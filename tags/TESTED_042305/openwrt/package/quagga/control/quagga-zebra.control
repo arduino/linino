@@ -1,0 +1,6 @@
+Package: quagga-zebra
+Priority: optional
+Section: net
+Maintainer: Johannes 5 Joemann <joemann@beefree.free.de>
+Source: buildroot internal
+Description: zebra daemon
