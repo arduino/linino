@@ -1,0 +1,5 @@
+config BR2_PACKAGE_BWM
+	tristate "bwm"
+	default m if CONFIG_DEVEL
+	help
+	  A very tiny bandwidth monitor.

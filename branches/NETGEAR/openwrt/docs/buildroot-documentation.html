@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>OpenWrt Buildroot - Usage and documentation</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" type="text/css" href="stylesheet.css" />
+</head>
+
+<body>
+  <div class="main">
+    <div class="titre">
+      <h1>OpenWrt Buildroot</h1>
+    </div>
+
+    <p>Usage and documentation by Felix Fietkau, based on uClibc Buildroot
+    documentation by Thomas Petazzoni. Contributions from Karsten Kruse,
+    Ned Ludd, Martin Herren.</p>
+
+    <p><small>Last modification : $Id$</small></p>
+
+    <ul>
+      <li><a href="#about">About OpenWrt Buildroot</a></li>
+      <li><a href="#download">Obtaining OpenWrt Buildroot</a></li>
+      <li><a href="#using">Using OpenWrt Buildroot</a></li>
+      <li><a href="#custom_targetfs">Customizing the target filesystem</a></li>
+      <li><a href="#custom_busybox">Customizing the Busybox
+      configuration</a></li>
+      <li><a href="#custom_uclibc">Customizing the uClibc
+      configuration</a></li>
+      <li><a href="#buildroot_innards">How OpenWrt Buildroot works</a></li>
+      <li><a href="#using_toolchain">Using the uClibc toolchain</a></li>
+      <li><a href="#toolchain_standalone">Using the uClibc toolchain
+      outside of Buildroot</a></li>
+      <li><a href="#downloaded_packages">Location of downloaded packages</a></li>
+      <li><a href="#add_software">Extending OpenWrt with more Software</a></li>
+      <li><a href="#links">Ressources</a></li>
+    </ul>
+
+    <h2><a name="about" id="about"></a>About OpenWrt Buildroot</h2>
+
+    <p>OpenWrt Buildroot is a set of Makefiles and patches that allows to easily
+    generate both a cross-compilation toolchain and a root filesystem for your
+    Wireless Router. The cross-compilation toolchain uses uClibc (<a href=
+    "http://www.uclibc.org/">http://www.uclibc.org/</a>), a tiny C standard
+    library.</p>
+
+    <p>A compilation toolchain is the set of tools that allows to
+    compile code for your system. It consists of a compiler (in our
+    case, <code>gcc</code>), binary utils like assembler and linker
+    (in our case, <code>binutils</code>) and a C standard library (for
+    example <a href="http://www.gnu.org/software/libc/libc.html">GNU
+    Libc</a>, <a href="http://www.uclibc.org">uClibc</a> or <a
+    href="http://www.fefe.de/dietlibc/">dietlibc</a>). The system
+    installed on your development station certainly already has a
+    compilation toolchain that you can use to compile application that
+    runs on your system. If you're using a PC, your compilation
+    toolchain runs on an x86 processor and generates code for a x86
+    processor. Under most Linux systems, the compilation toolchain
+    uses the GNU libc as C standard library.  This compilation
+    toolchain is called the "host compilation toolchain", and more
+    generally, the machine on which it is running, and on which you're
+    working is called the "host system". The compilation toolchain is
+    provided by your distribution, and OpenWrt Buildroot has nothing to do
+    with it.</p>
+
+    <p>As said above, the compilation toolchain that comes with your system
+    runs and generates code for the processor of your host system. As your
+    embedded system has a different processor, you need a cross-compilation
+    toolchain: it's a compilation toolchain that runs on your host system but
+    that generates code for your target system (and target processor). For
+    example, if your host system uses x86 and your target system uses MIPS, the
+    regular compilation toolchain of your host runs on x86 and generates code
+    for x86, while the cross-compilation toolchain runs on x86 and generates
+    code for MIPS.</p>
+
+    <p>You might wonder why such a tool is needed when you can compile
+    <code>gcc</code>, <code>binutils</code>, uClibc and all the tools by hand.
+    Of course, doing so is possible. But dealing with all configure options,
+    with all problems of every <code>gcc</code> or <code>binutils</code>
+    version it very time-consuming and uninteresting. OpenWrt Buildroot automates this
+    process through the use of Makefiles, and has a collection of patches for
+    each <code>gcc</code> and <code>binutils</code> version to make them work
+    on the MIPS architecture of most Broadcom based Wireless Routers.</p>
+
+    <h2><a name="download" id="download"></a>Obtaining OpenWrt Buildroot</h2>
+
+    <p>OpenWrt Buildroot is currently available as experimental snapshots</p>
+
+    <p>The latest snapshot is always available at <a
+    href="http://openwrt.org/downloads/experimental/">http://openwrt.org/downloads/experimental/</a>,
+
+    <h2><a name="using" id="using"></a>Using OpenWrt Buildroot</h2>
+
+    <p>OpenWrt Buildroot has a nice configuration tool similar to the one you can find
+    in the Linux Kernel (<a href="http://www.kernel.org/">http://www.kernel.org/</a>)
+    or in Busybox (<a href="http://www.busybox.org/">http://www.busybox.org/</a>).
+    Note that you can run everything as a normal user. There is no need to be root to
+    configure and use the Buildroot. The first step is to run the configuration
+    assistant:</p>
+
+<pre>
+ $ make menuconfig
+</pre>
+
+    <p>For each entry of the configuration tool, you can find associated help
+    that describes the purpose of the entry.</p>
+
+    <p>Once everything is configured, the configuration tool has generated a
+    <code>.config</code> file that contains the description of your
+    configuration. It will be used by the Makefiles to do what's needed.</p>
+
+    <p>Let's go:</p>
+
+<pre>
+ $ make
+</pre>
+
+    <p>This command will download, configure and compile all the selected
+    tools, and finally generate target firmware images and additional packages
+    (depending on your selections in <code>make menuconfig</code>.
+    All the target files can be found in the <code>bin/</code> subdirectory.
+    You can compile firmware images containing two different filesystem types:
+    <ul>
+        <li>jffs2</li>
+        <li>squashfs</li>
+    </ul>
+    <p><code>jffs2</code> contains a writable root filesystem, which will expand to
+    the size of your flash image. Note that you if you use the generic firmware
+    Image, you need to pick the right image for your Flash size, because of different
+    eraseblock sizes.</p>
+    
+    <p><code>squashfs</code> contains a read-only root filesystem using a modified 
+    <code>squashfs</code> filesystem with LZMA compression. When booting it, you can
+    create a writable second filesystem, which will contain your modifications to
+    the root filesystem, including the packages you install.
+    
+    <h2><a name="custom_targetfs" id="custom_targetfs"></a>Customizing the
+    target filesystem</h2>
+
+    <p>There are two ways to customize the resulting target filesystem:</p>
+
+    <ul>
+      <li>Customize the target filesystem directly, and rebuild the image. The
+      target filesystem is available under <code>build_ARCH/root/</code> where
+      <code>ARCH</code> is the chosen target architecture, usually mipsel.
+      You can simply make your changes here, and run make target_install afterwards, 
+      which will rebuild the target filesystem image. This method allows to do
+      everything on the target filesystem, but if you decide to rebuild your toolchain,
+      tools or packages, these changes will be lost.</li>
+
+      <li>Customize the target filesystem skeleton, available under
+      <code>target/default/target_skeleton/</code>. You can customize
+      configuration files or other stuff here. However, the full file hierarchy
+      is not yet present, because it's created during the compilation process.
+      So you can't do everything on this target filesystem skeleton, but
+      changes to it remains even when you completely rebuild the cross-compilation
+      toolchain and the tools.<br />
+    </ul>
+
+    <h2><a name="custom_busybox" id="custom_busybox"></a>Customizing the
+    Busybox configuration</h2>
+
+    <p>Busybox is very configurable, and you may want to customize it.
+    Its configuration is completely integrated into the main menuconfig system.
+    You can find it under "OpenWrt Package Selection" =&gt; "Busybox Configuration"</p>
+
+    <h2><a name="custom_uclibc" id="custom_uclibc"></a>Customizing the uClibc
+    configuration</h2>
+
+    <p>Just like <a href="#custom_busybox">BusyBox</a>, <a
+    href="http://www.uclibc.org">uClibc</a> offers a lot of
+    configuration options. They allow to select various
+    functionalities, depending on your needs and limitations.</p>
+
+    <p>The easiest way to modify the configuration of uClibc is to
+    follow these steps :</p>
+
+    <ol>
+
+      <li>Make a first compilation of buildroot without trying to
+      customize uClibc.</li>
+
+      <li>Go into the directory
+      <code>toolchain_build_ARCH/uClibc/</code> and run <code>make
+      menuconfig</code>. The nice configuration assistant, similar to
+      the one used in the Linux Kernel appears. Make
+      your configuration as appropriate.</li>
+
+      <li>Copy the <code>.config</code> file to
+      <code>toolchain/uClibc/uClibc.config</code> or
+      <code>toolchain/uClibc/uClibc.config-locale</code>. The former
+      is used if you haven't selected locale support in the Buildroot
+      configuration, and the latter is used if you have selected
+      locale support.</li>
+
+      <li>Run the compilation again</li>
+
+    </ol>
+
+    <p>Otherwise, you can simply change
+    <code>toolchain/uClibc/uClibc.config</code> or
+    <code>toolchain/uClibc/uClibc.config-locale</code> without running
+    the configuration assistant.</p>
+
+    <h2><a name="buildroot_innards" id="buildroot_innards"></a>How OpenWrt Buildroot
+    works</h2>
+
+    <p>As said above, OpenWrt is basically a set of Makefiles that download,
+    configure and compiles software with the correct options. It also includes
+    some patches for various software, mainly the ones involved in the
+    cross-compilation tool chain (<code>gcc</code>, <code>binutils</code> and
+    uClibc).</p>
+
+    <p>There is basically one Makefile per software, and they are named <code>Makefile</code>.
+    Makefiles are split into three sections:</p>
+
+    <ul>
+      <li><b>package</b> (in the <code>package/</code> directory) contains the
+      Makefiles and associated files for all user-space tools that Buildroot
+      can compile and add to the target root filesystem. There is one
+      sub-directory per tool.</li>
+
+      <li><b>toolchain</b> (in the <code>toolchain/</code> directory) contains
+      the Makefiles and associated files for all software related to the
+      cross-compilation toolchain : <code>binutils</code>, <code>ccache</code>,
+      <code>gcc</code>, <code>gdb</code>, <code>kernel-headers</code> and
+      <code>uClibc</code>.</li>
+
+      <li><b>target</b> (in the <code>target</code> directory) contains the
+      Makefiles and associated files for software related to the generation of
+      the target root filesystem image. Two types of filesystems are supported
+      : jffs2 and squashfs. 
+    </ul>
+
+    <p>Each directory contains at least 2 files :</p>
+
+    <ul>
+      <li><code>Makefile</code> is the Makefile that downloads, configures,
+      compiles and installs the software <code>something</code>.</li>
+
+      <li><code>Config.in</code> is a part of the configuration tool
+      description file. It describes the option related to the current
+      software.</li>
+    </ul>
+
+    <p>The main Makefile do the job through the following steps (once the
+    configuration is done):</p>
+
+    <ol>
+      <li>Create the download directory (<code>dl/</code> by default). This is
+      where the tarballs will be downloaded. It is interesting to know that the
+      tarballs are in this directory because it may be useful to save them
+      somewhere to avoid further downloads.</li>
+
+      <li>Create the build directory (<code>build_ARCH/</code> by default,
+      where <code>ARCH</code> is your architecture). This is where all
+      user-space tools while be compiled.</li>
+
+      <li>Create the toolchain build directory
+      (<code>toolchain_build_ARCH/</code> by default, where <code>ARCH</code>
+      is your architecture). This is where the cross compilation toolchain will
+      be compiled.</li>
+
+      <li>Setup the staging directory (<code>staging_dir_ARCH/</code> by
+      default). This is where the cross-compilation toolchain will be
+      installed. If you want to use the same cross-compilation toolchain for
+      other purposes, such as compiling third-party applications, you can add
+      <code>staging_dir_ARCH/bin</code> to your PATH, and then use
+      <code>arch-linux-gcc</code> to compile your application. In order to
+      setup this staging directory, it first removes it, and then it creates
+      various subdirectories and symlinks inside it.</li>
+
+      <li>Create the target directory (<code>build_ARCH/root/</code> by
+      default) and the target filesystem skeleton. This directory will contain
+      the final root filesystem. To setup it up, it first deletes it, then it
+      copies the skeleton available in  <code>target/default/target_skeleton</code>
+      and then removes useless <code>CVS/</code> directories.</li>
+
+      <li>Call the <code>prepare</code>, <code>compile</code> and <code>install</code>
+      targets for the subdirectories <code>toolchain</code>, <code>package</code>
+      and <code>target</code></li>
+    </ol>
+
+    <h2><a name="using_toolchain" id="using_toolchain"></a>Using the
+    uClibc toolchain</h2>
+
+    <p>You may want to compile your own programs or other software
+    that are not packaged in OpenWrt. In order to do this, you can
+    use the toolchain that was generated by the Buildroot.</p>
+
+    <p>The toolchain generated by the Buildroot by default is located in
+    <code>staging_dir_ARCH</code>. The simplest way to use it
+    is to add <code>staging_dir_ARCH/bin/</code> to your PATH
+    environment variable, and then to use
+    <code>arch-linux-gcc</code>, <code>arch-linux-objdump</code>,
+    <code>arch-linux-ld</code>, etc.</p>
+
+    <p>For example, you may add the following to your
+    <code>.bashrc</code> (considering you're building for the MIPS
+    architecture and that Buildroot is located in
+    <code>~/buildroot/</code>) :</p>
+
+<pre>
+export PATH=$PATH:~/buildroot/staging_dir_mipsel/bin/
+</pre>
+
+    <p>Then you can simply do :</p>
+
+<pre>
+mipsel-linux-uclibc-gcc -o foo foo.c
+</pre>
+
+    <p><b>Important</b> : do not try to move the toolchain to an other
+    directory, it won't work. There are some hard-coded paths in the
+    <i>gcc</i> configuration. If the default toolchain directory
+    doesn't suit your needs, please refer to the <a
+    href="#toolchain_standalone">Using the uClibc toolchain outside of
+    buildroot</a> section.</p>
+
+    <h2><a name="toolchain_standalone" id="toolchain_standalone"></a>Using the
+    uClibc toolchain outside of buildroot</h2>
+
+    <p>By default, the cross-compilation toolchain is generated inside
+    <code>staging_dir_ARCH/</code>. But sometimes, it may be useful to
+    install it somewhere else, so that it can be used to compile other programs
+    or by other users. Moving the <code>staging_dir_ARCH/</code>
+    directory elsewhere is <b>not possible</b>, because they are some hardcoded
+    paths in the toolchain configuration.</p>
+
+    <p>If you want to use the generated toolchain for other purposes,
+    you can configure Buildroot to generate it elsewhere using the
+    option of the configuration tool : <code>Build options -&gt;
+    Toolchain and header file location</code>, which defaults to
+    <code>staging_dir_ARCH/</code>.</p>
+
+    <h2><a name="downloaded_packages"
+    id="downloaded_packages"></a>Location of downloaded packages</h2>
+
+    <p>It might be useful to know that the various tarballs that are
+    downloaded by the <i>Makefiles</i> are all stored in the
+    <code>DL_DIR</code> which by default is the <code>dl</code>
+    directory. It's useful for example if you want to keep a complete
+    version of Buildroot which is know to be working with the
+    associated tarballs. This will allow you to regenerate the
+    toolchain and the target filesystem with exactly the same
+    versions.</p>
+
+    <h2><a name="add_software" id="add_software"></a>Extending OpenWrt with
+    more software</h2>
+
+    <p>This section will only consider the case in which you want to
+    add user-space software.</p>
+
+    <h3>Package directory</h3>
+
+    <p>First of all, create a directory under the <code>package</code>
+    directory for your software, for example <code>foo</code>.</p>
+
+    <h3><code>Config.in</code> file</h3>
+
+    <p>Then, create a file named <code>Config.in</code>. This file
+    will contain the portion of options description related to our
+    <code>foo</code> software that will be used and displayed in the
+    configuration tool. It should basically contain :</p>
+
+<pre>
+config BR2_PACKAGE_FOO
+        tristate "foo"
+        default n
+        help
+	     This is a comment that explains what foo is.
+</pre>
+
+    <p>Of course, you can add other options to configure particular
+    things in your software.</p>
+
+    <h3><code>Makefile</code> in the package directory</h3>
+
+    <p>To add your package to the build process, you need to edit
+    the Makefile in the <code>package/</code> directory. Locate the
+    lines that look like the following:</p>
+
+<pre>
+package-$(BR2_PACKAGE_FOO) += foo
+</pre>
+
+   <p>As you can see, this short line simply adds the target 
+   <code>foo</code> to the list of targets handled by OpenWrt Buildroot.</p>
+
+
+    <p>In addition to the default dependencies, you make your package
+    depend on another package (e.g. a library) by adding a line:
+    
+<pre>
+foo-compile: bar-compile
+</pre>
+
+   <h3>The <i>.control</i> file</h3>
+   <p>Additionally, you need to create a control file which contains
+   information about your package, readable by the <i>ipkg</i> package
+   utility.</p>
+   
+   <p>The file looks like this</p>
+
+<pre>
+     1  Package: foo
+     2  Priority: optional
+     3  Section: net
+     4  Maintainer: Foo Software &lt;foo@foosoftware.com&gt;
+     5  Source: http://foosoftware.com
+     6  Description: Your Package Description
+</pre>
+   
+   <p>You can skip the usual <code>Version:</code> and <code>Architecture</code>
+   fields, as they will be generated by the <code>make-ipkg-dir.sh</code> script
+   called from your Makefile</p>
+
+   <h3>The real <i>Makefile</i></h3>
+
+   <p>Finally, here's the hardest part. Create a file named
+   <code>Makefile</code>. It will contain the <i>Makefile</i> rules that
+   are in charge of downloading, configuring, compiling and installing
+   the software. Below is an example that we will comment
+   afterwards.</p>
+
+<pre>
+     1  # $Id$
+     2  include $(TOPDIR)/rules.mk
+     3  PKG_NAME:=foo
+     4  PKG_VERSION:=1.0
+     5  PKG_RELEASE:=1
+     6  PKG_MD5SUM:=4584f226523776a3cdd2fb6f8212ba8d
+     7
+     8  PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+     9  PKG_SOURCE_URL:=http://www.foosoftware.org/downloads
+    10  PKG_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+    11  PKG_IPK:=$(PACKAGE_DIR)/$(PKG_NAME)_$(PKG_VERSION)-$(PKG_RELEASE)_$(ARCH).ipk
+    12  PKG_IPK_DIR:=$(PKG_DIR)/ipkg
+    13
+    14  $(DL_DIR)/$(PKG_SOURCE):
+    15          $(SCRIPT_DIR)/download.pl $(DL_DIR) $(PKG_SOURCE) $(PKG_MD5SUM) $(PKG_SOURCE_URL)
+    16
+    17  $(PKG_DIR)/.source: $(DL_DIR)/$(PKG_SOURCE)
+    18          zcat $(DL_DIR)/$(PKG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+    19          touch $(PKG_DIR)/.source
+    20
+    21  $(PKG_DIR)/.configured: $(PKG_DIR)/.source
+    22          (cd $(PKG_DIR); \
+    23                  $(TARGET_CONFIGURE_OPTS) \
+    24                  CFLAGS="$(TARGET_CFLAGS)" \
+    25                  ./configure \
+    26                  --target=$(GNU_TARGET_NAME) \
+    27                  --host=$(GNU_TARGET_NAME) \
+    28                  --build=$(GNU_HOST_NAME) \
+    29                  --prefix=/usr \
+    30                  --sysconfdir=/etc \
+    31          );
+    32          touch $(PKG_DIR)/.configured;
+    33
+    34  $(PKG_DIR)/$(PKG_NAME): $(PKG_DIR)/.configured
+    35          $(MAKE) CC=$(TARGET_CC) -C $(PKG_DIR)
+    36
+    37  $(PKG_IPK): $(PKG_DIR)/$(PKG_NAME)
+    38		$(SCRIPT_DIR)/make-ipkg-dir.sh $(PKG_IPK_DIR) $(PKG_NAME).control $(PKG_VERSION)-$(PKG_RELEASE) $(ARCH)
+    39          $(MAKE) prefix=$(PKG_IPK_DIR)/usr -C $(PKG_DIR) install
+    40          rm -Rf $(PKG_IPK_DIR)/usr/man
+    41  	$(IPKG_BUILD) $(PKG_IPK_DIR) $(PACKAGE_DIR)
+    42
+    43  $(IPKG_STATE_DIR)/info/$(PKG_NAME).list: $(PKG_IPK)  
+    44  	$(IPKG) install $(PKG_IPK) 
+    45  
+    46  prepare: $(PKG_DIR)/.source
+    47  compile: $(PKG_IPK)
+    48  install: $(IPKG_STATE_DIR)/info/$(PKG_NAME).list
+    49  clean:
+    50  	rm -rf $(PKG_DIR)
+    51		rm -f $(PKG_IPK)
+</pre>
+
+    <p>First of all, this <i>Makefile</i> example works for a single
+    binary software. For other software such as libraries or more
+    complex stuff with multiple binaries, it should be adapted. Look at
+    the other <code>Makefile</code> files in the <code>package</code>
+    directory.</p>
+
+    <p>At lines 3-12, a couple of useful variables are defined :</p>
+
+    <ul>
+     <li><code>PKG_NAME</code> : The package name, e.g. <i>foo</i>.</li>
+     
+     <li><code>PKG_VERSION</code> : The version of the package that
+     should be downloaded.</li>
+
+     <li><code>PKG_RELEASE</code> : The release number that will be
+     appended to the version number of your <i>ipkg</i> package.
+
+     <li><code>PKG_MD5SUM</code> : The md5sum of the software archive.
+
+     <li><code>PKG_SOURCE</code> : The name of the tarball of
+     your package on the download website of FTP site. As you can see
+     <code>PKG_NAME</code> and <code>PKG_VERSION</code> are used.</li>
+
+     <li><code>PKG_SOURCE_URL</code> : Space separated list of the HTTP
+     or FTP sites from which the archive is downloaded. It must include the complete
+     path to the directory where <code>FOO_SOURCE</code> can be
+     found.</li>
+
+     <li><code>PKG_DIR</code> : The directory into which the software
+     will be configured and compiled. Basically, it's a subdirectory
+     of <code>BUILD_DIR</code> which is created upon decompression of
+     the tarball.</li>
+
+     <li><code>PKG_IPK</code> : The resulting <i>ipkg</i> package
+
+    </ul>
+
+    <p>Lines 14-15 defines a target that downloads the tarball from
+    the remote site to the download directory
+    (<code>DL_DIR</code>).</p>
+
+    <p>Lines 17-19 defines a target and associated rules that
+    uncompress the downloaded tarball. As you can see, this target
+    depends on the tarball file, so that the previous target (line
+    14-15) is called before executing the rules of the current
+    target. Uncompressing is followed by <i>touching</i> a hidden file
+    to mark the software has having been uncompressed. This trick is
+    used everywhere in Buildroot <i>Makefile</i> to split steps
+    (download, uncompress, configure, compile, install) while still
+    having correct dependencies.</p>
+
+    <p>Lines 21-32 defines a target and associated rules that
+    configures the software. It depends on the previous target (the
+    hidden <code>.source</code> file) so that we are sure the software has
+    been uncompressed. In order to configure it, it basically runs the
+    well-known <code>./configure</code>script. As we may be doing
+    cross-compilation, <code>target</code>, <code>host</code> and
+    <code>build</code> arguments are given. The prefix is also set to
+    <code>/usr</code>, not because the software will be installed in
+    <code>/usr</code> on your host system, but in the target
+    filesystem. Finally it creates a <code>.configured</code> file to
+    mark the software as configured.</p>
+
+    <p>Lines 34-35 defines a target and a rule that compiles the
+    software. This target will create the binary file in the
+    compilation directory, and depends on the software being already
+    configured (hence the reference to the <code>.configured</code>
+    file). It basically runs <code>make</code> inside the source
+    directory.</p>
+
+    <p>Lines 37-41 defines a target and associated rules that create
+    the <i>ipkg</i> package which can optionally be embedded into
+    the resulting firmware image. It depends on the binary file in 
+    the source directory, to make sure the software has been compiled.
+    It uses the make-ipkg-dir.sh script, which will create the ipkg
+    build directory for your package, copy your control file into 
+    that directory and add version and architecture information.
+    Then it calls the <code>install</code> target of the
+    software <code>Makefile</code> by passing a <code>prefix</code>
+    argument, so that the <code>Makefile</code> doesn't try to install
+    the software inside host <code>/usr</code> but inside target
+    <code>/usr</code>. After the installation, the
+    <code>/usr/man</code> directory inside the target filesystem is
+    removed to save space.
+    Finally <code>IPKG_BUILD</code> is called to create the package.</p>
+
+    <p>Line 43 and 44 define the installation target of your package,
+    which will embed the software into the target filesystem.</p>
+
+    <p>Lines 46-51 define the main targets that the Makefile in the
+    <code>package</code> dir calls.
+    <ul>
+      <li><code>prepare</code> : Download and unpack the source</li>
+      <li><code>compile</code> : Compile the source and create the package</li>
+      <li><code>install</code> : Embed the package into the target filesystem</li>
+      <li><code>clean</code> : Remove all the files created by the build process</li>
+    </ul></p>
+
+    <h3>Conclusion</h3>
+
+    <p>As you can see, adding a software to buildroot is simply a
+    matter of writing a <i>Makefile</i> using an already existing
+    example and to modify it according to the compilation process of
+    the software.</p>
+
+    <p>If you package software that might be useful for other persons,
+    don't forget to send a patch to OpenWrt developers !</p>
+
+     <h2><a name="links" id="links"></a>Resources</h2>
+
+    <p>To learn more about OpenWrt Buildroot you can visit this
+    website: <a href="http://openwrt.org/">http://openwrt.org/</a></p>
+
+  </div>
+</body>
+</html>
