@@ -1,18 +1,28 @@
 config BR2_PACKAGE_KMOD_DIAG
 	tristate "Router LED/Button Driver"
 	default y
+	depends BR2_DIAG_SUPPORT
 	help
 	  Driver for the LEDs on Wireless Routers (diag)
 
 config BR2_PACKAGE_KMOD_BRCM_WL
 	tristate "Broadcom Wireless Network Driver"
 	default y
+	depends BR_WIRELESS_BROADCOM
 	help
 	  Proprietary driver for Broadcom Wireless chipsets
+
+config BR2_PACKAGE_KMOD_ATHEROS_WL
+	tristate "Atheros Wireless Network Driver"
+	default y
+	depends BR_WIRELESS_ATHEROS
+	help
+	  Driver for Atheros Wireless chipsets
 
 config BR2_PACKAGE_KMOD_BRCM_ET
 	tristate "Broadcom Ethernet Driver"
 	default y
+	depends BR_KERNEL_24
 	help
 	  Proprietary driver for Broadcom Ethernet chipsets
 
@@ -69,28 +79,29 @@ config BR2_PACKAGE_KMOD_CIFS
 config BR2_PACKAGE_KMOD_USB
 	tristate "USB support"
 	default m
+	depends BR2_USB_UHCI || BR2_USB_OHCI || BR2_USB_EHCI
 
 config BR2_PACKAGE_KMOD_USB_CONTROLLER
 	tristate
-	depends on BR2_PACKAGE_KMOD_USB_UHCI || BR2_PACKAGE_KMOD_USB_OHCI
 	default n
 
 config BR2_PACKAGE_KMOD_USB_UHCI
 	tristate "Support for UHCI controllers"
 	default m
-	depends BR2_PACKAGE_KMOD_USB
+	depends BR2_PACKAGE_KMOD_USB && BR2_USB_UHCI
 	select BR2_PACKAGE_KMOD_USB_CONTROLLER
 
 config BR2_PACKAGE_KMOD_USB_OHCI
 	tristate "Support for OHCI controllers"
 	default m
-	depends BR2_PACKAGE_KMOD_USB
+	depends BR2_PACKAGE_KMOD_USB && BR2_USB_OHCI
 	select BR2_PACKAGE_KMOD_USB_CONTROLLER
 
 config BR2_PACKAGE_KMOD_USB2
 	tristate "Support for USB 2.0 controllers"
 	default m
-	depends BR2_PACKAGE_KMOD_USB_CONTROLLER
+	depends BR2_PACKAGE_KMOD_USB && BR2_USB_EHCI
+	select BR2_PACKAGE_KMOD_USB_CONTROLLER
 
 config BR2_PACKAGE_KMOD_USB_STORAGE
 	tristate "Support for USB storage devices"
@@ -105,6 +116,7 @@ config BR2_PACKAGE_KMOD_USB_PRINTER
 config BR2_PACKAGE_KMOD_IDE
 	tristate "IDE support"
 	default m
+	depends BR2_IDE_CONTROLLER
 	help
 	  Kernel modules for IDE support
 	  useful for usb mass storage devices (e.g. on WL-HDD)
@@ -112,6 +124,7 @@ config BR2_PACKAGE_KMOD_IDE
 config BR2_PACKAGE_KMOD_VFAT
 	tristate "VFAT filesystem support"
 	default m
+	depends BR2_PACKAGE_KMOD_IDE || BR2_PACKAGE_KMOD_USB_STORAGE
 	help
 	  Kernel modules for VFAT filesystem support
 	  useful for usb mass storage devices
@@ -119,30 +132,35 @@ config BR2_PACKAGE_KMOD_VFAT
 config BR2_PACKAGE_KMOD_EXT2
 	tristate "EXT2 filesystem support"
 	default m
+	depends BR2_PACKAGE_KMOD_IDE || BR2_PACKAGE_KMOD_USB_STORAGE
 	help
 	  Kernel modules for EXT2 filesystem support
 
 config BR2_PACKAGE_KMOD_EXT3
 	tristate "EXT3 filesystem support"
 	default m
+	depends BR2_PACKAGE_KMOD_IDE || BR2_PACKAGE_KMOD_USB_STORAGE
 	help
 	  Kernel modules for EXT3 filesystem support
 
 config BR2_PACKAGE_KMOD_XFS
 	tristate "XFS filesystem support"
 	default m
+	depends BR2_PACKAGE_KMOD_IDE || BR2_PACKAGE_KMOD_USB_STORAGE
 	help
 	  Kernel modules for XFS filesystem support
 
 config BR2_PACKAGE_KMOD_HFSPLUS
 	tristate "HFS+ filesystem support"
 	default m
+	depends BR2_PACKAGE_KMOD_IDE || BR2_PACKAGE_KMOD_USB_STORAGE
 	help
 	  Kernel modules for HFS+ filesystem support
 
 config BR2_PACKAGE_KMOD_LP
 	tristate "parallel port and lp support"
 	default m
+	depends BR2_PARALLEL_PORT
 	help
 	  Kernel modules for line printer and parallel port support
 

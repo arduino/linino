@@ -1,8 +1,13 @@
 # $Id$
 
 include $(TOPDIR)/rules.mk
+ifeq ($(BR2_KERNEL_26),y)
+include ./linux26.mk
+include ./linux26.config
+else
 include ./linux.mk
 include ./linux.config
+endif
 
 PKG_BUILD_DIR := $(BUILD_DIR)/linux-modules
 PKG_RELEASE := 1
