@@ -77,6 +77,110 @@ config BR2_ARCH
 	default "sh4eb"   if BR2_sh4eb
 	default "sparc"   if BR2_sparc
 
+config BR2_KERNEL_24
+	bool
+	default n
+
+config BR2_KERNEL_26
+	bool
+	default n
+
+config BR2_DIAG_SUPPORT
+	bool
+	default n
+
+config BR2_USB_UHCI
+	bool
+	default n
+
+config BR2_USB_OHCI
+	bool
+	default n
+
+config BR2_USB_EHCI
+	bool
+	default n
+
+config BR2_IDE_CONTROLLER
+	bool
+	default n
+
+config BR2_PARALLEL_PORT
+	bool
+	default n
+
+config BR2_WIRELESS_BROADCOM
+	bool
+	default n
+
+config BR2_WIRELESS_ATHEROS
+	bool
+	default n
+
+choice
+	prompt "Target platform" if CONFIG_DEVEL
+	default BR2_TARGET_WRT54G
+	help
+	  Stuff
+
+	config BR2_TARGET_DEFAULT
+		bool "Generic (Kernel 2.4.x)"
+		select BR2_KERNEL_24
+		select BR2_WIRELESS_BROADCOM
+		select BR2_USB_UHCI
+		select BR2_USB_OHCI
+		select BR2_USB_EHCI
+		select BR2_IDE_CONTROLLER
+		select BR2_PARALLEL_PORT
+		select BR2_DIAG_SUPPORT
+
+	config BR2_TARGET_DEFAULT
+		bool "Generic (Kernel 2.6.x)"
+		select BR2_KERNEL_26
+		select BR2_WIRELESS_ATHEROS
+		select BR2_USB_UHCI
+		select BR2_USB_OHCI
+		select BR2_USB_EHCI
+		select BR2_IDE_CONTROLLER
+		select BR2_PARALLEL_PORT
+
+	config BR2_TARGET_WRT54G
+		bool "Linksys WRT54G"
+		select BR2_KERNEL_24
+		select BR2_WIRELESS_BROADCOM
+		select BR2_DIAG_SUPPORT
+		depends BR2_mipsel
+
+	config BR2_TARGET_WRT54GS
+		bool "Linksys WRT54GS"
+		select BR2_KERNEL_24
+		select BR2_WIRELESS_BROADCOM
+		select BR2_DIAG_SUPPORT
+		depends BR2_mipsel
+	
+	config BR2_TARGET_MOTOROLA
+		bool "Motorola"
+		select BR2_KERNEL_24
+		depends BR2_mipsel
+
+	config BR2_TARGET_NETGEAR_WGT634U
+		bool "Netgear WGT634U"
+		select BR2_KERNEL_26
+		select BR2_WIRELESS_ATHEROS
+		select BR2_USB_OHCI
+		select BR2_USB_EHCI
+		depends BR2_mipsel
+
+	config BR2_TARGET_ASUS_WL500G_DELUXE
+		bool "ASUS WL-500g Deluxe"
+		select BR2_KERNEL_24
+		select BR2_WIRELESS_BROADCOM
+		select BR2_USB_UHCI
+		select BR2_USB_EHCI
+		select BR2_PARALLEL_PORT
+		depends BR2_mipsel
+
+endchoice
 
 menu "Build options"
 

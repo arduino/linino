@@ -69,7 +69,11 @@ TARGET_CC:=$(TARGET_CROSS)gcc
 STRIP:=$(STAGING_DIR)/bin/sstrip
 PATCH=$(SCRIPT_DIR)/patch-kernel.sh
 SED:=$(STAGING_DIR)/bin/sed -i -e
+ifeq ($(BR2_KERNEL_26),y)
+LINUX_VERSION=2.6.11
+else
 LINUX_VERSION=2.4.30
+endif
 LINUX_DIR:=$(BUILD_DIR)/linux
 LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
 LINUX_KERNEL:=$(BUILD_DIR)/buildroot-kernel
