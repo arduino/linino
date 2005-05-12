@@ -2,7 +2,11 @@
 include $(TOPDIR)/rules.mk
 
 package-:=tcp_wrappers
+
+ifeq ($(BR2_KERNEL_24),y)
 package-y:=openwrt
+endif
+
 package-$(BR2_PACKAGE_AICCU) += aiccu
 package-$(BR2_PACKAGE_ARPTABLES) += arptables
 package-$(BR2_PACKAGE_ARPWATCH) += arpwatch
