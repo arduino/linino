@@ -1,5 +1,11 @@
 #
 
+menu "Kernel Configuration"
+
+source "package/linux/Config.in"
+
+endmenu
+
 menu "OpenWrt Package Selection"
 
 comment "The default set"
@@ -87,12 +93,6 @@ source "package/libgd/Config.in"
 
 comment "Extra stuff"
 source "package/sdk/Config.in"
-
-endmenu
-
-menu "Kernel Configuration"
-
-source "package/linux/Config.in"
 
 endmenu
 
