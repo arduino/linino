@@ -13,7 +13,7 @@
 #
 #############################################################
 
-LINUX_FORMAT=zImage
+LINUX_FORMAT=vmlinux
 LINUX_KARCH:=$(shell echo $(ARCH) | sed -e 's/i[3-9]86/i386/' \
 	-e 's/mipsel/mips/' \
 	-e 's/powerpc/ppc/' \
@@ -62,7 +62,7 @@ $(LINUX_KERNEL): $(LINUX_DIR)/$(LINUX_BINLOC)
 	touch -c $(LINUX_KERNEL)
 	
 $(LINUX_IMAGE): $(LINUX_KERNEL)
-	cat $^ | $(BUILD_DIR)/lzma/lzma e -si -so -eos > $@ || (rm -f $@ && false)
+	cat $^ | gzip -9 -c > $@ || (rm -f $@ && false)
 
 $(LINUX_DIR)/.modules_done: $(LINUX_KERNEL) $(LINUX_IMAGE)
 	rm -rf $(BUILD_DIR)/modules
