@@ -1,0 +1,13 @@
+config BR2_PACKAGE_LIBMYSQLCLIENT
+	tristate "libmysqlclient - MySQL client library"
+	default m if CONFIG_DEVEL
+	help
+	  MySQL client library.
+	  
+	  http://dev.mysql.com/
+	  
+
+config BR2_PACKAGE_MYSQL
+	tristate
+	default BR2_PACKAGE_LIBMYSQLCLIENT
+
