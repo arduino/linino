@@ -83,4 +83,4 @@ iptables -t nat -N postrouting_rule
   iptables -t nat -A POSTROUTING -o $WAN -j MASQUERADE
 
 ## USER RULES
-. /etc/firewall.user
+[ -f /etc/firewall.user ] && . /etc/firewall.user
