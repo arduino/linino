@@ -146,6 +146,8 @@ int bcom_set_int(int skfd, char *ifname, char *var, int val)
 void setup_bcom(int skfd, char *ifname)
 {
 	int val = 0;
+	char buf[8192];
+	char wbuf[80];
 	char *v;
 	
 	if (bcom_ioctl(skfd, ifname, WLC_GET_MAGIC, &val, sizeof(val)) < 0)
@@ -153,20 +155,22 @@ void setup_bcom(int skfd, char *ifname)
 
 	bcom_ioctl(skfd, ifname, WLC_DOWN, NULL, 0);
 	
-	/* Set up WPA */
-	if (nvram_match(wl_var("crypto"), "tkip"))
-		val = TKIP_ENABLED;
-	else if (nvram_match(wl_var("crypto"), "aes"))
-		val = AES_ENABLED;
-	else if (nvram_match(wl_var("crypto"), "tkip+aes"))
-		val = TKIP_ENABLED | AES_ENABLED;
-	else
-		val = 0;
-	bcom_ioctl(skfd, ifname, WLC_SET_WSEC, &val, sizeof(val));
+	if (!nvram_enabled(wl_var("wep"))) {
+		/* Set up WPA */
+		if (nvram_match(wl_var("crypto"), "tkip"))
+			val = TKIP_ENABLED;
+		else if (nvram_match(wl_var("crypto"), "aes"))
+			val = AES_ENABLED;
+		else if (nvram_match(wl_var("crypto"), "tkip+aes"))
+			val = TKIP_ENABLED | AES_ENABLED;
+		else
+			val = 0;
+		bcom_ioctl(skfd, ifname, WLC_SET_WSEC, &val, sizeof(val));
 
-	if (val && nvram_get(wl_var("wpa_psk"))) {
-		val = 1;
-		bcom_ioctl(skfd, ifname, WLC_SET_EAP_RESTRICT, &val, sizeof(val));
+		if (val && nvram_get(wl_var("wpa_psk"))) {
+			val = 1;
+			bcom_ioctl(skfd, ifname, WLC_SET_EAP_RESTRICT, &val, sizeof(val));
+		}
 	}
 
 	/* Set up afterburner */
@@ -225,8 +229,6 @@ void setup_bcom(int skfd, char *ifname)
 		val = WLC_MACMODE_DISABLED;
 
 	if ((val != WLC_MACMODE_DISABLED) && (v = nvram_get(wl_var("maclist")))) {
-		char buf[8192];
-		char wbuf[80];
 		struct maclist *mac_list;
 		struct ether_addr *addr;
 		char *next;
@@ -235,7 +237,7 @@ void setup_bcom(int skfd, char *ifname)
 		mac_list = (struct maclist *) buf;
 		addr = mac_list->ea;
 		
-		foreach(wbuf, nvram_safe_get(wl_var("maclist")), next) {
+		foreach(wbuf, v, next) {
 			if (ether_atoe(wbuf, addr->ether_addr_octet)) {
 				mac_list->count++;
 				addr++;
@@ -246,6 +248,21 @@ void setup_bcom(int skfd, char *ifname)
 		val = WLC_MACMODE_DISABLED;
 	}
 	bcom_ioctl(skfd, ifname, WLC_SET_MACMODE, &val, sizeof(val));
+
+	if (v = nvram_get(wl_var("wds"))) {
+		struct maclist *wdslist = (struct maclist *) buf;
+		struct ether_addr *addr = wdslist->ea;
+		char *next;
+
+		memset(buf, 0, 8192);
+		foreach(wbuf, v, next) {
+			if (ether_atoe(wbuf, addr->ether_addr_octet)) {
+				wdslist->count++;
+				addr++;
+			}
+		}
+		bcom_ioctl(skfd, ifname, WLC_SET_WDSLIST, buf, sizeof(buf));
+	}
 	
 	/* Set up G mode */
 	bcom_ioctl(skfd, ifname, WLC_GET_PHYTYPE, &val, sizeof(val));
