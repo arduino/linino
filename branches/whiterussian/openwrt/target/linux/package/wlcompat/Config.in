@@ -8,7 +8,7 @@ config BR2_PACKAGE_KMOD_WLCOMPAT
 
 config BR2_PACKAGE_KMOD_WLCOMPAT_DEBUG
 	tristate "kmod-wlcompat-debug"
-	default y
+	default m
 	depends BR2_PACKAGE_KMOD_BRCM_WL
 	help
 	  A wrapper module, that provides Wireless Extension support for the
