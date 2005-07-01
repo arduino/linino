@@ -164,6 +164,7 @@ tcpdump-compile: libpcap-compile
 tinc-compile: zlib-compile openssl-compile lzo-compile
 vtun-compile: zlib-compile openssl-compile lzo-compile
 tor-compile: libevent-compile openssl-compile zlib-compile
+usbutils-compile: libusb-compile
 wpa_supplicant-compile: openssl-compile
 
 asterisk-compile: ncurses-compile openssl-compile
