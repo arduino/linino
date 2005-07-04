@@ -43,6 +43,7 @@ $(PKG_BUILD_DIR)/.configured:
 		  --sysconfdir=/etc \
 		  $(DISABLE_LARGEFILE) \
 		  $(DISABLE_NLS) \
+		  --disable-dietlibc \
 	)
 	touch $@
 
