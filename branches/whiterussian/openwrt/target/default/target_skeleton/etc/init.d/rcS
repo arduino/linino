@@ -1,7 +1,13 @@
 #!/bin/sh
 syslogd -C 16
 klogd
-${FAILSAFE:+telnetd -l /bin/login; ifup lan; exit}
+if [ "$FAILSAFE" = "true" ];then 
+	insmod $(head -1 /etc/modules)
+	ifconfig lo 127.0.0.1 up
+	ifconfig eth0 192.168.1.1 netmask 255.255.255.0 up
+	telnetd -l /bin/login
+	exit
+fi
 
 for i in /etc/init.d/S*; do
   $i start 2>&1
