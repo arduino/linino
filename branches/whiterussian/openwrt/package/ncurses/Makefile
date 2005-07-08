@@ -66,7 +66,7 @@ $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.prepared
 	);
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		libs
+		libs install.progs
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
