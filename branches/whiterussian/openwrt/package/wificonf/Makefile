@@ -3,14 +3,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wificonf
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/wificonf
 
 include $(TOPDIR)/package/rules.mk
-
-
-
 
 $(eval $(call PKG_template,WIFICONF,$(PKG_NAME),$(PKG_RELEASE),$(ARCH)))
 
