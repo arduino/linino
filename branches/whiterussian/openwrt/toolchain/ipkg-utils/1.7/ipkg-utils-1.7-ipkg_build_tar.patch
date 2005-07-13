@@ -1,10 +1,6 @@
-This patch from aorlinsk fixes an issue with order in options passed to tar
-
-  http://openwrt.org/forum/viewtopic.php?pid=8332#p8332
-
-
---- ipkg-utils-1.7/ipkg-build.orig	2005-06-14 23:48:36.000000000 +0200
-+++ ipkg-utils-1.7/ipkg-build	2005-06-14 23:50:03.000000000 +0200
+diff -ruN ipkg-utils-1.7-old/ipkg-build ipkg-utils-1.7-new/ipkg-build
+--- ipkg-utils-1.7-old/ipkg-build	2005-07-13 04:36:16.727438000 -0400
++++ ipkg-utils-1.7-new/ipkg-build	2005-07-13 05:27:49.385282832 -0400
 @@ -243,7 +243,7 @@
  mkdir $tmp_dir
  
