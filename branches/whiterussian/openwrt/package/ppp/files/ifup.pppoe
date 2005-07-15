@@ -1,8 +1,12 @@
 #!/bin/sh
+[ $# = 0 ] && { echo "  $0 <group>"; exit; }
 . /etc/functions.sh
 type=$1
 
-[ "$(nvram get ${type}_proto)" = "pppoe" ] || exit 0
+[ "$(nvram get ${type}_proto)" = "pppoe" ] || {
+	echo "$0: ${type}_proto isn't pppoe"
+	exit
+}
 
 for module in slhc ppp_generic pppox pppoe; do
 	/sbin/insmod $module 2>&- >&-
