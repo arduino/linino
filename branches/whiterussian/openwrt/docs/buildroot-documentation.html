@@ -15,7 +15,7 @@
       <h1>OpenWrt Buildroot</h1>
     </div>
 
-    <p>Usage and documentation by Felix Fietkau, based on uClibc Buildroot
+    <p>Usage and documentation by Felix Fietkau and Waldemar Brodkorb, based on uClibc Buildroot
     documentation by Thomas Petazzoni. Contributions from Karsten Kruse,
     Ned Ludd, Martin Herren.</p>
 
@@ -80,17 +80,18 @@
     <code>gcc</code>, <code>binutils</code>, uClibc and all the tools by hand.
     Of course, doing so is possible. But dealing with all configure options,
     with all problems of every <code>gcc</code> or <code>binutils</code>
-    version it very time-consuming and uninteresting. OpenWrt Buildroot automates this
+    version is very time-consuming and uninteresting. OpenWrt Buildroot automates this
     process through the use of Makefiles, and has a collection of patches for
     each <code>gcc</code> and <code>binutils</code> version to make them work
-    on the MIPS architecture of most Broadcom based Wireless Routers.</p>
+    on the MIPS architecture of most Wireless Routers.</p>
 
     <h2><a name="download" id="download"></a>Obtaining OpenWrt Buildroot</h2>
 
-    <p>OpenWrt Buildroot is currently available as experimental snapshots</p>
-
-    <p>The latest snapshot is always available at <a
-    href="http://openwrt.org/downloads/experimental/">http://openwrt.org/downloads/experimental/</a>,
+    <p>OpenWrt Buildroot is available via CVS - Concurrent Version System.
+    For any kind of development you should get the latest version from cvs via:</p>
+<pre>
+ $ cvs -d:pserver:anonymous@openwrt.org:/openwrt co openwrt
+</pre>
 
     <h2><a name="using" id="using"></a>Using OpenWrt Buildroot</h2>
 
@@ -128,8 +129,8 @@
         <li>squashfs</li>
     </ul>
     <p><code>jffs2</code> contains a writable root filesystem, which will expand to
-    the size of your flash image. Note that you if you use the generic firmware
-    Image, you need to pick the right image for your Flash size, because of different
+    the size of your flash image. Note: if you use the generic firmware image, you 
+    need to pick the right image for your flash size, because of different
     eraseblock sizes.</p>
     
     <p><code>squashfs</code> contains a read-only root filesystem using a modified 
@@ -196,7 +197,7 @@
       configuration, and the latter is used if you have selected
       locale support.</li>
 
-      <li>Run the compilation again</li>
+      <li>Run the compilation again.</li>
 
     </ol>
 
@@ -231,7 +232,9 @@
 
       <li><b>target</b> (in the <code>target</code> directory) contains the
       Makefiles and associated files for software related to the generation of
-      the target root filesystem image. Two types of filesystems are supported
+      the target root filesystem image and the linux kernel for the different 
+      system on a chip boards, used in the Wireless Routers. 
+      Two types of filesystems are supported
       : jffs2 and squashfs. 
     </ul>
 
@@ -275,7 +278,7 @@
 
       <li>Create the target directory (<code>build_ARCH/root/</code> by
       default) and the target filesystem skeleton. This directory will contain
-      the final root filesystem. To setup it up, it first deletes it, then it
+      the final root filesystem. To set it up, it first deletes it, then it
       copies the skeleton available in  <code>target/default/target_skeleton</code>
       and then removes useless <code>CVS/</code> directories.</li>
 
@@ -301,10 +304,10 @@
     <p>For example, you may add the following to your
     <code>.bashrc</code> (considering you're building for the MIPS
     architecture and that Buildroot is located in
-    <code>~/buildroot/</code>) :</p>
+    <code>~/openwrt/</code>) :</p>
 
 <pre>
-export PATH=$PATH:~/buildroot/staging_dir_mipsel/bin/
+export PATH=$PATH:~/openwrt/staging_dir_mipsel/bin/
 </pre>
 
     <p>Then you can simply do :</p>
@@ -343,7 +346,7 @@ mipsel-linux-uclibc-gcc -o foo foo.c
     downloaded by the <i>Makefiles</i> are all stored in the
     <code>DL_DIR</code> which by default is the <code>dl</code>
     directory. It's useful for example if you want to keep a complete
-    version of Buildroot which is know to be working with the
+    version of Buildroot which is known to be working with the
     associated tarballs. This will allow you to regenerate the
     toolchain and the target filesystem with exactly the same
     versions.</p>
@@ -368,14 +371,38 @@ mipsel-linux-uclibc-gcc -o foo foo.c
 
 <pre>
 config BR2_PACKAGE_FOO
-        tristate "foo"
-        default n
+        tristate "foo - some nice tool"
+        default m if CONFIG_DEVEL
         help
 	     This is a comment that explains what foo is.
 </pre>
 
+    <p>If you depend on other software or library inside the Buildroot, it
+    is important that you automatically select these packages in your 
+    <code>Config.in</code>. Example if foo depends on bar library:
+    </p>
+<pre>
+config BR2_PACKAGE_FOO
+        tristate "foo - some nice tool"
+        default m if CONFIG_DEVEL
+	select BR2_PACKAGE_LIBBAR
+        help
+        This is a comment that explains what foo is.
+</pre>
+
     <p>Of course, you can add other options to configure particular
     things in your software.</p>
+
+    <h3><code>Config.in</code> in the package directory</h3>
+	
+    <p>To add your package to the configuration tool, you need
+    to add the following line to <code>package/Config.in</code>,
+    please add it to a section, which fits the purpose of foo:
+
+<pre>
+comment "Networking"
+source "package/foo/Config.in"
+</pre>
 
     <h3><code>Makefile</code> in the package directory</h3>
 
@@ -390,18 +417,18 @@ package-$(BR2_PACKAGE_FOO) += foo
    <p>As you can see, this short line simply adds the target 
    <code>foo</code> to the list of targets handled by OpenWrt Buildroot.</p>
 
-
-    <p>In addition to the default dependencies, you make your package
-    depend on another package (e.g. a library) by adding a line:
+   <p>In addition to the default dependencies, you make your package
+   depend on another package (e.g. a library) by adding a line:
     
 <pre>
 foo-compile: bar-compile
 </pre>
 
-   <h3>The <i>.control</i> file</h3>
+   <h3>The ipkg control file</h3>
    <p>Additionally, you need to create a control file which contains
    information about your package, readable by the <i>ipkg</i> package
-   utility.</p>
+   utility. It should be created as file:
+   <code>package/foo/ipkg/foo.control</code></p>
    
    <p>The file looks like this</p>
 
@@ -411,44 +438,45 @@ foo-compile: bar-compile
      3  Section: net
      4  Maintainer: Foo Software &lt;foo@foosoftware.com&gt;
      5  Source: http://foosoftware.com
-     6  Description: Your Package Description
+     6  Depends: libbar
+     7  Description: Package Description
 </pre>
    
    <p>You can skip the usual <code>Version:</code> and <code>Architecture</code>
    fields, as they will be generated by the <code>make-ipkg-dir.sh</code> script
-   called from your Makefile</p>
+   called from your Makefile. The Depends field is important, so that ipkg will
+   automatically fetch all dependend software on your target system.</p>
 
    <h3>The real <i>Makefile</i></h3>
 
    <p>Finally, here's the hardest part. Create a file named
    <code>Makefile</code>. It will contain the <i>Makefile</i> rules that
    are in charge of downloading, configuring, compiling and installing
-   the software. Below is an example that we will comment
-   afterwards.</p>
+   the software. Below is an example that we will comment afterwards.</p>
 
 <pre>
      1  # $Id$
-     2  include $(TOPDIR)/rules.mk
-     3  PKG_NAME:=foo
-     4  PKG_VERSION:=1.0
-     5  PKG_RELEASE:=1
-     6  PKG_MD5SUM:=4584f226523776a3cdd2fb6f8212ba8d
-     7
-     8  PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-     9  PKG_SOURCE_URL:=http://www.foosoftware.org/downloads
-    10  PKG_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-    11  PKG_IPK:=$(PACKAGE_DIR)/$(PKG_NAME)_$(PKG_VERSION)-$(PKG_RELEASE)_$(ARCH).ipk
-    12  PKG_IPK_DIR:=$(PKG_DIR)/ipkg
-    13
-    14  $(DL_DIR)/$(PKG_SOURCE):
-    15          $(SCRIPT_DIR)/download.pl $(DL_DIR) $(PKG_SOURCE) $(PKG_MD5SUM) $(PKG_SOURCE_URL)
+     2	
+     3  include $(TOPDIR)/rules.mk
+     4
+     5  PKG_NAME:=foo
+     6  PKG_VERSION:=1.0
+     7  PKG_RELEASE:=1
+     8  PKG_MD5SUM:=4584f226523776a3cdd2fb6f8212ba8d
+     9 
+    10  PKG_SOURCE_URL:=http://www.foosoftware.org/downloads
+    11  PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+    12 	PKG_CAT:=zcat
+    13	
+    14	PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+    15	PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
     16
-    17  $(PKG_DIR)/.source: $(DL_DIR)/$(PKG_SOURCE)
-    18          zcat $(DL_DIR)/$(PKG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-    19          touch $(PKG_DIR)/.source
+    17	include $(TOPDIR)/package/rules.mk
+    18
+    19	$(eval $(call PKG_template,FOO,foo,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
     20
-    21  $(PKG_DIR)/.configured: $(PKG_DIR)/.source
-    22          (cd $(PKG_DIR); \
+    21  $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
+    22          (cd $(PKG_BUILD_DIR); \
     23                  $(TARGET_CONFIGURE_OPTS) \
     24                  CFLAGS="$(TARGET_CFLAGS)" \
     25                  ./configure \
@@ -457,36 +485,37 @@ foo-compile: bar-compile
     28                  --build=$(GNU_HOST_NAME) \
     29                  --prefix=/usr \
     30                  --sysconfdir=/etc \
-    31          );
-    32          touch $(PKG_DIR)/.configured;
-    33
-    34  $(PKG_DIR)/$(PKG_NAME): $(PKG_DIR)/.configured
-    35          $(MAKE) CC=$(TARGET_CC) -C $(PKG_DIR)
-    36
-    37  $(PKG_IPK): $(PKG_DIR)/$(PKG_NAME)
-    38		$(SCRIPT_DIR)/make-ipkg-dir.sh $(PKG_IPK_DIR) $(PKG_NAME).control $(PKG_VERSION)-$(PKG_RELEASE) $(ARCH)
-    39          $(MAKE) prefix=$(PKG_IPK_DIR)/usr -C $(PKG_DIR) install
-    40          rm -Rf $(PKG_IPK_DIR)/usr/man
-    41  	$(IPKG_BUILD) $(PKG_IPK_DIR) $(PACKAGE_DIR)
-    42
-    43  $(IPKG_STATE_DIR)/info/$(PKG_NAME).list: $(PKG_IPK)  
-    44  	$(IPKG) install $(PKG_IPK) 
-    45  
-    46  prepare: $(PKG_DIR)/.source
-    47  compile: $(PKG_IPK)
-    48  install: $(IPKG_STATE_DIR)/info/$(PKG_NAME).list
-    49  clean:
-    50  	rm -rf $(PKG_DIR)
-    51		rm -f $(PKG_IPK)
+    31 			--with-bar="$(STAGING_DIR)/usr" \
+    32          );
+    33          touch $@
+    34
+    35  $(PKG_BUILD_DIR)/.built:
+    36      	rm -rf $(PKG_INSTALL_DIR)
+    37		mkdir -p $(PKG_INSTALL_DIR)
+    38		$(MAKE) -C $(PKG_BUILD_DIR) \
+    39 	          $(TARGET_CONFIGURE_OPTS) \
+    40            install_prefix="$(PKG_INSTALL_DIR)" \
+    41 	          all install
+    42		touch $@
+    43 
+    44  $(IPKG_FOO):
+    46		install -d -m0755 $(IDIR_FOO)/usr/sbin
+    47    	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/foo $(IDIR_FOO)/usr/sbin
+    49		$(RSTRIP) $(IDIR_FOO)
+    50		$(IPKG_BUILD) $(IDIR_FOO) $(PACKAGE_DIR)
+    51	
+    52	mostlyclean:
+    53  	make -C $(PKG_BUILD_DIR) clean
+    54    	rm $(PKG_BUILD_DIR)/.built
 </pre>
 
     <p>First of all, this <i>Makefile</i> example works for a single
     binary software. For other software such as libraries or more
     complex stuff with multiple binaries, it should be adapted. Look at
-    the other <code>Makefile</code> files in the <code>package</code>
+    the other <code>Makefile</code> files in the <code>package/</code>
     directory.</p>
 
-    <p>At lines 3-12, a couple of useful variables are defined :</p>
+    <p>At lines 5-15, a couple of useful variables are defined:</p>
 
     <ul>
      <li><code>PKG_NAME</code> : The package name, e.g. <i>foo</i>.</li>
@@ -495,45 +524,42 @@ foo-compile: bar-compile
      should be downloaded.</li>
 
      <li><code>PKG_RELEASE</code> : The release number that will be
-     appended to the version number of your <i>ipkg</i> package.
+     appended to the version number of your <i>ipkg</i> package.</li>
 
-     <li><code>PKG_MD5SUM</code> : The md5sum of the software archive.
-
-     <li><code>PKG_SOURCE</code> : The name of the tarball of
-     your package on the download website of FTP site. As you can see
-     <code>PKG_NAME</code> and <code>PKG_VERSION</code> are used.</li>
+     <li><code>PKG_MD5SUM</code> : The md5sum of the software archive.</li>
 
      <li><code>PKG_SOURCE_URL</code> : Space separated list of the HTTP
      or FTP sites from which the archive is downloaded. It must include the complete
      path to the directory where <code>FOO_SOURCE</code> can be
      found.</li>
 
-     <li><code>PKG_DIR</code> : The directory into which the software
+     <li><code>PKG_SOURCE</code> : The name of the tarball of
+     your package on the download website of FTP site. As you can see
+     <code>PKG_NAME</code> and <code>PKG_VERSION</code> are used.</li>
+
+     <li><code>PKG_CAT</code> : The tool needed for extraction of the 
+	software archive.</li>
+
+     <li><code>PKG_BUILD_DIR</code> : The directory into which the software
      will be configured and compiled. Basically, it's a subdirectory
-     of <code>BUILD_DIR</code> which is created upon decompression of
+     of <code>BUILD_DIR</code> which is created upon extraction of
      the tarball.</li>
 
-     <li><code>PKG_IPK</code> : The resulting <i>ipkg</i> package
+     <li><code>PKG_INSTALL_DIR</code> : The directory into the software 
+     will be installed. It is a subdirectory of <code>PKG_BUILD_DIR</code>.</li>
 
     </ul>
 
-    <p>Lines 14-15 defines a target that downloads the tarball from
-    the remote site to the download directory
-    (<code>DL_DIR</code>).</p>
+    <p>In Line 3 and 17 we include common variables and routines to simplify
+	the process of ipkg creation. It includes routines to download, verify
+	 and extract the software package archives.</p>
 
-    <p>Lines 17-19 defines a target and associated rules that
-    uncompress the downloaded tarball. As you can see, this target
-    depends on the tarball file, so that the previous target (line
-    14-15) is called before executing the rules of the current
-    target. Uncompressing is followed by <i>touching</i> a hidden file
-    to mark the software has having been uncompressed. This trick is
-    used everywhere in Buildroot <i>Makefile</i> to split steps
-    (download, uncompress, configure, compile, install) while still
-    having correct dependencies.</p>
+    <p>Line 19 contains the magic line which automatically creates the 
+	ipkg for us.</p>
 
-    <p>Lines 21-32 defines a target and associated rules that
+    <p>Lines 21-33 defines a target and associated rules that
     configures the software. It depends on the previous target (the
-    hidden <code>.source</code> file) so that we are sure the software has
+    hidden <code>.prepared</code> file) so that we are sure the software has
     been uncompressed. In order to configure it, it basically runs the
     well-known <code>./configure</code>script. As we may be doing
     cross-compilation, <code>target</code>, <code>host</code> and
@@ -543,40 +569,20 @@ foo-compile: bar-compile
     filesystem. Finally it creates a <code>.configured</code> file to
     mark the software as configured.</p>
 
-    <p>Lines 34-35 defines a target and a rule that compiles the
+    <p>Lines 35-42 defines a target and a rule that compiles the
     software. This target will create the binary file in the
     compilation directory, and depends on the software being already
     configured (hence the reference to the <code>.configured</code>
-    file). It basically runs <code>make</code> inside the source
-    directory.</p>
+    file). Afterwards it installs the resulting binary into the 
+    <code>PKG_INSTALL_DIR</code>. It basically runs 
+    <code>make install</code> inside the source directory.</p>
 
-    <p>Lines 37-41 defines a target and associated rules that create
-    the <i>ipkg</i> package which can optionally be embedded into
-    the resulting firmware image. It depends on the binary file in 
-    the source directory, to make sure the software has been compiled.
-    It uses the make-ipkg-dir.sh script, which will create the ipkg
-    build directory for your package, copy your control file into 
-    that directory and add version and architecture information.
-    Then it calls the <code>install</code> target of the
-    software <code>Makefile</code> by passing a <code>prefix</code>
-    argument, so that the <code>Makefile</code> doesn't try to install
-    the software inside host <code>/usr</code> but inside target
-    <code>/usr</code>. After the installation, the
-    <code>/usr/man</code> directory inside the target filesystem is
-    removed to save space.
+    <p>Lines 44-50 defines a target and associated rules that create
+    the <i>ipkg</i> package, which can optionally be embedded into
+    the resulting firmware image. It manually installs all files you
+    want to integrate in your resulting ipkg. <code>RSTRIP</code> will
+    recursevily strip all binaries and libraries. 
     Finally <code>IPKG_BUILD</code> is called to create the package.</p>
-
-    <p>Line 43 and 44 define the installation target of your package,
-    which will embed the software into the target filesystem.</p>
-
-    <p>Lines 46-51 define the main targets that the Makefile in the
-    <code>package</code> dir calls.
-    <ul>
-      <li><code>prepare</code> : Download and unpack the source</li>
-      <li><code>compile</code> : Compile the source and create the package</li>
-      <li><code>install</code> : Embed the package into the target filesystem</li>
-      <li><code>clean</code> : Remove all the files created by the build process</li>
-    </ul></p>
 
     <h3>Conclusion</h3>
 
@@ -586,12 +592,14 @@ foo-compile: bar-compile
     the software.</p>
 
     <p>If you package software that might be useful for other persons,
-    don't forget to send a patch to OpenWrt developers !</p>
+    don't forget to send a patch to OpenWrt developers! 
+    Use the mail address: patches@openwrt.org   
+    </p>
 
      <h2><a name="links" id="links"></a>Resources</h2>
 
-    <p>To learn more about OpenWrt Buildroot you can visit this
-    website: <a href="http://openwrt.org/">http://openwrt.org/</a></p>
+    <p>To learn more about OpenWrt you can visit this website: 
+     <a href="http://openwrt.org/">http://openwrt.org/</a></p>
 
   </div>
 </body>
