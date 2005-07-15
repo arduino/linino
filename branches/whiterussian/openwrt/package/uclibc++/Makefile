@@ -12,7 +12,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tbz2
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(TOPDIR)/package/rules.mk
 
@@ -41,8 +40,7 @@ $(PKG_BUILD_DIR)/.configured:
 $(PKG_BUILD_DIR)/.built:
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) CROSS="$(TARGET_CROSS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+		all
 	touch $@
 
 $(IPKG_UCLIBCXX):
@@ -51,3 +49,10 @@ $(IPKG_UCLIBCXX):
 	$(STRIP) $(IDIR_UCLIBCXX)/usr/lib/*.so*
 	mkdir -p $(PACKAGE_DIR)
 	$(IPKG_BUILD) $(IDIR_UCLIBCXX) $(PACKAGE_DIR)
+
+compile: install-dev
+install-dev:
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) CROSS="$(TARGET_CROSS)" \
+		DESTDIR="$(STAGING_DIR)" \
+		install
