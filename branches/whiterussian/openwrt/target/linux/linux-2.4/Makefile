@@ -38,7 +38,7 @@ TARGET_MODULES_DIR := $(TARGET_DIR)/lib/modules/$(LINUX_VERSION)
 IPKG_KERNEL:=IPKG_TMP=$(BUILD_DIR)/tmp IPKG_INSTROOT=$(LINUX_TARGET_DIR) IPKG_CONF_DIR=$(LINUX_BUILD_DIR) $(SCRIPT_DIR)/ipkg -force-defaults -force-depends
 
 PKG_BUILD_DIR := $(LINUX_BUILD_DIR)/linux-modules
-PKG_RELEASE := 1
+PKG_RELEASE := 2
 
 KERNEL_IPKG:=$(LINUX_BUILD_DIR)/kernel_$(LINUX_VERSION)-$(BOARD)-$(PKG_RELEASE)_$(ARCH).ipk
 KERNEL_IDIR:=$(LINUX_BUILD_DIR)/kernel-ipkg
@@ -126,7 +126,6 @@ $(eval $(call KMOD_template,CRYPTO,crypto,\
 ))
 $(eval $(call KMOD_template,PPP,ppp,\
 	$(MODULES_DIR)/kernel/drivers/net/ppp_async.o \
-	$(MODULES_DIR)/kernel/drivers/net/ppp_synctty.o \
 	$(MODULES_DIR)/kernel/drivers/net/ppp_generic.o \
 	$(MODULES_DIR)/kernel/drivers/net/slhc.o \
 ,CONFIG_PPP))
