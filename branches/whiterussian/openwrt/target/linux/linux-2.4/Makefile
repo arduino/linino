@@ -141,7 +141,7 @@ $(eval $(call KMOD_template,TUN,tun,\
 ,CONFIG_TUN,,20,tun))
 $(eval $(call KMOD_template,GRE,gre,\
 	$(MODULES_DIR)/kernel/net/ipv4/ip_gre.o \
-,CONFIG_NET_IPGRE,,30,ip_gre))
+,CONFIG_NET_IPGRE))
 $(eval $(call KMOD_template,SCHED,sched,\
 	$(MODULES_DIR)/kernel/net/sched/*.o \
 ))
