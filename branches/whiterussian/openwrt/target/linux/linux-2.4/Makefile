@@ -43,6 +43,15 @@ PKG_RELEASE := 2
 KERNEL_IPKG:=$(LINUX_BUILD_DIR)/kernel_$(LINUX_VERSION)-$(BOARD)-$(PKG_RELEASE)_$(ARCH).ipk
 KERNEL_IDIR:=$(LINUX_BUILD_DIR)/kernel-ipkg
 
+PKG_MAKEOPTS:=	IPKG="$(IPKG_KERNEL)" \
+		BOARD="$(BOARD)" \
+		TARGET_DIR="$(LINUX_TARGET_DIR)" \
+		BUILD_DIR="$(LINUX_BUILD_DIR)" \
+		KERNEL_DIR="$(LINUX_SOURCE_DIR)" \
+		LINUX_VERSION="$(LINUX_VERSION)" \
+		KERNEL_RELEASE="$(PKG_RELEASE)"
+
+
 include $(LINUX_KCONFIG)
 
 INSTALL_TARGETS := $(KERNEL_IPKG)
@@ -211,18 +220,17 @@ prepare: $(LINUX_DIR)/.configured
 compile: $(LINUX_DIR)/.modules_done $(TARGETS)
 	ln -sf $(LINUX_BUILD_DIR)/linux-$(LINUX_VERSION) $(LINUX_DIR)
 	$(MAKE) -C $(TOPDIR)/target/linux/package \
-		BOARD="$(BOARD)" \
-		TARGET_DIR="$(LINUX_TARGET_DIR)" \
-		BUILD_DIR="$(LINUX_BUILD_DIR)" \
-		KERNEL_DIR="$(LINUX_SOURCE_DIR)" \
-		LINUX_VERSION="$(LINUX_VERSION)" \
-		KERNEL_RELEASE="$(PKG_RELEASE)"
+		$(PKG_MAKEOPTS) \
+		compile
 
 install: compile $(TARGET_MODULES_DIR) $(KERNEL_IPKG)
 	rm -rf $(LINUX_BUILD_DIR)/root*
 	cp -a $(BUILD_DIR)/root $(LINUX_BUILD_DIR)/
 	echo -e 'dest root /\noption offline_root $(LINUX_BUILD_DIR)/root' > $(LINUX_BUILD_DIR)/ipkg.conf
 	[ "$(INSTALL_TARGETS)" != "" ] && $(IPKG_KERNEL) install $(INSTALL_TARGETS) || true
+	$(MAKE) -C $(TOPDIR)/target/linux/package \
+		$(PKG_MAKEOPTS) \
+		install
 
 mostlyclean:
 	rm -f $(LINUX_BUILD_DIR)/linux-$(LINUX_VERSION)/.{drivers-unpacked,modules_done}
