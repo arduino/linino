@@ -29,6 +29,12 @@ $$(PKG_$(1)): $(LINUX_DIR)/.modules_done
 	$(SCRIPT_DIR)/make-ipkg-dir.sh $$(I_$(1)) ../control/kmod-$(2).control $(LINUX_VERSION)-$(BOARD)-$(PKG_RELEASE) $(ARCH)
 	echo "Depends: $$(IDEPEND_$(1))" >> $$(I_$(1))/CONTROL/control
 	cp $(3) $$(I_$(1))/lib/modules/$(LINUX_VERSION)
+ifneq ($(6),)
+	mkdir -p $$(I_$(1))/etc/modules.d
+	for module in $(7); do \
+		echo $$$$module >> $$(I_$(1))/etc/modules.d/$(6)-$(2); \
+	done
+endif
 	$(IPKG_BUILD) $$(I_$(1)) $(PACKAGE_DIR)
 
 endef
