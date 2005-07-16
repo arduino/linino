@@ -2,7 +2,7 @@
 . /etc/functions.sh
 type=$1
 
-[ "$(nvram get ${type}_proto)" = "pptp" ] || exit 0
+[ "$(nvram get ${type}_proto)" = "pptp" ] || exit
 
 [ -d "/var/lock" ] || mkdir -p /var/lock || exit 1
 
@@ -10,7 +10,7 @@ for module in slhc ppp_generic ppp_async ip_gre; do
 	/sbin/insmod $module 2>&- >&-
 done
 
-if=$(nvram get ${type}_ifname)
+if=$(nvram get pptp_ifname)
 ip=$(nvram get ${type}_ipaddr)
 netmask=$(nvram get ${type}_netmask)
 [ -z "$ip" -o -z "$if" ] || ifconfig $if $ip ${netmask:+netmask $netmask} broadcast + up
