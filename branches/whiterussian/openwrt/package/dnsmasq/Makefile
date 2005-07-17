@@ -29,7 +29,8 @@ $(IPKG_DNSMASQ):
 	install -d -m0755 $(IDIR_DNSMASQ)/usr/sbin
 	cp $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(IDIR_DNSMASQ)/usr/sbin/
 	$(STRIP) $(IDIR_DNSMASQ)/usr/sbin/*
-	install -m0644 ./files/dnsmasq.conf $(IDIR_DNSMASQ)/etc
-	install -m0755 ./files/S50dnsmasq $(IDIR_DNSMASQ)/etc/init.d
+	install -d -m0755 $(IDIR_DNSMASQ)/etc/init.d/
+	install -m0644 ./files/dnsmasq.conf $(IDIR_DNSMASQ)/etc/dnsmasq.conf
+	install -m0755 ./files/S50dnsmasq $(IDIR_DNSMASQ)/etc/init.d/S50dnsmasq
 	$(IPKG_BUILD) $(IDIR_DNSMASQ) $(PACKAGE_DIR)
 
