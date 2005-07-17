@@ -9,7 +9,7 @@ ipaddr=$(nvram get ${iface}_ipaddr)
 netmask=$(nvram get ${iface}_netmask)
 
 # check for existing DHCP server
-udhcpc -n -q -R -s /dev/zero -i $ifname >&- || {
+udhcpc -n -q -R -s /bin/true -i $ifname >&- || {
 
   ipaddr=$(ip2int $ipaddr)
   netmask=$(ip2int ${netmask:-255.255.255.0})
