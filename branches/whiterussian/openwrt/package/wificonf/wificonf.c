@@ -180,7 +180,7 @@ void setup_bcom(int skfd, char *ifname)
 	/* Set Country */
 	strncpy(buf, nvram_safe_get(wl_var("country_code")), 4);
 	buf[3] = 0;
-	bcom_ioctl(skfd, ifname, 273, buf, 4);
+	bcom_ioctl(skfd, ifname, WLC_SET_COUNTRY, buf, 4);
 	
 	/* Set up afterburner */
 	val = ABO_AUTO;
