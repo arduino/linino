@@ -50,7 +50,11 @@ case "$if_proto" in
 	;;
 	dhcp)
 		ip=$(nvram get ${type}_ipaddr)
-		${DEBUG:-eval} "udhcpc -R -i $if ${ip:+-r $ip} -b -p $pidfile &" 
+		DHCP_ARGS="-R -i $if ${ip:+-r $ip} -b -p $pidfile"
+		DHCP_HOSTNAME=$(nvram get ${type}_hostname)
+		DHCP_HOSTNAME=${DHCP_HOSTNAME%%.*}
+		[ -z $DHCP_HOSTNAME ] || DHCP_ARGS="$DHCP_ARGS -H $DHCP_HOSTNAME"
+		${DEBUG:-eval} "udhcpc $DHCP_ARGS &"
 	;;
 	none|"")
 	;;
