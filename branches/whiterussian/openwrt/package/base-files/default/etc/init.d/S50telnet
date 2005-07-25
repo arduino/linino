@@ -1,0 +1,2 @@
+#!/bin/sh
+telnetd -l /bin/login
