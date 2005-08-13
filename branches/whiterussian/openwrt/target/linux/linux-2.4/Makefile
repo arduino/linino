@@ -13,11 +13,6 @@
 include $(TOPDIR)/rules.mk
 include ../rules.mk
 
-# for testing
-ifeq ($(BOARD),)
-BOARD:=brcm
-endif
-
 LINUX_VERSION:=2.4.30
 MODULES_SUBDIR:=lib/modules/$(LINUX_VERSION)
 LINUX_KCONFIG:=./config/$(BOARD)
@@ -40,17 +35,16 @@ IPKG_KERNEL:=IPKG_TMP=$(BUILD_DIR)/tmp IPKG_INSTROOT=$(LINUX_TARGET_DIR) IPKG_CO
 PKG_BUILD_DIR := $(LINUX_BUILD_DIR)/linux-modules
 PKG_RELEASE := 2
 
-KERNEL_IPKG:=$(LINUX_BUILD_DIR)/kernel_$(LINUX_VERSION)-$(BOARD)-$(PKG_RELEASE)_$(ARCH).ipk
+KERNEL_IPKG:=$(LINUX_BUILD_DIR)/kernel-$(LINUX_VERSION)-$(BOARD)_$(PKG_RELEASE)_$(ARCH).ipk
 KERNEL_IDIR:=$(LINUX_BUILD_DIR)/kernel-ipkg
 
-PKG_MAKEOPTS:=	IPKG="$(IPKG_KERNEL)" \
+KPKG_MAKEOPTS:=	IPKG="$(IPKG_KERNEL)" \
 		BOARD="$(BOARD)" \
 		TARGET_DIR="$(LINUX_TARGET_DIR)" \
 		BUILD_DIR="$(LINUX_BUILD_DIR)" \
 		KERNEL_DIR="$(LINUX_SOURCE_DIR)" \
 		LINUX_VERSION="$(LINUX_VERSION)" \
 		KERNEL_RELEASE="$(PKG_RELEASE)"
-
 
 include $(LINUX_KCONFIG)
 
@@ -160,7 +154,7 @@ $(TARGETS): $(PACKAGE_DIR)
 $(PACKAGE_DIR):
 	mkdir -p $(PACKAGE_DIR)
 
-$(LINUX_DIR)/.unpacked: $(DL_DIR)/$(LINUX_SOURCE) $(DL_DIR)/$(LINUX_BINARY_WL_DRIVER) $(DL_DIR)/$(LINUX_ET_DRIVER)
+$(LINUX_DIR)/.unpacked: $(DL_DIR)/$(LINUX_SOURCE)
 	-mkdir -p $(LINUX_BUILD_DIR)
 	bzcat $(DL_DIR)/$(LINUX_SOURCE) | tar -C $(LINUX_BUILD_DIR) $(TAR_OPTIONS) -
 	rm -f $(LINUX_DIR)
@@ -176,7 +170,7 @@ $(LINUX_DIR)/.configured: $(LINUX_DIR)/.patched
 	-cp $(LINUX_KCONFIG) $(LINUX_DIR)/.config
 	$(SED) "s,^CROSS_COMPILE.*,CROSS_COMPILE=$(KERNEL_CROSS),g;" \
 	  $(LINUX_DIR)/Makefile  \
-	  $(LINUX_DIR)/arch/mips/Makefile
+	  $(LINUX_DIR)/arch/*/Makefile
 	$(SED) "s,\-mcpu=,\-mtune=,g;" $(LINUX_DIR)/arch/mips/Makefile
 	$(MAKE) -C $(LINUX_DIR) ARCH=$(LINUX_KARCH) oldconfig include/linux/version.h
 	touch $(LINUX_DIR)/.configured
@@ -209,7 +203,8 @@ $(TARGET_MODULES_DIR):
 $(KERNEL_IPKG):
 	rm -rf $(KERNEL_IDIR)
 	mkdir -p $(KERNEL_IDIR)/etc
-	$(SCRIPT_DIR)/make-ipkg-dir.sh $(KERNEL_IDIR) ../control/kernel.control $(LINUX_VERSION)-$(BOARD)-$(PKG_RELEASE) $(ARCH)
+	$(SCRIPT_DIR)/make-ipkg-dir.sh $(KERNEL_IDIR) ../control/kernel.control $(PKG_RELEASE) $(ARCH)
+	echo 'Package: kernel-$(LINUX_VERSION)-$(BOARD)' >> $(KERNEL_IDIR)/CONTROL/control
 	if [ -f ./config/$(BOARD).modules ]; then \
 		cp ./config/$(BOARD).modules $(KERNEL_IDIR)/etc/modules; \
 	fi
@@ -220,20 +215,25 @@ prepare: $(LINUX_DIR)/.configured
 compile: $(LINUX_DIR)/.modules_done $(TARGETS)
 	ln -sf $(LINUX_BUILD_DIR)/linux-$(LINUX_VERSION) $(LINUX_DIR)
 	$(MAKE) -C $(TOPDIR)/target/linux/package \
-		$(PKG_MAKEOPTS) \
+		$(KPKG_MAKEOPTS) \
 		compile
 
 install: compile $(TARGET_MODULES_DIR) $(KERNEL_IPKG)
 	rm -rf $(LINUX_BUILD_DIR)/root*
-	cp -a $(BUILD_DIR)/root $(LINUX_BUILD_DIR)/
 	echo -e 'dest root /\noption offline_root $(LINUX_BUILD_DIR)/root' > $(LINUX_BUILD_DIR)/ipkg.conf
-	[ "$(INSTALL_TARGETS)" != "" ] && $(IPKG_KERNEL) install $(INSTALL_TARGETS) || true
-	$(MAKE) -C $(TOPDIR)/target/linux/package \
-		$(PKG_MAKEOPTS) \
+	$(MAKE) -C $(TOPDIR)/package \
+		TARGET_DIR="$(LINUX_TARGET_DIR)" \
+		IPKG_CONF="$(LINUX_BUILD_DIR)" \
+		BOARD="$(BOARD)" \
 		install
+	$(MAKE) -C $(TOPDIR)/target/linux/package \
+		$(KPKG_MAKEOPTS) \
+		install
+	[ "$(INSTALL_TARGETS)" != "" ] && $(IPKG_KERNEL) install $(INSTALL_TARGETS) || true
 
 mostlyclean:
-	rm -f $(LINUX_BUILD_DIR)/linux-$(LINUX_VERSION)/.{drivers-unpacked,modules_done}
+	rm -f $(LINUX_BUILD_DIR)/linux-$(LINUX_VERSION)/.modules_done
+	rm -f $(LINUX_BUILD_DIR)/linux-$(LINUX_VERSION)/.drivers-unpacked
 	$(MAKE) -C $(LINUX_BUILD_DIR)/linux-$(LINUX_VERSION) clean
 	rm -f $(LINUX_KERNEL) $(LINUX_IMAGE)
 
