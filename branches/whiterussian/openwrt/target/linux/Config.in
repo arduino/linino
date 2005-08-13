@@ -246,4 +246,12 @@ config BR2_PACKAGE_KMOD_SCHED
 	help
 	  Kernel schedulers for IP traffic
 
+config BR2_PACKAGE_KMOD_VIDEODEV
+	tristate "Video (For Linux) kernel support"
+	default m
+
+config BR2_PACKAGE_KMOD_PWC
+	tristate "Kernel driver for USB Philips Cameras"
+	default m
+
 source "target/linux/package/Config.in"
