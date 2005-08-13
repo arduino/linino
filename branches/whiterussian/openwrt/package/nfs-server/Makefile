@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nfs-server
 PKG_VERSION:=2.2beta47
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=79a29fe9f79b2f3241d4915767b8c511
 
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/n/nfs-user-server
