@@ -11,10 +11,10 @@ include ./squashfs.mk
 endif
 
 prepare:
-	$(MAKE) -C $(BOARD) prepare
 compile:
-	$(MAKE) -C $(BOARD) compile
 install:
+	$(MAKE) -C $(BOARD) prepare
+	$(MAKE) -C $(BOARD) compile
 
 install-ib:
 	-$(MAKE) -C $(BOARD) IB_DIR="$(IB_DIR)" install-ib
