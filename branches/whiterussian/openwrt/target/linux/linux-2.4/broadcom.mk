@@ -37,7 +37,7 @@ $(DL_DIR)/$(LINUX_ET_DRIVER):
 $(LINUX_DIR)/.depend_done: $(LINUX_DIR)/.drivers-unpacked
 $(LINUX_DIR)/.modules_done: $(LINUX_DIR)/.drivers-unpacked
 
-$(LINUX_DIR)/.drivers-unpacked: $(LINUX_DIR)/.unpacked
+$(LINUX_DIR)/.drivers-unpacked: $(LINUX_DIR)/.unpacked $(DL_DIR)/$(LINUX_BINARY_WL_DRIVER) $(DL_DIR)/$(LINUX_ET_DRIVER)
 	-mkdir -p $(BUILD_DIR)
 	zcat $(DL_DIR)/$(LINUX_BINARY_WL_DRIVER) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
 	zcat $(DL_DIR)/$(LINUX_ET_DRIVER) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -

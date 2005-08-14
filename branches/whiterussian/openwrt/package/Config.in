@@ -137,6 +137,15 @@ source "package/shfs/Config.in"  # kmod-shfs
 comment "Extra stuff"
 source "package/sdk/Config.in"
 
+config BR2_PACKAGE_IMAGEBUILDER
+	bool "OpenWrt Image Builder"
+	default y if CONFIG_DEVEL
+	help
+	  Build an OpenWrt Image Builder.
+	  This package contains the necessary (precompiled) tools and all packages to generate
+	  firmware images from package lists, without having to use the full buildroot.
+	  Useful for building images with custom scripts or extra packages.
+
 endmenu
 
 source "package/Sysconf.in"

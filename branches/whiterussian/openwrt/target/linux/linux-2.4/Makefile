@@ -203,6 +203,15 @@ $(STAGING_DIR)/include/linux/version.h: $(LINUX_DIR)/.configured
 	tar -ch -C $(LINUX_DIR)/include -f - linux | tar -xf - -C $(STAGING_DIR)/include/
 	tar -ch -C $(LINUX_DIR)/include -f - asm | tar -xf - -C $(STAGING_DIR)/include/
 
+$(STAMP_DIR)/.linux-compile: $(LINUX_DIR)/.modules_done
+	@mkdir -p $(STAMP_DIR)
+	@$(MAKE) $(TARGETS)
+	ln -sf $(LINUX_BUILD_DIR)/linux-$(LINUX_VERSION) $(LINUX_DIR)
+	$(MAKE) -C $(TOPDIR)/target/linux/package \
+		$(KPKG_MAKEOPTS) \
+		compile
+	touch $@
+
 $(TARGET_MODULES_DIR): 
 	-mkdir -p $(TARGET_MODULES_DIR)
 
@@ -217,11 +226,7 @@ $(KERNEL_IPKG):
 
 source: $(DL_DIR)/$(LINUX_SOURCE)
 prepare: $(LINUX_DIR)/.configured
-compile: $(LINUX_DIR)/.modules_done $(TARGETS)
-	ln -sf $(LINUX_BUILD_DIR)/linux-$(LINUX_VERSION) $(LINUX_DIR)
-	$(MAKE) -C $(TOPDIR)/target/linux/package \
-		$(KPKG_MAKEOPTS) \
-		compile
+compile: $(STAMP_DIR)/.linux-compile
 
 install: compile $(TARGET_MODULES_DIR) $(KERNEL_IPKG)
 	rm -rf $(LINUX_BUILD_DIR)/root*
@@ -237,6 +242,7 @@ install: compile $(TARGET_MODULES_DIR) $(KERNEL_IPKG)
 	[ "$(INSTALL_TARGETS)" != "" ] && $(IPKG_KERNEL) install $(INSTALL_TARGETS) || true
 
 mostlyclean:
+	rm -f $(STAMP_DIR)/.linux-compile
 	rm -f $(LINUX_BUILD_DIR)/linux-$(LINUX_VERSION)/.modules_done
 	rm -f $(LINUX_BUILD_DIR)/linux-$(LINUX_VERSION)/.drivers-unpacked
 	$(MAKE) -C $(LINUX_BUILD_DIR)/linux-$(LINUX_VERSION) clean
@@ -250,5 +256,6 @@ rebuild:
 	$(MAKE) compile
 
 clean:
+	rm -f $(STAMP_DIR)/.linux-compile
 	rm -rf $(LINUX_BUILD_DIR)
 	rm -f $(TARGETS)
