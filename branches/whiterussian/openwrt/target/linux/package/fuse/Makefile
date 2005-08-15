@@ -55,8 +55,8 @@ $(PKG_BUILD_DIR)/.configured:
 		  --enable-shared \
 		  --enable-static \
 		  --enable-kernel-module \
-		  --enable-lib \
-		  --enable-util \
+		  --disable-lib \
+		  --disable-util \
 		  --disable-example \
 		  --disable-auto-modprobe \
 		  --with-kernel=$(KERNEL_DIR) \
