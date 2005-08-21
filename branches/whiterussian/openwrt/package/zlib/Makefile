@@ -46,16 +46,17 @@ $(IPKG_ZLIB):
 
 $(STAGING_DIR)/usr/lib/libz.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include
-	cp -fpR $(PKG_INSTALL_DIR)/usr/include/z{conf,lib}.h $(STAGING_DIR)/usr/include
+	cp -fpR $(PKG_INSTALL_DIR)/usr/include/*.h $(STAGING_DIR)/usr/include
 	mkdir -p $(STAGING_DIR)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libz.{a,so*} $(STAGING_DIR)/usr/lib
+	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/* $(STAGING_DIR)/usr/lib
 	touch $(STAGING_DIR)/usr/lib/libz.so
 	
 install-dev: $(STAGING_DIR)/usr/lib/libz.so
 
 uninstall-dev:
-	rm -rf $(STAGING_DIR)/usr/include/z{conf,lib}.h
-	rm -rf $(STAGING_DIR)/usr/lib/libz.{a,so*}
+	rm -rf $(STAGING_DIR)/usr/include/zconf.h
+	rm -rf $(STAGING_DIR)/usr/include/zlib.h
+	rm -rf $(STAGING_DIR)/usr/lib/libz.*
 
 compile: install-dev
 clean: uninstall-dev
