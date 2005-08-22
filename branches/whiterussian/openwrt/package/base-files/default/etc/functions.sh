@@ -9,7 +9,7 @@ nvram () {
     *) command nvram $*;;
   esac
 }
-. /etc/nvram.overrides
+[ "$FAILSAFE" = "true" ] && . /etc/nvram.overrides
 
 # valid interface?
 if_valid () (
