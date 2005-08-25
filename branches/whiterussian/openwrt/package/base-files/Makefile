@@ -43,6 +43,7 @@ $(IPKG_BASE):
 	ln -sf /tmp $(IDIR_BASE)/var
 	-find $(IDIR_BASE) -type d -name CVS | xargs rm -rf
 	-find $(IDIR_BASE) -type d -name .svn | xargs rm -rf
+	-find $(IDIR_BASE) -name '.#*' | xargs rm -f
 	mkdir -p $(IDIR_BASE)/etc
 	-grep \^BR2_SYSCONF $(TOPDIR)/.config > $(IDIR_BASE)/etc/sysconf
 	$(IPKG_BUILD) $(IDIR_BASE) $(PACKAGE_DIR)
