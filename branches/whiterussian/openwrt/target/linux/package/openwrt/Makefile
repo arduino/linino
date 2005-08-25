@@ -29,7 +29,7 @@ $(IPKG_OPENWRT): $(PKG_BUILD_DIR)/jffs2root
 	$(RSTRIP) $(IDIR_OPENWRT)
 	$(IPKG_BUILD) $(IDIR_OPENWRT) $(PACKAGE_DIR)
 
-install: $(IPKG_OPENWRT)
+install: compile
 	$(IPKG) install $(IPKG_OPENWRT)
 
 compile: install-dev $(IPKG_OPENWRT)
