@@ -21,6 +21,7 @@ $(eval $(call PKG_template,ZLIB,zlib,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 	(cd $(PKG_BUILD_DIR); \
 		$(TARGET_CONFIGURE_OPTS) \
+		LDSHARED="$(TARGET_CC) -shared -Wl,-soname,libz.so.1" \
 		./configure \
 		--prefix=/usr \
 		--shared \
