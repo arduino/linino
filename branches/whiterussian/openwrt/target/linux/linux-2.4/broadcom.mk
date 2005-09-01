@@ -26,8 +26,8 @@ LINUX_BINARY_DRIVER_SITE=http://openwrt.org/downloads/sources
 # proprietary driver, extracted from Linksys GPL sourcetree WRT54GS 4.70.6
 LINUX_BINARY_WL_DRIVER=kernel-binary-wl-0.4.tar.gz
 LINUX_BINARY_WL_MD5SUM=0659fa8f1805be6ec03188ef8e1216cc
-LINUX_ET_DRIVER=kernel-source-et-0.10.tar.gz
-LINUX_ET_MD5SUM=408901f0b3c672ea0f353795391f07f6
+LINUX_ET_DRIVER=kernel-source-et-0.11.tar.gz
+LINUX_ET_MD5SUM=bdc23ab59440793e35cab039457f6358
 
 $(DL_DIR)/$(LINUX_BINARY_WL_DRIVER):
 	$(SCRIPT_DIR)/download.pl $(DL_DIR) $(LINUX_BINARY_WL_DRIVER) $(LINUX_BINARY_WL_MD5SUM) $(LINUX_BINARY_DRIVER_SITE)
