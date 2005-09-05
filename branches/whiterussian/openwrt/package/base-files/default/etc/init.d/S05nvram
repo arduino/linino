@@ -82,6 +82,16 @@ nvram set lan_proto="static"
   nvram set wl0id=0x4320
 }
 
+WAN_PROTO="$(nvram get wan_proto)"
+[  "$WAN_PROTO" = "pptp" \
+-o "$WAN_PROTO" = "pppoe" ] && {
+	WAN_IFNAME="$(nvram get wan_ifname)"
+	[ "${WAN_IFNAME%%[0-9]*}" = "ppp" ] || {
+		nvram set wan_ifname=ppp0
+		nvram set ${WAN_PROTO}_ifname="$WAN_IFNAME"
+	}
+}
+
 # defaults
 nvram_default lan_ifname "br0"
 nvram_default lan_ifnames "$FAILSAFE_ifnames"

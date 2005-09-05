@@ -30,6 +30,7 @@ while :; do
 		connect /bin/true \
 		usepeerdns \
 		defaultroute \
+		replacedefaultroute \
 		linkname $type \
 		user "$USERNAME" \
 		password "$PASSWORD" \

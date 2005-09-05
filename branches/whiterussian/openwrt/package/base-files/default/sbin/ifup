@@ -8,12 +8,9 @@ if_proto=$(nvram get ${type}_proto)
 if=$(nvram get ${type}_ifname)
 [ "${if%%[0-9]}" = "ppp" ] && if=$(nvram get ${if_proto}_ifname)
 
-if_valid $if || exit 
+if_valid $if || [ "$if_proto" = "pptp" ] || exit 
 mac=$(nvram get ${type}_hwaddr)
 $DEBUG ifconfig $if down 2>&-
-
-pidfile=/var/run/${if}.pid
-[ -f $pidfile ] && $DEBUG kill $(cat $pidfile)
 
 if [ "${if%%[0-9]}" = "br" ]; then
 	stp=$(nvram get ${type}_stp)
@@ -32,34 +29,4 @@ else
 	${mac:+$DEBUG ifconfig $if down hw ether $mac}
 fi
 
-case "$if_proto" in
-	static)
-		ip=$(nvram get ${type}_ipaddr)
-		netmask=$(nvram get ${type}_netmask)
-		gateway=$(nvram get ${type}_gateway)
-
-		$DEBUG ifconfig $if $ip ${netmask:+netmask $netmask} broadcast + up
-		${gateway:+$DEBUG route add default gw $gateway}
-
-		[ -f /etc/resolv.conf ] && return
-
-		debug "# --- creating /etc/resolv.conf ---"
-		for dns in $(nvram get ${type}_dns); do
-			echo "nameserver $dns" >> /etc/resolv.conf
-		done
-	;;
-	dhcp)
-		ip=$(nvram get ${type}_ipaddr)
-		DHCP_ARGS="-R -i $if ${ip:+-r $ip} -b -p $pidfile"
-		DHCP_HOSTNAME=$(nvram get ${type}_hostname)
-		DHCP_HOSTNAME=${DHCP_HOSTNAME%%.*}
-		[ -z $DHCP_HOSTNAME ] || DHCP_ARGS="$DHCP_ARGS -H $DHCP_HOSTNAME"
-		${DEBUG:-eval} "udhcpc $DHCP_ARGS &"
-	;;
-	none|"")
-	;;
-	*)
-		[ -x "/sbin/ifup.${if_proto}" ] && { $DEBUG /sbin/ifup.${if_proto} $*; exit; }
-		echo "### ifup $type: ignored ${type}_proto=\"$if_proto\" (not supported)"
-	;;
-esac
+do_ifup $if_proto $type
