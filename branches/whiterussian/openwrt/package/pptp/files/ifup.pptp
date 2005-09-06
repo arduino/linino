@@ -25,6 +25,11 @@ while :; do
 	MTU=${MTU:+ mtu $MTU mru $MTU}
 
 	do_ifup $PPTP_PROTO $type
+	
+	# hack for some buggy ISPs
+	NETMASK=$(nvram get ${type}_netmask)
+	IFNAME=$(nvram get pptp_ifname)
+	[ -z "$NETMASK" -o -z "$IFNAME" ] || ifconfig $IFNAME netmask $NETMASK
 
 	/usr/sbin/pppd nodetach \
 		pty "/usr/sbin/pptp $IP --loglevel 0 --nolaunchpppd" \
@@ -38,7 +43,6 @@ while :; do
 		password "$PASSWORD" \
 		$MTU \
 		$IDLETIME \
-		$REDIAL \
-		$IFNAME
+		$REDIAL
 done &
 
