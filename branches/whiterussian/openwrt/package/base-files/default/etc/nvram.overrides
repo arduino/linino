@@ -22,7 +22,7 @@
 [ "$(nvram get boardnum)" = "asusX" \
 -a "$(nvram get boardtype)" = "bcm94710dev" ] && FAILSAFE_ifnames="eth0 eth1 eth2"
   
-FAILSAFE_ifnames=${FAILSAFE_ifnames:-"vlan0 vlan1 eth1 eth2 eth3"}
+FAILSAFE_ifnames=${FAILSAFE_ifnames:-"vlan0 eth1 eth2"}
 
 # failsafe if reset is held
 [ "$FAILSAFE" = "true" ] && {
