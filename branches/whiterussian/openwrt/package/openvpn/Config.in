@@ -16,6 +16,11 @@ config BR2_PACKAGE_OPENVPN_SERVER
 	default y
 	depends BR2_PACKAGE_OPENVPN
 
+config BR2_PACKAGE_OPENVPN_HTTP
+	bool "Enable http proxy support"
+	default y
+	depends BR2_PACKAGE_OPENVPN
+
 config BR2_PACKAGE_OPENVPN_LZO
 	bool "Enable transparent compression (lzo)"
 	default y
