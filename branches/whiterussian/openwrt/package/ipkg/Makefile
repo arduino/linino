@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ipkg
 PKG_VERSION:=0.99.149
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=975cc419d6db5fb279dc58177c68373b
 
 PKG_SOURCE_URL:=http://www.handhelds.org/packages/ipkg
