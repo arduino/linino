@@ -1,0 +1,35 @@
+diff -Nur ipkg-0.99.149.orig/ipkg_install.c ipkg-0.99.149/ipkg_install.c
+--- ipkg-0.99.149.orig/ipkg_install.c	2005-03-30 14:08:13.000000000 +0200
++++ ipkg-0.99.149/ipkg_install.c	2005-09-12 17:37:53.287558000 +0200
+@@ -1416,9 +1416,8 @@
+ 				       "       What would you like to do about it ?  Your options are:\n"
+ 				       "        Y or I  : install the package maintainer's version\n"
+ 				       "        N or O  : keep your currently-installed version\n"
+-				       "          D     : show the differences between the versions (if diff is installed)\n"
+ 				       "     The default action is to keep your current version.\n"
+-				       "    *** %s (Y/I/N/O/D) [default=N] ? ", file_name, short_file_name);
++				       "    *** %s (Y/I/N/O) [default=N] ? ", file_name, short_file_name);
+ 	  if (strcmp(response, "y") == 0
+ 	      || strcmp(response, "i") == 0
+ 	      || strcmp(response, "yes") == 0) {
+@@ -1426,20 +1425,6 @@
+ 	       return 0;
+ 	  }
+ 
+-	  if (strcmp(response, "d") == 0) {
+-	       char *cmd;
+-
+-	       free(response);
+-	       /* XXX: BUG rewrite to use exec or busybox's internal diff */
+-	       sprintf_alloc(&cmd, "diff -u %s %s", backup, file_name);
+-	       xsystem(cmd);
+-	       free(cmd);
+-	       printf("    [Press ENTER to continue]\n");
+-	       response = file_read_line_alloc(stdin);
+-	       free(response);
+-	       continue;
+-	  }
+-
+ 	  free(response);
+ 	  return 1;
+      }
