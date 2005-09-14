@@ -1,6 +1,6 @@
 Package: mtd
 Priority: optional
 Section: sys
-Maintainer: Felix Fietkau <nbd@vd-s.ath.cx>
+Maintainer: OpenWrt Developer <openwrt-devel@openwrt.org>
 Source: buildroot internal
 Description: Tool for modifying the flash chip
