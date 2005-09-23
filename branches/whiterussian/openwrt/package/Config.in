@@ -23,6 +23,7 @@ source "package/sablevm-classpath/Config.in"
 source "package/libffi-sable/Config.in"
 endmenu
 source "package/screen/Config.in"
+source "package/webif/Config.in"
 
 comment "Networking"
 source "package/aiccu/Config.in"
