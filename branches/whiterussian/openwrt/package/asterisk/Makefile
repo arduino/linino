@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
 PKG_VERSION:=1.0.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=4cc3c1e4a1b12e0e4c748326ad153291
 
 PKG_SOURCE_URL:=http://ftp.digium.com/pub/asterisk/old-releases
@@ -82,7 +82,7 @@ $(IPKG_ASTERISK):
 		cd modules; \
 		rm -rf	*adsi* *festival* *modem* *meetme* *oss* *phone* *intercom* \
 			*mp3* *nbscat* *mysql* *postgres* *pgsql* *voicemail* *speex* \
-			*musiconhold* *zapateller* *jpeg*; \
+			*zapateller* *jpeg*; \
 		rm -f {codec,format}_ilbc.so ; \
 		rm -f codec_lpc10.so ; \
 		rm -f pbx_dundi.so ; \
@@ -90,7 +90,7 @@ $(IPKG_ASTERISK):
 	(cd $(IDIR_ASTERISK)/etc/asterisk; \
 		rm -f 	*odbc* *mysql* *postgres* *pgsql* *voicemail* *adsi* *oss* *alsa* \
 			*festival* *modem* *meetme* *phone* *tds* *vofr* *rpt* *vpb* \
-			*zapata* *musiconhold*; \
+			*zapata*; \
 		rm -f dundi.conf ; \
 	)
 	install -d -m0755 $(IDIR_ASTERISK)/etc/default
@@ -131,6 +131,9 @@ $(IPKG_ASTERISK_VOICEMAIL):
 	install -m0644 $(PKG_BUILD_DIR)/configs/voicemail.conf.sample $(IDIR_ASTERISK_VOICEMAIL)/etc/asterisk/voicemail.conf
 	install -d -m0755 $(IDIR_ASTERISK_VOICEMAIL)/usr/lib/asterisk/modules
 	install -m0755 $(PKG_BUILD_DIR)/apps/*voicemail.so $(IDIR_ASTERISK_VOICEMAIL)/usr/lib/asterisk/modules/
+	install -m0755 $(PKG_BUILD_DIR)/res/res_adsi.so $(IDIR_ASTERISK_VOICEMAIL)/usr/lib/asterisk/modules/
+	install -d -m0755 $(IDIR_ASTERISK_VOICEMAIL)/usr/lib/asterisk/sounds
+	cp -fpR $(PKG_BUILD_DIR)/sounds/vm-*.gsm $(IDIR_ASTERISK_VOICEMAIL)/usr/lib/asterisk/sounds/
 	$(RSTRIP) $(IDIR_ASTERISK_VOICEMAIL)
 	$(IPKG_BUILD) $(IDIR_ASTERISK_VOICEMAIL) $(PACKAGE_DIR)
 
