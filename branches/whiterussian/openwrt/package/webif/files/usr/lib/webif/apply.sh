@@ -10,4 +10,5 @@ for config in config-*; do
 	name="/usr/lib/webif/apply-${config#config-}.sh"
 	[ -f "$name" ] && sh $name &
 done
+sleep 2
 rm -f config-*
