@@ -28,10 +28,9 @@ $(PKG_BUILD_DIR)/.built:
 		OFLAGS="$(TARGET_CFLAGS)" \
 		CC="$(TARGET_CC)" \
 		LINKER="$(TARGET_CC)" \
-		KERNEL="$(LINUX_VERSION)" \
 		KERNEL_SOURCES="$(LINUX_DIR)" \
 		ROOT="$(PKG_INSTALL_DIR)" \
-		all install
+		utils utils-install
 	touch $@
 
 $(IPKG_SHFS_UTILS):
