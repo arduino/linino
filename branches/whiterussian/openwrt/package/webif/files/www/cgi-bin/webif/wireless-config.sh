@@ -56,11 +56,8 @@ load_settings "wireless"
 	[ $FORM_encryption = off ] && {
 		wep=${wl0_wep:-$(nvram get wl0_wep)}
 		case "$wep" in
-			1|enabled|on)
-				FORM_encryption=wep
-				;;
-			*)
-				FORM_encryption=disabled
+			1|enabled|on) FORM_encryption=wep;;
+			*) FORM_encryption=disabled;;
 		esac
 	}
 	FORM_key1=${wl0_key1:-$(nvram get wl0_key1)}
@@ -74,32 +71,25 @@ load_settings "wireless"
 	SAVED=1
 	save_setting wireless wl0_mode "$FORM_mode"
 	save_setting wireless wl0_ssid "$FORM_ssid"
+	case "$FORM_aes$FORM_tkip" in 
+		aes) save_setting wireless wl0_crypto aes;;
+		tkip) save_setting wireless wl0_crypto tkip;;
+		aestkip) save_setting wireless wl0_crypto tkip+aes;;
+	esac
 	case "$FORM_encryption" in
 		psk)
 			case "${FORM_wpa1}${FORM_wpa2}" in
-				wpa1)
-					save_setting wireless wl0_akm "psk"
-					;;
-				wpa2)
-					save_setting wireless wl0_akm "psk2"
-					;;
-				wpa1wpa2)
-					save_setting wireless wl0_akm "psk psk2"
-					;;
+				wpa1) save_setting wireless wl0_akm "psk";;
+				wpa2) save_setting wireless wl0_akm "psk2";;
+				wpa1wpa2) save_setting wireless wl0_akm "psk psk2";;
 			esac
 			save_setting wireless wl0_wpa_psk "$FORM_wpa_psk"
 			;;
 		wpa)
 			case "${FORM_wpa1}${FORM_wpa2}" in
-				wpa1)
-					save_setting wireless wl0_akm "wpa"
-					;;
-				wpa2)
-					save_setting wireless wl0_akm "wpa2"
-					;;
-				wpa1wpa2)
-					save_setting wireless wl0_akm "wpa wpa2"
-					;;
+				wpa1) save_setting wireless wl0_akm "wpa";;
+				wpa2) save_setting wireless wl0_akm "wpa2";;
+				wpa1wpa2) save_setting wireless wl0_akm "wpa wpa2";;
 			esac
 			;;
 		wep)
