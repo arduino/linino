@@ -79,7 +79,9 @@ EOF
 		<div class="noBorderOnLeft">
 		$HEAD
 EOF
-	[ -z "$REMOTE_USER" ] && {
+	[ -z "$REMOTE_USER" \
+	  -a "${SCRIPT_NAME#/cgi-bin/webif/}" != "info.sh"\
+	  -a "${SCRIPT_NAME#/cgi-bin/webif/}" != "about.sh" ] && {
 		[ -z $FORM_passwd1 ] || {
 			echo '<pre>'
 			(
@@ -143,6 +145,8 @@ apply_passwd() {
 		busybox)
 			echo -n '/:' > /etc/httpd.conf
 			cat /etc/passwd | grep root | cut -d: -f1,2 >> /etc/httpd.conf
+			echo '/cgi-bin/webif/info.sh:*' >> /etc/httpd.conf
+			echo '/cgi-bin/webif/about.sh:*' >> /etc/httpd.conf
 			killall -HUP httpd
 			;;
 	esac
