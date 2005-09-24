@@ -40,6 +40,8 @@ load_settings "wireless"
 			;;
 	esac
 	FORM_wpa_psk=${wl0_wpa_psk:-$(nvram get wl0_wpa_psk)}
+	FORM_radius_key=${wl0_radius_key:-$(nvram get wl0_radius_key)}
+	FORM_radius_ipaddr=${wl0_radius_ipaddr:-$(nvram get wl0_radius_ipaddr)}
 	crypto=${wl0_crypto:-$(nvram get wl0_crypto)}
 	case "$crypto" in
 		tkip)
@@ -91,6 +93,9 @@ load_settings "wireless"
 				wpa2) save_setting wireless wl0_akm "wpa2";;
 				wpa1wpa2) save_setting wireless wl0_akm "wpa wpa2";;
 			esac
+			validate_ip "$FORM_radius_ipaddr" "RADIUS Server" 1 && \
+				save_setting wireless wl0_radius_ipaddr "$FORM_radius_ipaddr"
+			save_setting wireless wl0_radius_key "$FORM_radius_key"
 			;;
 		wep)
 			save_setting wireless wl0_wep enabled
@@ -122,6 +127,10 @@ function modechange()
 	set_visible('wpa_psk', checked('encryption_psk'));
 	set_visible('wep_keys', checked('encryption_wep'));
 
+	v = checked('encryption_wpa');
+	set_visible('radius_key', v);
+	set_visible('radius_ipaddr', v);
+
 	if (checked('mode_wet') || checked('mode_sta')) {
 			var wpa = document.getElementById('encryption_wpa');
 			wpa.disabled = true;
@@ -140,7 +149,7 @@ function modechange()
 	<? [ -z "$ERROR" ] || echo "<h2>Errors occured:</h2><h3>$ERROR</h3>" ?>
 	<h2>Settings saved</h2>
 	<br />
-<?el?>
+<?fi?>
 <? display_form "start_form:$SCRIPT_NAME
 field:ESSID
 text:ssid:$FORM_ssid
@@ -161,6 +170,10 @@ checkbox:tkip:$FORM_tkip:tkip:RC4 (TKIP)
 checkbox:aes:$FORM_aes:aes:AES
 field:WPA preshared key:wpa_psk
 text:wpa_psk:$FORM_wpa_psk
+field:RADIUS Server IP:radius_ipaddr
+text:radius_ipaddr:$FORM_radius_ipaddr
+field:RADIUS Server Key:radius_key
+text:radius_key:$FORM_radius_key
 field:WEP keys:wep_keys
 radio:key:$FORM_key:1
 text:key1:$FORM_key1:<br />
@@ -174,7 +187,6 @@ field
 submit:action:Save settings
 end_form"
 ?>
-<?fi?>
 
 <? footer ?>
 <!--
