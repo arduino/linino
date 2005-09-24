@@ -162,19 +162,19 @@ radio:encryption:$FORM_encryption:off:Disabled <br />:onChange=\"modechange()\"
 radio:encryption:$FORM_encryption:wep:WEP <br />:onChange=\"modechange()\"
 radio:encryption:$FORM_encryption:psk:WPA (preshared key) <br />:onChange=\"modechange()\"
 radio:encryption:$FORM_encryption:wpa:WPA (RADIUS):onChange=\"modechange()\"
-field:WPA support:wpa_support
+field:WPA support:wpa_support:hidden
 checkbox:wpa1:$FORM_wpa1:wpa1:WPA1
 checkbox:wpa2:$FORM_wpa2:wpa2:WPA2
-field:WPA encryption type:wpa_crypto
+field:WPA encryption type:wpa_crypto:hidden
 checkbox:tkip:$FORM_tkip:tkip:RC4 (TKIP)
 checkbox:aes:$FORM_aes:aes:AES
-field:WPA preshared key:wpa_psk
+field:WPA preshared key:wpa_psk:hidden
 text:wpa_psk:$FORM_wpa_psk
-field:RADIUS Server IP:radius_ipaddr
+field:RADIUS Server IP:radius_ipaddr:hidden
 text:radius_ipaddr:$FORM_radius_ipaddr
-field:RADIUS Server Key:radius_key
+field:RADIUS Server Key:radius_key:hidden
 text:radius_key:$FORM_radius_key
-field:WEP keys:wep_keys
+field:WEP keys:wep_keys:hidden
 radio:key:$FORM_key:1
 text:key1:$FORM_key1:<br />
 radio:key:$FORM_key:2

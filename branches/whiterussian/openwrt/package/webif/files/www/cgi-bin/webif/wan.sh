@@ -16,7 +16,7 @@ load_settings network
 	# detect pptp package and compile option
 	[ -x /sbin/ifup.pptp ] && {
 		PPTP_OPTION="radio:wan_proto:$FORM_wan_proto:pptp:PPTP<br />:onChange=\"modechange()\""
-		PPTP_SERVER_OPTION="field:PPTP Server IP:pptp_server_ip
+		PPTP_SERVER_OPTION="field:PPTP Server IP:pptp_server_ip:hidden
 text:pptp_server_ip:$FORM_pptp_server_ip"
 	}
 	[ -x /sbin/ifup.pppoe ] && {
@@ -146,28 +146,28 @@ radio:wan_proto:$FORM_wan_proto:static:Static IP<br />:onchange=\"modechange()\"
 $PPPOE_OPTION
 $PPTP_OPTION
 
-field:Internet IP Address:wan_ipaddr
+field:Internet IP Address:wan_ipaddr:hidden
 text:wan_ipaddr:$FORM_wan_ipaddr
-field:Subnet Mask:wan_netmask
+field:Subnet Mask:wan_netmask:hidden
 text:wan_netmask:$FORM_wan_netmask
-field:Gateway:wan_gateway
+field:Gateway:wan_gateway:hidden
 text:wan_gateway:$FORM_wan_gateway
-field:DNS Server(s):wan_dns
+field:DNS Server(s):wan_dns:hidden
 text:wan_dns:$FORM_wan_dns
 $PPTP_SERVER_OPTION
 
-field:PPP Redial Policy:ppp_redial
+field:PPP Redial Policy:ppp_redial:hidden
 radio:ppp_redial:$FORM_ppp_redial:demand:Connect on Demand<br />:onChange=\"modechange()\"
 radio:ppp_redial:$FORM_ppp_redial:persist:Keep Alive:onChange=\"modechange()\"
-field:Maximum Idle Time:ppp_demand_idletime
+field:Maximum Idle Time:ppp_demand_idletime:hidden
 text:ppp_idletime:$FORM_ppp_idletime
-field:Redial Timeout:ppp_persist_redialperiod
+field:Redial Timeout:ppp_persist_redialperiod:hidden
 text:ppp_redialperiod:$FORM_ppp_redialperiod
-field:PPP Username:ppp_username
+field:PPP Username:ppp_username:hidden
 text:ppp_username:$FORM_ppp_username
-field:PPP Password:ppp_passwd
+field:PPP Password:ppp_passwd:hidden
 text:ppp_passwd:$FORM_ppp_passwd
-field:PPP MTU:ppp_mtu
+field:PPP MTU:ppp_mtu:hidden
 text:ppp_mtu:$FORM_ppp_mtu
 
 field

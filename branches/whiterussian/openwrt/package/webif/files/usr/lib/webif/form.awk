@@ -18,9 +18,10 @@ $1 ~ /^start_form/ {
 }
 $1 ~ /^field/ {
 	if (field_open == 1) print "</td></tr>"
-	if ($3 != "") field_id=" id=\"" $3 "\""
-	else field_id=""
-	print "<tr" field_id "><td>" $2 "</td><td>"
+	if ($3 != "") field_opts=" id=\"" $3 "\""
+	else field_opts=""
+	if ($4 == "hidden") field_opts = field_opts " style=\"display: none\""
+	print "<tr" field_opts "><td>" $2 "</td><td>"
 	field_open=1
 }
 $1 ~ /^checkbox/ {
