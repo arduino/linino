@@ -115,25 +115,12 @@ header "Network" "Wireless" "Wireless settings" ' onLoad="modechange()" '
 <!--
 function modechange()
 {
-	if (checked('encryption_wpa') || checked('encryption_psk')) {
-		show('wpa_support');
-		show('wpa_crypto');
-	} else {
-		hide('wpa_support');
-		hide('wpa_crypto');
-	}
+	var v = (checked('encryption_wpa') || checked('encryption_psk'));
+	set_visible('wpa_support', v);
+	set_visible('wpa_crypto', v);
 	
-	if (checked('encryption_psk')) {
-		show('wpa_psk');
-	} else {
-		hide('wpa_psk');
-	}
-	
-	if (checked('encryption_wep')) {
-		show('wep_keys');
-	} else {
-		hide('wep_keys');
-	}
+	set_visible('wpa_psk', checked('encryption_psk'));
+	set_visible('wep_keys', checked('encryption_wep'));
 
 	if (checked('mode_wet') || checked('mode_sta')) {
 			var wpa = document.getElementById('encryption_wpa');
@@ -150,7 +137,9 @@ function modechange()
 </script>
 
 <?if [ "$SAVED" = "1" ] ?>
+	<? [ -z "$ERROR" ] || echo "<h2>Errors occured:</h2><h3>$ERROR</h3>" ?>
 	<h2>Settings saved</h2>
+	<br />
 <?el?>
 <? display_form "start_form:$SCRIPT_NAME
 field:ESSID
