@@ -159,6 +159,53 @@ load_settings() {
 	[ -f /tmp/.webif/config-$1 ] && . /tmp/.webif/config-$1 
 }
 
+validate_ip() {
+	[ \! -z "$1" ] && {
+		ipcalc "$1" >&- 2>&- && return 0 || {
+			ERROR="$ERROR Invalid IP address: $2<br />"
+			return 255
+		}
+	} || {
+		[ "$3" != "1" ] && return 0 || {
+			ERROR="$ERROR No IP address entered: $2<br />"
+			return 255
+		} 
+	}
+}
+
+validate_ips() {
+	[ \! -z "$1" ] && {
+		invalid_ip=0
+		for tmp_ip in $1; do
+			ipcalc "$1" >&- 2>&- || invalid_ip=1
+		done
+		[ "$invalid_ip" != 1 ] && return 0 || {
+			ERROR="$ERROR Invalid IP address list: $2<br />"
+			return 255
+		}
+	} || {
+		[ "$3" != "1" ] && return 0 || {
+			ERROR="$ERROR No IP address entered: $2<br />"
+			return 255
+		} 
+	}
+}
+
+validate_netmask() {
+	[ \! -z "$1" ] && {
+		# FIXME
+		ipcalc "$1" >&- 2>&- && return 0 || {
+			ERROR="$ERROR Invalid Netmask: $2<br />"
+			return 255
+		}
+	} || {
+		[ "$3" != "1" ] && return 0 || {
+			ERROR="$ERROR No Netmask entered: $2<br />"
+			return 255
+		} 
+	}
+}
+
 save_setting() {
 	oldval=$(eval "echo \${$2}")
 	oldval=${oldval:-$(nvram get "$2")}

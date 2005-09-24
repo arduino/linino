@@ -5,6 +5,11 @@
 # $5 = string to append
 # $6 = additional attributes 
 
+# trim leading whitespaces 
+{
+	gsub(/^[ \t]+/,"",$1)
+}
+
 $1 ~ /^start_form/ {
 	print "<form method=\"POST\" action=\"" $2 "\" enctype=\"multipart/form-data\">"
 	print "<input type=\"hidden\" name=\"submit\" value=\"1\" />"
@@ -39,7 +44,11 @@ $1 ~ /^submit/ {
 }
 $1 ~ /^end_form/ {
 	if (field_open == 1) print "</td></tr>"
+	field_open = 0
 	print "</tbody>"
 	print "</table>"
 	print "</form>"
+}
+END {
+	if(field_open == 1) print "</td></tr>"
 }
