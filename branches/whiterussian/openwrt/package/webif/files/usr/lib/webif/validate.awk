@@ -58,6 +58,18 @@ $1 == "hostname" {
 	}
 }
 
+$1 == "string" {
+	valid_type = 1
+}
+
+$1 == "mac" {
+	valid_type = 1
+	if ((value != "") && (value !~ /^[0-9a-fA-F][0-9a-fA-F]*:[0-9a-fA-F][0-9a-fA-F]*:[0-9a-fA-F][0-9a-fA-F]*:[0-9a-fA-F][0-9a-fA-F]*:[0-9a-fA-F][0-9a-fA-F]*:[0-9a-fA-F][0-9a-fA-F]*$/)) {
+		valid = 0
+		verr = "Invalid value"
+	}
+}
+
 valid_type != 1 { valid = 0 }
 
 valid == 1 {
@@ -65,17 +77,25 @@ valid == 1 {
 	for (i = 1; (valid == 1) && (i <= n); i++) {
 		if (options[i] == "required") {
 			if (value == "") { valid = 0; verr = "No value entered" }
-		} else if (options[i] ~ /^min=/) {
+		} else if ((options[i] ~ /^min=/) && (value != "")) {
 			if ($1 == "int") {
 				min = options[i]
 				sub(/^min=/, "", min)
 				if (value < min) { valid = 0; verr = "Value too small" }
+			} else if ($1 == "string") {
+				min = options[i]
+				sub(/^min=/, "", min)
+				if (length(value) < min) { valid = 0; verr = "Value too small" }
 			}
-		} else if (options[i] ~ /^max=/) {
+		} else if ((options[i] ~ /^max=/) && (value != ""))  {
 			if ($1 == "int") {
 				max = options[i]
 				sub(/^max=/, "", max)
 				if (value > max) { valid = 0; verr = "Value too large" }
+			} else if ($1 == "string") {
+				max = options[i]
+				sub(/^max=/, "", max)
+				if (length(value) > max) { valid = 0; verr = "Value too large" }
 			}
 		} else if ((options[i] == "nodots") && ($1 == "hostname")) {
 			if (value ~ /\./) {

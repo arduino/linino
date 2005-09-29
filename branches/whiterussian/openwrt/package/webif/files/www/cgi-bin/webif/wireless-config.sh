@@ -3,6 +3,7 @@
 . /usr/lib/webif/webif.sh
 load_settings "wireless"
 
+
 WDS=${wl0_wds:-$(nvram get wl0_wds)}
 WDS="${WDS# }"
 [ -z "$FORM_wdsremove" ] || {
@@ -22,14 +23,16 @@ END { print "" }')
 	save_setting wireless wl0_wds "$WDS"
 	FORM_submit=""
 }
-[ -z "$FORM_wdssubmit" ] || {
-	# FIXME: add input validation
-	WDS="$WDS $FORM_newmac"
-	WDS="${WDS# }"
-	save_setting wireless wl0_wds "$WDS"
+[ \! -z "$FORM_wdssubmit" ] && {
+	validate "mac|FORM_newmac|WDS MAC address||$FORM_newmac" && {
+		WDS="$WDS $FORM_newmac"
+		WDS="${WDS# }"
+		save_setting wireless wl0_wds "$WDS"
+	}
 	FORM_submit=""
 }
 if [ -z "$FORM_submit" ]; then
+	FORM_newmac=${FORM_newmac:-00:00:00:00:00:00}
 	FORM_mode=${wl0_mode:-$(nvram get wl0_mode)}
 	FORM_ssid=${wl0_ssid:-$(nvram get wl0_ssid)}
 	FORM_encryption=off
@@ -96,13 +99,16 @@ if [ -z "$FORM_submit" ]; then
 	FORM_key=${key:-1}
 else
 	SAVED=1
-	[ "$FORM_encryption" = "wpa" ] && VALIDATE_RADIUS="required"
+	[ "$FORM_encryption" = "wpa" ] && V_RADIUS="required"
+	[ "$FORM_encryption" = "psk" ] && V_PSK="required"
 	validate "
-ip|FORM_radius_ipaddr|RADIUS IP address|$VALIDATE_RADIUS|$FORM_radius_ipaddr
+ip|FORM_radius_ipaddr|RADIUS IP address|$V_RADIUS|$FORM_radius_ipaddr
 wep|FORM_key1|WEP key 1||$FORM_key1
 wep|FORM_key2|WEP key 2||$FORM_key2
 wep|FORM_key3|WEP key 3||$FORM_key3
-wep|FORM_key4|WEP key 4||$FORM_key4" && {
+wep|FORM_key4|WEP key 4||$FORM_key4
+string|FORM_wpa_psk|WPA pre-shared key|min=8 max=63 $V_PSK|$FORM_wpa_psk
+string|FORM_radius_key|RADIUS server key|min=4 max=63 $V_RADIUS|$FORM_radius_key" && {
 		save_setting wireless wl0_mode "$FORM_mode"
 		save_setting wireless wl0_ssid "$FORM_ssid"
 		case "$FORM_aes$FORM_tkip" in 
@@ -238,7 +244,7 @@ $0 ~ /^[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A
 '
 ?>
 		<tr>
-			<td width="45%"><input type="text" name="newmac" value="00:00:00:00:00:00" /></td>
+			<td width="45%"><input type="text" name="newmac" value="<? echo -n $FORM_newmac ?>" /></td>
 			<td width="55%"><input type="submit" name="wdssubmit" value="Add WDS peer" /></td>
 		</tr>
 	</table>
