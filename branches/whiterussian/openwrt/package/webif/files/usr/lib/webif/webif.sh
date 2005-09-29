@@ -5,6 +5,7 @@ rootdir=/cgi-bin/webif
 indexpage=index.sh
 
 header() {
+  CATEGORY="$1"
   UPTIME="$(uptime)"
   LOADAVG="${UPTIME#*load average: }"
   UPTIME="${UPTIME#*up }"
@@ -142,9 +143,9 @@ footer() {
 			</div>
 			<div class="apply">
 				<div>
-					<a href="config.sh?mode=save&amp;cat=Network">Apply changes &laquo;</a><br />
-					<a href="config.sh?mode=clear&amp;cat=Network">Clear changes &laquo;</a><br />
-					<a href="config.sh?mode=review&amp;cat=Network">Review changes $CHANGES &laquo;</a>
+					<a href="config.sh?mode=save&amp;cat=$CATEGORY">Apply changes &laquo;</a><br />
+					<a href="config.sh?mode=clear&amp;cat=$CATEGORY">Clear changes &laquo;</a><br />
+					<a href="config.sh?mode=review&amp;cat=$CATEGORY">Review changes $CHANGES &laquo;</a>
 				</div>
 			</div>
 		</div>

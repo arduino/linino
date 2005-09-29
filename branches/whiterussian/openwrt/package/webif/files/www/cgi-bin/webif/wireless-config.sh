@@ -97,7 +97,12 @@ if [ -z "$FORM_submit" ]; then
 else
 	SAVED=1
 	[ "$FORM_encryption" = "wpa" ] && VALIDATE_RADIUS="required"
-	validate "ip|FORM_radius_ipaddr|RADIUS IP address|$VALIDATE_RADIUS|$FORM_radius_ipaddr" && {
+	validate "
+ip|FORM_radius_ipaddr|RADIUS IP address|$VALIDATE_RADIUS|$FORM_radius_ipaddr
+wep|FORM_key1|WEP key 1||$FORM_key1
+wep|FORM_key2|WEP key 2||$FORM_key2
+wep|FORM_key3|WEP key 3||$FORM_key3
+wep|FORM_key4|WEP key 4||$FORM_key4" && {
 		save_setting wireless wl0_mode "$FORM_mode"
 		save_setting wireless wl0_ssid "$FORM_ssid"
 		case "$FORM_aes$FORM_tkip" in 

@@ -36,6 +36,28 @@ $1 == "int" {
 	if (valid == 0) verr = "Invalid value"
 }
 
+$1 == "wep" {
+	valid_type = 1
+	if (value !~ /^[0-9A-Fa-f]*$/) {
+		valid = 0
+		verr = "Invalid value"
+	} else if ((length(value) != 0) && (length(value) != 10) && (length(value) != 26)) {
+		valid = 0
+		verr = "Invalid key length"
+	} else if (value ~ /0$/) {
+		valid = 0
+		verr = "key must not end with '0'"
+	}
+}
+
+$1 == "hostname" {
+	valid_type = 1
+	if (value !~ /^[0-9a-zA-z\.\-]*$/) {
+		valid = 0
+		verr = "Invalid value"
+	}
+}
+
 valid_type != 1 { valid = 0 }
 
 valid == 1 {
@@ -54,6 +76,11 @@ valid == 1 {
 				max = options[i]
 				sub(/^max=/, "", max)
 				if (value > max) { valid = 0; verr = "Value too large" }
+			}
+		} else if ((options[i] == "nodots") && ($1 == "hostname")) {
+			if (value ~ /\./) {
+				valid = 0
+				verr = "Invalid value"
 			}
 		}
 	}
