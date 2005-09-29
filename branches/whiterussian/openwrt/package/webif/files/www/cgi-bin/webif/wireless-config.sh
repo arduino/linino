@@ -3,7 +3,33 @@
 . /usr/lib/webif/webif.sh
 load_settings "wireless"
 
-[ -z $FORM_submit ] && {
+WDS=${wl0_wds:-$(nvram get wl0_wds)}
+WDS="${WDS# }"
+[ -z "$FORM_wdsremove" ] || {
+	WDS=$(echo "$WDS " | awk '
+BEGIN {
+	RS=" "
+	FS=":"
+	first = 1
+}
+($0 !~ /^'"$FORM_wdsremove"'/) {
+	if (first != 1) printf " "
+	printf $0
+	first = 0
+}
+END { print "" }')
+	WDS="${WDS:- }"
+	save_setting wireless wl0_wds "$WDS"
+	FORM_submit=""
+}
+[ -z "$FORM_wdssubmit" ] || {
+	# FIXME: add input validation
+	WDS="$WDS $FORM_newmac"
+	WDS="${WDS# }"
+	save_setting wireless wl0_wds "$WDS"
+	FORM_submit=""
+}
+if [ -z "$FORM_submit" ]; then
 	FORM_mode=${wl0_mode:-$(nvram get wl0_mode)}
 	FORM_ssid=${wl0_ssid:-$(nvram get wl0_ssid)}
 	FORM_encryption=off
@@ -68,52 +94,53 @@ load_settings "wireless"
 	FORM_key4=${wl0_key4:-$(nvram get wl0_key4)}
 	key=${wl0_key:-$(nvram get wl0_key)}
 	FORM_key=${key:-1}
-	true
-} || {
+else
 	SAVED=1
-	save_setting wireless wl0_mode "$FORM_mode"
-	save_setting wireless wl0_ssid "$FORM_ssid"
-	case "$FORM_aes$FORM_tkip" in 
-		aes) save_setting wireless wl0_crypto aes;;
-		tkip) save_setting wireless wl0_crypto tkip;;
-		aestkip) save_setting wireless wl0_crypto tkip+aes;;
-	esac
-	case "$FORM_encryption" in
-		psk)
-			case "${FORM_wpa1}${FORM_wpa2}" in
-				wpa1) save_setting wireless wl0_akm "psk";;
-				wpa2) save_setting wireless wl0_akm "psk2";;
-				wpa1wpa2) save_setting wireless wl0_akm "psk psk2";;
-			esac
-			save_setting wireless wl0_wpa_psk "$FORM_wpa_psk"
-			;;
-		wpa)
-			case "${FORM_wpa1}${FORM_wpa2}" in
-				wpa1) save_setting wireless wl0_akm "wpa";;
-				wpa2) save_setting wireless wl0_akm "wpa2";;
-				wpa1wpa2) save_setting wireless wl0_akm "wpa wpa2";;
-			esac
-			validate_ip "$FORM_radius_ipaddr" "RADIUS Server" 1 && \
+	[ "$FORM_encryption" = "wpa" ] && VALIDATE_RADIUS="required"
+	validate "ip|FORM_radius_ipaddr|RADIUS IP address|$VALIDATE_RADIUS|$FORM_radius_ipaddr" && {
+		save_setting wireless wl0_mode "$FORM_mode"
+		save_setting wireless wl0_ssid "$FORM_ssid"
+		case "$FORM_aes$FORM_tkip" in 
+			aes) save_setting wireless wl0_crypto aes;;
+			tkip) save_setting wireless wl0_crypto tkip;;
+			aestkip) save_setting wireless wl0_crypto tkip+aes;;
+		esac
+		case "$FORM_encryption" in
+			psk)
+				case "${FORM_wpa1}${FORM_wpa2}" in
+					wpa1) save_setting wireless wl0_akm "psk";;
+					wpa2) save_setting wireless wl0_akm "psk2";;
+					wpa1wpa2) save_setting wireless wl0_akm "psk psk2";;
+				esac
+				save_setting wireless wl0_wpa_psk "$FORM_wpa_psk"
+				;;
+			wpa)
+				case "${FORM_wpa1}${FORM_wpa2}" in
+					wpa1) save_setting wireless wl0_akm "wpa";;
+					wpa2) save_setting wireless wl0_akm "wpa2";;
+					wpa1wpa2) save_setting wireless wl0_akm "wpa wpa2";;
+				esac
 				save_setting wireless wl0_radius_ipaddr "$FORM_radius_ipaddr"
-			save_setting wireless wl0_radius_key "$FORM_radius_key"
-			;;
-		wep)
-			save_setting wireless wl0_wep enabled
-			save_setting wireless wl0_akm "none"
-			save_setting wireless wl0_key1 "$FORM_key1"
-			save_setting wireless wl0_key2 "$FORM_key2"
-			save_setting wireless wl0_key3 "$FORM_key3"
-			save_setting wireless wl0_key4 "$FORM_key4"
-			save_setting wireless wl0_key "$FORM_key"
-			;;
-		off)
-			save_setting wireless wl0_akm "none"
-			save_setting wireless wl0_wep disabled
-			;;
-	esac
-}
+				save_setting wireless wl0_radius_key "$FORM_radius_key"
+				;;
+			wep)
+				save_setting wireless wl0_wep enabled
+				save_setting wireless wl0_akm "none"
+				save_setting wireless wl0_key1 "$FORM_key1"
+				save_setting wireless wl0_key2 "$FORM_key2"
+				save_setting wireless wl0_key3 "$FORM_key3"
+				save_setting wireless wl0_key4 "$FORM_key4"
+				save_setting wireless wl0_key "$FORM_key"
+				;;
+			off)
+				save_setting wireless wl0_akm "none"
+				save_setting wireless wl0_wep disabled
+				;;
+		esac
+	}
+fi
 
-header "Network" "Wireless" "Wireless settings" ' onLoad="modechange()" '
+header "Network" "Wireless" "Wireless settings" ' onLoad="modechange()" ' "$SCRIPT_NAME"
 ?>
 <script type="text/javascript" src="/webif.js"></script>
 <script type="text/javascript">
@@ -124,12 +151,12 @@ function modechange()
 	set_visible('wpa_support', v);
 	set_visible('wpa_crypto', v);
 	
-	set_visible('wpa_psk', checked('encryption_psk'));
+	set_visible('wpapsk', checked('encryption_psk'));
 	set_visible('wep_keys', checked('encryption_wep'));
 
 	v = checked('encryption_wpa');
-	set_visible('radius_key', v);
-	set_visible('radius_ipaddr', v);
+	set_visible('radiuskey', v);
+	set_visible('radius_ip', v);
 
 	if (checked('mode_wet') || checked('mode_sta')) {
 			var wpa = document.getElementById('encryption_wpa');
@@ -141,52 +168,80 @@ function modechange()
 	} else {
 			document.getElementById('encryption_wpa').disabled = false;
 	}
+	hide('save');
+	show('save');
 }
 -->
 </script>
 
-<?if [ "$SAVED" = "1" ] ?>
-	<? [ -z "$ERROR" ] || echo "<h2>Errors occured:</h2><h3>$ERROR</h3>" ?>
-	<h2>Settings saved</h2>
-	<br />
-<?fi?>
-<? display_form "start_form:$SCRIPT_NAME
-field:ESSID
-text:ssid:$FORM_ssid
-field:Mode
-radio:mode:$FORM_mode:ap:Access Point<br />:onChange=\"modechange()\" 
-radio:mode:$FORM_mode:sta:Client <br />:onChange=\"modechange()\" 
-radio:mode:$FORM_mode:wet:Bridge:onChange=\"modechange()\" 
-field:Encryption type
-radio:encryption:$FORM_encryption:off:Disabled <br />:onChange=\"modechange()\"
-radio:encryption:$FORM_encryption:wep:WEP <br />:onChange=\"modechange()\"
-radio:encryption:$FORM_encryption:psk:WPA (preshared key) <br />:onChange=\"modechange()\"
-radio:encryption:$FORM_encryption:wpa:WPA (RADIUS):onChange=\"modechange()\"
-field:WPA support:wpa_support:hidden
-checkbox:wpa1:$FORM_wpa1:wpa1:WPA1
-checkbox:wpa2:$FORM_wpa2:wpa2:WPA2
-field:WPA encryption type:wpa_crypto:hidden
-checkbox:tkip:$FORM_tkip:tkip:RC4 (TKIP)
-checkbox:aes:$FORM_aes:aes:AES
-field:WPA preshared key:wpa_psk:hidden
-text:wpa_psk:$FORM_wpa_psk
-field:RADIUS Server IP:radius_ipaddr:hidden
-text:radius_ipaddr:$FORM_radius_ipaddr
-field:RADIUS Server Key:radius_key:hidden
-text:radius_key:$FORM_radius_key
-field:WEP keys:wep_keys:hidden
-radio:key:$FORM_key:1
-text:key1:$FORM_key1:<br />
-radio:key:$FORM_key:2
-text:key2:$FORM_key2:<br />
-radio:key:$FORM_key:3
-text:key3:$FORM_key3:<br />
-radio:key:$FORM_key:4
-text:key4:$FORM_key4:<br />
-field
-submit:action:Save settings
+<? display_form "start_form|Wireless Configuration
+field|ESSID
+text|ssid|$FORM_ssid
+helpitem|ESSID
+helptext|Name of your Wireless Network
+field|Mode
+radio|mode|$FORM_mode|ap|Access Point<br />|onChange=\"modechange()\" 
+radio|mode|$FORM_mode|sta|Client <br />|onChange=\"modechange()\" 
+radio|mode|$FORM_mode|wet|Bridge|onChange=\"modechange()\" 
+helpitem|Mode
+helptext|Operation mode
+helplink|http://www.google.com
+end_form
+start_form|Encryption settings
+field|Encryption type
+radio|encryption|$FORM_encryption|off|Disabled <br />|onChange=\"modechange()\"
+radio|encryption|$FORM_encryption|wep|WEP <br />|onChange=\"modechange()\"
+radio|encryption|$FORM_encryption|psk|WPA (preshared key) <br />|onChange=\"modechange()\"
+radio|encryption|$FORM_encryption|wpa|WPA (RADIUS)|onChange=\"modechange()\"
+field|WPA support|wpa_support|hidden
+checkbox|wpa1|$FORM_wpa1|wpa1|WPA1
+checkbox|wpa2|$FORM_wpa2|wpa2|WPA2
+field|WPA encryption type|wpa_crypto|hidden
+checkbox|tkip|$FORM_tkip|tkip|RC4 (TKIP)
+checkbox|aes|$FORM_aes|aes|AES
+field|WPA preshared key|wpapsk|hidden
+text|wpa_psk|$FORM_wpa_psk
+field|RADIUS Server IP|radius_ip|hidden
+text|radius_ipaddr|$FORM_radius_ipaddr
+field|RADIUS Server Key|radiuskey|hidden
+text|radius_key|$FORM_radius_key
+field|WEP keys|wep_keys|hidden
+radio|key|$FORM_key|1
+text|key1|$FORM_key1|<br />
+radio|key|$FORM_key|2
+text|key2|$FORM_key2|<br />
+radio|key|$FORM_key|3
+text|key3|$FORM_key3|<br />
+radio|key|$FORM_key|4
+text|key4|$FORM_key4|<br />
 end_form"
 ?>
+<div class="settings">
+	<div class="settings-title"><h3><strong>WDS connections</strong></h3></div>
+	<div class="settings-content">
+	<table summary="Settings" width="100%">
+<?
+echo "$WDS " | awk '
+BEGIN {
+	RS=" "
+	FS=":"
+}
+
+$0 ~ /^[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]$/ {
+	print "<tr><td width=\"50%\">" $0 "</td><td>&nbsp;<a href=\"'"$SCRIPT_NAME"'?wdsremove=" $0 "\">Remove</a></td></tr>"
+}
+'
+?>
+		<tr>
+			<td width="45%"><input type="text" name="newmac" value="00:00:00:00:00:00" /></td>
+			<td width="55%"><input type="submit" name="wdssubmit" value="Add WDS peer" /></td>
+		</tr>
+	</table>
+	</div>
+	<div class="settings-help">&nbsp;</div>
+</div>
+<div style="clear: both">&nbsp;</div>
+
 
 <? footer ?>
 <!--

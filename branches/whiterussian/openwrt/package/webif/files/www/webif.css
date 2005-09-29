@@ -1,460 +1,278 @@
-/***************************************
- * TITLE: Prosimii Screen Stylesheet   * 
- * URI  : prosimii/prosimii-screen.css *
- * MODIF: 2004-Apr-28 21:43 +0800      *
- ***************************************/
-
-
-/* ##### Common Styles ##### */
+* {
+	margin: 0;
+	padding: 0;
+}
 
 html, body {
-  height: 100%;
-  width: inherit;
-}
-
-#container {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  font-family: verdana, helvetica, arial, sans-serif;
-  font-size: 73%;  /* Enables font size scaling in MSIE */
-  margin: 0;
-  padding: 0;
-}
-
-html > body {
-  font-size: 9pt;
-}
-
-acronym, .titleTip {
-  border-bottom: 1px dotted rgb(61,92,122);
-  cursor: help;
-  margin: 0;
-  padding: 0 0 0.4px 0;
-}
-
-a {
-  color: rgb(61,92,122);
-  background-color: transparent;
-  text-decoration: underline;
-  margin: 0;
-  padding: 0 1px 2px 1px;
-}
-
-a:hover {
-  color: rgb(117,144,174);
-  text-decoration: none;
-}
-
-ol {
-  margin: 1em 0 1.5em 0;
-  padding: 0;
-}
-
-ul {
-  list-style-type: square;
-  margin: 1em 0 1.5em 0;
-  padding: 0;
-}
-
-dl {
-  margin: 1em 0 0.5em 0;
-  padding: 0;
-}
-
-ul li {
-  line-height: 1.5em;
-  margin: 1.25ex 0 0 1.5em;
-  padding: 0;
-}
-
-ol li {
-  line-height: 1.5em;
-  margin: 1.25ex 0 0 2em;
-  padding: 0;
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 10pt;
+	width: inherit;
+	height: 100%;
 }
 
 dt {
-  font-weight: bold;
-  margin: 0;
-  padding: 0 0 1ex 0;
+	font-weight: bold;
 }
 
 dd {
-  line-height: 1.75em;
-  margin: 0 0 1.5em 1.5em;
-  padding: 0;
+	margin-left: 1em;
+	margin-bottom: 0.2em;
 }
 
-.doNotDisplay {
-  display: none !important;
+ul {
+	display: inline;
+	list-style-type: none;
 }
 
-
-.smallCaps {
-  font-size: 117%;
-  font-variant: small-caps;
+ul.about {
+	display: block;
+	list-style-type: disc;
+}
+li.about {
+	margin-left: 2em;
 }
 
-
-/* ##### Header ##### */
-
-.superHeader {
-  color: rgb(130,128,154);
-  background-color: rgb(33,50,66);
-  text-align: right;
-  margin: 0;
-  padding: 0.5ex 10px;
+hr {
+	display: none;
 }
 
-.superHeader span {
-  color: rgb(195,196,210);
-  background-color: transparent;
-  font-weight: bold;
-  text-transform: uppercase;
+.selected-maincat {
+	font-weight: bold;
 }
 
-.superHeader a {
-  color: rgb(195,196,210);
-  background-color: transparent;
-  text-decoration: none;
-  margin: 0;
-  padding: 0 0.25ex 0 0;
+#container {
+	position: relative;
+	min-height: 100%;
 }
 
-.superHeader a:hover {
-  color: rgb(193,102,90);
-  background-color: transparent;
-  text-decoration: none;
+#header {
+	position: relative;
+	width: 100%;
 }
 
-.topHeader {
-  color: rgb(130,128,154);
-  background-color: rgb(33,50,66);
-  text-align: left;
-  margin: 0;
-  padding: 0.5ex 10px;
+#header #header-title {
+	padding-top: 2em;
+	padding-bottom: 0.2em;
+	color: white;
+	background-color: #3D5C7A;
 }
 
-.categoryHeader {
-  color: rgb(130,128,154);
-  background-color: rgb(33,50,66);
-  position: absolute;
-  top: 0;
-  text-align: left;
-  margin: 0;
-  padding: 0.5ex 10px;
+#header #header-title #openwrt-title {
+	position: relative;
+	float: left;
+	left: 1em;
+	top: 0.7em;
 }
 
-.categoryHeader span {
-  color: rgb(195,196,210);
-  background-color: transparent;
-  font-weight: bold;
-  text-transform: uppercase;
+#header #header-title #openwrt-title h1 {
+	font-size: 2.8em;
 }
 
-.categoryHeader a {
-  color: rgb(195,196,210);
-  background-color: transparent;
-  text-decoration: none;
-  margin: 0;
-  padding: 0 0.25ex 0 0;
+#header #header-title #short-status {
+	position: relative;
+	text-align: right;
+	right: 1em;
+	line-height: 1.2em;
+	padding-bottom:	0.2em;
 }
 
-.categoryHeader a.active {
-  color: rgb(195,196,210);
-  font-weight: bold;
-  background-color: transparent;
-  text-decoration: none;
-  margin: 0;
-  padding: 0 0.25ex 0 0;
+#header #header-title #short-status ul {
+	font-size: 0.8em;
 }
 
-.categoryHeader a:hover {
-  color: rgb(193,102,90);
-  background-color: transparent;
-  text-decoration: none;
+#header #header-title #short-status h3 {
+	display: none;
+	font-size: 0.9em;
 }
 
-.midHeader {
-  color: white;
-  background-color: rgb(61,92,122);
-  margin: 0;
-  padding: 0.26ex 10px;
+#header #mainmenu {
+	position: absolute;
+	color: #C3C4D2;
+	background-color: #213242;
+	padding-top: 0.2em;
+	padding-bottom:	0.2em;
+	margin-top: 0.1em;
+	top: 0;
+	left: 0;
+	height: 1.2em;
+	width: 100%;
 }
 
-.headerTitle {
-  font-size: 300%;
-  margin: 0;
-  padding: 0;
+#header #mainmenu a {
+	color: #C3C4D2;
+	text-decoration: none;
 }
 
-.headerSubTitle {
-  font-size: 151%;
-  font-weight: normal;
-  font-style: italic;
-  margin: 0 0 1ex 0;
-  padding: 0;
+#header #mainmenu a:hover {
+	color: rgb(193,102,90);
 }
 
-.headerInfo {
-  text-align: right;
-  margin: 0;
-  padding: 0 0 2ex 0;
-  position: absolute;
-  right: 1em;
-  top: 0.3em;
+#header #mainmenu a:active {
+	font-weight: bold;
 }
 
-.headerInfo span {
-  color: rgb(195,196,210);
-  background-color: transparent;
-  font-weight: bold;
-  text-transform: uppercase;
+#header #mainmenu h3 {
+	padding-left: 1em;
+	float: left;
+	font-size: 9pt;
+	text-transform: uppercase;
 }
 
-.headerInfo a {
-  color: white;
-  background-color: transparent;
-  text-decoration: none;
-  margin: 0;
-  padding: 0 0 0.5ex 0;
-  display: block;
+#header #mainmenu ul {
+	display: inline;
+	list-style-type: none;
 }
 
-.headerInfo a:hover {
-  color: rgb(195,196,210);
-  background-color: transparent;
-  text-decoration: underline;
+#header #mainmenu li {
+	font-size: 9pt;
+	float: left;
+	margin-left: 1.5em;
 }
 
-.headerLinks {
-  text-align: right;
-  margin: 0;
-  padding: 0 0 2ex 0;
-  position: absolute;
-  right: 1.5em;
-  top: 3em;
+#header #submenu {
+	position: absolute;
+	color: white;
+	background-color: #7590AE;
+	width: 100%;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+	height: 1.3em;
 }
 
-.headerLinks a {
-  color: white;
-  background-color: transparent;
-  text-decoration: none;
-  display: block;
+#header #submenu a {
+	font-weight: bold;
+	color: white;
+	text-decoration: none;
 }
 
-.headerLinks a:hover {
-  color: rgb(195,196,210);
-  background-color: transparent;
-  text-decoration: underline;
+#header #submenu a:hover {
+	color: rgb(255,204,0);
 }
 
-.subHeader {
-  color: white;
-  background-color: rgb(117,144,174);
-  margin: 0;
-  padding: 0.5ex 10px;
+#header #submenu a:active {
+	font-weight: bold;
 }
 
-.subHeader a, .subHeader .highlight {
-  color: white;
-  background-color: transparent;
-  font-size: 110%;
-  font-weight: bold;
-  text-decoration: none;
-  margin: 0;
-  padding: 0 0.25ex 0 0;
+#header #submenu h3 {
+	display: none;
 }
 
-.subHeader a:hover, .subHeader .highlight {
-  color: rgb(255,204,0);
-  background-color: transparent;
-  text-decoration: none;
+#header #submenu ul {
+	display: inline;
+	list-style-type: none;
 }
 
-
-/* ##### Main Copy ##### */
-
-#main-copy {
-  margin: 0;
-  padding: 0.5em 10px;
-  clear: left;
+#header #submenu li {
+	float: left;
+	margin-left: 1em;
 }
 
-#main-copy h1 {
-  color: rgb(117,144,174);
-  background-color: transparent;
-  font-family: "trebuchet ms", verdana, helvetica, arial, sans-serif;
-  font-size: 200%;
-  margin: 0;
-  padding: 0;
+#content {
+	padding-top: 2em;
+	margin-left: 1em;
+	padding-bottom: 5em;
 }
 
-#main-copy h2 {
-  color: rgb(61,92,122);
-  background-color: transparent;
-  font-family: "trebuchet ms", verdana, helvetica, arial, sans-serif;
-  font-weight: normal;
-  font-size: 151%;
-  margin: 0;
-  padding: 1ex 0 0 0;
+#content .settings-block {
+	margin-bottom: 1.5em;
 }
 
-#main-copy p {
-  line-height: 1.75em;
-  margin: 1em 0 1.5em 0;
-  padding: 0;
+#content .settings-block .settings-block-title {
+	padding: 0.2em;
+	margin-bottom: 10px;
 }
 
-.newsHeading {
-  color: rgb(61,92,122);
-  background-color: transparent;
-  font-family: "trebuchet ms", verdana, helvetica, arial, sans-serif;
-  font-size: 145%;
-  text-decoration: none;
-  margin: 0;
-  padding: 1ex 0 0 0;
-  display: block;
+#content .settings-block .settings-block-title h2 {
+	color: #7590AE;
 }
 
-.newsHeading:hover {
-  color: rgb(117,144,174);
-  background-color: transparent;
-  text-decoration: underline;
+#content .settings-block .settings {
+	clear: both;
+	margin-left: 1.5em;
+	padding-right: 1em;
 }
 
-.newsDate {
-  font-style: italic;
-  margin: 0 !important;
-  padding: 0;
+#content .settings-block .settings .settings-title {
+	padding: 0.2em;
+	color: #000;
+	background-color: #CCC;
 }
 
-.newsSummary {
-  margin: 1.5ex 0 2.5ex 0.75ex !important;
-  padding: 0;
+#content .settings-block .settings .settings-content {
+	margin-left: 1em;
+	float: left;
+	width: 58%;
+	padding-bottom: 0.5em;
 }
 
-.more {
-  text-align: right;
-  margin: 0;
-  padding: 0.5em 0;
+#content .settings-block .settings .settings-content input {
+	margin-top: 0.8em;
 }
 
-.more a {
-  color: rgb(61,92,122);
-  background-color: transparent;
-  font-size: 92%;
-  text-decoration: underline;
-  margin: 0;
-  padding: 0.25ex 0.75ex;
+#content .settings-block .settings .settings-help {
+	padding: 0.4em;
+	margin-left: 42%;
 }
 
-.more a:hover {
-  color: rgb(117,144,174);
-  text-decoration: none;
+#content .settings-block .settings .settings-help h3 {
+	display: none;
 }
 
-.rowOfBoxes {
-  clear: both;
+#content .settings-block .settings .settings-help .more-help {
+	margin-right: 10%;
+	text-align: right;
 }
 
-.quarter, .threeQuarter, .oneThird, .half, .twoThirds, .fullWidth {
-  margin: 1em 0;
-  float: left;
-  border-left: 1px solid rgb(204,204,204);
+#save {
+	position: absolute;
+	text-align: right;
+	bottom: 0;
+	clear: both;
+	width: 100%;
+	height: 7.4em;
 }
 
-.quarter {
-  width: 21%;
-  padding: 0 1.9%;
+#save a {
+	color: white;
+	text-decoration: none;
+	font-weight: normal;
+	font-size: 11pt;
 }
 
-.threeQuarter {
-  width: 71%;
-  padding: 0 1.9%;
+#save a:hover {
+	text-decoration: underline;
 }
 
-.oneThird {
-  width: 28%;
-  padding: 0 1.9%;
+#save .page-save {
+	background-color: #FFF;
+	color: #FFF;
+	height: 2.3em;
+	width: 100%;
 }
 
-.half {
-  text-align: justify;
-  width: 46%;
-  padding: 0 1.9%;
+#save .page-save div {
+	float: right;
+	width: 15em;
+	height: 1.5em;
+	padding-right: 1em;
+	padding-top: 0.5em;
+	padding-bottom:	0.4em;
+	background-color: #7590AE;
 }
 
-.twoThirds {
-  text-align: justify;
-  width: 63%;
-  padding: 0 1.9%;
+#save .apply {
+	clear: both;
+	background-color: #7590AE;
+	width: 100%;
+	height: 5em;
 }
 
-.fullWidth {
-  text-align: justify;
-  width: 96%;
-  padding: 0 1.2em;
-  border-left: none;
-}
-
-.filler {  /* use with an empty <p> element to add padding to the end of a text box */
-  border: 1px solid white;
-}
- 
-.noBorderOnLeft {
-  border-left: none;
-}
-
-.dividingBorderAbove {
-  border-top: 1px solid rgb(204,204,204);
-}
-
-/* More elegant alternatives to .noBorderOnLeft & .dividingBorderAbove
- * that don't require the creation of new classes - but which are not
- * supported by MSIE - are the following:
- *
- * .rowOfBoxes > div:first-child {
- *   border-left: none;
- * }
- *
- * .rowOfBoxes + .rowOfBoxes {
- *   border-top: 1px solid rgb(204,204,204);
- * }
- */
-
-
-/* ##### Footer ##### */
-
-#footer {
-  border-top: 1px solid rgb(128,128,128);
-  color: rgb(51,51,102);
-  background-color: rgb(239,239,239);
-  font-size: 87%;
-  text-align: center;
-  line-height: 1.25em;
-  margin: 2em 0 0 0;
-  padding: 1ex 10px;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-}
-
-* > #footer {
-  width: auto;
-  left: 0;
-  right: 0;
-}
-
-#footer a {
-  color: rgb(0,68,204);
-  background-color: transparent;
-  text-decoration: underline;
-}
-
-#footer a:hover {
-  text-decoration: none;
+#save .apply div {
+	float: right;
+	height: 4em;
+	width: 15em;
+	padding-right: 1em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	background-color: #3D5C7A;
 }

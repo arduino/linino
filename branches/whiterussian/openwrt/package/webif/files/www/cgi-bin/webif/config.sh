@@ -21,9 +21,11 @@ header $FORM_cat .
 	<? (
 	cd /tmp/.webif
 	for configname in config-*; do
-		echo -n "<h3>${configname#config-}</h3><pre>"
-		cat $configname
-		echo '</pre>'
+		grep = $configname >&- 2>&- && {
+			echo -n "<h3>${configname#config-}</h3><pre>"
+			cat $configname
+			echo '</pre>'
+		}
 	done
 	) ?>
 		<?fi?>

@@ -1,87 +1,85 @@
 libdir=/usr/lib/webif
 wwwdir=/www
 cgidir=/www/cgi-bin/webif
+rootdir=/cgi-bin/webif
 indexpage=index.sh
 
 header() {
-  UPTIME=$(uptime)
-  UPTIME="up ${UPTIME##*up}"
+  UPTIME="$(uptime)"
+  LOADAVG="${UPTIME#*load average: }"
+  UPTIME="${UPTIME#*up }"
+  UPTIME="${UPTIME%%,*}"
   HOSTNAME=$(cat /proc/sys/kernel/hostname)
-  CHANGES=$(($(cat /tmp/.webif/config-* 2>&- | wc -l)))
-  CHANGES=${CHANGES#0}
-  CHANGES=${CHANGES:+( ${CHANGES} )}
+  VERSION=$(cat /etc/banner | grep "(")
+  VERSION="${VERSION%% ---*}"
   cat <<EOF
 Content-Type: text/html
 Pragma: no-cache
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-US">
-  <head>
-	<meta http-equiv="content-type" content="application/xhtml+xml; charset=ISO-8859-15" />
-	<link rel="stylesheet" type="text/css" href="/webif.css" media="screen, tv, projection" title="Default" />
-	<title>OpenWrt Administrative Console</title>
-  </head>
-  <body $4>
-  <div id="container">
-	<div id="header">
-	  <div class="topHeader">&nbsp;</div>
-	  <div class="midHeader">
-		<h1 class="headerTitle">OpenWrt Admin Console</h1>
-		<div class="headerSubTitle">$UPTIME</div>
-		<br class="doNotDisplay doNotPrint" />
-		<div class="headerInfo">
-		  <span>Hostname: &nbsp;</span>
-		  $HOSTNAME
-		</div>
-		<div class="headerLinks">
-		  <a href="config.sh?mode=save&cat=$1">Apply settings &laquo;</a>
-		  <a href="config.sh?mode=clear&cat=$1">Clear changes &laquo;</a>
-		  <a href="config.sh?mode=review&cat=$1">Review changes $CHANGES &laquo;</a>
-		</div>
-	  </div>
-	  <div class="doNotDisplay doNotPrint">
-		  <br />
-		  <br />
-		  <br />
-	  </div>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+    	<title>OpenWrt Administrative Console</title>
+		<link rel="stylesheet" type="text/css" href="/webif.css" />
+	</head>
+	<body $4><div id="container">
+	    <div id="header">
+	        <div id="header-title">
+				<div id="openwrt-title"><h1>OpenWrt Admin Console</h1></div>
+				<div id="short-status">
+					<h3><strong>Status:</strong></h3>
+					<ul>
+						<li><strong>Hostname:</strong> $HOSTNAME</li>
+						<li><strong>Uptime:</strong> $UPTIME</li>
+						<li><strong>Load:</strong> $LOADAVG</li>
+						<li><strong>Version:</strong> $VERSION</li>
+					</ul>
+				</div>
+			</div>
 EOF
   grep '##WEBIF:category' $cgidir/.categories $cgidir/*.sh 2>/dev/null | awk -F: '
 	BEGIN {
-	  print "<div class=\"categoryHeader\"><span>Categories: &nbsp;&nbsp;&nbsp; </span>"
+	  print "<div id=\"mainmenu\"><h3><strong>Categories:</strong></h3><ul>"
 	}
 	categories !~ /:$4:/ {
 	  categories = categories ":" $4 ":";
-	  if ($4 ~ /^'"$1"'$/) print "<a class=\"active\">&raquo;" $4 "&laquo;</a> &nbsp;"
-	  else print "<a href=\"'"$indexpage"'?cat=" $4 "\">&nbsp;" $4 "&nbsp;</a> &nbsp;";
+	  if ($4 ~ /^'"$1"'$/) print "<li class=\"selected-maincat\"><a href=\"'"$rootdir/$indexpage"'?cat=" $4 "\">&raquo;" $4 "&laquo;</a></li>"
+	  else print "<li><a href=\"'"$rootdir/$indexpage"'?cat=" $4 "\">&nbsp;" $4 "&nbsp;</a></li>";
 	}
 	END {
-	  print "</div>"
+	  print "</ul></div>"
 	}' -
 	[ \! -z "$2" ] && {
-	  grep "##WEBIF:name:$1:" *.sh 2>/dev/null | sed -e 's,^\([a-zA-Z\.\-]*\):\(.*\)$,\2:\1,' | sort -n | awk -F: '
+	  grep -H "##WEBIF:name:$1:" $cgidir/*.sh 2>/dev/null | sed -e 's,^.*/\([a-zA-Z\.\-]*\):\(.*\)$,\2:\1,' | sort -n | awk -F: '
 		BEGIN {
-		  print "<div class=\"subHeader\"><span class=\"doNotDisplay doNotPrint\">Config pages: &nbsp;</span>";
+	      print "<div id=\"submenu\"><h3><strong>Sub-Categories:</strong></h3><ul>"
 		}
 		{
-		  if ($5 ~ /^'"$2"'$/) print "<a class=\"active\">&raquo;" $5 "&laquo;</a>&nbsp;&nbsp;&nbsp;"
-		  else print "<a href=\"" $6 "\">" $5 "</a>&nbsp;&nbsp;&nbsp;";
+		  if ($5 ~ /^'"$2"'$/) print "<li class=\"selected-maincat\"><a href=\"'"$rootdir/"'" $6 "\">&raquo;" $5 "&laquo;</a></li>"
+		  else print "<li><a href=\"'"$rootdir/"'" $6 "\">&nbsp;" $5 "&nbsp;</a></li>"
 		}
 		END {
-		  print "</div>";
+	      print "</ul></div>"
 		}
 	  ' -
 	}
-	[ -z "$3" ] && HEAD="" || HEAD="<h1>$3</h1><br />" 
+	SAVED=${SAVED:+: Settings saved}
+	SAVED_TITLE=${ERROR:+: Settings not saved}
+	SAVED_TITLE=${SAVED_TITLE:-$SAVED}
+	ERROR=${ERROR:+<h3>$ERROR</h3><br /><br />}
+	HEAD="${3:+<div class=\"settings-block-title\"><h2>$3$SAVED_TITLE</h2></div>}"
+	FORM="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\">}"
+	SAVEBUTTON="${5:+<p><input type=\"submit\" name=\"action\" value=\"Save changes\" /></p>}"
 	cat <<EOF
-	</div>
-	<div id="main-copy">
-	  <div class="rowOfBoxes">
-		<div class="noBorderOnLeft">
-		$HEAD
+		</div>
+		$FORM
+		<div id="content">
+			<div class="settings-block">
+				$HEAD
+				$ERROR
 EOF
 	[ -z "$REMOTE_USER" \
-	  -a "${SCRIPT_NAME#/cgi-bin/webif/}" != "info.sh"\
-	  -a "${SCRIPT_NAME#/cgi-bin/webif/}" != "about.sh" ] && {
+	  -a "${SCRIPT_NAME#/cgi-bin/}" != "webif.sh" ] && {
 		[ -z $FORM_passwd1 ] || {
 			echo '<pre>'
 			(
@@ -128,14 +126,30 @@ EOF
 }
 
 footer() {
+  CHANGES=$(($(cat /tmp/.webif/config-* 2>&- | wc -l)))
+  CHANGES=${CHANGES#0}
+  CHANGES=${CHANGES:+(${CHANGES})}
   cat <<EOF
-	<br />
-	</div> </div> </div>
-	<div id="footer">
-OpenWrt Administrative Console
-	</div>
-	</div>
-  </body>
+			</div>
+			<hr width="40%" />
+		</div>
+		<br />
+		<div id="save">
+			<div class="page-save">
+				<div>
+					$SAVEBUTTON
+				</div>
+			</div>
+			<div class="apply">
+				<div>
+					<a href="config.sh?mode=save&amp;cat=Network">Apply changes &laquo;</a><br />
+					<a href="config.sh?mode=clear&amp;cat=Network">Clear changes &laquo;</a><br />
+					<a href="config.sh?mode=review&amp;cat=Network">Review changes $CHANGES &laquo;</a>
+				</div>
+			</div>
+		</div>
+		</form>
+    </div></body>
 </html>
 EOF
 }
@@ -143,17 +157,15 @@ EOF
 apply_passwd() {
 	case ${SERVER_SOFTWARE%% *} in
 		busybox)
-			echo -n '/:' > /etc/httpd.conf
+			echo -n '/cgi-bin/webif:' > /etc/httpd.conf
 			cat /etc/passwd | grep root | cut -d: -f1,2 >> /etc/httpd.conf
-			echo '/cgi-bin/webif/info.sh:*' >> /etc/httpd.conf
-			echo '/cgi-bin/webif/about.sh:*' >> /etc/httpd.conf
 			killall -HUP httpd
 			;;
 	esac
 }
 
 display_form() {
-	echo "$1" | awk -F: -f /usr/lib/webif/form.awk
+	echo "$1" | awk -F'|' -f /usr/lib/webif/form.awk
 }
 
 mkdir -p /tmp/.webif
@@ -163,55 +175,16 @@ load_settings() {
 	[ -f /tmp/.webif/config-$1 ] && . /tmp/.webif/config-$1 
 }
 
-validate_ip() {
-	[ \! -z "$1" ] && {
-		ipcalc "$1" >&- 2>&- && return 0 || {
-			ERROR="$ERROR Invalid IP address: $2<br />"
-			return 255
-		}
-	} || {
-		[ "$3" != "1" ] && return 0 || {
-			ERROR="$ERROR No IP address entered: $2<br />"
-			return 255
-		} 
-	}
-}
-
-validate_ips() {
-	[ \! -z "$1" ] && {
-		invalid_ip=0
-		for tmp_ip in $1; do
-			ipcalc "$1" >&- 2>&- || invalid_ip=1
-		done
-		[ "$invalid_ip" != 1 ] && return 0 || {
-			ERROR="$ERROR Invalid IP address list: $2<br />"
-			return 255
-		}
-	} || {
-		[ "$3" != "1" ] && return 0 || {
-			ERROR="$ERROR No IP address entered: $2<br />"
-			return 255
-		} 
-	}
-}
-
-validate_netmask() {
-	[ \! -z "$1" ] && {
-		# FIXME
-		ipcalc "$1" >&- 2>&- && return 0 || {
-			ERROR="$ERROR Invalid Netmask: $2<br />"
-			return 255
-		}
-	} || {
-		[ "$3" != "1" ] && return 0 || {
-			ERROR="$ERROR No Netmask entered: $2<br />"
-			return 255
-		} 
-	}
+validate() {
+	eval "$(echo "$1" | awk -f /usr/lib/webif/validate.awk)"
+	[ -z "$ERROR" ] && return 0 || return 255
 }
 
 save_setting() {
 	oldval=$(eval "echo \${$2}")
 	oldval=${oldval:-$(nvram get "$2")}
+	mv /tmp/.webif/config-$1 /tmp/.webif/config-$1-old 2>&- >&-
+	grep -v "^$2=" /tmp/.webif/config-$1-old > /tmp/.webif/config-$1 2>&-
 	[ "$oldval" != "$3" ] && echo "$2=\"$3\"" >> /tmp/.webif/config-$1
+	rm -f /tmp/.webif/config-$1-old
 }

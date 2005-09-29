@@ -15,12 +15,12 @@ load_settings network
 	
 	# detect pptp package and compile option
 	[ -x /sbin/ifup.pptp ] && {
-		PPTP_OPTION="radio:wan_proto:$FORM_wan_proto:pptp:PPTP<br />:onChange=\"modechange()\""
-		PPTP_SERVER_OPTION="field:PPTP Server IP:pptp_server_ip:hidden
-text:pptp_server_ip:$FORM_pptp_server_ip"
+		PPTP_OPTION="radio|wan_proto|$FORM_wan_proto|pptp|PPTP<br />|onChange=\"modechange()\""
+		PPTP_SERVER_OPTION="field|PPTP Server IP|pptp_server_ip|hidden
+text|pptp_server_ip|$FORM_pptp_server_ip"
 	}
 	[ -x /sbin/ifup.pppoe ] && {
-		PPPOE_OPTION="radio:wan_proto:$FORM_wan_proto:pppoe:PPPoE<br />:onChange=\"modechange()\""
+		PPPOE_OPTION="radio|wan_proto|$FORM_wan_proto|pppoe|PPPoE<br />|onChange=\"modechange()\""
 	}
 	
 	# pptp, dhcp and static common
@@ -55,59 +55,64 @@ text:pptp_server_ip:$FORM_pptp_server_ip"
 		return -1
 	}
 
-	save_setting network wan_proto $FORM_wan_proto
-	
-	# Settings specific to one protocol type
 	case "$FORM_wan_proto" in
 		static)
-			validate_ip "$FORM_wan_dns" "WAN DNS Server" 1 && \
-				save_setting network wan_dns $FORM_wan_dns
-
-			validate_ip "$FORM_wan_gateway" "WAN Gateway" && \
-				save_setting network wan_gateway $FORM_wan_gateway
-
-			# Requirements for input validation
-			REQ_IP=1
-			REQ_NETMASK=1
+			V_IP="required"
+			V_NM="required"
 			;;
 		pptp)
-			validate_ip "$FORM_pptp_server_ip" "PPTP Server" 1 && \
-				save_setting network pptp_server_ip "$FORM_pptp_server_ip"
+			V_PPTP="required"
 			;;
 	esac
-	
-	# Common settings for PPTP, Static and DHCP 
-	[ "$FORM_wan_proto" = "pptp" -o "$FORM_wan_proto" = "static" -o "$FORM_wan_proto" = "dhcp" ] && {
-		validate_ip "$FORM_wan_ipaddr" "WAN IP" $REQ_IP && \
+
+	# FIXME: add validation for DNS server list
+	validate "
+ip|FORM_wan_ipaddr|IP address|$V_IP|$FORM_wan_ipaddr
+netmask|FORM_wan_netmask|network mask|$V_NM|$FORM_wan_netmask
+ip|FORM_wan_gateway|gateway address||$FORM_wan_gateway
+ip|FORM_pptp_server_ip|PPTP server IP|$V_PPTP|$FORM_pptp_server_ip" && {
+		save_setting network wan_proto $FORM_wan_proto
+		
+		# Settings specific to one protocol type
+		case "$FORM_wan_proto" in
+			static)
+				save_setting network wan_dns $FORM_wan_dns
+				save_setting network wan_gateway $FORM_wan_gateway
+				;;
+			pptp)
+				save_setting network pptp_server_ip "$FORM_pptp_server_ip"
+				;;
+		esac
+		
+		# Common settings for PPTP, Static and DHCP 
+		[ "$FORM_wan_proto" = "pptp" -o "$FORM_wan_proto" = "static" -o "$FORM_wan_proto" = "dhcp" ] && {
 			save_setting network wan_ipaddr $FORM_wan_ipaddr
-	
-		validate_netmask "$FORM_wan_netmask" "WAN Netmask" $REQ_NETMASK && \
 			save_setting network wan_netmask $FORM_wan_netmask 
-	}
+		}
+		
+		# Common PPP settings
+		[ "$FORM_wan_proto" = "pppoe" -o "$FORM_wan_proto" = "pptp" ] && {
+			[ -z $FORM_ppp_username ] || save_setting network ppp_username $FORM_ppp_username
+			[ -z $FORM_ppp_passwd ] || save_setting network ppp_passwd $FORM_ppp_passwd
 	
-	# Common PPP settings
-	[ "$FORM_wan_proto" = "pppoe" -o "$FORM_wan_proto" = "pptp" ] && {
-		[ -z $FORM_ppp_username ] || save_setting network ppp_username $FORM_ppp_username
-		[ -z $FORM_ppp_passwd ] || save_setting network ppp_passwd $FORM_ppp_passwd
-
-		# These can be blank
-		save_setting network ppp_idletime $FORM_ppp_idletime
-		save_setting network ppp_redialperiod $FORM_ppp_redialperiod
-		save_setting network ppp_mtu $FORM_ppp_mtu
-
-		case "$FORM_ppp_redial" in
-			demand)
-				save_setting network ppp_demand 1
-				;;
-			persist)
-				save_setting network ppp_demand ""
-				;;
-		esac	
+			# These can be blank
+			save_setting network ppp_idletime $FORM_ppp_idletime
+			save_setting network ppp_redialperiod $FORM_ppp_redialperiod
+			save_setting network ppp_mtu $FORM_ppp_mtu
+	
+			case "$FORM_ppp_redial" in
+				demand)
+					save_setting network ppp_demand 1
+					;;
+				persist)
+					save_setting network ppp_demand ""
+					;;
+			esac	
+		}
 	}
-
 }
 
-header "Network" "WAN" "WAN settings" ' onLoad="modechange()" '
+header "Network" "WAN" "WAN settings" ' onLoad="modechange()" ' "$SCRIPT_NAME"
 ?>
 <script type="text/javascript" src="/webif.js "></script>
 <script type="text/javascript">
@@ -133,45 +138,37 @@ function modechange()
 }
 -->
 </script>
-<?if [ "$SAVED" = "1" ] ?>
-	<? [ -z "$ERROR" ] || echo "<h2>Errors occured:</h2><h3>$ERROR</h3>" ?>
-	<h2>Settings Saved</h2>
-	<br />
-<?fi?>
-<? display_form "start_form:$SCRIPT_NAME
-field:Internet Connection Type
-radio:wan_proto:$FORM_wan_proto:none:None<br />:onchange=\"modechange()\"
-radio:wan_proto:$FORM_wan_proto:dhcp:DHCP<br />:onchange=\"modechange()\"
-radio:wan_proto:$FORM_wan_proto:static:Static IP<br />:onchange=\"modechange()\"
+<? display_form "start_form|WAN Configuration
+field|Internet Connection Type
+radio|wan_proto|$FORM_wan_proto|none|None<br />|onchange=\"modechange()\"
+radio|wan_proto|$FORM_wan_proto|dhcp|DHCP<br />|onchange=\"modechange()\"
+radio|wan_proto|$FORM_wan_proto|static|Static IP<br />|onchange=\"modechange()\"
 $PPPOE_OPTION
 $PPTP_OPTION
 
-field:Internet IP Address:wan_ipaddr:hidden
-text:wan_ipaddr:$FORM_wan_ipaddr
-field:Subnet Mask:wan_netmask:hidden
-text:wan_netmask:$FORM_wan_netmask
-field:Gateway:wan_gateway:hidden
-text:wan_gateway:$FORM_wan_gateway
-field:DNS Server(s):wan_dns:hidden
-text:wan_dns:$FORM_wan_dns
+field|Internet IP Address|wan_ipaddr|hidden
+text|wan_ipaddr|$FORM_wan_ipaddr
+field|Subnet Mask|wan_netmask|hidden
+text|wan_netmask|$FORM_wan_netmask
+field|Gateway|wan_gateway|hidden
+text|wan_gateway|$FORM_wan_gateway
+field|DNS Server(s)|wan_dns|hidden
+text|wan_dns|$FORM_wan_dns
 $PPTP_SERVER_OPTION
 
-field:PPP Redial Policy:ppp_redial:hidden
-radio:ppp_redial:$FORM_ppp_redial:demand:Connect on Demand<br />:onChange=\"modechange()\"
-radio:ppp_redial:$FORM_ppp_redial:persist:Keep Alive:onChange=\"modechange()\"
-field:Maximum Idle Time:ppp_demand_idletime:hidden
-text:ppp_idletime:$FORM_ppp_idletime
-field:Redial Timeout:ppp_persist_redialperiod:hidden
-text:ppp_redialperiod:$FORM_ppp_redialperiod
-field:PPP Username:ppp_username:hidden
-text:ppp_username:$FORM_ppp_username
-field:PPP Password:ppp_passwd:hidden
-text:ppp_passwd:$FORM_ppp_passwd
-field:PPP MTU:ppp_mtu:hidden
-text:ppp_mtu:$FORM_ppp_mtu
-
-field
-submit:action:Save Settings
+field|PPP Redial Policy|ppp_redial|hidden
+radio|ppp_redial|$FORM_ppp_redial|demand|Connect on Demand<br />|onChange=\"modechange()\"
+radio|ppp_redial|$FORM_ppp_redial|persist|Keep Alive|onChange=\"modechange()\"
+field|Maximum Idle Time|ppp_demand_idletime|hidden
+text|ppp_idletime|$FORM_ppp_idletime
+field|Redial Timeout|ppp_persist_redialperiod|hidden
+text|ppp_redialperiod|$FORM_ppp_redialperiod
+field|PPP Username|ppp_username|hidden
+text|ppp_username|$FORM_ppp_username
+field|PPP Password|ppp_passwd|hidden
+text|ppp_passwd|$FORM_ppp_passwd
+field|PPP MTU|ppp_mtu|hidden
+text|ppp_mtu|$FORM_ppp_mtu
 end_form" ?>
 
 <? footer ?>
