@@ -78,23 +78,21 @@ valid == 1 {
 		if (options[i] == "required") {
 			if (value == "") { valid = 0; verr = "No value entered" }
 		} else if ((options[i] ~ /^min=/) && (value != "")) {
+			min = options[i]
+			sub(/^min=/, "", min)
+			min = int(min)
 			if ($1 == "int") {
-				min = options[i]
-				sub(/^min=/, "", min)
 				if (value < min) { valid = 0; verr = "Value too small" }
 			} else if ($1 == "string") {
-				min = options[i]
-				sub(/^min=/, "", min)
-				if (length(value) < min) { valid = 0; verr = "Value too small" }
+				if (length(value) < min) { valid = 0; verr = "Value too small: "  length(value) " < " min }
 			}
 		} else if ((options[i] ~ /^max=/) && (value != ""))  {
+			max = options[i]
+			sub(/^max=/, "", max)
+			max = int(max)
 			if ($1 == "int") {
-				max = options[i]
-				sub(/^max=/, "", max)
 				if (value > max) { valid = 0; verr = "Value too large" }
 			} else if ($1 == "string") {
-				max = options[i]
-				sub(/^max=/, "", max)
 				if (length(value) > max) { valid = 0; verr = "Value too large" }
 			}
 		} else if ((options[i] == "nodots") && ($1 == "hostname")) {
