@@ -4,24 +4,8 @@ cgidir=/www/cgi-bin/webif
 rootdir=/cgi-bin/webif
 indexpage=index.sh
 
-header() {
-	CATEGORY="$1"
-	UPTIME="$(uptime)"
-	LOADAVG="${UPTIME#*load average: }"
-	UPTIME="${UPTIME#*up }"
-	UPTIME="${UPTIME%%,*}"
-	HOSTNAME=$(cat /proc/sys/kernel/hostname)
-	VERSION=$(cat /etc/banner | grep "(")
-	VERSION="${VERSION%% ---*}"
-	SAVED=${SAVED:+: Settings saved}
-	SAVED_TITLE=${ERROR:+: Settings not saved}
-	SAVED_TITLE=${SAVED_TITLE:-$SAVED}
-	ERROR=${ERROR:+<h3>$ERROR</h3><br /><br />}
-	HEAD="${3:+<div class=\"settings-block-title\"><h2>$3$SAVED_TITLE</h2></div>}"
-	FORM="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\">}"
-	SAVEBUTTON="${5:+<p><input type=\"submit\" name=\"action\" value=\"Save changes\" /></p>}"
-	
-	CATEGORIES=$(grep '##WEBIF:category' $cgidir/.categories $cgidir/*.sh 2>/dev/null | awk -F: '
+categories() {
+	grep '##WEBIF:category' $cgidir/.categories $cgidir/*.sh 2>/dev/null | awk -F: '
 	BEGIN {
 	  print "<div id=\"mainmenu\"><h3><strong>Categories:</strong></h3><ul>"
 	}
@@ -32,9 +16,11 @@ header() {
 	}
 	END {
 	  print "</ul></div>"
-	}' -)
+	}' -
+}
 
-	SUBCATEGORIES=${2:+$(grep -H "##WEBIF:name:$1:" $cgidir/*.sh 2>/dev/null | sed -e 's,^.*/\([a-zA-Z\.\-]*\):\(.*\)$,\2:\1,' | sort -n | awk -F: '
+subcategories() {
+	grep -H "##WEBIF:name:$1:" $cgidir/*.sh 2>/dev/null | sed -e 's,^.*/\([a-zA-Z\.\-]*\):\(.*\)$,\2:\1,' | sort -n | awk -F: '
 	BEGIN {
       print "<div id=\"submenu\"><h3><strong>Sub-Categories:</strong></h3><ul>"
 	}
@@ -45,7 +31,28 @@ header() {
 	END {
       print "</ul></div>"
 	}
-  ' -)}
+  ' -
+}
+
+header() {
+	ERROR=${ERROR:+<h3>$ERROR</h3><br /><br />}
+	SAVED=${SAVED:+: Settings saved}
+	_category="$1"
+	_uptime="$(uptime)"
+	_loadavg="${_uptime#*load average: }"
+	_uptime="${_uptime#*up }"
+	_uptime="${_uptime%%,*}"
+	_hostname=$(cat /proc/sys/kernel/hostname)
+	_version=$(cat /etc/banner | grep "(")
+	_version="${_version%% ---*}"
+	_saved_title=${ERROR:+: Settings not saved}
+	_saved_title=${_saved_title:-$SAVED}
+	_head="${3:+<div class=\"settings-block-title\"><h2>$3$_saved_title</h2></div>}"
+	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\">}"
+	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"Save changes\" /></p>}"
+	_categories=$(categories $1)
+	_subcategories=${2:+$(subcategories $1 $2)}
+
 	cat <<EOF
 Content-Type: text/html
 Pragma: no-cache
@@ -63,20 +70,20 @@ Pragma: no-cache
 				<div id="short-status">
 					<h3><strong>Status:</strong></h3>
 					<ul>
-						<li><strong>Hostname:</strong> $HOSTNAME</li>
-						<li><strong>Uptime:</strong> $UPTIME</li>
-						<li><strong>Load:</strong> $LOADAVG</li>
-						<li><strong>Version:</strong> $VERSION</li>
+						<li><strong>Hostname:</strong> $_hostname</li>
+						<li><strong>Uptime:</strong> $_uptime</li>
+						<li><strong>Load:</strong> $_loadavg</li>
+						<li><strong>Version:</strong> $_version</li>
 					</ul>
 				</div>
 			</div>
-			$CATEGORIES
-			$SUBCATEGORIES
+			$_categories
+			$_subcategories
 		</div>
-		$FORM
+		$_form
 		<div id="content">
 			<div class="settings-block">
-				$HEAD
+				$_head
 				$ERROR
 EOF
 	[ -z "$REMOTE_USER" \
@@ -127,9 +134,9 @@ EOF
 }
 
 footer() {
-  CHANGES=$(($(cat /tmp/.webif/config-* 2>&- | wc -l)))
-  CHANGES=${CHANGES#0}
-  CHANGES=${CHANGES:+(${CHANGES})}
+  _changes=$(($(cat /tmp/.webif/config-* 2>&- | wc -l)))
+  _changes=${_changes#0}
+  _changes=${_changes:+(${_changes})}
   cat <<EOF
 			</div>
 			<hr width="40%" />
@@ -138,14 +145,14 @@ footer() {
 		<div id="save">
 			<div class="page-save">
 				<div>
-					$SAVEBUTTON
+					$_savebutton
 				</div>
 			</div>
 			<div class="apply">
 				<div>
-					<a href="config.sh?mode=save&amp;cat=$CATEGORY">Apply changes &laquo;</a><br />
-					<a href="config.sh?mode=clear&amp;cat=$CATEGORY">Clear changes &laquo;</a><br />
-					<a href="config.sh?mode=review&amp;cat=$CATEGORY">Review changes $CHANGES &laquo;</a>
+					<a href="config.sh?mode=save&amp;cat=$_category">Apply changes &laquo;</a><br />
+					<a href="config.sh?mode=clear&amp;cat=$_category">Clear changes &laquo;</a><br />
+					<a href="config.sh?mode=review&amp;cat=$_category">Review changes $_changes &laquo;</a>
 				</div>
 			</div>
 		</div>
@@ -169,19 +176,49 @@ display_form() {
 	echo "$1" | awk -F'|' -f /usr/lib/webif/form.awk
 }
 
-mkdir -p /tmp/.webif
+list_remove() {
+	echo "$1 " | awk '
+BEGIN {
+	RS=" "
+	FS=":"
+	first = 1
+}
+($0 !~ /^'"$2"'/) {
+	if (first != 1) printf " "
+	printf $0
+	first = 0
+}'
+}
+
+handle_list() {
+	_new="${1:+$(list_remove "$LISTVAL" "$1") }"
+	_new="${_new:-$LISTVAL}"
+	LISTVAL="$_new"
+	
+	_validate="$4"
+	_validate="${4:-none}"
+	[ \! -z "$3" ] && validate "$_validate|$2" && LISTVAL="$LISTVAL $2"
+
+	_changed="$1$3"
+	_return="${_changed:+0}"
+	_return="${_return:-255}"
+	LISTVAL="${LISTVAL# }"
+	LISTVAL="${LISTVAL%% }"
+	LISTVAL="${LISTVAL:- }"
+	return $_return
+}
 
 load_settings() {
 	[ \! "$1" = "nvram" -a -f /etc/config/$1 ] && . /etc/config/$1
-	[ -f /tmp/.webif/config-$1 ] && . /tmp/.webif/config-$1 
+	[ -f /tmp/.webif/config-$1 ] && . /tmp/.webif/config-$1
 }
 
 validate() {
 	eval "$(echo "$1" | awk -f /usr/lib/webif/validate.awk)"
-	[ -z "$ERROR" ] && return 0 || return 255
 }
 
 save_setting() {
+	mkdir -p /tmp/.webif
 	oldval=$(eval "echo \${$2}")
 	oldval=${oldval:-$(nvram get "$2")}
 	mv /tmp/.webif/config-$1 /tmp/.webif/config-$1-old 2>&- >&-

@@ -64,7 +64,7 @@ $1 == "string" {
 
 $1 == "mac" {
 	valid_type = 1
-	if ((value != "") && (value !~ /^[0-9a-fA-F][0-9a-fA-F]*:[0-9a-fA-F][0-9a-fA-F]*:[0-9a-fA-F][0-9a-fA-F]*:[0-9a-fA-F][0-9a-fA-F]*:[0-9a-fA-F][0-9a-fA-F]*:[0-9a-fA-F][0-9a-fA-F]*$/)) {
+	if ((value != "") && (value !~ /^[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]$/)) {
 		valid = 0
 		verr = "Invalid value"
 	}
@@ -111,4 +111,6 @@ valid_type == 1 {
 
 END {
 	print output "ERROR=\"" error "\";\n"
+	if (error == "") print "return 0"
+	else print "return 255"
 }

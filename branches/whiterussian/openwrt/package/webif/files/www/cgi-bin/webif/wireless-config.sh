@@ -4,33 +4,15 @@
 load_settings "wireless"
 
 
-WDS=${wl0_wds:-$(nvram get wl0_wds)}
-WDS="${WDS# }"
-[ -z "$FORM_wdsremove" ] || {
-	WDS=$(echo "$WDS " | awk '
-BEGIN {
-	RS=" "
-	FS=":"
-	first = 1
-}
-($0 !~ /^'"$FORM_wdsremove"'/) {
-	if (first != 1) printf " "
-	printf $0
-	first = 0
-}
-END { print "" }')
-	WDS="${WDS:- }"
-	save_setting wireless wl0_wds "$WDS"
+FORM_wds="${wl0_wds:-$(nvram get wl0_wds)}"
+LISTVAL="$FORM_wds"
+handle_list "$FORM_wdsremove" "$FORM_wdsadd" "$FORM_wdssubmit" 'mac|FORM_wdsadd|WDS MAC address|required' && {
+	FORM_wds="$LISTVAL"
+	save_setting wireless wl0_wds "$FORM_wds"
 	FORM_submit=""
 }
-[ \! -z "$FORM_wdssubmit" ] && {
-	validate "mac|FORM_newmac|WDS MAC address||$FORM_newmac" && {
-		WDS="$WDS $FORM_newmac"
-		WDS="${WDS# }"
-		save_setting wireless wl0_wds "$WDS"
-	}
-	FORM_submit=""
-}
+FORM_wdsadd=${FORM_wdsadd:-00:00:00:00:00:00}
+
 CC=${wl0_country_code:-$(nvram get wl0_country_code)}
 case "$CC" in
 	All|all|ALL) CHANNELS="1 2 3 4 5 6 7 8 9 10 11 12 13 14"; CHANNEL_MAX=14 ;;
@@ -43,7 +25,6 @@ for ch in $CHANNELS; do
 done
 
 if [ -z "$FORM_submit" ]; then
-	FORM_newmac=${FORM_newmac:-00:00:00:00:00:00}
 	FORM_mode=${wl0_mode:-$(nvram get wl0_mode)}
 	FORM_ssid=${wl0_ssid:-$(nvram get wl0_ssid)}
 	FORM_channel=${wl0_channel:-$(nvram get wl0_channel)}
@@ -243,36 +224,12 @@ radio|key|$FORM_key|3
 text|key3|$FORM_key3|<br />
 radio|key|$FORM_key|4
 text|key4|$FORM_key4|<br />
+end_form
+start_form|WDS connections
+listedit|wds|$SCRIPT_NAME|$FORM_wds|$FORM_wdsadd
 end_form"
-?>
-<div class="settings">
-	<div class="settings-title"><h3><strong>WDS connections</strong></h3></div>
-	<div class="settings-content">
-	<table summary="Settings" width="100%">
-<?
-echo "$WDS " | awk '
-BEGIN {
-	RS=" "
-	FS=":"
-}
 
-$0 ~ /^[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]$/ {
-	print "<tr><td width=\"50%\">" $0 "</td><td>&nbsp;<a href=\"'"$SCRIPT_NAME"'?wdsremove=" $0 "\">Remove</a></td></tr>"
-}
-'
-?>
-		<tr>
-			<td width="45%"><input type="text" name="newmac" value="<? echo -n $FORM_newmac ?>" /></td>
-			<td width="55%"><input type="submit" name="wdssubmit" value="Add WDS peer" /></td>
-		</tr>
-	</table>
-	</div>
-	<div class="settings-help">&nbsp;</div>
-</div>
-<div style="clear: both">&nbsp;</div>
-
-
-<? footer ?>
+footer ?>
 <!--
 ##WEBIF:name:Network:3:Wireless
 -->
