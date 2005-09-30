@@ -23,6 +23,7 @@ $1 ~ /^start_form/ {
 	if ($2 != "") print "<div class=\"settings-title\"><h3><strong>" $2 "</strong></h3></div>"
 	print "<div class=\"settings-content\"><table width=\"100%\" summary=\"Settings\">"
 	form_help = ""
+	form_help_link = ""
 }
 $1 ~ /^field/ {
 	if (field_open == 1) print "</td></tr>"
@@ -41,6 +42,22 @@ $1 ~ /^radio/ {
 	if ($3==$4) radio_selected="checked=\"checked\" "
 	else radio_selected=""
 	print "<input id=\"" $2 "_" $4 "\" type=\"radio\" name=\"" $2 "\" value=\"" $4 "\" " radio_selected $6 " />"
+}
+($1 != "") && ($1 !~ /^option/) {
+	select_open = 0
+	print "</select>"
+}
+$1 ~ /^select/ {
+	print "<select id=\"" $2 "\" name=\"" $2 "\">"
+	select_open = 1
+	select_default = $3
+}
+($1 ~ /^option/) && (select_open == 1) {
+	if ($2 == select_default) option_selected=" selected=\"selected\""
+	else option_selected=""
+	if ($3 != "") option_title = $3
+	else option_title = $2
+	print "<option" option_selected " value=\"" $2 "\">" option_title "</option>"
 }
 $1 ~ /^text/ { print "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
 $1 ~ /^submit/ { print "<input type=\"submit\" name=\"" $2 "\" value=\"" $3 "\" />" }

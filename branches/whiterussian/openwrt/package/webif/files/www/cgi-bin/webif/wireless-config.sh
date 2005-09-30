@@ -31,10 +31,22 @@ END { print "" }')
 	}
 	FORM_submit=""
 }
+CC=${wl0_country_code:-$(nvram get wl0_country_code)}
+case "$CC" in
+	All|all|ALL) CHANNELS="1 2 3 4 5 6 7 8 9 10 11 12 13 14"; CHANNEL_MAX=14 ;;
+	*) CHANNELS="1 2 3 4 5 6 7 8 9 10 11"; CHANNEL_MAX=11 ;;
+esac
+F_CHANNELS=""
+for ch in $CHANNELS; do
+	F_CHANNELS="${F_CHANNELS}option|$ch
+"
+done
+
 if [ -z "$FORM_submit" ]; then
 	FORM_newmac=${FORM_newmac:-00:00:00:00:00:00}
 	FORM_mode=${wl0_mode:-$(nvram get wl0_mode)}
 	FORM_ssid=${wl0_ssid:-$(nvram get wl0_ssid)}
+	FORM_channel=${wl0_channel:-$(nvram get wl0_channel)}
 	FORM_encryption=off
 	akm=${wl0_akm:-$(nvram get wl0_akm)}
 	case "$akm" in
@@ -108,9 +120,12 @@ wep|FORM_key2|WEP key 2||$FORM_key2
 wep|FORM_key3|WEP key 3||$FORM_key3
 wep|FORM_key4|WEP key 4||$FORM_key4
 string|FORM_wpa_psk|WPA pre-shared key|min=8 max=63 $V_PSK|$FORM_wpa_psk
-string|FORM_radius_key|RADIUS server key|min=4 max=63 $V_RADIUS|$FORM_radius_key" && {
+string|FORM_radius_key|RADIUS server key|min=4 max=63 $V_RADIUS|$FORM_radius_key
+string|FORM_ssid|ESSID|required|$FORM_ssid
+int|FORM_channel|Channel|required min=1 max=$CHANNEL_MAX|$FORM_channel" && {
 		save_setting wireless wl0_mode "$FORM_mode"
 		save_setting wireless wl0_ssid "$FORM_ssid"
+		save_setting wireless wl0_channel "$FORM_channel"
 		case "$FORM_aes$FORM_tkip" in 
 			aes) save_setting wireless wl0_crypto aes;;
 			tkip) save_setting wireless wl0_crypto tkip;;
@@ -190,13 +205,16 @@ field|ESSID
 text|ssid|$FORM_ssid
 helpitem|ESSID
 helptext|Name of your Wireless Network
+field|Channel
+select|channel|$FORM_channel
+$F_CHANNELS
 field|Mode
 radio|mode|$FORM_mode|ap|Access Point<br />|onChange=\"modechange()\" 
 radio|mode|$FORM_mode|sta|Client <br />|onChange=\"modechange()\" 
 radio|mode|$FORM_mode|wet|Bridge|onChange=\"modechange()\" 
 helpitem|Mode
 helptext|Operation mode
-helplink|http://www.google.com
+helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-7126c5958e237d603674b3a9739c9d23bdfdb293
 end_form
 start_form|Encryption settings
 field|Encryption type
