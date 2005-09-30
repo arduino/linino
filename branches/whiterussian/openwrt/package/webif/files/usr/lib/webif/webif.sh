@@ -5,15 +5,48 @@ rootdir=/cgi-bin/webif
 indexpage=index.sh
 
 header() {
-  CATEGORY="$1"
-  UPTIME="$(uptime)"
-  LOADAVG="${UPTIME#*load average: }"
-  UPTIME="${UPTIME#*up }"
-  UPTIME="${UPTIME%%,*}"
-  HOSTNAME=$(cat /proc/sys/kernel/hostname)
-  VERSION=$(cat /etc/banner | grep "(")
-  VERSION="${VERSION%% ---*}"
-  cat <<EOF
+	CATEGORY="$1"
+	UPTIME="$(uptime)"
+	LOADAVG="${UPTIME#*load average: }"
+	UPTIME="${UPTIME#*up }"
+	UPTIME="${UPTIME%%,*}"
+	HOSTNAME=$(cat /proc/sys/kernel/hostname)
+	VERSION=$(cat /etc/banner | grep "(")
+	VERSION="${VERSION%% ---*}"
+	SAVED=${SAVED:+: Settings saved}
+	SAVED_TITLE=${ERROR:+: Settings not saved}
+	SAVED_TITLE=${SAVED_TITLE:-$SAVED}
+	ERROR=${ERROR:+<h3>$ERROR</h3><br /><br />}
+	HEAD="${3:+<div class=\"settings-block-title\"><h2>$3$SAVED_TITLE</h2></div>}"
+	FORM="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\">}"
+	SAVEBUTTON="${5:+<p><input type=\"submit\" name=\"action\" value=\"Save changes\" /></p>}"
+	
+	CATEGORIES=$(grep '##WEBIF:category' $cgidir/.categories $cgidir/*.sh 2>/dev/null | awk -F: '
+	BEGIN {
+	  print "<div id=\"mainmenu\"><h3><strong>Categories:</strong></h3><ul>"
+	}
+	categories !~ /:$4:/ {
+	  categories = categories ":" $4 ":";
+	  if ($4 ~ /^'"$1"'$/) print "<li class=\"selected-maincat\"><a href=\"'"$rootdir/$indexpage"'?cat=" $4 "\">&raquo;" $4 "&laquo;</a></li>"
+	  else print "<li><a href=\"'"$rootdir/$indexpage"'?cat=" $4 "\">&nbsp;" $4 "&nbsp;</a></li>";
+	}
+	END {
+	  print "</ul></div>"
+	}' -)
+
+	SUBCATEGORIES=${2:+$(grep -H "##WEBIF:name:$1:" $cgidir/*.sh 2>/dev/null | sed -e 's,^.*/\([a-zA-Z\.\-]*\):\(.*\)$,\2:\1,' | sort -n | awk -F: '
+	BEGIN {
+      print "<div id=\"submenu\"><h3><strong>Sub-Categories:</strong></h3><ul>"
+	}
+	{
+	  if ($5 ~ /^'"$2"'$/) print "<li class=\"selected-maincat\"><a href=\"'"$rootdir/"'" $6 "\">&raquo;" $5 "&laquo;</a></li>"
+	  else print "<li><a href=\"'"$rootdir/"'" $6 "\">&nbsp;" $5 "&nbsp;</a></li>"
+	}
+	END {
+      print "</ul></div>"
+	}
+  ' -)}
+	cat <<EOF
 Content-Type: text/html
 Pragma: no-cache
 
@@ -37,41 +70,8 @@ Pragma: no-cache
 					</ul>
 				</div>
 			</div>
-EOF
-  grep '##WEBIF:category' $cgidir/.categories $cgidir/*.sh 2>/dev/null | awk -F: '
-	BEGIN {
-	  print "<div id=\"mainmenu\"><h3><strong>Categories:</strong></h3><ul>"
-	}
-	categories !~ /:$4:/ {
-	  categories = categories ":" $4 ":";
-	  if ($4 ~ /^'"$1"'$/) print "<li class=\"selected-maincat\"><a href=\"'"$rootdir/$indexpage"'?cat=" $4 "\">&raquo;" $4 "&laquo;</a></li>"
-	  else print "<li><a href=\"'"$rootdir/$indexpage"'?cat=" $4 "\">&nbsp;" $4 "&nbsp;</a></li>";
-	}
-	END {
-	  print "</ul></div>"
-	}' -
-	[ \! -z "$2" ] && {
-	  grep -H "##WEBIF:name:$1:" $cgidir/*.sh 2>/dev/null | sed -e 's,^.*/\([a-zA-Z\.\-]*\):\(.*\)$,\2:\1,' | sort -n | awk -F: '
-		BEGIN {
-	      print "<div id=\"submenu\"><h3><strong>Sub-Categories:</strong></h3><ul>"
-		}
-		{
-		  if ($5 ~ /^'"$2"'$/) print "<li class=\"selected-maincat\"><a href=\"'"$rootdir/"'" $6 "\">&raquo;" $5 "&laquo;</a></li>"
-		  else print "<li><a href=\"'"$rootdir/"'" $6 "\">&nbsp;" $5 "&nbsp;</a></li>"
-		}
-		END {
-	      print "</ul></div>"
-		}
-	  ' -
-	}
-	SAVED=${SAVED:+: Settings saved}
-	SAVED_TITLE=${ERROR:+: Settings not saved}
-	SAVED_TITLE=${SAVED_TITLE:-$SAVED}
-	ERROR=${ERROR:+<h3>$ERROR</h3><br /><br />}
-	HEAD="${3:+<div class=\"settings-block-title\"><h2>$3$SAVED_TITLE</h2></div>}"
-	FORM="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\">}"
-	SAVEBUTTON="${5:+<p><input type=\"submit\" name=\"action\" value=\"Save changes\" /></p>}"
-	cat <<EOF
+			$CATEGORIES
+			$SUBCATEGORIES
 		</div>
 		$FORM
 		<div id="content">

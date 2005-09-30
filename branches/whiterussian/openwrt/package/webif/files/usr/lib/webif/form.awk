@@ -15,6 +15,10 @@ BEGIN {
 	gsub(/^[ \t]+/,"",$1)
 }
 
+($1 != "") && ($1 !~ /^option/) {
+	select_open = 0
+	print "</select>"
+}
 $1 ~ /^start_form/ {
 	if ($3 != "") field_opts=" id=\"" $3 "\""
 	else field_opts=""
@@ -42,10 +46,6 @@ $1 ~ /^radio/ {
 	if ($3==$4) radio_selected="checked=\"checked\" "
 	else radio_selected=""
 	print "<input id=\"" $2 "_" $4 "\" type=\"radio\" name=\"" $2 "\" value=\"" $4 "\" " radio_selected $6 " />"
-}
-($1 != "") && ($1 !~ /^option/) {
-	select_open = 0
-	print "</select>"
 }
 $1 ~ /^select/ {
 	print "<select id=\"" $2 "\" name=\"" $2 "\">"
