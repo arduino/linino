@@ -3,13 +3,11 @@
 . /usr/lib/webif/webif.sh
 load_settings "wireless"
 
-
 FORM_wds="${wl0_wds:-$(nvram get wl0_wds)}"
 LISTVAL="$FORM_wds"
 handle_list "$FORM_wdsremove" "$FORM_wdsadd" "$FORM_wdssubmit" 'mac|FORM_wdsadd|WDS MAC address|required' && {
 	FORM_wds="$LISTVAL"
 	save_setting wireless wl0_wds "$FORM_wds"
-	FORM_submit=""
 }
 FORM_wdsadd=${FORM_wdsadd:-00:00:00:00:00:00}
 
@@ -24,7 +22,7 @@ for ch in $CHANNELS; do
 "
 done
 
-if [ -z "$FORM_submit" ]; then
+if [ -z "$FORM_submit" -o \! -z "$ERROR" ]; then
 	FORM_mode=${wl0_mode:-$(nvram get wl0_mode)}
 	FORM_ssid=${wl0_ssid:-$(nvram get wl0_ssid)}
 	FORM_channel=${wl0_channel:-$(nvram get wl0_channel)}
@@ -226,7 +224,9 @@ radio|key|$FORM_key|4
 text|key4|$FORM_key4|<br />
 end_form
 start_form|WDS connections
-listedit|wds|$SCRIPT_NAME|$FORM_wds|$FORM_wdsadd
+listedit|wds|$SCRIPT_NAME?|$FORM_wds|$FORM_wdsadd
+helpitem|Note
+helptext|You should save your settings on this page before adding/removing WDS links
 end_form"
 
 footer ?>

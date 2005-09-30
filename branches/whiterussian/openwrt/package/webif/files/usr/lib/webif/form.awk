@@ -62,7 +62,7 @@ $1 ~ /^select/ {
 ($1 ~ /^listedit/) {
 	n = split($4 " ", items, " ")
 	for (i = 1; i <= n; i++) {
-		if (items[i] != "") print "<tr><td width=\"50%\">" items[i] "</td><td>&nbsp;<a href=\"" $3 "?" $2 "remove=" items[i] "\">Remove</a></td></tr>"
+		if (items[i] != "") print "<tr><td width=\"50%\">" items[i] "</td><td>&nbsp;<a href=\"" $3 $2 "remove=" items[i] "\">Remove</a></td></tr>"
 	}
 	print "<tr><td width=\"100%\" colspan="2"><input type=\"text\" name=\"" $2 "add\" value=\"" $5 "\" /><input type=\"submit\" name=\"" $2 "submit\" value=\"Add\" /></td></tr>"
 }

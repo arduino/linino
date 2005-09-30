@@ -181,11 +181,9 @@ list_remove() {
 BEGIN {
 	RS=" "
 	FS=":"
-	first = 1
 }
-($0 !~ /^'"$2"'/) {
-	if (first != 1) printf " "
-	printf $0
+($0 !~ /^'"$2"'/) && ($0 != "") {
+	printf " " $0
 	first = 0
 }'
 }
@@ -194,12 +192,17 @@ handle_list() {
 	_new="${1:+$(list_remove "$LISTVAL" "$1") }"
 	_new="${_new:-$LISTVAL}"
 	LISTVAL="$_new"
+	LISTVAL="${LISTVAL# }"
+	LISTVAL="${LISTVAL%% }"
 	
 	_validate="$4"
 	_validate="${4:-none}"
-	[ \! -z "$3" ] && validate "$_validate|$2" && LISTVAL="$LISTVAL $2"
+	_changed="$1"
+	[ \! -z "$3" ] && validate "$_validate|$2" && {
+		LISTVAL="$LISTVAL $2"
+		_changed="$1$3"
+	}
 
-	_changed="$1$3"
 	_return="${_changed:+0}"
 	_return="${_return:-255}"
 	LISTVAL="${LISTVAL# }"
@@ -221,8 +224,11 @@ save_setting() {
 	mkdir -p /tmp/.webif
 	oldval=$(eval "echo \${$2}")
 	oldval=${oldval:-$(nvram get "$2")}
-	mv /tmp/.webif/config-$1 /tmp/.webif/config-$1-old 2>&- >&-
-	grep -v "^$2=" /tmp/.webif/config-$1-old > /tmp/.webif/config-$1 2>&-
+	grep "^$2=" /tmp/.webif/config-$1 >&- 2>&- && {
+		mv /tmp/.webif/config-$1 /tmp/.webif/config-$1-old 2>&- >&-
+		grep -v "^$2=" /tmp/.webif/config-$1-old > /tmp/.webif/config-$1 2>&- 
+		oldval=""
+	}
 	[ "$oldval" != "$3" ] && echo "$2=\"$3\"" >> /tmp/.webif/config-$1
 	rm -f /tmp/.webif/config-$1-old
 }

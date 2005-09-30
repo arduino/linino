@@ -4,6 +4,15 @@
 
 load_settings network
 
+FORM_dns="${wan_dns:-$(nvram get wan_dns)}"
+LISTVAL="$FORM_dns"
+handle_list "$FORM_dnsremove" "$FORM_dnsadd" "$FORM_dnssubmit" 'ip|FORM_dnsadd|WAN DNS address|required' && {
+	FORM_dns="$LISTVAL"
+	save_setting network wan_dns "$FORM_dns"
+}
+FORM_dnsadd=${FORM_dnsadd:-192.168.1.1}
+
+
 [ -z $FORM_submit ] && {
 	FORM_wan_proto=${wan_proto:-$(nvram get wan_proto)}
 	case "$FORM_wan_proto" in
@@ -27,7 +36,6 @@ text|pptp_server_ip|$FORM_pptp_server_ip"
 	FORM_wan_ipaddr=${wan_ipaddr:-$(nvram get wan_ipaddr)}
 	FORM_wan_netmask=${wan_netmask:-$(nvram get wan_netmask)}
 	FORM_wan_gateway=${wan_gateway:-$(nvram get wan_gateway)}
-	FORM_wan_dns=${wan_dns:-$(nvram get wan_dns)}
 	
   	# ppp common
 	FORM_ppp_username=${ppp_username:-$(nvram get ppp_username)}
@@ -76,7 +84,6 @@ ip|FORM_pptp_server_ip|PPTP server IP|$V_PPTP|$FORM_pptp_server_ip" && {
 		# Settings specific to one protocol type
 		case "$FORM_wan_proto" in
 			static)
-				save_setting network wan_dns $FORM_wan_dns
 				save_setting network wan_gateway $FORM_wan_gateway
 				;;
 			pptp)
@@ -121,6 +128,7 @@ function modechange()
 {
 	var v;
 	v = (checked('wan_proto_pppoe') || checked('wan_proto_pptp'));
+	set_visible('ppp_settings', v);
 	set_visible('ppp_username', v);
 	set_visible('ppp_passwd', v);
 	set_visible('ppp_redial', v);
@@ -129,6 +137,7 @@ function modechange()
 	set_visible('ppp_persist_redialperiod', v && !checked('ppp_redial_demand'));
 	
 	v = (checked('wan_proto_static') || checked('wan_proto_pptp') || checked('wan_proto_dhcp'));
+	set_visible('ip_settings', v);
 	set_visible('wan_ipaddr', v);
 	set_visible('wan_netmask', v);
 	
@@ -145,17 +154,25 @@ radio|wan_proto|$FORM_wan_proto|dhcp|DHCP<br />|onchange=\"modechange()\"
 radio|wan_proto|$FORM_wan_proto|static|Static IP<br />|onchange=\"modechange()\"
 $PPPOE_OPTION
 $PPTP_OPTION
+end_form
 
+start_form|IP Settings|ip_settings|hidden
 field|Internet IP Address|wan_ipaddr|hidden
 text|wan_ipaddr|$FORM_wan_ipaddr
 field|Subnet Mask|wan_netmask|hidden
 text|wan_netmask|$FORM_wan_netmask
 field|Gateway|wan_gateway|hidden
 text|wan_gateway|$FORM_wan_gateway
-field|DNS Server(s)|wan_dns|hidden
-text|wan_dns|$FORM_wan_dns
 $PPTP_SERVER_OPTION
+end_form
 
+start_form|DNS Servers|wan_dns|hidden
+listedit|dns|$SCRIPT_NAME?wan_proto=static&|$FORM_dns|$FORM_dnsadd
+helpitem|Note
+helptext|You should save your settings on this page before adding/removing DNS servers
+end_form
+
+start_form|PPP Settings|ppp_settings|hidden
 field|PPP Redial Policy|ppp_redial|hidden
 radio|ppp_redial|$FORM_ppp_redial|demand|Connect on Demand<br />|onChange=\"modechange()\"
 radio|ppp_redial|$FORM_ppp_redial|persist|Keep Alive|onChange=\"modechange()\"
@@ -169,9 +186,9 @@ field|PPP Password|ppp_passwd|hidden
 text|ppp_passwd|$FORM_ppp_passwd
 field|PPP MTU|ppp_mtu|hidden
 text|ppp_mtu|$FORM_ppp_mtu
-end_form" ?>
+end_form" 
 
-<? footer ?>
+footer ?>
 <!--
 ##WEBIF:name:Network:2:WAN
 -->
