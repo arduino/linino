@@ -34,8 +34,11 @@ subcategories() {
   ' -
 }
 
-header() {
+update_changes() {
 	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
+}
+
+header() {
 	ERROR=${ERROR:+<h3>$ERROR</h3><br /><br />}
 	SAVED=${SAVED:+: Settings saved}
 	_category="$1"
@@ -54,6 +57,7 @@ header() {
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories $1 $2)}
 
+	update_changes
 	cat <<EOF
 Content-Type: text/html
 Pragma: no-cache
@@ -248,3 +252,4 @@ AWK_END_FORM='
 	form_help_link = ""
 	print "<div style=\"clear: both\">&nbsp;</div></div>"
 '
+

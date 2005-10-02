@@ -2,6 +2,8 @@
 <? 
 . /usr/lib/webif/webif.sh
 
+update_changes
+
 case "$CHANGES" in
 	""|0)FORM_mode=nochange
 esac

@@ -4,7 +4,7 @@
 
 [ -f /tmp/.webif/file-hosts ] && HOSTS_FILE=/tmp/.webif/file-hosts || HOSTS_FILE=/etc/hosts
 [ -f /tmp/.webif/file-ethers ] && ETHERS_FILE=/tmp/.webif/file-ethers || ETHERS_FILE=/etc/ethers
-touch $HOSTS_FILE $ETHERS_FILE
+touch $HOSTS_FILE $ETHERS_FILE >&- 2>&-
 
 update_hosts() {
 	mkdir -p /tmp/.webif
