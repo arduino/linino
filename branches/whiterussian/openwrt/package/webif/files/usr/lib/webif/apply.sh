@@ -8,7 +8,7 @@ HANDLERS_config='
 '
 HANDLERS_file='
 	hosts) rm -f /etc/hosts; mv $config /etc/hosts;;
-	ethers) rm -rf /etc/ethers; mv $config /etc/ethers;;
+	ethers) rm -f /etc/ethers; mv $config /etc/ethers;;
 '
 
 reload_network() {
