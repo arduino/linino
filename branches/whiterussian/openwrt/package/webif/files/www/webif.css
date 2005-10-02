@@ -36,6 +36,10 @@ hr {
 	display: none;
 }
 
+hr.separator {
+	display: block;
+}
+
 .selected-maincat {
 	font-weight: bold;
 }
@@ -199,6 +203,7 @@ hr {
 }
 
 #content .settings-block .settings .settings-content {
+	padding-top: 1em;
 	margin-left: 1em;
 	float: left;
 	width: 58%;
@@ -211,6 +216,7 @@ hr {
 
 #content .settings-block .settings .settings-help {
 	padding: 0.4em;
+	padding-top: 1.4em;
 	margin-left: 42%;
 }
 

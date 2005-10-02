@@ -36,7 +36,6 @@ strip_cybertan() {
 }
 ?>
 <?if [ -z "$UPGRADE" ] ?>
-	<? $ERROR ?>
 	<form method="POST" name="upgrade" action="<? echo -n $SCRIPT_NAME ?>" enctype="multipart/form-data">
 	<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 	<tbody>

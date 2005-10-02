@@ -35,6 +35,7 @@ subcategories() {
 }
 
 header() {
+	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
 	ERROR=${ERROR:+<h3>$ERROR</h3><br /><br />}
 	SAVED=${SAVED:+: Settings saved}
 	_category="$1"
@@ -134,10 +135,9 @@ EOF
 }
 
 footer() {
-  _changes=$(($(cat /tmp/.webif/config-* 2>&- | wc -l)))
-  _changes=${_changes#0}
-  _changes=${_changes:+(${_changes})}
-  cat <<EOF
+	_changes=${CHANGES#0}
+	_changes=${_changes:+(${_changes})}
+	cat <<EOF
 			</div>
 			<hr width="40%" />
 		</div>
@@ -232,3 +232,19 @@ save_setting() {
 	[ "$oldval" != "$3" ] && echo "$2=\"$3\"" >> /tmp/.webif/config-$1
 	rm -f /tmp/.webif/config-$1-old
 }
+
+
+# common awk code for forms
+AWK_START_FORM='
+	print "<div class=\"settings\">"
+	print "<div class=\"settings-title\"><h3><strong>" title "</strong></h3></div>"
+	print "<div class=\"settings-content\">"
+'
+AWK_END_FORM='
+	print "</div>"
+	if (form_help != "") form_help = "<dl>" form_help "</dl>"
+	print "<div class=\"settings-help\"><blockquote><h3><strong>Short help:</strong></h3>" form_help form_help_link "</blockquote></div>"
+	form_help = ""
+	form_help_link = ""
+	print "<div style=\"clear: both\">&nbsp;</div></div>"
+'

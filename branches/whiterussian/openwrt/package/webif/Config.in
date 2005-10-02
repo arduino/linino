@@ -1,6 +1,7 @@
 config BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_HASERL
 	tristate "webif - OpenWrt Administrative Console"
-	default n
+	default m if CONFIG_DEVEL
 	help
 	  A web interface for configuring OpenWrt
 	  

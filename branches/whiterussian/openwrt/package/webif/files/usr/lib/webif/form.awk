@@ -83,5 +83,6 @@ $1 ~ /^end_form/ {
 	if (form_help != "") form_help = "<dl>" form_help "</dl>"
 	print "<div class=\"settings-help\"><blockquote><h3><strong>Short help:</strong></h3>" form_help form_help_link "</blockquote></div>"
 	form_help = ""
+	form_help_link = ""
 	print "<div style=\"clear: both\">&nbsp;</div></div>"
 }
