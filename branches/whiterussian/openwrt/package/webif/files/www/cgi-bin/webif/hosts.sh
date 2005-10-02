@@ -109,7 +109,7 @@ BEGIN {
 
 END {
 	print "<form enctype=\"multipart/form-data\" method=\"post\">"
-	print "<tr><td><input type\"text\" name=\"host_ip\" value=\"'"$FORM_host_ip"'\" /></td><td><input type=\"text\" name=\"host_name\" value=\"'"$FORM_host_name"'\" /></td><td><input type=\"submit\" name=\"add_host\" value=\"Add\" /></td></tr>"
+	print "<tr><td><input type\"text\" name=\"host_ip\" value=\"'"$FORM_host_ip"'\" /></td><td><input type=\"text\" name=\"host_name\" value=\"'"$FORM_host_name"'\" /></td><td style=\"width: 10em\"><input type=\"submit\" name=\"add_host\" value=\"Add\" /></td></tr>"
 	print "</form>"
 	print "</table>"
 	'"$AWK_END_FORM"'
@@ -135,7 +135,7 @@ BEGIN {
 }
 
 END {
-	print "<tr><td><input type\"text\" name=\"dhcp_mac\" value=\"'"$FORM_dhcp_mac"'\" /></td><td><input type=\"text\" name=\"dhcp_ip\" value=\"'"$FORM_dhcp_ip"'\" /></td><td><input type=\"submit\" name=\"add_dhcp\" value=\"Add\" /></td></tr>"
+	print "<tr><td><input type\"text\" name=\"dhcp_mac\" value=\"'"$FORM_dhcp_mac"'\" /></td><td><input type=\"text\" name=\"dhcp_ip\" value=\"'"$FORM_dhcp_ip"'\" /></td><td style=\"width: 10em\"><input type=\"submit\" name=\"add_dhcp\" value=\"Add\" /></td></tr>"
 	print "</table>"
 	print "</form>"
 	'"$AWK_END_FORM"'
