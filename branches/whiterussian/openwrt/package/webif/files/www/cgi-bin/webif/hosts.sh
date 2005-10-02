@@ -65,7 +65,6 @@ hostname|FORM_host_name|Hostname|required|$FORM_host_name" && update_hosts add "
 }
 [ ! -z "$FORM_add_dhcp" ] && {
 	# add a host to /etc/ethers
-	[ -f /tmp/.webif/file-ethers ] || cat /etc/ethers > /tmp/.webif/file-ethers
 	validate "mac|FORM_dhcp_mac|MAC Address|required|$FORM_dhcp_mac
 ip|FORM_dhcp_ip|IP|required|$FORM_dhcp_ip" && update_ethers add "$FORM_dhcp_mac" "$FORM_dhcp_ip"
 }
