@@ -24,6 +24,11 @@ done
 
 if [ -z "$FORM_submit" -o \! -z "$ERROR" ]; then
 	FORM_mode=${wl0_mode:-$(nvram get wl0_mode)}
+	infra=${wl0_infra:-$(nvram get wl0_infra)}
+	case "$infra" in
+		0|off|disabled) FORM_mode=adhoc;;
+	esac
+			
 	FORM_ssid=${wl0_ssid:-$(nvram get wl0_ssid)}
 	FORM_channel=${wl0_channel:-$(nvram get wl0_channel)}
 	FORM_encryption=off
@@ -102,7 +107,17 @@ string|FORM_wpa_psk|WPA pre-shared key|min=8 max=63 $V_PSK|$FORM_wpa_psk
 string|FORM_radius_key|RADIUS server key|min=4 max=63 $V_RADIUS|$FORM_radius_key
 string|FORM_ssid|ESSID|required|$FORM_ssid
 int|FORM_channel|Channel|required min=1 max=$CHANNEL_MAX|$FORM_channel" && {
-		save_setting wireless wl0_mode "$FORM_mode"
+		case "$FORM_mode" in
+			adhoc)
+				save_setting wireless wl0_mode sta
+				save_setting wireless wl0_infra 0
+				;;
+			*)
+				save_setting wireless wl0_mode "$FORM_mode"
+				save_setting wireless wl0_infra 1
+				;;
+		esac
+			
 		save_setting wireless wl0_ssid "$FORM_ssid"
 		save_setting wireless wl0_channel "$FORM_channel"
 		case "$FORM_aes$FORM_tkip" in 
@@ -152,6 +167,27 @@ header "Network" "Wireless" "Wireless settings" ' onLoad="modechange()" ' "$SCRI
 <!--
 function modechange()
 {
+	if (checked('mode_adhoc')) {
+		var psk = document.getElementById('encryption_psk');
+		psk.disabled = true;
+		if (psk.checked) {
+				psk.checked = false;
+				document.getElementById('encryption_off').checked = true;
+		}
+	} else {
+		document.getElementById('encryption_psk').disabled = false;
+	}
+	if (checked('mode_wet') || checked('mode_sta') || checked('mode_adhoc')) {
+		var wpa = document.getElementById('encryption_wpa');
+		wpa.disabled = true;
+		if (wpa.checked) {
+				wpa.checked = false;
+				document.getElementById('encryption_off').checked = true;
+		}
+	} else {
+		document.getElementById('encryption_wpa').disabled = false;
+	}
+	
 	var v = (checked('encryption_wpa') || checked('encryption_psk'));
 	set_visible('wpa_support', v);
 	set_visible('wpa_crypto', v);
@@ -163,16 +199,6 @@ function modechange()
 	set_visible('radiuskey', v);
 	set_visible('radius_ip', v);
 
-	if (checked('mode_wet') || checked('mode_sta')) {
-			var wpa = document.getElementById('encryption_wpa');
-			wpa.disabled = true;
-			if (wpa.checked) {
-					wpa.checked = false;
-					document.getElementById('encryption_off').checked = true;
-			}
-	} else {
-			document.getElementById('encryption_wpa').disabled = false;
-	}
 	hide('save');
 	show('save');
 }
@@ -190,7 +216,8 @@ $F_CHANNELS
 field|Mode
 radio|mode|$FORM_mode|ap|Access Point<br />|onChange=\"modechange()\" 
 radio|mode|$FORM_mode|sta|Client <br />|onChange=\"modechange()\" 
-radio|mode|$FORM_mode|wet|Bridge|onChange=\"modechange()\" 
+radio|mode|$FORM_mode|wet|Bridge <br />|onChange=\"modechange()\" 
+radio|mode|$FORM_mode|adhoc|Ad-Hoc|onChange=\"modechange()\" 
 helpitem|Mode
 helptext|Operation mode
 helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-7126c5958e237d603674b3a9739c9d23bdfdb293
