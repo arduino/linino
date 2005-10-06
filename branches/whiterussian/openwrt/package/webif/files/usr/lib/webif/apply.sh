@@ -7,8 +7,8 @@ HANDLERS_config='
 	network) reload_network;;
 '
 HANDLERS_file='
-	hosts) rm -f /etc/hosts; mv $config /etc/hosts;;
-	ethers) rm -f /etc/ethers; mv $config /etc/ethers;;
+	hosts) rm -f /etc/hosts; mv $config /etc/hosts; killall -HUP dnsmasq ;;
+	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
 '
 
 reload_network() {

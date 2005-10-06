@@ -133,6 +133,7 @@ int|FORM_channel|Channel|required min=1 max=$CHANNEL_MAX|$FORM_channel" && {
 					wpa1wpa2) save_setting wireless wl0_akm "psk psk2";;
 				esac
 				save_setting wireless wl0_wpa_psk "$FORM_wpa_psk"
+				save_setting wireless wl0_wep "disabled"
 				;;
 			wpa)
 				case "${FORM_wpa1}${FORM_wpa2}" in
@@ -142,6 +143,7 @@ int|FORM_channel|Channel|required min=1 max=$CHANNEL_MAX|$FORM_channel" && {
 				esac
 				save_setting wireless wl0_radius_ipaddr "$FORM_radius_ipaddr"
 				save_setting wireless wl0_radius_key "$FORM_radius_key"
+				save_setting wireless wl0_wep "disabled"
 				;;
 			wep)
 				save_setting wireless wl0_wep enabled
