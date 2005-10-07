@@ -12,6 +12,9 @@ HANDLERS_file='
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
 '
 
+# for some reason a for loop with "." doesn't work
+eval "$(cat /usr/lib/webif/apply-*.sh 2>&-)"
+
 reload_network() {
 	echo Reloading networking settings ...
 	grep '^wan_' config-network >&- 2>&- && {
