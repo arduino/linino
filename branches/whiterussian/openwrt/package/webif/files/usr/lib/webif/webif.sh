@@ -170,9 +170,9 @@ footer() {
 			</div>
 			<div class="apply">
 				<div>
-					<a href="config.sh?mode=save&amp;cat=$_category">Apply changes &laquo;</a><br />
-					<a href="config.sh?mode=clear&amp;cat=$_category">Clear changes &laquo;</a><br />
-					<a href="config.sh?mode=review&amp;cat=$_category">Review changes $_changes &laquo;</a>
+					<a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME">Apply changes &laquo;</a><br />
+					<a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">Clear changes &laquo;</a><br />
+					<a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">Review changes $_changes &laquo;</a>
 				</div>
 			</div>
 		</div>

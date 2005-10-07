@@ -13,6 +13,7 @@ case "$FORM_mode" in
 		rm -rf /tmp/.webif >&- 2>&- 
 		header $FORM_cat . "Configuration: cleared."
 		CHANGES=""
+		echo "${FORM_prev:+<meta http-equiv=\"refresh\" content=\"2; URL=$FORM_prev\" />}"
 		;;
 	review)
 		header $FORM_cat . "Configuration changes:"
@@ -37,6 +38,7 @@ case "$FORM_mode" in
 		echo '<pre>'
 		sh /usr/lib/webif/apply.sh
 		echo '</pre>'
+		echo "${FORM_prev:+<meta http-equiv=\"refresh\" content=\"2; URL=$FORM_prev\" />}"
 		;;
 esac
 
