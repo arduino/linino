@@ -17,9 +17,9 @@ categories() {
 		c[n] = $4
 		if (f[$4] == "") f[$4] = "'"$rootdir/$indexpage"'?cat=" $4
 	}
-	($3 == "name") && ((n[$4] == 0) || (n[$4] > int($5))) {
+	($3 == "name") && ((p[$4] == 0) || (p[$4] > int($5))) {
 		gsub(/^.*\//, "", $1);
-		n[$4] = int($5)
+		p[$4] = int($5)
 		f[$4] = "'"$rootdir"'/" $1
 	}
 	END {
