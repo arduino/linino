@@ -67,10 +67,10 @@ header() {
 	_saved_title=${ERROR:+: Settings not saved}
 	_saved_title=${_saved_title:-$SAVED}
 	_head="${3:+<div class=\"settings-block-title\"><h2>$3$_saved_title</h2></div>}"
-	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\">}"
+	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type="hidden" name="submit" value="1" />}"
 	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"Save changes\" /></p>}"
 	_categories=$(categories $1)
-	_subcategories=${2:+$(subcategories $1 $2)}
+	_subcategories=${2:+$(subcategories "$1" "$2")}
 
 	update_changes
 	cat <<EOF

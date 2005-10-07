@@ -1,7 +1,7 @@
 #!/usr/bin/haserl -u
 <? 
 . /usr/lib/webif/webif.sh
-header "System" "Firmware upgrade" "Firmware Upgrade"
+header "System" "Firmware upgrade" "Firmware upgrade"
 
 strip_cybertan() {
 	dd if="$FORM_firmware" of=/tmp/upgrade.bin bs=32 skip=1 2>/dev/null
@@ -60,13 +60,14 @@ strip_cybertan() {
 	</form>
 <?el?>
 <?
-	ERASE=""
-	[ "$FORM_erase_fs" = 1 ] && ERASE="-e linux "
-	[ "$FORM_erase_nvram" = 1 ] && ERASE="$ERASE -e nvram "
+	ERASE="${FORM_erase_fs:+-e linux }"
+	ERASE="$ERASE${FORM_erase_nvram:+-e nvram }"
+	cp /bin/busybox /tmp/
+	echo -n 'Upgrading... '
+	# FIXME: probably a race condition (with the reboot), but it seems to work
+	mtd -r $ERASE write /tmp/upgrade.bin linux 2>&- | awk 'END { print "done." }'
+	exit
 ?>
-Upgrading... 
-<? mtd -r $ERASE write /tmp/upgrade.bin linux 2>&- >&- ?>
-done <br />
 <?fi?>
 
 <? footer ?>

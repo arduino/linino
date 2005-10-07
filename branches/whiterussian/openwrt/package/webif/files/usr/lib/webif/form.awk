@@ -7,7 +7,6 @@
 
 BEGIN {
 	FS="|"
-	print "<input type=\"hidden\" name=\"submit\" value=\"1\" />"
 }
 
 # trim leading whitespaces 
