@@ -5,6 +5,7 @@
 HANDLERS_config='
 	wireless) reload_wireless;;
 	network) reload_network;;
+	system) reload_system;;
 '
 HANDLERS_file='
 	hosts) rm -f /etc/hosts; mv $config /etc/hosts; killall -HUP dnsmasq ;;
@@ -12,7 +13,7 @@ HANDLERS_file='
 '
 
 reload_network() {
-	echo Reloading networking settings...
+	echo Reloading networking settings ...
 	grep '^wan_' config-network >&- 2>&- && {
 		ifdown wan
 		ifup wan
@@ -25,10 +26,15 @@ reload_network() {
 }
 
 reload_wireless() {
-	echo Reloading wireless settings...
+	echo Reloading wireless settings ...
 	killall nas >&- 2>&- && sleep 2
 	/sbin/wifi
 	[ -f /etc/init.d/S41wpa ] && /etc/init.d/S41wpa
+}
+
+reload_system() {
+	echo Applying system settings ...
+	echo "$(nvram get wan_hostname)" > /proc/sys/kernel/hostname
 }
 
 cd /tmp/.webif
@@ -47,7 +53,7 @@ done
 	cd /proc/self
 	cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set
 )
-echo "Committing NVRAM..."
+echo "Committing NVRAM ..."
 nvram commit
 for config in $(ls config-* 2>&-); do 
 	name=${config#config-}
