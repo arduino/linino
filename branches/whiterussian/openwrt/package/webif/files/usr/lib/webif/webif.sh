@@ -156,6 +156,7 @@ EOF
 footer() {
 	_changes=${CHANGES#0}
 	_changes=${_changes:+(${_changes})}
+	_endform=${_savebutton:+</form>}
 	cat <<EOF
 			</div>
 			<hr width="40%" />
@@ -175,7 +176,7 @@ footer() {
 				</div>
 			</div>
 		</div>
-		</form>
+		$_endform
     </div></body>
 </html>
 EOF
