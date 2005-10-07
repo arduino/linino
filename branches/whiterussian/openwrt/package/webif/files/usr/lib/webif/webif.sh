@@ -5,17 +5,32 @@ rootdir=/cgi-bin/webif
 indexpage=index.sh
 
 categories() {
-	grep '##WEBIF:category' $cgidir/.categories $cgidir/*.sh 2>/dev/null | awk -F: '
+	grep '##WEBIF:' $cgidir/.categories $cgidir/*.sh 2>/dev/null | awk -F: '
 	BEGIN {
-	  print "<div id=\"mainmenu\"><h3><strong>Categories:</strong></h3><ul>"
+		n = 0
+		sel = 0
 	}
-	categories !~ /:$4:/ {
-	  categories = categories ":" $4 ":";
-	  if ($4 ~ /^'"$1"'$/) print "<li class=\"selected-maincat\"><a href=\"'"$rootdir/$indexpage"'?cat=" $4 "\">&raquo;" $4 "&laquo;</a></li>"
-	  else print "<li><a href=\"'"$rootdir/$indexpage"'?cat=" $4 "\">&nbsp;" $4 "&nbsp;</a></li>";
+	($3 == "category") && (categories !~ /:$4:/) {
+		categories = categories ":" $4 ":";
+	 	n++
+		if ($4 ~ /^'"$1"'$/) sel = n
+		c[n] = $4
+		if (f[$4] == "") f[$4] = "'"$rootdir/$indexpage"'?cat=" $4
+	}
+	($3 == "name") && ((n[$4] == 0) || (n[$4] > int($5))) {
+		gsub(/^.*\//, "", $1);
+		n[$4] = int($5)
+		f[$4] = "'"$rootdir"'/" $1
 	}
 	END {
-	  print "</ul></div>"
+		print "<div id=\"mainmenu\"><h3><strong>Categories:</strong></h3><ul>"
+		
+		for (i = 1; i <= n; i++) {
+			if (sel == i) print "<li class=\"selected-maincat\"><a href=\"" f[c[i]] "\">&raquo;" c[i] "&laquo;</a></li>"
+			else print "<li><a href=\"" f[c[i]] "\">&nbsp;" c[i] "&nbsp;</a></li>";
+		}
+	  
+		print "</ul></div>"
 	}' -
 }
 
