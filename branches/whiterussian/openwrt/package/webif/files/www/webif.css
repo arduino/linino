@@ -40,6 +40,10 @@ hr.separator {
 	display: block;
 }
 
+th {
+	text-align: left;
+}
+
 .selected-maincat {
 	font-weight: bold;
 }
@@ -210,7 +214,7 @@ hr.separator {
 	padding-bottom: 0.5em;
 }
 
-#content .settings-block .settings .settings-content input {
+#content .settings-block .settings .settings-content input select {
 	margin-top: 0.8em;
 }
 

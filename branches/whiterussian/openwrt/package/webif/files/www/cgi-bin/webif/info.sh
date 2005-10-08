@@ -19,7 +19,7 @@ header "Info" "Router Info" "Router Info"
 	</tr>
 	<tr>
 		<td>MAC-Address</td>
-		<td><? ifconfig eth0 | grep HWaddr | cut -b39-  ?></td>
+		<td><? /sbin/ifconfig eth0 | grep HWaddr | cut -b39-  ?></td>
 	</tr>
 </tbody>
 </table>
