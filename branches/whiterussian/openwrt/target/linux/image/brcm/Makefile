@@ -24,12 +24,26 @@ endif
 ifeq ($(FS),jffs2-4MB)
 TRXALIGN:=-a 0x10000
 endif
-$(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx:
-	$(STAGING_DIR)/bin/trx -o $@ $(BUILD_DIR)/loader.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
+
+$(KDIR)/loader.tmp.gz: $(BUILD_DIR)/loader.gz
+	cp $^ $@
+	echo -e "\\x00" >> $@
+
+$(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx: $(KDIR)/loader.tmp.gz
+	$(STAGING_DIR)/bin/trx -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
 
 
 ifeq ($(KERNEL),2.4)
 FSNAME:=$(patsubst jffs2-%,jffs2,$(FS))
+
+ifeq ($(FS),squashfs)
+$(BIN_DIR)/openwrt-wap54g-$(FSNAME).trx: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
+	cp $< $@
+	echo -ne '\x01' >> $@
+	
+install: $(BIN_DIR)/openwrt-wap54g-$(FSNAME).trx
+endif
+
 
 ifneq ($(FS),jffs2-8MB)
 $(BIN_DIR)/openwrt-wrt54g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx

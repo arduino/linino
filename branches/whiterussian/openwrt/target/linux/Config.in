@@ -48,23 +48,82 @@ config BR2_PACKAGE_KMOD_ARPT
 	help
 	  Kernel modules for ARP firewalling
 
-config BR2_PACKAGE_KMOD_EBT
-	tristate "Ethernet Bridge firewalling support"
-	default m
-	help
-	  Kernel modules for bridge firewalling
-
-config BR2_PACKAGE_KMOD_IPTABLES_V4
-	tristate "Basic set of kernel modules for iptables"
-	default y
-	help
-	  Kernel modules for IPv4 firewalling
+# disabled because of severe performance issues
+# config BR2_PACKAGE_KMOD_EBT
+#	tristate "Ethernet Bridge firewalling support"
+#	default m
+#	help
+#	  Kernel modules for bridge firewalling
 
 config BR2_PACKAGE_KMOD_IPTABLES_V4_EXTRA
 	tristate "Extra modules for iptables"
 	default m
+	select BR2_PACKAGE_KMOD_NAT_EXTRA
+	select BR2_PACKAGE_KMOD_QUEUE
+	select BR2_PACKAGE_KMOD_IPT_IPSEC
+	select BR2_PACKAGE_KMOD_IPT_IPOPT
+	select BR2_PACKAGE_KMOD_IPT_CONNTRACK
+	select BR2_PACKAGE_KMOD_IPT_FILTER
+	select BR2_PACKAGE_KMOD_IPT_NAT
+	select BR2_PACKAGE_KMOD_IPT_EXTRA
 	help
-	  Extra kernel modules for IPv4 firewalling
+	  Extra kernel modules for IPv4 firewalling (metapackage)
+
+config BR2_PACKAGE_KMOD_NAT_EXTRA
+	tristate "Extra NAT modules for iptables"
+	default m
+	help
+	  Extra NAT kernel modules for special protocols
+
+config BR2_PACKAGE_KMOD_QUEUE
+	tristate "iptables module for user-space queueing"
+	default m
+	help
+	  iptables module for user-space queueing
+
+config BR2_PACKAGE_KMOD_IPT_IPSEC
+	tristate "Extra iptables modules for matching IPSec"
+	default m
+	help
+	  Extra iptables modules for matching special IPSec packets
+
+config BR2_PACKAGE_KMOD_IPT_IPOPT
+	tristate "Extra iptables modules for matching IP packet options"
+	default m
+	help
+	  Extra iptables modules for matching IP packet options
+
+config BR2_PACKAGE_KMOD_IPT_CONNTRACK
+	tristate "Extra iptables modules for conntrack matching"
+	default m
+	help
+	  Extra iptables modules for matching conntrack states/options
+
+config BR2_PACKAGE_KMOD_IPT_FILTER
+	tristate "Extra iptables modules for content filtering"
+	default m
+	help
+	  Extra iptables modules for filtering the contents of packets
+	  Includes: ipp2p, layer7
+
+config BR2_PACKAGE_KMOD_IPT_NAT
+	tristate "Extra iptables modules for NAT"
+	default m
+	help
+	  Extra iptables modules for different NAT targets
+	  (MIRROR, REDIRECT)
+
+config BR2_PACKAGE_KMOD_IPT_EXTRA
+	tristate "Other extra iptables modules"
+	default m
+	help
+	  recent and owner match
+
+config BR2_PACKAGE_KMOD_IMQ
+	tristate "Intermediate Queueing device"
+	default m
+	help
+	  Kernel support for the Intermediate Queueing device
 
 config BR2_PACKAGE_KMOD_IPV6
 	tristate "IPv6 support"
@@ -125,6 +184,11 @@ config BR2_PACKAGE_KMOD_USB_STORAGE
 
 config BR2_PACKAGE_KMOD_USB_PRINTER
 	tristate "Support for USB printers"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_CONTROLLER
+
+config BR2_PACKAGE_KMOD_USB_ACM
+	tristate "Support for USB ACM compatible devices"
 	default m
 	depends BR2_PACKAGE_KMOD_USB_CONTROLLER
 

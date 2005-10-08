@@ -1,0 +1,6 @@
+Package: kmod-ipt-ipsec
+Priority: optional
+Section: net
+Maintainer: Felix Fietkau <openwrt@nbd.name>
+Source: buildroot internal
+Description: Extra iptables modules for matching special IPSec packets

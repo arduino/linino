@@ -5,11 +5,7 @@ else
 KDEPEND_$(1):=$($(4))
 endif
 
-ifeq ($$(strip $(5)),)
-IDEPEND_$(1):=kernel ($(LINUX_VERSION)-$(BOARD)-$(PKG_RELEASE))
-else
-IDEPEND_$(1):=kernel ($(LINUX_VERSION)-$(BOARD)-$(PKG_RELEASE)), $(5)
-endif
+IDEPEND_$(1):=kernel ($(LINUX_VERSION)-$(BOARD)-$(PKG_RELEASE)) $(foreach pkg,$(5),", $(pkg)")
 
 PKG_$(1) := $(PACKAGE_DIR)/kmod-$(2)_$(LINUX_VERSION)-$(BOARD)-$(PKG_RELEASE)_$(ARCH).ipk
 I_$(1) := $(PKG_BUILD_DIR)/ipkg/$(2)
@@ -28,7 +24,9 @@ $$(PKG_$(1)): $(LINUX_DIR)/.modules_done
 	mkdir -p $$(I_$(1))/lib/modules/$(LINUX_VERSION)
 	$(SCRIPT_DIR)/make-ipkg-dir.sh $$(I_$(1)) ../control/kmod-$(2).control $(LINUX_VERSION)-$(BOARD)-$(PKG_RELEASE) $(ARCH)
 	echo "Depends: $$(IDEPEND_$(1))" >> $$(I_$(1))/CONTROL/control
+ifneq ($(strip $(3)),)
 	cp $(3) $$(I_$(1))/lib/modules/$(LINUX_VERSION)
+endif
 ifneq ($(6),)
 	mkdir -p $$(I_$(1))/etc/modules.d
 	for module in $(7); do \

@@ -55,6 +55,42 @@ ifeq ($(BOARD),brcm)
 include ./broadcom.mk
 endif
 
+include ../netfilter.mk
+
+# metapackage for compatibility ...
+$(eval $(call KMOD_template,IPTABLES_V4_EXTRA,iptables-extra,\
+,,kmod-nat-extra kmod-queue kmod-ipt-ipsec kmod-ipt-ipopt kmod-ipt-conntrack kmod-ipt-filter kmod-ipt-nat kmod-ipt-extra))
+
+$(eval $(call KMOD_template,NAT_EXTRA,nat-extra,\
+	$(foreach mod,$(PKG_NAT_EXTRA-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+,,,40,$(PKG_NAT_EXTRA-m)))
+$(eval $(call KMOD_template,QUEUE,queue,\
+	$(foreach mod,$(PKG_QUEUE-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+))
+$(eval $(call KMOD_template,IPT_IPSEC,ipt-ipsec,\
+	$(foreach mod,$(PKG_IPT_IPSEC-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+))
+$(eval $(call KMOD_template,IPT_IPOPT,ipt-ipopt,\
+	$(foreach mod,$(PKG_IPT_IPOPT-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+))
+$(eval $(call KMOD_template,IPT_CONNTRACK,ipt-conntrack,\
+	$(foreach mod,$(PKG_IPT_CONNTRACK-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+))
+$(eval $(call KMOD_template,IPT_FILTER,ipt-filter,\
+	$(foreach mod,$(PKG_IPT_FILTER-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+))
+$(eval $(call KMOD_template,IPT_NAT,ipt-nat,\
+	$(foreach mod,$(PKG_IPT_NAT-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+))
+$(eval $(call KMOD_template,IMQ,imq,\
+	$(foreach mod,$(PKG_IMQ-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+	$(MODULES_DIR)/kernel/drivers/net/imq.o \
+))
+$(eval $(call KMOD_template,IPT_EXTRA,ipt-extra,\
+	$(foreach mod,$(PKG_IPT_EXTRA-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+))
+
+
 $(eval $(call KMOD_template,B44,b44,\
 	$(MODULES_DIR)/kernel/drivers/net/b44.o \
 ,CONFIG_B44))
@@ -64,9 +100,6 @@ $(eval $(call KMOD_template,ARPT,arptables,\
 $(eval $(call KMOD_template,EBT,ebtables,\
 	$(MODULES_DIR)/kernel/net/bridge/netfilter/*.o \
 ,CONFIG_BRIDGE_NF_EBTABLES))
-$(eval $(call KMOD_template,IPTABLES_V4_EXTRA,iptables-extra,\
-	$(MODULES_DIR)/kernel/net/ipv4/netfilter/ip*.o \
-))
 $(eval $(call KMOD_template,IPTABLES_V6,ip6tables,\
 	$(MODULES_DIR)/kernel/net/ipv6/netfilter/ip*.o \
 ,CONFIG_IP6_NF_IPTABLES,kmod-ipv6))
@@ -100,6 +133,9 @@ $(eval $(call KMOD_template,USB_STORAGE,usb-storage,\
 $(eval $(call KMOD_template,USB_PRINTER,usb-printer,\
 	$(MODULES_DIR)/kernel/drivers/usb/printer.o \
 ,CONFIG_USB_PRINTER,kmod-usb-core,60,printer))
+$(eval $(call KMOD_template,USB_ACM,usb-acm,\
+	$(MODULES_DIR)/kernel/drivers/usb/acm.o \
+,CONFIG_USB_ACM,kmod-usb-core,60,acm))
 $(eval $(call KMOD_template,IDE,ide,\
 	$(MODULES_DIR)/kernel/drivers/ide/*.o \
 	$(MODULES_DIR)/kernel/drivers/ide/*/*.o \
