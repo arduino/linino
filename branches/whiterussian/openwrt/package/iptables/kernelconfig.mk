@@ -35,7 +35,10 @@ ext-$(CONFIG_IP_NF_TARGET_MARK) += MARK
 ext-$(CONFIG_IP_NF_TARGET_ULOG) += ULOG
 #ext-$(CONFIG_IP_NF_TARGET_TCPMSS) += TCPMSS
 ext-$(CONFIG_IP_NF_TARGET_CONNMARK) += CONNMARK
+ext-$(CONFIG_IP_NF_TARGET_IMQ) += IMQ
 
 # add extensions that don't depend on kernel config
 ext-m += TTL
 ext-y += icmp standard tcp udp state MASQUERADE conntrack TCPMSS LOG
+
+include $(TOPDIR)/target/linux/netfilter.mk
