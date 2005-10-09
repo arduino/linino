@@ -25,7 +25,7 @@ ifeq ($(FS),jffs2-4MB)
 TRXALIGN:=-a 0x10000
 endif
 
-$(KDIR)/loader.tmp.gz: $(BUILD_DIR)/loader.gz
+$(KDIR)/loader.tmp.gz:
 	cp $^ $@
 	echo -e "\\x00" >> $@
 
