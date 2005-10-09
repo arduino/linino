@@ -26,7 +26,7 @@ TRXALIGN:=-a 0x10000
 endif
 
 $(KDIR)/loader.tmp.gz:
-	cp $^ $@
+	cp $(BUILD_DIR)/loader.gz $@
 	echo -e "\\x00" >> $@
 
 $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx: $(KDIR)/loader.tmp.gz
