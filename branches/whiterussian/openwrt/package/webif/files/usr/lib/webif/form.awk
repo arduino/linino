@@ -14,7 +14,7 @@ BEGIN {
 	gsub(/^[ \t]+/,"",$1)
 }
 
-($1 != "") && ($1 !~ /^option/) {
+($1 != "") && ($1 !~ /^option/) && (select_open == 1) {
 	select_open = 0
 	print "</select>"
 }

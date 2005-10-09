@@ -26,8 +26,8 @@ case "$FORM_mode" in
 			}
 		done
 		CONFIGFILES=""
-		for configname in $(ls file-* 2>&-); do
-			CONFIGFILES="$CONFIGFILES ${configname#file-}"
+		for configname in file-*; do
+			exists "$configname" && CONFIGFILES="$CONFIGFILES ${configname#file-}"
 		done
 		CONFIGFILES="${CONFIGFILES:+<h3 style="display:inline">Config files: </h3>$CONFIGFILES<br />}"
 		echo $CONFIGFILES

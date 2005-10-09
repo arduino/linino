@@ -4,7 +4,7 @@ cgidir=/www/cgi-bin/webif
 rootdir=/cgi-bin/webif
 indexpage=index.sh
 
-# workarounds for stupid busybox fork/exec on [ ]
+# workarounds for stupid busybox slowness on [ ]
 empty() {
 	case "$1" in
 		"") return 0 ;;
@@ -16,6 +16,10 @@ equal() {
 		"$2") return 0 ;;
 		*) return 255 ;;
 	esac
+}
+# very crazy, but also very fast :-)
+exists() {
+	( < $1 ) 2>&-
 }
 
 categories() {
@@ -54,7 +58,7 @@ header() {
 	_uptime="${_uptime#*up }"
 	_uptime="${_uptime%%,*}"
 	_hostname=$(cat /proc/sys/kernel/hostname)
-	_version=$(cat /etc/banner | grep "(")
+	_version=$( grep "(" /etc/banner )
 	_version="${_version%% ---*}"
 	_head="${3:+<div class=\"settings-block-title\"><h2>$3$_saved_title</h2></div>}"
 	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type="hidden" name="submit" value="1" />}"
@@ -175,14 +179,18 @@ apply_passwd() {
 	case ${SERVER_SOFTWARE%% *} in
 		busybox)
 			echo -n '/cgi-bin/webif:' > /etc/httpd.conf
-			cat /etc/passwd | grep root | cut -d: -f1,2 >> /etc/httpd.conf
+			grep root /etc/passwd | cut -d: -f1,2 >> /etc/httpd.conf
 			killall -HUP httpd
 			;;
 	esac
 }
 
 display_form() {
-	echo "$1" | awk -F'|' -f /usr/lib/webif/common.awk -f /usr/lib/webif/form.awk
+	if empty "$1"; then
+		awk -F'|' -f /usr/lib/webif/common.awk -f /usr/lib/webif/form.awk
+	else
+		echo "$1" | awk -F'|' -f /usr/lib/webif/common.awk -f /usr/lib/webif/form.awk
+	fi
 }
 
 list_remove() {
@@ -229,26 +237,35 @@ handle_list() {
 }
 
 load_settings() {
-	[ \! "$1" = "nvram" -a -f /etc/config/$1 ] && . /etc/config/$1
-	[ -f /tmp/.webif/config-$1 ] && . /tmp/.webif/config-$1
+	equal "$1" "nvram" || {
+		exists /etc/config/$1 && . /etc/config/$1
+	}
+	exists /tmp/.webif/config-$1 && . /tmp/.webif/config-$1
 }
 
 validate() {
-	eval "$(echo "$1" | awk -f /usr/lib/webif/validate.awk)"
+	if empty "$1"; then
+		eval "$(awk -f /usr/lib/webif/validate.awk)"
+	else
+		eval "$(echo "$1" | awk -f /usr/lib/webif/validate.awk)"
+	fi
 }
 
 
 save_setting() {
-	mkdir -p /tmp/.webif
+	exists /tmp/.webif/* || mkdir -p /tmp/.webif
 	oldval=$(eval "echo \${$2}")
 	oldval=${oldval:-$(nvram get "$2")}
 	grep "^$2=" /tmp/.webif/config-$1 >&- 2>&- && {
-		mv /tmp/.webif/config-$1 /tmp/.webif/config-$1-old 2>&- >&-
-		grep -v "^$2=" /tmp/.webif/config-$1-old > /tmp/.webif/config-$1 2>&- 
+		grep -v "^$2=" /tmp/.webif/config-$1 > /tmp/.webif/config-$1-new 2>&- 
+		mv /tmp/.webif/config-$1-new /tmp/.webif/config-$1 2>&- >&-
 		oldval=""
 	}
 	equal "$oldval" "$3" || echo "$2=\"$3\"" >> /tmp/.webif/config-$1
-	rm -f /tmp/.webif/config-$1-old
 }
 
 
+is_bcm947xx() {
+	read _systype < /proc/cpuinfo
+	equal "${_systype##* }" "BCM947XX"
+}

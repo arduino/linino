@@ -17,10 +17,12 @@ if empty "$FORM_submit"; then
 	FORM_lan_gateway=${lan_gateway:-$(nvram get lan_gateway)}
 else 
 	SAVED=1
-	validate "
+	validate <<EOF
 ip|FORM_lan_ipaddr|LAN IP|required|$FORM_lan_ipaddr
 netmask|FORM_lan_netmask|LAN network mask|required|$FORM_lan_netmask
-ip|FORM_lan_gateway|LAN gateway||$FORM_lan_gateway" && {
+ip|FORM_lan_gateway|LAN gateway||$FORM_lan_gateway
+EOF
+	equal "$?" 0 && {
 		save_setting network lan_ipaddr $FORM_lan_ipaddr
 		save_setting network lan_netmask $FORM_lan_netmask
 		save_setting network lan_gateway $FORM_lan_gateway
@@ -29,7 +31,8 @@ fi
 
 header "Network" "LAN" "LAN settings" '' "$SCRIPT_NAME"
 
-display_form "start_form|LAN Configuration
+display_form <<EOF
+start_form|LAN Configuration
 field|IP Address
 text|lan_ipaddr|$FORM_lan_ipaddr
 field|Netmask
@@ -41,7 +44,8 @@ start_form|DNS Servers
 listedit|dns|$SCRIPT_NAME?|$FORM_dns|$FORM_dnsadd
 helpitem|Note
 helptext|You should save your settings on this page before adding/removing DNS servers
-end_form" 
+end_form
+EOF
 
 footer ?>
 <!--

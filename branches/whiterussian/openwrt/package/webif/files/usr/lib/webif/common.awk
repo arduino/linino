@@ -1,5 +1,5 @@
 function start_form(title, field_opts) {
-	print "<div class=\"settings\">"
+	print "<div class=\"settings\"" field_opts ">"
 	if (title != "") print "<div class=\"settings-title\"><h3><strong>" title "</strong></h3></div>"
 	print "<div class=\"settings-content\">"
 }

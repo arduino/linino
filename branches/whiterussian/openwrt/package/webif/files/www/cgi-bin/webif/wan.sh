@@ -69,12 +69,13 @@ else
 			;;
 	esac
 
-	# FIXME: add validation for DNS server list
-	validate "
+validate <<EOF
 ip|FORM_wan_ipaddr|IP address|$V_IP|$FORM_wan_ipaddr
 netmask|FORM_wan_netmask|network mask|$V_NM|$FORM_wan_netmask
 ip|FORM_wan_gateway|gateway address||$FORM_wan_gateway
-ip|FORM_pptp_server_ip|PPTP server IP|$V_PPTP|$FORM_pptp_server_ip" && {
+ip|FORM_pptp_server_ip|PPTP server IP|$V_PPTP|$FORM_pptp_server_ip
+EOF
+	equal "$?" 0 && {
 		save_setting network wan_proto $FORM_wan_proto
 		
 		# Settings specific to one protocol type
@@ -116,7 +117,8 @@ ip|FORM_pptp_server_ip|PPTP server IP|$V_PPTP|$FORM_pptp_server_ip" && {
 fi
 
 header "Network" "WAN" "WAN settings" ' onLoad="modechange()" ' "$SCRIPT_NAME"
-?>
+
+cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>
 <script type="text/javascript">
 <!--
@@ -143,11 +145,14 @@ function modechange()
 }
 -->
 </script>
-<? display_form "start_form|WAN Configuration
+EOF
+
+display_form <<EOF
+start_form|WAN Configuration
 field|Internet Connection Type
-radio|wan_proto|$FORM_wan_proto|none|None<br />|onchange=\"modechange()\"
-radio|wan_proto|$FORM_wan_proto|dhcp|DHCP<br />|onchange=\"modechange()\"
-radio|wan_proto|$FORM_wan_proto|static|Static IP<br />|onchange=\"modechange()\"
+radio|wan_proto|$FORM_wan_proto|none|None<br />|onchange="modechange()"
+radio|wan_proto|$FORM_wan_proto|dhcp|DHCP<br />|onchange="modechange()"
+radio|wan_proto|$FORM_wan_proto|static|Static IP<br />|onchange="modechange()"
 $PPPOE_OPTION
 $PPTP_OPTION
 end_form
@@ -170,8 +175,8 @@ end_form
 
 start_form|PPP Settings|ppp_settings|hidden
 field|PPP Redial Policy|ppp_redial|hidden
-radio|ppp_redial|$FORM_ppp_redial|demand|Connect on Demand<br />|onChange=\"modechange()\"
-radio|ppp_redial|$FORM_ppp_redial|persist|Keep Alive|onChange=\"modechange()\"
+radio|ppp_redial|$FORM_ppp_redial|demand|Connect on Demand<br />|onChange="modechange()"
+radio|ppp_redial|$FORM_ppp_redial|persist|Keep Alive|onChange="modechange()"
 field|Maximum Idle Time|ppp_demand_idletime|hidden
 text|ppp_idletime|$FORM_ppp_idletime
 field|Redial Timeout|ppp_persist_redialperiod|hidden
@@ -182,7 +187,8 @@ field|PPP Password|ppp_passwd|hidden
 text|ppp_passwd|$FORM_ppp_passwd
 field|PPP MTU|ppp_mtu|hidden
 text|ppp_mtu|$FORM_ppp_mtu
-end_form" 
+end_form
+EOF
 
 footer ?>
 <!--

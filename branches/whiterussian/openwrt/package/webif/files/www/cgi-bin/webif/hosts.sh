@@ -2,12 +2,13 @@
 <? 
 . /usr/lib/webif/webif.sh
 
-[ -f /tmp/.webif/file-hosts ] && HOSTS_FILE=/tmp/.webif/file-hosts || HOSTS_FILE=/etc/hosts
-[ -f /tmp/.webif/file-ethers ] && ETHERS_FILE=/tmp/.webif/file-ethers || ETHERS_FILE=/etc/ethers
-touch $HOSTS_FILE $ETHERS_FILE >&- 2>&-
+exists /tmp/.webif/file-hosts  && HOSTS_FILE=/tmp/.webif/file-hosts || HOSTS_FILE=/etc/hosts
+exists /tmp/.webif/file-ethers  && ETHERS_FILE=/tmp/.webif/file-ethers || ETHERS_FILE=/etc/ethers
+exists $HOSTS_FILE || touch $HOSTS_FILE >&- 2>&-
+exists $ETHERS_FILE || touch $ETHERS_FILE >&- 2>&-
 
 update_hosts() {
-	mkdir -p /tmp/.webif
+	exists /tmp/.webif/* || mkdir -p /tmp/.webif
 	awk -v "mode=$1" -v "ip=$2" -v "name=$3" '
 BEGIN {
 	FS="[ \t]"
@@ -37,13 +38,13 @@ processed == 0 {
 }
 END {
 	if ((mode == "add") && (host_added == 0)) print ip "	" name
-}' - < "$HOSTS_FILE" > /tmp/.webif/file-hosts-new
+}' "$HOSTS_FILE" > /tmp/.webif/file-hosts-new
 	mv "/tmp/.webif/file-hosts-new" "/tmp/.webif/file-hosts"
 	HOSTS_FILE=/tmp/.webif/file-hosts
 }
 
 update_ethers() {
-	mkdir -p /tmp/.webif
+	exists /tmp/.webif/* || mkdir -p /tmp/.webif
 	case "$1" in
 		add)
 			grep -E -v "^[ \t]*$2" $ETHERS_FILE > /tmp/.webif/file-ethers-new
@@ -60,14 +61,21 @@ update_ethers() {
 
 empty "$FORM_add_host" || {
 	# add a host to /etc/hosts
-	validate "ip|FORM_host_ip|IP Address|required|$FORM_host_ip
-hostname|FORM_host_name|Hostname|required|$FORM_host_name" && update_hosts add "$FORM_host_ip" "$FORM_host_name"
+	validate <<EOF
+ip|FORM_host_ip|IP Address|required|$FORM_host_ip
+hostname|FORM_host_name|Hostname|required|$FORM_host_name
+EOF
+	equal "$?" 0 && update_hosts add "$FORM_host_ip" "$FORM_host_name"
 }
 empty "$FORM_add_dhcp" || {
 	# add a host to /etc/ethers
-	validate "mac|FORM_dhcp_mac|MAC Address|required|$FORM_dhcp_mac
-ip|FORM_dhcp_ip|IP|required|$FORM_dhcp_ip" && update_ethers add "$FORM_dhcp_mac" "$FORM_dhcp_ip"
+	validate <<EOF
+mac|FORM_dhcp_mac|MAC Address|required|$FORM_dhcp_mac
+ip|FORM_dhcp_ip|IP|required|$FORM_dhcp_ip
+EOF
+	equal "$?" 0 && update_ethers add "$FORM_dhcp_mac" "$FORM_dhcp_ip"
 }
+
 empty "$FORM_remove_host" || update_hosts del "$FORM_remove_ip" "$FORM_remove_name"
 empty "$FORM_remove_dhcp" || update_ethers del "$FORM_remove_mac"
 

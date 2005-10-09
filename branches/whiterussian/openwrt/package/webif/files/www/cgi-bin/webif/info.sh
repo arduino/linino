@@ -7,7 +7,7 @@ header "Info" "Router Info" "Router Info"
 <tbody>
 	<tr>
 		<td>Firmware Version</td>
-		<td><? cat /etc/banner | grep "(" | cut -b-20 | cut -b2- ?></td>
+		<td><? grep "(" /etc/banner | cut -b-20 | cut -b2- ?></td>
 	</tr>
 	<tr>
 		<td>Kernel Version</td>

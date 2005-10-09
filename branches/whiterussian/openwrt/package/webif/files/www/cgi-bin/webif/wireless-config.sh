@@ -101,7 +101,7 @@ else
 		psk) V_PSK="required";;
 	esac
 
-	validate "
+	validate <<EOF
 ip|FORM_radius_ipaddr|RADIUS IP address|$V_RADIUS|$FORM_radius_ipaddr
 wep|FORM_key1|WEP key 1||$FORM_key1
 wep|FORM_key2|WEP key 2||$FORM_key2
@@ -110,7 +110,9 @@ wep|FORM_key4|WEP key 4||$FORM_key4
 string|FORM_wpa_psk|WPA pre-shared key|min=8 max=63 $V_PSK|$FORM_wpa_psk
 string|FORM_radius_key|RADIUS server key|min=4 max=63 $V_RADIUS|$FORM_radius_key
 string|FORM_ssid|ESSID|required|$FORM_ssid
-int|FORM_channel|Channel|required min=1 max=$CHANNEL_MAX|$FORM_channel" && {
+int|FORM_channel|Channel|required min=1 max=$CHANNEL_MAX|$FORM_channel
+EOF
+	equal "$?" 0 && {
 
 		if equal "$FORM_mode" adhoc; then
 			FORM_mode=sta
@@ -211,7 +213,8 @@ function modechange()
 
 EOF
 
-display_form "start_form|Wireless Configuration
+display_form <<EOF
+start_form|Wireless Configuration
 field|ESSID
 text|ssid|$FORM_ssid
 helpitem|ESSID
@@ -220,20 +223,20 @@ field|Channel
 select|channel|$FORM_channel
 $F_CHANNELS
 field|Mode
-radio|mode|$FORM_mode|ap|Access Point<br />|onChange=\"modechange()\" 
-radio|mode|$FORM_mode|sta|Client <br />|onChange=\"modechange()\" 
-radio|mode|$FORM_mode|wet|Bridge <br />|onChange=\"modechange()\" 
-radio|mode|$FORM_mode|adhoc|Ad-Hoc|onChange=\"modechange()\" 
+radio|mode|$FORM_mode|ap|Access Point<br />|onChange="modechange()" 
+radio|mode|$FORM_mode|sta|Client <br />|onChange="modechange()" 
+radio|mode|$FORM_mode|wet|Bridge <br />|onChange="modechange()" 
+radio|mode|$FORM_mode|adhoc|Ad-Hoc|onChange="modechange()" 
 helpitem|Mode
 helptext|Operation mode
 helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-7126c5958e237d603674b3a9739c9d23bdfdb293
 end_form
 start_form|Encryption settings
 field|Encryption type
-radio|encryption|$FORM_encryption|off|Disabled <br />|onChange=\"modechange()\"
-radio|encryption|$FORM_encryption|wep|WEP <br />|onChange=\"modechange()\"
-radio|encryption|$FORM_encryption|psk|WPA (preshared key) <br />|onChange=\"modechange()\"
-radio|encryption|$FORM_encryption|wpa|WPA (RADIUS)|onChange=\"modechange()\"
+radio|encryption|$FORM_encryption|off|Disabled <br />|onChange="modechange()"
+radio|encryption|$FORM_encryption|wep|WEP <br />|onChange="modechange()"
+radio|encryption|$FORM_encryption|psk|WPA (preshared key) <br />|onChange="modechange()"
+radio|encryption|$FORM_encryption|wpa|WPA (RADIUS)|onChange="modechange()"
 field|WPA support|wpa_support|hidden
 checkbox|wpa1|$FORM_wpa1|wpa1|WPA1
 checkbox|wpa2|$FORM_wpa2|wpa2|WPA2
@@ -260,7 +263,8 @@ start_form|WDS connections
 listedit|wds|$SCRIPT_NAME?|$FORM_wds|$FORM_wdsadd
 helpitem|Note
 helptext|You should save your settings on this page before adding/removing WDS links
-end_form"
+end_form
+EOF
 
 footer ?>
 <!--
