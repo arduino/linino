@@ -4,12 +4,15 @@
 header "System" "Firmware upgrade" "Firmware upgrade"
 
 strip_cybertan() {
-	dd if="$FORM_firmware" of=/tmp/upgrade.bin bs=32 skip=1 2>/dev/null
-	rm $FORM_firmware
+	(
+		dd of=/dev/null bs=32 count=1 2>/dev/null
+		cat > /tmp/upgrade.bin
+	) < "$FORM_firmware"
+	rm "$FORM_firmware"
 }
 
 empty "$FORM_submit" || empty "$FORM_firmware" || {
-	[ -n $FORM_firmware ] && {
+	exists $FORM_firmware && {
 		HEADER=$(head -c4 $FORM_firmware | hexdump -e "8/1 \"%x\"")
 		grep BCM947 /proc/cpuinfo > /dev/null && {
 			case "$HEADER" in
