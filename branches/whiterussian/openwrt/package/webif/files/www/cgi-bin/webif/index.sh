@@ -2,7 +2,7 @@
 <? 
 . /usr/lib/webif/webif.sh
 category=$FORM_cat
-[ -z "$category" ] && category=Info
+empty "$category" && category=Info
 header $category 1
-?>
-<? footer ?>
+
+footer ?>

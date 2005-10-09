@@ -22,9 +22,8 @@ $1 ~ /^start_form/ {
 	if ($3 != "") field_opts=" id=\"" $3 "\""
 	else field_opts=""
 	if ($4 == "hidden") field_opts = field_opts " style=\"display: none\""
-	print "<div class=\"settings\"" field_opts ">"
-	if ($2 != "") print "<div class=\"settings-title\"><h3><strong>" $2 "</strong></h3></div>"
-	print "<div class=\"settings-content\"><table width=\"100%\" summary=\"Settings\">"
+	start_form($2, field_opts);
+	print "<table width=\"100%\" summary=\"Settings\">"
 	form_help = ""
 	form_help_link = ""
 }
@@ -78,10 +77,8 @@ $1 ~ /^helplink/ { form_help_link = "<div class=\"more-help\"><a href=\"" $2 "\"
 $1 ~ /^end_form/ {
 	if (field_open == 1) print "</td></tr>"
 	field_open = 0
-	print "</table></div>"
-	if (form_help != "") form_help = "<dl>" form_help "</dl>"
-	print "<div class=\"settings-help\"><blockquote><h3><strong>Short help:</strong></h3>" form_help form_help_link "</blockquote></div>"
+	print "</table>"
+	end_form(form_help, form_help_link);
 	form_help = ""
 	form_help_link = ""
-	print "<div style=\"clear: both\">&nbsp;</div></div>"
 }

@@ -4,14 +4,14 @@
 load_settings system
 load_settings nvram
 
-[ -z $FORM_submit ] && {
+if empty "$FORM_submit"; then
 	FORM_hostname=${wan_hostname:-$(nvram get wan_hostname)}
 	FORM_hostname=${FORM_hostname:-OpenWrt}
 	grep BCM947 /proc/cpuinfo 2>&- >&- && {
 		FORM_boot_wait=${boot_wait:-$(nvram get boot_wait)}
 		FORM_boot_wait=${FORM_boot_wait:-off}
 	}
-} || {
+else
 	SAVED=1
 	validate "hostname|FORM_hostname|Hostname|nodots required|$FORM_hostname" && {
 		save_setting system wan_hostname $FORM_hostname
@@ -21,7 +21,7 @@ load_settings nvram
 			esac
 		}
 	}
-}
+fi
 
 header "System" "Settings" "System settings" '' "$SCRIPT_NAME"
 
@@ -37,6 +37,7 @@ field
 end_form"
 
 footer ?>
+
 <!--
 ##WEBIF:name:System:1:Settings
 -->

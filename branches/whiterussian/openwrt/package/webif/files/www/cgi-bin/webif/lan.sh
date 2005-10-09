@@ -11,12 +11,11 @@ handle_list "$FORM_dnsremove" "$FORM_dnsadd" "$FORM_dnssubmit" 'ip|FORM_dnsadd|L
 }
 FORM_dnsadd=${FORM_dnsadd:-192.168.1.1}
 
-
-if [ -z "$FORM_submit" -o \! -z "$ERROR" ]; then
+if empty "$FORM_submit"; then 
 	FORM_lan_ipaddr=${lan_ipaddr:-$(nvram get lan_ipaddr)}
 	FORM_lan_netmask=${lan_netmask:-$(nvram get lan_netmask)}
 	FORM_lan_gateway=${lan_gateway:-$(nvram get lan_gateway)}
-else
+else 
 	SAVED=1
 	validate "
 ip|FORM_lan_ipaddr|LAN IP|required|$FORM_lan_ipaddr

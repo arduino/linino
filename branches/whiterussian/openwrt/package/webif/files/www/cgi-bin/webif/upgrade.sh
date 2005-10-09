@@ -8,7 +8,7 @@ strip_cybertan() {
 	rm $FORM_firmware
 }
 
-[ -z "$FORM_submit" -o -z "$FORM_firmware" ] || {
+empty "$FORM_submit" || empty "$FORM_firmware" || {
 	[ -n $FORM_firmware ] && {
 		HEADER=$(head -c4 $FORM_firmware | hexdump -e "8/1 \"%x\"")
 		grep BCM947 /proc/cpuinfo > /dev/null && {
@@ -35,7 +35,7 @@ strip_cybertan() {
 	}
 }
 ?>
-<?if [ -z "$UPGRADE" ] ?>
+<?if empty "$UPGRADE" ?>
 	<form method="POST" name="upgrade" action="<? echo -n $SCRIPT_NAME ?>" enctype="multipart/form-data">
 	<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 	<tbody>

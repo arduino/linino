@@ -35,10 +35,9 @@ case "$FORM_mode" in
 	save)
 		header $FORM_cat . "Configuration: updating..."
 		CHANGES=""
-		echo '<pre>'
+		echo "<pre>"
 		sh /usr/lib/webif/apply.sh
-		echo '</pre>'
-		echo "${FORM_prev:+<meta http-equiv=\"refresh\" content=\"2; URL=$FORM_prev\" />}"
+		echo "</pre>${FORM_prev:+<meta http-equiv=\"refresh\" content=\"2; URL=$FORM_prev\" />}"
 		;;
 esac
 

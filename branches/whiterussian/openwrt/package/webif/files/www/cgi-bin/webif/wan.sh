@@ -13,7 +13,7 @@ handle_list "$FORM_dnsremove" "$FORM_dnsadd" "$FORM_dnssubmit" 'ip|FORM_dnsadd|W
 FORM_dnsadd=${FORM_dnsadd:-192.168.1.1}
 
 
-[ -z $FORM_submit ] && {
+if empty "$FORM_submit"; then
 	FORM_wan_proto=${wan_proto:-$(nvram get wan_proto)}
 	case "$FORM_wan_proto" in
 		# supported types
@@ -46,21 +46,17 @@ text|pptp_server_ip|$FORM_pptp_server_ip"
 
 	redial=${ppp_demand:-$(nvram get ppp_demand)}
 	case "$redial" in
-		1|enabled|on)
-			FORM_ppp_redial="demand"
-		;;	
-		*)
-			FORM_ppp_redial="persist"
-		;;	
+		1|enabled|on) FORM_ppp_redial="demand";;	
+		*) FORM_ppp_redial="persist";;	
 	esac
 	
 	FORM_pptp_server_ip=${pptp_server_ip:-$(nvram get pptp_server_ip)}
-} || {
+else
 	SAVED=1
 
-	[ -z $FORM_wan_proto ] && {
+	empty "$FORM_wan_proto" && {
 		ERROR="No WAN protocol selected" 
-		return -1
+		return 255
 	}
 
 	case "$FORM_wan_proto" in
@@ -83,41 +79,41 @@ ip|FORM_pptp_server_ip|PPTP server IP|$V_PPTP|$FORM_pptp_server_ip" && {
 		
 		# Settings specific to one protocol type
 		case "$FORM_wan_proto" in
-			static)
-				save_setting network wan_gateway $FORM_wan_gateway
-				;;
-			pptp)
-				save_setting network pptp_server_ip "$FORM_pptp_server_ip"
-				;;
+			static) save_setting network wan_gateway $FORM_wan_gateway ;;
+			pptp) save_setting network pptp_server_ip "$FORM_pptp_server_ip" ;;
 		esac
 		
 		# Common settings for PPTP, Static and DHCP 
-		[ "$FORM_wan_proto" = "pptp" -o "$FORM_wan_proto" = "static" -o "$FORM_wan_proto" = "dhcp" ] && {
-			save_setting network wan_ipaddr $FORM_wan_ipaddr
-			save_setting network wan_netmask $FORM_wan_netmask 
-		}
+		case "$FORM_wan_proto" in
+			pptp|static|dhcp)
+				save_setting network wan_ipaddr $FORM_wan_ipaddr
+				save_setting network wan_netmask $FORM_wan_netmask 
+			;;
+		esac
 		
 		# Common PPP settings
-		[ "$FORM_wan_proto" = "pppoe" -o "$FORM_wan_proto" = "pptp" ] && {
-			[ -z $FORM_ppp_username ] || save_setting network ppp_username $FORM_ppp_username
-			[ -z $FORM_ppp_passwd ] || save_setting network ppp_passwd $FORM_ppp_passwd
-	
-			# These can be blank
-			save_setting network ppp_idletime $FORM_ppp_idletime
-			save_setting network ppp_redialperiod $FORM_ppp_redialperiod
-			save_setting network ppp_mtu $FORM_ppp_mtu
-	
-			case "$FORM_ppp_redial" in
-				demand)
-					save_setting network ppp_demand 1
-					;;
-				persist)
-					save_setting network ppp_demand ""
-					;;
-			esac	
-		}
+		case "$FORM_wan_proto" in
+			pppoe|pptp)
+				empty "$FORM_ppp_username" || save_setting network ppp_username $FORM_ppp_username
+				empty "$FORM_ppp_passwd" || save_setting network ppp_passwd $FORM_ppp_passwd
+		
+				# These can be blank
+				save_setting network ppp_idletime "$FORM_ppp_idletime"
+				save_setting network ppp_redialperiod "$FORM_ppp_redialperiod"
+				save_setting network ppp_mtu "$FORM_ppp_mtu"
+		
+				case "$FORM_ppp_redial" in
+					demand)
+						save_setting network ppp_demand 1
+						;;
+					persist)
+						save_setting network ppp_demand ""
+						;;
+				esac	
+			;;
+		esac
 	}
-}
+fi
 
 header "Network" "WAN" "WAN settings" ' onLoad="modechange()" ' "$SCRIPT_NAME"
 ?>

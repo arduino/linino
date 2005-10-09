@@ -4,49 +4,35 @@ cgidir=/www/cgi-bin/webif
 rootdir=/cgi-bin/webif
 indexpage=index.sh
 
+# workarounds for stupid busybox fork/exec on [ ]
+empty() {
+	case "$1" in
+		"") return 0 ;;
+		*) return 255 ;;
+	esac
+}
+equal() {
+	case "$1" in
+		"$2") return 0 ;;
+		*) return 255 ;;
+	esac
+}
+
 categories() {
-	grep '##WEBIF:' $cgidir/.categories $cgidir/*.sh 2>/dev/null | awk -F: '
-	BEGIN {
-		n = 0
-		sel = 0
-	}
-	($3 == "category") && (categories !~ /:$4:/) {
-		categories = categories ":" $4 ":";
-	 	n++
-		if ($4 ~ /^'"$1"'$/) sel = n
-		c[n] = $4
-		if (f[$4] == "") f[$4] = "'"$rootdir/$indexpage"'?cat=" $4
-	}
-	($3 == "name") && ((p[$4] == 0) || (p[$4] > int($5))) {
-		gsub(/^.*\//, "", $1);
-		p[$4] = int($5)
-		f[$4] = "'"$rootdir"'/" $1
-	}
-	END {
-		print "<div id=\"mainmenu\"><h3><strong>Categories:</strong></h3><ul>"
-		
-		for (i = 1; i <= n; i++) {
-			if (sel == i) print "<li class=\"selected-maincat\"><a href=\"" f[c[i]] "\">&raquo;" c[i] "&laquo;</a></li>"
-			else print "<li><a href=\"" f[c[i]] "\">&nbsp;" c[i] "&nbsp;</a></li>";
-		}
-	  
-		print "</ul></div>"
-	}' -
+	grep '##WEBIF:' $cgidir/.categories $cgidir/*.sh 2>/dev/null | \
+		awk -v "selected=$1" \
+			-v "rootdir=$rootdir" \
+			-v "indexpage=$indexpage" \
+			-f /usr/lib/webif/categories.awk -
 }
 
 subcategories() {
-	grep -H "##WEBIF:name:$1:" $cgidir/*.sh 2>/dev/null | sed -e 's,^.*/\([a-zA-Z\.\-]*\):\(.*\)$,\2:\1,' | sort -n | awk -F: '
-	BEGIN {
-      print "<div id=\"submenu\"><h3><strong>Sub-Categories:</strong></h3><ul>"
-	}
-	{
-	  if ($5 ~ /^'"$2"'$/) print "<li class=\"selected-maincat\"><a href=\"'"$rootdir/"'" $6 "\">&raquo;" $5 "&laquo;</a></li>"
-	  else print "<li><a href=\"'"$rootdir/"'" $6 "\">&nbsp;" $5 "&nbsp;</a></li>"
-	}
-	END {
-      print "</ul></div>"
-	}
-  ' -
+	grep -H "##WEBIF:name:$1:" $cgidir/*.sh 2>/dev/null | \
+		sed -e 's,^.*/\([a-zA-Z\.\-]*\):\(.*\)$,\2:\1,' | \
+		sort -n | \
+		awk -v "selected=$2" \
+			-v "rootdir=$rootdir" \
+			-f /usr/lib/webif/subcategories.awk -
 }
 
 update_changes() {
@@ -54,8 +40,14 @@ update_changes() {
 }
 
 header() {
-	ERROR=${ERROR:+<h3>$ERROR</h3><br /><br />}
-	SAVED=${SAVED:+: Settings saved}
+	empty "$ERROR" && {
+		_saved_title="${SAVED:+: Settings saved}"
+	} || {
+		FORM_submit="";
+		ERROR="<h3>$ERROR</h3><br /><br />"
+		_saved_title=": Settings not saved"
+	}
+
 	_category="$1"
 	_uptime="$(uptime)"
 	_loadavg="${_uptime#*load average: }"
@@ -64,8 +56,6 @@ header() {
 	_hostname=$(cat /proc/sys/kernel/hostname)
 	_version=$(cat /etc/banner | grep "(")
 	_version="${_version%% ---*}"
-	_saved_title=${ERROR:+: Settings not saved}
-	_saved_title=${_saved_title:-$SAVED}
 	_head="${3:+<div class=\"settings-block-title\"><h2>$3$_saved_title</h2></div>}"
 	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type="hidden" name="submit" value="1" />}"
 	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"Save changes\" /></p>}"
@@ -106,9 +96,8 @@ Pragma: no-cache
 				$_head
 				$ERROR
 EOF
-	[ -z "$REMOTE_USER" \
-	  -a "${SCRIPT_NAME#/cgi-bin/}" != "webif.sh" ] && {
-		[ -z $FORM_passwd1 ] || {
+	empty "$REMOTE_USER" && equal "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
+		empty "$FORM_passwd" && {
 			echo '<pre>'
 			(
 				echo "$FORM_passwd1"
@@ -193,7 +182,7 @@ apply_passwd() {
 }
 
 display_form() {
-	echo "$1" | awk -F'|' -f /usr/lib/webif/form.awk
+	echo "$1" | awk -F'|' -f /usr/lib/webif/common.awk -f /usr/lib/webif/form.awk
 }
 
 list_remove() {
@@ -209,26 +198,34 @@ BEGIN {
 }
 
 handle_list() {
-	_new="${1:+$(list_remove "$LISTVAL" "$1") }"
-	_new="${_new:-$LISTVAL}"
-	LISTVAL="$_new"
-	LISTVAL="${LISTVAL# }"
-	LISTVAL="${LISTVAL%% }"
+	# $1 - remove
+	# $2 - add
+	# $3 - submit
+	# $4 - validate
 	
-	_validate="$4"
-	_validate="${4:-none}"
-	_changed="$1"
-	[ \! -z "$3" ] && validate "$_validate|$2" && {
-		LISTVAL="$LISTVAL $2"
-		_changed="$1$3"
+	empty "$1" || {
+		LISTVAL="$(list_remove "$LISTVAL" "$1") "
+		LISTVAL="${LISTVAL# }"
+		LISTVAL="${LISTVAL%% }"
+		_changed=1
+	}
+	
+	empty "$3" || {
+		validate "${4:-none}|$2" && {
+			LISTVAL="$LISTVAL $2"
+			_changed=1
+		}
 	}
 
-	_return="${_changed:+0}"
-	_return="${_return:-255}"
 	LISTVAL="${LISTVAL# }"
 	LISTVAL="${LISTVAL%% }"
 	LISTVAL="${LISTVAL:- }"
-	return $_return
+
+	if empty "$_changed"; then
+		return 255
+	else
+		return 0
+	fi
 }
 
 load_settings() {
@@ -240,6 +237,7 @@ validate() {
 	eval "$(echo "$1" | awk -f /usr/lib/webif/validate.awk)"
 }
 
+
 save_setting() {
 	mkdir -p /tmp/.webif
 	oldval=$(eval "echo \${$2}")
@@ -249,23 +247,8 @@ save_setting() {
 		grep -v "^$2=" /tmp/.webif/config-$1-old > /tmp/.webif/config-$1 2>&- 
 		oldval=""
 	}
-	[ "$oldval" != "$3" ] && echo "$2=\"$3\"" >> /tmp/.webif/config-$1
+	equal "$oldval" "$3" || echo "$2=\"$3\"" >> /tmp/.webif/config-$1
 	rm -f /tmp/.webif/config-$1-old
 }
 
-
-# common awk code for forms
-AWK_START_FORM='
-	print "<div class=\"settings\">"
-	print "<div class=\"settings-title\"><h3><strong>" title "</strong></h3></div>"
-	print "<div class=\"settings-content\">"
-'
-AWK_END_FORM='
-	print "</div>"
-	if (form_help != "") form_help = "<dl>" form_help "</dl>"
-	print "<div class=\"settings-help\"><blockquote><h3><strong>Short help:</strong></h3>" form_help form_help_link "</blockquote></div>"
-	form_help = ""
-	form_help_link = ""
-	print "<div style=\"clear: both\">&nbsp;</div></div>"
-'
 

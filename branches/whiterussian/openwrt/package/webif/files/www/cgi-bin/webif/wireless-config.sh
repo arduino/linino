@@ -22,7 +22,8 @@ for ch in $CHANNELS; do
 "
 done
 
-if [ -z "$FORM_submit" -o \! -z "$ERROR" ]; then
+
+if empty "$FORM_submit"; then
 	FORM_mode=${wl0_mode:-$(nvram get wl0_mode)}
 	infra=${wl0_infra:-$(nvram get wl0_infra)}
 	case "$infra" in
@@ -80,7 +81,7 @@ if [ -z "$FORM_submit" -o \! -z "$ERROR" ]; then
 			FORM_tkip=tkip
 			;;
 	esac
-	[ $FORM_encryption = off ] && {
+	equal "$FORM_encryption" off && {
 		wep=${wl0_wep:-$(nvram get wl0_wep)}
 		case "$wep" in
 			1|enabled|on) FORM_encryption=wep;;
@@ -95,8 +96,11 @@ if [ -z "$FORM_submit" -o \! -z "$ERROR" ]; then
 	FORM_key=${key:-1}
 else
 	SAVED=1
-	[ "$FORM_encryption" = "wpa" ] && V_RADIUS="required"
-	[ "$FORM_encryption" = "psk" ] && V_PSK="required"
+	case "$FORM_encryption" in
+		wpa) V_RADIUS="required";;
+		psk) V_PSK="required";;
+	esac
+
 	validate "
 ip|FORM_radius_ipaddr|RADIUS IP address|$V_RADIUS|$FORM_radius_ipaddr
 wep|FORM_key1|WEP key 1||$FORM_key1
@@ -107,24 +111,21 @@ string|FORM_wpa_psk|WPA pre-shared key|min=8 max=63 $V_PSK|$FORM_wpa_psk
 string|FORM_radius_key|RADIUS server key|min=4 max=63 $V_RADIUS|$FORM_radius_key
 string|FORM_ssid|ESSID|required|$FORM_ssid
 int|FORM_channel|Channel|required min=1 max=$CHANNEL_MAX|$FORM_channel" && {
-		case "$FORM_mode" in
-			adhoc)
-				save_setting wireless wl0_mode sta
-				save_setting wireless wl0_infra 0
-				;;
-			*)
-				save_setting wireless wl0_mode "$FORM_mode"
-				save_setting wireless wl0_infra 1
-				;;
-		esac
+
+		if equal "$FORM_mode" adhoc; then
+			FORM_mode=sta
+			infra="0"
+		fi
+		save_setting wireless wl0_mode "$FORM_mode"
+		save_setting wireless wl0_infra ${infra:-1}
 			
 		save_setting wireless wl0_ssid "$FORM_ssid"
 		save_setting wireless wl0_channel "$FORM_channel"
-		case "$FORM_aes$FORM_tkip" in 
-			aes) save_setting wireless wl0_crypto aes;;
-			tkip) save_setting wireless wl0_crypto tkip;;
-			aestkip) save_setting wireless wl0_crypto tkip+aes;;
-		esac
+	
+		crypto=""
+		equal "$FORM_aes" aes && crypto="aes"
+		equal "$FORM_tkip" tkip && crypto="tkip${crypto:++$crypto}"
+
 		case "$FORM_encryption" in
 			psk)
 				case "${FORM_wpa1}${FORM_wpa2}" in
@@ -163,7 +164,8 @@ int|FORM_channel|Channel|required min=1 max=$CHANNEL_MAX|$FORM_channel" && {
 fi
 
 header "Network" "Wireless" "Wireless settings" ' onLoad="modechange()" ' "$SCRIPT_NAME"
-?>
+
+cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
 <script type="text/javascript">
 <!--
@@ -207,7 +209,9 @@ function modechange()
 -->
 </script>
 
-<? display_form "start_form|Wireless Configuration
+EOF
+
+display_form "start_form|Wireless Configuration
 field|ESSID
 text|ssid|$FORM_ssid
 helpitem|ESSID
