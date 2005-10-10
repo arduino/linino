@@ -81,11 +81,11 @@ if empty "$FORM_submit"; then
 			FORM_tkip=tkip
 			;;
 	esac
-	equal "$FORM_encryption" off && {
+	equal "$FORM_encryption" "off" && {
 		wep=${wl0_wep:-$(nvram get wl0_wep)}
 		case "$wep" in
 			1|enabled|on) FORM_encryption=wep;;
-			*) FORM_encryption=disabled;;
+			*) FORM_encryption=off;;
 		esac
 	}
 	FORM_key1=${wl0_key1:-$(nvram get wl0_key1)}
