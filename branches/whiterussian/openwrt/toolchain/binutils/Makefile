@@ -13,6 +13,14 @@ BINUTILS_SITE:=http://www.fr.kernel.org/pub/linux/devel/binutils \
 	       http://ftp.kernel.org/pub/linux/devel/binutils \
 	       http://www.de.kernel.org/pub/linux/devel/binutils
 
+ifeq ($(BINUTILS_VERSION),2.16.1)
+BINUTILS_SITE:=http://ftp.gnu.org/gnu/binutils/ \
+	ftp://gatekeeper.dec.com/pub/GNU/ \
+        ftp://ftp.uu.net/archive/systems/gnu/ \
+        ftp://ftp.eu.uu.net/pub/gnu/ \
+        ftp://ftp.funet.fi/pub/gnu/prep/ \
+        ftp://ftp.leo.org/pub/comp/os/unix/gnu/ 
+endif
 ifeq ($(BINUTILS_VERSION),2.15)
 BINUTILS_SITE:=http://ftp.gnu.org/gnu/binutils/ \
 	ftp://gatekeeper.dec.com/pub/GNU/ \
