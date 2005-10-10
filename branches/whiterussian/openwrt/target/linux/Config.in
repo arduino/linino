@@ -48,12 +48,11 @@ config BR2_PACKAGE_KMOD_ARPT
 	help
 	  Kernel modules for ARP firewalling
 
-# disabled because of severe performance issues
-# config BR2_PACKAGE_KMOD_EBT
-#	tristate "Ethernet Bridge firewalling support"
-#	default m
-#	help
-#	  Kernel modules for bridge firewalling
+config BR2_PACKAGE_KMOD_EBT
+	tristate "Ethernet Bridge firewalling support"
+	default m
+	help
+	  Kernel modules for bridge firewalling
 
 config BR2_PACKAGE_KMOD_IPTABLES_V4_EXTRA
 	tristate "Extra modules for iptables"
