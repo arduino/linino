@@ -71,6 +71,12 @@ header() {
 	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"Save changes\" /></p>}"
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
+	
+	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
+		_nopasswd=1
+		_form=""
+		_savebutton=""
+	}
 
 	update_changes
 	cat <<EOF
@@ -107,7 +113,7 @@ Pragma: no-cache
 				$ERROR
 EOF
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
-		empty "$FORM_passwd" || {
+		empty "$FORM_passwd1" || {
 			echo '<pre>'
 			(
 				echo "$FORM_passwd1"
@@ -119,7 +125,8 @@ EOF
 			footer
 			exit
 		}
-		grep 'root:!' /etc/passwd >&- 2>&- && {
+		
+		equal "$_nopasswd" 1 && {
 			cat <<EOF
 <br />
 <br />
