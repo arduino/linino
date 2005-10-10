@@ -17,6 +17,12 @@ equal() {
 		*) return 255 ;;
 	esac
 }
+neq() {
+	case "$1" in
+		"$2") return 255 ;;
+		*) return 0 ;;
+	esac
+}
 # very crazy, but also very fast :-)
 exists() {
 	( < $1 ) 2>&-
@@ -100,8 +106,8 @@ Pragma: no-cache
 				$_head
 				$ERROR
 EOF
-	empty "$REMOTE_USER" && equal "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
-		empty "$FORM_passwd" && {
+	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
+		empty "$FORM_passwd" || {
 			echo '<pre>'
 			(
 				echo "$FORM_passwd1"
