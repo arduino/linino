@@ -3,6 +3,13 @@
 . /usr/lib/webif/webif.sh
 header "Info" "Router Info" "Router Info"
 ?>
+<pre><?
+
+sed -e 's/&/&amp;/g' < /etc/banner
+
+?></pre>
+<br />
+<br />
 <table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 <tbody>
 	<tr>
@@ -23,7 +30,6 @@ header "Info" "Router Info" "Router Info"
 	</tr>
 </tbody>
 </table>
-
 <? footer ?>
 <!--
 ##WEBIF:name:Info:2:Router Info
