@@ -29,6 +29,11 @@ if empty "$FORM_submit"; then
 	case "$infra" in
 		0|off|disabled) FORM_mode=adhoc;;
 	esac
+	FORM_radio=${wl0_radio:-$(nvram get wl0_radio)}
+	case "$FORM_radio" in
+		0|off|diabled) FORM_radio=0;;
+		*) FORM_radio=1;;
+	esac
 			
 	FORM_ssid=${wl0_ssid:-$(nvram get wl0_ssid)}
 	FORM_channel=${wl0_channel:-$(nvram get wl0_channel)}
@@ -102,6 +107,7 @@ else
 	esac
 
 	validate <<EOF
+int|FORM_radio|Radio On/Off|required min=0 max=1|$FORM_radio
 ip|FORM_radius_ipaddr|RADIUS IP address|$V_RADIUS|$FORM_radius_ipaddr
 wep|FORM_key1|WEP key 1||$FORM_key1
 wep|FORM_key2|WEP key 2||$FORM_key2
@@ -113,6 +119,7 @@ string|FORM_ssid|ESSID|required|$FORM_ssid
 int|FORM_channel|Channel|required min=1 max=$CHANNEL_MAX|$FORM_channel
 EOF
 	equal "$?" 0 && {
+		save_setting wireless wl0_radio "$FORM_radio"
 
 		if equal "$FORM_mode" adhoc; then
 			FORM_mode=sta
@@ -216,6 +223,9 @@ EOF
 display_form <<EOF
 onchange|modechange
 start_form|Wireless Configuration
+field|Power
+radio|radio|$FORM_radio|1|Enabled<br />
+radio|radio|$FORM_radio|0|Disabled
 field|ESSID
 text|ssid|$FORM_ssid
 helpitem|ESSID
