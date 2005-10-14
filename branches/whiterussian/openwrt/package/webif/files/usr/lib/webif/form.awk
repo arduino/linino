@@ -14,6 +14,10 @@ BEGIN {
 	gsub(/^[ \t]+/,"",$1)
 }
 
+$1 ~ /^onchange/ {
+	onchange = $2
+}
+
 ($1 != "") && ($1 !~ /^option/) && (select_open == 1) {
 	select_open = 0
 	print "</select>"
@@ -32,21 +36,25 @@ $1 ~ /^field/ {
 	if ($3 != "") field_opts=" id=\"" $3 "\""
 	else field_opts=""
 	if ($4 == "hidden") field_opts = field_opts " style=\"display: none\""
-	print "<tr" field_opts "><td width=\"45%\">" $2 "</td><td width=\"55%\">"
+	print "<tr" field_opts "><td width=\"50%\">" $2 "</td><td width=\"50%\">"
 	field_open=1
 }
 $1 ~ /^checkbox/ {
-	if ($3==$4) checkbox_selected="checked=\"checked\" "
-	else checkbox_selected=""
-	print "<input id=\"" $2 "_" $4 "\" type=\"checkbox\" name=\"" $2 "\" value=\"" $4 "\" " checkbox_selected $6 " />"
+	if ($3==$4) opts="checked=\"checked\" "
+	else opts=""
+	if (onchange != "") opts = opts " onClick=\"" onchange "()\" onChange=\"" onchange "()\""
+	print "<input id=\"" $2 "_" $4 "\" type=\"checkbox\" name=\"" $2 "\" value=\"" $4 "\" " opts " />"
 }
 $1 ~ /^radio/ {
-	if ($3==$4) radio_selected="checked=\"checked\" "
-	else radio_selected=""
-	print "<input id=\"" $2 "_" $4 "\" type=\"radio\" name=\"" $2 "\" value=\"" $4 "\" " radio_selected $6 " />"
+	if ($3==$4) opts="checked=\"checked\" "
+	else opts=""
+	if (onchange != "") opts = opts " onClick=\"" onchange "()\" onChange=\"" onchange "()\""
+	print "<input id=\"" $2 "_" $4 "\" type=\"radio\" name=\"" $2 "\" value=\"" $4 "\" " opts " />"
 }
 $1 ~ /^select/ {
-	print "<select id=\"" $2 "\" name=\"" $2 "\">"
+	opts = ""
+	if (onchange != "") opts = opts " onClick=\"" onchange "()\" onChange=\"" onchange "()\""
+	print "<select id=\"" $2 "\" name=\"" $2 "\"" opts ">"
 	select_open = 1
 	select_default = $3
 }

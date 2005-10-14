@@ -214,6 +214,7 @@ function modechange()
 EOF
 
 display_form <<EOF
+onchange|modechange
 start_form|Wireless Configuration
 field|ESSID
 text|ssid|$FORM_ssid
@@ -223,20 +224,20 @@ field|Channel
 select|channel|$FORM_channel
 $F_CHANNELS
 field|Mode
-radio|mode|$FORM_mode|ap|Access Point<br />|onChange="modechange()" 
-radio|mode|$FORM_mode|sta|Client <br />|onChange="modechange()" 
-radio|mode|$FORM_mode|wet|Bridge <br />|onChange="modechange()" 
-radio|mode|$FORM_mode|adhoc|Ad-Hoc|onChange="modechange()" 
+radio|mode|$FORM_mode|ap|Access Point<br />
+radio|mode|$FORM_mode|sta|Client <br />
+radio|mode|$FORM_mode|wet|Bridge <br />
+radio|mode|$FORM_mode|adhoc|Ad-Hoc
 helpitem|Mode
 helptext|Operation mode
 helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-7126c5958e237d603674b3a9739c9d23bdfdb293
 end_form
 start_form|Encryption settings
 field|Encryption type
-radio|encryption|$FORM_encryption|off|Disabled <br />|onChange="modechange()"
-radio|encryption|$FORM_encryption|wep|WEP <br />|onChange="modechange()"
-radio|encryption|$FORM_encryption|psk|WPA (preshared key) <br />|onChange="modechange()"
-radio|encryption|$FORM_encryption|wpa|WPA (RADIUS)|onChange="modechange()"
+radio|encryption|$FORM_encryption|off|Disabled <br />
+radio|encryption|$FORM_encryption|wep|WEP <br />
+radio|encryption|$FORM_encryption|psk|WPA (preshared key) <br />
+radio|encryption|$FORM_encryption|wpa|WPA (RADIUS)
 field|WPA support|wpa_support|hidden
 checkbox|wpa1|$FORM_wpa1|wpa1|WPA1
 checkbox|wpa2|$FORM_wpa2|wpa2|WPA2

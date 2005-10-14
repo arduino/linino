@@ -24,12 +24,12 @@ if empty "$FORM_submit"; then
 	
 	# detect pptp package and compile option
 	[ -x /sbin/ifup.pptp ] && {
-		PPTP_OPTION="radio|wan_proto|$FORM_wan_proto|pptp|PPTP<br />|onChange=\"modechange()\""
+		PPTP_OPTION="radio|wan_proto|$FORM_wan_proto|pptp|PPTP<br />"
 		PPTP_SERVER_OPTION="field|PPTP Server IP|pptp_server_ip|hidden
 text|pptp_server_ip|$FORM_pptp_server_ip"
 	}
 	[ -x /sbin/ifup.pppoe ] && {
-		PPPOE_OPTION="radio|wan_proto|$FORM_wan_proto|pppoe|PPPoE<br />|onChange=\"modechange()\""
+		PPPOE_OPTION="radio|wan_proto|$FORM_wan_proto|pppoe|PPPoE<br />"
 	}
 	
 	# pptp, dhcp and static common
@@ -148,11 +148,12 @@ function modechange()
 EOF
 
 display_form <<EOF
+onchange|modechange
 start_form|WAN Configuration
 field|Internet Connection Type
-radio|wan_proto|$FORM_wan_proto|none|None<br />|onchange="modechange()"
-radio|wan_proto|$FORM_wan_proto|dhcp|DHCP<br />|onchange="modechange()"
-radio|wan_proto|$FORM_wan_proto|static|Static IP<br />|onchange="modechange()"
+radio|wan_proto|$FORM_wan_proto|none|None<br />
+radio|wan_proto|$FORM_wan_proto|dhcp|DHCP<br />
+radio|wan_proto|$FORM_wan_proto|static|Static IP<br />
 $PPPOE_OPTION
 $PPTP_OPTION
 end_form
@@ -175,8 +176,8 @@ end_form
 
 start_form|PPP Settings|ppp_settings|hidden
 field|PPP Redial Policy|ppp_redial|hidden
-radio|ppp_redial|$FORM_ppp_redial|demand|Connect on Demand<br />|onChange="modechange()"
-radio|ppp_redial|$FORM_ppp_redial|persist|Keep Alive|onChange="modechange()"
+radio|ppp_redial|$FORM_ppp_redial|demand|Connect on Demand<br />
+radio|ppp_redial|$FORM_ppp_redial|persist|Keep Alive
 field|Maximum Idle Time|ppp_demand_idletime|hidden
 text|ppp_idletime|$FORM_ppp_idletime
 field|Redial Timeout|ppp_persist_redialperiod|hidden
