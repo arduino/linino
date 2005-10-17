@@ -1,6 +1,0 @@
-config BR2_PACKAGE_GMP
-	tristate "libgmp"
-	default m if CONFIG_DEVEL
-	help
-	  libgmp
-	  

@@ -1,5 +1,0 @@
-config BR2_PACKAGE_MICROPERL
-	tristate "microperl"
-	default m if CONFIG_DEVEL
-	help
-	  Perl without operating-specific functions such as readdir.

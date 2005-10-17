@@ -1,7 +1,0 @@
-config BR2_PACKAGE_LIBPCAP
-	tristate "libpcap (a low-level packet capture library)"
-	default m if CONFIG_DEVEL
-	help
-	  A system-independent library for user-level network packet capture.
-
-	  http://www.tcpdump.org/

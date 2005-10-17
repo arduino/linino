@@ -1,6 +1,0 @@
-config BR2_PACKAGE_LIBGD
-	tristate "libgd"
-	default m if CONFIG_DEVEL
-	help
-	 The GD Graphics Library 
-	  

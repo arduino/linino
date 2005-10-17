@@ -1,6 +1,0 @@
-Package: lzo
-Priority: optional
-Section: libs
-Maintainer: Felix Fietkau <nbd@vd-s.ath.cx>
-Source: buildroot internal
-Description: an implementation of the deflate compression method (library)
