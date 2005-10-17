@@ -83,7 +83,7 @@ $(eval $(call KMOD_template,IPT_NAT,ipt-nat,\
 	$(foreach mod,$(PKG_IPT_NAT-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
 ))
 $(eval $(call KMOD_template,IMQ,imq,\
-	$(foreach mod,$(PKG_IMQ-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+	$(MODULES_DIR)/kernel/net/*/netfilter/*IMQ* \
 	$(MODULES_DIR)/kernel/drivers/net/imq.o \
 ))
 $(eval $(call KMOD_template,IPT_EXTRA,ipt-extra,\
