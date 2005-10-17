@@ -1,6 +1,6 @@
 config BR2_PACKAGE_EBTABLES
 	tristate "ebtables - Ethernet bridge firewall administration utility"
-	default n
+	default m if CONFIG_DEVEL
 	help
 	  Ethernet Bridge Firewalling (ebtables)
 	  
