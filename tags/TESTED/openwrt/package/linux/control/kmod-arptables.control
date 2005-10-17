@@ -1,6 +1,0 @@
-Package: kmod-arptables
-Priority: optional
-Section: net
-Maintainer: Felix Fietkau <nbd@vd-s.ath.cx>
-Source: buildroot internal
-Description: ARP firewalling kernel modules
