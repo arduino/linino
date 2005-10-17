@@ -1,6 +1,0 @@
-Package: speex
-Priority: optional
-Section: libs
-Maintainer: Felix Fietkau <nbd@vd-s.ath.cx>
-Source: buildroot internal
-Description: an open source patent-free speech compression codec

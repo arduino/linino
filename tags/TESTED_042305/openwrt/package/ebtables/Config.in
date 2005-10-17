@@ -1,6 +1,0 @@
-config BR2_PACKAGE_EBTABLES
-	tristate "Ethernet Bridge Firewalling"
-	default m if CONFIG_DEVEL
-	help
-		Ethernet Bridge Firewalling (ebtables)
-		http://ebtables.sourceforge.net/
