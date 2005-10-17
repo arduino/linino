@@ -1,8 +1,0 @@
-#
-
-menu "Target Filesystem"
-
-source "target/jffs2/Config.in"
-
-endmenu
-
