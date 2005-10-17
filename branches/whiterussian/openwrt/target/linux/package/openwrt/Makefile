@@ -35,4 +35,4 @@ install: compile
 compile: install-dev $(IPKG_OPENWRT)
 install-dev:
 	mkdir -p $(STAGING_DIR)/usr/include
-	cp -a ./include/* $(STAGING_DIR)/usr/include/
+	cp -fpR ./include/[a-z]* $(STAGING_DIR)/usr/include/
