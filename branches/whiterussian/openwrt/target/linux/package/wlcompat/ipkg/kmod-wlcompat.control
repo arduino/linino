@@ -1,7 +1,6 @@
 Package: kmod-wlcompat
 Priority: optional
 Section: sys
-Maintainer: Felix Fietkau <nbd@vd-s.ath.cx>
-Source: buildroot internal
+Maintainer: Felix Fietkau <nbd@openwrt.org>
 Depends: kmod-brcm-wl
 Description: Compatibility module for using the Wireless Extension with broadcom's wl
