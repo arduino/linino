@@ -1,8 +1,5 @@
 Package: webif
-Version: 0.00
-Architecture: all
-Maintainer: Felix Fietkau <openwrt@nbd.name>
-Source: buildroot internal
+Maintainer: Felix Fietkau <nbd@openwrt.org>
 Section: net
 Depends: haserl
 Priority: normal
