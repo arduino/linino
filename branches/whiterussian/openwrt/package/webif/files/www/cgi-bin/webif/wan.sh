@@ -12,7 +12,6 @@ handle_list "$FORM_dnsremove" "$FORM_dnsadd" "$FORM_dnssubmit" 'ip|FORM_dnsadd|W
 }
 FORM_dnsadd=${FORM_dnsadd:-192.168.1.1}
 
-
 if empty "$FORM_submit"; then
 	FORM_wan_proto=${wan_proto:-$(nvram get wan_proto)}
 	case "$FORM_wan_proto" in
@@ -21,16 +20,6 @@ if empty "$FORM_submit"; then
 		# otherwise select "none"
 		*) FORM_wan_proto="none";;
 	esac
-	
-	# detect pptp package and compile option
-	[ -x /sbin/ifup.pptp ] && {
-		PPTP_OPTION="radio|wan_proto|$FORM_wan_proto|pptp|PPTP<br />"
-		PPTP_SERVER_OPTION="field|PPTP Server IP|pptp_server_ip|hidden
-text|pptp_server_ip|$FORM_pptp_server_ip"
-	}
-	[ -x /sbin/ifup.pppoe ] && {
-		PPPOE_OPTION="radio|wan_proto|$FORM_wan_proto|pppoe|PPPoE<br />"
-	}
 	
 	# pptp, dhcp and static common
 	FORM_wan_ipaddr=${wan_ipaddr:-$(nvram get wan_ipaddr)}
@@ -102,6 +91,10 @@ EOF
 				save_setting network ppp_idletime "$FORM_ppp_idletime"
 				save_setting network ppp_redialperiod "$FORM_ppp_redialperiod"
 				save_setting network ppp_mtu "$FORM_ppp_mtu"
+
+				save_setting network wan_ifname "ppp0"
+				save_setting network pptp_ifname "vlan1"
+				save_setting network pppoe_ifname "vlan1"
 		
 				case "$FORM_ppp_redial" in
 					demand)
@@ -112,9 +105,23 @@ EOF
 						;;
 				esac	
 			;;
+			*)
+				save_setting network wan_ifname "vlan1"
+			;;
 		esac
 	}
 fi
+
+# detect pptp package and compile option
+[ -x /sbin/ifup.pptp ] && {
+	PPTP_OPTION="radio|wan_proto|$FORM_wan_proto|pptp|PPTP<br />"
+	PPTP_SERVER_OPTION="field|PPTP Server IP|pptp_server_ip|hidden
+text|pptp_server_ip|$FORM_pptp_server_ip"
+}
+[ -x /sbin/ifup.pppoe ] && {
+	PPPOE_OPTION="radio|wan_proto|$FORM_wan_proto|pppoe|PPPoE<br />"
+}
+
 
 header "Network" "WAN" "WAN settings" ' onLoad="modechange()" ' "$SCRIPT_NAME"
 
