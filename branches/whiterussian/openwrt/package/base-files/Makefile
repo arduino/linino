@@ -3,7 +3,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=base-files
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_BUILD_DIR:=$(BUILD_DIR)/base-files
 
 include $(TOPDIR)/package/rules.mk
