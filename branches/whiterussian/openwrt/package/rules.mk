@@ -54,10 +54,14 @@ endif
 
 all: compile
 
+compile-targets:
+install-targets:
+clean-targets:
+
 source: $(DL_DIR)/$(PKG_SOURCE)
 prepare: $(PKG_BUILD_DIR)/.prepared
-compile:
-install:
+compile: compile-targets
+install: install-targets
 mostlyclean:
 rebuild:
 	-$(MAKE) mostlyclean
@@ -72,7 +76,7 @@ $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 $(PACKAGE_DIR):
 	mkdir -p $@
 
-clean: 
+clean: clean-targets
 	rm -rf $(PKG_BUILD_DIR)
 
 .PHONY: all source prepare compile install clean
