@@ -101,10 +101,10 @@ image_clean:
 target_clean: image_clean
 	rm -rf $(BUILD_DIR)/linux-*/root
 
-clean: target_clean
+clean: dirclean
 	@$(MAKE) -C $(CONFIG) clean
 
-dirclean: clean
+dirclean: target_clean
 	rm -rf $(BUILD_DIR)
 
 distclean: clean
