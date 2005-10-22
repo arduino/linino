@@ -28,7 +28,7 @@ endif
 
 $(KDIR)/loader.tmp.gz:
 	cp $(BUILD_DIR)/loader.gz $@
-	echo -e "\\x00" >> $@
+	echo -ne "\\x00" >> $@
 
 $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx: $(KDIR)/loader.tmp.gz
 	$(STAGING_DIR)/bin/trx -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
