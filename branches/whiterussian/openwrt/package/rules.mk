@@ -8,13 +8,13 @@ IDIR_$(1):=$(PKG_BUILD_DIR)/ipkg/$(2)
 INFO_$(1):=$(IPKG_STATE_DIR)/info/$(2).list
 
 ifneq ($(BR2_PACKAGE_$(1)),)
-compile: $$(IPKG_$(1))
+compile-targets: $$(IPKG_$(1))
 endif
 ifneq ($(DEVELOPER),)
-compile: $$(IPKG_$(1))
+compile-targets: $$(IPKG_$(1))
 endif
 ifeq ($(BR2_PACKAGE_$(1)),y)
-install: $$(INFO_$(1))
+install-targets: $$(INFO_$(1))
 endif
 
 IDEPEND_$(1):=$$(strip $(5))
@@ -33,7 +33,7 @@ $$(INFO_$(1)): $$(IPKG_$(1))
 
 $(2)-clean:
 	rm -f $$(IPKG_$(1))
-clean: $(2)-clean
+clean-targets: $(2)-clean
 endef
 
 ifneq ($(strip $(PKG_SOURCE)),)
