@@ -7,7 +7,9 @@ PKG_VERSION:=0.99.149
 PKG_RELEASE:=2
 PKG_MD5SUM:=975cc419d6db5fb279dc58177c68373b
 
-PKG_SOURCE_URL:=http://www.handhelds.org/packages/ipkg
+PKG_SOURCE_URL:=http://www.handhelds.org/packages/ipkg \
+	http://www.gtlib.gatech.edu/pub/handhelds.org/packages/ipkg \
+	http://ftp.gwdg.de/pub/linux/handhelds/packages/ipkg
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_CAT:=zcat
 
