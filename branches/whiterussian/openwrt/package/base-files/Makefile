@@ -3,7 +3,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=base-files
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 PKG_BUILD_DIR:=$(BUILD_DIR)/base-files
 
 include $(TOPDIR)/package/rules.mk
@@ -55,9 +55,9 @@ $(IPKG_BASE):
 $(IPKG_LIBC):
 	$(SCRIPT_DIR)/make-ipkg-dir.sh $(IDIR_LIBC) ipkg/uclibc.control $(LIBC_VERSION)-$(PKG_RELEASE) $(ARCH)
 	mkdir -p $(IDIR_LIBC)/lib
-	cp $(STAGING_DIR)/lib/ld-uClibc*.so.* $(IDIR_LIBC)/lib/
-	for file in c crypt dl m nsl resolv rt uClibc util; do \
-		cp $(STAGING_DIR)/lib/lib$$file*.so.* $(IDIR_LIBC)/lib/; \
+	for file in ld-uClibc libc libcrypt libdl libm libnsl libresolv librt libuClibc libutil; do \
+		cp -fpR $(STAGING_DIR)/lib/$$file.so.* $(IDIR_LIBC)/lib/; \
+		cp -fpR $(STAGING_DIR)/lib/$$file-$(LIBC_VERSION).so $(IDIR_LIBC)/lib/; \
 	done
 	-$(STRIP) $(IDIR_LIBC)/lib/*
 	$(IPKG_BUILD) $(IDIR_LIBC) $(PACKAGE_DIR)
