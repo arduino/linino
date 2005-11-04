@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
 PKG_VERSION:=1.0.7
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 PKG_MD5SUM:=4cc3c1e4a1b12e0e4c748326ad153291
 
 PKG_SOURCE_URL:=http://ftp.digium.com/pub/asterisk/old-releases
