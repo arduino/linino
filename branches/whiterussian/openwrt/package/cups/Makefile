@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cups
 PKG_VERSION:=1.1.23
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=4ce09b1dce09b6b9398af0daae9adf63
 
 PKG_SOURCE_URL:=http://ftp.funet.fi/pub/mirrors/ftp.easysw.com/ftp.easysw.com/pub/cups/$(PKG_VERSION) \
@@ -73,6 +73,8 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_CUPS):
 	install -d -m0755 $(IDIR_CUPS)/etc/cups
 	cp -fpR $(PKG_INSTALL_DIR)/etc/cups/* $(IDIR_CUPS)/etc/cups/
+	rm -rf $(IDIR_CUPS)/etc/cups/certs
+	ln -sf /tmp $(IDIR_CUPS)/etc/cups/certs
 	install -d -m0755 $(IDIR_CUPS)/usr/bin
 	cp -fpR $(PKG_INSTALL_DIR)/usr/bin/* $(IDIR_CUPS)/usr/bin/
 	rm -f $(IDIR_CUPS)/usr/bin/cups-config
