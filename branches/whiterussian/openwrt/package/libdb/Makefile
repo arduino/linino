@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libdb
 PKG_VERSION:=4.3.28
-PKG_RELEASE:=0
+PKG_RELEASE:=1
 PKG_MD5SUM:=e27759537db6054b31d8cb3e99ba6fbb
 
 PKG_SOURCE_URL:=ftp://ftp.sleepycat.com/releases/ \
@@ -69,7 +69,7 @@ $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 
 $(IPKG_LIBDB): $(STAGING_DIR)/usr/lib/libdb.so
 	install -m0755 -d $(IDIR_LIBDB)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libdb*.so $(IDIR_LIBDB)/usr/lib/
+	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libdb-*.so $(IDIR_LIBDB)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBDB)
 	$(IPKG_BUILD) $(IDIR_LIBDB) $(PACKAGE_DIR)
 
@@ -78,7 +78,7 @@ $(STAGING_DIR)/usr/lib/libdb.so: $(PKG_BUILD_DIR)/.built
 	cp -fpR $(PKG_INSTALL_DIR)/usr/include/db.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libdb*.{a,so} $(STAGING_DIR)/usr/lib/
-	touch $(STAGING_DIR)/usr/lib/libdb.so
+	touch $@
 
 install-dev: $(STAGING_DIR)/usr/lib/libdb.so
 
