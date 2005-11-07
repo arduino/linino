@@ -59,6 +59,7 @@ $(BIN_DIR)/$(IB_NAME).tar.bz2: kernel-install
 	cp -fpR ./image $(IB_DIR)/
 	cp $(TOPDIR)/.config $(IB_DIR)/
 	find $(IB_DIR) -name CVS | xargs rm -rf
+	find $(IB_DIR) -name .svn | xargs rm -rf
 	(cd $(BUILD_DIR); tar c $(IB_NAME) | bzip2 -c > $(BIN_DIR)/$(IB_NAME).tar.bz2)
 
 ifeq ($(BR2_PACKAGE_IMAGEBUILDER),y)
