@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=uClibc++
 PKG_VERSION:=0.1.11
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=8a8e0ee8fefef150c08a649fd7da04aa
 
 PKG_SOURCE_URL:=http://cxx.uclibc.org/src/
@@ -46,7 +46,8 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_UCLIBCXX):
 	install -d -m0755 $(IDIR_UCLIBCXX)/usr/lib
-	cp -fpR $(PKG_BUILD_DIR)/src/libuClibc++*.so* $(IDIR_UCLIBCXX)/usr/lib/
+	cp -fpR $(PKG_BUILD_DIR)/src/libuClibc++-$(PKG_VERSION).so $(IDIR_UCLIBCXX)/usr/lib/
+	cp -fpR $(PKG_BUILD_DIR)/src/libuClibc++.so.* $(IDIR_UCLIBCXX)/usr/lib/
 	$(STRIP) $(IDIR_UCLIBCXX)/usr/lib/*.so*
 	mkdir -p $(PACKAGE_DIR)
 	$(IPKG_BUILD) $(IDIR_UCLIBCXX) $(PACKAGE_DIR)
