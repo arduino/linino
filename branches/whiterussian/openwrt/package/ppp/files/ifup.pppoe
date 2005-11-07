@@ -22,7 +22,6 @@ while :; do
 	IDLETIME=${IDLETIME:+lcp-echo-failure $IDLETIME}
 	MTU=$(nvram get ppp_mtu)
 	MTU=${MTU:-1492}
-	MTU=${MTU:+ mtu $MTU mru $MTU}
 
 	ifconfig $IFNAME up
 	/usr/sbin/pppd nodetach \
@@ -31,10 +30,12 @@ while :; do
 		usepeerdns \
 		defaultroute \
 		replacedefaultroute \
-		linkname $type \
+		ipparam "$type" \
+		linkname "$type" \
 		user "$USERNAME" \
 		password "$PASSWORD" \
-		$MTU \
+		mtu $MTU \
+		mru $MTU \
 		$IDLETIME \
 		$REDIAL \
 		nic-$IFNAME
