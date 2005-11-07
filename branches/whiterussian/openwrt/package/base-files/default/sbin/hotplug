@@ -1,4 +1,5 @@
 #!/bin/sh
+. /etc/functions.sh
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 LOGNAME=root
 USER=root
