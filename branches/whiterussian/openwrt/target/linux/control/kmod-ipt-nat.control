@@ -1,4 +1,4 @@
 Package: kmod-ipt-nat
 Priority: optional
 Section: net
-Description: Extra iptables modules for different NAT targets
+Description: Netfilter (IPv4) kernel modules for different NAT targets

@@ -1,4 +1,0 @@
-Package: kmod-queue
-Priority: optional
-Section: net
-Description: iptables module for user-space queueing

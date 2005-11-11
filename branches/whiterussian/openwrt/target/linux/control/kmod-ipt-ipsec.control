@@ -1,4 +1,4 @@
 Package: kmod-ipt-ipsec
 Priority: optional
 Section: net
-Description: Extra iptables modules for matching special IPSec packets
+Description: Netfilter (IPv4) kernel modules for matching special IPsec packets

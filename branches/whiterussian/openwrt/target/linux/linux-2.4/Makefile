@@ -58,37 +58,46 @@ endif
 include ../netfilter.mk
 
 # metapackage for compatibility ...
-$(eval $(call KMOD_template,IPTABLES_V4_EXTRA,iptables-extra,\
-,,kmod-nat-extra kmod-queue kmod-ipt-ipsec kmod-ipt-ipopt kmod-ipt-conntrack kmod-ipt-filter kmod-ipt-nat kmod-ipt-extra))
+$(eval $(call KMOD_template,IPTABLES_EXTRA,iptables-extra,\
+,,kmod-ipt-conntrack kmod-ipt-extra kmod-ipt-filter kmod-ipt-ipopt kmod-ipt-ipsec kmod-ipt-nat kmod-nat-extra kmod-queue))
 
-$(eval $(call KMOD_template,NAT_EXTRA,nat-extra,\
-	$(foreach mod,$(PKG_NAT_EXTRA-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
-,,,40,$(PKG_NAT_EXTRA-m)))
-$(eval $(call KMOD_template,QUEUE,queue,\
-	$(foreach mod,$(PKG_QUEUE-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
-))
-$(eval $(call KMOD_template,IPT_IPSEC,ipt-ipsec,\
-	$(foreach mod,$(PKG_IPT_IPSEC-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
-))
-$(eval $(call KMOD_template,IPT_IPOPT,ipt-ipopt,\
-	$(foreach mod,$(PKG_IPT_IPOPT-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
-))
 $(eval $(call KMOD_template,IPT_CONNTRACK,ipt-conntrack,\
-	$(foreach mod,$(PKG_IPT_CONNTRACK-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+	$(foreach mod,$(IPKG_KMOD_IPT_CONNTRACK-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+))
+$(eval $(call KMOD_template,IPT_EXTRA,ipt-extra,\
+	$(foreach mod,$(IPKG_KMOD_IPT_EXTRA-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
 ))
 $(eval $(call KMOD_template,IPT_FILTER,ipt-filter,\
-	$(foreach mod,$(PKG_IPT_FILTER-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+	$(foreach mod,$(IPKG_KMOD_IPT_FILTER-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+))
+$(eval $(call KMOD_template,IPT_IPOPT,ipt-ipopt,\
+	$(foreach mod,$(IPKG_KMOD_IPT_IPOPT-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+))
+$(eval $(call KMOD_template,IPT_IPSEC,ipt-ipsec,\
+	$(foreach mod,$(IPKG_KMOD_IPT_IPSEC-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
 ))
 $(eval $(call KMOD_template,IPT_NAT,ipt-nat,\
-	$(foreach mod,$(PKG_IPT_NAT-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+	$(foreach mod,$(IPKG_KMOD_IPT_NAT-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
 ))
+$(eval $(call KMOD_template,IPT_NAT_EXTRA,ipt-nat-extra,\
+	$(foreach mod,$(IPKG_KMOD_IPT_NAT_EXTRA-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+,,,40,$(IPKG_KMOD_IPT_NAT_EXTRA-m)))
+$(eval $(call KMOD_template,IPT_QUEUE,ipt-queue,\
+	$(foreach mod,$(IPKG_KMOD_IPT_QUEUE-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+))
+$(eval $(call KMOD_template,IPT_ULOG,ipt-ulog,\
+	$(foreach mod,$(IPKG_KMOD_IPT_ULOG-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+))
+
 $(eval $(call KMOD_template,IMQ,imq,\
 	$(MODULES_DIR)/kernel/net/*/netfilter/*IMQ* \
 	$(MODULES_DIR)/kernel/drivers/net/imq.o \
 ))
-$(eval $(call KMOD_template,IPT_EXTRA,ipt-extra,\
-	$(foreach mod,$(PKG_IPT_EXTRA-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
-))
+
+
+$(eval $(call KMOD_template,IP6TABLES,ip6tables,\
+	$(MODULES_DIR)/kernel/net/ipv6/netfilter/ip*.o \
+,CONFIG_IP6_IPT_IPTABLES,kmod-ipv6))
 
 
 $(eval $(call KMOD_template,B44,b44,\
@@ -100,9 +109,6 @@ $(eval $(call KMOD_template,ARPT,arptables,\
 $(eval $(call KMOD_template,EBT,ebtables,\
 	$(MODULES_DIR)/kernel/net/bridge/netfilter/*.o \
 ,CONFIG_BRIDGE_NF_EBTABLES))
-$(eval $(call KMOD_template,IPTABLES_V6,ip6tables,\
-	$(MODULES_DIR)/kernel/net/ipv6/netfilter/ip*.o \
-,CONFIG_IP6_NF_IPTABLES,kmod-ipv6))
 $(eval $(call KMOD_template,IPV6,ipv6,\
 	$(MODULES_DIR)/kernel/net/ipv6/ipv6.o \
 ,CONFIG_IPV6,,20,ipv6))

@@ -1,4 +1,4 @@
 Package: kmod-ipt-ipopt
 Priority: optional
 Section: net
-Description: Extra iptables modules for matching IP packet options
+Description: Netfilter (IPv4) kernel modules for matching/changing IP packet options

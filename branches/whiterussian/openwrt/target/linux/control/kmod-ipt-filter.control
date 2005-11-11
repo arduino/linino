@@ -1,4 +1,4 @@
 Package: kmod-ipt-filter
 Priority: optional
 Section: net
-Description: Extra iptables modules for filtering the contents of packets
+Description: Netfilter (IPv4) kernel modules for packet content inspection

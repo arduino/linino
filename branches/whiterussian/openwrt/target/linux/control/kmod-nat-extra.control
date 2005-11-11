@@ -1,4 +1,0 @@
-Package: kmod-nat-extra
-Priority: optional
-Section: net
-Description: Extra NAT kernel modules for special protocols
