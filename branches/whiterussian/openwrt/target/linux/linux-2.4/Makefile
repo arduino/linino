@@ -59,7 +59,7 @@ include ../netfilter.mk
 
 # metapackage for compatibility ...
 $(eval $(call KMOD_template,IPTABLES_EXTRA,iptables-extra,\
-,,kmod-ipt-conntrack kmod-ipt-extra kmod-ipt-filter kmod-ipt-ipopt kmod-ipt-ipsec kmod-ipt-nat kmod-nat-extra kmod-queue))
+,,kmod-ipt-conntrack kmod-ipt-extra kmod-ipt-filter kmod-ipt-ipopt kmod-ipt-ipsec kmod-ipt-nat kmod-ipt-nat-extra kmod-ipt-queue kmod-ipt-ulog))
 
 $(eval $(call KMOD_template,IPT_CONNTRACK,ipt-conntrack,\
 	$(foreach mod,$(IPKG_KMOD_IPT_CONNTRACK-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
