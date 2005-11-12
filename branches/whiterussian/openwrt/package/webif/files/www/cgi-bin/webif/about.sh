@@ -17,7 +17,7 @@ Contributions by:
 <ul class="about">
 	<li class="about">Philipp Kewisch &lt;<a href="mailto:openwrt@kewis.ch">openwrt@kewis.ch</a>&gt;</li>
 	<li class="about">Spectra &lt;<a href="mailto:spectra@gmx.ch">spectra@gmx.ch</a>&gt;</li>
-	<li class="about">Layout based on <a href="http://www.oswd.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> by haran</li>
+	<li class="about">Layout based on <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> by haran</li>
 </ul>
 
 
