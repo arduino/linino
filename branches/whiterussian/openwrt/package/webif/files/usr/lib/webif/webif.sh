@@ -132,7 +132,8 @@ EOF
 <br />
 <br />
 <h3>Warning: you haven't set a password for the Web interface and SSH access<br />
-Please enter one now</h3>
+Please enter one now (the user name in your browser will be 'root').</h3>
+<br />
 <br />
 <form enctype="multipart/form-data" action="$SCRIPT_NAME" method="POST">
 <table>
