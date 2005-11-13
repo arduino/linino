@@ -412,7 +412,7 @@ static void setup_bcom(int skfd, char *ifname)
 				
 				bcom_ioctl(skfd, ifname, WLC_SET_WPA_AUTH, &val, sizeof(val));
 				
-				if (!nvram_match(wl_var("mode"), "wet")) {
+				if (nvram_match(wl_var("mode"), "wet")) {
 					/* Enable in-driver WPA supplicant */
 					wsec_pmk_t pmk;
 					
