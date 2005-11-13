@@ -20,11 +20,13 @@ reload_network() {
 	grep '^wan_' config-network >&- 2>&- && {
 		ifdown wan
 		ifup wan
+		killall -HUP dnsmasq
 	}
 	
 	grep '^lan_' config-network >&- 2>&- && {
 		ifdown lan
 		ifup lan
+		killall -HUP dnsmasq
 	}
 }
 
