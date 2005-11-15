@@ -156,7 +156,7 @@ uninstall-dev:
 		$(STAGING_DIR)/usr/include/term{,cap}.h \
 		$(STAGING_DIR)/usr/include/unctrl.h \
 		$(STAGING_DIR)/usr/lib/libcurses.so \
-		$(STAGING_DIR)/usr/lib/lib{ncurses,panel}.{a,so*} \
+		$(STAGING_DIR)/usr/lib/lib{ncurses,panel,menu}.{a,so*} \
 
 compile: install-dev
 clean: uninstall-dev
