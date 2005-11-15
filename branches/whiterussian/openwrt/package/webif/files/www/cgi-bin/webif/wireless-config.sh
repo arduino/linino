@@ -134,6 +134,7 @@ EOF
 		crypto=""
 		equal "$FORM_aes" aes && crypto="aes"
 		equal "$FORM_tkip" tkip && crypto="tkip${crypto:++$crypto}"
+		save_setting wireless wl0_crypto "$crypto"
 
 		case "$FORM_encryption" in
 			psk)
