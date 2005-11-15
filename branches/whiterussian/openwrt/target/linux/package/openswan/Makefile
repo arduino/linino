@@ -3,9 +3,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openswan
-PKG_VERSION:=2.3.1
+PKG_VERSION:=2.4.2
 PKG_RELEASE:=1
-PKG_MD5SUM:=3dcf1cd7efcbe8db3148fc288d429db1
+PKG_MD5SUM:=38c7ad91312bdd67fa57fe987b21183e
 
 PKG_SOURCE_URL:=http://www.openswan.org/download
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -28,6 +28,7 @@ $(PKG_BUILD_DIR)/.built:
 		KERNELSRC="$(KERNEL_DIR)" \
 		ARCH="mips" \
 		USERCOMPILE="$(FLAGS)" \
+		AS="$(TARGET_CC) -c $(TARGET_CFLAGS)" \
 		module
 
 $(IPKG_KMOD_OPENSWAN):
