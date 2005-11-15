@@ -1,7 +1,7 @@
 menu "ndisc - ICMPv6 discovery tools"
 
 config BR2_PACKAGE_NDISC
-	bool
+	tristate
 	default n
 	depends BR2_PACKAGE_NDISC6 || BR2_PACKAGE_RDISC6
 
