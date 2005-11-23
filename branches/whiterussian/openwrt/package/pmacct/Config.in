@@ -2,24 +2,24 @@ menu "pmacct - IPv4/IPv6 accounting and aggregation tools"
 
 config BR2_PACKAGE_PMACCT
 	tristate
-	default n
+	default m if CONFIG_DEVEL
 	depends BR2_PACKAGE_PMACCT_BASIC || BR2_PACKAGE_PMACCT_MYSQL || BR2_PACKAGE_PMACCT_PGSQL || BR2_PACKAGE_PMACCT_CUSTOM || BR2_PACKAGE_PMACCT_CLIENT
 
 config BR2_PACKAGE_PMACCT_BASIC
 	tristate
-	default n
+	default m if CONFIG_DEVEL
 	depends BR2_PACKAGE_NFACCTD_BASIC || BR2_PACKAGE_PMACCTD_BASIC
 	select BR2_PACKAGE_PMACCT
 
 config BR2_PACKAGE_PMACCT_MYSQL
 	tristate
-	default n
+	default m if CONFIG_DEVEL
 	depends BR2_PACKAGE_NFACCTD_MYSQL || BR2_PACKAGE_PMACCTD_MYSQL
 	select BR2_PACKAGE_PMACCT
 
 config BR2_PACKAGE_PMACCT_PGSQL
 	tristate
-	default n
+	default m if CONFIG_DEVEL
 	depends BR2_PACKAGE_NFACCTD_PGSQL || BR2_PACKAGE_PMACCTD_PGSQL
 	select BR2_PACKAGE_PMACCT
 
