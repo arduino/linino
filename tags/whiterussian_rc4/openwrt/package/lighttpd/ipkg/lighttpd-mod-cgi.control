@@ -1,0 +1,5 @@
+Package: lighttpd-mod-cgi
+Priority: optional
+Section: net
+Description: a CGI module for lighttpd
+Depends: lighttpd

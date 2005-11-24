@@ -1,0 +1,5 @@
+Package: freeradius-mod-eap-peap
+Priority: optional
+Section: net
+Description: an EAP/PEAP module for FreeRADIUS
+Depends: freeradius, freeradius-mod-eap, freeradius-mod-eap-tls

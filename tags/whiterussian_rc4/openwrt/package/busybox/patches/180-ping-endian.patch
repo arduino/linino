@@ -1,0 +1,38 @@
+--- busybox-1.00/networking/ping.c.orig	2005-08-18 20:39:56.000000000 +0200
++++ busybox-1.00/networking/ping.c	2005-08-18 20:39:59.000000000 +0200
+@@ -223,9 +223,9 @@
+ 	pkt->icmp_type = ICMP_ECHO;
+ 	pkt->icmp_code = 0;
+ 	pkt->icmp_cksum = 0;
+-	pkt->icmp_seq = ntransmitted++;
++	pkt->icmp_seq = htons(ntransmitted++);
+ 	pkt->icmp_id = myid;
+-	CLR(pkt->icmp_seq % MAX_DUP_CHK);
++	CLR(ntohs(pkt->icmp_seq) % MAX_DUP_CHK);
+ 
+ 	gettimeofday((struct timeval *) &packet[8], NULL);
+ 	pkt->icmp_cksum = in_cksum((unsigned short *) pkt, sizeof(packet));
+@@ -309,12 +309,12 @@
+ 		if (triptime > tmax)
+ 			tmax = triptime;
+ 
+-		if (TST(icmppkt->icmp_seq % MAX_DUP_CHK)) {
++		if (TST(ntohs(icmppkt->icmp_seq) % MAX_DUP_CHK)) {
+ 			++nrepeats;
+ 			--nreceived;
+ 			dupflag = 1;
+ 		} else {
+-			SET(icmppkt->icmp_seq % MAX_DUP_CHK);
++			SET(ntohs(icmppkt->icmp_seq) % MAX_DUP_CHK);
+ 			dupflag = 0;
+ 		}
+ 
+@@ -323,7 +323,7 @@
+ 
+ 		printf("%d bytes from %s: icmp_seq=%u", sz,
+ 			   inet_ntoa(*(struct in_addr *) &from->sin_addr.s_addr),
+-			   icmppkt->icmp_seq);
++			   ntohs(icmppkt->icmp_seq));
+ 		printf(" ttl=%d", iphdr->ttl);
+ 		printf(" time=%lu.%lu ms", triptime / 10, triptime % 10);
+ 		if (dupflag)

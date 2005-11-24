@@ -1,0 +1,4 @@
+Package: wput
+Priority: optional
+Section: net
+Description: a wget-like command-line FTP client

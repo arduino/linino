@@ -1,0 +1,5 @@
+Package: nvram
+Priority: optional
+Section: sys
+Description: NVRAM utility and libraries for Broadcom hardware
+

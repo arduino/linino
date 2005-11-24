@@ -1,0 +1,5 @@
+Package: libopenldap
+Priority: optional
+Section: libs
+Description: OpenLDAP (Lightweight Directory Access Protocol) client libraries
+Depends: libopenssl, libsasl2

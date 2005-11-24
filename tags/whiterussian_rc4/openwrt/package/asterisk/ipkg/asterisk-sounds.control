@@ -1,0 +1,5 @@
+Package: asterisk-sounds
+Priority: optional
+Section: net
+Description: a sounds collection for Asterisk
+Depends: asterisk

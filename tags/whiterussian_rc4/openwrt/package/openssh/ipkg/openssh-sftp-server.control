@@ -1,0 +1,5 @@
+Package: openssh-sftp-server
+Priority: optional
+Section: net
+Depends: zlib, libopenssl
+Description: OpenSSH SFTP server

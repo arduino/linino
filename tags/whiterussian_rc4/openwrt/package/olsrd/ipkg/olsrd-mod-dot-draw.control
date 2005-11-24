@@ -1,0 +1,5 @@
+Package: olsrd-mod-dot-draw
+Priority: optional
+Section: net
+Description: a dot topology information plugin for olsrd
+Depends: olsrd

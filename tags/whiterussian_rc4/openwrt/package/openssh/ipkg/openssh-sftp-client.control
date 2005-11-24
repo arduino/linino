@@ -1,0 +1,5 @@
+Package: openssh-sftp-client
+Priority: optional
+Section: net
+Depends: zlib, libopenssl
+Description: OpenSSH SFTP client

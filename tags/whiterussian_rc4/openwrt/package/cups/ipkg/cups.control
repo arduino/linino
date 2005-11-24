@@ -1,0 +1,4 @@
+Package: cups
+Priority: optional
+Section: net
+Description: Common Unix Printing System

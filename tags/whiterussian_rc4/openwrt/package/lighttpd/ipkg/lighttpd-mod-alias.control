@@ -1,0 +1,5 @@
+Package: lighttpd-mod-alias
+Priority: optional
+Section: net
+Description: a directory alias module for lighttpd
+Depends: lighttpd
