@@ -97,7 +97,7 @@ $(eval $(call KMOD_template,IMQ,imq,\
 
 $(eval $(call KMOD_template,IP6TABLES,ip6tables,\
 	$(MODULES_DIR)/kernel/net/ipv6/netfilter/ip*.o \
-,CONFIG_IP6_IPT_IPTABLES,kmod-ipv6))
+,CONFIG_IP6_NF_IPTABLES,kmod-ip6tables))
 
 
 $(eval $(call KMOD_template,B44,b44,\
