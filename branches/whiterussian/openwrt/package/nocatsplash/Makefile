@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nocatsplash
 PKG_VERSION:=0.92
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=e0fcc0effe52e63bc31070d16d0b4a81
 
 PKG_SOURCE_URL:=http://wifi.rulez.org/~josephus/

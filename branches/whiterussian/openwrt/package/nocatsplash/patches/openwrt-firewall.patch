@@ -12,7 +12,7 @@ diff -urN NoCatSplash-0.92.old/libexec/iptables/initialize.fw NoCatSplash-0.92/l
 -    ip_conntrack ipt_mac ipt_state ipt_mark; do
 -
 -    modprobe $module
-+for module in ipt_TOS ipt_mac; do
++for module in ipt_REDIRECT ipt_TOS ipt_mac; do
 +    insmod $module
  done
  

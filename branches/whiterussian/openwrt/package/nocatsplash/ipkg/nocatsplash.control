@@ -1,7 +1,7 @@
 Package: nocatsplash
 Priority: optional
 Section: net
-Depends: iptables-extra, glib1
+Depends: glib1, iptables-mod-ipopt, iptables-mod-nat
 Description: NoCatSplash is an Open Public Network Gateway Daemon.
  It performs as a [captive/open/active] portal. When run on a gateway/router
  on a network, all web requests are redirected until the client either logs
