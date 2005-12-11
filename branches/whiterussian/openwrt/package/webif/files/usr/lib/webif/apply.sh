@@ -56,10 +56,12 @@ done
 # config-*		simple config files
 [ -f /etc/nvram.overrides ] && ( # White Russian
 	cd /proc/self
-	cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set
+	cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- && {
+		cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set
+		echo "Committing NVRAM ..."
+		nvram commit
+	}
 )
-echo "Committing NVRAM ..."
-nvram commit
 for config in $(ls config-* 2>&-); do 
 	name=${config#config-}
 	eval 'case "$name" in
