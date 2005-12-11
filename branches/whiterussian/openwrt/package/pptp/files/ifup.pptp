@@ -10,7 +10,7 @@ for module in slhc ppp_generic ppp_async ip_gre; do
 	/sbin/insmod $module 2>&- >&-
 done
 
-while :; do
+(while :; do
 	PPTP_PROTO="$(nvram get pptp_proto)"
 	[ "$PPTP_PROTO" = "static" ] || PPTP_PROTO=""
 	PPTP_PROTO="${PPTP_PROTO:-dhcp}"
@@ -52,5 +52,5 @@ while :; do
 		mru $MTU \
 		$DEMAND \
 		$KEEPALIVE
-done &
+done 2>&1 >/dev/null ) &
 

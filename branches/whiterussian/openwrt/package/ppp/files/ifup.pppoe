@@ -12,7 +12,7 @@ for module in slhc ppp_generic pppox pppoe; do
 	/sbin/insmod $module 2>&- >&-
 done
 
-while :; do
+(while :; do
 	IFNAME=$(nvram get pppoe_ifname)
 	USERNAME=$(nvram get ppp_username)
 	PASSWORD=$(nvram get ppp_passwd)
@@ -46,4 +46,4 @@ while :; do
 		$DEMAND \
 		$KEEPALIVE \
 		nic-$IFNAME
-done &
+done 2>&1 >/dev/null ) &
