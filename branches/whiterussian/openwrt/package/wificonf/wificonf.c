@@ -530,6 +530,11 @@ static void setup_bcom(int skfd, char *ifname)
 		bcom_ioctl(skfd, ifname, WLC_SET_EAP_RESTRICT, &val, sizeof(val));
 		bcom_set_int(skfd, ifname, "sup_wpa", 0);
 	}
+
+	if (v = nvram_get(wl_var("auth"))) {
+		val = atoi(v);
+		bcom_ioctl(skfd, ifname, WLC_SET_AUTH, &val, sizeof(val));
+	}
 }
 
 static void set_wext_ssid(int skfd, char *ifname)
