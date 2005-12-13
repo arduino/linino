@@ -1,4 +1,5 @@
 Package: wireless-tools
 Priority: optional
 Section: net
+Depends: iwlib
 Description: Tools for setting up WiFi cards using the Wireless Extension

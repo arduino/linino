@@ -1,5 +1,20 @@
+config BR2_COMPILE_WIRELESS_TOOLS
+	tristate
+	default n
+	depends BR2_PACKAGE_IWLIB
+
 config BR2_PACKAGE_WIRELESS_TOOLS
 	tristate "wireless-tools - Tools for manipulating Linux Wireless Extensions"
 	default y
+	select BR2_PACKAGE_IWLIB
 	help
 	  Tools for configuring Wireless Adapters implementing the "Wireless Extension"
+
+config BR2_PACKAGE_IWLIB
+	tristate "iwlib - Library for manipulating Linux Wireless Extensions"
+	default y
+	select BR2_COMPILE_WIRELESS_TOOLS
+	help
+	  Library configuring Wireless Adapters implementing the "Wireless Extension"
+
+
