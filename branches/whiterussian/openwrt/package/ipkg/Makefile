@@ -18,7 +18,8 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(TOPDIR)/package/rules.mk
 
-$(eval $(call PKG_template,IPKG,ipkg,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,IPKG_C,ipkg,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,IPKG_SH,ipkg-sh,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 $(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
@@ -58,10 +59,15 @@ $(PKG_BUILD_DIR)/.built:
 		all install
 	touch $@
 
-$(IPKG_IPKG):
-	install -d -m0755 $(IDIR_IPKG)/bin
-	cp -fpR $(PKG_INSTALL_DIR)/bin/ipkg-cl $(IDIR_IPKG)/bin/ipkg
-	install -d -m0755 $(IDIR_IPKG)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libipkg.so.* $(IDIR_IPKG)/usr/lib/
-	$(RSTRIP) $(IDIR_IPKG)
-	$(IPKG_BUILD) $(IDIR_IPKG) $(PACKAGE_DIR)
+$(IPKG_IPKG_C):
+	install -d -m0755 $(IDIR_IPKG_C)/bin
+	cp -fpR $(PKG_INSTALL_DIR)/bin/ipkg-cl $(IDIR_IPKG_C)/bin/ipkg
+	install -d -m0755 $(IDIR_IPKG_C)/usr/lib
+	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libipkg.so.* $(IDIR_IPKG_C)/usr/lib/
+	$(RSTRIP) $(IDIR_IPKG_C)
+	$(IPKG_BUILD) $(IDIR_IPKG_C) $(PACKAGE_DIR)
+	
+$(IPKG_IPKG_SH):
+	install -d -m0755 $(IDIR_IPKG_SH)/bin
+	install -m0755 ./files/ipkg $(IDIR_IPKG_SH)/bin/ipkg
+	$(IPKG_BUILD) $(IDIR_IPKG_SH) $(PACKAGE_DIR)
