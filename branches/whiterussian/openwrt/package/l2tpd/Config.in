@@ -7,3 +7,5 @@ config BR2_PACKAGE_L2TPD
 	 protocol (RFC2661). It does implement both LAC and LNS role 
 	 in a L2TP networking architecture. The main goal of this protocol is 
 	 to tunnel PPP frame trough an ip network. 
+	  
+	  http://l2tpd.sourceforge.net/
