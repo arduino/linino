@@ -1,0 +1,4 @@
+Package: mtd
+Priority: optional
+Section: sys
+Description: Tool for modifying the flash chip

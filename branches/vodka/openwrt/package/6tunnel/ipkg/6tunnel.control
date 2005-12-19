@@ -1,0 +1,5 @@
+Package: 6tunnel
+Priority: optional
+Section: net
+Depends:
+Description: An IPv4/IPv6 tunnel proxy

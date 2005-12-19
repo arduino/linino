@@ -1,0 +1,5 @@
+Package: iptables-mod-filter
+Priority: optional
+Section: net
+Depends: iptables, kmod-ipt-filter
+Description: Iptables (IPv4) extension for packet content inspection

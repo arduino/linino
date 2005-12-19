@@ -1,0 +1,4 @@
+Package: srelay
+Priority: optional
+Section: net
+Description: A socks 4/5 proxy server

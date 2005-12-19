@@ -1,0 +1,5 @@
+Package: freeradius-utils
+Priority: optional
+Section: net
+Description: some client utilities for FreeRADIUS
+Depends: freeradius

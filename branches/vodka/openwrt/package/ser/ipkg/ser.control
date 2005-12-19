@@ -1,0 +1,6 @@
+Package: ser
+Priority: optional
+Section: net
+Description: SIP Express Router
+ SIP Express Router (ser) is a high-performance,
+ configurable, free SIP server.

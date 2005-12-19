@@ -1,0 +1,5 @@
+Package: wondershaper
+Priority: optional
+Section: net
+Depends: tc
+Description: WonderShaper is a tc based traffic shaping tool.

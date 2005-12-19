@@ -1,0 +1,5 @@
+Package: mini-httpd
+Priority: optional
+Section: net
+Description: A small HTTP server, built with SSL support using MatrixSSL.
+Depends: libmatrixssl

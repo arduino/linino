@@ -1,0 +1,5 @@
+Package: libxslt
+Priority: optional
+Section: libs
+Description: Gnome XML library
+Depends: libxml2

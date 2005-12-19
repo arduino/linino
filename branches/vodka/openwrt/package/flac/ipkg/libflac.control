@@ -1,0 +1,4 @@
+Package: libflac
+Priority: optional
+Section: libs
+Description: Free Lossless Audio Codec library

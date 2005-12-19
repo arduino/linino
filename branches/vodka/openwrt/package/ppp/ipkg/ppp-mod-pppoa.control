@@ -1,0 +1,5 @@
+Package: ppp-mod-pppoa
+Priority: optional
+Section: net
+Description: a PPPoA (PPP over ATM) plugin for PPP
+Depends: ppp, kmod-pppoa

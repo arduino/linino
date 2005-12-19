@@ -1,0 +1,5 @@
+Package: kmod-wlcompat
+Priority: optional
+Section: sys
+Depends: kmod-brcm-wl
+Description: Compatibility module for using the Wireless Extension with broadcom's wl

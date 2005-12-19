@@ -1,0 +1,5 @@
+Package: iptraf
+Priority: optional
+Section: net
+Depends: libncurses
+Description: A console-based network monitoring program.

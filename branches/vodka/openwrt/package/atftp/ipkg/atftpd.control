@@ -1,0 +1,4 @@
+Package: atftpd
+Priority: optional
+Section: net
+Description: tftp server

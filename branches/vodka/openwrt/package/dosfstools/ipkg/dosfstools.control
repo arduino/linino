@@ -1,0 +1,4 @@
+Package: dosfstools
+Priority: optional
+Section: admin
+Description: Utilities to create and check MS-DOS FAT filesystems

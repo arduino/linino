@@ -1,0 +1,5 @@
+Package: rarpd
+Priority: optional
+Section: net
+Depends: libnet
+Description: Reverse ARP Daemon

@@ -1,0 +1,4 @@
+Package: microcom
+Priority: optional
+Section: console
+Description: serial terminal
