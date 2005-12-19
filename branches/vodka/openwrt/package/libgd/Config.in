@@ -1,9 +1,0 @@
-config BR2_PACKAGE_LIBGD
-	prompt "libgd............................. The GD Graphics Library"
-	tristate
-	default m if CONFIG_DEVEL
-	help
-	  The GD Graphics Library
-	  
-	  http://www.boutell.com/gd/
-
