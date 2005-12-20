@@ -7,7 +7,7 @@ PKG_VERSION:=r1208-20051209
 PKG_RELEASE:=1
 PKG_MD5SUM:=276f3961c3174617b9dd0ec8db9779d7
 
-PKG_SOURCE_URL:=http://snapshots.madwiwi.org/madwifi-old
+PKG_SOURCE_URL:=http://snapshots.madwifi.org/madwifi-old
 PKG_SOURCE:=$(PKG_NAME)-old-$(PKG_VERSION).tar.gz
 PKG_CAT:=zcat
 
