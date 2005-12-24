@@ -1,3 +1,5 @@
+# $Id$
+#
 include $(TOPDIR)/rules.mk
 
 KDIR:=$(BUILD_DIR)/linux-$(KERNEL)-$(BOARD)
@@ -24,6 +26,10 @@ TRXALIGN:=-a 0x20000
 endif
 ifeq ($(FS),jffs2-4MB)
 TRXALIGN:=-a 0x10000
+endif
+# see ticket #155
+ifeq ($(FS),squashfs)
+TRXALIGN:=-a 1024
 endif
 
 $(KDIR)/loader.tmp.gz:
