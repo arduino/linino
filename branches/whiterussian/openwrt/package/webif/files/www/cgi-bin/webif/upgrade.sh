@@ -21,7 +21,7 @@ empty "$FORM_submit" || empty "$FORM_firmware" || {
 					mv $FORM_firmware /tmp/upgrade.bin
 					UPGRADE=1
 				;;
-				57353447|57353453) # WRT54G(S)
+				57353447|57353453|57353473) # WRT54G(S)
 					echo "Firmware is in Cybertan BIN format, converting... "
 					strip_cybertan
 					echo "done <br />"
