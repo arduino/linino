@@ -46,4 +46,10 @@ config BR2_PACKAGE_OLSRD_MOD_SECURE
 	tristate
 	default m if CONFIG_DEVEL
 
+config BR2_PACKAGE_OLSRD_MOD_TAS
+	depends BR2_PACKAGE_OLSRD
+	prompt "...-mod-tas - Tiny Application Server (TAS) plugin for olsrd"
+	tristate
+	default m if CONFIG_DEVEL
+
 endmenu
