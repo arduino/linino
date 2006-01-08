@@ -361,5 +361,11 @@ config BR2_PACKAGE_KMOD_SOFTDOG
 	help
 	  Kernel modules for software watchdog driver
 
+config BR2_PACKAGE_KMOD_BONDING
+	tristate "Kernel driver for ethernet bonding"
+	default m
+	help
+	  Kernel modules for ethernet bonding
+
 
 source "target/linux/package/Config.in"

@@ -201,6 +201,10 @@ $(eval $(call KMOD_template,SOFTDOG,softdog,\
 	$(MODULES_DIR)/kernel/drivers/char/softdog.o \
 ))
 
+$(eval $(call KMOD_template,BONDING,bonding,\
+	$(MODULES_DIR)/kernel/drivers/net/bonding/bonding.o \
+))
+
 $(TARGETS): $(PACKAGE_DIR)
 
 $(PACKAGE_DIR):
