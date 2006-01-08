@@ -197,6 +197,10 @@ $(eval $(call KMOD_template,PWC,pwc,\
 	$(MODULES_DIR)/kernel/drivers/usb/pwc.o \
 ))
 
+$(eval $(call KMOD_template,SOFTDOG,softdog,\
+	$(MODULES_DIR)/kernel/drivers/char/softdog.o \
+))
+
 $(TARGETS): $(PACKAGE_DIR)
 
 $(PACKAGE_DIR):
