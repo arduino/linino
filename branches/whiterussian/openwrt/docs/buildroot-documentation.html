@@ -95,16 +95,16 @@
 
     <h2><a name="download" id="download"></a>Obtaining OpenWrt Buildroot</h2>
 
-    <p>OpenWrt Buildroot is available via CVS - Concurrent Version System.
-    For any kind of OpenWrt development you should get the latest version from cvs via:</p>
+    <p>OpenWrt Buildroot is available via SVN aka subversion.
+    For any kind of OpenWrt development you should get the latest version from svn via:</p>
 <pre>
- $ cvs -d:pserver:anonymous@openwrt.org:/openwrt co openwrt
+ $ svn co https://svn.openwrt.org/openwrt/trunk/
 </pre>
-    <p>If you only like to create your own custom firmware images and pakages we
-     strongely suggest to use the CVS branch of the stable version (whiterussian):
+    <p>If you only like to create your own custom firmware images and packages we
+     strongly suggest to use the SVN branch of the stable version (whiterussian):
     </p>
 <pre>
- $ cvs -d:pserver:anonymous@openwrt.org:/openwrt co -rwhiterussian openwrt
+ $ svn co https://svn.openwrt.org/openwrt/branches/whiterussian/
 </pre>
  
 
@@ -295,7 +295,7 @@
       default) and the target filesystem skeleton. This directory will contain
       the final root filesystem. To set it up, it first deletes it, then it
       copies the skeleton available in  <code>target/default/target_skeleton</code>
-      and then removes useless <code>CVS/</code> directories.</li>
+      and then removes useless <code>SVN/</code> directories.</li>
 
       <li>Call the <code>prepare</code>, <code>compile</code> and <code>install</code>
       targets for the subdirectories <code>toolchain</code>, <code>package</code>
