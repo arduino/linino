@@ -366,6 +366,10 @@ static void setup_bcom(int skfd, char *ifname)
 		val = atoi(v);
 		bcom_ioctl(skfd, ifname, WLC_SET_FRAG, &val, sizeof(val));
 	}
+	if ((val = atoi(nvram_safe_get(wl_var("rate")))) > 0) {
+		val *= 2;
+		bcom_ioctl(skfd, ifname, WLC_SET_RATE, &val, sizeof(val));
+	}
 	if (v = nvram_get(wl_var("dtim"))) {
 		val = atoi(v);
 		bcom_ioctl(skfd, ifname, WLC_SET_DTIMPRD, &val, sizeof(val));
