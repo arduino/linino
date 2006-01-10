@@ -149,6 +149,9 @@ function modechange()
 	v = checked('wan_proto_static');
 	set_visible('wan_gateway', v);
 	set_visible('wan_dns', v);
+
+	v = checked('wan_proto_pptp');
+	set_visible('pptp_server_ip',v);
 }
 -->
 </script>
