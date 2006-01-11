@@ -1,5 +1,5 @@
---- /home/nbd/trunk2/openwrt/build_mipsel/linux-2.4-brcm/linux-2.4.32/drivers/net/b44.c	2006-01-11 04:41:11.175458750 +0100
-+++ b44.c	2006-01-11 20:19:57.900822500 +0100
+--- linux-2.4.32.old/drivers/net/b44.c	2006-01-11 04:41:11.175458750 +0100
++++ linux-2.4.32/drivers/net/b44.c	2006-01-11 20:19:57.900822500 +0100
 @@ -3,6 +3,7 @@
   * Copyright (C) 2002 David S. Miller (davem@redhat.com)
   * Copyright (C) 2004 Pekka Pietikainen (pp@ee.oulu.fi)
