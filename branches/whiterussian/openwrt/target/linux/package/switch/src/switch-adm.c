@@ -32,6 +32,7 @@
 #include "gpio.h"
 
 #define DRIVER_NAME "adm6996"
+#define DRIVER_VERSION "0.01"
 
 static int eecs = 2;
 static int eesk = 3;
@@ -452,15 +453,6 @@ static int detect_adm()
 #else
 	ret = 1;
 #endif
-#if 0
-	if (ret == 1) {
-		int i = adm_rreg(0, 0);
-		if ((i == 0) || (i == 0xffff)) {
-			printk("No ADM6996 chip detected.\n");
-			ret = 0;
-		}
-	}
-#endif
 
 	return ret;
 }
@@ -475,7 +467,7 @@ static int __init adm_init()
 		{NULL, NULL, NULL}
 	};
 	switch_config port[] = {
-		{"enabled", handle_port_enable_read, handle_port_enable_write},
+		{"enable", handle_port_enable_read, handle_port_enable_write},
 		{"media", handle_port_media_read, handle_port_media_write},
 		{NULL, NULL, NULL}
 	};
@@ -485,6 +477,7 @@ static int __init adm_init()
 	};
 	switch_driver driver = {
 		name: DRIVER_NAME,
+		version: DRIVER_VERSION,
 		interface: "eth0",
 		ports: 6,
 		cpuport: 5,
