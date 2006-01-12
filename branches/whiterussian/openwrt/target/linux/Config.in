@@ -230,6 +230,11 @@ config BR2_PACKAGE_KMOD_USB2
 	depends BR2_PACKAGE_KMOD_USB
 	select BR2_PACKAGE_KMOD_USB_CONTROLLER
 
+config BR2_PACKAGE_KMOD_USB_SERIAL
+        tristate "Support for serial USB devices" 
+	default m 
+	depends BR2_PACKAGE_KMOD_USB_CONTROLLER
+
 config BR2_PACKAGE_KMOD_USB_STORAGE
 	tristate "Support for USB storage devices"
 	default m
