@@ -22,6 +22,12 @@
 #include <wlioctl.h>
 #include <signal.h>
 
+#define WD_INTERVAL 5
+#define WD_AUTH_IDLE 20
+#define WD_WDS_WAIT 120
+#define WD_WDS_IDLE 120
+#define WD_CLIENT_IDLE 20
+
 /*------------------------------------------------------------------*/
 /*
  * Macro to handle errors when setting WE
@@ -252,21 +258,20 @@ static int setup_bcom_wds(int skfd, char *ifname)
 void start_watchdog(int skfd, char *ifname)
 {
 	FILE *f;
-	unsigned char buf[8192], buf2[8192], wbuf[80], *v, *p, *next, *tmp;
+	unsigned char buf[8192], wdslist[8192], wbuf[80], *v, *p, *next, *tmp;
 	int wds = 0, i, j, restart_wds;
 	wlc_ssid_t ssid;
 
 	if (fork())
 		return;
 
-	system("kill $(cat /var/run/wifi.pid) 2>&- >&-");
 	f = fopen("/var/run/wifi.pid", "w");
 	fprintf(f, "%d\n", getpid());
 	fclose(f);
 	
 	v = nvram_safe_get(wl_var("wds"));
-	memset(buf2, 0, 8192);
-	p = buf2;
+	memset(wdslist, 0, 8192);
+	p = wdslist;
 	foreach(wbuf, v, next) {
 		if (ether_atoe(wbuf, p)) {
 			p += 6;
@@ -278,7 +283,7 @@ void start_watchdog(int skfd, char *ifname)
 	strncpy(ssid.SSID, v, 32);
 	
 	for (;;) {
-		sleep(5);
+		sleep(WD_INTERVAL);
 
 		/* client mode */
 		bcom_ioctl(skfd, ifname, WLC_GET_AP, &i, sizeof(i));
@@ -299,7 +304,7 @@ void start_watchdog(int skfd, char *ifname)
 				sta_info_t *sta = (sta_info_t *) (buf + 4);
 				if ((sta->flags & 0x18) != 0x18) 
 					i = 1;
-				if (sta->idle > 20)
+				if (sta->idle > WD_CLIENT_IDLE)
 					i = 1;
 			}
 			
@@ -309,25 +314,28 @@ void start_watchdog(int skfd, char *ifname)
 
 		
 		/* wds */
-		p = buf2;
+		p = wdslist;
 		restart_wds = 0;
-		for (i = 0; i < wds; i++) {
+		for (i = 0; (i < wds) && !restart_wds; i++, p += 6) {
 			memset(buf, 0, 8192);
 			strcpy(buf, "sta_info");
 			memcpy(buf + strlen(buf) + 1, p, 6);
-			if (bcom_ioctl(skfd, ifname, WLC_GET_VAR, buf, 8192) < 0) {
-			} else {
+			if (!(bcom_ioctl(skfd, ifname, WLC_GET_VAR, buf, 8192) < 0)) {
 				sta_info_t *sta = (sta_info_t *) (buf + 4);
-				if (!(sta->flags & 0x40)) {
-				} else {
-					if (sta->idle > 120)
+				if ((sta->flags & 0x40) == 0x40) /* this is a wds link */ { 
+					if (sta->idle > WD_WDS_IDLE)
+						restart_wds = 1;
+
+					/* if not authorized after WD_AUTH_IDLE seconds idletime */
+					if (((sta->flags & WL_STA_AUTHO) != WL_STA_AUTHO) && (sta->idle > WD_AUTH_IDLE))
 						restart_wds = 1;
 				}
 			}
-			p += 6;
 		}
-		if (restart_wds)
+		if (restart_wds) {
 			setup_bcom_wds(skfd, ifname);
+			sleep(WD_WDS_WAIT);
+		}
 	}
 }
 
@@ -672,6 +680,8 @@ int main(int argc, char **argv)
 		perror("socket");
 		exit(-1);
 	}
+
+	system("kill $(cat /var/run/wifi.pid) 2>&- >&-");
 
 	prefix = strdup("wl0_");
 	iw_enum_devices(skfd, &setup_interfaces, NULL, 0);
