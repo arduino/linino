@@ -3,9 +3,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=madwifi
-PKG_VERSION:=r1208-20051209
+PKG_VERSION:=r1208-20060106
 PKG_RELEASE:=1
-PKG_MD5SUM:=276f3961c3174617b9dd0ec8db9779d7
+PKG_MD5SUM:=d475d75d87d3d4ee2f6e8f905f7d0acc
 
 PKG_SOURCE_URL:=http://snapshots.madwifi.org/madwifi-old
 PKG_SOURCE:=$(PKG_NAME)-old-$(PKG_VERSION).tar.gz
