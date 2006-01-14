@@ -1,6 +1,6 @@
 diff -urN linux.old/drivers/net/b44.c linux.dev/drivers/net/b44.c
 --- linux.old/drivers/net/b44.c	2006-01-12 17:27:45.920623500 +0100
-+++ linux.dev/drivers/net/b44.c	2006-01-13 13:29:18.782391750 +0100
++++ linux.dev/drivers/net/b44.c	2006-01-14 02:03:19.413197250 +0100
 @@ -1,7 +1,9 @@
  /* b44.c: Broadcom 4400 device driver.
   *
@@ -182,15 +182,19 @@ diff -urN linux.old/drivers/net/b44.c linux.dev/drivers/net/b44.c
  	err = b44_writephy(bp, MII_BMCR, BMCR_RESET);
  	if (err)
  		return err;
-@@ -405,6 +490,18 @@
- {
+@@ -406,6 +491,23 @@
  	u32 val;
  	int err;
-+	char *s;
+ 
 +
-+	if ((s = nvram_get("boardnum")) && (s != NULL) && \
-+			!strncmp(s, "2", 1) && \
-+			(__b44_readphy(bp, 0, MII_BMCR, &val) != 0) && \
++	/*
++	 * workaround for bad hardware design in Linksys WAP54G v1.0
++	 * see https://dev.openwrt.org/ticket/146
++	 * check and reset bit "isolate"
++	 */
++	if ((bp->pdev->device == PCI_DEVICE_ID_BCM4713) && \
++			(atoi(nvram_get("boardnum")) == 2) && \
++			(__b44_readphy(bp, 0, MII_BMCR, &val) == 0) && \
 +			(val & BMCR_ISOLATE) && \
 +			(__b44_writephy(bp, 0, MII_BMCR, val & ~BMCR_ISOLATE) != 0)) {
 +		printk(KERN_WARNING PFX "PHY: cannot reset MII transceiver isolate bit.\n");
@@ -198,10 +202,11 @@ diff -urN linux.old/drivers/net/b44.c linux.dev/drivers/net/b44.c
 +	
 +	if (bp->phy_addr == B44_PHY_ADDR_NO_PHY)
 +		return 0;
- 
++
  	if ((err = b44_readphy(bp, B44_MII_ALEDCTRL, &val)) != 0)
  		goto out;
-@@ -498,6 +595,19 @@
+ 	if ((err = b44_writephy(bp, B44_MII_ALEDCTRL,
+@@ -498,6 +600,19 @@
  {
  	u32 bmsr, aux;
  
@@ -221,7 +226,7 @@ diff -urN linux.old/drivers/net/b44.c linux.dev/drivers/net/b44.c
  	if (!b44_readphy(bp, MII_BMSR, &bmsr) &&
  	    !b44_readphy(bp, B44_MII_AUXCTRL, &aux) &&
  	    (bmsr != 0xffff)) {
-@@ -1092,6 +1202,8 @@
+@@ -1092,6 +1207,8 @@
  /* bp->lock is held. */
  static void b44_chip_reset(struct b44 *bp)
  {
@@ -230,7 +235,7 @@ diff -urN linux.old/drivers/net/b44.c linux.dev/drivers/net/b44.c
  	if (ssb_is_core_up(bp)) {
  		bw32(B44_RCV_LAZY, 0);
  		bw32(B44_ENET_CTRL, ENET_CTRL_DISABLE);
-@@ -1105,9 +1217,10 @@
+@@ -1105,9 +1222,10 @@
  		bw32(B44_DMARX_CTRL, 0);
  		bp->rx_prod = bp->rx_cons = 0;
  	} else {
@@ -244,7 +249,7 @@ diff -urN linux.old/drivers/net/b44.c linux.dev/drivers/net/b44.c
  	}
  
  	ssb_core_reset(bp);
-@@ -1115,6 +1228,11 @@
+@@ -1115,6 +1233,11 @@
  	b44_clear_stats(bp);
  
  	/* Make PHY accessible. */
@@ -256,7 +261,28 @@ diff -urN linux.old/drivers/net/b44.c linux.dev/drivers/net/b44.c
  	bw32(B44_MDIO_CTRL, (MDIO_CTRL_PREAMBLE |
  			     (0x0d & MDIO_CTRL_MAXF_MASK)));
  	br32(B44_MDIO_CTRL);
-@@ -1628,7 +1746,7 @@
+@@ -1215,6 +1338,8 @@
+ 	struct b44 *bp = dev->priv;
+ 	int err;
+ 
++	netif_carrier_off(dev);
++
+ 	err = b44_alloc_consistent(bp);
+ 	if (err)
+ 		return err;
+@@ -1235,9 +1360,10 @@
+ 	bp->timer.expires = jiffies + HZ;
+ 	bp->timer.data = (unsigned long) bp;
+ 	bp->timer.function = b44_timer;
+-	add_timer(&bp->timer);
++	b44_timer((unsigned long) bp);
+ 
+ 	b44_enable_ints(bp);
++	netif_start_queue(dev);
+ 
+ 	return 0;
+ 
+@@ -1628,7 +1754,7 @@
  		u32 mii_regval;
  
  		spin_lock_irq(&bp->lock);
@@ -265,7 +291,7 @@ diff -urN linux.old/drivers/net/b44.c linux.dev/drivers/net/b44.c
  		spin_unlock_irq(&bp->lock);
  
  		data->val_out = mii_regval;
-@@ -1641,7 +1759,7 @@
+@@ -1641,7 +1767,7 @@
  			return -EPERM;
  
  		spin_lock_irq(&bp->lock);
@@ -274,7 +300,7 @@ diff -urN linux.old/drivers/net/b44.c linux.dev/drivers/net/b44.c
  		spin_unlock_irq(&bp->lock);
  
  		return err;
-@@ -1668,21 +1786,52 @@
+@@ -1668,21 +1794,52 @@
  static int __devinit b44_get_invariants(struct b44 *bp)
  {
  	u8 eeprom[128];
@@ -340,7 +366,7 @@ diff -urN linux.old/drivers/net/b44.c linux.dev/drivers/net/b44.c
  
  	/* With this, plus the rx_header prepended to the data by the
  	 * hardware, we'll land the ethernet header on a 2-byte boundary.
-@@ -1692,13 +1841,12 @@
+@@ -1692,13 +1849,12 @@
  	bp->imask = IMASK_DEF;
  
  	bp->core_unit = ssb_core_unit(bp);
@@ -356,7 +382,7 @@ diff -urN linux.old/drivers/net/b44.c linux.dev/drivers/net/b44.c
  }
  
  static int __devinit b44_init_one(struct pci_dev *pdev,
-@@ -1710,6 +1858,10 @@
+@@ -1710,6 +1866,10 @@
  	struct b44 *bp;
  	int err, i;
  
@@ -367,7 +393,7 @@ diff -urN linux.old/drivers/net/b44.c linux.dev/drivers/net/b44.c
  	if (b44_version_printed++ == 0)
  		printk(KERN_INFO "%s", version);
  
-@@ -1819,11 +1971,17 @@
+@@ -1819,11 +1979,17 @@
  
  	pci_save_state(bp->pdev, bp->pci_cfg_state);
  
