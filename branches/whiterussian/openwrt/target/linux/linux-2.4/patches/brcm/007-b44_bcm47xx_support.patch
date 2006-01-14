@@ -192,10 +192,10 @@ diff -urN linux.old/drivers/net/b44.c linux.dev/drivers/net/b44.c
 +	 * see https://dev.openwrt.org/ticket/146
 +	 * check and reset bit "isolate"
 +	 */
-+	if ((bp->pdev->device == PCI_DEVICE_ID_BCM4713) && \
-+			(atoi(nvram_get("boardnum")) == 2) && \
-+			(__b44_readphy(bp, 0, MII_BMCR, &val) == 0) && \
-+			(val & BMCR_ISOLATE) && \
++	if ((bp->pdev->device == PCI_DEVICE_ID_BCM4713) &&
++			(atoi(nvram_get("boardnum")) == 2) &&
++			(__b44_readphy(bp, 0, MII_BMCR, &val) == 0) && 
++			(val & BMCR_ISOLATE) &&
 +			(__b44_writephy(bp, 0, MII_BMCR, val & ~BMCR_ISOLATE) != 0)) {
 +		printk(KERN_WARNING PFX "PHY: cannot reset MII transceiver isolate bit.\n");
 +	}
