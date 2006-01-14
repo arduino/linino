@@ -3,7 +3,23 @@ export PATH=/bin:/sbin:/usr/bin:/usr/sbin
 mount none /proc -t proc
 insmod diag
 echo 0x01 > /proc/sys/diag
-sleep 1
+
+ifconfig eth0 up
+insmod switch-core
+insmod switch-robo || insmod switch-adm || rmmod switch-core
+
+[ -d /proc/switch/eth0 ] && {
+	echo 1 > /proc/switch/eth0/reset
+	echo "0 1 2 3 4 5u*" > /proc/switch/eth0/vlan/0/ports
+}
+
+# this delay is apparently necessary because the link isn't up yet
+ifconfig eth0 192.168.1.1 netmask 255.255.255.0 broadcast 192.168.1.255 up
+netmsg 192.168.1.0 "(dummy message)" # b44 eats the first packet
+netmsg 192.168.1.255 "Press reset now, to enter Failsafe!"
+
+sleep 2
+
 if [ $(cat /proc/sys/reset) = 1 -o "$(nvram get failsafe)" = 1 ]; then
 	export FAILSAFE=true
 	[ "$(nvram get boot_wait)" != "on" ] && {
@@ -11,8 +27,17 @@ if [ $(cat /proc/sys/reset) = 1 -o "$(nvram get failsafe)" = 1 ]; then
 		nvram commit
 	}
 	while :; do { echo $(((X=(X+1)%8)%2)) > /proc/sys/diag; sleep $((X==0)); } done &
+	netmsg 192.168.1.255 "Entering Failsafe!"
+else
+	netmsg 192.168.1.255 "Normal startup."
 fi
 
 mount_root ${FAILSAFE:+failsafe}
+
+# remove the drivers for now, just in case the user has newer versions on the jffs2 partition
+rmmod switch-robo
+rmmod switch-adm
+rmmod switch-core
+ifconfig eth0 0.0.0.0
 
 exec /sbin/init

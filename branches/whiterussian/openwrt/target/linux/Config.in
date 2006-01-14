@@ -32,15 +32,9 @@ config BR2_PACKAGE_KMOD_BRCM_WL
 config BR2_PACKAGE_KMOD_BRCM_ET
 	tristate "Broadcom Ethernet Driver"
 	depends BR2_LINUX_2_4_BRCM
-	default y
-	help
-	  Proprietary driver for Broadcom Ethernet chipsets
-
-config BR2_PACKAGE_KMOD_B44
-	tristate "Broadcom 44XX, 47XX ethernet driver"
 	default m
 	help
-	  Free driver for Broadcom Ethernet chipsets (without switch support)
+	  Proprietary driver for Broadcom Ethernet chipsets
 
 config BR2_PACKAGE_KMOD_ARPT
 	tristate "ARP firewalling support"
