@@ -73,6 +73,7 @@ $1 ~ /^select/ {
 	print "<tr><td width=\"100%\" colspan="2"><input type=\"text\" name=\"" $2 "add\" value=\"" $5 "\" /><input type=\"submit\" name=\"" $2 "submit\" value=\"Add\" /></td></tr>"
 }
 $1 ~ /^text/ { print "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
+$1 ~ /^password/ { print "<input id=\"" $2 "\" type=\"password\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
 $1 ~ /^submit/ { print "<input type=\"submit\" name=\"" $2 "\" value=\"" $3 "\" />" }
 $1 ~ /^helpitem/ { form_help = form_help "<dt>" $2 ":</dt>" }
 $1 ~ /^helptext/ { form_help = form_help "<dd>" $2 "</dd>" }
