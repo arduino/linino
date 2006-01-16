@@ -93,8 +93,6 @@ EOF
 				save_setting network ppp_mtu "$FORM_ppp_mtu"
 
 				save_setting network wan_ifname "ppp0"
-				save_setting network pptp_ifname "vlan1"
-				save_setting network pppoe_ifname "vlan1"
 		
 				case "$FORM_ppp_redial" in
 					demand)
@@ -106,7 +104,12 @@ EOF
 				esac	
 			;;
 			*)
-				save_setting network wan_ifname "vlan1"
+				wan_ifname=${wan_ifname:-$(nvram get wan_ifname)}
+				[ -z "$wan_ifname" -o "${wan_ifname%%[0-9]*}" = "ppp" ] && {
+					wan_device=${wan_device:-$(nvram get wan_device)}
+					wan_device=${wan_device:-vlan1}
+					save_setting network wan_ifname "$wan_device"
+				}
 			;;
 		esac
 	}

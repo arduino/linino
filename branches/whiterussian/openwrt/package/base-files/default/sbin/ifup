@@ -6,7 +6,7 @@ debug "### ifup $type ###"
 
 if_proto=$(nvram get ${type}_proto)
 if=$(nvram get ${type}_ifname)
-[ "${if%%[0-9]}" = "ppp" ] && if=$(nvram get ${if_proto}_ifname)
+[ "${if%%[0-9]}" = "ppp" ] && if=$(nvram get ${type}_device)
 
 if_valid $if || [ "$if_proto" = "pptp" ] || exit 
 mac=$(nvram get ${type}_hwaddr)

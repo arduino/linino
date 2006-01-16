@@ -34,7 +34,7 @@ done
 	
 	# hack for some buggy ISPs
 	NETMASK=$(nvram get ${type}_netmask)
-	IFNAME=$(nvram get pptp_ifname)
+	IFNAME=$(nvram get wan_device)
 	[ -z "$NETMASK" -o -z "$IFNAME" ] || ifconfig $IFNAME netmask $NETMASK
 
 	/usr/sbin/pppd nodetach \
