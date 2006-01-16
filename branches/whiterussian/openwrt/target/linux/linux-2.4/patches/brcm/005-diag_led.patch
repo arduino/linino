@@ -30,7 +30,7 @@ diff -urN linux-2.4.30.dev/drivers/net/diag/Makefile linux-2.4.30.dev2/drivers/n
 diff -urN linux-2.4.30.dev/drivers/net/diag/diag_led.c linux-2.4.30.dev2/drivers/net/diag/diag_led.c
 --- linux-2.4.30.dev/drivers/net/diag/diag_led.c	1970-01-01 01:00:00.000000000 +0100
 +++ linux-2.4.30.dev2/drivers/net/diag/diag_led.c	2005-08-22 03:37:58.112053448 +0200
-@@ -0,0 +1,245 @@
+@@ -0,0 +1,248 @@
 +/*
 + * diag_led.c - replacement diag module
 + *
@@ -121,17 +121,18 @@ diff -urN linux-2.4.30.dev/drivers/net/diag/diag_led.c linux-2.4.30.dev2/drivers
 +void (*set_diag)(u8 state);
 +void (*set_dmz)(u8 state);
 +
++static unsigned int diag_reverse = 1;
 +static unsigned int diag = 0;
 +
 +static void diag_change()
 +{
-+	set_diag(0xFF); // off
-+	set_dmz(0xFF); // off
++	set_diag(diag_reverse ? 0xFF : 0x00); // off
++	set_dmz(diag_reverse ? 0xFF : 0x00); // off
 +
 +	if(diag & BIT_DIAG)
-+		set_diag(0x00); // on
++		set_diag(diag_reverse ? 0x00 : 0xFF); // on
 +	if(diag & BIT_DMZ)
-+		set_dmz(0x00); // on
++		set_dmz(diag_reverse ? 0x00 : 0xFF); // on
 +}
 +
 +static int proc_diag(ctl_table *table, int write, struct file *filp,
@@ -246,6 +247,8 @@ diff -urN linux-2.4.30.dev/drivers/net/diag/diag_led.c linux-2.4.30.dev2/drivers
 +		}
 +		if (!strcmp(buf,"00")) {
 +			//buffalo
++			diag_reverse = 0;
++			set_dmz=v2_set_diag;
 +			reset_gpio=(1<<7);
 +		}
 +		if (!strcmp(buf,"45")) {
