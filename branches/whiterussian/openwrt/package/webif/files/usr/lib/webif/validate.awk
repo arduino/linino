@@ -70,6 +70,22 @@ $1 == "mac" {
 	}
 }
 
+$1 == "wpapsk" {
+	valid_type = 1
+	if (length(value) > 64) {
+		valid = 0
+		verr = "String too long"
+	}
+	if (length(value) < 8) {
+		valid = 0
+		verr = "String too short"
+	}
+	if ((length(value) == 64) && (value ~ /[^0-9a-fA-F]/)) {
+		valid = 0
+		verr = "Invalid hex key"
+	}
+}
+
 valid_type != 1 { valid = 0 }
 
 valid == 1 {

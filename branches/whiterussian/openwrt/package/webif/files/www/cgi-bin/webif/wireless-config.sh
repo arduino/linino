@@ -113,7 +113,7 @@ wep|FORM_key1|WEP key 1||$FORM_key1
 wep|FORM_key2|WEP key 2||$FORM_key2
 wep|FORM_key3|WEP key 3||$FORM_key3
 wep|FORM_key4|WEP key 4||$FORM_key4
-string|FORM_wpa_psk|WPA pre-shared key|min=8 max=63 $V_PSK|$FORM_wpa_psk
+wpapsk|FORM_wpa_psk|WPA pre-shared key|$V_PSK|$FORM_wpa_psk
 string|FORM_radius_key|RADIUS server key|min=4 max=63 $V_RADIUS|$FORM_radius_key
 string|FORM_ssid|ESSID|required|$FORM_ssid
 int|FORM_channel|Channel|required min=1 max=$CHANNEL_MAX|$FORM_channel
