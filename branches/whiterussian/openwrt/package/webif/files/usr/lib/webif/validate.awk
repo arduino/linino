@@ -38,15 +38,15 @@ $1 == "int" {
 
 $1 == "wep" {
 	valid_type = 1
-	if (value !~ /^[0-9A-Fa-f]*$/) {
+	if ((length(value) != 0) && (length(value) != 5) && (length(value) != 10) && (length(value) != 13) && (length(value) != 26)) {
 		valid = 0
-		verr = "Invalid value"
-	} else if ((length(value) != 0) && (length(value) != 10) && (length(value) != 26)) {
+		verr = "Invalid key length: Hex keys must be 10 or 26 hexdigits; Ascii keys must be 5 or 13 chars."
+	} else if (((length(value) == 10) || (length(value) == 26)) && (value !~ /^[0-9A-Fa-f]*$/)) {
 		valid = 0
-		verr = "Invalid key length"
+		verr = "Invalid key: Hex keys may only contain hexdigits (0-9,A-F,a-f)"
 	} else if (value ~ /0$/) {
 		valid = 0
-		verr = "key must not end with '0'"
+		verr = "Key must not end with '0'"
 	}
 }
 
