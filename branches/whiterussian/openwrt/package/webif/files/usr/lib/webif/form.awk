@@ -20,7 +20,7 @@ $1 ~ /^onchange/ {
 
 ($1 != "") && ($1 !~ /^option/) && (select_open == 1) {
 	select_open = 0
-	print "</select>"
+	printf "</select>"
 }
 $1 ~ /^start_form/ {
 	if ($3 != "") field_opts=" id=\"" $3 "\""
@@ -36,7 +36,10 @@ $1 ~ /^field/ {
 	if ($3 != "") field_opts=" id=\"" $3 "\""
 	else field_opts=""
 	if ($4 == "hidden") field_opts = field_opts " style=\"display: none\""
-	print "<tr" field_opts "><td width=\"50%\">" $2 "</td><td width=\"50%\">"
+	print "<tr" field_opts ">"
+	if ($2 != "") print "<td width=\"50%\">" $2 "</td><td width=\"50%\">"
+	else print "<td colspan=\"2\">"
+
 	field_open=1
 }
 $1 ~ /^checkbox/ {
@@ -63,7 +66,7 @@ $1 ~ /^select/ {
 	else option_selected=""
 	if ($3 != "") option_title = $3
 	else option_title = $2
-	print "<option" option_selected " value=\"" $2 "\">" option_title "</option>"
+	print "<option" option_selected " value=\"" $2 "\">" option_title "&nbsp;&nbsp;</option>"
 }
 ($1 ~ /^listedit/) {
 	n = split($4 " ", items, " ")
@@ -72,6 +75,8 @@ $1 ~ /^select/ {
 	}
 	print "<tr><td width=\"100%\" colspan="2"><input type=\"text\" name=\"" $2 "add\" value=\"" $5 "\" /><input type=\"submit\" name=\"" $2 "submit\" value=\"Add\" /></td></tr>"
 }
+$1 ~ /^caption/ { print "<b>" $2 "</b>" }
+$1 ~ /^string/ { print $2 }
 $1 ~ /^text/ { print "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
 $1 ~ /^password/ { print "<input id=\"" $2 "\" type=\"password\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
 $1 ~ /^submit/ { print "<input type=\"submit\" name=\"" $2 "\" value=\"" $3 "\" />" }

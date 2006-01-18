@@ -76,7 +76,7 @@ $1 == "wpapsk" {
 		valid = 0
 		verr = "String too long"
 	}
-	if (length(value) < 8) {
+	if ((length(value) != 0) && (length(value) < 8)) {
 		valid = 0
 		verr = "String too short"
 	}

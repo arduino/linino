@@ -1,3 +1,8 @@
+function value(name)
+{
+	var item = document.getElementById(name);
+	return (item ? item.value : "");
+}
 function checked(name)
 {
 	var item = document.getElementById(name);

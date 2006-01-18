@@ -3,14 +3,6 @@
 . /usr/lib/webif/webif.sh
 load_settings "wireless"
 
-FORM_wds="${wl0_wds:-$(nvram get wl0_wds)}"
-LISTVAL="$FORM_wds"
-handle_list "$FORM_wdsremove" "$FORM_wdsadd" "$FORM_wdssubmit" 'mac|FORM_wdsadd|WDS MAC address|required' && {
-	FORM_wds="$LISTVAL"
-	save_setting wireless wl0_wds "$FORM_wds"
-}
-FORM_wdsadd=${FORM_wdsadd:-00:00:00:00:00:00}
-
 CC=${wl0_country_code:-$(nvram get wl0_country_code)}
 case "$CC" in
 	All|all|ALL) CHANNELS="1 2 3 4 5 6 7 8 9 10 11 12 13 14"; CHANNEL_MAX=14 ;;
@@ -21,7 +13,6 @@ for ch in $CHANNELS; do
 	F_CHANNELS="${F_CHANNELS}option|$ch
 "
 done
-
 
 if empty "$FORM_submit"; then
 	FORM_mode=${wl0_mode:-$(nvram get wl0_mode)}
@@ -102,21 +93,25 @@ if empty "$FORM_submit"; then
 else
 	SAVED=1
 	case "$FORM_encryption" in
-		wpa) V_RADIUS="required";;
+		wpa) V_RADIUS="
+string|FORM_radius_key|RADIUS server key|min=4 max=63 required|$FORM_radius_key
+ip|FORM_radius_ipaddr|RADIUS IP address|required|$FORM_radius_ipaddr";;
 		psk) V_PSK="wpapsk|FORM_wpa_psk|WPA pre-shared key|required|$FORM_wpa_psk";;
+		wep) V_WEP="
+int|FORM_key|WEP key number|min=1 max=4|$FORM_key
+wep|FORM_key1|WEP key 1||$FORM_key1
+wep|FORM_key2|WEP key 2||$FORM_key2
+wep|FORM_key3|WEP key 3||$FORM_key3
+wep|FORM_key4|WEP key 4||$FORM_key4";;
 	esac
 
 	validate <<EOF
 int|FORM_radio|Radio On/Off|required min=0 max=1|$FORM_radio
-ip|FORM_radius_ipaddr|RADIUS IP address|$V_RADIUS|$FORM_radius_ipaddr
-wep|FORM_key1|WEP key 1||$FORM_key1
-wep|FORM_key2|WEP key 2||$FORM_key2
-wep|FORM_key3|WEP key 3||$FORM_key3
-wep|FORM_key4|WEP key 4||$FORM_key4
-$V_PSK
-string|FORM_radius_key|RADIUS server key|min=4 max=63 $V_RADIUS|$FORM_radius_key
 string|FORM_ssid|ESSID|required|$FORM_ssid
 int|FORM_channel|Channel|required min=1 max=$CHANNEL_MAX|$FORM_channel
+$V_WEP
+$V_RADIUS
+$V_PSK
 EOF
 	equal "$?" 0 && {
 		save_setting wireless wl0_radio "$FORM_radio"
@@ -270,11 +265,6 @@ radio|key|$FORM_key|3
 text|key3|$FORM_key3|<br />
 radio|key|$FORM_key|4
 text|key4|$FORM_key4|<br />
-end_form
-start_form|WDS connections
-listedit|wds|$SCRIPT_NAME?|$FORM_wds|$FORM_wdsadd
-helpitem|Note
-helptext|You should save your settings on this page before adding/removing WDS links
 end_form
 EOF
 

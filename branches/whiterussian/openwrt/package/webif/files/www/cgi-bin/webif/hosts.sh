@@ -84,14 +84,73 @@ header "Network" "Hosts" "Configured hosts" ''
 # Hosts in /etc/hosts
 awk -v "url=$SCRIPT_NAME" \
 	-v "ip=$FORM_host_ip" \
-	-v "name=$FORM_host_name"  -f /usr/lib/webif/common.awk -f /usr/lib/webif/display-hosts.awk $HOSTS_FILE
+	-v "name=$FORM_host_name"  -f /usr/lib/webif/common.awk -f - $HOSTS_FILE <<EOF
+BEGIN {
+	FS="[ \t]"
+	start_form("Hostnames")
+	print "<table width=\"70%\" summary=\"Settings\">"
+	print "<tr><th>IP</th><th>Hostname</th><th></th></tr>"
+	print "<tr><td colspan=\"3\"><hr class=\"separator\" /></td></tr>"
+}
+
+# only for valid IPv4 addresses
+(\$1 ~ /^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$/) {
+	gsub(/#.*$/, "");
+	output = ""
+	names_found = 0
+	n = split(\$0, names, "[ \\t]")
+	first = 1
+	for (i = 2; i <= n; i++) {
+		if (names[i] != "") {
+			if (first != 1) output = output "<tr>"
+			output = output "<td>" names[i] "</td><td align=\\"right\\" width=\\"10%\\"><a href=\\"" url "?remove_host=1&remove_ip=" $1 "&remove_name=" names[i] "\\">Remove</a></td></tr>"
+			first = 0
+			names_found++
+		}
+	}
+	if (names_found > 0) {
+		print "<tr><td rowspan=\\"" names_found "\\">" \$1 "</td>" output
+		print "<tr><td colspan=\\"3\\"><hr class=\\"separator\\" /></td></tr>"
+	}
+}
+
+END {
+	print "<form enctype=\\"multipart/form-data\\" method=\\"post\\">"
+	print "<tr><td><input type\\"text\\" name=\\"host_ip\\" value=\\"" ip "\\" /></td><td><input type=\\"text\\" name=\\"host_name\\" value=\\"" name "\\" /></td><td style=\\"width: 10em\\"><input type=\\"submit\\" name=\\"add_host\\" value=\\"Add\\" /></td></tr>"
+	print "</form>"
+	print "</table>"
+	end_form()
+}
+EOF
 
 # Static DHCP mappings (/etc/ethers)
 awk -v "url=$SCRIPT_NAME" \
 	-v "mac=$FORM_dhcp_mac" \
-	-v "ip=$FORM_dhcp_ip" -f /usr/lib/webif/common.awk -f /usr/lib/webif/display-dhcp.awk $ETHERS_FILE
+	-v "ip=$FORM_dhcp_ip" -f /usr/lib/webif/common.awk -f - $ETHERS_FILE <<EOF
+	
+BEGIN {
+	FS="[ \\t]"
+	print "<form enctype=\\"multipart/form-data\\" method=\\"post\\">"
+	start_form("Static IP addresses (for DHCP)")
+	print "<table width=\\"70%\\" summary=\\"Settings\\">"
+	print "<tr><th>MAC address</th><th>IP</th><th></th></tr>"
+}
+
+# only for valid MAC addresses
+(\$1 ~ /^[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]$/) {
+	gsub(/#.*$/, "");
+	print "<tr><td>" \$1 "</td><td>" \$2 "</td><td align=\\"right\\" width=\\"10%\\"><a href=\\"" url "?remove_dhcp=1&remove_mac=" \$1 "\\">Remove</a></td></tr>"
+}
+
+END {
+	print "<tr><td><input type\\"text\\" name=\\"dhcp_mac\\" value=\\"" mac "\\" /></td><td><input type=\\"text\\" name=\\"dhcp_ip\\" value=\\"" ip "\\" /></td><td style=\\"width: 10em\\"><input type=\\"submit\\" name=\\"add_dhcp\\" value=\\"Add\\" /></td></tr>"
+	print "</table>"
+	print "</form>"
+	end_form();
+}
+EOF
 
 footer ?>
 <!--
-##WEBIF:name:Network:4:Hosts
+##WEBIF:name:Network:5:Hosts
 -->
