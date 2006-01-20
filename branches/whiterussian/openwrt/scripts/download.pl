@@ -62,7 +62,11 @@ foreach my $mirror (@ARGV) {
 			/type="radio" name="use_default" value="(\w+)" onclick="form\.submit\(\)"\/>/ and do {
 				push @mirrors, "http://$1.dl.sourceforge.net/sourceforge/$sfpath";
 			};
+			/<a href="\/.+\?use_mirror=(\w+)"><b>Download/ and do {
+				push @mirrors, "http://$1.dl.sourceforge.net/sourceforge/$sfpath";
+			};
 		}
+		push @mirrors, "http://dl.sourceforge.net/sourceforge/$sfpath";
 		close SF;
 	} elsif ($mirror =~ /^\@GNU\/(.+)$/) {
 		my $gnupath = $1;
@@ -70,6 +74,10 @@ foreach my $mirror (@ARGV) {
 		push @mirrors, "ftp://ftp.belnet.be/mirror/ftp.gnu.org/gnu/$gnupath";
 		push @mirrors, "ftp://ftp.mirror.nl/pub/mirror/gnu/$gnupath";
 		push @mirrors, "http://mirror.switch.ch/ftp/mirror/gnu/$gnupath";
+		push @mirrors, "ftp://ftp.uu.net/archive/systems/gnu/$gnupath";
+		push @mirrors, "ftp://ftp.eu.uu.net/pub/gnu/$gnupath";
+		push @mirrors, "ftp://ftp.leo.org/pub/comp/os/unix/gnu/$gnupath";
+		push @mirrors, "ftp://ftp.digex.net/pub/gnu/$gnupath";
 	} else {
 		push @mirrors, $mirror;
 	}
