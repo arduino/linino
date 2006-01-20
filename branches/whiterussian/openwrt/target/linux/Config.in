@@ -258,6 +258,12 @@ config BR2_PACKAGE_KMOD_VFAT
 	  Kernel modules for VFAT filesystem support
 	  useful for usb mass storage devices
 
+config BR2_PACKAGE_KMOD_MINIX
+	tristate "MINIX filesystem support"
+	default m
+	help
+	  Kernel modules for MINIX filesystem support
+
 config BR2_PACKAGE_KMOD_EXT2
 	tristate "EXT2 filesystem support"
 	default m
