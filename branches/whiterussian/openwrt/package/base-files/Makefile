@@ -3,7 +3,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=base-files
-PKG_RELEASE:=6
+PKG_RELEASE:=7
 PKG_BUILD_DIR:=$(BUILD_DIR)/base-files
 
 include $(TOPDIR)/package/rules.mk
@@ -19,7 +19,16 @@ GCC_VERSION:=${shell cat $(STAGING_DIR)/gcc_version}
 IDIR_GCC:=$(PKG_BUILD_DIR)/libgcc
 IPKG_GCC:=$(PACKAGE_DIR)/libgcc_$(GCC_VERSION)-$(PKG_RELEASE)_$(ARCH).ipk
 
-PACKAGES:=$(IPKG_BASE) $(IPKG_LIBC) $(IPKG_GCC)
+PACKAGES:=$(IPKG_BASE) $(IPKG_LIBC) 
+PACKAGES_INSTALL:=$(IPKG_BASE) $(IPKG_LIBC) 
+
+ifeq ($(BR2_PACKAGE_LIBGCC),y)
+PACKAGES+=$(IPKG_GCC)
+PACKAGES_INSTALL+=$(IPKG_GCC)
+endif
+ifeq ($(BR2_PACKAGE_LIBGCC),m)
+PACKAGES+=$(IPKG_GCC)
+endif
 
 $(PKG_BUILD_DIR)/.prepared:
 	mkdir -p $(PKG_BUILD_DIR) $(PACKAGE_DIR)
@@ -62,7 +71,7 @@ $(IPKG_LIBC):
 $(IPKG_GCC):
 	$(SCRIPT_DIR)/make-ipkg-dir.sh $(IDIR_GCC) ipkg/libgcc.control $(GCC_VERSION)-$(PKG_RELEASE) $(ARCH)
 	mkdir -p $(IDIR_GCC)/lib
-	cp -fpR $(STAGING_DIR)/lib/libgcc*.so.* $(IDIR_GCC)/lib/
+	cp -fpR $(STAGING_DIR)/lib/libgcc_s.so.* $(IDIR_GCC)/lib/
 	-$(STRIP) $(IDIR_GCC)/lib/*
 	$(IPKG_BUILD) $(IDIR_GCC) $(PACKAGE_DIR)
 
@@ -73,4 +82,4 @@ prepare:
 compile: $(PACKAGES)
 install: compile
 	mkdir -p $(TARGET_DIR)
-	$(IPKG) install $(PACKAGES)
+	$(IPKG) install $(PACKAGES_INSTALL)
