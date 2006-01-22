@@ -44,6 +44,10 @@ th {
 	text-align: left;
 }
 
+option {
+	padding-right: 1em;
+}
+
 .selected-maincat {
 	font-weight: bold;
 }
