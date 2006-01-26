@@ -27,6 +27,11 @@ if empty "$FORM_submit"; then
 	esac
 			
 	FORM_ssid=${wl0_ssid:-$(nvram get wl0_ssid)}
+	FORM_broadcast=${wl0_closed:-$(nvram get wl0_closed)}
+	case "$FORM_broadcast" in
+		1|off|disabled) FORM_broadcast=1;;
+		*) FORM_broadcast=0;;
+	esac
 	FORM_channel=${wl0_channel:-$(nvram get wl0_channel)}
 	FORM_encryption=off
 	akm=${wl0_akm:-$(nvram get wl0_akm)}
@@ -107,6 +112,7 @@ wep|FORM_key4|WEP key 4||$FORM_key4";;
 
 	validate <<EOF
 int|FORM_radio|Radio On/Off|required min=0 max=1|$FORM_radio
+int|FORM_broadcast|Broadcast On/Off|required min=0 max=1|$FORM_broadcast
 string|FORM_ssid|ESSID|required|$FORM_ssid
 int|FORM_channel|Channel|required min=1 max=$CHANNEL_MAX|$FORM_channel
 $V_WEP
@@ -124,6 +130,7 @@ EOF
 		save_setting wireless wl0_infra ${infra:-1}
 			
 		save_setting wireless wl0_ssid "$FORM_ssid"
+		save_setting wireless wl0_closed "$FORM_broadcast"
 		save_setting wireless wl0_channel "$FORM_channel"
 	
 		crypto=""
@@ -222,6 +229,9 @@ start_form|Wireless Configuration
 field|Power
 radio|radio|$FORM_radio|1|Enabled<br />
 radio|radio|$FORM_radio|0|Disabled
+field|Broadcast
+radio|broadcast|$FORM_broadcast|0|Enabled<br />
+radio|broadcast|$FORM_broadcast|1|Disabled
 field|ESSID
 text|ssid|$FORM_ssid
 helpitem|ESSID
