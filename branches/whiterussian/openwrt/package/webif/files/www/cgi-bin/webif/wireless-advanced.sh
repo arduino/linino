@@ -25,7 +25,26 @@ else
 	save_setting wireless wl0_macmode "$FORM_macmode"
 fi
 
-header "Network" "Advanced Wireless" "Advanced Wireless Settings" ' onLoad="modechange()"'
+if empty "$FORM_submit"; then
+	FORM_lazywds=${wl0_lazywds:-$(nvram get wl0_lazywds)}
+	case "$FORM_lazywds" in
+		0|off|disabled) FORM_lazywds=0;;
+		*) FORM_lazywds=1;;
+	esac
+else
+	SAVED=1
+
+	validate <<EOF
+int|FORM_lazywds|Lazy WDS On/Off|required min=0 max=1|$FORM_lazywds
+EOF
+	equal "$?" 0 && {
+		save_setting wireless wl0_lazywds "$FORM_lazywds"
+	}
+	
+fi
+
+header "Network" "Advanced Wireless" "Advanced Wireless Settings" ' onLoad="modechange()"' "$SCRIPT_NAME"
+
 cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
 <script type="text/javascript">
@@ -53,11 +72,13 @@ option|disabled
 option|allow
 option|deny
 submit|macmode_set|Set
+field|Lazy WDS 
+radio|lazywds|$FORM_lazywds|1|Enabled<br />
+radio|lazywds|$FORM_lazywds|0|Disabled
 end_form
 EOF
 
 ?>
-
 </form>
 <? footer ?>
 <!--
