@@ -43,13 +43,13 @@ $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx: $(KDIR)/loader.tmp.gz
 ifeq ($(KERNEL),2.4)
 FSNAME:=$(patsubst jffs2-%,jffs2,$(FS))
 
-ifeq ($(FS),squashfs)
-$(BIN_DIR)/openwrt-wap54g-$(FSNAME).trx: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
-	cp $< $@
-	echo -ne '\x01' >> $@
-	
-install: $(BIN_DIR)/openwrt-wap54g-$(FSNAME).trx
-endif
+# ifeq ($(FS),squashfs)
+# $(BIN_DIR)/openwrt-wap54g-$(FSNAME).trx: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
+# 	cp $< $@
+# 	echo -ne '\x01' >> $@
+# 	
+# install: $(BIN_DIR)/openwrt-wap54g-$(FSNAME).trx
+# endif
 
 
 ifneq ($(FS),jffs2-8MB)
