@@ -24,6 +24,7 @@ if [ "${if%%[0-9]}" = "br" ]; then
 		${mac:+$DEBUG ifconfig $sif down hw ether $mac}
 		$DEBUG ifconfig $sif 0.0.0.0 up
 		$DEBUG brctl addif $if $sif
+		$DEBUG ifconfig $sif allmulti
 	done
 else
 	${mac:+$DEBUG ifconfig $if down hw ether $mac}
