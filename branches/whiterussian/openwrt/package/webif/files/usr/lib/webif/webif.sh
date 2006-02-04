@@ -196,7 +196,7 @@ apply_passwd() {
 			killall -HUP httpd
 			;;
 		mini_httpd/*)
-			grep root /etc/passwd | cut -d: -f1,2 > $cgidir/.htpasswd
+			grep '^root:' /etc/passwd | cut -d: -f1,2 > $cgidir/.htpasswd
 			killall -HUP mini_httpd
 			;;
 	esac
