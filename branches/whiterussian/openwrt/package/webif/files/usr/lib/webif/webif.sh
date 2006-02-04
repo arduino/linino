@@ -191,8 +191,8 @@ EOF
 apply_passwd() {
 	case ${SERVER_SOFTWARE%% *} in
 		busybox)
-			echo -n '/cgi-bin/webif:' > /etc/httpd.conf
-			grep root /etc/passwd | cut -d: -f1,2 >> /etc/httpd.conf
+			echo '/cgi-bin/webif:root:$p$root' > /etc/httpd.conf
+			echo '/cgi-bin/webif:admin:$p$root' >> /etc/httpd.conf
 			killall -HUP httpd
 			;;
 		mini_httpd/*)
