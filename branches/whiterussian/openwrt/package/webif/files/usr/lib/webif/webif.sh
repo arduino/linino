@@ -121,7 +121,7 @@ EOF
 				echo "$FORM_passwd1"
 				sleep 1
 				echo "$FORM_passwd2"
-			) | passwd root && apply_passwd
+			) | passwd root 2>&1 && apply_passwd
 			echo '</pre>'
 			footer
 			exit

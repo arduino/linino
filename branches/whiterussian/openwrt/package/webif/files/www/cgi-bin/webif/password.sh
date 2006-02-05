@@ -16,7 +16,7 @@ EOF
 				echo "$FORM_pw1"
 				sleep 1
 				echo "$FORM_pw2"
-			) | passwd root
+			) | passwd root 2>&1
 		)
 		equal "$?" 0 || ERROR="<pre>$RES</pre>"
 	}
