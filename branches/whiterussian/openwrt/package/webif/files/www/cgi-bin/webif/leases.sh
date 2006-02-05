@@ -1,15 +1,15 @@
-#!/usr/bin/haserl
+#!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-header "Status" "DHCP" "DHCP leases"
+header "Status" "DHCP" "@TR<<DHCP leases>>"
 ?>
 <table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 <tbody>
 	<tr>
-		<th>MAC Address</th>
-		<th>IP Address</th>
-		<th>Name</th>
-		<th>Expires in</th>
+		<th>@TR<<MAC Address>></th>
+		<th>@TR<<IP Address>></th>
+		<th>@TR<<Name>></th>
+		<th>@TR<<Expires in>></th>
 	</tr>
 <? [ -e /tmp/dhcp.leases ] && awk -vdate="$(date +%s)" '
 $1 > 0 {

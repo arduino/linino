@@ -1,7 +1,7 @@
-#!/usr/bin/haserl
+#!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-header "Info" "Router Info" "Router Info"
+header "Info" "Router Info" "@TR<<Router Info>>"
 
 ?>
 <pre><?
@@ -18,19 +18,19 @@ cat <<EOF
 <table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 <tbody>
 	<tr>
-		<td>Firmware Version</td>
+		<td>@TR<<Firmware Version>></td>
 		<td>$_version</td>
 	</tr>
 	<tr>
-		<td>Kernel Version</td>
+		<td>@TR<<Kernel Version>></td>
 		<td>$_kversion</td>
 	</tr>
 	<tr>
-		<td>Current Date/Time</td>
+		<td>@TR<<Current Date/Time>></td>
 		<td>$_date</td>
 	</tr>
 	<tr>
-		<td>MAC-Address</td>
+		<td>@TR<<MAC Address>></td>
 		<td>$_mac</td>
 	</tr>
 </tbody>

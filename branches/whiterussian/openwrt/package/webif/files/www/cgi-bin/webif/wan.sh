@@ -1,4 +1,4 @@
-#!/usr/bin/haserl
+#!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
 
@@ -6,7 +6,7 @@ load_settings network
 
 FORM_dns="${wan_dns:-$(nvram get wan_dns)}"
 LISTVAL="$FORM_dns"
-handle_list "$FORM_dnsremove" "$FORM_dnsadd" "$FORM_dnssubmit" 'ip|FORM_dnsadd|WAN DNS address|required' && {
+handle_list "$FORM_dnsremove" "$FORM_dnsadd" "$FORM_dnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
 	FORM_dns="$LISTVAL"
 	save_setting network wan_dns "$FORM_dns"
 }
@@ -44,7 +44,7 @@ else
 	SAVED=1
 
 	empty "$FORM_wan_proto" && {
-		ERROR="No WAN protocol selected" 
+		ERROR="@TR<<No WAN Proto|No WAN protocol has been selected>>" 
 		return 255
 	}
 
@@ -59,10 +59,10 @@ else
 	esac
 
 validate <<EOF
-ip|FORM_wan_ipaddr|IP address|$V_IP|$FORM_wan_ipaddr
-netmask|FORM_wan_netmask|network mask|$V_NM|$FORM_wan_netmask
-ip|FORM_wan_gateway|gateway address||$FORM_wan_gateway
-ip|FORM_pptp_server_ip|PPTP server IP|$V_PPTP|$FORM_pptp_server_ip
+ip|FORM_wan_ipaddr|@TR<<IP Address>>|$V_IP|$FORM_wan_ipaddr
+netmask|FORM_wan_netmask|@TR<<Netmask>>|$V_NM|$FORM_wan_netmask
+ip|FORM_wan_gateway|@TR<<Default Gateway>>||$FORM_wan_gateway
+ip|FORM_pptp_server_ip|@TR<<PPTP Server IP>>|$V_PPTP|$FORM_pptp_server_ip
 EOF
 	equal "$?" 0 && {
 		save_setting network wan_proto $FORM_wan_proto
@@ -126,7 +126,7 @@ text|pptp_server_ip|$FORM_pptp_server_ip"
 }
 
 
-header "Network" "WAN" "WAN settings" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+header "Network" "WAN" "@TR<<WAN Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>
@@ -162,44 +162,44 @@ EOF
 
 display_form <<EOF
 onchange|modechange
-start_form|WAN Configuration
-field|Internet Connection Type
-radio|wan_proto|$FORM_wan_proto|none|None<br />
-radio|wan_proto|$FORM_wan_proto|dhcp|DHCP<br />
-radio|wan_proto|$FORM_wan_proto|static|Static IP<br />
+start_form|@TR<<WAN Configuration>>
+field|@TR<<Connection Type>>
+radio|wan_proto|$FORM_wan_proto|none|@TR<<No WAN#None>><br />
+radio|wan_proto|$FORM_wan_proto|dhcp|@TR<<DHCP>><br />
+radio|wan_proto|$FORM_wan_proto|static|@TR<<Static IP>><br />
 $PPPOE_OPTION
 $PPTP_OPTION
 end_form
-
-start_form|IP Settings|ip_settings|hidden
-field|Internet IP Address|wan_ipaddr|hidden
+tatus
+start_form|@TR<<IP Settings>>|ip_settings|hidden
+field|@TR<<IP Address>>|wan_ipaddr|hidden
 text|wan_ipaddr|$FORM_wan_ipaddr
-field|Subnet Mask|wan_netmask|hidden
+field|@TR<<Netmask>>|wan_netmask|hidden
 text|wan_netmask|$FORM_wan_netmask
-field|Gateway|wan_gateway|hidden
+field|@TR<<Default Gateway>>|wan_gateway|hidden
 text|wan_gateway|$FORM_wan_gateway
 $PPTP_SERVER_OPTION
 end_form
 
-start_form|DNS Servers|wan_dns|hidden
+start_form|@TR<<DNS Servers>>|wan_dns|hidden
 listedit|dns|$SCRIPT_NAME?wan_proto=static&|$FORM_dns|$FORM_dnsadd
-helpitem|Note
-helptext|You should save your settings on this page before adding/removing DNS servers
+helpitem|@TR<<Note>>
+helptext|@TR<<Helptext DNS save#You should save your settings on this page before adding/removing DNS servers>> 
 end_form
 
-start_form|PPP Settings|ppp_settings|hidden
-field|PPP Redial Policy|ppp_redial|hidden
-radio|ppp_redial|$FORM_ppp_redial|demand|Connect on Demand<br />
-radio|ppp_redial|$FORM_ppp_redial|persist|Keep Alive
-field|Maximum Idle Time|ppp_demand_idletime|hidden
+start_form|@TR<<PPP Settings>>|ppp_settings|hidden
+field|@TR<<Redial Policy>>|ppp_redial|hidden
+radio|ppp_redial|$FORM_ppp_redial|demand|@TR<<Connect on Demand>><br />
+radio|ppp_redial|$FORM_ppp_redial|persist|@TR<<Keep Alive>>
+field|@TR<<Maximum Idle Time>>|ppp_demand_idletime|hidden
 text|ppp_idletime|$FORM_ppp_idletime
-field|Redial Timeout|ppp_persist_redialperiod|hidden
+field|@TR<<Redial Timeout>>|ppp_persist_redialperiod|hidden
 text|ppp_redialperiod|$FORM_ppp_redialperiod
-field|PPP Username|ppp_username|hidden
+field|@TR<<Username>>|ppp_username|hidden
 text|ppp_username|$FORM_ppp_username
-field|PPP Password|ppp_passwd|hidden
-text|ppp_passwd|$FORM_ppp_passwd
-field|PPP MTU|ppp_mtu|hidden
+field|@TR<<Password>>|ppp_passwd|hidden
+password|ppp_passwd|$FORM_ppp_passwd
+field|@TR<<MTU>>|ppp_mtu|hidden
 text|ppp_mtu|$FORM_ppp_mtu
 end_form
 EOF

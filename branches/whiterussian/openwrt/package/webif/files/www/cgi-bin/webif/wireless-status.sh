@@ -1,7 +1,7 @@
-#!/usr/bin/haserl
+#!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-header "Status" "Wireless" "Wireless status"
+header "Status" "Wireless" "@TR<<Wireless Status>>"
 ?>
 
 <pre><? iwconfig 2>&1 | grep -v 'no wireless' | grep '\w' ?></pre>

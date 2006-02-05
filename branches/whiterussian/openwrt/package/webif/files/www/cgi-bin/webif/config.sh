@@ -1,4 +1,4 @@
-#!/usr/bin/haserl
+#!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
 
@@ -8,15 +8,15 @@ case "$CHANGES" in
 	""|0)FORM_mode=nochange
 esac
 case "$FORM_mode" in 
-	nochange) header $FORM_cat . "Configuration: no changes were made.";;
+	nochange) header $FORM_cat . "@TR<<No config change.|No configuration changes were made.>>";;
 	clear)
 		rm -rf /tmp/.webif >&- 2>&- 
-		header $FORM_cat . "Configuration: cleared."
+		header $FORM_cat . "@TR<<Config discarded.|Your configuration changes have been discarded.>>"
 		CHANGES=""
 		echo "${FORM_prev:+<meta http-equiv=\"refresh\" content=\"2; URL=$FORM_prev\" />}"
 		;;
 	review)
-		header $FORM_cat . "Configuration changes:"
+		header $FORM_cat . "@TR<<Config changes:|Current configuration changes:>>"
 		cd /tmp/.webif
 		for configname in config-*; do
 			grep = $configname >&- 2>&- && {
@@ -33,10 +33,10 @@ case "$FORM_mode" in
 		echo $CONFIGFILES
 		;;
 	save)
-		header $FORM_cat . "Configuration: updating..."
+		header $FORM_cat . "@TR<<Updating config...|Updating your configuration...>>"
 		CHANGES=""
 		echo "<pre>"
-		sh /usr/lib/webif/apply.sh
+		sh /usr/lib/webif/apply.sh 2>&1
 		echo "</pre>${FORM_prev:+<meta http-equiv=\"refresh\" content=\"2; URL=$FORM_prev\" />}"
 		;;
 esac

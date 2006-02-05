@@ -1,4 +1,4 @@
-#!/usr/bin/haserl
+#!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
 load_settings "wireless"
@@ -19,17 +19,12 @@ handle_list "$FORM_maclistremove" "$FORM_maclistadd" "$FORM_maclistsubmit" 'mac|
 }
 FORM_maclistadd=${FORM_maclistadd:-00:00:00:00:00:00}
 
-if empty "$FORM_macmode_set"; then
-	FORM_macmode="${wl0_macmode:-$(nvram get wl0_macmode)}"
-else
-	save_setting wireless wl0_macmode "$FORM_macmode"
-fi
-
 if empty "$FORM_submit"; then
+	FORM_macmode="${wl0_macmode:-$(nvram get wl0_macmode)}"
 	FORM_lazywds=${wl0_lazywds:-$(nvram get wl0_lazywds)}
 	case "$FORM_lazywds" in
-		0|off|disabled) FORM_lazywds=0;;
-		*) FORM_lazywds=1;;
+		1|on|enabled) FORM_lazywds=1;;
+		*) FORM_lazywds=0;;
 	esac
 else
 	SAVED=1
@@ -39,11 +34,11 @@ int|FORM_lazywds|Lazy WDS On/Off|required min=0 max=1|$FORM_lazywds
 EOF
 	equal "$?" 0 && {
 		save_setting wireless wl0_lazywds "$FORM_lazywds"
+		save_setting wireless wl0_macmode "$FORM_macmode"
 	}
-	
 fi
 
-header "Network" "Advanced Wireless" "Advanced Wireless Settings" ' onLoad="modechange()"' "$SCRIPT_NAME"
+header "Network" "Advanced Wireless" "@TR<<Advanced Wireless Configuration>>" ' onLoad="modechange()"' "$SCRIPT_NAME"
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
@@ -55,32 +50,30 @@ function modechange() {
 }
 
 </script>
-<form enctype="multipart/form-data" method="post" action="$SCRIPT_NAME">
 EOF
 
 display_form <<EOF
 onchange|modechange
-start_form|WDS connections
+start_form|@TR<<WDS Connections>>
 listedit|wds|$SCRIPT_NAME?|$FORM_wds|$FORM_wdsadd
 end_form
-start_form|MAC filter list
+start_form|@TR<<MAC Filter List>>
 listedit|maclist|$SCRIPT_NAME?|$FORM_maclist|$FORM_maclistadd
-field
-caption|Filter mode: 
+end_form
+start_form|@TR<<Settings>>
+field|@TR<<Automatic WDS>>
+select|lazywds|$FORM_lazywds
+option|1|@TR<<Enabled>>
+option|0|@TR<<Disabled>>
+field|@TR<<Filter Mode>>:
 select|macmode|$FORM_macmode
-option|disabled
-option|allow
-option|deny
-submit|macmode_set|Set
-field|Lazy WDS 
-radio|lazywds|$FORM_lazywds|1|Enabled<br />
-radio|lazywds|$FORM_lazywds|0|Disabled
+option|disabled|@TR<<Disabled>>
+option|allow|@TR<<Allow>>
+option|deny|@TR<<Deny>>
 end_form
 EOF
 
-?>
-</form>
-<? footer ?>
+footer ?>
 <!--
 ##WEBIF:name:Network:4:Advanced Wireless
 -->

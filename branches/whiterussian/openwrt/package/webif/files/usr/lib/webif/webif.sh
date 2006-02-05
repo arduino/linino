@@ -51,11 +51,11 @@ update_changes() {
 
 header() {
 	empty "$ERROR" && {
-		_saved_title="${SAVED:+: Settings saved}"
+		_saved_title="${SAVED:+: @TR<<Settings saved>>}"
 	} || {
 		FORM_submit="";
 		ERROR="<h3>$ERROR</h3><br /><br />"
-		_saved_title=": Settings not saved"
+		_saved_title=": @TR<<Settings not saved>>"
 	}
 
 	_category="$1"
@@ -68,7 +68,7 @@ header() {
 	_version="${_version%% ---*}"
 	_head="${3:+<div class=\"settings-block-title\"><h2>$3$_saved_title</h2></div>}"
 	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type="hidden" name="submit" value="1" />}"
-	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"Save changes\" /></p>}"
+	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
 	
@@ -86,7 +86,7 @@ Pragma: no-cache
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
-    	<title>OpenWrt Administrative Console</title>
+    	<title>@TR<<OpenWrt Administrative Console>></title>
 		<link rel="stylesheet" type="text/css" href="/webif.css" />
 	</head>
 	<body $4><div id="container">
@@ -96,10 +96,10 @@ Pragma: no-cache
 				<div id="short-status">
 					<h3><strong>Status:</strong></h3>
 					<ul>
-						<li><strong>Hostname:</strong> $_hostname</li>
-						<li><strong>Uptime:</strong> $_uptime</li>
-						<li><strong>Load:</strong> $_loadavg</li>
-						<li><strong>Version:</strong> $_version</li>
+						<li><strong>@TR<<Host Name>>:</strong> $_hostname</li>
+						<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
+						<li><strong>@TR<<Load>>:</strong> $_loadavg</li>
+						<li><strong>@TR<<Version>>:</strong> $_version</li>
 					</ul>
 				</div>
 			</div>
@@ -130,7 +130,7 @@ EOF
 <br />
 <br />
 <br />
-<h3>Warning: you haven't set a password for the Web interface and SSH access<br />
+<h3>TR{Warning}: you haven't set a password for the Web interface and SSH access<br />
 Please enter one now (the user name in your browser will be 'root').</h3>
 <br />
 <br />
@@ -176,9 +176,9 @@ footer() {
 			</div>
 			<div class="apply">
 				<div>
-					<a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME">Apply changes &laquo;</a><br />
-					<a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">Clear changes &laquo;</a><br />
-					<a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">Review changes $_changes &laquo;</a>
+					<a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Apply Changes>> &laquo;</a><br />
+					<a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a><br />
+					<a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a>
 				</div>
 			</div>
 		</div>
@@ -286,3 +286,4 @@ is_bcm947xx() {
 	read _systype < /proc/cpuinfo
 	equal "${_systype##* }" "BCM947XX"
 }
+

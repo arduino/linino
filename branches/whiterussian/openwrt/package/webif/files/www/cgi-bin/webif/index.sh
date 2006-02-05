@@ -1,4 +1,4 @@
-#!/usr/bin/haserl
+#!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
 category=$FORM_cat

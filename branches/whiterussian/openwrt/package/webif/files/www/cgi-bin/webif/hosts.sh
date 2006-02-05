@@ -1,4 +1,4 @@
-#!/usr/bin/haserl
+#!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
 
@@ -62,16 +62,16 @@ update_ethers() {
 empty "$FORM_add_host" || {
 	# add a host to /etc/hosts
 	validate <<EOF
-ip|FORM_host_ip|IP Address|required|$FORM_host_ip
-hostname|FORM_host_name|Hostname|required|$FORM_host_name
+ip|FORM_host_ip|@TR<<IP Address>>|required|$FORM_host_ip
+hostname|FORM_host_name|@TR<<Host Name>>|required|$FORM_host_name
 EOF
 	equal "$?" 0 && update_hosts add "$FORM_host_ip" "$FORM_host_name"
 }
 empty "$FORM_add_dhcp" || {
 	# add a host to /etc/ethers
 	validate <<EOF
-mac|FORM_dhcp_mac|MAC Address|required|$FORM_dhcp_mac
-ip|FORM_dhcp_ip|IP|required|$FORM_dhcp_ip
+mac|FORM_dhcp_mac|@TR<<MAC Address>>|required|$FORM_dhcp_mac
+ip|FORM_dhcp_ip|@TR<<IP Address>>|required|$FORM_dhcp_ip
 EOF
 	equal "$?" 0 && update_ethers add "$FORM_dhcp_mac" "$FORM_dhcp_ip"
 }
@@ -79,7 +79,7 @@ EOF
 empty "$FORM_remove_host" || update_hosts del "$FORM_remove_ip" "$FORM_remove_name"
 empty "$FORM_remove_dhcp" || update_ethers del "$FORM_remove_mac"
 
-header "Network" "Hosts" "Configured hosts" ''
+header "Network" "Hosts" "@TR<<Configured Hosts>>" ''
 
 # Hosts in /etc/hosts
 awk -v "url=$SCRIPT_NAME" \
@@ -87,9 +87,9 @@ awk -v "url=$SCRIPT_NAME" \
 	-v "name=$FORM_host_name"  -f /usr/lib/webif/common.awk -f - $HOSTS_FILE <<EOF
 BEGIN {
 	FS="[ \t]"
-	start_form("Hostnames")
+	start_form("@TR<<Host Names>>")
 	print "<table width=\"70%\" summary=\"Settings\">"
-	print "<tr><th>IP</th><th>Hostname</th><th></th></tr>"
+	print "<tr><th>@TR<<IP Address>></th><th>@TR<<Host Name>></th><th></th></tr>"
 	print "<tr><td colspan=\"3\"><hr class=\"separator\" /></td></tr>"
 }
 
@@ -103,7 +103,7 @@ BEGIN {
 	for (i = 2; i <= n; i++) {
 		if (names[i] != "") {
 			if (first != 1) output = output "<tr>"
-			output = output "<td>" names[i] "</td><td align=\\"right\\" width=\\"10%\\"><a href=\\"" url "?remove_host=1&remove_ip=" $1 "&remove_name=" names[i] "\\">Remove</a></td></tr>"
+			output = output "<td>" names[i] "</td><td align=\\"right\\" width=\\"10%\\"><a href=\\"" url "?remove_host=1&remove_ip=" $1 "&remove_name=" names[i] "\\">@TR<<Remove>></a></td></tr>"
 			first = 0
 			names_found++
 		}
@@ -116,7 +116,7 @@ BEGIN {
 
 END {
 	print "<form enctype=\\"multipart/form-data\\" method=\\"post\\">"
-	print "<tr><td><input type\\"text\\" name=\\"host_ip\\" value=\\"" ip "\\" /></td><td><input type=\\"text\\" name=\\"host_name\\" value=\\"" name "\\" /></td><td style=\\"width: 10em\\"><input type=\\"submit\\" name=\\"add_host\\" value=\\"Add\\" /></td></tr>"
+	print "<tr><td><input type\\"text\\" name=\\"host_ip\\" value=\\"" ip "\\" /></td><td><input type=\\"text\\" name=\\"host_name\\" value=\\"" name "\\" /></td><td style=\\"width: 10em\\"><input type=\\"submit\\" name=\\"add_host\\" value=\\"@TR<<Add>>\\" /></td></tr>"
 	print "</form>"
 	print "</table>"
 	end_form()
@@ -131,19 +131,19 @@ awk -v "url=$SCRIPT_NAME" \
 BEGIN {
 	FS="[ \\t]"
 	print "<form enctype=\\"multipart/form-data\\" method=\\"post\\">"
-	start_form("Static IP addresses (for DHCP)")
+	start_form("@TR<<DHCP Static|Static IP addresses (for DHCP)>>")
 	print "<table width=\\"70%\\" summary=\\"Settings\\">"
-	print "<tr><th>MAC address</th><th>IP</th><th></th></tr>"
+	print "<tr><th>@TR<<MAC Address>></th><th>@TR<<IP Address>></th><th></th></tr>"
 }
 
 # only for valid MAC addresses
 (\$1 ~ /^[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]$/) {
 	gsub(/#.*$/, "");
-	print "<tr><td>" \$1 "</td><td>" \$2 "</td><td align=\\"right\\" width=\\"10%\\"><a href=\\"" url "?remove_dhcp=1&remove_mac=" \$1 "\\">Remove</a></td></tr>"
+	print "<tr><td>" \$1 "</td><td>" \$2 "</td><td align=\\"right\\" width=\\"10%\\"><a href=\\"" url "?remove_dhcp=1&remove_mac=" \$1 "\\">@TR<<Remove>></a></td></tr>"
 }
 
 END {
-	print "<tr><td><input type\\"text\\" name=\\"dhcp_mac\\" value=\\"" mac "\\" /></td><td><input type=\\"text\\" name=\\"dhcp_ip\\" value=\\"" ip "\\" /></td><td style=\\"width: 10em\\"><input type=\\"submit\\" name=\\"add_dhcp\\" value=\\"Add\\" /></td></tr>"
+	print "<tr><td><input type\\"text\\" name=\\"dhcp_mac\\" value=\\"" mac "\\" /></td><td><input type=\\"text\\" name=\\"dhcp_ip\\" value=\\"" ip "\\" /></td><td style=\\"width: 10em\\"><input type=\\"submit\\" name=\\"add_dhcp\\" value=\\"@TR<<Add>>\\" /></td></tr>"
 	print "</table>"
 	print "</form>"
 	end_form();

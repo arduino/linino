@@ -1,12 +1,12 @@
-#!/usr/bin/haserl
+#!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-header "Status" "Connections" "Connection status"
+header "Status" "Connections" "@TR<<Connection Status>>"
 ?>
 <table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 <tbody>
 	<tr>
-		<th><b>Ethernet/Wireless physical connections</b></th>
+		<th><b>@TR<<Physical Connections|Ethernet/Wireless Physical Connections>></b></th>
 	</tr>
 	<tr>
 		<td><pre><? cat /proc/net/arp ?></pre></td>
@@ -15,10 +15,10 @@ header "Status" "Connections" "Connection status"
 	<tr><td><br /><br /></td></tr>
 
 	<tr>
-		<th><b>Connections to the router</b></th>
+		<th><b>@TR<<Router Connections|Connections to the Router>></b></th>
 	</tr>
 	<tr>
-		<td><pre><? netstat -n 2>&- ?></pre></td>
+		<td><pre><? netstat -n 2>&- | awk '$0 ~ /^Active UNIX/ {ignore = 1}; ignore != 1 { print $0 }' ?></pre></td>
 	</tr>
 </tbody>
 </table>

@@ -16,7 +16,7 @@ HANDLERS_file='
 eval "$(cat /usr/lib/webif/apply-*.sh 2>&-)"
 
 reload_network() {
-	echo Reloading networking settings ...
+	echo '@TR<<Reloading>> @TR<<networking settings>> ...'
 	grep '^wan_' config-network >&- 2>&- && {
 		ifdown wan
 		ifup wan
@@ -31,14 +31,14 @@ reload_network() {
 }
 
 reload_wireless() {
-	echo Reloading wireless settings ...
+	echo '@TR<<Reloading>> @TR<<wireless settings>> ...'
 	killall nas >&- 2>&- && sleep 2
 	/sbin/wifi
 	[ -f /etc/init.d/S41wpa ] && /etc/init.d/S41wpa
 }
 
 reload_system() {
-	echo Applying system settings ...
+	echo '@TR<<Applying>> @TR<<system settings>> ...'
 	echo "$(nvram get wan_hostname)" > /proc/sys/kernel/hostname
 }
 
@@ -47,7 +47,7 @@ cd /tmp/.webif
 # file-* 		other config files
 for config in $(ls file-* 2>&-); do
 	name=${config#file-}
-	echo "Processing config file: $name"
+	echo "@TR<<Processing>> @TR<<config file>>: $name"
 	eval 'case "$name" in
 		'"$HANDLERS_file"'
 	esac'
@@ -58,7 +58,7 @@ done
 	cd /proc/self
 	cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- && {
 		cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set
-		echo "Committing NVRAM ..."
+		echo "@TR<<Committing>> NVRAM ..."
 		nvram commit
 	}
 )

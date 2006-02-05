@@ -58,6 +58,7 @@ $1 ~ /^select/ {
 	opts = ""
 	if (onchange != "") opts = opts " onClick=\"" onchange "()\" onChange=\"" onchange "()\""
 	print "<select id=\"" $2 "\" name=\"" $2 "\"" opts ">"
+	select_id = $2
 	select_open = 1
 	select_default = $3
 }
@@ -66,23 +67,23 @@ $1 ~ /^select/ {
 	else option_selected=""
 	if ($3 != "") option_title = $3
 	else option_title = $2
-	print "<option" option_selected " value=\"" $2 "\">" option_title "&nbsp;&nbsp;</option>"
+	print "<option id=\"" select_id "_" $2 "\"" option_selected " value=\"" $2 "\">" option_title "&nbsp;&nbsp;</option>"
 }
 ($1 ~ /^listedit/) {
 	n = split($4 " ", items, " ")
 	for (i = 1; i <= n; i++) {
-		if (items[i] != "") print "<tr><td width=\"50%\">" items[i] "</td><td>&nbsp;<a href=\"" $3 $2 "remove=" items[i] "\">Remove</a></td></tr>"
+		if (items[i] != "") print "<tr><td width=\"50%\">" items[i] "</td><td>&nbsp;<a href=\"" $3 $2 "remove=" items[i] "\">@TR<<Remove>></a></td></tr>"
 	}
-	print "<tr><td width=\"100%\" colspan="2"><input type=\"text\" name=\"" $2 "add\" value=\"" $5 "\" /><input type=\"submit\" name=\"" $2 "submit\" value=\"Add\" /></td></tr>"
+	print "<tr><td width=\"100%\" colspan="2"><input type=\"text\" name=\"" $2 "add\" value=\"" $5 "\" /><input type=\"submit\" name=\"" $2 "submit\" value=\"@TR<<Add>>\" /></td></tr>"
 }
 $1 ~ /^caption/ { print "<b>" $2 "</b>" }
 $1 ~ /^string/ { print $2 }
 $1 ~ /^text/ { print "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
 $1 ~ /^password/ { print "<input id=\"" $2 "\" type=\"password\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
 $1 ~ /^submit/ { print "<input type=\"submit\" name=\"" $2 "\" value=\"" $3 "\" />" }
-$1 ~ /^helpitem/ { form_help = form_help "<dt>" $2 ":</dt>" }
-$1 ~ /^helptext/ { form_help = form_help "<dd>" $2 "</dd>" }
-$1 ~ /^helplink/ { form_help_link = "<div class=\"more-help\"><a href=\"" $2 "\">more...</a></div>" }
+$1 ~ /^helpitem/ { form_help = form_help "<dt>" $2 ": </dt>" }
+$1 ~ /^helptext/ { form_help = form_help "<dd>" $2 " </dd>" }
+$1 ~ /^helplink/ { form_help_link = "<div class=\"more-help\"><a href=\"" $2 "\">@TR<<more...>></a></div>" }
 
 ($1 ~ /^checkbox/) || ($1 ~ /^radio/) {
 	print $5

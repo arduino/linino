@@ -1,9 +1,9 @@
-#!/usr/bin/haserl
+#!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-header "System" "Installed software" "Installed software"
+header "System" "Installed Software" "@TR<<Installed Software>>"
 ?>
-<p style="position: absolute; right: 1em; top: 10.5em"><a href="ipkg.sh?action=update">Update package lists</a></p>
+<p style="position: absolute; right: 1em; top: 10.5em"><a href="ipkg.sh?action=update">@TR<<Update package lists>></a></p>
 <pre><?
 if [ "$FORM_action" = "update" ]; then
 	ipkg update
@@ -14,14 +14,14 @@ elif [ "$FORM_action" = "remove" ]; then
 fi
 ?></pre>
 <div class="half noBorderOnLeft">
-  <h3>Installed packages</h3>
+  <h3>@TR<<Installed Packages>></h3>
   <table style="width: 90%">
 <?
 ipkg list_installed | awk -F ' ' '
 $2 !~ /terminated/ {
 	link=$1
 	gsub(/\+/,"%2B",link)
-	print "<tr><td>" $1 "</td><td><a href=\"ipkg.sh?action=remove&pkg=" link "\">Remove</td></tr>"
+	print "<tr><td>" $1 "</td><td><a href=\"ipkg.sh?action=remove&pkg=" link "\">@TR<<Uninstall>></td></tr>"
 }
 '
 ?>
@@ -39,7 +39,7 @@ $1 ~ /status/ {
 	if (current != $1) print "<tr><th>" $1 "</th><td></td></tr>"
 	link=$3
 	gsub(/\+/,"%2B",link)
-	print "<tr><td>" $3 "</td><td><a href=\"ipkg.sh?action=install&pkg=" link "\">Install</td></tr>"
+	print "<tr><td>" $3 "</td><td><a href=\"ipkg.sh?action=install&pkg=" link "\">@TR<<Install>></td></tr>"
 	current=$1
 }
 '
@@ -51,5 +51,5 @@ $1 ~ /status/ {
 	  
 <? footer ?>
 <!--
-##WEBIF:name:System:2:Installed software
+##WEBIF:name:System:2:Installed Software
 -->

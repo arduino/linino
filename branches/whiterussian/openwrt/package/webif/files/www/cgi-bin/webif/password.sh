@@ -1,4 +1,4 @@
-#!/usr/bin/haserl
+#!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
 
@@ -22,13 +22,13 @@ EOF
 	}
 }
 
-header "System" "Password" "Password change" '' "$SCRIPT_NAME"
+header "System" "Password" "@TR<<Password Change>>" '' "$SCRIPT_NAME"
 
 display_form <<EOF
-start_form|System settings
-field|New Password:
+start_form|@TR<<Password Change>>
+field|@TR<<New Password>>:
 password|pw1
-field|Confirm Password:
+field|@TR<<Confirm Password>>:
 password|pw2
 end_form
 EOF

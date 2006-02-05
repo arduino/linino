@@ -1,4 +1,4 @@
-#!/usr/bin/haserl
+#!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
 load_settings "wireless"
@@ -99,22 +99,22 @@ else
 	SAVED=1
 	case "$FORM_encryption" in
 		wpa) V_RADIUS="
-string|FORM_radius_key|RADIUS server key|min=4 max=63 required|$FORM_radius_key
-ip|FORM_radius_ipaddr|RADIUS IP address|required|$FORM_radius_ipaddr";;
-		psk) V_PSK="wpapsk|FORM_wpa_psk|WPA pre-shared key|required|$FORM_wpa_psk";;
+string|FORM_radius_key|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_radius_key
+ip|FORM_radius_ipaddr|@TR<<RADIUS IP Address>>|required|$FORM_radius_ipaddr";;
+		psk) V_PSK="wpapsk|FORM_wpa_psk|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_wpa_psk";;
 		wep) V_WEP="
-int|FORM_key|WEP key number|min=1 max=4|$FORM_key
-wep|FORM_key1|WEP key 1||$FORM_key1
-wep|FORM_key2|WEP key 2||$FORM_key2
-wep|FORM_key3|WEP key 3||$FORM_key3
-wep|FORM_key4|WEP key 4||$FORM_key4";;
+int|FORM_key|@TR<<Selected WEP Key>>|min=1 max=4|$FORM_key
+wep|FORM_key1|@TR<<WEP Key>> 1||$FORM_key1
+wep|FORM_key2|@TR<<WEP Key>> 2||$FORM_key2
+wep|FORM_key3|@TR<<WEP Key>> 3||$FORM_key3
+wep|FORM_key4|@TR<<WEP Key>> 4||$FORM_key4";;
 	esac
 
 	validate <<EOF
-int|FORM_radio|Radio On/Off|required min=0 max=1|$FORM_radio
-int|FORM_broadcast|Broadcast On/Off|required min=0 max=1|$FORM_broadcast
-string|FORM_ssid|ESSID|required|$FORM_ssid
-int|FORM_channel|Channel|required min=1 max=$CHANNEL_MAX|$FORM_channel
+int|FORM_radio|wl0_radio|required min=0 max=1|$FORM_radio
+int|FORM_broadcast|wl0_closed|required min=0 max=1|$FORM_broadcast
+string|FORM_ssid|@TR<<ESSID>>|required|$FORM_ssid
+int|FORM_channel|@TR<<Channel>>|required min=1 max=$CHANNEL_MAX|$FORM_channel
 $V_WEP
 $V_RADIUS
 $V_PSK
@@ -175,7 +175,7 @@ EOF
 	}
 fi
 
-header "Network" "Wireless" "Wireless settings" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+header "Network" "Wireless" "@TR<<Wireless Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
@@ -183,35 +183,32 @@ cat <<EOF
 <!--
 function modechange()
 {
-	if (checked('mode_adhoc')) {
-		var psk = document.getElementById('encryption_psk');
-		psk.disabled = true;
-		if (psk.checked) {
-				psk.checked = false;
-				document.getElementById('encryption_off').checked = true;
+	if (isset('mode','adhoc')) {
+		document.getElementById('encryption_psk').disabled = true;
+		if (isset('encryption','psk')) {
+				document.getElementById('encryption').value = 'off';
 		}
 	} else {
 		document.getElementById('encryption_psk').disabled = false;
 	}
-	if (checked('mode_wet') || checked('mode_sta') || checked('mode_adhoc')) {
-		var wpa = document.getElementById('encryption_wpa');
-		wpa.disabled = true;
-		if (wpa.checked) {
-				wpa.checked = false;
-				document.getElementById('encryption_off').checked = true;
+	
+	if (!isset('mode','ap')) {
+		document.getElementById('encryption_wpa').disabled = true;
+		if (value('encryption') == 'wpa') {
+				document.getElementById('encryption').value = 'off';
 		}
 	} else {
 		document.getElementById('encryption_wpa').disabled = false;
 	}
-	
-	var v = (checked('encryption_wpa') || checked('encryption_psk'));
+
+	var v = (isset('encryption','wpa') || isset('encryption','psk'));
 	set_visible('wpa_support', v);
 	set_visible('wpa_crypto', v);
 	
-	set_visible('wpapsk', checked('encryption_psk'));
-	set_visible('wep_keys', checked('encryption_wep'));
+	set_visible('wpapsk', isset('encryption','psk'));
+	set_visible('wep_keys', isset('encryption','wep'));
 
-	v = checked('encryption_wpa');
+	v = isset('encryption','wpa');
 	set_visible('radiuskey', v);
 	set_visible('radius_ip', v);
 
@@ -225,48 +222,52 @@ EOF
 
 display_form <<EOF
 onchange|modechange
-start_form|Wireless Configuration
-field|Power
-radio|radio|$FORM_radio|1|Enabled<br />
-radio|radio|$FORM_radio|0|Disabled
-field|Broadcast
-radio|broadcast|$FORM_broadcast|0|Enabled<br />
-radio|broadcast|$FORM_broadcast|1|Disabled
-field|ESSID
+start_form|@TR<<Wireless Configuration>>
+field|@TR<<Wireless Interface>>
+select|radio|$FORM_radio
+option|1|@TR<<Enabled>>
+option|0|@TR<<Disabled>>
+field|@TR<<ESSID Broadcast>>
+select|broadcast|$FORM_broadcast
+option|0|@TR<<Show>>
+option|1|@TR<<Hide>>
+field|@TR<<ESSID>>
 text|ssid|$FORM_ssid
-helpitem|ESSID
-helptext|Name of your Wireless Network
-field|Channel
+helpitem|@TR<<ESSID>>
+helptext|@TR<<Helptext ESSID#Name of your Wireless Network>>
+field|@TR<<Channel>>
 select|channel|$FORM_channel
 $F_CHANNELS
-field|Mode
-radio|mode|$FORM_mode|ap|Access Point<br />
-radio|mode|$FORM_mode|sta|Client <br />
-radio|mode|$FORM_mode|wet|Bridge <br />
-radio|mode|$FORM_mode|adhoc|Ad-Hoc
-helpitem|Mode
-helptext|Operation mode
+field|@TR<<WLAN Mode#Mode>>
+select|mode|$FORM_mode
+option|ap|@TR<<Access Point>>
+option|sta|@TR<<Client>>
+option|wet|@TR<<Client>> (@TR<<Bridge>>)
+option|adhoc|@TR<<Ad-Hoc>>
+helpitem|@TR<<WLAN Mode#Mode>>
+helptext|@TR<<Operation mode>>
 helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-7126c5958e237d603674b3a9739c9d23bdfdb293
 end_form
-start_form|Encryption settings
-field|Encryption type
-radio|encryption|$FORM_encryption|off|Disabled <br />
-radio|encryption|$FORM_encryption|wep|WEP <br />
-radio|encryption|$FORM_encryption|psk|WPA (preshared key) <br />
-radio|encryption|$FORM_encryption|wpa|WPA (RADIUS)
-field|WPA support|wpa_support|hidden
+start_form|@TR<<Encryption Settings>>
+field|@TR<<Encryption Type>>
+select|encryption|$FORM_encryption
+option|off|@TR<<Disabled>>
+option|wep|WEP
+option|psk|WPA (@TR<<PSK>>)
+option|wpa|WPA (RADIUS)
+field|@TR<<WPA Mode>>|wpa_support|hidden
 checkbox|wpa1|$FORM_wpa1|wpa1|WPA1
 checkbox|wpa2|$FORM_wpa2|wpa2|WPA2
-field|WPA encryption type|wpa_crypto|hidden
+field|@TR<<WPA Algorithms>>|wpa_crypto|hidden
 checkbox|tkip|$FORM_tkip|tkip|RC4 (TKIP)
 checkbox|aes|$FORM_aes|aes|AES
-field|WPA preshared key|wpapsk|hidden
+field|WPA @TR<<PSK>>|wpapsk|hidden
 text|wpa_psk|$FORM_wpa_psk
-field|RADIUS Server IP|radius_ip|hidden
+field|@TR<<RADIUS IP Address>>|radius_ip|hidden
 text|radius_ipaddr|$FORM_radius_ipaddr
-field|RADIUS Server Key|radiuskey|hidden
+field|@TR<<RADIUS Server Key>>|radiuskey|hidden
 text|radius_key|$FORM_radius_key
-field|WEP keys|wep_keys|hidden
+field|@TR<<WEP Keys>>|wep_keys|hidden
 radio|key|$FORM_key|1
 text|key1|$FORM_key1|<br />
 radio|key|$FORM_key|2

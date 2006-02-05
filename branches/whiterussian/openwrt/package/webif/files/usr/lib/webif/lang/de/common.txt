@@ -1,0 +1,188 @@
+# Common
+Settings saved => Einstellungen gespeichert
+Settings not saved => Einstellungen nicht gespeichert
+Save Changes => Speichern
+Apply Changes => Übernehmen
+Clear Changes => Verwerfen
+Review Changes => Anzeigen
+Host Name => Hostname
+Uptime => Uptime
+Load => Systemlast
+Version => Version
+Categories => Kategorien
+Subcategories => Unterkategorien
+more... => mehr...
+Add => Hinzufügen
+Remove => Entfernen
+
+# Categories
+Info => Info
+About => Über
+Router Info => Routerinformationen
+
+Status => Status
+Connections => Netzwerkverbindungen
+DHCP => DHCP
+Wireless => WLAN
+
+System => System
+Password => Passwort
+Settings => Einstellungen
+Installed Software => Installierte Software
+Firmware Upgrade => Firmware aktualisieren
+
+Network => Netzwerk
+LAN => LAN
+WAN => Internet
+Wireless => WLAN
+Advanced Wireless => WLAN (erweitert)
+Hosts => Host-Konfiguration
+
+
+# 'About' page
+Copyright => Copyright
+
+GPL_Text => Dieses Programm ist freie Software. Sie können es unter den Bedingungen der GNU General Public License,<br /> wie von der Free Software Foundation veröffentlicht, weitergeben und/oder modifizieren,<br /> entweder gemäß Version 2 der Lizenz oder (nach Ihrer Option) jeder späteren Version.
+Contributions by => Mit Beiträgen von
+Layout based on => Layout basiert auf
+by => von
+
+
+No config change. => Es wurden keine Konfigurationsänderungen vorgenommen.
+Config discarded. => Ihre Konfigurationsänderungen wurden verworfen.
+Config changes: => Aktuelle Konfigurationsänderungen:
+Updating config... => Aktualisiere die Konfiguration...
+
+
+# 'Router Info' page
+Firmware Version => Firmwareversion
+Kernel Version => Kernelversion
+Current Date/Time => Datum/Uhrzeit
+MAC Address => MAC-Adresse
+
+
+# 'Connections' page
+Connection Status => Verbindungsstatus
+Physical Connections => Netzwerkschnittstellen
+Router Connections => Netzwerkverbindungen auf dem Router
+
+
+# 'DHCP' page
+DHCP leases => DHCP-Leases
+IP Address => IP-Adresse
+Name => Name
+Expires in => Gültigkeitsdauer
+
+
+# 'Wireless Status' page
+Wireless Status => WLAN-Status
+
+# 'Password' page
+Password Change => Passwortänderung
+New Password => Neues Passwort
+Confirm Password => Passwort bestätigen
+
+# 'System Settings' page
+System Settings => Systemeinstellungen
+Host Name => Hostname
+
+
+# 'Installed Software' page
+Installed Packages => Installierte Pakete
+Update package lists => Paketlisten aktualisieren
+Uninstall => Deinstallieren
+Install => Installieren
+
+
+# 'Firmware Upgrade' page
+Firmware format => Firmware-Format
+converting... => konvertiere...
+Error => Fehler
+done => fertig
+Invalid_format => Das Dateiformat der Firmware ist ungültig
+Open_failed => Konnte die Firmwaredatei nicht öffnen
+Erase_JFFS2 => JFFS2-Partition löschen
+Erase NVRAM => NVRAM löschen
+Options => Optionen
+Firmware_image => Firmware-Datei:
+Upgrade => Aktualisieren
+Upgrading... => Aktualisiere...
+
+# 'LAN Settings' page
+LAN Settings => Netzwerkeinstellungen
+LAN Configuration => Netzwerkkonfiguration
+Netmask => Subnetzmaske
+Default Gateway => Standardgateway
+DNS Servers => DNS-Server
+DNS Address => DNS-Serveradresse
+
+Note => Hinweis
+Helptext DNS save => Sie müssen Ihre Änderungen an dieser Seite speichern, bevor Sie DNS-Server hinzufügen oder entfernen
+
+
+# 'WAN Settings' page
+WAN Settings => Internet-Einstellungen
+WAN Configuration => Internet-Konfiguration
+PPTP Server IP => PPTP-Serveradresse
+Connection Type => Verbindungsart
+No WAN => Keine Verbindung
+DHCP => DHCP
+Static IP => Statische Konfiguration
+IP Settings => IP-Konfiguration
+PPP Settings => PPP-Einstellungen
+Redial Policy => Verbindungsaufbau
+Connect on Demand => Bei Bedarf
+Keep Alive => Verbindung aufrechterhalten
+Maximum Idle Time => Maximale Wartezeit bei Inaktivität
+Redial Timeout => Wartezeit bei unterbrochener Verbindung
+MTU => Maximale Paketgröße
+Username => Benutzername
+
+
+# 'Wireless Configuration' page
+Wireless Configuration => WLAN-Konfiguration
+Wireless Interface => WLAN-Interface
+WEP Key => WEP-Schlüssel
+Selected WEP Key => Ausgewählter WEP Schlüssel
+WPA PSK => WPA-Schlüssel
+ESSID => ESSID
+Channel => Kanal
+RADIUS IP Address => RADIUS-Serveradresse
+RADIUS Server Key => RADIUS-Serverpasswort
+Enabled => Aktiviert
+Disabled => Deaktiviert
+ESSID Broadcast => ESSID-Broadcast 
+Show => Anzeigen
+Hide => Verstecken
+WLAN Mode => Betriebsmodus
+Access Point => Access Point
+Client => Client
+Bridge => Bridge
+Ad-Hoc => Ad-Hoc
+Operation mode => Betriebsmodus des Funknetzwerks
+Encryption Settings => Verschlüsselungseinstellungen
+Encryption Type => Verschlüsselungsart
+PSK => Passwort
+WPA Mode => WPA-Modus
+WPA Algorithms => WPA-Verschlüsselungsalgorithmen
+WEP Keys => WEP-Schlüssel
+
+Helptext ESSID => Name des Funknetzwerks
+
+# 'Advanced Wireless Configuration' page
+Advanced Wireless Configuration => WLAN-Konfiguration (erweitert)
+WDS Connections => WDS-Verbindungen
+MAC Filter List => Zugriffsbeschränkung (MAC-Adresse)
+Filter Mode => Filtermodus
+Allow => Erlauben
+Deny => Verweigern
+Set => Setzen
+Settings => Einstellungen
+Automatic WDS => Automatische WDS-Verbindung
+
+# "Hosts" page
+
+MAC Address => MAC-Adresse
+Configured Hosts => Konfigurierte Hosts
+DHCP Static => Statische DHCP-Einträge
+Host Names => Host-Einträge

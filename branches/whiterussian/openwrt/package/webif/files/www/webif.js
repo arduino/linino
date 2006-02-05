@@ -3,6 +3,10 @@ function value(name)
 	var item = document.getElementById(name);
 	return (item ? item.value : "");
 }
+function isset(name, val)
+{
+	return (value(name) == val);
+}
 function checked(name)
 {
 	var item = document.getElementById(name);

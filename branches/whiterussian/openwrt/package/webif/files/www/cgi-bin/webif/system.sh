@@ -1,4 +1,4 @@
-#!/usr/bin/haserl
+#!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
 load_settings system
@@ -26,15 +26,16 @@ EOF
 	}
 fi
 
-header "System" "Settings" "System settings" '' "$SCRIPT_NAME"
+header "System" "Settings" "@TR<<System Settings>>" '' "$SCRIPT_NAME"
 
 is_bcm947xx && bootwait_form="field|boot_wait
-radio|boot_wait|$FORM_boot_wait|on|On<br />
-radio|boot_wait|$FORM_boot_wait|off|Off"
+select|boot_wait|$FORM_boot_wait
+option|on|@TR<<Enabled>>
+option|off|@TR<<Disabled>>"
 
 display_form <<EOF
-start_form|System settings
-field|Hostname
+start_form|@TR<<System Settings>>
+field|@TR<<Host Name>>
 text|hostname|$FORM_hostname
 $bootwait_form
 field

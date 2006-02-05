@@ -20,7 +20,7 @@ BEGIN {
 
 $1 == "int" {
 	valid_type = 1
-	if (value !~ /^[0-9]*$/) { valid = 0; verr = "Invalid value" }
+	if (value !~ /^[0-9]*$/) { valid = 0; verr = "@TR<<Invalid value>>" }
 }
 
 # FIXME: add proper netmask validation
@@ -33,14 +33,14 @@ $1 == "int" {
 			if ((ipaddr[i] < 0) || (ipaddr[i] > 255)) valid = 0
 		}
 	}
-	if (valid == 0) verr = "Invalid value"
+	if (valid == 0) verr = "@TR<<Invalid value>>"
 }
 
 $1 == "wep" {
 	valid_type = 1
 	if (value !~ /^[0-9A-Fa-f]*$/) {
 		valid = 0
-		verr = "Invalid value"
+		verr = "@TR<<Invalid value>>"
 	} else if ((length(value) != 0) && (length(value) != 10) && (length(value) != 26)) {
 		valid = 0
 		verr = "Invalid key length"
@@ -54,7 +54,7 @@ $1 == "hostname" {
 	valid_type = 1
 	if (value !~ /^[0-9a-zA-z\.\-]*$/) {
 		valid = 0
-		verr = "Invalid value"
+		verr = "@TR<<Invalid value>>"
 	}
 }
 
@@ -66,7 +66,7 @@ $1 == "mac" {
 	valid_type = 1
 	if ((value != "") && (value !~ /^[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]$/)) {
 		valid = 0
-		verr = "Invalid value"
+		verr = "@TR<<Invalid value>>"
 	}
 }
 
@@ -107,14 +107,14 @@ valid == 1 {
 			sub(/^max=/, "", max)
 			max = int(max)
 			if ($1 == "int") {
-				if (value > max) { valid = 0; verr = "Value too large" }
+				if (value > max) { valid = 0; verr = "@TR<<Value too large>> (@TR<<maximum>>: " max ")" }
 			} else if ($1 == "string") {
-				if (length(value) > max) { valid = 0; verr = "Value too large" }
+				if (length(value) > max) { valid = 0; verr = "@TR<<String too short>> (@TR<<maximum>>: " max ")" }
 			}
 		} else if ((options[i] == "nodots") && ($1 == "hostname")) {
 			if (value ~ /\./) {
 				valid = 0
-				verr = "Invalid value"
+				verr = "@TR<<Invalid value>>"
 			}
 		}
 	}

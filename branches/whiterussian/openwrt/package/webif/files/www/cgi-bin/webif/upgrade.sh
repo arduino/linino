@@ -1,7 +1,7 @@
-#!/usr/bin/haserl -u
+#!/usr/bin/webif-page -u
 <? 
 . /usr/lib/webif/webif.sh
-header "System" "Firmware upgrade" "Firmware upgrade"
+header "System" "Firmware Upgrade" "@TR<<Firmware Upgrade>>"
 
 strip_cybertan() {
 	(
@@ -17,24 +17,24 @@ empty "$FORM_submit" || empty "$FORM_firmware" || {
 		grep BCM947 /proc/cpuinfo > /dev/null && {
 			case "$HEADER" in
 				48445230) # TRX
-					echo "Firmware is in TRX format<br />"
+					echo "@TR<<Firmware format>>: TRX<br />"
 					mv $FORM_firmware /tmp/upgrade.bin
 					UPGRADE=1
 				;;
 				57353447|57353453|57353473) # WRT54G(S)
-					echo "Firmware is in Cybertan BIN format, converting... "
+					echo "@TR<<Firmware format>>: Cybertan BIN =&lt; @TR<<converting...>> "
 					strip_cybertan
-					echo "done <br />"
+					echo "@TR<<done>>. <br />"
 					UPGRADE=1
 				;;
 				*)
 					rm $FORM_firmware
-					ERROR="<h2>Error: Invalid firmware file format</h2>"
+					ERROR="<h2>@TR<<Error>>: @TR<<Invalid_format|Invalid firmware file format>></h2>"
 				;;
 			esac
 		}
 	} || {
-		ERROR="<h2>Error: Couldn't open firmware file</h2>"
+		ERROR="<h2>@TR<<Error>>: @TR<<Open_failed|Couldn't open firmware file>></h2>"
 	}
 }
 ?>
@@ -43,20 +43,20 @@ empty "$FORM_submit" || empty "$FORM_firmware" || {
 	<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 	<tbody>
 		<tr>
-			<td>Options:</td>
+			<td>@TR<<Options>>:</td>
 			<td>
-				<input type="checkbox" name="erase_fs" value="1" checked="checked" />Erase JFFS2 partition<br />
-				<input type="checkbox" name="erase_nvram" value="1" />Erase NVRAM
+				<input type="checkbox" name="erase_fs" value="1" checked="checked" />@TR<<Erase_JFFS2|Erase JFFS2 partition>><br />
+				<input type="checkbox" name="erase_nvram" value="1" />@TR<<Erase NVRAM>>
 			</td>
 		</tr>
 		<tr>
-			<td>Firmware image to upload:</td>
+			<td>@TR<<Firmware_image|Firmware image to upload:>></td>
 			<td>
 				<input type="file" name="firmware" />
 			</td>
 		</tr>
 			<td />
-			<td><input type="submit" name="submit" value="Upgrade" /></td>
+			<td><input type="submit" name="submit" value="@TR<<Upgrade>>" /></td>
 		</tr>
 	</tbody>
 	</table>
@@ -66,14 +66,14 @@ empty "$FORM_submit" || empty "$FORM_firmware" || {
 	ERASE="${FORM_erase_fs:+-e linux }"
 	ERASE="$ERASE${FORM_erase_nvram:+-e nvram }"
 	cp /bin/busybox /tmp/
-	echo -n 'Upgrading... '
+	echo -n '@TR<<Upgrading...>> '
 	# FIXME: probably a race condition (with the reboot), but it seems to work
-	mtd -r $ERASE write /tmp/upgrade.bin linux 2>&- | awk 'END { print "done." }'
+	mtd -r $ERASE write /tmp/upgrade.bin linux 2>&- | awk 'END { print "@TR<<done>>." }'
 	exit
 ?>
 <?fi?>
 
 <? footer ?>
 <!--
-##WEBIF:name:System:3:Firmware upgrade
+##WEBIF:name:System:3:Firmware Upgrade
 -->
