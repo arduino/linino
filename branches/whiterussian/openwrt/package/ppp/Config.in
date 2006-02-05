@@ -6,6 +6,11 @@ config BR2_PACKAGE_PPP
 	default y
 	select BR2_PACKAGE_KMOD_PPP
 
+config BR2_PACKAGE_PPP_WITH_FILTER
+        bool "Enable filter support"
+	default y
+	depends BR2_PACKAGE_LIBPCAP
+
 config BR2_PACKAGE_PPP_MOD_PPPOE
 	prompt "...-mod-pppoe - PPPoE (PPP over Ethernet) plugin"
 	tristate

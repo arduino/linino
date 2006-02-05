@@ -37,6 +37,12 @@ $(eval $(call PKG_template,PPPSTATS,pppstats,$(PKG_VERSION)-$(PKG_RELEASE),$(ARC
 $(eval $(call PKG_mod_template,PPP_MOD_PPPOE,rp-pppoe))
 $(eval $(call PKG_mod_template,PPP_MOD_RADIUS,radius))
 
+PKG_DEPEND:="kmod-ppp"
+ifeq ($(BR2_PACKAGE_PPP_WITH_FILTER),y)
+ENABLE_FILTER:="FILTER=1"
+PKG_DEPEND += ", libpcap"
+endif
+
 $(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
@@ -71,6 +77,8 @@ $(PKG_BUILD_DIR)/.built:
 		CC=$(TARGET_CC) \
 		COPTS="$(TARGET_CFLAGS)" \
 		HAVE_INET6="1" \
+		$(ENABLE_FILTER) \
+		STAGING_DIR=$(STAGING_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)/usr" \
 		all install
 	touch $@
@@ -85,6 +93,7 @@ $(IPKG_PPP):
 	install -d -m0755 $(IDIR_PPP)/usr/sbin
 	install -m0755 $(PKG_INSTALL_DIR)/usr/sbin/pppd $(IDIR_PPP)/usr/sbin/
 	install -d -m0755 $(IDIR_PPP)/usr/lib/pppd
+	echo "Depends: $(PKG_DEPEND)" >> $(IDIR_PPP)/CONTROL/control
 	$(RSTRIP) $(IDIR_PPP)
 	$(IPKG_BUILD) $(IDIR_PPP) $(PACKAGE_DIR)
 	
