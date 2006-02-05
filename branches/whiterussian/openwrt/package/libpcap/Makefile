@@ -3,9 +3,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libpcap
-PKG_VERSION:=0.8.3
-PKG_RELEASE:=2
-PKG_MD5SUM:=56a9d4615d8354fcfe8cff8c8443c77b
+PKG_VERSION:=0.9.4
+PKG_RELEASE:=1
+PKG_MD5SUM:=79025766e8027df154cb1f32de8a7974
 
 PKG_SOURCE_URL:=http://www.tcpdump.org/release/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -18,7 +18,7 @@ include $(TOPDIR)/package/rules.mk
 
 $(eval $(call PKG_template,LIBPCAP,libpcap,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
-$(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
+$(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
@@ -48,17 +48,17 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  --enable-shared \
 		  --enable-static \
 		  --disable-yydebug \
-		  --with-build-cc=$(HOSTCC) \
 		  --enable-ipv6 \
+		  --with-build-cc=$(HOSTCC) \
 		  --with-pcap=linux \
 	);
 	touch $@
 
-$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
+$(PKG_BUILD_DIR)/.built:
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CCOPT="$(TARGET_CFLAGS)" \
+		CCOPT="$(TARGET_CFLAGS) -I$(BUILD_DIR)/linux/include" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 	touch $@
@@ -82,5 +82,5 @@ uninstall-dev:
 	rm -rf $(STAGING_DIR)/usr/include/pcap*
 	rm -rf $(STAGING_DIR)/usr/lib/libpcap.{a,so*}
 
-compile: install-dev
-clean: uninstall-dev
+compile-targets: install-dev
+clean-targets: uninstall-dev
