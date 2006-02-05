@@ -1,3 +1,5 @@
+Encoding => UTF-8
+
 # Common
 Settings saved => Changemensts sauvegardÃ©s
 Settings not saved => Les changements n'ont pas ÃtÃ©sauvegardÃs
