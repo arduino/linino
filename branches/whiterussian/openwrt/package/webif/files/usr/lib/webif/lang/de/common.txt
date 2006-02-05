@@ -14,6 +14,8 @@ Subcategories => Unterkategorien
 more... => mehr...
 Add => Hinzufügen
 Remove => Entfernen
+Warning => Warnung
+Password_warning => es wurde noch kein Passwort für Web-Administration und SSH gesetzt.<br />Bitte geben Sie jetzt ein neues Passwort ein (Benutzername im Browser: 'root').
 
 # Categories
 Info => Info

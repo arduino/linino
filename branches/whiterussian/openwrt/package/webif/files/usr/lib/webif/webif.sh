@@ -130,23 +130,23 @@ EOF
 <br />
 <br />
 <br />
-<h3>TR{Warning}: you haven't set a password for the Web interface and SSH access<br />
-Please enter one now (the user name in your browser will be 'root').</h3>
+<h3>@TR<<Warning>>: @TR<<you haven't set a password for the Web interface and SSH access<br />
+Please enter one now (the user name in your browser will be 'root').>></h3>
 <br />
 <br />
 <form enctype="multipart/form-data" action="$SCRIPT_NAME" method="POST">
 <table>
 	<tr>
-		<td>Enter Password:</td>
+		<td>@TR<<New Password>>:</td>
 		<td><input type="password" name="passwd1" /></td>
 	</tr>
 	<tr>
-		<td>Repeat Password: &nbsp; </td>
+		<td>@TR<<Confirm Password>>: &nbsp; </td>
 		<td><input type="password" name="passwd2" /></td>
 	</tr>
 	<tr>
 		<td />
-		<td><input type="submit" name="action" value="Set" /></td>
+		<td><input type="submit" name="action" value="@TR<<Set>>" /></td>
 	</tr>
 </table>
 </form>
