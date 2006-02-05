@@ -169,7 +169,7 @@ Encryption Settings => ParamÃtres de chiffrement
 Encryption Type => Type de chiffrement
 PSK => ClÃ©prÃ-partagÃe
 WPA Mode => Mode WPA
-WPA Algorithms => Alogrithmes WPA
+WPA Algorithms => Algorithmes WPA
 WEP Keys => ClÃs WEP
 
 Helptext ESSID => Nom du rÃseau sans-fil
