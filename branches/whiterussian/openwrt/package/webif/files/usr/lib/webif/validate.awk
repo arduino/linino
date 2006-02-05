@@ -98,9 +98,9 @@ valid == 1 {
 			sub(/^min=/, "", min)
 			min = int(min)
 			if ($1 == "int") {
-				if (value < min) { valid = 0; verr = "Value too small" }
+				if (value < min) { valid = 0; verr = "Value too small (minimum: " min ")" }
 			} else if ($1 == "string") {
-				if (length(value) < min) { valid = 0; verr = "Value too small: "  length(value) " < " min }
+				if (length(value) < min) { valid = 0; verr = "Value too small (minimum length: " min ")"}
 			}
 		} else if ((options[i] ~ /^max=/) && (value != ""))  {
 			max = options[i]
