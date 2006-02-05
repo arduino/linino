@@ -225,7 +225,7 @@ nomatch:
 		if (i == GLOB_NOSPACE || i == GLOB_ABORTED || i == GLOB_NOMATCH) {
 			// no language files found
 		} else {
-			for (i = 0; i < langfiles.gl_pathc; --i) {
+			for (i = 0; i < langfiles.gl_pathc; i++) {
 				load_lang(langfiles.gl_pathv[i]);
 			}
 		}
