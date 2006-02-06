@@ -2,18 +2,18 @@
 Encoding => UTF-8
 
 # Common
-Settings saved => Changements sauvegardés
-Settings not saved => Les changements n'ont pas éé sauvegardés
+Settings saved => Sauvardeacute
+Settings not saved => Non sauvegardeacute
 Save Changes => Sauvegarder
 Apply Changes => Appliquer
 Clear Changes => Effacer
 Review Changes => Revoir
 Host Name => Nom de machine
 Uptime => Uptime
-Load => Charge système
+Load => Charge systegraveme
 Version => Version
-Categories => Catégories
-Subcategories => Sous-catégories
+Categories => Cateacutegories
+Subcategories => Sous-cateacutetgories
 more... => davantage...
 Add => Ajouter
 Remove => Enlever
@@ -24,22 +24,22 @@ About => A propos
 Router Info => Informations routeur
 
 Status => Statut
-Connections => Connexions réseau
+Connections => Connexions reacuteseau
 DHCP => DHCP
 Wireless => Wi-Fi
 
-System => Système
+System => Systegraveme
 Password => Mot de passe
-Settings => Paramètres
-Installed Software => Logiciels installés
-Firmware Upgrade => Mise a jour firmware
+Settings => Paramegravetres
+Installed Software => Logiciels installeacutes
+Firmware Upgrade => Mise agrave jour firmware
 
-Network => Réseau
+Network => Reacuteseau
 LAN => LAN
 WAN => Internet
 Wireless => Wi-Fi
-Advanced Wireless => Wi-Fi (avancé)
-Hosts => Configuration des hôtes
+Advanced Wireless => Wi-Fi (avanceacute)
+Hosts => Configuration des hocirctes
 
 
 # 'About' page
@@ -47,17 +47,18 @@ Copyright => Copyright
 
 GPL_Text => Ce programme est un logiciel libre; vous pouvez le redistribuer
 et/ou <br />le modifier sous les termes de la General Public License<br
-/>telle qu'elle est publi�e par la Free Sofware Foundation; que ce soit sous
-la version 2 de la license, ou (a votre convenance) une version ult�rieure
+/>telle qu'elle est publieacutee par la Free Sofware Foundation; que ce soit sous
+la version 2 de la license, ou (agrave votre convenance) une version
+ulteacuterieure
 Contributions by => Contributions par
-Layout based on => Préentation basée sur
+Layout based on => Preacutesentation baseacutee sur
 by => par
 
 
-No config change. => Pas de changements dans la configuration.
-Config discarded. => Les changements n'ont pas �t� pris en compte.
+No config change. => Pas de changements.
+Config discarded. => Pas de prise en compte.
 Config changes: => Configuration actuelle:
-Updating config... => Mettre a jour de la configuration...
+Updating config... => Mise agrave jour...
 
 
 # 'Router Info' page
@@ -89,14 +90,14 @@ New Password => Nouveau mot de passe
 Confirm Password => Confirmez le mot de passe
 
 # 'System Settings' page
-System Settings => Paramètres u système
-Host Name => Nom d'hôte
+System Settings => Paramegravetres du systegraveme
+Host Name => Nom d'hocircte
 Language => Langue
 
 # 'Installed Software' page
-Installed Packages => Paquets logiciels installés
-Update package lists => Mise a jour de la liste des paquets
-Uninstall => Désinstaller
+Installed Packages => Paquets logiciels installeacutes
+Update package lists => Mise agrave jour de la liste des paquets
+Uninstall => Deacutesinstaller
 Install => Installer
 
 
@@ -106,7 +107,7 @@ converting... => conversion en cours...
 Error => Erreur
 done => prêt
 Invalid_formt => Le firmware n'a pas un format valide
-Open_failed => L'ouverture a échoué
+Open_failed => L'ouverture a eacutechoueacute
 Erase_JFFS2 => Effacer la partition JFFS2
 Erase NVRAM => Effacer la NVRAM
 Options => Options
@@ -115,7 +116,7 @@ Upgrade => Mettre a jour
 Upgrading... => Mise a jour en cours...
 
 # 'LAN Settings' page
-LAN Settings => Paramètres LAN
+LAN Settings => Paramegravetres LAN
 LAN Configuration => Configuration LAN
 Netmask => Masque réseau
 Default Gateway => Passerelle par défaut
@@ -123,12 +124,11 @@ DNS Servers => Serveur DNS
 DNS Address => Addresse DNS
 
 Note => Note
-Helptext DNS save => Il est recommandé de sauvegarder vos paramètres avant
-d'ajouter/enlever des serveurs DNS
+Helptext DNS save => Il est recommandeacute de sauvegarder vos paramegravetres avant d'ajouter/enlever des serveurs DNS
 
 
 # 'WAN Settings' page
-WAN Settings => Paramètres Internet
+WAN Settings => Paramegravetres Internet
 WAN Configuration => Configuration Internet
 PPTP Server IP => Adresse IP du serveur PPTP
 Connection Type => Type de connexion
@@ -136,12 +136,12 @@ No WAN => Pas de configuration WAN
 DHCP => DHCP
 Static IP => IP statique
 IP Settings => Paramètres IP
-PPP Settings => Param�tres PPP
-Redial Policy => Options de renumérotation
+PPP Settings => Paramegravetres PPP
+Redial Policy => Options de renumeacuterotation
 Connect on Demand => Sur demande
 Keep Alive => Toujours connecté
-Maximum Idle Time => Déai maximal d'inactivité
-Redial Timeout => Déai avant renumérotation
+Maximum Idle Time => Deacutelai maximal d'inactivteacute
+Redial Timeout => Deacutelai  avant renumérotation
 MTU => Taille maximale des paquets
 Username => Nom d'utilisateur
 
@@ -149,47 +149,47 @@ Username => Nom d'utilisateur
 # 'Wireless Configuration' page
 Wireless Configuration => Configuration Wi-Fi
 Wireless Interface => Interface Wi-Fi
-WEP Key => Clé WEP
-Selected WEP Key => Choix de la cl� WEP
-WPA PSK => WPA clé pré-partagée
+WEP Key => Cleacute WEP
+Selected WEP Key => Choix de la cleacute WEP
+WPA PSK => WPA cleacute preacute-partageacutee
 ESSID => ESSID
 Channel => Canal
 RADIUS IP Address => Adresse IP du serveur RADIUS
-RADIUS Server Key => Secret partagé avec le serveur RADIUS
-Enabled => Activé
-Disabled => Déactivé
+RADIUS Server Key => Secret partageacute avec le serveur RADIUS
+Enabled => Activeacute
+Disabled => Déactieacute
 ESSID Broadcast => Diffusion du SSID
 Show => Montrer
 Hide => Cacher
 WLAN Mode => Mode de fonctionnement Wi-Fi
-Access Point => Point d'accès
+Access Point => Point d'accegraves
 Client => Client
-Bridge => Pont-résea
+Bridge => Pont-reacuteseau
 Ad-Hoc => Ad-Hoc
 Operation mode => Mode de fonctionnement
-Encryption Settings => Paramètes de chiffrement
+Encryption Settings => Paramegravetres de chiffrement
 Encryption Type => Type de chiffrement
-PSK => Cl� pré-partagée
+PSK => Cleacute preacute-partageacutee
 WPA Mode => Mode WPA
 WPA Algorithms => Algorithmes WPA
-WEP Keys => Clés WEP
+WEP Keys => Cleacutes WEP
 
-Helptext ESSID => Nom du réseau sans-fil
+Helptext ESSID => Nom du reacute sans-fil
 
 # 'Advanced Wireless Configuration' page
-Advanced Wireless Configuration => Configuration Wi-Fi avancée
+Advanced Wireless Configuration => Configuration Wi-Fi avanceacutee
 WDS Connections => Connexions WDS
 MAC Filter List => Filtre par adresses MAC
 Filter Mode => Mode de filtrage
 Allow => Autoriser
 Deny => Refuser
-Set => Paramètrer
-Settings => Paramères
+Set => Paramegravetrer
+Settings => Paramegravetres
 Automatic WDS => WDS automatique
 
 # "Hosts" page
 
 MAC Address => Adresse MAC
-Configured Hosts => Hôtes configrés
-DHCP Static => Entrés DHCP statiques
-Host Names => Noms d'hôtes
+Configured Hosts => Hocirctes configureacutes
+DHCP Static => Entreacutees DHCP statiques
+Host Names => Noms d'hocirctes
