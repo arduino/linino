@@ -1,4 +1,4 @@
-lang = Espa&ntilde;ol
+lang => Espa&ntilde;ol
 # Common
 Settings saved => Cambios guardados
 Settings not saved => No se han podido guardar los cambios
