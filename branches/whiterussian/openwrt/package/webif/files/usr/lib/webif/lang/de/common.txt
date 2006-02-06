@@ -1,3 +1,4 @@
+lang => Deutsch
 # Common
 Settings saved => Einstellungen gespeichert
 Settings not saved => Einstellungen nicht gespeichert

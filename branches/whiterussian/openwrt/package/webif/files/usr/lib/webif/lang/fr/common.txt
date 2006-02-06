@@ -1,3 +1,4 @@
+#lang => Fran&ccedil;ais
 Encoding => UTF-8
 
 # Common
