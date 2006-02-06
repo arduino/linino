@@ -88,7 +88,7 @@ Confirm Password => Passwort bestätigen
 # 'System Settings' page
 System Settings => Systemeinstellungen
 Host Name => Hostname
-
+Language => Sprache
 
 # 'Installed Software' page
 Installed Packages => Installierte Pakete

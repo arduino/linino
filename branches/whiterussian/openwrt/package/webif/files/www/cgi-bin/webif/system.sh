@@ -44,7 +44,7 @@ start_form|@TR<<System Settings>>
 field|@TR<<Host Name>>
 text|hostname|$FORM_hostname
 $bootwait_form
-field|Language
+field|@TR<<Language>>
 select|language|$FORM_language
 $LANGUAGES
 end_form

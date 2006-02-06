@@ -91,6 +91,7 @@ Confirm Password => Confirmez le mot de passe
 # 'System Settings' page
 System Settings => Param√tres du syst√®e
 Host Name => Nom d'h√te
+Language => Langue
 
 # 'Installed Software' page
 Installed Packages => Paquets logiciels install√s
