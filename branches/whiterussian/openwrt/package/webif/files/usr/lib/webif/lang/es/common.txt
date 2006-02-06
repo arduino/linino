@@ -86,6 +86,7 @@ Confirm Password => Confirme la contrase&ntilde;a
 # 'System Settings' page
 System Settings => Par&aacute;metros del sistema
 Host Name => Nombre del host
+Language => Idioma
 
 # 'Installed Software' page
 Installed Packages => Paquetes instalados
