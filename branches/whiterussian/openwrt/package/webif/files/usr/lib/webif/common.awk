@@ -15,6 +15,10 @@ function textinput(name, value) {
 	return "<input type=\"text\" name=\"" name "\" value=\"" value "\" />"
 }
 
+function hidden(name, value) {
+	return "<input type=\"hidden\" name=\"" name "\" value=\"" value "\" />"
+}
+
 function button(name, caption) {
 	return "<input type=\"submit\" name=\"" name "\" value=\"@TR<<" caption ">>\" />"
 }
@@ -22,5 +26,5 @@ function button(name, caption) {
 function sel_option(name, caption, default, sel) {
 	if (default == name) sel = " selected=\"selected\""
 	else sel = ""
-	return "<option value=\"" name "\"" sel ">" caption "</option>"
+	return "<option value=\"" name "\"" sel ">@TR<<" caption ">></option>"
 }
