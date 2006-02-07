@@ -24,8 +24,6 @@
 
 #define WD_INTERVAL 5
 #define WD_AUTH_IDLE 20
-#define WD_WDS_WAIT 120
-#define WD_WDS_IDLE 120
 #define WD_CLIENT_IDLE 20
 
 /*------------------------------------------------------------------*/
@@ -259,7 +257,7 @@ void start_watchdog(int skfd, char *ifname)
 {
 	FILE *f;
 	unsigned char buf[8192], wdslist[8192], wbuf[80], *v, *p, *next, *tmp;
-	int wds = 0, i, j, restart_wds;
+	int wds = 0, ap, i, j, restart_wds, wdstimeout;
 	wlc_ssid_t ssid;
 
 	if (fork())
@@ -282,12 +280,16 @@ void start_watchdog(int skfd, char *ifname)
 	ssid.SSID_len = strlen(v);
 	strncpy(ssid.SSID, v, 32);
 	
+	/* client mode */
+	bcom_ioctl(skfd, ifname, WLC_GET_AP, &ap, sizeof(i));
+
+	if (ap && ((wdstimeout = atoi(nvram_safe_get(wl_var("wdstimeout")))) <= 0))
+		return;
+	
 	for (;;) {
 		sleep(WD_INTERVAL);
 
-		/* client mode */
-		bcom_ioctl(skfd, ifname, WLC_GET_AP, &i, sizeof(i));
-		if (!i) {
+		if (!ap) {
 			i = 0;
 			if (bcom_ioctl(skfd, ifname, WLC_GET_BSSID, buf, 6) < 0) 
 				i = 1;
@@ -323,7 +325,7 @@ void start_watchdog(int skfd, char *ifname)
 			if (!(bcom_ioctl(skfd, ifname, WLC_GET_VAR, buf, 8192) < 0)) {
 				sta_info_t *sta = (sta_info_t *) (buf + 4);
 				if ((sta->flags & 0x40) == 0x40) /* this is a wds link */ { 
-					if (sta->idle > WD_WDS_IDLE)
+					if (sta->idle > wdstimeout)
 						restart_wds = 1;
 
 					/* if not authorized after WD_AUTH_IDLE seconds idletime */
@@ -334,7 +336,7 @@ void start_watchdog(int skfd, char *ifname)
 		}
 		if (restart_wds) {
 			setup_bcom_wds(skfd, ifname);
-			sleep(WD_WDS_WAIT);
+			sleep(wdstimeout);
 		}
 	}
 }
