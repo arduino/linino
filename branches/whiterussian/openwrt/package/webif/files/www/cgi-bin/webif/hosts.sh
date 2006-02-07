@@ -84,7 +84,9 @@ header "Network" "Hosts" "@TR<<Configured Hosts>>" ''
 # Hosts in /etc/hosts
 awk -v "url=$SCRIPT_NAME" \
 	-v "ip=$FORM_host_ip" \
-	-v "name=$FORM_host_name"  -f /usr/lib/webif/common.awk -f - $HOSTS_FILE <<EOF
+	-v "name=$FORM_host_name" \
+	-f /usr/lib/webif/common.awk \
+	-f - $HOSTS_FILE <<EOF
 BEGIN {
 	FS="[ \t]"
 	start_form("@TR<<Host Names>>")
@@ -116,7 +118,7 @@ BEGIN {
 
 END {
 	print "<form enctype=\\"multipart/form-data\\" method=\\"post\\">"
-	print "<tr><td><input type\\"text\\" name=\\"host_ip\\" value=\\"" ip "\\" /></td><td><input type=\\"text\\" name=\\"host_name\\" value=\\"" name "\\" /></td><td style=\\"width: 10em\\"><input type=\\"submit\\" name=\\"add_host\\" value=\\"@TR<<Add>>\\" /></td></tr>"
+	print "<tr><td>" textinput("host_ip", ip) "</td><td>" textinput("host_name", name) "</td><td style=\\"width: 10em\\">" button("add_host", "Add") "</td></tr>"
 	print "</form>"
 	print "</table>"
 	end_form()
@@ -143,7 +145,7 @@ BEGIN {
 }
 
 END {
-	print "<tr><td><input type\\"text\\" name=\\"dhcp_mac\\" value=\\"" mac "\\" /></td><td><input type=\\"text\\" name=\\"dhcp_ip\\" value=\\"" ip "\\" /></td><td style=\\"width: 10em\\"><input type=\\"submit\\" name=\\"add_dhcp\\" value=\\"@TR<<Add>>\\" /></td></tr>"
+	print "<tr><td>" textinput("dhcp_mac", mac) "</td><td>" textinput("dhcp_ip", ip) "</td><td style=\\"width: 10em\\">" button("add_dhcp", "Add") "</td></tr>"
 	print "</table>"
 	print "</form>"
 	end_form();
