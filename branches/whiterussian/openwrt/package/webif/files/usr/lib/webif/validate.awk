@@ -70,6 +70,14 @@ $1 == "mac" {
 	}
 }
 
+$1 == "port" {
+	valid_type = 1
+	if (value !~ /^[0-9]*$/) {
+		valid = 0
+		verr = "@TR<<Invalid value>>"
+	}
+}
+
 $1 == "ports" {
 	valid_type = 1
 	n = split(value ",", ports, ",")
