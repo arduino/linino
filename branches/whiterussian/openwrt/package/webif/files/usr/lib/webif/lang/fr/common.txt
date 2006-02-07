@@ -2,7 +2,7 @@
 Encoding => UTF-8
 
 # Common
-Settings saved => Sauvard&&eacute;;
+Settings saved => Sauvegard&eacute;
 Settings not saved => Non sauvegard&eacute;
 Save Changes => Sauvegarder
 Apply Changes => Appliquer
