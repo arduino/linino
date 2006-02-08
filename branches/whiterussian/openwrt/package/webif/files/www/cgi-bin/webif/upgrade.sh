@@ -22,7 +22,7 @@ empty "$FORM_submit" || empty "$FORM_firmware" || {
 					UPGRADE=1
 				;;
 				57353447|57353453|57353473) # WRT54G(S)
-					echo "@TR<<Firmware format>>: Cybertan BIN =&lt; @TR<<converting...>> "
+					echo "@TR<<Firmware format>>: Cybertan BIN =&gt; @TR<<converting...>> "
 					strip_cybertan
 					echo "@TR<<done>>. <br />"
 					UPGRADE=1
@@ -45,7 +45,7 @@ empty "$FORM_submit" || empty "$FORM_firmware" || {
 		<tr>
 			<td>@TR<<Options>>:</td>
 			<td>
-				<input type="checkbox" name="erase_fs" value="1" checked="checked" />@TR<<Erase_JFFS2|Erase JFFS2 partition>><br />
+				<input type="checkbox" name="erase_fs" value="1" />@TR<<Erase_JFFS2|Erase JFFS2 partition>><br />
 				<input type="checkbox" name="erase_nvram" value="1" />@TR<<Erase NVRAM>>
 			</td>
 		</tr>
@@ -66,7 +66,7 @@ empty "$FORM_submit" || empty "$FORM_firmware" || {
 	ERASE="${FORM_erase_fs:+-e linux }"
 	ERASE="$ERASE${FORM_erase_nvram:+-e nvram }"
 	cp /bin/busybox /tmp/
-	echo -n '@TR<<Upgrading...>> '
+	echo '@TR<<Upgrading...>>'
 	# FIXME: probably a race condition (with the reboot), but it seems to work
 	mtd -r $ERASE write /tmp/upgrade.bin linux 2>&- | awk 'END { print "@TR<<done>>." }'
 	exit

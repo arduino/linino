@@ -240,6 +240,7 @@ nomatch:
 	
 	while (!feof(f) && (fgets(buf, LINE_BUF - 1, f)) != NULL) {
 		fprintf(stdout, "%s", translate_line(buf));
+		fflush(stdout);
 	}
 	
 	return 0;
