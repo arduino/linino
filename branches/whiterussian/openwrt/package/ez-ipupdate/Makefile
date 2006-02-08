@@ -46,8 +46,9 @@ $(PKG_BUILD_DIR)/.built:
 	touch $@
 
 $(IPKG_EZIPUPDATE):
-	mkdir -p $(IDIR_EZIPUPDATE)/usr/sbin 
-	cp $(PKG_BUILD_DIR)/ez-ipupdate $(IDIR_EZIPUPDATE)/usr/sbin/
+	mkdir -p $(IDIR_EZIPUPDATE)/usr/sbin $(IDIR_EZIPUPDATE)/etc/hotplug.d/iface
+	cp $(PKG_BUILD_DIR)/$(PKG_NAME) $(IDIR_EZIPUPDATE)/usr/sbin/
+	cp ./files/$(PKG_NAME).hotplug $(IDIR_EZIPUPDATE)/etc/hotplug.d/iface/10-$(PKG_NAME)
 	$(STRIP) $(IDIR_EZIPUPDATE)/usr/sbin/*
 	$(IPKG_BUILD) $(IDIR_EZIPUPDATE) $(PACKAGE_DIR)
 
