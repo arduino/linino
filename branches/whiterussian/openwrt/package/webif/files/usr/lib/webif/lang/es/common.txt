@@ -186,8 +186,8 @@ Configured Hosts => Equipos configurados
 DHCP Static => Entradas DHCP est&aacute;ticas
 Host Names => Nombre de los equipos
 
-Up => Activo
-Down => Ca&iacute;do
+Up => Subir
+Down => Bajar
 Edit => Editar
 Delete => Borrar
 Save => Guardar
