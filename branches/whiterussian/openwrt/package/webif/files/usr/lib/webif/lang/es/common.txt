@@ -15,6 +15,8 @@ Subcategories => Subcategor&iacute;s
 more... => m&aacute;s...
 Add => A&ntilde;adir
 Remove => Eliminar
+Warning => Atenci&oacute;n
+Password_warning => no has establecido una contrase&ntilde;a de protecci&oacute;n para el router (acceso web y ssh). Por favor, elija una ahora (el nombre de usuario ser&aacute; 'root')
 
 # Categories
 Info => Info
@@ -79,7 +81,7 @@ Expires in => Caduca en
 Wireless Status => Estado del Wi-Fi
 
 # 'Password' page
-Password Change => Cambio de la contrase&ntilde;
+Password Change => Cambio de la contrase&ntilde;a
 New Password => Nueva contrase&ntilde;a
 Confirm Password => Confirme la contrase&ntilde;a
 
@@ -104,7 +106,7 @@ Invalid_formt => Formato del firmware inv&aacute;lido
 Open_failed => Error al abrir el archivo
 Erase_JFFS2 => Borrar la partici&oacute;n JFFS2
 Erase NVRAM => Borrar la NVRAM
-Options => Optciones
+Options => Opciones
 Firmware_image => Archivo del firmware
 Upgrade => Actualizar
 Upgrading... => Actualizaci&oacute;n...
