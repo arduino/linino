@@ -202,7 +202,7 @@ Firewall Rules => Reglas del Firewall
 Firewall Configuration => Configuraci&oacute;n del Firewall
 
 New Rule => Nueva regla
-Match => 
+Match => Filtrar
 Target => Acci&oacute;n
 Port => Puerto
 
