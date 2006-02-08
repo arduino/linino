@@ -75,5 +75,5 @@ empty "$FORM_submit" || empty "$FORM_firmware" || {
 
 <? footer ?>
 <!--
-##WEBIF:name:System:3:Firmware Upgrade
+##WEBIF:name:System:4:Firmware Upgrade
 -->

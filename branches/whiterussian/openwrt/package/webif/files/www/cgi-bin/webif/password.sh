@@ -22,7 +22,7 @@ EOF
 	}
 }
 
-header "System" "Password" "@TR<<Password Change>>" '' "$SCRIPT_NAME"
+header "System" "Password Change" "@TR<<Password Change>>" '' "$SCRIPT_NAME"
 
 display_form <<EOF
 start_form|@TR<<Password Change>>
@@ -36,5 +36,5 @@ EOF
 footer ?>
 
 <!--
-##WEBIF:name:System:0:Password
+##WEBIF:name:System:2:Password Change
 -->

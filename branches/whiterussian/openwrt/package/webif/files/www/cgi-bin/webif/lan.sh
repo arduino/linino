@@ -42,8 +42,8 @@ text|lan_gateway|$FORM_lan_gateway
 end_form
 start_form|@TR<<DNS Servers>>
 listedit|dns|$SCRIPT_NAME?|$FORM_dns|$FORM_dnsadd
-helpitem|@TR<<Note>>
-helptext|@TR<<Helptext DNS save#You need save your settings on this page before adding/removing DNS servers>>
+helpitem|Note
+helptext|Helptext DNS save#You need save your settings on this page before adding/removing DNS servers
 end_form
 EOF
 

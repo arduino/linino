@@ -117,12 +117,12 @@ fi
 
 # detect pptp package and compile option
 [ -x /sbin/ifup.pptp ] && {
-	PPTP_OPTION="radio|wan_proto|$FORM_wan_proto|pptp|PPTP<br />"
-	PPTP_SERVER_OPTION="field|PPTP Server IP|pptp_server_ip|hidden
+	PPTP_OPTION="option|pptp|PPTP"
+	PPTP_SERVER_OPTION="field|PPTP Server IP|pptp_server|hidden
 text|pptp_server_ip|$FORM_pptp_server_ip"
 }
 [ -x /sbin/ifup.pppoe ] && {
-	PPPOE_OPTION="radio|wan_proto|$FORM_wan_proto|pppoe|PPPoE<br />"
+	PPPOE_OPTION="option|pppoe|PPPoE"
 }
 
 
@@ -135,26 +135,29 @@ cat <<EOF
 function modechange()
 {
 	var v;
-	v = (checked('wan_proto_pppoe') || checked('wan_proto_pptp'));
+	v = (isset('wan_proto', 'pppoe') || isset('wan_proto', 'pptp'));
 	set_visible('ppp_settings', v);
-	set_visible('ppp_username', v);
-	set_visible('ppp_passwd', v);
-	set_visible('ppp_redial', v);
-	set_visible('ppp_mtu', v);
-	set_visible('ppp_demand_idletime', v && checked('ppp_redial_demand'));
-	set_visible('ppp_persist_redialperiod', v && !checked('ppp_redial_demand'));
+	set_visible('username', v);
+	set_visible('passwd', v);
+	set_visible('redial', v);
+	set_visible('mtu', v);
+	set_visible('demand_idletime', v && isset('ppp_redial', 'demand'));
+	set_visible('persist_redialperiod', v && !isset('ppp_redial', 'demand'));
 	
-	v = (checked('wan_proto_static') || checked('wan_proto_pptp') || checked('wan_proto_dhcp'));
+	v = (isset('wan_proto', 'static') || isset('wan_proto', 'pptp') || isset('wan_proto', 'dhcp'));
 	set_visible('ip_settings', v);
-	set_visible('wan_ipaddr', v);
-	set_visible('wan_netmask', v);
+	set_visible('ipaddr', v);
+	set_visible('netmask', v);
 	
-	v = checked('wan_proto_static');
-	set_visible('wan_gateway', v);
-	set_visible('wan_dns', v);
+	v = isset('wan_proto', 'static');
+	set_visible('gateway', v);
+	set_visible('dns', v);
 
-	v = checked('wan_proto_pptp');
-	set_visible('pptp_server_ip',v);
+	v = isset('wan_proto', 'pptp');
+	set_visible('pptp_server',v);
+
+	hide('save');
+	show('save');
 }
 -->
 </script>
@@ -164,42 +167,49 @@ display_form <<EOF
 onchange|modechange
 start_form|@TR<<WAN Configuration>>
 field|@TR<<Connection Type>>
-radio|wan_proto|$FORM_wan_proto|none|@TR<<No WAN#None>><br />
-radio|wan_proto|$FORM_wan_proto|dhcp|@TR<<DHCP>><br />
-radio|wan_proto|$FORM_wan_proto|static|@TR<<Static IP>><br />
+select|wan_proto|$FORM_wan_proto
+option|none|@TR<<No WAN#None>>
+option|dhcp|@TR<<DHCP>>
+option|static|@TR<<Static IP>>
 $PPPOE_OPTION
 $PPTP_OPTION
+helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-b62c144b9886b221e0c4b870edb0dd23a7b6acab
 end_form
-tatus
 start_form|@TR<<IP Settings>>|ip_settings|hidden
-field|@TR<<IP Address>>|wan_ipaddr|hidden
+field|@TR<<IP Address>>|ipaddr|hidden
 text|wan_ipaddr|$FORM_wan_ipaddr
-field|@TR<<Netmask>>|wan_netmask|hidden
+field|@TR<<Netmask>>|netmask|hidden
 text|wan_netmask|$FORM_wan_netmask
-field|@TR<<Default Gateway>>|wan_gateway|hidden
+field|@TR<<Default Gateway>>|gateway|hidden
 text|wan_gateway|$FORM_wan_gateway
 $PPTP_SERVER_OPTION
+helpitem|IP Settings
+helptext|Helptext IP Settings#IP Settings are optional for DHCP and PPTP. If you set them, they are used as defaults in case the DHCP server is unavailable.
 end_form
-
-start_form|@TR<<DNS Servers>>|wan_dns|hidden
+start_form|@TR<<DNS Servers>>|dns|hidden
 listedit|dns|$SCRIPT_NAME?wan_proto=static&|$FORM_dns|$FORM_dnsadd
-helpitem|@TR<<Note>>
-helptext|@TR<<Helptext DNS save#You should save your settings on this page before adding/removing DNS servers>> 
+helpitem|Note
+helptext|Helptext DNS save#You should save your settings on this page before adding/removing DNS servers
 end_form
 
 start_form|@TR<<PPP Settings>>|ppp_settings|hidden
-field|@TR<<Redial Policy>>|ppp_redial|hidden
-radio|ppp_redial|$FORM_ppp_redial|demand|@TR<<Connect on Demand>><br />
-radio|ppp_redial|$FORM_ppp_redial|persist|@TR<<Keep Alive>>
-field|@TR<<Maximum Idle Time>>|ppp_demand_idletime|hidden
+field|@TR<<Redial Policy>>|redial|hidden
+select|ppp_redial|$FORM_ppp_redial
+option|demand|@TR<<Connect on Demand>>
+option|persist|@TR<<Keep Alive>>
+field|@TR<<Maximum Idle Time>>|demand_idletime|hidden
 text|ppp_idletime|$FORM_ppp_idletime
-field|@TR<<Redial Timeout>>|ppp_persist_redialperiod|hidden
+helpitem|Maximum Idle Time
+helptext|Helptext Idle Time#The number of seconds without internet traffic that the router should wait before disconnecting from the Internet (Connect on Demand only)
+field|@TR<<Redial Timeout>>|persist_redialperiod|hidden
 text|ppp_redialperiod|$FORM_ppp_redialperiod
-field|@TR<<Username>>|ppp_username|hidden
+helpitem|Redial Timeout
+helptext|Helptext Redial Timeout#The number of seconds to wait after receiving no response from the provider before trying to reconnect
+field|@TR<<Username>>|username|hidden
 text|ppp_username|$FORM_ppp_username
-field|@TR<<Password>>|ppp_passwd|hidden
+field|@TR<<Password>>|passwd|hidden
 password|ppp_passwd|$FORM_ppp_passwd
-field|@TR<<MTU>>|ppp_mtu|hidden
+field|@TR<<MTU>>|mtu|hidden
 text|ppp_mtu|$FORM_ppp_mtu
 end_form
 EOF

@@ -81,6 +81,9 @@ if empty "$FORM_submit"; then
 			FORM_aes=aes
 			FORM_tkip=tkip
 			;;
+		*)
+			FORM_tkip=tkip
+			;;
 	esac
 	equal "$FORM_encryption" "off" && {
 		wep=${wl0_wep:-$(nvram get wl0_wep)}
@@ -233,8 +236,8 @@ option|0|@TR<<Show>>
 option|1|@TR<<Hide>>
 field|@TR<<ESSID>>
 text|ssid|$FORM_ssid
-helpitem|@TR<<ESSID>>
-helptext|@TR<<Helptext ESSID#Name of your Wireless Network>>
+helpitem|ESSID
+helptext|Helptext ESSID#Name of your Wireless Network
 field|@TR<<Channel>>
 select|channel|$FORM_channel
 $F_CHANNELS
@@ -244,8 +247,8 @@ option|ap|@TR<<Access Point>>
 option|sta|@TR<<Client>>
 option|wet|@TR<<Client>> (@TR<<Bridge>>)
 option|adhoc|@TR<<Ad-Hoc>>
-helpitem|@TR<<WLAN Mode#Mode>>
-helptext|@TR<<Operation mode>>
+helpitem|WLAN Mode#Mode
+helptext|Helptext Operation mode#This sets the operation mode of your wireless network. Selecting 'Client (Bridge)' will not change your network interface settings. It will only set some parameters in the wireless driver that allow for limited bridging of the interface.
 helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-7126c5958e237d603674b3a9739c9d23bdfdb293
 end_form
 start_form|@TR<<Encryption Settings>>
@@ -255,6 +258,8 @@ option|off|@TR<<Disabled>>
 option|wep|WEP
 option|psk|WPA (@TR<<PSK>>)
 option|wpa|WPA (RADIUS)
+helpitem|Encryption Type
+helptext|Helptext Encryption Type#'WPA (RADIUS)' is only supported in Access Point mode. <br /> 'WPA (PSK)' doesn't work in Ad-Hoc mode.
 field|@TR<<WPA Mode>>|wpa_support|hidden
 checkbox|wpa1|$FORM_wpa1|wpa1|WPA1
 checkbox|wpa2|$FORM_wpa2|wpa2|WPA2

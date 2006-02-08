@@ -124,7 +124,6 @@ DNS Servers => Serveur DNS
 DNS Address => Addresse DNS
 
 Note => Note
-Helptext DNS save => Il est recommand&eacute; de sauvegarder vos param&egrave;tres avant d'ajouter/enlever des serveurs DNS
 
 
 # 'WAN Settings' page
@@ -166,7 +165,6 @@ Access Point => Point d'acc&egrave;s
 Client => Client
 Bridge => Pont-r&eacute;seau
 Ad-Hoc => Ad-Hoc
-Operation mode => Mode de fonctionnement
 Encryption Settings => Param&egrave;tres de chiffrement
 Encryption Type => Type de chiffrement
 PSK => Cl&eacute; pr&eacute;-partag&eacute;e
@@ -174,7 +172,6 @@ WPA Mode => Mode WPA
 WPA Algorithms => Algorithmes WPA
 WEP Keys => Cl&eacute;s WEP
 
-Helptext ESSID => Nom du r&eacute;seau sans-fil
 
 # 'Advanced Wireless Configuration' page
 Advanced Wireless Configuration => Configuration Wi-Fi avanc&eacute;e
@@ -193,3 +190,47 @@ MAC Address => Adresse MAC
 Configured Hosts => H&ocirc;tes configur&eacute;s
 DHCP Static => Entr&eacute;es DHCP statiques
 Host Names => Noms d'h&ocirc;tes
+
+# Untranslated
+# Up =>
+# Down =>
+# Edit =>
+# Delete =>
+# Save =>
+# Cancel =>
+
+# Forward =>
+# Accept =>
+# Drop =>
+
+# Firewall =>
+# Firewall Rules =>
+# Firewall Configuration =>
+
+# New Rule =>
+# Match =>
+# Target =>
+# Port =>
+
+# Protocol =>
+# Source IP =>
+# Destination IP =>
+# Source Ports =>
+# Destination Ports =>
+
+# Forward to =>
+# Port =>
+
+
+Helptext ESSID => Nom du r&eacute;seau sans-fil
+Helptext DNS save => Il est recommand&eacute; de sauvegarder vos param&egrave;tres avant d'ajouter/enlever des serveurs DNS
+
+
+# Untranslated
+# Helptext Operation mode => This sets the operation mode of your wireless network. Selecting 'Client (Bridge)' will not change your network interface settings. It will only set some parameters in the wireless driver that allow for limited bridging of the interface.
+# Helptext Encryption Type => 'WPA (RADIUS)' is only supported in Access Point mode. <br /> 'WPA (PSK)' doesn't work in Ad-Hoc mode.
+# Helptext IP Settings => IP Settings are optional for DHCP and PPTP. If you set them, they are used as defaults in case the DHCP server is unavailable.
+# Helptext Idle Time => The number of seconds without internet traffic that the router should wait before disconnecting from the Internet (Connect on Demand only)
+# Helptext Redial Timeout => The number of seconds to wait after receiving no response from the provider before trying to reconnect
+
+

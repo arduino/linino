@@ -118,8 +118,6 @@ DNS Servers => Servidor DNS
 DNS Address => Direcci&oacute;n IP del DNS
 
 Note => Nota
-Helptext DNS save => Es recomendable guardar los cambios antes de a&ntilde;adir o eliminar servidores de DNS de la lista
-
 
 # 'WAN Settings' page
 WAN Settings => Configuraci&oacute;n de Internet
@@ -168,8 +166,6 @@ WPA Mode => Modo WPA
 WPA Algorithms => Algoritmos WPA
 WEP Keys => Clave WEP
 
-Helptext ESSID => SSID
-
 # 'Advanced Wireless Configuration' page
 Advanced Wireless Configuration => Configuraci&oacute;n Wi-Fi avanzada
 WDS Connections => Conexiones WDS
@@ -187,3 +183,43 @@ MAC Address => Direcci&oacute;n MAC
 Configured Hosts => Equipos configurados
 DHCP Static => Entradas DHCP est&aacute;ticas
 Host Names => Nombre de los equipos
+
+Up => Activo
+Down => Ca&iacute;do
+Edit => Editar
+Delete => Borrar
+Save => Guardar
+Cancel => Cancelar
+
+Forward => Redirigir
+Accept => Aceptar
+Drop => Descartar
+
+Firewall => Firewall
+Firewall Rules => Reglas del Firewall
+Firewall Configuration => Configuraci&oacute;n del Firewall
+
+New Rule => Nueva regla
+Match => 
+Target => Acci&oacute;n
+Port => Puerto
+
+Protocol => Protocolo
+Source IP => IP origen
+Destination IP => IP destino
+Source Ports => Puertos origen
+Destination Ports => Puertos destino
+
+Forward to => Redirigir a
+Port => Puerto
+
+Helptext ESSID => SSID
+Helptext DNS save => Es recomendable guardar los cambios antes de a&ntilde;adir o eliminar servidores de DNS de la lista
+
+Helptext Operation mode => Establece el modo de operaci&oacute;n de tu red wireless. Eligiendo 'Client (bridge)' no cambiar&aacute; la configuraci&oacute;n de la interfaz de red. Simplemente a&ntilde;adir&aacute; unos par&aacute;metros que permitir&aacute;n que la interfaz wireless act&uacute;e en cierta medida en modo bridge.
+Helptext Encryption Type => 'WPA (RADIUS)' s&oacute;lo puede usarse en modo Punto de Acceso.<br /> 'WPA (PSK)' no funciona en modo Ad-Hoc.
+Helptext IP Settings => Las opciones IP son opcionales para DHCP y PPTP. Si las eliges, se utilizar&aacute;n por defecto en caso de que la configuraci&oacute;n autom&aacute;tica falle.
+Helptext Idle Time => N&uacute;mero de segundos sin actividad con Internet que debe esperar el router antes de desconectarse. (S&oacute;lo para el modo Bajo Demanda).
+Helptext Redial Timeout => N&uacute;mero de segundos sin recibir respuesta del servidor que debe esperar el router para volver a conectarse.
+
+

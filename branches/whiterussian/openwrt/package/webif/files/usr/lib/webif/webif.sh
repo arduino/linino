@@ -67,7 +67,7 @@ header() {
 	_version=$( grep "(" /etc/banner )
 	_version="${_version%% ---*}"
 	_head="${3:+<div class=\"settings-block-title\"><h2>$3$_saved_title</h2></div>}"
-	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type="hidden" name="submit" value="1" />}"
+	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />}"
 	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
