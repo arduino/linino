@@ -47,9 +47,11 @@ equal "$REQUEST_METHOD" "GET" && {
 function statusupdate() {
 	document.getElementById("form_submit").style.display = "none";
 	document.getElementById("status_text").style.display = "inline";
-	document.getElementById("status_text").firstChild.nodeValue = "@TR<<Upgrading...>>";
 
 	return true;
+}
+function printStatus() {
+	document.write('<div style="display: none; font-size: 14pt; font-weight: bold;" id="status_text" />@TR<<Upgrading...>>&nbsp;</div>');
 }
 	</script>
 	<form method="POST" name="upgrade" action="$SCRIPT_NAME" enctype="multipart/form-data" onSubmit="statusupdate()">
@@ -71,7 +73,7 @@ function statusupdate() {
 		<tr>
 			<td />
 			<td>
-				<div style="display: none; font-size: 14pt; font-weight: bold;" id="status_text" />&nbsp;</div>
+				<script type="text/javascript">printStatus()</script>
 				<input id="form_submit" type="submit" name="submit" value="@TR<<Upgrade>>" onClick="statusupdate()" />
 			</td>
 		</tr>
