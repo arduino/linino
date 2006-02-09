@@ -107,7 +107,6 @@ Install => Installer
 
 # 'Firmware Upgrade' page
 Firmware format => Format du firmware
-converting... => conversion en cours...
 Error => Erreur
 done => prêt
 Invalid_formt => Le firmware n'a pas un format valide

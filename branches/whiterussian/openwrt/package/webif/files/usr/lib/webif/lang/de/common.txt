@@ -99,7 +99,6 @@ Install => Installieren
 
 # 'Firmware Upgrade' page
 Firmware format => Firmware-Format
-converting... => konvertiere...
 Error => Fehler
 done => fertig
 Invalid_format => Das Dateiformat der Firmware ist ung&uuml;ltig

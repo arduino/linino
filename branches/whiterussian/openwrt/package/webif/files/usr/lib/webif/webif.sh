@@ -135,6 +135,8 @@ EOF
 <h3>@TR<<Warning>>: @TR<<Password_warning|you haven't set a password for the Web interface and SSH access<br />Please enter one now (the user name in your browser will be 'root').>></h3>
 <br />
 <br />
+EOF
+			empty "$NOINPUT" && cat <<EOF
 <form enctype="multipart/form-data" action="$SCRIPT_NAME" method="POST">
 <table>
 	<tr>

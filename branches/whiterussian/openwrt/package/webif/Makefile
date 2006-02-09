@@ -24,13 +24,15 @@ $(PKG_BUILD_DIR)/.configured:
 
 $(PKG_BUILD_DIR)/.built:
 	$(TARGET_CC) $(TARGET_CFLAGS) $(NVRAM_OPTS) -o $(PKG_BUILD_DIR)/webif-page src/webif-page.c
-	$(STRIP) $(PKG_BUILD_DIR)/webif-page
+	$(TARGET_CC) $(TARGET_CFLAGS) -o $(PKG_BUILD_DIR)/bstrip src/bstrip.c
+	$(STRIP) $(PKG_BUILD_DIR)/webif-page $(PKG_BUILD_DIR)/bstrip
 	touch $@
 
 $(IPKG_WEBIF): 
 	cp -a ./files/* $(IDIR_WEBIF)/
 	install -d $(IDIR_WEBIF)/usr/bin
 	install -m0755 $(PKG_BUILD_DIR)/webif-page $(IDIR_WEBIF)/usr/bin/webif-page
+	install -m0755 $(PKG_BUILD_DIR)/bstrip $(IDIR_WEBIF)/usr/bin/bstrip
 	find $(IDIR_WEBIF) -name CVS | xargs rm -rf
 	find $(IDIR_WEBIF) -name .svn | xargs rm -rf
 	$(IPKG_BUILD) $(IDIR_WEBIF) $(PACKAGE_DIR)

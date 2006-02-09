@@ -1,45 +1,58 @@
-#!/usr/bin/webif-page -u
-<? 
+#!/usr/bin/webif-page -p /bin/sh
 . /usr/lib/webif/webif.sh
+
+do_upgrade() {
+	# free some memory :)
+	ps | grep -vE 'Command|init|\[[kbmj]|httpd|haserl|bin/sh|awk|kill|ps|webif' | awk '{ print $1 }' | xargs kill -KILL
+	MEMFREE="$(awk 'BEGIN{ mem = 0 } ($1 == "MemFree:") || ($1 == "Cached:") {mem += int($2)} END{print mem}' /proc/meminfo)"
+	empty "$ERASE_NVRAM" || {
+		mtd -q erase nvram
+	}
+	empty "$ERASE_FS" || MTD_OPT="-e linux"
+	if [ $(($MEMFREE)) -ge 4096 ]; then
+		bstrip "$BOUNDARY" > /tmp/firmware.bin
+		mtd $MTD_OPT -q -r write /tmp/firmware.bin linux
+	else
+		# Not enough memory for storing the firmware on tmpfs
+		bstrip "$BOUNDARY" | mtd $MTD_OPT -q -q -r write - linux
+	fi
+	echo "@TR<<done>>."
+}
+
+read_var() {
+	NAME=""
+	while :; do
+		read LINE
+		LINE="${LINE%%[^0-9A-Za-z]}"
+		equal "$LINE" "$BOUNDARY" && read LINE
+		empty "$NAME$LINE" && exit
+		case "${LINE%%:*}" in
+			Content-Disposition)
+				NAME="${LINE##*; name=\"}"
+				NAME="${NAME%%\"*}"
+			;;
+		esac
+		empty "$LINE" && return
+	done
+}
+
+
+NOINPUT=1
 header "System" "Firmware Upgrade" "@TR<<Firmware Upgrade>>"
 
-strip_cybertan() {
-	(
-		dd of=/dev/null bs=32 count=1 2>/dev/null
-		cat > /tmp/upgrade.bin
-	) < "$FORM_firmware"
-	rm "$FORM_firmware"
-}
+equal "$REQUEST_METHOD" "GET" && {
+	cat <<EOF
+	<script type="text/javascript">
+	
+function statusupdate() {
+	document.getElementById("form_submit").style.display = "none";
+	document.getElementById("status_text").style.display = "inline";
+	document.getElementById("status_text").firstChild.nodeValue = "@TR<<Upgrading...>>";
 
-empty "$FORM_submit" || empty "$FORM_firmware" || {
-	exists $FORM_firmware && {
-		HEADER=$(head -c4 $FORM_firmware | hexdump -e "8/1 \"%x\"")
-		grep BCM947 /proc/cpuinfo > /dev/null && {
-			case "$HEADER" in
-				48445230) # TRX
-					echo "@TR<<Firmware format>>: TRX<br />"
-					mv $FORM_firmware /tmp/upgrade.bin
-					UPGRADE=1
-				;;
-				57353447|57353453|57353473) # WRT54G(S)
-					echo "@TR<<Firmware format>>: Cybertan BIN =&gt; @TR<<converting...>> "
-					strip_cybertan
-					echo "@TR<<done>>. <br />"
-					UPGRADE=1
-				;;
-				*)
-					rm $FORM_firmware
-					ERROR="<h2>@TR<<Error>>: @TR<<Invalid_format|Invalid firmware file format>></h2>"
-				;;
-			esac
-		}
-	} || {
-		ERROR="<h2>@TR<<Error>>: @TR<<Open_failed|Couldn't open firmware file>></h2>"
-	}
+	return true;
 }
-?>
-<?if empty "$UPGRADE" ?>
-	<form method="POST" name="upgrade" action="<? echo -n $SCRIPT_NAME ?>" enctype="multipart/form-data">
+	</script>
+	<form method="POST" name="upgrade" action="$SCRIPT_NAME" enctype="multipart/form-data" onSubmit="statusupdate()">
 	<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 	<tbody>
 		<tr>
@@ -55,25 +68,52 @@ empty "$FORM_submit" || empty "$FORM_firmware" || {
 				<input type="file" name="firmware" />
 			</td>
 		</tr>
+		<tr>
 			<td />
-			<td><input type="submit" name="submit" value="@TR<<Upgrade>>" /></td>
+			<td>
+				<div style="display: none; font-size: 14pt; font-weight: bold;" id="status_text" />&nbsp;</div>
+				<input id="form_submit" type="submit" name="submit" value="@TR<<Upgrade>>" onClick="statusupdate()" />
+			</td>
 		</tr>
 	</tbody>
 	</table>
 	</form>
-<?el?>
-<?
-	ERASE="${FORM_erase_fs:+-e linux }"
-	ERASE="$ERASE${FORM_erase_nvram:+-e nvram }"
-	cp /bin/busybox /tmp/
-	echo '@TR<<Upgrading...>>'
-	# FIXME: probably a race condition (with the reboot), but it seems to work
-	mtd -r $ERASE write /tmp/upgrade.bin linux 2>&- | awk 'END { print "@TR<<done>>." }'
-	exit
-?>
-<?fi?>
+EOF
+}
+equal "$REQUEST_METHOD" "POST" && {
+	equal "${CONTENT_TYPE%%;*}" "multipart/form-data" || ERR=1
+	BOUNDARY="${CONTENT_TYPE##*boundary=}"
+	empty "$BOUNDARY" && ERR=1
 
-<? footer ?>
-<!--
+	empty "$ERR" || {
+		echo "Wrong data format"
+		footer
+		exit
+	}
+cat <<EOF
+	<div style="margin: auto; text-align: left">
+<pre>
+EOF
+	while :; do
+		read_var
+		empty "$NAME" && exit
+		case "$NAME" in
+			erase_fs)
+				ERASE_FS=1
+				bstrip "$BOUNDARY" > /dev/null
+			;;
+			erase_nvram)
+				ERASE_NVRAM=1
+				bstrip "$BOUNDARY" > /dev/null
+			;;
+			firmware) do_upgrade;;
+		esac
+	done
+cat <<EOF
+	</div>
+EOF
+}
+
+footer
+
 ##WEBIF:name:System:4:Firmware Upgrade
--->

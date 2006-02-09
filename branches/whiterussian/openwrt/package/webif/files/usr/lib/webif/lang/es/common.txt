@@ -99,7 +99,6 @@ Install => Instalar
 
 # 'Firmware Upgrade' page
 Firmware format => Formato del firmware
-converting... => convirtiendo...
 Error => Error
 done => hecho
 Invalid_formt => Formato del firmware inv&aacute;lido

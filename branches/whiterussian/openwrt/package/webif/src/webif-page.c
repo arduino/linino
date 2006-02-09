@@ -181,10 +181,11 @@ static void load_lang(char *file)
 int main (int argc, char **argv)
 {
 	FILE *f;
-	int len, i;
-	char line[LINE_BUF];
+	int len, i, done;
+	char line[LINE_BUF], *tmp, *arg;
 	glob_t langfiles;
 	char *lang = NULL;
+	char *proc = "/usr/bin/haserl";
 
 	memset(ltable, 0, HASH_MAX * sizeof(lstr *));
 #ifdef NVRAM
@@ -231,8 +232,49 @@ nomatch:
 		}
 	}
 
+	/*
+	 * command line options for this parser are stored in argv[1] only.
+	 * filename to be processed is in argv[2]
+	 */
+	done = 0;
 	i = 1;
-	strcpy(buf, "/usr/bin/haserl");
+	while (!done) {
+		if (argv[1] == NULL) {
+			done = 1;
+		} else if (strncmp(argv[1], "-e", 2) == 0) {
+			argv[1] = strchr(argv[1], ' ');
+			argv[1]++;
+			if (argv[1] != NULL) {
+				arg = argv[1];
+				if ((tmp = strchr(argv[1], ' ')) != NULL) {
+					*tmp = 0;
+					argv[1] = &tmp[1];
+				} else {
+					argv[1] = NULL;
+					i++;
+				}
+				system(arg);
+			}
+		} else if (strncmp(argv[1], "-p", 2) == 0) {
+			argv[1] = strchr(argv[1], ' ');
+			argv[1]++;
+			if (argv[1] != NULL) {
+				arg = argv[1];
+				if ((tmp = strchr(argv[1], ' ')) != NULL) {
+					*tmp = 0;
+					argv[1] = &tmp[1];
+				} else {
+					argv[1] = NULL;
+					i++;
+				}
+				proc = strdup(arg);
+			}
+		} else {
+			done = 1;
+		}
+	}
+
+	strcpy(buf, proc);
 	while (argv[i]) {
 		sprintf(buf + strlen(buf), " %s", argv[i++]);
 	}
