@@ -18,9 +18,10 @@ more... => davantage...
 Add => Ajouter
 Remove => Enlever
 
-# Untranslated
-# Warning => 
-# Password_warning => you haven't set a password for the Web interface and SSH access<br /> Please enter one now (the user name in your browser will be 'root'). 
+Warning => Attention
+Password_warning => vous n'avez pas configur&eacute; de mot de passe pour
+l'interface Web et l'acc&egrave;s SSH<br /> Entrez en un maintenant (le nom
+d'utilisateur dans le navigateur sera 'root'). 
 
 # Categories
 Info => Info
@@ -194,46 +195,53 @@ Configured Hosts => H&ocirc;tes configur&eacute;s
 DHCP Static => Entr&eacute;es DHCP statiques
 Host Names => Noms d'h&ocirc;tes
 
-# Untranslated
-# Up =>
-# Down =>
-# Edit =>
-# Delete =>
-# Save =>
-# Cancel =>
+Up => Activ&eaccute;
+Down => D&eacute;sactiv&eacute;
+Edit => Editer
+Delete => Effacer
+Save => Sauvegarder
+Cancel => Annuler
 
-# Forward =>
-# Accept =>
-# Drop =>
+Forward => Transf&eacute;rer
+Accept => Accepter
+Drop => Ignorer
 
-# Firewall =>
-# Firewall Rules =>
-# Firewall Configuration =>
+Firewall => Pare-feu
+Firewall Rules => R&egrave;gles du pare-feu
+Firewall Configuration => Configuration du pare-feu
 
-# New Rule =>
-# Match =>
-# Target =>
-# Port =>
+New Rule => Nouvelle r&egrave;gle
+Match => Concordance
+Target => Destination
+Port => Port
 
-# Protocol =>
-# Source IP =>
-# Destination IP =>
-# Source Ports =>
-# Destination Ports =>
+Protocol => Protocole
+Source IP => IP source
+Destination IP => IP de destination
+Source Ports => Ports source
+Destination Ports => Ports de destination
 
-# Forward to =>
-# Port =>
+Forward to => Transf&eacute;rer vers
+Port => Port
 
 
 Helptext ESSID => Nom du r&eacute;seau sans-fil
 Helptext DNS save => Il est recommand&eacute; de sauvegarder vos param&egrave;tres avant d'ajouter/enlever des serveurs DNS
 
 
-# Untranslated
-# Helptext Operation mode => This sets the operation mode of your wireless network. Selecting 'Client (Bridge)' will not change your network interface settings. It will only set some parameters in the wireless driver that allow for limited bridging of the interface.
-# Helptext Encryption Type => 'WPA (RADIUS)' is only supported in Access Point mode. <br /> 'WPA (PSK)' doesn't work in Ad-Hoc mode.
-# Helptext IP Settings => IP Settings are optional for DHCP and PPTP. If you set them, they are used as defaults in case the DHCP server is unavailable.
-# Helptext Idle Time => The number of seconds without internet traffic that the router should wait before disconnecting from the Internet (Connect on Demand only)
-# Helptext Redial Timeout => The number of seconds to wait after receiving no response from the provider before trying to reconnect
+Helptext Operation mode => Configure le mode de fonctionnement de votre
+r&eacute;seau sans-fil. Le mode Client (Pont r&eacute;seau sans-fil) ne
+changeront pas les param&egrave;tres de votre interface. Certains
+param&egrave;tres de la carte Wi-Fi seront modifi&eacute;s de mani&egrave;re
+&agrave; pouvoir fonctionner en mode r&eacute;seau sans-fil.
+Helptext Encryption Type => 'WPA (RADIUS)' ne fonctionne qu'en mode point
+d'acc&egrave;s. <br /> 'WPA (PSK)' ne fonctionne pas en mode Ad-hoc.
+Helptext IP Settings => Les param&egrave;tres IP sont optionnels pour DHCP et
+PPTP. Si vous les configurez, ils seront utilis&eacute; comme
+param&egrave;tres par d&eacute;faut au cas o&uacute; le serveur DHCP ne
+r&eacute; pas.
+Helptext Idle Time => Nombre de secondes sans traffic internet &agrave; attendre avant que le routeur d&eacute;connecte d'Internet (Connexion &agreve; la demande)
+Helptext Redial Timeout => Nombre de secondes &agrave; attendre apr&egrave;s
+n'avoir recu aucune r&eacute;ponse du fournisseur avant nouvel &eacute;ssai
 
 
