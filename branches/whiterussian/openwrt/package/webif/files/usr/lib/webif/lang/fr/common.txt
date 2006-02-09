@@ -48,11 +48,7 @@ Hosts => Configuration des h&ocirc;tes
 # 'About' page
 Copyright => Copyright
 
-GPL_Text => Ce programme est un logiciel libre; vous pouvez le redistribuer
-et/ou <br />le modifier sous les termes de la General Public License<br
-/>telle qu'elle est publi&eacute;e par la Free Sofware Foundation; que ce soit sous
-la version 2 de la license, ou (&agrave; votre convenance) une version
-ult&eacute;rieure
+GPL_Text => Ce programme est un logiciel libre; vous pouvez le redistribuer et/ou <br />le modifier sous les termes de la General Public License<br />telle qu'elle est publi&eacute;e par la Free Sofware Foundation; que ce soit sous la version 2 de la license, ou (&agrave; votre convenance) une version ult&eacute;rieure
 Contributions by => Contributions par
 Layout based on => Pr&eacute;sentation baseacutee sur
 by => par
@@ -227,11 +223,9 @@ Helptext ESSID => Nom du r&eacute;seau sans-fil
 Helptext DNS save => Il est recommand&eacute; de sauvegarder vos param&egrave;tres avant d'ajouter/enlever des serveurs DNS
 
 
-Helptext Operation mode => Configure le mode de fonctionnement de votre r&eacute;seau sans-fil. Le mode Client (Pont r&eacute;seau sans-fil) ne changeront pas les param&egrave;tres de votre interface. Certains
-param&egrave;tres de la carte Wi-Fi seront modifi&eacute;s de mani&egrave;re &agrave; pouvoir fonctionner en mode r&eacute;seau sans-fil.
+Helptext Operation mode => Configure le mode de fonctionnement de votre r&eacute;seau sans-fil. Le mode Client (Pont r&eacute;seau sans-fil) ne changeront pas les param&egrave;tres de votre interface. Certains param&egrave;tres de la carte Wi-Fi seront modifi&eacute;s de mani&egrave;re &agrave; pouvoir fonctionner en mode r&eacute;seau sans-fil.
 Helptext Encryption Type => 'WPA (RADIUS)' ne fonctionne qu'en mode point d'acc&egrave;s. <br /> 'WPA (PSK)' ne fonctionne pas en mode Ad-hoc.
-Helptext IP Settings => Les param&egrave;tres IP sont optionnels pour DHCP et
-PPTP. Si vous les configurez, ils seront utilis&eacute; comme param&egrave;tres par d&eacute;faut au cas o&uacute; le serveur DHCP ne r&eacute; pas.
+Helptext IP Settings => Les param&egrave;tres IP sont optionnels pour DHCP et PPTP. Si vous les configurez, ils seront utilis&eacute; comme param&egrave;tres par d&eacute;faut au cas o&uacute; le serveur DHCP ne r&eacute; pas.
 Helptext Idle Time => Nombre de secondes sans traffic internet &agrave; attendr avant que le routeur d&eacute;connecte d'Internet (Connexion &agreve; la demande)
 Helptext Redial Timeout => Nombre de secondes &agrave; attendre apr&egrave;s n'avoir recu aucune r&eacute;ponse du fournisseur avant nouvel &eacute;ssai
 
