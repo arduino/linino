@@ -1,0 +1,20 @@
+--- busybox-1.00.orig/findutils/find.c	2004-03-15 03:28:37.000000000 -0500
++++ busybox-1.00/findutils/find.c	2006-02-12 06:52:21.245414250 -0500
+@@ -80,7 +80,7 @@
+ 	}
+ #ifdef CONFIG_FEATURE_FIND_TYPE
+ 	if (type_mask != 0) {
+-		if (!((statbuf->st_mode & S_IFMT) == type_mask))
++		if (!((statbuf->st_mode & S_IFMT) & type_mask))
+ 			goto no_match;
+ 	}
+ #endif
+@@ -197,7 +197,7 @@
+ 		} else if (strcmp(argv[i], "-type") == 0) {
+ 			if (++i == argc)
+ 				bb_error_msg_and_die(msg_req_arg, "-type");
+-			type_mask = find_type(argv[i]);
++			type_mask |= find_type(argv[i]);
+ #endif
+ #ifdef CONFIG_FEATURE_FIND_PERM
+ 		} else if (strcmp(argv[i], "-perm") == 0) {
