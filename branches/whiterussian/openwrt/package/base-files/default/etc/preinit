@@ -1,17 +1,13 @@
 #!/bin/sh
 export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+
 mount none /proc -t proc
 insmod diag
 echo 0x01 > /proc/sys/diag
 
-ifconfig eth0 up
 insmod switch-core
 insmod switch-robo || insmod switch-adm || rmmod switch-core
 
-case "$(nvram get boardtype)" in
-	0x0467) failsafe_vlan="0 1 2 3 5u*";;
-	*) failsafe_vlan="1 2 3 4 5u*";;
-esac
 # save the boot loader's vlan config
 # we need it on some routers that have no vlan*ports set
 [ -d /proc/switch/eth0 ] && {
@@ -19,10 +15,13 @@ esac
 	v1p="$(cat /proc/switch/eth0/vlan/1/ports)"
 	v2p="$(cat /proc/switch/eth0/vlan/2/ports)"
 	echo 1 > /proc/switch/eth0/reset
-	echo "$failsafe_vlan" > /proc/switch/eth0/vlan/0/ports
+
+	case "$(nvram get boardtype)" in
+		0x0467) echo "0 1 2 3 5u*";;
+		     *) echo "1 2 3 4 5u*";;
+	esac > /proc/switch/eth0/vlan/0/ports
 }
 
-# this delay is apparently necessary because the link isn't up yet
 ifconfig eth0 192.168.1.1 netmask 255.255.255.0 broadcast 192.168.1.255 up
 netmsg 192.168.1.0 "(dummy message)" # b44 eats the first packet
 netmsg 192.168.1.255 "Press reset now, to enter Failsafe!"
@@ -30,31 +29,26 @@ netmsg 192.168.1.255 "Press reset now, to enter Failsafe!"
 sleep 2
 
 if [ $(cat /proc/sys/reset) = 1 -o "$(nvram get failsafe)" = 1 ]; then
+	while :; do { echo $(((X=(X+1)%8)%2)) > /proc/sys/diag; sleep $((X==0)); } done &
 	export FAILSAFE=true
 	[ "$(nvram get boot_wait)" != "on" ] && {
 		nvram set boot_wait=on
 		nvram commit
 	}
-	while :; do { echo $(((X=(X+1)%8)%2)) > /proc/sys/diag; sleep $((X==0)); } done &
 	netmsg 192.168.1.255 "Entering Failsafe!"
+	telnetd -l /bin/login 
 else
-	netmsg 192.168.1.255 "Normal startup."
+	ifconfig eth0 0.0.0.0
+
+	# revert to the boot loader's vlan config
+	# required for at least WRT54G v1.1
+	[ -d /proc/switch/eth0 ] && {
+		echo "$v0p" > /proc/switch/eth0/vlan/0/ports
+		echo "$v1p" > /proc/switch/eth0/vlan/1/ports
+		echo "$v2p" > /proc/switch/eth0/vlan/2/ports
+	}
 fi
 
 mount_root ${FAILSAFE:+failsafe}
-
-# revert to the boot loader's vlan config
-# required for at least WRT54G v1.1
-[ -d /proc/switch/eth0 ] && {
-	echo "$v0p" > /proc/switch/eth0/vlan/0/ports
-	echo "$v1p" > /proc/switch/eth0/vlan/1/ports
-	echo "$v2p" > /proc/switch/eth0/vlan/2/ports
-}
-
-# remove the drivers for now
-rmmod switch-robo
-rmmod switch-adm
-rmmod switch-core
-ifconfig eth0 0.0.0.0
 
 exec /sbin/init
