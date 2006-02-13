@@ -1,7 +1,6 @@
 #!/bin/sh
 
 ## Please make changes in /etc/firewall.user
-${FAILSAFE:+exit}
 
 . /etc/functions.sh
 WAN=$(nvram get wan_ifname)

@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "S" > /proc/jffs2_bbc
+[ -f /proc/jffs2_bbc ] && echo "S" > /proc/jffs2_bbc
 
 mkdir -p /var/run
 mkdir -p /var/log
@@ -11,9 +11,9 @@ sed 's/^[^#]/insmod &/' /etc/modules /etc/modules.d/* 2>&-|ash
 ifconfig lo 127.0.0.1 up
 ifconfig eth0 promisc
 
-# configure the switch based on nvram if not in failsafe mode
-[ -d /proc/switch/eth0 -a -z "$FAILSAFE" ] && {
-	for nr in `seq 0 15`; do
+# configure the switch based on nvram
+[ -d /proc/switch/eth0 ] && {
+	for nr in $(seq 0 15); do
 		vp="$(nvram get vlan${nr}ports)"
 		[ -z "$vp" -o -z "$(nvram get vlan${nr}hwname)" ] || {
 			echo "$vp" > /proc/switch/eth0/vlan/$nr/ports
@@ -27,7 +27,3 @@ echo ${HOSTNAME:=OpenWrt}>/proc/sys/kernel/hostname
 
 vconfig set_name_type VLAN_PLUS_VID_NO_PAD
 
-# automagically run firstboot
-[ -z "$FAILSAFE" -a -z "$(nvram get no_root_swap)" ] && {
-	{ mount|grep "on / type jffs2" 1>&-; } || firstboot
-}

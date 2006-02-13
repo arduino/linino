@@ -1,37 +1,35 @@
 #!/bin/sh
-is_clean() {
-	OFFSET="$((0x$(dd if=/dev/mtdblock/1 bs=1 skip=$((0x14)) count=2 2>&- | hexdump | grep 0000000 | cut -d ' ' -f 2) - 1))"
-	dd if=/dev/mtdblock/1 bs=1 skip=$OFFSET count=1 2>&- | hexdump -v | grep ' 0000' > /dev/null && return 255 || return 0
+is_dirty() {
+	grep Broadcom /proc/cpuinfo >&- || return 1
+	OFFSET="$(($(hexdump -v /dev/mtdblock/1 -s 20 -n 2 -e '"%d"')-1))"
+	return $(hexdump -v /dev/mtdblock/1 -s $OFFSET -n 1 -e '"%d"')
 }
 
-if [ "$1" != "failsafe" ]; then 
+if [ "$1" != "failsafe" -a "$(nvram get no_root_swap)" != 1 ]; then 
+	mtd unlock linux
 	mount | grep jffs2 >&-
 	if [ $? = 0 ] ; then
 		if [ $(cat /proc/mtd | wc -l) = 6 ]; then
-			echo 5 > /proc/sys/diag
-			mtd unlock linux
 			mtd erase OpenWrt
 			jffs2root --move
 		else
-			mtd unlock rootfs
 			mount -o remount,rw /dev/root /
 		fi
 	else
-		if [ -z "$(nvram get no_root_swap)" ]; then
-			is_clean || {
-				mtd erase OpenWrt
-				mtd unlock linux
-				jffs2root --clean
-			}
-			mtd unlock OpenWrt
-			mount -t jffs2 /dev/mtdblock/4 /jffs
+		is_dirty
+		if [ $? = 0 ]; then
+			firstboot ramoverlay >&- 2>&-
+		else
+			mount /dev/mtdblock/4 /jffs
 			pivot_root /jffs /jffs/rom
 			mount none /proc -t proc
-			mount none /dev -t devfs
-			umount /rom/proc /rom/dev >&-
+			umount /rom/proc
+			mount -o move /rom/dev /dev
 		fi
 	fi
 fi
+
 mount none /tmp -t tmpfs -o nosuid,nodev,mode=1777,size=50%
 mkdir -p /dev/pts
 mount none /dev/pts -t devpts
+mount -t sysfs none /sys 2>&-

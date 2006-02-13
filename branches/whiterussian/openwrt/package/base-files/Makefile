@@ -47,6 +47,7 @@ $(IPKG_BASE):
 	mkdir -p $(IDIR_BASE)/lib
 	mkdir -p $(IDIR_BASE)/usr/lib
 	mkdir -p $(IDIR_BASE)/usr/bin
+	mkdir -p $(IDIR_BASE)/mnt
 	mkdir -p $(IDIR_BASE)/www
 	ln -sf /tmp/resolv.conf $(IDIR_BASE)/etc/resolv.conf
 	rm -rf $(IDIR_BASE)/var
