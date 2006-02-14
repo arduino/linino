@@ -1,15 +1,15 @@
 diff -urN linux-2.4.30/net/ipv4/netfilter/Config.in linux-2.4.30.new/net/ipv4/netfilter/Config.in
---- linux-2.4.30/net/ipv4/netfilter/Config.in	2006-02-07 15:44:46.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/Config.in	2006-02-07 15:46:07.000000000 +0100
+--- linux-2.4.30/net/ipv4/netfilter/Config.in	2006-02-14 14:02:20.000000000 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/Config.in	2006-02-14 13:49:55.000000000 +0100
 @@ -15,6 +15,7 @@
    dep_tristate '   PPTP protocol support' CONFIG_IP_NF_PPTP $CONFIG_IP_NF_CT_PROTO_GRE
    dep_tristate '  SIP protocol support' CONFIG_IP_NF_SIP $CONFIG_IP_NF_CONNTRACK
    dep_tristate '  H.323 (netmeeting) support' CONFIG_IP_NF_H323 $CONFIG_IP_NF_CONNTRACK
 +  dep_tristate '  RTSP protocol support' CONFIG_IP_NF_RTSP $CONFIG_IP_NF_CONNTRACK
  fi
-
+ 
  if [ "$CONFIG_EXPERIMENTAL" = "y" ]; then
-@@ -103,6 +103,13 @@
+@@ -103,6 +104,13 @@
  	  define_tristate CONFIG_IP_NF_NAT_H323 $CONFIG_IP_NF_NAT
  	fi
        fi
@@ -25,7 +25,7 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/Config.in linux-2.4.30.new/net/ipv4/ne
        else
 diff -urN linux-2.4.30/net/ipv4/netfilter/ip_conntrack_rtsp.c linux-2.4.30.new/net/ipv4/netfilter/ip_conntrack_rtsp.c
 --- linux-2.4.30/net/ipv4/netfilter/ip_conntrack_rtsp.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/ip_conntrack_rtsp.c	2006-02-07 15:46:07.000000000 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/ip_conntrack_rtsp.c	2006-02-14 13:49:55.000000000 +0100
 @@ -0,0 +1,507 @@
 +/*
 + * RTSP extension for IP connection tracking
@@ -536,7 +536,7 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/ip_conntrack_rtsp.c linux-2.4.30.new/n
 +module_exit(fini);
 diff -urN linux-2.4.30/net/ipv4/netfilter/ip_nat_rtsp.c linux-2.4.30.new/net/ipv4/netfilter/ip_nat_rtsp.c
 --- linux-2.4.30/net/ipv4/netfilter/ip_nat_rtsp.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/ip_nat_rtsp.c	2006-02-07 15:46:07.000000000 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/ip_nat_rtsp.c	2006-02-14 13:49:55.000000000 +0100
 @@ -0,0 +1,621 @@
 +/*
 + * RTSP extension for TCP NAT alteration
@@ -1160,8 +1160,8 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/ip_nat_rtsp.c linux-2.4.30.new/net/ipv
 +module_init(init);
 +module_exit(fini);
 diff -urN linux-2.4.30/net/ipv4/netfilter/Makefile linux-2.4.30.new/net/ipv4/netfilter/Makefile
---- linux-2.4.30/net/ipv4/netfilter/Makefile	2006-02-07 15:44:46.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/Makefile	2006-02-07 15:46:07.000000000 +0100
+--- linux-2.4.30/net/ipv4/netfilter/Makefile	2006-02-14 14:02:20.000000000 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/Makefile	2006-02-14 13:49:55.000000000 +0100
 @@ -32,6 +32,14 @@
  obj-$(CONFIG_IP_NF_CONNTRACK) += ip_conntrack.o
  
@@ -1177,9 +1177,146 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/Makefile linux-2.4.30.new/net/ipv4/net
  obj-$(CONFIG_IP_NF_AMANDA) += ip_conntrack_amanda.o
  ifdef CONFIG_IP_NF_AMANDA
  	export-objs += ip_conntrack_amanda.o
+diff -urN linux-2.4.30/include/linux/netfilter_helpers.h linux-2.4.30.new/include/linux/netfilter_helpers.h
+--- linux-2.4.30/include/linux/netfilter_helpers.h	1970-01-01 01:00:00.000000000 +0100
++++ linux-2.4.30.new/include/linux/netfilter_helpers.h	2006-02-14 13:49:55.000000000 +0100
+@@ -0,0 +1,133 @@
++/*
++ * Helpers for netfiler modules.  This file provides implementations for basic
++ * functions such as strncasecmp(), etc.
++ *
++ * gcc will warn for defined but unused functions, so we only include the
++ * functions requested.  The following macros are used:
++ *   NF_NEED_STRNCASECMP        nf_strncasecmp()
++ *   NF_NEED_STRTOU16           nf_strtou16()
++ *   NF_NEED_STRTOU32           nf_strtou32()
++ */
++#ifndef _NETFILTER_HELPERS_H
++#define _NETFILTER_HELPERS_H
++
++/* Only include these functions for kernel code. */
++#ifdef __KERNEL__
++
++#include <linux/ctype.h>
++#define iseol(c) ( (c) == '\r' || (c) == '\n' )
++
++/*
++ * The standard strncasecmp()
++ */
++#ifdef NF_NEED_STRNCASECMP
++static int
++nf_strncasecmp(const char* s1, const char* s2, u_int32_t len)
++{
++    if (s1 == NULL || s2 == NULL)
++    {
++        if (s1 == NULL && s2 == NULL)
++        {
++            return 0;
++        }
++        return (s1 == NULL) ? -1 : 1;
++    }
++    while (len > 0 && tolower(*s1) == tolower(*s2))
++    {
++        len--;
++        s1++;
++        s2++;
++    }
++    return ( (len == 0) ? 0 : (tolower(*s1) - tolower(*s2)) );
++}
++#endif /* NF_NEED_STRNCASECMP */
++
++/*
++ * Parse a string containing a 16-bit unsigned integer.
++ * Returns the number of chars used, or zero if no number is found.
++ */
++#ifdef NF_NEED_STRTOU16
++static int
++nf_strtou16(const char* pbuf, u_int16_t* pval)
++{
++    int n = 0;
++
++    *pval = 0;
++    while (isdigit(pbuf[n]))
++    {
++        *pval = (*pval * 10) + (pbuf[n] - '0');
++        n++;
++    }
++
++    return n;
++}
++#endif /* NF_NEED_STRTOU16 */
++
++/*
++ * Parse a string containing a 32-bit unsigned integer.
++ * Returns the number of chars used, or zero if no number is found.
++ */
++#ifdef NF_NEED_STRTOU32
++static int
++nf_strtou32(const char* pbuf, u_int32_t* pval)
++{
++    int n = 0;
++
++    *pval = 0;
++    while (pbuf[n] >= '0' && pbuf[n] <= '9')
++    {
++        *pval = (*pval * 10) + (pbuf[n] - '0');
++        n++;
++    }
++
++    return n;
++}
++#endif /* NF_NEED_STRTOU32 */
++
++/*
++ * Given a buffer and length, advance to the next line and mark the current
++ * line.
++ */
++#ifdef NF_NEED_NEXTLINE
++static int
++nf_nextline(char* p, uint len, uint* poff, uint* plineoff, uint* plinelen)
++{
++    uint    off = *poff;
++    uint    physlen = 0;
++
++    if (off >= len)
++    {
++        return 0;
++    }
++
++    while (p[off] != '\n')
++    {
++        if (len-off <= 1)
++        {
++            return 0;
++        }
++
++        physlen++;
++        off++;
++    }
++
++    /* if we saw a crlf, physlen needs adjusted */
++    if (physlen > 0 && p[off] == '\n' && p[off-1] == '\r')
++    {
++        physlen--;
++    }
++
++    /* advance past the newline */
++    off++;
++
++    *plineoff = *poff;
++    *plinelen = physlen;
++    *poff = off;
++
++    return 1;
++}
++#endif /* NF_NEED_NEXTLINE */
++
++#endif /* __KERNEL__ */
++
++#endif /* _NETFILTER_HELPERS_H */
 diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h
---- linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-07 15:44:46.000000000 +0100
-+++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-07 15:46:07.000000000 +0100
+--- linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-14 14:02:20.000000000 +0100
++++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-14 13:49:55.000000000 +0100
 @@ -66,6 +66,7 @@
  };
  
@@ -1206,7 +1343,7 @@ diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h linux-2.4.30.
  	struct ip_ct_pptp_master ct_pptp_info;
 diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h.orig linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h.orig
 --- linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h.orig	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h.orig	2006-02-07 15:42:53.000000000 +0100
++++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h.orig	2006-02-14 13:49:55.000000000 +0100
 @@ -0,0 +1,297 @@
 +#ifndef _IP_CONNTRACK_H
 +#define _IP_CONNTRACK_H
@@ -1507,7 +1644,7 @@ diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h.orig linux-2.
 +#endif /* _IP_CONNTRACK_H */
 diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack_rtsp.h linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack_rtsp.h
 --- linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack_rtsp.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack_rtsp.h	2006-02-07 15:46:07.000000000 +0100
++++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack_rtsp.h	2006-02-14 13:49:55.000000000 +0100
 @@ -0,0 +1,68 @@
 +/*
 + * RTSP extension for IP connection tracking.
@@ -1577,146 +1714,9 @@ diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack_rtsp.h linux-2.
 +#endif /* __KERNEL__ */
 +
 +#endif /* _IP_CONNTRACK_RTSP_H */
-diff -urN linux-2.4.30/include/linux/netfilter_helpers.h linux-2.4.30.new/include/linux/netfilter_helpers.h
---- linux-2.4.30/include/linux/netfilter_helpers.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/include/linux/netfilter_helpers.h	2006-02-07 15:46:07.000000000 +0100
-@@ -0,0 +1,133 @@
-+/*
-+ * Helpers for netfiler modules.  This file provides implementations for basic
-+ * functions such as strncasecmp(), etc.
-+ *
-+ * gcc will warn for defined but unused functions, so we only include the
-+ * functions requested.  The following macros are used:
-+ *   NF_NEED_STRNCASECMP        nf_strncasecmp()
-+ *   NF_NEED_STRTOU16           nf_strtou16()
-+ *   NF_NEED_STRTOU32           nf_strtou32()
-+ */
-+#ifndef _NETFILTER_HELPERS_H
-+#define _NETFILTER_HELPERS_H
-+
-+/* Only include these functions for kernel code. */
-+#ifdef __KERNEL__
-+
-+#include <linux/ctype.h>
-+#define iseol(c) ( (c) == '\r' || (c) == '\n' )
-+
-+/*
-+ * The standard strncasecmp()
-+ */
-+#ifdef NF_NEED_STRNCASECMP
-+static int
-+nf_strncasecmp(const char* s1, const char* s2, u_int32_t len)
-+{
-+    if (s1 == NULL || s2 == NULL)
-+    {
-+        if (s1 == NULL && s2 == NULL)
-+        {
-+            return 0;
-+        }
-+        return (s1 == NULL) ? -1 : 1;
-+    }
-+    while (len > 0 && tolower(*s1) == tolower(*s2))
-+    {
-+        len--;
-+        s1++;
-+        s2++;
-+    }
-+    return ( (len == 0) ? 0 : (tolower(*s1) - tolower(*s2)) );
-+}
-+#endif /* NF_NEED_STRNCASECMP */
-+
-+/*
-+ * Parse a string containing a 16-bit unsigned integer.
-+ * Returns the number of chars used, or zero if no number is found.
-+ */
-+#ifdef NF_NEED_STRTOU16
-+static int
-+nf_strtou16(const char* pbuf, u_int16_t* pval)
-+{
-+    int n = 0;
-+
-+    *pval = 0;
-+    while (isdigit(pbuf[n]))
-+    {
-+        *pval = (*pval * 10) + (pbuf[n] - '0');
-+        n++;
-+    }
-+
-+    return n;
-+}
-+#endif /* NF_NEED_STRTOU16 */
-+
-+/*
-+ * Parse a string containing a 32-bit unsigned integer.
-+ * Returns the number of chars used, or zero if no number is found.
-+ */
-+#ifdef NF_NEED_STRTOU32
-+static int
-+nf_strtou32(const char* pbuf, u_int32_t* pval)
-+{
-+    int n = 0;
-+
-+    *pval = 0;
-+    while (pbuf[n] >= '0' && pbuf[n] <= '9')
-+    {
-+        *pval = (*pval * 10) + (pbuf[n] - '0');
-+        n++;
-+    }
-+
-+    return n;
-+}
-+#endif /* NF_NEED_STRTOU32 */
-+
-+/*
-+ * Given a buffer and length, advance to the next line and mark the current
-+ * line.
-+ */
-+#ifdef NF_NEED_NEXTLINE
-+static int
-+nf_nextline(char* p, uint len, uint* poff, uint* plineoff, uint* plinelen)
-+{
-+    uint    off = *poff;
-+    uint    physlen = 0;
-+
-+    if (off >= len)
-+    {
-+        return 0;
-+    }
-+
-+    while (p[off] != '\n')
-+    {
-+        if (len-off <= 1)
-+        {
-+            return 0;
-+        }
-+
-+        physlen++;
-+        off++;
-+    }
-+
-+    /* if we saw a crlf, physlen needs adjusted */
-+    if (physlen > 0 && p[off] == '\n' && p[off-1] == '\r')
-+    {
-+        physlen--;
-+    }
-+
-+    /* advance past the newline */
-+    off++;
-+
-+    *plineoff = *poff;
-+    *plinelen = physlen;
-+    *poff = off;
-+
-+    return 1;
-+}
-+#endif /* NF_NEED_NEXTLINE */
-+
-+#endif /* __KERNEL__ */
-+
-+#endif /* _NETFILTER_HELPERS_H */
 diff -urN linux-2.4.30/include/linux/netfilter_mime.h linux-2.4.30.new/include/linux/netfilter_mime.h
 --- linux-2.4.30/include/linux/netfilter_mime.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/include/linux/netfilter_mime.h	2006-02-07 15:46:07.000000000 +0100
++++ linux-2.4.30.new/include/linux/netfilter_mime.h	2006-02-14 13:49:55.000000000 +0100
 @@ -0,0 +1,90 @@
 +/*
 + * MIME functions for netfilter modules.  This file provides implementations
@@ -1808,3 +1808,14 @@ diff -urN linux-2.4.30/include/linux/netfilter_mime.h linux-2.4.30.new/include/l
 +#endif /* __KERNEL__ */
 +
 +#endif /* _NETFILTER_MIME_H */
+diff -urN linux-2.4.30/arch/mips/kernel/mips_ksyms.c linux-2.4.30.new/arch/mips/kernel/mips_ksyms.c
+--- linux-2.4.30/arch/mips/kernel/mips_ksyms.c	2004-02-18 14:36:30.000000000 +0100
++++ linux-2.4.30.new/arch/mips/kernel/mips_ksyms.c	2006-02-14 13:50:27.000000000 +0100
+@@ -48,6 +48,7 @@
+ /*
+  * String functions
+  */
++EXPORT_SYMBOL_NOVERS(memchr);
+ EXPORT_SYMBOL_NOVERS(memcmp);
+ EXPORT_SYMBOL_NOVERS(memset);
+ EXPORT_SYMBOL_NOVERS(memcpy);

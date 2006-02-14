@@ -244,7 +244,7 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/ip_conntrack_sip.c linux-2.4.30.new/ne
 +	ct_sip_info->mangled = 0;	
 +
 +	/* keep the connection alive */
-+	ip_ct_refresh_acct(ct, ctinfo, iph, (SIP_EXPIRES * HZ));
++	ip_ct_refresh(ct, (SIP_EXPIRES * HZ));
 +
 +	/* Don't need to set the expectation for upstream direction */
 +	if (dir == IP_CT_DIR_REPLY)
