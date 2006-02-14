@@ -1,6 +1,6 @@
 diff -urN linux-2.4.30/net/ipv4/netfilter/Config.in linux-2.4.30.new/net/ipv4/netfilter/Config.in
---- linux-2.4.30/net/ipv4/netfilter/Config.in	2006-02-07 15:38:07.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/Config.in	2006-02-07 15:39:18.000000000 +0100
+--- linux-2.4.30/net/ipv4/netfilter/Config.in	2006-02-14 01:14:42.758184584 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/Config.in	2006-02-14 01:16:16.325960120 +0100
 @@ -13,6 +13,7 @@
    dep_tristate '  IRC protocol support' CONFIG_IP_NF_IRC $CONFIG_IP_NF_CONNTRACK
    dep_tristate '  GRE protocol support' CONFIG_IP_NF_CT_PROTO_GRE $CONFIG_IP_NF_CONNTRACK
@@ -25,7 +25,7 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/Config.in linux-2.4.30.new/net/ipv4/ne
        else
 diff -urN linux-2.4.30/net/ipv4/netfilter/ip_conntrack_sip.c linux-2.4.30.new/net/ipv4/netfilter/ip_conntrack_sip.c
 --- linux-2.4.30/net/ipv4/netfilter/ip_conntrack_sip.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/ip_conntrack_sip.c	2006-02-07 15:39:18.000000000 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/ip_conntrack_sip.c	2006-02-14 01:16:16.327959816 +0100
 @@ -0,0 +1,312 @@
 +/*
 + * SIP extension for IP connection tracking. 
@@ -341,7 +341,7 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/ip_conntrack_sip.c linux-2.4.30.new/ne
 +module_exit(fini);
 diff -urN linux-2.4.30/net/ipv4/netfilter/ip_nat_sip.c linux-2.4.30.new/net/ipv4/netfilter/ip_nat_sip.c
 --- linux-2.4.30/net/ipv4/netfilter/ip_nat_sip.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/ip_nat_sip.c	2006-02-07 15:39:18.000000000 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/ip_nat_sip.c	2006-02-14 01:16:16.328959664 +0100
 @@ -0,0 +1,800 @@
 +/*
 + * SIP extension for TCP NAT alteration. 
@@ -1144,8 +1144,8 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/ip_nat_sip.c linux-2.4.30.new/net/ipv4
 +module_init(init);
 +module_exit(fini);
 diff -urN linux-2.4.30/net/ipv4/netfilter/Makefile linux-2.4.30.new/net/ipv4/netfilter/Makefile
---- linux-2.4.30/net/ipv4/netfilter/Makefile	2006-02-07 15:38:07.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/Makefile	2006-02-07 15:39:18.000000000 +0100
+--- linux-2.4.30/net/ipv4/netfilter/Makefile	2006-02-14 01:14:42.760184280 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/Makefile	2006-02-14 01:16:16.329959512 +0100
 @@ -53,6 +53,10 @@
  ifdef CONFIG_IP_NF_NAT_PPTP
  	export-objs += ip_conntrack_pptp.o
@@ -1166,8 +1166,8 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/Makefile linux-2.4.30.new/net/ipv4/net
  # generic IP tables 
  obj-$(CONFIG_IP_NF_IPTABLES) += ip_tables.o
 diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h
---- linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-07 15:38:07.000000000 +0100
-+++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-07 15:39:18.000000000 +0100
+--- linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-14 01:14:42.014297672 +0100
++++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-14 01:16:16.330959360 +0100
 @@ -71,6 +71,7 @@
  #include <linux/netfilter_ipv4/ip_conntrack_ftp.h>
  #include <linux/netfilter_ipv4/ip_conntrack_irc.h>
@@ -1194,7 +1194,7 @@ diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h linux-2.4.30.
  #ifdef CONFIG_IP_NF_NAT_NEEDED
 diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack_sip.h linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack_sip.h
 --- linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack_sip.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack_sip.h	2006-02-07 15:39:18.000000000 +0100
++++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack_sip.h	2006-02-14 01:16:16.331959208 +0100
 @@ -0,0 +1,56 @@
 +#ifndef _IP_CONNTRACK_SIP_H
 +#define _IP_CONNTRACK_SIP_H
