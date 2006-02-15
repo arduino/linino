@@ -21,10 +21,13 @@ if [ "$1" != "failsafe" -a "$(nvram get no_root_swap)" != 1 ]; then
 			firstboot ramoverlay >&- 2>&-
 		else
 			mount /dev/mtdblock/4 /jffs
-			pivot_root /jffs /jffs/rom
-			mount none /proc -t proc
-			umount /rom/proc
-			mount -o move /rom/dev /dev
+			pivot_root /jffs /jffs/rom && {
+				mount none /proc -t proc
+				umount /rom/proc
+				mount -o move /rom/dev /dev
+			} || {
+				firstboot ramoverlay
+			}
 		fi
 	fi
 fi
