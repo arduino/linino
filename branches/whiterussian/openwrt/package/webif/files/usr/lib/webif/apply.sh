@@ -26,7 +26,8 @@ reload_network() {
 	grep '^lan_' config-network >&- 2>&- && {
 		ifdown lan
 		ifup lan
-		killall -HUP dnsmasq
+		killall dnsmasq
+		/etc/init.d/S??dnsmasq
 	}
 }
 
