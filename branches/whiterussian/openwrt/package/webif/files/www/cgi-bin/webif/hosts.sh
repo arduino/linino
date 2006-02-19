@@ -105,7 +105,7 @@ BEGIN {
 	for (i = 2; i <= n; i++) {
 		if (names[i] != "") {
 			if (first != 1) output = output "<tr>"
-			output = output "<td>" names[i] "</td><td align=\\"right\\" width=\\"10%\\"><a href=\\"" url "?remove_host=1&remove_ip=" $1 "&remove_name=" names[i] "\\">@TR<<Remove>></a></td></tr>"
+			output = output "<td>" names[i] "</td><td align=\\"right\\" width=\\"10%\\"><a href=\\"" url "?remove_host=1&remove_ip=" \$1 "&remove_name=" names[i] "\\">@TR<<Remove>></a></td></tr>"
 			first = 0
 			names_found++
 		}
