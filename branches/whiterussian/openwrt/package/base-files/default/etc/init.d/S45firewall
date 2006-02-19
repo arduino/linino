@@ -90,3 +90,9 @@ iptables -t nat -N postrouting_rule
 
 ## USER RULES
 [ -f /etc/firewall.user ] && . /etc/firewall.user
+[ -e /etc/config/firewall ] && {
+	rm -f /tmp/.firewall.sh
+	awk -f /usr/lib/common.awk -f /usr/lib/firewall.awk /etc/config/firewall > /tmp/.firewall.sh
+	. /tmp/.firewall.sh
+	rm -f /tmp/.firewall.sh
+}
