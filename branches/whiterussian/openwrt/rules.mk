@@ -2,6 +2,7 @@ include $(TOPDIR)/.config
 SHELL=/bin/bash
 export SHELL
 
+CP=cp -fpR
 MAKE1=make
 MAKEFLAGS=-j$(BR2_JLEVEL)
 
