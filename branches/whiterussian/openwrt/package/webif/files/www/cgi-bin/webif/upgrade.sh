@@ -5,9 +5,6 @@ do_upgrade() {
 	# free some memory :)
 	ps | grep -vE 'Command|init|\[[kbmj]|httpd|haserl|bin/sh|awk|kill|ps|webif' | awk '{ print $1 }' | xargs kill -KILL
 	MEMFREE="$(awk 'BEGIN{ mem = 0 } ($1 == "MemFree:") || ($1 == "Cached:") {mem += int($2)} END{print mem}' /proc/meminfo)"
-	empty "$ERASE_NVRAM" || {
-		mtd -q erase nvram
-	}
 	empty "$ERASE_FS" || MTD_OPT="-e linux"
 	if [ $(($MEMFREE)) -ge 4096 ]; then
 		bstrip "$BOUNDARY" > /tmp/firmware.bin
@@ -60,8 +57,7 @@ function printStatus() {
 		<tr>
 			<td>@TR<<Options>>:</td>
 			<td>
-				<input type="checkbox" name="erase_fs" value="1" />@TR<<Erase_JFFS2|Erase JFFS2 partition>><br />
-				<input type="checkbox" name="erase_nvram" value="1" />@TR<<Erase NVRAM>>
+				<input type="checkbox" name="erase_fs" value="1" />@TR<<Erase_JFFS2|Erase JFFS2 partition>>
 			</td>
 		</tr>
 		<tr>
@@ -102,10 +98,6 @@ EOF
 		case "$NAME" in
 			erase_fs)
 				ERASE_FS=1
-				bstrip "$BOUNDARY" > /dev/null
-			;;
-			erase_nvram)
-				ERASE_NVRAM=1
 				bstrip "$BOUNDARY" > /dev/null
 			;;
 			firmware) do_upgrade;;
