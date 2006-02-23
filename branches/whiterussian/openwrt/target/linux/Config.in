@@ -229,6 +229,31 @@ config BR2_PACKAGE_KMOD_USB_SERIAL
 	default m 
 	depends BR2_PACKAGE_KMOD_USB_CONTROLLER
 
+config BR2_PACKAGE_KMOD_USB_SERIAL_BELKIN
+	tristate "Support for Belkin USB-to-serial converters"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_SERIAL
+	
+config BR2_PACKAGE_KMOD_USB_SERIAL_FTDI
+	tristate "Support for FTDI USB-to-serial converterr"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_SERIAL
+
+config BR2_PACKAGE_KMOD_USB_SERIAL_MCT_U232
+        tristate "Support for Magic Control Technology USB-to-Serial converters"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_SERIAL
+
+config BR2_PACKAGE_KMOD_USB_SERIAL_PL2303
+	tristate "Support for Prolific PL2303 USB-to-Serial converters"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_SERIAL
+	
+config BR2_PACKAGE_KMOD_USB_SERIAL_VISOR
+	tristate "Support for Handspring Visor / Palm m50x / Sony Clie Driver"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_SERIAL
+
 config BR2_PACKAGE_KMOD_USB_STORAGE
 	tristate "Support for USB storage devices"
 	default m
