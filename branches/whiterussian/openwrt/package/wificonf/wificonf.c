@@ -220,12 +220,28 @@ static void stop_bcom(int skfd, char *ifname)
 static void start_bcom(int skfd, char *ifname)
 {
 	int val = 0;
+	char *v;
 	
 	if (bcom_ioctl(skfd, ifname, WLC_GET_MAGIC, &val, sizeof(val)) < 0)
 		return;
 
-	bcom_ioctl(skfd, ifname, WLC_UP, &val, sizeof(val));
-	set_wext_ssid(skfd, ifname);
+	if (v = nvram_get(wl_var("distance"))) {
+		rw_reg_t reg;
+		uint32 shm;
+		
+		val = atoi(v);
+		val = 9+(val/300)+((val%300)?1:0);
+		
+		shm = 0x10;
+		shm |= (val << 16);
+		bcom_ioctl(skfd, ifname, 197, &shm, sizeof(shm));
+		
+		reg.byteoff = 0x684;
+		reg.val = val + 510;
+		reg.size = 2;
+		bcom_ioctl(skfd, ifname, 102, &reg, sizeof(reg));
+	}
+
 }
 
 static int setup_bcom_wds(int skfd, char *ifname)
@@ -495,7 +511,8 @@ static void setup_bcom(int skfd, char *ifname)
 		}
 	}
 
-	start_bcom(skfd, ifname);
+	bcom_ioctl(skfd, ifname, WLC_UP, &val, sizeof(val));
+	set_wext_ssid(skfd, ifname);
 
 	if (!(v = nvram_get(wl_var("akm"))))
 		v = nvram_safe_get(wl_var("auth_mode"));
@@ -670,6 +687,7 @@ static int setup_interfaces(int skfd, char *ifname, char *args[], int count)
 		set_wext_mode(skfd, ifname);
 		setup_bcom(skfd, ifname);
 		setup_wext(skfd, ifname);
+		start_bcom(skfd, ifname);
 	}
 	
 	prefix[2]++;
