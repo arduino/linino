@@ -1,31 +1,54 @@
 diff -urN linux-2.4.30/net/ipv4/netfilter/Config.in linux-2.4.30.new/net/ipv4/netfilter/Config.in
---- linux-2.4.30/net/ipv4/netfilter/Config.in	2006-02-14 14:02:20.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/Config.in	2006-02-14 13:49:55.000000000 +0100
-@@ -15,6 +15,7 @@
+--- linux-2.4.30/net/ipv4/netfilter/Config.in	2006-02-28 23:55:30.907933976 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/Config.in	2006-02-28 23:59:58.032324896 +0100
+@@ -14,6 +14,7 @@
+   dep_tristate '  GRE protocol support' CONFIG_IP_NF_CT_PROTO_GRE $CONFIG_IP_NF_CONNTRACK
    dep_tristate '   PPTP protocol support' CONFIG_IP_NF_PPTP $CONFIG_IP_NF_CT_PROTO_GRE
-   dep_tristate '  SIP protocol support' CONFIG_IP_NF_SIP $CONFIG_IP_NF_CONNTRACK
    dep_tristate '  H.323 (netmeeting) support' CONFIG_IP_NF_H323 $CONFIG_IP_NF_CONNTRACK
 +  dep_tristate '  RTSP protocol support' CONFIG_IP_NF_RTSP $CONFIG_IP_NF_CONNTRACK
  fi
  
  if [ "$CONFIG_EXPERIMENTAL" = "y" ]; then
-@@ -103,6 +104,13 @@
- 	  define_tristate CONFIG_IP_NF_NAT_H323 $CONFIG_IP_NF_NAT
- 	fi
+@@ -102,6 +103,13 @@
+          define_tristate CONFIG_IP_NF_NAT_H323 $CONFIG_IP_NF_NAT
+        fi
        fi
 +      if [ "$CONFIG_IP_NF_RTSP" = "m" ]; then
 +        define_tristate CONFIG_IP_NF_NAT_RTSP m
 +      else
-+	if [ "$CONFIG_IP_NF_RTSP" = "y" ]; then
-+	  define_tristate CONFIG_IP_NF_NAT_RTSP $CONFIG_IP_NF_NAT
-+	fi
++       if [ "$CONFIG_IP_NF_RTSP" = "y" ]; then
++         define_tristate CONFIG_IP_NF_NAT_RTSP $CONFIG_IP_NF_NAT
++       fi
 +      fi
-       if [ "$CONFIG_IP_NF_AMANDA" = "m" ]; then
-         define_tristate CONFIG_IP_NF_NAT_AMANDA m
-       else
+       if [ "$CONFIG_EXPERIMENTAL" = "y" ]; then
+         dep_tristate '    Basic SNMP-ALG support (EXPERIMENTAL)' CONFIG_IP_NF_NAT_SNMP_BASIC $CONFIG_IP_NF_NAT
+       fi
+diff -urN linux-2.4.30/net/ipv4/netfilter/Makefile linux-2.4.30.new/net/ipv4/netfilter/Makefile
+--- linux-2.4.30/net/ipv4/netfilter/Makefile	2006-02-28 23:55:30.932930176 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/Makefile	2006-03-01 00:00:38.575161448 +0100
+@@ -57,6 +57,11 @@
+ ifdef CONFIG_IP_NF_NAT_H323
+        export-objs += ip_conntrack_h323.o
+ endif
++obj-$(CONFIG_IP_NF_RTSP) += ip_conntrack_rtsp.o
++ifdef CONFIG_IP_NF_NAT_RTSP
++       export-objs += ip_conntrack_rtsp.o
++endif
++
+ 
+ 
+ # NAT helpers 
+@@ -67,6 +72,7 @@
+ obj-$(CONFIG_IP_NF_NAT_PROTO_GRE) += ip_nat_proto_gre.o
+ obj-$(CONFIG_IP_NF_NAT_PPTP) += ip_nat_pptp.o
+ obj-$(CONFIG_IP_NF_NAT_H323) += ip_nat_h323.o
++obj-$(CONFIG_IP_NF_NAT_RTSP) += ip_nat_rtsp.o
+ 
+ # generic IP tables 
+ obj-$(CONFIG_IP_NF_IPTABLES) += ip_tables.o
 diff -urN linux-2.4.30/net/ipv4/netfilter/ip_conntrack_rtsp.c linux-2.4.30.new/net/ipv4/netfilter/ip_conntrack_rtsp.c
 --- linux-2.4.30/net/ipv4/netfilter/ip_conntrack_rtsp.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/ip_conntrack_rtsp.c	2006-02-14 13:49:55.000000000 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/ip_conntrack_rtsp.c	2006-02-28 23:58:15.173961744 +0100
 @@ -0,0 +1,507 @@
 +/*
 + * RTSP extension for IP connection tracking
@@ -536,7 +559,7 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/ip_conntrack_rtsp.c linux-2.4.30.new/n
 +module_exit(fini);
 diff -urN linux-2.4.30/net/ipv4/netfilter/ip_nat_rtsp.c linux-2.4.30.new/net/ipv4/netfilter/ip_nat_rtsp.c
 --- linux-2.4.30/net/ipv4/netfilter/ip_nat_rtsp.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/ip_nat_rtsp.c	2006-02-14 13:49:55.000000000 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/ip_nat_rtsp.c	2006-02-28 23:58:15.175961440 +0100
 @@ -0,0 +1,621 @@
 +/*
 + * RTSP extension for TCP NAT alteration
@@ -1159,27 +1182,20 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/ip_nat_rtsp.c linux-2.4.30.new/net/ipv
 +
 +module_init(init);
 +module_exit(fini);
-diff -urN linux-2.4.30/net/ipv4/netfilter/Makefile linux-2.4.30.new/net/ipv4/netfilter/Makefile
---- linux-2.4.30/net/ipv4/netfilter/Makefile	2006-02-14 14:02:20.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/Makefile	2006-02-14 13:49:55.000000000 +0100
-@@ -32,6 +32,14 @@
- obj-$(CONFIG_IP_NF_CONNTRACK) += ip_conntrack.o
- 
- # connection tracking helpers
-+
-+# rtsp protocol support
-+obj-$(CONFIG_IP_NF_RTSP) += ip_conntrack_rtsp.o
-+ifdef CONFIG_IP_NF_NAT_RTSP
-+       export-objs += ip_conntrack_rtsp.o
-+endif
-+obj-$(CONFIG_IP_NF_NAT_RTSP) += ip_nat_rtsp.o
-+
- obj-$(CONFIG_IP_NF_AMANDA) += ip_conntrack_amanda.o
- ifdef CONFIG_IP_NF_AMANDA
- 	export-objs += ip_conntrack_amanda.o
+diff -urN linux-2.4.30/arch/mips/kernel/mips_ksyms.c linux-2.4.30.new/arch/mips/kernel/mips_ksyms.c
+--- linux-2.4.30/arch/mips/kernel/mips_ksyms.c	2004-02-18 14:36:30.000000000 +0100
++++ linux-2.4.30.new/arch/mips/kernel/mips_ksyms.c	2006-02-28 23:58:15.724877992 +0100
+@@ -48,6 +48,7 @@
+ /*
+  * String functions
+  */
++EXPORT_SYMBOL_NOVERS(memchr);
+ EXPORT_SYMBOL_NOVERS(memcmp);
+ EXPORT_SYMBOL_NOVERS(memset);
+ EXPORT_SYMBOL_NOVERS(memcpy);
 diff -urN linux-2.4.30/include/linux/netfilter_helpers.h linux-2.4.30.new/include/linux/netfilter_helpers.h
 --- linux-2.4.30/include/linux/netfilter_helpers.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/include/linux/netfilter_helpers.h	2006-02-14 13:49:55.000000000 +0100
++++ linux-2.4.30.new/include/linux/netfilter_helpers.h	2006-02-28 23:58:15.199957792 +0100
 @@ -0,0 +1,133 @@
 +/*
 + * Helpers for netfiler modules.  This file provides implementations for basic
@@ -1314,36 +1330,9 @@ diff -urN linux-2.4.30/include/linux/netfilter_helpers.h linux-2.4.30.new/includ
 +#endif /* __KERNEL__ */
 +
 +#endif /* _NETFILTER_HELPERS_H */
-diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h
---- linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-14 14:02:20.000000000 +0100
-+++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-14 13:49:55.000000000 +0100
-@@ -66,6 +66,7 @@
- };
- 
- /* Add protocol helper include file here */
-+#include <linux/netfilter_ipv4/ip_conntrack_rtsp.h>
- #include <linux/netfilter_ipv4/ip_conntrack_amanda.h>
- 
- #include <linux/netfilter_ipv4/ip_conntrack_ftp.h>
-@@ -77,6 +78,7 @@
- /* per expectation: application helper private data */
- union ip_conntrack_expect_help {
- 	/* insert conntrack helper private data (expect) here */
-+	struct ip_ct_rtsp_expect exp_rtsp_info;
- 	struct ip_ct_amanda_expect exp_amanda_info;
- 	struct ip_ct_ftp_expect exp_ftp_info;
- 	struct ip_ct_irc_expect exp_irc_info;
-@@ -94,6 +96,7 @@
- /* per conntrack: application helper private data */
- union ip_conntrack_help {
- 	/* insert conntrack helper private data (master) here */
-+	struct ip_ct_rtsp_master ct_rtsp_info;
- 	struct ip_ct_ftp_master ct_ftp_info;
- 	struct ip_ct_irc_master ct_irc_info;
- 	struct ip_ct_pptp_master ct_pptp_info;
 diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack_rtsp.h linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack_rtsp.h
 --- linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack_rtsp.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack_rtsp.h	2006-02-14 13:49:55.000000000 +0100
++++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack_rtsp.h	2006-02-28 23:58:15.227953536 +0100
 @@ -0,0 +1,68 @@
 +/*
 + * RTSP extension for IP connection tracking.
@@ -1415,7 +1404,7 @@ diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack_rtsp.h linux-2.
 +#endif /* _IP_CONNTRACK_RTSP_H */
 diff -urN linux-2.4.30/include/linux/netfilter_mime.h linux-2.4.30.new/include/linux/netfilter_mime.h
 --- linux-2.4.30/include/linux/netfilter_mime.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/include/linux/netfilter_mime.h	2006-02-14 13:49:55.000000000 +0100
++++ linux-2.4.30.new/include/linux/netfilter_mime.h	2006-02-28 23:58:15.228953384 +0100
 @@ -0,0 +1,90 @@
 +/*
 + * MIME functions for netfilter modules.  This file provides implementations
@@ -1507,14 +1496,3 @@ diff -urN linux-2.4.30/include/linux/netfilter_mime.h linux-2.4.30.new/include/l
 +#endif /* __KERNEL__ */
 +
 +#endif /* _NETFILTER_MIME_H */
-diff -urN linux-2.4.30/arch/mips/kernel/mips_ksyms.c linux-2.4.30.new/arch/mips/kernel/mips_ksyms.c
---- linux-2.4.30/arch/mips/kernel/mips_ksyms.c	2004-02-18 14:36:30.000000000 +0100
-+++ linux-2.4.30.new/arch/mips/kernel/mips_ksyms.c	2006-02-14 13:50:27.000000000 +0100
-@@ -48,6 +48,7 @@
- /*
-  * String functions
-  */
-+EXPORT_SYMBOL_NOVERS(memchr);
- EXPORT_SYMBOL_NOVERS(memcmp);
- EXPORT_SYMBOL_NOVERS(memset);
- EXPORT_SYMBOL_NOVERS(memcpy);

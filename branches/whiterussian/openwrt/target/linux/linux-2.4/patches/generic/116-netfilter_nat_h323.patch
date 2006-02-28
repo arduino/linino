@@ -1,31 +1,53 @@
 diff -urN linux-2.4.30/net/ipv4/netfilter/Config.in linux-2.4.30.new/net/ipv4/netfilter/Config.in
---- linux-2.4.30/net/ipv4/netfilter/Config.in	2006-02-07 15:42:18.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/Config.in	2006-02-07 15:42:53.000000000 +0100
-@@ -14,6 +14,7 @@
+--- linux-2.4.30/net/ipv4/netfilter/Config.in	2006-02-28 23:39:57.844781136 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/Config.in	2006-02-28 23:45:18.819985488 +0100
+@@ -13,6 +13,7 @@
+   dep_tristate '  IRC protocol support' CONFIG_IP_NF_IRC $CONFIG_IP_NF_CONNTRACK
    dep_tristate '  GRE protocol support' CONFIG_IP_NF_CT_PROTO_GRE $CONFIG_IP_NF_CONNTRACK
    dep_tristate '   PPTP protocol support' CONFIG_IP_NF_PPTP $CONFIG_IP_NF_CT_PROTO_GRE
-   dep_tristate '  SIP protocol support' CONFIG_IP_NF_SIP $CONFIG_IP_NF_CONNTRACK
 +  dep_tristate '  H.323 (netmeeting) support' CONFIG_IP_NF_H323 $CONFIG_IP_NF_CONNTRACK
  fi
  
  if [ "$CONFIG_EXPERIMENTAL" = "y" ]; then
-@@ -95,6 +96,13 @@
- 	  define_tristate CONFIG_IP_NF_NAT_SIP $CONFIG_IP_NF_NAT
- 	fi
+@@ -94,6 +95,13 @@
+           define_tristate CONFIG_IP_NF_NAT_AMANDA $CONFIG_IP_NF_NAT
+         fi
        fi
 +      if [ "$CONFIG_IP_NF_H323" = "m" ]; then
-+	define_tristate CONFIG_IP_NF_NAT_H323 m
++       define_tristate CONFIG_IP_NF_NAT_H323 m
 +      else
-+	if [ "$CONFIG_IP_NF_H323" = "y" ]; then
-+	  define_tristate CONFIG_IP_NF_NAT_H323 $CONFIG_IP_NF_NAT
-+	fi
++       if [ "$CONFIG_IP_NF_H323" = "y" ]; then
++         define_tristate CONFIG_IP_NF_NAT_H323 $CONFIG_IP_NF_NAT
++       fi
 +      fi
-       if [ "$CONFIG_IP_NF_AMANDA" = "m" ]; then
-         define_tristate CONFIG_IP_NF_NAT_AMANDA m
-       else
+       if [ "$CONFIG_EXPERIMENTAL" = "y" ]; then
+         dep_tristate '    Basic SNMP-ALG support (EXPERIMENTAL)' CONFIG_IP_NF_NAT_SNMP_BASIC $CONFIG_IP_NF_NAT
+       fi
+diff -urN linux-2.4.30/net/ipv4/netfilter/Makefile linux-2.4.30.new/net/ipv4/netfilter/Makefile
+--- linux-2.4.30/net/ipv4/netfilter/Makefile	2006-02-28 23:39:57.847780680 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/Makefile	2006-02-28 23:45:58.759913696 +0100
+@@ -53,6 +53,10 @@
+ ifdef CONFIG_IP_NF_NAT_PPTP
+ 	export-objs += ip_conntrack_pptp.o
+ endif
++obj-$(CONFIG_IP_NF_H323) += ip_conntrack_h323.o
++ifdef CONFIG_IP_NF_NAT_H323
++       export-objs += ip_conntrack_h323.o
++endif
+ 
+ 
+ # NAT helpers 
+@@ -62,6 +66,7 @@
+ obj-$(CONFIG_IP_NF_NAT_IRC) += ip_nat_irc.o
+ obj-$(CONFIG_IP_NF_NAT_PROTO_GRE) += ip_nat_proto_gre.o
+ obj-$(CONFIG_IP_NF_NAT_PPTP) += ip_nat_pptp.o
++obj-$(CONFIG_IP_NF_NAT_H323) += ip_nat_h323.o
+ 
+ # generic IP tables 
+ obj-$(CONFIG_IP_NF_IPTABLES) += ip_tables.o
 diff -urN linux-2.4.30/net/ipv4/netfilter/ip_conntrack_h323.c linux-2.4.30.new/net/ipv4/netfilter/ip_conntrack_h323.c
 --- linux-2.4.30/net/ipv4/netfilter/ip_conntrack_h323.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/ip_conntrack_h323.c	2006-02-07 15:42:53.000000000 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/ip_conntrack_h323.c	2006-02-28 23:43:35.239732080 +0100
 @@ -0,0 +1,302 @@
 +/* 
 + * H.323 'brute force' extension for H.323 connection tracking. 
@@ -331,7 +353,7 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/ip_conntrack_h323.c linux-2.4.30.new/n
 +module_exit(fini);
 diff -urN linux-2.4.30/net/ipv4/netfilter/ip_nat_h323.c linux-2.4.30.new/net/ipv4/netfilter/ip_nat_h323.c
 --- linux-2.4.30/net/ipv4/netfilter/ip_nat_h323.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/ip_nat_h323.c	2006-02-07 15:42:53.000000000 +0100
++++ linux-2.4.30.new/net/ipv4/netfilter/ip_nat_h323.c	2006-02-28 23:43:35.240731928 +0100
 @@ -0,0 +1,403 @@
 +/* 
 + * H.323 'brute force' extension for NAT alteration. 
@@ -736,58 +758,36 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/ip_nat_h323.c linux-2.4.30.new/net/ipv
 +
 +module_init(init);
 +module_exit(fini);
-diff -urN linux-2.4.30/net/ipv4/netfilter/Makefile linux-2.4.30.new/net/ipv4/netfilter/Makefile
---- linux-2.4.30/net/ipv4/netfilter/Makefile	2006-02-07 15:42:18.000000000 +0100
-+++ linux-2.4.30.new/net/ipv4/netfilter/Makefile	2006-02-07 15:42:53.000000000 +0100
-@@ -57,6 +57,10 @@
- ifdef CONFIG_IP_NF_NAT_SIP
-         export-objs += ip_conntrack_sip.o
- endif
-+obj-$(CONFIG_IP_NF_H323) += ip_conntrack_h323.o
-+ifdef CONFIG_IP_NF_NAT_H323
-+	export-objs += ip_conntrack_h323.o
-+endif
- 
- 
- # NAT helpers 
-@@ -67,6 +71,7 @@
- obj-$(CONFIG_IP_NF_NAT_PROTO_GRE) += ip_nat_proto_gre.o
- obj-$(CONFIG_IP_NF_NAT_PPTP) += ip_nat_pptp.o
- obj-$(CONFIG_IP_NF_NAT_SIP) += ip_nat_sip.o
-+obj-$(CONFIG_IP_NF_NAT_H323) += ip_nat_h323.o
- 
- # generic IP tables 
- obj-$(CONFIG_IP_NF_IPTABLES) += ip_tables.o
 diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h
---- linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-07 15:42:18.000000000 +0100
-+++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-07 15:42:53.000000000 +0100
-@@ -72,6 +72,7 @@
+--- linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-28 23:39:57.588820048 +0100
++++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-28 23:48:57.946673168 +0100
+@@ -71,6 +71,7 @@
+ #include <linux/netfilter_ipv4/ip_conntrack_ftp.h>
  #include <linux/netfilter_ipv4/ip_conntrack_irc.h>
  #include <linux/netfilter_ipv4/ip_conntrack_pptp.h>
- #include <linux/netfilter_ipv4/ip_conntrack_sip.h>
 +#include <linux/netfilter_ipv4/ip_conntrack_h323.h>
  
  /* per expectation: application helper private data */
  union ip_conntrack_expect_help {
-@@ -81,6 +82,7 @@
+@@ -79,6 +80,7 @@
+ 	struct ip_ct_ftp_expect exp_ftp_info;
  	struct ip_ct_irc_expect exp_irc_info;
  	struct ip_ct_pptp_expect exp_pptp_info;
- 	struct ip_ct_sip_expect exp_sip_info;
 +	struct ip_ct_h225_expect exp_h225_info;
  
  #ifdef CONFIG_IP_NF_NAT_NEEDED
  	union {
-@@ -96,6 +98,7 @@
+@@ -93,6 +95,7 @@
+ 	struct ip_ct_ftp_master ct_ftp_info;
  	struct ip_ct_irc_master ct_irc_info;
  	struct ip_ct_pptp_master ct_pptp_info;
- 	struct ip_ct_sip_master ct_sip_info;
 +	struct ip_ct_h225_master ct_h225_info;
  };
  
  #ifdef CONFIG_IP_NF_NAT_NEEDED
 diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack_h323.h linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack_h323.h
 --- linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack_h323.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack_h323.h	2006-02-07 15:42:53.000000000 +0100
++++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack_h323.h	2006-02-28 23:43:35.261728736 +0100
 @@ -0,0 +1,30 @@
 +#ifndef _IP_CONNTRACK_H323_H
 +#define _IP_CONNTRACK_H323_H
