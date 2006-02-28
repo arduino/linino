@@ -16,19 +16,15 @@ if [ "$1" != "failsafe" -a "$(nvram get no_root_swap)" != 1 ]; then
 			mount -o remount,rw /dev/root /
 		fi
 	else
-		is_dirty
-		if [ $? = 0 ]; then
-			firstboot ramoverlay >&- 2>&-
-		else
+		is_dirty 
+		[ $? != 0 ] && {
 			mount /dev/mtdblock/4 /jffs
 			pivot_root /jffs /jffs/rom && {
 				mount none /proc -t proc
 				umount /rom/proc
 				mount -o move /rom/dev /dev
-			} || {
-				firstboot ramoverlay
 			}
-		fi
+		} || firstboot ramoverlay
 	fi
 fi
 
