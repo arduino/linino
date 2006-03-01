@@ -217,21 +217,14 @@ static void stop_bcom(int skfd, char *ifname)
 
 }
 
-static void start_bcom(int skfd, char *ifname)
+static inline void set_distance(int skfd, char *ifname)
 {
+	rw_reg_t reg;
+	uint32 shm;
 	int val = 0;
 	char *v;
 	
-	if (bcom_ioctl(skfd, ifname, WLC_GET_MAGIC, &val, sizeof(val)) < 0)
-		return;
-
-	bcom_ioctl(skfd, ifname, WLC_UP, &val, sizeof(val));
-	set_wext_ssid(skfd, ifname);
-
 	if (v = nvram_get(wl_var("distance"))) {
-		rw_reg_t reg;
-		uint32 shm;
-		
 		val = atoi(v);
 		val = 9+(val/150)+((val%150)?1:0);
 		
@@ -244,6 +237,18 @@ static void start_bcom(int skfd, char *ifname)
 		reg.size = 2;
 		bcom_ioctl(skfd, ifname, 102, &reg, sizeof(reg));
 	}
+}
+
+static void start_bcom(int skfd, char *ifname)
+{
+	int val = 0;
+
+	if (bcom_ioctl(skfd, ifname, WLC_GET_MAGIC, &val, sizeof(val)) < 0)
+		return;
+
+	bcom_ioctl(skfd, ifname, WLC_UP, &val, sizeof(val));
+	set_wext_ssid(skfd, ifname);
+	set_distance(skfd, ifname);
 }
 
 static int setup_bcom_wds(int skfd, char *ifname)
@@ -356,6 +361,9 @@ void start_watchdog(int skfd, char *ifname)
 			setup_bcom_wds(skfd, ifname);
 			sleep(wdstimeout);
 		}
+
+		/* refresh the distance setting - the driver might change it */
+		set_distance(skfd, ifname);
 	}
 }
 
