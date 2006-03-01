@@ -1496,3 +1496,30 @@ diff -urN linux-2.4.30/include/linux/netfilter_mime.h linux-2.4.30.new/include/l
 +#endif /* __KERNEL__ */
 +
 +#endif /* _NETFILTER_MIME_H */
+diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h
+--- linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-14 14:02:20.000000000 +0100
++++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h	2006-02-14 13:49:55.000000000 +0100
+@@ -66,6 +66,7 @@
+ };
+ 
+ /* Add protocol helper include file here */
++#include <linux/netfilter_ipv4/ip_conntrack_rtsp.h>
+ #include <linux/netfilter_ipv4/ip_conntrack_amanda.h>
+ 
+ #include <linux/netfilter_ipv4/ip_conntrack_ftp.h>
+@@ -77,6 +78,7 @@
+ /* per expectation: application helper private data */
+ union ip_conntrack_expect_help {
+ 	/* insert conntrack helper private data (expect) here */
++	struct ip_ct_rtsp_expect exp_rtsp_info;
+ 	struct ip_ct_amanda_expect exp_amanda_info;
+ 	struct ip_ct_ftp_expect exp_ftp_info;
+ 	struct ip_ct_irc_expect exp_irc_info;
+@@ -94,6 +96,7 @@
+ /* per conntrack: application helper private data */
+ union ip_conntrack_help {
+ 	/* insert conntrack helper private data (master) here */
++	struct ip_ct_rtsp_master ct_rtsp_info;
+ 	struct ip_ct_ftp_master ct_ftp_info;
+ 	struct ip_ct_irc_master ct_irc_info;
+ 	struct ip_ct_pptp_master ct_pptp_info;
