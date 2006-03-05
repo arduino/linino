@@ -1,16 +1,11 @@
 function portstr(type, str) {
-	if (str ~ /^[0-9]+-[0-9]+$/) {
-		gsub(/-/, ":", str)
-		if (type == "src") return " --sport " str
-		else return " --dport " str
-	} else {
-		if (insmod_mport != 1) {
-			print "insmod ipt_multiport >&- 2>&-"
-			insmod_mport = 1
-		}
-		if (type == "src") return " -m multiport --sports " str
-		else return " -m multiport --dports " str
+	gsub(/-/, ":", str)
+	if (insmod_mport != 1) {
+		print "insmod ipt_multiport >&- 2>&-"
+		insmod_mport = 1
 	}
+	if (type == "src") return " -m multiport --sports " str
+	else return " -m multiport --dports " str
 }
 
 function str2ipt(str) {
