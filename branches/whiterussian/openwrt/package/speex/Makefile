@@ -21,9 +21,10 @@ $(eval $(call PKG_template,LIBSPEEX,libspeex,$(PKG_VERSION)-$(PKG_RELEASE),$(ARC
 $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(strip $(TARGET_CFLAGS))" \
+		CFLAGS="$(strip $(TARGET_CFLAGS)) -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
+		OGG_CFLAGS="" \
 		./configure \
 		--target=$(GNU_TARGET_NAME) \
 		--host=$(GNU_TARGET_NAME) \
@@ -55,6 +56,7 @@ $(PKG_BUILD_DIR)/.built:
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		OGG_CFLAGS="" \
 	  	bin_PROGRAMS="" \
 		all install
 	touch $@
