@@ -281,7 +281,6 @@ void start_watchdog(int skfd, char *ifname)
 	FILE *f;
 	unsigned char buf[8192], wdslist[8192], wbuf[80], *v, *p, *next, *tmp;
 	int wds = 0, ap, i, j, restart_wds, wdstimeout;
-	wlc_ssid_t ssid;
 
 	if (fork())
 		return;
@@ -299,9 +298,6 @@ void start_watchdog(int skfd, char *ifname)
 			wds++;
 		}
 	}
-	v = nvram_safe_get(wl_var("ssid"));
-	ssid.SSID_len = strlen(v);
-	strncpy(ssid.SSID, v, 32);
 	
 	/* client mode */
 	bcom_ioctl(skfd, ifname, WLC_GET_AP, &ap, sizeof(i));
@@ -334,7 +330,7 @@ void start_watchdog(int skfd, char *ifname)
 			}
 			
 			if (i) 
-				bcom_ioctl(skfd, ifname, WLC_SET_SSID, &ssid, sizeof(ssid));
+				set_wext_ssid(skfd, ifname);
 		}
 
 		
