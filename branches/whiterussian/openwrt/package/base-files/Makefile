@@ -40,22 +40,21 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_BASE):
 	$(SCRIPT_DIR)/make-ipkg-dir.sh $(IDIR_BASE) ipkg/$(PKG_NAME).control $(PKG_RELEASE) $(ARCH)
 	cp -a ./default/* $(IDIR_BASE)
-	mkdir -p $(IDIR_BASE)/jffs
 	mkdir -p $(IDIR_BASE)/dev
+	mkdir -p $(IDIR_BASE)/etc/crontabs
+	mkdir -p $(IDIR_BASE)/jffs
+	mkdir -p $(IDIR_BASE)/lib
+	mkdir -p $(IDIR_BASE)/mnt
 	mkdir -p $(IDIR_BASE)/proc
 	mkdir -p $(IDIR_BASE)/tmp
-	mkdir -p $(IDIR_BASE)/lib
 	mkdir -p $(IDIR_BASE)/usr/lib
 	mkdir -p $(IDIR_BASE)/usr/bin
-	mkdir -p $(IDIR_BASE)/mnt
 	mkdir -p $(IDIR_BASE)/www
 	ln -sf /tmp/resolv.conf $(IDIR_BASE)/etc/resolv.conf
-	rm -rf $(IDIR_BASE)/var
 	ln -sf /tmp $(IDIR_BASE)/var
 	-find $(IDIR_BASE) -type d -name CVS | xargs rm -rf
 	-find $(IDIR_BASE) -type d -name .svn | xargs rm -rf
 	-find $(IDIR_BASE) -name '.#*' | xargs rm -f
-	mkdir -p $(IDIR_BASE)/etc
 	-grep \^BR2_SYSCONF $(TOPDIR)/.config > $(IDIR_BASE)/etc/sysconf
 	$(IPKG_BUILD) $(IDIR_BASE) $(PACKAGE_DIR)
 
