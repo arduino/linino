@@ -1,7 +1,7 @@
-function start_form(title, field_opts) {
+function start_form(title, field_opts, field_opts2) {
 	print "<div class=\"settings\"" field_opts ">"
 	if (title != "") print "<div class=\"settings-title\"><h3><strong>" title "</strong></h3></div>"
-	print "<div class=\"settings-content\">"
+	print "<div class=\"settings-content\"" field_opts2 ">"
 }
 
 function end_form(form_help, form_help_link) {
