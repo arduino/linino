@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssl
 PKG_VERSION:=0.9.7i
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=f69d82b206ff8bff9d0e721f97380b9e
 
 PKG_SOURCE_URL:=http://www.openssl.org/source/ \
@@ -74,7 +74,8 @@ $(IPKG_OPENSSL_UTIL):
 	install -d -m0755 $(IDIR_OPENSSL_UTIL)/etc/ssl
 	cp -fpR $(PKG_INSTALL_DIR)/etc/ssl/openssl.cnf $(IDIR_OPENSSL_UTIL)/etc/ssl/
 	install -d -m0755 $(IDIR_OPENSSL_UTIL)/etc/ssl/certs
-	install -d -m0700 $(IDIR_OPENSSL_UTIL)/etc/ssl/private
+	install -d -m0755 $(IDIR_OPENSSL_UTIL)/etc/ssl/private
+	chmod 0700 $(IDIR_OPENSSL_UTIL)/etc/ssl/private
 	install -d -m0755 $(IDIR_OPENSSL_UTIL)/usr/bin
 	cp -fpR $(PKG_INSTALL_DIR)/usr/bin/openssl $(IDIR_OPENSSL_UTIL)/usr/bin/
 	$(RSTRIP) $(IDIR_OPENSSL_UTIL)
