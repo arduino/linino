@@ -3,7 +3,7 @@ lang => Espa&ntilde;ol
 Settings saved => Cambios guardados
 Settings not saved => No se han podido guardar los cambios
 Save Changes => Guardar cambios
-Apply Changes => Applicar cambios
+Apply Changes => Aplicar cambios
 Clear Changes => Deshacer cambios
 Review Changes => Comprobar cambios
 Host Name => Nombre del equipo
@@ -24,7 +24,7 @@ About => Acerca de
 Router Info => Informaci&oacute;n del router
 
 Status => Estado
-Connections => Connexiones
+Connections => Conexiones
 DHCP => DHCP
 Wireless => Wi-Fi
 
@@ -134,7 +134,7 @@ Redial Policy => Opciones de reconexi&oacute;n
 Connect on Demand => Bajo demanda
 Keep Alive => Conexi&oacute;n permanente
 Maximum Idle Time => Tiempo m&aacute;ximo de inactividad
-Redial Timeout => Tiempo dereconexi&oacute;n
+Redial Timeout => Tiempo de reconexi&oacute;n
 MTU => MTU (tama&ntilde;o de los paquetes)
 Username => Nombre de usuario
 

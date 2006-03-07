@@ -189,8 +189,8 @@ Configured Hosts => H&ocirc;tes configur&eacute;s
 DHCP Static => Entr&eacute;es DHCP statiques
 Host Names => Noms d'h&ocirc;tes
 
-Up => Activ&eaccute;
-Down => D&eacute;sactiv&eacute;
+Up => Monter
+Down => Descendre
 Edit => Editer
 Delete => Effacer
 Save => Sauvegarder
