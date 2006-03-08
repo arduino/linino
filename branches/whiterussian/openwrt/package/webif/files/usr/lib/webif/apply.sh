@@ -35,8 +35,10 @@ reload_network() {
 reload_wireless() {
 	echo '@TR<<Reloading>> @TR<<wireless settings>> ...'
 	killall nas >&- 2>&- && sleep 2
-	/sbin/wifi
-	[ -f /etc/init.d/S41wpa ] && /etc/init.d/S41wpa
+	(
+		/sbin/wifi
+		[ -f /etc/init.d/S41wpa ] && /etc/init.d/S41wpa
+	) >&- 2>&- <&-
 }
 
 reload_system() {
