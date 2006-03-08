@@ -132,6 +132,16 @@ esac
 	nvram set lan_ifnames="vlan0"
 }
 
+# wrtsl54gs vlan defaults
+[  "$boardtype" = "0x042f" \
+-a "$boardnum" = "42" \
+-a "$boardflags" = "24" ] && {
+	nvram_default vlan0hwname "et0"
+	nvram_default vlan0ports "0 1 2 3 5u"
+	nvram_default vlan1hwname "et0"
+	nvram_default vlan1ports "4 5"
+}
+
 # needed at least for wrt54gs v1.1 and wrt54g v2.0, v2.2
 [ \! -z "$(nvram get boardrev)" ] && {
 	nvram_default wl0id 0x4320
