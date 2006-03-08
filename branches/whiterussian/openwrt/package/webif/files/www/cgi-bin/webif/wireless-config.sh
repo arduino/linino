@@ -8,10 +8,10 @@ case "$CC" in
 	All|all|ALL) CHANNELS="1 2 3 4 5 6 7 8 9 10 11 12 13 14"; CHANNEL_MAX=14 ;;
 	*) CHANNELS="1 2 3 4 5 6 7 8 9 10 11"; CHANNEL_MAX=11 ;;
 esac
-F_CHANNELS=""
+F_CHANNELS="option|0|@TR<<Auto>>"
 for ch in $CHANNELS; do
-	F_CHANNELS="${F_CHANNELS}option|$ch
-"
+	F_CHANNELS="${F_CHANNELS}
+option|$ch"
 done
 
 if empty "$FORM_submit"; then
@@ -117,7 +117,7 @@ wep|FORM_key4|@TR<<WEP Key>> 4||$FORM_key4";;
 int|FORM_radio|wl0_radio|required min=0 max=1|$FORM_radio
 int|FORM_broadcast|wl0_closed|required min=0 max=1|$FORM_broadcast
 string|FORM_ssid|@TR<<ESSID>>|required|$FORM_ssid
-int|FORM_channel|@TR<<Channel>>|required min=1 max=$CHANNEL_MAX|$FORM_channel
+int|FORM_channel|@TR<<Channel>>|required min=0 max=$CHANNEL_MAX|$FORM_channel
 $V_WEP
 $V_RADIUS
 $V_PSK
