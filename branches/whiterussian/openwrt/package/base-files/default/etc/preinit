@@ -17,8 +17,8 @@ insmod switch-robo || insmod switch-adm || rmmod switch-core
 	echo 1 > /proc/switch/eth0/reset
 
 	case "$(nvram get boardtype)" in
-		0x0467) echo "0 1 2 3 5u*";;
-		     *) echo "1 2 3 4 5u*";;
+		0x0467|0x042f) echo "0 1 2 3 5u*";;
+		            *) echo "1 2 3 4 5u*";;
 	esac > /proc/switch/eth0/vlan/0/ports
 }
 
