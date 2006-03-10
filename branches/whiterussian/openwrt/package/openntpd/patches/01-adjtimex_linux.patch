@@ -175,3 +175,33 @@ diff -urN openntpd-3.7p1.orig/openbsd-compat/port-linux.c openntpd-3.7p1/openbsd
 +	return result;
 +}
 +#endif
+diff -ruN openntpd-3.7p1-old/configure openntpd-3.7p1/configure
+--- openntpd-3.7p1-old/configure        2005-05-23 13:25:42.000000000 +0200
++++ openntpd-3.7p1/configure    2006-03-10 00:16:48.000000000 +0100
+@@ -854,6 +854,7 @@
+   --with-privsep-user=user Specify privilege separation user
+   --with-privsep-path=path Specify privilege separation chroot path
+   --with-builtin-arc4random Use builtin arc4random rather than OpenSSL's
++  --with-adjtimex         Use adjtimex to adjust kernel skew
+   --with-ssl-dir=PATH     Specify path to OpenSSL installation
+
+ Some influential environment variables:
+@@ -8656,6 +8563,18 @@
+
+ fi;
+
++
++# Check whether --with-adjtimex or --without-adjtimex was given.
++if test "${with_adjtimex+set}" = set; then
++  withval="$with_adjtimex"
++
++cat >>confdefs.h <<\_ACEOF
++#define USE_ADJTIMEX
++_ACEOF
++
++
++fi;
++
+ # Search for OpenSSL if required.
+ if test "$ac_cv_func_arc4random" != "yes" && test "x$builtin_arc4random" != "xyes"; then
+ saved_CPPFLAGS="$CPPFLAGS"
