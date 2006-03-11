@@ -139,7 +139,6 @@ $(INSTALL_PACKAGES): base-files-install
 
 arpwatch-compile: libpcap-compile
 cyrus-sasl-compile: openssl-compile
-dropbear-compile: zlib-compile
 dsniff-compile: libnids-compile openssl-compile libgdbm-compile
 fprobe-compile: libpcap-compile
 gdb-compile: ncurses-compile
