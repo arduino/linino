@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iptables
 PKG_VERSION:=1.3.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=86d88455520cfdc56fd7ae27897a80a4
 
 PKG_SOURCE_URL:=http://www.netfilter.org/files \
@@ -72,6 +72,13 @@ $(PKG_BUILD_DIR)/.built:
 	touch $@
 		
 $(IPKG_IPTABLES):
+	install -d -m0755 $(IDIR_IPTABLES)/etc/config
+	install -m0644 ./files/firewall.config $(IDIR_IPTABLES)/etc/config/firewall
+	install -d -m0755 $(IDIR_IPTABLES)/etc/init.d
+	install -m0755 ./files/firewall.init $(IDIR_IPTABLES)/etc/init.d/S45firewall
+	install -m0755 ./files/firewall.user $(IDIR_IPTABLES)/etc/
+	install -d -m0755 $(IDIR_IPTABLES)/usr/lib
+	install -m0644 ./files/firewall.awk $(IDIR_IPTABLES)/usr/lib
 	install -d -m0755 $(IDIR_IPTABLES)/usr/sbin
 	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/iptables $(IDIR_IPTABLES)/usr/sbin/
 	install -d -m0755 $(IDIR_IPTABLES)/usr/lib/iptables
