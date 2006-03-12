@@ -150,7 +150,7 @@ diff -Nur openswan-2.4.0.orig/programs/_startklips/_startklips.in openswan-2.4.0
      exit
  fi
 -if test ! -f $ipsecversion && test ! -f $netkey && modprobe -qn ipsec
-+if test ! -f $ipsecversion && test ! -f $netkey && insmod ipsec
++if test ! -f $ipsecversion && test ! -f $netkey 
  then
      # statically compiled KLIPS/NETKEY not found; try to load the module
 -    modprobe ipsec
