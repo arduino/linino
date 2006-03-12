@@ -17,7 +17,7 @@ dupe() { # <new_root> <old_root>
 	echo "done"
 
 	echo -n "setting up symlinks... "
-	for file in $(cd $2; find . -xdev -type f; find . -xdev -type l;)
+	for file in $(cd $2; find . -xdev -type f;)
 	do {
 		case "$file" in
 		"./rom/note") ;; #nothing
@@ -27,6 +27,10 @@ dupe() { # <new_root> <old_root>
 		*) ln -sf /rom/${file#./*} $file;;
 		esac
 	} done
+	for file in $(cd $2; find . -xdev -type l;)
+	do {
+		cp -af /rom/${file#./*} $file
+	}
 	echo "done"
 }
 
