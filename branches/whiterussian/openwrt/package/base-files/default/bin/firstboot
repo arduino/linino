@@ -17,8 +17,7 @@ dupe() { # <new_root> <old_root>
 	echo "done"
 
 	echo -n "setting up symlinks... "
-	for file in $(cd $2; find . -xdev -type f;)
-	do {
+	for file in $(cd $2; find . -xdev -type f;); do
 		case "$file" in
 		"./rom/note") ;; #nothing
 		"./etc/config"|\
@@ -26,11 +25,10 @@ dupe() { # <new_root> <old_root>
 		"./usr/lib/ipkg/info") cp -af $2/$file $file;;
 		*) ln -sf /rom/${file#./*} $file;;
 		esac
-	} done
-	for file in $(cd $2; find . -xdev -type l;)
-	do {
-		cp -af /rom/${file#./*} $file
-	}
+	done
+	for file in $(cd $2; find . -xdev -type l;); do
+		cp -af $2/${file#./*} $file
+	done
 	echo "done"
 }
 
