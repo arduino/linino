@@ -49,7 +49,6 @@ Hosts => Configuration des h&ocirc;tes
 Copyright => Copyright
 
 GPL_Text => Ce programme est un logiciel libre; vous pouvez le redistribuer
-GPL_Text => Ce programme est un logiciel libre; vous pouvez le redistribuer
 et/ou le modifier sous les termes de la General Public License telle qu'elle
 est publi&eacute;e par la Free Sofware Foundation; que ce soit sous la version
 2 de la license, ou (&agrave; votre convenance) une version ult&eacute;rieure
