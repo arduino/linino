@@ -51,6 +51,7 @@ $(IPKG_BASE):
 	mkdir -p $(IDIR_BASE)/usr/bin
 	mkdir -p $(IDIR_BASE)/www
 	ln -sf /tmp/resolv.conf $(IDIR_BASE)/etc/resolv.conf
+	rm -f $(IDIR_BASE)/var
 	ln -sf /tmp $(IDIR_BASE)/var
 	-find $(IDIR_BASE) -type d -name CVS | xargs rm -rf
 	-find $(IDIR_BASE) -type d -name .svn | xargs rm -rf
