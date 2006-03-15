@@ -59,7 +59,7 @@ $(IPKG_PPTPD):
 	install -d -m0755 $(IDIR_PPTPD)/etc
 	install -m0644 ./files/pptpd.conf $(IDIR_PPTPD)/etc/
 	install -d -m0755 $(IDIR_PPTPD)/etc/init.d
-	install -m0755 ./files/pptpd.init $(IDIR_PPTPD)/etc/init.d/pptpd
+	install -m0755 ./files/pptpd.init $(IDIR_PPTPD)/etc/init.d/S50pptpd
 	install -d -m0755 $(IDIR_PPTPD)/etc/ppp
 	install -m0644 ./files/options.pptpd $(IDIR_PPTPD)/etc/ppp/
 	install -d -m0755 $(IDIR_PPTPD)/usr/sbin
