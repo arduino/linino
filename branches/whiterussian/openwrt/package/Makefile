@@ -88,6 +88,7 @@ package-$(BR2_PACKAGE_PPTP) += pptp
 package-$(BR2_PACKAGE_PPTPD) += pptpd
 package-$(BR2_PACKAGE_QUAGGA) += quagga
 package-$(BR2_PACKAGE_RADVD) += radvd
+package-$(BR2_COMPILE_RADIUSCLIENT_NG) += radiusclient-ng
 package-$(BR2_PACKAGE_READLINE) += readline
 package-$(BR2_PACKAGE_ROBOCFG) += robocfg
 package-$(BR2_PACKAGE_RSYNC) += rsync
@@ -154,6 +155,7 @@ nfs-server-compile: portmap-compile
 nmap-compile: uclibc++-compile pcre-compile libpcap-compile
 nocatsplash-compile: glib-compile
 openldap-compile: cyrus-sasl-compile openssl-compile
+openser-compile: libradiusclient-ng-compile mysql-compile
 openssh-compile: zlib-compile openssl-compile
 openssl-compile: zlib-compile
 openswan-compile: gmp-compile
