@@ -607,8 +607,7 @@ s/ \+/ /g'`
 			ipkg_set_depends $pkg $new_deps
 		done
 
-		new_deps=`echo $new_deps | sed -e 's/[[:space:]]\+/\\
-/g' | sort | uniq`
+		new_deps=`echo $new_deps | sed -e 's/[[:space:]]\+/\n/g' | sort | uniq`
 
 		local maybe_new_pkgs=
 		for pkg in $new_deps; do
@@ -787,7 +786,7 @@ ipkg_install_file_dest() {
 			echo "Package: $pkg
 Status: install ok pending" | ipkg_status_update_sd $sd $pkg
 			mkdir -p $IPKG_PENDING_DIR
-			cp $filename $IPKG_PENDING_DIR
+			cp -f $filename $IPKG_PENDING_DIR
 			rm -r $IPKG_TMP/$pkg/control
 			rm -r $IPKG_TMP/$pkg/data
 			rmdir $IPKG_TMP/$pkg
