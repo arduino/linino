@@ -5,6 +5,12 @@ mount none /proc -t proc
 insmod diag
 echo 0x01 > /proc/sys/diag
 
+ifname=eth0
+# WAP54G, WL-HDD
+[  "$(nvram get boardnum)" = "2" \
+-o \( "$(nvram get boardnum)" = "asusX" \
+   -a "$(nvram get et1phyaddr)" -eq 1 \) ] && ifname="eth1"
+
 insmod switch-core
 insmod switch-robo || insmod switch-adm || rmmod switch-core
 
@@ -22,7 +28,7 @@ insmod switch-robo || insmod switch-adm || rmmod switch-core
 	esac > /proc/switch/eth0/vlan/0/ports
 }
 
-ifconfig eth0 192.168.1.1 netmask 255.255.255.0 broadcast 192.168.1.255 up
+ifconfig $ifname 192.168.1.1 netmask 255.255.255.0 broadcast 192.168.1.255 up
 netmsg 192.168.1.0 "(dummy message)" # b44 eats the first packet
 netmsg 192.168.1.255 "Press reset now, to enter Failsafe!"
 
@@ -36,9 +42,9 @@ if [ $(cat /proc/sys/reset) = 1 -o "$(nvram get failsafe)" = 1 ]; then
 		nvram commit
 	}
 	netmsg 192.168.1.255 "Entering Failsafe!"
-	telnetd -l /bin/login 
+	telnetd -l /bin/login <> /dev/null 2>&1
 else
-	ifconfig eth0 0.0.0.0
+	ifconfig $ifname 0.0.0.0
 
 	# revert to the boot loader's vlan config
 	# required for at least WRT54G v1.1
