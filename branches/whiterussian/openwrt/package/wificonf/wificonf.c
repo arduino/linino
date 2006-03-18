@@ -280,7 +280,7 @@ void start_watchdog(int skfd, char *ifname)
 {
 	FILE *f;
 	unsigned char buf[8192], wdslist[8192], wbuf[80], *v, *p, *next, *tmp;
-	int wds = 0, ap, i, j, restart_wds, wdstimeout;
+	int i, j, wds = 0, c = 0, restart_wds = 0, wdstimeout = 0;
 
 	if (fork())
 		return;
@@ -299,16 +299,22 @@ void start_watchdog(int skfd, char *ifname)
 		}
 	}
 	
-	/* client mode */
-	bcom_ioctl(skfd, ifname, WLC_GET_AP, &ap, sizeof(i));
-
-	if (ap && ((wdstimeout = atoi(nvram_safe_get(wl_var("wdstimeout")))) <= 0))
-		return;
-	
 	for (;;) {
-		sleep(WD_INTERVAL);
+		sleep(1);
+		
+		/* refresh the distance setting - the driver might change it */
+		set_distance(skfd, ifname);
 
-		if (!ap) {
+		if (restart_wds)
+			wdstimeout--;
+
+		if ((c++ < WD_INTERVAL) || ((restart_wds > 0) && (wdstimeout > 0)))
+			continue;
+		else
+			c = 0;
+
+		if (nvram_match(wl_var("mode"), "sta") ||
+			nvram_match(wl_var("mode"), "wet")) {
 			i = 0;
 			if (bcom_ioctl(skfd, ifname, WLC_GET_BSSID, buf, 6) < 0) 
 				i = 1;
@@ -332,11 +338,13 @@ void start_watchdog(int skfd, char *ifname)
 			if (i) 
 				set_wext_ssid(skfd, ifname);
 		}
-
 		
 		/* wds */
 		p = wdslist;
 		restart_wds = 0;
+		if (wdstimeout == 0)
+			wdstimeout = atoi(nvram_safe_get(wl_var("wdstimeout")));
+		
 		for (i = 0; (i < wds) && !restart_wds; i++, p += 6) {
 			memset(buf, 0, 8192);
 			strcpy(buf, "sta_info");
@@ -353,13 +361,10 @@ void start_watchdog(int skfd, char *ifname)
 				}
 			}
 		}
-		if (restart_wds) {
-			setup_bcom_wds(skfd, ifname);
-			sleep(wdstimeout);
-		}
 
-		/* refresh the distance setting - the driver might change it */
-		set_distance(skfd, ifname);
+		if (restart_wds && (wdstimeout > 0)) {
+			setup_bcom_wds(skfd, ifname);
+		}
 	}
 }
 
@@ -383,11 +388,11 @@ static void setup_bcom(int skfd, char *ifname)
 	buf[3] = 0;
 	bcom_ioctl(skfd, ifname, WLC_SET_COUNTRY, buf, 4);
 	
-	if (v = nvram_get(wl_var("txpwr"))) {
-		val = atoi(v);
-		val = mw_to_qdbm(val);
-		bcom_set_int(skfd, ifname, "qtxpower", val);
-	}
+	val = atoi(nvram_safe_get(wl_var("txpwr")));
+	if (val <= 0)
+		val = atoi(nvram_safe_get(wl_var("pa0maxpwr")));
+	val = mw_to_qdbm(val);
+	bcom_set_int(skfd, ifname, "qtxpower", val);
 	
 	/* Set other options */
 	val = nvram_enabled(wl_var("lazywds"));
@@ -464,8 +469,7 @@ static void setup_bcom(int skfd, char *ifname)
 	if (ap = !nvram_match(wl_var("mode"), "sta") && !nvram_match(wl_var("mode"), "wet"))
 		wds_enabled = setup_bcom_wds(skfd, ifname);
 
-	if (!ap || wds_enabled)	
-		start_watchdog(skfd, ifname);
+	start_watchdog(skfd, ifname);
 	
 	/* Set up afterburner, disabled it if WDS is enabled */
 	if (wds_enabled) {
@@ -706,7 +710,7 @@ int main(int argc, char **argv)
 		exit(-1);
 	}
 
-	system("kill $(cat /var/run/wifi.pid) 2>&- >&-");
+	system("kill $(cat /var/run/wifi.pid 2>&-) 2>&- >&-");
 
 	prefix = strdup("wl0_");
 	iw_enum_devices(skfd, &setup_interfaces, NULL, 0);
