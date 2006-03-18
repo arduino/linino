@@ -7,14 +7,6 @@ config BR2_PACKAGE_OPENSER
 	 Open SIP Express Router (OpenSER) is a high-performance,
 	 configurable, free SIP server.
 
-config BR2_PACKAGE_OPENSER_MOD_MYSQL
-	tristate "openser-mod-mysql - MySQL support"
-	default m
-	select BR2_PACKAGE_LIBMYSQLCLIENT
-	select BR2_PACKAGE_OPENSER
-	help
-	  Enable MySQL support
-
 config BR2_PACKAGE_OPENSER_MOD_AUTH
 	tristate "openser-mod-auth - Authentication support"
 	default m
@@ -38,6 +30,14 @@ config BR2_PACKAGE_OPENSER_MOD_AUTH_RADIUS
 	help
 	  Authentication against RADIUS
 
+config BR2_PACKAGE_OPENSER_MOD_AVP_RADIUS
+        tristate "openser-mod-avp-radius - AVP with RADIUS support"
+        default m
+        select BR2_PACKAGE_OPENSER
+	select BR2_PACKAGE_LIBRADIUSCLIENT_NG
+        help
+          Enable AVP with RADIUS support
+
 config BR2_PACKAGE_OPENSER_MOD_AVPOPS
 	tristate "openser-mod-avpops - AVP options support"
 	default m
@@ -45,6 +45,55 @@ config BR2_PACKAGE_OPENSER_MOD_AVPOPS
 	help
 	  Enable AVP options support
 
+config BR2_PACKAGE_OPENSER_MOD_DISPATCHER
+        tristate "openser-mod-dispatcher - dispatcher support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable dispatcher options support
+
+config BR2_PACKAGE_OPENSER_MOD_DIVERSION
+        tristate "openser-mod-diversion - diversion support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable diversion options support
+
+config BR2_PACKAGE_OPENSER_MOD_FLATSTORE
+        tristate "openser-mod-flatstore - flatstore support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable flatstore support
+
+config BR2_PACKAGE_OPENSER_MOD_GFLAGS
+        tristate "openser-mod-gflags - gflags support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable GFlags support
+
+config BR2_PACKAGE_OPENSER_MOD_GROUP
+        tristate "openser-mod-group - group support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable group support
+
+config BR2_PACKAGE_OPENSER_MOD_GROUP_RADIUS
+        tristate "openser-mod-group-radius - group with RADIUS support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable group with RADIUS support
+
+config BR2_PACKAGE_OPENSER_MOD_LCR
+        tristate "openser-mod-lcr - Least Cost Routing support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        select BR2_PACKAGE_OPENSER_MOD_MYSQL
+        help
+          Enable Least Cost Routing support
 
 config BR2_PACKAGE_OPENSER_MOD_MEDIAPROXY
 	tristate "openser-mod-mediaproxy - Mediaproxy support"
@@ -53,13 +102,20 @@ config BR2_PACKAGE_OPENSER_MOD_MEDIAPROXY
 	help
 	  Enable mediaproxy support
 
-config BR2_PACKAGE_OPENSER_MOD_LCR
-	tristate "openser-mod-lcr - Least Cost Routing support"
-	default m
-	select BR2_PACKAGE_OPENSER
-	select BR2_PACKAGE_OPENSER_MOD_MYSQL
-	help
-	  Enable Least Cost Routing support
+config BR2_PACKAGE_OPENSER_MOD_MSILO
+        tristate "openser-mod-msilo - MSilo support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable msilo support
+
+config BR2_PACKAGE_OPENSER_MOD_MYSQL
+        tristate "openser-mod-mysql - MySQL support"
+        default m
+        select BR2_PACKAGE_LIBMYSQLCLIENT
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable MySQL support
 
 config BR2_PACKAGE_OPENSER_MOD_NATHELPER
 	tristate "openser-mod-nathelper - NAT helper support"
@@ -67,6 +123,34 @@ config BR2_PACKAGE_OPENSER_MOD_NATHELPER
 	select BR2_PACKAGE_OPENSER
 	help
 	  NAT helper support
+
+config BR2_PACKAGE_OPENSER_MOD_OPTIONS
+        tristate "openser-mod-options - options support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable options support
+
+config BR2_PACKAGE_OPENSER_MOD_PDT
+        tristate "openser-mod-pdt - PDT support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable pdt support
+
+config BR2_PACKAGE_OPENSER_MOD_PERMISSIONS
+        tristate "openser-mod-permissions - Permissions support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable permissions support
+
+config BR2_PACKAGE_OPENSER_MOD_PIKE
+        tristate "openser-mod-pike - PIKE support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable pike support
 
 config BR2_PACKAGE_OPENSER_MOD_SMS
 	tristate "openser-mod-sms - SMS support"
@@ -81,6 +165,41 @@ config BR2_PACKAGE_OPENSER_MOD_SPEEDDIAL
 	select BR2_PACKAGE_OPENSER
 	help
 	  Speed Dial support
+
+config BR2_PACKAGE_OPENSER_MOD_UAC
+        tristate "openser-mod-uac - UAC support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable UAC support
+
+config BR2_PACKAGE_OPENSER_MOD_UAC_REDIRECT
+        tristate "openser-mod-uac - UAC redirect support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable UAC redirect support
+
+config BR2_PACKAGE_OPENSER_MOD_URI
+        tristate "openser-mod-uri - URI support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable URI support
+
+config BR2_PACKAGE_OPENSER_MOD_URI_DB
+        tristate "openser-mod-uri-db - URI database support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable URI database support
+
+config BR2_PACKAGE_OPENSER_MOD_URI_RADIUS
+        tristate "openser-mod-uri-radius - URI with RADIUS support"
+        default m
+        select BR2_PACKAGE_OPENSER
+        help
+          Enable URI with RADIUS support
 
 config BR2_PACKAGE_OPENSER_MOD_XLOG
 	tristate "openser-mod-xlog - Logging support"
