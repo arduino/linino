@@ -23,6 +23,7 @@ done
 		on|1|enabled)
 			DEMAND=$(nvram get ppp_idletime)
 			DEMAND=${DEMAND:+demand idle $DEMAND}
+			[ -f /etc/ppp/filter ] && DEMAND=${DEMAND:+precompiled-active-filter /etc/ppp/filter $DEMAND}
 		;;
 		*) DEMAND="";;
 	esac

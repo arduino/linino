@@ -7,9 +7,9 @@ config BR2_PACKAGE_PPP
 	select BR2_PACKAGE_KMOD_PPP
 
 config BR2_PACKAGE_PPP_WITH_FILTER
-        bool "Enable filter support"
-	default n
-	depends BR2_PACKAGE_LIBPCAP
+	bool "Enable filter support"
+	depends on BR2_PACKAGE_PPP
+	default y
 
 config BR2_PACKAGE_PPP_MOD_PPPOE
 	prompt "...-mod-pppoe - PPPoE (PPP over Ethernet) plugin"
