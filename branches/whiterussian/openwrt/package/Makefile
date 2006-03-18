@@ -155,7 +155,7 @@ nfs-server-compile: portmap-compile
 nmap-compile: uclibc++-compile pcre-compile libpcap-compile
 nocatsplash-compile: glib-compile
 openldap-compile: cyrus-sasl-compile openssl-compile
-openser-compile: libradiusclient-ng-compile mysql-compile
+openser-compile: radiusclient-ng-compile mysql-compile
 openssh-compile: zlib-compile openssl-compile
 openssl-compile: zlib-compile
 openswan-compile: gmp-compile
