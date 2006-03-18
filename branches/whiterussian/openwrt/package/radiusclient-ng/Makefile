@@ -23,29 +23,29 @@ $(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); rm -rf config.cache; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
+		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
 		ac_cv_func_getdomainname=yes \
 		./configure \
-		--target=$(GNU_TARGET_NAME) \
-		--host=$(GNU_TARGET_NAME) \
-		--build=$(GNU_HOST_NAME) \
-		--program-prefix="" \
-		--program-suffix="" \
-		--prefix=/usr \
-		--exec-prefix=/usr \
-		--bindir=/usr/bin \
-		--datadir=/usr/share \
-		--includedir=/usr/include \
-		--infodir=/usr/share/info \
-		--libdir=/usr/lib \
-		--libexecdir=/usr/lib \
-		--localstatedir=/var \
-		--mandir=/usr/share/man \
-		--sbindir=/usr/sbin \
-		--sysconfdir=/etc \
-		$(DISABLE_NLS) \
-		$(DISABLE_LARGEFILE) \
+			--target=$(GNU_TARGET_NAME) \
+			--host=$(GNU_TARGET_NAME) \
+			--build=$(GNU_HOST_NAME) \
+			--program-prefix="" \
+			--program-suffix="" \
+			--prefix=/usr \
+			--exec-prefix=/usr \
+			--bindir=/usr/bin \
+			--datadir=/usr/share \
+			--includedir=/usr/include \
+			--infodir=/usr/share/info \
+			--libdir=/usr/lib \
+			--libexecdir=/usr/lib \
+			--localstatedir=/var \
+			--mandir=/usr/share/man \
+			--sbindir=/usr/sbin \
+			--sysconfdir=/etc \
+			$(DISABLE_NLS) \
+			$(DISABLE_LARGEFILE) \
 	);
 	touch $@
 
@@ -56,25 +56,36 @@ $(PKG_BUILD_DIR)/.built:
 	touch $@
 
 $(IPKG_RADIUSCLIENT_NG):
-	mkdir -p $(IDIR_RADIUSCLIENT_NG)/usr
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin $(IDIR_RADIUSCLIENT_NG)/usr/
-	cp -fpR $(PKG_INSTALL_DIR)/etc $(IDIR_RADIUSCLIENT_NG)/
+	install -d -m0755 $(IDIR_RADIUSCLIENT_NG)/etc
+	cp -fpR $(PKG_INSTALL_DIR)/etc/radiusclient-ng $(IDIR_RADIUSCLIENT_NG)/etc/
+	install -d -m0755 $(IDIR_RADIUSCLIENT_NG)/usr/sbin
+	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/* $(IDIR_RADIUSCLIENT_NG)/usr/sbin/
 	$(RSTRIP) $(IDIR_RADIUSCLIENT_NG)/
 	$(IPKG_BUILD) $(IDIR_RADIUSCLIENT_NG) $(PACKAGE_DIR)
 
 $(IPKG_LIBRADIUSCLIENT_NG):
-	mkdir -p $(IDIR_LIBRADIUSCLIENT_NG)/usr
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib $(IDIR_LIBRADIUSCLIENT_NG)/usr/
+	install -d -m0755 $(IDIR_LIBRADIUSCLIENT_NG)/usr/lib
+	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libradiusclient-ng.so.* $(IDIR_LIBRADIUSCLIENT_NG)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBRADIUSCLIENT_NG)/
-	 $(IPKG_BUILD) $(IDIR_LIBRADIUSCLIENT_NG) $(PACKAGE_DIR)
+	$(IPKG_BUILD) $(IDIR_LIBRADIUSCLIENT_NG) $(PACKAGE_DIR)
 
 $(STAGING_DIR)/usr/lib/libradiusclient-ng.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include
-	cp -fpR $(PKG_INSTALL_DIR)/usr/include/ $(STAGING_DIR)/usr/
+	cp -fpR $(PKG_INSTALL_DIR)/usr/include/radiusclient-ng.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib/
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libradiusclient-ng{a,la,so}* $(STAGING_DIR)/usr/lib/
+	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libradiusclient-ng.{a,so*} $(STAGING_DIR)/usr/lib/
 	touch $@
 
+install-dev: $(STAGING_DIR)/usr/lib/libradiusclient-ng.so
+
+uninstall-dev:
+	rm -rf \
+	  $(STAGING_DIR)/usr/include/radiusclient-ng.h \
+	  $(STAGING_DIR)/usr/lib/libradiusclient-ng.{a,so*} \
+
+compile: install-dev
+clean: uninstall-dev
+
 mostlyclean:
-	$(MAKE) -C $(PKG_BUILD_DIR) clean
+	-$(MAKE) -C $(PKG_BUILD_DIR) clean
 	rm -f $(PKG_BUILD_DIR)/.built
