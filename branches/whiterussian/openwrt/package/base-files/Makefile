@@ -75,10 +75,15 @@ $(IPKG_GCC):
 	-$(STRIP) $(IDIR_GCC)/lib/*
 	$(IPKG_BUILD) $(IDIR_GCC) $(PACKAGE_DIR)
 
+$(PACKAGE_DIR):
+	mkdir -p $@
+
+$(PACKAGES): $(PACKAGE_DIR)
+
 package-clean:
 	rm -f $(PACKAGES)
 clean: package-clean
-prepare:
+prepare: 
 compile: $(PACKAGES)
 install: compile
 	mkdir -p $(TARGET_DIR)
