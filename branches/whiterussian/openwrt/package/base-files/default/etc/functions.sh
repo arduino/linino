@@ -45,8 +45,9 @@ do_ifup() {
 		ip=$(nvram get ${2}_ipaddr)
 		netmask=$(nvram get ${2}_netmask)
 		gateway=$(nvram get ${2}_gateway)
+		mtu=$(nvram get ${2}_mtu)
 
-		$DEBUG ifconfig $if $ip ${netmask:+netmask $netmask} broadcast + up
+		$DEBUG ifconfig $if $ip ${netmask:+netmask $netmask} ${mtu:+mtu $(($mtu))} broadcast + up
 		${gateway:+$DEBUG route add default gw $gateway}
 
 		[ -f /etc/resolv.conf ] || {
@@ -61,7 +62,8 @@ do_ifup() {
 	dhcp)
 		DHCP_IP=$(nvram get ${2}_ipaddr)
 		DHCP_NETMASK=$(nvram get ${2}_netmask)
-		$DEBUG ifconfig $if $ip ${netmask:+netmask $netmask} broadcast + up
+		mtu=$(nvram get ${2}_mtu)
+		$DEBUG ifconfig $if $ip ${netmask:+netmask $netmask} ${mtu:+mtu $(($mtu))} broadcast + up
 
 		DHCP_ARGS="-i $if ${DHCP_IP:+-r $DHCP_IP} -b -p $pidfile"
 		DHCP_HOSTNAME=$(nvram get ${2}_hostname)
