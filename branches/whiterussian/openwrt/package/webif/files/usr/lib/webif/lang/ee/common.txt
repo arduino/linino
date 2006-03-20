@@ -220,7 +220,7 @@ Helptext DNS save => Sellel lehel tehtud muudatused tuleb enne DNS-serverite lis
  
 Helptext Operation mode => M&auml;&auml;rab teie traadita v&otilde;rgu t&ouml;&ouml;reziimi. S&auml;te 'Client (Bridge)' ei muuda v&otilde;rguliidese s&auml;tteid. Muudetakse ainult raadioliidese draiveri teatud parameetreid, mis on seotud liidese sillarzeiimi piirangute lubamisega
  
-Helptext Encryption Type => 'WPA (RADIUS)' on lubatud ainult reeziimis "Access Point". <br /> S&auml;te 'WPA (PSK)' ei t&ouml;&ouml;ta v&tilde;rd&otilde;igusv&otilde;rgurezeiimis (Ad-Hoc)
+Helptext Encryption Type => 'WPA (RADIUS)' on lubatud ainult reziimis "Access Point". <br /> S&auml;te 'WPA (PSK)' ei t&ouml;&ouml;ta v&tilde;rd&otilde;igusv&otilde;rgureziimis (Ad-Hoc)
  
 Helptext IP Settings => IP-s&auml;tted on DHCP ja PPTP puhul valikulised. Kui muudate neid s&auml;tteid, siis rakendatakse neid vaikes&auml;tetena juhul, kui DHCP-server pole saadaval
  
