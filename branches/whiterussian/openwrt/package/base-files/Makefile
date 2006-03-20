@@ -56,7 +56,6 @@ $(IPKG_BASE):
 	-find $(IDIR_BASE) -type d -name CVS | xargs rm -rf
 	-find $(IDIR_BASE) -type d -name .svn | xargs rm -rf
 	-find $(IDIR_BASE) -name '.#*' | xargs rm -f
-	-grep \^BR2_SYSCONF $(TOPDIR)/.config > $(IDIR_BASE)/etc/sysconf
 	$(IPKG_BUILD) $(IDIR_BASE) $(PACKAGE_DIR)
 
 $(IPKG_LIBC):

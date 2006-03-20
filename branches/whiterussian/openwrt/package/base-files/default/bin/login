@@ -2,7 +2,6 @@
 . /etc/sysconf 2>&-
 
 [ "$FAILSAFE" != "true" ] &&
-[ "$BR2_SYSCONF_TELNET_FAILSAFE_ONLY" = "y" ] &&
 {
   grep '^root:[^!]' /etc/passwd >&- 2>&- &&
   {

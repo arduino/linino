@@ -151,6 +151,3 @@ config BR2_PACKAGE_IMAGEBUILDER
 	  Useful for building images with custom scripts or extra packages.
 
 endmenu
-
-source "package/Sysconf.in"
-
