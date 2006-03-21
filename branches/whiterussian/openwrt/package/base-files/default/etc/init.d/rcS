@@ -2,7 +2,8 @@
 ${FAILSAFE:+exit}
 
 syslog_ip=$(nvram get log_ipaddr)
-ipcalc -s "$syslog_ip" || syslog_ip=""
+eval $(ipcalc "$syslog_ip")
+[ "$syslog_ip" = "$IP" ] || syslog_ip=""
 syslogd -C 16 ${syslog_ip:+-L -R $syslog_ip}
 klogd
 #${FAILSAFE:+telnetd -l /bin/login; ifup lan; exit}
