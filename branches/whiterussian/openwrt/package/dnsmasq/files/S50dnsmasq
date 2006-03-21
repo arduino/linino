@@ -7,12 +7,12 @@
 
 # DHCP interface (lan, wan, wifi -- any ifup *)
 iface=lan
+ifname=$(nvram get ${iface}_ifname)
 
 udhcpc -n -q -R -s /bin/true -i $ifname >&- || {
   # no existing DHCP server?
 
   # calculate settings
-  ifname=$(nvram get ${iface}_ifname)
   ipaddr=$(nvram get ${iface}_ipaddr)
   netmask=$(nvram get ${iface}_netmask)
   start=$(nvram get dhcp_start)
