@@ -58,7 +58,7 @@ for config in $(ls file-* 2>&-); do
 done
 
 # config-*		simple config files
-[ -f /etc/nvram.overrides ] && ( # White Russian
+(
 	cd /proc/self
 	cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- && {
 		cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set
