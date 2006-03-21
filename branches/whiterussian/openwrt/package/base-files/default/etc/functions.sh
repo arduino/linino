@@ -2,15 +2,6 @@
 
 alias debug=${DEBUG:-:}
 
-# allow env to override nvram
-nvram () {
-  case $1 in
-    get) eval "echo \${NVRAM_$2:-\$(command nvram get $2)}";;
-    *) command nvram $*;;
-  esac
-}
-[ "$FAILSAFE" = "true" ] && . /etc/nvram.overrides
-
 # valid interface?
 if_valid () (
   ifconfig "$1" >&- 2>&- ||
