@@ -78,8 +78,6 @@ $(IPKG_GCC):
 $(PACKAGE_DIR):
 	mkdir -p $@
 
-$(PACKAGES): $(PACKAGE_DIR)
-
 package-clean:
 	rm -f $(PACKAGES)
 clean: package-clean
