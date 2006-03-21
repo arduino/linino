@@ -149,6 +149,9 @@ nvram set lan_proto="static"
 	nvram_default wl0id 0x4320
 }
 
+# hack for some motorola routers
+nvram unset wl0gpio0
+
 # defaults, can be overridden by hardware-specific nvram_default commands
 nvram_default lan_ifname "br0"
 nvram_default lan_ifnames "vlan0 eth1 eth2"
