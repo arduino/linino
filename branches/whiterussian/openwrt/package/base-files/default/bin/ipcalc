@@ -15,6 +15,7 @@ BEGIN {
 	limit=or(network,compl(netmask))-1
 	if (end>limit) end=limit
 
+	print "IP="int2ip(ipaddr)
 	print "NETMASK="int2ip(netmask)
 	print "BROADCAST="int2ip(broadcast)
 	print "NETWORK="int2ip(network)
