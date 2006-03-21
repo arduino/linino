@@ -1,0 +1,31 @@
+#!/bin/sh
+
+awk -f /usr/lib/common.awk -f - $* <<EOF
+BEGIN {
+	ipaddr=ip2int(ARGV[1])
+	netmask=ip2int(ARGV[2])
+	network=and(ipaddr,netmask)
+	broadcast=or(network,compl(netmask))
+	
+	start=or(network,and(ip2int(ARGV[3]),compl(netmask)))
+	limit=network+1
+	if (start<limit) start=limit
+	
+	end=or(start,and(ip2int(ARGV[4]),compl(netmask)))
+	limit=or(network,compl(netmask))-1
+	if (end>limit) end=limit
+
+	print "NETMASK="int2ip(netmask)
+	print "BROADCAST="int2ip(broadcast)
+	print "NETWORK="int2ip(network)
+	print "PREFIX="bitcount(int2ip(netmask))
+	
+	# range calculations:
+	# ipcalc <ip> <netmask> <start> <num>
+	
+	if (ARGC > 3) {
+		print "START="int2ip(start)
+		print "END="int2ip(end)
+	}
+}
+EOF

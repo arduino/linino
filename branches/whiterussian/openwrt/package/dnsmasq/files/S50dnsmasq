@@ -1,28 +1,33 @@
 #!/bin/sh
-. /etc/functions.sh
 
-# interface to use for DHCP
+# The following is to automatically configure the DHCP settings
+# based on nvram settings. Feel free to replace all this crap
+# with a simple "dnsmasq" and manage everything via the
+# /etc/dnsmasq.conf config file
+
+# DHCP interface (lan, wan, wifi -- any ifup *)
 iface=lan
 
-ifname=$(nvram get ${iface}_ifname)
-ipaddr=$(nvram get ${iface}_ipaddr)
-netmask=$(nvram get ${iface}_netmask)
-
-# check for existing DHCP server
 udhcpc -n -q -R -s /bin/true -i $ifname >&- || {
+  # no existing DHCP server?
 
-  ipaddr=$(ip2int $ipaddr)
-  netmask=$(ip2int ${netmask:-255.255.255.0})
-  network=$((ipaddr&netmask))
-  
+  # calculate settings
+  ifname=$(nvram get ${iface}_ifname)
+  ipaddr=$(nvram get ${iface}_ipaddr)
+  netmask=$(nvram get ${iface}_netmask)
   start=$(nvram get dhcp_start)
   start=$((network+${start:-100}))
-  end=$(nvram get dhcp_num)
-  end=$((start+${end:-150}))
+  num=$(nvram get dhcp_num)
+  num=$((start+${num:-150}))
+  eval $(ipcalc $ipaddr $netmask $start $num)
   
-  wanproto=$(nvram get wan_proto)
-  [ -z "$wanproto" -o "$wanproto" = "none" ] || wanif=$(nvram get wan_ifname)
-  
-  args="-K -F $(int2ip $start),$(int2ip $end),$(int2ip $netmask),12h ${wanif:+-I ${wanif} }"
+  # and pass the args via the commandline
+  # (because trying to edit the config from here is crazy)
+  args="-K -F $START,$END,$NETMASK,12h"
 }
+
+# ignore requests from wan interface
+wanproto=$(nvram get wan_proto)
+[ -z "$wanproto" -o "$wanproto" = "none" ] || args="${args} -I $(nvram get wan_ifname)"
+
 dnsmasq ${args}

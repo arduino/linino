@@ -358,7 +358,7 @@ endif
 
 config BUSYBOX_CONFIG_IPCALC
 	bool "ipcalc"
-	default y
+	default n
 	help
 	  ipcalc takes an IP address and netmask and calculates the
 	  resulting broadcast, network, and host range.
