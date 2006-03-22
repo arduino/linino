@@ -1,4 +1,4 @@
-Lang => Eesti
+lang => Eesti
 #Common 
 Settings saved => S&auml;tted salvestatud
 Settings not saved => S&auml;tted on salvestamata
