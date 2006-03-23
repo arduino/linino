@@ -232,6 +232,5 @@ Helptext Idle Time => Nombre de secondes sans traffic internet &agrave; attendre
 Helptext Redial Timeout => Nombre de secondes &agrave; attendre apr&egrave;s n'avoir recu aucune r&eacute;ponse du fournisseur avant un nouvel &eacute;ssai de connexion.
 
 
-# untranslated:
-Available packages => Available packages
+Available packages => Paquetages disponibles
 
