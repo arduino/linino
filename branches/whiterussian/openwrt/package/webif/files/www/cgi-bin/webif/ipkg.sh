@@ -28,7 +28,7 @@ $2 !~ /terminated/ {
   </table>
 </div>
 <div class="half noBorderOnLeft">
-  <h3>Available packages</h3>
+  <h3>@TR<<Available packages>></h3>
   <table style="width: 90%">
 <?
 grep Package: /usr/lib/ipkg/status /usr/lib/ipkg/lists/* 2>&- | sed -e 's, ,,' -e 's,/usr/lib/ipkg/lists/,,' | awk -F: '
