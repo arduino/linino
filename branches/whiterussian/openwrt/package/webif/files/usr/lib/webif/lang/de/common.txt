@@ -223,3 +223,6 @@ Helptext IP Settings => IP-Einstellungen sind optional für DHCP und PPTP. Wenn s
 Helptext Idle Time => Wartezeit in Sekunden, nach der bei Inaktivität die Internetverbindung getrennt wird.
 Helptext Redial Timeout => Maximale Zeit, die der Router auf Antwort vom Provider warten soll, bevor die Verbindung neu aufgebaut wird.
 
+# untranslated:
+Available packages => Verf&uuml;gbare Pakete
+

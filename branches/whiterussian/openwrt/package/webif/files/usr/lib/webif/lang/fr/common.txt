@@ -230,3 +230,8 @@ Helptext Encryption Type => 'WPA (RADIUS)' ne fonctionne qu'en mode point d'acc&
 Helptext IP Settings => Les param&egrave;tres IP sont optionnels pour DHCP et PPTP. Si vous les configurez, ils seront utilis&eacute; comme param&egrave;tres par d&eacute;faut dans le cas o&uacute; le serveur DHCP ne r&eacute;pond< pas.
 Helptext Idle Time => Nombre de secondes sans traffic internet &agrave; attendre avant que le routeur d&eacute;connecte d'Internet (Connexion &agrave; la demande)
 Helptext Redial Timeout => Nombre de secondes &agrave; attendre apr&egrave;s n'avoir recu aucune r&eacute;ponse du fournisseur avant un nouvel &eacute;ssai de connexion.
+
+
+# untranslated:
+Available packages => Available packages
+

@@ -222,3 +222,6 @@ Helptext Idle Time => N&uacute;mero de segundos sin actividad con Internet que d
 Helptext Redial Timeout => N&uacute;mero de segundos sin recibir respuesta del servidor que debe esperar el router para volver a conectarse.
 
 
+# untranslated:
+Available packages => Available packages
+

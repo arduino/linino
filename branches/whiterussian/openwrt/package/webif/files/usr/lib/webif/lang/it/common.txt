@@ -221,3 +221,6 @@ Helptext IP Settings => Le opzioni IP sono opzioni per DHCP e PPTP.
 Helptext Idle Time => Numero di secondi che deve aspettare il router prima di disconnettersi. (Solo nel metodo ' Connessione su richiesta').
 Helptext Redial Timeout => Numero di secondi che il router deve aspettare per effettuare una nuova riconnessione.
 
+# untranslated:
+Available packages => Available packages
+

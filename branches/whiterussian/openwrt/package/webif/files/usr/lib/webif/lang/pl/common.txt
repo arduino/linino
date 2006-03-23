@@ -223,3 +223,6 @@ Helptext IP Settings => Ustawienia numeru IP dla DHCP i PPTP jest niekonieczne. 
 Helptext Idle Time => Czas w sekundach bezruchu internetowego, po up&#322;ywie kt&#243;rych nast&#281;puje roz&#322;aczenie (tylko Po&#322;&#261;czenie na z&#261;danie)
 Helptext Redial Timeout => Liczba sekund, kt&#243;re trzeba odczekac po tym, jak nie otrzymales odpowiedzi od providera (przed ponowna proba podlaczenia)
 
+# untranslated:
+Available packages => Available packages
+

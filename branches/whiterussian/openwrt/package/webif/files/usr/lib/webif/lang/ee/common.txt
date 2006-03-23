@@ -15,7 +15,7 @@ Subcategories => Alamkategooriad
 more... => veel... 
 Add => Lisa
 Remove => Eemalda
-Warning => Hoiatus.
+Warning => Hoiatus
 Password_warning => veebilidese ja SSH salas&otilde;na on seadmata<br />Palun, sisesta see (veebiliidese kasutajanimi on 'root').
  
 # Categories 
@@ -47,8 +47,8 @@ Copyright => Copyright
  
 GPL_Text => K&auml;esolev programm on vabavara; seda v&otilde;ib levitada ja/v&otilde;i <br >modifitseerida vastavalt Free Software Foundationi <br > avaldatud avaliku litsentsi GNU General Public License 2. versiooni v&otilde;i <br > (teie valikul) mis tahes uuema versiooni tingimustele.
  
-Contributions by => Kaasaaitajad:
-Layout based on => Kujunduse idee:
+Contributions by => Kaasaaitajad
+Layout based on => Kujunduse idee
 by => autor
  
  
@@ -95,7 +95,7 @@ Installed Packages => Installitud paketid
 Update package lists => V&auml;rskenda paketiloendit
 Uninstall => Desinstalli
 Install => Installi
- 
+Available packages => Saadaolevad paketid 
  
 # Firmware Upgrade page 
 Firmware format => P&uuml;sivara vorming
@@ -116,7 +116,7 @@ Default Gateway => Vaikel&uuml;&uuml;s
 DNS Servers => DNS-serverid 
 DNS Address => DNS-i aadress
  
-Note => M&auml;rkus.
+Note => M&auml;rkus
  
  
 # WAN Settings page 
@@ -153,7 +153,7 @@ Disabled => Keelatud
 ESSID Broadcast => ESSID-i levindamine 
 Show => N&auml;ita
 Hide => Peida
-WLAN Mode => WLAN-i reziim
+WLAN Mode => WLAN-i rez"iim
 Access Point => AP
 Client => Klient
 Bridge => Sild
@@ -161,7 +161,7 @@ Ad-Hoc => Ad-Hoc
 Encryption Settings => Kr&uuml;pteerimise s&auml;tted
 Encryption Type => Kr&uuml;pteerimise t&uuml;&uuml;p
 PSK => PSK 
-WPA Mode => WPA reziim 
+WPA Mode => WPA rez"iim 
 WPA Algorithms => WPA algoritmid 
 WEP Keys => WEP-v&otilde;tmed 
  
@@ -170,7 +170,7 @@ WEP Keys => WEP-v&otilde;tmed
 Advanced Wireless Configuration => Raadioliidese t&auml;psem konfiguratsioon
 WDS Connections => WDS-&uuml;hendused 
 MAC Filter List => MAC-filtri loend 
-Filter Mode => Filtri reziim
+Filter Mode => Filtri rez"iim
 Allow => Luba
 Deny => Keela
 Set => Sea 
@@ -192,16 +192,16 @@ Delete => Kustuta
 Save => Salvesta
 Cancel => Loobu
  
-Forward => Suuna edasi
-Accept => N&otilde;ustu
-Drop => H&uuml;lga
+Forward => Forward
+Accept => Accept
+Drop => Drop
  
 Firewall => Tulem&uuml;&uuml;r
 Firewall Rules => Tulem&uuml;&uuml;ri reeglid
 Firewall Configuration => Tulem&uuml;&uuml;ri konfiguratsioon
  
 New Rule => Uus reegel
-Match => Sobivus
+Match => Vastavus
 Target => Sihtkoht
 Port => Port 
  
@@ -218,13 +218,13 @@ Helptext ESSID => Teie traadita v&otilde;rgu v&otilde;rgunimi
 
 Helptext DNS save => Sellel lehel tehtud muudatused tuleb enne DNS-serverite lisamist/eemaldamist salvestada
  
-Helptext Operation mode => M&auml;&auml;rab teie traadita v&otilde;rgu t&ouml;&ouml;reziimi. S&auml;te 'Client (Bridge)' ei muuda v&otilde;rguliidese s&auml;tteid. Muudetakse ainult raadioliidese draiveri teatud parameetreid, mis on seotud liidese sillarzeiimi piirangute lubamisega
+Helptext Operation mode => M&auml;&auml;rab teie traadita v&otilde;rgu t&ouml;&ouml;reziimi. S&auml;te "Klient (Sild)" ei muuda v&otilde;rguliidese s&auml;tteid. Muudetakse ainult raadioliidese draiveri teatud parameetreid, mis on seotud liidese sillarez"iimi piirangute lubamisega
  
-Helptext Encryption Type => 'WPA (RADIUS)' on lubatud ainult reziimis "Access Point". <br /> S&auml;te 'WPA (PSK)' ei t&ouml;&ouml;ta v&tilde;rd&otilde;igusv&otilde;rgureziimis (Ad-Hoc)
+Helptext Encryption Type => 'WPA (RADIUS)' on lubatud ainult rez"iimis "AP". <br /> S&auml;te 'WPA (PSK)' ei t&ouml;&ouml;ta v&otilde;rd&otilde;igusv&otilde;rgurez"iimis (Ad-Hoc)
  
-Helptext IP Settings => IP-s&auml;tted on DHCP ja PPTP puhul valikulised. Kui muudate neid s&auml;tteid, siis rakendatakse neid vaikes&auml;tetena juhul, kui DHCP-server pole saadaval
+Helptext IP Settings => IP-s&auml;tted on DHCP ja PPTP puhul valikulised. Kui muudate neid s&auml;tteid, siis rakendatakse need vaikes&auml;tetena juhul, kui DHCP-server pole saadaval.
  
-Helptext Idle Time => Aeg sekundites, mille v&auml;ltel marsruuter enne Interneti-&uuml;henduse katkestamist ootab (ainult s&auml;tte Connect on Demand puhul)
+Helptext Idle Time => Aeg sekundites, mille v&auml;ltel marsruuter enne Interneti-&uuml;henduse katkestamist ootab (ainult s&auml;tte Connect on Demand puhul).
  
-Helptext Redial Timeout => Aeg sekundites, kui kaua marsruuter p&auml;rast teenusepakkuja v&otilde;rgust teate "pole vastust" saamist ootab, enne kui asub &uuml;hendust taastama
+Helptext Redial Timeout => Aeg sekundites, kui kaua marsruuter p&auml;rast teenusepakkuja v&otilde;rgust teate "pole vastust" saamist ootab, enne kui asub &uuml;hendust taastama.
 

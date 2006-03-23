@@ -226,3 +226,6 @@ Helptext IP Settings => IP indstilinger er frivillig for DHCP og PPTP.  N&aring;
 Helptext Idle Time => Ventetid i sekunder f&oslash;r inaktivitet bliver &aring;rsagen til at forbindelsen afbrydes.
 
 Helptext Redial Timeout => Ventetid f&oslash;r der pr&oslash;ves at ringe op igen.
+
+# untranslated:
+Available packages => Available packages

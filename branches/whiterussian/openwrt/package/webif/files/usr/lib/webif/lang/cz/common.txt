@@ -223,3 +223,5 @@ Helptext IP Settings => Nastaven&#237; IP je pro mo&#382;nost DHCP a PPTP volite
 Helptext Idle Time => &#268;as v sekund&#225;ch, po kter&#253; kdy&#382; nedojde k &#382;&#225;dn&#233; aktivit&#277;, je spojen&#237; do Internetu uzav&#345;eno. (pouze pro volbu Connect on Demand)
 Helptext Redial Timeout => &#268;as po odpojen&#237;, po kter&#253; router &#269;ek&#225;, ne&#382; se pokus&#237; znovu nav&#225;zat spojen&#237;.
 
+# untranslated:
+Available packages => Available packages
