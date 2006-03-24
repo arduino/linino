@@ -92,6 +92,7 @@ Language => Jazyk
 
 # 'Installed Software' page
 Installed Packages => Nainstalovan&#233; bal&#237;&#269;ky
+Available packages => Dostupn&#233; bal&#237;&#269;ky
 Update package lists => Aktualizovat seznam bal&#237;&#269;k&#367;
 Uninstall => Odinstalovat
 Install => Nainstalovat
@@ -222,6 +223,3 @@ Helptext Encryption Type => 'WPA (RADIUS)' lze pou&#382;&#237;t pouze v m&#243;d
 Helptext IP Settings => Nastaven&#237; IP je pro mo&#382;nost DHCP a PPTP voliteln&#233;. Zadan&#225; adresa se pou&#382;ije v p&#345;&#237;pad&#277;, &#382;e nen&#237; DHCP server dostupn&#253;.
 Helptext Idle Time => &#268;as v sekund&#225;ch, po kter&#253; kdy&#382; nedojde k &#382;&#225;dn&#233; aktivit&#277;, je spojen&#237; do Internetu uzav&#345;eno. (pouze pro volbu Connect on Demand)
 Helptext Redial Timeout => &#268;as po odpojen&#237;, po kter&#253; router &#269;ek&#225;, ne&#382; se pokus&#237; znovu nav&#225;zat spojen&#237;.
-
-# untranslated:
-Available packages => Available packages
