@@ -390,9 +390,12 @@ static void setup_bcom(int skfd, char *ifname)
 	
 	val = atoi(nvram_safe_get(wl_var("txpwr")));
 	if (val <= 0)
-		val = atoi(nvram_safe_get(wl_var("pa0maxpwr")));
-	val = mw_to_qdbm(val);
-	bcom_set_int(skfd, ifname, "qtxpower", val);
+		val = atoi(nvram_safe_get("pa0maxpwr"));
+
+	if (val) {
+		val = mw_to_qdbm(val);
+		bcom_set_int(skfd, ifname, "qtxpower", val);
+	}
 	
 	/* Set other options */
 	val = nvram_enabled(wl_var("lazywds"));
