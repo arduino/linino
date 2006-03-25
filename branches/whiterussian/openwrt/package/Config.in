@@ -143,6 +143,8 @@ source "package/sdk/Config.in"
 
 config BR2_PACKAGE_IMAGEBUILDER
 	bool "OpenWrt Image Builder"
+	select BR2_PACKAGE_IPKG_SH
+	select BR2_PACKAGE_PPTP
 	default y if CONFIG_DEVEL
 	help
 	  Build an OpenWrt Image Builder.
