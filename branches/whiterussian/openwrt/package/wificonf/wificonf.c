@@ -406,7 +406,7 @@ static void setup_bcom(int skfd, char *ifname)
 		val = strtol(v,NULL,0);
 		bcom_ioctl(skfd, ifname, WLC_SET_FRAG, &val, sizeof(val));
 	}
-	if ((val = strtol(nvram_safe_get(wl_var("rate")))) > 0,NULL,0) {
+	if ((val = strtol(nvram_safe_get(wl_var("rate")),NULL,0)) > 0) {
 		val /= 500000;
 		bcom_ioctl(skfd, ifname, WLC_SET_RATE, &val, sizeof(val));
 	}
@@ -630,7 +630,7 @@ static void setup_wext_wep(int skfd, char *ifname)
 	}
 }
 
-static void set_wext_mode(skfd, ifname)
+static void set_wext_mode(int skfd, char *ifname)
 {
 	struct iwreq wrq;
 	int ap = 0, infra = 0, wet = 0;
