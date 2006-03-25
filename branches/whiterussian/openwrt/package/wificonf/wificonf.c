@@ -91,6 +91,7 @@ static char *wl_var(char *name)
 {
 	strcpy(buffer, prefix);
 	strcat(buffer, name);
+	return buffer;
 }
 
 static int nvram_enabled(char *name)
@@ -225,7 +226,7 @@ static inline void set_distance(int skfd, char *ifname)
 	char *v;
 	
 	if (v = nvram_get(wl_var("distance"))) {
-		val = atoi(v);
+		val = strtol(v,NULL,0);
 		val = 9+(val/150)+((val%150)?1:0);
 		
 		shm = 0x10;
@@ -318,8 +319,7 @@ void start_watchdog(int skfd, char *ifname)
 			i = 0;
 			if (bcom_ioctl(skfd, ifname, WLC_GET_BSSID, buf, 6) < 0) 
 				i = 1;
-			memcpy(buf + 6, "\x00\x00\x00\x00\x00\x00", 6);
-			if (memcmp(buf, buf + 6, 6) == 0)
+			if (memcmp(buf, "\0\0\0\0\0\0", 6) == 0)
 				i = 1;
 			
 			memset(buf, 0, 8192);
@@ -343,7 +343,7 @@ void start_watchdog(int skfd, char *ifname)
 		p = wdslist;
 		restart_wds = 0;
 		if (wdstimeout == 0)
-			wdstimeout = atoi(nvram_safe_get(wl_var("wdstimeout")));
+			wdstimeout = strtol(nvram_safe_get(wl_var("wdstimeout")),NULL,0);
 		
 		for (i = 0; (i < wds) && !restart_wds; i++, p += 6) {
 			memset(buf, 0, 8192);
@@ -388,9 +388,9 @@ static void setup_bcom(int skfd, char *ifname)
 	buf[3] = 0;
 	bcom_ioctl(skfd, ifname, WLC_SET_COUNTRY, buf, 4);
 	
-	val = atoi(nvram_safe_get(wl_var("txpwr")));
+	val = strtol(nvram_safe_get(wl_var("txpwr")),NULL,0);
 	if (val <= 0)
-		val = atoi(nvram_safe_get("pa0maxpwr"));
+		val = strtol(nvram_safe_get("pa0maxpwr"),NULL,0);
 
 	if (val) {
 		val = mw_to_qdbm(val);
@@ -403,31 +403,31 @@ static void setup_bcom(int skfd, char *ifname)
 	bcom_ioctl(skfd, ifname, WLC_SET_LAZYWDS, &val, sizeof(val));
 	
 	if (v = nvram_get(wl_var("frag"))) {
-		val = atoi(v);
+		val = strtol(v,NULL,0);
 		bcom_ioctl(skfd, ifname, WLC_SET_FRAG, &val, sizeof(val));
 	}
-	if ((val = atoi(nvram_safe_get(wl_var("rate")))) > 0) {
+	if ((val = strtol(nvram_safe_get(wl_var("rate")))) > 0,NULL,0) {
 		val /= 500000;
 		bcom_ioctl(skfd, ifname, WLC_SET_RATE, &val, sizeof(val));
 	}
 	if (v = nvram_get(wl_var("dtim"))) {
-		val = atoi(v);
+		val = strtol(v,NULL,0);
 		bcom_ioctl(skfd, ifname, WLC_SET_DTIMPRD, &val, sizeof(val));
 	}
 	if (v = nvram_get(wl_var("bcn"))) {
-		val = atoi(v);
+		val = strtol(v,NULL,0);
 		bcom_ioctl(skfd, ifname, WLC_SET_BCNPRD, &val, sizeof(val));
 	}
 	if (v = nvram_get(wl_var("rts"))) {
-		val = atoi(v);
+		val = strtol(v,NULL,0);
 		bcom_ioctl(skfd, ifname, WLC_SET_RTS, &val, sizeof(val));
 	}
 	if (v = nvram_get(wl_var("antdiv"))) {
-		val = atoi(v);
+		val = strtol(v,NULL,0);
 		bcom_ioctl(skfd, ifname, WLC_SET_ANTDIV, &val, sizeof(val));
 	}
 	if (v = nvram_get(wl_var("txant"))) {
-		val = atoi(v);
+		val = strtol(v,NULL,0);
 		bcom_ioctl(skfd, ifname, WLC_SET_TXANT, &val, sizeof(val));
 	}
 	
@@ -494,7 +494,7 @@ static void setup_bcom(int skfd, char *ifname)
 		int control = WLC_G_PROTECTION_CTL_OFF;
 		
 		if (v = nvram_get(wl_var("gmode"))) 
-			val = atoi(v);
+			val = strtol(v,NULL,0);
 		else
 			val = 1;
 
@@ -575,7 +575,7 @@ static void setup_bcom(int skfd, char *ifname)
 	}
 
 	if (v = nvram_get(wl_var("auth"))) {
-		val = atoi(v);
+		val = strtol(v,NULL,0);
 		bcom_ioctl(skfd, ifname, WLC_SET_AUTH, &val, sizeof(val));
 	}
 }
@@ -623,7 +623,7 @@ static void setup_wext_wep(int skfd, char *ifname)
 	}
 	
 	memset(&wrq, 0, sizeof(wrq));
-	i = atoi(nvram_safe_get(wl_var("key")));
+	i = strtol(nvram_safe_get(wl_var("key")),NULL,0);
 	if (i > 0 && i < 4) {
 		wrq.u.data.flags = i | IW_ENCODE_RESTRICTED;
 		IW_SET_EXT_ERR(skfd, ifname, SIOCSIWENCODE, &wrq, "Set Encode");
@@ -650,7 +650,7 @@ static void setup_wext(int skfd, char *ifname)
 	struct iwreq wrq;
 
 	/* Set channel */
-	int channel = atoi(nvram_safe_get(wl_var("channel")));
+	int channel = strtol(nvram_safe_get(wl_var("channel")),NULL,0);
 	
 	wrq.u.freq.m = -1;
 	wrq.u.freq.e = 0;
