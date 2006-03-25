@@ -19,7 +19,7 @@ BEGIN {
 	print "NETMASK="int2ip(netmask)
 	print "BROADCAST="int2ip(broadcast)
 	print "NETWORK="int2ip(network)
-	print "PREFIX="bitcount(int2ip(netmask))
+	print "PREFIX="32-bitcount(compl(netmask))
 	
 	# range calculations:
 	# ipcalc <ip> <netmask> <start> <num>
