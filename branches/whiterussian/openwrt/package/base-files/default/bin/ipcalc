@@ -11,7 +11,7 @@ BEGIN {
 	limit=network+1
 	if (start<limit) start=limit
 	
-	end=or(start,and(ip2int(ARGV[4]),compl(netmask)))
+	end=start+ARGV[4]
 	limit=or(network,compl(netmask))-1
 	if (end>limit) end=limit
 
