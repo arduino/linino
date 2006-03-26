@@ -61,9 +61,9 @@ do_ifup() {
 		DHCP_HOSTNAME=${DHCP_HOSTNAME%%.*}
 		[ -z $DHCP_HOSTNAME ] || DHCP_ARGS="$DHCP_ARGS -H $DHCP_HOSTNAME"
 		[ "$if_proto" = "pptp" ] && DHCP_ARGS="$DHCP_ARGS -n -q" || DHCP_ARGS="$DHCP_ARGS -R &"
-		oldpid=$(cat $pidfile)
+		[ -r $pidfile ] && oldpid=$(cat $pidfile 2>&-)
 		${DEBUG:-eval} "udhcpc $DHCP_ARGS"
-		pidof udhcpc | grep "$oldpid" >&- 2>&- && {
+		[ -n "$oldpid" ] && pidof udhcpc | grep "$oldpid" >&- 2>&- && {
 			sleep 1
 			kill -9 $oldpid
 		}

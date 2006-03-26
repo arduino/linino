@@ -27,9 +27,10 @@ case "$1" in
 
 		if [ -n "$router" ] ; then
 			echo "deleting routers"
-			while route del default gw 0.0.0.0 dev $interface ; do :; done
+			while route del default gw 0.0.0.0 dev $interface >&- 2>&- ; do :; done
 					
 			for i in $router ; do
+				echo "adding router $i"
 				route add default gw $i dev $interface
 			done
 		fi
@@ -37,8 +38,8 @@ case "$1" in
 		echo -n > $RESOLV_CONF
 		${domain:+echo search $domain} >> $RESOLV_CONF
 		for i in $dns ; do
-			echo adding dns $i
-			echo nameserver $i >> $RESOLV_CONF
+			echo "adding dns $i"
+			echo "nameserver $i" >> $RESOLV_CONF
 		done
 		
 		hotplug_event ifup

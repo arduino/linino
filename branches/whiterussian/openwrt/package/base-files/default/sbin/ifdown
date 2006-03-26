@@ -8,7 +8,7 @@ debug "### ifdown $type ###"
 if=$(nvram get ${type}_ifname)
 proto=$(nvram get ${type}_proto)
 if_valid $if && $DEBUG ifconfig $if down
-kill $(cat /var/run/${if}.pid 2>&-) 2>&-
+[ -r /var/run/${if}.pid ] && kill $(cat /var/run/${if}.pid 2>&-) 2>&-
 killall ifup.$proto >&- 2>&-
 case "$proto" in
 	pptp|pppoe) killall pppd >&- 2>&- ;;
