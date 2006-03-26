@@ -53,6 +53,12 @@ mountdp() { # <device> <mount_point> <ignored> <fs>
 	exit 0
 }
 
+[ -z "$rom" ] && {
+	echo "You do not have a squashfs partition; aborting"
+	echo "(firstboot cannot be run on jffs2 based firmwares)"
+	exit 1
+}
+
 [ "$1" = "switch2jffs" ] && {
 	#2nd stage
 	mtd erase OpenWrt
@@ -70,12 +76,6 @@ mountdp() { # <device> <mount_point> <ignored> <fs>
 }
 
 # script run manually
-[ -z "$rom" ] && {
-	echo "You do not have a squashfs partition; aborting"
-	echo "(firstboot cannot be run on jffs2 based firmwares)"
-	exit 1
-}
-
 [ \! -z "$jffs" ] && {
 	echo "firstboot has already been run"
 	echo "jffs2 partition is mounted, only resetting files"
