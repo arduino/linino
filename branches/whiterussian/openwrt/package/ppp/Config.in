@@ -3,8 +3,7 @@ menu "ppp - PPP (Point-to-Point Protocol) daemon"
 config BR2_PACKAGE_PPP
 	prompt "ppp - PPP (Point-to-Point Protocol) daemon"
 	tristate
-	default m if CONFIG_DEVEL
-	default m if BR2_PACKAGE_IMAGEBUILDER
+	default y
 	select BR2_PACKAGE_KMOD_PPP
 
 config BR2_PACKAGE_PPP_WITH_FILTER
@@ -15,8 +14,7 @@ config BR2_PACKAGE_PPP_WITH_FILTER
 config BR2_PACKAGE_PPP_MOD_PPPOE
 	prompt "...-mod-pppoe - PPPoE (PPP over Ethernet) plugin"
 	tristate
-	default m if CONFIG_DEVEL
-	default m if BR2_PACKAGE_IMAGEBUILDER
+	default y
 	depends on BR2_PACKAGE_PPP
 	select BR2_PACKAGE_KMOD_PPPOE
 
