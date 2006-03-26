@@ -1,7 +1,7 @@
 config BR2_PACKAGE_IPKG
 	tristate
 	default n
-	depends BR2_PACKAGE_IPKG_C || BR2_PACKAGE_IPKG_SHELL
+	depends BR2_PACKAGE_IPKG_C || BR2_PACKAGE_IPKG_SH
 
 config BR2_PACKAGE_IPKG_C
 	tristate "ipkg - itsy package management system"
@@ -21,7 +21,7 @@ config BR2_PACKAGE_IPKG_C
 	 up much less space).
 	 
 config BR2_PACKAGE_IPKG_SH
-	tristate "ipkg - itsy package management system (shell version)"
+	tristate "ipkg-sh - itsy package management system (shell version)"
 	default m if CONFIG_DEVEL
 	default m if BR2_PACKAGE_IMAGEBUILDER
 	select BR2_PACKAGE_IPKG
@@ -38,3 +38,6 @@ config BR2_PACKAGE_IPKG_SH
 	 Familiar that dpkg and apt serve for Debian, (while taking
 	 up much less space).
 
+if (BR2_PACKAGE_IPKG_C = y) && (BR2_PACKAGE_IPKG_SH = y)
+	comment "WARNING: both ipkg and ipkg-sh are selected for installation !"
+endif
