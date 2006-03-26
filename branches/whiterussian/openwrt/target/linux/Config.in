@@ -119,6 +119,24 @@ config BR2_PACKAGE_KMOD_IPT_NAT
 	  Includes: 
 	    * ipt_REDIRECT
 
+config BR2_PACKAGE_KMOD_IPT_NAT_H323
+	tristate "Netfilter NAT modules for H.323"
+	default m
+	help
+	  Netfilter (IPv4) NAT kernel modules for H.323
+
+config BR2_PACKAGE_KMOD_IPT_NAT_PPTP
+	tristate "Netfilter NAT modules for PPTP"
+	default m
+	help
+	  Netfilter (IPv4) NAT kernel modules for PPTP
+
+config BR2_PACKAGE_KMOD_IPT_NAT_RTSP
+	tristate "Netfilter NAT modules for RTSP"
+	default m
+	help
+	  Netfilter (IPv4) NAT kernel modules for RTSP
+
 config BR2_PACKAGE_KMOD_IPT_NAT_EXTRA
 	tristate "Extra Netfilter NAT modules for special protocols"
 	default m
@@ -129,8 +147,6 @@ config BR2_PACKAGE_KMOD_IPT_NAT_EXTRA
 	    * ip_conntrack_amanda
 	    * ip_conntrack_proto_gre
 	    * ip_nat_proto_gre
-	    * ip_conntrack_pptp
-	    * ip_nat_pptp
 	    * ip_nat_snmp_basic
 	    * ip_conntrack_tftp
 
