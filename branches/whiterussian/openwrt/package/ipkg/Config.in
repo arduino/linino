@@ -23,6 +23,7 @@ config BR2_PACKAGE_IPKG_C
 config BR2_PACKAGE_IPKG_SH
 	tristate "ipkg - itsy package management system (shell version)"
 	default m if CONFIG_DEVEL
+	default m if BR2_PACKAGE_IMAGEBUILDER
 	select BR2_PACKAGE_IPKG
 	help
 	 Lightweight package management system

@@ -2,6 +2,7 @@ config BR2_PACKAGE_PPTP
 	prompt "pptp - PPTP (Point-to-Point Tunneling Protocol) client"
 	tristate
 	default m if CONFIG_DEVEL
+	default m if BR2_PACKAGE_IMAGEBUILDER
 	select BR2_PACKAGE_KMOD_GRE
 	select BR2_PACKAGE_PPP
 	help
