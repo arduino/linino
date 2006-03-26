@@ -1,0 +1,5 @@
+Package: monit
+Priority: optional
+Section: admin
+Description: an utility for system services monitoring
+Depends: libpthread

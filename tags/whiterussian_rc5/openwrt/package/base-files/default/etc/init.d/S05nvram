@@ -1,0 +1,179 @@
+#!/bin/sh
+# NVRAM setup
+#
+# This file handles the NVRAM quirks of various hardware.
+
+alias debug=${DEBUG:-:}
+
+remap () {
+	for type in lan wifi wan pppoe
+	do
+		for s in '' s
+		do
+			eval nvram set ${type}_ifname$s=\"$(nvram get ${type}_ifname$s|sed s/$1/$2/g)\" 
+		done
+	done
+}
+
+nvram_default() {
+	[ -z "$(nvram get $1)" ] && nvram set "$1=$2"
+}
+
+nvram_set() { # for the linksys fixup part
+	[ "$(nvram get "$1")" = "$2" -a "$2" != "" ] || {
+		COMMIT=1
+		/usr/sbin/nvram set "$1=$2"
+	}
+}
+
+fixup_lan() { # fix for wrong lan_ifnames default
+	lan_ifnames="$(nvram get lan_ifnames)"
+	[ "${lan_ifnames%% *}" = "$1" ] || \
+		nvram set lan_ifnames="$2"
+}
+
+# work around braindead CFE defaults in linksys routers
+boardtype=$(nvram get boardtype)
+boardnum=$(nvram get boardnum)
+boardflags=$(($(nvram get boardflags)))
+adm_switch="$(( ($boardflags & 0x80) >> 7 ))"
+
+case "$(( $boardtype ))" in
+	"1800") #0x708
+		if [ "$adm_switch" = 0 ]; then
+			nvram_set sdram_init "$(printf 0x%04x $(( $(/usr/sbin/nvram get sdram_init) | 0x0100 )))"
+			[ "$COMMIT" = 1 ] && {
+				nvram_set sdram_config 0x0062
+				nvram_set clkfreq 216
+				nvram_set sdram_ncdl 0x0
+				nvram_set pa0itssit 62
+				nvram_set pa0b0 0x15eb
+				nvram_set pa0b1 0xfa82
+				nvram_set pa0b2 0xfe66
+				nvram_set pa0maxpwr 0x4e
+			}
+		fi
+	;;
+	"1127") #0x467
+		nvram_set sdram_init "$(printf 0x%04x $(( $(/usr/sbin/nvram get sdram_init) | 0x0100 )))"
+		[ "$COMMIT" = 1 ] && {
+			nvram_set sdram_config 0x0062
+			nvram_set sdram_ncdl 0x0
+			nvram_set pa0itssit 62
+			nvram_set pa0b0 0x168b
+			nvram_set pa0b1 0xfabf
+			nvram_set pa0b2 0xfeaf
+			nvram_set pa0maxpwr 0x4e
+		}
+	;;
+esac
+[ "$COMMIT" = "1" ] && nvram commit
+
+# linksys bug; remove when not using static configuration for lan
+nvram set lan_proto="static"
+
+# hacks for wrt54g 1.x hardware
+[  "$boardnum"  = "42" \
+-a "$boardtype" = "bcm94710dev" ] && {
+	debug "### wrt54g 1.x hack ###"
+	remap eth0 vlan2
+	remap eth1 vlan1
+	nvram_default vlan1hwname "et0"
+	nvram_default vlan2hwname "et0"
+	nvram_default lan_ifnames "vlan2 eth2"
+}
+
+# hacks for asus wl-500g deluxe
+[  "$boardnum"  = "45" \
+-a "$boardtype" = "bcm95365r" ] && {
+	debug "### wl-500g deluxe hacks ###"
+	remap eth0.1 vlan0
+	remap eth0 vlan1
+	nvram_default vlan0hwname "et0"
+	nvram_default vlan1hwname "et0"
+	nvram_default lan_ifnames "vlan0 eth1"
+
+	# set up the vlan*ports variables for the asus wl-500g deluxe
+	# if they don't already exist 
+	nvram_default vlan0ports "1 2 3 4 5*"
+	nvram_default vlan1ports "0 5"
+}
+
+# hacks for asus
+[ "$boardnum" = "asusX" ] && {
+	debug "### asus hacks ###"
+	case "$(($(nvram get et1phyaddr)))" in
+		1) # WL-HDD
+			lan=eth1
+			wan=none
+		;;
+		*)
+			lan=eth0
+			[ "$boardtype" = "bcm94710dev" ] && wan=eth1 || wan=none
+		;;
+	esac
+
+	fixup_lan "$lan" "$lan eth2"
+	nvram_default wan_ifname "$wan"
+}
+
+# hacks for wap54g hardware
+[  "$boardnum" = "2" \
+-o "$boardnum" = "1024" ] && {
+	debug "### wap54g hack ###"
+	nvram_default wan_ifname "none"
+	nvram_default lan_ifnames "eth0 eth1"
+}
+
+# hacks for buffalo wla2-g54l
+[  "$boardnum" = "00" \
+-a "$product_name" = "Product_name" \
+-o "$product_name" = "WLA2-G54L" ] && {
+	debug "### wla2-g54l hacks ###"
+	nvram_default wan_ifname "none"
+	fixup_lan "vlan0" "vlan0 eth1"
+}
+
+# wrtsl54gs vlan defaults
+[  "$boardtype" = "0x042f" \
+-a "$boardnum" = "42" \
+-a "$boardflags" = "24" ] && {
+	nvram_default vlan0hwname "et0"
+	nvram_default vlan0ports "0 1 2 3 5u"
+	nvram_default vlan1hwname "et0"
+	nvram_default vlan1ports "4 5"
+}
+
+# needed at least for wrt54gs v1.1 and wrt54g v2.0, v2.2
+[ \! -z "$(nvram get boardrev)" ] && {
+	nvram_default wl0id 0x4320
+}
+
+# hack for some motorola routers
+nvram unset wl0gpio0
+
+# defaults, can be overridden by hardware-specific nvram_default commands
+nvram_default lan_ifname "br0"
+nvram_default lan_ifnames "vlan0 eth1 eth2"
+
+nvram_default wan_ifname "vlan1"
+nvram_default wan_device "vlan1"
+nvram_default wan_proto "dhcp"
+
+nvram_default wl0_ssid OpenWrt
+nvram_default wl0_mode ap
+nvram_default wl0_infra 1
+nvram_default wl0_radio 1
+
+WAN_PROTO="$(nvram get wan_proto)"
+WAN_IFNAME="$(nvram get wan_ifname)"
+case "$WAN_PROTO" in
+	pp*) [ "${WAN_IFNAME%%[0-9]*}" = "ppp" ] || nvram set wan_ifname=ppp0;;
+	*) [ "${WAN_IFNAME%%[0-9]*}" = "ppp" ] && nvram set wan_ifname="$(nvram get wan_device)";;
+esac
+
+[ "$(nvram get il0macaddr)" = "00:90:4c:5f:00:2a" ] && {
+	# if default wifi mac, set two higher than the lan mac
+	nvram set il0macaddr=$(nvram get et0macaddr|
+	awk '{OFS=FS=":";for(x=7,y=2;--x;){$x=sprintf("%02x",(y+="0x"$x)%256);y/=256}print}')
+}

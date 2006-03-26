@@ -1,0 +1,29 @@
+#!/bin/sh
+[ -f /proc/jffs2_bbc ] && echo "S" > /proc/jffs2_bbc
+
+mkdir -p /var/run
+mkdir -p /var/log
+touch /var/log/wtmp
+touch /var/log/lastlog
+
+sed 's/^[^#]/insmod &/' /etc/modules /etc/modules.d/* 2>&-|ash
+
+ifconfig lo 127.0.0.1 up
+ifconfig eth0 promisc
+
+# configure the switch based on nvram
+[ -d /proc/switch/eth0 ] && {
+	for nr in $(seq 0 15); do
+		vp="$(nvram get vlan${nr}ports)"
+		[ -z "$vp" -o -z "$(nvram get vlan${nr}hwname)" ] || {
+			echo "$vp" > /proc/switch/eth0/vlan/$nr/ports
+		}
+	done
+}
+
+HOSTNAME=$(nvram get wan_hostname)
+HOSTNAME=${HOSTNAME%%.*}
+echo ${HOSTNAME:=OpenWrt}>/proc/sys/kernel/hostname
+
+vconfig set_name_type VLAN_PLUS_VID_NO_PAD
+

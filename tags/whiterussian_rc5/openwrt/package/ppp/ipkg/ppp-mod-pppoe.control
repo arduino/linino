@@ -1,0 +1,5 @@
+Package: ppp-mod-pppoe
+Priority: optional
+Section: net
+Description: a PPPoE (PPP over Ethernet) plugin for PPP
+Depends: ppp, kmod-pppoe

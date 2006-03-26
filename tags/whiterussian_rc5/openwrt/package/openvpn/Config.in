@@ -1,0 +1,28 @@
+config BR2_PACKAGE_OPENVPN
+	tristate "openvpn - Open source VPN solution using SSL"
+	default m if CONFIG_DEVEL
+	select BR2_PACKAGE_KMOD_TUN
+	select BR2_PACKAGE_LIBOPENSSL
+	help
+	  Open Source VPN solution using SSL
+	  
+	  http://openvpn.net/
+	  
+	  Depends: kmod-tun, libpthread, openssl
+	  
+
+config BR2_PACKAGE_OPENVPN_SERVER
+	bool "Enable server support"
+	default y
+	depends BR2_PACKAGE_OPENVPN
+
+config BR2_PACKAGE_OPENVPN_HTTP
+	bool "Enable http proxy support"
+	default y
+	depends BR2_PACKAGE_OPENVPN
+
+config BR2_PACKAGE_OPENVPN_LZO
+	bool "Enable transparent compression (lzo)"
+	default y
+	depends BR2_PACKAGE_OPENVPN
+	select BR2_PACKAGE_LIBLZO

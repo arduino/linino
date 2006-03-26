@@ -1,0 +1,5 @@
+Package: vtun
+Priority: optional
+Section: net
+Description: A VPN tunnel daemon
+Depends: libopenssl, liblzo, zlib, kmod-tun

@@ -1,0 +1,293 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 10pt;
+	width: inherit;
+	height: 100%;
+}
+
+dt {
+	font-weight: bold;
+}
+
+dd {
+	margin-left: 1em;
+	margin-bottom: 0.2em;
+}
+
+ul {
+	display: inline;
+	list-style-type: none;
+}
+
+ul.about {
+	display: block;
+	list-style-type: disc;
+}
+li.about {
+	margin-left: 2em;
+}
+
+hr {
+	display: none;
+}
+
+hr.separator {
+	display: block;
+}
+
+th {
+	text-align: left;
+}
+
+option {
+	padding-right: 1em;
+}
+
+.selected-maincat {
+	font-weight: bold;
+}
+
+#container {
+	position: relative;
+	min-height: 100%;
+}
+
+#header {
+	position: relative;
+	width: 100%;
+}
+
+#header #header-title {
+	padding-top: 2em;
+	padding-bottom: 0.2em;
+	color: white;
+	background-color: #3D5C7A;
+}
+
+#header #header-title #openwrt-title {
+	position: relative;
+	float: left;
+	left: 1em;
+	top: 0.7em;
+}
+
+#header #header-title #openwrt-title h1 {
+	font-size: 2.8em;
+}
+
+#header #header-title #short-status {
+	position: relative;
+	text-align: right;
+	right: 1em;
+	line-height: 1.2em;
+	padding-bottom:	0.2em;
+}
+
+#header #header-title #short-status ul {
+	font-size: 0.8em;
+}
+
+#header #header-title #short-status h3 {
+	display: none;
+	font-size: 0.9em;
+}
+
+#header #mainmenu {
+	position: absolute;
+	color: #C3C4D2;
+	background-color: #213242;
+	padding-top: 0.2em;
+	padding-bottom:	0.2em;
+	margin-top: 0.1em;
+	top: 0;
+	left: 0;
+	height: 1.2em;
+	width: 100%;
+}
+
+#header #mainmenu a {
+	color: #C3C4D2;
+	text-decoration: none;
+}
+
+#header #mainmenu a:hover {
+	color: rgb(193,102,90);
+}
+
+#header #mainmenu a:active {
+	font-weight: bold;
+}
+
+#header #mainmenu h3 {
+	padding-left: 1em;
+	float: left;
+	font-size: 9pt;
+	text-transform: uppercase;
+}
+
+#header #mainmenu ul {
+	display: inline;
+	list-style-type: none;
+}
+
+#header #mainmenu li {
+	font-size: 9pt;
+	float: left;
+	margin-left: 1.5em;
+}
+
+#header #submenu {
+	position: absolute;
+	color: white;
+	background-color: #7590AE;
+	width: 100%;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+	height: 1.3em;
+}
+
+#header #submenu a {
+	font-weight: bold;
+	color: white;
+	text-decoration: none;
+}
+
+#header #submenu a:hover {
+	color: rgb(255,204,0);
+}
+
+#header #submenu a:active {
+	font-weight: bold;
+}
+
+#header #submenu h3 {
+	display: none;
+}
+
+#header #submenu ul {
+	display: inline;
+	list-style-type: none;
+}
+
+#header #submenu li {
+	float: left;
+	margin-left: 1em;
+}
+
+#content {
+	padding-top: 2em;
+	margin-left: 1em;
+	padding-bottom: 6em;
+}
+
+#content .settings-block {
+	margin-bottom: 1.5em;
+}
+
+#content .settings-block .settings-block-title {
+	padding: 0.2em;
+	margin-bottom: 10px;
+}
+
+#content .settings-block .settings-block-title h2 {
+	color: #7590AE;
+}
+
+#content .settings-block .settings {
+	clear: both;
+	margin-left: 1.5em;
+	padding-right: 1em;
+}
+
+#content .settings-block .settings .settings-title {
+	padding: 0.2em;
+	color: #000;
+	background-color: #CCC;
+}
+
+#content .settings-block .settings .settings-content {
+	padding-top: 1em;
+	margin-left: 1em;
+	float: left;
+	width: 58%;
+	padding-bottom: 0.5em;
+}
+
+#content .settings-block .settings .settings-content select,
+#content .settings-block .settings .settings-content input {
+	margin-top: 0.8em;
+}
+
+#content .settings-block .settings .settings-help {
+	padding: 0.4em;
+	padding-top: 1.4em;
+	margin-left: 42%;
+}
+
+#content .settings-block .settings .settings-help h3 {
+	display: none;
+}
+
+#content .settings-block .settings .settings-help .more-help {
+	margin-right: 10%;
+	text-align: right;
+}
+
+#save {
+	position: absolute;
+	text-align: right;
+	bottom: 0;
+	clear: both;
+	width: 100%;
+	height: 7.4em;
+}
+
+#save a {
+	color: white;
+	text-decoration: none;
+	font-weight: normal;
+	font-size: 11pt;
+}
+
+#save a:hover {
+	text-decoration: underline;
+}
+
+#save .page-save {
+	background-color: #FFF;
+	color: #FFF;
+	height: 2.3em;
+	width: 100%;
+}
+
+#save .page-save div {
+	float: right;
+	width: 15em;
+	height: 1.5em;
+	padding-right: 1em;
+	padding-top: 0.5em;
+	padding-bottom:	0.4em;
+	background-color: #7590AE;
+}
+
+#save .apply {
+	clear: both;
+	background-color: #7590AE;
+	width: 100%;
+	height: 5em;
+}
+
+#save .apply div {
+	float: right;
+	height: 4em;
+	width: 15em;
+	padding-right: 1em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	background-color: #3D5C7A;
+}

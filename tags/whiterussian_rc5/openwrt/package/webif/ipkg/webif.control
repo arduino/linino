@@ -1,0 +1,6 @@
+Package: webif
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Section: net
+Depends: haserl
+Priority: normal
+Description: A modular, extensible web interface for OpenWrt.

@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# The following is to automatically configure the DHCP settings
+# based on nvram settings. Feel free to replace all this crap
+# with a simple "dnsmasq" and manage everything via the
+# /etc/dnsmasq.conf config file
+
+# DHCP interface (lan, wan, wifi -- any ifup *)
+iface=lan
+ifname=$(nvram get ${iface}_ifname)
+
+udhcpc -n -q -R -s /bin/true -i $ifname >&- || {
+  # no existing DHCP server?
+
+  # calculate settings
+  ipaddr=$(nvram get ${iface}_ipaddr)
+  netmask=$(nvram get ${iface}_netmask)
+  start=$(nvram get dhcp_start)
+  start=$((network+${start:-100}))
+  num=$(nvram get dhcp_num)
+  num=$((start+${num:-150}))
+  eval $(ipcalc $ipaddr $netmask $start $num)
+  
+  # and pass the args via the commandline
+  # (because trying to edit the config from here is crazy)
+  args="-K -F $START,$END,$NETMASK,12h"
+}
+
+# ignore requests from wan interface
+wanproto=$(nvram get wan_proto)
+[ -z "$wanproto" -o "$wanproto" = "none" ] || args="${args} -I $(nvram get wan_ifname)"
+
+dnsmasq ${args}
