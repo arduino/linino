@@ -536,7 +536,7 @@ diff -urN linux.old/arch/mips/bcm947xx/gpio.c linux.dev/arch/mips/bcm947xx/gpio.
 +		gpio_file[i].handle = devfs_register(gpio_dir,
 +						     gpio_file[i].name,
 +						     DEVFS_FL_DEFAULT, gpio_major, i,
-+						     S_IFCHR | S_IRUGO | S_IWUGO,
++						     S_IFCHR | S_IRUSR | S_IWUSR | S_IRGRP,
 +						     &gpio_fops, NULL);
 +	}
 +
