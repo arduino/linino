@@ -5,7 +5,7 @@
          devfs_rw_handle[mtd->index] = devfs_register(devfs_dir_handle, name,
                          DEVFS_FL_DEFAULT, MTD_BLOCK_MAJOR, mtd->index,
 -                        S_IFBLK | S_IRUGO | S_IWUGO,
-+                        S_IFBLK | S_IRUGO | S_IWUSR,
++                        S_IFBLK | S_IRUSR | S_IWUSR,
                          &mtd_fops, NULL);
  }
  
@@ -16,7 +16,7 @@
  	devfs_rw_handle[mtd->index] = devfs_register(devfs_dir_handle, name,
  			DEVFS_FL_DEFAULT, MTD_CHAR_MAJOR, mtd->index*2,
 -			S_IFCHR | S_IRUGO | S_IWUGO,
-+			S_IFCHR | S_IRUGO | S_IWUSR,
++			S_IFCHR | S_IRUSR | S_IWUSR,
  			&mtd_fops, NULL);
  
  	sprintf(name, "%dro", mtd->index);
