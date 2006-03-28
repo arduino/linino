@@ -17,7 +17,7 @@ PKG_CAT:=zcat
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-OPENSSL_NO_CIPHERS:= no-idea no-md2 no-mdc2 no-rc2 no-rc5
+OPENSSL_NO_CIPHERS:= no-idea no-md2 no-mdc2 no-rc5
 
 include $(TOPDIR)/package/rules.mk
 
