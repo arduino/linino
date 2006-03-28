@@ -23,7 +23,7 @@ if [ "$1" != "failsafe" -a "$(nvram get no_root_swap)" != 1 ]; then
 		is_dirty 
 		[ $? != 0 ] && {
 			mount /dev/mtdblock/4 /jffs
-			pivot /rom
+			pivot /jffs /rom
 		} || ramoverlay
 	fi
 fi
