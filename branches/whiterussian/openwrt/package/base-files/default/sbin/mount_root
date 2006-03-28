@@ -5,6 +5,9 @@ is_dirty() {
 	return $(hexdump -v /dev/mtdblock/1 -s $OFFSET -n 1 -e '"%d"')
 }
 
+size=$(awk '/Mem:/ {l=5242880;print((s=$2/2)<l)?$2-l:s}' /proc/meminfo)
+mount none /tmp -t tmpfs -o size=$size
+
 if [ "$1" != "failsafe" -a "$(nvram get no_root_swap)" != 1 ]; then 
 	mtd unlock linux
 	mount | grep jffs2 >&-
@@ -16,19 +19,16 @@ if [ "$1" != "failsafe" -a "$(nvram get no_root_swap)" != 1 ]; then
 			mount -o remount,rw /dev/root /
 		fi
 	else
+		. /bin/firstboot
 		is_dirty 
 		[ $? != 0 ] && {
 			mount /dev/mtdblock/4 /jffs
-			pivot_root /jffs /jffs/rom && {
-				mount none /proc -t proc
-				umount /rom/proc
-				mount -o move /rom/dev /dev
-			}
-		} || firstboot ramoverlay
+			pivot /rom
+		} || ramoverlay
 	fi
 fi
 
-mount none /tmp -t tmpfs -o nosuid,nodev,mode=1777,size=50%
+mount none /tmp -t tmpfs -o remount,nosuid,nodev,mode=1777
 mkdir -p /dev/pts
 mount none /dev/pts -t devpts
 mount -t sysfs none /sys 2>&-
