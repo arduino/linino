@@ -13,13 +13,12 @@ udhcpc -n -q -R -s /bin/true -i $ifname >&- || {
   # no existing DHCP server?
 
   # calculate settings
-  ipaddr=$(nvram get ${iface}_ipaddr)
+   ipaddr=$(nvram get ${iface}_ipaddr)
   netmask=$(nvram get ${iface}_netmask)
-  start=$(nvram get dhcp_start)
-  start=$((network+${start:-100}))
-  num=$(nvram get dhcp_num)
-  num=$((start+${num:-150}))
-  eval $(ipcalc $ipaddr $netmask $start $num)
+    start=$(nvram get dhcp_start)
+      num=$(nvram get dhcp_num)
+
+  eval $(ipcalc $ipaddr $netmask ${start:-100} ${num:-150})
   
   # and pass the args via the commandline
   # (because trying to edit the config from here is crazy)
