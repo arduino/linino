@@ -1,9 +1,10 @@
 #!/bin/sh
-grep '^root:[^!]' /etc/passwd >&- 2>&- &&
+grep '^root:[^!]' /etc/passwd >&- 2>&-
+[ "$?" = "0" -a -z "$FAILSAFE" ]  &&  
 {
     echo "Login failed."
     exit 0
-  } || {
+} || {
 cat << EOF
  === IMPORTANT ============================
   Use 'passwd' to set your login password
