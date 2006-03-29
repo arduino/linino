@@ -26,7 +26,7 @@ if_valid () (
 do_ifup() {
 	if_proto=$(nvram get ${2}_proto)
 	if=$(nvram get ${2}_ifname)
-	[ "${if%%[0-9]}" = "ppp" ] && if=$(nvram get ${if_proto}_ifname)
+	[ "${if%%[0-9]}" = "ppp" ] && if=$(nvram get ${2}_device)
 	
 	pidfile=/var/run/${if}.pid
 	[ -f $pidfile ] && $DEBUG kill $(cat $pidfile)
