@@ -19,10 +19,11 @@ udhcpc -n -q -R -s /bin/true -i $ifname >&- || {
       num=$(nvram get dhcp_num)
 
   eval $(ipcalc $ipaddr $netmask ${start:-100} ${num:-150})
+  lease=$(nvram get dhcp_lease)
   
   # and pass the args via the commandline
   # (because trying to edit the config from here is crazy)
-  args="-K -F $START,$END,$NETMASK,12h"
+  args="-K -F $START,$END,$NETMASK,${lease:-12h}"
 }
 
 # ignore requests from wan interface
