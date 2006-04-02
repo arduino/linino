@@ -21,7 +21,7 @@ ipkg list_installed | awk -F ' ' '
 $2 !~ /terminated/ {
 	link=$1
 	gsub(/\+/,"%2B",link)
-	print "<tr><td>" $1 "</td><td><a href=\"ipkg.sh?action=remove&pkg=" link "\">@TR<<Uninstall>></td></tr>"
+	print "<tr><td>" $1 "</td><td><a href=\"ipkg.sh?action=remove&pkg=" link "\" style=\"color: red\">@TR<<Uninstall>></a></td></tr>"
 }
 '
 ?>
@@ -39,7 +39,7 @@ $1 ~ /status/ {
 	if (current != $1) print "<tr><th>" $1 "</th><td></td></tr>"
 	link=$3
 	gsub(/\+/,"%2B",link)
-	print "<tr><td>" $3 "</td><td><a href=\"ipkg.sh?action=install&pkg=" link "\">@TR<<Install>></td></tr>"
+	print "<tr><td>" $3 "</td><td><a href=\"ipkg.sh?action=install&pkg=" link "\" style=\"color: green\">@TR<<Install>></a></td></tr>"
 	current=$1
 }
 '
