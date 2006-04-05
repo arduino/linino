@@ -3,9 +3,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sqlite
-PKG_VERSION:=3.2.1
+PKG_VERSION:=3.3.3
 PKG_RELEASE:=1
-PKG_MD5SUM:=ccf3831c2f67452d444c5e5e2c7ca6f0
+PKG_MD5SUM:=eb5d9d7e7853b3af78e767d709b7fced
 
 PKG_SOURCE_URL:=http://www.sqlite.org/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
