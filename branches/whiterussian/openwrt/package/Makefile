@@ -211,6 +211,9 @@ endif
 ifneq ($(BR2_PACKAGE_PMACCT_PGSQL),)
 pmacct-compile: postgresql-compile
 endif
+ifneq ($(BR2_PACKAGE_PMACCT_SQLITE),)
+pmacct-compile: sqlite-compile
+endif
 
 snort-compile: libnet-compile libpcap-compile pcre-compile
 ifeq ($(BR2_PACKAGE_SNORT_MYSQL),y)

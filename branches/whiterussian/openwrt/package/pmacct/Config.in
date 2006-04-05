@@ -3,7 +3,7 @@ menu "pmacct - IPv4/IPv6 accounting and aggregation tools"
 config BR2_PACKAGE_PMACCT
 	tristate
 	default m if CONFIG_DEVEL
-	depends BR2_PACKAGE_PMACCT_BASIC || BR2_PACKAGE_PMACCT_MYSQL || BR2_PACKAGE_PMACCT_PGSQL || BR2_PACKAGE_PMACCT_CUSTOM || BR2_PACKAGE_PMACCT_CLIENT
+	depends BR2_PACKAGE_PMACCT_BASIC || BR2_PACKAGE_PMACCT_MYSQL || BR2_PACKAGE_PMACCT_PGSQL || BR2_PACKAGE_PMACCT_SQLITE || BR2_PACKAGE_PMACCT_CUSTOM || BR2_PACKAGE_PMACCT_CLIENT
 
 config BR2_PACKAGE_PMACCT_BASIC
 	tristate
@@ -21,6 +21,12 @@ config BR2_PACKAGE_PMACCT_PGSQL
 	tristate
 	default m if CONFIG_DEVEL
 	depends BR2_PACKAGE_NFACCTD_PGSQL || BR2_PACKAGE_PMACCTD_PGSQL
+	select BR2_PACKAGE_PMACCT
+
+config BR2_PACKAGE_PMACCT_SQLITE
+	tristate
+	default m if CONFIG_DEVEL
+	depends BR2_PACKAGE_NFACCTD_SQLITE || BR2_PACKAGE_PMACCTD_SQLITE
 	select BR2_PACKAGE_PMACCT
 
 config BR2_PACKAGE_PMACCT_CUSTOM
@@ -64,7 +70,14 @@ choice
 		select BR2_PACKAGE_PMACCT_PGSQL
 		select BR2_PACKAGE_LIBPCAP
 		select BR2_PACKAGE_LIBPQ
-	
+
+	config BR2_PACKAGE_NFACCTD_SQLITE
+		prompt "nfacctd-sqlite: with SQLite database support"
+		tristate
+		select BR2_PACKAGE_PMACCT_SQLITE
+		select BR2_PACKAGE_LIBPCAP
+		select BR2_PACKAGE_LIBSQLITE
+
 	config BR2_PACKAGE_NFACCTD_CUSTOM
 		prompt "nfacctd-custom: customized to your needs"
 		tristate
@@ -97,6 +110,13 @@ choice
 		depends BR2_PACKAGE_NFACCTD_CUSTOM
 		select BR2_PACKAGE_LIBPQ
 
+	config BR2_PACKAGE_NFACCTD_WITH_SQLITE
+		prompt "SQLite database support"
+		bool
+		default n
+		depends BR2_PACKAGE_NFACCTD_CUSTOM
+		select BR2_PACKAGE_LIBSQLITE
+
 endchoice
 
 choice
@@ -114,6 +134,7 @@ choice
 	    - libpcap
 	    - libmysqlclient (for MySQL database logging support)
 	    - libpq (for PostgreSQL database logging support)
+	    - libsqlite (for SQLite database logging support)
 	  
 	
 	
@@ -136,7 +157,14 @@ choice
 		select BR2_PACKAGE_PMACCT_PGSQL
 		select BR2_PACKAGE_LIBPCAP
 		select BR2_PACKAGE_LIBPQ
-	
+
+	config BR2_PACKAGE_PMACCTD_SQLITE
+		prompt "pmacctd-sqlite: with SQLite database support"
+		tristate
+		select BR2_PACKAGE_PMACCT_SQLITE
+		select BR2_PACKAGE_LIBPCAP
+		select BR2_PACKAGE_LIBSQLITE
+
 	config BR2_PACKAGE_PMACCTD_CUSTOM
 		prompt "pmacctd-custom: customized to your needs"
 		tristate
@@ -168,6 +196,13 @@ choice
 		default n
 		depends BR2_PACKAGE_PMACCTD_CUSTOM
 		select BR2_PACKAGE_LIBPQ
+
+	config BR2_PACKAGE_PMACCTD_WITH_SQLITE
+		prompt "SQLite database support"
+		bool
+		default n
+		depends BR2_PACKAGE_PMACCTD_CUSTOM
+		select BR2_PACKAGE_LIBSQLITE
 
 endchoice
 
