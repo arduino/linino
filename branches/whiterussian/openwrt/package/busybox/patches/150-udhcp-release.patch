@@ -68,7 +68,7 @@ diff -Nurb busybox-1.00/networking/udhcp/dhcpc.c busybox-1.00-patched/networking
  					if (!client_config.foreground)
  						client_background();
  
-@@ -498,12 +507,13 @@
+@@ -498,12 +507,14 @@
  			case SIGUSR1:
  				perform_renew();
  				break;
@@ -77,7 +77,8 @@ diff -Nurb busybox-1.00/networking/udhcp/dhcpc.c busybox-1.00-patched/networking
 -				break;
  			case SIGTERM:
  				LOG(LOG_INFO, "Received SIGTERM");
-+				if (!client_config.release_on_quit)
++				if (client_config.release_on_quit)
++					perform_release();
  				return 0;
 +			case SIGUSR2:
 +				perform_release();

@@ -1,0 +1,11 @@
+diff -ruN busybox-1.00-old/networking/udhcp/clientpacket.c busybox-1.00-new/networking/udhcp/clientpacket.c
+--- busybox-1.00-old/networking/udhcp/clientpacket.c	2004-04-14 19:51:25.000000000 +0200
++++ busybox-1.00-new/networking/udhcp/clientpacket.c	2006-04-08 02:07:21.000000000 +0200
+@@ -166,7 +166,6 @@
+ 	packet.xid = random_xid();
+ 	packet.ciaddr = ciaddr;
+ 
+-	add_simple_option(packet.options, DHCP_REQUESTED_IP, ciaddr);
+ 	add_simple_option(packet.options, DHCP_SERVER_ID, server);
+ 
+ 	LOG(LOG_DEBUG, "Sending release...");
