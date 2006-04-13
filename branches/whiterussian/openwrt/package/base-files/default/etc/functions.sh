@@ -37,9 +37,21 @@ do_ifup() {
 		netmask=$(nvram get ${2}_netmask)
 		gateway=$(nvram get ${2}_gateway)
 		mtu=$(nvram get ${2}_mtu)
+		static_route=$(nvram get ${2}_static_route)
 
 		$DEBUG ifconfig $if $ip ${netmask:+netmask $netmask} ${mtu:+mtu $(($mtu))} broadcast + up
 		${gateway:+$DEBUG route add default gw $gateway}
+
+		[ -n "$static_route" ] && {
+			for route in $static_route; do
+				if [ "$(echo $route | cut -d \/ -f2)" != "32" ];
+				then
+					route add -net $(echo $route | cut -d \/ -f1) netmask $(echo $route | cut -d \/ -f1) dev $if
+				else
+					route add -host $(echo $route | cut -d \/ -f1) dev $if
+				fi
+			done
+		}
 
 		[ -f /etc/resolv.conf ] || {
 			debug "# --- creating /etc/resolv.conf ---"
