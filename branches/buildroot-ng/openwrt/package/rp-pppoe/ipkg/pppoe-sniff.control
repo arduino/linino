@@ -1,0 +1,4 @@
+Package: pppoe-sniff
+Priority: optional
+Section: net
+Description: PPPoE (PPP over Ethernet) frame sniffer

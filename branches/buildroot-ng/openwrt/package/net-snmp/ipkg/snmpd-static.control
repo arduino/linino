@@ -1,0 +1,5 @@
+Package: snmpd-static
+Priority: optional
+Section: admin
+Description: SNMP agent
+Depends: libelf

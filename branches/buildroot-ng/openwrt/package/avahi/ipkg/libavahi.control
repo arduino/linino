@@ -1,0 +1,4 @@
+Package: libavahi
+Priority: optional
+Section: libs
+Description: an DNS-SD over mDNS (aka RendezVous/Bonjour/ZeroConf) implementation (library)

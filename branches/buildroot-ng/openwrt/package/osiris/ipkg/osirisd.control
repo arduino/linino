@@ -1,0 +1,5 @@
+Package: osirisd
+Priority: optional
+Section: admin
+Depends: libopenssl, libpthread
+Description: an Host Integrity Monitoring System (scanning agent)

@@ -1,0 +1,5 @@
+Package: irssi
+Priority: optional
+Section: text
+Depends: glib1, libpthread, libncurses
+Description: IRC text client

@@ -1,0 +1,6 @@
+Package: rrs-nossl
+Priority: optional
+Section: net
+Depends: uclibc++
+Description: A reverse (connecting) remote shell, without SSL support.
+

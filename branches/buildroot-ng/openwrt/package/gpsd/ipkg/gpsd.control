@@ -1,0 +1,5 @@
+Package: gpsd
+Priority: optional
+Section: net
+Depends: libpthread, uclibc++
+Description: An interface daemon for GPS receivers.

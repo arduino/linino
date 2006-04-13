@@ -1,0 +1,4 @@
+Package: libvorbisidec
+Priority: optional
+Section: libs
+Description: A fixed-point implementation (Tremor) of libogg/libvorbis"

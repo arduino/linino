@@ -1,0 +1,4 @@
+Package: libao
+Priority: optional
+Section: libs
+Description: A cross platform audio library

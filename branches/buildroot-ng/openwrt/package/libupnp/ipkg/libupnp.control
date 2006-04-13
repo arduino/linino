@@ -1,0 +1,5 @@
+Package: libupnp
+Priority: optional
+Section: libs
+Depends: libpthread
+Description: The Universal Plug and Play (UPnP) SDK library.

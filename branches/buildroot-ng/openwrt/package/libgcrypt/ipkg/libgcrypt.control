@@ -1,0 +1,6 @@
+Package: libgcrypt
+Priority: optional
+Section: libs
+Description: GNU crypto library
+Depends: libgpg-error
+

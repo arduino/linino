@@ -1,0 +1,4 @@
+Package: libnetsnmp
+Priority: optional
+Section: libs
+Description: SNMP shared libraries

@@ -1,0 +1,5 @@
+Package: reaim
+Priority: optional
+Section: net
+Depends:
+Description: A transparent AIM / MSN proxy

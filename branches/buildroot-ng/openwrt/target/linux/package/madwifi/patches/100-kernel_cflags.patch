@@ -1,0 +1,32 @@
+diff -ru madwifi-ng-r1486-20060329/Makefile madwifi-ng-r1486-20060329-patch/Makefile
+--- madwifi-ng-r1486-20060329/Makefile	2006-03-13 19:23:02.000000000 -0500
++++ madwifi-ng-r1486-20060329-patch/Makefile	2006-03-31 10:52:05.000000000 -0500
+@@ -52,7 +52,7 @@
+ 
+ all: modules tools
+ 
+-modules: configcheck svnversion.h 
++modules: svnversion.h 
+ 	mkdir -p ${SYMBOLSDIR}
+ 	for i in ${DIRS_MODULES}; do \
+ 		$(MAKE) -C $$i || exit 1; \
+diff -ru madwifi-ng-r1486-20060329/hal/public/mips-be-elf.inc madwifi-ng-r1486-20060329-patch/hal/public/mips-be-elf.inc
+--- madwifi-ng-r1486-20060329/hal/public/mips-be-elf.inc	2006-03-28 03:46:27.000000000 -0500
++++ madwifi-ng-r1486-20060329-patch/hal/public/mips-be-elf.inc	2006-03-31 10:52:05.000000000 -0500
+@@ -66,5 +66,5 @@
+ 
+ LDOPTS=	-EB
+ COPTS+=	-DAH_BYTE_ORDER=AH_BIG_ENDIAN
+-COPTS+=	-G 0 -EB -mno-abicalls -fno-pic -Wa,--trap \
++COPTS+=	-G 0 -EB -mno-abicalls -fno-pic -Wa,--trap -mips32 \
+ 	-fno-strict-aliasing -fno-common -fomit-frame-pointer -mlong-calls
+diff -ru madwifi-ng-r1486-20060329/hal/public/mips-le-elf.inc madwifi-ng-r1486-20060329-patch/hal/public/mips-le-elf.inc
+--- madwifi-ng-r1486-20060329/hal/public/mips-le-elf.inc	2006-03-28 03:46:27.000000000 -0500
++++ madwifi-ng-r1486-20060329-patch/hal/public/mips-le-elf.inc	2006-03-31 10:52:05.000000000 -0500
+@@ -63,5 +63,5 @@
+ 
+ LDOPTS=	-EL
+ COPTS+=	-DAH_BYTE_ORDER=AH_LITTLE_ENDIAN
+-COPTS+=	-G 0 -EL -mno-abicalls -fno-pic -Wa,--trap \
++COPTS+=	-G 0 -EL -mno-abicalls -fno-pic -Wa,--trap -mips32 \
+ 	-fno-strict-aliasing -fno-common -fomit-frame-pointer -mlong-calls

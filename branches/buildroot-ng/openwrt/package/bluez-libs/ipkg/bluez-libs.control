@@ -1,0 +1,5 @@
+Package: bluez-libs
+Priority: optional
+Section: net
+Description: Bluez libs
+Depends: kmod-bluetooth
