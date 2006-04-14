@@ -240,7 +240,11 @@ handle_list() {
 	
 	empty "$3" || {
 		validate "${4:-none}|$2" && {
-			LISTVAL="$LISTVAL $2"
+			if empty "$LISTVAL"; then
+				LISTVAL="$2"
+			else
+				LISTVAL="$LISTVAL $2"
+			fi
 			_changed=1
 		}
 	}
