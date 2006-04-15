@@ -1,0 +1,69 @@
+diff -urN openssl-0.9.7i/Makefile openssl-0.9.7i.new/Makefile
+--- openssl-0.9.7i/Makefile	2005-10-15 00:27:49.000000000 +0200
++++ openssl-0.9.7i.new/Makefile	2006-04-15 12:50:22.000000000 +0200
+@@ -178,7 +178,7 @@
+ # we might set SHLIB_MARK to '$(SHARED_LIBS)'.
+ SHLIB_MARK=
+ 
+-DIRS=   crypto fips ssl $(SHLIB_MARK) sigs apps test tools
++DIRS=   crypto fips ssl $(SHLIB_MARK) sigs apps tools
+ SHLIBDIRS= crypto ssl
+ 
+ # dirs in crypto to build
+@@ -193,7 +193,7 @@
+ 
+ # tests to perform.  "alltests" is a special word indicating that all tests
+ # should be performed.
+-TESTS = alltests
++TESTS = 
+ 
+ MAKEFILE= Makefile
+ 
+@@ -205,7 +205,7 @@
+ 
+ TOP=    .
+ ONEDIRS=out tmp
+-EDIRS=  times doc bugs util include certs ms shlib mt demos perl sf dep VMS
++EDIRS=  times bugs util include certs ms shlib mt demos perl sf dep VMS
+ WDIRS=  windows
+ LIBS=   libcrypto.a libssl.a
+ SIGS=	libcrypto.a.sha1
+@@ -773,7 +773,7 @@
+ dist_pem_h:
+ 	(cd crypto/pem; $(MAKE) CC='${CC}' SDIRS='${SDIRS}' CFLAG='${CFLAG}' pem.h; $(MAKE) clean)
+ 
+-install: all install_docs install_sw
++install: all install_sw
+ 
+ install_sw:
+ 	@$(PERL) $(TOP)/util/mkdir-p.pl $(INSTALL_PREFIX)$(INSTALLTOP)/bin \
+diff -urN openssl-0.9.7i/Makefile.org openssl-0.9.7i.new/Makefile.org
+--- openssl-0.9.7i/Makefile.org	2006-04-15 12:47:55.000000000 +0200
++++ openssl-0.9.7i.new/Makefile.org	2006-04-15 12:51:18.000000000 +0200
+@@ -191,7 +191,7 @@
+ 
+ # tests to perform.  "alltests" is a special word indicating that all tests
+ # should be performed.
+-TESTS = alltests
++TESTS = 
+ 
+ MAKEFILE= Makefile
+ 
+@@ -203,7 +203,7 @@
+ 
+ TOP=    .
+ ONEDIRS=out tmp
+-EDIRS=  times doc bugs util include certs ms shlib mt demos perl sf dep VMS
++EDIRS=  times bugs util include certs ms shlib mt demos perl sf dep VMS
+ WDIRS=  windows
+ LIBS=   libcrypto.a libssl.a
+ SIGS=	libcrypto.a.sha1
+@@ -767,7 +767,7 @@
+ dist_pem_h:
+ 	(cd crypto/pem; $(MAKE) CC='${CC}' SDIRS='${SDIRS}' CFLAG='${CFLAG}' pem.h; $(MAKE) clean)
+ 
+-install: all install_docs install_sw
++install: all install_sw
+ 
+ install_sw:
+ 	@$(PERL) $(TOP)/util/mkdir-p.pl $(INSTALL_PREFIX)$(INSTALLTOP)/bin \

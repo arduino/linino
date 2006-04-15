@@ -198,7 +198,8 @@ $(eval $(call KMOD_template,VFAT,vfat,\
 ,CONFIG_VFAT_FS,,30,fat vfat))
 $(eval $(call KMOD_template,CRYPTO,crypto,\
 	$(MODULES_DIR)/kernel/crypto/*.o \
-))
+,,,20,arc4 \
+	sha1))
 $(eval $(call KMOD_template,PPP,ppp,\
 	$(MODULES_DIR)/kernel/drivers/net/ppp_async.o \
 	$(MODULES_DIR)/kernel/drivers/net/ppp_generic.o \
@@ -206,7 +207,7 @@ $(eval $(call KMOD_template,PPP,ppp,\
 ,CONFIG_PPP))
 $(eval $(call KMOD_template,MPPE,mppe,\
 	$(MODULES_DIR)/kernel/drivers/net/ppp_mppe_mppc.o \
-,CONFIG_PPP_MPPE_MPPC))
+,CONFIG_PPP_MPPE_MPPC,,30,ppp_mppe_mppc))
 $(eval $(call KMOD_template,PPPOE,pppoe,\
 	$(MODULES_DIR)/kernel/drivers/net/pppoe.o \
 	$(MODULES_DIR)/kernel/drivers/net/pppox.o \
