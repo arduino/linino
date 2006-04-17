@@ -24,7 +24,7 @@ if [ "$1" != "failsafe" -a "$(nvram get no_root_swap)" != 1 ]; then
 		[ $? != 0 ] && {
 			echo "switching to jffs2"
 			mount /dev/mtdblock/4 /jffs -t jffs2
-			pivot /jffs /rom
+			fopivot /jffs /rom
 		} || {
 			echo "jffs2 unusable; using ramdisk"
 			ramoverlay
