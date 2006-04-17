@@ -6,6 +6,7 @@ package-$(BR2_PACKAGE_KMOD_SHFS) += shfs
 package-$(BR2_PACKAGE_KMOD_SWITCH) += switch
 package-$(BR2_PACKAGE_KMOD_OPENSWAN) += openswan
 package-$(BR2_PACKAGE_KMOD_MADWIFI) += madwifi
+package-$(BR2_PACKAGE_KMOD_MINI_FO) += mini_fo
 package-y += openwrt
 
 package-$(BR2_PACKAGE_KMOD_WLCOMPAT) += wlcompat
