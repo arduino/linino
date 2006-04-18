@@ -55,6 +55,7 @@ else
 	}
 fi
 
+insmod mini_fo 2>&-
 mount_root ${FAILSAFE:+failsafe}
 
 exec /sbin/init

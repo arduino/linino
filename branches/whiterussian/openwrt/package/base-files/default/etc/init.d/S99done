@@ -3,7 +3,7 @@ sysctl -p >&-
 
 # automagically run firstboot
 [ "$(nvram get no_root_swap)" != 1 ] && {
-	{ mount|grep "on / type tmpfs" 1>&-; } && {
+	[ -d /tmp/root ] && {
 		lock /tmp/.switch2jffs
 		firstboot switch2jffs
 		lock -u /tmp/.switch2jffs
