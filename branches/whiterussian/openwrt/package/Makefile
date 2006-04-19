@@ -230,6 +230,9 @@ ulogd-compile: iptables-compile
 ifneq ($(BR2_PACKAGE_ULOGD_MYSQL),)
 ulogd-compile: mysql-compile
 endif
+ifneq ($(BR2_PACKAGE_ULOGD_PCAP),)
+ulogd-compile:pcap-compile
+endif
 ifneq ($(BR2_PACKAGE_ULOGD_PGSQL),)
 ulogd-compile: postgresql-compile
 endif
