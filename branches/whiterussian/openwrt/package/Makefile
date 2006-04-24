@@ -20,6 +20,7 @@ package-$(BR2_PACKAGE_DROPBEAR) += dropbear
 package-$(BR2_PACKAGE_DSNIFF) += dsniff
 package-$(BR2_PACKAGE_EBTABLES) += ebtables
 package-$(BR2_PACKAGE_EZIPUPDATE) += ez-ipupdate
+package-$(BR2_PACKAGE_FAKEIDENTD) += fakeidentd
 package-$(BR2_PACKAGE_FPING) += fping
 package-$(BR2_PACKAGE_FPROBE) += fprobe
 package-$(BR2_PACKAGE_FREERADIUS) += freeradius
