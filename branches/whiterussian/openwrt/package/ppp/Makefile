@@ -97,7 +97,7 @@ $(IPKG_PPP):
 	install -d -m0755 $(IDIR_PPP)/usr/sbin
 	install -m0755 $(PKG_INSTALL_DIR)/usr/sbin/pppd $(IDIR_PPP)/usr/sbin/
 	install -d -m0755 $(IDIR_PPP)/usr/lib/pppd
-	install -d -m0755 $(IDIR_PPP)/var/lock
+	install -d -m0755 $(IDIR_PPP)/tmp/lock
 	echo "Depends: $(PKG_DEPEND)" >> $(IDIR_PPP)/CONTROL/control
 	$(RSTRIP) $(IDIR_PPP)
 	$(IPKG_BUILD) $(IDIR_PPP) $(PACKAGE_DIR)
