@@ -99,7 +99,7 @@ $(eval $(call KMOD_template,IPT_ULOG,ipt-ulog,\
 ))
 
 $(eval $(call KMOD_template,IMQ,imq,\
-	$(MODULES_DIR)/kernel/net/*/netfilter/*IMQ* \
+	$(MODULES_DIR)/kernel/net/ipv4/netfilter/*IMQ* \
 	$(MODULES_DIR)/kernel/drivers/net/imq.o \
 ))
 
