@@ -78,6 +78,7 @@ package-$(BR2_PACKAGE_OPENSSL) += openssl
 package-$(BR2_PACKAGE_OPENSWAN) += openswan
 package-$(BR2_PACKAGE_OPENVPN) += openvpn
 package-$(BR2_PACKAGE_OSIRIS) += osiris
+package-$(BR2_COMPILE_PCMCIA_CS) += pcmcia-cs
 package-$(BR2_PACKAGE_PCRE) += pcre
 package-$(BR2_PACKAGE_PICOCOM) += picocom
 package-$(BR2_PACKAGE_PMACCT) += pmacct
