@@ -130,10 +130,11 @@ source "package/picocom/Config.in"
 source "package/setserial/Config.in"
 
 comment "Utilities ---"
+source "package/gcom/Config.in"
 source "package/madwifi-tools/Config.in"
-source "package/usbutils/Config.in"  # lsusb
 source "package/pcmcia-cs/Config.in"  # pcmcia-utils
 source "package/strace/Config.in"
+source "package/usbutils/Config.in"  # lsusb
 
 # what are we going to do with both of you
 comment "Kernel related ---"
