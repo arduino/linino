@@ -9,7 +9,12 @@ config BR2_PACKAGE_OPENVPN
 	  http://openvpn.net/
 	  
 	  Depends: kmod-tun, libpthread, openssl
-	  
+
+config BR2_PACKAGE_OPENVPN_EASY_RSA
+	tristate "openvpn-easy-rsa - simple shell scripts to manage a Certificate Authority"
+	default m
+	depends BR2_PACKAGE_OPENVPN
+	select BR2_PACKAGE_OPENSSL_UTIL
 
 config BR2_PACKAGE_OPENVPN_SERVER
 	bool "Enable server support"
@@ -21,8 +26,24 @@ config BR2_PACKAGE_OPENVPN_HTTP
 	default y
 	depends BR2_PACKAGE_OPENVPN
 
+config BR2_PACKAGE_OPENVPN_OPENSSL
+	bool "Enable openssl support"
+	default y
+	depends BR2_PACKAGE_OPENVPN
+	select BR2_PACKAGE_LIBOPENSSL
+
 config BR2_PACKAGE_OPENVPN_LZO
 	bool "Enable transparent compression (lzo)"
 	default y
 	depends BR2_PACKAGE_OPENVPN
 	select BR2_PACKAGE_LIBLZO
+
+config BR2_PACKAGE_OPENVPN_PASSWORD_SAVE
+	bool "Enable password saving"
+	default y
+	depends BR2_PACKAGE_OPENPVN
+
+config BR2_PACKAGE_OPENVPN_SMALL
+	bool "Enable smaller executable size (disable OCC, usage message, and verb 4 parm list)"
+	default n
+	depends BR2_PACKAGE_OPENVPN

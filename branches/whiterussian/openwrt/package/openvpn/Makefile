@@ -17,19 +17,30 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 include $(TOPDIR)/package/rules.mk
 
 $(eval $(call PKG_template,OPENVPN,openvpn,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,OPENVPN_EASY_RSA,openvpn-easy-rsa,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
-PKG_DEPEND:="libopenssl, kmod-tun"
+PKG_DEPEND:="kmod-tun"
+ifneq ($(BR2_PACKAGE_OPENVPN_OPENSSL),y)
+DISABLE_OPENSSL:=--disable-ssl --disable-crypto
+else
+PKG_DEPEND+=", libopenssl"
+endif
 ifneq ($(BR2_PACKAGE_OPENVPN_LZO),y)
 DISABLE_LZO:=--disable-lzo
 else
 PKG_DEPEND+=", liblzo"
 endif
-
 ifneq ($(BR2_PACKAGE_OPENVPN_SERVER),y)
 DISABLE_SERVER:=--disable-server
 endif
 ifneq ($(BR2_PACKAGE_OPENVPN_HTTP),y)
 DISABLE_HTTP:=--disable-http
+endif
+ifeq ($(BR2_PACKAGE_OPENVPN_PASSWORD_SAVE),y)
+ENABLE_PASSWORD_SAVE:=--enable-password-save
+endif
+ifeq ($(BR2_PACKAGE_OPENVPN_SMALL),y)
+ENABLE_SMALL:=--enable-small
 endif
 
 $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
@@ -66,8 +77,11 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  --disable-management \
 		  --disable-socks \
 		  $(DISABLE_LZO) \
+		  $(DISABLE_OPENSSL) \
 		  $(DISABLE_SERVER) \
 		  $(DISABLE_HTTP) \
+		  $(ENABLE_PASSWORD_SAVE) \
+		  $(ENABLE_SMALL) \
 	);
 	touch $(PKG_BUILD_DIR)/.configured
 
@@ -86,3 +100,9 @@ $(IPKG_OPENVPN):
 	echo "Depends: $(PKG_DEPEND)" >> $(IDIR_OPENVPN)/CONTROL/control
 	$(IPKG_BUILD) $(IDIR_OPENVPN) $(PACKAGE_DIR)
 
+$(IPKG_OPENVPN_EASY_RSA):
+	install -d -m0755 $(IDIR_OPENVPN_EASY_RSA)/usr/sbin $(IDIR_OPENVPN_EASY_RSA)/etc/easy-rsa
+	cp -fpR $(PKG_BUILD_DIR)/easy-rsa/2.0/{build-*,clean-all,inherit-inter,list-crl,pkitool,revoke-full,sign-req} $(IDIR_OPENVPN_EASY_RSA)/usr/sbin
+	install -m 0644 $(PKG_BUILD_DIR)/easy-rsa/2.0/openssl.cnf $(IDIR_OPENVPN_EASY_RSA)/etc/easy-rsa/openssl.cnf
+	install -m 0644 $(PKG_BUILD_DIR)/easy-rsa/2.0/vars $(IDIR_OPENVPN_EASY_RSA)/etc/easy-rsa/vars
+	$(IPKG_BUILD) $(IDIR_OPENVPN_EASY_RSA) $(PACKAGE_DIR)
