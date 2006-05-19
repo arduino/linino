@@ -41,6 +41,12 @@ config BR2_PACKAGE_KMOD_EBT
 	help
 	  Kernel modules for bridge firewalling
 
+config BR2_PACKAGE_KMOD_IPIP
+	tristate "IP in IP encapsulation support"
+	default m
+	help
+	  Kernel module for IP in IP encapsultation
+
 config BR2_PACKAGE_KMOD_IPTABLES_EXTRA
 	tristate "Extra Netfilter modules for IPv4 firewalling (meta-package)"
 	default m

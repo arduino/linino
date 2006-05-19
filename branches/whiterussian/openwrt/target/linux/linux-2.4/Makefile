@@ -102,7 +102,9 @@ $(eval $(call KMOD_template,IMQ,imq,\
 	$(MODULES_DIR)/kernel/net/ipv4/netfilter/*IMQ* \
 	$(MODULES_DIR)/kernel/drivers/net/imq.o \
 ))
-
+$(eval $(call KMOD_template,IPIP,ipip,\
+	$(MODULES_DIR)/kernel/net/ipv4/ipip.o \
+,CONFIG_NET_IPIP,kmod-ipip))
 
 $(eval $(call KMOD_template,IP6TABLES,ip6tables,\
 	$(MODULES_DIR)/kernel/net/ipv6/netfilter/ip*.o \
