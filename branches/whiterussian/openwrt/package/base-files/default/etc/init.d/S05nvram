@@ -132,6 +132,8 @@ nvram set lan_proto="static"
 	debug "### wla2-g54l hacks ###"
 	nvram_default wan_ifname "none"
 	fixup_lan "vlan0" "vlan0 eth1"
+	nvram_default vlan0ports "1 2 5t"
+	nvram_default vlan1ports "3 4 5t"
 }
 
 # wrtsl54gs vlan defaults

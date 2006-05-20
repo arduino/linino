@@ -26,15 +26,30 @@ if empty "$FORM_submit"; then
 		1|on|enabled) FORM_lazywds=1;;
 		*) FORM_lazywds=0;;
 	esac
+	FORM_wdstimeout=${wl0_wdstimeout:-$(nvram get wl0_wdstimeout)}
+	FORM_antdiv="${wl0_antdiv:-$(nvram get wl0_antdiv)}"
+	case "$FORM_antdiv" in
+		-1|auto) FORM_antdiv=-1;;
+		0|main|left) FORM_antdiv=0;;
+		1|aux|right) FORM_antdiv=1;;
+		3|diversity) FORM_antdiv=3;;
+		*) FORM_antdiv=-1;;
+	esac
+	FORM_distance="${wl0_distance:-$(nvram get wl0_distance)}"
 else
 	SAVED=1
 
 	validate <<EOF
 int|FORM_lazywds|Lazy WDS On/Off|required min=0 max=1|$FORM_lazywds
+int|FORM_wdstimeout|WDS watchdog timeout|optional min=0 max=3600|$FORM_wdstimeout
+int|FORM_distance|Distance|optional min=0 max=256|$FORM_distance
 EOF
 	equal "$?" 0 && {
 		save_setting wireless wl0_lazywds "$FORM_lazywds"
+		save_setting wireless wl0_wdstimeout "$FORM_wdstimeout"
 		save_setting wireless wl0_macmode "$FORM_macmode"
+		save_setting wireless wl0_antdiv "$FORM_antdiv"
+		save_setting wireless wl0_distance "$FORM_distance"
 	}
 fi
 
@@ -65,11 +80,21 @@ field|@TR<<Automatic WDS>>
 select|lazywds|$FORM_lazywds
 option|1|@TR<<Enabled>>
 option|0|@TR<<Disabled>>
+field|@TR<<WDS watchdog timeout>>
+text|wdstimeout|$FORM_wdstimeout
 field|@TR<<Filter Mode>>:
 select|macmode|$FORM_macmode
 option|disabled|@TR<<Disabled>>
 option|allow|@TR<<Allow>>
 option|deny|@TR<<Deny>>
+field|@TR<<Antenna selection>>:
+select|antdiv|$FORM_antdiv
+option|-1|@TR<<Automatic>>
+option|0|@TR<<Left>>
+option|1|@TR<<Right>>
+option|3|@TR<<Diversity>>
+field|@TR<<Distance>>
+text|distance|$FORM_distance
 end_form
 EOF
 

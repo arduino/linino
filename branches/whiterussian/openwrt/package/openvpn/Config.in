@@ -16,6 +16,15 @@ config BR2_PACKAGE_OPENVPN_EASY_RSA
 	depends BR2_PACKAGE_OPENVPN
 	select BR2_PACKAGE_OPENSSL_UTIL
 
+config BR2_PACKAGE_OPENVPN_WEBIF
+	tristate "openvpn-webif - web interface module to configure OpenVPN (client mode)"
+	default m
+	depends BR2_PACKAGE_OPENVPN
+	select BR2_PACKAGE_WEBIF
+	help
+	  Web interface module to configure and report status of OpenVPN (client
+	  mode only)
+
 config BR2_PACKAGE_OPENVPN_SERVER
 	bool "Enable server support"
 	default y
@@ -42,6 +51,11 @@ config BR2_PACKAGE_OPENVPN_PASSWORD_SAVE
 	bool "Enable password saving"
 	default y
 	depends BR2_PACKAGE_OPENPVN
+
+config BR2_PACKAG_OPENVPN_MANAGEMENT
+	bool "Enable PKCS12 management features"
+	default n
+	depends BR2_PACKAGE_OPENVPN
 
 config BR2_PACKAGE_OPENVPN_SMALL
 	bool "Enable smaller executable size (disable OCC, usage message, and verb 4 parm list)"

@@ -8,8 +8,23 @@ exists "$FW_FILE" || touch "$FW_FILE" >&- 2>&-
 FW_FILE_NEW="/tmp/.webif/file-firewall-new"
 
 empty "$FORM_cancel" || {
+	empty "$FORM_delete_on_cancel" || {
+		awk \
+			-f - "$FW_FILE" > "$FW_FILE_NEW" <<EOF
+BEGIN {
+	first=1
+}
+{
+	if (first != 1) print old
+	old = \$0
+	first = 0
+}
+EOF
+		mv "$FW_FILE_NEW" "$FW_FILE"
+	}
 	FORM_save=""
 	FORM_edit=""
+	FORM_cancel=""
 }
 
 empty "$FORM_save" || {
@@ -169,6 +184,7 @@ awk \
 	-v del_layer7="$FORM_del_layer7" \
 	-v data_submit="$FORM_data_submit" \
 	-v new_match="$FORM_new_match" \
+	-v delete_on_cancel="$FORM_delete_on_cancel" \
 	-f /usr/lib/webif/common.awk \
 	-f /usr/lib/common.awk \
 	-f - "$FW_FILE" <<EOF
@@ -296,8 +312,10 @@ BEGIN {
 
 (\$1 == "drop") || (\$1 == "accept") || (\$1 == "forward" ) {
 	if (n == edit) {
-		printf "<tr><td>&nbsp;</td><td>" button("save", "Save") button("cancel", "Cancel") "</td></tr>"
-		
+		printf "<tr><td>&nbsp;</td><td>" button("save", "Save")
+		if( delete_on_cancel != "" ) print hidden("delete_on_cancel", 1);
+		print button("cancel", "Cancel")
+		print "</td></tr>"
 		print "</table>"
 		print "</td></tr>"
 		print "</form>"
@@ -318,6 +336,7 @@ END {
 	print "<form method=\\"POST\\" action=\\"$SCRIPT_NAME\\" enctype=\\"multipart/form-data\\">"
 	print hidden("edit", n + 1);
 	print "<select name=\\"new_target\\">"
+	print hidden("delete_on_cancel", 1);
 	print sel_option("forward", "Forward")
 	print sel_option("accept", "Accept")
 	print sel_option("drop", "Drop")

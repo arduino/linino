@@ -43,14 +43,13 @@ do_ifup() {
 		${gateway:+$DEBUG route add default gw $gateway}
 
 		[ -n "$static_route" ] && {
-			for route in $static_route; do
-				if [ "$(echo $route | cut -d \/ -f2)" != "32" ];
-				then
-					route add -net $(echo $route | cut -d \/ -f1) netmask $(echo $route | cut -d \/ -f1) dev $if
-				else
-					route add -host $(echo $route | cut -d \/ -f1) dev $if
+			for route in $static_route; do {
+			eval "set $(echo $route | sed 's/:/ /g')"
+				if [ "$2" = "255.255.255.255" ]; then
+					opt="-host"
 				fi
-			done
+				$DEBUG route add ${opt:-"-net"} $1 netmask $2 gw $3 metric $4 
+			} done
 		}
 
 		[ -f /etc/resolv.conf ] || {

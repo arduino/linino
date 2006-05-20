@@ -182,6 +182,8 @@ Deny => Refuser
 Set => Param&egrave;trer
 Settings => Param&egrave;tres
 Automatic WDS => WDS automatique
+WDS watchdog timeout => D&eacute;lai d'inactivit&eacute; WDS
+Antenna selection => S&eacute;lection de l'antenne
 
 # "Hosts" page
 

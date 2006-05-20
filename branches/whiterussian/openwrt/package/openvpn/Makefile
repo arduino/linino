@@ -18,6 +18,7 @@ include $(TOPDIR)/package/rules.mk
 
 $(eval $(call PKG_template,OPENVPN,openvpn,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,OPENVPN_EASY_RSA,openvpn-easy-rsa,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,OPENVPN_WEBIF,openvpn-webif,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 PKG_DEPEND:="kmod-tun"
 ifneq ($(BR2_PACKAGE_OPENVPN_OPENSSL),y)
@@ -41,6 +42,9 @@ ENABLE_PASSWORD_SAVE:=--enable-password-save
 endif
 ifeq ($(BR2_PACKAGE_OPENVPN_SMALL),y)
 ENABLE_SMALL:=--enable-small
+endif
+ifneq ($(BR2_PACKAGE_OPENVPN_MANAGEMENT),y)
+DISABLE_SMALL:=--disable-management
 endif
 
 $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
@@ -82,6 +86,7 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  $(DISABLE_HTTP) \
 		  $(ENABLE_PASSWORD_SAVE) \
 		  $(ENABLE_SMALL) \
+		  $(DISABLE_MANAGEMENT) \
 	);
 	touch $(PKG_BUILD_DIR)/.configured
 
@@ -106,3 +111,9 @@ $(IPKG_OPENVPN_EASY_RSA):
 	install -m 0644 $(PKG_BUILD_DIR)/easy-rsa/2.0/openssl.cnf $(IDIR_OPENVPN_EASY_RSA)/etc/easy-rsa/openssl.cnf
 	install -m 0644 $(PKG_BUILD_DIR)/easy-rsa/2.0/vars $(IDIR_OPENVPN_EASY_RSA)/etc/easy-rsa/vars
 	$(IPKG_BUILD) $(IDIR_OPENVPN_EASY_RSA) $(PACKAGE_DIR)
+
+$(IPKG_OPENVPN_WEBIF):
+	install -d -m0755 $(IDIR_OPENVPN_WEBIF)/etc/init.d $(IDIR_OPENVPN_WEBIF)/www/cgi-bin/webif
+	install -m0755 ./files/S50openvpn $(IDIR_OPENVPN_WEBIF)/etc/init.d/S50openvpn
+	cp -fpR .files/openvpn{,-status}.sh $(IDIR_OPENVPN_WEBIF)/www/cgi-bin/webif/
+	$(IPKG_BUILD) $(IDIR_OPENVPN_WEBIF) $(PACKAGE_DIR)
