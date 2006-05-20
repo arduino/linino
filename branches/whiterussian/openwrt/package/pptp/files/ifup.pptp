@@ -4,7 +4,7 @@ type=$1
 
 [ "$(nvram get ${type}_proto)" = "pptp" ] || exit
 
-[ -d "/var/lock" ] || mkdir -p /var/lock || exit 1
+mkdir -p /var/lock
 
 for module in slhc ppp_generic ppp_async ip_gre; do
 	/sbin/insmod $module 2>&- >&-
