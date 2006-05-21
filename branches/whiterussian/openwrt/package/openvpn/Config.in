@@ -18,7 +18,7 @@ config BR2_PACKAGE_OPENVPN_EASY_RSA
 
 config BR2_PACKAGE_OPENVPN_WEBIF
 	tristate "openvpn-webif - web interface module to configure OpenVPN (client mode)"
-	default m
+	default n
 	depends BR2_PACKAGE_OPENVPN
 	select BR2_PACKAGE_WEBIF
 	help
