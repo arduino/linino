@@ -44,7 +44,7 @@ ifeq ($(BR2_PACKAGE_OPENVPN_SMALL),y)
 ENABLE_SMALL:=--enable-small
 endif
 ifneq ($(BR2_PACKAGE_OPENVPN_MANAGEMENT),y)
-DISABLE_SMALL:=--disable-management
+DISABLE_MANAGEMENT:=--disable-management
 endif
 
 $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared

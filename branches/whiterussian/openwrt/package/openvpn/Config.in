@@ -52,7 +52,7 @@ config BR2_PACKAGE_OPENVPN_PASSWORD_SAVE
 	default y
 	depends BR2_PACKAGE_OPENPVN
 
-config BR2_PACKAG_OPENVPN_MANAGEMENT
+config BR2_PACKAGE_OPENVPN_MANAGEMENT
 	bool "Enable PKCS12 management features"
 	default n
 	depends BR2_PACKAGE_OPENVPN

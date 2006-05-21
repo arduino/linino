@@ -2,7 +2,7 @@
 case "$1" in
   start|restart)
   ifup_interfaces=$(nvram get ifup_interfaces)
-  ifup_interfaces=${ifup_interfaces:-"wan lan wifi"}
+  ifup_interfaces=${ifup_interfaces:-"lan wan wifi"}
   for iface in $ifup_interfaces; do
   	ifup $iface
   	if [ "$iface" = "wifi" ]; then
