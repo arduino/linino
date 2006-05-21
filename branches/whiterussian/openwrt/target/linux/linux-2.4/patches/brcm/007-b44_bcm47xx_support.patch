@@ -400,7 +400,7 @@ diff -urN linux.old/drivers/net/b44.c linux.dev/drivers/net/b44.c
  	bw32(B44_MDIO_CTRL, (MDIO_CTRL_PREAMBLE |
  			     (0x0d & MDIO_CTRL_MAXF_MASK)));
  	br32(B44_MDIO_CTRL);
-@@ -1215,6 +1357,8 @@
+@@ -1215,11 +1357,13 @@
  	struct b44 *bp = dev->priv;
  	int err;
  
@@ -409,6 +409,12 @@ diff -urN linux.old/drivers/net/b44.c linux.dev/drivers/net/b44.c
  	err = b44_alloc_consistent(bp);
  	if (err)
  		return err;
+ 
+-	err = request_irq(dev->irq, b44_interrupt, SA_SHIRQ, dev->name, dev);
++	err = request_irq(dev->irq, b44_interrupt, SA_SHIRQ|SA_NET_RANDOM, dev->name, dev);
+ 	if (err)
+ 		goto err_out_free;
+ 
 @@ -1235,9 +1379,10 @@
  	bp->timer.expires = jiffies + HZ;
  	bp->timer.data = (unsigned long) bp;
