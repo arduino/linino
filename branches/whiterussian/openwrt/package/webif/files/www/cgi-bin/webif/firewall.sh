@@ -335,8 +335,8 @@ END {
 	print "<tr><td class=\\"edit_title\\">@TR<<New Rule>>: </td><td colspan=\\"4\\">"
 	print "<form method=\\"POST\\" action=\\"$SCRIPT_NAME\\" enctype=\\"multipart/form-data\\">"
 	print hidden("edit", n + 1);
-	print "<select name=\\"new_target\\">"
 	print hidden("delete_on_cancel", 1);
+	print "<select name=\\"new_target\\">"
 	print sel_option("forward", "Forward")
 	print sel_option("accept", "Accept")
 	print sel_option("drop", "Drop")
