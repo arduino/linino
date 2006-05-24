@@ -17,6 +17,6 @@ $(UTILS_BUILD_DIR):
 	mkdir -p $(UTILS_BUILD_DIR)
 	
 $(UTILS_BUILD_DIR)/%: src/%.c
-	$(CC) -o $@ $(patsubst $(UTILS_BUILD_DIR)/%,src/%.c,$@)
+	$(HOSTCC) -o $@ $(patsubst $(UTILS_BUILD_DIR)/%,src/%.c,$@)
 	chmod 755 $@
 
