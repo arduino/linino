@@ -51,6 +51,10 @@ FSNAME:=$(patsubst jffs2-%,jffs2,$(FS))
 # install: $(BIN_DIR)/openwrt-wap54g-$(FSNAME).trx
 # endif
 
+$(BIN_DIR)/openwrt-wr850g-$(FS).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
+	$(STAGING_DIR)/bin/motorola-bin -1 $< $@
+
+install: $(BIN_DIR)/openwrt-wr850g-$(FS).bin
 
 ifneq ($(FS),jffs2-8MB)
 $(BIN_DIR)/openwrt-wrt54g3g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
@@ -71,7 +75,7 @@ $(BIN_DIR)/openwrt-wa840g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$
 $(BIN_DIR)/openwrt-we800g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
 	$(STAGING_DIR)/bin/motorola-bin -3 $< $@
 
-install: $(BIN_DIR)/openwrt-wrt54g-$(FSNAME).bin $(BIN_DIR)/openwrt-wrt54gs_v4-$(FSNAME).bin $(BIN_DIR)/openwrt-wrt54g3g-$(FSNAME).bin $(BIN_DIR)/openwrt-wr850g-$(FSNAME).bin $(BIN_DIR)/openwrt-wa840g-$(FSNAME).bin $(BIN_DIR)/openwrt-we800g-$(FSNAME).bin
+install: $(BIN_DIR)/openwrt-wrt54g-$(FSNAME).bin $(BIN_DIR)/openwrt-wrt54gs_v4-$(FSNAME).bin $(BIN_DIR)/openwrt-wrt54g3g-$(FSNAME).bin $(BIN_DIR)/openwrt-wa840g-$(FSNAME).bin $(BIN_DIR)/openwrt-we800g-$(FSNAME).bin
 endif
 
 ifneq ($(FS),jffs2-4MB)
