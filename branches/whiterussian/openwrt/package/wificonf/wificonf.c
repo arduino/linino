@@ -546,7 +546,7 @@ static void setup_bcom(int skfd, char *ifname)
 		if (val && strstr(v, "psk")) {
 			val = (strstr(v, "psk2") ? 0x84 : 0x4);
 			v = nvram_safe_get(wl_var("wpa_psk"));
-			if ((strlen(v) >= 8) && (strlen(v) < 63)) {
+			if ((strlen(v) >= 8) && (strlen(v) <= 63)) {
 				
 				bcom_ioctl(skfd, ifname, WLC_SET_WPA_AUTH, &val, sizeof(val));
 				
