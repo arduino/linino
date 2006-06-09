@@ -3,11 +3,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=maradns
-PKG_VERSION:=1.0.26
+PKG_VERSION:=1.2.07.2
 PKG_RELEASE:=1
-PKG_MD5SUM:=b3180ad1f250a4e3820613e711ae159b
+PKG_MD5SUM:=dc67f6a496e668127871382a40367733
 
-PKG_SOURCE_URL:=http://www.maradns.org/download
+PKG_SOURCE_URL:=http://www.maradns.org/download/1.2/1.2.07.2/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_CAT:=bzcat
 
@@ -22,27 +22,6 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
 		./configure \
-		--target=$(GNU_TARGET_NAME) \
-		--host=$(GNU_TARGET_NAME) \
-		--build=$(GNU_HOST_NAME) \
-		--program-prefix="" \
-		--program-suffix="" \
-		--prefix=/usr \
-		--exec-prefix=/usr \
-		--bindir=/usr/bin \
-		--datadir=/usr/share \
-		--includedir=/usr/include \
-		--infodir=/usr/share/info \
-		--libdir=/usr/lib \
-		--libexecdir=/usr/lib \
-		--localstatedir=/var \
-		--mandir=/usr/share/man \
-		--sbindir=/usr/sbin \
-		--sysconfdir=/etc \
-		  $(DISABLE_LARGEFILE) \
-		  $(DISABLE_NLS) \
-		  --enable-shared \
-		  --disable-static \
 	);
 	touch $@
 
@@ -66,7 +45,7 @@ $(IPKG_MARADNS):
 	install -d -m0755 $(IDIR_MARADNS)/etc/init.d
 	install -m0755 ./files/maradns.init $(IDIR_MARADNS)/etc/init.d/S60maradns
 	install -d -m0755 $(IDIR_MARADNS)/usr/bin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/bin/{askmara,getzone} $(IDIR_MARADNS)/usr/bin/
+	cp -fpR $(PKG_INSTALL_DIR)/usr/bin/{askmara,getzone,fetchzone,duende} $(IDIR_MARADNS)/usr/bin/
 	install -d -m0755 $(IDIR_MARADNS)/usr/sbin
 	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/{maradns,zoneserver} $(IDIR_MARADNS)/usr/sbin/
 	$(RSTRIP) $(IDIR_MARADNS)
