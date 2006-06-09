@@ -89,6 +89,7 @@ Pragma: no-cache
 	<head>
     	<title>@TR<<OpenWrt Administrative Console>></title>
 		<link rel="stylesheet" type="text/css" href="/webif.css" />
+		<!--[if IE]> <style> #save { position: relative; }</style> <![endif]-->
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
 	</head>
 	<body $4><div id="container">
