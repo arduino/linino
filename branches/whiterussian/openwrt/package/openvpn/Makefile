@@ -115,6 +115,6 @@ $(IPKG_OPENVPN_EASY_RSA):
 $(IPKG_OPENVPN_WEBIF):
 	install -d -m0755 $(IDIR_OPENVPN_WEBIF)/etc/init.d $(IDIR_OPENVPN_WEBIF)/www/cgi-bin/webif
 	install -m0755 ./files/S50openvpn $(IDIR_OPENVPN_WEBIF)/etc/init.d/S50openvpn
-	install -m0644 ./files/openvpn.sh $(IDIR_OPENVPN_WEBIF)/www/cgi-bin/webif/
-	install -m0644 ./files/openvpn-status.sh $(IDIR_OPENVPN_WEBIF)/www/cgi-bin/webif/
+	install -m0755 ./files/openvpn.sh $(IDIR_OPENVPN_WEBIF)/www/cgi-bin/webif/
+	install -m0755 ./files/openvpn-status.sh $(IDIR_OPENVPN_WEBIF)/www/cgi-bin/webif/
 	$(IPKG_BUILD) $(IDIR_OPENVPN_WEBIF) $(PACKAGE_DIR)
