@@ -313,6 +313,8 @@ static int handle_vlan_port_read(void *driver, char *buf, int nr)
 			len += sprintf(buf + len, "\n");
 		}
 	}
+	
+	buf[len] = '\0';
 
 	return len;
 }
