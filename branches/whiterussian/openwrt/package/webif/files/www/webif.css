@@ -46,6 +46,11 @@ option {
 
 #container {
 	position: relative;
+	height: 100%;
+}
+
+#container[class] {
+	height: auto;
 	min-height: 100%;
 }
 
@@ -156,13 +161,6 @@ option {
 #save {
 	position: absolute;
 	bottom: 0;
-	clear: both;
-	width: 100%;
-	height: 7.4em;
-}
-
-#save .page-save {
-	height: 2.3em;
 	width: 100%;
 }
 
