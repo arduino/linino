@@ -1,17 +1,13 @@
+/* layout */
+
 * {
 	margin: 0;
 	padding: 0;
 }
 
 html, body {
-	font-family: Verdana, Helvetica, sans-serif;
-	font-size: 1.0em;
 	width: inherit;
 	height: 100%;
-}
-
-dt {
-	font-weight: bold;
 }
 
 dd {
@@ -25,31 +21,27 @@ ul {
 }
 
 ul.about {
-	display: block;
 	list-style-type: disc;
 }
+
 li.about {
 	margin-left: 2em;
 }
 
-hr {
+hr,
+#submenu h3,
+#short-status h3,
+#content .settings-block .settings .settings-help h3 {
 	display: none;
 }
 
+ul.about,
 hr.separator {
 	display: block;
 }
 
-th {
-	text-align: left;
-}
-
 option {
 	padding-right: 1em;
-}
-
-.selected-maincat {
-	font-weight: bold;
 }
 
 #container {
@@ -62,122 +54,55 @@ option {
 	width: 100%;
 }
 
-#header #header-title {
+#header-title {
 	padding-top: 2em;
 	padding-bottom: 0.2em;
-	color: white;
-	background-color: #3D5C7A;
 }
 
-#header #header-title #openwrt-title {
+#openwrt-title {
 	position: relative;
 	float: left;
 	left: 1em;
 	top: 0.7em;
 }
 
-#header #header-title #openwrt-title h1 {
-	font-size: 2.8em;
-}
-
-#header #header-title #short-status {
+#short-status {
 	position: relative;
-	text-align: right;
 	right: 1em;
 	line-height: 1.2em;
 	padding-bottom:	0.2em;
 }
 
-#header #header-title #short-status ul {
-	font-size: 0.8em;
-}
-
-#header #header-title #short-status h3 {
-	display: none;
-	font-size: 0.9em;
-}
-
-#header #mainmenu {
+#mainmenu,
+#submenu {
 	position: absolute;
-	color: #C3C4D2;
-	background-color: #213242;
+	width: 100%;
 	padding-top: 0.2em;
 	padding-bottom:	0.2em;
-	margin-top: 0.1em;
+}
+
+#mainmenu
+{
 	top: 0;
 	left: 0;
-	height: 1.2em;
-	width: 100%;
 }
 
-#header #mainmenu a {
-	color: #C3C4D2;
-	text-decoration: none;
-}
-
-#header #mainmenu a:hover {
-	color: rgb(193,102,90);
-}
-
-#header #mainmenu a:active {
-	font-weight: bold;
-}
-
-#header #mainmenu h3 {
+#mainmenu h3 {
 	padding-left: 1em;
 	float: left;
-	font-size: 0.9em;
-	text-transform: uppercase;
 }
 
-#header #mainmenu ul {
-	display: inline;
-	list-style-type: none;
-}
-
-#header #mainmenu li {
+#mainmenu li {
 	font-size: 0.9em;
 	float: left;
 	margin-left: 1.5em;
 }
 
-#header #submenu {
-	position: absolute;
-	color: white;
-	background-color: #7590AE;
-	width: 100%;
-	padding-top: 0.2em;
-	padding-bottom: 0.2em;
-	height: 1.3em;
-}
-
-#header #submenu a {
-	font-weight: bold;
-	color: white;
-	text-decoration: none;
-}
-
-#header #submenu a:hover {
-	color: rgb(255,204,0);
-}
-
-#header #submenu a:active {
-	font-weight: bold;
-}
-
-#header #submenu h3 {
-	display: none;
-}
-
-#header #submenu ul {
-	display: inline;
-	list-style-type: none;
-}
-
-#header #submenu li {
+#submenu li {
 	float: left;
 	margin-left: 1em;
 }
+
 
 #content {
 	padding-top: 2em;
@@ -190,12 +115,7 @@ option {
 }
 
 #content .settings-block .settings-block-title {
-	padding: 0.2em;
 	margin-bottom: 10px;
-}
-
-#content .settings-block .settings-block-title h2 {
-	color: #7590AE;
 }
 
 #content .settings-block .settings {
@@ -204,10 +124,9 @@ option {
 	padding-right: 1em;
 }
 
+#content .settings-block .settings-block-title,
 #content .settings-block .settings .settings-title {
 	padding: 0.2em;
-	color: #000;
-	background-color: #CCC;
 }
 
 #content .settings-block .settings .settings-content {
@@ -229,10 +148,6 @@ option {
 	margin-left: 42%;
 }
 
-#content .settings-block .settings .settings-help h3 {
-	display: none;
-}
-
 #content .settings-block .settings .settings-help .more-help {
 	margin-right: 10%;
 	text-align: right;
@@ -240,27 +155,13 @@ option {
 
 #save {
 	position: absolute;
-	text-align: right;
 	bottom: 0;
 	clear: both;
 	width: 100%;
 	height: 7.4em;
 }
 
-#save a {
-	color: white;
-	text-decoration: none;
-	font-weight: normal;
-	font-size: 1.1em;
-}
-
-#save a:hover {
-	text-decoration: underline;
-}
-
 #save .page-save {
-	background-color: #FFF;
-	color: #FFF;
 	height: 2.3em;
 	width: 100%;
 }
@@ -272,22 +173,131 @@ option {
 	padding-right: 1em;
 	padding-top: 0.5em;
 	padding-bottom:	0.4em;
-	background-color: #7590AE;
 }
 
 #save .apply {
 	clear: both;
-	background-color: #7590AE;
 	width: 100%;
 	height: 5em;
 }
 
 #save .apply div {
 	float: right;
-	height: 4em;
 	width: 15em;
+	height: 4em;
 	padding-right: 1em;
 	padding-top: 0.5em;
 	padding-bottom: 0.5em;
+}
+
+th {
+	text-align: left;
+}
+
+#content .settings-block .settings .settings-help .more-help,
+#save,
+#short-status {
+	text-align: right;
+}
+
+/* font */
+body {
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 1.0em;
+}
+
+dt,
+.selected-maincat,
+#mainmenu a:active,
+#submenu a {
+	font-weight: bold;
+}
+
+
+
+#openwrt-title h1 {
+	font-size: 2.8em;
+}
+
+
+#short-status ul {
+	font-size: 0.8em;
+}
+
+#mainmenu h3,
+#mainmenu li,
+#short-status h3 {
+	font-size: 0.9em;
+}
+
+#mainmenu a,
+#submenu a,
+#save a {
+	text-decoration: none;
+}
+
+#save a:hover {
+	text-decoration: underline;
+}
+
+#mainmenu h3 {
+	text-transform: uppercase;
+}
+
+#save a {
+	font-weight: normal;
+	font-size: 1.1em;
+}
+
+
+/* color */
+
+#header-title,
+#submenu,
+#submenu a,
+#save a,
+#save .page-save
+{
+	color: #fff;
+}
+
+#header-title,
+#save .apply div {
 	background-color: #3D5C7A;
 }
+
+#mainmenu {
+	color: #C3C4D2;
+	background-color: #213242;
+}
+
+#mainmenu a {
+	color: #C3C4D2;
+}
+
+#mainmenu a:hover {
+	color: rgb(193,102,90);
+}
+
+#submenu,
+#save div {
+	background-color: #7590AE;
+}
+
+#content .settings-block .settings-block-title h2 {
+	color: #7590AE;
+}
+
+#submenu a:hover {
+	color: #FB0;
+}
+
+#content .settings-block .settings .settings-title {
+	color: #000;
+	background-color: #CCC;
+}
+
+#save .page-save {
+	background-color: #FFF;
+}
+
