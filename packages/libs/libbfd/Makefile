@@ -19,14 +19,6 @@ include $(TOPDIR)/package/kernel.mk
 
 TARGETS:=$(GNU_TARGET_NAME)
 
-define Package/libbfd
-SECTION:=libs
-CATEGORY:=Libraries
-TITLE:=Universal BFD library from GNU binutils
-DESCRIPTION:=Universal BFD library from GNU binutils
-URL:=$(PKG_SOURCE_URL)
-endef
-
 define Build/Configure
 $(call Build/Configure/Default,--enable-install-libbfd --enable-commonbfdlib --disable-nls --enable-targets=$(TARGETS),,bfd)
 endef
@@ -48,5 +40,5 @@ define Build/UninstallDev
 		$(STAGING_DIR)/usr/include/bfd*.h \
 		$(STAGING_DIR)/usr/lib/libbfd*
 endef
-	
-$(eval $(call BuildPackage,libbfd))
+
+$(eval $(call Build/DefaultTargets))
