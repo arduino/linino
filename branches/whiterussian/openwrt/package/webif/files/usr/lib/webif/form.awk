@@ -80,6 +80,7 @@ $1 ~ /^caption/ { print "<b>" $2 "</b>" }
 $1 ~ /^string/ { print $2 }
 $1 ~ /^text/ { print "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
 $1 ~ /^password/ { print "<input id=\"" $2 "\" type=\"password\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
+$1 ~ /^upload/ { print "<input id=\"" $2 "\" type=\"file\" name=\"" $2 "\"/>" }
 $1 ~ /^submit/ { print "<input type=\"submit\" name=\"" $2 "\" value=\"" $3 "\" />" }
 $1 ~ /^helpitem/ { form_help = form_help "<dt>@TR<<" $2 ">>: </dt>" }
 $1 ~ /^helptext/ { form_help = form_help "<dd>@TR<<" $2 ">> </dd>" }
