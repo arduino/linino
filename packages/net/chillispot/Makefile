@@ -19,7 +19,7 @@ include $(TOPDIR)/package/rules.mk
 define Package/chillispot
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+@PACKAGE_KMOD_TUN
+  DEPENDS:=@+PACKAGE_KMOD_TUN
   TITLE:=Wireless LAN HotSpot controller
   DESCRIPTION:=Wireless LAN HotSpot controller\\\
     ChilliSpot is an open source captive portal or wireless LAN \\\
