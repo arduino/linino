@@ -14,8 +14,7 @@ PKG_CAT:=bzcat
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-include $(TOPDIR)/package/rules.mk
-include $(TOPDIR)/package/kernel.mk
+include $(TOPDIR)/include/package.mk
 
 TARGETS:=$(GNU_TARGET_NAME)
 
