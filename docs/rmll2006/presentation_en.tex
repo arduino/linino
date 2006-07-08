@@ -1,0 +1,559 @@
+\documentclass{beamer}
+
+\usepackage{beamerthemesplit}
+\usepackage[latin1]{inputenc}
+\usepackage[french]{babel}
+\usepackage{pstricks}               	% Advanced drawings
+\usepackage{fancyhdr}               	% Headers
+\usepackage{epsf}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+
+\title{OpenWrt : fresh air for (wlan) routers}
+
+\author{Florian Fainelli \\
+florian@openwrt.org}
+
+\institute{Rencontres Mondiales du Logiciel Libre 2006 \\
+Vandoeuvre-lès-Nancy\\
+Lenght : 30 minutes}
+
+\date[]{Thursday July 6th 2006}
+
+\begin{document}
+
+\frame{\titlepage}
+\frame[allowframebreaks]
+{
+\frametitle{Summary}
+\tableofcontents
+}
+
+\section{Introduction}
+\subsection{What is OpenWrt}
+\frame
+{
+\frametitle{What is OpenWrt}
+\begin{itemize}
+\item contraction of Opensource Wireless Technology
+\item minimalist GNU/Linux distribution GPL licensed
+\item set of Makefile providing the building of a full filesystem
+\item package and updates repository
+\end{itemize}
+}
+
+\subsection{Project history}
+\frame
+{
+\frametitle{Project history}
+\begin{itemize}
+\item OpenWrt was created  by Gerry Rozeman (aka Groz) and Mike Baker (aka [mbm]) in november 2003.
+\item Since the beginning, Gerry and Mike felt the great potential offered by a Linux-based firmware, and at the same time the limitations provided by the Linksys one. That is why they decide to replace the later by a minimalist one, built with the current uClibc buildroot.
+\item The philosophy is simple : everything is configured in commmand-line using SSH
+\end{itemize}
+}
+
+\subsection{Context}
+\frame
+{
+\frametitle{Context}
+\begin{itemize}
+\item At the time the first OpenWrt version is released, Sveasoft firmwares were already available since few months and add various features, configurable through the Linksys web interface.
+\item Few months later, DD-WRT firmware comes out, an OpenWrt fork, the main reason for its developpement is the lack of an OpenWrt web interface.
+\end{itemize}
+}
+
+\subsection{State of art}
+\frame
+{
+\frametitle{State of art}
+Nowadays, OpenWrt team is composed of 5 main developpers, helped by many contributors :
+\begin{itemize}
+\item Mike Baker ([mbm])
+\item Imre Kaloz (Kaloz)
+\item Nicolas Thill (Nico)
+\item Felix Fietkau (nbd)
+\item Florian Fainelli (florian)
+\end{itemize}
+}
+
+\section{The different versions}
+\subsection{Development tools}
+\frame
+{
+\frametitle{Development tools}
+\begin{itemize}
+\item subversion repository
+\item Trac web interface : https://dev.openwrt.org
+\end{itemize}
+}
+
+\frame
+{
+\subsection{Subversiion repository organisation}
+\frametitle{Subversiion repository organisation}
+The subversion repository is divided into several directories :
+\begin{itemize}
+\item 2 branches : \textbf{whiterussian/} and \textbf{buildroot-ng/}
+\item 5 tags : whiterussian\_rc1 to 5
+\item 1 packages directory : \textbf{packages/}
+\item kamikaze in trunk (currently being migrated to \textbf{buildroot-ng/} and \textbf{packages/}
+\end{itemize}
+}
+
+\subsection{Whiterussian}
+\frame
+{
+\frametitle{Whiterussian}
+
+Whiterussian is currently the stable version of the OpenWrt firmware. It runs fine on devices based on Broadcom 947xx and 953xx boards, such as :
+\begin{itemize}
+\item Linksys WRT54G v1.0 to v4
+\item Asus WL-500g (Deluxe, Premium)
+\item Motorola WR850G, WE500G
+\item Buffalo WBR-B11, WBR-G54, WLA-G54
+\end{itemize}
+
+It is being used a firmware basis by several Wireless User Groups, and some companies, such as FON(fonbasic firmware).
+}
+
+\subsection{Whiterussian limitations}
+\frame
+{
+\frametitle{Whiterussian limitations}
+Altough the firmware runs fine, it is currently being limited by :
+
+\begin{itemize}
+\item the usage of a binary Broadcom Wi-Fi driver, thus restricting to a 2.4 kernel
+\item the difficulty to maintain and port packages
+\item the hardware support limited to Broadcom 47xx/53xx boards
+\item a web interface too much relying on the existence of a NVRAM
+\end{itemize}
+}
+
+\subsection{Kamikaze}
+\frame[allowframebreaks]
+{
+\frametitle{Kamikaze}
+As a consequence to these difficulties, and the more and more increasing market of Linux-based hardware, the \textbf{Kamikaze} branch was opened.
+
+New hardware platforms were then supported~:
+\begin{itemize}
+\item Texas Instruments AR7 (noyau 2.4)
+\item Atheros AR531x (noyau 2.4)
+\item Aruba (noyau 2.6)
+\item x86 (noyaux 2.4 et 2.6)
+\item Broadcom SiByte (noyau 2.6)
+\item AMD Alchemy (noyau 2.6)
+\item Intel Xscale IX42x (noyau 2.6)
+\item Router Board RB532 (noyau 2.6)
+\end{itemize}
+}
+
+\subsection{Kamikaze limitations}
+\frame
+{
+\frametitle{Kamikaze limitations}
+Kamikaze has a certain number of drawbacks :
+\begin{itemize}
+\item difficulty in stabilising the kernels, most of the hardware platforms are not fully functionnal (Wi-Fi is not working most of the time)
+\item adding and maintaining packages is too close to the whiterussian way
+\item maintaining 2 distinct repository using different toolchains
+\end{itemize}
+}
+
+\subsection{buildroot-ng}
+\frame
+{
+\frametitle{buildroot-ng}
+\begin{itemize}
+\item abstraction et simplication d'écriture des fichiers \textbf{Makefile} et compatibilité avec la syntaxe précédente
+\item les paquetages dépendant fortement du noyau vont dans \textbf{buildroot-ng}, les autres dans \textbf{packages/}
+\item dépôt multi-architectures indépendamment du du système de base
+\end{itemize}
+}
+
+\subsection{Main tasks}
+\frame
+{
+\frametitle{Main tasks}
+\begin{itemize}
+\item Finish \textbf{buildroot-ng}
+\item Porting AR7-2.4 to AR7-2.6
+\item Porting Broadcom 63xx 2.6
+\item Rewriting \textbf{webif}
+\item Rewrite of the user documentation
+\end{itemize}
+}
+
+\subsection{Interests of OpenWrt}
+\frame
+{
+\frametitle{Interests of OpenWrt}
+\begin{itemize}
+\item fully customizable system from kernel to filesystem
+\item strictly identical firware independently from the platform runned on
+\item vendor version independent
+\item fully GPL code
+\end{itemize}
+}
+
+\section{Adding support for a new target}
+\subsection{Legal concerns}
+\frame
+{
+\frametitle{Legal concerns}
+Some legal concerns are raised when you know a hardware is running Linux~:
+Plusieurs questions légales se posent lorsque vous avez connaissance qu'un matériel donné fonctionne sous Linux~:
+\begin{itemize}
+\item does the manufacturer provide the firmware source code ?
+\item does this hardware use binary drivers ?
+\item are we sure it is Linux or uClinux ?
+\item is the GPL code compliant with GPL or compatible ?
+\end{itemize}
+}
+
+\subsection{Proving that a hardare is running Linux}
+\frame
+{
+\frametitle{Proving that a hardare is running Linux}
+You have different ways of proving that a hardware is running Linux~:
+\begin{itemize}
+\item downloading a firmware and trying to split it in : bootloader, kernel, filesystem (beware of the Big/Little Endian traps !)
+\item pluging a serial console and/or JTAG
+\item using a bug in the web interface to get the result of a dmes, cat /proc/xxxx
+\end{itemize}
+}
+
+\subsection{What if the manufacturer does not provide sources}
+\frame
+{
+\frametitle{GPL violation}
+In conformance to the GPL, using GPL codes for commercial products implies the following things :
+\begin{itemize}
+\item publishing kernel sources
+\item publishing source code of the GPL applications used in the filesystem
+\item publishing sources of the GNU toolchain and the filesystem creation tools
+\end{itemize}
+In cas of a GPL violation, please inform : \texttt{http://gpl-violations.org}
+}
+
+\subsection{Working basis}
+\frame
+{
+\frametitle{Working basis}
+Your working basis is composed of the following elements :
+\begin{itemize}
+\item Linux kernel sources, modified to support the hardware, with the latest patches for your architecture (arm, mipsm ppc ...)
+\item binary drivers and firmwares for the Wi-Fi card, Ethernet, ADSL ...
+\item binary tools to create the firmware : CRC calculation, version, padding ...
+\end{itemize}
+You are very likely not to be able to get a functionnal firmware with the manufacturer tools.
+}
+\subsection{Evaluation of the porting effort}
+\frame
+{
+\frametitle{Evaluation of the porting effort}
+According to what we have, to get a working port for the architecture with OpenWrt and being GPL compliant, we have to :
+\begin{itemize}
+\item analyse and generate differences between a vanilla kernel and the given one
+\item create a program adding the corect header in the firmware file (CRC calculation, version, padding ...)
+\item keep compatibily with the binary drivers and the current kernel version (beware of the VERSIONING option)
+\item eventually reverse engineer the binary drivers
+\end{itemize}
+}
+
+\subsection{Adding a new architecture to buildroot-ng}
+\frame
+{
+\frametitle{Adding a new architecture to buildroot-ng}
+Now that we have the requirements for having an OpenWrt system for our arhictecture, let's add it~:
+\begin{itemize}
+\item add and entry in \textbf{target/Config.in}
+\item add a directory \textbf{target/linux/architecture-2.x} (2.4 or 2.6 kernel) containing the arch-specific patches and kernel configuration
+\item add a directory \textbf{target/image/architecture} describing how to build the firmware image
+\item calling the kernel template in \textbf{include/target.mk}
+\end{itemize}
+}
+
+\subsection{Conventions}
+\frame
+{
+\frametitle{Conventions}
+\begin{itemize}
+\item Architecture naming must respect the kernel naming in \textbf{arch/}
+\item We recommend you get a vanilla kernel booting, rather than changing the filesystem
+\item Please separate patches as much as possible : architecture, drivers, various patches  ...
+\end{itemize}
+}
+
+\subsection{target/Config.in}
+\frame[containsverbatim]
+{
+\frametitle{target/Config.in}
+\begin{verbatim}
+config LINUX_2_6_ARCHITECTURE
+        bool "Architecture foo [2.6]"
+        select mips	
+        select LINUX_2_6
+        select PCI_SUPPORT
+        select PCMCIA_SUPPORT
+        help
+          A short description
+\end{verbatim}
+}
+
+\subsection{target/linux/architecture-2.x/Makefile}
+\frame[containsverbatim,allowframebreaks]
+{
+\frametitle{target/linux/architecture-2.x/Makefile}
+\begin{verbatim}
+include $(TOPDIR)/rules.mk
+
+LINUX_VERSION:=2.6.16.7
+LINUX_RELEASE:=1
+LINUX_KERNEL_MD5SUM:=9682b2bd6e02f3087982d7c3f5ba824e
+
+include ./config
+include $(INCLUDE_DIR)/kernel.mk
+include $(INCLUDE_DIR)/kernel-build.mk
+
+$(LINUX_DIR)/.patched: $(LINUX_DIR)/.unpacked
+        [ -d ../generic-$(KERNEL)/patches ] && 
+$(PATCH) $(LINUX_DIR) ../generic-$(KERNEL)/patches $(MAKE_TRACE)
+        [ -d ./patches ] && 
+$(PATCH) $(LINUX_DIR) ./patches $(MAKE_TRACE)
+        @$(CP) config $(LINUX_DIR)/.config
+        touch $@
+\end{verbatim}
+}
+
+\subsection{target/image/architecture/Makefile}
+\frame[containsverbatim,allowframebreaks]
+{
+\frametitle{target/image/architecture/Makefile}
+\begin{verbatim}
+include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/image.mk
+
+define Build/Compile
+        rm -f $(KDIR)/loader.gz
+        $(MAKE) -C lzma-loader \
+                BUILD_DIR="$(KDIR)" \
+                TARGET="$(KDIR)" \
+                install
+endef
+
+define Build/Clean
+        $(MAKE) -C lzma-loader clean
+endef
+define Image/Prepare
+        cat $(KDIR)/vmlinux | 
+$(STAGING_DIR)/bin/lzma e -si -so -eos -lc1 -lp2 -pb2 > $(KDIR)/vmlinux.lzma
+endef
+
+define Image/Build/hardware
+        dd if=$(KDIR)/loader.elf 
+of=$(BIN_DIR)/openwrt-hardware-$(KERNEL)-$(2).bin 
+bs=131072 conv=sync
+        cat $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(1).trx 
+>> $(BIN_DIR)/openwrt-hardware-$(KERNEL)-$(2).bin
+endef
+
+define trxalign/jffs2-128k
+-a 0x20000
+endef
+define trxalign/jffs2-64k
+-a 0x10000
+endef
+define trxalign/squashfs
+-a 1024
+endef
+
+$(eval $(call BuildImage))
+\end{verbatim}
+}
+
+\subsection{include/target.mk}
+\frame[containsverbatim]
+{
+\frametitle{include/target.mk}
+\begin{verbatim}
+...
+$(eval $(call kernel_template,2.6,architecture,
+	2_6_ARCHITECTURE))
+...
+\end{verbatim}
+}
+
+\subsection{Debuging and stabilising the port}
+
+\frame
+{
+\frametitle{Debuging and stabilizing}
+Common debuging tools :
+\begin{itemize}
+\item GDB
+\item EJTAG (si disponible)
+\item ksymoops
+\item usage of printk
+\item debug options enabled in the kernel
+\item bootloader documentation (RedBoot, CFE, YAMON, RomE ...)
+\item asking for help of users and developpers
+\end{itemize}
+}
+
+\subsection{Further problems}
+\frame
+{
+\frametitle{Further problems}
+Once you get a kernel booting on your hardware, it is very likely not to be directly usage, you may encounter the following issues~:
+\begin{itemize}
+\item drivers working not correctly or not at all
+\item unrecognized flash mapping
+\item low reaction system (processor caching)
+\end{itemize}
+}
+
+\section{Customizing the system}
+
+\frame
+{
+\frametitle{Customizing the system}
+You can highly customize your system, such as~:
+\begin{itemize}
+\item adding a captive portal, RADIUS server
+\item doing advanced filtering using iptables
+\item adding network stacks and protocols ...
+\item adding drivers for various hadware : webcam, additionnal Wi-Fi stick ...
+\item adding features to \textbf{webif} 
+\end{itemize}
+}
+
+\subsection{Adding packages}
+\frame
+{
+\frametitle{Adding packages}
+We invite you to participate to the migrating effort of the packages in \textbf{kamikaze} and make them use the \textbf{buildroot-ng} syntax.
+
+In opposition to the previous system, where you had to create 3 files :
+\begin{itemize}
+\item Makefile
+\item Config.in
+\item ipkg/paquetage.control
+\end{itemize}
+
+\textbf{buildroot-ng} describes and abdstracts everything in a \textbf{Makefile}.
+}
+
+\subsection{Hierarchy}
+\frame
+{
+\frametitle{Hierarchy}
+Packages are structured this way :
+
+\begin{tabbing}
+\hspace{10 pt}\=\hspace{10 pt}\=\hspace{10 pt}\=\kill
+packages/ \>  \>  \> \\ 
+ \>  section/ \>  \> \\ 
+ \>  \> package-name/ \> \\ 
+ \>  \>  \> Makefile \\
+ \>  \>  \> patches/
+\end{tabbing} 
+}
+
+\subsection{packages/section/Makefile}
+\frame[containsverbatim,allowframebreaks]
+{
+\frametitle{packages/section/Makefile}
+\begin{verbatim}
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=foo
+PKG_VERSION:=alpha-beta-4
+PKG_RELEASE:=1
+PKG_MD5SUM:=5988e7aeb0ae4dac8d83561265984cc9
+
+PKG_SOURCE_URL:=ftp://ftp.openwrt.org/foo
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_CAT:=zcat
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/foo
+SECTION:=libs
+CATEGORY:=Libraries
+TITLE:=My sample package
+DESCRIPTION:=My other descriptiong
+URL:=ftp://ftp.openwrt.org/foo
+endef
+
+define Build/Configure
+$(call Build/Configure/Default,--option-foo=bar)
+endef
+
+define Build/Compile
+        rm -rf $(PKG_INSTALL_DIR)
+        mkdir -p $(PKG_INSTALL_DIR)
+        $(MAKE) -C $(PKG_BUILD_DIR) \
+                DESTDIR="$(PKG_INSTALL_DIR)" \
+                all install
+endef
+
+define Package/foo/install
+        install -m0755 -d $(1)/usr/lib
+        $(CP) $(PKG_INSTALL_DIR)/usr/lib/libfoo.so.* $(1)/usr/lib/
+endef
+
+define Build/InstallDev
+        mkdir -p $(STAGING_DIR)/usr/include
+        $(CP) $(PKG_INSTALL_DIR)/usr/include/foo-header.h $(STAGING_DIR)/usr/include/
+        mkdir -p $(STAGING_DIR)/usr/lib
+        $(CP) $(PKG_INSTALL_DIR)/usr/lib/libfoo.{a,so*} $(STAGING_DIR)/usr/lib/
+        touch $(STAGING_DIR)/usr/lib/libfoo.so
+endef
+
+define Build/UninstallDev
+        rm -rf \
+          $(STAGING_DIR)/usr/include/foo-header.h \
+          $(STAGING_DIR)/usr/lib/libfoo.{a,so*}
+endef
+
+$(eval $(call BuildPackage,foo))
+\end{verbatim}
+}
+
+\section{Getting support}
+\frame
+{
+\frametitle{Getting support}
+Do not hesisate to contact us via the following ways~:
+\begin{itemize}
+\item IRC : irc.freenode.net \#openwrt and \#openwrt-devel
+\item Mailing-list : openwrt-devel@openwrt.org
+\item Forum : http://forum.openwrt.org
+\end{itemize}
+}
+
+\section{Becoming a developper}
+
+\frame
+{
+\frametitle{Becoming a developper}
+\begin{itemize}
+\item Do not hesitate to submit patches adding packages to the repository
+\item Do as much test and bugreport as you can
+\item Port OpenWrt to a new device ...
+\end{itemize}
+}
+
+\frame
+{
+\frametitle{Thank you very much}
+Thank you very much for your attention, question session is now open.
+}
+
+\end{document}
