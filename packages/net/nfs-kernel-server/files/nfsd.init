@@ -1,0 +1,47 @@
+#!/bin/sh
+
+NFS_D=/var/lib/nfs
+
+_start() {
+ mkdir -p $NFS_D
+ touch $NFS_D/rmtab
+ 
+ /usr/sbin/rpc.statd
+ /usr/sbin/rpc.lockd
+ /usr/sbin/exportfs -r
+ /usr/sbin/rpc.nfsd
+ /usr/sbin/rpc.mountd
+}
+
+_stop() {
+ killall rpc.mountd 2> /dev/null
+ killall -9 nfsd 2> /dev/null
+ /usr/sbin/exportfs -au
+ killall lockd 2> /dev/null
+ killall rpc.statd 2> /dev/null
+}
+
+_reload() {
+ /usr/sbin/exportfs -r
+}
+
+case $1 in
+ start)
+  _start
+  ;;
+ stop)
+  _stop
+  ;;
+ reload)
+  _reload
+  ;;
+ restart)
+  _stop
+  sleep 1
+  _start
+  ;;
+ *)
+  echo "usage: $0 (start|stop|reload|restart)"
+  exit 1
+esac
+exit $?
