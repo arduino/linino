@@ -21,8 +21,14 @@ case "$1" in
 		}
 		case "$(nvram get openvpn_cli_auth)" in
 			cert)
-				AUTH_OPTION="--pkcs12"
+				AUTH_OPTION="--ns-cert-type server --pkcs12"
 				AUTH_FILE="/etc/openvpn/certificate.p12"
+				PKCS12PASS="$(nvram get openvpn_cli_pkcs12pass)"
+				[ "$PKCS12PASS" ] && {
+					echo -n "$PKCS12PASS" > /etc/openvpn/pkcs12pass.tmp
+					chmod 600 /etc/openvpn/pkcs12pass.tmp
+					AUTH_OPTION="--askpass /etc/openvpn/pkcs12pass.tmp $AUTH_OPTION"
+				}
 			;;
 			psk)
 				AUTH_OPTION="--secret"

@@ -6,6 +6,9 @@
 . /usr/lib/webif/webif.sh
 load_settings "openvpn"
 
+openvpn_cli_pkcs12pass=${openvpn_cli_pkcs12pass:-$(nvram get openvpn_cli_pkcs12pass)}
+openvpn_cli_pkcs12pass=${openvpn_cli_pkcs12pass:+"-@@-"}
+
 if empty "$FORM_submit"; then
 	[ -f /etc/openvpn/certificate.p12 ] ||
 		NOCERT=1
@@ -21,14 +24,21 @@ if empty "$FORM_submit"; then
 	FORM_openvpn_cli_psk=${openvpn_cli_psk:-$(nvram get openvpn_cli_psk)}
 else
 	[ -d /etc/openvpn ] || mkdir /etc/openvpn
-	[ -f "$FORM_openvpn_pkcs12file" ] && {
-		cp "$FORM_openvpn_pkcs12file" /etc/openvpn/certificate.p12 &&
+	[ -f "$FORM_openvpn_cli_pkcs12file" ] && {
+		cp "$FORM_openvpn_cli_pkcs12file" /etc/openvpn/certificate.p12 &&
 			UPLOAD_CERT=1
 	}
-	[ -f "$FORM_openvpn_pskfile" ] && {
-		cp "$FORM_openvpn_pskfile" /etc/openvpn/shared.key &&
+	[ -f "$FORM_openvpn_cli_pskfile" ] && {
+		cp "$FORM_openvpn_cli_pskfile" /etc/openvpn/shared.key &&
 			UPLOAD_PSK=1
 	}
+	[ "$FORM_openvpn_cli_pkcs12pass" != "-@@-" ] && {
+		[ "$FORM_openvpn_cli_pkcs12pass" != "$openvpn_cli_pkcs12pass" ] && {
+			save_setting openvpn openvpn_cli_pkcs12pass $FORM_openvpn_cli_pkcs12pass
+			openvpn_cli_pkcs12pass=${FORM_openvpn_cli_pkcs12pass:+"-@@-"}
+		}
+	}
+
 	save_setting openvpn openvpn_cli $FORM_openvpn_cli
 	save_setting openvpn openvpn_cli_server $FORM_openvpn_cli_server
 	save_setting openvpn openvpn_cli_proto $FORM_openvpn_cli_proto
@@ -57,6 +67,7 @@ function modechange()
 	v = isset('openvpn_cli_auth', 'cert');
 	set_visible('certificate_status', v);
 	set_visible('certificate', v);
+	set_visible('pkcs12pass', v);
 
 	hide('save');
 	show('save');
@@ -98,14 +109,16 @@ $(empty "$NOPSK" || echo 'string|<span style="color:red">@TR<<No Keyfile uploade
 $(empty "$UPLOAD_PSK" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
 $(empty "$NOPSK" && echo 'string|@TR<<Found Installed Keyfile>>')
 field|@TR<<Upload Preshared Key>>|psk|hidden
-upload|openvpn_pskfile
+upload|openvpn_cli_pskfile
 
 field|@TR<<Certificate Status>>|certificate_status|hidden
 $(empty "$NOCERT" || echo 'string|<span style="color:red">@TR<<No Certificate uploaded yet!>></span>')
 $(empty "$UPLOAD_CERT" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
 $(empty "$NOCERT" && echo 'string|@TR<<Found Installed Certificate.>>')
 field|@TR<<Upload PKCS12 Certificate>>|certificate|hidden
-upload|openvpn_pkcs12file
+upload|openvpn_cli_pkcs12file
+field|@TR<<PKCS12 Container Password>>|pkcs12pass|hidden
+password|openvpn_cli_pkcs12pass|$openvpn_cli_pkcs12pass
 end_form
 
 EOF
@@ -113,5 +126,5 @@ EOF
 footer
 ?>
 <!--
-##WEBIF:name:Network:10:OpenVPN
+##WEBIF:name:VPN:1:OpenVPN
 -->

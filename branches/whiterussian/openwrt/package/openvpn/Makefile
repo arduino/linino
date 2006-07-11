@@ -78,7 +78,6 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  --disable-pthread \
 		  --disable-debug \
 		  --disable-plugins \
-		  --disable-management \
 		  --disable-socks \
 		  $(DISABLE_LZO) \
 		  $(DISABLE_OPENSSL) \

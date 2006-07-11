@@ -50,7 +50,7 @@ config BR2_PACKAGE_OPENVPN_LZO
 config BR2_PACKAGE_OPENVPN_PASSWORD_SAVE
 	bool "Enable password saving"
 	default y
-	depends BR2_PACKAGE_OPENPVN
+	depends BR2_PACKAGE_OPENVPN
 
 config BR2_PACKAGE_OPENVPN_MANAGEMENT
 	bool "Enable PKCS12 management features"
