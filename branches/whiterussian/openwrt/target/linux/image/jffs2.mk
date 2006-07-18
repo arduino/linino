@@ -14,10 +14,12 @@ jffs2-clean:
 $(KDIR)/root.jffs2-4MB: install-prepare
 	@rm -rf $(KDIR)/root/jffs
 	$(STAGING_DIR)/bin/mkfs.jffs2 $(JFFS2OPTS) -e 0x10000 -o $@ -d $(KDIR)/root
+	echo -ne '\xde\xad\xc0\xde' >> $@
 
 $(KDIR)/root.jffs2-8MB: install-prepare
 	@rm -rf $(KDIR)/root/jffs
 	$(STAGING_DIR)/bin/mkfs.jffs2 $(JFFS2OPTS) -e 0x20000 -o $@ -d $(KDIR)/root
+	echo -ne '\xde\xad\xc0\xde' >> $@
 
 jffs2-install: $(KDIR)/root.jffs2-4MB $(KDIR)/root.jffs2-8MB
 	$(MAKE) -C $(BOARD) install KERNEL="$(KERNEL)" FS="jffs2-4MB"

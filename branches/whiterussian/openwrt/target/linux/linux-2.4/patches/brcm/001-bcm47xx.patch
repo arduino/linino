@@ -8454,7 +8454,7 @@ diff -urN linux.old/arch/mips/bcm947xx/sbpci.c linux.dev/arch/mips/bcm947xx/sbpc
 diff -urN linux.old/arch/mips/bcm947xx/setup.c linux.dev/arch/mips/bcm947xx/setup.c
 --- linux.old/arch/mips/bcm947xx/setup.c	1970-01-01 01:00:00.000000000 +0100
 +++ linux.dev/arch/mips/bcm947xx/setup.c	2005-08-26 13:44:34.313391368 +0200
-@@ -0,0 +1,261 @@
+@@ -0,0 +1,168 @@
 +/*
 + * Generic setup routines for Broadcom MIPS boards
 + *
@@ -8477,11 +8477,6 @@ diff -urN linux.old/arch/mips/bcm947xx/setup.c linux.dev/arch/mips/bcm947xx/setu
 +#include <asm/bootinfo.h>
 +#include <asm/time.h>
 +#include <asm/reboot.h>
-+
-+#ifdef CONFIG_MTD_PARTITIONS
-+#include <linux/mtd/mtd.h>
-+#include <linux/mtd/partitions.h>
-+#endif
 +
 +#include <typedefs.h>
 +#include <bcmutils.h>
@@ -8628,94 +8623,6 @@ diff -urN linux.old/arch/mips/bcm947xx/setup.c linux.dev/arch/mips/bcm947xx/setu
 +{
 +}
 +
-+#ifdef CONFIG_MTD_PARTITIONS
-+
-+static struct mtd_partition bcm947xx_parts[] = {
-+	{ name: "pmon",	offset: 0, size: 0, mask_flags: MTD_WRITEABLE, },
-+	{ name: "linux", offset: 0, size: 0, },
-+	{ name: "rootfs", offset: 0, size: 0, },
-+	{ name: "nvram", offset: 0, size: 0, },
-+	{ name: "OpenWrt", offset: 0, size: 0, },
-+	{ name: NULL, },
-+};
-+
-+static int __init
-+find_root(struct mtd_info *mtd, size_t size, struct mtd_partition *part)
-+{
-+	struct trx_header *trx;
-+	unsigned char buf[512];
-+	int off;
-+	size_t len;
-+
-+	trx = (struct trx_header *) buf;
-+
-+	for (off = (256*1024); off < size; off += mtd->erasesize) {
-+		memset(buf, 0xe5, sizeof(buf));
-+
-+		/*
-+		 * Read into buffer 
-+		 */
-+		if (MTD_READ(mtd, off, sizeof(buf), &len, buf) ||
-+		    len != sizeof(buf))
-+			continue;
-+
-+		/* found a TRX header */
-+		if (le32_to_cpu(trx->magic) == TRX_MAGIC) {
-+			part->offset = le32_to_cpu(trx->offsets[2]) ? : 
-+				le32_to_cpu(trx->offsets[1]);
-+			part->size = le32_to_cpu(trx->len); 
-+
-+			part->size -= part->offset;
-+			part->offset += off;
-+
-+			goto done;
-+		}
-+	}
-+
-+	printk(KERN_NOTICE
-+	       "%s: Couldn't find root filesystem\n",
-+	       mtd->name);
-+	return -1;
-+
-+ done:
-+		return part->size;
-+}
-+
-+struct mtd_partition * __init
-+init_mtd_partitions(struct mtd_info *mtd, size_t size)
-+{
-+
-+	/* boot loader */
-+	bcm947xx_parts[0].offset=0;
-+	bcm947xx_parts[0].size=256*1024;
-+
-+	/* nvram */
-+	bcm947xx_parts[3].offset = size - ROUNDUP(NVRAM_SPACE, mtd->erasesize);
-+	bcm947xx_parts[3].size   = size - bcm947xx_parts[3].offset;
-+
-+	/* Size linux (kernel and rootfs) */
-+	bcm947xx_parts[1].offset = bcm947xx_parts[0].size;
-+	bcm947xx_parts[1].size   = bcm947xx_parts[3].offset - bcm947xx_parts[1].offset;
-+
-+	/* Find and size rootfs */
-+	if (find_root(mtd,size,&bcm947xx_parts[2])==0) {
-+		/* entirely jffs2 */
-+		bcm947xx_parts[2].size = bcm947xx_parts[3].offset - bcm947xx_parts[2].offset; 
-+		bcm947xx_parts[4].name = NULL;
-+	} else {
-+		/* legacy setup */
-+		/* calculate leftover flash, and assign it to the jffs2 partition */
-+		bcm947xx_parts[4].offset = bcm947xx_parts[2].offset + bcm947xx_parts[2].size;
-+		bcm947xx_parts[4].offset = ROUNDUP(bcm947xx_parts[4].offset, mtd->erasesize);
-+		bcm947xx_parts[4].size = bcm947xx_parts[3].offset - bcm947xx_parts[4].offset;
-+	}
-+
-+	return bcm947xx_parts;
-+}
-+
-+EXPORT_SYMBOL(init_mtd_partitions);
-+
-+#endif
 diff -urN linux.old/arch/mips/bcm947xx/time.c linux.dev/arch/mips/bcm947xx/time.c
 --- linux.old/arch/mips/bcm947xx/time.c	1970-01-01 01:00:00.000000000 +0100
 +++ linux.dev/arch/mips/bcm947xx/time.c	2005-08-26 13:44:34.314391216 +0200
@@ -10185,9 +10092,34 @@ diff -urN linux.old/drivers/mtd/maps/Makefile linux.dev/drivers/mtd/maps/Makefil
 diff -urN linux.old/drivers/mtd/maps/bcm947xx-flash.c linux.dev/drivers/mtd/maps/bcm947xx-flash.c
 --- linux.old/drivers/mtd/maps/bcm947xx-flash.c	1970-01-01 01:00:00.000000000 +0100
 +++ linux.dev/drivers/mtd/maps/bcm947xx-flash.c	2005-08-26 13:44:34.346386352 +0200
-@@ -0,0 +1,236 @@
+@@ -0,0 +1,547 @@
 +/*
-+ * Flash mapping for BCM947XX boards
++ *  Copyright (C) 2006 Felix Fietkau <nbd@openwrt.org>
++ *  Copyright (C) 2005 Waldemar Brodkorb <wbx@openwrt.org>
++ *  Copyright (C) 2004 Florian Schirmer (jolt@tuxbox.org)
++ *
++ *  original functions for finding root filesystem from Mike Baker 
++ *
++ *  This program is free software; you can redistribute  it and/or modify it
++ *  under  the terms of  the GNU General  Public License as published by the
++ *  Free Software Foundation;  either version 2 of the  License, or (at your
++ *  option) any later version.
++ *
++ *  THIS  SOFTWARE  IS PROVIDED   ``AS  IS'' AND   ANY  EXPRESS OR IMPLIED
++ *  WARRANTIES,   INCLUDING, BUT NOT  LIMITED  TO, THE IMPLIED WARRANTIES OF
++ *  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN
++ *  NO  EVENT  SHALL   THE AUTHOR  BE    LIABLE FOR ANY   DIRECT, INDIRECT,
++ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
++ *  NOT LIMITED   TO, PROCUREMENT OF  SUBSTITUTE GOODS  OR SERVICES; LOSS OF
++ *  USE, DATA,  OR PROFITS; OR  BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
++ *  ANY THEORY OF LIABILITY, WHETHER IN  CONTRACT, STRICT LIABILITY, OR TORT
++ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
++ *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ *
++ *  You should have received a copy of the  GNU General Public License along
++ *  with this program; if not, write  to the Free Software Foundation, Inc.,
++ *  675 Mass Ave, Cambridge, MA 02139, USA.
++ * 
 + *
 + * Copyright 2004, Broadcom Corporation
 + * All Rights Reserved.
@@ -10197,19 +10129,27 @@ diff -urN linux.old/drivers/mtd/maps/bcm947xx-flash.c linux.dev/drivers/mtd/maps
 + * SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS
 + * FOR A SPECIFIC PURPOSE OR NONINFRINGEMENT CONCERNING THIS SOFTWARE.
 + *
-+ * $Id: bcm947xx-flash.c,v 1.1 2005/03/16 13:50:00 wbx Exp $
++ * Flash mapping for BCM947XX boards
++ *
 + */
 +
 +#include <linux/module.h>
 +#include <linux/types.h>
 +#include <linux/kernel.h>
-+#include <asm/io.h>
++#include <linux/wait.h>
 +#include <linux/mtd/mtd.h>
 +#include <linux/mtd/map.h>
++#ifdef CONFIG_MTD_PARTITIONS
 +#include <linux/mtd/partitions.h>
++#endif
 +#include <linux/config.h>
++#include <linux/squashfs_fs.h>
++#include <linux/jffs2.h>
++#include <linux/crc32.h>
++#include <asm/io.h>
 +
 +#include <typedefs.h>
++#include <osl.h>
 +#include <bcmnvram.h>
 +#include <bcmutils.h>
 +#include <sbconfig.h>
@@ -10225,24 +10165,9 @@ diff -urN linux.old/drivers/mtd/maps/bcm947xx-flash.c linux.dev/drivers/mtd/maps
 +#define sbh bcm947xx_sbh
 +#define sbh_lock bcm947xx_sbh_lock
 +
-+#ifdef CONFIG_MTD_PARTITIONS
-+extern struct mtd_partition * init_mtd_partitions(struct mtd_info *mtd, size_t size);
-+#endif
-+
 +#define WINDOW_ADDR 0x1fc00000
 +#define WINDOW_SIZE 0x400000
 +#define BUSWIDTH 2
-+
-+/* e.g., flash=2M or flash=4M */
-+static int flash = 0;
-+MODULE_PARM(flash, "i");
-+static int __init
-+bcm947xx_setup(char *str)
-+{
-+	flash = memparse(str, &str);
-+	return 1;
-+}
-+__setup("flash=", bcm947xx_setup);
 +
 +static struct mtd_info *bcm947xx_mtd;
 +
@@ -10321,10 +10246,304 @@ diff -urN linux.old/drivers/mtd/maps/bcm947xx-flash.c linux.dev/drivers/mtd/maps
 +	copy_to: bcm947xx_map_copy_to
 +};
 +
-+#if LINUX_VERSION_CODE < 0x20212 && defined(MODULE)
-+#define init_bcm947xx_map init_module
-+#define cleanup_bcm947xx_map cleanup_module
++#ifdef CONFIG_MTD_PARTITIONS
++
++static struct mtd_partition bcm947xx_parts[] = {
++	{ name: "cfe",	offset: 0, size: 0, mask_flags: MTD_WRITEABLE, },
++	{ name: "linux", offset: 0, size: 0, },
++	{ name: "rootfs", offset: 0, size: 0, },
++	{ name: "nvram", offset: 0, size: 0, },
++	{ name: "OpenWrt", offset: 0, size: 0, },
++	{ name: NULL, },
++};
++
++static int __init
++find_cfe_size(struct mtd_info *mtd, size_t size)
++{
++	struct trx_header *trx;
++	unsigned char buf[512];
++	int off;
++	size_t len;
++	int blocksize;
++
++	trx = (struct trx_header *) buf;
++
++	blocksize = mtd->erasesize;
++	if (blocksize < 0x10000)
++		blocksize = 0x10000;
++
++	for (off = (128*1024); off < size; off += blocksize) {
++		memset(buf, 0xe5, sizeof(buf));
++
++		/*
++		 * Read into buffer 
++		 */
++		if (MTD_READ(mtd, off, sizeof(buf), &len, buf) ||
++		    len != sizeof(buf))
++			continue;
++
++		/* found a TRX header */
++		if (le32_to_cpu(trx->magic) == TRX_MAGIC) {
++			goto found;
++		}
++	}
++
++	printk(KERN_NOTICE
++	       "%s: Couldn't find bootloader size\n",
++	       mtd->name);
++	return -1;
++
++ found:
++	printk(KERN_NOTICE "bootloader size: %d\n", off);
++	return off;
++
++}
++
++/*
++ * Copied from mtdblock.c
++ *
++ * Cache stuff...
++ * 
++ * Since typical flash erasable sectors are much larger than what Linux's
++ * buffer cache can handle, we must implement read-modify-write on flash
++ * sectors for each block write requests.  To avoid over-erasing flash sectors
++ * and to speed things up, we locally cache a whole flash sector while it is
++ * being written to until a different sector is required.
++ */
++
++static void erase_callback(struct erase_info *done)
++{
++	wait_queue_head_t *wait_q = (wait_queue_head_t *)done->priv;
++	wake_up(wait_q);
++}
++
++static int erase_write (struct mtd_info *mtd, unsigned long pos, 
++			int len, const char *buf)
++{
++	struct erase_info erase;
++	DECLARE_WAITQUEUE(wait, current);
++	wait_queue_head_t wait_q;
++	size_t retlen;
++	int ret;
++
++	/*
++	 * First, let's erase the flash block.
++	 */
++
++	init_waitqueue_head(&wait_q);
++	erase.mtd = mtd;
++	erase.callback = erase_callback;
++	erase.addr = pos;
++	erase.len = len;
++	erase.priv = (u_long)&wait_q;
++
++	set_current_state(TASK_INTERRUPTIBLE);
++	add_wait_queue(&wait_q, &wait);
++
++	ret = MTD_ERASE(mtd, &erase);
++	if (ret) {
++		set_current_state(TASK_RUNNING);
++		remove_wait_queue(&wait_q, &wait);
++		printk (KERN_WARNING "erase of region [0x%lx, 0x%x] "
++				     "on \"%s\" failed\n",
++			pos, len, mtd->name);
++		return ret;
++	}
++
++	schedule();  /* Wait for erase to finish. */
++	remove_wait_queue(&wait_q, &wait);
++
++	/*
++	 * Next, writhe data to flash.
++	 */
++
++	ret = MTD_WRITE (mtd, pos, len, &retlen, buf);
++	if (ret)
++		return ret;
++	if (retlen != len)
++		return -EIO;
++	return 0;
++}
++
++
++
++
++static int __init
++find_root(struct mtd_info *mtd, size_t size, struct mtd_partition *part)
++{
++	struct trx_header trx, *trx2;
++	unsigned char buf[512], *block;
++	int off, blocksize;
++	u32 i, crc = ~0;
++	size_t len;
++	struct squashfs_super_block *sb = (struct squashfs_super_block *) buf;
++
++	blocksize = mtd->erasesize;
++	if (blocksize < 0x10000)
++		blocksize = 0x10000;
++
++	for (off = (128*1024); off < size; off += blocksize) {
++		memset(&trx, 0xe5, sizeof(trx));
++
++		/*
++		 * Read into buffer 
++		 */
++		if (MTD_READ(mtd, off, sizeof(trx), &len, (char *) &trx) ||
++		    len != sizeof(trx))
++			continue;
++
++		/* found a TRX header */
++		if (le32_to_cpu(trx.magic) == TRX_MAGIC) {
++			part->offset = le32_to_cpu(trx.offsets[2]) ? : 
++				le32_to_cpu(trx.offsets[1]);
++			part->size = le32_to_cpu(trx.len); 
++
++			part->size -= part->offset;
++			part->offset += off;
++
++			goto found;
++		}
++	}
++
++	printk(KERN_NOTICE
++	       "%s: Couldn't find root filesystem\n",
++	       mtd->name);
++	return -1;
++
++ found:
++	if (part->size == 0)
++		return 0;
++	
++	if (MTD_READ(mtd, part->offset, sizeof(buf), &len, buf) || len != sizeof(buf))
++		return 0;
++
++	if (*((__u32 *) buf) == SQUASHFS_MAGIC) {
++		printk(KERN_INFO "%s: Filesystem type: squashfs, size=0x%x\n", mtd->name, (u32) sb->bytes_used);
++
++		/* Update the squashfs partition size based on the superblock info */
++		part->size = sb->bytes_used;
++		len = part->offset + part->size;
++		len +=  (mtd->erasesize - 1);
++		len &= ~(mtd->erasesize - 1);
++		part->size = len - part->offset;
++	} else if (*((__u16 *) buf) == JFFS2_MAGIC_BITMASK) {
++		printk(KERN_INFO "%s: Filesystem type: jffs2\n", mtd->name);
++
++		/* Move the squashfs outside of the trx */
++		part->size = 0;
++	} else {
++		printk(KERN_INFO "%s: Filesystem type: unknown\n", mtd->name);
++		return 0;
++	}
++
++	if (trx.len != part->offset + part->size - off) {
++		/* Update the trx offsets and length */
++		trx.len = part->offset + part->size - off;
++	
++		/* Update the trx crc32 */
++		for (i = (u32) &(((struct trx_header *)NULL)->flag_version); i <= trx.len; i += sizeof(buf)) {
++			if (MTD_READ(mtd, off + i, sizeof(buf), &len, buf) || len != sizeof(buf))
++				return 0;
++			crc = crc32_le(crc, buf, min(sizeof(buf), trx.len - i));
++		}
++		trx.crc32 = crc;
++
++		/* read first eraseblock from the trx */
++		trx2 = block = kmalloc(mtd->erasesize, GFP_KERNEL);
++		if (MTD_READ(mtd, off, mtd->erasesize, &len, block) || len != mtd->erasesize) {
++			printk("Error accessing the first trx eraseblock\n");
++			return 0;
++		}
++		
++		printk("Updating TRX offsets and length:\n");
++		printk("old trx = [0x%08x, 0x%08x, 0x%08x], len=0x%08x crc32=0x%08x\n", trx2->offsets[0], trx2->offsets[1], trx2->offsets[2], trx2->len, trx2->crc32);
++		printk("new trx = [0x%08x, 0x%08x, 0x%08x], len=0x%08x crc32=0x%08x\n",   trx.offsets[0],   trx.offsets[1],   trx.offsets[2],   trx.len, trx.crc32);
++
++		/* Write updated trx header to the flash */
++		memcpy(block, &trx, sizeof(trx));
++		if (mtd->unlock)
++			mtd->unlock(mtd, off, mtd->erasesize);
++		erase_write(mtd, off, mtd->erasesize, block);
++		if (mtd->sync)
++			mtd->sync(mtd);
++		kfree(block);
++		printk("Done\n");
++	}
++	
++	return part->size;
++}
++
++struct mtd_partition * __init
++init_mtd_partitions(struct mtd_info *mtd, size_t size)
++{
++	int cfe_size;
++
++	cfe_size = find_cfe_size(mtd,size);
++
++	/* boot loader */
++	bcm947xx_parts[0].offset = 0;
++	bcm947xx_parts[0].size   = cfe_size;
++
++	/* nvram */
++	if (cfe_size != 384 * 1024) {
++		bcm947xx_parts[3].offset = size - ROUNDUP(NVRAM_SPACE, mtd->erasesize);
++		bcm947xx_parts[3].size   = ROUNDUP(NVRAM_SPACE, mtd->erasesize);
++	} else {
++		/* nvram (old 128kb config partition on netgear wgt634u) */
++		bcm947xx_parts[3].offset = bcm947xx_parts[0].size;
++		bcm947xx_parts[3].size   = ROUNDUP(NVRAM_SPACE, mtd->erasesize);
++	}
++
++	/* linux (kernel and rootfs) */
++	if (cfe_size != 384 * 1024) {
++		bcm947xx_parts[1].offset = bcm947xx_parts[0].size;
++		bcm947xx_parts[1].size   = bcm947xx_parts[3].offset - 
++			bcm947xx_parts[1].offset;
++	} else {
++		/* do not count the elf loader, which is on one block */
++		bcm947xx_parts[1].offset = bcm947xx_parts[0].size + 
++			bcm947xx_parts[3].size + mtd->erasesize;
++		bcm947xx_parts[1].size   = size - 
++			bcm947xx_parts[0].size - 
++			(2*bcm947xx_parts[3].size) - 
++			mtd->erasesize;
++	}
++
++	/* find and size rootfs */
++	if (find_root(mtd,size,&bcm947xx_parts[2])==0) {
++		/* entirely jffs2 */
++		bcm947xx_parts[4].name = NULL;
++		bcm947xx_parts[2].size = size - bcm947xx_parts[2].offset - 
++				bcm947xx_parts[3].size;
++	} else {
++		/* legacy setup */
++		/* calculate leftover flash, and assign it to the jffs2 partition */
++		if (cfe_size != 384 * 1024) {
++			bcm947xx_parts[4].offset = bcm947xx_parts[2].offset + 
++				bcm947xx_parts[2].size;
++			if ((bcm947xx_parts[4].offset % mtd->erasesize) > 0) {
++				bcm947xx_parts[4].offset += mtd->erasesize - 
++					(bcm947xx_parts[4].offset % mtd->erasesize);
++			}
++			bcm947xx_parts[4].size = bcm947xx_parts[3].offset - 
++				bcm947xx_parts[4].offset;
++		} else {
++			bcm947xx_parts[4].offset = bcm947xx_parts[2].offset + 
++				bcm947xx_parts[2].size;
++			if ((bcm947xx_parts[4].offset % mtd->erasesize) > 0) {
++				bcm947xx_parts[4].offset += mtd->erasesize - 
++					(bcm947xx_parts[4].offset % mtd->erasesize);
++			}
++			bcm947xx_parts[4].size = size - bcm947xx_parts[3].size - 
++				bcm947xx_parts[4].offset;
++		}
++	}
++
++	return bcm947xx_parts;
++}
++
 +#endif
++
 +
 +mod_init_t init_bcm947xx_map(void)
 +{
@@ -10370,22 +10589,21 @@ diff -urN linux.old/drivers/mtd/maps/bcm947xx-flash.c linux.dev/drivers/mtd/maps
 +	}
 +
 +	bcm947xx_map.map_priv_1 = (unsigned long) ioremap(window_addr, window_size);
++
 +	if (!bcm947xx_map.map_priv_1) {
-+		printk(KERN_ERR "pflash: ioremap failed\n");
-+		ret = -EIO;
-+		goto fail;
++		printk(KERN_ERR "Failed to ioremap\n");
++		return -EIO;
 +	}
 +
 +	if (!(bcm947xx_mtd = do_map_probe("cfi_probe", &bcm947xx_map))) {
 +		printk(KERN_ERR "pflash: cfi_probe failed\n");
-+		ret = -ENXIO;
-+		goto fail;
++		iounmap((void *)bcm947xx_map.map_priv_1);
++		return -ENXIO;
 +	}
 +
 +	bcm947xx_mtd->module = THIS_MODULE;
 +
-+	/* Allow size override for testing */
-+	size = flash ? : bcm947xx_mtd->size;
++	size = bcm947xx_mtd->size;
 +
 +	printk(KERN_NOTICE "Flash device: 0x%x at 0x%x\n", size, window_addr);
 +
@@ -10394,7 +10612,7 @@ diff -urN linux.old/drivers/mtd/maps/bcm947xx-flash.c linux.dev/drivers/mtd/maps
 +	for (i = 0; parts[i].name; i++);
 +	ret = add_mtd_partitions(bcm947xx_mtd, parts, i);
 +	if (ret) {
-+		printk(KERN_ERR "pflash: add_mtd_partitions failed\n");
++		printk(KERN_ERR "Flash: add_mtd_partitions failed\n");
 +		goto fail;
 +	}
 +#endif
