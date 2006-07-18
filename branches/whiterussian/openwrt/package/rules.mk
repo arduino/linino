@@ -2,6 +2,11 @@
 IPKG := IPKG_INSTROOT=$(TARGET_DIR) IPKG_CONF_DIR=$(IPKG_CONF) $(SCRIPT_DIR)/ipkg -force-defaults -force-depends
 IPKG_STATE_DIR := $(TARGET_DIR)/usr/lib/ipkg
 
+ifneq ($(DUMP),)
+dump:
+.PHONY: dump
+endif
+
 define PKG_template
 IPKG_$(1):=$(PACKAGE_DIR)/$(2)_$(3)_$(4).ipk
 IDIR_$(1):=$(PKG_BUILD_DIR)/ipkg/$(2)
@@ -36,6 +41,7 @@ $(2)-clean:
 clean-targets: $(2)-clean
 endef
 
+ifeq ($(DUMP),)
 ifneq ($(strip $(PKG_SOURCE)),)
 $(DL_DIR)/$(PKG_SOURCE):
 	$(SCRIPT_DIR)/download.pl "$(DL_DIR)" "$(PKG_SOURCE)" "$(PKG_MD5SUM)" $(PKG_SOURCE_URL)
@@ -80,3 +86,4 @@ clean: clean-targets
 	rm -rf $(PKG_BUILD_DIR)
 
 .PHONY: all source prepare compile install clean
+endif
