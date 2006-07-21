@@ -22,7 +22,7 @@ $(DL_DIR)/$(LINUX_HEADERS_SOURCE):
 
 $(LINUX_HEADERS_DIR)/.unpacked: $(DL_DIR)/$(LINUX_HEADERS_SOURCE)
 	mkdir -p $(TOOL_BUILD_DIR)
-	bzcat $(DL_DIR)/$(LINUX_HEADERS_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) - \
+	bzcat $(DL_DIR)/$(LINUX_HEADERS_SOURCE) | tar --wildcards -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) - \
 		linux-$(LINUX_HEADERS_VERSION)/include \
 		linux-$(LINUX_HEADERS_VERSION)/Makefile \
 		linux-$(LINUX_HEADERS_VERSION)/Rules.make \
