@@ -19,14 +19,13 @@ PKG_MD5SUM:=268ead27f4ac39bcfe17d9e38e0f2977
 PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_BUILDDEP:=openssl
 
 include $(INCLUDE_DIR)/package.mk
 
-#FIXME: not sure if libsasl2 needs libopenssl at runtime
 define Package/libsasl2
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libopenssl
   TITLE:=A general purpose authentication library
   DESCRIPTION:=A general purpose authentication library.
   URL:=http://asg.web.cmu.edu/sasl/
