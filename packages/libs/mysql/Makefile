@@ -23,6 +23,7 @@ PKG_MD5SUM:=f18153b0239aaa03fc5a751f2d82cb71
 PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_BUILDDEP:=ncurses readline
 
 include $(INCLUDE_DIR)/package.mk
 
