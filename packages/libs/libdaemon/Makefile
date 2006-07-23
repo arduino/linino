@@ -97,8 +97,8 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdaemon.so* $(STAGING_DIR)/usr/lib/
 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libdaemon.pc $(STAGING_DIR)/usr/lib/pkgconfig/
-	$(SED) 's,-I$${includedir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/libdaemon.pc
-	$(SED) 's,-L$${libdir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/libdaemon.pc
+	$(SED) 's,-I$$$${includedir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/libdaemon.pc
+	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/libdaemon.pc
 endef
 
 define Build/UninstallDev
