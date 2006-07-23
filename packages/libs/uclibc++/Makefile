@@ -11,24 +11,22 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=uclibc++
 PKG_VERSION:=0.2.0
 PKG_RELEASE:=1
-PKG_MD5SUM:=33e01302511c9a1987fb104f12d173e1
-
-PKG_SOURCE_URL:=http://cxx.uclibc.org/src/
-PKG_SOURCE:=uClibc++-$(PKG_VERSION).tbz2
-PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/uClibc++-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_SOURCE:=uClibc++-$(PKG_VERSION).tbz2
+PKG_SOURCE_URL:=http://cxx.uclibc.org/src/
+PKG_MD5SUM:=33e01302511c9a1987fb104f12d173e1
+PKG_CAT:=bzcat
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/uclibcxx
-NAME:=uclibc++
-SECTION:=libs
-CATEGORY:=Libraries
-TITLE:=C++ library for embedded systems
-DESCRIPTION:=A standard C++ library for embedded systems
-URL:=http://cxx.uclibc.org/src/
+  NAME:=uclibc++
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=C++ library for embedded systems
+  DESCRIPTION:=A standard C++ library for embedded systems
+  URL:=http://cxx.uclibc.org/src/
 endef
 
 UCLIBC_TARGET_ARCH:=$(shell echo $(ARCH) | sed -e s'/-.*//' \
@@ -50,8 +48,6 @@ define Build/Configure
 endef
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		TOPDIR="$(PKG_BUILD_DIR)/" \
 		$(TARGET_CONFIGURE_OPTS) \
@@ -63,6 +59,7 @@ endef
 define Package/uclibcxx/install
 	install -m0755 -d $(1)/lib
 	$(CP) $(PKG_BUILD_DIR)/src/libuClibc++*.so.* $(1)/lib/
+	$(CP) $(PKG_BUILD_DIR)/src/libuClibc++-*.so $(1)/lib/
 endef
 
 define Build/InstallDev
@@ -77,7 +74,7 @@ define Build/InstallDev
 endef
 	
 define Build/UninstallDev
-	rm -rf $(STAGING_DIR)/usr/lib/libuClibc++.{a,so*}
+	rm -rf $(STAGING_DIR)/lib/libuClibc++*.{a,so*}
 endef
 
 $(eval $(call BuildPackage,uclibcxx))
