@@ -243,6 +243,46 @@ $(eval $(call KMOD_template,BONDING,bonding,\
 	$(MODULES_DIR)/kernel/drivers/net/bonding/bonding.o \
 ))
 
+$(eval $(call KMOD_template,BLUETOOTH,bluetooth,\
+	$(MODULES_DIR)/kernel/net/bluetooth/bluez.o \
+	$(MODULES_DIR)/kernel/net/bluetooth/bnep/bnep.o \
+	$(MODULES_DIR)/kernel/net/bluetooth/l2cap.o \
+	$(MODULES_DIR)/kernel/net/bluetooth/rfcomm/rfcomm.o \
+	$(MODULES_DIR)/kernel/net/bluetooth/sco.o \
+,CONFIG_BLUEZ,,30,bluez bnep l2cap rfcomm sco))
+
+$(eval $(call KMOD_template,BLUETOOTH_BFUSB,bluetooth-bfusb,\
+	$(MODULES_DIR)/kernel/drivers/bluetooth/bfusb.o \
+))
+
+$(eval $(call KMOD_template,BLUETOOTH_BLUECARD,bluetooth-bluecard,\
+	$(MODULES_DIR)/kernel/drivers/bluetooth/bluecard_cs.o \
+))
+
+$(eval $(call KMOD_template,BLUETOOTH_BT3C,bluetooth-bt3c,\
+        $(MODULES_DIR)/kernel/drivers/bluetooth/bt3c_cs.o \
+))
+
+$(eval $(call KMOD_template,BLUETOOTH_BTUART,bluetooth-btuart,\
+        $(MODULES_DIR)/kernel/drivers/bluetooth/btuart_cs.o \
+))
+
+$(eval $(call KMOD_template,BLUETOOTH_DTL1,bluetooth-dtl1,\
+        $(MODULES_DIR)/kernel/drivers/bluetooth/dtl1_cs.o \
+))
+
+$(eval $(call KMOD_template,BLUETOOTH_HCIUART,bluetooth-hciuart,\
+        $(MODULES_DIR)/kernel/drivers/bluetooth/hci_uart.o \
+))
+
+$(eval $(call KMOD_template,BLUETOOTH_HCIUSB,bluetooth-hciusb,\
+        $(MODULES_DIR)/kernel/drivers/bluetooth/hci_usb.o \
+))
+
+$(eval $(call KMOD_template,BLUETOOTH_HCIVHCI,bluetooth-hcivhci,\
+        $(MODULES_DIR)/kernel/drivers/bluetooth/hci_vhci.o \
+))
+
 $(TARGETS): $(PACKAGE_DIR)
 
 $(PACKAGE_DIR):

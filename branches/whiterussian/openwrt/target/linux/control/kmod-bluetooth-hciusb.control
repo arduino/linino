@@ -1,0 +1,5 @@
+Package: kmod-bluetooth-hciusb
+Priority: optional
+Section: net
+Depends: kmod-bluetooth kmod-usb-core
+Description: Bluetooth HCI USB driver

@@ -1,0 +1,5 @@
+Package: kmod-bluetooth-bt3c
+Priority: optional
+Section: net
+Depends: kmod-bluetooth kmod-pcmcia
+Description: Bluetooth HCI BT3C (PC Card) drive

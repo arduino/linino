@@ -426,5 +426,72 @@ config BR2_PACKAGE_KMOD_BONDING
 	help
 	  Kernel modules for ethernet bonding
 
+config BR2_PACKAGE_KMOD_BLUETOOTH
+	tristate "Kernel driver for Bluetooth stack"
+	default m
+	help
+	  Kernel modules for Bluetooth stack
+
+config BR2_PACKAGE_KMOD_BLUETOOTH_BFUSB
+	tristate "Bluetooth HCI BlueFRITZ! USB driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	select BR2_PACKAGE_KMOD_USB
+	default m
+	help
+	  Bluetooth HCI BlueFRITZ! USB driver
+
+config BR2_PACKAGE_KMOD_BLUETOOTH_BLUECARD
+	tristate "Bluetooth HCI BlueCard (PC Card) driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	select BR2_PACKAGE_KMOD_PCMCIA
+	default m
+	help
+	  Bluetooth HCI BlueCard (PC Card) driver
+
+config BR2_PACKAGE_KMOD_BLUETOOTH_BT3C
+	tristate "Bluetooth HCI BT3C (PC Card) driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	select BR2_PACKAGE_KMOD_PCMCIA
+	default m
+	help
+	  Bluetooth HCI BT3C (PC Card) driver
+
+config BR2_PACKAGE_KMOD_BLUETOOTH_BTUART
+	tristate "Bluetooth HCI UART (PC Card) driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	select BR2_PACKAGE_KMOD_PCMCIA
+	default m
+	help
+	  Bluetooth HCI UART (PC Card) driver
+	
+config BR2_PACKAGE_KMOD_BLUETOOTH_DTL1
+	tristate "Bluetooth HCI DTL1 (PC Card) driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	select BR2_PACKAGE_KMOD_PCMCIA
+	default m
+	help
+	  Bluetooth HCI DTL1 (PC Card) driver
+
+config BR2_PACKAGE_KMOD_BLUETOOTH_HCIUART
+	tristate "Bluetooth HCI UART driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	default m
+	help
+	  Bluetooth HCI UART driver
+
+config BR2_PACKAGE_KMOD_BLUETOOTH_HCIUSB
+	tristate "Bluetooth HCI USB driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	depends BR2_PACKAGE_KMOD_USB
+	default m
+	help
+	  Bluetooth HCI USB driver
+
+config BR2_PACKAGE_KMOD_BLUETOOTH_HCIVHCI
+	tristate "Bluetooth Virtual HCI device driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	default m
+	help
+	  Bluetooth Virtual HCI device driver
 
 source "target/linux/package/Config.in"
