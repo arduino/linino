@@ -195,7 +195,8 @@ EOF
 apply_passwd() {
 	case ${SERVER_SOFTWARE%% *} in
 		busybox)
-			echo '/cgi-bin/webif:root:$p$root' > /etc/httpd.conf
+			echo ".asp:text/html" > /etc/httpd.conf
+			echo '/cgi-bin/webif:root:$p$root' >> /etc/httpd.conf
 			echo '/cgi-bin/webif:admin:$p$root' >> /etc/httpd.conf
 			killall -HUP httpd
 			;;
