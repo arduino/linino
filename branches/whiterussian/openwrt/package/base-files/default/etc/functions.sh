@@ -52,10 +52,10 @@ do_ifup() {
 			} done
 		}
 
-		[ -f /etc/resolv.conf ] || {
-			debug "# --- creating /etc/resolv.conf ---"
+		[ -f /tmp/resolv.conf ] || {
+			debug "# --- creating /tmp/resolv.conf ---"
 			for dns in $(nvram get ${2}_dns); do
-				echo "nameserver $dns" >> /etc/resolv.conf
+				echo "nameserver $dns" >> /tmp/resolv.conf
 			done
 		}
 		
