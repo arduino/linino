@@ -1,0 +1,139 @@
+diff -urN busybox-1.00.orig/include/usage.h busybox-1.00/include/usage.h
+--- busybox-1.00.orig/include/usage.h	2006-06-27 13:34:21.000000000 +0200
++++ busybox-1.00/include/usage.h	2006-06-27 13:56:08.000000000 +0200
+@@ -2445,23 +2445,30 @@
+ 
+ #ifdef CONFIG_FEATURE_TELNET_AUTOLOGIN
+ #define telnet_trivial_usage \
+-	"[-a] [-l USER] HOST [PORT]"
++	"[-a] [-l USER] [-b SRCADDR] HOST [PORT]"
+ #define telnet_full_usage \
+ 	"Telnet is used to establish interactive communication with another\n" \
+ 	"computer over a network using the TELNET protocol.\n\n" \
+ 	"Options:\n" \
+ 	"\t-a\t\tAttempt an automatic login with the USER variable.\n" \
+ 	"\t-l USER\t\tAttempt an automatic login with the USER argument.\n" \
++	"\t-b SRCADDR\tUse SRCADDR as local source address.\n" \
+ 	"\tHOST\t\tThe official name, alias or the IP address of the\n" \
+ 	"\t\t\tremote host.\n" \
+ 	"\tPORT\t\tThe remote port number to connect to. If it is not\n" \
+ 	"\t\t\tspecified, the default telnet (23) port is used."
+ #else
+ #define telnet_trivial_usage \
+-	"HOST [PORT]"
++	"[-b SRCADDR] HOST [PORT]"
+ #define telnet_full_usage \
+ 	"Telnet is used to establish interactive communication with another\n"\
+-	"computer over a network using the TELNET protocol."
++	"computer over a network using the TELNET protocol.\n\n" \
++	"Options:\n" \
++	"\t-b SRCADDR\tUse SRCADDR as local source address.\n" \
++	"\tHOST\t\tThe official name, alias or the IP address of the\n" \
++	"\t\t\tremote host.\n" \
++	"\tPORT\t\tThe remote port number to connect to. If it is not\n" \
++	"\t\t\tspecified, the default telnet (23) port is used."
+ #endif
+ 
+ #ifdef CONFIG_FEATURE_TELNETD_INETD
+diff -urN busybox-1.00.orig/networking/telnet.c busybox-1.00/networking/telnet.c
+--- busybox-1.00.orig/networking/telnet.c	2004-09-14 19:24:58.000000000 +0200
++++ busybox-1.00/networking/telnet.c	2006-06-27 13:50:52.000000000 +0200
+@@ -44,6 +44,7 @@
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <netinet/in.h>
++#include <arpa/inet.h>
+ #include "busybox.h"
+ 
+ #if 0
+@@ -627,7 +628,7 @@
+ extern int telnet_main(int argc, char** argv)
+ {
+ 	int len;
+-	struct sockaddr_in s_in;
++	struct sockaddr_in s_in, src_in;
+ #ifdef USE_POLL
+ 	struct pollfd ufds[2];
+ #else
+@@ -635,9 +636,7 @@
+ 	int maxfd;
+ #endif
+ 
+-#ifdef CONFIG_FEATURE_TELNET_AUTOLOGIN
+ 	int opt;
+-#endif
+ 
+ #ifdef CONFIG_FEATURE_AUTOWIDTH
+ 	get_terminal_width_height(0, &win_width, &win_height);
+@@ -648,6 +647,7 @@
+ #endif
+ 
+ 	memset(&G, 0, sizeof G);
++	memset(&src_in, 0, sizeof src_in);
+ 
+ 	if (tcgetattr(0, &G.termios_def) < 0)
+ 		exit(1);
+@@ -660,14 +660,38 @@
+ 
+ #ifdef CONFIG_FEATURE_TELNET_AUTOLOGIN
+ 	autologin = NULL;
+-	while ((opt = getopt(argc, argv, "al:")) != EOF) {
++#define GETOPT_STRING "al:I:"
++#else
++#define GETOPT_STRING "I:"
++#endif
++	while ((opt = getopt(argc, argv, GETOPT_STRING)) != EOF) {
+ 		switch (opt) {
++#ifdef CONFIG_FEATURE_TELNET_AUTOLOGIN
+ 			case 'l':
+ 				autologin = optarg;
+ 				break;
+ 			case 'a':
+ 				autologin = getenv("USER");
+ 				break;
++#endif
++			case 'b':
++				{
++					char dummy;
++					int i1, i2, i3, i4;
++					if (sscanf(optarg, "%u.%u.%u.%u%c",
++							   &i1, &i2, &i3, &i4, &dummy) == 4) {
++						unsigned char* ptr;
++						ptr = (unsigned char*)&src_in.sin_addr;
++						ptr[0] = i1;
++						ptr[1] = i2;
++						ptr[2] = i3;
++						ptr[3] = i4;
++					}
++					else {
++						bb_show_usage();
++					}
++				}
++				break;
+ 			case '?':
+ 				bb_show_usage();
+ 				break;
+@@ -681,12 +705,18 @@
+ 			bb_show_usage();
+ 	} else
+ 		bb_show_usage();
+-#else
+-	bb_lookup_host(&s_in, argv[1]);
+-	s_in.sin_port = bb_lookup_port((argc == 3) ? argv[2] : "telnet", "tcp", 23);
+-#endif
+ 
+-	G.netfd = xconnect(&s_in);
++	G.netfd = socket(AF_INET, SOCK_STREAM, 0);
++	if (src_in.sin_addr.s_addr != 0) {
++		if (bind(G.netfd, (struct sockaddr*)&src_in, sizeof(src_in)) == -1)
++			bb_perror_msg_and_die("Unable to bind local address (%s)",
++								  inet_ntoa(src_in.sin_addr));
++	}
++	if (connect(G.netfd, &s_in, sizeof(s_in)) < 0) {
++		bb_perror_msg_and_die("Unable to connect to remote host (%s)",
++							  inet_ntoa(s_in.sin_addr));
++	}
++	/*G.netfd = xconnect(&s_in);*/
+ 
+ 	setsockopt(G.netfd, SOL_SOCKET, SO_KEEPALIVE, &one, sizeof one);
+ 
