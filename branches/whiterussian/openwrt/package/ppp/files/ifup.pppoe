@@ -27,7 +27,7 @@ done
 			DEMAND=${DEMAND:+demand idle $DEMAND}
 			[ -f /etc/ppp/filter ] && DEMAND=${DEMAND:+precompiled-active-filter /etc/ppp/filter $DEMAND}
 			# set up a dummy nameserver for dial on demand
-			echo "nameserver 0.0.0.1" > /tmp/resolv.conf
+			echo "nameserver 1.1.1.1" > /tmp/resolv.conf
 		;;
 		*) DEMAND="";;
 	esac
