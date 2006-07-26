@@ -164,6 +164,8 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{howl,mDNSResponder}.{a,so*} $(STAGING_DIR)/usr/lib/
 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/howl.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+	$(SED) 's,-I/usr/include,,g' $(STAGING_DIR)/usr/lib/pkgconfig/howl.pc
+	$(SED) 's,-L/usr/lib/howl,,g' $(STAGING_DIR)/usr/lib/pkgconfig/howl.pc
 endef
 
 define Build/UninstallDev

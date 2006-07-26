@@ -87,6 +87,7 @@ define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libpng{,12}.pc $(STAGING_DIR)/usr/lib/pkgconfig/
 	$(SED) 's,^[ILR]_opts=".\+",,g' $(STAGING_DIR)/usr/bin/libpng*-config
+	$(SED) 's,-I$$$${includedir}/libpng12,,g' $(STAGING_DIR)/usr/lib/pkgconfig/libpng{,12}.pc
 endef
 
 define Build/UninstallDev
