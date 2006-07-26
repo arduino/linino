@@ -59,9 +59,9 @@ define Package/libopenldap/conffiles
 endef
 
 define Package/openldap-utils
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=libopenldap
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libopenldap
   TITLE:=LDAP client utilities
   DESCRIPTION:=LDAP (Lightweight Directory Access Protocol) client utilities.\\\
     OpenLDAP Software is an open source implementation of the \\\

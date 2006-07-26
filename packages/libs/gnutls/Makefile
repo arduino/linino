@@ -41,21 +41,6 @@ define Package/libgnutls
   URL:=http://www.gnu.org/software/gnutls/
 endef
 
-define Package/gnutls-utils
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=libgnutls
-  TITLE:=GNU TLS utilitis
-  DESCRIPTION:=The GNU TLS utilities.\\\
-    GnuTLS is a project that aims to develop a library which provides a \\\
-    secure layer, over a reliable transport layer. Currently the GnuTLS \\\
-    library implements the proposed standards by the IETF's TLS working \\\
-    group.\\\
-    \\\
-    This packages contains some GnuTLS utilities.
-  URL:=http://www.gnu.org/software/gnutls/
-endef
-
 define Package/libgnutls-openssl
   SECTION:=libs
   CATEGORY:=Libraries
@@ -68,6 +53,21 @@ define Package/libgnutls-openssl
     group.\\\
     \\\
     This packages contains the GnuTLS OpenSSL compatibility layer shared library.
+  URL:=http://www.gnu.org/software/gnutls/
+endef
+
+define Package/gnutls-utils
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=+libgnutls
+  TITLE:=GNU TLS utilitis
+  DESCRIPTION:=The GNU TLS utilities.\\\
+    GnuTLS is a project that aims to develop a library which provides a \\\
+    secure layer, over a reliable transport layer. Currently the GnuTLS \\\
+    library implements the proposed standards by the IETF's TLS working \\\
+    group.\\\
+    \\\
+    This packages contains some GnuTLS utilities.
   URL:=http://www.gnu.org/software/gnutls/
 endef
 

@@ -42,11 +42,10 @@ define Package/libradiusclient-ng/conffiles
 /etc/radiusclient-ng/servers
 endef
 
-
 define Package/radiusclient-ng
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=libradiusclient-ng
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libradiusclient-ng
   TITLE:=A RADIUS client
   DESCRIPTION:=A RADIUS client.\\\
     Purpose of this project is to build a portable, easy-to-use and standard \\\

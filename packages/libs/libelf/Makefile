@@ -31,7 +31,7 @@ define Package/libelf
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -rf config.cache; \
+	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \

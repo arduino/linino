@@ -36,9 +36,9 @@ define Package/libpq
 endef
 
 define Package/pgsql-cli
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=libpq
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=+libpq
   TITLE:=Command Line Interface (CLI) to PostgreSQL databases
   DESCRIPTION:=Command Line Interface (CLI) to PostgreSQL databases.
   URL:=http://www.postgresql.org/

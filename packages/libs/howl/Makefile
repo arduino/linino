@@ -34,9 +34,9 @@ define Package/libhowl
 endef
 
 define Package/howl-utils
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=libhowl
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libhowl
   TITLE:=A Zeroconf networking implementation (utilities)
   DESCRIPTION:=A Zeroconf networking implementation (utilities).\\\
     A cross-platform implementation of Zeroconf networking.\\\
@@ -46,9 +46,9 @@ define Package/howl-utils
 endef
 
 define Package/autoipd
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=libhowl
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libhowl
   TITLE:=An IPv4 Link-Local address self-assigner daemon
   DESCRIPTION:=An IPv4 Link-Local address self-assigner daemon.\\\
     A cross-platform implementation of Zeroconf networking.\\\
@@ -58,9 +58,9 @@ define Package/autoipd
 endef
 
 define Package/mdnsresponder
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=libhowl
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libhowl
   TITLE:=An mDNS (Multicast DNS) service responder daemon
   DESCRIPTION:=An mDNS (Multicast DNS) service responder daemon.\\\
     A cross-platform implementation of Zeroconf networking.\\\
@@ -74,9 +74,9 @@ define Package/mdnsresponder/conffiles
 endef
 
 define Package/nifd
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=libhowl
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libhowl
   TITLE:=A network interface monitor daemon
   DESCRIPTION:=A network interface monitor daemon.\\\
     A cross-platform implementation of Zeroconf networking.\\\

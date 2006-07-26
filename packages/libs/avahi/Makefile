@@ -19,7 +19,7 @@ PKG_MD5SUM:=cfb9e05c138dff4c430a35eee6229e8a
 PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-PKG_BUILDDEP:=expat libdaemon libgdbm
+PKG_BUILDDEP:=libexpat libdaemon libgdbm
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -41,9 +41,9 @@ define Package/libavahi
 endef
 
 define Package/avahi-daemon
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=libavahi
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libavahi
   TITLE:=An mDNS/DNS-SD implementation (daemon)
   DESCRIPTION:=An mDNS/DNS-SD (aka RendezVous/Bonjour/ZeroConf) implementation (daemon).\\\
     Avahi is a system which facilitates service discovery on a local network -- \\\
@@ -64,9 +64,9 @@ define Package/avahi-daemon/conffiles
 endef
 
 define Package/avahi-dnsconfd
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=libavahi
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libavahi
   TITLE:=An Unicast DNS server from mDNS/DNS-SD configuration daemon
   DESCRIPTION:=An Unicast DNS server from mDNS/DNS-SD configuration daemon.\\\
     Avahi is a system which facilitates service discovery on a local network -- \\\

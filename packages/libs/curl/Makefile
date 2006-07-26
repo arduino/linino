@@ -38,9 +38,9 @@ define Package/libcurl
 endef
 
 define Package/curl
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=libcurl
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libcurl
   TITLE:=A client-side URL transfer library
   DESCRIPTION:=A client-side URL transfer library.
   URL:=http://curl.haxx.se/

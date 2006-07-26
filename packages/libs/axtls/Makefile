@@ -29,9 +29,9 @@ define Package/libaxtls
 endef
 
 define Package/awhttpd
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=libaxtls
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libaxtls
   TITLE:=Anti-Web webserver
   DESCRIPTION:=Anti-Web webserver.
   URL:=http://www.axtls.co.nr/

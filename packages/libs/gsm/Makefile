@@ -35,9 +35,9 @@ define Package/libgsm
 endef
 
 define Package/gsm-utils
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=libgsm
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=+libgsm
   TITLE:=GSM transcoding utilities
   DESCRIPTION:=A GSM 06.10 full-rate speech transcoding implementation (utilities).\\\
     An implementation of the European GSM 06.10 provisional standard \\\

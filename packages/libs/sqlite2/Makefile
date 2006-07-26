@@ -19,7 +19,7 @@ PKG_MD5SUM:=838dbac20b56d2c4292e98848505a05b
 PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-PKG_BUILDDEP:=ncurses readline
+PKG_BUILDDEP:=libncurses libreadline
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,9 +36,9 @@ define Package/libsqlite2
 endef
 
 define Package/sqlite2-cli
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=libsqlite2 +libncurses +libreadline
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=+libsqlite2 +libncurses +libreadline
   TITLE:=Command line interface for SQLite
   DESCRIPTION:=Command line interface for SQLite.\\\
     SQLite is a small C library that implements a self-contained, embeddable, \\\

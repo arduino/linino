@@ -18,7 +18,7 @@ PKG_SOURCE_URL:=http://www.kismetwireless.net/code
 PKG_MD5SUM:=8ec2de513f2911df1b7edfcba5ad1c26
 PKG_CAT:=zcat
 
-PKG_BUILDDEP:=libpcap ncurses uclibc++
+PKG_BUILDDEP:=libpcap libncurses uclibcxx
 
 include $(INCLUDE_DIR)/package.mk
 

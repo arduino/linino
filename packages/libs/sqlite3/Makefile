@@ -19,7 +19,7 @@ PKG_MD5SUM:=eb5d9d7e7853b3af78e767d709b7fced
 PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-PKG_BUILDDEP:=ncurses readline
+PKG_BUILDDEP:=libncurses libreadline
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,9 +36,9 @@ define Package/libsqlite3
 endef
 
 define Package/sqlite3-cli
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=libsqlite3 +libncurses +libreadline
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=+libsqlite3 +libncurses +libreadline
   TITLE:=Command line interface for SQLite
   DESCRIPTION:=Command line interface for SQLite.\\\
     SQLite is a small C library that implements a self-contained, embeddable, \\\
