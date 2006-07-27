@@ -22,70 +22,6 @@ PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-PKG_CONFIGURE_OPTIONS := \
-	--enable-shared \
-	--disable-static \
-	--disable-ltdl-install \
-	--with-ltdl-include="$(STAGING_DIR)/usr/include" \
-	--with-ltdl-lib="$(STAGING_DIR)/usr/lib" \
-	--with-openssl-includes="$(STAGING_DIR)/usr/include" \
-	--with-openssl-libraries="$(STAGING_DIR)/usr/lib" \
-	--enable-strict-dependencies \
-	--with-raddbdir=/etc/freeradius \
-	--without-edir \
-	--without-snmp \
-	--with-experimental-modules \
-	--without-rlm_attr-rewrite \
-	--without-rlm_checkval \
-	--without-rlm_counter \
-	--without-rlm_dbm \
-	--with-rlm_eap \
-	--without-rlm_eap_sim \
-	--without-rlm_example \
-	--without-rlm_ippool \
-	--without-rlm_krb5 \
-	--without-rlm_otp \
-	--without-rlm_pam \
-	--without-rlm_perl \
-	--without-rlm_python \
-	--without-rlm_radutmp \
-	--without-rlm_smb \
-	--with-rlm_sql \
-	--with-rlm_sqlcounter \
-	--without-rlm_sql_db2 \
-	--without-rlm_sql_freetds \
-	--without-rlm_sql_iodbc \
-	--without-rlm_sql_oracle \
-	--without-rlm_sql_sybase \
-	--without-rlm_sql_unixodbc \
-	--without-rlm_sql_log \
-	--without-rlm_unix \
-
-ifneq ($(CONFIG_PACKAGE_freeradius-mod-ldap),)
-PKG_CONFIGURE_LIBS += -lcrypto -lssl
-PKG_CONFIGURE_OPTIONS += \
-	--with-rlm_ldap-include-dir="$(STAGING_DIR)/usr/include" \
-	--with-rlm_ldap-lib-dir="$(STAGING_DIR)/usr/lib"
-else
-PKG_CONFIGURE_OPTIONS += --without-rlm_ldap
-endif
-ifneq ($(CONFIG_PACKAGE_freeradius-mod-sql-mysql),)
-PKG_CONFIGURE_LIBS += -lz
-PKG_CONFIGURE_OPTIONS += \
-	--with-mysql-include-dir="$(STAGING_DIR)/usr/include" \
-	--with-mysql-lib-dir="$(STAGING_DIR)/usr/lib/mysql" \
-	--without-threads
-else
-PKG_CONFIGURE_OPTIONS += --without-rlm_sql_mysql
-endif
-ifneq ($(CONFIG_PACKAGE_freeradius-mod-sql-pgsql),)
-PKG_CONFIGURE_OPTIONS += \
-	--with-rlm_sql_postgresql-include-dir="$(STAGING_DIR)/usr/include" \
-	--with-rlm_sql_postgresql-lib-dir="$(STAGING_DIR)/usr/lib"
-else
-PKG_CONFIGURE_OPTIONS += --without-rlm_sql_postgresql
-endif
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/freeradius
@@ -249,6 +185,82 @@ define Package/freeradius-utils
   DEPENDS:=freeradius
   TITLE:=Misc. client utilities
 endef
+
+PKG_CONFIGURE_OPTIONS := \
+	--enable-shared \
+	--disable-static \
+	--disable-ltdl-install \
+	--with-ltdl-include="$(STAGING_DIR)/usr/include" \
+	--with-ltdl-lib="$(STAGING_DIR)/usr/lib" \
+	--with-openssl-includes="$(STAGING_DIR)/usr/include" \
+	--with-openssl-libraries="$(STAGING_DIR)/usr/lib" \
+	--enable-strict-dependencies \
+	--with-raddbdir=/etc/freeradius \
+	--without-edir \
+	--without-snmp \
+	--with-experimental-modules \
+	--without-rlm_attr-rewrite \
+	--without-rlm_checkval \
+	--without-rlm_counter \
+	--without-rlm_dbm \
+	--with-rlm_eap \
+	--without-rlm_eap_sim \
+	--without-rlm_example \
+	--without-rlm_ippool \
+	--without-rlm_krb5 \
+	--without-rlm_otp \
+	--without-rlm_pam \
+	--without-rlm_perl \
+	--without-rlm_python \
+	--without-rlm_radutmp \
+	--without-rlm_smb \
+	--with-rlm_sql \
+	--with-rlm_sqlcounter \
+	--without-rlm_sql_db2 \
+	--without-rlm_sql_freetds \
+	--without-rlm_sql_iodbc \
+	--without-rlm_sql_oracle \
+	--without-rlm_sql_sybase \
+	--without-rlm_sql_unixodbc \
+	--without-rlm_sql_log \
+	--without-rlm_unix \
+
+ifeq ($(SDK),)
+  ifneq ($(CONFIG_PACKAGE_freeradius-mod-ldap),)
+    PKG_CONFIGURE_LIBS += -lcrypto -lssl
+    PKG_CONFIGURE_OPTIONS += \
+		--with-rlm_ldap-include-dir="$(STAGING_DIR)/usr/include" \
+		--with-rlm_ldap-lib-dir="$(STAGING_DIR)/usr/lib"
+  else
+    PKG_CONFIGURE_OPTIONS += --without-rlm_ldap
+  endif
+  ifneq ($(CONFIG_PACKAGE_freeradius-mod-sql-mysql),)
+    PKG_CONFIGURE_LIBS += -lz
+    PKG_CONFIGURE_OPTIONS += \
+		--with-mysql-include-dir="$(STAGING_DIR)/usr/include" \
+		--with-mysql-lib-dir="$(STAGING_DIR)/usr/lib/mysql" \
+		--without-threads
+  else
+    PKG_CONFIGURE_OPTIONS += --without-rlm_sql_mysql
+  endif
+  ifneq ($(CONFIG_PACKAGE_freeradius-mod-sql-pgsql),)
+    PKG_CONFIGURE_OPTIONS += \
+		--with-rlm_sql_postgresql-include-dir="$(STAGING_DIR)/usr/include" \
+		--with-rlm_sql_postgresql-lib-dir="$(STAGING_DIR)/usr/lib"
+  else
+    PKG_CONFIGURE_OPTIONS += --without-rlm_sql_postgresql
+  endif
+else
+  PKG_CONFIGURE_LIBS += -lcrypto -lssl -lz
+  PKG_CONFIGURE_OPTIONS += \
+		--with-rlm_ldap-include-dir="$(STAGING_DIR)/usr/include" \
+		--with-rlm_ldap-lib-dir="$(STAGING_DIR)/usr/lib" \
+		--with-mysql-include-dir="$(STAGING_DIR)/usr/include" \
+		--with-mysql-lib-dir="$(STAGING_DIR)/usr/lib/mysql" \
+		--without-threads \
+		--with-rlm_sql_postgresql-include-dir="$(STAGING_DIR)/usr/include" \
+		--with-rlm_sql_postgresql-lib-dir="$(STAGING_DIR)/usr/lib"
+endif
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
