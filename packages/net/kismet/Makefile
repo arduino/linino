@@ -26,7 +26,7 @@ define Package/kismet-client
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Kismet client
-  DEPENDS:=+libncurses +uclibc++
+  DEPENDS:=+libncurses +uclibcxx
   DESCRIPTION:=Kismet client.\\\
     An 802.11 layer2 wireless network detector, sniffer, and intrusion \\\
     detection system.\\\
@@ -45,7 +45,7 @@ endef
 define Package/kismet-drone
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcap +uclibc++
+  DEPENDS:=+libpcap +uclibcxx
   TITLE:=Kismet drone
   DESCRIPTION:=Kismet drone.\\\
     An 802.11 layer2 wireless network detector, sniffer, and intrusion \\\
@@ -62,7 +62,7 @@ endef
 define Package/kismet-server
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcap +uclibc++
+  DEPENDS:=+libpcap +uclibcxx
   TITLE:=Kismet server
   DESCRIPTION:=Kismet server.\\\
     An 802.11 layer2 wireless network detector, sniffer, and intrusion \\\
