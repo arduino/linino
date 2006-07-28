@@ -25,7 +25,6 @@ include $(INCLUDE_DIR)/package.mk
 define Package/bluez-libs
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libdaemon
   TITLE:=Bluetooth library
   DESCRIPTION:=Bluetooth library.
   URL:=http://www.bluez.org/
