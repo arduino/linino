@@ -56,3 +56,7 @@ define Build/UninstallDev
 endef
 
 $(eval $(call BuildPackage,libpopt))
+
+$(eval $(call RequireCommand,gettext, \
+	popt requires GNU gettext to build. \
+))
