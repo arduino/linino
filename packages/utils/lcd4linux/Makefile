@@ -1,3 +1,9 @@
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 # $Id$
 
 include $(TOPDIR)/rules.mk
@@ -12,8 +18,6 @@ PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/l/lcd4linux/ \
 		http://ftp.de.debian.org/debian/pool/main/l/lcd4linux/
 PKG_MD5SUM:=5b5ac629be4bb5c29104fb8f6b7fa444
 PKG_CAT:=zcat
-
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
