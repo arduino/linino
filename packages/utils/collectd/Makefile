@@ -65,7 +65,7 @@ define Package/collectd/install
 	install -d -m0755 $(1)/usr/lib/collectd
 	install -d -m0755 $(1)/var/lib/collectd
 	install -d -m0755 $(1)/var/run
-	$(CP) ./files/S80collectd $(1)/etc/init.d/
+	install -m0755 ./files/S80collectd $(1)/etc/init.d/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/collectd $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/collectd/*.so $(1)/usr/lib/collectd/
 endef
