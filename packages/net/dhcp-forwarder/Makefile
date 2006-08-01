@@ -30,6 +30,10 @@ define Package/dhcp-forwarder
   URL:=http://www.nongnu.org/dhcp-fwd/
 endef
 
+define Package/dhcp-forwarder/conffiles
+/etc/dhcp-fwd.conf
+endef
+
 define Build/Configure
 $(call Build/Configure/Default,,ac_cv_func_malloc_0_nonnull="yes")
 endef
