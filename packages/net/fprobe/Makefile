@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/fprobe
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcap
+  DEPENDS:=+libpcap +libpthread
   TITLE:=NetFlow probe (libpcap-based)
   DESCRIPTION:=A NetFlow probe using libpcap
   URL:=http://fprobe.sourceforge.net/
