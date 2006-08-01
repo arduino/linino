@@ -20,6 +20,8 @@ PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
+PKG_BUILDDEP:=libnet
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libnids
