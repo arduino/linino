@@ -30,7 +30,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libmysqlclient
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+zlib
+  DEPENDS:=zlib
   TITLE:=MySQL client library
   DESCRIPTION:=MySQL client library.
   URL:=http://dev.mysql.com/
