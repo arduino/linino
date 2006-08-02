@@ -30,6 +30,7 @@ define Package/freeradius
   DEPENDS:=+libltdl +libopenssl +libpthread
   TITLE:=A flexible RADIUS server
   URL:=http://www.freeradius.org/
+  MENU:=1
 endef
 
 define Package/freeradius/conffiles
@@ -41,18 +42,21 @@ define Package/freeradius-democerts
   $(call Package/freeradius)
   DEPENDS:=freeradius
   TITLE:=Demo certificates to test the server
+  MENU:=0
 endef
 
 define Package/freeradius-mod-chap
   $(call Package/freeradius)
   DEPENDS:=freeradius
   TITLE:=CHAP module
+  MENU:=0
 endef
 
 define Package/freeradius-mod-detail
   $(call Package/freeradius)
   DEPENDS:=freeradius
   TITLE:=Detailed accounting module
+  MENU:=0
 endef
 
 define Package/freeradius-mod-eap
@@ -69,24 +73,28 @@ define Package/freeradius-mod-eap-gtc
   $(call Package/freeradius)
   DEPENDS:=freeradius-mod-eap
   TITLE:=EAP/GTC module
+  MENU:=0
 endef
 
 define Package/freeradius-mod-eap-md5
   $(call Package/freeradius)
   DEPENDS:=freeradius-mod-eap
   TITLE:=EAP/MD5 module
+  MENU:=0
 endef
 
 define Package/freeradius-mod-eap-mschapv2
   $(call Package/freeradius)
   DEPENDS:=freeradius-mod-eap
   TITLE:=EAP/MS-CHAPv2 module
+  MENU:=0
 endef
 
 define Package/freeradius-mod-eap-peap
   $(call Package/freeradius)
   DEPENDS:=freeradius-mod-eap
   TITLE:=EAP/PEAP module
+  MENU:=0
 endef
 
 define Package/freeradius-mod-eap-tls
@@ -99,12 +107,14 @@ define Package/freeradius-mod-eap-ttls
   $(call Package/freeradius)
   DEPENDS:=freeradius-mod-eap-tls
   TITLE:=EAP/TTLS module
+  MENU:=0
 endef
 
 define Package/freeradius-mod-files
   $(call Package/freeradius)
   DEPENDS:=freeradius
   TITLE:=Module using local files for authorization
+  MENU:=0
 endef
 
 define Package/freeradius-mod-files/conffiles
@@ -117,6 +127,7 @@ define Package/freeradius-mod-ldap
   $(call Package/freeradius)
   DEPENDS:=freeradius +libopenldap
   TITLE:=LDAP module
+  MENU:=0
 endef
 
 define Package/freeradius-mod-ldap/conffiles
@@ -127,18 +138,21 @@ define Package/freeradius-mod-mschap
   $(call Package/freeradius)
   DEPENDS:=freeradius
   TITLE:=MS-CHAP and MS-CHAPv2 module
+  MENU:=0
 endef
 
 define Package/freeradius-mod-pap
   $(call Package/freeradius)
   DEPENDS:=freeradius
   TITLE:=PAP module
+  MENU:=0
 endef
 
 define Package/freeradius-mod-preprocess
   $(call Package/freeradius)
   DEPENDS:=freeradius
   TITLE:=Request pre-processing module
+  MENU:=0
 endef
 
 define Package/freeradius-mod-preprocess/conffiles
@@ -150,6 +164,7 @@ define Package/freeradius-mod-realm
   $(call Package/freeradius)
   DEPENDS:=freeradius
   TITLE:=Realms handling module
+  MENU:=0
 endef
 
 define Package/freeradius-mod-realm/conffiles
@@ -166,24 +181,28 @@ define Package/freeradius-mod-sql-mysql
   $(call Package/freeradius)
   DEPENDS:=freeradius-mod-sql +libmysqlclient
   TITLE:=MySQL module
+  MENU:=0
 endef
 
 define Package/freeradius-mod-sql-pgsql
   $(call Package/freeradius)
   DEPENDS:=freeradius-mod-sql +libpq
   TITLE:=PostgreSQL module
+  MENU:=0
 endef
 
 define Package/freeradius-mod-sqlcounter
   $(call Package/freeradius)
   DEPENDS:=freeradius-mod-sql
   TITLE:=Generic SQL Counter module
+  MENU:=0
 endef
 
 define Package/freeradius-utils
   $(call Package/freeradius)
   DEPENDS:=freeradius
   TITLE:=Misc. client utilities
+  MENU:=0
 endef
 
 PKG_CONFIGURE_OPTIONS := \
