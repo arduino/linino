@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/clinkc
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+expat
+  DEPENDS:=+libexpat
   TITLE:=Embedded UPnP library
   DESCRIPTION:=CyberLink for C is a UPnP library using C for small and embedded platforms.
   URL:=http://sourceforge.net/projects/clinkc

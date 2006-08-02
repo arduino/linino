@@ -18,7 +18,7 @@ define Package/gpsd
   SECTION:=net
   CATEGORY:=Network
   TITLE:=gpsd
-  DEPENDS:=+libpthread +uclibcxx +ncurses
+  DEPENDS:=+libpthread +uclibcxx +libncurses
   DESCRIPTION:=An interface daemon for GPS receivers
 endef
 
