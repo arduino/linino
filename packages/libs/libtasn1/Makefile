@@ -30,7 +30,7 @@ define Package/libtasn1
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=An ASN.1 and DER structures manipulation library
-  DESCRIPTION:=An ASN.1 and DER structures manipulation library.
+  DESCRIPTION:=An ASN.1 and DER structures manipulation library. \\\
     This is a library for Abstract Syntax Notation One (ASN.1) and \\\
     Distinguish Encoding Rules (DER) manipulation.
   URL:=ftp://ftp.gnutls.org/pub/gnutls/libtasn1/
