@@ -32,6 +32,12 @@ plus ISP features such as rate limiting, walled garden, usage\\\
 accounting, and more.\\\
   URL:=http://sourceforge.net/projects/l2tpns
 endef
+
+define Package/l2tpns/conffiles
+/etc/l2tpns/ip_pool
+/etc/l2tpns/startup-config
+/etc/l2tpns/users
+endef
 	
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
