@@ -34,6 +34,11 @@ to tunnel PPP frame trough an ip network.\\\
   URL:=http://l2tpd.sourceforge.net/
 endef
 
+define Package/l2tpd/conffiles
+/etc/l2tpd/l2tpd.conf
+/etc/ppp/options.l2tpd
+endef
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
