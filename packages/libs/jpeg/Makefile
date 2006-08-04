@@ -23,16 +23,8 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/libjpeg
-  SECTION:=libs
-  CATEGORY:=Libraries
-  TITLE:=The Independent JPEG Group's JPEG runtime library
-  DESCRIPTION:=The Independent JPEG Group's JPEG runtime library.
-  URL:=http://www.ijg.org/
-endef
-
 define Build/Configure
-$(call Build/Configure/Default,--enable-shared --enable-static)
+$(call Build/Configure/Default,--disable-shared --enable-static)
 endef
 
 define Build/Compile
@@ -41,12 +33,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		prefix="$(PKG_INSTALL_DIR)/usr" \
 		exec_prefix="$(PKG_INSTALL_DIR)/usr" \
-		install-headers install-lib
-endef
-
-define Package/libjpeg/install
-	install -m0755 -d $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libjpeg.so.* $(1)/usr/lib/
+		all install-headers install-lib
 endef
 
 define Build/InstallDev
@@ -55,7 +42,7 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/jpegint.h $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/j{config,error,morecfg}.h $(STAGING_DIR)/usr/include
 	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libjpeg.{a,so*} $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libjpeg.a $(STAGING_DIR)/usr/lib/
 endef
 
 define Build/UninstallDev
@@ -64,4 +51,4 @@ define Build/UninstallDev
 		$(STAGING_DIR)/usr/lib/libjpeg.{a,so*}
 endef
 
-$(eval $(call BuildPackage,libjpeg))
+$(eval $(call Build/DefaultTargets))
