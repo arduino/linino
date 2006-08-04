@@ -12,7 +12,11 @@ PKG_VERSION:=3.7.1
 PKG_RELEASE:=1
 PKG_MD5SUM:=552639142e163745f6bcd4f1f3816d8a
 
-PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/l/logrotate
+PKG_SOURCE_URL:= \
+	http://ftp.de.debian.org/debian/pool/main/l/logrotate \
+	http://ftp.debian.org/debian/pool/main/l/logrotate \
+	http://ftp.fr.debian.org/debian/pool/main/l/logrotate \
+	http://ftp.us.debian.org/debian/pool/main/l/logrotate
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_CAT:=zcat
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
