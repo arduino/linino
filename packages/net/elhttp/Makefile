@@ -36,7 +36,7 @@ endef
 
 define Build/Compile
 	mkdir -p $(PKG_INSTALL_DIR)/usr/sbin
-	$(MAKE) CC=$(TARGET_CC) CROSS=$(TARGET_CROSS) -C $(PKG_BUILD_DIR) \
+	$(MAKE) CC="$(TARGET_CC)" CROSS="$(TARGET_CROSS)" -C "$(PKG_BUILD_DIR)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef

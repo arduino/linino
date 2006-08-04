@@ -40,9 +40,9 @@ $(call Build/Configure/Default)
 endef
 
 define Build/Compile	
-	$(MAKE) -j1 CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS)" -C $(PKG_BUILD_DIR) clean $(PKG_NAME)
+	$(MAKE) -j1 CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" -C $(PKG_BUILD_DIR) clean $(PKG_NAME)
 	mv $(PKG_BUILD_DIR)/$(PKG_NAME) $(PKG_BUILD_DIR)/$(PKG_NAME)4
-	$(MAKE) -j1 CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS) -DIPV6=1" -C $(PKG_BUILD_DIR) clean $(PKG_NAME)
+	$(MAKE) -j1 CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -DIPV6=1" -C $(PKG_BUILD_DIR) clean $(PKG_NAME)
 	mv $(PKG_BUILD_DIR)/$(PKG_NAME) $(PKG_BUILD_DIR)/$(PKG_NAME)6
 endef
 

@@ -62,7 +62,7 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC)
+		CC="$(TARGET_CC)"
 endef
 
 define Package/strace/install

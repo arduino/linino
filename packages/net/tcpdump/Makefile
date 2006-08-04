@@ -36,7 +36,7 @@ endef
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
-		BUILD_CC=$(TARGET_CC) HOSTCC=$(HOSTCC) \
+		BUILD_CC="$(TARGET_CC)" HOSTCC="$(HOSTCC)" \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \

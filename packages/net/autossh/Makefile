@@ -38,7 +38,7 @@ define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS) -Wall -D\"SSH_PATH=\\\"$(SSH)\\\"\" -D\"VER=\\\"$(PKG_VERSION)\\\"\"" \
+		CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -Wall -D\"SSH_PATH=\\\"$(SSH)\\\"\" -D\"VER=\\\"$(PKG_VERSION)\\\"\"" \
 		BINDIR=/usr/bin MANDIR=/usr/man
 endef
 

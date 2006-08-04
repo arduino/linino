@@ -38,7 +38,7 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS)" IDSDIR="/usr/share" HOST=$(GNU_TARGET_NAME)
+		CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" IDSDIR="/usr/share" HOST=$(GNU_TARGET_NAME)
 endef
 
 define Package/pciutils/install

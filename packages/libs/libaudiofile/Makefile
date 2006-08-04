@@ -62,7 +62,7 @@ define Build/Configure
 			$(DISABLE_LARGEFILE) \
 			--enable-shared \
 			--enable-static \
-			--with-build-cc=$(HOSTCC) \
+			--with-build-cc="$(HOSTCC)" \
 	);
 endef
 

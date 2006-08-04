@@ -37,7 +37,7 @@ define Build/Compile
         rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-	        CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" DEBUG=0
+	        CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" DEBUG=0
 endef
 
 define Package/aiccu/install

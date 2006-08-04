@@ -39,7 +39,7 @@ define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC)
+		CC="$(TARGET_CC)"
 endef
 
 define Package/yafc/install

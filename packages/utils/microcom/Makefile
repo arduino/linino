@@ -43,7 +43,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) CC=$(TARGET_CC)
+	$(MAKE) -C $(PKG_BUILD_DIR) CC="$(TARGET_CC)"
 endef
 
 define Package/microcom/install

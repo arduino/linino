@@ -34,7 +34,7 @@ endef
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) -f $(PKG_BUILD_DIR)/Makefile$(SSL_ENABLE) \
-		CC=$(TARGET_CC) STAGING_DIR=$(STAGING_DIR)
+		CC="$(TARGET_CC)" STAGING_DIR=$(STAGING_DIR)
 endef
 
 define Package/httping/install	

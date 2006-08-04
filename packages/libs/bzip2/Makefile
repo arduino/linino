@@ -35,7 +35,7 @@ define Build/Compile
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CC=$(TARGET_CC) \
+		CC="$(TARGET_CC)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		libbz2.a
 endef

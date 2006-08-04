@@ -59,7 +59,7 @@ endef
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR)\
-		CC=$(TARGET_CC) LD=$(TARGET_CROSS)ld
+		CC="$(TARGET_CC)" LD="$(TARGET_CROSS)ld"
 endef
 
 define Package/elinks/install

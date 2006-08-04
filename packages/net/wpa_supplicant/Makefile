@@ -49,7 +49,7 @@ define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) \
+		CC="$(TARGET_CC)" \
 		KERNEL=$(LINUX_DIR) \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS=" -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
