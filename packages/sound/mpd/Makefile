@@ -23,8 +23,8 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mpd
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=sound
+  CATEGORY:=Sound
   DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec
   TITLE:=Music Player Daemon
   DESCRIPTION:=Music Player Daemon.\\\
