@@ -41,9 +41,13 @@ define Package/roofnet
   URL:=http://pdos.csail.mit.edu/roofnet/
 endef
 
+CONF_OPTS= \
+		ac_cv_int64_t=no \
+		ac_cv_sizeof_off_t=4
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); \
+		$(CONF_OPTS) \
 		./configure; \
 		cp include/click/config.h include/click/config-host.h; \
 		rm -rf config.{cache,status} ; \
@@ -52,6 +56,7 @@ define Build/Configure
 		CFLAGS="-static -MD" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
+		$(CONF_OPTS) \
 		./configure \
 		  --prefix=/usr \
 		  --target=$(GNU_TARGET_NAME) \
@@ -68,6 +73,7 @@ endef
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
+	$(CONF_OPTS) \
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		BUILD_CXX="g++ -include $(PKG_BUILD_DIR)/include/click/config-host.h" \
 		tools elementmap.xml

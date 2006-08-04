@@ -1,0 +1,46 @@
+diff -urN click.old/configure click.dev/configure
+--- click.old/configure	2006-03-02 17:51:04.000000000 +0100
++++ click.dev/configure	2006-08-04 20:40:20.518827296 +0200
+@@ -6689,23 +6689,8 @@
+ echo "$as_me:$LINENO: result: $ac_cv_uint64_t" >&5
+ echo "${ECHO_T}$ac_cv_uint64_t" >&6
+ 
+-    have_int64_types=
+     if test $ac_cv_int64_t = no -o $ac_cv_uint64_t = no; then
+-	{ { echo "$as_me:$LINENO: error:
+-=========================================
+-
+-int64_t types not defined by $inttypes_hdr!
+-Compile with '--disable-int64'.
+-
+-=========================================" >&5
+-echo "$as_me: error:
+-=========================================
+-
+-int64_t types not defined by $inttypes_hdr!
+-Compile with '--disable-int64'.
+-
+-=========================================" >&2;}
+-   { (exit 1); exit 1; }; }
++    have_int64_types=
+     else
+ 
+ cat >>confdefs.h <<\_ACEOF
+diff -urN click.old/m4/click.m4 click.dev/m4/click.m4
+--- click.old/m4/click.m4	2006-03-02 17:51:06.000000000 +0100
++++ click.dev/m4/click.m4	2006-08-04 20:40:49.953352568 +0200
+@@ -536,13 +536,7 @@
+ 
+     have_int64_types=
+     if test $ac_cv_int64_t = no -o $ac_cv_uint64_t = no; then
+-	AC_MSG_ERROR([
+-=========================================
+-
+-int64_t types not defined by $inttypes_hdr!
+-Compile with '--disable-int64'.
+-
+-=========================================])
++	have_int64_types=no
+     else
+ 	AC_DEFINE([HAVE_INT64_TYPES], [1], [Define if 64-bit integer types are enabled.])
+ 	have_int64_types=yes
