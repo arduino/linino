@@ -27,8 +27,8 @@ define Package/ipcad
   DEPENDS:=+libpcap
   TITLE:=listens for traffic on the specified interfaces
   DESCRIPTION:=This daemon listens for traffic on the specified interfaces.\\\
-It has the built-in RSH and NetFlow engines to allow exporting\\\
-the accounting data the same way as Cisco routers do.\\\
+	It has the built-in RSH and NetFlow engines to allow exporting\\\
+	the accounting data the same way as Cisco routers do.\\\
   URL:=http://lionet.info/ipcad/
 endef
 
@@ -38,17 +38,25 @@ endef
 
 
 define Build/Configure
-$(call Build/Configure/Default,--enable-shared \
---disable-static \
---disable-rpath \
---with-gnu-ld \
---with-psrc=pcap \
---with-pcap-include="$(STAGING_DIR)/usr/include" \
---with-pcap-libraries="$(STAGING_DIR)/usr/lib",touch cfglex.c cslex.c;)
+	$(call Build/Configure/Default,--enable-shared \
+		--disable-static \
+		--disable-rpath \
+		--with-gnu-ld \
+		--with-psrc=pcap \
+		--with-pcap-include="$(STAGING_DIR)/usr/include" \
+		--with-pcap-libraries="$(STAGING_DIR)/usr/lib", \
+		touch cfglex.c cslex.c; \
+		ac_cv_func_getifaddrs=no \
+		ac_cv_header_ifaddrs_h=no \
+)
 endef
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS) -DHAVE_PCAP_H=1 -I$(STAGING_DIR)/usr/include" \
+		LIBS="-lnsl -pthread -lpcap" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		DESTDIR=$(PKG_INSTALL_DIR) \
 		all install
 endef
