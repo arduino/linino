@@ -40,7 +40,7 @@ define Build/Compile
 	make -C ${PKG_BUILD_DIR} \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-		CC=$(TARGET_CC) logrotate
+		CC="$(TARGET_CC)" logrotate
 endef
 
 define Package/logrotate/install	

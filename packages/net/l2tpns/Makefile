@@ -41,8 +41,8 @@ endef
 	
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) \
-		LD=$(TARGET_CC) \
+		CC="$(TARGET_CC) \
+		LD=$(TARGET_CC)" \
 		OPTIM="$(TARGET_CFLAGS)" \
 		DESTDIR=$(PKG_INSTALL_DIR) \
 		STAGING_DIR=$(STAGING_DIR) \

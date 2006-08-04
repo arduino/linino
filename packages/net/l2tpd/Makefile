@@ -42,7 +42,7 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CC=$(TARGET_CC) \
+		CC="$(TARGET_CC)" \
 		CFLAGS="$(TARGET_CFLAGS) -I. -DLINUX -DSANITY -DIP_ALLOCATION"
 endef
 

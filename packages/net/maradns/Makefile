@@ -45,7 +45,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		FLAGS="$(TARGET_CFLAGS)" \
-		CC=$(TARGET_CC) \
+		CC="$(TARGET_CC)" \
 		HOSTCC="$(HOSTCC)"
 	mkdir -p $(PKG_INSTALL_DIR)/usr/{bin,sbin}
 	mkdir -p $(PKG_INSTALL_DIR)/usr/man/man{1,5,8}

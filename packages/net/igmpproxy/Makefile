@@ -29,7 +29,7 @@ only IGMP signalling (Internet Group Management Protocol).\\\
 endef
 
 define Build/Compile	
-	$(MAKE) CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS)" -C $(PKG_BUILD_DIR)/src
+	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" -C $(PKG_BUILD_DIR)/src
 endef
 
 
