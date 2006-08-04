@@ -54,6 +54,7 @@ $(call Build/Configure/Default,--enable-small\
 			--without-zlib \
 			--disable-ipv6 \, x=`echo ac_cv_file_./features.conf | tr [:blank:]-/. _` && export $$$${x}=yes && \
 			x=`echo ac_cv_file_$(PKG_BUILD_DIR)/features.conf | tr [:blank:]-/. _` && export $$$${x}=yes && \
+			ac_cv_func_getifaddrs=no \
 )
 endef
 
