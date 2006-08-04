@@ -69,3 +69,8 @@ define Package/elinks/install
 endef
 
 $(eval $(call BuildPackage,elinks))
+
+$(eval $(call RequireCommand,autoconf, \
+	elinks requires GNU autoconf. \
+))
+
