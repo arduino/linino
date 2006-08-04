@@ -1,4 +1,11 @@
 #!/usr/bin/perl
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
 use strict;
 use warnings;
 
@@ -85,6 +92,7 @@ foreach my $mirror (@ARGV) {
 }
 
 push @mirrors, 'http://mirror1.openwrt.org/';
+push @mirrors, 'http://mirror2.openwrt.org/';
 push @mirrors, 'http://downloads.openwrt.org/sources/';
 
 while (!$ok) {
