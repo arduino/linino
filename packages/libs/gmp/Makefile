@@ -31,11 +31,15 @@ define Package/libgmp
 endef
 
 define Build/Configure
+	echo "#!/bin/sh" > $(PKG_BUILD_DIR)/$(TARGET_CROSS)gcc
+	echo 'ccache $(STAGING_DIR)/bin/$(TARGET_CROSS)gcc "$$$$@"' > $(PKG_BUILD_DIR)/$(TARGET_CROSS)gcc
+	chmod 0755 $(PKG_BUILD_DIR)/$(TARGET_CROSS)gcc
 	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		CC="$(PKG_BUILD_DIR)/$(TARGET_CROSS)gcc" \
 		./configure \
 			--target=$(GNU_TARGET_NAME) \
 			--host=$(GNU_TARGET_NAME) \
