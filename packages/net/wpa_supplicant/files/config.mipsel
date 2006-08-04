@@ -24,9 +24,9 @@
 #CONFIG_DRIVER_ATMEL=y
 
 # Driver interface for Broadcom driver
-CONFIG_DRIVER_BROADCOM=y
+# CONFIG_DRIVER_BROADCOM=y
 # Example path for wlioctl.h; change to match your configuration
-CFLAGS += -I../nvram/include
+# CFLAGS += -I../nvram/include
 
 # Driver interface for Intel ipw2100/2200 driver
 #CONFIG_DRIVER_IPW=y
