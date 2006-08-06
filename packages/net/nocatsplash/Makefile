@@ -36,6 +36,10 @@ define Package/nocatsplash
   URL:=http://nocat.net
 endef
 
+define Package/nocatsplash/conffiles
+/etc/nocat.conf
+endef
+
 define Build/Configure
 $(call Build/Configure/Default,	--with-firewall=iptables \
 		  --with-glib-prefix="$(STAGING_DIR)/usr")
