@@ -67,22 +67,22 @@ define Build/Compile
 endef
 
 define Package/libsablevm-classpath/install	
-	install -d -m0755 $(IDIR_LIBSABLEVM_CLASSPATH)/usr/lib/sablevm-classpath
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/sablevm-classpath/libjava*.so $(IDIR_LIBSABLEVM_CLASSPATH)/usr/lib/sablevm-classpath/
-	install -d -m0755 $(IDIR_LIBSABLEVM_CLASSPATH)/usr/lib/security
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/security/classpath.security $(IDIR_LIBSABLEVM_CLASSPATH)/usr/lib/security/
+	install -d -m0755 $(1)/usr/lib/sablevm-classpath
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/sablevm-classpath/libjava*.so $(1)/usr/lib/sablevm-classpath/
+	install -d -m0755 $(1)/usr/lib/security
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/security/classpath.security $(1)/usr/lib/security/
 endef
 
 define Package/sablevm-classpath-full/install	
-	install -d -m0755 $(IDIR_SABLEVM_CLASSPATH_FULL)/usr/share/sablevm-classpath
+	install -d -m0755 $(1)/usr/share/sablevm-classpath
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/sablevm-classpath/{libclasspath,resources}.jar \
-		$(IDIR_SABLEVM_CLASSPATH_FULL)/usr/share/sablevm-classpath/
+		$(1)/usr/share/sablevm-classpath/
 endef
 	
 define Package/sablevm-classpath-mini/install	
-	install -d -m0755 $(IDIR_SABLEVM_CLASSPATH_MINI)/usr/share/sablevm-classpath
+	install -d -m0755 $(1)/usr/share/sablevm-classpath
 	install -m0755 $(PKG_BUILD_DIR)/lib/mini.jar \
-		$(IDIR_SABLEVM_CLASSPATH_MINI)/usr/share/sablevm-classpath/libclasspath.jar
+		$(1)/usr/share/sablevm-classpath/libclasspath.jar
 endef
 
 $(eval $(call BuildPackage,libsablevm-classpath))
