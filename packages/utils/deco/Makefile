@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/deco
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=libncurses
+  DEPENDS:=+libncurses
   TITLE:=Text-based, full featured file manager
   DESCRIPTION:=A clone of Norton Commander for Unix. Text-based, full featured\\\
 	file manager.\\\
