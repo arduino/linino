@@ -36,7 +36,7 @@ endef
 define Package/cbtt-mysql
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=cbtt libmysqlclient
+  DEPENDS:=cbtt +libmysqlclient
   TITLE:=Bittorrent tracker with mysql support
   DESCRIPTION:=Bittorrent tracker with mysql support
   URL:=http://bnbtusermods.sourceforge.net

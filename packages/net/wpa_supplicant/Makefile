@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/wpa-supplicant
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=libopenssl
+  DEPENDS:=+libopenssl
   TITLE:=WPA Supplicant
   DESCRIPTION:=WPA Supplicant
   URL:=http://hostap.epitest.fi/wpa_supplicant/

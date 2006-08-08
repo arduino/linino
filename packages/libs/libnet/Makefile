@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libnet
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=libpcap
+  DEPENDS:=+libpcap
   TITLE:=Low-level packet creation library
   DESCRIPTION:=Low-level packet creation library
   URL:=http://www.packetfactory.net/libnet/
