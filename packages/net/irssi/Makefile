@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/irssi
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+glib +libncurses
+  DEPENDS:=+glib1 +libncurses
   TITLE:=console irc client
   DESCRIPTION:=IRC client for the text console
   URL:=http://irssi.org

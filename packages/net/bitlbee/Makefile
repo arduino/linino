@@ -29,7 +29,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/bitlbee
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +libglib1 +libiconv
+  DEPENDS:=+libopenssl +glib1 +libiconv
   TITLE:=IRC gateway to IM chat networks
   DESCRIPTION:=IRC gateway to IM chat networks
   URL:=http://www.bitlbee.org/

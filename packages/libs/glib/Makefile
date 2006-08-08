@@ -25,7 +25,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/libglib1
+define Package/glib1
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=+libpthread
@@ -94,7 +94,7 @@ define Build/Compile
 		install
 endef
 
-define Package/libglib1/install
+define Package/glib1/install
 	install -m0755 -d $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg{lib,module,thread}-1.2.so.* $(1)/usr/lib/
 endef
@@ -123,4 +123,4 @@ define Build/UninstallDev
 		$(STAGING_DIR)/usr/lib/pkgconfig/g{lib,module,thread}.pc
 endef
 
-$(eval $(call BuildPackage,libglib1))
+$(eval $(call BuildPackage,glib1))

@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/nocatsplash
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+glib
+  DEPENDS:=+glib1
   TITLE:=Open public network gateway daemon
   DESCRIPTION:=NoCatSplash is an Open Public Network Gateway Daemon.\\\
 	It performs as a [captive/open/active] portal. When run on a gateway/router\\\
