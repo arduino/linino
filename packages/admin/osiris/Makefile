@@ -11,13 +11,14 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=osiris
 PKG_VERSION:=4.2.1
 PKG_RELEASE:=1
-PKG_MD5SUM:=11445f7d8dec737f0be89357f5c5bcae
 
-PKG_SOURCE_URL:=http://www.hostintegrity.com/osiris/data/
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://osiris.shmoo.com/data/
+PKG_MD5SUM:=11445f7d8dec737f0be89357f5c5bcae
+PKG_CAT:=zcat
+
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
@@ -32,11 +33,14 @@ define Package/osirisd
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--with-osiris-user=root \
-		--with-root-dir=/var/lib/osiris \
-		--with-readline=no, ac_cv_openssldir="$(STAGING_DIR)/usr" \
-		ac_cv_have_accrights_in_msghdr=no \
-		ac_cv_have_control_in_msghdr=yes)
+  $(call Build/Configure/Default, \
+	--with-osiris-user=root \
+	--with-root-dir=/var/lib/osiris \
+	--with-readline=no, \
+	ac_cv_openssldir="$(STAGING_DIR)/usr" \
+	ac_cv_have_accrights_in_msghdr=no \
+	ac_cv_have_control_in_msghdr=yes \
+  )
 endef
 
 define Build/Compile	
