@@ -11,12 +11,13 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=squid
 PKG_VERSION:=2.5.STABLE13
 PKG_RELEASE:=1
-PKG_MD5SUM:=3e64468e123be1246d17486dab6bee87
 
-PKG_SOURCE_URL:=http://www.squid-cache.org/Versions/v2/2.5/
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://www.squid-cache.org/Versions/v2/2.5/
+PKG_MD5SUM:=3e64468e123be1246d17486dab6bee87
 PKG_CAT:=bzcat
+
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
@@ -26,10 +27,10 @@ define Package/squid
   CATEGORY:=Network
   DEPENDS:=+libopenssl
   TITLE:=full-featured Web proxy cache
-  DESCRIPTION:=Squid is a high-performance proxy caching server for web clients,\\\
-	supporting FTP, gopher, and HTTP data objects. Unlike traditional\\\
-	caching software, Squid handles all requests in a single,\\\
-	non-blocking, I/O-driven process.\\\
+  DESCRIPTION:=Squid is a high-performance proxy caching server for web clients, \\\
+    supporting FTP, gopher, and HTTP data objects. Unlike traditional \\\
+    caching software, Squid handles all requests in a single, \\\
+    non-blocking, I/O-driven process.
   URL:=http://www.squid-cache.org
   MENU:=1
 endef
@@ -223,4 +224,14 @@ $(eval $(call BuildPlugin,squid-mod-external-acl-winbind-group,wb_group))
 $(eval $(call BuildPlugin,squid-mod-ntlm-auth-fakeauth,fakeauth_auth))
 $(eval $(call BuildPlugin,squid-mod-ntlm-auth-smb-auth,ntlm_auth))
 $(eval $(call BuildPlugin,squid-mod-ntlm-auth-winbind-auth,wb_ntlmauth))
+
+
+define Require/openssl
+	echo 'int main(int argc, char **argv) { SSL_library_init(); return 0; }' | \
+		gcc -include openssl/ssl.h -x c -o $(TMP_DIR)/a.out -lcrypto -lssl -
+endef
+
+$(eval $(call Require,openssl, \
+	No OpenSSL development files were not found on your system. \
+))
 
