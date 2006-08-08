@@ -9,13 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=axtls
-PKG_VERSION:=0.95
+PKG_VERSION:=1.01
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/axTLS
 PKG_SOURCE:=axTLS-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.leroc.com.au/axTLS/
-PKG_MD5SUM:=cd887f379f303dd3ef691d8641307f0e
+PKG_MD5SUM:=ff71cb64234cad020f92bffa534ab2b8
 PKG_CAT:=zcat
 
 include $(INCLUDE_DIR)/package.mk
