@@ -14,7 +14,7 @@ PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/axTLS
 PKG_SOURCE:=axTLS-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.leroc.com.au/axTLS/
+PKG_SOURCE_URL:=@SF/axtls http://www.leroc.com.au/axTLS/
 PKG_MD5SUM:=ff71cb64234cad020f92bffa534ab2b8
 PKG_CAT:=zcat
 
@@ -25,7 +25,7 @@ define Package/libaxtls
   CATEGORY:=Libraries
   TITLE:=Embedded client/server TLSv1 SSL library
   DESCRIPTION:=Embedded client/server TLSv1 SSL library.
-  URL:=http://www.axtls.co.nr/
+  URL:=http://sourceforge.net/projects/axtls
 endef
 
 define Package/awhttpd
