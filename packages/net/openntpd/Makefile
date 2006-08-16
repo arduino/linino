@@ -80,12 +80,12 @@ $(call Build/Configure/Default, --with-builtin-arc4random \
 		--with-adjtimex)
 endef
 
-$(PKG_BUILD_DIR)/.built:
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) -DUSE_ADJTIMEX"
 	touch $@
-
+endef
 
 define Package/openntpd/install	
 	install -d -m0755 $(1)/etc
