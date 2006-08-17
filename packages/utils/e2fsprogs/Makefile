@@ -87,6 +87,7 @@ define Package/e2fsprogs/install
 	$(CP) $(PKG_INSTALL_DIR)/sbin/mke2fs $(1)/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/sbin/mkfs.ext{2,3} $(1)/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/sbin/tune2fs $(1)/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/sbin/resize2fs $(1)/sbin/
 	install -d -m0755 $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{blkid,com_err,e2p,ext2fs,uuid}.so.* $(1)/usr/lib/
 endef
