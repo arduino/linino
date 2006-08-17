@@ -1,0 +1,17 @@
+#!/bin/sh
+# Copyright (C) 2006 OpenWrt.org
+LOOPDEV="/dev/loop1"
+
+mkdir mount
+cp bin/openwrt-x86-2.4-ext2.img bin/boot.img
+gzip -9 < bin/openwrt-x86-2.4-ext2.img > initrd.gz
+sudo losetup $LOOPDEV bin/boot.img
+sudo mount $LOOPDEV mount
+sudo cp build_i386/linux/arch/i386/boot/bzImage mount/vmlinuz
+sudo cp initrd.gz mount/initrd.gz
+sudo mkdir mount/boot
+sudo build_i386/lilo-22.7.2/lilo -C package/lilo/bdlilo.conf
+sudo umount mount
+echo releasing $LOOPDEV
+sudo losetup -d $LOOPDEV
+rm -r -f mount
