@@ -23,6 +23,14 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
+define Package/libjpeg
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=The Independent JPEG Group's JPEG runtime library
+  DESCRIPTION:=The Independent JPEG Group's JPEG runtime library.
+  URL:=http://www.ijg.org/
+endef
+
 define Build/Configure
 $(call Build/Configure/Default,--disable-shared --enable-static)
 endef
