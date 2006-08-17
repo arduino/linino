@@ -43,7 +43,6 @@ case "$(( $boardtype ))" in
 		if [ "$adm_switch" = 0 ]; then
 			nvram_set sdram_init "$(printf 0x%04x $(( $(/usr/sbin/nvram get sdram_init) | 0x0100 )))"
 			[ "$COMMIT" = 1 ] && {
-				nvram_set sdram_config 0x0062
 				nvram_set clkfreq 216
 				nvram_set sdram_ncdl 0x0
 				nvram_set pa0itssit 62
@@ -57,7 +56,6 @@ case "$(( $boardtype ))" in
 	"1127") #0x467
 		nvram_set sdram_init "$(printf 0x%04x $(( $(/usr/sbin/nvram get sdram_init) | 0x0100 )))"
 		[ "$COMMIT" = 1 ] && {
-			nvram_set sdram_config 0x0062
 			nvram_set sdram_ncdl 0x0
 			nvram_set pa0itssit 62
 			nvram_set pa0b0 0x168b
