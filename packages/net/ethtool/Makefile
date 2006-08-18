@@ -30,10 +30,6 @@ define Package/ethtool
   URL:=http://sourceforge.net/projects/gkernel/
 endef
 
-define Build/Configure
-$(call Build/Configure/Default)
-endef
-
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)

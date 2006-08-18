@@ -32,9 +32,8 @@ transmission across the network also takes time!\\\
   URL:=http://www.vanheusden.com/httping/
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) -f $(PKG_BUILD_DIR)/Makefile$(SSL_ENABLE) \
-		CC="$(TARGET_CC)" STAGING_DIR=$(STAGING_DIR)
+define Build/Compile
+  $(call Build/Compile/Default,-f $(PKG_BUILD_DIR)/Makefile$(SSL_ENABLE) STAGING_DIR=$(STAGING_DIR))
 endef
 
 define Package/httping/install	

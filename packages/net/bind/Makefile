@@ -110,7 +110,6 @@ define Build/Compile
 		gen
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
-		STAGING_DIR=$(STAGING_DIR) \
 		all install
 endef
 

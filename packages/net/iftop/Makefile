@@ -33,17 +33,8 @@ answering the question "why is our ADSL link so slow?".\\\
   URL:=http://www.ex-parrot.com/~pdw/iftop/
 endef
 
-define Build/Configure
-$(call Build/Configure/Default)
-endef
-
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		install
+  $(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" install)
 endef
 
 define Package/iftop/install	

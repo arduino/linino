@@ -33,7 +33,7 @@ endef
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR)/src -f ../Makefile.openwrt  \
-		CC=$(TARGET_CC)
+		$(TARGET_CONFIGURE_OPTS)
 endef
 
 define Package/procmail/install

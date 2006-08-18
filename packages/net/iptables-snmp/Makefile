@@ -30,16 +30,11 @@ define Package/iptables-snmp
   URL:=http://www.nobiscuit.com/iptables-snmp/
 endef
 
-define Build/Configure
-$(call Build/Configure/Default)
-endef
-
 define Build/Compile	
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+  $(call Build/Compile/Default, \
 		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
-		all install
+		all install \
+  )
 endef
  
 define Package/iptables-snmp/install	

@@ -45,15 +45,8 @@ define Package/rp-l2tpd-mod-ppp
   TITLE:=a PPP handler for the L2TP daeomon
 endef
 
-define Build/Configure
-$(call Build/Configure/Default)
-endef
-
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+  $(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" all install)
 endef
 
 define Package/rp-l2tpd/install	

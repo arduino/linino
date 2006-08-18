@@ -32,7 +32,7 @@ keyboard, analog/gsm/isdn modem or bluetooth phones.\\\
  URL:=http://www.eja.it/?l=gpl&testo=miax
 endef
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		CC="$(TARGET_CC)" \
 		OFLAGS="$(TARGET_CFLAGS)" \

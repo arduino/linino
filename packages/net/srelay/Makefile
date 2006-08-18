@@ -39,11 +39,6 @@ define Build/Configure
 $(call Build/Configure/Default,--disable-thread)
 endef
 
-define Build/Compile
-$(call Build/Compile/Default, CC=$(TARGET_CC) \
-		all)
-endef
-
 define Package/srelay/install	
 	install -m0755 -d $(1)/usr/bin
 	install -m0755 -d $(1)/etc/init.d

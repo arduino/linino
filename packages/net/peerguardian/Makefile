@@ -35,15 +35,6 @@ define Package/peerguardian/conffiles
 /etc/p2p.p2b.p2p
 endef
 
-define Build/Configure
-$(call Build/Configure/Default)
-endef	
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		STAGING_DIR=$(STAGING_DIR)
-endef
-
 define Package/peerguardian/install
 	install -d -m0755 $(1)/usr/sbin $(1)/etc/init.d
 	install -m0755 $(PKG_BUILD_DIR)/peerguardnf $(1)/usr/sbin/

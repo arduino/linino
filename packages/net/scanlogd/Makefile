@@ -44,7 +44,7 @@ endef
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CC=$(TARGET_CC) LD=$(TARGET_CC) CFLAGS="-c $(TARGET_CFLAGS)" \
+		CC="$(TARGET_CC)" LD="$(TARGET_CC)" CFLAGS="-c $(TARGET_CFLAGS)" \
 		LDFLAGS= \
 		PCAP_H="-I$(STAGING_DIR)/usr/include" \
 		NIDS_H="-I$(STAGING_DIR)/usr/include" \

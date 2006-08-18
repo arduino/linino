@@ -39,17 +39,6 @@ define Package/dc
   URL:=http://www.gnu.org/software/bc/
 endef
 
-define Build/Configure
-$(call Build/Configure/Default)
-endef
-
-define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)"
-endef
-
 define Package/bc/install
 	install -m0755 -d $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME)/$(PKG_NAME) $(1)/usr/bin/$(PKG_NAME)

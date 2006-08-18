@@ -84,7 +84,6 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) -DUSE_ADJTIMEX"
-	touch $@
 endef
 
 define Package/openntpd/install	

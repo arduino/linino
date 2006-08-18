@@ -55,7 +55,6 @@ define Package/dhcp6-client/conffiles
 /etc/dhcp6/solicit.conf
 endef
 
-
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/server \
 		CC="$(TARGET_CC)" STAGING_DIR=$(STAGING_DIR)

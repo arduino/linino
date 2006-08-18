@@ -33,7 +33,7 @@ endef
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 	    TARGET_NETPERF_HOME="/etc/netperf.conf" \
-	    TARGET_CC=$(TARGET_CROSS)gcc \
+	    TARGET_CC="$(TARGET_CROSS)gcc" \
 	    TARGET_CFLAGS="$(TARGET_CFLAGS)" \
 		TARGET_LIBS="" \
 		all

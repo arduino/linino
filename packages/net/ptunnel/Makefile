@@ -37,9 +37,10 @@ endef
 define Build/Configure
 $(call Build/Configure/Default,--enable-shared \
 		--disable-static \
-		--with-gnu-ld, BUILD_CC=$(TARGET_CC) \
-		HOSTCC=$(HOSTCC) \
+		--with-gnu-ld, \
 		$(TARGET_CONFIGURE_OPTS) \
+		BUILD_CC="$(TARGET_CC)" \
+		HOSTCC="$(HOSTCC)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
@@ -48,11 +49,10 @@ $(call Build/Configure/Default,--enable-shared \
 endef
 
 define Build/Compile	
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+  $(call Build/Compile/Default, \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+		all install \
+  )
 endef
 
 define Package/ptunnel/install	

@@ -40,13 +40,7 @@ define Package/l2tpns/conffiles
 endef
 	
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		LD="$(TARGET_CC)" \
-		OPTIM="$(TARGET_CFLAGS)" \
-		DESTDIR=$(PKG_INSTALL_DIR) \
-		STAGING_DIR=$(STAGING_DIR) \
-		all install
+  $(call Build/Compile/Default, LD="$(TARGET_CC)" OPTIM="$(TARGET_CFLAGS)" STAGING_DIR=$(STAGING_DIR) DESTDIR=$(PKG_INSTALL_DIR) all install)
 endef
 
 define Package/l2tpns/install	

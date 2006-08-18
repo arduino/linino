@@ -34,9 +34,7 @@ define Package/parprouted
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="" \
-		all
+  $(call Build/Compile/Default,CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="" all)
 endef
 
 define Package/parprouted/install	

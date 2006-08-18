@@ -41,11 +41,6 @@ $(call Build/Configure/Default,--includedir=$(PKG_BUILD_DIR)/. \
 		ac_cv_sizeof_long=4)
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC)
-endef
-
 define Package/mutt/install
 	mkdir -p $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/bin/

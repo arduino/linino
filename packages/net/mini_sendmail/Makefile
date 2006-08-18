@@ -34,7 +34,7 @@ endef
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) \
+		$(TARGET_CONFIGURE_OPTS) \
 		OFLAGS="$(TARGET_CFLAGS)" \
 		all
 endef

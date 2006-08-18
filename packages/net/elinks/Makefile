@@ -83,11 +83,6 @@ define Build/Configure
  	);
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR)\
-		CC="$(TARGET_CC)" LD="$(TARGET_CROSS)ld"
-endef
-
 define Package/elinks/install
 	mkdir -p $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/src/elinks $(1)/usr/bin/

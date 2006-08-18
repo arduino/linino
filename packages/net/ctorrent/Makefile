@@ -56,7 +56,7 @@ define Build/Configure
 endef
 
 define Build/Compile	
-	$(MAKE) STAGING_DIR=$(STAGING_DIR) DESTDIR=$(PKG_INSTALL_DIR) -C $(PKG_BUILD_DIR) install
+  $(call Build/Compile/Default, DESTDIR=$(PKG_INSTALL_DIR)  install)
 endef
 	
 define Package/ctorrent/install	

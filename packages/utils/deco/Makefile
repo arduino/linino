@@ -30,10 +30,6 @@ define Package/deco
   URL:=http://deco.sourceforge.net/
 endef
   
-define Build/Configure
-$(call Build/Configure/Default)
-endef
-
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)
 endef

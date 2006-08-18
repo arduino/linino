@@ -31,8 +31,8 @@ URL:=http://core.it.uu.se/adhoc/AodvUUImpl
 endef
 
 define Build/Compile
-	$(call Build/Compile/Default,CC="$(TARGET_CC)" \
-KERNEL_DIR="$(LINUX_DIR)/" KCC="$(TARGET_CC)" LD="$(TARGET_CROSS)ld" \
+	$(call Build/Compile/Default, \
+KERNEL_DIR="$(LINUX_DIR)/" KCC="$(TARGET_CC)" \
 CFLAGS="$(TARGET_CFLAGS)" aodvd)
 endef
 

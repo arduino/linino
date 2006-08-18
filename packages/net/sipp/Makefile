@@ -34,15 +34,14 @@ endef
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) \
-		CC_linux=$(TARGET_CC) \
-		CPP_linux=$(TARGET_CC) \
-		CCLINK_linux=$(TARGET_CC) \
+		$(TARGET_CONFIGURE_OPTS) \
+		CC_linux="$(TARGET_CC)" \
+		CPP_linux="$(TARGET_CC)" \
+		CCLINK_linux="$(TARGET_CC)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS_linux="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -fno-builtin -nostdinc++" \
 		LFLAGS_linux="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
 		LIBS="-luClibc++ -lc -lm -lgcc -lpthread -ldl -lncurses" \
-		STAGING_DIR=$(STAGING_DIR) \
 		all
 endef
 

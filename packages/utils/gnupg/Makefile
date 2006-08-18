@@ -76,11 +76,6 @@ define Build/Configure
 	);
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)"
-endef
-
 define Package/gnupg/install
 	install -d -m0755 $(1)/usr/bin
 	install -m0755 $(PKG_BUILD_DIR)/g10/gpg $(1)/usr/bin/

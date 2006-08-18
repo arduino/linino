@@ -33,10 +33,6 @@ define Package/vgp
   URL:=http://vgpd.freaknet.org/
 endef
 
-define Build/Configure
-$(call Build/Configure/Default)
-endef
-
 define Build/Compile
 $(call Build/Compile/Default,DESTDIR=$(PKG_INSTALL_DIR) install)
 endef

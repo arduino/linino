@@ -34,10 +34,7 @@ define Package/ssmtp
   URL:=http://packages.debian.org/stable/mail/ssmtp
 endef
 
-define Build/Configure
-$(call Build/Configure/Default)
-endef
-	
+
 define Build/Compile
 $(call Build/Compile/Default,all)
 endef

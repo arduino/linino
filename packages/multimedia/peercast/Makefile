@@ -42,8 +42,9 @@ define Build/Configure
 $(call Build/Configure/Default,--enable-shared \
 			--disable-static \
 			--with-gnu-ld \
-			--enable-staticbin, BUILD_CC=$(TARGET_CC) HOSTCC=$(HOSTCC) \
+			--enable-staticbin, \
 		$(TARGET_CONFIGURE_OPTS) \
+		BUILD_CC="$(TARGET_CC)" HOSTCC="$(HOSTCC)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -nostdinc++ -nodefaultlibs" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
@@ -52,11 +53,7 @@ $(call Build/Configure/Default,--enable-shared \
 endef
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+  $(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" all install)
 endef
 
 define Package/peercast/install	

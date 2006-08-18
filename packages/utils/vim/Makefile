@@ -42,10 +42,6 @@ $(call Build/Configure/Default,--enable-min-features \
 			ac_cv_sizeof_int=4)
 endef
 
-define Build/Compile
-$(call Build/Compile/Default,CC="$(TARGET_CC)")
-endef
-
 define Package/vim/install	
 	mkdir -p $(1)/usr/bin
 	mkdir -p $(1)//usr/share/vim

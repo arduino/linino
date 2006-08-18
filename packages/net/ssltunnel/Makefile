@@ -32,7 +32,7 @@ define Package/ssltunnel
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,,BUILD_CC=$(TARGET_CC) HOSTCC=$(HOSTCC))
+  $(call Build/Configure/Default,,BUILD_CC="$(TARGET_CC)" HOSTCC="$(HOSTCC)")
 endef
 
 define Build/Compile

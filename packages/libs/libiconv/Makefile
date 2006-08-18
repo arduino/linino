@@ -29,10 +29,6 @@ define Package/libiconv
   URL:=http://www.gnu.org/software/libiconv/
 endef
 
-define Build/Configure
-$(call Build/Configure/Default)
-endef
-
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CC="$(TARGET_CC)"

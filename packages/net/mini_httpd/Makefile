@@ -93,7 +93,7 @@ define Build/Compile
 	# with MatrixSSL
   ifneq ($(CONFIG_PACKAGE_mini-httpd-matrixssl),)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) \
+		$(TARGET_CONFIGURE_OPTS) \
 		OFLAGS="$(TARGET_CFLAGS)" \
 		SSL_DEFS="-DUSE_SSL -DHAVE_MATRIXSSL" \
 		SSL_INC="-I$(STAGING_DIR)/usr/include" \
@@ -106,7 +106,7 @@ define Build/Compile
 	# with OpenSSL
   ifneq ($(CONFIG_PACKAGE_mini-httpd-openssl),)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) \
+		$(TARGET_CONFIGURE_OPTS) \
 		OFLAGS="$(TARGET_CFLAGS)" \
 		SSL_DEFS="-DUSE_SSL -DHAVE_OPENSSL" \
 		SSL_INC="-I$(STAGING_DIR)/usr/include" \
@@ -118,7 +118,7 @@ define Build/Compile
 	# without SSL
   ifneq ($(CONFIG_PACKAGE_mini-httpd),)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) \
+		$(TARGET_CONFIGURE_OPTS) \
 		OFLAGS="$(TARGET_CFLAGS)" \
 		all
   endif

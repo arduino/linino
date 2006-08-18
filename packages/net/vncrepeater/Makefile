@@ -41,7 +41,7 @@ define Package/vncrepeater/
 endef
 
 define Build/Compile
-$(call Build/Compile/Default,CC="$(TARGET_CC)" \
+$(call Build/Compile/Default, \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		repeater)

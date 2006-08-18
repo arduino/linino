@@ -29,10 +29,6 @@ of network interfaces.
   URL:=http://www.alobbs.com/macchanger
 endef
 
-define Build/Configure
-$(call Build/Configure/Default)
-endef
-
 define Build/Compile	
 	$(MAKE) DESTDIR=$(PKG_INSTALL_DIR) -C $(PKG_BUILD_DIR) install
 endef

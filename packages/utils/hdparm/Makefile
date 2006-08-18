@@ -36,11 +36,6 @@ endef
 define Build/Configure
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)"
-endef
-
 define Package/hdparm/install
 	install -d -m0755 $(1)/usr/sbin
 	install -m0755 $(PKG_BUILD_DIR)/hdparm $(1)/usr/sbin

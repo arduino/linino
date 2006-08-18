@@ -59,4 +59,4 @@ define Build/UninstallDev
 		$(STAGING_DIR)/usr/lib/libjpeg.{a,so*}
 endef
 
-$(eval $(call Build/DefaultTargets))
+$(eval $(call BuildPackage,libjpeg))

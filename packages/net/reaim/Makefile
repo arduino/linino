@@ -32,13 +32,11 @@ define Package/reaim
 endef
 
 define Build/Compile	
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) \
+  $(call Build/Compile/Default, \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+		all install \
+  )
 endef
 
 define Package/reaim/install	

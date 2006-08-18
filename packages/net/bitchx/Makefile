@@ -33,10 +33,6 @@ define Package/bitchx
   URL:=http://www.bitchx.org
 endef
 
-define Build/Configure
-$(call Build/Configure/Default)
-endef
-
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)

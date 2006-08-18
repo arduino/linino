@@ -65,9 +65,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" LD="$(TARGET_CROSS)ld" \
-		CFLAGS="$(TARGET_CFLAGS) -Wall"
+  $(call Build/Compile/Default, CFLAGS="$(TARGET_CFLAGS) -Wall")
 endef
 
 define Package/lcd4linux/install

@@ -32,10 +32,6 @@ define Package/clinkc
   URL:=http://sourceforge.net/projects/clinkc
 endef
 
-define Package/Configure
-$(call Build/Configure/Default)
-endef
-
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)

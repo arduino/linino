@@ -41,10 +41,11 @@ define Package/logrotate/conffiles
 endef
 
 define Build/Compile
-	make -C ${PKG_BUILD_DIR} \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-		CC="$(TARGET_CC)" logrotate
+  $(call Build/Compile/Default, \
+	CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
+	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
+	logrotate \
+  )
 endef
 
 define Package/logrotate/install	

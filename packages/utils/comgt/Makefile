@@ -41,10 +41,7 @@ define Build/Prepare
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		gcom
+  $(call Build/Compile/Default,gcom)
 endef
 	
 define Package/comgt/install

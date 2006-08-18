@@ -48,7 +48,6 @@ define Build/Compile
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		ar=$(TARGET_CROSS)ar \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		INTERACTIVE=0 \
 		all install

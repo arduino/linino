@@ -42,10 +42,6 @@ define Build/Configure
 	sed 's~gcc~$$(CC)~' $(PKG_BUILD_DIR)/Makefile.tmp > $(PKG_BUILD_DIR)/Makefile
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) CC="$(TARGET_CC)"
-endef
-
 define Package/microcom/install
 	install -d -m0755 $(1)/usr/bin
 	install -m0755 $(PKG_BUILD_DIR)/microcom $(1)/usr/bin

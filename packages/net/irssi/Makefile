@@ -45,11 +45,6 @@ $(call Build/Configure/Default,--with-perl=no \
 ac_cv_sizeof_off_t=8)
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)"
-endef
-
 define Package/irssi/install	
 	mkdir -p $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/src/fe-text/$(PKG_NAME) $(1)/usr/bin/

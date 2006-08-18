@@ -33,10 +33,6 @@ define Package/vnstat
   URL:=http://humdi.net/vnstat/
 endef
 
-define Build/Compile
-$(call Build/Compile/Default)
-endef
-
 define Package/vnstat/install	
 	install -d -m0755 $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/src/vnstat $(1)/usr/bin/

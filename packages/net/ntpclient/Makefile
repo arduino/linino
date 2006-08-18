@@ -29,9 +29,8 @@ define Package/ntpclient
   URL:=http://doolittle.faludi.com/ntpclient
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS)" all adjtimex
+define Build/Compile
+  $(call Build/Compile/Default,all adjtimex)
 endef
 
 define Package/ntpclient/install	

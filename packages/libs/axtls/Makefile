@@ -24,6 +24,7 @@ define Package/libaxtls
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Embedded client/server TLSv1 SSL library
+  DEPENDS:=libgdbm
   DESCRIPTION:=Embedded client/server TLSv1 SSL library.
   URL:=http://sourceforge.net/projects/axtls
 endef

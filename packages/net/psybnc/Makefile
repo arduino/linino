@@ -35,11 +35,11 @@ define Package/psybnc
 endef
 
 define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		HOSTCC="$(HOSTCC)" \
-		all
+  $(call Build/Compile/Default, \
+	CFLAGS="$(TARGET_CFLAGS)" \
+	HOSTCC="$(HOSTCC)" \
+	all \
+  )
 endef
 
 define Package/psybnc/install	

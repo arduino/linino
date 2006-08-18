@@ -38,7 +38,7 @@ define Package/vrrpd/conffiles
 endef
 
 define Build/Compile	
-$(call Build/Compile/Default,CC="$(TARGET_CC)" \
+$(call Build/Compile/Default, \
 		DBG_OPT="" \
 		MAIN_OPT="$(TARGET_CFLAGS)" \
 		vrrpd)

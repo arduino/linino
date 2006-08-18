@@ -39,7 +39,7 @@ $(call Build/Configure/Default,--with-kernel=$(LINUX_DIR) \
 endef
 
 define Build/Compile
-$(call Build/Compile/Default,CC=$(TARGET_CC) \
+$(call Build/Compile/Default,CC="$(TARGET_CC)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install)

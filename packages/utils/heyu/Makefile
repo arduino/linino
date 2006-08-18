@@ -31,10 +31,8 @@ define Package/heyu/conffiles
 /etc/heyu/x10.conf
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" LD="$(TARGET_CROSS)ld" \
-		CFLAGS="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR) -DSYSV -DPOSIX -DHAS_ITIMER -DLINUX -DHASSELECT -DHASTZ"
+define Build/Compile
+  $(call Build/Compile/Default, CFLAGS="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR) -DSYSV -DPOSIX -DHAS_ITIMER -DLINUX -DHASSELECT -DHASTZ")
 endef
 
 define Package/heyu/install	

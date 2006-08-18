@@ -33,14 +33,11 @@ endef
 
 
 define Build/Configure
-$(call Build/Configure/Default,--includedir=$(PKG_BUILD_DIR)/)
+  $(call Build/Configure/Default,--includedir=$(PKG_BUILD_DIR)/)
 endef
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)"
+  $(call Build/Compile/Default)
 	$(STRIP) $(PKG_BUILD_DIR)/src/$(PKG_NAME)
 endef
 
