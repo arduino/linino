@@ -91,6 +91,7 @@ config BR2_PACKAGE_KMOD_IPT_IPOPT
 	  Netfilter (IPv4) kernel modules for matching/changing IP packet options
 	  
 	  Includes:
+	    * ipt_CLASSIFY
 	    * ipt_dscp/DSCP
 	    * ipt_ecn/ECN
 	    * ipt_length
