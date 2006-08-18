@@ -1,0 +1,42 @@
+diff -urN dsl_qos_queue/dsl_qos_queue.c dsl_qos_queue.new/dsl_qos_queue.c
+--- dsl_qos_queue/dsl_qos_queue.c	2006-03-28 20:48:18.000000000 +0200
++++ dsl_qos_queue.new/dsl_qos_queue.c	2006-08-18 22:14:12.000000000 +0200
+@@ -552,12 +552,12 @@
+   
+   syslog(LOG_INFO, "setup()");
+   
+-  rval=system("modprobe ip_queue");
++/*  rval=system("modprobe ip_queue");
+   if (WEXITSTATUS(rval)!=0)
+   {
+     printf("Unable to install ip_queue module.\n");
+     exit(1);
+-  }
++  }*/
+   
+   for (i=0;i<MAX_QDEV;i++) if (_qdev[i]) hook_iptables(_qdev[i]);
+ 
+diff -urN dsl_qos_queue/makefile dsl_qos_queue.new/makefile
+--- dsl_qos_queue/makefile	2004-12-15 03:10:45.000000000 +0100
++++ dsl_qos_queue.new/makefile	2006-08-18 22:20:48.000000000 +0200
+@@ -4,14 +4,14 @@
+ all: dsl_qos_queue dsl_qos_train
+ clean:
+ 	rm *.o
+-dsl_qos_queue: dsl_qos_queue.o daemon.o $(LIBIPQ)
+-	$(CC) -o dsl_qos_queue dsl_qos_queue.o daemon.o -lipq
++dsl_qos_queue: dsl_qos_queue.o daemon.o
++	$(CC) $(CFLAGS) $(LDFLAGS) -o dsl_qos_queue dsl_qos_queue.o daemon.o -lipq
+ dsl_qos_queue.o: dsl_qos_queue.c
+-	$(CC) -c dsl_qos_queue.c
++	$(CC) $(CFLAGS) -c dsl_qos_queue.c
+ daemon.o: daemon.c
+-	$(CC) -c daemon.c
++	$(CC) $(CFLAGS) -c daemon.c
+ 
+ dsl_qos_train: dsl_qos_train.o
+-	$(CC) -o dsl_qos_train dsl_qos_train.o
++	$(CC) $(CFLAGS) -o dsl_qos_train dsl_qos_train.o
+ dsl_qos_train.o: dsl_qos_train.c
+-	$(CC) -c dsl_qos_train.c
++	$(CC) $(CFLAGS) -c dsl_qos_train.c

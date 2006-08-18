@@ -17,6 +17,7 @@ package-$(BR2_PACKAGE_CYRUS_SASL) += cyrus-sasl
 package-$(BR2_PACKAGE_DHCP_FORWARDER) += dhcp-forwarder
 package-$(BR2_PACKAGE_DNSMASQ) += dnsmasq
 package-$(BR2_PACKAGE_DROPBEAR) += dropbear
+package-$(BR2_PACKAGE_DSL_QOS_QUEUE) += dsl-qos-queue
 package-$(BR2_PACKAGE_DSNIFF) += dsniff
 package-$(BR2_PACKAGE_EBTABLES) += ebtables
 package-$(BR2_PACKAGE_EZIPUPDATE) += ez-ipupdate
