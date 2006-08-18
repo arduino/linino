@@ -72,6 +72,7 @@ config BR2_PACKAGE_KMOD_IPT_CONNTRACK
 	    * ipt_conntrack
 	    * ipt_helper
 	    * ipt_connmark/CONNMARK
+	    * ipt_connbytes
 
 config BR2_PACKAGE_KMOD_IPT_FILTER
 	tristate "Netfilter modules for packet content inspection"
