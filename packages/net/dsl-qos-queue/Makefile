@@ -30,8 +30,7 @@ define Package/dsl-qos-queue
 endef
 
 define Build/Compile
-$(call Build/Compile/Default,CC=$(TARGET_CC) \
-		$(TARGET_CONFIGURE_OPTS) \
+$(call Build/Compile/Default, \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
 		install_prefix="$(PKG_INSTALL_DIR)" \

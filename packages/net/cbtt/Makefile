@@ -29,6 +29,7 @@ define Package/cbtt
   DEPENDS:=zlib
   MENU:=1
   TITLE:=Bittorrent tracker
+  DEPENDS:=+libpthread
   DESCRIPTION:=a C BitTorrent Tracker
   URL:=http://bnbtusermods.sourceforge.net
 endef
@@ -36,7 +37,7 @@ endef
 define Package/cbtt-mysql
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=cbtt +libmysqlclient
+  DEPENDS:=cbtt +libmysqlclient +libpthread
   TITLE:=Bittorrent tracker with mysql support
   DESCRIPTION:=Bittorrent tracker with mysql support
   URL:=http://bnbtusermods.sourceforge.net
@@ -47,7 +48,7 @@ define Build/Compile
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		LFLAGS="-L$(STAGING_DIR)/usr/lib -L $(STAGING_DIR)/usr/lib/mysql -L. -lz -lmysqlclient" \
+		LFLAGS="-L$(STAGING_DIR)/usr/lib -L $(STAGING_DIR)/usr/lib/mysql -L. -lz -lmysqlclient -lpthread" \
 		CFLAGS="-I$(STAGING_DIR)/usr/include"
 	mkdir -p $(PKG_INSTALL_DIR)/usr/bin
 endef
