@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/lilo
 SECTION:=base
-CATEGORY:=X86 Boot Images
+CATEGORY:=Boot Loaders
 TITLE:=lilo
 DESCRIPTION:=lilo
 URL:=ftp://metalab.unc.edu/pub/Linux/system/boot/lilo/
@@ -44,7 +44,7 @@ define Package/lilo/install
 	$(CP) $(PKG_BUILD_DIR)/lilo.static $(1)/sbin/lilo
 	$(CP) lilo.conf $(1)/etc
 	$(CP) boot.msg $(1)/etc
-	$(CP) S11Pivot $(1)/etc/init.d
+	#$(CP) S11Pivot $(1)/etc/init.d
 endef
 
 $(eval $(call BuildPackage,lilo))
