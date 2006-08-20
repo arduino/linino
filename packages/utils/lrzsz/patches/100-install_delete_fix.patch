@@ -1,7 +1,7 @@
-diff -ur lrzsz.old/src/Makefile.am lrzsz.dev/src/Makefile.am
---- lrzsz.old/src/Makefile.am	1998-12-28 09:38:47.000000000 +0100
-+++ lrzsz.dev/src/Makefile.am	2006-08-20 18:46:20.000000000 +0200
-@@ -18,13 +18,13 @@
+diff -ur lrzsz.old/src/Makefile.in lrzsz.dev/src/Makefile.in
+--- lrzsz.old/src/Makefile.in	1998-12-30 17:31:46.000000000 +0100
++++ lrzsz.dev/src/Makefile.in	2006-08-20 19:10:09.000000000 +0200
+@@ -372,13 +372,13 @@
  	rm -f $(DESTDIR)/$(bindir)/`echo lsb | sed -e '$(transform)'`
  	ln $(DESTDIR)/$(bindir)/`echo lsz |sed -e '$(transform)'` \
  		$(DESTDIR)/$(bindir)/`echo lsb |sed -e '$(transform)'` 
