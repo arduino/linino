@@ -10,13 +10,13 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=autossh
 PKG_VERSION:=1.3
 PKG_RELEASE:=1
-PKG_MD5SUM:=0e7ec62eeca5d1b197f3ef2d0f0d417f
-
-PKG_SOURCE_URL:=http://www.harding.motd.ca/autossh
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
+PKG_SOURCE_URL:=http://www.harding.motd.ca/autossh
+PKG_MD5SUM:=0e7ec62eeca5d1b197f3ef2d0f0d417f
+PKG_CAT:=zcat
+
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
@@ -30,20 +30,16 @@ define Package/autossh
   URL:=http://www.harding.motd.ca/autossh
 endef
 
-define Build/Configure
-$(CP) $(PKG_BUILD_DIR)/Makefile.linux $(PKG_BUILD_DIR)/Makefile
-endef
-
 define Build/Compile
-$(call Build/Compile/Default, \
-	CFLAGS="$(TARGET_CFLAGS) -Wall -D\"SSH_PATH=\\\"$(SSH)\\\"\" -D\"VER=\\\"$(PKG_VERSION)\\\"\"" \
-	BINDIR=/usr/bin MANDIR=/usr/man \
-)
+	$(call Build/Compile/Default, -f Makefile.linux \
+		CFLAGS="$(TARGET_CFLAGS) -Wall -D\"SSH_PATH=\\\"\$$$$(SSH)\\\"\" -D\"VER=\\\"\$$$$(VER)\\\"\"" \
+		all \
+	)
 endef
 
 define Package/autossh/install
-	install -m0755 -d $(1)/usr/sbin
-	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
+	install -d -m0755 $(1)/usr/sbin
+	install -m0755 $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,autossh))
