@@ -1,15 +1,15 @@
-diff -Nur openswan-2.4.0.orig/programs/loggerfix openswan-2.4.0/programs/loggerfix
---- openswan-2.4.0.orig/programs/loggerfix	1970-01-01 01:00:00.000000000 +0100
-+++ openswan-2.4.0/programs/loggerfix	2005-09-29 13:44:43.325458750 +0200
+diff -urN openswan-2.4.6/programs/loggerfix openswan-2.4.6.new/programs/loggerfix
+--- openswan-2.4.6/programs/loggerfix	1970-01-01 01:00:00.000000000 +0100
++++ openswan-2.4.6.new/programs/loggerfix	2006-08-22 15:55:14.000000000 +0200
 @@ -0,0 +1,5 @@
 +#!/bin/sh
 +# use filename instead of /dev/null to log, but dont log to flash or ram
 +# pref. log to nfs mount
 +echo "$*" >> /dev/null
 +exit 0
-diff -Nur openswan-2.4.0.orig/programs/look/look.in openswan-2.4.0/programs/look/look.in
---- openswan-2.4.0.orig/programs/look/look.in	2005-08-18 16:10:09.000000000 +0200
-+++ openswan-2.4.0/programs/look/look.in	2005-09-29 13:44:49.537847000 +0200
+diff -urN openswan-2.4.6/programs/look/look.in openswan-2.4.6.new/programs/look/look.in
+--- openswan-2.4.6/programs/look/look.in	2005-08-18 16:10:09.000000000 +0200
++++ openswan-2.4.6.new/programs/look/look.in	2006-08-22 15:43:14.000000000 +0200
 @@ -84,7 +84,7 @@
  then
  	pat="$pat|$defaultroutephys\$|$defaultroutevirt\$"
@@ -19,21 +19,9 @@ diff -Nur openswan-2.4.0.orig/programs/look/look.in openswan-2.4.0/programs/look
  	do
  		pat="$pat|$i\$"
  	done
-diff -Nur openswan-2.4.0.orig/programs/manual/manual.in openswan-2.4.0/programs/manual/manual.in
---- openswan-2.4.0.orig/programs/manual/manual.in	2005-04-18 00:57:12.000000000 +0200
-+++ openswan-2.4.0/programs/manual/manual.in	2005-09-29 13:44:52.446028750 +0200
-@@ -104,7 +104,7 @@
- 				sub(/:/, " ", $0)
- 				if (interf != "")
- 					print $3 "@" interf
--			 }' | sed ':a;N;$!ba;s/\n/ /g'`"
-+			 }' | tr '\n' ' '`"
- 	;;
- esac
- 
-diff -Nur openswan-2.4.0.orig/programs/_plutorun/_plutorun.in openswan-2.4.0/programs/_plutorun/_plutorun.in
---- openswan-2.4.0.orig/programs/_plutorun/_plutorun.in	2005-04-21 23:57:16.000000000 +0200
-+++ openswan-2.4.0/programs/_plutorun/_plutorun.in	2005-09-29 13:44:53.442091000 +0200
+diff -urN openswan-2.4.6/programs/_plutorun/_plutorun.in openswan-2.4.6.new/programs/_plutorun/_plutorun.in
+--- openswan-2.4.6/programs/_plutorun/_plutorun.in	2006-04-21 17:41:45.000000000 +0200
++++ openswan-2.4.6.new/programs/_plutorun/_plutorun.in	2006-08-22 15:47:32.000000000 +0200
 @@ -147,7 +147,7 @@
  			exit 1
  		fi
@@ -43,30 +31,21 @@ diff -Nur openswan-2.4.0.orig/programs/_plutorun/_plutorun.in openswan-2.4.0/pro
  		then
  			echo Cannot write to directory to create \"$stderrlog\".
  			exit 1
-diff -Nur openswan-2.4.0.orig/programs/_realsetup/_realsetup.in openswan-2.4.0/programs/_realsetup/_realsetup.in
---- openswan-2.4.0.orig/programs/_realsetup/_realsetup.in	2005-07-28 02:23:48.000000000 +0200
-+++ openswan-2.4.0/programs/_realsetup/_realsetup.in	2005-09-29 13:44:53.442091000 +0200
-@@ -235,7 +235,7 @@
+diff -urN openswan-2.4.6/programs/_realsetup/_realsetup.in openswan-2.4.6.new/programs/_realsetup/_realsetup.in
+--- openswan-2.4.6/programs/_realsetup/_realsetup.in	2006-05-05 20:49:45.000000000 +0200
++++ openswan-2.4.6.new/programs/_realsetup/_realsetup.in	2006-08-22 15:48:13.000000000 +0200
+@@ -232,7 +232,7 @@
  
  	# misc pre-Pluto setup
  
 -	perform test -d `dirname $subsyslock` "&&" touch $subsyslock
-+	perform test -d `echo $subsyslock | sed -r 's/(^.*\/)(.*$)/\1/'` "&&" touch $subsyslock
++	perform test -d `echo $subsyslock | sed -r 's/(^.*\/)(.*$)/\1/'` "&&" touch $subsyslock "&&" rm -f $subsyslock
  
  	if test " $IPSECforwardcontrol" = " yes"
  	then
-@@ -347,7 +347,7 @@
- 		lsmod 2>&1 | grep "^xfrm_user" > /dev/null && rmmod -s xfrm_user
- 	fi 
- 
--	perform test -d `dirname $subsyslock` "&&" rm -f $subsyslock
-+	perform test -d `echo $subsyslock | sed -r 's/(^.*\/)(.*$)/\1/'` "&&" touch $subsyslock "&&" rm -f $subsyslock
- 
- 	perform rm -f $info $lock $plutopid
- 	perform echo "...Openswan IPsec stopped" "|" $LOGONLY
-diff -Nur openswan-2.4.0.orig/programs/send-pr/send-pr.in openswan-2.4.0/programs/send-pr/send-pr.in
---- openswan-2.4.0.orig/programs/send-pr/send-pr.in	2005-04-18 01:04:46.000000000 +0200
-+++ openswan-2.4.0/programs/send-pr/send-pr.in	2005-09-29 13:44:53.442091000 +0200
+diff -urN openswan-2.4.6/programs/send-pr/send-pr.in openswan-2.4.6.new/programs/send-pr/send-pr.in
+--- openswan-2.4.6/programs/send-pr/send-pr.in	2005-04-18 01:04:46.000000000 +0200
++++ openswan-2.4.6.new/programs/send-pr/send-pr.in	2006-08-22 15:51:09.000000000 +0200
 @@ -402,7 +402,7 @@
  		    else
  			if [ "$fieldname" != "Category" ]
@@ -103,10 +82,10 @@ diff -Nur openswan-2.4.0.orig/programs/send-pr/send-pr.in openswan-2.4.0/program
  			echo "/^>${fieldname}:/ s/${dpat}//" >> $FIXFIL
  		    fi
  		    echo "${fmtname}${desc}" >> $file
-diff -Nur openswan-2.4.0.orig/programs/setup/setup.in openswan-2.4.0/programs/setup/setup.in
---- openswan-2.4.0.orig/programs/setup/setup.in	2005-07-25 21:17:03.000000000 +0200
-+++ openswan-2.4.0/programs/setup/setup.in	2005-09-29 13:44:52.446028750 +0200
-@@ -117,12 +117,22 @@
+diff -urN openswan-2.4.6/programs/setup/setup.in openswan-2.4.6.new/programs/setup/setup.in
+--- openswan-2.4.6/programs/setup/setup.in	2005-07-25 21:17:03.000000000 +0200
++++ openswan-2.4.6.new/programs/setup/setup.in	2006-08-22 15:52:25.000000000 +0200
+@@ -117,12 +117,21 @@
  # do it
  case "$1" in
    start|--start|stop|--stop|_autostop|_autostart)
@@ -117,7 +96,6 @@ diff -Nur openswan-2.4.0.orig/programs/setup/setup.in openswan-2.4.0/programs/se
  			logger -s -p $IPSECsyslog -t ipsec_setup 2>&1
  		exit 1
  	fi
-+
 +	# make sure all required directories exist
 +	if [ ! -d /var/run/pluto ]
 +	then
@@ -130,9 +108,9 @@ diff -Nur openswan-2.4.0.orig/programs/setup/setup.in openswan-2.4.0/programs/se
  	tmp=/var/run/pluto/ipsec_setup.st
  	outtmp=/var/run/pluto/ipsec_setup.out
  	(
-diff -Nur openswan-2.4.0.orig/programs/showhostkey/showhostkey.in openswan-2.4.0/programs/showhostkey/showhostkey.in
---- openswan-2.4.0.orig/programs/showhostkey/showhostkey.in	2004-11-14 14:40:41.000000000 +0100
-+++ openswan-2.4.0/programs/showhostkey/showhostkey.in	2005-09-29 13:44:52.446028750 +0200
+diff -urN openswan-2.4.6/programs/showhostkey/showhostkey.in openswan-2.4.6.new/programs/showhostkey/showhostkey.in
+--- openswan-2.4.6/programs/showhostkey/showhostkey.in	2004-11-14 14:40:41.000000000 +0100
++++ openswan-2.4.6.new/programs/showhostkey/showhostkey.in	2006-08-22 15:54:21.000000000 +0200
 @@ -63,7 +63,7 @@
  	exit 1
  fi
@@ -142,15 +120,20 @@ diff -Nur openswan-2.4.0.orig/programs/showhostkey/showhostkey.in openswan-2.4.0
  
  awk '	BEGIN {
  		inkey = 0
-diff -Nur openswan-2.4.0.orig/programs/_startklips/_startklips.in openswan-2.4.0/programs/_startklips/_startklips.in
---- openswan-2.4.0.orig/programs/_startklips/_startklips.in	2005-03-31 23:07:27.000000000 +0200
-+++ openswan-2.4.0/programs/_startklips/_startklips.in	2005-09-29 13:44:53.442091000 +0200
-@@ -262,15 +262,15 @@
-     echo "FATAL ERROR: Both KLIPS and NETKEY IPsec code is present in kernel"
-     exit
- fi
--if test ! -f $ipsecversion && test ! -f $netkey && modprobe -qn ipsec
-+if test ! -f $ipsecversion && test ! -f $netkey 
+@@ -81,7 +81,7 @@
+ 		os = "[ \t]*"
+ 		x = "[^ \t]+"
+ 		oc = "(#.*)?"
+-		suffix = ":" os "[rR][sS][aA]" os "{" os oc "$"
++		suffix = ":" os "[rR][sS][aA]" os "\0173" os oc "$"
+ 		if (id == "") {
+ 			pat = "^" suffix
+ 			printid = "default"
+diff -urN openswan-2.4.6/programs/_startklips/_startklips.in openswan-2.4.6.new/programs/_startklips/_startklips.in
+--- openswan-2.4.6/programs/_startklips/_startklips.in	2006-05-09 20:34:34.000000000 +0200
++++ openswan-2.4.6.new/programs/_startklips/_startklips.in	2006-08-22 15:57:53.000000000 +0200
+@@ -265,12 +265,12 @@
+ if test ! -f $ipsecversion && test ! -f $netkey && modprobe -qn ipsec
  then
      # statically compiled KLIPS/NETKEY not found; try to load the module
 -    modprobe ipsec
@@ -164,7 +147,7 @@ diff -Nur openswan-2.4.0.orig/programs/_startklips/_startklips.in openswan-2.4.0
  fi
  
  if test -f $netkey
-@@ -278,18 +278,18 @@
+@@ -278,25 +278,25 @@
  	klips=false
  	if test -f $modules
  	then
@@ -178,8 +161,16 @@ diff -Nur openswan-2.4.0.orig/programs/_startklips/_startklips.in openswan-2.4.0
 -		modprobe -qv xfrm4_tunnel
 +		insmod -qv xfrm4_tunnel
  		# xfrm_user contains netlink support for IPsec 
--		modprobe -qv xfrm_user
-+		insmod -qv xfrm_user
+ 		modprobe -qv xfrm_user
+ 		if [ -n "`cat /proc/cpuinfo |grep Nehemiah`" ]
+ 		then
+ 			echo "VIA Nehemiah detected, probing for PadLock"
+-			modprobe -qv hw_random
++			insmod -qv hw_random
+ 			# padlock must load before aes module
+-			modprobe -qv padlock
++			insmod -qv padlock
+ 		fi
  		# load the most common ciphers/algo's
 -		modprobe -qv sha1
 -		modprobe -qv md5
@@ -192,17 +183,23 @@ diff -Nur openswan-2.4.0.orig/programs/_startklips/_startklips.in openswan-2.4.0
  	fi
  fi
  
-@@ -305,7 +305,12 @@
+@@ -312,10 +312,16 @@
  		fi
                  unset MODPATH MODULECONF        # no user overrides!
                  depmod -a >/dev/null 2>&1
+-		modprobe -qv hw_random
++		insmod -qv hw_random
+ 		# padlock must load before aes module
+-		modprobe -qv padlock
 -                modprobe -v ipsec
++		insmod -qv padlock
 +                if [ -f modprobe ]
-+									then modprobe -v ipsec
-+								elif [ -f insmod ]
-+									then insmod ipsec
-+								fi
-+									
++		then
++			modprobe -v ipsec
++		elif [ -f insmod ]
++		then
++			insmod ipsec
++		fi
          fi
          if test ! -f $ipsecversion
          then
