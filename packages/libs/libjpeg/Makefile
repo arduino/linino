@@ -31,17 +31,26 @@ define Package/libjpeg
   URL:=http://www.ijg.org/
 endef
 
+define Package/jpeg-tools
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=libjpeg
+  TITLE:=JPEG manipulation tools
+  DESCRIPTION:=JPEG manipulation tools
+  URL:=http://www.ijg.org/
+endef
+
 define Build/Configure
 $(call Build/Configure/Default,--disable-shared --enable-static)
 endef
 
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)/usr/{include,lib}
+	mkdir -p $(PKG_INSTALL_DIR)/usr/{include,lib,bin,man/man1}
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		prefix="$(PKG_INSTALL_DIR)/usr" \
 		exec_prefix="$(PKG_INSTALL_DIR)/usr" \
-		all install-headers install-lib
+		all install-headers install-lib install
 endef
 
 define Build/InstallDev
@@ -59,4 +68,10 @@ define Build/UninstallDev
 		$(STAGING_DIR)/usr/lib/libjpeg.{a,so*}
 endef
 
+define Package/jpeg-tools/install
+	install -m0755 -d $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/*jpeg* $(1)/usr/bin/
+endef
+
 $(eval $(call BuildPackage,libjpeg))
+$(eval $(call BuildPackage,jpeg-tools))
