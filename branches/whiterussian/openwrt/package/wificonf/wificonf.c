@@ -281,7 +281,7 @@ void start_watchdog(int skfd, char *ifname)
 {
 	FILE *f;
 	unsigned char buf[8192], wdslist[8192], wbuf[80], *v, *p, *next, *tmp;
-	int i, j, wds = 0, c = 0, restart_wds = 0, wdstimeout = 0;
+	int i, j, wds = 0, c = 0, restart_wds = 0, wdstimeout = 0, infra;
 
 	if (fork())
 		return;
@@ -289,6 +289,8 @@ void start_watchdog(int skfd, char *ifname)
 	f = fopen("/var/run/wifi.pid", "w");
 	fprintf(f, "%d\n", getpid());
 	fclose(f);
+
+	infra = strtol(nvram_safe_get(wl_var("infra")), NULL, 0);
 	
 	v = nvram_safe_get(wl_var("wds"));
 	memset(wdslist, 0, 8192);
@@ -313,6 +315,9 @@ void start_watchdog(int skfd, char *ifname)
 			continue;
 		else
 			c = 0;
+
+		if (infra != 1)
+			continue;
 
 		if (nvram_match(wl_var("mode"), "sta") ||
 			nvram_match(wl_var("mode"), "wet")) {
