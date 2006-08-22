@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/pptpd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=
+  DEPENDS:=+kmod-ppp +kmod-gre
   TITLE:=PopTop pptp server
   DESCRIPTION:=PopTop pptp server
 endef
