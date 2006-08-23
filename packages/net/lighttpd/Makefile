@@ -26,7 +26,7 @@ define Package/lighttpd
   MENU:=1
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +libpcre +libpthread
+  DEPENDS:=+libopenssl +libpcre +libpthread +libsqlite3 +libxml2
   TITLE:=A flexible and lightweight web server
   URL:=http://www.lighttpd.net/
 endef
