@@ -1,0 +1,10 @@
+diff -urN iproute2-2.6.11-050330/netem/Makefile iproute2-2.6.11-050330.new/netem/Makefile
+--- iproute2-2.6.11-050330/netem/Makefile	2005-04-01 21:58:11.000000000 +0200
++++ iproute2-2.6.11-050330.new/netem/Makefile	2006-08-23 10:23:05.000000000 +0200
+@@ -1,5 +1,6 @@
+ DISTGEN = maketable normal pareto paretonormal
+ DISTDATA = normal.dist pareto.dist paretonormal.dist experimental.dist
++CFLAGS = -D_GNU_SOURCE -Os -Wstrict-prototypes -Wall -I ../include -DRESOLVE_HOSTNAMES
+ 
+ LDLIBS += -lm 
+ 
