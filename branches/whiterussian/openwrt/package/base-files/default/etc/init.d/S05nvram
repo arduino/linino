@@ -67,8 +67,8 @@ case "$(( $boardtype ))" in
 esac
 [ "$COMMIT" = "1" ] && nvram commit
 
-# linksys bug; remove when not using static configuration for lan
-nvram set lan_proto="static"
+# linksys bug; use 'dhcpclient' or similar as lan_proto if you want to use dhcp
+[ "$(nvram get lan_proto)" = "dhcp" ] && nvram set lan_proto="static"
 
 # hacks for wrt54g 1.x hardware
 [  "$boardnum"  = "42" \

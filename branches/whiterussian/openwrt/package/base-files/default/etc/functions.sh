@@ -69,7 +69,7 @@ do_ifup() {
 		
 		env -i ACTION="ifup" INTERFACE="${2}" PROTO=static /sbin/hotplug "iface" &
 	;;
-	dhcp)
+	dhcp*)
 		DHCP_IP=$(nvram get ${2}_ipaddr)
 		DHCP_NETMASK=$(nvram get ${2}_netmask)
 		mtu=$(nvram get ${2}_mtu)
