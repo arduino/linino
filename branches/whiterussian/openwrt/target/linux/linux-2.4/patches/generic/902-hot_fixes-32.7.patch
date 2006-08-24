@@ -1,0 +1,813 @@
+Hot Fix 32.7 for Linux Kernel 2.4.30 - 2006/07/28 (interdiff'ed against 32.3)
+From Willy Tarreau - EXOSEC  < wtarreau at exosec.net >
+
+http://linux.exosec.net/kernel/2.4-hf/
+
+- CVE-2006-0741
+- CVE-2006-1524
+- CVE-2006-1056
+- CVE-2006-1864
+- CVE-2006-2444
+- CVE-2006-0039
+- CVE-2006-1525
+- CVE-2006-1857
+- CVE-2006-1858
+- CVE-2006-2271
+- CVE-2006-2272
+- CVE-2006-2274
+- CVE-2006-2935
+
+--- linux-2.4.30/arch/x86_64/kernel/process.c	2006-03-18 00:34:06.000000000 +0100
++++ linux-2.4.30-hf32.7/arch/x86_64/kernel/process.c	2006-07-28 13:53:36 +0200
+@@ -565,8 +565,6 @@
+ 				 *next = &next_p->thread;
+ 	struct tss_struct *tss = init_tss + smp_processor_id();
+ 
+-	unlazy_fpu(prev_p);
+-
+ 	/*
+ 	 * Reload rsp0, LDT and the page table pointer:
+ 	 */
+@@ -584,6 +582,11 @@
+ 		loadsegment(ds, next->ds);
+ 
+ 	/* 
++  	 * Must be after DS reload for AMD workaround.
++	 */
++	unlazy_fpu(prev_p);
++
++	/* 
+ 	 * Switch FS and GS.
+ 	 */
+ 	{ 
+--- linux-2.4.30/arch/i386/kernel/i387.c	2005-04-14 09:43:32 +0200
++++ linux-2.4.30-hf32.7/arch/i386/kernel/i387.c	2006-07-28 13:53:35 +0200
+@@ -11,6 +11,7 @@
+ #include <linux/config.h>
+ #include <linux/sched.h>
+ #include <linux/init.h>
++#include <linux/kernel_stat.h>
+ #include <asm/processor.h>
+ #include <asm/i387.h>
+ #include <asm/math_emu.h>
+@@ -70,8 +71,12 @@
+ static inline void __save_init_fpu( struct task_struct *tsk )
+ {
+ 	if ( cpu_has_fxsr ) {
+-		asm volatile( "fxsave %0 ; fnclex"
++		asm volatile( "fxsave %0"
+ 			      : "=m" (tsk->thread.i387.fxsave) );
++		if (tsk->thread.i387.fxsave.swd & (1<<7))
++			asm volatile("fnclex");
++		/* AMD CPUs leak F?P. Clear it here */
++		asm volatile("ffree %%st(7) ; fildl %0" :: "m" (kstat.context_swtch));
+ 	} else {
+ 		asm volatile( "fnsave %0 ; fwait"
+ 			      : "=m" (tsk->thread.i387.fsave) );
+--- linux-2.4.30/arch/x86_64/kernel/signal.c	2005-01-27 18:57:31 +0100
++++ linux-2.4.30-hf32.7/arch/x86_64/kernel/signal.c	2006-07-28 13:53:35 +0200
+@@ -137,15 +137,16 @@
+ 
+ 
+ #define COPY(x)		err |= __get_user(regs->x, &sc->x)
+-#define COPY_CANON(x)   \
+-	COPY(x); \
+-	if ((regs->x >> 48)  != 0 && (regs->x >> 48) != 0xffff) \
+-				regs->x = 0; 
+ 
+ 	/* fs and gs are ignored because we cannot handle the 64bit base easily */ 
+ 
+-	COPY(rdi); COPY(rsi); COPY(rbp); COPY_CANON(rsp); COPY(rbx);
+-	COPY(rdx); COPY(rcx); COPY_CANON(rip);
++	COPY(rdi); COPY(rsi); COPY(rbp); COPY(rsp); COPY(rbx);
++	COPY(rdx); COPY(rcx); 
++	COPY(rip);
++	if (regs->rip >= TASK_SIZE && regs->rip < VSYSCALL_START) { 
++		regs->rip = 0;
++		return -EFAULT;
++	}
+ 	COPY(r8);
+ 	COPY(r9);
+ 	COPY(r10);
+@@ -357,6 +358,11 @@
+ 	regs->rdx = (unsigned long)&frame->uc; 
+ 	regs->rsp = (unsigned long) frame;
+ 	regs->rip = (unsigned long) ka->sa.sa_handler;
++	if (regs->rip >= TASK_SIZE) { 
++		if (sig == SIGSEGV)
++			ka->sa.sa_handler = SIG_DFL;
++		regs->rip = 0;
++	}
+ 	regs->cs = __USER_CS;
+ 	regs->ss = __USER_DS; 
+ 
+--- linux-2.4.30/drivers/acpi/system.c	2004-11-17 12:54:21 +0100
++++ linux-2.4.30-hf32.7/drivers/acpi/system.c	2006-07-28 13:53:35 +0200
+@@ -748,7 +748,7 @@
+ 	
+ 	state = simple_strtoul(state_string, NULL, 0);
+ 	
+-	if (!system->states[state])
++	if (state >= ACPI_S_STATE_COUNT || !system->states[state])
+ 		return_VALUE(-ENODEV);
+ 
+ 	/*
+--- linux-2.4.30/drivers/cdrom/cdrom.c	2005-01-27 18:57:31 +0100
++++ linux-2.4.30-hf32.7/drivers/cdrom/cdrom.c	2006-07-28 13:53:35 +0200
+@@ -1259,7 +1259,7 @@
+ 	init_cdrom_command(&cgc, buf, sizeof(buf), CGC_DATA_READ);
+ 	cgc.cmd[0] = GPCMD_READ_DVD_STRUCTURE;
+ 	cgc.cmd[7] = s->type;
+-	cgc.cmd[9] = cgc.buflen = 0xff;
++	cgc.cmd[9] = cgc.buflen & 0xff;
+ 
+ 	if ((ret = cdo->generic_packet(cdi, &cgc)))
+ 		return ret;
+--- linux-2.4.30/drivers/net/via-rhine.c	2004-08-08 01:26:05 +0200
++++ linux-2.4.30-hf32.7/drivers/net/via-rhine.c	2006-07-28 13:53:35 +0200
+@@ -124,6 +124,7 @@
+ 
+ 	LK1.1.19 (Roger Luethi)
+ 	- Increase Tx threshold for unspecified errors
++	- Craig Brind: Zero padded aligned buffers for short packets
+ 
+ */
+ 
+@@ -1308,10 +1309,14 @@
+ 			np->stats.tx_dropped++;
+ 			return 0;
+ 		}
++		/* Padding is not copied and so must be redone. */
+ 		skb_copy_and_csum_dev(skb, np->tx_buf[entry]);
++		if (skb->len < ETH_ZLEN)
++			memset(np->tx_buf[entry] + skb->len, 0,
++			       ETH_ZLEN - skb->len);
+ 		np->tx_skbuff_dma[entry] = 0;
+ 		np->tx_ring[entry].addr = cpu_to_le32(np->tx_bufs_dma +
+-										  (np->tx_buf[entry] - np->tx_bufs));
++					  (np->tx_buf[entry] - np->tx_bufs));
+ 	} else {
+ 		np->tx_skbuff_dma[entry] =
+ 			pci_map_single(np->pdev, skb->data, skb->len, PCI_DMA_TODEVICE);
+--- linux-2.4.30/drivers/usb/gadget/rndis.c	2005-01-27 18:57:33 +0100
++++ linux-2.4.30-hf32.7/drivers/usb/gadget/rndis.c	2006-07-28 13:53:35 +0200
+@@ -853,9 +853,12 @@
+ 	
+ 	/* 
+ 	 * we need more memory: 
+-	 * oid_supported_list is the largest answer 
++	 * gen_ndis_query_resp expects enough space for
++	 * rndis_query_cmplt_type followed by data.
++	 * oid_supported_list is the largest data reply
+ 	 */
+-	r = rndis_add_response (configNr, sizeof (oid_supported_list));
++	r = rndis_add_response (configNr,
++		sizeof (oid_supported_list) + sizeof(rndis_query_cmplt_type));
+ 	
+ 	if (!r) return -ENOMEM;
+ 	resp = (rndis_query_cmplt_type *) r->buf;
+--- linux-2.4.30/fs/ext2/namei.c	2001-10-04 07:57:36 +0200
++++ linux-2.4.30-hf32.7/fs/ext2/namei.c	2006-07-28 13:53:36 +0200
+@@ -313,6 +313,13 @@
+ 			ext2_inc_count(new_dir);
+ 	}
+ 
++	/*
++	 * Like most other Unix systems, set the ctime for inodes on a
++	 * rename. Note that other 2.4 FS as well as EXT2 on 2.2 and 2.6
++	 * do this. ext2_dec_count() will mark the inode dirty.
++	 */
++	old_inode->i_ctime = CURRENT_TIME;
++
+ 	ext2_delete_entry (old_de, old_page);
+ 	ext2_dec_count(old_inode);
+ 
+--- linux-2.4.30/fs/ext3/inode.c	2004-08-08 01:26:05 +0200
++++ linux-2.4.30-hf32.7/fs/ext3/inode.c	2006-07-28 13:53:36 +0200
+@@ -570,6 +570,7 @@
+ 
+ 	branch[0].key = cpu_to_le32(parent);
+ 	if (parent) {
++		keys = 1;
+ 		for (n = 1; n < num; n++) {
+ 			struct buffer_head *bh;
+ 			/* Allocate the next block */
+--- linux-2.4.30/fs/jbd/recovery.c	2003-06-13 16:51:37 +0200
++++ linux-2.4.30-hf32.7/fs/jbd/recovery.c	2006-07-28 13:53:35 +0200
+@@ -138,8 +138,11 @@
+ 
+ 	*bhp = NULL;
+ 
+-	J_ASSERT (offset < journal->j_maxlen);
+-	
++	if (offset >= journal->j_maxlen) {
++		printk(KERN_ERR "JBD: corrupted journal superblock\n");
++		return -EIO;
++	}
++
+ 	err = journal_bmap(journal, offset, &blocknr);
+ 
+ 	if (err) {
+@@ -534,6 +537,7 @@
+ 		default:
+ 			jbd_debug(3, "Unrecognised magic %d, end of scan.\n",
+ 				  blocktype);
++			brelse(bh);
+ 			goto done;
+ 		}
+ 	}
+--- linux-2.4.30/fs/namei.c	2005-04-14 09:43:34 +0200
++++ linux-2.4.30-hf32.7/fs/namei.c	2006-07-28 13:53:35 +0200
+@@ -1478,27 +1478,34 @@
+ int vfs_unlink(struct inode *dir, struct dentry *dentry)
+ {
+ 	int error;
++	struct inode *inode;
+ 
+-	down(&dir->i_zombie);
+ 	error = may_delete(dir, dentry, 0);
+-	if (!error) {
+-		error = -EPERM;
+-		if (dir->i_op && dir->i_op->unlink) {
+-			DQUOT_INIT(dir);
+-			if (d_mountpoint(dentry))
+-				error = -EBUSY;
+-			else {
+-				lock_kernel();
+-				error = dir->i_op->unlink(dir, dentry);
+-				unlock_kernel();
+-				if (!error)
+-					d_delete(dentry);
+-			}
++	if (error)
++		return error;
++
++	inode = dentry->d_inode;
++	atomic_inc(&inode->i_count);
++	double_down(&dir->i_zombie, &inode->i_zombie);
++
++	error = -EPERM;
++	if (dir->i_op && dir->i_op->unlink) {
++		DQUOT_INIT(dir);
++		if (d_mountpoint(dentry))
++			error = -EBUSY;
++		else {
++			lock_kernel();
++			error = dir->i_op->unlink(dir, dentry);
++			unlock_kernel();
+ 		}
+ 	}
+-	up(&dir->i_zombie);
+-	if (!error)
++	double_up(&dir->i_zombie, &inode->i_zombie);
++	iput(inode);
++
++	if (!error) {
++		d_delete(dentry);
+ 		inode_dir_notify(dir, DN_DELETE);
++	}
+ 	return error;
+ }
+ 
+@@ -1607,18 +1614,19 @@
+ 	struct inode *inode;
+ 	int error;
+ 
+-	down(&dir->i_zombie);
+ 	error = -ENOENT;
+ 	inode = old_dentry->d_inode;
+ 	if (!inode)
+-		goto exit_lock;
+-
+-	error = may_create(dir, new_dentry);
+-	if (error)
+-		goto exit_lock;
++		goto exit;
+ 
+ 	error = -EXDEV;
+ 	if (dir->i_dev != inode->i_dev)
++		goto exit;
++
++	double_down(&dir->i_zombie, &old_dentry->d_inode->i_zombie);
++
++	error = may_create(dir, new_dentry);
++	if (error)
+ 		goto exit_lock;
+ 
+ 	/*
+@@ -1636,9 +1644,10 @@
+ 	unlock_kernel();
+ 
+ exit_lock:
+-	up(&dir->i_zombie);
++	double_up(&dir->i_zombie, &old_dentry->d_inode->i_zombie);
+ 	if (!error)
+ 		inode_dir_notify(dir, DN_CREATE);
++exit:
+ 	return error;
+ }
+ 
+--- linux-2.4.30/fs/nfs/inode.c	2004-04-14 15:05:40 +0200
++++ linux-2.4.30-hf32.7/fs/nfs/inode.c	2006-07-28 13:53:36 +0200
+@@ -1047,6 +1047,13 @@
+ 		invalid = 0;
+ 	}
+ 
++	/* set the invalid flag if the last attempt at invalidating
++	 * the inode didn't empty the clean_pages list */
++	if ( NFS_FLAGS(inode) & NFS_INO_MAPPED) {
++		NFS_FLAGS(inode) &= ~NFS_INO_MAPPED;
++		invalid = 1;
++	}
++
+ 	/*
+ 	 * If we have pending writebacks, things can get
+ 	 * messy.
+@@ -1092,6 +1099,12 @@
+ 		NFS_ATTRTIMEO(inode) = NFS_MINATTRTIMEO(inode);
+ 		NFS_ATTRTIMEO_UPDATE(inode) = jiffies;
+ 		invalidate_inode_pages(inode);
++		if (! list_empty(&inode->i_mapping->clean_pages)) {
++			dfprintk(PAGECACHE,
++				 "NFS: clean_pages for %x/%ld is not empty\n",
++				 inode->i_dev, inode->i_ino);
++			NFS_FLAGS(inode) |= NFS_INO_MAPPED;
++		}
+ 		memset(NFS_COOKIEVERF(inode), 0, sizeof(NFS_COOKIEVERF(inode)));
+ 	} else if (time_after(jiffies, NFS_ATTRTIMEO_UPDATE(inode)+NFS_ATTRTIMEO(inode))) {
+ 		if ((NFS_ATTRTIMEO(inode) <<= 1) > NFS_MAXATTRTIMEO(inode))
+--- linux-2.4.30/fs/partitions/msdos.c	2002-11-29 00:53:15 +0100
++++ linux-2.4.30-hf32.7/fs/partitions/msdos.c	2006-07-28 13:53:36 +0200
+@@ -572,6 +572,19 @@
+ 		put_dev_sector(sect);
+ 		return 0;
+ 	}
++	/*
++	 * Now that the 55aa signature is present, this is probably
++	 * either the boot sector of a FAT filesystem or a DOS-type
++	 * partition table. Reject this in case the boot indicator
++	 * is not 0 or 0x80.
++	 */
++	p = (struct partition *) (data + 0x1be);
++	for (i = 1; i <= 4; i++, p++) {
++		if (p->boot_ind != 0 && p->boot_ind != 0x80) {
++			put_dev_sector(sect);
++			return 0;
++		}
++	}
+ 	p = (struct partition *) (data + 0x1be);
+ 
+ 	/*
+--- linux-2.4.30/fs/quota_v2.c	2003-08-25 13:44:43 +0200
++++ linux-2.4.30-hf32.7/fs/quota_v2.c	2006-07-28 13:53:36 +0200
+@@ -14,6 +14,10 @@
+ #include <asm/byteorder.h>
+ #include <asm/uaccess.h>
+ 
++MODULE_AUTHOR("Jan Kara");
++MODULE_DESCRIPTION("Quota format v2 support");
++MODULE_LICENSE("GPL");
++
+ #define __QUOTA_V2_PARANOIA
+ 
+ typedef char *dqbuf_t;
+--- linux-2.4.30/fs/smbfs/dir.c	2004-02-18 14:36:31 +0100
++++ linux-2.4.30-hf32.7/fs/smbfs/dir.c	2006-07-28 13:53:35 +0200
+@@ -416,6 +416,11 @@
+ 	if (dentry->d_name.len > SMB_MAXNAMELEN)
+ 		goto out;
+ 
++	/* Do not allow lookup of names with backslashes in */
++	error = -EINVAL;
++	if (memchr(dentry->d_name.name, '\\', dentry->d_name.len))
++		goto out;
++
+ 	error = smb_proc_getattr(dentry, &finfo);
+ #ifdef SMBFS_PARANOIA
+ 	if (error && error != -ENOENT)
+--- linux-2.4.30/include/asm-x86_64/i387.h	2004-08-08 01:26:06 +0200
++++ linux-2.4.30-hf32.7/include/asm-x86_64/i387.h	2006-07-28 13:53:35 +0200
+@@ -125,8 +125,12 @@
+ 
+ static inline void save_init_fpu( struct task_struct *tsk )
+ {
+-	asm volatile( "fxsave %0 ; fnclex"
++	asm volatile( "fxsave %0"
+ 		      : "=m" (tsk->thread.i387.fxsave));
++	if (tsk->thread.i387.fxsave.swd & (1<<7))
++		asm volatile("fnclex");
++	/* AMD CPUs leak F?P through FXSAVE. Clear it here */
++	asm volatile("ffree %st(7) ; fildl %gs:0");
+ 	tsk->flags &= ~PF_USEDFPU;
+ 	stts();
+ }
+--- linux-2.4.30/include/linux/nfs_fs_i.h	2006-07-18 18:23:37 +0200
++++ linux-2.4.30-hf32.7/include/linux/nfs_fs_i.h	2006-07-28 13:53:36 +0200
+@@ -85,6 +85,7 @@
+ #define NFS_INO_REVALIDATING	0x0004		/* revalidating attrs */
+ #define NFS_IS_SNAPSHOT		0x0010		/* a snapshot file */
+ #define NFS_INO_FLUSH		0x0020		/* inode is due for flushing */
++#define NFS_INO_MAPPED		0x0040		/* page invalidation failed */
+ 
+ /*
+  * NFS lock info
+--- linux-2.4.30/include/net/sctp/sctp.h	2006-06-19 18:47:31 +0200
++++ linux-2.4.30-hf32.7/include/net/sctp/sctp.h	2006-07-28 13:53:35 +0200
+@@ -466,12 +466,12 @@
+  * there is room for a param header too.
+  */
+ #define sctp_walk_params(pos, chunk, member)\
+-_sctp_walk_params((pos), (chunk), WORD_ROUND(ntohs((chunk)->chunk_hdr.length)), member)
++_sctp_walk_params((pos), (chunk), ntohs((chunk)->chunk_hdr.length), member)
+ 
+ #define _sctp_walk_params(pos, chunk, end, member)\
+ for (pos.v = chunk->member;\
+      pos.v <= (void *)chunk + end - sizeof(sctp_paramhdr_t) &&\
+-     pos.v <= (void *)chunk + end - WORD_ROUND(ntohs(pos.p->length)) &&\
++     pos.v <= (void *)chunk + end - ntohs(pos.p->length) &&\
+      ntohs(pos.p->length) >= sizeof(sctp_paramhdr_t);\
+      pos.v += WORD_ROUND(ntohs(pos.p->length)))
+ 
+@@ -482,7 +482,7 @@
+ for (err = (sctp_errhdr_t *)((void *)chunk_hdr + \
+ 	    sizeof(sctp_chunkhdr_t));\
+      (void *)err <= (void *)chunk_hdr + end - sizeof(sctp_errhdr_t) &&\
+-     (void *)err <= (void *)chunk_hdr + end - WORD_ROUND(ntohs(err->length)) &&\
++     (void *)err <= (void *)chunk_hdr + end - ntohs(err->length) &&\
+      ntohs(err->length) >= sizeof(sctp_errhdr_t); \
+      err = (sctp_errhdr_t *)((void *)err + WORD_ROUND(ntohs(err->length))))
+ 
+--- linux-2.4.30/ipc/shm.c	2002-08-03 02:39:46 +0200
++++ linux-2.4.30-hf32.7/ipc/shm.c	2006-07-28 13:53:35 +0200
+@@ -161,6 +161,8 @@
+ {
+ 	UPDATE_ATIME(file->f_dentry->d_inode);
+ 	vma->vm_ops = &shm_vm_ops;
++	if (!(vma->vm_flags & VM_WRITE))
++		vma->vm_flags &= ~VM_MAYWRITE;
+ 	shm_inc(file->f_dentry->d_inode->i_ino);
+ 	return 0;
+ }
+--- linux-2.4.30/net/8021q/vlan.c	2004-02-18 14:36:32 +0100
++++ linux-2.4.30-hf32.7/net/8021q/vlan.c	2006-07-28 13:53:36 +0200
+@@ -757,6 +757,8 @@
+ 
+ 	case GET_VLAN_REALDEV_NAME_CMD:
+ 		err = vlan_dev_get_realdev_name(args.device1, args.u.device2);
++		if (err)
++			goto out;
+ 		if (copy_to_user((void*)arg, &args,
+ 				 sizeof(struct vlan_ioctl_args))) {
+ 			err = -EFAULT;
+@@ -765,6 +767,8 @@
+ 
+ 	case GET_VLAN_VID_CMD:
+ 		err = vlan_dev_get_vid(args.device1, &vid);
++		if (err)
++			goto out;
+ 		args.u.VID = vid;
+ 		if (copy_to_user((void*)arg, &args,
+ 				 sizeof(struct vlan_ioctl_args))) {
+@@ -778,7 +782,7 @@
+ 			__FUNCTION__, args.cmd);
+ 		return -EINVAL;
+ 	};
+-
++out:
+ 	return err;
+ }
+ 
+--- linux-2.4.30/net/core/ethtool.c	2004-08-08 01:26:06 +0200
++++ linux-2.4.30-hf32.7/net/core/ethtool.c	2006-07-28 13:53:35 +0200
+@@ -349,7 +349,7 @@
+ {
+ 	struct ethtool_coalesce coalesce;
+ 
+-	if (!dev->ethtool_ops->get_coalesce)
++	if (!dev->ethtool_ops->set_coalesce)
+ 		return -EOPNOTSUPP;
+ 
+ 	if (copy_from_user(&coalesce, useraddr, sizeof(coalesce)))
+@@ -403,7 +403,7 @@
+ {
+ 	struct ethtool_pauseparam pauseparam;
+ 
+-	if (!dev->ethtool_ops->get_pauseparam)
++	if (!dev->ethtool_ops->set_pauseparam)
+ 		return -EOPNOTSUPP;
+ 
+ 	if (copy_from_user(&pauseparam, useraddr, sizeof(pauseparam)))
+--- linux-2.4.30/net/core/neighbour.c	2005-04-14 09:43:35 +0200
++++ linux-2.4.30-hf32.7/net/core/neighbour.c	2006-07-28 13:53:36 +0200
+@@ -14,6 +14,7 @@
+  *	Vitaly E. Lavrov	releasing NULL neighbor in neigh_add.
+  *	Harald Welte		Add neighbour cache statistics like rtstat
+  *	Harald Welte		port neighbour cache rework from 2.6.9-rcX
++ *	Pradeep Vincent		Move neighbour cache entry to stale state
+  */
+ 
+ #include <linux/config.h>
+@@ -705,6 +706,14 @@
+ 			neigh_release(n);
+ 			continue;
+ 		}
++
++		/* Mark it stale - To be reconfirmed later when used */
++		if (n->nud_state & NUD_REACHABLE &&
++		    now - n->confirmed > n->parms->reachable_time) {
++			n->nud_state = NUD_STALE;
++			neigh_suspect(n);
++		}
++
+ 		write_unlock(&n->lock);
+ 
+ next_elt:
+--- linux-2.4.30/net/ipv4/netfilter/arp_tables.c	2004-11-17 12:54:22 +0100
++++ linux-2.4.30-hf32.7/net/ipv4/netfilter/arp_tables.c	2006-07-28 13:53:35 +0200
+@@ -871,6 +871,13 @@
+ 	if (len != sizeof(tmp) + tmp.size)
+ 		return -ENOPROTOOPT;
+ 
++	/* overflow check */
++	if (tmp.size >= (INT_MAX - sizeof(struct arpt_table_info)) / NR_CPUS -
++			SMP_CACHE_BYTES)
++		return -ENOMEM;
++	if (tmp.num_counters >= INT_MAX / sizeof(struct arpt_counters))
++		return -ENOMEM;
++
+ 	/* Pedantry: prevent them from hitting BUG() in vmalloc.c --RR */
+ 	if ((SMP_ALIGN(tmp.size) >> PAGE_SHIFT) + 2 > num_physpages)
+ 		return -ENOMEM;
+@@ -991,7 +998,7 @@
+ 		goto free;
+ 
+ 	write_lock_bh(&t->lock);
+-	if (t->private->number != paddc->num_counters) {
++	if (t->private->number != tmp.num_counters) {
+ 		ret = -EINVAL;
+ 		goto unlock_up_free;
+ 	}
+--- linux-2.4.30/net/ipv4/netfilter/ip_nat_snmp_basic.c	2004-11-17 12:54:22 +0100
++++ linux-2.4.30-hf32.7/net/ipv4/netfilter/ip_nat_snmp_basic.c	2006-07-28 13:53:35 +0200
+@@ -996,12 +996,12 @@
+ 		
+ 	return 1;
+ 
++err_addr_free:
++	kfree((unsigned long *)trap->ip_address);
++
+ err_id_free:
+ 	kfree(trap->id);
+ 
+-err_addr_free:
+-	kfree((unsigned long *)trap->ip_address);
+-	
+ 	return 0;
+ }
+ 
+@@ -1119,11 +1119,10 @@
+ 		struct snmp_v1_trap trap;
+ 		unsigned char ret = snmp_trap_decode(&ctx, &trap, map, check);
+ 		
+-		/* Discard trap allocations regardless */
+-		kfree(trap.id);
+-		kfree((unsigned long *)trap.ip_address);
+-		
+-		if (!ret)
++		if (ret) {
++			kfree(trap.id);
++			kfree((unsigned long *)trap.ip_address);
++		} else 
+ 			return ret;
+ 		
+ 	} else {
+--- linux-2.4.30/net/ipv4/netfilter/ip_tables.c	2005-04-14 09:43:35 +0200
++++ linux-2.4.30-hf32.7/net/ipv4/netfilter/ip_tables.c	2006-07-28 13:53:35 +0200
+@@ -1066,6 +1066,13 @@
+ 	if (len != sizeof(tmp) + tmp.size)
+ 		return -ENOPROTOOPT;
+ 
++	/* overflow check */
++	if (tmp.size >= (INT_MAX - sizeof(struct ipt_table_info)) / NR_CPUS -
++			SMP_CACHE_BYTES)
++		return -ENOMEM;
++	if (tmp.num_counters >= INT_MAX / sizeof(struct ipt_counters))
++		return -ENOMEM;
++
+ 	/* Pedantry: prevent them from hitting BUG() in vmalloc.c --RR */
+ 	if ((SMP_ALIGN(tmp.size) >> PAGE_SHIFT) + 2 > num_physpages)
+ 		return -ENOMEM;
+@@ -1195,7 +1202,7 @@
+ 		goto free;
+ 
+ 	write_lock_bh(&t->lock);
+-	if (t->private->number != paddc->num_counters) {
++	if (t->private->number != tmp.num_counters) {
+ 		ret = -EINVAL;
+ 		goto unlock_up_free;
+ 	}
+--- linux-2.4.30/net/ipv4/netfilter/ipt_recent.c	2005-04-14 09:43:35 +0200
++++ linux-2.4.30-hf32.7/net/ipv4/netfilter/ipt_recent.c	2006-07-28 13:53:35 +0200
+@@ -820,6 +820,7 @@
+ 	/* Create our proc 'status' entry. */
+ 	curr_table->status_proc = create_proc_entry(curr_table->name, ip_list_perms, proc_net_ipt_recent);
+ 	if (!curr_table->status_proc) {
++		vfree(hold);
+ 		printk(KERN_INFO RECENT_NAME ": checkentry: unable to allocate for /proc entry.\n");
+ 		/* Destroy the created table */
+ 		spin_lock_bh(&recent_lock);
+@@ -844,7 +845,6 @@
+ 		spin_unlock_bh(&recent_lock);
+ 		vfree(curr_table->time_info);
+ 		vfree(curr_table->hash_table);
+-		vfree(hold);
+ 		vfree(curr_table->table);
+ 		vfree(curr_table);
+ 		return 0;
+--- linux-2.4.30/net/ipv4/route.c	2004-11-17 12:54:22 +0100
++++ linux-2.4.30-hf32.7/net/ipv4/route.c	2006-07-28 13:53:35 +0200
+@@ -2214,7 +2214,10 @@
+ 	/* Reserve room for dummy headers, this skb can pass
+ 	   through good chunk of routing engine.
+ 	 */
+-	skb->mac.raw = skb->data;
++	skb->mac.raw = skb->nh.raw = skb->data;
++
++	/* Bugfix: need to give ip_route_input enough of an IP header to not gag. */
++	skb->nh.iph->protocol = IPPROTO_ICMP;
+ 	skb_reserve(skb, MAX_HEADER + sizeof(struct iphdr));
+ 
+ 	if (rta[RTA_SRC - 1])
+--- linux-2.4.30/net/ipv6/netfilter/ip6_tables.c	2005-04-14 09:43:35 +0200
++++ linux-2.4.30-hf32.7/net/ipv6/netfilter/ip6_tables.c	2006-07-28 13:53:35 +0200
+@@ -1151,6 +1151,13 @@
+ 	if ((SMP_ALIGN(tmp.size) >> PAGE_SHIFT) + 2 > num_physpages)
+ 		return -ENOMEM;
+ 
++	/* overflow check */
++	if (tmp.size >= (INT_MAX - sizeof(struct ip6t_table_info)) / NR_CPUS -
++			SMP_CACHE_BYTES)
++		return -ENOMEM;
++	if (tmp.num_counters >= INT_MAX / sizeof(struct ip6t_counters))
++		return -ENOMEM;
++
+ 	newinfo = vmalloc(sizeof(struct ip6t_table_info)
+ 			  + SMP_ALIGN(tmp.size) * smp_num_cpus);
+ 	if (!newinfo)
+@@ -1276,7 +1283,7 @@
+ 		goto free;
+ 
+ 	write_lock_bh(&t->lock);
+-	if (t->private->number != paddc->num_counters) {
++	if (t->private->number != tmp.num_counters) {
+ 		ret = -EINVAL;
+ 		goto unlock_up_free;
+ 	}
+--- linux-2.4.30/net/sctp/sm_statefuns.c	2005-01-27 18:57:34 +0100
++++ linux-2.4.30-hf32.7/net/sctp/sm_statefuns.c	2006-07-28 13:53:35 +0200
+@@ -619,8 +619,9 @@
+ 	 */
+         chunk->subh.cookie_hdr =
+ 		(struct sctp_signed_cookie *)chunk->skb->data;
+-	skb_pull(chunk->skb,
+-		 ntohs(chunk->chunk_hdr->length) - sizeof(sctp_chunkhdr_t));
++	if (!pskb_pull(chunk->skb, ntohs(chunk->chunk_hdr->length) -
++					 sizeof(sctp_chunkhdr_t)))
++		goto nomem;
+ 
+ 	/* 5.1 D) Upon reception of the COOKIE ECHO chunk, Endpoint
+ 	 * "Z" will reply with a COOKIE ACK chunk after building a TCB
+@@ -949,7 +950,8 @@
+ 	 */
+ 	chunk->subh.hb_hdr = (sctp_heartbeathdr_t *) chunk->skb->data;
+ 	paylen = ntohs(chunk->chunk_hdr->length) - sizeof(sctp_chunkhdr_t);
+-	skb_pull(chunk->skb, paylen);
++	if (!pskb_pull(chunk->skb, paylen))
++		goto nomem;
+ 
+ 	reply = sctp_make_heartbeat_ack(asoc, chunk,
+ 					chunk->subh.hb_hdr, paylen);
+@@ -1012,6 +1014,12 @@
+ 						  commands);
+ 
+ 	hbinfo = (sctp_sender_hb_info_t *) chunk->skb->data;
++	/* Make sure that the length of the parameter is what we expect */
++	if (ntohs(hbinfo->param_hdr.length) !=
++				    sizeof(sctp_sender_hb_info_t)) {
++		return SCTP_DISPOSITION_DISCARD;
++	}
++
+ 	from_addr = hbinfo->daddr;
+ 	link = sctp_assoc_lookup_paddr(asoc, &from_addr);
+ 
+@@ -1832,8 +1840,9 @@
+ 	 * are in good shape.
+ 	 */
+         chunk->subh.cookie_hdr = (struct sctp_signed_cookie *)chunk->skb->data;
+-	skb_pull(chunk->skb, ntohs(chunk->chunk_hdr->length) -
+-		 sizeof(sctp_chunkhdr_t));
++	if (!pskb_pull(chunk->skb, ntohs(chunk->chunk_hdr->length) -
++					sizeof(sctp_chunkhdr_t)))
++		goto nomem;
+ 
+ 	/* In RFC 2960 5.2.4 3, if both Verification Tags in the State Cookie
+ 	 * of a duplicate COOKIE ECHO match the Verification Tags of the
+--- linux-2.4.30/net/sctp/sm_statetable.c	2005-01-27 18:57:34 +0100
++++ linux-2.4.30-hf32.7/net/sctp/sm_statetable.c	2006-07-28 13:53:35 +0200
+@@ -366,9 +366,9 @@
+ 	/* SCTP_STATE_EMPTY */ \
+ 	{.fn = sctp_sf_ootb, .name = "sctp_sf_ootb"}, \
+ 	/* SCTP_STATE_CLOSED */ \
+-	{.fn = sctp_sf_bug, .name = "sctp_sf_bug"}, \
++	{.fn = sctp_sf_discard_chunk, .name = "sctp_sf_discard_chunk"}, \
+ 	/* SCTP_STATE_COOKIE_WAIT */ \
+-	{.fn = sctp_sf_bug, .name = "sctp_sf_bug"}, \
++	{.fn = sctp_sf_discard_chunk, .name = "sctp_sf_discard_chunk"}, \
+ 	/* SCTP_STATE_COOKIE_ECHOED */ \
+ 	{.fn = sctp_sf_do_ecne, .name = "sctp_sf_do_ecne"}, \
+ 	/* SCTP_STATE_ESTABLISHED */ \
+@@ -380,7 +380,7 @@
+ 	/* SCTP_STATE_SHUTDOWN_RECEIVED */ \
+ 	{.fn = sctp_sf_do_ecne, .name = "sctp_sf_do_ecne"}, \
+ 	/* SCTP_STATE_SHUTDOWN_ACK_SENT */ \
+-	{.fn = sctp_sf_bug, .name = "sctp_sf_bug"}, \
++	{.fn = sctp_sf_discard_chunk, .name = "sctp_sf_discard_chunk"}, \
+ } /* TYPE_SCTP_ECN_ECNE */
+ 
+ #define TYPE_SCTP_ECN_CWR { \
+@@ -401,7 +401,7 @@
+ 	/* SCTP_STATE_SHUTDOWN_RECEIVED */ \
+ 	{.fn = sctp_sf_discard_chunk, .name = "sctp_sf_discard_chunk"}, \
+ 	/* SCTP_STATE_SHUTDOWN_ACK_SENT */ \
+-	{.fn = sctp_sf_bug, .name = "sctp_sf_bug"}, \
++	{.fn = sctp_sf_discard_chunk, .name = "sctp_sf_discard_chunk"}, \
+ } /* TYPE_SCTP_ECN_CWR */
+ 
+ #define TYPE_SCTP_SHUTDOWN_COMPLETE { \
+@@ -647,7 +647,7 @@
+ 	/* SCTP_STATE_EMPTY */ \
+ 	{.fn = sctp_sf_bug, .name = "sctp_sf_bug"}, \
+ 	/* SCTP_STATE_CLOSED */ \
+-	{.fn = sctp_sf_bug, .name = "sctp_sf_bug"}, \
++	{.fn = sctp_sf_error_closed, .name = "sctp_sf_error_closed"}, \
+ 	/* SCTP_STATE_COOKIE_WAIT */ \
+ 	{.fn = sctp_sf_do_prm_requestheartbeat,		      \
+ 	 .name = "sctp_sf_do_prm_requestheartbeat"},          \
+--- linux-2.4.30/net/sctp/ulpqueue.c	2005-01-27 18:57:34 +0100
++++ linux-2.4.30-hf32.7/net/sctp/ulpqueue.c	2006-07-28 13:53:35 +0200
+@@ -273,6 +273,7 @@
+ static struct sctp_ulpevent *sctp_make_reassembled_event(struct sk_buff *f_frag, struct sk_buff *l_frag)
+ {
+ 	struct sk_buff *pos;
++	struct sk_buff *new = NULL;
+ 	struct sctp_ulpevent *event;
+ 	struct sk_buff *pnext, *last;
+ 	struct sk_buff *list = skb_shinfo(f_frag)->frag_list;
+@@ -291,11 +292,33 @@
+ 	 */
+ 	if (last)
+ 		last->next = pos;
+-	else
+-		skb_shinfo(f_frag)->frag_list = pos;
++ 	else {
++ 		if (skb_cloned(f_frag)) {
++ 			/* This is a cloned skb, we can't just modify
++ 			 * the frag_list.  We need a new skb to do that.
++ 			 * Instead of calling skb_unshare(), we'll do it
++ 			 * ourselves since we need to delay the free.
++ 			 */
++ 			new = skb_copy(f_frag, GFP_ATOMIC);
++ 			if (!new)
++ 				return NULL;	/* try again later */
++
++ 			new->sk = f_frag->sk;
++
++ 			skb_shinfo(new)->frag_list = pos;
++ 		} else
++ 			skb_shinfo(f_frag)->frag_list = pos;
++ 	}
+ 
+ 	/* Remove the first fragment from the reassembly queue.  */
+ 	__skb_unlink(f_frag, f_frag->list);
++
++ 	/* if we did unshare, then free the old skb and re-assign */
++ 	if (new) {
++ 		kfree_skb(f_frag);
++ 		f_frag = new;
++ 	}
++
+ 	while (pos) {
+ 
+ 		pnext = pos->next;
+--- linux-2.4.30/scripts/ver_linux	2004-02-18 14:36:32 +0100
++++ linux-2.4.30-hf32.7/scripts/ver_linux	2006-07-28 13:53:36 +0200
+@@ -22,7 +22,8 @@
+       '/GNU Make/{print "Gnu make              ",$NF}'
+ 
+ ld -v 2>&1 | awk -F\) '{print $1}' | awk \
+-      '/BFD/{print "binutils              ",$NF}'
++      '/BFD/{print "binutils              ",$NF} \
++       /^GNU/{print "binutils              ",$4}'
+ 
+ fdformat --version | awk -F\- '{print "util-linux            ", $NF}'
+ 
