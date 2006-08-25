@@ -33,31 +33,7 @@ endef
 
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status}; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		./configure \
-		  --target=$(GNU_TARGET_NAME) \
-		  --host=$(GNU_TARGET_NAME) \
-		  --build=$(GNU_HOST_NAME) \
-		  --program-prefix="" \
-		  --program-suffix="" \
-		  --prefix=/usr \
-		  --exec-prefix=/usr \
-		  --bindir=/usr/bin \
-		  --datadir=/usr/share \
-		  --includedir=/usr/include \
-		  --infodir=/usr/share/info \
-		  --libdir=/usr/lib \
-		  --libexecdir=/usr/lib \
-		  --localstatedir=/var \
-		  --mandir=/usr/share/man \
-		  --sbindir=/usr/sbin \
-		  --sysconfdir=/etc \
-		  $(DISABLE_LARGEFILE) \
-		  $(DISABLE_NLS) \
-		  --with-pppd-ip-alloc \
-	)
+$(call Build/Configure/Default,--with-pppd-ip-alloc --with-bcrelay)
 endef
 
 define Build/Compile
@@ -78,9 +54,9 @@ define Package/pptpd/install
 	install -m0644 ./files/options.pptpd $(1)/etc/ppp/
 	install -d -m0755 $(1)/usr/sbin
 	install -d -m0755 $(1)/usr/lib/pptpd
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/pptpd $(1)/usr/sbin/
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/pptpctrl $(1)/usr/sbin/
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/pptpd/* $(1)/usr/lib/pptpd
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pptpd $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pptpctrl $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pptpd/* $(1)/usr/lib/pptpd
 	$(STRIP) $1/usr/sbin/*
 	$(STRIP) $1/usr/lib/pptpd/*
 endef
