@@ -1,0 +1,47 @@
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id$
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=wknock
+PKG_VERSION:=1
+PKG_RELEASE:=1
+PKG_MD5SUM:=6b7a1f3cbb0af88da02e5d30cefd8e7f
+
+PKG_SOURCE_URL:=http://blackhat.com/presentations/bh-europe-05/BH_EU_05-Oudot/
+PKG_SOURCE:=$(PKG_NAME).tar.gz
+PKG_CAT:=zcat
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/wknock
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=kmod-brcm-wl +libpcap
+  TITLE:=A tool to hide your Access Point against opportunistic attackers.
+  DESCRIPTION:=tool to hide your Access Point against opportunistic attackers.
+  URL:=http://www.rstack.org/oudot/wknock/
+endef
+
+define Build/Compile	
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CC=$(TARGET_CC) \
+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -lpcap" \
+		all
+endef
+
+define Package/wknock/install	
+	install -d -m0755 $(1)/usr/sbin
+	install -m0755 $(PKG_BUILD_DIR)/wknock $(1)/usr/sbin/
+	install -m0755 $(PKG_BUILD_DIR)/wknock-ng $(1)/usr/sbin/
+endef
+
+$(eval $(call BuildPackage,wknock))
