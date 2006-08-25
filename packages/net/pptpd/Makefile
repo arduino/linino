@@ -62,6 +62,3 @@ define Package/pptpd/install
 endef
 
 $(eval $(call BuildPackage,pptpd))
-
-
-
