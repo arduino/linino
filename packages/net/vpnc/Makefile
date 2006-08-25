@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/vpnc
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libgpg-error +libgcrypt
+  DEPENDS:=+libgpg-error +libgcrypt +kmod-tun
   TITLE:=VPN client for Cisco 3000
   DESCRIPTION:=Client for cisco3000 VPN Concentrator
   URL:=http://www.unix-ag.uni-kl.de/~massar/vpnc/
