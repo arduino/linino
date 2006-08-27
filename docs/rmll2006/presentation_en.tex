@@ -139,14 +139,14 @@ As a consequence to these difficulties, and the more and more increasing market 
 
 New hardware platforms were then supported~:
 \begin{itemize}
-\item Texas Instruments AR7 (noyau 2.4)
-\item Atheros AR531x (noyau 2.4)
-\item Aruba (noyau 2.6)
-\item x86 (noyaux 2.4 et 2.6)
-\item Broadcom SiByte (noyau 2.6)
-\item AMD Alchemy (noyau 2.6)
-\item Intel Xscale IX42x (noyau 2.6)
-\item Router Board RB532 (noyau 2.6)
+\item Texas Instruments AR7 (2.4 kernel)
+\item Atheros AR531x (2.4 kernel)
+\item Aruba (2.6 kernel)
+\item x86 (2.4 and 2.6 kernels)
+\item Broadcom SiByte (2.6 kernel)
+\item AMD Alchemy (2.6 kernel)
+\item Intel Xscale IXP42x (2.6 kernel)
+\item Router Board RB532 (2.6 kernel)
 \end{itemize}
 }
 
@@ -167,9 +167,9 @@ Kamikaze has a certain number of drawbacks :
 {
 \frametitle{buildroot-ng}
 \begin{itemize}
-\item abstraction et simplication d'écriture des fichiers \textbf{Makefile} et compatibilité avec la syntaxe précédente
-\item les paquetages dépendant fortement du noyau vont dans \textbf{buildroot-ng}, les autres dans \textbf{packages/}
-\item dépôt multi-architectures indépendamment du du système de base
+\item ease and abstraction of the \textbf{Makefile} writing with compatibility with the previous syntax
+\item kernel dependent packages go in \textbf{buildroot-ng}, others in \textbf{packages/}
+\item multi-architecture repository independent from the base-system.
 \end{itemize}
 }
 
@@ -204,7 +204,6 @@ Kamikaze has a certain number of drawbacks :
 {
 \frametitle{Legal concerns}
 Some legal concerns are raised when you know a hardware is running Linux~:
-Plusieurs questions légales se posent lorsque vous avez connaissance qu'un matériel donné fonctionne sous Linux~:
 \begin{itemize}
 \item does the manufacturer provide the firmware source code ?
 \item does this hardware use binary drivers ?
@@ -394,7 +393,7 @@ $(eval $(call kernel_template,2.6,architecture,
 Common debuging tools :
 \begin{itemize}
 \item GDB
-\item EJTAG (si disponible)
+\item EJTAG (if available)
 \item ksymoops
 \item usage of printk
 \item debug options enabled in the kernel
