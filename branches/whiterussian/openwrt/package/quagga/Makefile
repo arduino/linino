@@ -25,6 +25,7 @@ $(eval $(call PKG_template,QUAGGA_OSPFD,quagga-ospfd,$(PKG_VERSION)-$(PKG_RELEAS
 $(eval $(call PKG_template,QUAGGA_OSPF6D,quagga-ospf6d,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,QUAGGA_RIPD,quagga-ripd,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,QUAGGA_RIPNGD,quagga-ripngd,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,QUAGGA_ISISD,quagga-isisd,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,QUAGGA_VTYSH,quagga-vtysh,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 $(PKG_BUILD_DIR)/.configured:
@@ -60,6 +61,8 @@ $(PKG_BUILD_DIR)/.configured:
 		--enable-vtysh \
 		--enable-user=quagga \
 		--enable-group=quagga \
+		--enable-multipath=8 \
+		--enable-isisd \
 	);
 	touch $@
 
@@ -115,6 +118,12 @@ $(IPKG_QUAGGA_RIPNGD):
 	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/ripngd $(IDIR_QUAGGA_RIPNGD)/usr/sbin/
 	$(RSTRIP) $(IDIR_QUAGGA_RIPNGD)
 	$(IPKG_BUILD) $(IDIR_QUAGGA_RIPNGD) $(PACKAGE_DIR)
+
+$(IPKG_QUAGGA_ISISD):
+	install -d -m0755 $(IDIR_QUAGGA_ISISD)/usr/sbin
+	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/isisd $(IDIR_QUAGGA_ISISD)/usr/sbin/
+	$(RSTRIP) $(IDIR_QUAGGA_ISISD)
+	$(IPKG_BUILD) $(IDIR_QUAGGA_ISISD) $(PACKAGE_DIR)
 
 $(IPKG_QUAGGA_VTYSH):
 	install -d -m0755 $(IDIR_QUAGGA_VTYSH)/usr/bin

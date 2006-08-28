@@ -52,6 +52,14 @@ config BR2_PACKAGE_QUAGGA_RIPNGD
 	help
 	  A RIPNG (IPv6) routing engine for use with Quagga routing software.
 
+config BR2_PACKAGE_QUAGGA_ISISD
+        depends BR2_PACKAGE_QUAGGA
+        prompt"...-isisd - IS-IS routing engine"
+        tristate
+        default m if CONFIG_DEVEL
+        help
+          An IS-IS routing engine for use with Quagga routing software.
+
 config BR2_PACKAGE_QUAGGA_VTYSH
 	depends BR2_PACKAGE_QUAGGA
 	select BR2_PACKAGE_LIBREADLINE
