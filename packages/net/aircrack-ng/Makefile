@@ -8,11 +8,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aircrack-ng
-PKG_VERSION:=0.6
+PKG_VERSION:=0.6.1
 PKG_RELEASE:=1
 PKG_MD5SUM:=6b85fe925c93c972f3d9f8170dce46c6
 
-PKG_SOURCE_URL:=http://download.aircrack-ng.org
+PKG_SOURCE_URL:=http://download.aircrack-ng.org/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_CAT:=zcat
 
