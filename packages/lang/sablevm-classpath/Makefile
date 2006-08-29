@@ -89,6 +89,6 @@ $(eval $(call BuildPackage,libsablevm-classpath))
 $(eval $(call BuildPackage,sablevm-classpath-full))
 $(eval $(call BuildPackage,sablevm-classpath-mini))
 
-$(eval $(call RequireCommand,gcj, \
-        libsablevm-classpath require jikes to build. \
+$(eval $(call RequireCommand,jikes jikes-sablevm sablevm fastjar, \
+        libsablevm-classpath require jikes jikes-sablevm sablevm fastjar to compile. \
 ))
