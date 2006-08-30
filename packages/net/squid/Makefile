@@ -224,14 +224,3 @@ $(eval $(call BuildPlugin,squid-mod-external-acl-winbind-group,wb_group))
 $(eval $(call BuildPlugin,squid-mod-ntlm-auth-fakeauth,fakeauth_auth))
 $(eval $(call BuildPlugin,squid-mod-ntlm-auth-smb-auth,ntlm_auth))
 $(eval $(call BuildPlugin,squid-mod-ntlm-auth-winbind-auth,wb_ntlmauth))
-
-
-define Require/openssl
-	echo 'int main(int argc, char **argv) { SSL_library_init(); return 0; }' | \
-		gcc -include openssl/ssl.h -x c -o $(TMP_DIR)/a.out -lcrypto -lssl -
-endef
-
-$(eval $(call Require,openssl, \
-	No OpenSSL development files were not found on your system. \
-))
-
