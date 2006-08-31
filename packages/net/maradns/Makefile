@@ -46,12 +46,14 @@ define Build/Compile
 		CFLAGS="$(TARGET_CFLAGS)" \
 		FLAGS="$(TARGET_CFLAGS)" \
 		CC="$(TARGET_CC)" \
-		HOSTCC="$(HOSTCC)"
+		HOSTCC="$(HOSTCC)" \
+		V=
 	mkdir -p $(PKG_INSTALL_DIR)/usr/{bin,sbin}
 	mkdir -p $(PKG_INSTALL_DIR)/usr/man/man{1,5,8}
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		PREFIX="$(PKG_INSTALL_DIR)/usr" \
 		RPM_BUILD_ROOT="$(PKG_INSTALL_DIR)" \
+		V= \
 		install
 endef
 
