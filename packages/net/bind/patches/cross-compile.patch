@@ -206,3 +206,15 @@ diff -urN bind-9.3.1/configure.in bind-9.3.1.new/configure.in
  if test "$use_openssl" = "auto"
  then
  	for d in $openssldirs
+diff -urN bind-9.3.1/configure bind-9.3.1.new/configure
+--- bind-9.3.1/lib/bind/configure	2004-12-09 05:09:03.000000000 +0100
++++ bind-9.3.1.new/lib/bind/configure	2006-07-31 14:24:19.000000000 +0200
+@@ -5289,6 +5289,7 @@
+ if eval "test \"\${$as_ac_File+set}\" = set"; then
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
++cross_compiling=no
+   test "$cross_compiling" = yes &&
+   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+ echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+
