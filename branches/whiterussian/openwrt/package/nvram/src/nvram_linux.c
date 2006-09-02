@@ -26,7 +26,6 @@
 
 #include <typedefs.h>
 #include <bcmnvram.h>
-#include <nvram_convert.h>
 #include <shutils.h>
 #include <utils.h>
 
@@ -116,8 +115,8 @@ nvram_getall(char *buf, int count)
 	return (ret == count) ? 0 : ret;
 }
 
-static int
-_nvram_set(const char *name, const char *value)
+int
+nvram_set(const char *name, const char *value)
 {
 	size_t count = strlen(name) + 1;
 	char tmp[100], *buf = tmp;
@@ -153,36 +152,15 @@ _nvram_set(const char *name, const char *value)
 }
 
 int
-nvram_set(const char *name, const char *value)
-{
-	 extern struct nvram_convert nvram_converts[];
-         struct nvram_convert *v;
-         int ret;
-
-         ret = _nvram_set(name, value);
-
-         for(v = nvram_converts ; v->name ; v++) {
-                 if(!strcmp(v->name, name)){
-                         if(strcmp(v->wl0_name,""))      _nvram_set(v->wl0_name, value);
-                         if(strcmp(v->d11g_name,""))     _nvram_set(v->d11g_name, value);
-                 }
-         }
-
-         return ret;
-}
-
-int
 nvram_unset(const char *name)
 {
-	return _nvram_set(name, NULL);
+	return nvram_set(name, NULL);
 }
 
 int
 nvram_commit(void)
 {
 	int ret;
-	
-	cprintf("nvram_commit(): start\n");	
 	
 	if((check_action() == ACT_IDLE) || 
 	   (check_action() == ACT_SW_RESTORE) || 
@@ -195,11 +173,7 @@ nvram_commit(void)
 
 		if (ret < 0)
 			perror(PATH_DEV_NVRAM);
-	
-		cprintf("nvram_commit(): end\n");	
 	}
-	else
-		cprintf("nvram_commit():  nothing to do...\n");
 
 	return ret;
 }
