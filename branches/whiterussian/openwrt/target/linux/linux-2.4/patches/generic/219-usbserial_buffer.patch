@@ -1,0 +1,21 @@
+--- linux.old/drivers/usb/serial/usbserial.c	2006-08-19 18:48:07.000000000 +0200
++++ linux.dev/drivers/usb/serial/usbserial.c	2006-08-19 18:46:02.000000000 +0200
+@@ -1359,7 +1359,7 @@
+ 	wake_up_interruptible(&tty->write_wait);
+ }
+ 
+-
++#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+ static void * usb_serial_probe(struct usb_device *dev, unsigned int ifnum,
+ 			       const struct usb_device_id *id)
+ {
+@@ -1512,7 +1512,8 @@
+ 			err("No free urbs available");
+ 			goto probe_error;
+ 		}
+-		buffer_size = endpoint->wMaxPacketSize;
++		/* Minimum buffer size for EVDO and HSDPA cards */
++		buffer_size = MIN(2048,endpoint->wMaxPacketSize);
+ 		port->bulk_in_endpointAddress = endpoint->bEndpointAddress;
+ 		port->bulk_in_buffer = kmalloc (buffer_size, GFP_KERNEL);
+ 		if (!port->bulk_in_buffer) {
