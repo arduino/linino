@@ -31,11 +31,15 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_COMGT):
 	install -d -m0755 $(IDIR_COMGT)/usr/bin
 	install -m0755 $(PKG_BUILD_DIR)/gcom $(IDIR_COMGT)/usr/bin/
+	install -d -m0755 $(IDIR_COMGT)/etc/chatscripts
+	install -m0644 ./files/wwan.chat $(IDIR_COMGT)/etc/chatscripts/wwan.chat
 	install -d -m0755 $(IDIR_COMGT)/etc/gcom
 	install -m0644 ./files/setpin.gcom $(IDIR_COMGT)/etc/gcom/setpin.gcom
 	install -m0644 ./files/setmode.gcom $(IDIR_COMGT)/etc/gcom/setmode.gcom
 	install -m0644 ./files/getcardinfo.gcom $(IDIR_COMGT)/etc/gcom/getcardinfo.gcom
 	install -m0644 ./files/getstrength.gcom $(IDIR_COMGT)/etc/gcom/getstrength.gcom
+	install -d -m0755 $(IDIR_COMGT)/sbin
+	install -m0755 ./files/ifup.wwan $(IDIR_COMGT)/sbin/
 	$(RSTRIP) $(IDIR_COMGT)
 	$(IPKG_BUILD) $(IDIR_COMGT) $(PACKAGE_DIR)
 

@@ -1,0 +1,102 @@
+#!/bin/sh
+[ $# = 0 ] && { echo "  $0 <group>"; exit; }
+. /etc/functions.sh
+type=$1
+
+[ "$(nvram get ${type}_proto)" = "wwan" ] || {
+	echo "$0: ${type}_proto isn't wwan"
+	exit
+}
+
+mkdir -p /var/lock
+
+for module in slhc ppp_generic pppox pppoe; do
+	/sbin/insmod $module 2>&- >&-
+done
+
+wwan_device="$(nvram get wwan_device)"
+[ -n "$wwan_device" -a -e "$wwan_device" ] || {
+	# try the defaults
+	for dev in /dev/tts/2 /dev/usb/tts/0 /dev/noz0; do
+		[ -e "$dev" ] && {
+			wwan_device="$dev"
+			nvram set wwan_device="$dev"
+			break
+		}
+	done
+	[ -z "$wwan_device" ] && {
+		echo "$0: No device found"
+		exit 1
+	}
+}
+
+if gcom -d $wwan_device -s /etc/gcom/getcardinfo.gcom | grep Novatel 2>/dev/null >/dev/null; then
+	case "$(nvram get wwan_service)" in
+		umts_only) CODE=2;;
+		gprs_only) CODE=1;;
+		*)
+			# umts_first
+			CODE=0
+		;;
+	esac
+	MODE="AT\$NWRAT=${CODE},2"
+else
+	case "$(nvram get wwan_service)" in
+		umts_only) CODE=1;;
+		gprs_only) CODE=0;;
+		*)
+			# umts_first
+			CODE=3
+		;;
+	esac
+	MODE="AT_OPSYS=${CODE}"
+fi
+
+(while :; do
+	USERNAME="$(nvram get wwan_username)"
+	PASSWORD="$(nvram get wwan_passwd)"
+	KEEPALIVE="$(nvram get wwan_redialperiod)"
+	KEEPALIVE="${KEEPALIVE:+lcp-echo-failure 5 lcp-echo-interval $KEEPALIVE}"
+	DEMAND="$(nvram get wwan_demand)"
+	APN="$(nvram get wwan_apn)"
+	case "$DEMAND" in
+		on|1|enabled)
+			DEMAND=$(nvram get wwan_idletime)
+			DEMAND=${DEMAND:+demand idle $DEMAND}
+			[ -f /etc/ppp/filter ] && DEMAND=${DEMAND:+precompiled-active-filter /etc/ppp/filter $DEMAND}
+			# set up a dummy nameserver for dial on demand
+			echo "nameserver 1.1.1.1" > /tmp/resolv.conf
+		;;
+		*) DEMAND="";;
+	esac
+			
+	MTU=$(nvram get wwan_mtu)
+
+	if PINCODE=$(nvram get wwan_pincode) gcom -d $wwan_device -s /etc/gcom/setpin.gcom; then
+		MODE="$MODE" gcom -d $wwan_device -s /etc/gcom/setmode.gcom
+		/usr/sbin/pppd nodetach \
+			noaccomp \
+			nopcomp \
+			novj \
+			nobsdcomp \
+			noauth \
+			connect /bin/true \
+			usepeerdns \
+			defaultroute \
+			replacedefaultroute \
+			ipparam "$type" \
+			linkname "$type" \
+			user "$USERNAME" \
+			password "$PASSWORD" \
+			${MTU:+mtu $MTU mru $MTU} \
+			$DEMAND \
+			$KEEPALIVE \
+			lock \
+			crtscts \
+			connect "WWAN_APN=\"$APN\" /usr/sbin/chat -V -E -f /etc/chatscripts/wwan.chat"
+			460800 "$wwan_device"
+	else
+		echo "Wrong Pincode."
+		break
+	fi
+done 2>&1 | logger) &

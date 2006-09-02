@@ -1,6 +1,7 @@
 config BR2_PACKAGE_COMGT
 	tristate "comgt - Option/Vodafone 3G/GPRS control tool"
 	default m
+	select BR2_PACKAGE_CHAT
 	help
 	  Option GlobeTrotter GPRS/EDGE/3G/HSDPA and Vodafone 3G/GPRS datacard control tool
 	  
@@ -8,3 +9,5 @@ config BR2_PACKAGE_COMGT
 	  on serial lines and through PCMCIA modems as well as GPRS and 3G datacards.
 	  
 	  http://www.pharscape.org/content/view/46/70/
+
+	  This package contains the scripts for setting up 3G/UMTS/GPRS
