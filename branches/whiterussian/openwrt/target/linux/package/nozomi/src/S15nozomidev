@@ -1,0 +1,6 @@
+#!/bin/sh
+# hack.. nozomi driver should register itself in devfs instead.
+mknod /dev/noz0 c 241 0
+mknod /dev/noz1 c 241 1
+mknod /dev/noz2 c 241 2
+mknod /dev/noz3 c 241 3

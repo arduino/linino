@@ -4,6 +4,7 @@ include $(TOPDIR)/rules.mk
 package-$(BR2_PACKAGE_KMOD_FUSE) += fuse
 package-$(BR2_PACKAGE_KMOD_SHFS) += shfs
 package-$(BR2_PACKAGE_KMOD_SWITCH) += switch
+package-$(BR2_PACKAGE_KMOD_NOZOMI) += nozomi
 package-$(BR2_PACKAGE_KMOD_OPENSWAN) += openswan
 package-$(BR2_PACKAGE_KMOD_MADWIFI) += madwifi
 package-$(BR2_PACKAGE_KMOD_MINI_FO) += mini_fo
