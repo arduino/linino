@@ -112,7 +112,7 @@ $(eval $(call KMOD_template,IP6TABLES,ip6tables,\
 
 $(eval $(call KMOD_template,PCMCIA,pcmcia,\
 	$(MODULES_DIR)/kernel/drivers/pcmcia/*.o \
-,CONFIG_PCMCIA))
+,CONFIG_PCMCIA,,40,pcmcia_core yenta_socket ds))
 $(eval $(call KMOD_template,PCMCIA_SERIAL,pcmcia-serial, \
 	$(MODULES_DIR)/kernel/drivers/char/pcmcia/serial_cs.o \
 ,CONFIG_PCMCIA_SERIAL_CS))
