@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ -f /sbin/pidof ]
+then
+    echo "Removing hard link from pidof to killall"
+    rm -f /sbin/pidof
+fi
+
+exit 0

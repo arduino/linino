@@ -1,0 +1,15 @@
+#!/bin/sh
+
+BINS="/sbin/fuser /usr/bin/killall /usr/bin/pstree /bin/pidof"
+echo "Recreating original BusyBox links: "
+
+for bin in $BINS
+do
+    if busybox 2>&1 | grep ${bin##/*/} >/dev/null
+    then
+         echo "$bin "
+         ln -sf /bin/busybox $bin
+    fi
+done
+
+exit 0

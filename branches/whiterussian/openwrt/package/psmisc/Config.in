@@ -1,0 +1,33 @@
+menu "Misc /proc utilities"
+
+config BR2_PACKAGE_PSMISC
+	prompt "Misc /proc utilities"
+	tristate
+	default m if CONFIG_DEVEL
+	help
+	PSmisc package is a set of additional small useful utilities that use
+	the proc filesystem: fuser, killall, pstree, and pidof
+	
+	http://psmisc.sourceforge.net/
+
+config BR2_PACKAGE_PSMISC_FUSER
+	prompt "fuser - identify processes using files or sockets"
+	bool
+	default y if CONFIG_DEVEL
+	depends BR2_PACKAGE_PSMISC
+
+config BR2_PACKAGE_PSMISC_KILLALL
+	prompt "killall - kill process by name, pidof - find PIDs by name"
+	bool
+	default y if CONFIG_DEVEL
+	depends BR2_PACKAGE_PSMISC
+
+config BR2_PACKAGE_PSMISC_PSTREE
+	prompt "pstree (requires libncurses) - display a tree of processes"
+	bool
+	default y if CONFIG_DEVEL
+	depends BR2_PACKAGE_PSMISC
+	select BR2_PACKAGE_LIBNCURSES
+	depends BR2_PACKAGE_PSMISC
+
+endmenu

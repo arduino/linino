@@ -92,6 +92,7 @@ package-$(BR2_PACKAGE_PPP) += ppp
 package-$(BR2_PACKAGE_PPTP) += pptp
 package-$(BR2_PACKAGE_PPTPD) += pptpd
 package-$(BR2_PACKAGE_PROCPS) += procps
+package-$(BR2_PACKAGE_PSMISC) += psmisc
 package-$(BR2_PACKAGE_QUAGGA) += quagga
 package-$(BR2_PACKAGE_RADVD) += radvd
 package-$(BR2_COMPILE_RADIUSCLIENT_NG) += radiusclient-ng
