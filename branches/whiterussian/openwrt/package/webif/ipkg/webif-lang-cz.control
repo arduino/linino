@@ -1,0 +1,7 @@
+Package: webif-lang-cz
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Section: net
+Depends: webif
+Priority: normal
+Description: Czech language file for webif.
+

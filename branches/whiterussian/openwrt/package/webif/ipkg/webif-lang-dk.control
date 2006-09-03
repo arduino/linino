@@ -1,0 +1,7 @@
+Package: webif-lang-dk
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Section: net
+Depends: webif
+Priority: normal
+Description: Danish language file for webif.
+

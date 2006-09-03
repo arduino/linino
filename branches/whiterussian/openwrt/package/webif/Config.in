@@ -1,3 +1,5 @@
+menu "webif - OpenWrt Administrative Console"
+
 config BR2_PACKAGE_WEBIF
 	select BR2_PACKAGE_HASERL
 	tristate "webif - OpenWrt Administrative Console"
@@ -5,3 +7,123 @@ config BR2_PACKAGE_WEBIF
 	help
 	  A web interface for configuring OpenWrt
 	  
+config BR2_PACKAGE_WEBIF_LANG_CA
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-ca - Canadian language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Canadian language file for webif
+
+config BR2_PACKAGE_WEBIF_LANG_CZ
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-cz - Czech language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Czech language file for webif
+
+config BR2_PACKAGE_WEBIF_LANG_DE
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-de - German language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  German language file for webif
+
+config BR2_PACKAGE_WEBIF_LANG_DK
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-dk - Danish language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Danish language file for webif
+
+config BR2_PACKAGE_WEBIF_LANG_EE
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-ee - Estonian language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Estonian language file for webif
+
+config BR2_PACKAGE_WEBIF_LANG_ES
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-es - Spanish language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Spanish language file for webif
+
+config BR2_PACKAGE_WEBIF_LANG_FR
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-fr - French language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  French language file for webif
+
+config BR2_PACKAGE_WEBIF_LANG_HR
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-hr - Croatian language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Croatian language file for webif
+
+config BR2_PACKAGE_WEBIF_LANG_HU
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-hu - Hungarian language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Hungarian language file for webif
+
+config BR2_PACKAGE_WEBIF_LANG_IT
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-it - Italian language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Italian language file for webif
+
+config BR2_PACKAGE_WEBIF_LANG_NL
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-nl - Dutch language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Dutch language file for webif
+
+config BR2_PACKAGE_WEBIF_LANG_NO
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-no - Norwegian language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Norwegian language file for webif
+
+config BR2_PACKAGE_WEBIF_LANG_PL
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-pl - Polish language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Polish language file for webif
+
+config BR2_PACKAGE_WEBIF_LANG_RU
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-ru - Russian language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Russian language file for webif
+
+config BR2_PACKAGE_WEBIF_LANG_SE
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-se - Swedish language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Swedish language file for webif
+endmenu

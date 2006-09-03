@@ -1,0 +1,7 @@
+Package: webif-lang-nl
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Section: net
+Depends: webif
+Priority: normal
+Description: Dutch language file for webif.
+

@@ -1,0 +1,7 @@
+Package: webif-lang-no
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Section: net
+Depends: webif
+Priority: normal
+Description: Norwegian language file for webif.
+

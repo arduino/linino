@@ -1,0 +1,7 @@
+Package: webif-lang-pl
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Section: net
+Depends: webif
+Priority: normal
+Description: Polish language file for webif.
+
