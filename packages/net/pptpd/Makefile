@@ -33,7 +33,7 @@ endef
 
 
 define Build/Configure
-$(call Build/Configure/Default,--with-pppd-ip-alloc --with-bcrelay)
+$(call Build/Configure/Default, --with-bcrelay)
 endef
 
 define Build/Compile
