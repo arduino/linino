@@ -12,18 +12,20 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/Config.in linux-2.4.30.new/net/ipv4/ne
 diff -urN linux-2.4.30/net/ipv4/netfilter/ip_conntrack_core.c linux-2.4.30.new/net/ipv4/netfilter/ip_conntrack_core.c
 --- linux-2.4.30/net/ipv4/netfilter/ip_conntrack_core.c	2006-08-18 17:57:40.000000000 +0200
 +++ linux-2.4.30.new/net/ipv4/netfilter/ip_conntrack_core.c	2006-08-18 17:58:03.000000000 +0200
-@@ -821,7 +821,15 @@
+@@ -821,7 +821,17 @@
  		}
  		*set_reply = 0;
  	}
 +
  	skb->nfct = &h->ctrack->infos[*ctinfo];
 +
++	#if defined(CONFIG_IP_NF_MATCH_CONNBYTES) || defined(CONFIG_IP_NF_MATCH_CONNBYTES_MODULE)
 +	/* devik: increment bytes in connection here */
 +	if (h->ctrack->bytes + skb->len >= 0xffff0000)
 +		h->ctrack->bytes = 0xffff0000;
 +	else
 +		h->ctrack->bytes += skb->len;
++	#endif
 +
  	return h->ctrack;
  }
@@ -36,7 +38,7 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/ip_conntrack_standalone.c linux-2.4.30
  				conntrack->layer7.app_proto); 
  	#endif
 -
-+	#if defined(CONFIG_IP_NF_MATCH_CONNBYTES)
++	#if defined(CONFIG_IP_NF_MATCH_CONNBYTES) || defined(CONFIG_IP_NF_MATCH_CONNBYTES_MODULE)
 +	len += sprintf(buffer + len, "bytes=%lu ",conntrack->bytes); /* devik */
 +	#endif
  	len += sprintf(buffer + len, "\n");
@@ -45,7 +47,7 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/ip_conntrack_standalone.c linux-2.4.30
 diff -urN linux-2.4.30/net/ipv4/netfilter/ipt_connbytes.c linux-2.4.30.new/net/ipv4/netfilter/ipt_connbytes.c
 --- linux-2.4.30/net/ipv4/netfilter/ipt_connbytes.c	1970-01-01 01:00:00.000000000 +0100
 +++ linux-2.4.30.new/net/ipv4/netfilter/ipt_connbytes.c	2006-08-18 17:58:03.000000000 +0200
-@@ -0,0 +1,61 @@
+@@ -0,0 +1,65 @@
 +/* Kernel module to match connection tracking byte counter.
 + * GPL (C) 2002 Martin Devera (devik@cdi.cz).
 + */
@@ -67,31 +69,35 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/ipt_connbytes.c linux-2.4.30.new/net/i
 +{
 +	const struct ipt_connbytes_info *sinfo = matchinfo;
 +	enum ip_conntrack_info ctinfo;
-+	struct ip_conntrack *ct;
++	struct ip_conntrack *ct = ip_conntrack_get((struct sk_buff *)skb, &ctinfo);
 +
-+	if (!(ct = ip_conntrack_get((struct sk_buff *)skb, &ctinfo)))
++	if (!ct) 
 +		return 0; /* no match */
 +	
-+	if (sinfo->from > sinfo->to)
-+		return (ct->bytes < sinfo->to || ct->bytes > sinfo->from);
++	if (sinfo->count.from > sinfo->count.to)
++		return (ct->bytes < sinfo->count.to || ct->bytes > sinfo->count.from);
 +	else
-+		return (ct->bytes >= sinfo->from && ct->bytes <= sinfo->to);
++		return (ct->bytes >= sinfo->count.from && ct->bytes <= sinfo->count.to);
 +}
 +
-+static int check(const char *tablename,
++static int checkentry(const char *tablename,
 +		 const struct ipt_ip *ip,
 +		 void *matchinfo,
 +		 unsigned int matchsize,
 +		 unsigned int hook_mask)
 +{
-+	if (matchsize != IPT_ALIGN(sizeof(struct ipt_connbytes_info)))
++	if (matchsize != IPT_ALIGN(sizeof(struct ipt_connbytes_info))) {
++		printk(KERN_ERR "CONNBYTES: invalid size (%u != %u).\n",
++			matchsize,
++			IPT_ALIGN(sizeof(struct ipt_connbytes_info)));
 +		return 0;
++	}
 +
 +	return 1;
 +}
 +
 +static struct ipt_match state_match
-+= { { NULL, NULL }, "connbytes", &match, &check, NULL, THIS_MODULE };
++= { { NULL, NULL }, "connbytes", &match, &checkentry, NULL, THIS_MODULE };
 +
 +static int __init init(void)
 +{
@@ -121,13 +127,15 @@ diff -urN linux-2.4.30/net/ipv4/netfilter/Makefile linux-2.4.30.new/net/ipv4/net
 diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h
 --- linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h	2006-08-18 17:57:40.000000000 +0200
 +++ linux-2.4.30.new/include/linux/netfilter_ipv4/ip_conntrack.h	2006-08-18 17:58:03.000000000 +0200
-@@ -205,7 +205,9 @@
+@@ -205,7 +205,11 @@
  	struct nf_ct_info infos[IP_CT_NUMBER];
  
  	/* Storage reserved for other modules: */
 -
 +	/* devik: store num of bytes transfered; counter uses saturated incr. */
++	#if defined(CONFIG_IP_NF_MATCH_CONNBYTES) || defined(CONFIG_IP_NF_MATCH_CONNBYTES_MODULE)
 +	unsigned long bytes;
++	#endif
 +	
  	union ip_conntrack_proto proto;
  
@@ -135,32 +143,31 @@ diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h linux-2.4.30.
 diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ipt_connbytes.h linux-2.4.30.new/include/linux/netfilter_ipv4/ipt_connbytes.h
 --- linux-2.4.30/include/linux/netfilter_ipv4/ipt_connbytes.h	1970-01-01 01:00:00.000000000 +0100
 +++ linux-2.4.30.new/include/linux/netfilter_ipv4/ipt_connbytes.h	2006-08-18 17:58:34.000000000 +0200
-@@ -0,0 +1,28 @@
+@@ -0,0 +1,27 @@
 +#ifndef _IPT_CONNBYTES_H
 +#define _IPT_CONNBYTES_H
 +
 +enum ipt_connbytes_what {
-+        IPT_CONNBYTES_WHAT_PKTS,
-+        IPT_CONNBYTES_WHAT_BYTES,
-+        IPT_CONNBYTES_WHAT_AVGPKT,
++	IPT_CONNBYTES_WHAT_PKTS,
++	IPT_CONNBYTES_WHAT_BYTES,
++	IPT_CONNBYTES_WHAT_AVGPKT,
 +};
 +
 +enum ipt_connbytes_direction {
-+        IPT_CONNBYTES_DIR_ORIGINAL,
-+        IPT_CONNBYTES_DIR_REPLY,
-+        IPT_CONNBYTES_DIR_BOTH,
++	IPT_CONNBYTES_DIR_ORIGINAL,
++	IPT_CONNBYTES_DIR_REPLY,
++	IPT_CONNBYTES_DIR_BOTH,
 +};
 +
 +struct ipt_connbytes_info
 +{
-+       /* if from<=to then it matches the range; if from>to then
-+          inverse range is matched */
-+       	unsigned long from,to;
++	/* if from<=to then it matches the range; if from>to then
++		inverse range is matched */
 +	struct {
-+                u_int64_t from; /* count to be matched */
-+                u_int64_t to;   /* count to be matched */
-+        } count;
-+        u_int8_t what;          /* ipt_connbytes_what */
-+        u_int8_t direction;     /* ipt_connbytes_direction */
++		u_int64_t from; /* count to be matched */
++		u_int64_t to;   /* count to be matched */
++	} count;
++	u_int8_t what;		/* ipt_connbytes_what */
++	u_int8_t direction;     /* ipt_connbytes_direction */
 +};
 +#endif
