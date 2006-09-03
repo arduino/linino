@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ -f /usr/bin/pkill ]
+then
+    echo "Removing hard link from pkill to pgrep"
+    rm -f /usr/bin/pkill
+fi
+
+if [ -f /usr/bin/snice ]
+then
+    echo "Removing hard link from snice to skill"
+    rm -f /usr/bin/skill
+fi
+
+exit 0

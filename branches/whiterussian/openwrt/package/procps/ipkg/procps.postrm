@@ -1,0 +1,19 @@
+#!/bin/sh
+
+BINS="/usr/bin/free /bin/kill /usr/bin/pgrep /usr/bin/pkill /usr/bin/pmap \
+/usr/bin/skill /usr/bin/pwdx /usr/bin/slabtop /usr/bin/snice /sbin/sysctl \
+/usr/bin/tload /usr/bin/top /usr/bin/uptime /usr/bin/vmstat /usr/bin/w \
+/usr/bin/watch /bin/ps"
+
+echo "Recreating original BusyBox links: "
+
+for bin in $BINS
+do
+    if busybox 2>&1 | grep ${bin##/*/} >/dev/null
+    then
+         echo "$bin "
+         ln -sf /bin/busybox $bin
+    fi
+done
+
+exit 0

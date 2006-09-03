@@ -1,0 +1,106 @@
+menu "Basic /proc utilities"
+
+config BR2_PACKAGE_PROCPS
+	prompt "Basic /proc utilities"
+	tristate
+	default m if CONFIG_DEVEL
+	help
+	procps is a package that has many small useful utilities that 
+	give information about processes using the /proc filesystem. The 
+	package includes the programs ps, vmstat, top, w, kill, free, slabtop, 
+	skill, and others.
+
+	Note that versions of many of these programs are included in BusyBox.
+	This package will replace many of them.
+
+	http://procps.sourceforge.net/
+
+config BR2_PACKAGE_PROCPS_PS
+	prompt "ps - report a snapshot of the current processes."
+	bool
+	default y if CONFIG_DEVEL
+	depends BR2_PACKAGE_PROCPS
+
+config BR2_PACKAGE_PROCPS_VMSTAT
+	prompt "vmstat - Report virtual memory statistics"
+	bool
+	default y if CONFIG_DEVEL
+	depends BR2_PACKAGE_PROCPS
+
+config BR2_PACKAGE_PROCPS_TOP
+	prompt "top (requires libncurses) - display Linux tasks"
+	bool
+	default y if CONFIG_DEVEL
+	depends BR2_PACKAGE_PROCPS
+	select BR2_PACKAGE_LIBNCURSES
+	depends BR2_PACKAGE_LIBNCURSES
+
+config BR2_PACKAGE_PROCPS_SLABTOP
+        prompt "slabtop (requires libncurses) - display kernel slab cache info"
+        bool
+        default y if CONFIG_DEVEL
+        depends BR2_PACKAGE_PROCPS
+	depends BR2_PACKAGE_LIBNCURSES
+	select BR2_PACKAGE_LIBNCURSES
+
+config BR2_PACKAGE_PROCPS_PMAP
+        prompt "pmap - report memory map of a process"
+        bool
+        default y if CONFIG_DEVEL
+        depends BR2_PACKAGE_PROCPS
+
+config BR2_PACKAGE_PROCPS_PWDX
+        prompt "pwdx - report current working directory of a process"
+        bool
+        default y if CONFIG_DEVEL
+        depends BR2_PACKAGE_PROCPS
+
+config BR2_PACKAGE_PROCPS_W
+	prompt "w - Show who is logged on and what they are doing"
+	bool
+	default y if CONFIG_DEVEL
+	depends BR2_PACKAGE_PROCPS
+
+config BR2_PACKAGE_PROCPS_KILL
+        prompt "kill - terminate a process"
+        bool
+        default y if CONFIG_DEVEL
+        depends BR2_PACKAGE_PROCPS
+
+config BR2_PACKAGE_PROCPS_SKILL
+        prompt "skill, snice - send a signal or report process status"
+        bool
+        default y if CONFIG_DEVEL
+        depends BR2_PACKAGE_PROCPS
+
+config BR2_PACKAGE_PROCPS_PGREP
+	prompt "pgrep, pkill - lookup or signal processes based on name or other attributes"
+	bool
+	default y if CONFIG_DEVEL
+	depends BR2_PACKAGE_PROCPS
+
+config BR2_PACKAGE_PROCPS_FREE
+        prompt "free - display system memory information"
+        bool
+        default y if CONFIG_DEVEL
+        depends BR2_PACKAGE_PROCPS
+
+config BR2_PACKAGE_PROCPS_SYSCTL
+        prompt "sysctl - configure kernel parameters at runtime"
+        bool
+        default y if CONFIG_DEVEL
+        depends BR2_PACKAGE_PROCPS
+
+config BR2_PACKAGE_PROCPS_TLOAD
+	prompt "tload - graphic representation of system load average"
+	bool
+	default y if CONFIG_DEVEL
+	depends BR2_PACKAGE_PROCPS
+
+config BR2_PACKAGE_PROCPS_WATCH
+	prompt "watch - execute a program periodically with fullscreen output"
+	bool
+	default y if CONFIG_DEVEL
+	depends BR2_PACKAGE_PROCPS
+
+endmenu

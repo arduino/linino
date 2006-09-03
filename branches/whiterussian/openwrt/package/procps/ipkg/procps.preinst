@@ -1,0 +1,24 @@
+#!/bin/sh
+
+echo "Removing symbolic links to BusyBox: "
+for bin in $BUILT
+do
+    if [ -h $bin ]
+    then
+        echo "$bin "
+        rm -f $bin
+    elif [ -e $bin ]
+    then
+        echo -e "$bin exists but is not a symbolic link.\nRe-creating BusyBox links and aborting..."
+        for bin in $BUILT
+        do
+            if busybox 2>&1 | grep ${bin##/*/} >/dev/null && [ ! -e $bin ]
+            then
+                ln -s /bin/busybox $bin
+            fi
+        done
+        exit 1
+    fi
+done
+
+exit 0

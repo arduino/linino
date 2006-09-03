@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ -f /usr/bin/skill ]
+then
+    echo "Hard linking snice to skill"
+    ln /usr/bin/skill /usr/bin/snice
+fi
+
+if [ -f /usr/bin/pgrep ]
+then
+    echo "Hard linking pkill to pgrep"
+    ln /usr/bin/pgrep /usr/bin/snice
+fi
+
+exit 0
