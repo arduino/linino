@@ -37,8 +37,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-  $(call Build/Compile/Default)
-	$(STRIP) $(PKG_BUILD_DIR)/src/$(PKG_NAME)
+  $(call Build/Compile/Default,all)
 endef
 
 define Package/oidentd/install
