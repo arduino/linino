@@ -30,7 +30,7 @@ EOF
 	}
 fi
 
-LANGUAGES="$(grep '^[\t ]*lang[\t ]*=>' /usr/lib/webif/lang/*/*.txt | awk -f /usr/lib/webif/languages.awk)"
+LANGUAGES="$(grep '^[\t ]*lang[\t ]*=>' /usr/lib/webif/lang/*/*.txt 2>/dev/null | awk -f /usr/lib/webif/languages.awk)"
 
 header "System" "Settings" "@TR<<System Settings>>" '' "$SCRIPT_NAME"
 
