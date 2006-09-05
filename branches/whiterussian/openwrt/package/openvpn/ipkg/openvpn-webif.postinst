@@ -1,0 +1,4 @@
+#!/bin/sh
+grep -q VPN /www/cgi-bin/webif/.categories 2>- ||
+  echo "##WEBIF:category:VPN" >> /www/cgi-bin/webif/.categories
+
