@@ -43,7 +43,6 @@ $(IPKG_KMOD_NOZOMI):
 	install -m0755 -d $(IDIR_KMOD_NOZOMI)/lib/modules/$(LINUX_VERSION)
 	install -m0755 -d $(IDIR_KMOD_NOZOMI)/etc/modules.d
 	install -m0755 -d $(IDIR_KMOD_NOZOMI)/etc/init.d
-	install -m0755 $(PKG_BUILD_DIR)/S15nozomidev $(IDIR_KMOD_NOZOMI)/etc/init.d/S15nozomidev
 	echo "pcmcia_core" > $(IDIR_KMOD_NOZOMI)/etc/modules.d/60-nozomi
 	echo "yenta_socket" >> $(IDIR_KMOD_NOZOMI)/etc/modules.d/60-nozomi
 	echo "ds" >> $(IDIR_KMOD_NOZOMI)/etc/modules.d/60-nozomi
