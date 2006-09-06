@@ -9,11 +9,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miredo
-PKG_VERSION:=0.5.3
+PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
-PKG_MD5SUM:=bbbbf60db1346af0bbba6602067ed7ab
+PKG_MD5SUM:=b5a51cb98732decc2ada96b2caee5d3c
 
-PKG_SOURCE_URL:=http://people.via.ecp.fr/~rem/miredo/v0.5/
+PKG_SOURCE_URL:=http://www.remlab.net/files/miredo/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_CAT:=bzcat
 
