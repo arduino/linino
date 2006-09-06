@@ -44,13 +44,14 @@ define Build/Compile
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		SUBDIRS="src scripts contrib" \
 		all install
 endef
 
 define Package/siproxd/install
 	install -d -m0755 $(1)/etc
-	$(CP) $(PKG_INSTALL_DIR)/etc/siproxd.conf.example $(1)/etc/siproxd.conf
-	$(CP) $(PKG_INSTALL_DIR)/etc/siproxd_passwd.cfg $(1)/etc/
+	$(CP) $(PKG_BUILD_DIR)/doc/siproxd.conf.example $(1)/etc/siproxd.conf
+	$(CP) $(PKG_BUILD_DIR)/doc/siproxd_passwd.cfg $(1)/etc/
 	install -d -m0755 $(1)/etc/init.d
 	install -m0755 files/siproxd.init $(1)/etc/init.d/siproxd
 	install -d -m0755 $(1)/usr/sbin
