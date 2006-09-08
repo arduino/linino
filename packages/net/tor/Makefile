@@ -50,8 +50,8 @@ id=52
 
 # do not change below
 # # check if we are on real system
-# if [ -z "$${IPKG_INSTROOT}" ]; then
-#         # create copies of passwd and group, if we use squashfs
+if [ -z "$${IPKG_INSTROOT}" ]; then
+        # create copies of passwd and group, if we use squashfs
         rootfs=`mount |awk '/root/ { print $$5 }'`
         if [ "$$rootfs" = "squashfs" ]; then
                 if [ -h /etc/group ]; then
