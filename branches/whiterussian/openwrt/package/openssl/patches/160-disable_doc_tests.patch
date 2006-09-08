@@ -1,25 +1,25 @@
-diff -urN openssl-0.9.7i/Makefile openssl-0.9.7i.new/Makefile
---- openssl-0.9.7i/Makefile	2005-10-15 00:27:49.000000000 +0200
-+++ openssl-0.9.7i.new/Makefile	2006-04-15 12:50:22.000000000 +0200
-@@ -178,7 +178,7 @@
+diff -Nur openssl-0.9.7k.orig/Makefile openssl-0.9.7k/Makefile
+--- openssl-0.9.7k.orig/Makefile	2006-09-05 10:40:05.000000000 +0200
++++ openssl-0.9.7k/Makefile	2006-09-06 18:09:28.000000000 +0200
+@@ -196,7 +196,7 @@
  # we might set SHLIB_MARK to '$(SHARED_LIBS)'.
  SHLIB_MARK=
  
--DIRS=   crypto fips ssl $(SHLIB_MARK) sigs apps test tools
-+DIRS=   crypto fips ssl $(SHLIB_MARK) sigs apps tools
+-DIRS=   crypto fips-1.0 ssl $(SHLIB_MARK) apps test tools
++DIRS=   crypto fips-1.0 ssl $(SHLIB_MARK) apps tools
  SHLIBDIRS= crypto ssl
  
  # dirs in crypto to build
-@@ -193,7 +193,7 @@
+@@ -211,7 +211,7 @@
  
  # tests to perform.  "alltests" is a special word indicating that all tests
  # should be performed.
 -TESTS = alltests
-+TESTS = 
++TESTS =
  
  MAKEFILE= Makefile
  
-@@ -205,7 +205,7 @@
+@@ -223,7 +223,7 @@
  
  TOP=    .
  ONEDIRS=out tmp
@@ -27,8 +27,8 @@ diff -urN openssl-0.9.7i/Makefile openssl-0.9.7i.new/Makefile
 +EDIRS=  times bugs util include certs ms shlib mt demos perl sf dep VMS
  WDIRS=  windows
  LIBS=   libcrypto.a libssl.a
- SIGS=	libcrypto.a.sha1
-@@ -773,7 +773,7 @@
+ SHARED_CRYPTO=libcrypto$(SHLIB_EXT)
+@@ -781,7 +781,7 @@
  dist_pem_h:
  	(cd crypto/pem; $(MAKE) CC='${CC}' SDIRS='${SDIRS}' CFLAG='${CFLAG}' pem.h; $(MAKE) clean)
  
@@ -37,19 +37,28 @@ diff -urN openssl-0.9.7i/Makefile openssl-0.9.7i.new/Makefile
  
  install_sw:
  	@$(PERL) $(TOP)/util/mkdir-p.pl $(INSTALL_PREFIX)$(INSTALLTOP)/bin \
-diff -urN openssl-0.9.7i/Makefile.org openssl-0.9.7i.new/Makefile.org
---- openssl-0.9.7i/Makefile.org	2006-04-15 12:47:55.000000000 +0200
-+++ openssl-0.9.7i.new/Makefile.org	2006-04-15 12:51:18.000000000 +0200
-@@ -191,7 +191,7 @@
+diff -Nur openssl-0.9.7k.orig/Makefile.org openssl-0.9.7k/Makefile.org
+--- openssl-0.9.7k.orig/Makefile.org	2006-04-24 15:32:57.000000000 +0200
++++ openssl-0.9.7k/Makefile.org	2006-09-06 18:10:05.000000000 +0200
+@@ -194,7 +194,7 @@
+ # we might set SHLIB_MARK to '$(SHARED_LIBS)'.
+ SHLIB_MARK=
+ 
+-DIRS=   crypto fips-1.0 ssl $(SHLIB_MARK) apps test tools
++DIRS=   crypto ssl apps
+ SHLIBDIRS= crypto ssl
+ 
+ # dirs in crypto to build
+@@ -209,7 +209,7 @@
  
  # tests to perform.  "alltests" is a special word indicating that all tests
  # should be performed.
 -TESTS = alltests
-+TESTS = 
++TESTS =
  
  MAKEFILE= Makefile
  
-@@ -203,7 +203,7 @@
+@@ -221,7 +221,7 @@
  
  TOP=    .
  ONEDIRS=out tmp
@@ -57,8 +66,8 @@ diff -urN openssl-0.9.7i/Makefile.org openssl-0.9.7i.new/Makefile.org
 +EDIRS=  times bugs util include certs ms shlib mt demos perl sf dep VMS
  WDIRS=  windows
  LIBS=   libcrypto.a libssl.a
- SIGS=	libcrypto.a.sha1
-@@ -767,7 +767,7 @@
+ SHARED_CRYPTO=libcrypto$(SHLIB_EXT)
+@@ -779,7 +779,7 @@
  dist_pem_h:
  	(cd crypto/pem; $(MAKE) CC='${CC}' SDIRS='${SDIRS}' CFLAG='${CFLAG}' pem.h; $(MAKE) clean)
  

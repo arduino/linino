@@ -3,9 +3,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssl
-PKG_VERSION:=0.9.7i
+PKG_VERSION:=0.9.7k
 PKG_RELEASE:=3
-PKG_MD5SUM:=f69d82b206ff8bff9d0e721f97380b9e
+PKG_MD5SUM:=be6bba1d67b26eabb48cf1774925416f
 
 PKG_SOURCE_URL:=http://www.openssl.org/source/ \
 	ftp://ftp.funet.fi/pub/crypt/cryptography/libs/openssl/source/ \
