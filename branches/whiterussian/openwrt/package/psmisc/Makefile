@@ -35,8 +35,8 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 	);
 
 	touch $@
-
 APPS:=
+DEPEND:=
 
 ifneq ($(BR2_PACKAGE_PSMISC_FUSER),)
 APPS += /sbin/fuser
@@ -46,6 +46,7 @@ APPS += /usr/bin/killall /bin/pidof
 endif
 ifneq ($(BR2_PACKAGE_PSMISC_PSTREE),)
 APPS += /usr/bin/pstree
+DEPEND:=libncurses
 endif
 
 $(PKG_BUILD_DIR)/.built:
@@ -61,36 +62,21 @@ $(PKG_BUILD_DIR)/.built:
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		$(TARGET_CONFIGURE_OPTS) \
 		prefix="$(PKG_INSTALL_DIR)"
-
-	if [ -n "$(BR2_PACKAGE_PSMISC_KILLALL)" ];then $(CP) $(PKG_BUILD_DIR)/src/killall $(PKG_INSTALL_DIR)/usr/bin;fi
-	if [ -n "$(BR2_PACKAGE_PSMISC_FUSER)" ];then $(CP) $(PKG_BUILD_DIR)/src/fuser $(PKG_INSTALL_DIR)/sbin;fi
-	if [ -n "$(BR2_PACKAGE_PSMISC_PSTREE)" ];then $(CP) $(PKG_BUILD_DIR)/src/pstree $(PKG_INSTALL_DIR)/usr/bin;fi
-
+	[ -n "$(BR2_PACKAGE_PSMISC_KILLALL)" ] && cp -a $(PKG_BUILD_DIR)/src/killall $(PKG_INSTALL_DIR)/usr/bin/
+	[ -n "$(BR2_PACKAGE_PSMISC_FUSER)" ] && cp -a $(PKG_BUILD_DIR)/src/fuser $(PKG_INSTALL_DIR)/sbin/
+	[ -n "$(BR2_PACKAGE_PSMISC_PSTREE)" ] && cp -a $(PKG_BUILD_DIR)/src/pstree $(PKG_INSTALL_DIR)/usr/bin/
 	touch $@
 
 $(IPKG_PSMISC):
-	install -d -m0755 $(IDIR_PSMISC)/usr/bin
-	install -d -m0755 $(IDIR_PSMISC)/sbin
-	install -d -m0755 $(IDIR_PSMISC)/bin
-	
-	if [ -n "$(BR2_PACKAGE_PSMISC_KILLALL)" ];then $(CP) $(PKG_INSTALL_DIR)/usr/bin/killall $(IDIR_PSMISC)/usr/bin;fi
-	if [ -n "$(BR2_PACKAGE_PSMISC_FUSER)" ];then $(CP) $(PKG_INSTALL_DIR)/sbin/fuser $(IDIR_PSMISC)/sbin;fi
-	if [ -n "$(BR2_PACKAGE_PSMISC_PSTREE)" ];then $(CP) $(PKG_INSTALL_DIR)/usr/bin/pstree $(IDIR_PSMISC)/usr/bin;fi
-	
+	cp -fpR $(PKG_INSTALL_DIR)/* $(IDIR_PSMISC)/	
+	grep -v -e ^BUILT -e /bin/sh $(IDIR_PSMISC)/CONTROL/preinst > $(IDIR_PSMISC)/CONTROL/preinst.tmp
+	rm $(IDIR_PSMISC)/CONTROL/preinst
+	echo -e "#!/bin/sh\nBUILT='$(APPS)'\n" > $(IDIR_PSMISC)/CONTROL/preinst
+	cat $(IDIR_PSMISC)/CONTROL/preinst.tmp >> $(IDIR_PSMISC)/CONTROL/preinst
+	rm $(IDIR_PSMISC)/CONTROL/preinst.tmp
+	echo "Depends: $(DEPEND)" >> $(IDIR_PSMISC)/CONTROL/control
+	echo "Description: Extra /proc utils: $(notdir $(APPS))" >>  $(IDIR_PSMISC)/CONTROL/control
 	$(RSTRIP) $(IDIR_PSMISC)
-	
-	# Insert BUILT variable into preinst script
-	grep -v -e ^BUILT -e /bin/sh $(PKG_INSTALL_DIR)/../ipkg/$(PKG_NAME)/CONTROL/preinst > $(PKG_INSTALL_DIR)/../ipkg/$(PKG_NAME)/CONTROL/preinst.tmp
-	rm $(PKG_INSTALL_DIR)/../ipkg/$(PKG_NAME)/CONTROL/preinst
-	echo -e "#!/bin/sh\nBUILT='$(APPS)'\n" > $(PKG_INSTALL_DIR)/../ipkg/$(PKG_NAME)/CONTROL/preinst
-	cat $(PKG_INSTALL_DIR)/../ipkg/$(PKG_NAME)/CONTROL/preinst.tmp >> $(PKG_INSTALL_DIR)/../ipkg/$(PKG_NAME)/CONTROL/preinst
-	rm $(PKG_INSTALL_DIR)/../ipkg/$(PKG_NAME)/CONTROL/preinst.tmp
-
-	if [ -n "$(BR2_PACKAGE_PSMISC_PSTREE)" ] || \
-		[ -n "$(BR2_PACKAGE_PSMISC_PSTREE)" ]; then\
-	echo "Depends: libncurses" >> $(PKG_INSTALL_DIR)/../ipkg/$(PKG_NAME)/CONTROL/control; fi
-	echo "Description: Extra /proc utils: $(notdir $(APPS))" >>  \$(PKG_INSTALL_DIR)/../ipkg/$(PKG_NAME)/CONTROL/control
-
 	$(IPKG_BUILD) $(IDIR_PSMISC) $(PACKAGE_DIR)
 
 mostlyclean:

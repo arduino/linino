@@ -5,10 +5,10 @@ echo "Recreating original BusyBox links: "
 
 for bin in $BINS
 do
-    if busybox 2>&1 | grep ${bin##/*/} >/dev/null
+    if [ ${IPKG_INSTROOT}/busybox 2>&1 | grep ${bin##/*/} >/dev/null ]
     then
          echo "$bin "
-         ln -sf /bin/busybox $bin
+         ln -sf ${IPKG_INSTROOT}/bin/busybox ${IPKG_INSTROOT}/$bin
     fi
 done
 
