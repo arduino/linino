@@ -1,20 +1,19 @@
 #!/bin/sh
-
 echo "Removing symbolic links to BusyBox: "
 for bin in $BUILT
 do
-    if [ -h $bin ]
+    if [ -h ${IPKG_INSTROOT}/$bin ]
     then
         echo "$bin "
-        rm -f $bin
-    elif [ -e $bin ]
+        rm -f ${IPKG_INSTROOT}/$bin
+    elif [ -e ${IPKG_INSTROOT}/$bin ]
     then
         echo -e "$bin exists but is not a symbolic link.\nRe-creating BusyBox links and aborting..."
         for bin in $BUILT
         do
-            if busybox 2>&1 | grep ${bin##/*/} >/dev/null && [ ! -e $bin ]
+            if [ ${IPKG_INSTROOT}/busybox 2>&1 | grep ${bin##/*/} >/dev/null ] && [ ! -e ${IPKG_INSTROOT}/$bin ]
             then
-                ln -s /bin/busybox $bin
+                ln -s ${IPKG_INSTROOT}/bin/busybox ${IPKG_INSTROOT}/$bin
             fi
         done
         exit 1

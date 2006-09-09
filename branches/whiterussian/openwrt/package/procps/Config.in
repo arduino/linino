@@ -33,14 +33,12 @@ config BR2_PACKAGE_PROCPS_TOP
 	default y if CONFIG_DEVEL
 	depends BR2_PACKAGE_PROCPS
 	select BR2_PACKAGE_LIBNCURSES
-	depends BR2_PACKAGE_LIBNCURSES
 
 config BR2_PACKAGE_PROCPS_SLABTOP
         prompt "slabtop (requires libncurses) - display kernel slab cache info"
         bool
         default y if CONFIG_DEVEL
         depends BR2_PACKAGE_PROCPS
-	depends BR2_PACKAGE_LIBNCURSES
 	select BR2_PACKAGE_LIBNCURSES
 
 config BR2_PACKAGE_PROCPS_PMAP

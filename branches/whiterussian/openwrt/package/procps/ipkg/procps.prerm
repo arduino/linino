@@ -1,15 +1,15 @@
 #!/bin/sh
 
-if [ -f /usr/bin/pkill ]
+if [ -f ${IPKG_INSTROOT}/usr/bin/pkill ]
 then
     echo "Removing hard link from pkill to pgrep"
-    rm -f /usr/bin/pkill
+    rm -f ${IPKG_INSTROOT}/usr/bin/pkill
 fi
 
-if [ -f /usr/bin/snice ]
+if [ -f ${IPKG_INSTROOT}/usr/bin/snice ]
 then
     echo "Removing hard link from snice to skill"
-    rm -f /usr/bin/skill
+    rm -f ${IPKG_INSTROOT}/usr/bin/skill
 fi
 
 exit 0
