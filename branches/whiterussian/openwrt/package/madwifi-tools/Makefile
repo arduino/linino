@@ -27,7 +27,7 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_MADWIFI_TOOLS):
 	mkdir -p $(IDIR_MADWIFI_TOOLS)/usr/sbin
-	cp -fpR $(PKG_BUILD_DIR)/tools/athstats \
+	$(CP) $(PKG_BUILD_DIR)/tools/athstats \
 		$(PKG_BUILD_DIR)/tools/athdebug \
 		$(PKG_BUILD_DIR)/tools/80211stats \
 		$(PKG_BUILD_DIR)/tools/80211debug \

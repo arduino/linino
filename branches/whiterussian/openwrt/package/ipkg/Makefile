@@ -61,9 +61,9 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_IPKG_C):
 	install -d -m0755 $(IDIR_IPKG_C)/bin
-	cp -fpR $(PKG_INSTALL_DIR)/bin/ipkg-cl $(IDIR_IPKG_C)/bin/ipkg
+	$(CP) $(PKG_INSTALL_DIR)/bin/ipkg-cl $(IDIR_IPKG_C)/bin/ipkg
 	install -d -m0755 $(IDIR_IPKG_C)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libipkg.so.* $(IDIR_IPKG_C)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libipkg.so.* $(IDIR_IPKG_C)/usr/lib/
 	$(RSTRIP) $(IDIR_IPKG_C)
 	$(IPKG_BUILD) $(IDIR_IPKG_C) $(PACKAGE_DIR)
 	

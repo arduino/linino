@@ -20,7 +20,7 @@ $(eval $(call PKG_template,NVRAM,nvram,$(PKG_RELEASE),$(ARCH)))
 
 $(PKG_BUILD_DIR)/.prepared:
 	mkdir -p $(PKG_BUILD_DIR)
-	cp -a ./src/* $(PKG_BUILD_DIR)
+	$(CP) ./src/* $(PKG_BUILD_DIR)
 	touch $@
 
 $(PKG_BUILD_DIR)/.built:

@@ -30,8 +30,8 @@ $(IPKG_FAKEIDENTD):
 			  $(IDIR_FAKEIDENTD)/etc/init.d \
 			  $(IDIR_FAKEIDENTD)/etc/default/
 	echo $(whoami) > $(IDIR_FAKEIDENTD)/etc/default/$(PKG_NAME)
-	cp -fpR $(PKG_BUILD_DIR)/fakeidentd $(IDIR_FAKEIDENTD)/usr/sbin/
-	cp -fpR ./files/$(PKG_NAME).init $(IDIR_FAKEIDENTD)/etc/init.d/$(PKG_NAME)
+	$(CP) $(PKG_BUILD_DIR)/fakeidentd $(IDIR_FAKEIDENTD)/usr/sbin/
+	$(CP) ./files/$(PKG_NAME).init $(IDIR_FAKEIDENTD)/etc/init.d/$(PKG_NAME)
 	$(RSTRIP) $(IDIR_FAKEIDENTD)
 	$(IPKG_BUILD) $(IDIR_FAKEIDENTD) $(PACKAGE_DIR)
 

@@ -39,7 +39,7 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_BASE):
 	$(SCRIPT_DIR)/make-ipkg-dir.sh $(IDIR_BASE) ipkg/$(PKG_NAME).control $(PKG_RELEASE) $(ARCH)
-	cp -a ./default/* $(IDIR_BASE)
+	$(CP) ./default/* $(IDIR_BASE)
 	mkdir -p $(IDIR_BASE)/dev
 	mkdir -p $(IDIR_BASE)/etc/crontabs
 	mkdir -p $(IDIR_BASE)/jffs
@@ -61,8 +61,8 @@ $(IPKG_LIBC):
 	$(SCRIPT_DIR)/make-ipkg-dir.sh $(IDIR_LIBC) ipkg/uclibc.control $(LIBC_VERSION)-$(PKG_RELEASE) $(ARCH)
 	mkdir -p $(IDIR_LIBC)/lib
 	for file in ld-uClibc libc libcrypt libdl libm libnsl libresolv librt libuClibc libutil; do \
-		cp -fpR $(STAGING_DIR)/lib/$$file.so.* $(IDIR_LIBC)/lib/; \
-		cp -fpR $(STAGING_DIR)/lib/$$file-$(LIBC_VERSION).so $(IDIR_LIBC)/lib/; \
+		$(CP) $(STAGING_DIR)/lib/$$file.so.* $(IDIR_LIBC)/lib/; \
+		$(CP) $(STAGING_DIR)/lib/$$file-$(LIBC_VERSION).so $(IDIR_LIBC)/lib/; \
 	done
 	-$(STRIP) $(IDIR_LIBC)/lib/*
 	$(IPKG_BUILD) $(IDIR_LIBC) $(PACKAGE_DIR)
@@ -70,7 +70,7 @@ $(IPKG_LIBC):
 $(IPKG_GCC):
 	$(SCRIPT_DIR)/make-ipkg-dir.sh $(IDIR_GCC) ipkg/libgcc.control $(GCC_VERSION)-$(PKG_RELEASE) $(ARCH)
 	mkdir -p $(IDIR_GCC)/lib
-	cp -fpR $(STAGING_DIR)/lib/libgcc_s.so.* $(IDIR_GCC)/lib/
+	$(CP) $(STAGING_DIR)/lib/libgcc_s.so.* $(IDIR_GCC)/lib/
 	-$(STRIP) $(IDIR_GCC)/lib/*
 	$(IPKG_BUILD) $(IDIR_GCC) $(PACKAGE_DIR)
 

@@ -22,7 +22,7 @@ define PKG_mod_template
 
 $$(IPKG_$(1)):
 	[ -z "$(2)" ] || install -d -m 0755 $$(IDIR_$(1))/usr/lib/openser/modules/
-	cp -fpR $(PKG_BUILD_DIR)/modules/$(2)/$(2).so \
+	$(CP) $(PKG_BUILD_DIR)/modules/$(2)/$(2).so \
 			$$(IDIR_$(1))/usr/lib/openser/modules/ ; \
 	$(RSTRIP) $$(IDIR_$(1))
 	$(IPKG_BUILD) $$(IDIR_$(1)) $(PACKAGE_DIR)
@@ -111,17 +111,17 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_OPENSER): 
 	mkdir -p $(IDIR_OPENSER)/usr/sbin
-	cp -fpR $(PKG_BUILD_DIR)/$(PKG_NAME) $(IDIR_OPENSER)/usr/sbin/
-	cp -fpR $(PKG_BUILD_DIR)/utils/gen_ha1/gen_ha1 $(IDIR_OPENSER)/usr/sbin/openser_gen_ha1
-	cp -fpR $(PKG_BUILD_DIR)/scripts/sc $(IDIR_OPENSER)/usr/sbin/openserctl
+	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(IDIR_OPENSER)/usr/sbin/
+	$(CP) $(PKG_BUILD_DIR)/utils/gen_ha1/gen_ha1 $(IDIR_OPENSER)/usr/sbin/openser_gen_ha1
+	$(CP) $(PKG_BUILD_DIR)/scripts/sc $(IDIR_OPENSER)/usr/sbin/openserctl
 	chmod 744 $(IDIR_OPENSER)/usr/sbin/openserctl
-	cp -fpR $(PKG_BUILD_DIR)/scripts/sc.dbtext $(IDIR_OPENSER)/usr/sbin/dbtextctl
+	$(CP) $(PKG_BUILD_DIR)/scripts/sc.dbtext $(IDIR_OPENSER)/usr/sbin/dbtextctl
 	chmod 744 $(IDIR_OPENSER)/usr/sbin/dbtextctl
 	mkdir -p $(IDIR_OPENSER)/usr/lib/openser/modules
 	(cd $(PKG_BUILD_DIR);\
-		cp -fpR $(OPENSER_MODULE_FILES) $(IDIR_OPENSER)/usr/lib/openser/modules/; \
+		$(CP) $(OPENSER_MODULE_FILES) $(IDIR_OPENSER)/usr/lib/openser/modules/; \
 	)
 	mkdir -p $(IDIR_OPENSER)/etc/openser
-	cp -fpR $(PKG_BUILD_DIR)/etc/openser.cfg $(IDIR_OPENSER)/etc/openser/
+	$(CP) $(PKG_BUILD_DIR)/etc/openser.cfg $(IDIR_OPENSER)/etc/openser/
 	$(RSTRIP) $(IDIR_OPENSER)
 	$(IPKG_BUILD) $(IDIR_OPENSER) $(PACKAGE_DIR)

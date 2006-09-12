@@ -57,23 +57,23 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_RADIUSCLIENT_NG):
 	install -d -m0755 $(IDIR_RADIUSCLIENT_NG)/etc
-	cp -fpR $(PKG_INSTALL_DIR)/etc/radiusclient-ng $(IDIR_RADIUSCLIENT_NG)/etc/
+	$(CP) $(PKG_INSTALL_DIR)/etc/radiusclient-ng $(IDIR_RADIUSCLIENT_NG)/etc/
 	install -d -m0755 $(IDIR_RADIUSCLIENT_NG)/usr/sbin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/* $(IDIR_RADIUSCLIENT_NG)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(IDIR_RADIUSCLIENT_NG)/usr/sbin/
 	$(RSTRIP) $(IDIR_RADIUSCLIENT_NG)/
 	$(IPKG_BUILD) $(IDIR_RADIUSCLIENT_NG) $(PACKAGE_DIR)
 
 $(IPKG_LIBRADIUSCLIENT_NG):
 	install -d -m0755 $(IDIR_LIBRADIUSCLIENT_NG)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libradiusclient-ng.so.* $(IDIR_LIBRADIUSCLIENT_NG)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libradiusclient-ng.so.* $(IDIR_LIBRADIUSCLIENT_NG)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBRADIUSCLIENT_NG)/
 	$(IPKG_BUILD) $(IDIR_LIBRADIUSCLIENT_NG) $(PACKAGE_DIR)
 
 $(STAGING_DIR)/usr/lib/libradiusclient-ng.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include
-	cp -fpR $(PKG_INSTALL_DIR)/usr/include/radiusclient-ng.h $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/radiusclient-ng.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib/
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libradiusclient-ng.{a,so*} $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libradiusclient-ng.{a,so*} $(STAGING_DIR)/usr/lib/
 	touch $@
 
 install-dev: $(STAGING_DIR)/usr/lib/libradiusclient-ng.so

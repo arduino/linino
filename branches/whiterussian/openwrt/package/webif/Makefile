@@ -17,7 +17,7 @@ define PKG_mod_template
 
 $$(IPKG_$(1)):
 	[ -z "$(2)" ] || install -d -m0755 $$(IDIR_$(1))/usr/lib/webif/lang/$(2)
-	cp -fpR ./files/usr/lib/webif/lang/$(2)/common.txt $$(IDIR_$(1))/usr/lib/webif/lang/$(2)/
+	$(CP) ./files/usr/lib/webif/lang/$(2)/common.txt $$(IDIR_$(1))/usr/lib/webif/lang/$(2)/
 	$(RSTRIP) $$(IDIR_$(1))
 	$(IPKG_BUILD) $$(IDIR_$(1)) $(PACKAGE_DIR)
 
@@ -70,7 +70,7 @@ $(PKG_BUILD_DIR)/.built:
 	touch $@
 
 $(IPKG_WEBIF): 
-	cp -a ./files/* $(IDIR_WEBIF)/
+	$(CP) ./files/* $(IDIR_WEBIF)/
 	rm -rf $(IDIR_WEBIF)/usr/lib/webif/lang/
 	install -d $(IDIR_WEBIF)/usr/bin
 	install -m0755 $(PKG_BUILD_DIR)/webif-page $(IDIR_WEBIF)/usr/bin/webif-page

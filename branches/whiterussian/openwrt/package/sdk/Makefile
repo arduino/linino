@@ -21,10 +21,10 @@ $(BIN_DIR)/$(SDK_NAME).tar.bz2:
 	)
 	rm -rf $(SDK_BUILD_DIR)
 	mkdir -p $(SDK_BUILD_DIR)/dl $(SDK_BUILD_DIR)/examples $(SDK_BUILD_DIR)/package
-	cp -a $(STAGING_DIR) $(SCRIPT_DIR) $(TOPDIR)/docs $(SDK_BUILD_DIR)/
-	cp -a $(TOPDIR)/package/strace $(TOPDIR)/package/iproute2 $(SDK_BUILD_DIR)/examples
+	$(CP) $(STAGING_DIR) $(SCRIPT_DIR) $(TOPDIR)/docs $(SDK_BUILD_DIR)/
+	$(CP) $(TOPDIR)/package/strace $(TOPDIR)/package/iproute2 $(SDK_BUILD_DIR)/examples
 	cp $(TOPDIR)/package/rules.mk $(SDK_BUILD_DIR)/package/
-	-cp -a ./files/* $(SDK_BUILD_DIR)/
+	-$(CP) ./files/* $(SDK_BUILD_DIR)/
 	egrep '^BR2_(ARCH|WGET|STAGING|JLEVEL|LARGEFILE|TARGET_OPT)' $(TOPDIR)/.config > $(SDK_BUILD_DIR)/.config
 	egrep '^BR2_(ARCH|WGET|STAGING|JLEVEL|LARGEFILE|TARGET_OPT)' $(TOPDIR)/.config | sed -e s,BR2_,CONFIG_,g >> $(SDK_BUILD_DIR)/.config
 	find $(SDK_BUILD_DIR) -name .svn | xargs rm -rf 

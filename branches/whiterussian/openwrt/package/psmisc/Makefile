@@ -62,9 +62,9 @@ $(PKG_BUILD_DIR)/.built:
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		$(TARGET_CONFIGURE_OPTS) \
 		prefix="$(PKG_INSTALL_DIR)"
-	[ -n "$(BR2_PACKAGE_PSMISC_KILLALL)" ] && cp -a $(PKG_BUILD_DIR)/src/killall $(PKG_INSTALL_DIR)/usr/bin/
-	[ -n "$(BR2_PACKAGE_PSMISC_FUSER)" ] && cp -a $(PKG_BUILD_DIR)/src/fuser $(PKG_INSTALL_DIR)/sbin/
-	[ -n "$(BR2_PACKAGE_PSMISC_PSTREE)" ] && cp -a $(PKG_BUILD_DIR)/src/pstree $(PKG_INSTALL_DIR)/usr/bin/
+	[ -n "$(BR2_PACKAGE_PSMISC_KILLALL)" ] && $(CP) $(PKG_BUILD_DIR)/src/killall $(PKG_INSTALL_DIR)/usr/bin/
+	[ -n "$(BR2_PACKAGE_PSMISC_FUSER)" ] && $(CP) $(PKG_BUILD_DIR)/src/fuser $(PKG_INSTALL_DIR)/sbin/
+	[ -n "$(BR2_PACKAGE_PSMISC_PSTREE)" ] && $(CP) $(PKG_BUILD_DIR)/src/pstree $(PKG_INSTALL_DIR)/usr/bin/
 	touch $@
 
 $(IPKG_PSMISC):
