@@ -1,3 +1,6 @@
+#!/bin/sh
+. /etc/nvram.sh
+
 ddnsupdate=$(nvram get ddns_update)
 [ "$ddnsupdate" = 1 ]&& {
 	service=$(nvram get ddns_service)
