@@ -22,7 +22,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/libnet
+define Package/libnet1
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=+libpcap
@@ -93,7 +93,7 @@ define Build/Compile
 		all install
 endef
 
-define Package/libnet/install
+define Package/libnet1/install
 	install -m0755 -d $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnet.so.* $(1)/usr/lib/
 endef
@@ -114,4 +114,4 @@ define Build/UninstallDev
 		$(STAGING_DIR)/usr/lib/libnet.{a,so*}
 endef
 
-$(eval $(call BuildPackage,libnet))
+$(eval $(call BuildPackage,libnet1))
