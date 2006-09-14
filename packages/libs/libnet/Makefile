@@ -9,13 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libnet
-PKG_VERSION:=1.1.2.1
-PKG_RELEASE:=1
+PKG_VERSION:=1.0.2a
+PKG_RELEASE:=7
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/libnet
-PKG_SOURCE:=$(PKG_NAME).tar.gz
-PKG_SOURCE_URL:=http://www.packetfactory.net/libnet/dist/
-PKG_MD5SUM:=be845c41170d72c7db524f3411b50256
+PKG_BUILD_DIR:=$(BUILD_DIR)/Libnet-$(PKG_VERSION)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.packetfactory.net/libnet/dist/deprecated/
+PKG_MD5SUM:=ddf53f0f484184390e8c2a1bd0853667
 PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -35,12 +35,6 @@ ENDIANESS:=lil
 ifeq ($(ARCH),mips)
 ENDIANESS:=big
 endif
-ifeq ($(ARCH),armeb)
-ENDIANESS:=big
-endif
-ifeq ($(ARCH),powerpc)
-ENDIANESS:=big
-endif
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); rm -rf config.cache; \
@@ -56,7 +50,6 @@ define Build/Configure
 		ac_libnet_have_pf_packet=yes \
 		ac_cv_lbl_unaligned_fail=no \
 		ac_cv_libnet_endianess=$(ENDIANESS) \
-		ac_libnet_have_packet_socket=yes \
 		./configure \
 			--target=$(GNU_TARGET_NAME) \
 			--host=$(GNU_TARGET_NAME) \
