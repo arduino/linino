@@ -47,16 +47,16 @@ define Package/libiconv/install
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include/iconv
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/iconv.h $(STAGING_DIR)/usr/include/iconv
-	mkdir -p $(STAGING_DIR)/usr/lib/iconv
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.* $(STAGING_DIR)/usr/lib/iconv
+	mkdir -p $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/iconv.h $(STAGING_DIR)/usr/include/
+	mkdir -p $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.* $(STAGING_DIR)/usr/lib/
 endef
 
 define Build/UninstallDev	
 	rm -rf \
-		$(STAGING_DIR)/usr/include/iconv \
-		$(STAGING_DIR)/usr/lib/iconv
+		$(STAGING_DIR)/usr/include/iconv.h \
+		$(STAGING_DIR)/usr/lib/libiconv.*
 endef
 
 $(eval $(call BuildPackage,libiconv))
