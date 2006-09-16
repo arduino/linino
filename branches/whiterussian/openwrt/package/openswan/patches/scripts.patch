@@ -203,3 +203,25 @@ diff -urN openswan-2.4.6/programs/_startklips/_startklips.in openswan-2.4.6.new/
          fi
          if test ! -f $ipsecversion
          then
+--- openswan-2.4.6/programs/starter/netkey.c	2004-12-01 08:31:26.000000000 +0100
++++ openswan-2.4.6.new/programs/starter/netkey.c	2006-09-15 15:06:18.000000000 +0200
+@@ -75,7 +75,7 @@
+ 		if (stat(PROC_MODULES,&stb)==0) {
+ 			unsetenv("MODPATH");
+ 			unsetenv("MODULECONF");
+-			system("depmod -a >/dev/null 2>&1 && modprobe xfrm4_tunnel esp4 ah4 af_key");
++			system("depmod -a >/dev/null 2>&1 && insmod xfrm4_tunnel esp4 ah4 af_key");
+ 		}
+ 		if (stat(PROC_NETKEY,&stb)==0) {
+ 			_netkey_module_loaded = 1;
+--- openswan-2.4.6/programs/starter/klips.c	2004-01-21 02:35:29.000000000 +0100
++++ openswan-2.4.6.new/programs/starter/klips.c	2006-09-15 15:05:37.000000000 +0200
+@@ -83,7 +83,7 @@
+ 		if (stat(PROC_MODULES,&stb)==0) {
+ 			unsetenv("MODPATH");
+ 			unsetenv("MODULECONF");
+-			system("depmod -a >/dev/null 2>&1 && modprobe ipsec");
++			system("depmod -a >/dev/null 2>&1 && insmod ipsec");
+ 		}
+ 		if (stat(PROC_IPSECVERSION,&stb)==0) {
+ 			_klips_module_loaded = 1;
