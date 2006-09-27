@@ -1,0 +1,86 @@
+mem_size: 1000000
+Linux version 2.4.29 (terence@cvs2) (gcc version 3.4.1) #123 Tue Aug 2 11:54:21 CST 2005
+BIOS-provided physical RAM map:
+ BIOS-e801: 0000000000000000 - 000000000009f000 (usable)
+ BIOS-e801: 0000000000100000 - 0000000001000000 (usable)
+16MB LOWMEM available.
+On node 0 totalpages: 4096
+zone(0): 4096 pages.
+zone(1): 0 pages.
+zone(2): 0 pages.
+DMI not present.
+Kernel command line: console=ttyS0,38400 root=/dev/mtdblock1 noinitrd
+Initializing CPU#0
+#sysinit: [sysinit]
+
+
+BusyBox v1.00 (2005.08.02-03:56+0000) Built-in shell (msh)
+Enter 'help' for a list of built-in commands.
+
+# Using /etc/resetDefault.o
+This is the parent process, pid = 28
+# update nvram with default list!
+# interfaces_init......
+Using /etc/rt61ap.o
+This is the child process, pid = 31
+Setting ra0 configuration....
+CountryRegion=5
+BssidNum=1
+SSID=airlink
+WirelessMode=0
+TxRate=0
+Channel=6
+BeaconPeriod=100
+DtimPeriod=1
+TxPower=100
+BGProtection=0
+RTSThreshold=2346
+FragThreshold=2346
+TxBurst=1
+ShortSlot=1
+PktAggregate=1
+NoForwarding=0
+NoForwardingBTNBSSID=0
+HideSSID=0
+Key1Type=0
+Key1Str=
+Key2Type=0
+Key2Str=
+Key3Type=0
+Key3Str=
+Key4Type=0
+Key4Str=
+WdsEnable=0
+AutoChannelSelect=0
+RekeyInterval=3600
+WPAPSK=
+AccessPolicy0=0
+RADIUS_Server=0.0.0.0
+RADIUS_Port=1812
+RADIUS_Key=
+own_ip_addr=192.168.1.1
+session_timeout_interval=0
+DisableOLBC=1
+AuthMode=WEPAUTO
+EncrypType=NONE
+DefaultKeyID=1
+BasicRate=15
+IEEE8021X=0
+# lan services init......
+Start UPnP
+# wan_init......
+
+ Configuration file: /var/RT61AP/RT61AP.dat
+ conf->SsidNum=1
+ IP address: '0.0.0.0'
+ RADIUS_Port: '1812'
+ Line 36: empty shared secret is not allowed.
+ RADIUS_Key: '', Key_len: 0
+ session_timeout policy = not use
+ Read Session Timeout Interval  0 seconds.
+ Set Session Timeout Interval  3600 seconds.
+ 1 errors found in configuration file '/var/RT61AP/RT61AP.dat'
+ Could not allocate memory for rtapd->conf
+
+#
+# dhttpd : This is httpd...ssl_enabled is 0

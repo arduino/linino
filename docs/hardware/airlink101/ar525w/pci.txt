@@ -1,0 +1,32 @@
+PCI devices found:
+  Bus  0, device   0, function  0:
+    Class 0600: PCI device 17f3:6020 (rev 0).
+  Bus  0, device   1, function  0:
+    Class 0280: PCI device 1814:0401 (rev 0).
+      IRQ 12.
+      Master Capable.  Latency=64.
+      Non-prefetchable 32 bit memory at 0xd5000000 [0xd5007fff].
+  Bus  0, device   7, function  0:
+    Class 0601: PCI device 17f3:6030 (rev 0).
+  Bus  0, device   8, function  0:
+    Class 0200: PCI device 17f3:6040 (rev 0).
+      IRQ 10.
+      Master Capable.  Latency=64.  Min Gnt=3.Max Lat=8.
+      I/O at 0xe800 [0xe8ff].
+      Non-prefetchable 32 bit memory at 0xd1900000 [0xd19000ff].
+  Bus  0, device   9, function  0:
+    Class 0200: PCI device 17f3:6040 (rev 0).
+      IRQ 11.
+      Master Capable.  Latency=64.  Min Gnt=3.Max Lat=8.
+      I/O at 0xe900 [0xe9ff].
+      Non-prefetchable 32 bit memory at 0xd2900000 [0xd29000ff].
+  Bus  0, device  10, function  0:
+    Class 0c03: PCI device 17f3:6060 (rev 7).
+      IRQ 15.
+      Master Capable.  Latency=32.  Max Lat=80.
+      Non-prefetchable 32 bit memory at 0xd5900000 [0xd5900fff].
+  Bus  0, device  10, function  1:
+    Class 0c03: PCI device 17f3:6061 (rev 0).
+      IRQ 14.
+      Master Capable.  Latency=32.
+      Non-prefetchable 32 bit memory at 0xd4900000 [0xd4900fff].

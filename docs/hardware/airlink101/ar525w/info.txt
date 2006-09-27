@@ -1,0 +1,21 @@
+Airlink101 AR525W
+
+Online Description from Airlink101:
+http://www.airlink101.com/products/ar525w.html
+
+CPU: RDC R3211-G (unknown frequency x100 Mhz)
+RAM: 128 MB
+Flash: 32 MB
+1 Ethernet controller RDC R6040
+1 Switch controller IC+ IP175C
+1 Mini-PCI extension slot
+1 Mini-PCI MiMo Wlan card Ralink RT2661T
+
+serial port (see the wiki for the exact serial pinout)
+JTAG interface
+
+List of files:
+nvram.txt: contents of NVRAM from the stock firmware (RedBoot)
+cpuinfo.txt: contents of /proc/cpuinfo (2.4.29)
+pci.txt:  contents of /proc/pci (2.4.29)
+dmesg-2_4_29.txt: dmesg from Kernel 2.4.29
