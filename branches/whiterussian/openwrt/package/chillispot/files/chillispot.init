@@ -7,7 +7,7 @@ case $1 in
  start)
   /sbin/insmod tun >/dev/null 2>&1
   [ -d $RUN_D ] || mkdir -p $RUN_D
-  /usr/sbin/chilli
+  /usr/sbin/chilli --dns1="$(nvram get lan_ipaddr)"
   ;;
  stop)
   [ -f $PID_F ] && kill $(cat $PID_F) >/dev/null 2>&1

@@ -1,4 +1,7 @@
 #!/bin/sh
+. /etc/functions.sh
+include /lib/network
+scan_interfaces
 
 RUN_D=/var/run
 PID_F=$RUN_D/chilli.pid
@@ -7,7 +10,8 @@ case $1 in
  start)
   /sbin/insmod tun >/dev/null 2>&1
   [ -d $RUN_D ] || mkdir -p $RUN_D
-  /usr/sbin/chilli
+  config_get ipaddr lan ipaddr
+  /usr/sbin/chilli --dns1="$ipaddr"
   ;;
  stop)
   [ -f $PID_F ] && kill $(cat $PID_F) >/dev/null 2>&1
