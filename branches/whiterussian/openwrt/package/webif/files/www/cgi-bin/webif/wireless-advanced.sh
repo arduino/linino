@@ -42,7 +42,7 @@ else
 	validate <<EOF
 int|FORM_lazywds|Lazy WDS On/Off|required min=0 max=1|$FORM_lazywds
 int|FORM_wdstimeout|WDS watchdog timeout|optional min=0 max=3600|$FORM_wdstimeout
-int|FORM_distance|Distance|optional min=0 max=256|$FORM_distance
+int|FORM_distance|Distance|optional min=1|$FORM_distance
 EOF
 	equal "$?" 0 && {
 		save_setting wireless wl0_lazywds "$FORM_lazywds"
