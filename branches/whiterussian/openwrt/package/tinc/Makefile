@@ -48,6 +48,7 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  $(DISABLE_LARGEFILE) \
 		  --with-kernel=$(LINUX_DIR) \
 		  --with-zlib=$(STAGING_DIR)/usr/ \
+		  --with-lzo-include=$(STAGING_DIR)/usr/include/lzo \
 	);
 	touch $@
 

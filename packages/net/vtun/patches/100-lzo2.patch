@@ -1,0 +1,41 @@
+diff -ur vtun.old/configure vtun.dev/configure
+--- vtun.old/configure	2002-12-20 18:22:15.000000000 +0100
++++ vtun.dev/configure	2006-09-29 21:06:09.000000000 +0200
+@@ -2001,14 +2001,14 @@
+ 	  CPPFLAGS="$CPPFLAGS -I$p"
+ 	fi
+         echo "$ac_t""($dir) yes " 1>&6 
+-	echo $ac_n "checking for lzo1x_decompress in -llzo""... $ac_c" 1>&6
+-echo "configure:2006: checking for lzo1x_decompress in -llzo" >&5
++	echo $ac_n "checking for lzo1x_decompress in -llzo2""... $ac_c" 1>&6
++echo "configure:2006: checking for lzo1x_decompress in -llzo2" >&5
+ ac_lib_var=`echo lzo'_'lzo1x_decompress | sed 'y%./+-%__p_%'`
+ if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+   echo $ac_n "(cached) $ac_c" 1>&6
+ else
+   ac_save_LIBS="$LIBS"
+-LIBS="-llzo  $LIBS"
++LIBS="-llzo2  $LIBS"
+ cat > conftest.$ac_ext <<EOF
+ #line 2014 "configure"
+ #include "confdefs.h"
+@@ -2037,7 +2037,7 @@
+ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+   echo "$ac_t""yes" 1>&6
+   
+-	       LIBS="$LIBS -llzo"
++	       LIBS="$LIBS -llzo2"
+ 	       cat >> confdefs.h <<\EOF
+ #define HAVE_LZO 1
+ EOF
+diff -ur vtun.old/lfd_lzo.c vtun.dev/lfd_lzo.c
+--- vtun.old/lfd_lzo.c	2002-04-25 11:19:50.000000000 +0200
++++ vtun.dev/lfd_lzo.c	2006-09-29 21:09:14.000000000 +0200
+@@ -36,6 +36,7 @@
+ #ifdef HAVE_LZO
+ 
+ #include "lzo1x.h"
++#include "lzoutil.h"
+ 
+ static lzo_byte *zbuf;
+ static lzo_voidp wmem;

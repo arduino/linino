@@ -37,7 +37,7 @@ endef
 define Build/Configure
 $(call Build/Configure/Default,,LIBS="-L$(STAGING_DIR)/usr/lib" \
 		BLOWFISH_HDR_DIR="$(STAGING_DIR)/usr/include/openssl" \
-		LZO_HDR_DIR="$(STAGING_DIR)/usr/include" \
+		LZO_HDR_DIR="$(STAGING_DIR)/usr/include/lzo" \
 		SSL_HDR_DIR="$(STAGING_DIR)/usr/include/openssl")
 endef
 

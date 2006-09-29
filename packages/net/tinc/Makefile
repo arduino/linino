@@ -35,7 +35,9 @@ endef
 
 define Build/Configure
 $(call Build/Configure/Default,--with-kernel=$(LINUX_DIR) \
-		  --with-zlib=$(STAGING_DIR)/usr/)
+		  --with-zlib=$(STAGING_DIR)/usr/ \
+		  --with-lzo-include=$(STAGING_DIR)/usr/include/lzo \
+)
 endef
 
 define Build/Compile

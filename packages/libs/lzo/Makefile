@@ -9,13 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lzo
-PKG_VERSION:=1.08
+PKG_VERSION:=2.02
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.oberhumer.com/opensource/lzo/download/
-PKG_MD5SUM:=ab94d3da364c7cbd5b78d76f1875b0f6
+PKG_MD5SUM:=6760e5819f4238328709bf93bf10071c
 PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -72,20 +72,20 @@ endef
 
 define Package/liblzo/install
 	install -d -m0755 $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblzo.so.* $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblzo2.so.* $(1)/usr/lib
 endef
 
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/lzo*.h $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/lzo $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblzo.{a,so*} $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblzo2.{a,so*} $(STAGING_DIR)/usr/lib/
 endef
 
 define Build/UninstallDev
 	rm -rf \
-		$(STAGING_DIR)/usr/include/lzo*.h \
-		$(STAGING_DIR)/usr/lib/liblzo.{a,so*}
+		$(STAGING_DIR)/usr/include/lzo* \
+		$(STAGING_DIR)/usr/lib/liblzo2.{a,so*}
 endef
 
 $(eval $(call BuildPackage,liblzo))
