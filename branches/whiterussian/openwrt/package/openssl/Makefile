@@ -3,9 +3,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssl
-PKG_VERSION:=0.9.7k
-PKG_RELEASE:=3
-PKG_MD5SUM:=be6bba1d67b26eabb48cf1774925416f
+PKG_VERSION:=0.9.8d
+PKG_RELEASE:=1
+PKG_MD5SUM:=8ed1853538e1d05a1f5ada61ebf8bffa
 
 PKG_SOURCE_URL:=http://www.openssl.org/source/ \
 	ftp://ftp.funet.fi/pub/crypt/cryptography/libs/openssl/source/ \
@@ -17,7 +17,9 @@ PKG_CAT:=zcat
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-OPENSSL_NO_CIPHERS:= no-idea no-md2 no-mdc2 no-rc5
+OPENSSL_NO_CIPHERS:= no-idea no-md2 no-mdc2 no-rc5 no-sha0 no-rmd160 no-aes192
+OPENSSL_OPTIONS:= shared no-ec no-err no-fips no-hw no-krb5 no-threads zlib-dynamic no-engines
+
 
 include $(TOPDIR)/package/rules.mk
 
@@ -27,16 +29,16 @@ $(eval $(call PKG_template,OPENSSL_UTIL,openssl-util,$(PKG_VERSION)-$(PKG_RELEAS
 .NOTPARALLEL:
 
 $(PKG_BUILD_DIR)/.configured:
-	$(SED) 's,/CFLAG=,/CFLAG= $(TARGET_SOFT_FLOAT) ,g' $(PKG_BUILD_DIR)/Configure
 	(cd $(PKG_BUILD_DIR); \
 		PATH=$(TARGET_PATH) \
-		./Configure linux-$(ARCH) \
-		  --prefix=/usr \
-		  --openssldir=/etc/ssl \
-		  -I$(STAGING_DIR)/usr/include \
-		  -L$(STAGING_DIR)/usr/lib -ldl \
-		  $(OPENSSL_NO_CIPHERS) \
-		  shared no-asm no-ec no-engine no-err no-fips no-hw no-krb5 no-threads zlib-dynamic \
+		./Configure linux-openwrt \
+			--prefix=/usr \
+			--openssldir=/etc/ssl \
+			-I$(STAGING_DIR)/usr/include \
+			-L$(STAGING_DIR)/usr/lib -ldl \
+			-DOPENSSL_SMALL_FOOTPRINT \
+			$(OPENSSL_NO_CIPHERS) \
+			$(OPENSSL_OPTIONS) \
 	)
 	touch $@
 
@@ -48,7 +50,7 @@ $(PKG_BUILD_DIR)/.built:
 		depend
 	$(MAKE) -C $(PKG_BUILD_DIR) -j1 \
 		CC="$(TARGET_CC)" \
-		CCOPTS="$(TARGET_CFLAGS) -fomit-frame-pointer" \
+		OPENWRT_OPTIMIZATION_FLAGS="$(TARGET_CFLAGS)" \
 		AR="$(TARGET_CROSS)ar r" \
 		RANLIB="$(TARGET_CROSS)ranlib" \
 		all build-shared
@@ -56,7 +58,7 @@ $(PKG_BUILD_DIR)/.built:
 	-rm $(PKG_BUILD_DIR)/libssl.so.*.*.*
 	$(MAKE) -C $(PKG_BUILD_DIR) -j1 \
 		CC=$(TARGET_CC) \
-		CCOPTS="$(TARGET_CFLAGS) -fomit-frame-pointer" \
+		OPENWRT_OPTIMIZATION_FLAGS="$(TARGET_CFLAGS)" \
 		do_linux-shared
 	$(MAKE) -C $(PKG_BUILD_DIR) -j1 \
 		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
