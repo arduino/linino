@@ -3,9 +3,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssh
-PKG_VERSION:=4.2p1
-PKG_RELEASE:=2
-PKG_MD5SUM:=df899194a340c933944b193477c628fa
+PKG_VERSION:=4.4p1
+PKG_RELEASE:=1
+PKG_MD5SUM:=793a709a8de695c22f523024d7e9bf07
 
 PKG_SOURCE_URL:=ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/ \
 		ftp://openbsd.wiretapped.net/pub/OpenBSD/OpenSSH/portable/ \
