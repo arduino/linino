@@ -49,8 +49,10 @@ $(call Build/Configure/Default,--enable-shared \
 endef
 
 define Build/Compile
-$(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install)
+$(call Build/Compile/Default, \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install \
+)
 endef
 
 define Package/libexif/install
