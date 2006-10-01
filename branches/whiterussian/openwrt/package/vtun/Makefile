@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vtun
 PKG_VERSION:=2.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=309534fd03c5d13a19c43916f61f4bbf
 
 PKG_SOURCE_URL:=@SF/vtun
@@ -24,7 +24,7 @@ $(PKG_BUILD_DIR)/.configured:
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LIBS="-L$(STAGING_DIR)/usr/lib" \
 		BLOWFISH_HDR_DIR="$(STAGING_DIR)/usr/include/openssl" \
-		LZO_HDR_DIR="$(STAGING_DIR)/usr/include" \
+		LZO_HDR_DIR="$(STAGING_DIR)/usr/include/lzo" \
 		SSL_HDR_DIR="$(STAGING_DIR)/usr/include/openssl" \
 		./configure \
 		--target=$(GNU_TARGET_NAME) \
