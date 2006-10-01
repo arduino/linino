@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tinc
 PKG_VERSION:=1.0.4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=63887373dd763f8d90cecc5a3616c363
 
 PKG_SOURCE_URL:=http://www.tinc-vpn.org/packages \
