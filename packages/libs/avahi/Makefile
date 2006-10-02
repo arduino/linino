@@ -198,3 +198,8 @@ endef
 $(eval $(call BuildPackage,libavahi))
 $(eval $(call BuildPackage,avahi-daemon))
 $(eval $(call BuildPackage,avahi-dnsconfd))
+
+$(eval $(call RequireCommand,pkg-config, \
+	$(PKG_NAME) requires pkg-config. \
+))
+
