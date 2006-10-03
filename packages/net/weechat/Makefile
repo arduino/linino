@@ -25,9 +25,10 @@ include $(INCLUDE_DIR)/package.mk
 define Package/weechat
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libncurses +liblua +gnutls +libiconv
+  DEPENDS:=+libncurses +liblua +libgnutls +libiconv
   TITLE:=Lightweight IRC client
-  DESCRIPTION:=Fast, light & extensible IRC client\\\
+  DESCRIPTION:=\
+  	Weechat is fast, light & extensible IRC client.
   URL:=http://weechat.flashtux.org
 endef
 
