@@ -11,28 +11,31 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=scanlogd
 PKG_VERSION:=2.2.6
 PKG_RELEASE:=1
-PKG_MD5SUM:=7b8187ea718ebe47f22805b921b909ab
 
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.openwall.com/scanlogd/ \
 		ftp://ftp.wiretapped.net/pub/openwall/ \
 		http://distro.ibiblio.org/pub/linux/distributions/openwall/
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_MD5SUM:=7b8187ea718ebe47f22805b921b909ab
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+
+PKG_INIT_PRIO:=60
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/scanlogd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcap +libnet +libnids
-  TITLE:=a port scan detection tool
-  DESCRIPTION:=Scanlogd is a TCP port scan detection tool, originally designed\\\
+  DEPENDS:=+libpcap +libnet0 +libnids
+  TITLE:=Port scan detection tool
+  DESCRIPTION:=\
+  	Scanlogd is a TCP port scan detection tool, originally designed \\\
 	to illustrate various attacks an IDS developer has to deal with.\\\
-	Thus, unlike some of the other port scan detection tools out there,\\\
-	scanlogd is designed to be totally safe to use.\\\
+	Thus, unlike some of the other port scan detection tools out there, \\\
+	scanlogd is designed to be totally safe to use.
   URL:=http://www.openwall.com/scanlogd
 endef
 
@@ -47,16 +50,17 @@ define Build/Compile
 		CC="$(TARGET_CC)" LD="$(TARGET_CC)" CFLAGS="-c $(TARGET_CFLAGS)" \
 		LDFLAGS= \
 		PCAP_H="-I$(STAGING_DIR)/usr/include" \
-		NIDS_H="-I$(STAGING_DIR)/usr/include" \
-		NIDS_L="-L$(STAGING_DIR)/usr/lib -lnids -lnet -lpcap" \
+		NIDS_H="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/lib/libnet-1.0.x/include" \
+		NIDS_L="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libnet-1.0.x/lib -lnids -lnet -lpcap" \
 		libnids
 endef
 
 define Package/scanlogd/install	
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/scanlogd.init $(1)/etc/init.d/S60scanlogd
 	install -d -m0755 $(1)/usr/sbin
 	install -m0755 $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
+	install -d -m0755 $(1)/etc/init.d
+	install -m0755 ./files/scanlogd.init $(1)/etc/init.d/scanlogd
+	ln -sf scanlogd $(1)/etc/init.d/S$(PKG_INIT_PRIO)scanlogd
 endef
 
 $(eval $(call BuildPackage,scanlogd))
