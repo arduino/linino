@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/peerguardian
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpthread +libncurses +iptables
+  DEPENDS:=@BROKEN +libpthread +libncurses +iptables
   TITLE:=PeerGuardian for Linux
   DESCRIPTION:=PeerGuardian helps protect your privacy by blocking many ranges\\\
 	of aggressive IPs while you use P2P.\\\
