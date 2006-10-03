@@ -21,7 +21,6 @@ define Package/wiviz
   CATEGORY:=Network
   DEPENDS:=+libpcap
   TITLE:=Wireless Network Visualization
-  DESCRIPTION:=Wireless Network Visualization
   URL:=http://students.washington.edu/natetrue/wiviz/
 endef
 	
@@ -31,16 +30,16 @@ define Build/Prepare
 endef
 
 define Build/Compile
-$(call Build/Compile/Default,CC="$(TARGET_CC)" \
-		CCOPTS="$(TARGET_CFLAGS)" \
-		INCLUDE="-I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include" \
-		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib")
+	$(call Build/Compile/Default, \
+		CCOPTS="\$$$$(EXTRA_CFLAGS)" \
+		INCLUDE="" \
+		LDFLAGS="\$$$$(EXTRA_LDFLAGS)" \
+	)
 endef
 
 define Package/wiviz/install	
 	mkdir -p $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
-	$(RSTRIP) $(1)
 	$(CP) ./files/* $(1)
 	find $(1) -name CVS | xargs rm -rf
 	find $(1) -name .svn | xargs rm -rf
