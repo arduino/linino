@@ -31,7 +31,7 @@ endef
 
 define Package/libgphoto2
   $(call Package/libgphoto2/Default)
-  DEPENDS:=+libusb +libexif +libjpeg +libpthread
+  DEPENDS:=+libusb +libexif +libjpeg +libpthread +libltdl
   TITLE:=The basic library of the gphoto2 program.
   MENU:=1
 endef
