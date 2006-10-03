@@ -57,6 +57,6 @@ endef
 
 $(eval $(call BuildPackage,libpopt))
 
-$(eval $(call RequireCommand,gettext, \
+$(eval $(call RequireCommand,xgettext, \
 	popt requires GNU gettext to build. \
 ))
