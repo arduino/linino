@@ -38,6 +38,7 @@ boardnum=$(nvram get boardnum)
 boardflags=$(($(nvram get boardflags)))
 adm_switch="$(( ($boardflags & 0x80) >> 7 ))"
 
+[ -n "$(nvram get vxkilled)" ] && boardtype=0 # don't mess with the ram settings on the hacked cfe
 case "$(( $boardtype ))" in
 	"1800") #0x708
 		if [ "$adm_switch" = 0 ]; then
