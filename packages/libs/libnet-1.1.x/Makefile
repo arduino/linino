@@ -31,13 +31,7 @@ define Package/libnet1
 endef
 
 ENDIANESS:=lil
-ifeq ($(ARCH),mips)
-  ENDIANESS:=big
-endif
-ifeq ($(ARCH),armeb)
-  ENDIANESS:=big
-endif
-ifeq ($(ARCH),powerpc)
+ifeq ($(CONFIG_BIG_ENDIAN),y)
   ENDIANESS:=big
 endif
 

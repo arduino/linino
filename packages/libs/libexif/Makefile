@@ -32,13 +32,7 @@ define Package/libexif
 endef
 
 BIG_ENDIAN:=no
-ifeq ($(ARCH),mips)
-BIG_ENDIAN:=yes
-endif
-ifeq ($(ARCH),armeb)
-BIG_ENDIAN:=yes
-endif
-ifeq ($(ARCH),powerpc)
+ifeq ($(CONFIG_BIG_ENDIAN),y)
 BIG_ENDIAN:=yes
 endif
 
