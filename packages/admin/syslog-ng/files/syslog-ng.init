@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
 
-syslog_start() {
+start() {
   [ -f /etc/syslog-ng/syslog-ng.conf ] || {
     echo "/etc/syslog-ng/syslog-ng.conf does not exist !";
     exit 0;
@@ -9,26 +10,17 @@ syslog_start() {
   [ -x /usr/sbin/syslog-ng ] && /usr/sbin/syslog-ng
 }
 
-syslog_stop() {
+stop() {
   killall syslog-ng
 }
 
-case "$1" in
-  start)
-	syslog_start
-	;;
-  stop)
-	syslog_stop
-	;;
-  restart)
-	syslog_stop
-	sleep 1s
-	syslog_start
-	;;
-  reload)
+restart() {
+	stop
+	sleep 1
+	start
+}
+
+reload() {
 	kill -HUP `cat /var/run/syslog-ng.pid` &>/dev/null
-	;;
-  *)
-	echo "Usage: $0 <start|stop|restart|reload>"
-	;;
-esac
+}
+

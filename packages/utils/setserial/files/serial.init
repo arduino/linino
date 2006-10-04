@@ -1,2 +1,6 @@
-#!/bin/sh
-/usr/sbin/setserial /dev/tts/1 irq 3
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+start() {
+	/usr/sbin/setserial /dev/tts/1 irq 3
+}

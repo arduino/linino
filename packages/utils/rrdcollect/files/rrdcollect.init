@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
 
 BIN=rrdcollect
 DEFAULT=/etc/default/$BIN
@@ -11,21 +12,16 @@ RRD_D=$LIB_D/rrd
 RRD_F=$(find $RRD_D -name "*.rrd" 2>/dev/null)
 [ -f $DEFAULT ] && . $DEFAULT
 
-case $1 in
- start)
-  mkdir -p $RUN_D
-  mkdir -p $IMG_D
-  mkdir -p $RRD_D
-  [ -n "$RRD_F" ] || /usr/bin/rrd.sh init
-  [ -x $CGI_S ] || /usr/bin/rrd.sh cgi
-  $BIN $OPTIONS
-  ;;
- stop)
-  [ -f $PID_F ] && kill $(cat $PID_F)
-  ;;
- *)
-  echo "usage: $0 (start|stop)"
-  exit 1
-esac
+start() {
+	mkdir -p $RUN_D
+	mkdir -p $IMG_D
+	mkdir -p $RRD_D
+	[ -n "$RRD_F" ] || /usr/bin/rrd.sh init
+	[ -x $CGI_S ] || /usr/bin/rrd.sh cgi
+	$BIN $OPTIONS
+}
 
-exit $?
+stop() {
+	[ -f $PID_F ] && kill $(cat $PID_F)
+}
+
