@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ettercap
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcap +libnet1 +libopenssl +libpcre +libiconv +libncurses
+  DEPENDS:=+libpcap +libnet1 +libopenssl +libpcre +libiconv +libncurses +libltdl
   TITLE:=Ettercap is a suite for man in the middle attacks on LAN.
   DESCRIPTION:=\
   	It features sniffing of live connections, content filtering on the fly \\\
