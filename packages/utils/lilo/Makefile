@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lilo
-PKG_VERSION:=22.7.2
+PKG_VERSION:=22.7.3
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -21,16 +21,16 @@ PKG_CAT:=zcat
 include $(INCLUDE_DIR)/package.mk
 
 define Package/lilo
-SECTION:=base
-CATEGORY:=Boot Loaders
-TITLE:=lilo
-DESCRIPTION:=lilo
-URL:=ftp://metalab.unc.edu/pub/Linux/system/boot/lilo/
-DEPENDS:=@LINUX_2_6_X86||LINUX_2_4_X86
+  SECTION:=base
+  CATEGORY:=Boot Loaders
+  DEPENDS:=@LINUX_2_6_X86||LINUX_2_4_X86
+  TITLE:=lilo
+  URL:=ftp://metalab.unc.edu/pub/Linux/system/boot/lilo/
 endef
 
-
-
+define Package/lilo/conffiles
+/etc/lilo.conf
+endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) alles
@@ -38,13 +38,11 @@ define Build/Compile
 endef
 
 define Package/lilo/install
-	mkdir -p $(1)/sbin
-	mkdir -p $(1)/etc/init.d
-	mkdir -p $(1)/boot
+	install -d -m0755 $(1)/sbin
 	$(CP) $(PKG_BUILD_DIR)/lilo.static $(1)/sbin/lilo
-	$(CP) lilo.conf $(1)/etc
-	$(CP) boot.msg $(1)/etc
-	#$(CP) S11Pivot $(1)/etc/init.d
+	install -d -m0755 $(1)/etc
+	$(CP) ./files/lilo.conf $(1)/etc/
+	$(CP) ./files/boot.msg $(1)/etc/
 endef
 
 $(eval $(call BuildPackage,lilo))
