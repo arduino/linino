@@ -1,4 +1,12 @@
-#!/bin/sh
-mkdir -p /tmp/cups
-mkdir -p /tmp/spool/cups/tmp
-exec /usr/sbin/cupsd
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+start() {
+	mkdir -p /tmp/cups
+	mkdir -p /tmp/spool/cups/tmp
+	/usr/sbin/cupsd
+}
+
+stop() {
+	killall cupsd
+}

@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
 
 DEFAULT=/etc/default/radiusd
 LOG_D=/var/log/radius
@@ -6,18 +7,12 @@ RUN_D=/var/run
 PID_F=$RUN_D/radiusd.pid
 [ -f $DEFAULT ] && . $DEFAULT
 
-case $1 in
- start)
-  [ -d $LOG_D ] || mkdir -p $LOG_D
-  [ -d $RUN_D ] || mkdir -p $RUN_D
-  radiusd $OPTIONS
-  ;;
- stop)
-  [ -f $PID_F ] && kill $(cat $PID_F)
-  ;;
- *)
-  echo "usage: $0 (start|stop)"
-  exit 1
-esac
+start() {
+	[ -d $LOG_D ] || mkdir -p $LOG_D
+	[ -d $RUN_D ] || mkdir -p $RUN_D
+	radiusd $OPTIONS
+}
 
-exit $?
+stop() {
+	[ -f $PID_F ] && kill $(cat $PID_F)
+}

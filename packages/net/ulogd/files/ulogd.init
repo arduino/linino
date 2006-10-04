@@ -1,17 +1,15 @@
-#!/bin/sh
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
 
 BIN=ulogd
 DEFAULT=/etc/default/$BIN
 LOG_D=/var/log
 [ -f $DEFAULT ] && . $DEFAULT
 
-case $1 in
- start)
-  $BIN $OPTIONS
-  ;;
- *)
-  echo "usage: $0 (start)"
-  exit 1
-esac
+start() {
+	$BIN $OPTIONS
+}
 
-exit $?
+stop() {
+	killall $BIN
+}

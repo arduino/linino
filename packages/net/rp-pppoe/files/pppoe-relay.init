@@ -1,15 +1,14 @@
-#!/bin/sh
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
 
 DEFAULT=/etc/default/pppoe-relay
 [ -f $DEFAULT ] && . $DEFAULT
 
-case $1 in
- start)
-  pppoe-relay $OPTIONS
-  ;;
- *)
-  echo "usage: $0 (start)"
-  exit 1
-esac
+start() {
+	pppoe-relay $OPTIONS
+}
 
-exit $?
+stop() {
+	killall pppoe-relay
+}
+

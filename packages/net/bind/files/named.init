@@ -1,5 +1,12 @@
-#!/bin/sh
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
 
-if [ -f /etc/bind/named.conf ]; then
-	named -c /etc/bind/named.conf
-fi
+start() {
+	if [ -f /etc/bind/named.conf ]; then
+		named -c /etc/bind/named.conf
+	fi
+}
+
+stop() {
+	killall named
+}

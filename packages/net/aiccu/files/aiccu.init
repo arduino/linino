@@ -1,21 +1,10 @@
-#!/bin/sh
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
 
-case "$1" in
-    start)
+start() {
 	aiccu start	
-	;;
+}
 
-    stop)
+stop() {
 	aiccu stop
-	aiccu stop
-	;;
-
-    restart)
-	$0 stop
-	$0 start
-	;;
-    *)
-	echo "Usage: $0 {start|stop|restart}"
-	exit 1
-	;;
-esac
+}

@@ -1,17 +1,16 @@
-#!/bin/sh
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
 
 DEFAULT=/etc/default/rp-l2tpd
 RUN_D=/var/run
 [ -f $DEFAULT ] && . $DEFAULT
 
-case $1 in
- start)
-  [ -d $RUN_D ] || mkdir -p $RUN_D
-  l2tpd $OPTIONS
-  ;;
- *)
-  echo "usage: $0 (start)"
-  exit 1
-esac
+start() {
+	[ -d $RUN_D ] || mkdir -p $RUN_D
+	l2tpd $OPTIONS
+}
 
-exit $?
+stop() {
+	killall l2tpd
+}
+
