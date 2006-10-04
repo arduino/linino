@@ -39,6 +39,7 @@ define Build/Configure
 		, \
 		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libnet-1.0.x/include" \
 		LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libnet-1.0.x/lib" \
+		PATH="$(STAGING_DIR)/usr/lib/libnet-1.0.x/bin:$$$$PATH" \
 	)
 endef
 
