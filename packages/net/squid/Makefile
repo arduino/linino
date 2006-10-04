@@ -12,184 +12,161 @@ PKG_NAME:=squid
 PKG_VERSION:=2.5.STABLE13
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.squid-cache.org/Versions/v2/2.5/
 PKG_MD5SUM:=3e64468e123be1246d17486dab6bee87
 PKG_CAT:=bzcat
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/squid
+define Package/squid/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl
-  TITLE:=full-featured Web proxy cache
-  DESCRIPTION:=Squid is a high-performance proxy caching server for web clients, \\\
-    supporting FTP, gopher, and HTTP data objects. Unlike traditional \\\
-    caching software, Squid handles all requests in a single, \\\
-    non-blocking, I/O-driven process.
   URL:=http://www.squid-cache.org
+endef
+
+define Package/squid
+  $(call Package/squid/Default)
   MENU:=1
+  DEPENDS:=+libopenssl +libpthread
+  TITLE:=full-featured Web proxy cache
+  DESCRIPTION:=\
+	Squid is a high-performance proxy caching server for web clients, \\\
+	supporting FTP, gopher, and HTTP data objects. Unlike traditional \\\
+	caching software, Squid handles all requests in a single, \\\
+	non-blocking, I/O-driven process.
 endef
 
 define Package/squid-mod-basic-auth-getpwnam
-  SECTION:=net
-  CATEGORY:=Network
+  $(call Package/squid/Default)
   DEPENDS:=squid
   TITLE:=getpwnam basic authentication helper
 endef
 
 define Package/squid-mod-basic-auth-ncsa
-  SECTION:=net
-  CATEGORY:=Network
+  $(call Package/squid/Default)
   DEPENDS:=squid
   TITLE:=NCSA basic authentication helper
 endef
 
 define Package/squid-mod-basic-auth-smb
-  SECTION:=net
-  CATEGORY:=Network
+  $(call Package/squid/Default)
   DEPENDS:=squid
   TITLE:=Samba basic authentication helper
 endef
 
 define Package/squid-mod-basic-auth-winbind
-  SECTION:=net
-  CATEGORY:=Network
+  $(call Package/squid/Default)
   DEPENDS:=squid
   TITLE:=Winbind basic authentication helper
 endef
 
 define Package/squid-mod-digest-auth-password
-  SECTION:=net
-  CATEGORY:=Network
+  $(call Package/squid/Default)
   DEPENDS:=squid
   TITLE:=Password digest authentication helper
 endef
 
 define Package/squid-mod-external-acl-ip-user
-  SECTION:=net
-  CATEGORY:=Network
+  $(call Package/squid/Default)
   DEPENDS:=squid
   TITLE:=IP user external ACL helper
 endef
 
 define Package/squid-mod-external-acl-unix-group
-  SECTION:=net
-  CATEGORY:=Network
+  $(call Package/squid/Default)
   DEPENDS:=squid
   TITLE:=Unix group external ACL helper
 endef
 
 define Package/squid-mod-external-acl-winbind-group
-  SECTION:=net
-  CATEGORY:=Network
+  $(call Package/squid/Default)
   DEPENDS:=squid
   TITLE:=Winbind group external ACL helper
 endef
 
 define Package/squid-mod-ntlm-auth-fakeauth
-  SECTION:=net
-  CATEGORY:=Network
+  $(call Package/squid/Default)
   DEPENDS:=squid
   TITLE:=Fakeauth NTLM authentication helper
 endef
 
 define Package/squid-mod-ntlm-auth-smb-auth
-  SECTION:=net
-  CATEGORY:=Network
+  $(call Package/squid/Default)
   DEPENDS:=squid
   TITLE:=Samba NTLM authentication helper
 endef
 
 define Package/squid-mod-ntlm-auth-winbind-auth
-  SECTION:=net
-  CATEGORY:=Network
+  $(call Package/squid/Default)
   DEPENDS:=squid
   TITLE:=Winbind NTLM authentication helper
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -rf config.cache; \
-                $(TARGET_CONFIGURE_OPTS) \
-                CFLAGS="$(TARGET_CFLAGS)" \
-                CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-                LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-                ac_cv_sizeof_void_p=4 \
-                ac_cv_sizeof_short=2 \
-                ac_cv_sizeof_int=4 \
-                ac_cv_sizeof_long=4 \
-                ac_cv_sizeof_long_long=8 \
-                ac_cv_sizeof___int64=0 \
-                ac_cv_sizeof_int16_t=2 \
-                ac_cv_sizeof_uint16_t=2 \
-                ac_cv_sizeof_u_int16_t=2 \
-                ac_cv_sizeof_int32_t=4 \
-                ac_cv_sizeof_uint32_t=4 \
-                ac_cv_sizeof_u_int32_t=4 \
-                ac_cv_sizeof_int64_t=8 \
-                ac_cv_sizeof_uint64_t=8 \
-                ac_cv_sizeof_u_int64_t=8 \
-                ac_cv_func_setresuid=no \
-                ac_cv_func_va_copy=no \
-                ac_cv_func___va_copy=no \
-                ./configure \
-                        --target=$(GNU_TARGET_NAME) \
-                        --host=$(GNU_TARGET_NAME) \
-                        --build=$(GNU_HOST_NAME) \
-                        --program-prefix="" \
-                        --program-suffix="" \
-                        --prefix=/usr \
-                        --exec-prefix=/usr \
-                        --bindir=/usr/bin \
-                        --datadir=/usr/share/squid \
-                        --includedir=/usr/include \
-                        --infodir=/usr/share/info \
-                        --libdir=/usr/lib \
-                        --libexecdir=/usr/lib/squid \
-                        --localstatedir=/var \
-                        --mandir=/usr/share/man \
-                        --sbindir=/usr/sbin \
-                        --sysconfdir=/etc/squid \
-                        $(DISABLE_LARGEFILE) \
-                        --enable-shared \
-                        --enable-static \
-                        --with-gnu-ld \
-                        --enable-x-accelerator-vary \
-                        --with-pthreads \
-                        --with-dl \
-                        --enable-icmp \
-                        --enable-kill-parent-hack \
-                        --enable-arp-acl \
-                        --enable-ssl \
-                        --enable-htcp \
-                        --enable-err-languages=English \
-                        --enable-default-err-language=English \
-                        --enable-linux-netfilter \
-                        --enable-icmp \
-                        --enable-external-acl-helpers="" \
-                        --enable-underscores \
-			--enable-cache-digests \
-                        --enable-referer-log \
-                        --enable-delay-pools \
-                        --enable-useragent-log \
-                        --with-openssl=$(STAGING_DIR)/usr \
-                        --enable-auth="basic digest ntlm" \
-                        --enable-basic-auth-helpers="getpwnam NCSA SMB winbind" \
-                        --enable-ntlm-auth-helpers="fakeauth SMB winbind" \
-                        --enable-digest-auth-helpers="password" \
-                        --enable-external-acl-helpers="ip_user unix_group winbind_group" \
-        );
+	$(call Build/Configure/Default, \
+		--datadir=/usr/share/squid \
+		--libexecdir=/usr/lib/squid \
+		--sysconfdir=/etc/squid \
+		--enable-shared \
+		--enable-static \
+		--with-gnu-ld \
+		--enable-x-accelerator-vary \
+		--with-pthreads \
+		--with-dl \
+		--enable-icmp \
+		--enable-kill-parent-hack \
+		--enable-arp-acl \
+		--enable-ssl \
+		--enable-htcp \
+		--enable-err-languages=English \
+		--enable-default-err-language=English \
+		--enable-linux-netfilter \
+		--enable-icmp \
+		--enable-external-acl-helpers="" \
+		--enable-underscores \
+		--enable-cache-digests \
+		--enable-referer-log \
+		--enable-delay-pools \
+		--enable-useragent-log \
+		--with-openssl=$(STAGING_DIR)/usr \
+		--enable-auth="basic digest ntlm" \
+		--enable-basic-auth-helpers="getpwnam NCSA SMB winbind" \
+		--enable-ntlm-auth-helpers="fakeauth SMB winbind" \
+		--enable-digest-auth-helpers="password" \
+		--enable-external-acl-helpers="ip_user unix_group winbind_group" \
+		, \
+		ac_cv_sizeof_void_p=4 \
+		ac_cv_sizeof_short=2 \
+		ac_cv_sizeof_int=4 \
+		ac_cv_sizeof_long=4 \
+		ac_cv_sizeof_long_long=8 \
+		ac_cv_sizeof___int64=0 \
+		ac_cv_sizeof_int16_t=2 \
+		ac_cv_sizeof_uint16_t=2 \
+		ac_cv_sizeof_u_int16_t=2 \
+		ac_cv_sizeof_int32_t=4 \
+		ac_cv_sizeof_uint32_t=4 \
+		ac_cv_sizeof_u_int32_t=4 \
+		ac_cv_sizeof_int64_t=8 \
+		ac_cv_sizeof_uint64_t=8 \
+		ac_cv_sizeof_u_int64_t=8 \
+		ac_cv_func_setresuid=no \
+		ac_cv_func_va_copy=no \
+		ac_cv_func___va_copy=no \
+        )
 endef
 	
 define Build/Compile	
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
+	# pass INCLUDES to compile host sources against our OpenSSL, not the host one
+	$(MAKE) -C $(PKG_BUILD_DIR)/lib \
+		INCLUDES="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		all
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR=$(PKG_INSTALL_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
 
