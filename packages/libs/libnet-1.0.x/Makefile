@@ -55,7 +55,9 @@ define Build/Configure
 endef
 
 define Build/Compile
+	# pass CFLAGS again to override -O2 set by configure
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CFLAGS="$(TARGET_CFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
