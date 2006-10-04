@@ -11,50 +11,58 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=rrs
 PKG_VERSION:=1.70
 PKG_RELEASE:=1
-PKG_MD5SUM:=b400d03c0e39e3e78a7327ba78f789f0
-
-PKG_SOURCE_URL:=http://www.cycom.se/uploads/36/19 
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.cycom.se/uploads/36/19 
+PKG_MD5SUM:=b400d03c0e39e3e78a7327ba78f789f0
 PKG_CAT:=zcat
+
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/rrs
-  SECTION:=net
-  CATEGORY:=Network
-  DEPENDS:=+uclibcxx +libopenssl
-  TITLE:=A reverse (connecting) remote shell, with SSL support
-  DESCRIPTION:=A reverse (connecting) remote shell, built with SSL support.
-  URL:=http://www.cycom.se/dl/rrs/
-endef
-
-define Package/rrs-nossl
+define Package/rrs/Default
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+uclibcxx 
-  TITLE:=A reverse (connecting) remote shell, without SSL support
-  DESCRIPTION:=A reverse (connecting) remote shell, built with SSL support.
+  TITLE:=A reverse (connecting) remote shell
   URL:=http://www.cycom.se/dl/rrs/
 endef
 
+define Package/rrs
+  $(call Package/rrs/Default)
+  DEPENDS+= +libopenssl
+  TITLE+= (with SSL support)
+endef
+
+define Package/rrs-nossl
+  TITLE+= (without SSL support)
+endef
+
+define Build/Compile/Template
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CC="$(TARGET_CC)" \
+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -fno-builtin -fno-rtti -nostdinc++" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -Wl,-Bdynamic,-luClibc++,-Bstatic,-lstdc++,-Bdynamic $(3) -lutil -lm -lc" \
+		$(2)
+	( cd $(PKG_BUILD_DIR); mv rrs rrs-$(1); )
+endef
+
+ifneq ($(CONFIG_PACKAGE_rrs),)
+  define Build/Compile/with-ssl
+	$(call Build/Compile/Template,ssl,generic,-lcrypto -lssl)
+  endef
+endif
+
+ifneq ($(CONFIG_PACKAGE_rrs-nossl),)
+  define Build/Compile/without-ssl
+	$(call Build/Compile/Template,nossl,generic-nossl,)
+  endef
+endif
+
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -fno-builtin -fno-rtti -nostdinc++" \
-		LDFLAGS="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -luClibc++ -lc -lm -lutil -lssl -lcrypto" \
-		generic
-	( cd $(PKG_BUILD_DIR); mv rrs rrs-ssl; )
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		clean
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -fno-builtin -fno-rtti -nostdinc++" \
-		LDFLAGSNOSSL="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -luClibc++ -lc -lm -lutil" \
-		generic-nossl
-	( cd $(PKG_BUILD_DIR); mv rrs rrs-nossl; )
+	$(call Build/Compile/with-ssl)
+	$(call Build/Compile/without-ssl)
 endef
 
 define Package/rrs/install	
