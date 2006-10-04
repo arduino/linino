@@ -200,12 +200,12 @@ static int setup_bcom_wds(int skfd, char *ifname)
 	char *v;
 	int wds_enabled = 0;
 
+	memset(buf, 0, 8192);
 	if (v = nvram_get(wl_var("wds"))) {
 		struct maclist *wdslist = (struct maclist *) buf;
 		struct ether_addr *addr = wdslist->ea;
 		char *next;
 
-		memset(buf, 0, 8192);
 		foreach(wbuf, v, next) {
 			if (ether_atoe(wbuf, addr->ether_addr_octet)) {
 				wdslist->count++;
@@ -213,8 +213,9 @@ static int setup_bcom_wds(int skfd, char *ifname)
 				wds_enabled = 1;
 			}
 		}
-		bcom_ioctl(skfd, ifname, WLC_SET_WDSLIST, buf, sizeof(buf));
 	}
+	bcom_ioctl(skfd, ifname, WLC_SET_WDSLIST, buf, sizeof(buf));
+
 	return wds_enabled;
 }
 
