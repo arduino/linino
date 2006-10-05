@@ -1,0 +1,12 @@
+diff -ur xsupplicant.old/lib/libxsupgui/Makefile.in xsupplicant.dev/lib/libxsupgui/Makefile.in
+--- xsupplicant.old/lib/libxsupgui/Makefile.in	2006-04-16 23:20:42.000000000 +0200
++++ xsupplicant.dev/lib/libxsupgui/Makefile.in	2006-10-05 14:15:06.009384528 +0200
+@@ -170,7 +170,7 @@
+ target_alias = @target_alias@
+ with_openssl_libs = @with_openssl_libs@
+ AUTOMAKE_OPTIONS = foreign no-dependencies
+-INCLUDES = ${top_srcdir}/src
++INCLUDES = -I${top_srcdir}/src
+ include_HEADERS = xsupgui.h
+ lib_LIBRARIES = libxsupgui.a
+ libxsupgui_a_SOURCES = xsupgui.c

@@ -9,9 +9,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xsupplicant
-PKG_VERSION:=1.2.3
+PKG_VERSION:=1.2.7
 PKG_RELEASE:=1
-PKG_MD5SUM:=c9b17b2e1879bac85c583980338fed85
+PKG_MD5SUM:=f66c49cd6e4f331d05bf83513ed91990
 
 PKG_SOURCE_URL:=@SF/open1x
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -48,6 +48,7 @@ define Build/Configure
 			-I$(PKG_BUILD_DIR)/lib/libxsupconfig/ \
 			-I$(STAGING_DIR)/usr/include/madwifi" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		CC="$(TARGET_CROSS)gcc" \
 		./configure \
 			--target=$(GNU_TARGET_NAME) \
 			--host=$(GNU_TARGET_NAME) \
@@ -77,6 +78,7 @@ define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CC="$(TARGET_CC)" \
 		DESTDIR=$(PKG_INSTALL_DIR) \
 		all install
 endef

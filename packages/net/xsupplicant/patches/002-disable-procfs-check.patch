@@ -1,7 +1,7 @@
-diff -Nur xsupplicant-1.2.2/configure xsupplicant-1.2.2.patched/configure
---- xsupplicant-1.2.2/configure	2005-09-14 05:34:54.000000000 +0200
-+++ xsupplicant-1.2.2.patched/configure	2005-12-23 23:51:47.031541500 +0100
-@@ -4809,19 +4809,6 @@
+diff -ur xsupplicant.old/configure xsupplicant.dev/configure
+--- xsupplicant.old/configure	2006-10-05 14:09:58.019206000 +0200
++++ xsupplicant.dev/configure	2006-10-05 14:12:12.466767016 +0200
+@@ -5449,19 +5449,6 @@
    FRAMER="generic"
  fi
  
@@ -18,6 +18,6 @@ diff -Nur xsupplicant-1.2.2/configure xsupplicant-1.2.2.patched/configure
 -   fi
 -fi
 -
- if test "$MADWIFI_PATH" != ""; then
-    echo "$as_me:$LINENO: result: Adding MADWIFI WPA support." >&5
- echo "${ECHO_T}Adding MADWIFI WPA support." >&6
+ CFLAGS="$GGDBFLAGS $CFLAGS"
+ 
+ touch Makefile.in
