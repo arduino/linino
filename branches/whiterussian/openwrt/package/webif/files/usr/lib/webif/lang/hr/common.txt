@@ -1,14 +1,15 @@
-lang => Croatian
+lang => Hrvatski
+Encoding => UTF-8
 # Common
 Settings saved => Postavke Spremljene
 Settings not saved => Postavke Nisu Spremljene
 Save Changes => Spremi Postavke
 Apply Changes => Primijeni Postavke
-Clear Changes => Obriši Postavke
+Clear Changes => Obri&scaron;i Postavke
 Review Changes => Pregledaj Izmjene
 Host Name => Naziv Hosta
 Uptime => U Pogonu Od
-Load => Optereæenje
+Load => Optere&aelig;enje
 Version => Verzija
 Categories => Kategorije
 Subcategories => Podkategorije
@@ -16,12 +17,12 @@ more... => nastavak...
 Add => Dodaj
 Remove => Makni
 Warning => Upozorenje
-Password_warning => Niste postavili lozinku za Web suèelje i SSH pristup
-Molimo vas unesite lozinku (korisnièko ime u vašem pregledniku æe biti 'root').
+Password_warning => Niste postavili lozinku za Web su&egrave;elje i SSH pristup
+Molimo vas unesite lozinku (korisni&egrave;ko ime u va&scaron;em pregledniku &aelig; biti 'root').
 # Categories
 Info => Informacije
 About => Opis
-Router Info => O ureðaju
+Router Info => O ure&eth;aju
 Status => Status
 Connections => Veze
 DHCP => DHCP
@@ -31,7 +32,7 @@ Password => Lozinka
 Settings => Postavke
 Installed Software => Instalirani Softver
 Firmware Upgrade => Nadogradnja Firmware-a
-Network => Mreža
+Network => Mre&zcaron;a
 LAN => LAN
 WAN => WAN
 Wireless => Wireless
@@ -50,9 +51,9 @@ Layout based on => Layout based on SmartHop webif
 by => by Silvije Filipovic - silvije.filipovic@slsolucije.hr
 
 No config change. => Nema nikakvih promjena konfiguracije.
-Config discarded. => Vaše promjene konfiguracije su opozvane.
+Config discarded. => Va&scaron;e promjene konfiguracije su opozvane.
 Config changes: => Trenutne promjene konfiguracije:
-Updating config... => Konfiguracija se nadograðuje...
+Updating config... => Konfiguracija se nadogra&eth;uje...
 
 # 'Router Info' page
 Firmware Version => Firmware Verzija
@@ -62,7 +63,7 @@ MAC Address => Mac Adresa
 
 # 'Connections' page
 Connection Status => Status Veza
-Physical Connections => Fizièke Veze
+Physical Connections => Fizi&egrave;ke Veze
 Router Connections => Usmjeravanje
 
 # 'DHCP' page
@@ -83,16 +84,16 @@ Host Name => Naziv Hosta
 Language => Jezik
 # 'Installed Software' page
 Installed Packages => Instalirani Paketi
-Update package lists => Ažuriraj listu paketa
+Update package lists => A&zcaron;uriraj listu paketa
 Uninstall => Deinstaliraj
 Install => Instaliraj
 
 # 'Firmware Upgrade' page
 Firmware format => Firmware format
-Error => Greška
+Error => Gre&scaron;ka
 done => gotovo
 Invalid_formt => Neispravan Firmware Format
-Erase_JFFS2 => Izbriši JFFS2 particiju
+Erase_JFFS2 => Izbri&scaron;i JFFS2 particiju
 Options => Opcije
 Firmware_image => Firmware image za upload
 Upgrade => Nadogradi
@@ -104,7 +105,7 @@ Netmask => Netmask
 Default Gateway => Default Gateway
 DNS Servers => DNS Serveri
 DNS Address => DNS Adresa
-Note => Bilješke
+Note => Bilje&scaron;ke
 # 'WAN Settings' page
 WAN Settings => WAN Postavke
 WAN Configuration => WAN Konfiguracija
@@ -112,7 +113,7 @@ PPTP Server IP => PPTP Server IP
 Connection Type => Tip Konekcije
 No WAN => Bez WAN Konekcije
 DHCP => DHCP
-Static IP => Statièki IP
+Static IP => Stati&egrave;ki IP
 IP Settings => IP Postavke
 PPP Settings => PPP Postavke
 Redial Policy => Redial Policy
@@ -121,7 +122,7 @@ Keep Alive => Keep Alive
 Maximum Idle Time => Dozvoljeni Max. Idle Time
 Redial Timeout => Redial Timeout
 MTU => MTU
-Username => Korisnièko Ime
+Username => Korisni&egrave;ko Ime
 
 # 'Wireless Configuration' page
 Wireless Configuration => Wireless Konfiguracija
@@ -133,8 +134,8 @@ ESSID => ESSID
 Channel => Kanal
 RADIUS IP Address => RADIUS IP Adresa
 RADIUS Server Key => RADIUS Server Key
-Enabled => Omoguæeno
-Disabled => Onemoguæeno
+Enabled => Omogu&aelig;eno
+Disabled => Onemogu&aelig;eno
 ESSID Broadcast => ESSID Broadcast
 Show => Neskriveni
 Hide => Skriveni
@@ -163,17 +164,17 @@ Automatic WDS => Automatski WDS
 # "Hosts" page
 MAC Address => MAC Adresa
 Configured Hosts => Konfigurirani Hostovi
-DHCP Static => Statièki DHCP
+DHCP Static => Stati&egrave;ki DHCP
 Host Names => Nazivi Hostova
 Up => Gore
 Down => Dolje
 Edit => Uredi
-Delete => Briši
+Delete => Bri&scaron;i
 Save => Spremi
 Cancel => Odustani
 Forward => Naprijed
 Accept => Prihvati
-Drop => Otkaži
+Drop => Otka&zcaron;i
 Firewall => Firewall
 Firewall Rules => Firewall Pravila
 Firewall Configuration => Firewall Konfiguracija
@@ -182,17 +183,17 @@ Match => Uvjet
 Target => Cilj
 Port => Port
 Protocol => Protokol
-Source IP => Ishodišni IP
-Destination IP => Odredišni IP
-Source Ports => Ishodišni Portovi
-Destination Ports => Odredišni Portovi
+Source IP => Ishodi&scaron;ni IP
+Destination IP => Odredi&scaron;ni IP
+Source Ports => Ishodi&scaron;ni Portovi
+Destination Ports => Odredi&scaron;ni Portovi
 Forward to => Preusmjeravanje na
 Port => Port
-Helptext ESSID => Naziv Wireless Mreže
-Helptext DNS save => Trebali biste spremiti vaše postavke na ovoj stranici prije dodavanja/brisanja DNS posljužitelja
-Helptext Operation mode => Ova opcija odreðuje operativni mod rada vaše wireless mreže. Odabir 'Client (Bridge)' neæe promijeniti postavke mrežnog suèelja. Samo æe biti dodani parametri u pogonski program koji omoguæavaju ogranièene bridging funkcije suèelja.
-Helptext Encryption Type => 'WPA (RADIUS)' je podržan samo u Access Point modu. 
+Helptext ESSID => Naziv Wireless Mre&zcaron;e
+Helptext DNS save => Trebali biste spremiti va&scaron;e postavke na ovoj stranici prije dodavanja/brisanja DNS poslju&zcaron;itelja
+Helptext Operation mode => Ova opcija odre&eth;uje operativni mod rada va&scaron;e wireless mre&zcaron;e. Odabir 'Client (Bridge)' ne&aelig;e promijeniti postavke mre&zcaron;nog su&egrave;elja. Samo &aelig;e biti dodani parametri u pogonski program koji omogu&aelig;avaju ograni&egrave;ene bridging funkcije su&egrave;elja.
+Helptext Encryption Type => 'WPA (RADIUS)' je podr&zcaron;an samo u Access Point modu. 
 'WPA (PSK)' ne radi u Ad-Hoc modu.
-Helptext IP Settings => IP Postavke su opcionalne za DHCP i PPTP. Ukoliko su postavljene, koriste se kao pretpostavljene, u sluèaju kada  DHCP poslužitelj nije dostupan.
-Helptext Idle Time => Vrijeme u sekundama bez internet prometa do kojeg ureðaj treba èekati prije prekida veze (samo kod Spajanja na Zahtjev)
+Helptext IP Settings => IP Postavke su opcionalne za DHCP i PPTP. Ukoliko su postavljene, koriste se kao pretpostavljene, u slu&egrave;aju kada  DHCP poslu&zcaron;itelj nije dostupan.
+Helptext Idle Time => Vrijeme u sekundama bez internet prometa do kojeg ure&eth;aj treba &egrave;ekati prije prekida veze (samo kod Spajanja na Zahtjev)
 Helptext Redial Timeout => Vrijeme u sekundama za prijem odgovora od prividera prije ponovnog spajanja
