@@ -32,7 +32,7 @@ endef
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) \
+		CC="$(TARGET_CC)" \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -lpcap" \
 		all
