@@ -51,5 +51,5 @@ $1 ~ /status/ {
 	  
 <? footer ?>
 <!--
-##WEBIF:name:System:3:Installed Software
+##WEBIF:name:System:300:Installed Software
 -->

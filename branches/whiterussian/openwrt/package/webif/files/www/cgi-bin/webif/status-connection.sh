@@ -25,5 +25,5 @@ header "Status" "Connections" "@TR<<Connection Status>>"
 
 <? footer ?>
 <!--
-##WEBIF:name:Status:1:Connections
+##WEBIF:name:Status:100:Connections
 -->

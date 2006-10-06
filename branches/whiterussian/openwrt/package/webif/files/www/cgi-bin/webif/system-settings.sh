@@ -53,5 +53,5 @@ EOF
 footer ?>
 
 <!--
-##WEBIF:name:System:1:Settings
+##WEBIF:name:System:100:Settings
 -->

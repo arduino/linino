@@ -110,4 +110,4 @@ EOF
 
 footer
 
-##WEBIF:name:System:4:Firmware Upgrade
+##WEBIF:name:System:400:Firmware Upgrade

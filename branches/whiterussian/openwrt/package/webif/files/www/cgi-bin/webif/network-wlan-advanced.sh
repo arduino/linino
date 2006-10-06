@@ -100,5 +100,5 @@ EOF
 
 footer ?>
 <!--
-##WEBIF:name:Network:4:Advanced Wireless
+##WEBIF:name:Network:250:Advanced Wireless
 -->

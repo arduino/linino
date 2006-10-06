@@ -8,5 +8,5 @@ header "Status" "Wireless" "@TR<<Wireless Status>>"
 
 <? footer ?>
 <!--
-##WEBIF:name:Status:2:Wireless
+##WEBIF:name:Status:200:Wireless
 -->

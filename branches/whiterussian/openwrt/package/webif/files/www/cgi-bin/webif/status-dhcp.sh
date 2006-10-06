@@ -34,5 +34,5 @@ $1 > 0 {
 
 <? footer ?>
 <!--
-##WEBIF:name:Status:2:DHCP
+##WEBIF:name:Status:150:DHCP
 -->

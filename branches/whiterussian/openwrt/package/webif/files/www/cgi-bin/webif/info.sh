@@ -40,5 +40,5 @@ EOF
 footer
 ?>
 <!--
-##WEBIF:name:Info:2:Router Info
+##WEBIF:name:Info:10:Router Info
 -->

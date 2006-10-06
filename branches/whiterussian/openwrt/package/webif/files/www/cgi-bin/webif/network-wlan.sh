@@ -286,5 +286,5 @@ EOF
 
 footer ?>
 <!--
-##WEBIF:name:Network:3:Wireless
+##WEBIF:name:Network:200:Wireless
 -->

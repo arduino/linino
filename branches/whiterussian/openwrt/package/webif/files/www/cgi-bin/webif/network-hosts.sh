@@ -154,5 +154,5 @@ EOF
 
 footer ?>
 <!--
-##WEBIF:name:Network:5:Hosts
+##WEBIF:name:Network:300:Hosts
 -->

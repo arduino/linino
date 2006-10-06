@@ -216,5 +216,5 @@ EOF
 
 footer ?>
 <!--
-##WEBIF:name:Network:2:WAN
+##WEBIF:name:Network:150:WAN
 -->

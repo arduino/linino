@@ -49,5 +49,5 @@ EOF
 
 footer ?>
 <!--
-##WEBIF:name:Network:1:LAN
+##WEBIF:name:Network:100:LAN
 -->
