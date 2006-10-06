@@ -1,0 +1,15 @@
+config BR2_PACKAGE_QOS_SCRIPTS
+	tristate "QoS scripts."
+	default m if CONFIG_DEVEL
+	select BR2_PACKAGE_TC
+	select BR2_PACKAGE_KMOD_SCHED
+	select BR2_PACKAGE_IPTABLES_MOD_FILTER
+	select BR2_PACKAGE_IPTABLES_MOD_IPOPT
+	select BR2_PACKAGE_IPTABLES_MOD_EXTRA
+	select BR2_PACKAGE_IPTABLES_MOD_CONNTRACK
+	select BR2_PACKAGE_IPTABLES_MOD_IMQ
+	help
+	 A set of scripts that abstract QoS configuration
+	 into a simple configuration file supporting stanzas that specify
+	 any number of QoS entries.
+

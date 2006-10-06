@@ -1,0 +1,2 @@
+#!/bin/sh
+/usr/lib/qos.sh firewall | sh

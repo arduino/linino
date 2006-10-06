@@ -1,0 +1,6 @@
+Package: qos-scripts
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Section: net
+Depends: tc, kmod-sched, iptables-mod-filter, iptables-mod-ipopt, iptables-mod-extra, iptables-mod-conntrack, iptables-mod-imq
+Priority: normal
+Description: QoS scripts for OpenWrt
