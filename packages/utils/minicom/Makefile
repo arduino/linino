@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/minicom
   SECTION:=utils
   CATEGORY:=Utilities
+  DEPENDS:=+libncurses
   TITLE:=Terminal emulation
   DESCRIPTION:=Terminal emulation program for the serial port
   URL:=http://alioth.debian.org/projects/minicom/
