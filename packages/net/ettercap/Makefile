@@ -44,10 +44,12 @@ define Build/Configure
 		--with-libnet="$(STAGING_DIR)/usr/lib/libnet-1.1.x" \
 		--with-openssl="$(STAGING_DIR)/usr" \
 		--with-libpcre="$(STAGING_DIR)/usr" \
-		--with-libiconv="$(STAGING_DIR)/usr" \
+		--with-iconv="$(STAGING_DIR)/usr/lib/libiconv" \
 		--with-libncurses="$(STAGING_DIR)/usr" \
 		--disable-gtk \
 		--disable-debug \
+		, \
+		LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
 	)
 endef
 
