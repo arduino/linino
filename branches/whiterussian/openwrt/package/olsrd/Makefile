@@ -61,7 +61,7 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_OLSRD):
 	install -d -m0755 $(IDIR_OLSRD)/etc
-	$(CP) $(PKG_INSTALL_DIR)/etc/olsrd.conf $(IDIR_OLSRD)/etc/
+	$(CP) ./files/olsrd.conf $(IDIR_OLSRD)/etc/
 	install -d -m0755 $(IDIR_OLSRD)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/olsrd $(IDIR_OLSRD)/usr/sbin/
 	install -d -m0755 $(IDIR_OLSRD)/etc/init.d

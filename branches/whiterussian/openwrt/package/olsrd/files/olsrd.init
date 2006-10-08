@@ -1,11 +1,38 @@
 #!/bin/sh
 
 DEFAULT=/etc/default/olsrd
+OPTIONS="-f /tmp/olsrd.conf"
 [ -f $DEFAULT ] && . $DEFAULT
 
 case $1 in
- start)
-  olsrd $OPTIONS
+	start)
+		lanip="$(nvram get lan_ipaddr)"
+		case "${lanip%\.*}" in
+			192.168.1|192.168.0)
+				HNA_IP=
+				HNA_MASK=
+			;;
+			*)
+				HNA_IP="$lanip"
+				HNA_MASK="$(nvram get lan_netmask)"
+			;;
+		esac
+		wifi_ifname="$(nvram get wifi_ifname)"
+		[ -z "$wifi_ifname" ] && grep '@INTERFACE@' /etc/olsrd.conf && {
+			echo No interface...
+			exit 1
+		}
+		(
+			cat <<EOF
+@define HNA_IP $HNA_IP
+@define HNA_MASK $HNA_MASK
+@define INTERFACE "$wifi_ifname"
+EOF
+			cat /etc/olsrd.conf
+		) | awk -f /usr/lib/parse-config.awk > /tmp/olsrd.conf
+		iptables -D input_rule -i "$wifi_ifname" -o "$wifi_ifname" -j ACCEPT 2>/dev/null >/dev/null # no duplicates please
+		iptables -A input_rule -i "$wifi_ifname" -o "$wifi_ifname" -j ACCEPT
+  		olsrd $OPTIONS
   ;;
  *)
   echo "usage: $0 (start)"
