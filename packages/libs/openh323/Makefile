@@ -24,44 +24,19 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libopenh323
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+pwlib
+  DEPENDS:=+pwlib +uclibcxx
   TITLE:=OpenH323 library
-  DESCRIPTION:=OpenH323 library.
   URL:=http://www.openh323.org/
 endef
 
 define Build/Configure
-	( cd $(PKG_BUILD_DIR); rm -f config.cache; \
-		CFLAGS="$(TARGET_CFLAGS)" \
+	$(call Build/Configure/Default, \
+		--enable-minsize \
+		--enable-audio \
+		--disable-video \
+		, \
 		CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti"  \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		$(TARGET_CONFIGURE_OPTS) \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=/usr/lib \
-			--libexecdir=/usr/lib \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc \
-			  $(DISABLE_LARGEFILE) \
-			  $(DISABLE_NLS) \
-			\
-			--enable-minsize \
-			--enable-audio \
-			--disable-video \
-	);
+	)
 endef
 
 define Build/Compile
@@ -79,4 +54,3 @@ define Build/UninstallDev
 endef
 
 $(eval $(call BuildPackage,libopenh323))
-
