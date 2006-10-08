@@ -68,9 +68,9 @@ define Build/Configure
 endef
 
 define Build/Compile
-	@echo 'CFLAGS+="-I$(STAGING_DIR)/usr/include/iconv"' >> \
+	@echo 'CFLAGS+="-I$(STAGING_DIR)/usr/lib/libiconv/include"' >> \
 		$(PKG_BUILD_DIR)/Makefile.settings
-	@echo 'LFLAGS+="-L$(STAGING_DIR)/usr/lib/iconv"' >> \
+	@echo 'LFLAGS+="-L$(STAGING_DIR)/usr/lib/libiconv/lib"' >> \
 		$(PKG_BUILD_DIR)/Makefile.settings
 	$(MAKE) -C $(PKG_BUILD_DIR)
 endef
