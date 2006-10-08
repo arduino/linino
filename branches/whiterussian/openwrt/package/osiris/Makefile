@@ -3,9 +3,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=osiris
-PKG_VERSION:=4.1.8
+PKG_VERSION:=4.2.1
 PKG_RELEASE:=1
-PKG_MD5SUM:=27a362ba5ad3025d5bca6d9c92196875
+PKG_MD5SUM:=11445f7d8dec737f0be89357f5c5bcae
 
 PKG_SOURCE_URL:=http://www.hostintegrity.com/osiris/data/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -56,6 +56,7 @@ $(PKG_BUILD_DIR)/.built:
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		INTERACTIVE=0 \
 		all install
