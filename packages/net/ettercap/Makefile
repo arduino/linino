@@ -30,7 +30,7 @@ define Package/ettercap
   	It features sniffing of live connections, content filtering on the fly \\\
   	and many other interesting tricks.\\\
   	It supports active and passive dissection of many protocols (even \\\
-  	ciphered ones) and includes many feature for network and host analysis.\\\
+  	ciphered ones) and includes many feature for network and host analysis.
   URL:=http://ettercap.sourceforge.net
 endef
 
