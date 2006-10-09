@@ -1,0 +1,211 @@
+diff -urN alsa-lib-1.0.10/src/alisp/alisp.c alsa-lib-1.0.10.new/src/alisp/alisp.c
+--- alsa-lib-1.0.10/src/alisp/alisp.c	2005-01-19 14:56:31.000000000 +0100
++++ alsa-lib-1.0.10.new/src/alisp/alisp.c	2006-10-09 16:20:51.000000000 +0200
+@@ -30,7 +30,6 @@
+ #include <ctype.h>
+ #include <math.h>
+ #include <err.h>
+-#include <wordexp.h>
+ 
+ #define alisp_seq_iterator alisp_object
+ 
+diff -urN alsa-lib-1.0.10/src/conf.c alsa-lib-1.0.10.new/src/conf.c
+--- alsa-lib-1.0.10/src/conf.c	2005-10-12 18:08:53.000000000 +0200
++++ alsa-lib-1.0.10.new/src/conf.c	2006-10-09 16:21:06.000000000 +0200
+@@ -415,7 +415,6 @@
+ 
+ 
+ #include <stdarg.h>
+-#include <wordexp.h>
+ #include <dlfcn.h>
+ #include <limits.h>
+ #include <sys/stat.h>
+diff -urN alsa-lib-1.0.10/src/names.c alsa-lib-1.0.10.new/src/names.c
+--- alsa-lib-1.0.10/src/names.c	2005-06-06 16:01:13.000000000 +0200
++++ alsa-lib-1.0.10.new/src/names.c	2006-10-09 16:21:16.000000000 +0200
+@@ -31,7 +31,6 @@
+  */
+ 
+ #include <stdarg.h>
+-#include <wordexp.h>
+ #include <dlfcn.h>
+ #include <limits.h>
+ #include <sys/stat.h>
+diff -urN alsa-lib-1.0.10/src/pcm/Makefile.am alsa-lib-1.0.10.new/src/pcm/Makefile.am
+--- alsa-lib-1.0.10/src/pcm/Makefile.am	2005-02-24 11:16:52.000000000 +0100
++++ alsa-lib-1.0.10.new/src/pcm/Makefile.am	2006-10-09 16:22:44.000000000 +0200
+@@ -9,7 +9,7 @@
+ 		    pcm_route.c pcm_mulaw.c pcm_alaw.c pcm_adpcm.c \
+ 		    pcm_rate.c pcm_plug.c pcm_misc.c pcm_mmap.c pcm_multi.c \
+ 	            pcm_shm.c pcm_file.c pcm_null.c pcm_share.c \
+-		    pcm_meter.c pcm_hooks.c pcm_lfloat.c pcm_ladspa.c \
++		    pcm_meter.c pcm_hooks.c pcm_lfloat.c \
+ 		    pcm_direct.c pcm_dmix.c pcm_dsnoop.c pcm_dshare.c \
+ 		    pcm_asym.c pcm_iec958.c pcm_softvol.c pcm_symbols.c \
+ 		    pcm_ioplug.c pcm_extplug.c
+@@ -17,7 +17,7 @@
+ EXTRA_DIST = pcm_dmix_i386.c pcm_dmix_x86_64.c pcm_dmix_generic.c
+ 
+ noinst_HEADERS = pcm_local.h pcm_plugin.h mask.h mask_inline.h \
+-	         interval.h interval_inline.h plugin_ops.h ladspa.h \
++	         interval.h interval_inline.h plugin_ops.h \
+ 		 pcm_direct.h pcm_dmix_i386.h pcm_dmix_x86_64.h \
+ 		 pcm_generic.h pcm_ext_parm.h
+ 
+diff -urN alsa-lib-1.0.10/src/pcm/Makefile.in alsa-lib-1.0.10.new/src/pcm/Makefile.in
+--- alsa-lib-1.0.10/src/pcm/Makefile.in	2005-11-16 15:44:41.000000000 +0100
++++ alsa-lib-1.0.10.new/src/pcm/Makefile.in	2006-10-09 16:19:45.000000000 +0200
+@@ -158,7 +158,7 @@
+ 		    pcm_route.c pcm_mulaw.c pcm_alaw.c pcm_adpcm.c \
+ 		    pcm_rate.c pcm_plug.c pcm_misc.c pcm_mmap.c pcm_multi.c \
+ 	            pcm_shm.c pcm_file.c pcm_null.c pcm_share.c \
+-		    pcm_meter.c pcm_hooks.c pcm_lfloat.c pcm_ladspa.c \
++		    pcm_meter.c pcm_hooks.c pcm_lfloat.c \
+ 		    pcm_direct.c pcm_dmix.c pcm_dsnoop.c pcm_dshare.c \
+ 		    pcm_asym.c pcm_iec958.c pcm_softvol.c pcm_symbols.c \
+ 		    pcm_ioplug.c pcm_extplug.c
+@@ -167,7 +167,7 @@
+ EXTRA_DIST = pcm_dmix_i386.c pcm_dmix_x86_64.c pcm_dmix_generic.c
+ 
+ noinst_HEADERS = pcm_local.h pcm_plugin.h mask.h mask_inline.h \
+-	         interval.h interval_inline.h plugin_ops.h ladspa.h \
++	         interval.h interval_inline.h plugin_ops.h \
+ 		 pcm_direct.h pcm_dmix_i386.h pcm_dmix_x86_64.h \
+ 		 pcm_generic.h pcm_ext_parm.h
+ 
+@@ -188,7 +188,7 @@
+ 	pcm_mulaw.lo pcm_alaw.lo pcm_adpcm.lo pcm_rate.lo pcm_plug.lo \
+ 	pcm_misc.lo pcm_mmap.lo pcm_multi.lo pcm_shm.lo pcm_file.lo \
+ 	pcm_null.lo pcm_share.lo pcm_meter.lo pcm_hooks.lo \
+-	pcm_lfloat.lo pcm_ladspa.lo pcm_direct.lo pcm_dmix.lo \
++	pcm_lfloat.lo pcm_direct.lo pcm_dmix.lo \
+ 	pcm_dsnoop.lo pcm_dshare.lo pcm_asym.lo pcm_iec958.lo \
+ 	pcm_softvol.lo pcm_symbols.lo pcm_ioplug.lo pcm_extplug.lo
+ libpcm_la_OBJECTS = $(am_libpcm_la_OBJECTS)
+@@ -209,7 +209,6 @@
+ @AMDEP_TRUE@	./$(DEPDIR)/pcm_hooks.Plo ./$(DEPDIR)/pcm_hw.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/pcm_iec958.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/pcm_ioplug.Plo \
+-@AMDEP_TRUE@	./$(DEPDIR)/pcm_ladspa.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/pcm_lfloat.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/pcm_linear.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/pcm_meter.Plo ./$(DEPDIR)/pcm_misc.Plo \
+@@ -277,7 +276,6 @@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcm_hw.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcm_iec958.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcm_ioplug.Plo@am__quote@
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcm_ladspa.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcm_lfloat.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcm_linear.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pcm_meter.Plo@am__quote@
+diff -urN alsa-lib-1.0.10/src/pcm/pcm.c alsa-lib-1.0.10.new/src/pcm/pcm.c
+--- alsa-lib-1.0.10/src/pcm/pcm.c	2005-09-29 21:11:50.000000000 +0200
++++ alsa-lib-1.0.10.new/src/pcm/pcm.c	2006-10-09 16:20:34.000000000 +0200
+@@ -1937,7 +1937,7 @@
+ }
+ 
+ static char *build_in_pcms[] = {
+-	"adpcm", "alaw", "copy", "dmix", "file", "hooks", "hw", "ladspa", "lfloat",
++	"adpcm", "alaw", "copy", "dmix", "file", "hooks", "hw", "lfloat",
+ 	"linear", "meter", "mulaw", "multi", "null", "plug", "rate", "route", "share",
+ 	"shm", "dsnoop", "dshare", "asym", "iec958", "softvol", NULL
+ };
+diff -urN alsa-lib-1.0.10/src/pcm/pcm_symbols.c alsa-lib-1.0.10.new/src/pcm/pcm_symbols.c
+--- alsa-lib-1.0.10/src/pcm/pcm_symbols.c	2005-01-03 19:19:23.000000000 +0100
++++ alsa-lib-1.0.10.new/src/pcm/pcm_symbols.c	2006-10-09 16:20:15.000000000 +0200
+@@ -39,7 +39,6 @@
+ extern const char *_snd_module_pcm_share;
+ extern const char *_snd_module_pcm_shm;
+ extern const char *_snd_module_pcm_lfloat;
+-extern const char *_snd_module_pcm_ladspa;
+ extern const char *_snd_module_pcm_dmix;
+ extern const char *_snd_module_pcm_dsnoop;
+ extern const char *_snd_module_pcm_dshare;
+@@ -65,7 +64,6 @@
+ 	&_snd_module_pcm_share,
+ 	&_snd_module_pcm_shm,
+ 	&_snd_module_pcm_lfloat,
+-	&_snd_module_pcm_ladspa,
+ 	&_snd_module_pcm_dmix,
+ 	&_snd_module_pcm_dsnoop,
+ 	&_snd_module_pcm_dshare,
+diff -urN alsa-lib-1.0.10/src/userfile.c alsa-lib-1.0.10.new/src/userfile.c
+--- alsa-lib-1.0.10/src/userfile.c	2005-05-24 16:14:29.000000000 +0200
++++ alsa-lib-1.0.10.new/src/userfile.c	2006-10-09 16:21:42.000000000 +0200
+@@ -1,58 +1,31 @@
+-/*
+- *  Get full filename
+- *  Copyright (c) 2003 by Jaroslav Kysela <perex@suse.cz>
+- *
+- *   This library is free software; you can redistribute it and/or modify
+- *   it under the terms of the GNU Lesser General Public License as
+- *   published by the Free Software Foundation; either version 2.1 of
+- *   the License, or (at your option) any later version.
+- *
+- *   This program is distributed in the hope that it will be useful,
+- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *   GNU Lesser General Public License for more details.
+- *
+- *   You should have received a copy of the GNU Lesser General Public
+- *   License along with this library; if not, write to the Free Software
+- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
++/* This is a mockup of alsalib's userfile.c without its functionality but
++ * the same interface. 
+  *
++ * Maybe someone, someday wants to FIXME.
+  */
+   
+ #include <string.h>
++#include <stdlib.h>
++#include <stdio.h>
+ #include <errno.h>
+-#include <wordexp.h>
+-#include <assert.h>
+ 
+-/**
+- * \brief Get the full file name
+- * \param file The file name string to parse
+- * \param result The pointer to store the resultant file name
+- * \return 0 if successful, or a negative error code
+- *
+- * Parses the given file name with POSIX-Shell-like expansion and
+- * stores the first matchine one.  The returned string is strdup'ed.
+- */
+ int snd_user_file(const char *file, char **result)
+ {
+-	wordexp_t we;
+-	int err;
+-	
+-	assert(file && result);
+-	err = wordexp(file, &we, WRDE_NOCMD);
+-	switch (err) {
+-	case WRDE_NOSPACE:
+-		return -ENOMEM;
+-	case 0:
+-		if (we.we_wordc == 1)
+-			break;
+-		/* fall thru */
+-	default:
+-		wordfree(&we);
+-		return -EINVAL;
++	static int warned;
++	if(getenv("BROKEN_USERFILE_SILENT") == NULL) {
++	    if(getenv("BROKEN_USERFILE_DEBUG") == NULL) {
++		if(warned == 0)
++		    fprintf(stderr, "WARNING: this snd_user_file implementation won't behave as expected.\n"
++				    "         set BROKEN_USERFILE_DEBUG to see all problems, or\n"
++				    "         set BROKEN_USERFILE_SILENT to disable all warnings.\n");
++		warned = 1;
++	    } else {
++		fprintf(stderr, "WARNING(snd_user_file): '%s' has not been expanded\n", file);
++	    }
+ 	}
+-	*result = strdup(we.we_wordv[0]);
++	
++	*result = strdup(file);
+ 	if (*result == NULL)
+ 		return -ENOMEM;
+-	wordfree(&we);
+ 	return 0;
+ }
