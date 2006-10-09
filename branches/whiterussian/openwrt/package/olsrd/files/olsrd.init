@@ -31,9 +31,13 @@ EOF
 			cat /etc/olsrd.conf
 		) | awk -f /usr/lib/parse-config.awk > /tmp/olsrd.conf
 		iptables -D forwarding_rule -i "$wifi_ifname" -j ACCEPT 2>/dev/null >/dev/null # no duplicates please
-		iptables -D forwarding_rule -o "$wifi_ifname" -j ACCEPT 2>/dev/null >/dev/null # no duplicates please
+		iptables -D forwarding_rule -o "$wifi_ifname" -j ACCEPT 2>/dev/null >/dev/null 
 		iptables -A forwarding_rule -i "$wifi_ifname" -j ACCEPT
 		iptables -A forwarding_rule -o "$wifi_ifname" -j ACCEPT
+		[ -z "$HNA_IP" ] && {
+			iptables -t nat -D POSTROUTING -o "$wifi_ifname" -j MASQUERADE 2>/dev/null >/dev/null
+			iptables -t nat -A POSTROUTING -o "$wifi_ifname" -j MASQUERADE
+		}
   		olsrd $OPTIONS
   ;;
  *)
