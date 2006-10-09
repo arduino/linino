@@ -21,6 +21,6 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_QOS_SCRIPTS): 
 	mkdir -p $(IDIR_QOS_SCRIPTS)
-	$(CP) ./* $(IDIR_QOS_SCRIPTS)/
+	$(CP) ./files/* $(IDIR_QOS_SCRIPTS)/
 	$(IPKG_BUILD) $(IDIR_QOS_SCRIPTS) $(PACKAGE_DIR)
 
