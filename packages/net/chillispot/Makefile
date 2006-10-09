@@ -9,9 +9,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=chillispot
-PKG_VERSION:=1.0
+PKG_VERSION:=1.1.0
 PKG_RELEASE:=1
-PKG_MD5SUM:=997827a9302a85920cfbc1334092ac0c
+PKG_MD5SUM:=9d2597756af3fa14d7331b4a3651fc9b
 
 PKG_SOURCE_URL:=http://www.chillispot.org/download
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
