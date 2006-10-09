@@ -12,7 +12,6 @@ PKG_NAME:=openldap
 PKG_VERSION:=2.2.29
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/ \
 	ftp://sunsite.cnlab-switch.ch/mirror/OpenLDAP/openldap-release/ \
@@ -21,7 +20,44 @@ PKG_SOURCE_URL:=ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/ \
 PKG_MD5SUM:=6c4c72a1336aa45b463e738034c078d6
 PKG_CAT:=zcat
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/openldap/Default
+  TITLE:=LDAP implementation
+  DESCRIPTION:=\
+    OpenLDAP Software is an open source implementation of the \\\
+    Lightweight Directory Access Protocol (LDAP).
+  URL:=http://www.openldap.org/
+endef
+
+define Package/libopenldap
+  $(call Package/openldap/Default)
+  SECTION:=libs
+  CATEGORY:=Libraries
+  DEPENDS:=+libopenssl +libsasl2
+  TITLE+= (libraries)
+  DESCRIPTION+=\\\
+    \\\
+    This package contains the shared LDAP client libraries, needed by other programs.
+endef
+
+define Package/libopenldap/conffiles
+/etc/openldap/ldap.conf
+endef
+
+define Package/openldap-utils
+  $(call Package/openldap/Default)
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=+libopenldap
+  TITLE+= (utilities)
+  DESCRIPTION+=\\\
+    \\\
+    This package contains client programs required to access LDAP servers.
+endef
 
 PKG_CONFIGURE_OPTIONS = \
 	--enable-shared \
@@ -38,45 +74,15 @@ PKG_CONFIGURE_OPTIONS = \
 	--with-tls \
 	--with-yielding_select="yes" \
 
-include $(INCLUDE_DIR)/package.mk
-
-define Package/libopenldap
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=+libopenssl +libsasl2
-  TITLE:=LDAP client libraries
-  DESCRIPTION:=LDAP (Lightweight Directory Access Protocol) client libraries.\\\
-    OpenLDAP Software is an open source implementation of the \\\
-    Lightweight Directory Access Protocol (LDAP).\\\
-    \\\
-    This package contains the shared LDAP client libraries, needed by other \\\
-    programs.
-  URL:=http://www.openldap.org/
-endef
-
-define Package/libopenldap/conffiles
-/etc/openldap/ldap.conf
-endef
-
-define Package/openldap-utils
-  SECTION:=net
-  CATEGORY:=Network
-  DEPENDS:=+libopenldap
-  TITLE:=LDAP client utilities
-  DESCRIPTION:=LDAP (Lightweight Directory Access Protocol) client utilities.\\\
-    OpenLDAP Software is an open source implementation of the \\\
-    Lightweight Directory Access Protocol (LDAP).\\\
-    \\\
-    This package contains client programs required to access LDAP servers.
-  URL:=http://www.openldap.org/
-endef
-
 define Build/Configure
 endef
 
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
+	-$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		distclean
 	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
 		./configure \
 			--target=$(GNU_HOST_NAME) \
@@ -140,20 +146,6 @@ define Build/Compile
 		all install
 endef
 
-define Package/libopenldap/install
-	install -m0755 -d $(1)/etc/openldap
-	$(CP) $(PKG_INSTALL_DIR)/etc/openldap/ldap.conf $(1)/etc/openldap/
-	install -m0755 -d $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{lber,ldap}*.so.* $(1)/usr/lib/
-	install -m0755 -d $(1)/usr/share/openldap
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/openldap/* $(1)/usr/share/openldap/
-endef
-	
-define Package/openldap-utils/install
-	install -m0755 -d $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ldap* $(1)/usr/bin/
-endef
-
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/{lber,ldap}*.h $(STAGING_DIR)/usr/include/
@@ -162,9 +154,22 @@ define Build/InstallDev
 endef
 	
 define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/{lber,ldap}*.h \
+	rm -rf	$(STAGING_DIR)/usr/include/{lber,ldap}*.h \
 		$(STAGING_DIR)/usr/lib/lib{lber,ldap}*.{a,so*}
+endef
+
+define Package/libopenldap/install
+	install -d -m0755 $(1)/etc/openldap
+	$(CP) $(PKG_INSTALL_DIR)/etc/openldap/ldap.conf $(1)/etc/openldap/
+	install -d -m0755 $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{lber,ldap}*.so.* $(1)/usr/lib/
+	install -d -m0755 $(1)/usr/share/openldap
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/openldap/* $(1)/usr/share/openldap/
+endef
+	
+define Package/openldap-utils/install
+	install -d -m0755 $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ldap* $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,libopenldap))
