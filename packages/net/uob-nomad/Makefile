@@ -38,26 +38,11 @@ define Package/uob-nomad
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)/Agent \
-		CC=$(TARGET_CC) \
-		$(TARGET_CONFIGURE_OPTS) \
-		mipagent
-	$(MAKE) -C $(PKG_BUILD_DIR)/Client/net-tools \
-		CC=$(TARGET_CC) \
-		$(TARGET_CONFIGURE_OPTS) \
-		clean
-	$(MAKE) -C $(PKG_BUILD_DIR)/Client/net-tools/lib \
-		CC=$(TARGET_CC) \
-		$(TARGET_CONFIGURE_OPTS) \
-		clean
-	$(MAKE) -C $(PKG_BUILD_DIR)/Client/net-tools \
-		CC=$(TARGET_CC) \
-		$(TARGET_CONFIGURE_OPTS) \
-		all
-	$(MAKE) -C $(PKG_BUILD_DIR)/Client \
-		CC=$(TARGET_CC) \
-		$(TARGET_CONFIGURE_OPTS) \
-		mipmn
+$(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/Agent mipagent)
+$(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/Client/net-tools clean)
+$(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/Client/net-tools/lib clean)
+$(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/Client/net-tools all)
+$(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/Client mipmn)
 endef
 
 define Package/uob-nomad/install	
