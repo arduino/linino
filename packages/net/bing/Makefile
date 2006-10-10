@@ -31,7 +31,7 @@ define Package/bing
 endef
 
 define Build/Compile
-$(call Build/Compile/Default,CC=$(TARGET_CC))
+$(call Build/Compile/Default)
 endef
 
 define Package/bing/install
