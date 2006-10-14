@@ -15,6 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)_src-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://fgouget.free.fr/bing/
 PKG_MD5SUM:=60aaee55277672d0cc163bf3f0b3d53f
 PKG_CAT:=zcat
+TAR_OPTIONS += || true
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
