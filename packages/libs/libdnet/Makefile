@@ -43,6 +43,7 @@ define Build/Configure
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		ac_cv_dnet_bsd_bpf=no \
 		./configure \
 			--target=$(GNU_TARGET_NAME) \
 			--host=$(GNU_TARGET_NAME) \
