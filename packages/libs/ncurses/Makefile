@@ -116,6 +116,7 @@ define Build/Compile
 			--with-terminfo-dirs=/usr/share/terminfo \
 			--with-default-terminfo-dir=/usr/share/terminfo \
 	);
+	rm -f $(PKG_BUILD_DIR)/lib/lib*
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		BUILD_CC="$(TARGET_CC)" \
@@ -129,6 +130,11 @@ define Package/libncurses/install
 	install -d -m0755 $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{ncurses,panel,menu}*.so.* $(1)/usr/lib/
 	install -d -m0755 $(1)/usr/share/terminfo
+	(cd $(PKG_INSTALL_DIR)/usr/share/terminfo; \
+		for dir in ??; do \
+			mv $$$$dir $$$$(echo -ne "\x$$$$dir"); \
+		done \
+	)
 	for file in a/ansi d/dumb l/linux r/rxvt s/screen v/vt100 v/vt102 x/xterm x/xterm-color; do \
 		install -d -m0755 $(1)/usr/share/terminfo/`dirname $$$$file`; \
 		$(CP) $(PKG_INSTALL_DIR)/usr/share/terminfo/$$$$file \
