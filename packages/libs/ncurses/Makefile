@@ -132,6 +132,7 @@ define Package/libncurses/install
 	install -d -m0755 $(1)/usr/share/terminfo
 	(cd $(PKG_INSTALL_DIR)/usr/share/terminfo; \
 		for dir in ??; do \
+			[ -d "$$$$dir" ] || continue; \
 			mv $$$$dir $$$$(echo -ne "\x$$$$dir"); \
 		done \
 	)
