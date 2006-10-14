@@ -92,6 +92,7 @@ define Build/Configure
 			--without-docs \
 			--without-bench \
 			--without-readline \
+			--with-named-thread-libs=-lpthread \
 	);
 endef
 
