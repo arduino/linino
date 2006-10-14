@@ -9,13 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=uclibc++
-PKG_VERSION:=0.2.0
+PKG_VERSION:=0.2.1
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/uClibc++-$(PKG_VERSION)
-PKG_SOURCE:=uClibc++-$(PKG_VERSION).tbz2
+PKG_SOURCE:=uClibc++-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://cxx.uclibc.org/src/
-PKG_MD5SUM:=33e01302511c9a1987fb104f12d173e1
+PKG_MD5SUM:=6e6032c49916b199ffe6a585552fd46b
 PKG_CAT:=bzcat
 
 include $(INCLUDE_DIR)/package.mk
@@ -52,6 +52,7 @@ define Build/Compile
 		$(TARGET_CONFIGURE_OPTS) \
 		ARCH_CFLAGS="$(TARGET_CFLAGS)" \
 		CROSS="$(TARGET_CROSS)" \
+		CP="$(CP)" \
 		all
 endef
 
