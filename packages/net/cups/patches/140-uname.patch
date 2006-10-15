@@ -1,0 +1,11 @@
+--- cups.dev/configure	Sun Oct 15 15:22:17 2006
++++ cups.old/configure	Sun Oct 15 15:21:40 2006
+@@ -1300,7 +1300,7 @@
+ 
+ 
+ 
+-uname=`uname`
++uname=${UNAME:-`uname`}
+ uversion=`uname -r | sed -e '1,$s/[^0-9]//g'`
+ case "$uname" in
+ 	GNU* | GNU/*)

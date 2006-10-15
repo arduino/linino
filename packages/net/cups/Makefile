@@ -43,19 +43,21 @@ define Package/cups/conffiles
 endef
 
 define Build/Configure
-$(call Build/Configure/Default, --with-gnu-ld \
---with-cups-user=root \
---with-cups-group=root \
---without-perl \
---without-python \
---without-php \
---disable-slp \
---disable-gnutls \
---disable-openssl \
---disable-cdsassl \
---disable-ssl \
---disable-slp \
-)
+	$(call Build/Configure/Default, --with-gnu-ld \
+		--with-cups-user=root \
+		--with-cups-group=root \
+		--without-perl \
+		--without-python \
+		--without-php \
+		--enable-shared \
+		--disable-slp \
+		--disable-gnutls \
+		--disable-openssl \
+		--disable-cdsassl \
+		--disable-ssl \
+		--disable-slp, \
+		UNAME="Linux" \
+	)
 endef
 
 define Build/Compile
@@ -65,6 +67,10 @@ define Build/Compile
 		DSTROOT="$(PKG_INSTALL_DIR)" \
 		STRIP="/bin/true" \
 		all install
+	if [ -d $(PKG_INSTALL_DIR)/usr/libexec ]; then \
+		rm -rf $(PKG_INSTALL_DIR)/usr/lib; \
+		mv $(PKG_INSTALL_DIR)/usr/libexec $(PKG_INSTALL_DIR)/usr/lib; \
+	fi
 endef
 
 define Package/cups/install
@@ -91,9 +97,6 @@ define Package/cups/install
 	# install initscript with priority 60
 	install -d -m0755 $(1)/etc/init.d
 	install -m0755 ./files/cupsd.init $(1)/etc/init.d/S60cupsd
-	find $(1) -name CVS | xargs rm -rf
-	$(RSTRIP) $(1)
-	$(IPKG_BUILD) $(1) $(PACKAGE_DIR)
 endef
 
 define Build/InstallDev
