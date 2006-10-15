@@ -18,8 +18,6 @@ PKG_SOURCE_URL:=@SF/pcre
 PKG_MD5SUM:=813850808894d99fb5b1c41ec6335d4f
 PKG_CAT:=bzcat
 
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libpcre
@@ -48,7 +46,7 @@ define Build/Configure
 			--datadir=/usr/share \
 			--includedir=/usr/include \
 			--infodir=/usr/share/info \
-			--libdir=/usr/lib \
+			--libdir=$(STAGING_DIR)/usr/lib \
 			--libexecdir=/usr/lib \
 			--localstatedir=/var \
 			--mandir=/usr/share/man \
@@ -63,8 +61,6 @@ define Build/Configure
 endef
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		CC_FOR_BUILD="$(HOSTCC)" \
 		LINK_FOR_BUILD="$(HOSTCC)" \
@@ -73,22 +69,21 @@ define Build/Compile
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+		all
 endef
 
 define Package/libpcre/install
 	install -d -m0755 $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpcre{,posix}.so.* $(1)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/.libs/libpcre{,posix}.so.* $(1)/usr/lib/
 endef
 
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/pcre-config $(STAGING_DIR)/usr/bin/
+	$(CP) $(PKG_BUILD_DIR)/pcre-config $(STAGING_DIR)/usr/bin/
 	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/pcre{,posix}.h $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_BUILD_DIR)/pcre{,posix}.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpcre{,posix}.{a,so*} $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/.libs/libpcre{,posix}.so.* $(STAGING_DIR)/usr/lib/
 endef
 
 define Build/UninstallDev
