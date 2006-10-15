@@ -3,8 +3,9 @@
 ## Please make changes in /etc/firewall.user
 
 . /etc/functions.sh
-WAN=$(nvram get wan_ifname)
-LAN=$(nvram get lan_ifname)
+WAN="$(nvram get wan_ifname)"
+WANDEV="$(nvram get wan_device)"
+LAN="$(nvram get lan_ifname)"
 
 ## CLEAR TABLES
 for T in filter nat; do
@@ -21,6 +22,7 @@ iptables -t nat -N postrouting_rule
 
 iptables -N LAN_ACCEPT
 [ -z "$WAN" ] || iptables -A LAN_ACCEPT -i "$WAN" -j RETURN
+[ -z "$WANDEV" -o "$WANDEV" = "$WAN" ] || iptables -A LAN_ACCEPT -i "$WANDEV" -j RETURN
 iptables -A LAN_ACCEPT -j ACCEPT
 
 ### INPUT
