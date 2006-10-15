@@ -20,7 +20,6 @@ PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-PKG_INIT_LEVEL:=60
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -56,7 +55,7 @@ define Package/syslog-ng/install
 	install -d -m0755 $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/syslog-ng $(1)/usr/sbin/
 	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/syslog-ng.init $(1)/etc/init.d/S$(PKG_INIT_LEVEL)syslog-ng
+	install -m0755 ./files/syslog-ng.init $(1)/etc/init.d/syslog-ng
 	install -d -m0755 $(1)/etc/syslog-ng
 	install -m0644 ./files/syslog-ng.conf $(1)/etc/syslog-ng/
 endef

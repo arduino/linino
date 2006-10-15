@@ -65,7 +65,6 @@ define Package/peercast/install
 	install -m0644 ./files/peercast.ini $(1)/etc/
 	install -m0755 -d $(1)/etc/init.d
 	install -m0755 ./files/peercast.init $(1)/etc/init.d/peercast
-	ln -sf peercast $(1)/etc/init.d/S60peercast
 endef
 
 $(eval $(call BuildPackage,peercast))

@@ -4,9 +4,9 @@
 BIN=ulogd
 DEFAULT=/etc/default/$BIN
 LOG_D=/var/log
-[ -f $DEFAULT ] && . $DEFAULT
 
 start() {
+	[ -f $DEFAULT ] && . $DEFAULT
 	$BIN $OPTIONS
 }
 

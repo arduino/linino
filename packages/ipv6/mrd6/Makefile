@@ -58,7 +58,7 @@ endef
 define Package/mrd6/install
 	install -d -m0755 $(1)/etc/init.d
 	install -m0644 files/mrd6.conf $(1)/etc
-	install -m0755 files/mrd6.init $(1)/etc/init.d/S60mrd6
+	install -m0755 files/mrd6.init $(1)/etc/init.d/mrd6
 endef
 
 $(eval $(call BuildPackage,mrd6))

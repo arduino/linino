@@ -2,9 +2,9 @@
 # Copyright (C) 2006 OpenWrt.org
 
 DEFAULT=/etc/default/pppoe-relay
-[ -f $DEFAULT ] && . $DEFAULT
 
 start() {
+	[ -f $DEFAULT ] && . $DEFAULT
 	pppoe-relay $OPTIONS
 }
 

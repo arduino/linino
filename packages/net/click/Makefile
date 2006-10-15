@@ -98,7 +98,7 @@ define Package/roofnet/install
 	$(CP) $(PKG_BUILD_DIR)/conf/wifi/read_handler $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/conf/wifi/write_handler $(1)/usr/bin
 	mkdir -p $(1)/etc/init.d
-	install -m 755 ./files/S50roofnet $(1)/etc/init.d/
+	install -m 755 ./files/roofnet.init $(1)/etc/init.d/roofnet
 endef
 
 $(eval $(call BuildPackage,click))

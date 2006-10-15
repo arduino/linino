@@ -152,7 +152,7 @@ define Package/openssh-server/install
 	chmod 0700 $(1)/etc/ssh
 	$(CP) $(PKG_INSTALL_DIR)/etc/ssh/sshd_config $(1)/etc/ssh/
 	install -m0755 -d $(1)/etc/init.d
-	install -m0755 ./files/S50sshd $(1)/etc/init.d/
+	install -m0755 ./files/sshd.init $(1)/etc/init.d/sshd
 	install -m0755 -d $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ssh-keygen $(1)/usr/bin/
 	install -m0755 -d $(1)/usr/sbin

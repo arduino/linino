@@ -61,14 +61,14 @@ define Build/Compile
 	$(CP) $(PKG_BUILD_DIR)/translation $(PKG_INSTALL_DIR)/usr/lib/bx/
 	bzip2 $(PKG_INSTALL_DIR)/usr/lib/bx/translation/*
 	$(CP) ./files/bitchxrc $(PKG_INSTALL_DIR)/tmp/.bitchxrc
-	$(CP) ./files/S98bitchxrc $(PKG_INSTALL_DIR)/etc/init.d/S98bitchxrc
+	$(CP) ./files/bitchxrc.init $(PKG_INSTALL_DIR)/etc/init.d/bitchxrc
 endef
 
 define Package/bitchx/install
 	install -m0755 -d $(1)/usr/bin $(1)/usr/lib $(1)/etc/init.d $(1)/tmp
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/etc/init.d/S98bitchxrc $(1)/etc/init.d/
+	$(CP) $(PKG_INSTALL_DIR)/etc/init.d/bitchxrc $(1)/etc/init.d/
 	$(CP) $(PKG_INSTALL_DIR)/tmp/.bitchxrc $(1)/tmp
 endef
 

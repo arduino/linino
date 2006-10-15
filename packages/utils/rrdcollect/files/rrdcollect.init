@@ -1,6 +1,7 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2006 OpenWrt.org
 
+START=98
 BIN=rrdcollect
 DEFAULT=/etc/default/$BIN
 RUN_D=/var/run
@@ -9,10 +10,10 @@ LIB_D=/var/lib/rrdcollect
 CGI_S=$LIB_D/rrd.cgi
 IMG_D=$LIB_D/img
 RRD_D=$LIB_D/rrd
-RRD_F=$(find $RRD_D -name "*.rrd" 2>/dev/null)
-[ -f $DEFAULT ] && . $DEFAULT
 
 start() {
+	RRD_F=$(find $RRD_D -name "*.rrd" 2>/dev/null)
+	[ -f $DEFAULT ] && . $DEFAULT
 	mkdir -p $RUN_D
 	mkdir -p $IMG_D
 	mkdir -p $RRD_D

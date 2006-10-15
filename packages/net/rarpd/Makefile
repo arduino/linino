@@ -20,8 +20,6 @@ PKG_CAT:=zcat
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-PKG_INIT_PRIO:=50
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/rarpd
@@ -60,7 +58,6 @@ define Package/rarpd/install
 	install -m644 ./files/rarpd.default $(1)/etc/default/rarpd
 	install -d -m0755 $(1)/etc/init.d
 	install -m755 ./files/rarpd.init $(1)/etc/init.d/rarpd
-	ln -sf rarpd $(1)/etc/init.d/S$(PKG_INIT_PRIO)rarpd
 endef
 
 $(eval $(call BuildPackage,rarpd))

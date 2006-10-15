@@ -49,7 +49,7 @@ define Package/pptpd/install
 	install -d -m0755 $(1)/etc
 	install -m0644 ./files/pptpd.conf $(1)/etc/
 	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/pptpd.init $(1)/etc/init.d/S50pptpd
+	install -m0755 ./files/pptpd.init $(1)/etc/init.d/pptpd
 	install -d -m0755 $(1)/etc/ppp
 	install -m0644 ./files/options.pptpd $(1)/etc/ppp/
 	install -d -m0755 $(1)/usr/sbin

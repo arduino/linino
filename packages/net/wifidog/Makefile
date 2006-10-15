@@ -55,7 +55,7 @@ endef
 	
 define Package/wifidog/install
 	install -m0755 -d $(1)/etc/init.d
-	install -m0755 ./files/$(PKG_NAME).init $(1)/etc/init.d/S65wifidog
+	install -m0755 ./files/$(PKG_NAME).init $(1)/etc/init.d/wifidog
 	install -m0644 ./files/wifidog.conf $(1)/etc/
 	install -m0755 -d $(1)/usr/bin
 	install -m0755 -d $(1)/usr/lib

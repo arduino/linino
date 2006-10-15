@@ -55,7 +55,7 @@ endef
 define Package/nfs-kernel-server/install
 	install -d -m755 $(1)/etc/init.d $(1)/usr/sbin
 	install -m0644 ./files/nfsd.exports $(1)/etc/exports
-	install -m0755 ./files/nfsd.init $(1)/etc/init.d/S60nfsd
+	install -m0755 ./files/nfsd.init $(1)/etc/init.d/nfsd
 	install -m0755 $(PKG_BUILD_DIR)/utils/lockd/lockd $(1)/usr/sbin/rpc.lockd
 	install -m0755 $(PKG_BUILD_DIR)/utils/statd/statd $(1)/usr/sbin/rpc.statd
 	install -m0755 $(PKG_BUILD_DIR)/utils/nfsd/nfsd $(1)/usr/sbin/rpc.nfsd

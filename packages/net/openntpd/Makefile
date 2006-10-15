@@ -90,7 +90,7 @@ define Package/openntpd/install
 	install -d -m0755 $(1)/etc
 	install -m0644 ./files/ntpd.conf $(1)/etc/
 	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/ntpd.init $(1)/etc/init.d/S55ntpd
+	install -m0755 ./files/ntpd.init $(1)/etc/init.d/ntpd
 	install -d -m0755 $(1)/usr/sbin/
 	install -m0755 $(PKG_BUILD_DIR)/ntpd $(1)/usr/sbin/
 endef

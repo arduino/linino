@@ -53,7 +53,7 @@ define Package/miau/install
 	install -d -m0755 $(1)/etc/init.d
 	install -d -m0755 $(1)/etc/default
 	install -d -m0755 $(1)/etc/miau
-	install -m0755 ./files/S50miau $(1)/etc/init.d/S50miau
+	install -m0755 ./files/miau.init $(1)/etc/init.d/miau
 	install -m0644 ./files/miau $(1)/etc/default/miau
 	install -m0644 ./files/miaurc $(1)/etc/miau/miaurc
 endef

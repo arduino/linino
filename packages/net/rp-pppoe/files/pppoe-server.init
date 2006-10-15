@@ -2,9 +2,9 @@
 # Copyright (C) 2006 OpenWrt.org
 
 DEFAULT=/etc/default/pppoe-server
-[ -f $DEFAULT ] && . $DEFAULT
 
 start() {
+	[ -f $DEFAULT ] && . $DEFAULT
 	pppoe-server $OPTIONS
 }
 

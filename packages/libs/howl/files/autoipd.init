@@ -4,9 +4,9 @@
 DEFAULT=/etc/default/autopid
 RUN_D=/var/run
 PID_F=$RUN_D/autoipd.pid
-[ -f $DEFAULT ] && . $DEFAULT
 
 start() {
+	[ -f $DEFAULT ] && . $DEFAULT
 	[ -d $RUN_D ] || mkdir -p $RUN_D
 	autoipd $OPTIONS
 }

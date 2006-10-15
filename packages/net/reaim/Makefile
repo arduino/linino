@@ -42,7 +42,6 @@ endef
 define Package/reaim/install	
 	install -d -m0755 $(1)/etc/init.d
 	install -m0755 ./files/reaim.init $(1)/etc/init.d/reaim
-	ln -sf reaim $(1)/etc/init.d/S63reaim
 	install -d -m0755 $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/reaim $(1)/usr/sbin/
 endef

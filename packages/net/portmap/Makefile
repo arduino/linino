@@ -42,7 +42,6 @@ endef
 define Package/portmap/install	
 	install -d -m0755 $(1)/etc/init.d 
 	install -m0755 ./files/portmap.init $(1)/etc/init.d/portmap
-	ln -sf portmap $(1)/etc/init.d/S59portmap
 	install -d -m0755 $(1)/usr/sbin 
 	install -m0755 $(PKG_BUILD_DIR)/portmap $(1)/usr/sbin/
 endef

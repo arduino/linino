@@ -1,5 +1,6 @@
 #!/bin/sh /etc/rc.common
 
+START=98
 start() {
 	# make /tmp/.bitchxrc as many servers ban root
 	if [ ! -e /tmp/.bitchxrc ]

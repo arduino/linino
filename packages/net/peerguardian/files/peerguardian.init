@@ -3,11 +3,11 @@
 
 BIN=pgtext
 DEFAULT=/etc/default/$BIN
-[ -f $DEFAULT ] && . $DEFAULT
 RUN_D=/var/run
 PID_F=$RUN_D/$BIN_${IF}_${ID}.pid
 
 start() {
+	[ -f $DEFAULT ] && . $DEFAULT
 	$BIN $OPTIONS
 }
 

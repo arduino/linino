@@ -30,25 +30,25 @@ define Package/collectd
 endef
 
 define Build/Compile
-$(call Build/Configure/Default,--enable-shared \
---disable-static \
---disable-debug \
---enable-cpu \
---enable-load \
---enable-memory \
---enable-ping \
---enable-traffic \
---disable-cpufreq \
---disable-disk \
---disable-hddtemp \
---disable-nfs \
---disable-processes \
---disable-sensors \
---disable-serial \
---disable-swap \
---disable-tape \
---disable-users \
-)
+	$(call Build/Configure/Default,--enable-shared \
+		--disable-static \
+		--disable-debug \
+		--enable-cpu \
+		--enable-load \
+		--enable-memory \
+		--enable-ping \
+		--enable-traffic \
+		--disable-cpufreq \
+		--disable-disk \
+		--disable-hddtemp \
+		--disable-nfs \
+		--disable-processes \
+		--disable-sensors \
+		--disable-serial \
+		--disable-swap \
+		--disable-tape \
+		--disable-users \
+	)
 endef
 
 define Build/Compile
@@ -65,7 +65,7 @@ define Package/collectd/install
 	install -d -m0755 $(1)/usr/lib/collectd
 	install -d -m0755 $(1)/var/lib/collectd
 	install -d -m0755 $(1)/var/run
-	install -m0755 ./files/S80collectd $(1)/etc/init.d/
+	install -m0755 ./files/collectd.init $(1)/etc/init.d/collectd
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/collectd $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/collectd/*.so $(1)/usr/lib/collectd/
 endef

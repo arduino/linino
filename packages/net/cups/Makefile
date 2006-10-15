@@ -96,7 +96,7 @@ define Package/cups/install
 	$(CP) ./files/etc/cups/* $(1)/etc/cups/
 	# install initscript with priority 60
 	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/cupsd.init $(1)/etc/init.d/S60cupsd
+	install -m0755 ./files/cupsd.init $(1)/etc/init.d/cupsd
 endef
 
 define Build/InstallDev

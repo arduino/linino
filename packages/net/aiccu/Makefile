@@ -43,7 +43,7 @@ endef
 define Package/aiccu/install
 	mkdir -p $(1)/usr/sbin $(1)/etc/init.d
 	install -m 755 $(PKG_BUILD_DIR)/unix-console/$(PKG_NAME) $(1)/usr/sbin/
-	install -m 755 ./files/aiccu.init $(1)/etc/init.d/S51aiccu
+	install -m 755 ./files/aiccu.init $(1)/etc/init.d/aiccu
 	install -m 644 $(PKG_BUILD_DIR)/doc/aiccu.conf $(1)/etc/aiccu.conf
 endef
 

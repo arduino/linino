@@ -19,7 +19,6 @@ PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-PKG_INIT_LEVEL:=60
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -42,10 +41,9 @@ endef
 define Package/srelay/install	
 	install -m0755 -d $(1)/usr/bin
 	install -m0755 -d $(1)/etc/init.d
-	$(CP) $(PKG_BUILD_DIR)/srelay $(1)/usr/bin/
-	$(CP) files/srelay.init $(1)/etc/init.d/S$(PKG_INIT_LEVEL)srelay
-	$(CP) files/srelay.conf $(1)/etc
-	chmod 755 $(1)/etc/init.d/S$(PKG_INIT_LEVEL)srelay
+	install -m0755 $(PKG_BUILD_DIR)/srelay $(1)/usr/bin/
+	install -m0755 files/srelay.init $(1)/etc/init.d/srelay
+	install -m0644 files/srelay.conf $(1)/etc
 endef
 
 $(eval $(call BuildPackage,srelay))

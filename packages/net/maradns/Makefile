@@ -61,7 +61,7 @@ define Package/maradns/install
 	install -d -m0755 $(1)/etc
 	install -m0644 ./files/mararc $(1)/etc/mararc
 	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/maradns.init $(1)/etc/init.d/S60maradns
+	install -m0755 ./files/maradns.init $(1)/etc/init.d/maradns
 	install -d -m0755 $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/{askmara,getzone,fetchzone,duende} $(1)/usr/bin/
 	install -d -m0755 $(1)/usr/sbin

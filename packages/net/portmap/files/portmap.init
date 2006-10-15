@@ -1,11 +1,12 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2006 OpenWrt.org
 
+START=40
 BIN=portmap
 DEFAULT=/etc/default/$BIN
-[ -f $DEFAULT ] && . $DEFAULT
 
 start() {
+	[ -f $DEFAULT ] && . $DEFAULT
 	$BIN $OPTIONS
 }
 

@@ -29,7 +29,7 @@ define Package/updatedd
   TITLE:=A tool to update dynamic dns services
   DESCRIPTION:=Updatedd is a small tool that will update one of many dynamic\\\
   dns services on boot.\\\
-  Please look at the /etc/init.d/S55ddns script for more info.\\\
+  Please look at the /etc/init.d/ddns script for more info.\\\
   URL:=http://www.philipp-benner.de/updatedd/
 endef
 
@@ -112,7 +112,7 @@ endef
 
 define Package/updatedd/install
 	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/S55ddns $(1)/etc/init.d/
+	install -m0755 ./files/ddns.init $(1)/etc/init.d/ddns
 	install -d -m0755 $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/updatedd $(1)/usr/bin/
 	install -d -m0755 $(1)/usr/lib/updatedd

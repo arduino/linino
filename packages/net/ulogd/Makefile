@@ -114,7 +114,6 @@ define Package/ulogd/install
 	install -m0644 ./files/ulogd.default $(1)/etc/default/ulogd
 	install -d -m0755 $(1)/etc/init.d
 	install -m0755 ./files/ulogd.init $(1)/etc/init.d/ulogd
-	ln -sf ulogd $(1)/etc/init.d/S49ulogd
 	install -d -m0755 $(1)/usr/lib/ulogd
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ulogd/ulogd_BASE.so $(1)/usr/lib/ulogd/
 	install -d -m0755 $(1)/usr/sbin

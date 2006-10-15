@@ -93,7 +93,7 @@ define Package/rrdcollect-example/install
 	install -m0644 ./files/rrd.conf $(1)/etc/
 	install -m0644 ./files/rrdcollect.conf $(1)/etc/
 	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/rrdcollect.init $(1)/etc/init.d/S98rrdcollect
+	install -m0755 ./files/rrdcollect.init $(1)/etc/init.d/rrdcollect
 	install -d -m0755 $(1)/usr/bin
 	install -m0755 ./files/rrd.sh $(1)/usr/bin/
 	install -d -m0755 $(1)/www/cgi-bin

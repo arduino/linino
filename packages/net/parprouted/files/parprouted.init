@@ -3,9 +3,9 @@
 
 BIN=parprouted
 DEFAULT=/etc/default/$BIN
-[ -f $DEFAULT ] && . $DEFAULT
 
 start() {
+	[ -f $DEFAULT ] && . $DEFAULT
 	$BIN $OPTIONS
 }
 

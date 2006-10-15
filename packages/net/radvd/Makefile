@@ -21,8 +21,6 @@ PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-PKG_INIT_PRIO=51
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/radvd
@@ -81,7 +79,7 @@ define Package/radvd/install
 	install -d -m0755 $(1)/etc
 	install -m0644 ./files/radvd.conf $(1)/etc/radvd.conf
 	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/radvd.init $(1)/etc/init.d/S$(PKG_INIT_PRIO)radvd
+	install -m0755 ./files/radvd.init $(1)/etc/init.d/radvd
 	install -d -m0755 $(1)/usr/sbin
 	install -m 755 $(PKG_INSTALL_DIR)/usr/sbin/radvd $(1)/usr/sbin/
 	install -m 755 $(PKG_INSTALL_DIR)/usr/sbin/radvdump $(1)/usr/sbin/

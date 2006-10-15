@@ -56,7 +56,6 @@ define Package/p910nd/install
 	install -d -m0755 $(1)/etc/init.d
 	install -m0755 ./files/p910nd.init $(1)/etc/init.d/p910nd
 	install -d -m0755 $(1)/usr/sbin
-	ln -sf p910nd $(1)/etc/init.d/S$(PKG_INIT_PRIO)p910nd
 	install -m0755 $(PKG_BUILD_DIR)/p910nd $(1)/usr/sbin/
 endef
 

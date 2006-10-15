@@ -42,7 +42,6 @@ define Package/parprouted/install
 	install -m0755 ./files/parprouted.default $(1)/etc/default/parprouted
 	install -d -m0755 $(1)/etc/init.d
 	install -m0755 ./files/parprouted.init $(1)/etc/init.d/parprouted
-	ln -sf parprouted $(1)/etc/init.d/S50parpouted
 	install -d -m0755 $(1)/usr/sbin
 	install -m0755 $(PKG_BUILD_DIR)/parprouted $(1)/usr/sbin/
 endef

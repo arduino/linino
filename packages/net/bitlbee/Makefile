@@ -38,7 +38,6 @@ endef
 define Package/bitlbee/conffiles
 /etc/bitlbee/motd.txt
 /etc/bitlbee/bitlbee.conf
-/etc/init.d/S55bitlbee
 endef
 
 define Build/Configure
@@ -81,7 +80,7 @@ define Package/bitlbee/install
 	$(MAKE) -C $(PKG_BUILD_DIR)/doc/user-guide \
 		DESTDIR="$(1)" install 
 	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/S55bitlbee $(1)/etc/init.d/S55bitlbee
+	install -m0755 ./files/bitlbee.init $(1)/etc/init.d/bitlbee
 endef
 
 $(eval $(call BuildPackage,bitlbee))

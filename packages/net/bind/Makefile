@@ -118,7 +118,7 @@ define Package/bind-server/install
 	install -d -m0755 $(1)/etc/init.d
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/named $(1)/usr/sbin/
 	$(CP) files/bind $(1)/etc
-	$(CP) files/named.init $(1)/etc/init.d/S$(PKG_INIT_LEVEL)named
+	$(CP) files/named.init $(1)/etc/init.d/named
 	find $(1)/etc/bind -name ".svn" | xargs rm -rf
 endef
 

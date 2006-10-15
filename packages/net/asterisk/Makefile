@@ -20,8 +20,6 @@ PKG_CAT:=zcat
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-PKG_INIT_PRIO:=60
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/asterisk/Default
@@ -392,7 +390,7 @@ define Package/asterisk/install
 	install -m0644  ./files/asterisk.default $(1)/etc/default/asterisk
 	install -d -m0755 $(1)/etc/init.d
 	install -m0755  ./files/asterisk.init $(1)/etc/init.d/asterisk
-	ln -sf asterisk $(1)/etc/init.d/S60asterisk
+	ln -sf asterisk $(1)/etc/init.d/asterisk
 endef
 
 define Package/asterisk-mini/install
@@ -418,7 +416,7 @@ define Package/asterisk-mini/install
 	install -m0644  ./files/asterisk.default $(1)/etc/default/asterisk
 	install -d -m0755 $(1)/etc/init.d
 	install -m0755  ./files/asterisk.init $(1)/etc/init.d/asterisk
-	ln -sf asterisk $(1)/etc/init.d/S$(PKG_INIT_PRIO)asterisk
+	ln -sf asterisk $(1)/etc/init.d/asterisk
 endef
 
 define Package/asterisk-mysql/install

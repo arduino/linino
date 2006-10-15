@@ -44,7 +44,7 @@ define Package/oidentd/install
 	install -m0755 -d $(1)/usr/sbin
 	install -m0755 -d $(1)/etc/init.d
 	$(CP) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(1)/usr/sbin/
-	$(CP) ./files/S85oidentd $(1)/etc/init.d
+	$(CP) ./files/oidentd.init $(1)/etc/init.d/oidentd
 endef
 
 $(eval $(call BuildPackage,oidentd))

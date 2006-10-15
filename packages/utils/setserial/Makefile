@@ -18,8 +18,6 @@ PKG_SOURCE_URL:=@SF/setserial
 PKG_MD5SUM:=c4867d72c41564318e0107745eb7a0f2
 PKG_CAT:=zcat
 
-PKG_INIT_PRIO=15
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/setserial
@@ -69,7 +67,7 @@ endef
 define Package/setserial/install
 	install -d -m0755 $(1)/etc/init.d
 	install -m0755 ./files/serial.init $(1)/etc/init.d/setserial
-	ln -sf setserial $(1)/etc/init.d/S$(PKG_INIT_PRIO)setserial
+	ln -sf setserial $(1)/etc/init.d/setserial
 	install -d -m0755 $(1)/usr/sbin
 	install -m0755 $(PKG_BUILD_DIR)/setserial $(1)/usr/sbin/
 endef

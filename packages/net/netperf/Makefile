@@ -41,7 +41,7 @@ endef
 
 define Package/netperf/install	
 	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/netserver.init $(1)/etc/init.d/S51netserver
+	install -m0755 ./files/netserver.init $(1)/etc/init.d/netserver
 	install -d -m0755 $(1)/usr/bin
 	install -m0755 $(PKG_BUILD_DIR)/netperf $(1)/usr/bin/
 	install -m0755 $(PKG_BUILD_DIR)/netserver $(1)/usr/bin/

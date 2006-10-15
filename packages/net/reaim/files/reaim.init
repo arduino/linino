@@ -1,16 +1,17 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2006 OpenWrt.org
 
+START=60
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 NAME=reaim
 DESC="Transparent proxy for IM behind NAT"
 IPT=/usr/sbin/iptables
 
-include /lib/network
-scan_interfaces
-config_get WAN wan ifname
-
 set_rules() {
+	include /lib/network
+	scan_interfaces
+	config_get WAN wan ifname
+
 	[ -z "$WAN" ] && exit
 	$IPT $1 input_rule -i $WAN -p tcp --dport 1863:1864 -j ACCEPT
 	$IPT $1 input_rule -i $WAN -p tcp --dport 4443 -j ACCEPT

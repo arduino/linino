@@ -3,9 +3,9 @@
 
 RARPD=/usr/sbin/rarpd
 DEFAULT=/etc/default/rarpd
-[ -f $DEFAULT ] && . $DEFAULT
 
 start() {
+	[ -f $DEFAULT ] && . $DEFAULT
 	$RARPD $OPTIONS
 }
 stop() {

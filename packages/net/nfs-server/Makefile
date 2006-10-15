@@ -38,7 +38,7 @@ define Package/nfs-server/install
 	install -d -m0755 $(1)/etc
 	install -m0644 ./files/nfsd.exports $(1)/etc/exports
 	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/nfsd.init $(1)/etc/init.d/S60nfsd
+	install -m0755 ./files/nfsd.init $(1)/etc/init.d/nfsd
 	install -d -m0755 $(1)/usr/sbin
 	install -m0755 $(PKG_BUILD_DIR)/rpc.* $(1)/usr/sbin/
 endef
