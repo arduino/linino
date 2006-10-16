@@ -390,7 +390,6 @@ define Package/asterisk/install
 	install -m0644  ./files/asterisk.default $(1)/etc/default/asterisk
 	install -d -m0755 $(1)/etc/init.d
 	install -m0755  ./files/asterisk.init $(1)/etc/init.d/asterisk
-	ln -sf asterisk $(1)/etc/init.d/asterisk
 endef
 
 define Package/asterisk-mini/install
