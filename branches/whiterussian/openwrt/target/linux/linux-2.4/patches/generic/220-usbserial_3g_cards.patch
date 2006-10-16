@@ -5,11 +5,11 @@
  static __u16	product	= 0xffff;
  
 -static struct usb_device_id generic_device_ids[2]; /* Initially all zeroes. */
-+static struct usb_device_id generic_device_ids[8]; /* Initially all zeroes. */
++static struct usb_device_id generic_device_ids[9]; /* Initially all zeroes. */
  
  /* All of the device info needed for the Generic Serial Converter */
  static struct usb_serial_device_type generic_device = {
-@@ -1793,6 +1793,26 @@
+@@ -1793,6 +1793,30 @@
  	generic_device_ids[0].idVendor = vendor;
  	generic_device_ids[0].idProduct = product;
  	generic_device_ids[0].match_flags = USB_DEVICE_ID_MATCH_VENDOR | USB_DEVICE_ID_MATCH_PRODUCT;
@@ -33,6 +33,10 @@
 +	generic_device_ids[5].idVendor = 0x0f3d;
 +	generic_device_ids[5].idProduct = 0x0112;
 +	generic_device_ids[5].match_flags = USB_DEVICE_ID_MATCH_VENDOR | USB_DEVICE_ID_MATCH_PRODUCT;
++	/* Sierra Wireless AirCard 875 */
++	generic_device_ids[6].idVendor = 0x1199;
++	generic_device_ids[6].idProduct = 0x6820;
++	generic_device_ids[6].match_flags = USB_DEVICE_ID_MATCH_VENDOR | USB_DEVICE_ID_MATCH_PRODUCT;
  	/* register our generic driver with ourselves */
  	usb_serial_register (&generic_device);
  #endif
