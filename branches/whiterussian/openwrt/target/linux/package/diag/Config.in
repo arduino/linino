@@ -1,0 +1,9 @@
+config BR2_PACKAGE_KMOD_DIAG
+	prompt "kmod-diag - kernel driver for LEDs and buttons"
+	tristate
+	default y 
+	help
+	  Kernel driver for LEDs and buttons.
+	  
+	  http://www.openwrt.org
+	  

@@ -1,6 +1,7 @@
 # Main makefile for the packages
 include $(TOPDIR)/rules.mk
 
+package-$(BR2_PACKAGE_KMOD_DIAG) += diag
 package-$(BR2_PACKAGE_KMOD_FUSE) += fuse
 package-$(BR2_PACKAGE_KMOD_SHFS) += shfs
 package-$(BR2_PACKAGE_KMOD_SWITCH) += switch

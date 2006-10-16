@@ -1,3 +1,4 @@
+source "target/linux/package/diag/Config.in"
 source "target/linux/package/wlcompat/Config.in"
 source "target/linux/package/madwifi/Config.in"
 source "target/linux/package/mini_fo/Config.in"
