@@ -2,16 +2,10 @@
 # Copyright (C) 2006 OpenWrt.org
 
 start() {
-	. /etc/nvram.sh
+	[ -f /etc/default/ddns ] && . /etc/default/ddns
 	
-	ddnsupdate=$(nvram get ddns_update)
-	[ "$ddnsupdate" = 1 ]&& {
-		service=$(nvram get ddns_service)
-		uname=$(nvram get ddns_user)
-		passwd=$(nvram get ddns_password)
-		host=$(nvram get ddns_host)
-	
-		/usr/bin/updatedd -Y $service -- $uname:$passwd $host
+	[ "$ddns_update" = 1 ] && {
+		/usr/bin/updatedd -Y $ddns_service -- $ddns_user:$ddns_passwd $ddns_host
 	}
 }
 
