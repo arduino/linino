@@ -35,14 +35,14 @@ endef
 define Package/kmod-aodv-uu
   SECTION:=kernel
   CATEGORY=Kernel drivers
-  DEPENDS:=@LINUX_2_6
   TITLE:=kernel module for Ad-hoc On-demand Distance Vector Routing
   DESCRIPTION:=\
   	Ad-hoc On-demand Distance Vector Routing
   URL:=http://core.it.uu.se/adhoc/AodvUUImpl
 endef
 
-define Build/Compile
+ifeq ($(CONFIG_LINUX_2_6),y)
+  define Build/Compile/linux26
 	$(MAKE) -C $(LINUX_DIR) \
 		ARCH="$(LINUX_KARCH)" \
 		CROSS_COMPILE="$(TARGET_CROSS)" \
@@ -50,10 +50,26 @@ define Build/Compile
 		KERNDIR="$(LINUX_DIR)" \
 		SUBDIRS="$(PKG_BUILD_DIR)/lnx" \
                 modules
-	$(call Build/Compile/Default, \
+  endef
+else
+  # We assume 2.4 builds are only for brcm-2.4 yet
+  define Build/Compile/linux24-brcm
+	$(call Build/Compile/Default,\
 		KERNEL_DIR="$(LINUX_DIR)/" \
 		KCC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS)" aodvd \
+		CFLAGS="$(TARGET_CFLAGS)" kaodv-mips \
+	)
+	cp $(PKG_BUILD_DIR)/lnx/kaodv-mips.$(LINUX_KMOD_SUFFIX) $(PKG_BUILD_DIR)/lnx/kaodv.$(LINUX_KMOD_SUFFIX)
+  endef
+endif
+
+define Build/Compile
+	$(call Build/Compile/linux26)
+	$(call Build/Compile/linux24-brcm)
+	$(call Build/Compile/Default,\
+		KERNEL_DIR="$(LINUX_DIR)/" \
+                KCC="$(TARGET_CC)" \
+                CFLAGS="$(TARGET_CFLAGS)" aodvd \
 	)
 endef
 
