@@ -11,4 +11,4 @@ sysctl -p >&-
 }
 
 # set leds to normal state
-echo "0x00" > /proc/sys/diag
+echo "0x02" > /proc/sys/diag
