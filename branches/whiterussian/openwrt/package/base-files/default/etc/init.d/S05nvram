@@ -99,6 +99,22 @@ nvram_default lan_proto static
 	nvram_default vlan1ports "0 5"
 }
 
+# wl-500g premium
+[  "$boardnum"  = "45" \
+-a "$boardtype" = "0x042f" ] && {
+	debug "### wl-500g premium hacks ###"
+	nvram_default lan_ifnames "vlan0 eth2"
+	nvram_default wan_ifname "vlan1"
+	
+	nvram_default vlan0hwname "et0"
+	nvram_default vlan1hwname "et0"
+
+	# set up the vlan*ports variables for the asus wl-500g premium
+	# if they don't already exist 
+	nvram_default vlan0ports "1 2 3 4 5*"
+	nvram_default vlan1ports "0 5"
+}
+
 # hacks for asus
 [ "$boardnum" = "asusX" ] && {
 	debug "### asus hacks ###"
