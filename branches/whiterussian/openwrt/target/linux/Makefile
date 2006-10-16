@@ -41,6 +41,8 @@ install-ib: $(1)/$(2)-install-ib
 endif
 
 .PHONY: $(1)/$(2)-clean $(1)/$(2)-prepare $(1)/$(2)-compile $(1)/$(2)-rebuild $(1)/$(2)-install $(1)/$(2)-image $(1)/$(2)-install-ib
+package/%:
+	$(MAKE) -C linux-$(1) BOARD="$(2)" $$@
 endef
 
 .PHONY: clean prepare compile rebuild install imagebuilder install-ib kernel-install

@@ -387,3 +387,8 @@ clean:
 	rm -f $(STAMP_DIR)/.linux-compile
 	rm -rf $(LINUX_BUILD_DIR)
 	rm -f $(TARGETS)
+
+package/%:
+	$(MAKE) -C $(TOPDIR)/target/linux/package \
+		$(KPKG_MAKEOPTS) \
+		$(patsubst package/%,%,$@)
