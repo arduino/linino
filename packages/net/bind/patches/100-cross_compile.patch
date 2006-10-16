@@ -1,7 +1,6 @@
-diff -urN bind-9.3.1/configure bind-9.3.1.new/configure
---- bind-9.3.1/configure	2004-12-09 05:09:03.000000000 +0100
-+++ bind-9.3.1.new/configure	2006-07-31 14:24:19.000000000 +0200
-@@ -4750,7 +4750,7 @@
+--- bind-9.3.2-P1/configure	2005-10-21 01:57:38.000000000 +0200
++++ bind-9.3.2-P1.new/configure	2006-10-16 21:43:12.000000000 +0200
+@@ -4816,7 +4816,7 @@
    use_openssl="auto"
  fi;
  
@@ -10,26 +9,28 @@ diff -urN bind-9.3.1/configure bind-9.3.1.new/configure
  if test "$use_openssl" = "auto"
  then
  	for d in $openssldirs
-@@ -5289,6 +5289,7 @@
- if eval "test \"\${$as_ac_File+set}\" = set"; then
-   echo $ECHO_N "(cached) $ECHO_C" >&6
+@@ -5357,8 +5357,7 @@
  else
-+cross_compiling=no
    test "$cross_compiling" = yes &&
    { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
- echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-@@ -23675,175 +23676,6 @@
+-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+-   { (exit 1); exit 1; }; }
++echo "$as_me: error: cannot check for file existence when cross compiling" >&2;} }
+ if test -r "$devrandom"; then
+   eval "$as_ac_File=yes"
+ else
+@@ -23747,176 +23746,6 @@
  # which provides some (all?) of the desired functions.
  #
  
 -echo "$as_me:$LINENO: checking for inet_ntop with IPv6 support" >&5
 -echo $ECHO_N "checking for inet_ntop with IPv6 support... $ECHO_C" >&6
 -if test "$cross_compiling" = yes; then
--  { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
--See \`config.log' for more details." >&5
--echo "$as_me: error: cannot run test program while cross compiling
--See \`config.log' for more details." >&2;}
--   { (exit 1); exit 1; }; }
+-  echo "$as_me:$LINENO: result: assuming inet_ntop needed" >&5
+-echo "${ECHO_T}assuming inet_ntop needed" >&6
+-        ISC_EXTRA_OBJS="$ISC_EXTRA_OBJS inet_ntop.$O"
+-        ISC_EXTRA_SRCS="$ISC_EXTRA_SRCS inet_ntop.c"
+-        ISC_PLATFORM_NEEDNTOP="#define ISC_PLATFORM_NEEDNTOP 1"
 -else
 -  cat >conftest.$ac_ext <<_ACEOF
 -/* confdefs.h.  */
@@ -191,13 +192,13 @@ diff -urN bind-9.3.1/configure bind-9.3.1.new/configure
 -
 -
 -
- 
+-
  #
  # Look for a 4.4BSD-style sa_len member in struct sockaddr.
-diff -urN bind-9.3.1/configure.in bind-9.3.1.new/configure.in
---- bind-9.3.1/configure.in	2004-12-09 05:07:10.000000000 +0100
-+++ bind-9.3.1.new/configure.in	2006-07-31 14:16:55.000000000 +0200
-@@ -362,7 +362,7 @@
+ #
+--- bind-9.3.2-P1/configure.in	2005-10-21 01:47:25.000000000 +0200
++++ bind-9.3.2-P1.new/configure.in	2006-10-16 21:36:09.000000000 +0200
+@@ -363,7 +363,7 @@
                            (Required for DNSSEC)],
      use_openssl="$withval", use_openssl="auto")
  
@@ -206,10 +207,9 @@ diff -urN bind-9.3.1/configure.in bind-9.3.1.new/configure.in
  if test "$use_openssl" = "auto"
  then
  	for d in $openssldirs
-diff -urN bind-9.3.1/configure bind-9.3.1.new/configure
---- bind-9.3.1/lib/bind/configure	2004-12-09 05:09:03.000000000 +0100
-+++ bind-9.3.1.new/lib/bind/configure	2006-07-31 14:24:19.000000000 +0200
-@@ -5289,6 +5289,7 @@
+--- bind-9.3.2-P1/lib/bind/configure	2005-10-14 03:44:50.000000000 +0200
++++ bind-9.3.2-P1.new/lib/bind/configure	2006-10-16 21:46:45.000000000 +0200
+@@ -4461,6 +4461,7 @@
  if eval "test \"\${$as_ac_File+set}\" = set"; then
    echo $ECHO_N "(cached) $ECHO_C" >&6
  else
@@ -217,4 +217,3 @@ diff -urN bind-9.3.1/configure bind-9.3.1.new/configure
    test "$cross_compiling" = yes &&
    { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
  echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-

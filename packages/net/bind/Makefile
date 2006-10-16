@@ -9,19 +9,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bind
-PKG_VERSION:=9.3.1
-PKG_RELEASE:=7
-PKG_BUILDDEP:=openssl
+PKG_VERSION:=9.3.2-P1
+PKG_RELEASE:=8
+PKG_MD5SUM:=a0b86647ef6a2d5f1e759112d08e2229
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_URL:=ftp://ftp.isc.org/isc/bind9/$(PKG_VERSION)/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.isc.org/isc/bind9/9.3.1/
-PKG_MD5SUM:=9ff3204eea27184ea0722f37e43fc95d
 PKG_CAT:=zcat
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
-PKG_BUILDDEP:=libopenssl
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -92,12 +89,15 @@ define Package/bind-dig
 endef
 
 define Package/Build/Configure
-$(call Build/Configure/Default,--enable-shared \
---enable-static \
---enable-ipv6 \
---with-randomdev=/dev/urandom \
---disable-threads \
---with-openssl=$(STAGING_DIR)/usr/
+$(call Build/Configure/Default,\
+		--enable-shared \
+		--enable-static \
+		--enable-ipv6 \
+		--with-randomdev=/dev/urandom \
+		--disable-threads \
+		--with-openssl=$(STAGING_DIR)/usr/ \
+		--with-libtool \
+		--with-gnu-ld \
 )
 endef
 
