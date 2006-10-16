@@ -2,7 +2,7 @@
  * diag_led.c - replacement diag module
  *
  * Copyright (C) 2004-2006 Mike Baker,
- *                         Imre Kaloz <kaloz@dune.hu>,
+ *                         Imre Kaloz <kaloz@openwrt.org>,
  *                         Felix Fietkau <nbd@openwrt.org>
  *
  * This program is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@
  * 2005/04/13 added licensing informations
  * 2005/04/18 base reset polarity off initial readings
  * 2006/08/18 asus power led support added
+ * 2006/10/16 asus wl-500g premium support added
  */
 
 #include <linux/module.h>
