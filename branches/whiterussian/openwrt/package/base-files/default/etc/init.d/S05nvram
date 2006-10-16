@@ -158,6 +158,10 @@ nvram_default lan_proto static
 	nvram_default vlan0ports "0 1 2 3 5u"
 	nvram_default vlan1hwname "et0"
 	nvram_default vlan1ports "4 5"
+	nvram_default lan_proto "static"
+	nvram_default lan_ifnames "eth0 eth2"
+	nvram_default wan_ifname "eth1"
+	nvram_default wan_device "eth1"
 }
 
 # needed at least for wrt54gs v1.1 and wrt54g v2.0, v2.2
