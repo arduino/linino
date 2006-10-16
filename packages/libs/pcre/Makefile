@@ -83,7 +83,7 @@ define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_BUILD_DIR)/pcre{,posix}.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/.libs/libpcre{,posix}.so.* $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/.libs/libpcre{,posix}.{a,so*} $(STAGING_DIR)/usr/lib/
 endef
 
 define Build/UninstallDev
