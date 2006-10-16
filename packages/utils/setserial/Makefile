@@ -67,7 +67,6 @@ endef
 define Package/setserial/install
 	install -d -m0755 $(1)/etc/init.d
 	install -m0755 ./files/serial.init $(1)/etc/init.d/setserial
-	ln -sf setserial $(1)/etc/init.d/setserial
 	install -d -m0755 $(1)/usr/sbin
 	install -m0755 $(PKG_BUILD_DIR)/setserial $(1)/usr/sbin/
 endef

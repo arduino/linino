@@ -45,7 +45,6 @@ define Package/htpdate/install
 	install -m0644 ./files/htpdate.default $(1)/etc/default/htpdate
 	install -d -m0755 $(1)/etc/init.d/
 	install -m0755 ./files/htpdate.init $(1)/etc/init.d/htpdate
-	ln -sf htpdate $(1)/etc/init.d/htpdate
 	install -d -m0755 $(1)/usr/sbin
 	install -m0755 $(PKG_BUILD_DIR)/htpdate $(1)/usr/sbin/
 endef
