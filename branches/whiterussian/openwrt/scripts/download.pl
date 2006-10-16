@@ -18,12 +18,28 @@ my $ok;
 
 @ARGV > 0 or die "Syntax: $0 <target dir> <filename> <md5sum> <mirror> [<mirror> ...]\n";
 
+sub which($) {
+	my $prog = shift;
+	my $res = `which $prog`;
+	$res or return undef;
+	$res =~ /^no / and return undef;
+	$res =~ /not found/ and return undef;
+	return $res;
+}
+
+my $md5cmd = which("md5sum");
+$md5cmd or $md5cmd = which("md5");
+$md5cmd or die 'no md5 checksum program found, please install md5 or md5sum';
+chomp $md5cmd;
+
 sub download
 {
 	my $mirror = shift;
-	
-	open WGET, "wget -t1 --timeout=20 -O- \"$mirror/$filename\" |" or die "Cannot launch wget.\n";
-	open MD5SUM, "| md5sum > \"$target/$filename.md5sum\"" or die "Cannot launch md5sum.\n";
+	my $options = $ENV{WGET_OPTIONS};
+	$options or $options = "";
+
+	open WGET, "wget -t1 --timeout=20 $options -O- \"$mirror/$filename\" |" or die "Cannot launch wget.\n";
+	open MD5SUM, "| $md5cmd > \"$target/$filename.md5sum\"" or die "Cannot launch md5sum.\n";
 	open OUTPUT, "> $target/$filename.dl" or die "Cannot create file $target/$filename.dl: $!\n";
 	my $buffer;
 	while (read WGET, $buffer, 1048576) {
@@ -41,7 +57,7 @@ sub download
 	}
 	
 	my $sum = `cat "$target/$filename.md5sum"`;
-	$sum =~ /^(\w+)\s+/ or die "Could not generate md5sum\n";
+	$sum =~ /^(\w+)\s*/ or die "Could not generate md5sum\n";
 	$sum = $1;
 	
 	if (($md5sum =~ /\w{32}/) and ($sum ne $md5sum)) {
@@ -91,7 +107,7 @@ foreach my $mirror (@ARGV) {
 	}
 }
 
-push @mirrors, 'http://mirror1.openwrt.org/';
+#push @mirrors, 'http://mirror1.openwrt.org/';
 push @mirrors, 'http://mirror2.openwrt.org/sources';
 push @mirrors, 'http://downloads.openwrt.org/sources/';
 
