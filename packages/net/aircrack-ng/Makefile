@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aircrack-ng
-PKG_VERSION:=0.6.1
+PKG_VERSION:=0.6.2
 PKG_RELEASE:=1
-PKG_MD5SUM:=8a72ad4746752dac9127edb3b41f6274
+PKG_MD5SUM:=0b1a9fb6818822f933336efc9fff316b
 
 PKG_SOURCE_URL:=http://download.aircrack-ng.org/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -48,7 +48,7 @@ define Package/aircrack-ng/install
 	install -d -m0755 $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/aircrack-ng $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/airdecap-ng $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/arpforge-ng $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/packetforge-ng $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ivstools $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/kstats $(1)/usr/bin/
 	install -d -m0755 $(1)/usr/sbin
