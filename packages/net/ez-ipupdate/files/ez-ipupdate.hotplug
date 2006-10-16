@@ -4,7 +4,11 @@ COMMAND=/usr/sbin/$NAME
 
 [ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" ] && {
         [ -x $COMMAND ] && [ -r $CONFIG ] && {
-                eval "ifname=\"\${${INTERFACE}_ifname}\""
-                $COMMAND -c $CONFIG -i $ifname 2>&1 | logger -t $NAME
+				include /lib/network
+				scan_interfaces
+				
+				config_get ifname wan ifname 
+				[ -n "$ifname" ] && \
+	                $COMMAND -c $CONFIG -i $ifname 2>&1 | logger -t $NAME
         } &
 }
