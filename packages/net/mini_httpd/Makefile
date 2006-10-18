@@ -57,6 +57,7 @@ endef
 
 define Package/mini-httpd-matrixssl
   $(call Package/mini-httpd)
+  DEPENDS:=+libmatrixssl
   TITLE:=A small web server, built with SSL support using MatrixSSL
   DESCRIPTION+=This package adds SSL/HTTPS. (MatrixSSL)
 endef
@@ -69,6 +70,7 @@ endef
 
 define Package/mini-httpd-openssl
   $(call Package/mini-httpd)
+  DEPENDS:=+libopenssl
   TITLE:=A small web server, built with SSL support using OpenSSL
   DESCRIPTION+=This package adds SSL/HTTPS. (OpenSSL)
 endef
