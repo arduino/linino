@@ -25,6 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/privoxy
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+libpcre
   TITLE:=web proxy with advanced filtering capabilities
   DESCRIPTION:=Privoxy is a web proxy with advanced filtering capabilities for\\\
 	protecting privacy, modifying web page content, managing cookies,\\\
