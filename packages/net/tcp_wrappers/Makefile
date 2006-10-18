@@ -30,7 +30,7 @@ define Package/libwrap
 endef
 
 define Build/Compile	
-	$(MAKE) -j1 -C $(PKG_BUILD_DIR) \
+	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		OPT_CFLAGS="$(TARGET_CFLAGS)" \
 		LIBS=-lnsl \
