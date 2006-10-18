@@ -23,6 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ctorrent
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+libopenssl
   TITLE:=console-based BitTorrent client
   DESCRIPTION:=CTorrent is a BitTorrent client written in the C programming language, known to\\\
 	be a very robust and mature programming language, which produces fast and\\\
