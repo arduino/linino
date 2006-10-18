@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/libao
   SECTION:=libs
+  DEPENDS:=+alsa-lib
   CATEGORY:=Libraries
   TITLE:=A cross platform audio library
   DESCRIPTION:=A cross platform audio library.\\\
