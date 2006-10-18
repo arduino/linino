@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/slurm
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+libncurses
   TITLE:=A realtime network interface monitor
   DESCRIPTION:=A realtime network interface monitor with the following features:\\\
 		* realtime traffic statistics divided into incoming and outgoing\\\
