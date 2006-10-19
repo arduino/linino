@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/vnc-reflector
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libjpeg
+  DEPENDS:=+libjpeg +zlib
   TITLE:=VNC proxy for multiple clients
   DESCRIPTION:=VNC Reflector is a specialized VNC server which acts as\\\
   a proxy sitting between real VNC server (a host) and a\\\
