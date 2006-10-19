@@ -41,17 +41,24 @@ define Package/roofnet
   URL:=http://pdos.csail.mit.edu/roofnet/
 endef
 
+BUILDOPTS = \
+		BUILD_CXX="g++ -I $(PKG_BUILD_DIR)/include-host" \
+		BUILD_DL_LIBS="-ldl"
+
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); \
+		rm -rf config.{cache,status} ; \
+		CONFIG_SITE= \
 		./configure; \
-		cp include/click/config.h include/click/config-host.h; \
+		rm -rf include-host; \
+		$(CP) include include-host; \
 		rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CXXFLAGS="-static -O2 -MD" \
 		CFLAGS="-static -MD" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-		$(CONF_OPTS) \
+		$(BUILDOPTS) \
 		./configure \
 		  --prefix=/usr \
 		  --target=$(GNU_TARGET_NAME) \
@@ -70,7 +77,7 @@ define Build/Compile
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(CONF_OPTS) \
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		BUILD_CXX="g++ -include $(PKG_BUILD_DIR)/include/click/config-host.h" \
+		$(BUILDOPTS) \
 		tools elementmap.xml
 	(cd $(PKG_BUILD_DIR)/userlevel; \
 		../tools/click-mkmindriver/click-mkmindriver -p roofnet -C .. \
