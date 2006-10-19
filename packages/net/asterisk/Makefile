@@ -116,7 +116,7 @@ endef
 
 define Package/asterisk-chan-h323
   $(call Package/asterisk/Default)
-  DEPENDS:=asterisk +libopenh323
+  DEPENDS:=asterisk +libopenh323 +uclibcxx
   TITLE:=H.323 support for Asterisk
   DESCRIPTION+=\\\
 	\\\
