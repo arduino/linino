@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/pwlib
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libpthread
+  DEPENDS:=+libpthread +uclibcxx
   TITLE:=Portable Windows library
   URL:=http://www.openh323.org/
 endef
