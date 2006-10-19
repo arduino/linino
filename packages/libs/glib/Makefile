@@ -39,12 +39,6 @@ endef
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
 		glib_cv_sizeof_gmutex=24 \
-		ac_cv_sizeof_char=1 \
-		ac_cv_sizeof_short=2 \
-		ac_cv_sizeof_int=4 \
-		ac_cv_sizeof_long=4 \
-		ac_cv_sizeof_long_long=8 \
-		ac_cv_sizeof_void_p=4 \
 		glib_cv_prog_cc_ansi_proto="no" \
 		glib_cv_has__inline="yes" \
 		glib_cv_has__inline__="yes" \
@@ -55,7 +49,6 @@ define Build/Configure
 		glib_cv_va_val_copy="yes" \
 		glib_cv_rtldglobal_broken="no" \
 		glib_cv_uscore="no" \
-		ac_cv_func_getpwuid_r="yes" \
 		glib_cv_func_pthread_mutex_trylock_posix="yes" \
 		glib_cv_func_pthread_cond_timedwait_posix="yes" \
 		glib_cv_sizeof_gmutex="24" \

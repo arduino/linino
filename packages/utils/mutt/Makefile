@@ -31,14 +31,13 @@ define Package/mutt
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--includedir=$(PKG_BUILD_DIR)/. \
+	$(call Build/Configure/Default, \
+		--includedir=$(PKG_BUILD_DIR)/. \
 		--oldincludedir=$(PKG_BUILD_DIR)/. \
 		--enable-pop \
 		--enable-imap \
-		--with-ssl,ac_cv_c_bigendian=no \
-		ac_cv_sizeof_off_t=8 \
-		ac_cv_sizeof_int=4 \
-		ac_cv_sizeof_long=4)
+		--with-ssl \
+	)
 endef
 
 define Package/mutt/install

@@ -31,17 +31,19 @@ define Package/tmsnc
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--with-libiconv-prefix=$(STAGING_DIR)/usr \
-                  --with-openssl="$(STAGING_DIR)/usr" \
-                  --with-ncurses="$(STAGING_DIR)/usr" \
-                  --with-gnu-ld, ac_cv_func_malloc_0_nonnull=yes \
-		  ac_cv_func_realloc_0_nonnull=yes)
+	$(call Build/Configure/Default, \
+		--with-libiconv-prefix=$(STAGING_DIR)/usr \
+		--with-openssl="$(STAGING_DIR)/usr" \
+		--with-ncurses="$(STAGING_DIR)/usr" \
+		--with-gnu-ld \
+	)
 endef
 
 define Build/Compile
-$(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" \
+	$(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		install)
+		install \
+	)
 	rm -rf $(PKG_INSTALL_DIR)/usr/man
 endef
 

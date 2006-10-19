@@ -32,14 +32,16 @@ characteristics.\\\
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--enable-shared \
---disable-static \
---disable-rpath \
---disable-multicast \
---disable-threads,CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
-LDFLAGS="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-LIBS="-luClibc++ -lc -lm -lgcc_s" \
-ac_cv_func_malloc_0_nonnull=yes)
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--disable-static \
+		--disable-rpath \
+		--disable-multicast \
+		--disable-threads, \
+		CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
+		LDFLAGS="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		LIBS="-luClibc++ -lc -lm -lgcc_s" \
+	)
 endef
 
 define Build/Compile	

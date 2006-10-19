@@ -32,12 +32,11 @@ define Package/fetchmail
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--enable-fallback=procmail --without-hesiod,ac_cv_c_bigendian=no \
-ac_cv_sizeof_off_t=8 \
-ac_cv_sizeof_int=4 \
-ac_cv_sizeof_long=4 \
-ac_cv_path_procmail=/usr/sbin/procmail \
-)
+	$(call Build/Configure/Default, \
+		--enable-fallback=procmail \
+		--without-hesiod, \
+		ac_cv_path_procmail=/usr/sbin/procmail \
+	)
 endef
 
 define Build/Compile

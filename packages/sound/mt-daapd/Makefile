@@ -37,16 +37,18 @@ define Package/mt-daapd/conffiles
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--enable-shared \
-                        --disable-static \
-                        --enable-mdns \
-                        --enable-howl \
-                        --with-id3tag="$(STAGING_DIR)/usr" \
-                        --with-gdbm-includes="$(STAGING_DIR)/usr/include" \
-                        --with-gdbm-libs="$(STAGING_DIR)/usr/lib" \
-                        --with-howl-includes="$(STAGING_DIR)/usr/include/howl" \
-                        --with-howl-libs="$(STAGING_DIR)/usr/lib" \
-                        --without-static-libs,ac_cv_func_setpgrp_void=yes)
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--disable-static \
+		--enable-mdns \
+		--enable-howl \
+		--with-id3tag="$(STAGING_DIR)/usr" \
+		--with-gdbm-includes="$(STAGING_DIR)/usr/include" \
+		--with-gdbm-libs="$(STAGING_DIR)/usr/lib" \
+		--with-howl-includes="$(STAGING_DIR)/usr/include/howl" \
+		--with-howl-libs="$(STAGING_DIR)/usr/lib" \
+		--without-static-libs \
+	)
 endef
 
 define Build/Compile	

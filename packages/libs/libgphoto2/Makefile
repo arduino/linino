@@ -42,11 +42,6 @@ define Package/libgphoto2-drivers
   TITLE:=Gphoto2 drivers for various cameras
 endef
 
-BIG_ENDIAN:=no
-ifeq ($(CONFIG_BIG_ENDIAN),y)
-  BIG_ENDIAN:=yes
-endif
-
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
@@ -63,8 +58,6 @@ define Build/Configure
 		LIBUSB_CFLAGS="$$$$CPPFLAGS" \
 		LIBUSB_LIBS="$$$$LDFLAGS -lusb" \
 		LIBS="-lltdl" \
-		ac_cv_c_gettext_without_libintl=yes \
-		ac_cv_c_bigendian=$(BIG_ENDIAN) \
 	)
 endef
 

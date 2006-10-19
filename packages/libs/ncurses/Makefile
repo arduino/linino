@@ -37,6 +37,7 @@ define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
+		CONFIG_SITE="" \
 		./configure \
 			--target=$(GNU_HOST_NAME) \
 			--host=$(GNU_HOST_NAME) \
@@ -80,7 +81,6 @@ define Build/Compile
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		ac_cv_linux_vers="2" \
 		./configure \
 			--target=$(GNU_TARGET_NAME) \
 			--host=$(GNU_TARGET_NAME) \

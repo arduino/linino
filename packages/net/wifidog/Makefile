@@ -39,9 +39,7 @@ define Package/wifidog/conffiles
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,,ac_cv_func_malloc_0_nonnull=yes \
-		ac_cv_func_memcmp_working=yes \
-		ac_cv_func_setvbuf_reversed=no)
+	$(call Build/Configure/Default)
 endef
 
 define Build/Compile

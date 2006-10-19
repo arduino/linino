@@ -41,7 +41,6 @@ define Build/Configure
 		libelf_cv_struct_elf64_ehdr=yes \
 		libelf_cv_type_elf64_addr=no \
 		libelf_cv_struct_elf64_rel=yes \
-		ac_cv_sizeof_long_long=8 \
 		./configure \
 			--target=$(GNU_TARGET_NAME) \
 			--host=$(GNU_TARGET_NAME) \

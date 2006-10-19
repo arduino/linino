@@ -59,20 +59,22 @@ define Package/rrdcollect-example/conffiles
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--enable-shared \
-                        --disable-static \
-                        --disable-rpath \
-                        --with-gnu-ld \
-                        --enable-exec \
-                        --without-rrdtool \
-                        --with-librrd \
-                        --without-libpcre \
-                        --without-libpcap, CFLAGS="$(TARGET_CFLAGS) -DSOCKET_COMM" \
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--disable-static \
+		--disable-rpath \
+		--with-gnu-ld \
+		--enable-exec \
+		--without-rrdtool \
+		--with-librrd \
+		--without-libpcre \
+		--without-libpcap, \
+		CFLAGS="$(TARGET_CFLAGS) -DSOCKET_COMM" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
 		LIBS="$(RRDTOOL_LIBS) -lz" \
 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-		ac_cv_func_malloc_0_nonnull=yes)
+	)
 endef
 
 define Build/Compile	

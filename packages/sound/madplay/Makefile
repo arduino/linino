@@ -35,19 +35,19 @@ full support for ID3 tags.\\\
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--enable-shared \
---disable-static \
---with-gnu-ld \
---disable-rpath \
---disable-debugging \
---disable-profiling \
---disable-experimental \
---without-libiconv-prefix \
---without-libintl-prefix \
---without-alsa \
---without-esd,LIBS="-lz" \
-ac_cv_linux_vers=2 \
-td_cv_buggygetaddrinfo="no")
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--disable-static \
+		--with-gnu-ld \
+		--disable-rpath \
+		--disable-debugging \
+		--disable-profiling \
+		--disable-experimental \
+		--without-libiconv-prefix \
+		--without-libintl-prefix \
+		--without-alsa \
+		--without-esd,LIBS="-lz" \
+	)
 endef
 
 define Build/Compile

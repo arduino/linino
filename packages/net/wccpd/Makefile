@@ -34,10 +34,12 @@ define Package/wccpd
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--enable-shared \
-                        --enable-static \
-                        --disable-rpath \
-                        --with-gnu-ld,ac_cv_func_setpgrp_void=yes)
+	$(call Build/Configure/Default,
+		--enable-shared \
+		--enable-static \
+		--disable-rpath \
+		--with-gnu-ld \
+	)
 endef
 
 define Build/Compile

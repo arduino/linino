@@ -48,10 +48,6 @@ define Build/Configure
 		CXXFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		ac_atomic_add=yes \
-		ac_atomic_sub=yes \
-		ac_cv_sys_restartable_syscalls=yes \
-		ac_cv_conv_longlong_to_float=yes \
 		mysql_cv_compress=yes \
 		mysql_cv_gethostname_style=glibc2 \
 		./configure \

@@ -40,10 +40,12 @@ define Package/nfs-kernel-server/conffiles
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--enable-static --enable-shared --disable-nfsv4 \
---disable-gss,ac_cv_func_malloc_0_nonnull=yes \
-ac_cv_func_memcmp_working=yes \
-ac_cv_func_setvbuf_reversed=no)
+	$(call Build/Configure/Default, \
+		--enable-static \
+		--enable-shared \
+		--disable-nfsv4 \
+		--disable-gss \
+	)
 endef
 
 define Build/Compile

@@ -35,7 +35,7 @@ define Package/ptunnel
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--enable-shared \
+	$(call Build/Configure/Default,--enable-shared \
 		--disable-static \
 		--with-gnu-ld, \
 		$(TARGET_CONFIGURE_OPTS) \
@@ -44,8 +44,8 @@ $(call Build/Configure/Default,--enable-shared \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		ac_cv_linux_vers=2 \
-		td_cv_buggygetaddrinfo="no")
+		td_cv_buggygetaddrinfo="no" \
+	)
 endef
 
 define Build/Compile	

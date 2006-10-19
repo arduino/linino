@@ -41,13 +41,8 @@ define Package/roofnet
   URL:=http://pdos.csail.mit.edu/roofnet/
 endef
 
-CONF_OPTS= \
-		ac_cv_int64_t=no \
-		ac_cv_sizeof_off_t=4
-
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); \
-		$(CONF_OPTS) \
 		./configure; \
 		cp include/click/config.h include/click/config-host.h; \
 		rm -rf config.{cache,status} ; \

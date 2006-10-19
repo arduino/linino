@@ -89,9 +89,6 @@ define Build/Configure
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-		ac_cv_func_malloc_0_nonnull=yes \
-		ac_cv_func_realloc_0_nonnull=yes \
-		ac_cv_func_memcmp_working=yes \
 		./configure \
 			--target=$(GNU_TARGET_NAME) \
 			--host=$(GNU_TARGET_NAME) \

@@ -34,9 +34,7 @@ define Package/raddump
 endef
 
 define Build/Configure	
-$(call Build/Configure/Default,,ac_cv_c_bigendian=no \
-                ac_cv_func_malloc_0_nonnull=yes \
-                ac_cv_func_realloc_0_nonnull=yes)
+	$(call Build/Configure/Default)
 endef
 
 define Build/Compile	

@@ -42,7 +42,8 @@ endef
 
 define Build/Compile
 $(call Build/Compile/Default, \
-		CFLAGS="$(TARGET_CFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
+		STAGING_DIR="$(STAGING_DIR)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		repeater)
 endef

@@ -34,12 +34,13 @@ for IRC-networks.\\\
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--enable-automode \
---enable-releasenick \
---enable-uptime \
---enable-privlog \
---enable-onconnect,ac_cv_func_malloc_0_nonnull=yes \
-ac_cv_func_realloc_0_nonnull=yes)
+	$(call Build/Configure/Default, \
+		--enable-automode \
+		--enable-releasenick \
+		--enable-uptime \
+		--enable-privlog \
+		--enable-onconnect \
+	)
 endef
 
 

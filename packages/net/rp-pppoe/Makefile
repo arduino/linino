@@ -54,12 +54,6 @@ define Build/Configure
  (cd $(PKG_BUILD_DIR)/src ; rm -rf config.{cache,status}; \
                 $(TARGET_CONFIGURE_OPTS) \
                 CFLAGS="$(TARGET_CFLAGS)" \
-                ac_cv_func_setvbuf_reversed=no \
-                ac_cv_sizeof_unsigned_short=2 \
-                ac_cv_sizeof_unsigned_int=4 \
-                ac_cv_sizeof_unsigned_long=4 \
-                ac_cv_linux_kernel_pppoe=yes \
-                ac_cv_pack_bitfields_reversed=yes \
                 ./configure \
                   --target=$(GNU_TARGET_NAME) \
                   --host=$(GNU_TARGET_NAME) \

@@ -31,21 +31,21 @@ define Package/vim
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--enable-min-features \
+	$(call Build/Configure/Default, \
+			--enable-min-features \
 			--disable-gui \
 			--without-x \
 			--disable-multibyte \
 			--disable-cscope \
 			--disable-gpm \
-			--with-tlib=ncurses,ac_cv_c_bigendian=no \
-			ac_cv_sizeof_off_t=8 \
-			ac_cv_sizeof_int=4)
+			--with-tlib=ncurses \
+	)
 endef
 
 define Package/vim/install	
 	mkdir -p $(1)/usr/bin
-	mkdir -p $(1)//usr/share/vim
-	$(CP) ./files/vimrc $(1)//usr/share/vim
+	mkdir -p $(1)/usr/share/vim
+	$(CP) ./files/vimrc $(1)/usr/share/vim
 	$(CP) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(1)/usr/bin/
 endef
 

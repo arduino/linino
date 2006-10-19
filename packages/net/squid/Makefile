@@ -138,26 +138,7 @@ define Build/Configure
 		--enable-ntlm-auth-helpers="fakeauth SMB winbind" \
 		--enable-digest-auth-helpers="password" \
 		--enable-external-acl-helpers="ip_user unix_group winbind_group" \
-		, \
-		ac_cv_sizeof_void_p=4 \
-		ac_cv_sizeof_short=2 \
-		ac_cv_sizeof_int=4 \
-		ac_cv_sizeof_long=4 \
-		ac_cv_sizeof_long_long=8 \
-		ac_cv_sizeof___int64=0 \
-		ac_cv_sizeof_int16_t=2 \
-		ac_cv_sizeof_uint16_t=2 \
-		ac_cv_sizeof_u_int16_t=2 \
-		ac_cv_sizeof_int32_t=4 \
-		ac_cv_sizeof_uint32_t=4 \
-		ac_cv_sizeof_u_int32_t=4 \
-		ac_cv_sizeof_int64_t=8 \
-		ac_cv_sizeof_uint64_t=8 \
-		ac_cv_sizeof_u_int64_t=8 \
-		ac_cv_func_setresuid=no \
-		ac_cv_func_va_copy=no \
-		ac_cv_func___va_copy=no \
-        )
+	)
 endef
 	
 define Build/Compile	

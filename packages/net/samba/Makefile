@@ -82,9 +82,6 @@ define Build/Compile
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-lgcc_s -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
 		ac_cv_lib_cups_httpConnect=no \
-		ac_cv_sizeof_int=4 \
-		ac_cv_sizeof_long=4 \
-		ac_cv_sizeof_short=2 \
 		samba_cv_FTRUNCATE_NEEDS_ROOT=no \
 		samba_cv_HAVE_BROKEN_FCNTL64_LOCKS=no \
 		samba_cv_HAVE_BROKEN_GETGROUPS=no \

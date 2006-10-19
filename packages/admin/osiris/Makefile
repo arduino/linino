@@ -33,14 +33,12 @@ define Package/osirisd
 endef
 
 define Build/Configure
-  $(call Build/Configure/Default, \
-	--with-osiris-user=root \
-	--with-root-dir=/var/lib/osiris \
-	--with-readline=no, \
-	ac_cv_openssldir="$(STAGING_DIR)/usr" \
-	ac_cv_have_accrights_in_msghdr=no \
-	ac_cv_have_control_in_msghdr=yes \
-  )
+	$(call Build/Configure/Default, \
+		--with-osiris-user=root \
+		--with-root-dir=/var/lib/osiris \
+		--with-readline=no, \
+		ac_cv_openssldir="$(STAGING_DIR)/usr" \
+	)
 endef
 
 define Build/Compile	

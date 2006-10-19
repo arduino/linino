@@ -47,7 +47,6 @@ define Build/Configure
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
 		LIBS="-lncurses" \
-		ac_cv_func_malloc_0_nonnull=yes \
 		ac_cv_lib_ncurses_use_default_colors=yes \
 		./configure \
 			--target=$(GNU_TARGET_NAME) \

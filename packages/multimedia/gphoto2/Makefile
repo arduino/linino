@@ -31,11 +31,6 @@ define Package/gphoto2
   URL:=http://www.gphoto.org/
 endef
 
-BIG_ENDIAN:=no
-ifeq ($(CONFIG_BIG_ENDIAN),y)
-  BIG_ENDIAN:=yes
-endif
-
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--without-libiconv-prefix \
@@ -47,8 +42,6 @@ define Build/Configure
 		LIBEXIF_LIBS="$$$$LDFLAGS -lexif" \
 		POPT_CFLAGS="$$$$CFLAGS $$$$CPPFLAGS" \
 		POPT_LIBS="$$$$LDFLAGS -lpopt" \
-		ac_cv_c_bigendian="$(BIG_ENDIAN)" \
-		ac_cv_func_malloc_0_nonnull=yes \
 	)
 endef
 

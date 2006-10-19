@@ -35,7 +35,7 @@ define Package/dhcp-forwarder/conffiles
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,,ac_cv_func_malloc_0_nonnull="yes")
+	$(call Build/Configure/Default)
 endef
 
 define Build/Compile
