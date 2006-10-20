@@ -300,7 +300,6 @@ static int __init diag_init()
 				button_gpio=(1<<4);
 				reset_gpio=(1<<0);
 				set_pwr=wl500gp_set_pwr;
-				pwr_reverse = 0;
 			} else {
 				//wl-500g deluxe
 				set_pwr=wl500g_set_pwr;
