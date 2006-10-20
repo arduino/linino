@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=wccpd
 PKG_VERSION:=0.2
 PKG_RELEASE:=1
-PKG_MD5SUM:=5f15c274de61dfb88e0dbfc1ccbe6b67
 
-PKG_SOURCE_URL:=@SF/wccpd
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/wccpd
+PKG_MD5SUM:=5f15c274de61dfb88e0dbfc1ccbe6b67
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,24 +26,22 @@ define Package/wccpd
   SECTION:=net
   CATEGORY:=Network
   TITLE:=a Web Cache Coordination daemon
-  DESCRIPTION:=wccpd is a WCCP (Web Cache Coordination Protocol) server daemon\\\
-  It allows a router (running Linux) to redirect web traffic to a\\\
-  group of Squid servers using WCCP as the monitoring/controling\\\
-  protocol.\\\
+  DESCRIPTION:=\
+	wccpd is a WCCP (Web Cache Coordination Protocol) server daemon \\\
+	It allows a router (running Linux) to redirect web traffic to a \\\
+	group of Squid servers using WCCP as the monitoring/controling \\\
+	protocol.
   URL:=http://wccpd.sourceforge.net/
 endef
 
 define Build/Configure
-	$(call Build/Configure/Default,
-		--enable-shared \
-		--enable-static \
-		--disable-rpath \
-		--with-gnu-ld \
-	)
+	$(call Build/Configure/Default)
 endef
 
 define Build/Compile
-$(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" all install)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install 
 endef
 
 define Package/wccpd/install
