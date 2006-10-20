@@ -4,14 +4,13 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-ifneq ($(strip $(PKG_CAT)),)
-  ifeq ($(PKG_CAT),unzip)
-    UNPACK=unzip -d $(PKG_BUILD_DIR) $(DL_DIR)/$(PKG_SOURCE)
-  else
-    UNPACK=$(PKG_CAT) $(DL_DIR)/$(PKG_SOURCE) | tar -C $(PKG_BUILD_DIR)/.. $(TAR_OPTIONS) -
-  endif
+
+include $(INCLUDE_DIR)/host.mk
+include $(INCLUDE_DIR)/unpack.mk
+
+ifneq ($(strip $(PKG_UNPACK)),)
   define Build/Prepare/Default
-  	$(UNPACK)
+  	$(PKG_UNPACK)
 	@if [ -d ./patches ]; then \
 		$(PATCH) $(PKG_BUILD_DIR) ./patches; \
 	fi
@@ -64,7 +63,7 @@ endef
 
 		
 ifneq ($(strip $(PKG_SOURCE)),)
-  source: $(DL_DIR)/$(PKG_SOURCE)
+  download: $(DL_DIR)/$(PKG_SOURCE)
 
   $(DL_DIR)/$(PKG_SOURCE):
 	mkdir -p $(DL_DIR)
@@ -101,7 +100,7 @@ define HostBuild
 	$(call Build/Uninstall)
 	rm -f $(STAGING_DIR)/stampfiles/.host_$(PKG_NAME)-installed
 
-  source:
+  download:
   prepare: $(PKG_BUILD_DIR)/.prepared
   configure: $(PKG_BUILD_DIR)/.configured
 

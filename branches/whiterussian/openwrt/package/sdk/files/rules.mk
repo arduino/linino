@@ -8,7 +8,8 @@
 -include $(TOPDIR)/.config
 include $(TOPDIR)/include/verbose.mk
 
-export SHELL=/bin/bash
+export SHELL=/usr/bin/env bash -c '. $(TOPDIR)/include/shell.sh; eval "$$2"' --
+export BASH=$(shell which bash)
 
 ARCH:=$(strip $(subst ",, $(CONFIG_ARCH)))
 TARGET_OPTIMIZATION:=$(strip $(subst ",, $(CONFIG_TARGET_OPTIMIZATION)))
@@ -22,27 +23,33 @@ OPTIMIZE_FOR_CPU:=$(ARCH)
 DL_DIR:=$(TOPDIR)/dl
 INCLUDE_DIR:=$(TOPDIR)/include
 SCRIPT_DIR:=$(TOPDIR)/scripts
-TOOL_BUILD_DIR:=$(TOPDIR)/toolchain_build_$(ARCH)
+TOOL_BUILD_DIR:=$(TOPDIR)/tool_build
+TOOLCHAIN_BUILD_DIR:=$(TOPDIR)/toolchain_build_$(ARCH)
 STAGING_DIR:=$(TOPDIR)/staging_dir_$(ARCH)
 BIN_DIR:=$(TOPDIR)/bin
 PACKAGE_DIR:=$(BIN_DIR)/packages
 IPKG_TARGET_DIR:=$(PACKAGE_DIR)
 BUILD_DIR:=$(TOPDIR)/build_$(ARCH)
+TMP_DIR:=$(BUILD_DIR)/tmp
 STAMP_DIR:=$(BUILD_DIR)/stamp
 TARGET_DIR:=$(BUILD_DIR)/root
 IPKG_STATE_DIR:=$(TARGET_DIR)/usr/lib/ipkg
 
-REAL_GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-linux-uclibc
-GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-linux
-KERNEL_CROSS:=$(STAGING_DIR)/bin/$(OPTIMIZE_FOR_CPU)-linux-uclibc-
-TARGET_CROSS:=$(STAGING_DIR)/bin/$(OPTIMIZE_FOR_CPU)-linux-uclibc-
+ifeq ($(CONFIG_NATIVE_TOOLCHAIN),)
+  REAL_GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-linux-uclibc
+  GNU_TARGET_NAME=$(OPTIMIZE_FOR_CPU)-linux
+  TARGET_CROSS:=$(OPTIMIZE_FOR_CPU)-linux-uclibc-
+endif
+
 IMAGE:=$(BUILD_DIR)/root_fs_$(ARCH)
 
-TARGET_PATH:=$(STAGING_DIR)/usr/bin:$(STAGING_DIR)/bin:/bin:/sbin:/usr/bin:/usr/sbin
+TARGET_PATH:=$(STAGING_DIR)/usr/bin:$(STAGING_DIR)/bin:$(PATH)
 TARGET_CFLAGS:=$(TARGET_OPTIMIZATION)
 
+export PATH:=$(TARGET_PATH)
+
 LINUX_DIR:=$(BUILD_DIR)/linux
-LINUX_HEADERS_DIR:=$(TOOL_BUILD_DIR)/linux
+LINUX_HEADERS_DIR:=$(TOOLCHAIN_BUILD_DIR)/linux
 
 # APPLICATIONS #
 HOSTCC:=gcc
@@ -52,29 +59,19 @@ PATCH:=$(SCRIPT_DIR)/patch-kernel.sh
 SED:=$(STAGING_DIR)/bin/sed -i -e
 CP:=cp -fpR
 
-HOST_ARCH:=$(shell $(HOSTCC) -dumpmachine | sed -e s'/-.*//' \
-	-e 's/sparc.*/sparc/' \
-	-e 's/arm.*/arm/' \
-	-e 's/m68k.*/m68k/' \
-	-e 's/ppc/powerpc/' \
-	-e 's/v850.*/v850/' \
-	-e 's/sh[234]/sh/' \
-	-e 's/mips-.*/mips/' \
-	-e 's/mipsel-.*/mipsel/' \
-	-e 's/cris.*/cris/' \
-	-e 's/i[3-9]86/i386/' \
-	)
-
-GNU_HOST_NAME:=$(HOST_ARCH)-pc-linux-gnu
+ifneq ($(CONFIG_CCACHE),)
+  # FIXME: move this variable to a better location
+  export CCACHE_DIR=$(STAGING_DIR)/ccache
+  TARGET_CC:= ccache $(TARGET_CC)
+endif
 
 TARGET_CONFIGURE_OPTS:= \
-  PATH=$(TARGET_PATH) \
   AR=$(TARGET_CROSS)ar \
-  AS=$(TARGET_CROSS)as \
+  AS="$(TARGET_CC) -c $(TARGET_CFLAGS)" \
   LD=$(TARGET_CROSS)ld \
   NM=$(TARGET_CROSS)nm \
-  CC=$(TARGET_CROSS)gcc \
-  GCC=$(TARGET_CROSS)gcc \
+  CC="$(TARGET_CC)" \
+  GCC="$(TARGET_CC)" \
   CXX=$(TARGET_CROSS)g++ \
   RANLIB=$(TARGET_CROSS)ranlib \
   STRIP=$(TARGET_CROSS)strip
@@ -87,6 +84,7 @@ RSTRIP:= \
 
 # where to build (and put) .ipk packages
 IPKG:= \
+  PATH="$(STAGING_DIR)/bin:$(PATH)" \
   IPKG_TMP=$(BUILD_DIR)/tmp \
   IPKG_INSTROOT=$(TARGET_DIR) \
   IPKG_CONF_DIR=$(STAGING_DIR)/etc \
@@ -95,7 +93,7 @@ IPKG:= \
 
 # invoke ipkg-build with some default options
 IPKG_BUILD:= \
-  PATH="$(TARGET_PATH)" ipkg-build -c -o root -g root
+  ipkg-build -c -o 0 -g 0
 
 ifeq ($(CONFIG_ENABLE_LOCALE),true)
   DISABLE_NLS:=
@@ -108,11 +106,12 @@ ifneq ($(CONFIG_LARGEFILE),y)
 endif
 
 ifeq ($(CONFIG_TAR_VERBOSITY),y)
-  TAR_OPTIONS=-xvf
+  TAR_OPTIONS:=-xvf -
 else
-  TAR_OPTIONS=-xf
+  TAR_OPTIONS:=-xf -
 endif
 
 all:
 FORCE: ;
 .PHONY: FORCE
+%: ;

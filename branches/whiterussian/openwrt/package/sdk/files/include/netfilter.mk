@@ -6,12 +6,9 @@
 #
 # $Id: netfilter.mk 2411 2005-11-11 03:41:43Z nico $
 
-ifeq ($(NF_2_6),1)
+ifeq ($(NF_KMOD),1)
 P_V4:=ipv4/netfilter/
 P_XT:=netfilter/
-else
-P_V4:=
-P_XT:=
 endif
 
 IPT_CONNTRACK-m :=
@@ -80,10 +77,13 @@ IPT_IPSEC-$(CONFIG_IP_NF_MATCH_AH) += $(P_V4)ipt_ah
 IPT_IPSEC-$(CONFIG_NETFILTER_XT_MATCH_ESP) += $(P_XT)xt_esp
 
 IPT_NAT-m :=
-IPT_NAT-$(CONFIG_IP_NF_NAT) += $(P_V4)ipt_SNAT $(P_V4)ipt_DNAT
+ifneq ($(NF_KMOD),1)
+  IPT_NAT-$(CONFIG_IP_NF_NAT) += $(P_V4)ipt_SNAT $(P_V4)ipt_DNAT
+endif
 IPT_NAT-$(CONFIG_IP_NF_TARGET_MASQUERADE) += $(P_V4)ipt_MASQUERADE
 IPT_NAT-$(CONFIG_IP_NF_TARGET_MIRROR) += $(P_V4)ipt_MIRROR
 IPT_NAT-$(CONFIG_IP_NF_TARGET_REDIRECT) += $(P_V4)ipt_REDIRECT
+IPT_NAT-$(CONFIG_IP_NF_TARGET_NETMAP) += $(P_V4)ipt_NETMAP
 
 IPT_NAT_EXTRA-m := 
 IPT_NAT_EXTRA-$(CONFIG_IP_NF_AMANDA) += $(P_V4)ip_conntrack_amanda

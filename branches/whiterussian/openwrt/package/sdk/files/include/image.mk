@@ -41,13 +41,26 @@ ifneq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),y)
     
   ifeq ($(CONFIG_TARGET_ROOTFS_TGZ),y)
     define Image/mkfs/tgz
-		tar -zcf $(BIN_DIR)/openwrt-rootfs.tgz --owner=root --group=root -C $(BUILD_DIR)/root/ .
+		tar -zcf $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-rootfs.tgz --owner=root --group=root -C $(BUILD_DIR)/root/ .
     endef
   endif
+  
+  
 endif
 
+
+ifeq ($(CONFIG_TARGET_ROOTFS_EXT2FS),y)
+  E2SIZE=$(shell echo $$(($(CONFIG_TARGET_ROOTFS_FSPART)*1024)))
+  
+  define Image/mkfs/ext2
+		$(STAGING_DIR)/bin/genext2fs -q -b $(E2SIZE) -I 1500 -d $(BUILD_DIR)/root/ $(KDIR)/root.ext2
+		$(call Image/Build,ext2)
+  endef
+endif
+
+
 define Image/mkfs/prepare/default
-	find $(BUILD_DIR)/root -type f -not -perm +0100 | xargs chmod 0644
+	find $(BUILD_DIR)/root -type f -not -perm +0100 -not -name 'ssh_host*' | xargs chmod 0644
 	find $(BUILD_DIR)/root -type f -perm +0100 | xargs chmod 0755
 	find $(BUILD_DIR)/root -type d | xargs chmod 0755
 	mkdir -p $(BUILD_DIR)/root/tmp
@@ -69,6 +82,7 @@ install:
 	$(call Image/mkfs/jffs2)
 	$(call Image/mkfs/squashfs)
 	$(call Image/mkfs/tgz)
+	$(call Image/mkfs/ext2)
 	
 clean:
 	$(call Build/Clean)
@@ -78,7 +92,7 @@ compile-targets:
 install-targets:
 clean-targets:
 
-source:
+download:
 prepare:
 compile: compile-targets
 install: compile install-targets

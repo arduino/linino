@@ -1,29 +1,41 @@
-# Main makefile for the packages
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id: Makefile 5128 2006-10-15 21:03:30Z nbd $
+
 include $(TOPDIR)/rules.mk
 include $(TOPDIR)/.config
 include $(TOPDIR)/.pkgdeps
+include $(INCLUDE_DIR)/host.mk
 
-SOURCE_PACKAGES:=$(patsubst %,%-source,$(package-y) $(package-m))
+PREREQ_PACKAGES:=$(patsubst %,%-prereq,$(prereq-y) $(prereq-m))
+DOWNLOAD_PACKAGES:=$(patsubst %,%-download,$(package-y) $(package-m))
 COMPILE_PACKAGES:=$(patsubst %,%-compile,$(package-y) $(package-m))
 INSTALL_PACKAGES:=$(patsubst %,%-install,$(package-y))
 
 $(STAMP_DIR) $(TARGET_DIR):
 	mkdir -p $@
 
-%-source: $(STAMP_DIR) $(TARGET_DIR)
-	$(MAKE) -C $(patsubst %-source,%,$@) source MAKEFLAGS="$(BUILD_MAKEFLAGS)"
+%-prereq: $(STAMP_DIR) $(TARGET_DIR)
+	$(MAKE) -C $(patsubst %-prereq,%,$@) prereq
+
+%-download: $(STAMP_DIR) $(TARGET_DIR)
+	$(MAKE) -C $(patsubst %-download,%,$@) download
 
 %-prepare: $(STAMP_DIR) $(TARGET_DIR)
-	$(MAKE) -C $(patsubst %-prepare,%,$@) prepare MAKEFLAGS="$(BUILD_MAKEFLAGS)"
+	$(MAKE) -C $(patsubst %-prepare,%,$@) prepare
 
 %-compile: $(STAMP_DIR) $(TARGET_DIR)
-	$(MAKE) -C $(patsubst %-compile,%,$@) compile MAKEFLAGS="$(BUILD_MAKEFLAGS)"
+	$(MAKE) -C $(patsubst %-compile,%,$@) compile
 
 %-install: $(STAMP_DIR) $(TARGET_DIR)
-	$(MAKE) -C $(patsubst %-install,%,$@) install MAKEFLAGS="$(BUILD_MAKEFLAGS)"
+	$(MAKE) -C $(patsubst %-install,%,$@) install
 
 %-clean: $(STAMP_DIR) $(TARGET_DIR)
-	$(MAKE) -C $(patsubst %-clean,%,$@) clean MAKEFLAGS="$(BUILD_MAKEFLAGS)"
+	$(MAKE) -C $(patsubst %-clean,%,$@) clean
 
 ifeq ($(SDK),1)
 GENDEP_OPTS := -s
