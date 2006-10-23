@@ -1,2 +1,2 @@
 #!/bin/sh
-. ./system-ipkg.sh
+exec ./system-ipkg.sh
