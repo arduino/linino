@@ -1,2 +1,2 @@
-#!/usr/bin/webif-page
+#!/bin/sh
 . ./system-ipkg.sh
