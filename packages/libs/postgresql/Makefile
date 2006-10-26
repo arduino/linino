@@ -15,10 +15,7 @@ PKG_RELEASE:=1
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=\
-	ftp://ftp3.us.postgresql.org/pub/postgresql/source/v$(PKG_VERSION)/ \
-	ftp://ftp.br.postgresql.org/pub/PostgreSQL/source/v$(PKG_VERSION)/ \
-	ftp://ftp.au.postgresql.org/pub/postgresql/source/v$(PKG_VERSION)/ \
-	ftp://ftp.tw.postgresql.org/pub/postgresql/source/v$(PKG_VERSION)/
+	ftp://ftp-archives.postgresql.org/pub/source/v$(PKG_VERSION)/
 PKG_MD5SUM:=d7cf0f0a0e1dda19268f55cb1e124c77
 PKG_CAT:=bzcat
 
