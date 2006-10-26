@@ -41,7 +41,7 @@ diff -urN busybox.old/miscutils/Makefile.in busybox.dev/miscutils/Makefile.in
 diff -urN busybox.old/miscutils/lock.c busybox.dev/miscutils/lock.c
 --- busybox.old/miscutils/lock.c	1970-01-01 01:00:00.000000000 +0100
 +++ busybox.dev/miscutils/lock.c	2006-03-14 09:50:40.000000000 +0100
-@@ -0,0 +1,128 @@
+@@ -0,0 +1,130 @@
 +#include <sys/types.h>
 +#include <sys/file.h>
 +#include <sys/stat.h>
@@ -96,9 +96,11 @@ diff -urN busybox.old/miscutils/lock.c busybox.dev/miscutils/lock.c
 +	int pid;
 +	char pidstr[8];
 +
-+	if ((fd = open(file, O_RDWR | O_CREAT, 0700)) < 0) {
-+		fprintf(stderr, "Can't open %s\n", file);
-+		return 1;
++	if ((fd = open(file, O_RDWR | O_CREAT | O_EXCL, 0700)) < 0) {
++		if ((fd = open(file, O_RDWR)) < 0) {
++			fprintf(stderr, "Can't open %s\n", file);
++			return 1;
++		}
 +	}
 +
 +	if (flock(fd, (shared ? LOCK_SH : LOCK_EX)) < 0) {
