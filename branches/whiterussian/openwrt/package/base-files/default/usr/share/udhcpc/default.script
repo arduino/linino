@@ -1,7 +1,7 @@
 #!/bin/sh
 [ -z "$1" ] && echo "Error: should be run by udhcpc" && exit 1
 
-RESOLV_CONF="/tmp/resolv.conf"
+RESOLV_CONF="/tmp/resolv.conf.auto"
 
 hotplug_event() {
 	nvram show 2>&- | grep _proto=dhcp | {

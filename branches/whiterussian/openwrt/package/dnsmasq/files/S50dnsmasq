@@ -30,4 +30,11 @@ udhcpc -n -q -R -s /bin/true -i $ifname >&- || {
 wanproto=$(nvram get wan_proto)
 [ -z "$wanproto" -o "$wanproto" = "none" ] || args="${args} -I $(nvram get wan_ifname)"
 
-dnsmasq ${args}
+dnsmasq ${args} && {
+	# use dnsmasq for local dns requests
+	rm -f /tmp/resolv.conf
+	cat > /tmp/resolv.conf <<EOF
+nameserver 127.0.0.1
+search lan
+EOF
+}

@@ -60,10 +60,10 @@ do_ifup() {
 			} done
 		}
 
-		[ -f /tmp/resolv.conf ] || {
-			debug "# --- creating /tmp/resolv.conf ---"
+		[ -f /tmp/resolv.conf.auto ] || {
+			debug "# --- creating /tmp/resolv.conf.auto ---"
 			for dns in $(nvram get ${2}_dns); do
-				echo "nameserver $dns" >> /tmp/resolv.conf
+				echo "nameserver $dns" >> /tmp/resolv.conf.auto
 			done
 		}
 		

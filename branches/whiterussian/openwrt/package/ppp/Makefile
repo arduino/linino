@@ -88,7 +88,7 @@ endif
 
 $(IPKG_PPP):
 	install -d -m0755 $(IDIR_PPP)/etc/ppp
-	ln -sf /tmp/resolv.conf $(IDIR_PPP)/etc/ppp/resolv.conf
+	ln -sf /tmp/resolv.conf.auto $(IDIR_PPP)/etc/ppp/resolv.conf
 	install -m0600 ./files/etc/ppp/chap-secrets $(IDIR_PPP)/etc/ppp/
 	install -m0644 ./files/etc/ppp/options $(IDIR_PPP)/etc/ppp/
 	$(INSTALL_FILTER)
