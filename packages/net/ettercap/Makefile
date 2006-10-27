@@ -38,6 +38,12 @@ define Package/ettercap/conffiles
 /etc/etter.conf
 endef
 
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	# remove default optimization flags set by configure
+	$(SED) 's,DEBUG_FLAGS=.*,DEBUG_FLAGS=,g' $(PKG_BUILD_DIR)/configure
+endef
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--with-libpcap="$(STAGING_DIR)/usr" \
@@ -52,7 +58,6 @@ define Build/Configure
 		LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
 	)
 endef
-
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
