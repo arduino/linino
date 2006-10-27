@@ -35,9 +35,8 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default,\
-		--enable-shared=yes \
-		--enable-static=yes \
-		--with-gnu-ld \
+		--enable-shared \
+		--enable-static \
 		--disable-debugging \
 		--disable-profiling \
 		--with-softfloat \
@@ -46,7 +45,9 @@ define Build/Configure
 endef
 
 define Build/Compile
+	# override AM_CFLAGS holding inappropriate optimization flags
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		AM_CFLAGS="" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
