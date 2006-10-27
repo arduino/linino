@@ -1,0 +1,3 @@
+#!/bin/sh
+# trigger for failsafe mode
+[ "$1" = "button" ] && killall sleep

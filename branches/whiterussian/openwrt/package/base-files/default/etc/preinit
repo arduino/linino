@@ -1,9 +1,10 @@
 #!/bin/sh
+. /etc/functions.sh
 export PATH=/bin:/sbin:/usr/bin:/usr/sbin
 
 mount none /proc -t proc
 insmod diag
-echo 0x01 > /proc/sys/diag
+set_state preinit
 
 ifname=eth0
 # WAP54G, WL-HDD
@@ -32,18 +33,8 @@ ifconfig $ifname 192.168.1.1 netmask 255.255.255.0 broadcast 192.168.1.255 up
 netmsg 192.168.1.0 "(dummy message)" # b44 eats the first packet
 netmsg 192.168.1.255 "Press reset now, to enter Failsafe!"
 
-sleep 2
-
-if [ "$(cat /proc/sys/reset 2>&-)" = 1 -o "$(nvram get failsafe)" = 1 ]; then
-	while :; do { echo $((((X=(X+1)%8)%2)*3)) > /proc/sys/diag; sleep $((X==0)); } done &
-	export FAILSAFE=true
-	[ "$(nvram get boot_wait)" != "on" ] && {
-		nvram set boot_wait=on
-		nvram commit
-	}
-	netmsg 192.168.1.255 "Entering Failsafe!"
-	telnetd -l /bin/login <> /dev/null 2>&1
-else
+echo /sbin/hotplug.failsafe > /proc/sys/kernel/hotplug
+if sleep 2; then
 	ifconfig $ifname 0.0.0.0
 
 	# revert to the boot loader's vlan config
@@ -53,7 +44,18 @@ else
 		echo "$v1p" > /proc/switch/eth0/vlan/1/ports
 		echo "$v2p" > /proc/switch/eth0/vlan/2/ports
 	}
+else
+	# sleep was interrupted by a hotplug event - enter failsafe mode
+	set_state failsafe
+	export FAILSAFE=true
+	[ "$(nvram get boot_wait)" != "on" ] && {
+		nvram set boot_wait=on
+		nvram commit
+	}
+	netmsg 192.168.1.255 "Entering Failsafe!"
+	telnetd -l /bin/login <> /dev/null 2>&1
 fi
+echo /sbin/hotplug > /proc/sys/kernel/hotplug
 
 insmod mini_fo 2>&-
 mount_root ${FAILSAFE:+failsafe}

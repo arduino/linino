@@ -1,13 +1,20 @@
-#$Id: 005-diag_led.patch 4594 2006-08-18 13:10:19Z florian $
+# $Id$
+#
+# Makefile for the diag driver
+#
+# Copyright (C) 2006 Felix Fietkau <nbd@openwrt.org>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version
+# 2 of the License, or (at your option) any later version.
+#
 
 EXTRA_CFLAGS := -I$(TOPDIR)/arch/mips/bcm947xx/include -DBCMDRIVER
 
-O_TARGET       := diag.o
+obj-m			:= diag.o
 
-MAC_OBJS       := diag_led.o
+ifeq ($(MAKING_MODULES),1)
+-include $(TOPDIR)/Rules.make
+endif
 
-export-objs    := 
-obj-y          := $(MAC_OBJS)
-obj-m          := $(O_TARGET)
-
-include $(TOPDIR)/Rules.make

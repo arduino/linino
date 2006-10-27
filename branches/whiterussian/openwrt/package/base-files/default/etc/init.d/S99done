@@ -1,4 +1,6 @@
 #!/bin/sh
+. /etc/functions.sh
+
 sysctl -p >&-
 
 # automagically run firstboot
@@ -11,4 +13,4 @@ sysctl -p >&-
 }
 
 # set leds to normal state
-echo "0x02" > /proc/sys/diag
+set_state done
