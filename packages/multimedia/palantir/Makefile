@@ -42,8 +42,6 @@ export CPPFLAGS=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
 export LDFLAGS=-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib
 
 define Build/Compile	
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)/usr
 	$(MAKE) -C $(PKG_BUILD_DIR)/server/libgsm \
 		$(TARGET_CONFIGURE_OPTS) \
 		CCINC="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
