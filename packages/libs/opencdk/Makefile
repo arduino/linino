@@ -12,7 +12,6 @@ PKG_NAME:=opencdk
 PKG_VERSION:=0.5.5
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.gnutls.org/pub/gnutls/opencdk/ \
 	ftp://ftp.gnupg.org/gcrypt/alpha/gnutls/opencdk/ \
@@ -22,6 +21,7 @@ PKG_SOURCE_URL:=ftp://ftp.gnutls.org/pub/gnutls/opencdk/ \
 PKG_MD5SUM:=aaff60107f0153873192ffda00699a96
 PKG_CAT:=bzcat
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
@@ -31,65 +31,35 @@ define Package/libopencdk
   CATEGORY:=Libraries
   DEPENDS:=+libgcrypt
   TITLE:=The Open Crypto Development Kit library
-  DESCRIPTION:=The Open Crypto Development Kit library.\\\
-    This library provides basic parts of the OpenPGP message format.\\\
-    For reference, please read the rfc2440.txt in the doc/ directory.\\\
-    Due to some possible security problems, the library also implements \\\
-    parts of draft-ietf-openpgp-rfc2440bis-08.txt. If you want to exchange \\\
-    messages with earlier PGP version < 7, you should use the compat mode.
+  DESCRIPTION:=\
+	This library provides basic parts of the OpenPGP message format.\\\
+	For reference, please read the rfc2440.txt in the doc/ directory.\\\
+	Due to some possible security problems, the library also implements \\\
+	parts of draft-ietf-openpgp-rfc2440bis-08.txt. If you want to exchange \\\
+	messages with earlier PGP version < 7, you should use the compat mode.
   URL:=ftp://ftp.gnutls.org/pub/gnutls/opencdk/
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
-		touch configure.ac ; \
-		touch acinclude.m4 ; \
-		touch aclocal.m4 ; \
-		touch Makefile.in ; \
-		touch config.h.in ; \
-		touch configure ; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=/usr/lib \
-			--libexecdir=/usr/lib \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc \
-			$(DISABLE_NLS) \
-			$(DISABLE_LARGEFILE) \
-			--enable-shared \
-			--enable-static \
-			--disable-rpath \
-			--with-libgcrypt-prefix="$(STAGING_DIR)/usr" \
+	(cd $(PKG_BUILD_DIR); touch \
+		configure.ac \
+		acinclude.m4 \
+		aclocal.m4 \
+		Makefile.in \
+		config.h.in \
+		configure \
 	);
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--enable-static \
+		--with-libgcrypt-prefix="$(STAGING_DIR)/usr" \
+	)
 endef
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
-endef
-
-define Package/libopencdk/install
-	install -m0755 -d $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libopencdk.so.* $(1)/usr/lib/
 endef
 
 define Build/InstallDev
@@ -106,6 +76,11 @@ define Build/UninstallDev
 		$(STAGING_DIR)/usr/bin/opencdk-config \
 		$(STAGING_DIR)/usr/include/opencdk.h \
 		$(STAGING_DIR)/usr/lib/libopencdk.{a,so*}
+endef
+
+define Package/libopencdk/install
+	install -d -m0755 $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libopencdk.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libopencdk))

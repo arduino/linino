@@ -5,17 +5,19 @@
 # See /LICENSE for more information.
 #
 # $Id$
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nsca
 PKG_VERSION:=2.6
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/nagios
 PKG_MD5SUM:=d526a3ac3c29648c729c5fb4fb332488
 PKG_CAT:=zcat
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -24,7 +26,6 @@ define Package/send-nsca
   CATEGORY:=Network
   DEPENDS:=+libmcrypt
   TITLE:=Nagios Service Check Acceptor (NSCA) client
-  DESCRIPTION:=Nagios Service Check Acceptor (NSCA) client.
   URL:=http://www.nagios.org/
 endef
 
@@ -33,32 +34,11 @@ define Package/send-nsca/conffiles
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=/usr/lib \
-			--libexecdir=/usr/lib \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc \
-			$(DISABLE_LARGEFILE) \
-			$(DISABLE_NLS) \
-			--with-libmcrypt-prefix="$(STAGING_DIR)/usr" \
-	);
+	$(call Build/Configure/Default, \
+		--with-libmcrypt-prefix="$(STAGING_DIR)/usr" \
+		, \
+		CFLAGS="$$$$CFLAGS $$$$CPPFLAGS" \
+	)
 endef
 
 define Build/Compile

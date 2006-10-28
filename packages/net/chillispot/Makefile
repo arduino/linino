@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=chillispot
 PKG_VERSION:=1.1.0
 PKG_RELEASE:=1
-PKG_MD5SUM:=9d2597756af3fa14d7331b4a3651fc9b
 
-PKG_SOURCE_URL:=http://www.chillispot.org/download
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.chillispot.org/download
+PKG_MD5SUM:=9d2597756af3fa14d7331b4a3651fc9b
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -27,14 +27,14 @@ define Package/chillispot
   CATEGORY:=Network
   DEPENDS:=@+PACKAGE_KMOD_TUN
   TITLE:=Wireless LAN HotSpot controller
-  DESCRIPTION:=Wireless LAN HotSpot controller\\\
-    ChilliSpot is an open source captive portal or wireless LAN \\\
-    access point controller. It is used for authenticating users \\\
-    of a wireless LAN. It supports web based login which is today's \\\
-    standard for public HotSpots and it supports Wireless Protected \\\
-    Access (WPA) which is the standard of the future. Authentication, \\\
-    authorization and accounting (AAA) is handled by your favorite \\\
-    radius server.
+  DESCRIPTION:=\
+	ChilliSpot is an open source captive portal or wireless LAN \\\
+	access point controller. It is used for authenticating users \\\
+	of a wireless LAN. It supports web based login which is today's \\\
+	standard for public HotSpots and it supports Wireless Protected \\\
+	Access (WPA) which is the standard of the future. Authentication, \\\
+	authorization and accounting (AAA) is handled by your favorite \\\
+	radius server.
   URL:=http://www.chillispot.org/
 endef
 
@@ -42,43 +42,10 @@ define Package/chillispot/conffiles
 /etc/chilli.conf
 endef
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=/usr/lib \
-			--libexecdir=/usr/lib \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc \
-			$(DISABLE_LARGEFILE) \
-			$(DISABLE_NLS) \
-			--enable-shared \
-			--disable-static \
-			--with-gnu-ld \
-	);
-endef
+# uses GNU configure
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef

@@ -12,12 +12,12 @@ PKG_NAME:=libpng
 PKG_VERSION:=1.2.8
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-config
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-config.tar.gz
 PKG_SOURCE_URL:=@SF/libpng
 PKG_MD5SUM:=e5a39003eed16103cbbd3b6a8bc6b1f9
 PKG_CAT:=zcat
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-config
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
@@ -27,53 +27,21 @@ define Package/libpng
   CATEGORY:=Libraries
   DEPENDS:=+zlib
   TITLE:=A PNG format files handling library
-  DESCRIPTION:=A PNG (Portable Network Graphics) format files handling library.
   URL:=http://www.libpng.org/pub/png/libpng.html
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=/usr/lib \
-			--libexecdir=/usr/lib \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc \
-			$(DISABLE_LARGEFILE) \
-			$(DISABLE_NLS) \
-			--enable-shared \
-			--enable-static \
-			--with-zlib=$(STAGING_DIR)/usr/ \
-	);
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--enable-static \
+		--with-zlib="$(STAGING_DIR)/usr" \
+	)
 endef
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
-endef
-
-define Package/libpng/install
-	install -d -m0755 $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpng{,12}.so.* $(1)/usr/lib/
 endef
 
 define Build/InstallDev
@@ -97,6 +65,11 @@ define Build/UninstallDev
 		$(STAGING_DIR)/usr/include/libpng \
 		$(STAGING_DIR)/usr/lib/libpng{,12}.{a,so*} \
 		$(STAGING_DIR)/usr/lib/pkgconfig/libpng{,12}.pc
+endef
+
+define Package/libpng/install
+	install -d -m0755 $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpng{,12}.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libpng))

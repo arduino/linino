@@ -12,11 +12,12 @@ PKG_NAME:=pcre
 PKG_VERSION:=5.0
 PKG_RELEASE:=3
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/pcre
 PKG_MD5SUM:=813850808894d99fb5b1c41ec6335d4f
 PKG_CAT:=bzcat
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -24,40 +25,15 @@ define Package/libpcre
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=A Perl Compatible Regular Expression library
-  DESCRIPTION:=A Perl Compatible Regular Expression library.
   URL:=http://www.pcre.org/
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=$(STAGING_DIR)/usr/lib \
-			--libexecdir=/usr/lib \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc \
-			$(DISABLE_LARGEFILE) \
-			$(DISABLE_NLS) \
-			--enable-shared \
-			--enable-static \
-			--enable-utf8 \
-	);
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--enable-static \
+		--enable-utf8 \
+	)
 endef
 
 define Build/Compile
@@ -70,11 +46,6 @@ define Build/Compile
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		all
-endef
-
-define Package/libpcre/install
-	install -d -m0755 $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/.libs/libpcre{,posix}.so.* $(1)/usr/lib/
 endef
 
 define Build/InstallDev
@@ -91,6 +62,11 @@ define Build/UninstallDev
 		$(STAGING_DIR)/usr/bin/pcre-config \
 		$(STAGING_DIR)/usr/include/pcre{,posix}.h \
 		$(STAGING_DIR)/usr/lib/libpcre{,posix}.{a,so*}
+endef
+
+define Package/libpcre/install
+	install -d -m0755 $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/.libs/libpcre{,posix}.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libpcre))

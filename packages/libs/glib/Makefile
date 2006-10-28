@@ -12,7 +12,6 @@ PKG_NAME:=glib
 PKG_VERSION:=1.2.10
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.gtk.org/pub/gtk/v1.2 \
 	http://ftp.gwdg.de/pub/misc/grafik/gimp/gtk/v1.2/ \
@@ -21,6 +20,7 @@ PKG_SOURCE_URL:=ftp://ftp.gtk.org/pub/gtk/v1.2 \
 PKG_MD5SUM:=6fe30dad87c77b91b632def29dd69ef9
 PKG_CAT:=zcat
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
@@ -30,66 +30,42 @@ define Package/glib1
   CATEGORY:=Libraries
   DEPENDS:=+libpthread
   TITLE:=The GLib library of C routines
-  DESCRIPTION:=The GLib library of C routines.\\\
-    GLib is a library containing many useful C routines for things such \\\
-    as trees, hashes, and lists.
+  DESCRIPTION:=\
+	GLib is a library containing many useful C routines for things such \\\
+	as trees, hashes, and lists.
   URL:=http://www.gtk.org/
 endef
 
+# commas are interpreted by the $(call ...) macro, so define an intermediate variable holding our settings
+PKG_CONFIGURE_VARS:=\
+	glib_cv_prog_cc_ansi_proto=no \
+	glib_cv_has__inline=yes \
+	glib_cv_has__inline__=yes \
+	glib_cv_hasinline=yes \
+	glib_cv_sane_realloc=yes \
+	glib_cv_va_copy=no \
+	glib_cv___va_copy=yes \
+	glib_cv_va_val_copy=yes \
+	glib_cv_rtldglobal_broken=no \
+	glib_cv_uscore=no \
+	glib_cv_func_pthread_mutex_trylock_posix=yes \
+	glib_cv_func_pthread_cond_timedwait_posix=yes \
+	glib_cv_sizeof_gmutex=24 \
+	glib_cv_byte_contents_gmutex="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" \
+
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
-		glib_cv_sizeof_gmutex=24 \
-		glib_cv_prog_cc_ansi_proto="no" \
-		glib_cv_has__inline="yes" \
-		glib_cv_has__inline__="yes" \
-		glib_cv_hasinline="yes" \
-		glib_cv_sane_realloc="yes" \
-		glib_cv_va_copy="no" \
-		glib_cv___va_copy="yes" \
-		glib_cv_va_val_copy="yes" \
-		glib_cv_rtldglobal_broken="no" \
-		glib_cv_uscore="no" \
-		glib_cv_func_pthread_mutex_trylock_posix="yes" \
-		glib_cv_func_pthread_cond_timedwait_posix="yes" \
-		glib_cv_sizeof_gmutex="24" \
-		glib_cv_byte_contents_gmutex="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--sbindir=/usr/sbin \
-			--libexecdir=/usr/lib \
-			--sysconfdir=/etc \
-			--datadir=/usr/share \
-			--localstatedir=/var \
-			--mandir=/usr/man \
-			--infodir=/usr/info \
-			$(DISABLE_NLS) \
-			$(DISABLE_LARGEFILE) \
-			--enable-shared=yes \
-			--enable-static=yes \
-	);
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--enable-static \
+		, \
+		$(PKG_CONFIGURE_VARS) \
+	)
 endef
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		install
-endef
-
-define Package/glib1/install
-	install -m0755 -d $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg{lib,module,thread}-1.2.so.* $(1)/usr/lib/
 endef
 
 define Build/InstallDev
@@ -114,6 +90,11 @@ define Build/UninstallDev
 		$(STAGING_DIR)/usr/lib/libg{lib,module,thread}-*.so.* \
 		$(STAGING_DIR)/usr/lib/glib \
 		$(STAGING_DIR)/usr/lib/pkgconfig/g{lib,module,thread}.pc
+endef
+
+define Package/glib1/install
+	install -d -m0755 $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg{lib,module,thread}-1.2.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,glib1))
