@@ -27,6 +27,7 @@ define Package/pptpd
   CATEGORY:=Network
   DEPENDS:=+kmod-ppp +kmod-gre
   TITLE:=PopTop pptp server
+  URL:=http://www.poptop.org/
 endef
 
 define Build/Configure
