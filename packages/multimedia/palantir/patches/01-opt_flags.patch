@@ -1,0 +1,24 @@
+diff -ruN palantir-2.6-old/server/Makefile palantir-2.6-new/server/Makefile
+--- palantir-2.6-old/server/Makefile	2005-09-02 14:33:50.000000000 +0200
++++ palantir-2.6-new/server/Makefile	2006-10-27 23:53:10.000000000 +0200
+@@ -47,7 +47,7 @@
+ .PHONY : tools man
+ 
+ 
+-CFLAGS= -Wall -D_REENTRANT -O3 -g
++CFLAGS= -Wall -D_REENTRANT $(COPTS)
+ CC= gcc
+ libjpeg= -ljpeg
+ 
+diff -ruN palantir-2.6-old/server/libgsm/Makefile palantir-2.6-new/server/libgsm/Makefile
+--- palantir-2.6-old/server/libgsm/Makefile	2005-08-14 00:16:27.000000000 +0200
++++ palantir-2.6-new/server/libgsm/Makefile	2006-10-27 23:53:44.000000000 +0200
+@@ -51,7 +51,7 @@
+ endif
+ 
+ CC		+= -ansi -pedantic
+-CCFLAGS 	= -c -O2 -DNeedFunctionPrototypes=1
++CCFLAGS 	= -c $(COPTS) -DNeedFunctionPrototypes=1
+ 
+ LD 		= $(CC)
+ 
