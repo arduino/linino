@@ -57,7 +57,6 @@ else
 fi
 echo /sbin/hotplug > /proc/sys/kernel/hotplug
 
-insmod mini_fo 2>&-
 mount_root ${FAILSAFE:+failsafe}
 
 exec /sbin/init
