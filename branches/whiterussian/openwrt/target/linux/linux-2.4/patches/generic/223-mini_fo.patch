@@ -7694,7 +7694,7 @@ diff -urN linux.old/fs/mini_fo/super.c linux.dev/fs/mini_fo/super.c
 +STATIC int
 +mini_fo_remount_fs(super_block_t *sb, int *flags, char *data)
 +{
-+	printk(KERN_CRIT "mini_fo_remount_fs: WARNING, this function is umimplemented.\n");
++	//printk(KERN_CRIT "mini_fo_remount_fs: WARNING, this function is umimplemented.\n");
 +	return -ENOSYS;
 +}
 +
