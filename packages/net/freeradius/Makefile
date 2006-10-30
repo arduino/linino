@@ -9,27 +9,31 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeradius
-PKG_VERSION:=1.1.1
+PKG_VERSION:=1.1.2
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/radius/ \
 	http://freeradius.portal-to-web.de/ \
 	ftp://ftp.uk.freeradius.org/pub/radius/
-PKG_MD5SUM:=b38b24f6352090fdb571b9e8da52e12e
+PKG_MD5SUM:=6649ac5f9666b4a8cd55a837068ca61e
 PKG_CAT:=zcat
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/freeradius
+define Package/freeradius/Default
   SECTION:=net
   CATEGORY:=Network
+  URL:=http://www.freeradius.org/
+endef
+
+define Package/freeradius
+  $(call Package/freeradius/Default)
   DEPENDS:=+libltdl +libopenssl +libpthread
   TITLE:=A flexible RADIUS server
-  URL:=http://www.freeradius.org/
   MENU:=1
 endef
 
@@ -39,28 +43,25 @@ define Package/freeradius/conffiles
 endef
 
 define Package/freeradius-democerts
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius
   TITLE:=Demo certificates to test the server
-  MENU:=0
 endef
 
 define Package/freeradius-mod-chap
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius
   TITLE:=CHAP module
-  MENU:=0
 endef
 
 define Package/freeradius-mod-detail
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius
   TITLE:=Detailed accounting module
-  MENU:=0
 endef
 
 define Package/freeradius-mod-eap
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius
   TITLE:=Base EAP module
 endef
@@ -70,51 +71,45 @@ define Package/freeradius-mod-eap/conffiles
 endef
 
 define Package/freeradius-mod-eap-gtc
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius-mod-eap
   TITLE:=EAP/GTC module
-  MENU:=0
 endef
 
 define Package/freeradius-mod-eap-md5
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius-mod-eap
   TITLE:=EAP/MD5 module
-  MENU:=0
 endef
 
 define Package/freeradius-mod-eap-mschapv2
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius-mod-eap
   TITLE:=EAP/MS-CHAPv2 module
-  MENU:=0
 endef
 
 define Package/freeradius-mod-eap-peap
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius-mod-eap
   TITLE:=EAP/PEAP module
-  MENU:=0
 endef
 
 define Package/freeradius-mod-eap-tls
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius-mod-eap
   TITLE:=EAP/TLS module
 endef
 
 define Package/freeradius-mod-eap-ttls
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius-mod-eap-tls
   TITLE:=EAP/TTLS module
-  MENU:=0
 endef
 
 define Package/freeradius-mod-files
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius
   TITLE:=Module using local files for authorization
-  MENU:=0
 endef
 
 define Package/freeradius-mod-files/conffiles
@@ -124,10 +119,9 @@ define Package/freeradius-mod-files/conffiles
 endef
 
 define Package/freeradius-mod-ldap
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius +libopenldap
   TITLE:=LDAP module
-  MENU:=0
 endef
 
 define Package/freeradius-mod-ldap/conffiles
@@ -135,24 +129,21 @@ define Package/freeradius-mod-ldap/conffiles
 endef
 
 define Package/freeradius-mod-mschap
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius
   TITLE:=MS-CHAP and MS-CHAPv2 module
-  MENU:=0
 endef
 
 define Package/freeradius-mod-pap
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius
   TITLE:=PAP module
-  MENU:=0
 endef
 
 define Package/freeradius-mod-preprocess
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius
   TITLE:=Request pre-processing module
-  MENU:=0
 endef
 
 define Package/freeradius-mod-preprocess/conffiles
@@ -161,10 +152,9 @@ define Package/freeradius-mod-preprocess/conffiles
 endef
 
 define Package/freeradius-mod-realm
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius
   TITLE:=Realms handling module
-  MENU:=0
 endef
 
 define Package/freeradius-mod-realm/conffiles
@@ -172,40 +162,36 @@ define Package/freeradius-mod-realm/conffiles
 endef
 
 define Package/freeradius-mod-sql
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius
   TITLE:=Base SQL module
 endef
 
 define Package/freeradius-mod-sql-mysql
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius-mod-sql +libmysqlclient
   TITLE:=MySQL module
-  MENU:=0
 endef
 
 define Package/freeradius-mod-sql-pgsql
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius-mod-sql +libpq
   TITLE:=PostgreSQL module
-  MENU:=0
 endef
 
 define Package/freeradius-mod-sqlcounter
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius-mod-sql
   TITLE:=Generic SQL Counter module
-  MENU:=0
 endef
 
 define Package/freeradius-utils
-  $(call Package/freeradius)
+  $(call Package/freeradius/Default)
   DEPENDS:=freeradius
   TITLE:=Misc. client utilities
-  MENU:=0
 endef
 
-PKG_CONFIGURE_OPTIONS := \
+PKG_CONFIGURE_OPTIONS:= \
 	--enable-shared \
 	--disable-static \
 	--disable-ltdl-install \
@@ -235,6 +221,7 @@ PKG_CONFIGURE_OPTIONS := \
 	--without-rlm_smb \
 	--with-rlm_sql \
 	--with-rlm_sqlcounter \
+	--without-rlm_sqlippool \
 	--without-rlm_sql_db2 \
 	--without-rlm_sql_freetds \
 	--without-rlm_sql_iodbc \
@@ -244,79 +231,60 @@ PKG_CONFIGURE_OPTIONS := \
 	--without-rlm_sql_log \
 	--without-rlm_unix \
 
-ifeq ($(SDK),)
-  ifneq ($(CONFIG_PACKAGE_freeradius-mod-ldap),)
-    PKG_CONFIGURE_LIBS += -lcrypto -lssl
-    PKG_CONFIGURE_OPTIONS += \
+PKG_DICTIONARIES:= \
+	freeradius freeradius.internal \
+	rfc2865 rfc2866 rfc2867 rfc2868 rfc2869 rfc3162 rfc3576 rfc3580 \
+	microsoft \
+	wispr \
+
+ifneq ($(SDK),)
+# Make sure the options below are enabled when building with the SDK
+  CONFIG_PACKAGE_freeradius-mod-ldap:=m
+  CONFIG_PACKAGE_freeradius-mod-sql-mysql:=m
+  CONFIG_PACKAGE_freeradius-mod-sql-pgsql:=m
+endif
+
+ifneq ($(CONFIG_PACKAGE_freeradius-mod-ldap),)
+  PKG_CONFIGURE_LIBS+= -lcrypto -lssl
+  PKG_CONFIGURE_OPTIONS+= \
 		--with-rlm_ldap-include-dir="$(STAGING_DIR)/usr/include" \
 		--with-rlm_ldap-lib-dir="$(STAGING_DIR)/usr/lib"
-  else
-    PKG_CONFIGURE_OPTIONS += --without-rlm_ldap
-  endif
-  ifneq ($(CONFIG_PACKAGE_freeradius-mod-sql-mysql),)
-    PKG_CONFIGURE_LIBS += -lz
-    PKG_CONFIGURE_OPTIONS += \
+else
+  PKG_CONFIGURE_OPTIONS+= --without-rlm_ldap
+endif
+
+ifneq ($(CONFIG_PACKAGE_freeradius-mod-sql-mysql),)
+  PKG_CONFIGURE_LIBS+= -lz
+  PKG_CONFIGURE_OPTIONS+= \
 		--with-mysql-include-dir="$(STAGING_DIR)/usr/include" \
 		--with-mysql-lib-dir="$(STAGING_DIR)/usr/lib/mysql" \
 		--without-threads
-  else
-    PKG_CONFIGURE_OPTIONS += --without-rlm_sql_mysql
-  endif
-  ifneq ($(CONFIG_PACKAGE_freeradius-mod-sql-pgsql),)
-    PKG_CONFIGURE_OPTIONS += \
-		--with-rlm_sql_postgresql-include-dir="$(STAGING_DIR)/usr/include" \
-		--with-rlm_sql_postgresql-lib-dir="$(STAGING_DIR)/usr/lib"
-  else
-    PKG_CONFIGURE_OPTIONS += --without-rlm_sql_postgresql
-  endif
 else
-  PKG_CONFIGURE_LIBS += -lcrypto -lssl -lz
-  PKG_CONFIGURE_OPTIONS += \
-		--with-rlm_ldap-include-dir="$(STAGING_DIR)/usr/include" \
-		--with-rlm_ldap-lib-dir="$(STAGING_DIR)/usr/lib" \
-		--with-mysql-include-dir="$(STAGING_DIR)/usr/include" \
-		--with-mysql-lib-dir="$(STAGING_DIR)/usr/lib/mysql" \
-		--without-threads \
+  PKG_CONFIGURE_OPTIONS+= --without-rlm_sql_mysql
+endif
+
+ifneq ($(CONFIG_PACKAGE_freeradius-mod-sql-pgsql),)
+  PKG_CONFIGURE_OPTIONS+= \
 		--with-rlm_sql_postgresql-include-dir="$(STAGING_DIR)/usr/include" \
 		--with-rlm_sql_postgresql-lib-dir="$(STAGING_DIR)/usr/lib"
+else
+  PKG_CONFIGURE_OPTIONS+= --without-rlm_sql_postgresql
 endif
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -L$(PKG_INSTALL_DIR)/usr/lib/freeradius" \
+	$(call Build/Configure/Default, \
+		--libdir=/usr/lib/freeradius \
+		--libexecdir=/usr/lib/freeradius \
+		$(PKG_CONFIGURE_OPTIONS) \
+		, \
+		LDFLAGS="$$$$LDFLAGS -L$(PKG_INSTALL_DIR)/usr/lib/freeradius" \
 		LIBS="$(PKG_CONFIGURE_LIBS)" \
 		sys_lib_search_path_spec="$(STAGING_DIR)/usr/lib $(STAGING_DIR)/lib" \
 		MYSQL_CONFIG="no" \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=/usr/lib/freeradius \
-			--libexecdir=/usr/lib/freeradius \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc \
-			$(DISABLE_LARGEFILE) \
-			$(DISABLE_NLS) \
-			$(PKG_CONFIGURE_OPTIONS) \
-	);
+	)
 endef
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		R="$(PKG_INSTALL_DIR)" \
 		INSTALLSTRIP="" \
@@ -324,25 +292,25 @@ define Build/Compile
 endef
 
 define Package/freeradius/install
-	install -m0755 -d $(1)/etc/init.d
-	install -m0755 ./files/radiusd.init $(1)/etc/init.d/radiusd
-	install -m0755 -d $(1)/etc/freeradius
+	install -d -m0755 $(1)/etc/freeradius
 	for f in clients.conf dictionary radiusd.conf; do \
 		$(CP) $(PKG_INSTALL_DIR)/etc/freeradius/$$$${f} $(1)/etc/freeradius/ ; \
 	done
-	install -m0755 -d $(1)/usr/share/freeradius
+	install -d -m0755 $(1)/usr/share/freeradius
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/freeradius/dictionary $(1)/usr/share/freeradius/
-	for f in freeradius freeradius.internal rfc2865 rfc2866 rfc2867 rfc2868 rfc2869 rfc3162 rfc3576 rfc3580 microsoft wispr; do \
+	for f in $(PKG_DICTIONARIES); do \
 		$(CP) $(PKG_INSTALL_DIR)/usr/share/freeradius/dictionary.$$$${f} $(1)/usr/share/freeradius/ ; \
 	done
-	install -m0755 -d $(1)/usr/lib/freeradius
+	install -d -m0755 $(1)/usr/lib/freeradius
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/freeradius/libradius{,-*}.so $(1)/usr/lib/freeradius/
-	install -m0755 -d $(1)/usr/sbin
+	install -d -m0755 $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/radiusd $(1)/usr/sbin/
+	install -d -m0755 $(1)/etc/init.d
+	install -m0755 ./files/radiusd.init $(1)/etc/init.d/radiusd
 endef
 
 define Package/freeradius-democerts/install
-	install -m0755 -d $(1)/etc/freeradius
+	install -d -m0755 $(1)/etc/freeradius
 	$(CP) $(PKG_INSTALL_DIR)/etc/freeradius/certs $(1)/etc/freeradius/
 	rm -rf $(1)/etc/freeradius/certs/README
 	rm -rf $(1)/etc/freeradius/certs/new*
@@ -352,7 +320,7 @@ endef
 
 define Package/freeradius-utils/install
 	install -m0755 -d $(1)/usr/bin
-	for f in radclient; do \
+	for f in radclient radeapclient; do \
 		$(CP) $(PKG_INSTALL_DIR)/usr/bin/$$$${f} $(1)/usr/bin/ ; \
 	done
 endef

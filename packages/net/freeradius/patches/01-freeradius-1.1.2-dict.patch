@@ -1,6 +1,6 @@
-diff -ruN freeradius-1.1.1-old/share/dictionary freeradius-1.1.1-new/share/dictionary
---- freeradius-1.1.1-old/share/dictionary	2006-03-16 23:03:11.000000000 +0100
-+++ freeradius-1.1.1-new/share/dictionary	2006-05-22 09:09:08.000000000 +0200
+diff -ruN freeradius-1.1.2-old/share/dictionary freeradius-1.1.2-new/share/dictionary
+--- freeradius-1.1.2-old/share/dictionary	2006-05-10 18:53:15.000000000 +0200
++++ freeradius-1.1.2-new/share/dictionary	2006-06-02 00:39:45.000000000 +0200
 @@ -52,7 +52,7 @@
  #	this directive to the end of this file if you want to see the
  #	old names in the logfiles, INSTEAD OF the new names.
@@ -10,7 +10,7 @@ diff -ruN freeradius-1.1.1-old/share/dictionary freeradius-1.1.1-new/share/dicti
  
  #
  #	Include the RFC dictionaries next.
-@@ -73,75 +73,75 @@
+@@ -73,76 +73,76 @@
  #
  #	Include vendor dictionaries after the standard ones.
  #
@@ -51,6 +51,7 @@ diff -ruN freeradius-1.1.1-old/share/dictionary freeradius-1.1.1-new/share/dicti
 -$INCLUDE dictionary.cisco.bbsm
 -$INCLUDE dictionary.colubris
 -$INCLUDE dictionary.cosine
+-$INCLUDE dictionary.digium
 -$INCLUDE dictionary.epygi
 -$INCLUDE dictionary.erx
 -$INCLUDE dictionary.ericsson
@@ -59,6 +60,7 @@ diff -ruN freeradius-1.1.1-old/share/dictionary freeradius-1.1.1-new/share/dicti
 +#$INCLUDE dictionary.cisco.bbsm
 +#$INCLUDE dictionary.colubris
 +#$INCLUDE dictionary.cosine
++#$INCLUDE dictionary.digium
 +#$INCLUDE dictionary.epygi
 +#$INCLUDE dictionary.erx
 +#$INCLUDE dictionary.ericsson
