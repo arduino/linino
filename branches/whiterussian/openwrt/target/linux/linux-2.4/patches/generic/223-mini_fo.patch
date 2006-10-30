@@ -1,6 +1,6 @@
 diff -urN linux.old/fs/Config.in linux.dev/fs/Config.in
---- linux.old/fs/Config.in	2006-10-28 22:29:42.000000000 +0200
-+++ linux.dev/fs/Config.in	2006-10-29 01:45:26.000000000 +0200
+--- linux.old/fs/Config.in	2006-10-30 03:44:06.000000000 +0100
++++ linux.dev/fs/Config.in	2006-10-30 03:42:09.000000000 +0100
 @@ -70,6 +70,7 @@
  dep_mbool '  JFS statistics' CONFIG_JFS_STATISTICS $CONFIG_JFS_FS
  
@@ -10,8 +10,8 @@ diff -urN linux.old/fs/Config.in linux.dev/fs/Config.in
  tristate 'FreeVxFS file system support (VERITAS VxFS(TM) compatible)' CONFIG_VXFS_FS
  tristate 'NTFS file system support (read only)' CONFIG_NTFS_FS
 diff -urN linux.old/fs/Makefile linux.dev/fs/Makefile
---- linux.old/fs/Makefile	2006-10-28 22:29:42.000000000 +0200
-+++ linux.dev/fs/Makefile	2006-10-29 01:45:50.000000000 +0200
+--- linux.old/fs/Makefile	2006-10-30 03:44:06.000000000 +0100
++++ linux.dev/fs/Makefile	2006-10-30 03:42:09.000000000 +0100
 @@ -31,6 +31,7 @@
  subdir-$(CONFIG_CODA_FS)	+= coda
  subdir-$(CONFIG_INTERMEZZO_FS)	+= intermezzo
@@ -22,7 +22,7 @@ diff -urN linux.old/fs/Makefile linux.dev/fs/Makefile
  subdir-$(CONFIG_MSDOS_FS)	+= msdos
 diff -urN linux.old/fs/mini_fo/aux.c linux.dev/fs/mini_fo/aux.c
 --- linux.old/fs/mini_fo/aux.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/aux.c	2006-10-29 04:32:06.000000000 +0100
++++ linux.dev/fs/mini_fo/aux.c	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,580 @@
 +/*
 + * Copyright (c) 1997-2003 Erez Zadok
@@ -606,7 +606,7 @@ diff -urN linux.old/fs/mini_fo/aux.c linux.dev/fs/mini_fo/aux.c
 +
 diff -urN linux.old/fs/mini_fo/ChangeLog linux.dev/fs/mini_fo/ChangeLog
 --- linux.old/fs/mini_fo/ChangeLog	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/ChangeLog	2006-10-29 01:18:22.000000000 +0200
++++ linux.dev/fs/mini_fo/ChangeLog	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,281 @@
 +2006-01-24  Markus Klotzbuecher  <mk@mary.denx.de>
 +
@@ -891,7 +891,7 @@ diff -urN linux.old/fs/mini_fo/ChangeLog linux.dev/fs/mini_fo/ChangeLog
 +	
 diff -urN linux.old/fs/mini_fo/dentry.c linux.dev/fs/mini_fo/dentry.c
 --- linux.old/fs/mini_fo/dentry.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/dentry.c	2006-10-29 04:32:06.000000000 +0100
++++ linux.dev/fs/mini_fo/dentry.c	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,244 @@
 +/*
 + * Copyright (c) 1997-2003 Erez Zadok
@@ -1139,7 +1139,7 @@ diff -urN linux.old/fs/mini_fo/dentry.c linux.dev/fs/mini_fo/dentry.c
 +};
 diff -urN linux.old/fs/mini_fo/file.c linux.dev/fs/mini_fo/file.c
 --- linux.old/fs/mini_fo/file.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/file.c	2006-10-29 04:32:06.000000000 +0100
++++ linux.dev/fs/mini_fo/file.c	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,717 @@
 +/*
 + * Copyright (c) 1997-2003 Erez Zadok
@@ -1860,7 +1860,7 @@ diff -urN linux.old/fs/mini_fo/file.c linux.dev/fs/mini_fo/file.c
 +	};
 diff -urN linux.old/fs/mini_fo/fist.h linux.dev/fs/mini_fo/fist.h
 --- linux.old/fs/mini_fo/fist.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/fist.h	2005-10-15 12:49:43.000000000 +0200
++++ linux.dev/fs/mini_fo/fist.h	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,248 @@
 +/*
 + * Copyright (c) 1997-2003 Erez Zadok
@@ -2112,8 +2112,8 @@ diff -urN linux.old/fs/mini_fo/fist.h linux.dev/fs/mini_fo/fist.h
 +#endif /* not __FIST_H_ */
 diff -urN linux.old/fs/mini_fo/inode.c linux.dev/fs/mini_fo/inode.c
 --- linux.old/fs/mini_fo/inode.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/inode.c	2006-10-29 04:32:06.000000000 +0100
-@@ -0,0 +1,1574 @@
++++ linux.dev/fs/mini_fo/inode.c	2006-10-30 03:55:42.000000000 +0100
+@@ -0,0 +1,1573 @@
 +/*
 + * Copyright (c) 1997-2003 Erez Zadok
 + * Copyright (c) 2001-2003 Stony Brook University
@@ -2651,6 +2651,12 @@ diff -urN linux.old/fs/mini_fo/inode.c linux.dev/fs/mini_fo/inode.c
 +
 +	dget(dentry);
 +	if(dtopd(dentry)->state == MODIFIED) {
++		/* XXX: disabled, because it does not bother to check files on
++		 * the original filesystem - just a hack, but better than simply
++		 * removing it without testing */
++		err = -EINVAL;
++		goto out;
++
 +		hidden_sto_dir = itohi2(dir);
 +		hidden_sto_dentry = dtohd2(dentry);
 +
@@ -2702,12 +2708,6 @@ diff -urN linux.old/fs/mini_fo/inode.c linux.dev/fs/mini_fo/inode.c
 +			}
 +		}
 +		else {
-+			/* XXX: disabled, because it does not bother to check files on
-+			 * the original filesystem - just a hack, but better than simply
-+			 * removing it without testing */
-+			err = -EINVAL;
-+			goto out;
-+
 +			/* ok, add deleted file to META */		
 +			meta_add_d_entry(dentry->d_parent, 
 +					 dentry->d_name.name, 
@@ -2723,13 +2723,6 @@ diff -urN linux.old/fs/mini_fo/inode.c linux.dev/fs/mini_fo/inode.c
 +		goto out;
 +	}
 +	else if(dtopd(dentry)->state == UNMODIFIED) {
-+		
-+		err = get_neg_sto_dentry(dentry);
-+		if(err) {
-+			err = -EINVAL;
-+			goto out;
-+		}
-+		
 +		/* XXX: simply adding it to the delete list here is fscking dangerous!
 +		 * as a temporary hack, i will disable rmdir on unmodified directories 
 +		 * for now.
@@ -2737,6 +2730,12 @@ diff -urN linux.old/fs/mini_fo/inode.c linux.dev/fs/mini_fo/inode.c
 +		err = -EINVAL;
 +		goto out;
 +
++		err = get_neg_sto_dentry(dentry);
++		if(err) {
++			err = -EINVAL;
++			goto out;
++		}
++		
 +		/* dput base dentry, this will relase the inode and free the
 +		 * dentry, as we will never need it again. */
 +		dput(dtohd(dentry));
@@ -3690,7 +3689,7 @@ diff -urN linux.old/fs/mini_fo/inode.c linux.dev/fs/mini_fo/inode.c
 +	};
 diff -urN linux.old/fs/mini_fo/main.c linux.dev/fs/mini_fo/main.c
 --- linux.old/fs/mini_fo/main.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/main.c	2006-10-29 04:32:06.000000000 +0100
++++ linux.dev/fs/mini_fo/main.c	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,414 @@
 +/*
 + * Copyright (c) 1997-2003 Erez Zadok
@@ -4108,7 +4107,7 @@ diff -urN linux.old/fs/mini_fo/main.c linux.dev/fs/mini_fo/main.c
 +module_exit(exit_mini_fo_fs)
 diff -urN linux.old/fs/mini_fo/Makefile linux.dev/fs/mini_fo/Makefile
 --- linux.old/fs/mini_fo/Makefile	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/Makefile	2006-10-29 03:08:04.000000000 +0100
++++ linux.dev/fs/mini_fo/Makefile	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,22 @@
 +#
 +# Makefile for mini_fo 2.4 and 2.6 Linux kernels
@@ -4134,7 +4133,7 @@ diff -urN linux.old/fs/mini_fo/Makefile linux.dev/fs/mini_fo/Makefile
 +
 diff -urN linux.old/fs/mini_fo/meta.c linux.dev/fs/mini_fo/meta.c
 --- linux.old/fs/mini_fo/meta.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/meta.c	2006-10-29 04:32:06.000000000 +0100
++++ linux.dev/fs/mini_fo/meta.c	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,1000 @@
 +/*
 + * Copyright (C) 2004, 2005 Markus Klotzbuecher <mk@creamnet.de>
@@ -5138,7 +5137,7 @@ diff -urN linux.old/fs/mini_fo/meta.c linux.dev/fs/mini_fo/meta.c
 +
 diff -urN linux.old/fs/mini_fo/mini_fo.h linux.dev/fs/mini_fo/mini_fo.h
 --- linux.old/fs/mini_fo/mini_fo.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/mini_fo.h	2006-10-29 01:18:22.000000000 +0200
++++ linux.dev/fs/mini_fo/mini_fo.h	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,503 @@
 +/*
 + * Copyright (c) 1997-2003 Erez Zadok
@@ -5645,7 +5644,7 @@ diff -urN linux.old/fs/mini_fo/mini_fo.h linux.dev/fs/mini_fo/mini_fo.h
 +#endif	/* not __MINI_FO_H_ */
 diff -urN linux.old/fs/mini_fo/mini_fo-merge linux.dev/fs/mini_fo/mini_fo-merge
 --- linux.old/fs/mini_fo/mini_fo-merge	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/mini_fo-merge	2005-10-15 12:49:43.000000000 +0200
++++ linux.dev/fs/mini_fo/mini_fo-merge	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,180 @@
 +#!/bin/bash
 +#
@@ -5829,7 +5828,7 @@ diff -urN linux.old/fs/mini_fo/mini_fo-merge linux.dev/fs/mini_fo/mini_fo-merge
 +echo "Done!"
 diff -urN linux.old/fs/mini_fo/mini_fo-overlay linux.dev/fs/mini_fo/mini_fo-overlay
 --- linux.old/fs/mini_fo/mini_fo-overlay	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/mini_fo-overlay	2005-10-15 12:49:43.000000000 +0200
++++ linux.dev/fs/mini_fo/mini_fo-overlay	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,130 @@
 +#!/bin/bash
 +#
@@ -5963,7 +5962,7 @@ diff -urN linux.old/fs/mini_fo/mini_fo-overlay linux.dev/fs/mini_fo/mini_fo-over
 +fi
 diff -urN linux.old/fs/mini_fo/mmap.c linux.dev/fs/mini_fo/mmap.c
 --- linux.old/fs/mini_fo/mmap.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/mmap.c	2006-10-29 04:32:06.000000000 +0100
++++ linux.dev/fs/mini_fo/mmap.c	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,637 @@
 +/*
 + * Copyright (c) 1997-2003 Erez Zadok
@@ -6604,7 +6603,7 @@ diff -urN linux.old/fs/mini_fo/mmap.c linux.dev/fs/mini_fo/mmap.c
 +}
 diff -urN linux.old/fs/mini_fo/README linux.dev/fs/mini_fo/README
 --- linux.old/fs/mini_fo/README	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/README	2005-10-15 12:49:43.000000000 +0200
++++ linux.dev/fs/mini_fo/README	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,163 @@
 +README for the mini_fo overlay file system
 +=========================================
@@ -6771,7 +6770,7 @@ diff -urN linux.old/fs/mini_fo/README linux.dev/fs/mini_fo/README
 +
 diff -urN linux.old/fs/mini_fo/RELEASE_NOTES linux.dev/fs/mini_fo/RELEASE_NOTES
 --- linux.old/fs/mini_fo/RELEASE_NOTES	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/RELEASE_NOTES	2005-10-15 12:49:43.000000000 +0200
++++ linux.dev/fs/mini_fo/RELEASE_NOTES	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,111 @@
 +Release:	mini_fo-0.6.1 (v0-6-1)
 +Date:		21.09.2005
@@ -6886,7 +6885,7 @@ diff -urN linux.old/fs/mini_fo/RELEASE_NOTES linux.dev/fs/mini_fo/RELEASE_NOTES
 +seperately by the lower fs.
 diff -urN linux.old/fs/mini_fo/state.c linux.dev/fs/mini_fo/state.c
 --- linux.old/fs/mini_fo/state.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/state.c	2006-10-29 04:32:06.000000000 +0100
++++ linux.dev/fs/mini_fo/state.c	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,620 @@
 +/*
 + * Copyright (C) 2005 Markus Klotzbuecher <mk@creamnet.de>
@@ -7510,7 +7509,7 @@ diff -urN linux.old/fs/mini_fo/state.c linux.dev/fs/mini_fo/state.c
 +
 diff -urN linux.old/fs/mini_fo/super.c linux.dev/fs/mini_fo/super.c
 --- linux.old/fs/mini_fo/super.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux.dev/fs/mini_fo/super.c	2006-10-29 04:32:06.000000000 +0100
++++ linux.dev/fs/mini_fo/super.c	2006-10-30 03:42:09.000000000 +0100
 @@ -0,0 +1,259 @@
 +/*
 + * Copyright (c) 1997-2003 Erez Zadok
