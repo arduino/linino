@@ -11,14 +11,13 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=comgt
 PKG_VERSION:=0.3
 PKG_RELEASE:=1
+
+PKG_SOURCE:=$(PKG_NAME)$(PKG_VERSION).tgz
+PKG_SOURCE_URL:=http://www.pharscape.org/3G/comgt
 PKG_MD5SUM:=cd32663025ed94a0ee623a689989f3c3
 
-PKG_SOURCE_URL:=http://www.pharscape.org/3G/comgt
-PKG_SOURCE:=$(PKG_NAME)$(PKG_VERSION).tgz
-PKG_CAT:=zcat
-
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_UNPACK:=zcat $(DL_DIR)/$(PKG_SOURCE) | $(TAR) -C $(PKG_BUILD_DIR) $(TAR_OPTIONS)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,22 +25,17 @@ define Package/comgt
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Option/Vodafone 3G/GPRS control tool
-  DESCRIPTION:=Option GlobeTrotter GPRS/EDGE/3G/HSDPA and Vodafone 3G/GPRS datacard control tool\\\
-\\\
-gcom is a scripting language interpreter useful for establishing communications\\\
-on serial lines and through PCMCIA modems as well as GPRS and 3G datacards.\\\
+  DESCRIPTION:=\
+	comgt is a scripting language interpreter useful for establishing communications \\\
+	on serial lines and through PCMCIA modems as well as GPRS and 3G datacards.
   URL:= http://www.pharscape.org/content/view/46/70/
 endef
 
-define Build/Prepare	
-	rm -rf $(PKG_BUILD_DIR)
-	mkdir -p $(PKG_BUILD_DIR)
-	zcat $(DL_DIR)/$(PKG_SOURCE) | tar -C $(PKG_BUILD_DIR) $(TAR_OPTIONS)
-	if [ -d ./patches ]; then $(PATCH) $(PKG_BUILD_DIR) ./patches ; fi
-endef
-
 define Build/Compile
-  $(call Build/Compile/Default,gcom)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		gcom
 endef
 	
 define Package/comgt/install
@@ -55,4 +49,3 @@ define Package/comgt/install
 endef
 
 $(eval $(call BuildPackage,comgt))
-
