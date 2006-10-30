@@ -38,7 +38,7 @@
 #define MODULE_NAME "diag"
 
 #define MAX_GPIO 8
-#define FLASH_TIME HZ/8
+#define FLASH_TIME HZ/6
 
 static unsigned int gpiomask = 0;
 module_param(gpiomask, int, 0644);
@@ -625,9 +625,6 @@ static void button_handler(int irq, void *dev_id, struct pt_regs *regs)
 			continue;
 
 		if (b->polarity != (in & b->gpio)) {
-			/* ASAP */
-			b->polarity ^= b->gpio;
-			sb_gpiointpolarity(sbh, b->gpio, b->polarity);
 
 			b->pressed ^= 1;
 
@@ -656,6 +653,8 @@ static void button_handler(int irq, void *dev_id, struct pt_regs *regs)
 			}
 
 			b->seen = jiffies;
+			b->polarity ^= b->gpio;
+			sb_gpiointpolarity(sbh, b->gpio, b->polarity);
 		}
 	}
 }
@@ -685,7 +684,7 @@ static void led_flash(unsigned long dummy) {
 		sb_gpiocontrol(sbh, mask, 0);
 		sb_gpioout(sbh, mask, val);
 
-		mod_timer(&led_timer,jiffies+FLASH_TIME);
+		mod_timer(&led_timer, jiffies + FLASH_TIME);
 	}
 }
 
@@ -700,11 +699,11 @@ static void __init register_buttons(struct button_t *b)
 		if (b->gpio & gpiomask)
 			continue;
 
-		sb_gpioouten(sbh,b->gpio,0);
-		sb_gpiocontrol(sbh,b->gpio,0);
+		sb_gpioouten(sbh, b->gpio,0);
+		sb_gpiocontrol(sbh, b->gpio,0);
 		b->polarity = sb_gpioin(sbh) & b->gpio;
 		sb_gpiointpolarity(sbh, b->gpio, b->polarity);
-		sb_gpiointmask(sbh, b->gpio,b->gpio);
+		sb_gpiointmask(sbh, b->gpio, b->gpio);
 	}
 
 	if ((cc = sb_setcore(sbh, SB_CC, 0))) {
@@ -735,7 +734,13 @@ static void __init register_leds(struct led_t *l)
 		return;
 
 	for(; l->name; l++) {
-		l->flash = 0;
+		if (l->gpio & gpiomask)
+			continue;
+
+		sb_gpioouten(sbh, l->gpio, l->gpio);
+		sb_gpiocontrol(sbh, l->gpio, 0);
+		sb_gpioout(sbh, l->gpio, (l->polarity == NORMAL)?0:l->gpio);
+
 		if ((p = create_proc_entry(l->name, S_IRUSR, leds))) {
 			l->proc.type = PROC_LED;
 			l->proc.ptr = l;
@@ -782,7 +787,6 @@ static int __init diag_init(void)
 		printk(MODULE_NAME ": Router model not detected.\n");
 		return -ENODEV;
 	}
-
 	memcpy(&platform, detected, sizeof(struct platform_t));
 
 	printk(MODULE_NAME ": Detected '%s'\n", platform.name);
@@ -791,10 +795,12 @@ static int __init diag_init(void)
 		printk(MODULE_NAME ": proc_mkdir on /proc/diag failed\n");
 		return -EINVAL;
 	}
+
 	if ((p = create_proc_entry("model", S_IRUSR, diag))) {
 		p->data = (void *) &proc_model;
 		p->proc_fops = &diag_proc_fops;
 	}
+
 	if ((p = create_proc_entry("gpiomask", S_IRUSR | S_IWUSR, diag))) {
 		p->data = (void *) &proc_gpiomask;
 		p->proc_fops = &diag_proc_fops;
@@ -816,7 +822,6 @@ module_exit(diag_exit);
 
 MODULE_AUTHOR("Mike Baker, Felix Fietkau / OpenWrt.org");
 MODULE_LICENSE("GPL");
-
 
 /* TODO: export existing sb_irq instead */
 static int sb_irq(void *sbh)
