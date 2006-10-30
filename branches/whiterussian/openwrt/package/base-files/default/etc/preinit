@@ -19,6 +19,8 @@ ifname=eth0
 insmod switch-core
 insmod switch-robo || insmod switch-adm || rmmod switch-core
 
+ifconfig $ifname 192.168.1.1 netmask 255.255.255.0 broadcast 192.168.1.255 up
+
 # save the boot loader's vlan config
 # we need it on some routers that have no vlan*ports set
 [ -d /proc/switch/eth0 ] && {
@@ -27,14 +29,15 @@ insmod switch-robo || insmod switch-adm || rmmod switch-core
 	v2p="$(cat /proc/switch/eth0/vlan/2/ports)"
 	echo 1 > /proc/switch/eth0/reset
 
-	case "$(nvram get boardtype)" in
-		0x0467|0x042f) echo "0 1 2 3 5u*";;
-		            *) echo "1 2 3 4 5u*";;
-	esac > /proc/switch/eth0/vlan/0/ports
-}
+	# this would be easier if we blasted the message across all ports
+	# but we don't want packets leaking across interfaces
 
-ifconfig $ifname 192.168.1.1 netmask 255.255.255.0 broadcast 192.168.1.255 up
-netmsg 192.168.1.255 "Press reset now, to enter Failsafe!"
+	for port in $(seq 0 4); do {
+		echo "$port 5u*" > /proc/switch/eth0/vlan/0/ports
+		netmsg 192.168.1.255 "Press reset now, to enter Failsafe!"
+	}; done
+
+} || netmsg 192.168.1.255 "Press reset now, to enter Failsafe!"
 
 sleep 2
 lock -w /tmp/.failsafe
