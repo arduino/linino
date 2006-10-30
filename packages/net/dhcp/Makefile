@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=dhcp
 PKG_VERSION:=3.0.3
 PKG_RELEASE:=1
-PKG_MD5SUM:=f91416a0b8ed3fd0601688cf0b7df58f
 
-PKG_SOURCE_URL:=ftp://ftp.isc.org/isc/dhcp/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=ftp://ftp.isc.org/isc/dhcp/
+PKG_MD5SUM:=f91416a0b8ed3fd0601688cf0b7df58f
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -22,39 +22,34 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/dhcp
+define Package/dhcp/Default
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=ISC's DHCP implementation
-  TITLE:=ISC's DHCP implementation
-  DESCRIPTION:=ISC's DHCP implementation
-  URL:=http://www.isc.org
+  TITLE:=ISC's DHCP
+  URL:=http://www.isc.org/
 endef
 
 define Package/dhcp-relay
-  $(call Package/dhcp)
-  TITLE:=DHCP relay
-  DESCRIPTION:=DHCP relay
+  $(call Package/dhcp/Default)
+  TITLE+= relay
 endef
 
 define Package/dhcp-server
-  $(call Package/dhcp)
-  TITLE:=DHCP server
-  DESCRIPTION:=DHCP server
+  $(call Package/dhcp/Default)
+  TITLE+= server
 endef
 
 
 define Build/Configure
+	# it's not GNU autoconf stuff
 	(cd $(PKG_BUILD_DIR) ; \
 		./configure \
-		  --copts "$(TARGET_CFLAGS)" \
-		  linux-2.2 \
+			--copts "$(TARGET_CFLAGS)" \
+			linux-2.2 \
 	);
 endef
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \

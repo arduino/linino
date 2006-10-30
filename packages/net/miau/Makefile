@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=miau
 PKG_VERSION:=0.6.0.2
 PKG_RELEASE:=1
-PKG_MD5SUM:=1b78d219a03655399c165eeb021cddd8
 
-PKG_SOURCE_URL:= @SF/miau
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/miau
+PKG_MD5SUM:=1b78d219a03655399c165eeb021cddd8
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,10 +26,11 @@ define Package/miau
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Another IRC-bouncer/proxy
-  DESCRIPTION:=In short, miau is an IRC-bouncer/proxy.\\\
-Being more verbose, miau is small but quite featured\\\
-IRC-bouncer - a service bit like HTTP-proxy, but\\\
-for IRC-networks.\\\
+  DESCRIPTION:=\
+	In short, miau is an IRC-bouncer/proxy.\\\
+	Being more verbose, miau is small but quite featured \\\
+	IRC-bouncer - a service bit like HTTP-proxy, but \\\
+	for IRC-networks.
   URL:=http://sourceforge.net/projects/miau/
 endef
 
@@ -43,9 +44,10 @@ define Build/Configure
 	)
 endef
 
-
 define Build/Compile	
-  $(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" install)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
 endef
 
 define Package/miau/install	

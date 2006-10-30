@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=rp-pppoe
 PKG_VERSION:=3.5
 PKG_RELEASE:=1
-PKG_MD5SUM:=97972f8f8f6a3ab9b7070333a6a29c4b
 
-PKG_SOURCE_URL:=http://roaringpenguin.com/penguin/pppoe/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://roaringpenguin.com/penguin/pppoe/
+PKG_MD5SUM:=97972f8f8f6a3ab9b7070333a6a29c4b
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -22,59 +22,36 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/rp-pppoe
+define Package/rp-pppoe/Default
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+ppp
-  SUBMENU:=Roaring Penguin PPPoE (PPP over Ethernet) implementation
-  TITLE:=Roaring Penguin PPPoE (PPP over Ethernet) implementation
+  TITLE:=PPPoE (PPP over Ethernet)
+  URL:=http://roaringpenguin.com/penguin/pppoe/
 endef
   
 define Package/rp-pppoe-client
-  $(call Package/rp-pppoe)
-  TITLE:=PPPoE (PPP over Ethernet) client
+  $(call Package/rp-pppoe/Default)
+  TITLE+= client
 endef
 
 define Package/rp-pppoe-relay
-  $(call Package/rp-pppoe)
-  TITLE:=PPPoE (PPP over Ethernet) relay
+  $(call Package/rp-pppoe/Default)
+  TITLE+= relay
 endef
 
 define Package/rp-pppoe-server
-  $(call Package/rp-pppoe)
-  TITLE:=PPPoE (PPP over Ethernet) server
+  $(call Package/rp-pppoe/Default)
+  TITLE+= server
 endef
 
 define Package/rp-pppoe-sniff
-  $(call Package/rp-pppoe)
-  TITLE:=PPPoE (PPP over Ethernet) sniffer
+  $(call Package/rp-pppoe/Default)
+  TITLE+= sniffer
 endef
 
 define Build/Configure
- (cd $(PKG_BUILD_DIR)/src ; rm -rf config.{cache,status}; \
-                $(TARGET_CONFIGURE_OPTS) \
-                CFLAGS="$(TARGET_CFLAGS)" \
-                ./configure \
-                  --target=$(GNU_TARGET_NAME) \
-                  --host=$(GNU_TARGET_NAME) \
-                  --build=$(GNU_HOST_NAME) \
-                  --program-prefix="" \
-                  --program-suffix="" \
-                  --prefix=/usr \
-                  --exec-prefix=/usr \
-                  --bindir=/usr/bin \
-                  --datadir=/usr/share \
-                  --includedir=/usr/include \
-                  --infodir=/usr/share/info \
-                  --libdir=/usr/lib \
-                  --libexecdir=/usr/lib \
-                  --localstatedir=/var \
-                  --mandir=/usr/share/man \
-                  --sbindir=/usr/sbin \
-                  --sysconfdir=/etc \
-                  $(DISABLE_LARGEFILE) \
-		  $(DISABLE_NLS) \
-        )
+	$(call Build/Configure/Default,,, src)
 endef
 
 define Build/Compile	
@@ -122,4 +99,3 @@ $(eval $(call BuildPackage,rp-pppoe-client))
 $(eval $(call BuildPackage,rp-pppoe-relay))
 $(eval $(call BuildPackage,rp-pppoe-server))
 $(eval $(call BuildPackage,rp-pppoe-sniff))
-

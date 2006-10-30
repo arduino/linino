@@ -1,3 +1,4 @@
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=iptables-snmp
 PKG_VERSION:=0.1
 PKG_RELEASE:=1
-PKG_MD5SUM:=8370d2f0c899461a053da491400119d1
 
-PKG_SOURCE_URL:=http://www.nobiscuit.com/iptables-snmp
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.nobiscuit.com/iptables-snmp
+PKG_MD5SUM:=8370d2f0c899461a053da491400119d1
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,15 +27,16 @@ define Package/iptables-snmp
   CATEGORY:=Network
   DEPENDS:=+snmpd
   TITLE:=An snmpd plugin to access iptables rules
-  DESCRIPTION:=This is a plugin that makes iptables rules accessable from snmpd.
+  DESCRIPTION:=\
+	This is a plugin that makes iptables rules accessable from snmpd.
   URL:=http://www.nobiscuit.com/iptables-snmp/
 endef
 
 define Build/Compile	
-  $(call Build/Compile/Default, \
+	$(call Build/Compile/Default, \
 		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
 		all install \
-  )
+	)
 endef
  
 define Package/iptables-snmp/install	

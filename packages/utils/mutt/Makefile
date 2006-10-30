@@ -25,8 +25,7 @@ define Package/mutt
   SECTION:=utils
   CATEGORY:=Utilities
   DEPENDS:=+libopenssl +libncurses
-  TITLE:=console mail client
-  DESCRIPTION:=Mail client for the text console
+  TITLE:=Console mail client
   URL:=http://www.mutt.org
 endef
 
@@ -40,9 +39,13 @@ define Build/Configure
 	)
 endef
 
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR)
+endef
+
 define Package/mutt/install
-	mkdir -p $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/bin/
+	install -d -m0755 $(1)/usr/bin
+	$(CP) $(PKG_BUILD_DIR)/mutt $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,mutt))

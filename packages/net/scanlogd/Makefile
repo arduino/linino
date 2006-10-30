@@ -14,8 +14,8 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.openwall.com/scanlogd/ \
-		ftp://ftp.wiretapped.net/pub/openwall/ \
-		http://distro.ibiblio.org/pub/linux/distributions/openwall/
+	ftp://ftp.wiretapped.net/pub/openwall/ \
+	http://distro.ibiblio.org/pub/linux/distributions/openwall/
 PKG_MD5SUM:=7b8187ea718ebe47f22805b921b909ab
 PKG_CAT:=zcat
 

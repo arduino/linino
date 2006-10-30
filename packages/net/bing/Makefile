@@ -1,9 +1,10 @@
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: Makefile 4603 2006-08-18 21:21:06Z mbm $
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
@@ -18,7 +19,6 @@ PKG_CAT:=zcat
 TAR_OPTIONS += || true
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -32,7 +32,7 @@ define Package/bing
 endef
 
 define Build/Compile
-$(call Build/Compile/Default)
+	$(call Build/Compile/Default)
 endef
 
 define Package/bing/install

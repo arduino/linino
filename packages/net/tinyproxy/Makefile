@@ -4,7 +4,7 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: $
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
@@ -26,32 +26,35 @@ define Package/tinyproxy
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Tinyproxy is a lightweight HTTP and HTTPS proxy.
-  DESCRIPTION:=\
-  	Tinyproxy is a lightweight HTTP and HTTPS proxy.\
-  URL:=http://tinyproxy.sourceforge.net
+  URL:=http://tinyproxy.sourceforge.net/
+endef
+
+define Package/tinyproxy/conffiles
+/etc/tinyproxy/tinyproxy.conf
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,\
-	--disable-static \
-	--enable-transparent-proxy \
-)
+	$(call Build/Configure/Default,\
+		--enable-filter \
+		--enable-transparent-proxy \
+	)
 endef
 
 define Build/Compile
-$(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" install)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
 endef
 
 define Package/tinyproxy/install
-	install -d -m0755 $(1)/usr/sbin \
-				$(1)/etc/tinyproxy \
-				$(1)/etc/init.d \
-				$(1)/var/log \
-				$(1)/usr/share
+	install -d -m0755 $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/tinyproxy $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/tinyproxy $(1)/usr/share/
-	$(CP) $(PKG_INSTALL_DIR)/etc/tinyproxy $(1)/etc/
-	$(CP) files/tinyproxy.init $(1)/etc/init.d/tinyproxy
+	install -d -m0755 $(1)/usr/share/tinyproxy
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/tinyproxy/*.html $(1)/usr/share/tinyproxy/
+	install -d -m0755 $(1)/etc/tinyproxy
+	$(CP) $(PKG_INSTALL_DIR)/etc/tinyproxy/tinyproxy.conf $(1)/etc/tinyproxy/
+	install -d -m0755 $(1)/etc/init.d
+	$(CP) ./files/tinyproxy.init $(1)/etc/init.d/tinyproxy
 endef
 
 $(eval $(call BuildPackage,tinyproxy))

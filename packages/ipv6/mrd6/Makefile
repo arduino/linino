@@ -49,8 +49,8 @@ define Build/Compile
 		CFLAGS="$(TARGET_CFLAGS) -DNO_INET6_OPTION" \
 		CXX="$(TARGET_CROSS)g++" \
 		CC="$(TARGET_CC)" \
-		STAGING_DIR=$(STAGING_DIR) \
-		DESTDIR=$(PKG_INSTALL_DIR) \
+		STAGING_DIR="$(STAGING_DIR)" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
 		PREFIX=/usr/ \
 		install
 endef

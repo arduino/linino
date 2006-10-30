@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=mini-sendmail
 PKG_VERSION:=1.3.5
 PKG_RELEASE:=1
-PKG_MD5SUM:=fff344184e98cff0ea4d817da9d29383
 
-PKG_SOURCE_URL:=http://www.acme.com/software/mini_sendmail/
 PKG_SOURCE:=mini_sendmail-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.acme.com/software/mini_sendmail/
+PKG_MD5SUM:=fff344184e98cff0ea4d817da9d29383
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/mini_sendmail-$(PKG_VERSION)
@@ -25,10 +25,11 @@ define Package/mini-sendmail
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A small sendmail-compatible mail forwarder
-  DESCRIPTION:=mini_sendmail reads its standard input up to an end-of-file and sends a\\\
-copy of the message found there to all of the addresses listed.\\\
-The message is sent by connecting to a local SMTP server. This means\\\
-mini_sendmail can be used to send email from inside a chroot(2) area.\\\
+  DESCRIPTION:=\
+	mini_sendmail reads its standard input up to an end-of-file and sends a \\\
+	copy of the message found there to all of the addresses listed.\\\
+	The message is sent by connecting to a local SMTP server. This means \\\
+	mini_sendmail can be used to send email from inside a chroot(2) area.
   URL:=http://www.acme.com/software/mini_sendmail/
 endef
 

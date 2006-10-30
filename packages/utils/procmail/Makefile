@@ -24,10 +24,11 @@ include $(INCLUDE_DIR)/package.mk
 define Package/procmail
   SECTION:=utils
   CATEGORY:=Utilities
-  TITLE:=mail processing tool
-  DESCRIPTION:=Procmail is able to process and classify incoming mail into\\\
+  TITLE:=Mail processing tool
+  DESCRIPTION:=\
+	Procmail is able to process and classify incoming mail into \\\
 	different mail boxes.\\\
-	Very useful in conjunction with mutt.\\\
+	Very useful in conjunction with mutt.
   URL:=http://www.procmail.org
 endef
 
@@ -37,7 +38,7 @@ define Build/Compile
 endef
 
 define Package/procmail/install
-	mkdir -p $(1)/usr/bin
+	install -d -m0755 $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/src/procmail $(1)/usr/bin/ 
 	$(CP) $(PKG_BUILD_DIR)/src/formail $(1)/usr/bin/
 endef

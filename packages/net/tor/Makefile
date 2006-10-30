@@ -11,12 +11,12 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=tor
 PKG_VERSION:=0.1.0.17
 PKG_RELEASE:=1
-PKG_MD5SUM:=83c4afe29fa82473afcb2ec7e17771b9
 
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://tor.eff.org/dist/ \
 	http://ftp.se.linux.org/crypto/tor/ \
 	http://tor.meulie.net/
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_MD5SUM:=83c4afe29fa82473afcb2ec7e17771b9
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -29,12 +29,13 @@ define Package/tor
   CATEGORY:=Network
   DEPENDS:=+libevent +libopenssl +libpthread +zlib
   TITLE:=An anonymous Internet communication system
-  DESCRIPTION:=Tor is a toolset for a wide range of organizations and people that want\\\
-  to improve their safety and security on the Internet. Using Tor can\\\
-  help you anonymize web browsing and publishing, instant messaging,\\\
-  IRC, SSH, and more. Tor also provides a platform on which software\\\
-  developers can build new applications with built-in anonymity, safety,\\\
-  and privacy features.\\\
+  DESCRIPTION:=\
+	Tor is a toolset for a wide range of organizations and people that want \\\
+	to improve their safety and security on the Internet. Using Tor can \\\
+	help you anonymize web browsing and publishing, instant messaging, \\\
+	IRC, SSH, and more. Tor also provides a platform on which software \\\
+	developers can build new applications with built-in anonymity, safety, \\\
+	and privacy features.
   URL:=http://tor.eff.org/
 endef
 
@@ -78,26 +79,29 @@ fi
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--enable-shared \
-                  --disable-static,ac_cv_libevent_normal=yes \
+	$(call Build/Configure/Default,\
+		--with-gnu-ld \
+		, \
+		ac_cv_libevent_normal=yes \
 		ac_cv_openssldir="$(STAGING_DIR)/usr" \
 		tor_cv_null_is_zero=yes \
-		tor_cv_unaligned_ok=yes)
+		tor_cv_unaligned_ok=yes \
+	)
 endef
 
 define Build/Compile
-$(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
 endef
 
 define Package/tor/install	
+	install -d -m0755 $(1)/usr/sbin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/tor $(1)/usr/sbin/
 	install -d -m0755 $(1)/etc/init.d
 	install -m0755 ./files/tor.init $(1)/etc/init.d/tor
 	install -d -m0755 $(1)/etc/tor
 	install -m0644 ./files/torrc $(1)/etc/tor/torrc
-	install -d -m0755 $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/tor $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,tor))
-

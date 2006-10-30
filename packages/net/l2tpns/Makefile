@@ -1,3 +1,4 @@
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=l2tpns
 PKG_VERSION:=2.1.14
 PKG_RELEASE:=1
-PKG_MD5SUM:=2a0ee2a3678160c335f1d68c17c4f871
 
-PKG_SOURCE_URL:=@SF/l2tpns
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/l2tpns
+PKG_MD5SUM:=2a0ee2a3678160c335f1d68c17c4f871
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,10 +27,11 @@ define Package/l2tpns
   CATEGORY:=Network
   DEPENDS:=+libcli
   TITLE:=An L2TP enhanced server
-  DESCRIPTION:=l2tpns is a layer 2 tunneling protocol network server (LNS).\\\
-	it supports up to 65535 concurrent sessions per server/cluster\\\
-	plus ISP features such as rate limiting, walled garden, usage\\\
-	accounting, and more.\\\
+  DESCRIPTION:=\
+	l2tpns is a layer 2 tunneling protocol network server (LNS).\\\
+	it supports up to 65535 concurrent sessions per server/cluster \\\
+	plus ISP features such as rate limiting, walled garden, usage \\\
+	accounting, and more.
   URL:=http://sourceforge.net/projects/l2tpns
 endef
 
@@ -40,7 +42,13 @@ define Package/l2tpns/conffiles
 endef
 	
 define Build/Compile
-  $(call Build/Compile/Default, LD="$(TARGET_CC)" OPTIM="$(TARGET_CFLAGS)" STAGING_DIR=$(STAGING_DIR) DESTDIR=$(PKG_INSTALL_DIR) all install)
+	$(call Build/Compile/Default, \
+		LD="$(TARGET_CC)" \
+		OPTIM="$(TARGET_CFLAGS)" \
+		STAGING_DIR="$(STAGING_DIR)" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install \
+	)
 endef
 
 define Package/l2tpns/install	

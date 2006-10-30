@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=ntpclient
 PKG_VERSION:=2003_194
 PKG_RELEASE:=2
-PKG_MD5SUM:=94e84d5c6023c5e1f3890b28d0a08c92
 
-PKG_SOURCE_URL:=http://doolittle.faludi.com/ntpclient
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://doolittle.faludi.com/ntpclient
+PKG_MD5SUM:=94e84d5c6023c5e1f3890b28d0a08c92
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
@@ -25,12 +25,13 @@ define Package/ntpclient
   SECTION:=net
   CATEGORY:=Network
   TITLE:=NTP (Network Time Protocol) client
-  DESCRIPTION:=NTP client for setting system time from NTP servers.
+  DESCRIPTION:=\
+	NTP client for setting system time from NTP servers.
   URL:=http://doolittle.faludi.com/ntpclient
 endef
 
 define Build/Compile
-  $(call Build/Compile/Default,all adjtimex)
+	$(call Build/Compile/Default,all adjtimex)
 endef
 
 define Package/ntpclient/install	

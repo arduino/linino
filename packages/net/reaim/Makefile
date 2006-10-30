@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=reaim
 PKG_VERSION:=0.8
 PKG_RELEASE:=1
-PKG_MD5SUM:=647d2ab72ec454f89294accfb3182c09
 
-PKG_SOURCE_URL:=@SF/reaim
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/reaim
+PKG_MD5SUM:=647d2ab72ec454f89294accfb3182c09
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -32,18 +32,18 @@ define Package/reaim
 endef
 
 define Build/Compile	
-  $(call Build/Compile/Default, \
+	$(call Build/Compile/Default, \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install \
-  )
+	)
 endef
 
 define Package/reaim/install	
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/reaim.init $(1)/etc/init.d/reaim
 	install -d -m0755 $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/reaim $(1)/usr/sbin/
+	install -d -m0755 $(1)/etc/init.d
+	install -m0755 ./files/reaim.init $(1)/etc/init.d/reaim
 endef
 
 $(eval $(call BuildPackage,reaim))

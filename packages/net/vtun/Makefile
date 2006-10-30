@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=vtun
 PKG_VERSION:=2.6
 PKG_RELEASE:=1
-PKG_MD5SUM:=309534fd03c5d13a19c43916f61f4bbf
 
-PKG_SOURCE_URL:=@SF/vtun
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/vtun
+PKG_MD5SUM:=309534fd03c5d13a19c43916f61f4bbf
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
@@ -26,7 +26,6 @@ define Package/vtun
   CATEGORY:=Network
   DEPENDS:=+kmod-tun +liblzo +libopenssl +zlib
   TITLE:=VPN tunneling daemon
-  DESCRIPTION:=VPN tunneling daemon
   URL:=http://vtun.sourceforge.net
 endef
 
@@ -35,20 +34,23 @@ define Package/vtun/conffiles
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,,LIBS="-L$(STAGING_DIR)/usr/lib" \
+	$(call Build/Configure/Default, \
+		, \
+		LIBS="-L$(STAGING_DIR)/usr/lib" \
 		BLOWFISH_HDR_DIR="$(STAGING_DIR)/usr/include/openssl" \
 		LZO_HDR_DIR="$(STAGING_DIR)/usr/include/lzo" \
-		SSL_HDR_DIR="$(STAGING_DIR)/usr/include/openssl")
+		SSL_HDR_DIR="$(STAGING_DIR)/usr/include/openssl" \
+	)
 endef
 
 define Build/Compile	
-$(call Build/Compile/Default,vtund)
+	$(call Build/Compile/Default,vtund)
 endef
 
 define Package/vtun/install	
-	install -m0755 -d $(1)/etc
+	install -d -m0755 $(1)/etc
 	install -m0600 $(PKG_BUILD_DIR)/vtund.conf $(1)/etc/
-	install -m0755 -d $(1)/usr/sbin
+	install -d -m0755 $(1)/usr/sbin
 	install -m0755 $(PKG_BUILD_DIR)/vtund $(1)/usr/sbin/
 endef
 

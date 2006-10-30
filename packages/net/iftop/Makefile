@@ -1,3 +1,4 @@
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=iftop
 PKG_VERSION:=0.17
 PKG_RELEASE:=1
-PKG_MD5SUM:=062bc8fb3856580319857326e0b8752d
 
-PKG_SOURCE_URL:=http://www.ex-parrot.com/~pdw/iftop/download
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.ex-parrot.com/~pdw/iftop/download
+PKG_MD5SUM:=062bc8fb3856580319857326e0b8752d
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,20 +27,23 @@ define Package/iftop
   CATEGORY:=Network
   DEPENDS:=+libpcap +libncurses +libpthread
   TITLE:=display bandwith usage on an interface
-  DESCRIPTION:=iftop does for network usage what top(1) does for CPU usage. It\\\
-listens to network traffic on a named interface and displays a\\\
-table of current bandwidth usage by pairs of hosts. Handy for\\\
-answering the question 'why is our ADSL link so slow?'.
+  DESCRIPTION:=\
+	iftop does for network usage what top(1) does for CPU usage. It \\\
+	listens to network traffic on a named interface and displays a \\\
+	table of current bandwidth usage by pairs of hosts. Handy for \\\
+	answering the question 'why is our ADSL link so slow?'.
   URL:=http://www.ex-parrot.com/~pdw/iftop/
 endef
 
 define Build/Compile
-  $(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" install)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
 endef
 
 define Package/iftop/install	
 	install -d -m0755 $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/$(PKG_NAME) $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/iftop $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,iftop))

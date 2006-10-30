@@ -30,12 +30,7 @@ define Package/usbutils
   URL:=http://linux-usb.sourceforge.net/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-	)
-endef
+# uses GNU configure
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \

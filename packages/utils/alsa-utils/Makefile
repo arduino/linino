@@ -33,7 +33,6 @@ endef
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-rpath \
-		--with-gnu-ld \
 	)
 endef
 

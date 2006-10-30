@@ -1,3 +1,4 @@
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,12 +11,13 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=bwm
 PKG_VERSION:=1.1.0
 PKG_RELEASE:=1
-PKG_MD5SUM:=51021a036acb92d2bda0c0c0483f9552
 
-PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/b/bwm
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION).orig
+PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/b/bwm
+PKG_MD5SUM:=51021a036acb92d2bda0c0c0483f9552
 PKG_CAT:=zcat
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION).orig
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,7 +25,6 @@ define Package/bwm
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A very tiny bandwidth monitor
-  DESCRIPTION:=A very tiny bandwidth monitor
   URL:=http://ftp.debian.org/debian/pool/main/b/bwm
 endef
 

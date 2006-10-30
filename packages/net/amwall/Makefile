@@ -1,3 +1,4 @@
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=amwall
 PKG_VERSION:=0.1.0
 PKG_RELEASE:=1
-PKG_MD5SUM:=a8b6438e7fd9ccadc9f68824ae62349c
 
-PKG_SOURCE_URL:=ftp://ftp.amselinux.net/source/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=ftp://ftp.amselinux.net/source/
+PKG_MD5SUM:=a8b6438e7fd9ccadc9f68824ae62349c
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,7 +27,6 @@ define Package/amwall
   CATEGORY:=Network
   DEPENDS:=+libamsel
   TITLE:=PF to iptables
-  DESCRIPTION:=PF to iptables
   URL:=http://www.amselinux.net
 endef
 
@@ -41,7 +41,7 @@ define Build/Compile
 		OPT_LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		PREFIX="/usr" \
 		CONFIG="$(PKG_BUILD_DIR)/etc/amsel" \
-		DESTDIR=$(PKG_INSTALL_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
 

@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=wknock
 PKG_VERSION:=1
 PKG_RELEASE:=1
-PKG_MD5SUM:=6b7a1f3cbb0af88da02e5d30cefd8e7f
 
-PKG_SOURCE_URL:=http://blackhat.com/presentations/bh-europe-05/BH_EU_05-Oudot/
 PKG_SOURCE:=$(PKG_NAME).tar.gz
+PKG_SOURCE_URL:=http://blackhat.com/presentations/bh-europe-05/BH_EU_05-Oudot/
+PKG_MD5SUM:=6b7a1f3cbb0af88da02e5d30cefd8e7f
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)

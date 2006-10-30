@@ -1,3 +1,4 @@
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,15 +11,16 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=logrotate
 PKG_VERSION:=3.7.1
 PKG_RELEASE:=1
-PKG_MD5SUM:=552639142e163745f6bcd4f1f3816d8a
 
+PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:= \
 	http://ftp.de.debian.org/debian/pool/main/l/logrotate \
 	http://ftp.debian.org/debian/pool/main/l/logrotate \
 	http://ftp.fr.debian.org/debian/pool/main/l/logrotate \
 	http://ftp.us.debian.org/debian/pool/main/l/logrotate
-PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
+PKG_MD5SUM:=552639142e163745f6bcd4f1f3816d8a
 PKG_CAT:=zcat
+
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
@@ -29,10 +31,11 @@ define Package/logrotate
   CATEGORY:=Utilities
   DEPENDS:=+libpopt
   TITLE:=rotates, compresses, and mails system logs
-  DESCRIPTION:=logrotate  is  designed to ease administration of systems that generate\\\
-large numbers of log files.  It allows auto-matic rotation, compression,\\\
-removal, and mailing of log files. Each  log  file  may  be  handled\\\
-daily,  weekly,monthly, or when it grows too large.\\\
+  DESCRIPTION:=\
+	logrotate is designed to ease administration of systems that generate \\\
+	large numbers of log files. It allows auto-matic rotation, compression, \\\
+	removal and mailing of log files. Each log file may be handled daily, \\\
+	weekly, monthly or when it grows too large.
   URL:=http://packages.debian.org/unstable/admin/logrotate
 endef
 
@@ -41,18 +44,19 @@ define Package/logrotate/conffiles
 endef
 
 define Build/Compile
-  $(call Build/Compile/Default, \
-	CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
-	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-	logrotate \
-  )
+	$(call Build/Compile/Default, \
+		RPM_OPT_FLAGS="\$$$$(EXTRA_CFLAGS)" \
+		LDFLAGS="\$$$$(EXTRA_LDFLAGS)" \
+		logrotate \
+	)
 endef
 
 define Package/logrotate/install	
-	mkdir -p $(1)/usr/sbin
-	$(CP) ${PKG_BUILD_DIR}/logrotate $(1)/usr/sbin
-	mkdir -p $(1)/etc/logrotate.d
-	$(CP) ./files/logrotate.conf $(1)/etc
+	install -d -m0755 $(1)/usr/sbin
+	$(CP) ${PKG_BUILD_DIR}/logrotate $(1)/usr/sbin/
+	install -d -m0755 $(1)/etc
+	$(CP) ./files/logrotate.conf $(1)/etc/
+	install -d -m0755 $(1)/etc/logrotate.d
 endef
 
 $(eval $(call BuildPackage,logrotate))

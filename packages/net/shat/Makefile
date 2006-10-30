@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=shat
 PKG_VERSION:=0.9.7
 PKG_RELEASE:=1
-PKG_MD5SUM:= da06846f35838b14d1513523dad84d24
 
-PKG_SOURCE_URL:=http://world.maxina.de/src/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://world.maxina.de/src/
+PKG_MD5SUM:=da06846f35838b14d1513523dad84d24
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,7 +26,8 @@ define Package/shat
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Source Hardware Address Translation
-  DESCRIPTION:=A tool which allows hosts with arbitrary IP configuration\\\
+  DESCRIPTION:=\
+	A tool which allows hosts with arbitrary IP configuration\\\
 	to connect to the internet over a SHAT gateway.\\\
   URL:=http://www.teddy-net.com/cvs/Maxina/128gw/service/arpcatch/shat/
 endef

@@ -11,11 +11,11 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=netperf
 PKG_VERSION:=2.3pl1
 PKG_RELEASE:=1
-PKG_MD5SUM:=b74314d78af31cb13516fb9a372d2e86
 
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.netperf.org/netperf/archive/ \
 	ftp://ftp.cup.hp.com/dist/networking/benchmarks/netperf/
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_MD5SUM:=b74314d78af31cb13516fb9a372d2e86
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,15 +26,14 @@ define Package/netperf
   SECTION:=net
   CATEGORY:=Network
   TITLE:=network performance measurement tool
-  DESCRIPTION:=Program and service to do network performance measurement.
   URL:=http://www.netperf.org
 endef
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-	    TARGET_NETPERF_HOME="/etc/netperf.conf" \
-	    TARGET_CC="$(TARGET_CROSS)gcc" \
-	    TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+		TARGET_NETPERF_HOME="/etc/netperf.conf" \
+		TARGET_CC="$(TARGET_CROSS)gcc" \
+		TARGET_CFLAGS="$(TARGET_CFLAGS)" \
 		TARGET_LIBS="" \
 		all
 endef

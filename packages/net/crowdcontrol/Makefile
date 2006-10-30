@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=crowdcontrol
 PKG_VERSION:=0.4b
 PKG_RELEASE:=1
-PKG_MD5SUM:=a0991ae3d1f1a361558bed1a4aa66a9c
 
-PKG_SOURCE_URL:=@openwrt/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@openwrt
+PKG_MD5SUM:=a0991ae3d1f1a361558bed1a4aa66a9c
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,10 +26,14 @@ define Package/crowdcontrol
   SECTION:=net
   CATEGORY:=Network
   TITLE:=The extra-light http proxy server
-  DESCRIPTION:=Crowd Control is an small, cross-platform HTTP proxy (a fork of the elhttp project)\\\
-	designed for systems with little RAM, such as a home router. It can filter URLs using\\\
+  DESCRIPTION:=\
+	Crowd Control is an small, cross-platform HTTP proxy (a fork of the elhttp project) \\\
+	designed for systems with little RAM, such as a home router. It can filter URLs using \\\
 	SquidGuard blocklists, and has the unique ability to filter HTTPS domains as well.
   URL:=http://sourceforge.net/projects/crowdcontrol/
+endef
+
+define Build/Configure
 endef
 
 define Build/Compile

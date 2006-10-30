@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=ethtool
 PKG_VERSION:=3
 PKG_RELEASE:=0
-PKG_MD5SUM:=b4e71f7fa2629250677eefcb338442c5
 
-PKG_SOURCE_URL:=@SF/gkernel
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/gkernel
+PKG_MD5SUM:=b4e71f7fa2629250677eefcb338442c5
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,15 +26,15 @@ define Package/ethtool
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Display or change ethernet card settings
-  DESCRIPTION:=ethtool is used for querying settings of an ethernet device and changing them
+  DESCRIPTION:=\
+  	ethtool is used for querying settings of an ethernet device and changing them.
   URL:=http://sourceforge.net/projects/gkernel/
 endef
 
+# uses GNU configure
+
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef

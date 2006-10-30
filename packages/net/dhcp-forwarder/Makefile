@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=dhcp-forwarder
 PKG_VERSION:=0.7
 PKG_RELEASE:=4
-PKG_MD5SUM:=e7f876e615ebc3f96418f6477b4451e2
 
-PKG_SOURCE_URL:=http://savannah.nongnu.org/download/dhcp-fwd
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://savannah.nongnu.org/download/dhcp-fwd
+PKG_MD5SUM:=e7f876e615ebc3f96418f6477b4451e2
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,7 +26,6 @@ define Package/dhcp-forwarder
   SECTION:=net
   CATEGORY:=Network
   TITLE:=DHCP relay agent
-  DESCRIPTION:=DHCP relay agent
   URL:=http://www.nongnu.org/dhcp-fwd/
 endef
 
@@ -34,9 +33,7 @@ define Package/dhcp-forwarder/conffiles
 /etc/dhcp-fwd.conf
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default)
-endef
+# uses GNU configure
 
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
@@ -48,12 +45,12 @@ define Build/Compile
 endef
 	
 define Package/dhcp-forwarder/install
-	install -m0755 -d $(1)/etc
-	install -m0644 $(PKG_BUILD_DIR)/contrib/dhcp-fwd.conf $(1)/etc/
-	install -m0755 -d $(1)/etc/init.d
-	install -m0755 ./files/dhcp-fwd.init $(1)/etc/init.d/dhcp-fwd
-	install -m0755 -d $(1)/usr/bin
+	install -d -m0755 $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/dhcp-fwd $(1)/usr/bin/
+	install -d -m0755 $(1)/etc
+	install -m0644 $(PKG_BUILD_DIR)/contrib/dhcp-fwd.conf $(1)/etc/
+	install -d -m0755 $(1)/etc/init.d
+	install -m0755 ./files/dhcp-fwd.init $(1)/etc/init.d/dhcp-fwd
 endef
 
 $(eval $(call BuildPackage,dhcp-forwarder))

@@ -11,12 +11,12 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=tinc
 PKG_VERSION:=1.0.4
 PKG_RELEASE:=1
-PKG_MD5SUM:=63887373dd763f8d90cecc5a3616c363
 
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.tinc-vpn.org/packages \
 	http://ftp.yi.se/pub/tinc/ \
 	http://www.mirrors.wiretapped.net/security/network-security/tinc/
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_MD5SUM:=63887373dd763f8d90cecc5a3616c363
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -29,22 +29,21 @@ define Package/tinc
   CATEGORY:=Network
   DEPENDS:=+liblzo +libopenssl +zlib
   TITLE:=VPN tunneling daemon
-  DESCRIPTION:=A VPN tunneling daemon
   URL:=http://www.tinc-vpn.org/
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--with-kernel=$(LINUX_DIR) \
-		  --with-zlib=$(STAGING_DIR)/usr/ \
-		  --with-lzo-include=$(STAGING_DIR)/usr/include/lzo \
-)
+	$(call Build/Configure/Default, \
+		--with-kernel="$(LINUX_DIR)" \
+		--with-zlib="$(STAGING_DIR)/usr" \
+		--with-lzo-include="$(STAGING_DIR)/usr/include/lzo" \
+	)
 endef
 
 define Build/Compile
-$(call Build/Compile/Default,CC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS)" \
+	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install)
+		all install
 endef
 
 define Package/tinc/install	

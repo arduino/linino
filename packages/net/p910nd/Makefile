@@ -12,13 +12,12 @@ PKG_NAME:=p910nd
 PKG_VERSION:=0.7
 PKG_RELEASE:=2
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.etherboot.org/p910nd
 PKG_MD5SUM:=7bf752532d26c9106f8039db95df3a6b
 PKG_CAT:=bzcat
 
-PKG_INIT_PRIO=70
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,14 +25,14 @@ define Package/p910nd
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A small non-spooling printer server
-  DESCRIPTION:=A small non-spooling printer server.\\\
-    p910nd  is a small daemon that copies any data received on \\\
-    the port it is listening on to the  corresponding  printer \\\
-    port.   It  is primarily intended for diskless Linux hosts \\\
-    running as printer drivers but there is no reason  why  it \\\
-    could  not  be used on diskful hosts.  Port 9100 is copied \\\
-    to /dev/lp0, 9101 to /dev/lp1 and 9102 to  /dev/lp2.   The \\\
-    default is port 9100 to /dev/lp0.
+  DESCRIPTION:=\
+	p910nd  is a small daemon that copies any data received on \\\
+	the port it is listening on to the  corresponding  printer \\\
+	port.   It  is primarily intended for diskless Linux hosts \\\
+	running as printer drivers but there is no reason  why  it \\\
+	could  not  be used on diskful hosts.  Port 9100 is copied \\\
+	to /dev/lp0, 9101 to /dev/lp1 and 9102 to  /dev/lp2.   The \\\
+	default is port 9100 to /dev/lp0.
   URL:=http://www.etherboot.org/p910nd/
 endef
 
@@ -51,12 +50,12 @@ define Build/Compile
 endef
 
 define Package/p910nd/install
+	install -d -m0755 $(1)/usr/sbin
+	install -m0755 $(PKG_BUILD_DIR)/p910nd $(1)/usr/sbin/
 	install -d -m0755 $(1)/etc/default
 	install -m0644 ./files/p910nd.default $(1)/etc/default/p910nd
 	install -d -m0755 $(1)/etc/init.d
 	install -m0755 ./files/p910nd.init $(1)/etc/init.d/p910nd
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/p910nd $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,p910nd))

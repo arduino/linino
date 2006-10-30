@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=pptpd
 PKG_VERSION:=1.3.0
 PKG_RELEASE:=1
-PKG_MD5SUM:=75d494e881f7027f4e60b114163f6b67
 
-PKG_SOURCE_URL:=@SF/poptop
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/poptop
+PKG_MD5SUM:=75d494e881f7027f4e60b114163f6b67
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -31,7 +31,9 @@ define Package/pptpd
 endef
 
 define Build/Configure
-	$(call Build/Configure/Default, --with-bcrelay)
+	$(call Build/Configure/Default, \
+		--with-bcrelay \
+	)
 endef
 
 define Build/Compile

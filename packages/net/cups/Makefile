@@ -1,3 +1,4 @@
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,14 +11,13 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=cups
 PKG_VERSION:=1.1.23
 PKG_RELEASE:=1
-PKG_MD5SUM:=4ce09b1dce09b6b9398af0daae9adf63
 
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-source.tar.bz2
 PKG_SOURCE_URL:= \
 	http://ftp.rz.tu-bs.de/pub/mirror/ftp.easysw.com/ftp/pub/cups/$(PKG_VERSION) \
 	ftp://ftp.easysw.com/pub/cups/$(PKG_VERSION) \
 	ftp://ftp3.easysw.com/pub/cups/$(PKG_VERSION)
-
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-source.tar.bz2
+PKG_MD5SUM:=4ce09b1dce09b6b9398af0daae9adf63
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -32,7 +32,8 @@ define Package/cups
   CATEGORY:=Network
   DEPENDS:=+zlib
   TITLE:=Common UNIX Printing System
-  DESCRIPTION:=A printer spooling system for devices with USB or LP support
+  DESCRIPTION:=\
+	A printer spooling system for devices with USB or LP support.
   URL:=http://www.cups.org/
 endef
 
@@ -44,7 +45,8 @@ define Package/cups/conffiles
 endef
 
 define Build/Configure
-	$(call Build/Configure/Default, --with-gnu-ld \
+	$(call Build/Configure/Default, \
+		--libexecdir=/usr/lib \
 		--with-cups-user=root \
 		--with-cups-group=root \
 		--without-perl \
@@ -68,10 +70,6 @@ define Build/Compile
 		DSTROOT="$(PKG_INSTALL_DIR)" \
 		STRIP="/bin/true" \
 		all install
-	if [ -d $(PKG_INSTALL_DIR)/usr/libexec ]; then \
-		rm -rf $(PKG_INSTALL_DIR)/usr/lib; \
-		mv $(PKG_INSTALL_DIR)/usr/libexec $(PKG_INSTALL_DIR)/usr/lib; \
-	fi
 endef
 
 define Package/cups/install
@@ -111,9 +109,9 @@ endef
 
 define Build/UninstallDev
 	rm -rf \
-	  $(STAGING_DIR)/usr/bin/cups-config \
-	  $(STAGING_DIR)/usr/include/cups \
-	  $(STAGING_DIR)/usr/lib/libcups.{a,so*}
+		$(STAGING_DIR)/usr/bin/cups-config \
+		$(STAGING_DIR)/usr/include/cups \
+		$(STAGING_DIR)/usr/lib/libcups.{a,so*}
 endef
 
 $(eval $(call BuildPackage,cups))

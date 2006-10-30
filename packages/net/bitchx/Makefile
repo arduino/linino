@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=bitchx
 PKG_VERSION:=1.1
 PKG_RELEASE:=1
-PKG_MD5SUM:=611d2dda222f00c10140236f4c331572
 
-PKG_SOURCE_URL:=http://bitchx.org/files/source/
 PKG_SOURCE:=ircii-pana-$(PKG_VERSION)-final.tar.gz
+PKG_SOURCE_URL:=http://bitchx.org/files/source/
+PKG_MD5SUM:=611d2dda222f00c10140236f4c331572
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/BitchX
@@ -29,7 +29,6 @@ define Package/bitchx
   CATEGORY:=Network
   DEPENDS:=+libncurses
   TITLE:=popular IRC client
-  DESCRIPTION:=popular IRC client
   URL:=http://www.bitchx.org
 endef
 

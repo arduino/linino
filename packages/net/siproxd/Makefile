@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=siproxd
 PKG_VERSION:=0.5.13
 PKG_RELEASE:=1
-PKG_MD5SUM:=91a572f80dd5a9af5a0f7f207fd34478
 
-PKG_SOURCE_URL:=@SF/siproxd
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/siproxd
+PKG_MD5SUM:=91a572f80dd5a9af5a0f7f207fd34478
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -27,7 +27,6 @@ define Package/siproxd
   CATEGORY:=Network
   DEPENDS:=+libosip2
   TITLE:=SIP (Session Initiation Protocol) proxy
-  DESCRIPTION:=A SIP (Session Initiation Protocol) proxy
   URL:=http://siproxd.sourceforge.net/
 endef
 
@@ -35,13 +34,9 @@ define Package/siproxd/conffiles
 /etc/siproxd.conf
 endef
 
-define Build/Configure
-$(call Build/Configure/Default,--enable-static --enable-shared)
-endef
+# uses GNU configure
 	
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		SUBDIRS="src scripts contrib" \
@@ -49,13 +44,13 @@ define Build/Compile
 endef
 
 define Package/siproxd/install
-	install -d -m0755 $(1)/etc
-	$(CP) $(PKG_BUILD_DIR)/doc/siproxd.conf.example $(1)/etc/siproxd.conf
-	$(CP) $(PKG_BUILD_DIR)/doc/siproxd_passwd.cfg $(1)/etc/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 files/siproxd.init $(1)/etc/init.d/siproxd
 	install -d -m0755 $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/siproxd $(1)/usr/sbin/
+	install -d -m0755 $(1)/etc
+	install -m0644 $(PKG_BUILD_DIR)/doc/siproxd.conf.example $(1)/etc/siproxd.conf
+	install -m0600 $(PKG_BUILD_DIR)/doc/siproxd_passwd.cfg $(1)/etc/
+	install -d -m0755 $(1)/etc/init.d
+	install -m0755 ./files/siproxd.init $(1)/etc/init.d/siproxd
 endef
 
 $(eval $(call BuildPackage,siproxd))

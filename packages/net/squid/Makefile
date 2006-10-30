@@ -5,7 +5,7 @@
 # See /LICENSE for more information.
 #
 # $Id$
-#
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=squid

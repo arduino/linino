@@ -1,3 +1,4 @@
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=ipcad
 PKG_VERSION:=3.7
 PKG_RELEASE:=1
-PKG_MD5SUM:=34c542c99593dfe9d5b408deffcfe70e
 
-PKG_SOURCE_URL:=@SF/ipcad
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/ipcad
+PKG_MD5SUM:=34c542c99593dfe9d5b408deffcfe70e
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,9 +27,10 @@ define Package/ipcad
   CATEGORY:=Network
   DEPENDS:=+libpcap
   TITLE:=listens for traffic on the specified interfaces
-  DESCRIPTION:=This daemon listens for traffic on the specified interfaces.\\\
-	It has the built-in RSH and NetFlow engines to allow exporting\\\
-	the accounting data the same way as Cisco routers do.\\\
+  DESCRIPTION:=\
+	This daemon listens for traffic on the specified interfaces.\\\
+	It has the built-in RSH and NetFlow engines to allow exporting \\\
+	the accounting data the same way as Cisco routers do.
   URL:=http://lionet.info/ipcad/
 endef
 
@@ -36,28 +38,26 @@ define Package/ipcad/conffiles/
 /etc/ipcad.conf
 endef
 
-
 define Build/Configure
-	$(call Build/Configure/Default,--enable-shared \
+	(cd $(PKG_BUILD_DIR); touch \
+		cfglex.c \
+		cslex.c \
+	);
+	$(call Build/Configure/Default, \
+		--enable-shared \
 		--disable-static \
-		--disable-rpath \
-		--with-gnu-ld \
 		--with-psrc=pcap \
 		--with-pcap-include="$(STAGING_DIR)/usr/include" \
-		--with-pcap-libraries="$(STAGING_DIR)/usr/lib", \
-		touch cfglex.c cslex.c; \
+		--with-pcap-libraries="$(STAGING_DIR)/usr/lib" \
+		, \
 		ac_cv_func_getifaddrs=no \
 		ac_cv_header_ifaddrs_h=no \
-)
+	)
 endef
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -DHAVE_PCAP_H=1 -I$(STAGING_DIR)/usr/include" \
-		LIBS="-lnsl -pthread -lpcap" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-		DESTDIR=$(PKG_INSTALL_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
 

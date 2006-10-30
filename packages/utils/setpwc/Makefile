@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=setpwc
 PKG_VERSION:=1.0
 PKG_RELEASE:=1
-PKG_MD5SUM:=a125d76f630c4aab940df5912f161965
 
-PKG_SOURCE_URL:=http://www.vanheusden.com/setpwc/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
+PKG_SOURCE_URL:=http://www.vanheusden.com/setpwc/
+PKG_MD5SUM:=a125d76f630c4aab940df5912f161965
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,7 +26,6 @@ define Package/setpwc
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Philips (and compatibles) WebCams (PWC) control utility
-  DESCRIPTION:=Philips (and compatibles) WebCams (PWC) control utility.
   URL:=http://www.vanheusden.com/setpwc/
 endef
 

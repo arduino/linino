@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=sipp
 PKG_VERSION:=1.0
 PKG_RELEASE:=1
-PKG_MD5SUM:=8866e9af0d3bc29e91ebb6eab89a7f1f
 
-PKG_SOURCE_URL:=@SF/sipp
 PKG_SOURCE:=$(PKG_NAME).$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/sipp
+PKG_MD5SUM:=8866e9af0d3bc29e91ebb6eab89a7f1f
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
@@ -26,7 +26,8 @@ define Package/sipp
   CATEGORY:=Network
   DEPENDS:=+uclibcxx +libpthread +libncurses
   TITLE:=test tool / traffic generator for the SIP protocol
-  DESCRIPTION:=SIPp is a free Open Source test tool / traffic generator for the SIP protocol.\\\
+  DESCRIPTION:=\
+	SIPp is a free Open Source test tool / traffic generator for the SIP protocol.\\\
 	It includes a few basic SipStone user agent scenarios (UAC and UAS) and\\\
 	establishes and releases multiple calls with the INVITE and BYE methods.\\\
   URL:=http://sipp.sourceforge.net
@@ -46,8 +47,8 @@ define Build/Compile
 endef
 
 define Package/sipp/install	
-	mkdir -p $(1)/usr/sbin
-	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
+	install -d -m0755 $(1)/usr/sbin
+	install -m0755 $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,sipp))

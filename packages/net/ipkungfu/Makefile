@@ -1,9 +1,10 @@
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: $
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
@@ -11,12 +12,13 @@ PKG_NAME:=ipkungfu
 PKG_VERSION:=0.6.0
 PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=http://www.linuxkungfu.org/ipkungfu
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.linuxkungfu.org/ipkungfu
 PKG_MD5SUM:=a65b5e629a7e9ef00aaf20587d918e5f
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,7 +28,7 @@ define Package/ipkungfu
   TITLE:=IPKungFu is an iptables-based Linux firewall
   DESCRIPTION:=\
   	IPKungFu is an iptables-based Linux firewall.\\\
-  	It aims to simplify the configuration of Internet\\\
+  	It aims to simplify the configuration of Internet \\\
   	connection sharing, port forwarding, and packet filtering.
   URL:=http://www.linuxkungfu.org
 endef
@@ -46,18 +48,19 @@ define Package/ipkungfu/conffiles
 /etc/ipkungfu/vhosts.conf
 endef
 
-define Build/Configure
-$(call Build/Configure/Default)
-endef
+# uses GNU configure
 
 define Build/Compile
-$(call Build/Compile/Default,all)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
 endef
 
 define Package/ipkungfu/install	
-	mkdir -p $(1)/usr/sbin $(1)/etc/ipkungfu/
-	$(CP) $(PKG_BUILD_DIR)/dummy_server $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/ipkungfu $(1)/usr/sbin/
+	install -d -m0755 $(1)/usr/sbin
+	$(CP) $(PKG_BUILD_DIR)/dummy_server $(1)/usr/sbin/
+	$(CP) $(PKG_BUILD_DIR)/ipkungfu $(1)/usr/sbin/
+	install -d -m0755 $(1)/etc/ipkungfu/
 	$(CP) $(PKG_BUILD_DIR)/files/conf/* $(1)/etc/ipkungfu/
 endef
 

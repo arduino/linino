@@ -26,7 +26,6 @@ define Package/vsftpd
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A fast and secure FTP server
-  DESCRIPTION:=A fast and secure FTP server.
   URL:=http://vsftpd.beasts.org/
 endef
 
@@ -48,12 +47,12 @@ define Build/Compile
 endef
 
 define Package/vsftpd/install
+	install -d -m0755 $(1)/usr/sbin
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/vsftpd $(1)/usr/sbin/
 	install -d -m0755 $(1)/etc
 	install -m0644 ./files/vsftpd.conf $(1)/etc/vsftpd.conf
 	install -d -m0755 $(1)/etc/init.d
 	install -m0755 ./files/vsftpd.init $(1)/etc/init.d/vsftpd
-	install -d -m0755 $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/vsftpd $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,vsftpd))

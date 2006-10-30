@@ -19,8 +19,6 @@ define Package/pipacs
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=UNIX socket accounting/wiewer program
-  DESCRIPTION:=An UNIX socket accounting/wiewer program.\\\
-	This is version 2.
 endef
 
 define Build/Prepare	
@@ -30,14 +28,14 @@ endef
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-	    $(TARGET_CONFIGURE_OPTS) \
-	    CFLAGS="$(TARGET_CFLAGS) -I $(STAGING_DIR)/usr/include" \
-	    all
+		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS) -I $(STAGING_DIR)/usr/include" \
+		all
 endef
 
 define Package/pipacs/install	
-	mkdir -p $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/pipacs $(1)/usr/bin
+	install -d -m0755 $(1)/usr/bin
+	install -m0755 $(PKG_BUILD_DIR)/pipacs $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,pipacs))

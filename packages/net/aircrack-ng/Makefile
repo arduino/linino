@@ -1,3 +1,4 @@
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=aircrack-ng
 PKG_VERSION:=0.6.2
 PKG_RELEASE:=1
-PKG_MD5SUM:=0b1a9fb6818822f933336efc9fff316b
 
-PKG_SOURCE_URL:=http://download.aircrack-ng.org/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://download.aircrack-ng.org/
+PKG_MD5SUM:=0b1a9fb6818822f933336efc9fff316b
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -24,9 +25,8 @@ include $(INCLUDE_DIR)/package.mk
 define Package/aircrack-ng
   SECTION:=net
   CATEGORY:=Network
-  TITLE:=Aircrack-ng the next generation of aircrack with new features
   DEPENDS:=+libpthread
-  DESCRIPTION:=Aircrack-ng the next generation of aircrack with new features
+  TITLE:=Aircrack-ng the next generation of aircrack with new features
   URL:=http://www.aircrack-ng.org
 endef
 

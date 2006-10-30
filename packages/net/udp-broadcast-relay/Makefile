@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=udp-broadcast-relay
 PKG_VERSION:=0.3
 PKG_RELEASE:=1
-PKG_MD5SUM:=a32f983b7063d6ac670e6b22be9b9d24
 
-PKG_SOURCE_URL:=http://www.joachim-breitner.de/udp-broadcast-relay/files/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.joachim-breitner.de/udp-broadcast-relay/files/
+PKG_MD5SUM:=a32f983b7063d6ac670e6b22be9b9d24
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -25,14 +25,15 @@ define Package/udp-broadcast-relay
   SECTION:=net
   CATEGORY:=Network
   TITLE:=listens for packets on a specified UDP broadcast port
-  DESCRIPTION:=This program listens for packets on a specified UDP broadcast port.\\\
-  When a packet is received, it sends that packet to all specified interfaces but\\\
-  the one it came from as though it originated from the original sender.\\\
-  The primary purpose of this is to allow games on machines on separated\\\
-  local networks (Ethernet, WLAN) that use udp broadcasts to find each other to do so.\\\
-  It also works on ppp links, so you can log in from windows boxes (e.g. using pptp)\\\
-  and play LAN-based games together. Currently, you have to care about upcoming or\\\
-  downgoing interfaces yourself.\\\
+  DESCRIPTION:=\
+	This program listens for packets on a specified UDP broadcast port.\\\
+	When a packet is received, it sends that packet to all specified interfaces but \\\
+	the one it came from as though it originated from the original sender.\\\
+	The primary purpose of this is to allow games on machines on separated \\\
+	local networks (Ethernet, WLAN) that use udp broadcasts to find each other to do so.\\\
+	It also works on ppp links, so you can log in from windows boxes (e.g. using pptp) \\\
+	and play LAN-based games together. Currently, you have to care about upcoming or \\\
+	downgoing interfaces yourself.
   URL:=http://www.joachim-breitner.de/udp-broadcast-relay/
 endef
 
@@ -41,7 +42,7 @@ define Build/Compile
 endef
 
 define Package/udp-broadcast-relay/install	
-	mkdir -p $(1)/usr/sbin
+	install -d -m0755 $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
 endef
 

@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=wx200d
 PKG_VERSION:=1.3
 PKG_RELEASE:=1
-PKG_MD5SUM:=0f90c099dddcdd46ac568d707822ec4c
 
-PKG_SOURCE_URL:=@SF/wx200d
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/wx200d
+PKG_MD5SUM:=0f90c099dddcdd46ac568d707822ec4c
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -27,31 +27,32 @@ define Package/wx200d
   CATEGORY:=Utilities
   DEPENDS:=+libpq
   TITLE:=weather station data collector
-  DESCRIPTION:=wx200d is a weather station data collector and server daemon\\\
-  for the WX200, WM918, WMR918 and WMR968 weather station\\\
-  hardware.\\\
+  DESCRIPTION:=\
+	wx200d is a weather station data collector and server daemon \\\
+	for the WX200, WM918, WMR918 and WMR968 weather station \\\
+	hardware.
   URL:=http://wx200d.sourceforge.net/
 endef
 
-define Build/Configure
-$(call Build/Configure/Default,--without-libiconv-prefix \
-			--without-libintl-prefix)
-endef
+# uses GNU configure
 
 define Build/Compile
-$(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
 endef
 
 define Package/wx200d/install	
 	install -d -m0755 $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/wx200 \
+	$(CP)	$(PKG_INSTALL_DIR)/usr/bin/wx200 \
 		$(PKG_INSTALL_DIR)/usr/bin/wxstdout \
 		$(PKG_INSTALL_DIR)/usr/bin/wxfilter \
-		$(PKG_INSTALL_DIR)/usr/bin/wxdebug $(1)/usr/bin/
+		$(PKG_INSTALL_DIR)/usr/bin/wxdebug \
+		$(1)/usr/bin/
 	install -d -m0755 $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/wx200d \
-		$(PKG_INSTALL_DIR)/usr/sbin/wxread $(1)/usr/sbin/
+	$(CP)	$(PKG_INSTALL_DIR)/usr/sbin/wx200d \
+		$(PKG_INSTALL_DIR)/usr/sbin/wxread \
+		$(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,wx200d))

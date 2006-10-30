@@ -20,6 +20,8 @@ PKG_CAT:=zcat
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
+PKG_BUILDDEP:=madwifi
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/xsupplicant
@@ -54,7 +56,7 @@ endef
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR=$(PKG_INSTALL_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
 

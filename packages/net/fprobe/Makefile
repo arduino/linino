@@ -8,15 +8,16 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME := fprobe
-PKG_VERSION := 1.1
-PKG_RELEASE := 1
-PKG_MD5SUM := 65850d0470078269b33eee58cba77ac2
+PKG_NAME:=fprobe
+PKG_VERSION:=1.1
+PKG_RELEASE:=1
 
-PKG_SOURCE := $(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL := @SF/fprobe
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=@SF/fprobe
+PKG_MD5SUM:=65850d0470078269b33eee58cba77ac2
+PKG_CAT:=bzcat
+
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_CAT := bzcat
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -25,17 +26,17 @@ define Package/fprobe
   CATEGORY:=Network
   DEPENDS:=+libpcap +libpthread
   TITLE:=NetFlow probe (libpcap-based)
-  DESCRIPTION:=A NetFlow probe using libpcap
   URL:=http://fprobe.sourceforge.net/
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--with-piddir=/var \
---with-pcap=$(STAGING_DIR)/usr/include \
---with-libpcap=$(STAGING_DIR)/usr/lib \
---with-membulk=index8 \
---with-hash=xor8 \
-)
+	$(call Build/Configure/Default, \
+		--with-piddir=/var \
+		--with-pcap="$(STAGING_DIR)/usr/include" \
+		--with-libpcap="$(STAGING_DIR)/usr/lib" \
+		--with-membulk=index8 \
+		--with-hash=xor8 \
+	)
 endef
 
 define Build/Compile
@@ -43,7 +44,7 @@ define Build/Compile
 endef
 
 define Package/fprobe/install
-	mkdir -p $(1)/usr/bin
+	install -d -m0755 $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/src/fprobe $(1)/usr/bin/
 endef
 

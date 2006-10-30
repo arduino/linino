@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=peercast
 PKG_VERSION:=0.1214
 PKG_RELEASE:=1
-PKG_MD5SUM:=4e8449cde7135ad97f788e67e1bd64ee
 
-PKG_SOURCE_URL:=http://www.cti.ecp.fr/~beauxir5/peercast
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.cti.ecp.fr/~beauxir5/peercast
+PKG_MD5SUM:=4e8449cde7135ad97f788e67e1bd64ee
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -27,10 +27,11 @@ define Package/peercast
   CATEGORY:=Multimedia
   DEPENDS:=+libpthread +uclibcxx
   TITLE:=P2P audio and video streaming server
-  DESCRIPTION:=PeerCast is a fresh new P2P streaming server. It can stream music\\\
-	and video from a broad variety of formats. Many audio players can\\\
-	listen to peercast streams, as it's been built to remain compatible\\\
-	with Nullsoft Shoutcast.\\\
+  DESCRIPTION:=\
+	PeerCast is a fresh new P2P streaming server. It can stream music \\\
+	and video from a broad variety of formats. Many audio players can \\\
+	listen to peercast streams, as it's been built to remain compatible \\\
+	with Nullsoft Shoutcast.
   URL:=http://www.peercast.org/
 endef
 
@@ -39,31 +40,28 @@ define Package/peercast/conffiles
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--enable-shared \
-			--disable-static \
-			--with-gnu-ld \
-			--enable-staticbin, \
-		$(TARGET_CONFIGURE_OPTS) \
-		BUILD_CC="$(TARGET_CC)" HOSTCC="$(HOSTCC)" \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -nostdinc++ -nodefaultlibs" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		LIBS="-nodefaultlibs -luClibc++ -lpthread")
+	$(call Build/Configure/Default, \
+		--enable-staticbin \
+		, \
+		CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
+		LIBS="-nodefaultlibs -luClibc++ -lpthread -lc -lm" \
+	)
 endef
 
 define Build/Compile
-  $(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" all install)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
 endef
 
 define Package/peercast/install	
-	install -m0755 -d $(1)/usr/sbin
+	install -d -m0755 $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/peercast $(1)/usr/sbin/
-	install -m0755 -d $(1)/usr/share/peercast/html
+	install -d -m0755 $(1)/usr/share/peercast/html
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/peercast/html/en $(1)/usr/share/peercast/html/
-	install -m0755 -d $(1)/etc
+	install -d -m0755 $(1)/etc
 	install -m0644 ./files/peercast.ini $(1)/etc/
-	install -m0755 -d $(1)/etc/init.d
+	install -d -m0755 $(1)/etc/init.d
 	install -m0755 ./files/peercast.init $(1)/etc/init.d/peercast
 endef
 

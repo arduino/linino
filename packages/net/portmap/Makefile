@@ -11,14 +11,13 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=portmap
 PKG_VERSION:=5beta
 PKG_RELEASE:=2
-PKG_MD5SUM:=781e16ed4487c4caa082c6fef09ead4f
 
-PKG_SOURCE_URL:=ftp://ftp.porcupine.org/pub/security
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=ftp://ftp.porcupine.org/pub/security
+PKG_MD5SUM:=781e16ed4487c4caa082c6fef09ead4f
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,7 +26,6 @@ define Package/portmap
   CATEGORY:=Network
   DEPENDS:=+libwrap
   TITLE:=RPC Portmapper
-  DESCRIPTION:=The RPC Portmapper (used by the NFS Server)
   URL:=ftp://ftp.porcupine.org/pub/security
 endef
 
@@ -40,10 +38,10 @@ define Build/Compile
 endef
 
 define Package/portmap/install	
-	install -d -m0755 $(1)/etc/init.d 
-	install -m0755 ./files/portmap.init $(1)/etc/init.d/portmap
 	install -d -m0755 $(1)/usr/sbin 
 	install -m0755 $(PKG_BUILD_DIR)/portmap $(1)/usr/sbin/
+	install -d -m0755 $(1)/etc/init.d 
+	install -m0755 ./files/portmap.init $(1)/etc/init.d/portmap
 endef
 
 $(eval $(call BuildPackage,portmap))

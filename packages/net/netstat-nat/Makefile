@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=netstat-nat
 PKG_VERSION:=1.4.6
 PKG_RELEASE:=1
-PKG_MD5SUM:=ccf71a6cbd9a513ea3adec54b54ee770
 
-PKG_SOURCE_URL:=http://tweegy.demon.nl/download/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://tweegy.demon.nl/download/
+PKG_MD5SUM:=ccf71a6cbd9a513ea3adec54b54ee770
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,21 +26,21 @@ define Package/netstat-nat
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A netstat variant for NAT connections
-  DESCRIPTION:=Netstat-nat is a small program written in C.\\\
-	It displays NAT connections, managed by netfilter/iptables which comes\\\
+  DESCRIPTION:=\
+	Netstat-nat is a small program written in C.\\\
+	It displays NAT connections, managed by netfilter/iptables which comes \\\
 	with the > 2.4.x linux kernels.\\\
-	The program reads its information from '/proc/net/ip_conntrack', which\\\
-	is the temporary conntrack-storage of netfilter.\\\
+	The program reads its information from '/proc/net/ip_conntrack', which \\\
+	is the temporary conntrack-storage of netfilter.
   URL:=http://tweegy.demon.nl/projects/netstat-nat/
 endef
 
+# uses GNU configure
+
 define Build/Compile	
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-	  $(TARGET_CONFIGURE_OPTS) \
-	  DESTDIR="$(PKG_INSTALL_DIR)" \
-	  all install
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
 endef
 
 define Package/netstat-nat/install	

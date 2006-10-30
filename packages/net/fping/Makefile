@@ -11,12 +11,13 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=fping
 PKG_VERSION:=2.4b2_to-ipv6
 PKG_RELEASE:=1
-PKG_MD5SUM:=3ad516765514249a40d3c5b6caab812a
 
-PKG_SOURCE_URL:=http://www.fping.com/download/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_URL:=http://www.fping.com/download/
+PKG_MD5SUM:=3ad516765514249a40d3c5b6caab812a
 PKG_CAT:=zcat
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -24,17 +25,20 @@ define Package/fping
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A program to ping multiple hosts in parallel
-  DESCRIPTION:=fping is a ping(1) like program which uses the Internet Control Message Protocol\\\
-(ICMP) echo request to determine if a host is up. fping is different from ping in\\\
-that you can specify any number of hosts on the command line, or specify a file\\\
-containing the lists of hosts to ping. Instead of trying one host until it timeouts\\\
-or replies, fping will send out a ping packet and move on to the next host in a\\\
-round-robin fashion. If a host replies, it is noted and removed from the list of\\\
-hosts to check. If a host does not respond within a certain time limit and/or retry\\\
-limit it will be considered unreachable.\\\
+  DESCRIPTION:=\
+	fping is a ping(1) like program which uses the Internet Control Message Protocol \\\
+	(ICMP) echo request to determine if a host is up. fping is different from ping in \\\
+	that you can specify any number of hosts on the command line, or specify a file \\\
+	containing the lists of hosts to ping. Instead of trying one host until it timeouts \\\
+	or replies, fping will send out a ping packet and move on to the next host in a \\\
+	round-robin fashion. If a host replies, it is noted and removed from the list of \\\
+	hosts to check. If a host does not respond within a certain time limit and/or retry \\\
+	limit it will be considered unreachable.
   URL:=http://www.fping.com
 endef
   
+# uses Build/Configure/Default
+
 define Build/Compile	
 	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" -C $(PKG_BUILD_DIR) clean $(PKG_NAME)
 	mv $(PKG_BUILD_DIR)/$(PKG_NAME) $(PKG_BUILD_DIR)/$(PKG_NAME)4
@@ -43,9 +47,10 @@ define Build/Compile
 endef
 
 define Package/fping/install	
-	mkdir -p $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME)4 $(1)/usr/bin/$(PKG_NAME)
-	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME)6 $(1)/usr/bin/
+	install -d -m0755 $(1)/usr/bin
+	$(CP) $(PKG_BUILD_DIR)/fping4 $(1)/usr/bin/
+	$(CP) $(PKG_BUILD_DIR)/fping6 $(1)/usr/bin/
+	ln -sf fping4 $(1)/usr/bin/fping
 endef
 
 $(eval $(call BuildPackage,fping))
