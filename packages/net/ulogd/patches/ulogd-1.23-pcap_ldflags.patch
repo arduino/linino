@@ -6,7 +6,7 @@ diff -urN ulogd-1.23/pcap/Makefile.in ulogd-1.23.new/pcap/Makefile.in
  
  $(SHARED_LIBS): %.so: %_sh.o
 -	$(LD) -shared -o $@ $< -lc -lpcap
-+	$(LD) -shared -o $@ $< -lc -lpcap -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib
- 
++	$(LD) -shared -o $@ $< @LDFLAGS@ -lc -lpcap 
+
  %_sh.o: %.c
  	$(CC) $(SH_CFLAGS) -o $@ -c $<
