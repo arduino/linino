@@ -1,3 +1,14 @@
 #!/bin/sh
-# trigger for failsafe mode
-[ "$1" = "button" ] && killall sleep
+[ "$1" = "button" -a "$ACTION" = "pressed" ] && {
+	lock /tmp/.failsafe
+
+	. /etc/functions.sh
+	set_state failsafe
+	[ "$(nvram get boot_wait)" != "on" ] && {
+		nvram set boot_wait=on
+		nvram commit
+	}
+
+	netmsg 192.168.1.255 "Entering Failsafe!"
+	telnetd -l /bin/login <> /dev/null 2>&1
+}

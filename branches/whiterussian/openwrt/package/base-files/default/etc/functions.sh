@@ -185,10 +185,9 @@ set_state() {
 			set_led power 0
 		;;
 		failsafe)
-			set_led diag 0 && led=diag
-			set_led power 1 && led=power
-			set_led dmz 0 && led=dmz
-			while :; do { set_led "$led" $(((X=(X+1)%8)%2)); sleep $((X==0)); } done &
+			set_led diag f
+			set_led power f
+			set_led dmz f
 		;;
 		done)
 			set_led dmz 0
