@@ -49,6 +49,12 @@ define Package/dhcp6-server/conffiles
 /etc/dhcpd6/partial_leases6.conf
 endef
 
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	# prevent package from rebuilding
+	find $(PKG_BUILD_DIR) | xargs touch
+endef
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/client \
 		CC="$(TARGET_CC)" \
