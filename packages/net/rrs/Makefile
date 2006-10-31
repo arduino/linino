@@ -39,6 +39,11 @@ define Package/rrs-nossl
   TITLE+= (without SSL support)
 endef
 
+ifneq ($(SDK),)
+  CONFIG_PACKAGE_rrs:=m
+  CONFIG_PACKAGE_rrs-nossl:=m
+endif
+
 define Build/Compile/Template
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CC="$(TARGET_CC)" \
