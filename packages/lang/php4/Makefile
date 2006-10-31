@@ -321,24 +321,24 @@ define Build/Compile
 endef
 
 define Package/php4/install
-	install -m0755 -d $(1)/etc
+	install -d -m0755 $(1)/etc
 	install -m0644 ./files/php.ini $(1)/etc/
 endef
 
 define Package/php4-cli/install
-	install -m0755 -d $(1)/usr/bin
+	install -d -m0755 $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/php-cli $(1)/usr/bin/php
 endef
 
 define Package/php4-cgi/install
-	install -m0755 -d $(1)/usr/bin
+	install -d -m0755 $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/php-cgi $(1)/usr/bin/php
 endef
 
 define Package/php4-fastcgi/install
-	install -m0755 -d $(1)/usr/sbin
+	install -d -m0755 $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/php-fastcgi $(1)/usr/sbin/php
-	install -m0755 -d $(1)/etc/init.d
+	install -d -m0755 $(1)/etc/init.d
 	install -m0755 ./files/php.init $(1)/etc/init.d/php
 endef
 

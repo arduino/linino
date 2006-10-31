@@ -12,7 +12,6 @@ PKG_NAME:=perl
 PKG_VERSION:=5.8.6
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.cpan.org/pub/CPAN/src/5.0 \
 	        ftp://ftp.mpi-sb.mpg.de/pub/perl/CPAN/src/5.0 \
@@ -21,14 +20,16 @@ PKG_SOURCE_URL:=ftp://ftp.cpan.org/pub/CPAN/src/5.0 \
 PKG_MD5SUM:=8d4aa4e061fd5bc0c39e4f0a63267880
 PKG_CAT:=zcat
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/microperl
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=A really minimal perl
-  DESCRIPTION:=A really minimal perl.\\\
-    A perl package without operating-specific functions such as readdir.
+  DESCRIPTION:=\
+	A perl package without operating-specific functions such as readdir.
   URL:=http://www.perl.com/
 endef
 

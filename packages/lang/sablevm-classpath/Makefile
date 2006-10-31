@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=sablevm-classpath
 PKG_VERSION:=1.13
 PKG_RELEASE:=1
-PKG_MD5SUM:=9476bb7a0ad67c6cfa353d06f094cdce
 
-PKG_SOURCE_URL:=http://sablevm.org/download/release/$(PKG_VERSION)/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://sablevm.org/download/release/$(PKG_VERSION)/
+PKG_MD5SUM:=9476bb7a0ad67c6cfa353d06f094cdce
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -22,43 +22,45 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/libsablevm-classpath
+define Package/sablevm-classpath/Default
   SECTION:=lang
   CATEGORY:=Languages
-  TITLE:=Essential native libraries for Java
-  DESCRIPTION:=GNU Classpath, Essential Libraries for Java, is a GNU project to create\\\
-	free core class libraries for use with virtual machines and compilers for\\\
-	the java programming language.\\\
-	This is a modified version for use with SableVM.\\\
   URL:=http://www.gnu.org/software/classpath/
 endef
 
+define Package/libsablevm-classpath
+  $(call Package/sablevm-classpath/Default)
+  TITLE:=Essential native libraries for Java
+  DESCRIPTION:=\
+	GNU Classpath, Essential Libraries for Java, is a GNU project to create \\\
+	free core class libraries for use with virtual machines and compilers for \\\
+	the java programming language.\\\
+	This is a modified version for use with SableVM.
+endef
+
 define Package/sablevm-classpath-full
-  SECTION:=lang
-  CATEGORY:=Languages
-  DEPENDS:=libsablevm-classpath
-  TITLE:=Full set
+  $(call Package/sablevm-classpath/Default)
+  DEPENDS:=+libsablevm-classpath
+  TITLE+= (full)
 endef
 
 define Package/sablevm-classpath-mini
-  SECTION:=lang
-  CATEGORY:=Languages
-  DEPENDS:=libsablevm-classpath
-  TITLE:=Minimal set
+  $(call Package/sablevm-classpath/Default)
+  DEPENDS:=+libsablevm-classpath
+  TITLE+= (minimal)
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--enable-shared \
-		  --disable-static \
+	$(call Build/Configure/Default, \
 		  --disable-gtk-peer \
 		  --disable-gtk-cairo \
-		  --without-x)
+		  --with-jikes \
+		  --without-x \
+	)
 endef
 
 
 define Build/Compile	
-	rm -rf $(PKG_INSTAL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install

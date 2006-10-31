@@ -12,7 +12,6 @@ PKG_NAME:=lua
 PKG_VERSION:=5.0.2
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.lua.org/ftp/ \
 	http://ftp.gwdg.de/pub/languages/lua/ \
@@ -21,63 +20,57 @@ PKG_SOURCE_URL:=http://www.lua.org/ftp/ \
 PKG_MD5SUM:= dea74646b7e5c621fef7174df83c34b1
 PKG_CAT:=zcat
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
+define Package/lua/Default
+  SECTION:=lang
+  CATEGORY:=Languages
+  TITLE:=LUA programming language
+  DESCRIPTION:=\
+	Lua is a powerful light-weight programming language designed for extending \\\
+	applications. Lua is also frequently used as a general-purpose, stand-alone \\\
+	language. Lua is free software.
+  URL:=http://www.lua.org/
+endef
+
 define Package/liblua
+  $(call Package/lua/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=LUA programming language (libraries)
-  DESCRIPTION:=LUA programming language (libraries).\\\
-    Lua is a powerful light-weight programming language designed for extending \\\
-    applications. Lua is also frequently used as a general-purpose, stand-alone \\\
-    language. Lua is free software.\\\
-    \\\
-    This package contains the LUA shared libraries, needed by other programs.
-  URL:=http://www.lua.org/
+  TITLE+= (libraries)
+  DESCRIPTION+=\\\
+	\\\
+	This package contains the LUA shared libraries, needed by other programs.
 endef
 
 define Package/lua
-  SECTION:=utils
-  CATEGORY:=Utilities
+  $(call Package/lua/Default)
   DEPENDS:=+liblua
-  TITLE:=LUA programming language (interpreter)
-  DESCRIPTION:=LUA programming language (interpreter).\\\
-    Lua is a powerful light-weight programming language designed for extending \\\
-    applications. Lua is also frequently used as a general-purpose, stand-alone \\\
-    language. Lua is free software.\\\
-    \\\
-    This package contains the LUA language interpreter.
-  URL:=http://www.lua.org/
-endef
-
-define Package/lua-examples
-  SECTION:=utils
-  CATEGORY:=Utilities
-  DEPENDS:=lua
-  TITLE:=LUA programming language (examples)
-  DESCRIPTION:=LUA programming language (examples).\\\
-    Lua is a powerful light-weight programming language designed for extending \\\
-    applications. Lua is also frequently used as a general-purpose, stand-alone \\\
-    language. Lua is free software.\\\
-    \\\
-    This package contains LUA language examples.
-  URL:=http://www.lua.org/
+  TITLE+= (interpreter)
+  DESCRIPTION+=\\\
+	\\\
+	This package contains the LUA language interpreter.
 endef
 
 define Package/luac
-  SECTION:=utils
-  CATEGORY:=Utilities
+  $(call Package/lua/Default)
   DEPENDS:=+liblua
-  TITLE:=LUA programming language (compiler)
-  DESCRIPTION:=LUA programming language (compiler).\\\
-    Lua is a powerful light-weight programming language designed for extending \\\
-    applications. Lua is also frequently used as a general-purpose, stand-alone \\\
-    language. Lua is free software.\\\
-    \\\
-    This package contains the LUA language compiler.
-  URL:=http://www.lua.org/
+  TITLE+= (compiler)
+  DESCRIPTION+=\\\
+	\\\
+	This package contains the LUA language compiler.
+endef
+
+define Package/lua-examples
+  $(call Package/lua/Default)
+  DEPENDS:=lua
+  TITLE+= (examples)
+  DESCRIPTION+=\\\
+	\\\
+	This package contains LUA language examples.
 endef
 
 define Build/Configure
@@ -111,6 +104,21 @@ define Build/Compile
 		install soinstall
 endef
 
+define Build/InstallDev
+	mkdir -p $(STAGING_DIR)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/lua{,lib}.h $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/lauxlib.h $(STAGING_DIR)/usr/include/
+	mkdir -p $(STAGING_DIR)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua{,lib}.{a,so*} $(STAGING_DIR)/usr/lib/
+endef
+
+define Build/UninstallDev
+	rm -rf \
+		$(STAGING_DIR)/usr/include/lua{,lib}.h \
+		$(STAGING_DIR)/usr/include/lauxlib.h \
+		$(STAGING_DIR)/usr/lib/liblua{,lib}.{a,so*}
+endef
+
 define Package/liblua/install
 	install -d -m0755 $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua{,lib}.so.* $(1)/usr/lib/
@@ -132,22 +140,7 @@ define Package/lua-examples/install
 		$(1)/usr/share/lua/examples/
 endef
 
-define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/lua{,lib}.h $(STAGING_DIR)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/lauxlib.h $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua{,lib}.{a,so*} $(STAGING_DIR)/usr/lib/
-endef
-
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/lua{,lib}.h \
-		$(STAGING_DIR)/usr/include/lauxlib.h \
-		$(STAGING_DIR)/usr/lib/liblua{,lib}.{a,so*}
-endef
-
 $(eval $(call BuildPackage,liblua))
 $(eval $(call BuildPackage,lua))
-$(eval $(call BuildPackage,lua-examples))
 $(eval $(call BuildPackage,luac))
+$(eval $(call BuildPackage,lua-examples))
