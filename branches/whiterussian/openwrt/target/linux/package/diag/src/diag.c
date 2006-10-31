@@ -121,6 +121,9 @@ enum {
 	/* Motorola */
 	WR850GV1,
 	WR850GV2,
+
+	/* Belkin */
+	BELKIN_UNKNOWN,
 };
 
 static struct platform_t __init platforms[] = {
@@ -370,9 +373,11 @@ static struct platform_t __init platforms[] = {
 			{ .name = "reset",	.gpio = 1 << 0 },
 		},
 		.leds		= {
+			{ .name = "power",	.gpio = 1 << 4, .polarity = NORMAL },
 			{ .name = "diag",	.gpio = 1 << 3, .polarity = REVERSE },
-			{ .name = "wlan_red",	.gpio = 1 << 5, .polarity = NORMAL },
-			{ .name = "wlan_green",	.gpio = 1 << 7, .polarity = NORMAL },
+			{ .name = "modem",	.gpio = 1 << 6, .polarity = NORMAL },
+			{ .name = "wlan_red",	.gpio = 1 << 5, .polarity = REVERSE },
+			{ .name = "wlan_green",	.gpio = 1 << 7, .polarity = REVERSE },
 		},
 	},
 	[WR850GV2] = {
@@ -382,8 +387,21 @@ static struct platform_t __init platforms[] = {
 		},
 		.leds		= {
 			{ .name = "diag",	.gpio = 1 << 1, .polarity = REVERSE },
-			{ .name = "wlan",	.gpio = 1 << 0, .polarity = REVERSE },
-			{ .name = "modem",	.gpio = 1 << 7, .polarity = NORMAL },
+			{ .name = "wlan",	.gpio = 1 << 0, .polarity = NORMAL },
+			{ .name = "modem_green",.gpio = 1 << 6, .polarity = REVERSE },
+			{ .name = "modem_red",	.gpio = 1 << 7, .polarity = REVERSE },
+		},
+	/* Belkin */
+	[BELKIN_UNKNOWN] = {
+		.name		= "Belkin (unknown)"
+		/* FIXME: verify & add detection */
+		.buttons	= {
+			{ .name = "reset",	.gpio = 1 << 7 },
+		},
+		.leds		= {
+			{ .name = "power",	.gpio = 1 << 5, .polarity = NORMAL },
+			{ .name = "wlan",	.gpio = 1 << 3, .polarity = NORMAL },
+			{ .name = "connected",	.gpio = 1 << 0, .polarity = NORMAL },
 		},
 	},
 };
