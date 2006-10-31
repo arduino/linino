@@ -15,7 +15,7 @@ diff -urN mrd6-0.9.5/src/Makefile mrd6-0.9.5.new/src/Makefile
  endif
  
 -LDFLAGS += -lm
-+LDFLAGS += -lm -lnotimpl -L$(STAGING_DIR)/usr/lib
++LDFLAGS += -L$(STAGING_DIR)/usr/lib -lnotimpl -lm
  ifeq ($(PLATFORM),OS_LINUX)
  	LDFLAGS += -ldl
  endif
