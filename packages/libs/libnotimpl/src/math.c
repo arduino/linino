@@ -1,6 +1,6 @@
 /* vi: set sw=4 ts=4: */
 
-#include "math.h"
+#include <math.h>
 
 
 /* cosf for uClibc
@@ -63,6 +63,6 @@
 	float x;
 #endif
 {
-	return (float) sin( (double)x );
+	return (float) rint( (double)x );
 }
 
