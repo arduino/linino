@@ -104,6 +104,7 @@ enum {
 	WBR2_G54,
 	WHR_G54S,
 	WHR_HP_G54,
+	WHR2_A54G54,
 	WLA2_G54L,
 	BUFFALO_UNKNOWN,
 	BUFFALO_UNKNOWN_4710,
@@ -293,6 +294,15 @@ static struct platform_t __init platforms[] = {
 			{ .name = "diag",	.gpio = 1 << 7, .polarity = REVERSE },
 			{ .name = "bridge",	.gpio = 1 << 1, .polarity = REVERSE },
 			{ .name = "ses",	.gpio = 1 << 6, .polarity = REVERSE },
+		},
+	},
+	[WHR2_A54G54] = {
+		.name		= "Buffalo WHR2-A54G54",
+		.buttons	= {
+			{ .name = "reset",	.gpio = 1 << 4 },
+		},
+		.leds		= {
+			{ .name = "diag",	.gpio = 1 << 7, .polarity = REVERSE },
 		},
 	},
 	[WLA2_G54L] = {
@@ -490,6 +500,8 @@ static struct platform_t __init *platform_detect(void)
 			return &platforms[WHR_HP_G54];
 		if (!strcmp(buf, "30182"))
 			return &platforms[WHR_G54S];
+		if (!strcmp(buf, "290441dd"))
+			return &platforms[WHR2_A54G54];
 	}
 
 	if (buf || !strcmp(boardnum, "00")) {/* probably buffalo */
