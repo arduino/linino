@@ -391,9 +391,10 @@ static struct platform_t __init platforms[] = {
 			{ .name = "modem_green",.gpio = 1 << 6, .polarity = REVERSE },
 			{ .name = "modem_red",	.gpio = 1 << 7, .polarity = REVERSE },
 		},
+	},
 	/* Belkin */
 	[BELKIN_UNKNOWN] = {
-		.name		= "Belkin (unknown)"
+		.name		= "Belkin (unknown)",
 		/* FIXME: verify & add detection */
 		.buttons	= {
 			{ .name = "reset",	.gpio = 1 << 7 },
