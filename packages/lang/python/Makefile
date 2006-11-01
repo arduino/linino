@@ -18,6 +18,7 @@ PKG_MD5SUM:=141c683447d5e76be1d2bd4829574f02
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Python-$(PKG_VERSION)
+PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -75,15 +76,22 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		$(MAKE_OPTS) \
-		all
+		all install
+endef
+
+define Build/InstallDev
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/python2.4 $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.4 $(STAGING_DIR)/usr/lib/
 endef
 
 define Package/python/install
-	mkdir -p $(1)/lib
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(MAKE_OPTS) \
-		DESTDIR="$(1)" \
-		install
+	mkdir -p $(1)/usr/{bin,lib}
+	$(CP) $(PKG_INSTALL_DIR)/usr/{bin,lib} $(1)/usr/
+endef
+
+define Build/UninstallDev
+	rm -rf \
+		$(STAGING_DIR)/usr/{include,lib}/python2.4
 endef
 
 $(eval $(call BuildPackage,python))
