@@ -66,7 +66,7 @@ endef
 MAKE_OPTS= \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		LD_LIBRARY_PATH="$(STAGING_DIR)/lib:$(LD_LIBRARY_PATH)" \
+		LD_LIBRARY_PATH="$(LD_LIBRARY_PATH)" \
 		LD="$(TARGET_CC)" \
 		HOSTPYTHON=./hostpython \
 		HOSTPGEN=./Parser/hostpgen
