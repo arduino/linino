@@ -23,11 +23,11 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 include $(INCLUDE_DIR)/package.mk
 
 define Package/python
-	SECTION:=lang
-	CATEGORY:=Languages
-	TITLE:=Python programming language
-	URL:=http://www.python.org
-	DEPENDS:=+uclibcxx
+  SECTION:=lang
+  CATEGORY:=Languages
+  DEPENDS:=+uclibcxx
+  TITLE:=Python programming language
+  URL:=http://www.python.org/
 endef
 
 define Package/python/description
@@ -51,9 +51,8 @@ define Build/Configure
 		make distclean; \
 		echo "import sys" > $(PKG_BUILD_DIR)/setup.py.new; \
 		echo "sys.path.append('$(PKG_BUILD_DIR)/Lib')" >> $(PKG_BUILD_DIR)/setup.py.new; \
-		cat $(PKG_BUILD_DIR)/setup.py.new $(PKG_BUILD_DIR)/setup.py > $(PKG_BUILD_DIR)/setup.py.foo; \
-		mv $(PKG_BUILD_DIR)/setup.py.foo $(PKG_BUILD_DIR)/setup.py; \
-		rm $(PKG_BUILD_DIR)/setup.py.new; \
+		cat $(PKG_BUILD_DIR)/setup.py >> $(PKG_BUILD_DIR)/setup.py.new; \
+		mv $(PKG_BUILD_DIR)/setup.py.new $(PKG_BUILD_DIR)/setup.py; \
 	);
 	$(call Build/Configure/Default, \
 		--disable-shared \
@@ -64,7 +63,7 @@ define Build/Configure
 	)
 endef
 
-MAKE_OPTS= \
+MAKE_OPTS:=\
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		LD_LIBRARY_PATH="$(LD_LIBRARY_PATH)" \
@@ -74,24 +73,37 @@ MAKE_OPTS= \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
 		$(MAKE_OPTS) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
 
 define Build/InstallDev
+	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/python2.4 $(STAGING_DIR)/usr/include/
+	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.4 $(STAGING_DIR)/usr/lib/
-endef
-
-define Package/python/install
-	mkdir -p $(1)/usr/{bin,lib}
-	$(CP) $(PKG_INSTALL_DIR)/usr/{bin,lib} $(1)/usr/
 endef
 
 define Build/UninstallDev
 	rm -rf \
 		$(STAGING_DIR)/usr/{include,lib}/python2.4
+endef
+
+define Package/python/install
+	install -d -m0755 $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/python2.4 $(1)/usr/bin/
+	ln -sf python2.4 $(1)/usr/bin/python
+	install -d -m0755 $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.4 $(1)/usr/lib/
+	rm -rf \
+		$(1)/usr/lib/python2.4/bsddb/test \
+		$(1)/usr/lib/python2.4/distutils/tests \
+		$(1)/usr/lib/python2.4/email/test \
+		$(1)/usr/lib/python2.4/idlelib \
+		$(1)/usr/lib/python2.4/lib-tk \
+		$(1)/usr/lib/python2.4/test \
+
 endef
 
 $(eval $(call BuildPackage,python))
