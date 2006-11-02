@@ -40,12 +40,6 @@ define Package/xsupplicant/conffiles
 endef
 
 define Build/Configure	
-	(cd $(PKG_BUILD_DIR); touch \
-		configure.in \
-		aclocal.m4 \
-		Makefile.in \
-		configure \
-	);
 	$(call Build/Configure/Default, \
 		--with-openssl="$(STAGING_DIR)/usr" \
 		--with-madwifi-path="$(STAGING_DIR)/usr/include/madwifi" \
