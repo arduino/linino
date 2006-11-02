@@ -66,3 +66,33 @@
 	return (float) rint( (double)x );
 }
 
+/* logf for uClibc
+ * 
+ * wrapper for logf(x)
+ */
+
+#ifdef __STDC__
+	float logf(float x)
+#else
+	float logf(x)
+	float x;
+#endif
+{
+	return (float) logf( (double)x );
+}
+
+/* expf for uClibc
+ *
+ * wrapper for expf(x)
+ */
+
+#ifdef __STDC__
+    float expf(float x)
+#else
+    float expf(x)
+    float x;
+#endif
+{
+    return (float) expf( (double)x );
+}
+
