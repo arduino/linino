@@ -39,6 +39,8 @@ endef
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-external-gsm \
+		, \
+		LIBS="-lnotimpl -lm" \
 	)
 endef
 
