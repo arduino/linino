@@ -9,14 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor
-PKG_VERSION:=0.1.0.17
+PKG_VERSION:=0.1.1.24
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://tor.eff.org/dist/ \
 	http://ftp.se.linux.org/crypto/tor/ \
 	http://tor.meulie.net/
-PKG_MD5SUM:=83c4afe29fa82473afcb2ec7e17771b9
+PKG_MD5SUM:=28dea6a77a43b6e421e1bd7b2cc3d940
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -79,13 +79,22 @@ fi
 endef
 
 define Build/Configure
+	(cd $(PKG_BUILD_DIR); touch \
+		configure.in \
+		aclocal.m4 \
+		Makefile.in \
+		configure \
+	);
 	$(call Build/Configure/Default,\
+		--with-libevent-dir="$(STAGING_DIR)/usr/" \
 		--with-gnu-ld \
 		, \
 		ac_cv_libevent_normal=yes \
 		ac_cv_openssldir="$(STAGING_DIR)/usr" \
 		tor_cv_null_is_zero=yes \
 		tor_cv_unaligned_ok=yes \
+		tor_cv_time_t_signed=yes \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -levent" \
 	)
 endef
 
