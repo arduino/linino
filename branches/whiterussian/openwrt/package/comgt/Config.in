@@ -1,6 +1,6 @@
 config BR2_PACKAGE_COMGT
 	tristate "comgt - Option/Vodafone 3G/GPRS control tool"
-	default m
+	default m if CONFIG_DEVEL
 	select BR2_PACKAGE_CHAT
 	help
 	  Option GlobeTrotter GPRS/EDGE/3G/HSDPA and Vodafone 3G/GPRS datacard control tool

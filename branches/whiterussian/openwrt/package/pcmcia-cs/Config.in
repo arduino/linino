@@ -7,7 +7,7 @@ config BR2_PACKAGE_PCMCIA_UTILS
 	tristate "pcmcia-utils - PCMCIA/Cardbus management utilities"
 	select BR2_COMPILE_PCMCIA_CS
 	select BR2_PACKAGE_KMOD_PCMCIA
-	default m
+	default m if CONFIG_DEVEL
 	help
 	  PCMCIA/Cardbus management utilities
 	  
