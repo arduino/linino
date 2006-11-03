@@ -93,7 +93,7 @@ fi
 			$KEEPALIVE \
 			lock \
 			crtscts \
-			connect "WWAN_APN=\"$APN\" /usr/sbin/chat -V -E -f /etc/chatscripts/wwan.chat"
+			connect "WWAN_APN=\"$APN\" /usr/sbin/chat -V -E -f /etc/chatscripts/wwan.chat" \
 			460800 "$wwan_device"
 	else
 		echo "Wrong Pincode."
