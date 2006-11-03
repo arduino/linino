@@ -60,7 +60,7 @@ define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/share/libtool
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/libtool/config.guess $(STAGING_DIR)/usr/share/libtool/
 	$(SED) 's|^sys_lib_dlsearch_path_spec=.*|sys_lib_dlsearch_path_spec="$(STAGING_DIR)/usr/lib $(STAGING_DIR)/lib"|g' \
-		$(PKG_INSTALL_DIR)/usr/bin/libtool
+		$(STAGING_DIR)/usr/bin/libtool
 endef
 
 define Build/UninstallDev
