@@ -10,7 +10,7 @@ type=$1
 
 mkdir -p /var/lock
 
-for module in slhc ppp_generic pppox pppoe; do
+for module in slhc ppp_generic ppp_async; do
 	/sbin/insmod $module 2>&- >&-
 done
 
