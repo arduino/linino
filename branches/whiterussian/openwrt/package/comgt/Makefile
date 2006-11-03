@@ -31,6 +31,8 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_COMGT):
 	install -d -m0755 $(IDIR_COMGT)/usr/bin
 	install -m0755 $(PKG_BUILD_DIR)/gcom $(IDIR_COMGT)/usr/bin/
+	install -d -m0755 $(IDIR_COMGT)/etc/ppp
+	install -m0755 ./files/wwan.connect $(IDIR_COMGT)/etc/ppp/wwan.connect
 	install -d -m0755 $(IDIR_COMGT)/etc/chatscripts
 	install -m0644 ./files/wwan.chat $(IDIR_COMGT)/etc/chatscripts/wwan.chat
 	install -d -m0755 $(IDIR_COMGT)/etc/gcom
@@ -40,6 +42,11 @@ $(IPKG_COMGT):
 	install -m0644 ./files/getstrength.gcom $(IDIR_COMGT)/etc/gcom/getstrength.gcom
 	install -d -m0755 $(IDIR_COMGT)/sbin
 	install -m0755 ./files/ifup.wwan $(IDIR_COMGT)/sbin/
+	install -m0755 ./files/ifdown.wwan $(IDIR_COMGT)/sbin/
+	install -d -m0755 $(IDIR_COMGT)/etc/hotplug.d/iface
+	install -m0644 ./files/wwan.iface $(IDIR_COMGT)/etc/hotplug.d/iface/05-wwan
+	install -d -m0755 $(IDIR_COMGT)/etc/hotplug.d/button
+	install -m0644 ./files/wwan.button $(IDIR_COMGT)/etc/hotplug.d/button/01-wwan
 	$(RSTRIP) $(IDIR_COMGT)
 	$(IPKG_BUILD) $(IDIR_COMGT) $(PACKAGE_DIR)
 

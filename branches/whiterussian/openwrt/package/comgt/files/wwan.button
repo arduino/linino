@@ -1,0 +1,18 @@
+[ "$ACTION" = "released" -a "$BUTTON" = "3g" ] && {
+	(echo /bin/true > /proc/sys/kernel/hotplug)
+	
+	# use led for keeping track of the state
+	case "$(cat /proc/diag/led/3g_green)" in
+		1)
+			ifdown wwan
+			ifup wan
+		;;
+		0)
+			ifdown wan
+			ifup wwan
+		;;
+	esac
+	sleep 1
+
+	(echo /sbin/hotplug > /proc/sys/kernel/hotplug)
+}

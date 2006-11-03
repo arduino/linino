@@ -72,15 +72,18 @@ fi
 			
 	MTU=$(nvram get wwan_mtu)
 
+	echo 0 > /proc/diag/led/3g_blue
+	echo 1 > /proc/diag/led/3g_green
+	echo 1 > /proc/diag/led/3g_blink
 	if PINCODE=$(nvram get wwan_pincode) gcom -d $wwan_device -s /etc/gcom/setpin.gcom; then
 		MODE="$MODE" gcom -d $wwan_device -s /etc/gcom/setmode.gcom
+		echo 0 > /proc/diag/led/3g_blink
 		/usr/sbin/pppd nodetach \
 			noaccomp \
 			nopcomp \
 			novj \
 			nobsdcomp \
 			noauth \
-			connect /bin/true \
 			usepeerdns \
 			defaultroute \
 			replacedefaultroute \
@@ -93,7 +96,7 @@ fi
 			$KEEPALIVE \
 			lock \
 			crtscts \
-			connect "WWAN_APN=\"$APN\" /usr/sbin/chat -V -E -f /etc/chatscripts/wwan.chat" \
+			connect "WWAN_APN=\"$APN\" /etc/ppp/wwan.connect" \
 			460800 "$wwan_device"
 	else
 		echo "Wrong Pincode."

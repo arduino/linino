@@ -1,0 +1,12 @@
+[ "$INTERFACE" = "wwan" ] && {
+	case "$ACTION" in
+		ifup)
+			echo 0 > /proc/diag/led/3g_blink
+		;;
+		ifdown)
+			echo 0 > /proc/diag/led/3g_blue
+			echo 0 > /proc/diag/led/3g_green
+			echo 0 > /proc/diag/led/3g_blink
+		;;
+	esac
+}
