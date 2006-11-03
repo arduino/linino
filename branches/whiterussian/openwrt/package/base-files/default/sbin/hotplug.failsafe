@@ -1,5 +1,6 @@
 #!/bin/sh
 [ "$1" = "button" -a "$ACTION" = "pressed" ] && {
+	echo /bin/true > /proc/sys/kernel/hotplug
 	lock /tmp/.failsafe
 
 	case "$(nvram get boardtype)" in
@@ -16,4 +17,8 @@
 
 	netmsg 192.168.1.255 "Entering Failsafe!"
 	telnetd -l /bin/login <> /dev/null 2>&1
+
+	exec </dev/tts/0 >/dev/tts/0 2>/dev/tts/0
+	ash --login
+	lock -u /tmp/.failsafe
 }

@@ -1,27 +1,9 @@
 #!/bin/sh
-(
-	lock -w /tmp/.failsafe
-	echo /sbin/hotplug > /proc/sys/kernel/hotplug
-	
-	ifconfig $ifname 0.0.0.0 down
-	
-	# revert to the boot loader's vlan config
-	# required for at least WRT54G v1.1
-	[ -d /proc/switch/eth0 ] && {
-		echo "$v0p" > /proc/switch/eth0/vlan/0/ports
-		echo "$v1p" > /proc/switch/eth0/vlan/1/ports
-		echo "$v2p" > /proc/switch/eth0/vlan/2/ports
-		unset v0p v1p v2p
-	}
-	
-	mount_root
-	
-	syslog_ip=$(nvram get log_ipaddr)
-	eval $(ipcalc "$syslog_ip")
-	[ "$syslog_ip" = "$IP" ] || syslog_ip=""
-	syslogd -C 16 ${syslog_ip:+-L -R $syslog_ip}
-	klogd
-	for i in /etc/init.d/S*; do
-	  $i start 2>&1
-	done 
-) | logger -s -p 6 -t '' &
+syslog_ip=$(nvram get log_ipaddr)
+eval $(ipcalc "$syslog_ip")
+[ "$syslog_ip" = "$IP" ] || syslog_ip=""
+syslogd -C 16 ${syslog_ip:+-L -R $syslog_ip}
+klogd
+for i in /etc/init.d/S*; do
+  $i start 2>&1
+done | logger -s -p 6 -t '' &
