@@ -129,6 +129,7 @@ enum {
 	TM2300,
 
 	/* Motorola */
+	WE800G,
 	WR850GV1,
 	WR850GV2,
 
@@ -384,6 +385,17 @@ static struct platform_t __init platforms[] = {
 		},
 	},
 	/* Motorola */
+	[WE800G] = {
+		.name		= "Motorola WE800G",
+		.buttons	= {
+			{ .name = "reset",	.gpio = 1 << 0 },
+		},
+		.leds		= {
+			{ .name = "power",	.gpio = 1 << 4, .polarity = NORMAL },
+			{ .name = "diag",	.gpio = 1 << 2, .polarity = REVERSE },
+			{ .name = "wlan_amber",	.gpio = 1 << 1, .polarity = NORMAL },
+		},
+	},
 	[WR850GV1] = {
 		.name		= "Motorola WR850G V1",
 		.buttons	= {
@@ -502,8 +514,11 @@ static struct platform_t __init *platform_detect(void)
 			return &platforms[ASUS_4702];
 
 		if ((simple_strtoul(getvar("GemtekPmonVer"), NULL, 0) == 9) &&
-			(simple_strtoul(getvar("et0phyaddr"), NULL, 0) == 30))
+			(simple_strtoul(getvar("et0phyaddr"), NULL, 0) == 30) &&
+			(!strncmp(getvar("ModelId"),"WE800G", 6)))
 			return &platforms[WR850GV1];
+		else
+			return &platforms[WE800G];
 	}
 
 	if ((buf = (nvram_get("melco_id") ?: nvram_get("buffalo_id")))) {
