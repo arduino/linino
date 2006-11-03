@@ -440,6 +440,8 @@ static struct proc_dir_entry *diag, *leds;
 
 extern void *bcm947xx_sbh;
 #define sbh bcm947xx_sbh
+extern spinlock_t bcm947xx_sbh_lock;
+#define sbh_lock bcm947xx_sbh_lock
 
 static int sb_irq(void *sbh);
 static struct platform_t platform;
@@ -681,14 +683,32 @@ struct event_t {
 
 static void hotplug_button(struct event_t *event)
 {
-	/* can't do it from interrupt context, reschedule */
-	if (in_interrupt()) {
-		schedule_task(&event->tq);
-		return;
-	}
 	call_usermodehelper (event->argv[0], event->argv, event->envp);
 	kfree(event);
 }
+
+static void set_irqenable(int enabled)
+{
+	unsigned int coreidx;
+	unsigned long flags;
+	chipcregs_t *cc;
+
+	spin_lock_irqsave(sbh_lock, flags);
+	coreidx = sb_coreidx(sbh);
+	if ((cc = sb_setcore(sbh, SB_CC, 0))) {
+		int intmask;
+
+		intmask = readl(&cc->intmask);
+		if (enabled)
+			intmask |= CI_GPIO;
+		else
+			intmask &= ~CI_GPIO;
+		writel(intmask, &cc->intmask);
+	}
+	sb_setcoreidx(sbh, coreidx);
+	spin_unlock_irqrestore(sbh_lock, flags);
+}
+
 
 static void button_handler(int irq, void *dev_id, struct pt_regs *regs)
 {
@@ -696,15 +716,15 @@ static void button_handler(int irq, void *dev_id, struct pt_regs *regs)
 	int in = sb_gpioin(sbh);
 	struct event_t *event;
 
+	set_irqenable(0);
 	for (b = platform.buttons; b->name; b++) { 
 		if (b->gpio & gpiomask)
 			continue;
 
 		if (b->polarity != (in & b->gpio)) {
-
 			b->pressed ^= 1;
 
-			if ((event = (struct event_t *)kmalloc (256, GFP_KERNEL))) {
+			if ((event = (struct event_t *)kmalloc (sizeof(struct event_t), GFP_ATOMIC))) {
 				int i;
 				char *scratch = event->buf;
 
@@ -733,6 +753,7 @@ static void button_handler(int irq, void *dev_id, struct pt_regs *regs)
 			sb_gpiointpolarity(sbh, b->gpio, b->polarity);
 		}
 	}
+	set_irqenable(1);
 }
 
 static struct timer_list led_timer = {
@@ -775,7 +796,6 @@ static void led_flash(unsigned long dummy) {
 static void __init register_buttons(struct button_t *b)
 {
 	int irq = sb_irq(sbh) + 2;
-	chipcregs_t *cc;
 
 	request_irq(irq, button_handler, SA_SHIRQ | SA_SAMPLE_RANDOM, "gpio", button_handler);
 
@@ -789,14 +809,7 @@ static void __init register_buttons(struct button_t *b)
 		sb_gpiointpolarity(sbh, b->gpio, b->polarity);
 		sb_gpiointmask(sbh, b->gpio, b->gpio);
 	}
-
-	if ((cc = sb_setcore(sbh, SB_CC, 0))) {
-		int intmask;
-
-		intmask = readl(&cc->intmask);
-		intmask |= CI_GPIO;
-		writel(intmask, &cc->intmask);
-	}
+	set_irqenable(1);
 }
 
 static void __exit unregister_buttons(struct button_t *b)
