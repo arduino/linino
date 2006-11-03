@@ -94,6 +94,8 @@ define Package/openntpd/install
 	install -m0644 ./files/ntpd.conf $(1)/etc/
 	install -d -m0755 $(1)/etc/init.d
 	install -m0755 ./files/ntpd.init $(1)/etc/init.d/ntpd
+	install -d -m0755 $(1)/etc/hotplug.d/iface
+	install -m0755 ./files/ntpd.hotplug $(1)/etc/hotplug.d/iface/20-ntpd
 endef
 
 $(eval $(call BuildPackage,openntpd))
