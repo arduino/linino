@@ -173,7 +173,10 @@ nvram_default lan_proto static
 }
 
 # hack for some motorola routers
-nvram unset wl0gpio0
+[  "$boardnum" != "00" ] && nvram unset wl0gpio0
+
+# buffalo routers use gpio0 for the aoss input button
+[  "$boardnum" = "00" ] && nvram set wl0gpio0=0
 
 # defaults, can be overridden by hardware-specific nvram_default commands
 nvram_default lan_ifname "br0"
