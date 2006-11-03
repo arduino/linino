@@ -9,9 +9,15 @@ case "$if_proto" in
 	none|"")exit;;
 esac
 if=$(nvram get ${type}_ifname)
-[ "${if%%[0-9]}" = "ppp" ] && if=$(nvram get ${type}_device)
+if [ "${if%%[0-9]}" = "ppp" ]; then
+	if=$(nvram get ${type}_device)
+	if_valid "$if" || {
+		[ "$if_proto" = "pppoe" ] && exit
+	}
+else
+	if_valid "$if" || exit
+fi
 
-if_valid $if || [ "$if_proto" = "pptp" ] || exit 
 mac=$(nvram get ${type}_hwaddr)
 $DEBUG ifconfig $if down 2>&-
 
