@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openntpd
-PKG_VERSION:=3.7p1
+PKG_VERSION:=3.9p1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -17,7 +17,7 @@ PKG_SOURCE_URL:=ftp://ftp.openbsd.org/pub/OpenBSD/OpenNTPD/ \
 	ftp://ftp.de.openbsd.org/pub/unix/OpenBSD/OpenNTPD/ \
 	ftp://ftp.fr.openbsd.org/pub/OpenBSD/OpenNTPD/ \
 	ftp://ftp.sunet.se/pub/OpenBSD/OpenNTPD/
-PKG_MD5SUM:=10ed8eefd760e5819efcf3277b118f47
+PKG_MD5SUM:=afc34175f38d08867c1403d9008600b3
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
