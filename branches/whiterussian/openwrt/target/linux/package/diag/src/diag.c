@@ -516,11 +516,12 @@ static struct platform_t __init *platform_detect(void)
 			return &platforms[ASUS_4702];
 
 		if ((simple_strtoul(getvar("GemtekPmonVer"), NULL, 0) == 9) &&
-			(simple_strtoul(getvar("et0phyaddr"), NULL, 0) == 30) &&
-			(!strncmp(getvar("ModelId"),"WE800G", 6)))
-			return &platforms[WR850GV1];
-		else
-			return &platforms[WE800G];
+			(simple_strtoul(getvar("et0phyaddr"), NULL, 0) == 30)) {
+			if (!strncmp(getvar("ModelId"),"WE800G", 6))
+				return &platforms[WE800G];
+			else
+				return &platforms[WR850GV1];
+		}
 	}
 
 	if ((buf = (nvram_get("melco_id") ?: nvram_get("buffalo_id")))) {
