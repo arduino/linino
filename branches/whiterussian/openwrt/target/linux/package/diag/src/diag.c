@@ -464,7 +464,7 @@ static struct platform_t __init *platform_detect(void)
 			return &platforms[USR5461];
 	} else { /* PMON based - old stuff */
 		if (!strncmp(boardtype, "bcm94710dev", 11)) {
-			if (!strcmp(boardtype, "42"))
+			if (!strcmp(boardnum, "42"))
 				return &platforms[WRT54GV1];
 			if (simple_strtoul(boardnum, NULL, 9) == 2)
 				return &platforms[WAP54GV1];
