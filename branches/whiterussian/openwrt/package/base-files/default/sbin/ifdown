@@ -10,6 +10,7 @@ proto=$(nvram get ${type}_proto)
 if_valid $if && $DEBUG ifconfig $if down
 [ -r /var/run/${if}.pid ] && kill $(cat /var/run/${if}.pid 2>&-) 2>&-
 killall ifup.$proto >&- 2>&-
+[ -x "/sbin/ifdown.$proto" ] && /sbin/ifdown.$proto "$type"
 case "$proto" in
 	pptp|pppoe) killall pppd >&- 2>&- ;;
 	static) env -i ACTION="ifdown" INTERFACE="$type" PROTO=static /sbin/hotplug "iface" ;;
