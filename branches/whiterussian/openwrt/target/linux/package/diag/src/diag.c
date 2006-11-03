@@ -40,6 +40,14 @@
 #define MAX_GPIO 8
 #define FLASH_TIME HZ/6
 
+#define EXTIF_ADDR 0x1f000000
+#define EXTIF_UART (EXTIF_ADDR + 0x00800000)
+
+/* For LEDs */
+#define GPIO_TYPE_NORMAL	(0x0 << 24)
+#define GPIO_TYPE_EXTIF 	(0x1 << 24)
+#define GPIO_TYPE_MASK  	(0xf << 24)
+
 static unsigned int gpiomask = 0;
 module_param(gpiomask, int, 0644);
 
@@ -72,9 +80,10 @@ struct button_t {
 struct led_t {
 	struct prochandler_t proc;
 	char *name;
-	u16 gpio;
+	u32 gpio;
 	u8 polarity;
 	u8 flash;
+	u8 state;
 };
 
 struct platform_t {
@@ -157,10 +166,8 @@ static struct platform_t __init platforms[] = {
 			{ .name = "reset",	.gpio = 1 << 6 },
 		},
 		.leds		= { 
-			/* FIXME */
-			{ .name = "diag",	.gpio = 1 << 1 },
-			{ .name = "dmz",	.gpio = 1 << 7 },
-			{ .name = "wlan",	.gpio = 1 << 0 },
+			{ .name = "diag",	.gpio = 0x13 | GPIO_TYPE_EXTIF, .polarity = NORMAL },
+			{ .name = "dmz",	.gpio = 0x12 | GPIO_TYPE_EXTIF, .polarity = NORMAL },
 		},
 	},
 	[WRT54G] = {
@@ -434,6 +441,15 @@ static inline char __init *getvar(char *str)
 	return nvram_get(str)?:"";
 }
 
+static void set_led_extif(struct led_t *led)
+{
+	volatile u8 *addr = (volatile u8 *) KSEG1ADDR(EXTIF_UART) + (led->gpio & ~GPIO_TYPE_MASK);
+	if (led->state)
+		*addr = 0xFF;
+	else
+		*addr;
+}
+
 static struct platform_t __init *platform_detect(void)
 {
 	char *boardnum, *boardtype, *buf;
@@ -549,9 +565,13 @@ static ssize_t diag_proc_read(struct file *file, char *buf, size_t count, loff_t
 				if (led->flash) {
 					len = sprintf(page, "f\n");
 				} else {
-					int in = (sb_gpioin(sbh) & led->gpio ? 1 : 0);
-					int p = (led->polarity == NORMAL ? 0 : 1);
-					len = sprintf(page, "%d\n", ((in ^ p) ? 1 : 0));
+					if (led->gpio & GPIO_TYPE_EXTIF) {
+						len = sprintf(page, "%d\n", led->state);
+					} else {
+						int in = (sb_gpioin(sbh) & led->gpio ? 1 : 0);
+						int p = (led->polarity == NORMAL ? 0 : 1);
+						len = sprintf(page, "%d\n", ((in ^ p) ? 1 : 0));
+					}
 				}
 				break;
 			}
@@ -607,7 +627,7 @@ static ssize_t diag_proc_write(struct file *file, const char *buf, size_t count,
 				struct led_t *led = (struct led_t *) handler->ptr;
 				int p = (led->polarity == NORMAL ? 0 : 1);
 				
-				if (led->gpio & gpiomask)
+				if (!(led->gpio & GPIO_TYPE_EXTIF) && (led->gpio & gpiomask))
 					break;
 
 				if (page[0] == 'f') {
@@ -615,9 +635,14 @@ static ssize_t diag_proc_write(struct file *file, const char *buf, size_t count,
 					led_flash(0);
 				} else {
 					led->flash = 0;
-					sb_gpioouten(sbh, led->gpio, led->gpio);
-					sb_gpiocontrol(sbh, led->gpio, 0);
-					sb_gpioout(sbh, led->gpio, ((p ^ (page[0] == '1')) ? led->gpio : 0));
+					if (led->gpio & GPIO_TYPE_EXTIF) {
+						led->state = p ^ ((page[0] == '1') ? 1 : 0);
+						set_led_extif(led);
+					} else {
+						sb_gpioouten(sbh, led->gpio, led->gpio);
+						sb_gpiocontrol(sbh, led->gpio, 0);
+						sb_gpioout(sbh, led->gpio, ((p ^ (page[0] == '1')) ? led->gpio : 0));
+					}
 				}
 				break;
 			}
@@ -697,14 +722,21 @@ static struct timer_list led_timer = {
 static void led_flash(unsigned long dummy) {
 	struct led_t *l;
 	unsigned mask = 0;
+	unsigned extif_blink = 0;
 
 	for (l = platform.leds; l->name; l++) {
-		if (l->flash) 
-			mask |= l->gpio; 
+		if (l->flash) {
+			if (l->gpio & GPIO_TYPE_EXTIF) {
+				extif_blink = 1;
+				l->state = !l->state;
+				set_led_extif(l);
+			} else {
+				mask |= l->gpio;
+			}
+		}
 	}
 
 	mask &= ~gpiomask;
-
 	if (mask) {
 		unsigned val;
 
@@ -714,7 +746,8 @@ static void led_flash(unsigned long dummy) {
 		sb_gpioouten(sbh, mask, mask);
 		sb_gpiocontrol(sbh, mask, 0);
 		sb_gpioout(sbh, mask, val);
-
+	}
+	if (mask || extif_blink) {
 		mod_timer(&led_timer, jiffies + FLASH_TIME);
 	}
 }
@@ -767,10 +800,15 @@ static void __init register_leds(struct led_t *l)
 	for(; l->name; l++) {
 		if (l->gpio & gpiomask)
 			continue;
-
-		sb_gpioouten(sbh, l->gpio, l->gpio);
-		sb_gpiocontrol(sbh, l->gpio, 0);
-		sb_gpioout(sbh, l->gpio, (l->polarity == NORMAL)?0:l->gpio);
+	
+		if (l->gpio & GPIO_TYPE_EXTIF) {
+			l->state = 0;
+			set_led_extif(l);
+		} else {
+			sb_gpioouten(sbh, l->gpio, l->gpio);
+			sb_gpiocontrol(sbh, l->gpio, 0);
+			sb_gpioout(sbh, l->gpio, (l->polarity == NORMAL)?0:l->gpio);
+		}
 
 		if ((p = create_proc_entry(l->name, S_IRUSR, leds))) {
 			l->proc.type = PROC_LED;
