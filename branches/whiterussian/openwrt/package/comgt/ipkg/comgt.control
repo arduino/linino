@@ -1,4 +1,5 @@
 Package: comgt
 Priority: optional
 Section: console
+Depends: chat
 Description: Option GlobeTrotter GPRS/EDGE/3G/HSDPA and Vodafone 3G/GPRS datacard control tool
