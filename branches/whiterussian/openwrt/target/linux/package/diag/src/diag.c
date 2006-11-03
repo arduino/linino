@@ -666,6 +666,11 @@ struct event_t {
 
 static void hotplug_button(struct event_t *event)
 {
+	/* can't do it from interrupt context, reschedule */
+	if (in_interrupt()) {
+		schedule_task(&event->tq);
+		return;
+	}
 	call_usermodehelper (event->argv[0], event->argv, event->envp);
 	kfree(event);
 }
