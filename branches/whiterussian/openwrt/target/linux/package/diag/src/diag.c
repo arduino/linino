@@ -223,7 +223,7 @@ static struct platform_t __init platforms[] = {
 		},
 	},
 	[WL300G] = {
-		.name		= "ASUS WL-500g",
+		.name		= "ASUS WL-300g",
 		.buttons	= {
 			{ .name = "reset",	.gpio = 1 << 6 },
 		},
