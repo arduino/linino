@@ -18,7 +18,7 @@
 	netmsg 192.168.1.255 "Entering Failsafe!"
 	telnetd -l /bin/login <> /dev/null 2>&1
 
-	exec </dev/tts/0 >/dev/tts/0 2>/dev/tts/0
+	exec </dev/console >/dev/console 2>/dev/console
 	ash --login
 	lock -u /tmp/.failsafe
 }
