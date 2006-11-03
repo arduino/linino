@@ -12,36 +12,52 @@ PKG_NAME:=jpeg
 PKG_VERSION:=6b
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)src.v$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.ijg.org/files/ \
         ftp://ftp.uu.net/graphics/jpeg/
 PKG_MD5SUM:=dbd5f3b47ed13132f04c685d608a7547
 PKG_CAT:=zcat
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+
+PKG_BUILDDEP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
+define Package/jpeg/Default
+  TITLE:=The Independent JPEG Group's JPEG
+  URL:=http://www.ijg.org/
+endef
+
 define Package/libjpeg
+  $(call Package/jpeg/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=The Independent JPEG Group's JPEG runtime library
-  DESCRIPTION:=The Independent JPEG Group's JPEG runtime library.
-  URL:=http://www.ijg.org/
+  TITLE+= runtime library
 endef
 
 define Package/jpeg-tools
+  $(call Package/jpeg/Default)
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=libjpeg
-  TITLE:=JPEG manipulation tools
-  DESCRIPTION:=JPEG manipulation tools
-  URL:=http://www.ijg.org/
+  DEPENDS:=+libjpeg
+  TITLE+= manipulation tools
+endef
+
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	# replace the old upstream libtool stuff with our own
+	ln -sf $(STAGING_DIR)/usr/bin/libtool $(PKG_BUILD_DIR)/
+	ln -sf $(STAGING_DIR)/usr/share/libtool/config.guess $(PKG_BUILD_DIR)/
+	ln -sf /bin/true $(PKG_BUILD_DIR)/ltconfig
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--disable-shared --enable-static)
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--enable-static \
+	)
 endef
 
 define Build/Compile
@@ -56,20 +72,26 @@ endef
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/jpeglib.h $(STAGING_DIR)/usr/include/
-	$(CP) $(PKG_BUILD_DIR)/jpegint.h $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/j{config,error,morecfg}.h $(STAGING_DIR)/usr/include
+	$(CP) $(PKG_BUILD_DIR)/jpegint.h $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/j{config,error,morecfg}.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libjpeg.a $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libjpeg.{a,so*} $(STAGING_DIR)/usr/lib/
 endef
 
 define Build/UninstallDev
-	rm -rf $(STAGING_DIR)/usr/include/jpeg{int,lib}.h \
+	rm -rf \
+		$(STAGING_DIR)/usr/include/jpeg{int,lib}.h \
 		$(STAGING_DIR)/usr/include/j{config,error,morecfg}.h \
 		$(STAGING_DIR)/usr/lib/libjpeg.{a,so*}
 endef
 
+define Package/libjpeg/install
+	install -d -m0755 $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libjpeg.so.* $(1)/usr/lib/
+endef
+
 define Package/jpeg-tools/install
-	install -m0755 -d $(1)/usr/bin
+	install -d -m0755 $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/*jpeg* $(1)/usr/bin/
 endef
 
