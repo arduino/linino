@@ -103,9 +103,12 @@ nvram_default lan_proto static
 [  "$boardnum"  = "45" \
 -a "$boardtype" = "0x042f" ] && {
 	debug "### wl-500g premium hacks ###"
+	remap eth0.1 vlan0
+	remap eth0 vlan1
+
 	nvram_default lan_ifnames "vlan0 eth2"
 	nvram_default wan_ifname "vlan1"
-	
+
 	nvram_default vlan0hwname "et0"
 	nvram_default vlan1hwname "et0"
 
