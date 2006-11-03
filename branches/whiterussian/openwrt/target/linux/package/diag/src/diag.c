@@ -71,10 +71,9 @@ struct prochandler_t {
 struct button_t {
 	struct prochandler_t proc;
 	char *name;
-	u16 gpio;
-	u8 polarity;
-	u8 pressed;
+	u32 gpio;
 	unsigned long seen;
+	u8 pressed;
 };
 
 struct led_t {
@@ -88,7 +87,11 @@ struct led_t {
 
 struct platform_t {
 	char *name;
+
 	struct button_t buttons[MAX_GPIO];
+	u32 button_mask;
+	u32 button_polarity;
+
 	struct led_t leds[MAX_GPIO];
 };
 
@@ -131,7 +134,7 @@ enum {
 	/* Motorola */
 	WE800G,
 	WR850GV1,
-	WR850GV2,
+	WR850GV2V3,
 
 	/* Belkin */
 	BELKIN_UNKNOWN,
@@ -172,7 +175,7 @@ static struct platform_t __init platforms[] = {
 		},
 	},
 	[WRT54G] = {
-		.name		= "Linksys WRT54G*",
+		.name		= "Linksys WRT54G/GS/GL",
 		.buttons	= {
 			{ .name = "reset",	.gpio = 1 << 6 },
 			{ .name = "ses",	.gpio = 1 << 4 },
@@ -404,21 +407,21 @@ static struct platform_t __init platforms[] = {
 		.leds		= {
 			{ .name = "power",	.gpio = 1 << 4, .polarity = NORMAL },
 			{ .name = "diag",	.gpio = 1 << 3, .polarity = REVERSE },
-			{ .name = "modem",	.gpio = 1 << 6, .polarity = NORMAL },
+			{ .name = "dmz",	.gpio = 1 << 6, .polarity = NORMAL },
 			{ .name = "wlan_red",	.gpio = 1 << 5, .polarity = REVERSE },
 			{ .name = "wlan_green",	.gpio = 1 << 7, .polarity = REVERSE },
 		},
 	},
-	[WR850GV2] = {
-		.name		= "Motorola WR850G V2",
+	[WR850GV2V3] = {
+		.name		= "Motorola WR850G V2/V3",
 		.buttons	= {
 			{ .name = "reset",	.gpio = 1 << 5 },
 		},
 		.leds		= {
-			{ .name = "diag",	.gpio = 1 << 1, .polarity = REVERSE },
+			{ .name = "power",	.gpio = 1 << 1, .polarity = NORMAL },
 			{ .name = "wlan",	.gpio = 1 << 0, .polarity = NORMAL },
-			{ .name = "modem_green",.gpio = 1 << 6, .polarity = REVERSE },
-			{ .name = "modem_red",	.gpio = 1 << 7, .polarity = REVERSE },
+			{ .name = "dmz",	.gpio = 1 << 6, .polarity = REVERSE },
+			{ .name = "diag",	.gpio = 1 << 7, .polarity = REVERSE },
 		},
 	},
 	/* Belkin */
@@ -545,8 +548,12 @@ static struct platform_t __init *platform_detect(void)
 			return &platforms[BUFFALO_UNKNOWN];
 	}
 
-	if (!strcmp(getvar("CFEver"), "MotoWRv203"))
-		return &platforms[WR850GV2];
+
+	if (!strcmp(getvar("CFEver"), "MotoWRv203") ||
+		!strcmp(getvar("MOTO_BOARD_TYPE"), "WR_FEM1")) {
+
+		return &platforms[WR850GV2V3];
+	}
 
 	/* not found */
 	return NULL;
@@ -586,8 +593,8 @@ static ssize_t diag_proc_read(struct file *file, char *buf, size_t count, loff_t
 					if (led->gpio & GPIO_TYPE_EXTIF) {
 						len = sprintf(page, "%d\n", led->state);
 					} else {
-						int in = (sb_gpioin(sbh) & led->gpio ? 1 : 0);
-						int p = (led->polarity == NORMAL ? 0 : 1);
+						u32 in = (sb_gpioin(sbh) & led->gpio ? 1 : 0);
+						u8 p = (led->polarity == NORMAL ? 0 : 1);
 						len = sprintf(page, "%d\n", ((in ^ p) ? 1 : 0));
 					}
 				}
@@ -664,9 +671,20 @@ static ssize_t diag_proc_write(struct file *file, const char *buf, size_t count,
 				}
 				break;
 			}
-			case PROC_GPIOMASK:
+			case PROC_GPIOMASK: {
+				u32 mask;
 				gpiomask = simple_strtoul(page, NULL, 16);
+
+				mask = platform.button_mask & ~gpiomask;
+
+				sb_gpioouten(sbh, mask, 0);
+				sb_gpiocontrol(sbh, mask, 0);
+				platform.button_polarity = sb_gpioin(sbh) & mask;
+				sb_gpiointpolarity(sbh, mask, platform.button_polarity);
+				sb_gpiointmask(sbh, mask, mask);
+
 				break;
+			}
 		}
 		ret = count;
 	}
@@ -714,45 +732,46 @@ static void set_irqenable(int enabled)
 static void button_handler(int irq, void *dev_id, struct pt_regs *regs)
 {
 	struct button_t *b;
-	int in = sb_gpioin(sbh);
-	struct event_t *event;
+	u32 in, changed;
+
+	in = sb_gpioin(sbh) & platform.button_mask;
+	sb_gpiointpolarity(sbh, platform.button_mask, in);
+	changed = platform.button_polarity ^ in;
+	platform.button_polarity = in;
 
 	set_irqenable(0);
 	for (b = platform.buttons; b->name; b++) { 
-		if (b->gpio & gpiomask)
-			continue;
+		struct event_t *event;
 
-		if (b->polarity != (in & b->gpio)) {
-			b->pressed ^= 1;
+		if (!(b->gpio & changed)) continue;
 
-			if ((event = (struct event_t *)kmalloc (sizeof(struct event_t), GFP_ATOMIC))) {
-				int i;
-				char *scratch = event->buf;
+		b->pressed ^= 1;
 
-				i = 0;
-				event->argv[i++] = hotplug_path;
-				event->argv[i++] = "button";
-				event->argv[i] = 0;
+		if ((event = (struct event_t *)kmalloc (sizeof(struct event_t), GFP_ATOMIC))) {
+			int i;
+			char *scratch = event->buf;
 
-				i = 0;
-				event->envp[i++] = "HOME=/";
-				event->envp[i++] = "PATH=/sbin:/bin:/usr/sbin:/usr/bin";
-				event->envp[i++] = scratch;
-				scratch += sprintf (scratch, "ACTION=%s", b->pressed?"pressed":"released") + 1;
-				event->envp[i++] = scratch;
-				scratch += sprintf (scratch, "BUTTON=%s", b->name) + 1;
-				event->envp[i++] = scratch;
-				scratch += sprintf (scratch, "SEEN=%ld", (jiffies - b->seen)/HZ) + 1;
-				event->envp[i] = 0;
+			i = 0;
+			event->argv[i++] = hotplug_path;
+			event->argv[i++] = "button";
+			event->argv[i] = 0;
 
-				INIT_TQUEUE(&event->tq, (void *)(void *)hotplug_button, (void *)event);
-				schedule_task(&event->tq);
-			}
+			i = 0;
+			event->envp[i++] = "HOME=/";
+			event->envp[i++] = "PATH=/sbin:/bin:/usr/sbin:/usr/bin";
+			event->envp[i++] = scratch;
+			scratch += sprintf (scratch, "ACTION=%s", b->pressed?"pressed":"released") + 1;
+			event->envp[i++] = scratch;
+			scratch += sprintf (scratch, "BUTTON=%s", b->name) + 1;
+			event->envp[i++] = scratch;
+			scratch += sprintf (scratch, "SEEN=%ld", (jiffies - b->seen)/HZ) + 1;
+			event->envp[i] = 0;
 
-			b->seen = jiffies;
-			b->polarity ^= b->gpio;
-			sb_gpiointpolarity(sbh, b->gpio, b->polarity);
+			INIT_TQUEUE(&event->tq, (void *)(void *)hotplug_button, (void *)event);
+			schedule_task(&event->tq);
 		}
+
+		b->seen = jiffies;
 	}
 	set_irqenable(1);
 }
@@ -763,8 +782,8 @@ static struct timer_list led_timer = {
 
 static void led_flash(unsigned long dummy) {
 	struct led_t *l;
-	unsigned mask = 0;
-	unsigned extif_blink = 0;
+	u32 mask = 0;
+	u8 extif_blink = 0;
 
 	for (l = platform.leds; l->name; l++) {
 		if (l->flash) {
@@ -780,10 +799,7 @@ static void led_flash(unsigned long dummy) {
 
 	mask &= ~gpiomask;
 	if (mask) {
-		unsigned val;
-
-		val = ~sb_gpioin(sbh);
-		val &= mask;
+		u32 val = ~sb_gpioin(sbh);
 
 		sb_gpioouten(sbh, mask, mask);
 		sb_gpiocontrol(sbh, mask, 0);
@@ -797,19 +813,21 @@ static void led_flash(unsigned long dummy) {
 static void __init register_buttons(struct button_t *b)
 {
 	int irq = sb_irq(sbh) + 2;
+	u32 mask;
 
 	request_irq(irq, button_handler, SA_SHIRQ | SA_SAMPLE_RANDOM, "gpio", button_handler);
 
-	for (; b->name; b++) {
-		if (b->gpio & gpiomask)
-			continue;
+	for (; b->name; b++)
+		platform.button_mask |= b->gpio;
 
-		sb_gpioouten(sbh, b->gpio,0);
-		sb_gpiocontrol(sbh, b->gpio,0);
-		b->polarity = sb_gpioin(sbh) & b->gpio;
-		sb_gpiointpolarity(sbh, b->gpio, b->polarity);
-		sb_gpiointmask(sbh, b->gpio, b->gpio);
-	}
+	mask = platform.button_mask & ~gpiomask;
+
+	sb_gpioouten(sbh, mask, 0);
+	sb_gpiocontrol(sbh, mask, 0);
+	platform.button_polarity = sb_gpioin(sbh) & mask;
+	sb_gpiointpolarity(sbh, mask, platform.button_polarity);
+	sb_gpiointmask(sbh, mask, mask);
+
 	set_irqenable(1);
 }
 
@@ -817,8 +835,7 @@ static void __exit unregister_buttons(struct button_t *b)
 {
 	int irq = sb_irq(sbh) + 2;
 
-	for (; b->name; b++)
-		sb_gpiointmask(sbh, b->gpio, 0);
+	sb_gpiointmask(sbh, platform.button_mask, 0);
 
 	free_irq(irq, button_handler);
 }
