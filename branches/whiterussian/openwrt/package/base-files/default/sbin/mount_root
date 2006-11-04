@@ -9,6 +9,7 @@ if [ "$1" != "failsafe" -a "$(nvram get no_root_swap)" != 1 ]; then
 	mtd unlock linux
 	mount | grep jffs2 >&-
 	if [ $? = 0 ] ; then
+		grep "mini_fo" /proc/filesystems >&- ||
 		mount -o remount,rw /dev/root /
 	else
 		. /bin/firstboot
@@ -18,7 +19,7 @@ if [ "$1" != "failsafe" -a "$(nvram get no_root_swap)" != 1 ]; then
 			mount /dev/mtdblock/4 /jffs -t jffs2
 			fopivot /jffs /rom
 		} || {
-			echo "jffs2 unusable; using ramdisk"
+			echo "jffs2 not ready yet; using ramdisk"
 			ramoverlay
 		}
 	fi
@@ -26,5 +27,5 @@ fi
 
 mount none /tmp -t tmpfs -o remount,nosuid,nodev,mode=1777
 mkdir -p /dev/pts
-mount none /dev/pts -t devpts
+mount none /dev/pts -t devpts 2>&-
 mount -t sysfs none /sys 2>&-
