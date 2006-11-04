@@ -14,7 +14,7 @@ ifname=eth0
 # WAP54G, WL-HDD
 [  "$(nvram get boardnum)" = "2" \
 -o \( "$(nvram get boardnum)" = "asusX" \
-   -a "$(nvram get et1phyaddr)" -eq 1 \) ] && ifname="eth1"
+   -a "$(($(nvram get et1phyaddr)))" -eq 1 \) ] && ifname="eth1"
 
 insmod switch-core
 insmod switch-robo || insmod switch-adm || rmmod switch-core
