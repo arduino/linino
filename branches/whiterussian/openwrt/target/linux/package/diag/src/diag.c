@@ -35,65 +35,10 @@
 #include <sbconfig.h>
 #include <sbchipc.h>
 
-#define MODULE_NAME "diag"
-
-#define MAX_GPIO 8
-#define FLASH_TIME HZ/6
-
-#define EXTIF_ADDR 0x1f000000
-#define EXTIF_UART (EXTIF_ADDR + 0x00800000)
-
-/* For LEDs */
-#define GPIO_TYPE_NORMAL	(0x0 << 24)
-#define GPIO_TYPE_EXTIF 	(0x1 << 24)
-#define GPIO_TYPE_MASK  	(0xf << 24)
+#include "diag.h"
 
 static unsigned int gpiomask = 0;
 module_param(gpiomask, int, 0644);
-
-enum polarity_t {
-	REVERSE = 0,
-	NORMAL = 1,
-};
-
-enum {
-	PROC_BUTTON,
-	PROC_LED,
-	PROC_MODEL,
-	PROC_GPIOMASK
-};
-
-struct prochandler_t {
-	int type;
-	void *ptr;
-};
-
-struct button_t {
-	struct prochandler_t proc;
-	char *name;
-	u32 gpio;
-	unsigned long seen;
-	u8 pressed;
-};
-
-struct led_t {
-	struct prochandler_t proc;
-	char *name;
-	u32 gpio;
-	u8 polarity;
-	u8 flash;
-	u8 state;
-};
-
-struct platform_t {
-	char *name;
-
-	struct button_t buttons[MAX_GPIO];
-	u32 button_mask;
-	u32 button_polarity;
-
-	struct led_t leds[MAX_GPIO];
-};
 
 enum {
 	/* Linksys */
@@ -439,32 +384,9 @@ static struct platform_t __init platforms[] = {
 	},
 };
 
-static struct proc_dir_entry *diag, *leds;
-
-extern void *bcm947xx_sbh;
-#define sbh bcm947xx_sbh
-extern spinlock_t bcm947xx_sbh_lock;
-#define sbh_lock bcm947xx_sbh_lock
-
-static int sb_irq(void *sbh);
-static struct platform_t platform;
-
-extern char *nvram_get(char *str);
-
-static void led_flash(unsigned long dummy);
-
 static inline char __init *getvar(char *str)
 {
 	return nvram_get(str)?:"";
-}
-
-static void set_led_extif(struct led_t *led)
-{
-	volatile u8 *addr = (volatile u8 *) KSEG1ADDR(EXTIF_UART) + (led->gpio & ~GPIO_TYPE_MASK);
-	if (led->state)
-		*addr = 0xFF;
-	else
-		*addr;
 }
 
 static struct platform_t __init *platform_detect(void)
@@ -559,14 +481,194 @@ static struct platform_t __init *platform_detect(void)
 	return NULL;
 }
 
-static ssize_t diag_proc_read(struct file *file, char *buf, size_t count, loff_t *ppos);
-static ssize_t diag_proc_write(struct file *file, const char *buf, size_t count, void *data);
-static struct file_operations diag_proc_fops = {
-	read: diag_proc_read,
-	write: diag_proc_write
-};
+static void set_irqenable(int enabled)
+{
+	unsigned int coreidx;
+	unsigned long flags;
+	chipcregs_t *cc;
+	int irq;
+
+	spin_lock_irqsave(sbh_lock, flags);
+	coreidx = sb_coreidx(sbh);
 
 
+	irq = sb_irq(sbh) + 2;
+	if (enabled)
+		request_irq(irq, button_handler, SA_SHIRQ | SA_SAMPLE_RANDOM, "gpio", button_handler);
+	else
+		free_irq(irq, button_handler);
+
+	if ((cc = sb_setcore(sbh, SB_CC, 0))) {
+		int intmask;
+
+		intmask = readl(&cc->intmask);
+		if (enabled)
+			intmask |= CI_GPIO;
+		else
+			intmask &= ~CI_GPIO;
+		writel(intmask, &cc->intmask);
+	}
+	sb_setcoreidx(sbh, coreidx);
+	spin_unlock_irqrestore(sbh_lock, flags);
+}
+
+static void register_buttons(struct button_t *b)
+{
+	for (; b->name; b++)
+		platform.button_mask |= b->gpio;
+
+	platform.button_mask &= ~gpiomask;
+
+	sb_gpioouten(sbh, platform.button_mask, 0);
+	sb_gpiocontrol(sbh, platform.button_mask, 0);
+	platform.button_polarity = sb_gpioin(sbh) & platform.button_mask;
+	sb_gpiointpolarity(sbh, platform.button_mask, platform.button_polarity);
+	sb_gpiointmask(sbh, platform.button_mask, platform.button_mask);
+
+	set_irqenable(1);
+}
+
+static void unregister_buttons(struct button_t *b)
+{
+
+	sb_gpiointmask(sbh, platform.button_mask, 0);
+
+	set_irqenable(0);
+}
+
+static void hotplug_button(struct event_t *event)
+{
+	call_usermodehelper (event->argv[0], event->argv, event->envp);
+	kfree(event);
+}
+
+
+static void button_handler(int irq, void *dev_id, struct pt_regs *regs)
+{
+	struct button_t *b;
+	u32 in, changed;
+
+	in = sb_gpioin(sbh) & platform.button_mask;
+	sb_gpiointpolarity(sbh, platform.button_mask, in);
+	changed = platform.button_polarity ^ in;
+	platform.button_polarity = in;
+
+	for (b = platform.buttons; b->name; b++) { 
+		struct event_t *event;
+
+		if (!(b->gpio & changed)) continue;
+
+		b->pressed ^= 1;
+
+		if ((event = (struct event_t *)kmalloc (sizeof(struct event_t), GFP_ATOMIC))) {
+			int i;
+			char *scratch = event->buf;
+
+			i = 0;
+			event->argv[i++] = hotplug_path;
+			event->argv[i++] = "button";
+			event->argv[i] = 0;
+
+			i = 0;
+			event->envp[i++] = "HOME=/";
+			event->envp[i++] = "PATH=/sbin:/bin:/usr/sbin:/usr/bin";
+			event->envp[i++] = scratch;
+			scratch += sprintf (scratch, "ACTION=%s", b->pressed?"pressed":"released") + 1;
+			event->envp[i++] = scratch;
+			scratch += sprintf (scratch, "BUTTON=%s", b->name) + 1;
+			event->envp[i++] = scratch;
+			scratch += sprintf (scratch, "SEEN=%ld", (jiffies - b->seen)/HZ) + 1;
+			event->envp[i] = 0;
+
+			INIT_TQUEUE(&event->tq, (void *)(void *)hotplug_button, (void *)event);
+			schedule_task(&event->tq);
+		}
+
+		b->seen = jiffies;
+	}
+}
+
+static void register_leds(struct led_t *l)
+{
+	struct proc_dir_entry *p;
+	u32 mask;
+	u32 val;
+
+	leds = proc_mkdir("led", diag);
+	if (!leds) 
+		return;
+
+	for(; l->name; l++) {
+		if (l->gpio & gpiomask)
+			continue;
+	
+		if (l->gpio & GPIO_TYPE_EXTIF) {
+			l->state = 0;
+			set_led_extif(l);
+		} else {
+			mask |= l->gpio;
+			val |= (l->polarity == NORMAL)?0:l->gpio;
+		}
+
+		if ((p = create_proc_entry(l->name, S_IRUSR, leds))) {
+			l->proc.type = PROC_LED;
+			l->proc.ptr = l;
+			p->data = (void *) &l->proc;
+			p->proc_fops = &diag_proc_fops;
+		}
+	}
+
+	sb_gpioouten(sbh, mask, mask);
+	sb_gpiocontrol(sbh, mask, 0);
+	sb_gpioout(sbh, mask, val);
+}
+
+static void unregister_leds(struct led_t *l)
+{
+	for(; l->name; l++)
+		remove_proc_entry(l->name, leds);
+
+	remove_proc_entry("led", diag);
+}
+
+static void set_led_extif(struct led_t *led)
+{
+	volatile u8 *addr = (volatile u8 *) KSEG1ADDR(EXTIF_UART) + (led->gpio & ~GPIO_TYPE_MASK);
+	if (led->state)
+		*addr = 0xFF;
+	else
+		*addr;
+}
+
+static void led_flash(unsigned long dummy) {
+	struct led_t *l;
+	u32 mask = 0;
+	u8 extif_blink = 0;
+
+	for (l = platform.leds; l->name; l++) {
+		if (l->flash) {
+			if (l->gpio & GPIO_TYPE_EXTIF) {
+				extif_blink = 1;
+				l->state = !l->state;
+				set_led_extif(l);
+			} else {
+				mask |= l->gpio;
+			}
+		}
+	}
+
+	mask &= ~gpiomask;
+	if (mask) {
+		u32 val = ~sb_gpioin(sbh);
+
+		sb_gpioouten(sbh, mask, mask);
+		sb_gpiocontrol(sbh, mask, 0);
+		sb_gpioout(sbh, mask, val);
+	}
+	if (mask || extif_blink) {
+		mod_timer(&led_timer, jiffies + FLASH_TIME);
+	}
+}
 
 static ssize_t diag_proc_read(struct file *file, char *buf, size_t count, loff_t *ppos)
 {
@@ -652,9 +754,6 @@ static ssize_t diag_proc_write(struct file *file, const char *buf, size_t count,
 				struct led_t *led = (struct led_t *) handler->ptr;
 				int p = (led->polarity == NORMAL ? 0 : 1);
 				
-				if (!(led->gpio & GPIO_TYPE_EXTIF) && (led->gpio & gpiomask))
-					break;
-
 				if (page[0] == 'f') {
 					led->flash = 1;
 					led_flash(0);
@@ -671,20 +770,19 @@ static ssize_t diag_proc_write(struct file *file, const char *buf, size_t count,
 				}
 				break;
 			}
-			case PROC_GPIOMASK: {
-				u32 mask;
+			case PROC_GPIOMASK:
 				gpiomask = simple_strtoul(page, NULL, 16);
 
-				mask = platform.button_mask & ~gpiomask;
+				if (platform.buttons) {
+					unregister_buttons(platform.buttons);
+					register_buttons(platform.buttons);
+				}
 
-				sb_gpioouten(sbh, mask, 0);
-				sb_gpiocontrol(sbh, mask, 0);
-				platform.button_polarity = sb_gpioin(sbh) & mask;
-				sb_gpiointpolarity(sbh, mask, platform.button_polarity);
-				sb_gpiointmask(sbh, mask, mask);
-
+				if (platform.leds) {
+					unregister_leds(platform.leds);
+					register_leds(platform.leds);
+				}
 				break;
-			}
 		}
 		ret = count;
 	}
@@ -692,210 +790,6 @@ static ssize_t diag_proc_write(struct file *file, const char *buf, size_t count,
 	kfree(page);
 	return ret;
 }
-
-struct event_t {
-	struct tq_struct tq;
-	char buf[256];
-	char *argv[3];
-	char *envp[6];
-};
-
-static void hotplug_button(struct event_t *event)
-{
-	call_usermodehelper (event->argv[0], event->argv, event->envp);
-	kfree(event);
-}
-
-static void set_irqenable(int enabled)
-{
-	unsigned int coreidx;
-	unsigned long flags;
-	chipcregs_t *cc;
-
-	spin_lock_irqsave(sbh_lock, flags);
-	coreidx = sb_coreidx(sbh);
-	if ((cc = sb_setcore(sbh, SB_CC, 0))) {
-		int intmask;
-
-		intmask = readl(&cc->intmask);
-		if (enabled)
-			intmask |= CI_GPIO;
-		else
-			intmask &= ~CI_GPIO;
-		writel(intmask, &cc->intmask);
-	}
-	sb_setcoreidx(sbh, coreidx);
-	spin_unlock_irqrestore(sbh_lock, flags);
-}
-
-
-static void button_handler(int irq, void *dev_id, struct pt_regs *regs)
-{
-	struct button_t *b;
-	u32 in, changed;
-
-	in = sb_gpioin(sbh) & platform.button_mask;
-	sb_gpiointpolarity(sbh, platform.button_mask, in);
-	changed = platform.button_polarity ^ in;
-	platform.button_polarity = in;
-
-	set_irqenable(0);
-	for (b = platform.buttons; b->name; b++) { 
-		struct event_t *event;
-
-		if (!(b->gpio & changed)) continue;
-
-		b->pressed ^= 1;
-
-		if ((event = (struct event_t *)kmalloc (sizeof(struct event_t), GFP_ATOMIC))) {
-			int i;
-			char *scratch = event->buf;
-
-			i = 0;
-			event->argv[i++] = hotplug_path;
-			event->argv[i++] = "button";
-			event->argv[i] = 0;
-
-			i = 0;
-			event->envp[i++] = "HOME=/";
-			event->envp[i++] = "PATH=/sbin:/bin:/usr/sbin:/usr/bin";
-			event->envp[i++] = scratch;
-			scratch += sprintf (scratch, "ACTION=%s", b->pressed?"pressed":"released") + 1;
-			event->envp[i++] = scratch;
-			scratch += sprintf (scratch, "BUTTON=%s", b->name) + 1;
-			event->envp[i++] = scratch;
-			scratch += sprintf (scratch, "SEEN=%ld", (jiffies - b->seen)/HZ) + 1;
-			event->envp[i] = 0;
-
-			INIT_TQUEUE(&event->tq, (void *)(void *)hotplug_button, (void *)event);
-			schedule_task(&event->tq);
-		}
-
-		b->seen = jiffies;
-	}
-	set_irqenable(1);
-}
-
-static struct timer_list led_timer = {
-	function: &led_flash
-};
-
-static void led_flash(unsigned long dummy) {
-	struct led_t *l;
-	u32 mask = 0;
-	u8 extif_blink = 0;
-
-	for (l = platform.leds; l->name; l++) {
-		if (l->flash) {
-			if (l->gpio & GPIO_TYPE_EXTIF) {
-				extif_blink = 1;
-				l->state = !l->state;
-				set_led_extif(l);
-			} else {
-				mask |= l->gpio;
-			}
-		}
-	}
-
-	mask &= ~gpiomask;
-	if (mask) {
-		u32 val = ~sb_gpioin(sbh);
-
-		sb_gpioouten(sbh, mask, mask);
-		sb_gpiocontrol(sbh, mask, 0);
-		sb_gpioout(sbh, mask, val);
-	}
-	if (mask || extif_blink) {
-		mod_timer(&led_timer, jiffies + FLASH_TIME);
-	}
-}
-
-static void __init register_buttons(struct button_t *b)
-{
-	int irq = sb_irq(sbh) + 2;
-	u32 mask;
-
-	request_irq(irq, button_handler, SA_SHIRQ | SA_SAMPLE_RANDOM, "gpio", button_handler);
-
-	for (; b->name; b++)
-		platform.button_mask |= b->gpio;
-
-	mask = platform.button_mask & ~gpiomask;
-
-	sb_gpioouten(sbh, mask, 0);
-	sb_gpiocontrol(sbh, mask, 0);
-	platform.button_polarity = sb_gpioin(sbh) & mask;
-	sb_gpiointpolarity(sbh, mask, platform.button_polarity);
-	sb_gpiointmask(sbh, mask, mask);
-
-	set_irqenable(1);
-}
-
-static void __exit unregister_buttons(struct button_t *b)
-{
-	int irq = sb_irq(sbh) + 2;
-
-	sb_gpiointmask(sbh, platform.button_mask, 0);
-
-	free_irq(irq, button_handler);
-}
-
-static void __init register_leds(struct led_t *l)
-{
-	struct proc_dir_entry *p;
-
-	leds = proc_mkdir("led", diag);
-	if (!leds) 
-		return;
-
-	for(; l->name; l++) {
-		if (l->gpio & gpiomask)
-			continue;
-	
-		if (l->gpio & GPIO_TYPE_EXTIF) {
-			l->state = 0;
-			set_led_extif(l);
-		} else {
-			sb_gpioouten(sbh, l->gpio, l->gpio);
-			sb_gpiocontrol(sbh, l->gpio, 0);
-			sb_gpioout(sbh, l->gpio, (l->polarity == NORMAL)?0:l->gpio);
-		}
-
-		if ((p = create_proc_entry(l->name, S_IRUSR, leds))) {
-			l->proc.type = PROC_LED;
-			l->proc.ptr = l;
-			p->data = (void *) &l->proc;
-			p->proc_fops = &diag_proc_fops;
-		}
-	}
-}
-
-static void __exit unregister_leds(struct led_t *l)
-{
-	for(; l->name; l++)
-		remove_proc_entry(l->name, leds);
-
-	remove_proc_entry("led", diag);
-}
-
-static void __exit diag_exit(void)
-{
-
-	del_timer(&led_timer);
-
-	if (platform.buttons)
-		unregister_buttons(platform.buttons);
-
-	if (platform.leds)
-		unregister_leds(platform.leds);
-
-	remove_proc_entry("model", diag);
-	remove_proc_entry("gpiomask", diag);
-	remove_proc_entry("diag", NULL);
-}
-
-static struct prochandler_t proc_model = { .type = PROC_MODEL };
-static struct prochandler_t proc_gpiomask = { .type = PROC_GPIOMASK };
 
 static int __init diag_init(void)
 {
@@ -935,6 +829,22 @@ static int __init diag_init(void)
 	return 0;
 }
 
+static void __exit diag_exit(void)
+{
+
+	del_timer(&led_timer);
+
+	if (platform.buttons)
+		unregister_buttons(platform.buttons);
+
+	if (platform.leds)
+		unregister_leds(platform.leds);
+
+	remove_proc_entry("model", diag);
+	remove_proc_entry("gpiomask", diag);
+	remove_proc_entry("diag", NULL);
+}
+
 EXPORT_NO_SYMBOLS;
 
 module_init(diag_init);
@@ -942,37 +852,3 @@ module_exit(diag_exit);
 
 MODULE_AUTHOR("Mike Baker, Felix Fietkau / OpenWrt.org");
 MODULE_LICENSE("GPL");
-
-/* TODO: export existing sb_irq instead */
-static int sb_irq(void *sbh)
-{
-	uint idx;
-	void *regs;
-	sbconfig_t *sb;
-	uint32 flag, sbipsflag;
-	uint irq = 0;
-
-	regs = sb_coreregs(sbh);
-	sb = (sbconfig_t *)((ulong) regs + SBCONFIGOFF);
-	flag = (R_REG(&sb->sbtpsflag) & SBTPS_NUM0_MASK);
-
-	idx = sb_coreidx(sbh);
-
-	if ((regs = sb_setcore(sbh, SB_MIPS, 0)) ||
-	    (regs = sb_setcore(sbh, SB_MIPS33, 0))) {
-		sb = (sbconfig_t *)((ulong) regs + SBCONFIGOFF);
-
-		/* sbipsflag specifies which core is routed to interrupts 1 to 4 */
-		sbipsflag = R_REG(&sb->sbipsflag);
-		for (irq = 1; irq <= 4; irq++, sbipsflag >>= 8) {
-			if ((sbipsflag & 0x3f) == flag)
-				break;
-		}
-		if (irq == 5)
-			irq = 0;
-	}
-
-	sb_setcoreidx(sbh, idx);
-
-	return irq;
-}
