@@ -203,6 +203,24 @@ $(eval $(call KMOD_template,VFAT,vfat,\
 	$(MODULES_DIR)/kernel/fs/vfat/vfat.o \
 	$(MODULES_DIR)/kernel/fs/fat/fat.o \
 ,CONFIG_VFAT_FS,,30,fat vfat))
+$(eval $(call KMOD_template,NLS_CP437,nls-cp437,\
+	$(MODULES_DIR)/kernel/fs/nls/nls_cp437.o \
+,CONFIG_NLS_CODEPAGE_437,,40,nls_cp437.o))
+$(eval $(call KMOD_template,NLS_CP850,nls-cp850,\
+	$(MODULES_DIR)/kernel/fs/nls/nls_cp850.o \
+,CONFIG_NLS_CODEPAGE_850,,40,nls_cp850.o))
+$(eval $(call KMOD_template,NLS_ISO8859_1,nls-iso8859-1,\
+	$(MODULES_DIR)/kernel/fs/nls/nls_iso8859-1.o \
+,CONFIG_NLS_ISO8859_1,,40,nls_iso8859-1.o))
+$(eval $(call KMOD_template,NLS_ISO8859_15,nls-iso8859-15,\
+	$(MODULES_DIR)/kernel/fs/nls/nls_iso8859-15.o \
+,CONFIG_NLS_ISO8859_15,,40,nls_iso8859-15.o))
+$(eval $(call KMOD_template,NLS_KOI8_R,nls-koi8-r,\
+	$(MODULES_DIR)/kernel/fs/nls/nls_koi8-r.o \
+,CONFIG_NLS_KOI8_R,,40,nls_koi8-r.o))
+$(eval $(call KMOD_template,NLS_UTF8,nls-utf8,\
+	$(MODULES_DIR)/kernel/fs/nls/nls_utf8.o \
+,CONFIG_NLS_UTF8,,40,nls_utf8.o))
 $(eval $(call KMOD_template,CRYPTO,crypto,\
 	$(MODULES_DIR)/kernel/crypto/*.o \
 ,,,20,arc4 \

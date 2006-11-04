@@ -301,6 +301,42 @@ config BR2_PACKAGE_KMOD_IDE
 	    - ide-disk
 	    - pdc202xx_old
 
+config BR2_PACKAGE_KMOD_NLS_CP437
+	tristate "Codepage 437 (United States, Canada)"
+	default m
+	help
+	  Kernel module for NLS Codepage 437 (United States, Canada)
+
+config BR2_PACKAGE_KMOD_NLS_CP850
+	tristate "Codepage 850 (Europe)"
+	default m
+	help
+	  Kernel module for NLS Codepage 850 (Europe)
+
+config BR2_PACKAGE_KMOD_NLS_ISO8859_1
+	tristate "ISO 8859-1 (Latin 1; Western European Languages)"
+	default m
+	help
+	  Kernel module for ISO 8859-1 (Latin 1)
+
+config BR2_PACKAGE_KMOD_NLS_ISO8859_15
+	tristate "ISO 8859-15 (Latin 9; Western, with Euro symbol)"
+	default m
+	help
+	  Kernel module for ISO 8859-15 (Latin 9)
+
+config BR2_PACKAGE_KMOD_NLS_KOI8_R
+	tristate "KOI8-R (Russian)"
+	default m
+	help
+	  Kernel module for KOI8-R (Russian)
+
+config BR2_PACKAGE_KMOD_NLS_UTF8
+	tristate "UTF8"
+	default m
+	help
+	  Kernel module for UTF8
+
 config BR2_PACKAGE_KMOD_VFAT
 	tristate "VFAT filesystem support"
 	default m
