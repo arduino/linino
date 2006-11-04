@@ -8627,7 +8627,7 @@ diff -urN linux.old/arch/mips/bcm947xx/setup.c linux.dev/arch/mips/bcm947xx/setu
 diff -urN linux.old/arch/mips/bcm947xx/time.c linux.dev/arch/mips/bcm947xx/time.c
 --- linux.old/arch/mips/bcm947xx/time.c	1970-01-01 01:00:00.000000000 +0100
 +++ linux.dev/arch/mips/bcm947xx/time.c	2005-08-26 13:44:34.314391216 +0200
-@@ -0,0 +1,102 @@
+@@ -0,0 +1,114 @@
 +/*
 + * Copyright 2004, Broadcom Corporation
 + * All Rights Reserved.
@@ -8727,8 +8727,20 @@ diff -urN linux.old/arch/mips/bcm947xx/time.c linux.dev/arch/mips/bcm947xx/time.
 +void __init
 +bcm947xx_timer_setup(struct irqaction *irq)
 +{
++	int x;
++
 +	/* Enable the timer interrupt */
 +	setup_irq(7, &bcm947xx_timer_irqaction);
++
++	sti();
++
++	for (x=0; x<5; x++) {
++		unsigned long ticks;
++		ticks = jiffies;
++		while (ticks == jiffies)
++			/* do nothing */;
++	}
++
 +}
 diff -urN linux.old/arch/mips/config-shared.in linux.dev/arch/mips/config-shared.in
 --- linux.old/arch/mips/config-shared.in	2005-08-26 13:41:43.371378504 +0200
