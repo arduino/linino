@@ -430,6 +430,8 @@ static int handle_reset(void *driver, char *buf, int nr)
 	 * sequence in software.
 	 */
 	if (eerc) {
+		unsigned long flags;
+		local_irq_save(flags);
 		/* Keep RC high for at least 20ms */
 		adm_enout(eerc, eerc);
 		for (i = 0; i < 20; i ++)
@@ -446,6 +448,7 @@ static int handle_reset(void *driver, char *buf, int nr)
 			udelay(1000);
 		/* Leave RC high and disable GPIO outputs */
 		adm_disout((__u8)(eecs | eesk | eedi));
+		local_irq_restore(flags);
 	
 	}
 
