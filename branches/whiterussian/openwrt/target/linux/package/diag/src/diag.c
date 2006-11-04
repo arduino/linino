@@ -364,7 +364,7 @@ static struct platform_t __init platforms[] = {
 		},
 		.leds		= {
 			{ .name = "power",	.gpio = 1 << 1, .polarity = NORMAL },
-			{ .name = "wlan",	.gpio = 1 << 0, .polarity = NORMAL },
+			{ .name = "wlan",	.gpio = 1 << 0, .polarity = REVERSE },
 			{ .name = "dmz",	.gpio = 1 << 6, .polarity = REVERSE },
 			{ .name = "diag",	.gpio = 1 << 7, .polarity = REVERSE },
 		},
