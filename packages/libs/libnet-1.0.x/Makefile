@@ -36,6 +36,13 @@ ifeq ($(CONFIG_BIG_ENDIAN),y)
 endif
 
 define Build/Configure
+	(cd $(PKG_BUILD_DIR); touch \
+		configure.in \
+		include.m4 \
+		aclocal.m4 \
+		Makefile.in \
+		configure \
+	);
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \

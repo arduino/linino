@@ -68,6 +68,14 @@ define Package/libgnutls-openssl
 endef
 
 define Build/Configure
+	(cd $(PKG_BUILD_DIR); touch \
+		configure.in \
+		acinclude.m4 \
+		aclocal.m4 \
+		Makefile.in \
+		config.h.in \
+		configure \
+	)
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \

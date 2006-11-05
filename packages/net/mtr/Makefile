@@ -40,6 +40,15 @@ define Package/mtr
 endef
 
 define Build/Configure
+	(cd $(PKG_BUILD_DIR); touch \
+		configure.in \
+		aclocal.m4 \
+		Makefile.in \
+		img/Makefile.in \
+		stamp-h.in \
+		config.h.in \
+		configure \
+	);
 	$(call Build/Configure/Default, \
 		--without-gtk \
 		, \

@@ -38,6 +38,13 @@ define Package/slurm
 endef
 
 define Build/Configure	
+	(cd $(PKG_BUILD_DIR); touch \
+		configure.in \
+		aclocal.m4 \
+		Makefile.in \
+		config.h.in \
+		configure \
+	);
 	$(call Build/Configure/Default, \
 		, \
 		LIBS="-lncurses" \

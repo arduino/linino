@@ -37,6 +37,14 @@ define Package/libtasn1
 endef
 
 define Build/Configure
+	(cd $(PKG_BUILD_DIR); touch \
+		configure.ac \
+		acinclude.m4 \
+		aclocal.m4 \
+		Makefile.in \
+		config.h.in \
+		configure \
+	);
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \
