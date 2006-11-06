@@ -20,7 +20,7 @@ header "Info" "About" "@TR<<About>>..."
 	<li class="about">SeDkY</li>
 	<li class="about">Ivoshiee</li>
 	<li class="about">arteqw</li>
-	<li class="about">silver71<li>
+	<li class="about">silver71</li>
 	<li class="about">@TR<<Layout based on>> <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran</li>
 </ul>
 
