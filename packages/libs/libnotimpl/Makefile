@@ -9,6 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libnotimpl
+PKG_VERSION:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libnotimpl
 
@@ -43,4 +44,4 @@ define Build/UninstallDev
 	rm -f $(STAGING_DIR)/usr/lib/libnotimpl.a
 endef
 
-$(eval $(call Build/DefaultTargets))
+$(eval $(call BuildPackage,libnotimpl))
