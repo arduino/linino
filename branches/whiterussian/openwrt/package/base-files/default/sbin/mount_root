@@ -9,7 +9,6 @@ if [ "$1" != "failsafe" -a "$(nvram get no_root_swap)" != 1 ]; then
 	mtd unlock linux
 	mount | grep jffs2 >&-
 	if [ $? = 0 ] ; then
-		grep "mini_fo" /proc/filesystems >&- ||
 		mount -o remount,rw /dev/root /
 	else
 		. /bin/firstboot
