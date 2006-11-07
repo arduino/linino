@@ -708,7 +708,7 @@ static ssize_t diag_proc_read(struct file *file, char *buf, size_t count, loff_t
 				len = sprintf(page, "%s\n", platform.name);
 				break;
 			case PROC_GPIOMASK:
-				len = sprintf(page, "%d\n", gpiomask);
+				len = sprintf(page, "0x%04x\n", gpiomask);
 				break;
 		}
 	}
