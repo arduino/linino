@@ -421,7 +421,7 @@ static struct platform_t __init *platform_detect(void)
 		if (!strncmp(boardtype, "bcm94710dev", 11)) {
 			if (!strcmp(boardnum, "42"))
 				return &platforms[WRT54GV1];
-			if (simple_strtoul(boardnum, NULL, 9) == 2)
+			if (simple_strtoul(boardnum, NULL, 0) == 2)
 				return &platforms[WAP54GV1];
 		}
 		if (!strncmp(getvar("hardware_version"), "WL500-", 6))
@@ -429,10 +429,10 @@ static struct platform_t __init *platform_detect(void)
 		if (!strncmp(getvar("hardware_version"), "WL300-", 6)) {
 			/* Either WL-300g or WL-HDD, do more extensive checks */
 			if ((simple_strtoul(getvar("et0phyaddr"), NULL, 0) == 0) &&
-				(simple_strtoul(getvar("et1phyaddr"), NULL, 9) == 1))
+				(simple_strtoul(getvar("et1phyaddr"), NULL, 0) == 1))
 				return &platforms[WLHDD];
 			if ((simple_strtoul(getvar("et0phyaddr"), NULL, 0) == 0) &&
-				(simple_strtoul(getvar("et1phyaddr"), NULL, 9) == 10))
+				(simple_strtoul(getvar("et1phyaddr"), NULL, 0) == 10))
 				return &platforms[WL300G];
 		}
 
@@ -773,7 +773,7 @@ static ssize_t diag_proc_write(struct file *file, const char *buf, size_t count,
 				break;
 			}
 			case PROC_GPIOMASK:
-				gpiomask = simple_strtoul(page, NULL, 16);
+				gpiomask = simple_strtoul(page, NULL, 0);
 
 				if (platform.buttons) {
 					unregister_buttons(platform.buttons);
