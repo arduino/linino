@@ -1,0 +1,6 @@
+Package: nfacctd
+Priority: optional
+Section: net
+Description: a NetFlow accounting daemon,
+ built without database support
+Depends: libpcap

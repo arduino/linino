@@ -1,0 +1,6 @@
+Package: quagga-isisd
+Priority: optional
+Section: net
+Depends: quagga
+Description: An IS-IS routing engine for use with Quagga
+ routing software

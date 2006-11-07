@@ -1,0 +1,5 @@
+Package: libfuse
+Priority: optional
+Section: libs
+Description: Filesystem in Userspace (library)
+Depends: libpthread

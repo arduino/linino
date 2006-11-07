@@ -1,0 +1,8 @@
+config BR2_PACKAGE_KMOD_NOZOMI
+	prompt "kmod-nozomi - Option Globetrotter HSDPA driver"
+	tristate
+	default m
+	help
+	  Kernel driver for Option Globetrotter HSDPA 3G card.
+	  
+	  http://www.pharscape.org/

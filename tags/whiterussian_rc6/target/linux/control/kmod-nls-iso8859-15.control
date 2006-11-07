@@ -1,0 +1,4 @@
+Package: kmod-nls-iso8859-15
+Priority: optional
+Section: sys
+Description: Kernel module for ISO 8859-15 (Latin 9)

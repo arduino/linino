@@ -1,0 +1,12 @@
+diff -urN speex-1.1.8/libspeex/Makefile.in speex-1.1.8.new/libspeex/Makefile.in
+--- speex-1.1.8/libspeex/Makefile.in	2005-05-06 07:00:35.000000000 +0200
++++ speex-1.1.8.new/libspeex/Makefile.in	2006-03-05 16:57:02.000000000 +0100
+@@ -107,7 +107,7 @@
+ 
+ EXTRA_DIST = testenc.c testenc_wb.c testenc_uwb.c testdenoise.c testecho.c
+ 
+-INCLUDES = -I$(top_srcdir)/include -I$(top_builddir)/include -I$(top_builddir) @OGG_CFLAGS@
++INCLUDES = -I$(top_srcdir)/include -I$(top_builddir)/include -I$(top_builddir) 
+ 
+ lib_LTLIBRARIES = libspeex.la
+ 

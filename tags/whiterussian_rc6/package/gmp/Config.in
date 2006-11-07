@@ -1,0 +1,12 @@
+config BR2_PACKAGE_LIBGMP
+	tristate "libgmp - GNU multiprecision arithmetic library"
+	default m if CONFIG_DEVEL
+	help
+	  GNU multiprecision arithmetic library
+	  
+	  http://www.swox.com/gmp/
+	  
+
+config BR2_PACKAGE_GMP
+	tristate
+	default BR2_PACKAGE_LIBGMP

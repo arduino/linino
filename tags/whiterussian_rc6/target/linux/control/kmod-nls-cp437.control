@@ -1,0 +1,4 @@
+Package: kmod-nls-cp437
+Priority: optional
+Section: sys
+Description: Kernel module for NLS Codepage 437 (United States, Canada)

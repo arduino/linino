@@ -1,0 +1,5 @@
+Package: lighttpd-mod-usertrack
+Priority: optional
+Section: net
+Description: an user tracking module for lighttpd
+Depends: lighttpd

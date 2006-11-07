@@ -1,0 +1,5 @@
+Package: kmod-bluetooth-dtl1
+Priority: optional
+Section: net
+Depends: kmod-bluetooth kmod-pcmcia
+Description: Bluetooth HCI DTL1 (PC Card) driver

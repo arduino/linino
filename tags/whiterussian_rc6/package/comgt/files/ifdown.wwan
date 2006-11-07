@@ -1,0 +1,5 @@
+#!/bin/sh
+echo 0 > /proc/diag/led/3g_green
+echo 0 > /proc/diag/led/3g_blue
+echo 0 > /proc/diag/led/3g_blink
+killall pppd

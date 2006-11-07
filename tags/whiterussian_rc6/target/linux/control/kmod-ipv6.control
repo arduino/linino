@@ -1,0 +1,4 @@
+Package: kmod-ipv6
+Priority: optional
+Section: net
+Description: Kernel modules for the IPv6 protocol

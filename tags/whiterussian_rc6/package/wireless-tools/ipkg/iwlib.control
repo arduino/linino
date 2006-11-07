@@ -1,0 +1,4 @@
+Package: iwlib
+Priority: optional
+Section: net
+Description: Library for setting up WiFi cards using the Wireless Extension

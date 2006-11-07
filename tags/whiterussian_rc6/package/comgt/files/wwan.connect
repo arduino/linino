@@ -1,0 +1,4 @@
+#!/bin/sh
+echo 1 > /proc/diag/led/3g_blue
+echo 1 > /proc/diag/led/3g_blink
+/usr/sbin/chat -V -E -f /etc/chatscripts/wwan.chat

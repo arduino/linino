@@ -1,0 +1,5 @@
+Package: pptpd
+Priority: optional
+Section: net
+Description: a Point-to-Point Tunneling Protocol (PPTP) server
+Depends: ppp, kmod-crypto, kmod-mppe, kmod-ppp

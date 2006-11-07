@@ -1,0 +1,5 @@
+Package: asterisk-voicemail
+Priority: optional
+Section: net
+Description: VoiceMail related modules for Asterisk
+Depends: asterisk

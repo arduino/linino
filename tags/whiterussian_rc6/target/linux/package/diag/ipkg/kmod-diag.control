@@ -1,0 +1,4 @@
+Package: kmod-diag
+Priority: optional
+Section: sys
+Description: Kernel modules for LEDs and buttons

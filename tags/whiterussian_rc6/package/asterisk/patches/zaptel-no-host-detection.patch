@@ -1,0 +1,28 @@
+diff -urN asterisk-1.0.10/Makefile asterisk-1.0.10.new/Makefile
+--- asterisk-1.0.10/Makefile	2006-03-05 15:13:43.799355464 +0100
++++ asterisk-1.0.10.new/Makefile	2006-03-05 15:25:02.911114784 +0100
+@@ -159,8 +159,8 @@
+ #Uncomment this to use the older DSP routines
+ #CFLAGS+=-DOLD_DSP_ROUTINES
+ 
+-CFLAGS+=$(shell if [ -f /usr/include/linux/zaptel.h ]; then echo "-DZAPTEL_OPTIMIZATIONS"; fi)
+-CFLAGS+=$(shell if [ -f /usr/local/include/zaptel.h ]; then echo "-DZAPTEL_OPTIMIZATIONS"; fi)
++#CFLAGS+=$(shell if [ -f /usr/include/linux/zaptel.h ]; then echo "-DZAPTEL_OPTIMIZATIONS"; fi)
++#CFLAGS+=$(shell if [ -f /usr/local/include/zaptel.h ]; then echo "-DZAPTEL_OPTIMIZATIONS"; fi)
+ 
+ LIBEDIT=editline/libedit.a
+ 
+diff -urN asterisk-1.0.10/res/Makefile asterisk-1.0.10.new/res/Makefile
+--- asterisk-1.0.10/res/Makefile	2006-03-05 15:13:43.819352424 +0100
++++ asterisk-1.0.10.new/res/Makefile	2006-03-05 15:26:12.987461560 +0100
+@@ -20,8 +20,8 @@
+ CRYPTO_LIBS=-lssl -lcrypto
+ 
+ CFLAGS+=
+-CFLAGS+=$(shell [ -f /usr/include/linux/zaptel.h ] && echo " -DZAPATA_MOH")
+-CFLAGS+=$(shell [ -f /usr/local/include/zaptel.h ] && echo " -DZAPATA_MOH")
++#CFLAGS+=$(shell [ -f $(STAGING_DIR)/usr/include/linux/zaptel.h ] && echo " -DZAPATA_MOH")
++#CFLAGS+=$(shell [ -f $(STAGING_DIR)/usr/include/zaptel/zaptel.h ] && echo " -DZAPATA_MOH")
+ #
+ # Work around buggy RedHat 9.0
+ #

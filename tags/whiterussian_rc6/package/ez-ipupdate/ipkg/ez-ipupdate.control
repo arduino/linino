@@ -1,0 +1,4 @@
+Package: ez-ipupdate
+Priority: optional
+Section: net
+Description: a client for dynamic DNS services

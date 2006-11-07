@@ -1,0 +1,73 @@
+diff -ru tinc-1.0.4.orig/configure tinc-1.0.4/configure
+--- tinc-1.0.4.orig/configure	2005-05-05 04:24:06.000000000 +1000
++++ tinc-1.0.4/configure	2005-11-13 18:34:21.000000000 +1100
+@@ -11074,13 +11144,13 @@
+ done
+ 
+ 
+-  echo "$as_me:$LINENO: checking for lzo1x_1_compress in -llzo" >&5
+-echo $ECHO_N "checking for lzo1x_1_compress in -llzo... $ECHO_C" >&6
+-if test "${ac_cv_lib_lzo_lzo1x_1_compress+set}" = set; then
++  echo "$as_me:$LINENO: checking for lzo1x_1_compress in -llzo2" >&5
++echo $ECHO_N "checking for lzo1x_1_compress in -llzo2... $ECHO_C" >&6
++if test "${ac_cv_lib_lzo2_lzo1x_1_compress+set}" = set; then
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-llzo  $LIBS"
++LIBS="-llzo2  $LIBS"
+ cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+ _ACEOF
+@@ -11112,7 +11182,8 @@
+   cat conftest.err >&5
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); } &&
+-	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
++	 { ac_try='test -z "$ac_c_werror_flag"
++			 || test ! -s conftest.err'
+   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+   (eval $ac_try) 2>&5
+   ac_status=$?
+@@ -11124,21 +11195,21 @@
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }; }; then
+-  ac_cv_lib_lzo_lzo1x_1_compress=yes
++  ac_cv_lib_lzo2_lzo1x_1_compress=yes
+ else
+   echo "$as_me: failed program was:" >&5
+ sed 's/^/| /' conftest.$ac_ext >&5
+ 
+-ac_cv_lib_lzo_lzo1x_1_compress=no
++ac_cv_lib_lzo2_lzo1x_1_compress=no
+ fi
+ rm -f conftest.err conftest.$ac_objext \
+       conftest$ac_exeext conftest.$ac_ext
+ LIBS=$ac_check_lib_save_LIBS
+ fi
+-echo "$as_me:$LINENO: result: $ac_cv_lib_lzo_lzo1x_1_compress" >&5
+-echo "${ECHO_T}$ac_cv_lib_lzo_lzo1x_1_compress" >&6
+-if test $ac_cv_lib_lzo_lzo1x_1_compress = yes; then
+-  LIBS="$LIBS -llzo"
++echo "$as_me:$LINENO: result: $ac_cv_lib_lzo2_lzo1x_1_compress" >&5
++echo "${ECHO_T}$ac_cv_lib_lzo2_lzo1x_1_compress" >&6
++if test $ac_cv_lib_lzo2_lzo1x_1_compress = yes; then
++  LIBS="$LIBS -llzo2"
+ else
+   { { echo "$as_me:$LINENO: error: \"lzo libraries not found.\"" >&5
+ echo "$as_me: error: \"lzo libraries not found.\"" >&2;}
+diff -ru tinc-1.0.4.orig/m4/lzo.m4 tinc-1.0.4/m4/lzo.m4
+--- tinc-1.0.4.orig/m4/lzo.m4	2004-03-25 08:04:27.000000000 +1100
++++ tinc-1.0.4/m4/lzo.m4	2005-11-13 18:38:39.000000000 +1100
+@@ -26,8 +26,8 @@
+     [AC_MSG_ERROR("lzo header files not found."); break]
+   )
+ 
+-  AC_CHECK_LIB(lzo, lzo1x_1_compress,
+-    [LIBS="$LIBS -llzo"],
++  AC_CHECK_LIB(lzo2, lzo1x_1_compress,
++    [LIBS="$LIBS -llzo2"],
+     [AC_MSG_ERROR("lzo libraries not found.")]
+   )
+ ])

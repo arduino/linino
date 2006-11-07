@@ -1,0 +1,4 @@
+Package: kmod-mppe
+Priority: optional
+Section: net
+Description: Microsoft PPP Encryption/Compression support

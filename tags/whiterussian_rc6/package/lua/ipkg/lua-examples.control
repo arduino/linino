@@ -1,0 +1,5 @@
+Package: lua-examples
+Priority: optional
+Section: devel
+Description: LUA programming language examples
+Depends: lua
