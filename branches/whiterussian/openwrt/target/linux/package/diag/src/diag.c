@@ -221,12 +221,14 @@ static struct platform_t __init platforms[] = {
 		.name		= "Buffalo WHR-G54S",
 		.buttons	= {
 			{ .name = "reset",	.gpio = 1 << 4 },
+			{ .name = "bridge",	.gpio = 1 << 5 },
 			{ .name = "ses",	.gpio = 1 << 0 },
 		},
 		.leds		= {
-			{ .name = "diag",	.gpio = 1 << 1, .polarity = REVERSE },
+			{ .name = "diag",	.gpio = 1 << 7, .polarity = REVERSE },
 			{ .name = "internal",	.gpio = 1 << 3, .polarity = REVERSE },
 			{ .name = "ses",	.gpio = 1 << 6, .polarity = REVERSE },
+			{ .name = "bridge",	.gpio = 1 << 1, .polarity = REVERSE },
 		},
 	},
 	[WBR2_G54] = {
