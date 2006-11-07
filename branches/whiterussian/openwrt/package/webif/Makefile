@@ -37,6 +37,7 @@ $(eval $(call PKG_template,WEBIF_LANG_IT,webif-lang-it,$(PKG_VERSION)-$(PKG_RELE
 $(eval $(call PKG_template,WEBIF_LANG_NL,webif-lang-nl,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,WEBIF_LANG_NO,webif-lang-no,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,WEBIF_LANG_PL,webif-lang-pl,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,WEBIF_LANG_PT,webif-lang-pt,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,WEBIF_LANG_RU,webif-lang-ru,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,WEBIF_LANG_SE,webif-lang-se,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
@@ -53,6 +54,7 @@ $(eval $(call PKG_mod_template,WEBIF_LANG_IT,it))
 $(eval $(call PKG_mod_template,WEBIF_LANG_NL,nl))
 $(eval $(call PKG_mod_template,WEBIF_LANG_NO,no))
 $(eval $(call PKG_mod_template,WEBIF_LANG_PL,pl))
+$(eval $(call PKG_mod_template,WEBIF_LANG_PT,pt))
 $(eval $(call PKG_mod_template,WEBIF_LANG_RU,ru))
 $(eval $(call PKG_mod_template,WEBIF_LANG_SE,se))
 

@@ -111,6 +111,14 @@ config BR2_PACKAGE_WEBIF_LANG_PL
 	help
 	  Polish language file for webif
 
+config BR2_PACKAGE_WEBIF_LANG_PT
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-pt - Portuguese language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Portuguese language file for webif
+
 config BR2_PACKAGE_WEBIF_LANG_RU
 	select BR2_PACKAGE_HASERL
 	tristate "webif-lang-ru - Russian language file for webif"
