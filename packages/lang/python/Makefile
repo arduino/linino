@@ -79,6 +79,8 @@ define Build/Compile
 endef
 
 define Build/InstallDev
+	mkdir -p $(STAGING_DIR)/usr/bin
+	$(CP) $(PKG_BUILD_DIR)/hostpython $(STAGING_DIR)/usr/bin/
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/python2.4 $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
