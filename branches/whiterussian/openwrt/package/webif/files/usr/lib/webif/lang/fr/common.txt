@@ -53,7 +53,7 @@ et/ou le modifier sous les termes de la General Public License telle qu'elle
 est publi&eacute;e par la Free Sofware Foundation; que ce soit sous la version
 2 de la license, ou (&agrave; votre convenance) une version ult&eacute;rieure
 Contributions by => Contributions par
-Layout based on => Pr&eacute;sentation baseacutee sur
+Layout based on => Pr&eacute;sentation b&aseacute;e sur
 by => par
 
 
