@@ -35,7 +35,6 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) alles
-	$(STRIP) $(PKG_BUILD_DIR)/lilo.static
 endef
 
 define Package/lilo/install
@@ -47,3 +46,9 @@ define Package/lilo/install
 endef
 
 $(eval $(call BuildPackage,lilo))
+
+$(foreach command, as86 ld86, \
+  $(eval $(call RequireCommand,$(command), \
+   $(PKG_NAME) requires $(command). \
+  )) \
+)
