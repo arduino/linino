@@ -31,6 +31,15 @@ define Package/sane-backends
   URL:=http://www.sane-project.org
 endef
 
+define Package/sane-libs
+ SECTION:=libs
+ CATEGORY:=Libraries
+ TITLE:=Scanner Access Now Easy (libraries)
+ DESCRIPTION:=\
+	SANE (Scanner Access Now Easy) is a universal scanner interface.
+ URL:=http://www.sane-project.org
+endef
+ 
 define Package/sane-backends/conffiles
 /etc/sane.d/saned.conf
 endef
@@ -57,4 +66,10 @@ define Package/sane-backends/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/saned $(1)/usr/sbin/
 endef
 
+define Package/sane-libs/install
+	install -d -m0755 $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
+endef
+
 $(eval $(call BuildPackage,sane-backends))
+$(eval $(call BuildPackage,sane-libs))
