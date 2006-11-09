@@ -73,7 +73,7 @@ endef
 define Package/openssh-sftp-server
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +zlib
+  DEPENDS:=
   TITLE:=OpenSSH SFTP server
   DESCRIPTION:=OpenSSH SFTP server.
   URL:=http://www.openssh.com/
@@ -126,6 +126,10 @@ endef
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		LIBS="" \
+		sftp-server
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install

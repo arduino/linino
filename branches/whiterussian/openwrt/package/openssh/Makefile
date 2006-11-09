@@ -76,6 +76,10 @@ $(PKG_BUILD_DIR)/.built:
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		LIBS="" \
+		sftp-server
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 	touch $@
 
