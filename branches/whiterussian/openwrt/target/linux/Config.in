@@ -275,6 +275,11 @@ config BR2_PACKAGE_KMOD_USB_PRINTER
 	default m
 	depends BR2_PACKAGE_KMOD_USB_CONTROLLER
 
+config BR2_PACKAGE_KMOD_USB_SCANNER
+	tristate "Support for USB scanners"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_CONTROLLER
+
 config BR2_PACKAGE_KMOD_USB_ACM
 	tristate "Support for USB ACM compatible devices"
 	default m

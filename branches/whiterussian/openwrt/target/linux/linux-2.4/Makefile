@@ -173,6 +173,9 @@ $(eval $(call KMOD_template,USB_SERIAL_VISOR,usb-serial-visor,\
 $(eval $(call KMOD_template,USB_PRINTER,usb-printer,\
 	$(MODULES_DIR)/kernel/drivers/usb/printer.o \
 ,CONFIG_USB_PRINTER,kmod-usb-core,60,printer))
+$(eval $(call KMOD_template,USB_SCANNER,usb-scanner,\
+	$(MODULES_DIR)/kernel/drivers/usb/scanner.o \
+,CONFIG_USB_SCANNER,kmod-usb-core,60,scanner))
 $(eval $(call KMOD_template,USB_ACM,usb-acm,\
 	$(MODULES_DIR)/kernel/drivers/usb/acm.o \
 ,CONFIG_USB_ACM,kmod-usb-core,60,acm))
