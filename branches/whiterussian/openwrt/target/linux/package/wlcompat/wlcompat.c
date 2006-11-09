@@ -27,9 +27,10 @@
 #include <linux/moduleparam.h>
 #include <linux/init.h>
 #include <linux/if_arp.h>
-#include <asm/uaccess.h>
 #include <linux/wireless.h>
 #include <linux/timer.h>
+#include <linux/delay.h>
+#include <asm/uaccess.h>
 
 #include <net/iw_handler.h>
 #include <wlioctl.h>
@@ -39,6 +40,8 @@ static struct net_device *dev;
 static unsigned short bss_force;
 static struct iw_statistics wstats;
 static int random = 1;
+static int last_mode = -1;
+static int scan_cur = 0;
 char buf[WLC_IOCTL_MAXLEN];
 
 /* The frequency of each channel in MHz */
@@ -48,6 +51,7 @@ const long channel_frequency[] = {
 };
 #define NUM_CHANNELS ( sizeof(channel_frequency) / sizeof(channel_frequency[0]) )
 
+#define SCAN_RETRY_MAX	5
 #define RNG_POLL_FREQ	20
 
 typedef struct internal_wsec_key {
@@ -199,7 +203,7 @@ static int wlcompat_set_scan(struct net_device *dev,
 			 union iwreq_data *wrqu,
 			 char *extra)
 {
-	int ap = 0, oldap = 0;
+	int ap = 0;
 	wl_scan_params_t params;
 
 	memset(&params, 0, sizeof(params));
@@ -214,16 +218,32 @@ static int wlcompat_set_scan(struct net_device *dev,
 	params.home_time = -1;
 	
 	/* can only scan in STA mode */
-	wl_ioctl(dev, WLC_GET_AP, &oldap, sizeof(oldap));
-	if (oldap > 0)
+	wl_ioctl(dev, WLC_GET_AP, &last_mode, sizeof(last_mode));
+	if (last_mode > 0) {
+		/* switch to ap mode, scan result query will switch back */
 		wl_ioctl(dev, WLC_SET_AP, &ap, sizeof(ap));
-	
-	if (wl_ioctl(dev, WLC_SCAN, &params, 64) < 0)
+
+		/* wait 250 msec after mode change */
+		set_current_state(TASK_INTERRUPTIBLE);
+		schedule_timeout(msecs_to_jiffies(250));
+	}
+
+	scan_cur = SCAN_RETRY_MAX;
+	while (scan_cur-- && (wl_ioctl(dev, WLC_SCAN, &params, 64) < 0)) {
+		/* sometimes the driver takes a few tries... */
+		set_current_state(TASK_INTERRUPTIBLE);
+		schedule_timeout(msecs_to_jiffies(250));
+	}
+
+	if (!scan_cur) 
 		return -EINVAL;
 	
-	if (oldap > 0)
-		wl_ioctl(dev, WLC_SET_AP, &oldap, sizeof(oldap));
+	scan_cur = 0;
 
+	/* wait at least 2 seconds for results */
+	set_current_state(TASK_INTERRUPTIBLE);
+	schedule_timeout(msecs_to_jiffies(2000));
+	
 	return 0;
 }
 
@@ -283,15 +303,18 @@ static int wlcompat_get_scan(struct net_device *dev,
 	int i, j;
 	int rssi, noise;
 	
+	memset(buf, 0, WLC_IOCTL_MAXLEN);
 	results->buflen = WLC_IOCTL_MAXLEN - sizeof(wl_scan_results_t);
 	
 	if (wl_ioctl(dev, WLC_SCAN_RESULTS, buf, WLC_IOCTL_MAXLEN) < 0)
 		return -EAGAIN;
 	
+	if ((results->count <= 0) && (scan_cur++ < SCAN_RETRY_MAX))
+		return -EAGAIN;
+	
 	bss_info = &(results->bss_info[0]);
 	info_ptr = (char *) bss_info;
 	for (i = 0; i < results->count; i++) {
-
 		/* send the cell address (must be sent first) */
 		iwe.cmd = SIOCGIWAP;
 		iwe.u.ap_addr.sa_family = ARPHRD_ETHER;
@@ -362,6 +385,10 @@ static int wlcompat_get_scan(struct net_device *dev,
 	wrqu->data.length = (current_ev - extra);
 	wrqu->data.flags = 0;
 
+	if (last_mode > 0)
+		/* switch back to ap mode */
+		wl_ioctl(dev, WLC_SET_AP, &last_mode, sizeof(last_mode));
+	
 	return 0;
 }
 
@@ -1003,6 +1030,7 @@ static int new_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) {
 	return ret;
 }
 
+#ifndef DEBUG
 static struct timer_list rng_timer;
 
 static void rng_timer_tick(unsigned long n)
@@ -1020,7 +1048,7 @@ static void rng_timer_tick(unsigned long n)
 
 	mod_timer(&rng_timer, jiffies + (HZ/RNG_POLL_FREQ));
 }
-
+#endif
 
 static int __init wlcompat_init()
 {
@@ -1045,12 +1073,14 @@ static int __init wlcompat_init()
 	dev->wireless_handlers = (struct iw_handler_def *)&wlcompat_handler_def;
 	dev->get_wireless_stats = wlcompat_get_wireless_stats;
 
+#ifndef DEBUG
 	if (random) {
 		init_timer(&rng_timer);
 		rng_timer.function = rng_timer_tick;
 		rng_timer.data = (unsigned long) dev;
 		rng_timer_tick((unsigned long) dev);
 	}
+#endif
 	
 #ifdef DEBUG
 	printk("broadcom driver private data: 0x%08x\n", dev->priv);
@@ -1060,8 +1090,10 @@ static int __init wlcompat_init()
 
 static void __exit wlcompat_exit()
 {
+#ifndef DEBUG
 	if (random)
 		del_timer(&rng_timer);
+#endif
 	dev->get_wireless_stats = NULL;
 	dev->wireless_handlers = NULL;
 	dev->do_ioctl = old_ioctl;
@@ -1072,6 +1104,8 @@ EXPORT_NO_SYMBOLS;
 MODULE_AUTHOR("openwrt.org");
 MODULE_LICENSE("GPL");
 
+#ifndef DEBUG
 module_param(random, int, 0);
+#endif
 module_init(wlcompat_init);
 module_exit(wlcompat_exit);
