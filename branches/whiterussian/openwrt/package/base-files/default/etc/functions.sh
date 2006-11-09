@@ -75,7 +75,7 @@ do_ifup() {
 		mtu=$(nvram get ${2}_mtu)
 		$DEBUG ifconfig $if $DHCP_IP ${DHCP_NETMASK:+netmask $DHCP_NETMASK} ${mtu:+mtu $(($mtu))} broadcast + up
 
-		DHCP_ARGS="-i $if ${DHCP_IP:+-r $DHCP_IP} -b -p $pidfile"
+		DHCP_ARGS="-i $if ${DHCP_IP:+-r $DHCP_IP} -b -p $pidfile -t 0"
 		DHCP_HOSTNAME=$(nvram get ${2}_hostname)
 		DHCP_HOSTNAME=${DHCP_HOSTNAME%%.*}
 		[ -z $DHCP_HOSTNAME ] || DHCP_ARGS="$DHCP_ARGS -H $DHCP_HOSTNAME"
