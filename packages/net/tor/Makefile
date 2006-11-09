@@ -79,6 +79,12 @@ fi
 endef
 
 define Build/Configure
+	(cd $(PKG_BUILD_DIR); touch \
+		configure.in \
+		aclocal.m4 \
+		Makefile.in \
+		configure \
+	);
 	$(call Build/Configure/Default,\
 		--with-libevent-dir="$(STAGING_DIR)/usr/" \
 		--with-gnu-ld \
