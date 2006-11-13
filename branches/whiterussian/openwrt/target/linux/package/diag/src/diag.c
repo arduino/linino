@@ -400,7 +400,7 @@ static struct platform_t __init *platform_detect(void)
 	if (strncmp(getvar("pmon_ver"), "CFE", 3) == 0) {
 		/* CFE based - newer hardware */
 		if (!strcmp(boardnum, "42")) { /* Linksys */
-			if (!strcmp(boardtype, "0x0101"))
+			if (!strcmp(boardtype, "0x0101") && !strcmp(getvar("boot_ver"), "v3.6"))
 				return &platforms[WRT54G3G];
 
 			if (!strcmp(getvar("et1phyaddr"),"5") && !strcmp(getvar("et1mdcport"), "1"))
