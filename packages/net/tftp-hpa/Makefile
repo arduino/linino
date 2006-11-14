@@ -21,22 +21,27 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
+define Package/tftp-hpa/Default
+  SECTION:=net
+  CATEGORY:=Network
+  URL:=http://www.kernel.org/pub/software/network/tftp
+endef
+
 define Package/tftp-hpa
- SECTION:=net
- CATEGORY:=Network
- TITLE:=tftp-hpa is an enhanced version of the BSD TFTP client
- URL:=http://www.kernel.org/pub/software/network/tftp
+  $(call Package/tftp-hpa/Default)
+  TITLE:=An enhanced version of the BSD TFTP client
 endef
 
 define Package/tftpd-hpa
- SECTION:=net
- CATEGORY:=Network
- TITLE:=tftp-hpa is an enhanced version of the BSD TFTP server
- URL:=http://www.kernel.org/pub/software/network/tftp
+  $(call Package/tftp-hpa/Default)
+  TITLE:=An enhanced version of the BSD TFTP server
 endef
 
 define Build/Configure	
-	$(call Build/Configure/Default)
+	$(call Build/Configure/Default, \
+		, \
+		CFLAGS="$$$$CFLAGS $$$$CPPFLAGS" \
+	)
 endef
 
 define Build/Compile	
