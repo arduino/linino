@@ -1,0 +1,14 @@
+--- strace-4.5.11/signal.c	2005-02-02 05:16:54.000000000 +0100
++++ strace-4.5.11.new/signal.c	2006-11-14 15:33:54.000000000 +0100
+@@ -1422,7 +1422,11 @@
+ 		if (umove(tcp, sp, &sc) < 0)
+ 		  	return 0;
+ 		tcp->u_arg[0] = 1;
++#ifdef LINUX_2_4
+ 		tcp->u_arg[1] = sc.sc_sigset;
++#else
++		tcp->u_arg[1] = sc.sc_hi2;
++#endif
+ 	} else {
+ 	  	tcp->u_rval = tcp->u_error = 0;
+ 		if(tcp->u_arg[0] == 0)
