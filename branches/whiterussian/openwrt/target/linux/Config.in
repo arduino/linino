@@ -49,6 +49,9 @@ config BR2_PACKAGE_KMOD_IPTABLES_EXTRA
 	select BR2_PACKAGE_KMOD_IPT_IPOPT
 	select BR2_PACKAGE_KMOD_IPT_IPSEC
 	select BR2_PACKAGE_KMOD_IPT_NAT
+	select BR2_PACKAGE_KMOD_IPT_NAT_PPTP
+	select BR2_PACKAGE_KMOD_IPT_NAT_H323
+	select BR2_PACKAGE_KMOD_IPT_NAT_RTSP
 	select BR2_PACKAGE_KMOD_IPT_NAT_EXTRA
 	select BR2_PACKAGE_KMOD_IPT_QUEUE
 	select BR2_PACKAGE_KMOD_IPT_ULOG
@@ -114,17 +117,30 @@ config BR2_PACKAGE_KMOD_IPT_NAT
 	  Includes: 
 	    * ipt_REDIRECT
 
+config BR2_PACKAGE_KMOD_IPT_NAT_DEFAULT
+	tristate "Netfilter NAT modules for special protocols"
+	default y
+	help
+	  Default Netfilter (IPv4) NAT kernel modules for special protocols
+	  
+	  Includes:
+	    * ip_conntrack_ftp
+	    * ip_nat_ftp
+	    * ip_conntrack_irc
+	    * ip_nat_irc
+	    * ip_conntrack_tftp
+
+config BR2_PACKAGE_KMOD_IPT_NAT_PPTP
+	tristate "Netfilter NAT modules for GRE and PPTP"
+	default m
+	help
+	  Netfilter (IPv4) NAT kernel modules for GRE and PPTP
+
 config BR2_PACKAGE_KMOD_IPT_NAT_H323
 	tristate "Netfilter NAT modules for H.323"
 	default m
 	help
 	  Netfilter (IPv4) NAT kernel modules for H.323
-
-config BR2_PACKAGE_KMOD_IPT_NAT_PPTP
-	tristate "Netfilter NAT modules for PPTP"
-	default m
-	help
-	  Netfilter (IPv4) NAT kernel modules for PPTP
 
 config BR2_PACKAGE_KMOD_IPT_NAT_RTSP
 	tristate "Netfilter NAT modules for RTSP"
@@ -140,8 +156,6 @@ config BR2_PACKAGE_KMOD_IPT_NAT_EXTRA
 	  
 	  Includes:
 	    * ip_conntrack_amanda
-	    * ip_conntrack_proto_gre
-	    * ip_nat_proto_gre
 	    * ip_nat_snmp_basic
 	    * ip_conntrack_tftp
 

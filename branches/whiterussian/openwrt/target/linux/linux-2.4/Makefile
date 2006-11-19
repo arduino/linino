@@ -76,6 +76,9 @@ $(eval $(call KMOD_template,IPT_IPOPT,ipt-ipopt,\
 $(eval $(call KMOD_template,IPT_IPSEC,ipt-ipsec,\
 	$(foreach mod,$(IPT_IPSEC-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
 ))
+$(eval $(call KMOD_template,IPT_NAT_DEFAULT,ipt-nat-default,\
+	$(foreach mod,$(IPT_NAT_DEFAULT-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+))
 $(eval $(call KMOD_template,IPT_NAT,ipt-nat,\
 	$(foreach mod,$(IPT_NAT-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
 ))
