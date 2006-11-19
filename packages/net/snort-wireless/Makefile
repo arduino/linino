@@ -118,7 +118,7 @@ ifneq ($(CONFIG_PACKAGE_snort-wireless),)
 		--without-mysql \
 		--without-postgresql \
   ))
-  $(eval $(call Install/Template,snort,basic))
+  $(eval $(call Install/Template,snort-wireless,basic))
 endif
 ifneq ($(CONFIG_PACKAGE_snort-wireless-mysql),)
   $(eval $(call Compile/Template,mysql, \
@@ -127,7 +127,7 @@ ifneq ($(CONFIG_PACKAGE_snort-wireless-mysql),)
   ))
   $(eval $(call Install/Template,snort-wireless-mysql,mysql))
 endif
-ifneq ($(CONFIG_PACKAGE_snort-pgsql),)
+ifneq ($(CONFIG_PACKAGE_snort-wireless-pgsql),)
   $(eval $(call Compile/Template,pgsql, \
 		--without-mysql \
 		--with-postgresql="$(STAGING_DIR)/usr" \
