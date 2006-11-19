@@ -14,7 +14,7 @@ $(DL_DIR)/$(GDB_SOURCE):
 	$(WGET) -P $(DL_DIR) $(GDB_SITE)/$(GDB_SOURCE)
 
 $(GDB_DIR)/.patched: $(DL_DIR)/$(GDB_SOURCE)
-	$(GDB_CAT) $(DL_DIR)/$(GDB_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
+	$(GDB_CAT) $(DL_DIR)/$(GDB_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS)
 	$(PATCH) $(GDB_DIR) ./patches
 	# Copy a config.sub from gcc.  This is only necessary until
 	# gdb's config.sub supports <arch>-linux-uclibc tuples.

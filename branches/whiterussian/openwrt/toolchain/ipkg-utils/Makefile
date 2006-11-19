@@ -22,7 +22,7 @@ $(DL_DIR)/$(PKG_SOURCE_FILE):
 
 $(PKG_BUILD_DIR)/.unpacked: $(DL_DIR)/$(PKG_SOURCE_FILE)
 	mkdir -p $(BUILD_DIR)
-	$(PKG_SOURCE_CAT) $(DL_DIR)/$(PKG_SOURCE_FILE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+	$(PKG_SOURCE_CAT) $(DL_DIR)/$(PKG_SOURCE_FILE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS)
 	touch $(PKG_BUILD_DIR)/.unpacked
 
 $(PKG_BUILD_DIR)/.patched: $(PKG_BUILD_DIR)/.unpacked

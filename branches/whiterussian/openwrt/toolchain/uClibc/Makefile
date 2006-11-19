@@ -41,7 +41,7 @@ $(DL_DIR)/$(UCLIBC_SOURCE):
 
 $(UCLIBC_DIR)/.unpacked: $(DL_DIR)/$(UCLIBC_SOURCE)
 	mkdir -p $(TOOL_BUILD_DIR)
-	bzcat $(DL_DIR)/$(UCLIBC_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS) -
+	bzcat $(DL_DIR)/$(UCLIBC_SOURCE) | tar -C $(TOOL_BUILD_DIR) $(TAR_OPTIONS)
 	$(PATCH) $(UCLIBC_DIR) ./patches
 	touch $(UCLIBC_DIR)/.unpacked
 

@@ -37,9 +37,9 @@ endif
 
 
 ifeq ($(BR2_TAR_VERBOSITY),y)
-TAR_OPTIONS=-xvf
+TAR_OPTIONS=-xvf -
 else
-TAR_OPTIONS=-xf
+TAR_OPTIONS=-xf -
 endif
 
 ifneq ($(BR2_LARGEFILE),y)

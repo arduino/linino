@@ -18,7 +18,7 @@ $(DL_DIR)/$(PKG_SOURCE_FILE):
 
 $(PKG_BUILD_DIR)/.patched: $(DL_DIR)/$(PKG_SOURCE_FILE)
 	mkdir -p $(TOOL_BUILD_DIR)
-	$(PKG_SOURCE_CAT) $(DL_DIR)/$(PKG_SOURCE_FILE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+	$(PKG_SOURCE_CAT) $(DL_DIR)/$(PKG_SOURCE_FILE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS)
 	$(PATCH) $(PKG_BUILD_DIR) ./patches
 	touch $(PKG_BUILD_DIR)/.patched
 
