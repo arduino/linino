@@ -1,0 +1,28 @@
+diff -baurN stunnel-4.16.orig/src/ssl.c stunnel-4.16/src/ssl.c
+--- stunnel-4.16.orig/src/ssl.c	2006-11-03 16:49:02.000000000 +0100
++++ stunnel-4.16/src/ssl.c	2006-11-03 16:50:16.000000000 +0100
+@@ -55,13 +55,16 @@
+ }
+ 
+ void ssl_configure(void) { /* configure global SSL settings */
++#ifndef OPENSSL_NO_COMP
+     if(options.compression!=COMP_NONE)
+         init_compression();
++#endif
+     if(!init_prng())
+         s_log(LOG_DEBUG, "PRNG seeded successfully");
+ }
+ 
+ static void init_compression(void) {
++#ifndef OPENSSL_NO_COMP
+     int id=0;
+     COMP_METHOD *cm=NULL;
+     char *name="unknown";
+@@ -90,6 +93,7 @@
+         exit(1);
+     }
+     s_log(LOG_INFO, "Compression enabled using %s method", name);
++#endif
+ }
+ 
+ static int init_prng(void) {
