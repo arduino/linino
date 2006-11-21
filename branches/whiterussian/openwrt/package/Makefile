@@ -115,7 +115,6 @@ package-$(BR2_PACKAGE_SQLITE) += sqlite
 package-$(BR2_PACKAGE_STRACE) += strace
 package-$(BR2_PACKAGE_STUNNEL) += stunnel
 package-$(BR2_PACKAGE_TCPDUMP) += tcpdump
-package-$(BR2_PACKAGE_TCPDUMP) += tcpdump
 package-$(BR2_PACKAGE_TINC) += tinc
 package-$(BR2_PACKAGE_TOR) += tor
 package-$(BR2_PACKAGE_TTCP) += ttcp
