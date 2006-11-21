@@ -1,0 +1,15 @@
+#!/bin/sh
+
+case "$1" in
+    start|boot)
+	# reasons for starting
+	[ -e "/etc/stunnel/stunnel.pem" ] && {
+	    chmod og-rwx /etc/stunnel/stunnel.pem
+	    stunnel
+	}
+	;;
+    stop)
+	killall stunnel
+	killall -9 stunnel
+	;;
+esac

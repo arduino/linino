@@ -113,6 +113,8 @@ package-$(BR2_PACKAGE_SNORT) += snort
 package-$(BR2_PACKAGE_SPEEX) += speex
 package-$(BR2_PACKAGE_SQLITE) += sqlite
 package-$(BR2_PACKAGE_STRACE) += strace
+package-$(BR2_PACKAGE_STUNNEL) += stunnel
+package-$(BR2_PACKAGE_TCPDUMP) += tcpdump
 package-$(BR2_PACKAGE_TCPDUMP) += tcpdump
 package-$(BR2_PACKAGE_TINC) += tinc
 package-$(BR2_PACKAGE_TOR) += tor
@@ -177,6 +179,7 @@ screen-compile: ncurses-compile
 siproxd-compile: libosip2-compile
 sipsak-compile: openssl-compile
 sqlite-compile: ncurses-compile readline-compile
+stunnel-compile: openssl-compile tcp_wrappers-compile
 tcpdump-compile: libpcap-compile
 tinc-compile: zlib-compile openssl-compile lzo-compile
 tor-compile: libevent-compile openssl-compile zlib-compile

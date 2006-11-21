@@ -1,0 +1,19 @@
+config BR2_PACKAGE_STUNNEL
+	tristate "stunnel - openssl wrapper"
+	select BR2_PACKAGE_LIBOPENSSL
+	select BR2_PACKAGE_LIBWRAP
+	default m if CONFIG_DEVEL
+	help
+
+	Stunnel is a program that allows you to encrypt arbitrary TCP connections
+	inside SSL (Secure Sockets Layer) available on both Unix and Windows.
+	Stunnel can allow you to secure non-SSL aware daemons and protocols
+	(like POP, IMAP, LDAP, etc) by having Stunnel provide the encryption,
+	requiring no changes to the daemon's code.
+
+	The Stunnel source code is not a complete product -- you still require a
+	functioning SSL library such as OpenSSL or SSLeay in order to compile
+	stunnel. This means that stunnel can support whatever (and only) that
+	which your SSL library can, without making any changes in the Stunnel code.
+
+	http://www.stunnel.org/
