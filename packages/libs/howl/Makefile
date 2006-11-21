@@ -85,7 +85,6 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \
-		--with-gnu-ld \
 	);
 endef
 

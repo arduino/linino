@@ -34,7 +34,6 @@ endef
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-rpath \
-		--with-gnu-ld \
 		--disable-asm \
 		--disable-gnupg-iconv \
 		--disable-card-support \

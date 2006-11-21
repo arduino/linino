@@ -36,8 +36,6 @@ endef
 # uses GNU configure
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		cfg_filename="/etc/dhcp-fwd.conf" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \

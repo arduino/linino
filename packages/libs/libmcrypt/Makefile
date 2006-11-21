@@ -36,7 +36,6 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \
-		--with-gnu-ld \
 	)
 endef
 
@@ -66,7 +65,7 @@ endef
 
 define Package/libmcrypt/install
 	install -d -m0755 $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmcrypt.so.* $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmcrypt.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libmcrypt))

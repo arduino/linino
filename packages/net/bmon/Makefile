@@ -18,7 +18,6 @@ PKG_MD5SUM:=3111a027907016c0902d67350c619df6
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -44,7 +43,6 @@ define Build/Configure
 	)
 endef
 
-
 define Build/Compile
 	$(call Build/Compile/Default,all)
 endef
@@ -55,4 +53,3 @@ define Package/bmon/install
 endef
 
 $(eval $(call BuildPackage,bmon))
-

@@ -22,7 +22,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/rrdcollect
+define Package/rrdcollect/Default
   SECTION:=utils
   CATEGORY:=Utilities
   DESCRIPTION:=\
@@ -63,7 +63,6 @@ define Build/Configure
 		--enable-shared \
 		--disable-static \
 		--disable-rpath \
-		--with-gnu-ld \
 		--enable-exec \
 		--without-rrdtool \
 		--with-librrd \

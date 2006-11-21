@@ -34,7 +34,6 @@ define Build/Configure
 		--enable-shared \
 		--enable-static \
 		--disable-rpath \
-		--with-gnu-ld \
 	)
 endef
 
