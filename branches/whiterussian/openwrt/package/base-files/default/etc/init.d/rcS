@@ -1,6 +1,6 @@
 #!/bin/sh
 syslog_ip=$(nvram get log_ipaddr)
-eval $(ipcalc "$syslog_ip")
+eval $(ipcalc.sh "$syslog_ip")
 [ "$syslog_ip" = "$IP" ] || syslog_ip=""
 syslogd -C 16 ${syslog_ip:+-L -R $syslog_ip}
 klogd
