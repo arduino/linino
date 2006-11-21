@@ -9,14 +9,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=postgresql
-PKG_VERSION:=7.4.9
+PKG_VERSION:=7.4.14
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=\
-	ftp://ftp-archives.postgresql.org/pub/source/v$(PKG_VERSION)/
-PKG_MD5SUM:=d7cf0f0a0e1dda19268f55cb1e124c77
+	ftp://ftp.us.postgresql.org/pub/mirrors/postgresql/source/v$(PKG_VERSION) \
+	ftp://ftp-archives.postgresql.org/pub/source/v$(PKG_VERSION)
+PKG_MD5SUM:=2e0e82552f8463343df5d89348356481
 PKG_CAT:=bzcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
