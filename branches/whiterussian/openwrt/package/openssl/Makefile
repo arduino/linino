@@ -17,9 +17,10 @@ PKG_CAT:=zcat
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-OPENSSL_NO_CIPHERS:= no-idea no-md2 no-mdc2 no-rc5 no-sha0 no-rmd160 no-aes192
-OPENSSL_OPTIONS:= shared no-ec no-err no-fips no-hw no-krb5 no-threads zlib-dynamic no-engines
-
+OPENSSL_NO_CIPHERS:= no-idea no-md2 no-mdc2 no-rc2 no-rc5 no-sha0 no-smime no-cast \
+					no-rmd160 no-aes192 no-ripemd no-camellia no-ans1 no-krb5 no-ssl2
+OPENSSL_OPTIONS:= shared no-dso no-ec no-err no-fips no-hw no-threads zlib-dynamic \
+					no-engines no-sse2 no-perlasm
 
 include $(TOPDIR)/package/rules.mk
 
