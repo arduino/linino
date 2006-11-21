@@ -48,7 +48,8 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 
 $(PKG_BUILD_DIR)/.built:
 	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
+	mkdir -p $(PKG_INSTALL_DIR)/etc/stunnel
+	echo '#dummy' > $(PKG_INSTALL_DIR)/etc/stunnel/stunnel.pem
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
@@ -60,7 +61,6 @@ $(IPKG_STUNNEL):
 	install -d -m0755 $(IDIR_STUNNEL)/etc/stunnel $(IDIR_STUNNEL)/etc/init.d
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/stunnel $(IDIR_STUNNEL)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libstunnel.so $(IDIR_STUNNEL)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/etc/stunnel/stunnel.pem $(IDIR_STUNNEL)/etc/stunnel/
 	$(CP) ./files/stunnel.conf $(IDIR_STUNNEL)/etc/stunnel/stunnel.conf
 	$(CP) ./files/stunnel.init $(IDIR_STUNNEL)/etc/init.d/S90stunnel
 

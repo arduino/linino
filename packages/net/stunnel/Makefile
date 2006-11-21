@@ -34,6 +34,8 @@ define Build/Configure
 endef
 
 define Build/Compile	
+	mkdir -p $(PKG_INSTALL_DIR)/etc/stunnel
+	echo '#dummy' > $(PKG_INSTALL_DIR)/etc/stunnel/stunnel.pem
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
@@ -44,7 +46,6 @@ define Package/stunnel/install
 	install -d -m0755 $(1)/etc/stunnel $(1)/etc/init.d
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/stunnel $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libstunnel.so $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/etc/stunnel/stunnel.pem $(1)/etc/stunnel/
 	$(CP) ./files/stunnel.conf $(1)/etc/stunnel/stunnel.conf
 	$(CP) ./files/stunnel.init $(1)/etc/init.d/S90stunnel
 endef
