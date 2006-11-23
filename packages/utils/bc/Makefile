@@ -45,13 +45,13 @@ define Package/dc
 endef
 
 define Package/bc/install
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/bc/bc $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bc/bc $(1)/usr/bin/
 endef
 
 define Package/dc/install
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/dc/dc $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dc/dc $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,bc))

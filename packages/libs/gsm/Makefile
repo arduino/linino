@@ -62,12 +62,12 @@ define Build/Compile
 endef
 
 define Package/libgsm/install
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgsm.so.* $(1)/usr/lib/
 endef
 
 define Package/gsm-utils/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 endef
 

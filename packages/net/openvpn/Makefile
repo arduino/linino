@@ -56,14 +56,14 @@ define Build/Compile
 endef
 
 define Package/openvpn/install	
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/openvpn $(1)/usr/sbin/
 endef
 
 define Package/openvpn-easy-rsa/install	
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/easy-rsa/2.0/{build-*,clean-all,inherit-inter,list-crl,pkitool,revoke-full,sign-req} $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/easy-rsa
+	$(INSTALL_DIR) $(1)/etc/easy-rsa
 	install -m 0644 $(PKG_BUILD_DIR)/easy-rsa/2.0/openssl.cnf $(1)/etc/easy-rsa/openssl.cnf
 	install -m 0644 $(PKG_BUILD_DIR)/easy-rsa/2.0/vars $(1)/etc/easy-rsa/vars
 endef

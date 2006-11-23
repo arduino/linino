@@ -45,7 +45,7 @@ define Build/Compile
 endef
 
 define Package/libamsel/install
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib
 endef
 

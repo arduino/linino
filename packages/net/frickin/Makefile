@@ -45,12 +45,12 @@ define Build/Configure
 endef
 
 define Package/frickin/install
-	install -d -m0755 $(1)/etc/default
-	install -m0644 ./files/frickin.default $(1)/etc/default/frickin
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/frickin.init $(1)/etc/init.d/frickin
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/frickin $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DATA) ./files/frickin.default $(1)/etc/default/frickin
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/frickin.init $(1)/etc/init.d/frickin
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/frickin $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,frickin))

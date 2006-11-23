@@ -103,19 +103,19 @@ endef
 
 define BuildPlugin
   define Package/$(1)/install
-	install -d -m0755 $$(1)/usr/lib/updatedd
-	install -m0755 $(PKG_INSTALL_DIR)/usr/lib/updatedd/$(2).so $$(1)/usr/lib/updatedd/
+	$(INSTALL_DIR) $$(1)/usr/lib/updatedd
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/updatedd/$(2).so $$(1)/usr/lib/updatedd/
   endef
 
   $$(eval $$(call BuildPackage,$(1)))
 endef
 
 define Package/updatedd/install
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/ddns.init $(1)/etc/init.d/ddns
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/ddns.init $(1)/etc/init.d/ddns
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/updatedd $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/lib/updatedd
+	$(INSTALL_DIR) $(1)/usr/lib/updatedd
 endef
 
 $(eval $(call BuildPackage,updatedd))

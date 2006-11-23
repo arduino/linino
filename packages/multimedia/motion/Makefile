@@ -50,9 +50,9 @@ define Build/Compile
 endef
 
 define Package/motion/install	
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/motion-dist.conf $(1)/etc/motion.conf
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/motion $(1)/usr/bin/
 
 endef

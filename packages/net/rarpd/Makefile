@@ -52,11 +52,11 @@ define Build/Compile
 endef
 
 define Package/rarpd/install	
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/rarpd $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/default
+	$(INSTALL_DIR) $(1)/etc/default
 	install -m644 ./files/rarpd.default $(1)/etc/default/rarpd
-	install -d -m0755 $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/init.d
 	install -m755 ./files/rarpd.init $(1)/etc/init.d/rarpd
 endef
 

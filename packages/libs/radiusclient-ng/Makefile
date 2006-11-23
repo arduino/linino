@@ -85,14 +85,14 @@ define Build/UninstallDev
 endef
 
 define Package/libradiusclient-ng/install
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/radiusclient-ng $(1)/etc/
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libradiusclient-ng.so.* $(1)/usr/lib/
 endef
 
 define Package/radiusclient-ng/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/rad{acct,iusclient,login,status} $(1)/usr/sbin/
 endef
 

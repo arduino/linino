@@ -43,12 +43,12 @@ define Build/Compile
 endef
 
 define Package/parprouted/install	
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/parprouted $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/default
-	install -m0755 ./files/parprouted.default $(1)/etc/default/parprouted
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/parprouted.init $(1)/etc/init.d/parprouted
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/parprouted $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_BIN) ./files/parprouted.default $(1)/etc/default/parprouted
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/parprouted.init $(1)/etc/init.d/parprouted
 endef
 
 $(eval $(call BuildPackage,parprouted))

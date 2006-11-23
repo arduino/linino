@@ -57,7 +57,7 @@ define Build/Compile
 endef
 
 define Package/uclibcxx/install
-	install -m0755 -d $(1)/lib
+	$(INSTALL_DIR) $(1)/lib
 	$(CP) $(PKG_BUILD_DIR)/src/libuClibc++*.so.* $(1)/lib/
 	$(CP) $(PKG_BUILD_DIR)/src/libuClibc++-*.so $(1)/lib/
 endef

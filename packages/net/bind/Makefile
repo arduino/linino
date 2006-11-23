@@ -96,25 +96,25 @@ define Build/Compile
 endef
 
 define Package/bind-server/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/named $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	$(CP) ./files/bind $(1)/etc/
-	install -d -m0755 $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/init.d
 	$(CP) ./files/named.init $(1)/etc/init.d/named
 	find $(1)/etc/bind/ -name ".svn" | xargs rm -rf
 endef
 
 define Package/bind-client/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nsupdate $(1)/usr/bin/
 endef
 
 define Package/bind-tools/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/dig $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/host $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/dnssec-keygen $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/dnssec-signzone $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/named-checkconf $(1)/usr/sbin/
@@ -124,30 +124,30 @@ define Package/bind-tools/install
 endef
 
 define Package/bind-rndc/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/rndc $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/rndc-confgen $(1)/usr/sbin/
 endef
 
 define Package/bind-check/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/named-checkconf $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/named-checkzone $(1)/usr/sbin/
 endef
 
 define Package/bind-dnssec/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/dnssec-keygen $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/dnssec-signzone $(1)/usr/sbin/
 endef
 
 define Package/bind-host/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/host $(1)/usr/bin/
 endef
 
 define Package/bind-dig/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/dig $(1)/usr/bin/
 endef
 

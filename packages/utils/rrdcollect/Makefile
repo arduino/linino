@@ -81,19 +81,19 @@ define Build/Compile
 endef
 
 define Package/rrdcollect/install	
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/rrdcollect $(1)/usr/sbin/
 endef
 
 define Package/rrdcollect-example/install	
-	install -d -m0755 $(1)/etc
-	install -m0644 ./files/rrd.conf $(1)/etc/
-	install -m0644 ./files/rrdcollect.conf $(1)/etc/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/rrdcollect.init $(1)/etc/init.d/rrdcollect
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 ./files/rrd.sh $(1)/usr/bin/
-	install -d -m0755 $(1)/www/cgi-bin
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/rrd.conf $(1)/etc/
+	$(INSTALL_DATA) ./files/rrdcollect.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/rrdcollect.init $(1)/etc/init.d/rrdcollect
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) ./files/rrd.sh $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/www/cgi-bin
 	ln -sf /var/lib/rrdcollect/rrd.cgi $(1)/www/cgi-bin/rrd.cgi
 	ln -sf /var/lib/rrdcollect/img $(1)/www/img
 endef

@@ -61,37 +61,37 @@ define Build/Compile
 endef
 
 define Package/rp-pppoe-client/install	
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/pppoe-client.init $(1)/etc/init.d/pppoe-client
-	install -d -m0755 $(1)/etc/ppp
-	install -m0644 $(PKG_INSTALL_DIR)/etc/pppoe.conf $(1)/etc/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/pppoe-client.init $(1)/etc/init.d/pppoe-client
+	$(INSTALL_DIR) $(1)/etc/ppp
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/pppoe.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pppoe $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/adsl-* $(1)/usr/sbin/
 endef
 
 define Package/rp-pppoe-relay/install	
-	install -d -m0755 $(1)/etc/default
-	install -m0755 ./files/pppoe-relay.default $(1)/etc/default/pppoe-relay
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/pppoe-relay.init $(1)/etc/init.d/pppoe-relay
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_BIN) ./files/pppoe-relay.default $(1)/etc/default/pppoe-relay
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/pppoe-relay.init $(1)/etc/init.d/pppoe-relay
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pppoe-relay $(1)/usr/sbin/
 endef
 
 define Package/rp-pppoe-server/install	
-	install -d -m0755 $(1)/etc/default
-	install -m0755 ./files/pppoe-server.default $(1)/etc/default/pppoe-server
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/pppoe-server.init $(1)/etc/init.d/pppoe-server
-	install -d -m0755 $(1)/etc/ppp
-	install -m0644 $(PKG_INSTALL_DIR)/etc/ppp/pppoe-server-options $(1)/etc/ppp/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_BIN) ./files/pppoe-server.default $(1)/etc/default/pppoe-server
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/pppoe-server.init $(1)/etc/init.d/pppoe-server
+	$(INSTALL_DIR) $(1)/etc/ppp
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/ppp/pppoe-server-options $(1)/etc/ppp/
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pppoe-server $(1)/usr/sbin/
 endef
 
 define Package/rp-pppoe-sniff/install	
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pppoe-sniff $(1)/usr/sbin/
 endef
 

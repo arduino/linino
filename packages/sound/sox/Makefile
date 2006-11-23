@@ -52,7 +52,7 @@ define Build/Compile
 endef
 
 define Package/sox/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/src/{play,sox,soxmix} $(1)/usr/bin/
 endef
 

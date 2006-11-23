@@ -54,7 +54,7 @@ define Build/Compile
 endef
 
 define Package/socat/install	
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/socat $(1)/usr/bin/
 endef
 

@@ -47,13 +47,13 @@ define Build/Compile
 endef
 
 define Package/xinetd/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/xinetd $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc
-	install -m0644 ./files/xinetd.conf $(1)/etc/xinetd.conf
-	install -d -m0755 $(1)/etc/xinetd.d
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/xinetd.init $(1)/etc/init.d/xinetd
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/xinetd.conf $(1)/etc/xinetd.conf
+	$(INSTALL_DIR) $(1)/etc/xinetd.d
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/xinetd.init $(1)/etc/init.d/xinetd
 endef
 
 $(eval $(call BuildPackage,xinetd))

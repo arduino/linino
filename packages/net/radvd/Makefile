@@ -76,13 +76,13 @@ define Build/Compile
 endef
 
 define Package/radvd/install
-	install -d -m0755 $(1)/etc
-	install -m0644 ./files/radvd.conf $(1)/etc/radvd.conf
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/radvd.init $(1)/etc/init.d/radvd
-	install -d -m0755 $(1)/usr/sbin
-	install -m 755 $(PKG_INSTALL_DIR)/usr/sbin/radvd $(1)/usr/sbin/
-	install -m 755 $(PKG_INSTALL_DIR)/usr/sbin/radvdump $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/radvd.conf $(1)/etc/radvd.conf
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/radvd.init $(1)/etc/init.d/radvd
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/radvd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/radvdump $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,radvd))

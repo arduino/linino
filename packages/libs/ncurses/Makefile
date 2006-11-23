@@ -127,9 +127,9 @@ define Build/Compile
 endef
 
 define Package/libncurses/install
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{ncurses,panel,menu}*.so.* $(1)/usr/lib/
-	install -d -m0755 $(1)/usr/share/terminfo
+	$(INSTALL_DIR) $(1)/usr/share/terminfo
 	(cd $(PKG_INSTALL_DIR)/usr/share/terminfo; \
 		for dir in ??; do \
 			[ -d "$$$$dir" ] || continue; \
@@ -137,7 +137,7 @@ define Package/libncurses/install
 		done \
 	)
 	for file in a/ansi d/dumb l/linux r/rxvt s/screen v/vt100 v/vt102 x/xterm x/xterm-color; do \
-		install -d -m0755 $(1)/usr/share/terminfo/`dirname $$$$file`; \
+		$(INSTALL_DIR) $(1)/usr/share/terminfo/`dirname $$$$file`; \
 		$(CP) $(PKG_INSTALL_DIR)/usr/share/terminfo/$$$$file \
 			$(1)/usr/share/terminfo/$$$$file; \
 	done

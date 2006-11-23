@@ -35,12 +35,12 @@ define Build/Compile
 endef
 
 define Package/nfs-server/install	
-	install -d -m0755 $(1)/etc
-	install -m0644 ./files/nfsd.exports $(1)/etc/exports
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/nfsd.init $(1)/etc/init.d/nfsd
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/rpc.* $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/nfsd.exports $(1)/etc/exports
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/nfsd.init $(1)/etc/init.d/nfsd
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/rpc.* $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,nfs-server))

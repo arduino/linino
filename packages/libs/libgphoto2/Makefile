@@ -92,12 +92,12 @@ define Build/UninstallDev
 endef
 
 define Package/libgphoto2/install
-	install -m0755 -d $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgphoto2{,_port}.so.* $(1)/usr/lib/
 endef
 
 define Package/libgphoto2-drivers/install
-	install -d -m0755 $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgphoto2{,_port} $(1)/usr/lib/
 	rm -rf $(1)/usr/lib/libgphoto2{,_port}/*/*.{,l}a
 endef

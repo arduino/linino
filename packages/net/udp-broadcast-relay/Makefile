@@ -42,7 +42,7 @@ define Build/Compile
 endef
 
 define Package/udp-broadcast-relay/install	
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
 endef
 

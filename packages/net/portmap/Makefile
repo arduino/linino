@@ -38,10 +38,10 @@ define Build/Compile
 endef
 
 define Package/portmap/install	
-	install -d -m0755 $(1)/usr/sbin 
-	install -m0755 $(PKG_BUILD_DIR)/portmap $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/init.d 
-	install -m0755 ./files/portmap.init $(1)/etc/init.d/portmap
+	$(INSTALL_DIR) $(1)/usr/sbin 
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/portmap $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/init.d 
+	$(INSTALL_BIN) ./files/portmap.init $(1)/etc/init.d/portmap
 endef
 
 $(eval $(call BuildPackage,portmap))

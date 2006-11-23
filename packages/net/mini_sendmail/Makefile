@@ -41,8 +41,8 @@ define Build/Compile
 endef
 
 define Package/mini-sendmail/install	
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/mini_sendmail $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mini_sendmail $(1)/usr/sbin/
 	ln -sf mini_sendmail $(1)/usr/sbin/sendmail
 endef
 

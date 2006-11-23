@@ -50,11 +50,11 @@ define Build/Compile
 endef
 
 define Package/vncrepeater/install	
-	install -d -m0755 $(1)/usr/sbin $(1)/etc
+	$(INSTALL_DIR) $(1)/usr/sbin $(1)/etc
 	$(CP) $(PKG_BUILD_DIR)/repeater $(1)/usr/sbin/$(PKG_NAME)
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_BUILD_DIR)/uvncrepeater.ini $(1)/etc/vncrepeater.conf
-	install -d -m0755 $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/init.d
 	$(CP) $(PKG_BUILD_DIR)/S60vncrepeater $(1)/etc/init.d/
 endef
 

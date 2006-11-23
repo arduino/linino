@@ -63,11 +63,11 @@ define Build/Compile
 endef
 
 define Package/bluez-utils/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/bluetooth
+	$(INSTALL_DIR) $(1)/etc/bluetooth
 	$(CP) $(PKG_INSTALL_DIR)/../hcid/hcid.conf $(1)/etc/bluetooth/
 	$(CP) $(PKG_INSTALL_DIR)/../rfcomm/rfcomm.conf $(1)/etc/bluetooth/
 	install -m0700 ./files/givepin $(1)/etc/bluetooth/

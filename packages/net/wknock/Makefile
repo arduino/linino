@@ -39,9 +39,9 @@ define Build/Compile
 endef
 
 define Package/wknock/install	
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/wknock $(1)/usr/sbin/
-	install -m0755 $(PKG_BUILD_DIR)/wknock-ng $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/wknock $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/wknock-ng $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,wknock))

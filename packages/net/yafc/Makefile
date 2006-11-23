@@ -36,7 +36,7 @@ define Build/Compile
 endef
 
 define Package/yafc/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/src/yafc $(1)/usr/sbin/
 endef
 

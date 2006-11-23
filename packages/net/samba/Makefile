@@ -167,25 +167,25 @@ define Build/Compile
 endef
 
 define Package/samba-server/install	
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/samba.init $(1)/etc/init.d/samba
-	install -d -m0755 $(1)/etc/samba
-	install -m0644 ./files/smb.conf $(1)/etc/samba/smb.conf
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/source/bin/smbpasswd.shared $(1)/usr/bin/smbpasswd
-	install -d -m0755 $(1)/usr/lib
-	install -m0755 $(PKG_BUILD_DIR)/source/bin/libsmb.so $(1)/usr/lib/
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/source/bin/nmbd.shared $(1)/usr/sbin/nmbd
-	install -m0755 $(PKG_BUILD_DIR)/source/bin/smbd.shared $(1)/usr/sbin/smbd
-	install -d -m0755 $(1)/usr/share/samba
-	install -m0644 $(PKG_INSTALL_DIR)/usr/share/samba/codepage.{437,850} $(1)/usr/share/samba/
-	install -m0644 $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{437,850} $(1)/usr/share/samba/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/samba.init $(1)/etc/init.d/samba
+	$(INSTALL_DIR) $(1)/etc/samba
+	$(INSTALL_DATA) ./files/smb.conf $(1)/etc/samba/smb.conf
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/smbpasswd.shared $(1)/usr/bin/smbpasswd
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/libsmb.so $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/nmbd.shared $(1)/usr/sbin/nmbd
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/smbd.shared $(1)/usr/sbin/smbd
+	$(INSTALL_DIR) $(1)/usr/share/samba
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/codepage.{437,850} $(1)/usr/share/samba/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{437,850} $(1)/usr/share/samba/
 endef
 
 define Package/samba-client/install	
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_INSTALL_DIR)/usr/bin/smbclient $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/smbclient $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,samba-server))

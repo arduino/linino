@@ -50,7 +50,7 @@ define Build/Compile
 endef
 
 define Package/dosfstools/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/dosfsck $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/fsck.{msdos,vfat} $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/mkdosfs $(1)/usr/sbin/

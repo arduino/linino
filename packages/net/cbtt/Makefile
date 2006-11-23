@@ -54,13 +54,13 @@ define Build/Compile
 endef
 
 define Package/cbtt/install
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/bnbt $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bnbt $(1)/usr/bin/
 endef
 
 define Package/cbtt-mysql/install
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/bnbtmysql $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bnbtmysql $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,cbtt))

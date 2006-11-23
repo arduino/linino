@@ -36,7 +36,7 @@ define Build/Compile
 endef
 
 define Package/bing/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/bing $(1)/usr/sbin/
 endef
 

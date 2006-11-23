@@ -74,28 +74,28 @@ endef
 
 define Package/cups/install
 	rm -rf $(1)/etc/cups
-	install -d -m0755 $(1)/etc/cups
+	$(INSTALL_DIR) $(1)/etc/cups
 	$(CP) $(PKG_INSTALL_DIR)/etc/cups/* $(1)/etc/cups/
 	rm -rf $(1)/etc/cups/certs
 	ln -sf /tmp $(1)/etc/cups/certs
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	rm -f $(1)/usr/bin/cups-config
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcups.so.* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/cups $(1)/usr/lib/
-	install -d -m0755 $(1)/usr/share/cups/templates
+	$(INSTALL_DIR) $(1)/usr/share/cups/templates
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/cups/templates/*.tmpl $(1)/usr/share/cups/templates/
-	install -d -m0755 $(1)/usr/share/doc/cups
+	$(INSTALL_DIR) $(1)/usr/share/doc/cups
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/cups/index.html $(1)/usr/share/doc/cups/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/cups/images $(1)/usr/share/doc/cups/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
 	# overwrite default config with our own
 	$(CP) ./files/etc/cups/* $(1)/etc/cups/
 	# install initscript with priority 60
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/cupsd.init $(1)/etc/init.d/cupsd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/cupsd.init $(1)/etc/init.d/cupsd
 endef
 
 define Build/InstallDev

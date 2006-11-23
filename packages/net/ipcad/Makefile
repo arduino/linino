@@ -62,9 +62,9 @@ define Build/Compile
 endef
 
 define Package/ipcad/install	
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/ipcad.conf $(1)/etc/
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ipcad $(1)/usr/bin/
 endef
 

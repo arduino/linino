@@ -158,16 +158,16 @@ define Build/UninstallDev
 endef
 
 define Package/libopenldap/install
-	install -d -m0755 $(1)/etc/openldap
+	$(INSTALL_DIR) $(1)/etc/openldap
 	$(CP) $(PKG_INSTALL_DIR)/etc/openldap/ldap.conf $(1)/etc/openldap/
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{lber,ldap}*.so.* $(1)/usr/lib/
-	install -d -m0755 $(1)/usr/share/openldap
+	$(INSTALL_DIR) $(1)/usr/share/openldap
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/openldap/* $(1)/usr/share/openldap/
 endef
 	
 define Package/openldap-utils/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ldap* $(1)/usr/bin/
 endef
 

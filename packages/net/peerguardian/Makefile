@@ -56,14 +56,14 @@ define Build/Compile
 endef
 
 define Package/peerguardian/install
-	install -d -m0755 $(1)/etc
-	install -m0644 $(PKG_BUILD_DIR)/PG.conf $(1)/etc/
-	install -m0644 $(PKG_BUILD_DIR)/p2p.p2b.p2p $(1)/etc/
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/peerguardnf $(1)/usr/sbin/
-	install -m0755 $(PKG_BUILD_DIR)/pgtext $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0644 ./files/peerguardian.init $(1)/etc/init.d/peerguardian
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/PG.conf $(1)/etc/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/p2p.p2b.p2p $(1)/etc/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/peerguardnf $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pgtext $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DATA) ./files/peerguardian.init $(1)/etc/init.d/peerguardian
 endef
 
 $(eval $(call BuildPackage,peerguardian))

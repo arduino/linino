@@ -94,12 +94,12 @@ define Build/UninstallDev
 endef
 
 define Package/libsqlite2/install
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsqlite.so.* $(1)/usr/lib/
 endef
 
 define Package/sqlite2-cli/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/sqlite $(1)/usr/bin/
 endef
 

@@ -47,14 +47,14 @@ define Build/Compile
 endef
 
 define Package/l2tpd/install	
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/l2tpd
-	install -m0644 ./files/l2tpd.conf $(1)/etc/l2tpd/
-	install -d -m0755 $(1)/etc/ppp
-	install -m0644 ./files/options.l2tpd $(1)/etc/ppp/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/l2tpd.init $(1)/etc/init.d/l2tpd
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/l2tpd
+	$(INSTALL_DATA) ./files/l2tpd.conf $(1)/etc/l2tpd/
+	$(INSTALL_DIR) $(1)/etc/ppp
+	$(INSTALL_DATA) ./files/options.l2tpd $(1)/etc/ppp/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/l2tpd.init $(1)/etc/init.d/l2tpd
 endef
 
 $(eval $(call BuildPackage,l2tpd))

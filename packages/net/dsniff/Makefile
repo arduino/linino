@@ -52,9 +52,9 @@ define Build/Compile
 endef
 
 define Package/dsniff/install	
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP)  $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
 endef
 

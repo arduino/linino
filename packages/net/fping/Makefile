@@ -47,7 +47,7 @@ define Build/Compile
 endef
 
 define Package/fping/install	
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/fping4 $(1)/usr/bin/
 	$(CP) $(PKG_BUILD_DIR)/fping6 $(1)/usr/bin/
 	ln -sf fping4 $(1)/usr/bin/fping

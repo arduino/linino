@@ -57,10 +57,10 @@ define Build/Compile
 endef
 
 define Package/ipkungfu/install	
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/dummy_server $(1)/usr/sbin/
 	$(CP) $(PKG_BUILD_DIR)/ipkungfu $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/ipkungfu/
+	$(INSTALL_DIR) $(1)/etc/ipkungfu/
 	$(CP) $(PKG_BUILD_DIR)/files/conf/* $(1)/etc/ipkungfu/
 endef
 

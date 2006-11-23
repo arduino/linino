@@ -112,35 +112,35 @@ define Build/UninstallDev
 endef
 
 define Package/libhowl/install
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{howl,mDNSResponder}.so.* $(1)/usr/lib/
 endef
 
 define Package/howl-autoipd/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/autoipd $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0644 ./files/autoipd.init $(1)/etc/init.d/autoipd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DATA) ./files/autoipd.init $(1)/etc/init.d/autoipd
 endef
 	
 define Package/howl-mdnsresponder/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/mDNSResponder $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc
-	install -m0644 ./files/mDNSResponder.conf $(1)/etc/mDNSResponder.conf
-	install -d -m0755 $(1)/etc/init.d
-	install -m0644 ./files/mDNSResponder.init $(1)/etc/init.d/mDNSResponder
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/mDNSResponder.conf $(1)/etc/mDNSResponder.conf
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DATA) ./files/mDNSResponder.init $(1)/etc/init.d/mDNSResponder
 endef
 
 define Package/howl-nifd/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nifd $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0644 ./files/nifd.init $(1)/etc/init.d/nifd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DATA) ./files/nifd.init $(1)/etc/init.d/nifd
 endef
 	
 define Package/howl-utils/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/mDNS{Browse,Publish,Query,Resolve} $(1)/usr/bin/
 endef
 	

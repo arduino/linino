@@ -40,10 +40,10 @@ define Build/Compile
 endef
 
 define Package/reaim/install	
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/reaim $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/reaim.init $(1)/etc/init.d/reaim
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/reaim.init $(1)/etc/init.d/reaim
 endef
 
 $(eval $(call BuildPackage,reaim))

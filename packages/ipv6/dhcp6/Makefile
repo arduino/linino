@@ -67,15 +67,15 @@ define Build/Compile
 endef
 
 define Package/dhcp6-client/install
-	install -d $(1)/usr/sbin $(1)/etc/dhcp6
-	install -m0755 $(PKG_BUILD_DIR)/client/cli $(1)/usr/sbin/dhcp6client
-	install -m0755 $(PKG_BUILD_DIR)/client/solicit.conf $(1)/etc/dhcp6/
+	$(INSTALL_DIR) $(1)/usr/sbin $(1)/etc/dhcp6
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client/cli $(1)/usr/sbin/dhcp6client
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client/solicit.conf $(1)/etc/dhcp6/
 endef
 
 define Package/dhcp6-server/install
-	install -d -m0755 $(1)/usr/sbin $(1)/etc/dhcpd6
-	install -m0755 $(PKG_BUILD_DIR)/server/serv $(1)/usr/sbin/dhcpd6
-	install -m0755 $(PKG_BUILD_DIR)/server/*.conf $(1)/etc/dhcpd6/
+	$(INSTALL_DIR) $(1)/usr/sbin $(1)/etc/dhcpd6
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/server/serv $(1)/usr/sbin/dhcpd6
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/server/*.conf $(1)/etc/dhcpd6/
 endef
 
 $(eval $(call BuildPackage,dhcp6-client))

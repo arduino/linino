@@ -275,7 +275,7 @@ endef
 
 define BuildPlugin
   define Package/$(1)/install
-  	[ -z "$(2)" ] || install -d -m0755 $$(1)/usr/lib/openser/modules/
+  	[ -z "$(2)" ] || $(INSTALL_DIR) $$(1)/usr/lib/openser/modules/
 	$(CP) $(PKG_BUILD_DIR)/modules/$(2)/$(2).so \
 			$$(1)/usr/lib/openser/modules/ ;
   endef

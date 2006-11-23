@@ -45,13 +45,13 @@ define Build/Compile
 endef
 
 define Package/aircrack-ng/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/aircrack-ng $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/airdecap-ng $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/packetforge-ng $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ivstools $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/kstats $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/aireplay-ng $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/airodump-ng $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/airmon-ng $(1)/usr/sbin/

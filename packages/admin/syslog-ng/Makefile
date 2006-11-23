@@ -52,12 +52,12 @@ $(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" \
 endef
 
 define Package/syslog-ng/install	
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/syslog-ng $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/syslog-ng.init $(1)/etc/init.d/syslog-ng
-	install -d -m0755 $(1)/etc/syslog-ng
-	install -m0644 ./files/syslog-ng.conf $(1)/etc/syslog-ng/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/syslog-ng.init $(1)/etc/init.d/syslog-ng
+	$(INSTALL_DIR) $(1)/etc/syslog-ng
+	$(INSTALL_DATA) ./files/syslog-ng.conf $(1)/etc/syslog-ng/
 endef
 
 $(eval $(call BuildPackage,syslog-ng))

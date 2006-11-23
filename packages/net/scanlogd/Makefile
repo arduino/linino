@@ -56,10 +56,10 @@ define Build/Compile
 endef
 
 define Package/scanlogd/install	
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/scanlogd.init $(1)/etc/init.d/scanlogd
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/scanlogd.init $(1)/etc/init.d/scanlogd
 endef
 
 $(eval $(call BuildPackage,scanlogd))

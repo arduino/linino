@@ -59,24 +59,24 @@ define Build/Compile
 endef
 
 define Package/rp-l2tpd/install	
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/l2tp.conf.example $(1)/etc/l2tp.conf
-	install -d -m0755 $(1)/usr/lib/l2tp
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/lib/l2tp
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/l2tpd $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/rp-l2tpd.init $(1)/etc/init.d/rp-l2tpd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/rp-l2tpd.init $(1)/etc/init.d/rp-l2tpd
 endef
 
 define Package/rp-l2tpd-mod-cmd/install	
-	install -d -m0755 $(1)/usr/lib/l2tp
+	$(INSTALL_DIR) $(1)/usr/lib/l2tp
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/l2tp/cmd.so $(1)/usr/lib/l2tp/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/l2tp-control $(1)/usr/sbin/
 endef
 
 define Package/rp-l2tpd-mod-ppp/install
-	install -d -m0755 $(1)/usr/lib/l2tp
+	$(INSTALL_DIR) $(1)/usr/lib/l2tp
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/l2tp/sync-pppd.so $(1)/usr/lib/l2tp/
 endef
 

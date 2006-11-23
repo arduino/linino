@@ -42,8 +42,8 @@ define Build/Compile
 endef
 
 define Package/stunnel/install	
-	install -d -m0755 $(1)/usr/sbin $(1)/usr/lib $(1)/usr/stunnel
-	install -d -m0755 $(1)/etc/stunnel $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/usr/sbin $(1)/usr/lib $(1)/usr/stunnel
+	$(INSTALL_DIR) $(1)/etc/stunnel $(1)/etc/init.d
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/stunnel $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libstunnel.so $(1)/usr/sbin/
 	$(CP) ./files/stunnel.conf $(1)/etc/stunnel/stunnel.conf

@@ -72,7 +72,7 @@ define Build/UninstallDev
 endef
 
 define Package/libltdl/install
-	install -m0755 -d $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libltdl.so.* $(1)/usr/lib/
 endef
 

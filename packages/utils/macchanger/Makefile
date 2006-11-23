@@ -39,9 +39,9 @@ define Build/Compile
 endef
 
 define Package/macchanger/install	
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/macchanger $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/share
+	$(INSTALL_DIR) $(1)/usr/share
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/macchanger $(1)/usr/share/
 endef
 

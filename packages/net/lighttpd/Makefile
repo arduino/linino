@@ -188,23 +188,23 @@ define Build/Compile
 endef
 
 define Package/lighttpd/install
-	install -m0755 -d $(1)/etc
-	install -m0644 ./files/lighttpd.conf $(1)/etc/
-	install -m0755 -d $(1)/etc/default
-	install -m0644 ./files/lighttpd.default $(1)/etc/default/lighttpd
-	install -m0755 -d $(1)/etc/init.d
-	install -m0755 ./files/lighttpd.init $(1)/etc/init.d/lighttpd
-	install -m0755 -d $(1)/usr/lib/lighttpd
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/lighttpd.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DATA) ./files/lighttpd.default $(1)/etc/default/lighttpd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/lighttpd.init $(1)/etc/init.d/lighttpd
+	$(INSTALL_DIR) $(1)/usr/lib/lighttpd
 	for m in dirlisting indexfile staticfile; do \
 		$(CP) $(PKG_INSTALL_DIR)/usr/lib/lighttpd/mod_$$$${m}.so $(1)/usr/lib/lighttpd/ ; \
 	done
-	install -m0755 -d $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/lighttpd $(1)/usr/sbin/
 endef
 
 define BuildPlugin
   define Package/$(1)/install
-	[ -z "$(2)" ] || install -d -m0755 $$(1)/usr/lib/lighttpd
+	[ -z "$(2)" ] || $(INSTALL_DIR) $$(1)/usr/lib/lighttpd
 	for m in $(2); do \
 		$(CP) $(PKG_INSTALL_DIR)/usr/lib/lighttpd/mod_$$$$$$$${m}.so $$(1)/usr/lib/lighttpd/ ; \
 	done

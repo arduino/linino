@@ -106,12 +106,12 @@ define Build/Compile
 endef
 
 define Package/libpq/install
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpq.so.* $(1)/usr/lib/
 endef
 
 define Package/pgsql-cli/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/psql $(1)/usr/bin/
 endef
 

@@ -44,9 +44,9 @@ define Build/Compile
 endef
 
 define Package/arpwatch/install
-	install -d -m0755 $(1)/etc/arpwatch
+	$(INSTALL_DIR) $(1)/etc/arpwatch
 	$(CP) $(PKG_BUILD_DIR)/arp.dat $(1)/etc/arpwatch/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/arp{watch,snmp} $(1)/usr/sbin/
 endef
 

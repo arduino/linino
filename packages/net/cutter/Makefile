@@ -35,12 +35,12 @@ endef
 	
 define Build/Compile
 	$(TARGET_CC) $(PKG_BUILD_DIR)/cutter.c -o $(PKG_BUILD_DIR)/cutter
-	install -d -m0755 $(PKG_INSTALL_DIR)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/cutter $(PKG_INSTALL_DIR)/usr/sbin/
+	$(INSTALL_DIR) $(PKG_INSTALL_DIR)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/cutter $(PKG_INSTALL_DIR)/usr/sbin/
 endef
 	
 define Package/cutter/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/cutter $(1)/usr/sbin/
 endef
 

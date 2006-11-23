@@ -36,7 +36,7 @@ define Build/Compile
 endef
 
 define Package/wdiag/install
-	install -m0755 -d $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/src/w{start,stop,estell} $(1)/usr/sbin/
 endef
 

@@ -38,7 +38,7 @@ define Build/Compile
 endef
 
 define Package/procmail/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/src/procmail $(1)/usr/bin/ 
 	$(CP) $(PKG_BUILD_DIR)/src/formail $(1)/usr/bin/
 endef

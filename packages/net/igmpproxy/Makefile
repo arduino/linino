@@ -42,10 +42,10 @@ define Build/Compile
 endef
 
 define Package/igmpproxy/install	
-	install -d -m0755 $(1)/etc
-	install -m0755 $(PKG_BUILD_DIR)/src/igmpproxy.conf $(1)/etc
-	install -d -m0755 $(1)/usr/sbin $(1)/etc
-	install -m0644 $(PKG_BUILD_DIR)/src/igmpproxy $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/igmpproxy.conf $(1)/etc
+	$(INSTALL_DIR) $(1)/usr/sbin $(1)/etc
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/src/igmpproxy $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,igmpproxy))

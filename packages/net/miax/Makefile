@@ -43,8 +43,8 @@ define Build/Compile
 endef
 
 define Package/miax/install	
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/miax $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/miax $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,miax))

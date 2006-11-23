@@ -55,20 +55,20 @@ define Build/Compile
 endef
 
 define Package/nfs-kernel-server/install
-	install -d -m755 $(1)/etc/init.d $(1)/usr/sbin
-	install -m0644 ./files/nfsd.exports $(1)/etc/exports
-	install -m0755 ./files/nfsd.init $(1)/etc/init.d/nfsd
-	install -m0755 $(PKG_BUILD_DIR)/utils/lockd/lockd $(1)/usr/sbin/rpc.lockd
-	install -m0755 $(PKG_BUILD_DIR)/utils/statd/statd $(1)/usr/sbin/rpc.statd
-	install -m0755 $(PKG_BUILD_DIR)/utils/nfsd/nfsd $(1)/usr/sbin/rpc.nfsd
-	install -m0755 $(PKG_BUILD_DIR)/utils/mountd/mountd $(1)/usr/sbin/rpc.mountd
-	install -m0755 $(PKG_BUILD_DIR)/utils/exportfs/exportfs $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/init.d $(1)/usr/sbin
+	$(INSTALL_DATA) ./files/nfsd.exports $(1)/etc/exports
+	$(INSTALL_BIN) ./files/nfsd.init $(1)/etc/init.d/nfsd
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/utils/lockd/lockd $(1)/usr/sbin/rpc.lockd
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/utils/statd/statd $(1)/usr/sbin/rpc.statd
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/utils/nfsd/nfsd $(1)/usr/sbin/rpc.nfsd
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/utils/mountd/mountd $(1)/usr/sbin/rpc.mountd
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/utils/exportfs/exportfs $(1)/usr/sbin/
 endef
 
 define Package/nfs-kernel-server-utils/install
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/utils/showmount/showmount $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/utils/nfsstat/nfsstat $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/utils/showmount/showmount $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/utils/nfsstat/nfsstat $(1)/usr/sbin
 endef
 
 $(eval $(call BuildPackage,nfs-kernel-server))

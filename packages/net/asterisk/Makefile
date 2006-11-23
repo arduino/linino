@@ -385,131 +385,131 @@ define Package/asterisk/install
 		rm -f skinny.conf ; \
 		rm -f dundi.conf ; \
 	)
-	install -m0644 ./files/modules.conf $(1)/etc/asterisk/
-	install -d -m0755 $(1)/etc/default
-	install -m0644  ./files/asterisk.default $(1)/etc/default/asterisk
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755  ./files/asterisk.init $(1)/etc/init.d/asterisk
+	$(INSTALL_DATA) ./files/modules.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DATA)  ./files/asterisk.default $(1)/etc/default/asterisk
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN)  ./files/asterisk.init $(1)/etc/init.d/asterisk
 endef
 
 define Package/asterisk-mini/install
-	install -d -m0755 $(1)/etc/asterisk
+	$(INSTALL_DIR) $(1)/etc/asterisk
 	for f in asterisk enum extconfig extensions features iax iaxprov logger manager modules musiconhold rtp sip; do \
 	  $(CP) $(PKG_INSTALL_DIR)/etc/asterisk/$$$$f.conf $(1)/etc/asterisk/ ; \
 	done
-	install -m0644 ./files/modules.conf $(1)/etc/asterisk/
-	install -d -m0755 $(1)/usr/lib/asterisk
+	$(INSTALL_DATA) ./files/modules.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/asterisk/firmware $(1)/usr/lib/asterisk/
-	install -d -m0755 $(1)/usr/lib/asterisk/keys
-	install -d -m0755 $(1)/usr/lib/asterisk/modules
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/keys
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
 	for f in chan_iax2 chan_local chan_sip codec_gsm codec_ulaw format_gsm format_pcm format_wav \
 	  format_wav_gsm pbx_config res_features res_musiconhold; do \
 	  $(CP) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/$$$$f.so $(1)/usr/lib/asterisk/modules/ ; \
 	done
-	install -d -m0755 $(1)/usr/lib/asterisk/mohmp3
-	install -d -m0755 $(1)/usr/lib/asterisk/sounds
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/mohmp3
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/sounds
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/asterisk $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/safe_asterisk $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/default
-	install -m0644  ./files/asterisk.default $(1)/etc/default/asterisk
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755  ./files/asterisk.init $(1)/etc/init.d/asterisk
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DATA)  ./files/asterisk.default $(1)/etc/default/asterisk
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN)  ./files/asterisk.init $(1)/etc/init.d/asterisk
 endef
 
 define Package/asterisk-mysql/install
-	install -d -m0755 $(1)/etc/asterisk
+	$(INSTALL_DIR) $(1)/etc/asterisk
 	install -m0600 $(PKG_BUILD_DIR)/configs/cdr_mysql.conf.sample $(1)/etc/asterisk/cdr_mysql.conf
-	install -d -m0755 $(1)/usr/lib/asterisk/modules
-	install -m0755 $(PKG_BUILD_DIR)/apps/app_sql_mysql.so $(1)/usr/lib/asterisk/modules/
-	install -m0755 $(PKG_BUILD_DIR)/cdr/cdr_mysql.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/apps/app_sql_mysql.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/cdr/cdr_mysql.so $(1)/usr/lib/asterisk/modules/
 endef
 
 define Package/asterisk-pgsql/install
-	install -d -m0755 $(1)/etc/asterisk
+	$(INSTALL_DIR) $(1)/etc/asterisk
 	install -m0600 $(PKG_BUILD_DIR)/configs/cdr_pgsql.conf.sample $(1)/etc/asterisk/cdr_pgsql.conf
-	install -d -m0755 $(1)/usr/lib/asterisk/modules
-	install -m0755 $(PKG_BUILD_DIR)/apps/app_sql_postgres.so $(1)/usr/lib/asterisk/modules/
-	install -m0755 $(PKG_BUILD_DIR)/cdr/cdr_pgsql.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/apps/app_sql_postgres.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/cdr/cdr_pgsql.so $(1)/usr/lib/asterisk/modules/
 endef
 
 define Package/asterisk-sqlite/install
-	install -d -m0755 $(1)/usr/lib/asterisk/modules
-	install -m0755 $(PKG_BUILD_DIR)/cdr/cdr_sqlite.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/cdr/cdr_sqlite.so $(1)/usr/lib/asterisk/modules/
 endef
 
 define Package/asterisk-sounds/install
-	install -d -m0755 $(1)/usr/lib/asterisk/sounds
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/sounds
 	$(CP) $(PKG_BUILD_DIR)/sounds/* $(1)/usr/lib/asterisk/sounds/
 	rm -f $(1)/usr/lib/asterisk/sounds/*.mp3
 	rm -f $(1)/usr/lib/asterisk/sounds/vm-*
 endef
 
 define Package/asterisk-voicemail/install
-	install -d -m0755 $(1)/etc/asterisk
-	install -m0644 $(PKG_BUILD_DIR)/configs/voicemail.conf.sample $(1)/etc/asterisk/voicemail.conf
-	install -d -m0755 $(1)/usr/lib/asterisk/modules
-	install -m0755 $(PKG_BUILD_DIR)/apps/*voicemail.so $(1)/usr/lib/asterisk/modules/
-	install -m0755 $(PKG_BUILD_DIR)/res/res_adsi.so $(1)/usr/lib/asterisk/modules/
-	install -d -m0755 $(1)/usr/lib/asterisk/sounds
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/configs/voicemail.conf.sample $(1)/etc/asterisk/voicemail.conf
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/apps/*voicemail.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/res/res_adsi.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/sounds
 	$(CP) $(PKG_BUILD_DIR)/sounds/vm-*.gsm $(1)/usr/lib/asterisk/sounds/
 endef
 
 define Package/asterisk-chan-bluetooth/install
-	install -d -m0755 $(1)/etc/asterisk
-	install -m0644 $(PKG_BUILD_DIR)/configs/bluetooth.conf $(1)/etc/asterisk/bluetooth.conf
-	install -d -m0755 $(1)/usr/lib/asterisk/modules
-	install -m0755 $(PKG_BUILD_DIR)/channels/chan_bluetooth.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/configs/bluetooth.conf $(1)/etc/asterisk/bluetooth.conf
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/channels/chan_bluetooth.so $(1)/usr/lib/asterisk/modules/
 endef
 
 define Package/asterisk-chan-h323/install
-	install -d -m0755 $(1)/etc/asterisk
-	install -m0644 $(PKG_BUILD_DIR)/channels/h323/h323.conf.sample $(1)/etc/asterisk/h323.conf
-	install -d -m0755 $(1)/usr/lib/asterisk/modules
-	install -m0755 $(PKG_BUILD_DIR)/channels/chan_h323.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/channels/h323/h323.conf.sample $(1)/etc/asterisk/h323.conf
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/channels/chan_h323.so $(1)/usr/lib/asterisk/modules/
 endef
 
 define Package/asterisk-chan-mgcp/install
-	install -d -m0755 $(1)/etc/asterisk
-	install -m0644 $(PKG_BUILD_DIR)/configs/mgcp.conf.sample $(1)/etc/asterisk/mgcp.conf
-	install -d -m0755 $(1)/usr/lib/asterisk/modules
-	install -m0755 $(PKG_BUILD_DIR)/channels/chan_mgcp.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/configs/mgcp.conf.sample $(1)/etc/asterisk/mgcp.conf
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/channels/chan_mgcp.so $(1)/usr/lib/asterisk/modules/
 endef
 
 define Package/asterisk-chan-skinny/install
-	install -d -m0755 $(1)/etc/asterisk
-	install -m0644 $(PKG_BUILD_DIR)/configs/skinny.conf.sample $(1)/etc/asterisk/skinny.conf
-	install -d -m0755 $(1)/usr/lib/asterisk/modules
-	install -m0755 $(PKG_BUILD_DIR)/channels/chan_skinny.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/configs/skinny.conf.sample $(1)/etc/asterisk/skinny.conf
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/channels/chan_skinny.so $(1)/usr/lib/asterisk/modules/
 endef
 
 define Package/asterisk-code-ilbc/install
-	install -d -m0755 $(1)/usr/lib/asterisk/modules
-	install -m0755 $(PKG_BUILD_DIR)/codecs/codec_ilbc.so $(1)/usr/lib/asterisk/modules/
-	install -m0755 $(PKG_BUILD_DIR)/formats/format_ilbc.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/codecs/codec_ilbc.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/formats/format_ilbc.so $(1)/usr/lib/asterisk/modules/
 endef
 
 define Package/asterisk-codec-lpc10/install
-	install -d -m0755 $(1)/usr/lib/asterisk/modules
-	install -m0755 $(PKG_BUILD_DIR)/codecs/codec_lpc10.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/codecs/codec_lpc10.so $(1)/usr/lib/asterisk/modules/
 endef
 
 define Package/asterisk-codec-speex/install
-	install -d -m0755 $(1)/usr/lib/asterisk/modules
-	install -m0755 $(PKG_BUILD_DIR)/codecs/codec_speex.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/codecs/codec_speex.so $(1)/usr/lib/asterisk/modules/
 endef
 
 define Package/asterisk-pbx-dundi/install
-	install -d -m0755 $(1)/etc/asterisk
-	install -m0644 $(PKG_BUILD_DIR)/configs/dundi.conf.sample $(1)/etc/asterisk/dundi.conf
-	install -d -m0755 $(1)/usr/lib/asterisk/modules
-	install -m0755 $(PKG_BUILD_DIR)/pbx/pbx_dundi.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/configs/dundi.conf.sample $(1)/etc/asterisk/dundi.conf
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pbx/pbx_dundi.so $(1)/usr/lib/asterisk/modules/
 endef
 
 define Package/asterisk-res-agi/install
-	install -d -m0755 $(1)/usr/lib/asterisk/agi-bin
-	install -d -m0755 $(1)/usr/lib/asterisk/modules
-	install -m0755 $(PKG_BUILD_DIR)/res/res_agi.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/agi-bin
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/res/res_agi.so $(1)/usr/lib/asterisk/modules/
 endef
 
 $(eval $(call BuildPackage,asterisk))

@@ -152,18 +152,18 @@ define Build/Compile
 endef
 
 define Package/squid/install	
-	install -d -m0755 $(1)/etc/squid
+	$(INSTALL_DIR) $(1)/etc/squid
 	$(CP) $(PKG_INSTALL_DIR)/etc/squid/mime.conf $(1)/etc/squid/
 	$(CP) $(PKG_INSTALL_DIR)/etc/squid/squid.conf $(1)/etc/squid/
-	install -d -m0755 $(1)/usr/share/squid
+	$(INSTALL_DIR) $(1)/usr/share/squid
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/squid/* $(1)/usr/share/squid/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/squid $(1)/usr/sbin/
 endef
 
 define BuildPlugin
   define Package/$(1)/install
-	install -d -m0755 $$(1)/usr/lib/squid
+	$(INSTALL_DIR) $$(1)/usr/lib/squid
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/squid/$(2) $$(1)/usr/lib/squid/
   endef
 

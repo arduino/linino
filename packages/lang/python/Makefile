@@ -93,10 +93,10 @@ define Build/UninstallDev
 endef
 
 define Package/python/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/python2.4 $(1)/usr/bin/
 	ln -sf python2.4 $(1)/usr/bin/python
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.4 $(1)/usr/lib/
 	rm -rf \
 		$(1)/usr/lib/python2.4/bsddb/test \

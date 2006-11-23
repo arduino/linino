@@ -45,12 +45,12 @@ define Build/Compile
 endef
 
 define Package/ssltunnel/install	
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_INSTALL_DIR)/usr/bin/pppclient $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_INSTALL_DIR)/usr/sbin/pppwho $(1)/usr/sbin/
-	install -d -m0755 $(1)/usr/lib
-	install -m0755 $(PKG_INSTALL_DIR)/usr/lib/pppserver $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pppclient $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/pppwho $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/pppserver $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,ssltunnel))

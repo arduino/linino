@@ -44,9 +44,9 @@ define Build/Compile
 endef
 
 define Package/pciutils/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/{lspci,setpci} $(1)/usr/sbin/
-	install -d -m0755 $(1)/usr/share
+	$(INSTALL_DIR) $(1)/usr/share
 	$(CP) $(PKG_BUILD_DIR)/pci.ids $(1)/usr/share/
 endef
 

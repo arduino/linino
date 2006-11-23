@@ -61,7 +61,7 @@ define Build/UninstallDev
 endef
 
 define Package/libol/install
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libol.so.* $(1)/usr/lib/
 endef
 

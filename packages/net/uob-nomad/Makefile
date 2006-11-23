@@ -46,7 +46,7 @@ $(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/Client mipmn)
 endef
 
 define Package/uob-nomad/install	
-	install -d -m0755 $(1)/usr/bin $(1)/usr/lib $(1)/etc/
+	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/lib $(1)/etc/
 	$(CP) $(PKG_BUILD_DIR)/Agent/mipagent $(1)/usr/bin/
 	$(CP) $(PKG_BUILD_DIR)/Client/mipmn $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/conf/mip{agent,mn,mn-filters}.conf $(1)/etc/

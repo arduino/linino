@@ -57,18 +57,18 @@ define Build/Compile
 endef
 
 define Package/ndisc6/install	
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/ndisc6 $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ndisc6 $(1)/usr/bin/
 endef
 
 define Package/rdisc6/install	
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/rdisc6 $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/rdisc6 $(1)/usr/bin/
 endef
 
 define Package/tcptraceroute6/install	
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/tcptraceroute6 $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tcptraceroute6 $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,ndisc6))

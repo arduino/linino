@@ -47,13 +47,13 @@ define Build/Compile
 endef
 
 define Package/tinyproxy/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/tinyproxy $(1)/usr/sbin/
-	install -d -m0755 $(1)/usr/share/tinyproxy
+	$(INSTALL_DIR) $(1)/usr/share/tinyproxy
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/tinyproxy/*.html $(1)/usr/share/tinyproxy/
-	install -d -m0755 $(1)/etc/tinyproxy
+	$(INSTALL_DIR) $(1)/etc/tinyproxy
 	$(CP) $(PKG_INSTALL_DIR)/etc/tinyproxy/tinyproxy.conf $(1)/etc/tinyproxy/
-	install -d -m0755 $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/init.d
 	$(CP) ./files/tinyproxy.init $(1)/etc/init.d/tinyproxy
 endef
 

@@ -53,9 +53,9 @@ define Build/Compile
 endef
 
 define Package/nmap/install	
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nmap $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/share/nmap
+	$(INSTALL_DIR) $(1)/usr/share/nmap
 	for file in mac-prefixes os-fingerprints protocols rpc service-probes services; do \
 		$(CP) $(PKG_INSTALL_DIR)/usr/share/nmap/nmap-$$$$file $(1)/usr/share/nmap/ ; \
 	done

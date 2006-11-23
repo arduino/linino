@@ -51,11 +51,11 @@ define Build/Compile
 endef
 
 define Package/chillispot/install
-	install -m0755 -d $(1)/etc/init.d
-	install -m0755 ./files/$(PKG_NAME).init $(1)/etc/init.d/chilli
-	install -m0755 -d $(1)/etc
-	install -m0644 $(PKG_BUILD_DIR)/doc/chilli.conf $(1)/etc/
-	install -m0755 -d $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/chilli
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/doc/chilli.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/chilli $(1)/usr/sbin/
 endef
 

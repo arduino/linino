@@ -67,13 +67,13 @@ define Build/Compile
 endef
 
 define Package/ettercap/install
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/etter.conf $(1)/etc/
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/etter{cap,filter,log} $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/lib/ettercap
+	$(INSTALL_DIR) $(1)/usr/lib/ettercap
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ettercap/*.so $(1)/usr/lib/ettercap/
-	install -d -m0755 $(1)/usr/share/ettercap
+	$(INSTALL_DIR) $(1)/usr/share/ettercap
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/ettercap/* $(1)/usr/share/ettercap/
 endef
 

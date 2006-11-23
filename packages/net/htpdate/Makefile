@@ -41,12 +41,12 @@ endef
 
 
 define Package/htpdate/install	
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/htpdate $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/default/
-	install -m0644 ./files/htpdate.default $(1)/etc/default/htpdate
-	install -d -m0755 $(1)/etc/init.d/
-	install -m0755 ./files/htpdate.init $(1)/etc/init.d/htpdate
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/htpdate $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/default/
+	$(INSTALL_DATA) ./files/htpdate.default $(1)/etc/default/htpdate
+	$(INSTALL_DIR) $(1)/etc/init.d/
+	$(INSTALL_BIN) ./files/htpdate.init $(1)/etc/init.d/htpdate
 endef
 
 $(eval $(call BuildPackage,htpdate))

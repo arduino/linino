@@ -45,7 +45,7 @@ define Build/Compile
 endef
 
 define Package/wccpd/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/wccpd $(1)/usr/sbin/
 endef
 

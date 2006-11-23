@@ -39,11 +39,11 @@ define Build/Compile
 endef
 
 define Package/netperf/install	
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/netserver.init $(1)/etc/init.d/netserver
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/netperf $(1)/usr/bin/
-	install -m0755 $(PKG_BUILD_DIR)/netserver $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/netserver.init $(1)/etc/init.d/netserver
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/netperf $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/netserver $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,netperf))

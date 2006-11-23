@@ -46,7 +46,7 @@ define Build/Compile
 endef
 
 define Package/rsync/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rsync $(1)/usr/bin/
 endef
 

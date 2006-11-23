@@ -50,12 +50,12 @@ define Build/Compile
 endef
 
 define Package/p910nd/install
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/p910nd $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/default
-	install -m0644 ./files/p910nd.default $(1)/etc/default/p910nd
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/p910nd.init $(1)/etc/init.d/p910nd
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/p910nd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DATA) ./files/p910nd.default $(1)/etc/default/p910nd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/p910nd.init $(1)/etc/init.d/p910nd
 endef
 
 $(eval $(call BuildPackage,p910nd))

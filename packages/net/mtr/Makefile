@@ -63,7 +63,7 @@ define Build/Compile
 endef
 
 define Package/mtr/install	
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/mtr $(1)/usr/sbin/
 endef
 

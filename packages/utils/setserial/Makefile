@@ -42,10 +42,10 @@ define Build/Compile
 endef
 
 define Package/setserial/install
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/setserial $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/serial.init $(1)/etc/init.d/setserial
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/setserial $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/serial.init $(1)/etc/init.d/setserial
 endef
 
 $(eval $(call BuildPackage,setserial))

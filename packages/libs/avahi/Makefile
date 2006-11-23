@@ -151,33 +151,33 @@ define Build/UninstallDev
 endef
 
 define Package/libavahi/install
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libavahi-{common,core}.so.* $(1)/usr/lib/
 endef
 
 define Package/avahi-autoipd/install
-	install -d -m0755 $(1)/etc/avahi
+	$(INSTALL_DIR) $(1)/etc/avahi
 	$(CP) $(PKG_INSTALL_DIR)/etc/avahi/avahi-autoipd.action $(1)/etc/avahi/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/avahi-autoipd $(1)/usr/sbin/
 endef
 
 define Package/avahi-daemon/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/avahi-daemon $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/avahi
-	install -m0644 ./files/avahi-daemon.conf $(1)/etc/avahi/
-	install -d -m0755 $(1)/etc/avahi/services
-	install -m0644 ./files/service-http $(1)/etc/avahi/services/http.service
-	install -m0644 ./files/service-ssh $(1)/etc/avahi/services/ssh.service
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/avahi-daemon.init $(1)/etc/init.d/avahi-daemon
+	$(INSTALL_DIR) $(1)/etc/avahi
+	$(INSTALL_DATA) ./files/avahi-daemon.conf $(1)/etc/avahi/
+	$(INSTALL_DIR) $(1)/etc/avahi/services
+	$(INSTALL_DATA) ./files/service-http $(1)/etc/avahi/services/http.service
+	$(INSTALL_DATA) ./files/service-ssh $(1)/etc/avahi/services/ssh.service
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/avahi-daemon.init $(1)/etc/init.d/avahi-daemon
 endef
 
 define Package/avahi-dnsconfd/install
-	install -d -m0755 $(1)/etc/avahi
+	$(INSTALL_DIR) $(1)/etc/avahi
 	$(CP) $(PKG_INSTALL_DIR)/etc/avahi/avahi-dnsconfd.action $(1)/etc/avahi/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/avahi-dnsconfd $(1)/usr/sbin/
 endef
 

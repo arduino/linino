@@ -64,16 +64,16 @@ define Package/sane-backends/conffiles
 endef
 
 define Package/sane-backends/install	
-	install -d -m0755 $(1)/etc/sane.d
+	$(INSTALL_DIR) $(1)/etc/sane.d
 	$(CP) $(PKG_INSTALL_DIR)/etc/sane.d/*.conf $(1)/etc/sane.d/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/saned $(1)/usr/sbin/
 endef
 
 define Package/sane-libs/install
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsane.so.* $(1)/usr/lib/
-	install -d -m0755 $(1)/usr/lib/sane
+	$(INSTALL_DIR) $(1)/usr/lib/sane
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/sane/libsane-*.so.* $(1)/usr/lib/sane/
 endef
 

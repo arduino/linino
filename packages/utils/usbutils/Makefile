@@ -39,9 +39,9 @@ define Build/Compile
 endef
 
 define Package/usbutils/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/lsusb $(1)/usr/sbin/
-	install -d -m0755 $(1)/usr/share
+	$(INSTALL_DIR) $(1)/usr/share
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/usb.ids $(1)/usr/share/
 endef
 

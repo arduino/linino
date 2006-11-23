@@ -43,7 +43,7 @@ define Build/Compile
 endef
 
 define Package/lrzsz/install	
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/lrz $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/lsz $(1)/usr/bin/
 	(cd $(1)/usr/bin; \

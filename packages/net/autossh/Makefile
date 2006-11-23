@@ -37,8 +37,8 @@ define Build/Compile
 endef
 
 define Package/autossh/install
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/autossh $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/autossh $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,autossh))

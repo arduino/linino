@@ -92,8 +92,8 @@ define Build/Compile
 endef
 
 define Package/mgetty/install
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 \
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/faxq \
 		$(PKG_INSTALL_DIR)/usr/bin/faxrm \
 		$(PKG_INSTALL_DIR)/usr/bin/faxrunq \
@@ -103,13 +103,13 @@ define Package/mgetty/install
 		$(PKG_INSTALL_DIR)/usr/bin/pbm2g3 \
 		$(PKG_INSTALL_DIR)/usr/bin/sff2g3 \
 		$(1)/usr/bin/
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 \
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/sbin/mgetty \
 		$(PKG_INSTALL_DIR)/usr/sbin/sendfax \
 		$(PKG_INSTALL_DIR)/usr/sbin/faxrunqd \
 		$(1)/usr/sbin/
-	install -d -m0755 $(1)/usr/lib/mgetty+sendfax
+	$(INSTALL_DIR) $(1)/usr/lib/mgetty+sendfax
 	install -m4755 \
 		$(PKG_INSTALL_DIR)/usr/lib/mgetty+sendfax/faxq-helper \
 		$(1)/usr/lib/mgetty+sendfax/
@@ -117,7 +117,7 @@ define Package/mgetty/install
 		$(PKG_INSTALL_DIR)/usr/lib/mgetty+sendfax/cour25n.pbm \
 		$(PKG_INSTALL_DIR)/usr/lib/mgetty+sendfax/cour25.pbm \
 		$(1)/usr/lib/mgetty+sendfax/
-	install -d -m0755 $(1)/etc/mgetty+sendfax
+	$(INSTALL_DIR) $(1)/etc/mgetty+sendfax
 	install -m600 \
 		$(PKG_INSTALL_DIR)/etc/mgetty+sendfax/dialin.config \
 		$(PKG_INSTALL_DIR)/etc/mgetty+sendfax/faxheader \

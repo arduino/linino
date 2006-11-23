@@ -48,16 +48,16 @@ define Build/Compile
 endef
 	
 define Package/wifidog/install
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/scripts/init.d/wifidog $(1)/usr/bin/wifidog-init
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/init.d/wifidog $(1)/usr/bin/wifidog-init
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/wifidog $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/wdctl $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libhttpd.so* $(1)/usr/lib/
-	install -d -m0755 $(1)/etc
-	install -m0644 ./files/wifidog.conf $(1)/etc/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/$(PKG_NAME).init $(1)/etc/init.d/wifidog
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/wifidog.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/wifidog
 endef
 
 $(eval $(call BuildPackage,wifidog))

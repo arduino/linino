@@ -38,9 +38,9 @@ define Build/Compile
 endef
 
 define Package/lilo/install
-	install -d -m0755 $(1)/sbin
+	$(INSTALL_DIR) $(1)/sbin
 	$(CP) $(PKG_BUILD_DIR)/lilo.static $(1)/sbin/lilo
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	$(CP) ./files/lilo.conf $(1)/etc/
 	$(CP) ./files/boot.msg $(1)/etc/
 endef

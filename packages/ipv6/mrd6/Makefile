@@ -58,9 +58,9 @@ define Build/Compile
 endef
 
 define Package/mrd6/install
-	install -d -m0755 $(1)/etc/init.d
-	install -m0644 files/mrd6.conf $(1)/etc
-	install -m0755 files/mrd6.init $(1)/etc/init.d/mrd6
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DATA) files/mrd6.conf $(1)/etc
+	$(INSTALL_BIN) files/mrd6.init $(1)/etc/init.d/mrd6
 endef
 
 $(eval $(call BuildPackage,mrd6))

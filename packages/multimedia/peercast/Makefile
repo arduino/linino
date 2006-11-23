@@ -55,14 +55,14 @@ define Build/Compile
 endef
 
 define Package/peercast/install	
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/peercast $(1)/usr/sbin/
-	install -d -m0755 $(1)/usr/share/peercast/html
+	$(INSTALL_DIR) $(1)/usr/share/peercast/html
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/peercast/html/en $(1)/usr/share/peercast/html/
-	install -d -m0755 $(1)/etc
-	install -m0644 ./files/peercast.ini $(1)/etc/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/peercast.init $(1)/etc/init.d/peercast
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/peercast.ini $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/peercast.init $(1)/etc/init.d/peercast
 endef
 
 $(eval $(call BuildPackage,peercast))

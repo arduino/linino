@@ -47,13 +47,13 @@ define Build/Compile
 endef
 
 define Package/vpnc/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP)	$(PKG_INSTALL_DIR)/usr/sbin/vpnc \
 		$(PKG_INSTALL_DIR)/usr/sbin/vpnc-disconnect \
 		$(1)/usr/sbin/
 	install -d -m0700 $(1)/etc/vpnc
 	install -m0600 $(PKG_INSTALL_DIR)/etc/vpnc/vpnc.conf $(1)/etc/vpnc/
-	install -m0755 $(PKG_INSTALL_DIR)/etc/vpnc/vpnc-script $(1)/etc/vpnc/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/etc/vpnc/vpnc-script $(1)/etc/vpnc/
 endef
 
 $(eval $(call BuildPackage,vpnc))

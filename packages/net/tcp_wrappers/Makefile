@@ -60,7 +60,7 @@ define Build/UninstallDev
 endef
 
 define Package/libwrap/install	
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/shared/libwrap.so.* $(1)/usr/lib/
 endef
 	

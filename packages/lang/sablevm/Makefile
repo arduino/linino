@@ -51,9 +51,9 @@ define Build/Compile
 endef
 
 define Package/sablevm/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/{java-,}sablevm $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsablevm-*.so $(1)/usr/lib/
 endef
 

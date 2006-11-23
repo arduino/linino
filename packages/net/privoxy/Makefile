@@ -76,7 +76,7 @@ define Build/Compile
 endef
 
 define Package/privoxy/install	
-	install -d -m0755 $(1)/usr/sbin $(1)/etc/privoxy 
+	$(INSTALL_DIR) $(1)/usr/sbin $(1)/etc/privoxy 
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/privoxy $(1)/usr/sbin/
 endef
 

@@ -48,12 +48,12 @@ define Build/Compile
 endef
 
 define Package/gmediaserver/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/gmediaserver $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/default
-	install -m0644 ./files/gmediaserver.default $(1)/etc/default/gmediaserver
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/gmediaserver.init $(1)/etc/init.d/gmediaserver
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DATA) ./files/gmediaserver.default $(1)/etc/default/gmediaserver
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/gmediaserver.init $(1)/etc/init.d/gmediaserver
 endef
 
 $(eval $(call BuildPackage,gmediaserver))

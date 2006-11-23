@@ -105,12 +105,12 @@ define Build/Compile
 endef
 
 define Package/tor/install	
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/tor $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/tor.init $(1)/etc/init.d/tor
-	install -d -m0755 $(1)/etc/tor
-	install -m0644 ./files/torrc $(1)/etc/tor/torrc
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/tor.init $(1)/etc/init.d/tor
+	$(INSTALL_DIR) $(1)/etc/tor
+	$(INSTALL_DATA) ./files/torrc $(1)/etc/tor/torrc
 endef
 
 $(eval $(call BuildPackage,tor))

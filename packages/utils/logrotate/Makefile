@@ -52,11 +52,11 @@ define Build/Compile
 endef
 
 define Package/logrotate/install	
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) ${PKG_BUILD_DIR}/logrotate $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	$(CP) ./files/logrotate.conf $(1)/etc/
-	install -d -m0755 $(1)/etc/logrotate.d
+	$(INSTALL_DIR) $(1)/etc/logrotate.d
 endef
 
 $(eval $(call BuildPackage,logrotate))

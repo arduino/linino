@@ -46,17 +46,17 @@ define Build/Compile
 endef
 
 define Package/pptpd/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pptpd $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pptpctrl $(1)/usr/sbin/
-	install -d -m0755 $(1)/usr/lib/pptpd
+	$(INSTALL_DIR) $(1)/usr/lib/pptpd
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pptpd/* $(1)/usr/lib/pptpd
-	install -d -m0755 $(1)/etc
-	install -m0644 ./files/pptpd.conf $(1)/etc/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/pptpd.init $(1)/etc/init.d/pptpd
-	install -d -m0755 $(1)/etc/ppp
-	install -m0644 ./files/options.pptpd $(1)/etc/ppp/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/pptpd.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/pptpd.init $(1)/etc/init.d/pptpd
+	$(INSTALL_DIR) $(1)/etc/ppp
+	$(INSTALL_DATA) ./files/options.pptpd $(1)/etc/ppp/
 endef
 
 $(eval $(call BuildPackage,pptpd))

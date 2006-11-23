@@ -88,19 +88,19 @@ define Build/Compile
 endef
 
 define Package/click/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/userlevel/roofnetclick $(1)/usr/bin/click 
 	$(CP) $(PKG_BUILD_DIR)/tools/click-align/click-align $(1)/usr/bin/click-align
 endef
 
 define Package/roofnet/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/conf/wifi/gen_config_roofnet.sh $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/conf/wifi/srcr.click $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/conf/wifi/read_handler $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/conf/wifi/write_handler $(1)/usr/bin
 	mkdir -p $(1)/etc/init.d
-	install -m 755 ./files/roofnet.init $(1)/etc/init.d/roofnet
+	$(INSTALL_BIN) ./files/roofnet.init $(1)/etc/init.d/roofnet
 endef
 
 $(eval $(call BuildPackage,click))

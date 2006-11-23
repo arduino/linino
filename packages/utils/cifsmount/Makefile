@@ -33,8 +33,8 @@ define Build/Compile
 endef
 
 define Package/cifsmount/install
-	install -d -m0755 $(1)/sbin
-	install -m0755 $(PKG_BUILD_DIR)/mount.cifs $(1)/sbin/
+	$(INSTALL_DIR) $(1)/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mount.cifs $(1)/sbin/
 endef
 
 $(eval $(call BuildPackage,cifsmount))

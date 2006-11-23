@@ -137,14 +137,14 @@ define Package/$(1)/conffiles
 endef
 
 define Package/$(1)/install
-	install -d -m0755 $$(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/$(2) $$(1)/usr/sbin/$(3)
-	install -d -m0755 $$(1)/etc
-	install -m0644 ./files/$(3).conf $$(1)/etc/
-	install -d -m0755 $$(1)/etc/default
-	install -m0644 ./files/$(3).default $$(1)/etc/default/$(3)
-	install -d -m0755 $$(1)/etc/init.d
-	install -m0755 ./files/$(3).init $$(1)/etc/init.d/$(3)
+	$(INSTALL_DIR) $$(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(2) $$(1)/usr/sbin/$(3)
+	$(INSTALL_DIR) $$(1)/etc
+	$(INSTALL_DATA) ./files/$(3).conf $$(1)/etc/
+	$(INSTALL_DIR) $$(1)/etc/default
+	$(INSTALL_DATA) ./files/$(3).default $$(1)/etc/default/$(3)
+	$(INSTALL_DIR) $$(1)/etc/init.d
+	$(INSTALL_BIN) ./files/$(3).init $$(1)/etc/init.d/$(3)
 endef
 
 endef
@@ -192,7 +192,7 @@ define Build/Compile
 endef
 
 define Package/pmacct-client/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/src/pmacct $(1)/usr/sbin/
 endef
 

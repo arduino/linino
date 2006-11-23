@@ -49,11 +49,11 @@ define Build/Compile
 endef
 
 define Package/iptraf/install	
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/src/iptraf $(1)/usr/bin/
-	install -d -m0755 $(1)/var/lib/iptraf/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/iptraf $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/var/lib/iptraf/
 	echo "$(PKG_VERSION)" > $(1)/var/lib/iptraf/version
-	install -d -m0755 $(1)/var/log/iptraf $(1)/var/run/iptraf
+	$(INSTALL_DIR) $(1)/var/log/iptraf $(1)/var/run/iptraf
 endef
 
 $(eval $(call BuildPackage,iptraf))

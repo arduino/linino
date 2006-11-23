@@ -43,12 +43,12 @@ define Build/Compile
 endef
 
 define Package/srelay/install	
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/srelay $(1)/usr/bin/
-	install -d -m0755 $(1)/etc
-	install -m0644 files/srelay.conf $(1)/etc/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 files/srelay.init $(1)/etc/init.d/srelay
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/srelay $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) files/srelay.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) files/srelay.init $(1)/etc/init.d/srelay
 endef
 
 $(eval $(call BuildPackage,srelay))

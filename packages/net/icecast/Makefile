@@ -60,11 +60,11 @@ define Build/Compile
 endef
 
 define Package/icecast/install	
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/icecast.xml $(1)/etc/
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/icecast $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/share/icecast
+	$(INSTALL_DIR) $(1)/usr/share/icecast
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/icecast/admin $(1)/usr/share/icecast/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/icecast/web $(1)/usr/share/icecast/
 endef

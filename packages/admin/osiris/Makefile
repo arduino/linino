@@ -48,10 +48,10 @@ define Build/Compile
 endef
 
 define Package/osirisd/install	
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/osirisd $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/osirisd.init $(1)/etc/init.d/osirisd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/osirisd.init $(1)/etc/init.d/osirisd
 endef
 
 $(eval $(call BuildPackage,osirisd))

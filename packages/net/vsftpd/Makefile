@@ -47,12 +47,12 @@ define Build/Compile
 endef
 
 define Package/vsftpd/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/vsftpd $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc
-	install -m0644 ./files/vsftpd.conf $(1)/etc/vsftpd.conf
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/vsftpd.init $(1)/etc/init.d/vsftpd
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/vsftpd.conf $(1)/etc/vsftpd.conf
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/vsftpd.init $(1)/etc/init.d/vsftpd
 endef
 
 $(eval $(call BuildPackage,vsftpd))

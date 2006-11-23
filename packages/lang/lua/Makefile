@@ -120,23 +120,23 @@ define Build/UninstallDev
 endef
 
 define Package/liblua/install
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua{,lib}.so.* $(1)/usr/lib/
 endef
 
 define Package/lua/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/lua $(1)/usr/bin/
 endef
 
 define Package/luac/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/luac $(1)/usr/bin/
 endef
 
 define Package/lua-examples/install
-	install -d -m0755 $(1)/usr/share/lua/examples
-	install -m0644 $(PKG_BUILD_DIR)/test/*.lua \
+	$(INSTALL_DIR) $(1)/usr/share/lua/examples
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/test/*.lua \
 		$(1)/usr/share/lua/examples/
 endef
 

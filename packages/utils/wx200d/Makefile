@@ -43,13 +43,13 @@ define Build/Compile
 endef
 
 define Package/wx200d/install	
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP)	$(PKG_INSTALL_DIR)/usr/bin/wx200 \
 		$(PKG_INSTALL_DIR)/usr/bin/wxstdout \
 		$(PKG_INSTALL_DIR)/usr/bin/wxfilter \
 		$(PKG_INSTALL_DIR)/usr/bin/wxdebug \
 		$(1)/usr/bin/
-	install -d -m0755 $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/sbin/
 	$(CP)	$(PKG_INSTALL_DIR)/usr/sbin/wx200d \
 		$(PKG_INSTALL_DIR)/usr/sbin/wxread \
 		$(1)/usr/sbin/

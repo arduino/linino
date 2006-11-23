@@ -325,32 +325,32 @@ define Build/Compile
 endef
 
 define Package/php5/install
-	install -d -m0755 $(1)/etc
-	install -m0644 ./files/php.ini $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/php.ini $(1)/etc/
 endef
 
 define Package/php5-cli/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/php-cli $(1)/usr/bin/php
 endef
 
 define Package/php5-cgi/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/php-cgi $(1)/usr/bin/php
 endef
 
 define Package/php5-fastcgi/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/php-fastcgi $(1)/usr/sbin/php
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/php.init $(1)/etc/init.d/php
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/php.init $(1)/etc/init.d/php
 endef
 
 define BuildPlugin
   define Package/$(1)/install
-	[ -z "$(2)" ] || install -d -m0755 $$(1)/usr/lib/php
+	[ -z "$(2)" ] || $(INSTALL_DIR) $$(1)/usr/lib/php
 	for m in $(2); do \
-		install -m0755 $(PKG_BUILD_DIR)/modules/$$$$$$$${m}.so $$(1)/usr/lib/php/ ; \
+		$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/$$$$$$$${m}.so $$(1)/usr/lib/php/ ; \
 	done
   endef
 

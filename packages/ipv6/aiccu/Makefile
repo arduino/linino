@@ -38,12 +38,12 @@ define Build/Compile
 endef
 
 define Package/aiccu/install
-	install -d -m0755 $(1)/usr/sbin
-	install -m 755 $(PKG_BUILD_DIR)/unix-console/$(PKG_NAME) $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unix-console/$(PKG_NAME) $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc
 	install -m 644 $(PKG_BUILD_DIR)/doc/aiccu.conf $(1)/etc/
-	install -d -m0755 $(1)/etc/init.d
-	install -m 755 ./files/aiccu.init $(1)/etc/init.d/aiccu
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/aiccu.init $(1)/etc/init.d/aiccu
 endef
 
 $(eval $(call BuildPackage,aiccu))

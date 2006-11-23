@@ -59,13 +59,13 @@ define Build/Compile
 endef
 
 define Package/maradns/install	
-	install -d -m0755 $(1)/etc
-	install -m0644 ./files/mararc $(1)/etc/mararc
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/maradns.init $(1)/etc/init.d/maradns
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/mararc $(1)/etc/mararc
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/maradns.init $(1)/etc/init.d/maradns
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/{askmara,getzone,fetchzone,duende} $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/{maradns,zoneserver} $(1)/usr/sbin/
 endef
 

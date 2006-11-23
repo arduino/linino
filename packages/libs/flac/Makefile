@@ -43,7 +43,7 @@ define Build/Compile
 endef
 
 define Package/libflac/install
-	install -m0755 -d $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/obj/release/lib/libFLAC.so $(1)/usr/lib/
 endef
 

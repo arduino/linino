@@ -61,11 +61,11 @@ define Build/Compile
 endef
 
 define Package/xsupplicant/install	
-	install -d -m0755 $(1)/etc
-	install -m0644 $(PKG_BUILD_DIR)/etc/xsupplicant.conf $(1)/etc/
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/xsupplicant.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xsup_* $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/xsupplicant $(1)/usr/sbin/
 endef
 

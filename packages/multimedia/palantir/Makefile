@@ -54,10 +54,10 @@ define Build/Compile
 endef
 
 define Package/palantir/install	
-	install -d -m0755 $(1)/etc
-	install -m0644 $(PKG_BUILD_DIR)/server/palantir-mips.conf.sample $(1)/etc/palantir.conf
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/server/palantir $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/server/palantir-mips.conf.sample $(1)/etc/palantir.conf
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/server/palantir $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,palantir))

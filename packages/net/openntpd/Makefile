@@ -88,14 +88,14 @@ define Build/Compile
 endef
 
 define Package/openntpd/install	
-	install -d -m0755 $(1)/usr/sbin/
-	install -m0755 $(PKG_BUILD_DIR)/ntpd $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc
-	install -m0644 ./files/ntpd.conf $(1)/etc/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/ntpd.init $(1)/etc/init.d/ntpd
-	install -d -m0755 $(1)/etc/hotplug.d/iface
-	install -m0755 ./files/ntpd.hotplug $(1)/etc/hotplug.d/iface/20-ntpd
+	$(INSTALL_DIR) $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ntpd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/ntpd.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/ntpd.init $(1)/etc/init.d/ntpd
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
+	$(INSTALL_BIN) ./files/ntpd.hotplug $(1)/etc/hotplug.d/iface/20-ntpd
 endef
 
 $(eval $(call BuildPackage,openntpd))

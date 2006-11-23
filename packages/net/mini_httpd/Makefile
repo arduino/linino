@@ -127,43 +127,43 @@ define Build/Compile
 endef
 
 define Package/mini-httpd/install
-	install -d -m0755 $(1)/etc
-	install -m0644 ./files/mini_httpd.conf $(1)/etc/mini_httpd.conf
-	install -d -m0755 $(1)/etc/default
-	install -m0644 ./files/mini_httpd.default $(1)/etc/default/mini_httpd
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/mini_httpd.init $(1)/etc/init.d/mini_httpd
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/mini_httpd $(1)/usr/sbin/mini_httpd
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/mini_httpd.conf $(1)/etc/mini_httpd.conf
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DATA) ./files/mini_httpd.default $(1)/etc/default/mini_httpd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/mini_httpd.init $(1)/etc/init.d/mini_httpd
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mini_httpd $(1)/usr/sbin/mini_httpd
 endef
 
 define Package/mini-httpd-htpasswd/install
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/htpasswd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/htpasswd $(1)/usr/sbin/
 endef
 
 define Package/mini-httpd-matrixssl/install
-	install -d -m0755 $(1)/etc
-	install -m0644 ./files/mini_httpd-ssl.conf $(1)/etc/mini_httpd.conf
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/mini_httpd-ssl.conf $(1)/etc/mini_httpd.conf
 	install -m0600 ./files/mini_httpd.pem $(1)/etc/mini_httpd.pem
-	install -d -m0755 $(1)/etc/default
-	install -m0644 ./files/mini_httpd.default $(1)/etc/default/mini_httpd
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/mini_httpd.init $(1)/etc/init.d/mini_httpd
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/mini_httpd-matrixssl $(1)/usr/sbin/mini_httpd
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DATA) ./files/mini_httpd.default $(1)/etc/default/mini_httpd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/mini_httpd.init $(1)/etc/init.d/mini_httpd
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mini_httpd-matrixssl $(1)/usr/sbin/mini_httpd
 endef
 
 define Package/mini-httpd-openssl/install
-	install -d -m0755 $(1)/etc
-	install -m0644 ./files/mini_httpd-ssl.conf $(1)/etc/mini_httpd.conf
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/mini_httpd-ssl.conf $(1)/etc/mini_httpd.conf
 	install -m0600 ./files/mini_httpd.pem $(1)/etc/mini_httpd.pem
-	install -d -m0755 $(1)/etc/default
-	install -m0644 ./files/mini_httpd.default $(1)/etc/default/mini_httpd
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/mini_httpd.init $(1)/etc/init.d/mini_httpd
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/mini_httpd-openssl $(1)/usr/sbin/mini_httpd
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DATA) ./files/mini_httpd.default $(1)/etc/default/mini_httpd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/mini_httpd.init $(1)/etc/init.d/mini_httpd
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mini_httpd-openssl $(1)/usr/sbin/mini_httpd
 endef
 
 $(eval $(call BuildPackage,mini-httpd))

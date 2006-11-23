@@ -42,9 +42,9 @@ define Build/Configure
 endef
 
 define Package/vim/install	
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/share/vim
+	$(INSTALL_DIR) $(1)/usr/share/vim
 	$(CP) ./files/vimrc $(1)/usr/share/vim/
 endef
 

@@ -136,42 +136,42 @@ define Build/Compile
 endef
 
 define Package/openssh-client/install
-	install -m0755 -d $(1)/etc/ssh
+	$(INSTALL_DIR) $(1)/etc/ssh
 	chmod 0700 $(1)/etc/ssh
 	$(CP) $(PKG_INSTALL_DIR)/etc/ssh/ssh_config $(1)/etc/ssh/
-	install -m0755 -d $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ssh $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/scp $(1)/usr/bin/
 endef
 
 define Package/openssh-client-utils/install
-	install -m0755 -d $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ssh-add $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ssh-agent $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ssh-keyscan $(1)/usr/bin/
 endef
 
 define Package/openssh-server/install
-	install -m0755 -d $(1)/etc/ssh
+	$(INSTALL_DIR) $(1)/etc/ssh
 	chmod 0700 $(1)/etc/ssh
 	$(CP) $(PKG_INSTALL_DIR)/etc/ssh/sshd_config $(1)/etc/ssh/
-	install -m0755 -d $(1)/etc/init.d
-	install -m0755 ./files/sshd.init $(1)/etc/init.d/sshd
-	install -m0755 -d $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/sshd.init $(1)/etc/init.d/sshd
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ssh-keygen $(1)/usr/bin/
-	install -m0755 -d $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/sshd $(1)/usr/sbin/
 endef
 
 define Package/openssh-sftp-client/install
-	install -m0755 -d $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/sftp $(1)/usr/bin/
 endef
 
 define Package/openssh-sftp-server/install
-	install -m0755 -d $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/sftp-server $(1)/usr/lib/
-	install -m0755 -d $(1)/usr/libexec
+	$(INSTALL_DIR) $(1)/usr/libexec
 	ln -sf ../lib/sftp-server $(1)/usr/libexec/sftp-server
 endef
 

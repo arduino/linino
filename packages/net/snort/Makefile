@@ -94,20 +94,20 @@ define Package/$(1)/conffiles
 endef
 
 define Package/$(1)/install
-	install -d -m0755 $$(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/snort-$(2) $$(1)/usr/sbin/snort
-	install -d -m0755 $$(1)/etc/snort
-	install -m0644 $(PKG_BUILD_DIR)/etc/snort.conf $$(1)/etc/snort/
-	install -m0644 $(PKG_BUILD_DIR)/etc/classification.config $$(1)/etc/snort/
-	install -m0644 $(PKG_BUILD_DIR)/etc/gen-msg.map $$(1)/etc/snort/
-	install -m0644 $(PKG_BUILD_DIR)/etc/reference.config $$(1)/etc/snort/
-	install -m0644 $(PKG_BUILD_DIR)/etc/sid-msg.map $$(1)/etc/snort/
-	install -m0644 $(PKG_BUILD_DIR)/etc/threshold.conf $$(1)/etc/snort/
-	install -m0644 $(PKG_BUILD_DIR)/etc/unicode.map $$(1)/etc/snort/
-	install -d -m0755 $$(1)/etc/default
-	install -m0644 ./files/snort.default $$(1)/etc/default/snort
-	install -d -m0755 $$(1)/etc/init.d
-	install -m0755 ./files/snort.init $$(1)/etc/init.d/snort
+	$(INSTALL_DIR) $$(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/snort-$(2) $$(1)/usr/sbin/snort
+	$(INSTALL_DIR) $$(1)/etc/snort
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/snort.conf $$(1)/etc/snort/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/classification.config $$(1)/etc/snort/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/gen-msg.map $$(1)/etc/snort/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/reference.config $$(1)/etc/snort/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/sid-msg.map $$(1)/etc/snort/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/threshold.conf $$(1)/etc/snort/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/unicode.map $$(1)/etc/snort/
+	$(INSTALL_DIR) $$(1)/etc/default
+	$(INSTALL_DATA) ./files/snort.default $$(1)/etc/default/snort
+	$(INSTALL_DIR) $$(1)/etc/init.d
+	$(INSTALL_BIN) ./files/snort.init $$(1)/etc/init.d/snort
 endef
 
 endef

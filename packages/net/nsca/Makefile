@@ -47,10 +47,10 @@ define Build/Compile
 endef
 
 define Package/send-nsca/install
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	install -m0600 $(PKG_BUILD_DIR)/sample-config/send_nsca.cfg $(1)/etc/
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/src/send_nsca $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/send_nsca $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,send-nsca))

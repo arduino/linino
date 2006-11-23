@@ -57,12 +57,12 @@ define Build/Compile
 endef
 
 define Package/collectd/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/collectd $(1)/usr/sbin/
-	install -d -m0755 $(1)/usr/lib/collectd
+	$(INSTALL_DIR) $(1)/usr/lib/collectd
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/collectd/*.so $(1)/usr/lib/collectd/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/collectd.init $(1)/etc/init.d/collectd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/collectd.init $(1)/etc/init.d/collectd
 endef
 
 $(eval $(call BuildPackage,collectd))

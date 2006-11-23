@@ -57,15 +57,15 @@ define Build/Compile
 endef
 
 define Package/mt-daapd/install	
-	install -d -m0755 $(1)/etc
-	install -m0644 $(PKG_BUILD_DIR)/contrib/mt-daapd.conf $(1)/etc/
-	install -m0644 $(PKG_BUILD_DIR)/contrib/mt-daapd.playlist $(1)/etc/
-	install -d -m0755 $(1)/usr/share
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/contrib/mt-daapd.conf $(1)/etc/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/contrib/mt-daapd.playlist $(1)/etc/
+	$(INSTALL_DIR) $(1)/usr/share
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/mt-daapd $(1)/usr/share/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/mt-daapd $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/mt-daapd.init $(1)/etc/init.d/mt-daapd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/mt-daapd.init $(1)/etc/init.d/mt-daapd
 endef
 
 $(eval $(call BuildPackage,mt-daapd))

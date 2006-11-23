@@ -47,12 +47,12 @@ define Build/Compile
 endef
 
 define Package/vrrpd/install	
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/vrrpd $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/default
-	install -m0644 ./files/vrrpd.default $(1)/etc/default/vrrpd
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/vrrpd.init $(1)/etc/init.d/vrrpd
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/vrrpd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DATA) ./files/vrrpd.default $(1)/etc/default/vrrpd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/vrrpd.init $(1)/etc/init.d/vrrpd
 endef
 
 $(eval $(call BuildPackage,vrrpd))

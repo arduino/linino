@@ -43,7 +43,7 @@ define Build/Compile
 endef
 
 define Package/alsa-utils/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/amixer $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/alsamixer $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/aplay $(1)/usr/bin/

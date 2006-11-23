@@ -44,13 +44,13 @@ define Build/Compile
 endef
 
 define Package/siproxd/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/siproxd $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc
-	install -m0644 $(PKG_BUILD_DIR)/doc/siproxd.conf.example $(1)/etc/siproxd.conf
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/doc/siproxd.conf.example $(1)/etc/siproxd.conf
 	install -m0600 $(PKG_BUILD_DIR)/doc/siproxd_passwd.cfg $(1)/etc/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/siproxd.init $(1)/etc/init.d/siproxd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/siproxd.init $(1)/etc/init.d/siproxd
 endef
 
 $(eval $(call BuildPackage,siproxd))

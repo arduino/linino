@@ -51,14 +51,14 @@ define Build/Compile
 endef
 
 define Package/miau/install	
-	install -d -m0755 $(1)/usr/bin  	
+	$(INSTALL_DIR) $(1)/usr/bin  	
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
-	install -d -m0755 $(1)/etc/init.d
-	install -d -m0755 $(1)/etc/default
-	install -d -m0755 $(1)/etc/miau
-	install -m0755 ./files/miau.init $(1)/etc/init.d/miau
-	install -m0644 ./files/miau $(1)/etc/default/miau
-	install -m0644 ./files/miaurc $(1)/etc/miau/miaurc
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DIR) $(1)/etc/miau
+	$(INSTALL_BIN) ./files/miau.init $(1)/etc/init.d/miau
+	$(INSTALL_DATA) ./files/miau $(1)/etc/default/miau
+	$(INSTALL_DATA) ./files/miaurc $(1)/etc/miau/miaurc
 endef
 
 $(eval $(call BuildPackage,miau))

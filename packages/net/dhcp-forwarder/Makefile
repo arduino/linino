@@ -43,12 +43,12 @@ define Build/Compile
 endef
 	
 define Package/dhcp-forwarder/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/dhcp-fwd $(1)/usr/bin/
-	install -d -m0755 $(1)/etc
-	install -m0644 $(PKG_BUILD_DIR)/contrib/dhcp-fwd.conf $(1)/etc/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/dhcp-fwd.init $(1)/etc/init.d/dhcp-fwd
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/contrib/dhcp-fwd.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/dhcp-fwd.init $(1)/etc/init.d/dhcp-fwd
 endef
 
 $(eval $(call BuildPackage,dhcp-forwarder))

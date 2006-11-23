@@ -223,34 +223,34 @@ define Build/Compile
 endef
 
 define Package/libnetsnmp/install
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnetsnmp{,agent,helpers,mibs}.so.* $(1)/usr/lib/
 endef
 
 define Package/snmpd/install
-	install -d -m0755 $(1)/etc/snmp
-	install -m0644 ./files/snmpd.conf $(1)/etc/snmp/snmpd.conf
-	install -d -m0755 $(1)/etc/default
-	install -m0644 ./files/snmpd.default $(1)/etc/default/snmpd
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/snmpd.init $(1)/etc/init.d/snmpd
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_INSTALL_DIR)/usr/sbin/snmpd-shared $(1)/usr/sbin/snmpd
+	$(INSTALL_DIR) $(1)/etc/snmp
+	$(INSTALL_DATA) ./files/snmpd.conf $(1)/etc/snmp/snmpd.conf
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DATA) ./files/snmpd.default $(1)/etc/default/snmpd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/snmpd.init $(1)/etc/init.d/snmpd
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/snmpd-shared $(1)/usr/sbin/snmpd
 endef
 
 define Package/snmpd-static/install
-	install -d -m0755 $(1)/etc/snmp
-	install -m0644 ./files/snmpd.conf $(1)/etc/snmp/snmpd.conf
-	install -d -m0755 $(1)/etc/default
-	install -m0644 ./files/snmpd.default $(1)/etc/default/snmpd
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/snmpd.init $(1)/etc/init.d/snmpd
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_INSTALL_DIR)/usr/sbin/snmpd-static $(1)/usr/sbin/snmpd
+	$(INSTALL_DIR) $(1)/etc/snmp
+	$(INSTALL_DATA) ./files/snmpd.conf $(1)/etc/snmp/snmpd.conf
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DATA) ./files/snmpd.default $(1)/etc/default/snmpd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/snmpd.init $(1)/etc/init.d/snmpd
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/snmpd-static $(1)/usr/sbin/snmpd
 endef
 
 define Package/snmp-utils/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/snmp{get,set,status,test,trap,walk} $(1)/usr/bin/
 endef
 

@@ -49,10 +49,10 @@ define Build/Compile
 endef
 
 define Package/jamvm/install	
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/src/jamvm $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/share/jamvm
-	install -m0644 $(PKG_BUILD_DIR)/lib/classes.zip $(1)/usr/share/jamvm/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/jamvm $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/share/jamvm
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/classes.zip $(1)/usr/share/jamvm/
 endef
 
 $(eval $(call BuildPackage,jamvm))

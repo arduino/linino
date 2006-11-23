@@ -35,12 +35,12 @@ define Build/Compile
 endef
 
 define Package/ntpclient/install	
-	install -d -m0755 $(1)/etc/hotplug.d/iface
-	install -m0755 ./files/ntpclient.init $(1)/etc/hotplug.d/iface/10-ntpclient
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/ntpclient $(1)/usr/sbin/
-	install -m0755 $(PKG_BUILD_DIR)/adjtimex $(1)/usr/sbin/
-	install -m0755 $(PKG_BUILD_DIR)/rate.awk $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
+	$(INSTALL_BIN) ./files/ntpclient.init $(1)/etc/hotplug.d/iface/10-ntpclient
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ntpclient $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/adjtimex $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/rate.awk $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,ntpclient))

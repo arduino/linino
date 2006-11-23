@@ -62,10 +62,10 @@ define Build/UninstallDev
 endef
 
 define Package/gpsd/install
-	install -d -m0755 $(1)/usr/lib
-	install -m0755 $(PKG_INSTALL_DIR)/usr/lib/libgps.so.* $(1)/usr/lib/
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_INSTALL_DIR)/usr/sbin/gpsd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/libgps.so.* $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/gpsd $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,gpsd))

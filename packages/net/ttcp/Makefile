@@ -29,8 +29,8 @@ define Build/Compile
 endef
 
 define Package/ttcp/install	
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/ttcp $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ttcp $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,ttcp))

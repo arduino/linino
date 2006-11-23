@@ -71,13 +71,13 @@ define Build/Compile
 endef
 
 define Package/rrs/install	
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/rrs-ssl $(1)/usr/bin/rrs
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/rrs-ssl $(1)/usr/bin/rrs
 endef
 
 define Package/rrs-nossl/install	
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/rrs-nossl $(1)/usr/bin/rrs
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/rrs-nossl $(1)/usr/bin/rrs
 endef
 
 $(eval $(call BuildPackage,rrs))

@@ -49,15 +49,15 @@ define Build/Compile
 endef
 
 define Package/tftp-hpa/install	
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/tftp/tftp $(1)/usr/bin/tftp-hpa
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tftp/tftp $(1)/usr/bin/tftp-hpa
 endef
 
 define Package/tftpd-hpa/install
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/tftpd/tftpd $(1)/usr/sbin/tftpd-hpa
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/tftpd-hpa.init $(1)/etc/init.d/tftpd-hpa
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tftpd/tftpd $(1)/usr/sbin/tftpd-hpa
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/tftpd-hpa.init $(1)/etc/init.d/tftpd-hpa
 endef
 
 $(eval $(call BuildPackage,tftp-hpa))

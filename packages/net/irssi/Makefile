@@ -46,8 +46,8 @@ define Build/Configure
 endef
 
 define Package/irssi/install	
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/src/fe-text/irssi $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/fe-text/irssi $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,irssi))

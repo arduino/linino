@@ -37,11 +37,11 @@ define Build/Compile
 endef
 
 define Package/deco/install
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/deco $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/lib/deco
-	install -m0644 $(PKG_BUILD_DIR)/menu $(1)/usr/lib/deco/menu
-	install -m0644 $(PKG_BUILD_DIR)/profile $(1)/usr/lib/deco/profile
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/deco $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/lib/deco
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/menu $(1)/usr/lib/deco/menu
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/profile $(1)/usr/lib/deco/profile
 endef
 
 $(eval $(call BuildPackage,deco))

@@ -292,25 +292,25 @@ define Build/Compile
 endef
 
 define Package/freeradius/install
-	install -d -m0755 $(1)/etc/freeradius
+	$(INSTALL_DIR) $(1)/etc/freeradius
 	for f in clients.conf dictionary radiusd.conf; do \
 		$(CP) $(PKG_INSTALL_DIR)/etc/freeradius/$$$${f} $(1)/etc/freeradius/ ; \
 	done
-	install -d -m0755 $(1)/usr/share/freeradius
+	$(INSTALL_DIR) $(1)/usr/share/freeradius
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/freeradius/dictionary $(1)/usr/share/freeradius/
 	for f in $(PKG_DICTIONARIES); do \
 		$(CP) $(PKG_INSTALL_DIR)/usr/share/freeradius/dictionary.$$$${f} $(1)/usr/share/freeradius/ ; \
 	done
-	install -d -m0755 $(1)/usr/lib/freeradius
+	$(INSTALL_DIR) $(1)/usr/lib/freeradius
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/freeradius/libradius{,-*}.so $(1)/usr/lib/freeradius/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/radiusd $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/radiusd.init $(1)/etc/init.d/radiusd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/radiusd.init $(1)/etc/init.d/radiusd
 endef
 
 define Package/freeradius-democerts/install
-	install -d -m0755 $(1)/etc/freeradius
+	$(INSTALL_DIR) $(1)/etc/freeradius
 	$(CP) $(PKG_INSTALL_DIR)/etc/freeradius/certs $(1)/etc/freeradius/
 	rm -rf $(1)/etc/freeradius/certs/README
 	rm -rf $(1)/etc/freeradius/certs/new*
@@ -319,7 +319,7 @@ define Package/freeradius-democerts/install
 endef
 
 define Package/freeradius-utils/install
-	install -m0755 -d $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	for f in radclient radeapclient; do \
 		$(CP) $(PKG_INSTALL_DIR)/usr/bin/$$$${f} $(1)/usr/bin/ ; \
 	done
@@ -327,11 +327,11 @@ endef
 
 define BuildPlugin
   define Package/$(1)/install
-	[ -z "$(2)" ] || install -d -m0755 $$(1)/usr/lib/freeradius
+	[ -z "$(2)" ] || $(INSTALL_DIR) $$(1)/usr/lib/freeradius
 	for m in $(2); do \
 		$(CP) $(PKG_INSTALL_DIR)/usr/lib/freeradius/$$$$$$$${m}{,-*}.so $$(1)/usr/lib/freeradius/ ; \
 	done
-	[ -z "$(3)" ] || install -d -m0755 $$(1)/etc/freeradius
+	[ -z "$(3)" ] || $(INSTALL_DIR) $$(1)/etc/freeradius
 	for f in $(3); do \
 		$(CP) $(PKG_INSTALL_DIR)/etc/freeradius/$$$$$$$${f} $$(1)/etc/freeradius/ ; \
 	done

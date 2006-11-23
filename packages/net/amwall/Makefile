@@ -46,11 +46,11 @@ define Build/Compile
 endef
 
 define Package/amwall/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin
-	install -d -m0755 $(1)/etc/amsel
+	$(INSTALL_DIR) $(1)/etc/amsel
 	$(CP) $(PKG_INSTALL_DIR)/etc/amsel* $(1)/etc
 endef
 

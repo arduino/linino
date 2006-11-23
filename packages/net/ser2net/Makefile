@@ -47,9 +47,9 @@ define Build/Compile
 endef
  
 define Package/ser2net/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ser2net $(1)/usr/sbin/
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_BUILD_DIR)/ser2net.conf $(1)/etc/
 endef
 

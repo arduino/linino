@@ -47,15 +47,15 @@ define Build/Compile
 	mkdir -p $(PKG_INSTALL_DIR)/usr/lib/bx/translation
 	mkdir -p $(PKG_INSTALL_DIR)/usr/lib/bx/plugins
 	mkdir -p $(PKG_INSTALL_DIR)/usr/lib/bx/help
-	install -c $(PKG_BUILD_DIR)/source/BitchX $(PKG_INSTALL_DIR)/usr/bin/BitchX-1.1-final
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/BitchX $(PKG_INSTALL_DIR)/usr/bin/BitchX-1.1-final
 	rm -f $(PKG_INSTALL_DIR)/usr/bin/BitchX
 	ln -s /usr/bin/BitchX-1.1-final $(PKG_INSTALL_DIR)/usr/bin/BitchX 
-	install -c $(PKG_BUILD_DIR)/BitchX.help $(PKG_INSTALL_DIR)/usr/lib/bx/BitchX.help
-	install -c $(PKG_BUILD_DIR)/BitchX.ircnames $(PKG_INSTALL_DIR)/usr/lib/bx/BitchX.ircnames
-	install -c $(PKG_BUILD_DIR)/BitchX.quit $(PKG_INSTALL_DIR)/usr/lib/bx/BitchX.quit
-	install -c $(PKG_BUILD_DIR)/BitchX.reasons $(PKG_INSTALL_DIR)/usr/lib/bx/BitchX.kick
-	install -c $(PKG_BUILD_DIR)/source/wserv $(PKG_INSTALL_DIR)/usr/lib/bx/wserv
-	install -c $(PKG_BUILD_DIR)/source/scr-bx $(PKG_INSTALL_DIR)/usr/bin/scr-bx
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/BitchX.help $(PKG_INSTALL_DIR)/usr/lib/bx/BitchX.help
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/BitchX.ircnames $(PKG_INSTALL_DIR)/usr/lib/bx/BitchX.ircnames
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/BitchX.quit $(PKG_INSTALL_DIR)/usr/lib/bx/BitchX.quit
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/BitchX.reasons $(PKG_INSTALL_DIR)/usr/lib/bx/BitchX.kick
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/source/wserv $(PKG_INSTALL_DIR)/usr/lib/bx/wserv
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/scr-bx $(PKG_INSTALL_DIR)/usr/bin/scr-bx
 	$(CP) $(PKG_BUILD_DIR)/script $(PKG_INSTALL_DIR)/usr/lib/bx/
 	$(CP) $(PKG_BUILD_DIR)/translation $(PKG_INSTALL_DIR)/usr/lib/bx/
 	bzip2 $(PKG_INSTALL_DIR)/usr/lib/bx/translation/*
@@ -64,7 +64,7 @@ define Build/Compile
 endef
 
 define Package/bitchx/install
-	install -m0755 -d $(1)/usr/bin $(1)/usr/lib $(1)/etc/init.d $(1)/tmp
+	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/lib $(1)/etc/init.d $(1)/tmp
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/etc/init.d/bitchxrc $(1)/etc/init.d/

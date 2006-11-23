@@ -79,8 +79,8 @@ define Package/bitlbee/install
 		DESTDIR="$(1)" install-etc install-bin 
 	$(MAKE) -C $(PKG_BUILD_DIR)/doc/user-guide \
 		DESTDIR="$(1)" install 
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/bitlbee.init $(1)/etc/init.d/bitlbee
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/bitlbee.init $(1)/etc/init.d/bitlbee
 endef
 
 $(eval $(call BuildPackage,bitlbee))

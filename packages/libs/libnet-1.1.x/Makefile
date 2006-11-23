@@ -73,7 +73,7 @@ define Build/UninstallDev
 endef
 
 define Package/libnet1/install
-	install -m0755 -d $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnet.so.* $(1)/usr/lib/
 endef
 

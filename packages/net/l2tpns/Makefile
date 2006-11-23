@@ -52,11 +52,11 @@ define Build/Compile
 endef
 
 define Package/l2tpns/install	
-	install -d -m0755 $(1)/etc/l2tpns
+	$(INSTALL_DIR) $(1)/etc/l2tpns
 	$(CP) $(PKG_INSTALL_DIR)/etc/l2tpns/* $(1)/etc/l2tpns/
-	install -d -m0755 $(1)/usr/lib/l2tpns
+	$(INSTALL_DIR) $(1)/usr/lib/l2tpns
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/l2tpns/* $(1)/usr/lib/l2tpns/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
 endef
 

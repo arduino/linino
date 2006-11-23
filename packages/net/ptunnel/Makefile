@@ -44,7 +44,7 @@ define Build/Compile
 endef
 
 define Package/ptunnel/install	
-	install -m0755 -d $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ptunnel $(1)/usr/sbin/
 endef
 

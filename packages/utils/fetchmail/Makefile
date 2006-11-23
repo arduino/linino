@@ -48,7 +48,7 @@ define Build/Compile
 endef
 
 define Package/fetchmail/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fetchmail $(1)/usr/bin/
 endef
 

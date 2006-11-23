@@ -42,11 +42,11 @@ define Build/Compile
 endef
 
 define Package/ssmtp/install	
-	install -d -m0755 $(1)/etc/ssmtp
-	install -m0644 $(PKG_BUILD_DIR)/ssmtp.conf $(1)/etc/ssmtp/
-	install -m0644 $(PKG_BUILD_DIR)/revaliases $(1)/etc/ssmtp/
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/ssmtp $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/ssmtp
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/ssmtp.conf $(1)/etc/ssmtp/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/revaliases $(1)/etc/ssmtp/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ssmtp $(1)/usr/sbin/
 	ln -sf ssmtp $(1)/usr/sbin/sendmail
 endef
 

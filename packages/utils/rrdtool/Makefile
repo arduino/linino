@@ -80,20 +80,20 @@ define Build/Compile
 endef
 
 define Package/rrdtool/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdtool $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdupdate $(1)/usr/bin/
 endef
 
 define Package/rrdcgi/install	
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdcgi $(1)/usr/bin/
 endef
 
 define Package/librrd/install	
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd.so.* $(1)/usr/lib/
-	install -d -m0755 $(1)/usr/share/rrdtool/fonts
+	$(INSTALL_DIR) $(1)/usr/share/rrdtool/fonts
 	$(CP) $(PKG_BUILD_DIR)/src/DejaVuSansMono-Roman.ttf \
 		$(1)/usr/share/rrdtool/fonts/
 endef

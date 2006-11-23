@@ -65,21 +65,21 @@ define Build/Compile
 endef
 
 define Package/monit/install	
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	install -m0600 $(PKG_BUILD_DIR)/monitrc $(1)/etc/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/monit.init $(1)/etc/init.d/monit
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/monit-ssl $(1)/usr/sbin/monit
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/monit.init $(1)/etc/init.d/monit
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/monit-ssl $(1)/usr/sbin/monit
 endef
 
 define Package/monit-nossl/install
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	install -m0600 $(PKG_BUILD_DIR)/monitrc $(1)/etc/
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/monit.init $(1)/etc/init.d/monit
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/monit-nossl $(1)/usr/sbin/monit
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/monit.init $(1)/etc/init.d/monit
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/monit-nossl $(1)/usr/sbin/monit
 endef
 
 $(eval $(call BuildPackage,monit))

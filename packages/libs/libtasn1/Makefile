@@ -77,7 +77,7 @@ define Build/UninstallDev
 endef
 
 define Package/libtasn1/install
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtasn1.so.* $(1)/usr/lib/
 endef
 

@@ -57,13 +57,13 @@ define Build/Compile
 endef
 
 define Package/e2fsprogs/install
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/e2fsck $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/mke2fs $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/mkfs.ext{2,3} $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/tune2fs $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/resize2fs $(1)/usr/sbin/
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{blkid,com_err,e2p,ext2fs,uuid}.so.* $(1)/usr/lib/
 endef
 

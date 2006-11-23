@@ -44,13 +44,13 @@ define Build/Compile
 endef
 
 define Package/psybnc/install	
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/psybnc.sh $(1)/usr/sbin/psybnc
-	install -d -m0755 $(1)/usr/share/psybnc
-	install -m0755 $(PKG_BUILD_DIR)/psybnc $(1)/usr/share/psybnc/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/psybnc.sh $(1)/usr/sbin/psybnc
+	$(INSTALL_DIR) $(1)/usr/share/psybnc
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/psybnc $(1)/usr/share/psybnc/
 	install -m0600 $(PKG_BUILD_DIR)/psybnc.conf $(1)/usr/share/psybnc/
-	install -d -m0755 $(1)/usr/share/psybnc/lang
-	install -m0644 $(PKG_BUILD_DIR)/lang/english.lng $(1)/usr/share/psybnc/lang/
+	$(INSTALL_DIR) $(1)/usr/share/psybnc/lang
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lang/english.lng $(1)/usr/share/psybnc/lang/
 	ln -sf /tmp $(1)/usr/share/psybnc/log
 endef
 

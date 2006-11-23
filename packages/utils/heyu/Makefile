@@ -40,10 +40,10 @@ define Build/Compile
 endef
 
 define Package/heyu/install	
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/heyu $(1)/usr/bin/
-	install -d -m0755 $(1)/etc/$(PKG_NAME)
-	install -m0644 ./files/x10.conf $(1)/etc/$(PKG_NAME)/x10.conf
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/heyu $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/$(PKG_NAME)
+	$(INSTALL_DATA) ./files/x10.conf $(1)/etc/$(PKG_NAME)/x10.conf
 endef
 
 $(eval $(call BuildPackage,heyu))

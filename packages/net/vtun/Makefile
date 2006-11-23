@@ -48,10 +48,10 @@ define Build/Compile
 endef
 
 define Package/vtun/install	
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	install -m0600 $(PKG_BUILD_DIR)/vtund.conf $(1)/etc/
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/vtund $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/vtund $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,vtun))

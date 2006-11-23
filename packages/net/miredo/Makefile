@@ -78,20 +78,20 @@ define Build/Compile
 endef
 
 define Package/miredo-server/install
-	install -d -m0755 $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/
 	$(CP) $(PKG_INSTALL_DIR)/etc/miredo-server.conf-dist $(1)/etc/miredo-server.conf
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/miredo-server.init $(1)/etc/init.d/miredo-server
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/miredo-server.init $(1)/etc/init.d/miredo-server
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/miredo-server $(1)/usr/sbin/
 endef
 
 define Package/miredo-client/install	
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/miredo.conf-dist $(1)/etc/miredo.conf
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/miredo.init $(1)/etc/init.d/miredo
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/miredo.init $(1)/etc/init.d/miredo
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/miredo $(1)/usr/sbin/
 endef
 

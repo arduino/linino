@@ -47,7 +47,7 @@ define Build/Compile
 endef
 
 define Package/tinc/install	
-	install -m0755 -d $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/tincd $(1)/usr/sbin/
 endef
 

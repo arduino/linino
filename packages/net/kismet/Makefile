@@ -121,34 +121,34 @@ endef
 
 #FIXME: remove this package?
 define Package/kismet/install
-	install -d -m0755 $(1)/usr/bin/
-	install -m0755 $(PKG_BUILD_DIR)/scripts/kismet $(1)/usr/bin/kismet
+	$(INSTALL_DIR) $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/kismet $(1)/usr/bin/kismet
 endef
 
 define Package/kismet-client/install
-	install -d -m0755 $(1)/etc/kismet/
-	install -m0644 ./files/ap_manuf $(1)/etc/kismet/
-	install -m0644 ./files/client_manuf $(1)/etc/kismet/
-	install -m0644 ./files/kismet.conf $(1)/etc/kismet/
-	install -m0644 ./files/kismet_ui.conf $(1)/etc/kismet/
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/kismet_client $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/kismet/
+	$(INSTALL_DATA) ./files/ap_manuf $(1)/etc/kismet/
+	$(INSTALL_DATA) ./files/client_manuf $(1)/etc/kismet/
+	$(INSTALL_DATA) ./files/kismet.conf $(1)/etc/kismet/
+	$(INSTALL_DATA) ./files/kismet_ui.conf $(1)/etc/kismet/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/kismet_client $(1)/usr/bin/
 endef
 
 define Package/kismet-drone/install
-	install -d -m0755 $(1)/etc/kismet/
-	install -m0644 ./files/kismet_drone.conf $(1)/etc/kismet/
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/kismet_drone $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/kismet/
+	$(INSTALL_DATA) ./files/kismet_drone.conf $(1)/etc/kismet/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/kismet_drone $(1)/usr/bin/
 endef
 
 define Package/kismet-server/install
-	install -d -m0755 $(1)/etc/kismet/
-	install -m0644 ./files/ap_manuf $(1)/etc/kismet/
-	install -m0644 ./files/client_manuf $(1)/etc/kismet/
-	install -m0644 ./files/kismet.conf $(1)/etc/kismet/
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/kismet_server $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/kismet/
+	$(INSTALL_DATA) ./files/ap_manuf $(1)/etc/kismet/
+	$(INSTALL_DATA) ./files/client_manuf $(1)/etc/kismet/
+	$(INSTALL_DATA) ./files/kismet.conf $(1)/etc/kismet/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/kismet_server $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,kismet-client))

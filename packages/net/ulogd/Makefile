@@ -110,21 +110,21 @@ define Build/Compile
 endef
 
 define Package/ulogd/install	
-	install -d -m0755 $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/ulogd.conf $(1)/etc/
-	install -d -m0755 $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ulogd $(1)/usr/sbin/
-	install -d -m0755 $(1)/usr/lib/ulogd
+	$(INSTALL_DIR) $(1)/usr/lib/ulogd
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ulogd/ulogd_BASE.so $(1)/usr/lib/ulogd/
-	install -d -m0755 $(1)/etc/default
-	install -m0644 ./files/ulogd.default $(1)/etc/default/ulogd
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/ulogd.init $(1)/etc/init.d/ulogd
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DATA) ./files/ulogd.default $(1)/etc/default/ulogd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/ulogd.init $(1)/etc/init.d/ulogd
 endef
 
 define BuildPlugin
   define Package/$(1)/install
-	install -m0755 -d $$(1)/usr/lib/ulogd
+	$(INSTALL_DIR) $$(1)/usr/lib/ulogd
 	for m in $(2); do \
 		$(CP) $(PKG_INSTALL_DIR)/usr/lib/ulogd/ulogd_$$$$$$$${m}.so $$(1)/usr/lib/ulogd/ ; \
 	done

@@ -74,14 +74,14 @@ define Build/Compile
 endef
 
 define Package/aodv-uu/install
-	install -m0755 -d $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/aodvd $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aodvd $(1)/usr/sbin
 endef
 
 define Package/kmod-aodv-uu/install
 	mkdir -p $(1)/etc/modules.d
-	install -m0644 ./files/aodv-uu.modules $(1)/etc/modules.d/80-aodv-uu
-	install -m0755 -d $(1)/lib/modules/$(LINUX_VERSION)
+	$(INSTALL_DATA) ./files/aodv-uu.modules $(1)/etc/modules.d/80-aodv-uu
+	$(INSTALL_DIR) $(1)/lib/modules/$(LINUX_VERSION)
 	$(CP) $(PKG_BUILD_DIR)/lnx/kaodv.$(LINUX_KMOD_SUFFIX) $(1)/lib/modules/$(LINUX_VERSION)/
 endef
 

@@ -67,7 +67,7 @@ define Build/UninstallDev
 endef
 
 define Package/id3lib/install
-	install -d -m0755 $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libid3-*.so.* $(1)/usr/lib/
 endef
 

@@ -56,9 +56,9 @@ define Build/Compile
 endef
 
 define Package/weechat/install	
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/weechat-curses $(1)/usr/bin/
-	install -d -m0755 $(1)/usr/lib/weechat/plugins
+	$(INSTALL_DIR) $(1)/usr/lib/weechat/plugins
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/weechat/plugins/lua.so* $(1)/usr/lib/weechat/plugins/
 endef
  

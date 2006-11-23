@@ -86,12 +86,12 @@ define Build/UninstallDev
 endef
 
 define Package/libjpeg/install
-	install -d -m0755 $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libjpeg.so.* $(1)/usr/lib/
 endef
 
 define Package/jpeg-tools/install
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/*jpeg* $(1)/usr/bin/
 endef
 
