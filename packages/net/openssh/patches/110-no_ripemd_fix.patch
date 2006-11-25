@@ -1,0 +1,13 @@
+--- openssh-4.4p1/mac.c.old	2006-11-25 22:59:32.000000000 +0100
++++ openssh-4.4p1/mac.c	2006-11-25 22:59:48.000000000 +0100
+@@ -51,8 +51,10 @@
+ 	{ "hmac-sha1-96",		EVP_sha1, 96 },
+ 	{ "hmac-md5",			EVP_md5, 0 },
+ 	{ "hmac-md5-96",		EVP_md5, 96 },
++#ifndef OPENSSL_NO_RIPEMD
+ 	{ "hmac-ripemd160",		EVP_ripemd160, 0 },
+ 	{ "hmac-ripemd160@openssh.com",	EVP_ripemd160, 0 },
++#endif
+ 	{ NULL,				NULL, 0 }
+ };
+ 
