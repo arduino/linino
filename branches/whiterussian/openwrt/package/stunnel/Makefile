@@ -43,6 +43,7 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  --sysconfdir=/etc \
 		  --with-random=/dev/urandom \
 		  --with-threads=fork \
+		  --with-ssl=$(STAGING_DIR)/usr \
 	);
 	touch $@
 

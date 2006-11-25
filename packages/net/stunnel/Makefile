@@ -30,6 +30,7 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--with-random=/dev/urandom \
 		--with-threads=fork \
+		--with-ssl=$(STAGING_DIR)/usr \
 	)
 endef
 
