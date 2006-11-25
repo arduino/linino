@@ -224,6 +224,8 @@ void start_watchdog(int skfd, char *ifname)
 	FILE *f;
 	unsigned char buf[8192], wdslist[8192], wbuf[80], *v, *p, *next, *tmp;
 	int i, j, wds = 0, c = 0, restart_wds = 0, wdstimeout = 0, infra;
+	int tsf_attack = 0;
+	unsigned int cur_tsf = 0;
 
 	if (fork())
 		return;
@@ -258,11 +260,70 @@ void start_watchdog(int skfd, char *ifname)
 		else
 			c = 0;
 
-		if (infra != 1)
+		/*
+		 * In adhoc mode it can be desirable to use a specific BSSID to prevent
+		 * accidental cell splitting caused by broken cards/drivers.
+		 * When wl0_bssid is set, make sure the current BSSID matches the one
+		 * set in nvram. If it doesn't change it and try to overpower the hostile
+		 * AP by increasing the upper 32 bit of the TSF by one every time.
+		 *
+		 * In client mode simply use that variable to connect to a specific AP
+		 */
+		if ((infra < 1) ||
+			nvram_match(wl_var("mode"), "sta") ||
+			nvram_match(wl_var("mode"), "wet")) {
+			rw_reg_t reg;
+
+			if (!(tmp = nvram_get(wl_var("bssid"))))
+				continue;
+
+			if (!ether_atoe(tmp, wbuf))
+				continue;
+
+			if ((bcom_ioctl(skfd, ifname, WLC_GET_BSSID, buf, 6) < 0) ||
+				(memcmp(buf, "\0\0\0\0\0\0", 6) == 0) ||
+				(memcmp(buf, wbuf, 6) != 0)) {
+			
+				if (bcom_ioctl(skfd, ifname, (infra < 1 ? WLC_SET_BSSID : WLC_REASSOC), wbuf, 6) < 0)
+					continue;
+
+				if (infra < 1) {
+					/* upper 32 bit of the TSF */
+					memset(&reg, 0, sizeof(reg));
+					reg.size = 4;
+					reg.byteoff = 0x184;
+					
+					bcom_ioctl(skfd, ifname, WLC_R_REG, &reg, sizeof(reg));
+
+					if (reg.val > cur_tsf)
+						cur_tsf = reg.val;
+					
+					cur_tsf |= 1;
+					cur_tsf <<=1;
+					reg.val = (cur_tsf == ~0 ? cur_tsf : cur_tsf + 1);
+					bcom_ioctl(skfd, ifname, WLC_W_REG, &reg, sizeof(reg));
+					
+					/* set the lower 32 bit as well */
+					reg.byteoff = 0x180;
+					bcom_ioctl(skfd, ifname, WLC_W_REG, &reg, sizeof(reg));
+					  
+					/* set the bssid again, just in case.. */
+					bcom_ioctl(skfd, ifname, WLC_SET_BSSID, wbuf, 6);
+					
+					/* reached the maximum, next time wrap around to (1 << 16)
+					 * instead of 0 */
+					if (cur_tsf == ~0)
+						cur_tsf = (1 << 16);
+				}
+			}
+		}
+
+		if (infra < 1)
 			continue;
 
 		if (nvram_match(wl_var("mode"), "sta") ||
 			nvram_match(wl_var("mode"), "wet")) {
+
 			i = 0;
 			if (bcom_ioctl(skfd, ifname, WLC_GET_BSSID, buf, 6) < 0) 
 				i = 1;
