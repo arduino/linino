@@ -28,6 +28,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <sys/ioctl.h>
+#include <sys/syscall.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <error.h>
@@ -41,6 +43,7 @@
 #include <string.h>
 
 #include <linux/mtd/mtd.h>
+#include <linux/reboot.h>
 
 #define TRX_MAGIC       0x30524448      /* "HDR0" */
 #define BUFSIZE (16 * 1024)
@@ -473,8 +476,9 @@ int main (int argc, char **argv)
 
 	sync();
 	
-	if (boot)
-		kill(1, 15); // send SIGTERM to init for reboot
-
+	if (boot) {
+		fflush(stdout);
+		syscall(SYS_reboot,LINUX_REBOOT_MAGIC1,LINUX_REBOOT_MAGIC2,LINUX_REBOOT_CMD_RESTART,NULL);
+	}
 	return 0;
 }
