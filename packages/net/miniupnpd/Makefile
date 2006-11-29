@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miniupnpd
-PKG_VERSION:=0.1
-PKG_RELEASE:=2
-PKG_MD5SUM:=4ba2a49c593d0c1088cc5791b8c6a985
+PKG_VERSION:=20061129
+PKG_RELEASE:=1
+PKG_MD5SUM:=1826c480e61e0573dfa1d835ee9d8802
 
-PKG_SOURCE_URL:=http://ftp.berlios.de/pub/xwrt/storage/
-PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://miniupnp.tuxfamily.org/files
+PKG_SOURCE:=$(PKG_NAME)$(PKG_VERSION).tar.gz
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
@@ -34,11 +34,6 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) -f Makefile.openwrt
-endef
-
-define Build/Clean
-	# remove the client dir since the build system doesnt know about it
-	rm -rf $(PKG_BUILD_DIR)/../miniupnpc
 endef
 
 define Package/miniupnpd/install
