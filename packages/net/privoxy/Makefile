@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/privoxy
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcre
+  DEPENDS:=+libpcre +libpthread
   TITLE:=web proxy with advanced filtering capabilities
   DESCRIPTION:=Privoxy is a web proxy with advanced filtering capabilities for\\\
 	protecting privacy, modifying web page content, managing cookies,\\\
@@ -76,8 +76,11 @@ define Build/Compile
 endef
 
 define Package/privoxy/install	
-	$(INSTALL_DIR) $(1)/usr/sbin $(1)/etc/privoxy 
+	$(INSTALL_DIR) $(1)/usr/sbin $(1)/etc/privoxy  $(1)/etc/init.d
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/privoxy $(1)/usr/sbin/
+	$(CP) ./files/$(PKG_NAME).config $(1)/etc/privoxy/config
+	$(CP) $(PKG_BUILD_DIR)/default.filter $(1)/etc/privoxy/
+	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
 endef
 
 $(eval $(call BuildPackage,privoxy))

@@ -1,0 +1,11 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+conf=/etc/privoxy/config
+
+start() {
+        /usr/sbin/privoxy $conf
+}
+
+stop() {
+        killall privoxy
+}
