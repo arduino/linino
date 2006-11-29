@@ -9,6 +9,7 @@ if [ "$upnpd_enabled" = "1" ]; then
 	# get bitspeed information, if provided
 	upnpd_up_bitspeed=$(nvram get upnpd_up_bitspeed)
 	upnpd_down_bitspeed=$(nvram get upnpd_down_bitspeed)
+	bitspeed_str=""
 	[ -n "$upnpd_up_bitspeed" ] && [ -n "$upnpd_down_bitspeed" ] && {
 		# covert to bytespeed
 		let upnpd_up_bytespeed=$upnpd_up_bitspeed*1024/8
@@ -17,9 +18,9 @@ if [ "$upnpd_enabled" = "1" ]; then
 	}
 	upnpd_log=$(nvram get upnpd_log_output)
 	if [ "$upnpd_log" = "1" ]; then
-		miniupnpd -i $(nvram get wan_ifname) -a $(nvram get lan_ipaddr) -p 5000 -U "$bitspeed_str" -d | logger -t miniupnpd &
+		miniupnpd -i $(nvram get wan_ifname) -a $(nvram get lan_ipaddr) -p 5000 -U $bitspeed_str -d | logger -t miniupnpd &
 	else
-		miniupnpd -i $(nvram get wan_ifname) -a $(nvram get lan_ipaddr) -p 5000 -U "$bitspeed_str"
+		miniupnpd -i $(nvram get wan_ifname) -a $(nvram get lan_ipaddr) -p 5000 -U $bitspeed_str
 	fi
 else
 	echo "miniupnpd service is disabled. Set nvram upnp_enabled to '1' to enable."
