@@ -103,6 +103,14 @@ nvram_default lan_proto static
 [  "$boardnum"  = "45" \
 -a "$boardtype" = "0x042f" ] && {
 	debug "### wl-500g premium hacks ###"
+	[ -z "$(nvram get lan_ifnames_t)" || {
+		# hasn't been remapped yet, revert the vlan1 config as well, because
+		# it defaults to "0 5u", which we can't use.
+		# use lan_ifnames_t as an indicator of whether the config was made
+		# by the original firmware.
+		nvram unset vlan1ports
+		nvram unset lan_ifnames_t
+	}
 	remap eth0.1 vlan0
 	remap eth0 vlan1
 
