@@ -113,6 +113,7 @@ nvram_default lan_proto static
 	}
 	remap eth0.1 vlan0
 	remap eth0 vlan1
+	remap eth1 eth2
 
 	nvram_default lan_ifnames "vlan0 eth2"
 	nvram_default wan_ifname "vlan1"
