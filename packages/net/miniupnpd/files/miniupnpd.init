@@ -1,14 +1,14 @@
-#!/bin/sh
-upnpd_enabled=$(nvram get upnp_enabled)
-if [ "$upnpd_enabled" = "1" ]; then
+#!/bin/sh /etc/rc.common
+START=95
+start() {
 	echo "miniupnpd starting ..."
 	iptables_flush.sh 2>&- >&-
 	killall miniupnpd 2>&-
 	iptables_removeall.sh 2>&- >&-
 	iptables_init.sh
 	# get bitspeed information, if provided
-	upnpd_up_bitspeed=$(nvram get upnpd_up_bitspeed)
-	upnpd_down_bitspeed=$(nvram get upnpd_down_bitspeed)
+	upnpd_up_bitspeed=$(uci get upnpd.general.up_bitspeed)
+	upnpd_down_bitspeed=$(uci get upnpd.general.down_bitspeed)
 	bitspeed_str=""
 	[ -n "$upnpd_up_bitspeed" ] && [ -n "$upnpd_down_bitspeed" ] && {
 		# covert to bytespeed
@@ -16,12 +16,15 @@ if [ "$upnpd_enabled" = "1" ]; then
 		let upnpd_down_bytespeed=$upnpd_down_bitspeed*1024/8
 		bitspeed_str="-B $upnpd_down_bytespeed $upnpd_up_bytespeed"
 	}
-	upnpd_log=$(nvram get upnpd_log_output)
+	upnpd_log=$(uci get upnpd.general.log_output)
 	if [ "$upnpd_log" = "1" ]; then
-		miniupnpd -i $(nvram get wan_ifname) -a $(nvram get lan_ipaddr) -p 5000 -U $bitspeed_str -d | logger -t miniupnpd &
+		miniupnpd -i $(uci get network.wan.ifname) -a $(uci get network.lan.ipaddr) -p 5000 -U $bitspeed_str -d | logger -t miniupnpd &
 	else
-		miniupnpd -i $(nvram get wan_ifname) -a $(nvram get lan_ipaddr) -p 5000 -U $bitspeed_str
+		miniupnpd -i $(uci get network.wan.ifname) -a $(uci get network.lan.ipaddr) -p 5000 -U $bitspeed_str
 	fi
-else
-	echo "miniupnpd service is disabled. Set nvram upnp_enabled to '1' to enable."
-fi
+}
+stop() {
+	iptables_flush.sh 2>&- >&-
+	killall miniupnpd 2>&-
+	iptables_removeall.sh 2>&- >&-
+}
