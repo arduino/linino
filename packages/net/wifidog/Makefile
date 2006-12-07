@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/wifidog
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+iptables-mod-extra +iptables-mod-ipopt
+  DEPENDS:=+iptables-mod-extra +iptables-mod-ipopt +iptables-mod-nat
   TITLE:=A wireless captive portal solution
   DESCRIPTION:=\
 	The Wifidog project is a complete and embeddable captive \\\
