@@ -40,6 +40,12 @@ define Package/squid
 	non-blocking, I/O-driven process.
 endef
 
+define Package/squid-mod-cachemgr
+  $(call Package/squid/Default)
+  DEPENDS:=squid
+  TITLE:=Web based proxy manager and reporting tool
+endef
+
 define Package/squid-mod-basic-auth-getpwnam
   $(call Package/squid/Default)
   DEPENDS:=squid
@@ -159,6 +165,13 @@ define Package/squid/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/squid/* $(1)/usr/share/squid/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/squid $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/lib/squid
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/squid/{unlinkd,pinger} $(1)/usr/lib/squid/
+endef
+
+define Package/squid-mod-cachemgr/install
+	$(INSTALL_DIR) $(1)/www/cgi-bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/squid/cachemgr.cgi $(1)/www/cgi-bin/
 endef
 
 define BuildPlugin
@@ -171,6 +184,7 @@ define BuildPlugin
 endef
 
 $(eval $(call BuildPackage,squid))
+$(eval $(call BuildPackage,squid-mod-cachemgr))
 $(eval $(call BuildPlugin,squid-mod-basic-auth-getpwnam,getpwname_auth))
 $(eval $(call BuildPlugin,squid-mod-basic-auth-ncsa,ncsa_auth))
 $(eval $(call BuildPlugin,squid-mod-basic-auth-smb,smb_auth))
