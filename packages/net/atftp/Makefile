@@ -32,13 +32,13 @@ endef
 
 define Package/atftp
   $(call Package/atftp/Default)
-  DEPENDS:=+libreadline +libpcre
+  DEPENDS:=+libreadline +libpcre +libncurses
   TITLE+= client
 endef
 
 define Package/atftpd
   $(call Package/atftp/Default)
-  DEPENDS:=+libreadline +libpcre
+  DEPENDS:=+libreadline +libpcre +libpthread
   TITLE+= server
 endef
 
