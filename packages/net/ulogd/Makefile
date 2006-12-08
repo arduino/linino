@@ -106,6 +106,12 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		CFLAGS="$(TARGET_CFLAGS) \
+			-Iinclude \
+			-I$(PKG_BUILD_DIR)/include/ulogd \
+			-I$(PKG_BUILD_DIR)/include \
+			-I$(PKG_BUILD_DIR)/libipulog/include \
+			-I$(STAGING_DIR)/usr/include" \
 		all install
 endef
 
