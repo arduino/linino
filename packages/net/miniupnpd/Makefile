@@ -9,15 +9,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miniupnpd
-PKG_VERSION:=20061129
+PKG_VERSION:=1.0-RC1
 PKG_RELEASE:=1
-PKG_MD5SUM:=1826c480e61e0573dfa1d835ee9d8802
+PKG_MD5SUM:=ab752eebbebcfa84178de0a4632d7688
 
 PKG_SOURCE_URL:=http://miniupnp.tuxfamily.org/files
-PKG_SOURCE:=$(PKG_NAME)$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_CAT:=zcat
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
@@ -32,18 +32,26 @@ define Package/miniupnpd
   URL:=http://miniupnp.tuxfamily.org/
 endef
 
+define Package/miniupnpd/postinst
+/etc/init.d/miniupnpd enable
+endef
+
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) -f Makefile.openwrt
+	$(MAKE) \
+		-C $(PKG_BUILD_DIR) \
+		-f Makefile.linux \
+		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS) -I $(STAGING_DIR)/usr/include" \
+		LIBS="$(STAGING_DIR)/usr/lib/libiptc.a"
 endef
 
 define Package/miniupnpd/install
-	$(INSTALL_DIR) $(1)/usr/bin $(1)/etc/init.d $(1)/etc/config $(1)/CONTROL
+	$(INSTALL_DIR) $(1)/usr/bin $(1)/etc/init.d $(1)/etc/config $(1)/etc/hotplug.d/iface
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/miniupnpd $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/linux/*.sh $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/miniupnpd.init $(1)/etc/init.d/miniupnpd
 	$(INSTALL_BIN) ./files/upnpd.config $(1)/etc/config/upnpd
-	$(INSTALL_BIN) ./ipkg/miniupnp.postinst $(1)/CONTROL/postinst
-	$(STRIP) $(1)/usr/bin/miniupnpd
+	$(INSTALL_DATA) ./files/miniupnpd.hotplug $(1)/etc/hotplug.d/iface/10-miniupnpd
 endef
 
 $(eval $(call BuildPackage,miniupnpd))
