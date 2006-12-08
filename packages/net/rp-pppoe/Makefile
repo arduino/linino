@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rp-pppoe
-PKG_VERSION:=3.5
+PKG_VERSION:=3.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://roaringpenguin.com/penguin/pppoe/
-PKG_MD5SUM:=97972f8f8f6a3ab9b7070333a6a29c4b
+PKG_MD5SUM:=0e32760f498f9cde44081ee6aafc823b
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -51,12 +51,15 @@ define Package/rp-pppoe-sniff
 endef
 
 define Build/Configure
-	$(call Build/Configure/Default,,, src)
+	$(call Build/Configure/Default,, \
+		ac_cv_path_PPPD=/usr/sbin/pppd, \
+		src \
+	)
 endef
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR)/src \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
+		RPM_INSTALL_ROOT="$(PKG_INSTALL_DIR)" \
 		all install
 endef
 
@@ -64,10 +67,9 @@ define Package/rp-pppoe-client/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/pppoe-client.init $(1)/etc/init.d/pppoe-client
 	$(INSTALL_DIR) $(1)/etc/ppp
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/pppoe.conf $(1)/etc/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/ppp/pppoe.conf $(1)/etc/ppp/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pppoe $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/adsl-* $(1)/usr/sbin/
 endef
 
 define Package/rp-pppoe-relay/install	
