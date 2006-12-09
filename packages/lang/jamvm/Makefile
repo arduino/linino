@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=jamvm
-PKG_VERSION:=1.4.1
+PKG_VERSION:=1.4.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/jamvm
-PKG_MD5SUM:=ed79d6b60e50b007614831f8c28321ac
+PKG_MD5SUM:=1b7bc9928c534412e062685a4191651d
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -40,6 +40,7 @@ endef
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-ffi \
+		--disable-int-threading \
 	)
 endef
 
