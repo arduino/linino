@@ -24,8 +24,8 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 include $(INCLUDE_DIR)/package.mk
 
 define Package/radvd
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=ipv6
+  CATEGORY:=IPv6
   TITLE:=IPv6 Routing Advertisement Daemon
   DESCRIPTION:=IPv6 Routing Advertisement Daemon.
   URL:=http://v6web.litech.org/radvd/
