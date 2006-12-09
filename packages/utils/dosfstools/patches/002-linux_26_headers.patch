@@ -1,0 +1,56 @@
+diff -urN dosfstools-2.11/dosfsck/common.h dosfstools-2.11.new/dosfsck/common.h
+--- dosfstools-2.11/dosfsck/common.h	2004-02-25 10:07:01.000000000 +0100
++++ dosfstools-2.11.new/dosfsck/common.h	2006-12-09 16:45:12.000000000 +0100
+@@ -4,9 +4,7 @@
+ 
+ #include <linux/version.h>
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 0)
+-# define __KERNEL__
+-# include <asm/types.h>
+-# undef __KERNEL__
++#include <linux/types.h>
+ # define MSDOS_FAT12 4084 /* maximum number of clusters in a 12 bit FAT */
+ #endif
+ 
+diff -urN dosfstools-2.11/dosfsck/file.c dosfstools-2.11.new/dosfsck/file.c
+--- dosfstools-2.11/dosfsck/file.c	2004-02-25 10:07:38.000000000 +0100
++++ dosfstools-2.11.new/dosfsck/file.c	2006-12-09 16:45:22.000000000 +0100
+@@ -18,9 +18,7 @@
+ 
+ #include <linux/version.h>
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 0)
+-# define __KERNEL__
+-# include <asm/types.h>
+-# undef __KERNEL__
++#include <linux/types.h>
+ #endif
+ 
+ #include <linux/msdos_fs.h>
+diff -urN dosfstools-2.11/dosfsck/io.c dosfstools-2.11.new/dosfsck/io.c
+--- dosfstools-2.11/dosfsck/io.c	2005-03-12 16:33:58.000000000 +0100
++++ dosfstools-2.11.new/dosfsck/io.c	2006-12-09 16:48:43.000000000 +0100
+@@ -19,6 +19,10 @@
+ #include <sys/ioctl.h>
+ #include <errno.h>
+ #include <fcntl.h>
++#include <linux/version.h>
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 0)
++#include <linux/types.h>
++#endif
+ #include <linux/fd.h>
+ 
+ #include "dosfsck.h"
+diff -urN dosfstools-2.11/mkdosfs/mkdosfs.c dosfstools-2.11.new/mkdosfs/mkdosfs.c
+--- dosfstools-2.11/mkdosfs/mkdosfs.c	2005-03-12 17:12:16.000000000 +0100
++++ dosfstools-2.11.new/mkdosfs/mkdosfs.c	2006-12-09 16:44:57.000000000 +0100
+@@ -68,9 +68,7 @@
+ 
+ #include <linux/version.h>
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 0)
+-# define __KERNEL__
+-# include <asm/types.h>
+-# undef __KERNEL__
++#include <linux/types.h>
+ #endif
+ 
+ #if __BYTE_ORDER == __BIG_ENDIAN
