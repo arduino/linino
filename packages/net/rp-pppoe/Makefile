@@ -13,7 +13,7 @@ PKG_VERSION:=3.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://roaringpenguin.com/penguin/pppoe/
+PKG_SOURCE_URL:=http://roaringpenguin.com/files/download
 PKG_MD5SUM:=0e32760f498f9cde44081ee6aafc823b
 PKG_CAT:=zcat
 
