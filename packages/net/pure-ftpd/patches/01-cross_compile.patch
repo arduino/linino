@@ -1,0 +1,110 @@
+--- pure-ftpd-1.0.21/configure	2006-02-19 15:33:05.000000000 +0100
++++ pure-ftpd-1.0.21.new/configure	2006-12-11 16:07:29.000000000 +0100
+@@ -9273,7 +9273,7 @@
+   if test "$cross_compiling" = yes; then
+   { { echo "$as_me:$LINENO: error: internal error: not reached in cross-compile" >&5
+ echo "$as_me: error: internal error: not reached in cross-compile" >&2;}
+-   { (exit 1); exit 1; }; }
++   }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+@@ -9679,7 +9679,7 @@
+   if test "$cross_compiling" = yes; then
+   { { echo "$as_me:$LINENO: error: internal error: not reached in cross-compile" >&5
+ echo "$as_me: error: internal error: not reached in cross-compile" >&2;}
+-   { (exit 1); exit 1; }; }
++   }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+@@ -10085,7 +10085,7 @@
+   if test "$cross_compiling" = yes; then
+   { { echo "$as_me:$LINENO: error: internal error: not reached in cross-compile" >&5
+ echo "$as_me: error: internal error: not reached in cross-compile" >&2;}
+-   { (exit 1); exit 1; }; }
++   }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+@@ -10491,7 +10491,7 @@
+   if test "$cross_compiling" = yes; then
+   { { echo "$as_me:$LINENO: error: internal error: not reached in cross-compile" >&5
+ echo "$as_me: error: internal error: not reached in cross-compile" >&2;}
+-   { (exit 1); exit 1; }; }
++   }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+@@ -10897,7 +10897,7 @@
+   if test "$cross_compiling" = yes; then
+   { { echo "$as_me:$LINENO: error: internal error: not reached in cross-compile" >&5
+ echo "$as_me: error: internal error: not reached in cross-compile" >&2;}
+-   { (exit 1); exit 1; }; }
++   }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+@@ -21379,7 +21379,7 @@
+ See \`config.log' for more details." >&5
+ echo "$as_me: error: cannot run test program while cross compiling
+ See \`config.log' for more details." >&2;}
+-   { (exit 1); exit 1; }; }
++   }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+@@ -21453,7 +21453,7 @@
+ See \`config.log' for more details." >&5
+ echo "$as_me: error: cannot run test program while cross compiling
+ See \`config.log' for more details." >&2;}
+-   { (exit 1); exit 1; }; }
++   }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+@@ -21521,7 +21521,7 @@
+ See \`config.log' for more details." >&5
+ echo "$as_me: error: cannot run test program while cross compiling
+ See \`config.log' for more details." >&2;}
+-   { (exit 1); exit 1; }; }
++   }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+@@ -21627,7 +21627,7 @@
+ See \`config.log' for more details." >&5
+ echo "$as_me: error: cannot run test program while cross compiling
+ See \`config.log' for more details." >&2;}
+-   { (exit 1); exit 1; }; }
++   }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+@@ -21696,7 +21696,7 @@
+ See \`config.log' for more details." >&5
+ echo "$as_me: error: cannot run test program while cross compiling
+ See \`config.log' for more details." >&2;}
+-   { (exit 1); exit 1; }; }
++   }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+@@ -22483,7 +22483,7 @@
+ See \`config.log' for more details." >&5
+ echo "$as_me: error: cannot run test program while cross compiling
+ See \`config.log' for more details." >&2;}
+-   { (exit 1); exit 1; }; }
++   }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+@@ -22886,7 +22886,7 @@
+ See \`config.log' for more details." >&5
+ echo "$as_me: error: cannot run test program while cross compiling
+ See \`config.log' for more details." >&2;}
+-   { (exit 1); exit 1; }; }
++   }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
