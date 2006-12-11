@@ -34,7 +34,8 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-	        CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" LDFLAGS="-lpthread" DEBUG=0
+	        CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		LDFLAGS="-lpthread" DEBUG=0
 endef
 
 define Package/aiccu/install
