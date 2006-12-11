@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/alsa-lib
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+kmod-alsa
+  DEPENDS:=+kmod-alsa @USB_SUPPORT
   TITLE:=ALSA (Advanced Linux Sound Architecture) library
   DESCRIPTION:=\
 	This is the library package for alsa, needed by some userspace programs. You must \\\
