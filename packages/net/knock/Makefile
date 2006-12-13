@@ -79,7 +79,7 @@ define Package/knock/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/knock $(1)/usr/bin/
 endef
 
-define Package/kockd/install
+define Package/knockd/install
 	$(INSTALL_DIR) $(1)/etc
 	install -m0600 $(PKG_INSTALL_DIR)/etc/knockd.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/sbin
