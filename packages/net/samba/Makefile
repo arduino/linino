@@ -37,6 +37,7 @@ endef
 define Package/samba-server
   $(call Package/samba)
   TITLE:=NetBIOS/SMB file and print server
+  DEPENDS:=+libgcc
 endef
 
 define Package/samba-client
