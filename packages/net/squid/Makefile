@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=squid
-PKG_VERSION:=2.5.STABLE13
+PKG_VERSION:=2.5.STABLE14
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.squid-cache.org/Versions/v2/2.5/
-PKG_MD5SUM:=3e64468e123be1246d17486dab6bee87
+PKG_MD5SUM:=f413e0b887a5f9b2a75350243ed5564c
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/squid/Default
   SECTION:=net
   CATEGORY:=Network
-  URL:=http://www.squid-cache.org
+  URL:=http://www.squid-cache.org/
 endef
 
 define Package/squid
@@ -38,6 +38,11 @@ define Package/squid
 	supporting FTP, gopher, and HTTP data objects. Unlike traditional \\\
 	caching software, Squid handles all requests in a single, \\\
 	non-blocking, I/O-driven process.
+endef
+
+define Package/squid/conffiles
+/etc/squid/mime.conf
+/etc/squid/squid.conf
 endef
 
 define Package/squid-mod-cachemgr
@@ -119,7 +124,6 @@ define Build/Configure
 		--sysconfdir=/etc/squid \
 		--enable-shared \
 		--enable-static \
-		--with-gnu-ld \
 		--enable-x-accelerator-vary \
 		--with-pthreads \
 		--with-dl \
@@ -157,6 +161,15 @@ define Build/Compile
 		all install
 endef
 
+define BuildPlugin
+  define Package/$(1)/install
+	$(INSTALL_DIR) $$(1)/usr/lib/squid
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/squid/$(2) $$(1)/usr/lib/squid/
+  endef
+
+  $$(eval $$(call BuildPackage,$(1)))
+endef
+
 define Package/squid/install	
 	$(INSTALL_DIR) $(1)/etc/squid
 	$(CP) $(PKG_INSTALL_DIR)/etc/squid/mime.conf $(1)/etc/squid/
@@ -172,15 +185,6 @@ endef
 define Package/squid-mod-cachemgr/install
 	$(INSTALL_DIR) $(1)/www/cgi-bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/squid/cachemgr.cgi $(1)/www/cgi-bin/
-endef
-
-define BuildPlugin
-  define Package/$(1)/install
-	$(INSTALL_DIR) $$(1)/usr/lib/squid
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/squid/$(2) $$(1)/usr/lib/squid/
-  endef
-
-  $$(eval $$(call BuildPackage,$(1)))
 endef
 
 $(eval $(call BuildPackage,squid))
