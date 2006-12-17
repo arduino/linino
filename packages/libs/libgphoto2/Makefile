@@ -47,7 +47,6 @@ define Build/Configure
 		--enable-shared \
 		--enable-static \
 		--disable-rpath \
-		--with-gnu-ld \
 		--with-drivers=all \
 		--without-included-ltdl \
 		--without-libiconv-prefix \
@@ -85,7 +84,8 @@ define Build/InstallDev
 endef
 
 define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/bin/gphoto2-config \
+	rm -rf \
+		$(STAGING_DIR)/usr/bin/gphoto2-config \
 		$(STAGING_DIR)/usr/bin/gphoto2-port-config \
 		$(STAGING_DIR)/usr/include/gphoto2* \
 		$(STAGING_DIR)/usr/lib/libgphoto*.{a,so*}
