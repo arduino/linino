@@ -49,6 +49,7 @@ config BR2_PACKAGE_IPTABLES_MOD_EXTRA
             * libipt_physdev
             * libipt_pkttype
             * libipt_recent
+	    * libipt_TARPIT
 
 config BR2_PACKAGE_IPTABLES_MOD_FILTER
 	tristate "iptables-mod-filter - Iptables extension for packet content inspection"
