@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=maradns
-PKG_VERSION:=1.2.07.2
+PKG_VERSION:=1.2.12.04
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.maradns.org/download/1.2/1.2.07.2/
-PKG_MD5SUM:=dc67f6a496e668127871382a40367733
+PKG_SOURCE_URL:=http://www.maradns.org/download/1.2/$(PKG_VERSION)/
+PKG_MD5SUM:=957b7772d22f30cb948def52eb6eaaf6
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
