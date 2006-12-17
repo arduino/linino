@@ -6,6 +6,10 @@ CP=cp -fpR
 MAKE1=make
 MAKEFLAGS=-j$(BR2_JLEVEL)
 
+INSTALL_BIN:=install -m0755
+INSTALL_DIR:=install -d -m0755
+INSTALL_DATA:=install -m0644
+
 # Strip off the annoying quoting
 ARCH:=$(strip $(subst ",, $(BR2_ARCH)))
 #"
