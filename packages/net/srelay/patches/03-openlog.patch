@@ -1,0 +1,20 @@
+diff -Naurp srelay-0.4.6.orig/main.c srelay-0.4.6/main.c
+--- srelay-0.4.6.orig/main.c    2006-12-13 22:58:39.000000000 +0100
++++ srelay-0.4.6/main.c 2006-12-13 23:02:59.000000000 +0100
+@@ -33,6 +33,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DA
+ */
+ 
+ #include <sys/stat.h>
++#include <syslog.h>
+ #include "srelay.h"
+ 
+ /* prototypes */
+@@ -125,6 +126,8 @@ int main(int ac, char **av)
+ 
+   uid = getuid();
+ 
++  openlog("srelay", LOG_PID, LOG_DAEMON);
++
+   while((ch = getopt(ac, av, "a:c:i:m:o:p:u:frstbvh?")) != -1)
+     switch (ch) {
+     case 'a':
