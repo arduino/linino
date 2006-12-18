@@ -45,8 +45,7 @@ define Build/Configure
 endef
 
 define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR)/src \
-              $(TARGET_CONFIGURE_OPTS)
+	$(MAKE) -C $(PKG_BUILD_DIR) all
 endef
 
 define Package/jamvm/install	
