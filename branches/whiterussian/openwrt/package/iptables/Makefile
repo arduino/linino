@@ -109,11 +109,13 @@ $(IPKG_IP6TABLES):
 
 $(STAGING_DIR)/usr/lib/libipq.a: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include
+	$(CP) $(PKG_BUILD_DIR)/include/iptables{,_common}.h $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libipq.h $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_BUILD_DIR)/include/libiptc $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libipq.a $(STAGING_DIR)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiptc.a $(STAGING_DIR)/usr/lib/
+	$(SED) 's|/usr/local/lib/iptables|/usr/lib/iptables|g' $(STAGING_DIR)/usr/include/iptables.h
 
 layer7-install:
 	mkdir -p $(IDIR_IPTABLES_MOD_FILTER)/etc/l7-protocols
@@ -122,6 +124,7 @@ layer7-install:
 install-dev: $(STAGING_DIR)/usr/lib/libipq.a
 
 uninstall-dev:
+	rm -rf $(STAGING_DIR)/usr/include/iptables{,_common}.h
 	rm -rf $(STAGING_DIR)/usr/include/libipq.h
 	rm -rf $(STAGING_DIR)/usr/include/libiptc
 	rm -rf $(STAGING_DIR)/usr/lib/libipq.a
