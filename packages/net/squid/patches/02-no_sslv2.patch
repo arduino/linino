@@ -1,0 +1,16 @@
+diff -ruN squid-2.5.STABLE14-old/src/ssl_support.c squid-2.5.STABLE14-new/src/ssl_support.c
+--- squid-2.5.STABLE14-old/src/ssl_support.c	2003-12-11 08:53:11.000000000 +0100
++++ squid-2.5.STABLE14-new/src/ssl_support.c	2006-12-17 18:23:57.000000000 +0100
+@@ -291,10 +291,12 @@
+ 
+     debug(83, 1) ("Initialising SSL.\n");
+     switch (version) {
++#ifndef OPENSSL_NO_SSL2
+     case 2:
+ 	debug(83, 5) ("Using SSLv2.\n");
+ 	method = SSLv2_server_method();
+ 	break;
++#endif
+     case 3:
+ 	debug(83, 5) ("Using SSLv3.\n");
+ 	method = SSLv3_server_method();
