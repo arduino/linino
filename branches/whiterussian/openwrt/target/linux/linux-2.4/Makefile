@@ -81,7 +81,7 @@ $(eval $(call KMOD_template,IPT_NAT_DEFAULT,ipt-nat-default,\
 ,,,10,$(IPT_NAT_DEFAULT-m)))
 $(eval $(call KMOD_template,IPT_NAT,ipt-nat,\
 	$(foreach mod,$(IPT_NAT-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
-,,,20,$(IPT_NAT_DEFAULT-m)))
+,,,20,$(IPT_NAT-m)))
 $(eval $(call KMOD_template,IPT_NAT_H323,ipt-nat-h323,\
 	$(foreach mod,$(IPT_NAT_H323-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
 ,,,40,$(IPT_NAT_H323-m)))
