@@ -14,9 +14,12 @@ for T in filter nat; do
 done
 
 iptables -N input_rule
+iptables -N input_wan
 iptables -N output_rule
 iptables -N forwarding_rule
+iptables -N forwarding_wan
 
+iptables -t nat -N prerouting_wan
 iptables -t nat -N prerouting_rule
 iptables -t nat -N postrouting_rule
 
@@ -38,6 +41,7 @@ iptables -A LAN_ACCEPT -j ACCEPT
   # insert accept rule or to jump to new accept-check table here
   #
   iptables -A INPUT -j input_rule
+  iptables -A INPUT -i $WAN -j input_wan
 
   # allow
   iptables -A INPUT -j LAN_ACCEPT	# allow from lan/wifi interfaces 
@@ -81,6 +85,7 @@ iptables -A LAN_ACCEPT -j ACCEPT
   # insert accept rule or to jump to new accept-check table here
   #
   iptables -A FORWARD -j forwarding_rule
+  iptables -A FORWARD -i $WAN -j forwarding_wan
 
   # allow
   iptables -A FORWARD -i br0 -o br0 -j ACCEPT
@@ -91,6 +96,8 @@ iptables -A LAN_ACCEPT -j ACCEPT
 
 ### MASQ
   iptables -t nat -A PREROUTING -j prerouting_rule
+  iptables -t nat -A PREROUTING -i $WAN -j prerouting_wan
+
   iptables -t nat -A POSTROUTING -j postrouting_rule
   iptables -t nat -A POSTROUTING -o $WAN -j MASQUERADE
 
