@@ -44,6 +44,13 @@ do_ifup() {
 		$DEBUG ifconfig $if $ip ${netmask:+netmask $netmask} ${mtu:+mtu $(($mtu))} broadcast + up
 		${gateway:+$DEBUG route add default gw $gateway}
 
+		[ -f /tmp/resolv.conf.auto ] || {
+			debug "# --- creating /tmp/resolv.conf.auto ---"
+			for dns in $(nvram get ${2}_dns); do
+				echo "nameserver $dns" >> /tmp/resolv.conf.auto
+			done
+		}
+		
 		[ -n "$static_route" ] && {
 			for route in $static_route; do {
 			eval "set $(echo $route | sed 's/:/ /g')"
@@ -54,13 +61,6 @@ do_ifup() {
 			} done
 		}
 
-		[ -f /tmp/resolv.conf.auto ] || {
-			debug "# --- creating /tmp/resolv.conf.auto ---"
-			for dns in $(nvram get ${2}_dns); do
-				echo "nameserver $dns" >> /tmp/resolv.conf.auto
-			done
-		}
-		
 		env -i ACTION="ifup" INTERFACE="${2}" PROTO=static /sbin/hotplug "iface" &
 	;;
 	dhcp*)
