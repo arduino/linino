@@ -211,7 +211,7 @@ $(eval $(call KMOD_template,VFAT,vfat,\
 ,CONFIG_VFAT_FS,,30,fat vfat))
 $(eval $(call KMOD_template,MSDOS,msdos,\
 	$(MODULES_DIR)/kernel/fs/msdos/msdos.o \
-,CONFIG_MSDOS_FS,,30,msdos))
+,CONFIG_MSDOS_FS,,40,msdos))
 $(eval $(call KMOD_template,NLS_CP437,nls-cp437,\
 	$(MODULES_DIR)/kernel/fs/nls/nls_cp437.o \
 ,CONFIG_NLS_CODEPAGE_437,,40,nls_cp437.o))
