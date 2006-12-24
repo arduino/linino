@@ -1,0 +1,15 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+START=60
+start() {
+	include /lib/network
+	scan_interfaces
+	config_get domain "$domain" domain
+	config_get dns_next_server "$dns_next_server" dns_next_server
+	nstxcd $domain $dns_next_server
+}
+
+stop() {
+	killall nstxcd
+}
