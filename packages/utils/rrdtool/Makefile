@@ -31,7 +31,7 @@ endef
 
 define Package/librrd
   $(call Package/rrd)
-  DEPENDS:=+libart +libfreetype +libpng +zlib
+  DEPENDS:=+libart +libfreetype +libpng +zlib +libnotimpl
   SECTION:=libs
   CATEGORY:=Utilities
   TITLE:=Round Robin Database (RRD) management library (v1.2.x)
