@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lua
-PKG_VERSION:=5.0.2
+PKG_VERSION:=5.1.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -17,7 +17,7 @@ PKG_SOURCE_URL:=http://www.lua.org/ftp/ \
 	http://ftp.gwdg.de/pub/languages/lua/ \
 	http://mirrors.dotsrc.org/lua/ \
 	http://www.tecgraf.puc-rio.br/lua/ftp/
-PKG_MD5SUM:= dea74646b7e5c621fef7174df83c34b1
+PKG_MD5SUM:=22f4f912f20802c11006fe9b84d5c461
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -48,7 +48,7 @@ endef
 
 define Package/lua
   $(call Package/lua/Default)
-  DEPENDS:=+liblua
+  DEPENDS:=+liblua +libreadline +libncurses
   TITLE+= (interpreter)
   DESCRIPTION+=\\\
 	\\\
@@ -85,7 +85,8 @@ define Build/Compile
 		INSTALL_ROOT=/usr \
 		MYCFLAGS="-I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
 		MYLDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-		all so
+		PKG_VERSION=$(PKG_VERSION) \
+		all linux 
 	# remove statically linked binaries, so that they will get linked against shlib this time
 	rm -f $(PKG_BUILD_DIR)/bin/lua{,c}
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -96,12 +97,12 @@ define Build/Compile
 		INSTALL_ROOT=/usr \
 		MYCFLAGS="-I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
 		MYLDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-		all
+		all linux
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		INSTALL_ROOT="$(PKG_INSTALL_DIR)/usr" \
-		install soinstall
+		INSTALL_TOP="$(PKG_INSTALL_DIR)/usr" \
+		install
 endef
 
 define Build/InstallDev
