@@ -145,6 +145,9 @@ $(eval $(call KMOD_template,USB,usb-core,\
 $(eval $(call KMOD_template,USB_UHCI,usb-uhci,\
 	$(MODULES_DIR)/kernel/drivers/usb/host/uhci.o \
 ,CONFIG_USB_UHCI_ALT,kmod-usb-core,60,uhci))
+$(eval $(call KMOD_template,USB_UHCI,usb-uhci-iv,\
+	$(MODULES_DIR)/kernel/drivers/usb/host/usb-uhci.o \
+,CONFIG_USB_UHCI,kmod-usb-core,60,usb-uhci-iv)) 
 $(eval $(call KMOD_template,USB_OHCI,usb-ohci,\
 	$(MODULES_DIR)/kernel/drivers/usb/host/usb-ohci.o \
 ,CONFIG_USB_OHCI,kmod-usb-core,60,usb-ohci))
