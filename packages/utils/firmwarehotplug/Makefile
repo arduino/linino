@@ -48,6 +48,8 @@ endef
 
 $(eval $(call BuildPackage,firmwarehotplug))
 
-$(eval $(call RequireCommand,sdcc, \
-      	$(PKG_NAME) requires sdcc. \
-))
+$(foreach command, sdcc sgml2html, \
+  $(eval $(call RequireCommand,$(command), \
+   $(PKG_NAME) requires $(command). \
+  )) \
+)
