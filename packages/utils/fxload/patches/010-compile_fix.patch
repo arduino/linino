@@ -1,0 +1,18 @@
+--- fxload-2002_04_11/ezusb.c.old	2006-12-18 18:51:26.000000000 -0700
++++ fxload-2002_04_11/ezusb.c	2006-12-18 18:51:59.000000000 -0700
+@@ -29,8 +29,14 @@
+ # include  <sys/ioctl.h>
+ 
+ # include  <linux/version.h>
+-# include  <linux/usb.h>
++typedef unsigned long kernel_ulong_t;
++
++#ifndef BITS_PER_LONG
++#define BITS_PER_LONG 32
++#endif
++
+ # include  <linux/usbdevice_fs.h>
++# include  <linux/usb.h>
+ 
+ # include "ezusb.h"
+ 
