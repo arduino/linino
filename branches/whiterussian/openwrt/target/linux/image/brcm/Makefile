@@ -54,7 +54,10 @@ FSNAME:=$(patsubst jffs2-%,jffs2,$(FS))
 $(BIN_DIR)/openwrt-wr850g-$(FS).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
 	$(STAGING_DIR)/bin/motorola-bin -1 $< $@
 
-install: $(BIN_DIR)/openwrt-wr850g-$(FS).bin
+$(BIN_DIR)/openwrt-usr5461-$(FS).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
+	$(STAGING_DIR)/bin/trx2usr $< $@
+
+install: $(BIN_DIR)/openwrt-wr850g-$(FS).bin $(BIN_DIR)/openwrt-usr5461-$(FS).bin
 
 ifneq ($(FS),jffs2-8MB)
 $(BIN_DIR)/openwrt-wrt54g3g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
