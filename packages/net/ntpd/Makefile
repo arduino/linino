@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ntp
-PKG_VERSION:=4.2.2p4
+PKG_VERSION:=4.2.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/
-PKG_MD5SUM:=916fe57525f8327f340b203f129088fa
+PKG_MD5SUM:=eb9147d26cbe18bd8fbec07f1df55aef
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
