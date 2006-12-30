@@ -1,0 +1,40 @@
+diff -Nru asterisk-1.2.14.org/channels/Makefile asterisk-1.2.14/channels/Makefile
+--- asterisk-1.2.14.org/channels/Makefile	2006-08-17 23:57:19.000000000 +0200
++++ asterisk-1.2.14/channels/Makefile	2006-12-27 09:12:28.000000000 +0100
+@@ -110,7 +110,7 @@
+ endif
+ 
+ ifndef WITHOUT_ZAPTEL
+-ifneq ($(wildcard $(CROSS_COMPILE_TARGET)/usr/include/linux/zaptel.h)$(wildcard $(CROSS_COMPILE_TARGET)/usr/local/include/zaptel.h)$(wildcard $(CROSS_COMPILE_TARGET)/usr/pkg/include/zaptel.h),)
++ifneq ($(wildcard $(STAGING_DIR)/usr/include/linux/zaptel.h)$(wildcard $(CROSS_COMPILE_TARGET)/usr/local/include/zaptel.h)$(wildcard $(CROSS_COMPILE_TARGET)/usr/pkg/include/zaptel.h),)
+   ifeq (${OSARCH},NetBSD)
+     SOLINK+=-L$(CROSS_COMPILE_TARGET)/usr/pkg/lib
+   endif
+@@ -151,6 +151,9 @@
+ 
+ #CFLAGS+=$(shell [ -f $(ZAPDIR)/libzap.a ] && echo "-I$(ZAPDIR)")
+ 
++CFLAGS += $(EXTRA_CFLAGS)
++CHANNEL_LIBS += $(EXTRA_CHAN_MODULES)
++
+ all: depend $(CHANNEL_LIBS) 
+ 
+ clean:
+@@ -158,7 +161,7 @@
+ 	rm -f busy.h ringtone.h gentone gentone-ulaw
+ 
+ %.so : %.o
+-	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} $< ${CYGSOLIB} ${LIBS}
++	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} $< ${CYGSOLIB}
+ 
+ ifneq ($(wildcard .depend),)
+   include .depend
+@@ -204,7 +207,7 @@
+ 	$(CC) -c $(CFLAGS) -o chan_zap.o chan_zap.c
+ 
+ chan_zap.so: chan_zap.o
+-	$(CC) $(SOLINK) -o $@ $<  $(ZAPPRI) $(ZAPR2) -ltonezone
++	$(CC) $(SOLINK) -o $@ $<  $(ZAPPRI) $(ZAPR2) $(EXTRA_LDFLAGS) -ltonezone
+ 
+ chan_sip.so: chan_sip.o
+ 	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} chan_sip.o ${CYGSOLIB}

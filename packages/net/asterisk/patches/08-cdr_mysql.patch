@@ -1,31 +1,6 @@
-diff -ruN asterisk-1.2.0-old/configs/cdr_mysql.conf.sample asterisk-1.2.0-new/configs/cdr_mysql.conf.sample
---- asterisk-1.2.0-old/configs/cdr_mysql.conf.sample	1970-01-01 01:00:00.000000000 +0100
-+++ asterisk-1.2.0-new/configs/cdr_mysql.conf.sample	2005-01-21 02:43:20.000000000 +0100
-@@ -0,0 +1,21 @@
-+;
-+; Note - if the database server is hosted on the same machine as the
-+; asterisk server, you can achieve a local Unix socket connection by
-+; setting hostname=localhost
-+;
-+; port and sock are both optional parameters.  If hostname is specified
-+; and is not "localhost", then cdr_mysql will attempt to connect to the
-+; port specified or use the default port.  If hostname is not specified
-+; or if hostname is "localhost", then cdr_mysql will attempt to connect
-+; to the socket file specified by sock or otherwise use the default socket
-+; file.
-+;
-+;[global]
-+;hostname=database.host.name
-+;dbname=asteriskcdrdb
-+;table=cdr
-+;password=password 
-+;user=asteriskcdruser
-+;port=3306
-+;sock=/tmp/mysql.sock
-+;userfield=1
-diff -ruN asterisk-1.2.0-old/cdr/cdr_mysql.c asterisk-1.2.0-new/cdr/cdr_mysql.c
---- asterisk-1.2.0-old/cdr/cdr_mysql.c	1970-01-01 01:00:00.000000000 +0100
-+++ asterisk-1.2.0-new/cdr/cdr_mysql.c	2005-12-04 20:10:59.000000000 +0100
+diff -Nru asterisk-1.2.14.org/cdr/cdr_mysql.c asterisk-1.2.14/cdr/cdr_mysql.c
+--- asterisk-1.2.14.org/cdr/cdr_mysql.c	1970-01-01 01:00:00.000000000 +0100
++++ asterisk-1.2.14/cdr/cdr_mysql.c	2006-12-27 09:02:18.000000000 +0100
 @@ -0,0 +1,493 @@
 +/*
 + * Asterisk -- A telephony toolkit for Linux.
@@ -520,3 +495,28 @@ diff -ruN asterisk-1.2.0-old/cdr/cdr_mysql.c asterisk-1.2.0-new/cdr/cdr_mysql.c
 +{
 +	return ASTERISK_GPL_KEY;
 +}
+diff -Nru asterisk-1.2.14.org/configs/cdr_mysql.conf.sample asterisk-1.2.14/configs/cdr_mysql.conf.sample
+--- asterisk-1.2.14.org/configs/cdr_mysql.conf.sample	1970-01-01 01:00:00.000000000 +0100
++++ asterisk-1.2.14/configs/cdr_mysql.conf.sample	2006-12-27 09:02:18.000000000 +0100
+@@ -0,0 +1,21 @@
++;
++; Note - if the database server is hosted on the same machine as the
++; asterisk server, you can achieve a local Unix socket connection by
++; setting hostname=localhost
++;
++; port and sock are both optional parameters.  If hostname is specified
++; and is not "localhost", then cdr_mysql will attempt to connect to the
++; port specified or use the default port.  If hostname is not specified
++; or if hostname is "localhost", then cdr_mysql will attempt to connect
++; to the socket file specified by sock or otherwise use the default socket
++; file.
++;
++;[global]
++;hostname=database.host.name
++;dbname=asteriskcdrdb
++;table=cdr
++;password=password 
++;user=asteriskcdruser
++;port=3306
++;sock=/tmp/mysql.sock
++;userfield=1

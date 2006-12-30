@@ -1,24 +1,7 @@
-diff -ruN asterisk-1.0.9-old/channels/Makefile asterisk-1.0.9-new/channels/Makefile
---- asterisk-1.0.9-old/channels/Makefile	2005-08-22 20:42:22.000000000 +0200
-+++ asterisk-1.0.9-new/channels/Makefile	2005-08-22 21:12:14.000000000 +0200
-@@ -202,6 +202,13 @@
- chan_h323.so: chan_h323.o h323/libchanh323.a
- 	$(CC) $(SOLINK) -o $@ $< h323/libchanh323.a $(CHANH323LIB) -L$(PWLIBDIR)/lib $(PTLIB) -L$(OPENH323DIR)/lib $(H323LIB) -L/usr/lib -lcrypto -lssl -lexpat
- 
-+#
-+# Asterisk Bluetooth Support
-+# http://www.crazygreek.co.uk/content/chan_bluetooth
-+#
-+chan_bluetooth.so: chan_bluetooth.o
-+	$(CC) $(SOLINK) -o $@ $< $(EXTRA_LDFLAGS) -lbluetooth
-+
- 
- #chan_modem.so : chan_modem.o
- #	$(CC) -rdynamic -shared -Xlinker -x -o $@ $<
-diff -ruN asterisk-1.0.9-old/channels/chan_bluetooth.c asterisk-1.0.9-new/channels/chan_bluetooth.c
---- asterisk-1.0.9-old/channels/chan_bluetooth.c	1970-01-01 01:00:00.000000000 +0100
-+++ asterisk-1.0.9-new/channels/chan_bluetooth.c	2005-09-06 22:51:30.000000000 +0200
-@@ -0,0 +1,3598 @@
+diff -Nru asterisk-1.2.14.org/channels/chan_bluetooth.c asterisk-1.2.14/channels/chan_bluetooth.c
+--- asterisk-1.2.14.org/channels/chan_bluetooth.c	1970-01-01 01:00:00.000000000 +0100
++++ asterisk-1.2.14/channels/chan_bluetooth.c	2006-12-27 09:04:03.000000000 +0100
+@@ -0,0 +1,3599 @@
 +/*
 + * Asterisk -- A telephony toolkit for Linux.
 + *
@@ -125,6 +108,7 @@ diff -ruN asterisk-1.0.9-old/channels/chan_bluetooth.c asterisk-1.0.9-new/channe
 +#include <asterisk/options.h>
 +#include <asterisk/cli.h>
 +#include <asterisk/callerid.h>
++#include <asterisk/version.h>
 +#include <sys/socket.h>
 +#include <sys/signal.h>
 +#include <sys/time.h>
@@ -3153,7 +3137,7 @@ diff -ruN asterisk-1.0.9-old/channels/chan_bluetooth.c asterisk-1.0.9-new/channe
 +  struct ast_variable * v;
 +  char * cat;
 +
-+  cfg = ast_load(BLT_CONFIG_FILE);
++  cfg = ast_config_load(BLT_CONFIG_FILE);
 +
 +  if (!cfg) {
 +    ast_log(LOG_NOTICE, "Unable to load Bluetooth config: %s.  Bluetooth disabled\n", BLT_CONFIG_FILE);
@@ -3617,9 +3601,26 @@ diff -ruN asterisk-1.0.9-old/channels/chan_bluetooth.c asterisk-1.0.9-new/channe
 +}
 +
 +
-diff -ruN asterisk-1.0.9-old/configs/bluetooth.conf asterisk-1.0.9-new/configs/bluetooth.conf
---- asterisk-1.0.9-old/configs/bluetooth.conf	1970-01-01 01:00:00.000000000 +0100
-+++ asterisk-1.0.9-new/configs/bluetooth.conf	2005-09-06 22:51:38.000000000 +0200
+diff -Nru asterisk-1.2.14.org/channels/Makefile asterisk-1.2.14/channels/Makefile
+--- asterisk-1.2.14.org/channels/Makefile	2006-08-17 23:57:19.000000000 +0200
++++ asterisk-1.2.14/channels/Makefile	2006-12-27 09:03:53.000000000 +0100
+@@ -249,6 +249,13 @@
+ #chan_modem.so : chan_modem.o
+ #	$(CC) -rdynamic -shared -Xlinker -x -o $@ $<
+ 
++#
++# Asterisk Bluetooth Support
++# http://www.crazygreek.co.uk/content/chan_bluetooth
++#
++chan_bluetooth.so: chan_bluetooth.o
++	$(CC) $(SOLINK) -o $@ $< $(EXTRA_LDFLAGS) -lbluetooth
++
+ install: all
+ 	for x in $(CHANNEL_LIBS); do $(INSTALL) -m 755 $$x $(DESTDIR)$(MODULES_DIR) ; done
+ 	if ! [ -f chan_iax.so ]; then rm -f $(DESTDIR)$(MODULES_DIR)/chan_iax.so ; fi
+diff -Nru asterisk-1.2.14.org/configs/bluetooth.conf asterisk-1.2.14/configs/bluetooth.conf
+--- asterisk-1.2.14.org/configs/bluetooth.conf	1970-01-01 01:00:00.000000000 +0100
++++ asterisk-1.2.14/configs/bluetooth.conf	2006-12-27 09:03:53.000000000 +0100
 @@ -0,0 +1,46 @@
 +[general]
 +; Channel we listen on as a HS (Headset)

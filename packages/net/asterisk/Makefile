@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
-PKG_VERSION:=1.2.1
+PKG_VERSION:=1.2.14
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.digium.com/pub/asterisk/old-releases/ ftp://ftp.digium.com/pub/asterisk/old-releases/
-PKG_MD5SUM:=04657086791e80f319c0d728af705001
+PKG_MD5SUM:=2ce03466b99e0b9471e6c791ed14a5f2
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -31,13 +31,13 @@ define Package/asterisk/Default
 	protocols, and can interoperate with almost all standards-based telephony \\\
 	equipment using relatively inexpensive hardware.
   URL:=http://www.asterisk.org/
+  SUBMENU:=asterisk (Complete Open Source PBX)
 endef
 
 define Package/asterisk
   $(call Package/asterisk/Default)
   DEPENDS:=+libncurses +libpthread
-  TITLE:=Complete open source PBX
-  MENU:=1
+  TITLE:=Complete Open Source PBX
 endef
 
 define Package/asterisk/conffiles
@@ -66,11 +66,13 @@ endef
 
 define Package/asterisk-mini
   $(call Package/asterisk/Default)
-  DEPENDS:=asterisk
-  TITLE:=Minimal open source PBX
+  DEPENDS:=+libncurses +libpthread
+  PROVIDES:=asterisk
+  TITLE:=Minimal Open Source PBX
   DESCRIPTION+=\\\
 	\\\
 	This package contains only the following modules: \\\
+        - app_dial\\\
     	- chan_iax2\\\
     	- chan_local\\\
     	- chan_sip\\\
@@ -99,6 +101,78 @@ define Package/asterisk-mini/conffiles
 /etc/asterisk/musiconhold.conf
 /etc/asterisk/rtp.conf
 /etc/asterisk/sip.conf
+endef
+
+define Package/asterisk-mysql
+  $(call Package/asterisk/Default)
+  DEPENDS:=asterisk +libmysqlclient
+  TITLE:=MySQL support
+  DESCRIPTION+=\\\
+	\\\
+	This package contains MySQL support modules for Asterisk.
+endef
+
+define Package/asterisk-mysql/conffiles
+/etc/asterisk/cdr_mysql.conf
+endef
+
+define Package/asterisk-pgsql
+  $(call Package/asterisk/Default)
+  DEPENDS:=asterisk +libpq
+  TITLE:=PostgreSQL support
+  DESCRIPTION+=\\\
+	\\\
+	This package contains PostgreSQL support modules for Asterisk.
+endef
+
+define Package/asterisk-pgsql/conffiles
+/etc/asterisk/cdr_pgsql.conf
+endef
+
+define Package/asterisk-sqlite
+  $(call Package/asterisk/Default)
+  DEPENDS:=asterisk +libsqlite2
+  TITLE:=SQLite modules
+  DESCRIPTION+=\\\
+	\\\
+	This package contains SQLite support modules for Asterisk.
+endef
+
+define Package/asterisk-sounds
+  $(call Package/asterisk)
+  MENU:=0
+  DEPENDS:=asterisk
+  TITLE:=Sound files
+  DESCRIPTION+=\\\
+    \\\
+    This package contains sound files for Asterisk.
+endef
+
+define Package/asterisk-voicemail
+  $(call Package/asterisk/Default)
+  DEPENDS:=asterisk
+  TITLE:=Voicemail support
+  DESCRIPTION+=\\\
+	\\\
+	This package contains voicemail related modules for Asterisk.
+endef
+
+define Package/asterisk-voicemail/conffiles
+/etc/asterisk/voicemail.conf
+endef
+
+define Package/asterisk-app-meetme
+  $(call Package/asterisk/Default)
+  DEPENDS:=asterisk +zaptel-libtonezone
+  TITLE:=MeetMe Confererencing support
+  DESCRIPTION+=\\\
+        \\\
+        This package provides the application MeetMe and conferencing support to \\\
+        Asterisk.
+endef
+
+define Package/asterisk-app-meetme/conffiles
+/etc/asterisk/meetme.conf
 endef
 
 define Package/asterisk-chan-bluetooth
@@ -209,72 +283,27 @@ define Package/asterisk-res-agi
 	Asterisk.
 endef
 
-define Package/asterisk-mysql
+define Package/asterisk-res-crypto
   $(call Package/asterisk/Default)
-  DEPENDS:=asterisk +libmysqlclient
-  TITLE:=MySQL support
+  DEPENDS:=asterisk +libopenssl
+  TITLE:=Cryptographic Digital Signatures support
   DESCRIPTION+=\\\
-	\\\
-	This package contains MySQL support modules for Asterisk.
+        \\\
+        This package provides Cryptographic Digital Signatures support to \\\
+        Asterisk.
 endef
 
-define Package/asterisk-mysql/conffiles
-/etc/asterisk/cdr_mysql.conf
-endef
-
-define Package/asterisk-pgsql
-  $(call Package/asterisk/Default)
-  DEPENDS:=asterisk +libpq
-  TITLE:=PostgreSQL support
-  DESCRIPTION+=\\\
-	\\\
-	This package contains PostgreSQL support modules for Asterisk.
-endef
-
-define Package/asterisk-pgsql/conffiles
-/etc/asterisk/cdr_pgsql.conf
-endef
-
-define Package/asterisk-sqlite
-  $(call Package/asterisk/Default)
-  DEPENDS:=asterisk +libsqlite2
-  TITLE:=SQLite modules
-  DESCRIPTION+=\\\
-	\\\
-	This package contains SQLite support modules for Asterisk.
-endef
-
-define Package/asterisk-sounds
-  $(call Package/asterisk)
-  MENU:=0
-  DEPENDS:=asterisk
-  TITLE:=Sound files
-  DESCRIPTION+=\\\
-    \\\
-    This package contains sound files for Asterisk.
-endef
-
-define Package/asterisk-voicemail
-  $(call Package/asterisk/Default)
-  DEPENDS:=asterisk
-  TITLE:=Voicemail support
-  DESCRIPTION+=\\\
-	\\\
-	This package contains voicemail related modules for Asterisk.
-endef
-
-define Package/asterisk-voicemail/conffiles
-/etc/asterisk/voicemail.conf
-endef
 
 ifneq ($(SDK),)
 # Make sure the options below are enabled when building with the SDK
   CONFIG_PACKAGE_asterisk-mysql:=m
   CONFIG_PACKAGE_asterisk-pgsql:=m
   CONFIG_PACKAGE_asterisk-sqlite:=m
+  CONFIG_PACKAGE_asterisk-app-meetme:=m
   CONFIG_PACKAGE_asterisk-chan-bluetooth:=m
   CONFIG_PACKAGE_asterisk-chan-h323:=m
   CONFIG_PACKAGE_asterisk-codec-speex:=m
+  CONFIG_PACKAGE_asterisk-res-crypto:=m
 endif
 
 EXTRA_CFLAGS:= -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
@@ -294,6 +323,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_asterisk-sqlite),)
   EXTRA_CDR_MODULES+= cdr_sqlite.so
 endif
+ifneq ($(CONFIG_PACKAGE_asterisk-app-meetme),)
+  EXTRA_APP_MODULES+= app_meetme.so
+endif
 ifneq ($(CONFIG_PACKAGE_asterisk-chan-bluetooth),)
   EXTRA_CHAN_MODULES+= chan_bluetooth.so
 endif
@@ -307,6 +339,9 @@ endif
 ifneq ($(CONFIG_PACKAGE_asterisk-codec-speex),)
   EXTRA_CFLAGS+= -I$(STAGING_DIR)/usr/include/speex
   EXTRA_CODEC_MODULES+= codec_speex.so
+endif
+ifneq ($(CONFIG_PACKAGE_asterisk-res-crypto),)
+  EXTRA_RES_MODULES+= res_crypto.so
 endif
 
 define Build/Configure
@@ -375,6 +410,7 @@ define Package/asterisk/install
 		rm -f codec_lpc10.so ; \
 		rm -f pbx_dundi.so ; \
 		rm -f res_agi.so ; \
+		rm -f res_crypto.so ; \
 	)
 	(cd $(1)/etc/asterisk; \
 		rm -f 	*odbc* *mysql* *postgres* *pgsql* *voicemail* *adsi* *oss* *alsa* \
@@ -455,6 +491,13 @@ define Package/asterisk-voicemail/install
 	$(CP) $(PKG_BUILD_DIR)/sounds/vm-*.gsm $(1)/usr/lib/asterisk/sounds/
 endef
 
+define Package/asterisk-app-meetme/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/configs/meetme.conf.sample $(1)/etc/asterisk/meetme.conf
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/apps/app_meetme.so $(1)/usr/lib/asterisk/modules/
+endef
+
 define Package/asterisk-chan-bluetooth/install
 	$(INSTALL_DIR) $(1)/etc/asterisk
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/configs/bluetooth.conf $(1)/etc/asterisk/bluetooth.conf
@@ -512,13 +555,18 @@ define Package/asterisk-res-agi/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/res/res_agi.so $(1)/usr/lib/asterisk/modules/
 endef
 
+define Package/asterisk-res-crypto/install
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/res/res_crypto.so $(1)/usr/lib/asterisk/modules/
+endef
+
 $(eval $(call BuildPackage,asterisk))
-$(eval $(call BuildPackage,asterisk-mini))
 $(eval $(call BuildPackage,asterisk-mysql))
 $(eval $(call BuildPackage,asterisk-pgsql))
 $(eval $(call BuildPackage,asterisk-sqlite))
-$(eval $(call BuildPackage,asterisk-voicemail))
 $(eval $(call BuildPackage,asterisk-sounds))
+$(eval $(call BuildPackage,asterisk-voicemail))
+$(eval $(call BuildPackage,asterisk-app-meetme))
 $(eval $(call BuildPackage,asterisk-chan-bluetooth))
 $(eval $(call BuildPackage,asterisk-chan-h323))
 $(eval $(call BuildPackage,asterisk-chan-mgcp))
@@ -528,3 +576,5 @@ $(eval $(call BuildPackage,asterisk-codec-lpc10))
 $(eval $(call BuildPackage,asterisk-codec-speex))
 $(eval $(call BuildPackage,asterisk-pbx-dundi))
 $(eval $(call BuildPackage,asterisk-res-agi))
+$(eval $(call BuildPackage,asterisk-res-crypto))
+$(eval $(call BuildPackage,asterisk-mini))

@@ -1,7 +1,7 @@
-diff -ruN asterisk-1.0.7-old/codecs/lpc10/Makefile asterisk-1.0.7-new/codecs/lpc10/Makefile
---- asterisk-1.0.7-old/codecs/lpc10/Makefile	2004-08-31 18:33:00.000000000 +0200
-+++ asterisk-1.0.7-new/codecs/lpc10/Makefile	2005-03-19 17:38:06.000000000 +0100
-@@ -31,6 +31,7 @@
+diff -Nru asterisk-1.2.14.org/codecs/lpc10/Makefile asterisk-1.2.14/codecs/lpc10/Makefile
+--- asterisk-1.2.14.org/codecs/lpc10/Makefile	2005-11-29 19:24:39.000000000 +0100
++++ asterisk-1.2.14/codecs/lpc10/Makefile	2006-12-27 08:54:16.000000000 +0100
+@@ -34,6 +34,7 @@
  ifneq ($(PROC),ppc)
  ifneq ($(PROC),x86_64)
  ifneq ($(PROC),alpha)
@@ -9,7 +9,7 @@ diff -ruN asterisk-1.0.7-old/codecs/lpc10/Makefile asterisk-1.0.7-new/codecs/lpc
  #The problem with sparc is the best stuff is in newer versions of gcc (post 3.0) only.
  #This works for even old (2.96) versions of gcc and provides a small boost either way.
  #A ultrasparc cpu is really v9 but the stock debian stable 3.0 gcc doesn.t support it.
-@@ -46,6 +47,7 @@
+@@ -53,6 +54,7 @@
  endif
  endif
  endif
@@ -17,7 +17,7 @@ diff -ruN asterisk-1.0.7-old/codecs/lpc10/Makefile asterisk-1.0.7-new/codecs/lpc
  
  LIB = $(LIB_TARGET_DIR)/liblpc10.a
  
-@@ -62,7 +64,7 @@
+@@ -69,7 +71,7 @@
  
  $(LIB): $(OBJ)
  	$(AR) cr $@ $(OBJ)

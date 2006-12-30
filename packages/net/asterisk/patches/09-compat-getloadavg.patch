@@ -1,0 +1,13 @@
+diff -Nru asterisk-1.2.14.org/include/asterisk/compat.h asterisk-1.2.14/include/asterisk/compat.h
+--- asterisk-1.2.14.org/include/asterisk/compat.h	2005-11-29 19:24:39.000000000 +0100
++++ asterisk-1.2.14/include/asterisk/compat.h	2006-12-27 09:07:28.000000000 +0100
+@@ -75,7 +75,9 @@
+ #define HAVE_STRTOQ
+ 
+ #ifdef _BSD_SOURCE
++#ifndef __UCLIBC__
+ #define HAVE_GETLOADAVG
++#endif /* __UCLIBC__ */
+ #endif
+ 
+ #ifdef __linux__

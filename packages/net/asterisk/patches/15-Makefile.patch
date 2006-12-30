@@ -1,7 +1,7 @@
-diff -ruN asterisk-1.2.0-old/Makefile asterisk-1.2.0-new/Makefile
---- asterisk-1.2.0-old/Makefile	2005-11-16 21:23:53.000000000 +0100
-+++ asterisk-1.2.0-new/Makefile	2005-12-04 23:01:16.000000000 +0100
-@@ -341,16 +339,6 @@
+diff -Nru asterisk-1.2.14.org/Makefile asterisk-1.2.14/Makefile
+--- asterisk-1.2.14.org/Makefile	2006-12-11 22:55:43.000000000 +0100
++++ asterisk-1.2.14/Makefile	2006-12-27 09:16:50.000000000 +0100
+@@ -356,16 +356,6 @@
  	netsock.o slinfactory.o ast_expr2.o ast_expr2f.o \
  	cryptostub.o
  
@@ -18,21 +18,20 @@ diff -ruN asterisk-1.2.0-old/Makefile asterisk-1.2.0-new/Makefile
  ifeq ($(OSARCH),Linux)
    LIBS+=-ldl -lpthread -lncurses -lm -lresolv  #-lnjamd
  else
-@@ -401,7 +389,9 @@
+@@ -420,8 +410,6 @@
    HAVEDOT=no
  endif
  
-+ifneq ($(NOCRYPTO),yes)
- LIBS+=-lssl
-+endif
- 
- INSTALL=install
- 
-@@ -430,12 +420,12 @@
- 	cd editline && unset CFLAGS LIBS && ./configure ; \
+-LIBS+=-lssl
+-
+ _all: all
+ 	@echo " +--------- Asterisk Build Complete ---------+"  
+ 	@echo " + Asterisk has successfully been built, but +"  
+@@ -447,12 +435,12 @@
+ 	cd editline && unset CFLAGS LIBS && CFLAGS="$(OPTIMIZE)" ./configure ; \
  
  editline/libedit.a: FORCE
--	cd editline && unset CFLAGS LIBS && test -f config.h || ./configure
+-	cd editline && unset CFLAGS LIBS && test -f config.h || CFLAGS="$(OPTIMIZE)" ./configure
 +	cd editline && unset CFLAGS LIBS && test -f config.h || CFLAGS="$(OPTIMIZE) $(EXTRA_CFLAGS)" LDFLAGS="$(EXTRA_LDFLAGS)" ./configure
  	$(MAKE) -C editline libedit.a
  
@@ -43,7 +42,7 @@ diff -ruN asterisk-1.2.0-old/Makefile asterisk-1.2.0-new/Makefile
  	else \
  		echo "You need to do a cvs update -d not just cvs update"; \
  		exit 1; \
-@@ -513,7 +503,7 @@
+@@ -530,7 +518,7 @@
  	fi
  	rm -f include/asterisk/build.h.tmp
  	$(CC) -c -o buildinfo.o $(CFLAGS) buildinfo.c

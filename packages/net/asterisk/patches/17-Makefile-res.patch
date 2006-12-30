@@ -1,0 +1,44 @@
+diff -Nru asterisk-1.2.14.org/res/Makefile asterisk-1.2.14/res/Makefile
+--- asterisk-1.2.14.org/res/Makefile	2005-11-29 19:24:39.000000000 +0100
++++ asterisk-1.2.14/res/Makefile	2006-12-27 09:18:45.000000000 +0100
+@@ -55,7 +55,7 @@
+ CFLAGS+=
+ 
+ ifndef WITHOUT_ZAPTEL
+-ifneq ($(wildcard $(CROSS_COMPILE_TARGET)/usr/include/linux/zaptel.h)$(wildcard $(CROSS_COMPILE_TARGET)/usr/local/include/zaptel.h),)
++ifneq ($(wildcard $(STAGING_DIR)/usr/include/linux/zaptel.h)$(wildcard $(CROSS_COMPILE_TARGET)/usr/local/include/zaptel.h),)
+   CFLAGS+=-DZAPATA_MOH
+ endif
+ endif # WITHOUT_ZAPTEL
+@@ -69,6 +69,9 @@
+ CFLAGS+=-DOPENSSL_NO_KRB5 -fPIC
+ endif
+ 
++CFLAGS += $(EXTRA_CFLAGS)
++MODS += $(EXTRA_RES_MODULES)
++
+ all: depend $(MODS)
+ 
+ install: all
+@@ -89,7 +92,7 @@
+ 	fi
+ 
+ res_crypto.so: res_crypto.o
+-	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} $< ${CYGSOLIB} $(CRYPTO_LIBS)
++	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} $< ${CYGSOLIB} $(EXTRA_LDFLAGS) $(CRYPTO_LIBS)
+ 
+ clean:
+ 	rm -f *.so *.o .depend
+@@ -109,6 +112,12 @@
+ res_config_odbc.so: res_config_odbc.o
+ 	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} $< ${CYGSOLIB} ${CYG_RES_CONFIG_ODBC_LIB}
+ 
++res_config_mysql.so: res_config_mysql.o
++	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} $< ${CYGSOLIB} $(EXTRA_LDFLAGS) -lmysqlclient -lz
++
++res_sqlite.so: res_sqlite.o
++	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} $< ${CYGSOLIB} $(EXTRA_LDFLAGS) -lsqlite
++
+ ifneq ($(wildcard .depend),)
+   include .depend
+ endif

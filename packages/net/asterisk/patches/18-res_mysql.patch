@@ -1,6 +1,6 @@
-diff -ruN asterisk-1.2.0-old/configs/res_mysql.conf.sample asterisk-1.2.0-new/configs/res_mysql.conf.sample
---- asterisk-1.2.0-old/configs/res_mysql.conf.sample	1970-01-01 01:00:00.000000000 +0100
-+++ asterisk-1.2.0-new/configs/res_mysql.conf.sample	2004-12-03 15:33:44.000000000 +0100
+diff -Nru asterisk-1.2.14.org/configs/res_mysql.conf.sample asterisk-1.2.14/configs/res_mysql.conf.sample
+--- asterisk-1.2.14.org/configs/res_mysql.conf.sample	1970-01-01 01:00:00.000000000 +0100
++++ asterisk-1.2.14/configs/res_mysql.conf.sample	2006-12-27 09:19:45.000000000 +0100
 @@ -0,0 +1,15 @@
 +;
 +; Sample configuration for res_config_mysql.c
@@ -17,9 +17,9 @@ diff -ruN asterisk-1.2.0-old/configs/res_mysql.conf.sample asterisk-1.2.0-new/co
 +;dbpass = mypass
 +;dbport = 3306
 +;dbsock = /tmp/mysql.sock
-diff -ruN asterisk-1.2.0-old/res/res_config_mysql.c asterisk-1.2.0-new/res/res_config_mysql.c
---- asterisk-1.2.0-old/res/res_config_mysql.c	1970-01-01 01:00:00.000000000 +0100
-+++ asterisk-1.2.0-new/res/res_config_mysql.c	2005-10-13 21:43:54.000000000 +0200
+diff -Nru asterisk-1.2.14.org/res/res_config_mysql.c asterisk-1.2.14/res/res_config_mysql.c
+--- asterisk-1.2.14.org/res/res_config_mysql.c	1970-01-01 01:00:00.000000000 +0100
++++ asterisk-1.2.14/res/res_config_mysql.c	2006-12-27 09:19:45.000000000 +0100
 @@ -0,0 +1,675 @@
 +/*
 + * Asterisk -- A telephony toolkit for Linux.

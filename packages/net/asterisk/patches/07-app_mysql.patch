@@ -1,6 +1,6 @@
-diff -ruN asterisk-1.2.0-old/apps/app_sql_mysql.c asterisk-1.2.0-new/apps/app_sql_mysql.c
---- asterisk-1.2.0-old/apps/app_sql_mysql.c	1970-01-01 01:00:00.000000000 +0100
-+++ asterisk-1.2.0-new/apps/app_sql_mysql.c	2005-06-07 18:36:28.000000000 +0200
+diff -Nru asterisk-1.2.14.org/apps/app_sql_mysql.c asterisk-1.2.14/apps/app_sql_mysql.c
+--- asterisk-1.2.14.org/apps/app_sql_mysql.c	1970-01-01 01:00:00.000000000 +0100
++++ asterisk-1.2.14/apps/app_sql_mysql.c	2006-12-27 09:00:04.000000000 +0100
 @@ -0,0 +1,445 @@
 +/*
 + * Asterisk -- A telephony toolkit for Linux.

@@ -1,0 +1,42 @@
+diff -Nru asterisk-1.2.14.org/apps/Makefile asterisk-1.2.14/apps/Makefile
+--- asterisk-1.2.14.org/apps/Makefile	2006-04-30 15:38:22.000000000 +0200
++++ asterisk-1.2.14/apps/Makefile	2006-12-27 09:08:57.000000000 +0100
+@@ -45,7 +45,7 @@
+ #APPS+=app_rpt.so
+ 
+ ifndef WITHOUT_ZAPTEL
+-ifneq ($(wildcard $(CROSS_COMPILE_TARGET)/usr/include/linux/zaptel.h)$(wildcard $(CROSS_COMPILE_TARGET)/usr/local/include/zaptel.h),)
++ifneq ($(wildcard $(STAGING_DIR)/usr/include/linux/zaptel.h)$(wildcard $(CROSS_COMPILE_TARGET)/usr/local/include/zaptel.h),)
+   APPS+=app_zapras.so app_meetme.so app_flash.so app_zapbarge.so app_zapscan.so app_page.so
+ endif
+ endif # WITHOUT_ZAPTEL
+@@ -83,6 +83,9 @@
+ #CFLAGS+=-DEXTENDED_ODBC_STORAGE
+ # See doc/README.odbcstorage for more information
+ 
++CFLAGS += $(EXTRA_CFLAGS)
++APPS += $(EXTRA_APP_MODULES)
++
+ all: $(APPS)
+ 
+ clean:
+@@ -102,14 +105,17 @@
+ app_curl.so: app_curl.o
+ 	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} $< ${CYGSOLIB} $(CURLLIBS)
+ 
++app_sql_mysql.so: app_sql_mysql.o
++	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} $< ${CYGSOLIB} $(EXTRA_LDFLAGS) -lmysqlclient
++
+ app_sql_postgres.o: app_sql_postgres.c
+ 	$(CC) -pipe -I$(CROSS_COMPILE_TARGET)/usr/local/pgsql/include -I$(CROSS_COMPILE_TARGET)/usr/include/postgresql $(CFLAGS) -c -o app_sql_postgres.o app_sql_postgres.c
+ 
+ app_sql_postgres.so: app_sql_postgres.o
+-	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} $< ${CYGSOLIB} -L/usr/local/pgsql/lib -lpq
++	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} $< ${CYGSOLIB} $(EXTRA_LDFLAGS) -lpq
+ 
+ app_sql_odbc.so: app_sql_odbc.o
+-	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} $< ${CYGSOLIB} -lodbc
++	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} $< ${CYGSOLIB} $(EXTRA_LDFLAGS) -lodbc
+ 
+ ifeq (SunOS,$(shell uname))
+ app_chanspy.so: app_chanspy.o

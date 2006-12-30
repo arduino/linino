@@ -1,6 +1,6 @@
-diff -ruN asterisk-1.2.1-old/codecs/ilbc/Makefile asterisk-1.2.1-new/codecs/ilbc/Makefile
---- asterisk-1.2.1-old/codecs/ilbc/Makefile	2005-11-29 19:24:39.000000000 +0100
-+++ asterisk-1.2.1-new/codecs/ilbc/Makefile	2005-12-16 19:24:36.000000000 +0100
+diff -Nru asterisk-1.2.14.org/codecs/ilbc/Makefile asterisk-1.2.14/codecs/ilbc/Makefile
+--- asterisk-1.2.14.org/codecs/ilbc/Makefile	2005-11-29 19:24:39.000000000 +0100
++++ asterisk-1.2.14/codecs/ilbc/Makefile	2006-12-27 09:21:07.000000000 +0100
 @@ -1,5 +1,5 @@
  ARCH=$(PROC)
 -CFLAGS+=-Wall -O3 -funroll-loops

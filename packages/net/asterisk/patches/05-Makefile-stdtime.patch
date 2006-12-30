@@ -1,0 +1,14 @@
+diff -Nru asterisk-1.2.14.org/stdtime/Makefile asterisk-1.2.14/stdtime/Makefile
+--- asterisk-1.2.14.org/stdtime/Makefile	2005-11-29 19:24:39.000000000 +0100
++++ asterisk-1.2.14/stdtime/Makefile	2006-12-27 08:56:14.000000000 +0100
+@@ -3,8 +3,8 @@
+ all: libtime.a
+ 
+ libtime.a: $(OBJS)
+-	ar rv $@ $(OBJS)
+-	ranlib $@
++	$(AR) rv $@ $(OBJS)
++	$(RANLIB) $@
+ 
+ install:
+ 

@@ -1,7 +1,7 @@
-diff -ruN asterisk-1.0.7-old/dns.c asterisk-1.0.7-new/dns.c
---- asterisk-1.0.7-old/dns.c	2004-06-22 22:11:15.000000000 +0200
-+++ asterisk-1.0.7-new/dns.c	2005-03-19 17:38:06.000000000 +0100
-@@ -153,7 +153,13 @@
+diff -Nru asterisk-1.2.14.org/dns.c asterisk-1.2.14/dns.c
+--- asterisk-1.2.14.org/dns.c	2005-11-29 19:24:39.000000000 +0100
++++ asterisk-1.2.14/dns.c	2006-12-27 08:50:05.000000000 +0100
+@@ -175,7 +175,13 @@
  
  #if defined(res_ninit)
  #define HAS_RES_NINIT
