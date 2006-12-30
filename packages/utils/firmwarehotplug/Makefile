@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/linux-hotplug
-PKG_MD5SUM:=unknown
+PKG_MD5SUM:=e5cf352b172f498e27b160167b981f24
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -31,9 +31,10 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/Default, \
+		OPT="$(TARGET_CFLAGS)" \
 		-C $(PKG_BUILD_DIR)/ezusb/midi/original \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-                all install
+                all install \
 	)
 endef
 
@@ -48,8 +49,31 @@ endef
 
 $(eval $(call BuildPackage,firmwarehotplug))
 
-$(foreach command, sdcc sgml2html, \
-  $(eval $(call RequireCommand,$(command), \
-   $(PKG_NAME) requires $(command). \
-  )) \
-)
+define Require/working-sdcc
+        echo 'int main() { return 0; }' >$(TMP_DIR)/a.c; \
+        sdcc -o $(TMP_DIR)/a.out $(TMP_DIR)/a.c; \
+	rm -f $(TMP_DIR)/a.*
+endef
+
+$(eval $(call Require,working-sdcc, \
+        Please install the SDCC Cross Compiler (sdcc). \
+))
+
+define Require/working-sgml2html
+	echo >$(TMP_DIR)/test.sgml ' \
+<!doctype linuxdoc system> \
+<article> \
+<!-- Title information --> \
+<title>test \
+<author>test \
+<htmlurl url="localhost"> \
+<date>test \
+<sect>test \
+</article>' ; \
+        sgml2html $(TMP_DIR)/test.sgml >$(TMP_DIR)/test.html; \
+	rm -f $(TMP_DIR)/test.*
+endef
+
+$(eval $(call Require,working-sgml2html, \
+        Please install the sgml-common package (sgml2html). \
+))
