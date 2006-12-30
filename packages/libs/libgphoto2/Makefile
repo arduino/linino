@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libgphoto2
-PKG_VERSION:=2.2.1
+PKG_VERSION:=2.3.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/gphoto
-PKG_MD5SUM:=69827311733e39fafa9f77bb05e55b77
+PKG_MD5SUM:=37f85e34e5b6031ddf6cac8b8782ac4f
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -31,7 +31,7 @@ endef
 
 define Package/libgphoto2
   $(call Package/libgphoto2/Default)
-  DEPENDS:=+libusb +libexif +libjpeg +libpthread +libltdl
+  DEPENDS:=+libusb +libexif +libjpeg +libpthread +libltdl +libiconv
   TITLE:=The basic library of the gphoto2 program.
   MENU:=1
 endef
@@ -52,6 +52,8 @@ define Build/Configure
 		--without-libiconv-prefix \
 		--without-libintl-prefix \
 		, \
+		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libiconv/include" \
+		LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
 		LIBEXIF_CFLAGS="$$$$CPPFLAGS" \
 		LIBEXIF_LIBS="$$$$LDFLAGS -lexif" \
 		LIBUSB_CFLAGS="$$$$CPPFLAGS" \
