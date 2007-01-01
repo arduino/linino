@@ -58,22 +58,3 @@ endef
 $(eval $(call Require,working-sdcc, \
         Please install the SDCC Cross Compiler (sdcc). \
 ))
-
-define Require/working-sgml2html
-	echo >$(TMP_DIR)/test.sgml ' \
-<!doctype linuxdoc system> \
-<article> \
-<!-- Title information --> \
-<title>test \
-<author>test \
-<htmlurl url="localhost"> \
-<date>test \
-<sect>test \
-</article>' ; \
-        sgml2html $(TMP_DIR)/test.sgml >$(TMP_DIR)/test.html; \
-	rm -f $(TMP_DIR)/test.*
-endef
-
-$(eval $(call Require,working-sgml2html, \
-        Please install the sgml-common package (sgml2html). \
-))
