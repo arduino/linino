@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/netpipe
   SECTION:=net
-  CATEGORY:=Networking
+  CATEGORY:=Network
   TITLE:=A Network Protocol Independent Performance Evaluator
   DESCRIPTION:=A Network Protocol Independent Performance Evaluator
   URL:=http://www.scl.ameslab.gov/netpipe/
