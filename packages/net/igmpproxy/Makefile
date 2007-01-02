@@ -45,7 +45,7 @@ define Package/igmpproxy/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/igmpproxy.conf $(1)/etc
 	$(INSTALL_DIR) $(1)/usr/sbin $(1)/etc
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/src/igmpproxy $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/igmpproxy $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,igmpproxy))
