@@ -1,0 +1,12 @@
+diff -ru gphoto2-2.2.0/gphoto2/foreach.c gphoto2-2.2.0-patched/gphoto2/foreach.c
+--- gphoto2-2.2.0/gphoto2/foreach.c     2006-06-15 23:03:47.000000000 -0700
++++ gphoto2-2.2.0-patched/gphoto2/foreach.c     2007-01-03 00:33:21.000000000 -0800
+@@ -31,6 +31,8 @@
+ 
+ #include <gphoto2-port-log.h>
+ 
++#define GP_DEBUG (void) 
++
+ #define GP_ERROR_FRONTEND_BAD_ID -10000
+ #define CR(result) {int __r=(result); if(__r<0) return(__r);}
+ #define CL(result,list) {int __r=(result); if(__r<0) {gp_list_free(list);return(__r);}}
