@@ -50,7 +50,7 @@ define Package/miniupnpd/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/miniupnpd $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/linux/*.sh $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/miniupnpd.init $(1)/etc/init.d/miniupnpd
-	$(INSTALL_BIN) ./files/upnpd.config $(1)/etc/config/upnpd
+	$(INSTALL_DATA) ./files/upnpd.config $(1)/etc/config/upnpd
 	$(INSTALL_DATA) ./files/miniupnpd.hotplug $(1)/etc/hotplug.d/iface/10-miniupnpd
 endef
 
