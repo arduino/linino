@@ -32,10 +32,6 @@ define Package/miniupnpd
   URL:=http://miniupnp.tuxfamily.org/
 endef
 
-define Package/miniupnpd/postinst
-/etc/init.d/miniupnpd enable
-endef
-
 define Build/Compile
 	$(MAKE) \
 		-C $(PKG_BUILD_DIR) \
