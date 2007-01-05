@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/shell-fm
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libmad +openssl +readline +libncurses
+  DEPENDS:=+libmad +libopenssl +libreadline +libncurses
   TITLE:=Console Based Last.FM Radio Player
   DESCRIPTION:=\
 	Shell.FM is a console based player for the streams provided \\\
