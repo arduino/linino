@@ -24,7 +24,6 @@ include $(INCLUDE_DIR)/package.mk
 define Package/setpwc
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+kmod-pwc
   TITLE:=Philips (and compatibles) WebCams (PWC) control utility
   URL:=http://www.vanheusden.com/setpwc/
 endef
