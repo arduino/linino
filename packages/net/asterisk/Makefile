@@ -455,7 +455,7 @@ endef
 
 define Package/asterisk-mysql/install
 	$(INSTALL_DIR) $(1)/etc/asterisk
-	install -m0600 $(PKG_BUILD_DIR)/configs/cdr_mysql.conf.sample $(1)/etc/asterisk/cdr_mysql.conf
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/configs/cdr_mysql.conf.sample $(1)/etc/asterisk/cdr_mysql.conf
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/apps/app_sql_mysql.so $(1)/usr/lib/asterisk/modules/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/cdr/cdr_mysql.so $(1)/usr/lib/asterisk/modules/
@@ -463,7 +463,7 @@ endef
 
 define Package/asterisk-pgsql/install
 	$(INSTALL_DIR) $(1)/etc/asterisk
-	install -m0600 $(PKG_BUILD_DIR)/configs/cdr_pgsql.conf.sample $(1)/etc/asterisk/cdr_pgsql.conf
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/configs/cdr_pgsql.conf.sample $(1)/etc/asterisk/cdr_pgsql.conf
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/apps/app_sql_postgres.so $(1)/usr/lib/asterisk/modules/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/cdr/cdr_pgsql.so $(1)/usr/lib/asterisk/modules/

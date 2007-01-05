@@ -66,7 +66,7 @@ endef
 
 define Package/monit/install	
 	$(INSTALL_DIR) $(1)/etc
-	install -m0600 $(PKG_BUILD_DIR)/monitrc $(1)/etc/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/monitrc $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/monit.init $(1)/etc/init.d/monit
 	$(INSTALL_DIR) $(1)/usr/sbin
@@ -75,7 +75,7 @@ endef
 
 define Package/monit-nossl/install
 	$(INSTALL_DIR) $(1)/etc
-	install -m0600 $(PKG_BUILD_DIR)/monitrc $(1)/etc/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/monitrc $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/monit.init $(1)/etc/init.d/monit
 	$(INSTALL_DIR) $(1)/usr/sbin

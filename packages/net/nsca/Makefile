@@ -48,7 +48,7 @@ endef
 
 define Package/send-nsca/install
 	$(INSTALL_DIR) $(1)/etc
-	install -m0600 $(PKG_BUILD_DIR)/sample-config/send_nsca.cfg $(1)/etc/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/sample-config/send_nsca.cfg $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/send_nsca $(1)/usr/sbin/
 endef

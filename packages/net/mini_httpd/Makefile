@@ -145,7 +145,7 @@ endef
 define Package/mini-httpd-matrixssl/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/mini_httpd-ssl.conf $(1)/etc/mini_httpd.conf
-	install -m0600 ./files/mini_httpd.pem $(1)/etc/mini_httpd.pem
+	$(INSTALL_CONF) ./files/mini_httpd.pem $(1)/etc/mini_httpd.pem
 	$(INSTALL_DIR) $(1)/etc/default
 	$(INSTALL_DATA) ./files/mini_httpd.default $(1)/etc/default/mini_httpd
 	$(INSTALL_DIR) $(1)/etc/init.d
@@ -157,7 +157,7 @@ endef
 define Package/mini-httpd-openssl/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/mini_httpd-ssl.conf $(1)/etc/mini_httpd.conf
-	install -m0600 ./files/mini_httpd.pem $(1)/etc/mini_httpd.pem
+	$(INSTALL_CONF) ./files/mini_httpd.pem $(1)/etc/mini_httpd.pem
 	$(INSTALL_DIR) $(1)/etc/default
 	$(INSTALL_DATA) ./files/mini_httpd.default $(1)/etc/default/mini_httpd
 	$(INSTALL_DIR) $(1)/etc/init.d

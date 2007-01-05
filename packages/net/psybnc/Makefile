@@ -48,7 +48,7 @@ define Package/psybnc/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/psybnc.sh $(1)/usr/sbin/psybnc
 	$(INSTALL_DIR) $(1)/usr/share/psybnc
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/psybnc $(1)/usr/share/psybnc/
-	install -m0600 $(PKG_BUILD_DIR)/psybnc.conf $(1)/usr/share/psybnc/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/psybnc.conf $(1)/usr/share/psybnc/
 	$(INSTALL_DIR) $(1)/usr/share/psybnc/lang
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lang/english.lng $(1)/usr/share/psybnc/lang/
 endef

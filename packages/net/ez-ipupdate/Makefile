@@ -43,7 +43,7 @@ define Package/ez-ipupdate/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ez-ipupdate $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
-	install -m0600 ./files/ez-ipupdate.conf $(1)/etc/
+	$(INSTALL_CONF) ./files/ez-ipupdate.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
 	$(INSTALL_BIN) ./files/ez-ipupdate.hotplug $(1)/etc/hotplug.d/iface/10-ez-ipupdate
 endef

@@ -52,7 +52,7 @@ define Package/vpnc/install
 		$(PKG_INSTALL_DIR)/usr/sbin/vpnc-disconnect \
 		$(1)/usr/sbin/
 	install -d -m0700 $(1)/etc/vpnc
-	install -m0600 $(PKG_INSTALL_DIR)/etc/vpnc/vpnc.conf $(1)/etc/vpnc/
+	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/vpnc/vpnc.conf $(1)/etc/vpnc/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/etc/vpnc/vpnc-script $(1)/etc/vpnc/
 endef
 

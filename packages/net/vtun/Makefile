@@ -49,7 +49,7 @@ endef
 
 define Package/vtun/install	
 	$(INSTALL_DIR) $(1)/etc
-	install -m0600 $(PKG_BUILD_DIR)/vtund.conf $(1)/etc/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/vtund.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/vtund $(1)/usr/sbin/
 endef

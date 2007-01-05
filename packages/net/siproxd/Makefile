@@ -48,7 +48,7 @@ define Package/siproxd/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/siproxd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/doc/siproxd.conf.example $(1)/etc/siproxd.conf
-	install -m0600 $(PKG_BUILD_DIR)/doc/siproxd_passwd.cfg $(1)/etc/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/doc/siproxd_passwd.cfg $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/siproxd.init $(1)/etc/init.d/siproxd
 endef
