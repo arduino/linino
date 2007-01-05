@@ -1,0 +1,32 @@
+diff -u10 -r howl-1.0.0/src/lib/howl/Posix/posix_interface.c howl-1.0.0-patched/src/lib/howl/Posix/posix_interface.c
+--- howl-1.0.0/src/lib/howl/Posix/posix_interface.c	2007-01-03 01:16:03.000000000 -0800
++++ howl-1.0.0-patched/src/lib/howl/Posix/posix_interface.c	2007-01-03 00:55:44.000000000 -0800
+@@ -30,24 +30,24 @@
+ #include <salt/debug.h>
+ #include <salt/interface.h>
+ #include <net/if.h> 
+ #include <arpa/inet.h>
+ #include <errno.h>
+ #include <sys/ioctl.h>
+ #include <sys/socket.h>
+ #include <stdio.h>
+ 
+ #if defined(__linux__)
+-typedef unsigned long long u64;
+-typedef __uint32_t 	u32;
+-typedef __uint16_t 	u16;
+-typedef __uint8_t		u8;
++typedef unsigned long long __u64;
++typedef __uint32_t 	__u32;
++typedef __uint16_t 	__u16;
++typedef __uint8_t		__u8;
+ #	include <linux/sockios.h>
+ #	include <linux/ethtool.h> 
+ #endif
+ 
+ #ifndef SIOCGIFCONF
+ #	include <sys/sockio.h>
+ #endif
+ 
+ #define SW_E_BAD_ARG 23
+ 
