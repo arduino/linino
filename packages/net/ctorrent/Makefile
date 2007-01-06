@@ -9,15 +9,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ctorrent
-PKG_VERSION:=1.3.4-dnh2
+PKG_VERSION:=1.3.4-dnh2.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.rahul.net/dholmes/ctorrent/
-PKG_MD5SUM:=6635e2d0d0ee21faeb85d95cd93c137b
+PKG_MD5SUM:=76484082d3d44d7d1fbc9f2e0e33440f
 PKG_CAT:=zcat
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-dnh2
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-dnh2.2
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
