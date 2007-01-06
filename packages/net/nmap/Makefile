@@ -9,10 +9,10 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nmap
-PKG_VERSION:=4.01
+PKG_VERSION:=4.20
 PKG_RELEASE:=1
 
-PKG_MD5SUM:=09c259837b24f6c7385c2c1c49760a7c
+PKG_MD5SUM:=ea50419f99472200c4184a304e3831ea
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.insecure.org/nmap/dist
 PKG_CAT:=bzcat
