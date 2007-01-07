@@ -126,5 +126,6 @@ EOF
 footer
 ?>
 <!--
+##WEBIF:category:VPN
 ##WEBIF:name:VPN:1:OpenVPN
 -->
