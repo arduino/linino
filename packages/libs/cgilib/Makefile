@@ -43,7 +43,6 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/cgi.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/libcgi.{a,so*} $(STAGING_DIR)/usr/lib/
-	touch $(STAGING_DIR)/usr/lib/libcgi.so
 endef
 	
 define Build/UninstallDev
