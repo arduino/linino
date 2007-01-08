@@ -107,7 +107,7 @@ endef
 
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/lua{,lib}.h $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/lua{,lib,conf}.h $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/lauxlib.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua{,lib}.{a,so*} $(STAGING_DIR)/usr/lib/
@@ -115,7 +115,7 @@ endef
 
 define Build/UninstallDev
 	rm -rf \
-		$(STAGING_DIR)/usr/include/lua{,lib}.h \
+		$(STAGING_DIR)/usr/include/lua{,lib,conf}.h \
 		$(STAGING_DIR)/usr/include/lauxlib.h \
 		$(STAGING_DIR)/usr/lib/liblua{,lib}.{a,so*}
 endef
