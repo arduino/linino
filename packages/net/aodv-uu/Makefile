@@ -40,14 +40,16 @@ define Package/aodv-uu
   	This package contains the AODV userland daemon.
 endef
 
-define Package/kmod-aodv-uu
+define KernelPackage/aodv-uu
   $(call Package/aodv-uu/Default)
-  SECTION:=kernel
-  CATEGORY=Kernel drivers
   TITLE+= (kernel module)
   DESCRIPTION+=\\\
   	\\\
   	This package contains the AODV kernel module.
+  FILES:=$(PKG_BUILD_DIR)/lnx/kaodv.$(LINUX_KMOD_SUFFIX)
+  SUBMENU:=Network Support
+  AUTOLOAD:=$(call AutoLoad,80,$(shell cat ./files/aodv-uu.modules))
+  VERSION:=$(LINUX_VERSION)+$(PKG_VERSION)-$(BOARD)-$(PKG_RELEASE)
 endef
 
 ifeq ($(CONFIG_LINUX_2_6),y)
@@ -97,4 +99,4 @@ define Package/kmod-aodv-uu/install
 endef
 
 $(eval $(call BuildPackage,aodv-uu))
-$(eval $(call BuildPackage,kmod-aodv-uu))
+$(eval $(call KernelPackage,aodv-uu))
