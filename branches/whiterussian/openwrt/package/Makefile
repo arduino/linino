@@ -150,6 +150,7 @@ $(INSTALL_PACKAGES): base-files-install
 arpwatch-compile: libpcap-compile
 cyrus-sasl-compile: openssl-compile
 dsniff-compile: libnids-compile openssl-compile libgdbm-compile
+dsl-qos-queue-compile: iptables-compile
 fprobe-compile: libpcap-compile
 gdb-compile: ncurses-compile
 kismet-compile: uclibc++-compile libpcap-compile ncurses-compile
