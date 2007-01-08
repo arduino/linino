@@ -18,7 +18,6 @@ PKG_MD5SUM:= 5b2e98da2310c71c703d4617b88a173f
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,7 +29,7 @@ define Package/frickin
 	Frickin PPTP Proxy allows a Point-to-Point Tunneling Protocol (PPTP) \\\
 	client to connect to a PPTP server through Network Address \\\
 	Translation (NAT).
-  URL:=http://frickin.sourceforge.net
+  URL:=http://frickin.sourceforge.net/
 endef
 
 define Package/frickin/conffiles

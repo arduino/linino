@@ -25,7 +25,7 @@ define Package/libbzip2
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=bzip2 is a freely available, patent free, high-quality data compressor.
-  URL:=http://www.bzip.org
+  URL:=http://www.bzip.org/
 endef
 
 define Build/Compile
@@ -47,4 +47,4 @@ define Build/UninstallDev
 		$(STAGING_DIR)/usr/lib/libbz2.a
 endef
 
-$(eval $(call BuildPackage,libbzip2))
+$(eval $(call Build/DefaultTargets))

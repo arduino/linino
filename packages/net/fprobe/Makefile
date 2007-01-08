@@ -45,7 +45,7 @@ endef
 
 define Package/fprobe/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/src/fprobe $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/fprobe $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,fprobe))

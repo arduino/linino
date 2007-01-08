@@ -25,8 +25,8 @@ include $(INCLUDE_DIR)/package.mk
 define Package/netperf
   SECTION:=net
   CATEGORY:=Network
-  TITLE:=network performance measurement tool
-  URL:=http://www.netperf.org
+  TITLE:=Network performance measurement tool
+  URL:=http://www.netperf.org/
 endef
 
 define Build/Compile	

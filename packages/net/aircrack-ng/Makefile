@@ -26,8 +26,8 @@ define Package/aircrack-ng
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libpthread
-  TITLE:=Aircrack-ng the next generation of aircrack with new features
-  URL:=http://www.aircrack-ng.org
+  TITLE:=Aircrack-ng is the next generation of aircrack with new features
+  URL:=http://www.aircrack-ng.org/
 endef
 
 define Build/Configure
@@ -41,7 +41,7 @@ define Build/Compile
 		CFLAGS="$(TARGET_CFLAGS) -Wall" \
 		prefix="/usr" \
 		destdir="$(PKG_INSTALL_DIR)" \
-	all install
+		all install
 endef
 
 define Package/aircrack-ng/install

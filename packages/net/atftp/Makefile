@@ -19,7 +19,6 @@ PKG_CAT:=zcat
 TAR_OPTIONS += || true
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -64,7 +63,7 @@ endef
 
 define Package/atftp/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/atftp $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/atftp $(1)/usr/sbin/
 endef
 
 define Package/atftpd/install

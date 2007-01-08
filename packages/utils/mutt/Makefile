@@ -26,7 +26,7 @@ define Package/mutt
   CATEGORY:=Utilities
   DEPENDS:=+libopenssl +libncurses
   TITLE:=Console mail client
-  URL:=http://www.mutt.org
+  URL:=http://www.mutt.org/
 endef
 
 define Build/Configure

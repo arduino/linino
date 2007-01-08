@@ -28,7 +28,7 @@ define Package/reaim
   DEPENDS:=+iptables
   TITLE:=A transparent AIM / MSN proxy
   DESCRIPTION:=ReAIM is a proxy for file transfers with MSN/AIM.
-  URL:=http://reaim.sourceforge.net
+  URL:=http://reaim.sourceforge.net/
 endef
 
 define Build/Compile	

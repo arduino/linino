@@ -27,7 +27,7 @@ define Package/amwall
   CATEGORY:=Network
   DEPENDS:=+libamsel
   TITLE:=PF to iptables
-  URL:=http://www.amselinux.net
+  URL:=http://www.amselinux.net/
 endef
 
 define Build/Compile
@@ -36,7 +36,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		V= \
-		LDIR=$(PKG_BUILD_DIR) \
+		LDIR="$(PKG_BUILD_DIR)" \
 		AMSEL_INCLUDE="$(STAGING_DIR)/usr/include" \
 		OPT_LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		PREFIX="/usr" \
@@ -47,11 +47,11 @@ endef
 
 define Package/amwall/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/amsel
-	$(CP) $(PKG_INSTALL_DIR)/etc/amsel* $(1)/etc
+	$(CP) $(PKG_INSTALL_DIR)/etc/amsel* $(1)/etc/
 endef
 
 $(eval $(call BuildPackage,amwall))

@@ -12,12 +12,12 @@ PKG_NAME:=libnids
 PKG_VERSION:=1.18
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.packetfactory.net/projects/libnids/dist/
 PKG_MD5SUM:=9ee6dcdfac97bae6fe611aa27d2594a5
 PKG_CAT:=zcat
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
@@ -35,12 +35,12 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
-			--enable-shared \
-			--enable-static \
-			--with-libnet="$(STAGING_DIR)/usr/lib/libnet-1.0.x" \
-			--with-libpcap="$(STAGING_DIR)/usr" \
-			, \
-			CFLAGS="$$$$CFLAGS $$$$CPPFLAGS" \
+		--enable-shared \
+		--enable-static \
+		--with-libnet="$(STAGING_DIR)/usr/lib/libnet-1.0.x" \
+		--with-libpcap="$(STAGING_DIR)/usr" \
+		, \
+		CFLAGS="$$$$CFLAGS $$$$CPPFLAGS" \
 	)
 endef
 
@@ -60,7 +60,8 @@ define Build/InstallDev
 endef
 
 define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/nids.h \
+	rm -rf \
+		$(STAGING_DIR)/usr/include/nids.h \
 		$(STAGING_DIR)/usr/lib/libnids.{a,so*}
 endef
 

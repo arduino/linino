@@ -35,7 +35,6 @@ define Build/Configure
 		--enable-shared \
 		--enable-static \
 		--disable-rpath \
-		--with-gnu-ld \
 		--without-x \
 		--without-freetype \
 		--with-jpeg=$(STAGING_DIR)/usr \
@@ -65,7 +64,8 @@ define Build/InstallDev
 endef
 
 define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/bin/gdlib-config \
+	rm -rf \
+		$(STAGING_DIR)/usr/bin/gdlib-config \
 		$(STAGING_DIR)/usr/include/entities.h \
 		$(STAGING_DIR)/usr/include/gd{,_io,cache,fontg,fontl,fontmb,fonts,fontt,fx}.h \
 		$(STAGING_DIR)/usr/lib/libgd.{a,so*}

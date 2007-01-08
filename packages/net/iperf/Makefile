@@ -52,7 +52,7 @@ endef
 
 define Package/iperf/install	
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/iperf $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/iperf $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,iperf))

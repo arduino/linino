@@ -38,7 +38,7 @@ endef
 
 define Package/oidentd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(1)/usr/sbin/
+	$(CP) $(PKG_BUILD_DIR)/src/oidentd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(CP) ./files/oidentd.init $(1)/etc/init.d/oidentd
 endef

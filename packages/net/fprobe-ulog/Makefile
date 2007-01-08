@@ -45,8 +45,8 @@ define Build/Compile
 endef
 
 define Package/fprobe-ulog/install	
-	mkdir -p $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/src/fprobe-ulog $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/fprobe-ulog $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,fprobe-ulog))

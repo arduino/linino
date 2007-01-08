@@ -11,10 +11,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=privoxy
 PKG_VERSION:=3.0.3
 PKG_RELEASE:=1
-PKG_MD5SUM:=b0710be8af09409bfb03f52523a17010
 
-PKG_SOURCE_URL:=@SF/ijbswa
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-stable-src.tar.gz
+PKG_SOURCE_URL:=@SF/ijbswa
+PKG_MD5SUM:=b0710be8af09409bfb03f52523a17010
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-stable
@@ -27,12 +27,13 @@ define Package/privoxy
   CATEGORY:=Network
   DEPENDS:=+libpcre +libpthread
   TITLE:=web proxy with advanced filtering capabilities
-  DESCRIPTION:=Privoxy is a web proxy with advanced filtering capabilities for\\\
-	protecting privacy, modifying web page content, managing cookies,\\\
-	controlling access, and removing ads, banners, pop-ups and other\\\
-	obnoxious Internet junk. Privoxy has a very flexible configuration\\\
-	and can be customized to suit individual needs and tastes. Privoxy\\\
-	has application for both stand-alone systems and multi-user networks.\\\
+  DESCRIPTION:=\
+	Privoxy is a web proxy with advanced filtering capabilities for \\\
+	protecting privacy, modifying web page content, managing cookies, \\\
+	controlling access, and removing ads, banners, pop-ups and other \\\
+	obnoxious Internet junk. Privoxy has a very flexible configuration \\\
+	and can be customized to suit individual needs and tastes. Privoxy \\\
+	has application for both stand-alone systems and multi-user networks.
   URL:=http://www.privoxy.org/
 endef
 

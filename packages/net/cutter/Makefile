@@ -18,7 +18,6 @@ PKG_MD5SUM:=50093db9b64277643969ee75b83ebbd1
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,13 +34,11 @@ endef
 	
 define Build/Compile
 	$(TARGET_CC) $(PKG_BUILD_DIR)/cutter.c -o $(PKG_BUILD_DIR)/cutter
-	$(INSTALL_DIR) $(PKG_INSTALL_DIR)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/cutter $(PKG_INSTALL_DIR)/usr/sbin/
 endef
 	
 define Package/cutter/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/cutter $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/cutter $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,cutter))

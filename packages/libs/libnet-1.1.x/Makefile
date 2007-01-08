@@ -46,7 +46,8 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \
-		--with-pf_packet=yes, \
+		--with-pf_packet=yes \
+		, \
 		ac_cv_libnet_endianess=$(ENDIANESS) \
 		ac_libnet_have_pf_packet=yes \
 		ac_libnet_have_packet_socket=yes \

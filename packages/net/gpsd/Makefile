@@ -29,6 +29,7 @@ define Package/gpsd
   CATEGORY:=Network
   DEPENDS:=+libpthread +uclibcxx
   TITLE:=An interface daemon for GPS receivers
+  URL:=http://gpsd.berlios.de/
 endef
 
 define Build/Configure

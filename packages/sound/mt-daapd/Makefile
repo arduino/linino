@@ -29,7 +29,7 @@ define Package/mt-daapd
   TITLE:=A multi-threaded DAAP (Digital Audio Access Protocol) daemon
   DESCRIPTION:=\
 	mt-daapd is a program which acts as an iTunes (DAAP) server for Linux.
-  URL:=http://www.mt-daapd.org
+  URL:=http://www.mt-daapd.org/
 endef
 
 define Package/mt-daapd/conffiles

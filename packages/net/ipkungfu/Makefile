@@ -30,7 +30,7 @@ define Package/ipkungfu
   	IPKungFu is an iptables-based Linux firewall.\\\
   	It aims to simplify the configuration of Internet \\\
   	connection sharing, port forwarding, and packet filtering.
-  URL:=http://www.linuxkungfu.org
+  URL:=http://www.linuxkungfu.org/
 endef
 
 define Package/ipkungfu/conffiles
