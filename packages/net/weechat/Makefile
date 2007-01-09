@@ -46,6 +46,8 @@ define Build/Configure
 		--disable-perl \
 		--disable-python \
 		--disable-ruby \
+		, \
+		LIBS="-llua -ldl -lm" \
 	)
 endef
 
