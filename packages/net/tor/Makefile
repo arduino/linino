@@ -79,22 +79,15 @@ fi
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); touch \
-		configure.in \
-		aclocal.m4 \
-		Makefile.in \
-		configure \
-	);
 	$(call Build/Configure/Default,\
-		--with-libevent-dir="$(STAGING_DIR)/usr/" \
-		--with-gnu-ld \
+		--with-libevent-dir="$(STAGING_DIR)/usr" \
+		--with-ssl-dir="$(STAGING_DIR)/usr" \
 		, \
-		ac_cv_libevent_normal=yes \
-		ac_cv_openssldir="$(STAGING_DIR)/usr" \
+		ac_cv_libevent_linker_option='(none)' \
+		ac_cv_openssl_linker_option='(none)' \
 		tor_cv_null_is_zero=yes \
 		tor_cv_unaligned_ok=yes \
 		tor_cv_time_t_signed=yes \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -levent" \
 	)
 endef
 
