@@ -20,6 +20,8 @@ TAR_OPTIONS += || true
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
+PKG_BUILDEP:=ncurses pcre readline
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/atftp/Default
@@ -31,13 +33,13 @@ endef
 
 define Package/atftp
   $(call Package/atftp/Default)
-  DEPENDS:=+libreadline +libpcre +libncurses
+  DEPENDS:=+libreadline +libncurses
   TITLE+= client
 endef
 
 define Package/atftpd
   $(call Package/atftp/Default)
-  DEPENDS:=+libreadline +libpcre +libpthread
+  DEPENDS:=+libpcre +libpthread
   TITLE+= server
 endef
 
@@ -52,7 +54,11 @@ if [ $$? -ne 0 ]; then
 fi
 endef
 
-# uses GNU configure
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--disable-libwrap \
+	)
+endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
