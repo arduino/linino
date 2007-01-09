@@ -87,17 +87,6 @@ define Build/Compile
 		MYLDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		PKG_VERSION=$(PKG_VERSION) \
 		all linux 
-	# remove statically linked binaries, so that they will get linked against shlib this time
-	rm -f $(PKG_BUILD_DIR)/bin/lua{,c}
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CROSS)gcc" \
-		LD="$(TARGET_CROSS)ld" \
-		AR="$(TARGET_CROSS)ar rcu" \
-		RANLIB="$(TARGET_CROSS)ranlib" \
-		INSTALL_ROOT=/usr \
-		MYCFLAGS="-I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-		MYLDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-		all linux
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -110,19 +99,21 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/lua{,lib,conf}.h $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/lauxlib.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua{,lib}.{a,so*} $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua.{a,so.*} $(STAGING_DIR)/usr/lib/
+	ln -sf liblua.so.$(PKG_VERSION) $(STAGING_DIR)/usr/lib/liblua.so
+	ln -sf liblua.so.$(PKG_VERSION) $(STAGING_DIR)/usr/lib/liblualib.so
 endef
 
 define Build/UninstallDev
 	rm -rf \
 		$(STAGING_DIR)/usr/include/lua{,lib,conf}.h \
 		$(STAGING_DIR)/usr/include/lauxlib.h \
-		$(STAGING_DIR)/usr/lib/liblua{,lib}.{a,so*}
+		$(STAGING_DIR)/usr/lib/liblua.{a,so*}
 endef
 
 define Package/liblua/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua{,lib}.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua.so.* $(1)/usr/lib/
 endef
 
 define Package/lua/install
