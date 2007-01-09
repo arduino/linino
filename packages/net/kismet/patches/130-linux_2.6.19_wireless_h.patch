@@ -1,0 +1,99 @@
+diff -ruN kismet-2006-04-R1-old/configure kismet-2006-04-R1-new/configure
+--- kismet-2006-04-R1-old/configure	2006-01-04 16:53:37.000000000 +0100
++++ kismet-2006-04-R1-new/configure	2007-01-09 23:04:03.000000000 +0100
+@@ -6354,6 +6354,11 @@
+ 	#include <linux/socket.h>
+ 
+ 
++#include <linux/version.h>
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,19)
++#include <linux/types.h>
++#include <linux/if.h>
++#endif
+ #include <linux/wireless.h>
+ _ACEOF
+ rm -f conftest.$ac_objext
+@@ -6417,6 +6422,11 @@
+ 		#include <netdb.h>
+ 		#include <netinet/in.h>
+         #include <sys/resource.h>
++	        #include <linux/version.h>
++	        #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,19)
++	        #include <linux/types.h>
++	        #include <linux/if.h>
++	        #endif
+ 		#include <linux/wireless.h>
+ 
+ int
+diff -ruN kismet-2006-04-R1-old/configure.in kismet-2006-04-R1-new/configure.in
+--- kismet-2006-04-R1-old/configure.in	2006-01-04 16:53:37.000000000 +0100
++++ kismet-2006-04-R1-new/configure.in	2007-01-09 23:01:41.000000000 +0100
+@@ -389,6 +389,11 @@
+ 	[
+ 	#include <sys/types.h>
+ 	#include <netdb.h>
++	#include <linux/version.h>
++	#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,19)
++	#include <linux/types.h>
++	#include <linux/if.h>
++	#endif
+ 	#include <linux/socket.h>
+ 	])
+ else
+@@ -403,6 +408,11 @@
+ 		#include <netdb.h>
+ 		#include <netinet/in.h>
+         #include <sys/resource.h>
++		#include <linux/version.h>
++		#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,19)
++		#include <linux/types.h>
++		#include <linux/if.h>
++		#endif
+ 		#include <linux/wireless.h>
+     ]], [[
+ 		struct iwreq wrq;
+diff -ruN kismet-2006-04-R1-old/ifcontrol.h kismet-2006-04-R1-new/ifcontrol.h
+--- kismet-2006-04-R1-old/ifcontrol.h	2004-08-09 06:36:01.000000000 +0200
++++ kismet-2006-04-R1-new/ifcontrol.h	2007-01-09 23:01:03.000000000 +0100
+@@ -42,6 +42,11 @@
+ typedef unsigned int u32;
+ typedef unsigned long u64;
+ 
++#include <linux/version.h>
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,19)
++#include <linux/types.h>
++#include <linux/if.h>
++#endif
+ #include <linux/wireless.h>
+ #else
+ #include <net/if.h>
+diff -ruN kismet-2006-04-R1-old/iwcontrol.h kismet-2006-04-R1-new/iwcontrol.h
+--- kismet-2006-04-R1-old/iwcontrol.h	2006-03-15 09:09:26.000000000 +0100
++++ kismet-2006-04-R1-new/iwcontrol.h	2007-01-09 22:58:50.000000000 +0100
+@@ -35,6 +35,11 @@
+ #include <arpa/inet.h>
+ 
+ #ifdef HAVE_LINUX_WIRELESS
++#include <linux/version.h>
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,19)
++#include <linux/types.h>
++#include <linux/if.h>
++#endif
+ #include <linux/wireless.h>
+ #else
+ #include <net/if.h>
+diff -ruN kismet-2006-04-R1-old/pcapsource.cc kismet-2006-04-R1-new/pcapsource.cc
+--- kismet-2006-04-R1-old/pcapsource.cc	2007-01-09 22:34:55.000000000 +0100
++++ kismet-2006-04-R1-new/pcapsource.cc	2007-01-09 23:01:11.000000000 +0100
+@@ -35,6 +35,11 @@
+ typedef unsigned int u32;
+ typedef unsigned long u64;
+ 
++#include <linux/version.h>
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,19)
++#include <linux/types.h>
++#include <linux/if.h>
++#endif
+ #include <linux/wireless.h>
+ #endif
+ 
