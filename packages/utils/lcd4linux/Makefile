@@ -33,10 +33,17 @@ define Package/lcd4linux
   URL:=http://lcd4linux.bulix.org/
 endef
 
-# commas are interpreted by the $(call ...) macro, so define a intermediate variable holding our drivers spec
+# commas are interpreted by the $(call ...) macro, so define an intermediate variable holding our drivers spec
 PKG_CONFIGURE_DRIVERS:=all,!PNG,!RouterBoard,!X11
 
 define Build/Configure
+        (cd $(PKG_BUILD_DIR); touch \
+		configure.in \
+		aclocal.m4 \
+		Makefile.in \
+		config-h.in \
+		configure \
+	);
 	$(call Build/Configure/Default, \
 		--without-x \
 		--with-drivers="$(PKG_CONFIGURE_DRIVERS)" \
