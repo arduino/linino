@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gmediaserver
-PKG_VERSION:=0.9.0
+PKG_VERSION:=0.12.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://savannah.nongnu.org/download/gmediaserver/
-PKG_MD5SUM:=93de0f8dcbc1353a0d0dd5b5ab4b3142
+PKG_MD5SUM:=7f99a9b2e32c41acf7e71eb0bc0840e9
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/gmediaserver
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+id3lib +libupnp
+  DEPENDS:=+id3lib +libiconv +libmagic +libupnp
   TITLE:=An UPnP music media server
   URL:=http://www.nongnu.org/gmediaserver/
 endef
@@ -33,16 +33,20 @@ endef
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-rpath \
+		--enable-threads=posix \
+		--with-libiconv-prefix="$(STAGING_DIR)/usr/lib/libiconv" \
+		--without-libintl-prefix \
 		--with-id3lib="$(STAGING_DIR)/usr" \
 		--with-libupnp="$(STAGING_DIR)/usr" \
 		, \
-		LIBS=" -lixml -lthreadutil -lupnp -luClibc++ -lz" \
-		am_cv_func_iconv=no \
+		LIBS=" -luClibc++ -lz" \
 	)
 endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		AR="$(TARGET_CROSS)ar" \
+		LTLIBICONV="" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
