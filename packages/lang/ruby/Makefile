@@ -1,3 +1,4 @@
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ruby
-PKG_VERSION:=1.8.4
+PKG_VERSION:=1.8.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.ruby-lang.org/pub/ruby/1.8/
-PKG_MD5SUM:=bd8c2e593e1fa4b01fd98eaf016329bb
+PKG_MD5SUM:=3fbb02294a8ca33d4684055adba5ed6f
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
