@@ -1,0 +1,28 @@
+diff -urN Linux-PAM-0.99.6.3/conf/pam_conv1/pam_conv_l.c Linux-PAM-0.99.6.3.new/conf/pam_conv1/pam_conv_l.c
+--- Linux-PAM-0.99.6.3/conf/pam_conv1/pam_conv_l.c	2006-09-06 11:29:19.000000000 +0200
++++ Linux-PAM-0.99.6.3.new/conf/pam_conv1/pam_conv_l.c	2007-01-10 23:19:05.000000000 +0100
+@@ -494,7 +494,9 @@
+ #ifdef __cplusplus
+ extern "C" int yywrap (void );
+ #else
+-extern int yywrap (void );
++int yywrap (void ) {
++	return 1;
++}
+ #endif
+ #endif
+ 
+diff -urN Linux-PAM-0.99.6.3/doc/specs/parse_l.c Linux-PAM-0.99.6.3.new/doc/specs/parse_l.c
+--- Linux-PAM-0.99.6.3/doc/specs/parse_l.c	2006-09-06 11:29:19.000000000 +0200
++++ Linux-PAM-0.99.6.3.new/doc/specs/parse_l.c	2007-01-10 23:21:55.000000000 +0100
+@@ -480,7 +480,9 @@
+ #ifdef __cplusplus
+ extern "C" int yywrap (void );
+ #else
+-extern int yywrap (void );
++int yywrap (void ) {
++	return 1;
++}
+ #endif
+ #endif
+ 
