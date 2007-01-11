@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libpam
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=Linux-PAM is a free implementation of the following DCE-RFC from Sunsoft.
+  TITLE:=free implementation of the following DCE-RFC from Sunsoft.
   DESCRIPTION:=\
 	Linux-PAM is a free implementation of the following DCE-RFC from Sunsoft. \\\
   URL:=http://www.kernel.org/pub/linux/libs/pam

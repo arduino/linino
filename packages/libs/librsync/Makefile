@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/librsync
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=librsync implements the rolling-checksum algorithm of remote file synchronization
+  TITLE:=implementation of the rolling-checksum algorithm
   DESCRIPTION:=\
   	librsync implements the rolling-checksum algorithm of remote file\\\
   	synchronization that was popularized by the rsync utility and is\\\
