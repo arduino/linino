@@ -61,13 +61,13 @@ install: $(BIN_DIR)/openwrt-wr850g-$(FS).bin $(BIN_DIR)/openwrt-usr5461-$(FS).bi
 
 ifneq ($(FS),jffs2-8MB)
 $(BIN_DIR)/openwrt-wrt54g3g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
-	$(STAGING_DIR)/bin/addpattern -4 -p W54F -v v1.99.5 -i $< -o $@ -g
+	$(STAGING_DIR)/bin/addpattern -4 -p W54F -v v2.01.1 -i $< -o $@ -g
 
 $(BIN_DIR)/openwrt-wrt54g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
-	$(STAGING_DIR)/bin/addpattern -4 -p W54G -v v4.20.6 -i $< -o $@ -g
+	$(STAGING_DIR)/bin/addpattern -4 -p W54G -v v4.60.1 -i $< -o $@ -g
 
 $(BIN_DIR)/openwrt-wrt54gs_v4-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
-	$(STAGING_DIR)/bin/addpattern -4 -p W54s -v v1.05.2 -i $< -o $@ -g
+	$(STAGING_DIR)/bin/addpattern -4 -p W54s -v v1.09.1 -i $< -o $@ -g
 
 $(BIN_DIR)/openwrt-wr850g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
 	$(STAGING_DIR)/bin/motorola-bin -1 $< $@
@@ -83,10 +83,10 @@ endif
 
 ifneq ($(FS),jffs2-4MB)
 $(BIN_DIR)/openwrt-wrt54gs-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
-	$(STAGING_DIR)/bin/addpattern -4 -p W54S -v v4.70.6 -i $< -o $@ -g
+	$(STAGING_DIR)/bin/addpattern -4 -p W54S -v v4.80.1 -i $< -o $@ -g
 
 $(BIN_DIR)/openwrt-wrtsl54gs-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
-	$(STAGING_DIR)/bin/addpattern -4 -p W54U -v v2.00.0 -i $< -o $@ -g
+	$(STAGING_DIR)/bin/addpattern -4 -p W54U -v v2.08.1 -i $< -o $@ -g
 
 install: $(BIN_DIR)/openwrt-wrt54gs-$(FSNAME).bin $(BIN_DIR)/openwrt-wrtsl54gs-$(FSNAME).bin
 endif
