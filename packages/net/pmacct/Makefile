@@ -114,9 +114,9 @@ $(PKG_BUILD_DIR)/nfacctd-$(1) $(PKG_BUILD_DIR)/pmacctd-$(1): $(PKG_BUILD_DIR)/.c
 	$(call Build/Configure/Default, \
 		--with-pcap-includes="$(STAGING_DIR)/usr/include" \
 		--with-pcap-libs="$(STAGING_DIR)/usr/lib" \
-		$(2) \
-		, \
-		LIBS="-lz" \
+		"$(2)" \
+		,\
+		LIBS+="-lz" \
 	);
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
@@ -160,8 +160,6 @@ ifneq ($(CONFIG_PACKAGE_nfacctd-mysql)$(CONFIG_PACKAGE_pmacctd-mysql),)
 		--enable-mysql \
 		--with-mysql-includes="$(STAGING_DIR)/usr/include" \
 		--with-mysql-libs="$(STAGING_DIR)/usr/lib/mysql" \
-		, \
-		LIBS='-lz' \
   ))
   $(eval $(call Install/Template,nfacctd-mysql,nfacctd-mysql,nfacctd))
   $(eval $(call Install/Template,pmacctd-mysql,pmacctd-mysql,pmacctd))
