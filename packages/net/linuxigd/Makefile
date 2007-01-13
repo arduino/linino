@@ -57,11 +57,11 @@ endef
 define Package/linuxigd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnpd $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/upnpd.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/linuxigd
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/*.gif $(1)/etc/linuxigd/
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/*.xml $(1)/etc/linuxigd/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/upnpd.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/upnpd.init $(1)/etc/init.d/upnpd
 endef

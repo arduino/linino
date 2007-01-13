@@ -5,11 +5,7 @@ START=65
 
 include /lib/network
 scan_interfaces
-
-# $WAN contains WAN ifname	
 config_get WAN wan ifname
-
-# $LAN contains WAN ifname
 config_get LAN lan ifname
 
 start() {
