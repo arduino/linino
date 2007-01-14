@@ -20,6 +20,8 @@ PKG_CAT:=zcat
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
+PKG_BUILDDEP:=libnotimpl
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/rrd
@@ -31,7 +33,7 @@ endef
 
 define Package/librrd
   $(call Package/rrd)
-  DEPENDS:=+libart +libfreetype +libpng +zlib +libnotimpl
+  DEPENDS:=+libart +libfreetype +libpng +zlib
   SECTION:=libs
   CATEGORY:=Utilities
   TITLE:=Round Robin Database (RRD) management library (v1.2.x)
