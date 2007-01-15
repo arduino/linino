@@ -9,9 +9,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miniupnpd
-PKG_VERSION:=1.0-RC1
+PKG_VERSION:=20070112
 PKG_RELEASE:=1
-PKG_MD5SUM:=ab752eebbebcfa84178de0a4632d7688
+PKG_MD5SUM:=e3ec679857b671d6b3236f594ee98694
 
 PKG_SOURCE_URL:=http://miniupnp.tuxfamily.org/files
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -27,15 +27,11 @@ define Package/miniupnpd
   CATEGORY:=Network
   DEPENDS:=+iptables
   TITLE:=Lightweight UPnP daemon
-  DESCRIPTION:=\
-	Lightweight UPnP daemon
   URL:=http://miniupnp.tuxfamily.org/
 endef
 
 define Build/Compile
-	$(MAKE) \
-		-C $(PKG_BUILD_DIR) \
-		-f Makefile.linux \
+	$(MAKE) -C $(PKG_BUILD_DIR) -f Makefile.linux \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) -I $(STAGING_DIR)/usr/include" \
 		LIBS="$(STAGING_DIR)/usr/lib/libiptc.a"
