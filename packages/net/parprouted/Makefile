@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=parprouted
-PKG_VERSION:=0.63
+PKG_VERSION:=0.64
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.hazard.maks.net/parprouted/
-PKG_MD5SUM:=12753098a22e82997d1941d6d2284750
+PKG_MD5SUM:=14133c9cb8dd9c9a90ff37648ae7b31a
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/parprouted
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+libpthread
   TITLE:=Proxy ARP daemon
   DESCRIPTION:=\
 	parprouted is a daemon for transparent IP (Layer 3) proxy ARP bridging.\\\
