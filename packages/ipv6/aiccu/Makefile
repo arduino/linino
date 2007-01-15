@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aiccu
-PKG_VERSION:=2006.07.25
+PKG_VERSION:=20070107
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sixxs.net/archive/sixxs/aiccu/unix
-PKG_MD5SUM:=0df76e92eb34f4ce8aa3cfcf6896f271
+PKG_MD5SUM:=67a6d55ef2d6e88a3f17bcb5eec02c61
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
@@ -26,17 +26,19 @@ define Package/aiccu
   CATEGORY:=IPv6
   DEPENDS:=+libpthread
   TITLE:=SixXS Automatic IPv6 Connectivity Client Utility
-  URL:=http://www.sixxs.net/archive/sixxs/aiccu/unix
+  URL:=http://www.sixxs.net/tools/aiccu/
 endef
 
 define Build/Configure
-	$(SED) "s,strip,$(STRIP)," $(PKG_BUILD_DIR)/unix-console/Makefile
+	$(SED) "s,strip,/bin/true," $(PKG_BUILD_DIR)/unix-console/Makefile
 endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-	        CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-lpthread" DEBUG=0
+	        CC="$(TARGET_CC)" \
+	        CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -DAICCU_CONSOLE -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -lpthread" \
+		DEBUG=0
 endef
 
 define Package/aiccu/install
