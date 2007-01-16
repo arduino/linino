@@ -9,13 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kismet
-PKG_VERSION:=2006-04-R1
+PKG_VERSION:=2007-01-R1a
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kismetwireless.net/code
-PKG_MD5SUM:=8ec2de513f2911df1b7edfcba5ad1c26
+PKG_MD5SUM:=5921166366d3f695eeef26121c56a674
 PKG_CAT:=zcat
 
 PKG_BUILDDEP:=libpcap libncurses uclibcxx
