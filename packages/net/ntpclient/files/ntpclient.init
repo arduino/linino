@@ -1,13 +1,32 @@
 #!/bin/sh
 # Copyright (C) 2006 OpenWrt.org
 
-ntp_server=$(nvram get ntp_server)
+. /etc/functions.sh
+
+config_cb() {
+	local cfg="$CONFIG_SECTION"
+	local cfgtype
+	config_get cfgtype "$cfg" TYPE
+
+	case "$cfgtype" in
+		ntp_client)
+			config_get hostname	$cfg hostname
+			config_get port		$cfg port
+			config_get count	$cfg count
+			
+			ps x | grep 'bin/[n]tpclient' >&- || {
+				route -n 2>&- | grep '^0.0.0.0' >&- && {
+					/usr/sbin/ntpclient -c ${count:-1} -s -h $hostname -p ${port:-123} 2>&- >&-
+				}
+			}
+		;;
+	esac
+}
 case "${ACTION:-ifup}" in
 	ifup)
-		ps x | grep 'bin/[n]tpclient' >&- || {
-			route -n 2>&- | grep '^0.0.0.0' >&- && /usr/sbin/ntpclient -c 1 -s -h ${ntp_server:-pool.ntp.org} &
-		}
-		;;
+		config_load ntp_client&
+	;;
 	ifdown)
-		route -n 2>&- | grep '^0.0.0.0' >&- || killall ntpclient 2>&- >&- ;;
+		route -n 2>&- | grep '^0.0.0.0' >&- || killall ntpclient 2>&- >&-
+	;;
 esac
