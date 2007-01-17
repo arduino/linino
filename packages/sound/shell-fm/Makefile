@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=shell-fm
 PKG_VERSION:=0.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://nex.scrapping.cc/shell-fm/downloads
@@ -33,9 +33,13 @@ define Package/shell-fm
   URL:=http://nex.scrapping.cc
 endef
 
+define Package/shell-fm/conffiles
+/etc/shell-fm.rc
+endef
+
 define Build/Configure
 	$(PKG_BUILD_DIR)/reconfig
-	$(call Build/Configure/Default)
+	$(call Build/Configure/Default, --disable-ao)
 endef
 
 define Build/Compile
@@ -47,6 +51,9 @@ endef
 define Package/shell-fm/install	
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/shell-fm $(1)/usr/bin/
+	$(INSTALL_DATA) ./files/shell-fm.rc $(1)/etc/shell-fm.rc
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/shell-fm.init $(1)/etc/init.d/shell-fm
 endef
 
 $(eval $(call BuildPackage,shell-fm))
