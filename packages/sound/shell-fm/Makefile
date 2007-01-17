@@ -51,6 +51,7 @@ endef
 define Package/shell-fm/install	
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/shell-fm $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/shell-fm.rc $(1)/etc/shell-fm.rc
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/shell-fm.init $(1)/etc/init.d/shell-fm
