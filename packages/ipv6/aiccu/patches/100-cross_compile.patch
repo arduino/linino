@@ -1,8 +1,8 @@
-diff -ruN aiccu-old/unix-console/Makefile aiccu-new/unix-console/Makefile
---- aiccu-old/unix-console/Makefile	2007-01-15 12:22:48.000000000 +0100
-+++ aiccu-new/unix-console/Makefile	2007-01-15 12:33:13.000000000 +0100
+diff -urN aiccu/unix-console/Makefile aiccu.new/unix-console/Makefile
+--- aiccu/unix-console/Makefile	2007-01-15 12:04:27.000000000 +0100
++++ aiccu.new/unix-console/Makefile	2007-01-18 15:08:28.000000000 +0100
 @@ -10,6 +10,9 @@
- #  $Date: 2007-01-11 00:28:45 $
+ #  $Date: 2007-01-15 11:04:27 $
  # **********************************************************/
  
 +OS_NAME=$(shell uname)
@@ -16,7 +16,7 @@ diff -ruN aiccu-old/unix-console/Makefile aiccu-new/unix-console/Makefile
  # Used by TIC to secure that communication
  # Currently defaultly builds only on Linux, but other platforms might easily also support it
 -ifeq ($(shell uname | grep -c "Linux"),1)
-+ifneq ($(HAVE_GNUTLS),)
++ifneq ($(HAEVE_GNUTLS),)
  CFLAGS	+= -D AICCU_GNUTLS
  LDFLAGS += -lgnutls
  endif
@@ -56,10 +56,10 @@ diff -ruN aiccu-old/unix-console/Makefile aiccu-new/unix-console/Makefile
  # NetBSD
 -ifeq ($(shell uname | grep -c "NetBSD"),1)
 +ifeq ($(shell echo $(OS_NAME) | grep -c "NetBSD"),1)
- CFLAGS	+= -D_NETBSD -D NEED_IFHEAD -D AICCU_TYPE="\"kame\""
- SRCS	+= ../common/aiccu_kame.c
- OBJS	+= ../common/aiccu_kame.o
-@@ -87,10 +90,10 @@
+ CFLAGS	+= -D_NETBSD -D AICCU_TYPE="\"kame\""
+ 
+ # Check if net/if_tun.h has TUNSIFHEAD and enable support for it
+@@ -97,10 +100,10 @@
  endif
  
  # OpenBSD
@@ -72,7 +72,7 @@ diff -ruN aiccu-old/unix-console/Makefile aiccu-new/unix-console/Makefile
  CFLAGS	+= -D AICCU_TYPE="\"openbsd2\""
  SRCS	+= ../common/aiccu_openbsd2.c
  OBJS	+= ../common/aiccu_openbsd2.o
-@@ -104,7 +107,7 @@
+@@ -114,7 +117,7 @@
  endif
  
  # Darwin
@@ -81,7 +81,7 @@ diff -ruN aiccu-old/unix-console/Makefile aiccu-new/unix-console/Makefile
  CFLAGS	+= -D_DARWIN -D NEED_IFHEAD -D AICCU_TYPE="\"darwin\""
  SRCS	+= ../common/aiccu_darwin.c
  OBJS	+= ../common/aiccu_darwin.o
-@@ -112,7 +115,7 @@
+@@ -122,7 +125,7 @@
  endif
  
  # SunOS / Solaris
@@ -90,7 +90,7 @@ diff -ruN aiccu-old/unix-console/Makefile aiccu-new/unix-console/Makefile
  CFLAGS	+= -D_SUNOS -D AICCU_TYPE="\"sunos\""
  SRCS	+= ../common/aiccu_sunos.c
  OBJS	+= ../common/aiccu_sunos.o
-@@ -120,7 +123,7 @@
+@@ -130,7 +133,7 @@
  endif
  
  # AIX

@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aiccu
-PKG_VERSION:=20070107
+PKG_VERSION:=20070115
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sixxs.net/archive/sixxs/aiccu/unix
-PKG_MD5SUM:=67a6d55ef2d6e88a3f17bcb5eec02c61
+PKG_MD5SUM:=0df76e92eb34f4ce8aa3cfcf6896f271
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
