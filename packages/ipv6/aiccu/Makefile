@@ -14,7 +14,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sixxs.net/archive/sixxs/aiccu/unix
-PKG_MD5SUM:=0df76e92eb34f4ce8aa3cfcf6896f271
+PKG_MD5SUM:=c9bcc83644ed788e22a7c3f3d4021350
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
