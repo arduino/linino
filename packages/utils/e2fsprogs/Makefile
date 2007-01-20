@@ -33,6 +33,20 @@ define Package/e2fsprogs
   URL:=http://e2fsprogs.sourceforge.net/
 endef
 
+define Package/tune2fs
+  $(call Package/e2fsprogs)
+  TITLE:=Ext2 Filesystem tune utility
+  DESCRIPTION:=Ext2 Filesystem tune utility
+  DEPENDS:=e2fsprogs
+endef
+
+define Package/resize2fs
+  $(call Package/e2fsprogs)
+  TITLE:=Ext2 Filesystem resize utility
+  DESCRIPTION:=Ext2 Filesystem resize utility
+  DEPENDS:=e2fsprogs
+endef
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
@@ -59,12 +73,21 @@ endef
 define Package/e2fsprogs/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/e2fsck $(1)/usr/sbin/
-	ln -sf mkfs.ext2 $(1)/usr/sbin/mke2fs
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/mkfs.ext{2,3} $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/tune2fs $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/resize2fs $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/mke2fs $(1)/usr/sbin/
+	ln -sf mke2fs $(1)/usr/sbin/mkfs.ext2
+	ln -sf mke2fs $(1)/usr/sbin/mkfs.ext3
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{blkid,com_err,e2p,ext2fs,uuid}.so.* $(1)/usr/lib/
 endef
 
+define Package/tune2fs/install
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/tune2fs $(1)/usr/sbin/
+endef
+
+define Package/resize2fs/install
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/resize2fs $(1)/usr/sbin/
+endef
+
 $(eval $(call BuildPackage,e2fsprogs))
+$(eval $(call BuildPackage,tune2fs))
+$(eval $(call BuildPackage,resize2fs))
