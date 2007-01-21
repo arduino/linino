@@ -10,9 +10,11 @@ mount_storage() {
 				}
 				cd $dev
 				for part in part*; do
-					path=/mnt/${dev}_${part##*part}
-					mkdir -p ${path}
-					mount ${part} ${path}
+					if [ $part != "part*" ] ; then
+						path=/mnt/${dev}_${part##*part}
+						mkdir -p ${path}
+						mount ${part} ${path}
+					fi
 				done
 			)
 		}
