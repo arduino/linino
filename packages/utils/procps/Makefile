@@ -49,6 +49,7 @@ endef
 
 define Package/procps/install
 	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ps/ps $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pgrep $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pkill $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pmap $(1)/usr/bin
