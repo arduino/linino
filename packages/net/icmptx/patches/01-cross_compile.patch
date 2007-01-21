@@ -1,0 +1,24 @@
+diff -urN icmptx-0.01/Makefile icmptx-0.01.new/Makefile
+--- icmptx-0.01/Makefile	2005-12-20 09:09:34.000000000 +0100
++++ icmptx-0.01.new/Makefile	2007-01-21 16:48:36.000000000 +0100
+@@ -3,16 +3,16 @@
+ all: icmptx
+ 
+ icmptx: it.o icmptx.o tun_dev.o
+-	gcc $(flags) -o icmptx icmptx.o it.o tun_dev.o
++	$(CC) -o icmptx icmptx.o it.o tun_dev.o
+ 
+ it.o: it.c
+-	gcc $(flags) -c it.c
++	$(CC) -c it.c
+ 
+ icmptx.o: icmptx.c
+-	gcc $(flags) -c icmptx.c
++	$(CC) -c icmptx.c
+ 
+ tun_dev.o: tun_dev.c
+-	gcc $(flags) -c tun_dev.c
++	$(CC) -c tun_dev.c
+ 
+ clean:
+ 	rm -f tun_dev.o it.o icmptx.o icmptx
