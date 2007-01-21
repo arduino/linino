@@ -50,9 +50,14 @@ endef
 $(eval $(call BuildPackage,firmwarehotplug))
 
 define Require/working-sdcc
-        echo 'int main() { return 0; }' >$(TMP_DIR)/a.c; \
-        sdcc -o $(TMP_DIR)/a.out $(TMP_DIR)/a.c; \
-	rm -f $(TMP_DIR)/a.*
+	echo 'int main() { return 0; }' >$(TMP_DIR)/a.c; \
+	sdcc -o $(TMP_DIR)/a.out $(TMP_DIR)/a.c && { \
+		rm -f $(TMP_DIR)/a.* \
+	} || { \
+		rm -f $(TMP_DIR)/a.*; \
+		false \
+	}
+
 endef
 
 $(eval $(call Require,working-sdcc, \
