@@ -27,7 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mrd6
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+uclibcxx
+  DEPENDS:=@LINUX_2_6 +uclibcxx
   TITLE:=IPv6 multicast routing daemon
   DESCRIPTION:=Multicast is becoming a major component in next generation\\\
 		networks, used in several scenarios, from video broadcasting\\\
