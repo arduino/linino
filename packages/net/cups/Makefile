@@ -23,7 +23,7 @@ PKG_CAT:=bzcat
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-PKG_BUILDDEP:=zlib
+PKG_BUILD_DEPENDS:=zlib
 
 include $(INCLUDE_DIR)/package.mk
 

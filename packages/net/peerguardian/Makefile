@@ -19,7 +19,7 @@ PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/pglinux-$(PKG_VERSION)
 
-PKG_BUILDDEP:=iptables
+PKG_BUILD_DEPENDS:=iptables
 
 include $(INCLUDE_DIR)/package.mk
 

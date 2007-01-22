@@ -20,7 +20,7 @@ PKG_CAT:=zcat
 PKG_BUILD_DIR:=$(BUILD_DIR)/BitchX
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-PKG_BUILDDEP:=libncurses
+PKG_BUILD_DEPENDS:=libncurses
 
 include $(INCLUDE_DIR)/package.mk
 

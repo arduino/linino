@@ -19,7 +19,7 @@ PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
-PKG_BUILDDEP:=libpcap
+PKG_BUILD_DEPENDS:=libpcap
 
 include $(INCLUDE_DIR)/package.mk
 

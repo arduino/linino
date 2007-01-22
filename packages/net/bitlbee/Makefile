@@ -22,7 +22,7 @@ PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
-PKG_BUILDDEP:=libopenssl glib1 libiconv
+PKG_BUILD_DEPENDS:=libopenssl glib1 libiconv
 
 include $(INCLUDE_DIR)/package.mk
 

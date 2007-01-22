@@ -21,7 +21,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-PKG_BUILDDEP=zlib mysql
+PKG_BUILD_DEPENDS=zlib libmysqlclient
 
 define Package/cbtt
   SECTION:=net

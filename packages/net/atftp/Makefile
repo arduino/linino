@@ -20,7 +20,7 @@ TAR_OPTIONS += || true
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
-PKG_BUILDEP:=ncurses pcre readline
+PKG_BUILD_DEPENDS:=libncurses libpcre libreadline
 
 include $(INCLUDE_DIR)/package.mk
 

@@ -21,7 +21,7 @@ PKG_CAT:=zcat
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-PKG_BUILDDEP:=libtool
+PKG_BUILD_DEPENDS:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 

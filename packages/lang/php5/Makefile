@@ -186,7 +186,7 @@ PKG_CONFIGURE_OPTS:= \
 	  --with-zlib-dir="$(STAGING_DIR)/usr" \
 
 ifneq ($(SDK),)
-  PKG_BUILDDEP:=libopenssl zlib libcurl libgd libgmp libopenldap libmysqlclient libpq libsqlite2 libexpat
+  PKG_BUILD_DEPENDS:=libopenssl zlib libcurl libgd libgmp libopenldap libmysqlclient libpq libsqlite2 libexpat
 # force PKG_CONFIGURE_{LIBS,OPTS} below when built in the SDK
   CONFIG_PACKAGE_php5-cli:=m
   CONFIG_PACKAGE_php5-cgi:=m

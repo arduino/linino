@@ -20,6 +20,8 @@ PKG_CAT:=zcat
 PKG_BUILD_DIR:=$(BUILD_DIR)/CyberLinkC
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
+PKG_BUILD_DEPENDS:=libexpat
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libclinkc

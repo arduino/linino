@@ -24,7 +24,7 @@ PKG_CAT:=zcat
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-PKG_BUILDDEP:=libncurses libreadline
+PKG_BUILD_DEPENDS:=libncurses libreadline
 
 include $(INCLUDE_DIR)/package.mk
 

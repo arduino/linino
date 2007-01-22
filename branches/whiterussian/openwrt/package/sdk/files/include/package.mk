@@ -171,7 +171,7 @@ define BuildPackage
 	echo "Version: $(VERSION)"; \
 	echo "Depends: $$(IDEPEND_$(1))"; \
 	echo "Provides: $(PROVIDES)"; \
-	echo "Build-Depends: $(PKG_BUILDDEP)"; \
+	echo "Build-Depends: $(PKG_BUILD_DEPENDS)"; \
 	echo "Category: $(CATEGORY)"; \
 	echo "Title: $(TITLE)"; \
 	if isset $(call shvar,Package/$(1)/description); then \

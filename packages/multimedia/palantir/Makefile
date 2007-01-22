@@ -19,7 +19,7 @@ PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
-PKG_BUILDDEP:=libjpeg
+PKG_BUILD_DEPENDS:=libjpeg
 
 define Package/palantir
   SECTION:=multimedia

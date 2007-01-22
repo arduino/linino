@@ -20,7 +20,7 @@ PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
-PKG_BUILDDEP:=iptables libupnp
+PKG_BUILD_DEPENDS:=iptables libupnp
 
 include $(INCLUDE_DIR)/package.mk
 

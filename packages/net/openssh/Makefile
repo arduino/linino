@@ -22,7 +22,8 @@ PKG_MD5SUM:=793a709a8de695c22f523024d7e9bf07
 PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-PKG_BUILDDEP:=libopenssl
+
+PKG_BUILD_DEPENDS:=libopenssl
 
 include $(INCLUDE_DIR)/package.mk
 
