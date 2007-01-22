@@ -43,7 +43,11 @@ UCLIBC_TARGET_ARCH:=$(shell echo $(ARCH) | sed -e s'/-.*//' \
 )
 
 define Build/Configure
-	cp ./files/config.$(UCLIBC_TARGET_ARCH) $(PKG_BUILD_DIR)/.config
+	if [ -f ./files/config.$(UCLIBC_TARGET_ARCH) ]; then \
+		cp ./files/config.$(UCLIBC_TARGET_ARCH) $(PKG_BUILD_DIR)/.config; \
+	else \
+		cp ./files/config.default $(PKG_BUILD_DIR)/.config; \
+	fi
 endef
 
 define Build/Compile
