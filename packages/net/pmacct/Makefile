@@ -95,7 +95,6 @@ define Package/pmacct-client
   TITLE:=Command-line client to gather data from the IMT plugin
 endef
 
-
 ifneq ($(SDK),)
   CONFIG_PACKAGE_nfacctd:=m
   CONFIG_PACKAGE_nfacctd-mysql:=m
@@ -114,9 +113,10 @@ $(PKG_BUILD_DIR)/nfacctd-$(1) $(PKG_BUILD_DIR)/pmacctd-$(1): $(PKG_BUILD_DIR)/.c
 	$(call Build/Configure/Default, \
 		--with-pcap-includes="$(STAGING_DIR)/usr/include" \
 		--with-pcap-libs="$(STAGING_DIR)/usr/lib" \
-		"$(2)" \
+		$(2) \
 		,\
-		LIBS+="-lz" \
+		LIBS="-lz" \
+		,
 	);
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
@@ -124,7 +124,9 @@ $(PKG_BUILD_DIR)/nfacctd-$(1) $(PKG_BUILD_DIR)/pmacctd-$(1): $(PKG_BUILD_DIR)/.c
 	mv -f $(PKG_BUILD_DIR)/src/nfacctd $(PKG_BUILD_DIR)/nfacctd-$(1)
 	mv -f $(PKG_BUILD_DIR)/src/pmacctd $(PKG_BUILD_DIR)/pmacctd-$(1)
 
-$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/nfacctd-$(1) $(PKG_BUILD_DIR)/pmacctd-$(1)
+ifneq ($(CONFIG_PACKAGE_nfacctd$(3))$(CONFIG_PACKAGE_pmacctd$(3)),)
+  $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/nfacctd-$(1) $(PKG_BUILD_DIR)/pmacctd-$(1)
+endif
 
 endef
 
@@ -150,38 +152,34 @@ endef
 endef
 
 
-ifneq ($(CONFIG_PACKAGE_nfacctd)$(CONFIG_PACKAGE_pmacctd),)
-  $(eval $(call Compile/Template,basic))
-  $(eval $(call Install/Template,nfacctd,nfacctd-basic,nfacctd))
-  $(eval $(call Install/Template,pmacctd,pmacctd-basic,pmacctd))
-endif
-ifneq ($(CONFIG_PACKAGE_nfacctd-mysql)$(CONFIG_PACKAGE_pmacctd-mysql),)
-  $(eval $(call Compile/Template,mysql, \
-		--enable-mysql \
-		--with-mysql-includes="$(STAGING_DIR)/usr/include" \
-		--with-mysql-libs="$(STAGING_DIR)/usr/lib/mysql" \
-  ))
-  $(eval $(call Install/Template,nfacctd-mysql,nfacctd-mysql,nfacctd))
-  $(eval $(call Install/Template,pmacctd-mysql,pmacctd-mysql,pmacctd))
-endif
-ifneq ($(CONFIG_PACKAGE_nfacctd-pgsql)$(CONFIG_PACKAGE_pmacctd-pgsql),)
-  $(eval $(call Compile/Template,pgsql, \
-		--enable-pgsql \
-		--with-pgsql-includes="$(STAGING_DIR)/usr/include" \
-		--with-pgsql-libs="$(STAGING_DIR)/usr/lib" \
-  ))
-  $(eval $(call Install/Template,nfacctd-pgsql,nfacctd-pgsql,nfacctd))
-  $(eval $(call Install/Template,pmacctd-pgsql,pmacctd-pgsql,pmacctd))
-endif
-ifneq ($(CONFIG_PACKAGE_nfacctd-sqlite)$(CONFIG_PACKAGE_pmacctd-sqlite),)
-  $(eval $(call Compile/Template,sqlite, \
-		--enable-sqlite3 \
-		--with-sqlite3-includes="$(STAGING_DIR)/usr/include" \
-		--with-sqlite3-libs="$(STAGING_DIR)/usr/lib" \
-  ))
-  $(eval $(call Install/Template,nfacctd-sqlite,nfacctd-sqlite,nfacctd))
-  $(eval $(call Install/Template,pmacctd-sqlite,pmacctd-sqlite,pmacctd))
-endif
+$(eval $(call Compile/Template,basic,,))
+$(eval $(call Install/Template,nfacctd,nfacctd-basic,nfacctd))
+$(eval $(call Install/Template,pmacctd,pmacctd-basic,pmacctd))
+
+$(eval $(call Compile/Template,mysql, \
+	--enable-mysql \
+	--with-mysql-includes="$(STAGING_DIR)/usr/include" \
+	--with-mysql-libs="$(STAGING_DIR)/usr/lib/mysql" \
+,-mysql))
+$(eval $(call Install/Template,nfacctd-mysql,nfacctd-mysql,nfacctd))
+$(eval $(call Install/Template,pmacctd-mysql,pmacctd-mysql,pmacctd))
+
+$(eval $(call Compile/Template,pgsql, \
+	--enable-pgsql \
+	--with-pgsql-includes="$(STAGING_DIR)/usr/include" \
+	--with-pgsql-libs="$(STAGING_DIR)/usr/lib" \
+,-pgsql))
+
+$(eval $(call Install/Template,nfacctd-pgsql,nfacctd-pgsql,nfacctd))
+$(eval $(call Install/Template,pmacctd-pgsql,pmacctd-pgsql,pmacctd))
+
+$(eval $(call Compile/Template,sqlite, \
+	--enable-sqlite3 \
+	--with-sqlite3-includes="$(STAGING_DIR)/usr/include" \
+	--with-sqlite3-libs="$(STAGING_DIR)/usr/lib" \
+,-sqlite))
+$(eval $(call Install/Template,nfacctd-sqlite,nfacctd-sqlite,nfacctd))
+$(eval $(call Install/Template,pmacctd-sqlite,pmacctd-sqlite,pmacctd))
 
 define Build/Configure
 endef
