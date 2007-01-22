@@ -31,9 +31,9 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/Default, \
-		CCOPTS="\$$$$(EXTRA_CFLAGS)" \
+		CCOPTS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
 		INCLUDE="" \
-		LDFLAGS="\$$$$(EXTRA_LDFLAGS)" \
+		LDFLAGS="$(EXTRA_LDFLAGS)" \
 	)
 endef
 
