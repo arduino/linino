@@ -30,6 +30,10 @@ define Package/arpd
 endef
 
 define Build/Configure
+        (cd $(PKG_BUILD_DIR); touch \
+		stamp-h.in \
+		config.h.in \
+	);
 	$(call Build/Configure/Default, \
 		--with-libdnet="$(STAGING_DIR)/usr" \
 		--with-libevent="$(STAGING_DIR)/usr" \
