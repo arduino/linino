@@ -41,8 +41,9 @@ define Build/Configure
 		configure.in \
 		aclocal.m4 \
 		Makefile.in \
-		config-h.in \
 		configure \
+		stamp-h.in \
+		config.h.in \
 	);
 	$(call Build/Configure/Default, \
 		--without-x \
