@@ -37,7 +37,14 @@ define Package/fping
   URL:=http://www.fping.com
 endef
   
-# uses Build/Configure/Default
+define Build/Configure
+        (cd $(PKG_BUILD_DIR); touch \
+		configure \
+		stamp-h.in \
+		config.h.in \
+	);
+	$(call Build/Configure/Default,)
+endef
 
 define Build/Compile	
 	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" -C $(PKG_BUILD_DIR) clean $(PKG_NAME)
