@@ -42,7 +42,8 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/Default, \
-		CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		CPPFLAGS="$(EXTRA_CFLAGS)" \
 		LDFLAGS="$(EXTRA_LDFLAGS)" \
 	)
 endef
