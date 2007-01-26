@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/sipsak
   SECTION:=net
   CATEGORY:=Network
-  DEPEDNDS:=+libopenssl
+  DEPENDS:=+libopenssl
   TITLE:=SIP (Session Initiation Protocol) stress and diagnostics utility
   URL:=http://www.sipsak.org/
 endef
