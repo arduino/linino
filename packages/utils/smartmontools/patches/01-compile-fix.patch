@@ -1,6 +1,7 @@
---- smartmontools-5.36/configure.in.orig	2006-12-17 03:01:38.000000000 +0100
-+++ smartmontools-5.36/configure.in	2006-12-17 03:00:35.000000000 +0100
-@@ -74,16 +74,16 @@
+diff -urN smartmontools-5.37/configure.in smartmontools-5.37.new/configure.in
+--- smartmontools-5.37/configure.in	2006-12-20 21:39:25.000000000 +0100
++++ smartmontools-5.37.new/configure.in	2007-01-26 11:37:41.000000000 +0100
+@@ -76,18 +76,18 @@
  AC_CHECK_FUNCS([uname])
  
  # Check whether snprintf appends null char and returns expected length on overflow
@@ -8,7 +9,9 @@
 -AC_MSG_CHECKING([for working snprintf])
 -AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>]], [[ char buf[]="ABCDEFGHI";
 -               int i=snprintf(buf,8,"12345678"); return !(!buf[7] && i==8); ]])],
--              [libc_have_working_snprintf=yes], [libc_have_working_snprintf=no])
+-              [libc_have_working_snprintf=yes],
+-	      [libc_have_working_snprintf=no],
+-	      [libc_have_working_snprintf=no])
 -AC_SUBST(libc_have_working_snprintf)
 -if test "$libc_have_working_snprintf" = "yes"; then
 -  AC_DEFINE(HAVE_WORKING_SNPRINTF)
@@ -18,7 +21,9 @@
 +#AC_MSG_CHECKING([for working snprintf])
 +#AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>]], [[ char buf[]="ABCDEFGHI";
 +#               int i=snprintf(buf,8,"12345678"); return !(!buf[7] && i==8); ]])],
-+#              [libc_have_working_snprintf=yes], [libc_have_working_snprintf=no])
++#              [libc_have_working_snprintf=yes],
++#	      [libc_have_working_snprintf=no],
++#	      [libc_have_working_snprintf=no])
 +#AC_SUBST(libc_have_working_snprintf)
 +#if test "$libc_have_working_snprintf" = "yes"; then
 +#  AC_DEFINE(HAVE_WORKING_SNPRINTF)
@@ -26,4 +31,4 @@
 +#AC_MSG_RESULT([$libc_have_working_snprintf])
  
  # check for __attribute__((packed))
- AH_TEMPLATE(HAVE_ATTR_PACKED, [Define to 1 if C compiler supports __attribute__((packed))])
+ AH_TEMPLATE(HAVE_ATTR_PACKED, [Define to 1 if C++ compiler supports __attribute__((packed))])
