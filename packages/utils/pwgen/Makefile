@@ -13,7 +13,7 @@ PKG_VERSION:=2.05
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=@SF/pwgen
+PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=b94546a346cb352054ea2d3d09f7f885
 PKG_CAT:=zcat
 
@@ -33,7 +33,7 @@ define Package/pwgen
 	remembering their position when memorizing only the word. \\\
 	\\\
 	E.g. to generate a WPA preshared-key do: \\\
-	    pwgen -c -n -s 63 1
+	pwgen -c -n -s 63 1
   URL:=http://sourceforge.net/projects/pwgen/
 endef
 
