@@ -45,7 +45,7 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/Default, \
-		RPM_OPT_FLAGS="$(EXTRA_CFLAGS)" \
+		RPM_OPT_FLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS)" \
 		LDFLAGS="$(EXTRA_LDFLAGS)" \
 		logrotate \
 	)
