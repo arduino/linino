@@ -26,27 +26,28 @@ if_valid () (
 )
 
 do_ifup() {
-	if_proto=$(nvram get ${2}_proto)
-	if=$(nvram get ${2}_ifname)
-	[ "${if%%[0-9]}" = "ppp" ] && if=$(nvram get ${2}_device)
+	ifproto="$1"
+	iftype="$2"
+	if="$(nvram get ${iftype}_ifname)"
+	[ "${if%%[0-9]}" = "ppp" ] && if="$(nvram get ${iftype}_device)"
 	
 	pidfile=/var/run/${if}.pid
 	[ -f $pidfile ] && $DEBUG kill $(cat $pidfile)
 
-	case "$1" in
+	case "$ifproto" in
 	static)
-		ip=$(nvram get ${2}_ipaddr)
-		netmask=$(nvram get ${2}_netmask)
-		gateway=$(nvram get ${2}_gateway)
-		mtu=$(nvram get ${2}_mtu)
-		static_route=$(nvram get ${2}_static_route)
+		ip=$(nvram get ${iftype}_ipaddr)
+		netmask=$(nvram get ${iftype}_netmask)
+		gateway=$(nvram get ${iftype}_gateway)
+		mtu=$(nvram get ${iftype}_mtu)
+		static_route=$(nvram get ${iftype}_static_route)
 
 		$DEBUG ifconfig $if $ip ${netmask:+netmask $netmask} ${mtu:+mtu $(($mtu))} broadcast + up
 		${gateway:+$DEBUG route add default gw $gateway}
 
 		[ -f /tmp/resolv.conf.auto ] || {
 			debug "# --- creating /tmp/resolv.conf.auto ---"
-			for dns in $(nvram get ${2}_dns); do
+			for dns in $(nvram get ${iftype}_dns); do
 				echo "nameserver $dns" >> /tmp/resolv.conf.auto
 			done
 		}
@@ -61,19 +62,19 @@ do_ifup() {
 			} done
 		}
 
-		env -i ACTION="ifup" INTERFACE="${2}" PROTO=static /sbin/hotplug "iface" &
+		env -i ACTION="ifup" INTERFACE="${iftype}" PROTO=static /sbin/hotplug "iface" &
 	;;
 	dhcp*)
-		DHCP_IP=$(nvram get ${2}_ipaddr)
-		DHCP_NETMASK=$(nvram get ${2}_netmask)
-		mtu=$(nvram get ${2}_mtu)
+		DHCP_IP=$(nvram get ${iftype}_ipaddr)
+		DHCP_NETMASK=$(nvram get ${iftype}_netmask)
+		mtu=$(nvram get ${iftype}_mtu)
 		$DEBUG ifconfig $if $DHCP_IP ${DHCP_NETMASK:+netmask $DHCP_NETMASK} ${mtu:+mtu $(($mtu))} broadcast + up
 
 		DHCP_ARGS="-i $if ${DHCP_IP:+-r $DHCP_IP} -b -p $pidfile -t 0"
-		DHCP_HOSTNAME=$(nvram get ${2}_hostname)
+		DHCP_HOSTNAME=$(nvram get ${iftype}_hostname)
 		DHCP_HOSTNAME=${DHCP_HOSTNAME%%.*}
 		[ -z $DHCP_HOSTNAME ] || DHCP_ARGS="$DHCP_ARGS -H $DHCP_HOSTNAME"
-		[ "$if_proto" = "pptp" ] && DHCP_ARGS="$DHCP_ARGS -n -q" || DHCP_ARGS="$DHCP_ARGS -R &"
+		[ "$(nvram get ${iftype}_proto)" = "pptp" ] && DHCP_ARGS="$DHCP_ARGS -n -q" || DHCP_ARGS="$DHCP_ARGS -R &"
 		[ -r $pidfile ] && oldpid=$(cat $pidfile 2>&-)
 		${DEBUG:-eval} "udhcpc $DHCP_ARGS"
 		[ -n "$oldpid" ] && pidof udhcpc | grep "$oldpid" >&- 2>&- && {
@@ -85,8 +86,8 @@ do_ifup() {
 	none|"")
 	;;
 	*)
-		[ -x "/sbin/ifup.$1" ] && { $DEBUG /sbin/ifup.$1 ${2}; exit; }
-		echo "### ifup ${2}: ignored ${2}_proto=\"$1\" (not supported)"
+		[ -x "/sbin/ifup.$ifproto" ] && { $DEBUG /sbin/ifup.$ifproto ${iftype}; exit; }
+		echo "### ifup ${iftype}: ignored ${iftype}_proto=\"$ifproto\" (not supported)"
 	;;
 	esac
 }
