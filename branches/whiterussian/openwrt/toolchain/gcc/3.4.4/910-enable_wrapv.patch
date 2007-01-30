@@ -1,0 +1,11 @@
+--- gcc.old/gcc/toplev.c	2005-03-09 01:50:25.000000000 +0100
++++ gcc.dev/gcc/toplev.c	2007-01-30 12:25:29.644130224 +0100
+@@ -991,7 +991,7 @@
+ int flag_trapv = 0;
+ 
+ /* Nonzero if signed arithmetic overflow should wrap around.  */
+-int flag_wrapv = 0;
++int flag_wrapv = 1;
+ 
+ /* Nonzero if subexpressions must be evaluated from left-to-right.  */
+ int flag_evaluation_order = 0;
