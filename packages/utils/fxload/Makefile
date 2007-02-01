@@ -17,7 +17,6 @@ PKG_MD5SUM:=cafd71a5bff0c57bcd248273b2541c05
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,11 +29,8 @@ define Package/fxload
 endef
 
 define Build/Compile
-	$(call Build/Compile/Default,
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		CC="$(TARGET_CC)" \
-		CROSS="$(TARGET_CROSS)" \
-		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
+	$(call Build/Compile/Default, \
+		CFLAGS="$(TARGET_CFLAGS)" \
 	)
 endef
 
