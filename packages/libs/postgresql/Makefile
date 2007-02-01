@@ -46,9 +46,9 @@ endef
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
-		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		CPPFLAGS="$$$$CPPFLAGS $(EXTRA_CPPFLAGS)" \
+		LDFLAGS="$(EXTRA_LDFLAGS)" \
 		./configure \
 			--target=$(GNU_TARGET_NAME) \
 			--host=$(GNU_TARGET_NAME) \

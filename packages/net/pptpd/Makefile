@@ -38,7 +38,7 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/Default, \
-		COPTS="\$$$$(EXTRA_CFLAGS)" \
+		COPTS="$(TARGET_CFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		INSTALL="install" \
 		all install \
