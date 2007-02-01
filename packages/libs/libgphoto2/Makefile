@@ -83,6 +83,8 @@ define Build/InstallDev
 	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(STAGING_DIR)/usr/lib/pkgconfig/libgphoto2.pc
 	$(SED) 's,-I$$$${includedir}/gphoto2,,g' $(STAGING_DIR)/usr/lib/pkgconfig/libgphoto2.pc
 	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/libgphoto2.pc
+	# remove annoying recursive symlink
+	rm -f $(STAGING_DIR)/usr/include/gphoto2/gphoto2
 endef
 
 define Build/UninstallDev
