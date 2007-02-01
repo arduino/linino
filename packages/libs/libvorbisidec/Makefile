@@ -31,7 +31,7 @@ define Package/libvorbisidec
 	It also has libogg built-in. It is suitable as a replacement for \\\
 	libvorbis and libogg in tremor-aware applications.\\\
 	Tremor is a decoder only. 
-  URL:=http://http://wiki.xiph.org/index.php/Tremor
+  URL:=http://wiki.xiph.org/index.php/Tremor
 endef
 
 define Build/Configure
