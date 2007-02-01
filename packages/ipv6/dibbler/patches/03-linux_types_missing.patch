@@ -1,0 +1,11 @@
+diff -ruN dibbler-0.5.0-old/Port-linux/utils.h dibbler-0.5.0-new/Port-linux/utils.h
+--- dibbler-0.5.0-old/Port-linux/utils.h	2006-01-12 01:23:35.000000000 +0100
++++ dibbler-0.5.0-new/Port-linux/utils.h	2007-01-31 17:44:42.000000000 +0100
+@@ -2,6 +2,7 @@
+ #define __UTILS_H__ 1
+ 
+ #include <asm/types.h>
++#include <linux/types.h>
+ #include <linux/inetdevice.h>
+ #include <resolv.h>
+ 

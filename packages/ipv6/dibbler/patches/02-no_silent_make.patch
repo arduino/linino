@@ -1,0 +1,12 @@
+diff -ruN dibbler-0.5.0-old/Makefile.inc dibbler-0.5.0-new/Makefile.inc
+--- dibbler-0.5.0-old/Makefile.inc	2006-08-22 02:11:49.000000000 +0200
++++ dibbler-0.5.0-new/Makefile.inc	2007-01-31 17:43:07.000000000 +0100
+@@ -64,7 +64,7 @@
+ #XMLLIBS      = `pkg-config libxml-2.0 --libs`
+ 
+ # === do not modify anything below ===
+-MAKEFLAGS   += -s
++#MAKEFLAGS   += -s
+ VERSION      = `$(TOPDIR)/test/xtract_version`
+ INST_WORKDIR = $(DESTDIR)'/var/lib/dibbler'
+ INST_MANDIR  = $(DESTDIR)'/usr/local/man'

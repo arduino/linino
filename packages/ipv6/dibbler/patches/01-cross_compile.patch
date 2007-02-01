@@ -1,0 +1,55 @@
+diff -ruN dibbler-0.5.0-old/Makefile dibbler-0.5.0-new/Makefile
+--- dibbler-0.5.0-old/Makefile	2006-10-06 00:58:22.000000000 +0200
++++ dibbler-0.5.0-new/Makefile	2007-01-31 18:03:24.000000000 +0100
+@@ -50,7 +50,8 @@
+ 	-L$(MISC)         -lMisc           \
+ 	-L$(MESSAGES)     -lMsg            \
+ 	-lClntOptions -lOptions -lLowLevel \
+-	-L$(POSLIB)       $(CLNTPOSLIB)
++	-L$(POSLIB)       $(CLNTPOSLIB) \
++	$(CLNT_LIBS)
+ 
+ ifndef MOD_CLNT_DISABLE_DNSUPDATE
+ CLNTPOSLIB=-lposlib	
+@@ -81,7 +82,9 @@
+ 	-L$(OPTIONS)     -lOptions         \
+ 	-L$(LOWLEVEL)    -lLowLevel        \
+ 	-L$(IFACEMGR)    -lIfaceMgr        \
+-	-L$(POSLIB)      $(SRVPOSLIB)
++	-L$(POSLIB)      $(SRVPOSLIB)      \
++	$(SRV_LIBS)
++
+ 
+ ifndef MOD_SRV_DISABLE_DNSUPDATE
+ SRVPOSLIB=-lposlib	
+@@ -104,7 +107,8 @@
+ 	-L$(MESSAGES)    -lMsg          \
+ 	-L$(MISC)        -lMisc         \
+ 	-L$(OPTIONS)     -lOptions      \
+-	-lMisc -lIfaceMgr -lLowLevel -lRelTransMgr -lRelCfgMgr -lRelMsg -lRelOptions -lOptions
++	-lMisc -lIfaceMgr -lLowLevel -lRelTransMgr -lRelCfgMgr -lRelMsg -lRelOptions -lOptions \
++	$(SRV_LIBS)
+ 
+ objs:	includes
+ 	@for dir in $(COMMONSUBDIRS); do \
+diff -ruN dibbler-0.5.0-old/Makefile.inc dibbler-0.5.0-new/Makefile.inc
+--- dibbler-0.5.0-old/Makefile.inc	2006-08-22 02:11:49.000000000 +0200
++++ dibbler-0.5.0-new/Makefile.inc	2007-01-31 17:43:07.000000000 +0100
+@@ -5,7 +5,7 @@
+ BISONPP      = $(PREFIX)/bison++/bison++ -S $(PREFIX)/bison++/bison.cc -H $(PREFIX)/bison++/bison.h
+ 
+ # === compiler options ===
+-COPTS        = -D$(ARCH) $(PORT_CFLAGS) $(XMLCFLAGS) -I $(INCDIR) $(DEBUGINFO) -Wall -funsigned-char -O0 $(PEDANTIC)
++COPTS        = -D$(ARCH) $(PORT_CFLAGS) $(XMLCFLAGS) -I $(INCDIR) $(DEBUGINFO) -Wall -funsigned-char $(PEDANTIC)
+ OPTS         = -ftemplate-depth-40 $(COPTS) $(CFLAGS) $(CXXFLAGS)
+ 
+ # === linker options ===
+@@ -124,7 +124,7 @@
+ 
+ %.a: objs
+ 	@echo "[LIB    ] $(SUBDIR)/$@"	
+-	ar cr $@ $(OBJECTS)
++	$(AR) cr $@ $(OBJECTS)
+ 
+ all: libs
+ 
