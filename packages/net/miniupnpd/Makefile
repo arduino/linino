@@ -9,9 +9,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miniupnpd
-PKG_VERSION:=1.0-RC2
+PKG_VERSION:=1.0-RC3
 PKG_RELEASE:=1
-PKG_MD5SUM:=17f739cdfd4efb3a0f4ec716f08bb094
+PKG_MD5SUM:=4aa5e9d6281bbec5b8dd0b386f35a153
 
 PKG_SOURCE_URL:=http://miniupnp.tuxfamily.org/files
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
