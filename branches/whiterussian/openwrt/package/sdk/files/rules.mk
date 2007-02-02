@@ -9,7 +9,6 @@
 include $(TOPDIR)/include/verbose.mk
 
 export SHELL=/usr/bin/env bash -c '. $(TOPDIR)/include/shell.sh; eval "$$2"' --
-export BASH=$(shell which bash)
 
 ARCH:=$(strip $(subst ",, $(CONFIG_ARCH)))
 TARGET_OPTIMIZATION:=$(strip $(subst ",, $(CONFIG_TARGET_OPTIMIZATION)))
@@ -30,7 +29,7 @@ BIN_DIR:=$(TOPDIR)/bin
 PACKAGE_DIR:=$(BIN_DIR)/packages
 IPKG_TARGET_DIR:=$(PACKAGE_DIR)
 BUILD_DIR:=$(TOPDIR)/build_$(ARCH)
-TMP_DIR:=$(BUILD_DIR)/tmp
+TMP_DIR:=$(TOPDIR)/tmp
 STAMP_DIR:=$(BUILD_DIR)/stamp
 TARGET_DIR:=$(BUILD_DIR)/root
 IPKG_STATE_DIR:=$(TARGET_DIR)/usr/lib/ipkg
@@ -43,7 +42,7 @@ endif
 
 IMAGE:=$(BUILD_DIR)/root_fs_$(ARCH)
 
-TARGET_PATH:=$(STAGING_DIR)/usr/bin:$(STAGING_DIR)/bin:$(PATH)
+TARGET_PATH:=$(STAGING_DIR)/usr/sbin:$(STAGING_DIR)/usr/bin:$(STAGING_DIR)/bin:$(PATH)
 TARGET_CFLAGS:=$(TARGET_OPTIMIZATION)
 
 export PATH:=$(TARGET_PATH)
@@ -70,6 +69,10 @@ ifneq ($(CONFIG_CCACHE),)
   TARGET_CC:= ccache $(TARGET_CC)
 endif
 
+EXTRA_CPPFLAGS := -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+EXTRA_CFLAGS := $(EXTRA_CPPFLAGS)
+EXTRA_LDFLAGS := -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib
+
 TARGET_CONFIGURE_OPTS:= \
   AR=$(TARGET_CROSS)ar \
   AS="$(TARGET_CC) -c $(TARGET_CFLAGS)" \
@@ -79,7 +82,8 @@ TARGET_CONFIGURE_OPTS:= \
   GCC="$(TARGET_CC)" \
   CXX=$(TARGET_CROSS)g++ \
   RANLIB=$(TARGET_CROSS)ranlib \
-  STRIP=$(TARGET_CROSS)strip
+  STRIP=$(TARGET_CROSS)strip \
+  OBJCOPY=$(TARGET_CROSS)objcopy
 
 # strip an entire directory
 RSTRIP:= \
@@ -115,6 +119,16 @@ ifeq ($(CONFIG_TAR_VERBOSITY),y)
 else
   TAR_OPTIONS:=-xf -
 endif
+
+define shvar
+V_$(subst .,_,$(subst -,_,$(subst /,_,$(1))))
+endef
+
+define shexport
+$(call shvar,$(1))=$$(call $(1))
+export $(call shvar,$(1))
+endef
+
 
 all:
 FORCE: ;

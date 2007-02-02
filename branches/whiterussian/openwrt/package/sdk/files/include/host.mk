@@ -5,11 +5,12 @@
 # See /LICENSE for more information.
 #
 
-include $(TOPDIR)/.host.mk
+include $(TMP_DIR)/.host.mk
 
 export TAR
 
-$(TOPDIR)/.host.mk: $(INCLUDE_DIR)/host.mk
+$(TMP_DIR)/.host.mk: $(TOPDIR)/include/host.mk
+	@mkdir -p $(TMP_DIR)
 	@( \
 		HOST_OS=`uname`; \
 		case "$$HOST_OS" in \
@@ -22,11 +23,12 @@ $(TOPDIR)/.host.mk: $(INCLUDE_DIR)/host.mk
 		echo "HOST_OS:=$$HOST_OS" > $@; \
 		echo "HOST_ARCH:=$$HOST_ARCH" >> $@; \
 		echo "GNU_HOST_NAME:=$$GNU_HOST_NAME" >> $@; \
-		TAR=`which gtar`; \
-		[ -n "$$TAR" -a -x "$$TAR" ] || TAR=`which tar`; \
+		TAR=`which gtar 2>/dev/null`; \
+		[ -n "$$TAR" -a -x "$$TAR" ] || TAR=`which tar 2>/dev/null`; \
 		echo "TAR:=$$TAR" >> $@; \
-		ZCAT=`which gzcat`; \
-		[ -n "$$ZCAT" -a -x "$$ZCAT" ] || ZCAT=`which zcat`; \
+		ZCAT=`which gzcat 2>/dev/null`; \
+		[ -n "$$ZCAT" -a -x "$$ZCAT" ] || ZCAT=`which zcat 2>/dev/null`; \
 		echo "ZCAT:=$$ZCAT" >> $@; \
+		echo "BASH:=$(shell which bash)" >> $@; \
 	)
 

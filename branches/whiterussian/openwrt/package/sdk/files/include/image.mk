@@ -4,6 +4,9 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
+
+include $(INCLUDE_DIR)/prereq.mk
+include $(INCLUDE_DIR)/kernel.mk
 KDIR:=$(BUILD_DIR)/linux-$(KERNEL)-$(BOARD)
 
 ifneq ($(CONFIG_BIG_ENDIAN),y)
@@ -53,7 +56,7 @@ ifeq ($(CONFIG_TARGET_ROOTFS_EXT2FS),y)
   E2SIZE=$(shell echo $$(($(CONFIG_TARGET_ROOTFS_FSPART)*1024)))
   
   define Image/mkfs/ext2
-		$(STAGING_DIR)/bin/genext2fs -q -b $(E2SIZE) -I 1500 -d $(BUILD_DIR)/root/ $(KDIR)/root.ext2
+		$(STAGING_DIR)/bin/genext2fs -U -b $(E2SIZE) -I 1500 -d $(BUILD_DIR)/root/ $(KDIR)/root.ext2
 		$(call Image/Build,ext2)
   endef
 endif
@@ -72,10 +75,17 @@ define Image/mkfs/prepare
 endef
 
 define BuildImage
-compile:
+download:
+prepare:
+ifneq ($(IB),1)
+  compile: compile-targets
 	$(call Build/Compile)
+else
+  compile:
+endif
 
-install:
+ifneq ($(IB),1)
+  install: compile install-targets
 	$(call Image/Prepare)
 	$(call Image/mkfs/prepare)
 	$(call Image/BuildKernel)
@@ -83,17 +93,25 @@ install:
 	$(call Image/mkfs/squashfs)
 	$(call Image/mkfs/tgz)
 	$(call Image/mkfs/ext2)
+else
+  install: compile install-targets
+	$(call Image/BuildKernel)
+	$(call Image/mkfs/jffs2)
+	$(call Image/mkfs/squashfs)
+	$(call Image/mkfs/tgz)
+	$(call Image/mkfs/ext2)
+endif
 	
-clean:
+ifneq ($(IB),1)
+  clean: clean-targets
 	$(call Build/Clean)
-endef
+else
+  clean:
+endif
 
 compile-targets:
 install-targets:
 clean-targets:
+endef
 
-download:
-prepare:
-compile: compile-targets
-install: compile install-targets
-clean: clean-targets
+

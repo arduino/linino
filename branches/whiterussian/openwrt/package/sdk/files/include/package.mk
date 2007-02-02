@@ -14,23 +14,14 @@ include $(INCLUDE_DIR)/prereq.mk
 include $(INCLUDE_DIR)/host.mk
 include $(INCLUDE_DIR)/unpack.mk
 
+PKG_CONFIG_PATH:=.
 export CONFIG_SITE:=$(INCLUDE_DIR)/site/$(REAL_GNU_TARGET_NAME)
-
-define shvar
-V_$(subst .,_,$(subst -,_,$(subst /,_,$(1))))
-endef
-
-define shexport
-$(call shvar,$(1))=$$(call $(1))
-export $(call shvar,$(1))
-endef
 
 define Build/DefaultTargets
   ifeq ($(DUMP),)
     ifeq ($(CONFIG_AUTOREBUILD),y)
-      _INFO:=
-      ifneq ($$(shell $(SCRIPT_DIR)/timestamp.pl -p $(PKG_BUILD_DIR) .),$(PKG_BUILD_DIR))
-        _INFO+=$(subst $(TOPDIR)/,,$(PKG_BUILD_DIR))
+      ifneq ($$(shell $(SCRIPT_DIR)/timestamp.pl -p $(PKG_BUILD_DIR) . $(PKG_FILE_DEPEND)),$(PKG_BUILD_DIR))
+        $$(info Forcing package rebuild)
         $(PKG_BUILD_DIR)/.prepared: package-clean
       endif
     endif
@@ -132,7 +123,17 @@ define BuildPackage
   INFO_$(1):=$(IPKG_STATE_DIR)/info/$(1).list
 
   ifdef Package/$(1)/install
-    compile-targets: $$(IPKG_$(1))
+    ifeq ($(CONFIG_PACKAGE_$(1)),y)
+      install-targets: $$(INFO_$(1))
+    endif
+
+    ifneq ($(CONFIG_PACKAGE_$(1))$(DEVELOPER)$(SDK),)
+      compile-targets: $$(IPKG_$(1))
+    else
+      compile-targets: $(1)-disabled
+      $(1)-disabled:
+	@echo "WARNING: skipping $(1) -- package not selected"
+    endif
   endif
 
   ifeq ($(FORCEREBUILD),y)
@@ -142,58 +143,67 @@ define BuildPackage
   IDEPEND_$(1):=$$(strip $$(DEPENDS))
 
   ifneq ($(DUMP),)
-    DUMPINFO += \
+    dumpinfo: dumpinfo-$(1)
+    dumpinfo-$(1): FORCE
+		@$$(DUMPINFO_$(call shvar,$(1)))
+		
+    DUMPINFO_$(call shvar,$(1)) += \
 	echo "Package: $(1)"; 
 
     ifneq ($(MENU),)
-      DUMPINFO += \
+      DUMPINFO_$(call shvar,$(1)) += \
 	echo "Menu: $(MENU)";
     endif
 
     ifneq ($(SUBMENU),)
-      DUMPINFO += \
+      DUMPINFO_$(call shvar,$(1)) += \
 	echo "Submenu: $(SUBMENU)";
       ifneq ($(SUBMENUDEP),)
-        DUMPINFO += \
+        DUMPINFO_$(call shvar,$(1)) += \
 	  echo "Submenu-Depends: $(SUBMENUDEP)";
       endif
     endif
 
     ifneq ($(DEFAULT),)
-      DUMPINFO += \
+      DUMPINFO_$(call shvar,$(1)) += \
 	echo "Default: $(DEFAULT)";
     endif
 
 	$(call shexport,Package/$(1)/description)
 
-    DUMPINFO += \
+    DUMPINFO_$(call shvar,$(1)) += \
 	if [ "$$$$PREREQ_CHECK" = 1 ]; then echo "Prereq-Check: 1"; fi; \
 	echo "Version: $(VERSION)"; \
 	echo "Depends: $$(IDEPEND_$(1))"; \
 	echo "Provides: $(PROVIDES)"; \
 	echo "Build-Depends: $(PKG_BUILD_DEPENDS)"; \
+	echo "Section: $(SECTION)"; \
 	echo "Category: $(CATEGORY)"; \
 	echo "Title: $(TITLE)"; \
+	echo "Maintainer: $(MAINTAINER)"; \
 	if isset $(call shvar,Package/$(1)/description); then \
 		echo -n "Description: "; \
 		getvar $(call shvar,Package/$(1)/description); \
 	else \
-		echo "Description: $(DESCRIPTION)" | sed -e 's,\\,\n,g'; \
+		echo "Description: $(patsubst \\,\\\\,$(DESCRIPTION))" | perl -ne 's/\\/\n/g, print'; \
 	fi;
 	
     ifneq ($(URL),)
-      DUMPINFO += \
+      DUMPINFO_$(call shvar,$(1)) += \
 		echo; \
 		echo "$(URL)";
     endif
 	
-	DUMPINFO += \
+	DUMPINFO_$(call shvar,$(1)) += \
 		echo "@@";
 
 	$(call shexport,Package/$(1)/config)
-	DUMPINFO += \
-		if isset $(call shvar,Package/$(1)/config); then echo "Config: "; getvar $(call shvar,Package/$(1)/config); fi; \
-		echo "@@";
+	DUMPINFO_$(call shvar,$(1)) += \
+		if isset $(call shvar,Package/$(1)/config); then \
+			echo "Config: "; \
+			getvar $(call shvar,Package/$(1)/config); \
+			echo "@@"; \
+		fi;
   
   endif
 
@@ -207,11 +217,11 @@ define BuildPackage
 	echo "Package: $(1)" > $$(IDIR_$(1))/CONTROL/control
 	echo "Version: $(VERSION)" >> $$(IDIR_$(1))/CONTROL/control
 	( \
-		DEPENDS=; \
+		DEPENDS='$(EXTRA_DEPENDS)'; \
 		for depend in $$(filter-out @%,$$(IDEPEND_$(1))); do \
 			DEPENDS=$$$${DEPENDS:+$$$$DEPENDS, }$$$${depend##+}; \
 		done; \
-		echo "Depends: $(EXTRA_DEPENDS) $$$$DEPENDS" >> $$(IDIR_$(1))/CONTROL/control; \
+		echo "Depends: $$$$DEPENDS" >> $$(IDIR_$(1))/CONTROL/control; \
 	)
 	echo "Source: $(SOURCE)" >> $$(IDIR_$(1))/CONTROL/control
 	echo "Section: $(SECTION)" >> $$(IDIR_$(1))/CONTROL/control
@@ -249,16 +259,12 @@ define BuildPackage
   $$(eval $$(call Build/DefaultTargets,$(1)))
 
   ifdef Package/$(1)/install
-    ifneq ($$(CONFIG_PACKAGE_$(1)),)
+    ifneq ($$(CONFIG_PACKAGE_$(1))$(DEVELOPER)$(SDK),)
       ifneq ($(MAKECMDGOALS),prereq)
         ifneq ($(DUMP),1)
           ifneq ($$(shell $(SCRIPT_DIR)/timestamp.pl -p -x ipkg -x ipkg-install '$$(IPKG_$(1))' '$(PKG_BUILD_DIR)'),$$(IPKG_$(1)))
-            _INFO+=$(subst $(TOPDIR)/,,$$(IPKG_$(1)))
             $(PKG_BUILD_DIR)/.built: package-rebuild
-          endif
-
-          ifneq ($$(_INFO),)
-            $$(info Rebuilding $$(_INFO))
+            $$(info Rebuilding $(subst $(TOPDIR)/,,$$(IPKG_$(1))))
           endif
         endif
       endif
@@ -287,9 +293,10 @@ define Build/Configure/Default
 		CXXFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
 		$(2) \
-		./configure \
+		$(PKG_CONFIG_PATH)/configure \
 		--target=$(GNU_TARGET_NAME) \
 		--host=$(GNU_TARGET_NAME) \
 		--build=$(GNU_HOST_NAME) \
@@ -316,11 +323,12 @@ define Build/Configure
 endef
 
 define Build/Compile/Default
+	CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS) " \
+	LDFLAGS="$(EXTRA_LDFLAGS) " \
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CROSS="$(TARGET_CROSS)" \
-		EXTRA_CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include " \
-		EXTRA_LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib " \
+		CXXFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS) " \
 		ARCH="$(ARCH)" \
 		$(1);
 endef
@@ -330,8 +338,7 @@ define Build/Compile
 endef
 
 ifneq ($(DUMP),)
-  dumpinfo: FORCE
-	@$(DUMPINFO)
+  dumpinfo:
 else
   $(PACKAGE_DIR):
 	mkdir -p $@
