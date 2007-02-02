@@ -24,6 +24,9 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 include $(INCLUDE_DIR)/package.mk
 
 FPM:=default
+ifeq ($(ARCH),armeb)
+  FPM:=arm
+endif
 ifeq ($(ARCH),i386)
   FPM:=intel
 endif
