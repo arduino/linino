@@ -79,7 +79,9 @@ nvram_default lan_proto static
 	remap eth0 vlan2
 	remap eth1 vlan1
 	nvram_default vlan1hwname "et0"
+	nvram_default vlan1ports "0 5"
 	nvram_default vlan2hwname "et0"
+	nvram_default vlan2ports "1 2 3 4 5*"
 	nvram_default lan_ifnames "vlan2 eth2"
 }
 
@@ -196,6 +198,9 @@ nvram_default wl0_ssid OpenWrt
 nvram_default wl0_mode ap
 nvram_default wl0_infra 1
 nvram_default wl0_radio 1
+
+nvram_default vlan0ports "1 2 3 4 5*"
+nvram_default vlan1ports "0 5"
 
 WAN_PROTO="$(nvram get wan_proto)"
 WAN_IFNAME="$(nvram get wan_ifname)"
