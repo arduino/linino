@@ -1,24 +1,4 @@
 #!/bin/sh
-[ "$1" = "button" -a "$ACTION" = "pressed" ] && {
-	echo /bin/true > /proc/sys/kernel/hotplug
-	lock /tmp/.failsafe
-
-	case "$(nvram get boardtype)" in
-		0x0467|0x042f) echo "0 1 2 3 5u*";;
-		            *) echo "1 2 3 4 5u*";;
-	esac > /proc/switch/eth0/vlan/0/ports
-
-	. /etc/functions.sh
-	set_state failsafe
-	[ "$(nvram get boot_wait)" != "on" ] && {
-		nvram set boot_wait=on
-		nvram commit
-	}
-
-	netmsg 192.168.1.255 "Entering Failsafe!"
-	telnetd -l /bin/login <> /dev/null 2>&1
-
-	exec </dev/console >/dev/console 2>/dev/console
-	ash --login
-	lock -u /tmp/.failsafe
-}
+case "$1" in
+	button) kill -USR1 1;;
+esac
