@@ -4,6 +4,12 @@
 . /etc/functions.sh
 export PATH=/bin:/sbin:/usr/bin:/usr/sbin
 
+# the shell really doesn't like having stdin/out closed
+# that's why we use /dev/pty/m0 and m1 as replacement
+# for /dev/console if there's no serial console available
+dd if=/dev/console of=/dev/null bs=1 count=0 >/dev/null 2>/dev/null || \
+	exec </dev/pty/m0 >/dev/pty/m1 2>&0
+
 failsafe() {
 	lock /tmp/.failsafe
 
