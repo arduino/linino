@@ -17,6 +17,7 @@ if_valid () (
 
       vif=$(ifconfig -a | awk '/^eth.*'$hwaddr'/ {print $1; exit}' IGNORECASE=1)
       debug "# vlan$i => $vif"
+	  [ -n "$vif" ] || vif=$(ifconfig -a | awk '/^eth'${hw##et}'/ {print $1; exit}' IGNORECASE=1)
 
       $DEBUG ifconfig $vif up
       $DEBUG vconfig add $vif $i 2>&-

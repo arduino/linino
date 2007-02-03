@@ -79,10 +79,11 @@ nvram_default lan_proto static
 	remap eth0 vlan2
 	remap eth1 vlan1
 	nvram_default vlan1hwname "et0"
-	nvram_default vlan1ports "0 5"
 	nvram_default vlan2hwname "et0"
-	nvram_default vlan2ports "1 2 3 4 5*"
-	nvram_default lan_ifnames "vlan2 eth2"
+	nvram_default lan_ifnames "vlan0 eth2"
+	nvram get lan_ifnames | grep vlan2 >/dev/null && {
+		nvram_default vlan2ports "1 2 3 4 5*"
+	}
 }
 
 # hacks for asus wl-500g deluxe
