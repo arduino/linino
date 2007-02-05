@@ -1,0 +1,4 @@
+Package: libhowl
+Priority: optional
+Section: net
+Description: a ZeroConf (aka RendezVous) implementation (library)

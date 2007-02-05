@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ -f ${IPKG_INSTROOT}/usr/bin/skill ]
+then
+    echo "Hard linking snice to skill"
+    ln ${IPKG_INSTROOT}/usr/bin/skill /usr/bin/snice
+fi
+
+if [ -f ${IPKG_INSTROT}/usr/bin/pgrep ]
+then
+    echo "Hard linking pkill to pgrep"
+    ln ${IPKG_INSTROT}/usr/bin/pgrep ${IPKG_INSTROOT}/usr/bin/snice
+fi
+
+exit 0

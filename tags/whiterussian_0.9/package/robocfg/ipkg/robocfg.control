@@ -1,0 +1,4 @@
+Package: robocfg
+Priority: optional
+Section: net
+Description: Broadcom BCM5325E/536x switch configuration utility

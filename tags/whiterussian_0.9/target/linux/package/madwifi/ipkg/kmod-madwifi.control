@@ -1,0 +1,4 @@
+Package: kmod-madwifi
+Priority: optional
+Section: kernel
+Description: Driver for Atheros 802.11a/b/g MiniPCI cards

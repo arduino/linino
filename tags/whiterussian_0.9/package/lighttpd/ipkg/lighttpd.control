@@ -1,0 +1,6 @@
+Package: lighttpd
+Priority: optional
+Section: net
+Description: a flexible and lightweight web server,
+ built with SSL support.
+Depends: libopenssl, libpcre

@@ -1,0 +1,5 @@
+Package: kmod-bluetooth-hcivhci
+Priority: optional
+Section: net
+Depends: kmod-bluetooth
+Description: Bluetooth Virtual HCI device driver

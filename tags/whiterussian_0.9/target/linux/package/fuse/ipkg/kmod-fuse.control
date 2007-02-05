@@ -1,0 +1,4 @@
+Package: kmod-fuse
+Priority: optional
+Section: kernel
+Description: Filesystem in Userspace (kernel module)

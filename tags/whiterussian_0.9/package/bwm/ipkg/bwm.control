@@ -1,0 +1,4 @@
+Package: bwm
+Priority: optional
+Section: net
+Description: A very tiny bandwidth monitor

@@ -1,0 +1,3937 @@
+Hot Fix 32.3 for Linux Kernel 2.4.30 - 2006/03/18
+From Willy Tarreau - EXOSEC  < wtarreau at exosec.net >
+
+http://linux.exosec.net/kernel/2.4-hf/
+
+- CVE-2004-1058
+- CVE-2004-2607
+- CVE-2005-0204
+- CVE-2005-1263
+- CVE-2005-2457
+- CVE-2005-2490
+- CVE-2005-2708
+- CVE-2005-2709
+- CVE-2005-2973
+- CVE-2005-3180
+- CVE-2005-3257
+- CVE-2005-3783
+- CVE-2005-3806
+- CVE-2005-3857
+
+
+diff -urN linux-2.4.30/arch/alpha/kernel/Makefile linux-2.4.30-hf32.3/arch/alpha/kernel/Makefile
+--- linux-2.4.30/arch/alpha/kernel/Makefile	2003-11-28 19:26:19.000000000 +0100
++++ linux-2.4.30-hf32.3/arch/alpha/kernel/Makefile	2006-03-18 00:34:06.000000000 +0100
+@@ -76,7 +76,7 @@
+ obj-y    += sys_alcor.o
+ endif
+ ifneq ($(CONFIG_ALPHA_CABRIOLET)$(CONFIG_ALPHA_EB164)$(CONFIG_ALPHA_EB66P)$(CONFIG_ALPHA_LX164)$(CONFIG_ALPHA_PC164),)
+-obj-y    += sys_cabriolet.o
++obj-y    += sys_cabriolet.o ns87312.o
+ endif
+ 
+ obj-$(CONFIG_ALPHA_DP264) += sys_dp264.o
+diff -urN linux-2.4.30/arch/alpha/kernel/pci_iommu.c linux-2.4.30-hf32.3/arch/alpha/kernel/pci_iommu.c
+--- linux-2.4.30/arch/alpha/kernel/pci_iommu.c	2003-06-13 16:51:29.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/alpha/kernel/pci_iommu.c	2006-03-18 00:34:06.000000000 +0100
+@@ -503,7 +503,7 @@
+ /* Given a scatterlist leader, choose an allocation method and fill
+    in the blanks.  */
+ 
+-static inline int
++static int
+ sg_fill(struct scatterlist *leader, struct scatterlist *end,
+ 	struct scatterlist *out, struct pci_iommu_arena *arena,
+ 	dma_addr_t max_dma, int dac_allowed)
+diff -urN linux-2.4.30/arch/i386/config.in linux-2.4.30-hf32.3/arch/i386/config.in
+--- linux-2.4.30/arch/i386/config.in	2004-11-17 12:54:21.000000000 +0100
++++ linux-2.4.30-hf32.3/arch/i386/config.in	2006-03-18 00:34:06.000000000 +0100
+@@ -65,6 +65,7 @@
+    define_bool CONFIG_X86_POPAD_OK y
+    define_bool CONFIG_RWSEM_GENERIC_SPINLOCK n
+    define_bool CONFIG_RWSEM_XCHGADD_ALGORITHM y
++   define_bool CONFIG_X86_TSC n
+ fi
+ if [ "$CONFIG_M486" = "y" ]; then
+    define_int  CONFIG_X86_L1_CACHE_SHIFT 4
+@@ -72,6 +73,7 @@
+    define_bool CONFIG_X86_ALIGNMENT_16 y
+    define_bool CONFIG_X86_PPRO_FENCE y
+    define_bool CONFIG_X86_F00F_WORKS_OK n
++   define_bool CONFIG_X86_TSC n
+ fi
+ if [ "$CONFIG_M586" = "y" ]; then
+    define_int  CONFIG_X86_L1_CACHE_SHIFT 5
+diff -urN linux-2.4.30/arch/i386/kernel/apm.c linux-2.4.30-hf32.3/arch/i386/kernel/apm.c
+--- linux-2.4.30/arch/i386/kernel/apm.c	2003-08-25 13:44:39.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/i386/kernel/apm.c	2006-03-18 00:34:06.000000000 +0100
+@@ -327,7 +327,7 @@
+  * Save a segment register away
+  */
+ #define savesegment(seg, where) \
+-		__asm__ __volatile__("movl %%" #seg ",%0" : "=m" (where))
++		__asm__ __volatile__("mov %%" #seg ",%0" : "=m" (where))
+ 
+ /*
+  * Maximum number of events stored
+@@ -553,7 +553,7 @@
+ 
+ #ifdef APM_ZERO_SEGS
+ #	define APM_DECL_SEGS \
+-		unsigned int saved_fs; unsigned int saved_gs;
++		unsigned short saved_fs; unsigned short saved_gs;
+ #	define APM_DO_SAVE_SEGS \
+ 		savesegment(fs, saved_fs); savesegment(gs, saved_gs)
+ #	define APM_DO_ZERO_SEGS \
+diff -urN linux-2.4.30/arch/i386/kernel/io_apic.c linux-2.4.30-hf32.3/arch/i386/kernel/io_apic.c
+--- linux-2.4.30/arch/i386/kernel/io_apic.c	2004-11-17 12:54:21.000000000 +0100
++++ linux-2.4.30-hf32.3/arch/i386/kernel/io_apic.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1194,7 +1194,7 @@
+ 	 * might have cached one ExtINT interrupt.  Finally, at
+ 	 * least one tick may be lost due to delays.
+ 	 */
+-	if (jiffies - t1 > 4)
++	if (jiffies - t1 > 4 && jiffies - t1 < 16)
+ 		return 1;
+ 
+ 	return 0;
+diff -urN linux-2.4.30/arch/i386/kernel/mtrr.c linux-2.4.30-hf32.3/arch/i386/kernel/mtrr.c
+--- linux-2.4.30/arch/i386/kernel/mtrr.c	2004-08-08 01:26:04.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/i386/kernel/mtrr.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1674,6 +1674,7 @@
+     char *ptr;
+     char line[LINE_SIZE];
+ 
++    if (!len) return -EINVAL;
+     if ( !suser () ) return -EPERM;
+     /*  Can't seek (pwrite) on this device  */
+     if (ppos != &file->f_pos) return -ESPIPE;
+diff -urN linux-2.4.30/arch/i386/kernel/process.c linux-2.4.30-hf32.3/arch/i386/kernel/process.c
+--- linux-2.4.30/arch/i386/kernel/process.c	2004-11-17 12:54:21.000000000 +0100
++++ linux-2.4.30-hf32.3/arch/i386/kernel/process.c	2006-03-18 00:34:06.000000000 +0100
+@@ -544,7 +544,7 @@
+  * Save a segment.
+  */
+ #define savesegment(seg,value) \
+-	asm volatile("movl %%" #seg ",%0":"=m" (*(int *)&(value)))
++	asm volatile("mov %%" #seg ",%0":"=m" (value))
+ 
+ int copy_thread(int nr, unsigned long clone_flags, unsigned long esp,
+ 	unsigned long unused,
+@@ -661,8 +661,8 @@
+ 	 * Save away %fs and %gs. No need to save %es and %ds, as
+ 	 * those are always kernel segments while inside the kernel.
+ 	 */
+-	asm volatile("movl %%fs,%0":"=m" (*(int *)&prev->fs));
+-	asm volatile("movl %%gs,%0":"=m" (*(int *)&prev->gs));
++	asm volatile("mov %%fs,%0":"=m" (prev->fs));
++	asm volatile("mov %%gs,%0":"=m" (prev->gs));
+ 
+ 	/*
+ 	 * Restore %fs and %gs.
+diff -urN linux-2.4.30/arch/i386/kernel/traps.c linux-2.4.30-hf32.3/arch/i386/kernel/traps.c
+--- linux-2.4.30/arch/i386/kernel/traps.c	2002-11-29 00:53:09.000000000 +0100
++++ linux-2.4.30-hf32.3/arch/i386/kernel/traps.c	2006-03-18 00:34:06.000000000 +0100
+@@ -631,15 +631,14 @@
+ 	 */
+ 	cwd = get_fpu_cwd(task);
+ 	swd = get_fpu_swd(task);
+-	switch (((~cwd) & swd & 0x3f) | (swd & 0x240)) {
++	switch (swd & ~cwd & 0x3f) {
+ 		case 0x000:
+ 		default:
+ 			break;
+ 		case 0x001: /* Invalid Op */
+-		case 0x041: /* Stack Fault */
+-		case 0x241: /* Stack Fault | Direction */
++			/* swd & 0x240 == 0x040: Stack Fault */
++			/* swd & 0x240 == 0x240: Stack Fault | Direction */
+ 			info.si_code = FPE_FLTINV;
+-			/* Should we clear the SF or let user space do it ???? */
+ 			break;
+ 		case 0x002: /* Denormalize */
+ 		case 0x010: /* Underflow */
+diff -urN linux-2.4.30/arch/ia64/ia32/sys_ia32.c linux-2.4.30-hf32.3/arch/ia64/ia32/sys_ia32.c
+--- linux-2.4.30/arch/ia64/ia32/sys_ia32.c	2005-04-14 09:43:32.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/ia64/ia32/sys_ia32.c	2006-03-18 00:34:06.000000000 +0100
+@@ -94,7 +94,7 @@
+ static DECLARE_MUTEX(ia32_mmap_sem);
+ 
+ static int
+-nargs (unsigned int arg, char **ap)
++nargs (unsigned int arg, char **ap, int max)
+ {
+ 	unsigned int addr;
+ 	int n, err;
+@@ -107,6 +107,8 @@
+ 		err = get_user(addr, (unsigned int *)A(arg));
+ 		if (err)
+ 			return err;
++		if (n > max)
++			return -E2BIG;
+ 		if (ap)
+ 			*ap++ = (char *) A(addr);
+ 		arg += sizeof(unsigned int);
+@@ -128,10 +130,11 @@
+ 	int na, ne, len;
+ 	long r;
+ 
+-	na = nargs(argv, NULL);
++	/* Allocates upto 2x MAX_ARG_PAGES */
++	na = nargs(argv, NULL, (MAX_ARG_PAGES*PAGE_SIZE) / sizeof(char *) - 1);
+ 	if (na < 0)
+ 		return na;
+-	ne = nargs(envp, NULL);
++	ne = nargs(envp, NULL, (MAX_ARG_PAGES*PAGE_SIZE) / sizeof(char *) - 1 );
+ 	if (ne < 0)
+ 		return ne;
+ 	len = (na + ne + 2) * sizeof(*av);
+@@ -143,10 +146,10 @@
+ 	av[na] = NULL;
+ 	ae[ne] = NULL;
+ 
+-	r = nargs(argv, av);
++	r = nargs(argv, av, na);
+ 	if (r < 0)
+ 		goto out;
+-	r = nargs(envp, ae);
++	r = nargs(envp, ae, ne);
+ 	if (r < 0)
+ 		goto out;
+ 
+@@ -1439,6 +1442,7 @@
+ 
+ 		tmp = ((ucmlen - CMSG32_ALIGN(sizeof(*ucmsg))) +
+ 		       CMSG_ALIGN(sizeof(struct cmsghdr)));
++		tmp = CMSG_ALIGN(tmp);
+ 		kcmlen += tmp;
+ 		ucmsg = CMSG32_NXTHDR(kmsg, ucmsg, ucmlen);
+ 	}
+@@ -1475,7 +1479,7 @@
+ 			goto out_free_efault;
+ 
+ 		/* Advance. */
+-		kcmsg = (struct cmsghdr *)((char *)kcmsg + CMSG_ALIGN(tmp));
++		kcmsg = (struct cmsghdr *)((char *)kcmsg + tmp);
+ 		ucmsg = CMSG32_NXTHDR(kmsg, ucmsg, ucmlen);
+ 	}
+ 
+diff -urN linux-2.4.30/arch/ia64/mm/fault.c linux-2.4.30-hf32.3/arch/ia64/mm/fault.c
+--- linux-2.4.30/arch/ia64/mm/fault.c	2003-08-25 13:44:39.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/ia64/mm/fault.c	2006-03-18 00:34:06.000000000 +0100
+@@ -206,9 +206,6 @@
+ 		return;
+ 	}
+ 
+-	if (done_with_exception(regs))
+-		return;
+-
+ 	/*
+ 	 * Since we have no vma's for region 5, we might get here even if the address is
+ 	 * valid, due to the VHPT walker inserting a non present translation that becomes
+@@ -219,6 +216,9 @@
+ 	if (REGION_NUMBER(address) == 5 && mapped_kernel_page_is_present(address))
+ 		return;
+ 
++	if (done_with_exception(regs))
++		return;
++
+ 	/*
+ 	 * Oops. The kernel tried to access some bad page. We'll have to terminate things
+ 	 * with extreme prejudice.
+diff -urN linux-2.4.30/arch/parisc/kernel/ioctl32.c linux-2.4.30-hf32.3/arch/parisc/kernel/ioctl32.c
+--- linux-2.4.30/arch/parisc/kernel/ioctl32.c	2005-01-27 18:57:31.000000000 +0100
++++ linux-2.4.30-hf32.3/arch/parisc/kernel/ioctl32.c	2006-03-18 00:34:06.000000000 +0100
+@@ -35,6 +35,7 @@
+ #include <linux/cdrom.h>
+ #include <linux/loop.h>
+ #include <linux/auto_fs.h>
++#include <linux/auto_fs4.h>
+ #include <linux/devfs_fs.h>
+ #include <linux/tty.h>
+ #include <linux/vt_kern.h>
+diff -urN linux-2.4.30/arch/parisc/kernel/sys_parisc32.c linux-2.4.30-hf32.3/arch/parisc/kernel/sys_parisc32.c
+--- linux-2.4.30/arch/parisc/kernel/sys_parisc32.c	2005-04-14 09:43:33.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/parisc/kernel/sys_parisc32.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1934,12 +1934,13 @@
+ 	struct cmsghdr *kcmsg, *kcmsg_base;
+ 	__kernel_size_t32 ucmlen;
+ 	__kernel_size_t kcmlen, tmp;
++	int err = -EFAULT;
+ 
+ 	kcmlen = 0;
+ 	kcmsg_base = kcmsg = (struct cmsghdr *)stackbuf;
+ 	ucmsg = CMSG32_FIRSTHDR(kmsg);
+ 	while(ucmsg != NULL) {
+-		if(get_user(ucmlen, &ucmsg->cmsg_len))
++		if (get_user(ucmlen, &ucmsg->cmsg_len))
+ 			return -EFAULT;
+ 
+ 		/* Catch bogons. */
+@@ -1948,6 +1949,7 @@
+ 
+ 		tmp = ((ucmlen - CMSG32_ALIGN(sizeof(*ucmsg))) +
+ 		       CMSG_ALIGN(sizeof(struct cmsghdr)));
++		tmp = CMSG_ALIGN(tmp);
+ 		kcmlen += tmp;
+ 		ucmsg = CMSG32_NXTHDR(kmsg, ucmsg, ucmlen);
+ 	}
+@@ -1968,21 +1970,23 @@
+ 	memset(kcmsg, 0, kcmlen);
+ 	ucmsg = CMSG32_FIRSTHDR(kmsg);
+ 	while(ucmsg != NULL) {
+-		__get_user(ucmlen, &ucmsg->cmsg_len);
++		if (__get_user(ucmlen, &ucmsg->cmsg_len))
++			goto Efault;
+ 		tmp = ((ucmlen - CMSG32_ALIGN(sizeof(*ucmsg))) +
+ 		       CMSG_ALIGN(sizeof(struct cmsghdr)));
++		if ((char *)kcmsg_base + kcmlen - (char *)kcmsg < CMSG_ALIGN(tmp))
++			goto Einval;
+ 		kcmsg->cmsg_len = tmp;
+-		__get_user(kcmsg->cmsg_level, &ucmsg->cmsg_level);
+-		__get_user(kcmsg->cmsg_type, &ucmsg->cmsg_type);
+-
+-		/* Copy over the data. */
+-		if(copy_from_user(CMSG_DATA(kcmsg),
+-				  CMSG32_DATA(ucmsg),
+-				  (ucmlen - CMSG32_ALIGN(sizeof(*ucmsg)))))
+-			goto out_free_efault;
++		tmp = CMSG_ALIGN(tmp);
++		if (__get_user(kcmsg->cmsg_level, &ucmsg->cmsg_level) ||
++		    __get_user(kcmsg->cmsg_type, &ucmsg->cmsg_type) ||
++		    copy_from_user(CMSG_DATA(kcmsg),
++				   CMSG32_DATA(ucmsg),
++				   (ucmlen - CMSG32_ALIGN(sizeof(*ucmsg)))))
++			goto Efault;
+ 
+ 		/* Advance. */
+-		kcmsg = (struct cmsghdr *)((char *)kcmsg + CMSG_ALIGN(tmp));
++		kcmsg = (struct cmsghdr *)((char *)kcmsg + tmp);
+ 		ucmsg = CMSG32_NXTHDR(kmsg, ucmsg, ucmlen);
+ 	}
+ 
+@@ -1991,10 +1995,12 @@
+ 	kmsg->msg_controllen = kcmlen;
+ 	return 0;
+ 
+-out_free_efault:
+-	if(kcmsg_base != (struct cmsghdr *)stackbuf)
++Einval:
++	err = -EINVAL;
++Efault:
++	if (kcmsg_base != (struct cmsghdr *)stackbuf)
+ 		kfree(kcmsg_base);
+-	return -EFAULT;
++	return err;
+ }
+ 
+ static void put_cmsg32(struct msghdr *kmsg, int level, int type,
+diff -urN linux-2.4.30/arch/ppc/boot/lib/zlib.c linux-2.4.30-hf32.3/arch/ppc/boot/lib/zlib.c
+--- linux-2.4.30/arch/ppc/boot/lib/zlib.c	2003-08-25 13:44:40.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/ppc/boot/lib/zlib.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1322,6 +1322,7 @@
+     if ((j = *p++) != 0)
+       v[x[j]++] = i;
+   } while (++i < n);
++  n = x[g];			/* set n to length of v */
+ 
+ 
+   /* Generate the Huffman codes and for each, make the table entries */
+diff -urN linux-2.4.30/arch/ppc64/boot/zlib.c linux-2.4.30-hf32.3/arch/ppc64/boot/zlib.c
+--- linux-2.4.30/arch/ppc64/boot/zlib.c	2003-08-25 13:44:40.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/ppc64/boot/zlib.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1338,6 +1338,7 @@
+     if ((j = *p++) != 0)
+       v[x[j]++] = i;
+   } while (++i < n);
++  n = x[g];			/* set n to length of v */
+ 
+ 
+   /* Generate the Huffman codes and for each, make the table entries */
+diff -urN linux-2.4.30/arch/ppc64/kernel/ioctl32.c linux-2.4.30-hf32.3/arch/ppc64/kernel/ioctl32.c
+--- linux-2.4.30/arch/ppc64/kernel/ioctl32.c	2005-01-27 18:57:31.000000000 +0100
++++ linux-2.4.30-hf32.3/arch/ppc64/kernel/ioctl32.c	2006-03-18 00:34:06.000000000 +0100
+@@ -49,6 +49,7 @@
+ #include <linux/cdrom.h>
+ #include <linux/loop.h>
+ #include <linux/auto_fs.h>
++#include <linux/autofs_4.h>
+ #include <linux/devfs_fs.h>
+ #include <linux/tty.h>
+ #include <linux/vt_kern.h>
+@@ -876,13 +877,15 @@
+ 		r = (void *) &r4;
+ 	}
+ 
+-	if (ret)
+-		return -EFAULT;
++	if (ret) {
++		ret = -EFAULT;
++		goto out;
++	}
+ 
+ 	set_fs (KERNEL_DS);
+ 	ret = sys_ioctl (fd, cmd, (long) r);
+ 	set_fs (old_fs);
+-
++out:
+ 	if (mysock)
+ 		sockfd_put(mysock);
+ 
+diff -urN linux-2.4.30/arch/ppc64/kernel/signal.c linux-2.4.30-hf32.3/arch/ppc64/kernel/signal.c
+--- linux-2.4.30/arch/ppc64/kernel/signal.c	2005-01-27 18:57:31.000000000 +0100
++++ linux-2.4.30-hf32.3/arch/ppc64/kernel/signal.c	2006-03-18 00:34:06.000000000 +0100
+@@ -332,7 +332,7 @@
+ }
+ 
+ 
+-asmlinkage int
++asmlinkage long
+ sys_rt_sigreturn(unsigned long r3, unsigned long r4, unsigned long r5,
+ 		 unsigned long r6, unsigned long r7, unsigned long r8,
+ 		 struct pt_regs *regs)
+diff -urN linux-2.4.30/arch/ppc64/kernel/sys_ppc32.c linux-2.4.30-hf32.3/arch/ppc64/kernel/sys_ppc32.c
+--- linux-2.4.30/arch/ppc64/kernel/sys_ppc32.c	2005-04-14 09:43:33.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/ppc64/kernel/sys_ppc32.c	2006-03-18 00:34:06.000000000 +0100
+@@ -3442,12 +3442,13 @@
+ 	struct cmsghdr *kcmsg, *kcmsg_base;
+ 	__kernel_size_t32 ucmlen;
+ 	__kernel_size_t kcmlen, tmp;
++	int err = -EFAULT;
+ 
+ 	kcmlen = 0;
+ 	kcmsg_base = kcmsg = (struct cmsghdr *)stackbuf;
+ 	ucmsg = CMSG32_FIRSTHDR(kmsg);
+ 	while(ucmsg != NULL) {
+-		if(get_user(ucmlen, &ucmsg->cmsg_len))
++		if (get_user(ucmlen, &ucmsg->cmsg_len))
+ 			return -EFAULT;
+ 
+ 		/* Catch bogons. */
+@@ -3456,6 +3457,7 @@
+ 
+ 		tmp = ((ucmlen - CMSG32_ALIGN(sizeof(*ucmsg))) +
+ 		       CMSG_ALIGN(sizeof(struct cmsghdr)));
++		tmp = CMSG_ALIGN(tmp);
+ 		kcmlen += tmp;
+ 		ucmsg = CMSG32_NXTHDR(kmsg, ucmsg, ucmlen);
+ 	}
+@@ -3476,21 +3478,23 @@
+ 	memset(kcmsg, 0, kcmlen);
+ 	ucmsg = CMSG32_FIRSTHDR(kmsg);
+ 	while (ucmsg != NULL) {
+-		__get_user(ucmlen, &ucmsg->cmsg_len);
++		if (__get_user(ucmlen, &ucmsg->cmsg_len))
++			goto Efault;
+ 		tmp = ((ucmlen - CMSG32_ALIGN(sizeof(*ucmsg))) +
+ 		       CMSG_ALIGN(sizeof(struct cmsghdr)));
++		if ((char *)kcmsg_base + kcmlen - (char *)kcmsg < CMSG_ALIGN(tmp))
++			goto Einval;
+ 		kcmsg->cmsg_len = tmp;
+-		__get_user(kcmsg->cmsg_level, &ucmsg->cmsg_level);
+-		__get_user(kcmsg->cmsg_type, &ucmsg->cmsg_type);
+-
+-		/* Copy over the data. */
+-		if(copy_from_user(CMSG_DATA(kcmsg),
+-				  CMSG32_DATA(ucmsg),
+-				  (ucmlen - CMSG32_ALIGN(sizeof(*ucmsg)))))
+-			goto out_free_efault;
++		tmp = CMSG_ALIGN(tmp);
++		if (__get_user(kcmsg->cmsg_level, &ucmsg->cmsg_level) ||
++		    __get_user(kcmsg->cmsg_type, &ucmsg->cmsg_type) ||
++		    copy_from_user(CMSG_DATA(kcmsg),
++				   CMSG32_DATA(ucmsg),
++				   (ucmlen - CMSG32_ALIGN(sizeof(*ucmsg)))))
++			goto Efault;
+ 
+ 		/* Advance. */
+-		kcmsg = (struct cmsghdr *)((char *)kcmsg + CMSG_ALIGN(tmp));
++		kcmsg = (struct cmsghdr *)((char *)kcmsg + tmp);
+ 		ucmsg = CMSG32_NXTHDR(kmsg, ucmsg, ucmlen);
+ 	}
+ 
+@@ -3499,10 +3503,12 @@
+ 	kmsg->msg_controllen = kcmlen;
+ 	return 0;
+ 
+-out_free_efault:
+-	if(kcmsg_base != (struct cmsghdr *)stackbuf)
++Einval:
++	err = -EINVAL;
++Efault:
++	if (kcmsg_base != (struct cmsghdr *)stackbuf)
+ 		kfree(kcmsg_base);
+-	return -EFAULT;
++	return err;
+ }
+ 
+ asmlinkage long sys32_sendmsg(int fd, struct msghdr32* user_msg, unsigned int user_flags)
+diff -urN linux-2.4.30/arch/s390x/kernel/linux32.c linux-2.4.30-hf32.3/arch/s390x/kernel/linux32.c
+--- linux-2.4.30/arch/s390x/kernel/linux32.c	2005-04-14 09:43:33.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/s390x/kernel/linux32.c	2006-03-18 00:34:06.000000000 +0100
+@@ -2425,12 +2425,13 @@
+ 	struct cmsghdr *kcmsg, *kcmsg_base;
+ 	__kernel_size_t32 ucmlen;
+ 	__kernel_size_t kcmlen, tmp;
++	int err = -EFAULT;
+ 
+ 	kcmlen = 0;
+ 	kcmsg_base = kcmsg = (struct cmsghdr *)stackbuf;
+ 	ucmsg = CMSG32_FIRSTHDR(kmsg);
+ 	while(ucmsg != NULL) {
+-		if(get_user(ucmlen, &ucmsg->cmsg_len))
++		if (get_user(ucmlen, &ucmsg->cmsg_len))
+ 			return -EFAULT;
+ 
+ 		/* Catch bogons. */
+@@ -2439,6 +2440,7 @@
+ 
+ 		tmp = ((ucmlen - CMSG32_ALIGN(sizeof(*ucmsg))) +
+ 		       CMSG_ALIGN(sizeof(struct cmsghdr)));
++		tmp = CMSG_ALIGN(tmp);
+ 		kcmlen += tmp;
+ 		ucmsg = CMSG32_NXTHDR(kmsg, ucmsg, ucmlen);
+ 	}
+@@ -2459,21 +2461,23 @@
+ 	memset(kcmsg, 0, kcmlen);
+ 	ucmsg = CMSG32_FIRSTHDR(kmsg);
+ 	while(ucmsg != NULL) {
+-		__get_user(ucmlen, &ucmsg->cmsg_len);
++		if (__get_user(ucmlen, &ucmsg->cmsg_len))
++			goto Efault;
+ 		tmp = ((ucmlen - CMSG32_ALIGN(sizeof(*ucmsg))) +
+ 		       CMSG_ALIGN(sizeof(struct cmsghdr)));
++		if ((char *)kcmsg_base + kcmlen - (char *)kcmsg < CMSG_ALIGN(tmp))
++			goto Einval;
+ 		kcmsg->cmsg_len = tmp;
+-		__get_user(kcmsg->cmsg_level, &ucmsg->cmsg_level);
+-		__get_user(kcmsg->cmsg_type, &ucmsg->cmsg_type);
+-
+-		/* Copy over the data. */
+-		if(copy_from_user(CMSG_DATA(kcmsg),
+-				  CMSG32_DATA(ucmsg),
+-				  (ucmlen - CMSG32_ALIGN(sizeof(*ucmsg)))))
+-			goto out_free_efault;
++		tmp = CMSG_ALIGN(tmp);
++		if (__get_user(kcmsg->cmsg_level, &ucmsg->cmsg_level) ||
++		    __get_user(kcmsg->cmsg_type, &ucmsg->cmsg_type) ||
++		    copy_from_user(CMSG_DATA(kcmsg),
++				   CMSG32_DATA(ucmsg),
++				   (ucmlen - CMSG32_ALIGN(sizeof(*ucmsg)))))
++			goto Efault;
+ 
+ 		/* Advance. */
+-		kcmsg = (struct cmsghdr *)((char *)kcmsg + CMSG_ALIGN(tmp));
++		kcmsg = (struct cmsghdr *)((char *)kcmsg + tmp);
+ 		ucmsg = CMSG32_NXTHDR(kmsg, ucmsg, ucmlen);
+ 	}
+ 
+@@ -2482,10 +2486,12 @@
+ 	kmsg->msg_controllen = kcmlen;
+ 	return 0;
+ 
+-out_free_efault:
+-	if(kcmsg_base != (struct cmsghdr *)stackbuf)
++Einval:
++	err = -EINVAL;
++Efault:
++	if (kcmsg_base != (struct cmsghdr *)stackbuf)
+ 		kfree(kcmsg_base);
+-	return -EFAULT;
++	return err;
+ }
+ 
+ static void put_cmsg32(struct msghdr *kmsg, int level, int type,
+diff -urN linux-2.4.30/arch/sparc/math-emu/math.c linux-2.4.30-hf32.3/arch/sparc/math-emu/math.c
+--- linux-2.4.30/arch/sparc/math-emu/math.c	1999-12-03 00:28:54.000000000 +0100
++++ linux-2.4.30-hf32.3/arch/sparc/math-emu/math.c	2006-03-18 00:34:06.000000000 +0100
+@@ -323,10 +323,6 @@
+ 		case FMOVS:
+ 		case FABSS:
+ 		case FNEGS: TYPE(2,1,0,1,0,0,0); break;
+-		default:
+-#ifdef DEBUG_MATHEMU
+-			printk("unknown FPop1: %03lx\n",(insn>>5)&0x1ff);
+-#endif
+ 		}
+ 	} else if ((insn & 0xc1f80000) == 0x81a80000)	/* FPOP2 */ {
+ 		switch ((insn >> 5) & 0x1ff) {
+@@ -336,10 +332,6 @@
+ 		case FCMPED: TYPE(3,0,0,2,1,2,1); break;
+ 		case FCMPQ: TYPE(3,0,0,3,1,3,1); break;
+ 		case FCMPEQ: TYPE(3,0,0,3,1,3,1); break;
+-		default:
+-#ifdef DEBUG_MATHEMU
+-			printk("unknown FPop2: %03lx\n",(insn>>5)&0x1ff);
+-#endif
+ 		}
+ 	}
+ 
+diff -urN linux-2.4.30/arch/sparc64/kernel/ioctl32.c linux-2.4.30-hf32.3/arch/sparc64/kernel/ioctl32.c
+--- linux-2.4.30/arch/sparc64/kernel/ioctl32.c	2005-04-14 09:43:33.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/sparc64/kernel/ioctl32.c	2006-03-18 00:34:06.000000000 +0100
+@@ -809,13 +809,15 @@
+ 		r = (void *) &r4;
+ 	}
+ 
+-	if (ret)
+-		return -EFAULT;
++	if (ret) {
++		ret = -EFAULT;
++		goto out;
++	}
+ 
+ 	set_fs (KERNEL_DS);
+ 	ret = sys_ioctl (fd, cmd, (long) r);
+ 	set_fs (old_fs);
+-
++out:
+ 	if (mysock)
+ 		sockfd_put(mysock);
+ 
+diff -urN linux-2.4.30/arch/sparc64/kernel/sys_sparc32.c linux-2.4.30-hf32.3/arch/sparc64/kernel/sys_sparc32.c
+--- linux-2.4.30/arch/sparc64/kernel/sys_sparc32.c	2005-04-14 09:43:33.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/sparc64/kernel/sys_sparc32.c	2006-03-18 00:34:06.000000000 +0100
+@@ -50,6 +50,7 @@
+ #include <linux/in.h>
+ #include <linux/icmpv6.h>
+ #include <linux/sysctl.h>
++#include <linux/vmalloc.h>
+ #include <linux/dnotify.h>
+ #include <linux/netfilter_ipv4/ip_tables.h>
+ 
+@@ -2496,12 +2497,13 @@
+ 	struct cmsghdr *kcmsg, *kcmsg_base;
+ 	__kernel_size_t32 ucmlen;
+ 	__kernel_size_t kcmlen, tmp;
++	int err = -EFAULT;
+ 
+ 	kcmlen = 0;
+ 	kcmsg_base = kcmsg = (struct cmsghdr *)stackbuf;
+ 	ucmsg = CMSG32_FIRSTHDR(kmsg);
+ 	while(ucmsg != NULL) {
+-		if(get_user(ucmlen, &ucmsg->cmsg_len))
++		if (get_user(ucmlen, &ucmsg->cmsg_len))
+ 			return -EFAULT;
+ 
+ 		/* Catch bogons. */
+@@ -2510,6 +2512,7 @@
+ 
+ 		tmp = ((ucmlen - CMSG32_ALIGN(sizeof(*ucmsg))) +
+ 		       CMSG_ALIGN(sizeof(struct cmsghdr)));
++		tmp = CMSG_ALIGN(tmp);
+ 		kcmlen += tmp;
+ 		ucmsg = CMSG32_NXTHDR(kmsg, ucmsg, ucmlen);
+ 	}
+@@ -2530,21 +2533,23 @@
+ 	memset(kcmsg, 0, kcmlen);
+ 	ucmsg = CMSG32_FIRSTHDR(kmsg);
+ 	while(ucmsg != NULL) {
+-		__get_user(ucmlen, &ucmsg->cmsg_len);
++		if (__get_user(ucmlen, &ucmsg->cmsg_len))
++			goto Efault;
+ 		tmp = ((ucmlen - CMSG32_ALIGN(sizeof(*ucmsg))) +
+ 		       CMSG_ALIGN(sizeof(struct cmsghdr)));
++		if ((char *)kcmsg_base + kcmlen - (char *)kcmsg < CMSG_ALIGN(tmp))
++			goto Einval;
+ 		kcmsg->cmsg_len = tmp;
+-		__get_user(kcmsg->cmsg_level, &ucmsg->cmsg_level);
+-		__get_user(kcmsg->cmsg_type, &ucmsg->cmsg_type);
+-
+-		/* Copy over the data. */
+-		if(copy_from_user(CMSG_DATA(kcmsg),
+-				  CMSG32_DATA(ucmsg),
+-				  (ucmlen - CMSG32_ALIGN(sizeof(*ucmsg)))))
+-			goto out_free_efault;
++		tmp = CMSG_ALIGN(tmp);
++		if (__get_user(kcmsg->cmsg_level, &ucmsg->cmsg_level) ||
++		    __get_user(kcmsg->cmsg_type, &ucmsg->cmsg_type) ||
++		    copy_from_user(CMSG_DATA(kcmsg),
++				   CMSG32_DATA(ucmsg),
++				   (ucmlen - CMSG32_ALIGN(sizeof(*ucmsg)))))
++			goto Efault;
+ 
+ 		/* Advance. */
+-		kcmsg = (struct cmsghdr *)((char *)kcmsg + CMSG_ALIGN(tmp));
++		kcmsg = (struct cmsghdr *)((char *)kcmsg + tmp);
+ 		ucmsg = CMSG32_NXTHDR(kmsg, ucmsg, ucmlen);
+ 	}
+ 
+@@ -2553,10 +2558,12 @@
+ 	kmsg->msg_controllen = kcmlen;
+ 	return 0;
+ 
+-out_free_efault:
+-	if(kcmsg_base != (struct cmsghdr *)stackbuf)
++Einval:
++	err = -EINVAL;
++Efault:
++	if (kcmsg_base != (struct cmsghdr *)stackbuf)
+ 		kfree(kcmsg_base);
+-	return -EFAULT;
++	return err;
+ }
+ 
+ static void put_cmsg32(struct msghdr *kmsg, int level, int type,
+@@ -2919,12 +2926,12 @@
+ 	if (optlen != kreplsize)
+ 		return -ENOPROTOOPT;
+ 
+-	krepl = (struct ipt_replace *)kmalloc(kreplsize, GFP_KERNEL);
++	krepl = (struct ipt_replace *)vmalloc(kreplsize);
+ 	if (krepl == NULL)
+ 		return -ENOMEM;
+ 
+ 	if (copy_from_user(krepl, optval, kreplsize)) {
+-		kfree(krepl);
++		vfree(krepl);
+ 		return -EFAULT;
+ 	}
+ 
+@@ -2932,10 +2939,9 @@
+ 		((struct ipt_replace32 *)krepl)->counters);
+ 
+ 	kcountersize = krepl->num_counters * sizeof(struct ipt_counters);
+-	krepl->counters = (struct ipt_counters *)kmalloc(
+-					kcountersize, GFP_KERNEL);
++	krepl->counters = (struct ipt_counters *)vmalloc(kcountersize);
+ 	if (krepl->counters == NULL) {
+-		kfree(krepl);
++		vfree(krepl);
+ 		return -ENOMEM;
+ 	}
+ 
+@@ -2949,8 +2955,8 @@
+ 		copy_to_user(counters32, krepl->counters, kcountersize))
+ 			ret = -EFAULT;
+ 
+-	kfree(krepl->counters);
+-	kfree(krepl);
++	vfree(krepl->counters);
++	vfree(krepl);
+ 
+ 	return ret;
+ }
+@@ -4205,7 +4211,7 @@
+ 
+ 		old_fs = get_fs();
+ 		set_fs(KERNEL_DS);
+-		ret = sys_utimes(kfilename, &ktvs[0]);
++		ret = sys_utimes(kfilename, (tvs ? &ktvs[0] : NULL));
+ 		set_fs(old_fs);
+ 
+ 		putname(kfilename);
+diff -urN linux-2.4.30/arch/sparc64/solaris/socket.c linux-2.4.30-hf32.3/arch/sparc64/solaris/socket.c
+--- linux-2.4.30/arch/sparc64/solaris/socket.c	2001-02-19 04:49:54.000000000 +0100
++++ linux-2.4.30-hf32.3/arch/sparc64/solaris/socket.c	2006-03-18 00:34:06.000000000 +0100
+@@ -410,8 +410,10 @@
+ 		unsigned long *kcmsg;
+ 		__kernel_size_t32 cmlen;
+ 
+-		if(kern_msg.msg_controllen > sizeof(ctl) &&
+-		   kern_msg.msg_controllen <= 256) {
++		if (kern_msg.msg_controllen <= sizeof(__kernel_size_t32))
++			return -EINVAL;
++
++		if(kern_msg.msg_controllen > sizeof(ctl)) {
+ 			err = -ENOBUFS;
+ 			ctl_buf = kmalloc(kern_msg.msg_controllen, GFP_KERNEL);
+ 			if(!ctl_buf)
+diff -urN linux-2.4.30/arch/x86_64/ia32/ia32_ioctl.c linux-2.4.30-hf32.3/arch/x86_64/ia32/ia32_ioctl.c
+--- linux-2.4.30/arch/x86_64/ia32/ia32_ioctl.c	2005-01-27 18:57:31.000000000 +0100
++++ linux-2.4.30-hf32.3/arch/x86_64/ia32/ia32_ioctl.c	2006-03-18 00:34:06.000000000 +0100
+@@ -816,6 +816,11 @@
+ 
+ extern struct socket *sockfd_lookup(int fd, int *err);
+ 
++extern __inline__ void sockfd_put(struct socket *sock)
++{
++	fput(sock->file);
++}
++
+ static int routing_ioctl(unsigned int fd, unsigned int cmd, unsigned long arg)
+ {
+ 	int ret;
+@@ -857,12 +862,17 @@
+ 		r = (void *) &r4;
+ 	}
+ 
+-	if (ret)
+-		return -EFAULT;
++	if (ret) {
++		ret = -EFAULT;
++		goto out;
++	}
+ 
+ 	set_fs (KERNEL_DS);
+ 	ret = sys_ioctl (fd, cmd, (long) r);
+ 	set_fs (old_fs);
++out:
++	if (mysock)
++		sockfd_put(mysock);
+ 
+ 	return ret;
+ }
+@@ -2766,17 +2776,24 @@
+ static int tiocgdev(unsigned fd, unsigned cmd,  unsigned int *ptr) 
+ { 
+ 
+-	struct file *file = fget(fd);
++	struct file *file;
+ 	struct tty_struct *real_tty;
++	int ret;
+ 
++	file = fget(fd);
+ 	if (!file)
+ 		return -EBADF;
++	ret = -EINVAL;
+ 	if (file->f_op->ioctl != tty_ioctl)
+-		return -EINVAL; 
++		goto out;
+ 	real_tty = (struct tty_struct *)file->private_data;
+ 	if (!real_tty) 	
+-		return -EINVAL; 
+-	return put_user(kdev_t_to_nr(real_tty->device), ptr); 
++		goto out;
++	ret = put_user(kdev_t_to_nr(real_tty->device), ptr); 
++out:
++	fput(file);
++
++	return ret;
+ } 
+ 
+ 
+diff -urN linux-2.4.30/arch/x86_64/ia32/socket32.c linux-2.4.30-hf32.3/arch/x86_64/ia32/socket32.c
+--- linux-2.4.30/arch/x86_64/ia32/socket32.c	2005-04-14 09:43:33.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/x86_64/ia32/socket32.c	2006-03-18 00:34:06.000000000 +0100
+@@ -127,12 +127,13 @@
+ 	struct cmsghdr *kcmsg, *kcmsg_base;
+ 	__kernel_size_t32 ucmlen;
+ 	__kernel_size_t kcmlen, tmp;
++	int err = -EFAULT;
+ 
+ 	kcmlen = 0;
+ 	kcmsg_base = kcmsg = (struct cmsghdr *)stackbuf;
+ 	ucmsg = CMSG32_FIRSTHDR(kmsg);
+ 	while(ucmsg != NULL) {
+-		if(get_user(ucmlen, &ucmsg->cmsg_len))
++		if (get_user(ucmlen, &ucmsg->cmsg_len))
+ 			return -EFAULT;
+ 
+ 		/* Catch bogons. */
+@@ -164,18 +165,19 @@
+ 	memset(kcmsg, 0, kcmlen);
+ 	ucmsg = CMSG32_FIRSTHDR(kmsg);
+ 	while(ucmsg != NULL) {
+-		__get_user(ucmlen, &ucmsg->cmsg_len);
++		if (__get_user(ucmlen, &ucmsg->cmsg_len))
++			goto Efault;
+ 		tmp = ((ucmlen - CMSG32_ALIGN(sizeof(*ucmsg))) +
+ 		       CMSG_ALIGN(sizeof(struct cmsghdr)));
++		if ((char *)kcmsg_base + kcmlen - (char *)kcmsg < CMSG_ALIGN(tmp))
++			goto Einval;
+ 		kcmsg->cmsg_len = tmp;
+-		__get_user(kcmsg->cmsg_level, &ucmsg->cmsg_level);
+-		__get_user(kcmsg->cmsg_type, &ucmsg->cmsg_type);
+-
+-		/* Copy over the data. */
+-		if(copy_from_user(CMSG_DATA(kcmsg),
+-				  CMSG32_DATA(ucmsg),
+-				  (ucmlen - CMSG32_ALIGN(sizeof(*ucmsg)))))
+-			goto out_free_efault;
++		if (__get_user(kcmsg->cmsg_level, &ucmsg->cmsg_level) ||
++		    __get_user(kcmsg->cmsg_type, &ucmsg->cmsg_type) ||
++		    copy_from_user(CMSG_DATA(kcmsg),
++				   CMSG32_DATA(ucmsg),
++				   (ucmlen - CMSG32_ALIGN(sizeof(*ucmsg)))))
++			goto Efault;
+ 
+ 		/* Advance. */
+ 		kcmsg = (struct cmsghdr *)((char *)kcmsg + CMSG_ALIGN(tmp));
+@@ -187,10 +189,12 @@
+ 	kmsg->msg_controllen = kcmlen;
+ 	return 0;
+ 
+-out_free_efault:
+-	if(kcmsg_base != (struct cmsghdr *)stackbuf)
++Einval:
++	err = -EINVAL;
++Efault:
++	if (kcmsg_base != (struct cmsghdr *)stackbuf)
+ 		kfree(kcmsg_base);
+-	return -EFAULT;
++	return err;
+ }
+ 
+ static void put_cmsg32(struct msghdr *kmsg, int level, int type,
+diff -urN linux-2.4.30/arch/x86_64/ia32/sys_ia32.c linux-2.4.30-hf32.3/arch/x86_64/ia32/sys_ia32.c
+--- linux-2.4.30/arch/x86_64/ia32/sys_ia32.c	2005-01-27 18:57:31.000000000 +0100
++++ linux-2.4.30-hf32.3/arch/x86_64/ia32/sys_ia32.c	2006-03-18 00:34:06.000000000 +0100
+@@ -2200,7 +2200,7 @@
+ 	return ret;
+ } 
+ 
+-static int nargs(u32 src, char **dst) 
++static int nargs(u32 src, char **dst, int max) 
+ { 
+ 	int cnt;
+ 	u32 val; 
+@@ -2210,13 +2210,13 @@
+ 		int ret = get_user(val, (__u32 *)(u64)src); 
+ 		if (ret)
+ 			return ret;
++		if (cnt > max)
++			return -E2BIG; 
+ 		if (dst)
+ 			dst[cnt] = (char *)(u64)val; 
+ 		cnt++;
+ 		src += 4;
+-		if (cnt >= (MAX_ARG_PAGES * PAGE_SIZE) / sizeof(char *))
+-			return -E2BIG; 
+-	} while(val); 
++		} while(val); 
+ 	if (dst)
+ 		dst[cnt-1] = 0; 
+ 	return cnt; 
+@@ -2230,13 +2230,14 @@
+ 	int ret;
+ 	unsigned sz = 0; 
+ 	
++	/* Can actually allocate 2*MAX_ARG_PAGES */
+ 	if (argv) {
+-	na = nargs(argv, NULL); 
++	na = nargs(argv, NULL, (MAX_ARG_PAGES * PAGE_SIZE)/sizeof(char*) - 1); 
+ 	if (na < 0) 
+ 		return -EFAULT; 
+ 	} 	
+ 	if (envp) { 
+-	ne = nargs(envp, NULL); 
++	ne = nargs(envp, NULL, (MAX_ARG_PAGES * PAGE_SIZE)/sizeof(char*) - 1); 
+ 	if (ne < 0) 
+ 		return -EFAULT; 
+ 	}
+@@ -2252,13 +2253,13 @@
+ 	} 
+ 	
+ 	if (argv) { 
+-	ret = nargs(argv, buf);
++	ret = nargs(argv, buf, na);
+ 	if (ret < 0)
+ 		goto free;
+ 	}
+ 
+ 	if (envp) { 
+-	ret = nargs(envp, buf + na); 
++	ret = nargs(envp, buf + na, ne); 
+ 	if (ret < 0)
+ 		goto free; 
+ 	}
+diff -urN linux-2.4.30/arch/x86_64/kernel/process.c linux-2.4.30-hf32.3/arch/x86_64/kernel/process.c
+--- linux-2.4.30/arch/x86_64/kernel/process.c	2004-04-14 15:05:28.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/x86_64/kernel/process.c	2006-03-18 00:34:06.000000000 +0100
+@@ -527,10 +527,10 @@
+ 	p->thread.fs = me->thread.fs;
+ 	p->thread.gs = me->thread.gs;
+ 
+-	asm("movl %%gs,%0" : "=m" (p->thread.gsindex));
+-	asm("movl %%fs,%0" : "=m" (p->thread.fsindex));
+-	asm("movl %%es,%0" : "=m" (p->thread.es));
+-	asm("movl %%ds,%0" : "=m" (p->thread.ds));
++	asm("mov %%gs,%0" : "=m" (p->thread.gsindex));
++	asm("mov %%fs,%0" : "=m" (p->thread.fsindex));
++	asm("mov %%es,%0" : "=m" (p->thread.es));
++	asm("mov %%ds,%0" : "=m" (p->thread.ds));
+ 
+ 	unlazy_fpu(current);	
+ 	p->thread.i387 = current->thread.i387;
+@@ -575,11 +575,11 @@
+ 	/* 
+ 	 * Switch DS and ES.	 
+ 	 */
+-	asm volatile("movl %%es,%0" : "=m" (prev->es)); 
++	asm volatile("mov %%es,%0" : "=m" (prev->es)); 
+ 	if (unlikely(next->es | prev->es))
+ 		loadsegment(es, next->es); 
+ 	
+-	asm volatile ("movl %%ds,%0" : "=m" (prev->ds)); 
++	asm volatile ("mov %%ds,%0" : "=m" (prev->ds)); 
+ 	if (unlikely(next->ds | prev->ds))
+ 		loadsegment(ds, next->ds);
+ 
+@@ -588,7 +588,7 @@
+ 	 */
+ 	{ 
+ 		unsigned fsindex;
+-		asm volatile("movl %%fs,%0" : "=g" (fsindex)); 
++		asm volatile("movl %%fs,%0" : "=r" (fsindex)); 
+ 		/* segment register != 0 always requires a reload. 
+ 		   also reload when it has changed. 
+ 		   when prev process used 64bit base always reload
+@@ -609,7 +609,7 @@
+ 	}
+ 	{
+ 		unsigned gsindex;
+-		asm volatile("movl %%gs,%0" : "=g" (gsindex)); 
++		asm volatile("movl %%gs,%0" : "=r" (gsindex)); 
+ 		if (unlikely((gsindex | next->gsindex) || prev->gs)) {
+ 			load_gs_index(next->gsindex);
+ 			if (gsindex)
+diff -urN linux-2.4.30/arch/x86_64/kernel/ptrace.c linux-2.4.30-hf32.3/arch/x86_64/kernel/ptrace.c
+--- linux-2.4.30/arch/x86_64/kernel/ptrace.c	2003-06-13 16:51:32.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/x86_64/kernel/ptrace.c	2006-03-18 00:34:06.000000000 +0100
+@@ -114,13 +114,13 @@
+ 			child->thread.es = value & 0xffff;
+ 			return 0;
+ 		case offsetof(struct user_regs_struct,fs_base):
+-			if (!((value >> 48) == 0 || (value >> 48) == 0xffff))
+-				return -EIO; 
++			if (value >= TASK_SIZE)
++				return -EIO;
+ 			child->thread.fs = value;
+ 			return 0;
+ 		case offsetof(struct user_regs_struct,gs_base):
+-			if (!((value >> 48) == 0 || (value >> 48) == 0xffff))
+-				return -EIO; 
++			if (value >= TASK_SIZE)
++				return -EIO;
+ 			child->thread.gs = value;
+ 			return 0;
+ 		case offsetof(struct user_regs_struct, eflags):
+@@ -139,6 +139,11 @@
+ 				return -EIO;
+ 			value &= 0xffff;
+             break;
++		case offsetof(struct user_regs_struct, rip):
++			/* Check if the new RIP address is canonical */
++			if (value >= TASK_SIZE)
++				return -EIO;
++			break;
+ 	}      
+ 	put_stack_long(child, regno - sizeof(struct pt_regs), value);
+ 	return 0;
+diff -urN linux-2.4.30/arch/x86_64/kernel/traps.c linux-2.4.30-hf32.3/arch/x86_64/kernel/traps.c
+--- linux-2.4.30/arch/x86_64/kernel/traps.c	2004-04-14 15:05:28.000000000 +0200
++++ linux-2.4.30-hf32.3/arch/x86_64/kernel/traps.c	2006-03-18 00:34:06.000000000 +0100
+@@ -857,7 +857,7 @@
+ 	set_intr_gate(9,&coprocessor_segment_overrun);
+ 	set_intr_gate(10,&invalid_TSS);
+ 	set_intr_gate(11,&segment_not_present);
+-	set_intr_gate_ist(12,&stack_segment,STACKFAULT_STACK);
++	set_intr_gate(12,&stack_segment);
+ 	set_intr_gate(13,&general_protection);
+ 	set_intr_gate(14,&page_fault);
+ 	set_intr_gate(15,&spurious_interrupt_bug);
+diff -urN linux-2.4.30/drivers/block/loop.c linux-2.4.30-hf32.3/drivers/block/loop.c
+--- linux-2.4.30/drivers/block/loop.c	2003-08-25 13:44:41.000000000 +0200
++++ linux-2.4.30-hf32.3/drivers/block/loop.c	2006-03-18 00:34:06.000000000 +0100
+@@ -974,7 +974,7 @@
+ 
+ int loop_register_transfer(struct loop_func_table *funcs)
+ {
+-	if ((unsigned)funcs->number > MAX_LO_CRYPT || xfer_funcs[funcs->number])
++	if ((unsigned)funcs->number >= MAX_LO_CRYPT || xfer_funcs[funcs->number])
+ 		return -EINVAL;
+ 	xfer_funcs[funcs->number] = funcs;
+ 	return 0; 
+diff -urN linux-2.4.30/drivers/bluetooth/bfusb.c linux-2.4.30-hf32.3/drivers/bluetooth/bfusb.c
+--- linux-2.4.30/drivers/bluetooth/bfusb.c	2004-08-08 01:26:04.000000000 +0200
++++ linux-2.4.30-hf32.3/drivers/bluetooth/bfusb.c	2006-03-18 00:34:06.000000000 +0100
+@@ -470,12 +470,11 @@
+ 		return 0;
+ 
+ 	write_lock_irqsave(&bfusb->lock, flags);
++	write_unlock_irqrestore(&bfusb->lock, flags);
+ 
+ 	bfusb_unlink_urbs(bfusb);
+ 	bfusb_flush(hdev);
+ 
+-	write_unlock_irqrestore(&bfusb->lock, flags);
+-
+ 	MOD_DEC_USE_COUNT;
+ 
+ 	return 0;
+diff -urN linux-2.4.30/drivers/bluetooth/hci_usb.c linux-2.4.30-hf32.3/drivers/bluetooth/hci_usb.c
+--- linux-2.4.30/drivers/bluetooth/hci_usb.c	2004-08-08 01:26:04.000000000 +0200
++++ linux-2.4.30-hf32.3/drivers/bluetooth/hci_usb.c	2006-03-18 00:34:06.000000000 +0100
+@@ -398,13 +398,13 @@
+ 
+ 	BT_DBG("%s", hdev->name);
+ 
++	/* Synchronize with completion handlers */
+ 	write_lock_irqsave(&husb->completion_lock, flags);
+-	
++	write_unlock_irqrestore(&husb->completion_lock, flags);
++
+ 	hci_usb_unlink_urbs(husb);
+ 	hci_usb_flush(hdev);
+ 
+-	write_unlock_irqrestore(&husb->completion_lock, flags);
+-
+ 	MOD_DEC_USE_COUNT;
+ 	return 0;
+ }
+diff -urN linux-2.4.30/drivers/char/cyclades.c linux-2.4.30-hf32.3/drivers/char/cyclades.c
+--- linux-2.4.30/drivers/char/cyclades.c	2005-01-27 18:57:32.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/char/cyclades.c	2006-03-18 00:34:06.000000000 +0100
+@@ -2960,10 +2960,15 @@
+ cy_write(struct tty_struct * tty, int from_user,
+            const unsigned char *buf, int count)
+ {
+-  struct cyclades_port *info = (struct cyclades_port *)tty->driver_data;
++  struct cyclades_port *info;
+   unsigned long flags;
+   int c, ret = 0;
+ 
++    if (!tty)
++	return 0;
++
++    info = (struct cyclades_port *)tty->driver_data;
++  
+ #ifdef CY_DEBUG_IO
+     printk("cyc:cy_write ttyC%d\n", info->line); /* */
+ #endif
+@@ -2972,7 +2977,7 @@
+         return 0;
+     }
+         
+-    if (!tty || !info->xmit_buf || !tmp_buf){
++    if (!info->xmit_buf || !tmp_buf){
+         return 0;
+     }
+ 
+@@ -3047,9 +3052,14 @@
+ static void
+ cy_put_char(struct tty_struct *tty, unsigned char ch)
+ {
+-  struct cyclades_port *info = (struct cyclades_port *)tty->driver_data;
++  struct cyclades_port *info;
+   unsigned long flags;
+ 
++    if (!tty)
++        return;
++
++    info = (struct cyclades_port *)tty->driver_data;
++  
+ #ifdef CY_DEBUG_IO
+     printk("cyc:cy_put_char ttyC%d\n", info->line);
+ #endif
+@@ -3057,7 +3067,7 @@
+     if (serial_paranoia_check(info, tty->device, "cy_put_char"))
+         return;
+ 
+-    if (!tty || !info->xmit_buf)
++    if (!info->xmit_buf)
+         return;
+ 
+     CY_LOCK(info, flags);
+diff -urN linux-2.4.30/drivers/char/drm/drm_stub.h linux-2.4.30-hf32.3/drivers/char/drm/drm_stub.h
+--- linux-2.4.30/drivers/char/drm/drm_stub.h	2006-02-26 22:56:01.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/char/drm/drm_stub.h	2006-03-18 00:34:06.000000000 +0100
+@@ -52,6 +52,7 @@
+ 	int                    err   = -ENODEV;
+ 	struct file_operations *old_fops;
+ 
++	if (minor < 0 || minor >=DRM_STUB_MAXCARDS) return -ENODEV;
+ 	if (!DRM(stub_list) || !DRM(stub_list)[minor].fops) return -ENODEV;
+ 	old_fops   = filp->f_op;
+ 	filp->f_op = fops_get(DRM(stub_list)[minor].fops);
+diff -urN linux-2.4.30/drivers/char/esp.c linux-2.4.30-hf32.3/drivers/char/esp.c
+--- linux-2.4.30/drivers/char/esp.c	2005-01-27 18:57:32.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/char/esp.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1251,13 +1251,18 @@
+ 
+ static void rs_put_char(struct tty_struct *tty, unsigned char ch)
+ {
+-	struct esp_struct *info = (struct esp_struct *)tty->driver_data;
++	struct esp_struct *info;
+ 	unsigned long flags;
+ 
++	if (!tty)
++		return;
++
++	info = (struct esp_struct *)tty->driver_data;
++	
+ 	if (serial_paranoia_check(info, tty->device, "rs_put_char"))
+ 		return;
+ 
+-	if (!tty || !info->xmit_buf)
++	if (!info->xmit_buf)
+ 		return;
+ 
+ 	save_flags(flags); cli();
+@@ -1296,13 +1301,19 @@
+ 		    const unsigned char *buf, int count)
+ {
+ 	int	c, t, ret = 0;
+-	struct esp_struct *info = (struct esp_struct *)tty->driver_data;
++	struct esp_struct *info;
+ 	unsigned long flags;
+ 
++
++	if (!tty)
++		return 0;
++	
++	info = (struct esp_struct *)tty->driver_data;
++
+ 	if (serial_paranoia_check(info, tty->device, "rs_write"))
+ 		return 0;
+ 
+-	if (!tty || !info->xmit_buf || !tmp_buf)
++	if (!info->xmit_buf || !tmp_buf)
+ 		return 0;
+ 	    
+ 	if (from_user)
+diff -urN linux-2.4.30/drivers/char/isicom.c linux-2.4.30-hf32.3/drivers/char/isicom.c
+--- linux-2.4.30/drivers/char/isicom.c	2005-01-27 18:57:32.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/char/isicom.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1223,9 +1223,15 @@
+ static int isicom_write(struct tty_struct * tty, int from_user,
+ 			const unsigned char * buf, int count)
+ {
+-	struct isi_port * port = (struct isi_port *) tty->driver_data;
++	struct isi_port * port;
+ 	unsigned long flags;
+ 	int cnt, total = 0;
++
++	if (!tty)
++		return 0;
++	
++	port = (struct isi_port *) tty->driver_data;
++	
+ #ifdef ISICOM_DEBUG
+ 	printk(KERN_DEBUG "ISICOM: isicom_write for port%d: %d bytes.\n",
+ 			port->channel+1, count);
+@@ -1233,7 +1239,7 @@
+ 	if (isicom_paranoia_check(port, tty->device, "isicom_write"))
+ 		return 0;
+ 	
+-	if (!tty || !port->xmit_buf || !tmp_buf)
++	if (!port->xmit_buf || !tmp_buf)
+ 		return 0;
+ 	if (from_user)
+ 		down(&tmp_buf_sem); /* acquire xclusive access to tmp_buf */
+@@ -1281,13 +1287,18 @@
+ /* put_char et all */
+ static void isicom_put_char(struct tty_struct * tty, unsigned char ch)
+ {
+-	struct isi_port * port = (struct isi_port *) tty->driver_data;
++	struct isi_port * port;
+ 	unsigned long flags;
++
++	if (!tty)
++		return;
++
++	port = (struct isi_port *) tty->driver_data;
+ 	
+ 	if (isicom_paranoia_check(port, tty->device, "isicom_put_char"))
+ 		return;
+ 	
+-	if (!tty || !port->xmit_buf)
++	if (!port->xmit_buf)
+ 		return;
+ #ifdef ISICOM_DEBUG
+ 	printk(KERN_DEBUG "ISICOM: put_char, port %d, char %c.\n", port->channel+1, ch);
+diff -urN linux-2.4.30/drivers/char/moxa.c linux-2.4.30-hf32.3/drivers/char/moxa.c
+--- linux-2.4.30/drivers/char/moxa.c	2005-01-27 18:57:32.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/char/moxa.c	2006-03-18 00:34:06.000000000 +0100
+@@ -294,6 +294,7 @@
+ static int moxa_get_serial_info(struct moxa_str *, struct serial_struct *);
+ static int moxa_set_serial_info(struct moxa_str *, struct serial_struct *);
+ static void MoxaSetFifo(int port, int enable);
++static unsigned long moxaIntPend[MAX_BOARDS];
+ 
+ #ifdef MODULE
+ int init_module(void)
+@@ -995,7 +996,8 @@
+ 		return;
+ 	}
+ 	for (card = 0; card < MAX_BOARDS; card++) {
+-		if ((ports = MoxaPortsOfCard(card)) <= 0)
++		if ((ports = MoxaPortsOfCard(card)) <= 0
++				|| moxaIntPend[card] == 0)
+ 			continue;
+ 		ch = &moxaChannels[card * MAX_PORTS_PER_BOARD];
+ 		for (i = 0; i < ports; i++, ch++) {
+@@ -1578,7 +1580,6 @@
+ 
+ static unsigned char moxaBuff[10240];
+ static unsigned long moxaIntNdx[MAX_BOARDS];
+-static unsigned long moxaIntPend[MAX_BOARDS];
+ static unsigned long moxaIntTable[MAX_BOARDS];
+ static char moxaChkPort[MAX_PORTS];
+ static char moxaLineCtrl[MAX_PORTS];
+diff -urN linux-2.4.30/drivers/char/mxser.c linux-2.4.30-hf32.3/drivers/char/mxser.c
+--- linux-2.4.30/drivers/char/mxser.c	2005-01-27 18:57:32.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/char/mxser.c	2006-03-18 00:34:06.000000000 +0100
+@@ -911,10 +911,15 @@
+ 		       const unsigned char *buf, int count)
+ {
+ 	int c, total = 0;
+-	struct mxser_struct *info = (struct mxser_struct *) tty->driver_data;
++	struct mxser_struct *info;
+ 	unsigned long flags;
+ 
+-	if (!tty || !info->xmit_buf || !mxvar_tmp_buf)
++	if (!tty)
++		return (0);
++	
++	info = (struct mxser_struct *) tty->driver_data;
++	
++	if (!info->xmit_buf || !mxvar_tmp_buf)
+ 		return (0);
+ 
+ 	save_flags(flags);
+@@ -979,10 +984,15 @@
+ 
+ static void mxser_put_char(struct tty_struct *tty, unsigned char ch)
+ {
+-	struct mxser_struct *info = (struct mxser_struct *) tty->driver_data;
++	struct mxser_struct *info;
+ 	unsigned long flags;
+ 
+-	if (!tty || !info->xmit_buf)
++	if (!tty)
++		return;
++
++	info = (struct mxser_struct *) tty->driver_data;
++	
++	if (!info->xmit_buf)
+ 		return;
+ 
+ 	save_flags(flags);
+diff -urN linux-2.4.30/drivers/char/random.c linux-2.4.30-hf32.3/drivers/char/random.c
+--- linux-2.4.30/drivers/char/random.c	2005-01-27 18:57:32.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/char/random.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1771,7 +1771,7 @@
+ static int proc_do_poolsize(ctl_table *table, int write, struct file *filp,
+ 			    void *buffer, size_t *lenp)
+ {
+-	unsigned int	ret;
++	int	ret;
+ 
+ 	sysctl_poolsize = random_state->poolinfo.POOLBYTES;
+ 
+@@ -1787,7 +1787,7 @@
+ 			     void *oldval, size_t *oldlenp,
+ 			     void *newval, size_t newlen, void **context)
+ {
+-	int	len;
++	unsigned int	len;
+ 	
+ 	sysctl_poolsize = random_state->poolinfo.POOLBYTES;
+ 
+diff -urN linux-2.4.30/drivers/char/riscom8.c linux-2.4.30-hf32.3/drivers/char/riscom8.c
+--- linux-2.4.30/drivers/char/riscom8.c	2005-01-27 18:57:32.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/char/riscom8.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1220,17 +1220,22 @@
+ static int rc_write(struct tty_struct * tty, int from_user, 
+ 		    const unsigned char *buf, int count)
+ {
+-	struct riscom_port *port = (struct riscom_port *)tty->driver_data;
++	struct riscom_port *port;
+ 	struct riscom_board *bp;
+ 	int c, total = 0;
+ 	unsigned long flags;
++
++	if (!tty)
++		return 0;
++
++	port = (struct riscom_port *)tty->driver_data;
+ 				
+ 	if (rc_paranoia_check(port, tty->device, "rc_write"))
+ 		return 0;
+ 	
+ 	bp = port_Board(port);
+ 
+-	if (!tty || !port->xmit_buf || !tmp_buf)
++	if (!port->xmit_buf || !tmp_buf)
+ 		return 0;
+ 
+ 	save_flags(flags);
+@@ -1298,13 +1303,18 @@
+ 
+ static void rc_put_char(struct tty_struct * tty, unsigned char ch)
+ {
+-	struct riscom_port *port = (struct riscom_port *)tty->driver_data;
++	struct riscom_port *port;
+ 	unsigned long flags;
+ 
++	if (!tty)
++		return;
++
++	port = (struct riscom_port *)tty->driver_data;
++
+ 	if (rc_paranoia_check(port, tty->device, "rc_put_char"))
+ 		return;
+ 
+-	if (!tty || !port->xmit_buf)
++	if (!port->xmit_buf)
+ 		return;
+ 
+ 	save_flags(flags); cli();
+diff -urN linux-2.4.30/drivers/char/serial.c linux-2.4.30-hf32.3/drivers/char/serial.c
+--- linux-2.4.30/drivers/char/serial.c	2005-01-27 18:57:32.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/char/serial.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1827,13 +1827,18 @@
+ 
+ static void rs_put_char(struct tty_struct *tty, unsigned char ch)
+ {
+-	struct async_struct *info = (struct async_struct *)tty->driver_data;
++	struct async_struct *info;
+ 	unsigned long flags;
+ 
++	if (!tty)
++		return;
++	
++	info =  (struct async_struct *)tty->driver_data;
++	
+ 	if (serial_paranoia_check(info, tty->device, "rs_put_char"))
+ 		return;
+ 
+-	if (!tty || !info->xmit.buf)
++	if (!info->xmit.buf)
+ 		return;
+ 
+ 	save_flags(flags); cli();
+@@ -1873,13 +1878,18 @@
+ 		    const unsigned char *buf, int count)
+ {
+ 	int	c, ret = 0;
+-	struct async_struct *info = (struct async_struct *)tty->driver_data;
++	struct async_struct *info;
+ 	unsigned long flags;
+ 				
++	if (!tty)
++		return 0;
++
++	info = (struct async_struct *)tty->driver_data;
++	
+ 	if (serial_paranoia_check(info, tty->device, "rs_write"))
+ 		return 0;
+ 
+-	if (!tty || !info->xmit.buf || !tmp_buf)
++	if (!info->xmit.buf || !tmp_buf)
+ 		return 0;
+ 
+ 	save_flags(flags);
+diff -urN linux-2.4.30/drivers/char/specialix.c linux-2.4.30-hf32.3/drivers/char/specialix.c
+--- linux-2.4.30/drivers/char/specialix.c	2005-01-27 18:57:32.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/char/specialix.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1600,17 +1600,22 @@
+ static int sx_write(struct tty_struct * tty, int from_user, 
+                     const unsigned char *buf, int count)
+ {
+-	struct specialix_port *port = (struct specialix_port *)tty->driver_data;
++	struct specialix_port *port;
+ 	struct specialix_board *bp;
+ 	int c, total = 0;
+ 	unsigned long flags;
++
++	if (!tty)
++		return 0;
++
++	port = (struct specialix_port *)tty->driver_data;
+ 				
+ 	if (sx_paranoia_check(port, tty->device, "sx_write"))
+ 		return 0;
+ 	
+ 	bp = port_Board(port);
+ 
+-	if (!tty || !port->xmit_buf || !tmp_buf)
++	if (!port->xmit_buf || !tmp_buf)
+ 		return 0;
+ 
+ 	save_flags(flags);
+@@ -1676,13 +1681,18 @@
+ 
+ static void sx_put_char(struct tty_struct * tty, unsigned char ch)
+ {
+-	struct specialix_port *port = (struct specialix_port *)tty->driver_data;
++	struct specialix_port *port;
+ 	unsigned long flags;
+ 
++	if (!tty)
++		return;
++
++	port = (struct specialix_port *)tty->driver_data;
++
+ 	if (sx_paranoia_check(port, tty->device, "sx_put_char"))
+ 		return;
+ 
+-	if (!tty || !port->xmit_buf)
++	if (!port->xmit_buf)
+ 		return;
+ 
+ 	save_flags(flags); cli();
+diff -urN linux-2.4.30/drivers/char/vt.c linux-2.4.30-hf32.3/drivers/char/vt.c
+--- linux-2.4.30/drivers/char/vt.c	2005-01-27 18:57:32.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/char/vt.c	2006-03-18 00:34:06.000000000 +0100
+@@ -166,6 +166,9 @@
+ 	if (i >= NR_KEYS || s >= MAX_NR_KEYMAPS)
+ 		return -EINVAL;	
+ 
++	if (!capable(CAP_SYS_TTY_CONFIG))
++		perm = 0;
++
+ 	switch (cmd) {
+ 	case KDGKBENT:
+ 		key_map = key_maps[s];
+@@ -276,6 +279,9 @@
+ 	char *first_free, *fj, *fnw;
+ 	int i, j, k;
+ 
++	if (!capable(CAP_SYS_TTY_CONFIG))
++		perm = 0;
++
+ 	/* we mostly copy too much here (512bytes), but who cares ;) */
+ 	if (copy_from_user(&tmp, user_kdgkb, sizeof(struct kbsentry)))
+ 		return -EFAULT;
+diff -urN linux-2.4.30/drivers/ide/ide-io.c linux-2.4.30-hf32.3/drivers/ide/ide-io.c
+--- linux-2.4.30/drivers/ide/ide-io.c	2003-11-28 19:26:20.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/ide/ide-io.c	2006-03-18 00:34:06.000000000 +0100
+@@ -899,11 +899,13 @@
+ 	rq = HWGROUP(drive)->rq;
+ 	HWGROUP(drive)->rq = NULL;
+ 
+-	rq->errors = 0;
+-	rq->sector = rq->bh->b_rsector;
+-	rq->current_nr_sectors = rq->bh->b_size >> 9;
+-	rq->hard_cur_sectors = rq->current_nr_sectors;
+-	rq->buffer = rq->bh->b_data;
++	if (rq) {
++		rq->errors = 0;
++		rq->sector = rq->bh->b_rsector;
++		rq->current_nr_sectors = rq->bh->b_size >> 9;
++		rq->hard_cur_sectors = rq->current_nr_sectors;
++		rq->buffer = rq->bh->b_data;
++	}
+ 
+ 	return ret;
+ }
+diff -urN linux-2.4.30/drivers/net/bonding/bond_alb.c linux-2.4.30-hf32.3/drivers/net/bonding/bond_alb.c
+--- linux-2.4.30/drivers/net/bonding/bond_alb.c	2004-04-14 15:05:30.000000000 +0200
++++ linux-2.4.30-hf32.3/drivers/net/bonding/bond_alb.c	2006-03-18 00:34:06.000000000 +0100
+@@ -37,6 +37,9 @@
+  *
+  * 2004/01/14 - Shmulik Hen <shmulik.hen at intel dot com>
+  *	- Add capability to tag self generated packets in ALB/TLB modes.
++ *
++ * 2005/12/02 - Michael O'Donnell <Michael.ODonnell at stratus dot com>
++ *	- Stratus88746: tlb_clear_slave() must tlb_init_slave() while locked.
+  */
+ 
+ //#define BONDING_DEBUG 1
+@@ -187,9 +190,9 @@
+ 		index = next_index;
+ 	}
+ 
+-	_unlock_tx_hashtbl(bond);
++	tlb_init_slave(slave); /* Stratus88746: do this before unlocking */
+ 
+-	tlb_init_slave(slave);
++	_unlock_tx_hashtbl(bond);
+ }
+ 
+ /* Must be called before starting the monitor timer */
+diff -urN linux-2.4.30/drivers/net/bonding/bond_main.c linux-2.4.30-hf32.3/drivers/net/bonding/bond_main.c
+--- linux-2.4.30/drivers/net/bonding/bond_main.c	2004-11-17 12:54:21.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/net/bonding/bond_main.c	2006-03-18 00:34:06.000000000 +0100
+@@ -469,6 +469,13 @@
+  *	  * Add support for VLAN hardware acceleration capable slaves.
+  *	  * Add capability to tag self generated packets in ALB/TLB modes.
+  *	  Set version to 2.6.0.
++ * 2004/10/29 - Mitch Williams <mitch.a.williams at intel dot com>
++ *	- Fixed bug when unloading module while using 802.3ad.  If
++ *	  spinlock debugging is turned on, this causes a stack dump.
++ *	  Solution is to move call to dev_remove_pack outside of the
++ *	  spinlock.
++ *	  Set version to 2.6.1.
++ *
+  */
+ 
+ //#define BONDING_DEBUG 1
+@@ -3565,15 +3572,15 @@
+ {
+ 	struct bonding *bond = bond_dev->priv;
+ 
+-	write_lock_bh(&bond->lock);
+-
+-	bond_mc_list_destroy(bond);
+-
+ 	if (bond->params.mode == BOND_MODE_8023AD) {
+ 		/* Unregister the receive of LACPDUs */
+ 		bond_unregister_lacpdu(bond);
+ 	}
+ 
++	write_lock_bh(&bond->lock);
++
++	bond_mc_list_destroy(bond);
++
+ 	/* signal timers not to re-arm */
+ 	bond->kill_timers = 1;
+ 
+diff -urN linux-2.4.30/drivers/net/e1000/e1000_hw.c linux-2.4.30-hf32.3/drivers/net/e1000/e1000_hw.c
+--- linux-2.4.30/drivers/net/e1000/e1000_hw.c	2005-04-14 09:43:33.000000000 +0200
++++ linux-2.4.30-hf32.3/drivers/net/e1000/e1000_hw.c	2006-03-18 00:34:06.000000000 +0100
+@@ -5049,7 +5049,7 @@
+             if(ret_val)
+                 return ret_val;
+ 
+-            msec_delay(20);
++            msec_delay_irq(20);
+ 
+             ret_val = e1000_write_phy_reg(hw, 0x0000,
+                                           IGP01E1000_IEEE_FORCE_GIGA);
+@@ -5073,7 +5073,7 @@
+             if(ret_val)
+                 return ret_val;
+ 
+-            msec_delay(20);
++            msec_delay_irq(20);
+ 
+             /* Now enable the transmitter */
+             ret_val = e1000_write_phy_reg(hw, 0x2F5B, phy_saved_data);
+@@ -5098,7 +5098,7 @@
+             if(ret_val)
+                 return ret_val;
+ 
+-            msec_delay(20);
++            msec_delay_irq(20);
+ 
+             ret_val = e1000_write_phy_reg(hw, 0x0000,
+                                           IGP01E1000_IEEE_FORCE_GIGA);
+@@ -5114,7 +5114,7 @@
+             if(ret_val)
+                 return ret_val;
+ 
+-            msec_delay(20);
++            msec_delay_irq(20);
+ 
+             /* Now enable the transmitter */
+             ret_val = e1000_write_phy_reg(hw, 0x2F5B, phy_saved_data);
+diff -urN linux-2.4.30/drivers/net/wan/sdla.c linux-2.4.30-hf32.3/drivers/net/wan/sdla.c
+--- linux-2.4.30/drivers/net/wan/sdla.c	2005-01-27 18:57:32.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/net/wan/sdla.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1201,6 +1201,7 @@
+ 		temp = kmalloc(mem.len, GFP_KERNEL);
+ 		if (!temp)
+ 			return(-ENOMEM);
++		memset(temp, 0, mem.len);
+ 		sdla_read(dev, mem.addr, temp, mem.len);
+ 		if(copy_to_user(mem.data, temp, mem.len))
+ 		{
+diff -urN linux-2.4.30/drivers/net/wireless/airo.c linux-2.4.30-hf32.3/drivers/net/wireless/airo.c
+--- linux-2.4.30/drivers/net/wireless/airo.c	2004-08-08 01:26:05.000000000 +0200
++++ linux-2.4.30-hf32.3/drivers/net/wireless/airo.c	2006-03-18 00:34:06.000000000 +0100
+@@ -43,6 +43,8 @@
+ #include <linux/pci.h>
+ #include <asm/uaccess.h>
+ 
++#include "airo.h"
++
+ #ifdef CONFIG_PCI
+ static struct pci_device_id card_ids[] = {
+ 	{ 0x14b9, 1, PCI_ANY_ID, PCI_ANY_ID, },
+diff -urN linux-2.4.30/drivers/net/wireless/airo.h linux-2.4.30-hf32.3/drivers/net/wireless/airo.h
+--- linux-2.4.30/drivers/net/wireless/airo.h	1970-01-01 01:00:00.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/net/wireless/airo.h	2006-03-18 00:34:06.000000000 +0100
+@@ -0,0 +1,8 @@
++#ifndef _AIRO_H_
++#define _AIRO_H_
++
++struct net_device *init_airo_card(unsigned short irq, int port, int is_pcmcia);
++void stop_airo_card(struct net_device *dev, int freeres);
++int reset_airo_card(struct net_device *dev);
++
++#endif  /*  _AIRO_H_  */
+diff -urN linux-2.4.30/drivers/net/wireless/airo_cs.c linux-2.4.30-hf32.3/drivers/net/wireless/airo_cs.c
+--- linux-2.4.30/drivers/net/wireless/airo_cs.c	2002-11-29 00:53:14.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/net/wireless/airo_cs.c	2006-03-18 00:34:06.000000000 +0100
+@@ -45,6 +45,8 @@
+ #include <pcmcia/cisreg.h>
+ #include <pcmcia/ds.h>
+ 
++#include "airo.h"
++
+ /*
+    All the PCMCIA modules use PCMCIA_DEBUG to control debugging.  If
+    you do not define PCMCIA_DEBUG at all, all the debug code will be
+@@ -91,10 +93,6 @@
+    event handler. 
+ */
+ 
+-struct net_device *init_airo_card( int, int, int );
+-void stop_airo_card( struct net_device *, int );
+-int reset_airo_card( struct net_device * );
+-
+ static void airo_config(dev_link_t *link);
+ static void airo_release(u_long arg);
+ static int airo_event(event_t event, int priority,
+diff -urN linux-2.4.30/drivers/net/wireless/hermes.c linux-2.4.30-hf32.3/drivers/net/wireless/hermes.c
+--- linux-2.4.30/drivers/net/wireless/hermes.c	2003-08-25 13:44:42.000000000 +0200
++++ linux-2.4.30-hf32.3/drivers/net/wireless/hermes.c	2006-03-18 00:34:06.000000000 +0100
+@@ -448,6 +448,43 @@
+ 	return err;
+ }
+ 
++/* Write a block of data to the chip's buffer with padding if
++ * neccessary, via the BAP. Synchronization/serialization is the
++ * caller's problem. len must be even.
++ *
++ * Returns: < 0 on internal failure (errno), 0 on success, > 0 on error from firmware
++ */
++int hermes_bap_pwrite_pad(hermes_t *hw, int bap, const void *buf, unsigned data_len, unsigned len,
++		      u16 id, u16 offset)
++{
++	int dreg = bap ? HERMES_DATA1 : HERMES_DATA0;
++	int err = 0;
++
++	if (len < 0 || len % 2 || data_len > len)
++		return -EINVAL;
++
++	err = hermes_bap_seek(hw, bap, id, offset);
++	if (err)
++		goto out;
++
++	/* Transfer all the complete words of data */
++	hermes_write_words(hw, dreg, buf, data_len/2);
++	/* If there is an odd byte left over pad and transfer it */
++	if (data_len & 1) {
++		u8 end[2];
++		end[1] = 0;
++		end[0] = ((unsigned char *)buf)[data_len - 1];
++		hermes_write_words(hw, dreg, end, 1);
++		data_len ++;
++	}
++	/* Now send zeros for the padding */
++	if (data_len < len)
++		hermes_clear_words(hw, dreg, (len - data_len) / 2);
++	/* Complete */
++ out:
++	return err;
++}
++
+ /* Read a Length-Type-Value record from the card.
+  *
+  * If length is NULL, we ignore the length read from the card, and
+@@ -534,6 +571,7 @@
+ 
+ EXPORT_SYMBOL(hermes_bap_pread);
+ EXPORT_SYMBOL(hermes_bap_pwrite);
++EXPORT_SYMBOL(hermes_bap_pwrite_pad);
+ EXPORT_SYMBOL(hermes_read_ltv);
+ EXPORT_SYMBOL(hermes_write_ltv);
+ 
+diff -urN linux-2.4.30/drivers/net/wireless/hermes.h linux-2.4.30-hf32.3/drivers/net/wireless/hermes.h
+--- linux-2.4.30/drivers/net/wireless/hermes.h	2006-01-29 08:47:28.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/net/wireless/hermes.h	2006-03-18 00:34:06.000000000 +0100
+@@ -319,6 +319,8 @@
+ 		       u16 id, u16 offset);
+ int hermes_bap_pwrite(hermes_t *hw, int bap, const void *buf, unsigned len,
+ 			u16 id, u16 offset);
++int hermes_bap_pwrite_pad(hermes_t *hw, int bap, const void *buf,
++			unsigned data_len, unsigned len, u16 id, u16 offset);
+ int hermes_read_ltv(hermes_t *hw, int bap, u16 rid, unsigned buflen,
+ 		    u16 *length, void *buf);
+ int hermes_write_ltv(hermes_t *hw, int bap, u16 rid,
+diff -urN linux-2.4.30/drivers/net/wireless/orinoco.c linux-2.4.30-hf32.3/drivers/net/wireless/orinoco.c
+--- linux-2.4.30/drivers/net/wireless/orinoco.c	2003-08-25 13:44:42.000000000 +0200
++++ linux-2.4.30-hf32.3/drivers/net/wireless/orinoco.c	2006-03-18 00:34:06.000000000 +0100
+@@ -2312,6 +2312,8 @@
+ 	}
+ }
+ 
++#define ALIGN(x,a) (((x)+(a)-1)&~((a)-1))
++
+ static int
+ orinoco_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+@@ -2407,14 +2409,22 @@
+ 			stats->tx_errors++;
+ 			goto fail;
+ 		}
++		/* Actual xfer length - allow for padding */
++		len = ALIGN(data_len, 2);
++		if (len < ETH_ZLEN - ETH_HLEN)
++			len = ETH_ZLEN - ETH_HLEN;
+ 	} else { /* IEEE 802.3 frame */
+ 		data_len = len + ETH_HLEN;
+ 		data_off = HERMES_802_3_OFFSET;
+ 		p = skb->data;
++		/* Actual xfer length - round up for odd length packets */
++		len = ALIGN(data_len, 2);
++		if (len < ETH_ZLEN)
++			len = ETH_ZLEN;
+ 	}
+ 
+-	/* Round up for odd length packets */
+-	err = hermes_bap_pwrite(hw, USER_BAP, p, RUP_EVEN(data_len), txfid, data_off);
++ 	err = hermes_bap_pwrite_pad(hw, USER_BAP, p, data_len, len,
++ 				txfid, data_off);
+ 	if (err) {
+ 		printk(KERN_ERR "%s: Error %d writing packet to BAP\n",
+ 		       dev->name, err);
+diff -urN linux-2.4.30/drivers/scsi/sd.c linux-2.4.30-hf32.3/drivers/scsi/sd.c
+--- linux-2.4.30/drivers/scsi/sd.c	2005-04-14 09:43:34.000000000 +0200
++++ linux-2.4.30-hf32.3/drivers/scsi/sd.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1472,6 +1472,7 @@
+ 		kfree(sd_sizes);
+ 		kfree(sd_blocksizes);
+ 		kfree(sd_hardsizes);
++		kfree(sd_max_sectors);
+ 		for (i = 0; i < N_USED_SD_MAJORS; i++) {
+ 			kfree(sd_gendisks[i].de_arr);
+ 			kfree(sd_gendisks[i].flags);
+@@ -1482,6 +1483,7 @@
+ 		del_gendisk(&sd_gendisks[i]);
+ 		blksize_size[SD_MAJOR(i)] = NULL;
+ 		hardsect_size[SD_MAJOR(i)] = NULL;
++		max_sectors[SD_MAJOR(i)] = NULL;
+ 		read_ahead[SD_MAJOR(i)] = 0;
+ 	}
+ 	sd_template.dev_max = 0;
+diff -urN linux-2.4.30/drivers/usb/serial/io_edgeport.c linux-2.4.30-hf32.3/drivers/usb/serial/io_edgeport.c
+--- linux-2.4.30/drivers/usb/serial/io_edgeport.c	2005-01-27 18:57:33.000000000 +0100
++++ linux-2.4.30-hf32.3/drivers/usb/serial/io_edgeport.c	2006-03-18 00:34:06.000000000 +0100
+@@ -2803,9 +2803,13 @@
+ static void unicode_to_ascii (char *string, short *unicode, int unicode_size)
+ {
+ 	int i;
+-	for (i = 0; i < unicode_size; ++i) {
++
++	if (unicode_size <= 0)
++		return;
++	
++	for (i = 0; i < unicode_size; ++i)
+ 		string[i] = (char)(le16_to_cpu(unicode[i]));
+-	}
++
+ 	string[unicode_size] = 0x00;
+ }
+ 
+diff -urN linux-2.4.30/fs/binfmt_elf.c linux-2.4.30-hf32.3/fs/binfmt_elf.c
+--- linux-2.4.30/fs/binfmt_elf.c	2005-04-14 09:43:34.000000000 +0200
++++ linux-2.4.30-hf32.3/fs/binfmt_elf.c	2006-03-18 00:34:06.000000000 +0100
+@@ -222,7 +222,7 @@
+ 	}
+ 
+ 	__put_user((elf_addr_t)argc,--sp);
+-	current->mm->arg_start = (unsigned long) p;
++	current->mm->arg_end = current->mm->arg_start = (unsigned long) p;
+ 	while (argc-->0) {
+ 		__put_user((elf_caddr_t)(unsigned long)p,argv++);
+ 		len = strnlen_user(p, PAGE_SIZE*MAX_ARG_PAGES);
+@@ -643,6 +643,11 @@
+ 		SET_PERSONALITY(elf_ex, ibcs2_interpreter);
+ 	}
+ 
++	if (BAD_ADDR(elf_ex.e_entry)) {
++		retval = -ENOEXEC;
++		goto out_free_dentry;
++	}
++
+ 	/* OK, we are done with that, now set up the arg stuff,
+ 	   and then start this sucker up */
+ 
+@@ -820,7 +825,7 @@
+ 			printk(KERN_ERR "Unable to load interpreter %.128s\n",
+ 				elf_interpreter);
+ 			force_sig(SIGSEGV, current);
+-			retval = -ENOEXEC; /* Nobody gets to see this, but.. */
++			retval = IS_ERR((void *)elf_entry) ? PTR_ERR((void *)elf_entry) : -ENOEXEC;
+ 			goto out_free_dentry;
+ 		}
+ 		reloc_func_desc = interp_load_addr;
+@@ -1159,7 +1164,7 @@
+ 	/* first copy the parameters from user space */
+ 	memset(&psinfo, 0, sizeof(psinfo));
+ 	{
+-		int i, len;
++		unsigned int i, len;
+ 
+ 		len = current->mm->arg_end - current->mm->arg_start;
+ 		if (len >= ELF_PRARGSZ)
+diff -urN linux-2.4.30/fs/buffer.c linux-2.4.30-hf32.3/fs/buffer.c
+--- linux-2.4.30/fs/buffer.c	2004-11-17 12:54:21.000000000 +0100
++++ linux-2.4.30-hf32.3/fs/buffer.c	2006-03-18 00:34:06.000000000 +0100
+@@ -584,7 +584,7 @@
+ 	(*bhp)->b_prev_free->b_next_free = bh;
+ 	(*bhp)->b_prev_free = bh;
+ 	nr_buffers_type[blist]++;
+-	size_buffers_type[blist] += bh->b_size;
++	size_buffers_type[blist] += bh->b_size >> 9;
+ }
+ 
+ static void __remove_from_lru_list(struct buffer_head * bh)
+@@ -604,7 +604,7 @@
+ 		bh->b_next_free = NULL;
+ 		bh->b_prev_free = NULL;
+ 		nr_buffers_type[blist]--;
+-		size_buffers_type[blist] -= bh->b_size;
++		size_buffers_type[blist] -= bh->b_size >> 9;
+ 	}
+ }
+ 
+@@ -1033,7 +1033,7 @@
+ {
+ 	unsigned long dirty, tot, hard_dirty_limit, soft_dirty_limit;
+ 
+-	dirty = size_buffers_type[BUF_DIRTY] >> PAGE_SHIFT;
++	dirty = size_buffers_type[BUF_DIRTY] >> (PAGE_SHIFT - 9);
+ 	tot = nr_free_buffer_pages();
+ 
+ 	dirty *= 100;
+@@ -1054,7 +1054,7 @@
+ {
+ 	unsigned long dirty, tot, dirty_limit;
+ 
+-	dirty = size_buffers_type[BUF_DIRTY] >> PAGE_SHIFT;
++	dirty = size_buffers_type[BUF_DIRTY] >> (PAGE_SHIFT - 9);
+ 	tot = nr_free_buffer_pages();
+ 
+ 	dirty *= 100;
+@@ -2839,7 +2839,7 @@
+ 		}
+ 		printk("%9s: %d buffers, %lu kbyte, %d used (last=%d), "
+ 		       "%d locked, %d dirty, %d delay\n",
+-		       buf_types[nlist], found, size_buffers_type[nlist]>>10,
++		       buf_types[nlist], found, size_buffers_type[nlist]>>(10-9),
+ 		       used, lastused, locked, dirty, delalloc);
+ 	}
+ 	spin_unlock(&lru_list_lock);
+diff -urN linux-2.4.30/fs/dcache.c linux-2.4.30-hf32.3/fs/dcache.c
+--- linux-2.4.30/fs/dcache.c	2004-11-17 12:54:21.000000000 +0100
++++ linux-2.4.30-hf32.3/fs/dcache.c	2006-03-18 00:34:06.000000000 +0100
+@@ -221,7 +221,7 @@
+ static inline struct dentry * __dget_locked(struct dentry *dentry)
+ {
+ 	atomic_inc(&dentry->d_count);
+-	if (atomic_read(&dentry->d_count) == 1) {
++	if (!list_empty(&dentry->d_lru)) {
+ 		dentry_stat.nr_unused--;
+ 		list_del_init(&dentry->d_lru);
+ 	}
+diff -urN linux-2.4.30/fs/inode.c linux-2.4.30-hf32.3/fs/inode.c
+--- linux-2.4.30/fs/inode.c	2004-04-14 15:05:40.000000000 +0200
++++ linux-2.4.30-hf32.3/fs/inode.c	2006-03-18 00:34:06.000000000 +0100
+@@ -297,7 +297,7 @@
+ {
+ 	struct list_head *to;
+ 
+-	if (inode->i_state & I_FREEING)
++	if (inode->i_state & (I_FREEING|I_CLEAR))
+ 		return;
+ 	if (list_empty(&inode->i_hash))
+ 		return;
+@@ -634,7 +634,9 @@
+ 		cdput(inode->i_cdev);
+ 		inode->i_cdev = NULL;
+ 	}
++	spin_lock(&inode_lock);
+ 	inode->i_state = I_CLEAR;
++	spin_unlock(&inode_lock);
+ }
+ 
+ /*
+@@ -852,8 +854,8 @@
+ 	 */
+ 	if (goal <= 0)
+ 		return;
+-	if (inodes_stat.nr_unused * sizeof(struct inode) * 10 <
+-				freeable_lowmem() * PAGE_SIZE)
++	if (inodes_stat.nr_unused <
++	    (freeable_lowmem() * PAGE_SIZE) / (sizeof(struct inode) * 10))
+ 		return;
+ 
+ 	wakeup_bdflush();
+diff -urN linux-2.4.30/fs/isofs/compress.c linux-2.4.30-hf32.3/fs/isofs/compress.c
+--- linux-2.4.30/fs/isofs/compress.c	2002-11-29 00:53:15.000000000 +0100
++++ linux-2.4.30-hf32.3/fs/isofs/compress.c	2006-03-18 00:34:06.000000000 +0100
+@@ -147,8 +147,14 @@
+ 	cend = le32_to_cpu(*(u32 *)(bh->b_data + (blockendptr & bufmask)));
+ 	brelse(bh);
+ 
++	if (cstart > cend)
++		goto eio;
++
+ 	csize = cend-cstart;
+ 
++	if (csize > deflateBound(1UL << zisofs_block_shift))
++		goto eio;
++
+ 	/* Now page[] contains an array of pages, any of which can be NULL,
+ 	   and the locks on which we hold.  We should now read the data and
+ 	   release the pages.  If the pages are NULL the decompressed data
+diff -urN linux-2.4.30/fs/isofs/inode.c linux-2.4.30-hf32.3/fs/isofs/inode.c
+--- linux-2.4.30/fs/isofs/inode.c	2005-04-14 09:43:34.000000000 +0200
++++ linux-2.4.30-hf32.3/fs/isofs/inode.c	2006-03-18 00:34:06.000000000 +0100
+@@ -335,16 +335,16 @@
+ 			else if (!strcmp(value,"acorn")) popt->map = 'a';
+ 			else return 0;
+ 		}
+-		if (!strcmp(this_char,"session") && value) {
++		else if (!strcmp(this_char,"session") && value) {
+ 			char * vpnt = value;
+ 			unsigned int ivalue = simple_strtoul(vpnt, &vpnt, 0);
+-			if(ivalue < 0 || ivalue >99) return 0;
++			if (ivalue > 99) return 0;
+ 			popt->session=ivalue+1;
+ 		}
+-		if (!strcmp(this_char,"sbsector") && value) {
++		else if (!strcmp(this_char,"sbsector") && value) {
+ 			char * vpnt = value;
+ 			unsigned int ivalue = simple_strtoul(vpnt, &vpnt, 0);
+-			if(ivalue < 0 || ivalue >660*512) return 0;
++			if (ivalue > 660*512) return 0;
+ 			popt->sbsector=ivalue;
+ 		}
+ 		else if (!strcmp(this_char,"check") && value) {
+diff -urN linux-2.4.30/fs/jfs/super.c linux-2.4.30-hf32.3/fs/jfs/super.c
+--- linux-2.4.30/fs/jfs/super.c	2005-04-14 09:43:34.000000000 +0200
++++ linux-2.4.30-hf32.3/fs/jfs/super.c	2006-03-18 00:34:06.000000000 +0100
+@@ -407,7 +407,7 @@
+ 		jfs_err("jfs_umount failed with return code %d", rc);
+ 	}
+ out_kfree:
+-	if (sbi->nls_tab)
++	if (sbi->nls_tab && sbi->nls_tab != (void *) -1)
+ 		unload_nls(sbi->nls_tab);
+ 	kfree(sbi);
+ 	return NULL;
+diff -urN linux-2.4.30/fs/locks.c linux-2.4.30-hf32.3/fs/locks.c
+--- linux-2.4.30/fs/locks.c	2004-04-14 15:05:40.000000000 +0200
++++ linux-2.4.30-hf32.3/fs/locks.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1087,7 +1087,6 @@
+ 			before = &fl->fl_next;
+ 			continue;
+ 		}
+-		printk(KERN_INFO "lease broken - owner pid = %d\n", fl->fl_pid);
+ 		lease_modify(before, fl->fl_type & ~F_INPROGRESS);
+ 		if (fl == *before)	/* lease_modify may have freed fl */
+ 			before = &fl->fl_next;
+diff -urN linux-2.4.30/fs/nfs/nfs2xdr.c linux-2.4.30-hf32.3/fs/nfs/nfs2xdr.c
+--- linux-2.4.30/fs/nfs/nfs2xdr.c	2002-11-29 00:53:15.000000000 +0100
++++ linux-2.4.30-hf32.3/fs/nfs/nfs2xdr.c	2006-03-18 00:34:06.000000000 +0100
+@@ -571,8 +571,11 @@
+ 	strlen = (u32*)kmap(rcvbuf->pages[0]);
+ 	/* Convert length of symlink */
+ 	len = ntohl(*strlen);
+-	if (len > rcvbuf->page_len)
+-		len = rcvbuf->page_len;
++	if (len >= rcvbuf->page_len - sizeof(u32) || len > NFS2_MAXPATHLEN) {
++		dprintk("NFS: server returned giant symlink!\n");
++		kunmap(rcvbuf->pages[0]);
++		return -ENAMETOOLONG;
++        }
+ 	*strlen = len;
+ 	/* NULL terminate the string we got */
+ 	string = (char *)(strlen + 1);
+diff -urN linux-2.4.30/fs/nfs/nfs3xdr.c linux-2.4.30-hf32.3/fs/nfs/nfs3xdr.c
+--- linux-2.4.30/fs/nfs/nfs3xdr.c	2003-11-28 19:26:21.000000000 +0100
++++ linux-2.4.30-hf32.3/fs/nfs/nfs3xdr.c	2006-03-18 00:34:06.000000000 +0100
+@@ -759,8 +759,11 @@
+ 	strlen = (u32*)kmap(rcvbuf->pages[0]);
+ 	/* Convert length of symlink */
+ 	len = ntohl(*strlen);
+-	if (len > rcvbuf->page_len)
+-		len = rcvbuf->page_len;
++	if (len >= rcvbuf->page_len - sizeof(u32)) {
++		dprintk("NFS: server returned giant symlink!\n");
++		kunmap(rcvbuf->pages[0]);
++		return -ENAMETOOLONG;
++        }
+ 	*strlen = len;
+ 	/* NULL terminate the string we got */
+ 	string = (char *)(strlen + 1);
+diff -urN linux-2.4.30/fs/proc/base.c linux-2.4.30-hf32.3/fs/proc/base.c
+--- linux-2.4.30/fs/proc/base.c	2005-01-27 18:57:33.000000000 +0100
++++ linux-2.4.30-hf32.3/fs/proc/base.c	2006-03-18 00:34:06.000000000 +0100
+@@ -185,8 +185,12 @@
+ 	int res = 0;
+ 	task_lock(task);
+ 	mm = task->mm;
+-	if (mm)
+-		atomic_inc(&mm->mm_users);
++	if (mm) {
++		if (mm->arg_end)
++			atomic_inc(&mm->mm_users);
++		else
++			mm = NULL;
++	}
+ 	task_unlock(task);
+ 	if (mm && mm->arg_start && mm->arg_start < mm->arg_end) {
+ 		unsigned long len = mm->arg_end - mm->arg_start;
+diff -urN linux-2.4.30/fs/smbfs/proc.c linux-2.4.30-hf32.3/fs/smbfs/proc.c
+--- linux-2.4.30/fs/smbfs/proc.c	2004-11-17 12:54:21.000000000 +0100
++++ linux-2.4.30-hf32.3/fs/smbfs/proc.c	2006-03-18 00:34:06.000000000 +0100
+@@ -2945,7 +2945,7 @@
+ 	LSET(data, 32, SMB_TIME_NO_CHANGE);
+ 	LSET(data, 40, SMB_UID_NO_CHANGE);
+ 	LSET(data, 48, SMB_GID_NO_CHANGE);
+-	LSET(data, 56, smb_filetype_from_mode(attr->ia_mode));
++	DSET(data, 56, smb_filetype_from_mode(attr->ia_mode));
+ 	LSET(data, 60, major);
+ 	LSET(data, 68, minor);
+ 	LSET(data, 76, 0);
+diff -urN linux-2.4.30/fs/xfs/linux-2.4/xfs_buf.c linux-2.4.30-hf32.3/fs/xfs/linux-2.4/xfs_buf.c
+--- linux-2.4.30/fs/xfs/linux-2.4/xfs_buf.c	2005-01-27 18:57:33.000000000 +0100
++++ linux-2.4.30-hf32.3/fs/xfs/linux-2.4/xfs_buf.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1073,7 +1073,7 @@
+ 	return(locked ? 0 : -EBUSY);
+ }
+ 
+-#ifdef DEBUG
++#if defined(DEBUG) || defined(XFS_BLI_TRACE)
+ /*
+  *	pagebuf_lock_value
+  *
+diff -urN linux-2.4.30/include/asm-i386/system.h linux-2.4.30-hf32.3/include/asm-i386/system.h
+--- linux-2.4.30/include/asm-i386/system.h	2005-03-26 10:13:13.000000000 +0100
++++ linux-2.4.30-hf32.3/include/asm-i386/system.h	2006-03-18 00:34:06.000000000 +0100
+@@ -84,7 +84,7 @@
+ #define loadsegment(seg,value)			\
+ 	asm volatile("\n"			\
+ 		"1:\t"				\
+-		"movl %0,%%" #seg "\n"		\
++		"mov %0,%%" #seg "\n"		\
+ 		"2:\n"				\
+ 		".section .fixup,\"ax\"\n"	\
+ 		"3:\t"				\
+@@ -96,7 +96,7 @@
+ 		".align 4\n\t"			\
+ 		".long 1b,3b\n"			\
+ 		".previous"			\
+-		: :"m" (*(unsigned int *)&(value)))
++		: :"m" (value))
+ 
+ /*
+  * Clear and set 'TS' bit respectively
+diff -urN linux-2.4.30/include/asm-x86_64/desc.h linux-2.4.30-hf32.3/include/asm-x86_64/desc.h
+--- linux-2.4.30/include/asm-x86_64/desc.h	2004-08-08 01:26:06.000000000 +0200
++++ linux-2.4.30-hf32.3/include/asm-x86_64/desc.h	2006-03-18 00:34:06.000000000 +0100
+@@ -128,7 +128,7 @@
+ 
+ static inline void set_tss_desc(unsigned n, void *addr)
+ { 
+-	set_tssldt_descriptor((void *)&gdt_table + __CPU_DESC_INDEX(n,tss), (unsigned long)addr, DESC_TSS, sizeof(struct tss_struct)); 
++	set_tssldt_descriptor((void *)&gdt_table + __CPU_DESC_INDEX(n,tss), (unsigned long)addr, DESC_TSS, IO_BITMAP_OFFSET + IO_BITMAP_BYTES + 7); 
+ } 
+ 
+ static inline void set_ldt_desc(unsigned n, void *addr, int size)
+diff -urN linux-2.4.30/include/asm-x86_64/processor.h linux-2.4.30-hf32.3/include/asm-x86_64/processor.h
+--- linux-2.4.30/include/asm-x86_64/processor.h	2004-04-14 15:05:40.000000000 +0200
++++ linux-2.4.30-hf32.3/include/asm-x86_64/processor.h	2006-03-18 00:34:06.000000000 +0100
+@@ -260,6 +260,7 @@
+  * Size of io_bitmap in longwords: 32 is ports 0-0x3ff.
+  */
+ #define IO_BITMAP_SIZE	32
++#define IO_BITMAP_BYTES (IO_BITMAP_SIZE * sizeof(u32))
+ #define IO_BITMAP_OFFSET offsetof(struct tss_struct,io_bitmap)
+ #define INVALID_IO_BITMAP_OFFSET 0x8000
+ 
+@@ -325,10 +326,9 @@
+ #define INIT_MMAP \
+ { &init_mm, 0, 0, NULL, PAGE_SHARED, VM_READ | VM_WRITE | VM_EXEC, 1, NULL, NULL }
+ 
+-#define STACKFAULT_STACK 1
+-#define DOUBLEFAULT_STACK 2 
+-#define NMI_STACK 3 
+-#define N_EXCEPTION_STACKS 3  /* hw limit: 7 */
++#define DOUBLEFAULT_STACK 1
++#define NMI_STACK 2
++#define N_EXCEPTION_STACKS 2  /* hw limit: 7 */
+ #define EXCEPTION_STKSZ PAGE_SIZE
+ #define EXCEPTION_STK_ORDER 0
+ 
+diff -urN linux-2.4.30/include/linux/delay.h linux-2.4.30-hf32.3/include/linux/delay.h
+--- linux-2.4.30/include/linux/delay.h	2005-11-18 12:45:36.000000000 +0100
++++ linux-2.4.30-hf32.3/include/linux/delay.h	2006-03-18 00:34:06.000000000 +0100
+@@ -14,6 +14,24 @@
+ #include <asm/delay.h>
+ 
+ /*
++ * We define MAX_MSEC_OFFSET as the maximal value that can be accepted by
++ * msecs_to_jiffies() without risking a multiply overflow. This function
++ * returns MAX_JIFFY_OFFSET for arguments above those values.
++ */
++
++#if HZ <= 1000 && !(1000 % HZ)
++#  define MAX_MSEC_OFFSET \
++	(ULONG_MAX - (1000 / HZ) + 1)
++#elif HZ > 1000 && !(HZ % 1000)
++#  define MAX_MSEC_OFFSET \
++	(ULONG_MAX / (HZ / 1000))
++#else
++#  define MAX_MSEC_OFFSET \
++	((ULONG_MAX - 999) / HZ)
++#endif
++
++
++/*
+  * Convert jiffies to milliseconds and back.
+  *
+  * Avoid unnecessary multiplications/divisions in the
+@@ -43,14 +61,14 @@
+ 
+ static inline unsigned long msecs_to_jiffies(const unsigned int m)
+ {
+-	if (m > jiffies_to_msecs(MAX_JIFFY_OFFSET))
++	if (MAX_MSEC_OFFSET < UINT_MAX && m > (unsigned int)MAX_MSEC_OFFSET)
+ 		return MAX_JIFFY_OFFSET;
+ #if HZ <= 1000 && !(1000 % HZ)
+-	return (m + (1000 / HZ) - 1) / (1000 / HZ);
++	return ((unsigned long)m + (1000 / HZ) - 1) / (1000 / HZ);
+ #elif HZ > 1000 && !(HZ % 1000)
+-	return m * (HZ / 1000);
++	return (unsigned long)m * (HZ / 1000);
+ #else
+-	return (m * HZ + 999) / 1000;
++	return ((unsigned long)m * HZ + 999) / 1000;
+ #endif
+ }
+ 
+diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h linux-2.4.30-hf32.3/include/linux/netfilter_ipv4/ip_conntrack.h
+--- linux-2.4.30/include/linux/netfilter_ipv4/ip_conntrack.h	2005-07-27 13:13:58.000000000 +0200
++++ linux-2.4.30-hf32.3/include/linux/netfilter_ipv4/ip_conntrack.h	2006-03-18 00:34:06.000000000 +0100
+@@ -229,7 +229,7 @@
+ ip_conntrack_get(struct sk_buff *skb, enum ip_conntrack_info *ctinfo);
+ 
+ /* decrement reference count on a conntrack */
+-extern inline void ip_conntrack_put(struct ip_conntrack *ct);
++extern void ip_conntrack_put(struct ip_conntrack *ct);
+ 
+ /* find unconfirmed expectation based on tuple */
+ struct ip_conntrack_expect *
+diff -urN linux-2.4.30/include/linux/netfilter_ipv4/ip_nat_rule.h linux-2.4.30-hf32.3/include/linux/netfilter_ipv4/ip_nat_rule.h
+--- linux-2.4.30/include/linux/netfilter_ipv4/ip_nat_rule.h	2006-01-29 08:38:54.000000000 +0100
++++ linux-2.4.30-hf32.3/include/linux/netfilter_ipv4/ip_nat_rule.h	2006-03-18 00:34:06.000000000 +0100
+@@ -19,5 +19,10 @@
+ alloc_null_binding(struct ip_conntrack *conntrack,
+ 		   struct ip_nat_info *info,
+ 		   unsigned int hooknum);
++
++extern unsigned int
++alloc_null_binding_confirmed(struct ip_conntrack *conntrack,
++			     struct ip_nat_info *info,
++			     unsigned int hooknum);
+ #endif
+ #endif /* _IP_NAT_RULE_H */
+diff -urN linux-2.4.30/include/linux/proc_fs.h linux-2.4.30-hf32.3/include/linux/proc_fs.h
+--- linux-2.4.30/include/linux/proc_fs.h	2005-12-04 19:00:23.000000000 +0100
++++ linux-2.4.30-hf32.3/include/linux/proc_fs.h	2006-03-18 00:34:06.000000000 +0100
+@@ -70,6 +70,7 @@
+ 	atomic_t count;		/* use count */
+ 	int deleted;		/* delete flag */
+ 	kdev_t	rdev;
++	void *set;
+ };
+ 
+ #define PROC_INODE_PROPER(inode) ((inode)->i_ino & ~0xffff)
+diff -urN linux-2.4.30/include/linux/sysctl.h linux-2.4.30-hf32.3/include/linux/sysctl.h
+--- linux-2.4.30/include/linux/sysctl.h	2005-11-02 10:29:31.000000000 +0100
++++ linux-2.4.30-hf32.3/include/linux/sysctl.h	2006-03-18 00:34:06.000000000 +0100
+@@ -29,6 +29,7 @@
+ #include <linux/list.h>
+ 
+ struct file;
++struct completion;
+ 
+ #define CTL_MAXNAME 10
+ 
+@@ -829,6 +830,8 @@
+ {
+ 	ctl_table *ctl_table;
+ 	struct list_head ctl_entry;
++	int used;
++	struct completion *unregistering;
+ };
+ 
+ struct ctl_table_header * register_sysctl_table(ctl_table * table, 
+diff -urN linux-2.4.30/include/linux/zlib.h linux-2.4.30-hf32.3/include/linux/zlib.h
+--- linux-2.4.30/include/linux/zlib.h	2005-11-18 12:46:17.000000000 +0100
++++ linux-2.4.30-hf32.3/include/linux/zlib.h	2006-03-18 00:34:06.000000000 +0100
+@@ -516,6 +516,11 @@
+    stream state was inconsistent (such as zalloc or state being NULL).
+ */
+ 
++static inline unsigned long deflateBound(unsigned long s)
++{
++	return s + ((s + 7) >> 3) + ((s + 63) >> 6) + 11;
++}
++
+ ZEXTERN int ZEXPORT zlib_deflateParams OF((z_streamp strm,
+ 					      int level,
+ 					      int strategy));
+diff -urN linux-2.4.30/include/net/ax25.h linux-2.4.30-hf32.3/include/net/ax25.h
+--- linux-2.4.30/include/net/ax25.h	2005-11-18 12:45:59.000000000 +0100
++++ linux-2.4.30-hf32.3/include/net/ax25.h	2006-03-18 00:34:06.000000000 +0100
+@@ -142,7 +142,7 @@
+ 	ax25_address		calls[AX25_MAX_DIGIS];
+ 	unsigned char		repeated[AX25_MAX_DIGIS];
+ 	unsigned char		ndigi;
+-	char			lastrepeat;
++	signed char		lastrepeat;
+ } ax25_digi;
+ 
+ typedef struct ax25_route {
+diff -urN linux-2.4.30/include/net/ip6_fib.h linux-2.4.30-hf32.3/include/net/ip6_fib.h
+--- linux-2.4.30/include/net/ip6_fib.h	2005-09-01 16:18:27.000000000 +0200
++++ linux-2.4.30-hf32.3/include/net/ip6_fib.h	2006-03-18 00:34:06.000000000 +0100
+@@ -171,13 +171,16 @@
+ 
+ extern int			fib6_add(struct fib6_node *root,
+ 					 struct rt6_info *rt,
+-					 struct nlmsghdr *nlh);
++					 struct nlmsghdr *nlh,
++					 struct netlink_skb_parms *req);
+ 
+ extern int			fib6_del(struct rt6_info *rt,
+-					 struct nlmsghdr *nlh);
++					 struct nlmsghdr *nlh,
++					 struct netlink_skb_parms *req);
+ 
+ extern void			inet6_rt_notify(int event, struct rt6_info *rt,
+-						struct nlmsghdr *nlh);
++						struct nlmsghdr *nlh,
++						struct netlink_skb_parms *req);
+ 
+ extern void			fib6_run_gc(unsigned long dummy);
+ 
+diff -urN linux-2.4.30/include/net/ip6_route.h linux-2.4.30-hf32.3/include/net/ip6_route.h
+--- linux-2.4.30/include/net/ip6_route.h	2005-09-01 16:18:27.000000000 +0200
++++ linux-2.4.30-hf32.3/include/net/ip6_route.h	2006-03-18 00:34:06.000000000 +0100
+@@ -39,9 +39,11 @@
+ extern int			ipv6_route_ioctl(unsigned int cmd, void *arg);
+ 
+ extern int			ip6_route_add(struct in6_rtmsg *rtmsg,
+-					      struct nlmsghdr *);
++					      struct nlmsghdr *,
++					      struct netlink_skb_parms *req);
+ extern int			ip6_del_rt(struct rt6_info *,
+-					   struct nlmsghdr *);
++					   struct nlmsghdr *,
++					   struct netlink_skb_parms *req);
+ 
+ extern int			ip6_rt_addr_add(struct in6_addr *addr,
+ 						struct net_device *dev);
+diff -urN linux-2.4.30/include/net/ip_vs.h linux-2.4.30-hf32.3/include/net/ip_vs.h
+--- linux-2.4.30/include/net/ip_vs.h	2005-09-01 16:18:30.000000000 +0200
++++ linux-2.4.30-hf32.3/include/net/ip_vs.h	2006-03-18 00:34:06.000000000 +0100
+@@ -82,6 +82,7 @@
+ #define IP_VS_CONN_F_IN_SEQ           0x0400    /* must do input seq adjust */
+ #define IP_VS_CONN_F_SEQ_MASK         0x0600    /* in/out sequence mask */
+ #define IP_VS_CONN_F_NO_CPORT         0x0800    /* no client port set yet */
++#define IP_VS_CONN_F_TEMPLATE         0x1000    /* template, not connection */
+ 
+ /* Move it to better place one day, for now keep it unique */
+ #define NFC_IPVS_PROPERTY	0x10000
+@@ -592,6 +593,8 @@
+ 
+ extern struct ip_vs_conn *ip_vs_conn_in_get
+ (int protocol, __u32 s_addr, __u16 s_port, __u32 d_addr, __u16 d_port);
++extern struct ip_vs_conn *ip_vs_ct_in_get
++(int protocol, __u32 s_addr, __u16 s_port, __u32 d_addr, __u16 d_port);
+ extern struct ip_vs_conn *ip_vs_conn_out_get
+ (int protocol, __u32 s_addr, __u16 s_port, __u32 d_addr, __u16 d_port);
+ 
+diff -urN linux-2.4.30/kernel/kmod.c linux-2.4.30-hf32.3/kernel/kmod.c
+--- linux-2.4.30/kernel/kmod.c	2003-11-28 19:26:21.000000000 +0100
++++ linux-2.4.30-hf32.3/kernel/kmod.c	2006-03-18 00:34:06.000000000 +0100
+@@ -125,6 +125,8 @@
+ 	curtask->euid = curtask->uid = curtask->suid = curtask->fsuid = 0;
+ 	curtask->egid = curtask->gid = curtask->sgid = curtask->fsgid = 0;
+ 
++	memcpy(&curtask->rlim, &init_task.rlim, sizeof(struct rlimit)*RLIM_NLIMITS);
++
+ 	curtask->ngroups = 0;
+ 
+ 	cap_set_full(curtask->cap_effective);
+diff -urN linux-2.4.30/kernel/ptrace.c linux-2.4.30-hf32.3/kernel/ptrace.c
+--- linux-2.4.30/kernel/ptrace.c	2003-08-25 13:44:44.000000000 +0200
++++ linux-2.4.30-hf32.3/kernel/ptrace.c	2006-03-18 00:34:06.000000000 +0100
+@@ -58,7 +58,7 @@
+ 	task_lock(task);
+ 	if (task->pid <= 1)
+ 		goto bad;
+-	if (task == current)
++	if (task->tgid == current->tgid)
+ 		goto bad;
+ 	if (!task->mm)
+ 		goto bad;
+diff -urN linux-2.4.30/kernel/sysctl.c linux-2.4.30-hf32.3/kernel/sysctl.c
+--- linux-2.4.30/kernel/sysctl.c	2005-01-27 18:57:34.000000000 +0100
++++ linux-2.4.30-hf32.3/kernel/sysctl.c	2006-03-18 00:34:06.000000000 +0100
+@@ -147,7 +147,7 @@
+ 
+ extern struct proc_dir_entry *proc_sys_root;
+ 
+-static void register_proc_table(ctl_table *, struct proc_dir_entry *);
++static void register_proc_table(ctl_table *, struct proc_dir_entry *, void *);
+ static void unregister_proc_table(ctl_table *, struct proc_dir_entry *);
+ #endif
+ 
+@@ -360,10 +360,51 @@
+ 
+ extern void init_irq_proc (void);
+ 
++static spinlock_t sysctl_lock = SPIN_LOCK_UNLOCKED;
++
++/* called under sysctl_lock */
++static int use_table(struct ctl_table_header *p)
++{
++	if (unlikely(p->unregistering != NULL))
++		return 0;
++	p->used++;
++	return 1;
++}
++
++/* called under sysctl_lock */
++static void unuse_table(struct ctl_table_header *p)
++{
++	if (!--p->used)
++		if (unlikely(p->unregistering != NULL))
++			complete(p->unregistering);
++}
++
++/* called under sysctl_lock, will reacquire if has to wait */
++static void start_unregistering(struct ctl_table_header *p)
++{
++	/*
++	 * if p->used is 0, nobody will ever touch that entry again;
++	 * we'll eliminate all paths to it before dropping sysctl_lock
++	 */
++	if (unlikely(p->used)) {
++		struct completion wait;
++		init_completion(&wait);
++		p->unregistering = &wait;
++		spin_unlock(&sysctl_lock);
++		wait_for_completion(&wait);
++		spin_lock(&sysctl_lock);
++	}
++	/*
++	 * do not remove from the list until nobody holds it; walking the
++	 * list in do_sysctl() relies on that.
++	 */
++	list_del_init(&p->ctl_entry);
++}
++
+ void __init sysctl_init(void)
+ {
+ #ifdef CONFIG_PROC_FS
+-	register_proc_table(root_table, proc_sys_root);
++	register_proc_table(root_table, proc_sys_root, &root_table_header);
+ 	init_irq_proc();
+ #endif
+ }
+@@ -372,6 +413,7 @@
+ 	       void *newval, size_t newlen)
+ {
+ 	struct list_head *tmp;
++	int error = -ENOTDIR;
+ 
+ 	if (nlen <= 0 || nlen >= CTL_MAXNAME)
+ 		return -ENOTDIR;
+@@ -383,21 +425,31 @@
+ 		if ((ssize_t)old_len < 0)
+ 			return -EINVAL;
+ 	}
++	spin_lock(&sysctl_lock);
+ 	tmp = &root_table_header.ctl_entry;
+ 	do {
+ 		struct ctl_table_header *head =
+ 			list_entry(tmp, struct ctl_table_header, ctl_entry);
+ 		void *context = NULL;
+-		int error = parse_table(name, nlen, oldval, oldlenp, 
++
++		if (!use_table(head))
++			continue;
++
++		spin_unlock(&sysctl_lock);
++
++		error = parse_table(name, nlen, oldval, oldlenp, 
+ 					newval, newlen, head->ctl_table,
+ 					&context);
+ 		if (context)
+ 			kfree(context);
++
++		spin_lock(&sysctl_lock);
++		unuse_table(head);
+ 		if (error != -ENOTDIR)
+-			return error;
+-		tmp = tmp->next;
+-	} while (tmp != &root_table_header.ctl_entry);
+-	return -ENOTDIR;
++			break;
++	} while ((tmp = tmp->next) != &root_table_header.ctl_entry);
++	spin_unlock(&sysctl_lock);
++	return error;
+ }
+ 
+ extern asmlinkage long sys_sysctl(struct __sysctl_args *args)
+@@ -604,12 +656,16 @@
+ 		return NULL;
+ 	tmp->ctl_table = table;
+ 	INIT_LIST_HEAD(&tmp->ctl_entry);
++	tmp->used = 0;
++	tmp->unregistering = NULL;
++	spin_lock(&sysctl_lock);
+ 	if (insert_at_head)
+ 		list_add(&tmp->ctl_entry, &root_table_header.ctl_entry);
+ 	else
+ 		list_add_tail(&tmp->ctl_entry, &root_table_header.ctl_entry);
++	spin_unlock(&sysctl_lock);
+ #ifdef CONFIG_PROC_FS
+-	register_proc_table(table, proc_sys_root);
++	register_proc_table(table, proc_sys_root, tmp);
+ #endif
+ 	return tmp;
+ }
+@@ -623,10 +679,12 @@
+  */
+ void unregister_sysctl_table(struct ctl_table_header * header)
+ {
+-	list_del(&header->ctl_entry);
++	spin_lock(&sysctl_lock);
++	start_unregistering(header);
+ #ifdef CONFIG_PROC_FS
+ 	unregister_proc_table(header->ctl_table, proc_sys_root);
+ #endif
++	spin_unlock(&sysctl_lock);
+ 	kfree(header);
+ }
+ 
+@@ -637,7 +695,7 @@
+ #ifdef CONFIG_PROC_FS
+ 
+ /* Scan the sysctl entries in table and add them all into /proc */
+-static void register_proc_table(ctl_table * table, struct proc_dir_entry *root)
++static void register_proc_table(ctl_table * table, struct proc_dir_entry *root, void *set)
+ {
+ 	struct proc_dir_entry *de;
+ 	int len;
+@@ -673,6 +731,7 @@
+ 			de = create_proc_entry(table->procname, mode, root);
+ 			if (!de)
+ 				continue;
++			de->set = set;
+ 			de->data = (void *) table;
+ 			if (table->proc_handler) {
+ 				de->proc_fops = &proc_sys_file_operations;
+@@ -681,7 +740,7 @@
+ 		}
+ 		table->de = de;
+ 		if (de->mode & S_IFDIR)
+-			register_proc_table(table->child, de);
++			register_proc_table(table->child, de, set);
+ 	}
+ }
+ 
+@@ -706,6 +765,13 @@
+ 				continue;
+ 		}
+ 
++		/*
++		 * In any case, mark the entry as goner; we'll keep it
++		 * around if it's busy, but we'll know to do nothing with
++		 * its fields.  We are under sysctl_lock here.
++		 */
++		de->data = NULL;
++
+ 		/* Don't unregister proc entries that are still being used.. */
+ 		if (atomic_read(&de->count))
+ 			continue;
+@@ -719,31 +785,44 @@
+ 			  size_t count, loff_t *ppos)
+ {
+ 	int op;
+-	struct proc_dir_entry *de;
++	struct proc_dir_entry *de =
++	  (struct proc_dir_entry*) file->f_dentry->d_inode->u.generic_ip;
+ 	struct ctl_table *table;
+ 	size_t res;
+-	ssize_t error;
+-	
+-	de = (struct proc_dir_entry*) file->f_dentry->d_inode->u.generic_ip;
+-	if (!de || !de->data)
+-		return -ENOTDIR;
+-	table = (struct ctl_table *) de->data;
+-	if (!table || !table->proc_handler)
+-		return -ENOTDIR;
+-	op = (write ? 002 : 004);
+-	if (ctl_perm(table, op))
+-		return -EPERM;
+-	
+-	res = count;
++	ssize_t error = -ENOTDIR;
+ 
+-	/*
+-	 * FIXME: we need to pass on ppos to the handler.
+-	 */
++	spin_lock(&sysctl_lock);
++	if (de && de->data && use_table(de->set)) {
++		/*
++		 * at that point we know that sysctl was not unregistered
++		 * and won't be until we finish
++		 */
++		spin_unlock(&sysctl_lock);
++		table = (struct ctl_table *) de->data;
++		if (!table || !table->proc_handler)
++			goto out;
++		error = -EPERM;
++		op = (write ? 002 : 004);
++		if (ctl_perm(table, op))
++			goto out;
++		
++		/* careful: calling conventions are nasty here */
++		res = count;
+ 
+-	error = (*table->proc_handler) (table, write, file, buf, &res);
+-	if (error)
+-		return error;
+-	return res;
++		/*
++		 * FIXME: we need to pass on ppos to the handler.
++		 */
++
++		error = (*table->proc_handler)(table, write, file,
++						buf, &res);
++		if (!error)
++			error = res;
++	out:
++		spin_lock(&sysctl_lock);
++		unuse_table(de->set);
++	}
++	spin_unlock(&sysctl_lock);
++	return error;
+ }
+ 
+ static ssize_t proc_readsys(struct file * file, char * buf,
+diff -urN linux-2.4.30/lib/inflate.c linux-2.4.30-hf32.3/lib/inflate.c
+--- linux-2.4.30/lib/inflate.c	2002-11-29 00:53:15.000000000 +0100
++++ linux-2.4.30-hf32.3/lib/inflate.c	2006-03-18 00:34:06.000000000 +0100
+@@ -320,7 +320,7 @@
+   {
+     *t = (struct huft *)NULL;
+     *m = 0;
+-    return 0;
++    return 2;
+   }
+ 
+ DEBG("huft2 ");
+@@ -368,6 +368,7 @@
+     if ((j = *p++) != 0)
+       v[x[j]++] = i;
+   } while (++i < n);
++  n = x[g];                   /* set n to length of v */
+ 
+ DEBG("h6 ");
+ 
+@@ -404,12 +405,13 @@
+ DEBG1("2 ");
+           f -= a + 1;           /* deduct codes from patterns left */
+           xp = c + k;
+-          while (++j < z)       /* try smaller tables up to z bits */
+-          {
+-            if ((f <<= 1) <= *++xp)
+-              break;            /* enough codes to use up j bits */
+-            f -= *xp;           /* else deduct codes from patterns */
+-          }
++          if (j < z)
++            while (++j < z)       /* try smaller tables up to z bits */
++            {
++              if ((f <<= 1) <= *++xp)
++                break;            /* enough codes to use up j bits */
++              f -= *xp;           /* else deduct codes from patterns */
++            }
+         }
+ DEBG1("3 ");
+         z = 1 << j;             /* table entries for j-bit table */
+diff -urN linux-2.4.30/lib/rbtree.c linux-2.4.30-hf32.3/lib/rbtree.c
+--- linux-2.4.30/lib/rbtree.c	2004-11-17 12:54:22.000000000 +0100
++++ linux-2.4.30-hf32.3/lib/rbtree.c	2006-03-18 00:34:06.000000000 +0100
+@@ -332,6 +332,7 @@
+ 		node = node->rb_right;
+ 		while (node->rb_left)
+ 			node = node->rb_left;
++		return node;
+ 	}
+ 
+ 	/* No right-hand children.  Everything down and left is
+@@ -355,6 +356,7 @@
+ 		node = node->rb_left;
+ 		while (node->rb_right)
+ 			node = node->rb_right;	 
++		return node;
+ 	}
+ 
+ 	/* No left-hand children. Go up till we find an ancestor which
+diff -urN linux-2.4.30/lib/rwsem-spinlock.c linux-2.4.30-hf32.3/lib/rwsem-spinlock.c
+--- linux-2.4.30/lib/rwsem-spinlock.c	2005-01-27 18:57:34.000000000 +0100
++++ linux-2.4.30-hf32.3/lib/rwsem-spinlock.c	2006-03-18 00:34:06.000000000 +0100
+@@ -127,12 +127,12 @@
+ 
+ 	rwsemtrace(sem,"Entering __down_read");
+ 
+-	spin_lock(&sem->wait_lock);
++	spin_lock_irq(&sem->wait_lock);
+ 
+ 	if (sem->activity>=0 && list_empty(&sem->wait_list)) {
+ 		/* granted */
+ 		sem->activity++;
+-		spin_unlock(&sem->wait_lock);
++		spin_unlock_irq(&sem->wait_lock);
+ 		goto out;
+ 	}
+ 
+@@ -147,7 +147,7 @@
+ 	list_add_tail(&waiter.list,&sem->wait_list);
+ 
+ 	/* we don't need to touch the semaphore struct anymore */
+-	spin_unlock(&sem->wait_lock);
++	spin_unlock_irq(&sem->wait_lock);
+ 
+ 	/* wait to be given the lock */
+ 	for (;;) {
+@@ -169,9 +169,10 @@
+ int fastcall __down_read_trylock(struct rw_semaphore *sem)
+ {
+ 	int ret = 0;
++	unsigned long flags;
+ 	rwsemtrace(sem,"Entering __down_read_trylock");
+ 
+-	spin_lock(&sem->wait_lock);
++	spin_lock_irqsave(&sem->wait_lock, flags);
+ 
+ 	if (sem->activity>=0 && list_empty(&sem->wait_list)) {
+ 		/* granted */
+@@ -179,7 +180,7 @@
+ 		ret = 1;
+ 	}
+ 
+-	spin_unlock(&sem->wait_lock);
++	spin_unlock_irqrestore(&sem->wait_lock, flags);
+ 
+ 	rwsemtrace(sem,"Leaving __down_read_trylock");
+ 	return ret;
+@@ -196,12 +197,12 @@
+ 
+ 	rwsemtrace(sem,"Entering __down_write");
+ 
+-	spin_lock(&sem->wait_lock);
++	spin_lock_irq(&sem->wait_lock);
+ 
+ 	if (sem->activity==0 && list_empty(&sem->wait_list)) {
+ 		/* granted */
+ 		sem->activity = -1;
+-		spin_unlock(&sem->wait_lock);
++		spin_unlock_irq(&sem->wait_lock);
+ 		goto out;
+ 	}
+ 
+@@ -216,7 +217,7 @@
+ 	list_add_tail(&waiter.list,&sem->wait_list);
+ 
+ 	/* we don't need to touch the semaphore struct anymore */
+-	spin_unlock(&sem->wait_lock);
++	spin_unlock_irq(&sem->wait_lock);
+ 
+ 	/* wait to be given the lock */
+ 	for (;;) {
+@@ -238,9 +239,10 @@
+ int fastcall __down_write_trylock(struct rw_semaphore *sem)
+ {
+ 	int ret = 0;
++	unsigned long flags;
+ 	rwsemtrace(sem,"Entering __down_write_trylock");
+ 
+-	spin_lock(&sem->wait_lock);
++	spin_lock_irqsave(&sem->wait_lock, flags);
+ 
+ 	if (sem->activity==0 && list_empty(&sem->wait_list)) {
+ 		/* granted */
+@@ -248,7 +250,7 @@
+ 		ret = 1;
+ 	}
+ 
+-	spin_unlock(&sem->wait_lock);
++	spin_unlock_irqrestore(&sem->wait_lock, flags);
+ 
+ 	rwsemtrace(sem,"Leaving __down_write_trylock");
+ 	return ret;
+@@ -259,14 +261,15 @@
+  */
+ void fastcall __up_read(struct rw_semaphore *sem)
+ {
++	unsigned long flags;
+ 	rwsemtrace(sem,"Entering __up_read");
+ 
+-	spin_lock(&sem->wait_lock);
++	spin_lock_irqsave(&sem->wait_lock, flags);
+ 
+ 	if (--sem->activity==0 && !list_empty(&sem->wait_list))
+ 		sem = __rwsem_wake_one_writer(sem);
+ 
+-	spin_unlock(&sem->wait_lock);
++	spin_unlock_irqrestore(&sem->wait_lock, flags);
+ 
+ 	rwsemtrace(sem,"Leaving __up_read");
+ }
+@@ -276,15 +279,16 @@
+  */
+ void fastcall __up_write(struct rw_semaphore *sem)
+ {
++	unsigned long flags;
+ 	rwsemtrace(sem,"Entering __up_write");
+ 
+-	spin_lock(&sem->wait_lock);
++	spin_lock_irqsave(&sem->wait_lock, flags);
+ 
+ 	sem->activity = 0;
+ 	if (!list_empty(&sem->wait_list))
+ 		sem = __rwsem_do_wake(sem);
+ 
+-	spin_unlock(&sem->wait_lock);
++	spin_unlock_irqrestore(&sem->wait_lock, flags);
+ 
+ 	rwsemtrace(sem,"Leaving __up_write");
+ }
+diff -urN linux-2.4.30/lib/rwsem.c linux-2.4.30-hf32.3/lib/rwsem.c
+--- linux-2.4.30/lib/rwsem.c	2004-11-17 12:54:22.000000000 +0100
++++ linux-2.4.30-hf32.3/lib/rwsem.c	2006-03-18 00:34:06.000000000 +0100
+@@ -127,7 +127,7 @@
+ 	set_task_state(tsk,TASK_UNINTERRUPTIBLE);
+ 
+ 	/* set up my own style of waitqueue */
+-	spin_lock(&sem->wait_lock);
++	spin_lock_irq(&sem->wait_lock);
+ 	waiter->task = tsk;
+ 	get_task_struct(tsk);
+ 
+@@ -142,7 +142,7 @@
+ 	if (!(count & RWSEM_ACTIVE_MASK))
+ 		sem = __rwsem_do_wake(sem);
+ 
+-	spin_unlock(&sem->wait_lock);
++	spin_unlock_irq(&sem->wait_lock);
+ 
+ 	/* wait to be given the lock */
+ 	for (;;) {
+@@ -195,15 +195,16 @@
+  */
+ struct rw_semaphore fastcall *rwsem_wake(struct rw_semaphore *sem)
+ {
++	unsigned long flags;
+ 	rwsemtrace(sem,"Entering rwsem_wake");
+ 
+-	spin_lock(&sem->wait_lock);
++	spin_lock_irqsave(&sem->wait_lock, flags);
+ 
+ 	/* do nothing if list empty */
+ 	if (!list_empty(&sem->wait_list))
+ 		sem = __rwsem_do_wake(sem);
+ 
+-	spin_unlock(&sem->wait_lock);
++	spin_unlock_irqrestore(&sem->wait_lock, flags);
+ 
+ 	rwsemtrace(sem,"Leaving rwsem_wake");
+ 
+diff -urN linux-2.4.30/mm/filemap.c linux-2.4.30-hf32.3/mm/filemap.c
+--- linux-2.4.30/mm/filemap.c	2005-04-14 09:43:35.000000000 +0200
++++ linux-2.4.30-hf32.3/mm/filemap.c	2006-03-18 00:34:06.000000000 +0100
+@@ -2605,6 +2605,8 @@
+ 		end = vma->vm_end;
+ 	end = ((end - vma->vm_start) >> PAGE_SHIFT) + vma->vm_pgoff;
+ 
++	error = -EIO;
++
+ 	/* round to cluster boundaries if this isn't a "random" area. */
+ 	if (!VM_RandomReadHint(vma)) {
+ 		start = CLUSTER_OFFSET(start);
+diff -urN linux-2.4.30/mm/vmscan.c linux-2.4.30-hf32.3/mm/vmscan.c
+--- linux-2.4.30/mm/vmscan.c	2005-01-27 18:57:34.000000000 +0100
++++ linux-2.4.30-hf32.3/mm/vmscan.c	2006-03-18 00:34:06.000000000 +0100
+@@ -556,6 +556,7 @@
+ 			continue;
+ 			
+ 		}
++		smp_rmb();
+ 		if (PageDirty(page)) {
+ 			spin_unlock(&pagecache_lock);
+ 			UnlockPage(page);
+diff -urN linux-2.4.30/net/core/rtnetlink.c linux-2.4.30-hf32.3/net/core/rtnetlink.c
+--- linux-2.4.30/net/core/rtnetlink.c	2003-08-25 13:44:44.000000000 +0200
++++ linux-2.4.30-hf32.3/net/core/rtnetlink.c	2006-03-18 00:34:06.000000000 +0100
+@@ -303,7 +303,7 @@
+ 		return 0;
+ 
+ 	family = ((struct rtgenmsg*)NLMSG_DATA(nlh))->rtgen_family;
+-	if (family > NPROTO) {
++	if (family >= NPROTO) {
+ 		*errp = -EAFNOSUPPORT;
+ 		return -1;
+ 	}
+diff -urN linux-2.4.30/net/ipv4/af_inet.c linux-2.4.30-hf32.3/net/ipv4/af_inet.c
+--- linux-2.4.30/net/ipv4/af_inet.c	2005-01-27 18:57:34.000000000 +0100
++++ linux-2.4.30-hf32.3/net/ipv4/af_inet.c	2006-03-18 00:34:06.000000000 +0100
+@@ -724,6 +724,7 @@
+ 		sin->sin_port = sk->sport;
+ 		sin->sin_addr.s_addr = addr;
+ 	}
++	memset(sin->sin_zero, 0, sizeof(sin->sin_zero));
+ 	*uaddr_len = sizeof(*sin);
+ 	return(0);
+ }
+diff -urN linux-2.4.30/net/ipv4/igmp.c linux-2.4.30-hf32.3/net/ipv4/igmp.c
+--- linux-2.4.30/net/ipv4/igmp.c	2005-01-27 18:57:34.000000000 +0100
++++ linux-2.4.30-hf32.3/net/ipv4/igmp.c	2006-03-18 00:34:06.000000000 +0100
+@@ -876,6 +876,10 @@
+ 		/* Is it our report looped back? */
+ 		if (((struct rtable*)skb->dst)->key.iif == 0)
+ 			break;
++		/* don't rely on MC router hearing unicast reports */
++		if (skb->pkt_type == PACKET_MULTICAST ||
++		    skb->pkt_type == PACKET_BROADCAST)
++			igmp_heard_report(in_dev, ih->group);
+ 		igmp_heard_report(in_dev, ih->group);
+ 		break;
+ 	case IGMP_PIM:
+@@ -1582,7 +1586,7 @@
+ 	}
+ 	pmc->sources = 0;
+ 	pmc->sfmode = MCAST_EXCLUDE;
+-	pmc->sfcount[MCAST_EXCLUDE] = 0;
++	pmc->sfcount[MCAST_INCLUDE] = 0;
+ 	pmc->sfcount[MCAST_EXCLUDE] = 1;
+ }
+ 
+@@ -1876,8 +1880,11 @@
+ 			sock_kfree_s(sk, newpsl, IP_SFLSIZE(newpsl->sl_max));
+ 			goto done;
+ 		}
+-	} else
+-		newpsl = 0;
++	} else {
++		newpsl = NULL;
++		(void) ip_mc_add_src(in_dev, &msf->imsf_multiaddr,
++		       msf->imsf_fmode, 0, NULL, 0);
++	}
+ 	psl = pmc->sflist;
+ 	if (psl) {
+ 		(void) ip_mc_del_src(in_dev, &msf->imsf_multiaddr, pmc->sfmode,
+diff -urN linux-2.4.30/net/ipv4/inetpeer.c linux-2.4.30-hf32.3/net/ipv4/inetpeer.c
+--- linux-2.4.30/net/ipv4/inetpeer.c	2001-10-01 18:19:56.000000000 +0200
++++ linux-2.4.30-hf32.3/net/ipv4/inetpeer.c	2006-03-18 00:34:06.000000000 +0100
+@@ -445,9 +445,12 @@
+ 	/* Trigger the timer after inet_peer_gc_mintime .. inet_peer_gc_maxtime
+ 	 * interval depending on the total number of entries (more entries,
+ 	 * less interval). */
+-	peer_periodic_timer.expires = jiffies
+-		+ inet_peer_gc_maxtime
+-		- (inet_peer_gc_maxtime - inet_peer_gc_mintime) / HZ *
+-			peer_total / inet_peer_threshold * HZ;
++	if (peer_total >= inet_peer_threshold)
++		peer_periodic_timer.expires = jiffies + inet_peer_gc_mintime;
++	else
++		peer_periodic_timer.expires = jiffies
++			+ inet_peer_gc_maxtime
++			- (inet_peer_gc_maxtime - inet_peer_gc_mintime) / HZ *
++				peer_total / inet_peer_threshold * HZ;
+ 	add_timer(&peer_periodic_timer);
+ }
+diff -urN linux-2.4.30/net/ipv4/ipvs/ip_vs_conn.c linux-2.4.30-hf32.3/net/ipv4/ipvs/ip_vs_conn.c
+--- linux-2.4.30/net/ipv4/ipvs/ip_vs_conn.c	2005-01-27 18:57:34.000000000 +0100
++++ linux-2.4.30-hf32.3/net/ipv4/ipvs/ip_vs_conn.c	2006-03-18 00:34:06.000000000 +0100
+@@ -210,6 +210,7 @@
+ 		cp = list_entry(e, struct ip_vs_conn, c_list);
+ 		if (s_addr==cp->caddr && s_port==cp->cport &&
+ 		    d_port==cp->vport && d_addr==cp->vaddr &&
++		    ((!s_port) ^ (!(cp->flags & IP_VS_CONN_F_NO_CPORT))) &&
+ 		    protocol==cp->protocol) {
+ 			/* HIT */
+ 			atomic_inc(&cp->refcnt);
+@@ -241,6 +242,40 @@
+ 	return cp;
+ }
+ 
++/* Get reference to connection template */
++struct ip_vs_conn *ip_vs_ct_in_get
++(int protocol, __u32 s_addr, __u16 s_port, __u32 d_addr, __u16 d_port)
++{
++	unsigned hash;
++	struct ip_vs_conn *cp;
++
++	hash = ip_vs_conn_hashkey(protocol, s_addr, s_port);
++
++	ct_read_lock(hash);
++
++	list_for_each_entry(cp, &ip_vs_conn_tab[hash], c_list) {
++		if (s_addr==cp->caddr && s_port==cp->cport &&
++		    d_port==cp->vport && d_addr==cp->vaddr &&
++		    cp->flags & IP_VS_CONN_F_TEMPLATE &&
++		    protocol==cp->protocol) {
++			/* HIT */
++			atomic_inc(&cp->refcnt);
++			goto out;
++		}
++	}
++	cp = NULL;
++
++  out:
++	ct_read_unlock(hash);
++
++	IP_VS_DBG(7, "template lookup/in %s %u.%u.%u.%u:%d->%u.%u.%u.%u:%d %s\n",
++		  ip_vs_proto_name(protocol),
++		  NIPQUAD(s_addr), ntohs(s_port),
++		  NIPQUAD(d_addr), ntohs(d_port),
++		  cp?"hit":"not hit");
++
++	return cp;
++}
+ 
+ /*
+  *  Gets ip_vs_conn associated with supplied parameters in the ip_vs_conn_tab.
+@@ -1087,7 +1122,7 @@
+ 
+ 	IP_VS_DBG(9, "Unbind-dest %s c:%u.%u.%u.%u:%d "
+ 		  "v:%u.%u.%u.%u:%d d:%u.%u.%u.%u:%d fwd:%c "
+-		  "s:%s flg:%X cnt:%d destcnt:%d",
++		  "s:%s flg:%X cnt:%d destcnt:%d\n",
+ 		  ip_vs_proto_name(cp->protocol),
+ 		  NIPQUAD(cp->caddr), ntohs(cp->cport),
+ 		  NIPQUAD(cp->vaddr), ntohs(cp->vport),
+@@ -1098,10 +1133,9 @@
+ 
+ 	/*
+ 	 * Decrease the inactconns or activeconns counter
+-	 * if it is not a connection template ((cp->cport!=0)
+-	 *   || (cp->flags & IP_VS_CONN_F_NO_CPORT)).
++	 * if it is not a connection template
+ 	 */
+-	if (cp->cport || (cp->flags & IP_VS_CONN_F_NO_CPORT)) {
++	if (!(cp->flags & IP_VS_CONN_F_TEMPLATE)) {
+ 		if (cp->flags & IP_VS_CONN_F_INACTIVE) {
+ 			atomic_dec(&dest->inactconns);
+ 		} else {
+@@ -1145,7 +1179,7 @@
+ 		/*
+ 		 * Invalidate the connection template
+ 		 */
+-		if (ct->cport) {
++		if (ct->vport != 65535) {
+ 			if (ip_vs_conn_unhash(ct)) {
+ 				ct->dport = 65535;
+ 				ct->vport = 65535;
+@@ -1430,7 +1464,7 @@
+ 		l = &ip_vs_conn_tab[hash];
+ 		for (e=l->next; e!=l; e=e->next) {
+ 			cp = list_entry(e, struct ip_vs_conn, c_list);
+-			if (!cp->cport && !(cp->flags & IP_VS_CONN_F_NO_CPORT))
++			if (cp->flags & IP_VS_CONN_F_TEMPLATE)
+ 				/* connection template */
+ 				continue;
+ 			switch(cp->state) {
+diff -urN linux-2.4.30/net/ipv4/ipvs/ip_vs_core.c linux-2.4.30-hf32.3/net/ipv4/ipvs/ip_vs_core.c
+--- linux-2.4.30/net/ipv4/ipvs/ip_vs_core.c	2005-04-14 09:43:35.000000000 +0200
++++ linux-2.4.30-hf32.3/net/ipv4/ipvs/ip_vs_core.c	2006-03-18 00:34:06.000000000 +0100
+@@ -188,10 +188,10 @@
+ 	if (portp[1] == svc->port) {
+ 		/* Check if a template already exists */
+ 		if (svc->port != FTPPORT)
+-			ct = ip_vs_conn_in_get(iph->protocol, snet, 0,
++			ct = ip_vs_ct_in_get(iph->protocol, snet, 0,
+ 					       iph->daddr, portp[1]);
+ 		else
+-			ct = ip_vs_conn_in_get(iph->protocol, snet, 0,
++			ct = ip_vs_ct_in_get(iph->protocol, snet, 0,
+ 					       iph->daddr, 0);
+ 
+ 		if (!ct || !ip_vs_check_template(ct)) {
+@@ -216,14 +216,14 @@
+ 						    snet, 0,
+ 						    iph->daddr, portp[1],
+ 						    dest->addr, dest->port,
+-						    0,
++						    IP_VS_CONN_F_TEMPLATE,
+ 						    dest);
+ 			else
+ 				ct = ip_vs_conn_new(iph->protocol,
+ 						    snet, 0,
+ 						    iph->daddr, 0,
+ 						    dest->addr, 0,
+-						    0,
++						    IP_VS_CONN_F_TEMPLATE,
+ 						    dest);
+ 			if (ct == NULL)
+ 				return NULL;
+@@ -242,10 +242,10 @@
+ 		 * port zero template: <protocol,caddr,0,vaddr,0,daddr,0>
+ 		 */
+ 		if (svc->fwmark)
+-			ct = ip_vs_conn_in_get(IPPROTO_IP, snet, 0,
++			ct = ip_vs_ct_in_get(IPPROTO_IP, snet, 0,
+ 					       htonl(svc->fwmark), 0);
+ 		else
+-			ct = ip_vs_conn_in_get(iph->protocol, snet, 0,
++			ct = ip_vs_ct_in_get(iph->protocol, snet, 0,
+ 					       iph->daddr, 0);
+ 
+ 		if (!ct || !ip_vs_check_template(ct)) {
+@@ -270,14 +270,14 @@
+ 						    snet, 0,
+ 						    htonl(svc->fwmark), 0,
+ 						    dest->addr, 0,
+-						    0,
++						    IP_VS_CONN_F_TEMPLATE,
+ 						    dest);
+ 			else
+ 				ct = ip_vs_conn_new(iph->protocol,
+ 						    snet, 0,
+ 						    iph->daddr, 0,
+ 						    dest->addr, 0,
+-						    0,
++						    IP_VS_CONN_F_TEMPLATE,
+ 						    dest);
+ 			if (ct == NULL)
+ 				return NULL;
+@@ -1111,11 +1111,10 @@
+ 		if (sysctl_ip_vs_expire_nodest_conn) {
+ 			/* try to expire the connection immediately */
+ 			ip_vs_conn_expire_now(cp);
+-		} else {
+-			/* don't restart its timer, and silently
+-			   drop the packet. */
+-			__ip_vs_conn_put(cp);
+ 		}
++		/* don't restart its timer, and silently
++		   drop the packet. */
++		__ip_vs_conn_put(cp);
+ 		return NF_DROP;
+ 	}
+ 
+diff -urN linux-2.4.30/net/ipv4/ipvs/ip_vs_ctl.c linux-2.4.30-hf32.3/net/ipv4/ipvs/ip_vs_ctl.c
+--- linux-2.4.30/net/ipv4/ipvs/ip_vs_ctl.c	2005-01-27 18:57:34.000000000 +0100
++++ linux-2.4.30-hf32.3/net/ipv4/ipvs/ip_vs_ctl.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1842,7 +1842,8 @@
+ 			entry.addr = svc->addr;
+ 			entry.port = svc->port;
+ 			entry.fwmark = svc->fwmark;
+-			strcpy(entry.sched_name, svc->scheduler->name);
++			strncpy(entry.sched_name, svc->scheduler->name, sizeof(entry.sched_name));
++			entry.sched_name[sizeof(entry.sched_name) - 1] = 0;
+ 			entry.flags = svc->flags;
+ 			entry.timeout = svc->timeout / HZ;
+ 			entry.netmask = svc->netmask;
+@@ -1866,7 +1867,8 @@
+ 			entry.addr = svc->addr;
+ 			entry.port = svc->port;
+ 			entry.fwmark = svc->fwmark;
+-			strcpy(entry.sched_name, svc->scheduler->name);
++			strncpy(entry.sched_name, svc->scheduler->name, sizeof(entry.sched_name));
++			entry.sched_name[sizeof(entry.sched_name) - 1] = 0;
+ 			entry.flags = svc->flags;
+ 			entry.timeout = svc->timeout / HZ;
+ 			entry.netmask = svc->netmask;
+@@ -2020,7 +2022,8 @@
+ 			svc = __ip_vs_service_get(get.protocol,
+ 						  get.addr, get.port);
+ 		if (svc) {
+-			strcpy(get.sched_name, svc->scheduler->name);
++			strncpy(get.sched_name, svc->scheduler->name, sizeof(get.sched_name));
++			get.sched_name[sizeof(get.sched_name) - 1] = 0;
+ 			get.flags = svc->flags;
+ 			get.timeout = svc->timeout / HZ;
+ 			get.netmask = svc->netmask;
+@@ -2083,10 +2086,14 @@
+ 			goto out;
+ 		}
+ 		u.state = ip_vs_sync_state;
+-		if (ip_vs_sync_state & IP_VS_STATE_MASTER)
+-			strcpy(u.mcast_master_ifn, ip_vs_mcast_master_ifn);
+-		if (ip_vs_sync_state & IP_VS_STATE_BACKUP)
+-			strcpy(u.mcast_backup_ifn, ip_vs_mcast_backup_ifn);
++		if (ip_vs_sync_state & IP_VS_STATE_MASTER) {
++			strncpy(u.mcast_master_ifn, ip_vs_mcast_master_ifn, sizeof(u.mcast_master_ifn));
++			u.mcast_master_ifn[sizeof(u.mcast_master_ifn) - 1] = 0;
++		}
++		if (ip_vs_sync_state & IP_VS_STATE_BACKUP) {
++			strncpy(u.mcast_backup_ifn, ip_vs_mcast_backup_ifn, sizeof(u.mcast_backup_ifn));
++			u.mcast_backup_ifn[sizeof(u.mcast_backup_ifn) - 1] = 0;
++		}
+ 		if (copy_to_user(user, &u, sizeof(u)) != 0)
+ 			ret = -EFAULT;
+ 	}
+diff -urN linux-2.4.30/net/ipv4/ipvs/ip_vs_sched.c linux-2.4.30-hf32.3/net/ipv4/ipvs/ip_vs_sched.c
+--- linux-2.4.30/net/ipv4/ipvs/ip_vs_sched.c	2004-04-14 15:05:41.000000000 +0200
++++ linux-2.4.30-hf32.3/net/ipv4/ipvs/ip_vs_sched.c	2006-03-18 00:34:06.000000000 +0100
+@@ -156,7 +156,7 @@
+ 	 */
+ 	if (sched == NULL) {
+ 		char module_name[IP_VS_SCHEDNAME_MAXLEN+8];
+-		sprintf(module_name,"ip_vs_%s", sched_name);
++		snprintf(module_name, sizeof(module_name), "ip_vs_%s", sched_name);
+ 		request_module(module_name);
+ 		sched = ip_vs_sched_getbyname(sched_name);
+ 	}
+diff -urN linux-2.4.30/net/ipv4/ipvs/ip_vs_sync.c linux-2.4.30-hf32.3/net/ipv4/ipvs/ip_vs_sync.c
+--- linux-2.4.30/net/ipv4/ipvs/ip_vs_sync.c	2005-01-27 18:57:34.000000000 +0100
++++ linux-2.4.30-hf32.3/net/ipv4/ipvs/ip_vs_sync.c	2006-03-18 00:34:06.000000000 +0100
+@@ -295,16 +295,24 @@
+ 
+ 	p = (char *)buffer + sizeof(struct ip_vs_sync_mesg);
+ 	for (i=0; i<m->nr_conns; i++) {
++		unsigned flags;
++
+ 		s = (struct ip_vs_sync_conn *)p;
+-		cp = ip_vs_conn_in_get(s->protocol,
+-				       s->caddr, s->cport,
+-				       s->vaddr, s->vport);
++		flags = ntohs(s->flags);
++		if (!(flags & IP_VS_CONN_F_TEMPLATE))
++			cp = ip_vs_conn_in_get(s->protocol,
++					       s->caddr, s->cport,
++					       s->vaddr, s->vport);
++		else
++			cp = ip_vs_ct_in_get(s->protocol,
++					       s->caddr, s->cport,
++					       s->vaddr, s->vport);
+ 		if (!cp) {
+ 			cp = ip_vs_conn_new(s->protocol,
+ 					    s->caddr, s->cport,
+ 					    s->vaddr, s->vport,
+ 					    s->daddr, s->dport,
+-					    ntohs(s->flags), NULL);
++					    flags, NULL);
+ 			if (!cp) {
+ 				IP_VS_ERR("ip_vs_conn_new failed\n");
+ 				return;
+@@ -313,11 +321,11 @@
+ 		} else if (!cp->dest) {
+ 			/* it is an entry created by the synchronization */
+ 			cp->state = ntohs(s->state);
+-			cp->flags = ntohs(s->flags) | IP_VS_CONN_F_HASHED;
++			cp->flags = flags | IP_VS_CONN_F_HASHED;
+ 		}	/* Note that we don't touch its state and flags
+ 			   if it is a normal entry. */
+ 
+-		if (ntohs(s->flags) & IP_VS_CONN_F_SEQ_MASK) {
++		if (flags & IP_VS_CONN_F_SEQ_MASK) {
+ 			opt = (struct ip_vs_sync_conn_options *)&s[1];
+ 			memcpy(&cp->in_seq, opt, sizeof(*opt));
+ 			p += FULL_CONN_SIZE;
+@@ -808,10 +816,12 @@
+ 
+ 	ip_vs_sync_state |= state;
+ 	if (state == IP_VS_STATE_MASTER) {
+-		strcpy(ip_vs_mcast_master_ifn, mcast_ifn);
++		strncpy(ip_vs_mcast_master_ifn, mcast_ifn, sizeof(ip_vs_mcast_master_ifn));
++		ip_vs_mcast_master_ifn[sizeof(ip_vs_mcast_master_ifn) - 1] = 0;
+ 		ip_vs_master_syncid = syncid;
+ 	} else {
+-		strcpy(ip_vs_mcast_backup_ifn, mcast_ifn);
++		strncpy(ip_vs_mcast_backup_ifn, mcast_ifn, sizeof(ip_vs_mcast_backup_ifn));
++		ip_vs_mcast_backup_ifn[sizeof(ip_vs_mcast_backup_ifn) - 1] = 0;
+ 		ip_vs_backup_syncid = syncid;
+ 	}
+ 
+diff -urN linux-2.4.30/net/ipv4/netfilter/ip_conntrack_core.c linux-2.4.30-hf32.3/net/ipv4/netfilter/ip_conntrack_core.c
+--- linux-2.4.30/net/ipv4/netfilter/ip_conntrack_core.c	2005-04-14 09:43:35.000000000 +0200
++++ linux-2.4.30-hf32.3/net/ipv4/netfilter/ip_conntrack_core.c	2006-03-18 00:34:06.000000000 +0100
+@@ -1349,6 +1349,7 @@
+ 			.tuple.dst.u.tcp.port;
+ 		sin.sin_addr.s_addr = h->ctrack->tuplehash[IP_CT_DIR_ORIGINAL]
+ 			.tuple.dst.ip;
++		memset(sin.sin_zero, 0, sizeof(sin.sin_zero));
+ 
+ 		DEBUGP("SO_ORIGINAL_DST: %u.%u.%u.%u %u\n",
+ 		       NIPQUAD(sin.sin_addr.s_addr), ntohs(sin.sin_port));
+diff -urN linux-2.4.30/net/ipv4/netfilter/ip_nat_proto_tcp.c linux-2.4.30-hf32.3/net/ipv4/netfilter/ip_nat_proto_tcp.c
+--- linux-2.4.30/net/ipv4/netfilter/ip_nat_proto_tcp.c	2002-11-29 00:53:15.000000000 +0100
++++ linux-2.4.30-hf32.3/net/ipv4/netfilter/ip_nat_proto_tcp.c	2006-03-18 00:34:06.000000000 +0100
+@@ -31,7 +31,8 @@
+ 		 enum ip_nat_manip_type maniptype,
+ 		 const struct ip_conntrack *conntrack)
+ {
+-	static u_int16_t port = 0, *portptr;
++	static u_int16_t port = 0;
++	u_int16_t *portptr;
+ 	unsigned int range_size, min, i;
+ 
+ 	if (maniptype == IP_NAT_MANIP_SRC)
+diff -urN linux-2.4.30/net/ipv4/netfilter/ip_nat_proto_udp.c linux-2.4.30-hf32.3/net/ipv4/netfilter/ip_nat_proto_udp.c
+--- linux-2.4.30/net/ipv4/netfilter/ip_nat_proto_udp.c	2000-08-04 22:07:24.000000000 +0200
++++ linux-2.4.30-hf32.3/net/ipv4/netfilter/ip_nat_proto_udp.c	2006-03-18 00:34:06.000000000 +0100
+@@ -32,7 +32,8 @@
+ 		 enum ip_nat_manip_type maniptype,
+ 		 const struct ip_conntrack *conntrack)
+ {
+-	static u_int16_t port = 0, *portptr;
++	static u_int16_t port = 0;
++	u_int16_t *portptr;
+ 	unsigned int range_size, min, i;
+ 
+ 	if (maniptype == IP_NAT_MANIP_SRC)
+diff -urN linux-2.4.30/net/ipv4/netfilter/ip_nat_rule.c linux-2.4.30-hf32.3/net/ipv4/netfilter/ip_nat_rule.c
+--- linux-2.4.30/net/ipv4/netfilter/ip_nat_rule.c	2005-01-27 18:57:34.000000000 +0100
++++ linux-2.4.30-hf32.3/net/ipv4/netfilter/ip_nat_rule.c	2006-03-18 00:34:06.000000000 +0100
+@@ -241,6 +241,27 @@
+ 	return ip_nat_setup_info(conntrack, &mr, hooknum);
+ }
+ 
++unsigned int
++alloc_null_binding_confirmed(struct ip_conntrack *conntrack,
++                             struct ip_nat_info *info,
++                             unsigned int hooknum)
++{
++	u_int32_t ip
++		= (HOOK2MANIP(hooknum) == IP_NAT_MANIP_SRC
++		   ? conntrack->tuplehash[IP_CT_DIR_REPLY].tuple.dst.ip
++		   : conntrack->tuplehash[IP_CT_DIR_REPLY].tuple.src.ip);
++	u_int16_t all
++		= (HOOK2MANIP(hooknum) == IP_NAT_MANIP_SRC
++		   ? conntrack->tuplehash[IP_CT_DIR_REPLY].tuple.dst.u.all
++		   : conntrack->tuplehash[IP_CT_DIR_REPLY].tuple.src.u.all);
++	struct ip_nat_multi_range mr
++		= { 1, { { IP_NAT_RANGE_MAP_IPS, ip, ip, { all }, { all } } } };
++
++	DEBUGP("Allocating NULL binding for confirmed %p (%u.%u.%u.%u)\n",
++	       conntrack, NIPQUAD(ip));
++	return ip_nat_setup_info(conntrack, &mr, hooknum);
++}
++
+ int ip_nat_rule_find(struct sk_buff **pskb,
+ 		     unsigned int hooknum,
+ 		     const struct net_device *in,
+diff -urN linux-2.4.30/net/ipv4/netfilter/ip_nat_standalone.c linux-2.4.30-hf32.3/net/ipv4/netfilter/ip_nat_standalone.c
+--- linux-2.4.30/net/ipv4/netfilter/ip_nat_standalone.c	2005-04-14 09:43:35.000000000 +0200
++++ linux-2.4.30-hf32.3/net/ipv4/netfilter/ip_nat_standalone.c	2006-03-18 00:34:06.000000000 +0100
+@@ -123,8 +123,12 @@
+ 				ret = call_expect(master_ct(ct), pskb, 
+ 						  hooknum, ct, info);
+ 			} else {
+-				/* LOCAL_IN hook doesn't have a chain!  */
+-				if (hooknum == NF_IP_LOCAL_IN)
++				if (unlikely(is_confirmed(ct)))
++					/* NAT module was loaded late */
++					ret = alloc_null_binding_confirmed(ct, info,
++		        		                                   hooknum);
++				else if (hooknum == NF_IP_LOCAL_IN)
++					/* LOCAL_IN hook doesn't have a chain */
+ 					ret = alloc_null_binding(ct, info,
+ 								 hooknum);
+ 				else
+diff -urN linux-2.4.30/net/ipv4/netfilter/ip_queue.c linux-2.4.30-hf32.3/net/ipv4/netfilter/ip_queue.c
+--- linux-2.4.30/net/ipv4/netfilter/ip_queue.c	2004-02-18 14:36:32.000000000 +0100
++++ linux-2.4.30-hf32.3/net/ipv4/netfilter/ip_queue.c	2006-03-18 00:34:06.000000000 +0100
+@@ -517,7 +517,7 @@
+ 	write_unlock_bh(&queue_lock);
+ 	
+ 	status = ipq_receive_peer(NLMSG_DATA(nlh), type,
+-	                          skblen - NLMSG_LENGTH(0));
++	                          nlmsglen - NLMSG_LENGTH(0));
+ 	if (status < 0)
+ 		RCV_SKB_FAIL(status);
+ 		
+diff -urN linux-2.4.30/net/ipv4/netfilter/ipt_unclean.c linux-2.4.30-hf32.3/net/ipv4/netfilter/ipt_unclean.c
+--- linux-2.4.30/net/ipv4/netfilter/ipt_unclean.c	2004-08-08 01:26:06.000000000 +0200
++++ linux-2.4.30-hf32.3/net/ipv4/netfilter/ipt_unclean.c	2006-03-18 00:34:06.000000000 +0100
+@@ -264,6 +264,7 @@
+ {
+ 	[TH_SYN]			= 1,
+ 	[TH_SYN|TH_ACK]			= 1,
++	[TH_SYN|TH_ACK|TH_PUSH]		= 1,
+ 	[TH_RST]			= 1,
+ 	[TH_RST|TH_ACK]			= 1,
+ 	[TH_RST|TH_ACK|TH_PUSH]		= 1,
+diff -urN linux-2.4.30/net/ipv4/tcp_input.c linux-2.4.30-hf32.3/net/ipv4/tcp_input.c
+--- linux-2.4.30/net/ipv4/tcp_input.c	2005-04-14 09:43:35.000000000 +0200
++++ linux-2.4.30-hf32.3/net/ipv4/tcp_input.c	2006-03-18 00:34:06.000000000 +0100
+@@ -374,8 +374,6 @@
+ 			app_win -= tp->ack.rcv_mss;
+ 		app_win = max(app_win, 2U*tp->advmss);
+ 
+-		if (!ofo_win)
+-			tp->window_clamp = min(tp->window_clamp, app_win);
+ 		tp->rcv_ssthresh = min(tp->window_clamp, 2U*tp->advmss);
+ 	}
+ }
+@@ -2488,6 +2486,7 @@
+ 			/* Note, it is the only place, where
+ 			 * fast path is recovered for sending TCP.
+ 			 */
++			tp->pred_flags = 0;
+ 			tcp_fast_path_check(sk, tp);
+ 
+ 			if (nwin > tp->max_window) {
+@@ -4243,16 +4242,7 @@
+ 					goto no_ack;
+ 			}
+ 
+-			if (eaten) {
+-				if (tcp_in_quickack_mode(tp)) {
+-					tcp_send_ack(sk);
+-				} else {
+-					tcp_send_delayed_ack(sk);
+-				}
+-			} else {
+-				__tcp_ack_snd_check(sk, 0);
+-			}
+-
++			__tcp_ack_snd_check(sk, 0);
+ no_ack:
+ 			if (eaten)
+ 				__kfree_skb(skb);
+diff -urN linux-2.4.30/net/ipv6/addrconf.c linux-2.4.30-hf32.3/net/ipv6/addrconf.c
+--- linux-2.4.30/net/ipv6/addrconf.c	2004-11-17 12:54:22.000000000 +0100
++++ linux-2.4.30-hf32.3/net/ipv6/addrconf.c	2006-03-18 00:34:06.000000000 +0100
+@@ -883,7 +883,7 @@
+ 	if (dev->type == ARPHRD_SIT && (dev->flags&IFF_POINTOPOINT))
+ 		rtmsg.rtmsg_flags |= RTF_NONEXTHOP;
+ 
+-	ip6_route_add(&rtmsg, NULL);
++	ip6_route_add(&rtmsg, NULL, NULL);
+ }
+ 
+ /* Create "default" multicast route to the interface */
+@@ -900,7 +900,7 @@
+ 	rtmsg.rtmsg_ifindex = dev->ifindex;
+ 	rtmsg.rtmsg_flags = RTF_UP;
+ 	rtmsg.rtmsg_type = RTMSG_NEWROUTE;
+-	ip6_route_add(&rtmsg, NULL);
++	ip6_route_add(&rtmsg, NULL, NULL);
+ }
+ 
+ static void sit_route_add(struct net_device *dev)
+@@ -917,7 +917,7 @@
+ 	rtmsg.rtmsg_flags	= RTF_UP|RTF_NONEXTHOP;
+ 	rtmsg.rtmsg_ifindex	= dev->ifindex;
+ 
+-	ip6_route_add(&rtmsg, NULL);
++	ip6_route_add(&rtmsg, NULL, NULL);
+ }
+ 
+ static void addrconf_add_lroute(struct net_device *dev)
+@@ -1009,7 +1009,7 @@
+ 	if (rt && ((rt->rt6i_flags & (RTF_GATEWAY | RTF_DEFAULT)) == 0)) {
+ 		if (rt->rt6i_flags&RTF_EXPIRES) {
+ 			if (pinfo->onlink == 0 || valid_lft == 0) {
+-				ip6_del_rt(rt, NULL);
++				ip6_del_rt(rt, NULL, NULL);
+ 				rt = NULL;
+ 			} else {
+ 				rt->rt6i_expires = rt_expires;
+@@ -1592,7 +1592,7 @@
+ 
+ 		rtmsg.rtmsg_ifindex = ifp->idev->dev->ifindex;
+ 
+-		ip6_route_add(&rtmsg, NULL);
++		ip6_route_add(&rtmsg, NULL, NULL);
+ 	}
+ 
+ out:
+diff -urN linux-2.4.30/net/ipv6/ip6_fib.c linux-2.4.30-hf32.3/net/ipv6/ip6_fib.c
+--- linux-2.4.30/net/ipv6/ip6_fib.c	2004-11-17 12:54:22.000000000 +0100
++++ linux-2.4.30-hf32.3/net/ipv6/ip6_fib.c	2006-03-18 00:34:06.000000000 +0100
+@@ -424,7 +424,7 @@
+  */
+ 
+ static int fib6_add_rt2node(struct fib6_node *fn, struct rt6_info *rt,
+-    struct nlmsghdr *nlh)
++		struct nlmsghdr *nlh,  struct netlink_skb_parms *req)
+ {
+ 	struct rt6_info *iter = NULL;
+ 	struct rt6_info **ins;
+@@ -482,7 +482,7 @@
+ 	*ins = rt;
+ 	rt->rt6i_node = fn;
+ 	atomic_inc(&rt->rt6i_ref);
+-	inet6_rt_notify(RTM_NEWROUTE, rt, nlh);
++	inet6_rt_notify(RTM_NEWROUTE, rt, nlh, req);
+ 	rt6_stats.fib_rt_entries++;
+ 
+ 	if ((fn->fn_flags & RTN_RTINFO) == 0) {
+@@ -506,7 +506,8 @@
+  *	with source addr info in sub-trees
+  */
+ 
+-int fib6_add(struct fib6_node *root, struct rt6_info *rt, struct nlmsghdr *nlh)
++int fib6_add(struct fib6_node *root, struct rt6_info *rt, struct nlmsghdr *nlh,
++		struct netlink_skb_parms *req)
+ {
+ 	struct fib6_node *fn;
+ 	int err = -ENOMEM;
+@@ -579,7 +580,7 @@
+ 	}
+ #endif
+ 
+-	err = fib6_add_rt2node(fn, rt, nlh);
++	err = fib6_add_rt2node(fn, rt, nlh, req);
+ 
+ 	if (err == 0) {
+ 		fib6_start_gc(rt);
+@@ -888,7 +889,7 @@
+ }
+ 
+ static void fib6_del_route(struct fib6_node *fn, struct rt6_info **rtp,
+-    struct nlmsghdr *nlh)
++    struct nlmsghdr *nlh, struct netlink_skb_parms *req)
+ {
+ 	struct fib6_walker_t *w;
+ 	struct rt6_info *rt = *rtp;
+@@ -943,11 +944,11 @@
+ 		if (atomic_read(&rt->rt6i_ref) != 1) BUG();
+ 	}
+ 
+-	inet6_rt_notify(RTM_DELROUTE, rt, nlh);
++	inet6_rt_notify(RTM_DELROUTE, rt, nlh, req);
+ 	rt6_release(rt);
+ }
+ 
+-int fib6_del(struct rt6_info *rt, struct nlmsghdr *nlh)
++int fib6_del(struct rt6_info *rt, struct nlmsghdr *nlh, struct netlink_skb_parms *req)
+ {
+ 	struct fib6_node *fn = rt->rt6i_node;
+ 	struct rt6_info **rtp;
+@@ -972,7 +973,7 @@
+ 
+ 	for (rtp = &fn->leaf; *rtp; rtp = &(*rtp)->u.next) {
+ 		if (*rtp == rt) {
+-			fib6_del_route(fn, rtp, nlh);
++			fib6_del_route(fn, rtp, nlh, req);
+ 			return 0;
+ 		}
+ 	}
+@@ -1101,7 +1102,7 @@
+ 		res = c->func(rt, c->arg);
+ 		if (res < 0) {
+ 			w->leaf = rt;
+-			res = fib6_del(rt, NULL);
++			res = fib6_del(rt, NULL, NULL);
+ 			if (res) {
+ #if RT6_DEBUG >= 2
+ 				printk(KERN_DEBUG "fib6_clean_node: del failed: rt=%p@%p err=%d\n", rt, rt->rt6i_node, res);
+diff -urN linux-2.4.30/net/ipv6/ip6_flowlabel.c linux-2.4.30-hf32.3/net/ipv6/ip6_flowlabel.c
+--- linux-2.4.30/net/ipv6/ip6_flowlabel.c	2000-08-07 07:20:09.000000000 +0200
++++ linux-2.4.30-hf32.3/net/ipv6/ip6_flowlabel.c	2006-03-18 00:34:06.000000000 +0100
+@@ -475,7 +475,7 @@
+ 						goto done;
+ 					}
+ 					fl1 = sfl->fl;
+-					atomic_inc(&fl->users);
++					atomic_inc(&fl1->users);
+ 					break;
+ 				}
+ 			}
+diff -urN linux-2.4.30/net/ipv6/mcast.c linux-2.4.30-hf32.3/net/ipv6/mcast.c
+--- linux-2.4.30/net/ipv6/mcast.c	2005-01-27 18:57:34.000000000 +0100
++++ linux-2.4.30-hf32.3/net/ipv6/mcast.c	2006-03-18 00:34:06.000000000 +0100
+@@ -505,8 +505,11 @@
+ 			sock_kfree_s(sk, newpsl, IP6_SFLSIZE(newpsl->sl_max));
+ 			goto done;
+ 		}
+-	} else
+-		newpsl = 0;
++	} else {
++		newpsl = NULL;
++		(void) ip6_mc_add_src(idev, group, gsf->gf_fmode, 0, NULL, 0);
++	}
++
+ 	psl = pmc->sflist;
+ 	if (psl) {
+ 		(void) ip6_mc_del_src(idev, group, pmc->sfmode,
+@@ -1142,6 +1145,11 @@
+ 	if (skb->pkt_type == PACKET_LOOPBACK)
+ 		return 0;
+ 
++	/* send our report if the MC router may not have heard this report */
++	if (skb->pkt_type != PACKET_MULTICAST &&
++	    skb->pkt_type != PACKET_BROADCAST)
++		return 0;
++
+ 	if (!pskb_may_pull(skb, sizeof(struct in6_addr)))
+ 		return -EINVAL;
+ 
+@@ -1867,7 +1875,7 @@
+ 	}
+ 	pmc->mca_sources = 0;
+ 	pmc->mca_sfmode = MCAST_EXCLUDE;
+-	pmc->mca_sfcount[MCAST_EXCLUDE] = 0;
++	pmc->mca_sfcount[MCAST_INCLUDE] = 0;
+ 	pmc->mca_sfcount[MCAST_EXCLUDE] = 1;
+ }
+ 
+diff -urN linux-2.4.30/net/ipv6/ndisc.c linux-2.4.30-hf32.3/net/ipv6/ndisc.c
+--- linux-2.4.30/net/ipv6/ndisc.c	2004-11-17 12:54:22.000000000 +0100
++++ linux-2.4.30-hf32.3/net/ipv6/ndisc.c	2006-03-18 00:34:06.000000000 +0100
+@@ -876,7 +876,7 @@
+ 					/* It is safe only because
+ 					   we aer in BH */
+ 					dst_release(&rt->u.dst);
+-					ip6_del_rt(rt, NULL);
++					ip6_del_rt(rt, NULL, NULL);
+ 				}
+ 			}
+ 		} else {
+@@ -962,7 +962,7 @@
+ 	rt = rt6_get_dflt_router(&skb->nh.ipv6h->saddr, skb->dev);
+ 
+ 	if (rt && lifetime == 0) {
+-		ip6_del_rt(rt, NULL);
++		ip6_del_rt(rt, NULL, NULL);
+ 		rt = NULL;
+ 	}
+ 
+diff -urN linux-2.4.30/net/ipv6/netfilter/ip6_queue.c linux-2.4.30-hf32.3/net/ipv6/netfilter/ip6_queue.c
+--- linux-2.4.30/net/ipv6/netfilter/ip6_queue.c	2004-02-18 14:36:32.000000000 +0100
++++ linux-2.4.30-hf32.3/net/ipv6/netfilter/ip6_queue.c	2006-03-18 00:34:06.000000000 +0100
+@@ -521,7 +521,7 @@
+ 	write_unlock_bh(&queue_lock);
+ 	
+ 	status = ipq_receive_peer(NLMSG_DATA(nlh), type,
+-	                          skblen - NLMSG_LENGTH(0));
++	                          nlmsglen - NLMSG_LENGTH(0));
+ 	if (status < 0)
+ 		RCV_SKB_FAIL(status);
+ 		
+diff -urN linux-2.4.30/net/ipv6/route.c linux-2.4.30-hf32.3/net/ipv6/route.c
+--- linux-2.4.30/net/ipv6/route.c	2004-11-17 12:54:22.000000000 +0100
++++ linux-2.4.30-hf32.3/net/ipv6/route.c	2006-03-18 00:34:06.000000000 +0100
+@@ -325,12 +325,12 @@
+    be destroyed.
+  */
+ 
+-static int rt6_ins(struct rt6_info *rt, struct nlmsghdr *nlh)
++static int rt6_ins(struct rt6_info *rt, struct nlmsghdr *nlh, struct netlink_skb_parms *req)
+ {
+ 	int err;
+ 
+ 	write_lock_bh(&rt6_lock);
+-	err = fib6_add(&ip6_routing_table, rt, nlh);
++	err = fib6_add(&ip6_routing_table, rt, nlh, req);
+ 	write_unlock_bh(&rt6_lock);
+ 
+ 	return err;
+@@ -341,7 +341,7 @@
+  */
+ 
+ static struct rt6_info *rt6_cow(struct rt6_info *ort, struct in6_addr *daddr,
+-				struct in6_addr *saddr)
++				struct in6_addr *saddr, struct netlink_skb_parms *req)
+ {
+ 	int err;
+ 	struct rt6_info *rt;
+@@ -373,7 +373,7 @@
+ 
+ 		dst_hold(&rt->u.dst);
+ 
+-		err = rt6_ins(rt, NULL);
++		err = rt6_ins(rt, NULL, req);
+ 		if (err == 0)
+ 			return rt;
+ 
+@@ -479,7 +479,8 @@
+ 			read_unlock_bh(&rt6_lock);
+ 
+ 			rt = rt6_cow(rt, &skb->nh.ipv6h->daddr,
+-				     &skb->nh.ipv6h->saddr);
++				     &skb->nh.ipv6h->saddr,
++				     &NETLINK_CB(skb));
+ 			
+ 			if (rt->u.dst.error != -EEXIST || --attempts <= 0)
+ 				goto out2;
+@@ -558,7 +559,7 @@
+ 			read_unlock_bh(&rt6_lock);
+ 
+ 			rt = rt6_cow(rt, fl->nl_u.ip6_u.daddr,
+-				     fl->nl_u.ip6_u.saddr);
++				     fl->nl_u.ip6_u.saddr, NULL);
+ 			
+ 			if (rt->u.dst.error != -EEXIST || --attempts <= 0)
+ 				goto out2;
+@@ -619,7 +620,7 @@
+ 
+ 	if (rt) {
+ 		if (rt->rt6i_flags & RTF_CACHE)
+-			ip6_del_rt(rt, NULL);
++			ip6_del_rt(rt, NULL, NULL);
+ 		else
+ 			dst_release(dst);
+ 	}
+@@ -712,7 +713,7 @@
+  *
+  */
+ 
+-int ip6_route_add(struct in6_rtmsg *rtmsg, struct nlmsghdr *nlh)
++int ip6_route_add(struct in6_rtmsg *rtmsg, struct nlmsghdr *nlh, struct netlink_skb_parms *req)
+ {
+ 	int err;
+ 	struct rtmsg *r;
+@@ -865,7 +866,7 @@
+ 	if (rt->u.dst.advmss > 65535-20)
+ 		rt->u.dst.advmss = 65535;
+ 	rt->u.dst.dev = dev;
+-	return rt6_ins(rt, nlh);
++	return rt6_ins(rt, nlh, req);
+ 
+ out:
+ 	if (dev)
+@@ -874,7 +875,7 @@
+ 	return err;
+ }
+ 
+-int ip6_del_rt(struct rt6_info *rt, struct nlmsghdr *nlh)
++int ip6_del_rt(struct rt6_info *rt, struct nlmsghdr *nlh, struct netlink_skb_parms *req)
+ {
+ 	int err;
+ 
+@@ -886,13 +887,13 @@
+ 
+ 	dst_release(&rt->u.dst);
+ 
+-	err = fib6_del(rt, nlh);
++	err = fib6_del(rt, nlh, req);
+ 	write_unlock_bh(&rt6_lock);
+ 
+ 	return err;
+ }
+ 
+-int ip6_route_del(struct in6_rtmsg *rtmsg, struct nlmsghdr *nlh)
++int ip6_route_del(struct in6_rtmsg *rtmsg, struct nlmsghdr *nlh, struct netlink_skb_parms *req)
+ {
+ 	struct fib6_node *fn;
+ 	struct rt6_info *rt;
+@@ -919,7 +920,7 @@
+ 			dst_hold(&rt->u.dst);
+ 			read_unlock_bh(&rt6_lock);
+ 
+-			return ip6_del_rt(rt, nlh);
++			return ip6_del_rt(rt, nlh, req);
+ 		}
+ 	}
+ 	read_unlock_bh(&rt6_lock);
+@@ -1021,11 +1022,11 @@
+ 		rt->u.dst.advmss = 65535;
+ 	nrt->rt6i_hoplimit = ipv6_get_hoplimit(neigh->dev);
+ 
+-	if (rt6_ins(nrt, NULL))
++	if (rt6_ins(nrt, NULL, NULL))
+ 		goto out;
+ 
+ 	if (rt->rt6i_flags&RTF_CACHE) {
+-		ip6_del_rt(rt, NULL);
++		ip6_del_rt(rt, NULL, NULL);
+ 		return;
+ 	}
+ 
+@@ -1087,7 +1088,7 @@
+ 	   2. It is gatewayed route or NONEXTHOP route. Action: clone it.
+ 	 */
+ 	if (!rt->rt6i_nexthop && !(rt->rt6i_flags & RTF_NONEXTHOP)) {
+-		nrt = rt6_cow(rt, daddr, saddr);
++		nrt = rt6_cow(rt, daddr, saddr, NULL);
+ 		if (!nrt->u.dst.error) {
+ 			nrt->u.dst.pmtu = pmtu;
+ 			/* According to RFC 1981, detecting PMTU increase shouldn't be
+@@ -1111,7 +1112,7 @@
+ 		dst_set_expires(&nrt->u.dst, ip6_rt_mtu_expires);
+ 		nrt->rt6i_flags |= RTF_DYNAMIC|RTF_CACHE|RTF_EXPIRES;
+ 		nrt->u.dst.pmtu = pmtu;
+-		rt6_ins(nrt, NULL);
++		rt6_ins(nrt, NULL, NULL);
+ 	}
+ 
+ out:
+@@ -1184,7 +1185,7 @@
+ 
+ 	rtmsg.rtmsg_ifindex = dev->ifindex;
+ 
+-	ip6_route_add(&rtmsg, NULL);
++	ip6_route_add(&rtmsg, NULL, NULL);
+ 	return rt6_get_dflt_router(gwaddr, dev);
+ }
+ 
+@@ -1210,7 +1211,7 @@
+ 
+ 			read_unlock_bh(&rt6_lock);
+ 
+-			ip6_del_rt(rt, NULL);
++			ip6_del_rt(rt, NULL, NULL);
+ 
+ 			goto restart;
+ 		}
+@@ -1236,10 +1237,10 @@
+ 		rtnl_lock();
+ 		switch (cmd) {
+ 		case SIOCADDRT:
+-			err = ip6_route_add(&rtmsg, NULL);
++			err = ip6_route_add(&rtmsg, NULL, NULL);
+ 			break;
+ 		case SIOCDELRT:
+-			err = ip6_route_del(&rtmsg, NULL);
++			err = ip6_route_del(&rtmsg, NULL, NULL);
+ 			break;
+ 		default:
+ 			err = -EINVAL;
+@@ -1296,7 +1297,7 @@
+ 
+ 	ipv6_addr_copy(&rt->rt6i_dst.addr, addr);
+ 	rt->rt6i_dst.plen = 128;
+-	rt6_ins(rt, NULL);
++	rt6_ins(rt, NULL, NULL);
+ 
+ 	return 0;
+ }
+@@ -1313,7 +1314,7 @@
+ 	rt = rt6_lookup(addr, NULL, loopback_dev.ifindex, 1);
+ 	if (rt) {
+ 		if (rt->rt6i_dst.plen == 128)
+-			err = ip6_del_rt(rt, NULL);
++			err = ip6_del_rt(rt, NULL, NULL);
+ 		else
+ 			dst_release(&rt->u.dst);
+ 	}
+@@ -1429,7 +1430,7 @@
+ 
+ 	nrt->rt6i_flags |= RTF_CACHE;
+ 	dst_hold(&nrt->u.dst);
+-	err = rt6_ins(nrt, NULL);
++	err = rt6_ins(nrt, NULL, NULL);
+ 	if (err)
+ 		nrt->u.dst.error = err;
+ 	return nrt;
+@@ -1556,7 +1557,7 @@
+ 
+ 	if (inet6_rtm_to_rtmsg(r, arg, &rtmsg))
+ 		return -EINVAL;
+-	return ip6_route_del(&rtmsg, nlh);
++	return ip6_route_del(&rtmsg, nlh, &NETLINK_CB(skb));
+ }
+ 
+ int inet6_rtm_newroute(struct sk_buff *skb, struct nlmsghdr* nlh, void *arg)
+@@ -1566,7 +1567,7 @@
+ 
+ 	if (inet6_rtm_to_rtmsg(r, arg, &rtmsg))
+ 		return -EINVAL;
+-	return ip6_route_add(&rtmsg, nlh);
++	return ip6_route_add(&rtmsg, nlh, &NETLINK_CB(skb));
+ }
+ 
+ struct rt6_rtnl_dump_arg
+@@ -1576,11 +1577,8 @@
+ };
+ 
+ static int rt6_fill_node(struct sk_buff *skb, struct rt6_info *rt,
+-			 struct in6_addr *dst,
+-			 struct in6_addr *src,
+-			 int iif,
+-			 int type, u32 pid, u32 seq,
+-			 struct nlmsghdr *in_nlh, int prefix)
++			 struct in6_addr *dst, struct in6_addr *src,
++			 int iif, int type, u32 pid, u32 seq, int prefix)
+ {
+ 	struct rtmsg *rtm;
+ 	struct nlmsghdr  *nlh;
+@@ -1593,9 +1591,6 @@
+ 			return 1;
+ 		}
+ 	}
+-	if (!pid && in_nlh) {
+-		pid = in_nlh->nlmsg_pid;
+-	}
+ 
+ 	nlh = NLMSG_PUT(skb, pid, seq, type, sizeof(*rtm));
+ 	rtm = NLMSG_DATA(nlh);
+@@ -1683,7 +1678,7 @@
+ 
+ 	return rt6_fill_node(arg->skb, rt, NULL, NULL, 0, RTM_NEWROUTE,
+ 		     NETLINK_CB(arg->cb->skb).pid, arg->cb->nlh->nlmsg_seq,
+-		     NULL, prefix);
++		     prefix);
+ }
+ 
+ static int fib6_dump_node(struct fib6_walker_t *w)
+@@ -1834,7 +1829,7 @@
+ 			    fl.nl_u.ip6_u.saddr,
+ 			    iif,
+ 			    RTM_NEWROUTE, NETLINK_CB(in_skb).pid,
+-			    nlh->nlmsg_seq, nlh, 0);
++			    nlh->nlmsg_seq, 0);
+ 	if (err < 0) {
+ 		err = -EMSGSIZE;
+ 		goto out_free;
+@@ -1850,17 +1845,25 @@
+ 	goto out;	
+ }
+ 
+-void inet6_rt_notify(int event, struct rt6_info *rt, struct nlmsghdr *nlh)
++void inet6_rt_notify(int event, struct rt6_info *rt, struct nlmsghdr *nlh,
++		      struct netlink_skb_parms *req)
+ {
+ 	struct sk_buff *skb;
+ 	int size = NLMSG_SPACE(sizeof(struct rtmsg)+256);
++	u32 pid = current->pid;
++	u32 seq = 0;
++
++	if (req)
++		pid = req->pid;
++	if (nlh)
++		seq = nlh->nlmsg_seq;
+ 
+ 	skb = alloc_skb(size, gfp_any());
+ 	if (!skb) {
+ 		netlink_set_err(rtnl, 0, RTMGRP_IPV6_ROUTE, ENOBUFS);
+ 		return;
+ 	}
+-	if (rt6_fill_node(skb, rt, NULL, NULL, 0, event, 0, 0, nlh, 0) < 0) {
++	if (rt6_fill_node(skb, rt, NULL, NULL, 0, event, pid, seq, 0) < 0) {
+ 		kfree_skb(skb);
+ 		netlink_set_err(rtnl, 0, RTMGRP_IPV6_ROUTE, EINVAL);
+ 		return;
+diff -urN linux-2.4.30/net/ipv6/udp.c linux-2.4.30-hf32.3/net/ipv6/udp.c
+--- linux-2.4.30/net/ipv6/udp.c	2004-11-17 12:54:22.000000000 +0100
++++ linux-2.4.30-hf32.3/net/ipv6/udp.c	2006-03-18 00:34:06.000000000 +0100
+@@ -89,7 +89,7 @@
+ 		next:;
+ 		}
+ 		result = best;
+-		for(;; result += UDP_HTABLE_SIZE) {
++		for(i = 0; i < (1 << 16) / UDP_HTABLE_SIZE; i++, result += UDP_HTABLE_SIZE) {
+ 			if (result > sysctl_local_port_range[1])
+ 				result = sysctl_local_port_range[0]
+ 					+ ((result - sysctl_local_port_range[0]) &
+@@ -97,6 +97,8 @@
+ 			if (!udp_lport_inuse(result))
+ 				break;
+ 		}
++		if (i >= (1 << 16) / UDP_HTABLE_SIZE)
++			goto fail;
+ gotit:
+ 		udp_port_rover = snum = result;
+ 	} else {
+diff -urN linux-2.4.30/net/netlink/af_netlink.c linux-2.4.30-hf32.3/net/netlink/af_netlink.c
+--- linux-2.4.30/net/netlink/af_netlink.c	2005-04-14 09:43:35.000000000 +0200
++++ linux-2.4.30-hf32.3/net/netlink/af_netlink.c	2006-03-18 00:34:06.000000000 +0100
+@@ -330,9 +330,9 @@
+ 	u32 pid = nlk_sk(sk)->pid;
+ 
+ 	netlink_table_grab();
+-	hash->entries--;
+ 	for (skp = nl_pid_hashfn(hash, pid); *skp; skp = &((*skp)->next)) {
+ 		if (*skp == sk) {
++			hash->entries--;
+ 			*skp = sk->next;
+ 			__sock_put(sk);
+ 			break;
+@@ -450,7 +450,12 @@
+ 	err = netlink_insert(sk, pid);
+ 	if (err == -EADDRINUSE)
+ 		goto retry;
+-	return 0;
++
++	/* If 2 threads race to autobind, that is fine.  */
++	if (err == -EBUSY)
++		err = 0;
++
++	return err;
+ }
+ 
+ static inline int netlink_capable(struct socket *sock, unsigned int flag) 

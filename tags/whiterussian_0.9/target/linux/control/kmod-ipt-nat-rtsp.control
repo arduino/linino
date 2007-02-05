@@ -1,0 +1,4 @@
+Package: kmod-ipt-nat-rtsp
+Priority: optional
+Section: net
+Description: Netfilter (IPv4) NAT kernel modules for RTSP

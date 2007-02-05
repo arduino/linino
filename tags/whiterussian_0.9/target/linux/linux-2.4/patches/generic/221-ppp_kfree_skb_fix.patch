@@ -1,0 +1,11 @@
+--- linux-2.4.30/drivers/net/ppp_async.c~	2006-06-16 22:41:01.000000000 +0300
++++ linux-2.4.30/drivers/net/ppp_async.c	2006-06-16 22:41:01.000000000 +0300
+@@ -624,7 +624,7 @@
+ 	*buf++ = PPP_FLAG;
+ 	ap->olim = buf;
+ 
+-	kfree_skb(ap->tpkt);
++	dev_kfree_skb_any(ap->tpkt);
+ 	ap->tpkt = 0;
+ 	return 1;
+ }

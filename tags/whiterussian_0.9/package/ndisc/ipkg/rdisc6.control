@@ -1,0 +1,4 @@
+Package: rdisc6
+Priority: optional
+Section: net
+Description: ICMPv6 Router Discovery tool

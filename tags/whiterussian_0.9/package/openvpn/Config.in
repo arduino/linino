@@ -1,0 +1,63 @@
+config BR2_PACKAGE_OPENVPN
+	tristate "openvpn - Open source VPN solution using SSL"
+	default m if CONFIG_DEVEL
+	select BR2_PACKAGE_KMOD_TUN
+	select BR2_PACKAGE_LIBOPENSSL
+	help
+	  Open Source VPN solution using SSL
+	  
+	  http://openvpn.net/
+	  
+	  Depends: kmod-tun, libpthread, openssl
+
+config BR2_PACKAGE_OPENVPN_EASY_RSA
+	tristate "openvpn-easy-rsa - simple shell scripts to manage a Certificate Authority"
+	default m
+	depends BR2_PACKAGE_OPENVPN
+	select BR2_PACKAGE_OPENSSL_UTIL
+
+config BR2_PACKAGE_OPENVPN_WEBIF
+	tristate "openvpn-webif - web interface module to configure OpenVPN (client mode)"
+	default m
+	depends BR2_PACKAGE_OPENVPN
+	select BR2_PACKAGE_WEBIF
+	help
+	  Web interface module to configure and report status of OpenVPN (client
+	  mode only)
+
+config BR2_PACKAGE_OPENVPN_SERVER
+	bool "Enable server support"
+	default y
+	depends BR2_PACKAGE_OPENVPN
+
+config BR2_PACKAGE_OPENVPN_HTTP
+	bool "Enable http proxy support"
+	default y
+	depends BR2_PACKAGE_OPENVPN
+
+config BR2_PACKAGE_OPENVPN_OPENSSL
+	bool "Enable openssl support"
+	default y
+	depends BR2_PACKAGE_OPENVPN
+	select BR2_PACKAGE_LIBOPENSSL
+
+config BR2_PACKAGE_OPENVPN_LZO
+	bool "Enable transparent compression (lzo)"
+	default y
+	depends BR2_PACKAGE_OPENVPN
+	select BR2_PACKAGE_LIBLZO
+
+config BR2_PACKAGE_OPENVPN_PASSWORD_SAVE
+	bool "Enable password saving"
+	default y
+	depends BR2_PACKAGE_OPENVPN
+
+config BR2_PACKAGE_OPENVPN_MANAGEMENT
+	bool "Enable PKCS12 management features"
+	default n
+	depends BR2_PACKAGE_OPENVPN
+
+config BR2_PACKAGE_OPENVPN_SMALL
+	bool "Enable smaller executable size (disable OCC, usage message, and verb 4 parm list)"
+	default n
+	depends BR2_PACKAGE_OPENVPN

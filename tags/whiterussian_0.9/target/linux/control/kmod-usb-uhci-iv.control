@@ -1,0 +1,4 @@
+Package: kmod-usb-uhci-iv
+Priority: optional
+Section: sys
+Description: Kernel driver for Intel/VIA UHCI USB controllers

@@ -1,0 +1,4 @@
+Package: kmod-pcmcia-serial
+Section: sys
+Priority: optional
+Description: PCMCIA/CardBus serial device support

@@ -1,0 +1,7 @@
+Package: webif-lang-es
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Section: net
+Depends: webif
+Priority: normal
+Description: Spanish language file for webif.
+

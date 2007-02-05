@@ -1,0 +1,16 @@
+#!/bin/sh
+. /etc/functions.sh
+
+sysctl -p >&-
+
+# automagically run firstboot
+[ "$(nvram get no_root_swap)" != 1 ] && {
+	[ -d /tmp/root ] && {
+		lock /tmp/.switch2jffs
+		firstboot switch2jffs
+		lock -u /tmp/.switch2jffs
+	}
+}
+
+# set leds to normal state
+set_state done

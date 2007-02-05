@@ -1,0 +1,4 @@
+Package: kmod-ipt-nat-default
+Priority: optional
+Section: net
+Description: Default Netfilter (IPv4) NAT kernel modules for special protocols

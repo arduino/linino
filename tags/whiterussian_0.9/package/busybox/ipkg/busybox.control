@@ -1,0 +1,4 @@
+Package: busybox
+Priority: optional
+Section: net
+Description: Core utilities for embedded Linux systems

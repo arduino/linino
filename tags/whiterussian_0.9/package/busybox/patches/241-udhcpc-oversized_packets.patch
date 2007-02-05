@@ -1,0 +1,85 @@
+diff -ruN busybox-1.00-old/networking/udhcp/packet.c busybox-1.00-new/networking/udhcp/packet.c
+--- busybox-1.00-old/networking/udhcp/packet.c	2004-04-14 19:51:25.000000000 +0200
++++ busybox-1.00-new/networking/udhcp/packet.c	2006-11-18 22:39:16.000000000 +0100
+@@ -112,6 +112,10 @@
+ 	return ~sum;
+ }
+ 
++int get_payload_len(struct dhcpMessage *payload)
++{
++	return sizeof(struct dhcpMessage) - MAX_OPTIONS_LEN + end_option(payload->options) + sizeof(payload->options[0]);
++}
+ 
+ /* Construct a ip/udp header for a packet, and specify the source and dest hardware address */
+ int raw_packet(struct dhcpMessage *payload, uint32_t source_ip, int source_port,
+@@ -121,6 +125,7 @@
+ 	int result;
+ 	struct sockaddr_ll dest;
+ 	struct udp_dhcp_packet packet;
++	int p_len = get_payload_len(payload);
+ 
+ 	if ((fd = socket(PF_PACKET, SOCK_DGRAM, htons(ETH_P_IP))) < 0) {
+ 		DEBUG(LOG_ERR, "socket call failed: %m");
+@@ -129,6 +134,7 @@
+ 
+ 	memset(&dest, 0, sizeof(dest));
+ 	memset(&packet, 0, sizeof(packet));
++	memcpy(&(packet.data), payload, p_len);
+ 
+ 	dest.sll_family = AF_PACKET;
+ 	dest.sll_protocol = htons(ETH_P_IP);
+@@ -146,18 +152,19 @@
+ 	packet.ip.daddr = dest_ip;
+ 	packet.udp.source = htons(source_port);
+ 	packet.udp.dest = htons(dest_port);
+-	packet.udp.len = htons(sizeof(packet.udp) + sizeof(struct dhcpMessage)); /* cheat on the psuedo-header */
++	p_len += sizeof(packet.udp);
++	packet.udp.len = htons(p_len);
+ 	packet.ip.tot_len = packet.udp.len;
+-	memcpy(&(packet.data), payload, sizeof(struct dhcpMessage));
+-	packet.udp.check = checksum(&packet, sizeof(struct udp_dhcp_packet));
++	p_len += sizeof(packet.ip);
++	packet.udp.check = checksum(&packet, p_len);
+ 
+-	packet.ip.tot_len = htons(sizeof(struct udp_dhcp_packet));
++	packet.ip.tot_len = htons(p_len);
+ 	packet.ip.ihl = sizeof(packet.ip) >> 2;
+ 	packet.ip.version = IPVERSION;
+ 	packet.ip.ttl = IPDEFTTL;
+ 	packet.ip.check = checksum(&(packet.ip), sizeof(packet.ip));
+ 
+-	result = sendto(fd, &packet, sizeof(struct udp_dhcp_packet), 0, (struct sockaddr *) &dest, sizeof(dest));
++	result = sendto(fd, &packet, p_len, 0, (struct sockaddr *) &dest, sizeof(dest));
+ 	if (result <= 0) {
+ 		DEBUG(LOG_ERR, "write on socket failed: %m");
+ 	}
+@@ -196,7 +203,7 @@
+ 	if (connect(fd, (struct sockaddr *)&client, sizeof(struct sockaddr)) == -1)
+ 		return -1;
+ 
+-	result = write(fd, payload, sizeof(struct dhcpMessage));
++	result = write(fd, payload, get_payload_len(payload));
+ 	close(fd);
+ 	return result;
+ }
+diff -ruN busybox-1.00-old/networking/udhcp/packet.h busybox-1.00-new/networking/udhcp/packet.h
+--- busybox-1.00-old/networking/udhcp/packet.h	2004-03-15 09:29:01.000000000 +0100
++++ busybox-1.00-new/networking/udhcp/packet.h	2006-11-18 22:09:05.000000000 +0100
+@@ -4,6 +4,8 @@
+ #include <netinet/udp.h>
+ #include <netinet/ip.h>
+ 
++#define MAX_OPTIONS_LEN  308
++
+ struct dhcpMessage {
+ 	uint8_t op;
+ 	uint8_t htype;
+@@ -20,7 +22,7 @@
+ 	uint8_t sname[64];
+ 	uint8_t file[128];
+ 	uint32_t cookie;
+-	uint8_t options[308]; /* 312 - cookie */
++	uint8_t options[MAX_OPTIONS_LEN]; /* 312 - cookie */
+ };
+ 
+ struct udp_dhcp_packet {

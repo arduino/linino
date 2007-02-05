@@ -1,0 +1,12 @@
+config BR2_PACKAGE_MTD
+	tristate "mtd - update utility for trx firmware images"
+	default y
+	help
+	 update utility for trx firmware images.
+
+config BR2_PACKAGE_MTD_STATIC
+	tristate "mtd - update utility for trx firmware images (statically linked)"
+	default n
+	help
+	 update utility for trx firmware images (statically linked). To update
+	 from other firmware or older OpenWrt releases.

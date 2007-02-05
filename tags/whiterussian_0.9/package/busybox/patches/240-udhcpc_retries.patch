@@ -1,0 +1,74 @@
+diff -ur busybox.old/networking/udhcp/dhcpc.c busybox.dev/networking/udhcp/dhcpc.c
+--- busybox.old/networking/udhcp/dhcpc.c	2006-11-10 00:20:17.000000000 +0100
++++ busybox.dev/networking/udhcp/dhcpc.c	2006-11-10 00:27:52.000000000 +0100
+@@ -69,6 +69,7 @@
+ 	clientid: NULL,
+ 	hostname: NULL,
+ 	ifindex: 0,
++	retries: 3,
+ 	arp: "\0\0\0\0\0\0",		/* appease gcc-3.0 */
+ };
+ 
+@@ -92,6 +93,7 @@
+ "  -r, --request=IP                IP address to request (default: none)\n"
+ "  -s, --script=file               Run file at dhcp events (default:\n"
+ "                                  " DEFAULT_SCRIPT ")\n"
++"  -t, --retries                   Maximum retries\n"
+ "  -v, --version                   Display version\n"
+ 	);
+ 	exit(0);
+@@ -208,13 +210,14 @@
+ 		{"request",	required_argument,	0, 'r'},
+ 		{"script",	required_argument,	0, 's'},
+ 		{"version",	no_argument,		0, 'v'},
++		{"retries",	required_argument,	0, 't'},
+ 		{0, 0, 0, 0}
+ 	};
+ 
+ 	/* get options */
+ 	while (1) {
+ 		int option_index = 0;
+-		c = getopt_long(argc, argv, "c:fbH:h:i:np:qRr:s:v", arg_options, &option_index);
++		c = getopt_long(argc, argv, "c:fbH:h:i:np:qRr:s:t:v", arg_options, &option_index);
+ 		if (c == -1) break;
+ 
+ 		switch (c) {
+@@ -263,6 +266,9 @@
+ 		case 's':
+ 			client_config.script = optarg;
+ 			break;
++		case 't':
++			client_config.retries = atoi(optarg);
++			break;
+ 		case 'v':
+ 			printf("udhcpcd, version %s\n\n", VERSION);
+ 			return 0;
+@@ -321,7 +327,7 @@
+ 			/* timeout dropped to zero */
+ 			switch (state) {
+ 			case INIT_SELECTING:
+-				if (packet_num < 3) {
++				if (!client_config.retries || (packet_num < client_config.retries)) {
+ 					if (packet_num == 0)
+ 						xid = random_xid();
+ 
+@@ -346,7 +352,7 @@
+ 				break;
+ 			case RENEW_REQUESTED:
+ 			case REQUESTING:
+-				if (packet_num < 3) {
++				if (!client_config.retries || (packet_num < client_config.retries)) {
+ 					/* send request packet */
+ 					if (state == RENEW_REQUESTED)
+ 						send_renew(xid, server_addr, requested_ip); /* unicast */
+diff -ur busybox.old/networking/udhcp/dhcpc.h busybox.dev/networking/udhcp/dhcpc.h
+--- busybox.old/networking/udhcp/dhcpc.h	2006-11-10 00:20:17.000000000 +0100
++++ busybox.dev/networking/udhcp/dhcpc.h	2006-11-10 00:24:04.000000000 +0100
+@@ -30,6 +30,7 @@
+ 	uint8_t *hostname;		/* Optional hostname to use */
+ 	int ifindex;			/* Index number of the interface to use */
+ 	uint8_t arp[6];			/* Our arp address */
++	int retries;			/* Maximum retries */
+ };
+ 
+ extern struct client_config_t client_config;

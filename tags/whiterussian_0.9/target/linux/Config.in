@@ -1,0 +1,560 @@
+
+config BR2_LINUX_2_4
+	bool "Linux 2.4"
+	default y
+
+config BR2_LINUX_2_4_BRCM
+	bool "Support for Broadcom based routers"
+	default y
+	help
+	  Build firmware images for Broadcom based routers
+          (e.g. Linksys WRT54G(S), Asus WL-500g, Motorola WR850G)
+		               
+	  This one builds the generic .trx images, activate one of the
+	  options below for creating device specific files for use 
+	  with TFTP client too. 
+
+comment "Kernel Modules"
+
+config BR2_PACKAGE_KMOD_BRCM_WL
+	tristate "Broadcom Wireless Network Driver"
+	depends BR2_LINUX_2_4_BRCM
+	default y
+	help
+	  Proprietary driver for Broadcom Wireless chipsets
+
+config BR2_PACKAGE_KMOD_ARPT
+	tristate "ARP firewalling support"
+	default m
+	help
+	  Kernel modules for ARP firewalling
+
+config BR2_PACKAGE_KMOD_EBT
+	tristate "Ethernet Bridge firewalling support"
+	default m
+	help
+	  Kernel modules for bridge firewalling
+
+config BR2_PACKAGE_KMOD_IPIP
+	tristate "IP in IP encapsulation support"
+	default m
+	help
+	  Kernel module for IP in IP encapsultation
+
+config BR2_PACKAGE_KMOD_IPTABLES_EXTRA
+	tristate "Extra Netfilter modules for IPv4 firewalling (meta-package)"
+	default m
+	select BR2_PACKAGE_KMOD_IPT_CONNTRACK
+	select BR2_PACKAGE_KMOD_IPT_FILTER
+	select BR2_PACKAGE_KMOD_IPT_IPOPT
+	select BR2_PACKAGE_KMOD_IPT_IPSEC
+	select BR2_PACKAGE_KMOD_IPT_NAT
+	select BR2_PACKAGE_KMOD_IPT_NAT_PPTP
+	select BR2_PACKAGE_KMOD_IPT_NAT_H323
+	select BR2_PACKAGE_KMOD_IPT_NAT_RTSP
+	select BR2_PACKAGE_KMOD_IPT_NAT_EXTRA
+	select BR2_PACKAGE_KMOD_IPT_QUEUE
+	select BR2_PACKAGE_KMOD_IPT_ULOG
+	select BR2_PACKAGE_KMOD_IPT_EXTRA
+	help
+	  Extra Netfilter kernel modules for IPv4 firewalling (meta-package)
+
+config BR2_PACKAGE_KMOD_IPT_CONNTRACK
+	tristate "Netfilter modules for connection tracking"
+	default m
+	help
+	  Netfilter (IPv4) kernel modules for connection tracking
+
+	  Includes:
+	    * ipt_conntrack
+	    * ipt_helper
+	    * ipt_connmark/CONNMARK
+	    * ipt_connbytes
+
+config BR2_PACKAGE_KMOD_IPT_FILTER
+	tristate "Netfilter modules for packet content inspection"
+	default m
+	help
+	  Netfilter (IPv4) kernel modules for packet content inspection
+
+	  Includes:
+	    * ipt_ipp2p
+	    * ipt_layer7
+
+config BR2_PACKAGE_KMOD_IPT_IPOPT
+	tristate "Netfilter modules for matching/changing IP packet options"
+	default m
+	help
+	  Netfilter (IPv4) kernel modules for matching/changing IP packet options
+	  
+	  Includes:
+	    * ipt_CLASSIFY
+	    * ipt_dscp/DSCP
+	    * ipt_ecn/ECN
+	    * ipt_length
+	    * ipt_mac
+	    * ipt_tos/TOS
+	    * ipt_tcpmms
+	    * ipt_ttl/TTL
+	    * ipt_unclean
+
+config BR2_PACKAGE_KMOD_IPT_IPSEC
+	tristate "Netfilter modules for matching IPsec packets"
+	default m
+	help
+	  Netfilter (IPv4) kernel modules for matching IPsec packets
+	  
+	  Includes:
+	    * ipt_ah
+	    * ipt_esp
+
+config BR2_PACKAGE_KMOD_IPT_NAT
+	tristate "Netfilter modules for different NAT targets"
+	default m
+	help
+	  Netfilter (IPv4) kernel modules for different NAT targets
+
+	  Includes: 
+	    * ipt_REDIRECT
+
+config BR2_PACKAGE_KMOD_IPT_NAT_DEFAULT
+	tristate "Netfilter NAT modules for special protocols"
+	default y
+	help
+	  Default Netfilter (IPv4) NAT kernel modules for special protocols
+	  
+	  Includes:
+	    * ip_conntrack_ftp
+	    * ip_nat_ftp
+	    * ip_conntrack_irc
+	    * ip_nat_irc
+	    * ip_conntrack_tftp
+
+config BR2_PACKAGE_KMOD_IPT_NAT_PPTP
+	tristate "Netfilter NAT modules for GRE and PPTP"
+	default m
+	help
+	  Netfilter (IPv4) NAT kernel modules for GRE and PPTP
+
+config BR2_PACKAGE_KMOD_IPT_NAT_H323
+	tristate "Netfilter NAT modules for H.323"
+	default m
+	help
+	  Netfilter (IPv4) NAT kernel modules for H.323
+
+config BR2_PACKAGE_KMOD_IPT_NAT_RTSP
+	tristate "Netfilter NAT modules for RTSP"
+	default m
+	help
+	  Netfilter (IPv4) NAT kernel modules for RTSP
+
+config BR2_PACKAGE_KMOD_IPT_NAT_EXTRA
+	tristate "Extra Netfilter NAT modules for special protocols"
+	default m
+	help
+	  Extra Netfilter (IPv4) NAT kernel modules for special protocols
+	  
+	  Includes:
+	    * ip_conntrack_amanda
+	    * ip_nat_snmp_basic
+	    * ip_conntrack_tftp
+
+config BR2_PACKAGE_KMOD_IPT_QUEUE
+	tristate "Netfilter module for user-space packet queueing"
+	default m
+	help
+	  Netfilter (IPv4) module for user-space packet queueing
+	  
+	  Includes:
+	    * ipt_QUEUE
+
+config BR2_PACKAGE_KMOD_IPT_ULOG
+	tristate "Netfilter module for user-space packet logging"
+	default m
+	help
+	  Netfilter (IPv4) module for user-space packet logging
+	  
+	  Includes:
+	    * ipt_ULOG
+
+config BR2_PACKAGE_KMOD_IPT_EXTRA
+	tristate "Other extra Netfilter modules"
+	default m
+	help
+	  Other extra Netfilter (IPv4) kernel modules
+
+	  Includes:
+	    * ipt_limit
+	    * ipt_owner
+	    * ipt_physdev
+	    * ipt_pkttype
+	    * ipt_recent
+
+config BR2_PACKAGE_KMOD_IMQ
+	tristate "Intermediate Queueing device"
+	default m
+	help
+	  Kernel support for the Intermediate Queueing device
+
+config BR2_PACKAGE_KMOD_IPV6
+	tristate "IPv6 support"
+	default m
+	help
+	  Kernel modules for IPv6 protocol support
+	  
+config BR2_PACKAGE_KMOD_IP6TABLES
+	tristate "Kernel modules for ip6tables"
+	default m
+	depends BR2_PACKAGE_KMOD_IPV6
+	help
+	  IPv6 firewalling support
+
+config BR2_PACKAGE_KMOD_NFS
+	tristate "NFS support"
+	default m
+	help
+	  Kernel modules for NFS support
+	  Includes lockd, nfs and sunrpc
+
+config BR2_PACKAGE_KMOD_CIFS
+	tristate "CIFS support"
+	default m
+	help
+	  Kernel modules for CIFS support
+
+config BR2_PACKAGE_KMOD_USB
+	tristate "USB support"
+	default m
+
+config BR2_PACKAGE_KMOD_USB_CONTROLLER
+	tristate
+	depends on BR2_PACKAGE_KMOD_USB_UHCI || BR2_PACKAGE_KMOD_USB_UHCI_IV || BR2_PACKAGE_KMOD_USB_OHCI || BR2_PACKAGE_KMOD_USB2
+	default n
+
+config BR2_PACKAGE_KMOD_USB_UHCI
+	tristate "Support for UHCI controllers"
+	default m
+	depends BR2_PACKAGE_KMOD_USB
+	select BR2_PACKAGE_KMOD_USB_CONTROLLER
+
+config BR2_PACKAGE_KMOD_USB_UHCI_IV
+	tristate "Support for Intel/VIA UHCI controllers"
+	default m
+	depends BR2_PACKAGE_KMOD_USB
+	select BR2_PACKAGE_KMOD_USB_CONTROLLER
+
+config BR2_PACKAGE_KMOD_USB_OHCI
+	tristate "Support for OHCI controllers"
+	default m
+	depends BR2_PACKAGE_KMOD_USB
+	select BR2_PACKAGE_KMOD_USB_CONTROLLER
+
+config BR2_PACKAGE_KMOD_USB2
+	tristate "Support for USB 2.0 controllers"
+	default m
+	depends BR2_PACKAGE_KMOD_USB
+	select BR2_PACKAGE_KMOD_USB_CONTROLLER
+
+config BR2_PACKAGE_KMOD_USB_SERIAL
+        tristate "Support for serial USB devices" 
+	default m 
+	depends BR2_PACKAGE_KMOD_USB_CONTROLLER
+
+config BR2_PACKAGE_KMOD_USB_SERIAL_BELKIN
+	tristate "Support for Belkin USB-to-serial converters"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_SERIAL
+	
+config BR2_PACKAGE_KMOD_USB_SERIAL_FTDI
+	tristate "Support for FTDI USB-to-serial converterr"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_SERIAL
+
+config BR2_PACKAGE_KMOD_USB_SERIAL_MCT_U232
+        tristate "Support for Magic Control Technology USB-to-Serial converters"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_SERIAL
+
+config BR2_PACKAGE_KMOD_USB_SERIAL_PL2303
+	tristate "Support for Prolific PL2303 USB-to-Serial converters"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_SERIAL
+	
+config BR2_PACKAGE_KMOD_USB_SERIAL_VISOR
+	tristate "Support for Handspring Visor / Palm m50x / Sony Clie Driver"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_SERIAL
+
+config BR2_PACKAGE_KMOD_USB_STORAGE
+	tristate "Support for USB storage devices"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_CONTROLLER
+
+config BR2_PACKAGE_KMOD_USB_PRINTER
+	tristate "Support for USB printers"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_CONTROLLER
+
+config BR2_PACKAGE_KMOD_USB_SCANNER
+	tristate "Support for USB scanners"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_CONTROLLER
+
+config BR2_PACKAGE_KMOD_USB_ACM
+	tristate "Support for USB ACM compatible devices"
+	default m
+	depends BR2_PACKAGE_KMOD_USB_CONTROLLER
+
+config BR2_PACKAGE_KMOD_PCMCIA
+	tristate "Support for PCMCIA devices"
+	default m
+
+config BR2_PACKAGE_KMOD_PCMCIA_SERIAL
+	tristate "Support for PCMCIA/Cardbus serial devices"
+	default m
+
+config BR2_PACKAGE_KMOD_IDE
+	tristate "IDE support"
+	default m
+	help
+	  Kernel modules for IDE support
+	  useful for usb mass storage devices (e.g. on WL-HDD)
+	  
+	  Includes:
+	    - ide-core
+	    - ide-detect
+	    - ide-disk
+	    - pdc202xx_old
+
+config BR2_PACKAGE_KMOD_NLS_CP437
+	tristate "Codepage 437 (United States, Canada)"
+	default m
+	help
+	  Kernel module for NLS Codepage 437 (United States, Canada)
+
+config BR2_PACKAGE_KMOD_NLS_CP850
+	tristate "Codepage 850 (Europe)"
+	default m
+	help
+	  Kernel module for NLS Codepage 850 (Europe)
+
+config BR2_PACKAGE_KMOD_NLS_ISO8859_1
+	tristate "ISO 8859-1 (Latin 1; Western European Languages)"
+	default m
+	help
+	  Kernel module for ISO 8859-1 (Latin 1)
+
+config BR2_PACKAGE_KMOD_NLS_ISO8859_15
+	tristate "ISO 8859-15 (Latin 9; Western, with Euro symbol)"
+	default m
+	help
+	  Kernel module for ISO 8859-15 (Latin 9)
+
+config BR2_PACKAGE_KMOD_NLS_KOI8_R
+	tristate "KOI8-R (Russian)"
+	default m
+	help
+	  Kernel module for KOI8-R (Russian)
+
+config BR2_PACKAGE_KMOD_NLS_UTF8
+	tristate "UTF8"
+	default m
+	help
+	  Kernel module for UTF8
+
+config BR2_PACKAGE_KMOD_VFAT
+	tristate "VFAT filesystem support"
+	default m
+	help
+	  Kernel modules for VFAT filesystem support
+	  useful for usb mass storage devices
+
+config BR2_PACKAGE_KMOD_MSDOS 
+        tristate "MSDOS filesystem support" 
+        default m 
+        help 
+          Kernel modules for MSDOS filesystem support 
+
+config BR2_PACKAGE_KMOD_MINIX
+	tristate "MINIX filesystem support"
+	default m
+	help
+	  Kernel modules for MINIX filesystem support
+
+config BR2_PACKAGE_KMOD_EXT2
+	tristate "EXT2 filesystem support"
+	default m
+	help
+	  Kernel modules for EXT2 filesystem support
+
+config BR2_PACKAGE_KMOD_EXT3
+	tristate "EXT3 filesystem support"
+	default m
+	help
+	  Kernel modules for EXT3 filesystem support
+
+config BR2_PACKAGE_KMOD_XFS
+	tristate "XFS filesystem support"
+	default m
+	help
+	  Kernel modules for XFS filesystem support
+
+config BR2_PACKAGE_KMOD_HFSPLUS
+	tristate "HFS+ filesystem support"
+	default m
+	help
+	  Kernel modules for HFS+ filesystem support
+
+config BR2_PACKAGE_KMOD_LOOP
+	tristate "loop mount support"
+	default m
+	help
+	  Kernel module for loop mount support
+
+config BR2_PACKAGE_KMOD_NBD
+	tristate "network block device"
+	default m
+	help
+	  Kernel module for network block device
+
+config BR2_PACKAGE_KMOD_LP
+	tristate "parallel port and lp support"
+	default m
+	help
+	  Kernel modules for line printer and parallel port support
+
+config BR2_PACKAGE_KMOD_CRYPTO
+	tristate "CryptoAPI modules"
+	default m
+	select BUSYBOX_CONFIG_FEATURE_CHECK_TAINTED_MODULE
+	help
+	  Kernel modules for cryptographic algorithms
+
+config BR2_PACKAGE_KMOD_PPP
+	tristate "PPP support"
+	default m
+	help
+	  Kernel support for PPP
+
+config BR2_PACKAGE_KMOD_MPPE
+	tristate "PPP MPPE/MPPC module"
+	default m
+	select BR2_PACKAGE_KMOD_CRYPTO
+	depends BR2_PACKAGE_KMOD_PPP
+	help
+	  Support for Microsoft PPP Encryption/Compression
+
+config BR2_PACKAGE_KMOD_PPPOE
+	tristate "PPPoE modules"
+	default m
+	depends BR2_PACKAGE_KMOD_PPP
+	help
+	  Support for PPP over Ethernet
+
+config BR2_PACKAGE_KMOD_TUN
+	tristate "Universal TUN/TAP driver"
+	default m
+	help
+	  Kernel support for the TUN/TAP tunneling device
+
+config BR2_PACKAGE_KMOD_GRE
+	tristate "GRE tunneling driver"
+	default m
+	help
+	  Kernel support for GRE tunnels
+
+config BR2_PACKAGE_KMOD_SCHED
+	tristate "Traffic schedulers"
+	default m
+	help
+	  Kernel schedulers for IP traffic
+
+config BR2_PACKAGE_KMOD_VIDEODEV
+	tristate "Video (For Linux) kernel support"
+	default m
+
+config BR2_PACKAGE_KMOD_PWC
+	tristate "Kernel driver for USB Philips Cameras"
+	default m
+
+config BR2_PACKAGE_KMOD_SOFTDOG
+	tristate "Kernel driver for software watchdog"
+	default m
+	help
+	  Kernel modules for software watchdog driver
+
+config BR2_PACKAGE_KMOD_BONDING
+	tristate "Kernel driver for ethernet bonding"
+	default m
+	help
+	  Kernel modules for ethernet bonding
+
+config BR2_PACKAGE_KMOD_BLUETOOTH
+	tristate "Kernel driver for Bluetooth stack"
+	default m
+	help
+	  Kernel modules for Bluetooth stack
+
+config BR2_PACKAGE_KMOD_BLUETOOTH_BFUSB
+	tristate "Bluetooth HCI BlueFRITZ! USB driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	select BR2_PACKAGE_KMOD_USB
+	default m
+	help
+	  Bluetooth HCI BlueFRITZ! USB driver
+
+config BR2_PACKAGE_KMOD_BLUETOOTH_BLUECARD
+	tristate "Bluetooth HCI BlueCard (PC Card) driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	select BR2_PACKAGE_KMOD_PCMCIA
+	default m
+	help
+	  Bluetooth HCI BlueCard (PC Card) driver
+
+config BR2_PACKAGE_KMOD_BLUETOOTH_BT3C
+	tristate "Bluetooth HCI BT3C (PC Card) driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	select BR2_PACKAGE_KMOD_PCMCIA
+	default m
+	help
+	  Bluetooth HCI BT3C (PC Card) driver
+
+config BR2_PACKAGE_KMOD_BLUETOOTH_BTUART
+	tristate "Bluetooth HCI UART (PC Card) driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	select BR2_PACKAGE_KMOD_PCMCIA
+	default m
+	help
+	  Bluetooth HCI UART (PC Card) driver
+	
+config BR2_PACKAGE_KMOD_BLUETOOTH_DTL1
+	tristate "Bluetooth HCI DTL1 (PC Card) driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	select BR2_PACKAGE_KMOD_PCMCIA
+	default m
+	help
+	  Bluetooth HCI DTL1 (PC Card) driver
+
+config BR2_PACKAGE_KMOD_BLUETOOTH_HCIUART
+	tristate "Bluetooth HCI UART driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	default m
+	help
+	  Bluetooth HCI UART driver
+
+config BR2_PACKAGE_KMOD_BLUETOOTH_HCIUSB
+	tristate "Bluetooth HCI USB driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	depends BR2_PACKAGE_KMOD_USB
+	default m
+	help
+	  Bluetooth HCI USB driver
+
+config BR2_PACKAGE_KMOD_BLUETOOTH_HCIVHCI
+	tristate "Bluetooth Virtual HCI device driver"
+	depends BR2_PACKAGE_KMOD_BLUETOOTH
+	default m
+	help
+	  Bluetooth Virtual HCI device driver
+
+source "target/linux/package/Config.in"

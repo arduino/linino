@@ -1,0 +1,5 @@
+Package: kmod-bluetooth-btuart
+Priority: optional
+Section: net
+Depends: kmod-bluetooth kmod-pcmcia
+Description: Bluetooth HCI UART (PC Card) driver.

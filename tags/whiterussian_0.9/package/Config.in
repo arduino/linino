@@ -1,0 +1,163 @@
+#
+
+menu "OpenWrt Package Selection"
+
+comment "The default set"
+source "package/busybox/Config.in"
+source "package/bridge/Config.in"
+source "package/dnsmasq/Config.in"
+source "package/ipkg/Config.in"
+source "package/iptables/Config.in"
+source "package/mtd/Config.in"
+
+comment "Applications"
+source "package/haserl/Config.in"
+source "package/lcd4linux/Config.in"
+source "package/lua/Config.in"
+source "package/microperl/Config.in"
+source "package/monit/Config.in"
+source "package/osiris/Config.in"
+source "package/procps/Config.in"
+source "package/psmisc/Config.in"
+menu "sablevm - a Java Virtual Machine (JVM) implementation"
+source "package/sablevm/Config.in"
+source "package/sablevm-classpath/Config.in"
+source "package/libffi-sable/Config.in"
+endmenu
+source "package/screen/Config.in"
+source "package/webif/Config.in"
+
+comment "Networking"
+source "package/aiccu/Config.in"
+source "package/arptables/Config.in"
+source "package/arpwatch/Config.in"
+source "package/asterisk/Config.in"
+source "package/bwm/Config.in"
+source "package/chillispot/Config.in"
+source "package/cifsmount/Config.in"
+source "package/cups/Config.in"
+source "package/dhcp-forwarder/Config.in"
+source "package/dropbear/Config.in"
+source "package/dsl-qos-queue/Config.in"
+source "package/dsniff/Config.in"
+source "package/ebtables/Config.in"
+source "package/ez-ipupdate/Config.in"
+source "package/fakeidentd/Config.in"
+source "package/fping/Config.in"
+source "package/fprobe/Config.in"
+source "package/freeradius/Config.in"
+source "package/frickin/Config.in"
+source "package/howl/Config.in"
+source "package/htpdate/Config.in"
+source "package/iproute2/Config.in"
+source "package/kismet/Config.in"
+source "package/l2tpd/Config.in"
+source "package/lighttpd/Config.in"
+source "package/maradns/Config.in"
+source "package/ndisc/Config.in"
+source "package/net-snmp/Config.in"
+source "package/nfs-server/Config.in"
+source "package/nmap/Config.in"
+source "package/nocatsplash/Config.in"
+source "package/ntpclient/Config.in"
+source "package/olsrd/Config.in"
+source "package/openntpd/Config.in"
+source "package/openser/Config.in"
+source "package/openssh/Config.in"
+source "package/openswan/Config.in"
+source "package/openvpn/Config.in"
+source "package/pmacct/Config.in"
+source "package/portmap/Config.in"
+source "package/ppp/Config.in"
+source "package/pptp/Config.in"
+source "package/pptpd/Config.in"
+source "package/quagga/Config.in"
+source "package/qos-scripts/Config.in"
+source "package/radvd/Config.in"
+source "package/robocfg/Config.in"
+source "package/rsync/Config.in"
+source "package/shat/Config.in"
+source "package/siproxd/Config.in"
+source "package/sipsak/Config.in"
+source "package/snort/Config.in"
+source "package/stunnel/Config.in"
+source "package/tcpdump/Config.in"
+source "package/tinc/Config.in"
+source "package/tor/Config.in"
+source "package/ttcp/Config.in"
+source "package/ulogd/Config.in"
+source "package/vsftpd/Config.in"
+source "package/vtun/Config.in"
+source "package/wireless-tools/Config.in"
+source "package/wol/Config.in"
+source "package/wpa_supplicant/Config.in"
+source "package/wput/Config.in"
+source "package/xinetd/Config.in"
+source "package/wificonf/Config.in"
+
+comment "Libraries"
+source "package/glib/Config.in"
+source "package/libdb/Config.in"
+source "package/libelf/Config.in"
+source "package/libevent/Config.in"
+source "package/base-files/Config.in" # libgcc
+source "package/libgd/Config.in"
+source "package/libgdbm/Config.in"
+source "package/gmp/Config.in"  # libbgmp
+source "package/libtool/Config.in"  # libltdl
+source "package/lzo/Config.in"  # liblzo
+source "package/matrixssl/Config.in"  # libmatrixssl
+source "package/mysql/Config.in"  # limysqlclient
+source "package/ncurses/Config.in"  # libncurses
+source "package/libnet/Config.in"
+source "package/libnids/Config.in"
+source "package/openldap/Config.in"  # libopenldap
+source "package/openssl/Config.in"  # libopenssl
+source "package/libosip2/Config.in"
+source "package/libpcap/Config.in"
+source "package/pcre/Config.in"  # libpcre
+source "package/libpng/Config.in"
+source "package/popt/Config.in"  # libpopt
+source "package/postgresql/Config.in"  # libpq
+source "package/libpthread/Config.in"
+source "package/radiusclient-ng/Config.in" # libradiusclient-ng
+source "package/readline/Config.in"  # libreadline
+source "package/cyrus-sasl/Config.in"  # libsasl2
+source "package/speex/Config.in" # libspeex
+source "package/sqlite/Config.in" # libsqlite
+source "package/tcp_wrappers/Config.in" # libwrap
+source "package/libusb/Config.in"
+source "package/uclibc++/Config.in"
+source "package/zlib/Config.in"
+
+comment "Serial communications & terminal emulation ---"
+source "package/microcom/Config.in"
+source "package/picocom/Config.in"
+source "package/setserial/Config.in"
+
+comment "Utilities ---"
+source "package/comgt/Config.in"
+source "package/madwifi-tools/Config.in"
+source "package/pciutils/Config.in"
+source "package/pcmcia-cs/Config.in"  # pcmcia-utils
+source "package/strace/Config.in"
+source "package/usbutils/Config.in"  # lsusb
+
+# what are we going to do with both of you
+comment "Kernel related ---"
+source "package/fuse/Config.in"  # kmod-fuse
+source "package/shfs/Config.in"  # kmod-shfs
+
+comment "Extra stuff"
+source "package/sdk/Config.in"
+
+config BR2_PACKAGE_IMAGEBUILDER
+	bool "OpenWrt Image Builder"
+	default y if CONFIG_DEVEL
+	help
+	  Build an OpenWrt Image Builder.
+	  This package contains the necessary (precompiled) tools and all packages to generate
+	  firmware images from package lists, without having to use the full buildroot.
+	  Useful for building images with custom scripts or extra packages.
+
+endmenu

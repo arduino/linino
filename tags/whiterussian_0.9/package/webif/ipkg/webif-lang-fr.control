@@ -1,0 +1,7 @@
+Package: webif-lang-fr
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Section: net
+Depends: webif
+Priority: normal
+Description: French language file for webif.
+

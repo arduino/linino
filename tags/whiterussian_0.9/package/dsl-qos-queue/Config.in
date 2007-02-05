@@ -1,0 +1,13 @@
+config BR2_PACKAGE_DSL_QOS_QUEUE
+	tristate "dsl-qos-queue - ADSL/ATM Bandwith management"
+	default m if CONFIG_DEVEL
+	select BR2_PACKAGE_KMOD_IPT_QUEUE
+	help
+	  This program implements a user space QUEUE processor which controls outbound traffic
+	  over a DSL modem using a pseudo- token-bucket-filter style queue with starvation protection.
+
+	  Main feature of this outbound rate limiter is it's ability to rate limit based on the calculated
+	  raw bandwidth used rather than just the IP bandwidth used. This provides a MUCH more accurate way
+	  to prevent packet queueing in the network device (in this case, ADSL modem).
+
+	  http://www.sonicspike.net/software/

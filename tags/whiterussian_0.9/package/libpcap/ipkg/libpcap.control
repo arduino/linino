@@ -1,0 +1,4 @@
+Package: libpcap
+Priority: optional
+Section: libs
+Description: a low-level packet capture library

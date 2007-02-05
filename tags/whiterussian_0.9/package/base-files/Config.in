@@ -1,0 +1,6 @@
+config BR2_PACKAGE_LIBGCC
+	tristate "libgcc - GCC support library"
+	default m if CONFIG_DEVEL
+	help
+	  GCC support library
+

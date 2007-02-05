@@ -1,0 +1,4 @@
+Package: kmod-ipt-nat-h323
+Priority: optional
+Section: net
+Description: Netfilter (IPv4) NAT kernel modules for H.323

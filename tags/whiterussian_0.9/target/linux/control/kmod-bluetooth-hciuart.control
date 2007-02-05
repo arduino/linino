@@ -1,0 +1,5 @@
+Package: kmod-bluetooth-hciuart
+Priority: optional
+Section: net
+Depends: kmod-bluetooth
+Description: Bluetooth HCI UART driver

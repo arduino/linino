@@ -1,0 +1,43 @@
+# Date: Sun, 20 Jun 2004 19:56:26 +0200
+# From: Erich Schubert <erich@debian.org>
+# Changes: Rebackported from 2.6.14, Horms <horms@debian.org>
+# Reported: http://bugs.debian.org/255406
+# Security: No
+# Upstream: Forwarded to upstream
+
+Package: kernel-source-2.4.26
+Severity: normal
+
+Some time ago i found a kernel crash in 2.4.x and reported it to LKML.
+Unfortunately i never recieved a reply, and i didn't see it in recent
+pre-releases of the 2.4.x kernel.
+
+To verify your system is vulnerable (need bridge support):
+$ brctl addbr br0
+$ brctl addbr br1
+$ brctl addif br0 eth0
+$ brctl delif br1 eth0
+(note br1 in last line, not br0! Deleting from the wrong bridge triggers
+the kernel crash.)
+
+This is a 1:1 backport (100% copy&paste) from 2.6.5 of the fix.
+Verify yourself, grab the file from 2.6.5, go to the function, copy the
+code, paste it and the issue is done. Returns "einval" on invalid
+requests instead of causing an inconsistency and a panic.
+
+(fixed sometime in 2.5.x it seems; it might be worth looking at when
+this was fixed - it might contain other fixes, too.)
+
+--- a/net/bridge/br_if.c	2005-11-16 14:46:05.000000000 +0900
++++ b/net/bridge/br_if.c	2005-11-16 14:46:09.000000000 +0900
+@@ -246,6 +246,10 @@
+ int br_del_if(struct net_bridge *br, struct net_device *dev)
+ {
+ 	int retval;
++	struct net_bridge_port *p = dev->br_port;
++
++	if (!p || p->br != br)
++		return -EINVAL;
+ 
+ 	br_write_lock_bh(BR_NETPROTO_LOCK);
+ 	write_lock(&br->lock);

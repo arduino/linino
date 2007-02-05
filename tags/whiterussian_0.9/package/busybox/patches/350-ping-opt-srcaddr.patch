@@ -1,0 +1,88 @@
+diff -urN busybox-1.00.orig/include/usage.h busybox-1.00/include/usage.h
+--- busybox-1.00.orig/include/usage.h	2006-06-27 12:44:26.000000000 +0200
++++ busybox-1.00/include/usage.h	2006-06-27 13:21:57.000000000 +0200
+@@ -1894,6 +1894,7 @@
+ 	"Options:\n" \
+ 	"\t-c COUNT\tSend only COUNT pings.\n" \
+ 	"\t-s SIZE\t\tSend SIZE data bytes in packets (default=56).\n" \
++	"\t-I IPADDR\tUse IPADDR as source address.\n" \
+ 	"\t-q\t\tQuiet mode, only displays output at start\n" \
+ 	"\t\t\tand when finished."
+ #endif
+diff -urN busybox-1.00.orig/networking/ping.c busybox-1.00/networking/ping.c
+--- busybox-1.00.orig/networking/ping.c	2006-06-27 12:44:26.000000000 +0200
++++ busybox-1.00/networking/ping.c	2006-06-27 13:19:04.000000000 +0200
+@@ -170,6 +170,7 @@
+ #else /* ! CONFIG_FEATURE_FANCY_PING */
+ /* full(er) version */
+ static struct sockaddr_in pingaddr;
++static struct sockaddr_in sourceaddr;
+ static int pingsock = -1;
+ static int datalen; /* intentionally uninitialized to work around gcc bug */
+ 
+@@ -342,6 +343,11 @@
+ 
+ 	pingsock = create_icmp_socket();
+ 
++	if (sourceaddr.sin_addr.s_addr != 0) {
++		if (bind(pingsock, (struct sockaddr*)&sourceaddr, sizeof(sourceaddr)) == -1)
++			bb_error_msg_and_die("could not bind to address");
++	}
++
+ 	memset(&pingaddr, 0, sizeof(struct sockaddr_in));
+ 
+ 	pingaddr.sin_family = AF_INET;
+@@ -361,10 +367,14 @@
+ 	setsockopt(pingsock, SOL_SOCKET, SO_RCVBUF, (char *) &sockopt,
+ 			   sizeof(sockopt));
+ 
+-	printf("PING %s (%s): %d data bytes\n",
++	printf("PING %s (%s)",
+ 	           hostent->h_name,
+-		   inet_ntoa(*(struct in_addr *) &pingaddr.sin_addr.s_addr),
+-		   datalen);
++		   inet_ntoa(*(struct in_addr *) &pingaddr.sin_addr.s_addr));
++	if (sourceaddr.sin_addr.s_addr != 0) {
++		printf(" from %s",
++			   inet_ntoa(*(struct in_addr *) &sourceaddr.sin_addr.s_addr));
++	}
++	printf(": %d data bytes\n", datalen);
+ 
+ 	signal(SIGINT, pingstats);
+ 
+@@ -400,6 +410,7 @@
+ 	argc--;
+ 	argv++;
+ 	options = 0;
++	memset(&sourceaddr, 0, sizeof(sourceaddr));
+ 	/* Parse any options */
+ 	while (argc >= 1 && **argv == '-') {
+ 		thisarg = *argv;
+@@ -420,6 +431,27 @@
+ 			argv++;
+ 			datalen = atoi(*argv);
+ 			break;
++		case 'I':
++			if (--argc <= 0)
++				bb_show_usage();
++			argv++;
++			{
++				char dummy;
++				int i1, i2, i3, i4;
++				if (sscanf(*argv, "%u.%u.%u.%u%c",
++						   &i1, &i2, &i3, &i4, &dummy) == 4) {
++					unsigned char* ptr;
++					ptr = (unsigned char*)&sourceaddr.sin_addr;
++					ptr[0] = i1;
++					ptr[1] = i2;
++					ptr[2] = i3;
++					ptr[3] = i4;
++				}
++				else {
++					bb_show_usage();
++				}
++			}
++			break;
+ 		default:
+ 			bb_show_usage();
+ 		}

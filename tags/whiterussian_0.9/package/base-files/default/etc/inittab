@@ -1,0 +1,2 @@
+::sysinit:/etc/init.d/rcS
+tts/0::askfirst:/bin/ash --login
