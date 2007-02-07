@@ -31,7 +31,8 @@ define Package/miniupnpd
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) -f Makefile.linux \
+	ln -sf $(PKG_BUILD_DIR)/config.h.openwrt $(PKG_BUILD_DIR)/config.h
+	$(MAKE) -C $(PKG_BUILD_DIR) -f Makefile.openwrt \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) -I $(STAGING_DIR)/usr/include" \
 		LIBS="$(STAGING_DIR)/usr/lib/libiptc.a"

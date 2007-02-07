@@ -1,0 +1,35 @@
+--- miniupnpd-1.0-RC3/Makefile.openwrt.orig	2007-02-06 22:50:56.000000000 -0600
++++ miniupnpd-1.0-RC3/Makefile.openwrt	2007-02-06 22:51:00.000000000 -0600
+@@ -11,17 +11,15 @@
+ CFLAGS += -D_GNU_SOURCE
+ RM = rm -f
+ INSTALL = install
+-IPTABLESINC=$(BUILD_DIR)/iptables-1.3.3/include
++IPTABLESINC=$(STAGING_DIR)/usr/include
+ 
+ BASEOBJS = miniupnpd.o upnphttp.o upnpdescgen.o upnpsoap.o \
+            upnpreplyparse.o minixml.o \
+ 		   upnpredirect.o getifaddr.o daemonize.o upnpglobalvars.o \
+-		   options.o
++		   options.o upnppermissions.o
+ 
+ LNXOBJS = linux/getifstats.o linux/iptcrdr.o
+ 
+-LIBS = $(BUILD_DIR)/iptables-1.3.3/libiptc/libiptc.a
+-
+ TESTUPNPDESCGENOBJS = testupnpdescgen.o upnpdescgen.o
+ 
+ EXECUTABLES = miniupnpd testupnpdescgen
+@@ -38,6 +36,7 @@
+ 	@echo no install for now...
+ 
+ miniupnpd:	$(BASEOBJS) $(LNXOBJS) $(LIBS)
++	$(CC) $(CFLAGS) -o $@ $(BASEOBJS) $(LNXOBJS) $(LIBS)
+ 
+ testupnpdescgen:	$(TESTUPNPDESCGENOBJS)
+ 
+@@ -69,3 +68,4 @@
+ linux/iptcrdr.o: linux/iptcrdr.h
+ testupnpdescgen.o: upnpdescgen.h
+ upnpdescgen.o: upnpdescgen.h miniupnpdpath.h upnpglobalvars.h
++upnppermissions.o: upnppermissions.c
