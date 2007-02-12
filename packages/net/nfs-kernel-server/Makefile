@@ -31,9 +31,7 @@ TITLE:=NFS server utils
 DESCRIPTION:=NFS server utils
 URL:=http://nfs.sourceforge.net
 DEPENDS:=nfs-kernel-server
-DEFAULT:=y
 endef
-  
 
 define Package/nfs-kernel-server/conffiles
 /etc/exports
