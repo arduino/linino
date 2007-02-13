@@ -51,6 +51,11 @@ define Package/zabbix-server
   DEPENDS:=+libsqlite3
 endef
 
+
+ifneq ($(SDK),)
+CONFIG_PACKAGE_zabbix-server:=m
+endif
+
 PKG_CONFIGURE_OPTIONS:= \
 	--bindir="/usr/sbin" \
 	--enable-agent
