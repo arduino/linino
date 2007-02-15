@@ -3,9 +3,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=stunnel
-PKG_VERSION:=4.16
+PKG_VERSION:=4.20
 PKG_RELEASE:=1
-PKG_MD5SUM:=8ea5cae3eeaacc0271b766506b4b9d4a
+PKG_MD5SUM:=cf9940395d3503018f721c962528d2ec
 PKG_SOURCE_URL:=http://www.stunnel.org/download/stunnel/src/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_CAT:=zcat
