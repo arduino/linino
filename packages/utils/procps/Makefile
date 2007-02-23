@@ -62,6 +62,8 @@ define Package/procps/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/vmstat $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/w $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/watch $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/proc/libproc-$(PKG_VERSION).so $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,procps))
