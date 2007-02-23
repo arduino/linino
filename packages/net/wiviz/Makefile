@@ -21,7 +21,7 @@ define Package/wiviz
   CATEGORY:=Network
   DEPENDS:=+libpcap
   TITLE:=Wireless Network Visualization
-  URL:=http://students.washington.edu/natetrue/wiviz/
+  URL:=http://devices.natetrue.com/wiviz/
 endef
 	
 define Build/Prepare
