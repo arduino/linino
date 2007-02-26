@@ -74,6 +74,8 @@ endef
 define Package/alsa-lib/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libasound.so.* $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/share/alsa/
+	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/usr/share/alsa/alsa.conf $(1)/usr/share/alsa/
 endef
 
 $(eval $(call BuildPackage,alsa-lib))
