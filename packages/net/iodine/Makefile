@@ -49,8 +49,7 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/Default,\
-		OS=Linux \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -c -DLinux" \
+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -c -DLINUX" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -lz" \
 		iodine iodined \
 	)
