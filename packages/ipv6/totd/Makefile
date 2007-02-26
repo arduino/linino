@@ -22,8 +22,8 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/totd
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=ipv6
+  CATEGORY:=IPv6
   DEPENDS:=+kmod-ipv6
   TITLE:=Small DNS proxy that supports IPv6/IPv4 record translation
   DESCRIPTION:=\
