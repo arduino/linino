@@ -8,7 +8,7 @@ start() {
 		[ ! -f $key ] && {
 			# generate missing keys
 			[ -x /usr/bin/ssh-keygen ] && {
-				/usr/bin/ssh-keygen -N '' -t $type -f $key 2>&- >&- && exec $0 $*
+				/usr/bin/ssh-keygen -N '' -t $type -f $key 2>&- >&- && exec /etc/rc.common "$initscript" start
 			} &
 			exit 0
 		}
