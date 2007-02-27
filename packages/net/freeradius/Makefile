@@ -271,6 +271,18 @@ else
   PKG_CONFIGURE_OPTIONS+= --without-rlm_sql_postgresql
 endif
 
+ifeq ($(CONFIG_PACKAGE_freeradius-mod-eap-tls),)
+  PKG_CONFIGURE_OPTIONS+= --without-rlm_eap_tls
+endif
+
+ifeq ($(CONFIG_PACKAGE_freeradius-mod-eap-peap),)
+  PKG_CONFIGURE_OPTIONS+= --without-rlm_eap_peap
+endif
+
+ifeq ($(CONFIG_PACKAGE_freeradius-mod-eap-ttls),)
+  PKG_CONFIGURE_OPTIONS+= --without-rlm_eap_ttls
+endif
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--libdir=/usr/lib/freeradius \
