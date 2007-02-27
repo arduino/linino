@@ -34,7 +34,9 @@ define Package/httping
 endef
 
 define Build/Compile
-	$(call Build/Compile/Default)
+	$(call Build/Compile/Default, \
+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+	)
 endef
 
 define Package/httping/install	
