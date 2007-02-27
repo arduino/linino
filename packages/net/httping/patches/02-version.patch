@@ -1,16 +1,16 @@
-diff -urN httping-1.0.10/main.c httping-1.0.10.new/main.c
---- httping-1.0.10/main.c	2006-01-02 17:07:29.000000000 +0100
-+++ httping-1.0.10.new/main.c	2007-02-27 11:14:32.000000000 +0100
-@@ -38,6 +38,8 @@
+diff -ruaN httping-1.2.2.orig/main.c httping-1.2.2/main.c
+--- httping-1.2.2.orig/main.c	2006-11-09 20:13:12.000000000 +0100
++++ httping-1.2.2/main.c	2007-02-27 11:38:14.000000000 +0100
+@@ -40,6 +40,8 @@
  #include "utils.h"
  #include "error.h"
  
-+#define VERSION "1.0.10"
++#define VERSION "1.2.2"
 +
  static volatile int stop = 0;
  
  int quiet = 0;
-@@ -48,7 +50,7 @@
+@@ -50,7 +52,7 @@
  
  void version(void)
  {
@@ -19,12 +19,12 @@ diff -urN httping-1.0.10/main.c httping-1.0.10.new/main.c
  #ifndef NO_SSL
  	fprintf(stderr, "SSL support included\n");
  #endif
-@@ -382,7 +384,7 @@
+@@ -413,7 +415,7 @@
  	if (useragent)
  		sprintf(&request[strlen(request)], "User-Agent: %s\r\n", useragent);
  	else
 -		sprintf(&request[strlen(request)], "User-Agent: HTTPing v" VERSION "\r\n");
 +		sprintf(&request[strlen(request)], "User-Agent: HTTPing v%s\r\n", VERSION);
+ 	sprintf(&request[strlen(request)], "Host: %s\r\n", hostname);
  	if (referer)
  		sprintf(&request[strlen(request)], "Referer: %s\r\n", referer);
- 	strcat(request, "\r\n");
