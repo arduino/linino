@@ -50,6 +50,7 @@ endef
 
 define Package/procps/install
 	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/free $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ps/ps $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pgrep $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pkill $(1)/usr/bin
@@ -59,6 +60,7 @@ define Package/procps/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/slabtop $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/snice $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tload $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/top $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/vmstat $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/w $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/watch $(1)/usr/bin
