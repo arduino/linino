@@ -119,7 +119,7 @@ define Package/updatedd/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/updatedd $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/updatedd
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
-        $(INSTALL_BIN) ./files/ddns.hotplug $(1)/etc/hotplug.d/iface/10-ddns
+	$(INSTALL_BIN) ./files/ddns.hotplug $(1)/etc/hotplug.d/iface/10-ddns
 endef
 
 $(eval $(call BuildPackage,updatedd))
