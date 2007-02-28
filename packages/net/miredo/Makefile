@@ -26,8 +26,8 @@ define Package/miredo
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libpthread +uclibcxx +kmod-ipv6 +kmod-tun
-  SUBMENU:=Teredo (IPv6 tunneling over UDP through NAT) client and relay daemon
-  DESCRIPTION:=A Teredo (IPv6 tunneling over UDP through NAT) client and relay daemon.
+  SUBMENU:=miredo - Teredo (IPv6 tunneling over UDP through NAT) client and relay daemon
+  DESCRIPTION:=miredo - A Teredo (IPv6 tunneling over UDP through NAT) client and relay daemon.
   URL:=http://www.simphalempin.com/dev/miredo/
 endef
 
