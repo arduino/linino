@@ -1,0 +1,15 @@
+NAME=updatedd
+CONFIG=/etc/$NAME.conf
+COMMAND=/usr/sbin/$NAME
+
+[ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" ] && {
+        [ -x $COMMAND ] && [ -r $CONFIG ] && {
+                                include /lib/network
+                                scan_interfaces
+
+                                config_get ifname wan ifname
+                                [ -n "$ifname" ] && {
+					/etc/init.d/ddns restart
+				}
+        } &
+}

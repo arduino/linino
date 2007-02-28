@@ -113,6 +113,8 @@ endef
 define Package/updatedd/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/ddns.init $(1)/etc/init.d/ddns
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/ddns.config $(1)/etc/config/updatedd
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/updatedd $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/updatedd
