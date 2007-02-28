@@ -25,8 +25,8 @@ include $(INCLUDE_DIR)/package.mk
 define Package/samba
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=A NetBIOS/SMB implementation
-  TITLE:=A NetBIOS/SMB implementation
+  SUBMENU:=samba - NetBIOS/SMB implementation
+  TITLE:=samba - NetBIOS/SMB implementation
   DESCRIPTION:=The Samba software suite is a collection of programs that implements the\\\
   SMB protocol for unix systems, allowing you to serve files and printers to\\\
   Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred\\\
