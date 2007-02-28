@@ -2,12 +2,21 @@
 # Copyright (C) 2006 OpenWrt.org
 
 START=60
+
+STEP_SERVERS="pool.ntp.org pool.ntp.org pool.ntp.org" 
+PIDFILE="/var/run/ntpd.pid" 
+TIMEOUT="2" # in seconds
+
 start() {
 #	ln -sf /dev/ttyS0 /dev/gps0
 #	/usr/sbin/setgarmin -d /dev/gps -c /etc/setgarmin.conf
-	/usr/sbin/ntpd -g
+	stop 
+	for s in $STEP_SERVERS ; do
+		/usr/sbin/ntpdate -s -b -u -t "$TIMEOUT" "$s" && break
+	done 
+	/usr/sbin/ntpd -g -p $PIDFILE
 }
 
 stop() {
-	killall ntpd
+	[ -f "$PIDFILE" ] && kill $(cat "$PIDFILE") 2>/dev/null >/dev/null
 }
