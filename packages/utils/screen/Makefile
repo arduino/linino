@@ -35,10 +35,6 @@ endef
 
 # uses GNU configure
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR)
-endef
-
 define Package/screen/install	
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/screen $(1)/usr/sbin/

@@ -507,3 +507,24 @@ diff -urN screen-4.0.2.old/pty.c screen-4.0.2.dev/pty.c
  oldlibs="$LIBS"
  LIBS="$LIBS -lsun"
  { echo "$as_me:$LINENO: checking IRIX sun library..." >&5
+diff -ur screen.old/sched.h screen.dev/sched.h
+--- screen.old/sched.h	2002-01-08 16:42:43.000000000 +0100
++++ screen.dev/sched.h	2007-03-02 17:03:48.475830776 +0100
+@@ -22,6 +22,11 @@
+  * $Id$ FAU
+  */
+ 
++#ifndef __SCHED_H
++#define __SCHED_H
++
++#include <sys/time.h>
++
+ struct event
+ {
+   struct event *next;
+@@ -41,3 +46,5 @@
+ #define EV_READ		1
+ #define EV_WRITE	2
+ #define EV_ALWAYS	3
++
++#endif
