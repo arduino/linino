@@ -1,0 +1,12 @@
+diff -urN php-5.0.5/ext/posix/posix.c php-5.0.5.new/ext/posix/posix.c
+--- php-5.0.5/ext/posix/posix.c	2005-06-07 00:06:00.000000000 +0200
++++ php-5.0.5.new/ext/posix/posix.c	2007-03-03 12:14:41.000000000 +0100
+@@ -438,7 +438,7 @@
+ 	add_assoc_string(return_value, "version",  u.version,  1);
+ 	add_assoc_string(return_value, "machine",  u.machine,  1);
+ #ifdef _GNU_SOURCE
+-	add_assoc_string(return_value, "domainname", u.domainname, 1);
++	add_assoc_string(return_value, "domainname", u.__domainname, 1);
+ #endif
+ }
+ /* }}} */
