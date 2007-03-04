@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
-PKG_VERSION:=5.0.5
+PKG_VERSION:=5.1.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://fr.php.net/distributions/
-PKG_MD5SUM:=b5d4ca75bbb11ee5b830fa67213d9f7f
+PKG_MD5SUM:=08e423aa314369d4392a36b3f7246afc
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -172,6 +172,8 @@ PKG_CONFIGURE_OPTS:= \
 	--without-iconv \
 	--disable-libxml \
 	  --without-libxml-dir \
+	--disable-xmlreader \
+	--disable-xmlwriter \
 	--disable-mbstring \
 	--disable-mbregex \
 	--with-openssl=shared,"$(STAGING_DIR)/usr" \

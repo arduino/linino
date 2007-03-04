@@ -1,6 +1,6 @@
---- php-5.0.4/configure	2005-06-16 19:23:10.000000000 +0200
-+++ php-5.0.4-patched/configure	2005-07-01 23:52:04.000000000 +0200
-@@ -13851,7 +13851,7 @@
+--- /tmp/php-5.1.6/configure	2006-08-23 07:55:02.000000000 -0500
++++ php-5.1.6/configure	2007-03-03 18:59:35.000000000 -0600
+@@ -14919,7 +14919,7 @@
      ac_libs=$LIBS
      LIBS="$LIBS -ldl"
      if test "$cross_compiling" = yes; then
@@ -8,71 +8,34 @@
 +  found=yes
  else
    cat > conftest.$ac_ext <<EOF
- #line 13858 "configure"
-@@ -15724,7 +15724,7 @@
- 
- 		
- 		if test "$cross_compiling" = yes; then
+ #line 14926 "configure"
+@@ -45575,7 +45575,7 @@
+       php_iconv_old_ld="$LDFLAGS"
+       LDFLAGS="-liconv $LDFLAGS"
+       if test "$cross_compiling" = yes; then
 -    { echo "configure: error: can not run test program while cross compiling" 1>&2; exit 1; }
 +    { echo "configure: error: can not run test program while cross compiling" 1>&2; }
  else
    cat > conftest.$ac_ext <<EOF
- #line 15731 "configure"
-@@ -16981,7 +16981,7 @@
- if { (eval echo configure:16982: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-   rm -rf conftest*
-   if test "$cross_compiling" = yes; then
--    { echo "configure: error: can not run test program while cross compiling" 1>&2; exit 1; }
-+    { echo "configure: error: can not run test program while cross compiling" 1>&2; }
+ #line 45582 "configure"
+@@ -107054,6 +107054,7 @@
  else
-   cat > conftest.$ac_ext <<EOF
- #line 16988 "configure"
-@@ -17478,7 +17478,7 @@
-   rm -fr conftest*
-   
-   if test "$cross_compiling" = yes; then
--    { echo "configure: error: can not run test program while cross compiling" 1>&2; exit 1; }
-+    { echo "configure: error: can not run test program while cross compiling" 1>&2;  }
- else
-   cat > conftest.$ac_ext <<EOF
- #line 17485 "configure"
-@@ -41405,7 +41405,7 @@
-     echo $ac_n "checking if iconv supports errno""... $ac_c" 1>&6
- echo "configure:41407: checking if iconv supports errno" >&5
-     if test "$cross_compiling" = yes; then
--    { echo "configure: error: can not run test program while cross compiling" 1>&2; exit 1; }
-+    { echo "configure: error: can not run test program while cross compiling" 1>&2;  }
- else
-   cat > conftest.$ac_ext <<EOF
- #line 41412 "configure"
-@@ -95618,7 +95618,7 @@
- version_type=none
- dynamic_linker="$host_os ld.so"
- sys_lib_dlsearch_path_spec="/lib /usr/lib"
--sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
+   sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
+ fi
 +sys_lib_search_path_spec=""
+ need_lib_prefix=unknown
+ hardcode_into_libs=no
  
- case $host_os in
- aix3*)
-@@ -95828,7 +95828,7 @@
-   esac
-   shlibpath_var=LD_LIBRARY${shlibsuff}_PATH
-   shlibpath_overrides_runpath=no
--  sys_lib_search_path_spec="/usr/lib${libsuff} /lib${libsuff} /usr/local/lib${libsuff}"
-+  sys_lib_search_path_spec=""
-   sys_lib_dlsearch_path_spec="/usr/lib${libsuff} /lib${libsuff}"
+@@ -107596,6 +107597,8 @@
+   dynamic_linker=no
    ;;
+ esac
++sys_lib_search_path_spec=""
++
+ echo "$ac_t""$dynamic_linker" 1>&6
+ test "$dynamic_linker" = no && can_build_shared=no
  
-@@ -95878,7 +95878,7 @@
-     ;;
-   esac
-   sys_lib_dlsearch_path_spec="/lib${libsuff} /usr/lib${libsuff}"
--  sys_lib_search_path_spec="/lib${libsuff} /usr/lib${libsuff} /usr/local/lib${libsuff}"
-+  sys_lib_search_path_spec=""
-   ;;
- 
- netbsd*)
-@@ -96977,7 +96977,7 @@
+@@ -108669,7 +108672,7 @@
  link_all_deplibs=$link_all_deplibs
  
  # Compile-time system search path for libraries
