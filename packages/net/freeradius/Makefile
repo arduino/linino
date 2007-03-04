@@ -271,15 +271,21 @@ else
   PKG_CONFIGURE_OPTIONS+= --without-rlm_sql_postgresql
 endif
 
-ifeq ($(CONFIG_PACKAGE_freeradius-mod-eap-tls),)
+ifneq ($(CONFIG_PACKAGE_freeradius-mod-eap-tls),)
+  PKG_CONFIGURE_OPTIONS+= --with-rlm_eap_tls
+else
   PKG_CONFIGURE_OPTIONS+= --without-rlm_eap_tls
 endif
 
-ifeq ($(CONFIG_PACKAGE_freeradius-mod-eap-peap),)
+ifneq ($(CONFIG_PACKAGE_freeradius-mod-eap-peap),)
+  PKG_CONFIGURE_OPTIONS+= --with-rlm_eap_peap
+else
   PKG_CONFIGURE_OPTIONS+= --without-rlm_eap_peap
 endif
 
-ifeq ($(CONFIG_PACKAGE_freeradius-mod-eap-ttls),)
+ifneq ($(CONFIG_PACKAGE_freeradius-mod-eap-ttls),)
+  PKG_CONFIGURE_OPTIONS+= --with-rlm_eap_ttls
+else
   PKG_CONFIGURE_OPTIONS+= --without-rlm_eap_ttls
 endif
 
