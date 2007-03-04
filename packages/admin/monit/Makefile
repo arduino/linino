@@ -9,9 +9,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=monit
-PKG_VERSION:=4.6
+PKG_VERSION:=4.9
 PKG_RELEASE:=1
-PKG_MD5SUM:=4e53aa44e4ca264e61c7c401cee4e697
+PKG_MD5SUM:=bcbaab776a54d1e34e3a057c925de9ca
 
 PKG_SOURCE_URL:=http://www.tildeslash.com/monit/dist/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz

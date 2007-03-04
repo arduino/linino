@@ -1,16 +1,14 @@
-diff -ruN monit-4.6-old/ssl.c monit-4.6-new/ssl.c
---- monit-4.6-old/ssl.c	2005-08-07 22:26:47.000000000 +0200
-+++ monit-4.6-new/ssl.c	2006-12-18 11:18:46.000000000 +0100
-@@ -1367,10 +1367,12 @@
+--- monit-4.9/ssl.c.orig	2007-01-13 06:00:08.000000000 -0600
++++ monit-4.9/ssl.c	2007-03-03 20:18:16.000000000 -0600
+@@ -663,9 +663,11 @@
      ssl->method = SSLv23_client_method();
      break;
  
-+#ifndef OPENSSL_NO_SSL2
++#ifndef OPENSSL_NO_SSLV2
    case SSL_VERSION_SSLV2:
- 
      ssl->method = SSLv2_client_method();
      break;
 +#endif
  
    case SSL_VERSION_SSLV3:
- 
+     ssl->method = SSLv3_client_method();
