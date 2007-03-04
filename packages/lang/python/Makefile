@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python
-PKG_VERSION:=2.4.3
+PKG_VERSION:=2.4.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=Python-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.python.org/ftp/python/2.4.3/
-PKG_MD5SUM:=141c683447d5e76be1d2bd4829574f02
+PKG_SOURCE_URL:=http://www.python.org/ftp/python/2.4.4/
+PKG_MD5SUM:=0ba90c79175c017101100ebf5978e906
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Python-$(PKG_VERSION)
