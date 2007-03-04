@@ -11,6 +11,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=zabbix
 PKG_VERSION:=1.3.2
 PKG_RELEASE:=1
+PKG_MD5SUM:=698a07f4e53820e44ef4a72c7c191e92
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://kent.dl.sourceforge.net/sourceforge/zabbix/
