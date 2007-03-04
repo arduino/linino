@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=syslog-ng
-PKG_VERSION:=1.6.9
+PKG_VERSION:=1.6.12
 PKG_RELEASE:=1
-PKG_MD5SUM:=5280a86b4f5c25b2ba157c8cea302cf0
+PKG_MD5SUM:=a3cbfdb6e1e5beea181a7349749719f3
 
-PKG_SOURCE_URL:=http://www.balabit.com/downloads/syslog-ng/stable/src \
-		http://www.balabit.com/downloads/syslog-ng/1.6/src
+PKG_SOURCE_URL:= http://www.balabit.com/downloads/syslog-ng/1.6/src \
+		http://www.balabit.com/downloads/syslog-ng/stable/src
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_CAT:=zcat
 

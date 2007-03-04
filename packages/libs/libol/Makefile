@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libol
-PKG_VERSION:=0.3.17
+PKG_VERSION:=0.3.18
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.balabit.com/downloads/libol/0.3
-PKG_MD5SUM:=28cc52e84bdb472b7830f9ad120a62a7
+PKG_MD5SUM:=cbadf4b7ea276dfa85acc38a1cc5ff17
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
