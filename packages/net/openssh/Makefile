@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssh
-PKG_VERSION:=4.4p1
+PKG_VERSION:=4.5p1
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -18,7 +18,7 @@ PKG_SOURCE_URL:=ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/ \
 		ftp://openbsd.wiretapped.net/pub/OpenBSD/OpenSSH/portable/ \
 	 	ftp://ftp.belnet.be/packages/openbsd/OpenSSH/portable/ \
 	   	ftp://ftp.de.openbsd.org/pub/unix/OpenBSD/OpenSSH/portable/
-PKG_MD5SUM:=793a709a8de695c22f523024d7e9bf07
+PKG_MD5SUM:=6468c339886f78e8a149b88f695839dd
 PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
