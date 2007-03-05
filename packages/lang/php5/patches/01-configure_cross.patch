@@ -1,5 +1,5 @@
 --- /tmp/php-5.1.6/configure	2006-08-23 07:55:02.000000000 -0500
-+++ php-5.1.6/configure	2007-03-03 18:59:35.000000000 -0600
++++ php-5.1.6/configure	2007-03-04 18:41:24.000000000 -0600
 @@ -14919,7 +14919,7 @@
      ac_libs=$LIBS
      LIBS="$LIBS -ldl"
@@ -18,29 +18,12 @@
  else
    cat > conftest.$ac_ext <<EOF
  #line 45582 "configure"
-@@ -107054,6 +107054,7 @@
- else
-   sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
- fi
-+sys_lib_search_path_spec=""
- need_lib_prefix=unknown
- hardcode_into_libs=no
+@@ -52337,7 +52337,7 @@
+     _SAVE_CPPFLAGS=$CPPFLAGS
+   _SAVE_LDFLAGS=$LDFLAGS
+   CPPFLAGS="$CPPFLAGS -I$LDAP_INCDIR"
+-  LDFLAGS="$LDFLAGS $LDAP_SHARED_LIBADD"
++  LDFLAGS="$LDFLAGS $LDAP_SHARED_LIBADD -lsasl2"
  
-@@ -107596,6 +107597,8 @@
-   dynamic_linker=no
-   ;;
- esac
-+sys_lib_search_path_spec=""
-+
- echo "$ac_t""$dynamic_linker" 1>&6
- test "$dynamic_linker" = no && can_build_shared=no
- 
-@@ -108669,7 +108672,7 @@
- link_all_deplibs=$link_all_deplibs
- 
- # Compile-time system search path for libraries
--sys_lib_search_path_spec=$lt_sys_lib_search_path_spec
-+sys_lib_search_path_spec=
- 
- # Run-time system search path for libraries
- sys_lib_dlsearch_path_spec=$lt_sys_lib_dlsearch_path_spec
+     echo $ac_n "checking for 3 arg ldap_set_rebind_proc""... $ac_c" 1>&6
+ echo "configure:52344: checking for 3 arg ldap_set_rebind_proc" >&5
