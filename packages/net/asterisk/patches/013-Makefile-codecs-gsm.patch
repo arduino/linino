@@ -7,7 +7,7 @@
 +ifneq (${PROC},armeb)
 +ifneq (${PROC},mipsel)
 +ifneq (${PROC},mips)
-+ifneq (${PROC},ppc)
++ifneq (${PROC},powerpc)
  ifneq ($(shell uname -m), parisc)
  ifneq ($(shell uname -m),s390)
  GSM_SOURCES+= $(SRC)/k6opt.s
@@ -30,7 +30,7 @@
 +ifneq (${PROC}, armeb)
 +ifneq (${PROC}, mipsel)
 +ifneq (${PROC}, mips)
-+ifneq (${PROC}, ppc)
++ifneq (${PROC}, powerpc)
  ifneq ($(shell uname -m), parisc)
  ifneq ($(shell uname -m),s390)
  GSM_OBJECTS+= $(SRC)/k6opt.o
