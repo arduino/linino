@@ -241,7 +241,7 @@ $(eval $(call KMOD_template,PPP,ppp,\
 	$(MODULES_DIR)/kernel/drivers/net/ppp_async.o \
 	$(MODULES_DIR)/kernel/drivers/net/ppp_generic.o \
 	$(MODULES_DIR)/kernel/drivers/net/slhc.o \
-,CONFIG_PPP))
+,CONFIG_PPP,,10,slhc ppp_generic ppp_async))
 $(eval $(call KMOD_template,MPPE,mppe,\
 	$(MODULES_DIR)/kernel/drivers/net/ppp_mppe_mppc.o \
 ,CONFIG_PPP_MPPE_MPPC,,30,ppp_mppe_mppc))
