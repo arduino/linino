@@ -60,9 +60,9 @@ define Package/ntpd/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/ntp.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_DATA) ./files/ntpd.init $(1)/etc/init.d/ntpd
+	$(INSTALL_BIN) ./files/ntpd.init $(1)/etc/init.d/ntpd
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
-	$(INSTALL_DATA) ./files/ntpd.hotplug $(1)/etc/hotplug.d/iface/20-ntpd
+	$(INSTALL_BIN) ./files/ntpd.hotplug $(1)/etc/hotplug.d/iface/20-ntpd
 endef
 
 $(eval $(call BuildPackage,ntpd))
