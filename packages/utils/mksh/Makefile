@@ -13,7 +13,8 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 include $(INCLUDE_DIR)/package.mk
 
 # This program seems to depend on libssp, but only for GCC 4
-GCCVER:=$(if $(DUMP),4,$(word 1,$(subst ., ,$(CONFIG_GCC_VERSION))))
+GCCVER:=$(if $(DUMP),4,$(word 1,$(subst ., ,$(subst ",,$(CONFIG_GCC_VERSION)))))
+#"))))
 ifeq ($(GCCVER),4)
   DEP:=+libssp
 else
