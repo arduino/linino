@@ -1,0 +1,71 @@
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id: $
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=chrony
+PKG_VERSION:=1.21
+PKG_RELEASE:=1
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:= ftp://chrony.sunsite.dk/projects/chrony/ \
+	http://chrony.sunsite.dk/download/
+PKG_MD5SUM:=84f76a73dff5a3c9e9f11f3c29a4e93b
+PKG_CAT:=zcat
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/chrony
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=NTP client/server for on-demand connections
+  DESCRIPTION:=\
+	A NTP implementation that has been specifically written to work well in the case of an intermittent \
+	(e.g. dial-on-demand) connection to the network where your NTP servers are.
+  URL:=http://chrony.sunsite.dk/
+  MAINTAINER:=Richard Kunze <kunze-openwrt-chrony@tivano.de>
+  DEPENDS:=uclibc libreadline libncurses
+endef
+
+define Package/chrony/conffiles
+/etc/chrony/chrony.conf
+endef
+
+define Build/Configure
+	$(call Build/Configure/Default, \
+			--target=$(GNU_TARGET_NAME) \
+			--prefix=/usr \
+			--with-readline-includes=$(STAGING_DIR)/usr/include \
+			--with-readline-library=$(STAGING_DIR)/usr/lib \	)
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) \
+		prefix="$(PKG_INSTALL_DIR)/usr"
+endef
+
+define Package/chrony/install	
+	$(INSTALL_DIR) $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/chronyd $(1)$(PKG_INSTALL_DIR)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/chronyc $(1)$(PKG_INSTALL_DIR)/usr/bin
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DIR) $(1)/etc/chrony
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
+	$(INSTALL_BIN) ./files/ntpd.hotplug $(1)/etc/hotplug.d/iface/20-ntpd
+	$(INSTALL_BIN) ./files/ntpd.init $(1)/etc/init.d/ntpd
+	$(INSTALL_CONF) ./files/ntpd.config $(1)/etc/config/ntpd
+	$(INSTALL_CONF) ./files/chrony.conf $(1)/etc/chrony/chrony.conf
+	$(INSTALL_CONF) ./files/chrony.keys $(1)/etc/chrony/chrony.keys
+endef
+
+$(eval $(call BuildPackage,chrony))
