@@ -1,6 +1,6 @@
 NAME=updatedd
-CONFIG=/etc/$NAME.conf
-COMMAND=/usr/sbin/$NAME
+CONFIG=/etc/config/$NAME
+COMMAND=/usr/bin/$NAME
 
 [ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" ] && {
         [ -x $COMMAND ] && [ -r $CONFIG ] && {
