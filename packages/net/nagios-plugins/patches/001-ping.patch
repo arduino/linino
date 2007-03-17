@@ -1,0 +1,19 @@
+--- nagios-plugins-1.4.5/configure.orig	2006-11-15 16:48:54.000000000 +0100
++++ nagios-plugins-1.4.5/configure	2006-11-15 16:49:07.000000000 +0100
+@@ -30041,16 +30041,6 @@
+ 
+ fi
+ 
+-if test "x$ac_cv_ping_has_timeout" != "xno"
+-then
+-
+-cat >>confdefs.h <<\_ACEOF
+-#define PING_HAS_TIMEOUT 1
+-_ACEOF
+-
+-fi
+-
+-
+ # Check whether --with-ping6_command or --without-ping6_command was given.
+ if test "${with_ping6_command+set}" = set; then
+   withval="$with_ping6_command"
