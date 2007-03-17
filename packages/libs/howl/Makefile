@@ -129,7 +129,7 @@ define Package/howl-mdnsresponder/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/mDNSResponder.conf $(1)/etc/mDNSResponder.conf
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_DATA) ./files/mDNSResponder.init $(1)/etc/init.d/mDNSResponder
+	$(INSTALL_BIN) ./files/mDNSResponder.init $(1)/etc/init.d/mDNSResponder
 endef
 
 define Package/howl-nifd/install
