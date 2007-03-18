@@ -1,6 +1,7 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2006 OpenWrt.org
 
+START=60
 BIN=monit
 DEFAULT=/etc/default/$BIN
 RUN_D=/var/run
