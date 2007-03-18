@@ -25,13 +25,12 @@ include $(INCLUDE_DIR)/package.mk
 define Package/chrony
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+libreadline +libncurses
   TITLE:=NTP client/server for on-demand connections
   DESCRIPTION:=\
 	A NTP implementation that has been specifically written to work well in the case of an intermittent \
 	(e.g. dial-on-demand) connection to the network where your NTP servers are.
   URL:=http://chrony.sunsite.dk/
-  MAINTAINER:=Richard Kunze <kunze-openwrt-chrony@tivano.de>
-  DEPENDS:=uclibc libreadline libncurses
 endef
 
 define Package/chrony/conffiles
@@ -43,7 +42,8 @@ define Build/Configure
 			--target=$(GNU_TARGET_NAME) \
 			--prefix=/usr \
 			--with-readline-includes=$(STAGING_DIR)/usr/include \
-			--with-readline-library=$(STAGING_DIR)/usr/lib \	)
+			--with-readline-library=$(STAGING_DIR)/usr/lib \
+	)
 endef
 
 define Build/Compile
@@ -55,8 +55,8 @@ endef
 define Package/chrony/install	
 	$(INSTALL_DIR) $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/chronyd $(1)$(PKG_INSTALL_DIR)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/chronyc $(1)$(PKG_INSTALL_DIR)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/chronyd $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/chronyc $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/etc/chrony
