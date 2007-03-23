@@ -26,6 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/click
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=@BROKEN
   MENU:=1
   TITLE:=The Click Modular Router
   DESCRIPTION:=The Click Modular Router
@@ -35,7 +36,7 @@ endef
 define Package/roofnet
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=click
+  DEPENDS:=@BROKEN click
   TITLE:=roofnet mesh networking scripts
   DESCRIPTION:=roofnet mesh networking scripts
   URL:=http://pdos.csail.mit.edu/roofnet/
