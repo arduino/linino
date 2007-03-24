@@ -51,5 +51,5 @@ endef
 $(eval $(call BuildPackage,ruby))
 
 $(eval $(call RequireCommand,/usr/bin/ruby, \
-        Ruby requires ruby installed on the host-system. \
+        $(PKG_NAME) requires ruby installed on the host-system. \
 ))

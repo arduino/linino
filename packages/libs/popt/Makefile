@@ -63,5 +63,5 @@ endef
 $(eval $(call BuildPackage,libpopt))
 
 $(eval $(call RequireCommand,xgettext, \
-	popt requires GNU gettext to build. \
+	$(PKG_NAME) requires GNU gettext to build. \
 ))

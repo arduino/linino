@@ -50,5 +50,5 @@ endef
 $(eval $(call BuildPackage,firmwarehotplug))
 
 $(eval $(call RequireCommand,sdcc, \
-        Please install the SDCC Cross Compiler (sdcc). \
+        $(PKG_NAME) requires the SDCC Cross Compiler (sdcc). \
 ))

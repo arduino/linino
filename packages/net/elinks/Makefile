@@ -91,6 +91,6 @@ endef
 $(eval $(call BuildPackage,elinks))
 
 $(eval $(call RequireCommand,autoconf, \
-	elinks requires GNU autoconf. \
+	$(PKG_NAME) requires GNU autoconf. \
 ))
 

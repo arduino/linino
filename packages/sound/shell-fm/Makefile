@@ -61,6 +61,6 @@ $(eval $(call BuildPackage,shell-fm))
 
 
 $(eval $(call RequireCommand,aclocal, \
-	shell-fm requires automake \
+	$(PKG_NAME) requires automake \
 ))
 
