@@ -50,13 +50,11 @@ define Package/rp-l2tpd-mod-ppp
 endef
 
 # uses GNU configure
+MAKE_FLAGS += \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+TARGET_CFLAGS := -I$(PKG_BUILD_DIR)/libevent $(TARGET_CFLAGS)
 
 define Package/rp-l2tpd/install	
 	$(INSTALL_DIR) $(1)/etc
