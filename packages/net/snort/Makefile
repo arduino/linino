@@ -114,26 +114,38 @@ endef
 
 
 ifneq ($(CONFIG_PACKAGE_snort),)
-  $(eval $(call Compile/Template,basic, \
+  define Compile/snort
+    $(call Compile/Template,basic, \
 		--without-mysql \
 		--without-postgresql \
-  ))
-  $(eval $(call Install/Template,snort,basic))
+    )
+    $(call Install/Template,snort,basic)
+  endef
 endif
+$(eval $(Compile/snort))
+
 ifneq ($(CONFIG_PACKAGE_snort-mysql),)
-  $(eval $(call Compile/Template,mysql, \
+  define Compile/snort-mysql
+    $(call Compile/Template,mysql, \
 		--with-mysql="$(STAGING_DIR)/usr" \
 		--without-postgresql \
-  ))
-  $(eval $(call Install/Template,snort-mysql,mysql))
+    )
+    $(call Install/Template,snort-mysql,mysql)
+  endef
 endif
+$(eval $(Compile/snort-mysql))
+
+
 ifneq ($(CONFIG_PACKAGE_snort-pgsql),)
-  $(eval $(call Compile/Template,pgsql, \
+  define Compile/snort-pgsql
+    $(call Compile/Template,pgsql, \
 		--without-mysql \
 		--with-postgresql="$(STAGING_DIR)/usr" \
-  ))
-  $(eval $(call Install/Template,snort-pgsql,pgsql))
+    )
+    $(call Install/Template,snort-pgsql,pgsql)
+  endef
 endif
+$(eval $(Compile/snort-pgsql))
 
 define Build/Configure
 endef
