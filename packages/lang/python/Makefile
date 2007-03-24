@@ -66,8 +66,9 @@ endef
 MAKE_OPTS:=\
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		LD_LIBRARY_PATH="$(LD_LIBRARY_PATH)" \
+		CROSS_COMPILE=yes \
 		LD="$(TARGET_CC)" \
+		BLDSHARED="$(TARGET_CC) -shared -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
 		HOSTPYTHON=./hostpython \
 		HOSTPGEN=./Parser/hostpgen
 
