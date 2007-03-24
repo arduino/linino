@@ -560,6 +560,16 @@ define Package/asterisk-res-crypto/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/res/res_crypto.so $(1)/usr/lib/asterisk/modules/
 endef
 
+define Build/InstallDev
+	mkdir -p $(STAGING_DIR)/usr/include
+	$(CP)   $(PKG_INSTALL_DIR)/usr/include/asterisk \
+		$(STAGING_DIR)/usr/include/
+endef
+
+define Build/UninstallDev
+	rm -rf  $(STAGING_DIR)/usr/include/asterisk
+endef
+
 $(eval $(call BuildPackage,asterisk))
 $(eval $(call BuildPackage,asterisk-mysql))
 $(eval $(call BuildPackage,asterisk-pgsql))
