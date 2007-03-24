@@ -1,6 +1,15 @@
---- miniupnpd-1.0-RC3/Makefile.openwrt.orig	2007-02-06 22:50:56.000000000 -0600
-+++ miniupnpd-1.0-RC3/Makefile.openwrt	2007-02-06 22:51:00.000000000 -0600
-@@ -11,17 +11,15 @@
+diff -ur miniupnpd.old/Makefile.openwrt miniupnpd.dev/Makefile.openwrt
+--- miniupnpd.old/Makefile.openwrt	2007-03-24 18:44:00.062407944 +0100
++++ miniupnpd.dev/Makefile.openwrt	2007-03-24 18:43:43.659901504 +0100
+@@ -2,7 +2,6 @@
+ # http://miniupnp.free.fr/
+ # Author : Thomas Bernard
+ # for use with GNU Make
+-include $(TOPDIR)/rules.mk
+ #CFLAGS = -Wall -O -D_GNU_SOURCE -g
+ #CFLAGS = -Wall -Os -D_GNU_SOURCE
+ #CC = mipsel-linux-gcc
+@@ -11,17 +10,15 @@
  CFLAGS += -D_GNU_SOURCE
  RM = rm -f
  INSTALL = install
@@ -20,7 +29,7 @@
  TESTUPNPDESCGENOBJS = testupnpdescgen.o upnpdescgen.o
  
  EXECUTABLES = miniupnpd testupnpdescgen
-@@ -38,6 +36,7 @@
+@@ -38,6 +35,7 @@
  	@echo no install for now...
  
  miniupnpd:	$(BASEOBJS) $(LNXOBJS) $(LIBS)
@@ -28,7 +37,7 @@
  
  testupnpdescgen:	$(TESTUPNPDESCGENOBJS)
  
-@@ -69,3 +68,4 @@
+@@ -69,3 +67,4 @@
  linux/iptcrdr.o: linux/iptcrdr.h
  testupnpdescgen.o: upnpdescgen.h
  upnpdescgen.o: upnpdescgen.h miniupnpdpath.h upnpglobalvars.h
