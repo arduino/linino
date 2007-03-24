@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/gmediaserver
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+id3lib +libiconv +libmagic +libupnp
+  DEPENDS:=+id3lib +libiconv +libmagic +libupnp +libuuid
   TITLE:=An UPnP music media server
   URL:=http://www.nongnu.org/gmediaserver/
 endef
