@@ -14,7 +14,7 @@ PKG_RELEASE:=1
 PKG_MD5SUM:=698a07f4e53820e44ef4a72c7c191e92
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://kent.dl.sourceforge.net/sourceforge/zabbix/
+PKG_SOURCE_URL:=@SF/zabbix
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
