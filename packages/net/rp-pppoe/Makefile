@@ -50,18 +50,11 @@ define Package/rp-pppoe-sniff
   TITLE+= sniffer
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default,, \
-		ac_cv_path_PPPD=/usr/sbin/pppd, \
-		src \
-	)
-endef
-
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR)/src \
-		RPM_INSTALL_ROOT="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/src/libevent
+CONFIGURE_PATH := ./src
+CONFIGURE_ARGS += ac_cv_path_PPPD=/usr/sbin/pppd
+MAKE_FLAGS := RPM_INSTALL_ROOT="$(PKG_INSTALL_DIR)" install
+MAKE_PATH := ./src
 
 define Package/rp-pppoe-client/install	
 	$(INSTALL_DIR) $(1)/etc/init.d
