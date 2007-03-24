@@ -36,8 +36,13 @@ endef
 # commas are interpreted by the $(call ...) macro, so define an intermediate variable holding our drivers spec
 PKG_CONFIGURE_DRIVERS:=all,!PNG,!RouterBoard,!X11
 
+CONFIGURE_ARGS += \
+		--without-x \
+		--with-drivers="$(PKG_CONFIGURE_DRIVERS)" \
+		--with-plugins=wireless
+
 define Build/Configure
-        (cd $(PKG_BUILD_DIR); touch \
+	(cd $(PKG_BUILD_DIR); touch \
 		configure.in \
 		aclocal.m4 \
 		Makefile.in \
@@ -45,15 +50,7 @@ define Build/Configure
 		stamp-h.in \
 		config.h.in \
 	);
-	$(call Build/Configure/Default, \
-		--without-x \
-		--with-drivers="$(PKG_CONFIGURE_DRIVERS)" \
-		--with-plugins=wireless \
-	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)
+	$(call Build/Configure/Default)
 endef
 
 define Package/lcd4linux/install

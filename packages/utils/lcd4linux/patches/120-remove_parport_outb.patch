@@ -13,3 +13,23 @@ diff -urN lcd4linux.old/drv_generic_parport.c lcd4linux.dev/drv_generic_parport.
  #if !defined(WITH_OUTB) && !defined(WITH_PPDEV)
  #error neither outb() nor ppdev() possible
  #error cannot compile parallel port driver
+diff -ur lcd4linux.old/drv_generic_parport.c lcd4linux.dev/drv_generic_parport.c
+--- lcd4linux.old/drv_generic_parport.c	2007-03-24 18:14:55.706590000 +0100
++++ lcd4linux.dev/drv_generic_parport.c	2007-03-24 18:15:20.036891568 +0100
+@@ -117,16 +117,6 @@
+ #include <sys/stat.h>
+ #include <sys/ioctl.h>
+ 
+-#ifdef HAVE_SYS_IO_H
+-#include <sys/io.h>
+-#define WITH_OUTB
+-#else
+-#ifdef HAVE_ASM_IO_H
+-#include <asm/io.h>
+-#define WITH_OUTB
+-#endif
+-#endif
+-
+ #if defined (HAVE_LINUX_PARPORT_H) && defined (HAVE_LINUX_PPDEV_H)
+ #define WITH_PPDEV
+ #include <linux/parport.h>
