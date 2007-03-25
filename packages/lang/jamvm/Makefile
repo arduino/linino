@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/jamvm
   SECTION:=lang
   CATEGORY:=Languages
-  DEPENDS:=+libffi-sable
+  DEPENDS:=+libffi-sable @!mips
   TITLE:=A compact Java Virtual Machine
   DESCRIPTION:=\
 	JamVM is a new Java Virtual Machine which conforms to the JVM \\\
