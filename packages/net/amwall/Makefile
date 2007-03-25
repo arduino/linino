@@ -42,6 +42,7 @@ define Build/Compile
 		PREFIX="/usr" \
 		CONFIG="$(PKG_BUILD_DIR)/etc/amsel" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		SHELL="/bin/bash" \
 		all install
 endef
 
