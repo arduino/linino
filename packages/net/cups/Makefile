@@ -46,13 +46,13 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
-		--libexecdir=/usr/lib \
 		--with-cups-user=root \
 		--with-cups-group=root \
 		--without-perl \
 		--without-python \
 		--without-php \
 		--enable-shared \
+		--disable-pam \
 		--disable-slp \
 		--disable-gnutls \
 		--disable-openssl \
