@@ -1,11 +1,15 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2006 OpenWrt.org
-conf=/etc/privoxy/config
+
+CFG_F=/etc/privoxy/config
+RUN_D=/var/run
+PID_F=$RUN_D/privoxy.pid
 
 start() {
-        /usr/sbin/privoxy $conf
+	mkdir -p $RUN_D
+	/usr/sbin/privoxy --pidfile $PID_F $CFG_F
 }
 
 stop() {
-        killall privoxy
+	[ -f $PID_F ] && kill $(cat $PID_F)
 }

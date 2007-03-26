@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=privoxy
 PKG_VERSION:=3.0.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-stable-src.tar.gz
 PKG_SOURCE_URL:=@SF/ijbswa
@@ -38,33 +38,12 @@ define Package/privoxy
 endef
 
 define Build/Configure
-  (cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
-                autoheader && autoconf && \
-                $(TARGET_CONFIGURE_OPTS) \
-                CFLAGS="$(strip $(TARGET_CFLAGS))" \
-                CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-                LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-                ./configure \
-                  --target=$(GNU_TARGET_NAME) \
-                  --host=$(GNU_TARGET_NAME) \
-                  --build=$(GNU_HOST_NAME) \
-                  --program-prefix="" \
-                  --program-suffix="" \
-                  --prefix=/usr \
-                  --exec-prefix=/usr \
-                  --bindir=/usr/bin \
-                  --datadir=/usr/share \
-                  --includedir=/usr/include \
-                  --infodir=/usr/share/info \
-                  --libdir=/usr/lib \
-                  --libexecdir=/usr/lib \
-                  --localstatedir=/var \
-                  --mandir=/usr/share/man \
-                  --sbindir=/usr/sbin \
-                  --sysconfdir=/etc \
-                  $(DISABLE_NLS) \
-                  --disable-static \
-        );
+	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
+		autoheader && autoconf \
+	);
+	$(call Build/Configure/Default, \
+		--sysconfdir=/etc/privoxy \
+	)
 endef
 
 define Build/Compile	
@@ -76,12 +55,19 @@ define Build/Compile
 		install
 endef
 
-define Package/privoxy/install	
-	$(INSTALL_DIR) $(1)/usr/sbin $(1)/etc/privoxy  $(1)/etc/init.d
+define Package/privoxy/conffiles
+/etc/privoxy/config
+/etc/privoxy/user.action
+endef
+
+define Package/privoxy/install
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/privoxy $(1)/usr/sbin/
-	$(CP) ./files/$(PKG_NAME).config $(1)/etc/privoxy/config
-	$(CP) $(PKG_BUILD_DIR)/default.filter $(1)/etc/privoxy/
-	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
+	$(INSTALL_DIR) $(1)/etc/privoxy
+	$(CP) $(PKG_INSTALL_DIR)/etc/privoxy/* $(1)/etc/privoxy/
+	$(INSTALL_CONF) ./files/privoxy.config $(1)/etc/privoxy/config
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/privoxy.init $(1)/etc/init.d/privoxy
 endef
 
 $(eval $(call BuildPackage,privoxy))
