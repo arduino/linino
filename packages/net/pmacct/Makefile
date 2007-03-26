@@ -85,30 +85,14 @@ define Package/pmacctd-sqlite
   DEPENDS+= +libsqlite3
 endef
 
-define Package/sfacctd/Default
-  $(call Package/pmacct/Default)
-  TITLE:=sFlow accounting daemon
-endef
-
 define Package/pmacct-client
   $(call Package/pmacct/Default)
   TITLE:=Command-line client to gather data from the IMT plugin
 endef
 
-ifneq ($(SDK),)
-  CONFIG_PACKAGE_nfacctd:=m
-  CONFIG_PACKAGE_nfacctd-mysql:=m
-  CONFIG_PACKAGE_nfacctd-pgsql:=m
-  CONFIG_PACKAGE_nfacctd-sqlite:=m
-  CONFIG_PACKAGE_pmacctd:=m
-  CONFIG_PACKAGE_pmacctd-mysql:=m
-  CONFIG_PACKAGE_pmacctd-pgsql:=m
-  CONFIG_PACKAGE_pmacctd-sqlite:=m
-endif
-
 define Compile/Template
 
-$(PKG_BUILD_DIR)/nfacctd-$(1) $(PKG_BUILD_DIR)/pmacctd-$(1): $(PKG_BUILD_DIR)/.configured
+$(PKG_BUILD_DIR)/nfacctd$(1) $(PKG_BUILD_DIR)/pmacctd$(1): $(PKG_BUILD_DIR)/.configured
 	-$(MAKE) -C $(PKG_BUILD_DIR) distclean
 	$(call Build/Configure/Default, \
 		--with-pcap-includes="$(STAGING_DIR)/usr/include" \
@@ -121,65 +105,85 @@ $(PKG_BUILD_DIR)/nfacctd-$(1) $(PKG_BUILD_DIR)/pmacctd-$(1): $(PKG_BUILD_DIR)/.c
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		all
-	mv -f $(PKG_BUILD_DIR)/src/nfacctd $(PKG_BUILD_DIR)/nfacctd-$(1)
-	mv -f $(PKG_BUILD_DIR)/src/pmacctd $(PKG_BUILD_DIR)/pmacctd-$(1)
+	mv -f $(PKG_BUILD_DIR)/src/nfacctd $(PKG_BUILD_DIR)/nfacctd$(1)
+	mv -f $(PKG_BUILD_DIR)/src/pmacctd $(PKG_BUILD_DIR)/pmacctd$(1)
 
-ifneq ($(CONFIG_PACKAGE_nfacctd$(3))$(CONFIG_PACKAGE_pmacctd$(3)),)
-  $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/nfacctd-$(1) $(PKG_BUILD_DIR)/pmacctd-$(1)
-endif
+$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/nfacctd$(1) $(PKG_BUILD_DIR)/pmacctd$(1)
 
 endef
 
 
 define Install/Template
 
-define Package/$(1)/conffiles
-/etc/default/$(3)
-/etc/$(3).conf
+define Package/$(1)$(2)/conffiles
+/etc/default/$(1)
+/etc/$(1).conf
 endef
 
-define Package/$(1)/install
+define Package/$(1)$(2)/install
 	$(INSTALL_DIR) $$(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(2) $$(1)/usr/sbin/$(3)
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(1)$(2) $$(1)/usr/sbin/$(1)
 	$(INSTALL_DIR) $$(1)/etc
-	$(INSTALL_DATA) ./files/$(3).conf $$(1)/etc/
+	$(INSTALL_DATA) ./files/$(1).conf $$(1)/etc/
 	$(INSTALL_DIR) $$(1)/etc/default
-	$(INSTALL_DATA) ./files/$(3).default $$(1)/etc/default/$(3)
+	$(INSTALL_DATA) ./files/$(1).default $$(1)/etc/default/$(1)
 	$(INSTALL_DIR) $$(1)/etc/init.d
-	$(INSTALL_BIN) ./files/$(3).init $$(1)/etc/init.d/$(3)
+	$(INSTALL_BIN) ./files/$(1).init $$(1)/etc/init.d/$(1)
 endef
 
 endef
 
+ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd)$(CONFIG_PACKAGE_pmacctd),)
+  define Compile/pmacct/basic
+    $(call Compile/Template,, \
+	--disable-mysql \
+	--disable-pgsql \
+	--disable-sqlite3 \
+    )
+    $(call Install/Template,nfacctd,)
+    $(call Install/Template,pmacctd,)
+  endef
+endif
+$(eval $(Compile/pmacct/basic))
 
-$(eval $(call Compile/Template,basic,,))
-$(eval $(call Install/Template,nfacctd,nfacctd-basic,nfacctd))
-$(eval $(call Install/Template,pmacctd,pmacctd-basic,pmacctd))
-
-$(eval $(call Compile/Template,mysql, \
+ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd-mysql)$(CONFIG_PACKAGE_pmacctd-mysql),)
+  define Compile/pmacct/mysql
+    $(call Compile/Template,-mysql, \
 	--enable-mysql \
 	--with-mysql-includes="$(STAGING_DIR)/usr/include" \
 	--with-mysql-libs="$(STAGING_DIR)/usr/lib/mysql" \
-,-mysql))
-$(eval $(call Install/Template,nfacctd-mysql,nfacctd-mysql,nfacctd))
-$(eval $(call Install/Template,pmacctd-mysql,pmacctd-mysql,pmacctd))
+    )
+    $(call Install/Template,nfacctd,-mysql)
+    $(call Install/Template,pmacctd,-mysql)
+  endef
+endif
+$(eval $(Compile/pmacct/mysql))
 
-$(eval $(call Compile/Template,pgsql, \
+ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd-pgsql)$(CONFIG_PACKAGE_pmacctd-pgsql),)
+  define Compile/pmacct/pgsql
+    $(call Compile/Template,-pgsql, \
 	--enable-pgsql \
 	--with-pgsql-includes="$(STAGING_DIR)/usr/include" \
 	--with-pgsql-libs="$(STAGING_DIR)/usr/lib" \
-,-pgsql))
+    )
+    $(call Install/Template,nfacctd,-pgsql)
+    $(call Install/Template,pmacctd,-pgsql)
+  endef
+endif
+$(eval $(Compile/pmacct/pgsql))
 
-$(eval $(call Install/Template,nfacctd-pgsql,nfacctd-pgsql,nfacctd))
-$(eval $(call Install/Template,pmacctd-pgsql,pmacctd-pgsql,pmacctd))
-
-$(eval $(call Compile/Template,sqlite, \
+ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd-sqlite)$(CONFIG_PACKAGE_pmacctd-sqlite),)
+  define Compile/pmacct/sqlite
+    $(call Compile/Template,-sqlite, \
 	--enable-sqlite3 \
 	--with-sqlite3-includes="$(STAGING_DIR)/usr/include" \
 	--with-sqlite3-libs="$(STAGING_DIR)/usr/lib" \
-,-sqlite))
-$(eval $(call Install/Template,nfacctd-sqlite,nfacctd-sqlite,nfacctd))
-$(eval $(call Install/Template,pmacctd-sqlite,pmacctd-sqlite,pmacctd))
+    )
+    $(call Install/Template,nfacctd,-sqlite)
+    $(call Install/Template,pmacctd,-sqlite)
+  endef
+endif
+$(eval $(Compile/pmacct/sqlite))
 
 define Build/Configure
 endef
