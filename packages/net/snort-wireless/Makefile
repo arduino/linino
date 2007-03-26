@@ -48,15 +48,9 @@ define Package/snort-wireless-pgsql
 endef
 
 
-ifneq ($(SDK),)
-  CONFIG_PACKAGE_snort-wireless:=m
-  CONFIG_PACKAGE_snort-wireless-mysql:=m
-  CONFIG_PACKAGE_snort-wireless-pgsql:=m
-endif
-
 define Compile/Template
 
-$(PKG_BUILD_DIR)/snort-wireless-$(1): $(PKG_BUILD_DIR)/.configured
+$(PKG_BUILD_DIR)/snort$(1): $(PKG_BUILD_DIR)/.configured
 	touch -r $(PKG_BUILD_DIR)/Makefile.am $(PKG_BUILD_DIR)/configure.in 
 	touch -r $(PKG_BUILD_DIR)/Makefile.in $(PKG_BUILD_DIR)/configure
 	-$(MAKE) -C $(PKG_BUILD_DIR) distclean
@@ -78,24 +72,24 @@ $(PKG_BUILD_DIR)/snort-wireless-$(1): $(PKG_BUILD_DIR)/.configured
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		extra_incl="" \
 		all
-	mv $(PKG_BUILD_DIR)/src/snort $(PKG_BUILD_DIR)/snort-wireless-$(1)
+	mv $(PKG_BUILD_DIR)/src/snort $(PKG_BUILD_DIR)/snort$(1)
 
-$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/snort-wireless-$(1)
+$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/snort$(1)
 
 endef
 
 
 define Install/Template
 
-define Package/$(1)/conffiles
+define Package/snort-wireless$(1)/conffiles
 /etc/default/snort
 /etc/snort/snort.conf
 /etc/snort/threshold.conf
 endef
 
-define Package/$(1)/install
+define Package/snort-wireless$(1)/install
 	$(INSTALL_DIR) $$(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/snort-wireless-$(2) $$(1)/usr/sbin/snort
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/snort$(1) $$(1)/usr/sbin/snort
 	$(INSTALL_DIR) $$(1)/etc/snort
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/snort.conf $$(1)/etc/snort/
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/classification.config $$(1)/etc/snort/
@@ -113,36 +107,36 @@ endef
 endef
 
 
-ifneq ($(CONFIG_PACKAGE_snort-wireless),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_snort-wireless),)
   define Compile/snort-wireless
-    $(call Compile/Template,basic, \
+    $(call Compile/Template,, \
 		--without-mysql \
 		--without-postgresql \
     )
-    $(call Install/Template,snort-wireless,basic)
+    $(call Install/Template,)
   endef
 endif
 $(eval $(Compile/snort-wireless))
 
 
-ifneq ($(CONFIG_PACKAGE_snort-wireless-mysql),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_snort-wireless-mysql),)
   define Compile/snort-wireless-mysql
-    $(call Compile/Template,mysql, \
+    $(call Compile/Template,-mysql, \
 		--with-mysql="$(STAGING_DIR)/usr" \
 		--without-postgresql \
     )
-    $(call Install/Template,snort-wireless-mysql,mysql)
+    $(call Install/Template,-mysql)
   endef
 endif
 $(eval $(Compile/snort-wireless-mysql))
 
-ifneq ($(CONFIG_PACKAGE_snort-wireless-pgsql),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_snort-wireless-pgsql),)
   define Compile/snort-wireless-pgsql
-    $(call Compile/Template,pgsql, \
+    $(call Compile/Template,-pgsql, \
 		--without-mysql \
 		--with-postgresql="$(STAGING_DIR)/usr" \
     )
-    $(call Install/Template,snort-wireless-pgsql,pgsql)
+    $(call Install/Template,-pgsql)
   endef
 endif
 $(eval $(Compile/snort-wireless-pgsql))
