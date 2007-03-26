@@ -54,7 +54,8 @@ define Build/UninstallDev
 	rm -rf \
 		$(STAGING_DIR)/usr/include/sigc++-2.0 \
 		$(STAGING_DIR)/usr/lib/libsigc-2.0.* \
-		$(STAGING_DIR)/usr/lib/sigc++-2.0
+		$(STAGING_DIR)/usr/lib/sigc++-2.0 \
+		$(STAGING_DIR)/usr/lib/pkgconfig/sigc++-2.0.pc
 		
 endef
 

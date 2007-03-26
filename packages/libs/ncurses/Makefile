@@ -167,8 +167,10 @@ define Build/UninstallDev
 		$(STAGING_DIR)/usr/include/panel.h \
 		$(STAGING_DIR)/usr/include/term{,cap}.h \
 		$(STAGING_DIR)/usr/include/unctrl.h \
+		$(STAGING_DIR)/usr/include/form.h \
+		$(STAGING_DIR)/usr/include/eti.h \
 		$(STAGING_DIR)/usr/lib/libcurses.so \
-		$(STAGING_DIR)/usr/lib/lib{ncurses,panel,menu}.{a,so*}
+		$(STAGING_DIR)/usr/lib/lib{ncurses,panel,menu,form}.{a,so*}
 endef
 
 $(eval $(call BuildPackage,libncurses))

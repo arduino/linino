@@ -64,11 +64,12 @@ endef
 
 define Build/UninstallDev
 	rm -rf \
+		$(STAGING_DIR)/usr/bin/audiofile-config \
 		$(STAGING_DIR)/usr/include/af_vfs.h \
 		$(STAGING_DIR)/usr/include/audiofile.h \
 		$(STAGING_DIR)/usr/include/aupvlist.h \
 		$(STAGING_DIR)/usr/lib/libaudiofile.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/libaudiofile.pc
+		$(STAGING_DIR)/usr/lib/pkgconfig/audiofile.pc
 endef
 
 define Package/libaudiofile/install

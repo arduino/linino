@@ -62,7 +62,8 @@ endef
 define Build/UninstallDev
 	rm -rf \
 		$(STAGING_DIR)/usr/include/upnp \
-		$(STAGING_DIR)/usr/lib/lib{ixml,threadutil,upnp}.{a,so*}
+		$(STAGING_DIR)/usr/lib/lib{ixml,threadutil,upnp}.{a,so*} \
+		$(STAGING_DIR)/usr/lib/pkgconfig/libupnp.pc
 endef
 
 define Package/libupnp/install

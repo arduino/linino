@@ -60,7 +60,7 @@ define Build/UninstallDev
 	rm -rf \
 		$(STAGING_DIR)/usr/include/mcrypt.h \
 		$(STAGING_DIR)/usr/lib/libmcrypt.{a,so*} \
-		$(STAGING_DIR)/usr/bin/mcrypt-config
+		$(STAGING_DIR)/usr/bin/libmcrypt-config
 endef
 
 define Package/libmcrypt/install
