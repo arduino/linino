@@ -9,12 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
-PKG_VERSION:=1.2.14
+PKG_VERSION:=1.2.16
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://ftp.digium.com/pub/asterisk/old-releases/ ftp://ftp.digium.com/pub/asterisk/old-releases/
-PKG_MD5SUM:=2ce03466b99e0b9471e6c791ed14a5f2
+PKG_SOURCE_URL:=http://ftp.digium.com/pub/asterisk/old-releases/ \
+	ftp://ftp.digium.com/pub/asterisk/old-releases
+PKG_MD5SUM:=88cfcd5c3b2a8f2504e561cb93546299
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -215,6 +216,19 @@ define Package/asterisk-chan-mgcp/conffiles
 /etc/asterisk/mgcp.conf
 endef
 
+define Package/asterisk-chan-oss
+  $(call Package/asterisk/Default)
+  DEPENDS:=asterisk
+  TITLE:=chan-oss
+  DESCRIPTION+=\\\
+	\\\
+	Channel driver for OSS sound cards
+endef
+
+define Package/asterisk-chan-oss/conffiles
+/etc/asterisk/oss.conf
+endef
+
 define Package/asterisk-chan-skinny
   $(call Package/asterisk/Default)
   DEPENDS:=asterisk
@@ -294,60 +308,48 @@ define Package/asterisk-res-crypto
 endef
 
 
-ifneq ($(SDK),)
-# Make sure the options below are enabled when building with the SDK
-  CONFIG_PACKAGE_asterisk-mysql:=m
-  CONFIG_PACKAGE_asterisk-pgsql:=m
-  CONFIG_PACKAGE_asterisk-sqlite:=m
-  CONFIG_PACKAGE_asterisk-app-meetme:=m
-  CONFIG_PACKAGE_asterisk-chan-bluetooth:=m
-  CONFIG_PACKAGE_asterisk-chan-h323:=m
-  CONFIG_PACKAGE_asterisk-codec-speex:=m
-  CONFIG_PACKAGE_asterisk-res-crypto:=m
-endif
-
 EXTRA_CFLAGS:= -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
 EXTRA_LDFLAGS:= -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib
 
-ifneq ($(CONFIG_PACKAGE_asterisk-mysql),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk-mysql),)
   EXTRA_CFLAGS+= -I$(STAGING_DIR)/usr/include/mysql
   EXTRA_LDFLAGS+= -L$(STAGING_DIR)/usr/lib/mysql
   EXTRA_APP_MODULES+= app_sql_mysql.so
   EXTRA_CDR_MODULES+= cdr_mysql.so
   EXTRA_RES_MODULES+= res_config_mysql.so
 endif
-ifneq ($(CONFIG_PACKAGE_asterisk-pgsql),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk-pgsql),)
   EXTRA_APP_MODULES+= app_sql_postgres.so
   EXTRA_CDR_MODULES+= cdr_pgsql.so
 endif
-ifneq ($(CONFIG_PACKAGE_asterisk-sqlite),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk-sqlite),)
   EXTRA_CDR_MODULES+= cdr_sqlite.so
 endif
-ifneq ($(CONFIG_PACKAGE_asterisk-app-meetme),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk-app-meetme),)
   EXTRA_APP_MODULES+= app_meetme.so
 endif
-ifneq ($(CONFIG_PACKAGE_asterisk-chan-bluetooth),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk-chan-bluetooth),)
   EXTRA_CHAN_MODULES+= chan_bluetooth.so
 endif
-ifneq ($(CONFIG_PACKAGE_asterisk-chan-h323),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk-chan-h323),)
   EXTRA_DEFINES+= \
 	OPENH323DIR="$(BUILD_DIR)/openh323" \
 	PWLIBDIR="$(BUILD_DIR)/pwlib" \
 	CXXLIBS="-nodefaultlibs -luClibc++ -lc -lm -lgcc"
   EXTRA_CHAN_MODULES+= chan_h323.so
 endif
-ifneq ($(CONFIG_PACKAGE_asterisk-codec-speex),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk-codec-speex),)
   EXTRA_CFLAGS+= -I$(STAGING_DIR)/usr/include/speex
   EXTRA_CODEC_MODULES+= codec_speex.so
 endif
-ifneq ($(CONFIG_PACKAGE_asterisk-res-crypto),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk-res-crypto),)
   EXTRA_RES_MODULES+= res_crypto.so
 endif
 
 define Build/Configure
 endef
 
-ifneq ($(CONFIG_PACKAGE_asterisk-chan-h323),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk-chan-h323),)
   define Build/Compile/chan-h323
 	$(MAKE) -C "$(PKG_BUILD_DIR)/channels/h323" \
 		$(TARGET_CONFIGURE_OPTS) \
@@ -406,6 +408,7 @@ define Package/asterisk/install
 		rm -f chan_h323.so ; \
 		rm -f chan_mgcp.so ; \
 		rm -f chan_skinny.so ; \
+		rm -f chan_oss.so ; \
 		rm -f {codec,format}_ilbc.so ; \
 		rm -f codec_lpc10.so ; \
 		rm -f pbx_dundi.so ; \
@@ -419,6 +422,7 @@ define Package/asterisk/install
 		rm -f bluetooth.conf ; \
 		rm -f mgcp.conf ; \
 		rm -f skinny.conf ; \
+		rm -f oss.conf ; \
 		rm -f dundi.conf ; \
 	)
 	$(INSTALL_DATA) ./files/modules.conf $(1)/etc/asterisk/
@@ -519,6 +523,13 @@ define Package/asterisk-chan-mgcp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/channels/chan_mgcp.so $(1)/usr/lib/asterisk/modules/
 endef
 
+define Package/asterisk-chan-oss/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/configs/oss.conf.sample $(1)/etc/asterisk/oss.conf
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/channels/chan_oss.so $(1)/usr/lib/asterisk/modules/
+endef
+
 define Package/asterisk-chan-skinny/install
 	$(INSTALL_DIR) $(1)/etc/asterisk
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/configs/skinny.conf.sample $(1)/etc/asterisk/skinny.conf
@@ -580,6 +591,7 @@ $(eval $(call BuildPackage,asterisk-app-meetme))
 $(eval $(call BuildPackage,asterisk-chan-bluetooth))
 $(eval $(call BuildPackage,asterisk-chan-h323))
 $(eval $(call BuildPackage,asterisk-chan-mgcp))
+$(eval $(call BuildPackage,asterisk-chan-oss))
 $(eval $(call BuildPackage,asterisk-chan-skinny))
 $(eval $(call BuildPackage,asterisk-codec-ilbc))
 $(eval $(call BuildPackage,asterisk-codec-lpc10))
