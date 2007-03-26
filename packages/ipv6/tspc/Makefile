@@ -13,7 +13,7 @@ PKG_VERSION:=2.1.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
-PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/t/tspc
+PKG_SOURCE_URL:=http://ftp.fr.debian.org/debian/pool/main/t/tspc/
 PKG_MD5SUM:=65183cae002feaacd8bc92d6a5404cc2
 PKG_CAT:=zcat
 
