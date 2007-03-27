@@ -22,6 +22,7 @@ CATEGORY:=Network
 TITLE:=Kernel NFS server support
 DESCRIPTION:=Kernel NFS server support
 URL:=http://nfs.sourceforge.net/
+DEPENDS:=+kmod-fs-nfsd +kmod-fs-nfs +portmap
 endef
 
 define Package/nfs-kernel-server-utils
