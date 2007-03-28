@@ -5,7 +5,7 @@ diff -ru chrony-1.21.orig/io_linux.h chrony-1.21/io_linux.h
  #define CHRONY_IOC_NONE        1U
  #define CHRONY_IOC_READ        2U
  #define CHRONY_IOC_WRITE       4U
-+#elif defined(__mips__)
++#elif defined(__mips__) || (__powerpc__) || (__arm__)
 +#define CHRONY_IOC_NRBITS	8
 +#define CHRONY_IOC_TYPEBITS	8
 +#define CHRONY_IOC_SIZEBITS	13
