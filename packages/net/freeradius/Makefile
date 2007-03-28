@@ -237,14 +237,7 @@ PKG_DICTIONARIES:= \
 	microsoft \
 	wispr \
 
-ifneq ($(SDK),)
-# Make sure the options below are enabled when building with the SDK
-  CONFIG_PACKAGE_freeradius-mod-ldap:=m
-  CONFIG_PACKAGE_freeradius-mod-sql-mysql:=m
-  CONFIG_PACKAGE_freeradius-mod-sql-pgsql:=m
-endif
-
-ifneq ($(CONFIG_PACKAGE_freeradius-mod-ldap),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-ldap),)
   PKG_CONFIGURE_LIBS+= -lcrypto -lssl
   PKG_CONFIGURE_OPTIONS+= \
 		--with-rlm_ldap-include-dir="$(STAGING_DIR)/usr/include" \
@@ -253,7 +246,7 @@ else
   PKG_CONFIGURE_OPTIONS+= --without-rlm_ldap
 endif
 
-ifneq ($(CONFIG_PACKAGE_freeradius-mod-sql-mysql),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-sql-mysql),)
   PKG_CONFIGURE_LIBS+= -lz
   PKG_CONFIGURE_OPTIONS+= \
 		--with-mysql-include-dir="$(STAGING_DIR)/usr/include" \
@@ -263,7 +256,7 @@ else
   PKG_CONFIGURE_OPTIONS+= --without-rlm_sql_mysql
 endif
 
-ifneq ($(CONFIG_PACKAGE_freeradius-mod-sql-pgsql),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-sql-pgsql),)
   PKG_CONFIGURE_OPTIONS+= \
 		--with-rlm_sql_postgresql-include-dir="$(STAGING_DIR)/usr/include" \
 		--with-rlm_sql_postgresql-lib-dir="$(STAGING_DIR)/usr/lib"
@@ -271,19 +264,19 @@ else
   PKG_CONFIGURE_OPTIONS+= --without-rlm_sql_postgresql
 endif
 
-ifneq ($(CONFIG_PACKAGE_freeradius-mod-eap-tls),)
-  PKG_CONFIGURE_OPTIONS+= --with-rlm_eap_tls
-else
-  PKG_CONFIGURE_OPTIONS+= --without-rlm_eap_tls
-endif
-
-ifneq ($(CONFIG_PACKAGE_freeradius-mod-eap-peap),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-eap-peap),)
   PKG_CONFIGURE_OPTIONS+= --with-rlm_eap_peap
 else
   PKG_CONFIGURE_OPTIONS+= --without-rlm_eap_peap
 endif
 
-ifneq ($(CONFIG_PACKAGE_freeradius-mod-eap-ttls),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-eap-tls),)
+  PKG_CONFIGURE_OPTIONS+= --with-rlm_eap_tls
+else
+  PKG_CONFIGURE_OPTIONS+= --without-rlm_eap_tls
+endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-eap-ttls),)
   PKG_CONFIGURE_OPTIONS+= --with-rlm_eap_ttls
 else
   PKG_CONFIGURE_OPTIONS+= --without-rlm_eap_ttls
