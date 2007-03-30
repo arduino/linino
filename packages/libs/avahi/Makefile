@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=avahi
-PKG_VERSION:=0.6.16
+PKG_VERSION:=0.6.17
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://avahi.org/download/
-PKG_MD5SUM:=3cbc460bbd55bae35f7b57443c063640
+PKG_MD5SUM:=29ebb2181958d5721ee5fc45f035a77c
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -43,7 +43,7 @@ define Package/libavahi
   $(call Package/avahi/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libdaemon
+  DEPENDS:=+libdaemon +libpthread
   TITLE+= (library)
   DESCRIPTION+=\\\
 	\\\
@@ -66,7 +66,7 @@ endef
 
 define Package/avahi-daemon
   $(call Package/avahi/Default)
-  DEPENDS:=+libavahi
+  DEPENDS:=+libavahi +libexpat
   TITLE+= (daemon)
   DESCRIPTION+=\\\
 	\\\
