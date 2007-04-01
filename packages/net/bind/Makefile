@@ -91,6 +91,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/lib/dns \
 		CC="$(HOSTCC)" \
 		CFLAGS="-O2" \
+		LIBS="" \
 		gen
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
