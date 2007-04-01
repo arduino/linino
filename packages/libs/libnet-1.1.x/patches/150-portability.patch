@@ -1,0 +1,35 @@
+diff -ur libnet.old/configure libnet.dev/configure
+--- libnet.old/configure	2007-04-01 17:48:16.000000000 +0200
++++ libnet.dev/configure	2007-04-01 18:43:46.000000000 +0200
+@@ -19537,7 +19537,15 @@
+ echo "$as_me:$LINENO: checking link-layer packet interface type" >&5
+ echo $ECHO_N "checking link-layer packet interface type... $ECHO_C" >&6
+ 
+-if test -r /dev/bpf0 ; then
++if test -n "$LL_INT_TYPE"; then
++    case $LIBOBJS in
++    "libnet_link_$LL_INT_TYPE.$ac_objext"   | \
++  *" libnet_link_$LL_INT_TYPE.$ac_objext"   | \
++    "libnet_link_$LL_INT_TYPE.$ac_objext "* | \
++  *" libnet_link_$LL_INT_TYPE.$ac_objext "* ) ;;
++  *) LIBOBJS="$LIBOBJS libnet_link_$LL_INT_TYPE.$ac_objext" ;;
++esac
++elif test -r /dev/bpf0 ; then
+     case $LIBOBJS in
+     "libnet_link_bpf.$ac_objext"   | \
+   *" libnet_link_bpf.$ac_objext"   | \
+diff -ur libnet.old/configure.in libnet.dev/configure.in
+--- libnet.old/configure.in	2007-04-01 17:48:16.000000000 +0200
++++ libnet.dev/configure.in	2007-04-01 18:44:29.000000000 +0200
+@@ -67,7 +67,10 @@
+ dnl
+ AC_MSG_CHECKING(link-layer packet interface type)
+ 
+-if test -r /dev/bpf0 ; then
++if test -n "$LL_INT_TYPE"; then
++	AC_LIBOBJ($LL_INT_TYPE)
++	AC_MSG_RESULT(found $LL_INT_TYPE (cached))
++elif test -r /dev/bpf0 ; then
+     AC_LIBOBJ([libnet_link_bpf])
+     AC_MSG_RESULT(found bpf)
+ elif test -r /usr/include/net/pfilt.h ; then
