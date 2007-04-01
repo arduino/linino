@@ -35,6 +35,16 @@ ifeq ($(CONFIG_BIG_ENDIAN),y)
   ENDIANESS:=big
 endif
 
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--with-pf_packet=yes
+
+CONFIGURE_VARS += \
+	ac_cv_libnet_endianess=$(ENDIANESS) \
+	ac_libnet_have_pf_packet=yes \
+	LL_INT_TYPE=sockpacket
+
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); touch \
 		configure.in \
@@ -43,14 +53,7 @@ define Build/Configure
 		Makefile.in \
 		configure \
 	);
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--with-pf_packet=yes \
-		, \
-		ac_cv_libnet_endianess=$(ENDIANESS) \
-		ac_libnet_have_pf_packet=yes \
-	)
+	$(call Build/Configure/Default)
 endef
 
 define Build/Compile
