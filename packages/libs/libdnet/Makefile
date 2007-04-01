@@ -43,6 +43,8 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \
+		--without-check \
+		--without-python \
 		, \
 		ac_cv_dnet_bsd_bpf=no \
 	)
