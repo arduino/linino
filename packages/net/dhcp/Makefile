@@ -43,6 +43,9 @@ endef
 define Build/Configure
 	# it's not GNU autoconf stuff
 	(cd $(PKG_BUILD_DIR) ; \
+		UNAME_S=Linux \
+		UNAME_M=$(ARCH) \
+		UNAME_R=2.4.34 \
 		./configure \
 			--copts "$(TARGET_CFLAGS)" \
 			linux-2.2 \
@@ -50,6 +53,9 @@ define Build/Configure
 endef
 
 define Build/Compile
+	UNAME_S=Linux \
+	UNAME_M=$(ARCH) \
+	UNAME_R=2.4.34 \
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
