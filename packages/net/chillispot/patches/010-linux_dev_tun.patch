@@ -1,0 +1,31 @@
+--- chillispot-1.1.0/src/tun.c.orig	2006-09-24 19:48:25.000000000 +0200
++++ chillispot-1.1.0/src/tun.c	2007-04-02 00:38:12.000000000 +0200
+@@ -77,6 +77,7 @@
+ #include <linux/if_tun.h>
+ #include <linux/netlink.h>
+ #include <linux/rtnetlink.h>
++#include <linux/version.h>
+ 
+ #elif defined (__FreeBSD__) || defined (__OpenBSD__) || defined (__NetBSD__)
+ #include <net/if.h>
+@@ -673,6 +674,11 @@
+ 
+ #if defined(__linux__)
+   struct ifreq ifr;
++# if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,18)
++#  define TUN_DEV  "/dev/tun"
++# else
++#  define TUN_DEV  "/dev/net/tun"
++# endif
+ 
+ #elif defined(__FreeBSD__) defined (__OpenBSD__) || defined (__NetBSD__) || defined (__APPLE__)
+   char devname[IFNAMSIZ+5]; /* "/dev/" + ifname */
+@@ -701,7 +707,7 @@
+   
+ #if defined(__linux__)
+   /* Open the actual tun device */
+-  if (((*tun)->fd  = open("/dev/net/tun", O_RDWR)) < 0) {
++  if (((*tun)->fd  = open(TUN_DEV, O_RDWR)) < 0) {
+     sys_err(LOG_ERR, __FILE__, __LINE__, errno, "open() failed");
+     return -1;
+   }
