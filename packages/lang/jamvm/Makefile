@@ -48,11 +48,13 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) all
 endef
 
-define Package/jamvm/install	
+ifneq ($(ARCH),mips)
+  define Package/jamvm/install	
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/jamvm $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/share/jamvm
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/classes.zip $(1)/usr/share/jamvm/
-endef
+  endef
+endif
 
 $(eval $(call BuildPackage,jamvm))
