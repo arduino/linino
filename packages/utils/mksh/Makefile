@@ -31,8 +31,8 @@ endef
 
 define Build/Compile
 	cd $(PKG_BUILD_DIR); \
-		CC=$(TARGET_CC) \
-		TARGET_OS=$(shell uname -s) \
+		CC="$(TARGET_CC)" \
+		TARGET_OS="$(shell uname -s)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-DMKSH_SMALL=1" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
