@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=samba
 PKG_VERSION:=2.0.10
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_MD5SUM:=54870482fe036b7e69dd48c90661eec6
 
 PKG_SOURCE_URL:=ftp://se.samba.org/pub/samba/stable \
@@ -34,15 +34,22 @@ define Package/samba
   URL:=http://www.samba.org/
 endef  
 
+define Package/samba-common
+  $(call Package/samba)
+  TITLE:=NetBIOS/SMB server and client shared files
+  DEPENDS:=+libgcc
+endef
+
 define Package/samba-server
   $(call Package/samba)
   TITLE:=NetBIOS/SMB file and print server
-  DEPENDS:=+libgcc
+  DEPENDS:=samba-common
 endef
 
 define Package/samba-client
   $(call Package/samba)
   TITLE:=NetBIOS/SMB simple client
+  DEPENDS:=samba-common
 endef
 
 define Build/Compile	
@@ -167,27 +174,35 @@ define Build/Compile
 		install
 endef
 
-define Package/samba-server/install	
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/samba.init $(1)/etc/init.d/samba
+define Package/samba-common/install
 	$(INSTALL_DIR) $(1)/etc/samba
 	$(INSTALL_DATA) ./files/smb.conf $(1)/etc/samba/smb.conf
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/smbpasswd.shared $(1)/usr/bin/smbpasswd
+	$(INSTALL_DIR) $(1)/usr/share/samba
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/codepage.{437,850} $(1)/usr/share/samba/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{437,850,ISO8859-1} $(1)/usr/share/samba/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/codepage.852 $(1)/usr/share/samba/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{852,ISO8859-2} $(1)/usr/share/samba/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/codepage.866 $(1)/usr/share/samba/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{866,ISO8859-5,KOI8-R} $(1)/usr/share/samba/
+endef
+
+define Package/samba-server/install
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/samba.init $(1)/etc/init.d/samba
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/libsmb.so $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/nmbd.shared $(1)/usr/sbin/nmbd
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/smbd.shared $(1)/usr/sbin/smbd
-	$(INSTALL_DIR) $(1)/usr/share/samba
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/codepage.{437,850} $(1)/usr/share/samba/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{437,850} $(1)/usr/share/samba/
 endef
 
-define Package/samba-client/install	
+define Package/samba-client/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/smbclient $(1)/usr/bin/
 endef
 
+$(eval $(call BuildPackage,samba-common))
 $(eval $(call BuildPackage,samba-server))
 $(eval $(call BuildPackage,samba-client))
