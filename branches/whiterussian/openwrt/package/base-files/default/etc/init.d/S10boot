@@ -21,9 +21,5 @@ ifconfig eth0 promisc
 	done
 }
 
-HOSTNAME=$(nvram get wan_hostname)
-HOSTNAME=${HOSTNAME%%.*}
-echo ${HOSTNAME:=OpenWrt}>/proc/sys/kernel/hostname
-
 vconfig set_name_type VLAN_PLUS_VID_NO_PAD
 

@@ -1,4 +1,9 @@
 #!/bin/sh
+
+HOSTNAME=$(nvram get wan_hostname)
+HOSTNAME=${HOSTNAME%%.*}
+echo ${HOSTNAME:=OpenWrt}>/proc/sys/kernel/hostname
+
 syslog_ip=$(nvram get log_ipaddr)
 eval $(ipcalc.sh "$syslog_ip")
 [ "$syslog_ip" = "$IP" ] || syslog_ip=""
