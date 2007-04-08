@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ssmtp
 PKG_VERSION:=2.61
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/s/ssmtp/
@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ssmtp
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+libopenssl
   TITLE:=A minimal and secure mail sender
   DESCRIPTION:=\
 	A secure, effective and simple way of getting mail off a system to your \\\
@@ -36,7 +37,16 @@ endef
 
 # uses GNU configure
 
+define Build/Configure
+	cd $(PKG_BUILD_DIR)
+	$(call Build/Configure/Default, \
+		--enable-ssl \
+	)
+endef
+
 define Build/Compile
+	EXTRA_CFLAGS="-I$(STAGING_DIR)/usr/include" \
+	EXTRA_LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		all
 endef
