@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=squid
-PKG_VERSION:=2.5.STABLE14
+PKG_VERSION:=2.6.STABLE12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.squid-cache.org/Versions/v2/2.5/
-PKG_MD5SUM:=f413e0b887a5f9b2a75350243ed5564c
+PKG_SOURCE_URL:=http://www.squid-cache.org/Versions/v2/2.6/
+PKG_MD5SUM:=a830ccc95cb39cdfa5e5b773add0bb0d
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -69,12 +69,6 @@ define Package/squid-mod-basic-auth-smb
   TITLE:=Samba basic authentication helper
 endef
 
-define Package/squid-mod-basic-auth-winbind
-  $(call Package/squid/Default)
-  DEPENDS:=squid
-  TITLE:=Winbind basic authentication helper
-endef
-
 define Package/squid-mod-digest-auth-password
   $(call Package/squid/Default)
   DEPENDS:=squid
@@ -93,12 +87,6 @@ define Package/squid-mod-external-acl-unix-group
   TITLE:=Unix group external ACL helper
 endef
 
-define Package/squid-mod-external-acl-winbind-group
-  $(call Package/squid/Default)
-  DEPENDS:=squid
-  TITLE:=Winbind group external ACL helper
-endef
-
 define Package/squid-mod-ntlm-auth-fakeauth
   $(call Package/squid/Default)
   DEPENDS:=squid
@@ -109,12 +97,6 @@ define Package/squid-mod-ntlm-auth-smb-auth
   $(call Package/squid/Default)
   DEPENDS:=squid
   TITLE:=Samba NTLM authentication helper
-endef
-
-define Package/squid-mod-ntlm-auth-winbind-auth
-  $(call Package/squid/Default)
-  DEPENDS:=squid
-  TITLE:=Winbind NTLM authentication helper
 endef
 
 define Build/Configure
@@ -144,14 +126,16 @@ define Build/Configure
 		--enable-useragent-log \
 		--with-openssl=$(STAGING_DIR)/usr \
 		--enable-auth="basic digest ntlm" \
-		--enable-basic-auth-helpers="getpwnam NCSA SMB winbind" \
-		--enable-ntlm-auth-helpers="fakeauth SMB winbind" \
+		--enable-basic-auth-helpers="getpwnam NCSA SMB" \
+		--enable-ntlm-auth-helpers="fakeauth SMB" \
 		--enable-digest-auth-helpers="password" \
-		--enable-external-acl-helpers="ip_user unix_group winbind_group" \
+		--enable-external-acl-helpers="ip_user unix_group" \
+		--enable-epoll \
+		--with-maxfd=4096 \
 	)
 endef
 	
-define Build/Compile	
+define Build/Compile
 	# pass INCLUDES to compile host sources against our OpenSSL, not the host one
 	$(MAKE) -C $(PKG_BUILD_DIR)/lib \
 		INCLUDES="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
@@ -170,7 +154,7 @@ define BuildPlugin
   $$(eval $$(call BuildPackage,$(1)))
 endef
 
-define Package/squid/install	
+define Package/squid/install
 	$(INSTALL_DIR) $(1)/etc/squid
 	$(CP) $(PKG_INSTALL_DIR)/etc/squid/mime.conf $(1)/etc/squid/
 	$(CP) $(PKG_INSTALL_DIR)/etc/squid/squid.conf $(1)/etc/squid/
@@ -192,11 +176,8 @@ $(eval $(call BuildPackage,squid-mod-cachemgr))
 $(eval $(call BuildPlugin,squid-mod-basic-auth-getpwnam,getpwname_auth))
 $(eval $(call BuildPlugin,squid-mod-basic-auth-ncsa,ncsa_auth))
 $(eval $(call BuildPlugin,squid-mod-basic-auth-smb,smb_auth))
-$(eval $(call BuildPlugin,squid-mod-basic-auth-winbind,wb_auth))
 $(eval $(call BuildPlugin,squid-mod-digest-auth-password,digest_pw_auth))
 $(eval $(call BuildPlugin,squid-mod-external-acl-ip-user,ip_user_check))
 $(eval $(call BuildPlugin,squid-mod-external-acl-unix-group,squid_unix_group))
-$(eval $(call BuildPlugin,squid-mod-external-acl-winbind-group,wb_group))
 $(eval $(call BuildPlugin,squid-mod-ntlm-auth-fakeauth,fakeauth_auth))
 $(eval $(call BuildPlugin,squid-mod-ntlm-auth-smb-auth,ntlm_auth))
-$(eval $(call BuildPlugin,squid-mod-ntlm-auth-winbind-auth,wb_ntlmauth))
