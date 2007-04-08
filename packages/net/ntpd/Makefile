@@ -35,6 +35,12 @@ define Package/ntpd/conffiles
 /etc/ntp.conf
 endef
 
+define Package/ntpd/postinst
+#!/bin/sh
+echo "ntp             123/udp     # Network Time Protocol
+ntp             123/tcp     # Network Time Protocol" >> /etc/services
+endef
+
 define Build/Configure
 	$(call Build/Configure/Default, \
                 --disable-all-clocks \
