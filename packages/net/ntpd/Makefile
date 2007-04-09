@@ -38,7 +38,7 @@ endef
 define Package/ntpd/postinst
 #!/bin/sh
 echo "ntp             123/udp     # Network Time Protocol
-ntp             123/tcp     # Network Time Protocol" >> /etc/services
+ntp             123/tcp     # Network Time Protocol" >> $${IPKG_INSTROOT}/etc/services
 endef
 
 define Build/Configure
