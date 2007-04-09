@@ -1,10 +1,10 @@
---- postgresql.old/src/port/Makefile	Sun Oct 15 00:09:57 2006
-+++ postgresql.dev/src/port/Makefile	Sun Oct 15 00:10:05 2006
-@@ -21,6 +21,7 @@
+--- postgresql-8.2.3/src/port/Makefile	2006-07-14 11:45:43.000000000 -0500
++++ new-postgresql-8.2.3/src/port/Makefile	2007-04-09 12:14:11.906032000 -0500
+@@ -43,6 +43,7 @@
  
  libpgport.a: $(LIBOBJS)
  	$(AR) $(AROPT) $@ $^
 +	$(RANLIB) libpgport.a
  
  thread.o: thread.c
- 	$(CC) $(CFLAGS) $(CPPFLAGS) $(THREAD_CPPFLAGS) -c $<
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(PTHREAD_CFLAGS) -c $<
