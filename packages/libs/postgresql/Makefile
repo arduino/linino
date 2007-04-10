@@ -195,7 +195,7 @@ define Package/pgsql-server/install
 		$(PKG_INSTALL_DIR)/usr/share/postgresql/system_views.sql \
 		$(1)/usr/share/postgresql
 
-		$(INSTALL_DATA) ./files/postgresql.config $(1)/etc/config/postgres
+		$(INSTALL_DATA) ./files/postgresql.config $(1)/etc/config/postgresql
 
 		$(CP) -r \
 			$(PKG_INSTALL_DIR)/usr/share/postgresql/timezone \
