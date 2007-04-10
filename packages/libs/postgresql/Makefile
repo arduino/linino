@@ -20,6 +20,8 @@ PKG_SOURCE_URL:=\
 PKG_MD5SUM:=cb47771004d53505200ffd00ac45bc32
 PKG_CAT:=bzcat
 
+PKG_BUILD_DEPENDS:=libnotimpl
+
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
@@ -45,7 +47,7 @@ endef
 define Package/pgsql-server
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libpq @C99_MATH
+  DEPENDS:=+libpq
   TITLE:=PostgreSQL databases Server
   DESCRIPTION:=PostgreSQL databases Server.
   URL:=http://www.postgresql.org/
@@ -96,8 +98,9 @@ define Build/Configure
 	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="$$$$CPPFLAGS $(EXTRA_CPPFLAGS)" \
-		LDFLAGS="$(EXTRA_LDFLAGS)" \
+		CPPFLAGS="$$$$CPPFLAGS $(TARGET_CPPFLAGS)" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		LIBS="-lnotimpl" \
 		./configure \
 			--target=$(GNU_TARGET_NAME) \
 			--host=$(GNU_TARGET_NAME) \
