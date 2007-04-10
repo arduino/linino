@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mini-sendmail
 PKG_VERSION:=1.3.5
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=mini_sendmail-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.acme.com/software/mini_sendmail/

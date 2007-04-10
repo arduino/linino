@@ -1,0 +1,34 @@
+--- mini_sendmail-1.3.5.org/mini_sendmail.c	2003-11-17 03:03:35.000000000 +0100
++++ mini_sendmail-1.3.5/mini_sendmail.c	2007-04-08 19:46:42.000000000 +0200
+@@ -539,6 +539,7 @@
+ 	}
+ 
+     /* Strip off any angle brackets. */
++/*
+     while ( len > 0 && *recipient == '<' )
+ 	{
+ 	++recipient;
+@@ -548,6 +549,23 @@
+ 	--len;
+ 
+     (void) snprintf( buf, sizeof(buf), "RCPT TO:<%.*s>", len, recipient );
++*/
++    if (len > 0 && recipient[len-1] == '>' )
++    {
++        /* "<name@domain>" or: "Full Name <name@domain>" */
++        while (len > 0 && *recipient != '<' )
++	    {
++	    ++recipient;
++	    --len;
++	    }
++        (void) snprintf( buf, sizeof(buf), "RCPT TO:%.*s", len, recipient );
++    }
++    else
++    {
++        /* name@domain */
++        (void) snprintf( buf, sizeof(buf), "RCPT TO:<%.*s>", len, recipient );
++    }
++             
+     send_command( buf );
+     status = read_response();
+     if ( status != 250  && status != 251 )
