@@ -2,9 +2,33 @@ NAME=ntpd
 CONFIG=/etc/$NAME.conf
 COMMAND=/usr/sbin/$NAME
 
-[ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" ] && {
-        [ -x $COMMAND ] && [ -r $CONFIG ] && {
-		killall ntpd
-		/etc/init.d/ntpd start
-        } &
+. /etc/functions.sh
+
+config_cb() {
+        local cfg="$CONFIG_SECTION"
+        local cfgtype
+        config_get cfgtype "$cfg" TYPE
+
+        case "$cfgtype" in
+                timezone)
+                        config_get posixtz      $cfg posixtz
+                        config_get zoneinfo     $cfg zoneinfo
+
+                        ps x | grep 'ntpd' >&- || {
+                                route -n 2>&- | grep '^0.0.0.0' >&- && {
+                                        echo "$posixtz" > /etc/TZ
+					/etc/init.d/ntpd start
+                                }
+                        }
+                ;;
+        esac
 }
+
+case "${ACTION:-ifup}" in
+        ifup)
+                config_load timezone&
+        ;;
+        ifdown)
+                route -n 2>&- | grep '^0.0.0.0' >&- || /etc/init.d/ntpd stop 2>&- >&-
+        ;;
+esac
