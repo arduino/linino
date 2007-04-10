@@ -14,7 +14,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.speech.cs.cmu.edu/flite/packed/flite-1.3/
 PKG_MD5SUM:=ae0aca1cb7b4801f4372f3a75a9e52b5
 PKG_CAT:=zcat
-
+ 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
@@ -31,17 +31,40 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
+		--enable-shared \
 		--with-audio="oss" \
+		--with-vox="cmu_us_kal16" \
+		--prefix="$(PKG_INSTALL_DIR)/usr" \
+		--exec-prefix="$(PKG_INSTALL_DIR)/usr" \
+		--bindir="$(PKG_INSTALL_DIR)/usr/bin" \
 	)
 endef
 
 define Build/Compile
-    $(MAKE) -C $(PKG_BUILD_DIR)
+	rm -rf $(PKG_INSTALL_DIR)
+	mkdir -p $(PKG_INSTALL_DIR)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
+endef
+
+define Build/InstallDev
+	mkdir -p $(STAGING_DIR)/usr/include/flite
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/flite/{cst,flite}*.h $(STAGING_DIR)/usr/include/flite/
+	mkdir -p $(STAGING_DIR)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libflite*.so.* $(STAGING_DIR)/usr/lib/
+endef
+	
+define Build/UninstallDev
+	rm -rf	$(STAGING_DIR)/usr/include/flite/{cst,flite}*.h \
+		$(STAGING_DIR)/usr/lib/libflite*.so.*
 endef
 
 define Package/flite/install
-	$(INSTALL_DIR) $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/flite $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/flite $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libflite*.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,flite))
