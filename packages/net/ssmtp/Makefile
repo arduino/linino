@@ -18,6 +18,9 @@ PKG_MD5SUM:=957e6fff08625fe34f4fc33d0925bbc9
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+EXTRA_LDFLAGS+=-Wl,-rpath-link,$(STAGING_DIR)/usr/lib
+TARGET_CONFIGURE_OPTS+=\
+	CC="$(TARGET_CC) $(EXTRA_LDFLAGS)"
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -38,17 +41,9 @@ endef
 # uses GNU configure
 
 define Build/Configure
-	cd $(PKG_BUILD_DIR)
 	$(call Build/Configure/Default, \
 		--enable-ssl \
 	)
-endef
-
-define Build/Compile
-	EXTRA_CFLAGS="-I$(STAGING_DIR)/usr/include" \
-	EXTRA_LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		all
 endef
 
 define Package/ssmtp/install	
