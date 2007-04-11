@@ -53,7 +53,7 @@ define Package/pgsql-server
   URL:=http://www.postgresql.org/
 endef
 
-# Need a native ecpg and zic for build
+# Need a native ecpg ,pg_config, and zic for build
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
 		./configure \
@@ -88,11 +88,14 @@ define Build/Configure
 			--without-tk \
 			--with-zlib="yes" \
 	);
-	$(MAKE) -C $(PKG_BUILD_DIR)/src/interfaces/ecpg/preproc CC="gcc" CFLAGS+="-I../../libpq"
+	$(MAKE) -C $(PKG_BUILD_DIR)/src/interfaces/ecpg/preproc CC="$(HOSTCC)" CFLAGS+="-I../../libpq"
 	mv $(PKG_BUILD_DIR)/src/interfaces/ecpg/preproc/ecpg \
 		$(PKG_BUILD_DIR)/src/interfaces/ecpg/preproc/ecpg.host
-	$(MAKE) -C $(PKG_BUILD_DIR)/src/timezone CC="gcc"
+	$(MAKE) -C $(PKG_BUILD_DIR)/src/timezone CC="$(HOSTCC)"
 	mv $(PKG_BUILD_DIR)/src/timezone/zic $(PKG_BUILD_DIR)/src/timezone/zic.host
+	$(MAKE) -C $(PKG_BUILD_DIR)/src/bin/pg_config CC="$(HOSTCC)"
+	mv $(PKG_BUILD_DIR)/src/bin/pg_config/pg_config \
+		$(PKG_BUILD_DIR)/src/bin/pg_config/pg_config.host
 	$(MAKE) -C $(PKG_BUILD_DIR) distclean
 
 	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
@@ -237,7 +240,7 @@ endef
 
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/pg_config $(STAGING_DIR)/usr/bin/
+	$(CP) $(PKG_BUILD_DIR)/src/bin/pg_config/pg_config.host $(STAGING_DIR)/usr/bin/pg_config
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpq $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpq-fe.h $(STAGING_DIR)/usr/include/
