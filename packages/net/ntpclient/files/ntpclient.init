@@ -12,11 +12,10 @@ config_cb() {
 		ntp_client)
 			config_get hostname	$cfg hostname
 			config_get port		$cfg port
-			config_get count	$cfg count
 			
 			ps x | grep 'bin/[n]tpclient' >&- || {
 				route -n 2>&- | grep '^0.0.0.0' >&- && {
-					/usr/sbin/ntpclient -c ${count:-1} -h $hostname -p ${port:-123} 2>&- >&-
+					/usr/sbin/ntpclient -s -h $hostname -p ${port:-123} 2>&- >&-
 				}
 			}
 		;;
