@@ -1,2 +1,2 @@
 #!/bin/sh
-/usr/lib/qos.sh firewall | sh
+/usr/lib/qos/generate.sh firewall | sh
