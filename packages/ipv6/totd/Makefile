@@ -42,7 +42,7 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		CC=$(TARGET_CC) \
+		CC="$(TARGET_CC)" \
 		all
 endef
 
