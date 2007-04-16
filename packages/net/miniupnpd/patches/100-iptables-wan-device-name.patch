@@ -1,26 +1,34 @@
 diff -urN miniupnpd.orig/linux/iptables_init.sh miniupnpd/linux/iptables_init.sh
---- miniupnpd.orig/linux/iptables_init.sh	2006-11-23 07:56:34.000000000 -0500
-+++ miniupnpd/linux/iptables_init.sh	2006-11-24 18:57:43.000000000 -0500
-@@ -2,8 +2,7 @@
+--- miniupnpd.orig/linux/iptables_init.sh	2007-04-13 10:02:22.291113712 -0500
++++ miniupnpd/linux/iptables_init.sh	2007-04-13 10:04:33.346190312 -0500
+@@ -1,9 +1,12 @@
+ #! /bin/sh
  # $Id: iptables_init.sh,v 1.3 2006/11/23 12:32:57 nanard Exp $
++. /etc/functions.sh
  IPTABLES=iptables
- 
--#change this parameters :
+
+ #change this parameters :
 -EXTIF=eth0
-+EXTIF=$(uci get network.wan.ifname)
++include /lib/network
++scan_interfaces
++config_get EXTIF wan ifname
  EXTIP="`LC_ALL=C /sbin/ifconfig $EXTIF | grep 'inet addr' | awk '{print $2}' | sed -e 's/.*://'`"
  echo "External IP = $EXTIP"
  
 diff -urN miniupnpd.orig/linux/iptables_removeall.sh miniupnpd/linux/iptables_removeall.sh
---- miniupnpd.orig/linux/iptables_removeall.sh	2006-11-23 07:56:34.000000000 -0500
-+++ miniupnpd/linux/iptables_removeall.sh	2006-11-24 19:00:47.000000000 -0500
-@@ -2,8 +2,7 @@
+--- miniupnpd.orig/linux/iptables_removeall.sh	2007-04-13 10:01:53.455497392 -0500
++++ miniupnpd/linux/iptables_removeall.sh	2007-04-13 10:04:19.444303720 -0500
+@@ -1,9 +1,12 @@
+ #! /bin/sh
  # $Id: iptables_removeall.sh,v 1.3 2006/11/23 12:32:57 nanard Exp $
++. /etc/functions.sh
  IPTABLES=iptables
- 
--#change this parameters :
+
+ #change this parameters :
 -EXTIF=eth0
-+EXTIF=$(uci get network.wan.ifname)
++include /lib/network
++scan_interfaces
++config_get EXTIF wan ifname
  EXTIP="`LC_ALL=C /sbin/ifconfig $EXTIF | grep 'inet addr' | awk '{print $2}' | sed -e 's/.*://'`"
- 
+
  #removing the MINIUPNPD chain for nat
