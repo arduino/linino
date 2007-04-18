@@ -1,6 +1,6 @@
-diff -ruN sablevm-1.11.1-orig/src/libsablevm/system.h sablevm-1.11.1-1/src/libsablevm/system.h
---- sablevm-1.11.1-orig/src/libsablevm/system.h	2005-03-18 01:25:09.000000000 +0100
-+++ sablevm-1.11.1-1/src/libsablevm/system.h	2005-03-22 01:05:19.000000000 +0100
+diff -ruN sablevm-sdk-1.13-old/sablevm/src/libsablevm/system.h sablevm-sdk-1.13-new/sablevm/src/libsablevm/system.h
+--- sablevm-sdk-1.13-old/sablevm/src/libsablevm/system.h	2007-03-30 03:57:54.000000000 +0200
++++ sablevm-sdk-1.13-new/sablevm/src/libsablevm/system.h	2007-04-11 02:25:06.000000000 +0200
 @@ -279,9 +279,9 @@
  
  #elif defined (_SABLEVM_COPY_GC) || (_SABLEVM_GENCOPY_GC)
