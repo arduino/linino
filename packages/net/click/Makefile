@@ -30,7 +30,7 @@ define Package/click
   MENU:=1
   TITLE:=The Click Modular Router
   DESCRIPTION:=The Click Modular Router
-  URL:=http://pdos.csail.mit.edu/click/
+  URL:=http://www.read.cs.ucla.edu/click/
 endef
 
 define Package/roofnet
