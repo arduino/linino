@@ -9,20 +9,27 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lighttpd
-PKG_VERSION:=1.4.13
+PKG_VERSION:=1.4.15
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.lighttpd.net/download/
-PKG_MD5SUM:=d775d6478391b95d841a1018c8db0b95
-PKG_CAT:=zcat
+PKG_MD5SUM:=b994b8c359da578dec073cae52c4924f
+PKG_CAT:=bzcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
+define Package/lighttpd/Default
+  SECTION:=net
+  CATEGORY:=Network
+  URL:=http://www.lighttpd.net/
+endef
+
 define Package/lighttpd
+  $(call Package/lighttpd/Default)
   MENU:=1
   SECTION:=net
   CATEGORY:=Network
@@ -38,144 +45,124 @@ define Package/lighttpd/conffiles
 endef
 
 define Package/lighttpd-mod-accesslog
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=Access logging module
 endef
 
 define Package/lighttpd-mod-alias
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=Directory alias module
 endef
 
 define Package/lighttpd-mod-auth
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=Authentication module
 endef
 
 define Package/lighttpd-mod-cgi
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=CGI module
 endef
 
 define Package/lighttpd-mod-evasive
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=Evasive module
 endef
 
 define Package/lighttpd-mod-expire
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=Expire module
 endef
 
 define Package/lighttpd-mod-fastcgi
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=FastCGI module
 endef
 
 define Package/lighttpd-mod-proxy
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=Proxy module
 endef
 
 define Package/lighttpd-mod-redirect
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=URL redirection module
 endef
 
 define Package/lighttpd-mod-rewrite
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=URL rewriting module
 endef
 
 define Package/lighttpd-mod-setenv
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=Environment variable setting module
 endef
 
 define Package/lighttpd-mod-simple-vhost
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=Simple virtual hosting module
 endef
 
 define Package/lighttpd-mod-ssi
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=SSI module
 endef
 
 define Package/lighttpd-mod-status
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=Server status display module
 endef
 
 define Package/lighttpd-mod-usertrack
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=User tracking module
 endef
 
 define Package/lighttpd-mod-webdav
-  $(call Package/lighttpd)
+  $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=WebDAV module
 endef
 
+
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2 -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+	$(call Build/Configure/Default, \
+		--libdir=/usr/lib/lighttpd \
+		--sysconfdir=/etc/lighttpd \
+		--enable-shared \
+		--enable-static \
+		--disable-rpath \
+		--without-attr \
+		--without-bzip2 \
+		--without-fam \
+		--without-gdbm \
+		--without-ldap \
+		--without-lua \
+		--without-memcache \
+		--without-mysql \
+		--with-openssl="$(STAGING_DIR)/usr" \
+		--with-pcre \
+		--without-valgrind \
+		--with-webdav-props \
+		, \
+		CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2 $$$$CPPFLAGS" \
 		PCRE_LIB="-lpcre" \
-		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=/usr/lib/lighttpd \
-			--libexecdir=/usr/lib \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc/lighttpd \
-			$(DISABLE_LARGEFILE) \
-			$(DISABLE_NLS) \
-			--enable-shared \
-			--enable-static \
-			--disable-rpath \
-			--without-attr \
-			--without-bzip2 \
-			--without-fam \
-			--without-gdbm \
-			--without-ldap \
-			--without-lua \
-			--without-memcache \
-			--without-mysql \
-			--with-openssl="$(STAGING_DIR)/usr" \
-			--with-pcre \
-			--without-valgrind \
-			--with-webdav-props \
 	);
 endef
 
