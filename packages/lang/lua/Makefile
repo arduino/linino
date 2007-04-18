@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lua
-PKG_VERSION:=5.1.1
+PKG_VERSION:=5.1.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -17,7 +17,7 @@ PKG_SOURCE_URL:=http://www.lua.org/ftp/ \
 	http://ftp.gwdg.de/pub/languages/lua/ \
 	http://mirrors.dotsrc.org/lua/ \
 	http://www.tecgraf.puc-rio.br/lua/ftp/
-PKG_MD5SUM:=22f4f912f20802c11006fe9b84d5c461
+PKG_MD5SUM:=687ce4c2a1ddff18f1008490fdc4e5e0
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -83,8 +83,8 @@ define Build/Compile
 		AR="$(TARGET_CROSS)ar rcu" \
 		RANLIB="$(TARGET_CROSS)ranlib" \
 		INSTALL_ROOT=/usr \
-		MYCFLAGS="-I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-		MYLDFLAGS="-L$(STAGING_DIR)/usr/lib" \
+		MYCFLAGS="$(TARGET_CPPFLAGS) $(TARGET_CFLAGS)" \
+		MYLDFLAGS="$(TARGET_LDFLAGS)" \
 		PKG_VERSION=$(PKG_VERSION) \
 		all linux 
 	rm -rf $(PKG_INSTALL_DIR)
