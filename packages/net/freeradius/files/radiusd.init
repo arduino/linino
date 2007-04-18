@@ -8,8 +8,8 @@ PID_F=$RUN_D/radiusd.pid
 
 start() {
 	[ -f $DEFAULT ] && . $DEFAULT
-	[ -d $LOG_D ] || mkdir -p $LOG_D
-	[ -d $RUN_D ] || mkdir -p $RUN_D
+	mkdir -p $LOG_D
+	mkdir -p $RUN_D
 	radiusd $OPTIONS
 }
 

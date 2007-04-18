@@ -9,14 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeradius
-PKG_VERSION:=1.1.2
+PKG_VERSION:=1.1.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/radius/ \
 	http://freeradius.portal-to-web.de/ \
 	ftp://ftp.uk.freeradius.org/pub/radius/
-PKG_MD5SUM:=6649ac5f9666b4a8cd55a837068ca61e
+PKG_MD5SUM:=
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -191,12 +191,10 @@ define Package/freeradius-utils
   TITLE:=Misc. client utilities
 endef
 
-PKG_CONFIGURE_OPTIONS:= \
+PKG_CONFIGURE_ARGS:= \
 	--enable-shared \
 	--disable-static \
-	--disable-ltdl-install \
-	--with-ltdl-include="$(STAGING_DIR)/usr/include" \
-	--with-ltdl-lib="$(STAGING_DIR)/usr/lib" \
+	--disable-developer \
 	--with-openssl-includes="$(STAGING_DIR)/usr/include" \
 	--with-openssl-libraries="$(STAGING_DIR)/usr/lib" \
 	--enable-strict-dependencies \
@@ -221,8 +219,10 @@ PKG_CONFIGURE_OPTIONS:= \
 	--without-rlm_smb \
 	--with-rlm_sql \
 	--with-rlm_sqlcounter \
+	--without-rlm_sqlhpwippool \
 	--without-rlm_sqlippool \
 	--without-rlm_sql_db2 \
+	--without-rlm_sql_firebird \
 	--without-rlm_sql_freetds \
 	--without-rlm_sql_iodbc \
 	--without-rlm_sql_oracle \
@@ -234,63 +234,63 @@ PKG_CONFIGURE_OPTIONS:= \
 PKG_DICTIONARIES:= \
 	freeradius freeradius.internal \
 	rfc2865 rfc2866 rfc2867 rfc2868 rfc2869 rfc3162 rfc3576 rfc3580 \
+	rfc4372 rfc4675 rfc4679 \
 	microsoft \
 	wispr \
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-ldap),)
-  PKG_CONFIGURE_LIBS+= -lcrypto -lssl
-  PKG_CONFIGURE_OPTIONS+= \
+  PKG_CONFIGURE_ARGS+= \
 		--with-rlm_ldap-include-dir="$(STAGING_DIR)/usr/include" \
 		--with-rlm_ldap-lib-dir="$(STAGING_DIR)/usr/lib"
+  PKG_CONFIGURE_LIBS+= -lcrypto -lssl
 else
-  PKG_CONFIGURE_OPTIONS+= --without-rlm_ldap
+  PKG_CONFIGURE_ARGS+= --without-rlm_ldap
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-sql-mysql),)
-  PKG_CONFIGURE_LIBS+= -lz
-  PKG_CONFIGURE_OPTIONS+= \
+  PKG_CONFIGURE_ARGS+= \
 		--with-mysql-include-dir="$(STAGING_DIR)/usr/include" \
 		--with-mysql-lib-dir="$(STAGING_DIR)/usr/lib/mysql" \
 		--without-threads
+  PKG_CONFIGURE_LIBS+= -lz
 else
-  PKG_CONFIGURE_OPTIONS+= --without-rlm_sql_mysql
+  PKG_CONFIGURE_ARGS+= --without-rlm_sql_mysql
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-sql-pgsql),)
-  PKG_CONFIGURE_OPTIONS+= \
+  PKG_CONFIGURE_ARGS+= \
 		--with-rlm_sql_postgresql-include-dir="$(STAGING_DIR)/usr/include" \
 		--with-rlm_sql_postgresql-lib-dir="$(STAGING_DIR)/usr/lib"
 else
-  PKG_CONFIGURE_OPTIONS+= --without-rlm_sql_postgresql
+  PKG_CONFIGURE_ARGS+= --without-rlm_sql_postgresql
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-eap-peap),)
-  PKG_CONFIGURE_OPTIONS+= --with-rlm_eap_peap
+  PKG_CONFIGURE_ARGS+= --with-rlm_eap_peap
 else
-  PKG_CONFIGURE_OPTIONS+= --without-rlm_eap_peap
+  PKG_CONFIGURE_ARGS+= --without-rlm_eap_peap
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-eap-tls),)
-  PKG_CONFIGURE_OPTIONS+= --with-rlm_eap_tls
+  PKG_CONFIGURE_ARGS+= --with-rlm_eap_tls
 else
-  PKG_CONFIGURE_OPTIONS+= --without-rlm_eap_tls
+  PKG_CONFIGURE_ARGS+= --without-rlm_eap_tls
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-eap-ttls),)
-  PKG_CONFIGURE_OPTIONS+= --with-rlm_eap_ttls
+  PKG_CONFIGURE_ARGS+= --with-rlm_eap_ttls
 else
-  PKG_CONFIGURE_OPTIONS+= --without-rlm_eap_ttls
+  PKG_CONFIGURE_ARGS+= --without-rlm_eap_ttls
 endif
 
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--libdir=/usr/lib/freeradius \
 		--libexecdir=/usr/lib/freeradius \
-		$(PKG_CONFIGURE_OPTIONS) \
+		$(PKG_CONFIGURE_ARGS) \
 		, \
 		LDFLAGS="$$$$LDFLAGS -L$(PKG_INSTALL_DIR)/usr/lib/freeradius" \
 		LIBS="$(PKG_CONFIGURE_LIBS)" \
-		sys_lib_search_path_spec="$(STAGING_DIR)/usr/lib $(STAGING_DIR)/lib" \
 		MYSQL_CONFIG="no" \
 	)
 endef
@@ -309,8 +309,10 @@ define Package/freeradius/install
 	done
 	$(INSTALL_DIR) $(1)/usr/share/freeradius
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/freeradius/dictionary $(1)/usr/share/freeradius/
+	$(SED) "s,^\(\$$$$INCLUDE\),#\1,g" $(1)/usr/share/freeradius/dictionary
 	for f in $(PKG_DICTIONARIES); do \
 		$(CP) $(PKG_INSTALL_DIR)/usr/share/freeradius/dictionary.$$$${f} $(1)/usr/share/freeradius/ ; \
+		$(SED) "s,^#\(\$$$$INCLUDE dictionary\.$$$${f}\),\1,g" $(1)/usr/share/freeradius/dictionary ; \
 	done
 	$(INSTALL_DIR) $(1)/usr/lib/freeradius
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/freeradius/libradius{,-*}.so $(1)/usr/lib/
