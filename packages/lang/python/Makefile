@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python
-PKG_VERSION:=2.4.4
-PKG_RELEASE:=1
+PKG_VERSION:=2.5
+PKG_RELEASE:=3
 
 PKG_SOURCE:=Python-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.python.org/ftp/python/2.4.4/
-PKG_MD5SUM:=0ba90c79175c017101100ebf5978e906
+PKG_SOURCE_URL:=http://www.python.org/ftp/python/2.5/
+PKG_MD5SUM:=ddb7401e711354ca83b7842b733825a3
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Python-$(PKG_VERSION)
@@ -22,11 +22,14 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
+PY_DISABLED_MODULES=readline pyexpat dbm gdbm bsddb \
+	_curses _curses_panel _tkinter nis zipfile
+
 define Package/python
   SECTION:=lang
   CATEGORY:=Languages
   DEPENDS:=+uclibcxx
-  TITLE:=Python programming language
+  TITLE:=Python 2.5 programming language
   URL:=http://www.python.org/
 endef
 
@@ -43,21 +46,20 @@ endef
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); \
+		rm -rf config.cache; \
 		CONFIG_SITE= \
-		./configure --with-threads=no; \
+		./configure --with-threads=no --with-cxx=no; \
 		$(MAKE) python Parser/pgen; \
 		mv python hostpython; \
 		mv Parser/pgen Parser/hostpgen; \
 		make distclean; \
-		echo "import sys" > $(PKG_BUILD_DIR)/setup.py.new; \
-		echo "sys.path.append('$(PKG_BUILD_DIR)/Lib')" >> $(PKG_BUILD_DIR)/setup.py.new; \
-		cat $(PKG_BUILD_DIR)/setup.py >> $(PKG_BUILD_DIR)/setup.py.new; \
-		mv $(PKG_BUILD_DIR)/setup.py.new $(PKG_BUILD_DIR)/setup.py; \
 	);
 	$(call Build/Configure/Default, \
 		--disable-shared \
+		--with-cxx=no \
 		--sysconfdir=/etc \
-		--with-threads=no, \
+		--with-threads=no \
+		--disable-ipv6 \
 		HOSTPYTHON=./hostpython \
 		HOSTPGEN=./Parser/hostpgen \
 	)
@@ -65,17 +67,22 @@ endef
 
 MAKE_OPTS:=\
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CROSS_COMPILE=yes \
+		PYTHON_MODULES_INCLUDE=$(STAGING_DIR)/include \
+		PYTHON_MODULES_LIB=$(STAGING_DIR)/lib \
+		PYTHON_DISABLE_MODULES="$(PY_DISABLED_MODULES)" \
+		CFLAGS="$(TARGET_CFLAGS) -fno-inline" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
 		LD="$(TARGET_CC)" \
-		BLDSHARED="$(TARGET_CC) -shared -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
 		HOSTPYTHON=./hostpython \
 		HOSTPGEN=./Parser/hostpgen
 
 define Build/Compile
+	export PYTHON_DISABLE_SSL=1
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(MAKE_OPTS) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		EXTRA_CFLAGS="$(TARGET_CFLAGS) -fno-inline" \
+		CROSS_COMPILE=yes \
 		all install
 endef
 
@@ -83,29 +90,29 @@ define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/hostpython $(STAGING_DIR)/usr/bin/
 	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/python2.4 $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/python2.5 $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.4 $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.5 $(STAGING_DIR)/usr/lib/
 endef
 
 define Build/UninstallDev
 	rm -rf \
-		$(STAGING_DIR)/usr/{include,lib}/python2.4
+		$(STAGING_DIR)/usr/{include,lib}/python2.5
 endef
 
 define Package/python/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/python2.4 $(1)/usr/bin/
-	ln -sf python2.4 $(1)/usr/bin/python
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/python2.5 $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/python $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.4 $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.5 $(1)/usr/lib/
 	rm -rf \
-		$(1)/usr/lib/python2.4/bsddb/test \
-		$(1)/usr/lib/python2.4/distutils/tests \
-		$(1)/usr/lib/python2.4/email/test \
-		$(1)/usr/lib/python2.4/idlelib \
-		$(1)/usr/lib/python2.4/lib-tk \
-		$(1)/usr/lib/python2.4/test \
+		$(1)/usr/lib/python2.5/bsddb/test \
+		$(1)/usr/lib/python2.5/distutils/tests \
+		$(1)/usr/lib/python2.5/email/test \
+		$(1)/usr/lib/python2.5/idlelib \
+		$(1)/usr/lib/python2.5/lib-tk \
+		$(1)/usr/lib/python2.5/test \
 
 endef
 
