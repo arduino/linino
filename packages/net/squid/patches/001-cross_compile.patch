@@ -557,7 +557,7 @@ diff -urN squid-2.5.STABLE13/src/Makefile.in squid-2.5.STABLE13.new/src/Makefile
  cf_parser.h: cf.data cf_gen$(EXEEXT)
 +	rm -f cf_gen
 +	gcc -c ctype.c
-+	gcc -o cf_gen cf_gen.c -DNODEBUG=1 -I./ -I../ -I../include/ -L../lib -lmiscutil$(shell uname -m) -lm -lnsl -Wl,ctype.o
++	gcc -o cf_gen cf_gen.c -DNODEBUG=1 -I./ -I../ -I../include/ $(CPPFLAGS) -L../lib -lmiscutil$(shell uname -m) -lm -lnsl -Wl,ctype.o
  	./cf_gen cf.data 
  
  cf_gen_defines.h: $(srcdir)/cf_gen_defines $(srcdir)/cf.data.pre
