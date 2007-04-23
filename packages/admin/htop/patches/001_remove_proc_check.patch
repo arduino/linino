@@ -1,0 +1,63 @@
+diff -purN htop-0.6.5_org/configure htop-0.6.5/configure
+--- htop-0.6.5_org/configure	2007-04-18 15:38:08.000000000 -0400
++++ htop-0.6.5/configure	2007-04-18 17:53:18.000000000 -0400
+@@ -5286,59 +5286,6 @@ _ACEOF
+ 
+ fi;
+ 
+-as_ac_File=`echo "ac_cv_file_$PROCDIR/stat" | $as_tr_sh`
+-echo "$as_me:$LINENO: checking for $PROCDIR/stat" >&5
+-echo $ECHO_N "checking for $PROCDIR/stat... $ECHO_C" >&6
+-if eval "test \"\${$as_ac_File+set}\" = set"; then
+-  echo $ECHO_N "(cached) $ECHO_C" >&6
+-else
+-  test "$cross_compiling" = yes &&
+-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+-   { (exit 1); exit 1; }; }
+-if test -r "$PROCDIR/stat"; then
+-  eval "$as_ac_File=yes"
+-else
+-  eval "$as_ac_File=no"
+-fi
+-fi
+-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+-echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+-if test `eval echo '${'$as_ac_File'}'` = yes; then
+-  :
+-else
+-  { { echo "$as_me:$LINENO: error: Cannot find /proc/stat. Make sure you have a Linux-compatible /proc filesystem mounted. See the file README for help." >&5
+-echo "$as_me: error: Cannot find /proc/stat. Make sure you have a Linux-compatible /proc filesystem mounted. See the file README for help." >&2;}
+-   { (exit 1); exit 1; }; }
+-fi
+-
+-as_ac_File=`echo "ac_cv_file_$PROCDIR/meminfo" | $as_tr_sh`
+-echo "$as_me:$LINENO: checking for $PROCDIR/meminfo" >&5
+-echo $ECHO_N "checking for $PROCDIR/meminfo... $ECHO_C" >&6
+-if eval "test \"\${$as_ac_File+set}\" = set"; then
+-  echo $ECHO_N "(cached) $ECHO_C" >&6
+-else
+-  test "$cross_compiling" = yes &&
+-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+-   { (exit 1); exit 1; }; }
+-if test -r "$PROCDIR/meminfo"; then
+-  eval "$as_ac_File=yes"
+-else
+-  eval "$as_ac_File=no"
+-fi
+-fi
+-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+-echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+-if test `eval echo '${'$as_ac_File'}'` = yes; then
+-  :
+-else
+-  { { echo "$as_me:$LINENO: error: Cannot find /proc/meminfo. Make sure you have a Linux-compatible /proc filesystem mounted. See the file README for help." >&5
+-echo "$as_me: error: Cannot find /proc/meminfo. Make sure you have a Linux-compatible /proc filesystem mounted. See the file README for help." >&2;}
+-   { (exit 1); exit 1; }; }
+-fi
+-
+-
+           ac_config_files="$ac_config_files Makefile"
+ 
+ cat >confcache <<\_ACEOF
