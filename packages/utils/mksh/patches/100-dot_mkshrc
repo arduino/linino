@@ -1,19 +1,21 @@
---- mksh.old/dot.mkshrc	2007-03-04 06:21:11.000000000 +0000
-+++ mksh.dev/dot.mkshrc	2007-03-05 22:11:49.000000000 +0000
+diff -ur mksh.old/dot.mkshrc mksh.dev/dot.mkshrc
+--- mksh.old/dot.mkshrc	2007-04-24 14:21:53.725182064 +0200
++++ mksh.dev/dot.mkshrc	2007-04-24 14:27:50.157996040 +0200
 @@ -1,6 +1,6 @@
- # $MirOS: src/bin/mksh/dot.mkshrc,v 1.8 2007/03/04 06:20:48 tg Exp $
- 
--: ${EDITOR:=/bin/ed} ${HOSTNAME:=$(hostname -s 2>/dev/null || hostname)}
-+: ${EDITOR:=/bin/ed} ${HOSTNAME:=$(</proc/sys/kernel/hostname)}
- PS1='$(((rv=$?)) && print $rv\|)${USER:=$(id -un)}@${HOSTNAME:=nil}:$(
- 	local pfx=~ wd=${PWD:-$(pwd)}
- 	[[ ${wd#$pfx} = $wd || $pfx = ?(/) ]] || wd=\~${wd#$pfx}
-@@ -21,7 +21,7 @@ export EDITOR HOSTNAME MKSH=$(whence -p 
+ : ${EDITOR:=/bin/ed} ${TERM:=vt100}
+-[[ ${HOSTNAME:=$(ulimit -c 0; hostname -s 2>/dev/null)} = \
+-    @(localhost|*([ 	])) ]] && HOSTNAME=$(ulimit -c 0; hostname 2>/dev/null)
++[[ ${HOSTNAME:=$(ulimit -c 0; cat /proc/sys/kernel/hostname)} = \
++    @(localhost|*([ 	])) ]] && HOSTNAME=$(ulimit -c 0; cat /proc/sys/kernel/hostname)
+ if [[ $(ulimit -c 0; id -u 2>/dev/null) -eq 0 ]]; then
+ 	PS1='# '
+ else
+@@ -25,7 +25,7 @@
  alias l='/bin/ls -F'
  alias la='l -a'
  alias ll='l -l'
 -alias lo='la -lo'
 +alias lo='la -l'
- [ -x /usr/bin/hd ] || eval alias hd="'hexdump -e '\\''\"%08.8_ax  \" 8/1" \
- 	'"%02X " " - " 8/1 "%02X "'"'\\'' -e '\\''"'"  |" "%_p"'"'\\''" \
- 	"-e '\\''"'"|\n"'"'\\'' '"
+ whence -p rot13 >/dev/null || alias rot13='tr [A-Za-z] [N-ZA-Mn-za-m]'
+ whence -p hd >/dev/null || function hd {
+ 	hexdump -e '"%08.8_ax  " 8/1 "%02X " " - " 8/1 "%02X "' \

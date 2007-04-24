@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mksh
-PKG_VERSION:=R29b
+PKG_VERSION:=R29c
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).cpio.gz
 PKG_SOURCE_URL:=http://www.mirbsd.org/MirOS/dist/mir/mksh
-PKG_MD5SUM:=a21850403bd30bab461f2fc9f9b803b8
+PKG_MD5SUM:=183957bfcbf7ca212843d6ca85be2fce
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
