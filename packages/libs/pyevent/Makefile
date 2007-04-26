@@ -17,7 +17,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/pyevent
  SECTION:=libs
  CATEGORY:=Libraries
- DEPENDS:=+libevent
+ DEPENDS:=+libevent +python
  TITLE:=Pyevent
  MAINTAINER:=jjones@pavlovmedia.com
  DESCRIPTION:=\
