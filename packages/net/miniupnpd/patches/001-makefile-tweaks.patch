@@ -1,15 +1,15 @@
-diff -ur miniupnpd.old/Makefile.openwrt miniupnpd.dev/Makefile.openwrt
---- miniupnpd.old/Makefile.openwrt	2007-03-24 18:44:00.062407944 +0100
-+++ miniupnpd.dev/Makefile.openwrt	2007-03-24 18:43:43.659901504 +0100
-@@ -2,7 +2,6 @@
+--- miniupnpd-1.0-RC4/Makefile.openwrt.orig	2007-04-26 14:46:51.000000000 -0500
++++ miniupnpd-1.0-RC4/Makefile.openwrt	2007-04-26 14:52:55.000000000 -0500
+@@ -2,7 +2,7 @@
  # http://miniupnp.free.fr/
  # Author : Thomas Bernard
  # for use with GNU Make
 -include $(TOPDIR)/rules.mk
++
  #CFLAGS = -Wall -O -D_GNU_SOURCE -g
  #CFLAGS = -Wall -Os -D_GNU_SOURCE
  #CC = mipsel-linux-gcc
-@@ -11,17 +10,15 @@
+@@ -11,7 +11,7 @@
  CFLAGS += -D_GNU_SOURCE
  RM = rm -f
  INSTALL = install
@@ -18,9 +18,7 @@ diff -ur miniupnpd.old/Makefile.openwrt miniupnpd.dev/Makefile.openwrt
  
  BASEOBJS = miniupnpd.o upnphttp.o upnpdescgen.o upnpsoap.o \
             upnpreplyparse.o minixml.o \
- 		   upnpredirect.o getifaddr.o daemonize.o upnpglobalvars.o \
--		   options.o
-+		   options.o upnppermissions.o
+@@ -20,8 +20,6 @@
  
  LNXOBJS = linux/getifstats.o linux/iptcrdr.o
  
@@ -29,7 +27,7 @@ diff -ur miniupnpd.old/Makefile.openwrt miniupnpd.dev/Makefile.openwrt
  TESTUPNPDESCGENOBJS = testupnpdescgen.o upnpdescgen.o
  
  EXECUTABLES = miniupnpd testupnpdescgen
-@@ -38,6 +35,7 @@
+@@ -38,6 +36,7 @@
  	@echo no install for now...
  
  miniupnpd:	$(BASEOBJS) $(LNXOBJS) $(LIBS)
@@ -37,7 +35,19 @@ diff -ur miniupnpd.old/Makefile.openwrt miniupnpd.dev/Makefile.openwrt
  
  testupnpdescgen:	$(TESTUPNPDESCGENOBJS)
  
-@@ -69,3 +67,4 @@
+@@ -59,13 +58,14 @@
+ upnphttp.o: upnphttp.h upnpdescgen.h miniupnpdpath.h upnpsoap.h
+ upnpdescgen.o: upnpdescgen.h miniupnpdpath.h upnpglobalvars.h
+ upnpsoap.o: upnpglobalvars.h upnphttp.h upnpsoap.h upnpreplyparse.h
+-upnpsoap.o: upnpredirect.h openbsd/getifstats.h
++upnpsoap.o: upnpredirect.h getifstats.h
+ upnpreplyparse.o: upnpreplyparse.h minixml.h
+ minixml.o: minixml.h
+ upnpredirect.o: upnpredirect.h upnpglobalvars.h openbsd/obsdrdr.h
+ daemonize.o: daemonize.h
+ upnpglobalvars.o: upnpglobalvars.h
+-linux/getifstats.o: openbsd/getifstats.h
++linux/getifstats.o: getifstats.h
  linux/iptcrdr.o: linux/iptcrdr.h
  testupnpdescgen.o: upnpdescgen.h
  upnpdescgen.o: upnpdescgen.h miniupnpdpath.h upnpglobalvars.h
