@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=samba
 PKG_VERSION:=2.0.10
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 PKG_MD5SUM:=54870482fe036b7e69dd48c90661eec6
 
 PKG_SOURCE_URL:=ftp://se.samba.org/pub/samba/stable \
@@ -181,7 +181,7 @@ define Package/samba-common/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/smbpasswd.shared $(1)/usr/bin/smbpasswd
 	$(INSTALL_DIR) $(1)/usr/share/samba
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/codepage.{437,850} $(1)/usr/share/samba/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{437,850,ISO8859-1} $(1)/usr/share/samba/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{437,850,ISO8859-1,ISO8859-15} $(1)/usr/share/samba/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/codepage.852 $(1)/usr/share/samba/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{852,ISO8859-2} $(1)/usr/share/samba/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/codepage.866 $(1)/usr/share/samba/
