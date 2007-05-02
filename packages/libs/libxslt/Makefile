@@ -33,6 +33,16 @@ define Package/libxslt
   URL:=http://xmlsoft.org/XSLT/
 endef
 
+define Package/xsltproc
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=+libxml2 +libxslt
+  TITLE:=Gnome XSLT xsltproc Utility
+  DESCRIPTION:=\
+       XSLT XML transformation utility
+  URL:=http://xmlsoft.org/XSLT/
+endef
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
@@ -88,4 +98,10 @@ define Package/libxslt/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxslt.so.* $(1)/usr/lib/
 endef
 
+define Package/xsltproc/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xsltproc $(1)/usr/bin/
+endef
+
 $(eval $(call BuildPackage,libxslt))
+$(eval $(call BuildPackage,xsltproc))
