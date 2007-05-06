@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/aiccu
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+libpthread
+  DEPENDS:=+libpthread +ntpclient
   TITLE:=SixXS Automatic IPv6 Connectivity Client Utility
   URL:=http://www.sixxs.net/tools/aiccu/
 endef
@@ -45,7 +45,7 @@ define Package/aiccu/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unix-console/$(PKG_NAME) $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
-	install -m 644 $(PKG_BUILD_DIR)/doc/aiccu.conf $(1)/etc/
+	$(INSTALL_CONF) ./files/aiccu.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/aiccu.init $(1)/etc/init.d/aiccu
 endef
