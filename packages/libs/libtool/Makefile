@@ -53,6 +53,9 @@ endef
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libtool $(STAGING_DIR)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libtoolize $(STAGING_DIR)/usr/bin/
+	mkdir -p $(STAGING_DIR)/usr/share/
+	$(CP) -R $(PKG_INSTALL_DIR)/usr/share/* $(STAGING_DIR)/usr/share/
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/ltdl.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(I_LIBLTDL_DEV)/usr/lib
@@ -61,6 +64,10 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/libtool/config.guess $(STAGING_DIR)/usr/share/libtool/
 	$(SED) 's|^sys_lib_dlsearch_path_spec=.*|sys_lib_dlsearch_path_spec="$(STAGING_DIR)/usr/lib $(STAGING_DIR)/lib"|g' \
 		$(STAGING_DIR)/usr/bin/libtool
+	$(SED) 's|^prefix=.*|prefix=$(STAGING_DIR)/usr|g' \
+		$(STAGING_DIR)/usr/bin/libtoolize
+	$(SED) 's|^datadir=.*|datadir=$(STAGING_DIR)/usr/share|g' \
+		$(STAGING_DIR)/usr/bin/libtoolize
 endef
 
 define Build/UninstallDev
