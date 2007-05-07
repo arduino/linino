@@ -28,7 +28,7 @@ PY_DISABLED_MODULES=readline pyexpat dbm gdbm bsddb \
 define Package/python
   SECTION:=lang
   CATEGORY:=Languages
-  DEPENDS:=+uclibcxx
+  DEPENDS:=+uclibcxx +libpthread
   TITLE:=Python 2.5 programming language
   URL:=http://www.python.org/
 endef
@@ -58,7 +58,7 @@ define Build/Configure
 		--disable-shared \
 		--with-cxx=no \
 		--sysconfdir=/etc \
-		--with-threads=no \
+		--with-threads \
 		--disable-ipv6 \
 		HOSTPYTHON=./hostpython \
 		HOSTPGEN=./Parser/hostpgen \
