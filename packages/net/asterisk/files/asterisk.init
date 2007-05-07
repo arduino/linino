@@ -8,7 +8,10 @@ start() {
 	[ -f $DEFAULT ] && . $DEFAULT
 	[ -d /var/run ] || mkdir -p /var/run
 	[ -d /var/log/asterisk ] || mkdir -p /var/log/asterisk
-	[ -d /var/spool/asterisk ] || mkdir -p /var/spool/asterisk
+	[ -d /var/spool/asterisk ] || {
+		mkdir -p /var/spool/asterisk
+		ln -s /usr/lib/asterisk/astdb /var/spool/asterisk/astdb
+	}
 	/usr/sbin/asterisk $OPTIONS
 }
 
