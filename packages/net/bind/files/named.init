@@ -1,27 +1,21 @@
 #!/bin/sh /etc/rc.common
 
-lease_file=/tmp/dhcpd.leases
-config_file=/etc/dhcpd.conf
-pid_file=/var/run/dhcpd.pid
+config_file=/etc/bind/named.conf
+pid_file=/var/run/named.pid
 
 start() {
-  echo Starting isc-dhcpd
+  echo Starting isc-bind
 
-  if [ ! -e $lease_file ]; then
-    echo "  Creating $lease_file"
-    touch $lease_file
-  fi
-
-  /usr/sbin/dhcpd -cf $config_file -lf $lease_file
+  /usr/sbin/named -c $config_file
 
   if [ $$ -eq 0 ]
   then
-    echo "  isc-dhcpd failed to start"
+    echo "  isc-bind failed to start"
   fi
 }
 
 stop() {
-  echo "Stopping isc-dhcpd"
+  echo "Stopping isc-bind"
   if [ -e $pid_file ]
   then
     kill `cat $pid_file`
@@ -29,7 +23,7 @@ stop() {
     if [ $$ -eq 0 ]
     then
       echo "  PID " `cat $pid_file` not found
-      echo "  Is the DHCP server running?"
+      echo "  Is the named server running?"
     fi
 
     rm $pid_file
