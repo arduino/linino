@@ -47,4 +47,4 @@ define Build/UninstallDev
 		$(STAGING_DIR)/usr/lib/libbz2.a
 endef
 
-$(eval $(call Build/DefaultTargets))
+$(eval $(call BuildPackage/libbzip2))

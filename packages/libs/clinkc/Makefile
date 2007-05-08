@@ -54,4 +54,4 @@ define Build/UninstallDev
 		$(STAGING_DIR)/usr/lib/libclinkc.a
 endef
 
-$(eval $(call Build/DefaultTargets))
+$(eval $(call BuildPackage/libclinkc))
