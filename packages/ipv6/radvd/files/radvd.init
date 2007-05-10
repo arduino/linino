@@ -1,5 +1,6 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2006 OpenWrt.org
+START=50
 
 start() {
 	echo 1 > /proc/sys/net/ipv6/conf/all/forwarding

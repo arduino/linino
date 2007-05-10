@@ -1,4 +1,5 @@
 #!/bin/sh /etc/rc.common
+START=50
 
 config_file=/etc/bind/named.conf
 pid_file=/var/run/named.pid
