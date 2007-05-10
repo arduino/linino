@@ -53,8 +53,6 @@ define Package/vncrepeater/install
 	$(CP) $(PKG_BUILD_DIR)/repeater $(1)/usr/sbin/$(PKG_NAME)
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_BUILD_DIR)/uvncrepeater.ini $(1)/etc/vncrepeater.conf
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(CP) $(PKG_BUILD_DIR)/S60vncrepeater $(1)/etc/init.d/
 endef
 
 $(eval $(call BuildPackage,vncrepeater))
