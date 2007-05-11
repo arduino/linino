@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/glib2
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libiconv +gettext
+  DEPENDS:=+libiconv +libintl
   TITLE:=glib 2.0
   DESCRIPTION:=The GLib library of C routines
   URL:=http://www.gtk.org/
