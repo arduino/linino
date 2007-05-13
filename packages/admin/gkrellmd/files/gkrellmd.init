@@ -1,0 +1,9 @@
+#!/bin/sh /etc/rc.common
+
+start() {
+	/usr/bin/gkrellmd
+}
+
+stop() {
+	killall gkrellmd
+}
