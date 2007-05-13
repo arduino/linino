@@ -1,0 +1,21 @@
+diff -Nur udev-103-old/Makefile udev-103-new/Makefile
+--- udev-103-old/Makefile	2006-10-20 14:43:35.000000000 +0200
++++ udev-103-new/Makefile	2006-11-24 15:44:35.000000000 +0100
+@@ -113,7 +113,7 @@
+ AR = $(CROSS_COMPILE)ar
+ RANLIB = $(CROSS_COMPILE)ranlib
+ 
+-CFLAGS		= -g -Wall -pipe -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64
++CFLAGS		= -Wall -pipe -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64
+ WARNINGS	= -Wstrict-prototypes -Wsign-compare -Wshadow \
+ 		  -Wchar-subscripts -Wmissing-declarations -Wnested-externs \
+ 		  -Wpointer-arith -Wcast-align -Wsign-compare -Wmissing-prototypes
+@@ -130,7 +130,7 @@
+ 
+ # if DEBUG is enabled, then we do not strip
+ ifeq ($(strip $(DEBUG)),true)
+-	CFLAGS  += -DDEBUG
++	CFLAGS  += -g -DDEBUG
+ endif
+ 
+ ifeq ($(strip $(USE_GCOV)),true)

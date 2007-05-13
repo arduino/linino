@@ -1,0 +1,28 @@
+diff -urN linux-2.6.16.7/drivers/char/watchdog/Kconfig linux-2.6.16.7.new/drivers/char/watchdog/Kconfig
+--- linux-2.6.16.7/drivers/char/watchdog/Kconfig	2006-04-17 23:53:25.000000000 +0200
++++ linux-2.6.16.7.new/drivers/char/watchdog/Kconfig	2006-04-22 23:23:53.000000000 +0200
+@@ -460,6 +460,14 @@
+ 	  timer expired and no process has written to /dev/watchdog during
+ 	  that time.
+ 
++config MTX1_WATCHDOG
++	tristate "MTX-1 Hardware Watchdog"
++	depends on WATCHDOG && MIPS_MTX1
++	help
++	  Hardware driver for the AccessCube MTX-1 watchdog. This is a
++	  watchdog timer that will reboot the machine after a 100 seconds
++	  timer expired.
++
+ # S390 Architecture
+ 
+ config ZVM_WATCHDOG
+diff -urN linux-2.6.16.7/drivers/char/watchdog/Makefile linux-2.6.16.7.new/drivers/char/watchdog/Makefile
+--- linux-2.6.16.7/drivers/char/watchdog/Makefile	2006-04-17 23:53:25.000000000 +0200
++++ linux-2.6.16.7.new/drivers/char/watchdog/Makefile	2006-04-22 23:21:18.000000000 +0200
+@@ -65,6 +65,7 @@
+ 
+ # MIPS Architecture
+ obj-$(CONFIG_INDYDOG) += indydog.o
++obj-$(CONFIG_MTX1_WATCHDOG) += mtx-1_watchdog.o
+ 
+ # S390 Architecture
