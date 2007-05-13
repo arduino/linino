@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -45,31 +45,24 @@ define Build/Configure
 	)
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR)/glib \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		install
+		all install
 endef
 
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(STAGING_DIR)/usr/bin/
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/glib-2.0 $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/glib-2.0 $(STAGING_DIR)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg* $(STAGING_DIR)/usr/lib/
-	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/g*-2.0.pc $(STAGING_DIR)/usr/lib/pkgconfig/
 endef
 
 define Build/UninstallDev
 	rm -rf \
-		$(STAGING_DIR)/usr/bin/{glib-genmarshal,glib-gettextize,glib-mkenums.gobject-query} \
 		$(STAGING_DIR)/usr/include/glib-2.0 \
-		$(STAGING_DIR)/usr/lib/{glib,libg*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/g*-2.0.pc 
+		$(STAGING_DIR)/usr/lib/libg*
 endef
 
 define Package/glib2/install	
