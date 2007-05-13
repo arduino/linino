@@ -39,6 +39,12 @@ define Build/Compile
 			$(BASH) Build.sh -d -r
 endef
 
+define Package/mksh/postinst
+#!/bin/sh
+grep mksh $${IPKG_INSTROOT}/etc/shells || \
+	echo "/bin/mksh" >> $${IPKG_INSTROOT}/etc/shells
+endef
+
 define Package/mksh/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/dot.mkshrc $(1)/etc/mkshrc
