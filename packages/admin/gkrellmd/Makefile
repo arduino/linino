@@ -1,3 +1,11 @@
+#
+# Copyright (C) 2007 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id: $
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gkrellmd
@@ -37,11 +45,9 @@ endef
 
 define Package/gkrellmd/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/server/$(PKG_NAME) $(1)/usr/bin/
-
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/server/$(PKG_NAME) $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc
-	$(CP) $(PKG_BUILD_DIR)/server/$(PKG_NAME).conf $(1)/etc/
-
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/server/$(PKG_NAME).conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/gkrellmd.init $(1)/etc/init.d/gkrellmd
 endef
