@@ -38,8 +38,7 @@ CONFIGURE_VARS += \
 		-I$(STAGING_DIR)/usr/lib/libintl/include \
 		-I$(STAGING_DIR)/usr/lib/libiconv/include \
 		-I$(STAGING_DIR)/usr/include/glib-2.0 \
-		-I$(STAGING_DIR)/usr/include/glib-2.0/glib \
-		-I$(STAGING_DIR)/usr/lib/glib-2.0/include" \
+		-I$(STAGING_DIR)/usr/include/glib-2.0/glib" \
 	SSHFS_LIBS=" \
 		-lglib-2.0 -lintl -liconv -lfuse -pthread \
 		-L$(STAGING_DIR)/usr/lib/libintl/lib \
