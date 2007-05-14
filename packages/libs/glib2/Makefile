@@ -55,6 +55,7 @@ endef
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/glib-2.0 $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_BUILD_DIR)/glibconfig.h $(STAGING_DIR)/usr/include/glib-2.0
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg* $(STAGING_DIR)/usr/lib/
 endef
