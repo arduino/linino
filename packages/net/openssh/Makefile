@@ -164,6 +164,46 @@ define Package/openssh-server/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/sshd $(1)/usr/sbin/
 endef
 
+define Package/openssh-server/postinst
+#!/bin/sh
+
+name=sshd
+id=99
+
+# do not change below
+# check if we are on real system
+if [ -z "$${IPKG_INSTROOT}" ]; then
+	# create copies of passwd and group, if we use squashfs
+	rootfs=`mount |awk '/root/ { print $$5 }'`
+	if [ "$$rootfs" = "squashfs" ]; then
+		if [ -h /etc/group ]; then
+			rm /etc/group
+			cp /rom/etc/group /etc/group
+		fi
+		if [ -h /etc/passwd ]; then
+			rm /etc/passwd
+			cp /rom/etc/passwd /etc/passwd
+		fi
+	fi
+fi
+
+echo ""
+if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then 
+	echo "adding group $$name to /etc/group"
+	echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group  
+fi
+
+if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then 
+	echo "adding user $$name to /etc/passwd"
+	echo "$${name}:x:$${id}:$${id}:$${name}:/var/empty/.$${name}:/bin/false" >> $${IPKG_INSTROOT}/etc/passwd
+fi
+
+grep -q '^ssh[[:space:]]*22/tcp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
+if [ $$? -ne 0 ]; then
+echo "ssh           22/tcp" >>$${IPKG_INSTROOT}/etc/services
+fi
+endef
+
 define Package/openssh-sftp-client/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/sftp $(1)/usr/bin/
