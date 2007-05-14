@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=speex
-PKG_VERSION:=1.1.8
+PKG_VERSION:=1.1.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://us.speex.org/download 
-PKG_MD5SUM:=734892c8ca5e7e835828048a1289a0cc
+PKG_SOURCE_URL:=http://downloads.us.xiph.org/releases/speex/
+PKG_MD5SUM:=1bd6cdf3a0ebabf818cd72a3401e2610
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -39,10 +39,13 @@ define Package/libspeex
   URL:=http://www.speex.org/
 endef
 
+TARGET_LDFLAGS:=$(TARGET_LDFLAGS) -lnotimpl
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \
+		--enable-fixed-point \
 		--disable-oggtest \
 	)
 endef

@@ -1,12 +1,13 @@
-diff -ur speex.old/libspeex/Makefile.in speex.dev/libspeex/Makefile.in
---- speex.old/libspeex/Makefile.in	2006-10-14 15:16:02.000000000 -0700
-+++ speex.dev/libspeex/Makefile.in	2006-10-14 15:14:35.000000000 -0700
-@@ -107,7 +107,7 @@
- 
+Binary files speex-1.1.12.orig/libspeex/.Makefile.in.swp and speex-1.1.12/libspeex/.Makefile.in.swp differ
+diff -urN speex-1.1.12.orig/libspeex/Makefile.in speex-1.1.12/libspeex/Makefile.in
+--- speex-1.1.12.orig/libspeex/Makefile.in	2007-05-13 13:18:43.000000000 +0200
++++ speex-1.1.12/libspeex/Makefile.in	2007-05-13 13:19:08.000000000 +0200
+@@ -245,7 +245,7 @@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
  EXTRA_DIST = testenc.c testenc_wb.c testenc_uwb.c testdenoise.c testecho.c
- 
 -INCLUDES = -I$(top_srcdir)/include -I$(top_builddir)/include -I$(top_builddir) @OGG_CFLAGS@
 +INCLUDES = -I$(top_srcdir)/include -I$(top_builddir)/include -I$(top_builddir)
- 
  lib_LTLIBRARIES = libspeex.la
  
+ # Sources for compilation in the library
