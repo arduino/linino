@@ -52,7 +52,7 @@ const long channel_frequency[] = {
 #define NUM_CHANNELS ( sizeof(channel_frequency) / sizeof(channel_frequency[0]) )
 
 #define SCAN_RETRY_MAX	5
-#define RNG_POLL_FREQ	2
+#define RNG_POLL_FREQ	1
 
 typedef struct internal_wsec_key {
 	uint8 index;		// 0x00
@@ -1032,17 +1032,22 @@ static int new_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) {
 
 #ifndef DEBUG
 static struct timer_list rng_timer;
+static spinlock_t rng_lock = SPIN_LOCK_UNLOCKED;
 
 static void rng_timer_tick(unsigned long n)
 {
 	struct net_device *dev = (struct net_device *) n;
+	unsigned long flags;
 	u16 data[4];
 	int i, ret;
 	
 	ret = 0;
+	spin_lock_irqsave(&rng_lock, flags);
 	for (i = 0; i < 3; i++) {
 		ret |= wl_get_val(dev, "rand", &data[i], sizeof(u16));
 	}
+	spin_unlock_irqrestore(&rng_lock, flags);
+
 	if (!ret)
 		batch_entropy_store(*((u32 *) &data[0]), *((u32 *) &data[2]), (jiffies % 255));
 
