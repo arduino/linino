@@ -56,10 +56,11 @@ do_ifup() {
 		[ -n "$static_route" ] && {
 			for route in $static_route; do {
 			eval "set $(echo $route | sed 's/:/ /g')"
-				if [ "$2" = "255.255.255.255" ]; then
+				if [ "$2" = "0.0.0.0" ]; then
 					opt="-host"
 				fi
 				$DEBUG route add ${opt:-"-net"} $1 netmask $2 gw $3 metric $4 
+				unset opt
 			} done
 		}
 
