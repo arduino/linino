@@ -21,7 +21,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
-
+ifeq ($(KERNEL),2.4)
 define Package/alsa-lib
   SECTION:=libs
   CATEGORY:=Libraries
@@ -32,6 +32,18 @@ define Package/alsa-lib
 	have enabled the ALSA support in the kernel.
   URL:=http://www.alsa-project.org/
 endef
+else
+define Package/alsa-lib
+  SECTION:=libs
+  CATEGORY:=Libraries
+  DEPENDS:=+kmod-soundcore @USB_SUPPORT
+  TITLE:=ALSA (Advanced Linux Sound Architecture) library
+  DESCRIPTION:=\
+	This is the library package for alsa, needed by some userspace programs. You must \\\
+	have enabled the ALSA support in the kernel.
+  URL:=http://www.alsa-project.org/
+endef
+endif
 
 define Build/Configure
 	$(call Build/Configure/Default,\
