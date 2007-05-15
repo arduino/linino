@@ -78,12 +78,15 @@ nvram_default lan_proto static
 	debug "### wrt54g 1.x hack ###"
 	remap eth0 vlan2
 	remap eth1 vlan1
+	nvram_default vlan0hwname "et0"
 	nvram_default vlan1hwname "et0"
-	nvram_default vlan2hwname "et0"
 	nvram_default lan_ifnames "vlan0 eth2"
-	nvram get lan_ifnames | grep vlan2 >/dev/null && {
+	if nvram get lan_ifnames | grep vlan2 >/dev/null; then
+		nvram_default vlan2hwname "et0"
 		nvram_default vlan2ports "1 2 3 4 5*"
-	}
+	else
+		nvram_default vlan0ports "1 2 3 4 5*"
+	fi
 }
 
 # hacks for asus wl-500g deluxe
