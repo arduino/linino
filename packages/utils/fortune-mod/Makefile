@@ -30,7 +30,7 @@ define Package/fortune-mod
 endef
 
 define Build/Compile
-	$(HOSTCC) -Wall -o $(PKG_BUILD_DIR)/util/strfile-host $(PKG_BUILD_DIR)/util/strfile.c -DVERSION=\"$(PKG_VERSION)\"
+	$(HOSTCC) -Wall -m32 -o $(PKG_BUILD_DIR)/util/strfile-host $(PKG_BUILD_DIR)/util/strfile.c -DVERSION=\"$(PKG_VERSION)\"
 	$(PKG_BUILD_DIR)/util/strfile-host $(PKG_BUILD_DIR)/datfiles/fortunes $(PKG_BUILD_DIR)/datfiles/fortunes.dat
 	$(MAKE) -C $(PKG_BUILD_DIR)/fortune
 endef
