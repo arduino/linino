@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/apr-util
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libiconv +libexpat
+  DEPENDS:=+libiconv +libexpat +apr
   TITLE:=Apache Portable Runtime Library Util
   URL:=http://apr.apache.org/
 endef
