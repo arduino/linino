@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aircrack-ng
-PKG_VERSION:=0.7
+PKG_VERSION:=0.9
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.aircrack-ng.org/
-PKG_MD5SUM:=34c0447951d438d76fa32d08eab5da01
+PKG_MD5SUM:=0fbf52827132d2996fc64afaef19cf68
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,7 +26,8 @@ define Package/aircrack-ng
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libpthread
-  TITLE:=Aircrack-ng is the next generation of aircrack with new features
+  TITLE:=next generation of aircrack with new features
+  DESCRIPTION:=Aircrack-ng is the next generation of aircrack with new features
   URL:=http://www.aircrack-ng.org/
 endef
 
