@@ -1,0 +1,13 @@
+diff -ur apr-util-0.9.13-old/configure apr-util-0.9.13/configure
+--- apr-util-0.9.13-old/configure	2006-11-29 13:01:46.000000000 +0100
++++ apr-util-0.9.13/configure	2007-05-15 02:12:29.000000000 +0200
+@@ -2039,9 +2039,6 @@
+    { (exit 1); exit 1; }; }
+   fi
+ 
+-  APR_BUILD_DIR="`$apr_config --installbuilddir`"
+-
+-      APR_BUILD_DIR="`cd $APR_BUILD_DIR && pwd`"
+ 
+   APR_INCLUDES="`$apr_config --includes`"
+   APR_LIBS="`$apr_config --link-libtool --libs`"
