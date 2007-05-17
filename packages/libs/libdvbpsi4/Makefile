@@ -54,7 +54,7 @@ endef
 
 define Package/libdvbpsi4/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INTALL_DIR)/usr/lib/libdvbpsi.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INTALL_DIR)/usr/lib/libdvbpsi.so* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libdvbpsi4))
