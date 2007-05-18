@@ -109,6 +109,8 @@ define Build/InstallDev
 	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/gnutls{,-extra}.pc
 	mkdir -p $(STAGING_DIR)/usr/share/aclocal
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/aclocal/libgnutls{,-extra}.m4 $(STAGING_DIR)/usr/share/aclocal/
+	$(SED)  "s,"prefix\=/usr",prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/gnutls-extra.pc
+	$(SED)  "s,"exec_prefix\=/usr",exec_prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/gnutls-extra.pc
 endef
 
 define Build/UninstallDev

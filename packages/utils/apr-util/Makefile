@@ -1,10 +1,10 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# crazy_imp
+# $ Id: $ 
 
 include $(TOPDIR)/rules.mk
 
@@ -56,6 +56,7 @@ define Build/InstallDev
 		$(CP)   $(PKG_INSTALL_DIR)/usr/lib/*aprutil* \
 		$(STAGING_DIR)/usr/lib/
 	$(SED)  "s,\"/usr\",$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/apu-config
+	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/libaprutil-0.la
 endef
 
 define Build/UninstallDev

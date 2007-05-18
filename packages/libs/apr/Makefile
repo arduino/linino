@@ -68,6 +68,7 @@ define Build/InstallDev
 		$(STAGING_DIR)/usr/share/
 	$(SED) "s,/usr/share/build,$(STAGING_DIR)/usr/share/build," $(STAGING_DIR)/usr/share/build/apr_rules.mk
 	$(SED)  "s,\"/usr\",$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/apr-config
+	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/libapr-0.la
 endef
 
 define Build/UninstallDev

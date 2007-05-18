@@ -1,10 +1,10 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# crazy_imp
+# $Id: $
 
 include $(TOPDIR)/rules.mk
 
@@ -61,6 +61,9 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/neon.pc $(STAGING_DIR)/usr/lib/pkgconfig/
 	$(SED)  "s,\=\/usr,\=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/neon-config
 	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/libneon.la
+	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/libneon.lav
+	$(SED)  "s,"prefix\=/usr",prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/neon.pc
+	$(SED)  "s,"exec_prefix\=/usr",exec_prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/neon.pc
 endef
 
 define Build/UninstallDev
