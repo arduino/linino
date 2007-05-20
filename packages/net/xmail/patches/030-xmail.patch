@@ -1,0 +1,12 @@
+diff -ruaN xmail-1.24.orig/xmail xmail-1.24/xmail
+--- xmail-1.24.orig/xmail	2006-12-31 20:03:59.000000000 +0100
++++ xmail-1.24/xmail	2007-02-02 13:14:39.000000000 +0100
+@@ -19,7 +19,7 @@
+ test -f $DAEMON || exit 0
+ 
+ set -e
+-ulimit -c 20000
++ulimit -c 10000
+ 
+ start_xmail()
+ {
