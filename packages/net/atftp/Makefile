@@ -73,6 +73,7 @@ define Package/atftp/install
 endef
 
 define Package/atftpd/install
+	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/atftpd $(1)/usr/sbin/
 endef
