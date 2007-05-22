@@ -26,7 +26,7 @@ define Package/subversion/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A compelling replacement for CVS
-  DEPENDS:=+zlib +neon +libintl
+  DEPENDS:=+zlib +neon +libintl +apr +apr-util
   URL:=http://subversion.tigris.org/
   SUBMENU:=subversion
 endef
@@ -61,6 +61,8 @@ define Build/Configure
 		--without-berkeley-db \
 		--with-ssl \
 		--disable-neon-version-check \
+		--with-apxs=no \
+		--with-apache=no \
 		, \
 		svn_lib_neon=yes \
 		LDFLAGS="-lcrypt -lnsl -lm -lintl -L$(STAGING_DIR)/usr/lib/libintl/lib/ \
@@ -96,3 +98,7 @@ endef
 $(eval $(call BuildPackage,subversion-libs))
 $(eval $(call BuildPackage,subversion-client))
 $(eval $(call BuildPackage,subversion-server))
+
+$(eval $(call RequireCommand,/usr/bin/ruby, \
+	$(PKG_NAME) requires ruby installed on the host-system. \
+))
