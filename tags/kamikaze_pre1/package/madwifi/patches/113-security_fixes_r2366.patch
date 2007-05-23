@@ -1,0 +1,238 @@
+diff -ur madwifi.old/net80211/ieee80211_input.c madwifi.dev/net80211/ieee80211_input.c
+--- madwifi.old/net80211/ieee80211_input.c	2007-05-23 16:27:33.877806448 +0200
++++ madwifi.dev/net80211/ieee80211_input.c	2007-05-23 16:27:46.742850664 +0200
+@@ -699,13 +699,31 @@
+ 
+ 			/* NB: assumes linear (i.e., non-fragmented) skb */
+ 
++			/* check length > header */
++			if (skb->len < sizeof(struct ether_header) + LLC_SNAPFRAMELEN
++			    + roundup(sizeof(struct athl2p_tunnel_hdr) - 2, 4) + 2) {
++				IEEE80211_DISCARD_MAC(vap, IEEE80211_MSG_INPUT,
++					ni->ni_macaddr, "data", "%s", "decap error");
++					vap->iv_stats.is_rx_decap++;
++				IEEE80211_NODE_STAT(ni, rx_decap);
++				goto err;
++			}
++
+ 			/* get to the tunneled headers */
+ 			ath_hdr = (struct athl2p_tunnel_hdr *)
+ 				skb_pull(skb, sizeof(struct ether_header) + LLC_SNAPFRAMELEN);
+- 			/* ignore invalid frames */
+-			if(ath_hdr == NULL)
++			eh_tmp = (struct ether_header *)
++				skb_pull(skb, roundup(sizeof(struct athl2p_tunnel_hdr) - 2, 4) + 2);
++			/* sanity check for malformed 802.3 length */
++			frame_len = ntohs(eh_tmp->ether_type);
++			if (skb->len < roundup(sizeof(struct ether_header) + frame_len, 4)) {
++				IEEE80211_DISCARD_MAC(vap, IEEE80211_MSG_INPUT,
++					ni->ni_macaddr, "data", "%s", "decap error");
++					vap->iv_stats.is_rx_decap++;
++				IEEE80211_NODE_STAT(ni, rx_decap);
+ 				goto err;
+-			
++			}
++
+ 			/* only implementing FF now. drop all others. */
+ 			if (ath_hdr->proto != ATH_L2TUNNEL_PROTO_FF) {
+ 				IEEE80211_DISCARD_MAC(vap,
+@@ -718,14 +736,7 @@
+ 			}
+ 			vap->iv_stats.is_rx_ffcnt++;
+ 			
+-			/* move past the tunneled header, with alignment */
+-			skb_pull(skb, roundup(sizeof(struct athl2p_tunnel_hdr) - 2, 4) + 2);
+-
+ 			skb1 = skb_clone(skb, GFP_ATOMIC); /* XXX: GFP_ATOMIC is overkill? */
+-			eh_tmp = (struct ether_header *)skb->data;
+-
+-			/* ether_type must be length*/
+-			frame_len = ntohs(eh_tmp->ether_type);
+ 
+ 			/* we now have 802.3 MAC hdr followed by 802.2 LLC/SNAP. convert to DIX */
+ 			athff_decap(skb);
+@@ -735,8 +746,6 @@
+ 
+ 			/* prepare second tunneled frame */
+ 			skb_pull(skb1, roundup(sizeof(struct ether_header) + frame_len, 4));
+-			eh_tmp = (struct ether_header *)skb1->data;
+-			frame_len = ntohs(eh_tmp->ether_type);
+ 			athff_decap(skb1);
+ 
+ 			/* deliver the frames */
+@@ -2530,6 +2539,19 @@
+ 			return;
+ 		}
+ 
++		/* IEEE802.11 does not specify the allowed range for 
++		 * beacon interval. We discard any beacons with a 
++		 * beacon interval outside of an arbitrary range in
++		 * order to protect against attack.
++		 */
++		if (!(IEEE80211_BINTVAL_MIN <= scan.bintval && 
++		     scan.bintval <= IEEE80211_BINTVAL_MAX)) {
++			IEEE80211_DISCARD(vap, IEEE80211_MSG_SCAN,
++				wh, "beacon", "invalid beacon interval (%u)", 
++				scan.bintval);
++			return;
++		}
++		
+ 		/*
+ 		 * Count frame now that we know it's to be processed.
+ 		 */
+@@ -2659,7 +2681,7 @@
+ 				IEEE80211_ADDR_COPY(ni->ni_bssid, wh->i_addr3);
+ 				memcpy(ni->ni_tstamp.data, scan.tstamp,
+ 					sizeof(ni->ni_tstamp));
+-				ni->ni_intval = scan.bintval;
++				ni->ni_intval = IEEE80211_BINTVAL_SANITISE(scan.bintval);
+ 				ni->ni_capinfo = scan.capinfo;
+ 				ni->ni_chan = ic->ic_curchan;
+ 				ni->ni_fhdwell = scan.fhdwell;
+@@ -3082,7 +3104,7 @@
+ 		ni->ni_rssi = rssi;
+ 		ni->ni_rstamp = rstamp;
+ 		ni->ni_last_rx = jiffies;
+-		ni->ni_intval = bintval;
++		ni->ni_intval = IEEE80211_BINTVAL_SANITISE(bintval);
+ 		ni->ni_capinfo = capinfo;
+ 		ni->ni_chan = ic->ic_curchan;
+ 		ni->ni_fhdwell = vap->iv_bss->ni_fhdwell;
+diff -ur madwifi.old/net80211/ieee80211_node.c madwifi.dev/net80211/ieee80211_node.c
+--- madwifi.old/net80211/ieee80211_node.c	2007-05-23 16:27:33.917800368 +0200
++++ madwifi.dev/net80211/ieee80211_node.c	2007-05-23 16:27:46.744850360 +0200
+@@ -655,7 +655,7 @@
+ 	memcpy(ni->ni_essid, se->se_ssid + 2, ni->ni_esslen);
+ 	ni->ni_rstamp = se->se_rstamp;
+ 	ni->ni_tstamp.tsf = se->se_tstamp.tsf;
+-	ni->ni_intval = se->se_intval;
++	ni->ni_intval = IEEE80211_BINTVAL_SANITISE(se->se_intval);
+ 	ni->ni_capinfo = se->se_capinfo;
+ 	ni->ni_chan = se->se_chan;
+ 	ni->ni_timoff = se->se_timoff;
+@@ -1222,7 +1222,7 @@
+ 		memcpy(ni->ni_essid, sp->ssid + 2, sp->ssid[1]);
+ 		IEEE80211_ADDR_COPY(ni->ni_bssid, wh->i_addr3);
+ 		memcpy(ni->ni_tstamp.data, sp->tstamp, sizeof(ni->ni_tstamp));
+-		ni->ni_intval = sp->bintval;
++		ni->ni_intval = IEEE80211_BINTVAL_SANITISE(sp->bintval);
+ 		ni->ni_capinfo = sp->capinfo;
+ 		ni->ni_chan = ic->ic_curchan;
+ 		ni->ni_fhdwell = sp->fhdwell;
+diff -ur madwifi.old/net80211/ieee80211_scan.h madwifi.dev/net80211/ieee80211_scan.h
+--- madwifi.old/net80211/ieee80211_scan.h	2006-02-06 17:03:21.000000000 +0100
++++ madwifi.dev/net80211/ieee80211_scan.h	2007-05-23 16:27:46.744850360 +0200
+@@ -130,7 +130,7 @@
+ 	u_int8_t bchan;
+ 	u_int8_t fhindex;
+ 	u_int8_t erp;
+-	u_int8_t bintval;
++	u_int16_t bintval;
+ 	u_int8_t timoff;
+ 	u_int8_t *tim;
+ 	u_int8_t *tstamp;
+diff -ur madwifi.old/net80211/ieee80211_var.h madwifi.dev/net80211/ieee80211_var.h
+--- madwifi.old/net80211/ieee80211_var.h	2007-05-23 16:27:33.933797936 +0200
++++ madwifi.dev/net80211/ieee80211_var.h	2007-05-23 16:27:46.745850208 +0200
+@@ -60,9 +60,15 @@
+ #define	IEEE80211_DTIM_MIN	1	/* min DTIM period */
+ #define	IEEE80211_DTIM_DEFAULT	1	/* default DTIM period */
+ 
+-#define	IEEE80211_BINTVAL_MAX	500	/* max beacon interval (TU's) */
++#define	IEEE80211_BINTVAL_MAX	1000	/* max beacon interval (TU's) */
+ #define	IEEE80211_BINTVAL_MIN	25	/* min beacon interval (TU's) */
+ #define	IEEE80211_BINTVAL_DEFAULT 100	/* default beacon interval (TU's) */
++#define IEEE80211_BINTVAL_VALID(_bi) \
++	((IEEE80211_BINTVAL_MIN <= (_bi)) && \
++	 ((_bi) <= IEEE80211_BINTVAL_MAX))
++#define IEEE80211_BINTVAL_SANITISE(_bi) \
++	(IEEE80211_BINTVAL_VALID(_bi) ? \
++	 (_bi) : IEEE80211_BINTVAL_DEFAULT)
+ 
+ #define	IEEE80211_BGSCAN_INTVAL_MIN	15	/* min bg scan intvl (secs) */
+ #define	IEEE80211_BGSCAN_INTVAL_DEFAULT	(5*60)	/* default bg scan intvl */
+diff -ur madwifi.old/net80211/ieee80211_wireless.c madwifi.dev/net80211/ieee80211_wireless.c
+--- madwifi.old/net80211/ieee80211_wireless.c	2007-05-23 16:27:33.924799304 +0200
++++ madwifi.dev/net80211/ieee80211_wireless.c	2007-05-23 16:27:46.747849904 +0200
+@@ -1249,34 +1249,36 @@
+ 	struct ieee80211vap *vap = dev->priv;
+ 	struct ieee80211com *ic = vap->iv_ic;
+ 
+-	if (wrq->disabled) {
+-		if (ic->ic_flags & IEEE80211_F_PMGTON) {
+-			ic->ic_flags &= ~IEEE80211_F_PMGTON;
+-			goto done;
+-		}
+-		return 0;
+-	}
++	/* XXX: These values, flags, and caps do not seem to be used elsewhere 
++	 * at all? */
+ 
+ 	if ((ic->ic_caps & IEEE80211_C_PMGT) == 0)
+ 		return -EOPNOTSUPP;
++	
++	if (wrq->disabled) {
++		if (ic->ic_flags & IEEE80211_F_PMGTON)
++			ic->ic_flags &= ~IEEE80211_F_PMGTON;
++	} else {
+ 	switch (wrq->flags & IW_POWER_MODE) {
+ 	case IW_POWER_UNICAST_R:
+ 	case IW_POWER_ALL_R:
+ 	case IW_POWER_ON:
+-		ic->ic_flags |= IEEE80211_F_PMGTON;
+-		break;
+-	default:
++			if (wrq->flags & IW_POWER_PERIOD) {
++				if (IEEE80211_BINTVAL_VALID(wrq->value))
++					ic->ic_lintval = IEEE80211_MS_TO_TU(wrq->value);
++				else
+ 		return -EINVAL;
+ 	}
+-	if (wrq->flags & IW_POWER_TIMEOUT) {
++			if (wrq->flags & IW_POWER_TIMEOUT)
+ 		ic->ic_holdover = IEEE80211_MS_TO_TU(wrq->value);
++			
+ 		ic->ic_flags |= IEEE80211_F_PMGTON;
++			break;
++		default:
++			return -EINVAL;
+ 	}
+-	if (wrq->flags & IW_POWER_PERIOD) {
+-		ic->ic_lintval = IEEE80211_MS_TO_TU(wrq->value);
+-		ic->ic_flags |= IEEE80211_F_PMGTON;
+ 	}
+-done:
++	
+ 	return IS_UP(ic->ic_dev) ? ic->ic_reset(ic->ic_dev) : 0;
+ }
+ 
+@@ -2266,8 +2268,7 @@
+ 		if (vap->iv_opmode != IEEE80211_M_HOSTAP &&
+ 		    vap->iv_opmode != IEEE80211_M_IBSS)
+ 			return -EINVAL;
+-		if (IEEE80211_BINTVAL_MIN <= value &&
+-		    value <= IEEE80211_BINTVAL_MAX) {
++		if (IEEE80211_BINTVAL_VALID(value)) {
+ 			ic->ic_lintval = value;		/* XXX multi-bss */
+ 			retv = ENETRESET;		/* requires restart */
+ 		} else
+@@ -3300,7 +3301,8 @@
+ {
+ 	struct ieee80211vap *vap = dev->priv;
+ 	int *param = (int *) extra;
+-	int ac = (param[1] < WME_NUM_AC) ? param[1] : WME_AC_BE;
++	int ac = (param[1] >= 0 && param[1] < WME_NUM_AC) ?
++		param[1] : WME_AC_BE;
+ 	int bss = param[2]; 
+ 	struct ieee80211_wme_state *wme = &vap->iv_ic->ic_wme;
+ 
+@@ -3388,7 +3390,8 @@
+ {
+ 	struct ieee80211vap *vap = dev->priv;
+ 	int *param = (int *) extra;
+-	int ac = (param[1] < WME_NUM_AC) ? param[1] : WME_AC_BE;
++	int ac = (param[1] >= 0 && param[1] < WME_NUM_AC) ?
++		param[1] : WME_AC_BE;
+ 	struct ieee80211_wme_state *wme = &vap->iv_ic->ic_wme;
+ 	struct chanAccParams *chanParams = (param[2] == 0) ? 
+ 		&(wme->wme_chanParams) : &(wme->wme_bssChanParams);
