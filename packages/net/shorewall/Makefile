@@ -9,11 +9,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=shorewall
-PKG_VERSION:=3.4.2
+PKG_VERSION:=3.4.3
 PKG_RELEASE:=1
-PKG_MD5SUM:=ca04cb57d2ff3995975e83155dd9944f
+PKG_MD5SUM:=4ac779d02d4befc72a0ce1534fbb328d
 
-PKG_SOURCE_URL:=http://www1.shorewall.net/pub/shorewall/3.4/shorewall-3.4.2/
+PKG_SOURCE_URL:=http://www1.shorewall.net/pub/$(PKG_NAME)/3.4/$(PKG_NAME)-$(PKG_VERSION)/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_CAT:=zcat
 
@@ -25,6 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/shorewall
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+iptables
   TITLE:=Shorewall firewall
   DESCRIPTION:=\
 	Shorewall Firewall is an iptables-based firewall for Linux.
