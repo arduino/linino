@@ -58,3 +58,7 @@ define Package/smartmontools/install
 endef
 
 $(eval $(call BuildPackage,smartmontools))
+
+$(eval $(call RequireCommand,automake, \
+	$(PKG_NAME) requires automake. \
+))
