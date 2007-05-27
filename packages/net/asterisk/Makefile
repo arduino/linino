@@ -442,7 +442,7 @@ define Package/asterisk-mini/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/asterisk/firmware $(1)/usr/lib/asterisk/
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/keys
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
-	for f in chan_iax2 chan_local chan_sip codec_gsm codec_ulaw format_gsm format_pcm format_wav \
+	for f in app_dial chan_iax2 chan_local chan_sip codec_gsm codec_ulaw format_gsm format_pcm format_wav \
 	  format_wav_gsm pbx_config res_features res_musiconhold; do \
 	  $(CP) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/$$$$f.so $(1)/usr/lib/asterisk/modules/ ; \
 	done
