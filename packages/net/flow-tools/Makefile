@@ -34,7 +34,7 @@ define Package/flow-tools
 endef
 
 define Build/Compile
-	$(call Build/Compile/Default)
+	$(call Build/Compile/Default,all)
 endef
 
 define Package/flow-tools/install	
