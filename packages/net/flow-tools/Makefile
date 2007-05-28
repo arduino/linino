@@ -19,6 +19,8 @@ PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
+PKG_BUILD_DEPENDS:=+zlib
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/flow-tools
@@ -29,7 +31,6 @@ define Package/flow-tools
 	Flow-tools is a software package for collecting and processing \\\
 	NetFlow data from Cisco and Juniper routers.
   URL:=http://www.splintered.net/sw/flow-tools/
-  DEPENDS:=+zlib
 endef
 
 define Build/Compile
