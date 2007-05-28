@@ -22,6 +22,9 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
+CONFIGURE_ARGS += \
+  --disable-dietlibc
+
 define Package/dhcp-forwarder
   SECTION:=net
   CATEGORY:=Network
@@ -41,7 +44,7 @@ define Build/Compile
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
-	
+
 define Package/dhcp-forwarder/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/dhcp-fwd $(1)/usr/bin/
