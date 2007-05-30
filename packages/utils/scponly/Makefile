@@ -21,12 +21,10 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
-PKG_CONFIGURE_OPTS:= \
+CONFIGURE_ARGS+= \
   --enable-winscp-compat \
   --enable-scp-compat \
-  --disable-rsync-compat \
-  --without-sftp-server
-
+  --disable-rsync-compat
 
 define Package/scponly
   SECTION:=utils
