@@ -49,6 +49,7 @@ endef
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/lib/libiconv/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/iconv.h $(STAGING_DIR)/usr/lib/libiconv/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/iconv.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib/libiconv/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.{a,so*} $(STAGING_DIR)/usr/lib/libiconv/lib/
 endef
