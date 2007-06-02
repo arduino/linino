@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=weechat
-PKG_VERSION:=0.2.0
+PKG_VERSION:=0.2.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://weechat.flashtux.org/download/
-PKG_MD5SUM:=69c292237bebd4b7a1ff29c0f9c76380
+PKG_MD5SUM:=c7c7f89d6dac502ad31d12198a8836c1
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/weechat
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libncurses +liblua +libgnutls
+  DEPENDS:=+libiconv +libncurses +liblua +libgnutls
   TITLE:=Lightweight IRC client
   DESCRIPTION:=\
   	Weechat is fast, light & extensible IRC client.
