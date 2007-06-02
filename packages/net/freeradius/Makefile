@@ -267,18 +267,21 @@ endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-eap-peap),)
   PKG_CONFIGURE_ARGS+= --with-rlm_eap_peap
+  PKG_CONFIGURE_LIBS+= -lcrypto -lssl
 else
   PKG_CONFIGURE_ARGS+= --without-rlm_eap_peap
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-eap-tls),)
   PKG_CONFIGURE_ARGS+= --with-rlm_eap_tls
+  PKG_CONFIGURE_LIBS+= -lcrypto -lssl
 else
   PKG_CONFIGURE_ARGS+= --without-rlm_eap_tls
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-eap-ttls),)
   PKG_CONFIGURE_ARGS+= --with-rlm_eap_ttls
+  PKG_CONFIGURE_LIBS+= -lcrypto -lssl
 else
   PKG_CONFIGURE_ARGS+= --without-rlm_eap_ttls
 endif
