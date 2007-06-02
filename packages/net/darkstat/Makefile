@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/darkstat
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcap
+  DEPENDS:=+libpcap +zlib
   TITLE:=Network bandwith monitor
   DESCRIPTION:=\
   	A free open source utility for bandwith monitoring \
