@@ -66,7 +66,8 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		prefix="$(PKG_INSTALL_DIR)/usr" \
 		exec_prefix="$(PKG_INSTALL_DIR)/usr" \
-		all install-headers install-lib install
+		all install-headers install-lib install \
+		LIBTOOL="./libtool --tag=CC"
 endef
 
 define Build/InstallDev

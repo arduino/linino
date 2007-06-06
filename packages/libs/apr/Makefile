@@ -72,7 +72,7 @@ define Build/InstallDev
 endef
 
 define Build/UninstallDev
-	rm	$(STAGING_DIR)/usr/bin/apr-config \
+	-rm	$(STAGING_DIR)/usr/bin/apr-config \
 		$(STAGING_DIR)/usr/include/apr-0/{apr_allocator.h,apr_atomic.h,apr_compat.h,apr_dso.h,apr_env.h,apr_errno.h,apr_file_info.h,apr_file_io.h,apr_fnmatch.h,apr_general.h,apr_getopt.h,apr_global_mutex.h,apr.h,apr_hash.h,apr_inherit.h,apr_lib.h,apr_mmap.h,apr_network_io.h,apr_poll.h,apr_pools.h,apr_portable.h,\apr_proc_mutex.h,\apr_ring.h,apr_shm.h,apr_signal.h,apr_strings.h,apr_support.h,apr_tables.h,apr_thread_cond.h,apr_thread_mutex.h,apr_thread_proc.h,apr_thread_rwlock.h,apr_time.h,apr_user.h,apr_version.h,apr_want.h} \
 		$(STAGING_DIR)/usr/lib/libapr-0* \
 		$(STAGING_DIR)/usr/share/build/{apr_rules.mk,libtool,make_exports.awk,make_var_export.awk,mkdir.sh}

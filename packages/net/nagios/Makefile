@@ -38,7 +38,8 @@ endef
 define Build/Configure
 	$(call Build/Configure/Default,\
 		--with-nagios-user="root" \
-		--with-nagios-group="root" \
+		--with-nagios-group="root", \
+		LIBS="-lnotimpl" \
 	)
 endef
 
