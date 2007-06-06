@@ -25,7 +25,6 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mpc
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libiconv
   TITLE:=Music Player Daemon Console Client
   DESCRIPTION:=\
 	MPD is a music player supporting flac, mp3 and ogg files.\\\

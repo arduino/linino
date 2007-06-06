@@ -37,7 +37,7 @@ define Build/Configure
 		--with-debug=0 \
 		--with-libgnutls-prefix=$(STAGING_DIR)/usr \
 		--without-doc-xsl-prefix \
-		--without-libiconv-prefix \
+		--with-libiconv-prefix="$(STAGING_DIR)/usr/lib/libiconv" \
 		--without-libintl-prefix \
 		--disable-aspell \
 		--enable-lua \
@@ -47,7 +47,7 @@ define Build/Configure
 		--disable-python \
 		--disable-ruby \
 		, \
-		LIBS="-llua -ldl -lm" \
+		LIBS="-llua -ldl -lm -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
 	)
 endef
 
