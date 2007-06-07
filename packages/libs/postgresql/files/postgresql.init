@@ -2,29 +2,38 @@
 # Copyright (C) 2006 OpenWrt.org
 START=50
 
+config_load "postgresql"
+config_get pgdata config PGDATA
+config_get pguser config PGUSER
+config_get pgctl config PG_CTL
+
 start() {
-    config_load "postgresql"
     if [ ! -e /bin/su ]; then
         echo "The su command is requred to run postgres"
         exit 1
     fi
-    config_get pgdata config PGDATA
 
     if [ ! -d ${pgdata} ]; then
         echo "Create the data directory (${pgdata}) and try again"
         exit 1
     fi
 
+    # make sure localhost (without a dot) is in /etc/hosts
+    grep -q 'localhost$' /etc/hosts || echo '127.0.0.1 localhost' >> /etc/hosts
+
+    # for whatever reason, /dev/null gets wrong perms
+    chmod a+w /dev/null
+
     if [ -f ${pgdata}/postmaster.pid ]; then
         rm ${pgdata}/postmaster.pid
     fi
 
-    config_get pguser config PGUSER
     config_get pglog config PGLOG
-    config_get pgctl config PG_CTL
     config_get pgopts config PGOPTS
-
-    /bin/su - ${pguser} -c "${pgctl} start -D '${pgdata}' -s -l '${pglog}' -o '${pgopts}'"
+    if [ -n "${pgopts}" ]; then
+        pgopts="-o ${pgopts}"
+    fi
+    /bin/su ${pguser} -c "${pgctl} start -D ${pgdata} -s -l ${pglog} ${pgopts}"
 
     while :
     do
@@ -32,7 +41,7 @@ start() {
         if [ -f "${pgdata}/postmaster.pid" ]; then
             ret=0
             break
-        fi
+	fi
 
         if [ ${cnt} -eq 30 ]; then
             echo "Postgres failed to start.  See ${pglog} for details"
@@ -43,4 +52,10 @@ start() {
     done
 
     return ${ret}
+}
+
+stop() {
+
+    /bin/su ${pguser} -c "${pgctl} stop -D '${pgdata}'"
+    return $?
 }
