@@ -38,7 +38,7 @@ endef
 
 define Package/twisted
   $(call Package/twisted/default)
-  DEPENDS:=+python zope-interface
+  DEPENDS:=+python +zope-interface
   TITLE:=A networking engine written in Python
   DESCRIPTION:=\
 	Twisted is a networking engine written in Python, supporting \\\
