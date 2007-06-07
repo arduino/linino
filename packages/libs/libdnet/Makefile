@@ -32,6 +32,17 @@ define Package/libdnet
   URL:=http://sourceforge.net/projects/libdnet/
 endef
 
+define Package/pydnet
+  SECTION:=libs
+  DEPENDS:=libdnet +python
+  CATEGORY:=Libraries
+  TITLE:=Low-level network library
+  DESCRIPTION:=\
+	libdnet is a library of simplified, portable interface to several \\\
+	low-level networking routines.
+  URL:=http://sourceforge.net/projects/libdnet/
+endef
+
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); touch \
 		configure.in \
@@ -81,4 +92,14 @@ define Package/libdnet/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/dnet $(1)/usr/sbin/
 endef
 
+define Package/pydnet/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	cd $(PKG_BUILD_DIR)/python; \
+	$(STAGING_DIR)/usr/bin/hostpython ./setup.py install \
+		--no-compile --prefix $(PKG_INSTALL_DIR)/usr
+	cp -a $(PKG_INSTALL_DIR)/usr/lib/python* $(1)/usr/lib/
+endef
+
+
 $(eval $(call BuildPackage,libdnet))
+$(eval $(call BuildPackage,pydnet))
