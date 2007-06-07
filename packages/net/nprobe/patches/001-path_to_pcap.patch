@@ -1,0 +1,13 @@
+--- nProbe/configure	2007-05-07 16:42:28.041884250 -0500
++++ nProbe.new/configure	2007-05-07 16:57:49.183452000 -0500
+@@ -23567,8 +23567,8 @@
+ 
+ if test ".${PCAP_ROOT}" != .; then
+   if test -d $PCAP_ROOT &&
+-     test -r $PCAP_ROOT/libpcap.a &&
+-     test -r $PCAP_ROOT/pcap.h; then
++     test -r $PCAP_ROOT/lib/libpcap.a &&
++     test -r $PCAP_ROOT/include/pcap.h; then
+        PCAP_ROOT=`cd ${PCAP_ROOT} && pwd`
+        CORELIBS="${CORELIBS} -L$PCAP_ROOT -lpcap"
+        INCS="${INCS} -I$PCAP_ROOT"
