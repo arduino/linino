@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nsca
-PKG_VERSION:=2.6
+PKG_VERSION:=2.7.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/nagios
-PKG_MD5SUM:=d526a3ac3c29648c729c5fb4fb332488
+PKG_MD5SUM:=823400ebca86df44c6f48b66e1c181d2
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -35,6 +35,8 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
+		--with-nsca-user="root" \
+		--with-nsca-grp="root" \
 		--with-libmcrypt-prefix="$(STAGING_DIR)/usr" \
 		, \
 		CFLAGS="$$$$CFLAGS $$$$CPPFLAGS" \
