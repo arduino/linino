@@ -7,13 +7,19 @@
 
 include $(INCLUDE_DIR)/host.mk
 include $(INCLUDE_DIR)/unpack.mk
+include $(INCLUDE_DIR)/depends.mk
 
+STAMP_PREPARED:=$(PKG_BUILD_DIR)/.prepared_$(shell find ${CURDIR} $(PKG_FILE_DEPEND) $(DEP_FINDPARAMS) | md5s)
+STAMP_CONFIGURED:=$(PKG_BUILD_DIR)/.configured
+STAMP_BUILT:=$(PKG_BUILD_DIR)/.built
+
+include $(INCLUDE_DIR)/quilt.mk
+
+Build/Patch:=$(Build/Patch/Default)
 ifneq ($(strip $(PKG_UNPACK)),)
   define Build/Prepare/Default
   	$(PKG_UNPACK)
-	@if [ -d ./patches ]; then \
-		$(PATCH) $(PKG_BUILD_DIR) ./patches; \
-	fi
+	$(Build/Patch)
   endef
 endif
 
@@ -69,30 +75,44 @@ ifneq ($(strip $(PKG_SOURCE)),)
 	mkdir -p $(DL_DIR)
 	$(SCRIPT_DIR)/download.pl "$(DL_DIR)" "$(PKG_SOURCE)" "$(PKG_MD5SUM)" $(PKG_SOURCE_URL)
 
-  $(PKG_BUILD_DIR)/.prepared: $(DL_DIR)/$(PKG_SOURCE)
+  $(STAMP_PREPARED): $(DL_DIR)/$(PKG_SOURCE)
+endif
+
+ifneq ($(CONFIG_AUTOREBUILD),)
+  define HostBuild/Autoclean
+    $(PKG_BUILD_DIR)/.dep_files: $(STAMP_PREPARED)
+    $(call rdep,${CURDIR} $(PKG_FILE_DEPEND),$(STAMP_PREPARED))
+    $(call rdep,$(PKG_BUILD_DIR),$(STAMP_BUILT),$(PKG_BUILD_DIR)/.dep_files, -and -not -path "/.*" -and -not -path "*/ipkg*")
+  endef
 endif
 
 define HostBuild
-  $(PKG_BUILD_DIR)/.prepared:
+  ifeq ($(DUMP),)
+    $(call HostBuild/Autoclean)
+  endif
+  
+  $(STAMP_PREPARED):
 	@-rm -rf $(PKG_BUILD_DIR)
 	@mkdir -p $(PKG_BUILD_DIR)
 	$(call Build/Prepare)
 	touch $$@
 
-  $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
+  $(STAMP_CONFIGURED): $(STAMP_PREPARED)
 	$(call Build/Configure)
 	touch $$@
 
-  $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
+  $(STAMP_BUILT): $(STAMP_CONFIGURED)
 	$(call Build/Compile)
+	@$(NO_TRACE_MAKE) $(PKG_BUILD_DIR)/.dep_files
 	touch $$@
 
-  $(STAGING_DIR)/stampfiles/.host_$(PKG_NAME)-installed: $(PKG_BUILD_DIR)/.built
+  $(STAGING_DIR)/stampfiles/.host_$(PKG_NAME)-installed: $(STAMP_BUILT)
 	$(call Build/Install)
+	mkdir -p $$(shell dirname $$@)
 	touch $$@
 	
   ifdef Build/Install
-    install-targets: $(STAGING_DIR)/stampfiles/.host_$(PKG_NAME)-installed
+    install: $(STAGING_DIR)/stampfiles/.host_$(PKG_NAME)-installed
   endif
 
   package-clean: FORCE
@@ -101,18 +121,11 @@ define HostBuild
 	rm -f $(STAGING_DIR)/stampfiles/.host_$(PKG_NAME)-installed
 
   download:
-  prepare: $(PKG_BUILD_DIR)/.prepared
-  configure: $(PKG_BUILD_DIR)/.configured
-
-  compile-targets: $(PKG_BUILD_DIR)/.built
-  compile: compile-targets
-
-  install-targets:
-  install: install-targets
-
-  clean-targets:
+  prepare: $(STAMP_PREPARED)
+  configure: $(STAMP_CONFIGURED)
+  compile: $(STAMP_BUILT)
+  install:
   clean: FORCE
-	@$(MAKE) clean-targets
 	$(call Build/Clean)
 	rm -rf $(PKG_BUILD_DIR)
 

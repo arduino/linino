@@ -17,7 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 
-RELEASE:=Kamikaze
+RELEASE:=White Russian
 #VERSION:=2.0 # uncomment for final release
 
 #--------------------------------------------------------------
@@ -32,19 +32,11 @@ export DEVELOPER
 
 all: world
 
-.pkginfo: FORCE
-ifneq ($(shell ./scripts/timestamp.pl -p .pkginfo package Makefile),.pkginfo)
-	@echo Collecting package info...
-	@-for dir in package/*/; do \
-		echo Source-Makefile: $${dir}Makefile; \
-		$(MAKE) --no-print-dir DUMP=1 -C $$dir 2>&- || true; \
-	done > $@
-endif
+tmp/.packageinfo: FORCE
+	mkdir -p tmp/info
+	$(MAKE) -s -f include/scan.mk SCAN_TARGET="packageinfo" SCAN_DIR="package" SCAN_NAME="package" SCAN_DEPS="$(wildcard package/*/Makefile include/package*.mk include/kernel.mk)" SCAN_EXTRA=""
 
-pkginfo-clean: FORCE
-	-rm -f .pkginfo .config.in
-
-package/%: .pkginfo FORCE
+package/%: tmp/.packageinfo FORCE
 	$(MAKE) -C package $(patsubst package/%,%,$@) SDK=1
 
 download: FORCE
@@ -60,7 +52,7 @@ world: FORCE
 	)
 
 clean: FORCE
-	rm -rf build_* bin
+	rm -rf build_* bin tmp/.packageinfo tmp/info
 
 distclean: clean
 	rm -rf dl .pkg*

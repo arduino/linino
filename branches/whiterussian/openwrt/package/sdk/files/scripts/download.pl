@@ -8,15 +8,40 @@
 
 use strict;
 use warnings;
+use File::Basename;
 
 my $target = shift @ARGV;
 my $filename = shift @ARGV;
 my $md5sum = shift @ARGV;
+my $scriptdir = dirname($0);
 my @mirrors;
 
 my $ok;
 
 @ARGV > 0 or die "Syntax: $0 <target dir> <filename> <md5sum> <mirror> [<mirror> ...]\n";
+
+sub localmirrors {
+    my @mlist;
+    open LM, "$scriptdir/localmirrors" and do {
+	    while (<LM>) {
+			chomp $_;
+			push @mlist, $_;
+		}
+		close LM;
+	};
+	open CONFIG, "<".$ENV{'TOPDIR'}."/.config" and do {
+		while (<CONFIG>) {
+			/^CONFIG_LOCALMIRROR="(.+)"/ and do {
+				chomp;
+				push @mlist, $1;
+			};
+		}
+		close CONFIG;
+	};
+	
+
+    return @mlist;
+}
 
 sub which($) {
 	my $prog = shift;
@@ -37,7 +62,8 @@ sub download
 	my $mirror = shift;
 	my $options = $ENV{WGET_OPTIONS};
 	$options or $options = "";
-
+	
+	$mirror =~ s/\/$//;
 	open WGET, "wget -t1 --timeout=20 $options -O- \"$mirror/$filename\" |" or die "Cannot launch wget.\n";
 	open MD5SUM, "| $md5cmd > \"$target/$filename.md5sum\"" or die "Cannot launch md5sum.\n";
 	open OUTPUT, "> $target/$filename.dl" or die "Cannot create file $target/$filename.dl: $!\n";
@@ -77,21 +103,14 @@ sub cleanup
 	unlink "$target/$filename.md5sum";
 }
 
+@mirrors = localmirrors();
+
 foreach my $mirror (@ARGV) {
 	if ($mirror =~ /^\@SF\/(.+)$/) {
-		my $sfpath = $1;
-		open SF, "wget -t1 -q -O- 'http://prdownloads.sourceforge.net/$sfpath/$filename' |";
-		while (<SF>) {
-			/RADIO NAME=use_default VALUE=(\w+) OnClick="form\.submit\(\)">/ or
-			/type="radio" name="use_default" value="(\w+)" onclick="form\.submit\(\)"\/>/ and do {
-				push @mirrors, "http://$1.dl.sourceforge.net/sourceforge/$sfpath";
-			};
-			/<a href="\/.+\?use_mirror=(\w+)"><b>Download/ and do {
-				push @mirrors, "http://$1.dl.sourceforge.net/sourceforge/$sfpath";
-			};
+		# give sourceforge a few more tries, because it redirects to different mirrors
+		for (1 .. 5) {
+			push @mirrors, "http://downloads.sourceforge.net/$1";
 		}
-		push @mirrors, "http://dl.sourceforge.net/sourceforge/$sfpath";
-		close SF;
 	} elsif ($mirror =~ /^\@GNU\/(.+)$/) {
 		my $gnupath = $1;
 		push @mirrors, "ftp://ftp.gnu.org/gnu/$gnupath";
@@ -107,9 +126,9 @@ foreach my $mirror (@ARGV) {
 	}
 }
 
-#push @mirrors, 'http://mirror1.openwrt.org/';
+#push @mirrors, 'http://mirror1.openwrt.org';
 push @mirrors, 'http://mirror2.openwrt.org/sources';
-push @mirrors, 'http://downloads.openwrt.org/sources/';
+push @mirrors, 'http://downloads.openwrt.org/sources';
 
 while (!$ok) {
 	my $mirror = shift @mirrors;
