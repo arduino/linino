@@ -1,7 +1,8 @@
-diff -x .svn -ruN motion-3.2.8.old/motion.c motion-3.2.8/motion.c
---- motion-3.2.8.old/motion.c	2007-03-31 12:54:31.000000000 +0200
-+++ motion-3.2.8/motion.c	2007-03-31 13:08:27.000000000 +0200
-@@ -1282,6 +1282,7 @@
+Index: motion-3.2.7/motion.c
+===================================================================
+--- motion-3.2.7.orig/motion.c	2007-06-11 08:27:27.000000000 +0100
++++ motion-3.2.7/motion.c	2007-06-11 08:27:35.000000000 +0100
+@@ -1279,6 +1279,7 @@
  		 * httpd-control snaps are always enabled.
  		 */
  
@@ -9,7 +10,7 @@ diff -x .svn -ruN motion-3.2.8.old/motion.c motion-3.2.8/motion.c
  		/* time_current_frame is used both for snapshot and timelapse features */
  		time_current_frame = cnt->currenttime;
  
-@@ -1291,7 +1292,7 @@
+@@ -1288,7 +1289,7 @@
  			event(cnt, EVENT_IMAGE_SNAPSHOT, newimg, NULL, NULL, cnt->currenttime_tm);
  			cnt->snapshot = 0;
  		}
@@ -18,7 +19,7 @@ diff -x .svn -ruN motion-3.2.8.old/motion.c motion-3.2.8/motion.c
  
  	/***** MOTION LOOP - TIMELAPSE FEATURE SECTION *****/
  
-@@ -1366,9 +1367,9 @@
+@@ -1363,9 +1364,9 @@
  			event(cnt, EVENT_TIMELAPSEEND, NULL, NULL, NULL, cnt->currenttime_tm);
  
  
