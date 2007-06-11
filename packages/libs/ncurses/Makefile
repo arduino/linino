@@ -164,7 +164,7 @@ define Build/UninstallDev
 	rm -rf \
 		$(STAGING_DIR)/usr/include/curses.h \
 		$(STAGING_DIR)/usr/include/ncurses.h \
-		$(PKG_INSTALL_DIR)/usr/include/ncurses_dll.h \
+		$(STAGING_DIR)/usr/include/ncurses_dll.h \
 		$(STAGING_DIR)/usr/include/menu.h \
 		$(STAGING_DIR)/usr/include/panel.h \
 		$(STAGING_DIR)/usr/include/term{,cap}.h \
