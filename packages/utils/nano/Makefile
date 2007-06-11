@@ -9,13 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nano
-PKG_VERSION:=1.3.8
+PKG_VERSION:=2.0.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.ewtoo.org/~astyanax/nano/dist/v1.3 \
-	http://www.nano-editor.org/dist/v1.3
-PKG_MD5SUM:=20633397bf5d462255f37dfcc7cad4e7
+PKG_SOURCE_URL:=http://www.nano-editor.org/dist/v2.0
+PKG_MD5SUM:=619107f0fc3c4383d668cef15aa3ca32
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
