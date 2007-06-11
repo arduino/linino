@@ -9,12 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=screen
-PKG_VERSION:=4.0.2
+PKG_VERSION:=4.0.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=@GNU/screen
-PKG_MD5SUM:=ed68ea9b43d9fba0972cb017a24940a1
+PKG_SOURCE_URL:=ftp://ftp.uni-erlangen.de/pub/utilities/screen \
+	@GNU/screen
+PKG_MD5SUM:=8506fd205028a96c741e4037de6e3c42
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -33,7 +34,11 @@ define Package/screen
   URL:=http://www.gnu.org/software/screen/
 endef
 
-# uses GNU configure
+define Build/Configure
+	$(call Build/Configure/Default,,\
+		LIBS="-lcrypt" \
+	)
+endef
 
 define Package/screen/install	
 	$(INSTALL_DIR) $(1)/usr/sbin
