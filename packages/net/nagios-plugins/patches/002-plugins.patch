@@ -1,25 +1,36 @@
---- nagios-plugins-1.4.5/plugins/Makefile.in.orig	2006-11-15 16:23:06.000000000 +0100
-+++ nagios-plugins-1.4.5/plugins/Makefile.in	2006-11-15 16:24:03.000000000 +0100
-@@ -36,7 +36,7 @@
- POST_UNINSTALL = :
- build_triplet = @build@
- host_triplet = @host@
--libexec_PROGRAMS = check_apt$(EXEEXT) check_disk$(EXEEXT) \
-+libexec_PROGRAMS = check_apt$(EXEEXT) \
- 	check_dummy$(EXEEXT) check_http$(EXEEXT) check_load$(EXEEXT) \
- 	check_mrtg$(EXEEXT) check_mrtgtraf$(EXEEXT) check_ntp$(EXEEXT) \
- 	check_nwstat$(EXEEXT) check_overcr$(EXEEXT) \
-@@ -46,7 +46,7 @@
- 	urlize$(EXEEXT) @EXTRAS@
- EXTRA_PROGRAMS = check_mysql$(EXEEXT) check_radius$(EXEEXT) \
- 	check_pgsql$(EXEEXT) check_snmp$(EXEEXT) check_hpjd$(EXEEXT) \
--	check_swap$(EXEEXT) check_fping$(EXEEXT) check_ldap$(EXEEXT) \
-+	check_fping$(EXEEXT) check_ldap$(EXEEXT) \
- 	check_game$(EXEEXT) check_dig$(EXEEXT) check_nagios$(EXEEXT) \
- 	check_by_ssh$(EXEEXT) check_dns$(EXEEXT) check_nt$(EXEEXT) \
- 	check_ide_smart$(EXEEXT) check_procs$(EXEEXT) \
---- nagios-plugins-1.4.5/plugins/Makefile.am.orig	2006-11-15 16:27:09.000000000 +0100
-+++ nagios-plugins-1.4.5/plugins/Makefile.am	2006-11-15 16:27:19.000000000 +0100
+diff -urN nagios-plugins-1.4.9/configure nagios-plugins-1.4.9.new/configure
+--- nagios-plugins-1.4.9/configure	2007-06-11 09:58:56.000000000 +0200
++++ nagios-plugins-1.4.9.new/configure	2007-06-11 10:02:45.000000000 +0200
+@@ -26234,7 +26234,7 @@
+ 
+ if test "$ac_cv_have_decl_swapctl" = "yes";
+ then
+-	EXTRAS="$EXTRAS check_swap"
++	EXTRAS="$EXTRAS"
+ 	echo "$as_me:$LINENO: checking for 2-arg (SVR4) swapctl" >&5
+ echo $ECHO_N "checking for 2-arg (SVR4) swapctl... $ECHO_C" >&6
+ 	if test "$ac_cv_type_swaptbl_t" = "yes" -a \
+@@ -26376,7 +26376,7 @@
+ #define HAVE_SWAP 1
+ _ACEOF
+ 
+-	EXTRAS="$EXTRAS check_swap"
++	EXTRAS="$EXTRAS"
+ fi
+ if test "x$ac_cv_swap_command" != "x"
+ then
+@@ -26428,7 +26428,7 @@
+ #define PROC_MEMINFO "$ac_cv_proc_meminfo"
+ _ACEOF
+ 
+-	EXTRAS="$EXTRAS check_swap"
++	EXTRAS="$EXTRAS"
+ fi
+ 
+ # Extract the first word of "dig", so it can be a program name with args.
+diff -urN nagios-plugins-1.4.9/plugins/Makefile.am nagios-plugins-1.4.9.new/plugins/Makefile.am
+--- nagios-plugins-1.4.9/plugins/Makefile.am	2007-04-15 10:50:58.000000000 +0200
++++ nagios-plugins-1.4.9.new/plugins/Makefile.am	2007-06-11 10:02:45.000000000 +0200
 @@ -23,7 +23,7 @@
  	check_udp check_clamd @check_tcp_ssl@
  
@@ -29,32 +40,24 @@
  	check_nagios check_by_ssh check_dns check_nt check_ide_smart	\
  	check_procs check_mysql_query check_apt
  
---- nagios-plugins-1.4.5/configure.orig	2006-11-15 16:33:34.000000000 +0100
-+++ nagios-plugins-1.4.5/configure	2006-11-15 16:35:55.000000000 +0100
-@@ -31800,7 +31800,7 @@
- 
- if test "$ac_cv_have_decl_swapctl" = "yes";
- then
--	EXTRAS="$EXTRAS check_swap"
-+	EXTRAS="$EXTRAS"
- 	echo "$as_me:$LINENO: checking for 2-arg (SVR4) swapctl" >&5
- echo $ECHO_N "checking for 2-arg (SVR4) swapctl... $ECHO_C" >&6
- 	if test "$ac_cv_type_swaptbl_t" = "yes" -a \
-@@ -31943,7 +31943,7 @@
- #define HAVE_SWAP 1
- _ACEOF
- 
--	EXTRAS="$EXTRAS check_swap"
-+	EXTRAS="$EXTRAS"
- fi
- if test "x$ac_cv_swap_command" != "x"
- then
-@@ -31995,7 +31995,7 @@
- #define PROC_MEMINFO "$ac_cv_proc_meminfo"
- _ACEOF
- 
--	EXTRAS="$EXTRAS check_swap"
-+	EXTRAS="$EXTRAS"
- fi
- 
- # Extract the first word of "dig", so it can be a program name with args.
+diff -urN nagios-plugins-1.4.9/plugins/Makefile.in nagios-plugins-1.4.9.new/plugins/Makefile.in
+--- nagios-plugins-1.4.9/plugins/Makefile.in	2007-06-04 11:02:42.000000000 +0200
++++ nagios-plugins-1.4.9.new/plugins/Makefile.in	2007-06-11 10:02:28.000000000 +0200
+@@ -35,7 +35,7 @@
+ build_triplet = @build@
+ host_triplet = @host@
+ libexec_PROGRAMS = check_apt$(EXEEXT) check_cluster$(EXEEXT) \
+-	check_disk$(EXEEXT) check_dummy$(EXEEXT) check_http$(EXEEXT) \
++	check_dummy$(EXEEXT) check_http$(EXEEXT) \
+ 	check_load$(EXEEXT) check_mrtg$(EXEEXT) \
+ 	check_mrtgtraf$(EXEEXT) check_ntp$(EXEEXT) \
+ 	check_nwstat$(EXEEXT) check_overcr$(EXEEXT) \
+@@ -45,7 +45,7 @@
+ 	urlize$(EXEEXT) @EXTRAS@
+ EXTRA_PROGRAMS = check_mysql$(EXEEXT) check_radius$(EXEEXT) \
+ 	check_pgsql$(EXEEXT) check_snmp$(EXEEXT) check_hpjd$(EXEEXT) \
+-	check_swap$(EXEEXT) check_fping$(EXEEXT) check_ldap$(EXEEXT) \
++	check_fping$(EXEEXT) check_ldap$(EXEEXT) \
+ 	check_game$(EXEEXT) check_dig$(EXEEXT) check_nagios$(EXEEXT) \
+ 	check_by_ssh$(EXEEXT) check_dns$(EXEEXT) check_nt$(EXEEXT) \
+ 	check_ide_smart$(EXEEXT) check_procs$(EXEEXT) \
