@@ -87,16 +87,17 @@ define Build/Configure
 			--without-tcl \
 			--without-tk \
 			--with-zlib="yes" \
+			--enable-depend \
 	);
-	$(MAKE) -C $(PKG_BUILD_DIR)/src/interfaces/ecpg/preproc CC="$(HOSTCC)" CFLAGS+="-I../../libpq"
+	$(MAKE) -C $(PKG_BUILD_DIR)/src/interfaces/ecpg/preproc CC="$(HOSTCC)" CFLAGS+="-I../../libpq" -j1
 	mv $(PKG_BUILD_DIR)/src/interfaces/ecpg/preproc/ecpg \
 		$(PKG_BUILD_DIR)/src/interfaces/ecpg/preproc/ecpg.host
-	$(MAKE) -C $(PKG_BUILD_DIR)/src/timezone CC="$(HOSTCC)"
+	$(MAKE) -C $(PKG_BUILD_DIR)/src/timezone CC="$(HOSTCC)" -j1
 	mv $(PKG_BUILD_DIR)/src/timezone/zic $(PKG_BUILD_DIR)/src/timezone/zic.host
-	$(MAKE) -C $(PKG_BUILD_DIR)/src/bin/pg_config CC="$(HOSTCC)"
+	$(MAKE) -C $(PKG_BUILD_DIR)/src/bin/pg_config CC="$(HOSTCC)" -j1
 	mv $(PKG_BUILD_DIR)/src/bin/pg_config/pg_config \
 		$(PKG_BUILD_DIR)/src/bin/pg_config/pg_config.host
-	$(MAKE) -C $(PKG_BUILD_DIR) distclean
+	$(MAKE) -C $(PKG_BUILD_DIR) distclean -j1
 
 	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
 		$(TARGET_CONFIGURE_OPTS) \
@@ -140,13 +141,14 @@ define Build/Configure
 			--without-tcl \
 			--without-tk \
 			--with-zlib="yes" \
+			--enable-depend \
 	);
 	$(SED) 's@ECPG = ../../preproc/ecpg@ECPG = ../../preproc/ecpg.host@' $(PKG_BUILD_DIR)/src/interfaces/ecpg/test/Makefile.regress
 	$(SED) 's@\./zic -d@./zic.host -d@' $(PKG_BUILD_DIR)/src/timezone/Makefile
 endef
 
 define Build/Compile
-	$(MAKE) -C "$(PKG_BUILD_DIR)" \
+	$(MAKE) -C "$(PKG_BUILD_DIR)" -j1 \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
