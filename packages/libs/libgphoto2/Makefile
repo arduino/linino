@@ -63,7 +63,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) -j$(CONFIG_JLEVEL) \
+	$(MAKE) -C $(PKG_BUILD_DIR) -j1 \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		LIBLTDL="" \
 		all install
