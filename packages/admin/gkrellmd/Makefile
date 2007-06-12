@@ -30,15 +30,12 @@ define Package/gkrellmd
   URL:=http://gkrellm.net/
 endef
 
-define Build/Configure
-endef
-
 define Build/Compile
-	CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS) "
+	CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS)"
 	LDFLAGS="$(EXTRA_LDFLAGS) "
 	$(MAKE) -C $(PKG_BUILD_DIR)/server \
-		CC=$(TARGET_CC) \
-		glib12=yes \
+		CC="$(TARGET_CC)" \
+		glib12="yes" \
 		GLIB12_LIB="-L$(STAGING_DIR)/usr/lib -lglib -lgmodule" \
 		GLIB12_INCLUDE="-I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include"
 endef
