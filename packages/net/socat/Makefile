@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/socat
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +libpthread
+  DEPENDS:=+libpthread
   TITLE:=A multipurpose relay (SOcket CAT)
   DESCRIPTION:=\
 	SoCat (for SOcket CAT) establishes two bidirectional byte streams and \\\
@@ -42,6 +42,7 @@ define Build/Configure
 		--disable-libwrap \
 		--disable-readline \
 		--disable-termios \
+		--disable-openssl \
 		, \
 		sc_cv_termios_ispeed="no" \
 	)
