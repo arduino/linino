@@ -22,8 +22,8 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libwrap
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=libs
+  CATEGORY:=Libraries
   TITLE:=Security wrapper library for TCP services
   URL:=ftp://ftp.porcupine.org/pub/security/index.html
 endef
