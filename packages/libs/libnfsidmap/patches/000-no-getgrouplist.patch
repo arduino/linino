@@ -1,0 +1,15 @@
+--- libnfsidmap-0.20/nss.c~	2007-02-05 08:13:05.000000000 -0800
++++ libnfsidmap-0.20/nss.c	2007-06-07 15:18:45.000000000 -0700
+@@ -295,9 +295,9 @@
+ 		ret = -ENOENT;
+ 		goto out;
+ 	}
+-	if (getgrouplist(pw->pw_name, pw->pw_gid, groups, ngroups) < 0)
+-		ret = -ERANGE;
+-	free(pw);
++	//	if (getgrouplist(pw->pw_name, pw->pw_gid, groups, ngroups) < 0)
++	//		ret = -ERANGE;
++	//	free(pw);
+ out:
+ 	return ret;
+ }
