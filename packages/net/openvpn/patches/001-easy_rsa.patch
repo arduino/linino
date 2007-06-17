@@ -155,5 +155,95 @@ diff -ur openvpn-2.0.7.orig/easy-rsa/2.0/vars openvpn-2.0.7/easy-rsa/2.0/vars
 -export EASY_RSA="`pwd`"
 +export EASY_RSA="/etc/easy-rsa"
  
+ #
+ # This variable should point to
+@@ -26,7 +26,7 @@
  # This variable should point to
  # the openssl.cnf file included
+ # with easy-rsa.
+-export KEY_CONFIG=`$EASY_RSA/whichopensslcnf $EASY_RSA`
++export KEY_CONFIG=`/usr/sbin/whichopensslcnf $EASY_RSA`
+ 
+ # Edit this variable to point to
+ # your soon-to-be-created key
+diff -urN openvpn-2.0.9.orig/easy-rsa/2.0/build-ca openvpn-2.0.9/easy-rsa/2.0/build-ca
+--- openvpn-2.0.9.orig/easy-rsa/2.0/build-ca	2007-06-18 01:20:36.000000000 +0200
++++ openvpn-2.0.9/easy-rsa/2.0/build-ca	2007-06-18 01:21:07.000000000 +0200
+@@ -5,4 +5,4 @@
+ #
+ 
+ export EASY_RSA="${EASY_RSA:-.}"
+-"$EASY_RSA/pkitool" --interact --initca $*
++"/usr/sbin/pkitool" --interact --initca $*
+diff -urN openvpn-2.0.9.orig/easy-rsa/2.0/build-inter openvpn-2.0.9/easy-rsa/2.0/build-inter
+--- openvpn-2.0.9.orig/easy-rsa/2.0/build-inter	2007-06-18 01:20:36.000000000 +0200
++++ openvpn-2.0.9/easy-rsa/2.0/build-inter	2007-06-18 01:21:19.000000000 +0200
+@@ -4,4 +4,4 @@
+ # root certificate.
+ 
+ export EASY_RSA="${EASY_RSA:-.}"
+-"$EASY_RSA/pkitool" --interact --inter $*
++"/usr/sbin/pkitool" --interact --inter $*
+diff -urN openvpn-2.0.9.orig/easy-rsa/2.0/build-key openvpn-2.0.9/easy-rsa/2.0/build-key
+--- openvpn-2.0.9.orig/easy-rsa/2.0/build-key	2007-06-18 01:20:36.000000000 +0200
++++ openvpn-2.0.9/easy-rsa/2.0/build-key	2007-06-18 01:21:32.000000000 +0200
+@@ -4,4 +4,4 @@
+ # root certificate.
+ 
+ export EASY_RSA="${EASY_RSA:-.}"
+-"$EASY_RSA/pkitool" --interact $*
++"/usr/sbin/pkitool" --interact $*
+diff -urN openvpn-2.0.9.orig/easy-rsa/2.0/build-key-pass openvpn-2.0.9/easy-rsa/2.0/build-key-pass
+--- openvpn-2.0.9.orig/easy-rsa/2.0/build-key-pass	2007-06-18 01:20:36.000000000 +0200
++++ openvpn-2.0.9/easy-rsa/2.0/build-key-pass	2007-06-18 01:21:45.000000000 +0200
+@@ -4,4 +4,4 @@
+ # with a password.
+ 
+ export EASY_RSA="${EASY_RSA:-.}"
+-"$EASY_RSA/pkitool" --interact --pass $*
++"/usr/sbin/pkitool" --interact --pass $*
+diff -urN openvpn-2.0.9.orig/easy-rsa/2.0/build-key-pkcs12 openvpn-2.0.9/easy-rsa/2.0/build-key-pkcs12
+--- openvpn-2.0.9.orig/easy-rsa/2.0/build-key-pkcs12	2007-06-18 01:20:36.000000000 +0200
++++ openvpn-2.0.9/easy-rsa/2.0/build-key-pkcs12	2007-06-18 01:21:57.000000000 +0200
+@@ -5,4 +5,4 @@
+ # the CA certificate as well.
+ 
+ export EASY_RSA="${EASY_RSA:-.}"
+-"$EASY_RSA/pkitool" --interact --pkcs12 $*
++"/usr/sbin/pkitool" --interact --pkcs12 $*
+diff -urN openvpn-2.0.9.orig/easy-rsa/2.0/build-key-server openvpn-2.0.9/easy-rsa/2.0/build-key-server
+--- openvpn-2.0.9.orig/easy-rsa/2.0/build-key-server	2007-06-18 01:20:36.000000000 +0200
++++ openvpn-2.0.9/easy-rsa/2.0/build-key-server	2007-06-18 01:22:09.000000000 +0200
+@@ -7,4 +7,4 @@
+ # extension in the openssl.cnf file.
+ 
+ export EASY_RSA="${EASY_RSA:-.}"
+-"$EASY_RSA/pkitool" --interact --server $*
++"/usr/sbin/pkitool" --interact --server $*
+diff -urN openvpn-2.0.9.orig/easy-rsa/2.0/build-req openvpn-2.0.9/easy-rsa/2.0/build-req
+--- openvpn-2.0.9.orig/easy-rsa/2.0/build-req	2007-06-18 01:20:36.000000000 +0200
++++ openvpn-2.0.9/easy-rsa/2.0/build-req	2007-06-18 01:22:27.000000000 +0200
+@@ -4,4 +4,4 @@
+ # when your root certificate and key is not available locally.
+ 
+ export EASY_RSA="${EASY_RSA:-.}"
+-"$EASY_RSA/pkitool" --interact --csr $*
++"/usr/sbin/pkitool" --interact --csr $*
+diff -urN openvpn-2.0.9.orig/easy-rsa/2.0/build-req-pass openvpn-2.0.9/easy-rsa/2.0/build-req-pass
+--- openvpn-2.0.9.orig/easy-rsa/2.0/build-req-pass	2007-06-18 01:20:36.000000000 +0200
++++ openvpn-2.0.9/easy-rsa/2.0/build-req-pass	2007-06-18 01:22:38.000000000 +0200
+@@ -4,4 +4,4 @@
+ # with a password.
+ 
+ export EASY_RSA="${EASY_RSA:-.}"
+-"$EASY_RSA/pkitool" --interact --csr --pass $*
++"/usr/sbin/pkitool" --interact --csr --pass $*
+diff -urN openvpn-2.0.9.orig/easy-rsa/2.0/sign-req openvpn-2.0.9/easy-rsa/2.0/sign-req
+--- openvpn-2.0.9.orig/easy-rsa/2.0/sign-req	2007-06-18 01:20:36.000000000 +0200
++++ openvpn-2.0.9/easy-rsa/2.0/sign-req	2007-06-18 01:22:53.000000000 +0200
+@@ -4,4 +4,4 @@
+ # with a local root certificate and key.
+ 
+ export EASY_RSA="${EASY_RSA:-.}"
+-"$EASY_RSA/pkitool" --interact --sign $*
++"/usr/sbin/pkitool" --interact --sign $*
