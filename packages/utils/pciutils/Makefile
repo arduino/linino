@@ -32,6 +32,11 @@ define Package/pciutils
   URL:=http://www.kernel.org/pub/software/utils/pciutils/
 endef
 
+define Package/pciutils/postinst
+#!/bin/sh
+update-pciids.sh
+endef
+
 define Build/Configure
 endef
 
@@ -55,13 +60,13 @@ endef
 
 define Build/UninstallDev
 	rm -rf \
-		$(STAGING_DIR)/usr/include/pci
+		$(STAGING_DIR)/usr/include/pci \
 		$(STAGING_DIR)/usr/lib/libpci.a
 endef
 
 define Package/pciutils/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_BUILD_DIR)/{lspci,setpci} $(1)/usr/sbin/
+	$(CP) $(PKG_BUILD_DIR)/{lspci,setpci,update-pciids.sh} $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/share
 	$(CP) $(PKG_BUILD_DIR)/pci.ids $(1)/usr/share/
 endef
