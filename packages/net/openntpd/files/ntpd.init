@@ -4,6 +4,7 @@
 START=60
 start() {
 	mkdir -p `awk -F: '/^ntp:/{print $6}' /etc/passwd`
+	mkdir -p /var/db/
 	/usr/sbin/ntpd -s
 }
 
