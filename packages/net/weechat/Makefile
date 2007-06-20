@@ -61,7 +61,8 @@ define Package/weechat/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/weechat-curses $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/weechat/plugins
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/weechat/plugins/lua.so* $(1)/usr/lib/weechat/plugins/
+	# FIXME : weechat is not configured to compile with lua since 0.2.4
+	#$(CP) $(PKG_INSTALL_DIR)/usr/lib/weechat/plugins/lua.so* $(1)/usr/lib/weechat/plugins/
 endef
- 
+
 $(eval $(call BuildPackage,weechat))
