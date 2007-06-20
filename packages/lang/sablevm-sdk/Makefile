@@ -51,15 +51,14 @@ define Build/Configure
 		--disable-gjdoc \
 	)
 	$(call Build/Configure/Default, \
-		--srcdir=./../sablevm \
+		--srcdir="./../sablevm" \
 		--with-fastjar=/usr/bin/fastjar \
 		--with-jikes=/usr/bin/jikes \
 		--with-internal-libffi=yes \
 		--with-internal-libpopt=no \
-		, \
+		,\
 		LIBS=" -lltdl -lpopt -lz " \
-		,
-		sablevm \
+		,sablevm,\
 	)
 	$(call Build/Configure/Default, \
 		--srcdir=./../sablevm-classpath \
@@ -68,9 +67,8 @@ define Build/Configure
 		--disable-gtk-peer \
 		--disable-gtk-cairo \
 		--without-x \
-		, \
-		, \
-		sablevm-classpath \
+		,\
+		,sablevm-classpath,\
 	)
 endef
 
