@@ -100,7 +100,7 @@ $(PKG_BUILD_DIR)/nfacctd$(1) $(PKG_BUILD_DIR)/pmacctd$(1): $(PKG_BUILD_DIR)/.con
 		$(2) \
 		,\
 		LIBS="-lz" \
-		,
+		,,\
 	);
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
