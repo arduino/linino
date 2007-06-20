@@ -34,7 +34,7 @@ endef
 
 define Package/pciutils/postinst
 #!/bin/sh
-update-pciids.sh
+$${IPKG_INSTROOT}/usr/sbin/update-pciids.sh
 endef
 
 define Build/Configure
