@@ -58,6 +58,10 @@ endef
 define Package/openvpn/install	
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/openvpn $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/init.d/
+	$(INSTALL_BIN) files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_BIN) files/$(PKG_NAME).default $(1)/etc/default/$(PKG_NAME)
 endef
 
 define Package/openvpn-easy-rsa/install	
