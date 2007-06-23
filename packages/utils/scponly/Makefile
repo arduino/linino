@@ -24,7 +24,8 @@ include $(INCLUDE_DIR)/package.mk
 CONFIGURE_ARGS+= \
   --enable-winscp-compat \
   --enable-scp-compat \
-  --disable-rsync-compat
+  --disable-rsync-compat \
+  --with-sftp-server="/usr/libexec/sftp-server"
 
 define Package/scponly
   SECTION:=utils
