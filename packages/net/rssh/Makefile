@@ -39,6 +39,7 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default,\
+		--with-sftp-server="/usr/libexec/sftp-server" \
 		,\
 		ac_cv_func_malloc_0_nonnull=yes \
 	)
