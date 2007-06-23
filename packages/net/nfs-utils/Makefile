@@ -46,7 +46,7 @@ endef
 
 define Package/Template
 	@if [ \! -f "$(PKG_INSTALL_DIR)/$(1)" ]; then \
-		rm -f $(PKG_BUILD_DIR)/.built; \
+		-rm -f $(PKG_BUILD_DIR)/.built; \
 		$(MAKE) $(PKG_BUILD_DIR)/.built; \
 	fi
 	$(INSTALL_DIR) $(2)
