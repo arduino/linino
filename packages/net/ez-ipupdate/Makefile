@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ez-ipupdate
 PKG_VERSION:=3.0.11b8
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/e/ez-ipupdate \
@@ -45,7 +45,7 @@ define Package/ez-ipupdate/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/ez-ipupdate.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
-	$(INSTALL_BIN) ./files/ez-ipupdate.hotplug $(1)/etc/hotplug.d/iface/10-ez-ipupdate
+	$(INSTALL_BIN) ./files/ez-ipupdate.hotplug $(1)/etc/hotplug.d/iface/30-ez-ipupdate
 endef
 
 $(eval $(call BuildPackage,ez-ipupdate))

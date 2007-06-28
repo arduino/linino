@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=updatedd
 PKG_VERSION:=2.5
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=2957496de0c8e08e9c6492fabf1a88be
 
 PKG_SOURCE_URL:=http://savannah.nongnu.org/download/updatedd/
@@ -119,7 +119,7 @@ define Package/updatedd/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/updatedd $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/updatedd
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
-	$(INSTALL_BIN) ./files/ddns.hotplug $(1)/etc/hotplug.d/iface/10-ddns
+	$(INSTALL_BIN) ./files/ddns.hotplug $(1)/etc/hotplug.d/iface/30-ddns
 endef
 
 $(eval $(call BuildPackage,updatedd))

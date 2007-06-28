@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miniupnpd
 PKG_VERSION:=1.0-RC5
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=fce12f92178409f0026a635d4bb5d8be
 
 PKG_SOURCE_URL:=http://miniupnp.tuxfamily.org/files
@@ -45,7 +45,7 @@ define Package/miniupnpd/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/linux/*.sh $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/miniupnpd.init $(1)/etc/init.d/miniupnpd
 	$(INSTALL_DATA) ./files/upnpd.config $(1)/etc/config/upnpd
-	$(INSTALL_DATA) ./files/miniupnpd.hotplug $(1)/etc/hotplug.d/iface/10-miniupnpd
+	$(INSTALL_DATA) ./files/miniupnpd.hotplug $(1)/etc/hotplug.d/iface/20-miniupnpd
 endef
 
 $(eval $(call BuildPackage,miniupnpd))

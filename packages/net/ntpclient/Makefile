@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ntpclient
 PKG_VERSION:=2003_194
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://doolittle.icarus.com/ntpclient/
@@ -36,7 +36,7 @@ endef
 
 define Package/ntpclient/install	
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
-	$(INSTALL_BIN) ./files/ntpclient.init $(1)/etc/hotplug.d/iface/10-ntpclient
+	$(INSTALL_BIN) ./files/ntpclient.init $(1)/etc/hotplug.d/iface/20-ntpclient
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/ntpclient.config $(1)/etc/config/ntp_client
 	$(INSTALL_DIR) $(1)/usr/sbin
