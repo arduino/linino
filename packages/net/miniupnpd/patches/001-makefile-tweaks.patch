@@ -35,20 +35,3 @@
  
  testupnpdescgen:	$(TESTUPNPDESCGENOBJS)
  
-@@ -59,13 +58,14 @@
- upnphttp.o: upnphttp.h upnpdescgen.h miniupnpdpath.h upnpsoap.h
- upnpdescgen.o: upnpdescgen.h miniupnpdpath.h upnpglobalvars.h
- upnpsoap.o: upnpglobalvars.h upnphttp.h upnpsoap.h upnpreplyparse.h
--upnpsoap.o: upnpredirect.h openbsd/getifstats.h
-+upnpsoap.o: upnpredirect.h getifstats.h
- upnpreplyparse.o: upnpreplyparse.h minixml.h
- minixml.o: minixml.h
- upnpredirect.o: upnpredirect.h upnpglobalvars.h openbsd/obsdrdr.h
- daemonize.o: daemonize.h
- upnpglobalvars.o: upnpglobalvars.h
--linux/getifstats.o: openbsd/getifstats.h
-+linux/getifstats.o: getifstats.h
- linux/iptcrdr.o: linux/iptcrdr.h
- testupnpdescgen.o: upnpdescgen.h
- upnpdescgen.o: upnpdescgen.h miniupnpdpath.h upnpglobalvars.h
-+upnppermissions.o: upnppermissions.c
