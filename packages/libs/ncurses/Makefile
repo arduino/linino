@@ -129,7 +129,7 @@ endef
 
 define Package/libncurses/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{ncurses,panel,menu}*.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{ncurses,panel,menu,form}*.so.* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/share/terminfo
 	(cd $(PKG_INSTALL_DIR)/usr/share/terminfo; \
 		for dir in ??; do \
