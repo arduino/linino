@@ -9,13 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miau
-PKG_VERSION:=0.6.3
-PKG_RELEASE:=1
+PKG_VERSION:=0.6.4
+PKG_RELEASE:=2
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/miau
-PKG_MD5SUM:=ddc69b54c3c74adc5e5b45aa62e1f4e2
-PKG_CAT:=zcat
+PKG_MD5SUM:=6ee1b23fe55b46988d0714021b0ff76c
+PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -34,21 +34,16 @@ define Package/miau
   URL:=http://sourceforge.net/projects/miau/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-automode \
-		--enable-releasenick \
-		--enable-uptime \
-		--enable-privlog \
-		--enable-onconnect \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-automode \
+	--enable-releasenick \
+	--enable-uptime \
+	--enable-privlog \
+	--enable-onconnect
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+MAKE_FLAGS += \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install
 
 define Package/miau/install	
 	$(INSTALL_DIR) $(1)/usr/bin  	
