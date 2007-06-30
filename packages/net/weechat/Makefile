@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=weechat
-PKG_VERSION:=0.2.4
-PKG_RELEASE:=1
+PKG_VERSION:=0.2.5
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://weechat.flashtux.org/download/
-PKG_MD5SUM:=c7c7f89d6dac502ad31d12198a8836c1
+PKG_MD5SUM:=42f96620c3b2fd3dca9768d9ce16dd06
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -32,30 +32,25 @@ define Package/weechat
   URL:=http://weechat.flashtux.org/
 endef
 
-define Build/Configure	
-	$(call Build/Configure/Default, \
-		--with-debug=0 \
-		--with-libgnutls-prefix=$(STAGING_DIR)/usr \
-		--without-doc-xsl-prefix \
-		--with-libiconv-prefix="$(STAGING_DIR)/usr/lib/libiconv" \
-		--without-libintl-prefix \
-		--disable-aspell \
-		--enable-lua \
-		--with-lua-inc="$(STAGING_DIR)/usr/include" \
-		--with-lua-lib="$(STAGING_DIR)/usr/lib" \
-		--disable-perl \
-		--disable-python \
-		--disable-ruby \
-		, \
-		LIBS="-llua -ldl -lm -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
-	)
-endef
+CONFIGURE_ARGS += \
+	--with-debug=0 \
+	--with-libgnutls-prefix=$(STAGING_DIR)/usr \
+	--without-doc-xsl-prefix \
+	--with-libiconv-prefix="$(STAGING_DIR)/usr/lib/libiconv" \
+	--without-libintl-prefix \
+	--disable-aspell \
+	--enable-lua \
+	--with-lua-inc="$(STAGING_DIR)/usr/include" \
+	--with-lua-lib="$(STAGING_DIR)/usr/lib" \
+	--disable-perl \
+	--disable-python \
+	--disable-ruby \
+	, \
+	LIBS="-llua -ldl -lm -L$(STAGING_DIR)/usr/lib/libiconv/lib"
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+MAKE_FLAGS += \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install
 
 define Package/weechat/install	
 	$(INSTALL_DIR) $(1)/usr/bin
