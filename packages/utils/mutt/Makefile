@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mutt
-PKG_VERSION:=1.5.11
-PKG_RELEASE:=1
+PKG_VERSION:=1.5.16
+PKG_RELEASE:=2
 
 PKG_SOURCE_URL:=@SF/mutt
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=00e6f8f7c37d4840e5e30583ebee21ce
+PKG_MD5SUM:=10eff7024dbb7ce1f773d688a69ea9db
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -29,19 +29,12 @@ define Package/mutt
   URL:=http://www.mutt.org/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--includedir=$(PKG_BUILD_DIR)/. \
-		--oldincludedir=$(PKG_BUILD_DIR)/. \
-		--enable-pop \
-		--enable-imap \
-		--with-ssl \
-	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)
-endef
+CONFIGURE_ARGS += \
+	--includedir=$(PKG_BUILD_DIR)/. \
+	--oldincludedir=$(PKG_BUILD_DIR)/. \
+	--enable-pop \
+	--enable-imap \
+	--with-ssl
 
 define Package/mutt/install
 	$(INSTALL_DIR) $(1)/usr/bin
