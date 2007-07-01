@@ -11,7 +11,7 @@ start() {
 	[ -d /var/log/asterisk ] || mkdir -p /var/log/asterisk
 	[ -d /var/spool/asterisk ] || mkdir -p /var/spool/asterisk
 	[ -f /usr/lib/asterisk/astdb ] && mv /usr/lib/asterisk/astdb /var/spool/asterisk/astdb
-	[ -h /usr/lib/asterisk/astdb ] || ln -s /var/spool/asterisk/astdb /usr/lib/asterisk/astdb
+	[ -h /usr/lib/asterisk/astdb ] || ln -sf /var/spool/asterisk/astdb /usr/lib/asterisk/astdb
 	/usr/sbin/asterisk $OPTIONS
 }
 
