@@ -8,7 +8,7 @@
 #
 
 RELEASE:=Kamikaze
-#VERSION:=2.0 # uncomment for final release
+VERSION:=7.07
 
 #--------------------------------------------------------------
 # Just run 'make menuconfig', configure stuff, then run 'make'.
