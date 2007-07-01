@@ -13,7 +13,8 @@ PKG_VERSION:=4.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
-PKG_SOURCE_URL:=http://sublimation.org/scponly
+PKG_SOURCE_URL:=@SF/scponly \
+	http://sublimation.org/scponly
 PKG_MD5SUM:=0425cb868cadd026851238452f1db907
 PKG_CAT:=zcat
 
@@ -21,11 +22,13 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
-CONFIGURE_ARGS+= \
-  --enable-winscp-compat \
-  --enable-scp-compat \
-  --disable-rsync-compat \
-  --with-sftp-server="/usr/libexec/sftp-server"
+CONFIGURE_ARGS += \
+	ac_cv_path_scponly_PROG_SFTP_SERVER="/usr/libexec/sftp-server" \
+	, \
+	--enable-winscp-compat \
+	--enable-scp-compat \
+	--disable-rsync-compat \
+	--with-sftp-server="/usr/libexec/sftp-server"
 
 define Package/scponly
   SECTION:=utils
