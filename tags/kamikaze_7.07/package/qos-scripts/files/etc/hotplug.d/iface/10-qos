@@ -1,0 +1,2 @@
+#!/bin/sh
+[ "$ACTION" = ifup ] && /usr/lib/qos/generate.sh interface "$INTERFACE" | sh

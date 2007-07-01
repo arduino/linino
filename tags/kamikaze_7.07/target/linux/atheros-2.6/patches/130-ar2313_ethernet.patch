@@ -1,0 +1,27 @@
+diff -urN linux.old/drivers/net/Kconfig linux.eth/drivers/net/Kconfig
+--- linux.old/drivers/net/Kconfig	2006-12-14 23:53:29.000000000 +0100
++++ linux.eth/drivers/net/Kconfig	2006-12-16 04:30:11.000000000 +0100
+@@ -313,6 +313,12 @@
+ 
+ source "drivers/net/arm/Kconfig"
+ 
++config AR2313
++	tristate "AR2313 Ethernet support"
++	depends on NET_ETHERNET && ATHEROS
++	help
++	  Support for the AR231x/531x ethernet controller
++
+ config MACE
+ 	tristate "MACE (Power Mac ethernet) support"
+ 	depends on NET_ETHERNET && PPC_PMAC && PPC32
+diff -urN linux.old/drivers/net/Makefile linux.eth/drivers/net/Makefile
+--- linux.old/drivers/net/Makefile	2006-12-14 23:53:29.000000000 +0100
++++ linux.eth/drivers/net/Makefile	2006-12-16 04:30:11.000000000 +0100
+@@ -9,6 +9,7 @@
+ obj-$(CONFIG_EHEA) += ehea/
+ obj-$(CONFIG_BONDING) += bonding/
+ obj-$(CONFIG_GIANFAR) += gianfar_driver.o
++obj-$(CONFIG_AR2313) += ar2313/
+ 
+ gianfar_driver-objs := gianfar.o \
+ 		gianfar_ethtool.o \

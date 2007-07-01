@@ -1,0 +1,172 @@
+Index: madwifi-ng-r2420-20070602/ath/if_ath.c
+===================================================================
+--- madwifi-ng-r2420-20070602.orig/ath/if_ath.c	2007-06-04 13:21:57.500235304 +0200
++++ madwifi-ng-r2420-20070602/ath/if_ath.c	2007-06-04 13:21:58.130139544 +0200
+@@ -75,7 +75,7 @@
+ #include <net80211/if_llc.h>
+ #endif
+ 
+-#define	AR_DEBUG
++#undef	AR_DEBUG
+ 
+ #include "net80211/if_athproto.h"
+ #include "if_athvar.h"
+@@ -382,7 +382,7 @@
+ 		ath_keyprint(sc, __func__, ix, hk, mac);	\
+ } while (0)
+ #else /* defined(AR_DEBUG) */
+-#define	IFF_DUMPPKTS(sc, _m)	netif_msg_dumppkts(&sc->sc_ic)
++#define	IFF_DUMPPKTS(sc, _m)	0
+ #define	DPRINTF(sc, _m, _fmt, ...)
+ #define	KEYPRINTF(sc, k, ix, mac)
+ #endif /* defined(AR_DEBUG) */
+Index: madwifi-ng-r2420-20070602/ath_rate/amrr/amrr.c
+===================================================================
+--- madwifi-ng-r2420-20070602.orig/ath_rate/amrr/amrr.c	2007-06-04 13:21:53.164894376 +0200
++++ madwifi-ng-r2420-20070602/ath_rate/amrr/amrr.c	2007-06-04 13:21:58.131139392 +0200
+@@ -69,7 +69,7 @@
+ 
+ #include "amrr.h"
+ 
+-#define	AMRR_DEBUG
++#undef	AMRR_DEBUG
+ #ifdef AMRR_DEBUG
+ #define	DPRINTF(sc, _fmt, ...) do {					\
+ 	if (sc->sc_debug & 0x10)					\
+Index: madwifi-ng-r2420-20070602/ath_rate/minstrel/minstrel.c
+===================================================================
+--- madwifi-ng-r2420-20070602.orig/ath_rate/minstrel/minstrel.c	2007-06-04 13:21:57.115293824 +0200
++++ madwifi-ng-r2420-20070602/ath_rate/minstrel/minstrel.c	2007-06-04 13:21:58.132139240 +0200
+@@ -116,7 +116,7 @@
+ 
+ #include "minstrel.h"
+ 
+-#define	MINSTREL_DEBUG
++#undef	MINSTREL_DEBUG
+ #ifdef MINSTREL_DEBUG
+ enum {
+ 		ATH_DEBUG_RATE		= 0x00000010	/* rate control */
+Index: madwifi-ng-r2420-20070602/ath_rate/onoe/onoe.c
+===================================================================
+--- madwifi-ng-r2420-20070602.orig/ath_rate/onoe/onoe.c	2007-06-04 13:21:53.176892552 +0200
++++ madwifi-ng-r2420-20070602/ath_rate/onoe/onoe.c	2007-06-04 13:21:58.132139240 +0200
+@@ -65,7 +65,7 @@
+ 
+ #include "onoe.h"
+ 
+-#define	ONOE_DEBUG
++#undef	ONOE_DEBUG
+ #ifdef ONOE_DEBUG
+ enum {
+ 	ATH_DEBUG_RATE	= 0x00000010,	/* rate control */
+Index: madwifi-ng-r2420-20070602/ath_rate/sample/sample.c
+===================================================================
+--- madwifi-ng-r2420-20070602.orig/ath_rate/sample/sample.c	2007-06-04 13:21:53.183891488 +0200
++++ madwifi-ng-r2420-20070602/ath_rate/sample/sample.c	2007-06-04 13:21:58.133139088 +0200
+@@ -67,7 +67,7 @@
+ 
+ #include "sample.h"
+ 
+-#define	SAMPLE_DEBUG
++#undef	SAMPLE_DEBUG
+ #ifdef SAMPLE_DEBUG
+ enum {
+ 	ATH_DEBUG_NODE		= 0x00080000,	/* node management */
+Index: madwifi-ng-r2420-20070602/net80211/ieee80211_proto.c
+===================================================================
+--- madwifi-ng-r2420-20070602.orig/net80211/ieee80211_proto.c	2007-06-04 13:21:53.189890576 +0200
++++ madwifi-ng-r2420-20070602/net80211/ieee80211_proto.c	2007-06-04 13:21:58.133139088 +0200
+@@ -312,6 +312,7 @@
+ }
+ EXPORT_SYMBOL(ieee80211_print_essid);
+ 
++#ifdef IEEE80211_DEBUG
+ void
+ ieee80211_dump_pkt(struct ieee80211com *ic,
+ 	const u_int8_t *buf, int len, int rate, int rssi)
+@@ -390,6 +391,7 @@
+ 	}
+ }
+ EXPORT_SYMBOL(ieee80211_dump_pkt);
++#endif /* IEEE80211_DEBUG */
+ 
+ int
+ ieee80211_fix_rate(struct ieee80211_node *ni, int flags)
+Index: madwifi-ng-r2420-20070602/net80211/ieee80211_proto.h
+===================================================================
+--- madwifi-ng-r2420-20070602.orig/net80211/ieee80211_proto.h	2007-06-04 13:21:53.194889816 +0200
++++ madwifi-ng-r2420-20070602/net80211/ieee80211_proto.h	2007-06-04 13:21:58.134138936 +0200
+@@ -247,7 +247,11 @@
+ #endif
+ int ieee80211_new_state(struct ieee80211vap *, enum ieee80211_state, int);
+ void ieee80211_print_essid(const u_int8_t *, int);
++#ifdef IEEE80211_DEBUG
+ void ieee80211_dump_pkt(struct ieee80211com *, const u_int8_t *, int, int, int);
++#else
++#define ieee80211_dump_pkt(...)
++#endif
+ struct sk_buff *ieee80211_getcfframe(struct ieee80211vap *, int);
+ 
+ /*
+Index: madwifi-ng-r2420-20070602/net80211/ieee80211_var.h
+===================================================================
+--- madwifi-ng-r2420-20070602.orig/net80211/ieee80211_var.h	2007-06-04 13:21:53.201888752 +0200
++++ madwifi-ng-r2420-20070602/net80211/ieee80211_var.h	2007-06-04 13:21:58.134138936 +0200
+@@ -35,8 +35,8 @@
+ #ifndef _NET80211_IEEE80211_VAR_H_
+ #define _NET80211_IEEE80211_VAR_H_
+ 
+-#define	IEEE80211_DEBUG
+-#define	IEEE80211_DEBUG_REFCNT			/* Node reference count debugging */
++#undef	IEEE80211_DEBUG
++#undef	IEEE80211_DEBUG_REFCNT			/* Node reference count debugging */
+ 
+ /* Definitions for IEEE 802.11 drivers. */
+ #include <net80211/ieee80211_linux.h>
+Index: madwifi-ng-r2420-20070602/tools/do_multi.c
+===================================================================
+--- madwifi-ng-r2420-20070602.orig/tools/do_multi.c	2007-06-04 13:21:54.000767304 +0200
++++ madwifi-ng-r2420-20070602/tools/do_multi.c	2007-06-04 13:21:58.134138936 +0200
+@@ -9,16 +9,20 @@
+ 
+     progname = basename(argv[0]);
+ 
++#if 0
+     if(strcmp(progname, "80211debug") == 0)
+ 	ret = a80211debug_init(argc, argv);
++#endif
+     if(strcmp(progname, "80211stats") == 0)
+ 	ret = a80211stats_init(argc, argv);
+     if(strcmp(progname, "athchans") == 0)
+ 	ret = athchans_init(argc, argv);
+     if(strcmp(progname, "athctrl") == 0)
+ 	ret =  athctrl_init(argc, argv);
++#if 0
+     if(strcmp(progname, "athdebug") == 0)
+ 	ret =  athdebug_init(argc, argv);
++#endif
+     if(strcmp(progname, "athkey") == 0)
+ 	ret =  athkey_init(argc, argv);
+     if(strcmp(progname, "athstats") == 0)
+Index: madwifi-ng-r2420-20070602/tools/Makefile
+===================================================================
+--- madwifi-ng-r2420-20070602.orig/tools/Makefile	2007-06-04 13:21:54.001767152 +0200
++++ madwifi-ng-r2420-20070602/tools/Makefile	2007-06-04 13:21:58.134138936 +0200
+@@ -52,7 +52,7 @@
+ 	
+ ifdef DOMULTI
+ OBJS=	do_multi.o athstats.o 80211stats.o athkey.o athchans.o athctrl.o \
+-	athdebug.o 80211debug.o wlanconfig.o 
++	wlanconfig.o 
+ ALL=	${OBJS} madwifi_multi
+ endif
+ 
+@@ -85,7 +85,7 @@
+ 	${CC} -c -o do_multi.o -DDOMULTI=1 ${ALL_CFLAGS} do_multi.c
+ madwifi_multi:
+ 	${CC} -o madwifi_multi ${LDFLAGS} ${OBJS}
+-	for i in athstats 80211stats athkey athchans athctrl athdebug wlanconfig 80211debug; do \
++	for i in athstats 80211stats athkey athchans athctrl wlanconfig; do \
+ 	ln -s -f madwifi_multi $$i; \
+ 	done
+ 

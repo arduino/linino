@@ -1,0 +1,20 @@
+Index: iproute-2.6.20-070313/ip/ipxfrm.c
+===================================================================
+--- iproute-2.6.20-070313.orig/ip/ipxfrm.c	2007-06-09 13:53:56.000000000 +0100
++++ iproute-2.6.20-070313/ip/ipxfrm.c	2007-06-09 13:53:59.000000000 +0100
+@@ -467,7 +467,6 @@
+ 	switch (sel->proto) {
+ 	case IPPROTO_TCP:
+ 	case IPPROTO_UDP:
+-	case IPPROTO_SCTP:
+ 	case IPPROTO_DCCP:
+ 	default: /* XXX */
+ 		if (sel->sport_mask)
+@@ -1107,7 +1106,6 @@
+ 		switch (sel->proto) {
+ 		case IPPROTO_TCP:
+ 		case IPPROTO_UDP:
+-		case IPPROTO_SCTP:
+ 		case IPPROTO_DCCP:
+ 			break;
+ 		default:

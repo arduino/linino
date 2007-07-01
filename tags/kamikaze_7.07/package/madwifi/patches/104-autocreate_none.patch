@@ -1,0 +1,13 @@
+Index: madwifi-ng-r2420-20070602/ath/if_ath.c
+===================================================================
+--- madwifi-ng-r2420-20070602.orig/ath/if_ath.c	2007-06-04 13:21:54.287723680 +0200
++++ madwifi-ng-r2420-20070602/ath/if_ath.c	2007-06-04 13:21:54.479694496 +0200
+@@ -424,7 +424,7 @@
+ 	HAL_STATUS status;
+ 	int error = 0;
+ 	unsigned int i;
+-	int autocreatemode = IEEE80211_M_STA;
++	int autocreatemode = -1;
+ 	u_int8_t csz;
+ 
+ 	sc->devid = devid;
