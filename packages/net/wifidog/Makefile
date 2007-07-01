@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wifidog
-PKG_VERSION:=1.1.3_beta6
+PKG_VERSION:=1.1.3_rc1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= @SF/$(PKG_NAME)
-PKG_MD5SUM:=842b21e1b02d0a90677b289d794e0e21
+PKG_MD5SUM:=2df210852bace3eb740f9344b843f6c3
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -39,13 +39,9 @@ define Package/wifidog/conffiles
 /etc/wifidog.conf
 endef
 
-# uses GNU configure
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+MAKE_FLAGS += \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install
 	
 define Package/wifidog/install
 	$(INSTALL_DIR) $(1)/usr/bin
