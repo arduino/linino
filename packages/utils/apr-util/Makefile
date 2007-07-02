@@ -25,13 +25,14 @@ include $(INCLUDE_DIR)/package.mk
 define Package/apr-util
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libiconv +libexpat +apr
+  DEPENDS:=+libiconv +libexpat +apr +libpthread +libopenssl +libsqlite3
   TITLE:=Apache Portable Runtime Library Util
   URL:=http://apr.apache.org/
 endef
 
 define Build/Configure	
 	$(call Build/Configure/Default, \
+		--with-pgsql=no \
 		--with-apr="$(STAGING_DIR)/usr/bin/apr-1-config" \
 		--with-expat="$(STAGING_DIR)/usr" \
 		, \
