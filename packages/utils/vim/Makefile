@@ -9,14 +9,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vim
-PKG_VERSION:=7.1
-PKG_RELEASE:=2
+PKG_VERSION:=5.8
+PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=ftp://ftp.vim.org/pub/vim/unix/
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=44c6b4914f38d6f9aa959640b89da329
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.gz
+PKG_MD5SUM:=89ab05bb5cd39eeb9e259503436c11ed
+PKG_CAT:=zcat
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)71
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -28,22 +29,23 @@ define Package/vim
   URL:=http://www.vim.org/
 endef
 
-CONFIGURE_ARGS += \
-	ac_cv_sizeof_int=4 \
-	, \
-	--enable-min-features \
-	--disable-gui \
-	--without-x \
-	--disable-multibyte \
-	--disable-cscope \
-	--disable-gpm \
-	--with-tlib=ncurses
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--enable-min-features \
+		--disable-gui \
+		--without-x \
+		--disable-multibyte \
+		--disable-cscope \
+		--disable-gpm \
+		--with-tlib=ncurses \
+	)
+endef
 
 define Package/vim/install	
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(1)/usr/bin/
+	$(CP) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/share/vim
-	$(INSTALL_CONF) ./files/vimrc $(1)/usr/share/vim/
+	$(CP) ./files/vimrc $(1)/usr/share/vim/
 endef
 
 $(eval $(call BuildPackage,vim))
