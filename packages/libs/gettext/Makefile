@@ -10,12 +10,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gettext
 PKG_VERSION:=0.16.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/gettext
-PKG_MD5SUM:=
-PKG_CAT:=zcat
+PKG_MD5SUM:=3d9ad24301c6d6b17ec30704a13fe127
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -29,27 +28,22 @@ define Package/libintl
   URL:=http://www.gnu.org/software/gettext/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--disable-rpath \
-		--enable-nls \
-		--disable-java \
-		--disable-native-java \
-		--disable-openmp \
-		--with-included-gettext \
-		--without-libintl-prefix \
-		--without-libexpat-prefix \
-		--without-emacs \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--disable-rpath \
+	--enable-nls \
+	--disable-java \
+	--disable-native-java \
+	--disable-openmp \
+	--with-included-gettext \
+	--without-libintl-prefix \
+	--without-libexpat-prefix \
+	--without-emacs
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+MAKE_FLAGS += \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install
 
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/lib/libintl/include
