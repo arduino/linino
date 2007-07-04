@@ -33,8 +33,7 @@ define Package/zile
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)/src \
-		all
+	$(MAKE) -C $(PKG_BUILD_DIR)/src
 endef
 
 define Package/zile/install
