@@ -10,13 +10,12 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lcd4linux
 PKG_VERSION:=0.10.0+cvs20051015
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/l/lcd4linux/ \
-		http://ftp.de.debian.org/debian/pool/main/l/lcd4linux/
+	http://ftp.de.debian.org/debian/pool/main/l/lcd4linux/
 PKG_MD5SUM:=5b5ac629be4bb5c29104fb8f6b7fa444
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION).orig
 
@@ -37,9 +36,9 @@ endef
 PKG_CONFIGURE_DRIVERS:=all,!PNG,!RouterBoard,!X11
 
 CONFIGURE_ARGS += \
-		--without-x \
-		--with-drivers="$(PKG_CONFIGURE_DRIVERS)" \
-		--with-plugins=wireless
+	--without-x \
+	--with-drivers="$(PKG_CONFIGURE_DRIVERS)" \
+	--with-plugins=wireless
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); touch \

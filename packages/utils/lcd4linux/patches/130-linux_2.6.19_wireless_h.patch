@@ -1,6 +1,7 @@
-diff -ruN lcd4linux-0.10.0+cvs20051015-old/plugin_wireless.c lcd4linux-0.10.0+cvs20051015-new/plugin_wireless.c
---- lcd4linux-0.10.0+cvs20051015-old/plugin_wireless.c	2005-05-08 06:32:45.000000000 +0200
-+++ lcd4linux-0.10.0+cvs20051015-new/plugin_wireless.c	2007-01-10 01:08:13.000000000 +0100
+Index: lcd4linux-0.10.0+cvs20051015.orig/plugin_wireless.c
+===================================================================
+--- lcd4linux-0.10.0+cvs20051015.orig.orig/plugin_wireless.c	2007-07-07 14:02:55.000000000 +0200
++++ lcd4linux-0.10.0+cvs20051015.orig/plugin_wireless.c	2007-07-07 14:02:57.000000000 +0200
 @@ -92,6 +92,11 @@
  
  #include <sys/ioctl.h>

@@ -1,0 +1,150 @@
+Index: lcd4linux-0.10.0+cvs20051015.orig/udelay.c
+===================================================================
+--- lcd4linux-0.10.0+cvs20051015.orig.orig/udelay.c	2007-07-07 14:02:55.000000000 +0200
++++ lcd4linux-0.10.0+cvs20051015.orig/udelay.c	2007-07-07 14:02:56.000000000 +0200
+@@ -134,28 +134,11 @@
+ #include <stdio.h>
+ 
+ 
+-#ifdef USE_OLD_UDELAY
+-
+-#include <time.h>
+-
+-#else
+-
+-#include <math.h>
+-#include <unistd.h>
+-#include <fcntl.h>
+-#include <errno.h>
+-#include <string.h>
+-#include <sys/time.h>
+-
+-#ifdef HAVE_ASM_MSR_H
+-#include <asm/msr.h>
+-#endif
+-
+-#endif
+-
+-
+ #include "debug.h"
+ #include "udelay.h"
++ 
++#include <time.h>
++#include <errno.h>
+ 
+ #ifdef USE_OLD_UDELAY
+ 
+@@ -163,16 +146,30 @@
+ 
+ void ndelay(const unsigned long nsec)
+ {
++#if 0
+     unsigned long loop = (nsec * loops_per_usec + 999) / 1000;
+ 
+   __asm__(".align 16\n" "1:\tdecl %0\n" "\tjne 1b":	/* no result */
+   :"a"(loop));
++#endif
++  struct timespec val;
++  struct timespec rem;
++  int ret;
++
++  val.tv_sec = 0;
++  val.tv_nsec = nsec;
++
++  do {
++	  ret = nanosleep(&val, &rem);
++	  val = rem;
++  } while ((ret == -1) && (errno == EINTR));
+ }
+ 
+ /* adopted from /usr/src/linux/init/main.c */
+ 
+ void udelay_calibrate(void)
+ {
++#if 0
+     clock_t tick;
+     unsigned long bit;
+ 
+@@ -197,12 +194,13 @@
+ 	if (clock() > tick)
+ 	    loops_per_usec &= ~bit;
+     }
++#endif
+ }
+ 
+ #else
+ 
+ static unsigned int ticks_per_usec = 0;
+-
++#if 0
+ static void getCPUinfo(int *hasTSC, double *MHz)
+ {
+     int fd;
+@@ -249,10 +247,11 @@
+     }
+ 
+ }
+-
++#endif
+ 
+ void udelay_init(void)
+ {
++#if 0
+ #ifdef HAVE_ASM_MSR_H
+ 
+     int tsc;
+@@ -274,12 +273,13 @@
+ 	ticks_per_usec = 0;
+ 	info("udelay: using gettimeofday() delay loop");
+     }
++#endif
+ }
+ 
+ 
+ void ndelay(const unsigned long nsec)
+ {
+-
++#if 0
+ #ifdef HAVE_ASM_MSR_H
+ 
+     if (ticks_per_usec) {
+@@ -313,6 +313,20 @@
+ 	    gettimeofday(&now, NULL);
+ 	} while (now.tv_sec == end.tv_sec ? now.tv_usec < end.tv_usec : now.tv_sec < end.tv_sec);
+     }
++#endif
++
++  struct timespec val;
++  struct timespec rem;
++  int ret;
++
++  val.tv_sec = 0;
++  val.tv_nsec = nsec;
++
++  do {
++	  ret = nanosleep(&val, &rem);
++	  val = rem;
++  } while ((ret == -1) && (errno == EINTR));
++
+ }
+ 
+ #endif
+Index: lcd4linux-0.10.0+cvs20051015.orig/udelay.h
+===================================================================
+--- lcd4linux-0.10.0+cvs20051015.orig.orig/udelay.h	2007-07-07 14:02:56.000000000 +0200
++++ lcd4linux-0.10.0+cvs20051015.orig/udelay.h	2007-07-07 14:02:56.000000000 +0200
+@@ -72,12 +72,14 @@
+ #ifndef _UDELAY_H_
+ #define _UDELAY_H_
+ 
++#if 0
+ /* stolen from linux/asm-i386/processor.h */
+ /* REP NOP (PAUSE) is a good thing to insert into busy-wait loops. */
+ static inline void rep_nop(void)
+ {
+     __asm__ __volatile__("rep; nop");
+ }
++#endif
+ 
+ 
+ #ifdef USE_OLD_UDELAY
