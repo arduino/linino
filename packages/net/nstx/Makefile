@@ -57,7 +57,6 @@ endef
 define Package/nstxd/install
 	$(INSTALL_DIR) $(1)/etc/init.d $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/nstxd $(1)/usr/sbin
-	$(INSTALL_BIN) ./files/nstx.init $(1)/etc/init.d/nstxd
 endef
 
 $(eval $(call BuildPackage,nstx))
