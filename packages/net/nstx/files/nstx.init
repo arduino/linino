@@ -7,9 +7,9 @@ start() {
 	scan_interfaces
 	config_get domain "$domain" domain
 	config_get dns_next_server "$dns_next_server" dns_next_server
-	nstxcd $domain $dns_next_server
+	nstxd $domain $dns_next_server
 }
 
 stop() {
-	killall nstxcd
+	killall nstxd
 }
