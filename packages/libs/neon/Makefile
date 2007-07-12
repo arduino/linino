@@ -66,10 +66,10 @@ define Build/InstallDev
 endef
 
 define Build/UninstallDev
-	rm	$(STAGING_DIR)/usr/bin/neon-config \
+	rm -rf	$(STAGING_DIR)/usr/bin/neon-config \
 		$(STAGING_DIR)/usr/lib/{libneon.a,libneon.la,libneon.so,libneon.so.26,libneon.so.26.0.3} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/neon.pc
-	rm -rf	$(STAGING_DIR)/usr/include/neon
+		$(STAGING_DIR)/usr/lib/pkgconfig/neon.pc \
+		$(STAGING_DIR)/usr/include/neon
 endef
 
 define Package/neon/install	
