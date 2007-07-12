@@ -70,9 +70,9 @@ define Build/InstallDev
 endef
 
 define Build/UninstallDev
-	rm 	$(STAGING_DIR)/usr/bin/apu-1-config \
-		$(STAGING_DIR)/usr/lib/{*aprutil-1*,aprutil.exp}
-	rm -rf	$(STAGING_DIR)/usr/include/apr-1
+	rm -rf	$(STAGING_DIR)/usr/bin/apu-1-config \
+		$(STAGING_DIR)/usr/lib/{*aprutil-1*,aprutil.exp} \
+		$(STAGING_DIR)/usr/include/apr-1
 endef
 
 define Package/apr-util/install	
