@@ -76,9 +76,9 @@ define Build/InstallDev
 endef
 
 define Build/UninstallDev
-	rm	$(STAGING_DIR)/usr/bin/apr-1-config \
+	rm -rf	$(STAGING_DIR)/usr/bin/apr-1-config \
 		$(STAGING_DIR)/usr/lib/{libapr-1*,apr.exp} \
-	rm -rf	$(STAGING_DIR)/usr/share/build-1/ \
+		$(STAGING_DIR)/usr/share/build-1/ \
 		$(STAGING_DIR)/usr/include/apr-1/
 endef
 
