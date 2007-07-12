@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libgssapi
 PKG_VERSION:=0.11
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.citi.umich.edu/projects/nfsv4/linux/libgssapi/
@@ -27,28 +27,26 @@ define Package/libgssapi
 endef
 
 TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib
-define Build/Compile
-	$(call Build/Compile/Default, \
-		OPT="$(TARGET_CFLAGS)" \
-		INSTALLSUID="install -m 4755" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install \
-	)
-endef
+
+MAKE_FLAGS += \
+	OPT="$(TARGET_CFLAGS)" \
+	INSTALLSUID="install -m 4755" \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include/gssglue/gssapi
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/include/gssglue/gssapi
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/gssglue/gssapi/gssapi.h $(STAGING_DIR)/usr/include/gssglue/gssapi
-	mkdir -p $(STAGING_DIR)/usr/lib
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgssapi.{a,so*} $(STAGING_DIR)/usr/lib
-	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libgssapi.pc $(STAGING_DIR)/usr/lib/pkgconfig
 endef
 
 define Build/UninstallDev
 	rm -rf \
-		$(STAGING_DIR)/usr/include/gssglue
-		$(STAGING_DIR)/usr/lib/libgssapi.{a,so*}
+		$(STAGING_DIR)/usr/include/gssglue \
+		$(STAGING_DIR)/usr/lib/libgssapi.{a,so*} \
 		$(STAGING_DIR)/usr/lib/pkgconfig/libgssapi.pc
 endef
 
