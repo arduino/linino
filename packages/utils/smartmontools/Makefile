@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/smartmontools
   SECTION:=utils
   CATEGORY:=Utilities
+  DEPENDS:=+libstdcpp
   TITLE:=S.M.A.R.T Monitoring Tool
   DESCRIPTION:=\
 	smartmontools contains utility programs (smartctl, smartd) to \\\
