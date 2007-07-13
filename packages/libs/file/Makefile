@@ -30,6 +30,14 @@ define Package/libmagic
   URL:=ftp://ftp.astron.com/pub/file/
 endef
 
+define Package/file
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=+libmagic
+  TITLE:=File type determination library
+  URL:=ftp://ftp.astron.com/pub/file/
+endef
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
@@ -64,4 +72,14 @@ define Package/libmagic/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmagic.so.* $(1)/usr/lib/
 endef
 
+define Package/file/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/share/file
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/file \
+		$(1)/usr/bin
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/magic/Magdir/linux \
+		$(1)/usr/share/file/magic
+endef
+
 $(eval $(call BuildPackage,libmagic))
+$(eval $(call BuildPackage,file))
