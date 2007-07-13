@@ -30,6 +30,11 @@ define Package/usbutils
   URL:=http://linux-usb.sourceforge.net/
 endef
 
+define Package/usbutils/postinst
+#!/bin/sh
+$${IPKG_INSTROOT}/usr/sbin/update-usbids.sh
+endef
+
 # uses GNU configure
 
 define Build/Compile
@@ -41,6 +46,7 @@ endef
 define Package/usbutils/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/lsusb $(1)/usr/sbin/
+	$(CP) $(PKG_BUILD_DIR)/update-usbids.sh $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/share
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/usb.ids $(1)/usr/share/
 endef
