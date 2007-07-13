@@ -1,0 +1,16 @@
+diff -urN miniupnpd-1.0-RC6/linux/iptcrdr.c miniupnpd-1.0-RC6.new/linux/iptcrdr.c
+--- miniupnpd-1.0-RC6/linux/iptcrdr.c	2007-06-11 15:25:40.000000000 +0200
++++ miniupnpd-1.0-RC6.new/linux/iptcrdr.c	2007-07-13 14:59:58.000000000 +0200
+@@ -15,7 +15,12 @@
+ #include <dlfcn.h>
+ #include <libiptc/libiptc.h>
+ #include <iptables.h>
++#include <linux/version.h>
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,22)
++#include <linux/netfilter/nf_nat.h>
++#else
+ #include <linux/netfilter_ipv4/ip_nat.h>
++#endif
+ #include "iptcrdr.h"
+ 
+ /* chain name to use, both in the nat table
