@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=squid
-PKG_VERSION:=2.6.STABLE12
+PKG_VERSION:=2.6.STABLE13
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.squid-cache.org/Versions/v2/2.6/
-PKG_MD5SUM:=a830ccc95cb39cdfa5e5b773add0bb0d
+PKG_MD5SUM:=fdc4ece264b47bab1b112d8f6f842b8b
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
