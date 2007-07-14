@@ -14,7 +14,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://subversion.tigris.org/downloads/
-PKG_MD5SUM:=
+PKG_MD5SUM:=d4aa5aeb09acb3307841022d279ab895
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -98,7 +98,3 @@ endef
 $(eval $(call BuildPackage,subversion-libs))
 $(eval $(call BuildPackage,subversion-client))
 $(eval $(call BuildPackage,subversion-server))
-
-$(eval $(call RequireCommand,/usr/bin/ruby, \
-	$(PKG_NAME) requires ruby installed on the host-system. \
-))
