@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=updatedd
 PKG_VERSION:=2.5
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_MD5SUM:=2957496de0c8e08e9c6492fabf1a88be
 
 PKG_SOURCE_URL:=http://savannah.nongnu.org/download/updatedd/
@@ -96,6 +96,13 @@ define Package/updatedd-mod-tzo
   TITLE:=tzo.com
 endef
 
+define Package/updatedd-mod-zoneedit
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=updatedd
+  TITLE:=zoneedit.com
+endef
+
 define Build/Compile
 $(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install)
@@ -132,3 +139,4 @@ $(eval $(call BuildPlugin,updatedd-mod-ods,ods))
 $(eval $(call BuildPlugin,updatedd-mod-ovh,ovh))
 $(eval $(call BuildPlugin,updatedd-mod-regfish,regfish))
 $(eval $(call BuildPlugin,updatedd-mod-tzo,tzo))
+$(eval $(call BuildPlugin,updatedd-mod-zoneedit,zoneedit))
