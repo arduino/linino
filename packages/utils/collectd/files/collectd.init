@@ -23,3 +23,7 @@ start() {
 stop() {
 	kill $(cat "$PIDFILE") 2>/dev/null
 }
+
+restart() {
+	start
+}
