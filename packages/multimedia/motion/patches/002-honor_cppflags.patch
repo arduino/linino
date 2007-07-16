@@ -1,7 +1,6 @@
-Index: motion-3.2.7/Makefile.in
-===================================================================
---- motion-3.2.7.orig/Makefile.in	2007-06-11 08:26:33.000000000 +0100
-+++ motion-3.2.7/Makefile.in	2007-06-11 08:27:55.000000000 +0100
+diff -ruN motion-3.2.5.1-old/Makefile.in motion-3.2.5.1-new/Makefile.in
+--- motion-3.2.5.1-old/Makefile.in	2006-03-07 22:52:49.000000000 +0100
++++ motion-3.2.5.1-new/Makefile.in	2006-03-27 22:04:34.000000000 +0200
 @@ -32,6 +32,7 @@
  ################################################################################
  CFLAGS       = @CFLAGS@ -Wall -DVERSION=\"$(VERSION)\" -D_REENTRANT \
@@ -10,7 +9,7 @@ Index: motion-3.2.7/Makefile.in
  LDFLAGS      = @LDFLAGS@
  LIBS         = @LIBS@ 
  VIDEO_OBJ    = @VIDEO@
-@@ -119,7 +120,7 @@
+@@ -115,7 +116,7 @@
  ################################################################################
  $(DEPEND_FILE): *.h $(SRC)
  	@echo "Generating dependencies, please wait..."

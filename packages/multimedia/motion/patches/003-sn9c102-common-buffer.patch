@@ -1,7 +1,7 @@
-Index: motion-3.2.7/motion.c
+Index: motion-3.2.8/motion.c
 ===================================================================
---- motion-3.2.7.orig/motion.c	2007-06-11 08:27:35.000000000 +0100
-+++ motion-3.2.7/motion.c	2007-06-11 08:28:30.000000000 +0100
+--- motion-3.2.8/motion.c	(revision 174)
++++ motion-3.2.8/motion.c	(working copy)
 @@ -474,8 +474,8 @@
  	cnt->imgs.shotstamp = mymalloc(sizeof(int));
  
