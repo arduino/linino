@@ -1,0 +1,14 @@
+--- httpd-2.2.4.orig/server/Makefile.in	2007-07-02 03:30:22.000000000 +0200
++++ httpd-2.2.4/server/Makefile.in	2007-07-02 03:47:35.000000000 +0200
+@@ -26,7 +26,10 @@
+ 	$(LINK) $(EXTRA_LDFLAGS) $(gen_test_char_OBJECTS) $(EXTRA_LIBS)
+ 
+ test_char.h: gen_test_char
+-	./gen_test_char > test_char.h
++	true
++#	./gen_test_char > test_char.h
++#	doesn't matter if you run it on the buildhost or on an wl500gd,
++#	same output on both, so i just patched in the test_char.h :).
+ 
+ util.lo: test_char.h
+ 
