@@ -9,13 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pcre
-PKG_VERSION:=7.0
-PKG_RELEASE:=1
+PKG_VERSION:=7.2
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/pcre
-PKG_MD5SUM:=b97e3bb84bd665e0fbb7a90344d65a43
-PKG_CAT:=bzcat
+PKG_MD5SUM:=53305db73855f1ff155dcd2c05d448d3
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -28,32 +27,23 @@ define Package/libpcre
   URL:=http://www.pcre.org/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--enable-utf8 \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--enable-utf8 \
+	--disable-cpp
 
-define Build/Compile
-	$(MAKE) -C "$(PKG_BUILD_DIR)" \
-		CC_FOR_BUILD="$(HOSTCC)" \
-		LINK_FOR_BUILD="$(HOSTCC)" \
-		CFLAGS_FOR_BUILD="" \
-		dftables
-	$(MAKE) -C "$(PKG_BUILD_DIR)" \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		all
-endef
+MAKE_FLAGS += \
+	$(TARGET_CONFIGURE_OPTS \
+	CFLAGS="$(TARGET_CFLAGS)" \
+	all
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/pcre-config $(STAGING_DIR)/usr/bin/
-	mkdir -p $(STAGING_DIR)/usr/include
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_BUILD_DIR)/pcre{,posix}.h $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/.libs/libpcre{,posix}.{a,so*} $(STAGING_DIR)/usr/lib/
 endef
 

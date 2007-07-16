@@ -1,8 +1,9 @@
-diff -ruN pcre-5.0-old/pcre-config.in pcre-5.0-new/pcre-config.in
---- pcre-5.0-old/pcre-config.in	2004-09-13 16:20:00.000000000 +0200
-+++ pcre-5.0-new/pcre-config.in	2005-09-04 16:34:39.000000000 +0200
-@@ -18,6 +18,10 @@
-   libR=" -R@libdir@"
+Index: pcre-7.2/pcre-config.in
+===================================================================
+--- pcre-7.2.orig/pcre-config.in	2007-07-16 08:33:37.000000000 +0200
++++ pcre-7.2/pcre-config.in	2007-07-16 08:33:37.000000000 +0200
+@@ -21,6 +21,10 @@
+   libR=" -Wl,-R@libdir@"
    ;;
  esac
 +libS=
@@ -12,7 +13,7 @@ diff -ruN pcre-5.0-old/pcre-config.in pcre-5.0-new/pcre-config.in
  
  while test $# -gt 0; do
    case "$1" in
-@@ -52,10 +56,10 @@
+@@ -55,10 +59,10 @@
        echo $includes
        ;;
      --libs-posix)
