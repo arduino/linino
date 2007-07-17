@@ -1,0 +1,17 @@
+Index: fcgi-2.4.0/include/fcgio.h
+===================================================================
+--- fcgi-2.4.0.orig/include/fcgio.h	2007-07-17 13:30:28.000000000 +0200
++++ fcgi-2.4.0/include/fcgio.h	2007-07-17 13:30:28.000000000 +0200
+@@ -77,10 +77,10 @@
+     virtual int sync();
+ 
+     // Remove and return the current character.
+-    virtual int uflow();
++    virtual int_type uflow();
+ 
+     // Fill the get area (if buffered) and return the current character.
+-    virtual int underflow();
++    virtual int_type underflow();
+ 
+     // Use a buffer.  The only reasons that a buffer would be useful is
+     // to support the use of the unget()/putback() or seek() methods.  Using
