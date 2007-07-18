@@ -150,6 +150,12 @@ define Package/php5-mod-xml
   TITLE:=XML module
 endef
 
+define Package/php5-mod-apc
+  $(call Package/php5/Default)
+  DEPENDS:=php5
+  TITLE:=APC Extension
+endef
+
 PKG_CONFIGURE_LIBS:= -lcrypto -lssl
 PKG_CONFIGURE_OPTS:= \
 	--enable-shared \
@@ -259,6 +265,12 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-xml),)
 else
   PKG_CONFIGURE_OPTS+= --disable-xml
 endif
+ifneq ($(CONFIG_PACKAGE_php5-mod-apc),)
+  PKG_CONFIGURE_OPTS+= --enable-apc --disable-apc-mmap
+  PKG_CONFIGURE_LIBS+= -lrt
+else
+  PKG_CONFIGURE_OPTS+= --disable-apc
+endif
 
 define Build/Configure
 endef
@@ -304,6 +316,8 @@ endif
 ifneq ($(CONFIG_PACKAGE_php5-fastcgi),)
   define Build/Compile/php5-fastcgi
 	-$(MAKE) -C $(PKG_BUILD_DIR) clean
+	rm $(PKG_BUILD_DIR)/configure
+	cd $(PKG_BUILD_DIR) && ./buildconf --force
 	$(call Build/Configure/Default, \
 		$(PKG_CONFIGURE_OPTS) \
 		--disable-cli \
@@ -376,3 +390,4 @@ $(eval $(call BuildPlugin,php5-mod-session,session))
 $(eval $(call BuildPlugin,php5-mod-sockets,sockets))
 $(eval $(call BuildPlugin,php5-mod-sqlite,sqlite))
 $(eval $(call BuildPlugin,php5-mod-xml,xml))
+$(eval $(call BuildPlugin,php5-mod-apc))
