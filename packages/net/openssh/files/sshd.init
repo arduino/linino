@@ -15,6 +15,7 @@ start() {
 		}
 	}; done
 	mkdir -p /var/empty
+	chmod 0700 /var/empty
 	/usr/sbin/sshd
 }
 
