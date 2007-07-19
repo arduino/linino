@@ -55,7 +55,7 @@ define Build/Configure
 		$(CP) include include-host; \
 		rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
-		CXXFLAGS="-static -O2 -MD" \
+		CXXFLAGS="-static -Os -MD" \
 		CFLAGS="-static -MD" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
