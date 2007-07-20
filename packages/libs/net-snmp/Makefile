@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=net-snmp
 PKG_VERSION:=5.1.2
-PKG_RELEASE:=2.1
+PKG_RELEASE:=2.2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -161,7 +161,6 @@ PKG_CONFIGURE_OPTIONS = \
 	--disable-debugging \
 	--disable-ipv6 \
 	--disable-manuals \
-	--disable-mib-loading \
 	--disable-mibs \
 	--disable-scripts \
 	--with-out-mib-modules="$(SNMP_MIB_MODULES_EXCLUDED)" \
