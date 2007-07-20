@@ -10,12 +10,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=updatedd
 PKG_VERSION:=2.5
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 PKG_MD5SUM:=2957496de0c8e08e9c6492fabf1a88be
 
 PKG_SOURCE_URL:=http://savannah.nongnu.org/download/updatedd/
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -103,10 +102,9 @@ define Package/updatedd-mod-zoneedit
   TITLE:=zoneedit.com
 endef
 
-define Build/Compile
-$(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install)
-endef
+MAKE_FLAGS += \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install
 
 define BuildPlugin
   define Package/$(1)/install
@@ -119,14 +117,14 @@ endef
 
 define Package/updatedd/install
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/ddns.init $(1)/etc/init.d/ddns
+	$(INSTALL_BIN) ./files/updatedd.init $(1)/etc/init.d/updatedd
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DATA) ./files/ddns.config $(1)/etc/config/updatedd
+	$(INSTALL_DATA) ./files/updatedd.config $(1)/etc/config/updatedd
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/updatedd $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/updatedd
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
-	$(INSTALL_BIN) ./files/ddns.hotplug $(1)/etc/hotplug.d/iface/30-ddns
+	$(INSTALL_BIN) ./files/updatedd.hotplug $(1)/etc/hotplug.d/iface/30-updatedd
 endef
 
 $(eval $(call BuildPackage,updatedd))

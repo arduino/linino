@@ -9,7 +9,7 @@ COMMAND=/usr/bin/$NAME
 
                                 config_get ifname wan ifname
                                 [ -n "$ifname" ] && {
-					/etc/init.d/ddns restart
+					/etc/init.d/updatedd restart
 				}
         } &
 }

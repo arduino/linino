@@ -1,0 +1,30 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=50
+
+start_service () {
+	local section="$1"
+	config_get service "$section" service
+	config_get user    "$section" user
+	config_get passwd  "$section" passwd
+	config_get host    "$section" host
+	config_get update  "$section" update
+
+	[ "$update" = 1 ] && {
+		/usr/bin/updatedd -Y $service -- $user:$passwd $host
+	}
+}
+
+start() {
+	config_load "updatedd"
+	config_foreach start_service updatedd
+}
+
+stop() {
+	killall updatedd
+}
+
+restart() {
+	stop
+	start
+}
