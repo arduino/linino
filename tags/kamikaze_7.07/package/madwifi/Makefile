@@ -10,14 +10,14 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=madwifi
-PKG_VERSION:=r2420-20070602
+PKG_VERSION:=r2568-20070710
 PKG_BRANCH:=madwifi-ng
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_BRANCH)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://snapshots.madwifi.org/$(PKG_BRANCH)
 PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/$(PKG_BRANCH)-$(PKG_VERSION)
-PKG_MD5SUM:=1ba88326b8dc8c231562329fc2e39578
+PKG_MD5SUM:=fe5d41acd085d2c46934be3f8839e694
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -81,7 +81,7 @@ endif
 define KernelPackage/madwifi
   SUBMENU:=Wireless Drivers
   TITLE:=Driver for Atheros wireless chipsets
-  DEPENDS:=+wireless-tools
+  DEPENDS:=+wireless-tools @!LINUX_2_6_AVR32
   DESCRIPTION:=\
 	This package contains a driver for Atheros 802.11a/b/g chipsets.
   URL:=http://madwifi.org/

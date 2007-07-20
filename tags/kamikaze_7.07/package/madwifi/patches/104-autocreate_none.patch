@@ -1,8 +1,8 @@
-Index: madwifi-ng-r2420-20070602/ath/if_ath.c
+Index: madwifi-ng-r2568-20070710/ath/if_ath.c
 ===================================================================
---- madwifi-ng-r2420-20070602.orig/ath/if_ath.c	2007-06-04 13:21:54.287723680 +0200
-+++ madwifi-ng-r2420-20070602/ath/if_ath.c	2007-06-04 13:21:54.479694496 +0200
-@@ -424,7 +424,7 @@
+--- madwifi-ng-r2568-20070710.orig/ath/if_ath.c	2007-07-13 11:18:14.437119270 +0200
++++ madwifi-ng-r2568-20070710/ath/if_ath.c	2007-07-13 11:18:15.697191079 +0200
+@@ -427,7 +427,7 @@
  	HAL_STATUS status;
  	int error = 0;
  	unsigned int i;
