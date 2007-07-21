@@ -358,7 +358,7 @@ endef
 $(eval $(call KernelPackage,usb-net))
 
 define KernelPackage/usb-net-asix
-  $(call usbdep,kmod-usbnet)
+  $(call usbdep,kmod-usb-net)
   TITLE:=Kernel module for USB-to-Ethernet Asix convertors
   DESCRIPTION:=Kernel module for USB-to-Ethernet Asix convertors
   KCONFIG:=$(CONFIG_USB_NET_AX8817X)
@@ -377,7 +377,7 @@ endef
 $(eval $(call KernelPackage,usb-net-asix))
 
 define KernelPackage/usb-net-kaweth
-  $(call usbdep,kmod-usbnet)
+  $(call usbdep,kmod-usb-net)
   TITLE:=Kernel module for USB-to-Ethernet Kaweth convertors
   DESCRIPTION:=Kernel module for USB-to-Ethernet Kaweth convertors
   KCONFIG:=$(CONFIG_USB_KAWETH)
@@ -388,7 +388,7 @@ endef
 $(eval $(call KernelPackage,usb-net-kaweth))
 
 define KernelPackage/usb-net-pegasus
-  $(call usbdep,kmod-usbnet)
+  $(call usbdep,kmod-usb-net)
   TITLE:=Kernel module for USB-to-Ethernet Pegasus convertors
   DESCRIPTION:=Kernel module for USB-to-Ethernet Pegasus convertors
   KCONFIG:=$(CONFIG_USB_PEGASUS)
