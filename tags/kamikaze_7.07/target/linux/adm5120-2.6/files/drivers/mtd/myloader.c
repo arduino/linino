@@ -51,7 +51,6 @@ int parse_myloader_partitions(struct mtd_info *master,
 	int num_parts;
 	int ret, i;
 	size_t retlen;
-	size_t parts_len;
 	char *names;
 	unsigned long offset;
 	unsigned long blocklen;

@@ -272,7 +272,6 @@ find_root(struct mtd_info *mtd, size_t size, struct mtd_partition *part)
 	int off, blocksize;
 	u32 i, crc = ~0;
 	size_t len;
-	struct squashfs_super_block *sb = (struct squashfs_super_block *) buf;
 
 	blocksize = mtd->erasesize;
 	if (blocksize < 0x10000)
@@ -450,8 +449,8 @@ int __init init_adm5120_map(void)
 #ifdef CONFIG_MTD_MYLOADER_PARTS
 	if (adm5120_boot_loader == BOOT_LOADER_MYLOADER)
 	{
-		printk(KERN_NOTICE "adm5120 : using MyLoader flash mapping\n");
 		char *part_type;
+		printk(KERN_NOTICE "adm5120 : using MyLoader flash mapping\n");
 
 		if (parsed_nr_parts == 0) {
 			ret = parse_myloader_partitions(adm5120_mtd, &parts, 0);
