@@ -51,6 +51,7 @@
 #include <linux/jffs2.h>
 #include <linux/crc32.h>
 #include <asm/io.h>
+#include <asm/bootinfo.h>
 #include <asm/mach-adm5120/myloader.h>
 #include <asm/mach-adm5120/adm5120_info.h>
 
@@ -431,8 +432,7 @@ int __init init_adm5120_map(void)
 	printk(KERN_NOTICE "Flash device: 0x%x at 0x%x\n", size, WINDOW_ADDR);
 
 #ifdef CONFIG_MTD_PARTITIONS
-
-	if (adm5120_boot_loader == BOOT_LOADER_CFE)
+	if (mips_machtype == MACH_ADM5120_WP54G_WRT)
 	{
 		printk(KERN_NOTICE "adm5120 : using CFE flash mapping\n");
 		parts = init_mtd_partitions(adm5120_mtd, size);
