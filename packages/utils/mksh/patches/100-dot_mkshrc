@@ -1,21 +1,18 @@
-diff -ur mksh.old/dot.mkshrc mksh.dev/dot.mkshrc
---- mksh.old/dot.mkshrc	2007-04-24 14:21:53.725182064 +0200
-+++ mksh.dev/dot.mkshrc	2007-04-24 14:27:50.157996040 +0200
-@@ -1,6 +1,6 @@
- : ${EDITOR:=/bin/ed} ${TERM:=vt100}
--[[ ${HOSTNAME:=$(ulimit -c 0; hostname -s 2>/dev/null)} = \
--    @(localhost|*([ 	])) ]] && HOSTNAME=$(ulimit -c 0; hostname 2>/dev/null)
-+[[ ${HOSTNAME:=$(ulimit -c 0; cat /proc/sys/kernel/hostname)} = \
-+    @(localhost|*([ 	])) ]] && HOSTNAME=$(ulimit -c 0; cat /proc/sys/kernel/hostname)
- if [[ $(ulimit -c 0; id -u 2>/dev/null) -eq 0 ]]; then
- 	PS1='# '
- else
-@@ -25,7 +25,7 @@
+$FreeWRT$
+--- mksh.orig/dot.mkshrc	Wed Jun 20 13:38:18 2007
++++ mksh/dot.mkshrc	Mon Jul  9 12:32:20 2007
+@@ -1,4 +1,4 @@
+-: ${EDITOR:=/bin/ed} ${TERM:=vt100} ${HOSTNAME:=$(ulimit -c 0;hostname -s 2>&-)}
++: ${EDITOR:=/bin/ed} ${TERM:=vt100} ${HOSTNAME:=$(</proc/sys/kernel/hostname)}
+ [[ $HOSTNAME = @(localhost|*([	 ])) ]] && HOSTNAME=$(ulimit -c 0;hostname 2>&-)
+ : ${HOSTNAME:=nil}; PS1='#'; [[ "$(ulimit -c 0; id -u 2>&-)" -eq 0 ]] || PS1='$'
+ PS1='$(((e = $?)) && print $e\|)${USER:=$(ulimit -c 0; id -un 2>&- || \
+@@ -19,7 +19,7 @@ export EDITOR HOSTNAME MKSH=$(whence -p 
  alias l='/bin/ls -F'
  alias la='l -a'
  alias ll='l -l'
 -alias lo='la -lo'
 +alias lo='la -l'
- whence -p rot13 >/dev/null || alias rot13='tr [A-Za-z] [N-ZA-Mn-za-m]'
- whence -p hd >/dev/null || function hd {
- 	hexdump -e '"%08.8_ax  " 8/1 "%02X " " - " 8/1 "%02X "' \
+ alias which='whence -p'
+ whence -p rot13 >&- || alias rot13='tr [A-Za-z] [N-ZA-Mn-za-m]'
+ whence -p hd >&- || function hd {
