@@ -1,5 +1,7 @@
---- squid-2.6.STABLE12/lib/Makefile.in.orig	2006-11-04 17:20:02.000000000 -0600
-+++ squid-2.6.STABLE12/lib/Makefile.in	2007-04-07 20:26:04.000000000 -0500
+Index: squid-2.6.STABLE14/lib/Makefile.in
+===================================================================
+--- squid-2.6.STABLE14.orig/lib/Makefile.in	2007-07-25 16:04:15.000000000 -0500
++++ squid-2.6.STABLE14/lib/Makefile.in	2007-07-25 16:04:16.000000000 -0500
 @@ -65,7 +65,9 @@
  	splay.c Stack.c strsep.c stub_memaccount.c util.c uudecode.c \
  	win32lib.c
@@ -77,7 +79,7 @@
  OPT_DEFAULT_HOSTS = @OPT_DEFAULT_HOSTS@
  PACKAGE = @PACKAGE@
  PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
-@@ -301,6 +323,7 @@
+@@ -303,6 +325,7 @@
  noinst_LIBRARIES = \
  	@LIBDLMALLOC@ \
  	libmiscutil.a \
@@ -85,7 +87,7 @@
  	libntlmauth.a \
  	@LIBREGEX@ \
  	$(LIBSSPWIN32)
-@@ -335,9 +358,34 @@
+@@ -337,9 +360,34 @@
  	uudecode.c \
  	$(WIN32SRC)
  
@@ -120,7 +122,7 @@
  # $(top_srcdir)/include/version.h should be a dependency
  libregex_a_SOURCES = \
  	GNUregex.c
-@@ -358,7 +406,7 @@
+@@ -360,7 +408,7 @@
  all: all-am
  
  .SUFFIXES:
@@ -129,7 +131,7 @@
  $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
  	@for dep in $?; do \
  	  case '$(am__configure_deps)' in \
-@@ -395,10 +443,13 @@
+@@ -397,10 +445,13 @@
  	-rm -f libdlmalloc.a
  	$(libdlmalloc_a_AR) libdlmalloc.a $(libdlmalloc_a_OBJECTS) $(libdlmalloc_a_LIBADD)
  	$(RANLIB) libdlmalloc.a
@@ -144,7 +146,7 @@
  libntlmauth.a: $(libntlmauth_a_OBJECTS) $(libntlmauth_a_DEPENDENCIES) 
  	-rm -f libntlmauth.a
  	$(libntlmauth_a_AR) libntlmauth.a $(libntlmauth_a_OBJECTS) $(libntlmauth_a_LIBADD)
-@@ -449,6 +500,21 @@
+@@ -451,6 +502,21 @@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util.Po@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/uudecode.Po@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/win32lib.Po@am__quote@
@@ -166,7 +168,7 @@
  
  .c.o:
  @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
-@@ -457,6 +523,9 @@
+@@ -459,6 +525,9 @@
  @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
  @am__fastdepCC_FALSE@	$(COMPILE) -c $<
  
