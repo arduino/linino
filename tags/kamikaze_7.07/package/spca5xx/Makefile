@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define KernelPackage/gspca
   SUBMENU:=Other modules
-  DEPENDS:=@LINUX_2_6 kmod-usb-core kmod-videodev @VIDEO_SUPPORT
+  DEPENDS:=@LINUX_2_6 kmod-usb-core kmod-videodev @VIDEO_SUPPORT @USB_SUPPORT
   TITLE:=Driver for SPCA5xx based USB cameras
   URL:=http://mxhaard.free.fr/
   VERSION:=$(LINUX_VERSION)+$(PKG_VERSION)-$(BOARD)-$(PKG_RELEASE)
