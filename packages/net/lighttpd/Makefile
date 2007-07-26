@@ -9,14 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lighttpd
-PKG_VERSION:=1.4.15
-PKG_RELEASE:=1
+PKG_VERSION:=1.4.16
+PKG_RELEASE:=2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.lighttpd.net/download/
-PKG_MD5SUM:=b994b8c359da578dec073cae52c4924f
-PKG_CAT:=bzcat
+PKG_MD5SUM:=ea671997591f772417b7e540d325f8cc
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
@@ -141,38 +140,31 @@ define Package/lighttpd-mod-webdav
 endef
 
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--libdir=/usr/lib/lighttpd \
-		--sysconfdir=/etc/lighttpd \
-		--enable-shared \
-		--enable-static \
-		--disable-rpath \
-		--without-attr \
-		--without-bzip2 \
-		--without-fam \
-		--without-gdbm \
-		--without-ldap \
-		--without-lua \
-		--without-memcache \
-		--without-mysql \
-		--with-openssl="$(STAGING_DIR)/usr" \
-		--with-pcre \
-		--without-valgrind \
-		--with-webdav-props \
-		, \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2 $$$$CPPFLAGS" \
-		PCRE_LIB="-lpcre" \
-	);
-endef
+CONFIGURE_ARGS += \
+	--libdir=/usr/lib/lighttpd \
+	--sysconfdir=/etc/lighttpd \
+	--enable-shared \
+	--enable-static \
+	--disable-rpath \
+	--without-attr \
+	--without-bzip2 \
+	--without-fam \
+	--without-gdbm \
+	--without-ldap \
+	--without-lua \
+	--without-memcache \
+	--without-mysql \
+	--with-openssl="$(STAGING_DIR)/usr" \
+	--with-pcre \
+	--without-valgrind \
+	--with-webdav-props \
+	, \
+	CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2 $$$$CPPFLAGS" \
+	PCRE_LIB="-lpcre"
 
-define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+MAKE_FLAGS += \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install
 
 define Package/lighttpd/install
 	$(INSTALL_DIR) $(1)/etc
