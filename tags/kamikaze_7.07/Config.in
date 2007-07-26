@@ -123,6 +123,12 @@ config SOURCE_FEEDS
 	help
 		Separate sources with spaces : " "
 
+config SOURCE_FEEDS_REV
+	string
+	prompt "Revision for the source feed svn checkout" if BUILDOPTS
+	default "8180"
+
+
 source "toolchain/Config.in"
 source "target/imagebuilder/Config.in"
 source "target/sdk/Config.in"
