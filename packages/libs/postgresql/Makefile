@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=postgresql
 PKG_VERSION:=8.2.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -29,7 +29,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libpq
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+zlib
+  DEPENDS:=+zlib +libreadline +libncurses
   TITLE:=PostgreSQL client library
   DESCRIPTION:=PostgreSQL client library.
   URL:=http://www.postgresql.org/
@@ -136,7 +136,6 @@ define Build/Configure
 			--without-pam \
 			--without-perl \
 			--without-python \
-			--without-readline \
 			--without-rendezvous \
 			--without-tcl \
 			--without-tk \
