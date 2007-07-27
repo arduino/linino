@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fortune-mod
 PKG_VERSION:=1.2.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://freeware.sgi.com/source/fortune-mod
@@ -30,7 +30,7 @@ define Package/fortune-mod
 endef
 
 define Build/Compile
-	$(HOSTCC) -Wall -m32 -o $(PKG_BUILD_DIR)/util/strfile-host $(PKG_BUILD_DIR)/util/strfile.c -DVERSION=\"$(PKG_VERSION)\"
+	$(HOSTCC) -Wall -o $(PKG_BUILD_DIR)/util/strfile-host $(PKG_BUILD_DIR)/util/strfile.c -DVERSION=\"$(PKG_VERSION)\"
 	$(PKG_BUILD_DIR)/util/strfile-host $(PKG_BUILD_DIR)/datfiles/fortunes $(PKG_BUILD_DIR)/datfiles/fortunes.dat
 	$(MAKE) -C $(PKG_BUILD_DIR)/fortune
 endef
