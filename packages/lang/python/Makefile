@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python
 PKG_VERSION:=2.5
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=Python-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.python.org/ftp/python/2.5/
@@ -22,13 +22,13 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-PY_DISABLED_MODULES=readline pyexpat dbm gdbm bsddb \
+PY_DISABLED_MODULES=pyexpat dbm gdbm bsddb \
 	_curses _curses_panel _tkinter nis zipfile
 
 define Package/python
   SECTION:=lang
   CATEGORY:=Languages
-  DEPENDS:=+uclibcxx +libpthread
+  DEPENDS:=+uclibcxx +libpthread +libreadline +libncurses
   TITLE:=Python 2.5 programming language
   URL:=http://www.python.org/
 endef
@@ -71,7 +71,7 @@ MAKE_OPTS:=\
 		PYTHON_MODULES_LIB=$(STAGING_DIR)/lib \
 		PYTHON_DISABLE_MODULES="$(PY_DISABLED_MODULES)" \
 		CFLAGS="$(TARGET_CFLAGS) -fno-inline" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
+		LDFLAGS="$(TARGET_LDFLAGS) -lncurses" \
 		LD="$(TARGET_CC)" \
 		HOSTPYTHON=./hostpython \
 		HOSTPGEN=./Parser/hostpgen
