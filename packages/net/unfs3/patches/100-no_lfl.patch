@@ -1,0 +1,49 @@
+Index: unfs3-0.9.17/Makefile.in
+===================================================================
+--- unfs3-0.9.17.orig/Makefile.in	2007-07-28 22:40:02.000000000 +0200
++++ unfs3-0.9.17/Makefile.in	2007-07-28 22:40:02.000000000 +0200
+@@ -11,7 +11,7 @@
+        md5.o mount.o nfs.o password.o readdir.o user.o xdr.o winsupport.o
+ CONFOBJ = Config/lib.a
+ EXTRAOBJ = @EXTRAOBJ@
+-LDFLAGS = @LDFLAGS@ @LIBS@ @LEXLIB@
++LDFLAGS = @LDFLAGS@ @LIBS@
+ EXEEXT = @EXEEXT@
+ 
+ prefix = @prefix@
+Index: unfs3-0.9.17/configure
+===================================================================
+--- unfs3-0.9.17.orig/configure	2007-07-28 22:40:02.000000000 +0200
++++ unfs3-0.9.17/configure	2007-07-28 22:40:02.000000000 +0200
+@@ -2122,7 +2122,7 @@
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lfl  $LIBS"
++LIBS="$LIBS"
+ cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+ _ACEOF
+Index: unfs3-0.9.17/Config/lex.yy.c
+===================================================================
+--- unfs3-0.9.17.orig/Config/lex.yy.c	2007-07-28 22:40:21.000000000 +0200
++++ unfs3-0.9.17/Config/lex.yy.c	2007-07-28 22:40:56.000000000 +0200
+@@ -442,9 +442,15 @@
+ 
+ #ifndef YY_SKIP_YYWRAP
+ #ifdef __cplusplus
+-extern "C" int yywrap YY_PROTO(( void ));
+-#else
+-extern int yywrap YY_PROTO(( void ));
++/* extern "C" int yywrap YY_PROTO(( void )); */
++int yywrap (void ) {
++    return 1;
++}
++#else
++/* extern int yywrap YY_PROTO(( void )); */
++int yywrap (void ) {
++    return 1;
++}
+ #endif
+ #endif
+ 
