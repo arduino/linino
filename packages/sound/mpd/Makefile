@@ -38,9 +38,13 @@ define Package/mpd/conffiles
 /etc/mpd.conf
 endef
 
+ifndef CONFIG_PACKAGE_kmod-soundcore
+	EXTRA_CONFIG_PARAM:=--disable-alsa
+endif
+
 define Build/Configure
 	$(call Build/Configure/Default, \
-		--disable-alsa \
+		$(EXTRA_CONFIG_PARAM) \
 		--disable-shout \
 		--disable-mod \
 		--disable-audiofile \
