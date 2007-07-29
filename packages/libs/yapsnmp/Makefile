@@ -51,7 +51,9 @@ define Build/Compile
 		all install
 endef
 
-pylibdir:=$(shell $(STAGING_DIR)/usr/bin/hostpython $(SCRIPT_DIR)/pylibdir.py)
+ifeq ($(DUMP),)
+  pylibdir:=$(shell $(STAGING_DIR)/usr/bin/hostpython $(SCRIPT_DIR)/pylibdir.py)
+endif
 define Package/yapsnmp/install
 	$(INSTALL_DIR) $(1)$(pylibdir)
 	$(CP) -a $(PKG_INSTALL_DIR)/* $(1)$(pylibdir)
