@@ -18,26 +18,22 @@ PKG_MD5SUM:=b400d03c0e39e3e78a7327ba78f789f0
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/rrs/Default
+define Package/rrs
   SECTION:=net
   CATEGORY:=Network
-  MENU:=1
-  DEPENDS:=+uclibcxx
-  TITLE:=A reverse (connecting) remote shell
+  DEPENDS:=+uclibcxx +libopenssl
+  TITLE:=A reverse (connecting) remote shell (with SSL support)
   URL:=http://www.cycom.se/dl/rrs/
 endef
 
-define Package/rrs
-  $(call Package/rrs/Default)
-  DEPENDS+=+libopenssl
-  TITLE+= (with SSL support)
+define Package/rrs-nossl
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+uclibcxx
+  TITLE:=A reverse (connecting) remote shell (without SSL support)
+  URL:=http://www.cycom.se/dl/rrs/
 endef
 
-define Package/rrs-nossl
-  $(call Package/rrs/Default)
-  DEPENDS+=rrs
-  TITLE+= (without SSL support)
-endef
 
 ifneq ($(SDK),)
   CONFIG_PACKAGE_rrs:=m
@@ -49,9 +45,12 @@ define Build/Compile/Template
 		CC="$(TARGET_CC)" \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -fno-builtin -fno-rtti -nostdinc++" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -Wl,-Bdynamic,-luClibc++,-Bstatic,-lstdc++,-Bdynamic $(3) -lutil -lm -lc" \
+		LDFLAGSNOSSL="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -Wl,-Bdynamic,-luClibc++,-Bstatic,-lstdc++,-Bdynamic $(3) -lutil -lm -lc" \
 		$(2)
 	( cd $(PKG_BUILD_DIR); mv rrs rrs-$(1); )
 endef
+
+# LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -Wl,-Bdynamic,-luClibc++,-Bstatic,-lstdc++,-Bdynamic $(3) -lutil -lm -lc" \
 
 ifneq ($(CONFIG_PACKAGE_rrs),)
   define Build/Compile/with-ssl
