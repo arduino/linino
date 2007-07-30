@@ -288,11 +288,11 @@ endif
 
 define Build/Configure
 	$(call Build/Configure/Default, \
-		--libdir=/usr/lib/ \
-		--libexecdir=/usr/lib/ \
+		--libdir=/usr/lib/freeradius \
+		--libexecdir=/usr/lib/freeradius \
 		$(PKG_CONFIGURE_ARGS) \
 		, \
-		LDFLAGS="$$$$LDFLAGS -L$(PKG_INSTALL_DIR)/usr/lib/" \
+		LDFLAGS="$$$$LDFLAGS -L$(PKG_INSTALL_DIR)/usr/lib/freeradius" \
 		LIBS="$(PKG_CONFIGURE_LIBS)" \
 		MYSQL_CONFIG="no" \
 	)
@@ -317,8 +317,8 @@ define Package/freeradius/install
 		$(CP) $(PKG_INSTALL_DIR)/usr/share/freeradius/dictionary.$$$${f} $(1)/usr/share/freeradius/ ; \
 		$(SED) "s,^#\(\$$$$INCLUDE dictionary\.$$$${f}\),\1,g" $(1)/usr/share/freeradius/dictionary ; \
 	done
-	$(INSTALL_DIR) $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libradius{,-*}.so $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/freeradius
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/freeradius/libradius{,-*}.so $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/radiusd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
@@ -343,9 +343,9 @@ endef
 
 define BuildPlugin
   define Package/$(1)/install
-	[ -z "$(2)" ] || $(INSTALL_DIR) $$(1)/usr/lib/
+	[ -z "$(2)" ] || $(INSTALL_DIR) $$(1)/usr/lib
 	for m in $(2); do \
-		$(CP) $(PKG_INSTALL_DIR)/usr/lib/$$$$$$$${m}{,-*}.so $$(1)/usr/lib/ ; \
+		$(CP) $(PKG_INSTALL_DIR)/usr/lib/freeradius/$$$$$$$${m}{,-*}.so $$(1)/usr/lib/ ; \
 	done
 	[ -z "$(3)" ] || $(INSTALL_DIR) $$(1)/etc/freeradius
 	for f in $(3); do \
