@@ -1,6 +1,7 @@
-diff -ruNb Python-2.5.pris/Makefile.pre.in Python-2.5/Makefile.pre.in
---- Python-2.5.pris/Makefile.pre.in	2006-07-30 11:20:10.000000000 -0500
-+++ Python-2.5/Makefile.pre.in	2007-04-19 17:02:07.078288000 -0500
+Index: Python-2.5.1/Makefile.pre.in
+===================================================================
+--- Python-2.5.1.orig/Makefile.pre.in	2007-07-30 12:55:24.000000000 -0500
++++ Python-2.5.1/Makefile.pre.in	2007-07-30 12:55:24.000000000 -0500
 @@ -170,6 +170,7 @@
  
  PYTHON=		python$(EXE)
@@ -47,9 +48,10 @@ diff -ruNb Python-2.5.pris/Makefile.pre.in Python-2.5/Makefile.pre.in
  	   	--prefix=$(prefix) \
  		--install-scripts=$(BINDIR) \
  		--install-platlib=$(DESTSHARED) \
-diff -ruNb Python-2.5.pris/setup.py Python-2.5/setup.py
---- Python-2.5.pris/setup.py	2006-08-09 18:42:18.000000000 -0500
-+++ Python-2.5/setup.py	2007-04-19 16:58:15.395808750 -0500
+Index: Python-2.5.1/setup.py
+===================================================================
+--- Python-2.5.1.orig/setup.py	2007-07-30 12:55:24.000000000 -0500
++++ Python-2.5.1/setup.py	2007-07-30 12:57:10.000000000 -0500
 @@ -209,6 +209,7 @@
          try:
              imp.load_dynamic(ext.name, ext_filename)

@@ -1,6 +1,7 @@
-diff -ruNb Python-2.5.pris/setup.py Python-2.5/setup.py
---- Python-2.5.pris/setup.py	2007-04-19 17:08:06.740765500 -0500
-+++ Python-2.5/setup.py	2007-04-19 17:08:23.121789250 -0500
+Index: Python-2.5.1/setup.py
+===================================================================
+--- Python-2.5.1.orig/setup.py	2007-07-30 12:55:24.000000000 -0500
++++ Python-2.5.1/setup.py	2007-07-30 12:55:24.000000000 -0500
 @@ -15,7 +15,14 @@
  from distutils.command.install_lib import install_lib
  

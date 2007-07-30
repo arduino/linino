@@ -1,6 +1,7 @@
-diff -ruNb Python-2.5.pris/setup.py Python-2.5/setup.py
---- Python-2.5.pris/setup.py	2007-04-19 17:06:20.170105250 -0500
-+++ Python-2.5/setup.py	2007-04-19 17:07:14.257485500 -0500
+Index: Python-2.5.1/setup.py
+===================================================================
+--- Python-2.5.1.orig/setup.py	2007-07-30 12:55:24.000000000 -0500
++++ Python-2.5.1/setup.py	2007-07-30 12:57:03.000000000 -0500
 @@ -244,7 +244,18 @@
          return sys.platform
  

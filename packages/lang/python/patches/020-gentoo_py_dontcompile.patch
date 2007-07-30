@@ -1,7 +1,8 @@
-diff -ruNb Python-2.5.pris/Python/import.c Python-2.5/Python/import.c
---- Python-2.5.pris/Python/import.c	2006-09-10 23:06:23.000000000 -0500
-+++ Python-2.5/Python/import.c	2007-04-19 17:09:30.209982000 -0500
-@@ -853,8 +853,12 @@
+Index: Python-2.5.1/Python/import.c
+===================================================================
+--- Python-2.5.1.orig/Python/import.c	2007-07-30 12:55:23.000000000 -0500
++++ Python-2.5.1/Python/import.c	2007-07-30 12:55:24.000000000 -0500
+@@ -864,8 +864,12 @@
  write_compiled_module(PyCodeObject *co, char *cpathname, time_t mtime)
  {
  	FILE *fp;
