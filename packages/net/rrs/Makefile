@@ -22,19 +22,20 @@ define Package/rrs/Default
   SECTION:=net
   CATEGORY:=Network
   MENU:=1
+  DEPENDS:=+uclibcxx
   TITLE:=A reverse (connecting) remote shell
   URL:=http://www.cycom.se/dl/rrs/
 endef
 
 define Package/rrs
   $(call Package/rrs/Default)
-  DEPENDS:=+uclibcxx
+  DEPENDS+=+libopenssl
   TITLE+= (with SSL support)
 endef
 
 define Package/rrs-nossl
   $(call Package/rrs/Default)
-  DEPENDS:=rrs
+  DEPENDS+=rrs
   TITLE+= (without SSL support)
 endef
 
