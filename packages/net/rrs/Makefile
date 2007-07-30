@@ -50,8 +50,6 @@ define Build/Compile/Template
 	( cd $(PKG_BUILD_DIR); mv rrs rrs-$(1); )
 endef
 
-# LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -Wl,-Bdynamic,-luClibc++,-Bstatic,-lstdc++,-Bdynamic $(3) -lutil -lm -lc" \
-
 ifneq ($(CONFIG_PACKAGE_rrs),)
   define Build/Compile/with-ssl
 	$(call Build/Compile/Template,ssl,generic,-lcrypto -lssl)
