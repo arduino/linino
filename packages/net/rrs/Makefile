@@ -10,32 +10,31 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rrs
 PKG_VERSION:=1.70
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.cycom.se/uploads/36/19 
 PKG_MD5SUM:=b400d03c0e39e3e78a7327ba78f789f0
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/rrs/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+uclibcxx 
+  MENU:=1
   TITLE:=A reverse (connecting) remote shell
   URL:=http://www.cycom.se/dl/rrs/
 endef
 
 define Package/rrs
   $(call Package/rrs/Default)
-  DEPENDS+= +libopenssl
+  DEPENDS:=+uclibcxx
   TITLE+= (with SSL support)
 endef
 
 define Package/rrs-nossl
+  $(call Package/rrs/Default)
+  DEPENDS:=rrs
   TITLE+= (without SSL support)
 endef
 
