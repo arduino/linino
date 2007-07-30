@@ -10,7 +10,7 @@ config_cb() {
 	config_get cfgtype "$cfg" TYPE
 
 	case "$cfgtype" in
-		ntp_client)
+		ntpclient)
 			config_get hostname	$cfg hostname
 			config_get port		$cfg port
 			config_get count 	$cfg count			
@@ -26,7 +26,7 @@ config_cb() {
 }
 case "${ACTION:-ifup}" in
 	ifup)
-		config_load ntp_client&
+		config_load ntpclient&
 	;;
 	ifdown)
 		route -n 2>&- | grep '^0.0.0.0' >&- || killall ntpclient 2>&- >&-
