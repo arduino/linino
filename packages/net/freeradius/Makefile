@@ -12,12 +12,12 @@ PKG_NAME:=freeradius
 PKG_VERSION:=1.1.6
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/radius/ \
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/radius/old/ \
 	http://freeradius.portal-to-web.de/ \
 	ftp://ftp.uk.freeradius.org/pub/radius/
-PKG_MD5SUM:=
-PKG_CAT:=zcat
+PKG_MD5SUM:=2c29ab90cc30aa3b92fbd78030ccc198
+PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

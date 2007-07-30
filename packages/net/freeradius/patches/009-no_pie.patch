@@ -1,6 +1,7 @@
-diff -ruN freeradius-1.1.6-old/src/main/Makefile.in freeradius-1.1.6-new/src/main/Makefile.in
---- freeradius-1.1.6-old/src/main/Makefile.in	2007-02-14 16:44:23.000000000 +0100
-+++ freeradius-1.1.6-new/src/main/Makefile.in	2007-04-13 05:08:11.000000000 +0200
+Index: freeradius-1.1.6/src/main/Makefile.in
+===================================================================
+--- freeradius-1.1.6.orig/src/main/Makefile.in	2007-07-30 14:17:42.000000000 -0500
++++ freeradius-1.1.6/src/main/Makefile.in	2007-07-30 14:17:43.000000000 -0500
 @@ -61,7 +61,7 @@
  
  radiusd: $(SERVER_OBJS) $(MODULE_OBJS) ../lib/libradius.la

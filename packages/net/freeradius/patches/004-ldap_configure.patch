@@ -1,6 +1,7 @@
-diff -ruN freeradius-1.1.6-old/src/modules/rlm_ldap/configure freeradius-1.1.6-new/src/modules/rlm_ldap/configure
---- freeradius-1.1.6-old/src/modules/rlm_ldap/configure	2006-06-27 00:57:36.000000000 +0200
-+++ freeradius-1.1.6-new/src/modules/rlm_ldap/configure	2007-04-13 02:09:28.000000000 +0200
+Index: freeradius-1.1.6/src/modules/rlm_ldap/configure
+===================================================================
+--- freeradius-1.1.6.orig/src/modules/rlm_ldap/configure	2007-07-30 14:17:42.000000000 -0500
++++ freeradius-1.1.6/src/modules/rlm_ldap/configure	2007-07-30 14:17:42.000000000 -0500
 @@ -1,9 +1,10 @@
  #! /bin/sh
  # From configure.in Revision: 1.10.2.4 .
@@ -6249,9 +6250,10 @@ diff -ruN freeradius-1.1.6-old/src/modules/rlm_ldap/configure freeradius-1.1.6-n
  
  { (exit 0); exit 0; }
  _ACEOF
-diff -ruN freeradius-1.1.6-old/src/modules/rlm_ldap/configure.in freeradius-1.1.6-new/src/modules/rlm_ldap/configure.in
---- freeradius-1.1.6-old/src/modules/rlm_ldap/configure.in	2005-08-22 16:50:46.000000000 +0200
-+++ freeradius-1.1.6-new/src/modules/rlm_ldap/configure.in	2007-04-13 01:52:06.000000000 +0200
+Index: freeradius-1.1.6/src/modules/rlm_ldap/configure.in
+===================================================================
+--- freeradius-1.1.6.orig/src/modules/rlm_ldap/configure.in	2007-07-30 14:17:42.000000000 -0500
++++ freeradius-1.1.6/src/modules/rlm_ldap/configure.in	2007-07-30 14:17:42.000000000 -0500
 @@ -90,6 +90,10 @@
  	dnl Static linking will probably not work, but nobody ever
  	dnl complained about it.

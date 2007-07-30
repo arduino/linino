@@ -1,6 +1,7 @@
-diff -ruN freeradius-1.1.1-old/raddb/eap.conf freeradius-1.1.1-new/raddb/eap.conf
---- freeradius-1.1.1-old/raddb/eap.conf	2006-01-04 15:29:29.000000000 +0100
-+++ freeradius-1.1.1-new/raddb/eap.conf	2006-05-22 23:29:11.000000000 +0200
+Index: freeradius-1.1.6/raddb/eap.conf
+===================================================================
+--- freeradius-1.1.6.orig/raddb/eap.conf	2007-07-30 14:17:42.000000000 -0500
++++ freeradius-1.1.6/raddb/eap.conf	2007-07-30 14:17:42.000000000 -0500
 @@ -73,8 +73,8 @@
  		#  User-Password, or the NT-Password attributes.
  		#  'System' authentication is impossible with LEAP.
@@ -32,7 +33,7 @@ diff -ruN freeradius-1.1.1-old/raddb/eap.conf freeradius-1.1.1-new/raddb/eap.con
  
  		## EAP-TLS
  		#
-@@ -283,7 +283,7 @@
+@@ -329,7 +329,7 @@
  		#  of MS-CHAPv2 in EAP by Cisco, which FreeRADIUS does not
  		#  currently support.
  		#
@@ -42,9 +43,10 @@ diff -ruN freeradius-1.1.1-old/raddb/eap.conf freeradius-1.1.1-new/raddb/eap.con
 +#		}
  	}
  
-diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/radiusd.conf.in
---- freeradius-1.1.1-old/raddb/radiusd.conf.in	2006-02-10 16:12:02.000000000 +0100
-+++ freeradius-1.1.1-new/raddb/radiusd.conf.in	2006-05-22 23:33:53.000000000 +0200
+Index: freeradius-1.1.6/raddb/radiusd.conf.in
+===================================================================
+--- freeradius-1.1.6.orig/raddb/radiusd.conf.in	2007-07-30 14:17:42.000000000 -0500
++++ freeradius-1.1.6/raddb/radiusd.conf.in	2007-07-30 14:17:42.000000000 -0500
 @@ -31,13 +31,13 @@
  
  #  Location of config and logfiles.
@@ -90,7 +92,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  
  
  # THREAD POOL CONFIGURATION
-@@ -657,7 +657,7 @@
+@@ -665,7 +665,7 @@
  	#  For all EAP related authentications.
  	#  Now in another file, because it is very large.
  	#
@@ -99,7 +101,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  
  	# Microsoft CHAP authentication
  	#
-@@ -1046,8 +1046,8 @@
+@@ -1066,8 +1066,8 @@
  	#
  	files {
  		usersfile = ${confdir}/users
@@ -110,7 +112,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  
  		#  If you want to use the old Cistron 'users' file
  		#  with FreeRADIUS, you should change the next line
-@@ -1221,7 +1221,7 @@
+@@ -1253,7 +1253,7 @@
  	#  For MS-SQL, use:	 	${confdir}/mssql.conf
  	#  For Oracle, use:	 	${confdir}/oraclesql.conf
  	#
@@ -119,7 +121,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  
  
  	#  For Cisco VoIP specific accounting with Postgresql,
-@@ -1694,7 +1694,7 @@
+@@ -1755,7 +1755,7 @@
  	#  The entire command line (and output) must fit into 253 bytes.
  	#
  	#  e.g. Framed-Pool = `%{exec:/bin/echo foo}`
@@ -128,7 +130,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  
  	#
  	#  The expression module doesn't do authorization,
-@@ -1707,7 +1707,7 @@
+@@ -1768,7 +1768,7 @@
  	#  listed in any other section.  See 'doc/rlm_expr' for
  	#  more information.
  	#
@@ -137,7 +139,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  
  	#
  	# We add the counter module here so that it registers
-@@ -1734,7 +1734,7 @@
+@@ -1795,7 +1795,7 @@
  	#  'raddb/huntgroups' files.
  	#
  	#  It also adds the %{Client-IP-Address} attribute to the request.
@@ -146,7 +148,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  
  	#
  	#  If you want to have a log of authentication requests,
-@@ -1747,7 +1747,7 @@
+@@ -1808,7 +1808,7 @@
  	#
  	#  The chap module will set 'Auth-Type := CHAP' if we are
  	#  handling a CHAP request and Auth-Type has not already been set
@@ -155,7 +157,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  
  	#
  	#  If the users are logging in with an MS-CHAP-Challenge
-@@ -1775,7 +1775,7 @@
+@@ -1836,7 +1836,7 @@
  	#  Otherwise, when the first style of realm doesn't match,
  	#  the other styles won't be checked.
  	#
@@ -164,7 +166,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  #	ntdomain
  
  	#
-@@ -1784,11 +1784,11 @@
+@@ -1845,11 +1845,11 @@
  	#
  	#  It also sets the EAP-Type attribute in the request
  	#  attribute list to the EAP type from the packet.
@@ -178,7 +180,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  
  	#
  	#  Look in an SQL database.  The schema of the database
-@@ -1842,24 +1842,24 @@
+@@ -1908,24 +1908,24 @@
  	#  PAP authentication, when a back-end database listed
  	#  in the 'authorize' section supplies a password.  The
  	#  password can be clear-text, or encrypted.
@@ -212,7 +214,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  
  	#
  	#  If you have a Cisco SIP server authenticating against
-@@ -1877,7 +1877,7 @@
+@@ -1943,7 +1943,7 @@
  	#  containing CHAP-Password attributes CANNOT be authenticated
  	#  against /etc/passwd!  See the FAQ for details.
  	#  
@@ -221,7 +223,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  
  	# Uncomment it if you want to use ldap for authentication
  	#
-@@ -1890,7 +1890,7 @@
+@@ -1956,7 +1956,7 @@
  
  	#
  	#  Allow EAP authentication.
@@ -230,7 +232,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  }
  
  
-@@ -1898,12 +1898,12 @@
+@@ -1964,12 +1964,12 @@
  #  Pre-accounting.  Decide which accounting type to use.
  #
  preacct {
@@ -245,7 +247,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  
  	#
  	#  Look for IPASS-style 'realm/', and if not found, look for
-@@ -1913,12 +1913,12 @@
+@@ -1979,12 +1979,12 @@
  	#  Accounting requests are generally proxied to the same
  	#  home server as authentication requests.
  #	IPASS
@@ -260,7 +262,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  }
  
  #
-@@ -1929,20 +1929,20 @@
+@@ -1995,20 +1995,20 @@
  	#  Create a 'detail'ed log of the packets.
  	#  Note that accounting requests which are proxied
  	#  are also logged in the detail file.
@@ -284,7 +286,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  #	sradutmp
  
  	#  Return an address to the IP Pool when we see a stop record.
-@@ -1970,7 +1970,7 @@
+@@ -2036,7 +2036,7 @@
  #  or rlm_sql module can handle this.
  #  The rlm_sql module is *much* faster
  session {
@@ -293,7 +295,7 @@ diff -ruN freeradius-1.1.1-old/raddb/radiusd.conf.in freeradius-1.1.1-new/raddb/
  
  	#
  	#  See "Simultaneous Use Checking Querie" in sql.conf
-@@ -2073,5 +2073,5 @@
+@@ -2139,5 +2139,5 @@
  	#  hidden inside of the EAP packet, and the end server will
  	#  reject the EAP request.
  	#
