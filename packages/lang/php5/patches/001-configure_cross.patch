@@ -1,6 +1,8 @@
---- /tmp/php-5.1.6/configure	2006-08-23 07:55:02.000000000 -0500
-+++ php-5.1.6/configure	2007-03-04 18:41:24.000000000 -0600
-@@ -14919,7 +14919,7 @@
+Index: php-5.2.3/configure
+===================================================================
+--- php-5.2.3.orig/configure	2007-07-30 10:52:16.000000000 -0500
++++ php-5.2.3/configure	2007-07-30 10:52:16.000000000 -0500
+@@ -14233,7 +14233,7 @@
      ac_libs=$LIBS
      LIBS="$LIBS -ldl"
      if test "$cross_compiling" = yes; then
@@ -8,17 +10,8 @@
 +  found=yes
  else
    cat > conftest.$ac_ext <<EOF
- #line 14926 "configure"
-@@ -45575,7 +45575,7 @@
-       php_iconv_old_ld="$LDFLAGS"
-       LDFLAGS="-liconv $LDFLAGS"
-       if test "$cross_compiling" = yes; then
--    { echo "configure: error: can not run test program while cross compiling" 1>&2; exit 1; }
-+    { echo "configure: error: can not run test program while cross compiling" 1>&2; }
- else
-   cat > conftest.$ac_ext <<EOF
- #line 45582 "configure"
-@@ -52337,7 +52337,7 @@
+ #line 14240 "configure"
+@@ -52155,7 +52155,7 @@
      _SAVE_CPPFLAGS=$CPPFLAGS
    _SAVE_LDFLAGS=$LDFLAGS
    CPPFLAGS="$CPPFLAGS -I$LDAP_INCDIR"
@@ -26,4 +19,4 @@
 +  LDFLAGS="$LDFLAGS $LDAP_SHARED_LIBADD -lsasl2"
  
      echo $ac_n "checking for 3 arg ldap_set_rebind_proc""... $ac_c" 1>&6
- echo "configure:52344: checking for 3 arg ldap_set_rebind_proc" >&5
+ echo "configure:52162: checking for 3 arg ldap_set_rebind_proc" >&5

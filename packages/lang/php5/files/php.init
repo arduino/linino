@@ -2,14 +2,14 @@
 
 export PHP_FCGI_CHILDREN=''
 PORT=1026
-BIN=/usr/sbin/php
+BIN=/usr/bin/php-fcgi
 
 case $1 in
  start)
   $BIN -b $PORT &
   ;;
  stop)
-  kill `pidof php`
+  kill `pidof php-fcgi`
   ;;
  *)
   echo "usage: $0 (start|stop)"

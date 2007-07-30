@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
-PKG_VERSION:=5.1.6
+PKG_VERSION:=5.2.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://fr.php.net/distributions/
-PKG_MD5SUM:=08e423aa314369d4392a36b3f7246afc
+PKG_SOURCE_URL:=http://www.php.net/distributions/
+PKG_MD5SUM:=eb50b751c8e1ced05bd012d5a0e4dec3
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -192,6 +192,7 @@ PKG_CONFIGURE_OPTS:= \
 	--disable-tokenizer \
 	--with-zlib="$(STAGING_DIR)/usr" \
 	  --with-zlib-dir="$(STAGING_DIR)/usr" \
+	--disable-filter
 
 ifneq ($(SDK),)
   PKG_BUILD_DEPENDS:=libopenssl zlib libcurl libgd libgmp libopenldap libmysqlclient libpq libsqlite2 libexpat
@@ -222,7 +223,7 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-gd),)
 	--with-png-dir="$(STAGING_DIR)/usr" \
 	--without-xpm-dir \
 	--without-ttf \
-	--without-t1lib	\
+	--without-t1lib \
 	--enable-gd-native-ttf \
 	--disable-gd-jis-conv
 else
@@ -309,7 +310,7 @@ ifneq ($(CONFIG_PACKAGE_php5-cgi),)
 		php_cv_cc_rpath="no" \
 	)
 	$(MAKE) -C $(PKG_BUILD_DIR)
-	mv $(PKG_BUILD_DIR)/sapi/cgi/php $(PKG_BUILD_DIR)/php-cgi
+	mv $(PKG_BUILD_DIR)/sapi/cgi/php-cgi $(PKG_BUILD_DIR)/php-cgi
   endef
 endif
 
@@ -330,7 +331,7 @@ ifneq ($(CONFIG_PACKAGE_php5-fastcgi),)
 		php_cv_cc_rpath="no" \
 	)
 	$(MAKE) -C $(PKG_BUILD_DIR)
-	mv $(PKG_BUILD_DIR)/sapi/cgi/php $(PKG_BUILD_DIR)/php-fastcgi
+	mv $(PKG_BUILD_DIR)/sapi/cgi/php-cgi $(PKG_BUILD_DIR)/php-fcgi
   endef
 endif
 
@@ -347,17 +348,17 @@ endef
 
 define Package/php5-cli/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/php-cli $(1)/usr/bin/php
+	$(CP) $(PKG_BUILD_DIR)/php-cli $(1)/usr/bin/php-cli
 endef
 
 define Package/php5-cgi/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/php-cgi $(1)/usr/bin/php
+	$(CP) $(PKG_BUILD_DIR)/php-cgi $(1)/usr/bin/php-cgi
 endef
 
 define Package/php5-fastcgi/install
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_BUILD_DIR)/php-fastcgi $(1)/usr/sbin/php
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_BUILD_DIR)/php-fcgi $(1)/usr/bin/php-fcgi
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/php.init $(1)/etc/init.d/php
 endef

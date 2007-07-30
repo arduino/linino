@@ -1,6 +1,8 @@
---- /tmp/php-5.1.6/ext/posix/posix.c	2006-01-01 06:50:12.000000000 -0600
-+++ php-5.1.6/ext/posix/posix.c	2007-03-03 19:00:44.000000000 -0600
-@@ -463,7 +463,7 @@
+Index: php-5.2.3/ext/posix/posix.c
+===================================================================
+--- php-5.2.3.orig/ext/posix/posix.c	2007-07-30 10:52:16.000000000 -0500
++++ php-5.2.3/ext/posix/posix.c	2007-07-30 10:52:17.000000000 -0500
+@@ -468,7 +468,7 @@
  	add_assoc_string(return_value, "version",  u.version,  1);
  	add_assoc_string(return_value, "machine",  u.machine,  1);
  #ifdef _GNU_SOURCE
