@@ -32,12 +32,8 @@ define Package/ptrtd
   URL:=http://v6web.litech.org/ptrtd/
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		CC="$(TARGET_CC)" \
-		all
-endef
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS)"
 
 define Package/ptrtd/install
 	$(INSTALL_DIR) $(1)/usr/sbin/
