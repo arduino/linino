@@ -18,7 +18,6 @@ PKG_MD5SUM:=65183cae002feaacd8bc92d6a5404cc2
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)2
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -32,22 +31,15 @@ define Package/tspc
   URL:=http://www.hexago.com
 endef
 
-define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		AR="$(TARGET_AR)" \
-		installdir="$(PKG_INSTALL_DIR)" \
-		install target=linux
-endef
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR)/include -I$(PKG_BUILD_DIR)/platform/linux" \
+	target=linux
 
 define Package/tspc/install
 	$(INSTALL_DIR) $(1)/bin
-	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/tspc $(1)/bin/
 	$(INSTALL_DIR) $(1)/etc/tsp
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/tspc $(1)/bin/
-	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/bin/tspc.conf $(1)/etc/tsp/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/bin/tspc.conf.sample $(1)/etc/tsp/tspc.conf
 endef
 
 $(eval $(call BuildPackage,tspc))
