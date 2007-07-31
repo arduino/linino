@@ -29,21 +29,18 @@ define Package/libopenh323
   URL:=http://www.openh323.org/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-minsize \
-		--enable-audio \
-		--disable-video \
-		, \
-		CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti"  \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-minsize \
+	--enable-audio \
+	--disable-video
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		optnoshared
-endef
+CONFIGURE_VARS += \
+	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti" \
+
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS)" \
+	CCFLAGS="$(TARGET_CFLAGS)" \
+	optnoshared
 
 define Build/InstallDev
 	ln -sf $(PKG_NAME)-$(PKG_VERSION) $(BUILD_DIR)/$(PKG_NAME)
