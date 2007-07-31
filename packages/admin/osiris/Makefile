@@ -30,22 +30,16 @@ define Package/osirisd
   URL:=http://www.hostintegrity.com/osiris
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--with-osiris-user=root \
-		--with-root-dir=/var/lib/osiris \
-		--with-readline=no, \
-		ac_cv_openssldir="$(STAGING_DIR)/usr" \
-	)
-endef
+CONFIGURE_ARGS += \
+	--with-osiris-user=root \
+	--with-root-dir=/var/lib/osiris \
+	--with-readline=no, \
+	ac_cv_openssldir="$(STAGING_DIR)/usr"
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
+MAKE_FLAGS += \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		INTERACTIVE=0 \
 		all install
-endef
 
 define Package/osirisd/install	
 	$(INSTALL_DIR) $(1)/usr/sbin
