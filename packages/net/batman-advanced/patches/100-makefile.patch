@@ -1,0 +1,23 @@
+diff -urN batmand-adv_0.1-alpha-rv466_sources.orig/Makefile batmand-adv_0.1-alpha-rv466_sources/Makefile
+--- batmand-adv_0.1-alpha-rv466_sources.orig/Makefile	2007-07-31 22:03:22.433434504 +0100
++++ batmand-adv_0.1-alpha-rv466_sources/Makefile	2007-07-31 22:05:07.553434504 +0100
+@@ -21,6 +21,7 @@
+ CFLAGS =		-Wall -O1 -g3
+ STRIP=			strip
+ LDFLAGS =		-lpthread
++SBINDIR=		$(INSTALL_PREFIX)/usr/sbin
+ 
+ CFLAGS_MIPS =	-Wall -O1 -g3
+ LDFLAGS_MIPS =	-lpthread
+@@ -253,4 +254,9 @@
+ 	rm -f batmand-adv batmand-mips* *.o *~
+ 
+ clean-long:
+-	rm -rf batmand-adv_*
+\ No newline at end of file
++	rm -rf batmand-adv_*
++
++install:
++	mkdir -p $(SBINDIR)
++	install -m 755 batmand-adv $(SBINDIR)
++

@@ -1,0 +1,57 @@
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id: Makefile 5624 2006-11-23 00:29:07Z nbd $
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=batmand-adv
+PKG_VERSION:=0.1-alpha-rv466_sources
+PKG_RELEASE:=1
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
+PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tgz
+PKG_SOURCE_URL:=http://downloads.open-mesh.net/batman/development/sources/
+PKG_MD5SUM:=3ebc394a7b7b3fa5cecaf97f6a220a3f
+PKG_CAT:=zcat
+
+PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/batman-advanced
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libpthread +kmod-tun
+  TITLE:=B.A.T.M.A.N. Better Approach To Mobile Ad-hoc Networking (L2 Version)
+  URL:=https://www.open-mesh.net/
+endef
+
+define Build/Configure
+endef
+
+define Build/Compile
+	rm -rf $(PKG_INSTALL_DIR)
+	mkdir -p $(PKG_INSTALL_DIR)
+	$(MAKE) -C "$(PKG_BUILD_DIR)" \
+		$(TARGET_CONFIGURE_OPTS) \
+		NODEBUG=1 \
+		OFLAGS="$(TARGET_CFLAGS)" \
+		UNAME="Linux" \
+		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
+		STRIP="/bin/true" \
+		batmand-adv install
+endef
+
+define Package/batman-advanced/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/batmand-adv $(1)/usr/sbin/
+	$(CP) -a ./files/* $(1)/
+	chmod -R 755 $(1)/etc/init.d/batman
+endef
+
+
+$(eval $(call BuildPackage,batman-advanced))
