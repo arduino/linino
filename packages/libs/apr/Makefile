@@ -32,27 +32,23 @@ define Package/apr
   URL:=http://apr.apache.org/
 endef
 
-define Build/Configure	
-	$(call Build/Configure/Default, \
+CONFIGURE_ARGS += \
 		--with-devrandom=/dev/urandom \
 		--disable-dso \
-		--disable-ipv6 \
-		, \
+		--disable-ipv6
+
+CONFIGURE_VARS += \
 		ac_cv_file__dev_zero=yes \
 		apr_cv_process_shared_works=no \
 		apr_cv_mutex_robust_shared=no \
 		apr_cv_tcp_nodelay_with_cork=yes \
 		ac_cv_sizeof_ssize_t=4 \
 		LDFLAGS="-lpthread -L$(STAGING_DIR)/lib" \
-		CFLAGS="-I$(STAGING_DIR)/include" \
-	)
-endef
+		CFLAGS="-I$(STAGING_DIR)/include $(TARGET_CFLAGS)"
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+MAKE_FLAGS += \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install
 
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/bin
