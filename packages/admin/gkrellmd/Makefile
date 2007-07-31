@@ -31,8 +31,8 @@ define Package/gkrellmd
 endef
 
 define Build/Compile
-	CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS)"
-	LDFLAGS="$(EXTRA_LDFLAGS) "
+	CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS)" \
+	LDFLAGS="$(EXTRA_LDFLAGS) " \
 	$(MAKE) -C $(PKG_BUILD_DIR)/server \
 		CC="$(TARGET_CC)" \
 		glib12="yes" \
