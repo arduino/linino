@@ -27,6 +27,7 @@ endef
 
 define Build/Compile
 	cd $(PKG_BUILD_DIR); \
+	BASECFLAGS='$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include' \
 	CFLAGS='$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include' \
 	LDFLAGS='$(TARGET_LDFLAGS)' \
 	$(STAGING_DIR)/usr/bin/hostpython ./setup.py build \
