@@ -39,18 +39,14 @@ define Package/libevent
   URL:=http://www.monkey.org/~provos/libevent/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS)" \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install
 
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/include
