@@ -29,60 +29,54 @@ define Package/pwlib
   URL:=http://www.openh323.org/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-minsize \
-		--enable-openh323 \
-		--disable-opal \
-		--disable-internalregex \
-		--disable-plugins \
-		--enable-audio \
-		--disable-alsa \
-		--disable-asn \
-		--disable-avc \
-		--disable-dc \
-		--disable-dtmf \
-		--disable-expat \
-		--disable-ftp \
-		--disable-http \
-		--disable-httpsvc \
-		--disable-ipv6 \
-		--disable-jabber \
-		--disable-openldap \
-		--disable-openssl \
-		--disable-oss \
-		--disable-pipechan \
-		--disable-pop3smtp \
-		--disable-remconn \
-		--disable-resolver \
-		--disable-qos \
-		--disable-sasl \
-		--disable-sdl \
-		--disable-serial \
-		--disable-shm-video \
-		--disable-snmp \
-		--disable-soap \
-		--disable-socks \
-		--disable-stun \
-		--disable-telnet \
-		--disable-tts \
-		--disable-v4l \
-		--disable-v4l2 \
-		--disable-bsdvideo \
-		--disable-video \
-		--disable-vxml \
-		--disable-wavfile \
-		--disable-xmlrpc \
-		, \
-		CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti"  \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-minsize \
+	--enable-openh323 \
+	--disable-opal \
+	--disable-internalregex \
+	--disable-plugins \
+	--enable-audio \
+	--disable-alsa \
+	--disable-asn \
+	--disable-avc \
+	--disable-dc \
+	--disable-dtmf \
+	--disable-expat \
+	--disable-ftp \
+	--disable-http \
+	--disable-httpsvc \
+	--disable-ipv6 \
+	--disable-jabber \
+	--disable-openldap \
+	--disable-openssl \
+	--disable-oss \
+	--disable-pipechan \
+	--disable-pop3smtp \
+	--disable-remconn \
+	--disable-resolver \
+	--disable-qos \
+	--disable-sasl \
+	--disable-sdl \
+	--disable-serial \
+	--disable-shm-video \
+	--disable-snmp \
+	--disable-soap \
+	--disable-socks \
+	--disable-stun \
+	--disable-telnet \
+	--disable-tts \
+	--disable-v4l \
+	--disable-v4l2 \
+	--disable-bsdvideo \
+	--disable-video \
+	--disable-vxml \
+	--disable-wavfile \
+	--disable-xmlrpc
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		optnoshared
-endef
+CONFIGURE_VARS += \
+	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti"
+
+MAKE_FLAGS += optnoshared
 
 define Build/InstallDev
 	ln -sf $(PKG_NAME)-$(PKG_VERSION) $(BUILD_DIR)/$(PKG_NAME)
