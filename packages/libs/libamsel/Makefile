@@ -34,15 +34,11 @@ endef
 define Build/Configure
 endef
 
-define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		LDIR=$(PKG_BUILD_DIR) \
-		PREFIX="$(PKG_INSTALL_DIR)/usr" \
-		all install
-endef
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR)" \
+	LDIR=$(PKG_BUILD_DIR) \
+	PREFIX="$(PKG_INSTALL_DIR)/usr" \
+	all install
 
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/include
