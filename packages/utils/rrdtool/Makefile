@@ -55,6 +55,14 @@ define Package/rrdtool
   TITLE:=Round Robin Database (RRD) management tools (v1.2.x)
 endef
 
+define Package/rrdpy
+  $(call Package/rrd)
+  DEPENDS:=librrd +python
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Round Robin Database (RRD) python bindings (v1.2.x)
+endef
+
 define Build/Configure
 $(call Build/Configure/Default,--enable-shared=yes \
                         --enable-static=yes \
@@ -79,12 +87,25 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
+  ifneq ($(CONFIG_PACKAGE_rrdpy),n)
+	$(MAKE) -C $(PKG_BUILD_DIR)/bindings/python \
+		pythondir=$(shell $(STAGING_DIR)/usr/bin/hostpython $(SCRIPT_DIR)/pylibdir.py) \
+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/python2.5" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
+  endif
 endef
 
 define Package/rrdtool/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdtool $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdupdate $(1)/usr/bin/
+endef
+
+define Package/rrdpy/install
+	$(INSTALL_DIR) $(1)/usr/lib/python2.5/site-packages
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.5/site-packages/* \
+		$(1)/usr/lib/python2.5/site-packages
 endef
 
 define Package/rrdcgi/install	
@@ -118,3 +139,4 @@ endef
 $(eval $(call BuildPackage,librrd))
 $(eval $(call BuildPackage,rrdcgi))
 $(eval $(call BuildPackage,rrdtool))
+$(eval $(call BuildPackage,rrdpy))
