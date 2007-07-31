@@ -34,14 +34,11 @@ define Package/libcli
   URL:=http://libcli.sourceforge.net/
 endef
 
-define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	$(call Build/Compile/Default, \
-		OPTIM="$(TARGET_CFLAGS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install \
-	)
-endef
+MAKE_FLAGS += \
+	OPTIM="$(TARGET_CFLAGS)" \
+	CFLAGS="$(TARGET_CFLAGS)" \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install 
 
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/include
