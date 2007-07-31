@@ -43,29 +43,18 @@ define Package/pydnet
   URL:=http://sourceforge.net/projects/libdnet/
 endef
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); touch \
-		configure.in \
-		include.m4 \
-		aclocal.m4 \
-		Makefile.in \
-		configure \
-	);
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--without-check \
-		--without-python \
-		, \
-		ac_cv_dnet_bsd_bpf=no \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--without-check \
+	--without-python
+		
+CONFIGURE_VARS += \
+	ac_cv_dnet_bsd_bpf=no
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+MAKE_FLAGS += \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install
 
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/bin
@@ -95,6 +84,7 @@ endef
 define Package/pydnet/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	cd $(PKG_BUILD_DIR)/python; \
+	CFLAGS="$(TARGET_CFLAGS)" \
 	$(STAGING_DIR)/usr/bin/hostpython ./setup.py install \
 		--no-compile --prefix $(PKG_INSTALL_DIR)/usr
 	cp -a $(PKG_INSTALL_DIR)/usr/lib/python* $(1)/usr/lib/
