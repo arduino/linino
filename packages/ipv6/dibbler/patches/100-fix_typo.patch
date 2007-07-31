@@ -1,0 +1,16 @@
+Index: dibbler-0.6.0/Misc/Makefile
+===================================================================
+--- dibbler-0.6.0.orig/Misc/Makefile	2007-07-31 12:08:57.168388403 +0200
++++ dibbler-0.6.0/Misc/Makefile	2007-07-31 12:09:14.901398951 +0200
+@@ -26,9 +26,9 @@
+ 	$(CC) $(COPTS) -std=c99 -c sha512.c 
+ 
+ # MD5 routined
+-md.o: md.c md.h
++md5.o: md5.c md5.h
+ 	@echo "[CC     ] $(SUBDIR)/$@"
+-	$(CC) $(COPTS) -c md.c 
++	$(CC) $(COPTS) -c md5.c 
+ 
+ # HMAC-SHA and HMAC-MD5
+ hmac-sha-md5.o: hmac-sha-md5.c hmac.h
