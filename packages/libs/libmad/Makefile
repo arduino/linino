@@ -46,21 +46,17 @@ define Package/libmad
   URL:=http://www.underbit.com/products/mad/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--enable-fpm="$(FPM)" \
-		--disable-debugging \
-		--enable-speed \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--enable-fpm="$(FPM)" \
+	--disable-debugging \
+	--enable-speed \
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS)" \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install
 
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/include
