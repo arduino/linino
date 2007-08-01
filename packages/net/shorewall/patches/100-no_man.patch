@@ -1,0 +1,30 @@
+diff -ruN shorewall-3.4.3/install.sh shorewall-3.4.3.new/install.sh
+--- shorewall-3.4.3/install.sh	2007-04-17 19:16:56.000000000 +0200
++++ shorewall-3.4.3.new/install.sh	2007-08-01 16:21:24.000000000 +0200
+@@ -677,26 +677,6 @@
+ # Install the Man Pages
+ #
+ 
+-cd manpages
+-
+-rm -f *.gz
+-
+-for f in *.5; do
+-    gzip $f
+-    run_install -D  -m 0444 $f.gz ${PREFIX}/usr/share/man/man5/$f.gz
+-    echo "Man page $f.gz installed to /usr/share/man/man5/$f.gz"
+-done
+-
+-for f in *.8; do
+-    gzip $f
+-    run_install -D  -m 0444 $f.gz ${PREFIX}/usr/share/man/man8/$f.gz
+-    echo "Man page $f.gz installed to /usr/share/man/man8/$f.gz"
+-done
+-
+-cd ..
+-
+-echo "Man Pages Installed"
+-
+ #
+ # Install the firewall script
+ #
