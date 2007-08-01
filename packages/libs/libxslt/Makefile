@@ -69,6 +69,7 @@ endef
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xslt-config $(STAGING_DIR)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xsltproc $(STAGING_DIR)/usr/bin/
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libxslt $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
