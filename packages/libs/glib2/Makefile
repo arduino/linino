@@ -58,6 +58,7 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/glibconfig.h $(STAGING_DIR)/usr/include/glib-2.0
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg* $(STAGING_DIR)/usr/lib/
+	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/libglib-2.0.la
 endef
 
 define Build/UninstallDev
