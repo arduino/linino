@@ -15,10 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.ex-parrot.com/~pdw/iftop/download
 PKG_MD5SUM:=062bc8fb3856580319857326e0b8752d
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,15 +31,9 @@ define Package/iftop
   URL:=http://www.ex-parrot.com/~pdw/iftop/
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
 define Package/iftop/install	
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/iftop $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/iftop $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,iftop))
