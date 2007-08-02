@@ -13,12 +13,8 @@ PKG_VERSION:=0.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.mamalinux.com/pub/atftp/
+PKG_SOURCE_URL:=http://www.mirrorservice.org/sites/www.ibiblio.org/gentoo/distfiles/
 PKG_MD5SUM:=3b27365772d918050b2251d98a9c7c82
-PKG_CAT:=zcat
-TAR_OPTIONS += || true
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 PKG_BUILD_DEPENDS:=libncurses libpcre libreadline
 
@@ -28,7 +24,6 @@ define Package/atftp/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=TFTP
-  URL:=ftp://ftp.mamalinux.com/pub/atftp/
 endef
 
 define Package/atftp
@@ -54,18 +49,13 @@ if [ $$? -ne 0 ]; then
 fi
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--disable-libwrap \
-	)
-endef
+CONFIGURE_ARGS += \
+	--disable-libwrap 
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -Wall -D_REENTRANT" \
-		all
-endef
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS) \
+	-Wall -D_REENTRANT" \
+	all
 
 define Package/atftp/install
 	$(INSTALL_DIR) $(1)/usr/sbin

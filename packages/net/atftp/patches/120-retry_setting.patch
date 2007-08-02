@@ -1,6 +1,7 @@
-diff -urN atftp.old/tftp.c atftp.dev/tftp.c
---- atftp.old/tftp.c	2006-03-25 16:41:49.000000000 +0100
-+++ atftp.dev/tftp.c	2006-03-25 18:10:04.000000000 +0100
+Index: atftp-0.7/tftp.c
+===================================================================
+--- atftp-0.7.orig/tftp.c	2007-08-02 23:04:23.000000000 +0200
++++ atftp-0.7/tftp.c	2007-08-02 23:04:23.000000000 +0200
 @@ -967,6 +967,7 @@
            { "tftp-timeout", 1, NULL, 'T'},
            { "mode", 1, NULL, 'M'},
@@ -27,9 +28,10 @@ diff -urN atftp.old/tftp.c atftp.dev/tftp.c
            case 'g':
                 interactive = 0;
                 if ((action == PUT) || (action == MGET))
-diff -urN atftp.old/tftp_def.c atftp.dev/tftp_def.c
---- atftp.old/tftp_def.c	2004-02-13 04:16:09.000000000 +0100
-+++ atftp.dev/tftp_def.c	2006-03-25 18:10:04.000000000 +0100
+Index: atftp-0.7/tftp_def.c
+===================================================================
+--- atftp-0.7.orig/tftp_def.c	2007-08-02 23:04:23.000000000 +0200
++++ atftp-0.7/tftp_def.c	2007-08-02 23:04:23.000000000 +0200
 @@ -37,6 +37,7 @@
       { "timeout", "5", 0, 1 },  /* 2348, 2349, 2090.  */
       { "blksize", "512", 0, 1 }, /* This is the default option */
@@ -38,9 +40,10 @@ diff -urN atftp.old/tftp_def.c atftp.dev/tftp_def.c
       { "", "", 0, 0}
  };
  
-diff -urN atftp.old/tftp_def.h atftp.dev/tftp_def.h
---- atftp.old/tftp_def.h	2004-02-13 04:16:09.000000000 +0100
-+++ atftp.dev/tftp_def.h	2006-03-25 17:19:15.000000000 +0100
+Index: atftp-0.7/tftp_def.h
+===================================================================
+--- atftp-0.7.orig/tftp_def.h	2007-08-02 23:04:23.000000000 +0200
++++ atftp-0.7/tftp_def.h	2007-08-02 23:04:23.000000000 +0200
 @@ -40,7 +40,8 @@
  #define OPT_TIMEOUT   3
  #define OPT_BLKSIZE   4
@@ -51,9 +54,10 @@ diff -urN atftp.old/tftp_def.h atftp.dev/tftp_def.h
  
  #define OPT_SIZE     12
  #define VAL_SIZE     MAXLEN
-diff -urN atftp.old/tftp_file.c atftp.dev/tftp_file.c
---- atftp.old/tftp_file.c	2004-02-13 04:16:09.000000000 +0100
-+++ atftp.dev/tftp_file.c	2006-03-25 18:10:04.000000000 +0100
+Index: atftp-0.7/tftp_file.c
+===================================================================
+--- atftp-0.7.orig/tftp_file.c	2007-08-02 23:04:23.000000000 +0200
++++ atftp-0.7/tftp_file.c	2007-08-02 23:04:23.000000000 +0200
 @@ -123,6 +123,7 @@
       struct tftphdr *tftphdr = (struct tftphdr *)data->data_buffer;
       FILE *fp = NULL;           /* the local file pointer */
