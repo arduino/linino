@@ -53,8 +53,7 @@ CONFIGURE_ARGS += \
 	--disable-libwrap 
 
 MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS) \
-	-Wall -D_REENTRANT" \
+	CFLAGS="$(TARGET_CFLAGS) -Wall -D_REENTRANT" \
 	all
 
 define Package/atftp/install
