@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/srelay
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+libwrap
   TITLE:=A socks 4/5 proxy server
   URL:=http://www.c-wind.com/srelay/
 endef
