@@ -46,7 +46,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)/glib \
+	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
@@ -57,19 +57,25 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/glib-2.0 $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_BUILD_DIR)/glibconfig.h $(STAGING_DIR)/usr/include/glib-2.0
 	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg* $(STAGING_DIR)/usr/lib/
-	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/libglib-2.0.la
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(STAGING_DIR)/usr/lib/
+	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(STAGING_DIR)/usr/lib/pkgconfig
+	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/{libglib,libgmodule,libgobject,libgthread}-2.0.la
+	$(SED)  "s,"prefix\=/usr",prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/{glib,gmodule,gmodule-export,gmodule-no-export,gobject,gthread}-2.0.pc
+	$(SED)  "s,"exec_prefix\=/usr",exec_prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/{glib,gmodule,gmodule-export,gmodule-no-export,gobject,gthread}-2.0.pc
 endef
 
 define Build/UninstallDev
 	rm -rf \
 		$(STAGING_DIR)/usr/include/glib-2.0 \
-		$(STAGING_DIR)/usr/lib/libg*
+		$(STAGING_DIR)/usr/lib/libg*-2.0.* \
+		$(STAGING_DIR)/usr/lib/glib-2.0 \
+		$(STAGING_DIR)/usr/lib/pkgconfig/g*-2.0.pc
 endef
 
 define Package/glib2/install	
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg*.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg*-2.0.so* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,glib2))
