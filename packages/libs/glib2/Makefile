@@ -79,3 +79,8 @@ define Package/glib2/install
 endef
 
 $(eval $(call BuildPackage,glib2))
+
+$(eval $(call RequireCommand,glib-genmarshal, \
+	$(PKG_NAME) requires the glib2 dev (named like libglib2.0-dev, \
+	depending of your package manager) package be installed on the host-system. \
+))
