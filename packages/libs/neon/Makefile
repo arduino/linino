@@ -42,6 +42,7 @@ define Build/Configure
 		CFLAGS="-I$(STAGING_DIR)/include \
 		       	-I$(STAGING_DIR)/usr/include/libxml2 \
 			-I$(STAGING_DIR)/usr/lib/libintl/include" \
+		XML2_CONFIG="$(STAGING_DIR)/usr/bin/xml2-config" \
 	)
 endef
 
