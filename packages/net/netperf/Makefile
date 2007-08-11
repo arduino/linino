@@ -12,9 +12,9 @@ PKG_NAME:=netperf
 PKG_VERSION:=2.4.3
 PKG_RELEASE:=2
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.netperf.org/netperf/
-PKG_MD5SUM:=391a0d98954c72a6ad7f08b8a115e1ce
+PKG_MD5SUM:=8b1f48500443b18b825ae2763a51eced
 
 include $(INCLUDE_DIR)/package.mk
 
