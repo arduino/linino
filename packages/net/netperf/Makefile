@@ -9,16 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=netperf
-PKG_VERSION:=2.3pl1
-PKG_RELEASE:=1
+PKG_VERSION:=2.4.3
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.netperf.org/netperf/archive/ \
-	ftp://ftp.cup.hp.com/dist/networking/benchmarks/netperf/
-PKG_MD5SUM:=b74314d78af31cb13516fb9a372d2e86
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_URL:=ftp://ftp.netperf.org/netperf/
+PKG_MD5SUM:=391a0d98954c72a6ad7f08b8a115e1ce
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,21 +25,22 @@ define Package/netperf
   URL:=http://www.netperf.org/
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		TARGET_NETPERF_HOME="/etc/netperf.conf" \
-		TARGET_CC="$(TARGET_CROSS)gcc" \
-		TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-		TARGET_LIBS="" \
-		all
-endef
-
-define Package/netperf/install	
+define Package/netperf/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/netserver.init $(1)/etc/init.d/netserver
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/netperf $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/netserver $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/netperf $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/netserver $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/lib/netperf
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/doc/examples/arr_script $(1)/lib/netperf
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/doc/examples/packet_byte_script $(1)/lib/netperf
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/doc/examples/sctp_stream_script $(1)/lib/netperf
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/doc/examples/snapshot_script $(1)/lib/netperf
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/doc/examples/tcp_range_script $(1)/lib/netperf
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/doc/examples/tcp_rr_script $(1)/lib/netperf
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/doc/examples/tcp_stream_script $(1)/lib/netperf
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/doc/examples/udp_rr_script $(1)/lib/netperf
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/doc/examples/udp_stream_script $(1)/lib/netperf
 endef
 
 $(eval $(call BuildPackage,netperf))
