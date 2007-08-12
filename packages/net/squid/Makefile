@@ -31,7 +31,7 @@ endef
 define Package/squid
   $(call Package/squid/Default)
   MENU:=1
-  DEPENDS:=+libopenssl +libpthread
+  DEPENDS:=+libopenssl +libpthread @BROKEN
   TITLE:=full-featured Web proxy cache
   DESCRIPTION:=\
 	Squid is a high-performance proxy caching server for web clients, \\\
