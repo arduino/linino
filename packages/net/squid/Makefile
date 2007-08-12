@@ -31,7 +31,7 @@ endef
 define Package/squid
   $(call Package/squid/Default)
   MENU:=1
-  DEPENDS:=+libopenssl +libpthread @BROKEN
+  DEPENDS:=+libopenssl +libpthread
   TITLE:=full-featured Web proxy cache
   DESCRIPTION:=\
 	Squid is a high-performance proxy caching server for web clients, \\\
@@ -181,3 +181,8 @@ $(eval $(call BuildPlugin,squid-mod-external-acl-ip-user,ip_user_check))
 $(eval $(call BuildPlugin,squid-mod-external-acl-unix-group,squid_unix_group))
 $(eval $(call BuildPlugin,squid-mod-ntlm-auth-fakeauth,fakeauth_auth))
 $(eval $(call BuildPlugin,squid-mod-ntlm-auth-smb-auth,ntlm_auth))
+
+$(eval $(call RequireHeader,/usr/include/openssl/ssl.h, \
+	$(PKG_NAME) requires the openssl development (named like libssl-dev, \
+	depending of your package manager) package be installed on the host-system. \
+))
