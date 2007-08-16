@@ -10,26 +10,22 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ettercap
 PKG_VERSION:=NG-0.7.3
-PKG_RELEASE:=0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/ettercap
 PKG_MD5SUM:=28fb15cd024162c55249888fe1b97820
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ettercap
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcap +libnet1 +libopenssl +libpcre +libiconv +libncurses +libltdl
+  DEPENDS:=+libpcap +libnet1 +libopenssl +libpcre +libiconv +libncurses +libltdl +libpthread +zlib
   TITLE:=Ettercap is a suite for man in the middle attacks on LAN.
   DESCRIPTION:=\
   	It features sniffing of live connections, content filtering on the fly \\\
-  	and many other interesting tricks.\\\
+  	and many other interesting tricks. \\\
   	It supports active and passive dissection of many protocols (even \\\
   	ciphered ones) and includes many feature for network and host analysis.
   URL:=http://ettercap.sourceforge.net
@@ -45,36 +41,31 @@ define Build/Prepare
 	$(SED) 's,DEBUG_FLAGS=.*,DEBUG_FLAGS=,g' $(PKG_BUILD_DIR)/configure
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--with-libpcap="$(STAGING_DIR)/usr" \
-		--with-libnet="$(STAGING_DIR)/usr/lib/libnet-1.1.x" \
-		--with-openssl="$(STAGING_DIR)/usr" \
-		--with-libpcre="$(STAGING_DIR)/usr" \
-		--with-iconv="$(STAGING_DIR)/usr/lib/libiconv" \
-		--with-libncurses="$(STAGING_DIR)/usr" \
-		--disable-gtk \
-		--disable-debug \
-		, \
-		LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
-	)
-endef
+CONFIGURE_ARGS += \
+	--with-libpcap="$(STAGING_DIR)/usr" \
+	--with-libnet="$(STAGING_DIR)/usr/lib/libnet-1.1.x" \
+	--with-openssl="$(STAGING_DIR)/usr" \
+	--with-libpcre="$(STAGING_DIR)/usr" \
+	--with-iconv="$(STAGING_DIR)/usr/lib/libiconv" \
+	--with-libncurses="$(STAGING_DIR)/usr" \
+	--disable-gtk \
+	--disable-debug \
+	, \
+	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib -L$(STAGING_DIR)/usr/lib/" \
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+MAKE_FLAGS += \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install
 
 define Package/ettercap/install
 	$(INSTALL_DIR) $(1)/etc
-	$(CP) $(PKG_INSTALL_DIR)/etc/etter.conf $(1)/etc/
+	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/etter.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/etter{cap,filter,log} $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/etter{cap,filter,log} $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/ettercap
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ettercap/*.so $(1)/usr/lib/ettercap/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/ettercap/*.so $(1)/usr/lib/ettercap/
 	$(INSTALL_DIR) $(1)/usr/share/ettercap
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/ettercap/* $(1)/usr/share/ettercap/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/ettercap/* $(1)/usr/share/ettercap/
 endef
 
 $(eval $(call BuildPackage,ettercap))
