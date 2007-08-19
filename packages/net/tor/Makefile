@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/tor
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libevent +libopenssl +libpthread +zlib +libevent
+  DEPENDS:=+libevent +libopenssl +libpthread +zlib
   TITLE:=An anonymous Internet communication system
   DESCRIPTION:=\
 	Tor is a toolset for a wide range of organizations and people that want \\\
