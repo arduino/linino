@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,25 +9,21 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor
-PKG_VERSION:=0.1.1.24
-PKG_RELEASE:=1
+PKG_VERSION:=0.1.2.16
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://tor.eff.org/dist/ \
 	http://ftp.se.linux.org/crypto/tor/ \
 	http://tor.meulie.net/
-PKG_MD5SUM:=28dea6a77a43b6e421e1bd7b2cc3d940
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=f340777b3f6c3175de976856d2d2e4be
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/tor
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libevent +libopenssl +libpthread +zlib
+  DEPENDS:=+libevent +libopenssl +libpthread +zlib +libevent
   TITLE:=An anonymous Internet communication system
   DESCRIPTION:=\
 	Tor is a toolset for a wide range of organizations and people that want \\\
@@ -69,7 +65,7 @@ fi
 echo ""
 if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then
         echo "adding group $$name to /etc/group"
-        echo "$${name}:x:$${id}:" >> ${IPKG_INSTROOT}/etc/group
+        echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group
 fi
 
 if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
@@ -78,28 +74,15 @@ if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
 fi
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default,\
-		--with-libevent-dir="$(STAGING_DIR)/usr" \
-		--with-ssl-dir="$(STAGING_DIR)/usr" \
-		, \
-		ac_cv_libevent_linker_option='(none)' \
-		ac_cv_openssl_linker_option='(none)' \
-		tor_cv_null_is_zero=yes \
-		tor_cv_unaligned_ok=yes \
-		tor_cv_time_t_signed=yes \
-	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+CONFIGURE_ARGS += \
+	--with-libevent-dir="$(STAGING_DIR)/usr" \
+	--with-ssl-dir="$(STAGING_DIR)/usr" \
+	, \
+	CROSS_COMPILE=yes
 
 define Package/tor/install	
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/tor $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/or/tor $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/tor.init $(1)/etc/init.d/tor
 	$(INSTALL_DIR) $(1)/etc/tor
