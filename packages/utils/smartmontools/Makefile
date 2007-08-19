@@ -60,6 +60,6 @@ endef
 
 $(eval $(call BuildPackage,smartmontools))
 
-$(eval $(call RequireCommand,automake, \
-	$(PKG_NAME) requires automake. \
+$(eval $(call RequireCommand,automake-1.9, \
+	$(PKG_NAME) requires automake 1.9 or compatible. \
 ))
