@@ -22,13 +22,13 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-PY_DISABLED_MODULES=pyexpat dbm gdbm bsddb \
-	_curses _curses_panel _tkinter nis zipfile
+PY_DISABLED_MODULES=pyexpat \
+	_curses _curses_panel _tkinter nis 
 
 define Package/python
   SECTION:=lang
   CATEGORY:=Languages
-  DEPENDS:=+uclibcxx +libpthread +libreadline +libncurses
+  DEPENDS:=+uclibcxx +libpthread +libreadline +libncurses +libopenssl
   TITLE:=Python 2.5 programming language
   URL:=http://www.python.org/
 endef
@@ -77,7 +77,6 @@ MAKE_OPTS:=\
 		HOSTPGEN=./Parser/hostpgen
 
 define Build/Compile
-	export PYTHON_DISABLE_SSL=1
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(MAKE_OPTS) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
@@ -93,6 +92,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/python2.5 $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.5 $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/libpython2.5.a $(STAGING_DIR)/usr/lib/python2.5
 endef
 
 define Build/UninstallDev
@@ -104,6 +104,8 @@ define Package/python/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/python2.5 $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/python $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/include/python2.5
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/python2.5/Python.h $(1)/usr/include/python2.5/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.5 $(1)/usr/lib/
 	rm -rf \
@@ -112,7 +114,9 @@ define Package/python/install
 		$(1)/usr/lib/python2.5/email/test \
 		$(1)/usr/lib/python2.5/idlelib \
 		$(1)/usr/lib/python2.5/lib-tk \
-		$(1)/usr/lib/python2.5/test \
+		$(1)/usr/lib/python2.5/sqlite3/test \
+		$(1)/usr/lib/python2.5/ctypes/test \
+		$(1)/usr/lib/python2.5/test
 
 endef
 
