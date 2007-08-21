@@ -1,0 +1,18 @@
+Index: haserl-0.8.0/src/haserl.c
+===================================================================
+--- haserl-0.8.0.orig/src/haserl.c	2007-06-04 13:22:30.973146648 +0200
++++ haserl-0.8.0/src/haserl.c	2007-06-04 13:22:31.039136616 +0200
+@@ -479,9 +479,12 @@
+ 		line=LineToStr(&qs[offset], cl-offset);
+ 		if (strncasecmp(&qs[offset], "Content-Disposition", 19) != 0) {
+ 			/* hmm... content disposition was not where we expected it */
++			/* Be kind to Opera 9.10 and just ignore this block	*/
++				/*
+ 			PrintParseError ("Content-Disposition Missing", 0);
+ 			free(ct);
+-			return(-1);
++				*/
++			continue;
+ 			}
+ 		/* Found it, so let's go find "name="				*/
+ 	 	if (!(envname=strstr(&qs[offset], "name="))) {
