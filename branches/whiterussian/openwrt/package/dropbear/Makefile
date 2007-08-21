@@ -3,9 +3,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dropbear
-PKG_VERSION:=0.49
+PKG_VERSION:=0.50
 PKG_RELEASE:=1
-PKG_MD5SUM:=7b20c85f1ee34f018a1b948eae003df9
+PKG_MD5SUM:=5c0f7405b915799c3d952d3a93a5df69
 
 PKG_SOURCE_URL:=http://matt.ucc.asn.au/dropbear/releases/ \
 				http://www.mirrors.wiretapped.net/security/cryptography/apps/ssh/dropbear/
