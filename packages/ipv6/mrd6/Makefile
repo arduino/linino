@@ -47,7 +47,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/src \
 		OPTIMIZE=yes \
 		SPACE_OPTIMIZE=yes \
-		FULL_STATIC=yes \
+		FULL_STATIC=no \
 		CFLAGS="$(TARGET_CFLAGS) -DNO_INET6_OPTION" \
 		CXX="$(TARGET_CROSS)g++" \
 		CC="$(TARGET_CC)" \
@@ -61,6 +61,12 @@ define Package/mrd6/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DATA) files/mrd6.conf $(1)/etc
 	$(INSTALL_BIN) files/mrd6.init $(1)/etc/init.d/mrd6
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/mrd $(1)/usr/sbin/mrd6
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mrd6sh $(1)/usr/bin/mrd6sh
+	$(INSTALL_DIR) $(1)/usr/lib/mrd6
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/mrd6/bgp.so $(1)/usr/lib/mrd6/bgp.so
 endef
 
 $(eval $(call BuildPackage,mrd6))
