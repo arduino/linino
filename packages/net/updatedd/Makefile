@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=updatedd
-PKG_VERSION:=2.5
-PKG_RELEASE:=4
-PKG_MD5SUM:=2957496de0c8e08e9c6492fabf1a88be
+PKG_VERSION:=2.6
+PKG_RELEASE:=5
 
-PKG_SOURCE_URL:=http://savannah.nongnu.org/download/updatedd/
-PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_SOURCE_URL:=@openwrt/
+PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.bz2
+PKG_MD5SUM:=f03446105ed043cd5dbd1ab95484d27f
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,9 +23,9 @@ define Package/updatedd
   CATEGORY:=Network
   MENU:=1
   TITLE:=A tool to update dynamic dns services
-  DESCRIPTION:=Updatedd is a small tool that will update one of many dynamic\\\
-  dns services on boot.\\\
-  Please look at the /etc/init.d/ddns script for more info.\\\
+  DESCRIPTION:=Updatedd is a small tool that will update one of many dynamic \\\
+	dns services on boot. \\\
+	Please look at the /etc/init.d/ddns script for more info. \\\
   URL:=http://www.philipp-benner.de/updatedd/
 endef
 
@@ -109,7 +106,7 @@ MAKE_FLAGS += \
 define BuildPlugin
   define Package/$(1)/install
 	$(INSTALL_DIR) $$(1)/usr/lib/updatedd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/updatedd/$(2).so $$(1)/usr/lib/updatedd/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/updatedd/$(2).so* $$(1)/usr/lib/updatedd/
   endef
 
   $$(eval $$(call BuildPackage,$(1)))
@@ -121,20 +118,20 @@ define Package/updatedd/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/updatedd.config $(1)/etc/config/updatedd
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/updatedd $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/updatedd $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/updatedd
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
 	$(INSTALL_BIN) ./files/updatedd.hotplug $(1)/etc/hotplug.d/iface/30-updatedd
 endef
 
 $(eval $(call BuildPackage,updatedd))
-$(eval $(call BuildPlugin,updatedd-mod-changeip,changeip))
-$(eval $(call BuildPlugin,updatedd-mod-dyndns,dyndns))
-$(eval $(call BuildPlugin,updatedd-mod-eurodyndns,eurodyndns))
-$(eval $(call BuildPlugin,updatedd-mod-hn,hn))
-$(eval $(call BuildPlugin,updatedd-mod-noip,noip))
-$(eval $(call BuildPlugin,updatedd-mod-ods,ods))
-$(eval $(call BuildPlugin,updatedd-mod-ovh,ovh))
-$(eval $(call BuildPlugin,updatedd-mod-regfish,regfish))
-$(eval $(call BuildPlugin,updatedd-mod-tzo,tzo))
-$(eval $(call BuildPlugin,updatedd-mod-zoneedit,zoneedit))
+$(eval $(call BuildPlugin,updatedd-mod-changeip,libchangeip))
+$(eval $(call BuildPlugin,updatedd-mod-dyndns,libdyndns))
+$(eval $(call BuildPlugin,updatedd-mod-eurodyndns,libeurodyndns))
+$(eval $(call BuildPlugin,updatedd-mod-hn,libhn))
+$(eval $(call BuildPlugin,updatedd-mod-noip,libnoip))
+$(eval $(call BuildPlugin,updatedd-mod-ods,libods))
+$(eval $(call BuildPlugin,updatedd-mod-ovh,libovh))
+$(eval $(call BuildPlugin,updatedd-mod-regfish,libregfish))
+$(eval $(call BuildPlugin,updatedd-mod-tzo,libtzo))
+$(eval $(call BuildPlugin,updatedd-mod-zoneedit,libzoneedit))

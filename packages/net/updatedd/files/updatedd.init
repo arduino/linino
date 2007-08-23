@@ -23,8 +23,3 @@ start() {
 stop() {
 	killall updatedd
 }
-
-restart() {
-	stop
-	start
-}
