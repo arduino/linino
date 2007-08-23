@@ -16,8 +16,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/joe-editor
 PKG_MD5SUM:=9bdffecce7ef910feaa06452d48843de
 
-PKG_BUILD_DEPENDS:=libncurses
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/joe
