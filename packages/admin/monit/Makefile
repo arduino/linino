@@ -63,7 +63,7 @@ $(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
 
 $(STAMP_BUILT): $(STAMP_BUILT)-$(2)
 
-define Package/monit$(1)/conffiles
+define Package/$(1)/conffiles
 /etc/monitrc
 endef
 
