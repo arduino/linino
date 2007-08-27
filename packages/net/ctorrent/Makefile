@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,16 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ctorrent
-PKG_VERSION:=dnh3.1
+PKG_VERSION:=dnh3.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.rahul.net/dholmes/ctorrent/
-PKG_MD5SUM:=de313da3a9acbd63bc50f093ed08097f
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=23b37cd7b558ad6a27974b311499bab6
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,24 +30,14 @@ define Package/ctorrent
   URL:=http://www.rahul.net/dholmes/ctorrent/
 endef
    
-define Build/Configure
-	$(call Build/Configure/Default, \
-		, \
-		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/openssl" \
-		CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
-		LIBS="-nodefaultlibs -lcrypto -luClibc++ -lm -lc -lgcc" \
-	)
-endef
+CONFIGURE_ARGS += \
+	CPPFLAGS="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/openssl" \
+	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
+	LIBS="-nodefaultlibs -lcrypto -luClibc++ -lm -lc -lgcc"
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-	
 define Package/ctorrent/install	
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ctorrent $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,ctorrent))
