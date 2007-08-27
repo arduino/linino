@@ -40,15 +40,9 @@ define Package/cbtt-mysql
   URL:=http://bnbtusermods.sourceforge.net
 endef
 
-define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		LFLAGS="-L$(STAGING_DIR)/usr/lib -L $(STAGING_DIR)/usr/lib/mysql -L. -lz -lmysqlclient -lpthread -luClibc++ -lc -lm -lgcc" \
-		CFLAGS="-I$(STAGING_DIR)/usr/include -fno-builtin -fno-rtti -nostdinc++"
-	mkdir -p $(PKG_INSTALL_DIR)/usr/bin
-endef
+MAKE_FLAGS += \
+	LFLAGS="-L$(STAGING_DIR)/usr/lib -L $(STAGING_DIR)/usr/lib/mysql -L. -lz -lmysqlclient -nodefaultlibs -lpthread -luClibc++ -lc -lm -lgcc" \
+	CFLAGS="-I$(STAGING_DIR)/usr/include -fno-builtin -fno-rtti -nostdinc++"
 
 define Package/cbtt/install
 	$(INSTALL_DIR) $(1)/usr/bin
