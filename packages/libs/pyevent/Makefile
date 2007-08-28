@@ -26,12 +26,11 @@ define Package/pyevent
 endef
 
 define Build/Compile
-	cd $(PKG_BUILD_DIR); \
-	LIBEVENT_HOME='$(STAGING_DIR)/usr/lib' \
-	CFLAGS='-I$(STAGING_DIR)/usr/include' \
-	LDFLAGS='$(TARGET_LDFLAGS)' \
-	$(STAGING_DIR)/usr/bin/hostpython ./setup.py install \
-	--prefix=$(PKG_INSTALL_DIR)/usr
+  	$(call Build/Compile/PyMod,\
+		LIBEVENT_HOME='$(STAGING_DIR)/usr/lib' \
+		,\
+		install \
+	)
 endef
 
 define Package/pyevent/install

@@ -24,9 +24,11 @@ define Package/pypcap
 endef
 
 define Build/Compile
-	cd $(PKG_BUILD_DIR); \
-	PCAP_HOME=$(STAGING_DIR)/usr \
-	$(STAGING_DIR)/usr/bin/hostpython ./setup.py build
+	$(call Build/Compile/PyMod,\
+		PCAP_HOME=$(STAGING_DIR)/usr \
+		,\
+		install \
+	)
 endef
 
 define Package/pypcap/install

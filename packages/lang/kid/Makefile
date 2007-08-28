@@ -25,11 +25,7 @@ define Package/kid
 endef
 
 define Build/Compile
-	cd $(PKG_BUILD_DIR); \
-	CFLAGS='-I$(STAGING_DIR)/usr/include' \
-	LDFLAGS='$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib' \
-	$(STAGING_DIR)/usr/bin/hostpython ./setup.py install \
-	--prefix=$(PKG_INSTALL_DIR)/usr
+	$(call Build/Compile/PyMod,,install)
 endef
 
 define Package/kid/install
