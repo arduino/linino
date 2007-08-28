@@ -22,13 +22,13 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-PY_DISABLED_MODULES=pyexpat \
+PY_DISABLED_MODULES=\
 	_curses _curses_panel _tkinter nis 
 
 define Package/python
   SECTION:=lang
   CATEGORY:=Languages
-  DEPENDS:=+uclibcxx +libpthread +libreadline +libncurses +libopenssl
+  DEPENDS:=+uclibcxx +libpthread +libreadline +libncurses +libopenssl +libexpat
   TITLE:=Python 2.5 programming language
   URL:=http://www.python.org/
 endef
