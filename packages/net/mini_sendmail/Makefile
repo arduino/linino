@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mini-sendmail
-PKG_VERSION:=1.3.5
+PKG_VERSION:=1.3.6
 PKG_RELEASE:=2
 
 PKG_SOURCE:=mini_sendmail-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.acme.com/software/mini_sendmail/
-PKG_MD5SUM:=fff344184e98cff0ea4d817da9d29383
-PKG_CAT:=zcat
+PKG_MD5SUM:=fb1585d2ad81c519a26d83bfd783dee8
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/mini_sendmail-$(PKG_VERSION)
 
@@ -33,12 +32,8 @@ define Package/mini-sendmail
   URL:=http://www.acme.com/software/mini_sendmail/
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		OFLAGS="$(TARGET_CFLAGS)" \
-		all
-endef
+MAKE_FLAGS += \
+	OFLAGS="$(TARGET_CFLAGS)"
 
 define Package/mini-sendmail/install	
 	$(INSTALL_DIR) $(1)/usr/sbin
