@@ -26,7 +26,7 @@ define Package/cbtt
   DEPENDS:=zlib
   MENU:=1
   TITLE:=Bittorrent tracker
-  DEPENDS:=+libpthread +uclibcxx
+  DEPENDS:=+libpthread +uclibcxx +libmysqlclient
   DESCRIPTION:=a C BitTorrent Tracker
   URL:=http://bnbtusermods.sourceforge.net
 endef
@@ -41,8 +41,8 @@ define Package/cbtt-mysql
 endef
 
 MAKE_FLAGS += \
-	LFLAGS="-L$(STAGING_DIR)/usr/lib -L $(STAGING_DIR)/usr/lib/mysql -L. -lz -lmysqlclient -nodefaultlibs -lpthread -luClibc++ -lc -lm -lgcc" \
-	CFLAGS="-I$(STAGING_DIR)/usr/include -fno-builtin -fno-rtti -nostdinc++"
+	LFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/mysql -L. -lz -lmysqlclient -nodefaultlibs -lpthread -luClibc++ -lc -lm -lgcc" \
+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -fno-builtin -fno-rtti -nostdinc++"
 
 define Package/cbtt/install
 	$(INSTALL_DIR) $(1)/usr/bin
