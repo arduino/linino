@@ -26,7 +26,7 @@ define Package/cbtt
   DEPENDS:=zlib
   MENU:=1
   TITLE:=Bittorrent tracker
-  DEPENDS:=+libpthread +uclibcxx +libmysqlclient
+  DEPENDS:=+libpthread +uclibcxx
   DESCRIPTION:=a C BitTorrent Tracker
   URL:=http://bnbtusermods.sourceforge.net
 endef
