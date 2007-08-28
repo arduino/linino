@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dibbler
-PKG_VERSION:=0.6.0
+PKG_VERSION:=0.6.0-RC1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.gz
-PKG_SOURCE_URL:=http://klub.com.pl/dhcpv6/dibbler
-PKG_MD5SUM:=27a2a4d136031c2af1b426dbd5d43b97
+PKG_SOURCE_URL:=@SF/dibbler
+PKG_MD5SUM:=d279efa2b43279f17f6f51cae083d458
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -73,7 +73,7 @@ define Build/Configure
 	);
 endef
 
-CXX_LIBS:= -nodefaultlibs -Wl,-Bdynamic,-luClibc++,-Bstatic,-lstdc++,-Bdynamic,-lm,-lc,-lgcc
+CXX_LIBS:="-nodefaultlibs -Wl,-Bdynamic,-luClibc++,-Bstatic,-lstdc++,-Bdynamic,-lm,-lc,-lgcc"
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
