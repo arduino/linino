@@ -59,7 +59,7 @@ RunAsDaemon 1
 
 ## The directory for keeping all the keys/etc. By default, we store
 ## things in $HOME/.tor on Unix, and in Application Data\tor on Windows.
-#DataDirectory /var/lib/tor
+DataDirectory /var/lib/tor
 
 ## The port on which Tor will listen for local connections from Tor controller
 ## applications, as documented in control-spec.txt.  NB: this feature is
