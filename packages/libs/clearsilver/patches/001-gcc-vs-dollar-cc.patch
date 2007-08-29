@@ -1,0 +1,11 @@
+--- clearsilver-0.10.5/rules.mk.in	2006-12-19 05:39:58.000000000 +0100
++++ clearsilver-0.10.5/rules.mk.in.new	2007-07-18 10:53:52.000000000 +0200
+@@ -158,7 +158,7 @@
+ 	@touch Makefile.depends
+ 	@if test "x" != "x$(SOURCE_FILES)"; then \
+ 	  for II in "$(SOURCE_FILES)"; do \
+-		gcc -M -MG ${CFLAGS} $$II >> Makefile.depends; \
++		$(CC) -M -MG ${CFLAGS} $$II >> Makefile.depends; \
+ 	  done; \
+ 	 fi
+ 	@echo "** (done) "
