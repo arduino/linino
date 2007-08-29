@@ -1,0 +1,10 @@
+--- tinyproxy-1.6.3/src/reqs.c-orig     2007-08-29 13:20:53.000000000 -0500
++++ tinyproxy-1.6.3/src/reqs.c  2007-08-29 13:21:53.000000000 -0500
+@@ -726,7 +726,7 @@
+                                            request->host);
+
+                        indicate_http_error(connptr, 403, "Filtered",
+-                                           "detail", "The request you made has been filted",
++                                           "detail", "The request you made has been filtered",
+                                            "url", url,
+                                            NULL);
