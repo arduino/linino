@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,11 +16,6 @@ PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/s/ssmtp/
 PKG_MD5SUM:=957e6fff08625fe34f4fc33d0925bbc9
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-EXTRA_LDFLAGS+=-Wl,-rpath-link,$(STAGING_DIR)/usr/lib
-TARGET_CONFIGURE_OPTS+=\
-	CC="$(TARGET_CC) $(EXTRA_LDFLAGS)"
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ssmtp
@@ -36,6 +31,10 @@ define Package/ssmtp
 	configuration.
   URL:=http://packages.debian.org/stable/mail/ssmtp
 endef
+
+EXTRA_LDFLAGS+=-Wl,-rpath-link,$(STAGING_DIR)/usr/lib
+TARGET_CONFIGURE_OPTS+=\
+	CC="$(TARGET_CC) $(EXTRA_LDFLAGS)"
 
 CONFIGURE_ARGS += \
 	--enable-ssl
