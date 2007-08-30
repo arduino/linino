@@ -25,16 +25,22 @@ include $(INCLUDE_DIR)/package.mk
 define Package/taglib
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+zlib
+  DEPENDS:=+zlib +uclibcxx
   TITLE:=Audio output library
   DESCRIPTION:=\
   	the audio output library
   URL:=http://developer.kde.org/~wheeler/taglib.html
 endef
 
+CONFIGURE_VARS += \
+        CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++ -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include"
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-final \
+		,\
+		LDFLAGS="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+                LIBS="-luClibc++ -lc -lm -lgcc -lz" \
 	)
 endef
 
