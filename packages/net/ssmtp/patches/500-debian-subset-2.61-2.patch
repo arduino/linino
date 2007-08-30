@@ -1,5 +1,7 @@
---- ssmtp-2.61.orig/ssmtp.conf
-+++ ssmtp-2.61/ssmtp.conf
+Index: ssmtp-2.61/ssmtp.conf
+===================================================================
+--- ssmtp-2.61.orig/ssmtp.conf	2007-08-30 20:56:56.000000000 +0200
++++ ssmtp-2.61/ssmtp.conf	2007-08-30 20:56:56.000000000 +0200
 @@ -36,3 +36,8 @@
  
  # Use this RSA certificate.
@@ -9,8 +11,10 @@
 +# If you want to have debugging of the config file parsing, move this option
 +# to the top of the config file and uncomment
 +#Debug=YES
---- ssmtp-2.61.orig/ssmtp.c
-+++ ssmtp-2.61/ssmtp.c
+Index: ssmtp-2.61/ssmtp.c
+===================================================================
+--- ssmtp-2.61.orig/ssmtp.c	2007-08-30 20:56:56.000000000 +0200
++++ ssmtp-2.61/ssmtp.c	2007-08-30 20:56:56.000000000 +0200
 @@ -93,6 +93,7 @@
  static char hextab[]="0123456789abcdef";
  #endif
@@ -233,8 +237,10 @@
  
  	return(0);
  }
---- ssmtp-2.61.orig/configure.in
-+++ ssmtp-2.61/configure.in
+Index: ssmtp-2.61/configure.in
+===================================================================
+--- ssmtp-2.61.orig/configure.in	2007-08-30 20:56:56.000000000 +0200
++++ ssmtp-2.61/configure.in	2007-08-30 20:56:56.000000000 +0200
 @@ -24,8 +24,8 @@
  AC_STRUCT_TM
  

@@ -1,6 +1,7 @@
-diff -ruN ssmtp-2.60-old/arpadate.c ssmtp-2.60-new/arpadate.c
---- ssmtp-2.60-old/arpadate.c	2002-12-08 18:30:11.000000000 +0100
-+++ ssmtp-2.60-new/arpadate.c	2004-05-23 18:54:32.000000000 +0200
+Index: ssmtp-2.61/arpadate.c
+===================================================================
+--- ssmtp-2.61.orig/arpadate.c	2007-08-30 20:56:56.000000000 +0200
++++ ssmtp-2.61/arpadate.c	2007-08-30 20:56:56.000000000 +0200
 @@ -79,7 +79,7 @@
  	time_t now;
  

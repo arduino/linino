@@ -15,7 +15,6 @@ PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/s/ssmtp/
 PKG_MD5SUM:=957e6fff08625fe34f4fc33d0925bbc9
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 EXTRA_LDFLAGS+=-Wl,-rpath-link,$(STAGING_DIR)/usr/lib
@@ -38,13 +37,8 @@ define Package/ssmtp
   URL:=http://packages.debian.org/stable/mail/ssmtp
 endef
 
-# uses GNU configure
-
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-ssl \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-ssl
 
 define Package/ssmtp/install	
 	$(INSTALL_DIR) $(1)/etc/ssmtp
