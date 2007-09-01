@@ -20,7 +20,7 @@ define Package/yapsnmp
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Python SNMP module
-  DEPENDS:=+libnetsnmp
+  DEPENDS:=+libnetsnmp +python
   DESCRIPTION:=\
   	yapsnmp is a Python SNMP module based on the net-snmp (formerly known \\\
 	as ucd-snmp) library. It's composed of a low level interface to the \\\
