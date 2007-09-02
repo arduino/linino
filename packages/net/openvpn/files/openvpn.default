@@ -1,2 +1,2 @@
 CONFIG="/etc/openvpn/server.conf"
-OPTIONS="--config $CONFIG --daemon"
+OPTIONS="--config $CONFIG"

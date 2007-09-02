@@ -10,7 +10,7 @@ PID_F=$RUN_D/$BIN.pid
 start() {
 	[ -f $DEFAULT ] && . $DEFAULT
 	mkdir -p $RUN_D
-	$BIN $OPTIONS
+	$BIN --writepid $RUN_D/$BIN.pid --daemon $OPTIONS
 }
 
 stop() {
