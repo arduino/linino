@@ -1,7 +1,7 @@
-Index: php-5.2.3/ext/apc/apc.c
+Index: php-5.2.4/ext/apc/apc.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,554 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -557,10 +557,10 @@ Index: php-5.2.3/ext/apc/apc.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_cache.c
+Index: php-5.2.4/ext/apc/apc_cache.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_cache.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_cache.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,1328 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -1890,10 +1890,10 @@ Index: php-5.2.3/ext/apc/apc_cache.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_cache.h
+Index: php-5.2.4/ext/apc/apc_cache.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_cache.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_cache.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,313 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -2208,10 +2208,10 @@ Index: php-5.2.3/ext/apc/apc_cache.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_compile.c
+Index: php-5.2.4/ext/apc/apc_compile.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_compile.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_compile.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,2530 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -4743,10 +4743,10 @@ Index: php-5.2.3/ext/apc/apc_compile.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_compile.h
+Index: php-5.2.4/ext/apc/apc_compile.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_compile.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_compile.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,134 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -4882,10 +4882,10 @@ Index: php-5.2.3/ext/apc/apc_compile.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_debug.c
+Index: php-5.2.4/ext/apc/apc_debug.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_debug.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_debug.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,57 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -4944,16 +4944,16 @@ Index: php-5.2.3/ext/apc/apc_debug.c
 +	}
 +#endif
 +}
-Index: php-5.2.3/ext/apc/apc_debug.h
+Index: php-5.2.4/ext/apc/apc_debug.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_debug.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_debug.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1 @@
 +void dump(zend_op_array * TSRMLS_DC);
-Index: php-5.2.3/ext/apc/apc.dsp
+Index: php-5.2.4/ext/apc/apc.dsp
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc.dsp	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc.dsp	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,207 @@
 +# Microsoft Developer Studio Project File - Name="apc" - Package Owner=<4>
 +# Microsoft Developer Studio Generated Build File, Format Version 6.00
@@ -5162,10 +5162,10 @@ Index: php-5.2.3/ext/apc/apc.dsp
 +# End Group
 +# End Target
 +# End Project
-Index: php-5.2.3/ext/apc/apc_fcntl.c
+Index: php-5.2.4/ext/apc/apc_fcntl.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_fcntl.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_fcntl.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,118 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -5285,10 +5285,10 @@ Index: php-5.2.3/ext/apc/apc_fcntl.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_fcntl.h
+Index: php-5.2.4/ext/apc/apc_fcntl.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_fcntl.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_fcntl.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,50 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -5340,10 +5340,10 @@ Index: php-5.2.3/ext/apc/apc_fcntl.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_fcntl_win32.c
+Index: php-5.2.4/ext/apc/apc_fcntl_win32.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_fcntl_win32.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_fcntl_win32.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,117 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -5462,10 +5462,10 @@ Index: php-5.2.3/ext/apc/apc_fcntl_win32.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_futex.c
+Index: php-5.2.4/ext/apc/apc_futex.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_futex.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_futex.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,116 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -5583,10 +5583,10 @@ Index: php-5.2.3/ext/apc/apc_futex.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_futex.h
+Index: php-5.2.4/ext/apc/apc_futex.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_futex.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_futex.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,55 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -5643,10 +5643,10 @@ Index: php-5.2.3/ext/apc/apc_futex.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_globals.h
+Index: php-5.2.4/ext/apc/apc_globals.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_globals.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_globals.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,110 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -5758,10 +5758,10 @@ Index: php-5.2.3/ext/apc/apc_globals.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc.h
+Index: php-5.2.4/ext/apc/apc.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,126 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -5889,10 +5889,10 @@ Index: php-5.2.3/ext/apc/apc.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_lock.h
+Index: php-5.2.4/ext/apc/apc_lock.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_lock.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_lock.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,105 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -5999,10 +5999,10 @@ Index: php-5.2.3/ext/apc/apc_lock.h
 +#endif
 +
 +#endif
-Index: php-5.2.3/ext/apc/apc_main.c
+Index: php-5.2.4/ext/apc/apc_main.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_main.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_main.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,681 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -6685,10 +6685,10 @@ Index: php-5.2.3/ext/apc/apc_main.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_main.h
+Index: php-5.2.4/ext/apc/apc_main.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_main.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_main.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,67 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -6757,10 +6757,10 @@ Index: php-5.2.3/ext/apc/apc_main.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_mmap.c
+Index: php-5.2.4/ext/apc/apc_mmap.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_mmap.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_mmap.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,137 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -6899,10 +6899,10 @@ Index: php-5.2.3/ext/apc/apc_mmap.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc.php
+Index: php-5.2.4/ext/apc/apc.php
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc.php	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc.php	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,1313 @@
 +<?php
 +/*
@@ -8217,10 +8217,10 @@ Index: php-5.2.3/ext/apc/apc.php
 +<!-- <?php echo "\nBased on APCGUI By R.Becker\n$VERSION\n"?> -->
 +</body>
 +</html>
-Index: php-5.2.3/ext/apc/apc_php.h
+Index: php-5.2.4/ext/apc/apc_php.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_php.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_php.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,71 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -8293,10 +8293,10 @@ Index: php-5.2.3/ext/apc/apc_php.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_pthreadmutex.c
+Index: php-5.2.4/ext/apc/apc_pthreadmutex.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_pthreadmutex.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_pthreadmutex.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,104 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -8402,10 +8402,10 @@ Index: php-5.2.3/ext/apc/apc_pthreadmutex.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_pthreadmutex.h
+Index: php-5.2.4/ext/apc/apc_pthreadmutex.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_pthreadmutex.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_pthreadmutex.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,48 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -8455,10 +8455,10 @@ Index: php-5.2.3/ext/apc/apc_pthreadmutex.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_rfc1867.c
+Index: php-5.2.4/ext/apc/apc_rfc1867.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_rfc1867.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_rfc1867.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,175 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -8635,10 +8635,10 @@ Index: php-5.2.3/ext/apc/apc_rfc1867.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_sem.c
+Index: php-5.2.4/ext/apc/apc_sem.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_sem.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_sem.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,177 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -8817,10 +8817,10 @@ Index: php-5.2.3/ext/apc/apc_sem.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_sem.h
+Index: php-5.2.4/ext/apc/apc_sem.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_sem.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_sem.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,51 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -8873,10 +8873,10 @@ Index: php-5.2.3/ext/apc/apc_sem.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_shm.c
+Index: php-5.2.4/ext/apc/apc_shm.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_shm.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_shm.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,111 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -8989,10 +8989,10 @@ Index: php-5.2.3/ext/apc/apc_shm.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_shm.h
+Index: php-5.2.4/ext/apc/apc_shm.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_shm.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_shm.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,49 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -9043,10 +9043,10 @@ Index: php-5.2.3/ext/apc/apc_shm.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_sma.c
+Index: php-5.2.4/ext/apc/apc_sma.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_sma.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_sma.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,624 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -9672,10 +9672,10 @@ Index: php-5.2.3/ext/apc/apc_sma.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_sma.h
+Index: php-5.2.4/ext/apc/apc_sma.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_sma.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_sma.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,82 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -9759,10 +9759,10 @@ Index: php-5.2.3/ext/apc/apc_sma.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_spin.c
+Index: php-5.2.4/ext/apc/apc_spin.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_spin.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_spin.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,65 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -9829,10 +9829,10 @@ Index: php-5.2.3/ext/apc/apc_spin.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_spin.h
+Index: php-5.2.4/ext/apc/apc_spin.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_spin.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_spin.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,48 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -9882,10 +9882,10 @@ Index: php-5.2.3/ext/apc/apc_spin.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_stack.c
+Index: php-5.2.4/ext/apc/apc_stack.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_stack.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_stack.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,105 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -9992,10 +9992,10 @@ Index: php-5.2.3/ext/apc/apc_stack.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_stack.h
+Index: php-5.2.4/ext/apc/apc_stack.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_stack.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_stack.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,58 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -10055,10 +10055,10 @@ Index: php-5.2.3/ext/apc/apc_stack.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_zend.c
+Index: php-5.2.4/ext/apc/apc_zend.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_zend.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_zend.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,277 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -10337,10 +10337,10 @@ Index: php-5.2.3/ext/apc/apc_zend.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/apc_zend.h
+Index: php-5.2.4/ext/apc/apc_zend.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/apc_zend.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/apc_zend.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,53 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -10395,10 +10395,10 @@ Index: php-5.2.3/ext/apc/apc_zend.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/CHANGELOG
+Index: php-5.2.4/ext/apc/CHANGELOG
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/CHANGELOG	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/CHANGELOG	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,192 @@
 +3.0.14: 2007-03-21
 +- Build fix (Shire)
@@ -10592,10 +10592,10 @@ Index: php-5.2.3/ext/apc/CHANGELOG
 +
 +1.0.1:
 +- added optional file modification time check [djc 2001-01-12]
-Index: php-5.2.3/ext/apc/config.m4
+Index: php-5.2.4/ext/apc/config.m4
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/config.m4	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/config.m4	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,214 @@
 +dnl
 +dnl $Id: config.m4,v 3.25 2007/02/24 15:57:59 rasmus Exp $
@@ -10811,10 +10811,10 @@ Index: php-5.2.3/ext/apc/config.m4
 +  AC_DEFINE(HAVE_APC, 1, [ ])
 +fi
 +
-Index: php-5.2.3/ext/apc/INSTALL
+Index: php-5.2.4/ext/apc/INSTALL
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/INSTALL	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/INSTALL	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,405 @@
 +Installation Instructions for APC
 +---------------------------------
@@ -11221,10 +11221,10 @@ Index: php-5.2.3/ext/apc/INSTALL
 +                            Optimize include_once and require_once calls and avoid the 
 +                            expensive system calls used.
 +                            (Default: 0)
-Index: php-5.2.3/ext/apc/LICENSE
+Index: php-5.2.4/ext/apc/LICENSE
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/LICENSE	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/LICENSE	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,68 @@
 +-------------------------------------------------------------------- 
 +                  The PHP License, version 3.01
@@ -11294,10 +11294,10 @@ Index: php-5.2.3/ext/apc/LICENSE
 +
 +PHP includes the Zend Engine, freely available at
 +<http://www.zend.com>.
-Index: php-5.2.3/ext/apc/NOTICE
+Index: php-5.2.4/ext/apc/NOTICE
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/NOTICE	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/NOTICE	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,43 @@
 +This is the NOTICE file that holds acknowledgements and stuff.
 +
@@ -11342,10 +11342,10 @@ Index: php-5.2.3/ext/apc/NOTICE
 +    Angel Li            diffs for ANSI comment compliance
 +    Christian Rishøj    help debugging phplib problems
 +    Sascha Schumann     memory error bug fix
-Index: php-5.2.3/ext/apc/pgsql_s_lock.c
+Index: php-5.2.4/ext/apc/pgsql_s_lock.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/pgsql_s_lock.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/pgsql_s_lock.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,481 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -11828,10 +11828,10 @@ Index: php-5.2.3/ext/apc/pgsql_s_lock.c
 +#endif   /* S_LOCK_TEST */
 +
 +#endif /* APC_SPIN_LOCKS */
-Index: php-5.2.3/ext/apc/pgsql_s_lock.h
+Index: php-5.2.4/ext/apc/pgsql_s_lock.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/pgsql_s_lock.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/pgsql_s_lock.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,928 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -12761,10 +12761,10 @@ Index: php-5.2.3/ext/apc/pgsql_s_lock.h
 +#endif
 +
 +#endif	 /* S_LOCK_H */
-Index: php-5.2.3/ext/apc/php_apc.c
+Index: php-5.2.4/ext/apc/php_apc.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/php_apc.c	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/php_apc.c	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,957 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -13723,10 +13723,10 @@ Index: php-5.2.3/ext/apc/php_apc.c
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/php_apc.h
+Index: php-5.2.4/ext/apc/php_apc.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/php_apc.h	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/php_apc.h	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,52 @@
 +/*
 +  +----------------------------------------------------------------------+
@@ -13780,10 +13780,10 @@ Index: php-5.2.3/ext/apc/php_apc.h
 + * vim600: expandtab sw=4 ts=4 sts=4 fdm=marker
 + * vim<600: expandtab sw=4 ts=4 sts=4
 + */
-Index: php-5.2.3/ext/apc/TECHNOTES.txt
+Index: php-5.2.4/ext/apc/TECHNOTES.txt
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/TECHNOTES.txt	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/TECHNOTES.txt	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,357 @@
 +APC Quick-Start Braindump
 +
@@ -14142,10 +14142,10 @@ Index: php-5.2.3/ext/apc/TECHNOTES.txt
 +If you made it to the end of this, you should have a pretty good idea of where things are in
 +the code.  I skimmed over a lot of things, so plan on spending some time reading through the code.
 +
-Index: php-5.2.3/ext/apc/tests/apc_001.phpt
+Index: php-5.2.4/ext/apc/tests/apc_001.phpt
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/tests/apc_001.phpt	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/tests/apc_001.phpt	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,27 @@
 +--TEST--
 +APC: apc_store/fetch with strings
@@ -14174,10 +14174,10 @@ Index: php-5.2.3/ext/apc/tests/apc_001.phpt
 +string(11) "hello world"
 +string(4) "nice"
 +===DONE===
-Index: php-5.2.3/ext/apc/tests/apc_002.phpt
+Index: php-5.2.4/ext/apc/tests/apc_002.phpt
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/tests/apc_002.phpt	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/tests/apc_002.phpt	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,34 @@
 +--TEST--
 +APC: apc_store/fetch with objects
@@ -14213,10 +14213,10 @@ Index: php-5.2.3/ext/apc/tests/apc_002.phpt
 +  bool(true)
 +}
 +===DONE===
-Index: php-5.2.3/ext/apc/tests/apc_003.phpt
+Index: php-5.2.4/ext/apc/tests/apc_003.phpt
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/tests/apc_003.phpt	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/tests/apc_003.phpt	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,112 @@
 +--TEST--
 +APC: apc_store/fetch with objects
@@ -14330,10 +14330,10 @@ Index: php-5.2.3/ext/apc/tests/apc_003.phpt
 +  bool(true)
 +}
 +===DONE===
-Index: php-5.2.3/ext/apc/tests/skipif.inc
+Index: php-5.2.4/ext/apc/tests/skipif.inc
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/tests/skipif.inc	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/tests/skipif.inc	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,6 @@
 +<?php
 +
@@ -14341,10 +14341,10 @@ Index: php-5.2.3/ext/apc/tests/skipif.inc
 +//if (!ini_get('apc.enabled')) die("skip apc not enabled");
 +
 +?>
-Index: php-5.2.3/ext/apc/TODO
+Index: php-5.2.4/ext/apc/TODO
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ php-5.2.3/ext/apc/TODO	2007-07-30 10:52:17.000000000 -0500
++++ php-5.2.4/ext/apc/TODO	2007-09-02 12:24:46.000000000 +0200
 @@ -0,0 +1,30 @@
 +Known Bugs
 + 
