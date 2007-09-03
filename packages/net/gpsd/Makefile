@@ -15,10 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.berlios.de/gpsd/
 PKG_MD5SUM:=3ff80db0e7d906457e5a7a1b04fcb4ec
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 PKG_BUILD_DEPENDS=libncurses libnotimpl
 
@@ -32,14 +28,13 @@ define Package/gpsd
   URL:=http://gpsd.berlios.de/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--without-x \
-		, \
-		CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
-		LIBS="-nodefaultlibs -luClibc++ -lnotimpl -lm -lc" \
-        )
-endef
+CONFIGURE_ARGS += \
+	--without-x \
+
+CONFIGURE_VARS += \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClic++" \
+	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
+	LIBS="-nodefaultlibs -luClibc++ -lnotimpl" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \

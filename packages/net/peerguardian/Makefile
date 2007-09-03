@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/peerguardian
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:= +libpthread +libncurses
+  DEPENDS:= +libncurses +libpthread +uclibcxx
   TITLE:=PeerGuardian for Linux
   DESCRIPTION:=\
 	PeerGuardian helps protect your privacy by blocking many ranges \\\
@@ -39,16 +39,9 @@ define Package/peerguardian/conffiles
 /etc/p2p.p2b.p2p
 endef
 
-# commas are interpreted by the $(call ...) macro, so define an intermediate variable holding our settings
-PKG_CONFIGURE_LIBS:=-Wl,-Bdynamic,-luClibc++,-Bstatic,-lstdc++,-Bdynamic,-lm,-lc
-
-define Build/Configure
-	$(call Build/Configure/Default, \
-		, \
-		CXXFLAGS="$$$$CXXFLAGS $$$$CPPFLAGS -fno-builtin -fno-rtti" \
-		LIBS="$(PKG_CONFIGURE_LIBS)" \
-	)
-endef
+CONFIGURE_VARS+= \
+	CXXFLAGS="$$$$CXXFLAGS $$$$CPPFLAGS -fno-builtin -fno-rtti" \
+	LIBS="-nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
