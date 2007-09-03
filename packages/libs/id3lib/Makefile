@@ -15,10 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/id3lib
 PKG_MD5SUM:=19f27ddd2dda4b2d26a559a4f0f402a7
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,23 +26,23 @@ define Package/id3lib
   URL:=http://www.id3lib.org/
 endef
 
-# commas are interpreted by the $(call ...) macro, so define a intermediate variable holding our settings
-PKG_CONFIGURE_LIBS:=-Wl,-Bdynamic,-luClibc++,-Bstatic,-lstdc++,-Bdynamic,-lz,-lm,-lc
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+
+CONFIGURE_VARS += \
+	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti"  \
+	LIBS="-nodefaultlibs -lz -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm" \
 
 define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		, \
-		CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti"  \
-		LIBS="$(PKG_CONFIGURE_LIBS)" \
-	)
+	$(call Build/Configure/Default)
+	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
 define Build/InstallDev
@@ -59,8 +55,7 @@ define Build/InstallDev
 endef
 
 define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/id3 \
+	rm -rf	$(STAGING_DIR)/usr/include/id3 \
 		$(STAGING_DIR)/usr/include/id3.h \
 		$(STAGING_DIR)/usr/lib/libid3.{a,so} \
 		$(STAGING_DIR)/usr/lib/libid3-*.so.*
