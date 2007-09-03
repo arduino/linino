@@ -10,12 +10,3 @@ diff -urN mrd6-0.9.5/src/Makefile mrd6-0.9.5.new/src/Makefile
  
  ifeq ($(OPTIMIZE),yes)
  	ifeq ($(SPACE_OPTIMIZE),yes)
-@@ -97,7 +97,7 @@
- 	endif
- endif
- 
--LDFLAGS += -lm
-+LDFLAGS += -L$(STAGING_DIR)/usr/lib -lnotimpl -lm
- ifeq ($(PLATFORM),OS_LINUX)
- 	LDFLAGS += -ldl
- endif
