@@ -23,17 +23,19 @@ define Package/ctorrent
   CATEGORY:=Network
   DEPENDS:=+libopenssl +uclibcxx
   TITLE:=console-based BitTorrent client
-  DESCRIPTION:=\
-  	CTorrent is a BitTorrent client written in the C programming language, known to \\\
-	be a very robust and mature programming language, which produces fast and \\\
-	optimized application.
   URL:=http://www.rahul.net/dholmes/ctorrent/
 endef
+
+define Package/ctorrent/description
+ CTorrent is a BitTorrent client written in the C programming language, 
+ known to be a very robust and mature programming language, which produces 
+ fast and optimized application.
+endef
    
-CONFIGURE_ARGS += \
-	CPPFLAGS="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/openssl" \
-	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
-	LIBS="-nodefaultlibs -lcrypto -luClibc++ -lm -lc -lgcc"
+CONFIGURE_VARS += \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
+	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
+	LIBS="-nodefaultlibs -lcrypto -luClibc++ -lm"
 
 define Package/ctorrent/install	
 	$(INSTALL_DIR) $(1)/usr/bin

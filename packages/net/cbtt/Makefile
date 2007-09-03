@@ -20,39 +20,64 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/cbtt
+define Package/cbtt/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=zlib
-  MENU:=1
+  DEPENDS:=+libpthread +uclibcxx +zlib
   TITLE:=Bittorrent tracker
-  DEPENDS:=+libpthread +uclibcxx
-  DESCRIPTION:=a C BitTorrent Tracker
   URL:=http://bnbtusermods.sourceforge.net
+endef
+
+define Package/cbtt
+$(call Package/cbtt/Default)
 endef
 
 define Package/cbtt-mysql
-  SECTION:=net
-  CATEGORY:=Network
-  DEPENDS:=cbtt +libmysqlclient
-  TITLE:=Bittorrent tracker with mysql support
-  DESCRIPTION:=Bittorrent tracker with mysql support
-  URL:=http://bnbtusermods.sourceforge.net
+  DEPENDS+= +libmysqlclient
+  TITLE+= (with mysql support)
 endef
 
-MAKE_FLAGS += \
-	LFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/mysql -L. -lz -lmysqlclient -nodefaultlibs -lpthread -luClibc++ -lc -lm -lgcc" \
-	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -fno-builtin -fno-rtti -nostdinc++"
 
-define Package/cbtt/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bnbt $(1)/usr/bin/
+define Build/Template
+
+$(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++" \
+		LFLAGS="$(TARGET_LDFLAGS) -L. -nodefaultlibs $(4) -lz -luClibc++ -lm -lpthread" \
+		$(3)
+	touch $$@
+
+$(STAMP_BUILT): $(STAMP_BUILT)-$(2)
+
+define Package/$(1)/install
+	$(INSTALL_DIR) $$(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(3) $$(1)/usr/bin/
 endef
 
-define Package/cbtt-mysql/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bnbtmysql $(1)/usr/bin/
 endef
+
+define Build/Configure
+endef
+
+define Build/Compile
+endef
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_cbtt),)
+  define Build/without-mysql
+    $(call Build/Template,cbtt,without-mysql,bnbt,)
+  endef
+endif
+$(eval $(Build/without-mysql))
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_cbtt-mysql),)
+  define Build/with-mysql
+    $(call Build/Template,cbtt-mysql,with-mysql,bnbtmysql, \
+	-L$(STAGING_DIR)/usr/lib/mysql -lmysqlclient \
+    )
+  endef
+endif
+$(eval $(Build/with-mysql))
 
 $(eval $(call BuildPackage,cbtt))
 $(eval $(call BuildPackage,cbtt-mysql))

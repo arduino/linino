@@ -26,24 +26,26 @@ define Package/vncrepeater
   CATEGORY:=Network
   DEPENDS:=+uclibcxx
   TITLE:=UltraVNC repeater for Linux
-  DESCRIPTION:=\
-	Viewer can be behind Nat router or directly connected to the internet \\\
-	Instead of forwarding serveral ports, you only need to forward 1 port \\\
-	If the PC that runs the Repeater has access to the local DNS server, \\\
-	you can use your local DNS names instead of 10.10.10.12.\\\
-	This could be handy when you have a dynamic DHCP server allocating \\\
-	ip adresses for your PC.
   URL:=http://ultravnc.sourceforge.net/addons/repeater.html
 endef
 
-define Package/vncrepeater/
+define Package/vncrepeater/conffiles
 /etc/vncrepeater.conf
+endef
+
+define Package/vncrepeater/description
+ Viewer can be behind Nat router or directly connected to the internet 
+ instead of forwarding serveral ports, you only need to forward 1 port. 
+ If the PC that runs the Repeater has access to the local DNS server, 
+ you can use your local DNS names instead of 10.10.10.12.
+ This could be handy when you have a dynamic DHCP server allocating 
+ ip adresses for your PC.
 endef
 
 define Build/Compile
 	$(call Build/Compile/Default, \
-		CFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
-		STAGING_DIR="$(STAGING_DIR)" \
+		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++" \
+		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++" \
 		repeater \
 	)
 endef

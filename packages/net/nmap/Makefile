@@ -12,13 +12,9 @@ PKG_NAME:=nmap
 PKG_VERSION:=4.20
 PKG_RELEASE:=1
 
-PKG_MD5SUM:=ea50419f99472200c4184a304e3831ea
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.insecure.org/nmap/dist
-PKG_CAT:=bzcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=ea50419f99472200c4184a304e3831ea
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,26 +23,26 @@ define Package/nmap
   CATEGORY:=Network
   DEPENDS:=+libdnet +libpcap +libpcre +uclibcxx
   TITLE:=Network exploration and/or security auditing utility
-  DESCRIPTION:=\
-  	A free open source utility for network exploration or security auditing.
   URL:=http://www.insecure.org/nmap/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--without-openssl \
-		--without-nmapfe \
-		--with-libdnet="$(STAGING_DIR)/usr" \
-		--with-libpcap="$(STAGING_DIR)/usr" \
-		--with-libpcre="$(STAGING_DIR)/usr" \
-		, \
-		CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
-		LIBS="-nodefaultlibs -luClibc++ -lc -lm -lgcc" \
-	)
+define Package/nmap/description
+ A free open source utility for network exploration or security auditing.
 endef
 
+CONFIGURE_ARGS += \
+	--without-openssl \
+	--without-nmapfe \
+	--with-libdnet="$(STAGING_DIR)/usr" \
+	--with-libpcap="$(STAGING_DIR)/usr" \
+	--with-libpcre="$(STAGING_DIR)/usr" \
+
+CONFIGURE_VARS += \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
+	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
+	LIBS="-nodefaultlibs -luClibc++" \
+
 define Build/Compile	
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install

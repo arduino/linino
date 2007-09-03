@@ -18,64 +18,73 @@ PKG_MD5SUM:=b400d03c0e39e3e78a7327ba78f789f0
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/rrs
+define Package/rrs/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+uclibcxx +libopenssl
-  TITLE:=A reverse (connecting) remote shell (with SSL support)
+  DEPENDS:=+uclibcxx
+  TITLE:=A reverse (connecting) remote shell
+  URL:=http://www.cycom.se/dl/rrs/
+endef
+
+define Package/rrs
+$(call Package/rrs/Default)
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS+= +libopenssl
+  TITLE+= (with SSL support)
   URL:=http://www.cycom.se/dl/rrs/
 endef
 
 define Package/rrs-nossl
+$(call Package/rrs/Default)
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+uclibcxx
-  TITLE:=A reverse (connecting) remote shell (without SSL support)
-  URL:=http://www.cycom.se/dl/rrs/
+  TITLE+= (without SSL support)
 endef
 
 
-ifneq ($(SDK),)
-  CONFIG_PACKAGE_rrs:=m
-  CONFIG_PACKAGE_rrs-nossl:=m
-endif
+define Build/Template
 
-define Build/Compile/Template
+$(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -fno-builtin -fno-rtti -nostdinc++" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -Wl,-Bdynamic,-luClibc++,-Bstatic,-lstdc++,-Bdynamic $(3) -lutil -lm -lc" \
-		LDFLAGSNOSSL="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -Wl,-Bdynamic,-luClibc++,-Bstatic,-lstdc++,-Bdynamic $(3) -lutil -lm -lc" \
-		$(2)
-	( cd $(PKG_BUILD_DIR); mv rrs rrs-$(1); )
+		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++" \
+		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs $(4) -luClibc++ -lm -lutil" \
+		LDFLAGSNOSSL="$(TARGET_LDFLAGS) -nodefaultlibs $(4) -luClibc++ -lm -lutil" \
+		$(3)
+	( cd $(PKG_BUILD_DIR); mv -f rrs rrs-$(2); )
+	touch $$@
+
+$(STAMP_BUILT): $(STAMP_BUILT)-$(2)
+
+define Package/$(1)/install
+	$(INSTALL_DIR) $$(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/rrs-$(2) $$(1)/usr/bin/rrs
 endef
 
-ifneq ($(CONFIG_PACKAGE_rrs),)
-  define Build/Compile/with-ssl
-	$(call Build/Compile/Template,ssl,generic,-lcrypto -lssl)
-  endef
-endif
+endef
 
-ifneq ($(CONFIG_PACKAGE_rrs-nossl),)
-  define Build/Compile/without-ssl
-	$(call Build/Compile/Template,nossl,generic-nossl,)
-  endef
-endif
+
+define Build/Configure
+endef
 
 define Build/Compile
-	$(call Build/Compile/with-ssl)
-	$(call Build/Compile/without-ssl)
 endef
 
-define Package/rrs/install	
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/rrs-ssl $(1)/usr/bin/rrs
-endef
+ifneq ($(SDK)$(CONFIG_PACKAGE_rrs),)
+  define Build/with-ssl
+    $(call Build/Template,rrs,with-ssl,generic,-lcrypto -lssl)
+  endef
+endif
+$(eval $(Build/with-ssl))
 
-define Package/rrs-nossl/install	
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/rrs-nossl $(1)/usr/bin/rrs
-endef
+ifneq ($(SDK)$(CONFIG_PACKAGE_rrs-nossl),)
+  define Build/without-ssl
+    $(call Build/Template,rrs-nossl,without-ssl,generic-nossl,)
+  endef
+endif
+$(eval $(Build/without-ssl))
+
 
 $(eval $(call BuildPackage,rrs))
 $(eval $(call BuildPackage,rrs-nossl))

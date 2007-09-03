@@ -12,27 +12,31 @@ PKG_NAME:=kismet
 PKG_VERSION:=2007-01-R1a
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kismetwireless.net/code
 PKG_MD5SUM:=5921166366d3f695eeef26121c56a674
-PKG_CAT:=zcat
 
-PKG_BUILD_DEPENDS:=libpcap libncurses uclibcxx
+PKG_BUILD_DEPENDS:=libnotimpl libpcap libncurses uclibcxx
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/kismet-client
+define Package/kismet/Default
   SECTION:=net
   CATEGORY:=Network
-  TITLE:=Kismet client
-  DEPENDS:=+libncurses +uclibcxx
-  DESCRIPTION:=Kismet client.\\\
-    An 802.11 layer2 wireless network detector, sniffer, and intrusion \\\
-    detection system.\\\
-    \\\
-    This package contains the kismet text interface client.
+  TITLE:=Kismet
+  DEPENDS:= +uclibcxx
   URL:=http://www.kismetwireless.net/
+endef
+
+define Package/kismet/Default/description
+ An 802.11 layer2 wireless network detector, sniffer, and intrusion 
+ detection system.
+endef
+
+define Package/kismet-client
+$(call Package/kismet/Default)
+  TITLE+= client
+  DEPENDS+= +libncurses
 endef
 
 define Package/kismet-client/conffiles
@@ -42,34 +46,30 @@ define Package/kismet-client/conffiles
 /etc/kismet/kismet_ui.conf
 endef
 
+define Package/kismet-client/description
+$(call Package/kismet/Default/description)
+ This package contains the kismet text interface client.
+endef
+
 define Package/kismet-drone
-  SECTION:=net
-  CATEGORY:=Network
-  DEPENDS:=+libpcap +uclibcxx
-  TITLE:=Kismet drone
-  DESCRIPTION:=Kismet drone.\\\
-    An 802.11 layer2 wireless network detector, sniffer, and intrusion \\\
-    detection system.\\\
-    \\\
-    This package contains the kismet remote sniffing.and monitoring drone.
-  URL:=http://www.kismetwireless.net/
+$(call Package/kismet/Default)
+  DEPENDS+= +libpcap
+  TITLE+= drone
 endef
 
 define Package/kismet-drone/conffiles
 /etc/kismet/kismet_drone.conf
 endef
 
+define Package/kismet-drone/description
+$(call Package/kismet/Default/description)
+ This package contains the kismet remote sniffing.and monitoring drone.
+endef
+
 define Package/kismet-server
-  SECTION:=net
-  CATEGORY:=Network
-  DEPENDS:=+libpcap +uclibcxx
-  TITLE:=Kismet server
-  DESCRIPTION:=Kismet server.\\\
-    An 802.11 layer2 wireless network detector, sniffer, and intrusion \\\
-    detection system.\\\
-    \\\
-    This package contains the kismet server.
-  URL:=http://www.kismetwireless.net/
+$(call Package/kismet/Default)
+  DEPENDS+= +libpcap
+  TITLE+= server
 endef
 
 define Package/kismet-server/conffiles
@@ -78,44 +78,26 @@ define Package/kismet-server/conffiles
 /etc/kismet/kismet.conf
 endef
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -rf config.cache; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)"  \
-		CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++"  \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -I$(LINUX_DIR)/include" \
-		LDFLAGS="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		LIBS="-luClibc++ -lc -lm -lgcc" \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=/usr/lib \
-			--libexecdir=/usr/lib \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc/kismet \
-			$(DISABLE_LARGEFILE) \
-			$(DISABLE_NLS) \
-			--enable-syspcap=yes \
-			--disable-setuid \
-			--disable-wsp100 \
-			--disable-gpsmap \
-	);
+define Package/kismet-server/description
+$(call Package/kismet/Default/description)
+ This package contains the kismet server.
 endef
+
+CONFIGURE_ARGS += \
+	--enable-syspcap=yes \
+	--disable-setuid \
+	--disable-wsp100 \
+	--disable-gpsmap \
+
+CONFIGURE_VARS += \
+	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
+	LDFLAGS="$$$$LDFLAGS" \
+	LIBS="-nodefaultlibs -luClibc++ -lm -lnotimpl" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		LIBS="-luClibc++ -lc -lm -lgcc" \
+		LD="\$$$$(CC)" \
 		all
 endef
 

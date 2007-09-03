@@ -42,6 +42,13 @@ UCLIBC_TARGET_ARCH:=$(shell echo $(ARCH) | sed -e s'/-.*//' \
 	-e 's/cris.*/cris/' \
 )
 
+MAKE_FLAGS:= \
+	TOPDIR="$(PKG_BUILD_DIR)/" \
+	$(TARGET_CONFIGURE_OPTS) \
+	ARCH_CFLAGS="$(TARGET_CFLAGS)" \
+	CROSS="$(TARGET_CROSS)" \
+	CP="$(CP)" \
+
 define Build/Configure
 	if [ -f ./files/config.$(UCLIBC_TARGET_ARCH) ]; then \
 		cp ./files/config.$(UCLIBC_TARGET_ARCH) $(PKG_BUILD_DIR)/.config; \
@@ -51,34 +58,45 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		TOPDIR="$(PKG_BUILD_DIR)/" \
-		$(TARGET_CONFIGURE_OPTS) \
-		ARCH_CFLAGS="$(TARGET_CFLAGS)" \
-		CROSS="$(TARGET_CROSS)" \
-		CP="$(CP)" \
+	# fix ccache issue
+	$(MAKE) -C $(PKG_BUILD_DIR)/src/abi/libsupc \
+		$(MAKE_FLAGS) \
+		CC="$(TARGET_CROSS)gcc" \
 		all
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(MAKE_FLAGS) \
+		DESTDIR="$(PKG_INSTALL_DIR)/usr" \
+		all install
+		
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		TOPDIR="$(PKG_BUILD_DIR)/" \
-                $(TARGET_CONFIGURE_OPTS) \
-                ARCH_CFLAGS="$(TARGET_CFLAGS)" \
-                CROSS="$(TARGET_CROSS)" \
-		DESTDIR="$(STAGING_DIR)" \
-		install
+	mkdir -p $(STAGING_DIR)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/g++-uc $(STAGING_DIR)/usr/bin/
+	mkdir -p $(STAGING_DIR)/usr/include/uClibc++
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(STAGING_DIR)/usr/include/uClibc++/
+	mkdir -p $(STAGING_DIR)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libuClibc++*.{a,so*} $(STAGING_DIR)/usr/lib/
+	$(SED) 's,-I/include/,-I$(STAGING_DIR)/usr/include/uClibc++/,g' $(STAGING_DIR)/usr/bin/g++-uc
+	$(SED) 's,-L/lib/,-L$(STAGING_DIR)/usr/lib/,g' $(STAGING_DIR)/usr/bin/g++-uc
+	$(if $(STAGING_DIR_HOST), \
+		ln -sf $(shell $(SCRIPT_DIR)/abs2rel.pl $(STAGING_DIR)/usr/bin/g++-uc $(STAGING_DIR_HOST)/bin/) $(STAGING_DIR_HOST)/bin/ \
+	)
 endef
 	
 define Build/UninstallDev
-	rm -rf $(STAGING_DIR)/lib/libuClibc++*.{a,so*}
+	rm -rf	$(STAGING_DIR)/usr/bin/g++-uc \
+		$(STAGING_DIR)/usr/include/uClibc++ \
+		$(STAGING_DIR)/usr/lib/libuClibc++*.{a,so*}
+	$(if $(STAGING_DIR_HOST), \
+		rm -f	$(STAGING_DIR_HOST)/bin/g++-uc \
+	)
 endef
 
 define Package/uclibcxx/install
-	$(INSTALL_DIR) $(1)/lib
-	$(CP) $(PKG_BUILD_DIR)/src/libuClibc++*.so.* $(1)/lib/
-	$(CP) $(PKG_BUILD_DIR)/src/libuClibc++-*.so $(1)/lib/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libuClibc++.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libuClibc++-*.so $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,uclibcxx))

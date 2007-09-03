@@ -15,10 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dast.nlanr.net/Projects/Iperf2.0
 PKG_MD5SUM:=bb658aba58a5af0356f5b1342dfe8f53
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,22 +23,23 @@ define Package/iperf
   CATEGORY:=Network
   DEPENDS:=+uclibcxx
   TITLE:=Internet Protocol bandwidth measuring tool
-  DESCRIPTION:=\
-	Iperf is a modern alternative for measuring TCP and UDP bandwidth \\\
-	performance, allowing the tuning of various parameters and \\\
-	characteristics.
   URL:=http://dast.nlanr.net/Projects/Iperf/ 
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--disable-multicast \
-		--disable-threads \
-		, \
-		CXXFLAGS="$$$$CXX_CFLAGS -fno-builtin -fno-rtti -nostdinc++" \
-		LIBS="-nodefaultlibs -luClibc++ -lc -lm -lgcc_s" \
-	)
+define Package/iperf/description
+ Iperf is a modern alternative for measuring TCP and UDP bandwidth 
+ performance, allowing the tuning of various parameters and 
+ characteristics.
 endef
+
+CONFIGURE_ARGS += \
+	--disable-multicast \
+	--disable-threads \
+
+CONFIGURE_VARS += \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
+	CXXFLAGS="$$$$CXX_CFLAGS -fno-builtin -fno-rtti -nostdinc++" \
+	LIBS="-nodefaultlibs -luClibc++" \
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
