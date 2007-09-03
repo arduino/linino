@@ -55,14 +55,11 @@ define Build/Configure
 	else \
 		cp ./files/config.default $(PKG_BUILD_DIR)/.config; \
 	fi
+	# fix ccache issue
+	$(SED) 's,$$$$CC,$(TARGET_CROSS)gcc,g' $(PKG_BUILD_DIR)/scripts/find_lib*.sh
 endef
 
 define Build/Compile
-	# fix ccache issue
-	$(MAKE) -C $(PKG_BUILD_DIR)/src/abi/libsupc \
-		$(MAKE_FLAGS) \
-		CC="$(TARGET_CROSS)gcc" \
-		all
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(MAKE_FLAGS) \
 		DESTDIR="$(PKG_INSTALL_DIR)/usr" \
