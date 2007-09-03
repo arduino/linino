@@ -1,0 +1,70 @@
+diff -ruN dibbler-0.6.0-RC1-old/Makefile dibbler-0.6.0-RC1-new/Makefile
+--- dibbler-0.6.0-RC1-old/Makefile	2007-01-30 21:34:24.000000000 +0100
++++ dibbler-0.6.0-RC1-new/Makefile	2007-09-01 04:55:38.000000000 +0200
+@@ -32,7 +32,7 @@
+ 
+ $(CLIENTBIN): libposlib includes commonlibs clntlibs $(MISC)/DHCPClient.o $(CLIENT)
+ 	@echo "[LINK   ] $(SUBDIR)/$@ ($(LINKPRINT))"
+-	$(CXX) $(CLNT_LDFLAGS) $(OPTS) $(CLNTLINKOPTS) -o $@ $(MISC)/DHCPClient.o $(CLIENT) \
++	$(CXXLD) $(CLNT_LDFLAGS) $(OPTS) $(CLNTLINKOPTS) -o $@ $(MISC)/DHCPClient.o $(CLIENT) \
+ 	-L$(MISC)         -lMisc         \
+ 	-L$(ADDRMGR)      -lAddrMgr      \
+ 	-L$(CLNTADDRMGR)  -lClntAddrMgr  \
+@@ -50,7 +50,8 @@
+ 	-L$(MESSAGES)     -lMsg            \
+ 	-lClntOptions -lOptions -lLowLevel \
+ 	-L$(MISC)         -lMisc           \
+-	-L$(POSLIB)       $(CLNTPOSLIB)
++	-L$(POSLIB)       $(CLNTPOSLIB) \
++	$(CLNT_LIBS)
+ 
+ ifndef MOD_CLNT_DISABLE_DNSUPDATE
+ CLNTPOSLIB=-lposlib	
+@@ -60,7 +61,7 @@
+ 
+ $(SERVERBIN): libposlib includes commonlibs srvlibs $(MISC)/DHCPServer.o $(SERVER)
+ 	@echo "[LINK   ] $(SUBDIR)/$@ ($(LINKPRINT))"
+-	$(CXX) $(SRV_LDFLAGS) $(OPTS) -I $(INCDIR) $(SRVLINKOPTS) -o $@ $(MISC)/DHCPServer.o $(SERVER)  \
++	$(CXXLD) $(SRV_LDFLAGS) $(OPTS) -I $(INCDIR) $(SRVLINKOPTS) -o $@ $(MISC)/DHCPServer.o $(SERVER)  \
+ 	-L$(SRVADDRMGR)   -lSrvAddrMgr     \
+ 	-L$(ADDRMGR)      -lAddrMgr        \
+ 	-L$(LOWLEVEL)                      \
+@@ -81,7 +82,8 @@
+ 	-L$(MISC)        -lMisc            \
+ 	-L$(LOWLEVEL)    -lLowLevel        \
+ 	-L$(IFACEMGR)    -lIfaceMgr        \
+-	-L$(POSLIB)      $(SRVPOSLIB)
++	-L$(POSLIB)      $(SRVPOSLIB) \
++	$(SRV_LIBS)
+ 
+ ifndef MOD_SRV_DISABLE_DNSUPDATE
+ SRVPOSLIB=-lposlib	
+@@ -91,7 +93,7 @@
+ 
+ $(RELAYBIN): poslib-configure includes commonlibs relaylibs $(MISC)/DHCPRelay.o $(RELAY)
+ 	@echo "[LINK   ] $(SUBDIR)/$@ ($(LINKPRINT))"
+-	$(CXX) $(REL_LDFLAGS) $(OPTS) -I $(INCDIR) $(SRVLINKOPTS) -o $@ $(MISC)/DHCPRelay.o $(RELAY)  \
++	$(CXXLD) $(REL_LDFLAGS) $(OPTS) -I $(INCDIR) $(SRVLINKOPTS) -o $@ $(MISC)/DHCPRelay.o $(RELAY)  \
+ 	-L$(RELTRANSMGR) -lRelTransMgr  \
+ 	-L$(RELCFGMGR)   -lRelCfgMgr    \
+ 	-L$(RELIFACEMGR) -lRelIfaceMgr  \
+@@ -104,7 +106,8 @@
+ 	-L$(MESSAGES)    -lMsg          \
+ 	-L$(MISC)        -lMisc         \
+ 	-L$(OPTIONS)     -lOptions      \
+-	-lMisc -lIfaceMgr -lLowLevel -lRelTransMgr -lRelCfgMgr -lRelMsg -lRelOptions -lOptions
++	-lMisc -lIfaceMgr -lLowLevel -lRelTransMgr -lRelCfgMgr -lRelMsg -lRelOptions -lOptions \
++	$(SRV_LIBS)
+ 
+ objs:	includes
+ 	@for dir in $(COMMONSUBDIRS); do \
+diff -ruN dibbler-0.6.0-RC1-old/Makefile.inc dibbler-0.6.0-RC1-new/Makefile.inc
+--- dibbler-0.6.0-RC1-old/Makefile.inc	2007-02-03 19:02:11.000000000 +0100
++++ dibbler-0.6.0-RC1-new/Makefile.inc	2007-09-01 04:56:44.000000000 +0200
+@@ -1,5 +1,6 @@
+ # === used tools ===
+ CXX          = g++
++CXXLD        = $(CXX)
+ CC           = gcc
+ FLEX         = flex
+ BISONPP      = $(PREFIX)/bison++/bison++ -S $(PREFIX)/bison++/bison.cc -H $(PREFIX)/bison++/bison.h

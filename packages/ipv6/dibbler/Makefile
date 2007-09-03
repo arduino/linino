@@ -48,8 +48,8 @@ define Build/Configure
 	(cd $(PKG_BUILD_DIR)/poslib; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="$(EXTRA_CPPFLAGS)" \
-		LDFLAGS="$(EXTRA_LDFLAGS)" \
+		CPPFLAGS="$(TARGET_CPPFLAGS)" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
 		./configure \
 			--target=$(GNU_TARGET_NAME) \
 			--host=$(GNU_TARGET_NAME) \
@@ -73,13 +73,16 @@ define Build/Configure
 	);
 endef
 
-CXX_LIBS:="-nodefaultlibs -Wl,-Bdynamic,-luClibc++,-Bstatic,-lstdc++,-Bdynamic,-lm,-lc,-lgcc"
+# link stuff missing from uClibc++ but present in stdc++ statically
+CXX_LIBS:= -nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		PORT_CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS) -fno-builtin -fno-rtti" \
-		PORT_LDFLAGS="$(EXTRA_LDFLAGS)" \
+		PORT_CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -fno-builtin -fno-rtti" \
+		PORT_LDFLAGS="$(TARGET_LDFLAGS)" \
 		DEBUGINFO= \
+		CXXLD="$(TARGET_CC)" \
 		CLNT_LIBS="$(CXX_LIBS)" \
 		SRV_LIBS="$(CXX_LIBS)" \
 		server client relay
