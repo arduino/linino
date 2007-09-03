@@ -5,34 +5,34 @@ START=50
 BIN=p910nd
 
 start_service() {
-        local section="$1"
-        config_get      port          "$section" port
-        config_get      device        "$section" device
-        config_get_bool bidirectional "$section" bidirectional
+	local section="$1"
+	config_get      port          "$section" port
+	config_get      device        "$section" device
+	config_get_bool bidirectional "$section" bidirectional
 
-        options=""
-        [ $bidirectional -eq 1 ] && {
-                options="$options -b"
-        }
-        options="$options -f $device $port"
+	options=""
+	[ $bidirectional -eq 1 ] && {
+		options="$options -b"
+	}
+	options="$options -f $device $port"
 
-        $BIN $options
+	$BIN $options
 }
 
 stop_service() {
-        local section="$1"
-        config_get port "$section" port
+	local section="$1"
+	config_get port "$section" port
 
-        PID_F=/var/run/p910${port}d.pid
-        [ -f $PID_F ] && kill $(cat $PID_F)
+	PID_F=/var/run/p910${port}d.pid
+	[ -f $PID_F ] && kill $(cat $PID_F)
 }
 
 start() {
-        config_load "p910nd"
-        config_foreach start_service p910nd
+	config_load "p910nd"
+	config_foreach start_service p910nd
 }
 
 stop() {
-        config_load "p910nd"
-        config_foreach stop_service p910nd
+	config_load "p910nd"
+	config_foreach stop_service p910nd
 }
