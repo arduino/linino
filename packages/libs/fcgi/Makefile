@@ -22,41 +22,55 @@ define Package/fcgi
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Shared library of FastCGI
-  DESCRIPTION:=\
-	FastCGI is a language independent, scalable, open extension to \\\
-	CGI that provides high performance without the limitations of \\\
-	server specific APIs.
   URL:=http://www.fastcgi.com/
+endef
+
+define Package/fcgi/description
+ FastCGI is a language independent, scalable, open extension to 
+ CGI that provides high performance without the limitations of 
+ server specific APIs.
 endef
 
 CONFIGURE_ARGS += \
 	--enable-shared \
-	--enable-static
+	--enable-static \
 
-MAKE_FLAGS += \
-	CCOPT="$(TARGET_CFLAGS) -I$(BUILD_DIR)/linux/include" \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	LDFLAGS="$(LDFLAGS) -lm" \
-	all install
+CONFIGURE_VARS += \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClic++" \
+	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
+	LIBS="-nodefaultlibs -luClibc++ -lm" \
+
+
+define Build/Configure
+	$(call Build/Configure/Default)
+	$(call libtool_disable_rpath)
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
+endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/fastcgi.h $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/fcgi{app,_config,misc,o,os,_stdio}.h $(STAGING_DIR)/usr/include/
 	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfcgi.{a,so*} $(STAGING_DIR)/usr/lib/
 endef
 
 define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/f*cgi*.h \
+	rm -rf	$(STAGING_DIR)/usr/include/fastcgi.h \
+		$(STAGING_DIR)/usr/include/fcgi{app,_config,misc,io,ios,_stdio}.h \
 		$(STAGING_DIR)/usr/lib/libfcgi.{a,so*}
 endef
 
 define Package/fcgi/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfcgi.so* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/cgi-fcgi $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/cgi-fcgi $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfcgi.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,fcgi))
