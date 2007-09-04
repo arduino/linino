@@ -15,9 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://trash.uid0.hu/openwrt
 PKG_MD5SUM:=7d5b8e9ab61a05658a5630f91505420d
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -37,13 +34,13 @@ CONFIGURE_ARGS += \
 	--disable-plugins \
 	--enable-audio \
 	--disable-alsa \
-	--disable-asn \
+	--enable-asn \
 	--disable-avc \
 	--disable-dc \
 	--disable-dtmf \
 	--disable-expat \
 	--disable-ftp \
-	--disable-http \
+	--enable-http \
 	--disable-httpsvc \
 	--disable-ipv6 \
 	--disable-jabber \
