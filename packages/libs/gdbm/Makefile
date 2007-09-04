@@ -8,17 +8,13 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=libgdbm
+PKG_NAME:=gdbm
 PKG_VERSION:=1.8.3
 PKG_RELEASE:=1
 
-PKG_SOURCE:=gdbm-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/gdbm
 PKG_MD5SUM:=1d1b1d5c0245b1c00aff92da751e9aa1
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/gdbm-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,19 +25,23 @@ define Package/libgdbm
   URL:=http://www.gnu.org/software/gdbm/
 endef
 
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+
 define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-	)
+	$(call Build/Configure/Default)
+	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		BINOWN=`id -u` \
 		BINGRP=`id -g` \
 		INSTALL_ROOT="$(PKG_INSTALL_DIR)" \
-		all install
+		install
 endef
 
 define Build/InstallDev
@@ -52,8 +52,7 @@ define Build/InstallDev
 endef
 
 define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/gdbm.h \
+	rm -rf	$(STAGING_DIR)/usr/include/gdbm.h \
 		$(STAGING_DIR)/usr/lib/libgdbm.{a,so*}
 endef
 
