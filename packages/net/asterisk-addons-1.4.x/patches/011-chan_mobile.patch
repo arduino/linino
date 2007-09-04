@@ -1,0 +1,2263 @@
+diff -Nru asterisk-addons-1.4.2/build_tools/menuselect-deps.in asterisk-addons-svn/build_tools/menuselect-deps.in
+--- asterisk-addons-1.4.2/build_tools/menuselect-deps.in	2007-05-14 18:22:44.000000000 +0200
++++ asterisk-addons-svn/build_tools/menuselect-deps.in	2007-06-04 19:10:59.000000000 +0200
+@@ -1,2 +1,3 @@
++BLUETOOTH=@PBX_BLUETOOTH@
+ MYSQLCLIENT=@PBX_MYSQLCLIENT@
+ ASTERISK=@PBX_ASTERISK@
+diff -Nru asterisk-addons-1.4.2/configs/mobile.conf.sample asterisk-addons-svn/configs/mobile.conf.sample
+--- asterisk-addons-1.4.2/configs/mobile.conf.sample	1970-01-01 01:00:00.000000000 +0100
++++ asterisk-addons-svn/configs/mobile.conf.sample	2007-06-04 19:11:00.000000000 +0200
+@@ -0,0 +1,30 @@
++;
++; mobile.conf
++;
++
++[general]
++interval=60		; Number of seconds between trying to connect to devices. 
++
++; The following is a list of the devices we deal with.
++; Every device listed below will be available for calls in and out of Asterisk. 
++; Discovered devices not in this list are not available.
++; Use the CLI command 'mobile search' to discover devices.
++; Use the CLI command 'mobile show devices' to see device status.
++;
++; To place out through a cell phone use Dial(Mobile/[device]/NNN.....) in your dialplan.
++; To call a headset use Dial(Mobile/[device]).
++
++;[dave]
++;address=00:12:56:90:6E:00
++;port=4
++;context=incoming-mobile
++
++;[blackberry]
++;address=00:0F:86:0E:AE:42
++;port=2
++;context=incoming-mobile
++
++;[headset]
++;address=00:0B:9E:11:74:A5
++;port=1
++;type=headset
+diff -Nru asterisk-addons-1.4.2/configure.ac asterisk-addons-svn/configure.ac
+--- asterisk-addons-1.4.2/configure.ac	2007-05-14 18:22:44.000000000 +0200
++++ asterisk-addons-svn/configure.ac	2007-06-04 19:11:00.000000000 +0200
+@@ -17,7 +17,7 @@
+ AC_CONFIG_SRCDIR([res_config_mysql.c])
+ 
+ AC_COPYRIGHT("Asterisk-addons")
+-AC_REVISION($Revision: 382 $)
++AC_REVISION($Revision: 384 $)
+ 
+ case "${host}" in
+      *freebsd*)
+@@ -159,13 +159,14 @@
+ # from here on down, library checking should be done in alphabetical order
+ # by the --with option name, to make things easier for the users :-)
+ 
++AST_EXT_LIB_SETUP([BLUETOOTH], [Bluetooth Support], [bluetooth])
+ AST_EXT_LIB_SETUP([CURSES], [curses], [curses])
+ AST_EXT_LIB_SETUP([NCURSES], [ncurses], [ncurses])
+ AST_EXT_LIB_SETUP([MYSQLCLIENT], [mysqlclient], [mysqlclient])
+ AST_EXT_LIB_SETUP([ASTERISK], [asterisk], [asterisk])
+ 
++AST_EXT_LIB_CHECK([BLUETOOTH], [bluetooth], [ba2str], [bluetooth/bluetooth.h])
+ AST_EXT_LIB_CHECK([CURSES], [curses], [initscr], [curses.h])
+-
+ AST_EXT_LIB_CHECK([NCURSES], [ncurses], [initscr], [curses.h])
+ 
+ MYSQL_CONFIG=No
+diff -Nru asterisk-addons-1.4.2/doc/chan_mobile.txt asterisk-addons-svn/doc/chan_mobile.txt
+--- asterisk-addons-1.4.2/doc/chan_mobile.txt	1970-01-01 01:00:00.000000000 +0100
++++ asterisk-addons-svn/doc/chan_mobile.txt	2007-06-04 19:11:00.000000000 +0200
+@@ -0,0 +1,262 @@
++chan_mobile
++
++Asterisk Channel Driver to allow Bluetooth Cell/Mobile Phones to be used as FXO devices, and Headsets as FXS devices.
++
++Features :-
++
++Multiple cell phones can be connected.
++Multiple headsets can be connected.
++Asterisk automatically connects to each configured cell phone / headset when it comes in range.
++CLI command to discover bluetooth devices.
++Inbound calls on the cell network to the cell phones are handled by Asterisk, just like inbound calls on a Zap channel.
++CLI passed through on inbound calls.
++Dial outbound on a cell phone using Dial(Mobile/device/nnnnnnn) in the dialplan.
++Dial a headset using Dial(Mobile/device) in the dialplan.
++Application MobileStatus can be used in the dialplan to see if a cell phone / headset is connected.
++Supports devicestate for dialplan hinting.
++Supports Inbound and Outbound SMS.
++
++Using chan_mobile :-
++
++In order to use chan_mobile, you must have a working bluetooth subsystem on your Asterisk box.
++This means a working bluetooth adapter, and the BlueZ packages.
++
++Any bluetooth adapter supported by the Linux kernel will do, including usb bluetooth dongles.
++
++The BlueZ package you need is bluez-utils. If you are using a GUI then you might want to install bluez-pin also.
++You also need libbluetooth, and libbluetooth-dev if you are compiling Asterisk from source.
++
++You need to get bluetooth working with your phone before attempting to use chan_mobile.
++This means 'pairing' your phone with your Asterisk box. I dont describe how to do this here as the process
++differs from distro to distro. You only need to pair once.
++
++However, the easist way to pair, is to use you cell phone to search for bluetooth devices, select your Asterisk box
++and enter the requested PIN.
++
++See www.bluez.org for other details about setting up Bluetooth under Linux.
++
++Assuming you have bluetooth working ok:-
++
++Load chan_mobile.so
++
++Search for your bluetooth devices using the CLI command 'mobile search'. Be patient with this command as
++it will take 8 - 10 seconds to do the discovery.
++
++Headsets will generally have to be put into 'pairing' mode before they will show up here.
++
++This will return something like the following :-
++
++*CLI> mobile search
++Address           Name                           Usable Type    Port
++00:12:56:90:6E:00 LG TU500                       Yes    Phone   4
++00:80:C8:35:52:78 Toaster                        No     Headset 0
++00:0B:9E:11:74:A5 Hello II Plus                  Yes    Headset 1
++00:0F:86:0E:AE:42 Daves Blackberry               Yes    Phone   7
++
++This is a list of all bluetooth devices seen and whether or not they are usable with chan_cellphone.
++The Address field contains the 'bd address' of the device. This is like an ethernet mac address.
++The Name field is whatever is configured into the device as its name.
++The Usable field tells you whether or not the device supports the Bluetooth Handsfree Profile or Headset profile.
++The Type field tells you whether the device is usable as a Phone line (FXO) or a headset (FXS)
++The Port field is the number to put in the configuration file.
++
++Choose which device(s) you want to use and edit /etc/asterisk/mobile.conf. There is a sample included
++with the Asterisk source under configs/mobile.conf.sample.
++
++Assuming we want to use the devices above, mobile.conf needs to look like this :-
++
++===================================================================================
++;
++; mobile.conf
++;
++
++[general]
++interval=60             ; Number of seconds between trying to connect to devices.
++
++; The following is a list of the devices we deal with.
++; Every device listed below will be available for calls in and out of Asterisk.
++; Discovered devices not in this list are not available.
++; Use the CLI command 'mobile search' to discover devices.
++; Use the CLI command 'mobile show devices' to see device status.
++;
++; To place a call use Dial(Mobile/[device]/NNN.....) in your dialplan.
++
++[dave]
++address=00:12:56:90:6E:00
++port=4
++context=incoming-mobile
++
++[headset]
++address=00:0B:9E:11:74:A5
++port=1
++type=headset
++===================================================================================
++
++Be sure to configure the right bd address and port number from the search. If you want inbound
++calls on a device to go to a specific context, add a context= line, otherwise the default will
++be used. The 'id' of the device [bitinbrackets] can be anything you like, just make the unique.
++
++If your are configuring a Headset be sure to include the type=headset line, if left out it defaults
++to phone.
++
++Having done this, unload chan_mobile and load it again.
++
++The CLI command 'mobile show devices' can be used at any time to show the status of configured devices,
++and whether or not the device is capable of sending / receiving SMS via bluetooth.
++
++*CLI> mobile show devices
++ID              Address           Connected State SMS
++blackberry      00:0F:86:0E:AE:42 Yes       Free  Yes
++dave            00:12:56:90:6E:00 Yes       Free  No
++headset         00:0B:9E:11:74:A5 Yes       Free  No
++*CLI>
++
++
++All being well Asterisk will now try and establish a connection to each configured device. If it cant
++it will retry after 'interval' seconds, infinately.
++
++This means that as your cell phone comes into range and goes out of range, Asterisk will automatically
++connect and disconnect from it. You dont need to worry about it.
++
++As each phone is connected you will see a message on the Asterisk console :-
++
++ Loaded chan_mobile.so => (Bluetooth Mobile Device Channel Driver)
++    -- Bluetooth Device blackberry has connected.
++    -- Bluetooth Device dave has connected.
++
++If someone calls your cell phone now, Asterisk will handle the call and it will be sent into the
++context you specified, or the default context. Mostly likely this means some SIP phone somewhere will
++ring, pick it up and take the call.
++
++To make outbound calls, add something to you Dialplan like the following :- (modify to suit)
++
++; Calls via TU500
++exten => _9X.,1,Dial(Mobile/dave/${EXTEN:1},45)
++exten => _9X.,n,Hangup
++; Calls via Blackberry
++exten => _8X.,1,Dial(Mobile/blackberry/${EXTEN:1},45)
++exten => _8X.,n,Hangup
++
++Pick up a SIP phone and dial 9<number of pizza shop> and the call vill go via the device 'dave' in
++mobile.conf.
++
++To incoming calls to a headset do something like this :-
++
++[incoming-context]
++exten => s,1,Dial(Mobile/headset,30)
++exten => s,n,Hangup()
++
++To dial out on a headset, you need to use some other mechanism, because the headset is not likely
++to have all the needed buttons on it. res_clioriginate is good for this :-
++
++*CLI> originate Mobile/headset extension NNNNN@context
++
++This will call your headset, once you answer Asterisk will call NNNNN at context context
++
++Dialplan hints :-
++
++chan_mobile supports 'device status' so you can do somthing like
++
++exten => 1234,hint,SIP/30&Mobile/dave&Mobile/blackberry
++
++
++MobileStatus Application :-
++
++chan_mobile also registers an application named MobileStatus. You can use this in your Dialplan
++to determine the 'state' of a device.
++
++For example, suppose you wanted to call dave's extension, but only if he was in the office. You could
++test to see if his cell phone was attached to Asterisk, if it is dial his extension, otherwise dial his
++cell phone.
++
++exten => 40,1,MobileStatus(dave,DAVECELL)
++exten => 40,2,GotoIf($["${DAVECELL}" = "1"]?3:5)
++exten => 40,3,Dial(ZAP/g1/0427466412,45,tT)
++exten => 40,4,Hangup
++exten => 40,5,Dial(SIP/40,45,tT)
++exten => 40,6,Hangup
++
++MobileStatus sets the value of the given variable to :-
++
++1 = Disconnected. i.e. Device not in range of Asterisk, or turned off etc etc
++2 = Connected and Not on a call. i.e. Free
++3 = Connected and on a call. i.e. Busy
++
++
++SMS Sending / Receiving
++
++If Asterisk has detected your cell phone is capable of SMS via bluetooth, you will be able to send and
++receive SMS.
++
++Incoming SMS's cause Asterisk to create an inbound call to the context you defined in mobile.conf or the default
++context if you did not define one. The call will start at extension 'sms'. Two channel variables will be available,
++SMSSRC = the number of the originator of the SMS and SMSTXT which is the text of the SMS.
++This is not a voice call, so grab the values of the variables and hang the call up.
++
++So, to handle incoming SMS's, do something like the following in your dialplan
++
++[incoming-mobile]
++exten => sms,1,Verbose(Incoming SMS from ${SMSSRC} ${SMSTXT})
++exten => sms,n,Hangup()
++
++The above will just print the message on the console.
++
++If you use res_jabber, you could do something like this :-
++
++[incoming-mobile]
++exten => sms,1,JabberSend(transport,user@jabber.somewhere.com,SMS from ${SMSRC} ${SMSTXT})
++exten => sms,2,Hangup()
++
++To send an SMS, use the application MobileSendSMS like the following :-
++
++exten => 99,1,MobileSendSMS(dave,0427123456,Hello World)
++
++This will send 'Hello World' via device 'dave' to '0427123456'
++
++
++DTMF Debouncing :-
++
++DTMF detection varies from phone to phone. There is a configuration variable that allows you to tune
++this to your needs. e.g. in mobile.conf
++
++[dave]
++address=00:12:56:90:6E:00
++port=4
++context=incoming-mobile
++dtmfskip=50
++
++change dtmfskip to suit your phone. The default is 200. The larger the number, the more chance of missed DTMF.
++The smaller the number the more chance of multiple digits being detected.
++
++
++Debugging :-
++
++Different phone manufacturers have different interpretations of the Bluetooth Handsfree Profile Spec.
++This means that not all phones work the same way, particularly in the connection setup / initialisation
++sequence. I've tried to make chan_cellphone as general as possible, but it may need modification to
++support some phone i've never tested.
++
++The RIM Blackberry 7250 works extremely well. So does the LG TU500.
++
++Some phones, most notably Sony Ericsson 'T' series, dont quite conform to the Bluetooth HFP spec.
++chan_mobile will detect these and adapt accordingly. The T-610 and T-630 have been tested and
++work fine.
++
++If your phone doesnt behave has expected, turn on Asterisk debugging with 'core set debug 1'.
++
++This will log a bunch of debug messages indicating what the phone is doing, importantly the rfcomm
++conversation between Asterisk and the phone. This can be used to sort out what your phone is doing
++and make chan_mobile support it.
++
++Be aware also, that just about all cell phones behave differently. For example my LG TU500 wont dial unless
++the phone is a the 'idle' screen. i.e. if the phone is showing a 'menu' on the display, when you dial via
++Asterisk, the call will not work. chan_mobile handles this, but there may be other phones that do
++other things too...
++
++Important: Watch what your cell phone is doing the first few times. Asterisk wont make random calls but
++if chan_mobile fails to hangup for some reason and you get a huge bill from your telco, dont blame me.
++
++
++Feedback, Support, Please can you make Cell Phone X work... etc :-
++
++email me at   david.bowerman at gmail.com   or dseeb_ on #asterisk & #asterisk-dev irc.
+diff -Nru asterisk-addons-1.4.2/Makefile asterisk-addons-svn/Makefile
+--- asterisk-addons-1.4.2/Makefile	2007-06-06 00:05:09.000000000 +0200
++++ asterisk-addons-svn/Makefile	2007-07-28 15:12:17.000000000 +0200
+@@ -49,7 +49,7 @@
+ endif
+ MODULES_DIR=$(ASTLIBDIR)/modules
+ 
+-MODS:=app_addon_sql_mysql app_saycountpl cdr_addon_mysql chan_ooh323 format_mp3 res_config_mysql
++MODS:=app_addon_sql_mysql app_saycountpl cdr_addon_mysql chan_ooh323 format_mp3 res_config_mysql chan_mobile
+ 
+ SELECTED_MODS:=$(patsubst %,%.so,$(filter-out $(MENUSELECT_ADDONS),$(MODS)))
+ 
+@@ -143,6 +143,9 @@
+ app_addon_sql_mysql.so: app_addon_sql_mysql.o
+ 	$(CC) $(SOLINK) -o $@ $< $(MYSQLCLIENT_LIB)
+ 
++chan_mobile.so: chan_mobile.o
++	$(CC) $(SOLINK) -o $@ $< $(BLUETOOTH_LIB)
++
+ chan_ooh323.so:
+ 	@if [ ! -f asterisk-ooh323c/Makefile ] ; then \
+ 		cd asterisk-ooh323c && ./configure ; \
+@@ -186,6 +189,8 @@
+ menuselect.makeopts menuselect.makedeps: menuselect/menuselect menuselect-tree
+ 	@menuselect/menuselect --check-deps $(GLOBAL_MAKEOPTS) $(USER_MAKEOPTS) menuselect.makeopts
+ 
++menuconfig: menuselect
++
+ menuselect: menuselect/menuselect menuselect-tree
+ 	-@menuselect/menuselect $(GLOBAL_MAKEOPTS) $(USER_MAKEOPTS) menuselect.makeopts && echo "menuselect changes saved!" || echo "menuselect changes NOT saved!"
+ 
+diff -Nru asterisk-addons-1.4.2/makeopts.in asterisk-addons-svn/makeopts.in
+--- asterisk-addons-1.4.2/makeopts.in	2007-05-14 18:22:44.000000000 +0200
++++ asterisk-addons-svn/makeopts.in	2007-06-04 19:11:00.000000000 +0200
+@@ -33,6 +33,9 @@
+ sharedstatedir = @sharedstatedir@
+ sysconfdir = @sysconfdir@
+ 
++BLUETOOTH_LIB=@BLUETOOTH_LIB@
++BLUETOOTH_INCLUDE=@BLUETOOTH_INCLUDE@
++
+ CURSES_LIB=@CURSES_LIB@
+ CURSES_INCLUDE=@CURSES_INCLUDE@
+ 
+diff -Nru asterisk-addons-1.4.2/menuselect-tree asterisk-addons-svn/menuselect-tree
+--- asterisk-addons-1.4.2/menuselect-tree	2007-05-14 18:22:44.000000000 +0200
++++ asterisk-addons-svn/menuselect-tree	2007-06-04 19:11:00.000000000 +0200
+@@ -13,6 +13,10 @@
+ 			<depend>mysqlclient</depend>
+ 			<depend>asterisk</depend>
+ 		</member>
++		<member name="chan_mobile" remove_on_change="chan_mobile.so chan_mobile.o" displayname="Bluetooth Mobile Device channel driver">
++			<depend>bluetooth</depend>
++			<depend>asterisk</depend>
++		</member>
+ 		<member name="chan_ooh323" displayname="Objective Systems H.323 Channel Driver">
+ 			<depend>asterisk</depend>
+ 		</member>
+--- asterisk-addons-1.4.2/chan_mobile.c	1970-01-01 01:00:00.000000000 +0100
++++ asterisk-addons-svn/chan_mobile.c	2007-07-29 13:30:43.000000000 +0200
+@@ -0,0 +1,1867 @@
++/*
++ * Asterisk -- An open source telephony toolkit.
++ *
++ * Copyright (C) 1999 - 2006, Digium, Inc.
++ *
++ * Mark Spencer <markster@digium.com>
++ *
++ * See http://www.asterisk.org for more information about
++ * the Asterisk project. Please do not directly contact
++ * any of the maintainers of this project for assistance;
++ * the project provides a web site, mailing lists and IRC
++ * channels for your use.
++ *
++ * This program is free software, distributed under the terms of
++ * the GNU General Public License Version 2. See the LICENSE file
++ * at the top of the source tree.
++ */
++
++/*! \file
++ *
++ * \brief Bluetooth Mobile Device channel driver
++ * 
++ * \author Dave Bowerman <david.bowerman@gmail.com>
++ *
++ * \ingroup channel_drivers
++ */
++
++/*** MODULEINFO
++	<depend>bluetooth</depend>
++ ***/
++
++#include <asterisk.h>
++
++ASTERISK_FILE_VERSION(__FILE__, "$Revision: 416 $")
++
++#include <stdio.h>
++#include <string.h>
++#include <sys/socket.h>
++#include <sys/time.h>
++#include <errno.h>
++#include <unistd.h>
++#include <stdlib.h>
++#include <arpa/inet.h>
++#include <fcntl.h>
++#include <sys/ioctl.h>
++#include <signal.h>
++
++#include <bluetooth/bluetooth.h>
++#include <bluetooth/hci.h>
++#include <bluetooth/hci_lib.h>
++#include <bluetooth/sdp.h>
++#include <bluetooth/sdp_lib.h>
++#include <bluetooth/rfcomm.h>
++#include <bluetooth/sco.h>
++
++#include <asterisk/lock.h>
++#include <asterisk/channel.h>
++#include <asterisk/config.h>
++#include <asterisk/logger.h>
++#include <asterisk/module.h>
++#include <asterisk/pbx.h>
++#include <asterisk/options.h>
++#include <asterisk/utils.h>
++#include <asterisk/linkedlists.h>
++#include <asterisk/cli.h>
++#include <asterisk/devicestate.h>
++#include <asterisk/causes.h>
++#include <asterisk/dsp.h>
++
++#ifndef ast_debug
++#define ast_debug(level, ...) do {       \
++        if (option_debug >= (level)) {       \
++                ast_log(LOG_DEBUG, __VA_ARGS__); \
++        }                                    \
++} while (0)
++#endif
++
++#define AST_MODULE "chan_mobile"
++
++#define MBL_CONFIG "mobile.conf"
++
++static int prefformat = AST_FORMAT_SLINEAR;
++
++static int discovery_interval = 60;	/* The device discovery interval, default 60 seconds. */
++static int sco_socket;			/* This is global so it can be closed on module unload outside of the listener thread */
++static sdp_session_t *sdp_session;
++
++enum mbl_type {
++	MBL_TYPE_PHONE,
++	MBL_TYPE_HEADSET
++};
++
++enum mbl_state {
++	MBL_STATE_INIT = 0,
++	MBL_STATE_INIT1,
++	MBL_STATE_INIT2,
++	MBL_STATE_INIT3,
++	MBL_STATE_INIT4,
++	MBL_STATE_INIT5,
++	MBL_STATE_INIT6,
++	MBL_STATE_PREIDLE,
++	MBL_STATE_IDLE,
++	MBL_STATE_DIAL,
++	MBL_STATE_DIAL1,
++	MBL_STATE_OUTGOING,
++	MBL_STATE_RING,
++	MBL_STATE_RING2,
++	MBL_STATE_RING3,
++	MBL_STATE_INCOMING,
++	MBL_STATE_HANGUP,
++	MBL_STATE_INSMS,
++	MBL_STATE_OUTSMS,
++	MBL_STATE_OUTSMS1,
++	MBL_STATE_OUTSMS2
++};
++
++struct mbl_pvt {
++	struct ast_channel *owner;		/* Channel we belong to, possibly NULL */
++	struct ast_frame fr;			/* "null" frame */
++	enum mbl_type type;			/* Phone or Headset */
++	char id[31];				/* The id from mobile.conf */
++	char bdaddr[18];			/* the bdaddr of the device */
++	char context[AST_MAX_CONTEXT];		/* the context for incoming calls */
++	char connected;				/* is it connected? */
++	int rfcomm_port;			/* rfcomm port number */
++	int rfcomm_socket;			/* rfcomm socket descriptor */
++	char rfcomm_buf[256];
++	int sco_socket;				/* sco socket descriptor */
++	enum mbl_state state;			/* monitor thread current state */
++	pthread_t monitor_thread;		/* monitor thread handle */
++	char sco_in_buf[48 + AST_FRIENDLY_OFFSET];
++	char sco_out_buf[352];
++	char *sco_out_ptr;
++	int sco_out_len;
++	char dial_number[AST_MAX_EXTENSION];	/* number for the monitor thread to dial */
++	int dial_timeout;
++	char ciev_call_0[4];			/* dynamically build reponse strings */
++	char ciev_call_1[4];
++	char ciev_callsetup_0[4];
++	char ciev_callsetup_1[4];
++	char ciev_callsetup_2[4];
++	char ciev_callsetup_3[4];
++	char no_callsetup;
++	char has_sms;
++	char sms_txt[161];
++	struct ast_dsp *dsp;
++	struct ast_frame *dsp_fr;
++	int dtmf_skip;
++	int skip_frames;
++	char sent_answer;
++	char hangup_count;
++	AST_LIST_ENTRY(mbl_pvt) entry;
++};
++
++static AST_LIST_HEAD_STATIC(devices, mbl_pvt);
++
++/* The discovery thread */
++static pthread_t discovery_thread = AST_PTHREADT_NULL;
++/* The sco listener thread */
++static pthread_t sco_listener_thread = AST_PTHREADT_NULL;
++
++/* CLI stuff */
++static const char show_usage[] =
++"Usage: mobile show devices\n" 
++"       Shows the state of Bluetooth Cell / Mobile devices.\n";
++
++static const char search_usage[] =
++"Usage: mobile search\n" 
++"       Searches for Bluetooth Cell / Mobile devices in range.\n";
++
++static const char rfcomm_usage[] =
++"Usage: mobile rfcomm command\n" 
++"       Send command to the rfcomm port.\n";
++
++static int do_show_devices(int, int, char **);
++static int do_search_devices(int, int, char **);
++static int do_send_rfcomm(int, int, char **);
++
++static struct ast_cli_entry mbl_cli[] = {
++	{{"mobile", "show", "devices", NULL}, do_show_devices, "Show Bluetooth Cell / Mobile devices", show_usage},
++	{{"mobile", "search", NULL}, do_search_devices, "Search for Bluetooth Cell / Mobile devices", search_usage},
++	{{"mobile", "rfcomm", NULL}, do_send_rfcomm, "Send commands to the rfcomm port for debugging", rfcomm_usage}
++};
++
++/* App stuff */
++static char *app_mblstatus = "MobileStatus";
++static char *mblstatus_synopsis = "MobileStatus(Device,Variable)";
++static char *mblstatus_desc =
++"MobileStatus(Device,Variable)\n"
++"  Device - Id of mobile device from mobile.conf\n"
++"  Variable - Variable to store status in will be 1-3.\n" 
++"             In order, Disconnected, Connected & Free, Connected & Busy.\n";
++
++static char *app_mblsendsms = "MobileSendSMS";
++static char *mblsendsms_synopsis = "MobileSendSMS(Device,Dest,Message)";
++static char *mblsendsms_desc =
++"MobileSendSms(Device,Dest,Message)\n"
++"  Device - Id of device from mobile.conf\n"
++"  Dest - destination\n"
++"  Message - text of the message\n";
++
++static struct ast_channel *mbl_request(const char *type, int format, void *data, int *cause);
++static int mbl_call(struct ast_channel *ast, char *dest, int timeout);
++static int mbl_hangup(struct ast_channel *ast);
++static int mbl_answer(struct ast_channel *ast);
++static int mbl_digit_begin(struct ast_channel *ast, char digit);
++static int mbl_digit_end(struct ast_channel *ast, char digit, unsigned int duration);
++static struct ast_frame *mbl_read(struct ast_channel *ast);
++static int mbl_write(struct ast_channel *ast, struct ast_frame *frame);
++static int mbl_fixup(struct ast_channel *oldchan, struct ast_channel *newchan);
++static int mbl_devicestate(void *data);
++static struct ast_channel *mbl_new(int state, struct mbl_pvt *pvt, char *cid_num);
++
++static int rfcomm_write(struct mbl_pvt *pvt, char *buf);
++static int rfcomm_read(struct mbl_pvt *pvt, char *buf, char flush, int timeout);
++static int sco_connect(char *bdaddr);
++static int sdp_search(char *addr, int profile);
++
++static const struct ast_channel_tech mbl_tech = {
++	.type = "Mobile",
++	.description = "Bluetooth Mobile Device Channel Driver",
++	.capabilities = AST_FORMAT_SLINEAR,
++	.requester = mbl_request,
++	.call = mbl_call,
++	.hangup = mbl_hangup,
++	.answer = mbl_answer,
++	.send_digit_begin = mbl_digit_begin,
++	.send_digit_end = mbl_digit_end,
++	.read = mbl_read,
++	.write = mbl_write,
++	.fixup = mbl_fixup,
++	.devicestate = mbl_devicestate
++};
++
++static int do_show_devices(int fd, int argc, char **argv)
++{
++
++	struct mbl_pvt *pvt;
++
++	#define FORMAT "%-15.15s %-17.17s %-9.9s %-5.5s %-3.3s\n"
++
++	ast_cli(fd, FORMAT, "ID", "Address", "Connected", "State", "SMS");
++	AST_LIST_TRAVERSE(&devices, pvt, entry) {
++		ast_cli(fd, FORMAT, pvt->id, pvt->bdaddr, pvt->connected?"Yes":"No", (pvt->state == MBL_STATE_IDLE)?"Free":(pvt->state < MBL_STATE_IDLE)?"Init":"Busy", (pvt->has_sms)?"Yes":"No");
++	}	
++
++	return RESULT_SUCCESS;
++
++}
++
++static int do_search_devices(int fd, int argc, char **argv)
++{
++
++	int hci_socket;
++	inquiry_info *ii = NULL;
++	int max_rsp, num_rsp;
++	int dev_id, len, flags;
++	int i, phport, hsport;
++	char addr[19] = {0};
++	char name[31] = {0};
++
++	#define FORMAT2 "%-17.17s %-30.30s %-6.6s %-7.7s %-4.4s\n"
++	#define FORMAT3 "%-17.17s %-30.30s %-6.6s %-7.7s %d\n"
++
++	dev_id = hci_get_route(NULL);
++	hci_socket = hci_open_dev(dev_id);
++	len  = 8;
++	max_rsp = 255;
++	flags = IREQ_CACHE_FLUSH;
++
++	ii = (inquiry_info*)malloc(max_rsp * sizeof(inquiry_info));
++	num_rsp = hci_inquiry(dev_id, len, max_rsp, NULL, &ii, flags);
++	if (num_rsp > 0) {
++		ast_cli(fd, FORMAT2, "Address", "Name", "Usable", "Type", "Port");
++		for (i = 0; i < num_rsp; i++) {
++			ba2str(&(ii+i)->bdaddr, addr);
++			name[0] = 0x00;
++			if (hci_read_remote_name(hci_socket, &(ii+i)->bdaddr, sizeof(name)-1, name, 0) < 0)
++				strcpy(name, "[unknown]");
++			phport = sdp_search(addr, HANDSFREE_AGW_PROFILE_ID);
++			if (!phport)
++				hsport = sdp_search(addr, HEADSET_PROFILE_ID);
++			else
++				hsport = 0;
++			ast_cli(fd, FORMAT3, addr, name, (phport > 0 || hsport > 0)?"Yes":"No", (phport > 0)?"Phone":"Headset", (phport > 0)?phport:hsport);
++		}
++	} else
++		ast_cli(fd, "No Bluetooth Cell / Mobile devices found.\n");
++
++	free(ii);
++
++	hci_close_dev(hci_socket);
++
++	return RESULT_SUCCESS;
++
++}
++
++static int do_send_rfcomm(int fd, int argc, char **argv)
++{
++
++	struct mbl_pvt *pvt;
++	char buf[128];
++
++	AST_LIST_TRAVERSE(&devices, pvt, entry) {
++		if (!strcmp(pvt->id, argv[2]))
++			break;
++	}
++
++	if (!pvt || !pvt->connected) {
++		sprintf(buf, "Device %s not found.\n", argv[2]);
++		ast_cli(fd, buf);
++		return RESULT_SUCCESS;
++	}
++
++	sprintf(buf, "%s\r", argv[3]);
++	rfcomm_write(pvt, buf);
++
++	return RESULT_SUCCESS;
++
++}
++
++static int mbl_status_exec(struct ast_channel *ast, void *data)
++{
++
++	struct mbl_pvt *pvt;
++	char *args = NULL, *device = NULL, *variable = NULL;
++	int stat;
++	char status[2];
++
++	if (!data)
++		return -1;
++
++	args = ast_strdupa((char *)data);
++	device = strsep(&args, "|");
++	if (device && (device[0] != 0x00)) {
++		variable = args;
++	} else
++		return -1;
++
++	stat = 1;
++
++	AST_LIST_TRAVERSE(&devices, pvt, entry) {
++		if (!strcmp(pvt->id, device))
++			break;
++	}
++
++	if (pvt) {
++		if (pvt->connected)
++			stat = 2;
++		if (pvt->owner)
++			stat = 3;
++	}
++
++	sprintf(status, "%d", stat);
++	pbx_builtin_setvar_helper(ast, variable, status);
++
++	return 0;
++
++}
++
++static int mbl_sendsms_exec(struct ast_channel *ast, void *data)
++{
++
++	struct mbl_pvt *pvt;
++	char *args = NULL, *device = NULL, *dest = NULL, *message = NULL;
++
++	if (!data)
++		return -1;
++
++	args = ast_strdupa((char *)data);
++	device = strsep(&args, "|");
++	if (device && (device[0] != 0x00)) {
++		dest = strsep(&args, "|");
++		if (dest && (dest[0] != 0x00)) {
++			message = args;
++			if (!message || (message[0] == 0x00)) {
++				ast_log(LOG_ERROR,"NULL Message to be sent-- SMS will not be sent.\n");
++				return -1;
++			}
++		} else {
++			ast_log(LOG_ERROR,"NULL destination for message -- SMS will not be sent.\n");
++			return -1;
++		}
++		
++	} else {
++		ast_log(LOG_ERROR,"NULL device for message -- SMS will not be sent.\n");
++		return -1;
++	}
++	
++
++	AST_LIST_TRAVERSE(&devices, pvt, entry) {
++		if (!strcmp(pvt->id, device))
++			break;
++	}
++
++	if (!pvt) {
++		ast_log(LOG_ERROR,"Bluetooth device %s wasn't found in the list -- SMS will not be sent.\n",device);
++		return -1;
++	}
++	
++	if (!pvt->connected) {
++		ast_log(LOG_ERROR,"bluetooth device %s wasn't connected -- SMS will not be sent.\n",device);
++		return -1;
++	}
++	
++	if (!pvt->has_sms) {
++		ast_log(LOG_ERROR,"bluetooth device %s doesn't handle SMS -- SMS will not be sent.\n",device);
++		return -1;
++	}
++	
++	if (pvt->state != MBL_STATE_IDLE) {
++		ast_log(LOG_ERROR,"bluetooth device %s isn't IDLE -- SMS will not be sent.\n",device);
++		return -1;
++	}
++	
++	strcpy(pvt->dial_number, dest);
++	memset(pvt->sms_txt, 0x0, sizeof(pvt->sms_txt));
++	strncpy(pvt->sms_txt, message, 160);
++	pvt->state = MBL_STATE_OUTSMS;
++
++	return 0;
++
++}
++
++static struct ast_channel *mbl_request(const char *type, int format, void *data, int *cause)
++{
++
++	struct ast_channel *chn = NULL;
++	struct mbl_pvt *pvt;
++	char *dest_dev = NULL;
++	char *dest_num = NULL;
++	int oldformat;
++
++	if (!data) {
++		ast_log(LOG_WARNING, "Channel requested with no data\n");
++		*cause = AST_CAUSE_INCOMPATIBLE_DESTINATION;
++		return NULL;
++	}
++
++	oldformat = format;
++	format &= (AST_FORMAT_SLINEAR);
++	if (!format) {
++		ast_log(LOG_WARNING, "Asked to get a channel of unsupported format '%d'\n", oldformat);
++		*cause = AST_CAUSE_FACILITY_NOT_IMPLEMENTED;
++		return NULL;
++	}
++
++	dest_dev = ast_strdupa((char *)data);
++
++	dest_num = strchr(dest_dev, '/');
++	if (dest_num)
++		*dest_num++ = 0x00;
++
++	/* Find requested device and make sure its connected. */
++	AST_LIST_TRAVERSE(&devices, pvt, entry) {
++		if (!strcmp(pvt->id, dest_dev)) {
++			break;
++		}
++	}
++	if (!pvt || !pvt->connected || pvt->owner) {
++		ast_log(LOG_WARNING, "Request to call on device %s which is not connected / already in use.\n", dest_dev);
++		*cause = AST_CAUSE_REQUESTED_CHAN_UNAVAIL;
++		return NULL;
++	}
++
++	if ((pvt->type == MBL_TYPE_PHONE) && !dest_num) {
++		ast_log(LOG_WARNING, "Cant determine destination number.\n");
++		*cause = AST_CAUSE_INCOMPATIBLE_DESTINATION;
++		return NULL;
++	}
++
++	pvt->sco_out_ptr = pvt->sco_out_buf;
++	pvt->sco_out_len = 0;
++
++	chn = mbl_new(AST_STATE_DOWN, pvt, NULL);
++	if (!chn) {
++		ast_log(LOG_WARNING, "Unable to allocate channel structure\n");
++		*cause = AST_CAUSE_REQUESTED_CHAN_UNAVAIL;
++		return NULL;
++	}
++
++	return chn;
++
++}
++
++static int mbl_call(struct ast_channel *ast, char *dest, int timeout)
++{
++
++	struct mbl_pvt *pvt;
++	char *dest_dev = NULL;
++	char *dest_num = NULL;
++
++	dest_dev = ast_strdupa((char *)dest);
++
++	pvt = ast->tech_pvt;
++
++	if (pvt->type == MBL_TYPE_PHONE) {
++		dest_num = strchr(dest_dev, '/');
++		if (!dest_num) {
++			ast_log(LOG_WARNING, "Cant determine destination number.\n");
++			return -1;
++		}
++		*dest_num++ = 0x00;
++	}
++
++	if ((ast->_state != AST_STATE_DOWN) && (ast->_state != AST_STATE_RESERVED)) {
++		ast_log(LOG_WARNING, "mbl_call called on %s, neither down nor reserved\n", ast->name);
++		return -1;
++	}
++
++	ast_debug(1, "Calling %s on %s\n", dest, ast->name);
++
++	if (pvt->type == MBL_TYPE_PHONE) {
++		ast_copy_string(pvt->dial_number, dest_num, sizeof(pvt->dial_number));
++		pvt->state = MBL_STATE_DIAL;
++		pvt->dial_timeout = (timeout == 0) ? 30 : timeout;
++	} else {
++		pvt->state = MBL_STATE_RING;
++	}
++
++
++	return 0;
++
++}
++
++static int mbl_hangup(struct ast_channel *ast)
++{
++
++	struct mbl_pvt *pvt;
++
++	if (!ast->tech_pvt) {
++		ast_log(LOG_WARNING, "Asked to hangup channel not connected\n");
++		return 0;
++	}
++	pvt = ast->tech_pvt;
++
++	ast_debug(1, "Hanging up device %s.\n", pvt->id);
++
++	ast_channel_lock(ast);
++	ast->fds[0] = -1;
++	ast_channel_unlock(ast);
++
++	if (pvt->type == MBL_TYPE_HEADSET && pvt->sco_socket != -1) {
++		close(pvt->sco_socket);
++		pvt->sco_socket = -1;
++	}
++
++	if ((pvt->state == MBL_STATE_INCOMING || pvt->state == MBL_STATE_OUTGOING || pvt->state == MBL_STATE_DIAL1 || pvt->state == MBL_STATE_RING3) && pvt->type == MBL_TYPE_PHONE) {
++		rfcomm_write(pvt, "AT+CHUP\r");
++		pvt->state = MBL_STATE_HANGUP;
++		pvt->hangup_count = 0;
++	} else
++		pvt->state = MBL_STATE_IDLE;
++
++	pvt->owner = NULL;
++	ast->tech_pvt = NULL;
++	ast_setstate(ast, AST_STATE_DOWN);
++
++	return 0;
++
++}
++
++static int mbl_answer(struct ast_channel *ast)
++{
++
++	struct mbl_pvt *pvt;
++
++	pvt = ast->tech_pvt;
++
++	rfcomm_write(pvt, "ATA\r");
++
++	ast_setstate(ast, AST_STATE_UP);
++
++	pvt->sent_answer = 1;
++
++	return 0;
++
++}
++
++static int mbl_digit_begin(struct ast_channel *chan, char digit)
++{
++
++	return 0;
++
++}
++
++static int mbl_digit_end(struct ast_channel *ast, char digit, unsigned int duration)
++{
++
++	struct mbl_pvt *pvt;
++	char buf[11];
++	
++	pvt = ast->tech_pvt;
++
++	if (pvt->type == MBL_TYPE_HEADSET)
++		return 0;
++
++	ast_debug(1, "Dialed %c\n", digit);
++
++	switch(digit) {
++	case '0':
++	case '1':
++	case '2':
++	case '3':
++	case '4':
++	case '5':
++	case '6':
++	case '7':
++	case '8':
++	case '9':
++	case '*':
++	case '#':
++		sprintf(buf, "AT+VTS=%c\r", digit);
++		rfcomm_write(pvt, buf);
++		break;
++	default:
++		ast_log(LOG_WARNING, "Unknown digit '%c'\n", digit);
++		return -1;
++	}
++
++	return 0;
++
++}
++
++/*
++
++	The SCO protocol basically delivers audio in 48 byte 'frames' in slin format.
++	Here we just package these into an ast_frame and return them.
++	The SCO connection from the device to Asterisk happens asynchronously, so it is feasible
++	that Asterisk will call mbl_read() before the device has connected. In that case we just return
++	a null frame.
++
++*/
++
++static struct ast_frame *mbl_read(struct ast_channel *ast)
++{
++
++	struct mbl_pvt *pvt = ast->tech_pvt;
++	int r;
++	struct ast_frame *f;
++
++	if (!pvt->owner) {
++		return &ast_null_frame;
++	}
++
++	if (pvt->state == MBL_STATE_HANGUP) {
++		return &ast_null_frame;
++	}
++
++	if (pvt->sco_socket == -1) {
++		return &ast_null_frame;
++	}
++
++	pvt->fr.frametype = AST_FRAME_VOICE;
++	pvt->fr.subclass = AST_FORMAT_SLINEAR;
++	pvt->fr.data = pvt->sco_in_buf + AST_FRIENDLY_OFFSET;
++
++	if ((r = read(pvt->sco_socket, pvt->fr.data, 48)) == 48) {
++		if (pvt->skip_frames == 0) {
++			f = ast_dsp_process(0, pvt->dsp, &pvt->fr);
++			if (f && (f->frametype == AST_FRAME_DTMF_END)) {
++				pvt->fr.frametype = AST_FRAME_DTMF_END;
++				pvt->fr.subclass = f->subclass;
++				pvt->skip_frames = pvt->dtmf_skip;
++			}
++			return &pvt->fr;
++		} else {
++			pvt->skip_frames--;
++		}
++	} else if (r == -1) {
++		ast_debug(1, "mbl_read() read error %d.\n", errno);
++		close(pvt->sco_socket);
++		pvt->sco_socket = -1;
++		ast_channel_lock(ast);
++		ast->fds[0] = -1;
++		ast_channel_unlock(ast);
++	} else {
++		ast_debug(1, "mbl_read() read short frame. (%d)\n", r);
++	}
++
++	return &ast_null_frame;
++
++}
++
++/*
++
++	We need to deliver 48 byte 'frames' of slin format audio to the device.
++	mbl_write() handles this by buffering short frames until the next time we are called.
++
++*/
++
++static int mbl_write(struct ast_channel *ast, struct ast_frame *frame)
++{
++
++	struct mbl_pvt *pvt = ast->tech_pvt;
++	int num_frames, i, r;
++	char *pfr;
++
++	if (frame->frametype != AST_FRAME_VOICE) {
++		return 0;
++	}
++	if (pvt->sco_socket == -1) {
++		return 0;
++	}
++
++	if (pvt->state == MBL_STATE_HANGUP) {
++		return 0;
++	}
++
++	if (frame->datalen > sizeof(pvt->sco_out_buf) - pvt->sco_out_len) {
++		frame->datalen = sizeof(pvt->sco_out_buf) - pvt->sco_out_len;
++		ast_debug(1, "Overrun on sco_out_buf detected.\n");
++	}
++
++	memmove(pvt->sco_out_ptr, frame->data, frame->datalen);
++	pvt->sco_out_len += frame->datalen;
++	num_frames = pvt->sco_out_len / 48;
++
++	pfr = pvt->sco_out_buf;
++	for (i=0; i<num_frames; i++) {
++		if ((r = write(pvt->sco_socket, pfr, 48)) == -1) {
++			close(pvt->sco_socket);
++			pvt->sco_socket = -1;
++		}
++		pfr += 48;
++	}
++
++	pvt->sco_out_len = pvt->sco_out_len - (num_frames * 48);
++	memmove(pvt->sco_out_buf, pfr, pvt->sco_out_len);
++	pvt->sco_out_ptr = pvt->sco_out_buf + pvt->sco_out_len; 
++	
++	return 0;
++
++}
++
++static int mbl_fixup(struct ast_channel *oldchan, struct ast_channel *newchan)
++{
++
++	struct mbl_pvt *pvt = oldchan->tech_pvt;
++
++	if (pvt && pvt->owner == oldchan)
++		pvt->owner = newchan;
++
++	return 0;
++
++}
++
++static int mbl_devicestate(void *data)
++{
++
++	char *device;
++	int res = AST_DEVICE_INVALID;
++	struct mbl_pvt *pvt;
++
++	device = ast_strdupa(S_OR(data, ""));
++
++	ast_debug(1, "Checking device state for device %s\n", device);
++
++	AST_LIST_TRAVERSE(&devices, pvt, entry) {
++		if (!strcmp(pvt->id, device))
++			break;
++	}
++
++	if (pvt) {
++		if (pvt->connected) {
++			if (pvt->owner)
++				res = AST_DEVICE_INUSE;
++			else
++				res = AST_DEVICE_NOT_INUSE;
++		}
++	}
++
++	return res;
++
++}
++
++static struct ast_channel *mbl_new(int state, struct mbl_pvt *pvt, char *cid_num)
++{
++
++	struct ast_channel *chn;
++
++	chn = ast_channel_alloc(1, state, 0, 0, 0, 0, 0, 0, "Mobile/%s-%04lx", pvt->id, ast_random() & 0xffff);
++	if (chn) {
++		chn->tech = &mbl_tech;
++		chn->nativeformats = prefformat;
++		chn->rawreadformat = prefformat;
++		chn->rawwriteformat = prefformat;
++		chn->writeformat = prefformat;
++		chn->readformat = prefformat;
++		chn->readq.first = NULL;
++		pvt->fr.frametype = AST_FRAME_VOICE;
++		pvt->fr.subclass = AST_FORMAT_SLINEAR;
++		pvt->fr.datalen = 48;
++		pvt->fr.samples = 24;
++		pvt->fr.src = "Mobile";
++		pvt->fr.offset = AST_FRIENDLY_OFFSET;
++		pvt->fr.mallocd = 0;
++		pvt->fr.delivery.tv_sec = 0;
++		pvt->fr.delivery.tv_usec = 0;
++		pvt->fr.data = pvt->sco_in_buf + AST_FRIENDLY_OFFSET;
++		chn->tech_pvt = pvt;
++		if (state == AST_STATE_RING)
++			chn->rings = 1;
++		ast_copy_string(chn->context, pvt->context, sizeof(chn->context));
++		ast_copy_string(chn->exten, "s", sizeof(chn->exten));
++		ast_string_field_set(chn, language, "en");
++		if (cid_num)
++			chn->cid.cid_num = ast_strdup(cid_num);
++		chn->cid.cid_name = ast_strdup(pvt->id);
++		pvt->owner = chn;
++
++	}
++
++	return chn;
++
++}
++
++static int rfcomm_connect(char *bdaddr, int remote_channel) {
++
++	bdaddr_t dst;
++	struct sockaddr_rc addr;
++	int s;
++
++	str2ba(bdaddr, &dst);
++
++	if ((s = socket(PF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM)) < 0) {
++		ast_debug(1, "socket() failed (%d).\n", errno);
++		return -1;
++	}
++
++	memset(&addr, 0, sizeof(addr));
++	addr.rc_family = AF_BLUETOOTH;
++	bacpy(&addr.rc_bdaddr, &dst);
++	addr.rc_channel = remote_channel;
++	if (connect(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
++		ast_debug(1, "connect() failed (%d).\n", errno);
++		close(s);
++		return -1;
++	}
++
++	return s;
++
++}
++
++static int rfcomm_write(struct mbl_pvt *pvt, char *buf)
++{
++
++	char *p;
++	ssize_t num_write;
++	int len;
++
++	ast_debug(1, "rfcomm_write() (%s) [%s]\n", pvt->id, buf);
++	len = strlen(buf);
++	p = buf;
++	while (len > 0) {
++		if ((num_write = write(pvt->rfcomm_socket, p, len)) == -1) {
++			ast_debug(1, "rfcomm_write() error [%d]\n", errno);
++			return 0;
++		}
++		len -= num_write;
++		p += num_write;
++	}
++
++	return 1;
++
++}
++
++/*
++
++	Here we need to return complete '\r' terminated single responses to the devices monitor thread, or
++	a timeout if nothing is available.
++	The rfcomm connection to the device is asynchronous, so there is no guarantee that responses will
++	be returned in a single read() call. We handle this by buffering the input and returning one response
++	per call, or a timeout if nothing is available.
++
++*/
++
++static int rfcomm_read(struct mbl_pvt *pvt, char *buf, char flush, int timeout)
++{
++
++	int sel, rlen, slen;
++	fd_set rfds;
++	struct timeval tv;
++	char *p;
++
++	if (!flush) {
++		if ((p = strchr(pvt->rfcomm_buf, '\r'))) {
++			*p++ = 0x00;
++			if (*p == '\n')
++				p++;
++			memmove(buf, pvt->rfcomm_buf, strlen(pvt->rfcomm_buf));
++			*(buf + strlen(pvt->rfcomm_buf)) = 0x00;
++			memmove(pvt->rfcomm_buf, p, strlen(p));
++			*(pvt->rfcomm_buf+strlen(p)) = 0x00;
++			return 1;
++		}
++	} else {
++		pvt->rfcomm_buf[0] = 0x00;
++	}
++
++	FD_ZERO(&rfds);
++	FD_SET(pvt->rfcomm_socket, &rfds);
++
++	tv.tv_sec = timeout;
++	tv.tv_usec = 0;
++
++	if ((sel = select(pvt->rfcomm_socket + 1, &rfds, NULL, NULL, &tv)) > 0) {
++		if (FD_ISSET(pvt->rfcomm_socket, &rfds)) {
++			slen = strlen(pvt->rfcomm_buf);
++			rlen = read(pvt->rfcomm_socket, pvt->rfcomm_buf + slen, sizeof(pvt->rfcomm_buf) - slen - 1);
++			if (rlen > 0) {
++				pvt->rfcomm_buf[slen+rlen] = 0x00;
++				if ((p = strchr(pvt->rfcomm_buf, '\r'))) {
++					*p++ = 0x00;
++					if (*p == '\n')
++						p++;
++					memmove(buf, pvt->rfcomm_buf, strlen(pvt->rfcomm_buf));
++					*(buf + strlen(pvt->rfcomm_buf)) = 0x00;
++					memmove(pvt->rfcomm_buf, p, strlen(p));
++					*(pvt->rfcomm_buf+strlen(p)) = 0x00;
++					return 1;
++				}
++			} else
++				return rlen;
++		}
++	} else if (sel == 0) { /* timeout */
++		return 0;
++	}
++
++	return 1;
++
++}
++
++static int sco_connect(char *bdaddr)
++{
++
++	bdaddr_t dst;
++	struct sockaddr_sco addr;
++	int s;
++
++	str2ba(bdaddr, &dst);
++
++	if ((s = socket(PF_BLUETOOTH, SOCK_SEQPACKET, BTPROTO_SCO)) < 0) {
++		ast_debug(1, "socket() failed (%d).\n", errno);
++		return -1;
++	}
++
++	memset(&addr, 0, sizeof(addr));
++	addr.sco_family = AF_BLUETOOTH;
++	bacpy(&addr.sco_bdaddr, &dst);
++
++	if (connect(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
++		ast_debug(1, "sco connect() failed (%d).\n", errno);
++		close(s);
++		return -1;
++	}
++
++	return s;
++
++}
++
++/*
++
++	sdp_search() performs a service discovery on the given device to determine whether
++	or not it supports the Handsfree Profile.
++
++*/
++
++static int sdp_search(char *addr, int profile)
++{
++
++	sdp_session_t *session = 0;
++	bdaddr_t bdaddr;
++	uuid_t svc_uuid;
++	uint32_t range = 0x0000ffff;
++	sdp_list_t *response_list, *search_list, *attrid_list;
++	int status, port;
++	sdp_list_t *proto_list;
++	sdp_record_t *sdprec;
++
++	str2ba(addr, &bdaddr);
++	port = 0;
++	session = sdp_connect(BDADDR_ANY, &bdaddr, SDP_RETRY_IF_BUSY);
++	if (!session) {
++		ast_debug(1, "sdp_connect() failed on device %s.\n", addr);
++		return 0;
++	}
++
++	sdp_uuid32_create(&svc_uuid, profile);
++	search_list = sdp_list_append(0, &svc_uuid);
++	attrid_list = sdp_list_append(0, &range);
++	response_list = 0x00;
++	status = sdp_service_search_attr_req(session, search_list, SDP_ATTR_REQ_RANGE, attrid_list, &response_list);
++	if (status == 0) {
++		if (response_list) {
++			sdprec = (sdp_record_t *) response_list->data;
++			proto_list = 0x00;
++			if (sdp_get_access_protos(sdprec, &proto_list) == 0) {
++				port = sdp_get_proto_port(proto_list, RFCOMM_UUID);
++				sdp_list_free(proto_list, 0);
++			}
++			sdp_record_free(sdprec);
++			sdp_list_free(response_list, 0);
++		} else
++			ast_debug(1, "No responses returned for device %s.\n", addr);
++	} else
++		ast_debug(1, "sdp_service_search_attr_req() failed on device %s.\n", addr);
++
++
++	sdp_list_free(search_list, 0);
++	sdp_list_free(attrid_list, 0);
++	sdp_close(session);
++
++	return port;
++
++}
++
++/*
++
++	sdp_register()
++
++	Register GENERIC_AUDIO & HEADSET with the SDP daemon on the Asterisk Box.
++	This assists connections to phones/pda's with dud bluetooth stacks like the IMate Jasjam
++	and some Nokia's
++
++*/
++
++static sdp_session_t *sdp_register(void)
++{
++
++	uint32_t service_uuid_int[] = {0, 0, 0, GENERIC_AUDIO_SVCLASS_ID};
++	uint8_t rfcomm_channel = 1;
++	const char *service_name = "Asterisk PABX";
++	const char *service_dsc = "Asterisk PABX";
++	const char *service_prov = "Asterisk";
++
++	uuid_t root_uuid, l2cap_uuid, rfcomm_uuid, svc_uuid, svc_class1_uuid, svc_class2_uuid;
++	sdp_list_t  *l2cap_list = 0, *rfcomm_list = 0, *root_list = 0, *proto_list = 0, *access_proto_list = 0, *svc_uuid_list = 0;
++	sdp_data_t *channel = 0;
++
++	int err = 0;
++	sdp_session_t *session = 0;
++
++	sdp_record_t *record = sdp_record_alloc();
++
++	sdp_uuid128_create(&svc_uuid, &service_uuid_int);
++	sdp_set_service_id(record, svc_uuid);
++
++	sdp_uuid32_create(&svc_class1_uuid, GENERIC_AUDIO_SVCLASS_ID);
++	sdp_uuid32_create(&svc_class2_uuid, HEADSET_PROFILE_ID);
++
++	svc_uuid_list = sdp_list_append(0, &svc_class1_uuid);
++	svc_uuid_list = sdp_list_append(svc_uuid_list, &svc_class2_uuid);
++	sdp_set_service_classes(record, svc_uuid_list);
++
++	sdp_uuid16_create(&root_uuid, PUBLIC_BROWSE_GROUP);
++	root_list = sdp_list_append(0, &root_uuid);
++	sdp_set_browse_groups( record, root_list );
++
++	sdp_uuid16_create(&l2cap_uuid, L2CAP_UUID);
++	l2cap_list = sdp_list_append(0, &l2cap_uuid);
++	proto_list = sdp_list_append(0, l2cap_list);
++
++	sdp_uuid16_create(&rfcomm_uuid, RFCOMM_UUID);
++	channel = sdp_data_alloc(SDP_UINT8, &rfcomm_channel);
++	rfcomm_list = sdp_list_append(0, &rfcomm_uuid);
++	sdp_list_append(rfcomm_list, channel);
++	sdp_list_append(proto_list, rfcomm_list);
++
++	access_proto_list = sdp_list_append(0, proto_list);
++	sdp_set_access_protos(record, access_proto_list);
++
++	sdp_set_info_attr(record, service_name, service_prov, service_dsc);
++
++	if (!(session = sdp_connect(BDADDR_ANY, BDADDR_LOCAL, SDP_RETRY_IF_BUSY)))
++		ast_log(LOG_WARNING, "Failed to connect sdp and create session.\n");
++	else
++		err = sdp_record_register(session, record, 0);
++
++	sdp_data_free(channel);
++	sdp_list_free(rfcomm_list, 0);
++	sdp_list_free(root_list, 0);
++	sdp_list_free(access_proto_list, 0);
++	sdp_list_free(svc_uuid_list, 0);
++
++	return session;
++
++}
++
++/*
++
++	Phone Monitor Thread
++
++	This thread is spun once a phone device is discovered and considered capable of being used, i.e. supports Handsfree Profile,
++	and its configured in mobile.conf.
++	The thread lives for the lifetime of the bluetooth connection, and handles the 'control' side of all calls.
++
++*/
++
++static void *do_monitor_phone(void *data)
++{
++
++	struct mbl_pvt *pvt = (struct mbl_pvt *)data;
++	struct ast_channel *chn;
++	char monitor = 1;
++	char buf[256];
++	char cid_num[AST_MAX_EXTENSION], *pcids, *pcide;
++	int s, t, i, smsi;
++	int group, group2;
++	int callp = 0, callsetupp;
++	char brsf, nsmode, *p, *p1;
++	char sms_src[13];
++	char sms_txt[161];
++
++	brsf = nsmode = 0;
++
++	if (!rfcomm_write(pvt, "AT+BRSF=4\r"))
++		monitor = 0;
++
++	while (monitor) {
++
++		if (pvt->state == MBL_STATE_DIAL1)
++			t = pvt->dial_timeout;
++		else if (pvt->state == MBL_STATE_HANGUP)
++			t = 2;
++		else if (pvt->state == MBL_STATE_OUTSMS1)
++			t = 2;
++		else if (pvt->state == MBL_STATE_OUTSMS2)
++			t = 10;
++		else
++			t = 1;
++
++		s = rfcomm_read(pvt, buf, 0, t);
++
++		if ((s > 0) && (buf[0] != 0x0) && (buf[0] != '\r')) {
++			ast_debug(1, "rfcomm_read() (%s) [%s]\n", pvt->id, buf);
++			switch (pvt->state) {
++			case MBL_STATE_INIT:
++				if (strstr(buf, "+BRSF:")) {
++					brsf = 1;
++				} else if (strstr(buf, "ERROR") && !nsmode) { /* Hmmm, Non-Standard Phone, just continue */
++					rfcomm_write(pvt, "AT+CIND=?\r");
++					pvt->state++;
++					nsmode = 1;
++				} else if (strstr(buf, "OK") && brsf) {
++					rfcomm_write(pvt, "AT+CIND=?\r");
++					pvt->state++;
++				}
++				break;
++			case MBL_STATE_INIT1:
++				if (strstr(buf, "+CIND:")) {
++					group = callp = callsetupp = 0;
++					group2 = 1;
++					for (i=0; i<strlen(buf); i++) {
++						if (buf[i] == '(')
++							group++;
++						if (buf[i] == ')') {
++							group--;
++							if (group == 0)
++								group2++;
++						}
++						if (strstr(buf+i, "\"call\""))
++							callp = group2;	
++						if (strstr(buf+i, "\"call_setup\""))
++							callsetupp = group2;
++						if (strstr(buf+i, "\"callsetup\""))
++							callsetupp = group2;
++					}
++					sprintf(pvt->ciev_call_0, "%d,0", callp);
++					sprintf(pvt->ciev_call_1, "%d,1", callp);
++					sprintf(pvt->ciev_callsetup_0, "%d,0", callsetupp);
++					sprintf(pvt->ciev_callsetup_1, "%d,1", callsetupp);
++					sprintf(pvt->ciev_callsetup_2, "%d,2", callsetupp);
++					sprintf(pvt->ciev_callsetup_3, "%d,3", callsetupp);
++					if (callsetupp == 0) /* This phone has no call setup indication!! ... */
++						pvt->no_callsetup = 1;
++					ast_debug(1, "CIEV_CALL=%d CIEV_CALLSETUP=%d\n", callp, callsetupp);
++				}
++				if (strstr(buf, "OK")) {
++					rfcomm_write(pvt, "AT+CIND?\r");
++					pvt->state++;
++				}
++				break;
++			case MBL_STATE_INIT2:
++				if ((p = strstr(buf, "+CIND:"))) {
++					p += 5;
++					if (*(p+(callp*2)) == '1') {
++						ast_verbose(VERBOSE_PREFIX_3 "Bluetooth Device %s has a call in progress - delaying connection.\n", pvt->id);
++						monitor = 0;
++					}
++				} else if (strstr(buf, "OK")) {
++					rfcomm_write(pvt, "AT+CMER=3,0,0,1\r");
++					pvt->state++;
++				}
++				break;
++			case MBL_STATE_INIT3:
++				if (strstr(buf, "OK")) {
++					rfcomm_write(pvt, "AT+CLIP=1\r");
++					pvt->state++;
++				}
++				break;
++			case MBL_STATE_INIT4:
++				if (strstr(buf, "OK")) {
++					rfcomm_write(pvt, "AT+CMGF=1\r");
++					pvt->state++;
++				}
++				break;
++			case MBL_STATE_INIT5:
++				if (strstr(buf, "ERROR")) { /* No SMS Support ! */
++					pvt->state = MBL_STATE_PREIDLE;
++				} else if (strstr(buf, "OK")) {
++					rfcomm_write(pvt, "AT+CNMI=2,1,0,1,0\r");
++					pvt->state++;
++				}
++				break;
++			case MBL_STATE_INIT6:
++				if (strstr(buf, "OK")) { /* We have SMS Support */
++					pvt->has_sms = 1;
++					pvt->state = MBL_STATE_PREIDLE;
++				} else if (strstr(buf, "ERROR")) {
++					pvt->has_sms = 0;
++					ast_log(LOG_NOTICE,"Device %s has no bluetooth SMS capability.\n", pvt->id);
++					pvt->state = MBL_STATE_PREIDLE;
++				}
++				break;
++			case MBL_STATE_PREIDLE: /* Nothing handled here, wait for timeout, then off we go... */
++				break;
++			case MBL_STATE_IDLE:
++				ast_debug(1, "Device %s %s [%s]\n", pvt->bdaddr, pvt->id, buf);
++				if (strstr(buf, "RING")) {
++					pvt->state = MBL_STATE_RING;
++				} else if (strstr(buf, "+CIEV:")) {
++					if (strstr(buf, pvt->ciev_callsetup_3)) {	/* User has dialed out on handset */
++						monitor = 0;				/* We disconnect now, as he is    */
++					}						/* probably leaving BT range...   */
++				}
++				break;
++			case MBL_STATE_DIAL: /* Nothing handled here, we need to wait for a timeout */
++				break;
++			case MBL_STATE_DIAL1:
++				if (strstr(buf, "OK")) {
++					if (pvt->no_callsetup) {
++						ast_queue_control(pvt->owner, AST_CONTROL_ANSWER);
++					} else {
++						ast_setstate(pvt->owner, AST_STATE_RINGING);
++					}
++					pvt->state = MBL_STATE_OUTGOING;
++				}
++				break;
++			case MBL_STATE_OUTGOING:
++				if (strstr(buf, "+CIEV")) {
++					if (strstr(buf, pvt->ciev_call_0)) { 				/* call was hung up */
++						ast_queue_control(pvt->owner, AST_CONTROL_HANGUP);
++					} else if (strstr(buf, pvt->ciev_callsetup_3)) { 		/* b-party ringing */
++						ast_queue_control(pvt->owner, AST_CONTROL_RINGING);
++					} else if (strstr(buf, pvt->ciev_call_1) && !pvt->no_callsetup) { /* b-party answer */
++						ast_queue_control(pvt->owner, AST_CONTROL_ANSWER);
++					}
++				}
++				break;
++			case MBL_STATE_RING:
++				cid_num[0] = 0x00;
++				if ((pcids = strstr(buf, "+CLIP:"))) {
++					if ((pcids = strchr(pcids, '"'))) {
++						if ((pcide = strchr(pcids+1, '"'))) {
++							strncpy(cid_num, pcids+1, pcide - pcids - 1);
++							cid_num[pcide - pcids - 1] = 0x00;
++						}
++					}
++					pvt->sco_out_ptr = pvt->sco_out_buf;
++					pvt->sco_out_len = 0;
++					pvt->sent_answer = 0;
++					chn = mbl_new(AST_STATE_RING, pvt, cid_num);
++					if (chn) {
++						if (ast_pbx_start(chn)) {
++							ast_log(LOG_ERROR, "Unable to start pbx on incoming call.\n");
++							ast_hangup(chn);
++						} else
++							pvt->state = MBL_STATE_RING3;
++					} else {
++						ast_log(LOG_ERROR, "Unable to allocate channel for incoming call.\n");
++						rfcomm_write(pvt, "AT+CHUP\r");
++						pvt->state = MBL_STATE_IDLE;
++					}
++				}
++				break;
++			case MBL_STATE_RING2:
++				pvt->sco_out_ptr = pvt->sco_out_buf;
++				pvt->sco_out_len = 0;
++				pvt->sent_answer = 0;
++				chn = mbl_new(AST_STATE_RING, pvt, cid_num);
++				if (chn) {
++					if (ast_pbx_start(chn)) {
++						ast_log(LOG_ERROR, "Unable to start pbx on incoming call.\n");
++						ast_hangup(chn);
++					} else
++						pvt->state = MBL_STATE_RING3;
++				} else {
++					ast_log(LOG_ERROR, "Unable to allocate channel for incoming call.\n");
++					rfcomm_write(pvt, "AT+CHUP\r");
++					pvt->state = MBL_STATE_IDLE;
++				}
++				break;
++			case MBL_STATE_RING3:
++				if (strstr(buf, "+CIEV")) {
++					if (strstr(buf, pvt->ciev_call_1)) {
++						if (pvt->sent_answer) {	/* We answered */
++							pvt->state = MBL_STATE_INCOMING;
++						} else {		/* User answered on handset!, disconnect */
++							pvt->state = MBL_STATE_IDLE;
++							ast_log(LOG_NOTICE,"Closing the sco_socket in RING3 with CIEV\n");
++							if (pvt->sco_socket > -1)
++								close(pvt->sco_socket);
++							ast_queue_control(pvt->owner, AST_CONTROL_HANGUP);
++						}
++					}
++					if ((strstr(buf, pvt->ciev_callsetup_0) || strstr(buf, pvt->ciev_call_0))) { /* Caller disconnected */
++						ast_queue_control(pvt->owner, AST_CONTROL_HANGUP);
++					}
++				} 
++				break;
++			case MBL_STATE_INCOMING:
++				if (strstr(buf, "+CIEV")) {
++					if (strstr(buf, pvt->ciev_call_0)) {
++						ast_queue_control(pvt->owner, AST_CONTROL_HANGUP);
++					}
++				}
++				break;
++			case MBL_STATE_HANGUP:
++				if (strstr(buf, "OK") || strstr(buf, pvt->ciev_call_0)) {
++					pvt->state = MBL_STATE_IDLE;
++				}
++				break;
++			case MBL_STATE_INSMS:
++				if (strstr(buf, "+CMGR:")) {
++					memset(sms_src, 0x00, sizeof(sms_src));
++					if ((p = strchr(buf, ','))) {
++						if (*(++p) == '"')
++							p++;
++						if ((p1 = strchr(p, ','))) {
++							if (*(--p1) == '"')
++								p1--;
++							memset(sms_src, 0x00, sizeof(sms_src));
++							strncpy(sms_src, p, p1 - p + 1);
++						}
++					}
++				} else if (strstr(buf, "OK")) {
++					chn = mbl_new(AST_STATE_DOWN, pvt, NULL);
++					strcpy(chn->exten, "sms");
++					pbx_builtin_setvar_helper(chn, "SMSSRC", sms_src);
++					pbx_builtin_setvar_helper(chn, "SMSTXT", sms_txt);
++					if (ast_pbx_start(chn))
++						ast_log(LOG_ERROR, "Unable to start pbx on incoming sms.\n");
++					pvt->state = MBL_STATE_IDLE;
++				} else {
++					memset(sms_txt, 0x00, sizeof(sms_txt));
++					strncpy(sms_txt, buf, strlen(buf));
++				}
++				break;
++			case MBL_STATE_OUTSMS:
++				break;
++			case MBL_STATE_OUTSMS1:
++				break;
++			case MBL_STATE_OUTSMS2:
++				if (strstr(buf, "OK")) {
++					pvt->state = MBL_STATE_IDLE;
++				}
++				break;
++			}
++			/* Unsolicited responses */
++
++ 			if (strstr(buf, "+CMTI:")) {	/* SMS Incoming... */
++				if ((p = strchr(buf, ','))) {
++					p++;
++					smsi = atoi(p);
++					if (smsi > 0) {
++						sprintf(buf, "AT+CMGR=%d\r", smsi);
++						rfcomm_write(pvt, buf);
++						pvt->state = MBL_STATE_INSMS;
++					}
++				}
++			}
++
++		} else if (s == 0) { /* Timeouts */
++			if (pvt->state == MBL_STATE_INIT2) { /* Some devices dont respond to AT+CIND? properly. RIM Blackberry 4 example */
++				pvt->state++;
++				rfcomm_write(pvt, "AT+CMER=3,0,0,1\r");
++ 			} else if (pvt->state == MBL_STATE_INIT3) { /* Some devices dont respond to AT+CMER=3,0,0,1 properly. VK 2020 for example */
++                                 pvt->state++;
++                                 rfcomm_write(pvt, "AT+CLIP=1\r");
++			} else if (pvt->state == MBL_STATE_PREIDLE) {
++				pvt->connected = 1;
++				ast_verbose(VERBOSE_PREFIX_3 "Bluetooth Device %s initialised and ready.\n", pvt->id);
++				pvt->state = MBL_STATE_IDLE;
++			} else if (pvt->state == MBL_STATE_DIAL) {
++				sprintf(buf, "ATD%s;\r", pvt->dial_number);
++				if (!rfcomm_write(pvt, buf)) {
++					ast_log(LOG_ERROR, "Dial failed on %s state %d\n", pvt->owner->name, pvt->state);
++					ast_queue_control(pvt->owner, AST_CONTROL_CONGESTION);
++					pvt->state = MBL_STATE_IDLE;
++				} else {
++					pvt->state = MBL_STATE_DIAL1;
++				}
++			} else if (pvt->state == MBL_STATE_DIAL1) {
++				ast_log(LOG_ERROR, "Dial failed on %s state %d\n", pvt->owner->name, pvt->state);
++				ast_queue_control(pvt->owner, AST_CONTROL_CONGESTION);
++				ast_queue_control(pvt->owner, AST_CONTROL_HANGUP);
++				pvt->state = MBL_STATE_IDLE;
++			} else if (pvt->state == MBL_STATE_RING) { /* No CLIP?, bump it */
++				pvt->state = MBL_STATE_RING2;
++			} else if (pvt->state == MBL_STATE_HANGUP) {
++				if (pvt->hangup_count == 6) {
++					ast_debug(1, "Device %s failed to hangup after 6 tries, disconnecting.\n", pvt->id);
++					monitor = 0;
++				}
++				rfcomm_write(pvt, "AT+CHUP\r");
++				pvt->hangup_count++;
++			} else if (pvt->state == MBL_STATE_OUTSMS) {
++				sprintf(buf, "AT+CMGS=\"%s\"\r", pvt->dial_number);
++				rfcomm_write(pvt, buf);
++				pvt->state = MBL_STATE_OUTSMS1;
++			} else if (pvt->state == MBL_STATE_OUTSMS1) {
++				if (pvt->rfcomm_buf[0] == '>') {
++					sprintf(buf, "%s%c", pvt->sms_txt, 0x1a);
++					rfcomm_write(pvt, buf);
++					pvt->state = MBL_STATE_OUTSMS2;
++				} else {
++					ast_log(LOG_ERROR, "Failed to send SMS to %s on device %s\n", pvt->dial_number, pvt->id);
++					pvt->state = MBL_STATE_IDLE;
++				}
++			} else if (pvt->state == MBL_STATE_OUTSMS2) {
++				ast_log(LOG_ERROR, "Failed to send SMS to %s on device %s\n", pvt->dial_number, pvt->id);
++				pvt->state = MBL_STATE_IDLE;
++			}
++		} else if (s == -1) {
++			if (option_verbose > 2)
++				ast_verbose(VERBOSE_PREFIX_3  "Bluetooth Device %s has disconnected, reason (%d).\n", pvt->id, errno); 
++			monitor = 0;
++		}
++
++	}
++
++	close(pvt->rfcomm_socket);
++	close(pvt->sco_socket);
++	pvt->sco_socket = -1;
++	pvt->connected = 0;
++	pvt->monitor_thread = AST_PTHREADT_NULL;
++
++	return NULL;
++
++}
++
++/*
++
++	Headset Monitor Thread
++
++	This thread is spun once a headset device is discovered and considered capable of being used, i.e. supports Headset Profile,
++	and its configured in mobile.conf.
++	The thread lives for the lifetime of the bluetooth connection, and handles the 'control' side of all calls.
++
++*/
++
++static void *do_monitor_headset(void *data)
++{
++
++	struct mbl_pvt *pvt = (struct mbl_pvt *)data;
++	char monitor = 1;
++	char buf[256];
++	int s, t;
++
++	pvt->state = MBL_STATE_PREIDLE;
++
++	while (monitor) {
++
++		if (pvt->state == MBL_STATE_RING2)
++			t = 2;
++		else
++			t = 1;
++		s = rfcomm_read(pvt, buf, 0, t);
++
++		if ((s > 0) && (buf[0] != 0x0) && (buf[0] != '\r')) {
++			ast_debug(1, "rfcomm_read() (%s) [%s]\n", pvt->id, buf);
++			switch (pvt->state) {
++			case MBL_STATE_RING2:
++				if (strstr(buf, "AT+CKPD=")) {
++					ast_channel_lock(pvt->owner);
++					pvt->owner->fds[0] = pvt->sco_socket;
++					ast_log(LOG_NOTICE,"pvt-sco_socket used for fds in headphone code\n");
++					ast_channel_unlock(pvt->owner);
++					ast_queue_control(pvt->owner, AST_CONTROL_ANSWER);
++					pvt->state = MBL_STATE_INCOMING;
++					rfcomm_write(pvt, "\r\n+VGS=13\r\n");
++					rfcomm_write(pvt, "\r\n+VGM=13\r\n");
++				}
++				break;
++			case MBL_STATE_INCOMING:
++				if (strstr(buf, "AT+CKPD=")) {
++					ast_queue_control(pvt->owner, AST_CONTROL_HANGUP);
++				}
++				break;
++			default:
++				break;
++			}
++			if (strstr(buf, "AT+VGS=")) {
++				rfcomm_write(pvt, "\r\nOK\r\n");
++			} else if (strstr(buf, "AT+VGM=")) {
++				rfcomm_write(pvt, "\r\nOK\r\n");
++			}
++		} else if (s == 0) {	/* Timeouts */
++			if (pvt->state == MBL_STATE_PREIDLE) {
++				pvt->connected = 1;
++				ast_verbose(VERBOSE_PREFIX_3 "Bluetooth Device %s initialised and ready.\n", pvt->id);
++				pvt->state = MBL_STATE_IDLE;
++			} else if (pvt->state == MBL_STATE_RING) {
++				pvt->sco_socket = sco_connect(pvt->bdaddr);
++				if (pvt->sco_socket > -1) {
++					ast_log(LOG_NOTICE,"sco_connect returned -1 in state RING\n");
++					ast_setstate(pvt->owner, AST_STATE_RINGING);
++					ast_queue_control(pvt->owner, AST_CONTROL_RINGING);
++					pvt->state = MBL_STATE_RING2;
++				} else {
++					ast_queue_control(pvt->owner, AST_CONTROL_HANGUP);
++				}
++			} else if (pvt->state == MBL_STATE_RING2) {
++				rfcomm_write(pvt, "\r\nRING\r\n");
++			}
++		} else if (s == -1) {
++			if (option_verbose > 2)
++				ast_verbose(VERBOSE_PREFIX_3  "Bluetooth Device %s has disconnected, reason (%d).\n", pvt->id, errno); 
++			monitor = 0;
++		}
++
++	}
++
++	return NULL;
++
++}
++
++static int start_monitor(struct mbl_pvt *pvt)
++{
++
++	if (pvt->type == MBL_TYPE_PHONE) {
++		if (ast_pthread_create_background(&pvt->monitor_thread, NULL, do_monitor_phone, pvt) < 0) {
++			pvt->monitor_thread = AST_PTHREADT_NULL;
++			return 0;
++		}
++	} else {
++		if (ast_pthread_create_background(&pvt->monitor_thread, NULL, do_monitor_headset, pvt) < 0) {
++			pvt->monitor_thread = AST_PTHREADT_NULL;
++			return 0;
++		}
++	}
++
++	return 1;
++
++}
++
++/*
++
++	Device Discovery Thread.
++
++	This thread wakes every 'discovery_interval' seconds and trys to connect to
++	those configured devices which are not connected. This saves the user from having
++	to manually connect his/her cell phone to the asterisk box. Once a successful
++	connection is made, a monitor thread is spun on the device which lives for the
++	lifetime of the connection.
++
++*/
++
++static void *do_discovery(void *data)
++{
++
++	struct mbl_pvt *pvt = data;
++
++	for (;;) {
++		AST_LIST_TRAVERSE(&devices, pvt, entry) {
++			if (!pvt->connected) {
++				if ((pvt->rfcomm_socket = rfcomm_connect(pvt->bdaddr, pvt->rfcomm_port)) > -1) {
++					pvt->state = 0;
++					if (start_monitor(pvt)) {
++						pvt->connected = 1;
++						if (option_verbose > 2)
++							ast_verbose(VERBOSE_PREFIX_3 "Bluetooth Device %s has connected.\n", pvt->id);
++					}
++				}
++			}
++		}
++		/* Go to sleep */
++		sleep(discovery_interval);
++	}
++
++	return NULL;
++}
++
++/*
++
++	This thread listens for incoming sco connections.
++	Although the Bluetooth Handsfree Profile Specification says that either end may initiate the audio connection,
++	in practice some devices (LG TU500) get upset unless they initiate the connection.
++	We leave all sco initiation to the device.
++	On an inbound sco connection, we need to find the appropriate device, and set the channel fd accordingly.
++
++*/
++
++static void *do_sco_listen(void *data)
++{
++
++	int ns;
++	bdaddr_t local;
++	struct sockaddr_sco addr;
++	struct sco_options so;
++	socklen_t len;
++	int opt = 1;
++	char saddr[18];
++	socklen_t addrlen;
++	struct mbl_pvt *pvt;
++
++	hci_devba(0, &local);
++
++	if ((sco_socket = socket(PF_BLUETOOTH, SOCK_SEQPACKET, BTPROTO_SCO)) < 0) {
++		ast_log(LOG_ERROR, "Unable to create sco listener socket.\n");
++		return NULL;
++	}
++	memset(&addr, 0, sizeof(addr));
++	addr.sco_family = AF_BLUETOOTH;
++	bacpy(&addr.sco_bdaddr, &local);
++	if (bind(sco_socket, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
++		ast_log(LOG_ERROR, "Unable to bind sco listener socket. (%d)\n", errno);
++		close(sco_socket);
++		return NULL;
++	}
++	if (setsockopt(sco_socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1) {
++		ast_log(LOG_ERROR, "Unable to setsockopt sco listener socket.\n");
++		close(sco_socket);
++		return NULL;
++	}
++	if (listen(sco_socket, 5) < 0) {
++		ast_log(LOG_ERROR, "Unable to listen sco listener socket.\n");
++		close(sco_socket);
++		return NULL;
++	}
++	while (1) {
++		addrlen = sizeof(struct sockaddr);
++		ast_log(LOG_NOTICE, "About to accept the sco_socket...\n");
++		if ((ns = accept(sco_socket, (struct sockaddr *)&addr, &addrlen)) > -1) {
++			ast_log(LOG_NOTICE, "sco_socket returns %d...\n",ns);
++			ba2str(&addr.sco_bdaddr, saddr);
++
++			len = sizeof(so);
++			getsockopt(ns, SOL_SCO, SCO_OPTIONS, &so, &len);
++
++			ast_debug(1, "Incoming Audio Connection from device %s MTU is %d\n", saddr, so.mtu);
++
++			pvt = NULL;
++			AST_LIST_TRAVERSE(&devices, pvt, entry) {
++				if (!strcmp(pvt->bdaddr, saddr))
++					break;
++			}
++			if (pvt) {
++				ast_log(LOG_NOTICE,"about to close the pvt-sco_socket and set it ns\n");
++				if (pvt->sco_socket != -1)
++					close(pvt->sco_socket);
++				pvt->sco_socket = ns;
++				if (pvt->owner) {
++					ast_channel_lock(pvt->owner);
++					pvt->owner->fds[0] = ns;
++					ast_channel_unlock(pvt->owner);
++				}
++			} else
++				ast_debug(1, "Could not find device for incoming Audio Connection.\n");
++		}
++		else ast_log(LOG_NOTICE, "Accept got a -1....");
++	}
++
++	return NULL;
++
++}
++
++static int mbl_load_config(void)
++{
++
++	struct ast_config *cfg = NULL;
++	char *cat = NULL;
++	struct ast_variable *var;
++	const char *address, *port, *context, *type, *skip;
++	struct mbl_pvt *pvt;
++
++	cfg = ast_config_load(MBL_CONFIG);
++	if (!cfg)
++		return 0;
++
++	for (var = ast_variable_browse(cfg, "general"); var; var = var->next) {
++		if (!strcasecmp(var->name, "interval"))
++			discovery_interval = atoi(var->value);
++	}
++
++	cat = ast_category_browse(cfg, NULL);
++	while (cat) {
++		if (strcasecmp(cat, "general")) {
++			ast_debug(1, "Loading device %s.\n", cat);
++			address = ast_variable_retrieve(cfg, cat, "address");
++			port = ast_variable_retrieve(cfg, cat, "port");
++			context = ast_variable_retrieve(cfg, cat, "context");
++			ast_log(LOG_NOTICE, "context for non-general category %s was %s\n", cat, context);
++			type = ast_variable_retrieve(cfg, cat, "type");
++			skip = ast_variable_retrieve(cfg, cat, "dtmfskip");
++			if (address && port) {
++				if ((pvt = ast_malloc(sizeof(struct mbl_pvt)))) {
++					if (type && !strcmp(type, "headset"))
++						pvt->type = MBL_TYPE_HEADSET;
++					else
++						pvt->type = MBL_TYPE_PHONE;
++					ast_copy_string(pvt->id, cat, sizeof(pvt->id));
++					ast_copy_string(pvt->bdaddr, address, sizeof(pvt->bdaddr));
++					ast_copy_string(pvt->context, S_OR(context, "default"), sizeof(pvt->context));
++					pvt->connected = 0;
++					pvt->state = MBL_STATE_INIT;
++					pvt->rfcomm_socket = -1;
++					pvt->rfcomm_port = atoi(port);
++					pvt->rfcomm_buf[0] = 0x00;
++					pvt->sco_socket = -1;
++					pvt->monitor_thread = AST_PTHREADT_NULL;
++					pvt->owner = NULL;
++					pvt->no_callsetup = 0;
++					pvt->has_sms = 0;
++					pvt->dsp = ast_dsp_new();
++					if (skip) {
++						if ((pvt->dtmf_skip = atoi(skip)) == 0)
++							pvt->dtmf_skip = 200;
++					} else
++						pvt->dtmf_skip = 200;
++					pvt->skip_frames = 0;
++					ast_dsp_set_features(pvt->dsp, DSP_FEATURE_DTMF_DETECT);
++					ast_dsp_digitmode(pvt->dsp, DSP_DIGITMODE_DTMF | DSP_DIGITMODE_RELAXDTMF);
++					AST_LIST_INSERT_HEAD(&devices, pvt, entry);
++				}
++			} else {
++				ast_log(LOG_ERROR, "Device %s has no address/port configured. It wont be enabled.\n", cat);
++			}
++		}
++		cat = ast_category_browse(cfg, cat);
++	}
++
++	ast_config_destroy(cfg);
++
++	return 1;
++
++}
++
++static int reload_module(void)
++{
++
++	return 0;
++
++}
++
++static int unload_module(void)
++{
++
++	struct mbl_pvt *pvt;
++
++	/* First, take us out of the channel loop */
++	ast_channel_unregister(&mbl_tech);
++
++	/* Kill the discovery thread */
++	if (discovery_thread != AST_PTHREADT_NULL) {
++		pthread_cancel(discovery_thread);
++		pthread_join(discovery_thread, NULL);
++	}
++	/* Kill the sco listener thread */
++	if (sco_listener_thread != AST_PTHREADT_NULL) {
++		pthread_cancel(sco_listener_thread);
++		pthread_join(sco_listener_thread, NULL);
++	}
++	if ((close(sco_socket) == -1))
++		ast_log(LOG_ERROR, "Unable to close sco_socket %d.\n", errno);
++
++	/* Unregister the CLI & APP */
++	ast_cli_unregister_multiple(mbl_cli, sizeof(mbl_cli) / sizeof(mbl_cli[0]));
++	ast_unregister_application(app_mblstatus);
++	ast_unregister_application(app_mblsendsms);
++
++	/* Destroy the device list */
++	while ((pvt = AST_LIST_REMOVE_HEAD(&devices, entry))) {
++		if (pvt->monitor_thread != AST_PTHREADT_NULL) {
++			pthread_cancel(pvt->monitor_thread);
++			pthread_join(pvt->monitor_thread, NULL);
++		}
++		if (pvt->sco_socket > -1) {
++			close(pvt->sco_socket);
++		}
++		if (pvt->rfcomm_socket > -1) {
++			close(pvt->rfcomm_socket);
++		}
++		ast_dsp_free(pvt->dsp);
++		free(pvt);
++	}
++
++	if (sdp_session)
++		sdp_close(sdp_session);
++
++	return 0;
++
++}
++
++static int load_module(void)
++{
++
++	int dev_id, s;
++	uint16_t vs;
++
++	/* Check if we have Bluetooth, no point loading otherwise... */
++	dev_id = hci_get_route(NULL);
++	s = hci_open_dev(dev_id);
++	if (dev_id < 0 || s < 0) {
++		ast_log(LOG_ERROR, "No Bluetooth device found. Not loading module.\n");
++		return AST_MODULE_LOAD_DECLINE;
++	}
++
++	hci_read_voice_setting(s, &vs, 1000);
++	vs = htobs(vs);
++	if (vs != 0x0060) {
++		ast_log(LOG_ERROR, "Bluetooth voice setting must be 0x0060 - see hciconfig hci0 voice.\n");
++		hci_close_dev(s);
++		return AST_MODULE_LOAD_DECLINE;
++	}
++
++	hci_close_dev(s);
++
++	if (!mbl_load_config()) {
++		ast_log(LOG_ERROR, "Unable to read config file %s. Not loading module.\n", MBL_CONFIG);
++		return AST_MODULE_LOAD_DECLINE;
++	}
++
++	sdp_session = sdp_register();
++
++	/* Spin the discovery thread */
++	if (ast_pthread_create_background(&discovery_thread, NULL, do_discovery, NULL) < 0) {
++		ast_log(LOG_ERROR, "Unable to create discovery thread.\n");
++		return AST_MODULE_LOAD_DECLINE;
++	}
++	/* Spin the sco listener thread */
++	if (ast_pthread_create_background(&sco_listener_thread, NULL, do_sco_listen, NULL) < 0) {
++		ast_log(LOG_ERROR, "Unable to create sco listener thread.\n");
++		pthread_cancel(discovery_thread);
++		pthread_join(discovery_thread, NULL);
++		return AST_MODULE_LOAD_DECLINE;
++	}
++
++	ast_cli_register_multiple(mbl_cli, sizeof(mbl_cli) / sizeof(mbl_cli[0]));
++	ast_register_application(app_mblstatus, mbl_status_exec, mblstatus_synopsis, mblstatus_desc);
++	ast_register_application(app_mblsendsms, mbl_sendsms_exec, mblsendsms_synopsis, mblsendsms_desc);
++
++	/* Make sure we can register our channel type */
++	if (ast_channel_register(&mbl_tech)) {
++		ast_log(LOG_ERROR, "Unable to register channel class %s\n", "Mobile");
++		return AST_MODULE_LOAD_FAILURE;
++	}
++
++	return 0;
++}
++
++AST_MODULE_INFO(ASTERISK_GPL_KEY, AST_MODFLAG_DEFAULT, "Bluetooth Mobile Device Channel Driver",
++		.load = load_module,
++		.unload = unload_module,
++		.reload = reload_module,
++);
