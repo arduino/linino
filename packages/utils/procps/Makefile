@@ -40,9 +40,12 @@ endef
 define Build/Configure
 endef
 
+EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+EXTRA_LDFLAGS += -L$(STAGING_DIR)/usr/lib
+
 define Build/Compile
 	$(call Build/Compile/Default, \
-		CFLAGS="$(TARGET_CFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
 		CPPFLAGS="$(EXTRA_CPPFLAGS)" \
 		LDFLAGS="$(EXTRA_LDFLAGS)" \
 	)
