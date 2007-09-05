@@ -9,16 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=axtls
-PKG_VERSION:=1.1.4
+PKG_VERSION:=1.1.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=axTLS-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/axtls http://www.leroc.com.au/axTLS/
-PKG_MD5SUM:=baf34d35459c6cb15e2c3a683b3233c2
-PKG_CAT:=zcat
+PKG_MD5SUM:=50e63d5fe002399e2ae63591908f7f5a
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/axTLS
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
