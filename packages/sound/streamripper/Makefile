@@ -31,6 +31,8 @@ define Package/streamripper
   URL:=http://streamripper.sourceforge.net/
 endef
 
+
+EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--without-ogg \
