@@ -29,10 +29,13 @@ define Build/Prepare
 	$(CP) ./src/* $(PKG_BUILD_DIR)/
 endef
 
+EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+EXTRA_LDFLAGS += -L$(STAGING_DIR)/usr/lib
+
 define Build/Compile
 	$(call Build/Compile/Default, \
 		CCOPTS="$(TARGET_CFLAGS)" \
-		INCLUDE="$(EXTRA_CPPFLAGS)" \
+		INCLUDE="$(EXTRA_CFLAGS)" \
 		LDFLAGS="$(EXTRA_LDFLAGS)" \
 	)
 endef
