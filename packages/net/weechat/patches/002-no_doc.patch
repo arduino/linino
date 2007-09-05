@@ -1,0 +1,24 @@
+diff -urN weechat-0.2.5/Makefile.am weechat-0.2.5.new/Makefile.am
+--- weechat-0.2.5/Makefile.am	2007-01-05 20:12:16.000000000 +0100
++++ weechat-0.2.5.new/Makefile.am	2007-09-05 19:28:55.000000000 +0200
+@@ -15,7 +15,7 @@
+ # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ #
+ 
+-SUBDIRS = po doc intl src
++SUBDIRS = po intl src
+ 
+ EXTRA_DIST = config.rpath BUGS FAQ FAQ.fr \
+              debian/changelog debian/control \
+diff -urN weechat-0.2.5/Makefile.in weechat-0.2.5.new/Makefile.in
+--- weechat-0.2.5/Makefile.in	2007-06-07 16:52:50.000000000 +0200
++++ weechat-0.2.5.new/Makefile.in	2007-09-05 19:28:48.000000000 +0200
+@@ -290,7 +290,7 @@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+ weechat_libdir = @weechat_libdir@
+-SUBDIRS = po doc intl src
++SUBDIRS = po intl src
+ EXTRA_DIST = config.rpath BUGS FAQ FAQ.fr \
+              debian/changelog debian/control \
+              debian/copyright debian/compat \
