@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -121,7 +121,7 @@ define Package/updatedd/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/updatedd $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/updatedd
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
-	$(INSTALL_BIN) ./files/updatedd.hotplug $(1)/etc/hotplug.d/iface/30-updatedd
+	$(INSTALL_DATA) ./files/updatedd.hotplug $(1)/etc/hotplug.d/iface/30-updatedd
 endef
 
 $(eval $(call BuildPackage,updatedd))
