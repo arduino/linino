@@ -32,9 +32,11 @@ define Package/ssmtp
   URL:=http://packages.debian.org/stable/mail/ssmtp
 endef
 
-EXTRA_LDFLAGS+=-Wl,-rpath-link,$(STAGING_DIR)/usr/lib
+EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib
+
 TARGET_CONFIGURE_OPTS+=\
-	CC="$(TARGET_CC) $(EXTRA_LDFLAGS)"
+	CC="$(TARGET_CC) $(EXTRA_CFLAGS) $(EXTRA_LDFLAGS)"
 
 CONFIGURE_ARGS += \
 	--enable-ssl
