@@ -21,10 +21,11 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
+# add dependency on 2.6 since recent dibbler needs <linux/ip_mp_alg.h>
 define Package/dibbler/Default
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+uclibcxx
+  DEPENDS:=+uclibcxx @LINUX_2_6
   TITLE:=Dibbler, a portable DHCPv6 implementation
   URL:=http://klub.com.pl/dhcpv6/
 endef
