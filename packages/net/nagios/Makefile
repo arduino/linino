@@ -35,10 +35,13 @@ define Package/send-nagios/conffiles
 /etc/send_nagios.cfg
 endef
 
+EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+
 define Build/Configure
 	$(call Build/Configure/Default,\
 		--with-nagios-user="root" \
 		--with-nagios-group="root", \
+		CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
 		LIBS="-lnotimpl" \
 	)
 endef
