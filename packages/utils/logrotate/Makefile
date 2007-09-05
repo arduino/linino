@@ -43,9 +43,12 @@ define Package/logrotate/conffiles
 /etc/logrotate.conf
 endef
 
+EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+EXTRA_LDFLAGS += -L$(STAGING_DIR)/usr/lib
+
 define Build/Compile
 	$(call Build/Compile/Default, \
-		RPM_OPT_FLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS)" \
+		RPM_OPT_FLAGS:="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
 		LDFLAGS="$(EXTRA_LDFLAGS)" \
 		logrotate \
 	)
