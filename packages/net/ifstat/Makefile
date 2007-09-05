@@ -1,0 +1,39 @@
+# 
+# Copyright (C) 2007 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+#
+# $ Id:$
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=ifstat
+PKG_VERSION:=1.1
+PKG_RELEASE:=1
+PKG_MD5SUM:=b655642c33a626cfe976792fbcd9b6e1
+
+PKG_SOURCE_URL:=http://gael.roualland.free.fr/ifstat
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_CAT:=zcat
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/ifstat
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=Network interface bandwidth usage
+  DESCRIPTION:=\
+	Network interface bandwidth usage, \
+	with support for snmp targets
+  URL:=http://gael.roualland.free.fr/ifstat/
+endef
+
+define Package/ifstat/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_BUILD_DIR)/ifstat $(1)/usr/bin/
+	$(RSTRIP) $(1)
+endef
+
+$(eval $(call BuildPackage,ifstat))
