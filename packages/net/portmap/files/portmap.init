@@ -7,7 +7,7 @@ DEFAULT=/etc/default/$BIN
 
 start() {
 	[ -f $DEFAULT ] && . $DEFAULT
-	$BIN $OPTIONS
+	$BIN -u 0 -g 0 $OPTIONS
 }
 
 stop() {
