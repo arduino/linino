@@ -45,6 +45,10 @@ define Package/jpeg-tools
   TITLE+= manipulation tools
 endef
 
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+
 define Build/Prepare
 	$(call Build/Prepare/Default)
 	# replace the old upstream libtool stuff with our own
@@ -54,20 +58,17 @@ define Build/Prepare
 endef
 
 define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-	)
+	$(call Build/Configure/Default,)
 endef
 
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)/usr/{include,lib,bin,man/man1}
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		LIBTOOL="./libtool --tag=CC" \
 		prefix="$(PKG_INSTALL_DIR)/usr" \
 		exec_prefix="$(PKG_INSTALL_DIR)/usr" \
-		all install-headers install-lib install \
-		LIBTOOL="./libtool --tag=CC"
+		all install install-headers install-lib
 endef
 
 define Build/InstallDev
@@ -80,8 +81,7 @@ define Build/InstallDev
 endef
 
 define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/jpeg{int,lib}.h \
+	rm -rf	$(STAGING_DIR)/usr/include/jpeg{int,lib}.h \
 		$(STAGING_DIR)/usr/include/j{config,error,morecfg}.h \
 		$(STAGING_DIR)/usr/lib/libjpeg.{a,so*}
 endef
