@@ -54,7 +54,7 @@ define Package/tinyproxy/install
 	$(INSTALL_DIR) $(1)/etc/tinyproxy
 	$(CP) $(PKG_INSTALL_DIR)/etc/tinyproxy/tinyproxy.conf $(1)/etc/tinyproxy/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(CP) ./files/tinyproxy.init $(1)/etc/init.d/tinyproxy
+	$(INSTALL_BIN) ./files/tinyproxy.init $(1)/etc/init.d/tinyproxy
 endef
 
 $(eval $(call BuildPackage,tinyproxy))
