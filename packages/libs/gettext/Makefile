@@ -16,9 +16,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/gettext
 PKG_MD5SUM:=3d9ad24301c6d6b17ec30704a13fe127
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libintl
@@ -41,11 +38,18 @@ CONFIGURE_ARGS += \
 	--without-libexpat-prefix \
 	--without-emacs
 
-MAKE_FLAGS += \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install
+define Build/Configure
+	$(call Build/Configure/Default)
+	$(call libtool_disable_rpath)
+endef
 
-define Build/InstallDev
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+endef
+
+define Build/InstallDev	
 	mkdir -p $(STAGING_DIR)/usr/lib/libintl/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libintl.h $(STAGING_DIR)/usr/lib/libintl/include/
 	mkdir -p $(STAGING_DIR)/usr/lib/libintl/lib
