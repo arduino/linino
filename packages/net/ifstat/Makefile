@@ -5,7 +5,7 @@
 # See /LICENSE for more information.
 #
 #
-# $Id:$
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
@@ -28,6 +28,22 @@ endef
 
 define Package/ifstat/description
  Network interface bandwidth usage, with support for snmp targets
+endef
+
+CONFIGURE_ARGS += \
+	--with-proc=yes \
+	--with-snmp=no \
+
+define Build/Configure
+	(cd $(PKG_BUILD_DIR); touch \
+		config.h.in \
+		configure \
+	);
+	$(call Build/Configure/Default)
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) all
 endef
 
 define Package/ifstat/install
