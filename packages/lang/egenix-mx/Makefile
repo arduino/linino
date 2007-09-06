@@ -80,6 +80,7 @@ define Build/UninstallDev
 endef
 
 define PyPackage/egenix-mx/install
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
 	$(CP) $(PKG_BUILD_DIR)/foo/mx $(1)$(PYTHON_PKG_DIR)/
 	ln -sf	$(1)$(PYTHON_PKG_DIR)/mx/BeeBase/ExitFunctions.py \
 		$(1)$(PYTHON_PKG_DIR)/mx/Misc/
