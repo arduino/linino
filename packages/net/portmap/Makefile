@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,9 +15,8 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://neil.brown.name/portmap/
 PKG_MD5SUM:=ac108ab68bf0f34477f8317791aaf1ff
-PKG_CAT:=zcat
 
-PKG_BUILD_DIR:=$(PKG_NAME)_$(PKG_VERSION)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -25,22 +24,24 @@ define Package/portmap
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libwrap
-  TITLE:=RPC Portmapper
+  TITLE:=The RPC Portmapper
   URL:=ftp://ftp.porcupine.org/pub/security
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -DHOSTS_ACCESS -DFACILITY=LOG_DAEMON -DIGNORE_SIGCHLD" \
-		WRAP_LIB="-L$(STAGING_DIR)/usr/lib -lwrap" \
-		all
+define Package/portmap/description
+ Portmap is a server that converts RPC (Remote Procedure Call) program
+ numbers into DARPA protocol port numbers.
 endef
 
-define Package/portmap/install	
-	$(INSTALL_DIR) $(1)/usr/sbin 
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -DHOSTS_ACCESS -DFACILITY=LOG_DAEMON -DIGNORE_SIGCHLD" \
+	WRAP_LIB="-L$(STAGING_DIR)/usr/lib -lwrap" \
+	all
+
+define Package/portmap/install
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/portmap $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc/init.d 
+	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/portmap.init $(1)/etc/init.d/portmap
 endef
 
