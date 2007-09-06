@@ -15,12 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://procps.sourceforge.net
 PKG_MD5SUM:=f490bca772b16472962c7b9f23b1e97d
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
-PKG_BUILD_DEPENDS:=libncurses
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,27 +23,19 @@ define Package/procps
   CATEGORY:=Utilities
   DEPENDS:=+libncurses
   TITLE:=proc utilities
-  DESCRIPTION:=\
-	procps is the package that has a bunch of small useful\\\
-	utilities that give information about processes using\\\
-	the /proc filesystem. The package includes the programs\\\
-	ps, top, vmstat, w, kill, free, slabtop, and skill.
   URL:=http://sourceforge.net/projects/procps/
 endef
 
-define Build/Configure
+define Package/procps/description
+ procps is the package that has a bunch of small useful utilities that give 
+ information about processes using the /proc filesystem. The package 
+ includes the programs ps, top, vmstat, w, kill, free, slabtop, and skill.
 endef
 
-EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
-EXTRA_LDFLAGS += -L$(STAGING_DIR)/usr/lib
-
-define Build/Compile
-	$(call Build/Compile/Default, \
-		CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
-		CPPFLAGS="$(EXTRA_CPPFLAGS)" \
-		LDFLAGS="$(EXTRA_LDFLAGS)" \
-	)
-endef
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS)" \
+	CPPFLAGS="$(TARGET_CPPFLAGS)" \
+	LDFLAGS="$(TARGET_LDFLAGS)" \
 
 define Package/procps/install
 	$(INSTALL_DIR) $(1)/usr/bin
