@@ -33,13 +33,16 @@ endef
 
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR)/include -I$(PKG_BUILD_DIR)/platform/linux" \
-	target=linux
+	target=linux \
+	all
 
 define Package/tspc/install
 	$(INSTALL_DIR) $(1)/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/tspc $(1)/bin/
 	$(INSTALL_DIR) $(1)/etc/tsp
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/bin/tspc.conf.sample $(1)/etc/tsp/tspc.conf
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/bin/tspc.conf.sample $(1)/etc/tsp/tspc.conf
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/template/linux.sh $(1)/etc/tsp/setup.sh
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/template/checktunnel.sh $(1)/etc/tsp/
 endef
 
 $(eval $(call BuildPackage,tspc))
