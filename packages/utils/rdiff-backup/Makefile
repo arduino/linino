@@ -15,34 +15,30 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://savannah.nongnu.org/download/rdiff-backup/
 PKG_MD5SUM:=756b38aaf2602d097cafd08996fb7887
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
+-include $(TOPDIR)/package/python/python-package.mk
 
-define Package/rdiff-backup
+define PyPackage/rdiff-backup
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Incremental backup utility
   URL:=http://www.nongnu.org/rdiff-backup
-  DEPENDS:=+librsync +python
+  DEPENDS+= +librsync
 endef
 
-define Build/Configure
+define PyPackage/rdiff-backup/filespec
++|/usr/bin/rdiff-backup
++|$(PYTHON_PKG_DIR)/rdiff_backup
 endef
 
 define Build/Compile
-	(cd $(PKG_BUILD_DIR); \
-		$(STAGING_DIR)/usr/bin/hostpython ./setup.py build --librsync-dir="$(STAGING_DIR)/usr" --lflags="-L$(STAGING_DIR)/usr/lib"; \
-		$(STAGING_DIR)/usr/bin/hostpython ./setup.py install --prefix=$(PKG_INSTALL_DIR)/usr/; \
-	);
+	$(call Build/Compile/PyMod,., \
+		build --librsync-dir="$(STAGING_DIR)/usr" , \
+	)
+	$(call Build/Compile/PyMod,., \
+		install --prefix="$(PKG_INSTALL_DIR)/usr", \
+	)
 endef
 
-define Package/rdiff-backup/install
-	mkdir -p $(1)/usr/{bin,lib}
-	$(CP) $(PKG_INSTALL_DIR)/usr/{bin,lib} $(1)/usr/
-endef
-
-$(eval $(call BuildPackage,rdiff-backup))
+$(eval $(call PyPackage,rdiff-backup))
