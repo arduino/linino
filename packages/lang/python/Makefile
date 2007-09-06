@@ -28,7 +28,7 @@ PY_DISABLED_MODULES=\
 define Package/python
   SECTION:=lang
   CATEGORY:=Languages
-  DEPENDS:=+uclibcxx +libpthread +libreadline +libncurses +libopenssl +libexpat
+  DEPENDS:=+libexpat +libopenssl +libpthread +libreadline +uclibcxx
   TITLE:=Python 2.5 programming language
   URL:=http://www.python.org/
 endef
@@ -66,15 +66,15 @@ define Build/Configure
 endef
 
 MAKE_OPTS:=\
-		$(TARGET_CONFIGURE_OPTS) \
-		PYTHON_MODULES_INCLUDE=$(STAGING_DIR)/include \
-		PYTHON_MODULES_LIB=$(STAGING_DIR)/lib \
-		PYTHON_DISABLE_MODULES="$(PY_DISABLED_MODULES)" \
-		CFLAGS="$(TARGET_CFLAGS) -fno-inline" \
-		LDFLAGS="$(TARGET_LDFLAGS) -lncurses" \
-		LD="$(TARGET_CC)" \
-		HOSTPYTHON=./hostpython \
-		HOSTPGEN=./Parser/hostpgen
+	$(TARGET_CONFIGURE_OPTS) \
+	PYTHON_MODULES_INCLUDE=$(STAGING_DIR)/include \
+	PYTHON_MODULES_LIB=$(STAGING_DIR)/lib \
+	PYTHON_DISABLE_MODULES="$(PY_DISABLED_MODULES)" \
+	CFLAGS="$(TARGET_CFLAGS) -fno-inline" \
+	LDFLAGS="$(TARGET_LDFLAGS)" \
+	LD="$(TARGET_CC)" \
+	HOSTPYTHON=./hostpython \
+	HOSTPGEN=./Parser/hostpgen
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -92,12 +92,13 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/python2.5 $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.5 $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_BUILD_DIR)/libpython2.5.a $(STAGING_DIR)/usr/lib/python2.5
+	$(CP) $(PKG_BUILD_DIR)/libpython2.5.a $(STAGING_DIR)/usr/lib/python2.5/
 endef
 
 define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/{include,lib}/python2.5
+	rm -rf	$(STAGING_DIR)/usr/bin/hostpython \
+		$(STAGING_DIR)/usr/include/python2.5 \
+		$(STAGING_DIR)/usr/lib/python2.5
 endef
 
 define Package/python/install
@@ -108,8 +109,7 @@ define Package/python/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/python2.5/Python.h $(1)/usr/include/python2.5/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.5 $(1)/usr/lib/
-	rm -rf \
-		$(1)/usr/lib/python2.5/bsddb/test \
+	rm -rf	$(1)/usr/lib/python2.5/bsddb/test \
 		$(1)/usr/lib/python2.5/distutils/tests \
 		$(1)/usr/lib/python2.5/email/test \
 		$(1)/usr/lib/python2.5/idlelib \
