@@ -9,15 +9,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=portmap
-PKG_VERSION:=5beta
-PKG_RELEASE:=2
+PKG_VERSION:=6.0
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.porcupine.org/pub/security
-PKG_MD5SUM:=781e16ed4487c4caa082c6fef09ead4f
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
+PKG_SOURCE_URL:=http://neil.brown.name/portmap/
+PKG_MD5SUM:=ac108ab68bf0f34477f8317791aaf1ff
 PKG_CAT:=zcat
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
+PKG_BUILD_DIR:=$(PKG_NAME)_$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
