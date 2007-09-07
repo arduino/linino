@@ -71,6 +71,7 @@ endef
 define Package/asterisk14-mysql
 $(call Package/asterisk-addons/Default)
   DEPENDS:= +asterisk14 +libmysqlclient
+  DEFAULT:=n
   TITLE+= MySQL support
 endef
 
