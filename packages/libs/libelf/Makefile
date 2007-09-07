@@ -15,10 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.mr511.de/software/
 PKG_MD5SUM:=be84e553686dd50c8b6d520f86f46521
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,19 +25,17 @@ define Package/libelf
   URL:=http://www.stud.uni-hannover.de/~michael/software/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--enable-elf64=yes \
-		, \
-		mr_cv_target_elf=yes \
-		libelf_64bit=yes \
-		libelf_cv_struct_elf64_ehdr=yes \
-		libelf_cv_type_elf64_addr=no \
-		libelf_cv_struct_elf64_rel=yes \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--enable-elf64=yes \
+
+CONFIGURE_VARS += \
+	mr_cv_target_elf=yes \
+	libelf_64bit=yes \
+	libelf_cv_struct_elf64_ehdr=yes \
+	libelf_cv_type_elf64_addr=no \
+	libelf_cv_struct_elf64_rel=yes \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -54,6 +48,10 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libelf* $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelf.{a,so*} $(STAGING_DIR)/usr/lib/
+	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libelf.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+	$(SED) 's,-I$$$${includedir}/libelf,-I$(STAGING_DIR)/usr/include/libelf,g' $(STAGING_DIR)/usr/lib/pkgconfig/libelf.pc
+	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/libelf.pc
 endef
 
 define Build/UninstallDev
