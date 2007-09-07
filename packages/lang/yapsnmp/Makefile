@@ -45,6 +45,7 @@ CONFIGURE_ARGS += \
 
 CONFIGURE_VARS += \
 	ac_cv_file__usr_include_net_snmp_library="yes" \
+	ac_cv_prog_SWIG="echo MISSING SWIG" \
 
 define Build/Configure
 	$(call Build/Configure/Default)
