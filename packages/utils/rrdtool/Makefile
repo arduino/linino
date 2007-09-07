@@ -11,106 +11,99 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=rrdtool
 PKG_VERSION:=1.2.11
 PKG_RELEASE:=1
-PKG_MD5SUM:=d61c5755cb77207f9ad3584b26e8bf08
 
 PKG_SOURCE_URL:=http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/pub
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=d61c5755cb77207f9ad3584b26e8bf08
 
 PKG_BUILD_DEPENDS:=libnotimpl
 
 include $(INCLUDE_DIR)/package.mk
+-include $(TOPDIR)/package/python/python-package.mk
 
-define Package/rrd
+define Package/rrdtool/Default
   SECTION:=utils
   CATEGORY:=Utilities
-  TITLE:=Round Robin Database (RRD) tools (v1.2.x)
-  SUBMENU:=Round Robin Database (RRD) tools (v1.2.x)
+  TITLE:=Round Robin Database (RRD)
 endef
 
 define Package/librrd
-  $(call Package/rrd)
-  DEPENDS:=+libart +libfreetype +libpng +zlib
+$(call Package/rrdtool/Default)
   SECTION:=libs
-  CATEGORY:=Utilities
-  TITLE:=Round Robin Database (RRD) management library (v1.2.x)
+  CATEGORY:=Libraries
+  TITLE+= management library (v1.2.x)
+  DEPENDS+= +libart +libfreetype +libpng +zlib
 endef
 	
 define Package/rrdcgi
-  $(call Package/rrd)
-  DEPENDS:=librrd +cgilib
-  SECTION:=utils
-  CATEGORY:=Utilities
-  TITLE:=Round Robin Database (RRD) CGI graphing tool (v1.2.x)
+$(call Package/rrdtool/Default)
+  TITLE+= CGI graphing tool (v1.2.x)
+  DEPENDS+= +librrd +cgilib
 endef
 
 define Package/rrdtool
-  $(call Package/rrd)
-  DEPENDS:=librrd
-  SECTION:=utils
-  CATEGORY:=Utilities
-  TITLE:=Round Robin Database (RRD) management tools (v1.2.x)
+$(call Package/rrdtool/Default)
+  TITLE+= management tools (v1.2.x)
+  DEPENDS+= +librrd
 endef
 
-define Package/rrdpy
-  $(call Package/rrd)
-  DEPENDS:=librrd +python
-  SECTION:=utils
-  CATEGORY:=Utilities
+define PyPackage/rrdpy
   TITLE:=Round Robin Database (RRD) python bindings (v1.2.x)
+  DEPENDS+= +librrd
 endef
+
+CONFIGURE_ARGS += \
+	--enable-shared=yes \
+	--enable-static=yes \
+	--disable-rpath \
+	--with-gnu-ld \
+	--disable-mmap \
+	--disable-perl \
+	--disable-tcl \
+	--without-x \
+	--with-rrd-default-font="/usr/share/rrdtool/fonts/DejaVuSansMono-Roman.ttf" \
+
+CONFIGURE_VARS += \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/freetype2 -I$(STAGING_DIR)/usr/include/libart-2.0" \
+	LIBS="-lnotimpl" \
+	rd_cv_ieee_works=yes \
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_rrdcgi),)
+  CONFIGURE_ARGS += --enable-rrdcgi
+else
+  CONFIGURE_ARGS += --disable-rrdcgi
+endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_rrdpy),)
+  CONFIGURE_ARGS += \
+	--enable-python
+  CONFIGURE_VARS += \
+	PYTHON="$(PYTHON)"
+else
+  CONFIGURE_ARGS += --disable-python
+endif
 
 define Build/Configure
-$(call Build/Configure/Default,--enable-shared=yes \
-                        --enable-static=yes \
-                        --disable-rpath \
-                        --with-gnu-ld \
-                        --enable-rrdcgi \
-                        --disable-mmap \
-                        --disable-perl \
-                        --disable-tcl \
-                        --disable-python \
-                        --without-x \
-                        --with-rrd-default-font=/usr/share/rrdtool/fonts/DejaVuSansMono-Roman.ttf, CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include/freetype2 -I$(STAGING_DIR)/usr/include/libart-2.0" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib " \
-		LIBS="-lnotimpl" \
-		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-		rd_cv_ieee_works=yes)
+	$(call Build/Configure/Default)
+	$(call libtool_disable_rpath)
 endef
 
-define Build/Compile	
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-  ifneq ($(CONFIG_PACKAGE_rrdpy),n)
-	$(MAKE) -C $(PKG_BUILD_DIR)/bindings/python \
-		pythondir=$(shell $(STAGING_DIR)/usr/bin/hostpython $(SCRIPT_DIR)/pylibdir.py) \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/python2.5" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-  endif
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir)
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
-define Package/rrdtool/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdtool $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdupdate $(1)/usr/bin/
+define Build/InstallDev
+	mkdir -p $(STAGING_DIR)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/rrd.h $(STAGING_DIR)/usr/include/
+	mkdir -p $(STAGING_DIR)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd.{a,so*} $(STAGING_DIR)/usr/lib/
 endef
 
-define Package/rrdpy/install
-	$(INSTALL_DIR) $(1)/usr/lib/python2.5/site-packages
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.5/site-packages/* \
-		$(1)/usr/lib/python2.5/site-packages
-endef
-
-define Package/rrdcgi/install	
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdcgi $(1)/usr/bin/
+define Build/UninstallDev
+	rm -rf	$(STAGING_DIR)/usr/include/rrd.h \
+		$(STAGING_DIR)/usr/lib/librrd.{a,so*} 
 endef
 
 define Package/librrd/install	
@@ -121,22 +114,23 @@ define Package/librrd/install
 		$(1)/usr/share/rrdtool/fonts/
 endef
 
-define Build/InstallDev	
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/rrd.h $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd.a $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd.so* $(STAGING_DIR)/usr/lib/
+define Package/rrdcgi/install	
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdcgi $(1)/usr/bin/
 endef
 
-define Build/UninstallDev	
-	rm -rf \
-		$(STAGING_DIR)/usr/include/rrd.h \
-		$(STAGING_DIR)/usr/lib/librrd.a \
-		$(STAGING_DIR)/usr/lib/librrd.so*
+define PyPackage/rrdpy/install
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
+	$(CP) $(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* $(1)$(PYTHON_PKG_DIR)/
+endef
+
+define Package/rrdtool/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdtool $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdupdate $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,librrd))
 $(eval $(call BuildPackage,rrdcgi))
+$(eval $(call PyPackage,rrdpy))
 $(eval $(call BuildPackage,rrdtool))
-$(eval $(call BuildPackage,rrdpy))
