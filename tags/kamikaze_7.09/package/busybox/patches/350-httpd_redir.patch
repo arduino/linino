@@ -1,0 +1,93 @@
+Index: busybox-1.4.2/include/usage.h
+===================================================================
+--- busybox-1.4.2.orig/include/usage.h	2007-06-04 13:21:32.103096256 +0200
++++ busybox-1.4.2/include/usage.h	2007-06-04 13:21:35.005655000 +0200
+@@ -1257,7 +1257,8 @@
+ 	USE_FEATURE_HTTPD_BASIC_AUTH(" [-r <realm>]") \
+ 	USE_FEATURE_HTTPD_AUTH_MD5(" [-m pass]") \
+        " [-h home]" \
+-       " [-d/-e <string>]"
++       " [-d/-e <string>]" \
++       " [-R <path> [-H <host>]]"
+ #define httpd_full_usage \
+        "Listen for incoming http server requests" \
+        "\n\nOptions:\n" \
+@@ -1273,7 +1274,9 @@
+        "	-m PASS		Crypt PASS with md5 algorithm\n") \
+        "	-h HOME		Specifies http HOME directory (default ./)\n" \
+        "	-e STRING	HTML encode STRING\n" \
+-       "	-d STRING	URL decode STRING"
++       "	-d STRING	URL decode STRING\n" \
++       "	-R PATH 	Redirect target path\n" \
++       "	-H HOST 	Redirect target host"
+ 
+ #define hwclock_trivial_usage \
+        "[-r|--show] [-s|--hctosys] [-w|--systohc] [-l|--localtime] [-u|--utc]"
+Index: busybox-1.4.2/networking/httpd.c
+===================================================================
+--- busybox-1.4.2.orig/networking/httpd.c	2007-06-04 13:21:34.588718384 +0200
++++ busybox-1.4.2/networking/httpd.c	2007-06-04 13:21:35.006654848 +0200
+@@ -140,6 +140,8 @@
+ 	USE_FEATURE_HTTPD_CGI(char *user_agent;)
+ 
+ 	const char *configFile;
++	const char *redirectPath;
++	const char *redirectHost;
+ 
+ 	unsigned int rmt_ip;
+ #if ENABLE_FEATURE_HTTPD_CGI || DEBUG
+@@ -880,8 +882,11 @@
+ 	}
+ #endif
+ 	if (responseNum == HTTP_MOVED_TEMPORARILY) {
+-		len += sprintf(buf+len, "Location: %s/%s%s\r\n",
++		len += sprintf(buf+len, "Location: %s%s%s%s%s%s\r\n",
++				(config->redirectHost ? "http://" : ""),
++				(config->redirectHost ? config->redirectHost : ""),
+ 				config->found_moved_temporarily,
++				(config->redirectHost ? "" : "/"),
+ 				(config->query ? "?" : ""),
+ 				(config->query ? config->query : ""));
+ 	}
+@@ -1594,8 +1599,12 @@
+ 		*++purl = '\0';       /* so keep last character */
+ 		test = purl;          /* end ptr */
+ 
++		/* redirect active */
++		if (config->redirectPath && (strncmp(url, config->redirectPath, strlen(config->redirectPath)) != 0))
++			config->found_moved_temporarily = config->redirectPath;
++
+ 		/* If URL is directory, adding '/' */
+-		if (test[-1] != '/') {
++		if(!config->redirectPath && (test[-1] != '/')) {
+ 			if (is_directory(url + 1, 1, &sb)) {
+ 				config->found_moved_temporarily = url;
+ 			}
+@@ -1897,7 +1906,9 @@
+ #endif
+ 
+ enum {
+-	c_opt_config_file = 0,
++	R_opt_redirect_path = 0,
++	H_opt_redirect_host,
++	c_opt_config_file,
+ 	d_opt_decode_url,
+ 	h_opt_home_httpd,
+ 	USE_FEATURE_HTTPD_ENCODE_URL_STR(e_opt_encode_url,)
+@@ -1919,7 +1930,7 @@
+ 	OPT_FOREGROUND  = 1 << p_opt_foreground,
+ };
+ 
+-static const char httpd_opts[] = "c:d:h:"
++static const char httpd_opts[] = "R:H:c:d:h:"
+ 	USE_FEATURE_HTTPD_ENCODE_URL_STR("e:")
+ 	USE_FEATURE_HTTPD_BASIC_AUTH("r:")
+ 	USE_FEATURE_HTTPD_AUTH_MD5("m:")
+@@ -1951,6 +1962,7 @@
+ 	config->ContentLength = -1;
+ 
+ 	opt = getopt32(argc, argv, httpd_opts,
++			&(config->redirectPath), &(config->redirectHost),
+ 			&(config->configFile), &url_for_decode, &home_httpd
+ 			USE_FEATURE_HTTPD_ENCODE_URL_STR(, &url_for_encode)
+ 			USE_FEATURE_HTTPD_BASIC_AUTH(, &(config->realm))

@@ -1,0 +1,22 @@
+Index: busybox-1.4.2/networking/udhcp/clientpacket.c
+===================================================================
+--- busybox-1.4.2.orig/networking/udhcp/clientpacket.c	2007-06-04 13:21:32.270070872 +0200
++++ busybox-1.4.2/networking/udhcp/clientpacket.c	2007-06-04 13:21:33.813836184 +0200
+@@ -78,6 +78,7 @@
+ int send_discover(unsigned long xid, unsigned long requested)
+ {
+ 	struct dhcpMessage packet;
++	static int msgs = 0;
+ 
+ 	init_packet(&packet, DHCPDISCOVER);
+ 	packet.xid = xid;
+@@ -85,7 +86,8 @@
+ 		add_simple_option(packet.options, DHCP_REQUESTED_IP, requested);
+ 
+ 	add_requests(&packet);
+-	bb_info_msg("Sending discover...");
++	if (msgs++ < 3)
++		bb_info_msg("Sending discover...");
+ 	return udhcp_raw_packet(&packet, INADDR_ANY, CLIENT_PORT, INADDR_BROADCAST,
+ 			SERVER_PORT, MAC_BCAST_ADDR, client_config.ifindex);
+ }

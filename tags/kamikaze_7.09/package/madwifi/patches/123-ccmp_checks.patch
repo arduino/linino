@@ -1,0 +1,24 @@
+Index: madwifi-ng-r2568-20070710/net80211/ieee80211_crypto_ccmp.c
+===================================================================
+--- madwifi-ng-r2568-20070710.orig/net80211/ieee80211_crypto_ccmp.c	2007-07-23 01:48:37.830135985 +0200
++++ madwifi-ng-r2568-20070710/net80211/ieee80211_crypto_ccmp.c	2007-07-23 01:48:42.870423216 +0200
+@@ -475,6 +475,9 @@
+ 	uint8_t *mic, *pos;
+ 	u_int space;
+ 
++	if (ctx->cc_tfm == NULL)
++		return 0;
++
+ 	ctx->cc_vap->iv_stats.is_crypto_ccmp++;
+ 
+ 	skb = skb0;
+@@ -589,6 +592,9 @@
+ 	uint8_t *pos, *mic;
+ 	u_int space;
+ 
++	if (ctx->cc_tfm == NULL)
++		return 0;
++
+ 	ctx->cc_vap->iv_stats.is_crypto_ccmp++;
+ 
+ 	skb = skb0;

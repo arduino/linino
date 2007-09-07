@@ -1,0 +1,109 @@
+Index: busybox-1.4.2/include/applets.h
+===================================================================
+--- busybox-1.4.2.orig/include/applets.h	2007-06-04 13:21:32.210079992 +0200
++++ busybox-1.4.2/include/applets.h	2007-06-04 13:21:34.188779184 +0200
+@@ -209,6 +209,7 @@
+ USE_MV(APPLET(mv, _BB_DIR_BIN, _BB_SUID_NEVER))
+ USE_NAMEIF(APPLET(nameif, _BB_DIR_SBIN, _BB_SUID_NEVER))
+ USE_NC(APPLET(nc, _BB_DIR_USR_BIN, _BB_SUID_NEVER))
++USE_NETMSG(APPLET_NOUSAGE(netmsg, netmsg, _BB_DIR_BIN, _BB_SUID_ALWAYS))
+ USE_NETSTAT(APPLET(netstat, _BB_DIR_BIN, _BB_SUID_NEVER))
+ USE_NICE(APPLET(nice, _BB_DIR_BIN, _BB_SUID_NEVER))
+ USE_NMETER(APPLET(nmeter, _BB_DIR_USR_BIN, _BB_SUID_NEVER))
+Index: busybox-1.4.2/networking/Config.in
+===================================================================
+--- busybox-1.4.2.orig/networking/Config.in	2007-06-04 13:21:32.216079080 +0200
++++ busybox-1.4.2/networking/Config.in	2007-06-04 13:21:34.188779184 +0200
+@@ -458,6 +458,12 @@
+ 	help
+ 	  A simple Unix utility which reads and writes data across network
+ 	  connections.
++	  
++config NETMSG
++	bool "netmsg"
++	default n
++	help
++	  simple program for sending udp broadcast messages
+ 
+ config NC_SERVER
+ 	bool "Netcat server options (-lp)"
+Index: busybox-1.4.2/networking/Kbuild
+===================================================================
+--- busybox-1.4.2.orig/networking/Kbuild	2007-06-04 13:21:32.221078320 +0200
++++ busybox-1.4.2/networking/Kbuild	2007-06-04 13:21:34.188779184 +0200
+@@ -27,6 +27,7 @@
+ lib-$(CONFIG_IPTUNNEL)     += iptunnel.o
+ lib-$(CONFIG_NAMEIF)       += nameif.o
+ lib-$(CONFIG_NC)           += nc.o
++lib-$(CONFIG_NETMSG)       += netmsg.o
+ lib-$(CONFIG_NETSTAT)      += netstat.o
+ lib-$(CONFIG_NSLOOKUP)     += nslookup.o
+ lib-$(CONFIG_PING)         += ping.o
+Index: busybox-1.4.2/networking/netmsg.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ busybox-1.4.2/networking/netmsg.c	2007-06-04 13:21:34.188779184 +0200
+@@ -0,0 +1,63 @@
++/*
++ * Copyright (C) 2006 Felix Fietkau <nbd@openwrt.org>
++ *
++ * This is free software, licensed under the GNU General Public License v2.
++ */
++#include <sys/types.h>
++#include <sys/socket.h>
++#include <netinet/in.h>
++#include <netdb.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include "busybox.h"
++
++
++#ifndef CONFIG_NETMSG
++int main(int argc, char **argv)
++#else
++int netmsg_main(int argc, char **argv)
++#endif
++{
++	int s;
++	struct sockaddr_in addr;
++	int optval = 1;
++	unsigned char buf[1001];
++
++	if (argc != 3) {
++		fprintf(stderr, "usage: %s <ip> \"<message>\"\n", argv[0]);
++		exit(1);
++	}
++
++	if ((s = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
++		perror("Opening socket");
++		exit(1);
++	}
++
++	memset(&addr, 0, sizeof(addr));
++	addr.sin_family = AF_INET;
++	addr.sin_addr.s_addr = inet_addr(argv[1]);
++	addr.sin_port = htons(0x1337);
++
++	memset(buf, 0, 1001);
++	buf[0] = 0xde;
++	buf[1] = 0xad;
++
++	strncpy(buf + 2, argv[2], 998);
++
++	if (setsockopt (s, SOL_SOCKET, SO_BROADCAST, (caddr_t) &optval, sizeof (optval)) < 0) {
++		perror("setsockopt()");
++		goto fail;
++	}
++
++	if (sendto(s, buf, 1001, 0, (struct sockaddr *) &addr, sizeof(addr)) < 0) {
++		perror("sendto()");
++		goto fail;
++	}
++
++	return 0;
++	
++fail:
++	close(s);
++	exit(1);
++}

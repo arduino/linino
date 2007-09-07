@@ -1,0 +1,78 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+START=60
+
+dhcp_calc() {
+	local ip="$1"
+	local res=0
+	
+	while [ -n "$ip" ]; do
+		part="${ip%%.*}"
+		res="$(($res * 256))"
+		res="$(($res + $part))"
+		[ "${ip%.*}" != "$ip" ] && ip="${ip#*.}" || ip=
+	done
+	echo "$res"
+}
+
+dhcp_add() {
+	local cfg="$1"
+
+	config_get net "$cfg" interface
+	[ -n "$net" ] || return 0
+	
+	config_get ifname "$net" ifname
+	[ -n "$ifname" ] || return 0
+	
+	config_get_bool ignore "$cfg" ignore
+	[ "$ignore" -gt 0 ] && {
+		append args "-I $ifname"
+		return 0
+	}
+	
+	config_get proto "$net" proto
+	[ static = "$proto" ] || return 0
+	
+	config_get ipaddr "$net" ipaddr
+	config_get netmask "$net" netmask
+
+	# check for an already active dhcp server on the interface, unless 'force' is set
+	config_get_bool force "$cfg" force 0
+	[ "$force" -gt 0 ] || {
+		udhcpc -n -q -R -s /bin/true -t 1 -i $ifname >&- && return 0
+	}
+	
+	config_get start "$cfg" start
+	config_get end "$cfg" end
+	config_get leasetime "$cfg" leasetime
+	config_get options "$cfg" options
+
+	leasetime="${leasetime:-12h}"
+	start="$(dhcp_calc "${start:-100}")"
+	end="$((${end:-150} + 1))"
+	eval "$(ipcalc.sh $ipaddr $netmask $start $end)"
+	append args "-F $START,$END,$NETMASK,$leasetime${options:+ $options}"
+}
+
+start() {
+	include /lib/network
+	scan_interfaces
+	config_load /var/state/network
+	config_load dhcp
+
+	args=""
+	config_foreach dhcp_add dhcp
+	
+	dnsmasq $args && {
+		rm -f /tmp/resolv.conf
+		cat > /tmp/resolv.conf <<EOF
+nameserver 127.0.0.1
+search lan
+EOF
+	}
+}
+
+stop() {
+	killall dnsmasq
+}

@@ -1,0 +1,16 @@
+Index: fuse-2.6.5/kernel/Makefile.in
+===================================================================
+--- fuse-2.6.5.orig/kernel/Makefile.in	2007-06-23 13:03:50.000000000 +0200
++++ fuse-2.6.5/kernel/Makefile.in	2007-06-23 13:03:50.000000000 +0200
+@@ -25,11 +25,9 @@
+ install-y: all
+ 	$(mkdir_p) $(DESTDIR)$(fusemoduledir)
+ 	$(INSTALL) -m 644 $(fusemodule) $(DESTDIR)$(fusemoduledir)/$(fusemodule)
+-	-/sbin/depmod -a
+ 
+ uninstall-y:
+ 	rm -f $(DESTDIR)$(fusemoduledir)/$(fusemodule)
+-	-/sbin/depmod -a
+ 
+ clean:
+ 	-rm -f $(fusemodule) *.o .*.cmd *.mod.c *.ko *.s */*.o

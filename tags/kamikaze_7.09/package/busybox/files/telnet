@@ -1,0 +1,16 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=50
+
+start() {
+	if 	[ \! -f /etc/passwd ] || \
+		awk -F: '/^root:/ && ($2 != "") && ($2 !~ /\!/) {exit 1}' /etc/passwd 2>/dev/null || \
+		[ \! -x /usr/sbin/dropbear ]
+	then \
+		telnetd -l /bin/login
+	fi
+}
+
+stop() {
+	killall telnetd
+}

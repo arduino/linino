@@ -1,0 +1,38 @@
+# Choose gcc version.
+
+choice
+	prompt "GCC compiler Version" if TOOLCHAINOPTS
+	default GCC_VERSION_3_4_6 if LINUX_2_4
+	default GCC_VERSION_4_2_0 if LINUX_2_6_MAGICBOX
+	default GCC_VERSION_4_1_2
+	help
+	  Select the version of gcc you wish to use.
+
+	config GCC_VERSION_3_4_6
+		bool "gcc 3.4.6"
+
+	config GCC_VERSION_4_1_2
+		depends !LINUX_2_4
+		bool "gcc 4.1.2"
+
+	config GCC_VERSION_4_2_0
+		depends !LINUX_2_4
+		bool "gcc 4.2.0"
+
+endchoice
+
+config EXTRA_GCC_CONFIG_OPTIONS
+	string
+	prompt "Additional gcc options" if TOOLCHAINOPTS
+	default ""
+	help
+	    Any additional gcc options you may want to include....
+
+config INSTALL_LIBSTDCPP
+	bool
+	prompt "Build/install c++ compiler and libstdc++?" if TOOLCHAINOPTS
+	default y
+	help
+	    Build/install c++ compiler and libstdc++?
+
+

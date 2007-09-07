@@ -1,0 +1,5 @@
+$include /etc/hotplug2-init.rules
+
+SUBSYSTEM ~~ (net|button|usb) {
+	exec /sbin/hotplug-call %SUBSYSTEM%;
+}

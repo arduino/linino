@@ -1,0 +1,13 @@
+Index: busybox-1.4.2/coreutils/uniq.c
+===================================================================
+--- busybox-1.4.2.orig/coreutils/uniq.c	2007-06-04 13:21:31.993112976 +0200
++++ busybox-1.4.2/coreutils/uniq.c	2007-06-04 13:21:35.960509840 +0200
+@@ -83,6 +83,8 @@
+ 
+ 			if (!s0 || strcmp(e0, e1)) {
+ 				break;
++			} else {
++				free(s1);
+ 			}
+ 
+ 			++dups;		 /* Note: Testing for overflow seems excessive. */

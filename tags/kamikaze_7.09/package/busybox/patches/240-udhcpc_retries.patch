@@ -1,0 +1,22 @@
+Index: busybox-1.4.2/networking/udhcp/dhcpc.c
+===================================================================
+--- busybox-1.4.2.orig/networking/udhcp/dhcpc.c	2007-06-04 13:21:32.319063424 +0200
++++ busybox-1.4.2/networking/udhcp/dhcpc.c	2007-06-04 13:21:33.430894400 +0200
+@@ -291,7 +291,7 @@
+ 			/* timeout dropped to zero */
+ 			switch (state) {
+ 			case INIT_SELECTING:
+-				if (packet_num < client_config.retries) {
++				if (!client_config.retries || (packet_num < client_config.retries)) {
+ 					if (packet_num == 0)
+ 						xid = random_xid();
+ 
+@@ -316,7 +316,7 @@
+ 				break;
+ 			case RENEW_REQUESTED:
+ 			case REQUESTING:
+-				if (packet_num < client_config.retries) {
++				if (!client_config.retries || (packet_num < client_config.retries)) {
+ 					/* send request packet */
+ 					if (state == RENEW_REQUESTED)
+ 						send_renew(xid, server_addr, requested_ip); /* unicast */

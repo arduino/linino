@@ -1,0 +1,61 @@
+Index: madwifi-ng-r2568-20070710/ath/if_ath.c
+===================================================================
+--- madwifi-ng-r2568-20070710.orig/ath/if_ath.c	2007-07-23 01:48:40.726301028 +0200
++++ madwifi-ng-r2568-20070710/ath/if_ath.c	2007-07-23 01:48:41.230329754 +0200
+@@ -5732,7 +5732,8 @@
+ 		 * frame; it'll be dropped where it's not wanted.
+ 		 */
+ 		if (rs->rs_keyix != HAL_RXKEYIX_INVALID &&
+-		    (ni = sc->sc_keyixmap[rs->rs_keyix]) != NULL) {
++		    ((ni = sc->sc_keyixmap[rs->rs_keyix]) != NULL) &&
++			ieee80211_check_rxnode(ni, (const struct ieee80211_frame_min *) skb->data)) {
+ 			struct ath_node *an;
+ 			/*
+ 			 * Fast path: node is present in the key map;
+Index: madwifi-ng-r2568-20070710/net80211/ieee80211_node.c
+===================================================================
+--- madwifi-ng-r2568-20070710.orig/net80211/ieee80211_node.c	2007-07-23 01:48:38.458171774 +0200
++++ madwifi-ng-r2568-20070710/net80211/ieee80211_node.c	2007-07-23 01:48:41.230329754 +0200
+@@ -1271,8 +1271,6 @@
+ 	IEEE80211_NODE_TABLE_UNLOCK_IRQ(nt);
+ 
+ 	return ni;
+-#undef IS_PSPOLL
+-#undef IS_CTL
+ }
+ #ifdef IEEE80211_DEBUG_REFCNT
+ EXPORT_SYMBOL(ieee80211_find_rxnode_debug);
+@@ -1280,6 +1278,20 @@
+ EXPORT_SYMBOL(ieee80211_find_rxnode);
+ #endif
+ 
++int
++ieee80211_check_rxnode(struct ieee80211_node *ni,
++	const struct ieee80211_frame_min *wh)
++{
++	if (IS_CTL(wh) && !IS_PSPOLL(wh) /*&& !IS_RTS(ah)*/)
++		return IEEE80211_ADDR_EQ(ni->ni_macaddr, wh->i_addr1);
++	else
++		return IEEE80211_ADDR_EQ(ni->ni_macaddr, wh->i_addr2);
++}
++
++EXPORT_SYMBOL(ieee80211_check_rxnode);
++#undef IS_PSPOLL
++#undef IS_CTL
++
+ /*
+  * Return a reference to the appropriate node for sending
+  * a data frame.  This handles node discovery in adhoc networks.
+Index: madwifi-ng-r2568-20070710/net80211/ieee80211_node.h
+===================================================================
+--- madwifi-ng-r2568-20070710.orig/net80211/ieee80211_node.h	2007-07-23 01:48:38.466172232 +0200
++++ madwifi-ng-r2568-20070710/net80211/ieee80211_node.h	2007-07-23 01:48:41.254331120 +0200
+@@ -328,6 +328,8 @@
+ 	*pni = NULL;			/* guard against use */
+ }
+ 
++int ieee80211_check_rxnode(struct ieee80211_node *ni,
++	const struct ieee80211_frame_min *wh);
+ int ieee80211_add_wds_addr(struct ieee80211_node_table *, struct ieee80211_node *,
+ 	const u_int8_t *, u_int8_t);
+ void ieee80211_remove_wds_addr(struct ieee80211_node_table *, const u_int8_t *);

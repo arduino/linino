@@ -1,0 +1,16 @@
+Index: madwifi-ng-r2568-20070710/ath/if_athvar.h
+===================================================================
+--- madwifi-ng-r2568-20070710.orig/ath/if_athvar.h	2007-07-23 01:48:42.262388566 +0200
++++ madwifi-ng-r2568-20070710/ath/if_athvar.h	2007-07-23 01:48:43.126437804 +0200
+@@ -123,6 +123,11 @@
+ #define	NETDEV_TX_BUSY	1
+ #endif
+ 
++#ifndef NETDEV_TX_OK
++#define NETDEV_TX_OK    0
++#define NETDEV_TX_BUSY  1
++#endif
++
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(2,4,23)
+ static inline struct net_device *_alloc_netdev(int sizeof_priv, const char *mask,
+ 					       void (*setup)(struct net_device *))

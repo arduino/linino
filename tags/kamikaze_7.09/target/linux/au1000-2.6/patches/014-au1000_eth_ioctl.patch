@@ -1,0 +1,15 @@
+--- linux-2.6.22.1.orig/drivers/net/au1000_eth.c	2007-07-24 18:43:25.527583520 +0200
++++ linux-2.6.22.1/drivers/net/au1000_eth.c	2007-07-24 23:07:00.388821102 +0200
+@@ -1320,9 +1320,12 @@
+ 	}
+ }
+ 
++#define AU1000_KNOWN_PHY_IOCTLS 		(SIOCGMIIPHY & 0xfff0)
+ static int au1000_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
+ {
+ 	struct au1000_private *aup = (struct au1000_private *)dev->priv;
++	if((cmd & AU1000_KNOWN_PHY_IOCTLS) != AU1000_KNOWN_PHY_IOCTLS)
++		return -EINVAL;
+ 
+ 	if (!netif_running(dev)) return -EINVAL;
+ 
