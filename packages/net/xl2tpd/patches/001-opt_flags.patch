@@ -1,0 +1,13 @@
+diff -ruN xl2tpd-1.1.11-old/Makefile xl2tpd-1.1.11-new/Makefile
+--- xl2tpd-1.1.11-old/Makefile	2007-06-26 19:53:07.000000000 +0200
++++ xl2tpd-1.1.11-new/Makefile	2007-09-04 21:55:56.000000000 +0200
+@@ -67,7 +67,8 @@
+ 
+ FFLAGS= -DIP_ALLOCATION
+ 
+-CFLAGS+= $(DFLAGS) -O2 -fno-builtin -Wall -DSANITY $(OSFLAGS) $(FFLAGS)
++OFLAGS=-O2
++CFLAGS+= $(DFLAGS) $(OFLAGS) -fno-builtin -Wall -DSANITY $(OSFLAGS) $(FFLAGS)
+ HDRS=l2tp.h avp.h misc.h control.h call.h scheduler.h file.h aaa.h md5.h
+ OBJS=xl2tpd.o pty.o misc.o control.o avp.o call.o network.o avpsend.o scheduler.o file.o aaa.o md5.o
+ SRCS=${OBJS:.o=.c} ${HDRS}

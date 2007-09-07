@@ -5,7 +5,7 @@ noauth
 debug        
 dump         
 logfd 2      
-logfile /var/log/l2tpd.log  
+logfile /var/log/xl2tpd.log  
 noccp 
 novj 
 novjccomp 
