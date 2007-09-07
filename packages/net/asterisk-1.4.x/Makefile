@@ -39,9 +39,6 @@ define Package/asterisk14
 $(call Package/asterisk14/Default)
   TITLE:=Complete open source PBX
   DEPENDS:= +libltdl +libncurses +libpopt +libpthread
-ifeq ($(SDK)$(CONFIG_PACKAGE_asterisk14-mysql),)
-  DEPENDS+= +zlib
-endif
 endef
 
 define Package/asterisk14/description
