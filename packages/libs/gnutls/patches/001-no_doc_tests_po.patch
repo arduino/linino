@@ -1,0 +1,14 @@
+Index: gnutls-2.0.0/Makefile.in
+===================================================================
+--- gnutls-2.0.0.orig/Makefile.in	2007-09-07 21:59:37.000000000 +0200
++++ gnutls-2.0.0/Makefile.in	2007-09-07 22:00:00.000000000 +0200
+@@ -498,8 +498,7 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
+-SUBDIRS = lgl gl includes lib libextra src $(am__append_1) doc tests \
+-	po
++SUBDIRS = lgl gl includes lib libextra src $(am__append_1)
+ ACLOCAL_AMFLAGS = -I m4 -I gl/m4 -I lgl/m4
+ tag = $(PACKAGE)_`echo $(VERSION) | sed 's/\./_/g'`
+ all: config.h

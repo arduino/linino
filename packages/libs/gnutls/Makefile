@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,20 +9,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnutls
-PKG_VERSION:=1.0.25
-PKG_RELEASE:=0
+PKG_VERSION:=2.0.0
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.gnutls.org/pub/gnutls/ \
-	ftp://ftp.gnupg.org/gcrypt/alpha/gnutls/ \
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://josefsson.org/gnutls/releases/ \
 	http://www.mirrors.wiretapped.net/security/network-security/gnutls/ \
-	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/ \
-	http://josefsson.org/gnutls/releases/
-PKG_MD5SUM:=3585b5b204135e51e0efc9084b3e028b
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+	ftp://ftp.gnutls.org/pub/gnutls/ \
+	ftp://ftp.gnupg.org/gcrypt/alpha/gnutls/ \
+	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/
+PKG_MD5SUM:=181b2ff554a83e6cf85505ea16699d39
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,19 +26,21 @@ define Package/gnutls/Default
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=GNU TLS
-  DESCRIPTION:=\
-	GnuTLS is a project that aims to develop a library which provides a \\\
-	secure layer, over a reliable transport layer. Currently the GnuTLS \\\
-	library implements the proposed standards by the IETF's TLS working \\\
-	group.
   URL:=http://www.gnu.org/software/gnutls/
+endef
+
+define Package/gnutls/Default/description
+ GnuTLS is a project that aims to develop a library which provides a
+ secure layer, over a reliable transport layer. Currently the GnuTLS
+ library implements the proposed standards by the IETF's TLS working
+ group.
 endef
 
 define Package/gnutls-utils
   $(call Package/gnutls/Default)
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libgnutls
+  DEPENDS:=+libgnutls +libgpg-error
   TITLE+= (utilities)
   DESCRIPTION+=\\\
 	\\\
@@ -68,32 +66,23 @@ define Package/libgnutls-openssl
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); touch \
-		configure.in \
-		acinclude.m4 \
-		aclocal.m4 \
-		Makefile.in \
-		config.h.in \
-		configure \
-	)
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \
 		--disable-srp-authentication \
-		--disable-anon-authentication \
-		--disable-openpgp-authentication \
-		--with-included-opencdk=yes \
 		--with-included-libtasn1=yes \
 		--with-included-libcfg=yes \
+		--without-libopencdk-prefix \
 		--without-zlib \
 		--without-lzo \
 	)
+	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
 
 define Build/InstallDev
@@ -107,8 +96,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/gnutls{,-extra}.pc $(STAGING_DIR)/usr/lib/pkgconfig/
 	$(SED) 's,-I$$$${includedir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/gnutls{,-extra}.pc
 	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/gnutls{,-extra}.pc
-	mkdir -p $(STAGING_DIR)/usr/share/aclocal
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/aclocal/libgnutls{,-extra}.m4 $(STAGING_DIR)/usr/share/aclocal/
 	$(SED)  "s,"prefix\=/usr",prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/gnutls-extra.pc
 	$(SED)  "s,"exec_prefix\=/usr",exec_prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/gnutls-extra.pc
 endef
