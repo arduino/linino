@@ -16,7 +16,6 @@ PKG_SOURCE_URL:=@SF/bnbtusermods
 PKG_MD5SUM:=d6edf0a11d7e68fa3d121e91308f22f5
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)80-$(PKG_VERSION)-src
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -25,7 +24,7 @@ define Package/cbtt/Default
   CATEGORY:=Network
   DEPENDS:=+libpthread +uclibcxx +zlib
   TITLE:=Bittorrent tracker
-  URL:=http://bnbtusermods.sourceforge.net
+  URL:=http://bnbtusermods.sourceforge.net/
 endef
 
 define Package/cbtt
@@ -33,6 +32,7 @@ $(call Package/cbtt/Default)
 endef
 
 define Package/cbtt-mysql
+$(call Package/cbtt/Default)
   DEPENDS+= +libmysqlclient
   TITLE+= (with mysql support)
 endef
