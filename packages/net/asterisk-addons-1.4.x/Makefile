@@ -71,7 +71,6 @@ endef
 define Package/asterisk14-mysql
 $(call Package/asterisk-addons/Default)
   DEPENDS:= +asterisk14 +libmysqlclient
-  DEFAULT:=n
   TITLE+= MySQL support
 endef
 
@@ -80,45 +79,54 @@ $(call Package/asterisk-addons/Default/description)
  This package contains MySQL support modules for Asterisk.
 endef
 
-
+EXTRA_CFLAGS:=$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)
+EXTRA_LDFLAGS:=$(TARGET_LDFLAGS)
 ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk14-mysql),)
   EXTRA_CFLAGS+= -I$(STAGING_DIR)/usr/include/mysql
   EXTRA_LDFLAGS+= -L$(STAGING_DIR)/usr/lib/mysql
 endif
 
+CONFIGURE_ARGS += \
+	--with-bluetooth="$(STAGING_DIR)/usr" \
+	--with-ncurses="$(STAGING_DIR)/usr" \
+	--with-mysqlclient="$(STAGING_DIR)/usr" \
+
+CONFIGURE_VARS += \
+	ac_cv_file__usr_include_asterisk_channel_h="yes" \
 
 define Build/Configure
 	( cd $(PKG_BUILD_DIR); ./bootstrap.sh )
-	$(call Build/Configure/Default)
-	cd $(PKG_BUILD_DIR)/asterisk-ooh323c && \
-		CPPFLAGS="-I$(STAGING_DIR)/host/include $(EXTRA_CFLAGS)" \
-		LDFLAGS="-L$(STAGING_DIR)/host/lib" \
-		./configure \
-		--target=$(GNU_TARGET_NAME) \
-		--host=$(GNU_TARGET_NAME) \
-		-build=$(GNU_HOST_NAME) \
-		--prefix=/usr \
-		--exec-prefix=/usr \
-		--bindir=/usr/bin \
-		--sbindir=/usr/sbin \
-		--libexecdir=/usr/lib \
-		--sysconfdir=/etc \
-		--datadir=/usr/share \
-		--localstatedir=/var \
-		--mandir=/usr/man \
-		--infodir=/usr/info \
-		$(DISABLE_NLS) \
-		ac_cv_file__usr_include_asterisk_channel_h="yes"
+	$(call Build/Configure/Default,,,)
+	$(call Build/Configure/Default,,,asterisk-ooh323c)
+	$(call libtool_disable_rpath)
 endef
+
+# XXX: explanations
+# - use AM_CFLAGS for asterisk-ooh323c
+# - use OPTIMIZE & OPTIONS for format_mp3
+
+MAKE_ARGS:= \
+	AM_CFLAGS="$(TARGET_CFLAGS)" \
+	OPTIMIZE="$(TARGET_CFLAGS)" \
+	OPTIONS="" \
+	BLUETOOTH_LIB="$(TARGET_LDFLAGS) -lbluetooth" \
+
+MAKE_VARS:= \
+	CFLAGS="$(EXTRA_CFLAGS) -DLOW_MEMORY" \
+	LDFLAGS="$(EXTRA_LDFLAGS)" \
 
 define Build/Compile
 	mkdir -p $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules
-	CFLAGS="-DLOW_MEMORY $(EXTRA_CFLAGS)" \
-	LDFLAGS="$(EXTRA_LDFLAGS)" \
+	$(MAKE_VARS) \
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
-		BLUETOOTH_LIB="$(TARGET_LDFLAGS) -lbluetooth" \
+		$(MAKE_ARGS) \
+		all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE_VARS) \
+	$(MAKE) -C "$(PKG_BUILD_DIR)" \
+		$(MAKE_ARGS) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install samples
+		install samples
 endef
 
 
