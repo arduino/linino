@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=keynote
 PKG_VERSION:=2.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
@@ -23,17 +23,22 @@ define Package/keynote
   CATEGORY:=Network
   DEPENDS:=@LINUX_2_6 +libopenssl
   TITLE:=Simple and flexible trust-management system
-  DESCRIPTION:=\
-	KeyNote is a simple and flexible trust-management system designed to work \\\
-	well for a variety of large- and small- scale Internet-based applications.\\\
-	It provides a single, unified language for both local policies and \\\
-	credentials. 
   URL:=http://www1.cs.columbia.edu/~angelos/keynote.html
+endef
+
+define Package/keynote/description
+ KeyNote is a simple and flexible trust-management system designed to work 
+ well for a variety of large- and small- scale Internet-based applications.
+ It provides a single, unified language for both local policies and 
+ credentials.
 endef
 
 CONFIGURE_ARGS += \
 	--enable-static \
 	--enable-shared
+
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS)"
 
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/include/keynote

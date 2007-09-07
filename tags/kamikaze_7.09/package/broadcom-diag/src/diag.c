@@ -113,6 +113,7 @@ enum {
 	/* D-Link */
 	DIR130,
 	DIR330,
+	DWL3150,
 };
 
 static void __init bcm4780_init(void) {
@@ -491,7 +492,7 @@ static struct platform_t __initdata platforms[] = {
 		.leds		= {
 			{ .name = "power",	.gpio = 1 << 1, .polarity = NORMAL },
 			{ .name = "wlan",	.gpio = 1 << 0, .polarity = REVERSE },
-			{ .name = "dmz",	.gpio = 1 << 6, .polarity = REVERSE },
+			{ .name = "wan",	.gpio = 1 << 6, .polarity = INPUT },
 			{ .name = "diag",	.gpio = 1 << 7, .polarity = REVERSE },
 		},
 	},
@@ -577,6 +578,16 @@ static struct platform_t __initdata platforms[] = {
 			{ .name = "diag", 	.gpio = 1 << 0},
 			{ .name = "usb", 	.gpio = 1 << 4},
 			{ .name = "blue",	.gpio = 1 << 6},
+		},
+	},
+	[DWL3150] = {
+		.name	= "D-Link DWL-3150",
+		.buttons	= {
+			{ .name = "reset",	.gpio = 1 << 7},
+		},
+		.leds	  = {
+			{ .name = "diag",	.gpio = 1 << 2},
+			{ .name = "status",	.gpio = 1 << 1},
 		},
 	},
 };
@@ -714,6 +725,9 @@ static struct platform_t __init *platform_detect(void)
 
 	if (!strncmp(boardnum, "04FN52", 6)) /* SimpleTech SimpleShare */
 		return &platforms[STI_NAS];
+
+	if (!strcmp(getvar("boardnum"), "10") && !strcmp(getvar("boardrev"), "0x13")) /* D-Link DWL-3150 */
+		return &platforms[DWL3150];
 
 	/* not found */
 	return NULL;
@@ -879,6 +893,7 @@ static void register_leds(struct led_t *l)
 {
 	struct proc_dir_entry *p;
 	u32 mask = 0;
+	u32 oe_mask = 0;
 	u32 val = 0;
 
 	leds = proc_mkdir("led", diag);
@@ -893,9 +908,12 @@ static void register_leds(struct led_t *l)
 			l->state = 0;
 			set_led_extif(l);
 		} else {
+			if (l->polarity != INPUT) oe_mask != l->gpio;
 			mask |= l->gpio;
 			val |= (l->polarity == NORMAL)?0:l->gpio;
 		}
+
+		if (l->polarity == INPUT) continue;
 
 		if ((p = create_proc_entry(l->name, S_IRUSR, leds))) {
 			l->proc.type = PROC_LED;
@@ -905,7 +923,7 @@ static void register_leds(struct led_t *l)
 		}
 	}
 
-	gpio_outen(mask, mask);
+	gpio_outen(mask, oe_mask);
 	gpio_control(mask, 0);
 	gpio_out(mask, val);
 }

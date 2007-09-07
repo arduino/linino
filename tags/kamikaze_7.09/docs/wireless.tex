@@ -3,6 +3,12 @@ The WiFi settings are configured in the file \texttt{/etc/config/wireless}
 it should detect your card and create a sample configuration file. By default '\texttt{option network  lan}' is
 commented. This prevents unsecured sharing of the network over the wireless interface.
 
+Each wireless driver has its own configuration script in \texttt{/lib/wifi/driver\_name.sh} which handles
+driver specific options and configurations. This script is also calling driver specific binaries like wlc for
+Broadcom, or hostapd and wpa\_supplicant for atheros.
+
+The reason for using such architecture, is that it abstracts the driver configuration 
+
 \paragraph{Generic Broadcom wireless config:}
 
 \begin{Verbatim}
@@ -25,7 +31,7 @@ config wifi-iface
 config wifi-device      "wifi0"
     option type         "atheros"
     option channel      "5"
-    option mode  	"11g"
+    option agmode  	"11g"
 
 config wifi-iface
     option device       "wifi0"
@@ -36,7 +42,7 @@ config wifi-iface
     option encryption   "none"
 \end{Verbatim}
 
-\paragraph{Generic multi-radio Atheros wireless conifg:}
+\paragraph{Generic multi-radio Atheros wireless config:}
 
 \begin{Verbatim}
 config wifi-device  wifi0
@@ -77,7 +83,7 @@ config wifi-device     wifi device name
     option channel  1-14
     option maxassoc 1-128 (broadcom only)
     option distance 1-n
-    option mode     11b, 11g, 11a, 11bg (atheros only)
+    option agmode     11b, 11g, 11a, 11bg (atheros only)
 
 config wifi-iface
     option network  the interface you want wifi to bridge with 
@@ -210,3 +216,103 @@ Only the following mode combinations are supported:
             \item 1x \texttt{adhoc}
         \end{itemize}
 \end{itemize}
+
+\paragraph{Adding a new driver configuration}
+
+Since we currently only support two different wireless drivers : Broadcom and Atheros,
+you might be interested in adding support for another driver like Ralink RT2x00, 
+Texas Instruments ACX100/111.
+
+The driver specific script should be placed in \texttt{/lib/wifi/<driver>.sh} and has to
+include several functions providing :
+
+\begin{itemize}
+	\item detection of the driver presence
+	\item enabling/disabling the wifi interface(s)
+	\item configuration reading and setting
+	\item third-party programs calling (nas, supplicant)
+\end{itemize}
+
+Each driver script should append the driver to a global DRIVERS variable :
+
+\begin{Verbatim}
+append DRIVERS "driver name"
+\end{Verbatim}
+
+\subparagraph{\texttt{scan\_<driver>}}
+
+This function will parse the \texttt{/etc/config/wireless} and make sure there
+are no configuration incompatibilities, like enabling hidden SSIDS with ad-hoc mode
+for instance. This can be more complex if your driver supports a lof of configuration
+options. It does not change the state of the interface.
+
+Example:
+\begin{Verbatim}
+scan_dummy() {
+	local device="$1"
+
+	config_get vifs "$device" vifs
+	for vif in $vifs; do
+		# check config consistency for wifi-iface sections
+	done
+	# check mode combination
+}
+\end{Verbatim}
+
+\subparagraph{\texttt{enable\_<driver>}}
+
+This function will bring up the wifi device and optionally create application specific
+configuration files, e.g. for the WPA authenticator or supplicant.
+
+Example:
+\begin{Verbatim}
+enable_dummy() {
+	local device="$1"
+
+	config_get vifs "$device" vifs
+	for vif in $vifs; do
+		# bring up virtual interface belonging to
+		# the wifi-device "$device"
+	done
+}
+\end{Verbatim}
+
+\subparagraph{\texttt{disable\_<driver>}}
+
+This function will bring down the wifi device and all its virtual interfaces (if supported).
+
+Example:
+\begin{Verbatim}
+disable_dummy() {
+	local device="$1"
+
+	# bring down virtual interfaces belonging to
+	# "$device" regardless of whether they are
+	# configured or not. Don't rely on the vifs
+	# variable at this point
+}
+\end{Verbatim}
+
+\subparagraph{\texttt{detect\_<driver>}}
+
+This function looks for interfaces that are usable with the driver. Template config sections
+for new devices should be written to stdout. Must check for already existing config sections
+belonging to the interfaces before creating new templates.
+
+Example:
+\begin{Verbatim}
+detect_dummy() {
+	[ wifi-device = "$(config_get dummydev type)" ] && return 0
+	cat <<EOF
+config wifi-device dummydev
+	option type dummy
+	# REMOVE THIS LINE TO ENABLE WIFI:
+	option disabled 1
+
+config wifi-iface
+	option device dummydev
+	option mode ap
+	option ssid OpenWrt
+EOF
+}
+\end{Verbatim}

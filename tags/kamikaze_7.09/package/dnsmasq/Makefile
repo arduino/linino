@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dnsmasq
-PKG_VERSION:=2.38
+PKG_VERSION:=2.39
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://thekelleys.org.uk/dnsmasq
-PKG_MD5SUM:=ab066a97c226066485ad20e5ad5ce424
+PKG_MD5SUM:=1ffccc1f0d9b8a08f2b99e03ba9cc08b
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,13 +22,15 @@ define Package/dnsmasq
   SECTION:=net
   CATEGORY:=Base system
   TITLE:=A lightweight DNS and DHCP server
-  DESCRIPTION:=\
-	It is intended to provide coupled DNS and DHCP service to a LAN.
   URL:=http://www.thekelleys.org.uk/dnsmasq/
 endef
 
 define Package/dnsmasq/conffiles
 /etc/dnsmasq.conf
+endef
+
+define Package/dnsmasq/description
+ It is intended to provide coupled DNS and DHCP service to a LAN.
 endef
 
 define Build/Compile

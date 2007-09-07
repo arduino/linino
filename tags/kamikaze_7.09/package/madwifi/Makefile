@@ -12,7 +12,7 @@ include $(INCLUDE_DIR)/kernel.mk
 PKG_NAME:=madwifi
 PKG_VERSION:=r2568-20070710
 PKG_BRANCH:=madwifi-ng
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_BRANCH)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://snapshots.madwifi.org/$(PKG_BRANCH)
@@ -47,9 +47,6 @@ ifneq ($(CONFIG_LINUX_2_6_ATHEROS),)
   BUS:=AHB
   HAL_TARGET:=ap51
 endif
-ifneq ($(CONFIG_LINUX_2_6_ARUBA),)
-  BUS:=PCI AHB	# no suitable HAL for AHB yet.
-endif
 
 BUS_MODULES:=
 ifeq ($(findstring AHB,$(BUS)),AHB)
@@ -82,8 +79,6 @@ define KernelPackage/madwifi
   SUBMENU:=Wireless Drivers
   TITLE:=Driver for Atheros wireless chipsets
   DEPENDS:=+wireless-tools @!LINUX_2_6_AVR32
-  DESCRIPTION:=\
-	This package contains a driver for Atheros 802.11a/b/g chipsets.
   URL:=http://madwifi.org/
   VERSION:=$(LINUX_VERSION)+$(PKG_VERSION)-$(BOARD)-$(PKG_RELEASE)
   FILES:= \
@@ -92,6 +87,10 @@ define KernelPackage/madwifi
 		$(PKG_BUILD_DIR)/ath_rate/$(RATE_CONTROL)/ath_rate_$(RATE_CONTROL).$(LINUX_KMOD_SUFFIX) \
 		$(PKG_BUILD_DIR)/net80211/wlan*.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,50,$(MADWIFI_AUTOLOAD))
+endef
+
+define KernelPackage/madwifi/description
+ This package contains a driver for Atheros 802.11a/b/g chipsets.
 endef
 
 MADWIFI_MAKEOPTS= -C $(PKG_BUILD_DIR) \

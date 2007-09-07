@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ebtables
 PKG_VERSION:=2.0.8-rc2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-v$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/ebtables
@@ -26,6 +26,9 @@ define Package/ebtables
   TITLE:=Ethernet bridge firewall administration utility
   URL:=http://ebtables.sourceforge.net/
 endef
+
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS)"
 
 define Package/ebtables/install
 	$(INSTALL_DIR) $(1)/etc
