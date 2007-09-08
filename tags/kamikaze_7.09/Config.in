@@ -126,7 +126,7 @@ config SOURCE_FEEDS
 config SOURCE_FEEDS_REV
 	string
 	prompt "Revision for the source feed svn checkout" if BUILDOPTS
-	default "8180"
+	default ""
 
 
 source "toolchain/Config.in"
