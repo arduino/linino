@@ -106,6 +106,12 @@ define Package/freeradius-mod-eap-ttls
   TITLE:=EAP/TTLS module
 endef
 
+define Package/freeradius-mod-exec
+  $(call Package/freeradius/Default)
+  DEPENDS:=freeradius
+  TITLE:=EXEC module
+endef
+
 define Package/freeradius-mod-files
   $(call Package/freeradius/Default)
   DEPENDS:=freeradius
@@ -367,6 +373,7 @@ $(eval $(call BuildPlugin,freeradius-mod-eap-mschapv2,rlm_eap_mschapv2,))
 $(eval $(call BuildPlugin,freeradius-mod-eap-peap,rlm_eap_peap,))
 $(eval $(call BuildPlugin,freeradius-mod-eap-tls,rlm_eap_tls,))
 $(eval $(call BuildPlugin,freeradius-mod-eap-ttls,rlm_eap_ttls,))
+$(eval $(call BuildPlugin,freeradius-mod-exec,rlm_exec,))
 $(eval $(call BuildPlugin,freeradius-mod-files,rlm_files,acct_users preproxy_users users))
 $(eval $(call BuildPlugin,freeradius-mod-ldap,rlm_ldap,ldap.attrmap))
 $(eval $(call BuildPlugin,freeradius-mod-mschap,rlm_mschap,))
