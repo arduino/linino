@@ -35,6 +35,7 @@ endef
 
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -DHOSTS_ACCESS -DFACILITY=LOG_DAEMON -DIGNORE_SIGCHLD" \
+	RPCUSER="nobody" \
 	WRAP_LIB="-L$(STAGING_DIR)/usr/lib -lwrap" \
 	all
 
