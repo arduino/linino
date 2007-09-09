@@ -36,53 +36,117 @@ define Package/gnutls/Default/description
  group.
 endef
 
-define Package/gnutls-utils
-  $(call Package/gnutls/Default)
+
+define Package/certtool
+$(call Package/gnutls/Default)
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libgnutls +libgpg-error
-  TITLE+= (utilities)
-  DESCRIPTION+=\\\
-	\\\
-	This package contains some GnuTLS utilities.
+  TITLE+= (certool utility)
+  DEPENDS+= +libgnutls +libncurses +libreadline
 endef
+
+define Package/certtool/description
+$(call Package/gnutls/Default/description)
+ This package contains the GnuTLS certtool utility.
+endef
+
+
+define Package/gnutls-utils
+$(call Package/gnutls/Default)
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE+= (utilities)
+  DEPENDS+= +libgnutls +libgnutls-extra
+endef
+
+define Package/gnutls-utils/description
+$(call Package/gnutls/Default/description)
+ This package contains the GnuTLS gnutls-cli, gnutls-serv and psktool
+ utilities.
+endef
+
 
 define Package/libgnutls
-  $(call Package/gnutls/Default)
-  DEPENDS:=+libgcrypt
-  TITLE+= (library)
-  DESCRIPTION+=\\\
-	\\\
-	This package contains the GnuTLS shared libraries, needed by other programs.
+$(call Package/gnutls/Default)
+ TITLE+= (library)
+ DEPENDS+= +libgcrypt +libgpg-error
 endef
+
+define Package/libgnutls/description
+$(call Package/gnutls/Default/description)
+ This package contains the GnuTLS shared library, needed by other programs.
+endef
+
+
+define Package/libgnutls-extra
+$(call Package/gnutls/Default)
+ TITLE+= (extra library)
+ DEPENDS+= +libgnutls
+endef
+
+define Package/libgnutls-extra/description
+$(call Package/gnutls/Default/description)
+ This package contains the GnuTLS extra shared library.
+endef
+
 
 define Package/libgnutls-openssl
-  $(call Package/gnutls/Default)
-  DEPENDS:=libgnutls
-  TITLE+= (OpenSSL compat library)
-  DESCRIPTION+=\\\
-	\\\
-	This package contains the GnuTLS OpenSSL compatibility layer shared library.
+$(call Package/gnutls/Default)
+ TITLE+= (OpenSSL compat library)
+ DEPENDS+= +libgnutls
 endef
 
+define Package/libgnutls-openssl/description
+$(call Package/gnutls/Default/description)
+ This package contains the GnuTLS OpenSSL compatibility layer shared library.
+endef
+
+
+# XXX: configure will disable any of theese if they're present regardless of
+# the "--enable" prefix
+#	--enable-anon-authentication \
+#	--enable-openpgp-authentication \
+#	--enable-psk-authentication \
+#	--enable-srp-authentication \
+#	--enable-tls-authorization \
+#
+# and the following prevents the library from building so it's ommited
+#	--disable-tls-authorization
+
+CONFIGURE_ARGS+= \
+	--enable-shared \
+	--enable-static \
+	--disable-anon-authentication \
+	--disable-openpgp-authentication \
+	--disable-psk-authentication \
+	--disable-srp-authentication \
+	--with-included-libtasn1 \
+	--with-included-libcfg \
+	--without-included-opencdk \
+	--with-libgcrypt \
+	--with-libgcrypt-prefix="$(STAGING_DIR)/usr" \
+	--without-libiconv-prefix \
+	--without-libintl-prefix \
+	--without-libopencdk-prefix \
+	--with-libreadline-prefix="$(STAGING_DIR)/usr" \
+	--without-lzo \
+	--without-zlib \
+
+# XXX: AM_CFLAGS duplicates with CFLAGS
+MAKE_ARGS:= \
+	AM_CFLAGS="" \
+
 define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--disable-srp-authentication \
-		--with-included-libtasn1=yes \
-		--with-included-libcfg=yes \
-		--without-libopencdk-prefix \
-		--without-zlib \
-		--without-lzo \
-	)
+	$(SED) 's,-I$$$${includedir},,g' $(PKG_BUILD_DIR)/configure
+	$(SED) 's,-L$$$${libdir},,g' $(PKG_BUILD_DIR)/configure
+	$(call Build/Configure/Default)
 	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_ARGS) all
 	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
+	$(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_ARGS) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
 define Build/InstallDev
@@ -96,34 +160,55 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/gnutls{,-extra}.pc $(STAGING_DIR)/usr/lib/pkgconfig/
 	$(SED) 's,-I$$$${includedir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/gnutls{,-extra}.pc
 	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/gnutls{,-extra}.pc
-	$(SED)  "s,"prefix\=/usr",prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/gnutls-extra.pc
-	$(SED)  "s,"exec_prefix\=/usr",exec_prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/gnutls-extra.pc
 endef
 
 define Build/UninstallDev
 	rm -rf	$(STAGING_DIR)/usr/bin/libgnutls{,-extra}-config \
 		$(STAGING_DIR)/usr/include/gnutls \
 		$(STAGING_DIR)/usr/lib/libgnutls{,-extra,-openssl}.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/gnutls{,-extra}.pc \
-		$(STAGING_DIR)/usr/share/aclocal/libgnutls{,-extra}.m4
+		$(STAGING_DIR)/usr/lib/pkgconfig/gnutls{,-extra}.pc
 endef
+
+
+define Package/certtool/conffiles
+/etc/gnutls/certtool.cfg
+endef
+
+define Package/certtool/install
+	$(INSTALL_DIR) $(1)/etc/gnutls
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/doc/certtool.cfg $(1)/etc/gnutls/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/certtool $(1)/usr/bin/
+endef
+
 
 define Package/gnutls-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/certtool $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/gnutls-{cli,serv} $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/psktool $(1)/usr/bin/
 endef
+
 
 define Package/libgnutls/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgnutls{,-extra}.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgnutls.so.* $(1)/usr/lib/
 endef
+
+
+define Package/libgnutls-extra/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgnutls-extra.so.* $(1)/usr/lib/
+endef
+
 
 define Package/libgnutls-openssl/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgnutls-openssl.so.* $(1)/usr/lib/
 endef
 
+
+$(eval $(call BuildPackage,certtool))
 $(eval $(call BuildPackage,gnutls-utils))
 $(eval $(call BuildPackage,libgnutls))
+$(eval $(call BuildPackage,libgnutls-extra))
 $(eval $(call BuildPackage,libgnutls-openssl))
