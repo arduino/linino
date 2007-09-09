@@ -1,15 +1,8 @@
---- bind-9.3.2-P1/configure	2005-10-21 01:57:38.000000000 +0200
-+++ bind-9.3.2-P1.new/configure	2006-10-16 21:43:12.000000000 +0200
-@@ -4816,7 +4816,7 @@
-   use_openssl="auto"
- fi;
- 
--openssldirs="/usr /usr/local /usr/local/ssl /usr/pkg"
-+openssldirs="-I$STAGING_DIR/usr/include"
- if test "$use_openssl" = "auto"
- then
- 	for d in $openssldirs
-@@ -5357,8 +5357,7 @@
+Index: bind-9.4.1/configure
+===================================================================
+--- bind-9.4.1.orig/configure	2007-06-26 21:11:45.000000000 +0200
++++ bind-9.4.1/configure	2007-06-26 21:12:33.000000000 +0200
+@@ -5262,8 +5262,7 @@
  else
    test "$cross_compiling" = yes &&
    { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
@@ -19,7 +12,7 @@
  if test -r "$devrandom"; then
    eval "$as_ac_File=yes"
  else
-@@ -23747,176 +23746,6 @@
+@@ -24165,176 +24164,6 @@
  # which provides some (all?) of the desired functions.
  #
  
@@ -196,19 +189,10 @@
  #
  # Look for a 4.4BSD-style sa_len member in struct sockaddr.
  #
---- bind-9.3.2-P1/configure.in	2005-10-21 01:47:25.000000000 +0200
-+++ bind-9.3.2-P1.new/configure.in	2006-10-16 21:36:09.000000000 +0200
-@@ -363,7 +363,7 @@
-                           (Required for DNSSEC)],
-     use_openssl="$withval", use_openssl="auto")
- 
--openssldirs="/usr /usr/local /usr/local/ssl /usr/pkg"
-+openssldirs="$STAGING_DIR/usr/include $STAGING_DIR/include"
- if test "$use_openssl" = "auto"
- then
- 	for d in $openssldirs
---- bind-9.3.2-P1/lib/bind/configure	2005-10-14 03:44:50.000000000 +0200
-+++ bind-9.3.2-P1.new/lib/bind/configure	2006-10-16 21:46:45.000000000 +0200
+Index: bind-9.4.1/lib/bind/configure
+===================================================================
+--- bind-9.4.1.orig/lib/bind/configure	2007-06-26 21:11:45.000000000 +0200
++++ bind-9.4.1/lib/bind/configure	2007-06-26 21:12:33.000000000 +0200
 @@ -4461,6 +4461,7 @@
  if eval "test \"\${$as_ac_File+set}\" = set"; then
    echo $ECHO_N "(cached) $ECHO_C" >&6

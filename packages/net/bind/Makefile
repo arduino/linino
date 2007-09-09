@@ -9,14 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bind
-PKG_VERSION:=9.3.2-P2
+PKG_VERSION:=9.4.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= \
 	ftp://ftp.isc.org/isc/bind9/$(PKG_VERSION) \
 	http://www.mirrorservice.org/sites/ftp.isc.org/isc/bind9/$(PKG_VERSION)
-PKG_MD5SUM:=948101be324deb15ff94a5b6a639ea39
+PKG_MD5SUM:=09b54d35036cb0423b2e618f21766285
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -73,8 +73,9 @@ define Package/bind-dig
   TITLE+= DNS excavation tool
 endef
 
-define Package/Build/Configure
-	$(call Build/Configure/Default,\
+export BUILD_CC="$(TARGET_CC)"
+
+CONFIGURE_ARGS += \
 		--enable-shared \
 		--enable-static \
 		--enable-ipv6 \
@@ -82,19 +83,21 @@ define Package/Build/Configure
 		--disable-threads \
 		--with-openssl="$(STAGING_DIR)/usr" \
 		--with-libtool \
-	)
-endef
+		, \
+		BUILD_CC="$(TARGET_CC)" \
 
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR)/lib/dns \
+		BUILD_CC="$(HOSTCC)" \
 		CC="$(HOSTCC)" \
 		CFLAGS="-O2" \
 		LIBS="" \
 		gen
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
 
