@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rrdtool
-PKG_VERSION:=1.2.11
+PKG_VERSION:=1.2.23
 PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/pub
+PKG_SOURCE_URL:=http://oss.oetiker.ch/rrdtool/pub/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=d61c5755cb77207f9ad3584b26e8bf08
+PKG_MD5SUM:=dafa161bc9c61e57636a6085c87c1fe8
 
 PKG_BUILD_DEPENDS:=libnotimpl
 
@@ -67,6 +67,8 @@ CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/freetype2 -I$(STAGING_DIR)/usr/include/libart-2.0" \
 	LIBS="-lnotimpl" \
 	rd_cv_ieee_works=yes \
+	rd_cv_null_realloc=nope \
+	ac_cv_func_mmap_fixed_mapped=yes \
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_rrdcgi),)
   CONFIGURE_ARGS += --enable-rrdcgi
