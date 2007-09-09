@@ -112,6 +112,12 @@ define Package/freeradius-mod-exec
   TITLE:=EXEC module
 endef
 
+define Package/freeradius-mod-attr-rewrite
+  $(call Package/freeradius/Default)
+  DEPENDS:=freeradius
+  TITLE:=ATTR rewrite module
+endef
+
 define Package/freeradius-mod-files
   $(call Package/freeradius/Default)
   DEPENDS:=freeradius
@@ -208,7 +214,6 @@ PKG_CONFIGURE_ARGS:= \
 	--without-edir \
 	--without-snmp \
 	--with-experimental-modules \
-	--without-rlm_attr-rewrite \
 	--without-rlm_checkval \
 	--without-rlm_counter \
 	--without-rlm_dbm \
@@ -290,6 +295,12 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-eap-ttls),)
   PKG_CONFIGURE_LIBS+= -lcrypto -lssl
 else
   PKG_CONFIGURE_ARGS+= --without-rlm_eap_ttls
+endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-attr-rewrite),)
+  PKG_CONFIGURE_ARGS+= --with-rlm_attr-rewrite
+else
+  PKG_CONFIGURE_ARGS+= --without-rlm_attr-rewrite
 endif
 
 define Build/Configure
@@ -374,6 +385,7 @@ $(eval $(call BuildPlugin,freeradius-mod-eap-peap,rlm_eap_peap,))
 $(eval $(call BuildPlugin,freeradius-mod-eap-tls,rlm_eap_tls,))
 $(eval $(call BuildPlugin,freeradius-mod-eap-ttls,rlm_eap_ttls,))
 $(eval $(call BuildPlugin,freeradius-mod-exec,rlm_exec,))
+$(eval $(call BuildPlugin,freeradius-mod-attr-rewrite,rlm_attr_rewrite))
 $(eval $(call BuildPlugin,freeradius-mod-files,rlm_files,acct_users preproxy_users users))
 $(eval $(call BuildPlugin,freeradius-mod-ldap,rlm_ldap,ldap.attrmap))
 $(eval $(call BuildPlugin,freeradius-mod-mschap,rlm_mschap,))
