@@ -1,0 +1,18 @@
+--- iperf-2.0.2/compat/Thread.c        2005-05-03 08:15:51.000000000 -0700
++++ iperf-2.0.2.new/compat/Thread.c     2007-06-04 10:41:11.000000000 -0700
+@@ -405,9 +405,13 @@
+ void thread_rest ( void ) {
+ #if defined( HAVE_THREAD )
+ #if defined( HAVE_POSIX_THREAD )
+-    // TODO add checks for sched_yield or pthread_yield and call that
+-    // if available
++
++#if defined( _POSIX_PRIORITY_SCHEDULING )
++    sched_yield();
++#else
+     usleep( 0 );
++#endif
++
+ #else // Win32
+     SwitchToThread( );
+ #endif
