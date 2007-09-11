@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lighttpd
-PKG_VERSION:=1.4.16
-PKG_RELEASE:=2
+PKG_VERSION:=1.4.18
+PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.lighttpd.net/download/
-PKG_MD5SUM:=ea671997591f772417b7e540d325f8cc
-
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=26f98dddf9d8c0775221b800986003ee
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,17 +27,8 @@ endef
 define Package/lighttpd
   $(call Package/lighttpd/Default)
   MENU:=1
-  SECTION:=net
-  CATEGORY:=Network
   DEPENDS:=+libopenssl +libpcre +libpthread +libsqlite3 +libxml2
   TITLE:=A flexible and lightweight web server
-  URL:=http://www.lighttpd.net/
-endef
-
-define Package/lighttpd/conffiles
-/etc/lighttpd.conf
-/etc/default/lighttpd
-/etc/init.d/lighttpd
 endef
 
 define Package/lighttpd-mod-accesslog
@@ -140,7 +128,7 @@ define Package/lighttpd-mod-webdav
 endef
 
 
-CONFIGURE_ARGS += \
+CONFIGURE_ARGS+= \
 	--libdir=/usr/lib/lighttpd \
 	--sysconfdir=/etc/lighttpd \
 	--enable-shared \
@@ -158,13 +146,26 @@ CONFIGURE_ARGS += \
 	--with-pcre \
 	--without-valgrind \
 	--with-webdav-props \
-	, \
-	CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2 $$$$CPPFLAGS" \
-	PCRE_LIB="-lpcre"
 
-MAKE_FLAGS += \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install
+CONFIGURE_VARS+= \
+	CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2 $$$$CPPFLAGS" \
+	PCRE_LIB="-lpcre" \
+
+define Build/Configure
+	$(call Build/Configure/Default,)
+	$(call libtool_disable_rpath)
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+endef
+
+define Package/lighttpd/conffiles
+/etc/lighttpd.conf
+/etc/default/lighttpd
+endef
 
 define Package/lighttpd/install
 	$(INSTALL_DIR) $(1)/etc
