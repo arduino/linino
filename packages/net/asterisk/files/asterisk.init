@@ -3,18 +3,19 @@
 START=50
 
 DEFAULT=/etc/default/asterisk
-OPTIONS=""
+DEST=
+OPTIONS=
 
 start() {
 	[ -f $DEFAULT ] && . $DEFAULT
-	[ -d /var/run ] || mkdir -p /var/run
-	[ -d /var/log/asterisk ] || mkdir -p /var/log/asterisk
-	[ -d /var/spool/asterisk ] || mkdir -p /var/spool/asterisk
-	[ -f /usr/lib/asterisk/astdb ] && mv /usr/lib/asterisk/astdb /var/spool/asterisk/astdb
-	[ -h /usr/lib/asterisk/astdb ] || ln -sf /var/spool/asterisk/astdb /usr/lib/asterisk/astdb
+	mkdir -p $DEST/var/run
+	mkdir -p $DEST/var/log/asterisk
+	mkdir -p $DEST/var/spool/asterisk
+	[ -f $DEST/usr/lib/asterisk/astdb ] && mv $DEST/usr/lib/asterisk/astdb $DEST/var/spool/asterisk/
+	[ -h $DEST/usr/lib/asterisk/astdb ] || ln -sf $DEST/var/spool/asterisk/astdb $DEST/usr/lib/asterisk/
 	/usr/sbin/asterisk $OPTIONS
 }
 
 stop() {
-	[ -f /var/run/asterisk.pid ] && kill $(cat /var/run/asterisk.pid) >/dev/null 2>&1
+	[ -f $DEST/var/run/asterisk.pid ] && kill $(cat $DEST/var/run/asterisk.pid) >/dev/null 2>&1
 }
