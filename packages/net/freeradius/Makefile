@@ -197,6 +197,11 @@ define Package/freeradius-mod-sqlcounter
   TITLE:=Generic SQL Counter module
 endef
 
+define Package/freeradius-mod-radutmp
+  $(call Package/freeradius/Default)
+  TITLE:=Radius UTMP module
+endef
+
 define Package/freeradius-utils
   $(call Package/freeradius/Default)
   DEPENDS:=freeradius
@@ -226,7 +231,6 @@ PKG_CONFIGURE_ARGS:= \
 	--without-rlm_pam \
 	--without-rlm_perl \
 	--without-rlm_python \
-	--without-rlm_radutmp \
 	--without-rlm_smb \
 	--with-rlm_sql \
 	--with-rlm_sqlcounter \
@@ -301,6 +305,12 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-attr-rewrite),)
   PKG_CONFIGURE_ARGS+= --with-rlm_attr-rewrite
 else
   PKG_CONFIGURE_ARGS+= --without-rlm_attr-rewrite
+endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-radutmp),)
+  PKG_CONFIGURE_ARGS+= --with-rlm_radutmp
+else
+  PKG_CONFIGURE_ARGS+= --without-rlm_radutmp
 endif
 
 define Build/Configure
@@ -396,4 +406,5 @@ $(eval $(call BuildPlugin,freeradius-mod-sql,rlm_sql,sql.conf))
 $(eval $(call BuildPlugin,freeradius-mod-sql-mysql,rlm_sql_mysql,))
 $(eval $(call BuildPlugin,freeradius-mod-sql-pgsql,rlm_sql_postgresql,))
 $(eval $(call BuildPlugin,freeradius-mod-sqlcounter,rlm_sqlcounter,))
+$(eval $(call BuildPlugin,freeradius-mod-radutmp,rlm_radutmp,))
 $(eval $(call BuildPackage,freeradius-utils))
