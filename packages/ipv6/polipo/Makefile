@@ -36,15 +36,18 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CC="$(TARGET_CC)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		all
+		polipo
+endef
+
+define Package/polipo/conffiles
+/etc/polipo/polipo.conf
 endef
 
 define Package/polipo/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/var/cache/$(PKG_NAME)
-	$(INSTALL_DIR) $(1)/etc/$(PKG_NAME)
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/config.sample $(1)/etc/$(PKG_NAME)/$(PKG_NAME).conf
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/polipo $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/polipo
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/config.sample $(1)/etc/polipo/polipo.conf
 endef
 
 $(eval $(call BuildPackage,polipo))
