@@ -61,6 +61,10 @@ define Package/iodine/install
 endef
 
 define Package/iodined/install
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/iodined.init $(1)/etc/init.d/iodined
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/iodined.config $(1)/etc/config/iodined
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/iodined $(1)/usr/sbin
 endef
