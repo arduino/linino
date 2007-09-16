@@ -1,0 +1,50 @@
+# 
+# Copyright (C) 2007 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id: Makefile 8594 2007-09-03 14:13:19Z nico $
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=polipo
+PKG_VERSION:=1.0.2
+PKG_RELEASE:=1
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/$(PKG_NAME)/
+PKG_MD5SUM:=2d1d8af414429e5823675a781604c70a
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/polipo
+  SECTION:=ipv6
+  CATEGORY:=IPv6
+  TITLE:=a caching web proxy
+  URL:=http://www.pps.jussieu.fr/~jch/software/polipo/
+  DEPENDS:=+kmod-ipv6
+endef
+
+define Package/polipo/description
+  Polipo is a small and fast caching web proxy (a web cache, an HTTP proxy, a proxy server).
+  While Polipo was designed to be used by one person or a small group of people, there is 
+  nothing that prevents it from being used by a larger group.
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CC="$(TARGET_CC)" \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		all
+endef
+
+define Package/polipo/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/var/cache/$(PKG_NAME)
+	$(INSTALL_DIR) $(1)/etc/$(PKG_NAME)
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/config.sample $(1)/etc/$(PKG_NAME)/$(PKG_NAME).conf
+endef
+
+$(eval $(call BuildPackage,polipo))
