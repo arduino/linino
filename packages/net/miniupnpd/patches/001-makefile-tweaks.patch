@@ -1,7 +1,7 @@
-Index: miniupnpd-1.0-RC6/Makefile.openwrt
+Index: miniupnpd-1.0-RC8/Makefile.openwrt
 ===================================================================
---- miniupnpd-1.0-RC6.orig/Makefile.openwrt	2007-06-30 18:30:56.000000000 +0200
-+++ miniupnpd-1.0-RC6/Makefile.openwrt	2007-06-30 18:30:57.000000000 +0200
+--- miniupnpd-1.0-RC8.orig/Makefile.openwrt	2007-09-17 17:43:54.000000000 -0500
++++ miniupnpd-1.0-RC8/Makefile.openwrt	2007-09-17 17:43:54.000000000 -0500
 @@ -2,7 +2,7 @@
  # http://miniupnp.free.fr/
  # Author : Thomas Bernard
