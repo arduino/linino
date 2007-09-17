@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mpd
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec
+  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread +alsa-lib
   TITLE:=Music Player Daemon
   DESCRIPTION:=\
 	MPD is a music player supporting flac, mp3 and ogg files.\\\
