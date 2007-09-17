@@ -35,6 +35,7 @@ define Build/Configure
 		--with-pgsql=no \
 		--with-apr="$(STAGING_DIR)/usr/bin/apr-1-config" \
 		--with-expat="$(STAGING_DIR)/usr" \
+		--without-sqlite2 \
 		, \
 		ac_cv_file_dbd_apr_dbd_mysql_c=no \
 		APR_BUILD_DIR="$(STAGING_DIR)/usr/share/build-1" \
