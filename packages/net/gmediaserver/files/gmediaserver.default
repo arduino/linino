@@ -1,1 +1,0 @@
-OPTIONS="--background --interface=br-lan --pid-file=$PID_F"
