@@ -9,14 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor
-PKG_VERSION:=0.1.2.16
-PKG_RELEASE:=2
+PKG_VERSION:=0.1.2.17
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://tor.eff.org/dist/ \
 	http://ftp.se.linux.org/crypto/tor/ \
 	http://tor.meulie.net/
-PKG_MD5SUM:=f340777b3f6c3175de976856d2d2e4be
+PKG_MD5SUM:=ef8fc7f45d167875c337063d437c9832
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -25,14 +25,15 @@ define Package/tor
   CATEGORY:=Network
   DEPENDS:=+libevent +libopenssl +libpthread +zlib
   TITLE:=An anonymous Internet communication system
-  DESCRIPTION:=\
-	Tor is a toolset for a wide range of organizations and people that want \\\
-	to improve their safety and security on the Internet. Using Tor can \\\
-	help you anonymize web browsing and publishing, instant messaging, \\\
-	IRC, SSH, and more. Tor also provides a platform on which software \\\
-	developers can build new applications with built-in anonymity, safety, \\\
-	and privacy features.
   URL:=http://tor.eff.org/
+endef
+
+define Package/tor/description
+ Tor is a toolset for a wide range of organizations and people that want to 
+ improve their safety and security on the Internet. Using Tor can help you 
+ anonymize web browsing and publishing, instant messaging, IRC, SSH, and 
+ more. Tor also provides a platform on which software developers can build 
+ new applications with built-in anonymity, safety, and privacy features.
 endef
 
 define Package/tor/conffiles
@@ -77,10 +78,19 @@ endef
 CONFIGURE_ARGS += \
 	--with-libevent-dir="$(STAGING_DIR)/usr" \
 	--with-ssl-dir="$(STAGING_DIR)/usr" \
-	, \
-	CROSS_COMPILE=yes
 
-define Package/tor/install	
+CONFIGURE_VARS += \
+	CROSS_COMPILE="yes" \
+
+# pass CFLAGS again to override -O2 set by configure
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
+endef
+
+define Package/tor/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/or/tor $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
