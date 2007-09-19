@@ -15,7 +15,7 @@ diff -ur bluez-utils-2.17.orig/hcid/hcid.conf bluez-utils-2.17/hcid/hcid.conf
  	#   %d - device id
  	#   %h - host name
 -	name "BlueZ (%d)";
-+	name "OpenWRT";
++	name "%h";
  
  	# Local device class
  	class 0x3e0100;

@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bluez-utils
 PKG_VERSION:=2.24
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://bluez.sourceforge.net/download
@@ -34,6 +34,7 @@ define Package/bluez-utils/conffiles
 /etc/bluetooth/givepin
 /etc/bluetooth/hcid.conf
 /etc/bluetooth/rfcomm.conf
+/etc/config/bluetooth
 endef
 
 define Build/Configure
@@ -71,6 +72,10 @@ define Package/bluez-utils/install
 	$(CP) $(PKG_INSTALL_DIR)/../hcid/hcid.conf $(1)/etc/bluetooth/
 	$(CP) $(PKG_INSTALL_DIR)/../rfcomm/rfcomm.conf $(1)/etc/bluetooth/
 	install -m0700 ./files/givepin $(1)/etc/bluetooth/
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/bluetooth.conf $(1)/etc/config/bluetooth
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/bluez-utils.init $(1)/etc/init.d/bluez-utils
 endef
 
 $(eval $(call BuildPackage,bluez-utils))
