@@ -51,9 +51,9 @@ endef
 define Package/fluxbox/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/share/fluxbox/styles/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/{fluxbox,fbsetbg} $(1)/usr/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/{fluxbox,fbsetbg} $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/fluxbox/{init,keys} $(1)/usr/share/fluxbox/
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/fluxbox/styles/BlueFlux/ $(1)/usr/share/fluxbox/styles
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/fluxbox/styles/* $(1)/usr/share/fluxbox/styles/
 	$(CP) files/menu $(1)/usr/share/fluxbox/
 endef
 
