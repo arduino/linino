@@ -1,5 +1,7 @@
---- portsentry/portsentry_config.h	2003-05-23 20:10:13.000000000 +0200
-+++ portsentry.old/portsentry_config.h	2005-07-09 21:21:15.000000000 +0200
+Index: portsentry_beta/portsentry_config.h
+===================================================================
+--- portsentry_beta.orig/portsentry_config.h	2007-09-20 17:30:32.000000000 +0200
++++ portsentry_beta/portsentry_config.h	2007-09-20 17:30:32.000000000 +0200
 @@ -22,7 +22,7 @@
  
  /* These are probably ok. Be sure you change the Makefile if you */
