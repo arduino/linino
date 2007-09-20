@@ -24,3 +24,9 @@ xf86dgaproto-X11R7.0-2.0.2|
 trapproto-X11R7.0-3.4.3|
 xineramaproto-X11R7.0-1.1.2|
 evieext-X11R7.0-1.0.2|
+applewmproto-X11R7.0-1.0.3|
+dmxproto-X11R7.0-2.2.2|
+printproto-X11R7.0-1.0.3|
+windowswmproto-X11R7.0-1.0.3|
+xf86rushproto-X11R7.0-1.1.2|
+xproxymanagementprotocol-X11R7.0-1.0.2|
