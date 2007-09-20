@@ -1,0 +1,11 @@
+diff -urN xorg-server-X11R7.2-1.2.0.orig/hw/xfree86/Makefile.in xorg-server-X11R7.2-1.2.0/hw/xfree86/Makefile.in
+--- xorg-server-X11R7.2-1.2.0.orig/hw/xfree86/Makefile.in	2007-09-15 15:37:21.000000000 +0200
++++ xorg-server-X11R7.2-1.2.0/hw/xfree86/Makefile.in	2007-09-15 15:40:39.000000000 +0200
+@@ -636,6 +636,7 @@
+ 
+ Xorg_LDADD = $(XORG_LIBS) \
+              @XSERVER_LIBS@ \
++			 -lfreetype -lz \
+ 	     dixmods/libxorgxkb.la
+ 
+ Xorg_LDFLAGS = $(LD_EXPORT_SYMBOLS_FLAG)

@@ -1,0 +1,13 @@
+diff -urN xorg-server-X11R7.2-1.2.0.orig/hw/xfree86/utils/xorgconfig/Makefile.in xorg-server-X11R7.2-1.2.0/hw/xfree86/utils/xorgconfig/Makefile.in
+--- xorg-server-X11R7.2-1.2.0.orig/hw/xfree86/utils/xorgconfig/Makefile.in	2007-09-14 22:02:33.000000000 +0200
++++ xorg-server-X11R7.2-1.2.0/hw/xfree86/utils/xorgconfig/Makefile.in	2007-09-14 22:58:12.000000000 +0200
+@@ -585,7 +585,7 @@
+         -DFILEMANSUFFIX='"$(FILE_MAN_SUFFIX)"' \
+         -DXVERSIONSTRING='"$(PACKAGE_STRING)"'
+ 
+-xorgconfig_LDADD = @XORGCONFIG_DEP_LIBS@
++xorgconfig_LDADD = @XORGCONFIG_DEP_LIBS@  -lXdmcp -lXau -shared 
+ xorgconfig_SOURCES = \
+ 	cards.c		\
+ 	cards.h		\
+

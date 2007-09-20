@@ -1,0 +1,12 @@
+diff -urN xorg-server-X11R7.2-1.2.0.orig/hw/xfree86/utils/xorgcfg/Makefile.in xorg-server-X11R7.2-1.2.0/hw/xfree86/utils/xorgcfg/Makefile.in
+--- xorg-server-X11R7.2-1.2.0.orig/hw/xfree86/utils/xorgcfg/Makefile.in	2007-09-14 21:34:05.000000000 +0200
++++ xorg-server-X11R7.2-1.2.0/hw/xfree86/utils/xorgcfg/Makefile.in	2007-09-14 21:35:49.000000000 +0200
+@@ -474,7 +474,7 @@
+ XNEST_LIBS = @XNEST_LIBS@
+ XNEST_TRUE = @XNEST_TRUE@
+ XORGCFG_DEP_CFLAGS = @XORGCFG_DEP_CFLAGS@
+-XORGCFG_DEP_LIBS = @XORGCFG_DEP_LIBS@
++XORGCFG_DEP_LIBS = @XORGCFG_DEP_LIBS@ -lXdmcp -lXau -shared
+ XORGCONFIG_DEP_CFLAGS = @XORGCONFIG_DEP_CFLAGS@
+ XORGCONFIG_DEP_LIBS = @XORGCONFIG_DEP_LIBS@
+ XORG_BUS_FREEBSDPCI_FALSE = @XORG_BUS_FREEBSDPCI_FALSE@
