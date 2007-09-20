@@ -1,0 +1,12 @@
+diff -ruN asterisk-addons-1.4.2-old/menuselect/Makefile asterisk-addons-1.4.2-new/menuselect/Makefile
+--- asterisk-addons-1.4.2-old/menuselect/Makefile	2007-06-06 00:01:45.000000000 +0200
++++ asterisk-addons-1.4.2-new/menuselect/Makefile	2007-09-19 18:00:27.000000000 +0200
+@@ -42,7 +42,7 @@
+ 	@$(MAKE) menuselect
+ 
+ autoconfig.h:
+-	@./configure $(CONFIGURE_SILENT) CC= LD= AR=
++	@./configure $(CONFIGURE_SILENT) CC= LD= AR= LDFLAGS=
+ 
+ _gmenuselect: autoconfig.h 
+ 	@$(MAKE) gmenuselect

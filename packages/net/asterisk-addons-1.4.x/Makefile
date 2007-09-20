@@ -79,8 +79,10 @@ $(call Package/asterisk-addons/Default/description)
  This package contains MySQL support modules for Asterisk.
 endef
 
+
 EXTRA_CFLAGS:=$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)
 EXTRA_LDFLAGS:=$(TARGET_LDFLAGS)
+
 ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk14-mysql),)
   EXTRA_CFLAGS+= -I$(STAGING_DIR)/usr/include/mysql
   EXTRA_LDFLAGS+= -L$(STAGING_DIR)/usr/lib/mysql
