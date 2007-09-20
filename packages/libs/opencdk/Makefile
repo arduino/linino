@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006, 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=opencdk
-PKG_VERSION:=0.5.5
+PKG_VERSION:=0.6.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -18,7 +18,7 @@ PKG_SOURCE_URL:=ftp://ftp.gnutls.org/pub/gnutls/opencdk/ \
 	http://www.mirrors.wiretapped.net/security/network-security/gnutls/opencdk/ \
 	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/opencdk/ \
 	http://josefsson.org/gnutls/releases/opencdk/
-PKG_MD5SUM:=aaff60107f0153873192ffda00699a96
+PKG_MD5SUM:=7bfc820bcdc08f0c31f860710368071e
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -29,7 +29,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libopencdk
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libgcrypt
+  DEPENDS:=+libgcrypt zlib
   TITLE:=The Open Crypto Development Kit library
   DESCRIPTION:=\
 	This library provides basic parts of the OpenPGP message format.\\\
@@ -41,14 +41,6 @@ define Package/libopencdk
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); touch \
-		configure.ac \
-		acinclude.m4 \
-		aclocal.m4 \
-		Makefile.in \
-		config.h.in \
-		configure \
-	);
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \

@@ -1,0 +1,24 @@
+diff -ur opencdk-0.6.4-/tests/Makefile.am opencdk-0.6.4/tests/Makefile.am
+--- opencdk-0.6.4-/tests/Makefile.am	2007-06-11 12:16:37.000000000 +0200
++++ opencdk-0.6.4/tests/Makefile.am	2007-09-13 19:54:03.000000000 +0200
+@@ -33,7 +33,7 @@
+ 
+ CLEANFILES = plain-test
+ 
+-LDADD = ../src/libopencdk.la
++LDADD = ../src/libopencdk.la $(LIBGCRYPT_LIBS)
+ 
+ if HAVE_W32_SYSTEM
+ # there is a problem with some tests and WINE
+diff -ur opencdk-0.6.4-/tests/Makefile.in opencdk-0.6.4/tests/Makefile.in
+--- opencdk-0.6.4-/tests/Makefile.in	2007-06-11 12:25:38.000000000 +0200
++++ opencdk-0.6.4/tests/Makefile.in	2007-09-13 19:54:21.000000000 +0200
+@@ -257,7 +257,7 @@
+ AM_LDFLAGS = -no-install
+ AM_CPPFLAGS = $(LIBGCRYPT_CFLAGS)
+ CLEANFILES = plain-test
+-LDADD = ../src/libopencdk.la
++LDADD = ../src/libopencdk.la $(LIBGCRYPT_LIBS)
+ noinst_HEADER = t-support.h
+ all: all-am
+ 
