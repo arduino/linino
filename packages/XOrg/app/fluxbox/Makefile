@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 CONFIGURE_VARS+=LIBS="-nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm" \
 		CXXLD="$(TARGET_CC)" 
 
-CONFIGURE_ARGS+=--disable-static --disable-xmb
+CONFIGURE_ARGS+=--disable-xmb
 
 define Package/fluxbox
   SECTION:=xorg-wm
@@ -49,9 +49,12 @@ define Build/Compile
 endef
 
 define Package/fluxbox/install
-	$(INSTALL_DIR) $(1)/usr/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ $(1)/usr/
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/ $(1)/usr/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/share/fluxbox/styles/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/{fluxbox,fbsetbg} $(1)/usr/
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/fluxbox/{init,keys} $(1)/usr/share/fluxbox/
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/fluxbox/styles/BlueFlux/ $(1)/usr/share/fluxbox/styles
+	$(CP) files/menu $(1)/usr/share/fluxbox/
 endef
 
 $(eval $(call BuildPackage,fluxbox))
