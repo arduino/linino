@@ -10,10 +10,28 @@ PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.2/src/lib/
 
 _CATEGORY:=libraries
 _DEPEND+=+xorg-headers-native +util-macros-X11R7.2 
+
 include ../../common.mk
 
+ifeq ("$(PKG_NAME)","libX11-X11R7.2")
+ CONFIGURE_ARGS_XTRA=--without-xcb
+endif
+
+define libX11-X11R7.2/Compile
+	$(MAKE_VARS) \
+		$(MAKE) -C $(PKG_BUILD_DIR)/src/util CFLAGS="" LDFLAGS="" CC="cc" makekeys 
+endef
+
+define libXt-X11R7.2/Compile
+	$(MAKE_VARS) \
+		$(MAKE) -C $(PKG_BUILD_DIR)/util CFLAGS="" LDFLAGS="" CC="cc" 
+endef
+
 define Build/Compile
+	$(call $(PKG_NAME)/Compile)
 	make -C $(PKG_BUILD_DIR)
+	mkdir -p $(PKG_INSTALL_DIR)
+	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
 endef
 
 define Build/Configure
@@ -36,17 +54,12 @@ endef
 
 define Package/${PKG_NAME}/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	if [ -d $(PKG_BUILD_DIR)/src/.libs/ ]; then \
-		cp -f $(PKG_BUILD_DIR)/src/.libs/lib*so* $(1)/usr/lib ; \
-	fi
-	if [ -d $(PKG_BUILD_DIR)/.libs/ ]; then \
-		cp -f $(PKG_BUILD_DIR)/.libs/lib*so* $(1)/usr/lib ; \
-	fi
+	find $(PKG_INSTALL_DIR)/usr/lib/ -name lib*so* | $(XARGS) -i -t cp -P {} $(1)/usr/lib 
 	$(call $(PKG_NAME)/install,$(1))
 endef
 
 define Build/InstallDev
-	DESTDIR=$(STAGING_DIR) $(MAKE) -C $(PKG_BUILD_DIR)/$(SUBPACKAGE)  $(MAKE_FLAGS) install
+	DESTDIR=$(STAGING_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
 	rm -rf $(STAGING_DIR)/usr/lib/*.la
 endef
 
