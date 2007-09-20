@@ -64,13 +64,17 @@ define Build/Configure
 			--glib1=1 \
 			--glib1prefix="$(STAGING_DIR)/usr" \
 	);
+	$(SED) 's,^CFLAGS=.*,CFLAGS=$(TARGET_CFLAGS),g'\
+		$(PKG_BUILD_DIR)/Makefile.settings
+	@echo 'CFLAGS+=-I$(STAGING_DIR)/usr/lib/libiconv/include' >> \
+		$(PKG_BUILD_DIR)/Makefile.settings
+	@echo 'LFLAGS+=-L$(STAGING_DIR)/usr/lib' >> \
+		$(PKG_BUILD_DIR)/Makefile.settings
+	@echo 'LFLAGS+=-L$(STAGING_DIR)/usr/lib/libiconv/lib' >> \
+		$(PKG_BUILD_DIR)/Makefile.settings
 endef
 
 define Build/Compile
-	@echo 'CFLAGS+="-I$(STAGING_DIR)/usr/lib/libiconv/include"' >> \
-		$(PKG_BUILD_DIR)/Makefile.settings
-	@echo 'LFLAGS+="-L$(STAGING_DIR)/usr/lib/libiconv/lib"' >> \
-		$(PKG_BUILD_DIR)/Makefile.settings
 	$(MAKE) -C $(PKG_BUILD_DIR)
 endef
 
