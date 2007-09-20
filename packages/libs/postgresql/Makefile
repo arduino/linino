@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=postgresql
-PKG_VERSION:=8.2.4
+PKG_VERSION:=8.2.5
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -17,7 +17,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=\
 	ftp://ftp.us.postgresql.org/pub/mirrors/postgresql/source/v$(PKG_VERSION) \
 	ftp://ftp-archives.postgresql.org/pub/source/v$(PKG_VERSION)
-PKG_MD5SUM:=af7ec100a33c41bfb8d87b5e0ec2f44a
+PKG_MD5SUM:=bb1cd309ea72f070cb964736f5755847
 PKG_CAT:=bzcat
 
 PKG_BUILD_DEPENDS:=libnotimpl

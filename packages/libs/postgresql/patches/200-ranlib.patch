@@ -1,5 +1,7 @@
---- postgresql-8.2.3/src/port/Makefile	2006-07-14 11:45:43.000000000 -0500
-+++ new-postgresql-8.2.3/src/port/Makefile	2007-04-09 12:14:11.906032000 -0500
+Index: postgresql-8.2.5/src/port/Makefile
+===================================================================
+--- postgresql-8.2.5.orig/src/port/Makefile	2007-09-20 10:18:17.000000000 -0500
++++ postgresql-8.2.5/src/port/Makefile	2007-09-20 10:18:17.000000000 -0500
 @@ -43,6 +43,7 @@
  
  libpgport.a: $(LIBOBJS)

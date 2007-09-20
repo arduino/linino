@@ -1,5 +1,7 @@
---- postgresql-8.2.3/src/bin/psql/print.h.old	2007-04-09 16:49:24.297992000 -0500
-+++ postgresql-8.2.3/src/bin/psql/print.h	2007-04-09 16:49:40.983034750 -0500
+Index: postgresql-8.2.5/src/bin/psql/print.h
+===================================================================
+--- postgresql-8.2.5.orig/src/bin/psql/print.h	2007-09-20 10:18:16.000000000 -0500
++++ postgresql-8.2.5/src/bin/psql/print.h	2007-09-20 10:18:17.000000000 -0500
 @@ -88,10 +88,6 @@
  
  void		setDecimalLocale(void);
