@@ -17,6 +17,10 @@ PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/server/xorg-server-X11R7.2-$(PKG_VERSION)/
 
 include $(INCLUDE_DIR)/package.mk
 
+EXTRA_CFLAGS+= -I${STAGING_DIR}/usr/include/X11/GL -I${STAGING_DIR}/usr/include/X11/dri/ -I${STAGING_DIR}/usr/include/X11/ -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+
+CONFIGURE_VARS+=ac_cv_file__usr_share_sgml_X11_defs_ent=yes
+
 define Package/xorg-server-X11R7.2/Default
   SECTION:=xorg-server
   CATEGORY:=Xorg
@@ -78,9 +82,6 @@ $(call Package/xorg-server-X11R7.2/Default)
   DEPENDS:=xorg-server-X11R7.2
 endef
 
-EXTRA_CFLAGS+= -I${STAGING_DIR}/usr/include/X11/GL -I${STAGING_DIR}/usr/include/X11/dri/ -I${STAGING_DIR}/usr/include/X11/ -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
-
-
 define Build/Configure
 	(cd $(PKG_BUILD_DIR) \
 		$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
@@ -89,7 +90,6 @@ define Build/Configure
 		$(CONFIGURE_ARGS_XTRA) \
 		$(CONFIGURE_ARGS) \
 		--with-default-font-path=built-ins \
-		as_ac_File=no \
 		);
 endef
 
