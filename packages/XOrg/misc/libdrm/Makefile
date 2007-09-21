@@ -25,7 +25,10 @@ define Package/libdrm
 endef
 
 define Build/Configure
-	cd  $(PKG_BUILD_DIR)/; $(TARGET_CONFIGURE_OPTS) ./configure  --host=$(GNU_TARGET_NAME) 
+	cd  $(PKG_BUILD_DIR)/; \
+		$(TARGET_CONFIGURE_OPTS) \
+		./configure  \
+			--host=$(GNU_TARGET_NAME) 
 endef
 
 define Build/Compile

@@ -13,7 +13,12 @@ _CATEGORY:=utils
 include ../../common.mk
 
 define Build/Configure
-	cd $(PKG_BUILD_DIR); ./configure --prefix=${STAGING_DIR} --sysconfdir=/etc --mandir=${STAGING_DIR}/share/man --localstatedir=/var
+	cd $(PKG_BUILD_DIR); \
+		./configure \
+			--prefix=${STAGING_DIR} \
+			--sysconfdir=/etc \
+			--mandir=${STAGING_DIR}/share/man \
+			--localstatedir=/var
 endef
 
 define Build/Compile
