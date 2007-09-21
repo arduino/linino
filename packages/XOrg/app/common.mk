@@ -35,9 +35,16 @@ define Build/Configure
 	)
 endef
 
-define Package/${PKG_NAME}/install
+define xinit-X11R7.2/install
+	rm -rf $(1)/usr
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xinit $(1)/usr/bin/xinit
+	cd $(1)/usr/bin/; ln -s xinit startx
+endef
+
+define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 	rm -rf $(1)/usr/man/
+	$(call $(PKG_NAME)/install,$(1))
 endef
-
