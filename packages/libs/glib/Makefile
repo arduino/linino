@@ -18,10 +18,6 @@ PKG_SOURCE_URL:=ftp://ftp.gtk.org/pub/gtk/v1.2 \
 	http://ftp.esat.net/mirrors/ftp.gimp.org/pub/gtk/v1.2/ \
 	http://www.mirrorservice.org/sites/ftp.gimp.org/pub/gtk/v1.2/
 PKG_MD5SUM:=6fe30dad87c77b91b632def29dd69ef9
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,14 +26,19 @@ define Package/glib1
   CATEGORY:=Libraries
   DEPENDS:=+libpthread
   TITLE:=The GLib library of C routines
-  DESCRIPTION:=\
-	GLib is a library containing many useful C routines for things such \\\
-	as trees, hashes, and lists.
   URL:=http://www.gtk.org/
 endef
 
-# commas are interpreted by the $(call ...) macro, so define an intermediate variable holding our settings
-PKG_CONFIGURE_VARS:=\
+define Package/glib1/description
+ GLib is a library containing many useful C routines for things such 
+ as trees, hashes, and lists.
+endef
+
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+
+CONFIGURE_VARS += \
 	glib_cv_prog_cc_ansi_proto=no \
 	glib_cv_has__inline=yes \
 	glib_cv_has__inline__=yes \
@@ -54,18 +55,14 @@ PKG_CONFIGURE_VARS:=\
 	glib_cv_byte_contents_gmutex="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" \
 
 define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		, \
-		$(PKG_CONFIGURE_VARS) \
-	)
+	$(call Build/Configure/Default)
+	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		install
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
 define Build/InstallDev
@@ -80,11 +77,16 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/glib $(STAGING_DIR)/usr/lib/
 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/g{lib,module,thread}.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+	$(SED) 's,-I$$$${prefix}/include/glib,-I$(STAGING_DIR)/usr/include/glib,g' $(STAGING_DIR)/usr/bin/glib-config
+	$(SED) 's,-I$$$${exec_prefix}/lib/glib,-I$(STAGING_DIR)/usr/lib/glib,g' $(STAGING_DIR)/usr/bin/glib-config
+	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(STAGING_DIR)/usr/bin/glib-config
+	$(SED) 's,-I$$$${includedir}/glib,-I$(STAGING_DIR)/usr/include/glib,g' $(STAGING_DIR)/usr/lib/pkgconfig/g{lib,module,thread}.pc
+	$(SED) 's,-I$$$${libdir}/glib,-I$(STAGING_DIR)/usr/lib/glib,g' $(STAGING_DIR)/usr/bin/glib-config
+	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/g{lib,module,thread}.pc
 endef
 
 define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/glib-config \
+	rm -rf 	$(STAGING_DIR)/usr/bin/glib-config \
 		$(STAGING_DIR)/usr/include/glib-1.2 \
 		$(STAGING_DIR)/usr/lib/libg{lib,module,thread}.{a,so} \
 		$(STAGING_DIR)/usr/lib/libg{lib,module,thread}-*.so.* \
