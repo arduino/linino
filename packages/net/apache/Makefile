@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apache
 PKG_VERSION:=2.2.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_SOURCE_NAME:=httpd
 
 PKG_SOURCE:=$(PKG_SOURCE_NAME)-$(PKG_VERSION).tar.gz
@@ -47,6 +47,23 @@ define Package/apache-server
 	scripts and configure the rest in /etc/httpd.conf.
 endef
 
+define Package/apache-server/conffiles
+/etc/apache/httpd.conf
+/etc/apache/extra/httpd-autoindex.conf
+/etc/apache/extra/httpd-dav.conf
+/etc/apache/extra/httpd-default.conf
+/etc/apache/extra/httpd-info.conf
+/etc/apache/extra/httpd-languages.conf
+/etc/apache/extra/httpd-manual.conf
+/etc/apache/extra/httpd-mpm.conf
+/etc/apache/extra/httpd-multilang-errordoc.conf
+/etc/apache/extra/httpd-ssl.conf
+/etc/apache/extra/httpd-userdir.conf
+/etc/apache/extra/httpd-vhosts.conf
+/etc/apache/magic
+/etc/apache/mime.types
+endef
+
 define Package/apache-icons
   $(call Package/apache/Default)
   TITLE:=Icons from Apache
@@ -60,10 +77,12 @@ define Build/Configure
 		--with-pcre="$(STAGING_DIR)/usr/bin/pcre-config" \
 		--enable-http \
 		--enable-ssl \
+		--enable-proxy \
 		--disable-disk-cache \
 		--enable-maintainer-mode \
 		--enable-mime-magic \
 		--without-suexec-bin \
+		--sysconfdir=/etc/apache \
 		ap_void_ptr_lt_long=no \
 		logfiledir="/var/log" \
 	)
@@ -119,7 +138,7 @@ define Package/apache-server/install
 	$(INSTALL_DIR) $(1)/usr/share
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/{error,htdocs,cgi-bin,build} $(1)/usr/share/
 	$(INSTALL_DIR) $(1)/etc/apache
-	$(CP) $(PKG_INSTALL_DIR)/etc/{magic,mime.types,extra} $(1)/etc/apache/
+	$(CP) $(PKG_INSTALL_DIR)/etc/apache/{magic,mime.types,extra} $(1)/etc/apache/
 	$(CP) ./files/etc/apache/httpd.conf $(1)/etc/apache/
 endef
 
