@@ -1,0 +1,13 @@
+include $(TOPDIR)/rules.mk
+
+PKG_BASE_NAME:=xf86
+PKG_NAME:=xf86-video-ati-X11R7.2
+PKG_RELEASE:=1
+PKG_VERSION:=6.6.3
+
+_DEPEND:=
+
+
+include ../common.mk
+
+$(eval $(call BuildPackage,$(PKG_NAME)))

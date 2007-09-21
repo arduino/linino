@@ -12,11 +12,14 @@ _CATEGORY:=driver
 _DEPEND+=+xorg-server-X11R7.2
 include ../../common.mk
 
-define Build/Compile
-	make -C $(PKG_BUILD_DIR)
-endef
-
 EXTRA_CFLAGS+= -I${STAGING_DIR}/usr/include/xorg -I${STAGING_DIR}/usr/include/X11/
+
+CONFIGURE_VARS+=DRI_CFLAGS="-I$(STAGING_DIR)/usr/include/X11/dri/"
+
+acvar=$(subst -,_,$(subst .,_,$(subst /,_,$(1))))
+
+CONFIGURE_VARS += $(foreach a,dri.h sarea.h dristruct.h exa.h,ac_cv_file_$(call acvar,$(STAGING_DIR)/usr/include/xorg/$(a))=yes) \
+		ac_cv_file__usr_share_sgml_X11_defs_ent=yes
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
@@ -25,16 +28,18 @@ define Build/Configure
 		$(CONFIGURE_VARS) \
 		$(CONFIGURE_CMD) \
 		$(CONFIGURE_ARGS_XTRA) \
-		$(CONFIGURE_ARGS) \
-		as_ac_File=no \
-		--enable-malloc0returnsnull; \
+		$(CONFIGURE_ARGS) ;\
 	fi \
 	)
 endef
 
-define Package/${PKG_NAME}/install
+define Build/Compile
+	make -C $(PKG_BUILD_DIR)
 	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
+	find $(PKG_INSTALL_DIR) -name *a | xargs rm -rf
+endef
+
+define Package/${PKG_NAME}/install
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
-	find $(1)/usr/lib/ -name *a | xargs rm -rf
 endef

@@ -1,0 +1,13 @@
+diff -urN xf86-video-i810-X11R7.2-1.6.5.orig/configure.ac xf86-video-i810-X11R7.2-1.6.5/configure.ac
+--- xf86-video-i810-X11R7.2-1.6.5.orig/configure.ac	2007-09-21 03:54:25.000000000 +0200
++++ xf86-video-i810-X11R7.2-1.6.5/configure.ac	2007-09-21 03:55:08.000000000 +0200
+@@ -72,7 +72,8 @@
+ 
+ # Checks for pkg-config packages
+ PKG_CHECK_MODULES(XORG, [xorg-server xproto xvmc fontsproto $REQUIRED_MODULES])
+-sdkdir=$(pkg-config --variable=sdkdir xorg-server)
++sdkdir=${SDKDIR}
++#$(pkg-config --variable=sdkdir xorg-server)
+ 
+ # Checks for libraries.
+ 
