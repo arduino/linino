@@ -24,11 +24,28 @@ CONFIGURE_VARS+=LIBS="-nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic 
 
 CONFIGURE_ARGS+=--disable-xmb
 
-define Package/fluxbox
+define Package/fluxbox/Default
   SECTION:=xorg-wm
   CATEGORY:=Xorg
+endef
+
+define Package/fluxbox
+$(call Package/fluxbox/Default)
   DEPENDS:=+xorg-server-X11R7.2-essentials +uclibcxx +xterm @TARGET_x86
   TITLE:=fluxbox window manager
+  MENU:=1
+endef
+
+define Package/fbrun
+$(call Package/fluxbox/Default)
+  DEPENDS:=fluxbox
+  TITLE:=fluxbox tool to run applications
+endef
+
+define Package/fbsetroot
+$(call Package/fluxbox/Default)
+  DEPENDS:=fluxbox
+  TITLE:=set fluxbox background
 endef
 
 define Build/Configure
@@ -57,4 +74,16 @@ define Package/fluxbox/install
 	$(CP) files/menu $(1)/usr/share/fluxbox/
 endef
 
+define Package/fbsetroot/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fbsetroot $(1)/usr/bin/
+endef
+
+define Package/fbrun/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fbrun $(1)/usr/bin/
+endef
+
+$(eval $(call BuildPackage,fbrun))
+$(eval $(call BuildPackage,fbsetroot))
 $(eval $(call BuildPackage,fluxbox))
