@@ -9,13 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apache
-PKG_VERSION:=2.2.4
+PKG_VERSION:=2.2.6
 PKG_RELEASE:=1
 PKG_SOURCE_NAME:=httpd
 
 PKG_SOURCE:=$(PKG_SOURCE_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.uni-erlangen.de/pub/mirrors/apache/httpd/
-PKG_MD5SUM:=3add41e0b924d4bb53c2dee55a38c09e
+PKG_MD5SUM:=d050a49bd7532ec21c6bb593b3473a5d
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_NAME)-$(PKG_VERSION)
@@ -118,9 +118,9 @@ define Package/apache-server/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/httpd.exp $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/share
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/{error,htdocs,cgi-bin,build} $(1)/usr/share/
-	$(INSTALL_DIR) $(1)/etc
-	$(CP) $(PKG_INSTALL_DIR)/etc/{magic,mime.types,extra} $(1)/etc/
-	$(CP) ./files/etc/httpd.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/apache
+	$(CP) $(PKG_INSTALL_DIR)/etc/{magic,mime.types,extra} $(1)/etc/apache/
+	$(CP) ./files/etc/apache/httpd.conf $(1)/etc/apache/
 endef
 
 define Package/apache-server/postrm
