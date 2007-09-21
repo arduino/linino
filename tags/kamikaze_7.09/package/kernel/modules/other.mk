@@ -106,6 +106,7 @@ define KernelPackage/soundcore
   DESCRIPTION:=Kernel modules for sound support
   KCONFIG:=$(CONFIG_SOUND)
   SUBMENU:=$(EMENU)
+  PROVIDES:=kmod-sound-core
 endef
 
 define KernelPackage/soundcore/2.4

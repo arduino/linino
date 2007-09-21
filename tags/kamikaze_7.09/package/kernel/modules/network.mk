@@ -52,6 +52,7 @@ define KernelPackage/ipip
 	Kernel modules for IP in IP encapsulation
   KCONFIG:=$(CONFIG_NET_IPIP)
   SUBMENU:=$(NSMENU)
+  PROVIDES:=iptunnel4
 endef
 
 define KernelPackage/ipip/2.4
