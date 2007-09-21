@@ -28,10 +28,8 @@ define Package/xorg-server-X11R7.2-essentials
 		+xf86-video-vga-X11R7.1 \
 		+xf86-input-evdev-X11R7.1 \
 		+xf86-input-keyboard-X11R7.2 \
-			@TARGET_x86
+		@TARGET_x86
 endef
-
-#	+font-bh-75dpi-X11R7.0 \
 
 define Build/Configure
 	echo 
