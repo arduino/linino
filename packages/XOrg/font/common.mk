@@ -12,26 +12,27 @@ _CATEGORY:=fonts
 _DEPEND+="+xorg-server-X11R7.2 +font-util-X11R7.1"
 include ../../common.mk
 
-#CONFIGURE_ARGS_XTRA+=--disable-iso8859-2 --disable-iso8859-3 --disable-iso8859-4  --disable-iso8859-5 --disable-iso8859-7 --disable-iso8859-8 --disable-iso8859-9 --disable-iso8859-10 --disable-iso8859-11 --disable-iso8859-13 --disable-iso8859-14 --disable-iso8859-16 --disable-koi8-r --disable-jisx0201
+CONFIGURE_ARGS_XTRA+=--disable-iso8859-2 --disable-iso8859-3 --disable-iso8859-4  --disable-iso8859-5 --disable-iso8859-7 --disable-iso8859-8 --disable-iso8859-9 --disable-iso8859-10 --disable-iso8859-11 --disable-iso8859-13 --disable-iso8859-14 --disable-iso8859-16 --disable-koi8-r --disable-jisx0201
 
 define Build/Compile
 	UTIL_DIR="$(STAGING_DIR)/usr/lib/X11/fonts/util/" make -e -C $(PKG_BUILD_DIR)
 	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
-	if [ -f "$(find $(PKG_INSTALL_DIR) -name fonts.dir)" ]; then \
-		mv `find $(PKG_INSTALL_DIR) -name fonts.dir` \
-			`find $(PKG_INSTALL_DIR) -name fonts.dir`.$(PKG_NAME);\
-	fi
+	find $(PKG_INSTALL_DIR) -name fonts.dir | \
+		xargs -i -t \
+			sed -i '1d' {} 
+	find $(PKG_INSTALL_DIR) -name fonts.dir | \
+		xargs -i -t \
+			mv {} {}.$(PKG_NAME) 
 endef
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
 	if [ -x $(CONFIGURE_CMD) ]; then \
 		$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-		$(CONFIGURE_VARS) \
-		$(CONFIGURE_CMD) \
-	--disable-iso8859-2 --disable-iso8859-3 --disable-iso8859-4  --disable-iso8859-5 --disable-iso8859-7 --disable-iso8859-8 --disable-iso8859-9 --disable-iso8859-10 --disable-iso8859-11 --disable-iso8859-13 --disable-iso8859-14 --disable-iso8859-16 --disable-koi8-r --disable-jisx0201 \
-	$(CONFIGURE_ARGS_XTRA) \
-		$(CONFIGURE_ARGS) ;\
+			$(CONFIGURE_VARS) \
+			$(CONFIGURE_CMD) \
+			$(CONFIGURE_ARGS_XTRA) \
+			$(CONFIGURE_ARGS) ;\
 	fi \
 	)
 endef
@@ -39,4 +40,26 @@ endef
 define Package/${PKG_NAME}/install
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
+endef
+
+define Package/${PKG_NAME}/postinst
+#!/bin/sh
+
+FILE_NEW=`find $${IPKG_INSTROOT} -name fonts.dir.${PKG_NAME}`
+FILE_OLD=`dirname $${FILE_NEW}`/fonts.dir
+
+echo found $${FILE}
+
+if [ ! -z $${FILE_NEW} ]; then
+	if [ -f $${FILE_OLD} ]; then
+		sed -i "1d" $${FILE_OLD}
+		cat $${FILE_NEW} >> $${FILE_OLD}
+		rm -rf $${FILE_NEW}
+		mv $${FILE_OLD} $${FILE_OLD}.tmp
+	else
+		mv $${FILE_NEW} $${FILE_OLD}.tmp
+	fi
+	(echo `wc -l $${FILE_OLD}.tmp | awk '{print($$1)}'`; cat $${FILE_OLD}.tmp) > $${FILE_OLD}
+	rm $${FILE_OLD}.tmp
+fi
 endef
