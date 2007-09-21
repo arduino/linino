@@ -32,6 +32,7 @@ define Build/Compile
 	make -C $(PKG_BUILD_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
+	find $(PKG_INSTALL_DIR) -name *.la | xargs rm -rf
 endef
 
 define Build/Configure
@@ -62,7 +63,6 @@ define Package/libXaw-X11R7.1/install
 endef
 
 define Build/InstallDev
-	DESTDIR=$(STAGING_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
-	rm -rf $(STAGING_DIR)/usr/lib/*.la
+	$(CP) $(PKG_INSTALL_DIR)/* $(STAGING_DIR)
 endef
 
