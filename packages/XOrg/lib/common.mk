@@ -47,15 +47,18 @@ define Build/Configure
 	)
 endef
 
-define libXaw-X11R7.1/install
-	rm -f $(1)/usr/lib/libXaw.so.*
-	cd $(1)/usr/lib; ln -s libXaw7.so.7.0.0 libXaw.so.7; ln -s libXaw6.so.6.0.1 libXaw.so.6
-endef
-
-define Package/${PKG_NAME}/install
+define Package/$(PKG_NAME)/install/Default
 	$(INSTALL_DIR) $(1)/usr/lib
 	find $(PKG_INSTALL_DIR)/usr/lib/ -name lib*so* | $(XARGS) -i -t cp -P {} $(1)/usr/lib 
-	$(call $(PKG_NAME)/install,$(1))
+endef
+
+define Package/$(PKG_NAME)/install
+	$(call Package/$(PKG_NAME)/install/Default,$(1))
+endef
+
+define Package/libXaw-X11R7.1/install
+	$(call Package/$(PKG_NAME)/install/Default,$(1))
+	cd $(1)/usr/lib; ln -s libXaw7.so.7.0.0 libXaw.so.7; ln -s libXaw6.so.6.0.1 libXaw.so.6
 endef
 
 define Build/InstallDev
