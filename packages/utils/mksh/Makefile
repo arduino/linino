@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mksh
-PKG_VERSION:=R29g
+PKG_VERSION:=R31b
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).cpio.gz
 PKG_SOURCE_URL:=http://www.mirbsd.org/MirOS/dist/mir/mksh
-PKG_MD5SUM:=324ea1a4a1d2fc3e37744e48586535e1
+PKG_MD5SUM:=819feed2336274f939c67547c5a3ddbd
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
@@ -36,7 +36,7 @@ define Build/Compile
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-DMKSH_SMALL=1" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
-			$(BASH) Build.sh -d -r
+			$(BASH) Build.sh -Q -r
 endef
 
 define Package/mksh/postinst

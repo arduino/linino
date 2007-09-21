@@ -1,13 +1,27 @@
 $FreeWRT$
---- mksh.orig/dot.mkshrc	Wed Jun 20 13:38:18 2007
-+++ mksh/dot.mkshrc	Mon Jul  9 12:32:20 2007
-@@ -1,4 +1,4 @@
+--- mksh.orig/dot.mkshrc	Mon Sep  3 09:25:05 2007
++++ mksh/dot.mkshrc	Fri Sep  7 23:49:55 2007
+@@ -1,24 +1,15 @@
 -: ${EDITOR:=/bin/ed} ${TERM:=vt100} ${HOSTNAME:=$(ulimit -c 0;hostname -s 2>&-)}
 +: ${EDITOR:=/bin/ed} ${TERM:=vt100} ${HOSTNAME:=$(</proc/sys/kernel/hostname)}
  [[ $HOSTNAME = @(localhost|*([	 ])) ]] && HOSTNAME=$(ulimit -c 0;hostname 2>&-)
  : ${HOSTNAME:=nil}; PS1='#'; [[ "$(ulimit -c 0; id -u 2>&-)" -eq 0 ]] || PS1='$'
- PS1='$(((e = $?)) && print $e\|)${USER:=$(ulimit -c 0; id -un 2>&- || \
-@@ -19,7 +19,7 @@ export EDITOR HOSTNAME MKSH=$(whence -p 
+-PS1='$(((e = $?)) && print $e\|)${USER:=$(ulimit -c 0; id -un 2>&- || \
++PS1='${USER:=$(ulimit -c 0; id -un 2>&- || \
+     print nobody)}@${HOSTNAME%%.*}:$(typeset pfx=~ wd=${PWD:-?}
+-	typeset -i n=${COLUMNS:-80}/3; let n="n < 7 ? 7 : n"
+ 	[[ ${wd#$pfx} = $wd || $pfx = ?(/) ]] || wd=\~${wd#$pfx}
+-	pfx=; while (( (${#pfx} + ${#wd}) > n )); do
+-		if [[ $wd = */* ]]; then
+-			pfx=.../
+-			wd=${wd#*/}
+-		else
+-			pfx=...
+-			wd=${wd#?????}
+-		fi
+-	done; print -r -- "$pfx$wd") '"$PS1 "
++    print -r -- "$wd") '"$PS1 "
+ export EDITOR HOSTNAME LESSHISTFILE=- MKSH=$(whence -p mksh) PS1 TERM USER
  alias l='/bin/ls -F'
  alias la='l -a'
  alias ll='l -l'
@@ -16,3 +30,4 @@ $FreeWRT$
  alias which='whence -p'
  whence -p rot13 >&- || alias rot13='tr [A-Za-z] [N-ZA-Mn-za-m]'
  whence -p hd >&- || function hd {
+
