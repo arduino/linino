@@ -46,7 +46,7 @@ define KernelPackage/bonding
 endef
 $(eval $(call KernelPackage,bonding))
 
-define KernelPackage/ipip
+define KernelPackage/iptunnel4
   TITLE:=IP in IP encapsulation support
   DESCRIPTION:=\
 	Kernel modules for IP in IP encapsulation
@@ -55,18 +55,18 @@ define KernelPackage/ipip
   PROVIDES:=iptunnel4
 endef
 
-define KernelPackage/ipip/2.4
+define KernelPackage/iptunnel4/2.4
   FILES:=$(LINUX_DIR)/net/ipv4/ipip.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,30,ipip)
 endef
 
-define KernelPackage/ipip/2.6
+define KernelPackage/iptunnel4/2.6
   FILES:= \
 	$(LINUX_DIR)/net/ipv4/ipip.$(LINUX_KMOD_SUFFIX) \
 	$(LINUX_DIR)/net/ipv4/tunnel4.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,30,ipip tunnel4)
 endef
-$(eval $(call KernelPackage,ipip))
+$(eval $(call KernelPackage,iptunnel4))
 
 
 define KernelPackage/ipsec

@@ -101,7 +101,7 @@ endef
 $(eval $(call KernelPackage,lp))
 
 
-define KernelPackage/soundcore
+define KernelPackage/sound-core
   TITLE:=Sound support
   DESCRIPTION:=Kernel modules for sound support
   KCONFIG:=$(CONFIG_SOUND)
@@ -109,12 +109,12 @@ define KernelPackage/soundcore
   PROVIDES:=kmod-sound-core
 endef
 
-define KernelPackage/soundcore/2.4
+define KernelPackage/sound-core/2.4
   FILES:=$(LINUX_DIR)/drivers/sound/soundcore.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,30,soundcore)
 endef
 
-define KernelPackage/soundcore/2.6
+define KernelPackage/sound-core/2.6
   FILES:= \
 	$(LINUX_DIR)/sound/soundcore.$(LINUX_KMOD_SUFFIX) \
 	$(LINUX_DIR)/sound/core/*.$(LINUX_KMOD_SUFFIX) \
@@ -122,14 +122,14 @@ define KernelPackage/soundcore/2.6
   AUTOLOAD:=$(call AutoLoad,30,soundcore snd snd-page-alloc snd-hwdep snd-rawmidi snd-timer snd-pcm snd-mixer-oss snd-pcm-oss)
 endef
 
-define KernelPackage/soundcore/uml-2.6
+define KernelPackage/sound-core/uml-2.6
   FILES:= \
 	$(LINUX_DIR)/arch/um/drivers/hostaudio.$(LINUX_KMOD_SUFFIX) \
 	$(LINUX_DIR)/sound/soundcore.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,30,soundcore hostaudio)
 endef
 
-$(eval $(call KernelPackage,soundcore))
+$(eval $(call KernelPackage,sound-core))
 
 
 define KernelPackage/loop
