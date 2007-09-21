@@ -52,7 +52,6 @@ define KernelPackage/iptunnel4
 	Kernel modules for IP in IP encapsulation
   KCONFIG:=$(CONFIG_NET_IPIP)
   SUBMENU:=$(NSMENU)
-  PROVIDES:=iptunnel4
 endef
 
 define KernelPackage/iptunnel4/2.4
