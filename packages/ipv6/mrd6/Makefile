@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006,2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,11 +10,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mrd6
 PKG_VERSION:=0.9.5
-PKG_RELEASE:=1
+PKG_REVISION:=3
+PKG_RELEASE:=$(PKG_REVISION).1
 
-PKG_SOURCE_URL:=http://hng.av.it.pt/mrd6/download/
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=24a08cf1407000d628a272b08a415dda
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_REVISION).tar.gz
+PKG_SOURCE_URL:=http://fivebits.net/files/mrd6/ \
+	http://hng.av.it.pt/mrd6/download/
+PKG_MD5SUM:=361322198dafcc5ffab5e8e23197012b
 
 PKG_BUILD_DEPENDS:=libnotimpl
 
@@ -23,13 +25,9 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mrd6
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=@LINUX_2_6 +uclibcxx
   TITLE:=IPv6 multicast routing daemon
   URL:=http://artemis.av.it.pt/mrd6/
-endef
-
-define Package/mrd6/conffiles
-/etc/mrd6.conf
+  DEPENDS:= +uclibcxx
 endef
 
 define Package/mrd6/description
@@ -48,11 +46,15 @@ define Build/Compile
 		SPACE_OPTIMIZE=yes \
 		FULL_STATIC=no \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -DNO_INET6_OPTION -fno-builtin -fno-rtti" \
-		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -ldl -lm -lnotimpl" \
+		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -ldl -lgcc -lm -lnotimpl" \
 		MODULE_CXX="\$$$$(CC) -shared \$$$$(CXXFLAGS) \$$$$(LDFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		PREFIX="/usr/" \
+		PREFIX="/usr" \
 		install
+endef
+
+define Package/mrd6/conffiles
+/etc/mrd6.conf
 endef
 
 define Package/mrd6/install

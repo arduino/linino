@@ -1,0 +1,19 @@
+Index: mrd6-0.9.5/src/icmp_inet6.cpp
+===================================================================
+--- mrd6-0.9.5.orig/src/icmp_inet6.cpp	2007-09-21 13:19:04.000000000 +0200
++++ mrd6-0.9.5/src/icmp_inet6.cpp	2007-09-21 13:19:06.000000000 +0200
+@@ -51,6 +51,14 @@
+ #define IP6_ALERT_MLD 0x00
+ #endif
+ 
++#ifndef IP6OPT_PAD1
++#define IP6OPT_PAD1 0
++#endif
++
++#ifndef IP6OPT_PADN
++#define IP6OPT_PADN 1
++#endif
++
+ static in6_addr mld_all_routers;
+ static in6_addr all_routers;
+ 
