@@ -112,6 +112,7 @@ define Package/xorg-server-X11R7.2/install
 	find $(1)/usr/lib/xorg/ -name *.la | xargs rm -rf
 	$(INSTALL_DIR) $(1)/usr/lib/X11/
 	$(CP) -r $(PKG_INSTALL_DIR)/usr/lib/X11/* $(1)/usr/lib/X11/
+	rm -rf $(1)/usr/share/X11 $(1)/usr/lib/X11/xserver	
 	$(INSTALL_DIR) $(1)/var/log/
 	$(INSTALL_DIR) $(1)/etc/X11/
 	$(CP) files/xorg.conf $(1)/etc/X11/
