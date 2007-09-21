@@ -8,17 +8,13 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=libfreetype
+PKG_NAME:=freetype
 PKG_VERSION:=2.3.1
 PKG_RELEASE:=1
 
-PKG_SOURCE:=freetype-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/freetype
 PKG_MD5SUM:=11e1186ca5520c5a284fa0a03f652035
-PKG_CAT:=bzcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/freetype-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,27 +23,29 @@ define Package/libfreetype
   CATEGORY:=Libraries
   DEPENDS:=+zlib
   TITLE:=A free, high-quality and portable font engine
-  DESCRIPTION:=\
-	The FreeType project is a team of volunteers who develop free, \\\
-	portable and high-quality software solutions for digital typography.\\\
-	They specifically target embedded systems and focus on bringing small, \\\
-	efficient and ubiquitous products.
   URL:=http://www.freetype.org/
 endef
 
+define Package/libfreetype/description
+ The FreeType project is a team of volunteers who develop free, 
+ portable and high-quality software solutions for digital typography.
+ They specifically target embedded systems and focus on bringing small, 
+ efficient and ubiquitous products.
+endef
+
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+
 define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-	)
-	$(SED) 's|^sys_lib_dlsearch_path_spec=.*|sys_lib_dlsearch_path_spec="$(STAGING_DIR)/usr/lib $(STAGING_DIR)/lib"|g' \
-		$(PKG_BUILD_DIR)/builds/unix/libtool
+	$(call Build/Configure/Default)
+	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
 define Build/InstallDev
@@ -60,13 +58,14 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfreetype.{a,so*} $(STAGING_DIR)/usr/lib/
 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/freetype2.pc $(STAGING_DIR)/usr/lib/pkgconfig/
-	$(SED) 's,-I$$$${includedir}/freetype2,,g' $(STAGING_DIR)/usr/lib/pkgconfig/freetype2.pc
+	$(SED) 's,-I$$$$includedir/freetype2,-I$(STAGING_DIR)/usr/include/freetype2,g' $(STAGING_DIR)/usr/bin/freetype-config
+	$(SED) 's,-I$$$${includedir}/freetype2,-I$(STAGING_DIR)/usr/include/freetype2,g' $(STAGING_DIR)/usr/lib/pkgconfig/freetype2.pc
+	$(SED) 's,-I$$$${includedir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/freetype2.pc
 	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/freetype2.pc
 endef
 
 define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/freetype-config \
+	rm -rf	$(STAGING_DIR)/usr/bin/freetype-config \
 		$(STAGING_DIR)/usr/include/freetype2 \
 		$(STAGING_DIR)/usr/include/ft2build.h \
 		$(STAGING_DIR)/usr/lib/libfreetype.{a,so*} \
