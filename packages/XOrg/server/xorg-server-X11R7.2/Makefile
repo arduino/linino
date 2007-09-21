@@ -17,13 +17,16 @@ PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/server/xorg-server-X11R7.2-$(PKG_VERSION)/
 
 include $(INCLUDE_DIR)/package.mk
 
-
-define Package/xorg-server-X11R7.2
+define Package/xorg-server-X11R7.2/Default
   SECTION:=xorg-server
   CATEGORY:=Xorg
   SUBMENU:=server
-  TITLE:=Xorg server
   URL:=http://xorg.freedesktop.org/
+endef
+
+define Package/xorg-server-X11R7.2
+$(call Package/xorg-server-X11R7.2/Default) 
+  TITLE:=Xorg server
   DEPENDS:=+compositeproto-X11R7.1 \
 		+damageproto-X11R7.0 \
 		+fixesproto-X11R7.1 \
@@ -41,6 +44,12 @@ define Package/xorg-server-X11R7.2
 		+libX11-X11R7.2 \
 		+glproto-X11R7.2 \
 		+xf86driproto-X11R7.0 \
+		+applewmproto-X11R7.0 \
+		+dmxproto-X11R7.0 \
+		+printproto-X11R7.0 \
+		+windowswmproto-X11R7.0 \
+		+xf86rushproto-X11R7.0 \
+		+xproxymanagementprotocol-X11R7.0 \
 		+libdrm \
 		+xf86miscproto-X11R7.0 \
 		+xf86vidmodeproto-X11R7.0 \
@@ -60,6 +69,13 @@ define Package/xorg-server-X11R7.2
 		+libnotimpl \
 		+Mesa \
 		@TARGET_x86
+  MENU:=1
+endef
+
+define Package/xorg-server-X11R7.2-config
+$(call Package/xorg-server-X11R7.2/Default) 
+  TITLE:=Xorg server configuration tools 
+  DEPENDS:=xorg-server-X11R7.2
 endef
 
 EXTRA_CFLAGS+= -I${STAGING_DIR}/usr/include/X11/GL -I${STAGING_DIR}/usr/include/X11/dri/ -I${STAGING_DIR}/usr/include/X11/ -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
@@ -85,7 +101,8 @@ endef
 
 define Package/xorg-server-X11R7.2/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/Xorg $(1)/usr/bin/
+	cd $(1)/usr/bin; ln -s Xorg X
 	$(INSTALL_DIR) $(1)/usr/share
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/* $(1)/usr/share/
 	$(INSTALL_DIR) $(1)/usr/lib/xserver
@@ -100,9 +117,15 @@ define Package/xorg-server-X11R7.2/install
 	$(CP) files/xorg.conf $(1)/etc/X11/
 endef
 
+define Packages/xorg-server-X11R7.2-config/install
+	$(INSTALL_DIR) $(1)/usr/bin
+    $(CP) $(PKG_INSTALL_DIR)/usr/bin/xorgconfig $(1)/usr/bin/
+endef
+
 define Build/InstallDev
  	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_BUILD_DIR)/xorg-server.pc $(STAGING_DIR)/usr/lib/pkgconfig/
 endef
 
 $(eval $(call BuildPackage,xorg-server-X11R7.2))
+$(eval $(call BuildPackage,xorg-server-X11R7.2-config))
