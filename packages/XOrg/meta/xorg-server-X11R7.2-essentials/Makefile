@@ -21,7 +21,7 @@ define Package/xorg-server-X11R7.2-essentials
   URL:=http://xorg.freedesktop.org/
   DEPENDS:=+xorg-server-X11R7.2 \
   		+font-alias-X11R7.0 \
-		+font-misc-misc-X11R7.0 \
+		+font-base \
 		+font-cursor-misc-X11R7.0 \
 		+xf86-input-mouse-X11R7.2 \
 		+xf86-video-vesa-X11R7.2 \
