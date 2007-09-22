@@ -21,10 +21,6 @@ PKG_SOURCE_URL:=http://curl.haxx.se/download/ \
 	http://www.mirrormonster.com/curl/download/ \
 	http://curl.mirrors.cyberservers.net/download/
 PKG_MD5SUM:=46ce665e47d37fce1a0bad935cce58a9
-PKG_CAT:=bzcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -48,40 +44,42 @@ define Package/libcurl
   TITLE:=A client-side URL transfer utility
 endef
 
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--disable-thread \
+	--enable-cookies \
+	--enable-crypto-auth \
+	--enable-nonblocking \
+	--enable-file \
+	--enable-ftp \
+	--enable-http \
+	--enable-ipv6 \
+	--disable-ares \
+	--disable-debug \
+	--disable-dict \
+	--disable-gopher \
+	--disable-ldap \
+	--disable-manual \
+	--disable-sspi \
+	--disable-telnet \
+	--disable-verbose \
+	--with-random="/dev/urandom" \
+	--with-ssl="$(STAGING_DIR)/usr" \
+	--without-ca-bundle \
+	--without-gnutls \
+	--without-libidn \
+	--with-zlib="$(STAGING_DIR)/usr" \
+
 define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--disable-thread \
-		--enable-cookies \
-		--enable-crypto-auth \
-		--enable-nonblocking \
-		--enable-file \
-		--enable-ftp \
-		--enable-http \
-		--enable-ipv6 \
-		--disable-ares \
-		--disable-debug \
-		--disable-dict \
-		--disable-gopher \
-		--disable-ldap \
-		--disable-manual \
-		--disable-sspi \
-		--disable-telnet \
-		--disable-verbose \
-		--with-random="/dev/urandom" \
-		--with-ssl="$(STAGING_DIR)/usr" \
-		--without-ca-bundle \
-		--without-gnutls \
-		--without-libidn \
-		--with-zlib="$(STAGING_DIR)/usr" \
-	);
+	$(call Build/Configure/Default)
+	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
 define Build/InstallDev
@@ -91,14 +89,19 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/curl $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcurl.{a,so*} $(STAGING_DIR)/usr/lib/
-	$(SED) 's,-I/usr/include,,g' $(STAGING_DIR)/usr/bin/curl-config
-	$(SED) 's,-L/usr/lib,,g' $(STAGING_DIR)/usr/bin/curl-config
+	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
+	$(CP) $(PKG_BUILD_DIR)/libcurl.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(STAGING_DIR)/usr/bin/curl-config
+	$(SED) 's,^includedir=.*,includedir=$(STAGING_DIR)/usr/include,g' $(STAGING_DIR)/usr/lib/pkgconfig/libcurl.pc
+	$(SED) 's,^libdir=.*,libdir=$(STAGING_DIR)/usr/lib,g' $(STAGING_DIR)/usr/lib/pkgconfig/libcurl.pc
+	$(SED) 's,$(TARGET_LDFLAGS),,g' $(STAGING_DIR)/usr/lib/pkgconfig/libcurl.pc
 endef
 
 define Build/UninstallDev
 	rm -rf	$(STAGING_DIR)/usr/bin/curl-config \
 		$(STAGING_DIR)/usr/include/curl \
-		$(STAGING_DIR)/usr/lib/libcurl.{a,so*}
+		$(STAGING_DIR)/usr/lib/libcurl.{a,so*} \
+		$(STAGING_DIR)/usr/lib/pkconfig/libcurl.pc
 endef
 
 define Package/curl/install
