@@ -62,7 +62,6 @@ define Build/Compile
 		$(MAKE_FLAGS) \
 		DESTDIR="$(PKG_INSTALL_DIR)/usr" \
 		all install
-		
 endef
 
 define Build/InstallDev
@@ -72,20 +71,20 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(STAGING_DIR)/usr/include/uClibc++/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libuClibc++*.{a,so*} $(STAGING_DIR)/usr/lib/
-	$(SED) 's,-I/include/,-I$(STAGING_DIR)/usr/include/uClibc++/,g' $(STAGING_DIR)/usr/bin/g++-uc
-	$(SED) 's,-L/lib/,-L$(STAGING_DIR)/usr/lib/,g' $(STAGING_DIR)/usr/bin/g++-uc
-	$(if $(STAGING_DIR_HOST), \
-		ln -sf $(shell $(SCRIPT_DIR)/abs2rel.pl $(STAGING_DIR)/usr/bin/g++-uc $(STAGING_DIR_HOST)/bin/) $(STAGING_DIR_HOST)/bin/ \
-	)
+	$(SED) 's|-I/include/|-I$(STAGING_DIR)/usr/include/uClibc++/|g' $(STAGING_DIR)/usr/bin/g++-uc
+	$(SED) 's|-L/lib/|-L$(STAGING_DIR)/usr/lib/|g' $(STAGING_DIR)/usr/bin/g++-uc
+# add another wrapper which links against both uClibc++ and libstdc++ 
+	$(CP) $(STAGING_DIR)/usr/bin/g++-uc $(STAGING_DIR)/usr/bin/g++-uc+std
+	$(SED) 's|^WRAPPER_INCLUDEDIR=.*||g' $(STAGING_DIR)/usr/bin/g++-uc+std
+	$(SED) 's|-luClibc++|-Wl,-Bdynamic,-luClibc++,-Bstatic,-lstdc++,-Bdynamic|g' $(STAGING_DIR)/usr/bin/g++-uc+std
+	$(SED) 's|-nostdinc++||g' $(STAGING_DIR)/usr/bin/g++-uc+std
 endef
 	
 define Build/UninstallDev
 	rm -rf	$(STAGING_DIR)/usr/bin/g++-uc \
+		$(STAGING_DIR)/usr/bin/g++-uc+std \
 		$(STAGING_DIR)/usr/include/uClibc++ \
 		$(STAGING_DIR)/usr/lib/libuClibc++*.{a,so*}
-	$(if $(STAGING_DIR_HOST), \
-		rm -f	$(STAGING_DIR_HOST)/bin/g++-uc \
-	)
 endef
 
 define Package/uclibcxx/install
