@@ -24,7 +24,6 @@ CONFIGURE_VARS+=ac_cv_file__usr_share_sgml_X11_defs_ent=yes
 define Package/xorg-server-X11R7.2/Default
   SECTION:=xorg-server
   CATEGORY:=Xorg
-  SUBMENU:=server
   URL:=http://xorg.freedesktop.org/
 endef
 

@@ -9,7 +9,11 @@
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.2/src/app
 
 _CATEGORY:=app
+
+ifneq ($(PKG_NAME),xinit-X11R7.2)
 _DEPEND+=xorg-server-X11R7.2-essentials
+endif
+
 include ../../common.mk
 
 ifeq ($(PKG_NAME),xdm-X11R7.2)
