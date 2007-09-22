@@ -19,18 +19,21 @@ include $(INCLUDE_DIR)/package.mk
 
 EXTRA_CFLAGS+= -I${STAGING_DIR}/usr/include/X11/GL -I${STAGING_DIR}/usr/include/X11/dri/ -I${STAGING_DIR}/usr/include/X11/ -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
-CONFIGURE_VARS+=ac_cv_file__usr_share_sgml_X11_defs_ent=yes
+CONFIGURE_ARGS_KDRIVE=--enable-composite --enable-kdrive \
+		--disable-dga --disable-dri --disable-xinerama \
+		--disable-xf86misc --disable-xf86vidmode \
+		--disable-xorg --disable-xorgcfg \
+		--disable-xkb --disable-xnest --disable-xvfb \
+		--disable-xevie --disable-xprint --disable-xtrap \
+		--disable-dmx --disable-w100 \
+		--with-default-font-path=built-ins \
+		--enable-tslib --enable-xcalibrate 
 
-define Package/xorg-server-X11R7.2/Default
-  SECTION:=xorg-server
-  CATEGORY:=Xorg
-  URL:=http://xorg.freedesktop.org/
-endef
+CONFIGURE_VARS+=ac_cv_file__usr_share_sgml_X11_defs_ent=yes 
+CONFIGURE_ARGS+=$(if $(CONFIG_XORG_BUILD_KDRIVE), $(CONFIGURE_ARGS_KDRIVE))
 
-define Package/xorg-server-X11R7.2
-$(call Package/xorg-server-X11R7.2/Default) 
-  TITLE:=Xorg server
-  DEPENDS:=+compositeproto-X11R7.1 \
+DEPENDS_SERVER:=+calibrateproto \
+		+compositeproto-X11R7.1 \
 		+damageproto-X11R7.0 \
 		+fixesproto-X11R7.1 \
 		+recordproto-X11R7.0 \
@@ -72,7 +75,42 @@ $(call Package/xorg-server-X11R7.2/Default)
 		+libnotimpl \
 		+Mesa \
 		@TARGET_x86
+
+DEPENDS_KDRIVE:=+calibrateproto \
+		+compositeproto-X11R7.1 \
+		+damageproto-X11R7.0 \
+		+fixesproto-X11R7.1 \
+		+recordproto-X11R7.0 \
+		+resourceproto-X11R7.0 \
+		+scrnsaverproto-X11R7.1 \
+		+videoproto-X11R7.0 \
+		+xextproto-X11R7.0 \
+		+xproto-X11R7.2 \
+		+libXext-X11R7.2 \
+		+libXdmcp-X11R7.2 \
+		+libXfont-X11R7.2 \
+		+libXrandr-X11R7.2 \
+		+xtrans-X11R7.2 \
+		+libX11-X11R7.2 \
+		@TARGET_x86 
+
+define Package/xorg-server-X11R7.2/config
+	config XORG_BUILD_KDRIVE
+		bool "Build kdrive instead of xserver"
+		depends PACKAGE_xorg-server-X11R7.2
+endef
+
+define Package/xorg-server-X11R7.2/Default
+  SECTION:=xorg-server
+  CATEGORY:=Xorg
+  URL:=http://xorg.freedesktop.org/
+endef
+
+define Package/xorg-server-X11R7.2
+$(call Package/xorg-server-X11R7.2/Default) 
+  TITLE:=Xorg server
   MENU:=1
+  DEPENDS:=$(if $(CONFIG_XORG_BUILD_KDRIVE), $(DEPENDS_KDRIVE), $(DEPENDS_SERVER))
 endef
 
 define Package/xorg-server-X11R7.2-config
