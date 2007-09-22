@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rrdcollect
 PKG_VERSION:=0.2.3
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/rrdcollect
@@ -70,7 +70,7 @@ define Build/Configure
 		--without-libpcap \
 		, \
 		CFLAGS="$(TARGET_CFLAGS) -DSOCKET_COMM" \
-		LIBS="-lz" \
+		LIBS="-lz -lfreetype -lpng -lart_lgpl_2" \
 	)
 endef
 
