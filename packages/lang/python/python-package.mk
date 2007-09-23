@@ -24,10 +24,11 @@ define PyPackage
   $(eval $(call PyPackage/$(1)))
 
   define Package/$(1)
+    SUBMENU:=Python
     TITLE:=$(TITLE)
     SECTION:=lang
     CATEGORY:=Languages
-    DEPENDS:=+python
+    DEPENDS:=python
     $(call PyPackage/$(1))
   endef
 

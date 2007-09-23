@@ -26,6 +26,7 @@ PY_DISABLED_MODULES=\
 	_curses _curses_panel _tkinter nis 
 
 define Package/python
+  SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
   DEPENDS:=+libexpat +libopenssl +libpthread +libreadline +uclibcxx
