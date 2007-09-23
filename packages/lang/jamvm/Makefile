@@ -15,34 +15,30 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/jamvm
 PKG_MD5SUM:=1b7bc9928c534412e062685a4191651d
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/jamvm
+  SUBMENU:=Java
   SECTION:=lang
   CATEGORY:=Languages
-  DEPENDS:=+libffi-sable @!mips
   TITLE:=A compact Java Virtual Machine
-  DESCRIPTION:=\
-	JamVM is a new Java Virtual Machine which conforms to the JVM \\\
-	specification version (blue book). In comparison to most other VM's \\\
-	(free and commercial) it is extremely small.However, unlike other \\\
-	small VMs (e.g. KVM) it is designed to support the full \\\
-	specification, and includes support for object finalisation, \\\
-	Soft/Weak/Phantom References, the Java Native Interface (JNI) and the \\\
-	Reflection API.
   URL:=http://sourceforge.net/projects/jamvm
+  DEPENDS:=+libffi-sable @!mips
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-ffi \
-		--disable-int-threading \
-	)
+define Package/jamvm/description
+ JamVM is a new Java Virtual Machine which conforms to the JVM 
+ specification version (blue book). In comparison to most other VM's (free 
+ and commercial) it is extremely small.However, unlike other small VMs 
+ (e.g. KVM) it is designed to support the full specification, and includes 
+ support for object finalisation, Soft/Weak/Phantom References, the Java 
+ Native Interface (JNI) and the Reflection API.
 endef
+
+CONFIGURE_ARGS+= \
+	--enable-ffi \
+	--disable-int-threading \
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) all
@@ -58,3 +54,4 @@ ifneq ($(ARCH),mips)
 endif
 
 $(eval $(call BuildPackage,jamvm))
+

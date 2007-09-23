@@ -15,35 +15,48 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/sablevm
 PKG_MD5SUM:=18a7c1a92b0748a206f9767a76a6b3bb
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/sablevm
+define Package/sablevm/Default
+  SUBMENU:=Java
   SECTION:=lang
   CATEGORY:=Languages
-  DEPENDS:=+libltdl +libpopt +libpthread +zlib
   TITLE:=A Java Virtual Machine (JVM) implementation
-  DESCRIPTION:=\
-	SableVM is a robust, extremely portable, efficient, and specifications-\\\
-	-compliant Java virtual machine that aims to be easy to maintain and to \\\
-	extend. It features a state-of-the-art and efficient interpreter engine.\\\
-	Its source code is very accessible and easy to understand. It also has \\\
-	many robustness features that have been the object of careful design.
   URL:=http://sablevm.org/
+  DEPENDS:=+libltdl +libpopt +libpthread +zlib
+endef
+
+define Package/sablevm/Default/description
+ SableVM is a robust, extremely portable, efficient, and specifications-
+ -compliant Java virtual machine that aims to be easy to maintain and to 
+ extend. It features a state-of-the-art and efficient interpreter engine.
+ Its source code is very accessible and easy to understand. It also has 
+ many robustness features that have been the object of careful design.
+endef
+
+define Package/sablevm
+$(call Package/sablevm/Default)
+  TITLE+= (full)
+endef
+
+define Package/sablevm/description
+$(call Package/sablevm/Default/description)
+ .
+ This package contains the full set of Java classes.
 endef
 
 define Package/sablevm-mini
-  $(call Package/sablevm)
+$(call Package/sablevm/Default)
   TITLE+= (minimal)
-  DESCRIPTION+=\\\
-	This package contains only the minimal set of Java classes needed to \\\
-	run a simple "HelloWorld" program (included in this package).
 endef
 
+define Package/sablevm-mini/description
+$(call Package/sablevm/Default/description)
+ .
+ This package contains only the minimal set of Java classes needed to 
+ run a simple "HelloWorld" program (included in this package).
+endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
@@ -122,3 +135,4 @@ $(foreach command, jikes fastjar, \
    $(PKG_NAME) requires $(command). \
   )) \
 )
+
