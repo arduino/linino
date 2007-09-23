@@ -1,15 +1,18 @@
---- xyssl-0.7-old/Makefile	2007-07-07 07:07:00.000000000 +0200
-+++ xyssl-0.7-new/Makefile	2007-08-29 12:26:01.000000000 +0200
+Index: xyssl-0.7/Makefile
+===================================================================
+--- xyssl-0.7.orig/Makefile	2007-09-23 23:28:33.000000000 +0200
++++ xyssl-0.7/Makefile	2007-09-23 23:28:34.000000000 +0200
 @@ -8,9 +8,10 @@
  	cd programs && make all && cd ..
  
  install:
 -	mkdir -p $(DESTDIR)/{include/xyssl,lib}
-+	mkdir -p $(DESTDIR)/include/xyssl
- 	cp -v -r include $(DESTDIR)/include
+-	cp -v -r include $(DESTDIR)/include
 -	cp -v library/libxyssl.a $(DESTDIR)/lib
++	mkdir -p $(DESTDIR)/include/xyssl
++	cp -v -r include/* $(DESTDIR)/include/
 +	mkdir -p $(DESTDIR)/lib
-+	cp -v library/libxyssl.* $(DESTDIR)/lib
++	cp -v library/libxyssl.* $(DESTDIR)/lib/
  	
  	mkdir -p $(DESTDIR)/bin
  	for p in programs/*/* ; do              \

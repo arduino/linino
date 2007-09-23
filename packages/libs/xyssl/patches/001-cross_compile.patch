@@ -1,6 +1,7 @@
-diff -ruN xyssl-0.7-old/library/Makefile xyssl-0.7-new/library/Makefile
---- xyssl-0.7-old/library/Makefile	2007-07-07 07:07:00.000000000 +0200
-+++ xyssl-0.7-new/library/Makefile	2007-08-29 12:20:53.000000000 +0200
+Index: xyssl-0.7/library/Makefile
+===================================================================
+--- xyssl-0.7.orig/library/Makefile	2007-09-23 23:28:33.000000000 +0200
++++ xyssl-0.7/library/Makefile	2007-09-23 23:28:33.000000000 +0200
 @@ -9,10 +9,13 @@
  #    _BSD_EXTENSION     when compiling on Plan9
  
@@ -43,9 +44,10 @@ diff -ruN xyssl-0.7-old/library/Makefile xyssl-0.7-new/library/Makefile
  
  clean:
  	rm -f *.o libxyssl.*
-diff -ruN xyssl-0.7-old/programs/Makefile xyssl-0.7-new/programs/Makefile
---- xyssl-0.7-old/programs/Makefile	2007-07-07 07:07:00.000000000 +0200
-+++ xyssl-0.7-new/programs/Makefile	2007-08-29 12:19:25.000000000 +0200
+Index: xyssl-0.7/programs/Makefile
+===================================================================
+--- xyssl-0.7.orig/programs/Makefile	2007-09-23 23:28:33.000000000 +0200
++++ xyssl-0.7/programs/Makefile	2007-09-23 23:28:33.000000000 +0200
 @@ -2,7 +2,8 @@
  # To compile on SunOS: add "-lsocket -lnsl" to LDFLAGS
  # To compile on MinGW: add "-lws2_32" to LDFLAGS
