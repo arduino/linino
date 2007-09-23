@@ -14,7 +14,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/amule
-PKG_MD5SUM:=
+PKG_MD5SUM:=0aafdd159edb8ad5f0064da87998b47d
 
 PKG_BUILD_DEPENDS:=libgd
 
@@ -67,10 +67,6 @@ CONFIGURE_ARGS+= \
 
 CONFIGURE_VARS+= \
 	CXX="g++-uc+std" \
-
-define Build/Configure
-	$(call Build/Configure/Default,)
-endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
