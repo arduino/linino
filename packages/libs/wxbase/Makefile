@@ -13,7 +13,7 @@ PKG_VERSION:=2.6.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=wxBase-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=@SF/wxWidgets
+PKG_SOURCE_URL:=@SF/wxwindows
 PKG_MD5SUM:=6e55324d2a522d23fd8834ad8656e0b6
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/wxBase-$(PKG_VERSION)
@@ -24,7 +24,7 @@ define Package/libwxbase
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Cross-platform C++ framework
-  URL:=http://www.gnu.org/software/libtool/
+  URL:=http://www.wxwidgets.org/
   DEPENDS:=+libexpat +uclibcxx +zlib
 endef
 
@@ -106,15 +106,9 @@ CONFIGURE_ARGS+= \
 CONFIGURE_VARS+= \
 	CXX="g++-uc+std" \
 
-define Build/Configure
-	$(call Build/Configure/Default,)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+MAKE_FLAGS += \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install \
 
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/bin
