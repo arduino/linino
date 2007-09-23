@@ -18,7 +18,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define KernelPackage/fonera-mp3-driver
   SUBMENU:=Other modules
-  DEPENDS:=@TARGET_atheros
+  DEPENDS:=@LINUX_2_6_ATHEROS
   TITLE:=Fonera-MP3 driver (VS1011X)
   FILES:=$(PKG_BUILD_DIR)/mp3_drv.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,25,mp3_drv)
