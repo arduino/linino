@@ -33,7 +33,6 @@ endef
 
 define PyPackage/twisted
 $(call PyPackage/twisted/default)
- MENU:=1
  TITLE:=Python networking engine
  DEPENDS+= +zope-interface
 endef
