@@ -22,7 +22,7 @@ define Package/babel
   SECTION:=ipv6
   CATEGORY:=IPv6
   TITLE:=Ad-Hoc network routing daemon
-  URL:=http://www.pps.jussieu.fr/~jch/software/ahcp/
+  URL:=http://www.pps.jussieu.fr/~jch/software/babel/
   DEPENDS:=+kmod-ipv6
 endef
 
