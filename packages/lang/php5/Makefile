@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006,2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -19,54 +19,60 @@ PKG_MD5SUM:=55c97a671fdabf462cc7a82971a656d2
 include $(INCLUDE_DIR)/package.mk
 
 define Package/php5/Default
+  SUBMENU:=PHP
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=PHP5 Hypertext preprocessor
-  DESCRIPTION:=\
-	PHP is a widely-used general-purpose scripting language that is especially \\\
-	suited for Web development and can be embedded into HTML.
   URL:=http://www.php.net/
+endef
+
+define Package/php5/Default/description
+ PHP is a widely-used general-purpose scripting language that is especially 
+ suited for Web development and can be embedded into HTML.
 endef
 
 define Package/php5
   $(call Package/php5/Default)
   DEPENDS:=+libopenssl +zlib
-  DESCRIPTION+=\\\
-	\\\
-	This package contains only the PHP config file. You must actually choose your \\\
-	PHP flavour (cli, cgi or fastcgi).
-  MENU:=1
 endef
 
-define Package/php5/conffiles
-/etc/php.ini
+define Package/php5/description
+$(call Package/php5/Default/description)
+ This package contains only the PHP config file. You must actually choose 
+ your PHP flavour (cli, cgi or fastcgi).
 endef
 
 define Package/php5-cli
   $(call Package/php5/Default)
   DEPENDS:=php5
   TITLE+= (CLI)
-  DESCRIPTION+=\\\
-	\\\
-	This package contains the CLI version of the PHP5 interpreter.
+endef
+
+define Package/php5-cli/description
+$(call Package/php5/Default/description)
+ This package contains the CLI version of the PHP5 interpreter.
 endef
 
 define Package/php5-cgi
   $(call Package/php5/Default)
   DEPENDS:=php5
   TITLE+= (CGI)
-  DESCRIPTION+=\\\
-	\\\
-	This package contains the CGI version of the PHP5 interpreter.
+endef
+
+define Package/php5-cgi/description
+$(call Package/php5/Default/description)
+ This package contains the CGI version of the PHP5 interpreter.
 endef
 
 define Package/php5-fastcgi
   $(call Package/php5/Default)
   DEPENDS:=php5
   TITLE+= (FastCGI)
-  DESCRIPTION+=\\\
-	\\\
-	This package contains the FastCGI version of the PHP5 interpreter.
+endef
+
+define Package/php5-fastcgi/description
+$(call Package/php5/Default/description)
+ This package contains the FastCGI version of the PHP5 interpreter.
 endef
 
 define Package/php5-mod-curl
@@ -336,6 +342,10 @@ define Build/Compile
 	$(call Build/Compile/php5-cli)
 	$(call Build/Compile/php5-cgi)
 	$(call Build/Compile/php5-fastcgi)
+endef
+
+define Package/php5/conffiles
+/etc/php.ini
 endef
 
 define Package/php5/install

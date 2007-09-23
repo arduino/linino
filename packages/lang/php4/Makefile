@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006,2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,61 +15,64 @@ PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://fr.php.net/distributions/
 PKG_MD5SUM:=fbc67d240812136a9842bc1f2a217b7a
-PKG_CAT:=bzcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/php4/Default
+  SUBMENU:=PHP
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=PHP4 Hypertext preprocessor
-  DESCRIPTION:=\
-	PHP is a widely-used general-purpose scripting language that is especially \\\
-	suited for Web development and can be embedded into HTML.
   URL:=http://www.php.net/
+endef
+
+define Package/php4/Default/description
+ PHP is a widely-used general-purpose scripting language that is especially 
+ suited for Web development and can be embedded into HTML.
 endef
 
 define Package/php4
   $(call Package/php4/Default)
   DEPENDS:=+libopenssl +zlib
-  DESCRIPTION+=\\\
-	\\\
-	This package contains only the PHP config file. You must actually choose your \\\
-	PHP flavour (cli, cgi or fastcgi).
-  MENU:=1
 endef
 
-define Package/php4/conffiles
-/etc/php.ini
+define Package/php4/description
+$(call Package/php4/Default/description)
+ This package contains only the PHP config file. You must actually choose 
+ your PHP flavour (cli, cgi or fastcgi).
 endef
 
 define Package/php4-cli
   $(call Package/php4/Default)
   DEPENDS:=php4
   TITLE+= (CLI)
-  DESCRIPTION+=\\\
-	\\\
-	This package contains the CLI version of the PHP4 interpreter.
+endef
+
+define Package/php4-cli/description
+$(call Package/php4/Default/description)
+ This package contains the CLI version of the PHP4 interpreter.
 endef
 
 define Package/php4-cgi
   $(call Package/php4/Default)
   DEPENDS:=php4
   TITLE+= (CGI)
-  DESCRIPTION+=\\\
-	\\\
-	This package contains the CGI version of the PHP4 interpreter.
+endef
+
+define Package/php4-cgi/description
+$(call Package/php4/Default/description)
+ This package contains the CGI version of the PHP4 interpreter.
 endef
 
 define Package/php4-fastcgi
   $(call Package/php4/Default)
   DEPENDS:=php4
   TITLE+= (FastCGI)
-  DESCRIPTION+=\\\
-	\\\
-	This package contains the FastCGI version of the PHP4 interpreter.
+endef
+
+define Package/php4-fastcgi/description
+$(call Package/php4/Default/description)
+ This package contains the FastCGI version of the PHP4 interpreter.
 endef
 
 define Package/php4-mod-curl
@@ -320,6 +323,10 @@ define Build/Compile
 	$(call Build/Compile/php4-fastcgi)
 endef
 
+define Package/php4/conffiles
+/etc/php.ini
+endef
+
 define Package/php4/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/php.ini $(1)/etc/
@@ -370,3 +377,4 @@ $(eval $(call BuildPlugin,php4-mod-session,session))
 $(eval $(call BuildPlugin,php4-mod-sockets,sockets))
 $(eval $(call BuildPlugin,php4-mod-sqlite,sqlite))
 $(eval $(call BuildPlugin,php4-mod-xml,xml))
+
