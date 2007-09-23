@@ -31,8 +31,8 @@ define Package/babel/description
  on DSDV and AODV, but with provisions for link cost estimation and 
  redistribution of routes from other routing protocols.
  While it is optimised for wireless mesh networks, Babel will also work 
- efficiently on wired networks. It will generate between roughly the same 
- and double the amount of routing traffic that RIPng would generate, while 
+ efficiently on wired networks. It will generate between 1.2 and 2.4 times 
+ the amount of routing traffic that RIPng would generate, while 
  never counting to infinity.
 endef
 
