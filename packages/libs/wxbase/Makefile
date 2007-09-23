@@ -106,9 +106,11 @@ CONFIGURE_ARGS+= \
 CONFIGURE_VARS+= \
 	CXX="g++-uc+std" \
 
-MAKE_FLAGS += \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install \
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
+endef
 
 define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/bin
