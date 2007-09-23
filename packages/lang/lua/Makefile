@@ -26,6 +26,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 include $(INCLUDE_DIR)/package.mk
 
 define Package/lua/Default
+  SUBMENU:=LUA
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=LUA programming language
@@ -38,6 +39,7 @@ endef
 
 define Package/liblua
   $(call Package/lua/Default)
+  SUBMENU:=
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= (libraries)
