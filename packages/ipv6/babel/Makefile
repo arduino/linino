@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/babel
   SECTION:=ipv6
   CATEGORY:=IPv6
-  TITLE:=Ad-Hoc network routing daemon
+  TITLE:=a loop-free distance-vector routing protocol
   URL:=http://www.pps.jussieu.fr/~jch/software/babel/
   DEPENDS:=+kmod-ipv6
 endef
