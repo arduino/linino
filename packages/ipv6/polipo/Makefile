@@ -23,7 +23,6 @@ define Package/polipo
   CATEGORY:=IPv6
   TITLE:=a caching web proxy
   URL:=http://www.pps.jussieu.fr/~jch/software/polipo/
-  DEPENDS:=+kmod-ipv6
 endef
 
 define Package/polipo/description
