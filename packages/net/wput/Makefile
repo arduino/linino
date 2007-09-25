@@ -22,6 +22,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/wput
+  SUBMENU:=FTP
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A wget-like command-line FTP client

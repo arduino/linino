@@ -23,6 +23,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 include $(INCLUDE_DIR)/package.mk
 
 define Package/pure-ftpd
+  SUBMENU:=FTP
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libelf
