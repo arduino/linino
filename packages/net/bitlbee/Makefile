@@ -27,6 +27,7 @@ PKG_BUILD_DEPENDS:=libopenssl glib1 libiconv
 include $(INCLUDE_DIR)/package.mk
 
 define Package/bitlbee
+  SUBMENU:=Instant Messaging
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libopenssl +glib1 +libiconv

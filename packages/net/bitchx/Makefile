@@ -25,6 +25,7 @@ PKG_BUILD_DEPENDS:=libncurses
 include $(INCLUDE_DIR)/package.mk
 
 define Package/bitchx
+  SUBMENU:=Instant Messaging
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libncurses

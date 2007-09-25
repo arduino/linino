@@ -19,10 +19,11 @@ PKG_MD5SUM:=42f96620c3b2fd3dca9768d9ce16dd06
 include $(INCLUDE_DIR)/package.mk
 
 define Package/weechat/Default
- SECTION:=net
- CATEGORY:=Network
- TITLE:=Lightweight IRC client
- URL:=http://weechat.flashtux.org/
+  SUBMENU:=Instant Messaging
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=Lightweight IRC client
+  URL:=http://weechat.flashtux.org/
 endef
 
 define Package/weechat/Default/description

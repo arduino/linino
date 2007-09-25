@@ -22,6 +22,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/psybnc
+  SUBMENU:=Instant Messaging
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=

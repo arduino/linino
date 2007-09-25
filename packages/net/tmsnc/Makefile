@@ -23,6 +23,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 include $(INCLUDE_DIR)/package.mk
 
 define Package/tmsnc
+  SUBMENU:=Instant Messaging
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libncurses +libopenssl +libpthread
