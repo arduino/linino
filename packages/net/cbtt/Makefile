@@ -20,6 +20,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)80-$(PKG_VERSION)-src
 include $(INCLUDE_DIR)/package.mk
 
 define Package/cbtt/Default
+  SUBMENU:=BitTorrent
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libpthread +uclibcxx +zlib

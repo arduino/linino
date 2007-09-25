@@ -19,6 +19,7 @@ PKG_MD5SUM:=23b37cd7b558ad6a27974b311499bab6
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ctorrent
+  SUBMENU:=BitTorrent
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libopenssl +uclibcxx
