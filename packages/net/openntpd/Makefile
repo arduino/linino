@@ -25,6 +25,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/openntpd
+  SUBMENU:=Time Synchronization
   SECTION:=net
   CATEGORY:=Network
   TITLE:=NTP server

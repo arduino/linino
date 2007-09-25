@@ -23,6 +23,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 include $(INCLUDE_DIR)/package.mk
 
 define Package/htpdate
+  SUBMENU:=Time Synchronization
   SECTION:=net
   CATEGORY:=Network
   TITLE:=an HTP (Hypertext Time Protocol) implementation

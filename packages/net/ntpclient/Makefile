@@ -21,6 +21,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ntpclient
+  SUBMENU:=Time Synchronization
   SECTION:=net
   CATEGORY:=Network
   TITLE:=NTP (Network Time Protocol) client
