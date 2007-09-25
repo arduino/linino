@@ -19,6 +19,7 @@ PKG_MD5SUM:=1a676eacf562e3b8de90493f99fe059c
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mutella
+  SUBMENU:=P2P
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Gnutella client with command line and http interface

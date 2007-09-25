@@ -23,6 +23,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 include $(INCLUDE_DIR)/package.mk
 
 define Package/opendchub
+  SUBMENU:=P2P
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libopenssl +libpthread
