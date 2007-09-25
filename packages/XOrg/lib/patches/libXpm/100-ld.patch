@@ -1,0 +1,12 @@
+diff -urN libXpm-X11R7.2-3.5.6.orig/sxpm/Makefile.in libXpm-X11R7.2-3.5.6/sxpm/Makefile.in
+--- libXpm-X11R7.2-3.5.6.orig/sxpm/Makefile.in	2007-09-14 18:57:22.000000000 +0200
++++ libXpm-X11R7.2-3.5.6/sxpm/Makefile.in	2007-09-14 18:58:38.000000000 +0200
+@@ -154,7 +154,7 @@
+ SHELL = @SHELL@
+ STRIP = @STRIP@
+ SXPM_CFLAGS = @SXPM_CFLAGS@
+-SXPM_LIBS = @SXPM_LIBS@
++SXPM_LIBS = @SXPM_LIBS@ -lXdmcp -lXau -shared
+ VERSION = @VERSION@
+ XPM_CFLAGS = @XPM_CFLAGS@
+ XPM_LIBS = @XPM_LIBS@
