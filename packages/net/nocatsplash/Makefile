@@ -23,6 +23,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 include $(INCLUDE_DIR)/package.mk
 
 define Package/nocatsplash
+  SUBMENU:=Captive Portals
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+glib1
