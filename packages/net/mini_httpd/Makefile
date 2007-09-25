@@ -21,6 +21,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/mini_httpd-$(PKG_VERSION)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mini-httpd/Default
+  SUBMENU:=Web
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A small web server

@@ -19,6 +19,7 @@ PKG_MD5SUM:=26f98dddf9d8c0775221b800986003ee
 include $(INCLUDE_DIR)/package.mk
 
 define Package/lighttpd/Default
+  SUBMENU:=Web
   SECTION:=net
   CATEGORY:=Network
   URL:=http://www.lighttpd.net/
