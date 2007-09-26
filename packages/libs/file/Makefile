@@ -52,6 +52,7 @@ CONFIGURE_ARGS += \
 	--without-libintl-prefix \
 
 MAKE_FLAGS += \
+	-C $(PKG_BUILD_DIR)/src \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
 	all install \
 
