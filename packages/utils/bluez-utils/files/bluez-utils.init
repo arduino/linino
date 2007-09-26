@@ -67,6 +67,8 @@ dund_config() {
 	append_bool "$cfg" msdun "--msdun"
 	append_bool "$cfg" activesync "--activesync"
 	append_bool "$cfg" cache "--cache"
+
+	append_string "$cfg" pppdopts ""
 	config_get_bool enabled "$cfg" "enabled" '1'
 	[ "$enabled" -gt 0 ] && /usr/bin/dund $args
 }
