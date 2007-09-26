@@ -14,7 +14,8 @@ PKG_RELEASE:=2
 PKG_SOURCE_NAME:=httpd
 
 PKG_SOURCE:=$(PKG_SOURCE_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://ftp.uni-erlangen.de/pub/mirrors/apache/httpd/
+PKG_SOURCE_URL:=http://ftp.uni-erlangen.de/pub/mirrors/apache/httpd/ \
+		http://apache.imsam.info/httpd/
 PKG_MD5SUM:=d050a49bd7532ec21c6bb593b3473a5d
 PKG_CAT:=zcat
 
@@ -26,15 +27,21 @@ include $(INCLUDE_DIR)/package.mk
 define Package/apache/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+apr +apr-util +zlib +libexpat +libpcre +libopenssl +libsqlite3
+  SUBMENU:=Web
   TITLE:=The Apache Web Server
   URL:=http://httpd.apache.org/
-  SUBMENU:=apache
+endef
+
+define Package/apache
+  $(call Package/apache/Default)
+  MENU=1
+  DEPENDS:=+apr +apr-util +zlib +libexpat +libpcre +libopenssl +libsqlite3
 endef
 
 define Package/apache-server
   $(call Package/apache/Default)
   TITLE:=The apache server & and some tools
+  DEPENDS:=apache
   DESCRIPTION:=\
 	Take care that you don't include apache at the moment into your image\\\
 	please select it only as module because busybox will override\\\
@@ -67,7 +74,7 @@ endef
 define Package/apache-icons
   $(call Package/apache/Default)
   TITLE:=Icons from Apache
-  DEPENDS:=
+  DEPENDS:=apache
 endef
 
 define Build/Configure	
@@ -154,5 +161,6 @@ define Package/apache-icons/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/icons $(1)/usr/share/
 endef
 
+$(eval $(call BuildPackage,apache))
 $(eval $(call BuildPackage,apache-server))
 $(eval $(call BuildPackage,apache-icons))
