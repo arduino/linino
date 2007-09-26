@@ -1,0 +1,67 @@
+#
+# Copyright (C) 2007 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# blogic@openwrt.org
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=lame
+PKG_VERSION:=3.96.1
+PKG_RELEASE:=1
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/lame
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+include $(INCLUDE_DIR)/package.mk
+
+define Package/lame/Default
+  SECTION:=sound
+  CATEGORY:=Sound
+  URL:=http://sourceforge.net/projects/lame
+endef
+
+define Package/lame
+$(call Package/lame/Default)
+  TITLE:=lame
+  DESCRIPTION:=lame mp3 encoder
+  MENU:=1
+endef
+
+define Package/lame-lib
+$(call Package/lame/Default)
+  TITLE:=lame-lib
+  DESCRIPTION:=lame mp3 encoder libs
+  DEPENDS:=lame
+endef
+
+
+define Build/Configure
+	$(call Build/Configure/Default) 
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
+endef
+
+define Package/lame/install	
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/lame $(1)/usr/bin/
+endef
+
+define Package/lame-lib/install	
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*so* $(1)/usr/lib/
+endef
+
+define Build/InstallDev
+	mkdir -p $(STAGING_DIR)/usr/{lib,include}
+	${CP} $(PKG_INSTALL_DIR)/usr/{lib,include} $(STAGING_DIR)/usr/
+ 
+endef
+
+$(eval $(call BuildPackage,lame-lib))
+$(eval $(call BuildPackage,lame))
