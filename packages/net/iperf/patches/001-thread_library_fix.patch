@@ -1,5 +1,7 @@
---- iperf-2.0.2/compat/Thread.c        2005-05-03 08:15:51.000000000 -0700
-+++ iperf-2.0.2.new/compat/Thread.c     2007-06-04 10:41:11.000000000 -0700
+Index: iperf-2.0.2/compat/Thread.c
+===================================================================
+--- iperf-2.0.2.orig/compat/Thread.c	2007-09-26 15:01:48.000000000 +0200
++++ iperf-2.0.2/compat/Thread.c	2007-09-26 15:01:49.000000000 +0200
 @@ -405,9 +405,13 @@
  void thread_rest ( void ) {
  #if defined( HAVE_THREAD )

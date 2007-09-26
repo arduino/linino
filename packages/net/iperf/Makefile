@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -18,38 +18,90 @@ PKG_MD5SUM:=bb658aba58a5af0356f5b1342dfe8f53
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/iperf
+define Package/iperf/Default
+  SUBMENU:=Monitoring
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+uclibcxx
+  DEPENDS:= +uclibcxx
   TITLE:=Internet Protocol bandwidth measuring tool
-  URL:=http://dast.nlanr.net/Projects/Iperf/ 
+  URL:=http://dast.nlanr.net/Projects/Iperf/
 endef
 
-define Package/iperf/description
+define Package/iperf/Default/description
  Iperf is a modern alternative for measuring TCP and UDP bandwidth 
  performance, allowing the tuning of various parameters and 
  characteristics.
 endef
 
+
+define Package/iperf
+$(call Package/iperf/Default)
+  TITLE+= (with single thread support)
+endef
+
+define Package/iperf/description
+$(call Package/iperf/Default/description)
+ This package is built with single thread support.
+endef
+
+
+define Package/iperf-mt
+$(call Package/iperf/Default)
+  DEPENDS+= +libpthread
+  TITLE+= (with multithread support)
+endef
+
+define Package/iperf-mt/description
+$(call Package/iperf/Default/description)
+ This package is built with multithread support.
+endef
+
+
+define Build/Template
+
+$(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
+	-$(MAKE) -C $(PKG_BUILD_DIR) clean
+	$(call Build/Configure/Default,$(3))
+	$(MAKE) -C $(PKG_BUILD_DIR)
+	( cd $(PKG_BUILD_DIR)/src; mv -f iperf iperf-$(2) )
+	touch $$@
+
+$(STAMP_BUILT): $(STAMP_BUILT)-$(2)
+
+define Package/$(1)/install
+	$(INSTALL_DIR) $$(1)/usr/bin
+	$(INSTALL_BIN) $$(PKG_BUILD_DIR)/src/iperf-$(2) $$(1)/usr/bin/iperf
+endef
+
+endef
+
 CONFIGURE_ARGS += \
 	--disable-multicast \
-	--disable-threads \
 
 CONFIGURE_VARS += \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
-	CXXFLAGS="$$$$CXX_CFLAGS -fno-builtin -fno-rtti -nostdinc++" \
-	LIBS="-nodefaultlibs -luClibc++ -lgcc" \
+	CXX="g++-uc" \
+	CXXFLAGS="$$$$CXX_CFLAGS -fno-rtti" \
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
-define Package/iperf/install	
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/iperf $(1)/usr/bin/
-endef
+ifneq ($(SDK)$(CONFIG_PACKAGE_iperf),)
+  define Build/singlethread
+    $(call Build/Template,iperf,singlethread, \
+	--disable-threads \
+    )
+  endef
+endif
+$(eval $(Build/singlethread))
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_iperf-mt),)
+  define Build/multithread
+    $(call Build/Template,iperf-mt,multithread, \
+	--enable-threads=posix \
+	LDFLAGS="$(TARGET_LDFLAGS) -lpthread" \
+	ac_cv_func_pthread_cancel=no \
+    )
+  endef
+endif
+$(eval $(Build/multithread))
 
 $(eval $(call BuildPackage,iperf))
+$(eval $(call BuildPackage,iperf-mt))
