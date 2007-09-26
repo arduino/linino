@@ -1,0 +1,51 @@
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id: Makefile 6500 2007-03-04 04:19:46Z pavlov $
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=dfu-util
+PKG_VERSION:=r1574
+PKG_RELEASE:=1
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://sources.nslu2-linux.org/sources
+PKG_MD5SUM:=f83f744e259785ac9ad1becc7a9c990d
+PKG_CAT:=zcat
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/dfu-util
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=OpenMoko device flash utility
+  DESCRIPTION:=\
+	Dfu-util is a program that implements the host side of the USB DFU \
+	(Universal Serial Bus Device Firmware Upgrade) protocol. \
+	This version is specifically used to flash the FIC Neo 1973 mobile phone.
+  URL:=http://wiki.openmoko.org/wiki/Dfu-util
+  DEPENDS:=+libusb
+endef
+
+# CONFIGURE_VARS += USB_CFLAGS="-I $(STAGING_DIR)/usr/include" \
+# 		  USB_LIBS="-L $(STAGING_DIR)/usr/lib"
+
+define Build/Configure
+	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status}; \
+		./autogen.sh \
+	);
+	$(call Build/Configure/Default)
+endef
+
+define Package/dfu-util/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/dfu-util $(1)/usr/bin/
+endef
+
+$(eval $(call BuildPackage,dfu-util))
