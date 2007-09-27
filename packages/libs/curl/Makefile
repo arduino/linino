@@ -101,7 +101,7 @@ define Build/UninstallDev
 	rm -rf	$(STAGING_DIR)/usr/bin/curl-config \
 		$(STAGING_DIR)/usr/include/curl \
 		$(STAGING_DIR)/usr/lib/libcurl.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkconfig/libcurl.pc
+		$(STAGING_DIR)/usr/lib/pkgconfig/libcurl.pc
 endef
 
 define Package/curl/install
