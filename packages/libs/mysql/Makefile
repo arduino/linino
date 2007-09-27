@@ -99,6 +99,8 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/mysql_config $(STAGING_DIR)/usr/bin/
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/mysql $(STAGING_DIR)/usr/include/
+	# NOTE: needed for MySQL-Python
+	$(CP) $(PKG_BUILD_DIR)/include/mysqld_error.h $(STAGING_DIR)/usr/include/mysql/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/mysql $(STAGING_DIR)/usr/lib/
 	rm -f $(STAGING_DIR)/usr/lib/mysql/libmysqlclient.la
