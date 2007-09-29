@@ -57,7 +57,7 @@ define Package/peerguardian/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/peerguardnf $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pgtext $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_DATA) ./files/peerguardian.init $(1)/etc/init.d/peerguardian
+	$(INSTALL_BIN) ./files/peerguardian.init $(1)/etc/init.d/peerguardian
 endef
 
 $(eval $(call BuildPackage,peerguardian))
