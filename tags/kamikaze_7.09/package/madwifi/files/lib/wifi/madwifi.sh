@@ -93,7 +93,7 @@ enable_atheros() {
 
 		[ "$first" = 1 ] && {
 			# only need to change freq band and channel on the first vif
-			config_get agmode "$device" mode
+			config_get agmode "$device" agmode
 			pureg=0
 			case "$agmode" in
 				*b) agmode=11b;;
