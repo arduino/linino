@@ -15,7 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=pglinux-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/peerguardian
 PKG_MD5SUM:=0fb2bc5501b031604fc56eec3bd35fa4
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/pglinux-$(PKG_VERSION)
 
@@ -26,12 +25,14 @@ include $(INCLUDE_DIR)/package.mk
 define Package/peerguardian
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:= +libncurses +libpthread +uclibcxx
+  DEPENDS:= +kmod-ipt-queue +libncurses +libpthread +uclibcxx
   TITLE:=PeerGuardian for Linux
-  DESCRIPTION:=\
-	PeerGuardian helps protect your privacy by blocking many ranges \\\
-	of aggressive IPs while you use P2P.
   URL:=http://phoenixlabs.org/
+endef
+
+define Package/peerguardian/description
+ PeerGuardian helps protect your privacy by blocking many ranges  of aggressive 
+ IPs while you use P2P.
 endef
 
 define Package/peerguardian/conffiles
