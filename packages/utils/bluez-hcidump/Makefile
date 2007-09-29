@@ -33,7 +33,6 @@ endef
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--with-bluez="$(STAGING_DIR)/usr/include" \
-		--with-usb=no \
 	)
 endef
 
