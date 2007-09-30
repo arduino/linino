@@ -35,7 +35,18 @@ endef
    
 CONFIGURE_VARS += \
 	CXX="g++-uc" \
-	CXXFLAGS="$$$$CXX_CFLAGS -fno-rtti" \
+	CXXFLAGS="$$$$CXXFLAGS -fno-rtti" \
+
+define Build/Configure
+	$(call Build/Configure/Default,)
+	$(call libtool_disable_rpath)
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+endef
 
 define Package/ctorrent/install	
 	$(INSTALL_DIR) $(1)/usr/bin
