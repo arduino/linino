@@ -34,9 +34,8 @@ define Package/ctorrent/description
 endef
    
 CONFIGURE_VARS += \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
-	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
-	LIBS="-nodefaultlibs -lcrypto -luClibc++ -lm"
+	CXX="g++-uc" \
+	CXXFLAGS="$$$$CXX_CFLAGS -fno-rtti" \
 
 define Package/ctorrent/install	
 	$(INSTALL_DIR) $(1)/usr/bin
