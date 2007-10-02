@@ -1,0 +1,232 @@
+--- p910nd-0.7/p910nd.c.orig	2007-09-29 17:03:03.000000000 -0700
++++ p910nd-0.7.new/p910nd.c	2007-09-29 17:06:53.000000000 -0700
+@@ -144,73 +144,185 @@
+ 		(void)close(lockfd);
+ }
+ 
+-ssize_t safe_write(int fd, char *buf, size_t count)
++typedef struct {
++	int detectEof;
++	int infd;
++	int outfd;
++	int startidx;
++	int endidx;
++	int bytes;
++	int totalin;
++	int totalout;
++	int eof;
++	int err;
++	char buffer[8192];
++} Buffer_t;
++
++void initBuffer( Buffer_t *b, int infd, int outfd, int detectEof )
++{
++	b->detectEof = detectEof;
++	b->infd = infd;
++	b->outfd = outfd;
++	b->startidx = 0;
++	b->endidx = 0;
++	b->bytes = 0;
++	b->totalin = 0;
++	b->totalout = 0;
++	b->eof = 0;
++	b->err = 0;
++}
++
++void prepBuffer( Buffer_t *b, fd_set *readfds, fd_set *writefds )
+ {
+-	size_t offset = 0;
+-	
+-	while (offset < count) {
+-		ssize_t n = write(fd, buf + offset, count - offset);
+-		
+-		if (n < 0 && errno != EINTR)
+-			return n;
+-			
+-		if (n > 0)
+-			offset += n;
++	if (!b->err && b->bytes != 0) {
++		FD_SET(b->outfd, writefds);
+ 	}
++	if (!b->eof && b->bytes < sizeof(b->buffer)) {
++		FD_SET(b->infd, readfds);
++	}
++}
+ 
+-	return offset;
++ssize_t readBuffer( Buffer_t *b )
++{
++	int avail;
++	ssize_t result = 1;
++	if (b->bytes == 0 || b->err) {
++		b->startidx = b->endidx = 0;
++		avail = sizeof(b->buffer);
++	} else if (b->bytes == sizeof(b->buffer)) {
++		avail = 0;
++	} else if (b->endidx > b->startidx) {
++		avail = sizeof(b->buffer) - b->endidx;
++	} else {
++		avail = b->startidx - b->endidx;
++	}
++	if (avail) {
++		result = read(b->infd, b->buffer+b->endidx, avail);
++		if (result > 0) {
++			b->endidx += result;
++			b->totalin += result;
++			b->bytes += result;
++			if (b->endidx == sizeof(b->buffer))
++				b->endidx = 0;
++		} else if (result < 0 || b->detectEof) {
++			b->eof = 1;
++		}
++	}
++	return result;
++}
++
++ssize_t writeBuffer( Buffer_t *b )
++{
++	int avail;
++	ssize_t result = 1;
++	if (b->bytes == 0 || b->err) {
++		avail = 0;
++	} else if (b->endidx > b->startidx) {
++		avail = b->endidx - b->startidx;
++	} else {
++		avail = sizeof(b->buffer) - b->startidx;
++	}
++	if (avail) {
++		result = write(b->outfd, b->buffer + b->startidx, avail);
++		if (result < 0) {
++			syslog(LOG_ERR, "write: %m\n");
++			b->err = 1;
++		} else {
++			b->startidx += result;
++			b->totalout += result;
++			b->bytes -= result;
++			if (b->startidx == sizeof(b->buffer))
++				b->startidx = 0;
++		}
++	}
++	return result;
+ }
+ 
+ /* Copy network socket to FILE f until EOS */
+ int copy_stream(int fd, int lp)
+ {
+-	int		nread, rcvd = 0, sent = 0;
+-	char		buffer[8192];
++	int 		result;
++	Buffer_t	inbuffer;
++	initBuffer( &inbuffer, fd, lp, 1 );
+ 
+ 	if (bidir) {
+-		for (;;) {
+-			fd_set	readfds;
+-			int result;
++		struct timeval  now;
++		struct timeval  then;
++		struct timeval	timeout;
++		int		timer = 0;
++		Buffer_t 	outbuffer;
++		initBuffer ( &outbuffer, lp, fd, 0 );
++		fd_set	readfds;
++		fd_set	writefds;
++		FD_ZERO(&readfds);
++		FD_ZERO(&writefds);
++		FD_SET(lp, &readfds);
++		FD_SET(fd, &readfds);
++		while (	(FD_ISSET(fd, &readfds)) ||
++			(FD_ISSET(lp, &writefds))) {
+ 			int maxfd = lp > fd ? lp : fd;
+-			FD_ZERO(&readfds);
+-			FD_SET(lp, &readfds);
+-			FD_SET(fd, &readfds);
+-			result = select(maxfd + 1, &readfds, 0, 0, 0);
++			if (timer) {
++				gettimeofday(&now,0);
++				// If timer expired, clear timer
++				// else don't try reading from printer
++				if ((now.tv_sec > then.tv_sec) ||
++					(now.tv_sec == then.tv_sec &&
++					 now.tv_usec > then.tv_usec)) {
++					timer = 0;
++				} else {
++					timeout.tv_sec = then.tv_sec;
++					timeout.tv_usec = then.tv_usec;
++					FD_CLR(lp, &readfds);
++				}
++			}
++			if (timer) {
++				result = select(maxfd + 1, &readfds, &writefds, 0, &timeout);
++			} else {
++				result = select(maxfd + 1, &readfds, &writefds, 0, 0);
++			}
+ 			if (result < 0)
+ 				return (result);
+-			if (result == 0)
+-				continue;
+ 			if (FD_ISSET(fd, &readfds)) {
+-				nread = read(fd, buffer, sizeof(buffer));
+-				if (nread <= 0)
+-					break;
+-				if (safe_write(lp, buffer, nread) < 0) {
+-					syslog(LOG_ERR, "write: %m\n");
+-					break;
+-				}
+-				rcvd += nread;
++				result = readBuffer(&inbuffer);
+ 			}
+ 			if (FD_ISSET(lp, &readfds)) {
+-				nread = read(lp, buffer, sizeof(buffer));
+-				if (nread > 0) {
+-					safe_write(fd, buffer, nread);
+-					sent += nread;
++				result = readBuffer(&outbuffer);
++				// Pace the printer data more slowly
++				if (result >= 0) {
++					gettimeofday(&then,0);
++					// wait 100 msec
++					then.tv_usec += 100000;
++					if (then.tv_usec > 1000000) {
++						then.tv_usec -= 1000000;
++						then.tv_sec ++;
++					}
++					timer = 1;
+ 				}
+ 			}
++			if (FD_ISSET(lp, &writefds)) {
++				result = writeBuffer(&inbuffer);
++			}
++			if (FD_ISSET(fd, &writefds)) {
++				result = writeBuffer(&outbuffer);
++				/* If socket write error, stop reading from it */
++				if (result < 0)
++					inbuffer.eof = 1;
++			}
++			FD_ZERO(&readfds);
++			FD_ZERO(&writefds);
++			prepBuffer( &inbuffer, &readfds, &writefds );
++			prepBuffer( &outbuffer, &readfds, &writefds );
+ 		}
+ 		syslog(LOG_NOTICE, "Finished job: %d bytes received, %d bytes sent\n",
+-			rcvd, sent);
++			inbuffer.totalout, 
++			outbuffer.totalout);
+ 		return (0);
+ 	} else {
+-		while ((nread = read(fd, buffer, sizeof(buffer))) > 0) {
+-			if (safe_write(lp, buffer, nread) < 0) {
+-				syslog(LOG_ERR, "write: %m\n");
+-				break;
+-			}
+-			rcvd += nread;
++		while ((result = readBuffer( &inbuffer)) > 0) {
++			(void)writeBuffer( &inbuffer);
+ 		}
+-		syslog(LOG_NOTICE, "Finished job: %d bytes received\n",	rcvd);
+-		return (nread);
++		syslog(LOG_NOTICE, "Finished job: %d bytes received\n",	inbuffer.totalout);
++		return (result);
+ 	}
+ }
+ 
