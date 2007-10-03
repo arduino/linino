@@ -38,10 +38,10 @@ CONFIGURE_VARS += \
 	EXAMPLES=0 \
 
 define Build/Compile
-	$(call Build/Compile/Default,\
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install \
-	)
+		all install
 endef
 
 define Build/InstallDev
