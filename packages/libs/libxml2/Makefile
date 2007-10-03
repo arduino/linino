@@ -23,54 +23,61 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
+
 define Package/libxml2
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=+libpthread +zlib
   TITLE:=Gnome XML library
-  DESCRIPTION:=\
-  	A library for manipulating XML and HTML resources.
   URL:=http://xmlsoft.org/
 endef
 
+define Package/libxml2/description
+ A library for manipulating XML and HTML resources.
+endef
+
+
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--without-c14n \
+	--without-catalog \
+	--without-debug \
+	--without-docbook \
+	--with-html \
+	--without-ftp \
+	--without-http \
+	--without-iconv \
+	--without-iso8859x \
+	--without-legacy \
+	--with-output \
+	--without-pattern \
+	--without-push \
+	--without-python \
+	--with-reader \
+	--without-readline \
+	--without-regexps \
+	--with-sax1 \
+	--with-schemas \
+	--with-threads \
+	--with-tree \
+	--with-valid \
+	--with-writer \
+	--with-xinclude \
+	--with-xpath \
+	--with-xptr \
+	--with-zlib \
+
+
 define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--without-c14n \
-		--without-catalog \
-		--without-debug \
-		--without-docbook \
-		--with-html \
-		--without-ftp \
-		--without-http \
-		--without-iconv \
-		--without-iso8859x \
-		--without-legacy \
-		--with-output \
-		--without-pattern \
-		--without-push \
-		--without-python \
-		--with-reader \
-		--without-readline \
-		--without-regexps \
-		--with-sax1 \
-		--with-schemas \
-		--with-threads \
-		--with-tree \
-		--with-valid \
-		--with-writer \
-		--with-xinclude \
-		--with-xpath \
-		--with-xptr \
-		--with-zlib \
-	)
+	$(call Build/Configure/Default)
+	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
 define Build/InstallDev
@@ -82,28 +89,25 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxml2.{a,so*} $(STAGING_DIR)/usr/lib/
 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libxml-2.0.pc $(STAGING_DIR)/usr/lib/pkgconfig/
-	$(SED) 's,-I$$$${includedir}/libxml2,,g' $(STAGING_DIR)/usr/bin/xml2-config
-	$(SED) 's,-I$$$${includedir},,g' $(STAGING_DIR)/usr/bin/xml2-config
-	$(SED) 's,-I$(STAGING_DIR)/usr/include,,g' $(STAGING_DIR)/usr/bin/xml2-config
+	$(SED) 's,-I$$$${includedir}/libxml2,-I$(STAGING_DIR)/usr/include/libxml2,g' $(STAGING_DIR)/usr/bin/xml2-config
 	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/bin/xml2-config
-	$(SED) 's,-L$(STAGING_DIR)/usr/lib,,g' $(STAGING_DIR)/usr/bin/xml2-config
-	$(SED) 's,-I$$$${includedir}/libxml2,,g' $(STAGING_DIR)/usr/lib/pkgconfig/libxml-2.0.pc
-	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/libxml-2.0.pc
-	$(SED)  "s,"prefix\=/usr",prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/libxml-2.0.pc
-	$(SED)  "s,"exec_prefix\=/usr",exec_prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/libxml-2.0.pc
+	$(SED) 's,^includedir=.*,includedir=$(STAGING_DIR)/usr/include,g' $(STAGING_DIR)/usr/lib/pkgconfig/libxml-2.0.pc
+	$(SED) 's,^libdir=.*,libdir=$(STAGING_DIR)/usr/lib,g' $(STAGING_DIR)/usr/lib/pkgconfig/libxml-2.0.pc
 endef
 
 define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/xml2-config \
+	rm -rf	$(STAGING_DIR)/usr/bin/xml2-config \
 		$(STAGING_DIR)/usr/include/libxml2 \
 		$(STAGING_DIR)/usr/lib/libxml2.{a,so*} \
 		$(STAGING_DIR)/usr/lib/pkgconfig/libxml-2.0.pc
 endef
+
 
 define Package/libxml2/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxml2.so.* $(1)/usr/lib/
 endef
 
+
 $(eval $(call BuildPackage,libxml2))
+
