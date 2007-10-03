@@ -31,8 +31,9 @@ diff -ruN expat-1.95.8-orig/Makefile.in expat-1.95.8-1/Makefile.in
  
  uninstall: uninstalllib
 -	$(LIBTOOL) --mode=uninstall rm -f $(bindir)/xmlwf
+-	rm -f $(man1dir)/xmlwf.1
 +	$(LIBTOOL) --mode=uninstall rm -f $(DESTDIR)$(bindir)/xmlwf
- 	rm -f $(man1dir)/xmlwf.1
++	rm -f $(DESTDIR)$(man1dir)/xmlwf.1
  
  uninstalllib:
 -	$(LIBTOOL) --mode=uninstall rm -f $(libdir)/$(LIBRARY)

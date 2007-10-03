@@ -15,54 +15,56 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_MD5SUM:=aff487543845a82fe262e6e2922b4c8e
 PKG_SOURCE_URL:=@SF/expat
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
+
 
 define Package/libexpat
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=An XML parsing library
-  DESCRIPTION:=\
-  	A fast, non-validating, stream-oriented XML parsing library.
   URL:=http://expat.sourceforge.net/
 endef
 
+define Package/libexpat/description
+ A fast, non-validating, stream-oriented XML parsing library.
+endef
+
+
+PKG_CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+
+
 define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-	)
+	$(call Build/Configure/Default)
+	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xmlwf $(STAGING_DIR)/usr/bin/
 	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/expat*.h $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/expat{,_external}.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libexpat.{a,so*} $(STAGING_DIR)/usr/lib/
 endef
 
 define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/xmlwf \
-		$(STAGING_DIR)/usr/include/expat*.h \
+	rm -rf	$(STAGING_DIR)/usr/include/expat{,_external}.h \
 		$(STAGING_DIR)/usr/lib/libexpat.{a,so*}
 endef
+
 
 define Package/libexpat/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libexpat.so.* $(1)/usr/lib/
 endef
 
+
 $(eval $(call BuildPackage,libexpat))
+
