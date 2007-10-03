@@ -15,10 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/libiconv
 PKG_MD5SUM:=0c99a05e0c3c153bac1c960f78711155
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,21 +25,23 @@ define Package/libiconv
   URL:=http://www.gnu.org/software/libiconv/
 endef
 
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--disable-rpath \
+
 define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--disable-rpath \
-	)
+	$(call Build/Configure/Default)
+	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)"
+	$(MAKE) -C $(PKG_BUILD_DIR) CC="$(TARGET_CC)"
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		includedir="$(PKG_INSTALL_DIR)/usr/include" \
 		libdir="$(PKG_INSTALL_DIR)/usr/lib" \
-		all install-lib
+		install-lib
 endef
 
 define Build/InstallDev
