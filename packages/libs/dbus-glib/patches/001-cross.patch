@@ -1,0 +1,26 @@
+Index: dbus-glib-0.74/dbus/Makefile.in
+===================================================================
+--- dbus-glib-0.74.orig/dbus/Makefile.in	2007-10-03 09:03:44.000000000 +0200
++++ dbus-glib-0.74/dbus/Makefile.in	2007-10-03 09:03:45.000000000 +0200
+@@ -292,7 +292,7 @@
+ target_vendor = @target_vendor@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+-SUBDIRS = . examples
++SUBDIRS = .
+ INCLUDES = \
+ 	-I$(top_srcdir)						\
+ 	-I$(top_builddir)					\
+Index: dbus-glib-0.74/Makefile.in
+===================================================================
+--- dbus-glib-0.74.orig/Makefile.in	2007-10-03 09:04:15.000000000 +0200
++++ dbus-glib-0.74/Makefile.in	2007-10-03 09:04:26.000000000 +0200
+@@ -261,7 +261,7 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ GLIB_PC = dbus-glib-1.pc
+-SUBDIRS = dbus tools test doc
++SUBDIRS = dbus
+ DIST_SUBDIRS = dbus tools test doc m4
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = $(GLIB_PC)
