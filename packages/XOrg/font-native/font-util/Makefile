@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/font-util
   SECTION:=xorg-font
   CATEGORY:=Xorg
-  SUBMENU:=fonts
+  SUBMENU:=font-utils
   TITLE:=misc tool to generate x fonts
   DEPENDS:=+xorg-server @TARGET_x86
 endef
