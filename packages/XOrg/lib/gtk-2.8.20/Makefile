@@ -1,0 +1,61 @@
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# blogic@openwrt.org
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=gtk2.8.20
+PKG_VERSION:=2.8.20
+PKG_RELEASE:=1
+
+PKG_SOURCE:=gtk+-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:= http://ftp.gnome.org/pub/gnome/sources/gtk+/2.8/
+PKG_BUILD_DIR=$(BUILD_DIR)/gtk+-2.8.20
+
+include $(INCLUDE_DIR)/package.mk
+
+EXTRA_CFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -I$(STAGING_DIR)/usr/lib/libintl/include/
+
+#needed as -lintl is nor in $(STAGING_DIR)/usr/lib ?!?!
+EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libintl/lib/ -L$(STAGING_DIR)/usr/lib/
+
+define Package/gtk-2.8.20
+  SECTION:=xorg-framework
+  CATEGORY:=Xorg
+  SUBMENU:=framework
+  TITLE:=GTK+ 2.8.20 package
+  DEPENDS:=+cairo +pango +libjpeg
+endef
+
+define Build/Configure
+	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
+		if [ -x $(CONFIGURE_CMD) ]; then \
+			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
+			$(CONFIGURE_VARS) \
+			$(CONFIGURE_CMD) \
+			$(CONFIGURE_ARGS_XTRA) \
+			$(CONFIGURE_ARGS) ;\
+		fi \
+	)
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR)
+	$(MAKE) -C $(PKG_BUILD_DIR)/ install DESTDIR=$(PKG_INSTALL_DIR)
+endef
+
+define Build/InstallDev
+	$(INSTALL_DIR)	$(STAGING_DIR)/usr/{lib/pkgconfig,include}
+	$(CP) -r $(PKG_INSTALL_DIR)/usr/include/* $(STAGING_DIR)/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{la,so} $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(STAGING_DIR)/usr/lib/pkgconfig/
+	$(SED) "s,"prefix\=.*",prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/{gtk,gdk}*.pc
+	$(SED) "s,"exec_prefix\=.*",exec_prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/{gtk,gdk}*.pc
+	$(SED) "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/lib{gtk,gdk}*.la
+endef
+
+$(eval $(call BuildPackage,gtk-2.8.20))
