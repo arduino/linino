@@ -152,7 +152,7 @@ endef
 
 # always build without SSL because we might need htpassd
 define Build/without-ssl
-  $(call Build/Template,minit-httpd,without-ssl,)
+  $(call Build/Template,mini-httpd,without-ssl,)
 endef
 $(eval $(Build/without-ssl))
 
@@ -170,7 +170,7 @@ $(eval $(Build/with-matrixssl))
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_mini-httpd-openssl),)
   define Build/with-openssl
-    $(call Build/Template,minit-httpd-openssl,with-openssl, \
+    $(call Build/Template,mini-httpd-openssl,with-openssl, \
 		SSL_DEFS="-DUSE_SSL -DHAVE_OPENSSL" \
 		SSL_INC="$(TARGET_CPPFLAGS)" \
 		SSL_LIBS="$(TARGET_LDFLAGS) -lcrypto -lssl" \
