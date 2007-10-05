@@ -24,7 +24,7 @@ define Package/cairo
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=2D graphics library with support for multiple output devices
-  DEPENDS:=+xorg-server-essentials +fontconfig
+  DEPENDS:=+xorg-server-essentials +fontconfig +libpng
 endef
 
 define Build/Configure
