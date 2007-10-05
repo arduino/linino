@@ -42,7 +42,7 @@ extern void __init setup_serial_port(void);
 
 unsigned int idt_cpu_freq = 132000000;
 EXPORT_SYMBOL(idt_cpu_freq);
-unsigned int board_type = 500;
+char board_type[11];
 EXPORT_SYMBOL(board_type);
 unsigned int gpio_bootup_state = 0;
 EXPORT_SYMBOL(gpio_bootup_state);
@@ -103,9 +103,9 @@ void __init prom_init(void)
 	add_memory_region(ddr->ddrbase + 0x400, memsize - 0x600, BOOT_MEM_RAM);
 }
 
-void prom_free_prom_memory(void)
+void __init prom_free_prom_memory(void)
 {
-	/* FIXME: STUB */
+	/* No prom memory to free */
 }
 
 extern char _image_cmdline;
@@ -135,8 +135,9 @@ void __init prom_setup_cmdline(void){
 		}
 #endif
 		if (i>0) *(cp++) = ' ';
+
 		if (strncmp(prom_argv[i], BOARD_TAG, sizeof(BOARD_TAG) - 1) == 0) {
-			board_type =  simple_strtoul(prom_argv[i] + sizeof(BOARD_TAG) - 1, 0, 10);
+			strcpy(board_type, prom_argv[i] + sizeof(BOARD_TAG) -1);
 		}
 		if (strncmp(prom_argv[i], GPIO_TAG, sizeof(GPIO_TAG) - 1) == 0) {
 			gpio_bootup_state =  simple_strtoul(prom_argv[i] + sizeof(GPIO_TAG) - 1, 0, 10);
