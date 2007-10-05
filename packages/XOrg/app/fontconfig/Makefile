@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fontconfig
-PKG_VERSION:=2.3.2
+PKG_VERSION:=2.3.95
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -17,7 +17,7 @@ PKG_SOURCE_URL:=http://fontconfig.org/release/
 
 include $(INCLUDE_DIR)/package.mk
 
-CONFIGURE_ARGS+=LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
+CONFIGURE_ARGS+=LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib" --disable-docs
 
 define Package/fontconfig
   SECTION:=xorg-util
@@ -30,13 +30,14 @@ endef
 define Build/Configure
 	cd  $(PKG_BUILD_DIR)/; \
 		$(TARGET_CONFIGURE_OPTS) \
-		$(subst -fhonour-copts,,$(CONFIGURE_VARS)) \
+		$(CONFIGURE_VARS) \
 		$(CONFIGURE_CMD) \
 			$(CONFIGURE_ARGS_XTRA) \
 			$(CONFIGURE_ARGS) 
 endef
 
 define Build/Compile
+	$(foreach dir,fc-case fc-lang fc-glyphname, $(MAKE) -C $(PKG_BUILD_DIR)/$(dir) CFLAGS="";)
 	$(MAKE) -C $(PKG_BUILD_DIR) 
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
