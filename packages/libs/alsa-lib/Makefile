@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 ifeq ($(KERNEL),2.4)
 DEPENDS_KMOD:=+kmod-alsa
 else
-DEPENDS_KMOD:=+kmod-soundcore
+DEPENDS_KMOD:=+kmod-sound-core
 endif
 
 define Package/alsa-lib
