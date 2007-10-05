@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 ifeq ($(KERNEL),2.4)
 DEPENDS_KMOD:=+kmod-alsa
 else
-DEPENDS_KMOD:=+kmod-sound-core
+DEPENDS_KMOD:=+kmod-soundcore
 endif
 
 define Package/alsa-lib
