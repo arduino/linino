@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/uob-nomad
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+kmod-ipip +libpthread
+  DEPENDS:=+kmod-iptunnel4 +libpthread
   TITLE:=UoB Nomad
   DESCRIPTION:=This is an implementation of NOMADv4 (Filters for\\\
   	Mobile IP, IETF Draft\\\
@@ -45,7 +45,7 @@ $(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/Client/net-tools all)
 $(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/Client mipmn)
 endef
 
-define Package/uob-nomad/install	
+define Package/uob-nomad/install
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/lib $(1)/etc/
 	$(CP) $(PKG_BUILD_DIR)/Agent/mipagent $(1)/usr/bin/
 	$(CP) $(PKG_BUILD_DIR)/Client/mipmn $(1)/usr/bin
