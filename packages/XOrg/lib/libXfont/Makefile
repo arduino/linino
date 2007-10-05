@@ -21,7 +21,7 @@ define Package/libXfont
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  +zlib +libfontenc +fontcacheproto +fontsproto +freetype @TARGET_x86
+  DEPENDS:=+xorg-headers-native +util-macros  +zlib +libfontenc +fontcacheproto +fontsproto +libfreetype @TARGET_x86
   TITLE:=libXfont
   URL:=http://xorg.freedesktop.org/
 endef

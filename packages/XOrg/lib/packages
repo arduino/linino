@@ -3,8 +3,8 @@ xtrans-X11R7.2-1.0.3|
 libXdmcp-X11R7.2-1.0.2|+xproto
 libX11-X11R7.2-1.1.1|+bigreqsproto+xproto+xextproto+libXau+xtrans+xcmiscproto+libXdmcp+xf86bigfontproto+kbproto+inputproto
 libfontenc-X11R7.2-1.0.4|+xproto+zlib
-libXfont-X11R7.2-1.2.7|+zlib+libfontenc+fontcacheproto+fontsproto+freetype
-libXrender-X11R7.2-0.9.2|+freetype+zlib+xproto+libfontenc+xtrans+fontsproto+renderproto
+libXfont-X11R7.2-1.2.7|+zlib+libfontenc+fontcacheproto+fontsproto+libfreetype
+libXrender-X11R7.2-0.9.2|+libfreetype+zlib+xproto+libfontenc+xtrans+fontsproto+renderproto
 libXrandr-X11R7.2-1.1.2|+libXext+libXrender+randrproto+renderproto+xextproto+libX11
 libXext-X11R7.2-1.0.2|+xproto+xextproto+libXau+libX11
 libxkbfile-X11R7.2-1.0.4|
