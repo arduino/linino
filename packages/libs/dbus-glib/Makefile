@@ -61,10 +61,6 @@ define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
 	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/dbus-glib-1.pc \
 		$(STAGING_DIR)/usr/lib/pkgconfig/
-	$(SED)	's,^includedir=.*,includedir=$(STAGING_DIR)/usr/include,g' \
-		$(STAGING_DIR)/usr/lib/pkgconfig/dbus-glib-1.pc
-	$(SED)	's,^libdir=.*,libdir=$(STAGING_DIR)/usr/lib,g' \
-		$(STAGING_DIR)/usr/lib/pkgconfig/dbus-glib-1.pc
 endef
 
 define Build/UninstallDev

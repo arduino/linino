@@ -58,8 +58,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libart_lgpl_2.{a,so*} $(STAGING_DIR)/usr/lib/
 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libart-2.0.pc $(STAGING_DIR)/usr/lib/pkgconfig/
-	$(SED) 's,-I$$$${includedir}/libart-2.0,,g' $(STAGING_DIR)/usr/lib/pkgconfig/libart-2.0.pc
-	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/libart-2.0.pc
 endef
 
 define Build/UninstallDev

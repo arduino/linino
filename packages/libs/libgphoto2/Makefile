@@ -80,9 +80,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libgphoto2.pc $(STAGING_DIR)/usr/lib/pkgconfig/
 	$(SED) 's,-I$$$${prefix}/include/gphoto2,,g' $(STAGING_DIR)/usr/bin/gphoto2{,-port}-config
 	$(SED) 's,-I$$$${prefix}/include,,g' $(STAGING_DIR)/usr/bin/gphoto2{,-port}-config
-	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(STAGING_DIR)/usr/lib/pkgconfig/libgphoto2.pc
-	$(SED) 's,-I$$$${includedir}/gphoto2,,g' $(STAGING_DIR)/usr/lib/pkgconfig/libgphoto2.pc
-	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/libgphoto2.pc
 	# remove annoying recursive symlink
 	rm -f $(STAGING_DIR)/usr/include/gphoto2/gphoto2
 endef

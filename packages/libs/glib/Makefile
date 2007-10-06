@@ -80,9 +80,6 @@ define Build/InstallDev
 	$(SED) 's,-I$$$${prefix}/include/glib,-I$(STAGING_DIR)/usr/include/glib,g' $(STAGING_DIR)/usr/bin/glib-config
 	$(SED) 's,-I$$$${exec_prefix}/lib/glib,-I$(STAGING_DIR)/usr/lib/glib,g' $(STAGING_DIR)/usr/bin/glib-config
 	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(STAGING_DIR)/usr/bin/glib-config
-	$(SED) 's,-I$$$${includedir}/glib,-I$(STAGING_DIR)/usr/include/glib,g' $(STAGING_DIR)/usr/lib/pkgconfig/g{lib,module,thread}.pc
-	$(SED) 's,-I$$$${libdir}/glib,-I$(STAGING_DIR)/usr/lib/glib,g' $(STAGING_DIR)/usr/bin/glib-config
-	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/g{lib,module,thread}.pc
 endef
 
 define Build/UninstallDev

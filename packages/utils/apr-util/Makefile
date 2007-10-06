@@ -65,9 +65,6 @@ define Build/InstallDev
 		$(CP)   $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/apr-util-1.pc \
 		$(STAGING_DIR)/usr/lib/pkgconfig/
 	$(SED)  "s,\"/usr\",$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/apu-1-config
-	$(SED)  "s,bindir\=\"/usr/bin\",bindir\=\"$(STAGING_DIR)/usr/bin\"," $(STAGING_DIR)/usr/bin/apu-1-config
-	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/libaprutil-1.la
-	
 endef
 
 define Build/UninstallDev

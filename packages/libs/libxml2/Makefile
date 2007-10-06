@@ -91,8 +91,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libxml-2.0.pc $(STAGING_DIR)/usr/lib/pkgconfig/
 	$(SED) 's,-I$$$${includedir}/libxml2,-I$(STAGING_DIR)/usr/include/libxml2,g' $(STAGING_DIR)/usr/bin/xml2-config
 	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/bin/xml2-config
-	$(SED) 's,^includedir=.*,includedir=$(STAGING_DIR)/usr/include,g' $(STAGING_DIR)/usr/lib/pkgconfig/libxml-2.0.pc
-	$(SED) 's,^libdir=.*,libdir=$(STAGING_DIR)/usr/lib,g' $(STAGING_DIR)/usr/lib/pkgconfig/libxml-2.0.pc
 endef
 
 define Build/UninstallDev

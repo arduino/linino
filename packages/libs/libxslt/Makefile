@@ -80,10 +80,6 @@ define Build/InstallDev
 	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/bin/xslt-config
 	$(SED) 's,-I$(STAGING_DIR)/usr/include,,g' $(STAGING_DIR)/usr/bin/xslt-config
 	$(SED) 's,-L$(STAGING_DIR)/usr/lib,,g' $(STAGING_DIR)/usr/bin/xslt-config
-	$(SED) 's,-I$$$${includedir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/libxslt.pc
-	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/libxslt.pc
-	$(SED) 's,-I$(STAGING_DIR)/usr/include,,g' $(STAGING_DIR)/usr/lib/pkgconfig/libxslt.pc
-	$(SED) 's,-L$(STAGING_DIR)/usr/lib,,g' $(STAGING_DIR)/usr/lib/pkgconfig/libxslt.pc
 endef
 
 define Build/UninstallDev

@@ -52,8 +52,6 @@ define Build/InstallDev
 	$(CP) -r $(PKG_INSTALL_DIR)/usr/include/* $(STAGING_DIR)/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{la,so.*} $(STAGING_DIR)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(STAGING_DIR)/usr/lib/pkgconfig/
-	$(SED) "s,"prefix\=.*",prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/{gtk,gdk}*-2.0.pc
-	$(SED) "s,"exec_prefix\=.*",exec_prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/{gtk,gdk}*-2.0.pc
 	$(SED) "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/lib{gtk,gdk}*-2.0.la
 endef
 

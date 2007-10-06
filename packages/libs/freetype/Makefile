@@ -60,8 +60,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/freetype2.pc $(STAGING_DIR)/usr/lib/pkgconfig/
 	$(SED) 's,-I$$$$includedir/freetype2,-I$(STAGING_DIR)/usr/include/freetype2,g' $(STAGING_DIR)/usr/bin/freetype-config
 	$(SED) 's,/usr/include/freetype2/,$(STAGING_DIR)/usr/include/freetype2/,g' $(STAGING_DIR)/usr/bin/freetype-config
-	$(SED) 's,^includedir=.*,includedir=$(STAGING_DIR)/usr/include,g' $(STAGING_DIR)/usr/lib/pkgconfig/freetype2.pc
-	$(SED) 's,^libdir=.*,libdir=$(STAGING_DIR)/usr/lib,g' $(STAGING_DIR)/usr/lib/pkgconfig/freetype2.pc
 endef
 
 define Build/UninstallDev

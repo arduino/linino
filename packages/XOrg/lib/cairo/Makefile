@@ -46,8 +46,6 @@ endef
 
 define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/* $(STAGING_DIR)/
-	$(SED) "s,"prefix\=.*",prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/{cairo-ft,cairo,cairo-pdf,cairo-png,cairo-ps,cairo-svg,cairo-xlib,cairo-xlib-xrender}.pc
-	$(SED) "s,"exec_prefix\=.*",exec_prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/{cairo-ft,cairo,cairo-pdf,cairo-png,cairo-ps,cairo-svg,cairo-xlib,cairo-xlib-xrender}.pc
 	$(SED) "s,-L/usr/local/lib,,g" $(STAGING_DIR)/usr/lib/libcairo.la
 	$(SED) "s,/usr/lib/libfontconfig.la,$(STAGING_DIR)/usr/lib/libfontconfig.la,g" $(STAGING_DIR)/usr/lib/libcairo.la
 	$(SED)  "s,$(STAGING_DIR)$(STAGING_DIR),$(STAGING_DIR),g" $(STAGING_DIR)/usr/lib/libcairo.la

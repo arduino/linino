@@ -62,8 +62,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/neon.pc $(STAGING_DIR)/usr/lib/pkgconfig/
 	$(SED)  "s,\=\/usr,\=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/neon-config
 	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/libneon.la
-	$(SED)  "s,"prefix\=/usr",prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/neon.pc
-	$(SED)  "s,"exec_prefix\=/usr",exec_prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/lib/pkgconfig/neon.pc
 endef
 
 define Build/UninstallDev

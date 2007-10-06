@@ -92,8 +92,6 @@ define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
 	$(CP) $(PKG_BUILD_DIR)/libcurl.pc $(STAGING_DIR)/usr/lib/pkgconfig/
 	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(STAGING_DIR)/usr/bin/curl-config
-	$(SED) 's,^includedir=.*,includedir=$(STAGING_DIR)/usr/include,g' $(STAGING_DIR)/usr/lib/pkgconfig/libcurl.pc
-	$(SED) 's,^libdir=.*,libdir=$(STAGING_DIR)/usr/lib,g' $(STAGING_DIR)/usr/lib/pkgconfig/libcurl.pc
 	$(SED) 's,$(TARGET_LDFLAGS),,g' $(STAGING_DIR)/usr/lib/pkgconfig/libcurl.pc
 endef
 

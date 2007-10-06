@@ -68,8 +68,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtorrent.{a,so*} $(STAGING_DIR)/usr/lib/
 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libtorrent.pc $(STAGING_DIR)/usr/lib/pkgconfig/
-	$(SED) 's,^includedir=.*,includedir=$(STAGING_DIR)/usr/include,g' $(STAGING_DIR)/usr/lib/pkgconfig/libtorrent.pc
-	$(SED) 's,^libdir=.*,libdir=$(STAGING_DIR)/usr/lib,g' $(STAGING_DIR)/usr/lib/pkgconfig/libtorrent.pc
 	$(SED) 's,$(TARGET_LDFLAGS),,g' $(STAGING_DIR)/usr/lib/pkgconfig/libtorrent.pc
 endef
 
