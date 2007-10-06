@@ -73,16 +73,16 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/glib-2.0 $(STAGING_DIR)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg{lib,module,object,thread}-2.0.{a,so*} $(STAGING_DIR)/usr/lib/
 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/g{lib,module,object,thread}-2.0.pc $(STAGING_DIR)/usr/lib/pkgconfig
-	$(SED) 's,^includedir=.*,includedir=$(STAGING_DIR)/usr/include,g' $(STAGING_DIR)/usr/lib/pkgconfig/g{lib,module,object,thread}-2.0.pc
-	$(SED) 's,^libdir=.*,libdir=$(STAGING_DIR)/usr/lib,g' $(STAGING_DIR)/usr/lib/pkgconfig/g{lib,module,object,thread}-2.0.pc
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/g{lib,module,module-no-export,object,thread}-2.0.pc $(STAGING_DIR)/usr/lib/pkgconfig
+	$(SED) 's,^includedir=.*,includedir=$(STAGING_DIR)/usr/include,g' $(STAGING_DIR)/usr/lib/pkgconfig/g{lib,module,module-no-export,object,thread}-2.0.pc
+	$(SED) 's,^libdir=.*,libdir=$(STAGING_DIR)/usr/lib,g' $(STAGING_DIR)/usr/lib/pkgconfig/g{lib,module,module-no-export,object,thread}-2.0.pc
 endef
 
 define Build/UninstallDev
 	rm -rf	$(STAGING_DIR)/usr/include/glib-2.0 \
 		$(STAGING_DIR)/usr/lib/glib-2.0 \
-		$(STAGING_DIR)/usr/lib/libg{lib,module,object,thread}-2.0.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/g{lib,module,object,thread}-2.0.pc
+		$(STAGING_DIR)/usr/lib/libg{lib,module,module-no-export,object,thread}-2.0.{a,so*} \
+		$(STAGING_DIR)/usr/lib/pkgconfig/g{lib,module,module-no-export,object,thread}-2.0.pc
 endef
 
 
