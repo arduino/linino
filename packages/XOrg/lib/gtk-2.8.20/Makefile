@@ -18,17 +18,16 @@ PKG_BUILD_DIR=$(BUILD_DIR)/gtk+-2.8.20
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_CFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -I$(STAGING_DIR)/usr/lib/libintl/include/
+EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
 
-#needed as -lintl is nor in $(STAGING_DIR)/usr/lib ?!?!
-EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libintl/lib/ -L$(STAGING_DIR)/usr/lib/
+EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libintl/lib/ -L$(STAGING_DIR)/usr/lib/libiconv/lib/ -L$(STAGING_DIR)/usr/lib/
 
 define Package/gtk-2.8.20
   SECTION:=xorg-framework
   CATEGORY:=Xorg
   SUBMENU:=framework
   TITLE:=GTK+ 2.8.20 package
-  DEPENDS:=+cairo +pango +libjpeg
+  DEPENDS:=+cairo +pango +libjpeg +atk +libtiff
 endef
 
 define Build/Configure
