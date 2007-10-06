@@ -17,11 +17,7 @@ PKG_SOURCE_URL:=ftp://ftp.gnome.org/pub/gnome/sources/pango/1.12/
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_LDFLAGS:="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
-
-#CONFIGURE_VARS+=FONTCONFIG_LIBS="-L/usr/src/owrt-X2/staging_dir/i386/usr/lib $(STAGING_DIR)/usr/lib/libfontconfig.la -lz"
-
-CONFIGURE_VARS+=RELINK_DIR=$(STAGING_DIR)
+EXTRA_LDFLAGS:=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libiconv/lib/ -L$(STAGING_DIR)/usr/lib/libintl/lib/
 
 define Package/pango
   SECTION:=xorg-libs

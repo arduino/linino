@@ -17,6 +17,8 @@ PKG_SOURCE_URL:=http://ftp.gnome.org/pub/gnome/sources/atk/1.11/
 
 include $(INCLUDE_DIR)/package.mk
 
+EXTRA_LDFLAGS:=-L$(STAGING_DIR)/usr/lib/libiconv/lib/ -L$(STAGING_DIR)/usr/lib/libintl/lib/
+
 define Package/atk
   SECTION:=xorg-libs
   CATEGORY:=Xorg
