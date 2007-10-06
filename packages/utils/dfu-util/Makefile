@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dfu-util
-PKG_VERSION:=r1574
+PKG_VERSION:=r3095
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://sources.nslu2-linux.org/sources
-PKG_MD5SUM:=f83f744e259785ac9ad1becc7a9c990d
+PKG_MD5SUM:=2346dddceeab0e7090109f04d9c3a6be
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
