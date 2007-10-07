@@ -1,0 +1,54 @@
+diff -urN xmms-1.2.10.orig/libxmms/Makefile.in xmms-1.2.10/libxmms/Makefile.in
+--- xmms-1.2.10.orig/libxmms/Makefile.in	2007-10-06 04:12:42.000000000 +0200
++++ xmms-1.2.10/libxmms/Makefile.in	2007-10-06 04:13:52.000000000 +0200
+@@ -255,6 +255,9 @@
+ 	done
+ libxmms.la: $(libxmms_la_OBJECTS) $(libxmms_la_DEPENDENCIES) 
+ 	$(LINK) -rpath $(libdir) $(libxmms_la_LDFLAGS) $(libxmms_la_OBJECTS) $(libxmms_la_LIBADD) $(LIBS)
++	$(CCLD) -shared  configfile.lo xmmsctrl.lo dirbrowser.lo util.lo formatter.lo titlestring.lo xentry.lo xconvert.lo \
++		-Wl,--whole-archive -Wl,--no-whole-archive ${libxmms_la_LIBADD} \
++		-lm  -Wl,-rpath-link=/usr/src/owrt-X2/staging_dir/i686/usr/lib -Wl,-soname -Wl,libxmms.so.1 -o .libs/libxmms.so.1.3.1
+ 
+ mostlyclean-compile:
+ 	-rm -f *.$(OBJEXT) core *.core
+diff -urN xmms-1.2.10.orig/xmms/Makefile.in xmms-1.2.10/xmms/Makefile.in
+--- xmms-1.2.10.orig/xmms/Makefile.in	2007-10-06 04:12:42.000000000 +0200
++++ xmms-1.2.10/xmms/Makefile.in	2007-10-06 04:16:44.000000000 +0200
+@@ -226,7 +226,7 @@
+ 
+ xmms_LDFLAGS = -export-dynamic
+ xmms_LDADD = @GTK_LIBS@ @PTHREAD_LIBS@ @SM_LIBS@ @VM_LIBS@ \
+-@POSIX_LIBS@ $(top_builddir)/libxmms/libxmms.la @LTLIBINTL@
++@POSIX_LIBS@ -L../libxmms/.libs/ -lxmms @LTLIBINTL@
+ 
+ 
+ INCLUDES = @GTK_CFLAGS@ @XMMS_DEFINES@ @ARCH_DEFINES@ \
+@@ -341,7 +341,7 @@
+ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
+ 	$(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+ CCLD = $(CC)
+-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ DIST_SOURCES = $(xmms_SOURCES)
+ HEADERS = $(xmmsinclude_HEADERS)
+--- xmms-1.2.10.orig/wmxmms/Makefile.in	2007-10-06 04:12:42.000000000 +0200
++++ xmms-1.2.10/wmxmms/Makefile.in	2007-10-06 04:24:28.000000000 +0200
+@@ -220,7 +220,7 @@
+ xmmsdir = @xmmsdir@
+ bin_PROGRAMS = wmxmms
+ 
+-wmxmms_LDADD = @GTK_LIBS@ $(top_builddir)/libxmms/libxmms.la @LTLIBINTL@
++wmxmms_LDADD = @GTK_LIBS@ -L../libxmms/.libs/ -lxmms @LTLIBINTL@
+ 
+ wmxmms_SOURCES = \
+ getopt.c \
+@@ -259,7 +259,7 @@
+ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
+ 	$(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+ CCLD = $(CC)
+-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS)  \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ DIST_SOURCES = $(wmxmms_SOURCES)
+ DATA = $(wmxmms_DATA)

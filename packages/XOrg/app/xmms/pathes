@@ -1,0 +1,33 @@
+--- xmms-1.2.10.orig/libxmms/Makefile	2007-10-06 03:35:15.000000000 +0200
++++ xmms-1.2.10/libxmms/Makefile	2007-10-06 04:05:21.000000000 +0200
+@@ -255,6 +255,9 @@
+ 	done
+ libxmms.la: $(libxmms_la_OBJECTS) $(libxmms_la_DEPENDENCIES) 
+ 	$(LINK) -rpath $(libdir) $(libxmms_la_LDFLAGS) $(libxmms_la_OBJECTS) $(libxmms_la_LIBADD) $(LIBS)
++	$(CCLD) -shared  configfile.lo xmmsctrl.lo dirbrowser.lo util.lo formatter.lo titlestring.lo xentry.lo xconvert.lo \
++	        -Wl,--whole-archive -Wl,--no-whole-archive ${libxmms_la_LIBADD} \
++	        -lm  -Wl,-rpath-link=/usr/src/owrt-X2/staging_dir/i686/usr/lib -Wl,-soname -Wl,libxmms.so.1 -o .libs/libxmms.so.1.3.1
+ 
+ mostlyclean-compile:
+ 	-rm -f *.$(OBJEXT) core *.core
+--- xmms-1.2.10.orig/xmms/Makefile	2007-10-06 03:35:14.000000000 +0200
++++ xmms-1.2.10/xmms/Makefile	2007-10-06 03:42:14.000000000 +0200
+@@ -225,8 +225,7 @@
+ bin_PROGRAMS = xmms
+ 
+ xmms_LDFLAGS = -export-dynamic
+-xmms_LDADD = -L/usr/src/owrt-X2/staging_dir/i686/usr/lib -lgtk -lgdk -rdynamic -lgmodule -lgthread -lglib -lpthread -ldl -lXext -lX11 -lm -lpthread -lSM -lICE -lXxf86vm \
+- $(top_builddir)/libxmms/libxmms.la 
++xmms_LDADD = -L../libxmms/.libs/ -L/usr/src/owrt-X2/staging_dir/i686/usr/lib -lgtk -lgdk -rdynamic -lgmodule -lgthread -lglib -lpthread -ldl -lXext -lX11 -lm -lpthread -lSM -lICE -lXxf86vm -lxmms 
+ 
+ 
+ INCLUDES = -I/usr/include/gtk-1.2 -I/usr/src/owrt-X2/staging_dir/i686/usr/include/glib-1.2 -I/usr/src/owrt-X2/staging_dir/i686/usr/lib/glib/include -D_REENTRANT -I/usr/src/owrt-X2/staging_dir/i686/usr/include/ -Os -pipe -funit-at-a-time -fhonour-copts  -Wall -Wpointer-arith -finline-functions -fomit-frame-pointer -ffast-math -funroll-all-loops -DDATA_DIR=\"/usr/share/xmms\" -DPLUGIN_DIR=\"${exec_prefix}/lib/xmms\" -DPLUGINSUBS=\"Output\",\"Input\",\"Effect\",\"General\",\"Visualization\" -DLOCALEDIR=\"/usr/share/locale\" -DI386_ASSEM \
+@@ -341,7 +340,7 @@
+ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
+ 	$(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+ CCLD = $(CC)
+-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ DIST_SOURCES = $(xmms_SOURCES)
+ HEADERS = $(xmmsinclude_HEADERS)
