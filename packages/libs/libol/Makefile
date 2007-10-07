@@ -45,12 +45,12 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libol-config $(STAGING_DIR)/usr/bin/
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libol $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libol.{*a,so*} $(STAGING_DIR)/usr/lib/
+	mkdir -p $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libol-config $(1)/usr/bin/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/libol $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libol.{*a,so*} $(1)/usr/lib/
 endef
 
 define Build/UninstallDev

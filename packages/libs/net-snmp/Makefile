@@ -253,12 +253,12 @@ define Package/snmp-utils/install
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/net-snmp-config $(STAGING_DIR)/usr/bin/
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/net-snmp $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnetsnmp{,agent,helpers,mibs}.{a,so*} $(STAGING_DIR)/usr/lib/
+	mkdir -p $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/net-snmp-config $(1)/usr/bin/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/net-snmp $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnetsnmp{,agent,helpers,mibs}.{a,so*} $(1)/usr/lib/
 endef
 
 define Build/UninstallDev

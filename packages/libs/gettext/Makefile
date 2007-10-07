@@ -50,10 +50,10 @@ define Build/Compile
 endef
 
 define Build/InstallDev	
-	mkdir -p $(STAGING_DIR)/usr/lib/libintl/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libintl.h $(STAGING_DIR)/usr/lib/libintl/include/
-	mkdir -p $(STAGING_DIR)/usr/lib/libintl/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libintl.{a,so*} $(STAGING_DIR)/usr/lib/libintl/lib/
+	mkdir -p $(1)/usr/lib/libintl/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/libintl.h $(1)/usr/lib/libintl/include/
+	mkdir -p $(1)/usr/lib/libintl/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libintl.{a,so*} $(1)/usr/lib/libintl/lib/
 endef
 
 define Build/UninstallDev	

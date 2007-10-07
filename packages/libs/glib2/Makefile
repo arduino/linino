@@ -67,13 +67,13 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/glib-2.0 $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/glib-2.0 $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg{lib,module,object,thread}-2.0.{a,so*} $(STAGING_DIR)/usr/lib/
-	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/g{lib,module,module-no-export,object,thread}-2.0.pc $(STAGING_DIR)/usr/lib/pkgconfig
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/glib-2.0 $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/glib-2.0 $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg{lib,module,object,thread}-2.0.{a,so*} $(1)/usr/lib/
+	mkdir -p $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/g{lib,module,module-no-export,object,thread}-2.0.pc $(1)/usr/lib/pkgconfig
 endef
 
 define Build/UninstallDev

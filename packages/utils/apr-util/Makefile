@@ -52,19 +52,19 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
+	mkdir -p $(1)/usr/bin
 	$(CP)   $(PKG_INSTALL_DIR)/usr/bin/apu-1-config \
-	 	$(STAGING_DIR)/usr/bin
-	mkdir -p $(STAGING_DIR)/usr/include/apr-1/
+	 	$(1)/usr/bin
+	mkdir -p $(1)/usr/include/apr-1/
 	$(CP)   $(PKG_INSTALL_DIR)/usr/include/apr-1/* \
-		$(STAGING_DIR)/usr/include/apr-1/
-	mkdir -p $(STAGING_DIR)/usr/lib 
+		$(1)/usr/include/apr-1/
+	mkdir -p $(1)/usr/lib 
 		$(CP)   $(PKG_INSTALL_DIR)/usr/lib/*aprutil* \
-		$(STAGING_DIR)/usr/lib/
-	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig/
+		$(1)/usr/lib/
+	mkdir -p $(1)/usr/lib/pkgconfig/
 		$(CP)   $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/apr-util-1.pc \
-		$(STAGING_DIR)/usr/lib/pkgconfig/
-	$(SED)  "s,\"/usr\",$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/apu-1-config
+		$(1)/usr/lib/pkgconfig/
+	$(SED)  "s,\"/usr\",$(1)/usr," $(1)/usr/bin/apu-1-config
 endef
 
 define Build/UninstallDev

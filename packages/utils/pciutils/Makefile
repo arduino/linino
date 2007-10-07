@@ -49,13 +49,13 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/lib/libpci.a $(STAGING_DIR)/usr/lib
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/include/pci
-	$(CP) $(PKG_BUILD_DIR)/lib/pci.h $(STAGING_DIR)/usr/include/pci
-	$(CP) $(PKG_BUILD_DIR)/lib/config.h $(STAGING_DIR)/usr/include/pci
-	$(CP) $(PKG_BUILD_DIR)/lib/header.h $(STAGING_DIR)/usr/include/pci
-	$(CP) $(PKG_BUILD_DIR)/lib/types.h $(STAGING_DIR)/usr/include/pci
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/lib/libpci.a $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/include/pci
+	$(CP) $(PKG_BUILD_DIR)/lib/pci.h $(1)/usr/include/pci
+	$(CP) $(PKG_BUILD_DIR)/lib/config.h $(1)/usr/include/pci
+	$(CP) $(PKG_BUILD_DIR)/lib/header.h $(1)/usr/include/pci
+	$(CP) $(PKG_BUILD_DIR)/lib/types.h $(1)/usr/include/pci
 endef
 
 define Build/UninstallDev

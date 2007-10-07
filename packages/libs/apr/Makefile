@@ -51,24 +51,24 @@ MAKE_FLAGS += \
 	all install
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
+	mkdir -p $(1)/usr/bin
 	$(CP)   $(PKG_INSTALL_DIR)/usr/bin/apr-1-config \
-		$(STAGING_DIR)/usr/bin
-	mkdir -p $(STAGING_DIR)/usr/include
+		$(1)/usr/bin
+	mkdir -p $(1)/usr/include
 	$(CP)   $(PKG_INSTALL_DIR)/usr/include/apr-1/ \
-		$(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
+		$(1)/usr/include/
+	mkdir -p $(1)/usr/lib
 	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/*apr* \
-		$(STAGING_DIR)/usr/lib/
-	mkdir -p $(STAGING_DIR)/usr/share/
+		$(1)/usr/lib/
+	mkdir -p $(1)/usr/share/
 	$(CP)   $(PKG_INSTALL_DIR)/usr/share/build-1/ \
-		$(STAGING_DIR)/usr/share/
-	$(SED) "s,/usr/share/build-1,$(STAGING_DIR)/usr/share/build-1," $(STAGING_DIR)/usr/share/build-1/apr_rules.mk
-	$(SED)  "s,\"/usr\",$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/apr-1-config
-	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/libapr-1.la
-	$(SED)  "s,"bindir\=\"/usr/bin\"",bindir=\"$(STAGING_DIR)/usr/bin\"," $(STAGING_DIR)/usr/bin/apr-1-config
-	$(SED)  "s,"datadir\=\"/usr/share\"",datadir=\"$(STAGING_DIR)/usr/share\"," $(STAGING_DIR)/usr/bin/apr-1-config
-	$(SED)  "s,"installbuilddir\=\"/usr/share/build-1\"",installbuilddir=\"$(STAGING_DIR)/usr/share/build-1\"," $(STAGING_DIR)/usr/bin/apr-1-config
+		$(1)/usr/share/
+	$(SED) "s,/usr/share/build-1,$(1)/usr/share/build-1," $(1)/usr/share/build-1/apr_rules.mk
+	$(SED)  "s,\"/usr\",$(1)/usr," $(1)/usr/bin/apr-1-config
+	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/libapr-1.la
+	$(SED)  "s,"bindir\=\"/usr/bin\"",bindir=\"$(1)/usr/bin\"," $(1)/usr/bin/apr-1-config
+	$(SED)  "s,"datadir\=\"/usr/share\"",datadir=\"$(1)/usr/share\"," $(1)/usr/bin/apr-1-config
+	$(SED)  "s,"installbuilddir\=\"/usr/share/build-1\"",installbuilddir=\"$(1)/usr/share/build-1\"," $(1)/usr/bin/apr-1-config
 endef
 
 define Build/UninstallDev

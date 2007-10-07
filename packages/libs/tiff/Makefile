@@ -45,10 +45,10 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/{lib,include}
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib* $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(STAGING_DIR)/usr/include/
-	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/libtif{f,fxx}.la
+	$(INSTALL_DIR) $(1)/usr/{lib,include}
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib* $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
+	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/libtif{f,fxx}.la
 endef
 
 define Package/tiff/Install

@@ -46,14 +46,14 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/mcrypt.h $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmcrypt.{a,so*} $(STAGING_DIR)/usr/lib/
-	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libmcrypt-config $(STAGING_DIR)/usr/bin/
-	$(SED) 's,-I$$$${prefix}/include,,g' $(STAGING_DIR)/usr/bin/libmcrypt-config
-	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(STAGING_DIR)/usr/bin/libmcrypt-config
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/mcrypt.h $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmcrypt.{a,so*} $(1)/usr/lib/
+	mkdir -p $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libmcrypt-config $(1)/usr/bin/
+	$(SED) 's,-I$$$${prefix}/include,,g' $(1)/usr/bin/libmcrypt-config
+	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(1)/usr/bin/libmcrypt-config
 endef
 
 define Build/UninstallDev

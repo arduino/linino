@@ -87,14 +87,14 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/sasl $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsasl2.{a,so*} $(STAGING_DIR)/usr/lib/
-	ln -sf libsasl2.a $(STAGING_DIR)/usr/lib/libsasl.a
-	ln -sf libsasl2.so $(STAGING_DIR)/usr/lib/libsasl.so
-	mkdir -p $(STAGING_DIR)/usr/lib/sasl2
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/sasl2/lib*.{a,so*} $(STAGING_DIR)/usr/lib/sasl2/
+	mkdir -p $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/sasl $(1)/usr/include/
+	mkdir -p $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsasl2.{a,so*} $(1)/usr/lib/
+	ln -sf libsasl2.a $(1)/usr/lib/libsasl.a
+	ln -sf libsasl2.so $(1)/usr/lib/libsasl.so
+	mkdir -p $(1)/usr/lib/sasl2
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/sasl2/lib*.{a,so*} $(1)/usr/lib/sasl2/
 endef
 
 define Build/UninstallDev

@@ -45,10 +45,10 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/lib/libiconv/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/iconv.h $(STAGING_DIR)/usr/lib/libiconv/include/
-	mkdir -p $(STAGING_DIR)/usr/lib/libiconv/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.{a,so*} $(STAGING_DIR)/usr/lib/libiconv/lib/
+	mkdir -p $(1)/usr/lib/libiconv/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/iconv.h $(1)/usr/lib/libiconv/include/
+	mkdir -p $(1)/usr/lib/libiconv/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.{a,so*} $(1)/usr/lib/libiconv/lib/
 endef
 
 define Build/UninstallDev	

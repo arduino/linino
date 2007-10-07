@@ -43,10 +43,10 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include/mpcdec/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/mpcdec/* $(STAGING_DIR)/usr/include/mpcdec/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(STAGING_DIR)/usr/lib/
+	mkdir -p $(1)/usr/include/mpcdec/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/mpcdec/* $(1)/usr/include/mpcdec/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
 endef
 
 define Build/UninstallDev

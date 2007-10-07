@@ -113,16 +113,16 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) -L $(PKG_INSTALL_DIR)/usr/bin/wx-config $(STAGING_DIR)/usr/bin/
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/wx-2.6 $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.6-*.so $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.6.so.* $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/wx $(STAGING_DIR)/usr/lib/
-	$(SED) 's,-I$$$${includedir}/wx-2.6,-I$(STAGING_DIR)/usr/include/wx-2.6,g' $(STAGING_DIR)/usr/bin/wx-config
-	$(SED) 's,-I$$$${libdir}/wx/include,-I$(STAGING_DIR)/usr/lib/wx/include,g' $(STAGING_DIR)/usr/bin/wx-config
+	mkdir -p $(1)/usr/bin
+	$(CP) -L $(PKG_INSTALL_DIR)/usr/bin/wx-config $(1)/usr/bin/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/wx-2.6 $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.6-*.so $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.6.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/wx $(1)/usr/lib/
+	$(SED) 's,-I$$$${includedir}/wx-2.6,-I$(1)/usr/include/wx-2.6,g' $(1)/usr/bin/wx-config
+	$(SED) 's,-I$$$${libdir}/wx/include,-I$(1)/usr/lib/wx/include,g' $(1)/usr/bin/wx-config
 endef
 
 define Build/UninstallDev

@@ -27,7 +27,7 @@ define Package/libXvMC
 endef
 
 define Build/InstallDev
-	DESTDIR=$(STAGING_DIR) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
+	DESTDIR=$(1) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
 endef
 
 ifeq (libXvMC,libX11)
@@ -80,7 +80,7 @@ define Package/libXaw/install
 endef
 
 define Build/InstallDev
-	$(CP) $(PKG_INSTALL_DIR)/* $(STAGING_DIR)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 endef
 
 $(eval $(call BuildPackage,libXvMC))

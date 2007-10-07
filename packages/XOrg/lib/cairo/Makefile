@@ -45,11 +45,11 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(CP) $(PKG_INSTALL_DIR)/* $(STAGING_DIR)/
-	$(SED) "s,-L/usr/local/lib,,g" $(STAGING_DIR)/usr/lib/libcairo.la
-	$(SED) "s,/usr/lib/libfontconfig.la,$(STAGING_DIR)/usr/lib/libfontconfig.la,g" $(STAGING_DIR)/usr/lib/libcairo.la
-	$(SED)  "s,$(STAGING_DIR)$(STAGING_DIR),$(STAGING_DIR),g" $(STAGING_DIR)/usr/lib/libcairo.la
-	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/libcairo.la
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+	$(SED) "s,-L/usr/local/lib,,g" $(1)/usr/lib/libcairo.la
+	$(SED) "s,/usr/lib/libfontconfig.la,$(1)/usr/lib/libfontconfig.la,g" $(1)/usr/lib/libcairo.la
+	$(SED)  "s,$(1)$(1),$(1),g" $(1)/usr/lib/libcairo.la
+	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/libcairo.la
 endef
 
 define Package/cairo/Install

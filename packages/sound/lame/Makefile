@@ -58,8 +58,8 @@ define Package/lame-lib/install
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/{lib,include}
-	${CP} $(PKG_INSTALL_DIR)/usr/{lib,include} $(STAGING_DIR)/usr/
+	mkdir -p $(1)/usr/{lib,include}
+	${CP} $(PKG_INSTALL_DIR)/usr/{lib,include} $(1)/usr/
  
 endef
 

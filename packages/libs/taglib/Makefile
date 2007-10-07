@@ -44,12 +44,12 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/taglib-config $(STAGING_DIR)/usr/bin/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtag.{a,so*} $(STAGING_DIR)/usr/lib/
-	mkdir -p $(STAGING_DIR)/usr/include/taglib
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/taglib/* $(STAGING_DIR)/usr/include/taglib/
+	mkdir -p $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/taglib-config $(1)/usr/bin/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtag.{a,so*} $(1)/usr/lib/
+	mkdir -p $(1)/usr/include/taglib
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/taglib/* $(1)/usr/include/taglib/
 endef
 
 define Build/UninstallDev

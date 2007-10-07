@@ -36,10 +36,10 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(CP) $(PKG_BUILD_DIR)/libdrm/*.h $(STAGING_DIR)/include 
-	$(CP) $(PKG_BUILD_DIR)/shared-core/*.h $(STAGING_DIR)/include 
-	$(CP) $(PKG_BUILD_DIR)/libdrm/.libs/libdrm.so* $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_BUILD_DIR)/libdrm.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+	$(CP) $(PKG_BUILD_DIR)/libdrm/*.h $(1)/include 
+	$(CP) $(PKG_BUILD_DIR)/shared-core/*.h $(1)/include 
+	$(CP) $(PKG_BUILD_DIR)/libdrm/.libs/libdrm.so* $(1)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/libdrm.pc $(1)/usr/lib/pkgconfig/
 endef
 
 define Package/libdrm/install

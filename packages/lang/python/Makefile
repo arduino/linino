@@ -87,13 +87,13 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/hostpython $(STAGING_DIR)/usr/bin/
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/python2.5 $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.5 $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_BUILD_DIR)/libpython2.5.a $(STAGING_DIR)/usr/lib/python2.5/
+	mkdir -p $(1)/usr/bin
+	$(CP) $(PKG_BUILD_DIR)/hostpython $(1)/usr/bin/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/python2.5 $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python2.5 $(1)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/libpython2.5.a $(1)/usr/lib/python2.5/
 endef
 
 define Build/UninstallDev

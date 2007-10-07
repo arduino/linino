@@ -53,11 +53,11 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/fastcgi.h $(STAGING_DIR)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/fcgi{app,_config,misc,o,os,_stdio}.h $(STAGING_DIR)/usr/include/
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfcgi.{a,so*} $(STAGING_DIR)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/fastcgi.h $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/fcgi{app,_config,misc,o,os,_stdio}.h $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfcgi.{a,so*} $(1)/usr/lib/
 endef
 
 define Build/UninstallDev

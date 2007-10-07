@@ -391,9 +391,9 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include/asterisk/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk/*.h $(STAGING_DIR)/usr/include/asterisk/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk.h $(STAGING_DIR)/usr/include/
+	mkdir -p $(1)/usr/include/asterisk/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk/*.h $(1)/usr/include/asterisk/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk.h $(1)/usr/include/
 endef
 
 

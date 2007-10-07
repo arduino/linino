@@ -49,14 +49,14 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libtasn1-config $(STAGING_DIR)/usr/bin/
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libtasn1.h $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtasn1.{a,so*} $(STAGING_DIR)/usr/lib/
-	$(SED) 's,-I$$$${prefix}/include,,g' $(STAGING_DIR)/usr/bin/libtasn1-config
-	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(STAGING_DIR)/usr/bin/libtasn1-config
+	mkdir -p $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libtasn1-config $(1)/usr/bin/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/libtasn1.h $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtasn1.{a,so*} $(1)/usr/lib/
+	$(SED) 's,-I$$$${prefix}/include,,g' $(1)/usr/bin/libtasn1-config
+	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(1)/usr/bin/libtasn1-config
 endef
 
 define Build/UninstallDev

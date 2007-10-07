@@ -35,12 +35,12 @@ MAKE_FLAGS += \
 	all install
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/include/gssglue/gssapi
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/gssglue/gssapi/gssapi.h $(STAGING_DIR)/usr/include/gssglue/gssapi
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgssapi.{a,so*} $(STAGING_DIR)/usr/lib
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libgssapi.pc $(STAGING_DIR)/usr/lib/pkgconfig
+	$(INSTALL_DIR) $(1)/usr/include/gssglue/gssapi
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/gssglue/gssapi/gssapi.h $(1)/usr/include/gssglue/gssapi
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgssapi.{a,so*} $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libgssapi.pc $(1)/usr/lib/pkgconfig
 endef
 
 define Build/UninstallDev

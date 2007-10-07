@@ -47,9 +47,9 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(CP) $(PKG_INSTALL_DIR)/* $(STAGING_DIR)/
-	$(SED) 's,-I$$$${prefix}/include,-I$(STAGING_DIR)/usr/include/,g' $(STAGING_DIR)/usr/bin/xine-config 
-	$(SED) 's,-L$$$${exec_prefix}/lib,-L$(STAGING_DIR)/usr/lib/,g' $(STAGING_DIR)/usr/bin/xine-config 
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+	$(SED) 's,-I$$$${prefix}/include,-I$(1)/usr/include/,g' $(1)/usr/bin/xine-config 
+	$(SED) 's,-L$$$${exec_prefix}/lib,-L$(1)/usr/lib/,g' $(1)/usr/bin/xine-config 
 endef
 
 define Package/xine-lib/install

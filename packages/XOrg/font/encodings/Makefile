@@ -27,7 +27,7 @@ define Package/encodings
 endef
 
 define Build/InstallDev
-	DESTDIR=$(STAGING_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
+	DESTDIR=$(1) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
 endef
 
 CONFIGURE_ARGS_XTRA+=--disable-iso8859-2 --disable-iso8859-3 --disable-iso8859-4  --disable-iso8859-5 --disable-iso8859-7 --disable-iso8859-8 --disable-iso8859-9 --disable-iso8859-10 --disable-iso8859-11 --disable-iso8859-13 --disable-iso8859-14 --disable-iso8859-16 --disable-koi8-r --disable-jisx0201

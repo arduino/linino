@@ -51,10 +51,10 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/lib $(STAGING_DIR)/lib
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/lib/* $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(STAGING_DIR)/usr/include
+	mkdir -p $(1)/usr/lib $(1)/lib
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/lib/* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include
 endef
 
 define Build/UninstallDev

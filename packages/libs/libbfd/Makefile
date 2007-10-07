@@ -43,14 +43,14 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include
+	mkdir -p $(1)/usr/include
 	$(CP)	$(PKG_INSTALL_DIR)/usr/include/ansidecl.h \
 		$(PKG_INSTALL_DIR)/usr/include/bfd{,link}.h \
 		$(PKG_INSTALL_DIR)/usr/include/symcat.h \
-		$(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
+		$(1)/usr/include/
+	mkdir -p $(1)/usr/lib
 	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/libbfd.a \
-		$(STAGING_DIR)/usr/lib/
+		$(1)/usr/lib/
 endef
 
 define Build/UninstallDev

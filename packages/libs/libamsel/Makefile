@@ -41,12 +41,12 @@ MAKE_FLAGS += \
 	all install
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/amsel/compat.h $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/include/compat
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/amsel/compat/queue.h $(STAGING_DIR)/usr/include/compat/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libamsel.so $(STAGING_DIR)/usr/lib/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/amsel/compat.h $(1)/usr/include/
+	mkdir -p $(1)/usr/include/compat
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/amsel/compat/queue.h $(1)/usr/include/compat/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libamsel.so $(1)/usr/lib/
 endef
 	
 define Build/UninstallDev

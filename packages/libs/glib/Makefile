@@ -66,20 +66,20 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/glib-config $(STAGING_DIR)/usr/bin/
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/glib-1.2 $(STAGING_DIR)/usr/include/
-	$(CP) $(PKG_BUILD_DIR)/glibconfig-sysdefs.h $(STAGING_DIR)/usr/include/glib-1.2/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg{lib,module,thread}.{a,so} $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg{lib,module,thread}-*.so.* $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/glib $(STAGING_DIR)/usr/lib/
-	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/g{lib,module,thread}.pc $(STAGING_DIR)/usr/lib/pkgconfig/
-	$(SED) 's,-I$$$${prefix}/include/glib,-I$(STAGING_DIR)/usr/include/glib,g' $(STAGING_DIR)/usr/bin/glib-config
-	$(SED) 's,-I$$$${exec_prefix}/lib/glib,-I$(STAGING_DIR)/usr/lib/glib,g' $(STAGING_DIR)/usr/bin/glib-config
-	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(STAGING_DIR)/usr/bin/glib-config
+	mkdir -p $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/glib-config $(1)/usr/bin/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/glib-1.2 $(1)/usr/include/
+	$(CP) $(PKG_BUILD_DIR)/glibconfig-sysdefs.h $(1)/usr/include/glib-1.2/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg{lib,module,thread}.{a,so} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg{lib,module,thread}-*.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/glib $(1)/usr/lib/
+	mkdir -p $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/g{lib,module,thread}.pc $(1)/usr/lib/pkgconfig/
+	$(SED) 's,-I$$$${prefix}/include/glib,-I$(1)/usr/include/glib,g' $(1)/usr/bin/glib-config
+	$(SED) 's,-I$$$${exec_prefix}/lib/glib,-I$(1)/usr/lib/glib,g' $(1)/usr/bin/glib-config
+	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(1)/usr/bin/glib-config
 endef
 
 define Build/UninstallDev

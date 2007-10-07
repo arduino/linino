@@ -161,8 +161,8 @@ define Packages/xorg-server-config/install
 endef
 
 define Build/InstallDev
- 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(STAGING_DIR)/usr/include/
-	$(CP) $(PKG_BUILD_DIR)/xorg-server.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+ 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
+	$(CP) $(PKG_BUILD_DIR)/xorg-server.pc $(1)/usr/lib/pkgconfig/
 endef
 
 $(eval $(call BuildPackage,xorg-server))

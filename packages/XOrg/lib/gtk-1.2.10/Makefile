@@ -54,9 +54,9 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(CP) $(PKG_INSTALL_DIR)/* $(STAGING_DIR)/
-	$(SED) "s,libdirs=-L.*,libdirs=,g" $(STAGING_DIR)/usr/bin/gtk-config
-	$(SED) "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/lib{gtk,gdk}.la
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+	$(SED) "s,libdirs=-L.*,libdirs=,g" $(1)/usr/bin/gtk-config
+	$(SED) "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/lib{gtk,gdk}.la
 endef
 
 $(eval $(call BuildPackage,gtk-1.2.10))

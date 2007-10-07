@@ -27,7 +27,7 @@ define Package/xine-ui
   DEPENDS:=+xine-lib +libpng +curl +libiconv +libXv +libICE +libXxf86vm
 endef
 
-CONFIGURE_VARS+=PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
+CONFIGURE_VARS+=PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -lnotimpl"
 CONFIGURE_ARGS+=--without-aalib \
 			--without-libcaca \
 			--disable-lirc \
@@ -51,7 +51,7 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(CP) $(PKG_INSTALL_DIR)/* $(STAGING_DIR)/
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 define Package/xine-ui/install

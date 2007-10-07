@@ -26,7 +26,7 @@ define Package/xproxymanagementprotocol
 endef
 
 define Build/InstallDev
-	DESTDIR=$(STAGING_DIR) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
+	DESTDIR=$(1) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
 endef
 
 define Build/Compile

@@ -81,16 +81,16 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xml2-config $(STAGING_DIR)/usr/bin/
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libxml2 $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxml2.{a,so*} $(STAGING_DIR)/usr/lib/
-	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libxml-2.0.pc $(STAGING_DIR)/usr/lib/pkgconfig/
-	$(SED) 's,-I$$$${includedir}/libxml2,-I$(STAGING_DIR)/usr/include/libxml2,g' $(STAGING_DIR)/usr/bin/xml2-config
-	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/bin/xml2-config
+	mkdir -p $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xml2-config $(1)/usr/bin/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/libxml2 $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxml2.{a,so*} $(1)/usr/lib/
+	mkdir -p $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libxml-2.0.pc $(1)/usr/lib/pkgconfig/
+	$(SED) 's,-I$$$${includedir}/libxml2,-I$(1)/usr/include/libxml2,g' $(1)/usr/bin/xml2-config
+	$(SED) 's,-L$$$${libdir},,g' $(1)/usr/bin/xml2-config
 endef
 
 define Build/UninstallDev

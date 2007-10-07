@@ -65,12 +65,12 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/lib/libnet-1.1.x/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libnet-config $(STAGING_DIR)/usr/lib/libnet-1.1.x/bin/
-	mkdir -p $(STAGING_DIR)/usr/lib/libnet-1.1.x/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libnet* $(STAGING_DIR)/usr/lib/libnet-1.1.x/include/
-	mkdir -p $(STAGING_DIR)/usr/lib/libnet-1.1.x/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnet.{a,so*} $(STAGING_DIR)/usr/lib/libnet-1.1.x/lib/
+	mkdir -p $(1)/usr/lib/libnet-1.1.x/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libnet-config $(1)/usr/lib/libnet-1.1.x/bin/
+	mkdir -p $(1)/usr/lib/libnet-1.1.x/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/libnet* $(1)/usr/lib/libnet-1.1.x/include/
+	mkdir -p $(1)/usr/lib/libnet-1.1.x/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnet.{a,so*} $(1)/usr/lib/libnet-1.1.x/lib/
 endef
 
 define Build/UninstallDev

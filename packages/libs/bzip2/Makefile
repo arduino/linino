@@ -35,10 +35,10 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_BUILD_DIR)/bzlib.h $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/libbz2.a $(STAGING_DIR)/usr/lib/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_BUILD_DIR)/bzlib.h $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/libbz2.a $(1)/usr/lib/
 endef
 	
 define Build/UninstallDev

@@ -105,21 +105,21 @@ define Build/InstallDev
 	rm -rf	$(PKG_INSTALL_DIR)/usr/man/ \
 		$(PKG_INSTALL_DIR)/usr/share/manual/
 	# if you need docs take a look into the build-dir :)
-	mkdir -p $(STAGING_DIR)/etc
+	mkdir -p $(1)/etc
 	$(CP)   $(PKG_INSTALL_DIR)/etc/* \
-		$(STAGING_DIR)/etc
-	mkdir -p $(STAGING_DIR)/usr/include
+		$(1)/etc
+	mkdir -p $(1)/usr/include
 	$(CP)	$(PKG_INSTALL_DIR)/usr/include/* \
-		$(STAGING_DIR)/usr/include
-	mkdir -p $(STAGING_DIR)/usr/lib
+		$(1)/usr/include
+	mkdir -p $(1)/usr/lib
 	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/httpd.exp \
-		$(STAGING_DIR)/usr/lib
-	mkdir -p $(STAGING_DIR)/usr/sbin
+		$(1)/usr/lib
+	mkdir -p $(1)/usr/sbin
 	$(CP)   $(PKG_INSTALL_DIR)/usr/sbin/* \
-		$(STAGING_DIR)/usr/sbin
-	mkdir -p $(STAGING_DIR)/usr/share
+		$(1)/usr/sbin
+	mkdir -p $(1)/usr/share
 	$(CP)   $(PKG_INSTALL_DIR)/usr/share/* \
-		$(STAGING_DIR)/usr/share
+		$(1)/usr/share
 endef
 
 define Build/UninstallDev

@@ -43,10 +43,10 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_BUILD_DIR)/include/serdisplib $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/lib/libserdisp.{a,so*} $(STAGING_DIR)/usr/lib/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_BUILD_DIR)/include/serdisplib $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/lib/libserdisp.{a,so*} $(1)/usr/lib/
 endef
 
 define Build/UninstallDev

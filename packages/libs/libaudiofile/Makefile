@@ -48,16 +48,16 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/audiofile-config $(STAGING_DIR)/usr/bin/
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/af_vfs.h $(STAGING_DIR)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/audiofile.h $(STAGING_DIR)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/aupvlist.h $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libaudiofile.{a,so*} $(STAGING_DIR)/usr/lib/
-	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/audiofile.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+	mkdir -p $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/audiofile-config $(1)/usr/bin/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/af_vfs.h $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/audiofile.h $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/aupvlist.h $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libaudiofile.{a,so*} $(1)/usr/lib/
+	mkdir -p $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/audiofile.pc $(1)/usr/lib/pkgconfig/
 endef
 
 define Build/UninstallDev

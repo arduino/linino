@@ -45,10 +45,10 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/include/urbi
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/urbi* $(STAGING_DIR)/usr/include/urbi/
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liburbi* $(STAGING_DIR)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/include/urbi
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/urbi* $(1)/usr/include/urbi/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liburbi* $(1)/usr/lib/
 endef
 
 define Build/UninstallDev

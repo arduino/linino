@@ -40,12 +40,12 @@ MAKE_FLAGS += \
 	all install
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(STAGING_DIR)/usr/include/
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsndfile.* $(STAGING_DIR)/usr/lib/
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib/pkgconfig/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/sndfile.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+	$(INSTALL_DIR) $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsndfile.* $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/sndfile.pc $(1)/usr/lib/pkgconfig/
 endef
 
 define Build/UninstallDev

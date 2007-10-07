@@ -95,14 +95,14 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/howl $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{howl,mDNSResponder}.{a,so*} $(STAGING_DIR)/usr/lib/
-	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/howl.pc $(STAGING_DIR)/usr/lib/pkgconfig/
-	$(SED) 's,-I/usr/include,-I$$$${includedir},g' $(STAGING_DIR)/usr/lib/pkgconfig/howl.pc
-	$(SED) 's,-L/usr/lib/howl,-L$$$${libdir}/howl,g' $(STAGING_DIR)/usr/lib/pkgconfig/howl.pc
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/howl $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{howl,mDNSResponder}.{a,so*} $(1)/usr/lib/
+	mkdir -p $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/howl.pc $(1)/usr/lib/pkgconfig/
+	$(SED) 's,-I/usr/include,-I$$$${includedir},g' $(1)/usr/lib/pkgconfig/howl.pc
+	$(SED) 's,-L/usr/lib/howl,-L$$$${libdir}/howl,g' $(1)/usr/lib/pkgconfig/howl.pc
 endef
 
 define Build/UninstallDev

@@ -44,50 +44,50 @@ MAKE_FLAGS += \
 	all install
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/include/ClearSilver
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/include/ClearSilver/cs
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/include/ClearSilver/cgi
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/include/ClearSilver/util
+	$(INSTALL_DIR) $(1)/usr/include/ClearSilver
+	$(INSTALL_DIR) $(1)/usr/include/ClearSilver/cs
+	$(INSTALL_DIR) $(1)/usr/include/ClearSilver/cgi
+	$(INSTALL_DIR) $(1)/usr/include/ClearSilver/util
 
-	$(CP) $(PKG_BUILD_DIR)/ClearSilver.h $(STAGING_DIR)/usr/include/ClearSilver/
-	$(CP) $(PKG_BUILD_DIR)/cs_config.h $(STAGING_DIR)/usr/include/ClearSilver/
+	$(CP) $(PKG_BUILD_DIR)/ClearSilver.h $(1)/usr/include/ClearSilver/
+	$(CP) $(PKG_BUILD_DIR)/cs_config.h $(1)/usr/include/ClearSilver/
 
-	$(CP) $(PKG_BUILD_DIR)/cs/cs.h $(STAGING_DIR)/usr/include/ClearSilver/cs/
+	$(CP) $(PKG_BUILD_DIR)/cs/cs.h $(1)/usr/include/ClearSilver/cs/
 
-	$(CP) $(PKG_BUILD_DIR)/cgi/cgi.h $(STAGING_DIR)/usr/include/ClearSilver/cgi/
-	$(CP) $(PKG_BUILD_DIR)/cgi/cgiwrap.h $(STAGING_DIR)/usr/include/ClearSilver/cgi/
-	$(CP) $(PKG_BUILD_DIR)/cgi/date.h $(STAGING_DIR)/usr/include/ClearSilver/cgi/
-	$(CP) $(PKG_BUILD_DIR)/cgi/html.h $(STAGING_DIR)/usr/include/ClearSilver/cgi/
+	$(CP) $(PKG_BUILD_DIR)/cgi/cgi.h $(1)/usr/include/ClearSilver/cgi/
+	$(CP) $(PKG_BUILD_DIR)/cgi/cgiwrap.h $(1)/usr/include/ClearSilver/cgi/
+	$(CP) $(PKG_BUILD_DIR)/cgi/date.h $(1)/usr/include/ClearSilver/cgi/
+	$(CP) $(PKG_BUILD_DIR)/cgi/html.h $(1)/usr/include/ClearSilver/cgi/
 
-	$(CP) $(PKG_BUILD_DIR)/util/neo_err.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/neo_files.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/neo_misc.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/neo_rand.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/ulist.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/neo_hdf.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/neo_str.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/neo_date.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/wildmat.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/neo_hash.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/ulocks.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/rcfs.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/skiplist.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/dict.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/filter.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/neo_net.h $(STAGING_DIR)/usr/include/ClearSilver/util/
-	$(CP) $(PKG_BUILD_DIR)/util/neo_server.h $(STAGING_DIR)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/neo_err.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/neo_files.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/neo_misc.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/neo_rand.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/ulist.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/neo_hdf.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/neo_str.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/neo_date.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/wildmat.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/neo_hash.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/ulocks.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/rcfs.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/skiplist.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/dict.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/filter.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/neo_net.h $(1)/usr/include/ClearSilver/util/
+	$(CP) $(PKG_BUILD_DIR)/util/neo_server.h $(1)/usr/include/ClearSilver/util/
 
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 
-	$(CP) $(PKG_BUILD_DIR)/libs/libneo_cs.a $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_BUILD_DIR)/libs/libneo_cgi.a $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_BUILD_DIR)/libs/libneo_utl.a $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/libs/libneo_cs.a $(1)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/libs/libneo_cgi.a $(1)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/libs/libneo_utl.a $(1)/usr/lib/
 
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 
-	$(CP) $(PKG_BUILD_DIR)/cs/cs $(STAGING_DIR)/usr/bin/
-	$(CP) $(PKG_BUILD_DIR)/cs/cstest $(STAGING_DIR)/usr/bin/
-	$(CP) $(PKG_BUILD_DIR)/cgi/cs_static.cgi $(STAGING_DIR)/usr/bin/
+	$(CP) $(PKG_BUILD_DIR)/cs/cs $(1)/usr/bin/
+	$(CP) $(PKG_BUILD_DIR)/cs/cstest $(1)/usr/bin/
+	$(CP) $(PKG_BUILD_DIR)/cgi/cs_static.cgi $(1)/usr/bin/
 endef
 
 define Build/UninstallDev

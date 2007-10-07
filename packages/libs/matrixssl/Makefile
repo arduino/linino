@@ -39,11 +39,11 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include/matrixSsl
-	$(CP) $(PKG_BUILD_DIR)/matrixSsl.h $(STAGING_DIR)/usr/include/matrixSsl/
-	ln -sf matrixSsl/matrixSsl.h $(STAGING_DIR)/usr/include/matrixSsl.h
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/src/libmatrixssl.so* $(STAGING_DIR)/usr/lib/
+	mkdir -p $(1)/usr/include/matrixSsl
+	$(CP) $(PKG_BUILD_DIR)/matrixSsl.h $(1)/usr/include/matrixSsl/
+	ln -sf matrixSsl/matrixSsl.h $(1)/usr/include/matrixSsl.h
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/src/libmatrixssl.so* $(1)/usr/lib/
 endef
 
 define Build/UninstallDev

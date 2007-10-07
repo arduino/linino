@@ -46,11 +46,11 @@ define Build/Compile
 endef
 
 define Build/InstallDev	
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_BUILD_DIR)/tcpd.h $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/libwrap.a $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_BUILD_DIR)/shared/libwrap.so* $(STAGING_DIR)/usr/lib/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_BUILD_DIR)/tcpd.h $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/libwrap.a $(1)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/shared/libwrap.so* $(1)/usr/lib/
 endef
 
 define Build/UninstallDev	

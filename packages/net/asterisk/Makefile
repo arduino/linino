@@ -371,9 +371,9 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include
+	mkdir -p $(1)/usr/include
 	$(CP)   $(PKG_INSTALL_DIR)/usr/include/asterisk \
-		$(STAGING_DIR)/usr/include/
+		$(1)/usr/include/
 endef
 
 define Build/UninstallDev

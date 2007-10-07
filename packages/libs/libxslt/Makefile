@@ -67,19 +67,19 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xslt-config $(STAGING_DIR)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xsltproc $(STAGING_DIR)/usr/bin/
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libxslt $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxslt.{a,so*} $(STAGING_DIR)/usr/lib/
-	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libxslt.pc $(STAGING_DIR)/usr/lib/pkgconfig/
-	$(SED) 's,-I$$$${includedir},,g' $(STAGING_DIR)/usr/bin/xslt-config
-	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/bin/xslt-config
-	$(SED) 's,-I$(STAGING_DIR)/usr/include,,g' $(STAGING_DIR)/usr/bin/xslt-config
-	$(SED) 's,-L$(STAGING_DIR)/usr/lib,,g' $(STAGING_DIR)/usr/bin/xslt-config
+	mkdir -p $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xslt-config $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xsltproc $(1)/usr/bin/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/libxslt $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxslt.{a,so*} $(1)/usr/lib/
+	mkdir -p $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libxslt.pc $(1)/usr/lib/pkgconfig/
+	$(SED) 's,-I$$$${includedir},,g' $(1)/usr/bin/xslt-config
+	$(SED) 's,-L$$$${libdir},,g' $(1)/usr/bin/xslt-config
+	$(SED) 's,-I$(1)/usr/include,,g' $(1)/usr/bin/xslt-config
+	$(SED) 's,-L$(1)/usr/lib,,g' $(1)/usr/bin/xslt-config
 endef
 
 define Build/UninstallDev

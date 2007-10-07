@@ -48,11 +48,11 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR)	$(STAGING_DIR)/usr/{lib/pkgconfig,include}
-	$(CP) -r $(PKG_INSTALL_DIR)/usr/include/* $(STAGING_DIR)/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{la,so.*} $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(STAGING_DIR)/usr/lib/pkgconfig/
-	$(SED) "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/lib{gtk,gdk}*-2.0.la
+	$(INSTALL_DIR)	$(1)/usr/{lib/pkgconfig,include}
+	$(CP) -r $(PKG_INSTALL_DIR)/usr/include/* $(1)/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{la,so.*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
+	$(SED) "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/lib{gtk,gdk}*-2.0.la
 endef
 
 $(eval $(call BuildPackage,gtk-2.8.20))

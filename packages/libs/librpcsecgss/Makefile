@@ -38,12 +38,12 @@ MAKE_FLAGS += \
 	all install
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/include/rpcsecgss/rpc
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/rpcsecgss/rpc/*.h $(STAGING_DIR)/usr/include/rpcsecgss/rpc/
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librpcsecgss.{a,so*} $(STAGING_DIR)/usr/lib
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/librpcsecgss.pc $(STAGING_DIR)/usr/lib/pkgconfig
+	$(INSTALL_DIR) $(1)/usr/include/rpcsecgss/rpc
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/rpcsecgss/rpc/*.h $(1)/usr/include/rpcsecgss/rpc/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librpcsecgss.{a,so*} $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/librpcsecgss.pc $(1)/usr/lib/pkgconfig
 endef	
 
 define Build/UninstallDev

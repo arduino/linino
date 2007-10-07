@@ -39,12 +39,12 @@ MAKE_FLAGS += \
 	all
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/pcre-config $(STAGING_DIR)/usr/bin/
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_BUILD_DIR)/pcre{,posix}.h $(STAGING_DIR)/usr/include/
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/.libs/libpcre{,posix}.{a,so*} $(STAGING_DIR)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_BUILD_DIR)/pcre-config $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_BUILD_DIR)/pcre{,posix}.h $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/.libs/libpcre{,posix}.{a,so*} $(1)/usr/lib/
 endef
 
 define Build/UninstallDev

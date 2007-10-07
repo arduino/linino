@@ -90,17 +90,17 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include
+	mkdir -p $(1)/usr/include
 	$(CP)	$(PKG_INSTALL_DIR)/usr/include/dbus-1.0 \
-		$(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
+		$(1)/usr/include/
+	mkdir -p $(1)/usr/lib
 	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/libdbus-1.{a,so*} \
-		$(STAGING_DIR)/usr/lib/
+		$(1)/usr/lib/
 	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/dbus-1.0 \
-		$(STAGING_DIR)/usr/lib/
-	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
+		$(1)/usr/lib/
+	mkdir -p $(1)/usr/lib/pkgconfig
 	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/dbus-1.pc \
-		$(STAGING_DIR)/usr/lib/pkgconfig/
+		$(1)/usr/lib/pkgconfig/
 endef
 
 define Build/UninstallDev

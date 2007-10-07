@@ -97,13 +97,13 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/lua{,lib,conf}.h $(STAGING_DIR)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/lauxlib.h $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua.{a,so.*} $(STAGING_DIR)/usr/lib/
-	ln -sf liblua.so.$(PKG_VERSION) $(STAGING_DIR)/usr/lib/liblua.so
-	ln -sf liblua.so.$(PKG_VERSION) $(STAGING_DIR)/usr/lib/liblualib.so
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/lua{,lib,conf}.h $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/lauxlib.h $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua.{a,so.*} $(1)/usr/lib/
+	ln -sf liblua.so.$(PKG_VERSION) $(1)/usr/lib/liblua.so
+	ln -sf liblua.so.$(PKG_VERSION) $(1)/usr/lib/liblualib.so
 endef
 
 define Build/UninstallDev

@@ -30,10 +30,10 @@ define Package/libnmeap
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_BUILD_DIR)/inc/nmeap{,_def}.h $(STAGING_DIR)/usr/include/
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/lib/libnmeap.a $(STAGING_DIR)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_BUILD_DIR)/inc/nmeap{,_def}.h $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/lib/libnmeap.a $(1)/usr/lib/
 endef
 
 define Build/UninstallDev

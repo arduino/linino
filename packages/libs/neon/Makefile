@@ -53,15 +53,15 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/neon-config $(STAGING_DIR)/usr/bin/
-	mkdir -p $(STAGING_DIR)/usr/include/neon
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/neon/* $(STAGING_DIR)/usr/include/neon/
-	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/{libneon.a,libneon.la,libneon.so,libneon.so.26,libneon.so.26.0.3} $(STAGING_DIR)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/neon.pc $(STAGING_DIR)/usr/lib/pkgconfig/
-	$(SED)  "s,\=\/usr,\=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/neon-config
-	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(STAGING_DIR)/usr/lib\'," $(STAGING_DIR)/usr/lib/libneon.la
+	mkdir -p $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/neon-config $(1)/usr/bin/
+	mkdir -p $(1)/usr/include/neon
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/neon/* $(1)/usr/include/neon/
+	mkdir -p $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/{libneon.a,libneon.la,libneon.so,libneon.so.26,libneon.so.26.0.3} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/neon.pc $(1)/usr/lib/pkgconfig/
+	$(SED)  "s,\=\/usr,\=$(1)/usr," $(1)/usr/bin/neon-config
+	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/libneon.la
 endef
 
 define Build/UninstallDev
