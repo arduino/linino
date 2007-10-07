@@ -68,7 +68,7 @@ define Build/DefaultTargets
     compile: $(STAGING_DIR)/stampfiles/.$(PKG_NAME)-installed
     $(STAGING_DIR)/stampfiles/.$(PKG_NAME)-installed: $(STAMP_BUILT)
 	mkdir -p $(STAGING_DIR)/stampfiles
-	$(Build/InstallDev)
+	$(call Build/InstallDev,$(STAGING_DIR))
 	touch $$@
   endif
 
