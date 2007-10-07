@@ -13,6 +13,7 @@ PKG_VERSION:=1.2.10
 PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.xmms.org/files/1.2.x/
+#PKG_INSTALL_MAN:=$(PKG_INSTALL_DIR)/usr/man
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -53,7 +54,7 @@ define Build/Compile
 endef
 
 define Package/xmms/install
-	$(call pkg_install_files,$(1),/usr/bin/xmms /usr/share/xmms/)
+	$(call pkg_install_files,$(1),/usr/bin/xmms /usr/lib/libxmms.so /usr/lib/libxmms.so.1 /usr/lib/libxmms.so.1.3.1 /usr/share/xmms/)
 endef
 
 $(eval $(call BuildPackage,xmms))
