@@ -9,12 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pwlib
-PKG_VERSION:=cvs-20051227
+PKG_VERSION:=1.11.1
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://trash.uid0.hu/openwrt
-PKG_MD5SUM:=7d5b8e9ab61a05658a5630f91505420d
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=ftp://peternixon.net/pub/voxgratia
+PKG_MD5SUM:=e1102dfd2608e3a117a2e016d0db53e3
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/pwlib-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,13 +25,19 @@ define Package/pwlib
   CATEGORY:=Libraries
   DEPENDS:=+libpthread +uclibcxx
   TITLE:=Portable Windows library
-  URL:=http://www.openh323.org/
+  URL:=http://www.voxgratia.org/
+endef
+
+define Package/pwlib/description
+	PWLib is a moderately large class library that was created as a
+	method to produce applications that run on both Microsoft
+	Windows and the X Window System.
 endef
 
 CONFIGURE_ARGS += \
 	--enable-minsize \
 	--enable-openh323 \
-	--disable-opal \
+	--enable-opal \
 	--disable-internalregex \
 	--disable-plugins \
 	--enable-audio \
@@ -59,7 +67,7 @@ CONFIGURE_ARGS += \
 	--disable-snmp \
 	--disable-soap \
 	--disable-socks \
-	--disable-stun \
+	--enable-stun \
 	--disable-telnet \
 	--disable-tts \
 	--disable-v4l \
