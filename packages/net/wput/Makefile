@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wput
-PKG_VERSION:=0.5
+PKG_VERSION:=0.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=@SF/wput
-PKG_MD5SUM:=441b2e07219f78167b29a7ac33488fff
-PKG_CAT:=zcat
+PKG_MD5SUM:=7ddb03154262df66e0e33f0676373ceb
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
@@ -25,19 +24,19 @@ define Package/wput
   SUBMENU:=FTP
   SECTION:=net
   CATEGORY:=Network
-  TITLE:=A wget-like command-line FTP client
-  URL:=http://itooktheredpill.dyndns.org/wput/
+  TITLE:=A tiny wget-like ftp-client for uploading files
+  URL:=http://wput.sourceforge.net/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--disable-g-switch \
-	)
+define Package/wput/description
+ Wput is a tiny ftp-client, that uploads files or directories
+ to a remote ftp-server.  Main features are: resuming,
+ time-stamping, wget-like interface, proxy-support and
+ speed-limit.
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)
-endef
+CONFIGURE_ARGS += \
+	--disable-g-switch \
 
 define Package/wput/install
 	$(INSTALL_DIR) $(1)/usr/bin
