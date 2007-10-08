@@ -33,6 +33,11 @@ define Package/bind/Default
   URL:=http://www.isc.org/sw/bind/
 endef
 
+define Package/bind-libs
+  $(call Package/bind/Default)
+  TITLE+= shared libraries
+endef
+
 define Package/bind-server
   $(call Package/bind/Default)
   TITLE+= DNS server
@@ -101,6 +106,11 @@ define Build/Compile
 		all install
 endef
 
+define Package/bind-libs/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib
+endef
+
 define Package/bind-server/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/named $(1)/usr/sbin/
@@ -157,6 +167,7 @@ define Package/bind-dig/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/dig $(1)/usr/bin/
 endef
 
+$(eval $(call BuildPackage,bind-libs))
 $(eval $(call BuildPackage,bind-server))
 $(eval $(call BuildPackage,bind-client))
 $(eval $(call BuildPackage,bind-tools))
