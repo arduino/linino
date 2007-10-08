@@ -58,7 +58,7 @@ define Build/InstallDev
 	$(CP) -R $(PKG_INSTALL_DIR)/usr/share/* $(1)/usr/share/
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/ltdl.h $(1)/usr/include/
-	mkdir -p $(I_LIBLTDL_DEV)/usr/lib
+	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libltdl.{a,so*} $(1)/usr/lib/
 	mkdir -p $(1)/usr/share/libtool
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/libtool/config.guess $(1)/usr/share/libtool/
