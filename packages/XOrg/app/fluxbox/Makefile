@@ -45,7 +45,13 @@ endef
 define Package/fbsetroot
 $(call Package/fluxbox/Default)
   DEPENDS:=fluxbox
-  TITLE:=set fluxbox background
+  TITLE:=set fluxbox background colors
+endef
+
+define Package/fbsetbg
+$(call Package/fluxbox/Default)
+  DEPENDS:=fluxbox +x-bkgd-images +eterm
+  TITLE:=set fluxbox background images
 endef
 
 define Build/Configure
@@ -68,10 +74,15 @@ endef
 define Package/fluxbox/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/share/fluxbox/styles/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/{fluxbox,fbsetbg} $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fluxbox $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/fluxbox/{init,keys} $(1)/usr/share/fluxbox/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/fluxbox/styles/* $(1)/usr/share/fluxbox/styles/
 	$(CP) files/menu $(1)/usr/share/fluxbox/
+endef
+
+define Package/fbsetbg/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fbsetbg $(1)/usr/bin/
 endef
 
 define Package/fbsetroot/install
@@ -85,5 +96,6 @@ define Package/fbrun/install
 endef
 
 $(eval $(call BuildPackage,fbrun))
+$(eval $(call BuildPackage,fbsetbg))
 $(eval $(call BuildPackage,fbsetroot))
 $(eval $(call BuildPackage,fluxbox))
