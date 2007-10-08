@@ -24,7 +24,6 @@ include $(INCLUDE_DIR)/package.mk
 define Package/autossh
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+openssh-client
   TITLE:=Autossh client
   URL:=http://www.harding.motd.ca/autossh/
 endef
