@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,24 +15,22 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://trash.uid0.hu/openwrt/
 PKG_MD5SUM:=ba1ffd45016f533bec2bb1539b78e43a
-PKG_CAT:=zcat
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_DEPENDS:=pwlib
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libopenh323
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+pwlib +uclibcxx
   TITLE:=OpenH323 library
-  URL:=http://www.openh323.org/
+  URL:=http://openh323.sourceforge.net/
 endef
 
 CONFIGURE_ARGS += \
 	--enable-minsize \
 	--enable-audio \
-	--disable-video
+	--disable-video \
 
 CONFIGURE_VARS += \
 	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti" \
