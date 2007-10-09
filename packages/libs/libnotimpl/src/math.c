@@ -96,3 +96,18 @@
     return (float) expf( (double)x );
 }
 
+/* lround for uClibc
+ *
+ * wrapper for lround(x)
+ */
+
+#ifdef __STDC__
+    long lround(double x)
+#else
+    long lround(x)
+    double x;
+#endif
+{
+    return (long) ((x - ((long)x) >= 0.5f) ? (((long)x) + 1) : ((long)x));
+}
+
