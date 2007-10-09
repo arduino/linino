@@ -1,5 +1,5 @@
 BKGD_IMAGE_PATH=/usr/share/X11/bkgd-images/
-if [ -x `which fbsetbg` ]; then
-	fbsetbg -f ${BKGD_IMAGE_PATH}/default.png
+if [ -x `which Esetroot` ]; then
+	Esetroot -scale ${BKGD_IMAGE_PATH}/default.png
 fi
 fluxbox
