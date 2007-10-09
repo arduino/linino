@@ -19,17 +19,17 @@ PKG_MD5SUM:=31e7156698a6f214b4067afb9e13728f
 include $(INCLUDE_DIR)/package.mk
 include ../python/python-package.mk
 
-define PyPackage/kid
+define PyPackage/python-kid
  TITLE:=XML-based Templating
  URL=http://www.kid-templating.org/
 endef
 
-define PyPackage/kid/description
+define PyPackage/python-kid/description
  Kid is a simple template language for XML based vocabularies written in 
  Python.
 endef
 
-define PyPackage/kid/filespec
+define PyPackage/python-kid/filespec
 +|$(PYTHON_PKG_DIR)/kid
 -|$(PYTHON_PKG_DIR)/kid/test
 endef
@@ -40,4 +40,4 @@ define Build/Compile
 	)
 endef
 
-$(eval $(call PyPackage,kid))
+$(eval $(call PyPackage,python-kid))

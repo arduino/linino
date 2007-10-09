@@ -19,13 +19,13 @@ PKG_MD5SUM:=a31f79f68d6d32898d6f24e11369a106
 include $(INCLUDE_DIR)/package.mk
 include ../python/python-package.mk
 
-define PyPackage/psycopg
- TITLE:=PostgreSQL database adapter
+define PyPackage/python-psycopg
+ TITLE:=PostgreSQL database adapter for Python
  URL=http://www.initd.org/
- DEPENDS+= +libpq +egenix-mx
+ DEPENDS+= +libpq +python-egenix-mx
 endef
 
-define PyPackage/psycopg/description
+define PyPackage/python-psycopg/description
  This package contains is a PostgreSQL database adapter for the Python 
  programming language.
 endef
@@ -41,9 +41,9 @@ define Build/Compile
 		OPT="$(TARGET_CFLAGS)"
 endef
 
-define PyPackage/psycopg/install
+define PyPackage/python-psycopg/install
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/psycopgmodule.so $(1)$(PYTHON_PKG_DIR)/
 endef
 
-$(eval $(call PyPackage,psycopg))
+$(eval $(call PyPackage,python-psycopg))

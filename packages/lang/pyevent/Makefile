@@ -19,13 +19,13 @@ PKG_MD5SUM:=584912c92d08bf005283fb29a47a6e4d
 include $(INCLUDE_DIR)/package.mk
 include ../python/python-package.mk
 
-define PyPackage/pyevent
+define PyPackage/python-event
  TITLE:=Python interface to libevent
  URL=http://code.google.com/p/pyevent/
  DEPENDS+= +libevent
 endef
 
-define PyPackage/pyevent/filespec
+define PyPackage/python-event/filespec
 +|$(PYTHON_PKG_DIR)/event.so
 endef
 
@@ -36,4 +36,4 @@ define Build/Compile
 	)
 endef
 
-$(eval $(call PyPackage,pyevent))
+$(eval $(call PyPackage,python-event))

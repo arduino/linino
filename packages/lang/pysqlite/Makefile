@@ -19,18 +19,18 @@ PKG_MD5SUM:=b4a185e936848370fcc1a5b17755b641
 include $(INCLUDE_DIR)/package.mk
 include ../python/python-package.mk
 
-define PyPackage/pysqlite
- TITLE:=SQLite database adapter
+define PyPackage/python-sqlite
+ TITLE:=SQLite database adapter for Python
  URL=http://www.initd.org/tracker/pysqlite/wiki/pysqlite
  DEPENDS+= +libsqlite3
 endef
 
-define PyPackage/pysqlite/description
+define PyPackage/python-sqlite/description
  This package contains an SQLite database adapter for the Python 
  programming language.
 endef
 
-define PyPackage/pysqlite/filespec
+define PyPackage/python-sqlite/filespec
 +|$(PYTHON_PKG_DIR)/pysqlite2
 -|$(PYTHON_PKG_DIR)/pysqlite2/test
 endef
@@ -41,4 +41,4 @@ define Build/Compile
 	)
 endef
 
-$(eval $(call PyPackage,pysqlite))
+$(eval $(call PyPackage,python-sqlite))

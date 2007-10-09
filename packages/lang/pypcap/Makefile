@@ -19,13 +19,13 @@ PKG_MD5SUM:=034c3cbbfa81aa19e8f685b767c65764
 include $(INCLUDE_DIR)/package.mk
 include ../python/python-package.mk
 
-define PyPackage/pypcap
+define PyPackage/python-pcap
  TITLE:=Python interface to lipcap
  URL:=http://code.google.com/p/pypcap/
  DEPENDS+= +libpcap
 endef
 
-define PyPackage/pypcap/filespec
+define PyPackage/python-pcap/filespec
 +|$(PYTHON_PKG_DIR)/pcap.so
 endef
 
@@ -36,4 +36,4 @@ define Build/Compile
 	)
 endef
 
-$(eval $(call PyPackage,pypcap))
+$(eval $(call PyPackage,python-pcap))

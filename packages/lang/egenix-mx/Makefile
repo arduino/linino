@@ -21,12 +21,12 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-base-$(PKG_VERSION)
 include $(INCLUDE_DIR)/package.mk
 include ../python/python-package.mk
 
-define PyPackage/egenix-mx
+define PyPackage/python-egenix-mx
  TITLE:=Egenix mxBase
  URL:=http://www.egenix.com/products/python/mxBase/
 endef
 
-define PyPackage/egenix-mx/description
+define PyPackage/python-egenix-mx/description
  This package contains a set of base packages from Egenix required by other 
  python packages.
 endef
@@ -79,7 +79,7 @@ define Build/UninstallDev
 	rm -rf $(STAGING_DIR)$(PYTHON_PKG_DIR)/mx
 endef
 
-define PyPackage/egenix-mx/install
+define PyPackage/python-egenix-mx/install
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
 	$(CP) $(PKG_BUILD_DIR)/foo/mx $(1)$(PYTHON_PKG_DIR)/
 	ln -sf	$(1)$(PYTHON_PKG_DIR)/mx/BeeBase/ExitFunctions.py \
@@ -87,4 +87,4 @@ define PyPackage/egenix-mx/install
 	rm -rf	$(1)$(PYTHON_PKG_DIR)/mx/*/Examples
 endef
 
-$(eval $(call PyPackage,egenix-mx))
+$(eval $(call PyPackage,python-egenix-mx))

@@ -19,18 +19,18 @@ PKG_MD5SUM:=532268f02870bea18c1d465e88afff30
 include $(INCLUDE_DIR)/package.mk
 include ../python/python-package.mk
 
-define PyPackage/pymysql
+define PyPackage/python-mysql
  TITLE:=MySQL database adapter for Python
  URL=http://mysql-python.sourceforge.net/
  DEPENDS+= +libmysqlclient
 endef
 
-define PyPackage/pymysql/description
+define PyPackage/python-mysql/description
  MySQLdb is an thread-compatible interface to the popular MySQL database 
  server that provides the Python database API.
 endef
 
-define PyPackage/pymysql/filespec
+define PyPackage/python-mysql/filespec
 +|$(PYTHON_PKG_DIR)/_mysql.so
 +|$(PYTHON_PKG_DIR)/_mysql_exceptions.py*
 +|$(PYTHON_PKG_DIR)/MySQLdb
@@ -42,4 +42,4 @@ define Build/Compile
 	)
 endef
 
-$(eval $(call PyPackage,pymysql))
+$(eval $(call PyPackage,python-mysql))
