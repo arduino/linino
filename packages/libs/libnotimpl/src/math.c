@@ -119,7 +119,7 @@
 #ifdef __STDC__
     float roundf(float x)
 #else
-    float round(x)
+    float roundf(x)
 	float x;
 #endif
 {
