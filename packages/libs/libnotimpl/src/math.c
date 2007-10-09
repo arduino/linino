@@ -111,3 +111,18 @@
     return (long) ((x - ((long)x) >= 0.5f) ? (((long)x) + 1) : ((long)x));
 }
 
+/* lround for uClibc
+ *
+ * wrapper for roundf(x)
+ */
+
+#ifdef __STDC__
+    float roundf(float x)
+#else
+    float round(x)
+	float x;
+#endif
+{
+	return (float) ((x - ((long)x) >= 0.5f) ? (((long)x) + 1) : ((long)x));
+}	
+
