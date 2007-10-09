@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -23,15 +23,14 @@ include $(INCLUDE_DIR)/package.mk
 define Package/pwlib
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libpthread +uclibcxx
   TITLE:=Portable Windows library
   URL:=http://www.voxgratia.org/
 endef
 
 define Package/pwlib/description
-	PWLib is a moderately large class library that was created as a
-	method to produce applications that run on both Microsoft
-	Windows and the X Window System.
+ PWLib is a moderately large class library that was created as a method to 
+ produce applications that run on both Microsoft Windows and the X Window 
+ System.
 endef
 
 CONFIGURE_ARGS += \
@@ -76,15 +75,16 @@ CONFIGURE_ARGS += \
 	--disable-video \
 	--disable-vxml \
 	--disable-wavfile \
-	--disable-xmlrpc
+	--disable-xmlrpc \
 
 CONFIGURE_VARS += \
-	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti"
+	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti" \
 
 MAKE_FLAGS += optnoshared
 
 define Build/InstallDev
 	ln -sf $(PKG_NAME)-$(PKG_VERSION) $(BUILD_DIR)/$(PKG_NAME)
+	$(SED) 's|//\(#include <ptlib/sound.h>\)|\1|' $(PKG_BUILD_DIR)/include/ptlib.h
 endef
 
 define Build/UninstallDev
