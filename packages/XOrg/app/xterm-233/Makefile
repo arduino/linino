@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/xterm
   SECTION:=xorg-extra
   CATEGORY:=Xorg
-  SUBMENU:=app
+  SUBMENU:=terminals
   TITLE:=xterm
   DEPENDS:=+xorg-server-essentials +libncurses @TARGET_x86
 endef
