@@ -48,6 +48,7 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/lib/libgif.la $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/lib/*.h $(1)/usr/include/
 	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/libgif.la
+	$(SED)  "s,installed.*,,g" $(1)/usr/lib/libgif.la
 endef
 
 define Package/giflib/install
