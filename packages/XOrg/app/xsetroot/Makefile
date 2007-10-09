@@ -11,7 +11,7 @@ include $(TOPDIR)/rules.mk
 PKG_BASE_NAME:=xsetroot
 PKG_NAME:=xsetroot
 PKG_RELEASE:=1
-PKG_VERSION:=X11R7.1-1.0.1
+PKG_VERSION:=X11R7.0-1.0.1
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.2/src/app
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
