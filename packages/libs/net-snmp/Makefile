@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -12,88 +12,79 @@ PKG_NAME:=net-snmp
 PKG_VERSION:=5.1.2
 PKG_RELEASE:=2.3
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/net-snmp
 PKG_MD5SUM:=8080555ab3f90011f25d5122042d9a8d
-PKG_CAT:=zcat
-
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
+define Package/net-snmp/Default
+  SECTION:=net
+  CATEGORY:=Network
+  URL:=http://www.net-snmp.org/
+endef
+
+define Package/net-snmp/Default/description
+ Simple Network Management Protocol (SNMP) is a widely used protocol for 
+ monitoring the health and welfare of network equipment (eg. routers), 
+ computer equipment and even devices like UPSs. Net-SNMP is a suite of 
+ applications used to implement SNMP v1, SNMP v2c and SNMP v3 using both 
+ IPv4 and IPv6.
+endef
+
+
 define Package/libnetsnmp
+$(call Package/net-snmp/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=+libelf
   TITLE:=Open source SNMP implementation (librairies)
-  DESCRIPTION:=Open source SNMP (Simple Network Management Protocol) implementation (libraries).\\\
-    Simple Network Management Protocol (SNMP) is a widely used \\\
-    protocol for monitoring the health and welfare of network \\\
-    equipment (eg. routers), computer equipment and even devices \\\
-    like UPSs. Net-SNMP is a suite of applications used to implement \\\
-    SNMP v1, SNMP v2c and SNMP v3 using both IPv4 and IPv6.\\\
-    \\\
-    This package contains shared libraries, needed by other programs.
-  URL:=http://www.net-snmp.org/
 endef
+
+define Package/libnetsnmp/description
+$(call Package/net-snmp/Default/description)
+ .
+ This package contains shared libraries, needed by other programs.
+endef
+
 
 define Package/snmp-utils
-  SECTION:=net
-  CATEGORY:=Network
+$(call Package/net-snmp/Default)
   DEPENDS:=+libnetsnmp
   TITLE:=Open source SNMP implementation (utilities)
-  DESCRIPTION:=Open source SNMP (Simple Network Management Protocol) implementation (utilities).\\\
-    Simple Network Management Protocol (SNMP) is a widely used \\\
-    protocol for monitoring the health and welfare of network \\\
-    equipment (eg. routers), computer equipment and even devices \\\
-    like UPSs. Net-SNMP is a suite of applications used to implement \\\
-    SNMP v1, SNMP v2c and SNMP v3 using both IPv4 and IPv6.\\\
-    \\\
-    This package contains SNMP client utilities.
-  URL:=http://www.net-snmp.org/
 endef
+
+define Package/snmp-utils/description
+$(call Package/net-snmp/Default/description)
+ .
+ This package contains SNMP client utilities.
+endef
+
 
 define Package/snmpd
-  SECTION:=net
-  CATEGORY:=Network
+$(call Package/net-snmp/Default)
   DEPENDS:=+libnetsnmp
   TITLE:=Open source SNMP implementation (daemon)
-  DESCRIPTION:=Open source SNMP (Simple Network Management Protocol) implementation (daemon).\\\
-    Simple Network Management Protocol (SNMP) is a widely used \\\
-    protocol for monitoring the health and welfare of network \\\
-    equipment (eg. routers), computer equipment and even devices \\\
-    like UPSs. Net-SNMP is a suite of applications used to implement \\\
-    SNMP v1, SNMP v2c and SNMP v3 using both IPv4 and IPv6.\\\
-    \\\
-    This package contains the SNMP agent, dynamically linked.
-  URL:=http://www.net-snmp.org/
 endef
 
-define Package/snmpd/conffiles
-/etc/default/snmpd
-/etc/snmp/snmpd.conf
+define Package/snmpd/description
+$(call Package/net-snmp/Default/description)
+ .
+ This package contains the SNMP agent, dynamically linked.
 endef
+
 
 define Package/snmpd-static
-  SECTION:=net
-  CATEGORY:=Network
+$(call Package/net-snmp/Default)
   TITLE:=Open source SNMP implementation (daemon)
-  DESCRIPTION:=Open source SNMP (Simple Network Management Protocol) implementation (daemon).\\\
-    Simple Network Management Protocol (SNMP) is a widely used \\\
-    protocol for monitoring the health and welfare of network \\\
-    equipment (eg. routers), computer equipment and even devices \\\
-    like UPSs. Net-SNMP is a suite of applications used to implement \\\
-    SNMP v1, SNMP v2c and SNMP v3 using both IPv4 and IPv6.\\\
-    \\\
-    This package contains the SNMP agent, statically linked.
-  URL:=http://www.net-snmp.org/
 endef
 
-define Package/snmpd-static/conffiles
-/etc/default/snmpd
-/etc/snmp/snmpd.conf
+define Package/snmpd-static/description
+$(call Package/net-snmp/Default/description)
+ .
+ This package contains the SNMP agent, statically linked.
 endef
+
 
 SNMP_MIB_MODULES_INCLUDED = \
 	host/hr_device \
@@ -148,7 +139,7 @@ SNMP_TRANSPORTS_INCLUDED = Callback UDP
 
 SNMP_TRANSPORTS_EXCLUDED = TCP TCPv6 UDPv6 Unix
 
-PKG_CONFIGURE_OPTIONS = \
+CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
 	--with-endianness=little \
@@ -172,37 +163,6 @@ PKG_CONFIGURE_OPTIONS = \
 	--without-rpm \
 	--without-zlib \
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		ac_cv_header_pcap_h=no \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=/usr/lib \
-			--libexecdir=/usr/lib \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc \
-			$(DISABLE_LARGEFILE) \
-			$(DISABLE_NLS) \
-			$(PKG_CONFIGURE_OPTIONS) \
-	);
-endef
-
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
@@ -213,16 +173,38 @@ define Build/Compile
 	#ifneq ($(CONFIG_PACKAGE_snmpd-static),)
 	( cd $(PKG_BUILD_DIR); rm -f agent/snmpd; )
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -static" \
+		LDFLAGS="$(TARGET_LDFLAGS) -static" \
 		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
 		all install
 	( cd $(PKG_INSTALL_DIR); mv ./usr/sbin/snmpd ./usr/sbin/snmpd-static; )
 	#endif
 endef
 
+define Build/InstallDev
+	mkdir -p $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/net-snmp-config $(1)/usr/bin/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/net-snmp $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnetsnmp{,agent,helpers,mibs}.{a,so*} $(1)/usr/lib/
+	$(SED) 's,-I/usr/include,,g' $(1)/usr/bin/net-snmp-config
+	$(SED) 's,-L/usr/lib,,g' $(1)/usr/bin/net-snmp-config
+endef
+
+define Build/UninstallDev
+	rm -rf	$(STAGING_DIR)/usr/bin/net-snmp-config \
+		$(STAGING_DIR)/usr/include/net-snmp \
+		$(STAGING_DIR)/usr/lib/libnetsnmp{,agent,helpers,mibs}.{a,so*}
+endef
+
 define Package/libnetsnmp/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnetsnmp{,agent,helpers,mibs}.so.* $(1)/usr/lib/
+endef
+
+define Package/snmpd/conffiles
+/etc/default/snmpd
+/etc/snmp/snmpd.conf
 endef
 
 define Package/snmpd/install
@@ -234,6 +216,11 @@ define Package/snmpd/install
 	$(INSTALL_BIN) ./files/snmpd.init $(1)/etc/init.d/snmpd
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/snmpd-shared $(1)/usr/sbin/snmpd
+endef
+
+define Package/snmpd-static/conffiles
+/etc/default/snmpd
+/etc/snmp/snmpd.conf
 endef
 
 define Package/snmpd-static/install
@@ -250,22 +237,6 @@ endef
 define Package/snmp-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/snmp{get,set,status,test,trap,walk} $(1)/usr/bin/
-endef
-
-define Build/InstallDev
-	mkdir -p $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/net-snmp-config $(1)/usr/bin/
-	mkdir -p $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/net-snmp $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnetsnmp{,agent,helpers,mibs}.{a,so*} $(1)/usr/lib/
-endef
-
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/net-snmp-config \
-		$(STAGING_DIR)/usr/include/net-snmp \
-		$(STAGING_DIR)/usr/lib/libnetsnmp{,agent,helpers,mibs}.{a,so*}
 endef
 
 $(eval $(call BuildPackage,libnetsnmp))
