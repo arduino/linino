@@ -8,12 +8,14 @@
 
 ifeq ($(DUMP),)
 
-  PYTHON:=$(STAGING_DIR)/usr/bin/hostpython
-
   PYTHON_VERSION=2.5
 
-  PYTHON_INC_DIR:=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION)
-  PYTHON_LIB_DIR:=$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION)
+  PYTHON_DIR:=$(STAGING_DIR)/usr
+  PYTHON_BIN_DIR:=$(PYTHON_DIR)/bin
+  PYTHON_INC_DIR:=$(PYTHON_DIR)/include/python$(PYTHON_VERSION)
+  PYTHON_LIB_DIR:=$(PYTHON_DIR)/lib/python$(PYTHON_VERSION)
+
+  PYTHON:=$(PYTHON_BIN_DIR)/python
 
   PYTHON_PKG_DIR:=/usr/lib/python$(PYTHON_VERSION)/site-packages
 
@@ -28,7 +30,7 @@ define PyPackage
     TITLE:=$(TITLE)
     SECTION:=lang
     CATEGORY:=Languages
-    DEPENDS:=python
+    DEPENDS:=python-core
     $(call PyPackage/$(1))
   endef
 
