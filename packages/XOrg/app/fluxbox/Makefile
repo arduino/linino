@@ -42,18 +42,6 @@ $(call Package/fluxbox/Default)
   TITLE:=fluxbox tool to run applications
 endef
 
-define Package/fbsetroot
-$(call Package/fluxbox/Default)
-  DEPENDS:=fluxbox
-  TITLE:=set fluxbox background colors
-endef
-
-define Package/fbsetbg
-$(call Package/fluxbox/Default)
-  DEPENDS:=fluxbox +x-bkgd-images +eterm
-  TITLE:=set fluxbox background images
-endef
-
 define Build/Configure
 	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
 		if [ -x $(CONFIGURE_CMD) ]; then \
@@ -96,6 +84,4 @@ define Package/fbrun/install
 endef
 
 $(eval $(call BuildPackage,fbrun))
-$(eval $(call BuildPackage,fbsetbg))
-$(eval $(call BuildPackage,fbsetroot))
 $(eval $(call BuildPackage,fluxbox))
