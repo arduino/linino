@@ -22,7 +22,7 @@ CONFIGURE_ARGS_XTRA+=--without-x
 define Package/libtiff
   SECTION:=libs
   CATEGORY:=libs
-  SUBMENU:=libraries
+  SUBMENU:=Libraries
   TITLE:=TIFF libraries
   DEPENDS:=+zlib +libjpeg
 endef
