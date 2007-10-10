@@ -15,69 +15,63 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.webdav.org/neon/
 PKG_MD5SUM:=6e52cd9c03e372026d6eccbfb80f09ef
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/neon
+define Package/libneon
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libopenssl +libxml2 +libintl
-  TITLE:=neon - HTTP and WebDAV client library
+  TITLE:=HTTP and WebDAV client library
   URL:=http://www.webdav.org/neon/
+  DEPENDS:=+libopenssl +libexpat
 endef
 
-define Build/Configure	
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--with-libxml2 \
-		--with-ssl=openssl \
-		--without-egd \
-		--without-socks \
-		, \
-		LDFLAGS="-lcrypto -lssl -L$(STAGING_DIR)/usr/lib" \
-		CFLAGS="-I$(STAGING_DIR)/include \
-		       	-I$(STAGING_DIR)/usr/include/libxml2 \
-			-I$(STAGING_DIR)/usr/lib/libintl/include" \
-		XML2_CONFIG="$(STAGING_DIR)/usr/bin/xml2-config" \
-	)
+
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--with-expat \
+	--with-ssl="openssl" \
+	--without-egd \
+	--without-socks \
+
+CONFIGURE_VARS += \
+	LDFLAGS="$$$$LDFLAGS -lcrypto -lssl"
+
+define Build/Configure
+	$(call Build/Configure/Default)
+	$(call libtool_disable_rpath)
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
 define Build/InstallDev
 	mkdir -p $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/neon-config $(1)/usr/bin/
-	mkdir -p $(1)/usr/include/neon
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/neon/* $(1)/usr/include/neon/
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/neon $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libneon.{a,so*} $(1)/usr/lib/
 	mkdir -p $(1)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/{libneon.a,libneon.la,libneon.so,libneon.so.26,libneon.so.26.0.3} $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/neon.pc $(1)/usr/lib/pkgconfig/
-	$(SED)  "s,\=\/usr,\=$(1)/usr," $(1)/usr/bin/neon-config
-	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/libneon.la
+	$(SED) 's,-I$$$${includedir}/,-I$(1)/usr/include/,g' $(1)/usr/bin/neon-config
+	$(SED) 's,-L$$$${libdir},,g' $(1)/usr/bin/neon-config
 endef
 
 define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/bin/neon-config \
-		$(STAGING_DIR)/usr/lib/{libneon.a,libneon.la,libneon.so,libneon.so.26,libneon.so.26.0.3} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/neon.pc \
-		$(STAGING_DIR)/usr/include/neon
+	rm -rf  $(STAGING_DIR)/usr/bin/neon-config \
+	        $(STAGING_DIR)/usr/include/neon \
+	        $(STAGING_DIR)/usr/lib/libneon.{a,so*} \
+	        $(STAGING_DIR)/usr/lib/pkgconfig/neon.pc
 endef
 
-define Package/neon/install	
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/neon-config $(1)/usr/bin/
+define Package/libneon/install	
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
-	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/neon.pc $(1)/usr/lib/pkgconfig/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libneon.so.* $(1)/usr/lib/
 endef
 
-$(eval $(call BuildPackage,neon))
+$(eval $(call BuildPackage,libneon))
