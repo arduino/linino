@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ahcpd
-PKG_VERSION:=0.1
+PKG_VERSION:=0.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/
-PKG_MD5SUM:=10779877e69605ab22675b36fbe3b8a4
+PKG_MD5SUM:=f75253b74bc54e117ba030c97c75c224
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -47,13 +47,21 @@ define Build/Compile
 		all
 endef
 
+define Package/ahcpd/conffiles
+/etc/config/ahcpd
+endef
+
 define Package/ahcpd/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ahcp-generate{,-address} $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/ahcp
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ahcp-config.sh $(1)/usr/lib/ahcp/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/{ahcp,dummy}-config.sh $(1)/usr/lib/ahcp/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ahcpd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/ahcpd.config $(1)/etc/config/ahcpd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/ahcpd.init $(1)/etc/init.d/ahcpd
 endef
 
 $(eval $(call BuildPackage,ahcpd))
