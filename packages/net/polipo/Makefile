@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=polipo
-PKG_VERSION:=1.0.2
-PKG_RELEASE:=2
+PKG_VERSION:=1.0.3
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/$(PKG_NAME)/
-PKG_MD5SUM:=2d1d8af414429e5823675a781604c70a
+PKG_MD5SUM:=a0b00ca01541cf77ff3d725c27cf68bb
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,7 +22,7 @@ define Package/polipo
   SUBMENU:=Proxy Servers
   SECTION:=net
   CATEGORY:=Network
-  TITLE:=a caching web proxy
+  TITLE:=A caching web proxy
   URL:=http://www.pps.jussieu.fr/~jch/software/polipo/
 endef
 
@@ -41,14 +41,19 @@ define Build/Compile
 endef
 
 define Package/polipo/conffiles
-/etc/polipo/polipo.conf
+/etc/config/polipo
+/etc/polipo/config
 endef
 
 define Package/polipo/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/polipo $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/polipo
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/config.sample $(1)/etc/polipo/polipo.conf
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/config.sample $(1)/etc/polipo/config
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/polipo.config $(1)/etc/config/polipo
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/polipo.init $(1)/etc/init.d/polipo
 endef
 
 $(eval $(call BuildPackage,polipo))

@@ -1,0 +1,64 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2007 OpenWrt.org
+
+START=99
+
+NAME=polipo
+BIN_F=/usr/sbin/$NAME
+SSD=start-stop-daemon
+
+is_enabled() {
+	local cfg="$1"
+
+	config_get_bool enabled "$cfg" enabled '1'
+	[ $enabled -ne 0 ] || {
+		echo "$initscript: not enabled"
+		return 1
+	}
+}
+
+get_pid_file() {
+	local cfg="$1"
+
+	config_get pid_file "$cfg" pid-file
+	[ -n "$pid_file" ] || pid_file="/var/run/$NAME.pid"
+}
+
+get_options() {
+	local cfg="$1"
+
+	config_get options "$cfg" options
+
+	config_get config_file "$cfg" config_file
+	[ -n "$config_script" ] && append options "-c $config_file"
+}
+
+start_service() {
+	local cfg="$1"
+
+	is_enabled "$cfg" || return
+	get_pid_file "$cfg"
+	get_options "$cfg"
+
+	$SSD -S -p $pid_file -b -m -x $BIN_F -- $options &>/dev/null
+}
+
+stop_service() {
+	local cfg="$1"
+
+	is_enabled "$cfg" || return
+	get_pid_file "$cfg"
+
+	$SSD -K -p $pid_file &>/dev/null
+}
+
+start() {
+	config_load $NAME
+	config_foreach start_service $NAME
+}
+
+stop() {
+	config_load $NAME
+	config_foreach stop_service $NAME
+}
+
