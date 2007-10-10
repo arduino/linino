@@ -9,19 +9,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=babel
-PKG_VERSION:=0.4
+PKG_VERSION:=0.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/
-PKG_MD5SUM:=427bbd044d9e842c8ed203d1b8d5dd6e
+PKG_MD5SUM:=7c88c0b2bc537f3dc89c595b9dba99f1
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/babel
   SECTION:=ipv6
   CATEGORY:=IPv6
-  TITLE:=a loop-free distance-vector routing protocol
+  TITLE:=A loop-free distance-vector routing protocol
   URL:=http://www.pps.jussieu.fr/~jch/software/babel/
   DEPENDS:=+kmod-ipv6
 endef
