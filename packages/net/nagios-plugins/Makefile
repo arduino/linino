@@ -26,7 +26,7 @@ comma:= ,
 define Package/nagios-plugins
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=uclibcxx
+  DEPENDS:=+uclibcxx
   TITLE:=plugins for Nagios checks
   URL:=http://nagiosplug.sourceforge.net/
 endef
