@@ -15,72 +15,76 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://apache.d-s-s-p.de/apr/
 PKG_MD5SUM:=6f4b063ac01a54ba0818c31280f06959
-PKG_CAT:=zcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/apr
+define Package/libapr
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=+libpthread
   TITLE:=Apache Portable Runtime Library
-  DESCRIPTION:=\
-  	Apache Portable Runtime Library
   URL:=http://apr.apache.org/
 endef
 
 CONFIGURE_ARGS += \
-		--with-devrandom=/dev/urandom \
-		--disable-dso \
-		--disable-ipv6
+	--with-devrandom=/dev/urandom \
+	--disable-dso \
+	--disable-ipv6
 
 CONFIGURE_VARS += \
-		ac_cv_file__dev_zero=yes \
-		apr_cv_process_shared_works=no \
-		apr_cv_mutex_robust_shared=no \
-		apr_cv_tcp_nodelay_with_cork=yes \
-		ac_cv_sizeof_ssize_t=4 \
-		LDFLAGS="-lpthread -L$(STAGING_DIR)/lib" \
-		CFLAGS="-I$(STAGING_DIR)/include $(TARGET_CFLAGS)"
+	ac_cv_file__dev_zero=yes \
+	apr_cv_process_shared_works=no \
+	apr_cv_mutex_robust_shared=no \
+	apr_cv_tcp_nodelay_with_cork=yes \
+	ac_cv_sizeof_ssize_t=4 \
+	LDFLAGS="$$$$LDFLAGS -lpthread" \
 
-MAKE_FLAGS += \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install
+define Build/Configure
+	$(call Build/Configure/Default)
+	$(call libtool_disable_rpath)
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+endef
 
 define Build/InstallDev
 	mkdir -p $(1)/usr/bin
 	$(CP)   $(PKG_INSTALL_DIR)/usr/bin/apr-1-config \
 		$(1)/usr/bin
-	mkdir -p $(1)/usr/include
-	$(CP)   $(PKG_INSTALL_DIR)/usr/include/apr-1/ \
-		$(1)/usr/include/
+	mkdir -p $(1)/usr/include/apr-1
+	$(CP)   $(PKG_INSTALL_DIR)/usr/include/apr-1/* \
+		$(1)/usr/include/apr-1/
 	mkdir -p $(1)/usr/lib
-	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/*apr* \
+	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/libapr-1.{a,so*} \
 		$(1)/usr/lib/
-	mkdir -p $(1)/usr/share/
-	$(CP)   $(PKG_INSTALL_DIR)/usr/share/build-1/ \
-		$(1)/usr/share/
-	$(SED) "s,/usr/share/build-1,$(1)/usr/share/build-1," $(1)/usr/share/build-1/apr_rules.mk
-	$(SED)  "s,\"/usr\",$(1)/usr," $(1)/usr/bin/apr-1-config
-	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/libapr-1.la
-	$(SED)  "s,"bindir\=\"/usr/bin\"",bindir=\"$(1)/usr/bin\"," $(1)/usr/bin/apr-1-config
-	$(SED)  "s,"datadir\=\"/usr/share\"",datadir=\"$(1)/usr/share\"," $(1)/usr/bin/apr-1-config
-	$(SED)  "s,"installbuilddir\=\"/usr/share/build-1\"",installbuilddir=\"$(1)/usr/share/build-1\"," $(1)/usr/bin/apr-1-config
+	mkdir -p $(1)/usr/lib/pkgconfig
+	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/apr-1.pc \
+		$(1)/usr/lib/pkgconfig/
+	mkdir -p $(1)/usr/share/build-1
+	$(CP)   $(PKG_INSTALL_DIR)/usr/share/build-1/* \
+		$(1)/usr/share/build-1/
+	$(SED) 's,^datadir=\"/usr/share\",datadir=\"$(1)/usr/share\",g' $(1)/usr/bin/apr-1-config
+	$(SED) 's,^installbuilddir=\"/usr/share/build-1\",installbuilddir=\"$(1)/usr/share/build-1\",g' $(1)/usr/bin/apr-1-config
+	$(SED) 's,^includedir=\"$$$${prefix}/include/,includedir=\"$(1)/usr/include/,g' $(1)/usr/bin/apr-1-config
+	$(SED) 's,-L$$$$libdir,,g' $(1)/usr/bin/apr-1-config
+	$(SED) 's,-R$$$$libdir,,g' $(1)/usr/bin/apr-1-config
+	$(SED) 's,/usr/share/build-1,$(1)/usr/share/build-1,g' $(1)/usr/share/build-1/apr_rules.mk
 endef
 
 define Build/UninstallDev
 	rm -rf	$(STAGING_DIR)/usr/bin/apr-1-config \
-		$(STAGING_DIR)/usr/lib/{libapr-1*,apr.exp} \
-		$(STAGING_DIR)/usr/share/build-1/ \
-		$(STAGING_DIR)/usr/include/apr-1/
+		$(STAGING_DIR)/usr/include/apr-1 \
+		$(STAGING_DIR)/usr/lib/libapr-1.{a,so*} \
+		$(STAGING_DIR)/usr/lib/pkgconfig/apr-1.pc \
+		$(STAGING_DIR)/usr/share/build-1
 endef
 
-define Package/apr/install
+define Package/libapr/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libapr-1.so.* $(1)/usr/lib/
 endef
 
-$(eval $(call BuildPackage,apr))
+$(eval $(call BuildPackage,libapr))
