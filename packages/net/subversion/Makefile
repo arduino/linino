@@ -26,7 +26,7 @@ define Package/subversion/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A compelling replacement for CVS
-  DEPENDS:=+zlib +neon +libintl +apr +apr-util
+  DEPENDS:=+zlib +libneon +libintl +libapr +libaprutil
   URL:=http://subversion.tigris.org/
   SUBMENU:=subversion
 endef

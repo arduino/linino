@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/clearsilver
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+neon +zlib
+  DEPENDS:=+libneon +zlib
   TITLE:=ClearSilver template system
   DESCRIPTION:=Clearsilver is a fast, powerful, and language-neutral HTML template system. In both static content sites and dynamic HTML applications, it provides a separation between presentation code and application logic which makes working with your project easier.
 	URL:=http://www.clearsilver.net/

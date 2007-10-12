@@ -35,7 +35,7 @@ endef
 define Package/apache
   $(call Package/apache/Default)
   MENU=1
-  DEPENDS:=+apr +apr-util +zlib +libexpat +libpcre +libopenssl +libsqlite3
+  DEPENDS:=+libapr +libaprutil +zlib +libexpat +libpcre +libopenssl +libsqlite3
 endef
 
 define Package/apache-server
