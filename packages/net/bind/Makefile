@@ -29,7 +29,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/bind/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=bind-libs
+  DEPENDS:=+bind-libs
   TITLE:=bind
   URL:=http://www.isc.org/sw/bind/
   SUBMENU:=ISC Bind
