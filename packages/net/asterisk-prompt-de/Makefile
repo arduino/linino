@@ -26,10 +26,13 @@ define Package/asterisk-prompt-de
   SECTION:=net
   CATEGORY:=Network
   TITLE:=German asterisk prompts
-  DESCRIPTION:=German asterisk prompts
   DEPENDS:=+asterisk
   URL:=http://www.stadt-pforzheim.de/asterisk/
   SUBMENU:=asterisk (Complete Open Source PBX)
+endef
+
+define Package/asterisk-prompt-de/description
+German asterisk prompts
 endef
 
 define Build/Compile

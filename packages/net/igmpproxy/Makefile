@@ -25,10 +25,12 @@ define Package/igmpproxy
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Multicast Routing Daemon
-  DESCRIPTION:=\
-	IGMPproxy is a simple dynamic Multicast Routing Daemon using \\\
-	only IGMP signalling (Internet Group Management Protocol).
   URL:=http://sourceforge.net/projects/igmpproxy
+endef
+
+define Package/igmpproxy/description
+	IGMPproxy is a simple dynamic Multicast Routing Daemon using 
+	only IGMP signalling (Internet Group Management Protocol).
 endef
 
 define Package/igmpproxy/conffiles

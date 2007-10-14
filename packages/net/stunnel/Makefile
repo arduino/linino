@@ -20,9 +20,11 @@ define Package/stunnel
   CATEGORY:=Network
   DEPENDS:=+libopenssl +libwrap
   TITLE:=SSL TCP Wrapper
-  DESCRIPTION:=\
-	 Open source SSL TCP Wrapper
   URL:=http://stunnel.org
+endef
+
+define Package/stunnel/description
+	 Open source SSL TCP Wrapper
 endef
 
 

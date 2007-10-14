@@ -30,7 +30,10 @@ define Package/nfs-utils
   $(call Package/nfs-utils/Default)
   DEPENDS:=+libwrap +libevent +libblkid
   TITLE:=updated mount utility (includes nfs4)
-  DESCRIPTION:=Updated mount.nfs command - allows mounting nfs4 volumes
+endef
+
+define Package/nfs-utils/description
+Updated mount.nfs command - allows mounting nfs4 volumes
 endef
 
 CONFIGURE_ARGS += --disable-gss

@@ -26,12 +26,15 @@ define Package/libgsm
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=A GSM transcoding library
-  DESCRIPTION:=A GSM 06.10 full-rate speech transcoding implementation (library).\\\
-    An implementation of the European GSM 06.10 provisional standard \\\
-    for full-rate speech transcoding, prI-ETS 300 036, which uses \\\
-    RPE/LTP (residual pulse excitation/long term prediction) coding \\\
-    at 13 kbit/s.
   URL:=ftp://ftp.cs.tu-berlin.de/pub/local/kbs/tubmik/gsm/
+endef
+
+define Package/libgsm/description
+A GSM 06.10 full-rate speech transcoding implementation (library).
+	An implementation of the European GSM 06.10 provisional standard 
+	for full-rate speech transcoding, prI-ETS 300 036, which uses 
+	RPE/LTP (residual pulse excitation/long term prediction) coding 
+	at 13 kbit/s.
 endef
 
 define Package/gsm-utils
@@ -39,12 +42,15 @@ define Package/gsm-utils
   CATEGORY:=Utilities
   DEPENDS:=+libgsm
   TITLE:=GSM transcoding utilities
-  DESCRIPTION:=A GSM 06.10 full-rate speech transcoding implementation (utilities).\\\
-    An implementation of the European GSM 06.10 provisional standard \\\
-    for full-rate speech transcoding, prI-ETS 300 036, which uses \\\
-    RPE/LTP (residual pulse excitation/long term prediction) coding \\\
-    at 13 kbit/s.
   URL:=ftp://ftp.cs.tu-berlin.de/pub/local/kbs/tubmik/gsm/
+endef
+
+define Package/gsm-utils/description
+A GSM 06.10 full-rate speech transcoding implementation (utilities).
+	An implementation of the European GSM 06.10 provisional standard 
+	for full-rate speech transcoding, prI-ETS 300 036, which uses 
+	RPE/LTP (residual pulse excitation/long term prediction) coding 
+	at 13 kbit/s.
 endef
 
 define Build/Configure

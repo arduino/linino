@@ -24,8 +24,11 @@ define Package/librpcsecgss
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=required libraries for the nfs-utils
-  DESCRIPTION:= Support libraries - for newer nfs mount command (nfs4)
   URL:=http://www.citi.umich.edu/projects/nfsv4/linux
+endef
+
+define Package/librpcsecgss/description
+ Support libraries - for newer nfs mount command (nfs4)
 endef
 
 TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib -I$(STAGING_DIR)/usr/include/gssglue/

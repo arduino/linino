@@ -26,13 +26,15 @@ define Package/libart
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=An high-performance 2D graphics library
-  DESCRIPTION:=\
-	A library of functions for 2D graphics supporting a superset of the \\\
-	PostScript imaging model, designed to be integrated with graphics, artwork, \\\
-	and illustration programs. It is written in optimized C, and is fully \\\
-	compatible with C++. With a small footprint of 10,000 lines of code, it is \\\
-	especially suitable for embedded applications.
   URL:=http://www.levien.com/libart/
+endef
+
+define Package/libart/description
+	A library of functions for 2D graphics supporting a superset of the 
+	PostScript imaging model, designed to be integrated with graphics, artwork, 
+	and illustration programs. It is written in optimized C, and is fully 
+	compatible with C++. With a small footprint of 10,000 lines of code, it is 
+	especially suitable for embedded applications.
 endef
 
 define Build/Configure

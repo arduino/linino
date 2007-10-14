@@ -26,9 +26,11 @@ define Package/dosfstools
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=MS-DOS FAT filesystems utilities
-  DESCRIPTION:=\
-	Utilities to create and check MS-DOS FAT filesystems.
   URL:=ftp://ftp.uni-erlangen.de:/pub/Linux/LOCAL/dosfstools/
+endef
+
+define Package/dosfstools/description
+	Utilities to create and check MS-DOS FAT filesystems.
 endef
 
 define Build/Configure

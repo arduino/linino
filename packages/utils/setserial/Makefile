@@ -25,13 +25,15 @@ define Package/setserial
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Serial port configuration utility
-  DESCRIPTION:=\
-	setserial  is a program designed to set and/or report the \\\
-	configuration information associated with a serial port. This \\\
-	information  includes what I/O port and IRQ a particular \\\
-	serial port is using, and whether or not the break key should \\\
-	be interpreted as the Secure Attention Key, and so on.
   URL:=http://setserial.sourceforge.net/
+endef
+
+define Package/setserial/description
+	setserial is a program designed to set and/or report the 
+	configuration information associated with a serial port. This 
+	information includes what I/O port and IRQ a particular 
+	serial port is using, and whether or not the break key should 
+	be interpreted as the Secure Attention Key, and so on.
 endef
 
 # uses GNU configure

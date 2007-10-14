@@ -27,12 +27,14 @@ define Package/unzip
   CATEGORY:=Utilities
   DEPENDS:=
   TITLE:=De-archiver for .zip files
-  DESCRIPTION:=\
-	InfoZIP's unzip program. With the exception of multi-volume archives \\\
-	(ie, .ZIP files that are split across several disks using PKZIP's /& option), \\\
-	this can handle any file produced either by PKZIP, or the corresponding \\\
-	InfoZIP zip program.
   URL:=http://infozip.sourceforge.net/Zip.html
+endef
+
+define Package/unzip/description
+	InfoZIP's unzip program. With the exception of multi-volume archives 
+	(ie, .ZIP files that are split across several disks using PKZIP's /& option), 
+	this can handle any file produced either by PKZIP, or the corresponding 
+	InfoZIP zip program.
 endef
 
 define Build/Configure

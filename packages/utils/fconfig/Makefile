@@ -25,9 +25,11 @@ define Package/fconfig
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=RedBoot configuration editor
-  DESCRIPTION:=\
-	displays and (if writable) also edits the RedBoot configuration.
   URL:=http://andrzejekiert.ovh.org/software.html.en
+endef
+
+define Package/fconfig/description
+	displays and (if writable) also edits the RedBoot configuration.
 endef
 
 define Build/Configure

@@ -23,12 +23,14 @@ define Package/ettercap
   CATEGORY:=Network
   DEPENDS:=+libpcap +libnet1 +libopenssl +libpcre +libiconv +libncurses +libltdl +libpthread +zlib
   TITLE:=Ettercap is a suite for man in the middle attacks on LAN.
-  DESCRIPTION:=\
-  	It features sniffing of live connections, content filtering on the fly \\\
-  	and many other interesting tricks. \\\
-  	It supports active and passive dissection of many protocols (even \\\
-  	ciphered ones) and includes many feature for network and host analysis.
   URL:=http://ettercap.sourceforge.net
+endef
+
+define Package/ettercap/description
+	It features sniffing of live connections, content filtering on the fly 
+	and many other interesting tricks. 
+	It supports active and passive dissection of many protocols (even 
+	ciphered ones) and includes many feature for network and host analysis.
 endef
 
 define Package/ettercap/conffiles

@@ -26,9 +26,11 @@ define Package/mvprelay
   SECTION:=net
   CATEGORY:=Network
   TITLE:=relays requests from the MVP
-  DESCRIPTION:=\
-  	Relays requests from the MediaMVP to the TFTP server	
   URL:=http://downloads.openwrt.org/sources/
+endef
+
+define Package/mvprelay/description
+	Relays requests from the MediaMVP to the TFTP server
 endef
 
 define Build/Configure

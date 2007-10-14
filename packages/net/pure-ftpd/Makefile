@@ -28,12 +28,11 @@ define Package/pure-ftpd
   CATEGORY:=Network
   DEPENDS:=+libelf
   TITLE:=Secure FTP made easy!
-  DESCRIPTION:=\
-  	Pure-FTPd is a free (BSD), secure, production-quality and standard-conformant FTP server.\
-	It doesn't provide useless bells and whistles, but focuses on efficiency and ease of use.\
-	It provides simple answers to common needs, plus unique useful features for personal users\
-	as well as hosting providers.
   URL:=http://www.pureftpd.org/project/pure-ftpd
+endef
+
+define Package/pure-ftpd/description
+	Pure-FTPd is a free (BSD), secure, production-quality and standard-conformant FTP server.\	It doesn't provide useless bells and whistles, but focuses on efficiency and ease of use.\	It provides simple answers to common needs, plus unique useful features for personal users\	as well as hosting providers.
 endef
 
 define Build/Configure

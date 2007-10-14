@@ -26,10 +26,12 @@ define Package/ptrtd
   CATEGORY:=IPv6
   DEPENDS:=+kmod-ipv6 +kmod-tun +ip
   TITLE:=Portable Transport Relay Translator Daemon
-  DESCRIPTION:=\
-	The Portable Transport Relay Translator Daemon (pTRTd)\\\
-	is a method of allowing IPv6 hosts to communicate with IPv4 hosts.
   URL:=http://v6web.litech.org/ptrtd/
+endef
+
+define Package/ptrtd/description
+	The Portable Transport Relay Translator Daemon (pTRTd)
+	is a method of allowing IPv6 hosts to communicate with IPv4 hosts.
 endef
 
 MAKE_FLAGS += \

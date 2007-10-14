@@ -26,9 +26,11 @@ define Package/lm-sensors
   CATEGORY:=Utilities
   TITLE:=lm-sensors
   DEPENDS:=+sysfsutils @LINUX_2_6_X86
-  DESCRIPTION:=\
-	Utility to read hardware sensor data
   URL:=http://www.lm-sensors.org/
+endef
+
+define Package/lm-sensors/description
+	Utility to read hardware sensor data
 endef
 
 define Build/Compile

@@ -15,12 +15,14 @@ define Package/l7-protocols
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Protocols for layer7 filtering
-  DESCRIPTION:=\
-	l7-filter classifies packets based on patterns in application \\\
-	layer data. This allows correct classification of P2P traffic that \\\
-	uses unpredictable ports as well as standard protocols running on \\\
-	non-standard ports.
   URL:=http://l7-filter.sourceforge.net/
+endef
+
+define Package/l7-protocols/description
+	l7-filter classifies packets based on patterns in application 
+	layer data. This allows correct classification of P2P traffic that 
+	uses unpredictable ports as well as standard protocols running on 
+	non-standard ports.
 endef
 
 define Build/Configure

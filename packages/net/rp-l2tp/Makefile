@@ -22,31 +22,17 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/rp-l2tpd/Default
+define Package/rp-l2tpd
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Roaring Penguin L2TP
-  DESCRIPTION:=\
-	Roaring Penguin L2TP (Layer 2 Tunneling Protocol) implementation.
   URL:=http://sourceforge.net/projects/rp-l2tp/
-endef
-
-define Package/rp-l2tpd
-  $(call Package/rp-l2tpd/Default)
-#	DEPENDS:=+rp-l2tpd-mod-cmd +rp-l2tpd-mod-ppp
   TITLE+= daemon
-#  MENU:=1
 endef
 
-#define Package/rp-l2tpd-mod-cmd
-#  $(call Package/rp-l2tpd/Default)
-#  TITLE:=Simple command handler for the RR L2TP daemon
-#endef
-
-#define Package/rp-l2tpd-mod-ppp
-#  $(call Package/rp-l2tpd/Default)
-#  TITLE:=PPP handler for the RR L2TP daeomon
-#endef
+define Package/rp-l2tpd/description
+	Roaring Penguin L2TP (Layer 2 Tunneling Protocol) implementation.
+endef
 
 # uses GNU configure
 MAKE_FLAGS += \

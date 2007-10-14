@@ -31,12 +31,14 @@ define Package/scanlogd
   CATEGORY:=Network
   DEPENDS:=+libpcap +libnet0 +libnids
   TITLE:=Port scan detection tool
-  DESCRIPTION:=\
-  	Scanlogd is a TCP port scan detection tool, originally designed \\\
-	to illustrate various attacks an IDS developer has to deal with.\\\
-	Thus, unlike some of the other port scan detection tools out there, \\\
-	scanlogd is designed to be totally safe to use.
   URL:=http://www.openwall.com/scanlogd
+endef
+
+define Package/scanlogd/description
+	Scanlogd is a TCP port scan detection tool, originally designed 
+	to illustrate various attacks an IDS developer has to deal with.
+	Thus, unlike some of the other port scan detection tools out there, 
+	scanlogd is designed to be totally safe to use.
 endef
 
 define Build/Configure	

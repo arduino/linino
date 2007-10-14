@@ -27,8 +27,11 @@ define Package/6tunnel
   CATEGORY:=IPv6
   DEPENDS:=+libpcap
   TITLE:=IPv4 / IPv6 tunnel proxy
-  DESCRIPTION:=IPv4 / IPv6 tunnel proxy
   URL:=http://toxygen.net/6tunnel/
+endef
+
+define Package/6tunnel/description
+IPv4 / IPv6 tunnel proxy
 endef
 
 define Build/Configure

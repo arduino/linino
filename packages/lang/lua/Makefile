@@ -30,10 +30,6 @@ define Package/lua/Default
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=LUA programming language
-  DESCRIPTION:=\
-	Lua is a powerful light-weight programming language designed for extending \\\
-	applications. Lua is also frequently used as a general-purpose, stand-alone \\\
-	language. Lua is free software.
   URL:=http://www.lua.org/
 endef
 
@@ -43,36 +39,52 @@ define Package/liblua
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= (libraries)
-  DESCRIPTION+=\\\
-	\\\
-	This package contains the LUA shared libraries, needed by other programs.
+endef
+
+define Package/liblua/description
+=
+	Lua is a powerful light-weight programming language designed for extending 
+	applications. Lua is also frequently used as a general-purpose, stand-alone 
+	language. Lua is free software.	This package contains the LUA shared libraries, needed by other programs.
 endef
 
 define Package/lua
   $(call Package/lua/Default)
   DEPENDS:=+liblua +libreadline +libncurses
   TITLE+= (interpreter)
-  DESCRIPTION+=\\\
-	\\\
-	This package contains the LUA language interpreter.
+endef
+
+define Package/lua/description
+=
+	Lua is a powerful light-weight programming language designed for extending 
+	applications. Lua is also frequently used as a general-purpose, stand-alone 
+	language. Lua is free software.	This package contains the LUA language interpreter.
 endef
 
 define Package/luac
   $(call Package/lua/Default)
   DEPENDS:=+liblua
   TITLE+= (compiler)
-  DESCRIPTION+=\\\
-	\\\
-	This package contains the LUA language compiler.
+endef
+
+define Package/luac/description
+=
+	Lua is a powerful light-weight programming language designed for extending 
+	applications. Lua is also frequently used as a general-purpose, stand-alone 
+	language. Lua is free software.	This package contains the LUA language compiler.
 endef
 
 define Package/lua-examples
   $(call Package/lua/Default)
   DEPENDS:=lua
   TITLE+= (examples)
-  DESCRIPTION+=\\\
-	\\\
-	This package contains LUA language examples.
+endef
+
+define Package/lua-examples/description
+=
+	Lua is a powerful light-weight programming language designed for extending 
+	applications. Lua is also frequently used as a general-purpose, stand-alone 
+	language. Lua is free software.	This package contains LUA language examples.
 endef
 
 define Build/Configure

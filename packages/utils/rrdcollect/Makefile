@@ -25,12 +25,6 @@ include $(INCLUDE_DIR)/package.mk
 define Package/rrdcollect/Default
   SECTION:=utils
   CATEGORY:=Utilities
-  DESCRIPTION:=\
-	RRDcollect is a daemon which polls ceratin files in /proc/ \\\
-	directory, gathering data and storing it inside RRDtool's \\\
-	database files.  Being written in C should be both fast \\\
-	and resources-friendly.  Supports both scanf(3)-style \\\
-	pattern matches and perl compatible regular expressions.
   URL:=http://rrdcollect.sourceforge.net/
 endef
 
@@ -38,18 +32,32 @@ define Package/rrdcollect
   $(call Package/rrdcollect/Default)
   DEPENDS:=+librrd
   TITLE:=Round-Robin Database (RRD) collecting daemon
-  DESCRIPTION+=\\\
-	\\\
-	This package contains the RRD collecting daemon.
   MENU:=1
+endef
+
+define Package/rrdcollect/description
+=
+	RRDcollect is a daemon which polls ceratin files in /proc/ 
+	directory, gathering data and storing it inside RRDtool's 
+	database files. Being written in C should be both fast 
+	and resources-friendly. Supports both scanf(3)-style 
+	pattern matches and perl compatible regular expressions.	
+	This package contains the RRD collecting daemon.
 endef
 
 define Package/rrdcollect-example
   $(call Package/rrdcollect/Default)
   DEPENDS:=rrdcollect
   TITLE:=Example setup for RRD collecting daemon above
-  DESCRIPTION+=\\\
-	\\\
+endef
+
+define Package/rrdcollect-example/description
+=
+	RRDcollect is a daemon which polls ceratin files in /proc/ 
+	directory, gathering data and storing it inside RRDtool's 
+	database files. Being written in C should be both fast 
+	and resources-friendly. Supports both scanf(3)-style 
+	pattern matches and perl compatible regular expressions.	
 	This package contains examples for the RRD collecting daemon.
 endef
 

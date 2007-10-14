@@ -23,13 +23,15 @@ define Package/ssmtp
   CATEGORY:=Network
   DEPENDS:=+libopenssl
   TITLE:=A minimal and secure mail sender
-  DESCRIPTION:=\
-	A secure, effective and simple way of getting mail off a system to your \\\
-	mail hub. It contains no suid-binaries or other dangerous things - no \\\
-	mail spool to poke around in, and no daemons running in the background.\\\
-	mail is simply forwarded to the configured mailhost. Extremely easy \\\
-	configuration.
   URL:=http://packages.debian.org/stable/mail/ssmtp
+endef
+
+define Package/ssmtp/description
+	A secure, effective and simple way of getting mail off a system to your 
+	mail hub. It contains no suid-binaries or other dangerous things - no 
+	mail spool to poke around in, and no daemons running in the background.
+	mail is simply forwarded to the configured mailhost. Extremely easy 
+	configuration.
 endef
 
 EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include

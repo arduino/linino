@@ -26,12 +26,14 @@ define Package/libffi-sable
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Foreign Function Interface library (for sablevm)
-  DESCRIPTION:=\
-	The libffi library provides a portable, high level programming \\\
-	interface to various calling conventions. This allows a programmer to \\\
-	call any function specified by a call interface description at run \\\
-	time.
   URL:=http://sources.redhat.com/libffi/
+endef
+
+define Package/libffi-sable/description
+	The libffi library provides a portable, high level programming 
+	interface to various calling conventions. This allows a programmer to 
+	call any function specified by a call interface description at run 
+	time.
 endef
 
 define Build/Configure

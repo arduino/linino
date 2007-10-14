@@ -26,13 +26,15 @@ define Package/netstat-nat
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A netstat variant for NAT connections
-  DESCRIPTION:=\
-	Netstat-nat is a small program written in C.\\\
-	It displays NAT connections, managed by netfilter/iptables which comes \\\
-	with the > 2.4.x linux kernels.\\\
-	The program reads its information from '/proc/net/ip_conntrack', which \\\
-	is the temporary conntrack-storage of netfilter.
   URL:=http://tweegy.demon.nl/projects/netstat-nat/
+endef
+
+define Package/netstat-nat/description
+	Netstat-nat is a small program written in C.
+	It displays NAT connections, managed by netfilter/iptables which comes 
+	with the > 2.4.x linux kernels.
+	The program reads its information from '/proc/net/ip_conntrack', which 
+	is the temporary conntrack-storage of netfilter.
 endef
 
 # uses GNU configure

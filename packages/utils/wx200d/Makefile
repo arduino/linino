@@ -27,11 +27,13 @@ define Package/wx200d
   CATEGORY:=Utilities
   DEPENDS:=+libpq
   TITLE:=weather station data collector
-  DESCRIPTION:=\
-	wx200d is a weather station data collector and server daemon \\\
-	for the WX200, WM918, WMR918 and WMR968 weather station \\\
-	hardware.
   URL:=http://wx200d.sourceforge.net/
+endef
+
+define Package/wx200d/description
+	wx200d is a weather station data collector and server daemon 
+	for the WX200, WM918, WMR918 and WMR968 weather station 
+	hardware.
 endef
 
 # uses GNU configure

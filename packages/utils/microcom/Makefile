@@ -25,10 +25,12 @@ define Package/microcom
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=A serial terminal emulation program
-  DESCRIPTION:=\
-	microcom is a minicom-like serial terminal emulator with scripting \\\
-	support.
   URL:=http://microcomlinux.homestead.com/
+endef
+
+define Package/microcom/description
+	microcom is a minicom-like serial terminal emulator with scripting 
+	support.
 endef
 
 define Build/Compile

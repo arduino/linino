@@ -26,11 +26,13 @@ define Package/wrt-radauth
   CATEGORY:=Network
   DEPENDS:=kmod-brcm-wl +nvram
   TITLE:=A Radius MAC authenticator for Broadcom based access points
-  DESCRIPTION:=\
-	This software watches the stations associating to a broadcom based \\\
-	AccessPoint (e.g. Linksys WRT54G) and sends an authentication request \\\
-	to the radius-server specified in nvram.
   URL:=http://www.zerfleddert.de/wrt54g/
+endef
+
+define Package/wrt-radauth/description
+	This software watches the stations associating to a broadcom based 
+	AccessPoint (e.g. Linksys WRT54G) and sends an authentication request 
+	to the radius-server specified in nvram.
 endef
   
 define Build/Compile

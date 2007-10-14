@@ -25,12 +25,14 @@ define Package/rssh
   SECTION:=net
   CATEGORY:=Network
   TITLE:=restricted shell for use with OpenSSH
-  DESCRIPTION:=\
-  	rssh is a restricted shell for use with OpenSSH, allowing only scp and/or sftp.\\\
-	It now also includes support for rdist, rsync, and cvs. For example, if you have\\\
-	a server which you only want to allow users to copy files off of via scp, without\\\
-	providing shell access, you can use rssh to do that.
   URL:=http://www.pizzashack.org/rssh/index.shtml
+endef
+
+define Package/rssh/description
+	rssh is a restricted shell for use with OpenSSH, allowing only scp and/or sftp.
+	It now also includes support for rdist, rsync, and cvs. For example, if you have
+	a server which you only want to allow users to copy files off of via scp, without
+	providing shell access, you can use rssh to do that.
 endef
 
 define Package/rssh/conffiles

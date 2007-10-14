@@ -26,9 +26,11 @@ define Package/streamripper
   CATEGORY:=Multimedia
   DEPENDS:=+libmad
   TITLE:=streamripper
-  DESCRIPTION:=\
-	Streamripper is an Open Source application that lets you record streaming mp3 to your hard drive.
   URL:=http://streamripper.sourceforge.net/
+endef
+
+define Package/streamripper/description
+	Streamripper is an Open Source application that lets you record streaming mp3 to your hard drive.
 endef
 
 

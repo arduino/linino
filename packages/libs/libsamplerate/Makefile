@@ -27,9 +27,11 @@ define Package/libsamplerate
   CATEGORY:=Libraries
   DEPENDS:=+libsndfile
   TITLE:=Sample Rate Converter
-  DESCRIPTION:=\
-  	Secret Rabbit Code (aka libsamplerate) is a Sample Rate Converter for audio
   URL:=http://www.mega-nerd.com/SRC/index.html
+endef
+
+define Package/libsamplerate/description
+	Secret Rabbit Code (aka libsamplerate) is a Sample Rate Converter for audio
 endef
 
 define Build/Configure

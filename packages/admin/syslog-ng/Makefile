@@ -28,10 +28,14 @@ define Package/syslog-ng
   CATEGORY:=Administration
   DEPENDS:=+libol
   TITLE:=A powerful syslog daemon
-  DESCRIPTION:=syslog-ng reads and logs messages to the  system  console,  log\\\
-	files, other machines and/or users as specified by its\\\
-	configuration file.\\\
   URL:=http://www.balabit.com/products/syslog_ng/
+endef
+
+define Package/syslog-ng/description
+syslog-ng reads and logs messages to the system console, log
+	files, other machines and/or users as specified by its
+	configuration file.
+
 endef
 
 define Package/syslog-ng/conffiles

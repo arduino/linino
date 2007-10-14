@@ -26,12 +26,14 @@ define Package/libcli
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=A Cisco-like CLI library
-  DESCRIPTION:=\
-	Libcli provides a shared library for including a Cisco-like \\\
-	command-line interface into other software. It's a telnet \\\
-	interface which supports command-line editing, history, \\\
-	authentication and callbacks for a user-definable function tree.
   URL:=http://libcli.sourceforge.net/
+endef
+
+define Package/libcli/description
+	Libcli provides a shared library for including a Cisco-like 
+	command-line interface into other software. It's a telnet 
+	interface which supports command-line editing, history, 
+	authentication and callbacks for a user-definable function tree.
 endef
 
 MAKE_FLAGS += \

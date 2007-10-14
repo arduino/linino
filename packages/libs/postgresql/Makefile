@@ -31,8 +31,11 @@ define Package/libpq
   CATEGORY:=Libraries
   DEPENDS:=+zlib +libreadline +libncurses
   TITLE:=PostgreSQL client library
-  DESCRIPTION:=PostgreSQL client library.
   URL:=http://www.postgresql.org/
+endef
+
+define Package/libpq/description
+PostgreSQL client library.
 endef
 
 define Package/pgsql-cli
@@ -40,8 +43,11 @@ define Package/pgsql-cli
   CATEGORY:=Utilities
   DEPENDS:=+libpq
   TITLE:=Command Line Interface (CLI) to PostgreSQL databases
-  DESCRIPTION:=Command Line Interface (CLI) to PostgreSQL databases.
   URL:=http://www.postgresql.org/
+endef
+
+define Package/pgsql-cli/description
+Command Line Interface (CLI) to PostgreSQL databases.
 endef
 
 define Package/pgsql-server
@@ -49,8 +55,11 @@ define Package/pgsql-server
   CATEGORY:=Utilities
   DEPENDS:=+libpq
   TITLE:=PostgreSQL databases Server
-  DESCRIPTION:=PostgreSQL databases Server.
   URL:=http://www.postgresql.org/
+endef
+
+define Package/pgsql-server/description
+PostgreSQL databases Server.
 endef
 
 # Need a native ecpg ,pg_config, and zic for build

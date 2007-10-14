@@ -28,14 +28,16 @@ define Package/nocatsplash
   CATEGORY:=Network
   DEPENDS:=+glib1
   TITLE:=Open public network gateway daemon
-  DESCRIPTION:=\
-	NoCatSplash is an Open Public Network Gateway Daemon.\\\
-	It performs as a [captive/open/active] portal. When run on a gateway/router \\\
-	on a network, all web requests are redirected until the client either logs \\\
-	in or clicks "I Accept" to an AUP. The gateway daemon then changes the \\\
-	firewall rules on the gateway to pass traffic for that client (based on IP \\\
-	address and MAC address).
   URL:=http://nocat.net
+endef
+
+define Package/nocatsplash/description
+	NoCatSplash is an Open Public Network Gateway Daemon.
+	It performs as a [captive/open/active] portal. When run on a gateway/router 
+	on a network, all web requests are redirected until the client either logs 
+	in or clicks "I Accept" to an AUP. The gateway daemon then changes the 
+	firewall rules on the gateway to pass traffic for that client (based on IP 
+	address and MAC address).
 endef
 
 define Package/nocatsplash/conffiles

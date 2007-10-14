@@ -27,10 +27,11 @@ define Package/chrony
   CATEGORY:=Network
   DEPENDS:=+libreadline +libncurses
   TITLE:=NTP client/server for on-demand connections
-  DESCRIPTION:=\
-	A NTP implementation that has been specifically written to work well in the case of an intermittent \
-	(e.g. dial-on-demand) connection to the network where your NTP servers are.
   URL:=http://chrony.sunsite.dk/
+endef
+
+define Package/chrony/description
+	A NTP implementation that has been specifically written to work well in the case of an intermittent \	(e.g. dial-on-demand) connection to the network where your NTP servers are.
 endef
 
 define Package/chrony/conffiles

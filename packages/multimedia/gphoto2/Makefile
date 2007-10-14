@@ -27,8 +27,11 @@ define Package/gphoto2
   CATEGORY:=Multimedia
   DEPENDS:=+libexif +libgphoto2 +libltdl +libpopt +libpthread
   TITLE:=Gphoto Digital Camera Control
-  DESCRIPTION:=For downloading and controlling digital cameras
   URL:=http://www.gphoto.org/
+endef
+
+define Package/gphoto2/description
+For downloading and controlling digital cameras
 endef
 
 define Build/Configure

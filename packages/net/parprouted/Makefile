@@ -26,13 +26,16 @@ define Package/parprouted
   CATEGORY:=Network
   DEPENDS:=+libpthread
   TITLE:=Proxy ARP daemon
-  DESCRIPTION:=\
-	parprouted is a daemon for transparent IP (Layer 3) proxy ARP bridging.\\\
-	This is useful for creation of transparent firewalls and bridging networks\\\
-	with different MAC protocols. Also, unlike standard bridging, proxy ARP\\\
-	bridging allows to bridge Ethernet networks behind wireless nodes without\\\
-	using WDS or layer 2 bridging.\\\
  URL:=http://www.hazard.maks.net/parprouted/
+endef
+
+define Package/parprouted/description
+	parprouted is a daemon for transparent IP (Layer 3) proxy ARP bridging.
+	This is useful for creation of transparent firewalls and bridging networks
+	with different MAC protocols. Also, unlike standard bridging, proxy ARP
+	bridging allows to bridge Ethernet networks behind wireless nodes without
+	using WDS or layer 2 bridging.
+
 endef
 
 define Build/Compile

@@ -31,14 +31,18 @@ endef
 define Package/nstx
   $(call Package/nstx/Default)
   TITLE+= client version
-  DESCRIPTION:=\
+endef
+
+define Package/nstx/description
 	nstx client version
 endef
 
 define Package/nstxd
   $(call Package/nstx/Default)
   TITLE+= server version
-  DESCRIPTION:=\
+endef
+
+define Package/nstxd/description
 	nstx server version
 endef
 

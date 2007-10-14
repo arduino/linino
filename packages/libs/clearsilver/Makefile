@@ -22,8 +22,11 @@ define Package/clearsilver
   CATEGORY:=Libraries
   DEPENDS:=+libneon +zlib
   TITLE:=ClearSilver template system
-  DESCRIPTION:=Clearsilver is a fast, powerful, and language-neutral HTML template system. In both static content sites and dynamic HTML applications, it provides a separation between presentation code and application logic which makes working with your project easier.
 	URL:=http://www.clearsilver.net/
+endef
+
+define Package/clearsilver/description
+Clearsilver is a fast, powerful, and language-neutral HTML template system. In both static content sites and dynamic HTML applications, it provides a separation between presentation code and application logic which makes working with your project easier.
 endef
 
 CONFIGURE_ARGS += \

@@ -28,14 +28,6 @@ define Package/avahi/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=An mDNS/DNS-SD implementation
-  DESCRIPTION:=\
-	An mDNS/DNS-SD (aka RendezVous/Bonjour/ZeroConf) implementation (library).\\\
-	Avahi is a system which facilitates service discovery on a local network -- \\\
-	this means that you can plug your laptop or computer into a network and \\\
-	instantly be able to view other people who you can chat with, find printers \\\
-	to print to or find files being shared. This kind of technology is already \\\
-	found in MacOS X (branded 'Rendezvous', 'Bonjour' and sometimes 'ZeroConf') \\\
-	and is very convenient.
   URL:=http://www.avahi.org/
 endef
 
@@ -45,8 +37,17 @@ define Package/libavahi
   CATEGORY:=Libraries
   DEPENDS:=+libdaemon +libpthread
   TITLE+= (library)
-  DESCRIPTION+=\\\
-	\\\
+endef
+
+define Package/libavahi/description
+
+	An mDNS/DNS-SD (aka RendezVous/Bonjour/ZeroConf) implementation (library).
+	Avahi is a system which facilitates service discovery on a local network -- 
+	this means that you can plug your laptop or computer into a network and 
+	instantly be able to view other people who you can chat with, find printers 
+	to print to or find files being shared. This kind of technology is already 
+	found in MacOS X (branded 'Rendezvous', 'Bonjour' and sometimes 'ZeroConf') 
+	and is very convenient.	
 	This package contains the mDNS/DNS-SD shared libraries, used by other programs.
 endef
 
@@ -54,13 +55,22 @@ define Package/avahi-autoipd
   $(call Package/avahi/Default)
   DEPENDS:=+libdaemon
   TITLE:=IPv4LL network address configuration daemon
-  DESCRIPTION+=\\\
-	\\\
-	This package implements IPv4LL, "Dynamic Configuration of \\\
-	IPv4 Link-Local Addresses" (IETF RFC3927), a protocol for \\\
-	automatic IP address configuration from the link-local \\\
-	169.254.0.0/16 range without the need for a central server. It \\\
-	is primarily intended to be used in ad-hoc networks which lack a \\\
+endef
+
+define Package/avahi-autoipd/description
+
+	An mDNS/DNS-SD (aka RendezVous/Bonjour/ZeroConf) implementation (library).
+	Avahi is a system which facilitates service discovery on a local network -- 
+	this means that you can plug your laptop or computer into a network and 
+	instantly be able to view other people who you can chat with, find printers 
+	to print to or find files being shared. This kind of technology is already 
+	found in MacOS X (branded 'Rendezvous', 'Bonjour' and sometimes 'ZeroConf') 
+	and is very convenient.	
+	This package implements IPv4LL, "Dynamic Configuration of 
+	IPv4 Link-Local Addresses" (IETF RFC3927), a protocol for 
+	automatic IP address configuration from the link-local 
+	169.254.0.0/16 range without the need for a central server. It 
+	is primarily intended to be used in ad-hoc networks which lack a 
 	DHCP server.
 endef
 
@@ -68,8 +78,17 @@ define Package/avahi-daemon
   $(call Package/avahi/Default)
   DEPENDS:=+libavahi +libexpat
   TITLE+= (daemon)
-  DESCRIPTION+=\\\
-	\\\
+endef
+
+define Package/avahi-daemon/description
+
+	An mDNS/DNS-SD (aka RendezVous/Bonjour/ZeroConf) implementation (library).
+	Avahi is a system which facilitates service discovery on a local network -- 
+	this means that you can plug your laptop or computer into a network and 
+	instantly be able to view other people who you can chat with, find printers 
+	to print to or find files being shared. This kind of technology is already 
+	found in MacOS X (branded 'Rendezvous', 'Bonjour' and sometimes 'ZeroConf') 
+	and is very convenient.	
 	This package contains an mDNS/DNS-SD daemon.
 endef
 
@@ -83,10 +102,13 @@ define Package/avahi-dnsconfd
   $(call Package/avahi/Default)
   DEPENDS:=+libavahi
   TITLE:=An Unicast DNS server from mDNS/DNS-SD configuration daemon
-  DESCRIPTION+=\\\
-	\\\
-	This package contains an Unicast DNS server from mDNS/DNS-SD configuration \\\
-	daemon, which may be used to configure conventional DNS servers using mDNS \\\
+endef
+
+define Package/avahi-dnsconfd/description
+
+	
+	This package contains an Unicast DNS server from mDNS/DNS-SD configuration 
+	daemon, which may be used to configure conventional DNS servers using mDNS 
 	in a DHCP-like fashion. Especially useful on IPv6.
 endef
 

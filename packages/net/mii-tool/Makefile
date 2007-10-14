@@ -26,12 +26,14 @@ define Package/mii-tool
   SECTION:=net
   CATEGORY:=Network
   TITLE:=configure media type using MII commands
-  DESCRIPTION:=\
-	The mii-tool command allows you to set or autodetect the media type\\\
-	or mii chipset-based ethernet devices. It traditionally had been\\\
-	distributed in the net-tools package. This is a single distribution\\\
-	optimized for embedded systems and fully automated cross/-sysroot-builds
   URL:=http://freshmeat.net/redir/mii-tool/
+endef
+
+define Package/mii-tool/description
+	The mii-tool command allows you to set or autodetect the media type
+	or mii chipset-based ethernet devices. It traditionally had been
+	distributed in the net-tools package. This is a single distribution
+	optimized for embedded systems and fully automated cross/-sysroot-builds
 endef
 
 MAKE_FLAGS += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -I. -idirafter ./include/"

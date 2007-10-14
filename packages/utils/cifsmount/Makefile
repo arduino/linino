@@ -20,7 +20,9 @@ define Package/cifsmount
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=CIFS mounting helper utility
-  DESCRIPTION:=\
+endef
+
+define Package/cifsmount/description
 	An user space helper utility for mounting remote CIFS shares.
 endef
 

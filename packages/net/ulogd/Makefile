@@ -69,7 +69,9 @@ define Package/ulogd-mod-extra
   $(call Package/ulogd/Default)
   DEPENDS:=ulogd
   TITLE:=Extra plugins
-  DESCRIPTION:=\
+endef
+
+define Package/ulogd-mod-extra/description
 	This package contains the LOCAL, LOGEMU, OPRINT, PWSNIFF and SYSLOG plugins.
 endef
 

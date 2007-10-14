@@ -26,11 +26,13 @@ define Package/ipkungfu
   SECTION:=net
   CATEGORY:=Network
   TITLE:=IPKungFu is an iptables-based Linux firewall
-  DESCRIPTION:=\
-  	IPKungFu is an iptables-based Linux firewall.\\\
-  	It aims to simplify the configuration of Internet \\\
-  	connection sharing, port forwarding, and packet filtering.
   URL:=http://www.linuxkungfu.org/
+endef
+
+define Package/ipkungfu/description
+	IPKungFu is an iptables-based Linux firewall.
+	It aims to simplify the configuration of Internet 
+	connection sharing, port forwarding, and packet filtering.
 endef
 
 define Package/ipkungfu/conffiles

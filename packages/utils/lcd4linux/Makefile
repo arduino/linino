@@ -26,10 +26,12 @@ define Package/lcd4linux
   CATEGORY:=Utilities
   DEPENDS:=+libncurses
   TITLE:=LCD display utility
-  DESCRIPTION:=\
-	LCD4Linux is a small program that grabs information from the kernel and \\\
-	some subsystems and displays it on an external liquid crystal display.
   URL:=http://lcd4linux.bulix.org/
+endef
+
+define Package/lcd4linux/description
+	LCD4Linux is a small program that grabs information from the kernel and 
+	some subsystems and displays it on an external liquid crystal display.
 endef
 
 # commas are interpreted by the $(call ...) macro, so define an intermediate variable holding our drivers spec

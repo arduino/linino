@@ -23,12 +23,14 @@ define Package/iftop
   CATEGORY:=Network
   DEPENDS:=+libpcap +libncurses +libpthread
   TITLE:=display bandwith usage on an interface
-  DESCRIPTION:=\
-	iftop does for network usage what top(1) does for CPU usage. It \\\
-	listens to network traffic on a named interface and displays a \\\
-	table of current bandwidth usage by pairs of hosts. Handy for \\\
-	answering the question 'why is our ADSL link so slow?'.
   URL:=http://www.ex-parrot.com/~pdw/iftop/
+endef
+
+define Package/iftop/description
+	iftop does for network usage what top(1) does for CPU usage. It 
+	listens to network traffic on a named interface and displays a 
+	table of current bandwidth usage by pairs of hosts. Handy for 
+	answering the question 'why is our ADSL link so slow?'.
 endef
 
 define Package/iftop/install	

@@ -27,11 +27,13 @@ define Package/ipcad
   CATEGORY:=Network
   DEPENDS:=+libpcap
   TITLE:=listens for traffic on the specified interfaces
-  DESCRIPTION:=\
-	This daemon listens for traffic on the specified interfaces.\\\
-	It has the built-in RSH and NetFlow engines to allow exporting \\\
-	the accounting data the same way as Cisco routers do.
   URL:=http://lionet.info/ipcad/
+endef
+
+define Package/ipcad/description
+	This daemon listens for traffic on the specified interfaces.
+	It has the built-in RSH and NetFlow engines to allow exporting 
+	the accounting data the same way as Cisco routers do.
 endef
 
 define Package/ipcad/conffiles/

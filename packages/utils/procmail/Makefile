@@ -25,11 +25,13 @@ define Package/procmail
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Mail processing tool
-  DESCRIPTION:=\
-	Procmail is able to process and classify incoming mail into \\\
-	different mail boxes.\\\
-	Very useful in conjunction with mutt.
   URL:=http://www.procmail.org
+endef
+
+define Package/procmail/description
+	Procmail is able to process and classify incoming mail into 
+	different mail boxes.
+	Very useful in conjunction with mutt.
 endef
 
 define Build/Compile	

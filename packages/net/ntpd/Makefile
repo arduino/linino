@@ -27,9 +27,11 @@ define Package/ntpd
   CATEGORY:=Network
   TITLE:=full featured NTP server
   DEPENDS:=+libreadline
-  DESCRIPTION:=\
-	The full featured original ntpd
   URL:=http://www.ntp.org/
+endef
+
+define Package/ntpd/description
+	The full featured original ntpd
 endef
 
 define Package/ntpd/conffiles

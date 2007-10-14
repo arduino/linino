@@ -25,15 +25,21 @@ endef
 define Package/lame
 $(call Package/lame/Default)
   TITLE:=lame
-  DESCRIPTION:=lame mp3 encoder
   MENU:=1
+endef
+
+define Package/lame/description
+lame mp3 encoder
 endef
 
 define Package/lame-lib
 $(call Package/lame/Default)
   TITLE:=lame-lib
-  DESCRIPTION:=lame mp3 encoder libs
   DEPENDS:=lame
+endef
+
+define Package/lame-lib/description
+lame mp3 encoder libs
 endef
 
 

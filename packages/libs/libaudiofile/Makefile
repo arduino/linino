@@ -26,11 +26,13 @@ define Package/libaudiofile
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Audio File library
-  DESCRIPTION:=\
-	The audiofile library allows the processing of audio data to and from audio \\\
-	files of many common formats (currently AIFF, AIFF-C, WAVE, NeXT/Sun, BICS, \\\
-	and raw data).
   URL:=http://www.68k.org/~michael/audiofile/
+endef
+
+define Package/libaudiofile/description
+	The audiofile library allows the processing of audio data to and from audio 
+	files of many common formats (currently AIFF, AIFF-C, WAVE, NeXT/Sun, BICS, 
+	and raw data).
 endef
 
 define Build/Configure

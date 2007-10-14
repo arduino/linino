@@ -26,11 +26,13 @@ define Package/totd
   CATEGORY:=IPv6
   DEPENDS:=+kmod-ipv6
   TITLE:=Small DNS proxy that supports IPv6/IPv4 record translation
-  DESCRIPTION:=\
-	totd is a small DNS proxy nameserver which supports IPv6 and enable IPv6\\\
-	only sites to access IPv4 sites by using some translation mechanism such\\\
-	as NAT-PT, KAME faith, etc...
   URL:=http://pasta.cs.uit.no/software/totd.html
+endef
+
+define Package/totd/description
+	totd is a small DNS proxy nameserver which supports IPv6 and enable IPv6
+	only sites to access IPv4 sites by using some translation mechanism such
+	as NAT-PT, KAME faith, etc...
 endef
 
 define Package/totd/conffiles

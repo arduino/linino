@@ -26,10 +26,12 @@ define Package/collectd
   CATEGORY:=Utilities
   DEPENDS=+libgcc
   TITLE:=Lightweight system statistics collection daemon
-  DESCRIPTION:=\
-	collectd is a small daemon which collects system information periodically \\\
-	and provides mechanismns to store the values in a variety of ways.
   URL:=http://verplant.org/collectd/
+endef
+
+define Package/collectd/description
+	collectd is a small daemon which collects system information periodically 
+	and provides mechanismns to store the values in a variety of ways.
 endef
 
 define Package/collectd/conffiles 

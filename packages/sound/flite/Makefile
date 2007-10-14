@@ -23,10 +23,13 @@ define Package/flite
   SECTION:=sound
   CATEGORY:=Sound
   TITLE:=Text-to-speech for embedded systems
-  DESCRIPTION:=Festival Lite is a stripped down version of Festival,\\\
-    the well-developed text-to-speech program written in C++.\\\
-    This program is written in C to keep memory usage low.
   URL:=http://www.speech.cs.cmu.edu/flite/index.html
+endef
+
+define Package/flite/description
+Festival Lite is a stripped down version of Festival,
+	the well-developed text-to-speech program written in C++.
+	This program is written in C to keep memory usage low.
 endef
 
 define Build/Configure

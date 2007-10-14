@@ -26,12 +26,14 @@ define Package/smartmontools
   CATEGORY:=Utilities
   DEPENDS:=+libstdcpp
   TITLE:=S.M.A.R.T Monitoring Tool
-  DESCRIPTION:=\
-	smartmontools contains utility programs (smartctl, smartd) to \\\
-	control/monitor storage systems using the Self-Monitoring, Analysis \\\
-	and Reporting Technology System (S.M.A.R.T.) built into most modern \\\
-	ATA and SCSI disks. It is derived from smartsuite.
   URL:=http://smartmontools.sourceforge.net/
+endef
+
+define Package/smartmontools/description
+	smartmontools contains utility programs (smartctl, smartd) to 
+	control/monitor storage systems using the Self-Monitoring, Analysis 
+	and Reporting Technology System (S.M.A.R.T.) built into most modern 
+	ATA and SCSI disks. It is derived from smartsuite.
 endef
 
 # uses GNU configure

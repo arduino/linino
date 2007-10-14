@@ -32,8 +32,11 @@ define Package/openssh-client
   CATEGORY:=Network
   DEPENDS:=+libopenssl +zlib
   TITLE:=OpenSSH client
-  DESCRIPTION:=OpenSSH client.
   URL:=http://www.openssh.com/
+endef
+
+define Package/openssh-client/description
+OpenSSH client.
 endef
 
 define Package/openssh-client/conffiles
@@ -45,8 +48,11 @@ define Package/openssh-client-utils
   CATEGORY:=Network
   DEPENDS:=openssh-client
   TITLE:=OpenSSH client utilities
-  DESCRIPTION:=OpenSSH client utilities.
   URL:=http://www.openssh.com/
+endef
+
+define Package/openssh-client-utils/description
+OpenSSH client utilities.
 endef
 
 define Package/openssh-server
@@ -54,8 +60,11 @@ define Package/openssh-server
   CATEGORY:=Network
   DEPENDS:=+libopenssl +zlib
   TITLE:=OpenSSH server
-  DESCRIPTION:=OpenSSH server.
   URL:=http://www.openssh.com/
+endef
+
+define Package/openssh-server/description
+OpenSSH server.
 endef
 
 define Package/openssh-server/conffiles
@@ -67,8 +76,11 @@ define Package/openssh-sftp-client
   CATEGORY:=Network
   DEPENDS:=+libopenssl +zlib
   TITLE:=OpenSSH SFTP client
-  DESCRIPTION:=OpenSSH SFTP client.
   URL:=http://www.openssh.com/
+endef
+
+define Package/openssh-sftp-client/description
+OpenSSH SFTP client.
 endef
 
 define Package/openssh-sftp-server
@@ -76,8 +88,11 @@ define Package/openssh-sftp-server
   CATEGORY:=Network
   DEPENDS:=
   TITLE:=OpenSSH SFTP server
-  DESCRIPTION:=OpenSSH SFTP server.
   URL:=http://www.openssh.com/
+endef
+
+define Package/openssh-sftp-server/description
+OpenSSH SFTP server.
 endef
 
 define Build/Configure

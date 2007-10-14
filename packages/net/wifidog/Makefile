@@ -28,12 +28,14 @@ define Package/wifidog
   CATEGORY:=Network
   DEPENDS:=+iptables-mod-extra +iptables-mod-ipopt +iptables-mod-nat +libgcc +libpthread
   TITLE:=A wireless captive portal solution
-  DESCRIPTION:=\
-	The Wifidog project is a complete and embeddable captive \\\
-	portal solution for wireless community groups or individuals \\\
-	who wish to open a free Hotspot while still preventing abuse \\\
-	of their Internet connection.
   URL:=http://www.wifidog.org
+endef
+
+define Package/wifidog/description
+	The Wifidog project is a complete and embeddable captive 
+	portal solution for wireless community groups or individuals 
+	who wish to open a free Hotspot while still preventing abuse 
+	of their Internet connection.
 endef
 
 define Package/wifidog/conffiles

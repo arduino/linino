@@ -26,10 +26,12 @@ define Package/macchanger
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=utility for viewing/manipulating the MAC address
-  DESCRIPTION:=\
-	This is a GNU/Linux utility for viewing/manipulating the MAC address \\\
-	of network interfaces.
   URL:=http://www.alobbs.com/macchanger
+endef
+
+define Package/macchanger/description
+	This is a GNU/Linux utility for viewing/manipulating the MAC address 
+	of network interfaces.
 endef
 
 define Build/Compile	

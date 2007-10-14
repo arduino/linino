@@ -27,14 +27,16 @@ define Package/slurm
   CATEGORY:=Network
   DEPENDS:=+libncurses
   TITLE:=A realtime network interface monitor
-  DESCRIPTION:=\
-	A realtime network interface monitor with the following features: \\\
-	- realtime traffic statistics divided into incoming and outgoing ;\\\
-	- optional combined view ;\\\
-	- can monitor any kind of network interface ;\\\
-	- shows detailed statistics about the interface ;\\\
-	- it's themeable.
   URL:=http://www.wormulon.net/projects/slurm
+endef
+
+define Package/slurm/description
+	A realtime network interface monitor with the following features: 
+	- realtime traffic statistics divided into incoming and outgoing ;
+	- optional combined view ;
+	- can monitor any kind of network interface ;
+	- shows detailed statistics about the interface ;
+	- it's themeable.
 endef
 
 define Build/Configure	

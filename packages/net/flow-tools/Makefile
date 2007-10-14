@@ -27,10 +27,12 @@ define Package/flow-tools
   SECTION:=net
   CATEGORY:=Network
   TITLE:=flow-tools
-  DESCRIPTION:=\
-	Flow-tools is a software package for collecting and processing \\\
-	NetFlow data from Cisco and Juniper routers.
   URL:=http://www.splintered.net/sw/flow-tools/
+endef
+
+define Package/flow-tools/description
+	Flow-tools is a software package for collecting and processing 
+	NetFlow data from Cisco and Juniper routers.
 endef
 
 define Build/Compile

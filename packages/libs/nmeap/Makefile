@@ -22,11 +22,14 @@ define Package/libnmeap
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=extensible NMEA-0183 parser written in standard C
-  DESCRIPTION:=The NMEAP parser is intended for use in applications that need to input NMEA-0183 \\\
-	data from a GPS (typically over a serial port). NMEAP is a linkable library written in portable \\\
-	standard C and is suitable for both desktop and embedded applications. \\\
-	It is licensed under the BSD open source license.
   URL:=http://www.dmh2000.com/nmea/nmeap.shtml
+endef
+
+define Package/libnmeap/description
+The NMEAP parser is intended for use in applications that need to input NMEA-0183 
+	data from a GPS (typically over a serial port). NMEAP is a linkable library written in portable 
+	standard C and is suitable for both desktop and embedded applications. 
+	It is licensed under the BSD open source license.
 endef
 
 define Build/InstallDev

@@ -27,9 +27,6 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/openldap/Default
   TITLE:=LDAP implementation
-  DESCRIPTION:=\
-    OpenLDAP Software is an open source implementation of the \\\
-    Lightweight Directory Access Protocol (LDAP).
   URL:=http://www.openldap.org/
 endef
 
@@ -39,9 +36,13 @@ define Package/libopenldap
   CATEGORY:=Libraries
   DEPENDS:=+libopenssl +libsasl2
   TITLE+= (libraries)
-  DESCRIPTION+=\\\
-    \\\
-    This package contains the shared LDAP client libraries, needed by other programs.
+endef
+
+define Package/libopenldap/description
+=
+	OpenLDAP Software is an open source implementation of the 
+	Lightweight Directory Access Protocol (LDAP).	
+	This package contains the shared LDAP client libraries, needed by other programs.
 endef
 
 define Package/libopenldap/conffiles
@@ -54,9 +55,13 @@ define Package/openldap-utils
   CATEGORY:=Utilities
   DEPENDS:=+libopenldap
   TITLE+= (utilities)
-  DESCRIPTION+=\\\
-    \\\
-    This package contains client programs required to access LDAP servers.
+endef
+
+define Package/openldap-utils/description
+=
+	OpenLDAP Software is an open source implementation of the 
+	Lightweight Directory Access Protocol (LDAP).	
+	This package contains client programs required to access LDAP servers.
 endef
 
 CONFIGURE_ARGS += \

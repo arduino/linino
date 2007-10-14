@@ -20,9 +20,11 @@ define Package/ttcp
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A TCP connection performance tester
-  DESCRIPTION:=\
-	A small utility to test TCP connection performance.
   URL:=https://dev.openwrt.org/browser/packages/net/ttcp/
+endef
+
+define Package/ttcp/description
+	A small utility to test TCP connection performance.
 endef
 
 define Build/Compile		

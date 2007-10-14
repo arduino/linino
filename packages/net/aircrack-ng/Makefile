@@ -27,8 +27,11 @@ define Package/aircrack-ng
   CATEGORY:=Network
   DEPENDS:=+libpthread
   TITLE:=next generation of aircrack with new features
-  DESCRIPTION:=Aircrack-ng is the next generation of aircrack with new features
   URL:=http://www.aircrack-ng.org/
+endef
+
+define Package/aircrack-ng/description
+Aircrack-ng is the next generation of aircrack with new features
 endef
 
 define Build/Configure

@@ -25,16 +25,18 @@ define Package/udp-broadcast-relay
   SECTION:=net
   CATEGORY:=Network
   TITLE:=listens for packets on a specified UDP broadcast port
-  DESCRIPTION:=\
-	This program listens for packets on a specified UDP broadcast port.\\\
-	When a packet is received, it sends that packet to all specified interfaces but \\\
-	the one it came from as though it originated from the original sender.\\\
-	The primary purpose of this is to allow games on machines on separated \\\
-	local networks (Ethernet, WLAN) that use udp broadcasts to find each other to do so.\\\
-	It also works on ppp links, so you can log in from windows boxes (e.g. using pptp) \\\
-	and play LAN-based games together. Currently, you have to care about upcoming or \\\
-	downgoing interfaces yourself.
   URL:=http://www.joachim-breitner.de/udp-broadcast-relay/
+endef
+
+define Package/udp-broadcast-relay/description
+	This program listens for packets on a specified UDP broadcast port.
+	When a packet is received, it sends that packet to all specified interfaces but 
+	the one it came from as though it originated from the original sender.
+	The primary purpose of this is to allow games on machines on separated 
+	local networks (Ethernet, WLAN) that use udp broadcasts to find each other to do so.
+	It also works on ppp links, so you can log in from windows boxes (e.g. using pptp) 
+	and play LAN-based games together. Currently, you have to care about upcoming or 
+	downgoing interfaces yourself.
 endef
 
 define Build/Compile	

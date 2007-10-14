@@ -25,16 +25,18 @@ define Package/pwgen
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Automatic Password generator
-  DESCRIPTION:=\
-	pwgen generates random, meaningless but pronounceable passwords. \\\
-	These passwords contain either only lowercase letters, or upper \\\
-	and lower case mixed, or digits thrown in. \\\
-	Uppercase letters and digits are placed in a way that eases \\\
-	remembering their position when memorizing only the word. \\\
-	\\\
-	E.g. to generate a WPA preshared-key do: \\\
-	pwgen -c -n -s 63 1
   URL:=http://sourceforge.net/projects/pwgen/
+endef
+
+define Package/pwgen/description
+	pwgen generates random, meaningless but pronounceable passwords. 
+	These passwords contain either only lowercase letters, or upper 
+	and lower case mixed, or digits thrown in. 
+	Uppercase letters and digits are placed in a way that eases 
+	remembering their position when memorizing only the word. 
+	
+	E.g. to generate a WPA preshared-key do: 
+	pwgen -c -n -s 63 1
 endef
 
 # uses GNU configure

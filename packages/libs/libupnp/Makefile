@@ -27,11 +27,13 @@ define Package/libupnp
   CATEGORY:=Libraries
   DEPENDS:=+libpthread
   TITLE:=UPnP SDK library
-  DESCRIPTION:=\
-	The Universal Plug and Play (UPnP) SDK for Linux provides support \\\
-	for building UPnP-compliant control points, devices, and bridges \\\
-	on Linux.
   URL:=http://upnp.sourceforge.net/
+endef
+
+define Package/libupnp/description
+	The Universal Plug and Play (UPnP) SDK for Linux provides support 
+	for building UPnP-compliant control points, devices, and bridges 
+	on Linux.
 endef
 
 define Build/Configure

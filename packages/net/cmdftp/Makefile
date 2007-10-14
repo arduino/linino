@@ -25,18 +25,20 @@ define Package/cmdftp
   SECTION:=net
   CATEGORY:=Network
   TITLE:=cmdftp is a tiny command line FTP client for Unix systems
-  DESCRIPTION:=\
-	Features include passive mode for all data transfers, shell \\\
-	like transparent syntax for local and remote modes, multiple \\\
-	and recursive file transfers using wildcards, recursive copy and \\\
-	move commands, remote and local text file viewing and editing, \\\
-	network errors detection and resuming of currently executing \\\
-	command, partial download resuming (if server accepts REST \\\
-	command), tab completion for both local and remote names, \\\
-	autologin using classic ~/.netrc approach, large file support. \\\
-	\\\
-	cmdftp is aimed at being small and simple. 
   URL:=http://cmdftp.sourceforge.net/
+endef
+
+define Package/cmdftp/description
+	Features include passive mode for all data transfers, shell 
+	like transparent syntax for local and remote modes, multiple 
+	and recursive file transfers using wildcards, recursive copy and 
+	move commands, remote and local text file viewing and editing, 
+	network errors detection and resuming of currently executing 
+	command, partial download resuming (if server accepts REST 
+	command), tab completion for both local and remote names, 
+	autologin using classic ~/.netrc approach, large file support. 
+	
+	cmdftp is aimed at being small and simple.
 endef
 
 define Package/cmdftp/install	

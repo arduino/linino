@@ -26,12 +26,14 @@ define Package/ser2net
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Serial port TCP/IP redirector
-  DESCRIPTION:=\
-  	This is ser2net, a program for allowing network connections to serial \\\
-	ports. See the man page for information about using the program. Note \\\
-	that ser2net supports RFC 2217 (remote control of serial port parameters), \\\
-	but you must have a complient client.
   URL:=http://sourceforge.net/projects/ser2net/
+endef
+
+define Package/ser2net/description
+	This is ser2net, a program for allowing network connections to serial 
+	ports. See the man page for information about using the program. Note 
+	that ser2net supports RFC 2217 (remote control of serial port parameters), 
+	but you must have a complient client.
 endef
 
 define Package/ser2net/conffiles

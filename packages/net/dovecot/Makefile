@@ -27,9 +27,11 @@ define Package/dovecot
   CATEGORY:=Network
   DEPENDS:=+libopenssl
   TITLE:=An IMAP and POP3 daemon
-  DESCRIPTION:=\
-	Dovecot is a program which provides POP3 and IMAP services.
   URL:=http://www.dovecot.org/
+endef
+
+define Package/dovecot/description
+	Dovecot is a program which provides POP3 and IMAP services.
 endef
 
 define Build/Configure

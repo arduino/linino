@@ -26,10 +26,12 @@ define Package/fetchmail
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Remote mail retriever
-  DESCRIPTION:=\
-	Retrieves remote mail via POP/IMAP.\\\
-	Very useful in conjunction with mutt.
   URL:=http://www.catb.org/~esr/fetchmail/
+endef
+
+define Package/fetchmail/description
+	Retrieves remote mail via POP/IMAP.
+	Very useful in conjunction with mutt.
 endef
 
 define Build/Configure

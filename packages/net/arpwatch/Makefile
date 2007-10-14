@@ -26,9 +26,11 @@ define Package/arpwatch
   CATEGORY:=Network
   DEPENDS:=+libpcap
   TITLE:=Ethernet station activity monitor
-  DESCRIPTION:=\
-	Ethernet monitor program for keeping track of ethernet/ip address pairings
   URL:=http://nbd.vd-s.ath.cx/openwrt
+endef
+
+define Package/arpwatch/description
+	Ethernet monitor program for keeping track of ethernet/ip address pairings
 endef
 
 define Package/arpwatch/conffiles

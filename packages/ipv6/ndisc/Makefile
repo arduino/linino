@@ -26,27 +26,39 @@ define Package/ndisc
   CATEGORY:=IPv6
   SUBMENU:=IPv6 discovery tools
   TITLE:=IPv6 discovery tools
-  DESCRIPTION:=IPv6 discovery tools
   URL:=http://people.via.ecp.fr/~rem/ndisc6/
+endef
+
+define Package/ndisc/description
+IPv6 discovery tools
 endef
 
 define Package/ndisc6
   $(call Package/ndisc)
   TITLE:=An ICMPv6 neighbour discovery tool
-  DESCRIPTION:=An ICMPv6 neighbour discovery tools
+endef
+
+define Package/ndisc6/description
+An ICMPv6 neighbour discovery tools
 endef
 
 define Package/rdisc6
   $(call Package/ndisc)
   TITLE:=An ICMPv6 router discovery tool
-  DESCRIPTION:=An ICMPv6 router discovery tool
+endef
+
+define Package/rdisc6/description
+An ICMPv6 router discovery tool
 endef
 
 define Package/tcptraceroute6
   $(call Package/ndisc)
   TITLE:=A TCP/IPv6-based traceroute implementation
-  DESCRIPTION:=A TCP/IPv6-based traceroute implementation
 endef 
+
+define Package/tcptraceroute6/description
+A TCP/IPv6-based traceroute implementation
+endef
   
 
 define Build/Compile	

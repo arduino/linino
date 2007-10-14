@@ -27,14 +27,16 @@ define Package/icecast
   CATEGORY:=Network
   DEPENDS:=+libcurl +libvorbisidec +libxml2 +libxslt
   TITLE:=A streaming media server for Ogg/Vorbis and MP3 audio streams
-  DESCRIPTION:=\
-	Icecast is a streaming media server which currently supports Ogg \\\
-	Vorbis and MP3 audio streams. It can be used to create an Internet \\\
-	radio station or a privately running jukebox and many things in \\\
-	between. It is very versatile in that new formats can be added \\\
-	relatively easily and supports open standards for commuincation and \\\
-	interaction.
   URL:=http://www.icecast.org/
+endef
+
+define Package/icecast/description
+	Icecast is a streaming media server which currently supports Ogg 
+	Vorbis and MP3 audio streams. It can be used to create an Internet 
+	radio station or a privately running jukebox and many things in 
+	between. It is very versatile in that new formats can be added 
+	relatively easily and supports open standards for commuincation and 
+	interaction.
 endef
 
 

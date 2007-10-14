@@ -24,12 +24,11 @@ define Package/aoetools
   SECTION:=net
   CATEGORY:=Network
   TITLE:=ATA over Ethernet tools
-  DESCRIPTION:=\
-	The aoetools are programs for users of the ATA over Ethernet \
-	(AoE) network storage protocol, a simple protocol for using \
-	storage over an ethernet LAN. The vblade program (storage \
-	target) exports a block device using AoE.
   URL:=http://aoetools.sourceforge.net/
+endef
+
+define Package/aoetools/description
+	The aoetools are programs for users of the ATA over Ethernet \	(AoE) network storage protocol, a simple protocol for using \	storage over an ethernet LAN. The vblade program (storage \	target) exports a block device using AoE.
 endef
 
 CONFIGURE_ARGS +=  NPERSHELF=16

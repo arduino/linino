@@ -26,7 +26,10 @@ define Package/mksh
   CATEGORY:=Base system
   TITLE:=mksh
   DEPENDS:=$(DEP)
-  DESCRIPTION:=MirBSD version of ksh
+endef
+
+define Package/mksh/description
+MirBSD version of ksh
 endef
 
 define Build/Compile

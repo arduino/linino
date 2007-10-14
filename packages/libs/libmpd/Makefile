@@ -22,8 +22,11 @@ define Package/libmpd
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Libmpd is an a library to easily connect to a mpd server.
-  DESCRIPTION:=It's wraps around libmpdclient and provides a higher level api.  
   URL:=http://sarine.nl/libmpd
+endef
+
+define Package/libmpd/description
+It's wraps around libmpdclient and provides a higher level api.
 endef
 
 define Build/Compile

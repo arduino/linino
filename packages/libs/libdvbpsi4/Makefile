@@ -26,10 +26,12 @@ define Package/libdvbpsi4
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=MPEG TS and DVB PSI tables decoding and generating
-  DESCRIPTION:=\
-	libdvbpsi is a simple library designed for MPEG TS and DVB PSI tables \\\
-	decoding and generating. 
   URL:=http://www.videolan.org/developers/libdvbpsi.html
+endef
+
+define Package/libdvbpsi4/description
+	libdvbpsi is a simple library designed for MPEG TS and DVB PSI tables 
+	decoding and generating.
 endef
 
 define Build/Compile

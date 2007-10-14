@@ -31,12 +31,14 @@ define Package/logrotate
   CATEGORY:=Utilities
   DEPENDS:=+libpopt
   TITLE:=rotates, compresses, and mails system logs
-  DESCRIPTION:=\
-	logrotate is designed to ease administration of systems that generate \\\
-	large numbers of log files. It allows auto-matic rotation, compression, \\\
-	removal and mailing of log files. Each log file may be handled daily, \\\
-	weekly, monthly or when it grows too large.
   URL:=http://packages.debian.org/unstable/admin/logrotate
+endef
+
+define Package/logrotate/description
+	logrotate is designed to ease administration of systems that generate 
+	large numbers of log files. It allows auto-matic rotation, compression, 
+	removal and mailing of log files. Each log file may be handled daily, 
+	weekly, monthly or when it grows too large.
 endef
 
 define Package/logrotate/conffiles

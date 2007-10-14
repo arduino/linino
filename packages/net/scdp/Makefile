@@ -27,11 +27,13 @@ define Package/scdp
   CATEGORY:=Network
   DEPENDS:=+libnet0
   TITLE:=An utility to send CDP (Cisco Discovery Protocol) packets
-  DESCRIPTION:=\
-  	This program sends CDP (Cisco Discovery Protocol) packets out on\\\
-	selected interfaces and tells the connected switch (cisco only)\\\
-	where the host is connected.
   URL:=http://sourceforge.net/projects/scdp
+endef
+
+define Package/scdp/description
+	This program sends CDP (Cisco Discovery Protocol) packets out on
+	selected interfaces and tells the connected switch (cisco only)
+	where the host is connected.
 endef
 			
 define Build/Configure

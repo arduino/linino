@@ -25,11 +25,13 @@ define Package/net-tools
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Original net-tools
-  DESCRIPTION:=\
-	The net-tools package contains usual linux commands: \\\
-	arp, hostname, ipmaddr, iptunnel, mii-tool, nameif, netstat, plipconfig, rarp, \\\
-	route and slattach.
   URL:=http://www.tazenda.demon.co.uk/phil/net-tools/
+endef
+
+define Package/net-tools/description
+	The net-tools package contains usual linux commands: 
+	arp, hostname, ipmaddr, iptunnel, mii-tool, nameif, netstat, plipconfig, rarp, 
+	route and slattach.
 endef
 
 define Build/Compile

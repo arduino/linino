@@ -26,15 +26,18 @@ define Package/uob-nomad
   CATEGORY:=Network
   DEPENDS:=+kmod-iptunnel4 +libpthread
   TITLE:=UoB Nomad
-  DESCRIPTION:=This is an implementation of NOMADv4 (Filters for\\\
-  	Mobile IP, IETF Draft\\\
-  	draft-mobileip-nomad-filters-05.txt) for Linux,\\\
-  	based on the Sun Labs Mobile IP software. It is\\\
-  	released under the Sun Public License (SPL).\\\
-  	\\\
-  	This version (0.11) has been modified to provide\\\
-  	status information to the UoB-NOMAD-GUI (ver 0.1).
   URL:=http://www.comnets.uni-bremen.de/~mab/openwrt/source/
+endef
+
+define Package/uob-nomad/description
+This is an implementation of NOMADv4 (Filters for
+	Mobile IP, IETF Draft
+	draft-mobileip-nomad-filters-05.txt) for Linux,
+	based on the Sun Labs Mobile IP software. It is
+	released under the Sun Public License (SPL).
+	
+	This version (0.11) has been modified to provide
+	status information to the UoB-NOMAD-GUI (ver 0.1).
 endef
 
 define Build/Compile

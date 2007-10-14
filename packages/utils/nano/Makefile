@@ -27,10 +27,12 @@ define Package/nano
   CATEGORY:=Utilities
   DEPENDS:=+libncurses
   TITLE:=An enhanced clone of the Pico text editor
-  DESCRIPTION:=\
-	GNU nano (Nano's ANOther editor, or Not ANOther editor) is an enhanced clone \\\
-	of the Pico text editor..
   URL:=http://www.nano-editor.org/
+endef
+
+define Package/nano/description
+	GNU nano (Nano's ANOther editor, or Not ANOther editor) is an enhanced clone 
+	of the Pico text editor..
 endef
 
 define Build/Configure

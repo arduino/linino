@@ -25,8 +25,11 @@ define Package/wdiag
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Westell DSL Modem Diagnostics for Linux
-  DESCRIPTION:=A collection of utilities to get DSL stats from Westell DSL modems.
   URL:=http://sourceforge.net/projects/wdiag/
+endef
+
+define Package/wdiag/description
+A collection of utilities to get DSL stats from Westell DSL modems.
 endef
 
 define Build/Compile

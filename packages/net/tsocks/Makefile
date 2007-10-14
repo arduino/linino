@@ -27,8 +27,11 @@ define Package/tsocks
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Transparent SOCKS v4 proxying library
-  DESCRIPTION:=Transparent SOCKS v4 proxying library
   URL:=http://tsocks.sourceforge.net/
+endef
+
+define Package/tsocks/description
+Transparent SOCKS v4 proxying library
 endef
 
 define Build/Configure

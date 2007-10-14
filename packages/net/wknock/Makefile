@@ -26,8 +26,11 @@ define Package/wknock
   CATEGORY:=Network
   DEPENDS:=kmod-brcm-wl +libpcap
   TITLE:=A tool to hide your Access Point against opportunistic attackers.
-  DESCRIPTION:=tool to hide your Access Point against opportunistic attackers.
   URL:=http://www.rstack.org/oudot/wknock/
+endef
+
+define Package/wknock/description
+tool to hide your Access Point against opportunistic attackers.
 endef
 
 define Build/Compile	

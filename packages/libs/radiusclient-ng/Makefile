@@ -23,10 +23,6 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 include $(INCLUDE_DIR)/package.mk
 
 define Package/radiusclient-ng/Default
-  DESCRIPTION:=\
-	Purpose of this project is to build a portable, easy-to-use and standard \\\
-	compliant library suitable for developing free and commercial software \\\
-	that need support for RADIUS protocol (RFCs 2128 and 2139).
   URL:=http://developer.berlios.de/projects/radiusclient-ng/
 endef
   
@@ -35,8 +31,13 @@ define Package/libradiusclient-ng
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=RADIUS client library
-  DESCRIPTION+=\\\
-	\\\
+endef
+
+define Package/libradiusclient-ng/description
+=
+	Purpose of this project is to build a portable, easy-to-use and standard 
+	compliant library suitable for developing free and commercial software 
+	that need support for RADIUS protocol (RFCs 2128 and 2139).	
 	This package contains shared libraries, needed by other programs.
 endef
 
@@ -53,8 +54,13 @@ define Package/radiusclient-ng
   CATEGORY:=Network
   DEPENDS:=+libradiusclient-ng
   TITLE:=RADIUS client
-  DESCRIPTION+=\\\
-	\\\
+endef
+
+define Package/radiusclient-ng/description
+=
+	Purpose of this project is to build a portable, easy-to-use and standard 
+	compliant library suitable for developing free and commercial software 
+	that need support for RADIUS protocol (RFCs 2128 and 2139).	
 	This package contains a RADIUS client.
 endef
 

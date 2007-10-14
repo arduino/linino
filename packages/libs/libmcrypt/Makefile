@@ -26,10 +26,12 @@ define Package/libmcrypt
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Cryptographic library
-  DESCRIPTION:=\
-	libmcrypt is a cryptographic library that conveniently brings \\\
-	together a variety of ciphers for convenient use.
   URL:=http://mcrypt.sourceforge.net/
+endef
+
+define Package/libmcrypt/description
+	libmcrypt is a cryptographic library that conveniently brings 
+	together a variety of ciphers for convenient use.
 endef
 
 define Build/Configure

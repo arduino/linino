@@ -25,8 +25,11 @@ define Package/fortune-mod
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=display fortune cookies on demand.
-  DESCRIPTION:=Fortune mod displays fortune cookies on demand
   URL:=http://freeware.sgi.com/source/fortune-mod
+endef
+
+define Package/fortune-mod/description
+Fortune mod displays fortune cookies on demand
 endef
 
 define Build/Compile

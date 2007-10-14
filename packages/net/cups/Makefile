@@ -32,9 +32,11 @@ define Package/cups
   CATEGORY:=Network
   DEPENDS:=+zlib
   TITLE:=Common UNIX Printing System
-  DESCRIPTION:=\
-	A printer spooling system for devices with USB or LP support.
   URL:=http://www.cups.org/
+endef
+
+define Package/cups/description
+	A printer spooling system for devices with USB or LP support.
 endef
 
 define Package/cups/conffiles

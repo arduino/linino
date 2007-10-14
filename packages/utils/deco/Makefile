@@ -26,10 +26,12 @@ define Package/deco
   CATEGORY:=Utilities
   DEPENDS:=+libncurses
   TITLE:=Text-based, full featured file manager
-  DESCRIPTION:=\
-	A clone of Norton Commander for Unix. Text-based, full featured \\\
-	file manager.
   URL:=http://deco.sourceforge.net/
+endef
+
+define Package/deco/description
+	A clone of Norton Commander for Unix. Text-based, full featured 
+	file manager.
 endef
   
 define Build/Compile

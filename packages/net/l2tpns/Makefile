@@ -27,12 +27,14 @@ define Package/l2tpns
   CATEGORY:=Network
   DEPENDS:=+libcli
   TITLE:=An L2TP enhanced server
-  DESCRIPTION:=\
-	l2tpns is a layer 2 tunneling protocol network server (LNS).\\\
-	it supports up to 65535 concurrent sessions per server/cluster \\\
-	plus ISP features such as rate limiting, walled garden, usage \\\
-	accounting, and more.
   URL:=http://sourceforge.net/projects/l2tpns
+endef
+
+define Package/l2tpns/description
+	l2tpns is a layer 2 tunneling protocol network server (LNS).
+	it supports up to 65535 concurrent sessions per server/cluster 
+	plus ISP features such as rate limiting, walled garden, usage 
+	accounting, and more.
 endef
 
 define Package/l2tpns/conffiles

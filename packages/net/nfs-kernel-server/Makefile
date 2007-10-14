@@ -20,18 +20,24 @@ define Package/nfs-kernel-server
 SECTION:=net
 CATEGORY:=Network
 TITLE:=Kernel NFS server support
-DESCRIPTION:=Kernel NFS server support
 URL:=http://nfs.sourceforge.net/
 DEPENDS:=+kmod-fs-nfsd +kmod-fs-nfs +portmap
+endef
+
+define Package/nfs-kernel-server/description
+Kernel NFS server support
 endef
 
 define Package/nfs-kernel-server-utils
 SECTION:=net
 CATEGORY:=Network
 TITLE:=NFS server utils
-DESCRIPTION:=NFS server utils
 URL:=http://nfs.sourceforge.net
 DEPENDS:=nfs-kernel-server
+endef
+
+define Package/nfs-kernel-server-utils/description
+NFS server utils
 endef
 
 define Package/nfs-kernel-server/conffiles

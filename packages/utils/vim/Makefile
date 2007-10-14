@@ -25,9 +25,11 @@ define Package/vim
   CATEGORY:=Utilities
   DEPENDS:=+libncurses
   TITLE:=Vi IMproved - enhanced vi editor
-  DESCRIPTION:=\
-	Vim is an almost compatible version of the UNIX editor Vi.
   URL:=http://www.vim.org/
+endef
+
+define Package/vim/description
+	Vim is an almost compatible version of the UNIX editor Vi.
 endef
 
 CONFIGURE_ARGS += \

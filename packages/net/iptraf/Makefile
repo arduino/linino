@@ -27,12 +27,14 @@ define Package/iptraf
   CATEGORY:=Network
   DEPENDS:=+libncurses
   TITLE:=A console-based network monitoring program
-  DESCRIPTION:=\
-	IPTraf is a console-based network statistics utility for Linux. It gathers \\\
-	a variety of figures such as TCP connection packet and byte counts, \\\
-	interface statistics and activity indicators, TCP/UDP traffic breakdowns, \\\
-	and LAN station packet and byte counts.
   URL:=http://iptraf.seul.org/
+endef
+
+define Package/iptraf/description
+	IPTraf is a console-based network statistics utility for Linux. It gathers 
+	a variety of figures such as TCP connection packet and byte counts, 
+	interface statistics and activity indicators, TCP/UDP traffic breakdowns, 
+	and LAN station packet and byte counts.
 endef
 
 define Build/Compile	

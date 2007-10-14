@@ -42,15 +42,17 @@ define Package/apache-server
   $(call Package/apache/Default)
   TITLE:=The apache server & and some tools
   DEPENDS:=apache
-  DESCRIPTION:=\
-	Take care that you don't include apache at the moment into your image\\\
-	please select it only as module because busybox will override\\\
-	/usr/sbin/httpd. It'll be solved soon. If you need to include this\\\
-	package in the image anyway, remove httpd from busybox\\\
-	(Base system --> Configuration --> Networking Utilities --> httpd).\\\
-	Also you should take care for the initscripts, apache's httpd isn't\\\
-	compatible with the one from busybox, so if you want to use apache\\\
-	for running your webif, you'll need to change the parameters in the\\\
+endef
+
+define Package/apache-server/description
+	Take care that you don't include apache at the moment into your image
+	please select it only as module because busybox will override
+	/usr/sbin/httpd. It'll be solved soon. If you need to include this
+	package in the image anyway, remove httpd from busybox
+	(Base system --> Configuration --> Networking Utilities --> httpd).
+	Also you should take care for the initscripts, apache's httpd isn't
+	compatible with the one from busybox, so if you want to use apache
+	for running your webif, you'll need to change the parameters in the
 	scripts and configure the rest in /etc/httpd.conf.
 endef
 

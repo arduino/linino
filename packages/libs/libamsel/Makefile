@@ -26,9 +26,11 @@ define Package/libamsel
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=The amwall library
-  DESCRIPTION:=\
-	A library for amwall configuration files.
   URL:=http://amselinux.de/
+endef
+
+define Package/libamsel/description
+	A library for amwall configuration files.
 endef
 
 define Build/Configure

@@ -25,12 +25,12 @@ define Package/dfu-util
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=OpenMoko device flash utility
-  DESCRIPTION:=\
-	Dfu-util is a program that implements the host side of the USB DFU \
-	(Universal Serial Bus Device Firmware Upgrade) protocol. \
-	This version is specifically used to flash the FIC Neo 1973 mobile phone.
   URL:=http://wiki.openmoko.org/wiki/Dfu-util
   DEPENDS:=+libusb
+endef
+
+define Package/dfu-util/description
+	Dfu-util is a program that implements the host side of the USB DFU \	(Universal Serial Bus Device Firmware Upgrade) protocol. \	This version is specifically used to flash the FIC Neo 1973 mobile phone.
 endef
 
 # CONFIGURE_VARS += USB_CFLAGS="-I $(STAGING_DIR)/usr/include" \

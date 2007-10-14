@@ -25,10 +25,12 @@ define Package/tspc
   SECTION:=ipv6
   CATEGORY:=IPv6
   TITLE:=Client for Hexago's (Freenet6's) IPv6 service
-  DESCRIPTION:=\
-	Client to configure an IPv6 tunnel to \\\
-	Hexago's (Freenet6's) migration broker.
   URL:=http://www.hexago.com
+endef
+
+define Package/tspc/description
+	Client to configure an IPv6 tunnel to 
+	Hexago's (Freenet6's) migration broker.
 endef
 
 MAKE_FLAGS += \

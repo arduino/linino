@@ -27,10 +27,12 @@ define Package/shell-fm
   CATEGORY:=Sound
   DEPENDS:=+libmad +libopenssl +libreadline +libncurses
   TITLE:=Console Based Last.FM Radio Player
-  DESCRIPTION:=\
-	Shell.FM is a console based player for the streams provided \\\
-	by Last.FM for the Linux platform. It's lightweight and easy to use.
   URL:=http://nex.scrapping.cc
+endef
+
+define Package/shell-fm/description
+	Shell.FM is a console based player for the streams provided 
+	by Last.FM for the Linux platform. It's lightweight and easy to use.
 endef
 
 define Package/shell-fm/conffiles

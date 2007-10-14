@@ -27,9 +27,11 @@ define Package/iptables-snmp
   CATEGORY:=Network
   DEPENDS:=+snmpd
   TITLE:=An snmpd plugin to access iptables rules
-  DESCRIPTION:=\
-	This is a plugin that makes iptables rules accessable from snmpd.
   URL:=http://www.nobiscuit.com/iptables-snmp/
+endef
+
+define Package/iptables-snmp/description
+	This is a plugin that makes iptables rules accessable from snmpd.
 endef
 
 define Build/Compile	

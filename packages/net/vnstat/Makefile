@@ -25,12 +25,14 @@ define Package/vnstat
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Console-based network traffic monitor
-  DESCRIPTION:=\
-	vnStat is a network traffic monitor for Linux that keeps a log of daily \\\
-	network traffic for the selected interface(s). vnStat isn't a packet \\\
-	sniffer. The traffic information is analyzed from the /proc -filesystem, \\\
-	so vnStat can be used without root permissions.
   URL:=http://humdi.net/vnstat/
+endef
+
+define Package/vnstat/description
+	vnStat is a network traffic monitor for Linux that keeps a log of daily 
+	network traffic for the selected interface(s). vnStat isn't a packet 
+	sniffer. The traffic information is analyzed from the /proc -filesystem, 
+	so vnStat can be used without root permissions.
 endef
 
 define Build/Compile

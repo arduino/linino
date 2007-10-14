@@ -25,10 +25,12 @@ define Package/serdisplib
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=A display control library
-  DESCRIPTION:=\
-	serdisplib is a library to drive serial and parallel displays \\\
-	with built-in controllers.
   URL:=http://serdisplib.sourceforge.net/
+endef
+
+define Package/serdisplib/description
+	serdisplib is a library to drive serial and parallel displays 
+	with built-in controllers.
 endef
 
 define Build/Configure

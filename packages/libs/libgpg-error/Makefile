@@ -29,13 +29,15 @@ define Package/libgpg-error
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=GnuPG error handling helper library
-  DESCRIPTION:=\
-	An helper library for common error codes and descriptions.\\\
-	This is a library that defines common error values for all GnuPG \\\
-	components.  Among these are GPG, GPGSM, GPGME, GPG-Agent, libgcrypt, \\\
-	Libksba, DirMngr, Pinentry, SmartCard Daemon and possibly more in the \\\
-	future.
   URL:=http://www.gnupg.org/related_software/libgpg-error/
+endef
+
+define Package/libgpg-error/description
+	An helper library for common error codes and descriptions.
+	This is a library that defines common error values for all GnuPG 
+	components. Among these are GPG, GPGSM, GPGME, GPG-Agent, libgcrypt, 
+	Libksba, DirMngr, Pinentry, SmartCard Daemon and possibly more in the 
+	future.
 endef
 
 define Build/Configure

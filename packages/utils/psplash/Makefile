@@ -23,8 +23,11 @@ define Package/psplash
   CATEGORY:=Utilities
   DEPENDS:=@LINUX_2_6_X86
   TITLE:=A boot splash screen
-  DESCRIPTION:=PSplash is a userspace graphical boot splash screen.
   URL:=http://projects.o-hand.com/psplash
+endef
+
+define Package/psplash/description
+PSplash is a userspace graphical boot splash screen.
 endef
 
 

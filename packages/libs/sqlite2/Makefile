@@ -26,9 +26,6 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/sqlite2/Default
   TITLE:=SQLite (v2.x) database engine
-  DESCRIPTION:=\
-	SQLite is a small C library that implements a self-contained, embeddable, \\\
-	zero-configuration SQL database engine.
   URL:=http://www.sqlite.org/
 endef
 
@@ -37,8 +34,12 @@ define Package/libsqlite2
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= (library)
-  DESCRIPTION+=\\\
-	\\\
+endef
+
+define Package/libsqlite2/description
+=
+	SQLite is a small C library that implements a self-contained, embeddable, 
+	zero-configuration SQL database engine.	
 	This package contains the SQLite (v2.x) shared library, used by other programs.
 endef
 
@@ -48,10 +49,14 @@ define Package/sqlite2-cli
   CATEGORY:=Utilities
   DEPENDS:=+libsqlite2 +libncurses +libreadline
   TITLE+= (cli)
-  DESCRIPTION+=\\\
-	\\\
-	This package contains a terminal-based front-end to the SQLite (v2.x) library \\\
-	that can evaluate queries interactively and display the results in \\\
+endef
+
+define Package/sqlite2-cli/description
+=
+	SQLite is a small C library that implements a self-contained, embeddable, 
+	zero-configuration SQL database engine.	
+	This package contains a terminal-based front-end to the SQLite (v2.x) library 
+	that can evaluate queries interactively and display the results in 
 	multiple formats.
 endef
 

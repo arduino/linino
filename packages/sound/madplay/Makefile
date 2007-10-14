@@ -28,12 +28,14 @@ define Package/madplay
   CATEGORY:=Sound
   DEPENDS:=+libid3tag +libmad
   TITLE:=MPEG audio player in fixed point
-  DESCRIPTION:=\
-	MAD is an MPEG audio decoder. It currently only supports the MPEG 1 \\\
-	standard, but fully implements all three audio layers (Layer I, Layer II, \\\
-	and Layer III, the latter often colloquially known as MP3.).  There is also \\\
-	full support for ID3 tags.
   URL:=http://sourceforge.net/projects/mad
+endef
+
+define Package/madplay/description
+	MAD is an MPEG audio decoder. It currently only supports the MPEG 1 
+	standard, but fully implements all three audio layers (Layer I, Layer II, 
+	and Layer III, the latter often colloquially known as MP3.). There is also 
+	full support for ID3 tags.
 endef
 
 define Build/Configure

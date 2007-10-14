@@ -26,8 +26,11 @@ define Package/glib2
   CATEGORY:=Libraries
   DEPENDS:=+libiconv +libintl
   TITLE:=glib 2.0
-  DESCRIPTION:=The GLib library of C routines
   URL:=http://www.gtk.org/
+endef
+
+define Package/glib2/description
+The GLib library of C routines
 endef
 
 

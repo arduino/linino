@@ -26,10 +26,12 @@ define Package/libsndfile
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Library for reading/writing audio files
-  DESCRIPTION:=\
-  	libsndfile is a library of C routines for reading and writing files \\\
-	containing sampled audio data.
   URL:=http://www.mega-nerd.com/libsndfile/
+endef
+
+define Package/libsndfile/description
+	libsndfile is a library of C routines for reading and writing files 
+	containing sampled audio data.
 endef
 
 CONFIGURE_ARGS += \

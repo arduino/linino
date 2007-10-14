@@ -26,9 +26,11 @@ define Package/bing
   SECTION:=net
   CATEGORY:=Network
   TITLE:=bing bandwidth measuring utility
-  DESCRIPTION:=\
-  	bing evaluates the raw bandwidth of a link (PSTN, xDSL, Cable ...)
   URL:=http://fgouget.free.fr/bing/
+endef
+
+define Package/bing/description
+	bing evaluates the raw bandwidth of a link (PSTN, xDSL, Cable ...)
 endef
 
 define Build/Compile

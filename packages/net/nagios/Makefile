@@ -26,9 +26,11 @@ define Package/nagios
   CATEGORY:=Network
   DEPENDS:=+libpthread +microperl
   TITLE:=service and network monitoring program
-  DESCRIPTION:=\
-	service and network monitoring program
   URL:=http://www.nagios.org/
+endef
+
+define Package/nagios/description
+	service and network monitoring program
 endef
 
 define Package/send-nagios/conffiles

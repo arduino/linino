@@ -27,10 +27,12 @@ define Package/matrixtunnel
   CATEGORY:=Network
   DEPENDS:=+libmatrixssl
   TITLE:=SSL tunnel based on matrixssl
-  DESCRIPTION:=\
-	matrixtunnel is a stripped down version of stunnel \\\
-	based on matrixssl library.
   URL:=http://znerol.ch/svn/matrixtunnel/trunk/
+endef
+
+define Package/matrixtunnel/description
+	matrixtunnel is a stripped down version of stunnel 
+	based on matrixssl library.
 endef
 
 define Build/Configure

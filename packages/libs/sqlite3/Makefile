@@ -26,9 +26,6 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/sqlite3/Default
   TITLE:=SQLite (v3.x) database engine
-  DESCRIPTION:=\
-	SQLite is a small C library that implements a self-contained, embeddable, \\\
-	zero-configuration SQL database engine.
   URL:=http://www.sqlite.org/
 endef
 
@@ -37,8 +34,12 @@ define Package/libsqlite3
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= (library)
-  DESCRIPTION+=\\\
-	This package contains the SQLite (v3.x) shared library, used by other programs.
+endef
+
+define Package/libsqlite3/description
+=
+	SQLite is a small C library that implements a self-contained, embeddable, 
+	zero-configuration SQL database engine.	This package contains the SQLite (v3.x) shared library, used by other programs.
 endef
 
 define Package/sqlite3-cli
@@ -47,10 +48,14 @@ define Package/sqlite3-cli
   CATEGORY:=Utilities
   DEPENDS:=+libsqlite3 +libncurses +libreadline
   TITLE+= (cli)
-  DESCRIPTION+=\\\
-	\\\
-	This package contains a terminal-based front-end to the SQLite (v3.x) library \\\
-	that can evaluate queries interactively and display the results in \\\
+endef
+
+define Package/sqlite3-cli/description
+=
+	SQLite is a small C library that implements a self-contained, embeddable, 
+	zero-configuration SQL database engine.	
+	This package contains a terminal-based front-end to the SQLite (v3.x) library 
+	that can evaluate queries interactively and display the results in 
 	multiple formats.
 endef
 

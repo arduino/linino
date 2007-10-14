@@ -88,7 +88,6 @@ endef
 define PyPackage/zope-interface
 $(call PyPackage/twisted/default)
   TITLE:=Zope interface
-  DESCRIPTION:=zope-interface
 endef
 
 TWISTED_SUPPROJECTS:=core

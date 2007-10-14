@@ -25,11 +25,13 @@ define Package/hdparm
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Hard disk drive configuration utilitity
-  DESCRIPTION:=\
-	Tune hard disk parameters for high performance.\\\
-	Get/set hard disk parameters for Linux IDE drives.\\\
-	Primary use is for enabling irq-unmasking and IDE multiplemode.
   URL:=http://sourceforge.net/projects/hdparm/
+endef
+
+define Package/hdparm/description
+	Tune hard disk parameters for high performance.
+	Get/set hard disk parameters for Linux IDE drives.
+	Primary use is for enabling irq-unmasking and IDE multiplemode.
 endef
 
 define Build/Configure

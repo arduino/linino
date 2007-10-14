@@ -29,13 +29,15 @@ define Package/linuxigd
   CATEGORY:=Network
   TITLE:=UPnP daemon
   DEPENDS:=+libupnp +libpthread
-  DESCRIPTION:=\
-	It implements the UPnP Internet Gateway Device specification (IGD) \\\
-	and allows UPnP aware clients, such as MSN Messenger, Azureus or \\\
-	Miranda to work properly from behind a NAT firewall. \\\
-	\\\
-	Please edit /etc/upnpd.conf before using upnpd!
   URL:=http://linux-igd.sourceforge.net/
+endef
+
+define Package/linuxigd/description
+	It implements the UPnP Internet Gateway Device specification (IGD) 
+	and allows UPnP aware clients, such as MSN Messenger, Azureus or 
+	Miranda to work properly from behind a NAT firewall. 
+	
+	Please edit /etc/upnpd.conf before using upnpd!
 endef
 
 define Build/Compile

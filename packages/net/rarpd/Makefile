@@ -27,13 +27,15 @@ define Package/rarpd
   CATEGORY:=Network
   DEPENDS:=+libnet0
   TITLE:=Reverse ARP Daemon
-  DESCRIPTION:=\
-	Rarpd  is  a  daemon  which responds to RARP requests.\\\
-	RARP is used by some machines at boot time to discover their\\\
-	IP address.  They  provide their  Ethernet address and rarpd\\\
-	responds with their IP address if it finds it in the ethers\\\
-	database.
   URL:=ftp://ftp.dementia.org/pub/net-tools/
+endef
+
+define Package/rarpd/description
+	Rarpd is a daemon which responds to RARP requests.
+	RARP is used by some machines at boot time to discover their
+	IP address. They provide their Ethernet address and rarpd
+	responds with their IP address if it finds it in the ethers
+	database.
 endef
 
 define Build/Configure

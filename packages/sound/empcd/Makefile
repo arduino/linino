@@ -26,11 +26,13 @@ define Package/empcd
   SECTION:=sound
   CATEGORY:=Sound
   TITLE:=EMPCd can control the MPD
-  DESCRIPTION:=\
-  	This is EMPCd which can use /dev/input/event0 or other event devices\\\
-	to control MPD (Music Player Daemon), directly using libmpdclient\\\
-	and other programs, currently using system(2).
   URL:=http://unfix.org/projects/empcd
+endef
+
+define Package/empcd/description
+	This is EMPCd which can use /dev/input/event0 or other event devices
+	to control MPD (Music Player Daemon), directly using libmpdclient
+	and other programs, currently using system(2).
 endef
 
 define Package/empcd/conffiles

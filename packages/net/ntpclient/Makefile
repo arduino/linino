@@ -25,9 +25,11 @@ define Package/ntpclient
   SECTION:=net
   CATEGORY:=Network
   TITLE:=NTP (Network Time Protocol) client
-  DESCRIPTION:=\
-	NTP client for setting system time from NTP servers.
   URL:=http://doolittle.icarus.com/ntpclient/
+endef
+
+define Package/ntpclient/description
+	NTP client for setting system time from NTP servers.
 endef
 
 MAKE_FLAGS += \

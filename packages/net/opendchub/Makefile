@@ -28,10 +28,12 @@ define Package/opendchub
   CATEGORY:=Network
   DEPENDS:=+libopenssl +libpthread
   TITLE:=software for the Direct Connect network
-  DESCRIPTION:=\
-	Open DC hub is a Unix/Linux version of the hub software\\\
-	for the Direct Connect network
   URL:=http://opendchub.sourceforge.net
+endef
+
+define Package/opendchub/description
+	Open DC hub is a Unix/Linux version of the hub software
+	for the Direct Connect network
 endef
 
 define Build/Configure

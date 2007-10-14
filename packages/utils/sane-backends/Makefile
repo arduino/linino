@@ -24,8 +24,6 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/sane-backends/Default
   TITLE:=Scanner Access Now Easy
-  DESCRIPTION:=\
-	SANE (Scanner Access Now Easy) is a universal scanner interface.
   URL:=http://www.sane-project.org/
 endef
 
@@ -37,11 +35,19 @@ define Package/sane-backends
   TITLE+= (backends)
 endef
 
+define Package/sane-backends/description
+	SANE (Scanner Access Now Easy) is a universal scanner interface.
+endef
+
 define Package/sane-libs
   $(call Package/sane-backends/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= (libraries)
+endef
+
+define Package/sane-libs/description
+	SANE (Scanner Access Now Easy) is a universal scanner interface.
 endef
  
 define Build/Configure

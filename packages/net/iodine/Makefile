@@ -28,20 +28,24 @@ define Package/iodine/Default
   DEPENDS:=+zlib
   TITLE:=IP over DNS tunneling
   URL:=http://code.kryo.se/iodine/
-  DESCRIPTION:=\
-	iodine
 endef
 
 define Package/iodine
   $(call Package/iodine/Default)
   TITLE+= client version
-  DESCRIPTION+= client version
+endef
+
+define Package/iodine/description
+ iodine client version
 endef
 
 define Package/iodined
   $(call Package/iodine/Default)
   TITLE+= server version
-  DESCRIPTION+= server version
+endef
+
+define Package/iodined/description
+ iodine server version
 endef
 
 define Build/Configure

@@ -29,9 +29,11 @@ define Package/openntpd
   SECTION:=net
   CATEGORY:=Network
   TITLE:=NTP server
-  DESCRIPTION:=\
-	A free and easy to use NTP (Network Time Protocol) implementation.
   URL:=http://www.openntpd.org/
+endef
+
+define Package/openntpd/description
+	A free and easy to use NTP (Network Time Protocol) implementation.
 endef
 
 define Package/openntpd/conffiles

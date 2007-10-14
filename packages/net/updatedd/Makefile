@@ -23,10 +23,14 @@ define Package/updatedd
   CATEGORY:=Network
   MENU:=1
   TITLE:=A tool to update dynamic dns services
-  DESCRIPTION:=Updatedd is a small tool that will update one of many dynamic \\\
-	dns services on boot. \\\
-	Please look at the /etc/init.d/ddns script for more info. \\\
   URL:=http://www.philipp-benner.de/updatedd/
+endef
+
+define Package/updatedd/description
+Updatedd is a small tool that will update one of many dynamic 
+	dns services on boot. 
+	Please look at the /etc/init.d/ddns script for more info. 
+
 endef
 
 define Package/updatedd-mod-changeip

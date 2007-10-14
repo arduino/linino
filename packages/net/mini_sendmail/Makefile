@@ -24,12 +24,14 @@ define Package/mini-sendmail
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A small sendmail-compatible mail forwarder
-  DESCRIPTION:=\
-	mini_sendmail reads its standard input up to an end-of-file and sends a \\\
-	copy of the message found there to all of the addresses listed.\\\
-	The message is sent by connecting to a local SMTP server. This means \\\
-	mini_sendmail can be used to send email from inside a chroot(2) area.
   URL:=http://www.acme.com/software/mini_sendmail/
+endef
+
+define Package/mini-sendmail/description
+	mini_sendmail reads its standard input up to an end-of-file and sends a 
+	copy of the message found there to all of the addresses listed.
+	The message is sent by connecting to a local SMTP server. This means 
+	mini_sendmail can be used to send email from inside a chroot(2) area.
 endef
 
 MAKE_FLAGS += \

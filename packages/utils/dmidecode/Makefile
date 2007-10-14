@@ -26,11 +26,13 @@ define Package/dmidecode
   CATEGORY:=Utilities
   DEPENDS:=@LINUX_2_6_X86
   TITLE:=Displays BIOS informations.
-  DESCRIPTION:=\
-	Dmidecode reports information about your system's hardware\\\
-	as described in your system BIOS according to the SMBIOS/DMI\\\
-	standard.
   URL:=http://www.nongnu.org/dmidecode/
+endef
+
+define Package/dmidecode/description
+	Dmidecode reports information about your system's hardware
+	as described in your system BIOS according to the SMBIOS/DMI
+	standard.
 endef
 
 define Package/dmidecode/install

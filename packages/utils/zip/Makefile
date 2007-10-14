@@ -27,12 +27,14 @@ define Package/zip
   CATEGORY:=Utilities
   DEPENDS:=
   TITLE:=Archiver for .zip files
-  DESCRIPTION:=\
-	This is InfoZIP's zip program. It produces files that are fully \\\
-	compatible with the popular PKZIP program; however, the command line \\\
-	options are not identical. In other words, the end result is the same, \\\
-	but the methods differ.
   URL:=http://infozip.sourceforge.net/Zip.html
+endef
+
+define Package/zip/description
+	This is InfoZIP's zip program. It produces files that are fully 
+	compatible with the popular PKZIP program; however, the command line 
+	options are not identical. In other words, the end result is the same, 
+	but the methods differ.
 endef
 
 define Build/Configure

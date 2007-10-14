@@ -26,8 +26,6 @@ define Package/howl/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Zeroconf networking implementation
-  DESCRIPTION:=\
-	Howl is a cross-platform implementation of Zeroconf networking.
   URL:=http://www.porchdogsoft.com/products/howl/
 endef
 
@@ -36,8 +34,11 @@ define Package/libhowl
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= (library)
-  DESCRIPTION+=\\\
-	\\\
+endef
+
+define Package/libhowl/description
+
+	Howl is a cross-platform implementation of Zeroconf networking.	
 	This package contains the Howl shared libraries, used by other programs.
 endef
 
@@ -45,8 +46,11 @@ define Package/howl-autoipd
   $(call Package/howl/Default)
   DEPENDS:=+libhowl
   TITLE:=An IPv4 Link-Local address self-assigner daemon
-  DESCRIPTION+=\\\
-	\\\
+endef
+
+define Package/howl-autoipd/description
+
+	Howl is a cross-platform implementation of Zeroconf networking.	
 	This package contains an IPv4 Link-Local address self-assigner daemon.
 endef
 
@@ -54,8 +58,11 @@ define Package/howl-mdnsresponder
   $(call Package/howl/Default)
   DEPENDS:=+libhowl
   TITLE:=An mDNS (Multicast DNS) service responder daemon
-  DESCRIPTION+=\\\
-	\\\
+endef
+
+define Package/howl-mdnsresponder/description
+
+	Howl is a cross-platform implementation of Zeroconf networking.	
 	This package contains an mDNS (Multicast DNS) service responder daemon.
 endef
 
@@ -67,8 +74,11 @@ define Package/howl-nifd
   $(call Package/howl/Default)
   DEPENDS:=+libhowl
   TITLE:=A network interface monitor daemon
-  DESCRIPTION+=\\\
-	\\\
+endef
+
+define Package/howl-nifd/description
+
+	
 	This package contains a network interface monitor daemon.
 endef
 
@@ -76,8 +86,11 @@ define Package/howl-utils
   $(call Package/howl/Default)
   DEPENDS:=+libhowl
   TITLE+= (utilities)
-  DESCRIPTION+=\\\
-	\\\
+endef
+
+define Package/howl-utils/description
+
+	
 	This package contains mDNS (Multicast DNS) client utilities.
 endef
 

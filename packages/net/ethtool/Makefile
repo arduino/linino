@@ -26,9 +26,11 @@ define Package/ethtool
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Display or change ethernet card settings
-  DESCRIPTION:=\
-  	ethtool is used for querying settings of an ethernet device and changing them.
   URL:=http://sourceforge.net/projects/gkernel/
+endef
+
+define Package/ethtool/description
+	ethtool is used for querying settings of an ethernet device and changing them.
 endef
 
 # uses GNU configure

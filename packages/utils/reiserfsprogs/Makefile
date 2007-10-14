@@ -26,10 +26,12 @@ define Package/reiserfsprogs
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=ReiserFS filesystems utilities
-  DESCRIPTION:=\
-	This package contains utilities to create, check, resize, and debug \\\
-	ReiserFS filesystems.
   URL:=http://www.namesys.com/
+endef
+
+define Package/reiserfsprogs/description
+	This package contains utilities to create, check, resize, and debug 
+	ReiserFS filesystems.
 endef
 
 #use Build/Configure/Default

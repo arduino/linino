@@ -27,12 +27,14 @@ define Package/l2tpd
   SECTION:=net
   CATEGORY:=Network
   TITLE:=An L2TP (Layer 2 Tunneling Protocol) daemon
-  DESCRIPTION:=\
-	l2tpd is the open source implementation of the L2TP tunneling \\\
-	protocol (RFC2661). It does implement both LAC and LNS role \\\
-	in a L2TP networking architecture. The main goal of this protocol is \\\
-	to tunnel PPP frame trough an ip network.
   URL:=http://l2tpd.sourceforge.net/
+endef
+
+define Package/l2tpd/description
+	l2tpd is the open source implementation of the L2TP tunneling 
+	protocol (RFC2661). It does implement both LAC and LNS role 
+	in a L2TP networking architecture. The main goal of this protocol is 
+	to tunnel PPP frame trough an ip network.
 endef
 
 define Package/l2tpd/conffiles

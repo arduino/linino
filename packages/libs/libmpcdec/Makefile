@@ -26,9 +26,11 @@ define Package/libmpcdec
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Musepack decoder library
-  DESCRIPTION:=\
-  	Musepack decoder library
   URL:=http://www.musepack.net
+endef
+
+define Package/libmpcdec/description
+	Musepack decoder library
 endef
 
 define Build/Configure

@@ -28,9 +28,11 @@ define Package/libxslt
   CATEGORY:=Libraries
   DEPENDS:=+libxml2
   TITLE:=Gnome XSLT library
-  DESCRIPTION:=\
-  	A library for XML transformation using XSLT.
   URL:=http://xmlsoft.org/XSLT/
+endef
+
+define Package/libxslt/description
+	A library for XML transformation using XSLT.
 endef
 
 define Package/xsltproc
@@ -38,9 +40,11 @@ define Package/xsltproc
   CATEGORY:=Utilities
   DEPENDS:=+libxml2 +libxslt
   TITLE:=Gnome XSLT xsltproc Utility
-  DESCRIPTION:=\
-       XSLT XML transformation utility
   URL:=http://xmlsoft.org/XSLT/
+endef
+
+define Package/xsltproc/description
+	XSLT XML transformation utility
 endef
 
 define Build/Configure

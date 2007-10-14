@@ -29,13 +29,15 @@ define Package/sox
   CATEGORY:=Sound
   DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec
   TITLE:=Sox is a general purpose sound converter/player/recorder
-  DESCRIPTION:=\
-	SoX is a command line utility that can convert various formats\\\
-	of computer audio files in to other formats. It can also apply\\\
-	various effects to these sound files during the conversion.\\\
-	As an added bonus, SoX can play and record audio files on\\\
-	several unix-style platforms.
   URL:=http://sox.sourceforge.net/
+endef
+
+define Package/sox/description
+	SoX is a command line utility that can convert various formats
+	of computer audio files in to other formats. It can also apply
+	various effects to these sound files during the conversion.
+	As an added bonus, SoX can play and record audio files on
+	several unix-style platforms.
 endef
 
 define Build/Configure

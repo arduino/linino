@@ -27,13 +27,15 @@ define Package/psybnc
   CATEGORY:=Network
   DEPENDS:=
   TITLE:=An IRC-Bouncer with many features
-  DESCRIPTION:=\
-	psyBNC is an easy-to-use, multi-user, permanent \\\
-	IRC-Bouncer with many features. Some of its features \\\
-	vhost- and relay support to connected bouncers and an \\\
-	extensive online help system. Many other helpful \\\
-	functions are included.
   URL:=http://www.psybnc.info/
+endef
+
+define Package/psybnc/description
+	psyBNC is an easy-to-use, multi-user, permanent 
+	IRC-Bouncer with many features. Some of its features 
+	vhost- and relay support to connected bouncers and an 
+	extensive online help system. Many other helpful 
+	functions are included.
 endef
 
 define Build/Compile	

@@ -28,9 +28,11 @@ define Package/tmsnc
   CATEGORY:=Network
   DEPENDS:=+libncurses +libopenssl +libpthread
   TITLE:=text-based MSN client
-  DESCRIPTION:=\
-	TMSNC is a textbased (console) MSN client written in C.
   URL:=http://tmsnc.sourceforge.net
+endef
+
+define Package/tmsnc/description
+	TMSNC is a textbased (console) MSN client written in C.
 endef
 
 define Build/Configure

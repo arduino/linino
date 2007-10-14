@@ -22,8 +22,11 @@ define Package/libnfsidmap
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=libnfsidmap, for compiling mount.nfs4
-  DESCRIPTION:= needed for nfs-utils
   URL:=http://www.citi.umich.edu/projects/nfsv4
+endef
+
+define Package/libnfsidmap/description
+ needed for nfs-utils
 endef
 
 TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib

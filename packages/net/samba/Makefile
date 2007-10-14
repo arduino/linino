@@ -27,12 +27,15 @@ define Package/samba
   CATEGORY:=Network
   SUBMENU:=samba - NetBIOS/SMB implementation
   TITLE:=samba - NetBIOS/SMB implementation
-  DESCRIPTION:=The Samba software suite is a collection of programs that implements the\\\
-  SMB protocol for unix systems, allowing you to serve files and printers to\\\
-  Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred\\\
-  to as the LanManager or Netbios protocol.
   URL:=http://www.samba.org/
 endef  
+
+define Package/samba/description
+The Samba software suite is a collection of programs that implements the
+	SMB protocol for unix systems, allowing you to serve files and printers to
+	Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred
+	to as the LanManager or Netbios protocol.
+endef
 
 define Package/samba-common
   $(call Package/samba)

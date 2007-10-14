@@ -27,14 +27,16 @@ define Package/ngrep
   CATEGORY:=Network
   DEPENDS:=+libpcap +libpcre
   TITLE:=network grep
-  DESCRIPTION:=\
-  	ngrep a pcap-aware tool that will allow you to specify extended\\\
-	regular expressions to match against data payloads of packets. It\\\
-	currently recognizes TCP, UDP, and ICMP across Ethernet, PPP, SLIP,\\\
-	FDDI, Token Ring and null interfaces, and understands BPF filter\\\
-	logic in the same fashion as more common packet sniffing tools,\\\
-	like tcpdump and snoop.
   URL:=http://ngrep.sourceforge.net
+endef
+
+define Package/ngrep/description
+	ngrep a pcap-aware tool that will allow you to specify extended
+	regular expressions to match against data payloads of packets. It
+	currently recognizes TCP, UDP, and ICMP across Ethernet, PPP, SLIP,
+	FDDI, Token Ring and null interfaces, and understands BPF filter
+	logic in the same fashion as more common packet sniffing tools,
+	like tcpdump and snoop.
 endef
 
 define Build/Configure

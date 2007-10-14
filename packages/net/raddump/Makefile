@@ -27,12 +27,14 @@ define Package/raddump
   CATEGORY:=Network
   DEPENDS:=+libpcap +libopenssl
   TITLE:=raddump interprets captured RADIUS packets.
-  DESCRIPTION:=\
-	raddump interprets captured RADIUS packets to print a \\\
-	timestamp, packet length, RADIUS packet type, source and \\\
-	destination hosts and ports, and included attribute names and \\\
-	values for each packet.
   URL:=http://sourceforge.net/projects/raddump
+endef
+
+define Package/raddump/description
+	raddump interprets captured RADIUS packets to print a 
+	timestamp, packet length, RADIUS packet type, source and 
+	destination hosts and ports, and included attribute names and 
+	values for each packet.
 endef
 
 # uses GNU configure

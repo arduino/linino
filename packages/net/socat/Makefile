@@ -27,14 +27,16 @@ define Package/socat
   CATEGORY:=Network
   DEPENDS:=+libpthread
   TITLE:=A multipurpose relay (SOcket CAT)
-  DESCRIPTION:=\
-	SoCat (for SOcket CAT) establishes two bidirectional byte streams and \\\
-	transfers data between them.\\\
-	Data channels may be files, pipes, devices (terminal or modem, etc.), or \\\
-	sockets (Unix, IPv4, IPv6, raw, UDP, TCP, SSL). It provides forking, \\\
-	logging and tracing, different modes for interprocess communication and \\\
-	many more options.
   URL:=http://www.dest-unreach.org/socat/
+endef
+
+define Package/socat/description
+	SoCat (for SOcket CAT) establishes two bidirectional byte streams and 
+	transfers data between them.
+	Data channels may be files, pipes, devices (terminal or modem, etc.), or 
+	sockets (Unix, IPv4, IPv6, raw, UDP, TCP, SSL). It provides forking, 
+	logging and tracing, different modes for interprocess communication and 
+	many more options.
 endef
 
 define Build/Configure

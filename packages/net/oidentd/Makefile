@@ -25,9 +25,11 @@ define Package/oidentd
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Identd server 
-  DESCRIPTION:=\
-	A nat aware identd server that will correctly forwared requests to clients.
   URL:=http://dev.ojnk.net/
+endef
+
+define Package/oidentd/description
+	A nat aware identd server that will correctly forwared requests to clients.
 endef
 
 # uses GNU configure

@@ -27,12 +27,14 @@ define Package/miau
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Another IRC-bouncer/proxy
-  DESCRIPTION:=\
-	In short, miau is an IRC-bouncer/proxy.\\\
-	Being more verbose, miau is small but quite featured \\\
-	IRC-bouncer - a service bit like HTTP-proxy, but \\\
-	for IRC-networks.
   URL:=http://sourceforge.net/projects/miau/
+endef
+
+define Package/miau/description
+	In short, miau is an IRC-bouncer/proxy.
+	Being more verbose, miau is small but quite featured 
+	IRC-bouncer - a service bit like HTTP-proxy, but 
+	for IRC-networks.
 endef
 
 CONFIGURE_ARGS += \

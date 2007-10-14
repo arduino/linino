@@ -25,11 +25,13 @@ define Package/zile
   CATEGORY:=Utilities
   DEPENDS:=+libncurses
   TITLE:=very small emacs-like editor
-  DESCRIPTION:=\
-	Zile is a small Emacs clone. Zile is a customizable, self-documenting \\\
-	real-time display editor. Zile was written to be as similar as possible \\\
-	to Emacs; every Emacs user should feel at home with Zile.
   URL:=http://zile.sourceforge.net
+endef
+
+define Package/zile/description
+	Zile is a small Emacs clone. Zile is a customizable, self-documenting 
+	real-time display editor. Zile was written to be as similar as possible 
+	to Emacs; every Emacs user should feel at home with Zile.
 endef
 
 define Build/Compile

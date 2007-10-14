@@ -26,12 +26,14 @@ define Package/bmon
   CATEGORY:=Network
   DEPENDS:=+libncurses
   TITLE:=bmon is a portable bandwidth monitor
-  DESCRIPTION:=\
-  	bmon is a portable bandwidth monitor \\\
-  	and rate estimator running on various \\\
-  	operating systems. It supports various \\\
-  	input methods for different architectures.
   URL:=http://people.suug.ch/~tgr/bmon/
+endef
+
+define Package/bmon/description
+	bmon is a portable bandwidth monitor 
+	and rate estimator running on various 
+	operating systems. It supports various 
+	input methods for different architectures.
 endef
 
 define Build/Configure

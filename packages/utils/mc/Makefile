@@ -25,15 +25,17 @@ define Package/mc
   CATEGORY:=Utilities
   DEPENDS:=+glib1 +libncurses
   TITLE:=midnight commander - a powerful file manager
-  DESCRIPTION:=\
-	GNU Midnight Commander is a text-mode full-screen file manager. \\\
-	It uses a two panel interface and a subshell for command execution. \\\
-	It includes an internal editor with syntax highlighting and an \\\
-	internal viewer with support for binary files. Also included is \\\
-	Virtual Filesystem (VFS), that allows files on remote systems \\\
-	(e.g. FTP, SSH, SMB servers) and files inside archives to be \\\
-	manipulated like real files.
   URL:=http://www.ibiblio.org/mc/
+endef
+
+define Package/mc/description
+	GNU Midnight Commander is a text-mode full-screen file manager. 
+	It uses a two panel interface and a subshell for command execution. 
+	It includes an internal editor with syntax highlighting and an 
+	internal viewer with support for binary files. Also included is 
+	Virtual Filesystem (VFS), that allows files on remote systems 
+	(e.g. FTP, SSH, SMB servers) and files inside archives to be 
+	manipulated like real files.
 endef
 
 CONFIGURE_ARGS += \

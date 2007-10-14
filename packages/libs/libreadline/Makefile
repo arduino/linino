@@ -26,14 +26,16 @@ define Package/libreadline
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Command lines edition library
-  DESCRIPTION:=\
-	The Readline library provides a set of functions for use by applications \\\
-	that allow users to edit command lines as they are typed in. Both Emacs \\\
-	and vi editing modes are available. The Readline library includes \\\
-	additional functions to maintain a list of previously-entered command \\\
-	lines, to recall and perhaps reedit those lines, and perform csh-like \\\
-	history expansion on previous commands.
   URL:=http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html
+endef
+
+define Package/libreadline/description
+	The Readline library provides a set of functions for use by applications 
+	that allow users to edit command lines as they are typed in. Both Emacs 
+	and vi editing modes are available. The Readline library includes 
+	additional functions to maintain a list of previously-entered command 
+	lines, to recall and perhaps reedit those lines, and perform csh-like 
+	history expansion on previous commands.
 endef
 
 define Build/Configure

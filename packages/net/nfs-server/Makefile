@@ -27,7 +27,10 @@ define Package/nfs-server
   CATEGORY:=Network
   DEPENDS:=+portmap
   TITLE:=User Space NFS server
-  DESCRIPTION:=User Space NFS server
+endef
+
+define Package/nfs-server/description
+User Space NFS server
 endef
 
 define Build/Compile	

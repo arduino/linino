@@ -26,11 +26,13 @@ define Package/crowdcontrol
   SECTION:=net
   CATEGORY:=Network
   TITLE:=The extra-light http proxy server
-  DESCRIPTION:=\
-	Crowd Control is an small, cross-platform HTTP proxy (a fork of the elhttp project) \\\
-	designed for systems with little RAM, such as a home router. It can filter URLs using \\\
-	SquidGuard blocklists, and has the unique ability to filter HTTPS domains as well.
   URL:=http://sourceforge.net/projects/crowdcontrol/
+endef
+
+define Package/crowdcontrol/description
+	Crowd Control is an small, cross-platform HTTP proxy (a fork of the elhttp project) 
+	designed for systems with little RAM, such as a home router. It can filter URLs using 
+	SquidGuard blocklists, and has the unique ability to filter HTTPS domains as well.
 endef
 
 define Build/Configure

@@ -26,10 +26,12 @@ define Package/libdnet
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Low-level network library
-  DESCRIPTION:=\
-	libdnet is a library of simplified, portable interface to several \\\
-	low-level networking routines.
   URL:=http://sourceforge.net/projects/libdnet/
+endef
+
+define Package/libdnet/description
+	libdnet is a library of simplified, portable interface to several 
+	low-level networking routines.
 endef
 
 define Package/pydnet
@@ -37,10 +39,12 @@ define Package/pydnet
   DEPENDS:=libdnet +python
   CATEGORY:=Libraries
   TITLE:=Low-level network library
-  DESCRIPTION:=\
-	libdnet is a library of simplified, portable interface to several \\\
-	low-level networking routines.
   URL:=http://sourceforge.net/projects/libdnet/
+endef
+
+define Package/pydnet/description
+	libdnet is a library of simplified, portable interface to several 
+	low-level networking routines.
 endef
 
 CONFIGURE_ARGS += \

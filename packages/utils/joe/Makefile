@@ -23,8 +23,11 @@ define Package/joe
   CATEGORY:=Utilities
   DEPENDS:=+libncurses
   TITLE:=JOE - Joes own editor
-  DESCRIPTION:=Joe is world-famous Wordstar like text editor.
   URL:=http://sourceforge.net/projects/joe-editor/
+endef
+
+define Package/joe/description
+Joe is world-famous Wordstar like text editor.
 endef
 
 define Package/joe/install

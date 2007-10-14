@@ -27,7 +27,10 @@ define Package/mgetty
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=A data/fax solution for your analog modem
-  DESCRIPTION:=A data/fax solution for your analog modem.
+endef
+
+define Package/mgetty/description
+A data/fax solution for your analog modem.
 endef
 
 define Build/Configure

@@ -27,10 +27,12 @@ define Package/libnids
   CATEGORY:=Libraries
   DEPENDS:=+libnet0
   TITLE:=A network intrusion detection library
-  DESCRIPTION:=\
-	An implementation of an E-component of Network Intrusion Detection \\\
-	System.
   URL:=http://www.packetfactory.net/projects/libnids/
+endef
+
+define Package/libnids/description
+	An implementation of an E-component of Network Intrusion Detection 
+	System.
 endef
 
 define Build/Configure

@@ -27,8 +27,11 @@ define Package/radvd
   SECTION:=ipv6
   CATEGORY:=IPv6
   TITLE:=IPv6 Routing Advertisement Daemon
-  DESCRIPTION:=IPv6 Routing Advertisement Daemon.
   URL:=http://v6web.litech.org/radvd/
+endef
+
+define Package/radvd/description
+IPv6 Routing Advertisement Daemon.
 endef
 
 define Package/radvd/conffiles

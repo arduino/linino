@@ -26,10 +26,12 @@ define Package/httptunnel
   CATEGORY:=Network
   DEPENDS:=+libopenssl
   TITLE:=bidirectional virtual data connection tunnelled in HTTP requests
-  DESCRIPTION:=\
-	httptunnel creates a bidirectional virtual data connection tunnelled in HTTP requests.\\\
-	The HTTP requests can be sent via an HTTP proxy if so desired.
   URL:=http://www.nocrew.org/software/httptunnel.html
+endef
+
+define Package/httptunnel/description
+	httptunnel creates a bidirectional virtual data connection tunnelled in HTTP requests.
+	The HTTP requests can be sent via an HTTP proxy if so desired.
 endef
 
 define Package/httptunnel/install	

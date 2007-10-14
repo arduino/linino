@@ -27,10 +27,12 @@ define Package/libid3tag
   CATEGORY:=Libraries
   DEPENDS:=+zlib
   TITLE:=An ID3 tag manipulation library
-  DESCRIPTION:=\
-	libid3tag is a library for reading and (eventually) writing ID3 tags, both \\\
-	ID3v1 and the various versions of ID3v2.
   URL:=http://mad.sourceforge.net/
+endef
+
+define Package/libid3tag/description
+	libid3tag is a library for reading and (eventually) writing ID3 tags, both 
+	ID3v1 and the various versions of ID3v2.
 endef
 
 define Build/Configure

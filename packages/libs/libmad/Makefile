@@ -38,12 +38,14 @@ define Package/libmad
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=An high-quality MPEG audio decoding library
-  DESCRIPTION:=\
-	MAD is a high-quality MPEG audio decoder. It currently supports \\\
-	MPEG-1 and the MPEG-2 extension to lower sampling frequencies, \\\
-	as well as the de facto MPEG 2.5 format. All three audio layers - \\\
-	Layer I, Layer II, and Layer III (i.e. MP3) - are fully implemented.
   URL:=http://www.underbit.com/products/mad/
+endef
+
+define Package/libmad/description
+	MAD is a high-quality MPEG audio decoder. It currently supports 
+	MPEG-1 and the MPEG-2 extension to lower sampling frequencies, 
+	as well as the de facto MPEG 2.5 format. All three audio layers - 
+	Layer I, Layer II, and Layer III (i.e. MP3) - are fully implemented.
 endef
 
 CONFIGURE_ARGS += \

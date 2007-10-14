@@ -29,8 +29,11 @@ define Package/click
   DEPENDS:=@BROKEN
   MENU:=1
   TITLE:=The Click Modular Router
-  DESCRIPTION:=The Click Modular Router
   URL:=http://www.read.cs.ucla.edu/click/
+endef
+
+define Package/click/description
+The Click Modular Router
 endef
 
 define Package/roofnet
@@ -38,8 +41,11 @@ define Package/roofnet
   CATEGORY:=Network
   DEPENDS:=@BROKEN click
   TITLE:=roofnet mesh networking scripts
-  DESCRIPTION:=roofnet mesh networking scripts
   URL:=http://pdos.csail.mit.edu/roofnet/
+endef
+
+define Package/roofnet/description
+roofnet mesh networking scripts
 endef
 
 BUILDOPTS = \

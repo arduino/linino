@@ -29,8 +29,11 @@ define Package/libclinkc
   CATEGORY:=Libraries
   DEPENDS:=+libexpat
   TITLE:=Embedded UPnP library
-  DESCRIPTION:=CyberLink for C is a UPnP library using C for small and embedded platforms.
   URL:=http://sourceforge.net/projects/clinkc
+endef
+
+define Package/libclinkc/description
+CyberLink for C is a UPnP library using C for small and embedded platforms.
 endef
 
 # uses GNU configure

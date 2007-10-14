@@ -26,11 +26,13 @@ define Package/librsync
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=implementation of the rolling-checksum algorithm
-  DESCRIPTION:=\
-  	librsync implements the rolling-checksum algorithm of remote file\\\
-  	synchronization that was popularized by the rsync utility and is\\\
-  	used in rproxy. This algorithm transfers the differences between 2\\\
-  	files without needing both files on the same system.
+endef
+
+define Package/librsync/description
+	librsync implements the rolling-checksum algorithm of remote file
+	synchronization that was popularized by the rsync utility and is
+	used in rproxy. This algorithm transfers the differences between 2
+	files without needing both files on the same system.
 endef
 
 define Build/Configure

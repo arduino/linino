@@ -25,15 +25,17 @@ define Package/picocom
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=A minimal dumb-terminal emulation program
-  DESCRIPTION:=\
-	As its name suggests, picocom is a minimal dumb-terminal emulation \\\
-	program. It is, in principle, very much like minicom, only it's pico \\\
-	instead of mini! It was designed to serve as a simple, manual, modem \\\
-	configuration, testing, and debugging tool. It has also served (quite \\\
-	well) as a low-tech "terminal-window" to allow operator intervention \\\
-	in PPP connection scripts. It could also prove useful in many other \\\
-	similar tasks.
   URL:=http://efault.net/npat/hacks/picocom/
+endef
+
+define Package/picocom/description
+	As its name suggests, picocom is a minimal dumb-terminal emulation 
+	program. It is, in principle, very much like minicom, only it's pico 
+	instead of mini! It was designed to serve as a simple, manual, modem 
+	configuration, testing, and debugging tool. It has also served (quite 
+	well) as a low-tech "terminal-window" to allow operator intervention 
+	in PPP connection scripts. It could also prove useful in many other 
+	similar tasks.
 endef
 
 define Build/Configure

@@ -26,10 +26,12 @@ define Package/fprobe-ulog
   CATEGORY:=Network
   DEPENDS:=+libpthread
   TITLE:=NetFlow probe (ulog-based)
-  DESCRIPTION:=\
-	A NetFlow probe obtaining packets through linux netfilter code \\\
-	(iptables ULOG target).
   URL:=http://fprobe.sourceforge.net
+endef
+
+define Package/fprobe-ulog/description
+	A NetFlow probe obtaining packets through linux netfilter code 
+	(iptables ULOG target).
 endef
 
 define Build/Configure

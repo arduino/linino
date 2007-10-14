@@ -31,13 +31,15 @@ define Package/libopencdk
   CATEGORY:=Libraries
   DEPENDS:=+libgcrypt zlib
   TITLE:=The Open Crypto Development Kit library
-  DESCRIPTION:=\
-	This library provides basic parts of the OpenPGP message format.\\\
-	For reference, please read the rfc2440.txt in the doc/ directory.\\\
-	Due to some possible security problems, the library also implements \\\
-	parts of draft-ietf-openpgp-rfc2440bis-08.txt. If you want to exchange \\\
-	messages with earlier PGP version < 7, you should use the compat mode.
   URL:=ftp://ftp.gnutls.org/pub/gnutls/opencdk/
+endef
+
+define Package/libopencdk/description
+	This library provides basic parts of the OpenPGP message format.
+	For reference, please read the rfc2440.txt in the doc/ directory.
+	Due to some possible security problems, the library also implements 
+	parts of draft-ietf-openpgp-rfc2440bis-08.txt. If you want to exchange 
+	messages with earlier PGP version < 7, you should use the compat mode.
 endef
 
 define Build/Configure

@@ -27,8 +27,11 @@ define Package/elinks
   CATEGORY:=Network
   DEPENDS:=+libopenssl
   TITLE:=A text based web browser
-  DESCRIPTION:=An advanced text based web browser
   URL:=http://elinks.or.cz/
+endef
+
+define Package/elinks/description
+An advanced text based web browser
 endef
 
 define Build/Configure

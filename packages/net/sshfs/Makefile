@@ -27,9 +27,11 @@ define Package/sshfs
   DEPENDS:=+libfuse +fuse-utils +glib2
   SECTION:=net
   CATEGORY:=Network
-  DESCRIPTION:=\
-	Mount remote system over sftp.
   URL:=http://fuse.sourceforge.net/
+endef
+
+define Package/sshfs/description
+	Mount remote system over sftp.
 endef
 
 CONFIGURE_VARS += \

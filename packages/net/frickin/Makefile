@@ -25,11 +25,13 @@ define Package/frickin
   SECTION:=net
   CATEGORY:=Network
   TITLE:=PPTP (Point-to-Point Tunneling Protocol) proxy
-  DESCRIPTION:=\
-	Frickin PPTP Proxy allows a Point-to-Point Tunneling Protocol (PPTP) \\\
-	client to connect to a PPTP server through Network Address \\\
-	Translation (NAT).
   URL:=http://frickin.sourceforge.net/
+endef
+
+define Package/frickin/description
+	Frickin PPTP Proxy allows a Point-to-Point Tunneling Protocol (PPTP) 
+	client to connect to a PPTP server through Network Address 
+	Translation (NAT).
 endef
 
 define Package/frickin/conffiles

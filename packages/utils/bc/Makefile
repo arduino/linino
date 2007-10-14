@@ -30,8 +30,10 @@ endef
 define Package/bc
   $(call Package/bc/Default)
   TITLE:=Arbitrary precision calculator language
-  DESCRIPTION:=\
-	bc is a language that supports arbitrary precision numbers with interactive \\\
+endef
+
+define Package/bc/description
+	bc is a language that supports arbitrary precision numbers with interactive 
 	execution of statements.
 endef
 
@@ -39,8 +41,10 @@ define Package/dc
   $(call Package/bc/Default)
   DEPENDS:=bc
   TITLE:=Arbitrary precision reverse-polish calculator
-  DESCRIPTION:=\
-	dc is a reverse-polish desk calculator which supports unlimited precision \\\
+endef
+
+define Package/dc/description
+	dc is a reverse-polish desk calculator which supports unlimited precision 
 	arithmetic.
 endef
 

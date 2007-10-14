@@ -25,11 +25,13 @@ define Package/strace
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=System call tracer
-  DESCRIPTION:=\
-	A useful diagnostic, instructional, and debugging tool. \\\
-	Allows you to track what system calls a program makes while it is \\\
-	running.
   URL:=http://strace.sourceforge.net/
+endef
+
+define Package/strace/description
+	A useful diagnostic, instructional, and debugging tool. 
+	Allows you to track what system calls a program makes while it is 
+	running.
 endef
 
 # uses GNU configure

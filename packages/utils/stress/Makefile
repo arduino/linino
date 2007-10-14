@@ -25,10 +25,11 @@ define Package/stress
   CATEGORY:=Utilities
   DEPENDS:=@LINUX_2_6_X86
   TITLE:=stress is a simple stress utility
-  DESCRIPTION:=\
-  	stress is a simple tool that imposes certain types of compute \
-	stress on UNIX-like operating systems.
   URL:=http://weather.ou.edu/~apw/projects/stress/
+endef
+
+define Package/stress/description
+	stress is a simple tool that imposes certain types of compute \	stress on UNIX-like operating systems.
 endef
 
 CONFIGURE_ARGS += \

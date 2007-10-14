@@ -24,10 +24,12 @@ define Package/devio
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Correctly write to and read from mtd character (and other block) devices
-  DESCRIPTION:=\
-	A command line program to correctly read (or write) a region of a block device.\\\
-	Primary use is for extracting formatted data from MTD partitions.
   URL:=http://sourceforge.net/projects/devio/
+endef
+
+define Package/devio/description
+	A command line program to correctly read (or write) a region of a block device.
+	Primary use is for extracting formatted data from MTD partitions.
 endef
 
 define Build/Configure

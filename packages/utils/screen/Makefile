@@ -28,10 +28,12 @@ define Package/screen
   CATEGORY:=Utilities
   DEPENDS:=+libncurses
   TITLE:=Full-screen terminal window manager
-  DESCRIPTION:=\
-  	Screen is a full-screen window manager that multiplexes a physical\\\
-	terminal between several processes, typically interactive shells.
   URL:=http://www.gnu.org/software/screen/
+endef
+
+define Package/screen/description
+	Screen is a full-screen window manager that multiplexes a physical
+	terminal between several processes, typically interactive shells.
 endef
 
 define Build/Configure

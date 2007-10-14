@@ -26,9 +26,11 @@ define Package/dialog
 	CATEGORY:=Utilities
 	DEPENDS:=+libncurses
 	TITLE:=Dialog
-	DESCRIPTION:=\
-		A script-interpreter which provides a set of curses widgets.
 	URL:=http://invisible-island.net/dialog/
+endef
+
+define Package/dialog/description
+		A script-interpreter which provides a set of curses widgets.
 endef
 
 define Build/Configure

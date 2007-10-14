@@ -26,12 +26,15 @@ define Package/ustl
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=C++ STL for embedded systems
-  DESCRIPTION:=C++ Standard Template Library (STL) for embedded systems.\\\
+  URL:=http://ustl.sourceforge.net/
+endef
+
+define Package/ustl/description
+	C++ Standard Template Library (STL) for embedded systems.\\\
     uSTL is a partial implementation of the STL (Standard Template \\\
     Library) that reduces code size by factoring memory management \\\
     code into a non-template base class and deriving containers \\\
     from it.
-  URL:=http://ustl.sourceforge.net/
 endef
 
 define Build/Configure

@@ -25,8 +25,11 @@ define Package/netpipe
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A Network Protocol Independent Performance Evaluator
-  DESCRIPTION:=A Network Protocol Independent Performance Evaluator
   URL:=http://www.scl.ameslab.gov/netpipe/
+endef
+
+define Package/netpipe/description
+A Network Protocol Independent Performance Evaluator
 endef
 
 define Build/Configure

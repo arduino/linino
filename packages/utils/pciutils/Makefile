@@ -26,10 +26,12 @@ define Package/pciutils
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Linux PCI Utilities
-  DESCRIPTION:=\
-	This package contains various utilities for inspecting and setting of \\\
-	devices connected to the PCI bus.
   URL:=http://www.kernel.org/pub/software/utils/pciutils/
+endef
+
+define Package/pciutils/description
+	This package contains various utilities for inspecting and setting of 
+	devices connected to the PCI bus.
 endef
 
 define Package/pciutils/postinst

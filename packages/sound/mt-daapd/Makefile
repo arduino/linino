@@ -27,9 +27,11 @@ define Package/mt-daapd
   CATEGORY:=Sound
   DEPENDS:=+libgdbm +libhowl +libid3tag
   TITLE:=A multi-threaded DAAP (Digital Audio Access Protocol) daemon
-  DESCRIPTION:=\
-	mt-daapd is a program which acts as an iTunes (DAAP) server for Linux.
   URL:=http://www.mt-daapd.org/
+endef
+
+define Package/mt-daapd/description
+	mt-daapd is a program which acts as an iTunes (DAAP) server for Linux.
 endef
 
 define Package/mt-daapd/conffiles

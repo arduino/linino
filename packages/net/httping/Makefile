@@ -26,11 +26,13 @@ define Package/httping
   CATEGORY:=Network
   DEPENDS:=+libopenssl
   TITLE:=Httping is like 'ping' but for http-requests
-  DESCRIPTION:=\
-	Give it an url, and it'll show you how long it takes to connect, send a \\\
-	request and retrieve the reply (only the headers). Be aware that the \\\
-	transmission across the network also takes time!
   URL:=http://www.vanheusden.com/httping/
+endef
+
+define Package/httping/description
+	Give it an url, and it'll show you how long it takes to connect, send a 
+	request and retrieve the reply (only the headers). Be aware that the 
+	transmission across the network also takes time!
 endef
 
 define Build/Compile

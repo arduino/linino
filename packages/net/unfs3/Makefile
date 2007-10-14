@@ -23,12 +23,14 @@ define Package/unfs3
   CATEGORY:=Network
   DEPENDS:=+portmap
   TITLE:=User-space NFSv3 Server
-  DESCRIPTION:=\
-	UNFS3 is a user-space implementation of the NFSv3 server \\\
-	specification. It provides a daemon for the MOUNT and NFS \\\
-	protocols, which are used by NFS clients for accessing files \\\
-	on the server.
   URL:=http://unfs3.sourceforge.net/
+endef
+
+define Package/unfs3/description
+	UNFS3 is a user-space implementation of the NFSv3 server 
+	specification. It provides a daemon for the MOUNT and NFS 
+	protocols, which are used by NFS clients for accessing files 
+	on the server.
 endef
 
 define Package/unfs3/install

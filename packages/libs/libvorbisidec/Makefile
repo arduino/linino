@@ -26,12 +26,14 @@ define Package/libvorbisidec
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=A fixed-point Ogg/Vorbis decoder library
-  DESCRIPTION:=\
-	libvorbisidec is "tremor", a fixed-point implementation of libvorbis.\\\
-	It also has libogg built-in. It is suitable as a replacement for \\\
-	libvorbis and libogg in tremor-aware applications.\\\
-	Tremor is a decoder only. 
   URL:=http://wiki.xiph.org/index.php/Tremor
+endef
+
+define Package/libvorbisidec/description
+	libvorbisidec is "tremor", a fixed-point implementation of libvorbis.
+	It also has libogg built-in. It is suitable as a replacement for 
+	libvorbis and libogg in tremor-aware applications.
+	Tremor is a decoder only.
 endef
 
 define Build/Configure

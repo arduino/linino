@@ -26,18 +26,20 @@ define Package/libdaemon
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=A lightweight C library that eases the writing of UNIX daemons
-  DESCRIPTION:=\
-	libdaemon is a lightweight C library that eases the writing of UNIX daemons.\\\
-	It consists of the following parts:\\\
-	- A wrapper around fork() which does the correct daemonization procedure of a process\\\
-	- A wrapper around syslog() for simpler and compatible log output to Syslog or STDERR\\\
-	- An API for writing PID files\\\
-	- An API for serializing UNIX signals into a pipe for usage with select() or poll()\\\
-	- An API for running subprocesses with STDOUT and STDERR redirected to syslog\\\
-	\\\
-	APIs like these are used in most daemon software available. It is not that \\\
-	simple to get it done right and code duplication is not a goal.
   URL:=http://0pointer.de/lennart/projects/libdaemon/
+endef
+
+define Package/libdaemon/description
+	libdaemon is a lightweight C library that eases the writing of UNIX daemons.
+	It consists of the following parts:
+	- A wrapper around fork() which does the correct daemonization procedure of a process
+	- A wrapper around syslog() for simpler and compatible log output to Syslog or STDERR
+	- An API for writing PID files
+	- An API for serializing UNIX signals into a pipe for usage with select() or poll()
+	- An API for running subprocesses with STDOUT and STDERR redirected to syslog
+	
+	APIs like these are used in most daemon software available. It is not that 
+	simple to get it done right and code duplication is not a goal.
 endef
 
 define Build/Configure

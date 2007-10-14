@@ -26,13 +26,15 @@ define Package/vgp
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A daemon working like Cisco(c) HSRP
-  DESCRIPTION:=\
-	VGP (Virtual Gateway Protocol)is a very simple protocol able to \\\
-	work in a way similar to Cisco(c) HSRP. It implements the idea \\\
-	of Virtual Gateway to provide fault tollerance (and load \\\
-	balancing) on your net. Each client on your net has as its \\\
-	default gateway set to the virtual gateway and not the real router.
   URL:=http://vgpd.freaknet.org/
+endef
+
+define Package/vgp/description
+	VGP (Virtual Gateway Protocol)is a very simple protocol able to 
+	work in a way similar to Cisco(c) HSRP. It implements the idea 
+	of Virtual Gateway to provide fault tollerance (and load 
+	balancing) on your net. Each client on your net has as its 
+	default gateway set to the virtual gateway and not the real router.
 endef
 
 # uses GNU configure

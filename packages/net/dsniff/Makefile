@@ -27,9 +27,11 @@ define Package/dsniff
   CATEGORY:=Network
   DEPENDS:=+libpcap +libnids +libnet0 +libopenssl +libgdbm
   TITLE:=A collection of tools for network auditing and penetration testing
-  DESCRIPTION:=\
-  	A collection of tools for network auditing and penetration testing.
   URL:=http://www.monkey.org/~dugsong/dsniff/
+endef
+
+define Package/dsniff/description
+	A collection of tools for network auditing and penetration testing.
 endef
 
 define Build/Configure

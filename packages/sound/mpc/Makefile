@@ -26,12 +26,14 @@ define Package/mpc
   SECTION:=sound
   CATEGORY:=Sound
   TITLE:=Music Player Daemon Console Client
-  DESCRIPTION:=\
-	MPD is a music player supporting flac, mp3 and ogg files.\\\
-	It is typically controlled over a network using one of it's many \\\
-	clients including mpc(console), gmpc(gnome), phpmp(php) etc.\\\
-	this is MPC
   URL:=http://www.musicpd.org/
+endef
+
+define Package/mpc/description
+	MPD is a music player supporting flac, mp3 and ogg files.
+	It is typically controlled over a network using one of it's many 
+	clients including mpc(console), gmpc(gnome), phpmp(php) etc.
+	this is MPC
 endef
 
 define Build/Configure

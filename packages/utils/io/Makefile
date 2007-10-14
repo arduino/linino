@@ -19,10 +19,12 @@ define Package/io
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Raw memory i/o utility
-  DESCRIPTION:=\
-	This tool can be used to access physical memory addresses from userspace. \\\
-	It can be useful to access hardware for which no device driver exists!
   URL:=http://www.sleepie.demon.co.uk/linuxvme/io.c
+endef
+
+define Package/io/description
+	This tool can be used to access physical memory addresses from userspace. 
+	It can be useful to access hardware for which no device driver exists!
 endef
 
 define Build/Prepare

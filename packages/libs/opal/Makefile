@@ -28,11 +28,14 @@ define Package/libopal
   CATEGORY:=Libraries
   DEPENDS:=+pwlib +uclibcxx
   TITLE:=Open Phone Abstraction Library
-  DESCRIPTION:=\
-	Open Phone Abstraction Library, implementation of the ITU H.323\\\
-	teleconferencing protocol, and successor of the openh323 library. It\\\
-	supports not only the H.323 protocol but also SIP and IAX2.\\\
   URL:=http://www.voxgratia.org/
+endef
+
+define Package/libopal/description
+	Open Phone Abstraction Library, implementation of the ITU H.323
+	teleconferencing protocol, and successor of the openh323 library. It
+	supports not only the H.323 protocol but also SIP and IAX2.
+
 endef
 
 CONFIGURE_ARGS += \

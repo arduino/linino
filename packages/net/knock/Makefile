@@ -27,32 +27,44 @@ define Package/knock/Default
   CATEGORY:=Network
   DEPENDS:=+libpcap
   TITLE:=Port-knocking
-  DESCRIPTION:=\
-	It listens to all traffic on an ethernet (or PPP) interface, \\\
-	looking for special "knock" sequences of port-hits. A client \\\
-	makes these port-hits by sending a TCP (or UDP) packet to a \\\
-	port on the server. This port need not be open -- since \\\
-	knockd listens at the link-layer level, it sees all traffic \\\
-	even if it's destined for a closed port. When the server \\\
-	detects a specific sequence of port-hits, it runs a command \\\
-	defined in its configuration file. This can be used to open \\\
-	up holes in a firewall for quick access.
   URL:=http://www.zeroflux.org/cgi-bin/cvstrac/knock/wiki
 endef
 
 define Package/knock
   $(call Package/knock/Default)
   TITLE+= client
-  DESCRIPTION+=\\\
-	\\\
+endef
+
+define Package/knock/description
+=
+	It listens to all traffic on an ethernet (or PPP) interface, 
+	looking for special "knock" sequences of port-hits. A client 
+	makes these port-hits by sending a TCP (or UDP) packet to a 
+	port on the server. This port need not be open -- since 
+	knockd listens at the link-layer level, it sees all traffic 
+	even if it's destined for a closed port. When the server 
+	detects a specific sequence of port-hits, it runs a command 
+	defined in its configuration file. This can be used to open 
+	up holes in a firewall for quick access.	
 	This package contains the port-knocking client.
 endef
 
 define Package/knockd
   $(call Package/knock/Default)
   TITLE+= server
-  DESCRIPTION+=\\\
-	\\\
+endef
+
+define Package/knockd/description
+=
+	It listens to all traffic on an ethernet (or PPP) interface, 
+	looking for special "knock" sequences of port-hits. A client 
+	makes these port-hits by sending a TCP (or UDP) packet to a 
+	port on the server. This port need not be open -- since 
+	knockd listens at the link-layer level, it sees all traffic 
+	even if it's destined for a closed port. When the server 
+	detects a specific sequence of port-hits, it runs a command 
+	defined in its configuration file. This can be used to open 
+	up holes in a firewall for quick access.	
 	This package contains the port-knocking server.
 endef
 

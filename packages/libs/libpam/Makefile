@@ -26,9 +26,12 @@ define Package/libpam
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=free implementation of the following DCE-RFC from Sunsoft.
-  DESCRIPTION:=\
-	Linux-PAM is a free implementation of the following DCE-RFC from Sunsoft. \\\
   URL:=http://www.kernel.org/pub/linux/libs/pam
+endef
+
+define Package/libpam/description
+	Linux-PAM is a free implementation of the following DCE-RFC from Sunsoft. 
+
 endef
 
 define Build/Configure

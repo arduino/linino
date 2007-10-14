@@ -26,10 +26,13 @@ define Package/shat
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Source Hardware Address Translation
-  DESCRIPTION:=\
-	A tool which allows hosts with arbitrary IP configuration\\\
-	to connect to the internet over a SHAT gateway.\\\
   URL:=http://www.teddy-net.com/cvs/Maxina/128gw/service/arpcatch/shat/
+endef
+
+define Package/shat/description
+	A tool which allows hosts with arbitrary IP configuration
+	to connect to the internet over a SHAT gateway.
+
 endef
 
 define Build/Compile	

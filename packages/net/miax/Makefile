@@ -26,11 +26,13 @@ define Package/miax
   CATEGORY:=Network
   DEPENDS:=+libpthread +bluez-libs
   TITLE:=A console iax (asterisk) client
-  DESCRIPTION:=\
-	miax is a console iax (asterisk) client, it can work with \\\
-	a soundcard as a normal voip phone, taking input/output from \\\
-	keyboard, analog/gsm/isdn modem or bluetooth phones.
   URL:=http://www.eja.it/?l=gpl&testo=miax
+endef
+
+define Package/miax/description
+	miax is a console iax (asterisk) client, it can work with 
+	a soundcard as a normal voip phone, taking input/output from 
+	keyboard, analog/gsm/isdn modem or bluetooth phones.
 endef
 
 define Build/Compile

@@ -27,10 +27,12 @@ define Package/libao
   DEPENDS:=+alsa-lib
   CATEGORY:=Libraries
   TITLE:=A cross platform audio library
-  DESCRIPTION:=\
-	Libao is a cross-platform audio library that allows programs to \\\
-	output audio using a simple API on a wide variety of platforms.
   URL:=http://www.xiph.org/ao/
+endef
+
+define Package/libao/description
+	Libao is a cross-platform audio library that allows programs to 
+	output audio using a simple API on a wide variety of platforms.
 endef
 
 define Build/Configure

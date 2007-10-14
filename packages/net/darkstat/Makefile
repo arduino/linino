@@ -27,10 +27,11 @@ define Package/darkstat
   CATEGORY:=Network
   DEPENDS:=+libpcap +zlib
   TITLE:=Network bandwith monitor
-  DESCRIPTION:=\
-  	A free open source utility for bandwith monitoring \
-	over web
   URL:=http://dmr.ath.cx/net/darkstat/
+endef
+
+define Package/darkstat/description
+	A free open source utility for bandwith monitoring \	over web
 endef
 
 define Build/Compile	

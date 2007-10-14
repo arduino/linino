@@ -26,12 +26,14 @@ define Package/lrzsz
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=X,Y and Z-modem protocols
-  DESCRIPTION:=\
-	Transfer files in your login sessions.\\\
-	Very leightweight and straight forward.\\\
-	You just need a terminal client that can do \\\
-	either X, Y or Z-modem file transfers.
   URL:=http://www.ohse.de/uwe/software/lrzsz.html
+endef
+
+define Package/lrzsz/description
+	Transfer files in your login sessions.
+	Very leightweight and straight forward.
+	You just need a terminal client that can do 
+	either X, Y or Z-modem file transfers.
 endef
 
 # uses GNU configure

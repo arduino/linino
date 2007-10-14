@@ -26,13 +26,15 @@ define Package/pen
   CATEGORY:=Network
   DEPENDS:=+libopenssl
   TITLE:=Simple tcp load balancer
-  DESCRIPTION:=\
-	This is pen, a load balancer for "simple" tcp based protocols \\\
-	such as http or smtp. It allows several servers to appear as \\\
-	one to the outside and automatically detects servers that are \\\
-	down and distributes clients among the available servers. \\\
-	This gives high availability and scalable performance.
   URL:=http://siag.nu/pen/
+endef
+
+define Package/pen/description
+	This is pen, a load balancer for "simple" tcp based protocols 
+	such as http or smtp. It allows several servers to appear as 
+	one to the outside and automatically detects servers that are 
+	down and distributes clients among the available servers. 
+	This gives high availability and scalable performance.
 endef
 
 define Build/Configure

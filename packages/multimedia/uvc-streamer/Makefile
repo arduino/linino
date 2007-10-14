@@ -25,9 +25,11 @@ define Package/uvc-streamer
   CATEGORY:=Utilities
   TITLE:=Linux-UVC streaming applicaton
   DEPENDS:=@LINUX_2_6 +libpthread
-  DESCRIPTION:=\
-  This package contains a streaming daemon for Linux-UVC based webcams
   URL:=http://www.naaa.de/uvc_streamer
+endef
+
+define Package/uvc-streamer/description
+	This package contains a streaming daemon for Linux-UVC based webcams
 endef
 
 MAKE_FLAGS += \

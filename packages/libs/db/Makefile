@@ -28,8 +28,11 @@ define Package/libdb
   CATEGORY:=Libraries
   DEPENDS:=+libxml2
   TITLE:=Berkeley DB library
-  DESCRIPTION:=Berkeley DB library.
   URL:=http://www.sleepycat.com/products/db.shtml
+endef
+
+define Package/libdb/description
+Berkeley DB library.
 endef
 
 define Build/Configure

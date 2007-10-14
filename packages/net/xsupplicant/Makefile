@@ -29,10 +29,12 @@ define Package/xsupplicant
   CATEGORY:=Network
   DEPENDS:=+libopenssl +wireless-tools
   TITLE:=A fully compliant 802.1x authenticator
-  DESCRIPTION:=\
-  	This software allows a GNU/Linux or BSD workstation to authenticate with \\\
-	a RADIUS server using 802.1x and various EAP protocols.
   URL:=http://open1x.sourceforge.net/
+endef
+
+define Package/xsupplicant/description
+	This software allows a GNU/Linux or BSD workstation to authenticate with 
+	a RADIUS server using 802.1x and various EAP protocols.
 endef
 
 define Package/xsupplicant/conffiles

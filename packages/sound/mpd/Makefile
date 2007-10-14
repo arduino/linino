@@ -27,11 +27,13 @@ define Package/mpd
   CATEGORY:=Sound
   DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread +alsa-lib
   TITLE:=Music Player Daemon
-  DESCRIPTION:=\
-	MPD is a music player supporting flac, mp3 and ogg files.\\\
-	It is typically controlled over a network using one of it's many \\\
-	clients including mpc(console), gmpc(gnome), phpmp(php) etc.
   URL:=http://www.musicpd.org/
+endef
+
+define Package/mpd/description
+	MPD is a music player supporting flac, mp3 and ogg files.
+	It is typically controlled over a network using one of it's many 
+	clients including mpc(console), gmpc(gnome), phpmp(php) etc.
 endef
 
 define Package/mpd/conffiles

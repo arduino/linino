@@ -25,11 +25,13 @@ define Package/cutter
   SECTION:=net
   CATEGORY:=Network
   TITLE:=allows an user to abort TCP/IP connections
-  DESCRIPTION:=\
-	Cutter is an open source program that allows Linux firewall \\\
-	administrators to abort TCP/IP connections routed over the \\\
-	firewall or router on which it is run.
   URL:=http://www.lowth.com/cutter/
+endef
+
+define Package/cutter/description
+	Cutter is an open source program that allows Linux firewall 
+	administrators to abort TCP/IP connections routed over the 
+	firewall or router on which it is run.
 endef
 	
 define Build/Compile

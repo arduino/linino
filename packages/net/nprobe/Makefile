@@ -28,9 +28,11 @@ define Package/nprobe
 	CATEGORY:=Utilities
 	DEPENDS:=+libpcap +libpcre +libpthread +libwrap
 	TITLE:=nProbe
-	DESCRIPTION:=\
-		nprobe
 	URL:=http://invisible-island.net/dialog/
+endef
+
+define Package/nprobe/description
+		nprobe
 endef
 
 define Build/Configure
