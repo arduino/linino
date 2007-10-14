@@ -21,7 +21,7 @@ include ../python/python-package.mk
 
 define PyPackage/python-psycopg
  TITLE:=PostgreSQL database adapter for Python
- URL=http://www.initd.org/
+ URL:=http://www.initd.org/
  DEPENDS+= +libpq +python-egenix-mx
 endef
 

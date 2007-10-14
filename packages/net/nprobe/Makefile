@@ -30,7 +30,7 @@ define Package/nprobe
 	TITLE:=nProbe
 	DESCRIPTION:=\
 		nprobe
-	URL=http://invisible-island.net/dialog/
+	URL:=http://invisible-island.net/dialog/
 endef
 
 define Build/Configure

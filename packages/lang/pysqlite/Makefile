@@ -21,7 +21,7 @@ include ../python/python-package.mk
 
 define PyPackage/python-sqlite
  TITLE:=SQLite database adapter for Python
- URL=http://www.initd.org/tracker/pysqlite/wiki/pysqlite
+ URL:=http://www.initd.org/tracker/pysqlite/wiki/pysqlite
  DEPENDS+= +libsqlite3
 endef
 

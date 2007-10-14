@@ -28,7 +28,7 @@ define Package/dialog
 	TITLE:=Dialog
 	DESCRIPTION:=\
 		A script-interpreter which provides a set of curses widgets.
-	URL=http://invisible-island.net/dialog/
+	URL:=http://invisible-island.net/dialog/
 endef
 
 define Build/Configure

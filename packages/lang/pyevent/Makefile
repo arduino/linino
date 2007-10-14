@@ -21,7 +21,7 @@ include ../python/python-package.mk
 
 define PyPackage/python-event
  TITLE:=Python interface to libevent
- URL=http://code.google.com/p/pyevent/
+ URL:=http://code.google.com/p/pyevent/
  DEPENDS+= +libevent
 endef
 

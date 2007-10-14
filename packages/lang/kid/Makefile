@@ -21,7 +21,7 @@ include ../python/python-package.mk
 
 define PyPackage/python-kid
  TITLE:=XML-based Templating
- URL=http://www.kid-templating.org/
+ URL:=http://www.kid-templating.org/
 endef
 
 define PyPackage/python-kid/description

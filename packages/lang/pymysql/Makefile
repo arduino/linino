@@ -21,7 +21,7 @@ include ../python/python-package.mk
 
 define PyPackage/python-mysql
  TITLE:=MySQL database adapter for Python
- URL=http://mysql-python.sourceforge.net/
+ URL:=http://mysql-python.sourceforge.net/
  DEPENDS+= +libmysqlclient
 endef
 
