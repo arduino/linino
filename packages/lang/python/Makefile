@@ -123,6 +123,7 @@ define Build/Compile
 		--disable-ipv6 \
 		--without-cxx-main \
 		--with-threads \
+		ac_cv_lib_readline_readline=no \
 		HOSTPYTHON=./hostpython \
 		HOSTPGEN=./hostpgen \
 		OPT="$(TARGET_CFLAGS)" \
