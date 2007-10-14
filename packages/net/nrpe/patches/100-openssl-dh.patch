@@ -1,0 +1,19 @@
+Index: nrpe-2.8.1/configure
+===================================================================
+--- nrpe-2.8.1.orig/configure	2007-10-11 14:40:36.000000000 +0200
++++ nrpe-2.8.1/configure	2007-10-11 14:40:36.000000000 +0200
+@@ -6073,11 +6073,9 @@
+ 
+ 				echo ""
+ 		echo "*** Generating DH Parameters for SSL/TLS ***"
+-		if test -f "$ssldir/sbin/openssl"; then
+-			sslbin=$ssldir/sbin/openssl
+-		else
+-			sslbin=$ssldir/bin/openssl
+-		fi
++		# Use host openssl as it just generates some random stuff,
++		# nothing machine-specific
++		sslbin=/usr/bin/openssl
+ 		# awk to strip off meta data at bottom of dhparam output
+ 		$sslbin dhparam -C 512 | awk '/^-----/ {exit} {print}' > include/dh.h
+ 	fi
