@@ -28,10 +28,6 @@ define Package/zabbix/Default
   SECTION:=admin
   CATEGORY:=Administration
   TITLE:=Zabbix
-  DESCRIPTION:=\
-	ZABBIX is an enterprise-class distributed monitoring solution for networks \\\
-	and applications. Native high-performance ZABBIX agents allow monitoring of \\\
-	performance and availability data of all operating systems.
   URL:=http://www.zabbix.com/
   SUBMENU:=zabbix
 endef
