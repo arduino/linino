@@ -1,5 +1,7 @@
---- pure-ftpd-1.0.21/configure	2006-02-19 15:33:05.000000000 +0100
-+++ pure-ftpd-1.0.21.new/configure	2006-12-11 16:07:29.000000000 +0100
+Index: pure-ftpd-1.0.21/configure
+===================================================================
+--- pure-ftpd-1.0.21.orig/configure	2007-10-14 22:03:46.000000000 +0200
++++ pure-ftpd-1.0.21/configure	2007-10-14 22:03:46.000000000 +0200
 @@ -9273,7 +9273,7 @@
    if test "$cross_compiling" = yes; then
    { { echo "$as_me:$LINENO: error: internal error: not reached in cross-compile" >&5
