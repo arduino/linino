@@ -31,6 +31,7 @@ define Package/libpq
   DEPENDS:=+zlib +libreadline +libncurses
   TITLE:=PostgreSQL client library
   URL:=http://www.postgresql.org/
+  SUBMENU:=database
 endef
 
 define Package/libpq/description
@@ -43,6 +44,7 @@ define Package/pgsql-cli
   DEPENDS:=+libpq
   TITLE:=Command Line Interface (CLI) to PostgreSQL databases
   URL:=http://www.postgresql.org/
+  SUBMENU:=database
 endef
 
 define Package/pgsql-cli/description
@@ -55,6 +57,7 @@ define Package/pgsql-server
   DEPENDS:=+libpq
   TITLE:=PostgreSQL databases Server
   URL:=http://www.postgresql.org/
+  SUBMENU:=database
 endef
 
 define Package/pgsql-server/description

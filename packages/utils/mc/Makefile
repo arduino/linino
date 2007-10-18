@@ -26,7 +26,7 @@ define Package/mc
   DEPENDS:=+glib1 +libncurses
   TITLE:=midnight commander - a powerful file manager
   URL:=http://www.ibiblio.org/mc/
-  SUBMENU:=mc
+  SUBMENU:=filemanager
 endef
 
 define Package/mc/description

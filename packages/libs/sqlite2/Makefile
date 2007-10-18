@@ -48,6 +48,7 @@ define Package/sqlite2-cli
   CATEGORY:=Utilities
   DEPENDS:=+libsqlite2 +libncurses +libreadline
   TITLE+= (cli)
+  SUBMENU:=database
 endef
 
 define Package/sqlite2-cli/description

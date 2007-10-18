@@ -26,6 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/sqlite3/Default
   TITLE:=SQLite (v3.x) database engine
   URL:=http://www.sqlite.org/
+  SUBMENU:=database
 endef
 
 define Package/libsqlite3

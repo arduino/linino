@@ -22,6 +22,7 @@ define Package/sdparm
   CATEGORY:=Utilities
   TITLE:=read or modify scsi or usb disk parameters
   DEPENDS:=+kmod-scsi-generic
+  SUBMENU:=disc
 endef
 
 define Package/sdparm/description
