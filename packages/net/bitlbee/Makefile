@@ -18,7 +18,6 @@ PKG_SOURCE_URL:=http://get.bitlbee.org/src \
 	http://get.us.bitlbee.org/src \
 	http://ftp.snt.utwente.nl/pub/software/bitlbee/src
 PKG_MD5SUM:=a4d7daa9b64898dd41a3a6d104692d9a
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 

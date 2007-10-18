@@ -16,7 +16,6 @@ PKG_MD5SUM:=51caefd77e5d440d0bbd6443db4fc0f8
 
 PKG_SOURCE_URL:=http://ftp1.sourceforge.net/tsocks/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)beta5.tar.gz
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

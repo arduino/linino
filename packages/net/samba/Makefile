@@ -16,7 +16,6 @@ PKG_MD5SUM:=54870482fe036b7e69dd48c90661eec6
 PKG_SOURCE_URL:=ftp://se.samba.org/pub/samba/stable \
 	ftp://ftp.easynet.be/samba/stable
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_CAT:=zcat
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 

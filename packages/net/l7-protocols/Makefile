@@ -7,7 +7,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/l7-filter
 PKG_MD5SUM:=d007dd322e174a5c0ec722061ba8a57b
-PKG_CAT:=zcat
 
 include $(INCLUDE_DIR)/package.mk
 

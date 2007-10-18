@@ -15,7 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=${PKG_NAME}-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.hsc.fr/ressources/outils/ssltunnel/download
 PKG_MD5SUM:=bfe529edb9b6c97bc03d213676b1f35d
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

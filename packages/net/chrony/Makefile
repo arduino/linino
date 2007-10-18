@@ -16,7 +16,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= ftp://chrony.sunsite.dk/projects/chrony/ \
 	http://chrony.sunsite.dk/download/
 PKG_MD5SUM:=84f76a73dff5a3c9e9f11f3c29a4e93b
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 

@@ -17,7 +17,6 @@ PKG_SOURCE_URL:=http://www.openwall.com/scanlogd/ \
 	ftp://ftp.wiretapped.net/pub/openwall/ \
 	http://distro.ibiblio.org/pub/linux/distributions/openwall/
 PKG_MD5SUM:=7b8187ea718ebe47f22805b921b909ab
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

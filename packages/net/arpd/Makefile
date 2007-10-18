@@ -15,7 +15,6 @@ PKG_RELEASE:=1
 PKG_MD5SUM:=e2911fa9de1b92ef50deda1489ae944d
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://niels.xtdnet.nl/honeyd
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 

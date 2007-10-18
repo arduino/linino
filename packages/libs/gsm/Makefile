@@ -16,7 +16,6 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-1.0-pl10
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.cs.tu-berlin.de/pub/local/kbs/tubmik/gsm/
 PKG_MD5SUM:=4b148480f82e96d274248e13880ec873
-PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 

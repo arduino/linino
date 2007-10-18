@@ -18,7 +18,6 @@ PKG_SOURCE_URL:=http://www.tcpdump.org/release/ \
 	http://www.at.tcpdump.org/ \
 	http://www.br.tcpdump.org/
 PKG_MD5SUM:=c491a78c52fe73f1f7271aa5d8c6ab2e
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

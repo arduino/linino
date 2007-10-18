@@ -15,7 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=psyBNC-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.psybnc.info/download/beta/
 PKG_MD5SUM:=4b893a92f914813450e0921b2894ad6c
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 

@@ -19,7 +19,6 @@ PKG_SOURCE_URL:= \
 	http://ftp.fr.debian.org/debian/pool/main/l/logrotate \
 	http://ftp.us.debian.org/debian/pool/main/l/logrotate
 PKG_MD5SUM:=552639142e163745f6bcd4f1f3816d8a
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

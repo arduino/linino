@@ -18,7 +18,6 @@ PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/ulogd/ \
 	ftp://ftp.de.netfilter.org/pub/netfilter/ulogd/ \
 	ftp://ftp.no.netfilter.org/pub/netfilter/ulogd/
 PKG_MD5SUM:=05b4ed2926b9a22aaeaf642917bbf8ff
-PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

@@ -15,7 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=${PKG_NAME}.tgz
 PKG_SOURCE_URL:=http://www.klake.org/~jt/sscep/
 PKG_MD5SUM:=b509cdf0de952841471e77499aa6e4ca
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

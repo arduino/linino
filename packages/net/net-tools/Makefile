@@ -15,7 +15,6 @@ PKG_RELEASE:=1
 PKG_MD5SUM:=888774accab40217dde927e21979c165
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.tazenda.demon.co.uk/phil/net-tools/
-PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 

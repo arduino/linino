@@ -15,7 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=NetPIPE_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.scl.ameslab.gov/netpipe/code
 PKG_MD5SUM:=62570140a3617eca4b15b3255d3edbe6
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/NetPIPE_$(PKG_VERSION)
 

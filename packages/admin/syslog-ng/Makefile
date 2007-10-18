@@ -16,7 +16,6 @@ PKG_MD5SUM:=a3cbfdb6e1e5beea181a7349749719f3
 PKG_SOURCE_URL:= http://www.balabit.com/downloads/syslog-ng/1.6/src \
 		http://www.balabit.com/downloads/syslog-ng/stable/src
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

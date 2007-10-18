@@ -15,7 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=nProbe-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://downloads.openwrt.org/sources
 PKG_MD5SUM:=32ed12f60eab771a79bd5f90622fa2a3
-PKG_CAT:=zcat
 
 BUILD_DEPENDS:=libwrap
 

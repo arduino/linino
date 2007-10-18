@@ -15,7 +15,6 @@ PKG_MD5SUM:=79a29fe9f79b2f3241d4915767b8c511
 
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/n/nfs-user-server
 PKG_SOURCE:=nfs-user-server_$(PKG_VERSION).orig.tar.gz
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

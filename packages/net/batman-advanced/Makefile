@@ -17,7 +17,6 @@ PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION)_sources.tgz
 PKG_SOURCE_URL:=http://downloads.open-mesh.net/batman/development/sources/ \
 	http://downloads.open-mesh.net/batman/development/sources/old/
 PKG_MD5SUM:=3ebc394a7b7b3fa5cecaf97f6a220a3f
-PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 

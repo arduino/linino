@@ -19,7 +19,6 @@ PKG_SOURCE_URL:=ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/ \
 	 	ftp://ftp.belnet.be/packages/openbsd/OpenSSH/portable/ \
 	   	ftp://ftp.de.openbsd.org/pub/unix/OpenBSD/OpenSSH/portable/
 PKG_MD5SUM:=50a800fd2c6def9e9a53068837e87b91
-PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 

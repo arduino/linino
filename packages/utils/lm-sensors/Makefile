@@ -15,7 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=lm_sensors-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dl.lm-sensors.org/lm-sensors/releases/
 PKG_MD5SUM:=55d77146fbd56c205a9f81d262b9453c
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/lm_sensors-$(PKG_VERSION)
 

@@ -18,7 +18,6 @@ PKG_SOURCE_URL:=ftp://ftp.gnupg.org/gcrypt/libgpg-error/ \
 	http://gulus.usherbrooke.ca/pub/appl/GnuPG/libgpg-error/ \
 	http://gnupg.unixmexico.org/ftp/libgpg-error/
 PKG_MD5SUM:=ff409db977e4a4897aa09ea420a28a2f
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

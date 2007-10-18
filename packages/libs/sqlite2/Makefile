@@ -15,7 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=sqlite-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sqlite.org/
 PKG_MD5SUM:=838dbac20b56d2c4292e98848505a05b
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/sqlite-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

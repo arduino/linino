@@ -18,7 +18,6 @@ PKG_SOURCE_URL:=\
 	ftp://ftp.us.postgresql.org/pub/mirrors/postgresql/source/v$(PKG_VERSION) \
 	ftp://ftp-archives.postgresql.org/pub/source/v$(PKG_VERSION)
 PKG_MD5SUM:=bb1cd309ea72f070cb964736f5755847
-PKG_CAT:=bzcat
 
 PKG_BUILD_DEPENDS:=libnotimpl
 

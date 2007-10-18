@@ -15,7 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=ircii-pana-$(PKG_VERSION)-final.tar.gz
 PKG_SOURCE_URL:=http://bitchx.org/files/source/
 PKG_MD5SUM:=611d2dda222f00c10140236f4c331572
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/BitchX
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

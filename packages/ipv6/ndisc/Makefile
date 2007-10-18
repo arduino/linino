@@ -15,7 +15,6 @@ PKG_MD5SUM:=33487fe5505b195eb31468d88ba9ab56
 
 PKG_SOURCE_URL:=http://people.via.ecp.fr/~rem/ndisc6/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 

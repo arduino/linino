@@ -15,7 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=Linux-PAM-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kernel.org/pub/linux/libs/pam/pre/library/
 PKG_MD5SUM:=0f17f7105faa82a51dfbeb6b08a1ca29
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Linux-PAM-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

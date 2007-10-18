@@ -15,7 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=uClibc++-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://cxx.uclibc.org/src/
 PKG_MD5SUM:=1ceef3209cca88be8f1bd9de99735954
-PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/uClibc++-$(PKG_VERSION)
 

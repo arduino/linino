@@ -19,7 +19,6 @@ PKG_SOURCE_URL:=ftp://ftp.gnutls.org/pub/gnutls/opencdk/ \
 	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/opencdk/ \
 	http://josefsson.org/gnutls/releases/opencdk/
 PKG_MD5SUM:=7bfc820bcdc08f0c31f860710368071e
-PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

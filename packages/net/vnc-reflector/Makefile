@@ -15,7 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=vnc_reflector-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/vnc-reflector
 PKG_MD5SUM:=c3f88bc62f228b335c25c07f9744ab0c
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/vnc_reflector
 

@@ -17,7 +17,6 @@ PKG_SOURCE_URL:=http://www.tinc-vpn.org/packages \
 	http://ftp.yi.se/pub/tinc/ \
 	http://www.mirrors.wiretapped.net/security/network-security/tinc/
 PKG_MD5SUM:=572255e6cbb9efffd9e40adb73ab7861
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

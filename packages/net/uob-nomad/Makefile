@@ -14,7 +14,6 @@ PKG_MD5SUM:=9c7445cefaf8d6160017aef606f2e558
 
 PKG_SOURCE_URL:=http://www.comnets.uni-bremen.de/~mab/openwrt/source/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install

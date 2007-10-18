@@ -17,7 +17,6 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)$(PKG_VERSION)-$(PKG_XVERSION).tar.gz
 PKG_SOURCE_URL:=ftp://alpha.greenie.net/pub/mgetty/source/1.1
 PKG_MD5SUM:=6805f8e31423bb777be80e3a856001cb
-PKG_CAT:=zcat
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 

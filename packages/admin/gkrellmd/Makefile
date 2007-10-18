@@ -15,7 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE_URL:=http://members.dslextreme.com/users/billw/gkrellm/
 PKG_SOURCE:=gkrellm-$(PKG_VERSION).tar.bz2
 PKG_MD5SUM:=57ef0525c0997ac2e7720712811f5a84
-PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/gkrellm-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
