@@ -26,6 +26,7 @@ define Package/reiserfsprogs
   CATEGORY:=Utilities
   TITLE:=ReiserFS filesystems utilities
   URL:=http://www.namesys.com/
+  SUBMENU:=filesystem
 endef
 
 define Package/reiserfsprogs/description

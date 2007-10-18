@@ -26,6 +26,7 @@ define Package/vim
   DEPENDS:=+libncurses
   TITLE:=Vi IMproved - enhanced vi editor
   URL:=http://www.vim.org/
+  SUBMENU:=editors
 endef
 
 define Package/vim/description

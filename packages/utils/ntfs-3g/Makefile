@@ -26,6 +26,7 @@ define Package/ntfs-3g
   SECTION:=utils
   CATEGORY:=Utilities
   URL:=http://www.ntfs-3g.org
+  SUBMENU:=filesystem
 endef
 
 define Package/ntfs-3g/description

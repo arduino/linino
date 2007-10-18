@@ -26,6 +26,7 @@ define Package/mutt
   DEPENDS:=+libopenssl +libncurses
   TITLE:=Console mail client
   URL:=http://www.mutt.org/
+  SUBMENU:=mail
 endef
 
 CONFIGURE_ARGS += \

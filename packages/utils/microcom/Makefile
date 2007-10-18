@@ -26,6 +26,7 @@ define Package/microcom
   CATEGORY:=Utilities
   TITLE:=A serial terminal emulation program
   URL:=http://microcomlinux.homestead.com/
+  SUBMENU:=terminal
 endef
 
 define Package/microcom/description

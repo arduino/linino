@@ -25,6 +25,7 @@ define Package/procmail
   CATEGORY:=Utilities
   TITLE:=Mail processing tool
   URL:=http://www.procmail.org
+  SUBMENU:=mail
 endef
 
 define Package/procmail/description

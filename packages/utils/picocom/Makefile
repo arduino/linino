@@ -25,6 +25,7 @@ define Package/picocom
   CATEGORY:=Utilities
   TITLE:=A minimal dumb-terminal emulation program
   URL:=http://efault.net/npat/hacks/picocom/
+  SUBMENU:=terminal
 endef
 
 define Package/picocom/description

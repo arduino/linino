@@ -26,6 +26,7 @@ define Package/fetchmail
   CATEGORY:=Utilities
   TITLE:=Remote mail retriever
   URL:=http://www.catb.org/~esr/fetchmail/
+  SUBMENU:=mail
 endef
 
 define Package/fetchmail/description

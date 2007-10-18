@@ -26,6 +26,7 @@ define Package/zile
   DEPENDS:=+libncurses
   TITLE:=very small emacs-like editor
   URL:=http://zile.sourceforge.net
+  SUBMENU:=editors
 endef
 
 define Package/zile/description

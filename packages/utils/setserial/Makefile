@@ -25,6 +25,7 @@ define Package/setserial
   CATEGORY:=Utilities
   TITLE:=Serial port configuration utility
   URL:=http://setserial.sourceforge.net/
+  SUBMENU:=terminal
 endef
 
 define Package/setserial/description

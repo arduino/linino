@@ -27,6 +27,7 @@ define Package/nano
   DEPENDS:=+libncurses
   TITLE:=An enhanced clone of the Pico text editor
   URL:=http://www.nano-editor.org/
+  SUBMENU:=editors
 endef
 
 define Package/nano/description

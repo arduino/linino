@@ -26,9 +26,8 @@ define Package/minicom
   DEPENDS:=+libncurses
   TITLE:=Terminal emulation program
   URL:=http://alioth.debian.org/projects/minicom/
+  SUBMENU:=terminal
 endef
-
-# uses GNU configure
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)
