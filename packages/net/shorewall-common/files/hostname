@@ -1,0 +1,8 @@
+#!/bin/sh
+
+. /etc/functions.sh
+config_load "system"
+local section="cfg1"
+config_get "hostname"  "$section" "hostname"
+
+echo "$hostname"
