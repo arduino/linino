@@ -23,6 +23,7 @@ define Package/p910nd
   CATEGORY:=Network
   TITLE:=A small non-spooling printer server
   URL:=http://www.etherboot.org/p910nd/
+  SUBMENU:=printing
 endef
 
 define Package/p910nd/conffiles

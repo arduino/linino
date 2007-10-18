@@ -28,6 +28,7 @@ define Package/vpnc
   DEPENDS:=+libgpg-error +libgcrypt +kmod-tun +ip
   TITLE:=VPN client for Cisco 3000
   URL:=http://www.unix-ag.uni-kl.de/~massar/vpnc/
+  SUBMENU:=vpn
 endef
 
 define Package/vpnc/conffiles

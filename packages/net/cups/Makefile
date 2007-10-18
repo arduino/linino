@@ -33,6 +33,7 @@ define Package/cups
   DEPENDS:=+zlib
   TITLE:=Common UNIX Printing System
   URL:=http://www.cups.org/
+  SUBMENU:=printing
 endef
 
 define Package/cups/description

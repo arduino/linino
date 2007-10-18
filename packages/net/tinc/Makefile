@@ -30,6 +30,7 @@ define Package/tinc
   DEPENDS:=+liblzo +libopenssl +zlib
   TITLE:=VPN tunneling daemon
   URL:=http://www.tinc-vpn.org/
+  SUBMENU:=vpn
 endef
 
 define Build/Configure

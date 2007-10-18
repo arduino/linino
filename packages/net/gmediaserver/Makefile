@@ -24,6 +24,7 @@ define Package/gmediaserver
   DEPENDS:=+id3lib +libiconv +libmagic +file +libupnp +libuuid
   TITLE:=An UPnP music media server
   URL:=http://www.nongnu.org/gmediaserver/
+  SUBMENU:=multimedia
 endef
 
 define Package/gmediaserver/description

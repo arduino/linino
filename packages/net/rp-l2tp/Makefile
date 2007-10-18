@@ -28,6 +28,7 @@ define Package/rp-l2tpd
   TITLE:=Roaring Penguin L2TP
   URL:=http://sourceforge.net/projects/rp-l2tp/
   TITLE+= daemon
+  SUBMENU:=dial-in/up
 endef
 
 define Package/rp-l2tpd/description

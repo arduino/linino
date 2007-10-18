@@ -28,6 +28,7 @@ define Package/aircrack-ng
   DEPENDS:=+libpthread
   TITLE:=next generation of aircrack with new features
   URL:=http://www.aircrack-ng.org/
+  SUBMENU:=wireless
 endef
 
 define Package/aircrack-ng/description

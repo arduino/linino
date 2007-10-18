@@ -27,6 +27,7 @@ define Package/ipkungfu
   CATEGORY:=Network
   TITLE:=IPKungFu is an iptables-based Linux firewall
   URL:=http://www.linuxkungfu.org/
+  SUBMENU:=firewall
 endef
 
 define Package/ipkungfu/description

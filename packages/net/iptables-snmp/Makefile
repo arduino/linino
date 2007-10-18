@@ -28,6 +28,7 @@ define Package/iptables-snmp
   DEPENDS:=+snmpd
   TITLE:=An snmpd plugin to access iptables rules
   URL:=http://www.nobiscuit.com/iptables-snmp/
+  SUBMENU:=firewall
 endef
 
 define Package/iptables-snmp/description

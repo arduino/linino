@@ -28,8 +28,9 @@ define Package/rp-pppoe/Default
   DEPENDS:=+ppp
   TITLE:=PPPoE (PPP over Ethernet)
   URL:=http://roaringpenguin.com/penguin/pppoe/
+  SUBMENU:=dial-in/up
 endef
-  
+
 define Package/rp-pppoe-client
   $(call Package/rp-pppoe/Default)
   TITLE+= client

@@ -24,6 +24,7 @@ define Package/shorewall
   DEPENDS:=+iptables
   TITLE:=Shorewall firewall
   URL:=http://www.shorewall.net/
+  SUBMENU:=firewall
 endef
 
 define define Package/shorewall/description

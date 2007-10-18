@@ -26,6 +26,7 @@ define Package/kismet/Default
   TITLE:=Kismet
   DEPENDS:= +uclibcxx
   URL:=http://www.kismetwireless.net/
+  SUBMENU:=wireless
 endef
 
 define Package/kismet/Default/description

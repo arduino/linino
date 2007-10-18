@@ -28,6 +28,7 @@ define Package/openvpn
   DEPENDS:=+kmod-tun +libopenssl +liblzo
   TITLE:=Open source VPN solution using SSL
   URL:=http://openvpn.net
+  SUBMENU:=vpn
 endef
 
 define Package/openvpn/description
