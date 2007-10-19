@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/karma
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+kmod-madwifi-karma +ruby +libpcap +libncurses
+  DEPENDS:=+kmod-madwifi +ruby +libpcap +libncurses
   TITLE:=set of tools for assessing the security of wireless clients
   URL:=http://theta44.org/karma/index.html
 endef
