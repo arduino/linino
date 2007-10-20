@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xyssl
-PKG_VERSION:=0.7
-PKG_RELEASE:=2
+PKG_VERSION:=0.8
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://xyssl.org/code/download/
-PKG_MD5SUM:=f6422c393a4ca72577331f373c6c4248
+PKG_MD5SUM:=5c80e021e3bca4b77fbe2429c9e61541
 
 include $(INCLUDE_DIR)/package.mk
 

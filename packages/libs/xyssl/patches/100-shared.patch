@@ -1,0 +1,12 @@
+diff -urN xyssl-0.8.orig/library/Makefile xyssl-0.8/library/Makefile
+--- xyssl-0.8.orig/library/Makefile	2007-10-20 20:29:26.000000000 +0200
++++ xyssl-0.8/library/Makefile	2007-10-20 20:30:41.000000000 +0200
+@@ -28,7 +28,7 @@
+ 
+ .SILENT:
+ 
+-all: static
++all: static shared
+ 
+ static: libxyssl.a
+ 
