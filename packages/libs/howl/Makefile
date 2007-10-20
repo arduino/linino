@@ -36,7 +36,6 @@ define Package/libhowl
 endef
 
 define Package/libhowl/description
-
 	Howl is a cross-platform implementation of Zeroconf networking.	
 	This package contains the Howl shared libraries, used by other programs.
 endef
@@ -48,7 +47,6 @@ define Package/howl-autoipd
 endef
 
 define Package/howl-autoipd/description
-
 	Howl is a cross-platform implementation of Zeroconf networking.	
 	This package contains an IPv4 Link-Local address self-assigner daemon.
 endef
@@ -60,7 +58,6 @@ define Package/howl-mdnsresponder
 endef
 
 define Package/howl-mdnsresponder/description
-
 	Howl is a cross-platform implementation of Zeroconf networking.	
 	This package contains an mDNS (Multicast DNS) service responder daemon.
 endef
@@ -76,8 +73,6 @@ define Package/howl-nifd
 endef
 
 define Package/howl-nifd/description
-
-	
 	This package contains a network interface monitor daemon.
 endef
 
@@ -88,8 +83,6 @@ define Package/howl-utils
 endef
 
 define Package/howl-utils/description
-
-	
 	This package contains mDNS (Multicast DNS) client utilities.
 endef
 
@@ -134,7 +127,7 @@ define Package/howl-autoipd/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DATA) ./files/autoipd.init $(1)/etc/init.d/autoipd
 endef
-	
+
 define Package/howl-mdnsresponder/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/mDNSResponder $(1)/usr/sbin/
@@ -150,12 +143,12 @@ define Package/howl-nifd/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DATA) ./files/nifd.init $(1)/etc/init.d/nifd
 endef
-	
+
 define Package/howl-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/mDNS{Browse,Publish,Query,Resolve} $(1)/usr/bin/
 endef
-	
+
 $(eval $(call BuildPackage,libhowl))
 $(eval $(call BuildPackage,howl-autoipd))
 $(eval $(call BuildPackage,howl-mdnsresponder))
