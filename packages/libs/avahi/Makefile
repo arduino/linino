@@ -39,7 +39,6 @@ define Package/libavahi
 endef
 
 define Package/libavahi/description
-
 	An mDNS/DNS-SD (aka RendezVous/Bonjour/ZeroConf) implementation (library).
 	Avahi is a system which facilitates service discovery on a local network -- 
 	this means that you can plug your laptop or computer into a network and 
@@ -57,7 +56,6 @@ define Package/avahi-autoipd
 endef
 
 define Package/avahi-autoipd/description
-
 	An mDNS/DNS-SD (aka RendezVous/Bonjour/ZeroConf) implementation (library).
 	Avahi is a system which facilitates service discovery on a local network -- 
 	this means that you can plug your laptop or computer into a network and 
@@ -80,7 +78,6 @@ define Package/avahi-daemon
 endef
 
 define Package/avahi-daemon/description
-
 	An mDNS/DNS-SD (aka RendezVous/Bonjour/ZeroConf) implementation (library).
 	Avahi is a system which facilitates service discovery on a local network -- 
 	this means that you can plug your laptop or computer into a network and 
