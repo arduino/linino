@@ -1,0 +1,61 @@
+Index: dibbler-0.6.0-RC1/Port-linux/iproute.c
+===================================================================
+--- dibbler-0.6.0-RC1.orig/Port-linux/iproute.c	2007-10-21 09:25:04.698543780 +0200
++++ dibbler-0.6.0-RC1/Port-linux/iproute.c	2007-10-21 09:25:30.572018227 +0200
+@@ -28,7 +28,6 @@
+ #include <netinet/ip.h>
+ #include <arpa/inet.h>
+ #include <linux/in_route.h>
+-#include <linux/ip_mp_alg.h>
+ 
+ #include "rt_names.h"
+ #include "utils.h"
+@@ -95,14 +94,6 @@
+ 	inet_prefix msrc;
+ } filter;
+ 
+-static char *mp_alg_names[IP_MP_ALG_MAX+1] = {
+-	[IP_MP_ALG_NONE] = "none",
+-	[IP_MP_ALG_RR] = "rr",
+-	[IP_MP_ALG_DRR] = "drr",
+-	[IP_MP_ALG_RANDOM] = "random",
+-	[IP_MP_ALG_WRANDOM] = "wrandom"
+-};
+-
+ static int flush_update(void)
+ {
+ 	if (rtnl_send(&rth, filter.flushb, filter.flushp) < 0) {
+@@ -335,14 +326,6 @@
+ 		fprintf(fp, "tos %s ", rtnl_dsfield_n2a(r->rtm_tos, b1, sizeof(b1)));
+ 	}
+ 
+-	if (tb[RTA_MP_ALGO]) {
+-		__u32 mp_alg = *(__u32*) RTA_DATA(tb[RTA_MP_ALGO]);
+-		if (mp_alg > IP_MP_ALG_NONE) {
+-			fprintf(fp, "mpath %s ",
+-			    mp_alg < IP_MP_ALG_MAX ? mp_alg_names[mp_alg] : "unknown");
+-		}
+-	}
+-
+ 	if (tb[RTA_GATEWAY] && filter.rvia.bitlen != host_len) {
+ 		fprintf(fp, "via %s ", 
+ 			format_host(r->rtm_family,
+@@ -846,18 +829,6 @@
+ 			   strcmp(*argv, "oif") == 0) {
+ 			NEXT_ARG();
+ 			d = *argv;
+-		} else if (strcmp(*argv, "mpath") == 0 ||
+-			   strcmp(*argv, "mp") == 0) {
+-			int i;
+-			__u32 mp_alg = IP_MP_ALG_NONE;
+-
+-			NEXT_ARG();
+-			for (i = 1; i < ARRAY_SIZE(mp_alg_names); i++)
+-				if (strcmp(*argv, mp_alg_names[i]) == 0)
+-					mp_alg = i;
+-			if (mp_alg == IP_MP_ALG_NONE)
+-				invarg("\"mpath\" value is invalid\n", *argv);
+-			addattr_l(&req.n, sizeof(req), RTA_MP_ALGO, &mp_alg, sizeof(mp_alg));
+ 		} else {
+ 			int type;
+ 			inet_prefix dst;
