@@ -16,10 +16,10 @@ PKG_SOURCE_URL:=http://oss.oetiker.ch/rrdtool/pub/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_MD5SUM:=dafa161bc9c61e57636a6085c87c1fe8
 
-PKG_BUILD_DEPENDS:=libnotimpl
+PKG_BUILD_DEPENDS:=libnotimpl python-core
 
 include $(INCLUDE_DIR)/package.mk
--include $(TOPDIR)/package/python/python-package.mk
+-include $(if $(DUMP),,./python-package.mk)
 
 define Package/rrdtool/Default
   SECTION:=utils
@@ -34,7 +34,7 @@ $(call Package/rrdtool/Default)
   TITLE+= management library (v1.2.x)
   DEPENDS+= +libart +libfreetype +libpng +zlib
 endef
-	
+
 define Package/rrdcgi
 $(call Package/rrdtool/Default)
   TITLE+= CGI graphing tool (v1.2.x)
@@ -47,7 +47,7 @@ $(call Package/rrdtool/Default)
   DEPENDS+= +librrd
 endef
 
-define PyPackage/rrdpy
+define Package/rrdpy
   TITLE:=Round Robin Database (RRD) python bindings (v1.2.x)
   DEPENDS+= +librrd
 endef
@@ -60,6 +60,7 @@ CONFIGURE_ARGS += \
 	--disable-mmap \
 	--disable-perl \
 	--disable-tcl \
+	--disable-ruby \
 	--without-x \
 	--with-rrd-default-font="/usr/share/rrdtool/fonts/DejaVuSansMono-Roman.ttf" \
 
@@ -135,4 +136,5 @@ endef
 $(eval $(call BuildPackage,librrd))
 $(eval $(call BuildPackage,rrdcgi))
 $(eval $(call PyPackage,rrdpy))
+$(eval $(call BuildPackage,rrdpy))
 $(eval $(call BuildPackage,rrdtool))
