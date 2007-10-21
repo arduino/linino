@@ -17,16 +17,23 @@ PKG_SOURCE_URL:=http://www.egenix.com/files/python/
 PKG_MD5SUM:=66841151728a06f92d0b8dd2ed317a29
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-base-$(PKG_VERSION)
+PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
-include ../python/python-package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+ifeq ($(DUMP)$(Build/Compile/PyMod),)
+  $(error Python packaging code not found.)
+endif
 
-define PyPackage/python-egenix-mx
- TITLE:=Egenix mxBase
- URL:=http://www.egenix.com/products/python/mxBase/
+define Package/python-egenix-mx
+  SECTION:=lang
+  CATEGORY:=Languages
+  DEPENDS:=python-core
+  TITLE:=Egenix mxBase
+  URL:=http://www.egenix.com/products/python/mxBase/
 endef
 
-define PyPackage/python-egenix-mx/description
+define Package/python-egenix-mx/description
  This package contains a set of base packages from Egenix required by other 
  python packages.
 endef
@@ -88,3 +95,4 @@ define PyPackage/python-egenix-mx/install
 endef
 
 $(eval $(call PyPackage,python-egenix-mx))
+$(eval $(call BuildPackage,python-egenix-mx))

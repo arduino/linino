@@ -17,76 +17,83 @@ PKG_SOURCE_URL:=http://tmrc.mit.edu/mirror/twisted/Twisted/2.5
 PKG_MD5SUM:=56df2ae66db57932515a491c03bf514f
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Twisted-$(PKG_VERSION)
+PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
-include ../python/python-package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+ifeq ($(DUMP)$(Build/Compile/PyMod),)
+  $(error Python packaging code not found.)
+endif
 
-define PyPackage/twisted/default
- URL:=http://twistedmatrix.com/
+define Package/twisted/default
+  SECTION:=lang
+  CATEGORY:=Languages
+  DEPENDS:=python-core
+  URL:=http://twistedmatrix.com/
 endef
 
-define PyPackage/twisted/default/description
+define Package/twisted/default/description
  Twisted is a networking engine written in Python, supporting numerous 
  protocols. It contains a web server, numerous chat clients, chat servers, 
  mail servers, and more.
 endef
 
-define PyPackage/twisted
-$(call PyPackage/twisted/default)
- TITLE:=Python networking engine
- DEPENDS+= +zope-interface
+define Package/twisted
+$(call Package/twisted/default)
+  TITLE:=Python networking engine
+  DEPENDS+= +zope-interface
 endef
 
-define PyPackage/twisted-conch
-$(call PyPackage/twisted/default)
+define Package/twisted-conch
+$(call Package/twisted/default)
   TITLE:=Twisted - Conch
   DEPENDS+= twisted
 endef
 
-define PyPackage/twisted-lore
-$(call PyPackage/twisted/default)
+define Package/twisted-lore
+$(call Package/twisted/default)
   TITLE:=Twisted - Lore
   DEPENDS+= twisted
 endef
 
-define PyPackage/twisted-mail
-$(call PyPackage/twisted/default)
+define Package/twisted-mail
+$(call Package/twisted/default)
   TITLE:=Twisted - Mail
   DEPENDS+= twisted
 endef
 
-define PyPackage/twisted-names
-$(call PyPackage/twisted/default)
+define Package/twisted-names
+$(call Package/twisted/default)
   TITLE:=Twisted - Names
   DEPENDS+= twisted
 endef
 
-define PyPackage/twisted-news
-$(call PyPackage/twisted/default)
+define Package/twisted-news
+$(call Package/twisted/default)
   TITLE:=Twisted - News
   DEPENDS+= twisted
 endef
 
-define PyPackage/twisted-runner
-$(call PyPackage/twisted/default)
+define Package/twisted-runner
+$(call Package/twisted/default)
   TITLE:=Twisted - Runner
   DEPENDS+= twisted
 endef
 
-define PyPackage/twisted-web
-$(call PyPackage/twisted/default)
+define Package/twisted-web
+$(call Package/twisted/default)
   TITLE:=Twisted - Web
   DEPENDS+= twisted
 endef
 
-define PyPackage/twisted-words
-$(call PyPackage/twisted/default)
+define Package/twisted-words
+$(call Package/twisted/default)
   TITLE:=Twisted - Words
   DEPENDS+= twisted
 endef
 
-define PyPackage/zope-interface
-$(call PyPackage/twisted/default)
+define Package/zope-interface
+$(call Package/twisted/default)
   TITLE:=Zope interface
 endef
 
@@ -230,3 +237,14 @@ $(eval $(call PyPackage,twisted-runner))
 $(eval $(call PyPackage,twisted-web))
 $(eval $(call PyPackage,twisted-words))
 $(eval $(call PyPackage,zope-interface))
+
+$(eval $(call BuildPackage,twisted))
+$(eval $(call BuildPackage,twisted-conch))
+$(eval $(call BuildPackage,twisted-lore))
+$(eval $(call BuildPackage,twisted-mail))
+$(eval $(call BuildPackage,twisted-names))
+$(eval $(call BuildPackage,twisted-news))
+$(eval $(call BuildPackage,twisted-runner))
+$(eval $(call BuildPackage,twisted-web))
+$(eval $(call BuildPackage,twisted-words))
+$(eval $(call BuildPackage,zope-interface))

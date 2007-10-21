@@ -6,40 +6,18 @@
 #
 # $Id$
 
-ifeq ($(DUMP),)
+PYTHON_VERSION=2.5
 
-  PYTHON_VERSION=2.5
+PYTHON_DIR:=$(STAGING_DIR)/usr
+PYTHON_BIN_DIR:=$(PYTHON_DIR)/bin
+PYTHON_INC_DIR:=$(PYTHON_DIR)/include/python$(PYTHON_VERSION)
+PYTHON_LIB_DIR:=$(PYTHON_DIR)/lib/python$(PYTHON_VERSION)
 
-  PYTHON_DIR:=$(STAGING_DIR)/usr
-  PYTHON_BIN_DIR:=$(PYTHON_DIR)/bin
-  PYTHON_INC_DIR:=$(PYTHON_DIR)/include/python$(PYTHON_VERSION)
-  PYTHON_LIB_DIR:=$(PYTHON_DIR)/lib/python$(PYTHON_VERSION)
+PYTHON:=$(PYTHON_BIN_DIR)/python
 
-  PYTHON:=$(PYTHON_BIN_DIR)/python
-
-  PYTHON_PKG_DIR:=/usr/lib/python$(PYTHON_VERSION)/site-packages
-
-endif
+PYTHON_PKG_DIR:=/usr/lib/python$(PYTHON_VERSION)/site-packages
 
 define PyPackage
-  NAME:=$(1)
-  $(eval $(call PyPackage/$(1)))
-
-  define Package/$(1)
-    SUBMENU:=Python
-    TITLE:=$(TITLE)
-    SECTION:=lang
-    CATEGORY:=Languages
-    DEPENDS:=python-core
-    $(call PyPackage/$(1))
-  endef
-
-  ifdef PyPackage/$(1)/description
-    define Package/$(1)/description
-$(call PyPackage/$(1)/description)
-    endef
-  endif
-
   $(call shexport,PyPackage/$(1)/filespec)
 
   define Package/$(1)/install
@@ -70,8 +48,6 @@ $(call PyPackage/$(1)/description)
 	)
 	$(call PyPackage/$(1)/install,$$(1))
   endef
-
-  $$(eval $$(call BuildPackage,$(1)))
 endef
 
 define Build/Compile/PyMod

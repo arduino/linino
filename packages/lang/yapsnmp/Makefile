@@ -15,17 +15,23 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=8a3e9a5b814388d7907c639105cb2365
+PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
-include ../python/python-package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+ifeq ($(DUMP)$(Build/Compile/PyMod),)
+  $(error Python packaging code not found.)
+endif
 
-define PyPackage/python-yapsnmp
- TITLE:=Python interface to Net-SNMP
- URL:=http://yapsnmp.sourceforge.net/
- DEPENDS+= +libnetsnmp
+define Package/python-yapsnmp
+  SECTION:=lang
+  CATEGORY:=Languages
+  TITLE:=Python interface to Net-SNMP
+  URL:=http://yapsnmp.sourceforge.net/
+  DEPENDS:=python-core +libnetsnmp
 endef
 
-define PyPackage/python-yapsnmp/description
+define Package/python-yapsnmp/description
  This package contains a Python SNMP module based on the net-snmp (formerly 
  known as ucd-snmp) library. It's composed of a low level interface to the 
  library, created using SWIG, and a higher level python module removing all 
@@ -62,3 +68,4 @@ define Build/Compile
 endef
 
 $(eval $(call PyPackage,python-yapsnmp))
+$(eval $(call BuildPackage,python-yapsnmp))

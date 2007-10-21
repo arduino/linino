@@ -15,17 +15,23 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/mysql-python
 PKG_MD5SUM:=532268f02870bea18c1d465e88afff30
+PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
-include ../python/python-package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+ifeq ($(DUMP)$(Build/Compile/PyMod),)
+  $(error Python packaging code not found.)
+endif
 
-define PyPackage/python-mysql
- TITLE:=MySQL database adapter for Python
- URL:=http://mysql-python.sourceforge.net/
- DEPENDS+= +libmysqlclient
+define Package/python-mysql
+  SECTION:=lang
+  CATEGORY:=Languages
+  TITLE:=MySQL database adapter for Python
+  URL:=http://mysql-python.sourceforge.net/
+  DEPENDS:=python-core +libmysqlclient
 endef
 
-define PyPackage/python-mysql/description
+define Package/python-mysql/description
  MySQLdb is an thread-compatible interface to the popular MySQL database 
  server that provides the Python database API.
 endef
@@ -43,3 +49,4 @@ define Build/Compile
 endef
 
 $(eval $(call PyPackage,python-mysql))
+$(eval $(call BuildPackage,python-mysql))

@@ -15,17 +15,21 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://initd.org/pub/software/pysqlite/releases/2.3/2.3.5/
 PKG_MD5SUM:=b4a185e936848370fcc1a5b17755b641
+PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
-include ../python/python-package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+ifeq ($(DUMP)$(Build/Compile/PyMod),)
+  $(error Python packaging code not found.)
+endif
 
-define PyPackage/python-sqlite
+define Package/python-sqlite
  TITLE:=SQLite database adapter for Python
  URL:=http://www.initd.org/tracker/pysqlite/wiki/pysqlite
- DEPENDS+= +libsqlite3
+ DEPENDS:= +libsqlite3
 endef
 
-define PyPackage/python-sqlite/description
+define Package/python-sqlite/description
  This package contains an SQLite database adapter for the Python 
  programming language.
 endef
@@ -42,3 +46,4 @@ define Build/Compile
 endef
 
 $(eval $(call PyPackage,python-sqlite))
+$(eval $(call BuildPackage,python-sqlite))

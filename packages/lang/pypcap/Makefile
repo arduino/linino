@@ -15,14 +15,20 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://pypcap.googlecode.com/files
 PKG_MD5SUM:=034c3cbbfa81aa19e8f685b767c65764
+PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
-include ../python/python-package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+ifeq ($(DUMP)$(Build/Compile/PyMod),)
+  $(error Python packaging code not found.)
+endif
 
-define PyPackage/python-pcap
- TITLE:=Python interface to lipcap
- URL:=http://code.google.com/p/pypcap/
- DEPENDS+= +libpcap
+define Package/python-pcap
+  SECTION:=lang
+  CATEGORY:=Languages
+  TITLE:=Python interface to lipcap
+  URL:=http://code.google.com/p/pypcap/
+  DEPENDS:=python-core +libpcap
 endef
 
 define PyPackage/python-pcap/filespec
@@ -37,3 +43,4 @@ define Build/Compile
 endef
 
 $(eval $(call PyPackage,python-pcap))
+$(eval $(call BuildPackage,python-pcap))

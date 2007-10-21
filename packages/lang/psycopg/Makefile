@@ -15,17 +15,23 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.initd.org/pub/software/psycopg/
 PKG_MD5SUM:=a31f79f68d6d32898d6f24e11369a106
+PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
-include ../python/python-package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+ifeq ($(DUMP)$(Build/Compile/PyMod),)
+  $(error Python packaging code not found.)
+endif
 
-define PyPackage/python-psycopg
- TITLE:=PostgreSQL database adapter for Python
- URL:=http://www.initd.org/
- DEPENDS+= +libpq +python-egenix-mx
+define Package/python-psycopg
+  SECTION:=lang
+  CATEGORY:=Languages
+  TITLE:=PostgreSQL database adapter for Python
+  URL:=http://www.initd.org/
+  DEPENDS:=python-core +libpq +python-egenix-mx
 endef
 
-define PyPackage/python-psycopg/description
+define Package/python-psycopg/description
  This package contains is a PostgreSQL database adapter for the Python 
  programming language.
 endef
@@ -47,3 +53,4 @@ define PyPackage/python-psycopg/install
 endef
 
 $(eval $(call PyPackage,python-psycopg))
+$(eval $(call BuildPackage,python-psycopg))

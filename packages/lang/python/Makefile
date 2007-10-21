@@ -5,7 +5,7 @@
 # See /LICENSE for more information.
 #
 # $Id$
- 
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python
@@ -18,12 +18,12 @@ PKG_MD5SUM:=70084ffa561660f07de466c2c8c4842d
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Python-$(PKG_VERSION)
 
-PKG_BUILD_DEPENDS:=libexpat libopenssl zlib
+PKG_BUILD_DEPENDS:=python libexpat libopenssl zlib
 
 include $(INCLUDE_DIR)/package.mk
-include ./python-package.mk
+-include $(if $(DUMP),,./python-package.mk)
 
-define PyPackage/python/Default
+define Package/python/Default
   SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
@@ -31,7 +31,7 @@ define PyPackage/python/Default
   URL:=http://www.python.org/
 endef
 
-define PyPackage/python/Default/description
+define Package/python/Default/description
  Python is a dynamic object-oriented programming language that can be used 
  for many kinds of software development. It offers strong support for 
  integration with other languages and tools, comes with extensive standard 
@@ -40,45 +40,45 @@ define PyPackage/python/Default/description
  the development of higher quality, more maintainable code.
 endef
 
-define PyPackage/python
-$(call PyPackage/python/Default)
+define Package/python
+$(call Package/python/Default)
  TITLE+= (full)
  DEPENDS:= +libpthread +zlib
  PROVIDES:=python-core
 endef
 
-define PyPackage/python/description
-$(call PyPackage/python/Default/description)
+define Package/python/description
+$(call Package/python/Default/description)
  .
  This package contains the full Python install.
 endef
 
-define PyPackage/python-mini
-$(call PyPackage/python/Default)
+define Package/python-mini
+$(call Package/python/Default)
  TITLE+= (minimal)
  DEPENDS:= +libpthread +zlib
  PROVIDES:=python-core
 endef
 
-define PyPackage/python-mini/description
-$(call PyPackage/python/Default/description)
+define Package/python-mini/description
+$(call Package/python/Default/description)
  .
  This package contains only a minimal Python install.
 endef
 
-define PyPackage/python-doc
-$(call PyPackage/python/Default)
+define Package/python-doc
+$(call Package/python/Default)
  TITLE:=Python interactive documentation
 endef
 
-define PyPackage/python-expat
-$(call PyPackage/python/Default)
+define Package/python-expat
+$(call Package/python/Default)
  TITLE:=Python support for expat
  DEPENDS+= +libexpat
 endef
 
-define PyPackage/python-openssl
-$(call PyPackage/python/Default)
+define Package/python-openssl
+$(call Package/python/Default)
  TITLE:=Python support for OpenSSL
  DEPENDS+= +libopenssl
 endef
@@ -135,6 +135,8 @@ define Build/Compile
 endef
 
 define Build/InstallDev
+	$(INSTALL_DIR) $(1)/mk
+	$(INSTALL_DATA) ./python-package.mk $(1)/mk/
 	mkdir -p $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/hostpython $(1)/usr/bin/
 	ln -sf hostpython $(1)/usr/bin/python
@@ -149,11 +151,12 @@ define Build/InstallDev
 endef
 
 define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/bin/hostpython \
-		$(STAGING_DIR)/usr/bin/python \
-		$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION) \
-		$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION) \
-		$(STAGING_DIR)/usr/lib/libpython$(PYTHON_VERSION).a
+	rm -rf \
+		$(1)/usr/bin/hostpython \
+		$(1)/usr/bin/python \
+		$(1)/usr/include/python$(PYTHON_VERSION) \
+		$(1)/usr/lib/python$(PYTHON_VERSION) \
+		$(1)/usr/lib/libpython$(PYTHON_VERSION).a
 endef
 
 define PyPackage/python/filespec
@@ -265,4 +268,10 @@ $(eval $(call PyPackage,python-mini))
 $(eval $(call PyPackage,python-doc))
 $(eval $(call PyPackage,python-expat))
 $(eval $(call PyPackage,python-openssl))
+
+$(eval $(call BuildPackage,python))
+$(eval $(call BuildPackage,python-mini))
+$(eval $(call BuildPackage,python-doc))
+$(eval $(call BuildPackage,python-expat))
+$(eval $(call BuildPackage,python-openssl))
 

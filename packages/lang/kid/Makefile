@@ -5,7 +5,7 @@
 # See /LICENSE for more information.
 #
 # $Id$
- 
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kid
@@ -15,16 +15,23 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kid-templating.org/dist/0.9.6/dist
 PKG_MD5SUM:=31e7156698a6f214b4067afb9e13728f
+PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
-include ../python/python-package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+ifeq ($(DUMP)$(Build/Compile/PyMod),)
+  $(error Python packaging code not found.)
+endif
 
-define PyPackage/python-kid
- TITLE:=XML-based Templating
- URL:=http://www.kid-templating.org/
+define Package/python-kid
+  SECTION:=lang
+  CATEGORY:=Languages
+  DEPENDS:=python-core
+  TITLE:=XML-based Templating
+  URL:=http://www.kid-templating.org/
 endef
 
-define PyPackage/python-kid/description
+define Package/python-kid/description
  Kid is a simple template language for XML based vocabularies written in 
  Python.
 endef
@@ -41,3 +48,4 @@ define Build/Compile
 endef
 
 $(eval $(call PyPackage,python-kid))
+$(eval $(call BuildPackage,python-kid))

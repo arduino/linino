@@ -15,14 +15,20 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://pyevent.googlecode.com/files/
 PKG_MD5SUM:=584912c92d08bf005283fb29a47a6e4d
+PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
-include ../python/python-package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+ifeq ($(DUMP)$(Build/Compile/PyMod),)
+  $(error Python packaging code not found.)
+endif
 
-define PyPackage/python-event
- TITLE:=Python interface to libevent
- URL:=http://code.google.com/p/pyevent/
- DEPENDS+= +libevent
+define Package/python-event
+  SECTION:=lang
+  CATEGORY:=Languages
+  TITLE:=Python interface to libevent
+  URL:=http://code.google.com/p/pyevent/
+  DEPENDS:=python-core +libevent
 endef
 
 define PyPackage/python-event/filespec
@@ -37,3 +43,4 @@ define Build/Compile
 endef
 
 $(eval $(call PyPackage,python-event))
+$(eval $(call BuildPackage,python-event))
