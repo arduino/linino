@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sshfs
-PKG_VERSION:=1.7
+PKG_VERSION:=1.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-fuse-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/fuse
-PKG_MD5SUM:=e91a2fed1da952a375798408dc6e41a0
+PKG_MD5SUM:=3c575cf89a6d3d8ab6063c2f60bd5b25
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-fuse-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
@@ -40,9 +40,9 @@ CONFIGURE_VARS += \
 		-I$(STAGING_DIR)/usr/lib/libintl/include \
 		-I$(STAGING_DIR)/usr/lib/libiconv/include \
 		-I$(STAGING_DIR)/usr/include/glib-2.0 \
-		-I$(STAGING_DIR)/usr/include/glib-2.0/glib" \
+		-I$(STAGING_DIR)/usr/lib/glib-2.0/include" \
 	SSHFS_LIBS=" \
-		-lglib-2.0 -lintl -liconv -lfuse -pthread \
+		-lglib-2.0 -lintl -liconv -lfuse -pthread -lgthread-2.0 \
 		-L$(STAGING_DIR)/usr/lib/libintl/lib \
 		-L$(STAGING_DIR)/usr/lib/libiconv/lib"
 		
