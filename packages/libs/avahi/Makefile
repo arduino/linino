@@ -101,8 +101,6 @@ define Package/avahi-dnsconfd
 endef
 
 define Package/avahi-dnsconfd/description
-
-	
 	This package contains an Unicast DNS server from mDNS/DNS-SD configuration 
 	daemon, which may be used to configure conventional DNS servers using mDNS 
 	in a DHCP-like fashion. Especially useful on IPv6.
