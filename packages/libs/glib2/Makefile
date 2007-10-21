@@ -39,7 +39,8 @@ endef
 
 define Build/Compile
 	mkdir -p $(PKG_BUILD_DIR)/build/$(GNU_HOST_NAME)
-	( cd $(PKG_BUILD_DIR); ./configure \
+	( cd $(PKG_BUILD_DIR); CONFIG_SITE= \
+		./configure \
 		--target=$(GNU_HOST_NAME) \
 		--host=$(GNU_HOST_NAME) \
 		--build=$(GNU_HOST_NAME) \
