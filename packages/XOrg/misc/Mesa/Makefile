@@ -22,6 +22,7 @@ define Package/Mesa
   CATEGORY:=Xorg
   SUBMENU:=misc
   TITLE:=OpenGL compatible 3-D graphics library
+  DEPENDS:=@TARGET_x86
 endef
 
 define Build/Configure

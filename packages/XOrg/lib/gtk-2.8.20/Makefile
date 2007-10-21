@@ -27,7 +27,7 @@ define Package/gtk-2.8.20
   CATEGORY:=Xorg
   SUBMENU:=framework
   TITLE:=GTK+ 2.8.20 package
-  DEPENDS:=+cairo +pango +libjpeg +atk +libtiff
+  DEPENDS:=+cairo +pango +libjpeg +atk +libtiff @TARGET_x86
 endef
 
 define Build/Configure

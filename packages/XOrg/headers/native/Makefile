@@ -15,11 +15,12 @@ PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/headers/xorg-headers-native-$(PKG_VERSION)/
 include $(INCLUDE_DIR)/package.mk
 
 define Package/xorg-headers-native
-	SECTION:=xorg-headers
-	CATEGORY:=Xorg
-	SUBMENU:=headers
-	TITLE:=xorg-headers-native
-	URL:=http://xorg.freedesktop.org/
+  SECTION:=xorg-headers
+  CATEGORY:=Xorg
+  SUBMENU:=headers
+  TITLE:=xorg-headers-native
+  URL:=http://xorg.freedesktop.org/
+  DEPENDS:=@TARGET_x86
 endef
 
 define Build/Prepare

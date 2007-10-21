@@ -22,6 +22,7 @@ define Package/libdrm
   CATEGORY:=Xorg
   SUBMENU:=misc
   TITLE:=library for direct rendering
+  DEPENDS:=@TARGET_x86
 endef
 
 define Build/Configure
