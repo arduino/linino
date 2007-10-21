@@ -47,17 +47,9 @@ define Build/Compile
 	)
 endef
 
-define Package/Template
-	@if [ \! -f "$(PKG_INSTALL_DIR)/$(1)" ]; then \
-		-rm -f $(PKG_BUILD_DIR)/.built; \
-		$(MAKE) $(PKG_BUILD_DIR)/.built; \
-	fi
-	$(INSTALL_DIR) $(2)
-	$(CP) $(PKG_INSTALL_DIR)/$(1) $(2)/
-endef
-
 define Package/nfs-utils/install
-        $(call Package/Template,sbin/mount*,$(1)/sbin)
+	$(INSTALL_DIR) $(1)/sbin
+	$(CP) $(PKG_INSTALL_DIR)/sbin/mount* $(1)/sbin/
 endef
 
 $(eval $(call BuildPackage,nfs-utils))
