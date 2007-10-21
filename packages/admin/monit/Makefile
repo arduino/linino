@@ -27,7 +27,7 @@ define Package/monit/Default
 endef
 
 define Package/monit/Default/description
- An utility for monitoring services on a Unix system
+	An utility for monitoring services on a Unix system
 endef
 
 define Package/monit
@@ -38,7 +38,7 @@ endef
 
 define Package/monit/description
 $(call Package/monit/Default/description)
- This package is built with SSL support.
+	This package is built with SSL support.
 endef
 
 define Package/monit-nossl
@@ -48,9 +48,8 @@ endef
 
 define Package/monit-nossl/description
 $(call Package/monit/Default/description)
- This package is built without SSL support.
+	This package is built without SSL support.
 endef
-
 
 define Build/Template
 
@@ -77,7 +76,6 @@ define Package/$(1)/install
 endef
 
 endef
-
 
 define Build/Configure
 endef

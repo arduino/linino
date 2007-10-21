@@ -27,7 +27,7 @@ define Package/htop
 endef
 
 define Package/htop/description
- An interactive process viewer with colors tree mode and other features.
+	An interactive process viewer with colors tree mode and other features.
 endef
 
 define Build/Compile

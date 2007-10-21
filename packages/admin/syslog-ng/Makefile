@@ -17,9 +17,6 @@ PKG_SOURCE_URL:= http://www.balabit.com/downloads/syslog-ng/1.6/src \
 		http://www.balabit.com/downloads/syslog-ng/stable/src
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/syslog-ng
@@ -31,10 +28,9 @@ define Package/syslog-ng
 endef
 
 define Package/syslog-ng/description
-syslog-ng reads and logs messages to the system console, log
+	syslog-ng reads and logs messages to the system console, log
 	files, other machines and/or users as specified by its
 	configuration file.
-
 endef
 
 define Package/syslog-ng/conffiles
@@ -50,8 +46,7 @@ $(call Build/Configure/Default,--disable-dependency-tracking \
 endef
 
 define Build/Compile	
-$(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install)
+$(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" all install)
 endef
 
 define Package/syslog-ng/install	
