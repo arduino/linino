@@ -12,7 +12,7 @@ PKG_NAME:=updatedd
 PKG_VERSION:=2.6
 PKG_RELEASE:=5
 
-PKG_SOURCE_URL:=@openwrt/
+PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.bz2
 PKG_MD5SUM:=f03446105ed043cd5dbd1ab95484d27f
 
