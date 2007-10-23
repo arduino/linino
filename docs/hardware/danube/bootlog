@@ -1,0 +1,661 @@
+
+ROM VER: 1.0.3
+CFG 01
+Readà
+ROM VER: 1.0.3
+CFG 01
+Read EEPROMX
+üHVCáU-Boot 1.0.5
+DRAM:  32 MB
+
+ relocate_code start
+ relocate code finish
+
+Entering flash_init()
+Flash:  8 MB
+env_relocate[226] malloced ENV at 81f80008
+env_relocate finished
+entering devices_init
+In:    serial
+Out:   serial
+Err:   serial
+console_init_r finished!
+Net:   danube Switch
+
+Type "run flash_nfs" to mount root filesystem over NFS
+
+Hit any key to stop autoboot:  3  0 
+DANUBE #   
+Unknown command '<NULL>' - try 'help'
+DANUBE # printenv
+bootcmd=run flash_flash
+bootdelay=3
+baudrate=115200
+preboot=echo;echo Type "run flash_nfs" to mount root filesystem over NFS;echo
+ethaddr=00:01:22:33:44:55
+netdev=eth0
+baudrate=115200
+nfsargs=setenv bootargs root=/dev/nfs rw nfsroot=$(serverip):$(rootpath)
+ramargs=setenv bootargs root=/dev/ram rw
+addip=setenv bootargs $(bootargs) ip=$(ipaddr):$(serverip):$(gatewayip):$(netmask):$(hostname):$(netdev):on
+addmisc=setenv bootargs $(bootargs) console=ttyS1,$(baudrate) ethaddr=$(ethaddr) mem=31M panic=1
+flash_nfs=run nfsargs addip addmisc;bootm $(kernel_addr)
+flash_self=run ramargs addip addmisc;bootm $(kernel_addr) $(ramdisk_addr)
+net_nfs=tftp 80500000 $(bootfile);run nfsargs addip addmisc;bootm
+net_ram=tftp 80500000 $(bootfile);run ramargs addip addmisc;bootm
+net_flash=tftp 80500000 $(bootfile);run flashargs addip addmisc;bootm
+flash_flash=run flashargs addip addmisc; bootm $(f_kernel_addr)
+rootpath=/mnt/danube_rootfs
+bootfile=uImage
+kernel_addr=80500000
+ramdisk_addr=B0100000
+u-boot=/tftpboot/danube/u-boot.bin
+load=tftp 80500000 $(u-boot)
+update=protect off 1:0-2;era 1:0-2;cp.b 80500000 B0000000 $(filesize)
+flashargs=setenv bootargs root=/dev/mtdblock2
+update_uboot=tftpboot 80500000 u-boot.bin;erase b0000000 b002ffff;cp.b 80500000 b0000000 $(filesize) 
+update_rootfs=tftpboot 80500000 rootfs.img;upgrade rootfs 80500000 $(filesize) 0
+update_kernel=tftpboot 80500000 uImage;erase $(f_kernel_addr) b03bffff;cp.b 80500000 $(f_kernel_addr) $(filesize) 
+update_firmware=tftpboot 80500000 firmware.img;upgrade firmware 80500000 $(filesize) 0
+reset_uboot_config=erase b0030000 b004ffff
+f_uboot_addr=0xb0000000
+f_uboot_size=0x30000
+f_firmware_addr=0xb03c0000
+f_firmware_size=0x40000
+f_rootfs_addr=0xb0050000
+f_rootfs_size=0x280000
+f_rootfs_end=0xb02cffff
+f_kernel_addr=0xb02d0000
+f_kernel_size=0xf0000
+f_kernel_end=0xb03bffff
+f_sysconfig_addr=0xb0400000
+f_sysconfig_size=0x10000
+f_voip_addr=0xb0410000
+f_voip_size=0x10000
+flash_end=0xb0420000
+part0_begin=0xB0000000
+part1_begin=0xB0030000
+part2_begin=0xB0050000
+part3_begin=0xB02F0000
+part4_begin=0xB03C0000
+part5_begin=0xB0400000
+part6_begin=0xB0410000
+total_part=7
+bootargs=root=/dev/mtdblock2 ip=172.20.80.23:172.20.80.237::::eth0:on console=ttyS1,115200 ethaddr=00:01:22:33:44:55 mem=31M panic=1
+filesize=1fd040
+ipaddr=10.10.10.10
+serverip=10.10.10.123
+stdin=serial
+stdout=serial
+stderr=serial
+
+Environment size: 2356/131068 bytes
+DANUBE # flinfo
+
+Bank # 1: MXIC  29LV640BB (64 Mbit, boot sector SA0~SA126 size 64k bytes,other sectors SA127~SA135 size 8k bytes)
+  Size: 8 MB in 135 Sectors
+  Sector Start Addresses:
+    B0000000      B0002000      B0004000      B0006000      B0008000     
+    B000A000      B000C000      B000E000      B0010000      B0020000     
+    B0030000      B0040000      B0050000      B0060000      B0070000     
+    B0080000      B0090000      B00A0000      B00B0000      B00C0000     
+    B00D0000      B00E0000      B00F0000      B0100000      B0110000     
+    B0120000      B0130000      B0140000      B0150000      B0160000     
+    B0170000      B0180000      B0190000      B01A0000      B01B0000     
+    B01C0000      B01D0000      B01E0000      B01F0000      B0200000     
+    B0210000      B0220000      B0230000      B0240000      B0250000     
+    B0260000      B0270000      B0280000      B0290000      B02A0000     
+    B02B0000      B02C0000      B02D0000      B02E0000      B02F0000     
+    B0300000      B0310000      B0320000      B0330000      B0340000     
+    B0350000      B0360000      B0370000      B0380000      B0390000     
+    B03A0000      B03B0000      B03C0000      B03D0000      B03E0000     
+    B03F0000      B0400000      B0410000      B0420000      B0430000     
+    B0440000      B0450000      B0460000      B0470000      B0480000     
+    B0490000      B04A0000      B04B0000      B04C0000      B04D0000     
+    B04E0000      B04F0000      B0500000      B0510000      B0520000     
+    B0530000      B0540000      B0550000      B0560000      B0570000     
+    B0580000      B0590000      B05A0000      B05B0000      B05C0000     
+    B05D0000      B05E0000      B05F0000      B0600000      B0610000     
+    B0620000      B0630000      B0640000      B0650000      B0660000     
+    B0670000      B0680000      B0690000      B06A0000      B06B0000     
+    B06C0000      B06D0000      B06E0000      B06F0000      B0700000     
+    B0710000      B0720000      B0730000      B0740000      B0750000     
+    B0760000      B0770000      B0780000      B0790000      B07A0000     
+    B07B0000      B07C0000      B07D0000      B07E0000      B07F0000     
+DANUBE # 
+
+Bank # 1: MXIC  29LV640BB (64 Mbit, boot sector SA0~SA126 size 64k bytes,other sectors SA127~SA135 size 8k bytes)
+  Size: 8 MB in 135 Sectors
+  Sector Start Addresses:
+    B0000000      B0002000      B0004000      B0006000      B0008000     
+    B000A000      B000C000      B000E000      B0010000      B0020000     
+    B0030000      B0040000      B0050000      B0060000      B0070000     
+    B0080000      B0090000      B00A0000      B00B0000      B00C0000     
+    B00D0000      B00E0000      B00F0000      B0100000      B0110000     
+    B0120000      B0130000      B0140000      B0150000      B0160000     
+    B0170000      B0180000      B0190000      B01A0000      B01B0000     
+    B01C0000      B01D0000      B01E0000      B01F0000      B0200000     
+    B0210000      B0220000      B0230000      B0240000      B0250000     
+    B0260000      B0270000      B0280000      B0290000      B02A0000     
+    B02B0000      B02C0000      B02D0000      B02E0000      B02F0000     
+    B0300000      B0310000      B0320000      B0330000      B0340000     
+    B0350000      B0360000      B0370000      B0380000      B0390000     
+    B03A0000      B03B0000      B03C0000      B03D0000      B03E0000     
+    B03F0000      B0400000      B0410000      B0420000      B0430000     
+    B0440000      B0450000      B0460000      B0470000      B0480000     
+    B0490000      B04A0000      B04B0000      B04C0000      B04D0000     
+    B04E0000      B04F0000      B0500000      B0510000      B0520000     
+    B0530000      B0540000      B0550000      B0560000      B0570000     
+    B0580000      B0590000      B05A0000      B05B0000      B05C0000     
+    B05D0000      B05E0000      B05F0000      B0600000      B0610000     
+    B0620000      B0630000      B0640000      B0650000      B0660000     
+    B0670000      B0680000      B0690000      B06A0000      B06B0000     
+    B06C0000      B06D0000      B06E0000      B06F0000      B0700000     
+    B0710000      B0720000      B0730000      B0740000      B0750000     
+    B0760000      B0770000      B0780000      B0790000      B07A0000     
+    B07B0000      B07C0000      B07D0000      B07E0000      B07F0000     
+DANUBE # run bootcmd
+## Booting image at b02d0000 ...
+   Image Name:   MIPS Linux-2.4.31-Danube-3.0.3-G
+   Created:      2006-10-12  11:35:12 UTC
+   Image Type:   MIPS Linux Kernel Image (gzip compressed)
+   Data Size:    854782 Bytes = 834.7 kB
+   Load Address: 80002000
+   Entry Point:  801ca040
+   Verifying Checksum ... OK
+   Uncompressing Kernel Image ... OK
+
+Starting kernel ...
+
+TODO: chip version
+memsize=32l
+flash_start=0xb0000000
+flash_size=8388608l
+Reserving memory for CP1 @0xa1f00000
+memsize=31
+CPU revision is: 00019641
+Primary instruction cache 16kB, physically tagged, 4-way, linesize 32 bytes.
+Primary data cache 16kB, 4-way, linesize 32 bytes.
+Linux version 2.4.31-Danube-3.0.3-G0432V30V (root@localhost) (gcc version 3.3.6) #2 å10æœˆ 12 19:35:05 CST 2006
+Can't analyze prologue code at 8001e360
+Determined physical RAM map:
+User-defined physical RAM map:
+ memory: 01f00000 @ 00000000 (usable)
+On node 0 totalpages: 7936
+zone(0): 7936 pages.
+zone(1): 0 pages.
+zone(2): 0 pages.
+Kernel command line: root=/dev/mtdblock2 ip=10.10.10.10:10.10.10.123::::eth0:on console=ttyS1,115200 ethaddr=00:01:22:33:44:55 mem=31M panic=1 
+ethaddr_setup: mac address  0- 1-22-33-44-55 
+mips_hpt_frequency:166666667
+r4k_offset: 00196e6a(1666666)
+Using 166.667 MHz high precision timer.
+Syam before calibrate_delay
+Calibrating delay loop... 
+222.00 BogoMIPS
+Syam after calibrate_delay
+MIPS CPU counter frequency is fixed at 166666667 Hz
+Memory: 28728k/31744k available (1808k kernel code, 3016k reserved, 108k data, 100k init, 0k highmem)
+Dentry cache hash table entries: 4096 (order: 3, 32768 bytes)
+Inode cache hash table entries: 2048 (order: 2, 16384 bytes)
+Mount cache hash table entries: 512 (order: 0, 4096 bytes)
+Buffer cache hash table entries: 1024 (order: 0, 4096 bytes)
+Page-cache hash table entries: 8192 (order: 3, 32768 bytes)
+Checking for 'wait' instruction...  unavailable.
+POSIX conformance testing by UNIFIX
+Linux NET4.0 for Linux 2.4
+Based upon Swansea University Computer Society NET3.039
+Initializing RT netlink socket
+LSP Revision 1
+Starting kswapd
+Squashfs 2.2 (released 2005/07/03) (C) 2002-2004, 2005 Phillip Lougher
+pty: 256 Unix98 ptys configured
+ttyS0 at MEM 0xbe100400 (irq = 2) is a IFX_ASC
+ttyS1 at MEM 0xbe100c00 (irq = 9) is a IFX_ASC
+<6>Danube PMU driver v0.3
+cgu: misc_register on minor = 63
+gptu: totally 6 16-bit timers/counters
+gptu: misc_register on minor 62
+gptu: succeeded to request irq 118
+gptu: succeeded to request irq 119
+gptu: succeeded to request irq 120
+gptu: succeeded to request irq 121
+gptu: succeeded to request irq 122
+gptu: succeeded to request irq 123
+led: misc_register on minor = 151
+memcopy_init: memcopy init
+loop: loaded (max 8 devices)
+PPP generic driver version 2.4.2
+danube MAC driver loaded!
+Loading 2nd ETH driver... init succeeded
+oamk: init_module() called.
+Opening oam kernel socket
+oamk: init_module() returned.
+init_danube_mtd: start_scan_addr: b0000000
+init_danube_mtd: chip probing count 0
+Danube: probing address:b0000000
+ Amd/Fujitsu Extended Query Table v1.1 at 0x0040
+number of CFI chips: 1
+cfi_cmdset_0002: Disabling fast programming due to code brokenness.
+init_danube_mtd: bank1, name:Danube Bank 0, size:8388608bytes 
+DANUBE flash0: Using static image partition definition
+Creating 7 MTD partitions on "Danube Bank 0":
+0x00000000-0x00030000 : "U-Boot"
+0x00030000-0x00050000 : "Environment"
+0x00050000-0x002f0000 : "rootfs"
+0x002f0000-0x003c0000 : "Linux"
+0x003c0000-0x00400000 : "firmware"
+0x00400000-0x00410000 : "User-Data"
+0x00410000-0x00420000 : "voip-Data"
+Initializing Cryptographic API
+NET4: Linux TCP/IP 1.0 for NET4.0
+IP Protocols: ICMP, UDP, TCP, IGMP
+IP: routing cache hash table of 512 buckets, 4Kbytes
+TCP: Hash tables configured (established 2048 bind 4096)
+Linux IP multicast router 0.06 plus PIM-SM
+IP-Config: Guessing netmask 255.0.0.0
+IP-Config: Complete:
+      device=eth0, addr=10.10.10.10, mask=255.0.0.0, gw=255.255.255.255,
+     host=10.10.10.10, domain=, nis-domain=(none),
+     bootserver=10.10.10.123, rootserver=10.10.10.123, rootpath=
+ip_conntrack version 2.1 (248 buckets, 1984 max) - 624 bytes per conntrack
+ip_conntrack_pptp version 1.9 loaded
+ip_nat_pptp version 1.5 loaded
+ip_tables: (C) 2000-2002 Netfilter core team
+NET4: Unix domain sockets 1.0/SMP for Linux NET4.0.
+Ebtables v2.0 registered
+NET4: Ethernet Bridge 008 for NET4.0
+Bridge firewalling registered
+Danube Port Initialization
+DANUBE MIPS24KEc MPS mailbox driver, Version 1.1.0
+(c) Copyright 2006, Infineon Technologies AG
+IFX_MPS: using proc fs
+VFS: Mounted root (squashfs filesystem) readonly.
+Freeing unused kernel memory: 100k freed
+init started:  BusyBox v1.00 (2006.10.12-11:36+0000) multi-call binary
+Algorithmics/MIPS FPU Emulator v1.5
+Created character device /dev/danube-port with major[247] and minor[0]
+1+0 records in
+1+0 records out
+Mount ADSL Firmware Now
+part_begin_addr=0xb0400000
+mtd_dev=/dev/mtd/5
+autoboot open /dev/danube/mei fail
+Using /lib/modules/2.4.31-Danube-3.0.3-G0432V30V/kernel/net/ifx_nfext/ifx_nfext_core.o
+Using /lib/modules/2.4.31-Danube-3.0.3-G0432V30V/kernel/net/ifx_nfext/ifx_nfext_ppp.o
+Using /lib/modules/2.4.31-Danube-3.0.3-G0432V30V/kernel/drivers/net/admmod.o
+Loading ADM6996 driver... 
+
+6996I SMI Mode-Chip ID:71023 
+ Bringing up syslog
+Bringing up klogd
+<6>device eth0 entered promiscuous mode
+br0: port 1(eth0) entering learning state
+br0: port 1(eth0) entering forwarding state
+br0: topology change detected, propagating
+--VDSL2 Pre Initialization   --
+Init VDSL2 CPE Ref environment
+
+- loading VDSL2 CPE Ref Board - board driver -
+*** Creating dir:  /dev/adm5120_rb
+*** Creating node: /dev/adm5120_rb/0
+Using ./drv_adm5120_rb
+cat: /proc/mei/version: No such file or directory
+ADM5120 Board Driver, Version 0.0.4.1
+<6>(c) Copyright 2003, Infineon Technologies AG
+
+- loading VDSL2 CPE board - DFE driver -
+*** Creating dir:  /dev/vinax
+*** Creating node: /dev/vinax/cntrl0
+3.0.3-432-V30WV
+*** Creating node: /dev/vinax/0
+Using ./drv_vinax
+<6>VINAX Driver, Version 0.1.0.2
+<6>(c) Copyright 2005, Infineon Technologies AG
+<6>### VINAX - VINAX - VINAX - VINAX ###
+<7>VINAX_DRV: create proc config entry
+--> Add VINAX tick to timer queue
+
+board driver <drv_adm5120_rb> loaded
+--> AInitializes the MultiPort Memory Controller for the VDSL2 DFEBoard_InitIrq!
+mazon-Vinax test: open device: /dev/adm5120_rb/0.
+--> Amazon-Vinax test: close(3) device: //dev/adm5120_rb/0.
+current HW type is CPE_MODE
++++ setup CPE firmware vcpe_hw.bin +++
+ln: ./firmware.bin: File exists
+ln: ./firmware0.bin: File exists
+ln: ./firmware1.bin: File exists
+MEI driver <drv_vinax> loaded
+init Danube-Vinax MEI base addr=0x14000000 poVINAX_DRV[00]: ERROR - INIT DEVICE, HW failure
+lling mode
+!!! RESET the VDSL2 device (via MEI) !!!
+set VINAX DFE config
+VDSL2 pre init done
+---VDSL2 Post Initialization --
+VDSL2 initialisation - post
+Start VDSL2 CPE Ref environment
+Start VINAX firmeware download
+--> test: open device: /dev/vinax/0.
+<6>device nas1 entered promiscuous mode
+br0: port 2(nas1) entering learning state
+StartVINAX_DRV[00-01] Error ioctl - missing init, invalid cmd !!!
+ Download <firmware.bin>, size: 540148
+--> test: ERROR - ioct(FIO_VINAX_FW_DL), Operation not permitted, retCode = -1021
+Start VDSL2 DSL DAEMON Application
+DSL: start DSL daemon.
+DSL: DSL daemon running in background now!
+DSL: Device granularity is 1
+DSL: No firmware pointer
+DSL: No 2nd firmware pointer
+DSL: Given warmstart memory will be analyzed...
+DSL: ...No warmstart memory defined
+DSL: ...Using memory allocation via DSL_Malloc() for ALL data base sections
+DSL: ...Startup mode: COLDSTART
+DSL: No mapping information (line -> device channel) provided. Taking internal default settings.
+DSL[00]: VINAX init failed, no valid data
+DSL[00]: VINAX driver init failed
+DSL: Thread PID for thread tPM_Tick is 1006
+DSL: 
+DSL: *****************************************************
+DSL: DSL library version: 1.5.1
+DSL: *****************************************************
+DSL: Number of devices       :   1
+DSL: Number of lines         :   1
+DSL: Number of lines/device  :   1
+DSL: Number of channels/line :   2
+DSL: 
+DSL: Memory usage of warm start resistent data base
+DSL:   magic key data base         :       4 bytes
+DSL:   line config data base       :     316 bytes
+DSL:   channel config data base    :     184 bytes
+DSL:   line array config data base :    2424 bytes
+DSL:                                --------------
+DSL:   Total                       :    2928 bytes
+DSL: 
+DSL: Memory usage of status data base
+DSL:   line status data base       :     220 bytes
+DSL:   channel status data base    :     408 bytes
+DSL:                                --------------
+DSL:   Total                       :     628 bytes
+DSL: 
+DSL: Context memory usage
+DSL:   context structure           :    1128 bytes
+DSL:   Timeout event lists         :      32 bytes
+DSL:                                --------------
+DSL:   Total                       :    1160 b<6>br0: port 2(nas1) entering forwarding state
+br0: topology change detected, propagating
+ytes
+DSL: *****************************************************
+DSL: 
+DSL: Thread PID for thread tPipe_0 is 1007
+DSL: Thread PID for thread tPipe_1 is 1008
+iptables: No chain/target/match by that name
+iptables: No chain/target/match by that name
+DSL: Thread PID for thread tPipe_2 is 1015
+nReturn=0 nLine=0
+
+VDSL2 post init done
+device eth2 entered promiscuous mode
+br0: port 3(eth2) entering learning state
+installing mps devices...
+
++--------------------------------------+
+| Linux/MIPS on DANUBE by Infineon COM AC BB_CPE |
++--------------------------------------+
+br0: port 3(eth2) entering forwarding state
+br0: topology change detected, propagating
+
+danube login: root
+Password: 
+Login incorrect
+danube login: 
+Login ti
+danube login: admin
+Password: 
+Login incorrect
+danube login: root
+Password: 
+
+
+BusyBox v1.00 (2006.10.12-11:36+0000) Built-in shell (msh)
+Enter 'help' for a list of built-in commands.
+
+# lspci
+lspci: not found
+# 
+\[                    grep                  pwd 
+adm6996               gunzip                read_img 
+basename              gzip                  reboot 
+br2684ctl             hostname              ripd 
+br2684ctld            httpd                 rm 
+brctl                 ifconfig              rmmod 
+bringup_dns_relay     ifx_util              route 
+bringup_oam           inetd                 sh 
+bringup_pppoa         init                  sleep 
+bringup_pppoe         insmod                snmpd 
+bringup_wan           iptables              status_oper 
+bringup_wan_service   kill                  swreset 
+busybox               killall               syslogd 
+cat                   klogd                 tail 
+chmod                 ln                    tar 
+chroot                logger                tc 
+cli_be                login                 telnetd 
+cli_fe                logread               test 
+cmvread               ls                    tftpd 
+cmvwrite              mem                   top 
+cp                    mkdir                 touch 
+cut                   mknod                 tr 
+date                  mknod_util            true 
+dd                    modprobe.sh           tty 
+dmesg                 more                  udhcpc 
+dnrd                  mount                 udhcpd 
+dumpleases            mpstat                udhcpr 
+echo                  msh                   umount 
+env                   mv                    uname 
+expr                  naptcfg               upgrade 
+false                 next_macaddr          uptime 
+fgrep                 oamctl                usleep 
+free                  oamd                  version.sh 
+get_adsl_rate         passwd                vlanctl 
+get_atmqos_name       ping                  zcat 
+get_if_index          pppd 
+getty                 ps 
+# dmesg
+memsize=32l
+flash_start=0xb0000000
+flash_size=8388608l
+Reserving memory for CP1 @0xa1f00000
+memsize=31
+CPU revision is: 00019641
+Primary instruction cache 16kB, physically tagged, 4-way, linesize 32 bytes.
+Primary data cache 16kB, 4-way, linesize 32 bytes.
+Linux version 2.4.31-Danube-3.0.3-G0432V30V (root@localhost) (gcc version 3.3.6) #2 å10æœˆ 12 19:35:05 CST 2006
+Can't analyze prologue code at 8001e360
+Determined physical RAM map:
+User-defined physical RAM map:
+ memory: 01f00000 @ 00000000 (usable)
+On node 0 totalpages: 7936
+zone(0): 7936 pages.
+zone(1): 0 pages.
+zone(2): 0 pages.
+Kernel command line: root=/dev/mtdblock2 ip=10.10.10.10:10.10.10.123::::eth0:on console=ttyS1,115200 ethaddr=00:01:22:33:44:55 mem=31M panic=1 
+ethaddr_setup: mac address  0- 1-22-33-44-55 
+mips_hpt_frequency:166666667
+r4k_offset: 00196e6a(1666666)
+Using 166.667 MHz high precision timer.
+Syam before calibrate_delay
+Calibrating delay loop... 
+Syam after calibrate_delay
+MIPS CPU counter frequency is fixed at 166666667 Hz
+Memory: 28728k/31744k available (1808k kernel code, 3016k reserved, 108k data, 100k init, 0k highmem)
+Dentry cache hash table entries: 4096 (order: 3, 32768 bytes)
+Inode cache hash table entries: 2048 (order: 2, 16384 bytes)
+Mount cache hash table entries: 512 (order: 0, 4096 bytes)
+Buffer cache hash table entries: 1024 (order: 0, 4096 bytes)
+Page-cache hash table entries: 8192 (order: 3, 32768 bytes)
+Checking for 'wait' instruction...  unavailable.
+POSIX conformance testing by UNIFIX
+Linux NET4.0 for Linux 2.4
+Based upon Swansea University Computer Society NET3.039
+Initializing RT netlink socket
+LSP Revision 1
+Starting kswapd
+Squashfs 2.2 (released 2005/07/03) (C) 2002-2004, 2005 Phillip Lougher
+pty: 256 Unix98 ptys configured
+ttyS0 at MEM 0xbe100400 (irq = 2) is a IFX_ASC
+ttyS1 at MEM 0xbe100c00 (irq = 9) is a IFX_ASC
+<6>Danube PMU driver v0.3
+cgu: misc_register on minor = 63
+gptu: totally 6 16-bit timers/counters
+gptu: misc_register on minor 62
+gptu: succeeded to request irq 118
+gptu: succeeded to request irq 119
+gptu: succeeded to request irq 120
+gptu: succeeded to request irq 121
+gptu: succeeded to request irq 122
+gptu: succeeded to request irq 123
+led: misc_register on minor = 151
+memcopy_init: memcopy init
+loop: loaded (max 8 devices)
+PPP generic driver version 2.4.2
+danube MAC driver loaded!
+Loading 2nd ETH driver... init succeeded
+oamk: init_module() called.
+Opening oam kernel socket
+oamk: init_module() returned.
+init_danube_mtd: start_scan_addr: b0000000
+init_danube_mtd: chip probing count 0
+Danube: probing address:b0000000
+ Amd/Fujitsu Extended Query Table v1.1 at 0x0040
+number of CFI chips: 1
+cfi_cmdset_0002: Disabling fast programming due to code brokenness.
+init_danube_mtd: bank1, name:Danube Bank 0, size:8388608bytes 
+DANUBE flash0: Using static image partition definition
+Creating 7 MTD partitions on "Danube Bank 0":
+0x00000000-0x00030000 : "U-Boot"
+0x00030000-0x00050000 : "Environment"
+0x00050000-0x002f0000 : "rootfs"
+0x002f0000-0x003c0000 : "Linux"
+0x003c0000-0x00400000 : "firmware"
+0x00400000-0x00410000 : "User-Data"
+0x00410000-0x00420000 : "voip-Data"
+Initializing Cryptographic API
+NET4: Linux TCP/IP 1.0 for NET4.0
+IP Protocols: ICMP, UDP, TCP, IGMP
+IP: routing cache hash table of 512 buckets, 4Kbytes
+TCP: Hash tables configured (established 2048 bind 4096)
+Linux IP multicast router 0.06 plus PIM-SM
+IP-Config: Guessing netmask 255.0.0.0
+IP-Config: Complete:
+      device=eth0, addr=10.10.10.10, mask=255.0.0.0, gw=255.255.255.255,
+     host=10.10.10.10, domain=, nis-domain=(none),
+     bootserver=10.10.10.123, rootserver=10.10.10.123, rootpath=
+ip_conntrack version 2.1 (248 buckets, 1984 max) - 624 bytes per conntrack
+ip_conntrack_pptp version 1.9 loaded
+ip_nat_pptp version 1.5 loaded
+ip_tables: (C) 2000-2002 Netfilter core team
+NET4: Unix domain sockets 1.0/SMP for Linux NET4.0.
+Ebtables v2.0 registered
+NET4: Ethernet Bridge 008 for NET4.0
+Bridge firewalling registered
+Danube Port Initialization
+DANUBE MIPS24KEc MPS mailbox driver, Version 1.1.0
+(c) Copyright 2006, Infineon Technologies AG
+IFX_MPS: using proc fs
+VFS: Mounted root (squashfs filesystem) readonly.
+Freeing unused kernel memory: 100k freed
+Algorithmics/MIPS FPU Emulator v1.5
+Loading ADM6996 driver... 
+
+6996I SMI Mode-Chip ID:71023 
+ <6>device eth0 entered promiscuous mode
+br0: port 1(eth0) entering learning state
+br0: port 1(eth0) entering forwarding state
+br0: topology change detected, propagating
+ADM5120 Board Driver, Version 0.0.4.1
+<6>(c) Copyright 2003, Infineon Technologies AG
+<6>VINAX Driver, Version 0.1.0.2
+<6>(c) Copyright 2005, Infineon Technologies AG
+<6>### VINAX - VINAX - VINAX - VINAX ###
+<7>VINAX_DRV: create proc config entry
+--> Add VINAX tick to timer queue
+Initializes the MultiPort Memory Controller for the VDSL2 DFEBoard_InitIrq!
+VINAX_DRV[00]: ERROR - INIT DEVICE, HW failure
+<6>device nas1 entered promiscuous mode
+br0: port 2(nas1) entering learning state
+VINAX_DRV[00-01] Error ioctl - missing init, invalid cmd !!!
+<6>br0: port 2(nas1) entering forwarding state
+br0: topology change detected, propagating
+device eth2 entered promiscuous mode
+br0: port 3(eth2) entering learning state
+br0: port 3(eth2) entering forwarding state
+br0: topology change detected, propagating
+# ls /p# ls /proc/
+1            4            cpuinfo      eth2         loadavg      slabinfo
+1005         5            crypto       execdomains  locks        stat
+1006         6            danube_bcu   filesystems  lspinfo      swaps
+1007         67           danube_dma   fs           meminfo      sys
+1008         7            danube_etop  interrupts   misc         sysvipc
+1015         74           danube_pmu   iomem        modules      tty
+1039         80           danube_rcu   ioports      mounts       uptime
+1042         808          danube_wdt   irq          mtd          version
+17           994          devices      kcore        net
+2            bus          dma          kmsg         partitions
+3            cmdline      driver       ksyms        self
+# mount
+/dev/root on / type squashfs (ro)
+proc on /proc type proc (rw)
+/dev/ram on /ramdisk type ramfs (rw)
+/dev/ram on /dev type ramfs (rw)
+/dev/mtdblock/4 on /firmware type squashfs (ro)
+# cat /p# cat /proc/bu# cat /proc/bus/pc      # cat /proc/
+/proc/1/            /proc/80/           /proc/eth2/         /proc/modules 
+/proc/1005/         /proc/808/          /proc/execdomains   /proc/mounts 
+/proc/1006/         /proc/994/          /proc/filesystems   /proc/mtd 
+/proc/1007/         /proc/bus/          /proc/fs/           /proc/net/
+/proc/1008/         /proc/cmdline       /proc/interrupts    /proc/partitions 
+/proc/1015/         /proc/cpuinfo       /proc/iomem         /proc/self/
+/proc/1039/         /proc/crypto        /proc/ioports       /proc/slabinfo 
+/proc/17/           /proc/danube_bcu    /proc/irq/          /proc/stat 
+/proc/2/            /proc/danube_dma/   /proc/kcore         /proc/swaps 
+/proc/3/            /proc/danube_etop/  /proc/kmsg          /proc/sys/
+/proc/4/            /proc/danube_pmu    /proc/ksyms         /proc/sysvipc/
+/proc/5/            /proc/danube_rcu    /proc/loadavg       /proc/tty/
+/proc/6/            /proc/danube_wdt    /proc/locks         /proc/uptime 
+/proc/67/           /proc/devices       /proc/lspinfo/      /proc/version 
+/proc/7/            /proc/dma           /proc/meminfo 
+/proc/74/           /proc/driver/       /proc/misc 
+# cat /proc/bu# cat /proc/bus/
+cat: Read error: Is a directory
+# # cat /proc/bus/at /proc/bus/ t /proc/bus/  /proc/bus/ l /proc/bus/s /proc/bus/ /proc/bus/
+# cat /p# cat /proc/mem# cat /proc/meminfo 
+        total:    used:    free:  shared: buffers:  cached:
+Mem:  29519872 10489856 19030016        0  1298432  4550656
+Swap:        0        0        0
+MemTotal:        28828 kB
+MemFree:         18584 kB
+MemShared:           0 kB
+Buffers:          1268 kB
+Cached:           4444 kB
+SwapCached:          0 kB
+Active:           2780 kB
+Inactive:         2956 kB
+HighTotal:           0 kB
+HighFree:            0 kB
+LowTotal:        28828 kB
+LowFree:         18584 kB
+SwapTotal:           0 kB
+SwapFree:            0 kB
+# cat /p# cat /proc/cp# cat /proc/cpuinfo 
+system type		: DANUBE
+processor		: 0
+cpu model		: unknown V4.1
+BogoMIPS		: 222.00
+wait instruction	: no
+microsecond timers	: yes
+tlb_entries		: 16
+extra interrupt vector	: yes
+hardware watchpoint	: yes
+VCED exceptions		: not available
+VCEI exceptions		: not available
+# 
