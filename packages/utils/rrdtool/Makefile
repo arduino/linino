@@ -102,22 +102,25 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/rrd.h $(1)/usr/include/
 	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd_th.{a,so*} $(1)/usr/lib/
 endef
 
 define Build/UninstallDev
 	rm -rf	$(STAGING_DIR)/usr/include/rrd.h \
-		$(STAGING_DIR)/usr/lib/librrd.{a,so*} 
+		$(STAGING_DIR)/usr/lib/librrd.{a,so*} \
+		$(STAGING_DIR)/usr/lib/librrd_th.{a,so*}
 endef
 
-define Package/librrd/install	
+define Package/librrd/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd_th.so.* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/share/rrdtool/fonts
 	$(CP) $(PKG_BUILD_DIR)/src/DejaVuSansMono-Roman.ttf \
 		$(1)/usr/share/rrdtool/fonts/
 endef
 
-define Package/rrdcgi/install	
+define Package/rrdcgi/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdcgi $(1)/usr/bin/
 endef
