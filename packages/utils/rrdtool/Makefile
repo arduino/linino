@@ -19,7 +19,10 @@ PKG_MD5SUM:=dafa161bc9c61e57636a6085c87c1fe8
 PKG_BUILD_DEPENDS:=libnotimpl python-core
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,./python-package.mk)
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+ifneq ($(MAKECMDGOALS),download)
+  $(if $(DUMP)$(Build/Compile/PyMod),,$(error Python packaging code not found.))
+endif
 
 define Package/rrdtool/Default
   SECTION:=utils

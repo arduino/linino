@@ -17,7 +17,10 @@ PKG_SOURCE_URL:=http://savannah.nongnu.org/download/rdiff-backup/
 PKG_MD5SUM:=756b38aaf2602d097cafd08996fb7887
 
 include $(INCLUDE_DIR)/package.mk
--include $(TOPDIR)/package/python/python-package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+ifneq ($(MAKECMDGOALS),download)
+  $(if $(DUMP)$(Build/Compile/PyMod),,$(error Python packaging code not found.))
+endif
 
 define PyPackage/rdiff-backup
   SECTION:=utils
