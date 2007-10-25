@@ -29,7 +29,7 @@ define Package/xorg-server-essentials
 		+xf86-input-evdev \
 		+xf86-input-keyboard \
 		+xinit \
-		@TARGET_x86
+		@DISPLAY_SUPPORT
 endef
 
 define Build/Configure

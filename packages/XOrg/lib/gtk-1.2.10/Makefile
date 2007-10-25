@@ -33,7 +33,7 @@ define Package/gtk-1.2.10
   CATEGORY:=Xorg
   SUBMENU:=framework
   TITLE:=GTK+ 1.2.10 package
-  DEPENDS:=+glib1 @TARGET_x86
+  DEPENDS:=+glib1 @DISPLAY_SUPPORT
 endef
 
 define Build/Configure

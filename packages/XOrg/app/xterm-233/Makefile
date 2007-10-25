@@ -22,7 +22,7 @@ define Package/xterm
   CATEGORY:=Xorg
   SUBMENU:=terminals
   TITLE:=xterm
-  DEPENDS:=+xorg-server-essentials +libncurses @TARGET_x86
+  DEPENDS:=+xorg-server-essentials +libncurses @DISPLAY_SUPPORT
 endef
 
 define Build/Configure

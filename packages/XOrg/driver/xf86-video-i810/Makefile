@@ -21,7 +21,7 @@ define Package/xf86-video-i810
   SECTION:=xorg-driver
   CATEGORY:=Xorg
   SUBMENU:=driver
-  DEPENDS:=+xorg-server  +libXvMC @TARGET_x86
+  DEPENDS:=+xorg-server  +libXvMC @DISPLAY_SUPPORT
   TITLE:=xf86-video-i810
   URL:=http://xorg.freedesktop.org/
 endef

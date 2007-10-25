@@ -22,7 +22,7 @@ define Package/font-util
   CATEGORY:=Xorg
   SUBMENU:=font-utils
   TITLE:=misc tool to generate x fonts
-  DEPENDS:=+xorg-server @TARGET_x86
+  DEPENDS:=+xorg-server @DISPLAY_SUPPORT
 endef
 
 define Build/Configure

@@ -21,7 +21,7 @@ define Package/@NAME@
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros @DEP@ @TARGET_x86
+  DEPENDS:=+xorg-headers-native +util-macros @DEP@ @DISPLAY_SUPPORT
   TITLE:=@NAME@
   URL:=http://xorg.freedesktop.org/
 endef

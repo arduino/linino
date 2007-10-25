@@ -20,7 +20,7 @@ define Package/xf86driproto
   SECTION:=xorg-proto
   CATEGORY:=Xorg
   SUBMENU:=proto
-  DEPENDS:= @TARGET_x86
+  DEPENDS:= @DISPLAY_SUPPORT
   TITLE:=xf86driproto
   URL:=http://xorg.freedesktop.org/
 endef

@@ -21,7 +21,7 @@ define Package/libXcursor
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +libXrender +libXfixes @TARGET_x86
+  DEPENDS:=+xorg-headers-native +libXrender +libXfixes @DISPLAY_SUPPORT
   TITLE:=libXcursor
   URL:=http://xorg.freedesktop.org/
 endef

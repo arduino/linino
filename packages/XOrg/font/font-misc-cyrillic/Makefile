@@ -21,7 +21,7 @@ define Package/font-misc-cyrillic
   SECTION:=xorg-font
   CATEGORY:=Xorg
   SUBMENU:=font
-  DEPENDS:= +xorg-server +font-util @TARGET_x86
+  DEPENDS:= +xorg-server +font-util @DISPLAY_SUPPORT
   TITLE:=font-misc-cyrillic
   URL:=http://xorg.freedesktop.org/
 endef

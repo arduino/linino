@@ -21,7 +21,7 @@ define Package/libfontenc
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  +xproto +zlib @TARGET_x86
+  DEPENDS:=+xorg-headers-native +util-macros  +xproto +zlib @DISPLAY_SUPPORT
   TITLE:=libfontenc
   URL:=http://xorg.freedesktop.org/
 endef

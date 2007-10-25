@@ -20,7 +20,7 @@ define Package/xcmiscproto
   SECTION:=xorg-proto
   CATEGORY:=Xorg
   SUBMENU:=proto
-  DEPENDS:= @TARGET_x86
+  DEPENDS:= @DISPLAY_SUPPORT
   TITLE:=xcmiscproto
   URL:=http://xorg.freedesktop.org/
 endef

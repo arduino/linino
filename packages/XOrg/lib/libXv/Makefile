@@ -21,7 +21,7 @@ define Package/libXv
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  +libXext +videoproto @TARGET_x86
+  DEPENDS:=+xorg-headers-native +util-macros  +libXext +videoproto @DISPLAY_SUPPORT
   TITLE:=libXv
   URL:=http://xorg.freedesktop.org/
 endef

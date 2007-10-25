@@ -19,7 +19,7 @@ define Package/x-bkgd-images
   CATEGORY:=Xorg
   SUBMENU:=misc
   TITLE:=Background images for X
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@DISPLAY_SUPPORT
 endef
 
 define Build/Configure

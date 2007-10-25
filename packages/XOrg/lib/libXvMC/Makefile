@@ -21,7 +21,7 @@ define Package/libXvMC
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  +libXext +videoproto +libXv @TARGET_x86
+  DEPENDS:=+xorg-headers-native +util-macros  +libXext +videoproto +libXv @DISPLAY_SUPPORT
   TITLE:=libXvMC
   URL:=http://xorg.freedesktop.org/
 endef

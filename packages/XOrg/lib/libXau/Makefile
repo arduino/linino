@@ -21,7 +21,7 @@ define Package/libXau
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  +xproto @TARGET_x86
+  DEPENDS:=+xorg-headers-native +util-macros  +xproto @DISPLAY_SUPPORT
   TITLE:=libXau
   URL:=http://xorg.freedesktop.org/
 endef

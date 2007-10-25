@@ -21,7 +21,7 @@ define Package/libXdmcp
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  +xproto @TARGET_x86
+  DEPENDS:=+xorg-headers-native +util-macros  +xproto @DISPLAY_SUPPORT
   TITLE:=libXdmcp
   URL:=http://xorg.freedesktop.org/
 endef

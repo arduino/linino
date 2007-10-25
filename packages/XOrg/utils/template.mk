@@ -20,7 +20,7 @@ define Package/@NAME@
   SECTION:=xorg-utils
   CATEGORY:=Xorg
   SUBMENU:=utils
-  DEPENDS:=@DEP@ @TARGET_x86
+  DEPENDS:=@DEP@ @DISPLAY_SUPPORT
   TITLE:=${PKG_NAME}
   URL:=http://xorg.freedesktop.org/
 endef

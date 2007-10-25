@@ -21,7 +21,7 @@ define Package/libXpm
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  @TARGET_x86
+  DEPENDS:=+xorg-headers-native +util-macros  @DISPLAY_SUPPORT
   TITLE:=libXpm
   URL:=http://xorg.freedesktop.org/
 endef

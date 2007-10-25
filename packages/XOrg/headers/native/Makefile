@@ -20,7 +20,7 @@ define Package/xorg-headers-native
   SUBMENU:=headers
   TITLE:=xorg-headers-native
   URL:=http://xorg.freedesktop.org/
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=@DISPLAY_SUPPORT
 endef
 
 define Build/Prepare

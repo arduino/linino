@@ -21,7 +21,7 @@ define Package/@NAME@
   SECTION:=xorg-font
   CATEGORY:=Xorg
   SUBMENU:=font
-  DEPENDS:=@DEP@ +xorg-server +font-util @TARGET_x86
+  DEPENDS:=@DEP@ +xorg-server +font-util @DISPLAY_SUPPORT
   TITLE:=@NAME@
   URL:=http://xorg.freedesktop.org/
 endef

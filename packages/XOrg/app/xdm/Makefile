@@ -27,7 +27,7 @@ define Package/xdm
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:=${_DEPEND} @TARGET_x86
+  DEPENDS:=${_DEPEND} @DISPLAY_SUPPORT
   TITLE:=xdm
   URL:=http://xorg.freedesktop.org/
 endef

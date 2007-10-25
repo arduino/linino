@@ -20,7 +20,7 @@ define Package/@NAME@
   SECTION:=xorg-proto
   CATEGORY:=Xorg
   SUBMENU:=proto
-  DEPENDS:=@DEP@ @TARGET_x86
+  DEPENDS:=@DEP@ @DISPLAY_SUPPORT
   TITLE:=@NAME@
   URL:=http://xorg.freedesktop.org/
 endef

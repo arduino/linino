@@ -20,7 +20,7 @@ define Package/videoproto
   SECTION:=xorg-proto
   CATEGORY:=Xorg
   SUBMENU:=proto
-  DEPENDS:= @TARGET_x86
+  DEPENDS:= @DISPLAY_SUPPORT
   TITLE:=videoproto
   URL:=http://xorg.freedesktop.org/
 endef

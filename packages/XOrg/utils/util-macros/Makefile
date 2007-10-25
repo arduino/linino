@@ -20,7 +20,7 @@ define Package/util-macros
   SECTION:=xorg-utils
   CATEGORY:=Xorg
   SUBMENU:=utils
-  DEPENDS:= @TARGET_x86
+  DEPENDS:= @DISPLAY_SUPPORT
   TITLE:=${PKG_NAME}
   URL:=http://xorg.freedesktop.org/
 endef

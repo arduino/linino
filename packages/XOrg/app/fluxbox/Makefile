@@ -31,7 +31,7 @@ endef
 
 define Package/fluxbox
 $(call Package/fluxbox/Default)
-  DEPENDS:=+xorg-server-essentials +uclibcxx +xterm @TARGET_x86
+  DEPENDS:=+xorg-server-essentials +uclibcxx +xterm @DISPLAY_SUPPORT
   TITLE:=fluxbox window manager
   MENU:=1
 endef

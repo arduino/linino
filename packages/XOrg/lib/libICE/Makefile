@@ -21,7 +21,7 @@ define Package/libICE
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  +xproto +xtrans @TARGET_x86
+  DEPENDS:=+xorg-headers-native +util-macros  +xproto +xtrans @DISPLAY_SUPPORT
   TITLE:=libICE
   URL:=http://xorg.freedesktop.org/
 endef

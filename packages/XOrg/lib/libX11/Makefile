@@ -21,7 +21,7 @@ define Package/libX11
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  +bigreqsproto +xproto +xextproto +libXau +xtrans +xcmiscproto +libXdmcp +xf86bigfontproto +kbproto +inputproto @TARGET_x86
+  DEPENDS:=+xorg-headers-native +util-macros  +bigreqsproto +xproto +xextproto +libXau +xtrans +xcmiscproto +libXdmcp +xf86bigfontproto +kbproto +inputproto @DISPLAY_SUPPORT
   TITLE:=libX11
   URL:=http://xorg.freedesktop.org/
 endef

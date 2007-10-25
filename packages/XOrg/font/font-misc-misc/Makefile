@@ -26,7 +26,7 @@ endef
 
 define Package/font-base
   $(call Package/font-misc-misc/Default)
-  DEPENDS:=+xorg-server +font-util @TARGET_x86
+  DEPENDS:=+xorg-server +font-util @DISPLAY_SUPPORT
   TITLE:=font-base 
   URL:=http://xorg.freedesktop.org/
 endef

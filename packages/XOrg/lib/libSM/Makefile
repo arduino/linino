@@ -21,7 +21,7 @@ define Package/libSM
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  +libICE @TARGET_x86
+  DEPENDS:=+xorg-headers-native +util-macros  +libICE @DISPLAY_SUPPORT
   TITLE:=libSM
   URL:=http://xorg.freedesktop.org/
 endef

@@ -21,7 +21,7 @@ define Package/libXrender
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  +libfreetype +zlib +xproto +libfontenc +xtrans +fontsproto +renderproto @TARGET_x86
+  DEPENDS:=+xorg-headers-native +util-macros  +libfreetype +zlib +xproto +libfontenc +xtrans +fontsproto +renderproto @DISPLAY_SUPPORT
   TITLE:=libXrender
   URL:=http://xorg.freedesktop.org/
 endef

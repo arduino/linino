@@ -21,7 +21,7 @@ define Package/libXrandr
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  +libXext +libXrender +randrproto +renderproto +xextproto +libX11 @TARGET_x86
+  DEPENDS:=+xorg-headers-native +util-macros  +libXext +libXrender +randrproto +renderproto +xextproto +libX11 @DISPLAY_SUPPORT
   TITLE:=libXrandr
   URL:=http://xorg.freedesktop.org/
 endef

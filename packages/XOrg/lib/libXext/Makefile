@@ -21,7 +21,7 @@ define Package/libXext
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  +xproto +xextproto +libXau +libX11 @TARGET_x86
+  DEPENDS:=+xorg-headers-native +util-macros  +xproto +xextproto +libXau +libX11 @DISPLAY_SUPPORT
   TITLE:=libXext
   URL:=http://xorg.freedesktop.org/
 endef

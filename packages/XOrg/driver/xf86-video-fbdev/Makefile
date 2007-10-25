@@ -21,7 +21,7 @@ define Package/xf86-video-fbdev
   SECTION:=xorg-driver
   CATEGORY:=Xorg
   SUBMENU:=driver
-  DEPENDS:=+xorg-server  @TARGET_x86
+  DEPENDS:=+xorg-server  @DISPLAY_SUPPORT
   TITLE:=xf86-video-fbdev
   URL:=http://xorg.freedesktop.org/
 endef

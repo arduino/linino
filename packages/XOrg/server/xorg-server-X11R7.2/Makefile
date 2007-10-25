@@ -74,7 +74,7 @@ DEPENDS_SERVER:=+calibrateproto \
 		+libXpm \
 		+libnotimpl \
 		+Mesa \
-		@TARGET_x86
+		@DISPLAY_SUPPORT
 
 DEPENDS_KDRIVE:=+calibrateproto \
 		+compositeproto \
@@ -92,7 +92,7 @@ DEPENDS_KDRIVE:=+calibrateproto \
 		+libXrandr \
 		+xtrans \
 		+libX11 \
-		@TARGET_x86 
+		@DISPLAY_SUPPORT 
 
 define Package/xorg-server/config
 	config XORG_BUILD_KDRIVE

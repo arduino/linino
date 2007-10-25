@@ -21,7 +21,7 @@ define Package/@NAME@
   SECTION:=xorg-driver
   CATEGORY:=Xorg
   SUBMENU:=driver
-  DEPENDS:=+xorg-server @DEP@ @TARGET_x86
+  DEPENDS:=+xorg-server @DEP@ @DISPLAY_SUPPORT
   TITLE:=@NAME@
   URL:=http://xorg.freedesktop.org/
 endef

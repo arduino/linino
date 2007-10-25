@@ -20,7 +20,7 @@ define Package/evieext
   SECTION:=xorg-proto
   CATEGORY:=Xorg
   SUBMENU:=proto
-  DEPENDS:= @TARGET_x86
+  DEPENDS:= @DISPLAY_SUPPORT
   TITLE:=evieext
   URL:=http://xorg.freedesktop.org/
 endef

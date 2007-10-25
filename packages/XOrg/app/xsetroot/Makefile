@@ -27,7 +27,7 @@ define Package/xsetroot
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:=${_DEPEND} @TARGET_x86
+  DEPENDS:=${_DEPEND} @DISPLAY_SUPPORT
   TITLE:=xsetroot
   URL:=http://xorg.freedesktop.org/
 endef

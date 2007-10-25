@@ -21,7 +21,7 @@ define Package/font-alias
   SECTION:=xorg-font
   CATEGORY:=Xorg
   SUBMENU:=font
-  DEPENDS:= +xorg-server +font-util @TARGET_x86
+  DEPENDS:= +xorg-server +font-util @DISPLAY_SUPPORT
   TITLE:=font-alias
   URL:=http://xorg.freedesktop.org/
 endef
