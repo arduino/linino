@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=6tunnel
 PKG_VERSION:=0.11rc1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=b325fa9d238e32195fbb3fc3646b0d28
 
 PKG_SOURCE_URL:=http://toxygen.net/6tunnel/
@@ -44,9 +44,17 @@ define Build/Compile
 		default
 endef
 
+define Package/6tunnel/conffiles
+/etc/config/6tunnel
+endef
+
 define Package/6tunnel/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/6tunnel $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/6tunnel.config $(1)/etc/config/6tunnel
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/6tunnel.init $(1)/etc/init.d/6tunnel
 endef
 
 $(eval $(call BuildPackage,6tunnel))
