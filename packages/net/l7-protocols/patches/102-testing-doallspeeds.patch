@@ -1,0 +1,18 @@
+Index: l7-protocols-2007-10-10/testing/doallspeeds.sh
+===================================================================
+--- l7-protocols-2007-10-10.orig/testing/doallspeeds.sh	2007-10-31 16:07:03.000000000 -0500
++++ l7-protocols-2007-10-10/testing/doallspeeds.sh	2007-10-31 16:07:20.000000000 -0500
+@@ -25,11 +25,11 @@
+ 	printf `basename $f .pat`
+ 
+ 	if [ $userspace ]; then 
+-		gtime=`./timeit.sh $f userspace   real | grep Total | cut -d\  -f 2`
++		gtime=`./timeit.sh $f userspace   real | grep Total | cut -d\  -f 2 | awk '{print $1}'`
+ 		printf \\t$gtime
+ 	fi
+ 	if [ $kernel ]; then 
+-		htime=`./timeit.sh $f kernel real | grep Total | cut -d\  -f 2`
++		htime=`./timeit.sh $f kernel real | grep Total | cut -d\  -f 2 | awk '{print $1}'`
+ 		printf \\t$htime
+ 	fi
+ 	printf \\n

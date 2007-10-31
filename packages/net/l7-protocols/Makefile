@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=l7-protocols
 PKG_VERSION:=2007-10-10
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/l7-filter
@@ -15,20 +15,38 @@ define Package/l7-protocols
   CATEGORY:=Network
   TITLE:=Protocols for layer7 filtering
   URL:=http://l7-filter.sourceforge.net/
+  SUBMENU:=layer7
+  DEPENDS:=iptables-mod-filter
 endef
 
 define Package/l7-protocols/description
-	l7-filter classifies packets based on patterns in application 
-	layer data. This allows correct classification of P2P traffic that 
-	uses unpredictable ports as well as standard protocols running on 
-	non-standard ports.
+       l7-filter classifies packets based on patterns in application
+       layer data. This allows correct classification of P2P traffic that
+       uses unpredictable ports as well as standard protocols running on
+       non-standard ports.
+endef
+
+define Package/l7-protocols-testing
+	$(call Package/l7-protocols)
+    TITLE:=testing utilities for layer7
+	DEPENDS+=l7-protocols +uclibcxx
+endef
+
+define Package/l7-protocols-testing/description
+	testing utilities for layer 7 patterns
 endef
 
 define Build/Configure
 endef
 
-define Build/Compile
-endef
+ifneq ($(SDK)$(CONFIG_PACKAGE_l7-protocols-testing),)
+  define Build/Compile
+	cd $(PKG_BUILD_DIR)/testing && $(MAKE) $(TARGET_CONFIGURE_OPTS) CXX="$(STAGING_DIR)/usr/bin/g++-uc"
+  endef
+else
+  define Build/Compile
+  endef
+endif
 
 define Package/l7-protocols/install
 	$(INSTALL_DIR) $(1)/etc/l7-protocols
@@ -38,8 +56,22 @@ define Package/l7-protocols/install
 		$(PKG_BUILD_DIR)/groups.sh \
 		$(PKG_BUILD_DIR)/malware \
 		$(PKG_BUILD_DIR)/protocols \
-		$(PKG_BUILD_DIR)/testing \
 		$(1)/etc/l7-protocols
 endef
 
+define Package/l7-protocols-testing/install
+	$(INSTALL_DIR) $(1)/etc/l7-protocols/testing
+	$(CP) $(PKG_BUILD_DIR)/testing/data \
+		$(1)/etc/l7-protocols/testing
+	$(INSTALL_BIN) \
+		$(PKG_BUILD_DIR)/testing/rand{chars,printable} \
+		$(PKG_BUILD_DIR)/testing/test_speed-{kernel,userspace} \
+		$(PKG_BUILD_DIR)/testing/match_kernel \
+		$(PKG_BUILD_DIR)/testing/doallspeeds.sh \
+		$(PKG_BUILD_DIR)/testing/test_match.sh \
+		$(PKG_BUILD_DIR)/testing/timeit.sh \
+		$(1)/etc/l7-protocols/testing
+endef
+
 $(eval $(call BuildPackage,l7-protocols))
+$(eval $(call BuildPackage,l7-protocols-testing))
