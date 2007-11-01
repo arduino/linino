@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/icmptx
   SECTION:=net
   CATEGORY:=Network
-  TITLE:=allows you to pass IP packets via DNS queries
+  TITLE:=allows you to pass IP packets via ICMP queries 
   URL:=http://thomer.com/icmptx/
 endef
 
