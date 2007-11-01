@@ -52,7 +52,7 @@ define Package/6tunnel/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/6tunnel $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DATA) ./files/6tunnel.config $(1)/etc/config/6tunnel
+	$(INSTALL_DATA) ./files/6tunnel.conf $(1)/etc/config/6tunnel
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/6tunnel.init $(1)/etc/init.d/6tunnel
 endef
