@@ -46,7 +46,9 @@ CONFIGURE_ARGS += \
 	--disable-valgrindmi \
 	--disable-tui \
 	--disable-valgrindtk \
-	 --without-included-gettext
+	--without-included-gettext
+
+DEFAULT_SUPP += "uclibc.supp"
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
