@@ -38,6 +38,10 @@ endef
 define Package/autossh/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/autossh $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/autossh.init $(1)/etc/init.d/autossh
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/autossh.config $(1)/etc/config/autossh
 endef
 
 $(eval $(call BuildPackage,autossh))
