@@ -13,7 +13,7 @@ PKG_VERSION:=1.2.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://downloads.sourceforge.net/enlightenment/
+PKG_SOURCE_URL:=@SF/enlightenment
 
 include $(INCLUDE_DIR)/package.mk
 
