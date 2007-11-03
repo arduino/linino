@@ -13,7 +13,9 @@ PKG_VERSION:=1.2.10
 PKG_RELEASE:=1
 
 PKG_SOURCE:=gtk+-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://gd.tuwien.ac.at/graphics/gimp/gtk/v1.2/
+PKG_SOURCE_URL:= \
+	ftp://ftp.gtk.org/pub/gtk/v1.2/ \
+	http://gd.tuwien.ac.at/graphics/gimp/gtk/v1.2/
 PKG_BUILD_DIR=$(BUILD_DIR)/gtk+-1.2.10
 
 include $(INCLUDE_DIR)/package.mk
