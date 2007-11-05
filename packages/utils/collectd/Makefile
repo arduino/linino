@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=collectd
-PKG_VERSION:=3.11.5
+PKG_VERSION:=4.2.0
 PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://verplant.org/collectd/files
-PKG_MD5SUM:=7a3e47ccaed2eb1d03f91c82a1406e8d
+PKG_SOURCE_URL:=http://collectd.org/files/
+PKG_MD5SUM:=ed1f41f86ad61bd7096ee5386ab33fd0
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -70,7 +70,8 @@ CONFIGURE_ARGS += \
 	--enable-traffic \
 	--disable-users \
 	--disable-vserver \
-	--enable-wireless
+	--enable-wireless \
+	--with-nan-emulation
 
 MAKE_FLAGS += \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
