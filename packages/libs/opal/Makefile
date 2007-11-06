@@ -8,27 +8,28 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=opal
-PKG_VERSION:=2.3.1
+PKG_NAME:=opal-snapshot
+PKG_VERSION:=18818
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://peternixon.net/pub/voxgratia
-PKG_MD5SUM:=5a9d7f060527885bed3a26324de6dcfc
+PKG_MD5SUM:=121b77a82f9a4eb289e2351d588185e9
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
-# Set location of pwlib (Which needs to have been built already)
-PWLIBDIR=$(BUILD_DIR)/pwlib-1.11.1
+# Set location of ptlib (Which needs to have been built already)
+export PWLIBDIR=$(BUILD_DIR)/ptlib-snapshot
+export PTLIBDIR=$(BUILD_DIR)/ptlib-snapshot
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libopal
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+pwlib +uclibcxx
+  DEPENDS:=+ptlib +uclibcxx
   TITLE:=Open Phone Abstraction Library
-  URL:=http://www.voxgratia.org/
+  URL:=http://www.opalvoip.org/
 endef
 
 define Package/libopal/description
@@ -39,9 +40,17 @@ define Package/libopal/description
 endef
 
 CONFIGURE_ARGS += \
-	--enable-minsize \
 	--enable-audio \
-	--disable-video
+	--disable-video \
+	--enable-sip \
+	--enable-h323 \
+	--disable-iax \
+	--disable-h224 \
+	--disable-h450 \
+	--disable-h460 \
+	--disable-ivr \
+	--disable-rfc4175 \
+	--disable-versioncheck
 
 CONFIGURE_VARS += \
 	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti" \
