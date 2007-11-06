@@ -1,0 +1,111 @@
+# 
+# Copyright (C) 2006-2007 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=ptlib-snapshot
+PKG_VERSION:=18818
+PKG_RELEASE:=1
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=ftp://peternixon.net/pub/voxgratia
+PKG_MD5SUM:=ac65581ccc9ada31817bf681574bec0d
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/ptlib
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=Portable Tools library
+  URL:=http://www.opalvoip.org/
+endef
+
+define Package/ptlib/description
+ PTLib is a moderately large class library that has its genesis many years ago as
+ PWLib (portable Windows Library), a method to product applications to run on both
+ Microsoft Windows and Unix X-Windows systems. It also was to have a Macintosh port
+ as well but that never eventuated. The parts of the library relating to GUI
+ functions have long been removed as other class libraries such as wxWidgets were
+ much more advanced.
+endef
+
+CONFIGURE_ARGS += \
+	--enable-minsize \
+	--enable-openh323 \
+	--enable-opal \
+	--disable-internalregex \
+	--disable-plugins \
+	--enable-audio \
+	--disable-alsa \
+	--disable-asn \
+	--disable-avc \
+	--disable-dc \
+	--disable-dtmf \
+	--disable-expat \
+	--disable-ftp \
+	--disable-http \
+	--disable-httpsvc \
+	--disable-ipv6 \
+	--disable-jabber \
+	--disable-odbc \
+	--disable-openldap \
+	--disable-openssl \
+	--disable-oss \
+	--disable-pipechan \
+	--disable-pop3smtp \
+	--disable-remconn \
+	--disable-resolver \
+	--disable-qos \
+	--disable-sasl \
+	--disable-sdl \
+	--disable-serial \
+	--disable-shm-video \
+	--disable-snmp \
+	--disable-soap \
+	--disable-socks \
+	--disable-stun \
+	--disable-telnet \
+	--disable-tts \
+	--disable-v4l \
+	--disable-v4l2 \
+	--disable-bsdvideo \
+	--disable-video \
+	--disable-vxml \
+	--disable-wavfile \
+	--disable-xmlrpc \
+
+CONFIGURE_VARS += \
+	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti" \
+
+CONFIGURE_CMD = ./configure
+
+define Build/Configure/Default
+        (cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH)/$(strip $(3)); \
+        if [ -x $(CONFIGURE_CMD) ]; then \
+                $(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/$(3)/ && \
+                $(CONFIGURE_VARS) \
+                $(2) \
+                $(CONFIGURE_CMD) \
+                $(CONFIGURE_ARGS) \
+                $(1); \
+        fi; \
+        )
+endef
+
+MAKE_FLAGS += optnoshared
+
+define Build/InstallDev
+	ln -sf $(PKG_NAME)-$(PKG_VERSION) $(BUILD_DIR)/$(PKG_NAME)
+	$(SED) 's|//\(#include <ptlib/sound.h>\)|\1|' $(PKG_BUILD_DIR)/include/ptlib.h
+endef
+
+define Build/UninstallDev
+	rm -rf $(BUILD_DIR)/$(PKG_NAME)
+endef
+
+$(eval $(call BuildPackage,ptlib))
