@@ -50,7 +50,8 @@ CONFIGURE_ARGS += \
 	--disable-h460 \
 	--disable-ivr \
 	--disable-rfc4175 \
-	--disable-versioncheck
+	--disable-versioncheck \
+	--enable-localgsm
 
 CONFIGURE_VARS += \
 	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti" \
