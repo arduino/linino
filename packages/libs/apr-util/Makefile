@@ -45,7 +45,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(MAKE) -C $(PKG_BUILD_DIR) APRUTIL_LIBS="-lsqlite3 -L$(STAGING_DIR)/usr/lib -lexpat -liconv -lapr-1 -luuid -lm -lcrypt" all
 	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
