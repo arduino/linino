@@ -27,6 +27,7 @@ define Package/l2tpns
   DEPENDS:=+libcli
   TITLE:=An L2TP enhanced server
   URL:=http://sourceforge.net/projects/l2tpns
+  SUBMENU:=vpn
 endef
 
 define Package/l2tpns/description
