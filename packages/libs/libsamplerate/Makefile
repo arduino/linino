@@ -37,20 +37,17 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-fftw \
 	)
+	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile
-	$(call Build/Compile/Default,\
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install \
-	)
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
-	mkdir -p $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsamplerate.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 define Build/UninstallDev

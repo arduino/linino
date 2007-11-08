@@ -37,16 +37,21 @@ CONFIGURE_ARGS += \
 	--disable-flac
 
 MAKE_FLAGS += \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install
+	DESTDIR="$(PKG_INSTALL_DIR)"
+
+define Build/Configure
+	$(call Build/Configure/Default)
+	$(call libtool_disable_rpath)
+endef
+
+define Build/Compile
+	$(call Build/Compile/Default,all)
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(call Build/Compile/Default,install)
+endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
-	$(INSTALL_DIR) $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsndfile.* $(1)/usr/lib/
-	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/sndfile.pc $(1)/usr/lib/pkgconfig/
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 define Build/UninstallDev
