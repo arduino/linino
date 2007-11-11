@@ -15,16 +15,14 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-fuse-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/fuse
 PKG_MD5SUM:=3c575cf89a6d3d8ab6063c2f60bd5b25
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-fuse-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-PKG_BUILD_DEPENDS:=libfuse glib2
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-fuse-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/sshfs
   TITLE:=SSHFS
-  DEPENDS:=+libfuse +fuse-utils +glib2
+  DEPENDS:=+libfuse +fuse-utils +glib2 +libpthread
   SECTION:=net
   CATEGORY:=Network
   URL:=http://fuse.sourceforge.net/
