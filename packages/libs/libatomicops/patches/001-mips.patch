@@ -1,0 +1,135 @@
+From ths@networkno.de Thu Oct 27 15:44:14 2005
+Received: (at submit) by bugs.debian.org; 27 Oct 2005 22:44:14 +0000
+Return-path: <ths@networkno.de>
+Received: from mx02.qsc.de [213.148.130.14] 
+	by spohr.debian.org with esmtp (Exim 3.36 1 (Debian))
+	id 1EVGTm-0002nQ-00; Thu, 27 Oct 2005 15:44:14 -0700
+Received: from port-195-158-169-21.dynamic.qsc.de ([195.158.169.21] helo=hattusa.textio)
+	by mx02.qsc.de with esmtp (Exim 3.35 #1)
+	id 1EVGTH-00020N-00
+	for submit@bugs.debian.org; Fri, 28 Oct 2005 00:43:43 +0200
+Received: from ths by hattusa.textio with local (Exim 4.54)
+	id 1EVGTG-000263-9P
+	for submit@bugs.debian.org; Fri, 28 Oct 2005 00:43:42 +0200
+Date: Fri, 28 Oct 2005 00:43:42 +0200
+To: submit@bugs.debian.org
+Subject: [mips/mipsel] FTBFS due to missing arch-specific implementation
+Message-ID: <20051027224341.GX5721@hattusa.textio>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.11
+From: Thiemo Seufer <ths@networkno.de>
+Delivered-To: submit@bugs.debian.org
+X-Spam-Checker-Version: SpamAssassin 2.60-bugs.debian.org_2005_01_02 
+	(1.212-2003-09-23-exp) on spohr.debian.org
+X-Spam-Level: 
+X-Spam-Status: No, hits=-8.0 required=4.0 tests=BAYES_00,HAS_PACKAGE 
+	autolearn=no version=2.60-bugs.debian.org_2005_01_02
+
+Package: libatomic-ops
+Version: 1.0-3
+Tags: patch
+
+Libatomic-ops currently FTBFS on mips/mipsel because there is no
+arch-specific implementation, and the generic pthread isn't configured.
+
+The appended patch adds a basic implementation for linux.
+
+
+Thiemo
+
+
+--- libatomic-ops-1.0.away/src/atomic_ops/sysdeps/Makefile.am	2005-08-03 02:05:18.000000000 +0200
++++ libatomic-ops-1.0/src/atomic_ops/sysdeps/Makefile.am	2005-10-27 20:59:59.000000000 +0200
+@@ -26,7 +26,7 @@ nobase_sysdep_HEADERS= generic_pthread.h
+ 	  gcc/alpha.h gcc/arm.h gcc/x86.h \
+ 	  gcc/hppa.h gcc/ia64.h \
+ 	  gcc/powerpc.h gcc/sparc.h \
+-	  gcc/hppa.h gcc/m68k.h gcc/s390.h \
++	  gcc/hppa.h gcc/m68k.h gcc/mips.h gcc/s390.h \
+ 	  gcc/ia64.h gcc/x86_64.h gcc/cris.h \
+ 	\
+ 	  icc/ia64.h \
+--- libatomic-ops-1.0.away/src/atomic_ops/sysdeps/gcc/mips.h	1970-01-01 01:00:00.000000000 +0100
++++ libatomic-ops-1.0/src/atomic_ops/sysdeps/gcc/mips.h	2005-10-28 00:11:19.000000000 +0200
+@@ -0,0 +1,65 @@
++/* 
++ * Copyright (c) 2005  Thiemo Seufer <ths@networkno.de>
++ *
++ * THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY EXPRESSED
++ * OR IMPLIED.  ANY USE IS AT YOUR OWN RISK.
++ *
++ * Permission is hereby granted to use or copy this program
++ * for any purpose,  provided the above notices are retained on all copies.
++ * Permission to modify the code and to distribute modified code is granted,
++ * provided the above notices are retained, and a notice that the code was
++ * modified is included with the above copyright notice.
++ */
++
++#include "../all_aligned_atomic_load_store.h"
++#include "../test_and_set_t_is_ao_t.h"
++
++/* Data dependence does not imply read ordering.  */
++#define AO_NO_DD_ORDERING
++
++AO_INLINE void
++AO_nop_full()
++{
++  __asm__ __volatile__(
++      "       .set push           \n"
++      "       .set mips2          \n"
++      "       .set noreorder      \n"
++      "       .set nomacro        \n"
++      "       sync                \n"
++      "       .set pop              "
++      : : : "memory");
++}
++
++#define AO_HAVE_nop_full
++
++AO_INLINE int
++AO_compare_and_swap(volatile AO_t *addr, AO_t old, AO_t new_val)
++{
++  register int was_equal = 0;
++  register int temp;
++
++  __asm__ __volatile__(
++      "       .set push           \n"
++      "       .set mips2          \n"
++      "       .set noreorder      \n"
++      "       .set nomacro        \n"
++      "1:     ll      %0, %1      \n"
++      "       bne     %0, %4, 2f  \n"
++      "        move   %0, %3      \n"
++      "       sc      %0, %1      \n"
++      "       .set pop            \n"
++      "       beqz    %0, 1b      \n"
++      "       li     %2, 1        \n"
++      "2:                           "
++      : "=&r" (temp), "+R" (*addr), "+r" (was_equal)
++      : "r" (new_val), "r" (old)
++      : "memory");
++  return was_equal;
++}
++
++#define AO_HAVE_compare_and_swap
++
++/*
++ * FIXME: We should also implement fetch_and_add and or primitives
++ * directly.
++ */
+--- libatomic-ops-1.0.away/src/atomic_ops.h	2005-08-03 02:05:18.000000000 +0200
++++ libatomic-ops-1.0/src/atomic_ops.h	2005-10-27 21:01:29.000000000 +0200
+@@ -219,6 +219,9 @@
+ # if defined(__cris__) || defined(CRIS)
+ #   include "atomic_ops/sysdeps/gcc/cris.h"
+ # endif
++# if defined(__mips__)
++#   include "atomic_ops/sysdeps/gcc/mips.h"
++# endif /* __mips__ */
+ #endif /* __GNUC__ && !AO_USE_PTHREAD_DEFS */
+ 
+ #if defined(__INTEL_COMPILER) && !defined(AO_USE_PTHREAD_DEFS)
+
+
