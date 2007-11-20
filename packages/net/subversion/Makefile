@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=subversion
-PKG_VERSION:=1.4.4
+PKG_VERSION:=1.4.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://subversion.tigris.org/downloads/
-PKG_MD5SUM:=d4aa5aeb09acb3307841022d279ab895
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=4c333a5fe827568c67d195cda7a5e154
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -47,36 +44,36 @@ define Package/subversion-server
   TITLE:=subversion server
 endef
 
-define Build/Configure	
-	$(call Build/Configure/Default, \
-		--with-apr="$(STAGING_DIR)/usr/bin/apr-1-config" \
-		--with-apr-util="$(STAGING_DIR)/usr/bin/apu-1-config" \
-		--with-neon="$(STAGING_DIR)/usr" \
-		--disable-mod-activation \
-		--without-ruby-sitedir \
-		--without-swig \
-		--with-jikes=no \
-		--without-junit \
-		--without-berkeley-db \
-		--with-ssl \
-		--disable-neon-version-check \
-		--with-apxs=no \
-		--with-apache=no \
-		, \
-		svn_lib_neon=yes \
-		LDFLAGS="-lcrypt -lnsl -lm -lintl -L$(STAGING_DIR)/usr/lib/libintl/lib/ \
-			 -lz -L$(STAGING_DIR)/usr/lib/ \
-			 -lpthread -L$(STAGING_DIR)/lib" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include/ \
-			  -I$(STAGING_DIR)/usr/lib/libintl/include \
-			  -I$(STAGING_DIR)/include/" \
-	)
+CONFIGURE_ARGS += \
+	--with-apr="$(STAGING_DIR)/usr/bin/apr-1-config" \
+	--with-apr-util="$(STAGING_DIR)/usr/bin/apu-1-config" \
+	--with-neon="$(STAGING_DIR)/usr/include/neon" \
+	--disable-mod-activation \
+	--without-ruby-sitedir \
+	--without-swig \
+	--with-jikes=no \
+	--without-junit \
+	--without-berkeley-db \
+	--with-ssl \
+	--disable-neon-version-check \
+	--with-apxs=no \
+	--with-apache=no \
+
+CONFIGURE_VARS += \
+	svn_lib_neon=yes \
+	LDFLAGS="-lcrypt -lnsl -lm -lintl -L$(STAGING_DIR)/usr/lib/libintl/lib/ \
+		-lz -L$(STAGING_DIR)/usr/lib/ -lpthread -L$(STAGING_DIR)/lib" \
+	CPPFLAGS="-I$(STAGING_DIR)/usr/include/ -I$(STAGING_DIR)/usr/lib/libintl/include \
+		-I$(STAGING_DIR)/include/" \
+
+define Build/Configure
+	$(call Build/Configure/Default)
+	$(call libtool_disable_rpath)
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all local-install
+define Build/Compile
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all local-install
 endef
 
 define Package/subversion-libs/install
