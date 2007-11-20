@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,13 +10,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bmon
 PKG_VERSION:=2.1.0
-PKG_RELEASE:=0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://people.suug.ch/~tgr/bmon/files/
 PKG_MD5SUM:=3111a027907016c0902d67350c619df6
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,18 +33,14 @@ define Package/bmon/description
 	input methods for different architectures.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--disable-cnt-workaround \
-		--disable-dbi \
-		--disable-rrd \
-		--disable-asound \
-	)
-endef
+CONFIGURE_ARGS += \
+	--disable-cnt-workaround \
+	--disable-dbi \
+	--disable-rrd \
+	--disable-asound \
 
-define Build/Compile
-	$(call Build/Compile/Default,all)
-endef
+CONFIGURE_VARS += \
+	ac_cv_lib_nl_nl_connect=no \
 
 define Package/bmon/install
 	$(INSTALL_DIR) $(1)/usr/sbin

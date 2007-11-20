@@ -1,6 +1,7 @@
-diff -ruN bmon-2.1.0-old/src/out_audio.c bmon-2.1.0-new/src/out_audio.c
---- bmon-2.1.0-old/src/out_audio.c	2005-04-05 17:01:33.000000000 +0200
-+++ bmon-2.1.0-new/src/out_audio.c	2006-10-09 23:11:44.000000000 +0200
+Index: bmon-2.1.0/src/out_audio.c
+===================================================================
+--- bmon-2.1.0.orig/src/out_audio.c	2007-11-20 17:25:54.000000000 +0100
++++ bmon-2.1.0/src/out_audio.c	2007-11-20 17:25:54.000000000 +0100
 @@ -141,7 +141,7 @@
  	.om_draw = audio_draw,
  	.om_set_opts = audio_set_opts,
@@ -10,9 +11,10 @@ diff -ruN bmon-2.1.0-old/src/out_audio.c bmon-2.1.0-new/src/out_audio.c
  };
  
  static void __init audio_init(void)
-diff -ruN bmon-2.1.0-old/src/out_xml_event.c bmon-2.1.0-new/src/out_xml_event.c
---- bmon-2.1.0-old/src/out_xml_event.c	2005-04-05 17:01:33.000000000 +0200
-+++ bmon-2.1.0-new/src/out_xml_event.c	2006-10-09 23:11:59.000000000 +0200
+Index: bmon-2.1.0/src/out_xml_event.c
+===================================================================
+--- bmon-2.1.0.orig/src/out_xml_event.c	2007-11-20 17:25:54.000000000 +0100
++++ bmon-2.1.0/src/out_xml_event.c	2007-11-20 17:25:54.000000000 +0100
 @@ -127,7 +127,7 @@
  	.om_draw = xml_event_draw,
  	.om_set_opts = xml_event_set_opts,
