@@ -4,7 +4,7 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: $
+# $Id:$
 
 include $(TOPDIR)/rules.mk
 
@@ -39,12 +39,16 @@ CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
 
+CONFIGURE_VARS += \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libiconv/include" \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libintl/include" \
+	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
+	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libintl/lib" \
+	LIBS="-lnotimpl" \
+	ac_cv_lib_m_rintf=no \
+
 define Build/Configure
-        $(call Build/Configure/Default, \
-                , \
-                LIBS="-lnotimpl" \
-                ac_cv_lib_m_rintf=no \
-        )
+	$(call Build/Configure/Default)
 	$(call libtool_disable_rpath)
 endef
 
