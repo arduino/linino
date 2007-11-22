@@ -9,9 +9,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=shorewall-shell
-PKG_VERSION:=4.0.4
+PKG_VERSION:=4.0.5
 PKG_RELEASE:=1
-PKG_MD5SUM:=1b1a4101e206c3c0e9ae2e3190c8aaf3
+PKG_MD5SUM:=2962e1c8fb8dc581fcbdb4f562a660de
 
 PKG_SOURCE_URL:=http://www1.shorewall.net/pub/shorewall/4.0/shorewall-$(PKG_VERSION)/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
