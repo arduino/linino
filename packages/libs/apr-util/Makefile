@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libaprutil
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libapr +libexpat +libiconv +libpthread +libsqlite3
+  DEPENDS:=+libapr +libexpat +libiconv +libpthread +libsqlite3 +libuuid
   TITLE:=Apache Portable Runtime Utility Library
   URL:=http://apr.apache.org/
 endef
