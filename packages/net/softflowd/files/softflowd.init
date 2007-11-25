@@ -50,7 +50,7 @@ stop_service() {
 
 	[ -n "$pid_file" ] || pid_file="$pidfile"
 	# FIXME
-	$SSD -K -p $pid_file -q && rm -f /var/run/$control_socket
+	$SSD -K -p $pid_file -q && rm -f $control_socket
 }
 
 start() {
