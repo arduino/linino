@@ -7,8 +7,6 @@ RUN_D=/var/run/samba
 NMBD_PID_F=$RUN_D/nmbd.pid
 SMBD_PID_F=$RUN_D/smbd.pid
 
-. /etc/functions.sh
-
 config_cb() {
         local cfg="$CONFIG_SECTION"
         local cfgtype
@@ -18,7 +16,7 @@ config_cb() {
                 timezone)
                         config_get posixtz      $cfg posixtz
                         config_get zoneinfo     $cfg zoneinfo
-                	echo "$posixtz" > /etc/TZ
+			echo "$posixtz" > /etc/TZ
                 ;;
         esac
 }
