@@ -47,6 +47,19 @@ define Build/Compile
         )
 endef
 
+define Build/InstallDev
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_BUILD_DIR)/bzlib.h $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/libbz2.a $(1)/usr/lib/
+endef
+
+define Build/UninstallDev
+	rm -rf \
+		$(STAGING_DIR)/usr/include/bzlib.h \
+		$(STAGING_DIR)/usr/lib/libbz2.a
+endef
+
 define Package/bzip2/install
 	mkdir -p $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bzip2 $(1)/usr/bin/
