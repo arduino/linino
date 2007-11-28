@@ -34,33 +34,33 @@ endef
 
 define Build/Configure
 $(call Build/Configure/Default,, \
-       UNAME_S="Linux" \
-       UNAME_R="$(LINUX_VERSION)" \
-       UNAME_M="$(ARCH)" \
+	UNAME_S="Linux" \
+	UNAME_R="$(LINUX_VERSION)" \
+	UNAME_M="$(ARCH)" \
 )
 endef
 
 define Build/Compile
-       rm -rf $(PKG_INSTALL_DIR)
-       mkdir -p $(PKG_INSTALL_DIR)/usr
-       $(MAKE) -C $(PKG_BUILD_DIR) \
-               $(TARGET_CONFIGURE_OPTS) \
-               COPTS="$(TARGET_CFLAGS)" \
-               PRECOMPILED_FILTER=1 \
-               STAGING_DIR="$(STAGING_DIR)" \
-               DESTDIR="$(PKG_INSTALL_DIR)/usr" \
-               all
+	rm -rf $(PKG_INSTALL_DIR)
+	mkdir -p $(PKG_INSTALL_DIR)/usr
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		 $(TARGET_CONFIGURE_OPTS) \
+		 CC="$(TARGET_CC) $(TARGET_CFLAGS) -s" \
+		 PRECOMPILED_FILTER=1 \
+		 STAGING_DIR="$(STAGING_DIR)" \
+		 DESTDIR="$(PKG_INSTALL_DIR)/usr" \
+		 all
 endef
 
 define Package/ipupdate/install
-       $(INSTALL_DIR) $(1)/usr/sbin
-       $(INSTALL_BIN) $(PKG_BUILD_DIR)/ipupdate $(1)/usr/sbin/
-       $(INSTALL_DIR) $(1)/etc/ipupdate
-       $(INSTALL_BIN) $(PKG_BUILD_DIR)/dollardns $(1)/etc/ipupdate/
-       $(INSTALL_BIN) $(PKG_BUILD_DIR)/failover $(1)/etc/ipupdate/
-       $(INSTALL_BIN) $(PKG_BUILD_DIR)/ifip $(1)/etc/ipupdate/
-       $(INSTALL_BIN) $(PKG_BUILD_DIR)/whatismyip $(1)/etc/ipupdate/
-       $(INSTALL_CONF) $(PKG_BUILD_DIR)/ipupdate.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ipupdate $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/ipupdate
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dollardns $(1)/etc/ipupdate/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/failover $(1)/etc/ipupdate/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ifip $(1)/etc/ipupdate/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/whatismyip $(1)/etc/ipupdate/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/ipupdate.conf $(1)/etc/
 endef
 
 $(eval $(call BuildPackage,ipupdate))
