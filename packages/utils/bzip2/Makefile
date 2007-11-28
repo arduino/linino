@@ -28,7 +28,7 @@ define Package/bzip2
   URL:=http://www.bzip.org/
 endef
 
-define Package/dmidecode/description
+define Package/bzip2/description
 	bzip2 is a freely available, patent free, high-quality \
 	data compressor.
 endef
