@@ -16,7 +16,7 @@ PKG_SOURCE:=$(PKG_NAME).tar.bz2
 PKG_SOURCE_URL:=http://avr32linux.org/twiki/pub/Main/GadgetFsTest
 PKG_MD5SUM:=49476a74c29f1281c8a4c035aa57a5bd
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
