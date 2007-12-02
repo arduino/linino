@@ -1,24 +1,24 @@
-Index: lcd4linux-0.10.0+cvs20051015.orig/drv_T6963.c
+Index: lcd4linux-847/drv_T6963.c
 ===================================================================
---- lcd4linux-0.10.0+cvs20051015.orig.orig/drv_T6963.c	2007-07-07 14:02:55.000000000 +0200
-+++ lcd4linux-0.10.0+cvs20051015.orig/drv_T6963.c	2007-07-07 14:02:57.000000000 +0200
-@@ -170,7 +170,9 @@
+--- lcd4linux-847.orig/drv_T6963.c	2007-12-01 17:15:10.000000000 +0100
++++ lcd4linux-847/drv_T6963.c	2007-12-01 17:15:11.000000000 +0100
+@@ -114,7 +114,9 @@
      /* wait for STA0=1 and STA1=1 */
      n = 0;
      do {
-+#if 0
++#if 0    
  	rep_nop();
-+#endif
++#endif	
  	if (++n > 1000) {
  	    debug("hang in status1");
  	    bug = 1;
-@@ -206,7 +208,9 @@
+@@ -150,7 +152,9 @@
      /* wait for STA3=1 */
      n = 0;
      do {
-+#if 0
++#if 0    
  	rep_nop();
-+#endif
++#endif	
  	if (++n > 1000) {
  	    debug("hang in status2");
  	    bug = 1;
