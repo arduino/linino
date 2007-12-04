@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kismet
-PKG_VERSION:=2007-01-R1a
+PKG_VERSION:=2007-10-R1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kismetwireless.net/code
-PKG_MD5SUM:=5921166366d3f695eeef26121c56a674
+PKG_MD5SUM:=2100c667e69db0cde35fa2d06c8516e2
 
 PKG_BUILD_DEPENDS:=libnotimpl libpcap libncurses uclibcxx
 
@@ -69,7 +69,7 @@ endef
 
 define Package/kismet-server
 $(call Package/kismet/Default)
-  DEPENDS+= +libpcap
+  DEPENDS+= +libpcap +dbus
   TITLE+= server
 endef
 
