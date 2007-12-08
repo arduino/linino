@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=l7-protocols
-PKG_VERSION:=2007-11-03
+PKG_VERSION:=2007-11-22
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/l7-filter
-PKG_MD5SUM:=bf7aa60fa366f8b1d001a832bbb5eb8d
+PKG_MD5SUM:=162c988422fec85e1f1c24417a2c600c
 
 include $(INCLUDE_DIR)/package.mk
 
