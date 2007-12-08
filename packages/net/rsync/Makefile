@@ -23,6 +23,7 @@ define Package/rsync
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Fast remote file copy program (like rcp)
+  DEPENDS:=+libpopt
   URL:=http://rsync.samba.org/
 endef
 
@@ -32,14 +33,17 @@ define Package/rsync/description
 	It has many more options than rcp, and uses the rsync
 	remote-update protocol to greatly speed up file
 	transfers when the destination file already exists.
-
+	
 	The rsync remote-update protocol allows rsync to
 	transfer just the differences between two sets of files 
 	across the network link. 
 endef
 
-MAKE_FLAGS += \
-	PREFIX="/usr" \
+CONFIGURE_ARGS += \
+	--with-included-popt=no \
+	--disable-debug \
+	--disable-ipv6 \
+	--disable-locale \
 
 define Package/rsync/install
 	$(INSTALL_DIR) $(1)/usr/bin
