@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/lcd4linux
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libncurses
+  DEPENDS:=+libncurses +libusb +libgd
   TITLE:=LCD display utility
   URL:=http://lcd4linux.bulix.org/
 endef
@@ -38,13 +38,22 @@ define Package/lcd4linux/conffiles
 /etc/lcd4linux.conf
 endef
 
-# commas are interpreted by the $(call ...) macro, so define an intermediate variable holding our drivers spec
-PKG_CONFIGURE_DRIVERS:=all,!PNG,!RouterBoard,!X11
+# commas are interpreted by the $(call ...) macro, so define an intermediate variable holding our drivers and plugins spec
+PKG_CONFIGURE_DRIVERS:=all,!PNG,!RouterBoard,!X11,!serdisplib
+PKG_CONFIGURE_PLUGINS:=wireless
+
+EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib
+
+TARGET_CONFIGURE_OPTS+=\
+        CC="$(TARGET_CC) $(EXTRA_CFLAGS) $(EXTRA_LDFLAGS)"
 
 CONFIGURE_ARGS += \
 	--without-x \
+	--without-python \
 	--with-drivers="$(PKG_CONFIGURE_DRIVERS)" \
-	--with-plugins=wireless \
+	--with-plugins="$(PKG_CONFIGURE_PLUGINS)" \
+	--disable-rpath \
 
 define Build/Configure
 	$(call Build/Configure/Default,)
