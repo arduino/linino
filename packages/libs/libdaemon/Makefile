@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libdaemon
-PKG_VERSION:=0.10
+PKG_VERSION:=0.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://0pointer.de/lennart/projects/libdaemon/
-PKG_MD5SUM:=6812a5e4063b5016f25e9a0cebbd3dd9
+PKG_MD5SUM:=76596823cc1a6d1cdf7779b782ff0ee6
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -36,8 +36,8 @@ define Package/libdaemon/description
 	- An API for writing PID files
 	- An API for serializing UNIX signals into a pipe for usage with select() or poll()
 	- An API for running subprocesses with STDOUT and STDERR redirected to syslog
-	
-	APIs like these are used in most daemon software available. It is not that 
+
+	APIs like these are used in most daemon software available. It is not that
 	simple to get it done right and code duplication is not a goal.
 endef
 
