@@ -6,10 +6,12 @@
 #
 # $Id$
 #
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rsync
 PKG_VERSION:=2.6.9
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://rsync.samba.org/ftp/rsync
@@ -20,22 +22,28 @@ include $(INCLUDE_DIR)/package.mk
 define Package/rsync
   SECTION:=net
   CATEGORY:=Network
-  TITLE:=fast incremental file transfer
+  TITLE:=Fast remote file copy program (like rcp)
   URL:=http://rsync.samba.org/
 endef
 
-define Build/Compile
-	$(call Build/Compile/Default, \
-		PREFIX="/usr" \
-	)
+define Package/rsync/description
+	sync is a program that allows files to be copied to
+	and from remote machines in much the same way as rcp.
+	It has many more options than rcp, and uses the rsync
+	remote-update protocol to greatly speed up file
+	transfers when the destination file already exists.
+
+	The rsync remote-update protocol allows rsync to
+	transfer just the differences between two sets of files 
+	across the network link. 
 endef
 
+MAKE_FLAGS += \
+	PREFIX="/usr" \
+
 define Package/rsync/install
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(1)" \
-		PREFIX="/usr" \
-		install-strip
-	rm -rf $(1)/usr/man
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,rsync))
