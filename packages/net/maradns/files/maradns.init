@@ -12,3 +12,7 @@ start() {
 stop() {
 	killall duende maradns zoneserver
 }
+
+reload() {
+	killall -HUP maradns
+}
