@@ -35,7 +35,6 @@ endef
 
 CONFIGURE_ARGS += \
 	--disable-gui \
-	--enable-gui=none \
 	--disable-gtktest \
 	--disable-xim \
 	--with-features=tiny \
