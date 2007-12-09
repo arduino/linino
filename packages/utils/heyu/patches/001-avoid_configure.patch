@@ -25,16 +25,16 @@ diff -urN orig/heyu-2.0beta.2/Makefile heyu-2.0beta.2/Makefile
 +## by the Configure program
 +
 +SRCS =	date.c erase.c info.c  message.c relay.c \
-+	monitor.c reset.c setclock.c stop.c \
-+	tty.c turn.c x10.c xread.c xwrite.c status.c cm11a.c \
-+	eeprom.c preset.c process.c sun.c cmd.c config.c x10state.c \
-+	poll.c modules.c cm17a.c xsync.c timing.c
++	relay_aux.c monitor.c reset.c setclock.c stop.c \
++	tty.c x10.c xread.c xwrite.c status.c cm11a.c \
++	eeprom.c process.c sun.c cmd.c config.c x10state.c \
++	poll.c modules.c cm10a.c cm17a.c tty_aux.c xsync.c x10aux.c timing.c
 +
 +OBJS =	date.o erase.o info.o message.o relay.o \
-+	monitor.o reset.o setclock.o stop.o \
-+	tty.o turn.o x10.o xread.o xwrite.o status.o cm11a.o \
-+	eeprom.o preset.o process.o sun.o cmd.o config.o x10state.o \
-+	poll.o modules.o cm17a.o xsync.o timing.o
++	relay_aux.o monitor.o reset.o setclock.o stop.o \
++	tty.o x10.o xread.o xwrite.o status.o cm11a.o \
++	eeprom.o process.o sun.o cmd.o config.o x10state.o \
++	poll.o modules.o cm10a.o cm17a.o tty_aux.o xsync.o x10aux.o timing.o
 +
 +OTHERSRC = README README2 Makefile x10config.sample protocol.txt eeprom.h \
 +	x10.sched.sample  heyu.1 x10.h x10config.5 x10cm17a.5 \
