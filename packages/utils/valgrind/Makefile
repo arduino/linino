@@ -58,7 +58,7 @@ endef
 
 define Package/valgrind/install	
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/valgrind.sh $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/valgrind
 	$(CP) ./files/uclibc.supp $(1)/usr/lib/valgrind/

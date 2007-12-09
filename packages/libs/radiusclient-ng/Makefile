@@ -98,7 +98,7 @@ endef
 
 define Package/radiusclient-ng/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/rad{acct,iusclient,login,status} $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/rad{acct,iusclient,login,status} $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,libradiusclient-ng))

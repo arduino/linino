@@ -49,7 +49,7 @@ endef
 
 define Package/nfs-utils/install
 	$(INSTALL_DIR) $(1)/sbin
-	$(CP) $(PKG_INSTALL_DIR)/sbin/mount* $(1)/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/sbin/mount* $(1)/sbin/
 endef
 
 $(eval $(call BuildPackage,nfs-utils))

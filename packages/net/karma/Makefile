@@ -51,7 +51,7 @@ endef
 
 define Package/karma/install	
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_BUILD_DIR)/bin/karma $(1)/usr/sbin/karma-ruby
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/karma $(1)/usr/sbin/karma-ruby
 	$(CP) $(PKG_BUILD_DIR)/src/karma $(1)/usr/sbin/karma
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_BUILD_DIR)/etc/* $(1)/etc/

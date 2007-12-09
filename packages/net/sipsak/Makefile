@@ -44,7 +44,7 @@ endef
 
 define Package/sipsak/install	
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/sipsak $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/sipsak $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,sipsak))

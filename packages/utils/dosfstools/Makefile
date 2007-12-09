@@ -53,10 +53,10 @@ endef
 
 define Package/dosfstools/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/dosfsck $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/fsck.{msdos,vfat} $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/mkdosfs $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/mkfs.{msdos,vfat} $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dosfsck $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/fsck.{msdos,vfat} $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/mkdosfs $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/mkfs.{msdos,vfat} $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,dosfstools))

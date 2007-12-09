@@ -120,7 +120,7 @@ define Package/ulogd/install
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/ulogd.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ulogd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ulogd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/lib/ulogd
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ulogd/ulogd_BASE.so $(1)/usr/lib/ulogd/
 	$(INSTALL_DIR) $(1)/etc/default

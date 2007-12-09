@@ -45,7 +45,7 @@ endef
 
 define Package/radsecproxy/install
 	$(INSTALL_DIR) $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/radsecproxy $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/radsecproxy $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/
 	$(CP) $(PKG_INSTALL_DIR)/etc/radsecproxy.conf-example $(1)/etc/radsecproxy.conf
 	$(INSTALL_DIR) $(1)/etc/init.d/

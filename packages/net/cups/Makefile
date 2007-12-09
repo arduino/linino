@@ -82,7 +82,7 @@ define Package/cups/install
 	rm -rf $(1)/etc/cups/certs
 	ln -sf /tmp $(1)/etc/cups/certs
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	rm -f $(1)/usr/bin/cups-config
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcups.so.* $(1)/usr/lib/
@@ -93,7 +93,7 @@ define Package/cups/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/cups/index.html $(1)/usr/share/doc/cups/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/cups/images $(1)/usr/share/doc/cups/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
 	# overwrite default config with our own
 	$(CP) ./files/etc/cups/* $(1)/etc/cups/
 	# install initscript with priority 60
@@ -103,7 +103,7 @@ endef
 
 define Build/InstallDev
 	mkdir -p $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/cups-config $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/cups-config $(1)/usr/bin/
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/cups $(1)/usr/include/
 	mkdir -p $(1)/usr/lib

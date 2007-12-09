@@ -72,7 +72,7 @@ define Package/sane-backends/install
 	$(INSTALL_DIR) $(1)/etc/sane.d
 	$(CP) $(PKG_INSTALL_DIR)/etc/sane.d/*.conf $(1)/etc/sane.d/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/saned $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/saned $(1)/usr/sbin/
 endef
 
 define Package/sane-libs/install

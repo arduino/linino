@@ -45,7 +45,7 @@ endef
 
 define Build/InstallDev
 	mkdir -p $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/taglib-config $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/taglib-config $(1)/usr/bin/
 	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtag.{a,so*} $(1)/usr/lib/
 	mkdir -p $(1)/usr/include/taglib

@@ -106,7 +106,7 @@ endef
 
 define Package/weechat/install	
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/weechat-curses $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/weechat-curses $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/weechat/plugins
 endef
 

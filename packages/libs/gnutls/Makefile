@@ -151,7 +151,7 @@ endef
 
 define Build/InstallDev
 	mkdir -p $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libgnutls{,-extra}-config $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libgnutls{,-extra}-config $(1)/usr/bin/
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/gnutls $(1)/usr/include/
 	mkdir -p $(1)/usr/lib
@@ -176,14 +176,14 @@ define Package/certtool/install
 	$(INSTALL_DIR) $(1)/etc/gnutls
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/doc/certtool.cfg $(1)/etc/gnutls/
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/certtool $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/certtool $(1)/usr/bin/
 endef
 
 
 define Package/gnutls-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/gnutls-{cli,serv} $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/psktool $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/gnutls-{cli,serv} $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/psktool $(1)/usr/bin/
 endef
 
 

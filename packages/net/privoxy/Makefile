@@ -63,7 +63,7 @@ endef
 
 define Package/privoxy/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/privoxy $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/privoxy $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/privoxy
 	$(CP) $(PKG_INSTALL_DIR)/etc/privoxy/* $(1)/etc/privoxy/
 	$(INSTALL_CONF) ./files/privoxy.config $(1)/etc/privoxy/config

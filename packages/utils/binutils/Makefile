@@ -53,7 +53,7 @@ endef
 
 define Package/binutils/install
 	$(INSTALL_DIR) $(1)/usr
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ $(1)/usr
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ $(1)/usr
 	$(CP) $(PKG_INSTALL_DIR)/usr/*-linux $(1)/usr
 endef
 

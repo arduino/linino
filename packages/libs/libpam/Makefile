@@ -72,7 +72,7 @@ define Package/libpam/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/lib/
 	$(CP) $(PKG_INSTALL_DIR)/etc/* $(1)/etc/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,libpam))

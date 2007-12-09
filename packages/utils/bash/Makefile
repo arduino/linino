@@ -54,7 +54,7 @@ endef
 
 define Package/bash/install
 	$(INSTALL_DIR) $(1)/bin
-	$(CP) $(PKG_INSTALL_DIR)/bin/bash $(1)/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/bash $(1)/bin/
 endef
 
 $(eval $(call BuildPackage,bash))

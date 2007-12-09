@@ -84,7 +84,7 @@ endef
 
 define Build/InstallDev
 	mkdir -p $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/curl-config $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/curl-config $(1)/usr/bin/
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/curl $(1)/usr/include/
 	mkdir -p $(1)/usr/lib
@@ -104,7 +104,7 @@ endef
 
 define Package/curl/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/curl $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/curl $(1)/usr/bin/
 endef
 
 define Package/libcurl/install

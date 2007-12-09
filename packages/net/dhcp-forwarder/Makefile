@@ -46,7 +46,7 @@ endef
 
 define Package/dhcp-forwarder/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/dhcp-fwd $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dhcp-fwd $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/contrib/dhcp-fwd.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d

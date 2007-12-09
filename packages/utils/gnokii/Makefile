@@ -59,9 +59,9 @@ define Package/gnokii/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/gnokii $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/gnokiid $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/mgnokiidev $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/gnokii $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/gnokiid $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/mgnokiidev $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgnokii.so.3.5.0 $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgnokii.so.3 $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgnokii.so $(1)/usr/lib

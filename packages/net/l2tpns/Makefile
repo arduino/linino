@@ -59,7 +59,7 @@ define Package/l2tpns/install
 	$(INSTALL_DIR) $(1)/usr/lib/l2tpns
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/l2tpns/* $(1)/usr/lib/l2tpns/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,l2tpns))

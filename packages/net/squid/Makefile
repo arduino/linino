@@ -162,7 +162,7 @@ define Package/squid/install
 	$(INSTALL_DIR) $(1)/usr/share/squid
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/squid/* $(1)/usr/share/squid/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/squid $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/squid $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/lib/squid
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/squid/{unlinkd,pinger} $(1)/usr/lib/squid/
 endef

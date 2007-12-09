@@ -47,7 +47,7 @@ endef
 
 define Package/xinetd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/xinetd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/xinetd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/xinetd.conf $(1)/etc/xinetd.conf
 	$(INSTALL_DIR) $(1)/etc/xinetd.d

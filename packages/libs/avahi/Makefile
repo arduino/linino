@@ -173,12 +173,12 @@ define Package/avahi-autoipd/install
 	$(INSTALL_DIR) $(1)/etc/avahi
 	$(CP) $(PKG_INSTALL_DIR)/etc/avahi/avahi-autoipd.action $(1)/etc/avahi/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/avahi-autoipd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/avahi-autoipd $(1)/usr/sbin/
 endef
 
 define Package/avahi-daemon/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/avahi-daemon $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/avahi-daemon $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/avahi
 	$(INSTALL_DATA) ./files/avahi-daemon.conf $(1)/etc/avahi/
 	$(INSTALL_DIR) $(1)/etc/avahi/services
@@ -192,7 +192,7 @@ define Package/avahi-dnsconfd/install
 	$(INSTALL_DIR) $(1)/etc/avahi
 	$(CP) $(PKG_INSTALL_DIR)/etc/avahi/avahi-dnsconfd.action $(1)/etc/avahi/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/avahi-dnsconfd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/avahi-dnsconfd $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,libavahi))

@@ -61,7 +61,7 @@ endef
 
 define Package/mutella/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/mutella{,_sio} $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mutella{,_sio} $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/share
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/mutella $(1)/usr/share/
 endef

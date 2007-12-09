@@ -43,7 +43,7 @@ endef
 
 define Package/bluez-hcidump/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/hcidump $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/hcidump $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,bluez-hcidump))

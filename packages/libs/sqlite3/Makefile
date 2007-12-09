@@ -102,7 +102,7 @@ endef
 
 define Package/sqlite3-cli/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/sqlite3 $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/sqlite3 $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,libsqlite3))

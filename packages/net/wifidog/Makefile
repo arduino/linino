@@ -48,8 +48,8 @@ MAKE_FLAGS += \
 define Package/wifidog/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/init.d/wifidog $(1)/usr/bin/wifidog-init
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/wifidog $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/wdctl $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/wifidog $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/wdctl $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libhttpd.so* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/etc

@@ -49,7 +49,7 @@ endef
  
 define Package/ser2net/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ser2net $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ser2net $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_BUILD_DIR)/ser2net.conf $(1)/etc/
 endef

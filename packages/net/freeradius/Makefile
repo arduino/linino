@@ -346,7 +346,7 @@ define Package/freeradius/install
 	$(INSTALL_DIR) $(1)/usr/lib/freeradius
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/freeradius/libradius{,-*}.so $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/radiusd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/radiusd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/radiusd.init $(1)/etc/init.d/radiusd
 endef
@@ -363,7 +363,7 @@ endef
 define Package/freeradius-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	for f in radclient radeapclient; do \
-		$(CP) $(PKG_INSTALL_DIR)/usr/bin/$$$${f} $(1)/usr/bin/ ; \
+		$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$$$${f} $(1)/usr/bin/ ; \
 	done
 endef
 

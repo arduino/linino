@@ -46,19 +46,19 @@ define Package/rp-l2tpd/install
 	$(CP) $(PKG_INSTALL_DIR)/etc/l2tp.conf.example $(1)/etc/l2tp.conf
 	$(INSTALL_DIR) $(1)/usr/lib/l2tp
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/l2tpd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/l2tpd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/rp-l2tpd.init $(1)/etc/init.d/rp-l2tpd
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/l2tp/cmd.so $(1)/usr/lib/l2tp/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/l2tp/sync-pppd.so $(1)/usr/lib/l2tp/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/l2tp-control $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/l2tp-control $(1)/usr/sbin/
 endef
 
 #define Package/rp-l2tpd-mod-cmd/install	
 #	$(INSTALL_DIR) $(1)/usr/lib/l2tp
 #	$(CP) $(PKG_INSTALL_DIR)/usr/lib/l2tp/cmd.so $(1)/usr/lib/l2tp/
 #	$(INSTALL_DIR) $(1)/usr/sbin
-#	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/l2tp-control $(1)/usr/sbin/
+#	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/l2tp-control $(1)/usr/sbin/
 #endef
 
 #define Package/rp-l2tpd-mod-ppp/install

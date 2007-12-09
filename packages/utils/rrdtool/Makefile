@@ -125,7 +125,7 @@ endef
 
 define Package/rrdcgi/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdcgi $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rrdcgi $(1)/usr/bin/
 endef
 
 define PyPackage/rrdpy/install
@@ -135,8 +135,8 @@ endef
 
 define Package/rrdtool/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdtool $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdupdate $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rrdtool $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rrdupdate $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,librrd))

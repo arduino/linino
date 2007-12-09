@@ -65,7 +65,7 @@ endef
 
 define Build/InstallDev
 	mkdir -p $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/g++-uc $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/g++-uc $(1)/usr/bin/
 	mkdir -p $(1)/usr/include/uClibc++
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/uClibc++/
 	mkdir -p $(1)/usr/lib
@@ -73,7 +73,7 @@ define Build/InstallDev
 	$(SED) 's|-I/include/|-I$(1)/usr/include/uClibc++/|g' $(1)/usr/bin/g++-uc
 	$(SED) 's|-L/lib/|-L$(1)/usr/lib/|g' $(1)/usr/bin/g++-uc
 # add another wrapper which links against both uClibc++ and libstdc++ 
-	$(CP) $(1)/usr/bin/g++-uc $(1)/usr/bin/g++-uc+std
+	$(INSTALL_BIN) $(1)/usr/bin/g++-uc $(1)/usr/bin/g++-uc+std
 	$(SED) 's|^WRAPPER_INCLUDEDIR=.*||g' $(1)/usr/bin/g++-uc+std
 	$(SED) 's|-luClibc++|-Wl,-Bdynamic,-luClibc++,-Bstatic,-lstdc++,-Bdynamic|g' $(1)/usr/bin/g++-uc+std
 	$(SED) 's|-nostdinc++||g' $(1)/usr/bin/g++-uc+std

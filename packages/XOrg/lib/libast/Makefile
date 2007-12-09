@@ -50,7 +50,7 @@ endef
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{lib,include,bin}
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*{la,so}* $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include
 	$(SED) "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/libast*.la
 	$(SED) "s,-I/usr/include,,g" $(1)/usr/bin/libast-config

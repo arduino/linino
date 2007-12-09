@@ -77,14 +77,14 @@ endef
 
 define Package/zabbix-agent/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/zabbix_agentd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/zabbix_agentd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/zabbix
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/misc/conf/zabbix_agentd.conf $(1)/etc/zabbix/
 endef
 
 define Package/zabbix-sender/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/zabbix_sender $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/zabbix_sender $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/zabbix
 endef
 
@@ -94,7 +94,7 @@ endef
 
 define Package/zabbix-server/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/zabbix_server $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/zabbix_server $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/zabbix
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/misc/conf/zabbix_server.conf $(1)/etc/zabbix/
 endef

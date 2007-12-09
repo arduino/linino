@@ -64,9 +64,9 @@ define Package/maradns/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/maradns.init $(1)/etc/init.d/maradns
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/{askmara,getzone,fetchzone,duende} $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/{askmara,getzone,fetchzone,duende} $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/{maradns,zoneserver} $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/{maradns,zoneserver} $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,maradns))

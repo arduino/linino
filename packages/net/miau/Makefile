@@ -49,7 +49,7 @@ MAKE_FLAGS += \
 
 define Package/miau/install	
 	$(INSTALL_DIR) $(1)/usr/bin  	
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DIR) $(1)/etc/default
 	$(INSTALL_DIR) $(1)/etc/miau

@@ -67,7 +67,7 @@ endef
 
 define Package/xinit/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xinit $(1)/usr/bin/xinit
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/xinit $(1)/usr/bin/xinit
 	cd $(1)/usr/bin/; ln -s xinit startx
 endef
 

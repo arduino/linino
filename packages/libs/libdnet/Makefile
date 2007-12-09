@@ -61,7 +61,7 @@ MAKE_FLAGS += \
 
 define Build/InstallDev
 	mkdir -p $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/dnet-config $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/dnet-config $(1)/usr/bin/
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/dnet.h $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/dnet $(1)/usr/include/
@@ -81,7 +81,7 @@ define Package/libdnet/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdnet.so.* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/dnet $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dnet $(1)/usr/sbin/
 endef
 
 define Package/pydnet/install

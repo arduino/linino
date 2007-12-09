@@ -39,7 +39,7 @@ MAKE_FLAGS += \
 
 define Package/osirisd/install	
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/osirisd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/osirisd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/osirisd.init $(1)/etc/init.d/osirisd
 endef

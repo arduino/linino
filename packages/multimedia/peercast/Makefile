@@ -53,7 +53,7 @@ endef
 
 define Package/peercast/install	
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/peercast $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/peercast $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/share/peercast/html
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/peercast/html/en $(1)/usr/share/peercast/html/
 	$(INSTALL_DIR) $(1)/etc

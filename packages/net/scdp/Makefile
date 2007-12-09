@@ -52,7 +52,7 @@ endef
 
 define Package/scdp/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/scdp $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/scdp $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,scdp))

@@ -486,8 +486,8 @@ define Package/asterisk-mini/install
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/mohmp3
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/sounds
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/asterisk $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/safe_asterisk $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/asterisk $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/safe_asterisk $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/default
 	$(INSTALL_DATA)  ./files/asterisk.default $(1)/etc/default/asterisk
 	$(INSTALL_DIR) $(1)/etc/init.d

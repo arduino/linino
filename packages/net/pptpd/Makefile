@@ -47,8 +47,8 @@ endef
 
 define Package/pptpd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pptpd $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pptpctrl $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/pptpd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/pptpctrl $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/lib/pptpd
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pptpd/* $(1)/usr/lib/pptpd
 	$(INSTALL_DIR) $(1)/etc

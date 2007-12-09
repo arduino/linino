@@ -42,7 +42,7 @@ endef
 
 define Package/ethtool/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ethtool $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ethtool $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,ethtool))

@@ -47,7 +47,7 @@ endef
 
 define Package/tinyproxy/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/tinyproxy $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/tinyproxy $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/share/tinyproxy
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/tinyproxy/*.html $(1)/usr/share/tinyproxy/
 	$(INSTALL_DIR) $(1)/etc/tinyproxy

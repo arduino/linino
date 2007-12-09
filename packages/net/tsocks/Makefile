@@ -48,7 +48,7 @@ endef
 
 define Package/tsocks/install
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/tsocks $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/tsocks $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/lib/libtsocks.so{,*} $(1)/usr/lib/
 endef
 

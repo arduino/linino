@@ -51,9 +51,9 @@ endef
 
 define Build/InstallDev	
 	mkdir -p $(1)/usr/lib/libintl/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libintl.h $(1)/usr/lib/libintl/include/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/include/libintl.h $(1)/usr/lib/libintl/include/
 	mkdir -p $(1)/usr/lib/libintl/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libintl.{a,so*} $(1)/usr/lib/libintl/lib/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/libintl.{a,so*} $(1)/usr/lib/libintl/lib/
 endef
 
 define Build/UninstallDev	
@@ -62,7 +62,7 @@ endef
 
 define Package/libintl/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libintl.so.* $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/libintl.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libintl))

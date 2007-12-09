@@ -43,9 +43,9 @@ endef
 
 define Package/alsa-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/amixer $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/alsamixer $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/aplay $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/amixer $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/alsamixer $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/aplay $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,alsa-utils))

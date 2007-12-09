@@ -71,8 +71,8 @@ endef
 
 define Build/InstallDev
 	mkdir -p $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xslt-config $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xsltproc $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/xslt-config $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/xsltproc $(1)/usr/bin/
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libxslt $(1)/usr/include/
 	mkdir -p $(1)/usr/lib
@@ -100,7 +100,7 @@ endef
 
 define Package/xsltproc/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xsltproc $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/xsltproc $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,libxslt))

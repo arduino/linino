@@ -37,7 +37,7 @@ endef
 define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/local/lib/pkgconfig/fontutil.pc $(1)/usr/lib/pkgconfig/
 	$(CP) $(PKG_INSTALL_DIR)/usr/local/lib/X11/* $(1)/usr/lib/X11/
-	$(CP) $(PKG_INSTALL_DIR)/usr/local/bin/* $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/local/bin/* $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,font-util))

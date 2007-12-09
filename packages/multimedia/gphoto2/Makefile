@@ -55,7 +55,7 @@ endef
 
 define Package/gphoto2/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/gphoto2 $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/gphoto2 $(1)/usr/bin/
 endef
 
 

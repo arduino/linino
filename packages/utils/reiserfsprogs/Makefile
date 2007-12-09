@@ -44,11 +44,11 @@ endef
 
 define Package/reiserfsprogs/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/debugreiserfs $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/mkreiserfs $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/reiserfsck $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/reiserfstune $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/resize_reiserfs $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/debugreiserfs $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/mkreiserfs $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/reiserfsck $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/reiserfstune $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/resize_reiserfs $(1)/usr/sbin/
 	ln -sf mkreiserfs $(1)/usr/sbin/mkfs.reiserfs
 	ln -sf reiserfsck $(1)/usr/sbin/fsck.reiserfs
 endef

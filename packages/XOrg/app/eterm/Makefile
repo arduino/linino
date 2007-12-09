@@ -57,12 +57,12 @@ endef
 define Package/eterm/install
 	$(INSTALL_DIR) $(1)/usr/{bin,lib}
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*so* $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/Eterm $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/Eterm $(1)/usr/bin
 endef
 
 define Package/esetroot/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/Esetroot $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/Esetroot $(1)/usr/bin
 endef
 
 $(eval $(call BuildPackage,esetroot))

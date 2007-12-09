@@ -54,7 +54,7 @@ endef
 
 define Package/rarpd/install	
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/rarpd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/rarpd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/default
 	install -m644 ./files/rarpd.default $(1)/etc/default/rarpd
 	$(INSTALL_DIR) $(1)/etc/init.d

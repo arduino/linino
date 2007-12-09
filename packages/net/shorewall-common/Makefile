@@ -44,7 +44,7 @@ define Package/shorewall-common/install
 	$(INSTALL_DIR) $(1)/bin
 	$(INSTALL_BIN) ./files/shorewall.init $(1)/etc/init.d/shorewall
 	$(INSTALL_BIN) ./files/hostname $(1)/bin
-	$(CP) $(PKG_INSTALL_DIR)/sbin/shorewall $(1)/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/sbin/shorewall $(1)/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/shorewall $(1)/usr/share
 	$(CP) $(PKG_INSTALL_DIR)/etc/shorewall $(1)/etc
 endef

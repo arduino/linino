@@ -66,7 +66,7 @@ define Package/ipcad/install
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/ipcad.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ipcad $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ipcad $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,ipcad))

@@ -45,8 +45,8 @@ endef
 
 define Package/lrzsz/install	
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/lrz $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/lsz $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/lrz $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/lsz $(1)/usr/bin/
 	(cd $(1)/usr/bin; \
 		ln -fs lrz lrx; \
 		ln -fs lrz lrb; \

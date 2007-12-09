@@ -46,7 +46,7 @@ endef
 
 define Package/vgp/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/vgpd $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/vgpd $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,vgp))

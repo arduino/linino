@@ -123,14 +123,14 @@ endef
 
 define Package/howl-autoipd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/autoipd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/autoipd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DATA) ./files/autoipd.init $(1)/etc/init.d/autoipd
 endef
 
 define Package/howl-mdnsresponder/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/mDNSResponder $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mDNSResponder $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/mDNSResponder.conf $(1)/etc/mDNSResponder.conf
 	$(INSTALL_DIR) $(1)/etc/init.d
@@ -139,14 +139,14 @@ endef
 
 define Package/howl-nifd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nifd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/nifd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DATA) ./files/nifd.init $(1)/etc/init.d/nifd
 endef
 
 define Package/howl-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/mDNS{Browse,Publish,Query,Resolve} $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mDNS{Browse,Publish,Query,Resolve} $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,libhowl))

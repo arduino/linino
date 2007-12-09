@@ -89,7 +89,7 @@ endef
 
 define Package/rrdcollect/install	
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/rrdcollect $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/rrdcollect $(1)/usr/sbin/
 endef
 
 define Package/rrdcollect-example/install	
