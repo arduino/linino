@@ -119,7 +119,7 @@ define Package/bind-server/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/named $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_BIN) ./files/bind $(1)/etc/
+	$(CP) ./files/bind $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(CP) ./files/named.init $(1)/etc/init.d/named
 	find $(1)/etc/bind/ -name ".svn" | xargs rm -rf
