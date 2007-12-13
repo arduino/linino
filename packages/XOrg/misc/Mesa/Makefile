@@ -34,7 +34,7 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(CP) -r $(PKG_BUILD_DIR)/include/* $(1)/usr/include
+	$(CP) $(PKG_BUILD_DIR)/include/* $(1)/usr/include
 endef
 
 $(eval $(call BuildPackage,Mesa))
