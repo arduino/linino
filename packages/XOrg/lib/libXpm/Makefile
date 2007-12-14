@@ -67,7 +67,7 @@ endef
 
 define Package/libXpm/install/Default
 	$(INSTALL_DIR) $(1)/usr/lib
-	find $(PKG_INSTALL_DIR)/usr/lib/ -name lib*so* | $(XARGS) -i -t cp -P {} $(1)/usr/lib 
+	find $(PKG_INSTALL_DIR)/usr/lib/ -name lib*so* | $(XARGS) -I % -t cp -P % $(1)/usr/lib 
 endef
 
 define Package/libXpm/install
