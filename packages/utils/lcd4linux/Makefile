@@ -39,7 +39,7 @@ define Package/lcd4linux/conffiles
 endef
 
 # commas are interpreted by the $(call ...) macro, so define an intermediate variable holding our drivers and plugins spec
-PKG_CONFIGURE_DRIVERS:=all,!PNG,!RouterBoard,!X11,!serdisplib
+PKG_CONFIGURE_DRIVERS:=all,!PNG,!RouterBoard,!X11,!serdisplib,!G15
 PKG_CONFIGURE_PLUGINS:=wireless
 
 EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
