@@ -1,0 +1,17 @@
+*** libvorbisidec-1.0.2+svn12153/autogen.sh.orig	Tue Nov 20 19:07:46 2007
+--- libvorbisidec-1.0.2+svn12153/autogen.sh	Tue Nov 20 19:08:24 2007
+***************
+*** 109,120 ****
+  $ACLOCAL $ACLOCAL_FLAGS || exit 1
+  echo "  $LIBTOOLIZE --automake"
+  $LIBTOOLIZE --automake || exit 1
+- echo "  autoheader"
+- autoheader || exit 1
+  echo "  $AUTOMAKE --add-missing $AUTOMAKE_FLAGS"
+  $AUTOMAKE --add-missing $AUTOMAKE_FLAGS || exit 1
+  echo "  autoconf"
+  autoconf || exit 1
+  
+  cd $olddir
+- $srcdir/configure --enable-maintainer-mode "$@" && echo
+--- 109,117 ----

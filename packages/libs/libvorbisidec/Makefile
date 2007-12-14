@@ -9,11 +9,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libvorbisidec
-PKG_VERSION:=1.2.0-dave
+PKG_VERSION:=1.0.2+svn12153
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://users.tpg.com.au/davico/openwrt/
+PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
+PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/libv/libvorbisidec/
 PKG_MD5SUM:=cb8e51aab92ef164f8e0e8853f7164fa
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -36,6 +36,7 @@ define Package/libvorbisidec/description
 endef
 
 define Build/Configure
+	(cd $(PKG_BUILD_DIR); ./autogen.sh );
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \
