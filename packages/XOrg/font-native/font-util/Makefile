@@ -16,6 +16,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.2/src/font
 
 include $(INCLUDE_DIR)/package.mk
+STAGING_DIR=$(STAGING_DIR_HOST)
 
 define Package/font-util
   SECTION:=xorg-font
