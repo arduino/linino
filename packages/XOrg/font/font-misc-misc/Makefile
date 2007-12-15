@@ -123,3 +123,12 @@ endef
 
 $(eval $(call BuildPackage,font-misc-misc))
 $(eval $(call BuildPackage,font-base))
+
+# FIXME: replace with native versions
+$(eval $(call RequireCommand,mkfontscale, \
+	Please install mkfontscale (usually in xfonts-utils) \
+))
+$(eval $(call RequireCommand,mkfontdir, \
+	Please install mkfontdir (usually in xfonts-utils) \
+))
+
