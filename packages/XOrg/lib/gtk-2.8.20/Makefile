@@ -56,3 +56,6 @@ define Build/InstallDev
 endef
 
 $(eval $(call BuildPackage,gtk-2.8.20))
+$(eval $(call RequireCommand,gdk-pixbuf-csource, \
+	Please install gtk2.0-dev \
+))
