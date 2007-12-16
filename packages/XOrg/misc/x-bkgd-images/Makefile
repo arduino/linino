@@ -31,7 +31,7 @@ define Build/Compile
 endef
 
 define Package/x-bkgd-images/install
-	$(call pkg_install_files,`pwd`/files,$(1),/usr/share/X11/) 
+	$(CP) ./files/* $(1)/ 
 endef
 
 $(eval $(call BuildPackage,x-bkgd-images))
