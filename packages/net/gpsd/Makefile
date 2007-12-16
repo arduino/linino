@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gpsd
-PKG_VERSION:=2.29
+PKG_VERSION:=2.35
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.berlios.de/gpsd/
-PKG_MD5SUM:=3ff80db0e7d906457e5a7a1b04fcb4ec
+PKG_MD5SUM:=fdd16502f68b997858edd5a9f2fcf9dc
 
 PKG_BUILD_DEPENDS=libncurses libnotimpl
 
@@ -29,26 +29,42 @@ define Package/gpsd
 endef
 
 CONFIGURE_ARGS += \
-	--without-x \
+	--disable-python \
+	--disable-sirf \
+	--disable-tsip \
+	--disable-fv18 \
+	--disable-tripmate \
+	--disable-earthmate \
+	--disable-itrax \
+	--disable-navcom \
+	--disable-garmin \
+	--disable-ubx \
+	--disable-evermore \
+	--disable-rtcm104 \
+	--disable-ntrip \
+	--disable-ntpshm \
+	--disable-pps \
+	--disable-reconfigure \
+	--without-x 
 
 CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClic++" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
 	LIBS="-nodefaultlibs -luClibc++ -lnotimpl" \
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CXXLINK="\$$$$(LINK)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+define Build/Configure
+	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status}; \
+		./autogen.sh \
+	);
+	$(call Build/Configure/Default)
 endef
 
 define Build/InstallDev
 	mkdir -p $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/gps{,d}.h $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libgpsmm.h $(1)/usr/include/
+	$(CP) $(PKG_BUILD_DIR)/gps{,d}.h $(1)/usr/include/
+	$(CP) $(PKG_BUILD_DIR)/libgpsmm.h $(1)/usr/include/
 	mkdir -p $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgps.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/.libs/libgps.{a,so*} $(1)/usr/lib/
 endef
 
 define Build/UninstallDev
@@ -59,9 +75,9 @@ endef
 
 define Package/gpsd/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/libgps.so.* $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/.libs/libgps.so.* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/gpsd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/.libs/gpsd $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,gpsd))
