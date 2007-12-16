@@ -33,7 +33,10 @@ CONFIGURE_ARGS+=LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -lnotimpl" \
 	sys_lib_dlsearch_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
 	sys_lib_search_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
 	--disable-mikmod \
-	--disable-vorbis
+	--disable-vorbis \
+	--disable-esd
+
+TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include/gtk-1.2
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
@@ -46,15 +49,16 @@ define Build/Configure
 			$(CONFIGURE_ARGS) ;\
 		fi \
 	)
+	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) 
+	$(MAKE) -C $(PKG_BUILD_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR=$(PKG_INSTALL_DIR) install 
 endef
 
 define Package/xmms/install
-	$(call pkg_install_files,$(PKG_INSTALL_DIR),$(1),/usr/bin/xmms /usr/lib/libxmms.so /usr/lib/libxmms.so.1 /usr/lib/libxmms.so.1.3.1 /usr/share/xmms/)
+	$(call pkg_install_files,/usr/bin/xmms /usr/lib/libxmms.so /usr/lib/libxmms.so.1 /usr/lib/libxmms.so.1.3.1 /usr/share/xmms/wmxmms.xpm,$(PKG_INSTALL_DIR),$(1))
 endef
 
 $(eval $(call BuildPackage,xmms))

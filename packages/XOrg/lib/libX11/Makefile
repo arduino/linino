@@ -49,7 +49,6 @@ define Build/Compile
 	make -C $(PKG_BUILD_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
-	find $(PKG_INSTALL_DIR) -name *.la | xargs rm -rf
 endef
 
 define Build/Configure
@@ -63,6 +62,7 @@ define Build/Configure
 		--enable-malloc0returnsnull; \
 	fi \
 	)
+	$(call libtool_disable_rpath)
 endef
 
 define Package/libX11/install/Default
@@ -80,6 +80,7 @@ define Package/libXaw/install
 endef
 
 define Build/InstallDev
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 endef
 

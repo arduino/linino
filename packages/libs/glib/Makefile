@@ -61,22 +61,14 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/glib-config $(1)/usr/bin/
-	mkdir -p $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/glib-1.2 $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+	$(CP) $(PKG_BUILD_DIR)/.libs/*.a $(PKG_BUILD_DIR)/*/.libs/*.a $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/glibconfig-sysdefs.h $(1)/usr/include/glib-1.2/
-	mkdir -p $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg{lib,module,thread}.{a,so} $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg{lib,module,thread}-*.so.* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/glib $(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/g{lib,module,thread}.pc $(1)/usr/lib/pkgconfig/
 	$(SED) 's,-I$$$${prefix}/include/glib,-I$(1)/usr/include/glib,g' $(1)/usr/bin/glib-config
 	$(SED) 's,-I$$$${exec_prefix}/lib/glib,-I$(1)/usr/lib/glib,g' $(1)/usr/bin/glib-config
 	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(1)/usr/bin/glib-config

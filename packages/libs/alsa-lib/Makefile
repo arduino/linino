@@ -53,15 +53,15 @@ endef
 define Build/Compile
 	# override AM_CFLAGS holding inappropriate optimization flags
 	$(MAKE) -C $(PKG_BUILD_DIR) AM_CFLAGS="" all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 endef
 
 define Build/InstallDev
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/alsa $(1)/usr/include/
 	mkdir -p $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libasound.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libasound.{la,a,so*} $(1)/usr/lib/
 	mkdir -p $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/alsa.pc $(1)/usr/lib/pkgconfig/
 endef
