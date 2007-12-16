@@ -1,0 +1,73 @@
+# 
+# Copyright (C) 2007 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id: $
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=libnfnetlink
+PKG_VERSION:=0.0.30
+PKG_RELEASE:=0
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnfnetlink/
+PKG_MD5SUM:=7fd3c8ddc03d42fa9f0177a17a38f163
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/libnfnetlink
+  SECTION:=libs
+  CATEGORY:=Libraries
+  DEPENDS:=@LINUX_2_6
+  TITLE:=libnfnetlink
+  URL:=http://netfilter.org/projects/libnfnetlink/index.html
+endef
+
+define Package/libnfnetlink/description
+ libnfnetlink is is the low-level library for netfilter related kernel/userspace communication. 
+ It provides a generic messaging infrastructure for in-kernel netfilter subsystems 
+ (such as nfnetlink_log, nfnetlink_queue, nfnetlink_conntrack) and their respective users 
+ and/or management tools in userspace.
+endef
+
+CONFIGURE_ARGS += \
+	--enable-static \
+	--enable-shared
+
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS)"
+
+
+define Build/Compile
+	# pass CFLAGS again to override -O2 set by configure
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
+endef
+
+
+define Build/InstallDev
+	mkdir -p $(1)/usr/include/libnfnetlink
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/libnfnetlink/{libnfnetlink,linux_nfnetlink}.h $(1)/usr/include/libnfnetlink/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnfnetlink.{a,so*} $(1)/usr/lib/
+endef
+
+define Build/UninstallDev
+	rm -rf	$(1)/usr/include/libnfnetlink \
+		$(1)/usr/lib/libnfnetlink.{a,so*}
+endef
+
+define Package/libnfnetlink/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnfnetlink.so.* $(1)/usr/lib/
+endef
+
+$(eval $(call BuildPackage,libnfnetlink))
