@@ -52,8 +52,8 @@ endef
 
 define Build/UninstallDev
 	rm -rf \
-		$(STAGING_DIR)/usr/include/ao/ \
-		$(STAGING_DIR)/usr/lib/libao.{a,so*,la}
+		$(STAGING_DIR)/usr/include/samplerate/ \
+		$(STAGING_DIR)/usr/lib/libsamplerate.{a,so*,la}
 endef
 
 define Package/libsamplerate/install
