@@ -33,7 +33,10 @@ define Package/darkstat/description
 	A free open source utility for bandwith monitoring \	over web
 endef
 
-define Build/Compile	
+CONFIGURE_ARGS += \
+	--with-chroot-dir /var/empty
+
+define Build/Compile
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(HOSTCC) $(PKG_BUILD_DIR)/static/c-ify.c \
 		-o $(PKG_BUILD_DIR)/c-ify
@@ -42,7 +45,7 @@ define Build/Compile
 		all install
 endef
 
-define Package/darkstat/install	
+define Package/darkstat/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/darkstat $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
