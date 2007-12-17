@@ -58,7 +58,8 @@ define Build/Compile
 endef
 
 define Package/xmms/install
-	$(call pkg_install_files,/usr/bin/xmms /usr/lib/libxmms.so /usr/lib/libxmms.so.1 /usr/lib/libxmms.so.1.3.1 /usr/share/xmms/wmxmms.xpm,$(PKG_INSTALL_DIR),$(1))
+	$(call pkg_install_files,/usr/lib/libxmms.so /usr/lib/libxmms.so.1 /usr/lib/libxmms.so.1.3.1 /usr/share/xmms/wmxmms.xpm,$(PKG_INSTALL_DIR),$(1))
+	$(call pkg_install_bin,/usr/bin/xmms,$(PKG_INSTALL_DIR),$(1))
 endef
 
 $(eval $(call BuildPackage,xmms))
