@@ -6,21 +6,22 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=ptlib-snapshot
-PKG_VERSION:=18818
+PKG_NAME:=ptlib
+PKG_VERSION:=2.1.2
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://peternixon.net/pub/voxgratia
-PKG_MD5SUM:=ac65581ccc9ada31817bf681574bec0d
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.bz2
+PKG_SOURCE_URL:=@SF/opalvoip
+PKG_MD5SUM:=3b663c577f12ab46dc910557482bf53e
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ptlib
   SECTION:=libs
   CATEGORY:=Libraries
+  #DEPENDS:=+expat
   TITLE:=Portable Tools library
   URL:=http://www.opalvoip.org/
 endef
@@ -36,14 +37,13 @@ endef
 
 CONFIGURE_ARGS += \
 	--enable-minsize \
-	--enable-openh323 \
 	--enable-opal \
 	--disable-internalregex \
-	--disable-plugins \
 	--enable-audio \
 	--disable-alsa \
 	--disable-asn \
 	--disable-avc \
+	--disable-configfile \
 	--disable-dc \
 	--disable-dtmf \
 	--disable-expat \
@@ -57,9 +57,10 @@ CONFIGURE_ARGS += \
 	--disable-openssl \
 	--disable-oss \
 	--disable-pipechan \
+	--disable-plugins \
 	--disable-pop3smtp \
 	--disable-remconn \
-	--disable-resolver \
+	--enable-resolver \
 	--disable-qos \
 	--disable-sasl \
 	--disable-sdl \
@@ -68,7 +69,7 @@ CONFIGURE_ARGS += \
 	--disable-snmp \
 	--disable-soap \
 	--disable-socks \
-	--disable-stun \
+	--enable-stun \
 	--disable-telnet \
 	--disable-tts \
 	--disable-v4l \
@@ -100,7 +101,7 @@ endef
 MAKE_FLAGS += optnoshared
 
 define Build/InstallDev
-	ln -sf $(PKG_NAME)-$(PKG_VERSION) $(BUILD_DIR)/$(PKG_NAME)
+	ln -sf $(PKG_NAME)_$(PKG_VERSION) $(BUILD_DIR)/$(PKG_NAME)
 	$(SED) 's|//\(#include <ptlib/sound.h>\)|\1|' $(PKG_BUILD_DIR)/include/ptlib.h
 endef
 
