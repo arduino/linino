@@ -8,19 +8,21 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=opal-snapshot
-PKG_VERSION:=18818
+PKG_NAME:=opal
+PKG_VERSION:=3.1.2
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.bz2
 PKG_SOURCE_URL:=ftp://peternixon.net/pub/voxgratia
-PKG_MD5SUM:=121b77a82f9a4eb289e2351d588185e9
+PKG_MD5SUM:=07fd0ed5ae95e1b88874e1fb9669e4f3
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
 
 # Set location of ptlib (Which needs to have been built already)
-export PWLIBDIR=$(BUILD_DIR)/ptlib-snapshot
-export PTLIBDIR=$(BUILD_DIR)/ptlib-snapshot
+export PWLIBDIR=$(BUILD_DIR)/ptlib
+export PTLIBDIR=$(BUILD_DIR)/ptlib
+export PWLIBPLUGINDIR=$(BUILD_DIR)/ptlib/plugins/ptlib/
+export PTLIBPLUGINDIR=$(BUILD_DIR)/ptlib/plugins/ptlib/
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -62,7 +64,7 @@ MAKE_FLAGS += \
 	optnoshared
 
 define Build/InstallDev
-	ln -sf $(PKG_NAME)-$(PKG_VERSION) $(BUILD_DIR)/$(PKG_NAME)
+	ln -sf $(PKG_NAME)_$(PKG_VERSION) $(BUILD_DIR)/$(PKG_NAME)
 endef
 
 define Build/UninstallDev
