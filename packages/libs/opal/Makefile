@@ -19,9 +19,7 @@ PKG_MD5SUM:=07fd0ed5ae95e1b88874e1fb9669e4f3
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
 
 # Set location of ptlib (Which needs to have been built already)
-export PWLIBDIR=$(BUILD_DIR)/ptlib
 export PTLIBDIR=$(BUILD_DIR)/ptlib
-export PWLIBPLUGINDIR=$(BUILD_DIR)/ptlib/plugins/ptlib/
 export PTLIBPLUGINDIR=$(BUILD_DIR)/ptlib/plugins/ptlib/
 
 include $(INCLUDE_DIR)/package.mk
