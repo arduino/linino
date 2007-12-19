@@ -49,16 +49,17 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include/atomicops/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/atomic_ops{,_malloc,_stack}.h $(1)/usr/include/atomicops/
+	mkdir -p $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
 	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libatomic_ops*.a $(1)/usr/lib/
 endef
 
 define Build/UninstallDev
 	rm -rf \
-		$(STAGING_DIR)/usr/include/libatomicops \
-		$(STAGING_DIR)/usr/lib/libatomic_ops*.a
+		$(STAGING_DIR)/usr/include/atomic_ops{,_malloc,_stack}.h \
+		$(STAGING_DIR)/usr/include/atomic_ops \
+		$(STAGING_DIR)/usr/lib/libatomic_ops{,_gpl}.a
 endef
 
 $(eval $(call BuildPackage,libatomicops))
