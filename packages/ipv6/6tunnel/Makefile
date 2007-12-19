@@ -53,8 +53,10 @@ define Package/6tunnel/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/6tunnel $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/6tunnel.conf $(1)/etc/config/6tunnel
+	$(INSTALL_DATA) ./files/6bridge.conf $(1)/etc/config/6bridge
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/6tunnel.init $(1)/etc/init.d/6tunnel
+	$(INSTALL_BIN) ./files/6bridge.init $(1)/etc/init.d/6bridge
 endef
 
 $(eval $(call BuildPackage,6tunnel))
