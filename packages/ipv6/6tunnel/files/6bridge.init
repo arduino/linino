@@ -14,10 +14,10 @@ start_service() {
 	config_get bridge "$section" bridge
 
 	brctl addbr $bridge
-	brctl addif $bridge $lan
-	brctl addif $bridge $wan
+	brctl addif $bridge $LAN
+	brctl addif $bridge $WAN
 	brctl setfd $bridge 0
-        ebtables -t broute -A BROUTING -i $wan -p ! ipv6 -j DROP
+        ebtables -t broute -A BROUTING -i $WAN -p ! ipv6 -j DROP
         ifconfig $bridge up
 }
 
@@ -34,8 +34,8 @@ stop_service() {
 
         ifconfig $bridge down
         ebtables -t broute -F
-        brctl delif $bridge $wan
-        brctl delif $bridge $lan
+        brctl delif $bridge $WAN
+        brctl delif $bridge $LAN
         brctl delbr $bridge
 }
 start() {
