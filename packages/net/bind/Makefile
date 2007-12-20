@@ -21,14 +21,12 @@ PKG_MD5SUM:=09b54d35036cb0423b2e618f21766285
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-PKG_BUILD_DEPENDS:=libopenssl
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/bind/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+bind-libs
+  DEPENDS:=+bind-libs +libopenssl
   TITLE:=bind
   URL:=http://www.isc.org/sw/bind/
   SUBMENU:=dns
