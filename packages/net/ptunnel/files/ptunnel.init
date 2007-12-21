@@ -1,0 +1,14 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2007 OpenWrt.org
+START=70
+STOP=70
+
+start() {
+        iptables -I OUTPUT 1 -p icmp -j ACCEPT
+	ptunnel -v 1 -c br-lan
+}
+		
+stop() {
+        killall ptunnel
+}
+			

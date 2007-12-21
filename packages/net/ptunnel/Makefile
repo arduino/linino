@@ -47,6 +47,8 @@ endef
 define Package/ptunnel/install	
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ptunnel $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/ptunnel.init $(1)/etc/init.d/ptunnel
 endef
 
 $(eval $(call BuildPackage,ptunnel))
