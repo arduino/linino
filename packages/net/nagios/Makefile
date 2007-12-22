@@ -20,6 +20,8 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
+PKG_BUILD_DEPENDS:=libnotimpl
+
 define Package/nagios
   SECTION:=net
   CATEGORY:=Network
