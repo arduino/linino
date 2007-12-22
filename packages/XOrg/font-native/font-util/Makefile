@@ -16,7 +16,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.2/src/font
 
 include $(INCLUDE_DIR)/package.mk
-STAGING_DIR=$(STAGING_DIR_HOST)
 
 define Package/font-util
   SECTION:=xorg-font
@@ -36,10 +35,10 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig $(1)/usr/lib/X11 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig $(1)/usr/lib/X11 $(STAGING_DIR_HOST)/usr/bin
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/local/lib/pkgconfig/fontutil.pc $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/local/lib/X11/* $(1)/usr/lib/X11/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/local/bin/* $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/local/bin/* $(STAGING_DIR_HOST)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,font-util))
