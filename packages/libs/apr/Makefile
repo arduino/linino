@@ -46,19 +46,19 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
+	mkdir -p $(2)/bin
 	$(CP)   $(PKG_INSTALL_DIR)/usr/bin/apr-1-config \
-		$(1)/usr/bin
+		$(2)/bin
 	mkdir -p $(1)/usr/include/apr-1
 	$(CP)   $(PKG_INSTALL_DIR)/usr/include/apr-1/* \
 		$(1)/usr/include/apr-1/
 	mkdir -p $(1)/usr/lib
-	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/libapr-1.{a,so*} \
+	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/libapr-1.{la,a,so*} \
 		$(1)/usr/lib/
 	mkdir -p $(1)/usr/lib/pkgconfig
 	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/apr-1.pc \
@@ -66,11 +66,12 @@ define Build/InstallDev
 	mkdir -p $(1)/usr/share/build-1
 	$(CP)   $(PKG_INSTALL_DIR)/usr/share/build-1/* \
 		$(1)/usr/share/build-1/
-	$(SED) 's,^datadir=\"/usr/share\",datadir=\"$(1)/usr/share\",g' $(1)/usr/bin/apr-1-config
-	$(SED) 's,^installbuilddir=\"/usr/share/build-1\",installbuilddir=\"$(1)/usr/share/build-1\",g' $(1)/usr/bin/apr-1-config
-	$(SED) 's,^includedir=\"$$$${prefix}/include/,includedir=\"$(1)/usr/include/,g' $(1)/usr/bin/apr-1-config
-	$(SED) 's,-L$$$$libdir,,g' $(1)/usr/bin/apr-1-config
-	$(SED) 's,-R$$$$libdir,,g' $(1)/usr/bin/apr-1-config
+	$(SED) 's,^datadir=\"/usr/share\",datadir=\"$(1)/usr/share\",g' $(2)/bin/apr-1-config
+	$(SED) 's,^installbuilddir=\"/usr/share/build-1\",installbuilddir=\"$(1)/usr/share/build-1\",g' $(2)/bin/apr-1-config
+	$(SED) 's,^libdir=\"$$$${exec_prefix}/lib,libdir=\"$(1)/usr/lib,g' $(2)/bin/apr-1-config
+	$(SED) 's,^includedir=\"$$$${prefix}/include/,includedir=\"$(1)/usr/include/,g' $(2)/bin/apr-1-config
+	$(SED) 's,-L$$$$libdir,,g' $(2)/bin/apr-1-config
+	$(SED) 's,-R$$$$libdir,,g' $(2)/bin/apr-1-config
 	$(SED) 's,/usr/share/build-1,$(1)/usr/share/build-1,g' $(1)/usr/share/build-1/apr_rules.mk
 endef
 

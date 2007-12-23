@@ -29,7 +29,7 @@ endef
 
 CONFIGURE_ARGS += \
 	--with-pgsql=no \
-	--with-apr="$(STAGING_DIR)/usr/bin/apr-1-config" \
+	--with-apr="$(STAGING_DIR_HOST)/bin/apr-1-config" \
 	--with-expat="$(STAGING_DIR)/usr" \
 	--without-sqlite2 \
 	--with-sqlite3="$(STAGING_DIR)/usr" \
@@ -46,34 +46,35 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) APRUTIL_LIBS="-lsqlite3 -L$(STAGING_DIR)/usr/lib -lexpat -liconv -lapr-1 -luuid -lm -lcrypt" all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
+	mkdir -p $(2)/bin
 	$(CP)   $(PKG_INSTALL_DIR)/usr/bin/apu-1-config \
-	 	$(1)/usr/bin
+	 	$(2)/bin
 	mkdir -p $(1)/usr/include/apr-1/
 	$(CP)   $(PKG_INSTALL_DIR)/usr/include/apr-1/* \
 		$(1)/usr/include/apr-1/
 	mkdir -p $(1)/usr/lib 
-	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/libaprutil-1.{a,so*} \
+	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/libaprutil-1.{la,a,so*} \
 		$(1)/usr/lib/
 	mkdir -p $(1)/usr/lib/pkgconfig/
 	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/apr-util-1.pc \
 		$(1)/usr/lib/pkgconfig/
-	$(SED) 's, -e \"s -I$$$$prefix/lib  g\",,g' $(1)/usr/bin/apu-1-config
-	$(SED) 's,^includedir=\"$$$${prefix}/include/,includedir=\"$(1)/usr/include/,g' $(1)/usr/bin/apu-1-config
-	$(SED) 's,-L$$$$libdir,,g' $(1)/usr/bin/apu-1-config
-	$(SED) 's,-R$$$$libdir,,g' $(1)/usr/bin/apu-1-config
+	$(SED) 's, -e \"s -I$$$$prefix/lib  g\",,g' $(2)/bin/apu-1-config
+	$(SED) 's,^libdir=\"$$$${exec_prefix}/lib,libdir=\"$(1)/usr/lib,g' $(2)/bin/apu-1-config
+	$(SED) 's,^includedir=\"$$$${prefix}/include/,includedir=\"$(1)/usr/include/,g' $(2)/bin/apu-1-config
+	$(SED) 's,-L$$$$libdir,,g' $(2)/bin/apu-1-config
+	$(SED) 's,-R$$$$libdir,,g' $(2)/bin/apu-1-config
 endef
 
 define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/bin/apu-1-config \
-		$(STAGING_DIR)/usr/include/apr-1 \
-		$(STAGING_DIR)/usr/lib/libaprutil-1.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/apr-util-1.pc
+	rm -rf	$(2)/bin/apu-1-config \
+		$(1)/usr/include/apr-1 \
+		$(1)/usr/lib/libaprutil-1.{a,so*} \
+		$(1)/usr/lib/pkgconfig/apr-util-1.pc
 endef
 
 define Package/libaprutil/install	
