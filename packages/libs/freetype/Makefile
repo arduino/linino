@@ -49,8 +49,8 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/freetype-config $(1)/usr/bin/
+	mkdir -p $(2)/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/freetype-config $(2)/bin/
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/freetype2 $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/ft2build.h $(1)/usr/include/
@@ -58,16 +58,16 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfreetype.{a,so*} $(1)/usr/lib/
 	mkdir -p $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/freetype2.pc $(1)/usr/lib/pkgconfig/
-	$(SED) 's,-I$$$$includedir/freetype2,-I$(1)/usr/include/freetype2,g' $(1)/usr/bin/freetype-config
-	$(SED) 's,/usr/include/freetype2/,$(1)/usr/include/freetype2/,g' $(1)/usr/bin/freetype-config
+	$(SED) 's,-I$$$$includedir/freetype2,-I$(1)/usr/include/freetype2,g' $(2)/bin/freetype-config
+	$(SED) 's,/usr/include/freetype2/,$(1)/usr/include/freetype2/,g' $(2)/bin/freetype-config
 endef
 
 define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/bin/freetype-config \
-		$(STAGING_DIR)/usr/include/freetype2 \
-		$(STAGING_DIR)/usr/include/ft2build.h \
-		$(STAGING_DIR)/usr/lib/libfreetype.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/freetype2.pc
+	rm -rf	$(2)/bin/freetype-config \
+		$(1)/usr/include/freetype2 \
+		$(1)/usr/include/ft2build.h \
+		$(1)/usr/lib/libfreetype.{a,so*} \
+		$(1)/usr/lib/pkgconfig/freetype2.pc
 endef
 
 define Package/libfreetype/install
