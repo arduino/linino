@@ -84,15 +84,15 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR_HOST)/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/curl-config $(STAGING_DIR_HOST)/bin/
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(STAGING_DIR_HOST)/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/curl-config $(2)/bin/
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/curl $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcurl.{a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_BUILD_DIR)/libcurl.pc $(1)/usr/lib/pkgconfig/
-	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(STAGING_DIR_HOST)/bin/curl-config
+	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(2)/bin/curl-config
 	$(SED) 's,$(TARGET_LDFLAGS),,g' $(1)/usr/lib/pkgconfig/libcurl.pc
 endef
 
