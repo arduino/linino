@@ -81,6 +81,8 @@ endef
 
 define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(2)/bin
+	mv $(1)/usr/bin/makestrs $(2)/bin
 endef
 
 $(eval $(call BuildPackage,libXt))
