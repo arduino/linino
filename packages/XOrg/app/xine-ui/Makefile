@@ -27,7 +27,9 @@ define Package/xine-ui
   DEPENDS:=+xine-lib +libpng +curl +libiconv +libXv +libICE +libXxf86vm
 endef
 
-CONFIGURE_VARS+=PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -lnotimpl"
+CONFIGURE_VARS+= \
+	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+
 CONFIGURE_ARGS+=--without-aalib \
 			--without-libcaca \
 			--disable-lirc \
@@ -43,20 +45,21 @@ define Build/Configure
 			$(CONFIGURE_ARGS) ;\
 		fi \
 	)
+	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)
+	$(MAKE) -C $(PKG_BUILD_DIR) X_LIBS="-L$(STAGING_DIR)/usr/lib -lnotimpl -lfreetype"
 	$(MAKE) -C $(PKG_BUILD_DIR)/ install DESTDIR=$(PKG_INSTALL_DIR)
 endef
 
-define Build/InstallDev
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
-endef
-
 define Package/xine-ui/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*so* $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/share
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/share/xine \
+		$(PKG_INSTALL_DIR)/usr/share/pixmaps \
+		$(1)/usr/share/
 endef
 
 $(eval $(call BuildPackage,xine-ui))
