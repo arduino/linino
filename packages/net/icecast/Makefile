@@ -21,6 +21,9 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
+TREMOR_BUILD_DIR=$(PKG_BUILD_DIR)/libvorbisidec-1.2.0-dave
+TREMOR_DIR=$(TREMOR_BUILD_DIR)/ipkg-install/usr
+
 define Package/icecast
   SECTION:=net
   CATEGORY:=Network
@@ -39,23 +42,35 @@ define Package/icecast/description
 	interaction.
 endef
 
+define Build/Prepare
+	$(Build/Prepare/Default)
+	$(SUBMAKE) -f libvorbisidec.mk \
+		BUILD_DIR="$(PKG_BUILD_DIR)" \
+		V=99 \
+		prepare
+endef
 
 define Build/Configure
+	$(MAKE) -f libvorbisidec.mk \
+		BUILD_DIR="$(PKG_BUILD_DIR)" \
+		V=99 \
+		compile
+	$(SED) 's,-lvorbisidec,$(TREMOR_DIR)/lib/libvorbisidec.a,g' $(PKG_BUILD_DIR)/configure
 	$(call Build/Configure/Default, \
 		--enable-yp \
 		--with-curl="yes" \
 		--with-curl-config="$(STAGING_DIR)/usr/bin/curl-config" \
-		--with-ogg="$(STAGING_DIR)/usr" \
+		--with-ogg="$(TREMOR_DIR)" \
 		--with-speex="no" \
 		--with-theora="no" \
-		--with-vorbis="$(STAGING_DIR)/usr" \
+		--with-vorbis="$(TREMOR_DIR)" \
 		--with-xslt-config="$(STAGING_DIR)/usr/bin/xslt-config" \
 		, \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include/libxml2 " \
+		CPPFLAGS="-I$(TREMOR_DIR)/include -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include/libxml2 " \
 	)
 endef
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
