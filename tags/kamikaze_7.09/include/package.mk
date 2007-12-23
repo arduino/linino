@@ -68,7 +68,7 @@ define Build/DefaultTargets
     compile: $(STAGING_DIR)/stampfiles/.$(PKG_NAME)-installed
     $(STAGING_DIR)/stampfiles/.$(PKG_NAME)-installed: $(STAMP_BUILT)
 	mkdir -p $(STAGING_DIR)/stampfiles
-	$(call Build/InstallDev,$(STAGING_DIR))
+	$(call Build/InstallDev,$(STAGING_DIR),$(STAGING_DIR))
 	touch $$@
   endif
 
@@ -136,7 +136,7 @@ configure: $(STAMP_CONFIGURED)
 compile:
 install:
 clean: FORCE
-	$(Build/UninstallDev)
+	$(call Build/UninstallDev,$(STAGING_DIR),$(STAGING_DIR))
 	$(Build/Clean)
 	@rm -f $(STAGING_DIR)/stampfiles/.$(PKG_NAME)-installed
 	@rm -rf $(PKG_BUILD_DIR)
