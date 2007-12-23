@@ -35,10 +35,10 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig $(1)/usr/lib/X11 $(STAGING_DIR_HOST)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig $(1)/usr/lib/X11 $(2)/bin
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/local/lib/pkgconfig/fontutil.pc $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/local/lib/X11/* $(1)/usr/lib/X11/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/local/bin/* $(STAGING_DIR_HOST)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/local/bin/* $(2)/bin/
 endef
 
 $(eval $(call BuildPackage,font-util))
