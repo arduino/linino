@@ -9,14 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor
-PKG_VERSION:=0.1.2.17
+PKG_VERSION:=0.2.0.9-alpha
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://tor.eff.org/dist/ \
 	http://ftp.se.linux.org/crypto/tor/ \
 	http://tor.meulie.net/
-PKG_MD5SUM:=ef8fc7f45d167875c337063d437c9832
+PKG_MD5SUM:=47523575d2f6b857c453f37fbd4fca10
 
 include $(INCLUDE_DIR)/package.mk
 
