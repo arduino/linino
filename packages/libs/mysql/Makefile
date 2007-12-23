@@ -94,22 +94,21 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
+	$(INSTALL_DIR) $(2)/bin $(1)/usr/bin $(1)/usr/include $(1)/usr/lib
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mysql_config $(1)/usr/bin/
-	mkdir -p $(1)/usr/include
+	ln -sf $(1)/usr/bin/mysql_config $(2)/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/mysql $(1)/usr/include/
 	# NOTE: needed for MySQL-Python
 	$(CP) $(PKG_BUILD_DIR)/include/mysqld_error.h $(1)/usr/include/mysql/
-	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/mysql $(1)/usr/lib/
 	rm -f $(1)/usr/lib/mysql/libmysqlclient.la
 endef
 
 define Build/UninstallDev
 	rm -rf \
-		$(STAGING_DIR)/usr/bin/mysql_config \
-		$(STAGING_DIR)/usr/include/mysql \
-		$(STAGING_DIR)/usr/lib/mysql
+		$(2)/bin/mysql_config \
+		$(1)/usr/include/mysql \
+		$(1)/usr/lib/mysql
 endef
 
 define Package/libmysqlclient/install
