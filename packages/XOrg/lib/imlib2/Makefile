@@ -50,9 +50,11 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/libImlib2.la
-	$(SED)  "s,prefix.*,prefix=$(STAGING_DIR)/usr,g" $(1)/usr/bin/imlib2-config 
-	$(SED)  "s,exec_prefix.*,exec_prefix=$(STAGING_DIR)/usr,g" $(1)/usr/bin/imlib2-config
 	$(CP) $(PKG_BUILD_DIR)/src/modules/loaders/.libs/*.so $(1)/usr/lib/imlib2/loaders/
+	$(INSTALL_DIR) $(2)/bin
+	mv $(1)/usr/bin/imlib2-config $(2)/bin/
+	$(SED)  "s,prefix.*,prefix=$(STAGING_DIR)/usr,g" $(2)/bin/imlib2-config 
+	$(SED)  "s,exec_prefix.*,exec_prefix=$(STAGING_DIR)/usr,g" $(2)/bin/imlib2-config
 endef
 
 define Package/imlib2/install
