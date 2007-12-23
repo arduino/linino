@@ -45,6 +45,8 @@ define Build/Configure
 	)
 endef
 
+TARGET_CPPFLAGS:=-I. -I.. $(TARGET_CPPFLAGS)
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
