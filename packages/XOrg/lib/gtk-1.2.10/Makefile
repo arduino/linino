@@ -57,7 +57,9 @@ endef
 
 define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
-	$(SED) "s,libdirs=-L.*,libdirs=,g" $(1)/usr/bin/gtk-config
+	$(INSTALL_DIR) $(2)/bin
+	mv $(1)/usr/bin/gtk-config $(2)/bin/
+	$(SED) "s,libdirs=-L.*,libdirs=,g" $(2)/bin/gtk-config
 	$(SED) "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/lib{gtk,gdk}.la
 endef
 
