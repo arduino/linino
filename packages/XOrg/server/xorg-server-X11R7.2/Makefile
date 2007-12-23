@@ -139,7 +139,7 @@ endef
 define Package/xorg-server/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/Xorg $(1)/usr/bin/
-	cd $(1)/usr/bin; ln -s Xorg X
+	cd $(1)/usr/bin; ln -sf Xorg X
 	$(INSTALL_DIR) $(1)/usr/share
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/* $(1)/usr/share/
 	$(INSTALL_DIR) $(1)/usr/lib/xserver
