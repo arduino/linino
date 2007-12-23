@@ -18,6 +18,7 @@ PKG_MD5SUM:=9c1cf1868e085f47e135a86945d93ce0
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_BUILD_DEPENDS:=libnotimpl
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,10 +37,10 @@ define Package/qolyester/description
 endef
 
 # uses GNU configure
-
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		LIBS="-L$(STAGING_DIR)/usr/lib -lnotimpl" \
 		all install
 endef
 
