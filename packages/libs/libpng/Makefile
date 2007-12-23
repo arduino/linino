@@ -44,8 +44,8 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libpng{,12}-config $(1)/usr/bin/
+	mkdir -p $(2)/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libpng{,12}-config $(2)/bin/
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/png{,conf}.h $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpng $(1)/usr/include/
@@ -53,7 +53,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpng{,12}.{a,so*} $(1)/usr/lib/
 	mkdir -p $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libpng{,12}.pc $(1)/usr/lib/pkgconfig/
-	$(SED) 's,^[ILR]_opts=".\+",,g' $(1)/usr/bin/libpng*-config
+	$(SED) 's,^[ILR]_opts=".\+",,g' $(2)/bin/libpng*-config
 endef
 
 define Build/UninstallDev
