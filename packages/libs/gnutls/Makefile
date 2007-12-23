@@ -145,13 +145,13 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_ARGS) all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 	$(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_ARGS) DESTDIR="$(PKG_INSTALL_DIR)" install
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 endef
 
 define Build/InstallDev
 	mkdir -p $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libgnutls{,-extra}-config $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libgnutls{,-extra}-config $(2)/bin/
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/gnutls $(1)/usr/include/
 	mkdir -p $(1)/usr/lib
@@ -161,10 +161,10 @@ define Build/InstallDev
 endef
 
 define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/bin/libgnutls{,-extra}-config \
-		$(STAGING_DIR)/usr/include/gnutls \
-		$(STAGING_DIR)/usr/lib/libgnutls{,-extra,-openssl}.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/gnutls{,-extra}.pc
+	rm -rf $(2)/usr/bin/libgnutls{,-extra}-config \
+		$(1)/usr/include/gnutls \
+		$(1)/usr/lib/libgnutls{,-extra,-openssl}.{a,so*} \
+		$(1)/usr/lib/pkgconfig/gnutls{,-extra}.pc
 endef
 
 
