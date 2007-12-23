@@ -50,8 +50,8 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 	$(SED) 's,-I$$$${prefix}/include,-I$(1)/usr/include/,g' $(1)/usr/bin/xine-config 
 	$(SED) 's,-L$$$${exec_prefix}/lib,-L$(1)/usr/lib/,g' $(1)/usr/bin/xine-config
-	$(INSTALL_DIR) $(STAGING_DIR_HOST)/bin
-	mv $(1)/usr/bin/xine-config $(STAGING_DIR_HOST)/bin
+	$(INSTALL_DIR) $(2)/bin
+	mv $(1)/usr/bin/xine-config $(2)/bin
 endef
 
 define Package/xine-lib/install
