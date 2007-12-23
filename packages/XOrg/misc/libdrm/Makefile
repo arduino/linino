@@ -41,6 +41,7 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/shared-core/*.h $(1)/include 
 	$(CP) $(PKG_BUILD_DIR)/libdrm/.libs/libdrm.so* $(1)/usr/lib/
 	$(CP) $(PKG_BUILD_DIR)/libdrm.pc $(1)/usr/lib/pkgconfig/
+	rm -f $(1)/include/config.h
 endef
 
 define Package/libdrm/install
