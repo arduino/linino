@@ -70,6 +70,7 @@ CONFIGURE_ARGS += \
 	--without-gnutls \
 	--without-libidn \
 	--with-zlib="$(STAGING_DIR)/usr" \
+	--disable-gssapi
 
 define Build/Configure
 	$(call Build/Configure/Default)
@@ -83,15 +84,15 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/curl-config $(1)/usr/bin/
+	mkdir -p $(STAGING_DIR_HOST)/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/curl-config $(STAGING_DIR_HOST)/bin/
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/curl $(1)/usr/include/
 	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcurl.{a,so*} $(1)/usr/lib/
 	mkdir -p $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_BUILD_DIR)/libcurl.pc $(1)/usr/lib/pkgconfig/
-	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(1)/usr/bin/curl-config
+	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(STAGING_DIR_HOST)/bin/curl-config
 	$(SED) 's,$(TARGET_LDFLAGS),,g' $(1)/usr/lib/pkgconfig/libcurl.pc
 endef
 
