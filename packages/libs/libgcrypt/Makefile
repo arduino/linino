@@ -54,22 +54,24 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libgcrypt-config $(1)/usr/bin/
+	mkdir -p $(2)/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libgcrypt-config $(2)/bin/
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/gcrypt*.h $(1)/usr/include/
 	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgcrypt.{a,so*} $(1)/usr/lib/
 	mkdir -p $(1)/usr/share/aclocal
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/aclocal/libgcrypt.m4 $(1)/usr/share/aclocal/
+	$(SED) 's,^libdir=\"$$$${exec_prefix}/lib,libdir=\"$(1)/usr/lib,g' $(2)/bin/libgcrypt-config
+	$(SED) 's,^includedir=\"$$$${prefix}/include/,includedir=\"$(1)/usr/include/,g' $(2)/bin/libgcrypt-config
 endef
 
 define Build/UninstallDev
 	rm -rf \
-		$(STAGING_DIR)/usr/bin/libgcrypt-config \
-		$(STAGING_DIR)/usr/include/gcrypt*.h \
-		$(STAGING_DIR)/usr/lib/libgcrypt.{a,so*} \
-		$(STAGING_DIR)/usr/share/aclocal/libgcrypt.m4
+		$(2)/bin/libgcrypt-config \
+		$(1)/usr/include/gcrypt*.h \
+		$(1)/usr/lib/libgcrypt.{a,so*} \
+		$(1)/usr/share/aclocal/libgcrypt.m4
 endef
 
 define Package/libgcrypt/install
