@@ -64,14 +64,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/aclocal/gpg-error.m4 $(1)/usr/share/aclocal/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/gpg-error-config \
-		$(STAGING_DIR)/usr/include/gpg-error.h \
-		$(STAGING_DIR)/usr/lib/libgpg-error.{a,so*} \
-		$(STAGING_DIR)/usr/share/aclocal/gpg-error.m4
-endef
-
 define Package/libgpg-error/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgpg-error.so.* $(1)/usr/lib/

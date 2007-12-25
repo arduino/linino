@@ -48,11 +48,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcli.so* $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/libcli.h \
-		$(STAGING_DIR)/usr/lib/libcli.so*
-endef
-
 define Package/libcli/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcli.so.* $(1)/usr/lib/

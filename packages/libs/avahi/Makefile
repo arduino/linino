@@ -158,12 +158,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/avahi-core.pc $(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/avahi-{common,core} \
-		$(STAGING_DIR)/usr/lib/libavahi-{common,core}.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/avahi-core.pc
-endef
-
 define Package/libavahi/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libavahi-{common,core}.so.* $(1)/usr/lib/

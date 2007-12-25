@@ -62,13 +62,6 @@ define Build/InstallDev
 	$(SED) 's,-L$$$${libdir},,g' $(1)/usr/bin/neon-config
 endef
 
-define Build/UninstallDev
-	rm -rf  $(STAGING_DIR)/usr/bin/neon-config \
-	        $(STAGING_DIR)/usr/include/neon \
-	        $(STAGING_DIR)/usr/lib/libneon.{a,so*} \
-	        $(STAGING_DIR)/usr/lib/pkgconfig/neon.pc
-endef
-
 define Package/libneon/install	
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libneon.so.* $(1)/usr/lib/

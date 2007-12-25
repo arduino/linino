@@ -49,13 +49,6 @@ define Build/InstallDev
 	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libamsel.so $(1)/usr/lib/
 endef
-	
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/compat.h \
-		$(STAGING_DIR)/usr/include/compat \
-		$(STAGING_DIR)/usr/lib/libamsel.so
-endef
 
 define Package/libamsel/install
 	$(INSTALL_DIR) $(1)/usr/lib

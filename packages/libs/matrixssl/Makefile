@@ -45,12 +45,6 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/src/libmatrixssl.so* $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/matrixSsl* \
-		$(STAGING_DIR)/usr/lib/libmatrixssl.so*
-endef
-
 define Package/libmatrixssl/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/src/libmatrixssl.so.* $(1)/usr/lib/

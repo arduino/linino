@@ -40,8 +40,4 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/libnotimpl.a $(STAGING_DIR)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -f $(STAGING_DIR)/usr/lib/libnotimpl.a
-endef
-
 $(eval $(call BuildPackage,libnotimpl))

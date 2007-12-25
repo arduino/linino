@@ -83,12 +83,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libradiusclient-ng.{a,so}* $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/radiusclient-ng.h \
-		$(STAGING_DIR)/usr/lib/libradiusclient-ng.{a,so}*
-endef
-
 define Package/libradiusclient-ng/install
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/radiusclient-ng $(1)/etc/

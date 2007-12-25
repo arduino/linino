@@ -64,15 +64,6 @@ define Build/InstallDev
 	ln -sf $(1)/usr/bin/libgcrypt-config $(2)/bin/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(1)/usr/bin/libgcrypt-config \
-		$(2)/bin/libgcrypt-config \
-		$(1)/usr/include/gcrypt*.h \
-		$(1)/usr/lib/libgcrypt.{a,so*} \
-		$(1)/usr/share/aclocal/libgcrypt.m4
-endef
-
 define Package/libgcrypt/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgcrypt.so.* $(1)/usr/lib/

@@ -46,12 +46,6 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/lib/.libs/libsysfs.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/sysfs/*.h \
-		$(STAGING_DIR)/usr/lib/libsysfs.{a,so*}
-endef
-
 define Package/sysfsutils/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/cmd/systool $(1)/usr/bin/

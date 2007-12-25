@@ -85,14 +85,6 @@ define Build/InstallDev
 	$(SED) 's,-L$(1)/usr/lib,,g' $(1)/usr/bin/xslt-config
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/xslt-config \
-		$(STAGING_DIR)/usr/include/libxslt \
-		$(STAGING_DIR)/usr/lib/libxslt.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/libxslt.pc
-endef
-
 define Package/libxslt/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxslt.so.* $(1)/usr/lib/

@@ -59,14 +59,6 @@ define Build/InstallDev
 	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(1)/usr/bin/libtasn1-config
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/libtasn1-config \
-		$(STAGING_DIR)/usr/include/libtasn1.h \
-		$(STAGING_DIR)/usr/lib/libtasn1.{a,so*} \
-		$(STAGING_DIR)/usr/share/aclocal/libtasn1.m4
-endef
-
 define Package/libtasn1/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtasn1.so.* $(1)/usr/lib/

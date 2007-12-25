@@ -56,12 +56,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libid3tag.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/id3tag.h \
-		$(STAGING_DIR)/usr/lib/libid3tag.{a,so*}
-endef
-
 define Package/libid3tag/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libid3tag.so.* $(1)/usr/lib/

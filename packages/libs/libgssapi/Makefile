@@ -46,11 +46,4 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libgssapi.pc $(1)/usr/lib/pkgconfig
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/gssglue \
-		$(STAGING_DIR)/usr/lib/libgssapi.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/libgssapi.pc
-endef
-
 $(eval $(call BuildPackage,libgssapi))

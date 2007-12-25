@@ -95,11 +95,6 @@ define Build/InstallDev
 	mkdir -p $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{lber,ldap}*.{a,so*} $(1)/usr/lib/
 endef
-	
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/{lber,ldap}*.h \
-		$(STAGING_DIR)/usr/lib/lib{lber,ldap}*.{a,so*}
-endef
 
 define Package/libopenldap/install
 	$(INSTALL_DIR) $(1)/etc/openldap

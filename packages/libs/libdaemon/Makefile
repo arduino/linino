@@ -65,14 +65,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libdaemon.pc $(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/libdaemon \
-		$(STAGING_DIR)/usr/lib/libdaemon.a \
-		$(STAGING_DIR)/usr/lib/libdaemon.so* \
-		$(STAGING_DIR)/usr/lib/pkgconfig/libdaemon.pc
-endef
-
 define Package/libdaemon/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdaemon.so.* $(1)/usr/lib/

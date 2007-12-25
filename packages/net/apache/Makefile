@@ -123,14 +123,6 @@ define Build/InstallDev
 		$(1)/usr/share
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/{ap_*,http*,mod_*,mpm*,os.h,scoreboard.h,unixd.h,util_*} \
-		$(STAGING_DIR)/etc/{httpd.conf,magic,mime.types,extra,original} \
-		$(STAGING_DIR)/usr/sbin/{ab,apachectl,apxs,checkgid,dbmmanage,envvars,envvars-std,htcacheclean,htdbm,htdigest,htpasswd,httpd,httxt2dbm,logresolve,rotatelogs} \
-		$(STAGING_DIR)/usr/share/{error,icons,htdocs,cgi-bin,build} \
-		$(STAGING_DIR)/usr/lib/httpd.exp
-endef
-
 define Package/apache-server/preinst
 	rm /usr/sbin/httpd
 	echo -e "You should take a look in the initscripts, busybox's httpd \n\

@@ -54,13 +54,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libid3-*.so.* $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/id3 \
-		$(STAGING_DIR)/usr/include/id3.h \
-		$(STAGING_DIR)/usr/lib/libid3.{a,so} \
-		$(STAGING_DIR)/usr/lib/libid3-*.so.*
-endef
-
 define Package/id3lib/install
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libid3-*.so.* $(1)/usr/lib/

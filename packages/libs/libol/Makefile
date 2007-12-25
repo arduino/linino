@@ -52,13 +52,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libol.{*a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/libol-config \
-		$(STAGING_DIR)/usr/include/libol \
-		$(STAGING_DIR)/usr/lib/libol.{*a,so*}
-endef
-
 define Package/libol/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libol.so.* $(1)/usr/lib/

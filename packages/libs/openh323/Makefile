@@ -44,8 +44,4 @@ define Build/InstallDev
 	ln -sf $(PKG_NAME)-$(PKG_VERSION) $(BUILD_DIR)/$(PKG_NAME)
 endef
 
-define Build/UninstallDev
-	rm -rf $(BUILD_DIR)/$(PKG_NAME)
-endef
-
 $(eval $(call BuildPackage,libopenh323))

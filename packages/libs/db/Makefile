@@ -95,10 +95,4 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdb*.{a,so} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/db.h \
-		$(STAGING_DIR)/usr/lib/libdb*.{a,so}
-endef
-
 $(eval $(call BuildPackage,libdb))

@@ -52,12 +52,6 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/shared/libwrap.so* $(1)/usr/lib/
 endef
 
-define Build/UninstallDev	
-	rm -rf \
-		$(STAGING_DIR)/usr/include/tcpd.h \
-		$(STAGING_DIR)/usr/lib/libwrap.{a,so*}
-endef
-
 define Package/libwrap/install	
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/shared/libwrap.so.* $(1)/usr/lib/

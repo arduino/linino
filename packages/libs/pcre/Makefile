@@ -34,7 +34,7 @@ CONFIGURE_ARGS += \
 	--disable-cpp
 
 MAKE_FLAGS += \
-	$(TARGET_CONFIGURE_OPTS \
+	$(TARGET_CONFIGURE_OPTS) \
 	CFLAGS="$(TARGET_CFLAGS)" \
 	all
 
@@ -45,13 +45,6 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/pcre{,posix}.h $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/.libs/libpcre{,posix}.{a,so*} $(1)/usr/lib/
-endef
-
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/pcre-config \
-		$(STAGING_DIR)/usr/include/pcre{,posix}.h \
-		$(STAGING_DIR)/usr/lib/libpcre{,posix}.{a,so*}
 endef
 
 define Package/libpcre/install

@@ -68,13 +68,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/speex.pc $(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/speex \
-		$(STAGING_DIR)/usr/lib/libspeex.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/speex.pc
-endef
-
 define Package/libspeex/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libspeex.so.* $(1)/usr/lib/

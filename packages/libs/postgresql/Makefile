@@ -265,19 +265,6 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/src/timezone/zic.host $(1)/usr/bin/zic
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/pg_config \
-		$(STAGING_DIR)/usr/include/libpq \
-		$(STAGING_DIR)/usr/include/libpq-fe.h \
-		$(STAGING_DIR)/usr/include/pg_config.h \
-		$(STAGING_DIR)/usr/include/postgres_ext.h \
-		$(STAGING_DIR)/usr/include/postgresql \
-		$(STAGING_DIR)/usr/lib/libpq.{a,so*} \
-		$(STAGING_DIR)/usr/bin/ecpg \
-		$(STAGING_DIR)/usr/bin/zic
-endef
-
 $(eval $(call BuildPackage,libpq))
 $(eval $(call BuildPackage,pgsql-cli))
 $(eval $(call BuildPackage,pgsql-server))

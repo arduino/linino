@@ -50,12 +50,6 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/lib/libserdisp.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/serdisplib \
-		$(STAGING_DIR)/usr/lib/libserdisp.{a,so*}
-endef
-
 define Package/serdisplib/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/lib/libserdisp.so.* $(1)/usr/lib

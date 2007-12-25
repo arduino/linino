@@ -165,12 +165,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/rrd.h \
-		$(STAGING_DIR)/usr/lib/librrd.{a,so*}
-endef
-
 $(eval $(call BuildPackage,librrd1))
 $(eval $(call BuildPackage,rrdcgi1))
 $(eval $(call BuildPackage,rrdtool1))

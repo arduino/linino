@@ -57,13 +57,6 @@ define Build/InstallDev
 	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(1)/usr/bin/libmcrypt-config
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/mcrypt.h \
-		$(STAGING_DIR)/usr/lib/libmcrypt.{a,so*} \
-		$(STAGING_DIR)/usr/bin/libmcrypt-config
-endef
-
 define Package/libmcrypt/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmcrypt.so.* $(1)/usr/lib/

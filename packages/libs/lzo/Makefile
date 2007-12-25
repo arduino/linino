@@ -49,12 +49,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblzo2.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/lzo* \
-		$(STAGING_DIR)/usr/lib/liblzo2.{a,so*}
-endef
-
 define Package/liblzo/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblzo2.so.* $(1)/usr/lib/

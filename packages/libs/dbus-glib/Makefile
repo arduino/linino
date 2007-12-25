@@ -63,14 +63,6 @@ define Build/InstallDev
 		$(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/dbus-1.0/dbus/dbus-glib{,-error-enum,-lowlevel}.h \
-		$(STAGING_DIR)/usr/include/dbus-1.0/dbus/dbus-gtype-specialized.h \
-		$(STAGING_DIR)/usr/lib/libdbus-glib-1.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/dbus-glib-1.pc
-endef
-
-
 define Package/libdbus-glib/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdbus-glib-1.so.* $(1)/usr/lib/

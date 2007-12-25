@@ -51,10 +51,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liburbi* $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf $(STAGING_DIR)/usr/include/urbi
-endef
-
 define Package/urbi/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/

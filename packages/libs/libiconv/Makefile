@@ -51,10 +51,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.{a,so*} $(1)/usr/lib/libiconv/lib/
 endef
 
-define Build/UninstallDev	
-	rm -rf	$(STAGING_DIR)/usr/lib/libiconv
-endef
-
 define Package/libiconv/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.so.* $(1)/usr/lib/

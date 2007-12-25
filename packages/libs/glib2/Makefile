@@ -80,14 +80,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/g{lib,module,module-no-export,object,thread}-2.0.pc $(1)/usr/lib/pkgconfig
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/glib-2.0 \
-		$(STAGING_DIR)/usr/lib/glib-2.0 \
-		$(STAGING_DIR)/usr/lib/libg{lib,module,module-no-export,object,thread}-2.0.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/g{lib,module,module-no-export,object,thread}-2.0.pc
-endef
-
-
 define Package/glib2/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg*-2.0.so* $(1)/usr/lib/

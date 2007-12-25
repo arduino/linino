@@ -67,12 +67,6 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/.libs/libgps.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/gps{,d}.h \
-		$(STAGING_DIR)/usr/include/libgpsmm.h \
-		$(STAGING_DIR)/usr/lib/libgps.{a,so*} 
-endef
-
 define Package/gpsd/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/.libs/libgps.so.* $(1)/usr/lib/

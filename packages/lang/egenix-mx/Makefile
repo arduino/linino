@@ -82,10 +82,6 @@ define Build/InstallDev
 		$(1)$(PYTHON_PKG_DIR)/mx/Tools/mxTools/
 endef
 
-define Build/UninstallDev
-	rm -rf $(STAGING_DIR)$(PYTHON_PKG_DIR)/mx
-endef
-
 define PyPackage/python-egenix-mx/install
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
 	$(CP) $(PKG_BUILD_DIR)/foo/mx $(1)$(PYTHON_PKG_DIR)/

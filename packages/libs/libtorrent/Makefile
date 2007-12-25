@@ -71,12 +71,6 @@ define Build/InstallDev
 	$(SED) 's,$(TARGET_LDFLAGS),,g' $(1)/usr/lib/pkgconfig/libtorrent.pc
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/torrent \
-		$(STAGING_DIR)/usr/lib/libtorrent.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/libtorrent.pc
-endef
-
 define Package/libtorrent/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtorrent.so.* $(1)/usr/lib/

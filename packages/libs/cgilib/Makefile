@@ -43,12 +43,6 @@ define Build/InstallDev
 	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/libcgi.{a,so*} $(1)/usr/lib/
 endef
-	
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/cgi.h \
-		$(STAGING_DIR)/usr/lib/libcgi.{a,so*}
-endef
 
 define Package/cgilib/install
 	$(INSTALL_DIR) $(1)/usr/lib

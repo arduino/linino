@@ -63,10 +63,4 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libustl.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/ustl* \
-		$(STAGING_DIR)/usr/lib/libustl.{a,so*}
-endef
-
 $(eval $(call BuildPackage,ustl))

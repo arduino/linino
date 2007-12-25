@@ -79,12 +79,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libjpeg.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/jpeg{int,lib}.h \
-		$(STAGING_DIR)/usr/include/j{config,error,morecfg}.h \
-		$(STAGING_DIR)/usr/lib/libjpeg.{a,so*}
-endef
-
 define Package/libjpeg/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libjpeg.so.* $(1)/usr/lib/

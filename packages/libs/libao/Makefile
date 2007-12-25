@@ -60,13 +60,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/ao.pc $(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/ao \
-		$(STAGING_DIR)/usr/lib/libao.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/ao.pc
-endef
-
 define Package/libao/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libao.so.* $(1)/usr/lib/

@@ -70,13 +70,6 @@ define Build/InstallDev
 	$(SED) 's,-R$$$$libdir,,g' $(2)/bin/apu-1-config
 endef
 
-define Build/UninstallDev
-	rm -rf	$(2)/bin/apu-1-config \
-		$(1)/usr/include/apr-1 \
-		$(1)/usr/lib/libaprutil-1.{a,so*} \
-		$(1)/usr/lib/pkgconfig/apr-util-1.pc
-endef
-
 define Package/libaprutil/install	
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libaprutil-1.so.* $(1)/usr/lib/

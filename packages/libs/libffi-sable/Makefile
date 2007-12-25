@@ -56,12 +56,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libffi.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev	
-	rm -rf \
-		$(STAGING_DIR)/usr/include/ffi{,target}.h \
-		$(STAGING_DIR)/usr/lib/libffi.{a,so*}
-endef
-
 define Package/libffi-sable/install	
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libffi.so.* $(1)/usr/lib/

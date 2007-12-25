@@ -125,14 +125,6 @@ define Build/InstallDev
 	$(SED) 's,-I$$$${libdir}/wx/include,-I$(1)/usr/lib/wx/include,g' $(1)/usr/bin/wx-config
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/bin/wx-config \
-		$(STAGING_DIR)/usr/include/wx-2.6 \
-		$(STAGING_DIR)/usr/lib/libwx_base{,_net,_xml}-2.6-*.so \
-		$(STAGING_DIR)/usr/lib/libwx_base{,_net,_xml}-2.6.so.* \
-		$(STAGING_DIR)/usr/lib/wx
-endef
-
 define Package/libwxbase/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.6.so.* $(1)/usr/lib/

@@ -52,12 +52,4 @@ define Build/InstallDev
 		$(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -f \
-		$(STAGING_DIR)/usr/include/ansidecl.h \
-		$(STAGING_DIR)/usr/include/bfd{,link}.h \
-		$(STAGING_DIR)/usr/include/symcat.h \
-		$(STAGING_DIR)/usr/lib/libbfd.a
-endef
-
 $(eval $(call Build/DefaultTargets))

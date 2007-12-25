@@ -56,11 +56,6 @@ define Build/InstallDev
 	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libflite*.so.* $(1)/usr/lib/
 endef
-	
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/flite/{cst,flite}*.h \
-		$(STAGING_DIR)/usr/lib/libflite*.so.*
-endef
 
 define Package/flite/install
 	$(INSTALL_DIR) $(1)/usr/bin

@@ -75,14 +75,6 @@ define Build/InstallDev
 	$(SED) 's,/usr/share/build-1,$(1)/usr/share/build-1,g' $(1)/usr/share/build-1/apr_rules.mk
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/bin/apr-1-config \
-		$(STAGING_DIR)/usr/include/apr-1 \
-		$(STAGING_DIR)/usr/lib/libapr-1.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/apr-1.pc \
-		$(STAGING_DIR)/usr/share/build-1
-endef
-
 define Package/libapr/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libapr-1.so.* $(1)/usr/lib/

@@ -93,15 +93,6 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/cgi/cs_static.cgi $(1)/usr/bin/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/ClearSilver \
-		$(STAGING_DIR)/usr/lib/libneo_* \
-		$(STAGING_DIR)/usr/bin/cs \
-		$(STAGING_DIR)/usr/bin/cstest \
-		$(STAGING_DIR)/usr/bin/cs_static.cgi
-endef
-
 define Package/clearsilver/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/libs/libneo_cs.a $(1)/usr/lib/

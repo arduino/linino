@@ -110,12 +110,6 @@ define Build/InstallDev
 	$(SED) 's,-L/usr/lib/howl,-L$$$${libdir}/howl,g' $(1)/usr/lib/pkgconfig/howl.pc
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/howl \
-		$(STAGING_DIR)/usr/lib/lib{howl,mDNSResponder}.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/howl.pc
-endef
-
 define Package/libhowl/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{howl,mDNSResponder}.so.* $(1)/usr/lib/

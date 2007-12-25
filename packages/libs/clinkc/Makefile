@@ -51,9 +51,4 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclinkc.a $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/cybergarage \
-		$(STAGING_DIR)/usr/lib/libclinkc.a
-endef
-
 $(eval $(call BuildPackage/libclinkc))

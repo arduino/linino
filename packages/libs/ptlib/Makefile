@@ -105,8 +105,4 @@ define Build/InstallDev
 	$(SED) 's|//\(#include <ptlib/sound.h>\)|\1|' $(PKG_BUILD_DIR)/include/ptlib.h
 endef
 
-define Build/UninstallDev
-	rm -rf $(BUILD_DIR)/$(PKG_NAME)
-endef
-
 $(eval $(call BuildPackage,ptlib))

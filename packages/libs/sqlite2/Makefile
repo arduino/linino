@@ -90,12 +90,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/sqlite.pc $(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/sqlite.h \
-		$(STAGING_DIR)/usr/lib/libsqlite.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/sqlite.pc
-endef
-
 define Package/libsqlite2/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsqlite.so.* $(1)/usr/lib/

@@ -56,15 +56,6 @@ define Build/InstallDev
 	$(SED) 's,^[ILR]_opts=".\+",,g' $(2)/bin/libpng*-config
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/libpng{,12}-config \
-		$(STAGING_DIR)/usr/include/png{,conf}.h \
-		$(STAGING_DIR)/usr/include/libpng \
-		$(STAGING_DIR)/usr/lib/libpng{,12}.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/libpng{,12}.pc
-endef
-
 define Package/libpng/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpng{,12}.so.* $(1)/usr/lib/

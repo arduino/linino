@@ -376,11 +376,6 @@ define Build/InstallDev
 		$(1)/usr/include/
 endef
 
-define Build/UninstallDev
-	rm -rf  $(STAGING_DIR)/usr/include/asterisk
-endef
-
-
 define Package/asterisk/conffiles
 /etc/asterisk/asterisk.conf
 /etc/asterisk/agents.conf

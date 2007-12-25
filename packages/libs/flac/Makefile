@@ -44,12 +44,6 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/obj/release/lib/libFLAC.{a,so} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/FLAC \
-		$(STAGING_DIR)/usr/lib/libFLAC.{a,so}
-endef
-
 define Package/libflac/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/obj/release/lib/libFLAC.so $(1)/usr/lib/

@@ -62,14 +62,6 @@ define Build/InstallDev
 	$(SED) 's,-I$$$${prefix}/include,,g' $(1)/usr/bin/gdlib-config
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/gdlib-config \
-		$(STAGING_DIR)/usr/include/entities.h \
-		$(STAGING_DIR)/usr/include/gd{,_io,cache,fontg,fontl,fontmb,fonts,fontt,fx}.h \
-		$(STAGING_DIR)/usr/lib/libgd.{a,so*}
-endef
-
 define Package/libgd/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgd.so.* $(1)/usr/lib/

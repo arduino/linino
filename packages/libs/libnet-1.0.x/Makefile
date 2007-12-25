@@ -72,10 +72,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnet.{a,so*} $(1)/usr/lib/libnet-1.0.x/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf $(STAGING_DIR)/usr/lib/libnet-1.0.x
-endef
-
 define Package/libnet0/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnet.so.* $(1)/usr/lib/

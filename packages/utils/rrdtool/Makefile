@@ -108,12 +108,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd_th.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/rrd.h \
-		$(STAGING_DIR)/usr/lib/librrd.{a,so*} \
-		$(STAGING_DIR)/usr/lib/librrd_th.{a,so*}
-endef
-
 define Package/librrd/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd.so.* $(1)/usr/lib/

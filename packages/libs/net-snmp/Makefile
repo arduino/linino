@@ -191,12 +191,6 @@ define Build/InstallDev
 	$(SED) 's,-L/usr/lib,,g' $(1)/usr/bin/net-snmp-config
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/bin/net-snmp-config \
-		$(STAGING_DIR)/usr/include/net-snmp \
-		$(STAGING_DIR)/usr/lib/libnetsnmp{,agent,helpers,mibs}.{a,so*}
-endef
-
 define Package/libnetsnmp/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnetsnmp{,agent,helpers,mibs}.so.* $(1)/usr/lib/

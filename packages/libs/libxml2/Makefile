@@ -92,14 +92,6 @@ define Build/InstallDev
 	$(SED) 's,-L$$$${libdir},,g' $(1)/usr/bin/xml2-config
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/bin/xml2-config \
-		$(STAGING_DIR)/usr/include/libxml2 \
-		$(STAGING_DIR)/usr/lib/libxml2.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/libxml-2.0.pc
-endef
-
-
 define Package/libxml2/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxml2.so.* $(1)/usr/lib/

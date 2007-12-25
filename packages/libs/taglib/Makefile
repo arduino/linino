@@ -52,12 +52,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/taglib/* $(1)/usr/include/taglib/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/bin/taglib-config \
-		$(STAGING_DIR)/usr/include/taglib \
-		$(STAGING_DIR)/usr/lib/libtag.{a,so*}
-endef
-
 define Package/taglib/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtag.so.* $(1)/usr/lib/

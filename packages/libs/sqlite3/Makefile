@@ -89,12 +89,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/sqlite3.pc $(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/sqlite3.h \
-		$(STAGING_DIR)/usr/lib/libsqlite3.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/sqlite3.pc
-endef
-
 define Package/libsqlite3/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsqlite3.so.* $(1)/usr/lib/

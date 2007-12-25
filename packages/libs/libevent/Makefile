@@ -57,13 +57,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevent-$(PKG_VERSION).so* $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/event.h \
-		$(STAGING_DIR)/usr/lib/libevent.{a,so} \
-		$(STAGING_DIR)/usr/lib/libevent-$(PKG_VERSION).so*
-endef
-
 define Package/libevent/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevent-$(PKG_VERSION).so.* $(1)/usr/lib/

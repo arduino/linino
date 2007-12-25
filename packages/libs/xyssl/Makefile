@@ -63,11 +63,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxyssl.{a,so} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/xyssl \
-		$(STAGING_DIR)/usr/lib/libxyssl.{a,so}
-endef
-
 define Package/libxyssl/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/libxyssl.so $(1)/usr/lib/

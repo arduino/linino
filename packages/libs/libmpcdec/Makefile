@@ -50,12 +50,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/mpcdec/ \
-		$(STAGING_DIR)/usr/lib/libmpcdec.*
-endef
-
 define Package/libmpcdec/install
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmpcdec.* $(1)/usr/lib/

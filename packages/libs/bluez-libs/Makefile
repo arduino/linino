@@ -50,13 +50,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/bluez.pc $(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/bluetooth \
-		$(STAGING_DIR)/usr/lib/libbluetooth.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/bluez.pc
-endef
-
 define Package/bluez-libs/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libbluetooth.so.* $(1)/usr/lib/

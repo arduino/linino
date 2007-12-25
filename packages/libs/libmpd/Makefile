@@ -44,13 +44,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libmpd.pc $(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-	$(STAGING_DIR)/usr/include/libmpd \
-	$(STAGING_DIR)/usr/lib/libmpd.{a,so*} \
-	$(STAGING_DIR)/usr/lib/pkgconfig/libmpd.pc
-endef
-
 define Package/libmpd/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/libmpd.so.* $(1)/usr/lib/

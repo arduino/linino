@@ -150,15 +150,6 @@ define Build/InstallDev
 		$(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(1)/usr/bin/hostpython \
-		$(1)/usr/bin/python \
-		$(1)/usr/include/python$(PYTHON_VERSION) \
-		$(1)/usr/lib/python$(PYTHON_VERSION) \
-		$(1)/usr/lib/libpython$(PYTHON_VERSION).a
-endef
-
 define PyPackage/python/filespec
 +|/usr/bin/python$(PYTHON_VERSION)
 +|/usr/lib/python$(PYTHON_VERSION)

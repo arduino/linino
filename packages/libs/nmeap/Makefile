@@ -39,9 +39,4 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/lib/libnmeap.a $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -f $(STAGING_DIR)/usr/include/nmeap{,_def}.h \
-		$(STAGING_DIR)/usr/lib/libnmeap.a
-endef
-
 $(eval $(call BuildPackage,libnmeap))

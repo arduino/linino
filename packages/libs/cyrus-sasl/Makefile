@@ -96,12 +96,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/sasl2/lib*.{a,so*} $(1)/usr/lib/sasl2/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/sasl \
-		$(STAGING_DIR)/usr/lib/libsasl{2,}.{a,so*} \
-		$(STAGING_DIR)/usr/lib/sasl2
-endef
-
 define Package/libsasl2/install
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsasl2.so.* $(1)/usr/lib/

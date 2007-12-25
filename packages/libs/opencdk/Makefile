@@ -64,13 +64,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libopencdk.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/opencdk-config \
-		$(STAGING_DIR)/usr/include/opencdk.h \
-		$(STAGING_DIR)/usr/lib/libopencdk.{a,so*}
-endef
-
 define Package/libopencdk/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libopencdk.so.* $(1)/usr/lib/

@@ -47,12 +47,6 @@ define Build/InstallDev
 	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpopt.{a,so*} $(1)/usr/lib/
 endef
-	
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/popt.h \
-		$(STAGING_DIR)/usr/lib/libpopt.{a,so*}
-endef
 
 define Package/libpopt/install
 	$(INSTALL_DIR) $(1)/usr/lib

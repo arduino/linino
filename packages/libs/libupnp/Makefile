@@ -58,13 +58,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libupnp.pc $(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/upnp \
-		$(STAGING_DIR)/usr/lib/lib{ixml,threadutil,upnp}.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/libupnp.pc
-endef
-
 define Package/libupnp/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{ixml,threadutil,upnp}.so.* $(1)/usr/lib/

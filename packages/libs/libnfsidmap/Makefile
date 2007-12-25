@@ -46,11 +46,4 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libnfsidmap.pc $(1)/usr/lib/pkgconfig
 endef	
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/nfsidmap.h \
-		$(STAGING_DIR)/usr/lib/libnfsidmap.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/libnfsidmap.pc
-endef
-
 $(eval $(call BuildPackage,libnfsidmap))

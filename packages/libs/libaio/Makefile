@@ -52,12 +52,6 @@ define Build/InstallDev
 	ln -sf libaio.so.$(LIBAIO_SOVER) $(1)/usr/lib/libaio.so.1
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/libaio.h \
-		$(STAGING_DIR)/usr/lib/libaio.{a,so*}
-endef
-
 define Package/libaio/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/src/libaio.so.* $(1)/usr/lib/

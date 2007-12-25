@@ -61,14 +61,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libart-2.0.pc $(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/libart2-config \
-		$(STAGING_DIR)/usr/include/libart-2.0 \
-		$(STAGING_DIR)/usr/lib/libart_lgpl_2.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/libart-2.0.pc
-endef
-
 define Package/libart/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libart_lgpl_2.so.* $(1)/usr/lib/

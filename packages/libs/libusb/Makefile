@@ -52,14 +52,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libusb.pc $(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/libusb-config \
-		$(STAGING_DIR)/usr/include/usb.h \
-		$(STAGING_DIR)/usr/lib/libusb*.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/libusb.pc
-endef
-
 define Package/libusb/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libusb*.so.* $(1)/usr/lib/

@@ -104,13 +104,6 @@ define Build/InstallDev
 	rm -f $(1)/usr/lib/mysql/libmysqlclient.la
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(2)/bin/mysql_config \
-		$(1)/usr/include/mysql \
-		$(1)/usr/lib/mysql
-endef
-
 define Package/libmysqlclient/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/mysql/libmysqlclient.so.* $(1)/usr/lib/

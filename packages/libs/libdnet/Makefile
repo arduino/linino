@@ -69,14 +69,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdnet.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/dnet-config \
-		$(STAGING_DIR)/usr/include/dnet.h  \
-		$(STAGING_DIR)/usr/include/dnet  \
-		$(STAGING_DIR)/usr/lib/libdnet.{a,so*}
-endef
-
 define Package/libdnet/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdnet.so.* $(1)/usr/lib/

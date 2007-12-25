@@ -54,13 +54,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/sndfile* \
-		$(STAGING_DIR)/usr/lib/libsndfile.{a,so*,la} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/sndfile.pc
-endef
-
 define Package/libsndfile/install
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsndfile.so* $(1)/usr/lib/

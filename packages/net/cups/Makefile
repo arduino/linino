@@ -110,11 +110,4 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcups.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/cups-config \
-		$(STAGING_DIR)/usr/include/cups \
-		$(STAGING_DIR)/usr/lib/libcups.{a,so*}
-endef
-
 $(eval $(call BuildPackage,cups))

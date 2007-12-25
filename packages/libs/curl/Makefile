@@ -94,13 +94,6 @@ define Build/InstallDev
 	ln -sf $(1)/usr/bin/curl-config $(2)/bin/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/bin/curl-config \
-		$(STAGING_DIR)/usr/include/curl \
-		$(STAGING_DIR)/usr/lib/libcurl.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/libcurl.pc
-endef
-
 define Package/curl/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/curl $(1)/usr/bin/

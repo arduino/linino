@@ -83,14 +83,6 @@ define Build/InstallDev
 	rm -f $(1)/usr/include/gphoto2/gphoto2
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/bin/gphoto2-config \
-		$(STAGING_DIR)/usr/bin/gphoto2-port-config \
-		$(STAGING_DIR)/usr/include/gphoto2* \
-		$(STAGING_DIR)/usr/lib/libgphoto*.{a,so*}
-endef
-
 define Package/libgphoto2/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgphoto2{,_port}.so.* $(1)/usr/lib/

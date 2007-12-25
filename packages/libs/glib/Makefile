@@ -74,15 +74,6 @@ define Build/InstallDev
 	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(1)/usr/bin/glib-config
 endef
 
-define Build/UninstallDev
-	rm -rf 	$(STAGING_DIR)/usr/bin/glib-config \
-		$(STAGING_DIR)/usr/include/glib-1.2 \
-		$(STAGING_DIR)/usr/lib/libg{lib,module,thread}.{a,so} \
-		$(STAGING_DIR)/usr/lib/libg{lib,module,thread}-*.so.* \
-		$(STAGING_DIR)/usr/lib/glib \
-		$(STAGING_DIR)/usr/lib/pkgconfig/g{lib,module,thread}.pc
-endef
-
 define Package/glib1/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg{lib,module,thread}-1.2.so.* $(1)/usr/lib/

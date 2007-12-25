@@ -56,10 +56,6 @@ define Build/InstallDev
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/libintl.{a,so*} $(1)/usr/lib/libintl/lib/
 endef
 
-define Build/UninstallDev	
-	rm -rf	$(STAGING_DIR)/usr/lib/libintl
-endef
-
 define Package/libintl/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/libintl.so.* $(1)/usr/lib/

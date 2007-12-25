@@ -83,11 +83,5 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgsm.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/gsm.h \
-		$(STAGING_DIR)/usr/lib/libgsm.{a,so*}
-endef
-
 $(eval $(call BuildPackage,libgsm))
 $(eval $(call BuildPackage,gsm-utils))

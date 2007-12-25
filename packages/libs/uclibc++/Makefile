@@ -78,13 +78,6 @@ define Build/InstallDev
 	$(SED) 's|-luClibc++|-Wl,-Bdynamic,-luClibc++,-Bstatic,-lstdc++,-Bdynamic|g' $(2)/bin/g++-uc+std
 	$(SED) 's|-nostdinc++||g' $(2)/bin/g++-uc+std
 endef
-	
-define Build/UninstallDev
-	rm -rf $(2)/bin/g++-uc \
-		$(2)/bin/g++-uc+std \
-		$(1)/usr/include/uClibc++ \
-		$(1)/usr/lib/libuClibc++*.{a,so*}
-endef
 
 define Package/uclibcxx/install
 	$(INSTALL_DIR) $(1)/usr/lib

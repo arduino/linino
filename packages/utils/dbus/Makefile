@@ -103,14 +103,6 @@ define Build/InstallDev
 		$(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/dbus-1.0 \
-		$(STAGING_DIR)/usr/lib/libdbus-1.{a,so*} \
-		$(STAGING_DIR)/usr/lib/dbus-1.0 \
-		$(STAGING_DIR)/usr/lib/pkgconfig/dbus-1.pc
-endef
-
-
 define Package/dbus/conffiles
 /etc/dbus-1/session.conf
 /etc/dbus-1/system.conf

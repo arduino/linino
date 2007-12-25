@@ -160,14 +160,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/gnutls{,-extra}.pc $(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf $(2)/usr/bin/libgnutls{,-extra}-config \
-		$(1)/usr/include/gnutls \
-		$(1)/usr/lib/libgnutls{,-extra,-openssl}.{a,so*} \
-		$(1)/usr/lib/pkgconfig/gnutls{,-extra}.pc
-endef
-
-
 define Package/certtool/conffiles
 /etc/gnutls/certtool.cfg
 endef

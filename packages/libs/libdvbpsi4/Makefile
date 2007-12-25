@@ -47,12 +47,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdvbpsi.{a,so*,la} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/dvbpsi \
-		$(STAGING_DIR)/usr/lib/libdvbpsi.{a,so*,la}
-endef
-
 define Package/libdvbpsi4/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdvbpsi.so* $(1)/usr/lib/

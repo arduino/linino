@@ -59,12 +59,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libosip2.pc $(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/osip{,parser}2 \
-		$(STAGING_DIR)/usr/lib/libosip{,parser}2.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/libosip2.pc
-endef
-
 define Package/libosip2/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libosip{,parser}2.so.* $(1)/usr/lib/

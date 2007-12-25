@@ -66,12 +66,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/alsa.pc $(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/alsa \
-		$(STAGING_DIR)/usr/lib/libasound.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/alsa.pc
-endef
-
 define Package/alsa-lib/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libasound.so.* $(1)/usr/lib/

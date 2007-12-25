@@ -68,14 +68,6 @@ define Build/InstallDev
 	$(SED) 's,$(TARGET_LDFLAGS),,g' $(1)/usr/lib/pkgconfig/sigc++-2.0.pc
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/sigc++-2.0 \
-		$(STAGING_DIR)/usr/lib/libsigc-2.0.{a,so*} \
-		$(STAGING_DIR)/usr/lib/sigc++-2.0 \
-		$(STAGING_DIR)/usr/lib/pkgconfig/sigc++-2.0.pc
-		
-endef
-
 define Package/libsigcxx/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsigc-2.0.so.* $(1)/usr/lib/

@@ -50,12 +50,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/samplerate/ \
-		$(STAGING_DIR)/usr/lib/libsamplerate.{a,so*,la}
-endef
-
 define Package/libsamplerate/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/* $(1)/usr/bin/

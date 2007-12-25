@@ -59,12 +59,6 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/lib/types.h $(1)/usr/include/pci
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/pci \
-		$(STAGING_DIR)/usr/lib/libpci.a
-endef
-
 define Package/pciutils/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/{lspci,setpci,update-pciids.sh} $(1)/usr/sbin/

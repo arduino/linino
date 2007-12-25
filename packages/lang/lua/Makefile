@@ -117,13 +117,6 @@ define Build/InstallDev
 	ln -sf liblua.so.$(PKG_VERSION) $(1)/usr/lib/liblualib.so
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/lua{,lib,conf}.h \
-		$(STAGING_DIR)/usr/include/lauxlib.h \
-		$(STAGING_DIR)/usr/lib/liblua.{a,so*}
-endef
-
 define Package/liblua/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua.so.* $(1)/usr/lib/

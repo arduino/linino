@@ -59,13 +59,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include
 endef
 
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/security \
-		$(STAGING_DIR)/lib/libpam.* \
-		$(STAGING_DIR)/lib/security 
-endef
-
 define Package/libpam/install
 	$(INSTALL_DIR) $(1)/lib
 	$(INSTALL_DIR) $(1)/etc

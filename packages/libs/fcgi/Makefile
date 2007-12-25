@@ -60,12 +60,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfcgi.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/fastcgi.h \
-		$(STAGING_DIR)/usr/include/fcgi{app,_config,misc,io,ios,_stdio}.h \
-		$(STAGING_DIR)/usr/lib/libfcgi.{a,so*}
-endef
-
 define Package/fcgi/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/cgi-fcgi $(1)/usr/bin/

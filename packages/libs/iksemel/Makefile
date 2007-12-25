@@ -54,12 +54,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/iksemel.pc $(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf	$(STAGING_DIR)/usr/include/iksemel.h \
-		$(STAGING_DIR)/usr/lib/libiksemel.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/iksemel.pc
-endef
-
 define Package/libiksemel/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiksemel.so.* $(1)/usr/lib/
