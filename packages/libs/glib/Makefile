@@ -69,9 +69,11 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 	$(CP) $(PKG_BUILD_DIR)/.libs/*.a $(PKG_BUILD_DIR)/*/.libs/*.a $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/glibconfig-sysdefs.h $(1)/usr/include/glib-1.2/
-	$(SED) 's,-I$$$${prefix}/include/glib,-I$(1)/usr/include/glib,g' $(1)/usr/bin/glib-config
-	$(SED) 's,-I$$$${exec_prefix}/lib/glib,-I$(1)/usr/lib/glib,g' $(1)/usr/bin/glib-config
-	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(1)/usr/bin/glib-config
+	$(INSTALL_DIR) $(2)/bin
+	mv $(1)/usr/bin/glib-config $(2)/bin/
+	$(SED) 's,-I$$$${prefix}/include/glib,-I$(1)/usr/include/glib,g' $(2)/bin/glib-config
+	$(SED) 's,-I$$$${exec_prefix}/lib/glib,-I$(1)/usr/lib/glib,g' $(2)/bin/glib-config
+	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(2)/bin/glib-config
 endef
 
 define Package/glib1/install
