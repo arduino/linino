@@ -34,7 +34,8 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-    cp -r $(PKG_BUILD_DIR)/* $(1)/include/
+	$(INSTALL_DIR) $(1)/include
+	$(CP) $(PKG_BUILD_DIR)/* $(1)/include/
 endef
 
 $(eval $(call BuildPackage,xorg-headers-native))
