@@ -49,34 +49,6 @@ define Build/Compile
 		all install
 endef
 
-define Build/InstallDev
-	mkdir -p $(2)/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libtool $(2)/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libtoolize $(2)/bin/
-	mkdir -p $(1)/usr/share/
-	$(CP) -R $(PKG_INSTALL_DIR)/usr/share/* $(1)/usr/share/
-	mkdir -p $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/ltdl.h $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libltdl.{a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/share/libtool
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/libtool/config.guess $(1)/usr/share/libtool/
-	$(SED) 's|^sys_lib_dlsearch_path_spec=.*|sys_lib_dlsearch_path_spec="$(1)/usr/lib $(1)/lib"|g' \
-		$(2)/bin/libtool
-	$(SED) 's|^prefix=.*|prefix=$(1)/usr|g' \
-		$(2)/bin/libtoolize
-	$(SED) 's|^datadir=.*|datadir=$(1)/usr/share|g' \
-		$(2)/bin/libtoolize
-endef
-
-define Build/UninstallDev
-	rm -rf \
-		$(2)/bin/libtool* \
-		$(1)/usr/include/ltdl.h \
-		$(1)/usr/lib/libltdl.{a,so*} \
-		$(1)/usr/share/libtool
-endef
-
 define Package/libltdl/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libltdl.so.* $(1)/usr/lib/
