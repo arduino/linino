@@ -31,6 +31,7 @@ define Build/Compile
 endef
 
 define Package/x-bkgd-images/install
+	$(INSTALL_DIR) $(1)
 	$(CP) ./files/* $(1)/ 
 endef
 
