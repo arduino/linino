@@ -45,6 +45,7 @@ define Build/Compile
 endef
 
 define Build/InstallDev
+	$(INSTALL_DIR) $(1)
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 	$(SED) "s,-L/usr/local/lib,,g" $(1)/usr/lib/libcairo.la
 	$(SED) "s,/usr/lib/libfontconfig.la,$(1)/usr/lib/libfontconfig.la,g" $(1)/usr/lib/libcairo.la

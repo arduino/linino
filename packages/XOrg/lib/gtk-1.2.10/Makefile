@@ -56,6 +56,7 @@ define Build/Compile
 endef
 
 define Build/InstallDev
+	$(INSTALL_DIR) $(1)
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 	$(INSTALL_DIR) $(2)/bin
 	mv $(1)/usr/bin/gtk-config $(2)/bin/
