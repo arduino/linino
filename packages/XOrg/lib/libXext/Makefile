@@ -49,6 +49,7 @@ define Build/Compile
 	make -C $(PKG_BUILD_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
+	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 endef
 
 define Build/Configure
@@ -80,8 +81,8 @@ define Package/libXaw/install
 endef
 
 define Build/InstallDev
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 $(eval $(call BuildPackage,libXext))
