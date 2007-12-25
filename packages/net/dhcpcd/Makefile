@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/dhcpcd
   SECTION:=net
-  CATEGORY:=Networking
+  CATEGORY:=Network
   TITLE:=DHCP client for automatically configuring IPv4 networking
   URL:=http://dhcpcd.berlios.de/
 endef
