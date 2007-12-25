@@ -81,6 +81,7 @@ endef
 
 define Build/InstallDev
 	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(INSTALL_DIR) $(1)
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 endef
 
