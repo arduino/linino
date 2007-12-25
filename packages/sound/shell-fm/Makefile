@@ -59,9 +59,3 @@ define Package/shell-fm/install
 endef
 
 $(eval $(call BuildPackage,shell-fm))
-
-
-$(eval $(call RequireCommand,aclocal, \
-	$(PKG_NAME) requires automake \
-))
-

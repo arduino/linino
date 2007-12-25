@@ -60,7 +60,3 @@ define Package/smartmontools/install
 endef
 
 $(eval $(call BuildPackage,smartmontools))
-
-$(eval $(call RequireCommand,automake-1.9, \
-	$(PKG_NAME) requires automake 1.9 or compatible. \
-))
