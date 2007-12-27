@@ -16,6 +16,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://iksemel.googlecode.com/files/
 PKG_MD5SUM:=36ab2d9f11980a19217b6f79a19ef8e7
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libiksemel
@@ -34,15 +36,8 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	LIBS="-lgnutls -lgcrypt -lgpg-error" \
 
-define Build/Configure
-	$(call Build/Configure/Default)
-	$(call libtool_disable_rpath)
-endef
-
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
 
 define Build/InstallDev

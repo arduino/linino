@@ -19,6 +19,8 @@ PKG_MD5SUM:=2d126c35448503f6dbe33934d9581f6b
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libsndfile
@@ -37,18 +39,8 @@ CONFIGURE_ARGS += \
 	--disable-flac
 
 MAKE_FLAGS += \
-	DESTDIR="$(PKG_INSTALL_DIR)"
-
-define Build/Configure
-	$(call Build/Configure/Default)
-	$(call libtool_disable_rpath)
-endef
-
-define Build/Compile
-	$(call Build/Compile/Default,all)
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
-	$(call Build/Compile/Default,install)
-endef
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	all install
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)

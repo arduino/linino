@@ -16,6 +16,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/gettext
 PKG_MD5SUM:=3d9ad24301c6d6b17ec30704a13fe127
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libintl
@@ -38,15 +40,8 @@ CONFIGURE_ARGS += \
 	--without-libexpat-prefix \
 	--without-emacs
 
-define Build/Configure
-	$(call Build/Configure/Default)
-	$(call libtool_disable_rpath)
-endef
-
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
 
 define Build/InstallDev	

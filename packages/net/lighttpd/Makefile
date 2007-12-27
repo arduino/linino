@@ -16,6 +16,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.lighttpd.net/download/
 PKG_MD5SUM:=26f98dddf9d8c0775221b800986003ee
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/lighttpd/Default
@@ -152,15 +154,8 @@ CONFIGURE_VARS+= \
 	CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2 $$$$CPPFLAGS" \
 	PCRE_LIB="-lpcre" \
 
-define Build/Configure
-	$(call Build/Configure/Default,)
-	$(call libtool_disable_rpath)
-endef
-
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
 
 define Package/lighttpd/conffiles

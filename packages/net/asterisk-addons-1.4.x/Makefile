@@ -16,6 +16,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.digium.com/pub/asterisk/old-releases/
 PKG_MD5SUM:=c080b02e6ddc81dab6a64691af890805
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/asterisk-addons/Default
@@ -100,7 +102,6 @@ define Build/Configure
 	( cd $(PKG_BUILD_DIR); ./bootstrap.sh )
 	$(call Build/Configure/Default,,,)
 	$(call Build/Configure/Default,,,asterisk-ooh323c)
-	$(call libtool_disable_rpath)
 endef
 
 # XXX: explanations
@@ -123,7 +124,6 @@ define Build/Compile
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		$(MAKE_ARGS) \
 		all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 	$(MAKE_VARS) \
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		$(MAKE_ARGS) \

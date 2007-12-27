@@ -20,6 +20,8 @@ PKG_MD5SUM:=8f0b3ce721bda11401e656b90ba4e78c
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 
@@ -68,15 +70,8 @@ CONFIGURE_ARGS += \
 	--with-zlib \
 
 
-define Build/Configure
-	$(call Build/Configure/Default)
-	$(call libtool_disable_rpath)
-endef
-
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
 
 define Build/InstallDev

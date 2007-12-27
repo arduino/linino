@@ -14,6 +14,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.xmms.org/files/1.2.x/
 #PKG_INSTALL_MAN:=$(PKG_INSTALL_DIR)/usr/man
+PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -49,7 +50,6 @@ define Build/Configure
 			$(CONFIGURE_ARGS) ;\
 		fi \
 	)
-	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile

@@ -16,6 +16,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.alsa-project.org/pub/lib/
 PKG_MD5SUM:=d55a9d7d2a79d738a1b7a511cffda4b6
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 ifeq ($(KERNEL),2.4)
@@ -45,16 +47,10 @@ CONFIGURE_ARGS += \
 	--with-softfloat \
 	--with-versioned=no \
 
-define Build/Configure
-	$(call Build/Configure/Default)
-	$(call libtool_disable_rpath)
-endef
-
 define Build/Compile
 	# override AM_CFLAGS holding inappropriate optimization flags
 	$(MAKE) -C $(PKG_BUILD_DIR) AM_CFLAGS="" all
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 endef
 
 define Build/InstallDev

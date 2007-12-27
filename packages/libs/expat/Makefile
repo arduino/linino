@@ -16,6 +16,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_MD5SUM:=aff487543845a82fe262e6e2922b4c8e
 PKG_SOURCE_URL:=@SF/expat
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 
@@ -31,19 +33,11 @@ define Package/libexpat/description
 endef
 
 
-PKG_CONFIGURE_ARGS += \
+CONFIGURE_ARGS += \
 	--enable-shared \
-	--enable-static \
-
-
-define Build/Configure
-	$(call Build/Configure/Default)
-	$(call libtool_disable_rpath)
-endef
+	--enable-static
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 

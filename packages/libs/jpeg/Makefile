@@ -20,7 +20,7 @@ PKG_MD5SUM:=dbd5f3b47ed13132f04c685d608a7547
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
-PKG_BUILD_DEPENDS:=libtool
+PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -56,10 +56,6 @@ define Build/Prepare
 	ln -sf $(STAGING_DIR)/host/share/libtool/config.guess $(PKG_BUILD_DIR)/
 	ln -sf $(STAGING_DIR)/host/share/libtool/ltmain.sh $(PKG_BUILD_DIR)/
 	ln -sf /bin/true $(PKG_BUILD_DIR)/ltconfig
-endef
-
-define Build/Configure
-	$(call Build/Configure/Default,)
 endef
 
 define Build/Compile

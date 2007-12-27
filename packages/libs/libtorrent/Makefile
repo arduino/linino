@@ -18,6 +18,8 @@ PKG_MD5SUM:=86cdfca2d1c3cfb3b6b316d9beaa25e0
 
 PKG_BUILD_DEPENDS:=libtool
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libtorrent
@@ -49,7 +51,6 @@ CONFIGURE_VARS += \
 
 define Build/Configure
 	$(call Build/Configure/Default,)
-	$(call libtool_disable_rpath)
 	$(SED) 's|^sys_lib_dlsearch_path_spec=.*|sys_lib_dlsearch_path_spec="$(STAGING_DIR)/usr/lib"|g' \
 		$(PKG_BUILD_DIR)/libtool
 	$(SED) 's|^postdeps=.*|postdeps=|g' $(PKG_BUILD_DIR)/libtool

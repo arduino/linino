@@ -19,6 +19,8 @@ PKG_SOURCE_SUBDIR:=lcd4linux-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=svn
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/lcd4linux
@@ -55,15 +57,8 @@ CONFIGURE_ARGS += \
 	--with-plugins="$(PKG_CONFIGURE_PLUGINS)" \
 	--disable-rpath \
 
-define Build/Configure
-	$(call Build/Configure/Default,)
-	$(call libtool_disable_rpath)
-endef
-
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)"
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
 
 define Package/lcd4linux/install

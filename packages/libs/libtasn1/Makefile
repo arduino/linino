@@ -20,6 +20,8 @@ PKG_SOURCE_URL:=ftp://ftp.gnutls.org/pub/gnutls/libtasn1/ \
 	http://josefsson.org/gnutls/releases/libtasn1/
 PKG_MD5SUM:=93b43cc5013bda4d8bf64508f1566c54
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libtasn1
@@ -34,17 +36,11 @@ define Package/libtasn1/description
  Distinguish Encoding Rules (DER) manipulation.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
+CONFIGURE_ARGS += \
 		--enable-shared \
-		--enable-static \
-	)
-	$(call libtool_disable_rpath)
-endef
+		--enable-static
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
 

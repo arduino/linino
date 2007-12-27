@@ -19,6 +19,8 @@ PKG_MD5SUM:=6861c2c6b8e5273c9b80cf736b9fd0e
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libsamplerate
@@ -37,7 +39,6 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-fftw \
 	)
-	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile

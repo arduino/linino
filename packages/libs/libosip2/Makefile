@@ -16,6 +16,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/osip
 PKG_MD5SUM:=f1237af0250c59b318bd64a59f5750ea
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libosip2
@@ -41,7 +43,6 @@ CONFIGURE_ARGS+= \
 
 define Build/Configure
 	$(call Build/Configure/Default)
-	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile

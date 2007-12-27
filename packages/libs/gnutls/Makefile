@@ -20,6 +20,8 @@ PKG_SOURCE_URL:=http://josefsson.org/gnutls/releases/ \
 	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/
 PKG_MD5SUM:=181b2ff554a83e6cf85505ea16699d39
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/gnutls/Default
@@ -140,13 +142,10 @@ define Build/Configure
 	$(SED) 's,-I$$$${includedir},,g' $(PKG_BUILD_DIR)/configure
 	$(SED) 's,-L$$$${libdir},,g' $(PKG_BUILD_DIR)/configure
 	$(call Build/Configure/Default)
-	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_ARGS) all
-	$(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_ARGS) DESTDIR="$(PKG_INSTALL_DIR)" install
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
+	$(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_ARGS) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
 
 define Build/InstallDev

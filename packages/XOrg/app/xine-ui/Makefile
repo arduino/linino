@@ -14,6 +14,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.sourceforge.net/xine/
+PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -45,7 +46,6 @@ define Build/Configure
 			$(CONFIGURE_ARGS) ;\
 		fi \
 	)
-	$(call libtool_disable_rpath)
 endef
 
 define Build/Compile

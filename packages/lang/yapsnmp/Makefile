@@ -17,6 +17,8 @@ PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=8a3e9a5b814388d7907c639105cb2365
 PKG_BUILD_DEPENDS:=python
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 ifneq ($(MAKECMDGOALS),download)
@@ -53,17 +55,11 @@ CONFIGURE_VARS += \
 	ac_cv_file__usr_include_net_snmp_library="yes" \
 	ac_cv_prog_SWIG="echo MISSING SWIG" \
 
-define Build/Configure
-	$(call Build/Configure/Default)
-	$(call libtool_disable_rpath)
-endef
-
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		INCLUDES="-I$(PYTHON_INC_DIR)" \
 		SNMPINCDIR="$(STAGING_DIR)/usr/include/net-snmp/library" \
 		all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 

@@ -18,6 +18,8 @@ PKG_MD5SUM:=6c6a61e4b08fb4b110ca7953f71c8b5e
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/glib-$(PKG_VERSION)
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 
@@ -35,9 +37,6 @@ endef
 
 
 define Build/Configure
-endef
-
-define Build/Compile
 	mkdir -p $(PKG_BUILD_DIR)/build/$(GNU_HOST_NAME)
 	( cd $(PKG_BUILD_DIR); CONFIG_SITE= \
 		./configure \
@@ -64,10 +63,10 @@ define Build/Compile
 		glib_cv_uscore=no \
 		ac_cv_path_GLIB_GENMARSHAL=$(PKG_BUILD_DIR)/build/$(GNU_HOST_NAME)/bin/glib-genmarshal \
 	);
-	$(call libtool_disable_rpath)
-	$(MAKE) -C $(PKG_BUILD_DIR) all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
 
 define Build/InstallDev
