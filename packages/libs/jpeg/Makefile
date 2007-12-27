@@ -51,8 +51,10 @@ CONFIGURE_ARGS += \
 define Build/Prepare
 	$(call Build/Prepare/Default)
 	# replace the old upstream libtool stuff with our own
-	ln -sf $(STAGING_DIR_HOST)/bin/libtool $(PKG_BUILD_DIR)/
-	ln -sf $(STAGING_DIR)/usr/share/libtool/config.guess $(PKG_BUILD_DIR)/
+	ln -sf $(STAGING_DIR)/host/bin/libtool $(PKG_BUILD_DIR)/
+	ln -sf $(STAGING_DIR)/host/share/libtool/config.sub $(PKG_BUILD_DIR)/
+	ln -sf $(STAGING_DIR)/host/share/libtool/config.guess $(PKG_BUILD_DIR)/
+	ln -sf $(STAGING_DIR)/host/share/libtool/ltmain.sh $(PKG_BUILD_DIR)/
 	ln -sf /bin/true $(PKG_BUILD_DIR)/ltconfig
 endef
 
