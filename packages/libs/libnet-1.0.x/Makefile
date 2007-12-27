@@ -8,11 +8,11 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=libnet
+PKG_NAME:=libnet0
 PKG_VERSION:=1.0.2a
 PKG_RELEASE:=7
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=libnet-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.packetfactory.net/libnet/dist/deprecated/
 PKG_MD5SUM:=ddf53f0f484184390e8c2a1bd0853667
 
