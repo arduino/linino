@@ -49,7 +49,7 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DEV) $(1)/usr/bin $(1)/usr/include $(1)/usr/lib $(1)/usr/lib/pkgconfig
+	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/include $(1)/usr/lib $(1)/usr/lib/pkgconfig
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libart2-config $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libart-2.0 $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libart_lgpl_2.{la,a,so*} $(1)/usr/lib/
