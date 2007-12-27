@@ -14,6 +14,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.gnome.org/pub/gnome/sources/pango/1.12/ 
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -57,7 +58,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/ $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
 	$(SED)  "s,Libs:,Libs: -L$$$${libdir}/libiconv/lib/ -L$$$${libdir}/libintl/lib/ ,g" $(1)/usr/lib/pkgconfig/pango*.pc
-	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/libpango*.la
 endef
 
 define Package/pango/Install

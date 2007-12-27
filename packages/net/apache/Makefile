@@ -80,9 +80,9 @@ endef
 
 define Build/Configure	
 	$(call Build/Configure/Default, \
-		--with-apr="$(STAGING_DIR_HOST)/bin/apr-1-config" \
-		--with-apr-util="$(STAGING_DIR_HOST)/bin/apu-1-config" \
-		--with-pcre="$(STAGING_DIR)/usr/bin/pcre-config" \
+		--with-apr="$(STAGING_DIR)/host/bin/apr-1-config" \
+		--with-apr-util="$(STAGING_DIR)/host/bin/apu-1-config" \
+		--with-pcre="$(STAGING_DIR)/host/bin/pcre-config" \
 		--enable-http \
 		--enable-ssl \
 		--enable-proxy \

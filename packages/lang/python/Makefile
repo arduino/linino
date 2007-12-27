@@ -135,18 +135,18 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/mk
+	$(INSTALL_DIR) $(1)/mk $(2)/bin $(1)/usr/bin $(1)/usr/include $(1)/usr/lib
 	$(INSTALL_DATA) ./python-package.mk $(1)/mk/
-	mkdir -p $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/hostpython $(1)/usr/bin/
 	ln -sf hostpython $(1)/usr/bin/python
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP)	$(PKG_INSTALL_DIR)/usr/include/python$(PYTHON_VERSION) \
+	ln -sf $(STAGING_DIR)/usr/bin/hostpython $(2)/bin/
+	ln -sf $(STAGING_DIR)/usr/bin/python $(2)/bin/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/python$(PYTHON_VERSION) \
 		$(1)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/python$(PYTHON_VERSION) \
-		$(1)/usr/lib/
-	$(CP)	$(PKG_BUILD_DIR)/libpython$(PYTHON_VERSION).a \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/python$(PYTHON_VERSION) \
+		$(PKG_BUILD_DIR)/libpython$(PYTHON_VERSION).a \
 		$(1)/usr/lib/
 endef
 

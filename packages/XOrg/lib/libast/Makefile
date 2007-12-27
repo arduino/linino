@@ -15,6 +15,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.eterm.org/download/
 PKG_MD5SUM:=a9ec3b2da317f35869316e6d9571d296
+PKG_FIXUP:=libtol
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -52,7 +53,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*{la,so}* $(1)/usr/lib
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(2)/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include
-	$(SED) "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/libast*.la
 	$(SED) "s,-I/usr/include,,g" $(2)/bin/libast-config
 	$(SED) "s,-L/usr/lib,,g" $(2)/bin/libast-config
 	$(SED) "s,-L/usr/X11R6/lib,,g" $(2)/bin/libast-config

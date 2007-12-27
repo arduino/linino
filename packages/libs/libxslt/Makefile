@@ -70,19 +70,16 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/include $(1)/usr/lib $(1)/usr/lib/pkgconfig
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/xslt-config $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/xsltproc $(1)/usr/bin/
-	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libxslt $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxslt.{a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libxslt.pc $(1)/usr/lib/pkgconfig/
 	$(SED) 's,-I$$$${includedir},,g' $(1)/usr/bin/xslt-config
 	$(SED) 's,-L$$$${libdir},,g' $(1)/usr/bin/xslt-config
-	$(SED) 's,-I$(1)/usr/include,,g' $(1)/usr/bin/xslt-config
-	$(SED) 's,-L$(1)/usr/lib,,g' $(1)/usr/bin/xslt-config
+	$(SED) 's,-I$(STAGING_DIR)/usr/include,,g' $(1)/usr/bin/xslt-config
+	$(SED) 's,-L$(STAGING_DIR)/usr/lib,,g' $(1)/usr/bin/xslt-config
 endef
 
 define Package/libxslt/install

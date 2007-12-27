@@ -53,8 +53,8 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfreetype.{a,so*} $(1)/usr/lib/
 	mkdir -p $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/freetype2.pc $(1)/usr/lib/pkgconfig/
-	$(SED) 's,-I$$$$includedir/freetype2,-I$(1)/usr/include/freetype2,g' $(2)/bin/freetype-config
-	$(SED) 's,/usr/include/freetype2/,$(1)/usr/include/freetype2/,g' $(2)/bin/freetype-config
+	$(SED) 's,-I$$$$includedir/freetype2,-I$(STAGING_DIR)/usr/include/freetype2,g' $(2)/bin/freetype-config
+	$(SED) 's,/usr/include/freetype2/,$(STAGING_DIR)/usr/include/freetype2/,g' $(2)/bin/freetype-config
 endef
 
 define Package/libfreetype/install

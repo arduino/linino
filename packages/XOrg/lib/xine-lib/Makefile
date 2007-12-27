@@ -14,11 +14,11 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.sourceforge.net/xine/
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
 CONFIGURE_ARGS_XTRA+=--enable-static --disable-vcd
-EXTRA_LDLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/xine-lib
   SECTION:=xorg-lib
@@ -41,16 +41,14 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR)/ install DESTDIR=$(PKG_INSTALL_DIR)
-	find $(PKG_INSTALL_DIR) -name lib*.*a | xargs rm -rf
+	$(MAKE) -C $(PKG_BUILD_DIR)/ all install DESTDIR=$(PKG_INSTALL_DIR)
 endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
-	$(SED) 's,-I$$$${prefix}/include,-I$(1)/usr/include/,g' $(1)/usr/bin/xine-config 
-	$(SED) 's,-L$$$${exec_prefix}/lib,-L$(1)/usr/lib/,g' $(1)/usr/bin/xine-config
+	$(SED) 's,-I$$$${prefix}/include,-I$(STAGING_DIR)/usr/include/,g' $(1)/usr/bin/xine-config 
+	$(SED) 's,-L$$$${exec_prefix}/lib,-L$(STAGING_DIR)/usr/lib/,g' $(1)/usr/bin/xine-config
 	$(INSTALL_DIR) $(2)/bin
 	mv $(1)/usr/bin/xine-config $(2)/bin
 endef

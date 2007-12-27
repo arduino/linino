@@ -27,8 +27,8 @@ CONFIGURE_ARGS_XTRA+=--x-includes=$(STAGING_DIR)/usr/include/ \
 		--enable-static=yes
 
 EXTRA_CFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
-
-EXTRA_LDFLAGS+=-lnotimpl
+TARGET_CFLAGS+= -I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include
+EXTRA_LDFLAGS+=-lnotimpl -lglib -lgmodule
 
 define Package/gtk-1.2.10
   SECTION:=xorg-framework
@@ -61,7 +61,6 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(2)/bin
 	mv $(1)/usr/bin/gtk-config $(2)/bin/
 	$(SED) "s,libdirs=-L.*,libdirs=,g" $(2)/bin/gtk-config
-	$(SED) "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/lib{gtk,gdk}.la
 endef
 
 $(eval $(call BuildPackage,gtk-1.2.10))

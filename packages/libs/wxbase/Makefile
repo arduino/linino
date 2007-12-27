@@ -113,16 +113,14 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/include $(1)/usr/lib
 	$(CP) -L $(PKG_INSTALL_DIR)/usr/bin/wx-config $(1)/usr/bin/
-	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/wx-2.6 $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.6-*.so $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.6.so.* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/wx $(1)/usr/lib/
-	$(SED) 's,-I$$$${includedir}/wx-2.6,-I$(1)/usr/include/wx-2.6,g' $(1)/usr/bin/wx-config
-	$(SED) 's,-I$$$${libdir}/wx/include,-I$(1)/usr/lib/wx/include,g' $(1)/usr/bin/wx-config
+	$(SED) 's,-I$$$${includedir}/wx-2.6,-I$(STAGING_DIR)/usr/include/wx-2.6,g' $(1)/usr/bin/wx-config
+	$(SED) 's,-I$$$${libdir}/wx/include,-I$(STAGING_DIR)/usr/lib/wx/include,g' $(1)/usr/bin/wx-config
 endef
 
 define Package/libwxbase/install

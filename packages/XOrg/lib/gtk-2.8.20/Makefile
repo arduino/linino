@@ -49,10 +49,9 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR)	$(1)/usr/{lib/pkgconfig,include}
-	$(CP) -r $(PKG_INSTALL_DIR)/usr/include/* $(1)/include/
+	$(CP) -r $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{la,so.*} $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
-	$(SED) "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/lib{gtk,gdk}*-2.0.la
 endef
 
 $(eval $(call BuildPackage,gtk-2.8.20))

@@ -14,6 +14,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= http://libtiff.maptools.org/dl/
+PKG_FIXUP := libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -47,7 +48,6 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{lib,include}
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib* $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
-	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/libtif{f,fxx}.la
 endef
 
 define Package/tiff/Install

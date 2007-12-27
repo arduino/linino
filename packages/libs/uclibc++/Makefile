@@ -64,14 +64,12 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(2)/bin
+	$(INSTALL_DIR) $(2)/bin $(1)/usr/include/uClibc++ $(1)/usr/lib
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/g++-uc $(2)/bin/
-	mkdir -p $(1)/usr/include/uClibc++
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/uClibc++/
-	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libuClibc++*.{a,so*} $(1)/usr/lib/
-	$(SED) 's|-I/include/|-I$(1)/usr/include/uClibc++/|g' $(2)/bin/g++-uc
-	$(SED) 's|-L/lib/|-L$(1)/usr/lib/|g' $(2)/bin/g++-uc
+	$(SED) 's|-I/include/|-I$(STAGING_DIR)/usr/include/uClibc++/|g' $(2)/bin/g++-uc
+	$(SED) 's|-L/lib/|-L$(STAGING_DIR)/usr/lib/|g' $(2)/bin/g++-uc
 # add another wrapper which links against both uClibc++ and libstdc++ 
 	$(INSTALL_BIN) $(2)/bin/g++-uc $(2)/bin/g++-uc+std
 	$(SED) 's|^WRAPPER_INCLUDEDIR=.*||g' $(2)/bin/g++-uc+std

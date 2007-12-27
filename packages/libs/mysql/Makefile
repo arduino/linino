@@ -96,7 +96,7 @@ endef
 define Build/InstallDev
 	$(INSTALL_DIR) $(2)/bin $(1)/usr/bin $(1)/usr/include $(1)/usr/lib
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mysql_config $(1)/usr/bin/
-	ln -sf $(1)/usr/bin/mysql_config $(2)/bin/
+	ln -sf $(STAGING_DIR)/usr/bin/mysql_config $(2)/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/mysql $(1)/usr/include/
 	# NOTE: needed for MySQL-Python
 	$(CP) $(PKG_BUILD_DIR)/include/mysqld_error.h $(1)/usr/include/mysql/

@@ -46,28 +46,24 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(2)/bin
+	$(INSTALL_DIR) $(2)/bin $(1)/usr/include/apr-1 $(1)/usr/lib $(1)/usr/lib/pkgconfig $(1)/usr/share/build-1
 	$(CP)   $(PKG_INSTALL_DIR)/usr/bin/apr-1-config \
 		$(2)/bin
-	mkdir -p $(1)/usr/include/apr-1
 	$(CP)   $(PKG_INSTALL_DIR)/usr/include/apr-1/* \
 		$(1)/usr/include/apr-1/
-	mkdir -p $(1)/usr/lib
 	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/libapr-1.{la,a,so*} \
 		$(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
 	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/apr-1.pc \
 		$(1)/usr/lib/pkgconfig/
-	mkdir -p $(1)/usr/share/build-1
 	$(CP)   $(PKG_INSTALL_DIR)/usr/share/build-1/* \
 		$(1)/usr/share/build-1/
-	$(SED) 's,^datadir=\"/usr/share\",datadir=\"$(1)/usr/share\",g' $(2)/bin/apr-1-config
-	$(SED) 's,^installbuilddir=\"/usr/share/build-1\",installbuilddir=\"$(1)/usr/share/build-1\",g' $(2)/bin/apr-1-config
-	$(SED) 's,^libdir=\"$$$${exec_prefix}/lib,libdir=\"$(1)/usr/lib,g' $(2)/bin/apr-1-config
-	$(SED) 's,^includedir=\"$$$${prefix}/include/,includedir=\"$(1)/usr/include/,g' $(2)/bin/apr-1-config
+	$(SED) 's,^datadir=\"/usr/share\",datadir=\"$(STAGING_DIR)/usr/share\",g' $(2)/bin/apr-1-config
+	$(SED) 's,^installbuilddir=\"/usr/share/build-1\",installbuilddir=\"$(STAGING_DIR)/usr/share/build-1\",g' $(2)/bin/apr-1-config
+	$(SED) 's,^libdir=\"$$$${exec_prefix}/lib,libdir=\"$(STAGING_DIR)/usr/lib,g' $(2)/bin/apr-1-config
+	$(SED) 's,^includedir=\"$$$${prefix}/include/,includedir=\"$(STAGING_DIR)/usr/include/,g' $(2)/bin/apr-1-config
 	$(SED) 's,-L$$$$libdir,,g' $(2)/bin/apr-1-config
 	$(SED) 's,-R$$$$libdir,,g' $(2)/bin/apr-1-config
-	$(SED) 's,/usr/share/build-1,$(1)/usr/share/build-1,g' $(1)/usr/share/build-1/apr_rules.mk
+	$(SED) 's,/usr/share/build-1,$(STAGING_DIR)/usr/share/build-1,g' $(1)/usr/share/build-1/apr_rules.mk
 endef
 
 define Package/libapr/install

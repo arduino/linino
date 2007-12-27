@@ -69,7 +69,6 @@ CONFIGURE_ARGS += \
 	--with-rrd-default-font="/usr/share/rrdtool/fonts/DejaVuSansMono-Roman.ttf" \
 
 CONFIGURE_VARS += \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/freetype2 -I$(STAGING_DIR)/usr/include/libart-2.0" \
 	LIBS="-lnotimpl" \
 	rd_cv_ieee_works=yes \
 	rd_cv_null_realloc=nope \

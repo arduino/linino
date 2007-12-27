@@ -47,8 +47,8 @@ define Package/subversion-server
 endef
 
 CONFIGURE_ARGS += \
-	--with-apr="$(STAGING_DIR_HOST)/bin/apr-1-config" \
-	--with-apr-util="$(STAGING_DIR_HOST)/bin/apu-1-config" \
+	--with-apr="$(STAGING_DIR)/host/bin/apr-1-config" \
+	--with-apr-util="$(STAGING_DIR)/host/bin/apu-1-config" \
 	--with-neon="$(STAGING_DIR)/usr/include/neon" \
 	--disable-mod-activation \
 	--without-ruby-sitedir \

@@ -14,10 +14,9 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= http://cairographics.org/releases/
+PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
-
-EXTRA_LDFLAGS:="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
 
 define Package/cairo
   SECTION:=xorg-libs
@@ -48,9 +47,8 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 	$(SED) "s,-L/usr/local/lib,,g" $(1)/usr/lib/libcairo.la
-	$(SED) "s,/usr/lib/libfontconfig.la,$(1)/usr/lib/libfontconfig.la,g" $(1)/usr/lib/libcairo.la
-	$(SED)  "s,$(1)$(1),$(1),g" $(1)/usr/lib/libcairo.la
-	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/libcairo.la
+	$(SED) "s,/usr/lib/libfontconfig.la,$(STAGING_DIR)/usr/lib/libfontconfig.la,g" $(1)/usr/lib/libcairo.la
+	$(SED)  "s,$(STAGING_DIR)$(STAGING_DIR),$(STAGING_DIR),g" $(1)/usr/lib/libcairo.la
 endef
 
 define Package/cairo/Install

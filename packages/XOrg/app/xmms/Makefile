@@ -37,7 +37,8 @@ CONFIGURE_ARGS+=LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -lnotimpl" \
 	--disable-vorbis \
 	--disable-esd
 
-TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include/gtk-1.2
+TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include/gtk-1.2 -I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include
+TARGET_LDFLAGS += -lgthread
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
@@ -53,8 +54,10 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR=$(PKG_INSTALL_DIR) install 
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR=$(PKG_INSTALL_DIR) \
+		LIBTOOL="libtool --tag=CC" \
+		all install 
 endef
 
 define Package/xmms/install

@@ -31,7 +31,7 @@ endef
 
 CONFIGURE_ARGS += \
 	--with-pgsql=no \
-	--with-apr="$(STAGING_DIR_HOST)/bin/apr-1-config" \
+	--with-apr="$(STAGING_DIR)/host/bin/apr-1-config" \
 	--with-expat="$(STAGING_DIR)/usr" \
 	--without-sqlite2 \
 	--with-sqlite3="$(STAGING_DIR)/usr" \
@@ -47,21 +47,18 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(2)/bin
+	$(INSTALL_DIR) $(2)/bin $(1)/usr/include/apr-1/ $(1)/usr/lib  $(1)/usr/lib/pkgconfig/
 	$(CP)   $(PKG_INSTALL_DIR)/usr/bin/apu-1-config \
 	 	$(2)/bin
-	mkdir -p $(1)/usr/include/apr-1/
 	$(CP)   $(PKG_INSTALL_DIR)/usr/include/apr-1/* \
 		$(1)/usr/include/apr-1/
-	mkdir -p $(1)/usr/lib 
 	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/libaprutil-1.{la,a,so*} \
 		$(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig/
 	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/apr-util-1.pc \
 		$(1)/usr/lib/pkgconfig/
 	$(SED) 's, -e \"s -I$$$$prefix/lib  g\",,g' $(2)/bin/apu-1-config
-	$(SED) 's,^libdir=\"$$$${exec_prefix}/lib,libdir=\"$(1)/usr/lib,g' $(2)/bin/apu-1-config
-	$(SED) 's,^includedir=\"$$$${prefix}/include/,includedir=\"$(1)/usr/include/,g' $(2)/bin/apu-1-config
+	$(SED) 's,^libdir=\"$$$${exec_prefix}/lib,libdir=\"$(STAGING_DIR)/usr/lib,g' $(2)/bin/apu-1-config
+	$(SED) 's,^includedir=\"$$$${prefix}/include/,includedir=\"$(STAGING_DIR)/usr/include/,g' $(2)/bin/apu-1-config
 	$(SED) 's,-L$$$$libdir,,g' $(2)/bin/apu-1-config
 	$(SED) 's,-R$$$$libdir,,g' $(2)/bin/apu-1-config
 endef

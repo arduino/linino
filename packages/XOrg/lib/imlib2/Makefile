@@ -14,6 +14,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/enlightenment
+PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,7 +27,6 @@ define Package/imlib2
 endef
 
 CONFIGURE_ARGS+=--disable-gtktest LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
-
 EXTRA_LDFLAGS+=-lnotimpl
 
 define Build/Configure
@@ -49,7 +49,6 @@ endef
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
-	$(SED)  "s,"libdir\=\'/usr/lib\'",libdir='$(1)/usr/lib\'," $(1)/usr/lib/libImlib2.la
 	$(CP) $(PKG_BUILD_DIR)/src/modules/loaders/.libs/*.so $(1)/usr/lib/imlib2/loaders/
 	$(INSTALL_DIR) $(2)/bin
 	mv $(1)/usr/bin/imlib2-config $(2)/bin/
