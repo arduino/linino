@@ -14,6 +14,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ftp.gnome.org/pub/gnome/sources/atk/1.11/
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -40,8 +41,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR)/ install DESTDIR=$(PKG_INSTALL_DIR)
+	$(MAKE) -C $(PKG_BUILD_DIR) all install DESTDIR=$(PKG_INSTALL_DIR)
 endef
 
 define Build/InstallDev
