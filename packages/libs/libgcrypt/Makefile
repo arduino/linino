@@ -62,7 +62,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/aclocal/libgcrypt.m4 $(1)/usr/share/aclocal/
 	$(SED) 's,^libdir=\"$$$${exec_prefix}/lib,libdir=\"$(STAGING_DIR)/usr/lib,g' $(1)/usr/bin/libgcrypt-config
 	$(SED) 's,^includedir=\"$$$${prefix}/include/,includedir=\"$(STAGING_DIR)/usr/include/,g' $(1)/usr/bin/libgcrypt-config
-	ln -sf $(1)/usr/bin/libgcrypt-config $(2)/bin/
+	ln -sf $(STAGING_DIR)/usr/bin/libgcrypt-config $(2)/bin/
 endef
 
 define Package/libgcrypt/install
