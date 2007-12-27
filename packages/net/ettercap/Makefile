@@ -52,12 +52,13 @@ CONFIGURE_ARGS += \
 	--with-libncurses="$(STAGING_DIR)/usr" \
 	--disable-gtk \
 	--disable-debug \
-	, \
-	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib -L$(STAGING_DIR)/usr/lib/" \
+	--enable-plugins
 
 MAKE_FLAGS += \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
+ 	AM_LDFLAGS="-L$(STAGING_DIR)/usr/lib/libiconv/lib" \
 	all install
+
 
 define Package/ettercap/install
 	$(INSTALL_DIR) $(1)/etc
