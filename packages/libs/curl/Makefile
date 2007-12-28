@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=curl
-PKG_VERSION:=7.14.0
+PKG_VERSION:=7.17.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -20,7 +20,7 @@ PKG_SOURCE_URL:=http://curl.haxx.se/download/ \
 	ftp://ftp.planetmirror.com/pub/curl/ \
 	http://www.mirrormonster.com/curl/download/ \
 	http://curl.mirrors.cyberservers.net/download/
-PKG_MD5SUM:=46ce665e47d37fce1a0bad935cce58a9
+PKG_MD5SUM:=1fa635d1dfde8337c98c82749d75c1de
 
 PKG_FIXUP = libtool
 
@@ -65,12 +65,15 @@ CONFIGURE_ARGS += \
 	--disable-manual \
 	--disable-sspi \
 	--disable-telnet \
+	--enable-tftp \
 	--disable-verbose \
 	--with-random="/dev/urandom" \
 	--with-ssl="$(STAGING_DIR)/usr" \
 	--without-ca-bundle \
 	--without-gnutls \
+	--without-krb4 \
 	--without-libidn \
+	--without-nss \
 	--with-zlib="$(STAGING_DIR)/usr" \
 	--disable-gssapi
 
