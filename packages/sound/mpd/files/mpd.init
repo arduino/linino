@@ -1,0 +1,23 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2007 OpenWrt.org
+START=93
+
+start() {
+	#create mpd db
+        /usr/bin/mpd --stdout --create-db
+	
+	#optional export for mpc
+        #export MPD_HOST=192.168.111.123
+	
+	#start mpd
+        /usr/bin/mpd
+	
+	#generate playlist and start to play
+        /usr/bin/mpc listall | /usr/bin/mpc add -
+        /usr/bin/mpc play
+}
+
+stop() {
+        killall mpd
+}
+						
