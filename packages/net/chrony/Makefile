@@ -22,6 +22,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/chrony
+  SUBMENU:=Time Synchronization
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libreadline +libncurses
