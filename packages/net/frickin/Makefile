@@ -25,6 +25,7 @@ define Package/frickin
   CATEGORY:=Network
   TITLE:=PPTP (Point-to-Point Tunneling Protocol) proxy
   URL:=http://frickin.sourceforge.net/
+  SUBMENU:=VPN
 endef
 
 define Package/frickin/description
