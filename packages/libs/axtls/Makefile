@@ -30,6 +30,7 @@ endef
 define Package/axhttpd
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Web
   DEPENDS:=+libaxtls
   TITLE:=A small embedded web server using the axTLS library
   URL:=http://www.axtls.co.nr/
