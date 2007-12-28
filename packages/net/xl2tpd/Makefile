@@ -23,7 +23,7 @@ define Package/xl2tpd
   CATEGORY:=Network
   TITLE:=An L2TP (Layer 2 Tunneling Protocol) daemon
   URL:=http://www.xelerance.com/software/xl2tpd
-  SUBMENU:=vpn
+  SUBMENU:=VPN
 endef
 
 define Package/xl2tpd/description

@@ -26,7 +26,7 @@ define Package/vtun
   DEPENDS:=+kmod-tun +liblzo +libopenssl +zlib
   TITLE:=VPN tunneling daemon
   URL:=http://vtun.sourceforge.net
-  SUBMENU:=vpn
+  SUBMENU:=VPN
 endef
 
 define Package/vtun/conffiles

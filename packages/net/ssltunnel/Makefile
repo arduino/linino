@@ -27,7 +27,7 @@ define Package/ssltunnel
   DEPENDS:=+ppp +libopenssl
   TITLE:=A PPP over SSL vpn tool
   URL:=http://www.hsc.fr/ressources/outils/ssltunnel/index.html
-  SUBMENU:=vpn
+  SUBMENU:=VPN
 endef
 
 define Build/Configure

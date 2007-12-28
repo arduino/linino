@@ -27,7 +27,7 @@ define Package/pptpd
   DEPENDS:=+kmod-ppp +kmod-gre
   TITLE:=PopTop pptp server
   URL:=http://www.poptop.org/
-  SUBMENU:=vpn
+  SUBMENU:=VPN
 endef
 
 define Build/Configure

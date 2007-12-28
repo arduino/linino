@@ -27,7 +27,7 @@ define Package/l2tpd
   CATEGORY:=Network
   TITLE:=An L2TP (Layer 2 Tunneling Protocol) daemon
   URL:=http://l2tpd.sourceforge.net/
-  SUBMENU:=vpn
+  SUBMENU:=VPN
 endef
 
 define Package/l2tpd/description
