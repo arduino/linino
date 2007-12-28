@@ -9,15 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=horst
-PKG_VERSION:=1.3pre
+PKG_VERSION:=2.0-rc1
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
-PKG_SOURCE_URL:=http://br1.einfach.org/horst/
-PKG_MD5SUM:=ceb1c8847be8e11db39df2fa74ac28f7
-PKG_CAT:=zcat
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).zip
+PKG_SOURCE_URL:=http://br1.einfach.org/horst_dl/
+PKG_MD5SUM:=7eb6f7ae819722b1fcdd86df98f7884d
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)/horst.git
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,18 +25,19 @@ define Package/horst
 	CATEGORY:=Network
 	DEPENDS:=+libncurses
 	MAINTAINER:=Bruno Randolf <br1@einfach.org>
-	TITLE:=Provides highly optimized radio scanning
+	TITLE:=Highly Optimized 802.11 Radio Scanning Tool
 	URL:=http://br1.einfach.org/horst/
 endef
 
 define Package/horst/description
-	Provides highly optimized radio scanning.
+	[horst] is a scanning and analysis tool for 802.11 wireless networks
+	and especially IBSS (ad-hoc) mode and mesh networks (OLSR).
 endef
 
-define Package/horst/install      
+define Package/horst/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/horst $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/horst.sh $(1)/usr/sbin/
 endef
-
 
 $(eval $(call BuildPackage,horst))
