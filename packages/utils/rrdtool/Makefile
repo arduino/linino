@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=http://oss.oetiker.ch/rrdtool/pub/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_MD5SUM:=dafa161bc9c61e57636a6085c87c1fe8
 
-PKG_BUILD_DEPENDS:=libnotimpl python-core
+PKG_BUILD_DEPENDS:=python libnotimpl
 PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
