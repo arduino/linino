@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/matrixtunnel
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=VPN
   DEPENDS:=+libmatrixssl
   TITLE:=SSL tunnel based on matrixssl
   URL:=http://znerol.ch/svn/matrixtunnel/trunk/
