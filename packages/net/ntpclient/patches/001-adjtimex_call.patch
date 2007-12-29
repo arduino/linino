@@ -1,0 +1,21 @@
+diff -urN ntpclient/ntpclient.c ntpclient.new/ntpclient.c
+--- ntpclient/ntpclient.c	2003-07-14 04:12:30.000000000 +0200
++++ ntpclient.new/ntpclient.c	2007-12-29 22:48:01.000000000 +0100
+@@ -128,7 +128,7 @@
+ #ifdef linux
+ 	struct timex txc;
+ 	txc.modes=0;
+-	if (__adjtimex(&txc) < 0) {
++	if (adjtimex(&txc) < 0) {
+ 		perror("adjtimex"); exit(1);
+ 	}
+ 	return txc.freq;
+@@ -145,7 +145,7 @@
+ 	struct timex txc;
+ 	txc.modes = ADJ_FREQUENCY;
+ 	txc.freq = new_freq;
+-	if (__adjtimex(&txc) < 0) {
++	if (adjtimex(&txc) < 0) {
+ 		perror("adjtimex"); exit(1);
+ 	}
+ 	return txc.freq;
