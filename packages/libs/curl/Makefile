@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -75,7 +75,10 @@ CONFIGURE_ARGS += \
 	--without-libidn \
 	--without-nss \
 	--with-zlib="$(STAGING_DIR)/usr" \
-	--disable-gssapi
+	--disable-gssapi \
+
+CONFIGURE_VARS += \
+	LDFLAGS="$$$$LDFLAGS -lcrypto -lssl -lz" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
