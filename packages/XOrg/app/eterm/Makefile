@@ -28,7 +28,7 @@ endef
 define Package/eterm
 $(call Package/eterm/Default)  
   TITLE:=eterm
-  DEPENDS:=+xorg-server-essentials +libXcursor +imlib2 +libast @DISPLAY_SUPPORT
+  DEPENDS:=+xorg-server-essentials +libXcursor +imlib2 +libast +libiconv @DISPLAY_SUPPORT
 endef
 
 define Package/esetroot
