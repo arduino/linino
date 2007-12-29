@@ -1,0 +1,32 @@
+diff -urN pulseaudio-0.9.7/src/pulsecore/shm.c pulseaudio-0.9.7.new/src/pulsecore/shm.c
+--- pulseaudio-0.9.7/src/pulsecore/shm.c	2007-10-28 20:13:53.000000000 +0100
++++ pulseaudio-0.9.7.new/src/pulsecore/shm.c	2007-12-09 19:25:03.000000000 +0100
+@@ -167,7 +167,7 @@
+ 
+ fail:
+ 
+-#ifdef HAVE_SHM_OPEN
++#ifdef HAVE_SHM_UNLINK
+     if (fd >= 0) {
+         shm_unlink(fn);
+         pa_close(fd);
+@@ -196,7 +196,7 @@
+         pa_xfree(m->ptr);
+ #endif
+     } else {
+-#ifdef HAVE_SHM_OPEN
++#ifdef HAVE_SHM_UNLINK
+         if (munmap(m->ptr, m->size) < 0)
+             pa_log("munmap() failed: %s", pa_cstrerror(errno));
+ 
+@@ -370,8 +370,10 @@
+         /* Ok, the owner of this shms segment is dead, so, let's remove the segment */
+         segment_name(fn, sizeof(fn), id);
+ 
++#ifdef HAVE_SHM_UNLINK
+         if (shm_unlink(fn) < 0 && errno != EACCES)
+             pa_log_warn("Failed to remove SHM segment %s: %s\n", fn, pa_cstrerror(errno));
++#endif
+     }
+ 
+     closedir(d);
