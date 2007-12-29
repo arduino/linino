@@ -25,7 +25,7 @@ define Package/scmpc
   SECTION:=sound
   CATEGORY:=Sound
   TITLE:=A MPD client which submits your tracks to Last.Fm
-  DEPENDS:=+curl +libdaemon +argtable +confuse
+  DEPENDS:=+libcurl +libdaemon +argtable +confuse
   URL:=http://scmpc.berlios.de/
 endef
 
