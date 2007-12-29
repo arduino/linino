@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libart
-PKG_VERSION:=2.3.17
+PKG_VERSION:=2.3.19
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_lgpl-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.gnome.org/pub/gnome/sources/libart_lgpl/2.3
-PKG_MD5SUM:=f1f6b3e5490f382535dccb288f5d8b14
+PKG_MD5SUM:=a2992b830295132dae2bf85d1156e48e
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_lgpl-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
