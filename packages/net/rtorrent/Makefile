@@ -26,14 +26,14 @@ define Package/rtorrent
   CATEGORY:=Network
   TITLE:=BitTorrent client for ncurses
   URL:=http://libtorrent.rakshasa.no/
-  DEPENDS:=+libcurl +libtorrent
+  DEPENDS:=+libcurl +libtorrent +libncurses
 endef
 
 define Package/rtorrent/description
- rTorrent is a BitTorrent client for ncurses, using the libtorrent library. 
- The client and library are written in C++ with emphasis on speed and 
- efficiency, while delivering equivalent features to those found in GUI 
- based clients in an ncurses client.
+	rTorrent is a BitTorrent client for ncurses, using the libtorrent library.
+	The client and library are written in C++ with emphasis on speed and
+	efficiency, while delivering equivalent features to those found in GUI
+	based clients in an ncurses client.
 endef
 
 CONFIGURE_ARGS+= \
@@ -46,13 +46,9 @@ CONFIGURE_VARS += \
 	CXXFLAGS="$$$$CXXFLAGS -fno-rtti"  \
 	LIBS="-lm" \
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
-endef
-
 define Package/rtorrent/install	
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rtorrent $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/rtorrent $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,rtorrent))
