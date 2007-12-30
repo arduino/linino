@@ -17,6 +17,7 @@ PKG_SOURCE_URL:=http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/
 PKG_MD5SUM:=fcb32a01e1ae3f9ed5bac86b12c7a1cc
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_DEPENDS:=libelf
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -42,6 +43,8 @@ define Package/ntpd/postinst
 echo "ntp             123/udp     # Network Time Protocol
 ntp             123/tcp     # Network Time Protocol" >> $${IPKG_INSTROOT}/etc/services
 endef
+
+TARGET_CPPFLAGS += -I$(STAGING_DIR)/usr/include/libelf
 
 define Build/Configure
 	$(call Build/Configure/Default, \
