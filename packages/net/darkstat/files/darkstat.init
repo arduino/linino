@@ -21,8 +21,8 @@ start_darkstat() {
 	include /lib/network
 	scan_interfaces
 	config_get ifname "$interface" ifname
-	
-	$BIN -d -i "${ifname:-$interface}" \
+
+	$BIN --debug -i "$interface" \	
 		${httpaddr:+-b "$httpaddr"}  \
 		${httpport:+-p "$httpport"}
 }
