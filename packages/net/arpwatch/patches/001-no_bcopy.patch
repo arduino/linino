@@ -1,0 +1,16 @@
+diff -urN arpwatch-2.1a11/Makefile.in arpwatch-2.1a11.new/Makefile.in
+--- arpwatch-2.1a11/Makefile.in	2000-06-15 02:39:55.000000000 +0200
++++ arpwatch-2.1a11.new/Makefile.in	2007-12-30 03:59:03.000000000 +0100
+@@ -74,9 +74,9 @@
+ 
+ # We would like to say "OBJ = $(SRC:.c=.o)" but Ultrix's make cannot
+ # hack the extra indirection
+-OBJ =	$(WSRC:.c=.o) $(SSRC:.c=.o) $(CSRC:.c=.o) $(GENSRC:.c=.o) @LIBOBJS@
+-WOBJ =	$(WSRC:.c=.o) $(CSRC:.c=.o) $(GENSRC:.c=.o) @LIBOBJS@
+-SOBJ =	$(SSRC:.c=.o) $(CSRC:.c=.o) $(GENSRC:.c=.o) @LIBOBJS@
++OBJ =	$(WSRC:.c=.o) $(SSRC:.c=.o) $(CSRC:.c=.o) $(GENSRC:.c=.o) #@LIBOBJS@
++WOBJ =	$(WSRC:.c=.o) $(CSRC:.c=.o) $(GENSRC:.c=.o) #@LIBOBJS@
++SOBJ =	$(SSRC:.c=.o) $(CSRC:.c=.o) $(GENSRC:.c=.o) #@LIBOBJS@
+ HDR =	arpwatch.h db.h dns.h ec.h file.h machdep.h report.h setsignal.h
+ 
+ TAGHDR = \
