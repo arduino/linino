@@ -1,0 +1,13 @@
+Index: miredo-1.0.0/libteredo/maintain.c
+===================================================================
+--- miredo-1.0.0.orig/libteredo/maintain.c	2007-12-30 16:39:41.032377076 +0100
++++ miredo-1.0.0/libteredo/maintain.c	2007-12-30 16:39:54.569148495 +0100
+@@ -62,7 +62,7 @@
+ #define PROBE_SYMMETRIC	3
+ #define NOT_RUNNING	(-1)
+ 
+-#if (_POSIX_CLOCK_SELECTION - 0 >= 0) && (_POSIX_MONOTONIC_CLOCK - 0 >= 0)
++#if (_POSIX_CLOCK_SELECTION - 0 >= 0) && (_POSIX_MONOTONIC_CLOCK - 0 >= 0) && !defined(__UCLIBC__)
+ static inline void gettime (struct timespec *now)
+ {
+ 	if (clock_gettime (CLOCK_MONOTONIC, now))
