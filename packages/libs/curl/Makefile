@@ -75,7 +75,6 @@ CONFIGURE_ARGS += \
 	--without-libidn \
 	--without-nss \
 	--with-zlib="$(STAGING_DIR)/usr" \
-	--disable-gssapi \
 
 CONFIGURE_VARS += \
 	LDFLAGS="$$$$LDFLAGS -lcrypto -lssl -lz" \
