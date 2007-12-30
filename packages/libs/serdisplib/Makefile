@@ -40,7 +40,9 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CFLAGS="$(TARGET_CFLAGS) -Wall -Wno-implicit -fPIC -I../include -I.." \
+		all
 endef
 
 define Build/InstallDev
