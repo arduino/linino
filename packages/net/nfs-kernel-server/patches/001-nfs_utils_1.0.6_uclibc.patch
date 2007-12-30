@@ -1,7 +1,13 @@
---- nfs-utils-1.0.6/support/nfs/svc_socket.c.orig	2004-12-12 06:43:52.000000000 +0000
-+++ nfs-utils-1.0.6/support/nfs/svc_socket.c	2004-12-12 06:50:04.000000000 +0000
-@@ -66,6 +66,7 @@
-   __bzero ((char *) &addr, sizeof (addr));
+Index: nfs-utils-1.0.7/support/nfs/svc_socket.c
+===================================================================
+--- nfs-utils-1.0.7.orig/support/nfs/svc_socket.c	2007-12-30 16:52:24.647893048 +0100
++++ nfs-utils-1.0.7/support/nfs/svc_socket.c	2007-12-30 16:53:46.880579218 +0100
+@@ -63,9 +63,10 @@
+ 	}
+     }
+ 
+-  __bzero ((char *) &addr, sizeof (addr));
++  memset((char *) &addr, 0, sizeof (addr));
    addr.sin_family = AF_INET;
  
 +#ifndef __UCLIBC__	/* neither getrpcbynumber() nor getrpcbynumber_r() is SuSv3 */
