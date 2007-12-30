@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php4
-PKG_VERSION:=4.3.11
-PKG_RELEASE:=2
+PKG_VERSION:=4.4.7
+PKG_RELEASE:=1
 
 PKG_SOURCE:=php-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://fr.php.net/distributions/
-PKG_MD5SUM:=fbc67d240812136a9842bc1f2a217b7a
+PKG_MD5SUM:=3f21b44d37a57ca3876d3aea713c700d
 PKG_BUILD_DIR:=$(BUILD_DIR)/php-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
@@ -142,12 +142,6 @@ define Package/php4-mod-sockets
   TITLE:=Sockets module
 endef
 
-define Package/php4-mod-sqlite
-  $(call Package/php4/Default)
-  DEPENDS:=php4 +libsqlite2
-  TITLE:=SQLite module
-endef
-
 define Package/php4-mod-xml
   $(call Package/php4/Default)
   DEPENDS:=php4 +libexpat
@@ -186,7 +180,7 @@ PKG_CONFIGURE_OPTS:= \
 	  --with-zlib-dir="$(STAGING_DIR)/usr" \
 
 ifneq ($(SDK),)
-  PKG_BUILD_DEPENDS:=libopenssl zlib libcurl libgd libgmp libopenldap libmysqlclient libpq libsqlite2 libexpat
+  PKG_BUILD_DEPENDS:=libopenssl zlib libcurl libgd libgmp libopenldap libmysqlclient libpq libexpat
 # force PKG_CONFIGURE_{LIBS,OPTS} below when built in the SDK
   CONFIG_PACKAGE_php4-cli:=m
   CONFIG_PACKAGE_php4-cgi:=m
@@ -198,7 +192,6 @@ ifneq ($(SDK),)
   CONFIG_PACKAGE_php4-mod-mysql:=m
   CONFIG_PACKAGE_php4-mod-pcre:=m
   CONFIG_PACKAGE_php4-mod-pgsql:=m
-  CONFIG_PACKAGE_php4-mod-sqlite:=m
   CONFIG_PACKAGE_php4-mod-xml:=m
 endif
 
@@ -245,11 +238,6 @@ ifneq ($(CONFIG_PACKAGE_php4-mod-pgsql),)
   PKG_CONFIGURE_OPTS+= --with-pgsql=shared,"$(STAGING_DIR)/usr"
 else
   PKG_CONFIGURE_OPTS+= --without-pgsql
-endif
-ifneq ($(CONFIG_PACKAGE_php4-mod-sqlite),)
-  PKG_CONFIGURE_OPTS+= --with-sqlite=shared,"$(STAGING_DIR)/usr"
-else
-  PKG_CONFIGURE_OPTS+= --without-sqlite
 endif
 ifneq ($(CONFIG_PACKAGE_php4-mod-xml),)
   PKG_CONFIGURE_OPTS+= --enable-xml=shared \
@@ -376,6 +364,5 @@ $(eval $(call BuildPlugin,php4-mod-pcre,pcre))
 $(eval $(call BuildPlugin,php4-mod-pgsql,pgsql))
 $(eval $(call BuildPlugin,php4-mod-session,session))
 $(eval $(call BuildPlugin,php4-mod-sockets,sockets))
-$(eval $(call BuildPlugin,php4-mod-sqlite,sqlite))
 $(eval $(call BuildPlugin,php4-mod-xml,xml))
 
