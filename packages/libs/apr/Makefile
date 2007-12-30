@@ -31,7 +31,7 @@ endef
 CONFIGURE_ARGS += \
 	--with-devrandom=/dev/urandom \
 	--disable-dso \
-	--disable-ipv6
+	--enable-ipv6
 
 CONFIGURE_VARS += \
 	ac_cv_file__dev_zero=yes \
