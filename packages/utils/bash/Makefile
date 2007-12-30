@@ -39,7 +39,9 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-restricted \
 		--without-bash-malloc \
-                --bindir=/bin \
+                --bindir=/bin, \
+		ac_cv_func_bcopy=yes \
+		ac_cv_func_bzero=yes \
 	)
 endef
 
