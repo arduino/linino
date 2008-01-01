@@ -25,7 +25,7 @@ define Package/gadgetfs-test
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Test program for gadgetfs
-  DEPENDS:=@DEVEL +libpthread
+  DEPENDS:=@DEVEL @LINUX_2_6 +libpthread
   URL:=http://linux-usb.org/gadget
 endef
 
