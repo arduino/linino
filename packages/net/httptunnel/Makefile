@@ -24,7 +24,7 @@ define Package/httptunnel
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libopenssl
-  TITLE:=bidirectional virtual data connection tunnelled in HTTP requests
+  TITLE:=bidirectional tunnel in HTTP requests
   URL:=http://www.nocrew.org/software/httptunnel.html
 endef
 
@@ -37,6 +37,10 @@ define Package/httptunnel/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/hts $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/htc $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/httptunnel.init $(1)/etc/init.d/httptunnel
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/httptunnel.conf $(1)/etc/config/httptunnel	
 endef
 
 $(eval $(call BuildPackage,httptunnel))
