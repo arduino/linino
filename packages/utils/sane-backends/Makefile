@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sane-backends
-PKG_VERSION:=1.0.17
+PKG_VERSION:=1.0.18
 PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.sane-project.org/pub/sane/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=b51c10da8a81a04e1bae88c9e6556df2
+PKG_MD5SUM:=7ca7e2908e24721471de92cf40c75e60
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -80,6 +80,13 @@ define Package/sane-libs/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsane.so.* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/sane
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/sane/libsane-*.so.* $(1)/usr/lib/sane/
+endef
+
+define Build/InstallDev
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/sane $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsane.{la,so*} $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,sane-backends))
