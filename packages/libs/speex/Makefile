@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=speex
-PKG_VERSION:=1.2beta1
+PKG_VERSION:=1.2beta3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.us.xiph.org/releases/speex/
-PKG_MD5SUM:=aac2e4ba42122b885c787ea280acb3d9
+PKG_MD5SUM:=bcada04dc663a725ee7fcfa6301520a3
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -37,7 +37,7 @@ define Package/libspeex/description
 	alternative to expensive proprietary speech codecs. Moreover, Speex 
 	is well-adapted to Internet applications and provides useful features 
 	that are not present in most other codecs.
-	
+
 	This package contains the shared codec library, needed by other programs.
 endef
 
@@ -49,6 +49,8 @@ define Build/Configure
 		--enable-static \
 		--enable-fixed-point \
 		--disable-oggtest \
+		--disable-float-api \
+		--disable-vbr \
 	)
 endef
 
