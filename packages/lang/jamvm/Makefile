@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=jamvm
-PKG_VERSION:=1.4.4
+PKG_VERSION:=1.5.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/jamvm
-PKG_MD5SUM:=1b7bc9928c534412e062685a4191651d
+PKG_MD5SUM:=a965452442cdbfc94caba57d0dd25a8f
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -41,7 +41,9 @@ CONFIGURE_ARGS+= \
 	--disable-int-threading \
 
 define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CPPFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		all
 endef
 
 ifneq ($(ARCH),mips)
