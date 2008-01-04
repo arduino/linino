@@ -35,8 +35,9 @@ MAKE_FLAGS += \
 	linux \
 
 define Package/portsentry/install	
-	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/$(PKG_NAME).conf $(1)/etc/
+	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/bin/
 endef
