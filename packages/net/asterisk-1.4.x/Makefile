@@ -336,6 +336,8 @@ endif
 ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk14-codec-speex),)
   CONFIGURE_ARGS+= \
 	--with-speex="$(STAGING_DIR)/usr"
+  SITE_VARS+= \
+	ac_cv_lib_speex_speex_encode=yes
   EXTRA_CFLAGS+= -I$(STAGING_DIR)/usr/include/speex
 else
   CONFIGURE_ARGS+= \
@@ -369,7 +371,7 @@ endif
 
 define Build/Configure
 	( cd $(PKG_BUILD_DIR); ./bootstrap.sh )
-	$(call Build/Configure/Default)
+	$(call Build/Configure/Default,,$(SITE_VARS))
 endef
 
 define Build/Compile
