@@ -43,7 +43,7 @@ CONFIGURE_ARGS += \
 	--disable-alsa \
 	--disable-asn \
 	--disable-avc \
-	--disable-configfile \
+	--enable-configfile \
 	--disable-dc \
 	--disable-dtmf \
 	--enable-expat \
