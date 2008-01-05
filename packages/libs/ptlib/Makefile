@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ptlib
   SECTION:=libs
   CATEGORY:=Libraries
-  #DEPENDS:=+expat
+  DEPENDS:=+expat
   TITLE:=Portable Tools library
   URL:=http://www.opalvoip.org/
 endef
@@ -46,7 +46,7 @@ CONFIGURE_ARGS += \
 	--disable-configfile \
 	--disable-dc \
 	--disable-dtmf \
-	--disable-expat \
+	--enable-expat \
 	--disable-ftp \
 	--disable-http \
 	--disable-httpsvc \
