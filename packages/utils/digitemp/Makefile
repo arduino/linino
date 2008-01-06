@@ -32,7 +32,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) -DLINUX -I$(STAGING_DIR)/usr/include \
-			-I/.src -I./userial" \
+			-I/.src -I./userial -DOWUSB" \
 		LIBS="-L$(STAGING_DIR)/usr/lib -lusb -lm" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		ds2490
