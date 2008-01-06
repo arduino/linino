@@ -40,7 +40,11 @@ MAKE_FLAGS += \
 
 define Package/uvc-streamer/install
 	$(INSTALL_DIR) $(1)/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/uvc_stream $(1)/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/uvc_stream $(1)/sbin/$(PKG_NAME)
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/$(PKG_NAME).config $(1)/etc/config/$(PKG_NAME)
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
 endef
 
 $(eval $(call BuildPackage,uvc-streamer))
