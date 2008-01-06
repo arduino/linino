@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ptlib
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+expat
+  DEPENDS:=+libexpat
   TITLE:=Portable Tools library
   URL:=http://www.opalvoip.org/
 endef
