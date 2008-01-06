@@ -33,7 +33,7 @@ start_service() {
 	append_bool "$section" framespersecond "-f"
 	append_string "$section" port "-p"
 	config_get_bool "enabled" "$section" "enabled" '1'
-	[ "$enabled" -gt 0 ] && $SSD -S -p $PIDF -q -x $PROG -- -b $args
+	[ "$enabled" -gt 0 ] && sleep 5s && $SSD -S -p $PIDF -q -x $PROG -- -b $args &
 }
 
 stop_service() {
