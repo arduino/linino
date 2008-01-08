@@ -13,7 +13,7 @@ start() {
 		touch $lease_file
 	fi
 	
-	/usr/sbin/dhcpd -cf $config_file -lf $lease_file
+	/usr/sbin/dhcpd -q -cf $config_file -lf $lease_file
 	
 	if [ $$ -eq 0 ]; then
 		echo "  isc-dhcpd failed to start"

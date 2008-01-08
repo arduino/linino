@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dhcp
-PKG_VERSION:=3.0.6
+PKG_VERSION:=3.1.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.isc.org/isc/dhcp/
-PKG_MD5SUM:=724bad21ad8b638abadd5fcc07df1a0f
+PKG_MD5SUM:=27d179a3c3fbef576566b456a1168246
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -44,17 +44,16 @@ define Build/Configure
 	(cd $(PKG_BUILD_DIR) ; \
 		UNAME_S=Linux \
 		UNAME_M=$(ARCH) \
-		UNAME_R=2.4.34 \
+		UNAME_R=2.6.23 \
 		./configure \
 			--copts "$(TARGET_CFLAGS)" \
-			linux-2.2 \
 	);
 endef
 
 define Build/Compile
 	UNAME_S=Linux \
 	UNAME_M=$(ARCH) \
-	UNAME_R=2.4.34 \
+	UNAME_R=2.6.23 \
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
