@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ntp
 PKG_VERSION:=4.2.4p4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/
@@ -48,11 +48,11 @@ TARGET_CPPFLAGS += -I$(STAGING_DIR)/usr/include/libelf
 
 define Build/Configure
 	$(call Build/Configure/Default, \
-                --disable-all-clocks \
+		--disable-all-clocks \
 		--disable-parse-clocks \
-                --enable-NMEA \
+		--enable-NMEA \
 		--enable-LOCAL-CLOCK \
-                --enable-SHM \
+		--enable-SHM \
 		--enable-linuxcaps \
 	)
 endef
