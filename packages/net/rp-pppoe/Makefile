@@ -63,7 +63,9 @@ define Package/rp-pppoe-client/install
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/ppp/pppoe.conf $(1)/etc/ppp/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/pppoe $(1)/usr/sbin/
-	$(CP) $(PKG_BUILD_DIR)/scripts/pppoe-{connect,start,stop} $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/pppoe-connect $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/pppoe-start $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/pppoe-stop $(1)/usr/sbin/
 	$(SED) 's,modprobe,insmod,g' $(1)/usr/sbin/pppoe-connect
 endef
 
