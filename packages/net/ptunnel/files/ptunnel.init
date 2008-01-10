@@ -1,14 +1,27 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2007 OpenWrt.org
 START=70
-STOP=70
+BIN=ptunnel
 
 start() {
-        iptables -I OUTPUT 1 -p icmp -j ACCEPT
-	ptunnel -v 1 -c br-lan
+    config_load ptunnel
+    config_foreach start_ptunnel ptunnel
 }
-		
+
+start_ptunnel() {
+    local section="$1"
+    
+    include /lib/network
+    scan_interfaces
+    
+    iptables -I OUTPUT 1 -p icmp -j ACCEPT
+    config_get interface "$section" interface
+
+    $BIN -c "$interface" > /dev/null&
+}
+
 stop() {
-        killall ptunnel
+        ps aux | grep ptunnel |  awk '{print }' | \
+            xargs kill 2> /dev/null
 }
-			
+									
