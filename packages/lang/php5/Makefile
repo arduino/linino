@@ -101,7 +101,7 @@ endef
 
 define Package/php5-mod-ldap
   $(call Package/php5/Default)
-  DEPENDS:=php5 +libopenldap
+  DEPENDS:=php5 +libopenldap +libsasl2
   TITLE:=LDAP module
 endef
 
