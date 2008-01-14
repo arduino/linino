@@ -36,7 +36,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(foreach dir,fc-case fc-lang fc-glyphname, $(MAKE) -C $(PKG_BUILD_DIR)/$(dir) CFLAGS="";)
+	$(foreach dir,fc-case fc-lang fc-glyphname, $(MAKE) -C $(PKG_BUILD_DIR)/$(dir) CFLAGS="" CPPFLAGS="" LDFLAGS="";)
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" DOCSRC="" install
 endef
 
