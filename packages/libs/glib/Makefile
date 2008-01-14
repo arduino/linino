@@ -56,6 +56,7 @@ CONFIGURE_VARS += \
 	glib_cv_sizeof_gmutex=24 \
 	glib_cv_byte_contents_gmutex="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" \
 
+TARGET_LDFLAGS += -L$(TOOLCHAIN_DIR)/lib
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
