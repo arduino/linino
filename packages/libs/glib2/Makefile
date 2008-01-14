@@ -65,6 +65,7 @@ define Build/Configure
 	);
 endef
 
+TARGET_LDFLAGS += -L$(TOOLCHAIN_DIR)/lib
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
