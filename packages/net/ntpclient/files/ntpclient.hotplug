@@ -13,7 +13,7 @@ config_cb() {
 		ntpclient)
 			config_get hostname	$cfg hostname
 			config_get port		$cfg port
-			config_get count 	$cfg count			
+			config_get count	$cfg count
 
 			[ "$DONE" = "1" ] && exit 0
 			ps | grep 'bin/[n]tpclient' >&- || {

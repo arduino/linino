@@ -3,17 +3,17 @@
 
 START=60
 
-STEP_SERVERS="pool.ntp.org pool.ntp.org pool.ntp.org" 
-PIDFILE="/var/run/ntpd.pid" 
+STEP_SERVERS="0.openwrt.pool.ntp.org 1.openwrt.pool.ntp.org 2.openwrt.pool.ntp.org"
+PIDFILE="/var/run/ntpd.pid"
 TIMEOUT="2" # in seconds
 
 start() {
 #	ln -sf /dev/ttyS0 /dev/gps0
 #	/usr/sbin/setgarmin -d /dev/gps -c /etc/setgarmin.conf
-	stop 
+	stop
 	for s in $STEP_SERVERS ; do
 		/usr/sbin/ntpdate -s -b -u -t "$TIMEOUT" "$s" && break
-	done 
+	done
 	/usr/sbin/ntpd -g -p $PIDFILE
 }
 

@@ -9,13 +9,13 @@ EOF
 }
 
 [ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" ] && {
-        [ -x $COMMAND ] && [ -n "$CHRONY_KEY" ] &&{
-            chrony_control online
-        }
+	[ -x $COMMAND ] && [ -n "$CHRONY_KEY" ] &&{
+		chrony_control online
+	}
 }
 
 [ "$ACTION" = "ifdown" -a "$INTERFACE" = "wan" ] && {
-        [ -x $COMMAND ] && [ -n "$CHRONY_KEY" ] &&{
-            chrony_control offline
-        }
+	[ -x $COMMAND ] && [ -n "$CHRONY_KEY" ] &&{
+		chrony_control offline
+	}
 }
