@@ -79,6 +79,11 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	LDFLAGS="$$$$LDFLAGS -lcrypto -lssl -lz" \
 
+
+define Build/Configure
+	$(call Build/Configure/Default,,bash)
+endef
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
