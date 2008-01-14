@@ -1,0 +1,98 @@
+Index: glib-2.12.12/glib/Makefile.in
+===================================================================
+--- glib-2.12.12.orig/glib/Makefile.in	2008-01-14 22:10:34.000000000 +0100
++++ glib-2.12.12/glib/Makefile.in	2008-01-14 22:17:51.000000000 +0100
+@@ -514,10 +514,10 @@
+ @AMDEP_TRUE@	./$(DEPDIR)/gwin32.Plo
+ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+ 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+-LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
++LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
+ 	$(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+ CCLD = $(CC)
+-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ DIST_SOURCES = $(libglib_2_0_la_SOURCES) $(EXTRA_libglib_2_0_la_SOURCES) \
+ 	gspawn-win32-helper.c gspawn-win32-helper-console.c
+Index: glib-2.12.12/glib/gnulib/Makefile.in
+===================================================================
+--- glib-2.12.12.orig/glib/gnulib/Makefile.in	2008-01-14 22:10:52.000000000 +0100
++++ glib-2.12.12/glib/gnulib/Makefile.in	2008-01-14 22:18:34.000000000 +0100
+@@ -279,10 +279,10 @@
+ @AMDEP_TRUE@	./$(DEPDIR)/vasnprintf.Plo
+ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+ 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+-LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
++LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
+ 	$(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+ CCLD = $(CC)
+-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ DIST_SOURCES = $(libgnulib_la_SOURCES)
+ DIST_COMMON = README $(srcdir)/Makefile.in Makefile.am
+Index: glib-2.12.12/gmodule/Makefile.in
+===================================================================
+--- glib-2.12.12.orig/gmodule/Makefile.in	2008-01-14 22:11:55.000000000 +0100
++++ glib-2.12.12/gmodule/Makefile.in	2008-01-14 22:19:43.000000000 +0100
+@@ -310,10 +310,10 @@
+ @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/gmodule.Plo
+ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+ 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+-LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
++LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
+ 	$(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+ CCLD = $(CC)
+-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ DIST_SOURCES = $(libgmodule_2_0_la_SOURCES)
+ DATA = $(noinst_DATA)
+Index: glib-2.12.12/gobject/Makefile.in
+===================================================================
+--- glib-2.12.12.orig/gobject/Makefile.in	2008-01-14 22:12:34.000000000 +0100
++++ glib-2.12.12/gobject/Makefile.in	2008-01-14 22:19:10.000000000 +0100
+@@ -463,10 +463,10 @@
+ @AMDEP_TRUE@	./$(DEPDIR)/testgobject.Po
+ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+ 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+-LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
++LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
+ 	$(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+ CCLD = $(CC)
+-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ DIST_SOURCES = $(libgobject_2_0_la_SOURCES) $(glib_genmarshal_SOURCES) \
+ 	$(gobject_query_SOURCES) $(testgobject_SOURCES)
+Index: glib-2.12.12/gthread/Makefile.in
+===================================================================
+--- glib-2.12.12.orig/gthread/Makefile.in	2008-01-14 22:11:40.000000000 +0100
++++ glib-2.12.12/gthread/Makefile.in	2008-01-14 22:19:29.000000000 +0100
+@@ -297,10 +297,10 @@
+ @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/gthread-impl.Plo
+ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+ 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+-LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
++LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
+ 	$(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+ CCLD = $(CC)
+-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ DIST_SOURCES = $(libgthread_2_0_la_SOURCES)
+ DATA = $(noinst_DATA)
+Index: glib-2.12.12/glib/libcharset/Makefile.in
+===================================================================
+--- glib-2.12.12.orig/glib/libcharset/Makefile.in	2008-01-14 22:18:47.000000000 +0100
++++ glib-2.12.12/glib/libcharset/Makefile.in	2008-01-14 22:18:52.000000000 +0100
+@@ -287,7 +287,7 @@
+ LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
+ 	$(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+ CCLD = $(CC)
+-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
++LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+ DIST_SOURCES = $(libcharset_la_SOURCES)
+ DIST_COMMON = README $(srcdir)/Makefile.in Makefile.am
