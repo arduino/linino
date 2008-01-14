@@ -21,7 +21,7 @@ define Package/libxkbfile
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  @DISPLAY_SUPPORT
+  DEPENDS:=+xorg-headers-native +util-macros +libX11 @DISPLAY_SUPPORT
   TITLE:=libxkbfile
   URL:=http://xorg.freedesktop.org/
 endef
