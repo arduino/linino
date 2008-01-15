@@ -33,9 +33,9 @@ define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CC=$(TARGET_CC) \
-		LD=$(TARGET_CC) \
-		CFLAGS="$(strip $(TARGET_CFLAGS))" \
+		CC="$(TARGET_CC)" \
+		LD="$(TARGET_CC)" \
+		CCFLAGS="$(strip $(TARGET_CFLAGS))" \
 		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		prefix="$(PKG_INSTALL_DIR)/usr"
