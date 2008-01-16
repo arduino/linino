@@ -270,7 +270,7 @@ else
   PKG_CONFIGURE_OPTS+= --disable-xml
 endif
 ifneq ($(CONFIG_PACKAGE_php5-mod-apc),)
-  PKG_CONFIGURE_OPTS+= --enable-apc --disable-apc-mmap
+  PKG_CONFIGURE_OPTS+= --enable-apc --disable-apc-mmap --disable-apc-pthreadmutex
   PKG_CONFIGURE_LIBS+= -lrt
 else
   PKG_CONFIGURE_OPTS+= --disable-apc
