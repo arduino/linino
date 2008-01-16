@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
-PKG_VERSION:=5.2.4
+PKG_VERSION:=5.2.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
-PKG_MD5SUM:=55c97a671fdabf462cc7a82971a656d2
+PKG_MD5SUM:=1fe14ca892460b09f06729941a1bb605
 
 include $(INCLUDE_DIR)/package.mk
 
