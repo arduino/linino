@@ -36,7 +36,7 @@ start() {
     if [ -n "${pgopts}" ]; then
         pgopts="-o ${pgopts}"
     fi
-    /bin/su ${pguser} -c "/usr/bin/postgres -D '${pgdata}' &" >> ${pglog} 2>&1
+    /bin/su ${pguser} -c "/usr/bin/postmaster -D '${pgdata}' &" >> ${pglog} 2>&1
 
     while :
     do
@@ -75,7 +75,7 @@ restart() {
     if [ -f ${pgdata}/postmaster.pid ]; then
         rm ${pgdata}/postmaster.pid
     fi
-    /bin/su ${pguser} -c "/usr/bin/postgres -D '${pgdata}' &" >> ${pglog} 2>&1
+    /bin/su ${pguser} -c "/usr/bin/postmaster -D '${pgdata}' &" >> ${pglog} 2>&1
     echo "ok"
     return $?
 }

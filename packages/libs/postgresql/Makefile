@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=postgresql
 PKG_VERSION:=8.2.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -158,6 +158,8 @@ define Build/Configure
 	);
 	$(SED) 's@ECPG = ../../preproc/ecpg@ECPG = ../../preproc/ecpg.host@' $(PKG_BUILD_DIR)/src/interfaces/ecpg/test/Makefile.regress
 	$(SED) 's@\./zic -d@./zic.host -d@' $(PKG_BUILD_DIR)/src/timezone/Makefile
+	# note: unclear if this is needed yet, commenting out for the moment
+	#$(SED) 's@US/Eastern@America/New_York@' $(PKG_BUILD_DIR)/src/timezone/Makefile
 endef
 
 define Build/Compile
@@ -185,18 +187,27 @@ define Package/pgsql-server/install
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/postgres \
 		$(PKG_INSTALL_DIR)/usr/bin/dropdb \
+		$(PKG_INSTALL_DIR)/usr/bin/clusterdb \
 		$(PKG_INSTALL_DIR)/usr/bin/createdb \
+		$(PKG_INSTALL_DIR)/usr/bin/createlang \
 		$(PKG_INSTALL_DIR)/usr/bin/createuser \
+		$(PKG_INSTALL_DIR)/usr/bin/dropdb \
+		$(PKG_INSTALL_DIR)/usr/bin/droplang \
 		$(PKG_INSTALL_DIR)/usr/bin/dropuser \
 		$(PKG_INSTALL_DIR)/usr/bin/initdb \
+		$(PKG_INSTALL_DIR)/usr/bin/ipcclean \
 		$(PKG_INSTALL_DIR)/usr/bin/pg_config \
 		$(PKG_INSTALL_DIR)/usr/bin/pg_controldata \
 		$(PKG_INSTALL_DIR)/usr/bin/pg_ctl \
 		$(PKG_INSTALL_DIR)/usr/bin/pg_dump \
 		$(PKG_INSTALL_DIR)/usr/bin/pg_dumpall \
 		$(PKG_INSTALL_DIR)/usr/bin/pg_restore \
+		$(PKG_INSTALL_DIR)/usr/bin/pg_resetxlog \
+		$(PKG_INSTALL_DIR)/usr/bin/reindexdb \
 		$(PKG_INSTALL_DIR)/usr/bin/vacuumdb \
 		$(1)/usr/bin
+
+	$(LN) -s postgres $(1)/usr/bin/postmaster
 
 	$(INSTALL_BIN) ./files/postgresql.init $(1)/etc/init.d/postgresql
 
