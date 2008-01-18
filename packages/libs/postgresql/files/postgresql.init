@@ -2,10 +2,13 @@
 # Copyright (C) 2006 OpenWrt.org
 START=50
 
+EXTRA_COMMANDS="status reload"
+
 config_load "postgresql"
 config_get pgdata config PGDATA
 config_get pguser config PGUSER
 config_get pgctl config PG_CTL
+config_get pglog config PGLOG
 
 start() {
     if [ ! -e /bin/su ]; then
@@ -18,6 +21,7 @@ start() {
         exit 1
     fi
 
+    echo "starting postgres..."
     # make sure localhost (without a dot) is in /etc/hosts
     grep -q 'localhost$' /etc/hosts || echo '127.0.0.1 localhost' >> /etc/hosts
 
@@ -28,12 +32,11 @@ start() {
         rm ${pgdata}/postmaster.pid
     fi
 
-    config_get pglog config PGLOG
     config_get pgopts config PGOPTS
     if [ -n "${pgopts}" ]; then
         pgopts="-o ${pgopts}"
     fi
-    /bin/su ${pguser} -c "${pgctl} start -D ${pgdata} -s -l ${pglog} ${pgopts}"
+    /bin/su ${pguser} -c "/usr/bin/postgres -D '${pgdata}' &" >> ${pglog} 2>&1
 
     while :
     do
@@ -41,7 +44,7 @@ start() {
         if [ -f "${pgdata}/postmaster.pid" ]; then
             ret=0
             break
-	fi
+        fi
 
         if [ ${cnt} -eq 30 ]; then
             echo "Postgres failed to start.  See ${pglog} for details"
@@ -51,11 +54,40 @@ start() {
         sleep 1
     done
 
+    echo "ok"
     return ${ret}
 }
 
 stop() {
+    echo "stopping postgres..."
+    /bin/su ${pguser} -c "${pgctl} stop -D '${pgdata}' -s -m fast"
+    ret=$?
+    if [ -f ${pgdata}/postmaster.pid ]; then
+        rm ${pgdata}/postmaster.pid
+    fi
+    echo "ok"
+    return ${ret}
+}
 
-    /bin/su ${pguser} -c "${pgctl} stop -D '${pgdata}'"
+restart() {
+    echo "restarting postgres..."
+    /bin/su ${pguser} -c "${pgctl} stop -D '${pgdata}' -s -m fast -w"
+    if [ -f ${pgdata}/postmaster.pid ]; then
+        rm ${pgdata}/postmaster.pid
+    fi
+    /bin/su ${pguser} -c "/usr/bin/postgres -D '${pgdata}' &" >> ${pglog} 2>&1
+    echo "ok"
     return $?
+}
+
+reload() {
+    echo "reloading postgres..."
+    /bin/su ${pguser} -c "${pgctl} reload -D '${pgdata}' -s"
+    echo "ok"
+}
+
+status() {
+    echo "status postgres..."
+    /bin/su ${pguser} -c "${pgctl} status -D '${pgdata}'"
+    echo "ok"
 }
