@@ -191,7 +191,6 @@ define Package/pgsql-server/install
 		$(PKG_INSTALL_DIR)/usr/bin/createdb \
 		$(PKG_INSTALL_DIR)/usr/bin/createlang \
 		$(PKG_INSTALL_DIR)/usr/bin/createuser \
-		$(PKG_INSTALL_DIR)/usr/bin/dropdb \
 		$(PKG_INSTALL_DIR)/usr/bin/droplang \
 		$(PKG_INSTALL_DIR)/usr/bin/dropuser \
 		$(PKG_INSTALL_DIR)/usr/bin/initdb \
