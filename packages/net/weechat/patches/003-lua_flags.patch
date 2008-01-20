@@ -1,0 +1,18 @@
+diff -urN weechat-0.2.6/configure weechat-0.2.6.new/configure
+--- weechat-0.2.6/configure	2007-09-05 16:16:21.000000000 +0200
++++ weechat-0.2.6.new/configure	2008-01-20 16:29:38.000000000 +0100
+@@ -30180,14 +30180,6 @@
+   test -n "$LUACONFIG" && break
+ done
+ 
+-        if test "x$LUACONFIG" != "x" ; then
+-            { echo "$as_me:$LINENO: checking for Lua headers and librairies with lua-config" >&5
+-echo $ECHO_N "checking for Lua headers and librairies with lua-config... $ECHO_C" >&6; }
+-	    echo
+-            LUA_CFLAGS=`$LUACONFIG --include`
+-            LUA_LFLAGS=`$LUACONFIG --libs`
+-	    LUA_VERSION="5.0.x"
+-        fi
+     fi
+ 
+     if test "x$LUA_CFLAGS" = "x" -o "x$LUA_LFLAGS" = "x" ; then

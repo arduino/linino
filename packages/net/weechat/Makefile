@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=weechat
-PKG_VERSION:=0.2.5
-PKG_RELEASE:=2
+PKG_VERSION:=0.2.6
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://weechat.flashtux.org/download/
-PKG_MD5SUM:=42f96620c3b2fd3dca9768d9ce16dd06
+PKG_MD5SUM:=ccdecf663b0050a23049acb4b9a76193
 
 PKG_FIXUP = libtool
 
@@ -78,15 +78,18 @@ CONFIGURE_ARGS+= \
 	--disable-perl \
 	--disable-python \
 	--disable-ruby \
+	LUACONFIG="" \
 
 CONFIGURE_VARS+= \
 	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
 
-ifndef ($(SDK)$(CONFIG_PACKAGE_weechat-mod-lua),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_weechat-mod-lua),)
   CONFIGURE_ARGS+= \
 	--enable-lua \
 	--with-lua-inc="$(STAGING_DIR)/usr/include" \
-	--with-lua-lib="$(STAGING_DIR)/usr/lib"
+	--with-lua-lib="$(STAGING_DIR)/usr/lib" \
+	LUA_CFLAGS="-I$(STAGING_DIR)/usr/include/"
+	LUA_LFLAGS="-L$(STAGING_DIR)/usr/lib -llualib50 -llua50"
   CONFIGURE_VARS+= \
 	LIBS="-ldl -lm"
 else
@@ -95,7 +98,11 @@ else
 endif
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(LUA_FLAGS) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		LUACONFIG="" \
+		all install
 endef
 
 define Package/weechat/install	
