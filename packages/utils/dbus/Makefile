@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -27,10 +27,10 @@ define Package/dbus/Default
 endef
 
 define Package/dbus/Default/description
- D-Bus is a message bus system, a simple way for applications to talk to one 
- another. In addition to interprocess communication, D-Bus helps coordinate 
- process lifecycle; it makes it simple and reliable to code a "single instance" 
- application or daemon, and to launch applications and daemons on demand when 
+ D-Bus is a message bus system, a simple way for applications to talk to one
+ another. In addition to interprocess communication, D-Bus helps coordinate
+ process lifecycle; it makes it simple and reliable to code a "single instance"
+ application or daemon, and to launch applications and daemons on demand when
  their services are needed.
 endef
 
@@ -75,6 +75,7 @@ CONFIGURE_ARGS += \
 	--disable-xml-docs \
 	--without-x \
 	--with-xml="expat" \
+	--with-dbus-user=root \
 	--with-dbus-daemondir="/usr/sbin" \
 	--with-system-socket="/var/run/dbus/system_bus_socket" \
 	--with-system-pid-file="/var/run/dbus.pid" \
@@ -116,7 +117,7 @@ define Package/dbus/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dbus-daemon $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/dbus.init $(1)/etc/init.d/
+	$(INSTALL_BIN) ./files/dbus.init $(1)/etc/init.d/dbus
 endef
 
 
