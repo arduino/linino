@@ -159,7 +159,7 @@ define Package/xorg-server/install
 	rm -rf $(1)/usr/share/X11 $(1)/usr/lib/X11/xserver	
 	$(INSTALL_DIR) $(1)/var/log/
 	$(INSTALL_DIR) $(1)/etc/X11/
-	$(CP) files/$(XORG_CONFIG_FILE) $(1)/etc/X11/
+	$(CP) files/$(XORG_CONFIG_FILE) $(1)/etc/X11/xorg.conf
 endef
 
 define Packages/xorg-server-config/install
