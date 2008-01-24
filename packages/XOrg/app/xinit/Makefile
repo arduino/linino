@@ -16,18 +16,13 @@ PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.2/src/app
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
 
-_DEPEND:=
-ifneq (xinit,xinit)
-_DEPEND+=xorg-server-essentials
-endif
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/xinit
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:=${_DEPEND} @DISPLAY_SUPPORT
+  DEPENDS:=libX11 @DISPLAY_SUPPORT
   TITLE:=xinit
   URL:=http://xorg.freedesktop.org/
 endef
