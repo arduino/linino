@@ -94,6 +94,13 @@ DEPENDS_KDRIVE:=+calibrateproto \
 		+libX11 \
 		@DISPLAY_SUPPORT 
 
+
+ifneq ($(CONFIG_TARGET_olpc),)
+  XORG_CONFIG_FILE=xorg-olpc.conf
+else
+  XORG_CONFIG_FILE=xorg.conf
+endif
+
 define Package/xorg-server/config
 	config XORG_BUILD_KDRIVE
 		bool "Build kdrive instead of xserver"
@@ -152,7 +159,7 @@ define Package/xorg-server/install
 	rm -rf $(1)/usr/share/X11 $(1)/usr/lib/X11/xserver	
 	$(INSTALL_DIR) $(1)/var/log/
 	$(INSTALL_DIR) $(1)/etc/X11/
-	$(CP) files/xorg.conf $(1)/etc/X11/
+	$(CP) files/$(XORG_CONFIG_FILE) $(1)/etc/X11/
 endef
 
 define Packages/xorg-server-config/install
