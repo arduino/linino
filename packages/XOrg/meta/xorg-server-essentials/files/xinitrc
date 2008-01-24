@@ -1,3 +1,8 @@
+#setting green backgroun, if xsetroot exists
+if [ -x `which xsetroot` ]; then
+	xsetroot -solid green
+fi
+
 BKGD_IMAGE_PATH=/usr/share/X11/bkgd-images/
 if [ -x `which Esetroot` ]; then
 	Esetroot -scale ${BKGD_IMAGE_PATH}/default.png
