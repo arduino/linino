@@ -10,12 +10,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=loop-aes
-PKG_VERSION:=3.2a
+PKG_VERSION:=3.2b
 PKG_RELEASE:=1
 
 PKG_SOURCE:=loop-AES-v$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=d0b5b0f104ce0e1ee9e3ba9608f24ec4
+PKG_MD5SUM:=2c5642ccfa1a780ef4bd76eb873076aa
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/loop-AES-v$(PKG_VERSION)
 
@@ -23,10 +23,10 @@ include $(INCLUDE_DIR)/package.mk
 
 define KernelPackage/loop-aes
   SUBMENU:=Cryptographic API modules
-  DEPENDS:=@LINUX_2_6
+  DEPENDS:=@!PACKAGE_kmod-loop
   TITLE:=loopback module with built-in AES
   FILES:=$(PKG_BUILD_DIR)/loop.$(LINUX_KMOD_SUFFIX)
-  AUTOLOAD:=$(call AutoLoad,80,loop)
+  AUTOLOAD:=$(call AutoLoad,30,loop)
   URL:=http://loop-aes.sourceforge.net
 endef
 
