@@ -1,0 +1,39 @@
+#############################################################################
+#
+# OpenSLP registration file
+#
+# May be used to register services for legacy applications that do not use
+# the SLPAPIs to register for themselves
+#
+# Format and contents conform to specification in IETF RFC 2614 so the
+# comments use the language of the RFC.  In OpenSLP, SLPD operates as an SA
+# and a DA.  The SLP UA functionality is encapsulated by the libslp library.
+#
+#############################################################################
+
+#comment
+;comment 
+#service-url,language-tag,lifetime,[service-type]<newline> 
+#["scopes="scope-list<newline>]
+#[attrid"="val1<newline>] 
+#[attrid"="val1,val2,val3<newline>] 
+#<newline>
+
+#
+# The following are examples entries for this file
+#
+
+##Register a OpenSLP testing service 
+#service:test.openslp://192.168.100.1,en,65535 
+#scopes=test1,test2 
+#description=OpenSLP Testing Service 
+#authors=mpeterson,jcarey 
+
+##Register ssh service 
+#service:ssh.openslp://192.168.100.1,en,65535 
+#use default scopes 
+#description="Secure Shell" 
+
+##Register telnet service with no attributes 
+#service:telnet.myorg://192.168.100.1,en,65535 
+#use default scopes
