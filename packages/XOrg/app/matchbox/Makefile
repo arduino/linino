@@ -23,7 +23,7 @@ define Package/matchbox
   TITLE:=matchbox window manager
   SECTION:=xorg-wm
   CATEGORY:=Xorg
-  DEPENDS:=+xorg-server-essentials +zlib +libfreetype +fontconfig @DISPLAY_SUPPORT
+  DEPENDS:=+xorg-server-essentials +zlib +libfreetype +fontconfig +libmatchbox @DISPLAY_SUPPORT
 endef
 
 define Build/Compile
