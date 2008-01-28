@@ -32,10 +32,10 @@ endef
 #	all
 
 define Package/openslp/install
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/etc $(1)/lib $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/slpd/slpd $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/slptool/slptool $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/slptool/.libs/slptool $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/libslp/.libs/libslp.so* $(1)/lib
 	$(INSTALL_DATA) ./files/* $(1)/etc
 endef
 
