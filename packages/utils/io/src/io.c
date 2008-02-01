@@ -1,9 +1,11 @@
 /*
  * Simple app. to do memory accesses via /dev/mem.
  *
- * $Id: io.c,v 1.5 2000/08/21 09:01:57 richard Exp $
+ * $Id: io.c,v 2.0 $
  *
  * Copyright (c) Richard Hirst <rhirst@linuxcare.com>
+ * Copyright (c) Thomas Langer <thomas.langer@infineon.com>
+ *
  */
 
 #include <stdio.h>
@@ -16,24 +18,23 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#ifndef FALSE
-#define FALSE	0
-#define TRUE	(!FALSE)
-#endif
-
-static char *argv0;
+#define MEM_READ  0
+#define MEM_WRITE 1
+#define MEM_AND   2
+#define MEM_OR    3
 
 static void
-usage (void)
+usage (char *argv0)
 {
 	fprintf(stderr,
-"Raw memory i/o utility - $Revision: 1.5 $\n\n"
-"%s -v -1|2|4 -r|w [-l <len>] [-f <file>] <addr> [<value>]\n\n"
+"Raw memory i/o utility - $Revision: 2.0 $\n\n"
+"%s -v -1|2|4 -r|w|a|o [-l <len>] [-f <file>] <addr> [<value>]\n\n"
 "    -v         Verbose, asks for confirmation\n"
 "    -1|2|4     Sets memory access size in bytes (default byte)\n"
 "    -l <len>   Length in bytes of area to access (defaults to\n"
 "               one access, or whole file length)\n"
-"    -r|w       Read from or Write to memory (default read)\n"
+"    -r|w|a|o   Read from or Write to memory (default read)\n"
+"               optional write with modify (and/or)\n"
 "    -f <file>  File to write on memory read, or\n"
 "               to read on memory write\n"
 "    <addr>     The memory address to access\n"
@@ -110,6 +111,64 @@ write_memory(unsigned long phys_addr, void *addr, int len, int iosize, unsigned 
 }
 
 
+static void
+and_write_memory(unsigned long phys_addr, void *addr, int len, int iosize, unsigned long value)
+{
+	switch(iosize) {
+	case 1:
+		while (len) {
+			*(unsigned char *)addr &= value;
+			len -= iosize;
+			addr += iosize;
+		}
+		break;
+	case 2:
+		while (len) {
+			*(unsigned short *)addr &= value;
+			len -= iosize;
+			addr += iosize;
+		}
+		break;
+	case 4:
+		while (len) {
+			*(unsigned long *)addr &= value;
+			len -= iosize;
+			addr += iosize;
+		}
+		break;
+	}
+}
+
+
+static void
+or_write_memory(unsigned long phys_addr, void *addr, int len, int iosize, unsigned long value)
+{
+	switch(iosize) {
+	case 1:
+		while (len) {
+			*(unsigned char *)addr |= value;
+			len -= iosize;
+			addr += iosize;
+		}
+		break;
+	case 2:
+		while (len) {
+			*(unsigned short *)addr |= value;
+			len -= iosize;
+			addr += iosize;
+		}
+		break;
+	case 4:
+		while (len) {
+			*(unsigned long *)addr |= value;
+			len -= iosize;
+			addr += iosize;
+		}
+		break;
+	}
+}
+
+
 int
 main (int argc, char **argv)
 {
@@ -117,20 +176,19 @@ main (int argc, char **argv)
 	void *real_io;
 	unsigned long real_len, real_addr, req_addr, req_value = 0, offset;
 	char *endptr;
-	int memread = TRUE;
+	int memfunc = MEM_READ;
 	int iosize = 1;
 	char *filename = NULL;
 	int verbose = 0;
 
-	argv0 = argv[0];
 	opterr = 0;
 	if (argc == 1)
-		usage();
+		usage(argv[0]);
 
-	while ((opt = getopt(argc, argv, "hv124rwl:f:")) > 0) {
+	while ((opt = getopt(argc, argv, "hv124rwaol:f:")) > 0) {
 		switch (opt) {
 		case 'h':
-			usage();
+			usage(argv[0]);
 		case 'v':
 			verbose = 1;
 			break;
@@ -140,10 +198,16 @@ main (int argc, char **argv)
 			iosize = opt - '0';
 			break;
 		case 'r':
-			memread = TRUE;
+			memfunc = MEM_READ;
+			break;
+		case 'a':
+			memfunc = MEM_AND;
+			break;
+		case 'o':
+			memfunc = MEM_OR;
 			break;
 		case 'w':
-			memread = FALSE;
+			memfunc = MEM_WRITE;
 			break;
 		case 'l':
 			req_len = strtoul(optarg, &endptr, 0);
@@ -157,7 +221,7 @@ main (int argc, char **argv)
 			break;
 		default:
 			fprintf(stderr, "Unknown option: %c\n", opt);
-			usage();
+			usage(argv[0]);
 		}
 	}
 
@@ -171,17 +235,18 @@ main (int argc, char **argv)
 		exit(1);
 	}
 	optind++;
-	if (!filename && optind < argc)
-		memread = FALSE;
+	if (!filename && (memfunc == MEM_READ) && optind < argc) {
+		memfunc = MEM_WRITE;
+	}
 	if (filename && optind > argc) {
 		fprintf(stderr, "Filename AND value given\n");
 		exit(1);
 	}
-	if (!filename && !memread && optind == argc) {
+	if (!filename && (memfunc != MEM_READ) && optind == argc) {
 		fprintf(stderr, "No value given for WRITE\n");
 		exit(1);
 	}
-	if (!filename && !memread) {
+	if (!filename && (memfunc != MEM_READ)) {
 		req_value = strtoul(argv[optind], &endptr, 0);
 		if (*endptr) {
 			fprintf(stderr, "Bad <value> value '%s'\n", argv[optind]);
@@ -194,7 +259,7 @@ main (int argc, char **argv)
 		}
 		optind++;
 	}
-	if (filename && memread && !req_len) {
+	if (filename && (memfunc == MEM_READ) && !req_len) {
 		fprintf(stderr, "No size given for file memread\n");
 		exit(1);
 	}
@@ -202,14 +267,14 @@ main (int argc, char **argv)
 		fprintf(stderr, "Too many arguments '%s'...\n", argv[optind]);
 		exit(1);
 	}
-	if (filename && memread) {
+	if (filename && (memfunc == MEM_READ)) {
 		ffd = open(filename, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
 		if (ffd < 0) {
 			fprintf(stderr, "Failed to open destination file '%s': %s\n", filename, strerror(errno));
 			exit(1);
 		}
 	}
-	if (filename && !memread) {
+	if (filename && (memfunc != MEM_READ)) {
 		ffd = open(filename, O_RDONLY);
 		if (ffd < 0) {
 			fprintf(stderr, "Failed to open source file '%s': %s\n", filename, strerror(errno));
@@ -243,19 +308,19 @@ main (int argc, char **argv)
 		fprintf(stderr, "Badly aligned <size> for access size\n");
 		exit(1);
 	}
-	
+
 	if (!verbose)
 		/* Nothing */;
-	else if (filename && memread)
-		printf("Request to memread 0x%x bytes from address 0x%08lx\n"
+	else if (filename && (memfunc == MEM_READ))
+		printf("Request to read 0x%x bytes from address 0x%08lx\n"
 			"\tto file %s, using %d byte accesses\n",
 			req_len, req_addr, filename, iosize);
 	else if (filename)
 		printf("Request to write 0x%x bytes to address 0x%08lx\n"
 			"\tfrom file %s, using %d byte accesses\n",
 			req_len, req_addr, filename, iosize);
-	else if (memread)
-		printf("Request to memread 0x%x bytes from address 0x%08lx\n"
+	else if (memfunc == MEM_READ)
+		printf("Request to read 0x%x bytes from address 0x%08lx\n"
 			"\tusing %d byte accesses\n",
 			req_len, req_addr, iosize);
 	else
@@ -279,7 +344,7 @@ main (int argc, char **argv)
 		printf("Attempting to map 0x%lx bytes at address 0x%08lx\n",
 			real_len, real_addr);
 
-	mfd = open("/dev/mem", memread ? O_RDONLY : O_RDWR);
+	mfd = open("/dev/mem", (memfunc == MEM_READ) ? O_RDONLY : O_RDWR);
 	if (mfd == -1) {
 		perror("open /dev/mem");
 		exit(1);
@@ -287,7 +352,7 @@ main (int argc, char **argv)
 	if (verbose)
 		printf("open(/dev/mem) ok\n");
 	real_io = mmap(NULL, real_len,
-			memread ? PROT_READ:PROT_WRITE,
+			(memfunc == MEM_READ) ? PROT_READ:PROT_READ|PROT_WRITE,
 			MAP_SHARED, mfd, real_addr);
 	if (real_io == (void *)(-1)) {
 		fprintf(stderr, "mmap() failed: %s\n", strerror(errno));
@@ -308,7 +373,7 @@ main (int argc, char **argv)
 		}
 	}
 
-	if (filename && memread) {
+	if (filename && (memfunc == MEM_READ)) {
 		int n = write(ffd, real_io + offset, req_len);
 
 		if (n < 0) {
@@ -334,10 +399,23 @@ main (int argc, char **argv)
 			exit(1);
 		}
 	}
-	else if (memread)
-		memread_memory(req_addr, real_io + offset, req_len, iosize);
-	else
-		write_memory(req_addr, real_io + offset, req_len, iosize, req_value);
+	else {
+		switch (memfunc)
+		{
+		case MEM_READ:
+			memread_memory(req_addr, real_io + offset, req_len, iosize);
+			break;
+		case MEM_WRITE:
+			write_memory(req_addr, real_io + offset, req_len, iosize, req_value);
+			break;
+		case MEM_AND:
+			and_write_memory(req_addr, real_io + offset, req_len, iosize, req_value);
+			break;
+		case MEM_OR:
+			or_write_memory(req_addr, real_io + offset, req_len, iosize, req_value);
+			break;
+		}
+	}
 
 	if (filename)
 		close(ffd);
