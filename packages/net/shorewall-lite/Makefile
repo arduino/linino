@@ -25,14 +25,13 @@ define Package/shorewall-lite
   CATEGORY:=Network
   DEPENDS:=+ip +iptables +iptables-utils
   TITLE:=Shorewall Lite
-  DESCRIPTION:=Shoreline Firewall Lite is an iptables-based firewall for Linux systems.
   URL:=http://www.shorewall.net/
   SUBMENU:=firewall
 endef
 
-#define Package/shorewall-lite/description
-#	Shoreline Firewall Lite is an iptables-based firewall for Linux systems.
-#endef
+define Package/shorewall-lite/description
+	Shoreline Firewall Lite is an iptables-based firewall for Linux systems.
+endef
 
 define Package/shorewall-lite/conffiles
 /etc/shorewall-lite/shorewall-lite.conf
