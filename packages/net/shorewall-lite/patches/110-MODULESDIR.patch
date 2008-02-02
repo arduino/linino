@@ -1,0 +1,21 @@
+diff -Nru shorewall-lite-4.0.8.orig/lib.base shorewall-lite-4.0.8/lib.base
+--- shorewall-lite-4.0.8.orig/lib.base	2008-01-26 05:40:32.000000000 +0800
++++ shorewall-lite-4.0.8/lib.base	2008-01-26 18:08:32.000000000 +0800
+@@ -251,7 +251,7 @@
+ 
+     [ -n "${MODULE_SUFFIX:=o gz ko o.gz ko.gz}" ]
+ 
+-    [ -z "$MODULESDIR" ] && MODULESDIR=/lib/modules/$(uname -r)/kernel/net/ipv4/netfilter:/lib/modules/$(uname -r)/kernel/net/netfilter
++    [ -z "$MODULESDIR" ] && MODULESDIR=/lib/modules/$(uname -r)/kernel/net/ipv4/netfilter:/lib/modules/$(uname -r)/kernel/net/netfilter:/lib/modules/$(uname -r)
+     MODULES=$(lsmod | cut -d ' ' -f1)
+ 
+     for directory in $(split $MODULESDIR); do
+@@ -283,7 +283,7 @@
+     [ -n "${MODULE_SUFFIX:=o gz ko o.gz ko.gz}" ]
+ 
+     [ -z "$MODULESDIR" ] && \
+-	MODULESDIR=/lib/modules/$(uname -r)/kernel/net/ipv4/netfilter:/lib/modules/$(uname -r)/kernel/net/netfilter
++	MODULESDIR=/lib/modules/$(uname -r)/kernel/net/ipv4/netfilter:/lib/modules/$(uname -r)/kernel/net/netfilter:/lib/modules/$(uname -r)
+ 
+     for directory in $(split $MODULESDIR); do
+ 	[ -d $directory ] && moduledirectories="$moduledirectories $directory"

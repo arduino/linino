@@ -1,0 +1,12 @@
+diff -Nru shorewall-lite-4.0.8.orig/shorewall-lite shorewall-lite-4.0.8/shorewall-lite
+--- shorewall-lite-4.0.8.orig/shorewall-lite	2007-12-15 07:13:36.000000000 +0800
++++ shorewall-lite-4.0.8/shorewall-lite	2008-01-26 18:05:13.000000000 +0800
+@@ -153,7 +153,7 @@
+ 
+     export VERBOSE
+ 
+-    [ -n "${HOSTNAME:=$(hostname)}" ]
++    [ -n "${HOSTNAME:=$(${SHAREDIR}/hostname)}" ]
+ 
+ }
+ 
