@@ -9,6 +9,17 @@ config_cb() {
 	local cfgtype
 	config_get cfgtype "$cfg" TYPE
 
+	# initial frequency offset, if configured
+	case "$cfgtype" in
+		ntpdrift)
+			config_get freq		$cfg freq
+
+			if [ ! "$freq" = "" ]; then
+				adjtimex -f $freq
+			fi
+		;;
+	esac
+
 	case "$cfgtype" in
 		ntpclient)
 			config_get hostname	$cfg hostname
