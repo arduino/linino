@@ -1,0 +1,36 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2008 OpenWrt.org
+
+START=80 
+
+config_cb() {
+	local cfg="$CONFIG_SECTION"
+	local cfgtype
+	config_get cfgtype "$cfg" TYPE
+
+	case "$cfgtype" in
+		ntpclient)
+			config_get hostname     $cfg hostname
+			config_get port         $cfg port
+
+			# prepare for continuos operation
+			count=0	# unlimited
+			ps | grep 'bin/[n]tpclient' >&- || {
+				while true; do
+					ping -c 1 $hostname 2>&- >&- && {
+					/usr/sbin/ntpclient -c ${count:-1} -l -h $hostname -p ${port:-123} 2>&- >&- &
+					} && return
+					sleep 3
+				done
+			}
+		;;
+	esac
+}
+
+start() {
+	config_load ntpclient&
+}
+
+stop() {
+	killall ntpclient 2>&- >&-
+}
