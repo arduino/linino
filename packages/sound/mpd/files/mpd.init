@@ -7,7 +7,7 @@ start() {
         /usr/bin/mpd --stdout --create-db
 	
 	#optional export for mpc
-        #export MPD_HOST=192.168.111.123
+        #export MPD_HOST=127.0.0.1
 	
 	#start mpd
         /usr/bin/mpd
@@ -15,6 +15,7 @@ start() {
 	#generate playlist and start to play
         /usr/bin/mpc listall | /usr/bin/mpc add -
         /usr/bin/mpc play
+	/usr/bin/mpc repeat	
 }
 
 stop() {
