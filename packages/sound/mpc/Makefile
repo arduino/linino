@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpc
 PKG_VERSION:=0.12.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.musicpd.org/uploads/files/
@@ -51,6 +51,7 @@ endef
 define Package/mpc/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/src/mpc $(1)/usr/bin/
+	$(INSTALL_BIN) ./files/pls-handler.sh $(1)/usr/bin
 endef
 
 $(eval $(call BuildPackage,mpc))
