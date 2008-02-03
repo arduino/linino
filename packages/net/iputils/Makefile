@@ -118,53 +118,46 @@ define Package/iputils-traceroute6/description
   Traces path to a network host (IPv6).
 endef
 
-
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS)"
 
 define Package/iputils-arping/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(STRIP) $(PKG_BUILD_DIR)/arping
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/arping $(1)/usr/bin/
 endef
 
 define Package/iputils-clockdiff/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(STRIP) $(PKG_BUILD_DIR)/clockdiff
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/clockdiff $(1)/usr/bin/
 endef
 
 define Package/iputils-ping/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(STRIP) $(PKG_BUILD_DIR)/ping
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ping $(1)/usr/bin/
 endef
 
 define Package/iputils-ping6/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(STRIP) $(PKG_BUILD_DIR)/ping6
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ping6 $(1)/usr/bin/
 endef
 
 define Package/iputils-tftpd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(STRIP) $(PKG_BUILD_DIR)/tftpd
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tftpd $(1)/usr/sbin/
 endef
 
 define Package/iputils-tracepath/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(STRIP) $(PKG_BUILD_DIR)/tracepath
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tracepath $(1)/usr/bin/
 endef
 
 define Package/iputils-tracepath6/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(STRIP) $(PKG_BUILD_DIR)/tracepath6
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tracepath6 $(1)/usr/bin/
 endef
 
 define Package/iputils-traceroute6/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(STRIP) $(PKG_BUILD_DIR)/traceroute6
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/traceroute6 $(1)/usr/bin/
 endef
 
