@@ -1,4 +1,5 @@
 #
+
 # Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -193,7 +194,3 @@ $(eval $(call BuildPackage,libavahi))
 $(eval $(call BuildPackage,avahi-autoipd))
 $(eval $(call BuildPackage,avahi-daemon))
 $(eval $(call BuildPackage,avahi-dnsconfd))
-
-$(eval $(call RequireCommand,pkg-config, \
-	$(PKG_NAME) requires pkg-config. \
-))

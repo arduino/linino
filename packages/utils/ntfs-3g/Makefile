@@ -62,7 +62,3 @@ define Package/ntfs-3g/install
 endef
 
 $(eval $(call BuildPackage,ntfs-3g))
-
-$(eval $(call RequireCommand,pkg-config, \
-	$(PKG_NAME) requires pkg-config. \
-))
