@@ -1,0 +1,12 @@
+diff -urN nufw-2.2.11/src/nuauth/Makefile.am nufw-2.2.11.new/src/nuauth/Makefile.am
+--- nufw-2.2.11/src/nuauth/Makefile.am	2007-12-18 14:11:10.000000000 +0100
++++ nufw-2.2.11.new/src/nuauth/Makefile.am	2008-02-05 16:41:29.000000000 +0100
+@@ -27,7 +27,7 @@
+ nuauth_LDADD = $(GLIB_LIBS) -lm  -lgnutls -lsasl2 -lnufw -L$(top_builddir)/src/include/
+ 
+ install-exec-local:
+-	install -d $(localstatedir)/run/nuauth/
++	install -d $(DESTDIR)/$(localstatedir)/run/nuauth/
+ 
+ nuauth$(EXEEXT): $(nuauth_OBJECTS) $(nuauth_DEPENDENCIES)
+ 	@rm -f nuauth$(EXEEXT)
