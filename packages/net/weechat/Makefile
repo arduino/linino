@@ -86,6 +86,8 @@ CONFIGURE_VARS+= \
 ifneq ($(SDK)$(CONFIG_PACKAGE_weechat-mod-lua),)
   CONFIGURE_ARGS+= \
 	--enable-lua \
+	--enable-plugins \
+	--with-plugins="lua" \
 	--with-lua-inc="$(STAGING_DIR)/usr/include" \
 	--with-lua-lib="$(STAGING_DIR)/usr/lib" \
 	LUA_CFLAGS="-I$(STAGING_DIR)/usr/include/"
