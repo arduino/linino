@@ -39,15 +39,11 @@ define Build/Compile
 		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		prefix="$(PKG_INSTALL_DIR)/usr"
-	mkdir -p $(PKG_INSTALL_DIR)/usr/sbin
-	$(CP) $(PKG_BUILD_DIR)/natpmp $(PKG_INSTALL_DIR)/usr/sbin
 endef
 
 define Package/natpmp/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/natpmp $(1)/usr/sbin
-	$(RSTRIP) $(1)/usr/sbin/natpmp
-
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/natpmp $(1)/usr/sbin
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/natpmp.config $(1)/etc/config/natpmp
 	$(INSTALL_DIR) $(1)/etc/init.d
