@@ -1,8 +1,8 @@
-Index: postgresql-8.2.5/src/backend/utils/adt/float.c
+Index: postgresql-8.3.0/src/backend/utils/adt/float.c
 ===================================================================
---- postgresql-8.2.5.orig/src/backend/utils/adt/float.c	2007-09-20 10:18:16.000000000 -0500
-+++ postgresql-8.2.5/src/backend/utils/adt/float.c	2007-09-20 10:18:17.000000000 -0500
-@@ -110,7 +110,9 @@
+--- postgresql-8.3.0.orig/src/backend/utils/adt/float.c	2008-01-01 13:45:52.000000000 -0600
++++ postgresql-8.3.0/src/backend/utils/adt/float.c	2008-02-06 16:30:02.000000000 -0600
+@@ -71,7 +71,9 @@
  static int	float8_cmp_internal(float8 a, float8 b);
  
  #ifndef HAVE_CBRT
@@ -13,7 +13,7 @@ Index: postgresql-8.2.5/src/backend/utils/adt/float.c
  #endif   /* HAVE_CBRT */
  
  
-@@ -2831,7 +2833,7 @@
+@@ -2733,7 +2735,7 @@
  #ifndef HAVE_CBRT
  
  static double

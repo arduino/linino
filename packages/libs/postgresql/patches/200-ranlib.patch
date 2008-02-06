@@ -1,12 +1,12 @@
-Index: postgresql-8.2.5/src/port/Makefile
+Index: postgresql-8.3.0/src/port/Makefile
 ===================================================================
---- postgresql-8.2.5.orig/src/port/Makefile	2007-09-20 10:18:17.000000000 -0500
-+++ postgresql-8.2.5/src/port/Makefile	2007-09-20 10:18:17.000000000 -0500
-@@ -43,6 +43,7 @@
+--- postgresql-8.3.0.orig/src/port/Makefile	2008-02-06 16:27:48.000000000 -0600
++++ postgresql-8.3.0/src/port/Makefile	2008-02-06 16:28:18.000000000 -0600
+@@ -49,6 +49,7 @@
  
- libpgport.a: $(LIBOBJS)
+ libpgport.a: $(OBJS)
  	$(AR) $(AROPT) $@ $^
 +	$(RANLIB) libpgport.a
  
+ # thread.o needs PTHREAD_CFLAGS (but thread_srv.o does not)
  thread.o: thread.c
- 	$(CC) $(CFLAGS) $(CPPFLAGS) $(PTHREAD_CFLAGS) -c $<
