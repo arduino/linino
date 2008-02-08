@@ -17,7 +17,7 @@ PKG_MD5SUM:=660cbfd3dc8c10bf9b1803cd2b688256
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/libnetfilter_queue
+define Package/libnetfilter-queue
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=@LINUX_2_6 +libnfnetlink
@@ -25,7 +25,7 @@ define Package/libnetfilter_queue
   URL:=http://www1.cs.columbia.edu/~angelos/libnetfilter_queue.html
 endef
 
-define Package/libnetfilter_queue/description
+define Package/libnetfilter-queue/description
 	libnetfilter_queue is a userspace library providing an API to packets 
 	that have been queued by the kernel packet filter. It is is part of a system 
 	that deprecates the old ip_queue / libipq mechanism.
@@ -42,9 +42,6 @@ MAKE_FLAGS += \
 
 
 define Build/Compile
-	# with dynamic linking fail on undefined symbols
-	#$(SED) 's@nfqnl_test_LDFLAGS = -dynamic@nfqnl_test_LDFLAGS = -lnfnetlink@' $(PKG_BUILD_DIR)/utils/Makefile.am		
-	# pass CFLAGS again to override -O2 set by configure
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
@@ -65,9 +62,9 @@ define Build/UninstallDev
 		$(1)/usr/lib/libnetfilter_queue.{a,so*}
 endef
 
-define Package/libnetfilter_queue/install
+define Package/libnetfilter-queue/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnetfilter_queue* $(1)/usr/lib/
 endef
 
-$(eval $(call BuildPackage,libnetfilter_queue))
+$(eval $(call BuildPackage,libnetfilter-queue))
