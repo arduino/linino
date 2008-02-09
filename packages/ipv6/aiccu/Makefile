@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/aiccu
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+libpthread +ntpclient
+  DEPENDS:=+libpthread +ntpclient +ip
   TITLE:=SixXS Automatic IPv6 Connectivity Client Utility
   URL:=http://www.sixxs.net/tools/aiccu/
 endef
