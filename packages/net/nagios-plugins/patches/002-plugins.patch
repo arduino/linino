@@ -1,16 +1,16 @@
-diff -urN nagios-plugins-1.4.9/configure nagios-plugins-1.4.9.new/configure
---- nagios-plugins-1.4.9/configure	2007-06-11 09:58:56.000000000 +0200
-+++ nagios-plugins-1.4.9.new/configure	2007-06-11 10:02:45.000000000 +0200
-@@ -26234,7 +26234,7 @@
+diff -urN nagios-plugins-1.4.11/configure nagios-plugins-1.4.11.new/configure
+--- nagios-plugins-1.4.11/configure	2007-12-13 23:42:38.000000000 +0100
++++ nagios-plugins-1.4.11.new/configure	2008-02-11 07:56:02.000000000 +0100
+@@ -27226,7 +27226,7 @@
  
  if test "$ac_cv_have_decl_swapctl" = "yes";
  then
 -	EXTRAS="$EXTRAS check_swap"
 +	EXTRAS="$EXTRAS"
- 	echo "$as_me:$LINENO: checking for 2-arg (SVR4) swapctl" >&5
- echo $ECHO_N "checking for 2-arg (SVR4) swapctl... $ECHO_C" >&6
+ 	{ echo "$as_me:$LINENO: checking for 2-arg (SVR4) swapctl" >&5
+ echo $ECHO_N "checking for 2-arg (SVR4) swapctl... $ECHO_C" >&6; }
  	if test "$ac_cv_type_swaptbl_t" = "yes" -a \
-@@ -26376,7 +26376,7 @@
+@@ -27365,7 +27365,7 @@
  #define HAVE_SWAP 1
  _ACEOF
  
@@ -19,7 +19,7 @@ diff -urN nagios-plugins-1.4.9/configure nagios-plugins-1.4.9.new/configure
  fi
  if test "x$ac_cv_swap_command" != "x"
  then
-@@ -26428,7 +26428,7 @@
+@@ -27417,7 +27417,7 @@
  #define PROC_MEMINFO "$ac_cv_proc_meminfo"
  _ACEOF
  
@@ -28,21 +28,23 @@ diff -urN nagios-plugins-1.4.9/configure nagios-plugins-1.4.9.new/configure
  fi
  
  # Extract the first word of "dig", so it can be a program name with args.
-diff -urN nagios-plugins-1.4.9/plugins/Makefile.am nagios-plugins-1.4.9.new/plugins/Makefile.am
---- nagios-plugins-1.4.9/plugins/Makefile.am	2007-04-15 10:50:58.000000000 +0200
-+++ nagios-plugins-1.4.9.new/plugins/Makefile.am	2007-06-11 10:02:45.000000000 +0200
-@@ -23,7 +23,7 @@
+diff -urN nagios-plugins-1.4.11/plugins/Makefile.am nagios-plugins-1.4.11.new/plugins/Makefile.am
+--- nagios-plugins-1.4.11/plugins/Makefile.am	2007-12-12 02:27:48.000000000 +0100
++++ nagios-plugins-1.4.11.new/plugins/Makefile.am	2008-02-11 08:08:14.000000000 +0100
+@@ -22,8 +22,8 @@
+ check_tcp_programs = check_ftp check_imap check_nntp check_pop \
  	check_udp check_clamd @check_tcp_ssl@
  
- EXTRA_PROGRAMS = check_mysql check_radius check_pgsql check_snmp check_hpjd \
+-EXTRA_PROGRAMS = check_mysql check_radius check_pgsql check_snmp check_hpjd \
 -	check_swap check_fping check_ldap check_game check_dig \
++EXTRA_PROGRAMS = check_mysql check_radius check_snmp check_hpjd \
 +	check_fping check_ldap check_game check_dig \
  	check_nagios check_by_ssh check_dns check_nt check_ide_smart	\
  	check_procs check_mysql_query check_apt
  
-diff -urN nagios-plugins-1.4.9/plugins/Makefile.in nagios-plugins-1.4.9.new/plugins/Makefile.in
---- nagios-plugins-1.4.9/plugins/Makefile.in	2007-06-04 11:02:42.000000000 +0200
-+++ nagios-plugins-1.4.9.new/plugins/Makefile.in	2007-06-11 10:02:28.000000000 +0200
+diff -urN nagios-plugins-1.4.11/plugins/Makefile.in nagios-plugins-1.4.11.new/plugins/Makefile.in
+--- nagios-plugins-1.4.11/plugins/Makefile.in	2007-12-13 23:42:36.000000000 +0100
++++ nagios-plugins-1.4.11.new/plugins/Makefile.in	2008-02-11 08:08:22.000000000 +0100
 @@ -35,7 +35,7 @@
  build_triplet = @build@
  host_triplet = @host@
@@ -51,13 +53,25 @@ diff -urN nagios-plugins-1.4.9/plugins/Makefile.in nagios-plugins-1.4.9.new/plug
 +	check_dummy$(EXEEXT) check_http$(EXEEXT) \
  	check_load$(EXEEXT) check_mrtg$(EXEEXT) \
  	check_mrtgtraf$(EXEEXT) check_ntp$(EXEEXT) \
- 	check_nwstat$(EXEEXT) check_overcr$(EXEEXT) \
-@@ -45,7 +45,7 @@
- 	urlize$(EXEEXT) @EXTRAS@
+ 	check_ntp_peer$(EXEEXT) check_nwstat$(EXEEXT) \
+@@ -44,8 +44,8 @@
+ 	check_time$(EXEEXT) check_ntp_time$(EXEEXT) check_ups$(EXEEXT) \
+ 	check_users$(EXEEXT) negate$(EXEEXT) urlize$(EXEEXT) @EXTRAS@
  EXTRA_PROGRAMS = check_mysql$(EXEEXT) check_radius$(EXEEXT) \
- 	check_pgsql$(EXEEXT) check_snmp$(EXEEXT) check_hpjd$(EXEEXT) \
+-	check_pgsql$(EXEEXT) check_snmp$(EXEEXT) check_hpjd$(EXEEXT) \
 -	check_swap$(EXEEXT) check_fping$(EXEEXT) check_ldap$(EXEEXT) \
++	check_snmp$(EXEEXT) check_hpjd$(EXEEXT) \
 +	check_fping$(EXEEXT) check_ldap$(EXEEXT) \
  	check_game$(EXEEXT) check_dig$(EXEEXT) check_nagios$(EXEEXT) \
  	check_by_ssh$(EXEEXT) check_dns$(EXEEXT) check_nt$(EXEEXT) \
  	check_ide_smart$(EXEEXT) check_procs$(EXEEXT) \
+--- nagios-plugins-1.4.11/plugins/check_pgsql.c	2007-01-28 22:46:41.000000000 +0100
++++ nagios-plugins-1.4.11.new/plugins/check_pgsql.c	2008-02-13 15:47:11.000000000 +0100
+@@ -45,6 +45,7 @@
+ #include "netutils.h"
+ #include <libpq-fe.h>
+ 
++#define NAMEDATALEN 64
+ #define DEFAULT_DB "template1"
+ #define DEFAULT_HOST "127.0.0.1"
+ 
