@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -13,8 +13,11 @@ PKG_VERSION:=1.0.50
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/rrdtool-$(PKG_VERSION)
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/pub/rrdtool-1.0.x
+PKG_SOURCE:=rrdtool-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:= \
+	http://oss.oetiker.ch/rrdtool/pub/rrdtool-1.0.x \
+	http://www.fastmirrors.org/rrdtool/rrdtool-1.0.x \
+	ftp://ftp.sunet.se/pub/network/monitoring/rrdtool/rrdtool-1.0.x
 PKG_MD5SUM:=c466e2e7df95fa8e318e46437da87686
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -31,18 +34,18 @@ endef
 
 define Package/librrd1/description
 Round Robin Database (RRD) management library.
-	RRD is the Acronym for Round Robin Database. RRD is a system to store and 
-	display time-series data (i.e. network bandwidth, machine-room temperature, 
-	server load average). It stores the data in a very compact way that will 
-	not expand over time, and it presents useful graphs by processing the data 
-	to enforce a certain data density. It can be used either via simple wrapper 
-	scripts (from shell or Perl) or via frontends that poll network devices and 
+	RRD is the Acronym for Round Robin Database. RRD is a system to store and
+	display time-series data (i.e. network bandwidth, machine-room temperature,
+	server load average). It stores the data in a very compact way that will
+	not expand over time, and it presents useful graphs by processing the data
+	to enforce a certain data density. It can be used either via simple wrapper
+	scripts (from shell or Perl) or via frontends that poll network devices and
 	put friendly user interface on it.
-	
-	This is version 1.0.x with cgilib-0.4, gd1.3 and libpng-1.0.9 linked into 
-	librrd.so. The library is much smaller compared to the 1.2.x version with 
+
+	This is version 1.0.x with cgilib-0.4, gd1.3 and libpng-1.0.9 linked into
+	librrd.so. The library is much smaller compared to the 1.2.x version with
 	separate dynamic linked libraries.
-	
+
 	This package contains a shared library, used by other programs.
 endef
 
@@ -56,19 +59,19 @@ endef
 
 define Package/rrdcgi1/description
 Round Robin Database (RRD) CGI graphing tool.
-	RRD is the Acronym for Round Robin Database. RRD is a system to store and 
-	display time-series data (i.e. network bandwidth, machine-room temperature, 
-	server load average). It stores the data in a very compact way that will 
-	not expand over time, and it presents useful graphs by processing the data 
-	to enforce a certain data density. It can be used either via simple wrapper 
-	scripts (from shell or Perl) or via frontends that poll network devices and 
+	RRD is the Acronym for Round Robin Database. RRD is a system to store and
+	display time-series data (i.e. network bandwidth, machine-room temperature,
+	server load average). It stores the data in a very compact way that will
+	not expand over time, and it presents useful graphs by processing the data
+	to enforce a certain data density. It can be used either via simple wrapper
+	scripts (from shell or Perl) or via frontends that poll network devices and
 	put friendly user interface on it.
-	
-	This is version 1.0.x with cgilib-0.4, gd1.3 and libpng-1.0.9 linked into 
-	librrd.so. The library is much smaller compared to the 1.2.x version with 
+
+	This is version 1.0.x with cgilib-0.4, gd1.3 and libpng-1.0.9 linked into
+	librrd.so. The library is much smaller compared to the 1.2.x version with
 	separate dynamic linked libraries.
-	
-	This package contains the rrdcgi tool used to create web pages containing 
+
+	This package contains the rrdcgi tool used to create web pages containing
 	RRD graphs based on templates.
 endef
 
@@ -82,18 +85,18 @@ endef
 
 define Package/rrdtool1/description
 Round Robin Database (RRD) management tools.
-	RRD is the Acronym for Round Robin Database. RRD is a system to store and 
-	display time-series data (i.e. network bandwidth, machine-room temperature, 
-	server load average). It stores the data in a very compact way that will 
-	not expand over time, and it presents useful graphs by processing the data 
-	to enforce a certain data density. It can be used either via simple wrapper 
-	scripts (from shell or Perl) or via frontends that poll network devices and 
+	RRD is the Acronym for Round Robin Database. RRD is a system to store and
+	display time-series data (i.e. network bandwidth, machine-room temperature,
+	server load average). It stores the data in a very compact way that will
+	not expand over time, and it presents useful graphs by processing the data
+	to enforce a certain data density. It can be used either via simple wrapper
+	scripts (from shell or Perl) or via frontends that poll network devices and
 	put friendly user interface on it.
-	
-	This is version 1.0.x with cgilib-0.4, gd1.3 and libpng-1.0.9 linked into 
-	librrd.so. The library is much smaller compared to the 1.2.x version with 
+
+	This is version 1.0.x with cgilib-0.4, gd1.3 and libpng-1.0.9 linked into
+	librrd.so. The library is much smaller compared to the 1.2.x version with
 	separate dynamic linked libraries.
-	
+
 	This package contains command line tools used to manage RRDs.
 endef
 

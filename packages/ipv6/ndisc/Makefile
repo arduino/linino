@@ -13,7 +13,8 @@ PKG_VERSION:=0.5.1
 PKG_RELEASE:=1
 PKG_MD5SUM:=33487fe5505b195eb31468d88ba9ab56
 
-PKG_SOURCE_URL:=http://people.via.ecp.fr/~rem/ndisc6/
+PKG_SOURCE_URL:=http://www.remlab.net/files/ndisc6/ \
+	http://www.remlab.net/files/ndisc6/archive/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -53,31 +54,31 @@ endef
 define Package/tcptraceroute6
   $(call Package/ndisc)
   TITLE:=A TCP/IPv6-based traceroute implementation
-endef 
+endef
 
 define Package/tcptraceroute6/description
 A TCP/IPv6-based traceroute implementation
 endef
-  
 
-define Build/Compile	
+
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		all
 endef
 
-define Package/ndisc6/install	
+define Package/ndisc6/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ndisc6 $(1)/usr/bin/
 endef
 
-define Package/rdisc6/install	
+define Package/rdisc6/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/rdisc6 $(1)/usr/bin/
 endef
 
-define Package/tcptraceroute6/install	
+define Package/tcptraceroute6/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tcptraceroute6 $(1)/usr/bin/
 endef

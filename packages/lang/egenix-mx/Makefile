@@ -13,7 +13,7 @@ PKG_VERSION:=2.0.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-base-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.egenix.com/files/python/
+PKG_SOURCE_URL:=http://downloads.egenix.com/python/
 PKG_MD5SUM:=66841151728a06f92d0b8dd2ed317a29
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-base-$(PKG_VERSION)

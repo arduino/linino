@@ -13,7 +13,7 @@ PKG_VERSION:=0.2.0.9-alpha
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://tor.eff.org/dist/ \
+PKG_SOURCE_URL:=http://www.torproject.org/dist/ \
 	http://ftp.se.linux.org/crypto/tor/ \
 	http://tor.meulie.net/
 PKG_MD5SUM:=47523575d2f6b857c453f37fbd4fca10
