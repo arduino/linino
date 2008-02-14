@@ -22,6 +22,8 @@ PKG_MD5SUM:=6c4c72a1336aa45b463e738034c078d6
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/openldap/Default
