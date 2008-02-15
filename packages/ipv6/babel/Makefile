@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=babel
-PKG_VERSION:=0.8
+PKG_VERSION:=0.9
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/
-PKG_MD5SUM:=b8739f4c2cb63b7c3d79a6250be8aa6b
+PKG_MD5SUM:=27275abda11f48bc1251526b0bffa4df
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,24 +27,18 @@ define Package/babel
 endef
 
 define Package/babel/description
- Babel is a loop-avoiding distance-vector routing protocol roughly based 
- on DSDV and AODV, but with provisions for link cost estimation and 
+ Babel is a loop-avoiding distance-vector routing protocol roughly based
+ on DSDV and AODV, but with provisions for link cost estimation and
  redistribution of routes from other routing protocols.
- While it is optimised for wireless mesh networks, Babel will also work 
- efficiently on wired networks. It will generate between 1.2 and 2.4 times 
- the amount of routing traffic that RIPng would generate, while 
+ While it is optimised for wireless mesh networks, Babel will also work
+ efficiently on wired networks. It will generate between 1.2 and 2.4 times
+ the amount of routing traffic that RIPng would generate, while
  never counting to infinity.
 endef
 
-define Build/Configure
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		all
-endef
+MAKE_FLAGS += \
+	CC="$(TARGET_CC)" \
+	CFLAGS="$(TARGET_CFLAGS)" \
 
 define Package/babel/install
 	$(INSTALL_DIR) $(1)/usr/sbin
