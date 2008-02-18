@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hdparm
-PKG_VERSION:=6.6
+PKG_VERSION:=8.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=@SF/hdparm
-PKG_MD5SUM:=ecea69f775396e4ab6112dcf9066239f
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_URL:=@SF/$(PKG_NAME)
+PKG_MD5SUM:=87c1512497195204034503665f71f5fc
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,19 +31,13 @@ define Package/hdparm/description
 	Primary use is for enabling irq-unmasking and IDE multiplemode.
 endef
 
-define Build/Configure
-endef
-
-define Build/Compile
-	$(call Build/Compile/Default, \
-		CFLAGS="$(EXTRA_CFLAGS)" \
-		LDFLAGS="$(EXTRA_LDFLAGS)" \
-	)
-endef
+MAKE_FLAGS += \
+	CFLAGS="$(EXTRA_CFLAGS)" \
+	LDFLAGS="$(EXTRA_LDFLAGS)" \
 
 define Package/hdparm/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/hdparm $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin
 endef
 
 $(eval $(call BuildPackage,hdparm))
