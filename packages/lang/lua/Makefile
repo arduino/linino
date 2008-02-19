@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lua
-PKG_VERSION:=5.1.2
+PKG_VERSION:=5.1.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -17,7 +17,7 @@ PKG_SOURCE_URL:=http://www.lua.org/ftp/ \
 	http://ftp.gwdg.de/pub/languages/lua/ \
 	http://mirrors.dotsrc.org/lua/ \
 	http://www.tecgraf.puc-rio.br/lua/ftp/
-PKG_MD5SUM:=687ce4c2a1ddff18f1008490fdc4e5e0
+PKG_MD5SUM:=a70a8dfaa150e047866dc01a46272599
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -32,8 +32,14 @@ define Package/lua/Default
   URL:=http://www.lua.org/
 endef
 
+define Package/lua/Default/description
+ Lua is a powerful light-weight programming language designed for extending 
+ applications. Lua is also frequently used as a general-purpose, stand-alone 
+ language. Lua is free software.
+endef
+
 define Package/liblua
-  $(call Package/lua/Default)
+$(call Package/lua/Default)
   SUBMENU:=
   SECTION:=libs
   CATEGORY:=Libraries
@@ -41,49 +47,41 @@ define Package/liblua
 endef
 
 define Package/liblua/description
-=
-	Lua is a powerful light-weight programming language designed for extending 
-	applications. Lua is also frequently used as a general-purpose, stand-alone 
-	language. Lua is free software.	This package contains the LUA shared libraries, needed by other programs.
+$(call Package/lua/Default/description)
+ This package contains the LUA shared libraries, needed by other programs.
 endef
 
 define Package/lua
-  $(call Package/lua/Default)
+$(call Package/lua/Default)
   DEPENDS:=+liblua +libreadline +libncurses
   TITLE+= (interpreter)
 endef
 
 define Package/lua/description
-=
-	Lua is a powerful light-weight programming language designed for extending 
-	applications. Lua is also frequently used as a general-purpose, stand-alone 
-	language. Lua is free software.	This package contains the LUA language interpreter.
+$(call Package/lua/Default/description)
+ This package contains the LUA language interpreter.
 endef
 
 define Package/luac
-  $(call Package/lua/Default)
+$(call Package/lua/Default)
   DEPENDS:=+liblua
   TITLE+= (compiler)
 endef
 
 define Package/luac/description
-=
-	Lua is a powerful light-weight programming language designed for extending 
-	applications. Lua is also frequently used as a general-purpose, stand-alone 
-	language. Lua is free software.	This package contains the LUA language compiler.
+$(call Package/lua/Default/description)
+ This package contains the LUA language compiler.
 endef
 
 define Package/lua-examples
-  $(call Package/lua/Default)
+$(call Package/lua/Default)
   DEPENDS:=lua
   TITLE+= (examples)
 endef
 
 define Package/lua-examples/description
-=
-	Lua is a powerful light-weight programming language designed for extending 
-	applications. Lua is also frequently used as a general-purpose, stand-alone 
-	language. Lua is free software.	This package contains LUA language examples.
+$(call Package/lua/Default/description)
+ This package contains LUA language examples.
 endef
 
 define Build/Configure

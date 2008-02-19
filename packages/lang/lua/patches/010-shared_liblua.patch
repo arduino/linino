@@ -2,10 +2,11 @@
 # Copyright (C) 2006 OpenWrt.org
 #
 
-diff -ruN lua-5.1.1-old/Makefile lua-5.1.1-new/Makefile
---- lua-5.1.1-old/Makefile	2006-06-02 12:53:38.000000000 +0200
-+++ lua-5.1.1-new/Makefile	2007-01-09 02:10:39.000000000 +0100
-@@ -42,7 +42,7 @@
+Index: lua-5.1.3/Makefile
+===================================================================
+--- lua-5.1.3.orig/Makefile	2008-02-20 00:06:06.000000000 +0100
++++ lua-5.1.3/Makefile	2008-02-20 00:06:07.000000000 +0100
+@@ -38,7 +38,7 @@
  # What to install.
  TO_BIN= lua luac
  TO_INC= lua.h luaconf.h lualib.h lauxlib.h ../etc/lua.hpp
@@ -14,11 +15,12 @@ diff -ruN lua-5.1.1-old/Makefile lua-5.1.1-new/Makefile
  TO_MAN= lua.1 luac.1
  
  # Lua version and release.
-diff -ruN lua-5.1.1-old/src/Makefile lua-5.1.1-new/src/Makefile
---- lua-5.1.1-old/src/Makefile	2006-03-22 01:41:49.000000000 +0100
-+++ lua-5.1.1-new/src/Makefile	2007-01-09 02:10:45.000000000 +0100
+Index: lua-5.1.3/src/Makefile
+===================================================================
+--- lua-5.1.3.orig/src/Makefile	2008-02-20 00:06:06.000000000 +0100
++++ lua-5.1.3/src/Makefile	2008-02-20 00:06:07.000000000 +0100
 @@ -23,6 +23,7 @@
- PLATS= aix ansi bsd generic linux macosx mingw posix solaris
+ PLATS= aix ansi bsd freebsd generic linux macosx mingw posix solaris
  
  LUA_A=	liblua.a
 +LUA_SO= liblua.so
@@ -66,7 +68,7 @@ diff -ruN lua-5.1.1-old/src/Makefile lua-5.1.1-new/src/Makefile
  
  clean:
  	$(RM) $(ALL_T) $(ALL_O)
-@@ -92,7 +100,7 @@
+@@ -96,7 +104,7 @@
  	$(MAKE) all MYCFLAGS=
  
  linux:
@@ -74,10 +76,11 @@ diff -ruN lua-5.1.1-old/src/Makefile lua-5.1.1-new/src/Makefile
 +	$(MAKE) all MYCFLAGS+=-DLUA_USE_LINUX MYLIBS="-Wl,-E -ldl -lreadline -lhistory -lncurses"
  
  macosx:
- 	$(MAKE) all MYCFLAGS=-DLUA_USE_MACOSX
-diff -ruN lua-5.1.1-old/src/ldo.h lua-5.1.1-new/src/ldo.h
---- lua-5.1.1-old/src/ldo.h	2005-08-24 18:15:49.000000000 +0200
-+++ lua-5.1.1-new/src/ldo.h	2007-01-09 02:10:45.000000000 +0100
+ 	$(MAKE) all MYCFLAGS=-DLUA_USE_LINUX MYLIBS="-lreadline"
+Index: lua-5.1.3/src/ldo.h
+===================================================================
+--- lua-5.1.3.orig/src/ldo.h	2008-02-20 00:06:06.000000000 +0100
++++ lua-5.1.3/src/ldo.h	2008-02-20 00:06:07.000000000 +0100
 @@ -46,7 +46,7 @@
  LUAI_FUNC int luaD_poscall (lua_State *L, StkId firstResult);
  LUAI_FUNC void luaD_reallocCI (lua_State *L, int newsize);
@@ -87,9 +90,10 @@ diff -ruN lua-5.1.1-old/src/ldo.h lua-5.1.1-new/src/ldo.h
  
  LUAI_FUNC void luaD_throw (lua_State *L, int errcode);
  LUAI_FUNC int luaD_rawrunprotected (lua_State *L, Pfunc f, void *ud);
-diff -ruN lua-5.1.1-old/src/lfunc.h lua-5.1.1-new/src/lfunc.h
---- lua-5.1.1-old/src/lfunc.h	2005-04-25 21:24:10.000000000 +0200
-+++ lua-5.1.1-new/src/lfunc.h	2007-01-09 02:10:45.000000000 +0100
+Index: lua-5.1.3/src/lfunc.h
+===================================================================
+--- lua-5.1.3.orig/src/lfunc.h	2008-02-20 00:06:06.000000000 +0100
++++ lua-5.1.3/src/lfunc.h	2008-02-20 00:06:07.000000000 +0100
 @@ -18,7 +18,7 @@
                           cast(int, sizeof(TValue *)*((n)-1)))
  
@@ -99,9 +103,10 @@ diff -ruN lua-5.1.1-old/src/lfunc.h lua-5.1.1-new/src/lfunc.h
  LUAI_FUNC Closure *luaF_newCclosure (lua_State *L, int nelems, Table *e);
  LUAI_FUNC Closure *luaF_newLclosure (lua_State *L, int nelems, Table *e);
  LUAI_FUNC UpVal *luaF_newupval (lua_State *L);
-diff -ruN lua-5.1.1-old/src/lmem.h lua-5.1.1-new/src/lmem.h
---- lua-5.1.1-old/src/lmem.h	2005-04-25 21:24:10.000000000 +0200
-+++ lua-5.1.1-new/src/lmem.h	2007-01-09 02:10:45.000000000 +0100
+Index: lua-5.1.3/src/lmem.h
+===================================================================
+--- lua-5.1.3.orig/src/lmem.h	2008-02-20 00:06:06.000000000 +0100
++++ lua-5.1.3/src/lmem.h	2008-02-20 00:06:07.000000000 +0100
 @@ -38,9 +38,9 @@
     ((v)=cast(t *, luaM_reallocv(L, v, oldn, n, sizeof(t))))
  
@@ -114,9 +119,10 @@ diff -ruN lua-5.1.1-old/src/lmem.h lua-5.1.1-new/src/lmem.h
  LUAI_FUNC void *luaM_growaux_ (lua_State *L, void *block, int *size,
                                 size_t size_elem, int limit,
                                 const char *errormsg);
-diff -ruN lua-5.1.1-old/src/lstring.h lua-5.1.1-new/src/lstring.h
---- lua-5.1.1-old/src/lstring.h	2005-04-25 21:24:10.000000000 +0200
-+++ lua-5.1.1-new/src/lstring.h	2007-01-09 02:10:45.000000000 +0100
+Index: lua-5.1.3/src/lstring.h
+===================================================================
+--- lua-5.1.3.orig/src/lstring.h	2008-02-20 00:06:06.000000000 +0100
++++ lua-5.1.3/src/lstring.h	2008-02-20 00:06:07.000000000 +0100
 @@ -25,7 +25,7 @@
  
  LUAI_FUNC void luaS_resize (lua_State *L, int newsize);
@@ -126,9 +132,10 @@ diff -ruN lua-5.1.1-old/src/lstring.h lua-5.1.1-new/src/lstring.h
  
  
  #endif
-diff -ruN lua-5.1.1-old/src/lundump.h lua-5.1.1-new/src/lundump.h
---- lua-5.1.1-old/src/lundump.h	2005-11-11 15:03:13.000000000 +0100
-+++ lua-5.1.1-new/src/lundump.h	2007-01-09 02:10:45.000000000 +0100
+Index: lua-5.1.3/src/lundump.h
+===================================================================
+--- lua-5.1.3.orig/src/lundump.h	2008-02-20 00:06:06.000000000 +0100
++++ lua-5.1.3/src/lundump.h	2008-02-20 00:06:07.000000000 +0100
 @@ -17,7 +17,7 @@
  LUAI_FUNC void luaU_header (char* h);
  
