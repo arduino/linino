@@ -55,7 +55,7 @@ define Package/ahcpd/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ahcp-generate{,-address} $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/ahcp
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/{ahcp,dummy}-config.sh $(1)/usr/lib/ahcp/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ahcp{,-dummy}-config.sh $(1)/usr/lib/ahcp/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ahcpd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/config
