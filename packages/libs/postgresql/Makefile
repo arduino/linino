@@ -205,8 +205,7 @@ define Package/pgsql-server/install
 		$(PKG_INSTALL_DIR)/usr/bin/reindexdb \
 		$(PKG_INSTALL_DIR)/usr/bin/vacuumdb \
 		$(1)/usr/bin
-
-	 ln -s postgres $(1)/usr/bin/postmaster
+	ln -sf postgres $(1)/usr/bin/postmaster
 
 	$(INSTALL_BIN) ./files/postgresql.init $(1)/etc/init.d/postgresql
 
