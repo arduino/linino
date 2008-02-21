@@ -1,0 +1,47 @@
+--- dansguardian-2.9.9.2/configure	2007-11-13 17:17:03.000000000 +0100
++++ dansguardian-2.9.9.2.new/configure	2008-02-21 11:15:07.000000000 +0100
+@@ -799,7 +799,7 @@
+ sharedstatedir='${prefix}/com'
+ localstatedir='${prefix}/var'
+ includedir='${prefix}/include'
+-oldincludedir='/usr/include'
++oldincludedir='${prefix}/usr/include'
+ docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
+ infodir='${datarootdir}/info'
+ htmldir='${docdir}'
+@@ -6429,7 +6429,7 @@
+ # Check whether --with-zlib was given.
+ if test "${with_zlib+set}" = set; then
+   withval=$with_zlib;  # check for header & func (in library) in given prefix
+-	CPPFLAGS="${CPPFLAGS} -I${withval}/include"
++	CPPFLAGS="${CPPFLAGS}"
+ 	if test "x$staticzlib" = "xtrue"; then
+ 		LIBS="-Bstatic -L${withval} -lz -Bdynamic ${LIBS}"
+ 	else
+@@ -9637,7 +9637,7 @@
+ 	PCRE_PREFIX=`pcre-config --prefix`
+ 
+ 	LIBS="${PCRE_LIBS} ${LIBS}"
+-	CPPFLAGS="${CPPFLAGS} -I${PCRE_PREFIX}/include"
++	CPPFLAGS="${CPPFLAGS}"
+ 
+ 	{ echo "$as_me:$LINENO: checking for REG_DOTALL in pcreposix.h" >&5
+ echo $ECHO_N "checking for REG_DOTALL in pcreposix.h... $ECHO_C" >&6; }
+@@ -10076,7 +10076,7 @@
+ 	CLAMAV_PREFIX=`clamav-config --prefix`
+ 
+ 	LIBS="${CLAMAV_LIBS} -lclamav ${LIBS}"
+-		CPPFLAGS="${CPPFLAGS} -I${CLAMAV_PREFIX}/include"
++		CPPFLAGS="${CPPFLAGS}"
+ 
+ 
+ cat >>confdefs.h <<\_ACEOF
+@@ -10753,7 +10753,7 @@
+ if test "${with_libiconv+set}" = set; then
+   withval=$with_libiconv;  # check for header & func (in library) in given prefix
+ 			if test "x$withval" != "x"; then
+-				CPPFLAGS="${CPPFLAGS} -I${withval}/include"
++				CPPFLAGS="${CPPFLAGS}"
+ 				LIBS="-L${withval}/lib -liconv ${LIBS}"
+ 			else
+ 				LIBS="-liconv ${LIBS}"
