@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libupnp
-PKG_VERSION:=1.3.1
+PKG_VERSION:=1.6.3
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=@SF/upnp
-PKG_MD5SUM:=6646be5e31e58188e8f47c6ce64faa4c
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=@SF/pupnp
+PKG_MD5SUM:=553f3491fe4da88aba1763497730e2c0
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -25,14 +25,16 @@ define Package/libupnp
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=+libpthread
-  TITLE:=UPnP SDK library
-  URL:=http://upnp.sourceforge.net/
+  TITLE:=A Portable Open Source UPnP Development Kit
+  URL:=http://pupnp.sourceforge.net/
 endef
 
 define Package/libupnp/description
-	The Universal Plug and Play (UPnP) SDK for Linux provides support 
-	for building UPnP-compliant control points, devices, and bridges 
-	on Linux.
+        The portable SDK for UPnP Devices (libupnp) provides developers with an
+	API and open source code for building control points, devices, and
+	bridges that are compliant with Version 1.0 of the  Universal Plug and
+	Play Device Architecture Specification and support several operating
+	systems like Linux, *BSD, Solaris and others.
 endef
 
 define Build/Configure
