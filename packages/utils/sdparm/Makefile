@@ -34,7 +34,7 @@ endef
 
 define Package/sdparm/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/sdparm $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,sdparm))
