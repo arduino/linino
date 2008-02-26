@@ -1,9 +1,10 @@
-diff -ru gphoto2-2.2.0/gphoto2/foreach.c gphoto2-2.2.0-patched/gphoto2/foreach.c
---- gphoto2-2.2.0/gphoto2/foreach.c     2006-06-15 23:03:47.000000000 -0700
-+++ gphoto2-2.2.0-patched/gphoto2/foreach.c     2007-01-03 00:33:21.000000000 -0800
+Index: gphoto2-2.4.0/gphoto2/foreach.c
+===================================================================
+--- gphoto2-2.4.0.orig/gphoto2/foreach.c	2008-02-26 19:59:37.000000000 +0100
++++ gphoto2-2.4.0/gphoto2/foreach.c	2008-02-26 19:59:38.000000000 +0100
 @@ -31,6 +31,8 @@
  
- #include <gphoto2-port-log.h>
+ #include <gphoto2/gphoto2-port-log.h>
  
 +#define GP_DEBUG (void) 
 +
