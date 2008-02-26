@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hdparm
-PKG_VERSION:=8.1
+PKG_VERSION:=8.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=87c1512497195204034503665f71f5fc
+PKG_MD5SUM:=3f33e79d3b404906d1442986c14db468
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,8 +36,8 @@ MAKE_FLAGS += \
 	LDFLAGS="$(EXTRA_LDFLAGS)" \
 
 define Package/hdparm/install
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/sbin
 endef
 
 $(eval $(call BuildPackage,hdparm))
