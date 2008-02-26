@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,18 +9,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libgphoto2
-PKG_VERSION:=2.3.1
+PKG_VERSION:=2.4.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/gphoto
-PKG_MD5SUM:=37f85e34e5b6031ddf6cac8b8782ac4f
+PKG_MD5SUM:=a60154772635b693ff08b4f34dea7f61
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
-
 
 define Package/libgphoto2/Default
   SECTION:=libs
@@ -41,25 +39,23 @@ define Package/libgphoto2-drivers
   TITLE:=Gphoto2 drivers for various cameras
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--disable-rpath \
-		--with-drivers=all \
-		--without-included-ltdl \
-		--without-libiconv-prefix \
-		--without-libintl-prefix \
-		, \
-		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libiconv/include" \
-		LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
-		LIBEXIF_CFLAGS="$$$$CPPFLAGS" \
-		LIBEXIF_LIBS="$$$$LDFLAGS -lexif" \
-		LIBUSB_CFLAGS="$$$$CPPFLAGS" \
-		LIBUSB_LIBS="$$$$LDFLAGS -lusb" \
-		LIBS="-lltdl" \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--disable-rpath \
+	--with-drivers=all \
+	--without-included-ltdl \
+	--without-libiconv-prefix \
+	--without-libintl-prefix \
+
+CONFIGURE_VARS += \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libiconv/include" \
+	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
+	LIBEXIF_CFLAGS="$$$$CPPFLAGS" \
+	LIBEXIF_LIBS="$$$$LDFLAGS -lexif" \
+	LIBUSB_CFLAGS="$$$$CPPFLAGS" \
+	LIBUSB_LIBS="$$$$LDFLAGS -lusb" \
+	LIBS="-lltdl" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
