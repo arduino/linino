@@ -4,7 +4,7 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: $
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
@@ -14,16 +14,15 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dansguardian.org/downloads/2/Beta
-PKG_MD5SUM:=
+PKG_MD5SUM:=7877ee4d34df6ac538e6522755cedaf6
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/dansguardian
   SECTION:=net
-  DEPENDS:=+libpthread +uclibcxx
+  DEPENDS:=+libpthread +uclibcxx +zlib
   CATEGORY:=Network
   TITLE:=DansGuardian
   URL:=http://dansguardian.org
@@ -40,13 +39,13 @@ CONFIGURE_VARS += \
 	LDFLAGS="$$$$LDFLAGS" \
 	LIBS="-nodefaultlibs -luClibc++ -lpthread" \
 
-
 define Build/Configure
 	$(call Build/Configure/Default,\
 		--disable-clamav \
 		--with-sysconfsubdir=dansguardian \
 		--with-proxyuser=root \
 		--with-proxygroup=root \
+		--disable-pcre \
 	)
 endef
 

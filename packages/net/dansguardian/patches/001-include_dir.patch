@@ -1,5 +1,7 @@
---- dansguardian-2.9.9.2/configure	2007-11-13 17:17:03.000000000 +0100
-+++ dansguardian-2.9.9.2.new/configure	2008-02-21 11:15:07.000000000 +0100
+Index: dansguardian-2.9.9.2/configure
+===================================================================
+--- dansguardian-2.9.9.2.orig/configure	2008-02-27 17:52:06.000000000 +0100
++++ dansguardian-2.9.9.2/configure	2008-02-27 17:52:06.000000000 +0100
 @@ -799,7 +799,7 @@
  sharedstatedir='${prefix}/com'
  localstatedir='${prefix}/var'
