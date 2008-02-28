@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,8 +16,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.namesys.com/pub/reiserfsprogs
 PKG_MD5SUM:=b42cf15f6651c3ceff5cb84996c0d539
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,11 +29,9 @@ define Package/reiserfsprogs
 endef
 
 define Package/reiserfsprogs/description
-	This package contains utilities to create, check, resize, and debug 
-	ReiserFS filesystems.
+	This package contains utilities to create, check,
+	resize, and debug ReiserFS filesystems.
 endef
-
-#use Build/Configure/Default
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -44,11 +41,7 @@ endef
 
 define Package/reiserfsprogs/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/debugreiserfs $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/mkreiserfs $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/reiserfsck $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/reiserfstune $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/resize_reiserfs $(1)/usr/sbin/
+	$(INSTALL_BIN) $(foreach bin,debugreiserfs mkreiserfs reiserfsck reiserfstune resize_reiserfs,$(PKG_INSTALL_DIR)/usr/sbin/$(bin)) $(1)/usr/sbin/
 	ln -sf mkreiserfs $(1)/usr/sbin/mkfs.reiserfs
 	ln -sf reiserfsck $(1)/usr/sbin/fsck.reiserfs
 endef
