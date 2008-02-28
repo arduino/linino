@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,7 +16,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/socks-relay
 PKG_MD5SUM:=4a9f3298b38d8588f0ffde31b946a47f
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+# PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -32,23 +32,19 @@ define Package/srelay/conffiles
 /etc/srelay.conf
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--disable-thread \
-	)
-endef
+CONFIGURE_ARGS += \
+	--disable-thread \
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)
-endef
+CONFIGURE_VARS += \
+	CPPFLAGS="-DLINUX" \
 
 define Package/srelay/install	
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/srelay $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) files/srelay.conf $(1)/etc/
+	$(INSTALL_DATA) files/$(PKG_NAME).conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) files/srelay.init $(1)/etc/init.d/srelay
+	$(INSTALL_BIN) files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
 endef
 
 $(eval $(call BuildPackage,srelay))
