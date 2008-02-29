@@ -9,19 +9,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pulseaudio
-PKG_VERSION:=0.9.8
+PKG_VERSION:=0.9.9
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://0pointer.de/lennart/projects/pulseaudio/
-PKG_MD5SUM:=184a41d5947e583d395f0a2541525fc2
+PKG_MD5SUM:=8a6f7a9611bb194d94311764022b197
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/pulseaudio
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+liboil +libsamplerate +libsndfile +libatomicops +libltdl @BROKEN
+  DEPENDS:=+liboil +libsamplerate +libsndfile +libatomicops +libltdl +dbus +libintl +libiconv @BROKEN
   TITLE:=Network sound server
   URL:=http://www.pulseaudio.org
 endef
@@ -33,14 +33,20 @@ CONFIGURE_ARGS += \
 	--with-access-group=root \
 	--without-x \
 	--enable-static-bins \
+	--disable-dbus \
+	--disable-hal \
+	--disable-gconf \
+	--disable-tcpwrap \
 	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
 	LIBOIL_CFLAGS="-I$(STAGING_DIR)/usr/include/liboil-0.3/" \
 	LIBOIL_LIBS="-L$(STAGING_DIR)/usr/lib/" \
 
+SUPP_LIBS:=-L$(STAGING_DIR)/usr/lib/libintl/lib -L$(STAGING_DIR)/usr/lib/libiconv/lib
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib $(SUPP_LIBS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		X_CFLAGS="" \
 		all install
