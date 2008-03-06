@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -25,32 +25,28 @@ comma:= ,
 define Package/nagios-plugins
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Monitoring
   DEPENDS:=+uclibcxx
   TITLE:=plugins for Nagios checks
   URL:=http://nagiosplug.sourceforge.net/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--without-mysql \
-		--with-openssl="$(STAGING_DIR)/usr" \
-		--with-ping-command="/bin/ping -c %d %s" \
-		--with-ps-command="/bin/ps -Aopid" \
-		--with-ps-cols="6" \
-		--with-ps-format="%d %s %d %s %s %n" \
-		--with-ps-varlist="&procuid$(comma)&procpid$(comma)&procvsz$(comma)procstat$(comma)procprog$(comma)&pos" \
-		--with-uptime-command="/usr/bin/uptime" \
-		--with-ssh-command="/usr/bin/ssh" \
-		--with-nslookup-command="/usr/bin/nslookup" \
-		, \
-	)
-endef
+CONFIGURE_ARGS += \
+	--without-mysql \
+	--with-openssl="$(STAGING_DIR)/usr" \
+	--with-ping-command="/bin/ping -c %d %s" \
+	--with-ps-command="/bin/ps -Aopid" \
+	--with-ps-cols="6" \
+	--with-ps-format="%d %s %d %s %s %n" \
+	--with-ps-varlist="&procuid$(comma)&procpid$(comma)&procvsz$(comma)procstat$(comma)procprog$(comma)&pos" \
+	--with-uptime-command="/usr/bin/uptime" \
+	--with-ssh-command="/usr/bin/ssh" \
+	--with-nslookup-command="/usr/bin/nslookup"
 
 define Build/Compile
-	$(call Build/Compile/Default,\
+	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install \
-	)
+		all install
 endef
 
 define Package/nagios-plugins/install
