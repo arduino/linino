@@ -25,6 +25,7 @@ define Package/bash
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=The GNU Bourne Again SHell
+  DEPENDS:=+libncurses
   URL:=http://www.gnu.org/software/bash/
 endef
 
