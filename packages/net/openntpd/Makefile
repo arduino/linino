@@ -73,7 +73,7 @@ if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
 fi
 
 grep -q '^ntp[[:space:]]*123/udp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
-[ $$? -ne 0 ] && echo "ntp       123/udp" >>$${IPKG_INSTROOT}/etc/services
+[ $$? -ne 0 ] && echo "ntp       123/udp" >>$${IPKG_INSTROOT}/etc/services || exit 0
 endef
 
 define Build/Configure
