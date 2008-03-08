@@ -5,6 +5,7 @@
 # Set the following values to somewhat less than your actual download
 # and uplink speed. In kilobits. Also set the device that is to be shaped.
 
+MODULES='sch_ingress sch_sfq sch_htb cls_u32'
 DOWNLINK=2000
 UPLINK=240
 DEV=eth0
@@ -29,9 +30,22 @@ then
 	exit
 fi
 
+
 # clean existing down- and uplink qdiscs, hide errors
 tc qdisc del dev $DEV root    2> /dev/null > /dev/null
 tc qdisc del dev $DEV ingress 2> /dev/null > /dev/null
+
+if [ "$1" = "stop" ] 
+then 
+	for i in $MODULES ; do
+		rmmod $i
+	done
+	exit
+fi
+
+for i in $MODULES ; do
+        insmod $i
+done
 
 ###### uplink
 
