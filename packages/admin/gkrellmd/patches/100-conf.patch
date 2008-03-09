@@ -1,6 +1,7 @@
-diff -ur gkrellm-2.2.10~/server/gkrellmd.conf gkrellm-2.2.10/server/gkrellmd.conf
---- gkrellm-2.2.10~/server/gkrellmd.conf	2005-05-22 11:56:53.000000000 -0400
-+++ gkrellm-2.2.10/server/gkrellmd.conf	2007-03-10 23:32:23.000000000 -0500
+Index: gkrellm-2.3.1/server/gkrellmd.conf
+===================================================================
+--- gkrellm-2.3.1.orig/server/gkrellmd.conf	2008-03-09 10:19:26.000000000 +0100
++++ gkrellm-2.3.1/server/gkrellmd.conf	2008-03-09 10:19:26.000000000 +0100
 @@ -4,7 +4,7 @@
  # the client update frequency.  Values may be from 1 to 10 and should be
  # smaller values to reduce network traffic.
@@ -10,21 +11,26 @@ diff -ur gkrellm-2.2.10~/server/gkrellmd.conf gkrellm-2.2.10/server/gkrellmd.con
  
  # Limit number of simultaneous clients allowed to connect.
  #
-@@ -17,18 +17,18 @@
- # List of hosts allowed to connect.  If no hosts are specified in a
- # gkrellmd.conf file or on the command line, all hosts will be allowed.
+@@ -13,7 +13,7 @@
+ # Specify a specific network interface to listen on for connections.
+ # By default gkrellmd listens on all available network interfaces.
  #
--#allow-host	localhost
-+allow-host	localhost
- #allow-host	127.0.0.1
- #allow-host	::1
- #allow-host	192.168.0.*
+-address 127.0.0.1
++#address 127.0.0.1
+ 
+ # Specify the port to listen on for connections.
+ #
+@@ -29,14 +29,14 @@
  
  # Drop privileges after startup (you must start gkrellmd as root to do it).
  #
 -#user	nobody
 +user	nobody
  #group	proc
+ 
+ # Create a PID file for the running gkrellmd.  Default is no PID file.
+-#pidfile /var/run/gkrellmd.pid
++pidfile /var/run/gkrellmd.pid
  
  # Run in background and detach from the controlling terminal
 -#detach

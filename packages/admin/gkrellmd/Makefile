@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gkrellmd
-PKG_VERSION:=2.2.10
+PKG_VERSION:=2.3.1
 PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=http://members.dslextreme.com/users/billw/gkrellm/
 PKG_SOURCE:=gkrellm-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=57ef0525c0997ac2e7720712811f5a84
+PKG_SOURCE_URL:=http://members.dslextreme.com/users/billw/gkrellm/
+PKG_MD5SUM:=009d8dddd3ce5cc83a4bb4d559ee922d
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/gkrellm-$(PKG_VERSION)
 
@@ -24,8 +24,14 @@ define Package/gkrellmd
   SECTION:=admin
   CATEGORY:=Administration
   DEPENDS:=+glib1
-  TITLE:=System monitoring daemon
+  TITLE:=The GNU Krell Monitors Server
   URL:=http://gkrellm.net/
+endef
+
+define Package/gkrellmd/description
+	Gkrellmd Listens for connections from gkrellm clients. When
+	a gkrellm client connects to a gkrellmd server all builtin
+	monitors collect their data from the server.
 endef
 
 define Build/Compile
@@ -44,7 +50,7 @@ define Package/gkrellmd/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/server/$(PKG_NAME).conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/gkrellmd.init $(1)/etc/init.d/gkrellmd
+	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
 endef
 
 $(eval $(call BuildPackage,gkrellmd))
