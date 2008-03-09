@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007 - 2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mpd
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread +alsa-lib
+  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread
   TITLE:=Music Player Daemon
   URL:=http://www.musicpd.org/
 endef
@@ -39,21 +39,19 @@ define Package/mpd/conffiles
 /etc/mpd.conf
 endef
 
-ifndef CONFIG_PACKAGE_kmod-soundcore
+ifndef CONFIG_PACKAGE_kmod-sound-core
 	EXTRA_CONFIG_PARAM:=--disable-alsa
 endif
 
 define Build/Configure
 	$(call Build/Configure/Default, \
 	        $(EXTRA_CONFIG_PARAM) \
-		--disable-shout \
 	        --disable-mod \
 	        --disable-audiofile \
 	        --disable-iconv \
 	        --disable-mpc \
 	        --disable-aac \
-	        --disable-oggvorbis \
-	        --disable-oggflac \
+	        --with-tremor \
 	        --with-id3tag-includes="$(STAGING_DIR)/usr/include" \
 	        --with-id3tag-libraries="$(STAGING_DIR)/usr/lib" \
 	        --with-libFLAC-includes="$(STAGING_DIR)/usr/include" \
