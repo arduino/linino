@@ -1,8 +1,8 @@
-Index: lighttpd-1.4.16/configure
+Index: lighttpd-1.4.19/configure
 ===================================================================
---- lighttpd-1.4.16.orig/configure	2007-07-26 11:58:37.000000000 +0200
-+++ lighttpd-1.4.16/configure	2007-07-26 11:58:37.000000000 +0200
-@@ -23844,7 +23844,7 @@
+--- lighttpd-1.4.19.orig/configure	2008-03-11 20:34:42.000000000 +0100
++++ lighttpd-1.4.19/configure	2008-03-11 20:34:42.000000000 +0100
+@@ -23971,7 +23971,7 @@
  { echo "$as_me:$LINENO: result: $WITH_PCRE" >&5
  echo "${ECHO_T}$WITH_PCRE" >&6; }
  
@@ -11,11 +11,11 @@ Index: lighttpd-1.4.16/configure
    # Extract the first word of "pcre-config", so it can be a program name with args.
  set dummy pcre-config; ac_word=$2
  { echo "$as_me:$LINENO: checking for $ac_word" >&5
-Index: lighttpd-1.4.16/configure.in
+Index: lighttpd-1.4.19/configure.in
 ===================================================================
---- lighttpd-1.4.16.orig/configure.in	2007-07-26 11:58:37.000000000 +0200
-+++ lighttpd-1.4.16/configure.in	2007-07-26 11:58:37.000000000 +0200
-@@ -250,7 +250,7 @@
+--- lighttpd-1.4.19.orig/configure.in	2008-03-11 20:34:42.000000000 +0100
++++ lighttpd-1.4.19/configure.in	2008-03-11 20:34:42.000000000 +0100
+@@ -251,7 +251,7 @@
      [WITH_PCRE=$withval],[WITH_PCRE=yes])
  AC_MSG_RESULT([$WITH_PCRE])
  
