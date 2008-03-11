@@ -41,7 +41,7 @@ define Build/Compile
 endef
 
 define Package/wshaper/install
-	$(INSTALL_DIR) $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/sbin/ $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/wshaper.htb $(1)/usr/sbin/
 	$(INSTALL_BIN) ./files/wshaper.init $(1)/etc/init.d/wshaper
 endef
