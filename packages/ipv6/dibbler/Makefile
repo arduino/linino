@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dibbler
-PKG_VERSION:=0.6.0-RC1
+PKG_VERSION:=0.6.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.gz
-PKG_SOURCE_URL:=@SF/dibbler
-PKG_MD5SUM:=d279efa2b43279f17f6f51cae083d458
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_URL:=@SF/$(PKG_NAME)
+PKG_MD5SUM:=220e68795ab0375cb3bc1f40c47e0bb2
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -88,17 +86,17 @@ define Build/Compile
 		server client relay
 endef
 
-define Package/dibbler-client/install	
+define Package/dibbler-client/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dibbler-client $(1)/usr/sbin/
 endef
 
-define Package/dibbler-relay/install	
+define Package/dibbler-relay/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dibbler-relay $(1)/usr/sbin/
 endef
 
-define Package/dibbler-server/install	
+define Package/dibbler-server/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dibbler-server $(1)/usr/sbin/
 endef

@@ -1,7 +1,7 @@
-Index: dibbler-0.6.0/Misc/Makefile
+Index: dibbler-0.6.1/Misc/Makefile
 ===================================================================
---- dibbler-0.6.0.orig/Misc/Makefile	2007-07-31 12:08:57.168388403 +0200
-+++ dibbler-0.6.0/Misc/Makefile	2007-07-31 12:09:14.901398951 +0200
+--- dibbler-0.6.1.orig/Misc/Makefile	2008-03-12 13:27:35.000000000 +0100
++++ dibbler-0.6.1/Misc/Makefile	2008-03-12 13:27:36.000000000 +0100
 @@ -26,9 +26,9 @@
  	$(CC) $(COPTS) -std=c99 -c sha512.c 
  
