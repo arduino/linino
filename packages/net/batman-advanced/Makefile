@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -31,14 +31,14 @@ include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 define Package/batman-adv/Default
-  SECTION:=net
-  CATEGORY:=Network
   URL:=https://www.open-mesh.net/
   MAINTAINER:=Marek Lindner <lindner_marek@yahoo.de>
 endef
 
 define Package/batmand-adv
 $(call Package/batman-adv/Default)
+  SECTION:=net
+  CATEGORY:=Network
   DEPENDS:=+libpthread +kmod-tun
   TITLE:=B.A.T.M.A.N. layer 2 routing daemon
 endef
@@ -49,6 +49,8 @@ endef
 
 define Package/battool
 $(call Package/batman-adv/Default)
+  SECTION:=net
+  CATEGORY:=Network
   TITLE:=B.A.T.M.A.N. layer 2 debug tools
 endef
 
@@ -58,6 +60,7 @@ endef
 
 define KernelPackage/batman-adv-core
 $(call Package/batman-adv/Default)
+  SUBMENU:=Network Support
   DEPENDS:=@LINUX_2_6
   TITLE:=Kernel routing module for B.A.T.M.A.N. layer 2
   FILES:=$(PKG_KMOD_BUILD_DIR)/batman-adv-core.$(LINUX_KMOD_SUFFIX)
