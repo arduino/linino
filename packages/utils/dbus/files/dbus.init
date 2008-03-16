@@ -4,7 +4,7 @@
 SSD=start-stop-daemon
 PIDF=/var/run/dbus.pid
 PROG=/usr/sbin/dbus-daemon
-ARGS=
+ARGS=--system
 
 START=60
 start() {
