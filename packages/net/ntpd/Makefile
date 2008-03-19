@@ -26,7 +26,7 @@ define Package/ntpd
   SECTION:=net
   CATEGORY:=Network
   TITLE:=full featured NTP server
-  DEPENDS:=+libreadline
+  DEPENDS:=+libreadline +libncurses
   URL:=http://www.ntp.org/
 endef
 
