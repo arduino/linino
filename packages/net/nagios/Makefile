@@ -52,6 +52,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		INSTALL_OPTS="" \
+		STRIP=: \
 		all install install-config
 endef
 
