@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007,2008 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,14 +9,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mjpg-streamer
-PKG_VERSION:=rev51
+PKG_REV:=56
+PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
-PKG_SOURCE:=mjpg_streamer_$(PKG_VERSION).tgz
-PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=a9f26a96fdebdf3046ce920d2bcfb4ef
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=https://mjpg-streamer.svn.sourceforge.net/svnroot/mjpg-streamer/mjpg-streamer/
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=$(PKG_REV)
+PKG_SOURCE_PROTO:=svn
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,7 +30,7 @@ define Package/mjpg-streamer
 endef
 
 define Package/mjpg-streamer/description
-	streaming application for Linux-UVC compatible webcams
+	Streaming application for Linux-UVC compatible webcams
 endef
 
 EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib
@@ -38,8 +39,8 @@ define Package/mjpg-streamer/install
 	$(INSTALL_DIR) $(1)/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mjpg_streamer $(1)/sbin
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/input_uvc.so $(1)/usr/lib
-	$(CP) $(foreach plugin,http file autofocus,$(PKG_BUILD_DIR)/output_$(plugin).so) $(1)/usr/lib/
+	$(CP) $(foreach input_plugin,uvc gspcav1,$(PKG_BUILD_DIR)/input_$(input_plugin).so) $(1)/usr/lib
+	$(CP) $(foreach output_plugin,http file autofocus,$(PKG_BUILD_DIR)/output_$(output_plugin).so) $(1)/usr/lib
 	$(INSTALL_DIR) $(1)/webcam_www
 	$(CP) $(PKG_BUILD_DIR)/www/* $(1)/webcam_www
 endef
