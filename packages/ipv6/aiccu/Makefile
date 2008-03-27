@@ -47,6 +47,8 @@ define Package/aiccu/install
 	$(INSTALL_CONF) ./files/aiccu.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/aiccu.init $(1)/etc/init.d/aiccu
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
+	$(INSTALL_DATA) ./files/aiccu.hotplug $(1)/etc/hotplug.d/iface/30-aiccu
 endef
 
 $(eval $(call BuildPackage,aiccu))
