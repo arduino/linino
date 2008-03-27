@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/shorewall
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+iptables
+  DEPENDS:=+iptables +iptables-mod-extra
   TITLE:=Shorewall firewall
   URL:=http://www.shorewall.net/
   SUBMENU:=firewall

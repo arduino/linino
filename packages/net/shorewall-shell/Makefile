@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/shorewall-shell
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+iptables
+  DEPENDS:=+iptables +iptables-mod-extra
   TITLE:=Shorewall Shell
   URL:=http://www.shorewall.net/
   SUBMENU:=firewall
