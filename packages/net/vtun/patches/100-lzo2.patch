@@ -1,41 +1,38 @@
-diff -ur vtun.old/configure vtun.dev/configure
---- vtun.old/configure	2002-12-20 18:22:15.000000000 +0100
-+++ vtun.dev/configure	2006-09-29 21:06:09.000000000 +0200
-@@ -2001,14 +2001,14 @@
- 	  CPPFLAGS="$CPPFLAGS -I$p"
+diff -urN vtun-3.0.1/configure vtun-3.0.1.new/configure
+--- vtun-3.0.1/configure	2006-12-11 08:55:06.000000000 +0100
++++ vtun-3.0.1.new/configure	2008-03-27 19:10:22.000000000 +0100
+@@ -5459,7 +5459,7 @@
  	fi
-         echo "$ac_t""($dir) yes " 1>&6 
--	echo $ac_n "checking for lzo1x_decompress in -llzo""... $ac_c" 1>&6
--echo "configure:2006: checking for lzo1x_decompress in -llzo" >&5
-+	echo $ac_n "checking for lzo1x_decompress in -llzo2""... $ac_c" 1>&6
-+echo "configure:2006: checking for lzo1x_decompress in -llzo2" >&5
- ac_lib_var=`echo lzo'_'lzo1x_decompress | sed 'y%./+-%__p_%'`
- if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
-   echo $ac_n "(cached) $ac_c" 1>&6
- else
-   ac_save_LIBS="$LIBS"
--LIBS="-llzo  $LIBS"
-+LIBS="-llzo2  $LIBS"
- cat > conftest.$ac_ext <<EOF
- #line 2014 "configure"
- #include "confdefs.h"
-@@ -2037,7 +2037,7 @@
- if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
-   echo "$ac_t""yes" 1>&6
-   
--	       LIBS="$LIBS -llzo"
-+	       LIBS="$LIBS -llzo2"
- 	       cat >> confdefs.h <<\EOF
- #define HAVE_LZO 1
- EOF
-diff -ur vtun.old/lfd_lzo.c vtun.dev/lfd_lzo.c
---- vtun.old/lfd_lzo.c	2002-04-25 11:19:50.000000000 +0200
-+++ vtun.dev/lfd_lzo.c	2006-09-29 21:09:14.000000000 +0200
-@@ -36,6 +36,7 @@
- #ifdef HAVE_LZO
+         echo "$as_me:$LINENO: result: ($dir) yes " >&5
+ echo "${ECHO_T}($dir) yes " >&6
+-	LZOCHK="lzo2 lzo"
++	LZOCHK="lzo2"
+     else
+         echo "$as_me:$LINENO: result: \"no\"" >&5
+ echo "${ECHO_T}\"no\"" >&6
+@@ -5504,8 +5504,7 @@
+         echo "$as_me:$LINENO: result: \"no\"" >&5
+ echo "${ECHO_T}\"no\"" >&6
+ 	{ { echo "$as_me:$LINENO: error: LZO library not found. " >&5
+-echo "$as_me: error: LZO library not found. " >&2;}
+-   { (exit 1); exit 1; }; }
++echo "$as_me: error: LZO library not found. " >&2;} }
  
- #include "lzo1x.h"
-+#include "lzoutil.h"
+     fi
  
- static lzo_byte *zbuf;
- static lzo_voidp wmem;
+@@ -5598,13 +5597,11 @@
+       done
+       if test $havelzo = 0; then
+ 	    { { echo "$as_me:$LINENO: error: LZO library not found. " >&5
+-echo "$as_me: error: LZO library not found. " >&2;}
+-   { (exit 1); exit 1; }; }
++echo "$as_me: error: LZO library not found. " >&2;} }
+       fi
+    else
+         { { echo "$as_me:$LINENO: error: LZO headers not found. " >&5
+-echo "$as_me: error: LZO headers not found. " >&2;}
+-   { (exit 1); exit 1; }; }
++echo "$as_me: error: LZO headers not found. " >&2;} }
+    fi
+ fi
+ 

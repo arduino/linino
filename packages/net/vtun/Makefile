@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vtun
-PKG_VERSION:=2.6
+PKG_VERSION:=3.0.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/vtun
-PKG_MD5SUM:=309534fd03c5d13a19c43916f61f4bbf
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+PKG_MD5SUM:=c342ffe77055d4248a38f0b380f28c1b
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,6 +33,9 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
+		--with-lzo-headers="$(STAGING_DIR)/usr/include/lzo" \
+		--with-lzo-lib="$(STAGING_DIR)/usr/lib/" \
+		--with-ssl-headers="$(STAGING_DIR)/usr/include/openssl" \
 		, \
 		LIBS="-L$(STAGING_DIR)/usr/lib" \
 		BLOWFISH_HDR_DIR="$(STAGING_DIR)/usr/include/openssl" \
