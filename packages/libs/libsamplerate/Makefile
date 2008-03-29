@@ -1,20 +1,20 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $ Id: $
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libsamplerate
-PKG_VERSION:=0.1.2
+PKG_VERSION:=0.1.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.mega-nerd.com/SRC/
-PKG_MD5SUM:=6861c2c6b8e5273c9b80cf736b9fd0e
+PKG_MD5SUM:=3f91af22a6c4135485594d0d2c91d45d
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -32,19 +32,17 @@ define Package/libsamplerate
 endef
 
 define Package/libsamplerate/description
-	Secret Rabbit Code (aka libsamplerate) is a Sample Rate Converter for audio
+	Secret Rabbit Code (aka libsamplerate) is a Sample Rate
+	Converter for audio
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--disable-fftw \
-	)
-endef
+CONFIGURE_ARGS += \
+	--disable-fftw \
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
 endef
 
 define Build/InstallDev
