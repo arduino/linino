@@ -7,12 +7,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ptlib
-PKG_VERSION:=2.1.2
+PKG_VERSION:=2.2.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.bz2
 PKG_SOURCE_URL:=@SF/opalvoip
-PKG_MD5SUM:=3b663c577f12ab46dc910557482bf53e
+PKG_MD5SUM:=a448ef2b9504db3642159accefd6d85a
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
 
@@ -38,7 +38,7 @@ endef
 CONFIGURE_ARGS += \
 	--enable-minsize \
 	--enable-opal \
-	--disable-internalregex \
+	--enable-internalregex \
 	--enable-audio \
 	--disable-alsa \
 	--disable-asn \
@@ -61,7 +61,7 @@ CONFIGURE_ARGS += \
 	--disable-pop3smtp \
 	--disable-remconn \
 	--enable-resolver \
-	--disable-qos \
+	--enable-qos \
 	--disable-sasl \
 	--disable-sdl \
 	--disable-serial \
@@ -77,7 +77,7 @@ CONFIGURE_ARGS += \
 	--disable-bsdvideo \
 	--disable-video \
 	--disable-vxml \
-	--disable-wavfile \
+	--enable-wavfile \
 	--disable-xmlrpc \
 
 CONFIGURE_VARS += \
