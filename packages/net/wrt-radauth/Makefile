@@ -9,10 +9,10 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wrt-radauth
-PKG_VERSION:=1.0
+PKG_VERSION:=0.1
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.zerfleddert.de/wrt54g/
 PKG_MD5SUM:=f941e3139175dc6b87f6c89ba8848a07
 
@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/wrt-radauth
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=kmod-brcm-wl +nvram
+  DEPENDS:=+kmod-brcm-wl +nvram
   TITLE:=A Radius MAC authenticator for Broadcom based access points
   URL:=http://www.zerfleddert.de/wrt54g/
 endef
@@ -35,6 +35,7 @@ define Package/wrt-radauth/description
 endef
   
 define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) clean
 	$(call Build/Compile/Default, \
 		CFLAGS="$(EXTRA_CFLAGS)" \
 		LDFLAGS="$(EXTRA_LDFLAGS)" \
