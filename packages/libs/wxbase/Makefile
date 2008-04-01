@@ -9,14 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wxbase
-PKG_VERSION:=2.6.4
+PKG_VERSION:=2.8.7
 PKG_RELEASE:=1
 
-PKG_SOURCE:=wxBase-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=wxGTK-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/wxwindows
-PKG_MD5SUM:=6e55324d2a522d23fd8834ad8656e0b6
+PKG_MD5SUM:=b25e85eeee524903214ebb520753f4bd
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/wxBase-$(PKG_VERSION)
+PKG_BUILD_DIR:=$(BUILD_DIR)/wxGTK-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -114,18 +114,18 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/include $(1)/usr/lib
-	$(CP) -L $(PKG_INSTALL_DIR)/usr/bin/wx-config $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/wx-2.6 $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.6-*.so $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.6.so.* $(1)/usr/lib/
+	$(CP) -L $(PKG_BUILD_DIR)/wx-config $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/wx-2.8 $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.8-*.so $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.8.so.* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/wx $(1)/usr/lib/
-	$(SED) 's,-I$$$${includedir}/wx-2.6,-I$(STAGING_DIR)/usr/include/wx-2.6,g' $(1)/usr/bin/wx-config
+	$(SED) 's,-I$$$${includedir}/wx-2.8,-I$(STAGING_DIR)/usr/include/wx-2.8,g' $(1)/usr/bin/wx-config
 	$(SED) 's,-I$$$${libdir}/wx/include,-I$(STAGING_DIR)/usr/lib/wx/include,g' $(1)/usr/bin/wx-config
 endef
 
 define Package/libwxbase/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.6.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.8.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libwxbase))
