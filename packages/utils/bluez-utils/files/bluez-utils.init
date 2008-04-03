@@ -108,16 +108,6 @@ start() {
 	config_foreach rfcomm_config rfcomm
 	config_foreach dund_config dund
 	config_foreach pand_config pand
-	
-        #start passkey agent
-        passkey-agent --default 1234&
-
-        hcitool hci0 up
-        rfcomm release 0
-
-        #set up serial conenction
-        #rfcomm connect /dev/rfcomm0 00:1D:E9:5B:92:8D&
-
 }
 
 stop() {
