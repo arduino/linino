@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -30,14 +30,15 @@ define Package/pps-tools/description
 endef
 
 define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_BUILD_DIR)/timepps.h $(1)/usr/include/
 endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -DHAVE_ISC_READER=1 -I ." \
-		BINDIR="/usr/sbin" MANDIR="/usr/man" 
+		CFLAGS="$(TARGET_CFLAGS) -DHAVE_ISC_READER=1 -I$(LINUX_DIR)/include -I ." \
+		BINDIR="/usr/sbin" MANDIR="/usr/man"
 endef
 
 define Package/pps-tools/install
