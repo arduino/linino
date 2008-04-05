@@ -75,7 +75,7 @@ endef
 
 # FIXME: check if busybox really provides a wget applet
 define Package/wget/postrm
-!/bin/sh
+#!/bin/sh
 ln -sf ../../bin/busybox $${IPKG_INSTROOT}/usr/bin/wget
 endef
 

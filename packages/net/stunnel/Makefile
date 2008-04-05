@@ -49,7 +49,7 @@ define Package/stunnel/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/stunnel $(1)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libstunnel.so $(1)/usr/sbin/
 	$(CP) ./files/stunnel.conf $(1)/etc/stunnel/stunnel.conf
-	$(CP) ./files/stunnel.init $(1)/etc/init.d/S90stunnel
+	$(INSTALL_BIN) ./files/stunnel.init $(1)/etc/init.d/S90stunnel
 endef
 
 $(eval $(call BuildPackage,stunnel))
