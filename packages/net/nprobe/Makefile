@@ -23,11 +23,11 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/nProbe
 include $(INCLUDE_DIR)/package.mk
 
 define Package/nprobe
-	SECTION:=utils
-	CATEGORY:=Utilities
-	DEPENDS:=+libpcap +libpcre +libpthread +libwrap
-	TITLE:=nProbe
-	URL:=http://invisible-island.net/dialog/
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=+libpcap +libpcre +libpthread +libwrap +libmysqlclient
+  TITLE:=nProbe
+  URL:=http://invisible-island.net/dialog/
 endef
 
 define Package/nprobe/description
