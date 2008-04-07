@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=babel
-PKG_VERSION:=0.11
+PKG_VERSION:=0.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/
-PKG_MD5SUM:=390bd17c00f009f6364d70a0fb9777fb
+PKG_MD5SUM:=33a4f783ae7b6ed25668473ee9771297
 
 include $(INCLUDE_DIR)/package.mk
 
