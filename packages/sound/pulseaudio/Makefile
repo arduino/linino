@@ -1,20 +1,22 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: $
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pulseaudio
-PKG_VERSION:=0.9.9
+PKG_VERSION:=0.9.10
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://0pointer.de/lennart/projects/pulseaudio/
-PKG_MD5SUM:=8a6f7a9611bb194d94311764022b197
+PKG_MD5SUM:=9187ac1b302b9ab45f355242f453882e
+
+PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,10 +35,13 @@ CONFIGURE_ARGS += \
 	--with-access-group=root \
 	--without-x \
 	--enable-static-bins \
+	--enable-ltdl-install \
 	--disable-dbus \
 	--disable-hal \
 	--disable-gconf \
 	--disable-tcpwrap \
+
+CONFIGURE_VARS += \
 	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
 	LIBOIL_CFLAGS="-I$(STAGING_DIR)/usr/include/liboil-0.3/" \
 	LIBOIL_LIBS="-L$(STAGING_DIR)/usr/lib/" \

@@ -1,14 +1,14 @@
-diff -urN pulseaudio-0.9.7/configure pulseaudio-0.9.7.new/configure
---- pulseaudio-0.9.7/configure  2007-10-30 17:02:51.000000000 +0100
-+++ pulseaudio-0.9.7.new/configure      2007-11-11 20:39:27.000000000 +0100
-@@ -29636,8 +29636,7 @@
+Index: pulseaudio-0.9.10/configure
+===================================================================
+--- pulseaudio-0.9.10.orig/configure	2008-04-11 13:28:12.000000000 +0200
++++ pulseaudio-0.9.10/configure	2008-04-11 13:28:12.000000000 +0200
+@@ -30281,8 +30281,7 @@
  else
-
- { { echo "$as_me:$LINENO: error: *** libatomic-ops headers not found" >&5
+ 
+    { { echo "$as_me:$LINENO: error: *** libatomic-ops headers not found" >&5
 -echo "$as_me: error: *** libatomic-ops headers not found" >&2;}
 -   { (exit 1); exit 1; }; }
 +echo "$as_me: error: *** libatomic-ops headers not found" >&2;} }
-
+ 
  fi
-
-
+ 

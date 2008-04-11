@@ -1,6 +1,16 @@
-diff -urN pulseaudio-0.9.7/src/pulsecore/shm.c pulseaudio-0.9.7.new/src/pulsecore/shm.c
---- pulseaudio-0.9.7/src/pulsecore/shm.c	2007-10-28 20:13:53.000000000 +0100
-+++ pulseaudio-0.9.7.new/src/pulsecore/shm.c	2007-12-09 19:25:03.000000000 +0100
+Index: pulseaudio-0.9.10/src/pulsecore/shm.c
+===================================================================
+--- pulseaudio-0.9.10.orig/src/pulsecore/shm.c	2008-04-11 13:28:12.000000000 +0200
++++ pulseaudio-0.9.10/src/pulsecore/shm.c	2008-04-11 13:28:13.000000000 +0200
+@@ -125,7 +125,7 @@
+         m->do_unlink = 0;
+ 
+     } else {
+-#ifdef HAVE_SHM_OPEN
++#ifdef HAVE_SHM_UNLINK
+         struct shm_marker *marker;
+ 
+         pa_random(&m->id, sizeof(m->id));
 @@ -167,7 +167,7 @@
  
  fail:
@@ -19,7 +29,25 @@ diff -urN pulseaudio-0.9.7/src/pulsecore/shm.c pulseaudio-0.9.7.new/src/pulsecor
          if (munmap(m->ptr, m->size) < 0)
              pa_log("munmap() failed: %s", pa_cstrerror(errno));
  
-@@ -370,8 +370,10 @@
+@@ -260,7 +260,7 @@
+ #endif
+ }
+ 
+-#ifdef HAVE_SHM_OPEN
++#ifdef HAVE_SHM_UNLINK
+ 
+ int pa_shm_attach_ro(pa_shm *m, unsigned id) {
+     char fn[32];
+@@ -318,7 +318,7 @@
+ 
+ int pa_shm_cleanup(void) {
+ 
+-#ifdef HAVE_SHM_OPEN
++#ifdef HAVE_SHM_UNLINK
+ #ifdef SHM_PATH
+     DIR *d;
+     struct dirent *de;
+@@ -371,8 +371,10 @@
          /* Ok, the owner of this shms segment is dead, so, let's remove the segment */
          segment_name(fn, sizeof(fn), id);
  
