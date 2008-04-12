@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,9 +16,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.us.xiph.org/releases/icecast/
 PKG_MD5SUM:=35256fbc4a93571662af2ed18fbbfcc5
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 TREMOR_BUILD_DIR=$(PKG_BUILD_DIR)/libvorbisidec-1.2.0-dave
@@ -27,7 +24,7 @@ TREMOR_DIR=$(TREMOR_BUILD_DIR)/ipkg-install/usr
 define Package/icecast
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libcurl +libvorbisidec +libxml2 +libxslt
+  DEPENDS:=+libcurl +libxml2 +libxslt
   TITLE:=A streaming media server for Ogg/Vorbis and MP3 audio streams
   URL:=http://www.icecast.org/
   SUBMENU:=multimedia
