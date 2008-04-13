@@ -1,8 +1,10 @@
---- vsftpd-2.0.4-orig/tunables.c	2006-01-07 20:32:44.000000000 +0100
-+++ vsftpd-2.0.4/tunables.c	2006-01-11 18:25:15.000000000 +0100
-@@ -92,7 +92,7 @@
- unsigned int tunable_max_per_ip = 0;
- unsigned int tunable_trans_chunk_size = 0;
+Index: vsftpd-2.0.6/tunables.c
+===================================================================
+--- vsftpd-2.0.6.orig/tunables.c	2008-04-13 11:41:08.000000000 +0200
++++ vsftpd-2.0.6/tunables.c	2008-04-13 11:41:09.000000000 +0200
+@@ -100,7 +100,7 @@
+ /* -rw------- */
+ unsigned int tunable_chown_upload_mode = 0600;
  
 -const char* tunable_secure_chroot_dir = "/usr/share/empty";
 +const char* tunable_secure_chroot_dir = "/var/run/vsftpd";

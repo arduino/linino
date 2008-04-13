@@ -5,8 +5,10 @@ sysutil.c:604: error: assignment of read-only member '__in'
 sysutil.c: In function 'vsf_sysutil_wait_get_exitcode':
 sysutil.c:614: error: assignment of read-only member '__in'
 
---- vsftpd-2.0.4-old/sysutil.c
-+++ vsftpd-2.0.4-new/sysutil.c
+Index: vsftpd-2.0.6/sysutil.c
+===================================================================
+--- vsftpd-2.0.6.orig/sysutil.c	2008-04-13 11:41:08.000000000 +0200
++++ vsftpd-2.0.6/sysutil.c	2008-04-13 11:41:09.000000000 +0200
 @@ -601,7 +601,7 @@
  vsf_sysutil_wait_exited_normally(
    const struct vsf_sysutil_wait_retval* p_waitret)
