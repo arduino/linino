@@ -1,0 +1,13 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2007-2008 OpenWrt.org
+
+START=70
+
+start() {
+        [ -f /etc/keepalived/keepalived ] && /usr/sbin/keepalived
+}
+
+stop() {
+        killall keepalived      
+}
+
