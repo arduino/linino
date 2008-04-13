@@ -23,7 +23,7 @@ define Package/autossh
   CATEGORY:=Network
   TITLE:=Autossh client
   URL:=http://www.harding.motd.ca/autossh/
-  SUBMENU:=ssh
+  SUBMENU:=SSH
 endef
 
 define Build/Compile

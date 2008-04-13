@@ -24,7 +24,7 @@ define Package/joe
   DEPENDS:=+libncurses
   TITLE:=JOE - Joes own editor
   URL:=http://sourceforge.net/projects/joe-editor/
-  SUBMENU:=editors
+  SUBMENU:=Editors
 endef
 
 define Package/joe/description

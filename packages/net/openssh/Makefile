@@ -32,7 +32,7 @@ define Package/openssh-client
   DEPENDS:=+libopenssl +zlib
   TITLE:=OpenSSH client
   URL:=http://www.openssh.com/
-  SUBMENU:=ssh
+  SUBMENU:=SSH
 endef
 
 define Package/openssh-client/description
@@ -49,7 +49,7 @@ define Package/openssh-client-utils
   DEPENDS:=openssh-client
   TITLE:=OpenSSH client utilities
   URL:=http://www.openssh.com/
-  SUBMENU:=ssh
+  SUBMENU:=SSH
 endef
 
 define Package/openssh-client-utils/description
@@ -62,7 +62,7 @@ define Package/openssh-server
   DEPENDS:=+libopenssl +zlib
   TITLE:=OpenSSH server
   URL:=http://www.openssh.com/
-  SUBMENU:=ssh
+  SUBMENU:=SSH
 endef
 
 define Package/openssh-server/description
@@ -79,7 +79,7 @@ define Package/openssh-sftp-client
   DEPENDS:=+libopenssl +zlib
   TITLE:=OpenSSH SFTP client
   URL:=http://www.openssh.com/
-  SUBMENU:=ssh
+  SUBMENU:=SSH
 endef
 
 define Package/openssh-sftp-client/description
@@ -92,7 +92,7 @@ define Package/openssh-sftp-server
   DEPENDS:=
   TITLE:=OpenSSH SFTP server
   URL:=http://www.openssh.com/
-  SUBMENU:=ssh
+  SUBMENU:=SSH
 endef
 
 define Package/openssh-sftp-server/description
