@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,9 +16,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.sane-project.org/pub/sane/$(PKG_NAME)-$(PKG_VERSION)/
 PKG_MD5SUM:=8c0936272dcfd4e98c51512699f1c06f
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/sane-backends/Default
@@ -26,8 +23,12 @@ define Package/sane-backends/Default
   URL:=http://www.sane-project.org/
 endef
 
+define Package/sane-backends/Default/description
+ SANE (Scanner Access Now Easy) is a universal scanner interface.
+endef
+
 define Package/sane-backends
-  $(call Package/sane-backends/Default)
+$(call Package/sane-backends/Default)
   SECTION:=utils
   CATEGORY:=Utilities
   DEPENDS:=+sane-libs
@@ -35,28 +36,30 @@ define Package/sane-backends
 endef
 
 define Package/sane-backends/description
-	SANE (Scanner Access Now Easy) is a universal scanner interface.
+$(call Package/sane-backends/Default/description)
+ This package contains the SANE daemon.
 endef
 
 define Package/sane-libs
   $(call Package/sane-backends/Default)
   SECTION:=libs
   CATEGORY:=Libraries
+  DEPENDS:=+libjpeg +libpthread +libusb
   TITLE+= (libraries)
 endef
 
 define Package/sane-libs/description
-	SANE (Scanner Access Now Easy) is a universal scanner interface.
+$(call Package/sane-backends/Default/description)
+ This package contains the SANE shared libraries.
 endef
  
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--disable-ipv6 \
-		--disable-translations \
-		--without-gphoto2 \
-		--disable-debug \
-	)
-endef
+CONFIGURE_ARGS+= \
+	--enable-shared \
+	--enable-static \
+	--disable-ipv6 \
+	--disable-translations \
+	--without-gphoto2 \
+	--disable-debug \
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -86,7 +89,7 @@ define Build/InstallDev
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/sane $(1)/usr/include/
 	mkdir -p $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsane.{la,so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsane.{a,so*} $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,sane-backends))
