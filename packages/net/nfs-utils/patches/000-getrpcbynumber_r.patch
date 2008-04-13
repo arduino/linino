@@ -1,5 +1,7 @@
---- nfs-utils-1.1.0/support/nfs/svc_socket.c~	2007-05-10 20:40:57.000000000 -0700
-+++ nfs-utils-1.1.0/support/nfs/svc_socket.c	2007-06-07 15:37:39.000000000 -0700
+Index: nfs-utils-1.1.2/support/nfs/svc_socket.c
+===================================================================
+--- nfs-utils-1.1.2.orig/support/nfs/svc_socket.c	2008-04-13 10:38:24.000000000 +0200
++++ nfs-utils-1.1.2/support/nfs/svc_socket.c	2008-04-13 10:38:24.000000000 +0200
 @@ -67,8 +67,10 @@
    memset (&addr, 0, sizeof (addr));
    addr.sin_family = AF_INET;

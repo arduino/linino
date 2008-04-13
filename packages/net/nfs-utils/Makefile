@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nfs-utils
-PKG_VERSION:=1.1.0
+PKG_VERSION:=1.1.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.sourceforge.net/nfs/
-PKG_MD5SUM:=df88c6fe88a26f9797e74cb2d3291a2a
+PKG_MD5SUM:=76ee9274c2b867839427eba91b327f03
 
 PKG_BUILD_DEPENDS:=libgssapi librpcsecgss libnfsidmap libwrap
 

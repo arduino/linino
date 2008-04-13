@@ -1,6 +1,8 @@
---- nfs-utils-1.1.0/utils/mountd/cache.c~	2007-05-10 20:40:57.000000000 -0700
-+++ nfs-utils-1.1.0/utils/mountd/cache.c	2007-06-07 15:29:28.000000000 -0700
-@@ -131,17 +131,17 @@
+Index: nfs-utils-1.1.2/utils/mountd/cache.c
+===================================================================
+--- nfs-utils-1.1.2.orig/utils/mountd/cache.c	2008-04-13 10:38:24.000000000 +0200
++++ nfs-utils-1.1.2/utils/mountd/cache.c	2008-04-13 10:38:25.000000000 +0200
+@@ -141,17 +141,17 @@
  	pw = getpwuid(uid);
  	if (!pw)
  		rv = -1;
