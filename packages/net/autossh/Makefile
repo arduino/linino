@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=autossh
-PKG_VERSION:=1.4a
+PKG_VERSION:=1.4b
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://www.harding.motd.ca/autossh/
-PKG_MD5SUM:=a5497938986f0c179926f1ebba603767
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_MD5SUM:=8f9aa006f6f69e912d3c2f504622d6f7
 
 include $(INCLUDE_DIR)/package.mk
 
