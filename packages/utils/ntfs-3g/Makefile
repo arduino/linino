@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/ntfs-3g
   TITLE:=NTFS-3G
-  DEPENDS:=+libfuse +fuse-utils
+  DEPENDS:=+libfuse +fuse-utils +libpthread
   SECTION:=utils
   CATEGORY:=Utilities
   URL:=http://www.ntfs-3g.org
