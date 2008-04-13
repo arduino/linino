@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -47,8 +47,8 @@ define Package/subversion-server
 endef
 
 CONFIGURE_ARGS += \
-	--with-apr="$(STAGING_DIR)/host/bin/apr-1-config" \
-	--with-apr-util="$(STAGING_DIR)/host/bin/apu-1-config" \
+	--with-apr="$(STAGING_DIR)/usr/bin/apr-1-config" \
+	--with-apr-util="$(STAGING_DIR)/usr/bin/apu-1-config" \
 	--with-neon="$(STAGING_DIR)/usr/include/neon" \
 	--disable-mod-activation \
 	--without-ruby-sitedir \
