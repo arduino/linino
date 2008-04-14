@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,18 +16,21 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://savannah.nongnu.org/download/rdiff-backup/
 PKG_MD5SUM:=756b38aaf2602d097cafd08996fb7887
 
+PKG_BUILD_DEPENDS:=python
+
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 ifneq ($(MAKECMDGOALS),download)
   $(if $(DUMP)$(Build/Compile/PyMod),,$(error Python packaging code not found.))
 endif
 
-define PyPackage/rdiff-backup
-  SECTION:=utils
-  CATEGORY:=Utilities
+define Package/rdiff-backup
+  SUBMENU:=Python
+  SECTION:=lang
+  CATEGORY:=Languages
   TITLE:=Incremental backup utility
   URL:=http://www.nongnu.org/rdiff-backup
-  DEPENDS+= +librsync
+  DEPENDS:=python-core +librsync
 endef
 
 define PyPackage/rdiff-backup/filespec
@@ -45,3 +48,4 @@ define Build/Compile
 endef
 
 $(eval $(call PyPackage,rdiff-backup))
+$(eval $(call BuildPackage,rdiff-backup))
