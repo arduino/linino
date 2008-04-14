@@ -51,9 +51,13 @@ $(call Package/rrdtool/Default)
   DEPENDS+= +librrd
 endef
 
-define Package/rrdpy
-  TITLE:=Round Robin Database (RRD) python bindings (v1.2.x)
-  DEPENDS+= +librrd
+define Package/python-rrd
+$(call Package/rrdtool/Default)
+  SUBMENU:=Python
+  SECTION:=lang
+  CATEGORY:=Languages
+  TITLE+= python bindings (v1.2.x)
+  DEPENDS+= python-core +librrd
 endef
 
 CONFIGURE_ARGS += \
@@ -80,7 +84,7 @@ else
   CONFIGURE_ARGS += --disable-rrdcgi
 endif
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_rrdpy),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_python-rrd),)
   CONFIGURE_ARGS += \
 	--enable-python
   CONFIGURE_VARS += \
@@ -115,19 +119,20 @@ define Package/rrdcgi/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rrdcgi $(1)/usr/bin/
 endef
 
-define PyPackage/rrdpy/install
-	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
-	$(CP) $(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* $(1)$(PYTHON_PKG_DIR)/
-endef
-
 define Package/rrdtool/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rrdtool $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rrdupdate $(1)/usr/bin/
 endef
 
+define PyPackage/python-rrd/install
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
+	$(CP) $(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* $(1)$(PYTHON_PKG_DIR)/
+endef
+
 $(eval $(call BuildPackage,librrd))
 $(eval $(call BuildPackage,rrdcgi))
-$(eval $(call PyPackage,rrdpy))
-$(eval $(call BuildPackage,rrdpy))
 $(eval $(call BuildPackage,rrdtool))
+
+$(eval $(call PyPackage,python-rrd))
+$(eval $(call BuildPackage,python-rrd))
