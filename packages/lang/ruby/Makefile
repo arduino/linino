@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,9 +15,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.ruby-lang.org/pub/ruby/1.8/
 PKG_MD5SUM:=eb7f25818cb6993839b38d1f21bd4ea1
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -54,12 +51,8 @@ $(call Package/ruby/Default)
   TITLE+= (shared library)
 endef
 
-
-# NOTE: it would be a *lot* of work to attempt to break down Ruby's
-# standard library bundle into coherent pieces, and work out the dependencies
-# between them. This could be useful, e.g. if you don't want to do any XML or
-# YAML handling, why carry all that code? However, squashfs does a good
-# job of fitting it all into flash.
+# Ongoing work to break up ruby's standard library into coherent pieces
+# with minimal dependencies between them
 
 define Package/ruby-core
 $(call Package/ruby/Default)
@@ -214,6 +207,7 @@ define Package/ruby-core/install
 		\
 		$(1)/usr/lib/ruby/1.8/*/gdbm.so \
 		\
+		$(1)/usr/lib/ruby/1.8/kconv.rb \
 		$(1)/usr/lib/ruby/1.8/*/nkf.so \
 		\
 		$(1)/usr/lib/ruby/1.8/digest \
@@ -227,8 +221,15 @@ define Package/ruby-core/install
 		$(1)/usr/lib/ruby/1.8/rmd160.rb \
 		$(1)/usr/lib/ruby/1.8/sha1.rb \
 		$(1)/usr/lib/ruby/1.8/sha2.rb \
+		$(1)/usr/lib/ruby/1.8/drb/ssl.rb \
+		$(1)/usr/lib/ruby/1.8/net/ftptls.rb \
+		$(1)/usr/lib/ruby/1.8/net/https.rb \
+		$(1)/usr/lib/ruby/1.8/net/telnets.rb \
+		$(1)/usr/lib/ruby/1.8/webrick/ssl.rb \
 		\
 		$(1)/usr/lib/ruby/1.8/*/readline.so \
+		$(1)/usr/lib/ruby/1.8/irb/completion.rb \
+		$(1)/usr/lib/ruby/1.8/irb/ext/save-history.rb \
 		\
 		$(1)/usr/lib/ruby/1.8/*/zlib.so \
 		\
@@ -265,6 +266,7 @@ define Package/ruby-core/install
 		\
 		$(1)/usr/lib/ruby/1.8/yaml \
 		$(1)/usr/lib/ruby/1.8/yaml.rb \
+		$(1)/usr/lib/ruby/1.8/*/syck.so \
 		
 	find $(1) -name '*.h' | xargs rm -f
 endef
@@ -305,6 +307,7 @@ endef
 
 define Package/ruby-nkf/install
 	( cd $(PKG_INSTALL_DIR); $(TAR) -cf - \
+		usr/lib/ruby/1.8/kconv.rb \
 		usr/lib/ruby/1.8/*/nkf.so \
 	) | ( cd $(1); $(TAR) -xf - )
 endef
@@ -322,6 +325,11 @@ define Package/ruby-openssl/install
 		usr/lib/ruby/1.8/rmd160.rb \
 		usr/lib/ruby/1.8/sha1.rb \
 		usr/lib/ruby/1.8/sha2.rb \
+		usr/lib/ruby/1.8/drb/ssl.rb \
+		usr/lib/ruby/1.8/net/ftptls.rb \
+		usr/lib/ruby/1.8/net/https.rb \
+		usr/lib/ruby/1.8/net/telnets.rb \
+		usr/lib/ruby/1.8/webrick/ssl.rb \
 	) | ( cd $(1); $(TAR) -xf - )
 endef
 
@@ -336,6 +344,8 @@ endef
 define Package/ruby-readline/install
 	( cd $(PKG_INSTALL_DIR); $(TAR) -cf - \
 		usr/lib/ruby/1.8/*/readline.so \
+		usr/lib/ruby/1.8/irb/completion.rb \
+		usr/lib/ruby/1.8/irb/ext/save-history.rb \
 	) | ( cd $(1); $(TAR) -xf - )
 endef
 
@@ -386,9 +396,11 @@ define Package/ruby-xsd/install
 endef
 
 define Package/ruby-yaml/install
-	$(INSTALL_DIR) $(1)/usr/lib/ruby/1.8
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/yaml $(1)/usr/lib/ruby/1.8/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/yaml.rb $(1)/usr/lib/ruby/1.8/
+	( cd $(PKG_INSTALL_DIR); $(TAR) -cf - \
+		usr/lib/ruby/1.8/yaml \
+		usr/lib/ruby/1.8/yaml.rb \
+		usr/lib/ruby/1.8/*/syck.so \
+	) | ( cd $(1); $(TAR) -xf - )
 endef
 
 define Package/ruby-zlib/install
