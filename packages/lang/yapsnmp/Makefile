@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,6 +15,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=8a3e9a5b814388d7907c639105cb2365
+
 PKG_BUILD_DEPENDS:=python
 
 PKG_FIXUP = libtool
@@ -26,6 +27,7 @@ ifneq ($(MAKECMDGOALS),download)
 endif
 
 define Package/python-yapsnmp
+  SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=Python interface to Net-SNMP

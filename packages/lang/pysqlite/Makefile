@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,6 +15,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://initd.org/pub/software/pysqlite/releases/2.3/2.3.5/
 PKG_MD5SUM:=b4a185e936848370fcc1a5b17755b641
+
 PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
@@ -24,9 +25,12 @@ ifneq ($(MAKECMDGOALS),download)
 endif
 
 define Package/python-sqlite
+ SUBMENU:=Python
+ SECTION:=lang
+ CATEGORY:=Languages
  TITLE:=SQLite database adapter for Python
  URL:=http://www.initd.org/tracker/pysqlite/wiki/pysqlite
- DEPENDS:= +libsqlite3
+ DEPENDS:=python-core +libsqlite3
 endef
 
 define Package/python-sqlite/description

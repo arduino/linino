@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -26,10 +26,11 @@ ifneq ($(MAKECMDGOALS),download)
 endif
 
 define Package/twisted/default
+  SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
-  DEPENDS:=python-core
   URL:=http://twistedmatrix.com/
+  DEPENDS:=python-core
 endef
 
 define Package/twisted/default/description

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -26,6 +26,7 @@ ifneq ($(MAKECMDGOALS),download)
 endif
 
 define Package/python-egenix-mx
+  SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
   DEPENDS:=python-core
