@@ -1,7 +1,7 @@
-Index: gphoto2-2.4.0/gphoto2/foreach.c
+Index: gphoto2-2.4.1/gphoto2/foreach.c
 ===================================================================
---- gphoto2-2.4.0.orig/gphoto2/foreach.c	2008-02-26 19:59:37.000000000 +0100
-+++ gphoto2-2.4.0/gphoto2/foreach.c	2008-02-26 19:59:38.000000000 +0100
+--- gphoto2-2.4.1.orig/gphoto2/foreach.c	2008-04-19 13:58:07.000000000 +0200
++++ gphoto2-2.4.1/gphoto2/foreach.c	2008-04-19 13:58:07.000000000 +0200
 @@ -31,6 +31,8 @@
  
  #include <gphoto2/gphoto2-port-log.h>
