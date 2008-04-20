@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/collectd
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS=+libgcc
+  DEPENDS=+libgcc +libpthread
   TITLE:=Lightweight system statistics collection daemon
   URL:=http://verplant.org/collectd/
 endef
