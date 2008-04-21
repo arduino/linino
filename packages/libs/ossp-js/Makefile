@@ -1,0 +1,128 @@
+#
+# Copyright (C) 2008 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id$
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=js
+PKG_VERSION:=1.6.20070208
+PKG_RELEASE:=1
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=ftp://ftp.ossp.org/pkg/lib/js/
+PKG_MD5SUM:=07f6cad7e03fd74a949588c3d4b333de
+
+PKG_BUILD_DEPENDS:= libreadline
+PKG_FIXUP = libtool
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/js/Default
+ TITLE:=Mozilla JavaScript Engine
+ URL:=http://www.ossp.org/pkg/lib/js/
+endef
+
+define Package/js
+$(call Package/js/Default)
+ SECTION:=lang
+ CATEGORY:=Languages
+ SUBMENU:=JavaScript
+ TITLE+= (interpreter)
+ DEPENDS+= +libjs +libreadline +libncurses
+endef
+
+define Package/libjs
+$(call Package/js/Default)
+ SECTION:=libs
+ CATEGORY:=Libraries
+ TITLE+= (library)
+endef
+
+define Build/Configure
+	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
+		./configure \
+			--prefix=/usr \
+			--exec-prefix=/usr \
+			--bindir=/usr/bin \
+			--datadir=/usr/share \
+			--includedir=/usr/include \
+			--infodir=/usr/share/info \
+			--libdir=/usr/lib \
+			--libexecdir=/usr/lib \
+			--localstatedir=/var \
+			--mandir=/usr/share/man \
+			--sbindir=/usr/sbin \
+			--sysconfdir=/etc \
+			$(DISABLE_NLS) \
+			$(DISABLE_LARGEFILE) \
+			--disable-shared \
+			--enable-static \
+	);
+	$(MAKE) -C $(PKG_BUILD_DIR) src/jsautocfg.h
+	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
+		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		CPPFLAGS="$(TARGET_CPPFLAGS)" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		./configure \
+			--target=$(GNU_TARGET_NAME) \
+			--host=$(GNU_TARGET_NAME) \
+			--build=$(GNU_HOST_NAME) \
+			--program-prefix="" \
+			--program-suffix="" \
+			--prefix=/usr \
+			--exec-prefix=/usr \
+			--bindir=/usr/bin \
+			--datadir=/usr/share \
+			--includedir=/usr/include \
+			--infodir=/usr/share/info \
+			--libdir=/usr/lib \
+			--libexecdir=/usr/lib \
+			--localstatedir=/var \
+			--mandir=/usr/share/man \
+			--sbindir=/usr/sbin \
+			--sysconfdir=/etc \
+			$(DISABLE_NLS) \
+			$(DISABLE_LARGEFILE) \
+			--enable-shared \
+			--enable-static \
+			--with-dso \
+			--with-editline \
+			--with-file \
+			--without-perl \
+	);
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
+endef
+
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/js-config $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/js $(1)/usr/include/	
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libjs.{a,so*} $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/js.pc $(1)/usr/lib/pkgconfig/
+endef
+
+define Package/js/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/js $(1)/usr/bin/
+endef
+
+define Package/libjs/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libjs.so.* $(1)/usr/lib/
+endef
+
+$(eval $(call BuildPackage,js))
+$(eval $(call BuildPackage,libjs))
