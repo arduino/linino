@@ -1,21 +1,22 @@
 # 
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id:$
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=liboil
 PKG_VERSION:=0.3.12
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://liboil.freedesktop.org/download/
 PKG_MD5SUM:=96ee4c627ffb0db3999cef3c7454b1d9
 
+PKG_BUILD_DEPENDS:=libnotimpl
 PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -23,7 +24,6 @@ include $(INCLUDE_DIR)/package.mk
 define Package/liboil
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libnotimpl
   TITLE:=simple functions optimized for various CPUs
   URL:=http://liboil.freedesktop.org/wiki/
 endef
@@ -54,18 +54,17 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/liboil-0.3/ $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/liboil-0.3 $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liboil-0.3.{a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
-	$(CP) $(PKG_BUILD_DIR)/liboil.pc $(1)/usr/lib/pkgconfig/
-	$(SED) 's,$(TARGET_LDFLAGS),,g' $(1)/usr/lib/pkgconfig/liboil.pc
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/liboil-0.3.pc $(1)/usr/lib/pkgconfig/
 endef
 
 define Package/liboil/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liboil-0.3.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liboil-0.3.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,liboil))

@@ -1,0 +1,19 @@
+--- liboil-0.3.12/liboil.pc.in.orig	2006-10-11 07:12:30.000000000 +0200
++++ liboil-0.3.12/liboil.pc.in	2008-04-04 10:22:24.000000000 +0200
+@@ -1,7 +1,7 @@
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+ libdir=@libdir@
+-includedir=@includedir@/liboil-@LIBOIL_MAJORMINOR@
++includedir=@includedir@
+ toolsdir=${exec_prefix}/bin
+ 
+ 
+@@ -9,6 +9,6 @@
+ Description: Library of Optimized Inner Loops
+ Version: @VERSION@
+ Libs: -L${libdir} -loil-@LIBOIL_MAJORMINOR@ -lm
+-Cflags: -I${includedir}
++Cflags: -I${includedir}/liboil-@LIBOIL_MAJORMINOR@
+ 
+ 
