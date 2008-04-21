@@ -10,14 +10,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libsamplerate
 PKG_VERSION:=0.1.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.mega-nerd.com/SRC/
 PKG_MD5SUM:=3f91af22a6c4135485594d0d2c91d45d
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 PKG_FIXUP = libtool
 
@@ -32,8 +29,8 @@ define Package/libsamplerate
 endef
 
 define Package/libsamplerate/description
-	Secret Rabbit Code (aka libsamplerate) is a Sample Rate
-	Converter for audio
+ Secret Rabbit Code (aka libsamplerate) is a Sample Rate
+ Converter for audio.
 endef
 
 CONFIGURE_ARGS += \
@@ -46,14 +43,13 @@ define Build/Compile
 endef
 
 define Build/InstallDev
+	$(INSTALL_DIR) $(1)
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 define Package/libsamplerate/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/* $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsamplerate.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsamplerate.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libsamplerate))
