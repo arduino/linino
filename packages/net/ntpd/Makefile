@@ -122,6 +122,8 @@ endef
 define Package/ntpdate/install
 	$(INSTALL_DIR) $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ntpdate/ntpdate $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/ntpdate.init $(1)/etc/init.d/ntpdate
 endef
 
 define Package/ntp-utils/install
