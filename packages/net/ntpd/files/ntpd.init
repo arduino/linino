@@ -1,19 +1,14 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 
-START=60
+START=65
 
-STEP_SERVERS="0.openwrt.pool.ntp.org 1.openwrt.pool.ntp.org 2.openwrt.pool.ntp.org"
 PIDFILE="/var/run/ntpd.pid"
-TIMEOUT="2" # in seconds
 
 start() {
 #	ln -sf /dev/ttyS0 /dev/gps0
 #	/usr/sbin/setgarmin -d /dev/gps -c /etc/setgarmin.conf
 	stop
-	for s in $STEP_SERVERS ; do
-		/usr/sbin/ntpdate -s -b -u -t "$TIMEOUT" "$s" && break
-	done
 	/usr/sbin/ntpd -g -p $PIDFILE
 }
 
