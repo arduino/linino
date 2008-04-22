@@ -37,7 +37,6 @@ endef
 
 define Package/ntpd
   $(call Package/ntpd/Default)
-  DEPENDS:=+ntpdate
   TITLE+= server
 endef
 
@@ -71,10 +70,24 @@ define Package/ntpd/conffiles
 /etc/ntp.conf
 endef
 
-define Package/ntpd/postinst
+define Package/ntpd/Default/postinst
 #!/bin/sh
-echo "ntp             123/udp     # Network Time Protocol
-ntp             123/tcp     # Network Time Protocol" >> $${IPKG_INSTROOT}/etc/services
+grep -q '^ntp[[:space:]]*123/udp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
+[ $$? -ne 0 ] && echo "ntp            123/udp     # Network Time Protocol" >>$${IPKG_INSTROOT}/etc/services || exit 0
+grep -q '^ntp[[:space:]]*123/tcp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
+[ $$? -ne 0 ] && echo "ntp            123/tcp     # Network Time Protocol" >>$${IPKG_INSTROOT}/etc/services || exit 0
+endef
+
+define Package/ntpdate/postinst
+  $(call Package/ntpd/Default/postinst)
+endef
+
+define Package/ntpd/postinst
+  $(call Package/ntpd/Default/postinst)
+endef
+
+define Package/ntp-utils/postinst
+  $(call Package/ntpd/Default/postinst)
 endef
 
 TARGET_CPPFLAGS += -I$(STAGING_DIR)/usr/include/libelf
