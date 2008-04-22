@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,12 +10,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rsync
-PKG_VERSION:=2.6.9
+PKG_VERSION:=3.0.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://rsync.samba.org/ftp/rsync
-PKG_MD5SUM:=996d8d8831dbca17910094e56dcb5942
+PKG_MD5SUM:=fd4c5d77d8cb7bb86ab209076fa214d9
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,10 +33,10 @@ define Package/rsync/description
 	It has many more options than rcp, and uses the rsync
 	remote-update protocol to greatly speed up file
 	transfers when the destination file already exists.
-	
+
 	The rsync remote-update protocol allows rsync to
-	transfer just the differences between two sets of files 
-	across the network link. 
+	transfer just the differences between two sets of files
+	across the network link.
 endef
 
 CONFIGURE_ARGS += \
@@ -44,6 +44,8 @@ CONFIGURE_ARGS += \
 	--disable-debug \
 	--disable-ipv6 \
 	--disable-locale \
+	--disable-xattr-support \
+	--disable-acl-support \
 
 define Package/rsync/install
 	$(INSTALL_DIR) $(1)/usr/bin
