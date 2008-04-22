@@ -26,6 +26,17 @@ define Package/sispmctl
   DEPENDS:=+libusb
 endef
 
+define Package/sispmctl/description
+ The sispmctl tool can control Gembird SIS-PM Silver Shield
+ programmable power outlet strips (also known under the name
+ Revolt Intelli-Plug) from the command line.
+ .
+ It can be used to switch on or off any of the programmable
+ power sockets of the SIS-PM via USB. It can also show the
+ current status of each power socket, and it can handle
+ multiple SIS-PM devices, too. 
+endef
+
 CONFIGURE_ARGS += \
 	--enable-webless \
 	--disable-dependency-tracking \
