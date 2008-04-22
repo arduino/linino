@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -31,7 +31,9 @@ define Package/chrony
 endef
 
 define Package/chrony/description
-	A NTP implementation that has been specifically written to work well in the case of an intermittent \	(e.g. dial-on-demand) connection to the network where your NTP servers are.
+	A NTP implementation that has been specifically written to work
+	well in the case of an intermittent (e.g. dial-on-demand)
+	connection to the network where your NTP servers are.
 endef
 
 define Package/chrony/conffiles
@@ -53,7 +55,7 @@ define Build/Compile
 		prefix="$(PKG_INSTALL_DIR)/usr"
 endef
 
-define Package/chrony/install	
+define Package/chrony/install
 	$(INSTALL_DIR) $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/chronyd $(1)/usr/sbin
