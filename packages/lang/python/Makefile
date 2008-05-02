@@ -69,18 +69,19 @@ endef
 define Package/python-doc
 $(call Package/python/Default)
  TITLE:=Python interactive documentation
+ DEPENDS+= python-core
 endef
 
 define Package/python-expat
 $(call Package/python/Default)
  TITLE:=Python support for expat
- DEPENDS+= +libexpat
+ DEPENDS+= python-core +libexpat
 endef
 
 define Package/python-openssl
 $(call Package/python/Default)
  TITLE:=Python support for OpenSSL
- DEPENDS+= +libopenssl
+ DEPENDS+= python-core +libopenssl
 endef
 
 
