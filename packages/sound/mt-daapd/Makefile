@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2005-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mt-daapd
-PKG_VERSION:=0.2.4
+PKG_VERSION:=0.2.4.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=@SF/mt-daapd
-PKG_MD5SUM:=2e1cdbe6b94ef153e915806f80a28dca
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_SOURCE_URL:=@SF/$(PKG_NAME)
+PKG_MD5SUM:=67bef9fb14d487693b0dfb792c3f1b05
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -38,26 +35,23 @@ define Package/mt-daapd/conffiles
 /etc/mt-daapd.playlist
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-mdns \
-		--enable-howl \
-		--with-id3tag="$(STAGING_DIR)/usr" \
-		--with-gdbm-includes="$(STAGING_DIR)/usr/include" \
-		--with-gdbm-libs="$(STAGING_DIR)/usr/lib" \
-		--with-howl-includes="$(STAGING_DIR)/usr/include/howl" \
-		--with-howl-libs="$(STAGING_DIR)/usr/lib" \
-		--without-static-libs \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-mdns \
+	--enable-howl \
+	--with-id3tag="$(STAGING_DIR)/usr" \
+	--with-gdbm-includes="$(STAGING_DIR)/usr/include" \
+	--with-gdbm-libs="$(STAGING_DIR)/usr/lib" \
+	--with-howl-includes="$(STAGING_DIR)/usr/include/howl" \
+	--with-howl-libs="$(STAGING_DIR)/usr/lib" \
+	--without-static-libs \
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
 
-define Package/mt-daapd/install	
+define Package/mt-daapd/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/contrib/mt-daapd.conf $(1)/etc/
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/contrib/mt-daapd.playlist $(1)/etc/
