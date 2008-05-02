@@ -13,21 +13,21 @@ PKG_VERSION:=1.0.11
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://ap.coova.org/chilli/
+PKG_SOURCE_URL:=http://ap.coova-chilli.org/chilli/
 PKG_MD5SUM:=d932dc9ca42b90d56ef27552f049c44a
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/coova
+define Package/coova-chilli
   SUBMENU:=Captive Portals
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+kmod-tun
   TITLE:=Wireless LAN HotSpot controller (Coova Chilli Version)
-  URL:=http://www.coova.org/
+  URL:=http://www.coova-chilli.org/
 endef
 
-define Package/coova/description
+define Package/coova-chilli/description
 	CoovaChilli is an open source access controller for wireless LAN
 	access points and is based on ChilliSpot. It is used for authenticating
 	users of a wireless (or wired) LAN. It supports web based login (UAM)
@@ -37,7 +37,7 @@ define Package/coova/description
 	radius server.
 endef
 
-define Package/coova/conffiles
+define Package/coova-chilli/conffiles
 /etc/chilli.conf
 endef
 
@@ -47,7 +47,7 @@ define Build/Compile
 		all install
 endef
 
-define Package/coova/install
+define Package/coova-chilli/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/chilli.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/chilli
@@ -58,4 +58,4 @@ define Package/coova/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*.so.* $(1)/usr/lib/
 endef
 
-$(eval $(call BuildPackage,coova))
+$(eval $(call BuildPackage,coova-chilli))
