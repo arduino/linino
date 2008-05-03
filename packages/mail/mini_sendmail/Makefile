@@ -16,6 +16,8 @@ PKG_SOURCE:=mini_sendmail-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.acme.com/software/mini_sendmail/
 PKG_MD5SUM:=fb1585d2ad81c519a26d83bfd783dee8
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/mini_sendmail-$(PKG_VERSION)
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mini-sendmail
