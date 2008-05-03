@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2007 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python
 PKG_VERSION:=2.5.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=Python-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.python.org/ftp/python/$(PKG_VERSION)/
@@ -153,9 +153,11 @@ endef
 
 define PyPackage/python/filespec
 +|/usr/bin/python$(PYTHON_VERSION)
++|/usr/include/python$(PYTHON_VERSION)/pyconfig.h
 +|/usr/lib/python$(PYTHON_VERSION)
 -|/usr/lib/python$(PYTHON_VERSION)/bsddb/test
 -|/usr/lib/python$(PYTHON_VERSION)/config
++|/usr/lib/python$(PYTHON_VERSION)/config/Makefile
 -|/usr/lib/python$(PYTHON_VERSION)/ctypes/test
 -|/usr/lib/python$(PYTHON_VERSION)/distutils/command/wininst-*.exe
 -|/usr/lib/python$(PYTHON_VERSION)/distutils/tests
@@ -243,7 +245,7 @@ define PyPackage/python-mini/install
 	ln -sf python$(PYTHON_VERSION) $(1)/usr/bin/python
 endef
 
-define PyPackage/python-pydoc/filespec
+define PyPackage/python-doc/filespec
 +|/usr/lib/python$(PYTHON_VERSION)/pydoc.py
 endef
 
