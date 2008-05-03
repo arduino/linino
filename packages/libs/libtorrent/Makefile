@@ -10,13 +10,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libtorrent
 PKG_VERSION:=0.11.9
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://libtorrent.rakshasa.no/downloads/
 PKG_MD5SUM:=8974dc9499b382a09fb952cabcfef9a0
-
-PKG_BUILD_DEPENDS:=libtool
 
 PKG_FIXUP = libtool
 
@@ -27,7 +25,7 @@ define Package/libtorrent
   CATEGORY:=Libraries
   TITLE:=Rakshasa's BitTorrent library
   URL:=http://libtorrent.rakshasa.no/
-  DEPENDS:=+libsigcxx
+  DEPENDS:=+libopenssl +libsigcxx
 endef
 
 define Package/libtorrent/description
@@ -38,38 +36,30 @@ define Package/libtorrent/description
  the speed of the official client.
 endef
 
+# XXX: rtorrent needs encryption (--enable-openssl)
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \
 	--enable-aligned \
 	--disable-debug \
-	--disable-openssl \
+	--enable-openssl \
 
 CONFIGURE_VARS += \
-	CXX="g++-uc+std" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-rtti"  \
 
-define Build/Configure
-	$(call Build/Configure/Default,)
-	$(SED) 's|^sys_lib_dlsearch_path_spec=.*|sys_lib_dlsearch_path_spec="$(STAGING_DIR)/usr/lib"|g' \
-		$(PKG_BUILD_DIR)/libtool
-	$(SED) 's|^postdeps=.*|postdeps=|g' $(PKG_BUILD_DIR)/libtool
-endef
-
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) all
-	$(call libtool_fixup_libdir,$(PKG_INSTALL_DIR))
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/torrent $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtorrent.{a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libtorrent.pc $(1)/usr/lib/pkgconfig/
-	$(SED) 's,$(TARGET_LDFLAGS),,g' $(1)/usr/lib/pkgconfig/libtorrent.pc
 endef
 
 define Package/libtorrent/install

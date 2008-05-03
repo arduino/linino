@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wxbase
 PKG_VERSION:=2.8.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=wxGTK-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/wxwindows
@@ -25,7 +25,7 @@ define Package/libwxbase
   CATEGORY:=Libraries
   TITLE:=Cross-platform C++ framework
   URL:=http://www.wxwidgets.org/
-  DEPENDS:=+libexpat +uclibcxx +zlib
+  DEPENDS:=+libexpat +libstdcpp +zlib
 endef
 
 define Package/libwxbase/description
@@ -102,9 +102,6 @@ CONFIGURE_ARGS+= \
 	--without-libiconv-prefix \
 	--without-sdl-prefix \
 	--without-cppunit-prefix \
-
-CONFIGURE_VARS+= \
-	CXX="g++-uc+std" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \

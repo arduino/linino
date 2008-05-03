@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mutella
 PKG_VERSION:=0.4.5
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
@@ -26,7 +26,7 @@ define Package/mutella
   CATEGORY:=Network
   TITLE:=Gnutella client with command line and http interface
   URL:=http://mutella.sourceforge.net/
-  DEPENDS:=+libncurses +libreadline +libpthread +uclibcxx +zlib
+  DEPENDS:=+libncurses +libreadline +libpthread +libstdcpp +zlib
 endef
 
 define Package/mutella/description
@@ -41,7 +41,6 @@ define Package/mutella/description
 endef
 
 CONFIGURE_VARS += \
-	CXX="g++-uc+std" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-rtti"  \
 
 define Build/Prepare
