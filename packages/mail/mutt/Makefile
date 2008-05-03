@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,17 +16,14 @@ PKG_SOURCE_URL:=@SF/mutt
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_MD5SUM:=10eff7024dbb7ce1f773d688a69ea9db
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mutt
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=mail
+  CATEGORY:=Mail
   DEPENDS:=+libopenssl +libncurses
   TITLE:=Console mail client
   URL:=http://www.mutt.org/
-  SUBMENU:=mail
 endef
 
 CONFIGURE_ARGS += \

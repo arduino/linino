@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,22 +16,19 @@ PKG_SOURCE_URL:=http://www.procmail.org/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_MD5SUM:=1678ea99b973eb77eda4ecf6acae53f1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/procmail
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=mail
+  CATEGORY:=Mail
   TITLE:=Mail processing tool
   URL:=http://www.procmail.org
-  SUBMENU:=mail
 endef
 
 define Package/procmail/description
-	Procmail is able to process and classify incoming mail into 
-	different mail boxes.
-	Very useful in conjunction with mutt.
+ Procmail is able to process and classify incoming mail into 
+ different mail boxes.
+ Very useful in conjunction with mutt.
 endef
 
 define Build/Compile	

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -19,8 +19,8 @@ PKG_MD5SUM:=106730bdbaa4fda9e90a7c22df024114
 include $(INCLUDE_DIR)/package.mk
 
 define Package/xmail
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=mail
+  CATEGORY:=Mail
   DEPENDS:=+uclibcxx +libopenssl
   TITLE:=advanced, fast and reliable ESMTP/POP3 mail server
   URL:=http://www.xmailserver.org/

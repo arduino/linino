@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -19,19 +19,19 @@ PKG_MD5SUM:=957e6fff08625fe34f4fc33d0925bbc9
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ssmtp
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=mail
+  CATEGORY:=Mail
   DEPENDS:=+libopenssl
   TITLE:=A minimal and secure mail sender
   URL:=http://packages.debian.org/stable/mail/ssmtp
 endef
 
 define Package/ssmtp/description
-	A secure, effective and simple way of getting mail off a system to your 
-	mail hub. It contains no suid-binaries or other dangerous things - no 
-	mail spool to poke around in, and no daemons running in the background.
-	mail is simply forwarded to the configured mailhost. Extremely easy 
-	configuration.
+ A secure, effective and simple way of getting mail off a system to your 
+ mail hub. It contains no suid-binaries or other dangerous things - no 
+ mail spool to poke around in, and no daemons running in the background.
+ mail is simply forwarded to the configured mailhost. Extremely easy 
+ configuration.
 endef
 
 EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include

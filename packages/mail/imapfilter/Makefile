@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,14 +16,11 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://imapfilter.hellug.gr/source/
 PKG_MD5SUM:=4c1f28dffbb727a4769948f10baccd79
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/imapfilter
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=mail
+  CATEGORY:=Mail
   DEPENDS:=+liblua +libopenssl
   TITLE:=IMAP server based email filtering
   URL:=http://imapfilter.hellug.gr/

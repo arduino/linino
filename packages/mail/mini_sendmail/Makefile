@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,22 +16,20 @@ PKG_SOURCE:=mini_sendmail-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.acme.com/software/mini_sendmail/
 PKG_MD5SUM:=fb1585d2ad81c519a26d83bfd783dee8
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/mini_sendmail-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mini-sendmail
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=mail
+  CATEGORY:=Mail
   TITLE:=A small sendmail-compatible mail forwarder
   URL:=http://www.acme.com/software/mini_sendmail/
 endef
 
 define Package/mini-sendmail/description
-	mini_sendmail reads its standard input up to an end-of-file and sends a 
-	copy of the message found there to all of the addresses listed.
-	The message is sent by connecting to a local SMTP server. This means 
-	mini_sendmail can be used to send email from inside a chroot(2) area.
+ mini_sendmail reads its standard input up to an end-of-file and sends a 
+ copy of the message found there to all of the addresses listed.
+ The message is sent by connecting to a local SMTP server. This means 
+ mini_sendmail can be used to send email from inside a chroot(2) area.
 endef
 
 MAKE_FLAGS += \
