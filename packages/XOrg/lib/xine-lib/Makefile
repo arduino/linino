@@ -18,7 +18,7 @@ PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
-CONFIGURE_ARGS_XTRA+=--enable-static --disable-vcd
+CONFIGURE_ARGS_XTRA+=--enable-static --disable-vcd --disable-imagemagick
 
 define Package/xine-lib
   SECTION:=xorg-lib

@@ -31,6 +31,8 @@ endef
 CONFIGURE_VARS+= \
 	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
 
+EXTRA_LDFLAGS:=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+
 CONFIGURE_ARGS+=--without-aalib \
 			--without-libcaca \
 			--disable-lirc \
