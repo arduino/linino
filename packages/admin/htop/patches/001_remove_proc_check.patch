@@ -1,12 +1,11 @@
-Index: htop-0.6.6/configure
+Index: htop-0.7/configure
 ===================================================================
---- htop-0.6.6.orig/configure	2007-09-20 10:45:31.000000000 -0500
-+++ htop-0.6.6/configure	2007-09-20 10:45:31.000000000 -0500
-@@ -6207,62 +6207,6 @@
+--- htop-0.7.orig/configure	2008-05-07 20:52:47.000000000 +0200
++++ htop-0.7/configure	2008-05-07 20:52:47.000000000 +0200
+@@ -5844,61 +5844,6 @@
  
  fi
  
--
 -as_ac_File=`echo "ac_cv_file_$PROCDIR/stat" | $as_tr_sh`
 -{ echo "$as_me:$LINENO: checking for $PROCDIR/stat" >&5
 -echo $ECHO_N "checking for $PROCDIR/stat... $ECHO_C" >&6; }
