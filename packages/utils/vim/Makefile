@@ -160,7 +160,8 @@ define Package/vim-full/postinst
   if [ $${IPKG_INSTROOT} != / ]
   then
     if [ -d /usr/share/ ]
-      ln -s $${IPKG_INSTROOT}/usr/share/vim/ /usr/share/
+      then
+        ln -s $${IPKG_INSTROOT}/usr/share/vim/ /usr/share/
     fi
   fi
 endef
@@ -170,7 +171,8 @@ define Package/vim/postinst
   if [ $${IPKG_INSTROOT} != / ]
   then
     if [ -d /usr/share/ ]
-      ln -s $${IPKG_INSTROOT}/usr/share/vim/vimrc /usr/share/vim/vimrc
+      then
+        ln -s $${IPKG_INSTROOT}/usr/share/vim/vimrc /usr/share/vim/vimrc
     fi
   fi
 endef
