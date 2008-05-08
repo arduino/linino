@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2005-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libtasn1
-PKG_VERSION:=1.1
+PKG_VERSION:=1.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -18,7 +18,7 @@ PKG_SOURCE_URL:=ftp://ftp.gnutls.org/pub/gnutls/libtasn1/ \
 	http://www.mirrors.wiretapped.net/security/network-security/gnutls/libtasn1/ \
 	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/libtasn1/ \
 	http://josefsson.org/gnutls/releases/libtasn1/
-PKG_MD5SUM:=93b43cc5013bda4d8bf64508f1566c54
+PKG_MD5SUM:=a733ecdfed3517910e627d24e050979f
 
 PKG_FIXUP = libtool
 
