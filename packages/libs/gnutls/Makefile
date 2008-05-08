@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2005-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,16 +9,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnutls
-PKG_VERSION:=2.0.0
+PKG_VERSION:=2.2.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://josefsson.org/gnutls/releases/ \
-	http://www.mirrors.wiretapped.net/security/network-security/gnutls/ \
+PKG_SOURCE_URL:=http://www.mirrors.wiretapped.net/security/network-security/gnutls/ \
 	ftp://ftp.gnutls.org/pub/gnutls/ \
-	ftp://ftp.gnupg.org/gcrypt/alpha/gnutls/ \
-	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/
-PKG_MD5SUM:=181b2ff554a83e6cf85505ea16699d39
+	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/ \
+	http://josefsson.org/gnutls/releases/
+PKG_MD5SUM:=71d9b7ec32a2a67854940a8848c2b229
 
 PKG_FIXUP = libtool
 
@@ -71,7 +70,7 @@ endef
 define Package/libgnutls
 $(call Package/gnutls/Default)
  TITLE+= (library)
- DEPENDS+= +libgcrypt +libgpg-error
+ DEPENDS+= +zlib +libtasn1 +libgcrypt +libgpg-error
 endef
 
 define Package/libgnutls/description
@@ -103,36 +102,17 @@ $(call Package/gnutls/Default/description)
  This package contains the GnuTLS OpenSSL compatibility layer shared library.
 endef
 
-
-# XXX: configure will disable any of theese if they're present regardless of
-# the "--enable" prefix
-#	--enable-anon-authentication \
-#	--enable-openpgp-authentication \
-#	--enable-psk-authentication \
-#	--enable-srp-authentication \
-#	--enable-tls-authorization \
-#
-# and the following prevents the library from building so it's ommited
-#	--disable-tls-authorization
-
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \
-	--disable-anon-authentication \
 	--disable-openpgp-authentication \
 	--disable-psk-authentication \
 	--disable-srp-authentication \
-	--with-included-libtasn1 \
-	--with-included-libcfg \
-	--without-included-opencdk \
-	--with-libgcrypt \
 	--with-libgcrypt-prefix="$(STAGING_DIR)/usr" \
-	--without-libiconv-prefix \
-	--without-libintl-prefix \
-	--without-libopencdk-prefix \
 	--with-libreadline-prefix="$(STAGING_DIR)/usr" \
-	--without-lzo \
-	--without-zlib \
+	--with-libz-prefix="$(STAGING_DIR)/usr" \
+	--with-libtasn1-prefix="$(STAGING_DIR)/usr" \
+	--without-lzo
 
 # XXX: AM_CFLAGS duplicates with CFLAGS
 MAKE_ARGS:= \
