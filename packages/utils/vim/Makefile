@@ -20,7 +20,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)71
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/vim
+define Package/vim/Default
   SECTION:=utils
   CATEGORY:=Utilities
   DEPENDS:=+libncurses
@@ -29,15 +29,59 @@ define Package/vim
   SUBMENU:=Editors
 endef
 
+define Package/vim
+  $(call Packages/vim/Default)
+  TITLE+= (Tiny)
+endef
+
+define Package/vim-full
+  $(call Packages/vim/Default)
+  TITLE+= (Normal)
+endef
+
+define Package/vim-runtime
+  $(call Packages/vim/Default)
+  TITLE+= (runtime files)
+endef
+
+define Package/vim-help
+  $(call Packages/vim/Default)
+  TITLE+= (help files)
+endef
+
+define Package/vim-full/conffiles
+/usr/share/vim/vimrc
+endef
+
+define Package/vim/conffiles
+/usr/share/vim/vimrc
+endef
+
 define Package/vim/description
 	Vim is an almost compatible version of the UNIX editor Vi.
+	(Tiny build)
 endef
+
+define Package/vim-full/description
+	Vim is an almost compatible version of the UNIX editor Vi.
+	(Normal build)
+endef
+
+define Package/vim-runtime/description
+	Vim is an almost compatible version of the UNIX editor Vi.
+	(Runtime files)
+endef
+
+define Package/vim-help/description
+	Vim is an almost compatible version of the UNIX editor Vi.
+	(Help files)
+endef
+	
 
 CONFIGURE_ARGS += \
 	--disable-gui \
 	--disable-gtktest \
 	--disable-xim \
-	--with-features=tiny \
 	--without-x \
 	--disable-multibyte \
 	--disable-netbeans \
@@ -45,11 +89,94 @@ CONFIGURE_ARGS += \
 	--disable-gpm \
 	--with-tlib=ncurses
 
-define Package/vim/install	
+ifneq ($(CONFIG_PACKAGE_vim),)
+define Build/Compile/vim
+	$(call Build/Configure/Default, \
+	  --with-features=tiny \
+	 )
+	$(MAKE) -C $(PKG_BUILD_DIR) clean
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+	  DESTDIR="$(PKG_INSTALL_DIR)" \
+	  all
+	$(CP) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(PKG_BUILD_DIR)/vim_tiny
+endef
+endif
+
+ifneq ($(CONFIG_PACKAGE_vim-full),)
+define Build/Compile/vim-full
+	$(call Build/Configure/Default, \
+	  --with-features=normal \
+	)
+	$(MAKE) -C $(PKG_BUILD_DIR) clean
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+	  DESTDIR="$(PKG_INSTALL_DIR)" \
+	  all
+	$(CP) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(PKG_BUILD_DIR)/vim_normal
+endef
+endif    
+
+define Build/Compile/vim-runtime
+	$(MAKE) -C $(PKG_BUILD_DIR)/src DESTDIR="$(PKG_INSTALL_DIR)" installrtbase
+	tar -czf $(PKG_BUILD_DIR)/docs.tgz $(PKG_INSTALL_DIR)/usr/share/vim/vim*/doc 
+	rm -rf $(PKG_INSTALL_DIR)/usr/share/vim/vim*/doc
+	rm -rf $(PKG_INSTALL_DIR)/usr/man
+endef
+
+define Build/Configure
+endef
+
+define Build/Compile
+$(call Build/Compile/vim)
+$(call Build/Compile/vim-full)
+$(call Build/Compile/vim-runtime)
+endef
+
+define Package/vim/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/vim_tiny $(1)/usr/bin/vim
 	$(INSTALL_DIR) $(1)/usr/share/vim
 	$(INSTALL_CONF) ./files/vimrc $(1)/usr/share/vim/
 endef
 
+
+define Package/vim-full/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/vim_normal $(1)/usr/bin/vim
+	$(INSTALL_DIR) $(1)/usr/share/vim
+	$(INSTALL_CONF) ./files/vimrc.full $(1)/usr/share/vim/vimrc
+endef
+
+define Package/vim-runtime/install
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)
+	rm -rf $(1)/usr/share/vim/vim*/doc
+endef
+
+define Package/vim-help/install
+	tar -C $(1) -xzf $(PKG_BUILD_DIR)/docs.tgz 
+endef
+
+define Package/vim-full/postinst
+#!/bin/sh
+  if [ $${IPKG_INSTROOT} != / ]
+  then
+    if [ -d /usr/share/ ]
+      ln -s $${IPKG_INSTROOT}/usr/share/vim/ /usr/share/
+    fi
+  fi
+endef
+
+define Package/vim/postinst
+#!/bin/sh
+  if [ $${IPKG_INSTROOT} != / ]
+  then
+    if [ -d /usr/share/ ]
+      ln -s $${IPKG_INSTROOT}/usr/share/vim/vimrc /usr/share/vim/vimrc
+    fi
+  fi
+endef
+
 $(eval $(call BuildPackage,vim))
+$(eval $(call BuildPackage,vim-full))
+$(eval $(call BuildPackage,vim-runtime))
+$(eval $(call BuildPackage,vim-help))
+
