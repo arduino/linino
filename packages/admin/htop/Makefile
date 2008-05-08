@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=htop
-PKG_VERSION:=0.7
+PKG_VERSION:=0.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=4afc961fa709167e1b434682897991f9
+PKG_MD5SUM:=b6955f8d75cdb5a3ccea83415cb18815
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -31,6 +31,10 @@ define Package/htop/description
  it allows to scroll the list vertically and horizontally to
  see all processes and their full command lines. 
 endef
+
+CONFIGURE_VARS += \
+	ac_cv_file__proc_stat=yes \
+	ac_cv_file__proc_meminfo=yes \
 
 define Package/htop/install	
 	$(INSTALL_DIR) $(1)/usr/bin
