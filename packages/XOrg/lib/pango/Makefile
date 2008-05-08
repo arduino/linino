@@ -9,11 +9,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pango
-PKG_VERSION:=1.12.3
+PKG_VERSION:=1.19.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://ftp.gnome.org/pub/gnome/sources/pango/1.12/ 
+PKG_SOURCE_URL:=ftp://ftp.gnome.org/pub/gnome/sources/pango/1.19/ 
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
