@@ -9,13 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ctorrent
-PKG_VERSION:=dnh3.3
+PKG_VERSION:=dnh3.3.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/dtorrent \
 	http://www.rahul.net/dholmes/ctorrent/
-PKG_MD5SUM:=f87e36c89a2b5092be30bfbddc742b27
+PKG_MD5SUM:=9bfe42c2dd6a6aabd545fe332bc23e87
 
 PKG_FIXUP = libtool
 
