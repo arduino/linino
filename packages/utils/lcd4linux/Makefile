@@ -9,9 +9,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lcd4linux
-PKG_REV:=847
+PKG_REV:=877
 PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=3
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://ssl.bulix.org/svn/lcd4linux/trunk/
@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/lcd4linux
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libncurses +libusb +libgd
+  DEPENDS:=+libncurses +libusb +libiconv +libgd
   TITLE:=LCD display utility
   URL:=http://lcd4linux.bulix.org/
 endef
@@ -41,11 +41,11 @@ define Package/lcd4linux/conffiles
 endef
 
 # commas are interpreted by the $(call ...) macro, so define an intermediate variable holding our drivers and plugins spec
-PKG_CONFIGURE_DRIVERS:=all,!PNG,!RouterBoard,!X11,!serdisplib,!G15
-PKG_CONFIGURE_PLUGINS:=wireless
+PKG_CONFIGURE_DRIVERS:=all,!PNG,!PPM,!RouterBoard,!X11,!serdisplib,!G15
+PKG_CONFIGURE_PLUGINS:=wireless,mpd,iconv,cpuinfo,loadavg,meminfo,proc_stat,uname,uptime
 
-EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
-EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib
+EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/lib/libiconv/include
+EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 TARGET_CONFIGURE_OPTS+=\
         CC="$(TARGET_CC) $(EXTRA_CFLAGS) $(EXTRA_LDFLAGS)"
