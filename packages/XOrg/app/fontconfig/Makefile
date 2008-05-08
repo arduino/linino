@@ -1,10 +1,9 @@
 # 
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org
 
 include $(TOPDIR)/rules.mk
 
@@ -36,13 +35,19 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(foreach dir,fc-case fc-lang fc-glyphname, $(MAKE) -C $(PKG_BUILD_DIR)/$(dir) CFLAGS="" CPPFLAGS="" LDFLAGS="";)
+	$(foreach dir,fc-case fc-lang fc-glyphname src fc-cache fc-list, $(MAKE) -C $(PKG_BUILD_DIR)/$(dir) CFLAGS="-I$(STAGING_DIR)/usr/include"  \
+			CPPFLAGS="" LDFLAGS="-L$(STAGING_DIR)/usr/lib";)
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" DOCSRC="" install
 endef
 
 define Package/fontconfig/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*so* $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/etc/fonts/conf.d
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/fonts/fonts.* $(1)/etc/fonts
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/fonts/conf.d/* $(1)/etc/fonts/conf.d
 endef
 
 define Build/InstallDev
