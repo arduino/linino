@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dbus
-PKG_VERSION:=1.0.2
-PKG_RELEASE:=2
+PKG_VERSION:=1.0.3
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dbus.freedesktop.org/releases/dbus/
-PKG_MD5SUM:=0552a9b54beb4a044951b7cdbc8fc855
+PKG_MD5SUM:=2e0185e1f8b4c61c9248049c680d2ab6
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -73,13 +73,13 @@ CONFIGURE_ARGS += \
 	--disable-tests \
 	--disable-verbose-mode \
 	--disable-xml-docs \
-	--without-x \
 	--with-xml="expat" \
 	--with-dbus-user=root \
 	--with-dbus-daemondir="/usr/sbin" \
 	--with-system-socket="/var/run/dbus/system_bus_socket" \
 	--with-system-pid-file="/var/run/dbus.pid" \
 
+#	--without-x \
 CONFIGURE_VARS+= \
 	ac_cv_have_abstract_sockets="yes" \
 
