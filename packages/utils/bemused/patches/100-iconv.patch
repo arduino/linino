@@ -1,0 +1,13 @@
+--- bemused-mpd-r059/mpdctrl.orig	2008-04-23 11:53:58.000000000 +0200
++++ bemused-mpd-r059/mpdctrl.c	2008-04-23 14:36:34.000000000 +0200
+@@ -160,8 +160,8 @@
+     }
+ 
+     /* OpenWRT needs a type cast */
+-    /* iconv_value = iconv(i, (const char **)&p1, &fromlen, &p2, &tolen); */
+-    iconv_value = iconv(i, &p1, &fromlen, &p2, &tolen);
++    iconv_value = iconv(i, (const char **)&p1, &fromlen, &p2, &tolen);
++    /* iconv_value = iconv(i, &p1, &fromlen, &p2, &tolen); */
+     if (iconv_value == (size_t) -1) {
+         error ("ICONV ERROR3: failed to convert string, error: %d\n", errno);
+ 	return "ICONV ERROR3";

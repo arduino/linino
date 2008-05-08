@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bemused-mpd
-PKG_VERSION:=r047
+PKG_VERSION:=r059
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://download.origo.ethz.ch/bemused-lnx-mpdhack/382
-PKG_MD5SUM:=f40715812d59d2ab1bd93f96c5e8818b
+PKG_SOURCE_URL:=http://download.origo.ethz.ch/bemused-lnx-mpdhack/512
+PKG_MD5SUM:=76cb208842cce784fd65ec4d392fd6cb
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/bemusedlinuxserver
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+bluez-libs +glib1 +mpd +libstdcpp
+  DEPENDS:=+bluez-libs +glib1 +mpd +libstdcpp +libiconv
   TITLE:=Bemused linux server
   URL:=http://bemused-lnx-mpdhack.origo.ethz.ch/
 endef
@@ -42,8 +42,8 @@ define Build/Compile
 	CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS)" \
 	LDFLAGS="$(TARGET_LDFLAGS) " \
 	CPPFLAGS="$(TARGET_CPPFLAGS)" \
-	INCL="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include" \
-	MYLIBS="-lbluetooth -lglib"
+	INCL="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include -I$(STAGING_DIR)/usr/lib/libiconv/include" \
+	MYLIBS="-lbluetooth -lglib -L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv"
 	$(STRIP) $(PKG_BUILD_DIR)/bemusedlinuxserver
 endef
 
