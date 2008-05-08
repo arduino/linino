@@ -1,12 +1,12 @@
-diff -ruN glib-2.12.12-old/Makefile.in glib-2.12.12-new/Makefile.in
---- glib-2.12.12-old/Makefile.in	2007-05-02 01:20:29.000000000 +0200
-+++ glib-2.12.12-new/Makefile.in	2007-08-18 22:02:49.000000000 +0200
-@@ -239,7 +239,7 @@
- 
+diff --git a/Makefile.in b/Makefile.in
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -338,7 +338,7 @@ EXTRA_DIST = ChangeLog.pre-2-14 ChangeLog.pre-2-12 ChangeLog.pre-2-10 \
+ 	gio-2.0-uninstalled.pc.in gio-unix-2.0-uninstalled.pc.in
+ TEST_PROGS = 
  AUTOMAKE_OPTIONS = 1.7
- 
--SUBDIRS = . m4macros glib gobject gmodule gthread tests build po docs
-+SUBDIRS = . m4macros glib gobject gmodule gthread build po
- 
+-SUBDIRS = . m4macros glib gobject gmodule gthread gio tests po docs
++SUBDIRS = . m4macros glib gobject gmodule gthread gio po
+ DIST_SUBDIRS = $(SUBDIRS) build
  bin_SCRIPTS = glib-gettextize
- 
+ AM_CPPFLAGS = \

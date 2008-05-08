@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=glib2
-PKG_VERSION:=2.12.12
+PKG_VERSION:=2.15.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=glib-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.gtk.org/pub/glib/2.12/
-PKG_MD5SUM:=6c6a61e4b08fb4b110ca7953f71c8b5e
+PKG_SOURCE_URL:=ftp://ftp.gtk.org/pub/glib/2.15/
+PKG_MD5SUM:=14c3ce0d2e9befe607bae0c514500e9e
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/glib-$(PKG_VERSION)
 
