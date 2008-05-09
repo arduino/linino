@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -14,7 +14,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dbus.freedesktop.org/releases/dbus/
-PKG_MD5SUM:=2e0185e1f8b4c61c9248049c680d2ab6
+PKG_MD5SUM:=ce328423db5743fe9006d39113b5324d
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -80,6 +80,7 @@ CONFIGURE_ARGS += \
 	--with-system-pid-file="/var/run/dbus.pid" \
 
 #	--without-x \
+
 CONFIGURE_VARS+= \
 	ac_cv_have_abstract_sockets="yes" \
 
