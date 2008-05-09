@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bemused-mpd
-PKG_VERSION:=r059
+PKG_VERSION:=r060
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://download.origo.ethz.ch/bemused-lnx-mpdhack/512
-PKG_MD5SUM:=76cb208842cce784fd65ec4d392fd6cb
+PKG_SOURCE_URL:=http://download.origo.ethz.ch/bemused-lnx-mpdhack/513
+PKG_MD5SUM:=08238fef7b00dec19c93d5aa481803c6
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
