@@ -15,7 +15,7 @@ config_cb() {
 			config_get freq		$cfg freq
 
 			if [ ! "$freq" = "" ]; then
-				adjtimex -f $freq
+				adjtimex -f $freq >/dev/null
 			fi
 		;;
 	esac
