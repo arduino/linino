@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libgcrypt
 PKG_VERSION:=1.4.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.gnupg.org/gcrypt/libgcrypt/
@@ -29,22 +29,24 @@ define Package/libgcrypt
 endef
 
 define Package/libgcrypt/description
-	This is a general purpose cryptographic library based on the code from 
-	GnuPG. It provides functions for all cryptograhic building blocks: 
-	symmetric ciphers (AES, DES, Blowfish, CAST5, Twofish, Arcfour), hash 
-	algorithms (MD4, MD5, RIPE-MD160, SHA-1, TIGER-192), MACs (HMAC for all 
-	hash algorithms), public key algorithms (RSA, ElGamal, DSA), large 
-	integer functions, random numbers and a lot of supporting functions.
+ This is a general purpose cryptographic library based on the code from 
+ GnuPG. It provides functions for all cryptograhic building blocks: 
+ symmetric ciphers (AES, DES, Arcfour), hash algorithms (MD5, SHA-1,
+ RIPE-MD160, SHA-224/256, SHA-384/512), MACs (HMAC for all hash
+ algorithms), public key algorithms (RSA, DSA), large integer functions,
+ random numbers and a lot of supporting functions. Some algorithms have
+ been disabled to reduce size (Blowfish, CAST5, Twofish, Serpent,
+ RC2, SEED, Camellia, CRC, MD4, TIGER-192, Whirlpool, ElGamal, ECC).
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--disable-asm \
-		--with-gpg-error-prefix="$(STAGING_DIR)/usr" \
-	)
-endef
+CONFIGURE_ARGS+= \
+	--enable-shared \
+	--enable-static \
+	--disable-asm \
+	--with-gpg-error-prefix="$(STAGING_DIR)/usr" \
+	--enable-digests="md5 rmd160 sha1 sha256 sha512" \
+	--enable-ciphers="arcfour des aes" \
+	--enable-pubkey-ciphers="rsa dsa" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
