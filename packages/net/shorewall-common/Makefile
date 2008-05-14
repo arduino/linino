@@ -13,7 +13,9 @@ PKG_VERSION:=4.0.10.1
 PKG_RELEASE:=1
 PKG_MD5SUM:=9f8fc4c977c8291736c3f750c52f4dc8
 
-PKG_SOURCE_URL:=http://www1.shorewall.net/pub/shorewall/4.0/shorewall-$(PKG_VERSION)/
+# PKG_SOURCE_URL:=http://www1.shorewall.net/pub/shorewall/4.0/shorewall-$(PKG_VERSION)/
+# The source directory only goes to three levels of version number:
+PKG_SOURCE_URL:=http://www1.shorewall.net/pub/shorewall/4.0/shorewall-4.0.10
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 
 include $(INCLUDE_DIR)/package.mk
