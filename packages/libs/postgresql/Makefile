@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=postgresql
 PKG_VERSION:=8.3.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -223,6 +223,7 @@ define Package/pgsql-server/install
 		$(PKG_INSTALL_DIR)/usr/share/postgresql/psqlrc.sample \
 		$(PKG_INSTALL_DIR)/usr/share/postgresql/recovery.conf.sample \
 		$(PKG_INSTALL_DIR)/usr/share/postgresql/system_views.sql \
+		$(PKG_INSTALL_DIR)/usr/share/postgresql/snowball_create.sql \
 		$(1)/usr/share/postgresql
 
 		$(INSTALL_DATA) ./files/postgresql.config $(1)/etc/config/postgresql
