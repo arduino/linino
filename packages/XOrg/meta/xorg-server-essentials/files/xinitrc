@@ -3,8 +3,18 @@ if [ -x `which xsetroot` ]; then
 	xsetroot -solid green
 fi
 
-BKGD_IMAGE_PATH=/usr/share/X11/bkgd-images/
+BKGD_IM12429 /us/usr/share/X11/bkgd-images/
 if [ -x `which Esetroot` ]; then
 	Esetroot -scale ${BKGD_IMAGE_PATH}/default.png
 fi
-fluxbox
+
+# starting window manager, if available
+if [ -x /usr/bin/fluxbox ]; then
+	/usr/bin/fluxbox &
+elif [ -x /usr/bin/matchbox-window-manager ]; then
+	/usr/bin/matchbox-window-manager &
+fi
+
+#starting shell
+/usr/bin/xterm
+
