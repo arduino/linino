@@ -14,7 +14,7 @@ config_cb() {
 }
 
 start() {
-	[ -d /tmp/bandwidthd ] || mkdir -p /tmp/bandwidthd && cp /www/ledgend.gif /tmp/bandwidthd/
+	[ -d /tmp/bandwidthd ] || mkdir -p /tmp/bandwidthd && cp /www/legend.gif /tmp/bandwidthd/
 	[ -e /htdocs ] || ln -s /tmp/bandwidthd /htdocs
 	[ -e /www/bandwidthd ] || ln -s /tmp/bandwidthd /www/bandwidthd
 	rm -f /tmp/bandwidthd.conf
@@ -49,6 +49,7 @@ ${graph:+ graph $graph}
 ${meta_refresh:+ meta_refresh $meta_refresh}
 EOF
 	done
+	cd /
 	bandwidthd
 }
 
