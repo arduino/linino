@@ -23,7 +23,7 @@ define Package/cairo
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=2D graphics library with support for multiple output devices
-  DEPENDS:=+xorg-server-essentials +fontconfig +libpng +libexpat
+  DEPENDS:=+xorg-server-essentials +fontconfig +libpng +libexpat +pixman
 endef
 
 CONFIGURE_VARS += FONTCONFIG_LIBS="-lfreetype -lfontconfig -lz -lexpat"
