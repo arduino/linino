@@ -34,7 +34,7 @@ start() {
 		config_get filter $cfg filter
 		config_get graph $cfg graph
 		config_get meta_refresh $cfg meta_refresh
-			for subnet in $subnets
+			for subnet in $subnets; do
 				echo "subnet $subnet">> /tmp/bandwidthd.conf
 			done
 		cat >> /tmp/bandwidthd.conf <<EOF
