@@ -44,8 +44,12 @@ EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib
 define Package/bandwidthd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bandwidthd $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/bandwidthd.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/bandwidthd.config $(1)/etc/config/bandwidthd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/bandwidthd.init $(1)/etc/init.d/bandwidthd
+	$(INSTALL_DIR) $(1)/www
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/htdocs/legend.gif $(1)/www/
 endef
 
 $(eval $(call BuildPackage,bandwidthd))

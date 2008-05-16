@@ -1,0 +1,57 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2008 OpenWrt.org
+START=99
+
+config_cb() {
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
+	        bandwidthd)
+	                append cfgs "$cfg_name"
+	        ;;
+	esac
+}
+
+start() {
+	[ -d /tmp/bandwidthd ] || mkdir -p /tmp/bandwidthd && cp /www/ledgend.gif /tmp/bandwidthd/
+	[ -e /htdocs ] || ln -s /tmp/bandwidthd /htdocs
+	[ -e /www/bandwidthd ] || ln -s /tmp/bandwidthd /www/bandwidthd
+	rm -f /tmp/bandwidthd.conf
+	touch /tmp/bandwidthd.conf
+	[ -e /etc/bandwidthd.conf ] || ln -s /tmp/bandwidthd.conf /etc/bandwidthd.conf
+	
+	
+	config_load bandwidthd
+	for cfg in $cfgs; do
+		config_get interface $cfg interface
+		config_get subnets $cfg interface
+		config_get skip_intervals $cfg skip_intervals
+		config_get graph_cutoff $cfg graph_cutoff
+		config_get promiscuous $cfg promiscuous
+		config_get output_cdf $cfg output_cdf
+		config_get recover_cdf $cfg recover_cdf
+		config_get filter $cfg filter
+		config_get graph $cfg graph
+		config_get meta_refresh $cfg meta_refresh
+			for subnet in $subnets
+				echo "subnet $subnet">> /tmp/bandwidthd.conf
+			done
+		cat >> /tmp/bandwidthd.conf <<EOF
+${interface:+ dev "$interface"}
+${skip_intervals:+ skip_intervals $skip_intervals}
+${graph_cutoff:+ graph_cutoff $graph_cutoff}
+${promiscuous:+ promiscuous $promiscuous}
+${output_cdf:+ output_cdf $output_cdf}
+${recover_cdf:+ recover_cdf $recover_cdf}
+${filter:+ filter $filter}
+${graph:+ graph $graph}
+${meta_refresh:+ meta_refresh $meta_refresh}
+EOF
+	done
+	bandwidthd
+}
+
+stop() {
+	killall bandwidthd
+}
