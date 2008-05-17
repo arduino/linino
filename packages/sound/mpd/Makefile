@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpd
 PKG_VERSION:=0.13.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.musicpd.org/uploads/files/
@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mpd
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread
+  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread +libiconv
   TITLE:=Music Player Daemon
   URL:=http://www.musicpd.org/
 endef
@@ -48,7 +48,6 @@ define Build/Configure
 	        $(EXTRA_CONFIG_PARAM) \
 	        --disable-mod \
 	        --disable-audiofile \
-	        --disable-iconv \
 	        --disable-mpc \
 	        --disable-aac \
 	        --with-tremor \
@@ -58,6 +57,8 @@ define Build/Configure
 	        --with-libFLAC-libraries="$(STAGING_DIR)/usr/lib" \
 	        --with-mad-includes="$(STAGING_DIR)/usr/include" \
 	        --with-mad-libraries="$(STAGING_DIR)/usr/lib" \
+		--with-iconv-includes="$(STAGING_DIR)/usr/lib/libiconv/include" \
+		--with-iconv-libraries="$(STAGING_DIR)/usr/lib/libiconv/lib" \
 	)
 endef
 
