@@ -13,7 +13,7 @@ PKG_VERSION:=1.0.11
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://ap.coova-chilli.org/chilli/
+PKG_SOURCE_URL:=http://ap.coova.org/chilli/
 PKG_MD5SUM:=d932dc9ca42b90d56ef27552f049c44a
 
 include $(INCLUDE_DIR)/package.mk
