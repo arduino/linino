@@ -3,6 +3,15 @@
 START=93
 
 start() {
+	#create mpd directories
+	md=`grep music_directory /etc/mpd.conf | cut -d "\"" -f 2 | sed "s/~/\/root/g"`
+	if [ ! -d $md ]; then
+		mkdir -p $md
+	fi
+	pld=`grep playlist_directory /etc/mpd.conf | cut -d "\"" -f 2 | sed "s/~/\/root/g"`
+	if [ ! -d $pld ]; then
+		mkdir -p $pld
+	fi
 	#create mpd db
         /usr/bin/mpd --stdout --create-db
 	
