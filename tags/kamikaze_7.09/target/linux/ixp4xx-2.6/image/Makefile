@@ -74,7 +74,7 @@ $(eval $(call BuildImage))
 
 $(eval $(call Require,npe-ucode, \
 	You must manually download $(UCODEFILE) from \\\
-	http://www.intel.com/design/network/products/npfamily/ixp400_archives.htm \\\
+	http://downloadcenter.intel.com/detail_desc.aspx?ProductID=2100&DwnldID=12954&agr=Y \\\
 	and put it in $(DL_DIR). \\\
 	You will need to agree to the Intel Public License to do so - please do read it! \
 ))
