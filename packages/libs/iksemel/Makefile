@@ -34,7 +34,7 @@ CONFIGURE_ARGS += \
 	--with-libgnutls-prefix="$(STAGING_DIR)/usr" \
 
 CONFIGURE_VARS += \
-	LIBS="-lgnutls -lgcrypt -lgpg-error" \
+	LIBS="-L$(STAGING_DIR)/usr/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib -lgnutls -lgcrypt -lgpg-error" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
