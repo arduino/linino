@@ -1,0 +1,20 @@
+diff -Naur muninlite-1.0.0/Makefile muninlite-1.0.0-openwrt/Makefile
+--- muninlite-1.0.0/Makefile	2007-06-15 14:00:12.000000000 +0200
++++ muninlite-1.0.0-openwrt/Makefile	2008-05-13 14:15:47.000000000 +0200
+@@ -1,7 +1,7 @@
+ 
+ 
+-PLUGINS=df cpu if_ if_err_ load memory processes swap netstat uptime interrupts irqstats
+-#PLUGINS=cpu if_ if_err_ load memory processes netstat uptime interrupts irqstats
++#PLUGINS=df cpu if_ if_err_ load memory processes swap netstat uptime interrupts irqstats
++PLUGINS=cpu if_ if_err_ load memory processes netstat uptime interrupts irqstats
+ 
+ munin-node: plugins/*
+ 	@VERSION=$$(cat VERSION); \
+@@ -43,4 +43,4 @@
+ 	cd releases; \
+ 	rm -rf  muninlite-$$VERSION/releases; \
+ 	tar zcvf muninlite-$$VERSION.tar.gz muninlite-$$VERSION >/dev/null; \
+-	rm -rf  muninlite-$$VERSION;
+\ No newline at end of file
++	rm -rf  muninlite-$$VERSION;
