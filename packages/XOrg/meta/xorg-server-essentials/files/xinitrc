@@ -3,7 +3,7 @@ if [ -x `which xsetroot` ]; then
 	xsetroot -solid green
 fi
 
-BKGD_IM12429 /us/usr/share/X11/bkgd-images/
+BKGD_IMAGE_PATH=/usr/share/X11/bkgd-images/
 if [ -x `which Esetroot` ]; then
 	Esetroot -scale ${BKGD_IMAGE_PATH}/default.png
 fi
