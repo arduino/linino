@@ -30,22 +30,22 @@ define Package/vim/Default
 endef
 
 define Package/vim
-  $(call Packages/vim/Default)
+  $(call Package/vim/Default)
   TITLE+= (Tiny)
 endef
 
 define Package/vim-full
-  $(call Packages/vim/Default)
+  $(call Package/vim/Default)
   TITLE+= (Normal)
 endef
 
 define Package/vim-runtime
-  $(call Packages/vim/Default)
+  $(call Package/vim/Default)
   TITLE+= (runtime files)
 endef
 
 define Package/vim-help
-  $(call Packages/vim/Default)
+  $(call Package/vim/Default)
   TITLE+= (help files)
 endef
 
@@ -153,28 +153,6 @@ endef
 
 define Package/vim-help/install
 	tar -C $(1) -xzf $(PKG_BUILD_DIR)/docs.tgz 
-endef
-
-define Package/vim-full/postinst
-#!/bin/sh
-  if [ $${IPKG_INSTROOT} != / ]
-  then
-    if [ -d /usr/share/ ]
-      then
-        ln -s $${IPKG_INSTROOT}/usr/share/vim/ /usr/share/
-    fi
-  fi
-endef
-
-define Package/vim/postinst
-#!/bin/sh
-  if [ $${IPKG_INSTROOT} != / ]
-  then
-    if [ -d /usr/share/ ]
-      then
-        ln -s $${IPKG_INSTROOT}/usr/share/vim/vimrc /usr/share/vim/vimrc
-    fi
-  fi
 endef
 
 $(eval $(call BuildPackage,vim))
