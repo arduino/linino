@@ -27,9 +27,9 @@ CONFIGURE_ARGS_KDRIVE=--enable-composite --enable-kdrive \
 		--disable-xevie --disable-xprint --disable-xtrap \
 		--disable-dmx --disable-w100 \
 		--with-default-font-path=built-ins \
-		--enable-tslib --enable-xcalibrate 
+		--enable-tslib --enable-xcalibrate
 
-CONFIGURE_VARS+=ac_cv_file__usr_share_sgml_X11_defs_ent=yes 
+CONFIGURE_VARS+=ac_cv_file__usr_share_sgml_X11_defs_ent=yes
 CONFIGURE_ARGS+=$(if $(CONFIG_XORG_BUILD_KDRIVE), $(CONFIGURE_ARGS_KDRIVE))
 
 DEPENDS_SERVER:=+calibrateproto \
@@ -92,10 +92,10 @@ DEPENDS_KDRIVE:=+calibrateproto \
 		+libXrandr \
 		+xtrans \
 		+libX11 \
-		@DISPLAY_SUPPORT 
+		@DISPLAY_SUPPORT
 
 
-ifneq ($(CONFIG_TARGET_olpc),)
+ifeq ($(CONFIG_TARGET_olpc),y)
   XORG_CONFIG_FILE=xorg-olpc.conf
 else
   XORG_CONFIG_FILE=xorg.conf
