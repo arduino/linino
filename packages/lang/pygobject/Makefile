@@ -51,7 +51,7 @@ define Build/InstallDev
 	cp -r $(PKG_INSTALL_DIR)/* $(1)
 endef
 
-define Package/python-gtk/install
+define Package/python-gobject/install
 	mkdir -p $(1)
 	cp -r $(PKG_INSTALL_DIR)/* $(1)
 endef
