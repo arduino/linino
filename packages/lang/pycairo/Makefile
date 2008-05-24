@@ -13,14 +13,10 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.cairographics.org/releases/
-#PKG_MD5SUM:=532268f02870bea18c1d465e88afff30
 PKG_BUILD_DEPENDS:=python cairo
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
-ifneq ($(MAKECMDGOALS),download)
-  $(if $(DUMP)$(Build/Compile/PyMod),,$(error Python packaging code not found.))
-endif
 
 define Package/pycairo
   SECTION:=lang
@@ -34,11 +30,29 @@ define Package/pycairo/description
   cairo modul for python
 endef
 
-define Build/Compile
-	$(call Build/Compile/PyMod,., \
-		install --prefix="$(PKG_INSTALL_DIR)/usr", \
+define Build/Configure
+	(cd $(PKG_BUILD_DIR); \
+		if [ -x $(CONFIGURE_CMD) ]; then \
+			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
+			$(CONFIGURE_VARS) \
+			$(CONFIGURE_CMD) \
+			$(CONFIGURE_ARGS) ;\
+		fi \
 	)
 endef
 
-$(eval $(call PyPackage,pycairo))
+define Build/Compile
+	cd $(PKG_BUILD_DIR) ; $(MAKE) $(MAKE_FLAGS) $(MAKE_VARS)
+endef
+
+define Build/InstallDev
+	cd $(PKG_BUILD_DIR) ; DESTDIR=$(1) $(MAKE) $(MAKE_FLAGS) install
+#	rm $(1)/usr/lib/pkgconfig/pycairo.pc
+endef
+
+define Package/pycairo/install
+	cd $(PKG_BUILD_DIR) ; DESTDIR=$(1) $(MAKE) $(MAKE_FLAGS) install
+#	rm $(1)/usr/lib/pkgconfig/pycairo.pc
+endef
+
 $(eval $(call BuildPackage,pycairo))

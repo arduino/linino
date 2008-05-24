@@ -13,32 +13,47 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.10/
-#PKG_MD5SUM:=532268f02870bea18c1d465e88afff30
-#PKG_BUILD_DEPENDS:=python gtk
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
-ifneq ($(MAKECMDGOALS),download)
-  $(if $(DUMP)$(Build/Compile/PyMod),,$(error Python packaging code not found.))
-endif
 
+EXTRA_CFLAGS:=-I$(STAGING_DIR)/usr/include/pycairo/ -I$(STAGING_DIR)/usr/lib/libintl/include/ -I$(STAGING_DIR)/usr/lib/libiconv/include/
+RSTRIP:=true
 define Package/python-gtk
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=GTK bindings to python
   URL:=http://www.pygtk.org/
-  DEPENDS:=python-core 
+  DEPENDS:=python-core +python-gobject +gtk-2.10.14 +pycairo
 endef
 
 define Package/python-gtk/description
   API to GTK and glade library from python
 endef
 
-define Build/Compile
-	$(call Build/Compile/PyMod,., \
-		install --prefix="$(PKG_INSTALL_DIR)/usr", \
+define Build/Configure
+	(cd $(PKG_BUILD_DIR); \
+		if [ -x $(CONFIGURE_CMD) ]; then \
+		$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
+			$(CONFIGURE_VARS) \
+			$(CONFIGURE_CMD) \
+			$(CONFIGURE_ARGS) ;\
+		fi \
 	)
 endef
 
-$(eval $(call PyPackage,python-gtk))
+define Build/Compile
+	cd $(PKG_BUILD_DIR) ; PYTHON_HOST=/usr/bin/python DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) all install
+endef
+
+define Build/InstallDev
+	mkdir -p $(1)
+	cp -r $(PKG_INSTALL_DIR)/* $(1)
+endef
+
+define Package/python-gtk/install
+	mkdir -p $(1)
+	cp -r $(PKG_INSTALL_DIR)/* $(1)
+endef
+
 $(eval $(call BuildPackage,python-gtk))
