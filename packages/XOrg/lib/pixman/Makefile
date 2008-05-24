@@ -18,12 +18,14 @@ PKG_MD5SUM:=41804ac38025102dcc9891dfd4a3d105
 
 include $(INCLUDE_DIR)/package.mk
 
+EXTRA_LDFLAGS:="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
+
 define Package/pixman
   SECTION:=xorg-libs
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=pixman
-  DEPENDS:=+xorg-server-essentials 
+  DEPENDS:=+xorg-server-essentials +gtk2.10.14 
 endef
 
 define Build/Configure
@@ -48,7 +50,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
-define Package/pixman/Install
+define Package/pixman/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*so* $(1)/usr/lib/
 endef

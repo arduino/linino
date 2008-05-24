@@ -43,7 +43,7 @@ define Build/InstallDev
 	$(SED)  "s,$(STAGING_DIR)$(STAGING_DIR),$(STAGING_DIR),g" $(1)/usr/lib/libcairo.la
 endef
 
-define Package/cairo/Install
+define Package/cairo/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*so* $(1)/usr/lib/
 endef

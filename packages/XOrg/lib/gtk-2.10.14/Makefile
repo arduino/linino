@@ -38,8 +38,14 @@ endef
 define Build/InstallDev
 	$(INSTALL_DIR)	$(1)/usr/{lib/pkgconfig,include}
 	$(CP) -r $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{la,so.*} $(1)/usr/lib/
+	$(CP) -r $(PKG_INSTALL_DIR)/usr/lib/gtk-2.0/include/* $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{la,so.*,so} $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
+endef
+
+define Package/gtk-2.10.14/install
+	$(INSTALL_DIR)	$(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{so.*,so} $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,gtk-2.10.14))
