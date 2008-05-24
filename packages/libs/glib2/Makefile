@@ -78,6 +78,8 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libg{lib,module,object,thread}-2.0.{a,so*} $(1)/usr/lib/
 	mkdir -p $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/g{lib,module,module-no-export,object,thread}-2.0.pc $(1)/usr/lib/pkgconfig
+	mkdir -p $(1)/share/aclocal/
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/aclocal/*.m4 $(STAGING_DIR_HOST)/share/aclocal/
 endef
 
 define Package/glib2/install
