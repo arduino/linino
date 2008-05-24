@@ -19,6 +19,7 @@ PKG_FIXUP:=libtool
 include $(INCLUDE_DIR)/package.mk
 
 define Package/pycairo
+  SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=Cairo bindings to python
@@ -42,17 +43,17 @@ define Build/Configure
 endef
 
 define Build/Compile
-	cd $(PKG_BUILD_DIR) ; $(MAKE) $(MAKE_FLAGS) $(MAKE_VARS)
+	cd $(PKG_BUILD_DIR) ; DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) all install
 endef
 
 define Build/InstallDev
-	cd $(PKG_BUILD_DIR) ; DESTDIR=$(1) $(MAKE) $(MAKE_FLAGS) install
-#	rm $(1)/usr/lib/pkgconfig/pycairo.pc
+	mkdir -p $(1)
+	cp -r $(PKG_INSTALL_DIR)/* $(1)
 endef
 
-define Package/pycairo/install
-	cd $(PKG_BUILD_DIR) ; DESTDIR=$(1) $(MAKE) $(MAKE_FLAGS) install
-#	rm $(1)/usr/lib/pkgconfig/pycairo.pc
+define Package/python-gtk/install
+	mkdir -p $(1)
+	cp -r $(PKG_INSTALL_DIR)/* $(1)
 endef
 
 $(eval $(call BuildPackage,pycairo))

@@ -7,35 +7,33 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=pygtk
-PKG_VERSION:=2.10.6
+PKG_NAME:=pygobject
+PKG_VERSION:=2.14.0
 PKG_RELEASE:=1
-
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.10/
-PKG_FIXUP:=libtool
+PKG_SOURCE_URL:=http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.14
+
+EXTRA_LDFLAGS=-L$(STAGING_DIR)/usr/lib/libintl/lib/ -L$(STAGING_DIR)/usr/lib/libiconv/lib/
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_CFLAGS:=-I$(STAGING_DIR)/usr/include/pycairo/ -I$(STAGING_DIR)/usr/lib/libintl/include/ -I$(STAGING_DIR)/usr/lib/libiconv/include/
-
-define Package/python-gtk
+define Package/python-gobject
   SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
-  TITLE:=GTK bindings to python
+  TITLE:=python gobjects
   URL:=http://www.pygtk.org/
-  DEPENDS:=python-core +python-gobject +gtk-2.10.14 +pycairo
+  DEPENDS:=python-core 
 endef
 
-define Package/python-gtk/description
+define Package/python-gobject/description
   API to GTK and glade library from python
 endef
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); \
 		if [ -x $(CONFIGURE_CMD) ]; then \
-		$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
+			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
 			$(CONFIGURE_VARS) \
 			$(CONFIGURE_CMD) \
 			$(CONFIGURE_ARGS) ;\
@@ -44,7 +42,8 @@ define Build/Configure
 endef
 
 define Build/Compile
-	cd $(PKG_BUILD_DIR) ; PYTHON_HOST=/usr/bin/python DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) all install
+	cd $(PKG_BUILD_DIR)/gobject ; gcc -I$(STAGING_DIR)/usr/lib/glib-2.0/include/ -I$(STAGING_DIR)/usr/include/glib-2.0/ generate-constants.c -o generate-constants
+	cd $(PKG_BUILD_DIR) ; DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) all install
 endef
 
 define Build/InstallDev
@@ -57,4 +56,4 @@ define Package/python-gtk/install
 	cp -r $(PKG_INSTALL_DIR)/* $(1)
 endef
 
-$(eval $(call BuildPackage,python-gtk))
+$(eval $(call BuildPackage,python-gobject))
