@@ -25,7 +25,7 @@ define Package/pixman
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=pixman
-  DEPENDS:=+xorg-server-essentials +gtk2.10.14 
+  DEPENDS:=+xorg-server-essentials
 endef
 
 define Build/Configure
