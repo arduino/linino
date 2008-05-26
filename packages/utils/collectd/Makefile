@@ -305,6 +305,11 @@ endif
 # exception: mod-rrdtool(1) needs rrdtool
 ifneq ($(CONFIG_PACKAGE_collectd-mod-rrdtool1)$(CONFIG_PACKAGE_collectd-mod-rrdtool),)
 	PKG_CONFIGURE_OPTS += --enable-rrdtool
+	ifneq ($(CONFIG_PACKAGE_collectd-mod-rrdtool1),)
+		PKG_CONFIGURE_OPTS += --with-rrdtool=$(wildcard $(BUILD_DIR)/rrdtool-1.0.*)
+	else
+		PKG_CONFIGURE_OPTS += --with-rrdtool=$(wildcard $(BUILD_DIR)/rrdtool-1.2.*)
+	endif
 endif
 
 
