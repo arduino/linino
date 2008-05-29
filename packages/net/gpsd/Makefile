@@ -50,7 +50,7 @@ CONFIGURE_ARGS += \
 	--without-x \
 
 CONFIGURE_VARS += \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClic++" \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
 	LIBS="-nodefaultlibs -luClibc++ -lnotimpl" \
 
