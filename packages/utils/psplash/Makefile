@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/psplash
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=@LINUX_2_6_X86
+  DEPENDS:=@LINUX_2_6
   TITLE:=A boot splash screen
   URL:=http://projects.o-hand.com/psplash
 endef

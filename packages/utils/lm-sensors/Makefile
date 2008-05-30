@@ -24,7 +24,7 @@ define Package/lm-sensors
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=lm-sensors
-  DEPENDS:=+sysfsutils @LINUX_2_6_X86
+  DEPENDS:=+sysfsutils @LINUX_2_6
   URL:=http://www.lm-sensors.org/
 endef
 

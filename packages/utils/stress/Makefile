@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/stress
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=@LINUX_2_6_X86
+  DEPENDS:=@LINUX_2_6
   TITLE:=stress is a simple stress utility
   URL:=http://weather.ou.edu/~apw/projects/stress/
 endef
