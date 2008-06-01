@@ -122,6 +122,22 @@ LCD4LINUX_CONFIGURE_PLUGINS:= \
 	    $(if $(CONFIG_LCD4LINUX_PLUGIN_$(c)),$(c),) \
 	)
 
+ifneq ($(CONFIG_LCD4LINUX_DRV_PNG),)
+PKG_BUILD_DEPENDS += libgd
+endif
+
+ifneq ($(CONFIG_LCD4LINUX_DRV_PPM),)
+PKG_BUILD_DEPENDS += libgd
+endif
+
+ifneq ($(CONFIG_LCD4LINUX_DRV_st2205),)
+PKG_BUILD_DEPENDS += st2205tool
+endif
+
+ifneq ($(CONFIG_LCD4LINUX_PLUGIN_gps),)
+PKG_BUILD_DEPENDS += libnmeap
+endif
+
 EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/lib/libiconv/include
 EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libiconv/lib
 
