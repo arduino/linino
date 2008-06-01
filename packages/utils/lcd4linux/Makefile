@@ -31,6 +31,13 @@ define Package/lcd4linux
   URL:=http://lcd4linux.bulix.org/
 endef
 
+define Package/lcd4linux/config
+	menu "Configuration"
+	depends on PACKAGE_lcd4linux
+	source "$(SOURCE)/Config.in"
+	endmenu
+endef
+
 define Package/lcd4linux/description
 	LCD4Linux is a small program that grabs information from the kernel and 
 	some subsystems and displays it on an external liquid crystal display.
@@ -40,21 +47,93 @@ define Package/lcd4linux/conffiles
 /etc/lcd4linux.conf
 endef
 
-# commas are interpreted by the $(call ...) macro, so define an intermediate variable holding our drivers and plugins spec
-PKG_CONFIGURE_DRIVERS:=all,!PNG,!PPM,!RouterBoard,!X11,!serdisplib,!G15
-PKG_CONFIGURE_PLUGINS:=wireless,mpd,iconv,cpuinfo,loadavg,meminfo,proc_stat,uname,uptime
+LCD4LINUX_DRIVERS:= \
+	BeckmannEgle \
+	BWCT \
+	CrystalFontz \
+	Curses \
+	Cwlinux \
+	G15 \
+	HD44780 \
+	LCD2USB \
+	LCDLinux \
+	LCDTerm \
+	LPH7508 \
+	LUIse \
+	M50530 \
+	MatrixOrbital \
+	MilfordInstruments \
+	Noritake \
+	NULL \
+	PNG \
+	PPM \
+	Pertelian \
+	picoLCD \
+	RouterBoard \
+	serdisplib \
+	SimpleLCD \
+	st2205 \
+	T6963 \
+	Trefon \
+	USBLCD \
+	USBHUB \
+	WincorNixdorf \
+	X11 \
+
+LCD4LINUX_PLUGINS:= \
+	apm \
+	asterisk \
+	button_exec \
+	cpuinfo \
+	diskstats \
+	dvb \
+	exec \
+	fifo \
+	file \
+	gps \
+	i2c_sensors \
+	iconv \
+	imon \
+	isdn \
+	kvv \
+	loadavg \
+	meminfo \
+	mpd \
+	mysql \
+	netdev \
+	pop3 \
+	ppp \
+	proc_stat \
+	python \
+	seti \
+	statfs \
+	uname \
+	uptime \
+	wireless \
+	xmms \
+
+LCD4LINUX_CONFIGURE_DRIVERS:= \
+	$(foreach c, $(LCD4LINUX_DRIVERS), \
+	    $(if $(CONFIG_LCD4LINUX_DRV_$(c)),$(c),) \
+	)
+
+LCD4LINUX_CONFIGURE_PLUGINS:= \
+	$(foreach c, $(LCD4LINUX_PLUGINS), \
+	    $(if $(CONFIG_LCD4LINUX_PLUGIN_$(c)),$(c),) \
+	)
 
 EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/lib/libiconv/include
 EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 TARGET_CONFIGURE_OPTS+=\
-        CC="$(TARGET_CC) $(EXTRA_CFLAGS) $(EXTRA_LDFLAGS)"
+	CC="$(TARGET_CC) $(EXTRA_CFLAGS) $(EXTRA_LDFLAGS)"
+
 
 CONFIGURE_ARGS += \
 	--without-x \
 	--without-python \
-	--with-drivers="$(PKG_CONFIGURE_DRIVERS)" \
-	--with-plugins="$(PKG_CONFIGURE_PLUGINS)" \
+	--with-drivers="$(LCD4LINUX_CONFIGURE_DRIVERS)" \
+	--with-plugins="$(LCD4LINUX_CONFIGURE_PLUGINS)" \
 	--disable-rpath \
 
 define Build/Compile

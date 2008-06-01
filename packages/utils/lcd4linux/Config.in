@@ -1,0 +1,244 @@
+comment "LCD4Linux Drivers ---"
+
+config LCD4LINUX_DRV_BeckmannEgle
+	bool
+	prompt "BeckmannEgle"
+
+config LCD4LINUX_DRV_BWCT
+	bool
+	prompt "BWCT"
+
+config LCD4LINUX_DRV_CrystalFontz
+	bool
+	prompt "CrystalFontz"
+
+config LCD4LINUX_DRV_Curses
+	bool
+	prompt "Curses"
+
+config LCD4LINUX_DRV_Cwlinux
+	bool
+	prompt "Cwlinux"
+
+config LCD4LINUX_DRV_G15
+	bool
+	prompt "G15"
+
+config LCD4LINUX_DRV_HD44780
+	bool
+	prompt "HD44780"
+
+config LCD4LINUX_DRV_LCD2USB
+	bool
+	prompt "LCD2USB"
+
+config LCD4LINUX_DRV_LCDLinux
+	bool
+	prompt "LCDLinux"
+
+config LCD4LINUX_DRV_LCDTerm
+	bool
+	prompt "LCDTerm"
+
+config LCD4LINUX_DRV_LPH7508
+	bool
+	prompt "LPH7508"
+
+config LCD4LINUX_DRV_LUIse
+	bool
+	prompt "LUIse"
+
+config LCD4LINUX_DRV_M50530
+	bool
+	prompt "M50530"
+
+config LCD4LINUX_DRV_MatrixOrbital
+	bool
+	prompt "MatrixOrbital"
+
+config LCD4LINUX_DRV_MilfordInstruments
+	bool
+	prompt "MilfordInstruments"
+
+config LCD4LINUX_DRV_Noritake
+	bool
+	prompt "Noritake"
+
+config LCD4LINUX_DRV_NULL
+	bool
+	prompt "NULL"
+
+config LCD4LINUX_DRV_PNG
+	bool
+	prompt "PNG (you need to select libgd)"
+
+config LCD4LINUX_DRV_PPM
+	bool
+	prompt "PPM (you need to select libgd)"
+
+config LCD4LINUX_DRV_Pertelian
+	bool
+	prompt "Pertelian"
+
+config LCD4LINUX_DRV_picoLCD
+	bool
+	prompt "picoLCD"
+
+config LCD4LINUX_DRV_RouterBoard
+	bool
+	prompt "RouterBoard"
+
+config LCD4LINUX_DRV_serdisplib
+	bool
+	prompt "serdisplib"
+
+config LCD4LINUX_DRV_SimpleLCD
+	bool
+	prompt "SimpleLCD"
+
+config LCD4LINUX_DRV_st2205
+	bool
+	prompt "st2205 (you need to select st2205tool)"
+
+config LCD4LINUX_DRV_T6963
+	bool
+	prompt "T6963"
+
+config LCD4LINUX_DRV_Trefon
+	bool
+	prompt "Trefon"
+
+config LCD4LINUX_DRV_USBLCD
+	bool
+	prompt "USBLCD"
+
+config LCD4LINUX_DRV_USBHUB
+	bool
+	prompt "USBHUB"
+
+config LCD4LINUX_DRV_WincorNixdorf
+	bool
+	prompt "WincorNixdorf"
+
+config LCD4LINUX_DRV_X11
+	bool
+	prompt "X11"
+
+comment "LCD4Linux Plugins ---"
+
+config LCD4LINUX_PLUGIN_apm
+	bool
+	prompt "apm"
+
+config LCD4LINUX_PLUGIN_asterisk
+	bool
+	prompt "asterisk"
+
+config LCD4LINUX_PLUGIN_button_exec
+	bool
+	prompt "button_exec"
+
+config LCD4LINUX_PLUGIN_cpuinfo
+	bool
+	prompt "cpuinfo"
+
+config LCD4LINUX_PLUGIN_diskstats
+	bool
+	prompt "diskstats"
+
+config LCD4LINUX_PLUGIN_dvb
+	bool
+	prompt "dvb"
+
+config LCD4LINUX_PLUGIN_exec
+	bool
+	prompt "exec"
+
+config LCD4LINUX_PLUGIN_fifo
+	bool
+	prompt "fifo"
+
+config LCD4LINUX_PLUGIN_file
+	bool
+	prompt "file"
+
+config LCD4LINUX_PLUGIN_gps
+	bool
+	prompt "gps (you need to select libnmeap)"
+
+config LCD4LINUX_PLUGIN_i2c_sensors
+	bool
+	prompt "i2c_sensors"
+
+config LCD4LINUX_PLUGIN_iconv
+	bool
+	prompt "iconv"
+
+config LCD4LINUX_PLUGIN_imon
+	bool
+	prompt "imon"
+
+config LCD4LINUX_PLUGIN_isdn
+	bool
+	prompt "isdn"
+
+config LCD4LINUX_PLUGIN_kvv
+	bool
+	prompt "kvv"
+
+config LCD4LINUX_PLUGIN_loadavg
+	bool
+	prompt "loadavg"
+
+config LCD4LINUX_PLUGIN_meminfo
+	bool
+	prompt "meminfo"
+
+config LCD4LINUX_PLUGIN_mpd
+	bool
+	prompt "mpd"
+
+config LCD4LINUX_PLUGIN_mysql
+	bool
+	prompt "mysql"
+
+config LCD4LINUX_PLUGIN_pop3
+	bool
+	prompt "pop3"
+
+config LCD4LINUX_PLUGIN_ppp
+	bool
+	prompt "ppp"
+
+config LCD4LINUX_PLUGIN_proc_stat
+	bool
+	prompt "proc_stat"
+
+config LCD4LINUX_PLUGIN_python
+	bool
+	prompt "python"
+
+config LCD4LINUX_PLUGIN_seti
+	bool
+	prompt "seti"
+
+config LCD4LINUX_PLUGIN_statfs
+	bool
+	prompt "statfs"
+
+config LCD4LINUX_PLUGIN_uname
+	bool
+	prompt "uname"
+
+config LCD4LINUX_PLUGIN_uptime
+	bool
+	prompt "uptime"
+
+config LCD4LINUX_PLUGIN_wireless
+	bool
+	prompt "wireless"
+
+config LCD4LINUX_PLUGIN_xmms
+	bool
+	prompt "xmms"
+
