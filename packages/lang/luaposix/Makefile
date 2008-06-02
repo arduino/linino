@@ -32,17 +32,8 @@ endef
 define Build/Configure
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CROSS)gcc" \
-		LD="$(TARGET_CROSS)ld" \
-		AR="$(TARGET_CROSS)ar rcu" \
-		RANLIB="$(TARGET_CROSS)ranlib" \
-		INSTALL_ROOT=/usr \
-		LUAINC=$(STAGING_DIR)/usr/include \
-		OS=Linux
-	$(STRIP) $(PKG_BUILD_DIR)/posix.so
-endef
+MAKE_FLAGS += \
+	OS=Linux
 
 define Package/luaposix/install		
 	$(INSTALL_DIR) $(1)/usr/lib/lua
