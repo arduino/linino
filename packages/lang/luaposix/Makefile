@@ -39,7 +39,8 @@ define Build/Compile
 		AR="$(TARGET_CROSS)ar rcu" \
 		RANLIB="$(TARGET_CROSS)ranlib" \
 		INSTALL_ROOT=/usr \
-		LUAINC=$(STAGING_DIR)/usr/include
+		LUAINC=$(STAGING_DIR)/usr/include \
+		OS=Linux
 	$(STRIP) $(PKG_BUILD_DIR)/posix.so
 endef
 
