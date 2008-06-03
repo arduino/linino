@@ -44,8 +44,7 @@ define Build/InstallDev
 endef
 
 define Package/gtk-2.10.14/install
-	$(INSTALL_DIR)	$(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{so.*,so} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 $(eval $(call BuildPackage,gtk-2.10.14))
