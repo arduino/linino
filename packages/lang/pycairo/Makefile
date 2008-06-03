@@ -12,7 +12,7 @@ PKG_VERSION:=1.4.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.cairographics.org/releases/
+PKG_SOURCE_URL:=http://www.cairographics.org/releases
 PKG_BUILD_DEPENDS:=python cairo
 PKG_FIXUP:=libtool
 
@@ -51,7 +51,7 @@ define Build/InstallDev
 	cp -r $(PKG_INSTALL_DIR)/* $(1)
 endef
 
-define Package/python-gtk/install
+define Package/pycairo/install
 	mkdir -p $(1)
 	cp -r $(PKG_INSTALL_DIR)/* $(1)
 endef
