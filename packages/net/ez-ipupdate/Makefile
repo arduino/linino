@@ -28,10 +28,6 @@ define Package/ez-ipupdate
   URL:=http://ez-ipupdate.com/
 endef
 
-define Package/ez-ipupdate/conffiles
-/etc/ez-ipupdate.conf
-endef
-
 # uses GNU configure
 
 define Build/Compile
@@ -41,8 +37,8 @@ endef
 define Package/ez-ipupdate/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ez-ipupdate $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_CONF) ./files/ez-ipupdate.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/config/
+	$(INSTALL_CONF) ./files/ez-ipupdate.config $(1)/etc/config/ddns
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
 	$(INSTALL_BIN) ./files/ez-ipupdate.hotplug $(1)/etc/hotplug.d/iface/30-ez-ipupdate
 endef
