@@ -13,6 +13,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gstreamer/
 PKG_FIXUP:=libtool
+PKG_MD5SUM:=82192b54a7a914609dfb97e2a44b311e
 
 include $(INCLUDE_DIR)/package.mk
 
