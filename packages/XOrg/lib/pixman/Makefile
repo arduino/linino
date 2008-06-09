@@ -19,6 +19,7 @@ PKG_MD5SUM:=41804ac38025102dcc9891dfd4a3d105
 include $(INCLUDE_DIR)/package.mk
 
 EXTRA_LDFLAGS:="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
+TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include/gtk-2.0/gdk
 
 define Package/pixman
   SECTION:=xorg-libs
