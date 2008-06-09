@@ -16,8 +16,8 @@ PKG_MD5SUM:=354853e0b2da90c527e35aabb8d6f1e6
 include $(INCLUDE_DIR)/package.mk
 
 define Package/make
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=devel
+  CATEGORY:=Development
   TITLE:=make
 endef
 

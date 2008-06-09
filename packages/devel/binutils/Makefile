@@ -15,7 +15,7 @@ PKG_SOURCE_URL:=http://ftp.gnu.org/gnu/binutils/ \
         ftp://ftp.uu.net/archive/systems/gnu/ \
         ftp://ftp.eu.uu.net/pub/gnu/ \
         ftp://ftp.funet.fi/pub/gnu/prep/ \
-        ftp://ftp.leo.org/pub/comp/os/unix/gnu/ 
+        ftp://ftp.leo.org/pub/comp/os/unix/gnu/
 
 PKG_SOURCE:=binutils-$(PKG_VERSION).tar.bz2
 PATCH_DIR:=$(TOPDIR)/toolchain/binutils/patches/$(PKG_VERSION)
@@ -23,12 +23,13 @@ PATCH_DIR:=$(TOPDIR)/toolchain/binutils/patches/$(PKG_VERSION)
 include $(INCLUDE_DIR)/package.mk
 
 CONFIGURE_ARGS_XTRA+=--disable-werror \
-		--disable-nls 
+		--disable-nls
 
 define Package/binutils
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=devel
+  CATEGORY:=Development
   TITLE:=binutils
+  DEPENDS:=@TARGET_x86
 endef
 
 define Package/binutils/description
