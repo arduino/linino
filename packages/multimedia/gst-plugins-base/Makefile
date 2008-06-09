@@ -13,10 +13,11 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gst-plugins-base/
 PKG_FIXUP:=libtool
+PKG_MD5SUM:=0ee35455a4eb507bcfbfcd44d9e15d1e
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_CFLAGS+= -I$(STAGING_DIR)/usr/lib/libintl/include/ -I$(STAGING_DIR)/usr/lib/libiconv/include/
+EXTRA_CFLAGS+= -I$(STAGING_DIR)/usr/lib/libintl/include/ -I$(STAGING_DIR)/usr/lib/libiconv/include/ -I$(STAGING_DIR)/usr/include/gtk-2.0/gdk
 EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libintl/lib/ -L$(STAGING_DIR)/usr/lib/libiconv/lib/
 
 define Package/gst-plugins-base
@@ -24,7 +25,7 @@ define Package/gst-plugins-base
   CATEGORY:=Multimedia
   TITLE:=gst-plugins-base
   URL:=http://gst-plugins-base.freedesktop.org/
-  DEPENDS:=gstreamer +liboil +pango
+  DEPENDS:=gstreamer +liboil +pango +gtk-2.10.14
 endef
 
 define Package/gst-plugins-base/description
