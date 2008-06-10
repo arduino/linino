@@ -37,6 +37,7 @@ CONFIGURE_ARGS += \
 	ac_cv_file__usr_pkg_include=no \
 	ac_cv_file__usr_local_pgsql_lib=no \
 	ac_cv_file__usr_local_pgsql_include=no \
+	ac_cv_lib_pq_PQconnectdb=no \
 
 EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
 EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib
