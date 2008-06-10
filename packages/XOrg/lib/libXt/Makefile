@@ -21,7 +21,7 @@ define Package/libXt
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  +libSM @DISPLAY_SUPPORT
+  DEPENDS:=+xorg-headers-native +util-macros +libX11 +libSM @DISPLAY_SUPPORT
   TITLE:=libXt
   URL:=http://xorg.freedesktop.org/
 endef
