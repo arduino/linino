@@ -21,7 +21,7 @@ define Package/libxkbui
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  @DISPLAY_SUPPORT
+  DEPENDS:=+xorg-headers-native +util-macros +libXt +libxkbfile @DISPLAY_SUPPORT
   TITLE:=libxkbui
   URL:=http://xorg.freedesktop.org/
 endef
