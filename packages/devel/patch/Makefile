@@ -32,7 +32,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE_VARS) $(MAKE) $(MAKE_ARGS) DESTDIR=$(PKG_INSTALL_DIR) exec_prefix=$(PKG_INSTALL_DIR) -C $(PKG_BUILD_DIR) all install 
+	$(MAKE_VARS) $(MAKE) $(MAKE_ARGS) exec_prefix=$(PKG_INSTALL_DIR) -C $(PKG_BUILD_DIR) all install 
 endef
 
 define Package/patch/install
