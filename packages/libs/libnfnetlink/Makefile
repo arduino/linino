@@ -50,7 +50,6 @@ endef
 
 define Build/InstallDev
 	mkdir -p $(1)/usr/include/libnfnetlink
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libnfnetlink/{libnfnetlink,linux_nfnetlink}.h $(1)/usr/include/libnfnetlink/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libnfnetlink/{libnfnetlink,linux_nfnetlink,linux_nfnetlink_compat}.h $(1)/usr/include/libnfnetlink/
 	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnfnetlink.{a,so*} $(1)/usr/lib/
