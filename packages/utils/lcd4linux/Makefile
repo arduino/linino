@@ -11,7 +11,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=lcd4linux
 PKG_REV:=877
 PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://ssl.bulix.org/svn/lcd4linux/trunk/
@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/lcd4linux
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libncurses +libusb +libiconv +libgd
+  DEPENDS:=+libusb
   TITLE:=LCD display utility
   URL:=http://lcd4linux.bulix.org/
 endef
@@ -130,13 +130,57 @@ ifneq ($(CONFIG_LCD4LINUX_DRV_PPM),)
 PKG_BUILD_DEPENDS += libgd
 endif
 
+ifneq ($(CONFIG_LCD4LINUX_DRV_G15),)
+PKG_BUILD_DEPENDS += libgd
+endif
+
+ifneq ($(CONFIG_LCD4LINUX_DRV_LPH7508),)
+PKG_BUILD_DEPENDS += libgd
+endif
+
+ifneq ($(CONFIG_LCD4LINUX_DRV_LUIse),)
+PKG_BUILD_DEPENDS += libgd
+endif
+
+ifneq ($(CONFIG_LCD4LINUX_DRV_Noritake),)
+PKG_BUILD_DEPENDS += libgd
+endif
+
+ifneq ($(CONFIG_LCD4LINUX_DRV_serdisplib),)
+PKG_BUILD_DEPENDS += libgd, serdisplib
+endif
+
 ifneq ($(CONFIG_LCD4LINUX_DRV_st2205),)
-PKG_BUILD_DEPENDS += st2205tool
+PKG_BUILD_DEPENDS += libgd, st2205tool
+endif
+
+ifneq ($(CONFIG_LCD4LINUX_DRV_T6963),)
+PKG_BUILD_DEPENDS += libgd
+endif
+
+ifneq ($(CONFIG_LCD4LINUX_DRV_Curses),)
+PKG_BUILD_DEPENDS += libncurses
+endif
+
+ifneq ($(CONFIG_LCD4LINUX_DRV_X11),)
+PKG_BUILD_DEPENDS += libgd, libX11
 endif
 
 ifneq ($(CONFIG_LCD4LINUX_PLUGIN_gps),)
 PKG_BUILD_DEPENDS += libnmeap
 endif
+
+ifneq ($(CONFIG_LCD4LINUX_PLUGIN_iconv),)
+PKG_BUILD_DEPENDS += libiconv
+endif
+
+ifneq ($(CONFIG_LCD4LINUX_PLUGIN_mysql),)
+PKG_BUILD_DEPENDS += libmysqlclient
+endif
+
+
+## TODO PYTHON PLUGIN, DEPENDS on ver >= '2.1.0'
+
 
 EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/lib/libiconv/include
 EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libiconv/lib

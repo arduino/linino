@@ -70,11 +70,11 @@ config LCD4LINUX_DRV_NULL
 
 config LCD4LINUX_DRV_PNG
 	bool
-	prompt "PNG (you need to select libgd)"
+	prompt "PNG"
 
 config LCD4LINUX_DRV_PPM
 	bool
-	prompt "PPM (you need to select libgd)"
+	prompt "PPM"
 
 config LCD4LINUX_DRV_Pertelian
 	bool
@@ -98,7 +98,7 @@ config LCD4LINUX_DRV_SimpleLCD
 
 config LCD4LINUX_DRV_st2205
 	bool
-	prompt "st2205 (you need to select st2205tool)"
+	prompt "st2205"
 
 config LCD4LINUX_DRV_T6963
 	bool
@@ -164,7 +164,7 @@ config LCD4LINUX_PLUGIN_file
 
 config LCD4LINUX_PLUGIN_gps
 	bool
-	prompt "gps (you need to select libnmeap)"
+	prompt "gps"
 
 config LCD4LINUX_PLUGIN_i2c_sensors
 	bool
