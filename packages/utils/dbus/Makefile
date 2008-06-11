@@ -78,8 +78,7 @@ CONFIGURE_ARGS += \
 	--with-dbus-daemondir="/usr/sbin" \
 	--with-system-socket="/var/run/dbus/system_bus_socket" \
 	--with-system-pid-file="/var/run/dbus.pid" \
-
-#	--without-x \
+	--without-x
 
 CONFIGURE_VARS+= \
 	ac_cv_have_abstract_sockets="yes" \
