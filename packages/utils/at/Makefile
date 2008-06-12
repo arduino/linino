@@ -35,7 +35,7 @@ CONFIGURE_ARGS+=--with-daemon_username=nobody --with-daemon_groupname=nogroup
 
 define Package/at/install
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/sbin $(1)/etc/init.d/
-	$(INSTALL_BIN) ./files/atd.init $(1)/etc/init.d/
+	$(INSTALL_BIN) ./files/atd.init $(1)/etc/init.d/atd
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/at $(1)/usr/bin
 	ln -sf at $(1)/usr/bin/atq
 	ln -sf at $(1)/usr/bin/atrm
