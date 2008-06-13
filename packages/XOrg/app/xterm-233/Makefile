@@ -44,8 +44,8 @@ endef
 
 define Package/xterm/install
 	$(INSTALL_DIR) $(1)/usr/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin $(1)/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib $(1)/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin $(1)/usr/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib $(1)/usr/
 endef
 
 $(eval $(call BuildPackage,xterm))
