@@ -16,5 +16,5 @@ elif [ -x /usr/bin/matchbox-window-manager ]; then
 fi
 
 #starting shell
-/usr/bin/xterm
+/bin/xterm
 
