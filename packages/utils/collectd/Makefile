@@ -140,7 +140,7 @@ endef
 define Package/collectd-mod-iptables
         $(call Package/collectd/common_info)
         TITLE:=collectd - iptables status input plugin
-        DEPENDS:=collectd
+        DEPENDS:=collectd +iptables
 endef
 
 define Package/collectd-mod-irq
