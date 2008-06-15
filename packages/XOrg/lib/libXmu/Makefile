@@ -1,10 +1,10 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org 
+# blogic@openwrt.org
 include $(TOPDIR)/rules.mk
 
 PKG_BASE_NAME:=libXmu
@@ -21,7 +21,7 @@ define Package/libXmu
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  @DISPLAY_SUPPORT
+  DEPENDS:=+xorg-headers-native +util-macros +libXt +libXext @DISPLAY_SUPPORT
   TITLE:=libXmu
   URL:=http://xorg.freedesktop.org/
 endef
@@ -36,12 +36,12 @@ endif
 
 define libX11/Compile
 	$(MAKE_VARS) \
-		$(MAKE) -C $(PKG_BUILD_DIR)/src/util CFLAGS="" LDFLAGS="" CC="cc" makekeys 
+		$(MAKE) -C $(PKG_BUILD_DIR)/src/util CFLAGS="" LDFLAGS="" CC="cc" makekeys
 endef
 
 define libXt/Compile
 	$(MAKE_VARS) \
-		$(MAKE) -C $(PKG_BUILD_DIR)/util CFLAGS="" LDFLAGS="" CC="cc" 
+		$(MAKE) -C $(PKG_BUILD_DIR)/util CFLAGS="" LDFLAGS="" CC="cc"
 endef
 
 define Build/Compile
@@ -67,7 +67,7 @@ endef
 
 define Package/libXmu/install/Default
 	$(INSTALL_DIR) $(1)/usr/lib
-	find $(PKG_INSTALL_DIR)/usr/lib/ -name lib*so* | $(XARGS) -I % -t cp -P % $(1)/usr/lib 
+	find $(PKG_INSTALL_DIR)/usr/lib/ -name lib*so* | $(XARGS) -I % -t cp -P % $(1)/usr/lib
 endef
 
 define Package/libXmu/install
