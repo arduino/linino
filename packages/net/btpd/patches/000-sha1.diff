@@ -66,6 +66,90 @@ diff -purN btpd-0.13/cli/Makefile.am btpd-0.13-hack/cli/Makefile.am
 +btcli_LDADD=../misc/libmisc.a -lm
 +btcli_CPPFLAGS=-I$(top_srcdir)/misc
 +btcli_LDFLAGS=
+diff -urN btpd-0.13.orig/configure btpd-0.13/configure
+--- btpd-0.13.orig/configure	2007-05-19 13:55:14.000000000 -0700
++++ btpd-0.13/configure	2008-06-14 23:04:33.000000000 -0700
+@@ -2939,80 +2939,6 @@
+ fi;
+ 
+ old_LDFLAGS="$LDFLAGS"
+-LDFLAGS="$LDFLAGS $openssl_LDFLAGS"
+-
+-echo "$as_me:$LINENO: checking for SHA1_Final in -lcrypto" >&5
+-echo $ECHO_N "checking for SHA1_Final in -lcrypto... $ECHO_C" >&6
+-if test "${ac_cv_lib_crypto_SHA1_Final+set}" = set; then
+-  echo $ECHO_N "(cached) $ECHO_C" >&6
+-else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lcrypto  $LIBS"
+-cat >conftest.$ac_ext <<_ACEOF
+-/* confdefs.h.  */
+-_ACEOF
+-cat confdefs.h >>conftest.$ac_ext
+-cat >>conftest.$ac_ext <<_ACEOF
+-/* end confdefs.h.  */
+-
+-/* Override any gcc2 internal prototype to avoid an error.  */
+-#ifdef __cplusplus
+-extern "C"
+-#endif
+-/* We use char because int might match the return type of a gcc2
+-   builtin and then its argument prototype would still apply.  */
+-char SHA1_Final ();
+-int
+-main ()
+-{
+-SHA1_Final ();
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-rm -f conftest.$ac_objext conftest$ac_exeext
+-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+-  (eval $ac_link) 2>conftest.er1
+-  ac_status=$?
+-  grep -v '^ *+' conftest.er1 >conftest.err
+-  rm -f conftest.er1
+-  cat conftest.err >&5
+-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-  (exit $ac_status); } &&
+-	 { ac_try='test -z "$ac_c_werror_flag"
+-			 || test ! -s conftest.err'
+-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+-  (eval $ac_try) 2>&5
+-  ac_status=$?
+-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-  (exit $ac_status); }; } &&
+-	 { ac_try='test -s conftest$ac_exeext'
+-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+-  (eval $ac_try) 2>&5
+-  ac_status=$?
+-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+-  (exit $ac_status); }; }; then
+-  ac_cv_lib_crypto_SHA1_Final=yes
+-else
+-  echo "$as_me: failed program was:" >&5
+-sed 's/^/| /' conftest.$ac_ext >&5
+-
+-ac_cv_lib_crypto_SHA1_Final=no
+-fi
+-rm -f conftest.err conftest.$ac_objext \
+-      conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
+-fi
+-echo "$as_me:$LINENO: result: $ac_cv_lib_crypto_SHA1_Final" >&5
+-echo "${ECHO_T}$ac_cv_lib_crypto_SHA1_Final" >&6
+-if test $ac_cv_lib_crypto_SHA1_Final = yes; then
+-  :
+-else
+-  echo Must have openssl; exit 1
+-fi
+-
+-LDFLAGS=$old_LDFLAGS
+-
+ 
+ 
+ subdirs="$subdirs libevent"
 diff -purN btpd-0.13/configure.ac btpd-0.13-hack/configure.ac
 --- btpd-0.13/configure.ac	2007-05-18 19:31:59.000000000 +0400
 +++ btpd-0.13-hack/configure.ac	2007-09-04 15:09:17.000000000 +0400
