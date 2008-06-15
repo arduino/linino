@@ -38,3 +38,7 @@ define Package/telepathy-python/install
 endef
 
 $(eval $(call BuildPackage,telepathy-python))
+
+$(eval $(call RequireCommand,xsltproc, \
+	$(PKG_NAME) requires xsltproc installed on the host-system. \
+))
