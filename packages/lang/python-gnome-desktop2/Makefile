@@ -23,7 +23,7 @@ define Package/gnome-python-desktop
   SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
-  TITLE:=Window Navigator Construction Kit
+  TITLE:=Gnome Python Bindings
   URL:=http://ftp.gnome.org/
   DEPENDS:=+libwnck +python-gtk
 endef
