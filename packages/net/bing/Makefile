@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -33,7 +33,7 @@ define Package/bing/description
 endef
 
 define Build/Compile
-	$(call Build/Compile/Default)
+	$(call Build/Compile/Default,bing)
 endef
 
 define Package/bing/install
