@@ -11,12 +11,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=lirc
-PKG_VERSION:=0.8.3pre1
+PKG_VERSION:=0.8.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://lirc.sourceforge.net/software/snapshots
-PKG_MD5SUM:=1fe9ab0a8e4fe2113040f6c576e51759
+PKG_SOURCE_URL:=@SF/${PKG_NAME}
+PKG_MD5SUM:=8e78eeded7b31e5ad02e328970437c0f
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -83,7 +83,7 @@ endef
 
 define  Package/lirctools
     $(call Package/lirc/Default)
-    DEPENDS:=lirc    
+    DEPENDS:=lirc
     TITLE:=LIRC tools
 endef
 
@@ -123,7 +123,7 @@ define  Package/lirc/install
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/contrib/lircd.conf $(1)/etc/
 endef
 #todo:
-#	$(CP) $(PKG_BUILD_DIR)/drivers/lirc_dev/lirc_dev.ko 
+#	$(CP) $(PKG_BUILD_DIR)/drivers/lirc_dev/lirc_dev.ko
 #	$(CP) $(PKG_BUILD_DIR)/drivers/lirc_mceusb2/lirc_mceusb2.ko
 #depends on the selected module
 
