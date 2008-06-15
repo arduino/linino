@@ -83,3 +83,8 @@ define Package/nrpe/install
 endef
 
 $(eval $(call BuildPackage,nrpe))
+
+$(eval $(call RequireCommand,openssl, \
+	$(PKG_NAME) requires openssl installed on the host-system. \
+))
+
