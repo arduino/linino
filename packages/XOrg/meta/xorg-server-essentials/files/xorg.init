@@ -1,0 +1,23 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2008 OpenWrt.org
+
+SSD=start-stop-daemon
+PIDF=/var/run/xorg.pid
+PROG=/usr/bin/startx
+ARGS=
+
+START=90
+start() {
+	. /etc/profile
+	mkdir -p /var/run/xorg
+	$SSD -S -p $PIDF -q -x $PROG -- $ARGS 
+}
+
+stop() {
+	killall X
+}
+
+status() {
+        ps | grep -q "^ *$(cat $PIDF 2>/dev/null) *.*$PROG"
+}
+

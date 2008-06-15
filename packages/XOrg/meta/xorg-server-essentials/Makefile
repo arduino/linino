@@ -43,6 +43,8 @@ endef
 define Package/xorg-server-essentials/install
 	$(INSTALL_DIR) $(1)/root
 	$(CP) files/xinitrc $(1)/root/.xinitrc
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) files/xorg.init $(1)/etc/init.d/xorg
 endef
 
 $(eval $(call BuildPackage,xorg-server-essentials))
