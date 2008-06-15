@@ -81,7 +81,7 @@ CONFIGURE_ARGS+= \
 	LUACONFIG="" \
 
 CONFIGURE_VARS+= \
-	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
+	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib" \
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_weechat-mod-lua),)
   CONFIGURE_ARGS+= \
