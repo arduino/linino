@@ -19,7 +19,7 @@ start() {
 	if [ -e $pidfile ] ; then
 		echo "$pidfile exists -- not starting ahcpd." >&2
 	else
-		/usr/bin/ahcpd -D -I $pidfile ${no_ipv4:+-s} ${no_dns:+-N} $authority $interfaces
+		/usr/sbin/ahcpd -D -I $pidfile ${no_ipv4:+-s} ${no_dns:+-N} $authority $interfaces
 	fi
 }
 
