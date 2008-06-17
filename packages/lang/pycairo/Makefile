@@ -15,6 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.cairographics.org/releases
 PKG_BUILD_DEPENDS:=python cairo
 PKG_FIXUP:=libtool
+PKG_MD5SUM:=c63199d35b1e1d3c5133509f315f70d7
 
 include $(INCLUDE_DIR)/package.mk
 

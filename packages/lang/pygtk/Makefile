@@ -14,6 +14,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.10/
 PKG_FIXUP:=libtool
+PKG_MD5SUM:=d033b7617b9074357f687326b52b6296
 
 include $(INCLUDE_DIR)/package.mk
 

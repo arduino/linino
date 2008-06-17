@@ -12,6 +12,7 @@ PKG_VERSION:=1.0.4
 PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.sourceforge.net/numpy/
+PKG_MD5SUM:=8f011e9d7697da570efaac61c51725e0
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,7 +30,7 @@ define Package/numpy/description
 endef
 
 define Build/Compile
-	cd $(PKG_BUILD_DIR) ; $(CONFIGURE_VARS) $(MAKE_VARS) /usr/bin/python ./setup.py install --prefix="$(PKG_INSTALL_DIR)/usr"
+	cd $(PKG_BUILD_DIR) ; $(CONFIGURE_VARS) $(MAKE_VARS) $(STAGING_DIR)/i386/host/bin/python ./setup.py install --prefix="$(PKG_INSTALL_DIR)/usr"
 	sed -i "s/UCS4/UCS2/g" $(PKG_INSTALL_DIR)/usr/lib/python2.5/site-packages/numpy/core/multiarray.so
 endef
 

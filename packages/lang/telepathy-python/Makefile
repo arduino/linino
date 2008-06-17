@@ -12,6 +12,7 @@ PKG_VERSION:=0.15.0
 PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://telepathy.freedesktop.org/releases/telepathy-python/
+PKG_MD5SUM:=678a28e3b7d06f75940beec28130d9a5
 
 include $(INCLUDE_DIR)/package.mk
 
