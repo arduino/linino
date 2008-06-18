@@ -30,7 +30,7 @@ define Package/numpy/description
 endef
 
 define Build/Compile
-	cd $(PKG_BUILD_DIR) ; $(CONFIGURE_VARS) $(MAKE_VARS) $(STAGING_DIR)/i386/host/bin/python ./setup.py install --prefix="$(PKG_INSTALL_DIR)/usr"
+	cd $(PKG_BUILD_DIR) ; $(CONFIGURE_VARS) $(MAKE_VARS) $(STAGING_DIR)/host/bin/python ./setup.py install --prefix="$(PKG_INSTALL_DIR)/usr"
 	sed -i "s/UCS4/UCS2/g" $(PKG_INSTALL_DIR)/usr/lib/python2.5/site-packages/numpy/core/multiarray.so
 endef
 
