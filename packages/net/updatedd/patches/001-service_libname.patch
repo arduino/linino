@@ -1,7 +1,5 @@
-Index: updatedd-2.6/src/updatedd.c
-===================================================================
---- updatedd-2.6.orig/src/updatedd.c	2007-09-16 21:00:07.000000000 +0200
-+++ updatedd-2.6/src/updatedd.c	2007-09-16 21:00:07.000000000 +0200
+--- a/src/updatedd.c
++++ b/src/updatedd.c
 @@ -36,7 +36,8 @@
  #include <limits.h> /* PATH_MAX */
  #include "updatedd.h"
