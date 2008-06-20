@@ -1,19 +1,19 @@
---- libpng3-1.2.5.0.orig/scripts/libpng-config-body.in
-+++ libpng3-1.2.5.0/scripts/libpng-config-body.in
+--- a/scripts/libpng-config-body.in
++++ b/scripts/libpng-config-body.in
 @@ -83,6 +83,7 @@
-
+ 
      --static)
          R_opts=""
 +        libs=${all_libs}
          ;;
-
+ 
      *)
---- libpng3-1.2.5.0.orig/scripts/libpng.pc.in
-+++ libpng3-1.2.5.0/scripts/libpng.pc.in
-@@ -7,5 +7,5 @@
- Name: libpng12
+--- a/scripts/libpng.pc.in
++++ b/scripts/libpng.pc.in
+@@ -6,5 +6,5 @@
+ Name: libpng
  Description: Loads and saves PNG files
- Version: 1.2.8
--Libs: -L${libdir} -lpng12 -lz -lm
+ Version: 1.2.29
+-Libs: -L${libdir} -lpng12
 +Libs: -lpng12
- Cflags: -I${includedir}/libpng12
+ Cflags: -I${includedir}

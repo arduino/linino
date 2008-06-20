@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libpng
-PKG_VERSION:=1.2.8
+PKG_VERSION:=1.2.29
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-config.tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/libpng
-PKG_MD5SUM:=e5a39003eed16103cbbd3b6a8bc6b1f9
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-config
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=f588cb4ee39e3a333604096f937ea157
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -48,7 +45,7 @@ define Build/InstallDev
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libpng{,12}-config $(2)/bin/
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/png{,conf}.h $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpng $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpng12 $(1)/usr/include/
 	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpng{,12}.{a,so*} $(1)/usr/lib/
 	mkdir -p $(1)/usr/lib/pkgconfig
