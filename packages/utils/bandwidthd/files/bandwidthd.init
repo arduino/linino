@@ -13,7 +13,45 @@ config_cb() {
 	esac
 }
 
+export_bool() {
+	local option="$1"
+	local section="$2"
+	local _loctmp
+	config_get_bool _loctmp "$section" "$option"
+	if [ -n "$_loctmp" ]; then
+		conffile="${conffile}$option "
+		if [ 1 -eq "$_loctmp" ]; then
+			conffile="${conffile}true"
+		else
+			conffile="${conffile}false"
+		fi
+		conffile="${conffile}\n"
+	fi
+}
+
+export_number() {
+	local option="$1"
+	local section="$2"
+	local _loctmp
+	config_get _loctmp "$section" "$option"
+	if [ -n "$_loctmp" ]; then
+		conffile="${conffile}$option ${_loctmp}\n"
+	fi
+}
+
+export_string() {
+	local option="$1"
+	local section="$2"
+	local _loctmp
+	config_get _loctmp "$section" "$option"
+	if [ -n "$_loctmp" ]; then
+		conffile="${conffile}$option \"${_loctmp}\"\n"
+	fi
+}
+
 start() {
+	local subnet conffile
+
 	[ -d /tmp/bandwidthd ] || mkdir -p /tmp/bandwidthd && cp /www/legend.gif /tmp/bandwidthd/
 	[ -e /htdocs ] || ln -s /tmp/bandwidthd /htdocs
 	[ -e /www/bandwidthd ] || ln -s /tmp/bandwidthd /www/bandwidthd
@@ -24,30 +62,21 @@ start() {
 	
 	config_load bandwidthd
 	for cfg in $cfgs; do
-		config_get interface $cfg interface
-		config_get subnets $cfg interface
-		config_get skip_intervals $cfg skip_intervals
-		config_get graph_cutoff $cfg graph_cutoff
-		config_get promiscuous $cfg promiscuous
-		config_get output_cdf $cfg output_cdf
-		config_get recover_cdf $cfg recover_cdf
-		config_get filter $cfg filter
-		config_get graph $cfg graph
-		config_get meta_refresh $cfg meta_refresh
+		config_get subnets $cfg subnets
 			for subnet in $subnets; do
-				echo "subnet $subnet">> /tmp/bandwidthd.conf
+				conffile="${conffile}subnet ${subnet}\n"
 			done
-		cat >> /tmp/bandwidthd.conf <<EOF
-${interface:+ dev "$interface"}
-${skip_intervals:+ skip_intervals $skip_intervals}
-${graph_cutoff:+ graph_cutoff $graph_cutoff}
-${promiscuous:+ promiscuous $promiscuous}
-${output_cdf:+ output_cdf $output_cdf}
-${recover_cdf:+ recover_cdf $recover_cdf}
-${filter:+ filter $filter}
-${graph:+ graph $graph}
-${meta_refresh:+ meta_refresh $meta_refresh}
-EOF
+		export_string dev $cfg
+		export_number skip_intervals $cfg
+		export_number graph_cutoff $cfg
+		export_bool promiscuous $cfg
+		export_bool output_cdf $cfg
+		export_bool recover_cdf $cfg
+		export_string filter $cfg
+		export_bool graph $cfg
+		export_number meta_refresh $cfg
+		[ -n "$conffile" ] && echo -e "$conffile" >>/tmp/bandwidthd.conf
+		unset conffile
 	done
 	cd /
 	bandwidthd
