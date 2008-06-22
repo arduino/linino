@@ -9,11 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lame
-PKG_VERSION:=3.96.1
+PKG_VERSION:=3.97
 PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/lame
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_MD5SUM:=90a4acbb730d150dfe80de145126eef7
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/lame/Default
