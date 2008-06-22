@@ -1,0 +1,11 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -287,7 +287,7 @@
+ AUTOMAKE_OPTIONS = 1.6 foreign
+ @BUILD_IMAP_TRUE@IMAP_SUBDIR = imap
+ @BUILD_IMAP_TRUE@IMAP_INCLUDES = -I$(top_srcdir)/imap
+-SUBDIRS = m4 po intl doc contrib $(IMAP_SUBDIR)
++SUBDIRS = m4 intl contrib $(IMAP_SUBDIR)
+ bin_SCRIPTS = muttbug flea @SMIMEAUX_TARGET@
+ BUILT_SOURCES = keymap_defs.h patchlist.c reldate.h hcversion.h
+ mutt_SOURCES = \
