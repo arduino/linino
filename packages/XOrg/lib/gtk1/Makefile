@@ -1,5 +1,5 @@
-#
-# Copyright (C) 2006-2008 OpenWrt.org
+# 
+# Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,7 +8,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=gtk-1.2.10
+PKG_NAME:=gtk1
 PKG_VERSION:=1.2.10
 PKG_RELEASE:=1
 
@@ -30,7 +30,7 @@ EXTRA_CFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 TARGET_CFLAGS+= -I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include
 EXTRA_LDFLAGS+=-lnotimpl -lglib -lgmodule
 
-define Package/gtk-1.2.10
+define Package/gtk1
   SECTION:=xorg-framework
   CATEGORY:=Xorg
   SUBMENU:=framework
@@ -63,4 +63,4 @@ define Build/InstallDev
 	$(SED) "s,libdirs=-L.*,libdirs=,g" $(2)/bin/gtk-config
 endef
 
-$(eval $(call BuildPackage,gtk-1.2.10))
+$(eval $(call BuildPackage,gtk1))

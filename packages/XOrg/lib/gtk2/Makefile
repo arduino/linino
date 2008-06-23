@@ -7,7 +7,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=gtk2.10.14
+PKG_NAME:=gtk2
 PKG_VERSION:=2.10.14
 PKG_RELEASE:=1
 
@@ -22,7 +22,7 @@ EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
 
 EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libintl/lib/ -L$(STAGING_DIR)/usr/lib/libiconv/lib/ -L$(STAGING_DIR)/usr/lib/
 
-define Package/gtk-2.10.14
+define Package/gtk2
   SECTION:=xorg-framework
   CATEGORY:=Xorg
   SUBMENU:=framework
@@ -43,11 +43,11 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
 endef
 
-define Package/gtk-2.10.14/install
+define Package/gtk2/install
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
-$(eval $(call BuildPackage,gtk-2.10.14))
+$(eval $(call BuildPackage,gtk2))
 $(eval $(call RequireCommand,gdk-pixbuf-csource, \
 	Please install gtk2.0-dev \
 ))
