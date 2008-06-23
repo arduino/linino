@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -23,7 +23,7 @@ define Package/imlib2
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=Image library
-  DEPENDS:=+xorg-server-essentials +giflib +libtiff +libjpeg +gtk-1.2.10 +libnotimpl +libfreetype
+  DEPENDS:=+xorg-server-essentials +giflib +libtiff +libjpeg +gtk1 +libnotimpl +libfreetype
 endef
 
 CONFIGURE_ARGS+=--disable-gtktest LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
@@ -52,7 +52,7 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/src/modules/loaders/.libs/*.so $(1)/usr/lib/imlib2/loaders/
 	$(INSTALL_DIR) $(2)/bin
 	mv $(1)/usr/bin/imlib2-config $(2)/bin/
-	$(SED)  "s,prefix.*,prefix=$(STAGING_DIR)/usr,g" $(2)/bin/imlib2-config 
+	$(SED)  "s,prefix.*,prefix=$(STAGING_DIR)/usr,g" $(2)/bin/imlib2-config
 	$(SED)  "s,exec_prefix.*,exec_prefix=$(STAGING_DIR)/usr,g" $(2)/bin/imlib2-config
 endef
 

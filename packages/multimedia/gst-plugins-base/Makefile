@@ -25,7 +25,7 @@ define Package/gst-plugins-base
   CATEGORY:=Multimedia
   TITLE:=gst-plugins-base
   URL:=http://gst-plugins-base.freedesktop.org/
-  DEPENDS:=gstreamer +liboil +pango +gtk-2.10.14
+  DEPENDS:=gstreamer +liboil +pango +gtk2
 endef
 
 define Package/gst-plugins-base/description

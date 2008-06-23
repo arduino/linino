@@ -25,7 +25,7 @@ define Package/libwnck
   CATEGORY:=Libraries
   TITLE:=Window Navigator Construction Kit
   URL:=http://ftp.gnome.org/
-  DEPENDS:=+gtk-2.10.14 +glib2 +libXext
+  DEPENDS:=+gtk2 +glib2 +libXext
 endef
 
 define Package/libwnck/description

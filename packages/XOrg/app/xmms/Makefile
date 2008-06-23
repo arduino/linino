@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -22,7 +22,7 @@ define Package/xmms
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:=+xorg-server-essentials +alsa-lib +gtk-1.2.10 +libnotimpl
+  DEPENDS:=+xorg-server-essentials +alsa-lib +gtk1 +libnotimpl
   TITLE:=XMMS audio player
 endef
 
@@ -57,7 +57,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR=$(PKG_INSTALL_DIR) \
 		LIBTOOL="libtool --tag=CC" \
-		all install 
+		all install
 endef
 
 define Package/xmms/install
