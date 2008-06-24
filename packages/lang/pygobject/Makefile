@@ -24,7 +24,7 @@ define Package/python-gobject
   CATEGORY:=Languages
   TITLE:=python gobjects
   URL:=http://www.pygtk.org/
-  DEPENDS:=python-core 
+  DEPENDS:=python-core +glib2
 endef
 
 define Package/python-gobject/description
