@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xyssl
-PKG_VERSION:=0.8
-PKG_RELEASE:=3
+PKG_VERSION:=0.9
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
-PKG_SOURCE_URL:=http://xyssl.org/code/download/
-PKG_MD5SUM:=5c80e021e3bca4b77fbe2429c9e61541
+PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
+PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/x/xyssl
+PKG_MD5SUM:=3f0695831aa874cb77e3790755d6b570
 
 include $(INCLUDE_DIR)/package.mk
 
