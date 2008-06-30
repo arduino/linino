@@ -147,6 +147,18 @@ define Package/php5-mod-sqlite
   TITLE:=SQLite module
 endef
 
+define Package/php5-mod-pdo
+  $(call Package/php5/Default)
+  DEPENDS:=php5
+  TITLE:=PHP Data Objects module
+endef
+
+define Package/php5-mod-pdo-sqlite
+  $(call Package/php5/Default)
+  DEPENDS:=php5-mod-pdo +libsqlite3
+  TITLE:=PHP Data Objects module - SQLite support
+endef
+
 define Package/php5-mod-xml
   $(call Package/php5/Default)
   DEPENDS:=php5 +libexpat
@@ -262,6 +274,14 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-sqlite),)
   PKG_CONFIGURE_OPTS+= --with-sqlite=shared,"$(STAGING_DIR)/usr"
 else
   PKG_CONFIGURE_OPTS+= --without-sqlite
+endif
+ifneq ($(CONFIG_PACKAGE_php5-mod-pdo),)
+  PKG_CONFIGURE_OPTS+= --enable-pdo=shared
+  ifneq ($(CONFIG_PACKAGE_php5-mod-pdo-sqlite),)
+    PKG_CONFIGURE_OPTS+= --with-pdo-sqlite=shared,"$(STAGING_DIR)/usr"
+  endif
+else
+  PKG_CONFIGURE_OPTS+= --disable-pdo
 endif
 ifneq ($(CONFIG_PACKAGE_php5-mod-xml),)
   PKG_CONFIGURE_OPTS+= --enable-xml=shared,"$(STAGING_DIR)/usr" \
@@ -397,5 +417,7 @@ $(eval $(call BuildPlugin,php5-mod-pgsql,pgsql))
 $(eval $(call BuildPlugin,php5-mod-session,session))
 $(eval $(call BuildPlugin,php5-mod-sockets,sockets))
 $(eval $(call BuildPlugin,php5-mod-sqlite,sqlite))
+$(eval $(call BuildPlugin,php5-mod-pdo,pdo))
+$(eval $(call BuildPlugin,php5-mod-pdo-sqlite,pdo_sqlite))
 $(eval $(call BuildPlugin,php5-mod-xml,xml))
 $(eval $(call BuildPlugin,php5-mod-apc))
