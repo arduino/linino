@@ -42,7 +42,8 @@ endef
 
 define Package/libgsl/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgsl.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgsl.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgslcblas.so* $(1)/usr/lib/
 endef
 
 define Build/InstallDev
@@ -50,6 +51,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/gsl/*.h $(1)/usr/include/
 	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgsl.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgslcblas.{a,so*} $(1)/usr/lib/
 endef
 
 define Build/UninstallDev
