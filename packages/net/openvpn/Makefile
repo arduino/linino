@@ -48,6 +48,8 @@ define Build/Configure
 		--enable-management \
 		--disable-socks \
 		--enable-password-save \
+		,\
+		ac_cv_func_epoll_create=no \
 	)
 endef
 
