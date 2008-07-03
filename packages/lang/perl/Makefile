@@ -33,16 +33,12 @@ define Package/perl/Default
   URL:=http://www.perl.com/
 endef
 
-define Package/perl/Default/description
- Perl rocks
-endef
-
 define Package/microperl
 $(call Package/perl/Default)
   TITLE+=(minimal version)
 endef
 
-define Package/perl/description
+define Package/microperl/description
 $(call Package/perl/Default/description)
  A perl package without operating-specific functions such as readdir.
 endef
@@ -82,6 +78,12 @@ include perlmod.mk
 define Package/perl
 $(call Package/perl/Default)
   MAINTAINER:=Peter Colberg <peter@petercolberg.org>
+endef
+
+define Package/perl/description
+ Perl is a stable, cross platform programming language.
+ It is used for mission critical projects in the public and private sectors
+ and is widely used to program web applications of all needs.
 endef
 
 define Build/perl/Configure
