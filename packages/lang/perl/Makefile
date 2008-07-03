@@ -39,7 +39,6 @@ $(call Package/perl/Default)
 endef
 
 define Package/microperl/description
-$(call Package/perl/Default/description)
  A perl package without operating-specific functions such as readdir.
 endef
 
