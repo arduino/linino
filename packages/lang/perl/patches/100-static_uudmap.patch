@@ -1,0 +1,74 @@
+--- a/Makefile.micro	2007-12-18 11:47:07.000000000 +0100
++++ b/Makefile.micro	2008-06-30 04:16:09.139721328 +0200
+@@ -173,13 +173,7 @@
+ uxsutils$(_O):	$(HE) xsutils.c
+ 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) xsutils.c
+ 
+-uudmap.h: generate_uudmap$(_X)
+-	$(RUN) ./generate_uudmap$(_X) >uudmap.h
+-
+-generate_uudmap$(_O): generate_uudmap.c
+-	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) generate_uudmap.c
+-
+-generate_uudmap$(_X): generate_uudmap$(_O)
+-	$(LD) -o generate_uudmap $(LDFLAGS) generate_uudmap$(_O) $(LIBS)
++uudmap.h:
++	cp uudmap.h-premade uudmap.h
+ 
+ # That's it, folks!
+--- a/Makefile.SH	2007-12-18 11:47:07.000000000 +0100
++++ b/Makefile.SH	2008-06-30 04:05:27.362846396 +0200
+@@ -357,7 +357,7 @@
+ h2 = embed.h form.h gv.h handy.h hv.h keywords.h mg.h op.h opcode.h
+ h3 = pad.h patchlevel.h perl.h perlapi.h perly.h pp.h proto.h regcomp.h
+ h4 = regexp.h scope.h sv.h unixish.h util.h iperlsys.h thread.h
+-h5 = utf8.h warnings.h
++h5 = utf8.h uudmap.h warnings.h
+ h = $(h1) $(h2) $(h3) $(h4) $(h5)
+ 
+ c1 = av.c scope.c op.c doop.c doio.c dump.c gv.c hv.c mg.c reentr.c mro.c perl.c
+@@ -478,11 +478,8 @@
+ 
+ globals\$(OBJ_EXT): uudmap.h
+ 
+-uudmap.h: generate_uudmap\$(EXE_EXT)
+-	\$(RUN) ./generate_uudmap\$(EXE_EXT) >uudmap.h
+-
+-generate_uudmap\$(EXE_EXT): generate_uudmap\$(OBJ_EXT)
+-	\$(CC) -o generate_uudmap \$(LDFLAGS) generate_uudmap\$(OBJ_EXT) \$(libs)
++uudmap.h:
++	cp uudmap.h-premade uudmap.h
+ 
+ !GROK!THIS!
+ $spitshell >>Makefile <<'!NO!SUBS!'
+--- a/MANIFEST	2007-12-18 11:47:07.000000000 +0100
++++ b/MANIFEST	2008-06-30 04:04:34.302847693 +0200
+@@ -3968,6 +3968,7 @@
+ utils/xsubpp.PL			External subroutine preprocessor
+ uts/sprintf_wrap.c		sprintf wrapper for UTS
+ uts/strtol_wrap.c		strtol wrapper for UTS
++uudmap.h			The uuencode decoding map
+ uupacktool.pl			Pack/unpack files to the .packed format
+ vmesMakefile			VM/ESA Makefile
+ vmesvmesa.c			VM/ESA-specific C code for Perl core
+--- a/uudmap.h-premade	1970-01-01 01:00:00.000000000 +0100
++++ b/uudmap.h-premade	2008-04-20 13:09:00.880250784 +0200
+@@ -0,0 +1,18 @@
++{
++    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 
++    16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 
++    32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 
++    48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 
++    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
++}
