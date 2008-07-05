@@ -9,13 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pciutils
-PKG_VERSION:=2.2.9
+PKG_VERSION:=3.0.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.kernel.org/pub/software/utils/pciutils/ \
 	ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci
-PKG_MD5SUM:=cec05e7785497c5e19da2f114b934ffd
+PKG_MD5SUM:=85b5dae042217cf11bca10d52210a78d
 
 include $(INCLUDE_DIR)/package.mk
 
