@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rdiff-backup
-PKG_VERSION:=1.0.4
+PKG_VERSION:=1.0.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://savannah.nongnu.org/download/rdiff-backup/
-PKG_MD5SUM:=756b38aaf2602d097cafd08996fb7887
+PKG_MD5SUM:=fa2a165fa07a94be52c52e3545bc7758
 
 PKG_BUILD_DEPENDS:=python
 
@@ -31,6 +31,15 @@ define Package/rdiff-backup
   TITLE:=Incremental backup utility
   URL:=http://www.nongnu.org/rdiff-backup
   DEPENDS:=python-core +librsync +libpopt
+endef
+
+define Package/rdiff-backup/description
+	rdiff-backup backs up one directory to another, possibly over a
+	network. The target directory ends up a copy of the source directory,
+	but extra reverse diffs are stored in a special subdirectory of that
+	target directory, so you can still recover files lost some time ago.
+	The idea is to combine the best features of a mirror and an incremental
+	backup.
 endef
 
 define PyPackage/rdiff-backup/filespec
