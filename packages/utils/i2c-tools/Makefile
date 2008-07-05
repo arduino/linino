@@ -8,14 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=i2c-tools
-PKG_VERSION:=3.0.0
+PKG_VERSION:=3.0.1
 PKG_RELEASE:=1
 
-PKG_SOURCE:=i2c-tools-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://dl.lm-sensors.org/i2c-tools/releases/
-PKG_MD5SUM:=aeaa1d5d7b35faf096e5663c5fd823dc
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/i2c-tools-$(PKG_VERSION)
+PKG_MD5SUM:=0f5c7ce5fd3c65113909db0ef3a3a8c8
 
 include $(INCLUDE_DIR)/package.mk
 
