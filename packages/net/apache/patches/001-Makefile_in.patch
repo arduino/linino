@@ -1,5 +1,5 @@
---- httpd-2.2.4.orig/server/Makefile.in	2007-07-02 03:30:22.000000000 +0200
-+++ httpd-2.2.4/server/Makefile.in	2007-07-02 03:47:35.000000000 +0200
+--- a/server/Makefile.in
++++ b/server/Makefile.in
 @@ -26,7 +26,10 @@
  	$(LINK) $(EXTRA_LDFLAGS) $(gen_test_char_OBJECTS) $(EXTRA_LIBS)
  

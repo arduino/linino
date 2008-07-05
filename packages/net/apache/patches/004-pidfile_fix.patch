@@ -1,5 +1,5 @@
---- httpd-2.2.4.orig/include/scoreboard.h	2007-07-02 03:30:23.000000000 +0200
-+++ httpd-2.2.4/include/scoreboard.h	2007-07-15 23:43:19.000000000 +0200
+--- a/include/scoreboard.h
++++ b/include/scoreboard.h
 @@ -42,7 +42,7 @@
  
  /* Scoreboard file, if there is one */

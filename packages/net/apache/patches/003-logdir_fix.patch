@@ -1,6 +1,6 @@
---- httpd-2.2.4.orig/build/mkconfNW.awk	2007-07-02 03:30:22.000000000 +0200
-+++ httpd-2.2.4/build/mkconfNW.awk	2007-07-15 21:29:01.000000000 +0200
-@@ -23,7 +23,7 @@
+--- a/build/mkconfNW.awk
++++ b/build/mkconfNW.awk
+@@ -24,7 +24,7 @@
      A["sysconfdir"] = "conf"
      A["iconsdir"] = "icons"
      A["manualdir"] = "manual"
@@ -9,8 +9,8 @@
      A["errordir"] = "error"
      A["proxycachedir"] = "proxy"
  
---- httpd-2.2.4.orig/config.layout	2007-07-02 03:30:22.000000000 +0200
-+++ httpd-2.2.4/config.layout	2007-07-15 22:03:15.000000000 +0200
+--- a/config.layout
++++ b/config.layout
 @@ -28,8 +28,8 @@
      cgidir:        ${datadir}/cgi-bin
      includedir:    ${prefix}/include
