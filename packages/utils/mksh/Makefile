@@ -1,12 +1,20 @@
+# 
+# Copyright (C) 2007-2008 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id$
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mksh
-PKG_VERSION:=R31b
+PKG_VERSION:=R33d
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).cpio.gz
 PKG_SOURCE_URL:=http://www.mirbsd.org/MirOS/dist/mir/mksh
-PKG_MD5SUM:=819feed2336274f939c67547c5a3ddbd
+PKG_MD5SUM:=8ad2547ad55dc3a02b13554ab9b5c9c8
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 

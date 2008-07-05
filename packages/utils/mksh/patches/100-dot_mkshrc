@@ -1,33 +1,36 @@
 $FreeWRT$
---- mksh.orig/dot.mkshrc	Mon Sep  3 09:25:05 2007
-+++ mksh/dot.mkshrc	Fri Sep  7 23:49:55 2007
-@@ -1,24 +1,15 @@
+
+	• FreeWRT patches:
+	  – no hostname(1)
+	  – ls has no -o
+	  – yofuh doesn’t like $? in $PS1
+
+--- a/dot.mkshrc
++++ b/dot.mkshrc
+@@ -25,13 +25,15 @@
+ # sample mksh initialisation file for interactive shells; install as
+ # /etc/skel/.mkshrc (as root, for new accounts) or copy to ~/.mkshrc
+ 
 -: ${EDITOR:=/bin/ed} ${TERM:=vt100} ${HOSTNAME:=$(ulimit -c 0;hostname -s 2>&-)}
 +: ${EDITOR:=/bin/ed} ${TERM:=vt100} ${HOSTNAME:=$(</proc/sys/kernel/hostname)}
  [[ $HOSTNAME = @(localhost|*([	 ])) ]] && HOSTNAME=$(ulimit -c 0;hostname 2>&-)
  : ${HOSTNAME:=nil}; PS1='#'; [[ "$(ulimit -c 0; id -u 2>&-)" -eq 0 ]] || PS1='$'
--PS1='$(((e = $?)) && print $e\|)${USER:=$(ulimit -c 0; id -un 2>&- || \
-+PS1='${USER:=$(ulimit -c 0; id -un 2>&- || \
-     print nobody)}@${HOSTNAME%%.*}:$(typeset pfx=~ wd=${PWD:-?}
--	typeset -i n=${COLUMNS:-80}/3; let n="n < 7 ? 7 : n"
- 	[[ ${wd#$pfx} = $wd || $pfx = ?(/) ]] || wd=\~${wd#$pfx}
--	pfx=; while (( (${#pfx} + ${#wd}) > n )); do
--		if [[ $wd = */* ]]; then
--			pfx=.../
--			wd=${wd#*/}
--		else
--			pfx=...
--			wd=${wd#?????}
--		fi
--	done; print -r -- "$pfx$wd") '"$PS1 "
-+    print -r -- "$wd") '"$PS1 "
- export EDITOR HOSTNAME LESSHISTFILE=- MKSH=$(whence -p mksh) PS1 TERM USER
- alias l='/bin/ls -F'
+ function precmd {
+ 	typeset -Ui10 e=$?
+ 
+-	(( e )) && print -n "$e|"
++# enable this back if you want the errorlevel in your prompt
++# this is default in upstream mksh, disabled locally in fwrt
++#	(( e )) && print -n "$e|"
+ }
+ PS1='$(precmd)${USER:=$(ulimit -c 0;id -un 2>&- || print \?)}@${HOSTNAME%%.*}:$(
+ 	typeset pfx=~ wd=${PWD:-?}
+@@ -53,7 +55,7 @@
+ alias l='ls -F'
  alias la='l -a'
  alias ll='l -l'
--alias lo='la -lo'
-+alias lo='la -l'
+-alias lo='l -alo'
++alias lo='l -al'
  alias which='whence -p'
- whence -p rot13 >&- || alias rot13='tr [A-Za-z] [N-ZA-Mn-za-m]'
- whence -p hd >&- || function hd {
-
+ whence -p rot13 >&- || alias rot13='tr \
+     abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ \
