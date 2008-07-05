@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xl2tpd
-PKG_VERSION:=1.1.11
+PKG_VERSION:=1.1.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.xelerance.com/software/xl2tpd
-PKG_MD5SUM:=ab5656eb5a3d1973f7f69b039675332e
+PKG_MD5SUM:=8ace771a29139485c0edf428091cad5d
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,9 +27,9 @@ define Package/xl2tpd
 endef
 
 define Package/xl2tpd/description
- l2tpd is the open source implementation of the L2TP tunneling protocol 
- (RFC2661). It does implement both LAC and LNS role in a L2TP networking 
- architecture. The main goal of this protocol is to tunnel PPP frame trough 
+ l2tpd is the open source implementation of the L2TP tunneling protocol
+ (RFC2661). It does implement both LAC and LNS role in a L2TP networking
+ architecture. The main goal of this protocol is to tunnel PPP frame trough
  an ip network.
 endef
 

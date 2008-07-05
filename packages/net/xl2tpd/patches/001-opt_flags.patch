@@ -1,7 +1,6 @@
-diff -ruN xl2tpd-1.1.11-old/Makefile xl2tpd-1.1.11-new/Makefile
---- xl2tpd-1.1.11-old/Makefile	2007-06-26 19:53:07.000000000 +0200
-+++ xl2tpd-1.1.11-new/Makefile	2007-09-04 21:55:56.000000000 +0200
-@@ -67,7 +67,8 @@
+--- a/Makefile
++++ b/Makefile
+@@ -69,7 +69,8 @@
  
  FFLAGS= -DIP_ALLOCATION
  
