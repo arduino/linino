@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=unfs3
-PKG_VERSION:=0.9.17
+PKG_VERSION:=0.9.20
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=cde90d604ef42d8ab0c82ed501179417
+PKG_MD5SUM:=2920d9cc7c3cb76da0792669bf035650
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,9 +27,9 @@ define Package/unfs3
 endef
 
 define Package/unfs3/description
-	UNFS3 is a user-space implementation of the NFSv3 server 
-	specification. It provides a daemon for the MOUNT and NFS 
-	protocols, which are used by NFS clients for accessing files 
+	UNFS3 is a user-space implementation of the NFSv3 server
+	specification. It provides a daemon for the MOUNT and NFS
+	protocols, which are used by NFS clients for accessing files
 	on the server.
 endef
 
