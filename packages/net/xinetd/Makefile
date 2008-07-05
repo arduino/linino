@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xinetd
-PKG_VERSION:=2.3.13
-PKG_RELEASE:=2
+PKG_VERSION:=2.3.14
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.xinetd.org/
-PKG_MD5SUM:=4295b5fe12350f09b5892b363348ac8b
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=567382d7972613090215c6c54f9b82d9
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,6 +23,14 @@ define Package/xinetd
   CATEGORY:=Network
   TITLE:=A powerful and secure super-server
   URL:=http://www.xinetd.org/
+endef
+
+define Package/xinetd/description
+	xinetd has access control mechanisms, extensive logging capabilities,
+	the ability to make services available based on time, can place limits
+	on the number of servers that can be started, and has deployable
+	defence mechanisms to protect against port scanners, among other
+	things.
 endef
 
 define Package/xinetd/conffiles

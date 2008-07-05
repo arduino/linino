@@ -1,6 +1,5 @@
-diff -ruN xinetd-2.3.13-orig/Makefile.in xinetd-2.3.13-6/Makefile.in
---- xinetd-2.3.13-orig/Makefile.in	2003-08-15 16:00:45.000000000 +0200
-+++ xinetd-2.3.13-6/Makefile.in	2005-03-09 22:53:15.000000000 +0100
+--- a/Makefile.in
++++ b/Makefile.in
 @@ -75,15 +75,15 @@
  
  install: build
