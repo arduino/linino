@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=setpwc
-PKG_VERSION:=1.0
+PKG_VERSION:=1.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://www.vanheusden.com/setpwc/
-PKG_MD5SUM:=a125d76f630c4aab940df5912f161965
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_MD5SUM:=1bc721cdfcbac24027e2afc93685d29f
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,6 +25,10 @@ define Package/setpwc
   URL:=http://www.vanheusden.com/setpwc/
 endef
 
+define Package/setpwc/description
+	With setpwc you can set and list various settings of Philips (and
+	compatibles) WebCams with the 'PWC chipset'.
+endef
 
 define Build/Compile		
 	$(TARGET_CC) $(TARGET_CFLAGS) -DVERSION=\"$(PKG_VERSION)\" -o $(PKG_BUILD_DIR)/setpwc $(PKG_BUILD_DIR)/setpwc.c 
