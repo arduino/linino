@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bemused-mpd
-PKG_VERSION:=r060
+PKG_VERSION:=r062
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://download.origo.ethz.ch/bemused-lnx-mpdhack/513
-PKG_MD5SUM:=08238fef7b00dec19c93d5aa481803c6
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_SOURCE_URL:=http://download.origo.ethz.ch/bemused-lnx-mpdhack/526
+PKG_MD5SUM:=aed8b41aed530e9177e43d9bebad10b7
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,7 +27,7 @@ define Package/bemusedlinuxserver
 endef
 
 define Package/bemusedlinuxserver/description
-    Bemused is a system which allows you to control your music collection 
+    Bemused is a system which allows you to control your music collection
     from your phone, using Bluetooth.
     This is the MPD hack version.
     Check http://jamse.sourceforge.net/ for a mobile phone client.
