@@ -9,16 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=motion
-PKG_VERSION:=3.2.9
+PKG_VERSION:=3.2.10.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.lavrsen.dk/sources/motion-daily \
 		@SF/motion
-PKG_MD5SUM:=6003011b126c9b17e23e085e7fba6536
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=5ffdc958313345c69d3e0d5ec5c013cd
 
 include $(INCLUDE_DIR)/package.mk
 

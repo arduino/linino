@@ -1,16 +1,14 @@
-Index: motion-3.2.9/Makefile.in
-===================================================================
---- motion-3.2.9.orig/Makefile.in
-+++ motion-3.2.9/Makefile.in
-@@ -33,6 +33,7 @@ examplesdir = $(docdir)/examples
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -32,6 +32,7 @@
  ################################################################################
- CFLAGS       = @CFLAGS@ -Wall -DVERSION=\"$(VERSION)\" -D_REENTRANT \
- 	       -Dsysconfdir=\"$(sysconfdir)\"
+ CFLAGS       = @CFLAGS@ -Wall -DVERSION=\"@PACKAGE_VERSION@\"  \
+ 	       -Dsysconfdir=\"$(sysconfdir)\" -Ddocdir=\"$(docdir)\"
 +CPPFLAGS     = @CPPFLAGS@
  LDFLAGS      = @LDFLAGS@
  LIBS         = @LIBS@ 
  VIDEO_OBJ    = @VIDEO@
-@@ -120,7 +121,7 @@ endif
+@@ -119,7 +120,7 @@
  ################################################################################
  $(DEPEND_FILE): *.h $(SRC)
  	@echo "Generating dependencies, please wait..."
