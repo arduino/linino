@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=smartmontools
-PKG_VERSION:=5.37
-PKG_RELEASE:=2
+PKG_VERSION:=5.38
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/smartmontools
-PKG_MD5SUM:=4ab3668b7d1362ce923f64a211e0e568
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_MD5SUM:=a282846532ecbd6b4a28072373b3a70b
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,9 +27,9 @@ define Package/smartmontools
 endef
 
 define Package/smartmontools/description
-	smartmontools contains utility programs (smartctl, smartd) to 
-	control/monitor storage systems using the Self-Monitoring, Analysis 
-	and Reporting Technology System (S.M.A.R.T.) built into most modern 
+	smartmontools contains utility programs (smartctl, smartd) to
+	control/monitor storage systems using the Self-Monitoring, Analysis
+	and Reporting Technology System (S.M.A.R.T.) built into most modern
 	ATA and SCSI disks. It is derived from smartsuite.
 endef
 

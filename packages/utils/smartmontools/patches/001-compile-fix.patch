@@ -1,7 +1,6 @@
-diff -urN smartmontools-5.37/configure.in smartmontools-5.37.new/configure.in
---- smartmontools-5.37/configure.in	2006-12-20 21:39:25.000000000 +0100
-+++ smartmontools-5.37.new/configure.in	2007-01-26 11:37:41.000000000 +0100
-@@ -76,18 +76,18 @@
+--- a/configure.in
++++ b/configure.in
+@@ -88,18 +88,18 @@
  AC_CHECK_FUNCS([uname])
  
  # Check whether snprintf appends null char and returns expected length on overflow
