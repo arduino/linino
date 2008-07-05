@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=heyu
-PKG_VERSION:=2.1.3
+PKG_VERSION:=2.3.2
 PKG_RELEASE:=1
 
-PKG_SOURCE:=heyu-$(PKG_VERSION).tgz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://heyu.tanj.com/download/
-PKG_MD5SUM:=d40f4ebf7d42fb896e7c6300227906eb
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_MD5SUM:=af3eeeaa8c432e5b3510f4df6dd39f4f
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,6 +24,18 @@ define Package/heyu
   DEPENDS:=+setserial
   TITLE:=X10 home automation control using a CM11A
   URL:=http://heyu.tanj.com/heyu2/
+endef
+
+define Package/heyu/description
+	HEYU is a text-based console program for remotely controlling lights
+	and appliances in the home or office.   It is made available under a
+	free and open source license.
+
+	Heyu uses the CM11A computer interface to send and receive X10 control
+	signals over the AC power lines to modules which can turn On, Off, or
+	Dim attached lamps or appliances.   It can store a schedule of timed
+	events in the CM11A memory for execution when the computer is turned
+	off or disconnected.
 endef
 
 define Package/heyu/conffiles
