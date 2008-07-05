@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sdparm
-PKG_VERSION:=1.02
+PKG_VERSION:=1.03
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://sg.torque.net/sg/p/
-PKG_MD5SUM:=cc6de6fdba91f382d00b9b8a09dd14f2
+PKG_MD5SUM:=12ccf6df3ce677437bfd1bc3bebd4d25
 
 PKG_FIXUP = libtool
 
@@ -29,7 +29,8 @@ define Package/sdparm
 endef
 
 define Package/sdparm/description
-	The sdparm utility outputs and in some cases modifies SCSI device parameters.
+	The sdparm utility outputs and in some cases modifies SCSI device
+	parameters.
 endef
 
 define Package/sdparm/install
