@@ -9,16 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mgetty
-PKG_VERSION:=1.1.35
-PKG_XVERSION:=Feb22
+PKG_VERSION:=1.1.36
+PKG_XVERSION:=Jun15
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)$(PKG_VERSION)-$(PKG_XVERSION).tar.gz
 PKG_SOURCE_URL:=ftp://alpha.greenie.net/pub/mgetty/source/1.1
-PKG_MD5SUM:=6805f8e31423bb777be80e3a856001cb
-
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=0320e98c6b86bcca48fc5f355b94ead4
 
 include $(INCLUDE_DIR)/package.mk
 
