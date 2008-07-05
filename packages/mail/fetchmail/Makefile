@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fetchmail
-PKG_VERSION:=6.2.5
+PKG_VERSION:=6.3.9-rc2
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.catb.org/~esr/fetchmail/
-PKG_MD5SUM:=9956b30139edaa4f5f77c4d0dbd80225
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://download.berlios.de/fetchmail
+PKG_MD5SUM:=29f338f6a0dbef027b420344fda34580
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,7 +22,7 @@ define Package/fetchmail
   SECTION:=mail
   CATEGORY:=Mail
   TITLE:=Remote mail retriever
-  URL:=http://www.catb.org/~esr/fetchmail/
+  URL:=http://fetchmail.berlios.de/
 endef
 
 define Package/fetchmail/description
