@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vpnc
-PKG_VERSION:=0.4.0
+PKG_VERSION:=0.5.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.unix-ag.uni-kl.de/~massar/vpnc/
-PKG_MD5SUM:=604807e7dd90fce00a4e2344ee29c76d
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=7a8e94dbe94f39a4fd89b72e0125f66f
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -25,9 +22,17 @@ define Package/vpnc
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libgpg-error +libgcrypt +kmod-tun +ip
-  TITLE:=VPN client for Cisco 3000
+  TITLE:=VPN client for Cisco EasyVPN
   URL:=http://www.unix-ag.uni-kl.de/~massar/vpnc/
   SUBMENU:=VPN
+endef
+
+define Package/vpnc/description
+	A VPN client compatible with Cisco's EasyVPN equipment.
+
+	Supports IPSec (ESP) with Mode Configuration and Xauth.  Supports only
+	shared-secret IPSec authentication with Xauth, AES (256, 192, 128),
+	3DES, 1DES, MD5, SHA1, DH1/2/5 and IP tunneling.
 endef
 
 define Package/vpnc/conffiles

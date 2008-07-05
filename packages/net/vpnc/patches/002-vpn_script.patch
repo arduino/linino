@@ -1,7 +1,7 @@
---- vpnc-0.4.0/vpnc-script	2007-02-18 12:52:03.000000000 +0100
-+++ vpnc-0.4.0.patched/vpnc-script	2007-02-25 11:34:06.000000000 +0100
-@@ -107,7 +107,7 @@
- }
+--- a/vpnc-script
++++ b/vpnc-script
+@@ -95,7 +95,7 @@
+ # =========== tunnel interface handling ====================================
  
  do_ifconfig() {
 -	ifconfig "$TUNDEV" inet "$INTERNAL_IP4_ADDRESS" $ifconfig_syntax_ptp "$INTERNAL_IP4_ADDRESS" netmask 255.255.255.255 mtu 1412 up
@@ -9,7 +9,7 @@
  }
  
  destroy_tun_device() {
-@@ -388,6 +388,18 @@
+@@ -490,6 +490,18 @@
  	fi
  }
  
@@ -25,10 +25,10 @@
 +	iptables -D forwarding_rule -o $TUNDEV -j ACCEPT
 +}
 +
- ####
+ #### Main
  
  if [ -z "$reason" ]; then
-@@ -401,8 +413,10 @@
+@@ -503,8 +515,10 @@
  		;;
  	connect)
  		do_connect

@@ -1,8 +1,7 @@
-diff -Nur vpnc-0.4.0/Makefile vpnc-0.4.0.patched/Makefile
---- vpnc-0.4.0/Makefile	2007-02-19 21:51:12.000000000 +0100
-+++ vpnc-0.4.0.patched/Makefile	2007-02-25 10:40:25.000000000 +0100
+--- a/Makefile
++++ b/Makefile
 @@ -20,7 +20,7 @@
- # $Id: Makefile 148 2007-02-19 20:51:14Z Maurice Massar $
+ # $Id: Makefile 236 2007-09-05 20:40:59Z Joerg Mayer $
  
  DESTDIR=
 -PREFIX=/usr/local
@@ -10,19 +9,21 @@ diff -Nur vpnc-0.4.0/Makefile vpnc-0.4.0.patched/Makefile
  ETCDIR=/etc/vpnc
  BINDIR=$(PREFIX)/bin
  SBINDIR=$(PREFIX)/sbin
-@@ -35,12 +35,11 @@
- RELEASE_VERSION := $(shell cat VERSION)
+@@ -50,14 +50,11 @@
+ #OPENSSLLIBS = -lcrypto
  
  CC=gcc
--CFLAGS += -W -Wall -O3 -Wmissing-declarations -Wwrite-strings -g
-+CFLAGS += -W -Wall -Wmissing-declarations -Wwrite-strings -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include $(OFLAGS) '-DVERSION="$(shell cat VERSION)"'
- CPPFLAGS = -DVERSION=\"$(VERSION)\"
--LDFLAGS = -g $(shell libgcrypt-config --libs)
+-CFLAGS ?= -O3 -g
+-CFLAGS += -W -Wall -Wmissing-declarations -Wwrite-strings
 -CFLAGS +=  $(shell libgcrypt-config --cflags)
++CFLAGS += -W -Wall -Wmissing-declarations -Wwrite-strings -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include $(OFLAGS) '-DVERSION="$(shell cat VERSION)"'
+ CPPFLAGS += -DVERSION=\"$(VERSION)\" $(OPENSSL_GPL_VIOLATION)
+-LDFLAGS ?= -g
+-LDFLAGS += $(shell libgcrypt-config --libs) $(OPENSSLLIBS)
 +LDFLAGS = -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -lgcrypt -lgpg-error
  
 -ifeq ($(shell uname -s), SunOS)
 +ifeq ($(OS), SunOS)
  LDFLAGS += -lnsl -lresolv -lsocket
  endif
- 
+ ifneq (,$(findstring Apple,$(shell $(CC) --version)))
