@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wifidog
-PKG_VERSION:=1.1.4
+PKG_VERSION:=1.1.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= @SF/$(PKG_NAME)
-PKG_MD5SUM:=daa4f492dd6acafe0a7127d07633aca5
+PKG_MD5SUM:=abe5f7123179a0f08c493ce59fb3cb31
 
 PKG_FIXUP = libtool
 
@@ -30,9 +30,9 @@ define Package/wifidog
 endef
 
 define Package/wifidog/description
-	The Wifidog project is a complete and embeddable captive 
-	portal solution for wireless community groups or individuals 
-	who wish to open a free Hotspot while still preventing abuse 
+	The Wifidog project is a complete and embeddable captive
+	portal solution for wireless community groups or individuals
+	who wish to open a free Hotspot while still preventing abuse
 	of their Internet connection.
 endef
 
