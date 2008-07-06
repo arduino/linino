@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bluez-utils
-PKG_VERSION:=3.24
-PKG_RELEASE:=4
+PKG_VERSION:=3.35
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://bluez.sourceforge.net/download
-PKG_MD5SUM:=cc3582da827bc4c468147af1afaa5aff
+PKG_MD5SUM:=21dc2f8c03dae9db87da351c735510bb
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/bluez-utils
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+bluez-libs +libpthread +dbus
+  DEPENDS:=+bluez-libs +libpthread +dbus +libintl +libiconv
   TITLE:=Bluetooth utilities
   URL:=http://www.bluez.org/
 endef
@@ -35,21 +35,22 @@ define Package/bluez-utils/conffiles
 /etc/config/bluetooth
 endef
 
-
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-debug \
-		--enable-usb \
-		--enable-input \
-		--enable-serial \
-		--enable-network \
-		--with-bluez="$(STAGING_DIR)/usr/include" \
-		--with-usb=yes \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-pand \
+	--enable-rfcomm \
+	--enable-dund \
+	--enable-serial \
+	--enable-network \
+	--enable-usb \
+	--enable-input \
+	--with-bluez="$(STAGING_DIR)/usr/include" \
+	--with-usb=yes \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib \
+			-L$(STAGING_DIR)/usr/lib/libintl/lib \
+			-L$(STAGING_DIR)/usr/lib/libiconv/lib" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
@@ -67,7 +68,6 @@ define Package/bluez-utils/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/bluetooth.conf $(1)/etc/config/bluetooth
 	$(INSTALL_DIR) $(1)/etc/dbus-1/system.d/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/../daemon/bluetooth.conf $(1)/etc/dbus-1/system.d/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/bluez-utils.init $(1)/etc/init.d/bluez-utils
 endef
