@@ -9,14 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sipp
-PKG_VERSION:=1.0
+PKG_VERSION:=3.1
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME).$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME).$(PKG_VERSION).src.tar.gz
 PKG_SOURCE_URL:=@SF/sipp
-PKG_MD5SUM:=8866e9af0d3bc29e91ebb6eab89a7f1f
+PKG_MD5SUM:=452a6f88f2d314dbb2f44e318a60982b
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME).svn
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,9 +29,9 @@ define Package/sipp
 endef
 
 define Package/sipp/description
- SIPp is a free Open Source test tool / traffic generator for the SIP 
- protocol. It includes a few basic SipStone user agent scenarios (UAC and 
- UAS) and establishes and releases multiple calls with the INVITE and BYE 
+ SIPp is a free Open Source test tool / traffic generator for the SIP
+ protocol. It includes a few basic SipStone user agent scenarios (UAC and
+ UAS) and establishes and releases multiple calls with the INVITE and BYE
  methods.
 endef
 
@@ -44,7 +44,7 @@ define Build/Compile
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS_linux="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++" \
 		LFLAGS_linux="$(TARGET_LDFLAGS)" \
-		LIBS="-nodefaultlibs -lncurses -luClibc++ -ldl -lpthread" \
+		LIBS="-nodefaultlibs -lncurses -luClibc++ -ldl -lpthread -lm" \
 		all
 endef
 
