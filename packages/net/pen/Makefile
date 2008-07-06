@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pen
-PKG_VERSION:=0.17.1
+PKG_VERSION:=0.18.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://siag.nu/pub/pen/
-PKG_MD5SUM:=62548155d3bf42aea05b32227e132331
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_MD5SUM:=96f6d39e7e7cca11a647e795550f3829
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,10 +27,10 @@ define Package/pen
 endef
 
 define Package/pen/description
-	This is pen, a load balancer for "simple" tcp based protocols 
-	such as http or smtp. It allows several servers to appear as 
-	one to the outside and automatically detects servers that are 
-	down and distributes clients among the available servers. 
+	This is pen, a load balancer for "simple" tcp based protocols
+	such as http or smtp. It allows several servers to appear as
+	one to the outside and automatically detects servers that are
+	down and distributes clients among the available servers.
 	This gives high availability and scalable performance.
 endef
 
