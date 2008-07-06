@@ -1,8 +1,6 @@
-Index: gnutls-2.2.3/Makefile.in
-===================================================================
---- gnutls-2.2.3.orig/Makefile.in	2008-05-08 21:18:29.000000000 +0200
-+++ gnutls-2.2.3/Makefile.in	2008-05-08 21:18:29.000000000 +0200
-@@ -537,7 +537,7 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -573,7 +573,7 @@
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
@@ -10,4 +8,4 @@ Index: gnutls-2.2.3/Makefile.in
 +SUBDIRS = lgl gl includes lib libextra src \
  	$(am__append_1)
  ACLOCAL_AMFLAGS = -I m4 -I gl/m4 -I lgl/m4
- tag = $(PACKAGE)_`echo $(VERSION) | sed 's/\./_/g'`
+ EXTRA_DIST = cfg.mk maint.mk .clcopying

@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnutls
-PKG_VERSION:=2.2.3
+PKG_VERSION:=2.4.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -17,7 +17,7 @@ PKG_SOURCE_URL:=http://www.mirrors.wiretapped.net/security/network-security/gnut
 	ftp://ftp.gnutls.org/pub/gnutls/ \
 	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/ \
 	http://josefsson.org/gnutls/releases/
-PKG_MD5SUM:=71d9b7ec32a2a67854940a8848c2b229
+PKG_MD5SUM:=dce4000841ba5f80d310c4972b5f3efe
 
 PKG_FIXUP = libtool
 
