@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpd
-PKG_VERSION:=0.13.1
-PKG_RELEASE:=2
+PKG_VERSION:=0.13.2
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.musicpd.org/uploads/files/
-PKG_MD5SUM:=3079a76b7ce048d89e2f644b578cd4fe
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=b461896369949ff3cff955692ead9f8b
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -31,7 +28,7 @@ endef
 
 define Package/mpd/description
 	MPD is a music player supporting flac, mp3 and ogg files.
-	It is typically controlled over a network using one of it's many 
+	It is typically controlled over a network using one of it's many
 	clients including mpc(console), gmpc(gnome), phpmp(php) etc.
 endef
 
