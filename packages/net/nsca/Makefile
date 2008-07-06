@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nsca
-PKG_VERSION:=2.7.1
+PKG_VERSION:=2.7.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/nagios
-PKG_MD5SUM:=823400ebca86df44c6f48b66e1c181d2
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_MD5SUM:=33a98e7975f633a9489d7a8938ed6131
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,6 +24,12 @@ define Package/send-nsca
   DEPENDS:=+libmcrypt
   TITLE:=Nagios Service Check Acceptor (NSCA) client
   URL:=http://www.nagios.org/
+endef
+
+define Package/send-nsca/description
+	This is the client program that is used to send service check
+	information from a remote machine to the nsca daemon on the central
+	machine that runs Nagios.
 endef
 
 define Package/send-nsca/conffiles
