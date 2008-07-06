@@ -9,9 +9,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bahamut
-PKG_VERSION:=1.8.3
+PKG_VERSION:=1.8.4
 PKG_RELEASE:=1
-PKG_MD5SUM:=2e782fe99656433ca24f6a9832d9aad5
+PKG_MD5SUM:=6b9a805f4408f3887e75a9d14c69ab93
 
 PKG_SOURCE_URL:=http://bahamut.dal.net/download/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-release.tar.gz
