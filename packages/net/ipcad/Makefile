@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ipcad
-PKG_VERSION:=3.7
+PKG_VERSION:=3.7.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/ipcad
-PKG_MD5SUM:=34c542c99593dfe9d5b408deffcfe70e
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=125605249958894148ec26d3c88189f5
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -31,7 +28,7 @@ endef
 
 define Package/ipcad/description
 	This daemon listens for traffic on the specified interfaces.
-	It has the built-in RSH and NetFlow engines to allow exporting 
+	It has the built-in RSH and NetFlow engines to allow exporting
 	the accounting data the same way as Cisco routers do.
 endef
 
