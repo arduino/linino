@@ -1,11 +1,10 @@
-diff -ruaN httping-1.2.2.orig/main.c httping-1.2.2/main.c
---- httping-1.2.2.orig/main.c	2006-11-09 20:13:12.000000000 +0100
-+++ httping-1.2.2/main.c	2007-02-27 11:38:14.000000000 +0100
+--- a/main.c
++++ b/main.c
 @@ -40,6 +40,8 @@
  #include "utils.h"
  #include "error.h"
  
-+#define VERSION "1.2.2"
++#define VERSION "1.2.6"
 +
  static volatile int stop = 0;
  
@@ -14,12 +13,12 @@ diff -ruaN httping-1.2.2.orig/main.c httping-1.2.2/main.c
  
  void version(void)
  {
--	fprintf(stderr, "HTTPing v" VERSION ", (C) 2003-2005 folkert@vanheusden.com\n");
-+	fprintf(stderr, "HTTPing v%s (C) 2003-2005 folkert@vanheusden.com\n", VERSION);
+-	fprintf(stderr, "HTTPing v" VERSION ", (C) 2003-2008 folkert@vanheusden.com\n");
++	fprintf(stderr, "HTTPing v%s (C) 2003-2008 folkert@vanheusden.com\n", VERSION);
  #ifndef NO_SSL
  	fprintf(stderr, "SSL support included\n");
  #endif
-@@ -413,7 +415,7 @@
+@@ -425,7 +427,7 @@
  	if (useragent)
  		sprintf(&request[strlen(request)], "User-Agent: %s\r\n", useragent);
  	else

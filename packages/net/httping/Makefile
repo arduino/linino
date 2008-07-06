@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=httping
-PKG_VERSION:=1.2.2
+PKG_VERSION:=1.2.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://www.vanheusden.com/httping/
-PKG_MD5SUM:=cde335c0110fb1b156afdf80ff5ade1d
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_MD5SUM:=2fa68b95d190a9e101232792df49e1ad
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,8 +27,8 @@ define Package/httping
 endef
 
 define Package/httping/description
-	Give it an url, and it'll show you how long it takes to connect, send a 
-	request and retrieve the reply (only the headers). Be aware that the 
+	Give it an url, and it'll show you how long it takes to connect, send a
+	request and retrieve the reply (only the headers). Be aware that the
 	transmission across the network also takes time!
 endef
 
