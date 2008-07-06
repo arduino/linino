@@ -1,5 +1,5 @@
---- elinks-0.11.1/config/config.sub.orig	2008-05-15 23:12:39.000000000 -0500
-+++ elinks-0.11.1/config/config.sub	2008-05-15 23:13:03.000000000 -0500
+--- a/config/config.sub
++++ b/config/config.sub
 @@ -239,7 +239,7 @@
  	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
  	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
