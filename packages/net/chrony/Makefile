@@ -9,15 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=chrony
-PKG_VERSION:=1.21
-PKG_RELEASE:=2
+PKG_VERSION:=1.23
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= ftp://chrony.sunsite.dk/projects/chrony/ \
 	http://chrony.sunsite.dk/download/
-PKG_MD5SUM:=84f76a73dff5a3c9e9f11f3c29a4e93b
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_MD5SUM:=ffce77695e55d8efda19ab0b78309c23
 
 include $(INCLUDE_DIR)/package.mk
 

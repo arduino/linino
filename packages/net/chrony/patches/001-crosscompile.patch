@@ -1,7 +1,6 @@
-diff -ru chrony-1.21.orig/configure chrony-1.21/configure
---- chrony-1.21.orig/configure	2005-08-11 22:32:54.000000000 +0200
-+++ chrony-1.21/configure	2006-08-08 22:24:39.000000000 +0200
-@@ -185,6 +185,13 @@
+--- a/configure
++++ b/configure
+@@ -187,6 +187,13 @@
      --prefix=* | --install_prefix=* )
        INSTALL_PREFIX=`echo $option | sed -e 's/[^=]*=//;'`
      ;;
@@ -15,12 +14,12 @@ diff -ru chrony-1.21.orig/configure chrony-1.21/configure
      --trace )
        EXTRA_DEFS="-DTRACEON"
      ;;
-@@ -237,7 +244,7 @@
+@@ -242,7 +249,7 @@
          ;;
      esac
      ;;
 -    Linux* )
 +    Linux* | linux* )
-         EXTRA_OBJECTS="sys_linux.o wrap_adjtimex.o rtc_linux.o"
-         SYSDEFS="-DLINUX"
-         echo "Configuring for " $SYSTEM
+         EXTRA_OBJECTS="sys_linux.o wrap_adjtimex.o"
+         if [ $feat_rtc -eq 1 ] ; then
+             EXTRA_OBJECTS+=" rtc_linux.o"
