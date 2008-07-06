@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=neon
-PKG_VERSION:=0.26.3
+PKG_VERSION:=0.28.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.webdav.org/neon/
-PKG_MD5SUM:=6e52cd9c03e372026d6eccbfb80f09ef
+PKG_MD5SUM:=b99b3f44e8507ae2d17362f1b34aaf02
 
 PKG_FIXUP = libtool
 
