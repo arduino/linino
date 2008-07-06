@@ -1,0 +1,11 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -46,7 +46,7 @@
+ 	$(CC) -o lft $(OBJS) $(LDFLAGS) $(LIBS)
+ 
+ whob: whois.o
+-	$(CC) -o whob whois.c -DSTANDALONE $(LDFLAGS) $(LIBS)
++	$(CC) -o whob whois.c -DSTANDALONE -I$(STAGING_DIR)/usr/include $(LDFLAGS) $(LIBS)
+ 
+ install: lft lft.8 whob whob.8
+ 	@echo "Installing LFT and WhoB"
