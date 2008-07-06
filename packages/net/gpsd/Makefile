@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gpsd
-PKG_VERSION:=2.36
+PKG_VERSION:=2.37
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.berlios.de/gpsd/
-PKG_MD5SUM:=bb54e89ddb4fdc7af8bbc5534652f9ce
+PKG_MD5SUM:=6c96cc0b2df0279cb7baac1ebc5881d3
 
 PKG_FIXUP = libtool
 
