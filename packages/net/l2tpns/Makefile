@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=l2tpns
-PKG_VERSION:=2.1.14
+PKG_VERSION:=2.1.21
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/l2tpns
-PKG_MD5SUM:=2a0ee2a3678160c335f1d68c17c4f871
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=385c58055723ebc6c38062acd2db9c2c
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -32,8 +29,8 @@ endef
 
 define Package/l2tpns/description
 	l2tpns is a layer 2 tunneling protocol network server (LNS).
-	it supports up to 65535 concurrent sessions per server/cluster 
-	plus ISP features such as rate limiting, walled garden, usage 
+	it supports up to 65535 concurrent sessions per server/cluster
+	plus ISP features such as rate limiting, walled garden, usage
 	accounting, and more.
 endef
 
