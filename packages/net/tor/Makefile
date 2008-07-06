@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor
-PKG_VERSION:=0.2.0.26-rc
+PKG_VERSION:=0.2.0.28-rc
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.torproject.org/dist/
-PKG_MD5SUM:=aa1179fab4dc69a10278e70729681053
+PKG_MD5SUM:=d65dd5c9e1f82912aa0c736c5daec22d
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,10 +27,10 @@ define Package/tor
 endef
 
 define Package/tor/description
- Tor is a toolset for a wide range of organizations and people that want to 
- improve their safety and security on the Internet. Using Tor can help you 
- anonymize web browsing and publishing, instant messaging, IRC, SSH, and 
- more. Tor also provides a platform on which software developers can build 
+ Tor is a toolset for a wide range of organizations and people that want to
+ improve their safety and security on the Internet. Using Tor can help you
+ anonymize web browsing and publishing, instant messaging, IRC, SSH, and
+ more. Tor also provides a platform on which software developers can build
  new applications with built-in anonymity, safety, and privacy features.
 endef
 
