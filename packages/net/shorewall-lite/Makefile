@@ -1,9 +1,16 @@
+# 
+# Copyright (C) 2008 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id$
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=shorewall-lite
-PKG_VERSION:=4.0.8
+PKG_VERSION:=4.0.12
 PKG_RELEASE:=1
-PKG_MD5SUM:=9eb449aed51d2f040c67baa23477b89c
 
 PKG_SOURCE_URL:=http://www.shorewall.net/pub/shorewall/4.0/shorewall-$(PKG_VERSION)/ \
 	http://www1.shorewall.net/pub/shorewall/4.0/shorewall-$(PKG_VERSION)/ \
@@ -13,10 +20,7 @@ PKG_SOURCE_URL:=http://www.shorewall.net/pub/shorewall/4.0/shorewall-$(PKG_VERSI
 	http://shorewall.infohiiway.com/pub/shorewall/4.0/shorewall-$(PKG_VERSION)/ \
 	http://www.shorewall.com.ar/pub/shorewall/shorewall/4.0/shorewall-$(PKG_VERSION)/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_CAT=bzcat
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=ab82b03f987f69536d305db40dc7692c
 
 include $(INCLUDE_DIR)/package.mk
 

@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=shorewall-common
-PKG_VERSION:=4.0.10.1
+PKG_VERSION:=4.0.12
 PKG_RELEASE:=1
-PKG_MD5SUM:=9f8fc4c977c8291736c3f750c52f4dc8
 
-# PKG_SOURCE_URL:=http://www1.shorewall.net/pub/shorewall/4.0/shorewall-$(PKG_VERSION)/
-# The source directory only goes to three levels of version number:
-PKG_SOURCE_URL:=http://www1.shorewall.net/pub/shorewall/4.0/shorewall-4.0.10
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
+PKG_SOURCE_URL:=http://www.shorewall.net/pub/shorewall/4.0/shorewall-$(PKG_VERSION)/
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_MD5SUM:=556016e223fdd804e6c76218380165f9
 
 include $(INCLUDE_DIR)/package.mk
 
