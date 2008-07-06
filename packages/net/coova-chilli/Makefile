@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=coova-chilli
-PKG_VERSION:=1.0.11
+PKG_VERSION:=1.0.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ap.coova.org/chilli/
-PKG_MD5SUM:=d932dc9ca42b90d56ef27552f049c44a
+PKG_MD5SUM:=365f46fe79b3d76432544d6bc5f37939
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -24,7 +24,7 @@ define Package/coova-chilli
   CATEGORY:=Network
   DEPENDS:=+kmod-tun
   TITLE:=Wireless LAN HotSpot controller (Coova Chilli Version)
-  URL:=http://www.coova-chilli.org/
+  URL:=http://coova.org/wiki/index.php/CoovaChilli
 endef
 
 define Package/coova-chilli/description
