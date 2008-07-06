@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rp-pppoe
-PKG_VERSION:=3.8
+PKG_VERSION:=3.9
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://roaringpenguin.com/files/download
-PKG_MD5SUM:=0e32760f498f9cde44081ee6aafc823b
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=7693f289c3babcfe211a9deef9118c6f
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,8 +23,13 @@ define Package/rp-pppoe/Default
   CATEGORY:=Network
   DEPENDS:=+ppp
   TITLE:=PPPoE (PPP over Ethernet)
-  URL:=http://roaringpenguin.com/penguin/pppoe/
+  URL:=http://roaringpenguin.com/products/pppoe
   SUBMENU:=dial-in/up
+endef
+
+define Package/rp-pppoe/Default/description
+	Dubbed RP-PPPoE, this open-source product is ideal for Linux users with
+	a DSL "modem" whose Internet service provider uses PPPoE.
 endef
 
 define Package/rp-pppoe-client
@@ -35,9 +37,19 @@ define Package/rp-pppoe-client
   TITLE+= client
 endef
 
+define Package/rp-pppoe-client/description
+        $(call Package/rp-pppoe/Default/description)
+        This package contains pppoe-connect.
+endef
+
 define Package/rp-pppoe-relay
   $(call Package/rp-pppoe/Default)
   TITLE+= relay
+endef
+
+define Package/rp-pppoe-relay/description
+        $(call Package/rp-pppoe/Default/description)
+        This package contains pppoe-relay.
 endef
 
 define Package/rp-pppoe-server
@@ -45,9 +57,19 @@ define Package/rp-pppoe-server
   TITLE+= server
 endef
 
+define Package/rp-pppoe-server/description
+        $(call Package/rp-pppoe/Default/description)
+        This package contains pppoe-server.
+endef
+
 define Package/rp-pppoe-sniff
   $(call Package/rp-pppoe/Default)
   TITLE+= sniffer
+endef
+
+define Package/rp-pppoe-sniff/description
+        $(call Package/rp-pppoe/Default/description)
+        This package contains pppoe-sniff.
 endef
 
 TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/src/libevent
