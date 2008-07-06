@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=subversion
-PKG_VERSION:=1.4.6
+PKG_VERSION:=1.5.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://subversion.tigris.org/downloads/
-PKG_MD5SUM:=9c7cf517362c1c9332b610339e5cce6b
+PKG_MD5SUM:=004b57643406dd10957ec87955702189
 
 PKG_FIXUP = libtool
 
@@ -29,9 +29,22 @@ define Package/subversion/Default
   SUBMENU:=subversion
 endef
 
+define Package/subversion/Default/description
+	Subversion is a free/open-source version control system. That is,
+	Subversion manages files and directories, and the changes made to them,
+	over time. This allows you to recover older versions of your data, or
+	examine the history of how your data changed. In this regard, many
+	people think of a version control system as a sort of time machine.
+endef
+
 define Package/subversion-libs
   $(call Package/subversion/Default)
   TITLE:=subversion libs
+endef
+
+define Package/subversion-libs/description
+  $(call Package/subversion/Default/description)
+  This package contains the subversion libraries.
 endef
 
 define Package/subversion-client
@@ -40,10 +53,20 @@ define Package/subversion-client
   TITLE:=subversion client tools
 endef
 
+define Package/subversion-client/description
+  $(call Package/subversion/Default/description)
+  This package contains the subversion client tools.
+endef
+
 define Package/subversion-server
   $(call Package/subversion/Default)
   DEPENDS+=subversion-libs
   TITLE:=subversion server
+endef
+
+define Package/subversion-server/description
+  $(call Package/subversion/Default/description)
+  This package contains the subversion server.
 endef
 
 CONFIGURE_ARGS += \
