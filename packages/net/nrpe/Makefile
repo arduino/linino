@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nrpe
-PKG_VERSION:=2.8.1
+PKG_VERSION:=2.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/nagios
-PKG_MD5SUM:=
+PKG_MD5SUM:=b2d75e2962f1e3151ef58794d60c9e97
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,11 +27,12 @@ define Package/nrpe
 endef
 
 define Package/nrpe/description
- NOTE: several assumptions are made:
- 1) As openssl is used to generate some stuff during "configure" it is 
- assumed that openssl is installed on compiling PC in its default
- location (i.e. accessible as /usr/bin/openssl).
- 2) "nagios" user and group should exist on your openwrt installation.
+	The NRPE addon is designed to allow you to execute Nagios plugins on
+	remote Linux/Unix machines.  The main reason for doing this is to allow
+	Nagios to monitor "local" resources (like CPU load, memory usage, etc.)
+	on remote machines.  Since these public resources are not usually
+	exposed to external machines, an agent like NRPE must be installed on
+	the remote Linux/Unix machines.
 endef
 
 define Package/nrpe/postinst
