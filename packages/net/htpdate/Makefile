@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=htpdate
-PKG_VERSION:=0.9.0
+PKG_VERSION:=1.0.1
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.clevervest.com/htp/archive/c/
-PKG_MD5SUM:=12cf883c5619cf4c13a62f77f1a55b54
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=a0c2b7a3e89a9fedb1ae8cba17928ec3
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,6 +24,14 @@ define Package/htpdate
   CATEGORY:=Network
   TITLE:=an HTP (Hypertext Time Protocol) implementation
   URL:=http://www.clevervest.com/htp/
+endef
+
+define Package/htpdate/description
+	The HTTP Time Protocol (HTP) is used to synchronize a computer's time
+	with web servers as reference time source. Htpdate will synchronize your
+	computer's time by extracting timestamps from HTTP headers found
+	in web server responses. Htpdate can be used as a daemon, to keep your
+	computer synchronized.
 endef
 
 define Package/htpdate/conffiles
