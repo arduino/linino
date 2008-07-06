@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kismet
-PKG_VERSION:=2007-10-R1
+PKG_VERSION:=2008-05-R1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kismetwireless.net/code
-PKG_MD5SUM:=2100c667e69db0cde35fa2d06c8516e2
+PKG_MD5SUM:=6ee365d36354b4dee4945e67f8149294
 
 PKG_BUILD_DEPENDS:=libnotimpl libpcap libncurses uclibcxx
 
@@ -30,7 +30,7 @@ define Package/kismet/Default
 endef
 
 define Package/kismet/Default/description
- An 802.11 layer2 wireless network detector, sniffer, and intrusion 
+ An 802.11 layer2 wireless network detector, sniffer, and intrusion
  detection system.
 endef
 

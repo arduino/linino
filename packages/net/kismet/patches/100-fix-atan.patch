@@ -1,7 +1,6 @@
-diff -ru kismet-2007-10-R1/gpsd.cc kismet-2007-10-R1-fixed/gpsd.cc
---- kismet-2007-10-R1/gpsd.cc	2007-09-15 09:14:00.000000000 -0700
-+++ kismet-2007-10-R1-fixed/gpsd.cc	2007-11-06 01:46:12.000000000 -0800
-@@ -323,7 +323,7 @@
+--- a/gpsd.cc
++++ b/gpsd.cc
+@@ -478,7 +478,7 @@
  		if (ty == 0) {
  			dir = 0.0;
  		} else {
