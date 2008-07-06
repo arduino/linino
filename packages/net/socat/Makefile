@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=socat
-PKG_VERSION:=1.4.3.0
-PKG_RELEASE:=2
+PKG_VERSION:=1.6.0.1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.dest-unreach.org/socat/download/
-PKG_MD5SUM:=ce574e75c2fda4456e8efd4efb86ec5e
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-1.4
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=6a0dd33cde2a18eb382433aca8f76ce2
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,11 +27,11 @@ define Package/socat
 endef
 
 define Package/socat/description
-	SoCat (for SOcket CAT) establishes two bidirectional byte streams and 
+	SoCat (for SOcket CAT) establishes two bidirectional byte streams and
 	transfers data between them.
-	Data channels may be files, pipes, devices (terminal or modem, etc.), or 
-	sockets (Unix, IPv4, IPv6, raw, UDP, TCP, SSL). It provides forking, 
-	logging and tracing, different modes for interprocess communication and 
+	Data channels may be files, pipes, devices (terminal or modem, etc.), or
+	sockets (Unix, IPv4, IPv6, raw, UDP, TCP, SSL). It provides forking,
+	logging and tracing, different modes for interprocess communication and
 	many more options.
 endef
 
