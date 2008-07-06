@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libelf
-PKG_VERSION:=0.8.8
+PKG_VERSION:=0.8.10
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.mr511.de/software/
-PKG_MD5SUM:=be84e553686dd50c8b6d520f86f46521
+PKG_MD5SUM:=9db4d36c283d9790d8fa7df1f4d7b4d9
 
 include $(INCLUDE_DIR)/package.mk
 
