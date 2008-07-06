@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=opencdk
-PKG_VERSION:=0.6.4
+PKG_VERSION:=0.6.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -18,10 +18,7 @@ PKG_SOURCE_URL:=ftp://ftp.gnutls.org/pub/gnutls/opencdk/ \
 	http://www.mirrors.wiretapped.net/security/network-security/gnutls/opencdk/ \
 	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/opencdk/ \
 	http://josefsson.org/gnutls/releases/opencdk/
-PKG_MD5SUM:=7bfc820bcdc08f0c31f860710368071e
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=813d62d7afe7b2c2d8f3df0a6c9d9331
 
 include $(INCLUDE_DIR)/package.mk
 
