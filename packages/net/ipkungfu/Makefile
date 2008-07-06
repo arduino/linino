@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ipkungfu
-PKG_VERSION:=0.6.0
+PKG_VERSION:=0.6.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.linuxkungfu.org/ipkungfu
-PKG_MD5SUM:=a65b5e629a7e9ef00aaf20587d918e5f
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=89f6bc0df356dd4ee650882c54ec9074
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -31,7 +28,7 @@ endef
 
 define Package/ipkungfu/description
 	IPKungFu is an iptables-based Linux firewall.
-	It aims to simplify the configuration of Internet 
+	It aims to simplify the configuration of Internet
 	connection sharing, port forwarding, and packet filtering.
 endef
 
