@@ -1,16 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=natpmp
-PKG_VERSION:=0.2.1
+PKG_VERSION:=0.2.3
 PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=http://download.savannah.nongnu.org/releases/natpmp/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=b0b1fea34ecd2c99f75c01a6728c9a7b
-
-PKG_CAT:=zcat
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=f696565d59c488b9ad9f43625be93377
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,7 +19,8 @@ define Package/natpmp
 endef
 
 define Package/natpmp/description
-  stunnel replacement based on xyssl
+	This is a daemon implementing NAT-PMP. NAT-PMP is a protocol for
+	handling port forwarding requests from clients behind a NAT.
 endef
 
 define Build/Configure
