@@ -1,7 +1,5 @@
-Index: maradns-1.2.12.06/rng/Makefile
-===================================================================
---- maradns-1.2.12.06.orig/rng/Makefile	2007-06-30 14:32:06.000000000 +0200
-+++ maradns-1.2.12.06/rng/Makefile	2007-06-30 14:32:06.000000000 +0200
+--- a/rng/Makefile
++++ b/rng/Makefile
 @@ -25,7 +25,7 @@
  	$(CC) -c $(FLAGS) -o rng-api-fst.o rng-api-fst.c
  

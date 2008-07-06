@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=maradns
-PKG_VERSION:=1.2.12.06
+PKG_VERSION:=1.3.07.08
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.maradns.org/download/1.2/$(PKG_VERSION)/
-PKG_MD5SUM:=9219647108d283725011e37e29771b90
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_SOURCE_URL:=http://www.maradns.org/download/1.3/$(PKG_VERSION)/
+PKG_MD5SUM:=d44d7e1309c7c05654e62b52c6ab6822
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -28,6 +25,11 @@ define Package/maradns
   TITLE:=Small and secure DNS Server
   URL:=http://www.maradns.org/
   SUBMENU:=DNS
+endef
+
+define Package/maradns/description
+	maradns is a DNS server written with security, simplicity, and
+	performance in mind.
 endef
 
 define Package/maradns/conffiles
