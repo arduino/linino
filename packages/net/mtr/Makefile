@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mtr
-PKG_VERSION:=0.69
+PKG_VERSION:=0.73
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.bitwizard.nl/mtr/
-PKG_MD5SUM:=58904d6d8d70114195cdeb653d56914c
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=52223cc34c72092a0392865356a3dc76
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,13 +27,13 @@ define Package/mtr
 endef
 
 define Package/mtr/description
-	mtr combines the functionality of the 'traceroute' and 'ping' programs 
+	mtr combines the functionality of the 'traceroute' and 'ping' programs
 	in a single network diagnostic tool.
-	As mtr starts, it investigates the network connection between the host 
-	mtr runs on and a user-specified destination host. After it 
-	determines the address of each network hop between the machines, 
-	it sends a sequence ICMP ECHO requests to each one to determine the 
-	quality of the link to each machine. As it does this, it prints 
+	As mtr starts, it investigates the network connection between the host
+	mtr runs on and a user-specified destination host. After it
+	determines the address of each network hop between the machines,
+	it sends a sequence ICMP ECHO requests to each one to determine the
+	quality of the link to each machine. As it does this, it prints
 	running statistics about each machine.
 endef
 

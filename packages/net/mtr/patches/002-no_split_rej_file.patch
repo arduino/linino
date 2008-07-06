@@ -1,0 +1,54 @@
+diff -urN mtr-0.73/split.c.rej mtr-0.73.new/split.c.rej
+--- mtr-0.73/split.c.rej	2006-11-18 12:04:44.000000000 +0100
++++ mtr-0.73.new/split.c.rej	1970-01-01 01:00:00.000000000 +0100
+@@ -1,29 +0,0 @@
+-***************
+-*** 103,115 ****
+-        name = dns_lookup(addr);
+-        if(name != NULL) {
+-         /* May be we should test name's length */
+--        sprintf(newLine, "%s %d %d %d %d %d %d", name,
+-                 net_loss(at),
+-                 net_returned(at), net_xmit(at),
+-                 net_best(at) /1000, net_avg(at)/1000,
+-                 net_worst(at)/1000);
+-        } else {
+--        sprintf(newLine, "%s %d %d %d %d %d %d",
+-                 strlongip( addr ),
+-                 net_loss(at),
+-                 net_returned(at), net_xmit(at),
+---- 103,115 ----
+-        name = dns_lookup(addr);
+-        if(name != NULL) {
+-         /* May be we should test name's length */
+-+        snprintf(newLine,sizeof(newLine), "%s %d %d %d %d %d %d", name,
+-                 net_loss(at),
+-                 net_returned(at), net_xmit(at),
+-                 net_best(at) /1000, net_avg(at)/1000,
+-                 net_worst(at)/1000);
+-        } else {
+-+        snprintf(newLine,sizeof(newLine), "%s %d %d %d %d %d %d",
+-                 strlongip( addr ),
+-                 net_loss(at),
+-                 net_returned(at), net_xmit(at),
+diff -urN mtr-0.73/dns.c.rej mtr-0.73.new/dns.c.rej
+--- mtr-0.73/dns.c.rej	2006-06-14 07:00:56.000000000 +0200
++++ mtr-0.73.new/dns.c.rej	1970-01-01 01:00:00.000000000 +0100
+@@ -1,17 +0,0 @@
+-***************
+-*** 1357,1363 ****
+-  #ifdef ENABLE_IPV6
+-  /* Returns an ip6.arpa character string. */
+-  void addr2ip6arpa( ip_t * ip, char * buf ) {
+--   char * p = (char *) ip;
+-    char * b = buf;
+-    int i;
+-  
+---- 1357,1363 ----
+-  #ifdef ENABLE_IPV6
+-  /* Returns an ip6.arpa character string. */
+-  void addr2ip6arpa( ip_t * ip, char * buf ) {
+-+   unsigned char * p = (unsigned char *) ip;
+-    char * b = buf;
+-    int i;
+-  
