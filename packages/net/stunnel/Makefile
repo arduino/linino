@@ -3,14 +3,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=stunnel
-PKG_VERSION:=4.20
+PKG_VERSION:=4.25
 PKG_RELEASE:=1
-PKG_MD5SUM:=cf9940395d3503018f721c962528d2ec
+PKG_MD5SUM:=7f00799f43910c0362df0e69c65965aa
 PKG_SOURCE_URL:=http://www.stunnel.org/download/stunnel/src/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,7 +20,11 @@ define Package/stunnel
 endef
 
 define Package/stunnel/description
-	 Open source SSL TCP Wrapper
+	Stunnel is a program that allows you to encrypt arbitrary TCP
+	connections inside SSL (Secure Sockets Layer) available on both Unix
+	and Windows. Stunnel can allow you to secure non-SSL aware daemons and
+	protocols (like POP, IMAP, LDAP, etc) by having Stunnel provide the
+	encryption, requiring no changes to the daemon's code. 
 endef
 
 
@@ -44,12 +45,14 @@ define Build/Compile
 endef
 
 define Package/stunnel/install	
-	$(INSTALL_DIR) $(1)/usr/sbin $(1)/usr/lib $(1)/usr/stunnel
-	$(INSTALL_DIR) $(1)/etc/stunnel $(1)/etc/init.d
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/stunnel $(1)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libstunnel.so $(1)/usr/sbin/
-	$(CP) ./files/stunnel.conf $(1)/etc/stunnel/stunnel.conf
-	$(INSTALL_BIN) ./files/stunnel.init $(1)/etc/init.d/S90stunnel
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/stunnel $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/lib/stunnel
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/stunnel/libstunnel.so $(1)/usr/lib/stunnel/
+	$(INSTALL_DIR) $(1)/etc/stunnel
+	$(INSTALL_CONF) ./files/stunnel.conf $(1)/etc/stunnel/stunnel.conf
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/stunnel.init $(1)/etc/init.d/stunnel
 endef
 
 $(eval $(call BuildPackage,stunnel))

@@ -1,7 +1,6 @@
-diff -baurN stunnel-4.16.orig/src/ssl.c stunnel-4.16/src/ssl.c
---- stunnel-4.16.orig/src/ssl.c	2006-11-03 16:49:02.000000000 +0100
-+++ stunnel-4.16/src/ssl.c	2006-11-03 16:50:16.000000000 +0100
-@@ -55,13 +55,16 @@
+--- a/src/ssl.c
++++ b/src/ssl.c
+@@ -62,13 +62,16 @@
  }
  
  void ssl_configure(void) { /* configure global SSL settings */
@@ -18,8 +17,8 @@ diff -baurN stunnel-4.16.orig/src/ssl.c stunnel-4.16/src/ssl.c
      int id=0;
      COMP_METHOD *cm=NULL;
      char *name="unknown";
-@@ -90,6 +93,7 @@
-         exit(1);
+@@ -97,6 +100,7 @@
+         die(1);
      }
      s_log(LOG_INFO, "Compression enabled using %s method", name);
 +#endif
