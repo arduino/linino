@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libsigc++
-PKG_VERSION:=2.0.17
-PKG_RELEASE:=2
+PKG_VERSION:=2.0.18
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.0/
-PKG_MD5SUM:=fde0ee69e3125e982746d9fe005763e1
+PKG_MD5SUM:=ddebf5aafc8525d10366a8724abc9f28
 
 PKG_FIXUP = libtool
 
