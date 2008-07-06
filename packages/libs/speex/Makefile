@@ -9,15 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=speex
-PKG_VERSION:=1.2beta3
+PKG_VERSION:=1.2beta3.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.us.xiph.org/releases/speex/
-PKG_MD5SUM:=bcada04dc663a725ee7fcfa6301520a3
+PKG_MD5SUM:=b47396952c5fdd54b6468316c3bd339f
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 PKG_BUILD_DEPENDS:=libnotimpl
 
 include $(INCLUDE_DIR)/package.mk
