@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=serdisplib
-PKG_VERSION:=1.96
+PKG_VERSION:=1.97.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/serdisplib
-PKG_MD5SUM:=b074e02d8d63f34cba8ec45c23f63f78
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_MD5SUM:=ae6ca7c14ca92b0fc9dbb5df4a05a4c7
 
 include $(INCLUDE_DIR)/package.mk
 
