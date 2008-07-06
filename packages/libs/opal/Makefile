@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=opal
-PKG_VERSION:=3.2.0
+PKG_VERSION:=3.2.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.bz2
 PKG_SOURCE_URL:=@SF/opalvoip
-PKG_MD5SUM:=a6a19937f9ede963e6a9a18ca2837627
+PKG_MD5SUM:=405ba3b03ec706b6e6f873de340937e2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
 
@@ -36,7 +36,6 @@ define Package/libopal/description
 	Open Phone Abstraction Library, implementation of the ITU H.323
 	teleconferencing protocol, and successor of the openh323 library. It
 	supports not only the H.323 protocol but also SIP and IAX2.
-
 endef
 
 CONFIGURE_ARGS += \
