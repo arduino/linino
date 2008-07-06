@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bluez-libs
-PKG_VERSION:=3.24
+PKG_VERSION:=3.35
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://bluez.sourceforge.net/download
-PKG_MD5SUM:=3af3dfa6ff01715e91bdc985d71ee21e
+PKG_MD5SUM:=2682b84da32cd78b48982d1d69ba637c
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -28,12 +28,9 @@ define Package/bluez-libs
   URL:=http://www.bluez.org/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
+CONFIGURE_ARGS += \
 		--enable-shared \
 		--enable-static \
-	)
-endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
