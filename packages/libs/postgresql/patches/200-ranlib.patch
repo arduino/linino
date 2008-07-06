@@ -1,7 +1,5 @@
-Index: postgresql-8.3.0/src/port/Makefile
-===================================================================
---- postgresql-8.3.0.orig/src/port/Makefile	2008-02-06 16:27:48.000000000 -0600
-+++ postgresql-8.3.0/src/port/Makefile	2008-02-06 16:28:18.000000000 -0600
+--- a/src/port/Makefile
++++ b/src/port/Makefile
 @@ -49,6 +49,7 @@
  
  libpgport.a: $(OBJS)

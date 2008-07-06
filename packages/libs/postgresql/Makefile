@@ -9,10 +9,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=postgresql
-PKG_VERSION:=8.3.1
+PKG_VERSION:=8.3.3
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=\
 	http://ftp7.us.postgresql.org/pub/postgresql/source/v$(PKG_VERSION) \
@@ -20,11 +19,9 @@ PKG_SOURCE_URL:=\
 	http://ftp9.us.postgresql.org/pub/postgresql/source/v$(PKG_VERSION) \
 	http://ftp.be.postgresql.org/postgresql/source/v$(PKG_VERSION) \
 	ftp://ftp-archives.postgresql.org/pub/source/v$(PKG_VERSION)
-PKG_MD5SUM:=a5e0ed6a85b450dc217ec71da93243a7
+PKG_MD5SUM:=0ae4bd9620e84d3e08dcf923808d14d0
 
 PKG_BUILD_DEPENDS:=libnotimpl
-
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
