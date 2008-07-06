@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gmediaserver
-PKG_VERSION:=0.12.0
+PKG_VERSION:=0.13.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://savannah.nongnu.org/download/gmediaserver/
-PKG_MD5SUM:=7f99a9b2e32c41acf7e71eb0bc0840e9
+PKG_MD5SUM:=c422de386331e2a1a859d45f6fa270a3
 
 include $(INCLUDE_DIR)/package.mk
 
