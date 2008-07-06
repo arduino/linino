@@ -1,5 +1,5 @@
---- readline-5.1/support/config.sub.orig	2008-04-25 08:48:01.000000000 -0500
-+++ readline-5.1/support/config.sub	2008-04-25 08:48:59.000000000 -0500
+--- a/support/config.sub
++++ b/support/config.sub
 @@ -228,7 +228,7 @@
  	| a29k \
  	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
