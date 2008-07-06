@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=l7-protocols
-PKG_VERSION:=2007-11-22
+PKG_VERSION:=2008-04-23
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/l7-filter
-PKG_MD5SUM:=162c988422fec85e1f1c24417a2c600c
+PKG_MD5SUM:=f71420848eb60f7fdca04c2e89c78ee5
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -41,7 +41,7 @@ endef
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_l7-protocols-testing),)
   define Build/Compile
-	cd $(PKG_BUILD_DIR)/testing && $(MAKE) $(TARGET_CONFIGURE_OPTS) CXX="$(STAGING_DIR)/usr/bin/g++-uc"
+	cd $(PKG_BUILD_DIR)/testing && $(MAKE) $(TARGET_CONFIGURE_OPTS) CXX="$(STAGING_DIR)/host/bin/g++-uc"
   endef
 else
   define Build/Compile

@@ -1,7 +1,5 @@
-Index: l7-protocols-2007-10-10/testing/timeit.sh
-===================================================================
---- l7-protocols-2007-10-10.orig/testing/timeit.sh	2007-10-31 15:58:48.000000000 -0500
-+++ l7-protocols-2007-10-10/testing/timeit.sh	2007-10-31 16:02:19.000000000 -0500
+--- a/testing/timeit.sh
++++ b/testing/timeit.sh
 @@ -1,11 +1,8 @@
  #!/bin/bash
  

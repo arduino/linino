@@ -1,7 +1,5 @@
-Index: l7-protocols-2007-10-10/testing/Makefile
-===================================================================
---- l7-protocols-2007-10-10.orig/testing/Makefile	2007-10-31 14:40:41.000000000 -0500
-+++ l7-protocols-2007-10-10/testing/Makefile	2007-10-31 14:40:41.000000000 -0500
+--- a/testing/Makefile
++++ b/testing/Makefile
 @@ -1,19 +1,19 @@
  all: randchars randprintable test_speed-kernel test_speed-userspace match_kernel
  

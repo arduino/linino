@@ -1,7 +1,5 @@
-Index: l7-protocols-2007-10-10/testing/doallspeeds.sh
-===================================================================
---- l7-protocols-2007-10-10.orig/testing/doallspeeds.sh	2007-10-31 16:07:03.000000000 -0500
-+++ l7-protocols-2007-10-10/testing/doallspeeds.sh	2007-10-31 16:07:20.000000000 -0500
+--- a/testing/doallspeeds.sh
++++ b/testing/doallspeeds.sh
 @@ -25,11 +25,11 @@
  	printf `basename $f .pat`
  
