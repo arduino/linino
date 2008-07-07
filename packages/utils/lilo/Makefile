@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lilo
-PKG_VERSION:=22.7.3
+PKG_VERSION:=22.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).src.tar.gz
 PKG_SOURCE_URL:=ftp://metalab.unc.edu/pub/Linux/system/boot/lilo/
-PKG_MD5SUM:=
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_MD5SUM:=72765f2aafd20e23ecf07ebd22baeec7
 
 include $(INCLUDE_DIR)/package.mk
 
