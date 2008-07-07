@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ntfs-3g
-PKG_VERSION:=1.616
-PKG_RELEASE:=2
+PKG_VERSION:=1.2531
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://www.ntfs-3g.org/
-PKG_MD5SUM:=fdb1c55f00263c962a52d0707a6d075e
+PKG_MD5SUM:=69374cd09803c5fdbb5dabd1d704b9fe
 
 PKG_BUILD_DEPENDS:=libfuse
 
@@ -36,6 +36,7 @@ endef
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
+	--with-fuse=external \
 	, \
 	ac_cv_path_LDCONFIG=""
 
