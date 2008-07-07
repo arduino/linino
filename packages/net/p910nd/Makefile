@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=p910nd
-PKG_VERSION:=0.7
-PKG_RELEASE:=4
+PKG_VERSION:=0.92
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.etherboot.org/p910nd
-PKG_MD5SUM:=7bf752532d26c9106f8039db95df3a6b
+PKG_SOURCE_URL:=http://etherboot.sourceforge.net/p910nd
+PKG_MD5SUM:=d0d0d0500d151c1a49dcb69dd94b8357
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,7 +22,7 @@ define Package/p910nd
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A small non-spooling printer server
-  URL:=http://www.etherboot.org/p910nd/
+  URL:=http://etherboot.sourceforge.net/p910nd/
   SUBMENU:=printing
 endef
 
