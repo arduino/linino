@@ -308,6 +308,9 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk14-chan-gtalk),)
   CONFIGURE_ARGS+= \
 	--with-gnutls="$(STAGING_DIR)/usr" \
 	--with-iksemel="$(STAGING_DIR)/usr"
+  SITE_VARS+= \
+	ac_cv_lib_iksemel_iks_start_sasl=yes \
+	ac_cv_lib_gnutls_gnutls_bye=yes
 else
   CONFIGURE_ARGS+= \
 	--without-gnutls \
