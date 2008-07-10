@@ -48,7 +48,8 @@ define Build/Configure
 		--enable-fixed-point \
 		--disable-oggtest \
 		--disable-float-api \
-		--disable-vbr \
+		--disable-vbr, \
+		OGG_CFLAGS="" \
 	)
 endef
 
