@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freetype
-PKG_VERSION:=2.3.6
+PKG_VERSION:=2.3.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/freetype
-PKG_MD5SUM:=fb182d508017cb608e9df8c7dca648dc
+PKG_MD5SUM:=83306194817ebdea554133b4232a34aa
 
 PKG_FIXUP = libtool
 
@@ -55,6 +55,14 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/freetype2.pc $(1)/usr/lib/pkgconfig/
 	$(SED) 's,-I$$$$includedir/freetype2,-I$(STAGING_DIR)/usr/include/freetype2,g' $(2)/bin/freetype-config
 	$(SED) 's,/usr/include/freetype2/,$(STAGING_DIR)/usr/include/freetype2/,g' $(2)/bin/freetype-config
+endef
+
+define Build/UninstallDev
+	rm -rf $(1)/bin/freetype-config \
+		$(1)/usr/include/freetype2 \
+		$(1)/usr/include/ft2build.h \
+		$(1)/usr/lib/libfreetype.{a,so*} \
+		$(1)/usr/lib/pkgconfig/freetype2.pc
 endef
 
 define Package/libfreetype/install
