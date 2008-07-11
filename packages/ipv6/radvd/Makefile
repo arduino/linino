@@ -9,14 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=radvd
-PKG_VERSION:=1.0
+PKG_VERSION:=1.1
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://v6web.litech.org/radvd/dist \
 		http://download.sourcemage.org/mirror
-PKG_MD5SUM:=8bce4a21757cf069f5a69e2f9bee9e5b
+PKG_MD5SUM:=9ee449e4b89171432cb9e9100e0b5648
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
@@ -31,10 +31,6 @@ endef
 
 define Package/radvd/description
 IPv6 Routing Advertisement Daemon.
-endef
-
-define Package/radvd/conffiles
-/etc/radvd.conf
 endef
 
 define Build/Configure
@@ -78,8 +74,8 @@ define Build/Compile
 endef
 
 define Package/radvd/install
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) ./files/radvd.conf $(1)/etc/radvd.conf
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/radvd.config $(1)/etc/config/radvd
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/radvd.init $(1)/etc/init.d/radvd
 	$(INSTALL_DIR) $(1)/usr/sbin
