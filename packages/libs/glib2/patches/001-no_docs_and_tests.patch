@@ -10,3 +10,35 @@ diff --git a/Makefile.in b/Makefile.in
  DIST_SUBDIRS = $(SUBDIRS) build
  bin_SCRIPTS = glib-gettextize
  AM_CPPFLAGS = \
+diff -urN glib-2.15.4/gio/Makefile.am glib-2.15.4.new/gio/Makefile.am
+--- glib-2.15.4/gio/Makefile.am	2008-01-28 16:03:24.000000000 +0100
++++ glib-2.15.4.new/gio/Makefile.am	2008-07-11 15:49:27.000000000 +0200
+@@ -123,7 +123,6 @@
+ platform_libadd += -lshlwapi
+ endif
+ 
+-SUBDIRS += tests
+ 
+ libgio_2_0_la_SOURCES =		\
+ 	gappinfo.c 		\
+diff -urN glib-2.15.4/gio/Makefile.in glib-2.15.4.new/gio/Makefile.in
+--- glib-2.15.4/gio/Makefile.in	2008-01-28 17:54:34.000000000 +0100
++++ glib-2.15.4.new/gio/Makefile.in	2008-07-11 15:49:20.000000000 +0200
+@@ -168,7 +168,7 @@
+   distclean-recursive maintainer-clean-recursive
+ ETAGS = etags
+ CTAGS = ctags
+-DIST_SUBDIRS = xdgmime inotify . fam tests
++DIST_SUBDIRS = xdgmime inotify . fam
+ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ ACLOCAL = @ACLOCAL@
+ ALLOCA = @ALLOCA@
+@@ -379,7 +379,7 @@
+ 	pltcheck.sh $(NULL)
+ TEST_PROGS = 
+ NULL = 
+-SUBDIRS = $(am__append_1) $(am__append_2) . $(am__append_4) tests
++SUBDIRS = $(am__append_1) $(am__append_2) . $(am__append_4)
+ @HAVE_GNUC_VISIBILITY_TRUE@@OS_LINUX_TRUE@TESTS = abicheck.sh pltcheck.sh
+ AM_CPPFLAGS = \
+ 	-DG_LOG_DOMAIN=\"GLib-GIO\"			\
