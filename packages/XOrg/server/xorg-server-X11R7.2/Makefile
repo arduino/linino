@@ -19,18 +19,18 @@ include $(INCLUDE_DIR)/package.mk
 
 EXTRA_CFLAGS+= -I${STAGING_DIR}/usr/include/X11/GL -I${STAGING_DIR}/usr/include/X11/dri/ -I${STAGING_DIR}/usr/include/X11/ -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
-CONFIGURE_ARGS_KDRIVE=--enable-composite --enable-kdrive \
-		--disable-dga --disable-dri --disable-xinerama \
-		--disable-xf86misc --disable-xf86vidmode \
-		--disable-xorg --disable-xorgcfg \
-		--disable-xkb --disable-xnest --disable-xvfb \
-		--disable-xevie --disable-xprint --disable-xtrap \
-		--disable-dmx --disable-w100 \
-		--with-default-font-path=built-ins \
-		--enable-tslib --enable-xcalibrate
+#CONFIGURE_ARGS_KDRIVE=--enable-composite --enable-kdrive \
+#		--disable-dga --disable-dri --disable-xinerama \
+#		--disable-xf86misc --disable-xf86vidmode \
+#		--disable-xorg --disable-xorgcfg \
+#		--disable-xkb --disable-xnest --disable-xvfb \
+#		--disable-xevie --disable-xprint --disable-xtrap \
+#		--disable-dmx --disable-w100 \
+#		--with-default-font-path=built-ins \
+#		--enable-tslib --enable-xcalibrate
 
 CONFIGURE_VARS+=ac_cv_file__usr_share_sgml_X11_defs_ent=yes
-CONFIGURE_ARGS+=$(if $(CONFIG_XORG_BUILD_KDRIVE), $(CONFIGURE_ARGS_KDRIVE))
+#CONFIGURE_ARGS+=$(if $(CONFIG_XORG_BUILD_KDRIVE), $(CONFIGURE_ARGS_KDRIVE))
 
 DEPENDS_SERVER:=+calibrateproto \
 		+compositeproto \
@@ -76,23 +76,23 @@ DEPENDS_SERVER:=+calibrateproto \
 		+Mesa \
 		@DISPLAY_SUPPORT
 
-DEPENDS_KDRIVE:=+calibrateproto \
-		+compositeproto \
-		+damageproto \
-		+fixesproto \
-		+recordproto \
-		+resourceproto \
-		+scrnsaverproto \
-		+videoproto \
-		+xextproto \
-		+xproto \
-		+libXext \
-		+libXdmcp \
-		+libXfont \
-		+libXrandr \
-		+xtrans \
-		+libX11 \
-		@DISPLAY_SUPPORT
+#DEPENDS_KDRIVE:=+calibrateproto \
+#		+compositeproto \
+#		+damageproto \
+#		+fixesproto \
+#		+recordproto \
+#		+resourceproto \
+#		+scrnsaverproto \
+#		+videoproto \
+#		+xextproto \
+#		+xproto \
+#		+libXext \
+#		+libXdmcp \
+#		+libXfont \
+#		+libXrandr \
+#		+xtrans \
+#		+libX11 \
+#		@DISPLAY_SUPPORT
 
 
 ifeq ($(CONFIG_TARGET_olpc),y)
@@ -101,11 +101,11 @@ else
   XORG_CONFIG_FILE=xorg.conf
 endif
 
-define Package/xorg-server/config
-	config XORG_BUILD_KDRIVE
-		bool "Build kdrive instead of xserver"
-		depends PACKAGE_xorg-server
-endef
+#define Package/xorg-server/config
+#	config XORG_BUILD_KDRIVE
+#		bool "Build kdrive instead of xserver"
+#		depends PACKAGE_xorg-server || BROKEN
+#endef
 
 define Package/xorg-server/Default
   SECTION:=xorg-server
