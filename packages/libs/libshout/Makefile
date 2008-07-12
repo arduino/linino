@@ -38,8 +38,8 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
-		VORBIS_CFLAGS="$(STAGING_DIR)/usr/include/tremor"\
-		VORBIS_LIBS="$(STAGING_DIR)/usr/lib" \
+		VORBIS_CFLAGS="-I$(STAGING_DIR)/usr/include/tremor/"\
+		VORBIS_LIBS="-L$(STAGING_DIR)/usr/lib" \
 		--enable-shared \
 		--enable-static \
 	)
