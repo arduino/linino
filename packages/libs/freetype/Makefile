@@ -57,13 +57,6 @@ define Build/InstallDev
 	$(SED) 's,/usr/include/freetype2/,$(STAGING_DIR)/usr/include/freetype2/,g' $(2)/bin/freetype-config
 endef
 
-define Build/UninstallDev
-	rm -rf $(1)/bin/freetype-config \
-		$(1)/usr/include/freetype2 \
-		$(1)/usr/include/ft2build.h \
-		$(1)/usr/lib/libfreetype.{a,so*} \
-		$(1)/usr/lib/pkgconfig/freetype2.pc
-endef
 
 define Package/libfreetype/install
 	$(INSTALL_DIR) $(1)/usr/lib
