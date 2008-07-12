@@ -16,8 +16,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://collectd.org/files/
 PKG_MD5SUM:=176880c32a06bee9d5e6e2e7c76751a3
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_FIXUP=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -272,6 +271,9 @@ PKG_CONFIGURE_OPTS:= \
 	--enable-getifaddrs \
 	--with-nan-emulation \
 	--with-fp-layout=nothing
+
+CONFIGURE_VARS+= \
+	CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2 $$$$CPPFLAGS" \
 
 # list of permanently disabled plugins
 disabled_plugins := apple_sensors battery cpufreq entropy hddtemp ipmi ipvs libvirt mbmon memcached \
