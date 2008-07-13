@@ -186,8 +186,8 @@ define Package/samba-common/install
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{437,850,ISO8859-1,ISO8859-15} $(1)/usr/share/samba/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/codepage.852 $(1)/usr/share/samba/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{852,ISO8859-2} $(1)/usr/share/samba/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/codepage.866 $(1)/usr/share/samba/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{866,ISO8859-5,KOI8-R} $(1)/usr/share/samba/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/codepage.{866,1251} $(1)/usr/share/samba/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{866,ISO8859-5,KOI8-R,1251} $(1)/usr/share/samba/
 endef
 
 define Package/samba-server/install
