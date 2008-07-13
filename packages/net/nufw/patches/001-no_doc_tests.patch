@@ -1,21 +1,21 @@
-diff -urN nufw-2.2.11/Makefile.am nufw-2.2.11.new/Makefile.am
---- nufw-2.2.11/Makefile.am	2007-12-08 12:08:50.000000000 +0100
-+++ nufw-2.2.11.new/Makefile.am	2008-02-05 12:10:08.000000000 +0100
+diff -urN nufw-2.2.15/Makefile.am nufw-2.2.15.new/Makefile.am
+--- nufw-2.2.15/Makefile.am	2008-04-15 14:12:18.000000000 +0200
++++ nufw-2.2.15.new/Makefile.am	2008-07-13 22:39:22.000000000 +0200
 @@ -1,4 +1,4 @@
--SUBDIRS = src scripts doc tests
-+SUBDIRS = src scripts
+-SUBDIRS = src scripts doc tests conf python
++SUBDIRS = src scripts conf python
  
- EXTRA_DIST = conf doc patches python debian autogen.sh
- 
-diff -urN nufw-2.2.11/Makefile.in nufw-2.2.11.new/Makefile.in
---- nufw-2.2.11/Makefile.in	2008-01-08 22:35:41.000000000 +0100
-+++ nufw-2.2.11.new/Makefile.in	2008-02-05 12:09:47.000000000 +0100
+ PATCH_FILES = patches/dump-connection-mark.diff 
+ EXTRA_DIST = autogen.sh $(PATCH_FILES)
+diff -urN nufw-2.2.15/Makefile.in nufw-2.2.15.new/Makefile.in
+--- nufw-2.2.15/Makefile.in	2008-04-15 14:12:41.000000000 +0200
++++ nufw-2.2.15.new/Makefile.in	2008-07-13 22:39:40.000000000 +0200
 @@ -234,7 +234,7 @@
  sharedstatedir = @sharedstatedir@
  sysconfdir = @sysconfdir@
  target_alias = @target_alias@
--SUBDIRS = src scripts doc tests
-+SUBDIRS = src scripts 
- EXTRA_DIST = conf doc patches python debian autogen.sh
+-SUBDIRS = src scripts doc tests conf python
++SUBDIRS = src scripts conf python
+ PATCH_FILES = patches/dump-connection-mark.diff 
+ EXTRA_DIST = autogen.sh $(PATCH_FILES)
  all: all-recursive
- 
