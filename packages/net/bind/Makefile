@@ -9,14 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bind
-PKG_VERSION:=9.4.1
+PKG_VERSION:=9.5.0-P1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= \
 	ftp://ftp.isc.org/isc/bind9/$(PKG_VERSION) \
 	http://www.mirrorservice.org/sites/ftp.isc.org/isc/bind9/$(PKG_VERSION)
-PKG_MD5SUM:=09b54d35036cb0423b2e618f21766285
+PKG_MD5SUM:=a4f9dd6d205d24ec89fa4e44d8188197
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -90,6 +90,7 @@ CONFIGURE_ARGS += \
 		--disable-threads \
 		--with-openssl="$(STAGING_DIR)/usr" \
 		--with-libtool \
+		--with-libxml2=no \
 		, \
 		BUILD_CC="$(TARGET_CC)" \
 
