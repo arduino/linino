@@ -77,8 +77,8 @@ define Package/gsm-utils/install
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/gsm.h $(1)/usr/include/
+	mkdir -p $(1)/usr/include/gsm
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/gsm.h $(1)/usr/include/gsm/
 	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgsm.{a,so*} $(1)/usr/lib/
 endef
