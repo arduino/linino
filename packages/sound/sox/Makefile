@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sox
-PKG_VERSION:=12.18.2
+PKG_VERSION:=14.0.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/sox
-PKG_MD5SUM:=ba25e512a6c824d6e56d76767a18af99
+PKG_MD5SUM:=6c95af60b20b9655531bf3162c0be937
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/sox
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec
+  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libgsm
   TITLE:=Sox is a general purpose sound converter/player/recorder
   URL:=http://sox.sourceforge.net/
 endef
@@ -56,7 +56,7 @@ endef
 
 define Package/sox/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/src/{play,sox,soxmix} $(1)/usr/bin/
+	$(CP) $(PKG_BUILD_DIR)/src/{play,sox} $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,sox))
