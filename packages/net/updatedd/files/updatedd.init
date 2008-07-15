@@ -11,7 +11,19 @@ start_service () {
 	config_get update   "$section" update
 
 	[ "$update" = 1 ] && {
-		/usr/bin/updatedd -Y $service -- $username:$password $host
+		if [ "$service" = "dyndns" ]; then
+			wget http://checkip.dyndns.org -O /tmp/updatedd_ip_check
+			current_ip=`cat /tmp/updatedd_ip_check |cut -d':' -f2|cut -d'<' -f1 |cut -d' ' -f2`
+			rm /tmp/updatedd_ip_check
+			old_ip=`nslookup "$host" |grep "$host" -A 1 |grep Address |cut -d' ' -f3`
+			if [ "$current_ip" = "$old_ip" ]; then
+				echo "Preventing abusive update"
+				abusive=1
+			fi
+		fi
+		if [ "$abusive" != "1" ]; then
+			/usr/bin/updatedd -Y $service -- $username:$password $host
+		fi
 	}
 }
 
