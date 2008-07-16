@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=haserl
-PKG_VERSION:=0.8.0
-PKG_RELEASE:=2
+PKG_VERSION:=0.9.24
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/haserl
-PKG_MD5SUM:=bd9195d086566f56634c0bcbbbcbebea
+PKG_MD5SUM:=f0cdb34f5ea50482fb6b7961bb158332
 
 include $(INCLUDE_DIR)/package.mk
 
