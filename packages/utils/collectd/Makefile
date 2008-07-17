@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=collectd
-PKG_VERSION:=4.4.1
+PKG_VERSION:=4.4.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://collectd.org/files/
-PKG_MD5SUM:=176880c32a06bee9d5e6e2e7c76751a3
+PKG_MD5SUM:=faee2bb6e38da1051fdd31762bdf3ab7
 
 PKG_FIXUP=libtool
 

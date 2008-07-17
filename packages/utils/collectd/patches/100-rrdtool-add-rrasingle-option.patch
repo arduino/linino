@@ -1,6 +1,7 @@
-diff -ur collectd-4.4.0.orig/src/rrdtool.c collectd-4.4.0/src/rrdtool.c
---- collectd-4.4.0.orig/src/rrdtool.c	2008-05-22 21:05:58.000000000 +0200
-+++ collectd-4.4.0/src/rrdtool.c	2008-05-22 21:08:11.000000000 +0200
+Index: collectd-4.4.2/src/rrdtool.c
+===================================================================
+--- collectd-4.4.2.orig/src/rrdtool.c	2008-07-17 19:30:00.000000000 +0200
++++ collectd-4.4.2/src/rrdtool.c	2008-07-17 19:30:44.000000000 +0200
 @@ -87,6 +87,7 @@
  	"HeartBeat",
  	"RRARows",
@@ -24,4 +25,3 @@ diff -ur collectd-4.4.0.orig/src/rrdtool.c collectd-4.4.0/src/rrdtool.c
  	else
  	{
  		return (-1);
-Nur in collectd-4.4.0/src: rrdtool.c~.

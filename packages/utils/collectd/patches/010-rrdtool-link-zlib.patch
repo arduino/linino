@@ -1,6 +1,8 @@
---- collectd-4.4.0.orig/configure	2008-05-26 17:54:07.000000000 +0200
-+++ collectd-4.4.0/configure	2008-05-26 19:10:23.000000000 +0200
-@@ -31551,7 +31551,7 @@
+Index: collectd-4.4.2/configure
+===================================================================
+--- collectd-4.4.2.orig/configure	2008-07-17 19:34:16.000000000 +0200
++++ collectd-4.4.2/configure	2008-07-17 19:34:25.000000000 +0200
+@@ -31428,7 +31428,7 @@
    withval=$with_rrdtool; 	if test "x$withval" != "xno" && test "x$withval" != "xyes"
  	then
  		librrd_cflags="-I$withval/include"
