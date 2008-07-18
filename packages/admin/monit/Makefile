@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=monit
-PKG_VERSION:=4.9
+PKG_VERSION:=4.10.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.tildeslash.com/monit/dist/
-PKG_MD5SUM:=bcbaab776a54d1e34e3a057c925de9ca
+PKG_MD5SUM:=d3143b0bbd79b53f1b019d2fc1dae656
 
 include $(INCLUDE_DIR)/package.mk
 
