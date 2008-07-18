@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dibbler
-PKG_VERSION:=0.6.1
+PKG_VERSION:=0.7.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=220e68795ab0375cb3bc1f40c47e0bb2
+PKG_MD5SUM:=76a814d528274b2dc7ff7623bd6f6b45
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,9 +27,20 @@ define Package/dibbler/Default
   URL:=http://klub.com.pl/dhcpv6/
 endef
 
+define Package/dibbler/Default/description
+	Dibbler is a portable DHCPv6 implementation. It supports stateful (i.e.
+	IPv6 address granting) as well as stateless (i.e. option granting)
+	autoconfiguration for IPv6.
+endef
+
 define Package/dibbler-client
   $(call Package/dibbler/Default)
   TITLE+= (client)
+endef
+
+define Package/dibbler-client/description
+  $(call Package/dibbler/Default/description)
+  This package contains the dibbler client.
 endef
 
 define Package/dibbler-relay
@@ -37,9 +48,19 @@ define Package/dibbler-relay
   TITLE+= (relay)
 endef
 
+define Package/dibbler-relay/description
+  $(call Package/dibbler/Default/description)
+  This package contains the dibbler relay.
+endef
+
 define Package/dibbler-server
   $(call Package/dibbler/Default)
   TITLE+= (server)
+endef
+
+define Package/dibbler-server/description
+  $(call Package/dibbler/Default/description)
+  This package contains the dibbler server.
 endef
 
 define Build/Configure
