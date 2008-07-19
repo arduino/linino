@@ -1,7 +1,6 @@
-diff -Naur bluez-utils-3.35.ori/tools/hciattach.c bluez-utils-3.35/tools/hciattach.c
---- bluez-utils-3.35.ori/tools/hciattach.c	2008-05-20 18:14:39.000000000 +0200
-+++ bluez-utils-3.35/tools/hciattach.c	2008-07-06 13:01:28.000000000 +0200
-@@ -108,20 +108,37 @@
+--- a/tools/hciattach.c
++++ b/tools/hciattach.c
+@@ -111,20 +111,37 @@
  		return B230400;
  	case 460800:
  		return B460800;

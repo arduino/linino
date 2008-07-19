@@ -1,6 +1,5 @@
-diff -urN bluez-utils-3.24.orig/input/device.c bluez-utils-3.24/input/device.c
---- bluez-utils-3.24/input/device.orig	2007-12-08 20:04:42.000000000 +0100
-+++ bluez-utils-3.24/input/device.c	2008-01-16 09:20:41.000000000 +0100
+--- a/input/device.c
++++ b/input/device.c
 @@ -25,6 +25,8 @@
  #include <config.h>
  #endif
@@ -10,9 +9,8 @@ diff -urN bluez-utils-3.24.orig/input/device.c bluez-utils-3.24/input/device.c
  #include <stdlib.h>
  #include <errno.h>
  #include <fcntl.h>
-diff -urN bluez-utils-3.24.orig/input/storage.c bluez-utils-3.24/input/storage.c
---- bluez-utils-3.24/input/storage.orig	2007-10-05 09:17:06.000000000 +0200
-+++ bluez-utils-3.24/input/storage.c	2008-01-16 09:26:23.000000000 +0100
+--- a/input/storage.c
++++ b/input/storage.c
 @@ -25,6 +25,8 @@
  #include <config.h>
  #endif

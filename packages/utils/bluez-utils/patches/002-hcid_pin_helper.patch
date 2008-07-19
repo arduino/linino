@@ -1,7 +1,6 @@
-diff -ur bluez-utils-2.17.orig/hcid/hcid.conf bluez-utils-2.17/hcid/hcid.conf
---- bluez-utils-2.17.orig/hcid/hcid.conf	2004-12-25 19:06:00.000000000 +0100
-+++ bluez-utils-2.17/hcid/hcid.conf	2005-07-26 14:44:23.000000000 +0200
-@@ -34,7 +34,7 @@
+--- a/hcid/hcid.conf
++++ b/hcid/hcid.conf
+@@ -29,7 +29,7 @@
  	# Local device name
  	#   %d - device id
  	#   %h - host name
@@ -9,4 +8,4 @@ diff -ur bluez-utils-2.17.orig/hcid/hcid.conf bluez-utils-2.17/hcid/hcid.conf
 +	name "%h";
  
  	# Local device class
- 	class 0x3e0100;
+ 	class 0x000100;

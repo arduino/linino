@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bluez-utils
-PKG_VERSION:=3.35
+PKG_VERSION:=3.36
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://bluez.sourceforge.net/download
-PKG_MD5SUM:=21dc2f8c03dae9db87da351c735510bb
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=4fc292b635ba7b442c7aaf5680199012
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -43,6 +40,7 @@ CONFIGURE_ARGS += \
 	--enable-network \
 	--enable-usb \
 	--enable-input \
+	--disable-audio \
 	--with-bluez="$(STAGING_DIR)/usr/include" \
 	--with-usb=yes \
 
