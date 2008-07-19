@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bluez-hcidump
-PKG_VERSION:=1.40
+PKG_VERSION:=1.42
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://bluez.sourceforge.net/download
-PKG_MD5SUM:=c5793b79c3e7fea3a367c08c26c8e23c
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=5704737aaf72104eeaf77335218a1827
 
 include $(INCLUDE_DIR)/package.mk
 
