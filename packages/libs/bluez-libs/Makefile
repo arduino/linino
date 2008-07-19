@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bluez-libs
-PKG_VERSION:=3.35
+PKG_VERSION:=3.36
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://bluez.sourceforge.net/download
-PKG_MD5SUM:=2682b84da32cd78b48982d1d69ba637c
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=8c2ca546c0e7bb73dbd0e906fce7f6b1
 
 include $(INCLUDE_DIR)/package.mk
 
