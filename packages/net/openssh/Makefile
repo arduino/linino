@@ -29,7 +29,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openssh-client
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +zlib
+  DEPENDS:=+libopenssl +zlib +libssp
   TITLE:=OpenSSH client
   URL:=http://www.openssh.com/
   SUBMENU:=SSH
@@ -59,7 +59,7 @@ endef
 define Package/openssh-server
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +zlib
+  DEPENDS:=+libopenssl +zlib +libssp
   TITLE:=OpenSSH server
   URL:=http://www.openssh.com/
   SUBMENU:=SSH
