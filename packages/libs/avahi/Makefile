@@ -10,12 +10,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=avahi
-PKG_VERSION:=0.6.21
+PKG_VERSION:=0.6.23
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://avahi.org/download/
-PKG_MD5SUM:=9cc68f79c50c9dd9e419990c3c9b05b9
+PKG_MD5SUM:=aab1a304851d8145ea5f6a85c10af9e9
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -112,11 +112,12 @@ define Build/Configure
 		--enable-shared \
 		--enable-static \
 		--disable-glib \
+		--disable-gobject \
 		--disable-qt3 \
 		--disable-qt4 \
 		--disable-gtk \
 		--disable-dbus \
-		--enable-expat \
+		--with-xml=expat \
 		--disable-dbm \
 		--enable-gdbm \
 		--enable-libdaemon \
