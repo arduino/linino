@@ -4,17 +4,17 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: $
+# $Id: Makefile 2 07/06/2008 18:59:01Z jrhopper@gmail.com$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aprx
-PKG_VERSION:=0.22
-PKG_RELEASE:=svn115
+PKG_VERSION:=0.99
+PKG_RELEASE:=svn121
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).$(PKG_RELEASE).tar.gz
 PKG_SOURCE_URL:=http://ham.zmailer.org/oh2mqk/aprx
-PKG_MD5SUM:=e376bb1c420858b5053584bae00d498d
+PKG_MD5SUM:=095ec0aa24432196002ae717593bfe5c
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION).$(PKG_RELEASE)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -33,7 +33,15 @@ define Package/aprx/description
 	It then forwards appropriate packets to APRS-IS servers.
 endef
 
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--with-embedded \
+	)
+endef
+
 define Package/aprx/install	
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/aprx.init $(1)/etc/init.d/aprx
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/aprx.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/sbin
