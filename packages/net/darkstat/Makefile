@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=darkstat
-PKG_VERSION:=3.0.707
+PKG_VERSION:=3.0.708
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://dmr.ath.cx/net/darkstat
-PKG_MD5SUM:=91c70f96498dd679b21330214361e4dc
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=21fe231f6ec84be082e9d41747dd0fc9
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,7 +27,9 @@ define Package/darkstat
 endef
 
 define Package/darkstat/description
-	A free open source utility for bandwith monitoring \	over web
+	darkstat is a packet sniffer that runs as a background process on a
+	cable/DSL router, gathers all sorts of statistics about network usage,
+	and serves them over HTTP.
 endef
 
 CONFIGURE_ARGS += \
