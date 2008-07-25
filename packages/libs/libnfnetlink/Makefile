@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libnfnetlink
-PKG_VERSION:=0.0.38
+PKG_VERSION:=0.0.39
 PKG_RELEASE:=0
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnfnetlink/
-PKG_MD5SUM:=014aa52e39f2b8f296a307ba712ba3c1
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=348fed8c1edbe5b873ffc7b192140093
 
 include $(INCLUDE_DIR)/package.mk
 
