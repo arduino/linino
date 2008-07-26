@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wput
-PKG_VERSION:=0.6
+PKG_VERSION:=0.6.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=@SF/wput
-PKG_MD5SUM:=7ddb03154262df66e0e33f0676373ceb
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+PKG_MD5SUM:=92b41efed4db8eb4f3443c23bf7ceecf
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -37,6 +35,7 @@ endef
 
 CONFIGURE_ARGS += \
 	--disable-g-switch \
+	--without-ssl \
 
 define Package/wput/install
 	$(INSTALL_DIR) $(1)/usr/bin
