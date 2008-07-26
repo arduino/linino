@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rtorrent
 PKG_VERSION:=0.7.9
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://libtorrent.rakshasa.no/downloads/
@@ -42,7 +42,6 @@ CONFIGURE_ARGS+= \
 	--disable-debug \
 
 CONFIGURE_VARS += \
-	CXXFLAGS="$$$$CXXFLAGS -fno-rtti"  \
 	LIBS="-lm" \
 
 define Build/Compile
