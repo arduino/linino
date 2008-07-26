@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wget
-PKG_VERSION:=1.11.2
-PKG_RELEASE:=2
+PKG_VERSION:=1.11.4
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNU/$(PKG_NAME)
-PKG_MD5SUM:=730d2687231934f51e47f6f85260b2d3
+PKG_MD5SUM:=f5076a8c2ec2b7f334cb6e3059820f9c
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,13 +26,12 @@ define Package/wget/Default
 endef
 
 define Package/wget/Default/description
-	Wget is a network utility to retrieve files from the Web
-	using http and ftp, the two most widely used Internet
-	protocols. It works non-interactively, so it will work in
-	the background, after having logged off. The program supports
-	recursive retrieval of web-authoring pages as well as ftp
-	sites -- you can use wget to make mirrors of archives and
-	home pages or to travel the Web like a WWW robot.
+ Wget is a network utility to retrieve files from the Web using http 
+ and ftp, the two most widely used Internet	protocols. It works 
+ non-interactively, so it will work in the background, after having 
+ logged off. The program supports recursive retrieval of web-authoring 
+ pages as well as ftp sites -- you can use wget to make mirrors of 
+ archives and home pages or to travel the Web like a WWW robot.
 endef
 
 define Package/wget
@@ -86,19 +85,19 @@ CONFIGURE_ARGS += \
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_wget),)
   define Build/with-ssl
-    $(call Build/Template,wget,with-ssl, \
-	--with-ssl \
-	--with-libssl-prefix="$(STAGING_DIR)/usr" \
-    )
+	$(call Build/Template,wget,with-ssl, \
+		--with-ssl \
+		--with-libssl-prefix="$(STAGING_DIR)/usr" \
+	)
   endef
 endif
 $(eval $(Build/with-ssl))
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_wget-nossl),)
   define Build/without-ssl
-    $(call Build/Template,wget-nossl,without-ssl, \
-	--without-ssl \
-    )  
+	$(call Build/Template,wget-nossl,without-ssl, \
+		--without-ssl \
+	)
   endef
 endif
 $(eval $(Build/without-ssl))
