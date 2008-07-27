@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnutls
-PKG_VERSION:=2.4.0
+PKG_VERSION:=2.4.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -17,7 +17,7 @@ PKG_SOURCE_URL:=http://www.mirrors.wiretapped.net/security/network-security/gnut
 	ftp://ftp.gnutls.org/pub/gnutls/ \
 	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/ \
 	http://josefsson.org/gnutls/releases/
-PKG_MD5SUM:=dce4000841ba5f80d310c4972b5f3efe
+PKG_MD5SUM:=573db36cb3f8472b0293cfa1f52c607a
 
 PKG_FIXUP = libtool
 
@@ -62,8 +62,8 @@ endef
 
 define Package/gnutls-utils/description
 $(call Package/gnutls/Default/description)
- This package contains the GnuTLS gnutls-cli, gnutls-serv and psktool
- utilities.
+ This package contains the GnuTLS gnutls-cli, gnutls-serv, psktool,
+ and srptool utilities.
 endef
 
 
@@ -106,13 +106,10 @@ CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \
 	--disable-openpgp-authentication \
-	--disable-psk-authentication \
-	--disable-srp-authentication \
 	--with-libgcrypt-prefix="$(STAGING_DIR)/usr" \
 	--with-libreadline-prefix="$(STAGING_DIR)/usr" \
 	--with-libz-prefix="$(STAGING_DIR)/usr" \
-	--with-libtasn1-prefix="$(STAGING_DIR)/usr" \
-	--without-lzo
+	--with-libtasn1-prefix="$(STAGING_DIR)/usr"
 
 # XXX: AM_CFLAGS duplicates with CFLAGS
 MAKE_ARGS:= \
@@ -152,6 +149,7 @@ define Package/gnutls-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/gnutls-{cli,serv} $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/psktool $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/srptool $(1)/usr/bin/
 endef
 
 
