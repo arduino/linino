@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=radsecproxy
-PKG_VERSION:=1.0p1
+PKG_VERSION:=1.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://software.uninett.no/radsecproxy/
-PKG_MD5SUM:=d1bdfd731342eda1242ba94703165fbe
-
-PKG_BUILD_DEPENDS:= libopenssl libpthread zlib
+PKG_MD5SUM:=f7d0eaf1e9d963557affc90e61c0d1ae
 
 include $(INCLUDE_DIR)/package.mk
 
