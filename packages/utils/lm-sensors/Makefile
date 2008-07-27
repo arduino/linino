@@ -63,7 +63,6 @@ endef
 define Package/lm-sensors/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/prog/sensors/sensors $(1)/usr/sbin/
-	$(CP) $(PKG_BUILD_DIR)/prog/detect/i2cdetect $(1)/usr/sbin/
 	$(CP) $(PKG_BUILD_DIR)/prog/detect/sensors-detect $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) files/sensors.conf $(1)/etc/sensors.conf
