@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=babel
-PKG_VERSION:=0.14
+PKG_VERSION:=0.15
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/
-PKG_MD5SUM:=d850a0e5044acb64038205197503937e
+PKG_MD5SUM:=510da09a471bba78bb8178810094e3de
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,6 +36,10 @@ define Package/babel/description
  never counting to infinity.
 endef
 
+define Package/babel/conffiles
+/etc/babel.conf
+endef
+
 MAKE_FLAGS += \
 	CC="$(TARGET_CC)" \
 	CFLAGS="$(TARGET_CFLAGS)" \
@@ -43,6 +47,8 @@ MAKE_FLAGS += \
 define Package/babel/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/babel $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_CONF) ./files/babel.conf $(1)/etc/
 endef
 
 $(eval $(call BuildPackage,babel))
