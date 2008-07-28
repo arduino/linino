@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/xmail
   SECTION:=mail
   CATEGORY:=Mail
-  DEPENDS:=+uclibcxx +libopenssl
+  DEPENDS:=+uclibcxx +libopenssl +libpthread
   TITLE:=advanced, fast and reliable ESMTP/POP3 mail server
   URL:=http://www.xmailserver.org/
 endef
@@ -32,10 +32,6 @@ define Package/xmail/description
  multiple domains, virtual users and spam protection.
 endef
 
-define Build/Configure
-	$(CP) ./files/SysMachine.h $(PKG_BUILD_DIR)/
-endef
-
 define Build/Compile
 	CFLAGS="$(TARGET_CFLAGS)" \
 	$(MAKE) -C $(PKG_BUILD_DIR) -f Makefile.lnx \
@@ -44,13 +40,18 @@ define Build/Compile
 		CPPFLAGS="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++" \
 		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -lcrypto -lssl -luClibc++ -ldl -lm -lpthread" \
 		all
+	tar -cjf $(PKG_BUILD_DIR)/MailRoot.tar.bz2 -C $(PKG_BUILD_DIR)/MailRoot --exclude bin .
 endef
 
 define Package/xmail/install
 	$(INSTALL_DIR) $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/* $(1)/usr/bin/
-	$(INSTALL_DIR) $(1)/var/MailRoot/
-	$(CP) $(PKG_BUILD_DIR)/MailRoot $(1)/var/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/MailRoot.tar.bz2 $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/xmail.config $(1)/etc/config/xmail
+	$(INSTALL_DIR) $(1)/etc/init.d/
+	$(INSTALL_BIN) ./files/xmail.init $(1)/etc/init.d/xmail
 endef
 
 $(eval $(call BuildPackage,xmail))
