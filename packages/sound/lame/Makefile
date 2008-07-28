@@ -9,11 +9,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lame
-PKG_VERSION:=3.97
+PKG_VERSION:=398
 PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/lame
-PKG_MD5SUM:=90a4acbb730d150dfe80de145126eef7
+PKG_MD5SUM:=f44b9f8e1b5d8835d0a77f9cc9cedd1c
 
 include $(INCLUDE_DIR)/package.mk
 
