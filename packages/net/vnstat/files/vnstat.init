@@ -1,0 +1,56 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2008 OpenWrt.org
+
+START=99
+LIB_D=/var/lib/vnstat
+WWW_D=/www/vnstat
+
+system_config() {
+	local cfg="$1"
+
+	config_get hostname "$cfg" hostname
+	hostname="${hostname:-OpenWrt}"
+}
+
+do_download() {
+	include /lib/network
+	scan_interfaces
+
+	local cfg="$1"
+
+	config_get ifname "$cfg" "ifname"
+	[ -n "$ifname" ] || return 0
+	[ -e $LIB_D/$ifname ] && return 0
+
+	config_get_bool enabled "$cfg" "enabled" "1"
+	if [ "$enabled" -gt 0 ]; then
+		config_get remote_path "$cfg" "remote_path"
+		[ -n "$remote_path" ] || return 0
+		config_get remote_host "$cfg" "remote_host"
+		[ -n "$remote_host" ] || return 0
+
+		[ -x /usr/bin/wget ] && download_command="wget http://$remote_host/$remote_path/${hostname}_$ifname -O $LIB_D/$ifname"
+		[ -n "$download_command" ] || return 0
+
+		while [ ! -e $LIB_D/$ifname ]; do
+			$download_command 2>/dev/null
+			[ -e $LIB_D/$ifname ] && {
+				logger -s -t "vnstat" "Successfully downloaded ${ifname}'s vnStat database backup"
+				[ -x /bin/ln ] && ln -sf $LIB_D/$ifname $WWW_D/$ifname
+				return 0
+			}
+			sleep 30
+		done
+	fi
+}
+
+start() {
+	[ -d $LIB_D ] || mkdir -p $LIB_D
+	[ -d $WWW_D ] || mkdir -p $WWW_D
+
+	config_load system
+	config_foreach system_config system
+
+	config_load vnstat
+	config_foreach do_download interface
+}

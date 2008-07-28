@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vnstat
-PKG_VERSION:=1.4
+PKG_VERSION:=1.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://humdi.net/vnstat
-PKG_MD5SUM:=9184f79b5e60499bc059f670032291e5
+PKG_MD5SUM:=ccaffe8e70d47e0cf2f25e52daa25712
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -34,6 +34,10 @@ define Package/vnstat/description
 	so vnStat can be used without root permissions.
 endef
 
+define Package/vnstat/conffiles
+/etc/config/vnstat
+endef
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
@@ -43,6 +47,26 @@ endef
 define Package/vnstat/install	
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/vnstat $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/vnstat.conf $(1)/etc/config/vnstat
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/vnstat.init $(1)/etc/init.d/vnstat
+endef
+
+define Package/vnstat/postinst
+#!/bin/sh
+BIN=$${IPKG_INSTROOT}/usr/bin/vnstat
+CRONTAB=$${IPKG_INSTROOT}/etc/crontabs/root
+LIB_D=$${IPKG_INSTROOT}/var/lib/vnstat
+mkdir -p $${IPKG_INSTROOT}/etc/crontabs/
+[ -d $$LIB_D ] || mkdir -p $$LIB_D
+IFACE_WAN=$$(uci get network.wan.ifname)
+if [ -n $$IFACE_WAN ]; then
+	[ -e $$LIB_D/$$IFACE_WAN ] || ( [ -x $$BIN ] && $$BIN -u -i $$IFACE_WAN )
+fi
+grep -q "$$BIN -u" $$CRONTAB 2>/dev/null
+[ $$? -ne 0 ] && echo "0-55/5 *   * * *   root    if [ -x $$BIN ] && [ \`ls $$LIB_D | wc -l\` -ge 1 ]; then $$BIN -u; fi" >> $$CRONTAB
+true
 endef
 
 $(eval $(call BuildPackage,vnstat))
