@@ -36,7 +36,7 @@ define Build/Configure
 endef
 
 MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR)" \
+	CFLAGS="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR) -fPIC" \
 	LDIR=$(PKG_BUILD_DIR) \
 	PREFIX="$(PKG_INSTALL_DIR)/usr" \
 	all install
