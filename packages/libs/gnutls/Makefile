@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnutls
 PKG_VERSION:=2.4.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.mirrors.wiretapped.net/security/network-security/gnutls/ \
@@ -70,7 +70,7 @@ endef
 define Package/libgnutls
 $(call Package/gnutls/Default)
  TITLE+= (library)
- DEPENDS+= +zlib +libtasn1 +libgcrypt +libgpg-error
+ DEPENDS+= +zlib +libgcrypt +libgpg-error
 endef
 
 define Package/libgnutls/description
@@ -106,10 +106,11 @@ CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \
 	--disable-openpgp-authentication \
+	--with-included-libcfg \
+	--with-included-libtasn1 \
 	--with-libgcrypt-prefix="$(STAGING_DIR)/usr" \
 	--with-libreadline-prefix="$(STAGING_DIR)/usr" \
 	--with-libz-prefix="$(STAGING_DIR)/usr" \
-	--with-libtasn1-prefix="$(STAGING_DIR)/usr"
 
 # XXX: AM_CFLAGS duplicates with CFLAGS
 MAKE_ARGS:= \
