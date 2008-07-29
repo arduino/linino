@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,15 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=radiusclient-ng
-PKG_VERSION:=0.5.2
+PKG_VERSION:=0.5.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.berlios.de/radiusclient-ng/
-PKG_MD5SUM:=c54eb70e964bdd22dd44b39a9b4df8ca
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_MD5SUM:=6fb7d4d0aefafaee7385831ac46a8e9c
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -25,19 +22,22 @@ define Package/radiusclient-ng/Default
   URL:=http://developer.berlios.de/projects/radiusclient-ng/
 endef
   
+define Package/radiusclient-ng/Default/description
+ Purpose of this project is to build a portable, easy-to-use and 
+ standard compliant library suitable for developing free and commercial 
+ software that need support for RADIUS protocol (RFCs 2128 and 2139).
+endef
+
 define Package/libradiusclient-ng
-  $(call Package/radiusclient-ng/Default)
+$(call Package/radiusclient-ng/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=RADIUS client library
 endef
 
 define Package/libradiusclient-ng/description
-=
-	Purpose of this project is to build a portable, easy-to-use and standard 
-	compliant library suitable for developing free and commercial software 
-	that need support for RADIUS protocol (RFCs 2128 and 2139).	
-	This package contains shared libraries, needed by other programs.
+$(call Package/radiusclient-ng/Default/description)
+ This package contains shared libraries, needed by other programs.
 endef
 
 define Package/libradiusclient-ng/conffiles
@@ -56,19 +56,13 @@ define Package/radiusclient-ng
 endef
 
 define Package/radiusclient-ng/description
-=
-	Purpose of this project is to build a portable, easy-to-use and standard 
-	compliant library suitable for developing free and commercial software 
-	that need support for RADIUS protocol (RFCs 2128 and 2139).	
-	This package contains a RADIUS client.
+$(call Package/radiusclient-ng/Default/description)
+ This package contains a RADIUS client.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
