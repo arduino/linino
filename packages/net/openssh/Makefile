@@ -29,7 +29,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openssh-client
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +zlib +libssp
+  DEPENDS:=+libopenssl +zlib
   TITLE:=OpenSSH client
   URL:=http://www.openssh.com/
   SUBMENU:=SSH
@@ -59,7 +59,7 @@ endef
 define Package/openssh-server
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +zlib +libssp
+  DEPENDS:=+libopenssl +zlib
   TITLE:=OpenSSH server
   URL:=http://www.openssh.com/
   SUBMENU:=SSH
@@ -136,6 +136,7 @@ define Build/Configure
 			--disable-utmpx \
 			--disable-wtmp \
 			--disable-wtmpx \
+			--without-stackprotect \
 			--without-bsd-auth \
 			--without-kerberos5 \
 			--without-pam \
