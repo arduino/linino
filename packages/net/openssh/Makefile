@@ -99,6 +99,27 @@ define Package/openssh-sftp-server/description
 OpenSSH SFTP server.
 endef
 
+CONFIGURE_OPTS+= \
+	--enable-shared \
+	--disable-static \
+	--disable-debug \
+	--disable-strip \
+	--disable-etc-default-login \
+	--disable-lastlog \
+	--disable-utmp \
+	--disable-utmpx \
+	--disable-wtmp \
+	--disable-wtmpx \
+	--without-bsd-auth \
+	--without-kerberos5 \
+	--without-pam \
+	--without-x
+
+ifneq ($(CONFIG_SSP_SUPPORT),y)
+CONFIGURE_OPTS+= \
+	--without-stackprotect
+endif
+	
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
 		$(TARGET_CONFIGURE_OPTS) \
@@ -126,21 +147,7 @@ define Build/Configure
 			--sysconfdir=/etc/ssh \
 			$(DISABLE_LARGEFILE) \
 			$(DISABLE_NLS) \
-			--enable-shared \
-			--disable-static \
-			--disable-debug \
-			--disable-strip \
-			--disable-etc-default-login \
-			--disable-lastlog \
-			--disable-utmp \
-			--disable-utmpx \
-			--disable-wtmp \
-			--disable-wtmpx \
-			--without-stackprotect \
-			--without-bsd-auth \
-			--without-kerberos5 \
-			--without-pam \
-			--without-x \
+			$(CONFIGURE_OPTS) \
 	);
 endef
 

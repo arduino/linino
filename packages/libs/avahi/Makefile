@@ -103,7 +103,6 @@ endef
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \
-	--disable-stack-protector \
 	--disable-glib \
 	--disable-gobject \
 	--disable-qt3 \
@@ -134,7 +133,12 @@ CONFIGURE_ARGS+= \
 	--with-avahi-user=nobody \
 	--with-avahi-group=nogroup \
 	--with-autoipd-user=nobody \
-	--with-autoipd-group=nogroup \
+	--with-autoipd-group=nogroup
+
+ifneq ($(CONFIG_SSP_SUPPORT),y)
+CONFIGURE_ARGS+= \
+	--disable-stack-protector
+endif
 
 CONFIGURE_VARS+= \
 	CFLAGS="$$$$CFLAGS -DNDEBUG" \
