@@ -11,14 +11,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=avahi
 PKG_VERSION:=0.6.23
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://avahi.org/download/
 PKG_MD5SUM:=aab1a304851d8145ea5f6a85c10af9e9
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 PKG_BUILD_DEPENDS:=libexpat libdaemon libgdbm
 
@@ -31,6 +28,16 @@ define Package/avahi/Default
   URL:=http://www.avahi.org/
 endef
 
+define Package/avahi/Default/description
+ An mDNS/DNS-SD (aka RendezVous/Bonjour/ZeroConf) implementation (library).
+ Avahi is a system which facilitates service discovery on a local network --
+ this means that you can plug your laptop or computer into a network and
+ instantly be able to view other people who you can chat with, find printers
+ to print to or find files being shared. This kind of technology is already
+ found in MacOS X (branded 'Rendezvous', 'Bonjour' and sometimes 'ZeroConf')
+ and is very convenient.
+endef
+
 define Package/libavahi
   $(call Package/avahi/Default)
   SECTION:=libs
@@ -40,14 +47,9 @@ define Package/libavahi
 endef
 
 define Package/libavahi/description
-	An mDNS/DNS-SD (aka RendezVous/Bonjour/ZeroConf) implementation (library).
-	Avahi is a system which facilitates service discovery on a local network --
-	this means that you can plug your laptop or computer into a network and
-	instantly be able to view other people who you can chat with, find printers
-	to print to or find files being shared. This kind of technology is already
-	found in MacOS X (branded 'Rendezvous', 'Bonjour' and sometimes 'ZeroConf')
-	and is very convenient.
-	This package contains the mDNS/DNS-SD shared libraries, used by other programs.
+$(call Package/avahi/Default/description) 
+ .
+ This package contains the mDNS/DNS-SD shared libraries, used by other programs.
 endef
 
 define Package/avahi-autoipd
@@ -57,19 +59,13 @@ define Package/avahi-autoipd
 endef
 
 define Package/avahi-autoipd/description
-	An mDNS/DNS-SD (aka RendezVous/Bonjour/ZeroConf) implementation (library).
-	Avahi is a system which facilitates service discovery on a local network --
-	this means that you can plug your laptop or computer into a network and
-	instantly be able to view other people who you can chat with, find printers
-	to print to or find files being shared. This kind of technology is already
-	found in MacOS X (branded 'Rendezvous', 'Bonjour' and sometimes 'ZeroConf')
-	and is very convenient.
-	This package implements IPv4LL, "Dynamic Configuration of
-	IPv4 Link-Local Addresses" (IETF RFC3927), a protocol for
-	automatic IP address configuration from the link-local
-	169.254.0.0/16 range without the need for a central server. It
-	is primarily intended to be used in ad-hoc networks which lack a
-	DHCP server.
+$(call Package/avahi/Default/description)
+ .
+ This package implements IPv4LL, "Dynamic Configuration of IPv4 Link-Local 
+ Addresses" (IETF RFC3927), a protocol for automatic IP address configuration 
+ from the link-local 169.254.0.0/16 range without the need for a central 
+ server. It is primarily intended to be used in ad-hoc networks which lack a
+ DHCP server.
 endef
 
 define Package/avahi-daemon
@@ -79,14 +75,9 @@ define Package/avahi-daemon
 endef
 
 define Package/avahi-daemon/description
-	An mDNS/DNS-SD (aka RendezVous/Bonjour/ZeroConf) implementation (library).
-	Avahi is a system which facilitates service discovery on a local network --
-	this means that you can plug your laptop or computer into a network and
-	instantly be able to view other people who you can chat with, find printers
-	to print to or find files being shared. This kind of technology is already
-	found in MacOS X (branded 'Rendezvous', 'Bonjour' and sometimes 'ZeroConf')
-	and is very convenient.
-	This package contains an mDNS/DNS-SD daemon.
+$(call Package/avahi/Default/description)
+ .
+ This package contains an mDNS/DNS-SD daemon.
 endef
 
 define Package/avahi-daemon/conffiles
@@ -102,48 +93,51 @@ define Package/avahi-dnsconfd
 endef
 
 define Package/avahi-dnsconfd/description
-	This package contains an Unicast DNS server from mDNS/DNS-SD configuration
-	daemon, which may be used to configure conventional DNS servers using mDNS
-	in a DHCP-like fashion. Especially useful on IPv6.
+$(call Package/avahi/Default/description)
+ .
+ This package contains an Unicast DNS server from mDNS/DNS-SD configuration
+ daemon, which may be used to configure conventional DNS servers using mDNS
+ in a DHCP-like fashion. Especially useful on IPv6.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--disable-glib \
-		--disable-gobject \
-		--disable-qt3 \
-		--disable-qt4 \
-		--disable-gtk \
-		--disable-dbus \
-		--with-xml=expat \
-		--disable-dbm \
-		--enable-gdbm \
-		--enable-libdaemon \
-		--disable-python \
-		--disable-pygtk \
-		--disable-python-dbus \
-		--disable-mono \
-		--disable-monodoc \
-		--disable-doxygen-doc \
-		--disable-doxygen-dot \
-		--disable-doxygen-man \
-		--disable-doxygen-rtf \
-		--disable-doxygen-xml \
-		--disable-doxygen-chm \
-		--disable-doxygen-chi \
-		--disable-doxygen-html \
-		--disable-doxygen-ps \
-		--disable-doxygen-pdf \
-		--disable-xmltoman \
-		--with-distro=none \
-		--with-avahi-user=nobody \
-		--with-avahi-group=nogroup \
-		, \
-		CFLAGS="$$$$CFLAGS -DNDEBUG" \
-	)
-endef
+CONFIGURE_ARGS+= \
+	--enable-shared \
+	--enable-static \
+	--disable-stack-protector \
+	--disable-glib \
+	--disable-gobject \
+	--disable-qt3 \
+	--disable-qt4 \
+	--disable-gtk \
+	--disable-dbus \
+	--with-xml=expat \
+	--disable-dbm \
+	--enable-gdbm \
+	--enable-libdaemon \
+	--disable-python \
+	--disable-pygtk \
+	--disable-python-dbus \
+	--disable-mono \
+	--disable-monodoc \
+	--disable-doxygen-doc \
+	--disable-doxygen-dot \
+	--disable-doxygen-man \
+	--disable-doxygen-rtf \
+	--disable-doxygen-xml \
+	--disable-doxygen-chm \
+	--disable-doxygen-chi \
+	--disable-doxygen-html \
+	--disable-doxygen-ps \
+	--disable-doxygen-pdf \
+	--disable-xmltoman \
+	--with-distro=none \
+	--with-avahi-user=nobody \
+	--with-avahi-group=nogroup \
+	--with-autoipd-user=nobody \
+	--with-autoipd-group=nogroup \
+
+CONFIGURE_VARS+= \
+	CFLAGS="$$$$CFLAGS -DNDEBUG" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -195,3 +189,8 @@ $(eval $(call BuildPackage,libavahi))
 $(eval $(call BuildPackage,avahi-autoipd))
 $(eval $(call BuildPackage,avahi-daemon))
 $(eval $(call BuildPackage,avahi-dnsconfd))
+
+$(eval $(call RequireCommand,intltool-update, \
+	$(PKG_NAME) requires intltool >= 0.35.0 \
+))
+
