@@ -18,12 +18,17 @@ PKG_MD5SUM:=8918dcf7428cd119d0c8275765ff2833
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/libupnp
+define Package/libupnp/Default
   SECTION:=libs
   CATEGORY:=Libraries
+  URL:=http://upnp.sourceforge.net/
+endef
+
+define Package/libupnp
+  $(call Package/libupnp/Default)
   DEPENDS:=+libpthread
-  TITLE:=A Portable Open Source UPnP Development Kit
-  URL:=http://pupnp.sourceforge.net/
+  TITLE:=UPnP SDK library
+  MENU:=1
 endef
 
 define Package/libupnp/description
@@ -32,6 +37,17 @@ define Package/libupnp/description
 	bridges that are compliant with Version 1.0 of the  Universal Plug and
 	Play Device Architecture Specification and support several operating
 	systems like Linux, *BSD, Solaris and others.
+endef
+
+define Package/libupnp-sample
+  $(call Package/libupnp/Default)
+  DEPENDS:=libupnp
+  TITLE:=UPnP sample applications
+endef
+
+define Package/libupnp-sample/description
+	TVcontrolpoint & tvdevice sample applications
+	run inside /etc/upnp-tvdevice/
 endef
 
 define Build/Configure
@@ -46,6 +62,14 @@ define Build/Compile
 		CCOPT="$(TARGET_CFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
+	$(MAKE) -C $(PKG_BUILD_DIR)/upnp/sample/ upnp_tv_device upnp_tv_ctrlpt
+endef
+
+define Build/Compile/libupnp-sample
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CCOPT="$(TARGET_CFLAGS)" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		check
 endef
 
 define Build/InstallDev
@@ -62,4 +86,13 @@ define Package/libupnp/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{ixml,threadutil,upnp}.so.* $(1)/usr/lib/
 endef
 
+define Package/libupnp-sample/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/upnp_tv_device $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/upnp_tv_ctrlpt $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/etc/upnp-tvdevice/web
+	$(CP) $(PKG_BUILD_DIR)/upnp/sample/web/* $(1)/etc/upnp-tvdevice
+endef
+
 $(eval $(call BuildPackage,libupnp))
+$(eval $(call BuildPackage,libupnp-sample))
