@@ -20,6 +20,11 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
+# workaround for fedora sdcc naming changes
+ifneq ($(wildcard /usr/libexec/sdcc),)
+  export PATH:=$(PATH):/usr/libexec
+endif
+
 define Package/firmwarehotplug
   SECTION:=utils
   CATEGORY:=Utilities
