@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=batmand-adv
-PKG_REV:=1057
+PKG_REV:=1103
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 PKG_BRANCH:=batman-adv-userspace
