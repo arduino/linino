@@ -18,12 +18,12 @@ include $(INCLUDE_DIR)/package.mk
 include ../perl/perlmod.mk
 
 define Package/perl-compress-bzip2
-SUBMENU:=Perl
-SECTION:=lang
-CATEGORY:=Languages
-TITLE:=Perl interface to bzip2 compression library
-URL:=http://search.cpan.org/~arjay/Compress-Bzip2-2.09/
-DEPENDS:=perl
+  SUBMENU:=Perl
+  SECTION:=lang
+  CATEGORY:=Languages
+  TITLE:=Perl interface to bzip2 compression library
+  URL:=http://search.cpan.org/~arjay/Compress-Bzip2-2.09/
+  DEPENDS:=perl +bzip2
 endef
 
 define Build/Configure
