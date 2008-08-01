@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006,2007 OpenWrt.org
+#
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -24,11 +24,12 @@ define Package/php4/Default
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=PHP4 Hypertext preprocessor
+  DEPENDS:=@!TARGET_ixp4xx
   URL:=http://www.php.net/
 endef
 
 define Package/php4/Default/description
- PHP is a widely-used general-purpose scripting language that is especially 
+ PHP is a widely-used general-purpose scripting language that is especially
  suited for Web development and can be embedded into HTML.
 endef
 
@@ -39,7 +40,7 @@ endef
 
 define Package/php4/description
 $(call Package/php4/Default/description)
- This package contains only the PHP config file. You must actually choose 
+ This package contains only the PHP config file. You must actually choose
  your PHP flavour (cli, cgi or fastcgi).
 endef
 
