@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -182,5 +182,9 @@ $(eval $(Build/perl))
 
 $(eval $(call BuildPackage,microperl))
 $(eval $(call BuildPackage,perl))
+
+$(eval $(call RequireCommand,rsync, \
+	$(PKG_NAME) requires rsync installed on the host-system. \
+))
 
 -include perlbase.mk
