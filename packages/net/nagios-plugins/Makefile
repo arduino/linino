@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -24,7 +24,7 @@ define Package/nagios-plugins
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Monitoring
-  DEPENDS:=+uclibcxx
+  DEPENDS:=+uclibcxx +libpq
   TITLE:=plugins for Nagios checks
   URL:=http://nagiosplug.sourceforge.net/
 endef
