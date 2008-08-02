@@ -13,6 +13,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.14
 PKG_MD5SUM:=ed4d9e653ea4ed2b68ceb28341894779
+PKG_BUILD_DEP:=python
 
 EXTRA_LDFLAGS=-L$(STAGING_DIR)/usr/lib/libintl/lib/ -L$(STAGING_DIR)/usr/lib/libiconv/lib/
 
