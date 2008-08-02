@@ -25,7 +25,7 @@ define Package/gnome-python-desktop
   CATEGORY:=Languages
   TITLE:=Gnome Python Bindings
   URL:=http://ftp.gnome.org/
-  DEPENDS:=+libwnck +python-gtk
+  DEPENDS:=+libwnck +python-gtk @DISPLAY_SUPPORT
 endef
 
 define Package/gnome-python-desktop/description

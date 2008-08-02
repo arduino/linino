@@ -25,7 +25,7 @@ define Package/pycairo
   CATEGORY:=Languages
   TITLE:=Cairo bindings to python
   URL:=http://www.cairographics.org/
-  DEPENDS:=python +cairo
+  DEPENDS:=python +cairo @DISPLAY_SUPPORT
 endef
 
 define Package/pycairo/description
