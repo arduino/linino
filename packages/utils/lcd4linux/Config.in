@@ -67,6 +67,7 @@ config LCD4LINUX_DRV_Noritake
 config LCD4LINUX_DRV_NULL
 	bool
 	prompt "NULL"
+	default y
 
 config LCD4LINUX_DRV_PNG
 	bool

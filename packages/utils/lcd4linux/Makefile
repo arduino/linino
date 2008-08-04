@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -11,7 +11,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=lcd4linux
 PKG_REV:=877
 PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://ssl.bulix.org/svn/lcd4linux/trunk/
@@ -29,6 +29,7 @@ define Package/lcd4linux
   DEPENDS:=+libusb
   TITLE:=LCD display utility
   URL:=http://lcd4linux.bulix.org/
+  MENU:=1
 endef
 
 define Package/lcd4linux/config
@@ -178,7 +179,14 @@ ifneq ($(CONFIG_LCD4LINUX_PLUGIN_mysql),)
 PKG_BUILD_DEPENDS += libmysqlclient
 endif
 
-
+# XXX: lcd4linux needs at least one driver and one plugin, if none are selected, build'em all
+ifeq ($(strip $(LCD4LINUX_CONFIGURE_DRIVERS)),)
+  LCD4LINUX_CONFIGURE_DRIVERS:=all
+endif  
+ifeq ($(strip $(LCD4LINUX_CONFIGURE_PLUGINS)),)
+  LCD4LINUX_CONFIGURE_PLUGINS:=all
+endif  
+  
 ## TODO PYTHON PLUGIN, DEPENDS on ver >= '2.1.0'
 
 
@@ -188,13 +196,13 @@ EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib -
 TARGET_CONFIGURE_OPTS+=\
 	CC="$(TARGET_CC) $(EXTRA_CFLAGS) $(EXTRA_LDFLAGS)"
 
-
 CONFIGURE_ARGS += \
 	--without-x \
 	--without-python \
-	--with-drivers="$(LCD4LINUX_CONFIGURE_DRIVERS)" \
-	--with-plugins="$(LCD4LINUX_CONFIGURE_PLUGINS)" \
 	--disable-rpath \
+	--with-drivers="$(strip $(LCD4LINUX_CONFIGURE_DRIVERS))" \
+	--with-plugins="$(strip $(LCD4LINUX_CONFIGURE_PLUGINS))" \
+
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
