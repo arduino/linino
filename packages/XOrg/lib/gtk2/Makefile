@@ -27,7 +27,7 @@ define Package/gtk2
   CATEGORY:=Xorg
   SUBMENU:=framework
   TITLE:=GTK+ 2.10.14 package
-  DEPENDS:=+cairo +pango +libjpeg +atk +libtiff +pixman @DISPLAY_SUPPORT
+  DEPENDS:=+cairo +pango +libjpeg +atk +libtiff +pixman +libX11
 endef
 
 define Build/Compile
