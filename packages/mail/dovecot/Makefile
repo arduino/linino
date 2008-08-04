@@ -103,7 +103,3 @@ endef
 
 
 $(eval $(call BuildPackage,dovecot))
-
-$(eval $(call RequireCommand,autoconf, \
-	$(PKG_NAME) requires GNU autoconf. \
-))

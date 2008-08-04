@@ -90,8 +90,3 @@ define Package/elinks/install
 endef
 
 $(eval $(call BuildPackage,elinks))
-
-$(eval $(call RequireCommand,autoconf, \
-	$(PKG_NAME) requires GNU autoconf. \
-))
-

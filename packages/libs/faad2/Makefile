@@ -93,7 +93,3 @@ endef
 
 $(eval $(call BuildPackage,faad2))
 $(eval $(call BuildPackage,libfaad2))
-
-$(eval $(call RequireCommand,autoconf, \
-	$(PKG_NAME) requires GNU autoconf. \
-))
