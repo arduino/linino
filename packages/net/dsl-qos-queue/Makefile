@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/dsl-qos-queue
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+iptables +kmod-ipt-queue @!LINUX_2_6_25
+  DEPENDS:=+iptables +kmod-ipt-queue @!LINUX_2_6_25 @!LINUX_2_6_26
   TITLE:=ADSL/ATM Bandwith management
 endef
 
