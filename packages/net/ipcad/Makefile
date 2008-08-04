@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ipcad
 PKG_VERSION:=3.7.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/ipcad
@@ -36,6 +36,7 @@ define Package/ipcad/conffiles/
 /etc/ipcad.conf
 endef
 
+# XXX: don't detect/use netfilter ipq capture
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); touch \
 		cfglex.c \
@@ -50,6 +51,7 @@ define Build/Configure
 		, \
 		ac_cv_func_getifaddrs=no \
 		ac_cv_header_ifaddrs_h=no \
+		ac_cv_header_linux_netfilter_ipv4_ip_queue_h=no \
 	)
 endef
 
