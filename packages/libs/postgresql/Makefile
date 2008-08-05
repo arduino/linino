@@ -152,6 +152,7 @@ define Build/Configure
 			--without-tk \
 			--with-zlib="yes" \
 			--enable-depend \
+			$(if $(CONFIG_TARGET_avr32),--disable-spinlocks) \
 	);
 	$(SED) 's@ECPG = ../../preproc/ecpg@ECPG = ../../preproc/ecpg.host@' $(PKG_BUILD_DIR)/src/interfaces/ecpg/test/Makefile.regress
 	$(SED) 's@\./zic -d@./zic.host -d@' $(PKG_BUILD_DIR)/src/timezone/Makefile
