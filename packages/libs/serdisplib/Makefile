@@ -22,6 +22,7 @@ define Package/serdisplib
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=A display control library
+  DEPENDS:=@!LINUX_2_4
   URL:=http://serdisplib.sourceforge.net/
 endef
 
