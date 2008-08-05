@@ -44,8 +44,8 @@ define Build/Template
 $(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++" \
-		LFLAGS="$(TARGET_LDFLAGS) -L. -nodefaultlibs $(4) -lz -luClibc++ -lm -lpthread" \
+		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -nostdinc++" \
+		LFLAGS="$(TARGET_LDFLAGS) -L. -nodefaultlibs $(4) -lz -luClibc++ -lm -lpthread -lgcc" \
 		$(3)
 	touch $$@
 
