@@ -16,9 +16,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
 PKG_MD5SUM:=189fb792470c966834d5204705ebee83
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mvprelay

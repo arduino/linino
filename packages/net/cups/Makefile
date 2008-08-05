@@ -19,9 +19,6 @@ PKG_SOURCE_URL:= \
 	ftp://ftp3.easysw.com/pub/cups/$(PKG_VERSION)
 PKG_MD5SUM:=4ce09b1dce09b6b9398af0daae9adf63
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 PKG_BUILD_DEPENDS:=zlib
 
 include $(INCLUDE_DIR)/package.mk

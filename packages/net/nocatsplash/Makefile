@@ -17,7 +17,6 @@ PKG_SOURCE_URL:=http://wifi.rulez.org/~josephus/
 PKG_MD5SUM:=e0fcc0effe52e63bc31070d16d0b4a81
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/NoCatSplash-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 

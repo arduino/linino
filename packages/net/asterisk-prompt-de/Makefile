@@ -17,7 +17,6 @@ PKG_SOURCE_URL:=http://www.stadt-pforzheim.de/asterisk/dateien/
 PKG_MD5SUM:=d263b0b746acf84d7519ff8fb6699dc8
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/ast_prompts_de_v2_0
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 

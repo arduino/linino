@@ -17,7 +17,6 @@ PKG_SOURCE_URL:=http://bitchx.org/files/source/
 PKG_MD5SUM:=611d2dda222f00c10140236f4c331572
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/BitchX
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 PKG_BUILD_DEPENDS:=libncurses
 

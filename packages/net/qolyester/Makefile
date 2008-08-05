@@ -16,8 +16,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
 PKG_MD5SUM:=9c1cf1868e085f47e135a86945d93ce0
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 PKG_BUILD_DEPENDS:=libnotimpl
 
 include $(INCLUDE_DIR)/package.mk

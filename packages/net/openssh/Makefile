@@ -20,8 +20,6 @@ PKG_SOURCE_URL:=ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/ \
 		ftp://ftp.de.openbsd.org/pub/unix/OpenBSD/OpenSSH/portable/
 PKG_MD5SUM:=1f1dfaa775f33dd3328169de9bdc292a
 
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 PKG_BUILD_DEPENDS:=libopenssl
 
 include $(INCLUDE_DIR)/package.mk

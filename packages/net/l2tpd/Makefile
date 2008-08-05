@@ -18,7 +18,6 @@ PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/l/l2tpd
 PKG_MD5SUM:=3f2707b6e16a8cb72e7bf64f574202fa
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_UPSTREAM_VERSION).orig
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 

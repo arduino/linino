@@ -17,7 +17,6 @@ PKG_SOURCE_URL:=http://znerol.ch/files
 PKG_MD5SUM:=af169751efc7d87d500716a48d74ddc5
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 

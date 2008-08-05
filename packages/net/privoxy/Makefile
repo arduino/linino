@@ -17,7 +17,6 @@ PKG_SOURCE_URL:=@SF/ijbswa
 PKG_MD5SUM:=252c0e085218fb930c4bc7563e9cedd9
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-stable
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 

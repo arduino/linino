@@ -17,7 +17,6 @@ PKG_SOURCE_URL:=http://www.monkey.org/~dugsong/dsniff/beta
 PKG_MD5SUM:=2f761fa3475682a7512b0b43568ee7d6
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-2.4
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 

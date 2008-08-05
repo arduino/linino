@@ -18,9 +18,6 @@ PKG_SOURCE_URL:=http://www.openwall.com/scanlogd/ \
 	http://distro.ibiblio.org/pub/linux/distributions/openwall/
 PKG_MD5SUM:=7b8187ea718ebe47f22805b921b909ab
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 PKG_INIT_PRIO:=60
 
 include $(INCLUDE_DIR)/package.mk

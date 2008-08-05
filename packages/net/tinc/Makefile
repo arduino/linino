@@ -18,9 +18,6 @@ PKG_SOURCE_URL:=http://www.tinc-vpn.org/packages \
 	http://www.mirrors.wiretapped.net/security/network-security/tinc/
 PKG_MD5SUM:=1b59583b5bc57806459c81a413fb0cc4
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/tinc

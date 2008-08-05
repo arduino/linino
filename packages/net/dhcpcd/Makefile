@@ -17,9 +17,6 @@ PKG_SOURCE_URL:=http://download.berlios.de/dhcpcd/
 PKG_MD5SUM:=e9100e53f64ca1f9fb0d392c3a623738
 PKG_CAT:=bzcat
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/dhcpcd

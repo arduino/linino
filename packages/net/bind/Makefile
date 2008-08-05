@@ -18,9 +18,6 @@ PKG_SOURCE_URL:= \
 	http://www.mirrorservice.org/sites/ftp.isc.org/isc/bind9/$(PKG_VERSION)
 PKG_MD5SUM:=a4f9dd6d205d24ec89fa4e44d8188197
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/bind/Default

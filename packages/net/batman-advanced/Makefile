@@ -20,7 +20,6 @@ PKG_SOURCE_SUBDIR:=batman-adv-$(PKG_VERSION)
 PKG_SOURCE_URL:=http://downloads.open-mesh.net/svn/batman/trunk/
 PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 PKG_KMOD_BUILD_DIR:=$(PKG_BUILD_DIR)/batman-adv-kernelland/batman-core
 

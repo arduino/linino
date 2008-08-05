@@ -18,9 +18,6 @@ PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/radius/old/ \
 	ftp://ftp.uk.freeradius.org/pub/radius/
 PKG_MD5SUM:=2c29ab90cc30aa3b92fbd78030ccc198
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/freeradius/Default

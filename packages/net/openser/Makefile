@@ -18,9 +18,6 @@ PKG_VARIANT:=
 PKG_SOURCE_URL:=http://openser.org/pub/openser/$(PKG_VERSION)/src
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)$(PKG_VARIANT)_src.tar.gz
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/openser
