@@ -53,6 +53,7 @@ DEFAULT_SUPP += "uclibc.supp"
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		CFLAGS="$(TARGET_CFLAGS)" \
 		all install
 endef
 
