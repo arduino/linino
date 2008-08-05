@@ -16,7 +16,7 @@ define KernelPackage/et131x
   TITLE:=Agere ET131x Gigabit Ethernet driver
   URL:=http://sourceforge.net/projects/et131x
   FILES:=$(PKG_BUILD_DIR)/et131x.$(LINUX_KMOD_SUFFIX)
-  DEPENDS:=@LINUX_2_6
+  DEPENDS:=@LINUX_2_6 @PCI_SUPPORT
   AUTOLOAD:=$(call AutoLoad,70,et131x)
 endef
 
