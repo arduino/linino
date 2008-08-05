@@ -47,6 +47,9 @@ MAKE_FLAGS:= \
 	ARCH_CFLAGS="$(TARGET_CFLAGS)" \
 	CROSS="$(TARGET_CROSS)" \
 	CP="$(CP)" \
+	$(if $(CONFIG_TARGET_avr32),check_as_needed=)
+
+# check_as_needed overrides dependency on libgcc_s
 
 define Build/Configure
 	if [ -f ./files/config.$(UCLIBC_TARGET_ARCH) ]; then \
