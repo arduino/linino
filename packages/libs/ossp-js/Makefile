@@ -42,6 +42,14 @@ $(call Package/js/Default)
  TITLE+= (library)
 endef
 
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--with-dso \
+	--with-editline \
+	--with-file \
+	--without-perl
+
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
 		./configure \
@@ -63,38 +71,7 @@ define Build/Configure
 			--enable-static \
 	);
 	$(MAKE) -C $(PKG_BUILD_DIR) src/jsautocfg.h
-	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="$(TARGET_CPPFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=/usr/lib \
-			--libexecdir=/usr/lib \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc \
-			$(DISABLE_NLS) \
-			$(DISABLE_LARGEFILE) \
-			--enable-shared \
-			--enable-static \
-			--with-dso \
-			--with-editline \
-			--with-file \
-			--without-perl \
-	);
+	$(call Build/Configure/Default)
 endef
 
 define Build/Compile
