@@ -32,6 +32,7 @@ define Package/apcupsd
 endef
 
 define Build/Configure
+	$(CP) $(SCRIPT_DIR)/config.* $(PKG_BUILD_DIR)/autoconf/
 	$(call Build/Configure/Default, \
 		--with-distname=unknown \
 		--sysconfdir=/etc/apcupsd \
