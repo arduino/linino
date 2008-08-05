@@ -17,9 +17,6 @@ PKG_SOURCE_URL:=@SF/mad \
 	ftp://ftp.mars.org/pub/mpeg/
 PKG_MD5SUM:=6814b47ceaa99880c754c5195aa1aac1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/madplay
