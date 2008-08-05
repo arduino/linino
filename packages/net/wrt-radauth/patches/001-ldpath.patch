@@ -6,7 +6,7 @@ diff -urN wrt-radauth/Makefile wrt-radauth.new/Makefile
  
  wrt-radauth: wrt-radauth.o md5.o wireless.o radius.o
 -	$(CC) $(LDFLAGS) -L$(WRT_BUILDROOT)/build_mipsel/root/usr/lib -lshared -lnvram $^ -o $@
-+	$(CC) $(CFLAGS) $(LDFLAGS) -L$(STAGING_DIR)/usr/lib -lshared -lnvram $^ -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -L$(STAGING_DIR)/usr/lib -lnvram $(STAGING_DIR)/usr/lib/libshared.a
  
  
  radius-client: radius-client.o md5.o radius.o
