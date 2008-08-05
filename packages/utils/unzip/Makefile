@@ -16,7 +16,7 @@ PKG_SOURCE:=$(PKG_NAME)552.zip
 PKG_SOURCE_URL:=@SF/infozip
 PKG_MD5SUM:=3d55b4e7375c3d0b81feca52dc0e4d48
 
-PKG_UNPACK:=unzip -d $(PKG_BUILD_DIR)/ $(DL_DIR)/$(PKG_SOURCE)
+PKG_UNPACK=unzip -d $(PKG_BUILD_DIR)/ $(DL_DIR)/$(PKG_SOURCE)
 
 include $(INCLUDE_DIR)/package.mk
 
