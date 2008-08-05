@@ -18,8 +18,6 @@ PKG_SOURCE_URL:=http://v6web.litech.org/radvd/dist \
 		http://download.sourcemage.org/mirror
 PKG_MD5SUM:=9ee449e4b89171432cb9e9100e0b5648
 
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/radvd
