@@ -17,7 +17,6 @@ PKG_SOURCE_URL:=http://ham.zmailer.org/oh2mqk/aprx
 PKG_MD5SUM:=095ec0aa24432196002ae717593bfe5c
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION).$(PKG_RELEASE)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
