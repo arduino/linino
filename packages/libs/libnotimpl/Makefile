@@ -21,8 +21,12 @@ define Package/libnotimpl
   TITLE:=Implements functions missing from uClibc
 endef
 
+ifeq ($(ARCH),x86_64)
+  FPIC:=-fPIC
+endif
+
 define cc
-	$(TARGET_CC) $(TARGET_CFLAGS) -Wall -c src/$(1).c -o $(PKG_BUILD_DIR)/$(1).o
+	$(TARGET_CC) $(TARGET_CFLAGS) $(FPIC) -Wall -c src/$(1).c -o $(PKG_BUILD_DIR)/$(1).o
 endef
 
 define Build/Prepare

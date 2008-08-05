@@ -27,6 +27,10 @@ define Package/libopenh323
   URL:=http://openh323.sourceforge.net/
 endef
 
+ifeq ($(ARCH),x86_64)
+  FPIC:=-fPIC
+endif
+
 CONFIGURE_ARGS += \
 	--enable-minsize \
 	--enable-audio \
@@ -36,8 +40,8 @@ CONFIGURE_VARS += \
 	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti" \
 
 MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CCFLAGS="$(TARGET_CFLAGS)" \
+	CFLAGS="$(TARGET_CFLAGS) $(FPIC)" \
+	CCFLAGS="$(TARGET_CFLAGS) $(FPIC)" \
 	optnoshared
 
 define Build/InstallDev
