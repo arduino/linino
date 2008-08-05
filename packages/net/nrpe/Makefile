@@ -73,6 +73,7 @@ endef
 
 CONFIGURE_ARGS += \
 	--with-ssl="$(STAGING_DIR)/usr" \
+	--with-ssl-lib="$(STAGING_DIR)/usr/lib"
 
 define Package/nrpe/install
 	$(INSTALL_DIR) $(1)/usr/sbin
