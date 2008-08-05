@@ -18,8 +18,6 @@ PKG_SOURCE_URL:=ftp://ftp.sleepycat.com/releases/ \
 	http://downloads.sleepycat.com/
 PKG_MD5SUM:=8b5cff6eb83972afdd8e0b821703c33c
 
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libdb

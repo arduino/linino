@@ -16,9 +16,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.andrew.cmu.edu/pub/cyrus-mail/
 PKG_MD5SUM:=268ead27f4ac39bcfe17d9e38e0f2977
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 PKG_BUILD_DEPENDS:=libopenssl
 PKG_FIXUP = libtool
 

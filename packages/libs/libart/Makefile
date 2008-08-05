@@ -17,7 +17,6 @@ PKG_SOURCE_URL:=http://ftp.gnome.org/pub/gnome/sources/libart_lgpl/2.3
 PKG_MD5SUM:=a2992b830295132dae2bf85d1156e48e
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_lgpl-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk

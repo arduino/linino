@@ -17,7 +17,6 @@ PKG_SOURCE_URL:=http://www.hpl.hp.com/research/linux/atomic_ops/download/
 PKG_MD5SUM:=1b65e48271c81e3fa2d7a9a69bab7504
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libatomic_ops-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 

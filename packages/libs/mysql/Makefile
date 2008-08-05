@@ -20,9 +20,6 @@ PKG_SOURCE_URL:=\
 	http://mysql.holywar.net/Downloads/MySQL-5.0/
 PKG_MD5SUM:=f18153b0239aaa03fc5a751f2d82cb71
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 PKG_BUILD_DEPENDS:=libncurses libreadline
 
 include $(INCLUDE_DIR)/package.mk

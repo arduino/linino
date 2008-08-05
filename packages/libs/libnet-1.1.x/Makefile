@@ -17,7 +17,6 @@ PKG_SOURCE_URL:=http://www.packetfactory.net/libnet/dist/
 PKG_MD5SUM:=be845c41170d72c7db524f3411b50256
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libnet
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 

@@ -17,8 +17,6 @@ PKG_SOURCE:=$(PKG_NAME)-0.8-0.tar.bz2
 PKG_SOURCE_URL:=@SF/ustl
 PKG_MD5SUM:=dd59483c327f1bd1356273bc5ae4dde0
 
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ustl
