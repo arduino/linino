@@ -25,6 +25,7 @@ define Package/libffi-sable
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Foreign Function Interface library (for sablevm)
+  DEPENDS:=@!TARGET_avr32
   URL:=http://sources.redhat.com/libffi/
 endef
 
