@@ -13,7 +13,7 @@ PKG_VERSION:=0.92
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://etherboot.sourceforge.net/p910nd
+PKG_SOURCE_URL:=http://p910nd.sourceforge.net
 PKG_MD5SUM:=d0d0d0500d151c1a49dcb69dd94b8357
 
 include $(INCLUDE_DIR)/package.mk
