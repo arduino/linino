@@ -99,7 +99,10 @@ define Package/openssh-sftp-server/description
 OpenSSH SFTP server.
 endef
 
-CONFIGURE_OPTS+= \
+CONFIGURE_ARGS+= \
+	$(DISABLE_LARGEFILE) \
+	$(DISABLE_NLS) \
+	--sysconfdir=/etc/ssh \
 	--enable-shared \
 	--disable-static \
 	--disable-debug \
@@ -116,40 +119,11 @@ CONFIGURE_OPTS+= \
 	--without-x
 
 ifneq ($(CONFIG_SSP_SUPPORT),y)
-CONFIGURE_OPTS+= \
+CONFIGURE_ARGS += \
 	--without-stackprotect
 endif
-	
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
-		LD="$(TARGET_CC)" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=/usr/lib \
-			--libexecdir=/usr/lib \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc/ssh \
-			$(DISABLE_LARGEFILE) \
-			$(DISABLE_NLS) \
-			$(CONFIGURE_OPTS) \
-	);
-endef
+
+CONFIGURE_VARS += LD="$(TARGET_CC)"
 
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
@@ -160,6 +134,7 @@ define Build/Compile
 		sftp-server
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		STRIP_OPT="" \
 		all install
 endef
 
