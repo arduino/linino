@@ -20,8 +20,6 @@ PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
 
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/n2n
@@ -35,14 +33,15 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-	$(TARGET_CONFIGURE_OPTS) \
-	CFLAGS="$(TARGET_CFLAGS)"
+		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		INSTALL_PROG=":"
 endef
 
 define Package/n2n/install
 	$(INSTALL_DIR) $(1)/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/edge $(1)/sbin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/supernode $(1)/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/edge $(1)/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/supernode $(1)/sbin/
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/n2n.config $(1)/etc/config/n2n
 	$(INSTALL_DIR) $(1)/etc/init.d
