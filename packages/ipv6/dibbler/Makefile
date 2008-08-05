@@ -93,12 +93,12 @@ define Build/Configure
 endef
 
 # link stuff missing from uClibc++ but present in stdc++ statically
-CXX_LIBS:= -nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm
+CXX_LIBS:= -nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm -lgcc
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		PORT_CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -fno-builtin -fno-rtti" \
+		PORT_CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -fno-builtin" \
 		PORT_LDFLAGS="$(TARGET_LDFLAGS)" \
 		DEBUGINFO= \
 		CXXLD="$(TARGET_CC)" \
