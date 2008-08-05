@@ -142,6 +142,7 @@ endif
 
 CONFIGURE_VARS+= \
 	CFLAGS="$$$$CFLAGS -DNDEBUG" \
+	$(if $(CONFIG_LINUX_2_4),ac_cv_header_sys_inotify_h=no)
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
