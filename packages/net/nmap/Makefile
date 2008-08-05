@@ -40,7 +40,7 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
-	LIBS="-nodefaultlibs -luClibc++" \
+	LIBS="-nodefaultlibs -luClibc++ -lgcc" \
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
