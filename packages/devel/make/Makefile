@@ -25,20 +25,7 @@ define Package/make/description
 	The Make package contains a program for compiling packages
 endef
 
-define Build/Configure
-	(cd  $(PKG_BUILD_DIR)/; \
-		$(TARGET_CONFIGURE_OPTS) \
-		$(CONFIGURE_VARS) \
-		$(CONFIGURE_CMD) \
-		$(CONFIGURE_ARGS_XTRA) \
-		$(CONFIGURE_ARGS) \
-	);
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) all
-	$(MAKE) -C $(PKG_BUILD_DIR) install DESTDIR=$(PKG_INSTALL_DIR)
-endef
+MAKE_FLAGS += all install DESTDIR="$(PKG_INSTALL_DIR)"
 
 define Package/make/install
 	$(INSTALL_DIR) $(1)/usr/bin
