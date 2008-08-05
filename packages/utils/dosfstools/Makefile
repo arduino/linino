@@ -16,9 +16,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).src.tar.gz
 PKG_SOURCE_URL:=ftp://ftp.uni-erlangen.de/pub/Linux/LOCAL/dosfstools/
 PKG_MD5SUM:=407d405ade410f7597d364ab5dc8c9f6
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/dosfstools
