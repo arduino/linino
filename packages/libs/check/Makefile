@@ -32,14 +32,8 @@ define Package/check/description
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); \
-		if [ -x $(CONFIGURE_CMD) ]; then \
-			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-			$(CONFIGURE_VARS) \
-			$(CONFIGURE_CMD) \
-			$(CONFIGURE_ARGS) ;\
-		fi \
-	)
+	$(CP) $(SCRIPT_DIR)/config.* $(PKG_BUILD_DIR)/build-aux/
+	$(call Build/Configure/Default)
 endef
 
 define Build/Compile
