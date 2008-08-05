@@ -42,7 +42,7 @@ endef
 
 CONFIGURE_VARS+= \
 	CXXFLAGS="$$$$CXXFLAGS $$$$CPPFLAGS -fno-builtin -fno-rtti" \
-	LIBS="-nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm" \
+	LIBS="-nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm -lgcc" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
