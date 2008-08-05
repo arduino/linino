@@ -38,7 +38,7 @@ endef
 
 define Package/asterisk
 $(call Package/asterisk/Default)
-  DEPENDS:=+libncurses +libpthread
+  DEPENDS:=+libncurses +libpthread @!TARGET_avr32
   TITLE:=Complete Open Source PBX
 endef
 
@@ -49,7 +49,7 @@ endef
 
 define Package/asterisk-mini
 $(call Package/asterisk/Default)
-  DEPENDS:=+libncurses +libpthread
+  DEPENDS:=+libncurses +libpthread @!TARGET_avr32
   PROVIDES:=asterisk
   TITLE:=Minimal Open Source PBX
 endef
