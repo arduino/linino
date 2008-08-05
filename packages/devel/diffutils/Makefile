@@ -28,6 +28,7 @@ define Package/diffutils/description
 endef
 
 define Build/Configure
+	$(CP) $(SCRIPT_DIR)/config.* $(PKG_BUILD_DIR)/config/
 	$(call Build/Configure/Default,ac_cv_func_mempcpy=n)
 endef
 
