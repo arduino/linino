@@ -40,6 +40,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/server \
 		CC="$(TARGET_CC)" \
 		glib12="yes" \
+		without-libsensors="yes" \
 		GLIB12_LIB="-L$(STAGING_DIR)/usr/lib -lglib -lgmodule" \
 		GLIB12_INCLUDE="-I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include"
 endef
