@@ -21,6 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libgsl
   SECTION:=libs
   CATEGORY:=Libraries
+  DEPENDS:=@!TARGET_avr32
   TITLE:=GNU Scientific Library
   URL:=http://www.gnu.org/software/gsl/
 endef
