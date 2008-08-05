@@ -17,10 +17,6 @@ PKG_SOURCE_URL:=@SF/apcupsd
 PKG_MD5SUM:=fd8785e7607d20cefa68dc20e44eebc4
 PKG_CAT:=zcat
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-#PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-PKG_INSTALL_DIR:=$(BUILD_DIR)/apcupsd-ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/apcupsd
