@@ -30,7 +30,7 @@ define Package/numpy/description
 endef
 
 define Build/Compile
-	cd $(PKG_BUILD_DIR) ; $(CONFIGURE_VARS) $(MAKE_VARS) $(STAGING_DIR)/host/bin/python ./setup.py install --prefix="$(PKG_INSTALL_DIR)/usr"
+	cd $(PKG_BUILD_DIR) ; $(CONFIGURE_VARS) $(MAKE_VARS) python2.5 ./setup.py install --prefix="$(PKG_INSTALL_DIR)/usr"
 	sed -i "s/UCS4/UCS2/g" $(PKG_INSTALL_DIR)/usr/lib/python2.5/site-packages/numpy/core/multiarray.so
 endef
 
@@ -40,3 +40,11 @@ define Package/numpy/install
 endef
 
 $(eval $(call BuildPackage,numpy))
+
+define Require/python25-dev
+[ -e /usr/include/python2.5/pyconfig.h ]
+endef
+
+$(eval $(call Require,python25-dev, \
+	Please install Python 2.5 (including development headers and libraries) \
+))
