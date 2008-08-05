@@ -36,6 +36,8 @@ define Package/igmpproxy/conffiles
 /etc/igmpproxy.conf
 endef
 
+TARGET_CFLAGS += -Dlog=igmpproxy_log
+
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR)/src \
 		CC="$(TARGET_CC)" \
