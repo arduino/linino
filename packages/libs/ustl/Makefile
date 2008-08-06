@@ -23,6 +23,7 @@ define Package/ustl
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=C++ STL for embedded systems
+  DEPENDS:=@!TARGET_avr32
   URL:=http://ustl.sourceforge.net/
 endef
 
