@@ -18,8 +18,6 @@ PKG_FIXUP := libtool
 
 include $(INCLUDE_DIR)/package.mk
 
-CONFIGURE_ARGS_XTRA+=--without-x
-
 define Package/libtiff
   SECTION:=libs
   CATEGORY:=Libraries
@@ -27,22 +25,8 @@ define Package/libtiff
   DEPENDS:=+zlib +libjpeg
 endef
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
-		if [ -x $(CONFIGURE_CMD) ]; then \
-			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-			$(CONFIGURE_VARS) \
-			$(CONFIGURE_CMD) \
-			$(CONFIGURE_ARGS_XTRA) \
-			$(CONFIGURE_ARGS) ;\
-		fi \
-	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR)/ install DESTDIR=$(PKG_INSTALL_DIR)
-endef
+CONFIGURE_ARGS += --without-x
+MAKE_FLAGS += all install DESTDIR=$(PKG_INSTALL_DIR)
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{lib,include}
