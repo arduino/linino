@@ -21,6 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/flite
   SECTION:=sound
   CATEGORY:=Sound
+  DEPENDS:=@!GCC_VERSION_3_4_6
   TITLE:=Text-to-speech for embedded systems
   URL:=http://www.speech.cs.cmu.edu/flite/index.html
 endef
