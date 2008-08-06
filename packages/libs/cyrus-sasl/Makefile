@@ -28,48 +28,46 @@ define Package/libsasl2
   URL:=http://asg.web.cmu.edu/sasl/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--disable-sample \
-		--enable-staticdlopen \
-		--disable-java \
-		--disable-alwaystrue \
-		--disable-checkapop \
-		--enable-cram \
-		--enable-digest \
-		--disable-otp \
-		--disable-srp \
-		--disable-srp-setpass \
-		--disable-krb4 \
-		--disable-gssapi \
-		--disable-gss_mutexes \
-		--enable-plain \
-		--enable-anon \
-		--disable-login \
-		--disable-ntlm \
-		--disable-sql \
-		--with-dblib="none" \
-		--without-gdbm \
-		--with-devrandom="/dev/urandom" \
-		--without-pam \
-		--without-saslauthd \
-		--without-authdaemond \
-		--without-pwcheck \
-		--with-ipctype=unix \
-		--with-openssl="$(STAGING_DIR)/usr" \
-		--without-des \
-		--without-opie \
-		--without-ldap \
-		--without-mysql \
-		--without-pgsql \
-		--without-sqlite \
-		--without-rc4 \
-		--without-dmalloc \
-		--without-sfio \
-	);
-endef
+TARGET_CFLAGS += $(FPIC)
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--disable-sample \
+	--enable-staticdlopen \
+	--disable-java \
+	--disable-alwaystrue \
+	--disable-checkapop \
+	--enable-cram \
+	--enable-digest \
+	--disable-otp \
+	--disable-srp \
+	--disable-srp-setpass \
+	--disable-krb4 \
+	--disable-gssapi \
+	--disable-gss_mutexes \
+	--enable-plain \
+	--enable-anon \
+	--disable-login \
+	--disable-ntlm \
+	--disable-sql \
+	--with-dblib="none" \
+	--without-gdbm \
+	--with-devrandom="/dev/urandom" \
+	--without-pam \
+	--without-saslauthd \
+	--without-authdaemond \
+	--without-pwcheck \
+	--with-ipctype=unix \
+	--with-openssl="$(STAGING_DIR)/usr" \
+	--without-des \
+	--without-opie \
+	--without-ldap \
+	--without-mysql \
+	--without-pgsql \
+	--without-sqlite \
+	--without-rc4 \
+	--without-dmalloc \
+	--without-sfio
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/include \

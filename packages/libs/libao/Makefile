@@ -31,16 +31,15 @@ define Package/libao/description
 	output audio using a simple API on a wide variety of platforms.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--disable-esd \
-		--disable-arts \
-		--disable-nas \
-		--disable-polyp \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--disable-esd \
+	--disable-arts \
+	--disable-nas \
+	--disable-polyp
+
+TARGET_CFLAGS += $(FPIC)
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \

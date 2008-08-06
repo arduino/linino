@@ -30,6 +30,8 @@ define Package/libdvbpsi4/description
 	decoding and generating.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	$(call Build/Compile/Default, \
 		DESTDIR="$(PKG_INSTALL_DIR)" \

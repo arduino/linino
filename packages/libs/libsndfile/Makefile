@@ -32,6 +32,8 @@ define Package/libsndfile/description
  containing sampled audio data.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--disable-flac
 

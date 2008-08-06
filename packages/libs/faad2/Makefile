@@ -70,6 +70,8 @@ define Build/Configure
 	)
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 MAKE_FLAGS += \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
 	all install \

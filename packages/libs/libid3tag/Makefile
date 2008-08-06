@@ -31,6 +31,8 @@ define Package/libid3tag/description
 	ID3v1 and the various versions of ID3v2.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \

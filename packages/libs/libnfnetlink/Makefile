@@ -33,6 +33,8 @@ define Package/libnfnetlink/description
  and/or management tools in userspace.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-static \
 	--enable-shared

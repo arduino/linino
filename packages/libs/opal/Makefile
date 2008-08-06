@@ -38,6 +38,8 @@ define Package/libopal/description
 	supports not only the H.323 protocol but also SIP and IAX2.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-audio \
 	--disable-video \

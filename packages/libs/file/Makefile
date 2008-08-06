@@ -44,6 +44,8 @@ define Package/file/description
  a wrapper around the "magic" library. 
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

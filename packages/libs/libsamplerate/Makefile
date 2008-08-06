@@ -33,6 +33,8 @@ define Package/libsamplerate/description
  Converter for audio.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--disable-fftw \
 

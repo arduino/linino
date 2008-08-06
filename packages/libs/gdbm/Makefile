@@ -27,6 +27,8 @@ define Package/libgdbm
   URL:=http://www.gnu.org/software/gdbm/
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

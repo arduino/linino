@@ -102,6 +102,8 @@ $(call Package/gnutls/Default/description)
  This package contains the GnuTLS OpenSSL compatibility layer shared library.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \

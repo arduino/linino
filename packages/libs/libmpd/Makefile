@@ -29,6 +29,8 @@ define Package/libmpd/description
 It's wraps around libmpdclient and provides a higher level api.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 	DESTDIR="$(PKG_INSTALL_DIR)" \

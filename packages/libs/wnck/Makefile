@@ -44,6 +44,8 @@ define Build/Configure
 	)
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	cd $(PKG_BUILD_DIR) ; DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) all install
 endef

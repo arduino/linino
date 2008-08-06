@@ -33,9 +33,7 @@ define Package/pwlib/description
  System.
 endef
 
-ifeq ($(ARCH),x86_64)
-  FPIC:=-fPIC
-endif
+TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
 	--enable-minsize \
@@ -82,7 +80,7 @@ CONFIGURE_ARGS += \
 	--disable-xmlrpc \
 
 CONFIGURE_VARS += \
-	STDCXXFLAGS="$(TARGET_CFLAGS) $(FPIC) -fno-builtin" \
+	STDCXXFLAGS="$(TARGET_CFLAGS) -fno-builtin" \
 
 MAKE_FLAGS += optnoshared
 

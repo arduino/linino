@@ -35,6 +35,8 @@ define Package/ptlib/description
  much more advanced.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-minsize \
 	--enable-opal \

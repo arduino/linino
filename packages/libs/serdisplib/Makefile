@@ -38,9 +38,11 @@ define Build/Configure
 	)
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CFLAGS="$(TARGET_CFLAGS) -Wall -Wno-implicit -fPIC -I../include -I.." \
+		CFLAGS="$(TARGET_CFLAGS) -Wall -Wno-implicit -I../include -I.." \
 		all
 endef
 

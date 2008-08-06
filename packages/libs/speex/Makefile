@@ -39,6 +39,8 @@ define Package/libspeex/description
 	This package contains the shared codec library, needed by other programs.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 TARGET_LDFLAGS:=$(TARGET_LDFLAGS) -lnotimpl
 
 define Build/Configure

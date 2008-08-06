@@ -28,17 +28,16 @@ define Package/libapr
   URL:=http://apr.apache.org/
 endef
 
+TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += \
 	--with-devrandom=/dev/urandom \
 	--disable-dso \
 	--enable-ipv6
 
 CONFIGURE_VARS += \
-	ac_cv_file__dev_zero=yes \
 	apr_cv_process_shared_works=no \
 	apr_cv_mutex_robust_shared=no \
 	apr_cv_tcp_nodelay_with_cork=yes \
-	ac_cv_sizeof_ssize_t=4 \
 	LDFLAGS="$$$$LDFLAGS -lpthread" \
 
 define Build/Compile

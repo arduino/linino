@@ -36,6 +36,8 @@ define Package/libtasn1/description
  Distinguish Encoding Rules (DER) manipulation.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 		--enable-shared \
 		--enable-static

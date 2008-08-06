@@ -39,6 +39,8 @@ define Package/libgphoto2-drivers
   TITLE:=Gphoto2 drivers for various cameras
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

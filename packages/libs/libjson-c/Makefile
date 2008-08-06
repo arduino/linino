@@ -29,6 +29,8 @@ define Package/libjson/description
  This package contains a library for javascript object notation backends.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \

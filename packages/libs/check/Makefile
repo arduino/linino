@@ -36,6 +36,8 @@ define Build/Configure
 	$(call Build/Configure/Default)
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	cd $(PKG_BUILD_DIR) ; DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) all install
 	cd $(PKG_INSTALL_DIR)/usr/lib/ ; ln -s libcheck.so libcheck_pic.so

@@ -29,6 +29,7 @@ define Package/libaprutil
 endef
 
 
+TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += \
 	--with-pgsql=no \
 	--with-apr="$(STAGING_DIR)/usr/bin/apr-1-config" \

@@ -41,6 +41,8 @@ define Package/jpeg-tools
   TITLE+= manipulation tools
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

@@ -41,6 +41,8 @@ UCLIBC_TARGET_ARCH:=$(shell echo $(ARCH) | sed -e s'/-.*//' \
 	-e 's/cris.*/cris/' \
 )
 
+TARGET_CFLAGS += $(FPIC)
+
 MAKE_FLAGS:= \
 	TOPDIR="$(PKG_BUILD_DIR)/" \
 	$(TARGET_CONFIGURE_OPTS) \

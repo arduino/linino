@@ -32,6 +32,8 @@ define Build/Configure
 	)
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	# pass CFLAGS again to override -O2 set by configure
 	$(MAKE) -C $(PKG_BUILD_DIR) \

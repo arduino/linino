@@ -139,6 +139,8 @@ SNMP_TRANSPORTS_INCLUDED = Callback UDP
 
 SNMP_TRANSPORTS_EXCLUDED = TCP TCPv6 UDPv6 Unix
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

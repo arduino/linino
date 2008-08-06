@@ -34,6 +34,8 @@ define Package/libsigcxx/description
  whether it is static or virtual.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

@@ -25,6 +25,8 @@ define Package/libelf
   URL:=http://www.stud.uni-hannover.de/~michael/software/
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

@@ -32,6 +32,8 @@ define Package/libcli/description
 	authentication and callbacks for a user-definable function tree.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 MAKE_FLAGS += \
 	OPTIM="$(TARGET_CFLAGS)" \
 	CFLAGS="$(TARGET_CFLAGS)" \

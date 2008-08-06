@@ -33,6 +33,8 @@ endef
 LIBAIO_CFLAGS:=-nostdlib -nostartfiles -I. $(TARGET_CFLAGS) $(TARGET_CPPFLAGS)
 LIBAIO_SOVER:=1.0.1
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \

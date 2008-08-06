@@ -42,6 +42,8 @@ define Build/Configure
 	)
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		LNETLIB="-L$(STAGING_DIR)/usr/lib/libnet-1.0.x/lib -lnet" \

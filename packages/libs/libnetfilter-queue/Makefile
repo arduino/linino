@@ -31,6 +31,8 @@ define Package/libnetfilter-queue/description
 	that deprecates the old ip_queue / libipq mechanism.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-static \
 	--enable-shared \

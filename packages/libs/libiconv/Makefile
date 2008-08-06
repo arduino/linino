@@ -27,14 +27,12 @@ define Package/libiconv
   URL:=http://www.gnu.org/software/libiconv/
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
 	--disable-rpath \
-
-define Build/Configure
-	$(call Build/Configure/Default)
-endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) CC="$(TARGET_CC)"

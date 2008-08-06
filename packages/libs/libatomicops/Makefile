@@ -38,6 +38,8 @@ define Package/libatomicops/description
   architectures.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

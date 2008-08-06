@@ -35,6 +35,7 @@ define Package/glib2/description
 The GLib library of C routines
 endef
 
+TARGET_CFLAGS += $(FPIC)
 
 define Build/Configure
 	mkdir -p $(PKG_BUILD_DIR)/build/$(GNU_HOST_NAME)

@@ -29,6 +29,8 @@ define Package/libnfsidmap/description
  needed for nfs-utils
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib
 
 MAKE_FLAGS += \

@@ -36,6 +36,8 @@ endef
 
 # uses GNU configure
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	chmod +x $(PKG_BUILD_DIR)/config/install-sh
 	$(MAKE) -C $(PKG_BUILD_DIR) \

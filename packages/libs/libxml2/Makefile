@@ -34,6 +34,7 @@ define Package/libxml2/description
  A library for manipulating XML and HTML resources.
 endef
 
+TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
 	--enable-shared \

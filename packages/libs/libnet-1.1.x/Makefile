@@ -33,6 +33,8 @@ ifeq ($(CONFIG_BIG_ENDIAN),y)
   ENDIANESS:=big
 endif
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

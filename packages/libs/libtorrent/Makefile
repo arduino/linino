@@ -36,6 +36,8 @@ define Package/libtorrent/description
  the speed of the official client.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 # XXX: rtorrent needs encryption (--enable-openssl)
 CONFIGURE_ARGS+= \
 	--enable-shared \

@@ -32,6 +32,8 @@ define Package/libgsl/description
 	There are over 1000 functions in total with an extensive test suite.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)

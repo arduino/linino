@@ -37,6 +37,8 @@ define Package/confuse/description
 	 libConfuse was called libcfg before, but was changed to not confuse with other similar libraries. 
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

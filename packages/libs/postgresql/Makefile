@@ -160,6 +160,8 @@ define Build/Configure
 	#$(SED) 's@US/Eastern@America/New_York@' $(PKG_BUILD_DIR)/src/timezone/Makefile
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \

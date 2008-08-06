@@ -29,9 +29,7 @@ define Package/libmpcdec/description
 	Musepack decoder library
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default)
-endef
+TARGET_CFLAGS += $(FPIC)
 
 define Build/Compile
 	$(call Build/Compile/Default,\

@@ -27,6 +27,8 @@ define Package/libwrap
   URL:=ftp://ftp.porcupine.org/pub/security/index.html
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \

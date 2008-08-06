@@ -39,6 +39,7 @@ define Package/alsa-lib/description
  You must have enabled the ALSA support in the kernel.
 endef
 
+TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

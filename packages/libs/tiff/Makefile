@@ -25,6 +25,8 @@ define Package/libtiff
   DEPENDS:=+zlib +libjpeg
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += --without-x
 MAKE_FLAGS += all install DESTDIR=$(PKG_INSTALL_DIR)
 

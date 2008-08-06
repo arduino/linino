@@ -31,6 +31,8 @@ define Package/libaudiofile/description
 	and raw data).
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \

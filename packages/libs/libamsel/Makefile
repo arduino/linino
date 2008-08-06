@@ -32,6 +32,8 @@ endef
 define Build/Configure
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR) -fPIC" \
 	LDIR=$(PKG_BUILD_DIR) \

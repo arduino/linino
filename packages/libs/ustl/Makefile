@@ -40,6 +40,8 @@ define Build/Configure
 	$(CP) ./files/Common.mk $(PKG_BUILD_DIR)/
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)

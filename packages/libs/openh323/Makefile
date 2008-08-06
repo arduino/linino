@@ -27,9 +27,7 @@ define Package/libopenh323
   URL:=http://openh323.sourceforge.net/
 endef
 
-ifeq ($(ARCH),x86_64)
-  FPIC:=-fPIC
-endif
+TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
 	--enable-minsize \

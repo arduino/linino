@@ -34,6 +34,8 @@ define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	$(call cc,math)
 	$(TARGET_CROSS)ar rc $(PKG_BUILD_DIR)/libnotimpl.a $(PKG_BUILD_DIR)/*.o

@@ -33,6 +33,8 @@ define Package/libpam/description
 
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \

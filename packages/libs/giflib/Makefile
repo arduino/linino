@@ -25,19 +25,8 @@ define Package/giflib
   DEPENDS:=
 endef
 
-CONFIGURE_ARGS+=--without-x
-
-define Build/Configure
-	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
-		if [ -x $(CONFIGURE_CMD) ]; then \
-			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-			$(CONFIGURE_VARS) \
-			$(CONFIGURE_CMD) \
-			$(CONFIGURE_ARGS_XTRA) \
-			$(CONFIGURE_ARGS) ;\
-		fi \
-	)
-endef
+TARGET_CFLAGS += $(FPIC)
+CONFIGURE_ARGS += --without-x
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)

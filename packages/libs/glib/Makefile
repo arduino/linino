@@ -36,6 +36,8 @@ define Package/glib1/description
  as trees, hashes, and lists.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

@@ -29,7 +29,7 @@ define Package/libgssapi/description
  Support libraries - for newer nfs mount command (nfs4)
 endef
 
-TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib
+TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib $(FPIC)
 
 MAKE_FLAGS += \
 	OPT="$(TARGET_CFLAGS)" \

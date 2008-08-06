@@ -28,6 +28,8 @@ define Package/id3lib
   URL:=http://www.id3lib.org/
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

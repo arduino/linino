@@ -34,6 +34,8 @@ define Package/libvorbisidec/description
 	Tremor is a decoder only.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); ./autogen.sh );
 	$(call Build/Configure/Default, \

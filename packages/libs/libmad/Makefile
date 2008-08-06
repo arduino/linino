@@ -44,6 +44,8 @@ define Package/libmad/description
 	Layer I, Layer II, and Layer III (i.e. MP3) - are fully implemented.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

@@ -41,6 +41,8 @@ define Build/Configure
 	$(MAKE) -C $(PKG_BUILD_DIR) oldconfig
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CC="$(TARGET_CC)" \

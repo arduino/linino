@@ -26,20 +26,20 @@ define Package/libgd
   URL:=http://www.boutell.com/gd/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--disable-rpath \
-		--without-x \
-		--without-freetype \
-		--with-jpeg=$(STAGING_DIR)/usr \
-		--with-png=$(STAGING_DIR)/usr \
-		--without-xpm \
-		, \
-		LIBPNG12_CONFIG="$(STAGING_DIR)/usr/bin/libpng12-config" \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--disable-rpath \
+	--without-x \
+	--without-freetype \
+	--with-jpeg=$(STAGING_DIR)/usr \
+	--with-png=$(STAGING_DIR)/usr \
+	--without-xpm
+
+CONFIGURE_VARS += \
+	LIBPNG12_CONFIG="$(STAGING_DIR)/usr/bin/libpng12-config"
+
+TARGET_CFLAGS += $(FPIC)
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \

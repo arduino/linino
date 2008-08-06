@@ -46,6 +46,8 @@ define Package/libcurl
   TITLE:=A client-side URL transfer utility
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

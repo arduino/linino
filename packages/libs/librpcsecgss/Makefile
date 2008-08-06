@@ -31,7 +31,7 @@ define Package/librpcsecgss/description
  Support libraries - for newer nfs mount command (nfs4)
 endef
 
-TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib -I$(STAGING_DIR)/usr/include/gssglue/
+TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib -I$(STAGING_DIR)/usr/include/gssglue/ $(FPIC)
 
 MAKE_FLAGS += \
 	OPT="$(TARGET_CFLAGS)" \

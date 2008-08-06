@@ -62,6 +62,8 @@ define Package/openldap-utils/description
 	This package contains client programs required to access LDAP servers.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

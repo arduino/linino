@@ -100,6 +100,7 @@ $(call Package/avahi/Default/description)
  in a DHCP-like fashion. Especially useful on IPv6.
 endef
 
+TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \

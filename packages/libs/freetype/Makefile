@@ -35,6 +35,8 @@ define Package/libfreetype/description
  efficient and ubiquitous products.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

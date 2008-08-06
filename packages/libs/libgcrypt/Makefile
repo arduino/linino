@@ -39,6 +39,8 @@ define Package/libgcrypt/description
  RC2, SEED, Camellia, CRC, MD4, TIGER-192, Whirlpool, ElGamal, ECC).
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \

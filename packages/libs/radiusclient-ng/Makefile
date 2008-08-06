@@ -60,6 +60,8 @@ $(call Package/radiusclient-ng/Default/description)
  This package contains a RADIUS client.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \

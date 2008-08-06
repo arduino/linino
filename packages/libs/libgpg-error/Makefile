@@ -38,6 +38,8 @@ define Package/libgpg-error/description
 	future.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \

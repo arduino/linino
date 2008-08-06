@@ -33,6 +33,8 @@ define Package/st2205tool/description
   mplayer or LCD4Linux
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CPPFLAGS) $(TARGET_CFLAGS) -I$(PKG_BUILD_DIR)/libst2205/" \
 	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \

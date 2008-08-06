@@ -33,6 +33,8 @@ define Package/libffi-sable/description
 	time.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \

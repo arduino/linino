@@ -36,6 +36,7 @@ define Package/libwxbase/description
  etc.) allowing you to write portable programs easily.
 endef
 
+TARGET_CFLAGS += $(FPIC)
 
 # XXX: aMule *needs* the following configure options to be enabled:
 #	--enable-intl

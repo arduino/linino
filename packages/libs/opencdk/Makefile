@@ -38,6 +38,8 @@ define Package/libopencdk/description
 	messages with earlier PGP version < 7, you should use the compat mode.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
