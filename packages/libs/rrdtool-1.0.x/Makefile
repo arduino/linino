@@ -98,42 +98,19 @@ Round Robin Database (RRD) management tools.
 	This package contains command line tools used to manage RRDs.
 endef
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -rf config.{status,cache} ; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		ac_cv_path_PERL=no \
-		rd_cv_ieee_works=yes \
-		shrext_cmds=".so" \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=/usr/lib \
-			--libexecdir=/usr/lib \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc \
-			$(DISABLE_LARGEFILE) \
-			$(DISABLE_NLS) \
-			--enable-shared=yes \
-			--enable-static=yes \
-			--disable-rpath \
-			--with-gnu-ld \
-			--enable-local-zlib \
-	);
-endef
+CONFIGURE_ARGS += \
+	$(DISABLE_LARGEFILE) \
+	$(DISABLE_NLS) \
+	--enable-shared=yes \
+	--enable-static=yes \
+	--disable-rpath \
+	--with-gnu-ld \
+	--enable-local-zlib
+
+CONFIGURE_VARS += \
+	ac_cv_path_PERL=no \
+	rd_cv_ieee_works=yes \
+	shrext_cmds=".so"
 
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
