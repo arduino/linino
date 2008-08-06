@@ -24,7 +24,7 @@ define Package/sablevm/Default
   CATEGORY:=Languages
   TITLE:=A Java Virtual Machine (JVM) implementation
   URL:=http://sablevm.org/
-  DEPENDS:=+libltdl +libpopt +libpthread +zlib
+  DEPENDS:=+libltdl +libpopt +libpthread +zlib @!TARGET_avr32
 endef
 
 define Package/sablevm/Default/description
