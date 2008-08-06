@@ -41,6 +41,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		WARNING_CXXFLAGS="-Wall" \
 		all install
 endef
 
