@@ -19,6 +19,7 @@ PKG_MD5SUM:=d033b7617b9074357f687326b52b6296
 include $(INCLUDE_DIR)/package.mk
 
 EXTRA_CFLAGS:=-I$(STAGING_DIR)/usr/include/pycairo/ -I$(STAGING_DIR)/usr/lib/libintl/include/ -I$(STAGING_DIR)/usr/lib/libiconv/include/
+EXTRA_LDFLAGS:=-L$(STAGING_DIR)/usr/lib/libintl/lib -L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Package/python-gtk
   SUBMENU:=Python
@@ -33,19 +34,13 @@ define Package/python-gtk/description
   API to GTK and glade library from python
 endef
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); \
-		if [ -x $(CONFIGURE_CMD) ]; then \
-		$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-			$(CONFIGURE_VARS) \
-			$(CONFIGURE_CMD) \
-			$(CONFIGURE_ARGS) ;\
-		fi \
-	)
-endef
-
 define Build/Compile
-	cd $(PKG_BUILD_DIR) ; PYTHON_HOST=/usr/bin/python DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) all install
+	PYTHON_HOST="python2.5" \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		SUBDIRS="codegen . gtk" \
+		all install
+	sed -i "s/UCS4/UCS2/g" $(PKG_INSTALL_DIR)/usr/lib/python2.5/site-packages/gtk-2.0/gtk/_gtk.so
 endef
 
 define Build/InstallDev
