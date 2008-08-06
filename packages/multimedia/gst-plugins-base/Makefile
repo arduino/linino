@@ -33,14 +33,10 @@ define Package/gst-plugins-base/description
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); \
-		if [ -x $(CONFIGURE_CMD) ]; then \
-			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-			$(CONFIGURE_VARS) \
-			$(CONFIGURE_CMD) \
-			--disable-ogg --disable-vorbis\
-			$(CONFIGURE_ARGS) ;\
-		fi \
+	$(call Build/Configure/Default,\
+		--disable-ogg \
+		--disable-vorbis \
+		--without-x \
 	)
 endef
 
