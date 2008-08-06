@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=liboil
-PKG_VERSION:=0.3.12
-PKG_RELEASE:=2
+PKG_VERSION:=0.3.15
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://liboil.freedesktop.org/download/
-PKG_MD5SUM:=96ee4c627ffb0db3999cef3c7454b1d9
+PKG_MD5SUM:=11dd39b1ca13ce2e0618d4df8303f137
 
 PKG_BUILD_DEPENDS:=libnotimpl
 PKG_FIXUP = libtool
