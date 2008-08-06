@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/nufw/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+glib2 +libgnutls +libpam +libsasl2 +libintl +libiconv +libnetfilter-queue
+  DEPENDS:=+glib2 +libgnutls +libsasl2 +libintl +libiconv +libnetfilter-queue
   TITLE:=nufw
   URL:=http://www.nufw.org/
 endef
@@ -65,6 +65,7 @@ CONFIGURE_ARGS += \
 	--enable-static \
 	--enable-shared \
 	--disable-pam-nufw \
+	--without-system-auth \
 	--with-libgnutls-prefix="$(STAGING_DIR)/usr/" \
 	--with-libgcrypt-prefix="$(STAGING_DIR)/usr/" \
 	--with-libsasl-prefix="$(STAGING_DIR)/usr/"
