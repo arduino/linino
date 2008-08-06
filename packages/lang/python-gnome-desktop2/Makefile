@@ -32,29 +32,16 @@ define Package/gnome-python-desktop/description
   python bindings for gnome
 endef
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); \
-		if [ -x $(CONFIGURE_CMD) ]; then \
-			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-			$(CONFIGURE_VARS) \
-			$(CONFIGURE_CMD) \
-			$(CONFIGURE_ARGS) ;\
-		fi \
-	)
-endef
-
-define Build/Compile
-	cd $(PKG_BUILD_DIR) ; DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) all install
-endef
+MAKE_FLAGS += DESTDIR=$(PKG_INSTALL_DIR) all install
 
 define Build/InstallDev
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 endef
 
 define Package/gnome-python-desktop/install
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 endef
 
 $(eval $(call BuildPackage,gnome-python-desktop))

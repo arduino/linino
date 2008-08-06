@@ -44,13 +44,16 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 endef
 
 define Package/python-gtk/install
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 endef
 
 $(eval $(call BuildPackage,python-gtk))
+$(eval $(call RequireCommand,pygtk-codegen-2.0 \
+	Please install the pygtk 2.0 development package \
+))
