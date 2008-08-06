@@ -34,14 +34,8 @@ define Package/gstreamer/description
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); \
-		if [ -x $(CONFIGURE_CMD) ]; then \
-			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-			$(CONFIGURE_VARS) \
-			$(CONFIGURE_CMD) \
+	$(call Build/Configure/Default,\
 			--disable-tests \
-			$(CONFIGURE_ARGS) ;\
-		fi \
 	)
 endef
 
