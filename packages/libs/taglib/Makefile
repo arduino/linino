@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/taglib
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:= +uclibcxx +zlib
+  DEPENDS:= +uclibcxx +zlib @!TARGET_avr32
   TITLE:=Audio output library
   URL:=http://developer.kde.org/~wheeler/taglib.html
 endef
