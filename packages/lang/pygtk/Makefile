@@ -54,6 +54,6 @@ define Package/python-gtk/install
 endef
 
 $(eval $(call BuildPackage,python-gtk))
-$(eval $(call RequireCommand,pygtk-codegen-2.0 \
+$(eval $(call RequireCommand,pygtk-codegen-2.0, \
 	Please install the pygtk 2.0 development package \
 ))
