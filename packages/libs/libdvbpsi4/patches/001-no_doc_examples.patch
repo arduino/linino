@@ -1,0 +1,27 @@
+diff -urN libdvbpsi4-0.1.5/Makefile.am libdvbpsi4-0.1.5.new/Makefile.am
+--- libdvbpsi4-0.1.5/Makefile.am	2005-03-21 14:24:33.000000000 +0100
++++ libdvbpsi4-0.1.5.new/Makefile.am	2008-08-06 12:15:59.000000000 +0200
+@@ -1,7 +1,7 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+-SUBDIRS = src examples misc
+-DIST_SUBDIRS = $(SUBDIRS) doc debian wince
++SUBDIRS = src
++DIST_SUBDIRS = $(SUBDIRS) debian wince
+ 
+ EXTRA_DIST = libdvbpsi.spec bootstrap
+ 
+diff -urN libdvbpsi4-0.1.5/Makefile.in libdvbpsi4-0.1.5.new/Makefile.in
+--- libdvbpsi4-0.1.5/Makefile.in	2005-07-06 16:44:57.000000000 +0200
++++ libdvbpsi4-0.1.5.new/Makefile.in	2008-08-06 12:15:47.000000000 +0200
+@@ -136,8 +136,8 @@
+ target_os = @target_os@
+ target_vendor = @target_vendor@
+ 
+-SUBDIRS = src examples misc
+-DIST_SUBDIRS = $(SUBDIRS) doc debian wince
++SUBDIRS = src
++DIST_SUBDIRS = $(SUBDIRS) debian wince
+ 
+ EXTRA_DIST = libdvbpsi.spec bootstrap
+ 
