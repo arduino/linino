@@ -38,6 +38,8 @@ endef
 CONFIGURE_ARGS += \
 	--enable-daemon \
 	--disable-gtk \
+	--disable-wx \
+	--with-wx-config="$(STAGING_DIR)/usr/bin/" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
