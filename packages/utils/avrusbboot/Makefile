@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/avrusbboot
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libusb +uclibcxx
+  DEPENDS:=+libusb +uclibcxx +libgcc
   TITLE:=USB bootloader for Atmel AVR controllers
   URL:=http://www.fischl.de/avrusbboot/
 endef
@@ -42,7 +42,7 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/software \
 		CXX="$(TARGET_CROSS)g++ $(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++ -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/uClibc++" \
-		LFLAGS="-L$(STAGING_DIR)/usr/lib -nodefaultlibs -luClibc++ -lusb" \
+		LFLAGS="-L$(STAGING_DIR)/usr/lib -nodefaultlibs -luClibc++ -lusb -lgcc_s" \
 		all
 endef
 
