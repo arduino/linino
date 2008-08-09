@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=6tunnel
-PKG_VERSION:=0.11rc1
+PKG_VERSION:=0.11rc2
 PKG_RELEASE:=2
-PKG_MD5SUM:=b325fa9d238e32195fbb3fc3646b0d28
+PKG_MD5SUM:=74e02d4f0704b3083a01feda66033449
 
 PKG_SOURCE_URL:=http://toxygen.net/6tunnel/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-0.11
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -32,15 +30,8 @@ define Package/6tunnel/description
 IPv4 / IPv6 tunnel proxy
 endef
 
-define Build/Configure
-$(call Build/Configure/Default,,ac_cv_path_STRIP=$(STRIP) ac_cv_func_vsnprintf=yes)
-endef
-
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		default
+	$(TARGET_CC) $(TARGET_CFLAGS) -o $(PKG_BUILD_DIR)/$(PKG_NAME) $(PKG_BUILD_DIR)/$(PKG_NAME).c
 endef
 
 define Package/6tunnel/install
