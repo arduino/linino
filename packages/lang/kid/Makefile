@@ -20,9 +20,6 @@ PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
-ifneq ($(MAKECMDGOALS),download)
-  $(if $(DUMP)$(Build/Compile/PyMod),,$(error Python packaging code not found.))
-endif
 
 define Package/python-kid
   SUBMENU:=Python
@@ -44,6 +41,7 @@ define PyPackage/python-kid/filespec
 endef
 
 define Build/Compile
+	$(if $(Build/Compile/PyMod),,@echo Python packaging code not found.; false)
 	$(call Build/Compile/PyMod,., \
 		install --prefix="$(PKG_INSTALL_DIR)/usr", \
 	)

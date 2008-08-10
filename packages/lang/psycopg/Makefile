@@ -20,9 +20,6 @@ PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
-ifneq ($(MAKECMDGOALS),download)
-  $(if $(DUMP)$(Build/Compile/PyMod),,$(error Python packaging code not found.))
-endif
 
 define Package/python-psycopg
   SUBMENU:=Python
@@ -45,6 +42,7 @@ CONFIGURE_ARGS += \
 	--with-mxdatetime-includes="$(STAGING_DIR)$(PYTHON_PKG_DIR)/mx/DateTime/mxDateTime" \
 
 define Build/Compile
+	$(if $(Build/Compile/PyMod),,@echo Python packaging code not found.; false)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		OPT="$(TARGET_CFLAGS)"
 endef

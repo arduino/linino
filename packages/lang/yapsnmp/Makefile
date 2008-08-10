@@ -22,9 +22,6 @@ PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
-ifneq ($(MAKECMDGOALS),download)
-  $(if $(DUMP)$(Build/Compile/PyMod),,$(error Python packaging code not found.))
-endif
 
 define Package/python-yapsnmp
   SUBMENU:=Python
@@ -58,6 +55,7 @@ CONFIGURE_VARS += \
 	ac_cv_prog_SWIG="echo MISSING SWIG" \
 
 define Build/Compile
+	$(if $(Build/Compile/PyMod),,@echo Python packaging code not found.; false)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		INCLUDES="-I$(PYTHON_INC_DIR)" \
 		SNMPINCDIR="$(STAGING_DIR)/usr/include/net-snmp/library" \
