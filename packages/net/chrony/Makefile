@@ -23,7 +23,7 @@ define Package/chrony
   SUBMENU:=Time Synchronization
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libreadline +libncurses @!TARGET_avr32 @!TARGET_powerpc
+  DEPENDS:=+libreadline +libncurses @!TARGET_avr32 @!powerpc
   TITLE:=NTP client/server for on-demand connections
   URL:=http://chrony.sunsite.dk/
 endef
