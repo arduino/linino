@@ -34,9 +34,9 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-	        CC="$(TARGET_CC)" \
-	        CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -DAICCU_CONSOLE -DHAS_IFHEAD -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -lpthread" \
+		CC="$(TARGET_CC)" OS_NAME="Linux" OS_VERSION="$(LINUX_VERSION)" \
+		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
+		EXTRA_LDFLAGS="$(TARGET_LDFLAGS) -pthread" \
 		DEBUG=0
 endef
 
