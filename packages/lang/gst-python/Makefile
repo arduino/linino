@@ -26,7 +26,7 @@ define Package/gst-python
   CATEGORY:=Languages
   TITLE:=python bindings for dbus
   URL:=http://gstreamer.freedesktop.org/
-  DEPENDS:=+gstreamer +gst-plugins-base +python-gtk @BROKEN
+  DEPENDS:=+gstreamer +gst-plugins-base +python-gtk
 endef
 
 define Package/gst-python/description
