@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/qolyester
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpthread @!TARGET_avr32 @!TARGET_powerpc
+  DEPENDS:=+libpthread @!TARGET_avr32 @!powerpc
   TITLE:=OLSR implementation with QoS
   URL:=http://qolsr.lri.fr/code/
 endef
