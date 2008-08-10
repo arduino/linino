@@ -250,6 +250,8 @@ endif
 define Build/Configure
 endef
 
+TARGET_CFLAGS += $(if $(CONFIG_BIG_ENDIAN),-DIEEE_BIG_ENDIAN,-DIEEE_LITTLE_ENDIAN) $(FPIC)
+
 ifneq ($(CONFIG_PACKAGE_php4-cli),)
   define Build/Compile/php4-cli
 	-$(MAKE) -C $(PKG_BUILD_DIR) clean
