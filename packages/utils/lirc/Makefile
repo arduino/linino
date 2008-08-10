@@ -112,6 +112,7 @@ endef
 
 MAKE_FLAGS += \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
+	ARCH="$(LINUX_KARCH)" \
 	all
 
 define  Package/lirc/install
