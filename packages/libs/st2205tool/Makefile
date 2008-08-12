@@ -24,7 +24,7 @@ define Package/st2205tool
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=ST220xu powered photo-frames library
-  DEPENDS:=libgd
+  DEPENDS:=+libgd
   URL:=http://picframe.spritesserver.nl/wiki/
 endef
 
