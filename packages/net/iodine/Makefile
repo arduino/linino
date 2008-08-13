@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iodine
-PKG_VERSION:=0.4.1
+PKG_VERSION:=0.4.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://code.kryo.se/iodine/
-PKG_MD5SUM:=58d82bca11a41a01d0ddfa7d105e6a48
+PKG_MD5SUM:=890f13ab9ee7ea722baf0ceb3ee561c0
 
 include $(INCLUDE_DIR)/package.mk
 
