@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/aircrack-ng
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpthread
+  DEPENDS:=+libpthread +libopenssl +libpcap
   TITLE:=next generation of aircrack with new features
   URL:=http://www.aircrack-ng.org/
   SUBMENU:=wireless
