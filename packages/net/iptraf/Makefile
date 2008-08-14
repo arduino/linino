@@ -36,6 +36,13 @@ define Package/iptraf/description
 	and LAN station packet and byte counts.
 endef
 
+define Package/iptraf/postinst
+#!/bin/sh
+if [ -z "$${IPKG_INSTROOT}" ]; then
+	mkdir -p $${IPKG_INSTROOT}/var/log/iptraf $${IPKG_INSTROOT}/var/run/iptraf $${IPKG_INSTROOT}/var/lib/iptraf/
+fi
+endef
+
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR)/src \
 		$(TARGET_CONFIGURE_OPTS) \
@@ -52,9 +59,6 @@ endef
 define Package/iptraf/install	
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/iptraf $(1)/usr/bin/
-	$(INSTALL_DIR) $(1)/var/lib/iptraf/
-	echo "$(PKG_VERSION)" > $(1)/var/lib/iptraf/version
-	$(INSTALL_DIR) $(1)/var/log/iptraf $(1)/var/run/iptraf
 endef
 
 $(eval $(call BuildPackage,iptraf))
