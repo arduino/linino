@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=polipo
-PKG_VERSION:=1.0.3
+PKG_VERSION:=1.0.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/$(PKG_NAME)/
-PKG_MD5SUM:=a0b00ca01541cf77ff3d725c27cf68bb
+PKG_MD5SUM:=defdce7f8002ca68705b6c2c36c4d096
 
 include $(INCLUDE_DIR)/package.mk
 
