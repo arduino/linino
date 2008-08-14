@@ -3,7 +3,6 @@
 
 . /etc/functions.sh
 
-unset IFACE
 unset SERVER
 unset PORT
 unset INTERVAL
@@ -45,9 +44,7 @@ load_settings() {
 	
 	config_get interval $1 interval
 	config_get count $1 count
-	config_get iface $1 iface
 	
-	[ -n "$iface" ] && IFACE=$iface
 	[ -n "$count" ] && COUNT=$count
 	[ -n "$interval" ] && INTERVAL=$interval
 }
@@ -55,10 +52,7 @@ load_settings() {
 config_load ntpclient
 config_foreach load_settings ntpclient
 
-# check if we only listen to a single iface
-[ -n "$IFACE" -a "$IFACE" != "$INTERFACE" ] && exit 0 
-
-DEF_ROUTE=`route -n | grep '^0.0.0.0'`                                     
+DEF_ROUTE=`route -n | grep '^0.0.0.0'`
 NTP_RUNNING=`ps  | grep $NTPC | grep -v grep`
 
 case "${ACTION:-ifup}" in
