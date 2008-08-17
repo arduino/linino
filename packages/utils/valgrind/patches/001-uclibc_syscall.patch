@@ -1,6 +1,6 @@
---- valgrind/coregrind/m_syswrap/syswrap-amd64-linux.c.orig	2006-08-02 16:51:51.000000000 -0600
-+++ valgrind/coregrind/m_syswrap/syswrap-amd64-linux.c	2006-08-02 16:53:19.000000000 -0600
-@@ -1124,7 +1124,7 @@
+--- a/coregrind/m_syswrap/syswrap-amd64-linux.c
++++ b/coregrind/m_syswrap/syswrap-amd64-linux.c
+@@ -1165,7 +1165,7 @@
     GENXY(__NR_times,             sys_times),          // 100 
     PLAXY(__NR_ptrace,            sys_ptrace),         // 101 
     GENX_(__NR_getuid,            sys_getuid),         // 102 
@@ -9,9 +9,9 @@
     GENX_(__NR_getgid,            sys_getgid),         // 104 
  
     GENX_(__NR_setuid,            sys_setuid),         // 105 
---- valgrind/include/vki-linux.h.orig	2006-08-02 18:22:21.000000000 -0600
-+++ valgrind/include/vki-linux.h	2006-08-02 18:38:02.000000000 -0600
-@@ -1556,7 +1556,9 @@
+--- a/include/vki/vki-linux.h
++++ b/include/vki/vki-linux.h
+@@ -1582,7 +1582,9 @@
  
  #define VKI_BLKROSET   _VKI_IO(0x12,93)	/* set device read-only (0 = read-write) */
  #define VKI_BLKROGET   _VKI_IO(0x12,94)	/* get read-only status (0 = read_write) */
@@ -21,7 +21,7 @@
  #define VKI_BLKRASET   _VKI_IO(0x12,98)	/* set read ahead for block device */
  #define VKI_BLKRAGET   _VKI_IO(0x12,99)	/* get current read ahead setting */
  #define VKI_BLKFRASET  _VKI_IO(0x12,100)/* set filesystem (mm/filemap.c) read-ahead */
-@@ -1631,6 +1633,54 @@
+@@ -1657,6 +1659,54 @@
  //#define SG_GET_COMMAND_Q 0x2270   /* Yields 0 (queuing off) or 1 (on) */
  #define VKI_SG_SET_COMMAND_Q 0x2271   /* Change queuing state with 0 or 1 */
  
@@ -76,7 +76,7 @@
  //----------------------------------------------------------------------
  // From linux-2.6.8.1/include/linux/cdrom.h
  //----------------------------------------------------------------------
-@@ -1640,6 +1690,7 @@
+@@ -1666,6 +1716,7 @@
                                             (struct cdrom_tochdr) */
  #define VKI_CDROMREADTOCENTRY	0x5306 /* Read TOC entry 
                                             (struct cdrom_tocentry) */
@@ -84,9 +84,9 @@
  #define VKI_CDROMSUBCHNL	0x530b /* Read subchannel data 
                                             (struct cdrom_subchnl) */
  #define VKI_CDROMREADMODE2	0x530c /* Read CDROM mode 2 data (2336 Bytes) 
---- valgrind/coregrind/m_syswrap/syswrap-generic.c.orig	2006-08-02 18:22:13.000000000 -0600
-+++ valgrind/coregrind/m_syswrap/syswrap-generic.c	2006-08-02 18:43:49.000000000 -0600
-@@ -3227,6 +3227,33 @@
+--- a/coregrind/m_syswrap/syswrap-generic.c
++++ b/coregrind/m_syswrap/syswrap-generic.c
+@@ -3288,6 +3288,33 @@
     case VKI_SG_GET_SG_TABLESIZE: /* 0x227f */
        PRE_MEM_WRITE( "ioctl(SG_GET_SG_TABLESIZE)", ARG3, sizeof(int) );
        break;
@@ -120,7 +120,7 @@
  
     case VKI_IIOCGETCPS:
        PRE_MEM_WRITE( "ioctl(IIOCGETCPS)", ARG3,
-@@ -3550,6 +3578,8 @@
+@@ -3611,6 +3638,8 @@
     case VKI_BLKROGET:
        PRE_MEM_WRITE( "ioctl(BLKROGET)", ARG3, sizeof(int));
        break;
@@ -129,7 +129,7 @@
     case VKI_BLKGETSIZE:
        PRE_MEM_WRITE( "ioctl(BLKGETSIZE)", ARG3, sizeof(unsigned long));
        break;
-@@ -3558,6 +3588,8 @@
+@@ -3619,6 +3648,8 @@
     case VKI_BLKRAGET:
        PRE_MEM_WRITE( "ioctl(BLKRAGET)", ARG3, sizeof(long));
        break;
@@ -138,7 +138,7 @@
     case VKI_BLKFRASET:
        break;
     case VKI_BLKFRAGET:
-@@ -3624,6 +3656,8 @@
+@@ -3685,6 +3716,8 @@
        PRE_MEM_WRITE( "ioctl(CDROMREADTOCENTRY)", ARG3, 
  		     sizeof(struct vki_cdrom_tocentry));
        break;
@@ -147,7 +147,7 @@
     case VKI_CDROMMULTISESSION: /* 0x5310 */
        PRE_MEM_WRITE( "ioctl(CDROMMULTISESSION)", ARG3,
  		     sizeof(struct vki_cdrom_multisession));
-@@ -4042,6 +4076,28 @@
+@@ -4274,6 +4307,28 @@
     case VKI_SG_GET_SG_TABLESIZE:
        POST_MEM_WRITE(ARG3, sizeof(int));
        break;      
@@ -176,7 +176,7 @@
  
     case VKI_IIOCGETCPS:
        POST_MEM_WRITE( ARG3, VKI_ISDN_MAX_CHANNELS * 2 * sizeof(unsigned long) );
-@@ -4260,6 +4317,8 @@
+@@ -4492,6 +4547,8 @@
     case VKI_BLKROGET:
        POST_MEM_WRITE(ARG3, sizeof(int));
        break;
@@ -185,7 +185,7 @@
     case VKI_BLKGETSIZE:
        POST_MEM_WRITE(ARG3, sizeof(unsigned long));
        break;
-@@ -4268,6 +4327,8 @@
+@@ -4500,6 +4557,8 @@
     case VKI_BLKRAGET:
        POST_MEM_WRITE(ARG3, sizeof(long));
        break;
@@ -194,7 +194,7 @@
     case VKI_BLKFRASET:
        break;
     case VKI_BLKFRAGET:
-@@ -4309,6 +4370,8 @@
+@@ -4541,6 +4600,8 @@
     case VKI_CDROMREADTOCENTRY:
        POST_MEM_WRITE(ARG3, sizeof(struct vki_cdrom_tocentry));
        break;
