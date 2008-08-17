@@ -21,9 +21,6 @@ PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
-ifneq ($(MAKECMDGOALS),download)
-  $(if $(DUMP)$(Build/Compile/PyMod),,$(error Python packaging code not found.))
-endif
 
 define Package/rrdtool/Default
   SECTION:=utils
@@ -94,6 +91,7 @@ else
 endif
 
 define Build/Compile
+	$(if $(Build/Compile/PyMod),,@echo Python packaging code not found.; false)
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
 
