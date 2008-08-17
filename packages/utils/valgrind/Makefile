@@ -47,10 +47,18 @@ CONFIGURE_ARGS += \
 
 DEFAULT_SUPP += "uclibc.supp"
 
-define Build/Compile	
+define Build/Compile
+	$(TARGET_CC) $(TARGET_CFLAGS) -c -o $(PKG_BUILD_DIR)/abort.o ./src/abort.c
+	$(TARGET_CROSS)ar rcu $(PKG_BUILD_DIR)/abort.a $(PKG_BUILD_DIR)/abort.o
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
+		AM_CFLAGS_X86_LINUX="$(TARGET_CFLAGS)" \
+		AM_CFLAGS_AMD64_LINUX="$(TARGET_CFLAGS)" \
+		AM_CFLAGS_PPC32_LINUX="$(TARGET_CFLAGS)" \
+		AM_CFLAGS_PPC64_LINUX="$(TARGET_CFLAGS)" \
+		TOOL_LDADD_COMMON="-lgcc $(PKG_BUILD_DIR)/abort.a" \
 		all install
 endef
 
