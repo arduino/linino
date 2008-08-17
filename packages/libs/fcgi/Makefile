@@ -24,6 +24,7 @@ define Package/fcgi
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Shared library of FastCGI
+  DEPENDS:=+uclibcxx
   URL:=http://www.fastcgi.com/
 endef
 
