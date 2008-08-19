@@ -29,7 +29,7 @@ start_ntpclient() {
 	config_foreach check_server ntpserver
 	[ -z "$SERVER" ] && exit 0
 	logger starting ntpclient
-	$NTPC ${COUNT:+-c $COUNT} ${INTERVAL:+-i $INTERVAL} -D -p $PORT -h $SERVER 2> /dev/null
+	$NTPC ${COUNT:+-c $COUNT} ${INTERVAL:+-i $INTERVAL} -s -l -D -p $PORT -h $SERVER 2> /dev/null
 }
 
 stop_ntpclient() {
