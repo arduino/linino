@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -195,6 +195,7 @@ endef
 
 define Package/freeradius-mod-radutmp
   $(call Package/freeradius/Default)
+  DEPENDS:=freeradius
   TITLE:=Radius UTMP module
 endef
 
@@ -204,7 +205,9 @@ define Package/freeradius-utils
   TITLE:=Misc. client utilities
 endef
 
-PKG_CONFIGURE_ARGS:= \
+CONFIGURE_ARGS+= \
+	--libdir=/usr/lib/freeradius \
+	--libexecdir=/usr/lib/freeradius \
 	--enable-shared \
 	--disable-static \
 	--disable-developer \
@@ -250,76 +253,69 @@ PKG_DICTIONARIES:= \
 	wispr \
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-ldap),)
-  PKG_CONFIGURE_ARGS+= \
+  CONFIGURE_ARGS+= \
 		--with-rlm_ldap-include-dir="$(STAGING_DIR)/usr/include" \
 		--with-rlm_ldap-lib-dir="$(STAGING_DIR)/usr/lib"
-  PKG_CONFIGURE_LIBS+= -lcrypto -lssl
+  CONFIGURE_LIBS+= -lcrypto -lssl
 else
-  PKG_CONFIGURE_ARGS+= --without-rlm_ldap
+  CONFIGURE_ARGS+= --without-rlm_ldap
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-sql-mysql),)
-  PKG_CONFIGURE_ARGS+= \
+  CONFIGURE_ARGS+= \
 		--with-mysql-include-dir="$(STAGING_DIR)/usr/include" \
 		--with-mysql-lib-dir="$(STAGING_DIR)/usr/lib/mysql" \
 		--without-threads
-  PKG_CONFIGURE_LIBS+= -lz
+  CONFIGURE_LIBS+= -lz
 else
-  PKG_CONFIGURE_ARGS+= --without-rlm_sql_mysql
+  CONFIGURE_ARGS+= --without-rlm_sql_mysql
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-sql-pgsql),)
-  PKG_CONFIGURE_ARGS+= \
+  CONFIGURE_ARGS+= \
 		--with-rlm_sql_postgresql-include-dir="$(STAGING_DIR)/usr/include" \
 		--with-rlm_sql_postgresql-lib-dir="$(STAGING_DIR)/usr/lib"
 else
-  PKG_CONFIGURE_ARGS+= --without-rlm_sql_postgresql
+  CONFIGURE_ARGS+= --without-rlm_sql_postgresql
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-eap-peap),)
-  PKG_CONFIGURE_ARGS+= --with-rlm_eap_peap
-  PKG_CONFIGURE_LIBS+= -lcrypto -lssl
+  CONFIGURE_ARGS+= --with-rlm_eap_peap
+  CONFIGURE_LIBS+= -lcrypto -lssl
 else
-  PKG_CONFIGURE_ARGS+= --without-rlm_eap_peap
+  CONFIGURE_ARGS+= --without-rlm_eap_peap
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-eap-tls),)
-  PKG_CONFIGURE_ARGS+= --with-rlm_eap_tls
-  PKG_CONFIGURE_LIBS+= -lcrypto -lssl
+  CONFIGURE_ARGS+= --with-rlm_eap_tls
+  CONFIGURE_LIBS+= -lcrypto -lssl
 else
-  PKG_CONFIGURE_ARGS+= --without-rlm_eap_tls
+  CONFIGURE_ARGS+= --without-rlm_eap_tls
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-eap-ttls),)
-  PKG_CONFIGURE_ARGS+= --with-rlm_eap_ttls
-  PKG_CONFIGURE_LIBS+= -lcrypto -lssl
+  CONFIGURE_ARGS+= --with-rlm_eap_ttls
+  CONFIGURE_LIBS+= -lcrypto -lssl
 else
-  PKG_CONFIGURE_ARGS+= --without-rlm_eap_ttls
+  CONFIGURE_ARGS+= --without-rlm_eap_ttls
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-attr-rewrite),)
-  PKG_CONFIGURE_ARGS+= --with-rlm_attr-rewrite
+  CONFIGURE_ARGS+= --with-rlm_attr-rewrite
 else
-  PKG_CONFIGURE_ARGS+= --without-rlm_attr-rewrite
+  CONFIGURE_ARGS+= --without-rlm_attr-rewrite
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius-mod-radutmp),)
-  PKG_CONFIGURE_ARGS+= --with-rlm_radutmp
+  CONFIGURE_ARGS+= --with-rlm_radutmp
 else
-  PKG_CONFIGURE_ARGS+= --without-rlm_radutmp
+  CONFIGURE_ARGS+= --without-rlm_radutmp
 endif
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--libdir=/usr/lib/freeradius \
-		--libexecdir=/usr/lib/freeradius \
-		$(PKG_CONFIGURE_ARGS) \
-		, \
-		LDFLAGS="$$$$LDFLAGS -L$(PKG_INSTALL_DIR)/usr/lib/freeradius" \
-		LIBS="$(PKG_CONFIGURE_LIBS)" \
-		MYSQL_CONFIG="no" \
-	)
-endef
+CONFIGURE_VARS+= \
+	LDFLAGS="$$$$LDFLAGS -L$(PKG_INSTALL_DIR)/usr/lib/freeradius" \
+	LIBS="$(CONFIGURE_LIBS)" \
+	MYSQL_CONFIG="no" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
