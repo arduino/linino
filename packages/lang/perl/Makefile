@@ -179,6 +179,12 @@ endef
 endif
 $(eval $(Build/perl))
 
+define Build/Configure
+endef
+
+define Build/Compile
+endef
+
 $(eval $(call BuildPackage,microperl))
 $(eval $(call BuildPackage,perl))
 
