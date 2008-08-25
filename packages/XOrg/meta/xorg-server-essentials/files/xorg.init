@@ -10,7 +10,7 @@ START=90
 start() {
 	. /etc/profile
 	mkdir -p /var/run/xorg
-	$SSD -S -p $PIDF -q -x $PROG -- $ARGS 
+	$SSD -S -p $PIDF -q -b -x $PROG -- $ARGS 
 }
 
 stop() {
