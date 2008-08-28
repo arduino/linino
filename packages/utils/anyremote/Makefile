@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=anyremote
-PKG_VERSION:=4.4
+PKG_VERSION:=4.7.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/${PKG_NAME}
-PKG_MD5SUM:=a8fce6470c32cc263c3610d92e7b4141
+PKG_MD5SUM:=bd177156faa8a59a5d3e02cada243fc3
 
 include $(INCLUDE_DIR)/package.mk
 
