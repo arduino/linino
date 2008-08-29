@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=linux-uvc
-PKG_REV:=215
+PKG_REV:=244
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
