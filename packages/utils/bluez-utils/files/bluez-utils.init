@@ -31,15 +31,6 @@ hcid_config() {
 	[ "$enabled" -gt 0 ] && /usr/sbin/hcid $args
 }
 
-sdpd_config() {
-	local cfg="$1"
-	args=""
-	append_bool "$cfg" nodaemon "-n"
-	append_bool "$cfg" something "-m"
-	config_get_bool enabled "$cfg" "enabled" '1'
-	[ "$enabled" -gt 0 ] && /usr/sbin/sdpd $args
-}
-
 rfcomm_config() {
 	local cfg="$1"
 	args=""
@@ -104,7 +95,6 @@ start() {
 	config_load bluetooth
 
 	config_foreach hcid_config hcid
-	config_foreach sdpd_config sdpd
 	config_foreach rfcomm_config rfcomm
 	config_foreach dund_config dund
 	config_foreach pand_config pand
@@ -114,6 +104,5 @@ stop() {
 	killall dund
 	killall pand
 	/usr/bin/rfcomm release all
-	killall sdpd
 	killall hcid
 }
