@@ -9,11 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=atk
-PKG_VERSION:=1.11.4
-PKG_RELEASE:=1
+PKG_VERSION:=1.22.0
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://ftp.gnome.org/pub/gnome/sources/atk/1.11/
+PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/1.22/
+PKG_MD5SUM:=06a2b39a22d5ca35c47435da6b9643ac
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -28,17 +29,6 @@ define Package/atk
   DEPENDS:=+xorg-server-essentials +glib2
 endef
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
-		if [ -x $(CONFIGURE_CMD) ]; then \
-			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-			$(CONFIGURE_VARS) \
-			$(CONFIGURE_CMD) \
-			$(CONFIGURE_ARGS_XTRA) \
-			$(CONFIGURE_ARGS) ;\
-		fi \
-	)
-endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) all install DESTDIR=$(PKG_INSTALL_DIR)
