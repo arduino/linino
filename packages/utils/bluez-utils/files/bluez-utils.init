@@ -61,6 +61,12 @@ dund_config() {
 	append_bool "$cfg" cache "--cache"
 
 	append_string "$cfg" pppdopts ""
+	config_get ifn "$cfg" interface
+	if [ -n "$ifn" ]; then
+		config_get unit "$ifn" unit
+		[ -z "$unit" ] || append args "unit $unit ipparam $ifn linkname $ifn"
+	fi
+
 	config_get_bool enabled "$cfg" "enabled" '1'
 	[ "$enabled" -gt 0 ] && /usr/bin/dund $args
 }
