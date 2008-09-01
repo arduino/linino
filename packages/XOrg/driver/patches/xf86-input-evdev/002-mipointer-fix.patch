@@ -1,0 +1,30 @@
+diff -urN xf86-input-evdev-1.1.2.orig/src/evdev_axes.c xf86-input-evdev-1.1.2/src/evdev_axes.c
+--- xf86-input-evdev-1.1.2.orig/src/evdev_axes.c	2008-08-28 10:59:09.000000000 +0200
++++ xf86-input-evdev-1.1.2/src/evdev_axes.c	2008-08-28 10:55:52.000000000 +0200
+@@ -532,8 +532,14 @@
+ 	return Success;
+ 
+     if (!InitValuatorClassDeviceStruct(device, axes,
++#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) >= 1
++                                       GetMotionHistroy(),
++                                       GetMotionHistorSize(),
++#else
+                                        miPointerGetMotionEvents,
++                                       miPointerGetMotionBufferSize(),
++#endif
++                                       0))
+-                                       miPointerGetMotionBufferSize(), 0))
+         return !Success;
+ 
+     for (i = 0; i < axes; i++) {
+@@ -543,8 +549,9 @@
+ 
+     if (!InitPtrFeedbackClassDeviceStruct(device, EvdevPtrCtrlProc))
+         return !Success;
++#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) == 0
+-
+     xf86MotionHistoryAllocate (pInfo);
++#endif
+ 
+     return Success;
+ }

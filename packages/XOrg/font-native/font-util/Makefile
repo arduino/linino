@@ -9,11 +9,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=font-util
-PKG_VERSION:=X11R7.1-1.0.1
-PKG_RELEASE:=1
+PKG_VERSION:=1.0.1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.2/src/font
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/font
 
 include $(INCLUDE_DIR)/package.mk
 

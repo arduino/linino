@@ -9,9 +9,9 @@ include $(TOPDIR)/rules.mk
 
 PKG_BASE_NAME:=@BASE_NAME@
 PKG_NAME:=@NAME@
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_VERSION:=@VER@
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.2/src/lib/
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
 
@@ -31,7 +31,7 @@ define Build/InstallDev
 endef
 
 ifeq (@NAME@,libX11)
- CONFIGURE_ARGS_XTRA=--without-xcb
+ CONFIGURE_ARGS+=--without-xcb
 endif
 
 define libX11/Compile
@@ -53,16 +53,7 @@ define Build/Compile
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
-	if [ -x $(CONFIGURE_CMD) ]; then \
-		$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-		$(CONFIGURE_VARS) \
-		$(CONFIGURE_CMD) \
-		$(CONFIGURE_ARGS_XTRA) \
-		$(CONFIGURE_ARGS) \
-		--enable-malloc0returnsnull; \
-	fi \
-	)
+	$(call Build/Configure/Default, --enable-malloc0returnsnull)
 endef
 
 define Package/@NAME@/install/Default

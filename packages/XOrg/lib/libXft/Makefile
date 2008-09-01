@@ -9,9 +9,9 @@ include $(TOPDIR)/rules.mk
 
 PKG_BASE_NAME:=libXft
 PKG_NAME:=libXft
-PKG_RELEASE:=1
-PKG_VERSION:=X11R7.2-2.1.12
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.2/src/lib/
+PKG_RELEASE:=2
+PKG_VERSION:=2.1.12
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
 

@@ -8,8 +8,8 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_RELEASE:=1
-PKG_VERSION:=7.1
+PKG_RELEASE:=2
+PKG_VERSION:=7.3
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/headers/xorg-headers-native-$(PKG_VERSION)/
 
 include $(INCLUDE_DIR)/package.mk

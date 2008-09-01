@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=scrnsaverproto
-PKG_RELEASE:=1
-PKG_VERSION:=X11R7.1-1.1.0
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.2/src/proto/
+PKG_RELEASE:=2
+PKG_VERSION:=1.1.0
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/proto/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
 
@@ -26,7 +26,7 @@ define Package/scrnsaverproto
 endef
 
 define Build/InstallDev
-	DESTDIR=$(1) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
+	DESTDIR=$(STAGING_DIR) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
 endef
 
 define Build/Compile

@@ -4,15 +4,17 @@ for d in `find . -name packages`; do
 	echo "Entering "`dirname $d`
 	for p in `cat packages`; do
 		_NAME=${p%%|*}
-		NAME=${_NAME%-X11*}
+		NAME=${_NAME%-*}
 		BASE_NAME=${NAME%%-*}
-		_VER=${_NAME##*-X}
-		VER=X${_VER%%|*}
+		VER=${_NAME##*-}
 		DEP=`echo ${p##*|} | sed "s/+/ +/g"`
 		echo generating Makefile for ${NAME}-${VER} with deps : ${DEP}
-		rm -rf ${NAME} 
-		if [ "$1" == "gen" ]; then
-			mkdir ${NAME}
+		rm -f ${NAME}/Makefile
+        rm -f ${NAME}/patches/*
+		if [ "$1" = "gen" ]; then
+			if [ ! -e ${NAME} ]; then
+                mkdir ${NAME}
+            fi
 			sed "s/@VER@/${VER}/g" template.mk | sed "s/@DEP@/${DEP}/g" | sed "s/@NAME@/${NAME}/g" | sed "s/@BASE_NAME@/${BASE_NAME}/g" > ${NAME}/Makefile
 			if [ -d `pwd`/patches/${NAME} ]; then
 				mkdir ${NAME}/patches

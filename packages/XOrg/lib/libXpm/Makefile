@@ -1,17 +1,17 @@
-#
-# Copyright (C) 2007-2008 OpenWrt.org
+# 
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org
+# blogic@openwrt.org 
 include $(TOPDIR)/rules.mk
 
 PKG_BASE_NAME:=libXpm
 PKG_NAME:=libXpm
-PKG_RELEASE:=1
-PKG_VERSION:=X11R7.2-3.5.6
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.2/src/lib/
+PKG_RELEASE:=2
+PKG_VERSION:=3.5.7
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
 
@@ -21,27 +21,27 @@ define Package/libXpm
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros +libX11 @DISPLAY_SUPPORT
+  DEPENDS:=+xorg-headers-native +util-macros  @DISPLAY_SUPPORT
   TITLE:=libXpm
   URL:=http://xorg.freedesktop.org/
 endef
 
 define Build/InstallDev
-	DESTDIR=$(1) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
+	DESTDIR=$(STAGING_DIR) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
 endef
 
 ifeq (libXpm,libX11)
- CONFIGURE_ARGS_XTRA=--without-xcb
+ CONFIGURE_ARGS+=--without-xcb
 endif
 
 define libX11/Compile
 	$(MAKE_VARS) \
-		$(MAKE) -C $(PKG_BUILD_DIR)/src/util CFLAGS="" LDFLAGS="" CC="cc" makekeys
+		$(MAKE) -C $(PKG_BUILD_DIR)/src/util CFLAGS="" LDFLAGS="" CC="cc" makekeys 
 endef
 
 define libXt/Compile
 	$(MAKE_VARS) \
-		$(MAKE) -C $(PKG_BUILD_DIR)/util CFLAGS="" LDFLAGS="" CC="cc"
+		$(MAKE) -C $(PKG_BUILD_DIR)/util CFLAGS="" LDFLAGS="" CC="cc" 
 endef
 
 define Build/Compile
@@ -53,21 +53,12 @@ define Build/Compile
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
-	if [ -x $(CONFIGURE_CMD) ]; then \
-		$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-		$(CONFIGURE_VARS) \
-		$(CONFIGURE_CMD) \
-		$(CONFIGURE_ARGS_XTRA) \
-		$(CONFIGURE_ARGS) \
-		--enable-malloc0returnsnull; \
-	fi \
-	)
+	$(call Build/Configure/Default, --enable-malloc0returnsnull)
 endef
 
 define Package/libXpm/install/Default
 	$(INSTALL_DIR) $(1)/usr/lib
-	find $(PKG_INSTALL_DIR)/usr/lib/ -name lib*so* | $(XARGS) -I % -t cp -P % $(1)/usr/lib
+	find $(PKG_INSTALL_DIR)/usr/lib/ -name lib*so* | $(XARGS) -i -t cp -P {} $(1)/usr/lib 
 endef
 
 define Package/libXpm/install
@@ -80,8 +71,7 @@ define Package/libXaw/install
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+	$(CP) $(PKG_INSTALL_DIR)/* $(STAGING_DIR)
 endef
 
 $(eval $(call BuildPackage,libXpm))

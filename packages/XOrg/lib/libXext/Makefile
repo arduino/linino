@@ -9,13 +9,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_BASE_NAME:=libXext
 PKG_NAME:=libXext
-PKG_RELEASE:=1
-PKG_VERSION:=X11R7.2-1.0.2
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.2/src/lib/
+PKG_RELEASE:=2
+PKG_VERSION:=1.0.2
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
-
-PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,11 +27,11 @@ define Package/libXext
 endef
 
 define Build/InstallDev
-	DESTDIR=$(1) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
+	DESTDIR=$(STAGING_DIR) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
 endef
 
 ifeq (libXext,libX11)
- CONFIGURE_ARGS_XTRA=--without-xcb
+ CONFIGURE_ARGS+=--without-xcb
 endif
 
 define libX11/Compile
@@ -51,24 +49,16 @@ define Build/Compile
 	make -C $(PKG_BUILD_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
+	find $(PKG_INSTALL_DIR) -name *.la | xargs rm -rf
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
-	if [ -x $(CONFIGURE_CMD) ]; then \
-		$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-		$(CONFIGURE_VARS) \
-		$(CONFIGURE_CMD) \
-		$(CONFIGURE_ARGS_XTRA) \
-		$(CONFIGURE_ARGS) \
-		--enable-malloc0returnsnull; \
-	fi \
-	)
+	$(call Build/Configure/Default, --enable-malloc0returnsnull)
 endef
 
 define Package/libXext/install/Default
 	$(INSTALL_DIR) $(1)/usr/lib
-	find $(PKG_INSTALL_DIR)/usr/lib/ -name lib*so* | $(XARGS) -I % -t cp -P % $(1)/usr/lib 
+	find $(PKG_INSTALL_DIR)/usr/lib/ -name lib*so* | $(XARGS) -i -t cp -P {} $(1)/usr/lib 
 endef
 
 define Package/libXext/install
@@ -81,8 +71,7 @@ define Package/libXaw/install
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+	$(CP) $(PKG_INSTALL_DIR)/* $(STAGING_DIR)
 endef
 
 $(eval $(call BuildPackage,libXext))

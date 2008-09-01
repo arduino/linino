@@ -8,26 +8,26 @@
 include $(TOPDIR)/rules.mk
 
 PKG_BASE_NAME:=xf86
-PKG_NAME:=xf86-video-i810
-PKG_RELEASE:=1
-PKG_VERSION:=X11R7.2-1.6.5
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.2/src/driver
+PKG_NAME:=xf86-video-intel
+PKG_RELEASE:=2
+PKG_VERSION:=2.1.1
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/driver
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/xf86-video-i810
+define Package/xf86-video-intel
   SECTION:=xorg-driver
   CATEGORY:=Xorg
   SUBMENU:=driver
-  DEPENDS:=+xorg-server  +libXvMC @DISPLAY_SUPPORT
-  TITLE:=xf86-video-i810
+  DEPENDS:=+xorg-server  @DISPLAY_SUPPORT
+  TITLE:=xf86-video-intel
   URL:=http://xorg.freedesktop.org/
 endef
 
 define Build/InstallDev
-	DESTDIR=$(1) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
+	DESTDIR=$(STAGING_DIR) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
 endef
 
 EXTRA_CPPFLAGS= -I$(STAGING_DIR)/usr/include/xorg \
@@ -46,7 +46,7 @@ define Build/Configure
 	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
 	if [ -x $(CONFIGURE_CMD) ]; then \
 		$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-		$(foreach a,dri.h sarea.h dristruct.h exa.h,export ac_cv_file_$(call acvar,$(STAGING_DIR)/usr/include/xorg/$(a))=yes;) \
+		$(foreach a,dri.h sarea.h dristruct.h exa.h damage.h,export ac_cv_file_$(call acvar,$(STAGING_DIR)/usr/include/xorg/$(a))=yes;) \
 		sed -i "s|sdkdir=.*|sdkdir=$(STAGING_DIR)/usr/include/xorg|g" $(PKG_BUILD_DIR)/configure ;\
 		$(CONFIGURE_VARS) \
 		$(CONFIGURE_CMD) \
@@ -63,9 +63,9 @@ define Build/Compile
 	find $(PKG_INSTALL_DIR) -name *a | xargs rm -rf
 endef
 
-define Package/xf86-video-i810/install
+define Package/xf86-video-intel/install
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
 endef
 
-$(eval $(call BuildPackage,xf86-video-i810))
+$(eval $(call BuildPackage,xf86-video-intel))

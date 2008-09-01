@@ -11,10 +11,9 @@ include $(TOPDIR)/rules.mk
 PKG_BASE_NAME:=font-base
 PKG_NAME:=font-misc-misc
 PKG_RELEASE:=1
-PKG_VERSION:=X11R7.0-1.0.0
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.2/src/font
-PKG_SOURCE:=font-misc-misc-X11R7.0-1.0.0.tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/fonts/font-misc-misc-X11R7.0-1.0.0/
+PKG_VERSION:=1.0.0
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/font
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 
 include $(INCLUDE_DIR)/package.mk
 
