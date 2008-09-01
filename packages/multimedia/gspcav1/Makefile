@@ -23,7 +23,7 @@ define KernelPackage/video-gspca
   SUBMENU:=Video Support
   TITLE:=SPCA5xx based USB webcam support
   URL:=http://mxhaard.free.fr/
-  DEPENDS:=@LINUX_2_6 @USB_SUPPORT +kmod-usb-core kmod-video-core
+  DEPENDS:=@LINUX_2_6 @USB_SUPPORT +kmod-usb-core +kmod-video-core
   FILES:=$(PKG_BUILD_DIR)/gspca.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,90,gspca)
 endef
