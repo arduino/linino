@@ -8,37 +8,29 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pixman
-PKG_VERSION:=0.10.0
-PKG_RELEASE:=1
+PKG_VERSION:=0.11.8
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:= http://cairographics.org/releases/
-PKG_FIXUP = libtool
-PKG_MD5SUM:=41804ac38025102dcc9891dfd4a3d105
+PKG_SOURCE_URL:=http://cairographics.org/releases/
+PKG_MD5SUM:=7b5db768c51337b5e5e954fc9c961cd3
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
 EXTRA_LDFLAGS:="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
-TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include/gtk-2.0/gdk
+TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/include/gtk-2.0/gdk
 
 define Package/pixman
   SECTION:=xorg-libs
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=pixman
-  DEPENDS:=+xorg-server-essentials
 endef
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
-		if [ -x $(CONFIGURE_CMD) ]; then \
-			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-			$(CONFIGURE_VARS) \
-			$(CONFIGURE_CMD) \
-			$(CONFIGURE_ARGS_XTRA) \
-			$(CONFIGURE_ARGS) ;\
-		fi \
-	)
+define Package/pixman/description
+pixman is a library that provides low-level pixel manipulation
+features such as image compositing and trapezoid rasterization.
 endef
 
 define Build/Compile
