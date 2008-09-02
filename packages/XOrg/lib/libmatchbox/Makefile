@@ -23,7 +23,7 @@ define Package/libmatchbox
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+libX11 +libXft +libpng +libjpeg @DISPLAY_SUPPORT
+  DEPENDS:=+libX11 +libXft +libpng +libjpeg +libXau +libXdmcp
   TITLE:=libmatchbox
   URL:=http://matchbox-project.org
 endef
