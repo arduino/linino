@@ -4,21 +4,25 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
+# $Id:
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libwnck
-PKG_VERSION:=2.18.3
-PKG_RELEASE:=1
+PKG_VERSION:=2.22.3
+PKG_RELEASE:=2
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://ftp.gnome.org/pub/gnome/sources/libwnck/2.18/
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/2.22/
+PKG_MD5SUM:=12cf787efa0b9d95bc53613bcc7d958e
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_CFLAGS+= -I$(STAGING_DIR)/usr/lib/libintl/include/ -I$(STAGING_DIR)/usr/lib/libiconv/include/
-EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/ \
+              -I$(STAGING_DIR)/usr/lib/libiconv/include/
+EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
+               -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/libwnck
   SECTION:=libs
@@ -29,35 +33,28 @@ define Package/libwnck
 endef
 
 define Package/libwnck/description
-  window Navigator Construction Kit
-endef
-
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); \
-		if [ -x $(CONFIGURE_CMD) ]; then \
-			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-			GMSGFMT=msgfmt \
-			$(CONFIGURE_VARS) \
-			$(CONFIGURE_CMD) \
-			$(CONFIGURE_ARGS) ;\
-		fi \
-	)
+Window Navigator Construction Kit
 endef
 
 TARGET_CFLAGS += $(FPIC)
 
 define Build/Compile
-	cd $(PKG_BUILD_DIR) ; DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) all install
+	$(MAKE) -C $(PKG_BUILD_DIR)
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)/usr/include/libwnck-1.0/libwnck/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/include/libwnck-1.0/libwnck/* $(1)/usr/include/libwnck-1.0/libwnck/
+	$(INSTALL_DIR) $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*{.so.*,la} $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
 endef
 
 define Package/libwnck/install
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*{.so.*,a} $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libwnck))
