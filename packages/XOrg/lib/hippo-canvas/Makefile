@@ -5,13 +5,16 @@ PKG_VERSION:=0.3.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=@GNOME/$(PKG_VERSION)/0.3/
+PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/0.3/
 PKG_MD5SUM:=9a0f64eb0258a3e8ba710eff9798a7d0
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
+EXTRA_CFLAGS += \
+	-I$(STAGING_DIR)/usr/lib/libintl/include \
+	-I$(STAGING_DIR)/usr/include/libcroco-0.6 \
+	-I$(STAGING_DIR)/usr/include/pycairo
 
 define Package/hippo-canvas
   SECTION:=xorg-libs
@@ -19,7 +22,7 @@ define Package/hippo-canvas
   SUBMENU:=libraries
   TITLE:=Hippo Canvas
   URL:=http://developer.mugshot.org/wiki/Hippo_Canvas
-  DEPENDS:=+librsvg +python +gtk2 +cairo +libcroco +pango
+  DEPENDS:=+librsvg +python +gtk2 +cairo +libcroco +pango +pycairo
 endef
 
 define Package/hippo-canvas/description
