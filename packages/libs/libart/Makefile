@@ -43,12 +43,11 @@ define Build/Configure
 		--enable-shared \
 		--enable-static \
 		, \
-		HOSTCC="$(HOSTCC)" \
 	)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)
+	$(MAKE) -C $(PKG_BUILD_DIR) HOSTCC="$(HOSTCC)"
 	$(MAKE) -C $(PKG_BUILD_DIR) install DESTDIR="$(PKG_INSTALL_DIR)"
 endef
 
