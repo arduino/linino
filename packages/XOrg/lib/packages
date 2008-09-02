@@ -11,7 +11,7 @@ libXfixes-4.0.3|
 libXfont-1.3.1|+zlib+libfontenc+fontcacheproto+fontsproto+libfreetype
 libxkbfile-1.0.4|
 libxkbui-1.0.2|
-libXmu-1.0.3|
+libXmu-1.0.3|+libXt +libXext
 libXpm-3.5.7|
 libXrandr-1.2.2|+libXext+libXrender+randrproto+renderproto+xextproto+libX11
 libXrender-0.9.4|+libfreetype+zlib+xproto+libfontenc+xtrans+fontsproto+renderproto

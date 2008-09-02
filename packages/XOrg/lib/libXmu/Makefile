@@ -21,7 +21,7 @@ define Package/libXmu
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  @DISPLAY_SUPPORT
+  DEPENDS:=+xorg-headers-native +util-macros +libXt +libXext @DISPLAY_SUPPORT
   TITLE:=libXmu
   URL:=http://xorg.freedesktop.org/
 endef
