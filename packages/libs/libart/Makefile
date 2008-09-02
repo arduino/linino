@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libart
-PKG_VERSION:=2.3.19
-PKG_RELEASE:=1
+PKG_VERSION:=2.3.20
+PKG_RELEASE:=2
 
-PKG_SOURCE:=$(PKG_NAME)_lgpl-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://ftp.gnome.org/pub/gnome/sources/libart_lgpl/2.3
-PKG_MD5SUM:=a2992b830295132dae2bf85d1156e48e
+PKG_SOURCE:=$(PKG_NAME)_lgpl-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)_lgpl/2.3
+PKG_MD5SUM:=d0ce67f2ebcef1e51a83136c69242a73
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_lgpl-$(PKG_VERSION)
 PKG_FIXUP:=libtool
@@ -38,28 +38,31 @@ endef
 
 TARGET_CFLAGS += $(FPIC)
 
-CONFIGURE_ARGS += \
-	--enable-shared \
-	--enable-static
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--enable-static \
+		, \
+		HOSTCC="$(HOSTCC)" \
+	)
+endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		HOSTCC="$(HOSTCC)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+	$(MAKE) -C $(PKG_BUILD_DIR)
+	$(MAKE) -C $(PKG_BUILD_DIR) install DESTDIR="$(PKG_INSTALL_DIR)"
 endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/include $(1)/usr/lib $(1)/usr/lib/pkgconfig
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libart2-config $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libart-2.0 $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libart_lgpl_2.{la,a,so*} $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libart-2.0.pc $(1)/usr/lib/pkgconfig/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/libart_lgpl_2.{la,a,so*} $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libart-2.0.pc $(1)/usr/lib/pkgconfig/
 endef
 
 define Package/libart/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libart_lgpl_2.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/libart_lgpl_2.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libart))
