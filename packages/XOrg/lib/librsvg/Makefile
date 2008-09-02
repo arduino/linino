@@ -14,7 +14,9 @@ include $(INCLUDE_DIR)/package.mk
 EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
                -L$(STAGING_DIR)/usr/lib/libintl/lib/ \
                -L$(STAGING_DIR)/usr/lib/libiconv/lib/
-	
+
+TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include/libcroco-0.6
+
 define Package/librsvg
   SECTION:=xorg-libs
   CATEGORY:=Xorg
