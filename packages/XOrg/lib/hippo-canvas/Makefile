@@ -11,13 +11,12 @@ PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/ 
-	
+EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
+
 define Package/hippo-canvas
   SECTION:=xorg-libs
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEFAULT:=y
   TITLE:=Hippo Canvas
   URL:=http://developer.mugshot.org/wiki/Hippo_Canvas
   DEPENDS:=+librsvg +python +gtk2 +cairo +libcroco +pango
@@ -37,7 +36,7 @@ define Build/Compile
 	make -C $(PKG_BUILD_DIR)/ install DESTDIR=$(PKG_INSTALL_DIR)
 endef
 
-define Build/InstallDev 
+define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/python2.5/site-packages/
@@ -54,7 +53,6 @@ define Package/hippo-canvas/install
 	$(INSTALL_DIR) $(1)/usr/lib/python2.5/site-packages/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/python2.5/site-packages/*.{so*,a} $(1)/usr/lib/python2.5/site-packages/
 endef
-	
-$(eval $(call BuildPackage,hippo-canvas))
 
+$(eval $(call BuildPackage,hippo-canvas))
 
