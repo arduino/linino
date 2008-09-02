@@ -1,0 +1,9 @@
+diff -urN librsvg-2.22.2.orig/gdk-pixbuf-loader/io-svg.c librsvg-2.22.2/gdk-pixbuf-loader/io-svg.c
+--- librsvg-2.22.2.orig/gdk-pixbuf-loader/io-svg.c	2008-08-12 01:28:41.000000000 +0200
++++ librsvg-2.22.2/gdk-pixbuf-loader/io-svg.c	2008-08-12 01:31:29.000000000 +0200
+@@ -258,4 +258,5 @@
+         info->mime_types  = mime_types;
+         info->extensions  = extensions;
+         info->flags       = GDK_PIXBUF_FORMAT_SCALABLE;
++        info->license     = "LGPL";
+ }
