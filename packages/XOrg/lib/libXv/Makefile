@@ -26,10 +26,6 @@ define Package/libXv
   URL:=http://xorg.freedesktop.org/
 endef
 
-define Build/InstallDev
-	DESTDIR=$(STAGING_DIR) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
-endef
-
 ifeq (libXv,libX11)
  CONFIGURE_ARGS+=--without-xcb
 endif
@@ -71,7 +67,7 @@ define Package/libXaw/install
 endef
 
 define Build/InstallDev
-	$(CP) $(PKG_INSTALL_DIR)/* $(STAGING_DIR)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 endef
 
 $(eval $(call BuildPackage,libXv))

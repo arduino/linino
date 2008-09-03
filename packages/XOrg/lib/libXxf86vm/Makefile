@@ -21,13 +21,9 @@ define Package/libXxf86vm
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  @DISPLAY_SUPPORT
+  DEPENDS:=+xorg-headers-native +util-macros  +xproto +libX11 +xextproto +libXext +xf86vidmodeproto @DISPLAY_SUPPORT
   TITLE:=libXxf86vm
   URL:=http://xorg.freedesktop.org/
-endef
-
-define Build/InstallDev
-	DESTDIR=$(STAGING_DIR) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
 endef
 
 ifeq (libXxf86vm,libX11)
@@ -71,7 +67,7 @@ define Package/libXaw/install
 endef
 
 define Build/InstallDev
-	$(CP) $(PKG_INSTALL_DIR)/* $(STAGING_DIR)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 endef
 
 $(eval $(call BuildPackage,libXxf86vm))

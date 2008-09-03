@@ -21,13 +21,9 @@ define Package/libXfont
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  +zlib +libfontenc +fontcacheproto +fontsproto +libfreetype @DISPLAY_SUPPORT
+  DEPENDS:=+xorg-headers-native +util-macros  +zlib +xproto +xtrans +libfontenc +fontcacheproto +fontsproto +libfreetype @DISPLAY_SUPPORT
   TITLE:=libXfont
   URL:=http://xorg.freedesktop.org/
-endef
-
-define Build/InstallDev
-	DESTDIR=$(STAGING_DIR) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
 endef
 
 ifeq (libXfont,libX11)
@@ -71,7 +67,7 @@ define Package/libXaw/install
 endef
 
 define Build/InstallDev
-	$(CP) $(PKG_INSTALL_DIR)/* $(STAGING_DIR)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 endef
 
 $(eval $(call BuildPackage,libXfont))
