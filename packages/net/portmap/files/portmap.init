@@ -1,7 +1,7 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2006-2008 OpenWrt.org
 
-START=40
+START=19
 NAME=portmap
 PROG=/usr/sbin/$NAME
 DEFAULT=/etc/default/$NAME
