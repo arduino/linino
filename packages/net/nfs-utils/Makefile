@@ -38,6 +38,8 @@ endef
 
 CONFIGURE_ARGS += --disable-gss
 TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib
+TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+
 define Build/Compile
 	$(call Build/Compile/Default, \
 		OPT="$(TARGET_CFLAGS)" \
