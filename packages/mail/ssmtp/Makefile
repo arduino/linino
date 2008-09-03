@@ -34,10 +34,7 @@ define Package/ssmtp/description
  configuration.
 endef
 
-EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
-EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib
-
-TARGET_CONFIGURE_OPTS+=\
+TARGET_CONFIGURE_OPTS += \
 	CC="$(TARGET_CC) $(EXTRA_CFLAGS) $(EXTRA_LDFLAGS)"
 
 CONFIGURE_ARGS += \

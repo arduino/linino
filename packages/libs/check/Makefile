@@ -16,8 +16,15 @@ PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/ -I$(STAGING_DIR)/usr/lib/libiconv/include/ -fPIC
-EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libintl/lib/ -L$(STAGING_DIR)/usr/lib/libiconv/lib/
+PKG_INSTALL = 1
+
+TARGET_CFLAGS += $(FPIC) \
+	-I$(STAGING_DIR)/usr/lib/libintl/include \
+	-I$(STAGING_DIR)/usr/lib/libiconv/include
+
+TARGET_LDFLAGS += \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Package/check
   SECTION:=lib
@@ -28,7 +35,7 @@ define Package/check
 endef
 
 define Package/check/description
-  unit testinglibrary
+  unit testing library
 endef
 
 define Build/Configure
@@ -36,10 +43,8 @@ define Build/Configure
 	$(call Build/Configure/Default)
 endef
 
-TARGET_CFLAGS += $(FPIC)
-
-define Build/Compile
-	cd $(PKG_BUILD_DIR) ; DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) all install
+define Build/Install
+	$(call Build/Install/Default)
 	cd $(PKG_INSTALL_DIR)/usr/lib/ ; ln -s libcheck.so libcheck_pic.so
 endef
 

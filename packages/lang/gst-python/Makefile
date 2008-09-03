@@ -17,8 +17,17 @@ PKG_MD5SUM:=2c633a06c140024dd0d59db1e87e6945
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_CFLAGS+= -I$(STAGING_DIR)/usr/lib/libintl/include/ -I$(STAGING_DIR)/usr/lib/libiconv/include/
-EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libintl/lib/ -L$(STAGING_DIR)/usr/lib/libiconv/lib/
+PKG_INSTALL=1
+
+TARGET_CFLAGS += $(FPIC) \
+	-I$(STAGING_DIR)/usr/lib/libintl/include \
+	-I$(STAGING_DIR)/usr/lib/libiconv/include
+
+TARGET_LDFLAGS += \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib
+
+CONFIGURE_VARS += PYTHON=/usr/bin/python
 
 define Package/gst-python
   SUBMENU:=Python
@@ -31,22 +40,6 @@ endef
 
 define Package/gst-python/description
   python bindings for dbus 
-endef
-
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); \
-		if [ -x $(CONFIGURE_CMD) ]; then \
-			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-			$(CONFIGURE_VARS) \
-			PYTHON=/usr/bin/python \
-			$(CONFIGURE_CMD) \
-			$(CONFIGURE_ARGS) ;\
-		fi \
-	)
-endef
-
-define Build/Compile
-	cd $(PKG_BUILD_DIR) ; DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) all install
 endef
 
 define Build/InstallDev

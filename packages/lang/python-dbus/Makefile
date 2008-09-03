@@ -16,8 +16,13 @@ PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_CFLAGS+= -I$(STAGING_DIR)/usr/lib/libintl/include/ -I$(STAGING_DIR)/usr/lib/libiconv/include/
-EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libintl/lib/ -L$(STAGING_DIR)/usr/lib/libiconv/lib/
+EXTRA_CFLAGS += \
+	-I$(STAGING_DIR)/usr/lib/libintl/include \
+	-I$(STAGING_DIR)/usr/lib/libiconv/include
+
+EXTRA_LDFLAGS += \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Package/dbus-python
   SUBMENU:=Python
