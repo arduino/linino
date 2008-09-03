@@ -14,7 +14,7 @@ PKG_RELEASE:=2
 PKG_VERSION:=@VER@
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/app
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
+PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 
 _DEPEND:=@DEP@
 ifneq (@NAME@,xinit)
