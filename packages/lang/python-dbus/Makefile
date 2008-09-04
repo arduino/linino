@@ -42,21 +42,21 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/dbus-1.0/dbus/
-	$(INSTALL_DATA) $(STAGING_DIR)/usr/include/dbus-1.0/dbus/* \
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/include/dbus-1.0/dbus/* \
 		$(1)/usr/include/dbus-1.0/dbus/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
-	$(INSTALL_DATA) $(STAGING_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig
 endef
 
 define Package/dbus-python/install
 	$(INSTALL_DIR) $(1)/usr/lib/python2.5/site-packages/
-	$(INSTALL_DATA) $(STAGING_DIR)/usr/lib/python2.5/site-packages/*.{py,so,a} \
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/python2.5/site-packages/*.{py,so,a} \
 		$(1)/usr/lib/python2.5/site-packages/
 	$(INSTALL_DIR) $(1)/usr/lib/python2.5/site-packages/dbus/
-	$(INSTALL_DATA) $(STAGING_DIR)/usr/lib/python2.5/site-packages/dbus/*.py \
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/python2.5/site-packages/dbus/*.py \
 		$(1)/usr/lib/python2.5/site-packages/dbus/
 	$(INSTALL_DIR) $(1)/usr/lib/python2.5/site-packages/dbus/mainloop/
-	$(INSTALL_DATA) $(STAGING_DIR)/usr/lib/python2.5/site-packages/dbus/mainloop/*.py \
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/python2.5/site-packages/dbus/mainloop/*.py \
 		$(1)/usr/lib/python2.5/site-packages/dbus/mainloop/
 endef
 
