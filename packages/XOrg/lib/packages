@@ -16,6 +16,7 @@ libXpm-3.5.7|+xproto+libX11
 libXrandr-1.2.2|+libXext+libXrender+randrproto+renderproto+xextproto+libX11
 libXrender-0.9.4|+libX11+renderproto
 libXt-1.0.4|+libSM+libX11+xproto+kbproto
+libXtst-1.0.3|+libX11+libXext+recordproto+xextproto+inputproto
 libXv-1.0.3|+libXext+videoproto
 libXvMC-1.0.4|+libXext+videoproto+libXv
 libXxf86misc-1.0.1|+xproto+libX11+xextproto+libXext+xf86miscproto
