@@ -8,53 +8,44 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pycairo
-PKG_VERSION:=1.4.12
-PKG_RELEASE:=1
+PKG_VERSION:=1.6.4
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.cairographics.org/releases
-PKG_BUILD_DEPENDS:=python cairo
+PKG_SOURCE_URL:=http://www.cairographics.org/releases/
+PKG_MD5SUM:=2c3aa21e6e610321498f9f81f7b625df
 PKG_FIXUP:=libtool
-PKG_MD5SUM:=c63199d35b1e1d3c5133509f315f70d7
 
 include $(INCLUDE_DIR)/package.mk
+
+PKG_INSTALL=1
 
 define Package/pycairo
   SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=Cairo bindings to python
-  URL:=http://www.cairographics.org/
-  DEPENDS:=python +cairo
+  URL:=http://www.cairographics.org/pycairo/
+  DEPENDS:=python-core +cairo
 endef
 
 define Package/pycairo/description
-  cairo modul for python
-endef
-
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); \
-		if [ -x $(CONFIGURE_CMD) ]; then \
-			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-			$(CONFIGURE_VARS) \
-			$(CONFIGURE_CMD) \
-			$(CONFIGURE_ARGS) ;\
-		fi \
-	)
-endef
-
-define Build/Compile
-	cd $(PKG_BUILD_DIR) ; DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) all install
+  Cairo bindings for python
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)/usr/include/pycairo
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/include/pycairo/* \
+		$(1)/usr/include/pycairo
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
+		$(1)/usr/lib/pkgconfig/
 endef
 
 define Package/pycairo/install
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)/usr/lib/python2.5/site-packages/cairo/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/python2.5/site-packages/cairo/*.{py,so,a} \
+		$(1)/usr/lib/python2.5/site-packages/cairo/
 endef
 
 $(eval $(call BuildPackage,pycairo))
