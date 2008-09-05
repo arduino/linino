@@ -18,8 +18,7 @@ PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_LDFLAGS:="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
-TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/include/gtk-2.0/gdk
+PKG_INSTALL=1
 
 define Package/pixman
   SECTION:=xorg-libs
@@ -33,9 +32,8 @@ pixman is a library that provides low-level pixel manipulation
 features such as image compositing and trapezoid rasterization.
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR)/ install DESTDIR=$(PKG_INSTALL_DIR)
+define Build/Configure
+	$(call Build/Configure/Default,--disable-gtk)
 endef
 
 define Build/InstallDev
