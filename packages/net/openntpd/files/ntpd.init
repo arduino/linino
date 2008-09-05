@@ -2,6 +2,11 @@
 # Copyright (C) 2006 OpenWrt.org
 
 START=60
+
+boot() {
+	return 0
+}
+
 start() {
 	mkdir -p `awk -F: '/^ntp:/{print $6}' /etc/passwd`
 	mkdir -p /var/db/
