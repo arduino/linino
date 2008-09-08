@@ -197,12 +197,6 @@ define Package/collectd-mod-rrdtool1
         DEPENDS:=collectd +librrd1
 endef
 
-define Package/collectd-mod-rrdtool
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - rrdtool 1.2.x output plugin
-        DEPENDS:=collectd +librrd
-endef
-
 define Package/collectd-mod-snmp
         $(call Package/collectd/common_info)
         TITLE:=collectd - snmp input plugin
@@ -305,13 +299,9 @@ ifneq ($(CONFIG_PACKAGE_collectd-mod-netlink),)
 endif
 
 # exception: mod-rrdtool(1) needs rrdtool
-ifneq ($(CONFIG_PACKAGE_collectd-mod-rrdtool1)$(CONFIG_PACKAGE_collectd-mod-rrdtool),)
+ifneq ($(CONFIG_PACKAGE_collectd-mod-rrdtool1),)
 	PKG_CONFIGURE_OPTS += --enable-rrdtool
-	ifneq ($(CONFIG_PACKAGE_collectd-mod-rrdtool1),)
-		PKG_CONFIGURE_OPTS += --with-rrdtool=$(wildcard $(BUILD_DIR)/rrdtool-1.0.*)
-	else
-		PKG_CONFIGURE_OPTS += --with-rrdtool=$(wildcard $(BUILD_DIR)/rrdtool-1.2.*)
-	endif
+	PKG_CONFIGURE_OPTS += --with-rrdtool=$(wildcard $(BUILD_DIR)/rrdtool-1.0.*)
 endif
 
 
@@ -445,11 +435,6 @@ define Package/collectd-mod-rrdtool1/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/rrdtool.so $(1)/usr/lib/collectd/
 endef
 
-define Package/collectd-mod-rrdtool/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/rrdtool.so $(1)/usr/lib/collectd/
-endef
-
 define Package/collectd-mod-snmp/install
 	$(INSTALL_DIR) $(1)/usr/lib/collectd
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/snmp.so $(1)/usr/lib/collectd/
@@ -520,7 +505,6 @@ $(eval $(call BuildPackage,collectd-mod-ping))
 $(eval $(call BuildPackage,collectd-mod-powerdns))
 $(eval $(call BuildPackage,collectd-mod-processes))
 $(eval $(call BuildPackage,collectd-mod-rrdtool1))
-$(eval $(call BuildPackage,collectd-mod-rrdtool))
 $(eval $(call BuildPackage,collectd-mod-snmp))
 $(eval $(call BuildPackage,collectd-mod-syslog))
 $(eval $(call BuildPackage,collectd-mod-tail))
