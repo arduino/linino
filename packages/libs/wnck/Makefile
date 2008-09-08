@@ -47,14 +47,14 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/libwnck-1.0/libwnck/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/include/libwnck-1.0/libwnck/* $(1)/usr/include/libwnck-1.0/libwnck/
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*{.so.*,la} $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*{.so*,la} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
 endef
 
 define Package/libwnck/install
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*{.so.*,a} $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*{.so*,a} $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libwnck))
