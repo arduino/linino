@@ -28,6 +28,10 @@ endef
 define Build/Compile
 endef
 
+define Package/ddns-scripts/conffiles
+/etc/config/ddns
+endef
+
 define Package/ddns-scripts/install
 	$(INSTALL_DIR) $(1)
 	$(CP) ./files/* $(1)/
