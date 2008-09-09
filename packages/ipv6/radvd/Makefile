@@ -71,6 +71,10 @@ define Build/Compile
 		install
 endef
 
+define Package/radvd/conffiles
+/etc/config/radvd
+endef
+
 define Package/radvd/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/radvd.config $(1)/etc/config/radvd
