@@ -40,6 +40,10 @@ define Build/Compile
 		DEBUG=0
 endef
 
+define Package/aiccu/conffiles
+/etc/aiccu.conf
+endef
+
 define Package/aiccu/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unix-console/$(PKG_NAME) $(1)/usr/sbin/
