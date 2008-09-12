@@ -1,10 +1,11 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
 # blogic@openwrt.org
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
@@ -15,7 +16,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.eterm.org/download/
 PKG_MD5SUM:=a9ec3b2da317f35869316e6d9571d296
-PKG_FIXUP:=libtol
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
