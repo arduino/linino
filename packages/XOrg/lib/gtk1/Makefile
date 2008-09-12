@@ -1,10 +1,11 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
 # blogic@openwrt.org
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
@@ -13,12 +14,14 @@ PKG_VERSION:=1.2.10
 PKG_RELEASE:=1
 
 PKG_SOURCE:=gtk+-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:= \
-	ftp://ftp.gtk.org/pub/gtk/v1.2/ \
-	http://gd.tuwien.ac.at/graphics/gimp/gtk/v1.2/
+PKG_SOURCE_URL:=@GNOME/gtk+/1.2/
 PKG_BUILD_DIR=$(BUILD_DIR)/gtk+-1.2.10
+PKG_MD5SUM:=4d5cb2fc7fb7830e4af9747a36bfce20
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+
+PKG_INSTALL=1
 
 CONFIGURE_ARGS_XTRA+=--x-includes=$(STAGING_DIR)/usr/include/ \
 		--x-libraries=$(STAGING_DIR)/usr/lib \
@@ -27,7 +30,7 @@ CONFIGURE_ARGS_XTRA+=--x-includes=$(STAGING_DIR)/usr/include/ \
 		--enable-static=yes
 
 EXTRA_CFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
-TARGET_CFLAGS+= -I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include
+TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include
 EXTRA_LDFLAGS+=-lnotimpl -lglib -lgmodule
 
 define Package/gtk1
@@ -36,23 +39,6 @@ define Package/gtk1
   SUBMENU:=framework
   TITLE:=GTK+ 1.2.10 package
   DEPENDS:=+glib1 +libX11
-endef
-
-define Build/Configure
-	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
-		if [ -x $(CONFIGURE_CMD) ]; then \
-			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-			$(CONFIGURE_VARS) \
-			$(CONFIGURE_CMD) \
-			$(CONFIGURE_ARGS_XTRA) \
-			$(CONFIGURE_ARGS) ;\
-		fi \
-	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR)/ install DESTDIR=$(PKG_INSTALL_DIR)
 endef
 
 define Build/InstallDev
