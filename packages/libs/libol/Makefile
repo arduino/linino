@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,6 +15,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.balabit.com/downloads/libol/0.3
 PKG_MD5SUM:=cbadf4b7ea276dfa85acc38a1cc5ff17
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -43,17 +44,27 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libol-config $(1)/usr/bin/
-	mkdir -p $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libol $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libol.{*a,so*} $(1)/usr/lib/
+	$(INSTALL_DIR) $(2)/bin
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/libol-config \
+		$(2)/bin/
+
+	$(INSTALL_DIR) $(1)/usr/include/libol
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/libol/*.h \
+		$(1)/usr/include/libol/
+
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libol.{la,so*} \
+		$(1)/usr/lib/
 endef
 
 define Package/libol/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libol.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libol.{a,so*} \
+		$(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libol))
