@@ -14,6 +14,7 @@ PKG_VERSION:=0.0.13
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnetfilter_queue/
 PKG_MD5SUM:=660cbfd3dc8c10bf9b1803cd2b688256
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
