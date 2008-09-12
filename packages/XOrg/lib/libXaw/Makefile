@@ -21,7 +21,7 @@ define Package/libXaw
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+xorg-headers-native +util-macros  +xproto +libX11 +libXext +xextproto +libXt +libXmu +libXmu +libXpm +libXp +printproto +libXau @DISPLAY_SUPPORT
+  DEPENDS:=+xorg-headers-native +util-macros  +xproto +libX11 +libXext +xextproto +libXt +libXmu +libXmu +libXpm +printproto +libXau @DISPLAY_SUPPORT
   TITLE:=libXaw
   URL:=http://xorg.freedesktop.org/
 endef
