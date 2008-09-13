@@ -1,3 +1,11 @@
+#
+# Copyright (C) 2008 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id$
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=librsvg
@@ -11,11 +19,15 @@ PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
+PKG_INSTALL=1
+
 EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
                -L$(STAGING_DIR)/usr/lib/libintl/lib/ \
                -L$(STAGING_DIR)/usr/lib/libiconv/lib/
 
 TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include/libcroco-0.6
+
+STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_librsvg CONFIG_PACKAGE_librsvg-pixbuf-loader)
 
 define Package/librsvg
   SECTION:=xorg-libs
@@ -23,7 +35,16 @@ define Package/librsvg
   SUBMENU:=libraries
   TITLE:=SVG rendering library
   URL:=http://librsvg.sourceforge.net/
-  DEPENDS:=+cairo +libxml2 +glib2 +libcroco
+  DEPENDS:=+cairo +libxml2 +glib2 +libcroco +pango +gtk2
+endef
+
+define Package/librsvg-pixbuf-loader
+  SECTION:=xorg-libs
+  CATEGORY:=Xorg
+  SUBMENU:=libraries
+  TITLE:=SVG rendering library
+  URL:=http://librsvg.sourceforge.net/
+  DEPENDS:=librsvg
 endef
 
 define Package/librsvg/description
@@ -31,18 +52,20 @@ librsvg is a high performance SVG rendering library associated with the Gnome Pr
 endef
 
 define Build/Configure
-  $(call Build/Configure/Default,--disable-mozilla-plugin --with-croco)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR=$(PKG_INSTALL_DIR) \
-		all install
+	$(call Build/Configure/Default, \
+		--disable-gtk-theme \
+		--disable-mozilla-plugin \
+		--with-croco \
+		$(if $(CONFIG_PACKAGE_librsvg-pixbuf-loader), \
+			--enable-pixbuf-loader,\
+			--disable-pixbuf-loader \
+		) \
+	)
 endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
 	$(INSTALL_DIR) $(1)/usr/include/
@@ -52,10 +75,14 @@ endef
 define Package/librsvg/install
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} $(1)/usr/lib/
-	$(INSTALL_DIR) $(1)/usr/lib/gtk-2.0/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/gtk-2.0/* $(1)/usr/lib/gtk-2.0/
 endef
-	
+
+define Package/librsvg-pixbuf-loader/install
+	$(INSTALL_DIR) $(1)/usr/lib/gtk-2.0/2.10.0/loaders
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/gtk-2.0/2.10.0/loaders/*.{so*,a} \
+		$(1)/usr/lib/gtk-2.0/2.10.0/loaders
+endef
+
 $(eval $(call BuildPackage,librsvg))
-
-
+$(eval $(call BuildPackage,librsvg-pixbuf-loader))
