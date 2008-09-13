@@ -1,3 +1,11 @@
+#
+# Copyright (C) 2008 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id$
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hippo-canvas
@@ -10,11 +18,16 @@ PKG_MD5SUM:=9a0f64eb0258a3e8ba710eff9798a7d0
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+
+PKG_INSTALL:=1
 
 EXTRA_CFLAGS += \
 	-I$(STAGING_DIR)/usr/lib/libintl/include \
 	-I$(STAGING_DIR)/usr/include/libcroco-0.6 \
-	-I$(STAGING_DIR)/usr/include/pycairo
+	$(if $(CONFIG_PACKAGE_python-hipp-canvas),-I$(STAGING_DIR)/usr/include/pycairo,)
+
+STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_hippo-canvas CONFIG_PACKAGE_python-hippo-canvas)
 
 define Package/hippo-canvas
   SECTION:=xorg-libs
@@ -22,7 +35,7 @@ define Package/hippo-canvas
   SUBMENU:=libraries
   TITLE:=Hippo Canvas
   URL:=http://developer.mugshot.org/wiki/Hippo_Canvas
-  DEPENDS:=+librsvg +python +gtk2 +cairo +libcroco +pango +pycairo
+  DEPENDS:=+librsvg +gtk2 +cairo +libcroco +pango
 endef
 
 define Package/hippo-canvas/description
@@ -30,32 +43,52 @@ The Hippo Canvas is a Cairo/GObject/GTK+ based canvas, written in C with
 support for flexible layout, CSS styling, and initial work on animations.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, --enable-python)
+define Package/python-hippo-canvas
+  SECTION:=lang-python
+  CATEGORY:=Languages
+  SUBMENU:=Python
+  TITLE:=Python bindings for hippo canvas
+  URL:=http://developer.mugshot.org/wiki/Hippo_Canvas
+  DEPENDS:=python-core +python-gtk +pycairo +hippo-canvas
 endef
 
-define Build/Compile
-	make -C $(PKG_BUILD_DIR)
-	make -C $(PKG_BUILD_DIR)/ install DESTDIR=$(PKG_INSTALL_DIR)
+define Build/Configure
+	$(call Build/Configure/Default, \
+		$(if $(CONFIG_PACKAGE_python-hippo-canvas), \
+			--enable-python, \
+			--disable-python \
+		) \
+	)
 endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} $(1)/usr/lib/
-	$(INSTALL_DIR) $(1)/usr/lib/python2.5/site-packages/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/python2.5/site-packages/*.{so*,a,la} $(1)/usr/lib/python2.5/site-packages/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} \
+		$(1)/usr/lib/
+
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
+		$(1)/usr/lib/pkgconfig/
+
 	$(INSTALL_DIR) $(1)/usr/include/hippo-canvas-1/hippo/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/include/hippo-canvas-1/hippo/* $(1)/usr/include/hippo-canvas-1/hippo/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/hippo-canvas-1/hippo/* \
+		$(1)/usr/include/hippo-canvas-1/hippo/
 endef
 
 define Package/hippo-canvas/install
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} $(1)/usr/lib/
-	$(INSTALL_DIR) $(1)/usr/lib/python2.5/site-packages/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/python2.5/site-packages/*.{so*,a} $(1)/usr/lib/python2.5/site-packages/
+endef
+
+define Package/python-hippo-canvas/install
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/*.{so*,a} \
+		$(1)$(PYTHON_PKG_DIR)
 endef
 
 $(eval $(call BuildPackage,hippo-canvas))
-
+$(eval $(call BuildPackage,python-hippo-canvas))
