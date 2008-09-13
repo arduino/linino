@@ -20,18 +20,30 @@ PKG_BUILD_DEPENDS:= libopenh323 pwlib
 
 include $(INCLUDE_DIR)/package.mk
 
+STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar, \
+	CONFIG_PACKAGE_asterisk14 CONFIG_PACKAGE_asterisk14-mini \
+	CONFIG_PACKAGE_asterisk14-chan-alsa CONFIG_PACKAGE_asterisk14-chan-gtalk \
+	CONFIG_PACKAGE_asterisk14-chan-h323 CONFIG_PACKAGE_asterisk14-chan-mgcp \
+	CONFIG_PACKAGE_asterisk14-chan-skinny CONFIG_PACKAGE_asterisk14-codec-ilbc \
+	CONFIG_PACKAGE_asterisk14-codec-lpc10 CONFIG_PACKAGE_asterisk14-codec-speex \
+	CONFIG_PACKAGE_asterisk14-pbx-dundi CONFIG_PACKAGE_asterisk14-res-agi \
+	CONFIG_PACKAGE_asterisk14-res-crypto CONFIG_PACKAGE_asterisk14-pgsql \
+	CONFIG_PACKAGE_asterisk14-sqlite CONFIG_PACKAGE_asterisk14-voicemail \
+	CONFIG_PACKAGE_asterisk14-sounds \
+)
+
 define Package/asterisk14/Default
   SUBMENU:=asterisk14 (Complete Open Source PBX), v1.4.x
   SECTION:=net
   CATEGORY:=Network
+  URL:=http://www.asterisk.org/
 endef
 
 define Package/asterisk14/Default/description
- Asterisk is a complete PBX in software. It provides all of the features 
- you would expect from a PBX and more. Asterisk does voice over IP in three 
- protocols, and can interoperate with almost all standards-based telephony 
+ Asterisk is a complete PBX in software. It provides all of the features
+ you would expect from a PBX and more. Asterisk does voice over IP in three
+ protocols, and can interoperate with almost all standards-based telephony
  equipment using relatively inexpensive hardware.
-  URL:=http://www.asterisk.org/
 endef
 
 
