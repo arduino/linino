@@ -57,3 +57,6 @@ $(eval $(call BuildPackage,python-gtk))
 $(eval $(call RequireCommand,pygtk-codegen-2.0, \
 	Please install the pygtk 2.0 development package \
 ))
+$(eval $(call RequireCommand,python2.5, \
+	Please install Python 2.5 \
+))
