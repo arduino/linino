@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -13,8 +13,9 @@ PKG_VERSION:=1.6.12
 PKG_RELEASE:=1
 PKG_MD5SUM:=a3cbfdb6e1e5beea181a7349749719f3
 
-PKG_SOURCE_URL:= http://www.balabit.com/downloads/files/syslog-ng/sources/1.6/src \
-		http://www.balabit.com/downloads/files/syslog-ng/stable/src
+PKG_SOURCE_URL:= \
+	http://www.balabit.com/downloads/files/syslog-ng/sources/1.6/src \
+	http://www.balabit.com/downloads/files/syslog-ng/stable/src
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 
 include $(INCLUDE_DIR)/package.mk
@@ -38,18 +39,22 @@ define Package/syslog-ng/conffiles
 endef
 
 define Build/Configure
-$(call Build/Configure/Default,--disable-dependency-tracking \
-                        --disable-full-static \
-                        --enable-tcp-wrapper \
-                        --with-libol="$(STAGING_DIR)/usr/bin",CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/libol" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libol")
+	$(call Build/Configure/Default, \
+		--disable-dependency-tracking \
+        --disable-full-static \
+        --enable-tcp-wrapper \
+        --with-libol="$(STAGING_DIR)/host/bin" \
+		, \
+		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/libol" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libol" \
+	)
 endef
 
-define Build/Compile	
-$(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" all install)
+define Build/Compile
+	$(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" all install)
 endef
 
-define Package/syslog-ng/install	
+define Package/syslog-ng/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/syslog-ng $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
