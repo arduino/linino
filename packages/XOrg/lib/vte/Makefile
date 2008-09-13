@@ -43,7 +43,7 @@ endef
 define Package/python-vte
   SECTION:=lang-python
   CATEGORY:=Languages
-  SUBMENU:=python
+  SUBMENU:=Python
   TITLE:=Python bindings for vte
   URL:=http://developer.gnome.org/arch/gnome/widgets/vte.html
   DEPENDS:=python-core +python-gtk +vte
