@@ -78,7 +78,8 @@ define Build/Compile
 		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib \
 			-L$(STAGING_DIR)/usr/lib/libintl/lib \
 			-L$(STAGING_DIR)/usr/lib/libiconv/lib \
-			-Wl,-rpath-link,$(STAGING_DIR)/usr/lib -liconv" \
+			-Wl,-rpath-link,$(STAGING_DIR)/usr/lib -liconv \
+			-lgnutls -lnetfilter_queue -lpthread" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
