@@ -59,7 +59,7 @@ endef
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--without-xft2 \
-		$(if PKG_CONFIG_python-vte,--enable-python,--disable-python) \
+		$(if $(CONFIG_PACKAGE_python-vte),--enable-python,--disable-python) \
 	)
 endef
 
