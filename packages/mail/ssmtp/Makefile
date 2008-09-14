@@ -18,6 +18,8 @@ PKG_MD5SUM:=957e6fff08625fe34f4fc33d0925bbc9
 
 include $(INCLUDE_DIR)/package.mk
 
+TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
+
 define Package/ssmtp
   SECTION:=mail
   CATEGORY:=Mail
@@ -34,8 +36,8 @@ define Package/ssmtp/description
  configuration.
 endef
 
-TARGET_CONFIGURE_OPTS += \
-	CC="$(TARGET_CC) $(EXTRA_CFLAGS) $(EXTRA_LDFLAGS)"
+CONFIGURE_VARS += \
+	LIBS="-L$(STAGING_DIR)/usr/lib -lcrypto -lssl"
 
 CONFIGURE_ARGS += \
 	--enable-ssl
