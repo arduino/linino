@@ -266,7 +266,7 @@ ifneq ($(CONFIG_PACKAGE_php4-cli),)
 		LIBS="$(PKG_CONFIGURE_LIBS)" \
 		php_cv_cc_rpath="no" \
 	)
-	$(MAKE) -C $(PKG_BUILD_DIR)
+	LD_LIBRARY_PATH="" $(MAKE) -C $(PKG_BUILD_DIR)
 	mv $(PKG_BUILD_DIR)/sapi/cli/php $(PKG_BUILD_DIR)/php-cli
   endef
 endif
@@ -285,7 +285,7 @@ ifneq ($(CONFIG_PACKAGE_php4-cgi),)
 		LIBS="$(PKG_CONFIGURE_LIBS)" \
 		php_cv_cc_rpath="no" \
 	)
-	$(MAKE) -C $(PKG_BUILD_DIR)
+	LD_LIBRARY_PATH="" $(MAKE) -C $(PKG_BUILD_DIR)
 	mv $(PKG_BUILD_DIR)/sapi/cgi/php $(PKG_BUILD_DIR)/php-cgi
   endef
 endif
@@ -304,7 +304,7 @@ ifneq ($(CONFIG_PACKAGE_php4-fastcgi),)
 		LIBS="$(PKG_CONFIGURE_LIBS)" \
 		php_cv_cc_rpath="no" \
 	)
-	$(MAKE) -C $(PKG_BUILD_DIR)
+	LD_LIBRARY_PATH="" $(MAKE) -C $(PKG_BUILD_DIR)
 	mv $(PKG_BUILD_DIR)/sapi/cgi/php $(PKG_BUILD_DIR)/php-fastcgi
   endef
 endif
