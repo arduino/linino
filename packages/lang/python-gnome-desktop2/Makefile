@@ -23,7 +23,10 @@ PKG_INSTALL=1
 EXTRA_CFLAGS += \
 	-I$(STAGING_DIR)/usr/lib/libintl/include \
 	-I$(STAGING_DIR)/usr/lib/libiconv/include \
-	$(if CONFIG_PACKAGE_python-rsvg,-I$(STAGING_DIR)/usr/include/librsvg-2,) \
+	$(if CONFIG_PACKAGE_python-rsvg, \
+		-I$(STAGING_DIR)/usr/include/librsvg-2 \
+		-I$(STAGING_DIR)/usr/include/pycairo \
+	,) \
 	$(if CONFIG_PACKAGE_python-wnck,-I$(STAGING_DIR)/usr/include/libwnck-1.0,)
 
 EXTRA_LDFLAGS += \
@@ -42,7 +45,7 @@ define Package/python-gnome-desktop/Default
 endef
 
 define Package/python-rsvg
-	$(call Package/python-gnome-desktop/Default,librsvg,+librsvg)
+	$(call Package/python-gnome-desktop/Default,librsvg,+librsvg +pycairo)
 endef
 
 define Package/python-wnck
