@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tinyproxy
-PKG_VERSION:=1.6.3
+PKG_VERSION:=1.6.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=@SF/tinyproxy
-PKG_MD5SUM:=bd14d029b12621bcfd7ee71b2f4893da
+PKG_SOURCE_URL:=http://www.banu.com/pub/tinyproxy/1.6/
+PKG_MD5SUM:=3157b9159a8d005f4248cf4d4d6c65e2
 
 include $(INCLUDE_DIR)/package.mk
 
