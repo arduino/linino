@@ -1,0 +1,66 @@
+--- cups-1.3.7/cups-config.in	2007-07-11 23:46:42.000000000 +0200
++++ cups-1.3.7.new/cups-config.in	2008-07-13 17:17:00.000000000 +0200
+@@ -53,7 +53,7 @@
+ 	CFLAGS="$CFLAGS -I$includedir"
+     fi
+ 
+-    if test $libdir != /usr/lib -a $libdir != /usr/lib32 -a $libdir != /usr/lib64; then
++    if test $libdir != /usr/lib -a $libdir != /usr/lib -a $libdir != /usr/lib; then
+ 	LDFLAGS="$LDFLAGS -L$libdir"
+     fi
+ fi
+diff -urN cups-1.3.7/config-scripts/cups-3264.m4 cups-1.3.7.new/config-scripts/cups-3264.m4
+--- cups-1.3.7/config-scripts/cups-3264.m4	2007-07-11 23:46:42.000000000 +0200
++++ cups-1.3.7.new/config-scripts/cups-3264.m4	2008-07-13 17:21:36.000000000 +0200
+@@ -108,7 +108,7 @@
+ 			LIB64CUPSIMAGE="64bit/libcupsimage.so.2"
+ 			LIB64DIR="$exec_prefix/lib"
+ 			if test -d /usr/lib64; then
+-				LIB64DIR="${LIB64DIR}64"
++				LIB64DIR="${LIB64DIR}"
+ 			fi
+ 			UNINSTALL64="uninstall64bit"
+ 		fi
+diff -urN cups-1.3.7/config-scripts/cups-directories.m4 cups-1.3.7.new/config-scripts/cups-directories.m4
+--- cups-1.3.7/config-scripts/cups-directories.m4	2007-09-18 22:39:31.000000000 +0200
++++ cups-1.3.7.new/config-scripts/cups-directories.m4	2008-07-13 17:21:51.000000000 +0200
+@@ -107,7 +107,7 @@
+ 			;;
+ 		Linux*)
+ 			if test -d /usr/lib64; then
+-				libdir="$exec_prefix/lib64"
++				libdir="$exec_prefix/lib"
+ 			fi
+ 			;;
+ 		HP-UX*)
+--- cups-1.3.7/configure	2008-04-01 23:59:43.000000000 +0200
++++ cups-1.3.7.new/configure	2008-07-13 17:20:19.000000000 +0200
+@@ -9217,7 +9217,7 @@
+ 			;;
+ 		Linux*)
+ 			if test -d /usr/lib64; then
+-				libdir="$exec_prefix/lib64"
++				libdir="$exec_prefix/lib"
+ 			fi
+ 			;;
+ 		HP-UX*)
+@@ -9761,9 +9761,6 @@
+ 			LIB32CUPS="32bit/libcups.so.2"
+ 			LIB32CUPSIMAGE="32bit/libcupsimage.so.2"
+ 			LIB32DIR="$exec_prefix/lib"
+-			if test -d /usr/lib32; then
+-				LIB32DIR="${LIB32DIR}32"
+-			fi
+ 			UNINSTALL32="uninstall32bit"
+ 		fi
+ 
+@@ -9773,9 +9770,6 @@
+ 			LIB64CUPS="64bit/libcups.so.2"
+ 			LIB64CUPSIMAGE="64bit/libcupsimage.so.2"
+ 			LIB64DIR="$exec_prefix/lib"
+-			if test -d /usr/lib64; then
+-				LIB64DIR="${LIB64DIR}64"
+-			fi
+ 			UNINSTALL64="uninstall64bit"
+ 		fi
+ 		;;

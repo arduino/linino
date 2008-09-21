@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cups
-PKG_VERSION:=1.1.23
+PKG_VERSION:=1.3.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-source.tar.bz2
@@ -17,7 +17,7 @@ PKG_SOURCE_URL:= \
 	http://ftp.rz.tu-bs.de/pub/mirror/ftp.easysw.com/ftp/pub/cups/$(PKG_VERSION) \
 	ftp://ftp.easysw.com/pub/cups/$(PKG_VERSION) \
 	ftp://ftp3.easysw.com/pub/cups/$(PKG_VERSION)
-PKG_MD5SUM:=4ce09b1dce09b6b9398af0daae9adf63
+PKG_MD5SUM:=db4a45a17104f10f3ee599d88267c9e5
 
 PKG_BUILD_DEPENDS:=zlib
 
@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/cups
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+zlib
+  DEPENDS:=+zlib +libpthread +libpng +libjpeg
   TITLE:=Common UNIX Printing System
   URL:=http://www.cups.org/
   SUBMENU:=printing
@@ -59,6 +59,7 @@ define Build/Configure
 		--disable-ssl \
 		--disable-slp, \
 		UNAME="Linux" \
+		LIBS="-L$(STAGING_DIR)/usr/lib -lz -lpng -ljpeg" \
 	)
 endef
 
@@ -82,7 +83,7 @@ define Package/cups/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	rm -f $(1)/usr/bin/cups-config
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcups.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcups.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/cups $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/share/cups/templates
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/cups/templates/*.tmpl $(1)/usr/share/cups/templates/
@@ -104,7 +105,7 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/cups $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcups.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcups.so* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,cups))
