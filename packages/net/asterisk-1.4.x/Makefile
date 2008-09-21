@@ -385,6 +385,7 @@ endif
 
 
 define Build/Configure
+	-rm $(PKG_BUILD_DIR)/menuselect.makeopts
 	( cd $(PKG_BUILD_DIR); ./bootstrap.sh )
 	$(call Build/Configure/Default,,$(SITE_VARS))
 endef
