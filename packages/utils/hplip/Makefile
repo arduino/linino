@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hplip
-PKG_VERSION:=2.7.12
+PKG_VERSION:=2.8.9
 PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/hplip
-PKG_MD5SUM:=ba00337ccf1b520509518bffbec960db
+PKG_MD5SUM:=2e20dba86abb99a3ca59d05e814ce9a1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DEPENDS := python
@@ -40,6 +40,14 @@ CONFIGURE_ARGS += \
 	--disable-pp-build \
 	--disable-doc-build \
 	--disable-foomatic-xml-install
+
+define Build/Configure
+	$(call Build/Configure/Default,\
+		$(CONFIGURE_ARGS),\
+		ac_cv_lib_cups_cupsDoFileRequest=yes \
+		LIBS="-ljpeg -lusb" \
+	)
+endef
 
 define Package/hplip/install
 	$(INSTALL_DIR) $(1)/usr/lib
