@@ -1,0 +1,41 @@
+diff -urN gettext-0.16.1/gettext-tools/gnulib-lib/Makefile.in gettext-0.16.1.new/gettext-tools/gnulib-lib/Makefile.in
+--- gettext-0.16.1/gettext-tools/gnulib-lib/Makefile.in	2006-11-27 18:34:53.000000000 +0100
++++ gettext-0.16.1.new/gettext-tools/gnulib-lib/Makefile.in	2008-09-21 18:18:52.000000000 +0200
+@@ -648,7 +648,6 @@
+ 	  if test -f $$p; then \
+ 	    f=$(am__strip_dir) \
+ 	    echo " $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(libdir)/$$f'"; \
+-	    $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(libdir)/$$f"; \
+ 	  else :; fi; \
+ 	done
+ 
+diff -urN gettext-0.16.1/gettext-tools/libgettextpo/Makefile.in gettext-0.16.1.new/gettext-tools/libgettextpo/Makefile.in
+--- gettext-0.16.1/gettext-tools/libgettextpo/Makefile.in	2006-11-27 18:48:21.000000000 +0100
++++ gettext-0.16.1.new/gettext-tools/libgettextpo/Makefile.in	2008-09-21 18:19:27.000000000 +0200
+@@ -660,7 +660,6 @@
+ 	  if test -f $$p; then \
+ 	    f=$(am__strip_dir) \
+ 	    echo " $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(libdir)/$$f'"; \
+-	    $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(libdir)/$$f"; \
+ 	  else :; fi; \
+ 	done
+ 
+diff -urN gettext-0.16.1/gettext-tools/src/Makefile.in gettext-0.16.1.new/gettext-tools/src/Makefile.in
+--- gettext-0.16.1/gettext-tools/src/Makefile.in	2006-11-27 18:34:56.000000000 +0100
++++ gettext-0.16.1.new/gettext-tools/src/Makefile.in	2008-09-21 18:19:10.000000000 +0200
+@@ -1097,7 +1097,6 @@
+ 	  if test -f $$p; then \
+ 	    f=$(am__strip_dir) \
+ 	    echo " $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(libdir)/$$f'"; \
+-	    $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(libdir)/$$f"; \
+ 	  else :; fi; \
+ 	done
+ 
+@@ -1129,7 +1128,6 @@
+ 	  ; then \
+ 	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
+ 	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) '$$p' '$(DESTDIR)$(bindir)/$$f'"; \
+-	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) "$$p" "$(DESTDIR)$(bindir)/$$f" || exit 1; \
+ 	  else :; fi; \
+ 	done
+ 
