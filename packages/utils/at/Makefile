@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/at
   SECTION:=utils
   CATEGORY:=Utilities
+  DEPENDS:=+libelf
   TITLE:=Delayed job execution and batch processing
 endef
 
@@ -30,7 +31,8 @@ define Package/at/description
 endef
 
 export SENDMAIL=/bin/true
-EXTRA_CFLAGS:=-DNEED_YYWRAP -I$(PKG_BUILD_DIR)
+EXTRA_CFLAGS:=-DNEED_YYWRAP -I$(PKG_BUILD_DIR) -I$(STAGING_DIR)/usr/include/libelf \
+		-L$(STAGING_DIR)/usr/lib
 CONFIGURE_ARGS+=--with-daemon_username=nobody --with-daemon_groupname=nogroup
 
 define Package/at/install
