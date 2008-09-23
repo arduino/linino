@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=samba3
 PKG_VERSION:=3.0.24
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 #PKG_MD5SUM:=b51b2975f21006f85f7297f3fb1acde1
 
 PKG_SOURCE_URL:=ftp://ftp.samba.org/pub/samba/old-versions/
@@ -35,13 +35,24 @@ define Package/samba3/config
 	source "$(SOURCE)/Config.in"
 endef
 
+ifneq ($(CONFIG_LARGEFILE),)
+  define Build/Prepare/LFS
+	cat ./files/config-lfs.h >> $(PKG_BUILD_DIR)/source/include/config.h
+  endef
+endif
+
+define Build/Prepare
+$(call Build/Prepare/Default)
+$(call Build/Prepare/LFS)
+endef
+
 define Build/Compile
-	CFLAGS="$(TARGET_CFLAGS) -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE" \
 	CC="$(TARGET_CC)" \
-	CPPFLAGS="$(TARGET_CPPFLAGS) -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE" \
+	CFLAGS="$(TARGET_CFLAGS)" \
+	CPPFLAGS="$(TARGET_CPPFLAGS)" \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
-		$(MAKE) -C $(PKG_BUILD_DIR)/source \
-			all bin/smbpasswd	
+	$(MAKE) -C $(PKG_BUILD_DIR)/source \
+		all bin/smbpasswd	
 endef
 
 define Package/samba3/install
