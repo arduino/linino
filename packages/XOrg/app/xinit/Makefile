@@ -1,10 +1,10 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org 
+# blogic@openwrt.org
 
 include $(TOPDIR)/rules.mk
 
@@ -16,18 +16,15 @@ PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/app
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
 
-_DEPEND:= +libX11
-ifneq (xinit,xinit)
-_DEPEND+=xorg-server-essentials
-endif
-
 include $(INCLUDE_DIR)/package.mk
+
+PKG_INSTALL=1
 
 define Package/xinit
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:=${_DEPEND} @DISPLAY_SUPPORT
+  DEPENDS:=libX11 @DISPLAY_SUPPORT
   TITLE:=xinit
   URL:=http://xorg.freedesktop.org/
 endef
@@ -36,27 +33,12 @@ define Build/InstallDev
 	DESTDIR=$(1) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
 endef
 
-ifeq (xinit,xdm)
-CONFIGURE_ARGS+=--with-random-device=/dev/urandom
-endif
-
 CONFIGURE_ARGS+=LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib" 
-
-define Build/Compile
-	make -C $(PKG_BUILD_DIR)
-	make -C $(PKG_BUILD_DIR) DESTDIR=$(PKG_INSTALL_DIR) install
-endef
-
-define Package/xinit/install
-	$(INSTALL_DIR) $(1)
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)
-	rm -rf $(1)/usr/man/
-endef
 
 define Package/xinit/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xinit $(1)/usr/bin/xinit
-	cd $(1)/usr/bin/; ln -s xinit startx
+	cd $(1)/usr/bin/; ln -sf xinit startx
 endef
 
 $(eval $(call BuildPackage,xinit))
