@@ -24,7 +24,7 @@ define Package/xinit
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:=libX11 @DISPLAY_SUPPORT
+  DEPENDS:=+libX11 @DISPLAY_SUPPORT
   TITLE:=xinit
   URL:=http://xorg.freedesktop.org/
 endef
