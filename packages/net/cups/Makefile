@@ -21,6 +21,8 @@ PKG_MD5SUM:=db4a45a17104f10f3ee599d88267c9e5
 
 PKG_BUILD_DEPENDS:=zlib
 
+TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/cups
@@ -57,6 +59,7 @@ define Build/Configure
 		--disable-openssl \
 		--disable-cdsassl \
 		--disable-ssl \
+		--disable-gssapi \
 		--disable-slp, \
 		UNAME="Linux" \
 		LIBS="-L$(STAGING_DIR)/usr/lib -lz -lpng -ljpeg" \
