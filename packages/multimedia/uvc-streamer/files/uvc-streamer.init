@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2008 OpenWrt.org
 START=50
 
 SSD=start-stop-daemon
@@ -37,9 +37,7 @@ start_service() {
 }
 
 stop_service() {
-	killall $NAME 2>&1 > /dev/null
-	# FIXME: Fix Busybox start-stop-daemon to work with multiple PIDs
-	# $SSD -K -p $PIDF -q
+	$SSD -K -p $PIDF
 }
 
 start() {
