@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,24 +9,24 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dbus-glib
-PKG_VERSION:=0.74
-PKG_RELEASE:=1
+PKG_VERSION:=0.76
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dbus.freedesktop.org/releases/dbus-glib/
-PKG_MD5SUM:=
+PKG_MD5SUM:=d3b716a7e798faa1c6a867675f00306a
 
 include $(INCLUDE_DIR)/package.mk
 
+PKG_INSTALL=1
 
 define Package/libdbus-glib
- SECTION:=libs
- CATEGORY:=Libraries
- TITLE:=D-Bus Glib bindings
- URL:=http://dbus.freedesktop.org/doc/dbus-glib/
- DEPENDS:= +dbus +glib2 +libiconv +libintl
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=D-Bus Glib bindings
+  URL:=http://dbus.freedesktop.org/doc/dbus-glib/
+  DEPENDS:=+dbus +glib2 +libiconv +libintl
 endef
-
 
 TARGET_CFLAGS += $(FPIC)
 
@@ -45,29 +45,26 @@ CONFIGURE_VARS+= \
 	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
 	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libintl/lib" \
 
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
 define Build/InstallDev
-	mkdir -p $(1)/usr/include/dbus-1.0/dbus
-	$(CP)	$(PKG_INSTALL_DIR)/usr/include/dbus-1.0/dbus/dbus-glib{,-error-enum,-lowlevel}.h \
-		$(PKG_INSTALL_DIR)/usr/include/dbus-1.0/dbus/dbus-gtype-specialized.h \
-		$(1)/usr/include//dbus-1.0/dbus/
-	mkdir -p $(1)/usr/lib
-	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/libdbus-glib-1.{a,so*} \
+	$(INSTALL_DIR) $(1)/usr/include/dbus-1.0/dbus
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/dbus-1.0/dbus/*.h \
+		$(1)/usr/include/dbus-1.0/dbus/
+
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libdbus-glib-1.{la,so*} \
 		$(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
-	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/dbus-glib-1.pc \
+
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/dbus-glib-1.pc \
 		$(1)/usr/lib/pkgconfig/
 endef
 
 define Package/libdbus-glib/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdbus-glib-1.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/libdbus-glib-1.so.* $(1)/usr/lib/
 endef
 
 
