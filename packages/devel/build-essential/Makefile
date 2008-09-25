@@ -18,7 +18,7 @@ define Package/build-essential
   SECTION:=devel
   CATEGORY:=Development
   TITLE:=Build essentials 
-  DEPENDS=+gcc +make +binutils +patch +diffutils @BUILD_DEVELOPER_SYSTEM
+  DEPENDS=+gcc +make +binutils +patch +diffutils @NO_STRIP
 endef
 
 define Build/Compile

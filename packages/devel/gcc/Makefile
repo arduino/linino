@@ -26,7 +26,7 @@ define Package/gcc
   SECTION:=devel
   CATEGORY:=Development
   TITLE:=gcc
-  DEPENDS:=@TARGET_x86 @BUILD_DEVELOPER_SYSTEM
+  DEPENDS:=@TARGET_x86 @NO_STRIP
 endef
 
 define Package/gcc/description
