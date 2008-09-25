@@ -9,21 +9,24 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dbus
-PKG_VERSION:=1.0.3
-PKG_RELEASE:=1
+PKG_VERSION:=1.2.3
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dbus.freedesktop.org/releases/dbus/
-PKG_MD5SUM:=ce328423db5743fe9006d39113b5324d
+PKG_MD5SUM:=f71641385768e99361bd298568207cee
 
 include $(INCLUDE_DIR)/package.mk
 
+PKG_INSTALL=1
+
+TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/dbus/Default
- SECTION:=utils
- CATEGORY:=Utilities
- TITLE:=Simple interprocess messaging system
- URL:=http://dbus.freedesktop.org/
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Simple interprocess messaging system
+  URL:=http://dbus.freedesktop.org/
 endef
 
 define Package/dbus/Default/description
@@ -84,23 +87,21 @@ CONFIGURE_VARS+= \
 	ac_cv_have_abstract_sockets="yes" \
 
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
-	$(CP)	$(PKG_INSTALL_DIR)/usr/include/dbus-1.0 \
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/dbus-1.0 \
 		$(1)/usr/include/
-	mkdir -p $(1)/usr/lib
-	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/libdbus-1.{a,so*} \
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libdbus-1.{a,so*} \
 		$(1)/usr/lib/
-	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/dbus-1.0 \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/dbus-1.0 \
 		$(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
-	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/dbus-1.pc \
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/dbus-1.pc \
 		$(1)/usr/lib/pkgconfig/
 endef
 
