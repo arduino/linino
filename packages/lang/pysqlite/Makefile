@@ -49,3 +49,7 @@ endef
 
 $(eval $(call PyPackage,python-sqlite))
 $(eval $(call BuildPackage,python-sqlite))
+
+$(eval $(call RequireHeader,/usr/include/gnu/stubs-32.h, \
+	$(PKG_NAME) requires a 32-bits toolchain. \
+))
