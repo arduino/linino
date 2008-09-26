@@ -15,7 +15,7 @@ config_cb() {
 
 start() {
 	config_load aiccu
-	for cfgs_section $cfgs_sections; do
+	for cfgs_section in $cfgs_sections; do
 		config_get username $cfgs_section username
 		config_get password $cfgs_section password
 		config_get server $cfgs_section server
