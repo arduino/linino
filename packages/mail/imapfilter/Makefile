@@ -50,7 +50,8 @@ define Build/Compile
 		$(TARGET_CONFIGURE_OPTS) \
 		INCDIRS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LIBDIRS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		MYCFLAGS="$(TARGET_CFLAGS)"
+		MYCFLAGS="$(TARGET_CFLAGS)" \
+		MYLDFLAGS="-lcrypt" 
 endef
 
 define Package/imapfilter/conffiles
