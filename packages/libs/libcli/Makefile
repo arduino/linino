@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libcli
-PKG_VERSION:=1.8.5
+PKG_VERSION:=1.9.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/libcli
-PKG_MD5SUM:=0fdd30df5a8c1388a4549751ba61247a
+PKG_MD5SUM:=bad78e4b1b9e29d349c48cad3adfd154
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,6 +35,7 @@ endef
 TARGET_CFLAGS += $(FPIC)
 
 MAKE_FLAGS += \
+	DEBUG="" \
 	OPTIM="$(TARGET_CFLAGS)" \
 	CFLAGS="$(TARGET_CFLAGS)" \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
