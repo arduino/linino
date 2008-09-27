@@ -9,14 +9,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=siproxd
-PKG_VERSION:=0.7.0
+PKG_VERSION:=0.7.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/siproxd
-PKG_MD5SUM:=6c978eef0d00160e50073e2e2fd8c23d
+PKG_MD5SUM:=45e5a44803181e2bf3361d562060c904
 
 include $(INCLUDE_DIR)/package.mk
+
+PKG_FIXUP = libtool
 
 define Package/siproxd
   SECTION:=net
@@ -36,6 +38,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		SUBDIRS="src scripts contrib" \
+		LIBLTDL="$(STAGING_DIR)/usr/lib/libltdl.la" \
 		all install
 endef
 
