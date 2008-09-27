@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dialog
-PKG_VERSION:=1.0-20060221
+PKG_VERSION:=1.1-20080819
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=ftp://invisible-island.net/dialog
-PKG_MD5SUM:=acfd843163394e8bb17c841fdbe9c4a4
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_MD5SUM:=3caebd641a9f337b980becb4444336c5
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -38,7 +36,7 @@ endef
 
 define Package/dialog/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/dialog $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dialog $(1)/usr/bin
 	$(STRIP) $(1)/usr/bin/dialog
 endef
 
