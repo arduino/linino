@@ -38,6 +38,7 @@ MAKE_FLAGS += \
 	DEBUG="" \
 	OPTIM="$(TARGET_CFLAGS)" \
 	CFLAGS="$(TARGET_CFLAGS)" \
+	PREFIX="/usr" \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
 	all install 
 
