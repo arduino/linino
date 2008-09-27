@@ -182,7 +182,9 @@ CONFIGURE_ARGS += \
 	--disable-ipv6 \
 
 CONFIGURE_VARS += \
-	ac_cv_func_setpgrp_void=yes \
+	ac_cv_func_setpgrp_void=yes
+
+TARGET_LDFLAGS += -L$(PKG_BUILD_DIR)
 
 MAKE_FLAGS += \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
