@@ -4,17 +4,17 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: Makefile 9947 2007-12-27 02:12:04Z nbd $
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libosip2
-PKG_VERSION:=3.0.3
+PKG_VERSION:=3.1.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/osip
-PKG_MD5SUM:=f90ae77075fbd8693af7c78998fcf151
+PKG_MD5SUM:=7eb305608256ac2a7a27b66ce52627c8
 
 PKG_FIXUP = libtool
 
