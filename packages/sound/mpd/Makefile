@@ -47,6 +47,7 @@ define Build/Configure
 	        --disable-audiofile \
 	        --disable-mpc \
 	        --disable-aac \
+		--disable-lsr \
 	        --with-tremor \
 	        --with-id3tag-includes="$(STAGING_DIR)/usr/include" \
 	        --with-id3tag-libraries="$(STAGING_DIR)/usr/lib" \
