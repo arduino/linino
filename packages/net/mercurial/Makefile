@@ -14,7 +14,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=http://selenic.com/mercurial/release/
 PKG_SOURCE:=mercurial-$(PKG_VERSION).tar.gz
-#PKG_MD5SUM:=9f8dd7fa6f8886f77be9b923f008504c
+PKG_MD5SUM:=32432616f517107e6582721c257cd1f4
 PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
@@ -28,13 +28,13 @@ define Package/mercurial
 endef
 
 define Package/mercurial/description
-  DESCRIPTION:=A fast, lightweight Source Control Management system designed for efficient handling of very large distributed projects.
+  A fast, lightweight Source Control Management system designed for efficient handling of very large distributed projects.
 endef
 
 HG_BUILDOPTS= \
 	CC="$(TARGET_CC)" \
 	LDSHARED="$(TARGET_CC) -shared" \
-	CFLAGS="-I$(STAGING_DIR)/usr/include/python2.5/" \
+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/python2.5/" \
 	LDFLAGS="-L$(STAGING_DIR)/usr/lib -lpython2.5"
 
 define Build/Compile
