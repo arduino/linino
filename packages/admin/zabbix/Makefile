@@ -79,7 +79,45 @@ define Package/zabbix-agent/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/zabbix_agentd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/zabbix
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/misc/conf/zabbix_agentd.conf $(1)/etc/zabbix/
+	$(INSTALL_CONF) ./files/zabbix_agentd.conf $(1)/etc/zabbix/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/zabbix_agentd.init $(1)/etc/init.d/zabbix_agentd
+endef
+
+define Package/zabbix-agent/postinst
+#!/bin/sh
+  
+name=zabbix
+id=53
+  
+# do not change below
+# check if we are on real system
+if [ -z "$${IPKG_INSTROOT}" ]; then
+	# create copies of passwd and group, if we use squashfs
+	rootfs=`mount |awk '/root/ { print $$5 }'`
+	if [ "$$rootfs" = "squashfs" ]; then
+		if [ -h /etc/group ]; then
+			rm /etc/group
+			cp /rom/etc/group /etc/group
+		fi
+		if [ -h /etc/passwd ]; then
+			rm /etc/passwd
+			cp /rom/etc/passwd /etc/passwd
+		fi
+	fi
+fi
+
+echo ""
+if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then 
+	echo "adding group $$name to /etc/group"
+	echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group  
+fi
+
+if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then 
+	echo "adding user $$name to /etc/passwd"
+	echo "$${name}:x:$${id}:$${id}:$${name}:/tmp/.$${name}:/bin/false" >> $${IPKG_INSTROOT}/etc/passwd
+fi
+
 endef
 
 define Package/zabbix-sender/install
