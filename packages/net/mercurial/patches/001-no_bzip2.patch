@@ -1,0 +1,208 @@
+diff -rc mercurial-1.0.orig/mercurial/archival.py mercurial-1.0/mercurial/archival.py
+*** mercurial-1.0.orig/mercurial/archival.py	2008-03-25 00:05:20.000000000 +0100
+--- mercurial-1.0/mercurial/archival.py	2008-04-13 02:22:47.000000000 +0200
+***************
+*** 64,71 ****
+                  self.fileobj.write(fname + '\000')
+  
+      def __init__(self, dest, prefix, mtime, kind=''):
+!         self.prefix = tidyprefix(dest, prefix, ['.tar', '.tar.bz2', '.tar.gz',
+!                                                 '.tgz', '.tbz2'])
+          self.mtime = mtime
+  
+          def taropen(name, mode, fileobj=None):
+--- 64,71 ----
+                  self.fileobj.write(fname + '\000')
+  
+      def __init__(self, dest, prefix, mtime, kind=''):
+!         self.prefix = tidyprefix(dest, prefix, ['.tar', '.tar.gz',
+!                                                 '.tgz'])
+          self.mtime = mtime
+  
+          def taropen(name, mode, fileobj=None):
+***************
+*** 178,184 ****
+  archivers = {
+      'files': fileit,
+      'tar': tarit,
+-     'tbz2': lambda name, prefix, mtime: tarit(name, prefix, mtime, 'bz2'),
+      'tgz': lambda name, prefix, mtime: tarit(name, prefix, mtime, 'gz'),
+      'uzip': lambda name, prefix, mtime: zipit(name, prefix, mtime, False),
+      'zip': zipit,
+--- 178,183 ----
+diff -rc mercurial-1.0.orig/mercurial/bundlerepo.py mercurial-1.0/mercurial/bundlerepo.py
+*** mercurial-1.0.orig/mercurial/bundlerepo.py	2008-03-25 00:05:20.000000000 +0100
+--- mercurial-1.0/mercurial/bundlerepo.py	2008-04-13 02:23:54.000000000 +0200
+***************
+*** 12,18 ****
+  
+  from node import hex, nullid, short
+  from i18n import _
+! import changegroup, util, os, struct, bz2, tempfile, shutil, mdiff
+  import repo, localrepo, changelog, manifest, filelog, revlog
+  
+  class bundlerevlog(revlog.revlog):
+--- 12,18 ----
+  
+  from node import hex, nullid, short
+  from i18n import _
+! import changegroup, util, os, struct, tempfile, shutil, mdiff
+  import repo, localrepo, changelog, manifest, filelog, revlog
+  
+  class bundlerevlog(revlog.revlog):
+***************
+*** 173,201 ****
+              raise util.Abort(_("%s: not a Mercurial bundle file") % bundlename)
+          elif not header.startswith("HG10"):
+              raise util.Abort(_("%s: unknown bundle version") % bundlename)
+-         elif header == "HG10BZ":
+-             fdtemp, temp = tempfile.mkstemp(prefix="hg-bundle-",
+-                                             suffix=".hg10un", dir=self.path)
+-             self.tempfile = temp
+-             fptemp = os.fdopen(fdtemp, 'wb')
+-             def generator(f):
+-                 zd = bz2.BZ2Decompressor()
+-                 zd.decompress("BZ")
+-                 for chunk in f:
+-                     yield zd.decompress(chunk)
+-             gen = generator(util.filechunkiter(self.bundlefile, 4096))
+- 
+-             try:
+-                 fptemp.write("HG10UN")
+-                 for chunk in gen:
+-                     fptemp.write(chunk)
+-             finally:
+-                 fptemp.close()
+-                 self.bundlefile.close()
+- 
+-             self.bundlefile = open(self.tempfile, "rb")
+-             # seek right after the header
+-             self.bundlefile.seek(6)
+          elif header == "HG10UN":
+              # nothing to do
+              pass
+--- 173,178 ----
+diff -rc mercurial-1.0.orig/mercurial/changegroup.py mercurial-1.0/mercurial/changegroup.py
+*** mercurial-1.0.orig/mercurial/changegroup.py	2008-03-25 00:05:20.000000000 +0100
+--- mercurial-1.0/mercurial/changegroup.py	2008-04-13 02:24:40.000000000 +0200
+***************
+*** 8,14 ****
+  """
+  
+  from i18n import _
+! import struct, os, bz2, zlib, util, tempfile
+  
+  def getchunk(source):
+      """get a chunk from a changegroup"""
+--- 8,14 ----
+  """
+  
+  from i18n import _
+! import struct, os, zlib, util, tempfile
+  
+  def getchunk(source):
+      """get a chunk from a changegroup"""
+***************
+*** 49,60 ****
+  bundletypes = {
+      "": ("", nocompress),
+      "HG10UN": ("HG10UN", nocompress),
+-     "HG10BZ": ("HG10", lambda: bz2.BZ2Compressor()),
+      "HG10GZ": ("HG10GZ", lambda: zlib.compressobj()),
+  }
+  
+  # hgweb uses this list to communicate it's preferred type
+! bundlepriority = ['HG10GZ', 'HG10BZ', 'HG10UN']
+  
+  def writebundle(cg, filename, bundletype):
+      """Write a bundle file and return its filename.
+--- 49,59 ----
+  bundletypes = {
+      "": ("", nocompress),
+      "HG10UN": ("HG10UN", nocompress),
+      "HG10GZ": ("HG10GZ", lambda: zlib.compressobj()),
+  }
+  
+  # hgweb uses this list to communicate it's preferred type
+! bundlepriority = ['HG10GZ', 'HG10UN']
+  
+  def writebundle(cg, filename, bundletype):
+      """Write a bundle file and return its filename.
+***************
+*** 122,133 ****
+              zd = zlib.decompressobj()
+              for chunk in f:
+                  yield zd.decompress(chunk)
+-     elif header == 'HG10BZ':
+-         def generator(f):
+-             zd = bz2.BZ2Decompressor()
+-             zd.decompress("BZ")
+-             for chunk in util.filechunkiter(f, 4096):
+-                 yield zd.decompress(chunk)
+      return util.chunkbuffer(generator(fh))
+  
+  def readbundle(fh, fname):
+--- 121,126 ----
+diff -rc mercurial-1.0.orig/mercurial/commands.py mercurial-1.0/mercurial/commands.py
+*** mercurial-1.0.orig/mercurial/commands.py	2008-03-25 00:05:20.000000000 +0100
+--- mercurial-1.0/mercurial/commands.py	2008-04-13 02:24:54.000000000 +0200
+***************
+*** 139,145 ****
+  
+      "files" (default): a directory full of files
+      "tar": tar archive, uncompressed
+-     "tbz2": tar archive, compressed using bzip2
+      "tgz": tar archive, compressed using gzip
+      "uzip": zip archive, uncompressed
+      "zip": zip archive, compressed using deflate
+--- 139,144 ----
+diff -rc mercurial-1.0.orig/mercurial/hgweb/hgwebdir_mod.py mercurial-1.0/mercurial/hgweb/hgwebdir_mod.py
+*** mercurial-1.0.orig/mercurial/hgweb/hgwebdir_mod.py	2008-03-25 00:05:20.000000000 +0100
+--- mercurial-1.0/mercurial/hgweb/hgwebdir_mod.py	2008-04-13 02:25:33.000000000 +0200
+***************
+*** 152,158 ****
+  
+          def archivelist(ui, nodeid, url):
+              allowed = ui.configlist("web", "allow_archive", untrusted=True)
+!             for i in [('zip', '.zip'), ('gz', '.tar.gz'), ('bz2', '.tar.bz2')]:
+                  if i[0] in allowed or ui.configbool("web", "allow" + i[0],
+                                                      untrusted=True):
+                      yield {"type" : i[0], "extension": i[1],
+--- 152,158 ----
+  
+          def archivelist(ui, nodeid, url):
+              allowed = ui.configlist("web", "allow_archive", untrusted=True)
+!             for i in [('zip', '.zip'), ('gz', '.tar.gz')]:
+                  if i[0] in allowed or ui.configbool("web", "allow" + i[0],
+                                                      untrusted=True):
+                      yield {"type" : i[0], "extension": i[1],
+diff -rc mercurial-1.0.orig/mercurial/hgweb/hgweb_mod.py mercurial-1.0/mercurial/hgweb/hgweb_mod.py
+*** mercurial-1.0.orig/mercurial/hgweb/hgweb_mod.py	2008-03-25 00:05:20.000000000 +0100
+--- mercurial-1.0/mercurial/hgweb/hgweb_mod.py	2008-04-13 02:25:49.000000000 +0200
+***************
+*** 91,97 ****
+          hook.redirect(True)
+          self.mtime = -1
+          self.reponame = name
+!         self.archives = 'zip', 'gz', 'bz2'
+          self.stripecount = 1
+          self._capabilities = None
+          # a repo owner may set web.templates in .hg/hgrc to get any file
+--- 91,97 ----
+          hook.redirect(True)
+          self.mtime = -1
+          self.reponame = name
+!         self.archives = 'zip', 'gz'
+          self.stripecount = 1
+          self._capabilities = None
+          # a repo owner may set web.templates in .hg/hgrc to get any file
+***************
+*** 915,921 ****
+                      diff=diff)
+  
+      archive_specs = {
+-         'bz2': ('application/x-tar', 'tbz2', '.tar.bz2', None),
+          'gz': ('application/x-tar', 'tgz', '.tar.gz', None),
+          'zip': ('application/zip', 'zip', '.zip', None),
+          }
+--- 915,920 ----
