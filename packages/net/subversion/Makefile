@@ -86,8 +86,9 @@ CONFIGURE_ARGS += \
 
 CONFIGURE_VARS += \
 	svn_lib_neon=yes \
-	LDFLAGS="-lcrypt -lnsl -lm -lintl -L$(STAGING_DIR)/usr/lib/libintl/lib/ \
-		-lz -L$(STAGING_DIR)/usr/lib/ -lpthread -L$(STAGING_DIR)/lib" \
+	LDFLAGS="-lcrypt -lm -lintl -L$(STAGING_DIR)/usr/lib/libintl/lib/ \
+		-lz -L$(STAGING_DIR)/usr/lib/ -lpthread -L$(STAGING_DIR)/lib \
+		-L$(TOOLCHAIN_DIR)/lib" \
 	CPPFLAGS="-I$(STAGING_DIR)/usr/include/ -I$(STAGING_DIR)/usr/lib/libintl/include \
 		-I$(STAGING_DIR)/include/" \
 
