@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rp-pppoe
-PKG_VERSION:=3.9
+PKG_VERSION:=3.10
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://roaringpenguin.com/files/download
-PKG_MD5SUM:=7693f289c3babcfe211a9deef9118c6f
+PKG_MD5SUM:=d58a13cc4185bca6121a606ff456dec0
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -74,8 +74,8 @@ endef
 
 TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/src/libevent
 CONFIGURE_PATH := ./src
-CONFIGURE_ARGS += ac_cv_path_PPPD=/usr/sbin/pppd
-MAKE_FLAGS := RPM_INSTALL_ROOT="$(PKG_INSTALL_DIR)" install
+CONFIGURE_ARGS += ac_cv_path_PPPD=/usr/sbin/pppd --enable-plugin=../../ppp-2.4.3/ipkg-install/usr/include/
+MAKE_FLAGS := DESTDIR="$(PKG_INSTALL_DIR)" install
 MAKE_PATH := ./src
 
 define Package/rp-pppoe-client/install	
@@ -106,9 +106,11 @@ define Package/rp-pppoe-server/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/pppoe-server.init $(1)/etc/init.d/pppoe-server
 	$(INSTALL_DIR) $(1)/etc/ppp
+	$(INSTALL_DIR) $(1)/etc/ppp/plugins
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/ppp/pppoe-server-options $(1)/etc/ppp/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/pppoe-server $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/etc/ppp/plugins/rp-pppoe.so $(1)/etc/ppp/plugins/
 endef
 
 define Package/rp-pppoe-sniff/install	
