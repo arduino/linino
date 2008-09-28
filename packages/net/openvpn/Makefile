@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openvpn
 PKG_VERSION:=2.0.9
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://openvpn.net/release @SF/openvpn
@@ -27,6 +27,10 @@ define Package/openvpn
   SUBMENU:=VPN
 endef
 
+define Package/openvpn/conffiles
+/etc/config/openvpn
+endef
+
 define Package/openvpn/description
 	 Open source VPN solution using SSL
 endef
@@ -35,6 +39,12 @@ define Package/openvpn-easy-rsa
   $(call Package/openvpn)
   DEPENDS:=openvpn +openssl-util
   TITLE:=Simple shell scripts to manage a Certificate Authority
+endef
+
+define Package/openvpn-easy-rsa/conffiles
+/etc/easy-rsa/keys/serial
+/etc/easy-rsa/keys/index.txt
+/etc/easy-rsa/vars
 endef
 
 define Build/Configure
@@ -61,16 +71,19 @@ define Package/openvpn/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/openvpn $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d/
 	$(INSTALL_BIN) files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
-	$(INSTALL_DIR) $(1)/etc/default
-	$(INSTALL_BIN) files/$(PKG_NAME).default $(1)/etc/default/$(PKG_NAME)
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) files/$(PKG_NAME).config $(1)/etc/config/$(PKG_NAME)
 endef
 
 define Package/openvpn-easy-rsa/install	
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/easy-rsa/2.0/{build-*,clean-all,inherit-inter,list-crl,pkitool,revoke-full,sign-req,whichopensslcnf} $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/easy-rsa
-	install -m 0644 $(PKG_BUILD_DIR)/easy-rsa/2.0/openssl.cnf $(1)/etc/easy-rsa/openssl.cnf
-	install -m 0644 $(PKG_BUILD_DIR)/easy-rsa/2.0/vars $(1)/etc/easy-rsa/vars
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/easy-rsa/2.0/openssl.cnf $(1)/etc/easy-rsa/openssl.cnf
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/easy-rsa/2.0/vars $(1)/etc/easy-rsa/vars
+	$(INSTALL_DIR) $(1)/etc/easy-rsa/keys
+	$(INSTALL_DATA) files/easy-rsa.index $(1)/etc/easy-rsa/keys/index.txt
+	$(INSTALL_DATA) files/easy-rsa.serial $(1)/etc/easy-rsa/keys/serial
 endef
 
 $(eval $(call BuildPackage,openvpn))

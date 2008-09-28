@@ -1,2 +1,0 @@
-CONFIG="/etc/openvpn/server.conf"
-OPTIONS="--config $CONFIG"
