@@ -1,0 +1,12 @@
+Index: linux-2.6.21.7/drivers/char/Makefile
+===================================================================
+--- linux-2.6.21.7.orig/drivers/char/Makefile
++++ linux-2.6.21.7/drivers/char/Makefile
+@@ -103,6 +103,7 @@ obj-$(CONFIG_IPMI_HANDLER)	+= ipmi/
+ 
+ obj-$(CONFIG_HANGCHECK_TIMER)	+= hangcheck-timer.o
+ obj-$(CONFIG_TCG_TPM)		+= tpm/
++obj-$(CONFIG_AMAZONE_WDT) += amazone_wdt.o
+ 
+ # Files generated that shall be removed upon make clean
+ clean-files := consolemap_deftbl.c defkeymap.c

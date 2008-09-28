@@ -1,0 +1,8 @@
+#!/bin/sh
+# Copyright (C) 2006 OpenWrt.org
+
+{
+	for i in /etc/rc.d/$1*; do
+		[ -x $i ] && $i $2 2>&1
+	done 
+} | logger -s -p 6 -t '' &

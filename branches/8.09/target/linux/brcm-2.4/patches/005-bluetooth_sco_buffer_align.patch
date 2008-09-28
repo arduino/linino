@@ -1,0 +1,14 @@
+Index: linux-2.4.35.4/drivers/bluetooth/hci_usb.c
+===================================================================
+--- linux-2.4.35.4.orig/drivers/bluetooth/hci_usb.c
++++ linux-2.4.35.4/drivers/bluetooth/hci_usb.c
+@@ -259,6 +259,9 @@ static int hci_usb_isoc_rx_submit(struct
+ 	void *buf;
+ 
+ 	mtu  = husb->isoc_in_ep->wMaxPacketSize;
++#ifdef CONFIG_BCM4710
++	mtu = (mtu + 1) & ~1;		/* brcm: isoc buffers must be aligned on word boundary */
++#endif
+         size = mtu * HCI_MAX_ISOC_FRAMES;
+ 
+ 	buf = kmalloc(size, GFP_ATOMIC);

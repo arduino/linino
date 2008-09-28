@@ -1,0 +1,3 @@
+[ ifup = "$ACTION" ] && {
+	uci_set_state network "$INTERFACE" up 1 
+}
