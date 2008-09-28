@@ -38,7 +38,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
 endef
 
-define Package/libtiff/Install
+define Package/libtiff/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*so* $(1)/usr/lib/
 endef
