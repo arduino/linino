@@ -40,14 +40,10 @@ CONFIGURE_ARGS += \
 	LIBNFNETLINK_CFLAGS="-I$(STAGING_DIR)/usr/include" \
 	LIBNFNETLINK_LIBS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib"
 
-MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS)"
-
-
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -lc -L$(TOOLCHAIN_DIR)/lib" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
