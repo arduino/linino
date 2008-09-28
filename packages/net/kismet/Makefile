@@ -86,6 +86,7 @@ endef
 
 CONFIGURE_ARGS += \
 	--enable-syspcap=yes \
+	--disable-dbus \
 	--disable-setuid \
 	--disable-wsp100 \
 	--disable-gpsmap \
