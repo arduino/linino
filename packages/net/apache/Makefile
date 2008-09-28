@@ -119,9 +119,9 @@ define Build/InstallDev
 	mkdir -p $(1)/etc
 	$(CP)   $(PKG_INSTALL_DIR)/etc/* \
 		$(1)/etc
-	mkdir -p $(1)/usr/include
+	mkdir -p $(1)/usr/include/apache
 	$(CP)	$(PKG_INSTALL_DIR)/usr/include/* \
-		$(1)/usr/include
+		$(1)/usr/include/apache
 	mkdir -p $(1)/usr/lib
 	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/httpd.exp \
 		$(1)/usr/lib
