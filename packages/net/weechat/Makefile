@@ -83,17 +83,16 @@ CONFIGURE_ARGS+= \
 CONFIGURE_VARS+= \
 	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib" \
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_weechat-mod-lua),)
+ifneq ($(CONFIG_PACKAGE_weechat-mod-lua),)
   CONFIGURE_ARGS+= \
 	--enable-lua \
 	--enable-plugins \
 	--with-plugins="lua" \
 	--with-lua-inc="$(STAGING_DIR)/usr/include" \
-	--with-lua-lib="$(STAGING_DIR)/usr/lib" \
-	LUA_CFLAGS="-I$(STAGING_DIR)/usr/include/"
-	LUA_LFLAGS="-L$(STAGING_DIR)/usr/lib -llualib50 -llua50"
+	--with-lua-lib="$(STAGING_DIR)/usr/lib"
   CONFIGURE_VARS+= \
 	LIBS="-ldl -lm"
+  TARGET_LDFLAGS += -lcrypt
 else
   CONFIGURE_ARGS+= \
 	--disable-lua
