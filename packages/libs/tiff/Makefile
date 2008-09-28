@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -13,10 +13,13 @@ PKG_VERSION:=3.8.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:= http://libtiff.maptools.org/dl/
-PKG_FIXUP := libtool
+PKG_SOURCE_URL:=http://libtiff.maptools.org/dl/
+PKG_MD5SUM:=fbb6f446ea4ed18955e2714934e5b698
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+
+PKG_INSTALL=1
 
 define Package/libtiff
   SECTION:=libs
@@ -28,7 +31,6 @@ endef
 TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += --without-x
-MAKE_FLAGS += all install DESTDIR=$(PKG_INSTALL_DIR)
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{lib,include}
@@ -36,7 +38,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
 endef
 
-define Package/tiff/Install
+define Package/libtiff/Install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*so* $(1)/usr/lib/
 endef
