@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=icecast
-PKG_VERSION:=2.3.0
+PKG_VERSION:=2.3.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.us.xiph.org/releases/icecast/
-PKG_MD5SUM:=35256fbc4a93571662af2ed18fbbfcc5
+PKG_MD5SUM:=ff516b3ccd2bcc31e68f460cd316093f
 
 include $(INCLUDE_DIR)/package.mk
 
