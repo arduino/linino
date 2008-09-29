@@ -11,11 +11,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nufw
-PKG_VERSION:=2.2.15
+PKG_VERSION:=2.2.17
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.nufw.org/download/nufw/
-PKG_MD5SUM:=ef9d335c2db263d85541379db7871f65
+PKG_MD5SUM:=f25ef486b0fc71cd03a3913a26515029
 
 include $(INCLUDE_DIR)/package.mk
 
