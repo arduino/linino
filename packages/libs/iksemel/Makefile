@@ -25,7 +25,7 @@ define Package/libiksemel
   CATEGORY:=Libraries
   TITLE:=Iksemel Jabber Library
   URL:=http://code.google.com/p/iksemel/
-  DEPENDS:= +libgnutls
+  DEPENDS:= +libgnutls +libtasn1
 endef
 
 TARGET_CFLAGS += $(FPIC)
