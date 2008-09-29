@@ -27,6 +27,13 @@ define Package/libspeex
   URL:=http://www.speex.org/
 endef
 
+define Package/libspeexdsp
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=Open source speech compression codec library output to DSP
+  URL:=http://www.speex.org/
+endef
+
 define Package/libspeex/description
 	Open source patent-free speech compression codec library.
 	Speex is an Open Source/Free Software patent-free audio compression 
@@ -40,6 +47,18 @@ define Package/libspeex/description
 endef
 
 TARGET_CFLAGS += $(FPIC)
+
+define Package/libspeexdsp/description
+	Open source patent-free speech compression codec library.
+	Speex is an Open Source/Free Software patent-free audio compression 
+	format designed for speech. The Speex Project aims to lower the 
+	barrier of entry for voice applications by providing a free 
+	alternative to expensive proprietary speech codecs. Moreover, Speex 
+	is well-adapted to Internet applications and provides useful features 
+	that are not present in most other codecs.
+
+	This package contains the shared dsp library, needed by other programs.
+endef
 
 TARGET_LDFLAGS:=$(TARGET_LDFLAGS) -lnotimpl
 
@@ -63,12 +82,14 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/speex $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libspeex.{a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libspeexdsp.{a,so*} $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/speex.pc $(1)/usr/lib/pkgconfig/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/speexdsp.pc $(1)/usr/lib/pkgconfig/
 endef
 
 define Package/libspeex/install
@@ -76,4 +97,11 @@ define Package/libspeex/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libspeex.so.* $(1)/usr/lib/
 endef
 
+define Package/libspeexdsp/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libspeexdsp.so.* $(1)/usr/lib/
+endef
+
 $(eval $(call BuildPackage,libspeex))
+$(eval $(call BuildPackage,libspeexdsp))
+
