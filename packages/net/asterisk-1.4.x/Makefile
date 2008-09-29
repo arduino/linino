@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
-PKG_VERSION:=1.4.11
+PKG_VERSION:=1.4.21
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://ftp.digium.com/pub/asterisk/old-releases/
-PKG_MD5SUM:=3ba9b399fedc68de4845b1c5603d167c
+PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
+PKG_MD5SUM:=c4cf69eb6eae3105806b08d3efc28ec7
 
 PKG_BUILD_DEPENDS:= libopenh323 pwlib
 
@@ -50,7 +50,7 @@ endef
 define Package/asterisk14
 $(call Package/asterisk14/Default)
   TITLE:=Complete open source PBX
-  DEPENDS:= +libltdl +libncurses +libpopt +libpthread @!TARGET_avr32
+  DEPENDS:= +libncurses +libpopt +libpthread @!TARGET_avr32
 endef
 
 define Package/asterisk14/description
@@ -80,6 +80,58 @@ $(call Package/asterisk14/Default/description)
  - pbx_config
  - res_features
  - res_musiconhold
+endef
+
+
+define Package/asterisk14-app-meetme
+$(call Package/asterisk14/Default)
+  TITLE:=conferencing support
+  DEPENDS:= +asterisk14 +zaptel14-libtonezone
+endef
+
+define Package/asterisk14-app-meetme/description
+$(call Package/asterisk14/Default/description)
+ This package provides the MeetMe application driver Conferencing support to 
+ Asterisk.
+endef
+
+
+define Package/asterisk14-chan-oss
+$(call Package/asterisk14/Default)
+  TITLE:=OSS soundcards support
+  DEPENDS:= +asterisk14
+endef
+
+define Package/asterisk14-chan-oss/description
+$(call Package/asterisk14/Default/description)
+ This package provides the channel driver for OSS sound cards support to 
+ Asterisk.
+endef
+
+
+define Package/asterisk14-app-meetme
+$(call Package/asterisk14/Default)
+  TITLE:=conferencing support
+  DEPENDS:= +asterisk14 +zaptel14-libtonezone
+endef
+
+define Package/asterisk14-app-meetme/description
+$(call Package/asterisk14/Default/description)
+ This package provides the MeetMe application driver Conferencing support to 
+ Asterisk.
+endef
+
+
+define Package/asterisk14-chan-oss
+$(call Package/asterisk14/Default)
+  TITLE:=OSS soundcards support
+  DEPENDS:= +asterisk14
+endef
+
+define Package/asterisk14-chan-oss/description
+$(call Package/asterisk14/Default/description)
+ This package provides the channel driver for OSS sound cards support to 
+ Asterisk.
 endef
 
 
@@ -147,17 +199,17 @@ $(call Package/asterisk14/Default/description)
 endef
 
 
-define Package/asterisk14-codec-ilbc
-$(call Package/asterisk14/Default)
-  TITLE:=ILBC Translator
-  DEPENDS:= +asterisk14
-endef
+#define Package/asterisk14-codec-ilbc
+#$(call Package/asterisk14/Default)
+#  TITLE:=ILBC Translator
+#  DEPENDS:= +asterisk14
+#endef
 
-define Package/asterisk14-codec-ilbc/description
-$(call Package/asterisk14/Default/description)
- This package contains the ILBC (Internet Low Bitrate Codec) translator 
- for Asterisk.
-endef
+#define Package/asterisk14-codec-ilbc/description
+#$(call Package/asterisk14/Default/description)
+# This package contains the ILBC (Internet Low Bitrate Codec) translator 
+# for Asterisk.
+#endef
 
 
 define Package/asterisk14-codec-lpc10
@@ -176,7 +228,7 @@ endef
 define Package/asterisk14-codec-speex
 $(call Package/asterisk14/Default)
   TITLE:=Speex/PCM16 Codec Translator
-  DEPENDS:= +asterisk14 +libspeex
+  DEPENDS:= +asterisk14 +libspeex +libspeexdsp
 endef
 
 define Package/asterisk14-chan-speex/description
@@ -272,11 +324,20 @@ $(call Package/asterisk14/Default/description)
  This package contains voicemail related modules for Asterisk.
 endef
 
+define Package/asterisk14-rawplayer
+$(call Package/asterisk14/Default)
+  TITLE:=Play raw files for asterisk
+endef
+
+define Package/asterisk14-rawplayer/description
+ Contains the rawplayer utility for asterisk
+endef
+
 
 CONFIGURE_ARGS+= \
 	--without-curl \
 	--without-curses \
-	--without-gsm \
+	--with-gsm="$(STAGING_DIR)/usr" \
 	--without-imap \
 	--without-isdnnet \
 	--without-kde \
@@ -289,7 +350,6 @@ CONFIGURE_ARGS+= \
 	--without-odbc \
 	--without-ogg \
 	--without-osptk \
-	--without-oss \
 	--with-popt="$(STAGING_DIR)/usr" \
 	--without-pri \
 	--without-qt \
@@ -299,21 +359,35 @@ CONFIGURE_ARGS+= \
 	--without-tds \
 	--without-termcap \
 	--without-tinfo \
-	--without-tonezone \
 	--without-vorbis \
 	--without-vpb \
 	--with-z="$(STAGING_DIR)/usr" \
-	--without-zaptel \
 
 EXTRA_CFLAGS:= $(TARGET_CPPFLAGS)
 EXTRA_LDFLAGS:= $(TARGET_LDFLAGS)
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk14-chan-alsa),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk14-app-meetme),)
   CONFIGURE_ARGS+= \
-	--with-asound="$(STAGING_DIR)/usr"
+	--with-tonezone="$(STAGING_DIR)/usr" --with-zaptel="$(STAGING_DIR)/usr"
 else
   CONFIGURE_ARGS+= \
-	--without-asound
+	--without-tonezone --without-zaptel
+endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk14-chan-alsa),)
+  CONFIGURE_ARGS+= \
+        --with-asound="$(STAGING_DIR)/usr"
+else
+  CONFIGURE_ARGS+= \
+        --without-asound
+endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk14-chan-oss),)
+  CONFIGURE_ARGS+= \
+        --with-oss
+else
+  CONFIGURE_ARGS+= \
+        --without-oss
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk14-chan-gtalk),)
@@ -406,6 +480,8 @@ define Build/Compile
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install samples
 	$(SED) 's|/var/lib/asterisk|/usr/lib/asterisk|g' $(PKG_INSTALL_DIR)/etc/asterisk/musiconhold.conf
+
+	$(TARGET_CC) -O2 $(PKG_BUILD_DIR)/contrib/utils/rawplayer.c -o $(PKG_BUILD_DIR)/rawplayer
 endef
 
 define Build/InstallDev
@@ -485,9 +561,10 @@ define Package/asterisk14/install
 		cd modules; \
 		rm -rf	*adsi* *festival* *modem* *oss* *phone* *intercom* \
 			*mp3* *nbscat* *sqlite* *mysql* *postgres* *pgsql* \
-			*voicemail* *speex* *flash* *page* *zap* *jpeg* \
+			*voicemail* *speex* *flash* *page* *meetme* *zap* *jpeg* \
 			*snmp* \
 			chan_alsa.so \
+			chan_oss.so \
 			chan_gtalk.so \
 			chan_h323.so \
 			chan_mgcp.so \
@@ -568,6 +645,54 @@ define Package/asterisk14-mini/install
 endef
 
 
+define Package/asterisk14-app-meetme/conffiles
+/etc/asterisk/meetme.conf
+endef
+
+define Package/asterisk14-app-meetme/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/meetme.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/app_meetme.so $(1)/usr/lib/asterisk/modules/
+endef
+
+
+define Package/asterisk14-chan-oss/conffiles
+/etc/asterisk/oss.conf
+endef
+
+define Package/asterisk14-chan-oss/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/oss.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_oss.so $(1)/usr/lib/asterisk/modules/
+endef
+
+
+define Package/asterisk14-app-meetme/conffiles
+/etc/asterisk/meetme.conf
+endef
+
+define Package/asterisk14-app-meetme/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/meetme.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/app_meetme.so $(1)/usr/lib/asterisk/modules/
+endef
+
+
+define Package/asterisk14-chan-oss/conffiles
+/etc/asterisk/oss.conf
+endef
+
+define Package/asterisk14-chan-oss/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/oss.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_oss.so $(1)/usr/lib/asterisk/modules/
+endef
+
+
 define Package/asterisk14-chan-alsa/conffiles
 /etc/asterisk/alsa.conf
 endef
@@ -631,11 +756,11 @@ define Package/asterisk14-chan-skinny/install
 endef
 
 
-define Package/asterisk14-codec-ilbc/install
-	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/codec_ilbc.so $(1)/usr/lib/asterisk/modules/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/format_ilbc.so $(1)/usr/lib/asterisk/modules/
-endef
+#define Package/asterisk14-codec-ilbc/install
+#	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+#	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/codec_ilbc.so $(1)/usr/lib/asterisk/modules/
+#	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/format_ilbc.so $(1)/usr/lib/asterisk/modules/
+#endef
 
 
 define Package/asterisk14-codec-lpc10/install
@@ -718,15 +843,23 @@ define Package/asterisk14-voicemail/install
 	$(CP) $(PKG_INSTALL_DIR)//usr/lib/asterisk/sounds/vm-*.gsm $(1)/usr/lib/asterisk/sounds/
 endef
 
+define Package/asterisk14-rawplayer/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN)	$(PKG_BUILD_DIR)/rawplayer \
+			$(1)/usr/bin
+endef
+
 
 $(eval $(call BuildPackage,asterisk14))
 $(eval $(call BuildPackage,asterisk14-mini))
+$(eval $(call BuildPackage,asterisk14-app-meetme))
+$(eval $(call BuildPackage,asterisk14-chan-oss))
 $(eval $(call BuildPackage,asterisk14-chan-alsa))
 $(eval $(call BuildPackage,asterisk14-chan-gtalk))
 $(eval $(call BuildPackage,asterisk14-chan-h323))
 $(eval $(call BuildPackage,asterisk14-chan-mgcp))
 $(eval $(call BuildPackage,asterisk14-chan-skinny))
-$(eval $(call BuildPackage,asterisk14-codec-ilbc))
+#$(eval $(call BuildPackage,asterisk14-codec-ilbc))
 $(eval $(call BuildPackage,asterisk14-codec-lpc10))
 $(eval $(call BuildPackage,asterisk14-codec-speex))
 $(eval $(call BuildPackage,asterisk14-pbx-dundi))
@@ -736,3 +869,4 @@ $(eval $(call BuildPackage,asterisk14-pgsql))
 $(eval $(call BuildPackage,asterisk14-sqlite))
 $(eval $(call BuildPackage,asterisk14-voicemail))
 $(eval $(call BuildPackage,asterisk14-sounds))
+$(eval $(call BuildPackage,asterisk14-rawplayer))
