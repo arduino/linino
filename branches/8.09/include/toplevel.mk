@@ -7,7 +7,6 @@
 #
 
 RELEASE:=Kamikaze
-REVISION:=8.09
 SHELL:=/usr/bin/env bash
 PREP_MK= OPENWRT_BUILD= QUIET=0
 
@@ -16,7 +15,7 @@ include $(TOPDIR)/include/verbose.mk
 ifeq ($(SDK),1)
   include $(TOPDIR)/include/version.mk
 else
-  REVISION?=$(shell $(TOPDIR)/scripts/getver.sh)
+  REVISION:=$(shell $(TOPDIR)/scripts/getver.sh)
 endif
 
 OPENWRTVERSION:=$(RELEASE)$(if $(REVISION), ($(REVISION)))
