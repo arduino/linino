@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk-addons
-PKG_VERSION:=1.4.2
+PKG_VERSION:=1.4.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://ftp.digium.com/pub/asterisk/old-releases/
-PKG_MD5SUM:=c080b02e6ddc81dab6a64691af890805
+PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
+PKG_MD5SUM:=3b14c147101c13ca6146c41870bad97a
 
 PKG_FIXUP = libtool
 
@@ -91,6 +91,7 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk14-mysql),)
 endif
 
 CONFIGURE_ARGS += \
+	--with-asterisk="$(STAGING_DIR)/usr" \
 	--with-bluetooth="$(STAGING_DIR)/usr" \
 	--with-ncurses="$(STAGING_DIR)/usr" \
 	--with-mysqlclient="$(STAGING_DIR)/usr" \
@@ -110,12 +111,13 @@ endef
 
 MAKE_ARGS:= \
 	AM_CFLAGS="$(TARGET_CFLAGS)" \
-	OPTIMIZE="$(TARGET_CFLAGS)" \
+	OPTIMIZE="$(TARGET_CFLAGS) -DLOW_MEMORY" \
 	OPTIONS="" \
+	NOISY_BUILD="yes" \
 	BLUETOOTH_LIB="$(TARGET_LDFLAGS) -lbluetooth" \
 
 MAKE_VARS:= \
-	CFLAGS="$(EXTRA_CFLAGS) -DLOW_MEMORY" \
+	CFLAGS="$(EXTRA_CFLAGS)" \
 	LDFLAGS="$(EXTRA_LDFLAGS)" \
 
 define Build/Compile

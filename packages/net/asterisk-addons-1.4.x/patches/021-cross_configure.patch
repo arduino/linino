@@ -1,12 +1,12 @@
-diff -ruN asterisk-addons-1.4.2-old/menuselect/Makefile asterisk-addons-1.4.2-new/menuselect/Makefile
---- asterisk-addons-1.4.2-old/menuselect/Makefile	2007-06-06 00:01:45.000000000 +0200
-+++ asterisk-addons-1.4.2-new/menuselect/Makefile	2007-09-19 18:00:27.000000000 +0200
-@@ -42,7 +42,7 @@
- 	@$(MAKE) menuselect
+diff -Nru asterisk-addons-1.4.5.org/menuselect/Makefile asterisk-addons-1.4.5/menuselect/Makefile
+--- asterisk-addons-1.4.5.org/menuselect/Makefile	2007-11-21 01:17:33.000000000 +0100
++++ asterisk-addons-1.4.5/menuselect/Makefile	2007-12-20 22:47:17.000000000 +0100
+@@ -51,7 +51,7 @@
+ $(OBJS) menuselect_gtk.o menuselect_curses.o menuselect_stub.o: autoconfig.h menuselect.h
  
- autoconfig.h:
--	@./configure $(CONFIGURE_SILENT) CC= LD= AR=
-+	@./configure $(CONFIGURE_SILENT) CC= LD= AR= LDFLAGS=
+ makeopts autoconfig.h: autoconfig.h.in makeopts.in
+-	@./configure $(CONFIGURE_SILENT) CC= LD= AR= CFLAGS=
++	@./configure $(CONFIGURE_SILENT) CC= LD= AR= CFLAGS= LDFLAGS=
  
- _gmenuselect: autoconfig.h 
- 	@$(MAKE) gmenuselect
+ menuselect gmenuselect: mxml/libmxml.a
+ 
