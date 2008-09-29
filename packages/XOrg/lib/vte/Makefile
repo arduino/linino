@@ -37,7 +37,7 @@ define Package/vte
   SUBMENU:=libraries
   TITLE:=Virtual Terminal Widget
   URL:=http://developer.gnome.org/arch/gnome/widgets/vte.html
-  DEPENDS:=+gtk2
+  DEPENDS:=+gtk2 +libncurses
 endef
 
 define Package/python-vte
