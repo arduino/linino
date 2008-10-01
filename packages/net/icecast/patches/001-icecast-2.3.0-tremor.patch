@@ -146,3 +146,14 @@ diff -urN icecast-2.3.2/src/source.c icecast-2.3.2.new/src/source.c
  
    ;
    return 0;
+--- icecast-2.3.2/src/format_kate.c	2008-04-18 18:29:28.000000000 +0200
++++ icecast-2.3.2.new/src/format_kate.c	2008-10-01 08:27:00.000000000 +0200
+@@ -19,7 +19,7 @@
+ 
+ #include <stdlib.h>
+ #include <string.h>
+-#include <ogg/ogg.h>
++#include <tremor/ogg.h>
+ #ifdef HAVE_KATE
+ #include <kate/oggkate.h>
+ #endif
