@@ -44,7 +44,7 @@ diff -urN numpy-1.0.4/numpy/core/setup.py numpy-1.0.4.patched/numpy/core/setup.p
 diff -urN numpy-1.0.4/numpy/distutils/unixccompiler.py numpy-1.0.4.patched/numpy/distutils/unixccompiler.py
 --- numpy-1.0.4/numpy/distutils/unixccompiler.py	2007-11-07 22:05:15.000000000 +0000
 +++ numpy-1.0.4.patched/numpy/distutils/unixccompiler.py	2008-05-25 11:07:14.000000000 +0100
-@@ -9,11 +9,35 @@
+@@ -9,11 +9,36 @@
  from numpy.distutils.ccompiler import replace_method
  
  import log
@@ -62,6 +62,7 @@ diff -urN numpy-1.0.4/numpy/distutils/unixccompiler.py numpy-1.0.4.patched/numpy
 +		if output_progname == "_configtest":
 +			self.spawn(['gcc', '-lm', '-o',output_progname]+objects, display = "")
 +		else:
++			print "#### Running " + str(CCompiler.EXECUTABLE)
 +			self.link(CCompiler.EXECUTABLE, objects,
 +                  self.executable_filename(output_progname), output_dir,
 +                  libraries, library_dirs, runtime_library_dirs, None,

@@ -25,7 +25,6 @@ PKG_INSTALL:=1
 EXTRA_CFLAGS += \
 	-I$(STAGING_DIR)/usr/lib/libintl/include \
 	-I$(STAGING_DIR)/usr/include/libcroco-0.6 \
-	$(if $(CONFIG_PACKAGE_python-hippo-canvas),-I$(STAGING_DIR)/usr/include/pycairo,)
 
 STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_hippo-canvas CONFIG_PACKAGE_python-hippo-canvas)
 

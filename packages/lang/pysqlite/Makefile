@@ -40,6 +40,14 @@ define PyPackage/python-sqlite/filespec
 -|$(PYTHON_PKG_DIR)/pysqlite2/test
 endef
 
+define Build/Configure
+	cp ./files/setup.cfg.in $(PKG_BUILD_DIR)/setup.cfg
+	$(SED) \
+		's,@INCLUDE_DIRS@,$(STAGING_DIR)/usr/include,g' \
+		-e 's,@INCLUDE_DIRS@,$(STAGING_DIR)/usr/include,g' \
+		$(PKG_BUILD_DIR)/setup.cfg
+endef
+
 define Build/Compile
 	$(if $(Build/Compile/PyMod),,@echo Python packaging code not found.; false)
 	$(call Build/Compile/PyMod,., \
@@ -49,7 +57,3 @@ endef
 
 $(eval $(call PyPackage,python-sqlite))
 $(eval $(call BuildPackage,python-sqlite))
-
-$(eval $(call RequireHeader,/usr/include/gnu/stubs-32.h, \
-	$(PKG_NAME) requires a 32-bits toolchain. \
-))

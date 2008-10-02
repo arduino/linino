@@ -21,7 +21,7 @@ define Package/ipython
   SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
-  TITLE:=python bindings for dbus
+  TITLE:=ipython
   URL:=http://ipython.scipy.org/dist/
 endef
 

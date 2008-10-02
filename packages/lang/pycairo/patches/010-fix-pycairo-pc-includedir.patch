@@ -1,0 +1,13 @@
+--- pycairo-1.6.4/pycairo.pc.in.orig	2008-09-30 16:55:10.000000000 +0200
++++ pycairo-1.6.4/pycairo.pc.in	2008-09-30 16:55:44.000000000 +0200
+@@ -1,8 +1,9 @@
+ prefix=@prefix@
++includedir=@includedir@
+ 
+ Name: Pycairo
+ Description: Python bindings for cairo
+ Version: @VERSION@
+ Requires: cairo
+-Cflags: -I@includedir@/pycairo
++Cflags: -I${includedir}/pycairo
+ Libs:

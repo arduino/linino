@@ -4,6 +4,7 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
@@ -16,30 +17,32 @@ PKG_FIXUP:=libtool
 PKG_MD5SUM:=2c633a06c140024dd0d59db1e87e6945
 
 include $(INCLUDE_DIR)/package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
 PKG_INSTALL=1
 
 TARGET_CFLAGS += $(FPIC) \
 	-I$(STAGING_DIR)/usr/lib/libintl/include \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include
+	-I$(STAGING_DIR)/usr/lib/libiconv/include \
+	-I$(STAGING_DIR)/usr/include/gstreamer-0.10
 
 TARGET_LDFLAGS += \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
-CONFIGURE_VARS += PYTHON=/usr/bin/python
+CONFIGURE_VARS += PYTHON=$(HOST_PYTHON)
 
 define Package/gst-python
   SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
-  TITLE:=python bindings for dbus
+  TITLE:=python bindings for gstreamer
   URL:=http://gstreamer.freedesktop.org/
   DEPENDS:=+gstreamer +gst-plugins-base +python-gtk
 endef
 
 define Package/gst-python/description
-  python bindings for dbus 
+  python bindings for gstreamer
 endef
 
 define Build/InstallDev

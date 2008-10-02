@@ -15,6 +15,7 @@ PKG_SOURCE_URL:=http://downloads.sourceforge.net/numpy/
 PKG_MD5SUM:=8f011e9d7697da570efaac61c51725e0
 
 include $(INCLUDE_DIR)/package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
 define Package/numpy
   SUBMENU:=Python
@@ -22,7 +23,7 @@ define Package/numpy
   CATEGORY:=Languages
   TITLE:=numpy
   URL:=http://numpy.sf.net
-  DEPENDS:=python-core @TARGET_x86||TARGET_olpc||TARGET_uml
+  DEPENDS:=python-core @TARGET_x86||TARGET_olpc||TARGET_uml @BROKEN
 endef
 
 define Package/numpy/description
@@ -31,7 +32,6 @@ endef
 
 define Build/Compile
 	cd $(PKG_BUILD_DIR) ; $(CONFIGURE_VARS) $(MAKE_VARS) python2.5 ./setup.py install --prefix="$(PKG_INSTALL_DIR)/usr"
-	sed -i "s/UCS4/UCS2/g" $(PKG_INSTALL_DIR)/usr/lib/python2.5/site-packages/numpy/core/multiarray.so
 endef
 
 define Package/numpy/install

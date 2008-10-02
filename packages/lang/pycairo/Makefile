@@ -4,6 +4,7 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
@@ -17,6 +18,7 @@ PKG_MD5SUM:=2c3aa21e6e610321498f9f81f7b625df
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
 PKG_INSTALL=1
 
@@ -35,17 +37,20 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/pycairo
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/include/pycairo/* \
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/pycairo/* \
 		$(1)/usr/include/pycairo
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
 		$(1)/usr/lib/pkgconfig/
 endef
 
 define Package/pycairo/install
-	$(INSTALL_DIR) $(1)/usr/lib/python2.5/site-packages/cairo/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/python2.5/site-packages/cairo/*.{py,so,a} \
-		$(1)/usr/lib/python2.5/site-packages/cairo/
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)/cairo/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/cairo/*.{py,so,a} \
+		$(1)$(PYTHON_PKG_DIR)/cairo/
 endef
 
 $(eval $(call BuildPackage,pycairo))

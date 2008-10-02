@@ -40,6 +40,8 @@ CONFIGURE_ARGS += \
 	--with-postgres-libraries="$(STAGING_DIR)/usr/lib" \
 	--with-postgres-includes="$(STAGING_DIR)/usr/include" \
 	--with-mxdatetime-includes="$(STAGING_DIR)$(PYTHON_PKG_DIR)/mx/DateTime/mxDateTime" \
+	--with-python-prefix=$(STAGING_DIR)/usr
+	--with-python-exec-prefix=$(STAGING_DIR)/usr
 
 define Build/Compile
 	$(if $(Build/Compile/PyMod),,@echo Python packaging code not found.; false)

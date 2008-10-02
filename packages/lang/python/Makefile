@@ -14,14 +14,12 @@ PKG_RELEASE:=2
 
 PKG_SOURCE:=Python-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.python.org/ftp/python/$(PKG_VERSION)/
-PKG_MD5SUM:=70084ffa561660f07de466c2c8c4842d
+#PKG_MD5SUM:=afb5451049eda91fbde10bd5a4b7fadc
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Python-$(PKG_VERSION)
 
-PKG_BUILD_DEPENDS:=python libexpat libopenssl zlib
-
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,./python-package.mk)
+-include $(if $(DUMP),,./files/python-package.mk)
 
 define Package/python/Default
   SUBMENU:=Python
@@ -32,19 +30,19 @@ define Package/python/Default
 endef
 
 define Package/python/Default/description
- Python is a dynamic object-oriented programming language that can be used 
- for many kinds of software development. It offers strong support for 
- integration with other languages and tools, comes with extensive standard 
- libraries, and can be learned in a few days. Many Python programmers 
- report substantial productivity gains and feel the language encourages 
+ Python is a dynamic object-oriented programming language that can be used
+ for many kinds of software development. It offers strong support for
+ integration with other languages and tools, comes with extensive standard
+ libraries, and can be learned in a few days. Many Python programmers
+ report substantial productivity gains and feel the language encourages
  the development of higher quality, more maintainable code.
 endef
 
 define Package/python
 $(call Package/python/Default)
- TITLE+= (full)
- DEPENDS:= +libpthread +zlib
- PROVIDES:=python-core
+  TITLE+= (full)
+  DEPENDS:=+libpthread +zlib
+  PROVIDES:=python-core
 endef
 
 define Package/python/description
@@ -55,27 +53,27 @@ endef
 
 define Package/python-mini
 $(call Package/python/Default)
- TITLE+= (minimal)
- DEPENDS:= +libpthread +zlib
- PROVIDES:=python-core
+  TITLE+= (minimal)
+  DEPENDS:=+libpthread +zlib
+  PROVIDES:=python-core
 endef
 
 define Package/python-mini/description
 $(call Package/python/Default/description)
- .
- This package contains only a minimal Python install.
+  .
+  This package contains only a minimal Python install.
 endef
 
 define Package/python-doc
 $(call Package/python/Default)
- TITLE:=Python interactive documentation
- DEPENDS+= python-core
+  TITLE:=Python interactive documentation
+  DEPENDS+= python-core
 endef
 
 define Package/python-expat
 $(call Package/python/Default)
- TITLE:=Python support for expat
- DEPENDS+= python-core +libexpat
+  TITLE:=Python support for expat
+  DEPENDS+= python-core +libexpat
 endef
 
 define Package/python-openssl
@@ -97,8 +95,8 @@ MAKE_OPTS:=\
 	CFLAGS="$(TARGET_CFLAGS) -fno-inline" \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
 	LD="$(TARGET_CC)" \
-	HOSTPYTHON=./hostpython \
-	HOSTPGEN=./hostpgen
+	HOSTPYTHON=$(PKG_INSTALL_DIR)/host/bin/python \
+	HOSTPGEN=./hostpgen \
 
 define Build/Configure
 endef
@@ -109,15 +107,16 @@ define Build/Compile
 		rm -rf config.cache; \
 		CONFIG_SITE= \
 		OPT="$(HOST_CFLAGS)" \
-		./configure --without-cxx-main --without-threads; \
+		./configure --without-cxx-main --without-threads --prefix=$(PKG_INSTALL_DIR)/host; \
 	);
-	$(MAKE) -C $(PKG_BUILD_DIR) python Parser/pgen
-	(cd $(PKG_BUILD_DIR); \
-		mv python ./hostpython; \
-		mv Parser/pgen ./hostpgen; \
-	);
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		python Parser/pgen
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		HOSTPYTHON=$(PKG_BUILD_DIR)/python \
+		sharedmods install
+	(cd $(PKG_BUILD_DIR);mv Parser/pgen hostpgen)
 	$(MAKE) -C $(PKG_BUILD_DIR) distclean
-	#echo "readline readline.c -lreadline -lncurses" >> $(PKG_BUILD_DIR)/Modules/Setup.local
+
 	$(call Build/Configure/Default, \
 		--sysconfdir=/etc \
 		--disable-shared \
@@ -125,8 +124,6 @@ define Build/Compile
 		--without-cxx-main \
 		--with-threads \
 		ac_cv_lib_readline_readline=no \
-		HOSTPYTHON=./hostpython \
-		HOSTPGEN=./hostpgen \
 		OPT="$(TARGET_CFLAGS)" \
 	)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -137,18 +134,33 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/mk $(2)/bin $(1)/usr/bin $(1)/usr/include $(1)/usr/lib
-	$(INSTALL_DATA) ./python-package.mk $(1)/mk/
-	$(CP) $(PKG_BUILD_DIR)/hostpython $(1)/usr/bin/
-	ln -sf hostpython $(1)/usr/bin/python
-	ln -sf $(STAGING_DIR)/usr/bin/hostpython $(2)/bin/
-	ln -sf $(STAGING_DIR)/usr/bin/python $(2)/bin/
+	$(INSTALL_DATA) ./files/python-package.mk $(1)/mk/
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/include/python$(PYTHON_VERSION) \
 		$(1)/usr/include/
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/python$(PYTHON_VERSION) \
+		$(PKG_INSTALL_DIR)/host/lib/python$(PYTHON_VERSION) \
 		$(PKG_BUILD_DIR)/libpython$(PYTHON_VERSION).a \
 		$(1)/usr/lib/
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/python$(PYTHON_VERSION)/config \
+		$(1)/usr/lib/python$(PYTHON_VERSION)/
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/host/bin/python \
+		$(1)/usr/bin/hostpython
+	(cd $(2)/bin; \
+	ln -sf ../../usr/bin/hostpython python$(PYTHON_VERSION); \
+	ln -sf python$(PYTHON_VERSION) python)
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/host/bin/python$(PYTHON_VERSION)-config \
+		$(2)/bin/
+	$(SED) 's,^#!.*,#!/usr/bin/env python2.5,g' $(2)/bin/python$(PYTHON_VERSION)-config
+
+	(cd $(2)/bin; \
+	ln -sf python$(PYTHON_VERSION)-config python-config;)
 endef
 
 define PyPackage/python/filespec

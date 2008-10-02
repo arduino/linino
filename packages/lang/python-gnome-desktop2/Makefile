@@ -4,6 +4,7 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
@@ -23,11 +24,6 @@ PKG_INSTALL=1
 EXTRA_CFLAGS += \
 	-I$(STAGING_DIR)/usr/lib/libintl/include \
 	-I$(STAGING_DIR)/usr/lib/libiconv/include \
-	$(if CONFIG_PACKAGE_python-rsvg, \
-		-I$(STAGING_DIR)/usr/include/librsvg-2 \
-		-I$(STAGING_DIR)/usr/include/pycairo \
-	,) \
-	$(if CONFIG_PACKAGE_python-wnck,-I$(STAGING_DIR)/usr/include/libwnck-1.0,)
 
 EXTRA_LDFLAGS += \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib \

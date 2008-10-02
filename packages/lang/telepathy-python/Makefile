@@ -4,6 +4,7 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
@@ -15,6 +16,7 @@ PKG_SOURCE_URL:=http://telepathy.freedesktop.org/releases/telepathy-python/
 PKG_MD5SUM:=678a28e3b7d06f75940beec28130d9a5
 
 include $(INCLUDE_DIR)/package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
 define Package/telepathy-python
   SUBMENU:=Python
@@ -26,14 +28,15 @@ define Package/telepathy-python
 endef
 
 define Package/telepathy-python/description
-  telepathy- python bingings
+  telepathy python bingings
 endef
 
 define Build/Compile
-	cd $(PKG_BUILD_DIR) ; $(CONFIGURE_VARS) $(MAKE_VARS) /usr/bin/python ./setup.py install --prefix="$(PKG_INSTALL_DIR)/usr"
+	$(call Build/Compile/PyMod,,install --prefix="$(PKG_INSTALL_DIR)/usr")
 endef
 
 define Package/telepathy-python/install
+	#FIXME: Only copy required files
 	mkdir -p $(1)
 	cp -r $(PKG_INSTALL_DIR)/* $(1)
 endef

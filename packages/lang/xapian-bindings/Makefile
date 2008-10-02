@@ -4,7 +4,7 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id:
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
@@ -17,6 +17,7 @@ PKG_SOURCE_URL:=http://oligarchy.co.uk/xapian/$(PKG_VERSION)
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
 PKG_INSTALL=1
 
