@@ -26,7 +26,7 @@ define Package/tinyproxy
 endef
 
 define Package/tinyproxy/conffiles
-/etc/tinyproxy/tinyproxy.conf
+/etc/config/tinyproxy
 endef
 
 define Build/Configure
@@ -47,8 +47,8 @@ define Package/tinyproxy/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/tinyproxy $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/share/tinyproxy
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/tinyproxy/*.html $(1)/usr/share/tinyproxy/
-	$(INSTALL_DIR) $(1)/etc/tinyproxy
-	$(CP) $(PKG_INSTALL_DIR)/etc/tinyproxy/tinyproxy.conf $(1)/etc/tinyproxy/
+	$(INSTALL_DIR) $(1)/etc/config
+	$(CP) ./files/tinyproxy.config $(1)/etc/config/tinyproxy
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/tinyproxy.init $(1)/etc/init.d/tinyproxy
 endef
