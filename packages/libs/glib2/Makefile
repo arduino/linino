@@ -91,9 +91,6 @@ define Build/InstallDev
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/*.pc \
 		$(1)/usr/lib/pkgconfig
-	$(SED) \
-		"s,=\(glib-genmarshal\|gobject-query\|glib-mkenums\),=$(STAGING_DIR_HOST)/bin/\1,g" \
-		$(1)/usr/lib/pkgconfig/glib-2.0.pc
 
 	$(INSTALL_DIR) $(2)/share/aclocal/
 	$(INSTALL_DATA) \
