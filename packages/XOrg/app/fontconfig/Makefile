@@ -26,12 +26,10 @@ define Package/fontconfig
 endef
 
 define Build/Configure
-	cd  $(PKG_BUILD_DIR)/; \
-		$(TARGET_CONFIGURE_OPTS) \
-		$(CONFIGURE_VARS) \
-		$(CONFIGURE_CMD) \
-			$(CONFIGURE_ARGS_XTRA) \
-			$(CONFIGURE_ARGS) 
+	$(call Build/Configure/Default, \
+		--disable-docs, \
+		ac_cv_prog_HASDOCBOOK=no \
+	)
 endef
 
 define Build/Compile
