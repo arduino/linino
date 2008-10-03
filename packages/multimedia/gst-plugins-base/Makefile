@@ -8,24 +8,35 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gst-plugins-base
-PKG_VERSION:=0.10.12
-PKG_RELEASE:=1
+PKG_VERSION:=0.10.21
+PKG_RELEASE:=2
+
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gst-plugins-base/
+PKG_MD5SUM:=0e0cd485311502ad1c0c028148e3186
 PKG_FIXUP:=libtool
-PKG_MD5SUM:=0ee35455a4eb507bcfbfcd44d9e15d1e
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_CFLAGS+= -I$(STAGING_DIR)/usr/lib/libintl/include/ -I$(STAGING_DIR)/usr/lib/libiconv/include/ -I$(STAGING_DIR)/usr/include/gtk-2.0/gdk
-EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libintl/lib/ -L$(STAGING_DIR)/usr/lib/libiconv/lib/
+PKG_INSTALL=1
+
+EXTRA_CFLAGS+= \
+	-I$(STAGING_DIR)/usr/lib/libintl/include \
+	-I$(STAGING_DIR)/usr/lib/libiconv/include \
+	-I$(STAGING_DIR)/usr/include/gtk-2.0/gdk \
+	-I$(STAGING_DIR)/usr/include/gstreamer-0.10
+
+EXTRA_LDFLAGS+= \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Package/gst-plugins-base
   SECTION:=multimedia
   CATEGORY:=Multimedia
   TITLE:=gst-plugins-base
-  URL:=http://gst-plugins-base.freedesktop.org/
-  DEPENDS:=gstreamer +liboil +pango +gtk2
+  URL:=http://gstreamer.freedesktop.org/
+  DEPENDS:=+gstreamer +liboil +pango +libXv +libogg +libvorbis +libtheora +alsa-lib
 endef
 
 define Package/gst-plugins-base/description
@@ -33,25 +44,49 @@ define Package/gst-plugins-base/description
 endef
 
 define Build/Configure
-	$(call Build/Configure/Default,\
-		--disable-ogg \
-		--disable-vorbis \
-		--without-x \
+	$(call Build/Configure/Default, \
+		--disable-gnome_vfs \
+		--disable-examples \
+		--disable-cdparanoia \
+		--disable-libvisual \
+		--disable-oggtest \
+		--disable-vorbistest \
+		--disable-freetypetest \
 	)
 endef
 
-define Build/Compile
-	cd $(PKG_BUILD_DIR) ; DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) all install
-endef
-
 define Build/InstallDev
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)/usr/include/gstreamer-0.10/gst/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/* \
+		$(1)/usr/include/
+
+	$(INSTALL_DIR) $(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} \
+		$(1)/usr/lib/
+
+	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-0.10
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.{so*,la} \
+		$(1)/usr/lib/gstreamer-0.10/
+
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
+		$(1)/usr/lib/pkgconfig/
 endef
 
 define Package/gst-plugins-base/install
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} \
+		$(1)/usr/lib/
+
+	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-0.10
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.{so*,a} \
+		$(1)/usr/lib/gstreamer-0.10
 endef
 
 $(eval $(call BuildPackage,gst-plugins-base))

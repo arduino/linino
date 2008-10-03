@@ -4,21 +4,31 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gstreamer
-PKG_VERSION:=0.10.12
-PKG_RELEASE:=1
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_VERSION:=0.10.21
+PKG_RELEASE:=2
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gstreamer/
+PKG_MD5SUM:=7bad90af3fd81a1535363cf85359125c
 PKG_FIXUP:=libtool
-PKG_MD5SUM:=82192b54a7a914609dfb97e2a44b311e
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_CFLAGS+= -I$(STAGING_DIR)/usr/lib/libintl/include/ -I$(STAGING_DIR)/usr/lib/libiconv/include/
-EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libintl/lib/ -L$(STAGING_DIR)/usr/lib/libiconv/lib/
+PKG_INSTALL=1
+
+EXTRA_CFLAGS+= \
+	-I$(STAGING_DIR)/usr/lib/libintl/include \
+	-I$(STAGING_DIR)/usr/lib/libiconv/include
+
+EXTRA_LDFLAGS+= \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Package/gstreamer
   SECTION:=multimedia
@@ -26,32 +36,59 @@ define Package/gstreamer
   TITLE:=gstreamer
   URL:=http://gstreamer.freedesktop.org/
   DEPENDS:=+libxml2 +check +glib2
-  MENU:=1
 endef
 
 define Package/gstreamer/description
-	gnu streamer
+	A framework for streaming media.
 endef
 
 define Build/Configure
 	$(call Build/Configure/Default,\
-			--disable-tests \
+		--disable-tests \
+		--disable-examples \
 	)
 endef
 
-define Build/Compile
-	cd $(PKG_BUILD_DIR) ; DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) all install
-	cd $(PKG_INSTALL_DIR)/usr/include/; ln -s gstreamer-0.10/gst/
-endef
-
 define Build/InstallDev
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)/usr/include/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/* \
+		$(1)/usr/include/
+
+	$(INSTALL_DIR) $(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} \
+		$(1)/usr/lib/
+
+	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-0.10/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.{so*,la} \
+		$(1)/usr/lib/gstreamer-0.10
+
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
+		$(1)/usr/lib/pkgconfig/
+
+	$(INSTALL_DIR) $(2)/share/aclocal/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/share/aclocal/* \
+		$(2)/share/aclocal/
 endef
 
 define Package/gstreamer/install
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+
+	$(INSTALL_DIR) $(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} \
+		$(1)/usr/lib/
+
+	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-0.10/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.{so*,a} \
+		$(1)/usr/lib/gstreamer-0.10
 endef
 
 $(eval $(call BuildPackage,gstreamer))
