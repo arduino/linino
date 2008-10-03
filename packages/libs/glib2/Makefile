@@ -9,19 +9,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=glib2
-PKG_VERSION:=2.16.5
-PKG_RELEASE:=2
+PKG_VERSION:=2.18.1
+PKG_RELEASE:=3
 
 PKG_SOURCE:=glib-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=@GNOME/glib/2.16
-PKG_MD5SUM:=039f02d47d4071322a3f00abf031e5d9
-
 PKG_BUILD_DIR:=$(BUILD_DIR)/glib-$(PKG_VERSION)
-
+PKG_SOURCE_URL:=@GNOME/glib/2.18
+PKG_MD5SUM:=51a9a33f49a4896d4d95d8e980666b9e
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
+PKG_INSTALL=1
 
 define Package/glib2
   SECTION:=libs
@@ -32,10 +31,17 @@ define Package/glib2
 endef
 
 define Package/glib2/description
-The GLib library of C routines
+  The GLib library of C routines
 endef
 
-TARGET_CFLAGS += $(FPIC)
+TARGET_CFLAGS+= \
+	$(FPIC) \
+	-I$(STAGING_DIR)/usr/lib/libiconv/include \
+	-I$(STAGING_DIR)/usr/lib/libintl/include
+
+TARGET_LDFLAGS+= \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib
 
 define Build/Configure
 	mkdir -p $(PKG_BUILD_DIR)/build/$(GNU_HOST_NAME)
@@ -56,10 +62,6 @@ define Build/Configure
 		--enable-static \
 		--enable-debug=no \
 		, \
-		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libiconv/include" \
-		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libintl/include" \
-		LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
-		LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libintl/lib" \
 		glib_cv_stack_grows=no \
 		glib_cv_uscore=no \
 		ac_cv_path_GLIB_GENMARSHAL=$(PKG_BUILD_DIR)/build/$(GNU_HOST_NAME)/bin/glib-genmarshal \
@@ -67,38 +69,49 @@ define Build/Configure
 	);
 endef
 
-TARGET_LDFLAGS += -L$(TOOLCHAIN_DIR)/lib
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
-endef
-
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/glib-2.0 $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/gio-unix-2.0 $(1)/usr/include/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/glib-2.0 \
+		$(1)/usr/include/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/gio-unix-2.0 \
+		$(1)/usr/include/
+
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/glib-2.0 $(1)/usr/lib/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/libg{io,lib,module,object,thread}-2.0.{a,so*,la} $(1)/usr/lib/
-	$(SED) "s, /usr/lib/, $(STAGING_DIR)/usr/lib/,g" $(1)/usr/lib/*.la
-	
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/glib-2.0 \
+		$(1)/usr/lib/
+
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} \
+		$(1)/usr/lib/
+
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/g{io,io-unix,lib,module,module-no-export,object,thread}-2.0.pc $(1)/usr/lib/pkgconfig
-	$(foreach prog,glib-genmarshal gobject-query glib-mkenums,$(SED) "s,=$(prog),=$(STAGING_DIR)/host/bin/$(prog),g" $(1)/usr/lib/pkgconfig/glib-2.0.pc)
-	
-	
-	$(INSTALL_DIR) $(1)/share/aclocal/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/aclocal/*.m4 $(STAGING_DIR_HOST)/share/aclocal/
-	
-	$(INSTALL_DIR) $(1)/host/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/build/$(GNU_HOST_NAME)/bin/* $(1)/host/bin
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/*.pc \
+		$(1)/usr/lib/pkgconfig
+	$(SED) \
+		"s,=\(glib-genmarshal\|gobject-query\|glib-mkenums\),=$(STAGING_DIR_HOST)/bin/\1,g" \
+		$(1)/usr/lib/pkgconfig/glib-2.0.pc
+
+	$(INSTALL_DIR) $(2)/share/aclocal/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/share/aclocal/*.m4  \
+		$(2)/share/aclocal/
+
+	$(INSTALL_DIR) $(2)/bin
+	$(INSTALL_BIN) \
+		$(PKG_BUILD_DIR)/build/$(GNU_HOST_NAME)/bin/* \
+		$(2)/bin
 endef
 
 define Package/glib2/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/libg*-2.0.so* $(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
+		$(1)/usr/lib/
 endef
 
 
 $(eval $(call BuildPackage,glib2))
-
