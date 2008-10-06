@@ -41,13 +41,13 @@ define Build/Compile
 endef
 
 define Package/aiccu/conffiles
-/etc/aiccu.conf
+/etc/config/aiccu
 endef
 
 define Package/aiccu/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unix-console/$(PKG_NAME) $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_CONF) ./files/aiccu.conf $(1)/etc/config/aiccu
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/aiccu.init $(1)/etc/init.d/aiccu
