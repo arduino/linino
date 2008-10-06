@@ -52,7 +52,7 @@ start_proxy() {
 	proxy_atom "$1" MaxSpareServers >> $CFGFILE
 	proxy_atom "$1" StartServers >> $CFGFILE
 	proxy_atom "$1" MaxRequestsPerChild >> $CFGFILE
-	proxy_atom "$1" Allow >> $CFGFILE
+	proxy_list "$1" Allow >> $CFGFILE
 
 	proxy_string "$1" ViaProxyName >> $CFGFILE
 	proxy_string "$1" Filter >> $CFGFILE
