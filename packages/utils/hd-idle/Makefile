@@ -9,17 +9,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hd-idle
-PKG_REV:=HEAD
+PKG_REV:=20081006
 PKG_VERSION:=$(PKG_REV)
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=:pserver:anonymous@hd-idle.cvs.sourceforge.net:/cvsroot/hd-idle
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)
-PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_SOURCE_PROTO:=cvs
+PKG_SOURCE_URL:=http://downloads.openwrt.org/sources
+PKG_MD5SUM:=4902893f901cc0bfcccef3d30d2e5d5b
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+# CVS disabled. The package must not be a moving target by itself
+#PKG_SOURCE_URL:=:pserver:anonymous@hd-idle.cvs.sourceforge.net:/cvsroot/hd-idle
+#PKG_SOURCE_PROTO:=cvs
+#PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(REV)
+#PKG_SOURCE_VERSION:=$(PKG_REV)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -31,7 +33,7 @@ define Package/hd-idle
 endef
 
 define Build/Compile
-        $(TARGET_CC) $(TARGET_CFLAGS) -o $(PKG_BUILD_DIR)/$(PKG_NAME) $(PKG_BUILD_DIR)/$(PKG_NAME).c
+	$(TARGET_CC) $(TARGET_CFLAGS) -o $(PKG_BUILD_DIR)/$(PKG_NAME) $(PKG_BUILD_DIR)/$(PKG_NAME).c
 endef
 
 define Package/hd-idle/install
