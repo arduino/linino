@@ -1,6 +1,6 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2006 OpenWrt.org
-START=50
+START=70
 
 config_cb() {
 	local cfg_type="$1"
@@ -31,12 +31,13 @@ start() {
 		echo "password $password" >> /tmp/run/aiccu-${cfgs_section}.conf
 		[ -n "$server" ] && echo "server $server" >> /tmp/run/aiccu-${cfgs_section}.conf
 		[ -n "$protocol" ] && echo "protocol $protocol" >> /tmp/run/aiccu-${cfgs_section}.conf
-		[ -n "$interface" ] && echo "interface $interface" >> /tmp/run/aiccu-${cfgs_section}.conf
-		[ -n "$tunnel_id" ] && echo "tunnel_id $tunnel_id" >> /tmp/run/aiccu-${cfgs_section}.conf || echo "tunnel_id aiccu" >> /tmp/run/aiccu-${cfgs_section}.conf
+		[ -n "$interface" ] && echo "ipv6_interface $interface" >> /tmp/run/aiccu-${cfgs_section}.conf
+		[ -n "$tunnel_id" ] && echo "tunnel_id $tunnel_id" >> /tmp/run/aiccu-${cfgs_section}.conf
 		[ "$requiretls" = "1" ] && echo "requiretls true" >> /tmp/run/aiccu-${cfgs_section}.conf
 		[ "$defaultroute" != "1" ] && echo "defaultroute false >> /tmp/run/aiccu-${cfgs_section}.conf
 		[ "$nat" = "1" ] && echo "behindnat true >> /tmp/run/aiccu-${cfgs_section}.conf
 		[ "$heartbeat" != "1" ] && echo "makebeats false" >> /tmp/run/aiccu-${cfgs_section}.conf
+		echo 'daemonize true' >> /tmp/run/aiccu-${cfgs_section}.conf
 		echo "pidfile /var/run/aiccu-${cfgs_section}.pid" >> /tmp/run/aiccu-${cfgs_section}.conf
 	
 		aiccu start /tmp/run/aiccu-$cfgs_section.conf
@@ -44,5 +45,8 @@ start() {
 }
 
 stop() {
-	aiccu stop
+	config_load aiccu
+	for cfgs_section in $cfgs_sections; do
+		aiccu stop /tmp/run/aiccu-$cfgs_section.conf
+	done
 }
