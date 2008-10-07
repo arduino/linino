@@ -325,6 +325,11 @@ ifeq ($(CONFIG_BROKEN),y)
 	$(call Image/Build/Profile/CAS861W,$(1))
 	$(call Image/Build/Profile/NFS101U,$(1))
 	$(call Image/Build/Profile/NFS101WU,$(1))
+	# Edimax
+	$(call Image/Build/Profile/BR6104K,$(1))
+	$(call Image/Build/Profile/BR6104KP,$(1))
+	$(call Image/Build/Profile/BR6104WG,$(1))
+	$(call Image/Build/Profile/BR6114WG,$(1))
 	# Motorola
 	$(call Image/Build/Profile/PMUGW,$(1))
   endef
@@ -335,11 +340,6 @@ define Image/Build/Profile/Generic
 	$(call Image/Build/Profile/WP54,$(1))
 	$(call Image/Build/Profile/NP27G,$(1))
 	$(call Image/Build/Profile/NP28G,$(1))
-	# Edimax
-	$(call Image/Build/Profile/BR6104K,$(1))
-	$(call Image/Build/Profile/BR6104KP,$(1))
-	$(call Image/Build/Profile/BR6104WG,$(1))
-	$(call Image/Build/Profile/BR6114WG,$(1))
 	# Infineon
 	$(call Image/Build/Profile/EASY83000,$(1))
 	$(call Image/Build/Profile/EASY5120RT,$(1))
