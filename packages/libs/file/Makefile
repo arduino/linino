@@ -58,6 +58,11 @@ MAKE_FLAGS += \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
 	all install \
 
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	chmod -R u+w $(PKG_BUILD_DIR)
+endef
+
 define Build/InstallDev
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/magic.h $(1)/usr/include/
