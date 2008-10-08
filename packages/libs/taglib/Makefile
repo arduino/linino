@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -17,6 +17,8 @@ PKG_SOURCE_URL:=http://developer.kde.org/~wheeler/files/src/
 PKG_MD5SUM:=dcd50ddb2544faeae77f194804559404
 
 include $(INCLUDE_DIR)/package.mk
+
+PKG_INSTALL=1
 
 define Package/taglib
   SECTION:=libs
@@ -39,19 +41,23 @@ CONFIGURE_VARS += \
 	LDFLAGS="$$$$LDFLAGS" \
 	LIBS="-nodefaultlibs -lz -luClibc++" \
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/taglib-config $(1)/usr/bin/
-	mkdir -p $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtag.{a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/include/taglib
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/taglib/* $(1)/usr/include/taglib/
+	$(INSTALL_DIR) $(2)/bin
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/taglib-config \
+		$(2)/bin/
+	$(SED) \
+		's,^\(prefix\|exec_prefix\)=.*,\1=$(STAGING_DIR)/usr,g' \
+		$(2)/bin/taglib-config
+
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libtag.{la,so*} \
+		$(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/include/taglib
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/taglib/* \
+		$(1)/usr/include/taglib/
 endef
 
 define Package/taglib/install
