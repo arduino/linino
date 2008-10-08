@@ -30,6 +30,11 @@ define Package/avrdude/description
  AVRDUDE is a full featured program for programming Atmel's AVR CPU's.
 endef
 
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	chmod -R u+w $(PKG_BUILD_DIR)
+endef
+
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--disable-static \
