@@ -15,7 +15,7 @@ PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://xmlsoft.org/sources/ \
 	ftp://fr.rpmfind.net/pub/libxml/
-#PKG_MD5SUM:=2621d322c16f0257e30f0ff2b13384de
+PKG_MD5SUM:=dc43ff7ae6aded45f578c87b7b0c8766
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
