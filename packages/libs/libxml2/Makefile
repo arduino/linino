@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,18 +9,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libxml2
-PKG_VERSION:=2.6.32
-PKG_RELEASE:=1
+PKG_VERSION:=2.7.2
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://xmlsoft.org/sources/ \
 	ftp://fr.rpmfind.net/pub/libxml/
-PKG_MD5SUM:=2621d322c16f0257e30f0ff2b13384de
-
-PKG_FIXUP = libtool
+#PKG_MD5SUM:=2621d322c16f0257e30f0ff2b13384de
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
+PKG_INSTALL=1
 
 define Package/libxml2
   SECTION:=libs
@@ -31,7 +31,7 @@ define Package/libxml2
 endef
 
 define Package/libxml2/description
- A library for manipulating XML and HTML resources.
+  A library for manipulating XML and HTML resources.
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -67,29 +67,38 @@ CONFIGURE_ARGS += \
 	--with-xptr \
 	--with-zlib \
 
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
-endef
-
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/xml2-config $(1)/usr/bin/
-	mkdir -p $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libxml2 $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxml2.{a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libxml-2.0.pc $(1)/usr/lib/pkgconfig/
-	$(SED) 's,-I$$$${includedir}/libxml2,-I$(1)/usr/include/libxml2,g' $(1)/usr/bin/xml2-config
-	$(SED) 's,-L$$$${libdir},,g' $(1)/usr/bin/xml2-config
+	$(INSTALL_DIR) $(2)/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/xml2-config $(2)/bin/
+	$(SED) 's,^\(prefix\|exec_prefix\)=.*,\1=$(STAGING_DIR)/usr,g' $(2)/bin/xml2-config
+
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/libxml2 \
+		$(1)/usr/include/
+
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxml2.{la,so*} \
+		$(1)/usr/lib/
+
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libxml-2.0.pc \
+		$(1)/usr/lib/pkgconfig/
+
+	$(INSTALL_DIR) $(2)/share/aclocal/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/share/aclocal/* \
+		$(2)/share/aclocal
 endef
 
 define Package/libxml2/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxml2.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxml2.so.* \
+		$(1)/usr/lib/
 endef
 
 
 $(eval $(call BuildPackage,libxml2))
-
