@@ -41,9 +41,6 @@ CONFIGURE_ARGS += \
 	--enable-webless \
 	--disable-dependency-tracking \
 
-CONFIGURE_VARS += \
-	ac_cv_path_HAVELIBUSB="$(STAGING_DIR)/usr/bin/libusb-config" \
-
 define Package/sispmctl/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(1)/usr/bin/
