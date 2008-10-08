@@ -18,6 +18,8 @@ PKG_MD5SUM:=460f848ce5f4a33ae66b15a4fb7720ec
 
 include $(INCLUDE_DIR)/package.mk
 
+PKG_INSTALL=1
+
 define Package/libaudiofile
   SECTION:=libs
   CATEGORY:=Libraries
@@ -41,28 +43,36 @@ define Build/Configure
 	)
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/audiofile-config $(1)/usr/bin/
-	mkdir -p $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/af_vfs.h $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/audiofile.h $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/aupvlist.h $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libaudiofile.{a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/audiofile.pc $(1)/usr/lib/pkgconfig/
+	$(INSTALL_DIR) $(2)/bin
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/audiofile-config \
+		$(2)/bin/
+	$(SED) \
+		's,^\(prefix\|exec_prefix\)=.*,\1=$(STAGING_DIR)/usr,g' \
+		$(2)/bin/audiofile-config
+
+	$(INSTALL_DIR) $(1)/usr/include
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/{af_vfs,audiofile,aupvlist}.h \
+		$(1)/usr/include/
+
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libaudiofile.{la,so*} \
+		$(1)/usr/lib/
+
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/audiofile.pc \
+		$(1)/usr/lib/pkgconfig/
 endef
 
 define Package/libaudiofile/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libaudiofile.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libaudiofile.so.* \
+		$(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libaudiofile))
