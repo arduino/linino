@@ -1,0 +1,20 @@
+diff --git a/Makefile.in b/Makefile.in
+index a09b06c..d2a920d 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -359,7 +359,6 @@ SUBDIRS = \
+ 	gst-libs 		\
+ 	gst sys $(SUBDIRS_EXT) 	\
+ 	tools 			\
+-	tests 			\
+ 	docs			\
+ 	po 			\
+ 	common 			\
+@@ -371,7 +370,6 @@ DIST_SUBDIRS = \
+ 	gst-libs		\
+ 	gst sys ext		\
+ 	tools 			\
+-	tests 			\
+ 	po 			\
+ 	common 			\
+ 	m4 			\
