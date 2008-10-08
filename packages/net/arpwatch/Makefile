@@ -35,6 +35,11 @@ define Package/arpwatch/conffiles
 /etc/arpwatch/arp.dat
 endef
 
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	chmod -R u+w $(PKG_BUILD_DIR)
+endef
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		ARPDIR=/etc/arpwatch \
