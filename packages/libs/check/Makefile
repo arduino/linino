@@ -11,7 +11,8 @@ PKG_NAME:=check
 PKG_VERSION:=0.9.5
 PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://dl.sourceforge.net/sourceforge/check/
+PKG_SOURCE_URL:=@SF/check/
+PKG_MD5SUM:=30143c7974b547a12a7da47809a90951
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -30,8 +31,7 @@ define Package/check
   SECTION:=lib
   CATEGORY:=Libraries
   TITLE:=check
-  URL:=http://sf.net
-  DEPENDS:=+libxml2
+  URL:=http://check.sourceforge.net/
 endef
 
 define Package/check/description
