@@ -15,6 +15,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://developer.kde.org/~wheeler/files/src/
 PKG_MD5SUM:=dcd50ddb2544faeae77f194804559404
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
