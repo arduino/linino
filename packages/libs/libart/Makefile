@@ -21,6 +21,8 @@ PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
+PKG_INSTALL=1
+
 define Package/libart
   SECTION:=libs
   CATEGORY:=Libraries
@@ -42,21 +44,33 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \
-		, \
 	)
 endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) HOSTCC="$(HOSTCC)"
-	$(MAKE) -C $(PKG_BUILD_DIR) install DESTDIR="$(PKG_INSTALL_DIR)"
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/include $(1)/usr/lib $(1)/usr/lib/pkgconfig
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libart2-config $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libart-2.0 $(1)/usr/include/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/libart_lgpl_2.{la,a,so*} $(1)/usr/lib/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libart-2.0.pc $(1)/usr/lib/pkgconfig/
+	$(INSTALL_DIR) $(2)/bin $(1)/usr/include $(1)/usr/lib $(1)/usr/lib/pkgconfig
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/libart2-config \
+		$(2)/bin/
+	$(SED) \
+		's,^\(prefix\|exec_prefix\)=.*,\1=$(STAGING_DIR)/usr,g' \
+		$(2)/bin/libart2-config
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/libart-2.0 \
+			$(1)/usr/include/
+
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libart_lgpl_2.{la,so*} \
+		$(1)/usr/lib/
+
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libart-2.0.pc \
+		$(1)/usr/lib/pkgconfig/
 endef
 
 define Package/libart/install
