@@ -1,5 +1,5 @@
---- rcs-5.7.orig/src/conf.h
-+++ rcs-5.7/src/conf.h
+--- /dev/null
++++ b/src/conf.h
 @@ -0,0 +1,399 @@
 +/* RCS compile-time configuration */
 +
@@ -400,3 +400,14 @@
 +
 +/* <time.h> */
 +time_t time P((time_t*));
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -153,7 +153,7 @@
+ 	$(REMOVE) TAGS
+ 
+ #(Unix
+-conf.h : conf.sh Makefile
++conf.h :
+ 	$(REMOVE) a.*
+ 	ALL_CFLAGS="$(ALL_CFLAGS)" \
+ 	CC='$(CC)' \
