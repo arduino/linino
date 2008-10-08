@@ -19,6 +19,7 @@ PKG_SOURCE_URL:=ftp://ftp.gnutls.org/pub/gnutls/opencdk/ \
 	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/opencdk/ \
 	http://josefsson.org/gnutls/releases/opencdk/
 PKG_MD5SUM:=813d62d7afe7b2c2d8f3df0a6c9d9331
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
