@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -50,7 +50,7 @@ CONFIGURE_ARGS += \
 	--enable-static \
 	--without-check \
 	--without-python
-		
+
 CONFIGURE_VARS += \
 	ac_cv_dnet_bsd_bpf=no
 
@@ -59,20 +59,38 @@ MAKE_FLAGS += \
 	all install
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/dnet-config $(1)/usr/bin/
-	mkdir -p $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/dnet.h $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/dnet $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdnet.{a,so*} $(1)/usr/lib/
+	$(INSTALL_DIR) $(2)/bin
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/dnet-config \
+		$(2)/bin/
+	$(SED) \
+		's,^\(prefix\|exec_prefix\)=.*,\1=$(STAGING_DIR)/usr,g' \
+		$(2)/bin/dnet-config
+
+	$(INSTALL_DIR) $(1)/usr/include
+	$(INSTALL_DATA)\
+		$(PKG_INSTALL_DIR)/usr/include/dnet.h \
+		$(1)/usr/include/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/dnet \
+		$(1)/usr/include/
+
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libdnet.{la,so*} \
+		$(1)/usr/lib/
 endef
 
 define Package/libdnet/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdnet.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libdnet.so.* \
+		$(1)/usr/lib/
+
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dnet $(1)/usr/sbin/
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/sbin/dnet \
+		$(1)/usr/sbin/
 endef
 
 define Package/pydnet/install
