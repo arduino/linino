@@ -18,10 +18,11 @@ PKG_SOURCE_URL:=ftp://ftp.gnupg.org/gcrypt/libgpg-error/ \
 	http://gulus.usherbrooke.ca/pub/appl/GnuPG/libgpg-error/ \
 	http://gnupg.unixmexico.org/ftp/libgpg-error/
 PKG_MD5SUM:=f3e9870e213518b407a959f8d29cd554
-
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+
+PKG_INSTALL=1
 
 define Package/libgpg-error
   SECTION:=libs
@@ -48,26 +49,36 @@ define Build/Configure
 	)
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/gpg-error-config $(1)/usr/bin/
-	mkdir -p $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/gpg-error.h $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgpg-error.{a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/share/aclocal
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/aclocal/gpg-error.m4 $(1)/usr/share/aclocal/
+	$(INSTALL_DIR) $(2)/bin
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/gpg-error-config \
+		$(2)/bin/
+	$(SED) \
+		's,^\(prefix\|exec_prefix\)=.*,\1=$(STAGING_DIR)/usr,g' \
+		$(2)/bin/gpg-error-config
+
+	$(INSTALL_DIR) $(1)/usr/include
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/gpg-error.h \
+		$(1)/usr/include/
+
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libgpg-error.{la,so*} \
+		$(1)/usr/lib/
+
+	$(INSTALL_DIR) $(1)/usr/share/aclocal
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/share/aclocal/gpg-error.m4 \
+		$(1)/usr/share/aclocal/
 endef
 
 define Package/libgpg-error/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgpg-error.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libgpg-error.so.* \
+		$(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libgpg-error))
