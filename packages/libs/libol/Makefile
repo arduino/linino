@@ -48,6 +48,9 @@ define Build/InstallDev
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/libol-config \
 		$(2)/bin/
+	$(SED) \
+		's,^\(prefix\|exec_prefix\)=.*,\1=$(STAGING_DIR)/usr,g' \
+		$(2)/bin/libol-config
 
 	$(INSTALL_DIR) $(1)/usr/include/libol
 	$(INSTALL_DATA) \
