@@ -23,6 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/fftw3
   SECTION:=Libraries
   CATEGORY:=Libraries
+  DEPENDS:=@!avr32
   TITLE:=Fast Fourier transform library
   URL:=http://www.fftw.org/
 endef
@@ -34,6 +35,8 @@ define Package/fftw3/description
 	handle arbitrary array sizes efficiently.
 	http://www.fftw.org/
 endef
+
+TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
 	--prefix=/usr \
