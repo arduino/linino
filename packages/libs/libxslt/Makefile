@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -47,16 +47,11 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \
-		--with-libxml-prefix="$(STAGING_DIR)/usr" \
-		--with-libxml-include-prefix="$(STAGING_DIR)/usr/include" \
-		--with-libxml-libs-prefix="$(STAGING_DIR)/usr/lib" \
 		--without-python \
 		--without-crypto \
 		--without-debug \
 		--without-mem-debug \
 		--without-debugger \
-		, \
-		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/libxml2" \
 	)
 endef
 
