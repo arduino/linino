@@ -42,6 +42,11 @@ CONFIGURE_ARGS += \
 	--enable-adminport \
 	--enable-ipv6
 
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	chmod -R u+w $(PKG_BUILD_DIR)
+endef
+
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); touch \
 		configure.ac \
