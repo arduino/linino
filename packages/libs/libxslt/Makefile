@@ -16,8 +16,11 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://xmlsoft.org/sources/ \
 	ftp://fr.rpmfind.net/pub/libxml/
 PKG_MD5SUM:=e83ec5d27fc4c10c6f612879bea9a153
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+
+PKG_INSTALL=1
 
 define Package/libxslt
   SECTION:=libs
@@ -57,33 +60,46 @@ endef
 
 TARGET_CFLAGS += $(FPIC)
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/include $(1)/usr/lib $(1)/usr/lib/pkgconfig
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/xslt-config $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/xsltproc $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libxslt $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxslt.{a,so*} $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libxslt.pc $(1)/usr/lib/pkgconfig/
-	$(SED) 's,-I$$$${includedir},,g' $(1)/usr/bin/xslt-config
-	$(SED) 's,-L$$$${libdir},,g' $(1)/usr/bin/xslt-config
-	$(SED) 's,-I$(STAGING_DIR)/usr/include,,g' $(1)/usr/bin/xslt-config
-	$(SED) 's,-L$(STAGING_DIR)/usr/lib,,g' $(1)/usr/bin/xslt-config
+	$(INSTALL_DIR) $(2)/bin $(1)/usr/include/libxslt $(1)/usr/lib \
+		$(1)/usr/lib/pkgconfig $(2)/share/aclocal
+
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/xslt-config \
+		$(2)/bin/
+	$(SED) \
+		's,^\(prefix\|exec_prefix\)=.*,\1=$(STAGING_DIR)/usr,g' \
+		$(2)/bin/xslt-config
+
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/libxslt/* \
+		$(1)/usr/include/libxslt/
+
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxslt.{la,so*} \
+		$(1)/usr/lib/
+
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libxslt.pc \
+		$(1)/usr/lib/pkgconfig/
+
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/share/aclocal/* \
+		$(2)/share/aclocal
 endef
 
 define Package/libxslt/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxslt.so.* $(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxslt.so.* \
+		$(1)/usr/lib/
 endef
 
 define Package/xsltproc/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/xsltproc $(1)/usr/bin/
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/xsltproc \
+		$(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,libxslt))
