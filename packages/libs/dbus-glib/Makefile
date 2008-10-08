@@ -15,6 +15,7 @@ PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dbus.freedesktop.org/releases/dbus-glib/
 PKG_MD5SUM:=d3b716a7e798faa1c6a867675f00306a
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
