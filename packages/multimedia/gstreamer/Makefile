@@ -35,7 +35,7 @@ define Package/gstreamer
   CATEGORY:=Multimedia
   TITLE:=gstreamer
   URL:=http://gstreamer.freedesktop.org/
-  DEPENDS:=+libxml2 +check +glib2
+  DEPENDS:=+libxml2 +glib2
 endef
 
 define Package/gstreamer/description
