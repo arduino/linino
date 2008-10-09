@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=natpmp
 PKG_VERSION:=0.2.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE_URL:=http://download.savannah.nongnu.org/releases/natpmp/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -33,7 +33,7 @@ define Build/Compile
 		CC="$(TARGET_CC)" \
 		LD="$(TARGET_CC)" \
 		CCFLAGS="$(strip $(TARGET_CFLAGS))" \
-		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include" \
+		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include" -DIPTABLES_PATH=\\\"/usr/sbin\\\"" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		prefix="$(PKG_INSTALL_DIR)/usr"
 endef
