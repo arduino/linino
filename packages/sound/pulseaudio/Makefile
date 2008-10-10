@@ -53,6 +53,7 @@ define Build/Compile
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib $(SUPP_LIBS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		LIBLTDL="$(STAGING_DIR)/usr/lib/libltdl.la" \
 		X_CFLAGS="" \
 		all install
 endef
