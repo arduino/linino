@@ -1,0 +1,123 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -1080,60 +1080,38 @@ uninstall-am: uninstall-pkgconfigDATA
+ @DX_COND_doc_TRUE@	INPUT='$(DX_INPUT)' EXAMPLE_PATH='$(DX_EXAMPLE_PATH)' EXAMPLE_PATTERNS='$(DX_EXAMPLE_PATTERNS)' \
+ @DX_COND_doc_TRUE@	$(DX_ENV) $(DX_DOXYGEN) $(srcdir)/$(DX_CONFIG)
+ 
+-avahi-core.pc: avahi-core.pc.in
+-	sed -e 's,@prefix\@,$(prefix),g' \
+-	    -e 's,@libdir\@,$(libdir),g' \
+-	    -e 's,@PACKAGE_VERSION\@,$(PACKAGE_VERSION),g' $< > $@
+-
+-@HAVE_DBUS_TRUE@avahi-client.pc: avahi-client.pc.in
+-@HAVE_DBUS_TRUE@	sed -e 's,@prefix\@,$(prefix),g' \
+-@HAVE_DBUS_TRUE@	    -e 's,@libdir\@,$(libdir),g' \
+-@HAVE_DBUS_TRUE@	    -e 's,@PACKAGE_VERSION\@,$(PACKAGE_VERSION),g' $< > $@
+-
+-@ENABLE_COMPAT_HOWL_TRUE@@HAVE_DBUS_TRUE@avahi-compat-howl.pc: avahi-compat-howl.pc.in
+-@ENABLE_COMPAT_HOWL_TRUE@@HAVE_DBUS_TRUE@	sed -e 's,@prefix\@,$(prefix),g' \
+-@ENABLE_COMPAT_HOWL_TRUE@@HAVE_DBUS_TRUE@	    -e 's,@libdir\@,$(libdir),g' \
+-@ENABLE_COMPAT_HOWL_TRUE@@HAVE_DBUS_TRUE@	    -e 's,@HOWL_COMPAT_VERSION\@,$(HOWL_COMPAT_VERSION),g' $< > $@
+-
+-@ENABLE_COMPAT_LIBDNS_SD_TRUE@@HAVE_DBUS_TRUE@avahi-compat-libdns_sd.pc: avahi-compat-libdns_sd.pc.in
+-@ENABLE_COMPAT_LIBDNS_SD_TRUE@@HAVE_DBUS_TRUE@	sed -e 's,@prefix\@,$(prefix),g' \
+-@ENABLE_COMPAT_LIBDNS_SD_TRUE@@HAVE_DBUS_TRUE@	    -e 's,@libdir\@,$(libdir),g' \
+-@ENABLE_COMPAT_LIBDNS_SD_TRUE@@HAVE_DBUS_TRUE@	    -e 's,@PACKAGE_VERSION\@,$(PACKAGE_VERSION),g' $< > $@
+-
+-@HAVE_DBUS_TRUE@@HAVE_MONO_TRUE@avahi-sharp.pc: avahi-sharp.pc.in
+-@HAVE_DBUS_TRUE@@HAVE_MONO_TRUE@	sed -e 's,@prefix\@,$(prefix),g' \
+-@HAVE_DBUS_TRUE@@HAVE_MONO_TRUE@	    -e 's,@PACKAGE_VERSION\@,$(PACKAGE_VERSION),g' \
+-@HAVE_DBUS_TRUE@@HAVE_MONO_TRUE@	    -e 's,@libdir\@,$(libdir),g' $< > $@
+-
+-@HAVE_DBUS_TRUE@@HAVE_MONO_TRUE@avahi-ui-sharp.pc: avahi-ui-sharp.pc.in
+-@HAVE_DBUS_TRUE@@HAVE_MONO_TRUE@	sed -e 's,@prefix\@,$(prefix),g' \
+-@HAVE_DBUS_TRUE@@HAVE_MONO_TRUE@	    -e 's,@PACKAGE_VERSION\@,$(PACKAGE_VERSION),g' \
+-@HAVE_DBUS_TRUE@@HAVE_MONO_TRUE@	    -e 's,@libdir\@,$(libdir),g' $< > $@
+-
+-@HAVE_GLIB_TRUE@avahi-glib.pc: avahi-glib.pc.in
+-@HAVE_GLIB_TRUE@	sed -e 's,@prefix\@,$(prefix),g' \
+-@HAVE_GLIB_TRUE@	    -e 's,@libdir\@,$(libdir),g' \
+-@HAVE_GLIB_TRUE@	    -e 's,@PACKAGE_VERSION\@,$(PACKAGE_VERSION),g' $< > $@
+-
+-@HAVE_GLIB_TRUE@@HAVE_GOBJECT_TRUE@avahi-gobject.pc: avahi-gobject.pc.in
+-@HAVE_GLIB_TRUE@@HAVE_GOBJECT_TRUE@	sed -e 's,@prefix\@,$(prefix),g' \
+-@HAVE_GLIB_TRUE@@HAVE_GOBJECT_TRUE@	    -e 's,@libdir\@,$(libdir),g' \
+-@HAVE_GLIB_TRUE@@HAVE_GOBJECT_TRUE@	    -e 's,@PACKAGE_VERSION\@,$(PACKAGE_VERSION),g' $< > $@
+-
+-@HAVE_DBUS_TRUE@@HAVE_GTK_TRUE@avahi-ui.pc: avahi-ui.pc.in
+-@HAVE_DBUS_TRUE@@HAVE_GTK_TRUE@	sed -e 's,@prefix\@,$(prefix),g' \
+-@HAVE_DBUS_TRUE@@HAVE_GTK_TRUE@	    -e 's,@libdir\@,$(libdir),g' \
+-@HAVE_DBUS_TRUE@@HAVE_GTK_TRUE@	    -e 's,@PACKAGE_VERSION\@,$(PACKAGE_VERSION),g' $< > $@
+-
+-@HAVE_QT3_TRUE@avahi-qt3.pc: avahi-qt3.pc.in
+-@HAVE_QT3_TRUE@	sed -e 's,@prefix\@,$(prefix),g' \
+-@HAVE_QT3_TRUE@	    -e 's,@libdir\@,$(libdir),g' \
+-@HAVE_QT3_TRUE@	    -e 's,@PACKAGE_VERSION\@,$(PACKAGE_VERSION),g' $< > $@
+-
+-@HAVE_QT4_TRUE@avahi-qt4.pc: avahi-qt4.pc.in
+-@HAVE_QT4_TRUE@	sed -e 's,@prefix\@,$(prefix),g' \
+-@HAVE_QT4_TRUE@	    -e 's,@libdir\@,$(libdir),g' \
+-@HAVE_QT4_TRUE@	    -e 's,@PACKAGE_VERSION\@,$(PACKAGE_VERSION),g' $< > $@
++avahi-core.pc: $(top_builddir)/config.status avahi-core.pc.in
++	cd $(top_builddir) && $(SHELL) ./config.status $@
++
++@HAVE_DBUS_TRUE@avahi-client.pc: $(top_builddir)/config.status avahi-client.pc.in
++@HAVE_DBUS_TRUE@	cd $(top_builddir) && $(SHELL) ./config.status $@
++
++@ENABLE_COMPAT_HOWL_TRUE@@HAVE_DBUS_TRUE@avahi-compat-howl.pc: $(top_builddir)/config.status avahi-compat-howl.pc.in
++@ENABLE_COMPAT_HOWL_TRUE@@HAVE_DBUS_TRUE@	cd $(top_builddir) && $(SHELL) ./config.status $@
++
++@ENABLE_COMPAT_LIBDNS_SD_TRUE@@HAVE_DBUS_TRUE@avahi-compat-libdns_sd.pc: $(top_builddir)/config.status avahi-compat-libdns_sd.pc.in
++@ENABLE_COMPAT_LIBDNS_SD_TRUE@@HAVE_DBUS_TRUE@	cd $(top_builddir) && $(SHELL) ./config.status $@
++
++@HAVE_DBUS_TRUE@@HAVE_MONO_TRUE@avahi-sharp.pc: $(top_builddir)/config.status avahi-sharp.pc.in
++@HAVE_DBUS_TRUE@@HAVE_MONO_TRUE@	cd $(top_builddir) && $(SHELL) ./config.status $@
++
++@HAVE_DBUS_TRUE@@HAVE_MONO_TRUE@avahi-ui-sharp.pc: $(top_builddir)/config.status avahi-ui-sharp.pc.in
++@HAVE_DBUS_TRUE@@HAVE_MONO_TRUE@	cd $(top_builddir) && $(SHELL) ./config.status $@
++
++@HAVE_GLIB_TRUE@avahi-glib.pc: $(top_builddir)/config.status avahi-glib.pc.in
++@HAVE_GLIB_TRUE@	cd $(top_builddir) && $(SHELL) ./config.status $@
++
++@HAVE_GLIB_TRUE@@HAVE_GOBJECT_TRUE@avahi-gobject.pc: $(top_builddir)/config.status avahi-gobject.pc.in
++@HAVE_GLIB_TRUE@@HAVE_GOBJECT_TRUE@	cd $(top_builddir) && $(SHELL) ./config.status $@
++
++@HAVE_DBUS_TRUE@@HAVE_GTK_TRUE@avahi-ui.pc: $(top_builddir)/config.status avahi-ui.pc.in
++@HAVE_DBUS_TRUE@@HAVE_GTK_TRUE@	cd $(top_builddir) && $(SHELL) ./config.status $@
++
++@HAVE_QT3_TRUE@avahi-qt3.pc: $(top_builddir)/config.status avahi-qt3.pc.in
++@HAVE_QT3_TRUE@	cd $(top_builddir) && $(SHELL) ./config.status $@
++
++@HAVE_QT4_TRUE@avahi-qt4.pc: $(top_builddir)/config.status avahi-qt4.pc.in
++@HAVE_QT4_TRUE@	cd $(top_builddir) && $(SHELL) ./config.status $@
+ 
+ avahi.devhelp: doxygen-run
+ 	xsltproc -o $@ doxygen_to_devhelp.xsl doxygen/xml/index.xml
+--- a/configure
++++ b/configure
+@@ -36519,7 +36519,8 @@ fi
+ 
+ 
+ # ==========================================================================
+-ac_config_files="$ac_config_files Makefile avahi-common/Makefile avahi-core/Makefile avahi-glib/Makefile avahi-gobject/Makefile avahi-qt/Makefile avahi-daemon/Makefile avahi-daemon/avahi-dbus.conf avahi-discover-standalone/Makefile avahi-client/Makefile initscript/Makefile initscript/debian/Makefile initscript/gentoo/Makefile initscript/archlinux/Makefile initscript/suse/Makefile initscript/fedora/Makefile initscript/mandriva/Makefile initscript/darwin/Makefile initscript/freebsd/Makefile initscript/slackware/Makefile avahi-dnsconfd/Makefile avahi-utils/Makefile avahi-python/Makefile avahi-python/avahi/Makefile avahi-python/avahi-discover/Makefile examples/Makefile common/Makefile man/Makefile tests/Makefile service-type-database/Makefile avahi-sharp/Makefile avahi-ui-sharp/Makefile avahi-compat-libdns_sd/Makefile avahi-compat-howl/Makefile avahi-compat-howl/samples/Makefile avahi-autoipd/Makefile avahi-ui/Makefile po/Makefile.in"
++ac_config_files="$ac_config_files Makefile avahi-common/Makefile avahi-core/Makefile avahi-glib/Makefile avahi-gobject/Makefile avahi-qt/Makefile avahi-daemon/Makefile avahi-daemon/avahi-dbus.conf avahi-discover-standalone/Makefile avahi-client/Makefile initscript/Makefile initscript/debian/Makefile initscript/gentoo/Makefile initscript/archlinux/Makefile initscript/suse/Makefile initscript/fedora/Makefile initscript/mandriva/Makefile initscript/darwin/Makefile initscript/freebsd/Makefile initscript/slackware/Makefile avahi-dnsconfd/Makefile avahi-utils/Makefile avahi-python/Makefile avahi-python/avahi/Makefile avahi-python/avahi-discover/Makefile examples/Makefile common/Makefile man/Makefile tests/Makefile service-type-database/Makefile avahi-sharp/Makefile avahi-ui-sharp/Makefile avahi-compat-libdns_sd/Makefile avahi-compat-howl/Makefile avahi-compat-howl/samples/Makefile avahi-autoipd/Makefile avahi-ui/Makefile po/Makefile.in avahi-client.pc avahi-compat-howl.pc avahi-compat-howl.pc avahi-compat-libdns_sd.pc avahi-core.pc avahi-glib.pc avahi-gobject.pc avahi-qt3.pc avahi-qt4.pc avahi-ui.pc"
++
+ 
+ cat >confcache <<\_ACEOF
+ # This file is a shell script that caches the results of configure
+@@ -37626,6 +37627,15 @@ do
+     "avahi-ui/Makefile") CONFIG_FILES="$CONFIG_FILES avahi-ui/Makefile" ;;
+     "po/Makefile.in") CONFIG_FILES="$CONFIG_FILES po/Makefile.in" ;;
+     "po/stamp-it") CONFIG_COMMANDS="$CONFIG_COMMANDS po/stamp-it" ;;
++    "avahi-client.pc") CONFIG_COMMANDS="$CONFIG_COMMANDS avahi-client.pc" ;;
++    "avahi-compat-howl.pc") CONFIG_COMMANDS="$CONFIG_COMMANDS avahi-compat-howl.pc" ;;
++    "avahi-compat-libdns_sd.pc") CONFIG_COMMANDS="$CONFIG_COMMANDS avahi-compat-libdns_sd.pc" ;;
++    "avahi-core.pc") CONFIG_COMMANDS="$CONFIG_COMMANDS avahi-core.pc" ;;
++    "avahi-glib.pc") CONFIG_COMMANDS="$CONFIG_COMMANDS avahi-glib.pc" ;;
++    "avahi-gobject.pc") CONFIG_COMMANDS="$CONFIG_COMMANDS avahi-gobject.pc" ;;
++    "avahi-qt3.pc") CONFIG_COMMANDS="$CONFIG_COMMANDS avahi-qt3.pc" ;;
++    "avahi-qt4.pc") CONFIG_COMMANDS="$CONFIG_COMMANDS avahi-qt4.pc" ;;
++    "avahi-ui.pc") CONFIG_COMMANDS="$CONFIG_COMMANDS avahi-ui.pc" ;;
+ 
+   *) { { $as_echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
+ $as_echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
