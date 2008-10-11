@@ -17,6 +17,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/6scripts
   SECTION:=ipv6
   CATEGORY:=IPv6
+  DEPENDS:=+kmod-ipv6
   TITLE:=IPv6 scripts
 endef
 

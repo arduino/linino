@@ -46,11 +46,7 @@ stop_service() {
 	ip tunnel del $tnlifname
 }
 start() {
-	if ! [ -f /proc/net/if_inet6 ]; then
-		echo "IPv6 not enabled, install kmod-ipv6";
-		exit 1;
-	fi
-	if ! [ -x /sbin/ip ]; then
+	if ! [ -x /usr/sbin/ip ]; then
 		echo "ip is required to setup the tunnel";
 		exit 1;
 	fi
