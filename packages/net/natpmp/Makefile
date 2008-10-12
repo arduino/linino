@@ -32,8 +32,8 @@ define Build/Compile
 		$(TARGET_CONFIGURE_OPTS) \
 		CC="$(TARGET_CC)" \
 		LD="$(TARGET_CC)" \
-		CCFLAGS="$(strip $(TARGET_CFLAGS))" \
-		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include" -DIPTABLES_PATH=\\\"/usr/sbin\\\"" \
+		CFLAGS="$(strip $(TARGET_CFLAGS))" \
+		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include -DIPTABLES_PATH=\\\"/usr/sbin\\\"" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		prefix="$(PKG_INSTALL_DIR)/usr"
 endef
