@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 ARCH:=powerpc
 BOARD:=ppc44x
 BOARDNAME:=AMCC/IBM PPC44x
-FEATURES:=squashfs
+FEATURES:=squashfs broken
 
 LINUX_VERSION:=2.6.26.5
 LINUX_KARCH:=powerpc
