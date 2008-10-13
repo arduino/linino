@@ -19,6 +19,8 @@ PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
+export PATH:=$(PKG_BUILD_DIR)/bin:$(TARGET_PATH)
+
 #FIXME: Each plugin should be indepently selectable
 
 PKG_INSTALL=1
@@ -66,6 +68,9 @@ define Build/Configure
 		--disable-directshow \
 		--disable-sunaudio \
 	)
+	mkdir -p $(PKG_BUILD_DIR)/bin
+	touch $(PKG_BUILD_DIR)/bin/gtkdoc-rebase
+	chmod +x $(PKG_BUILD_DIR)/bin/gtkdoc-rebase
 endef
 
 define Build/InstallDev

@@ -18,6 +18,8 @@ PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
+export PATH:=$(PKG_BUILD_DIR)/bin:$(TARGET_PATH)
+
 PKG_INSTALL=1
 
 EXTRA_CFLAGS+= \
@@ -53,6 +55,9 @@ define Build/Configure
 		--disable-vorbistest \
 		--disable-freetypetest \
 	)
+	mkdir -p $(PKG_BUILD_DIR)/bin
+	touch $(PKG_BUILD_DIR)/bin/gtkdoc-rebase
+	chmod +x $(PKG_BUILD_DIR)/bin/gtkdoc-rebase
 endef
 
 define Build/InstallDev
