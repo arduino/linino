@@ -61,12 +61,15 @@ endef
 TARGET_CFLAGS += $(FPIC)
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(2)/bin $(1)/usr/include/libxslt $(1)/usr/lib \
+	$(INSTALL_DIR) $(1)/usr/bin $(2)/bin $(1)/usr/include/libxslt $(1)/usr/lib \
 		$(1)/usr/lib/pkgconfig $(2)/share/aclocal
 
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/xslt-config \
 		$(2)/bin/
+
+	ln -sf $(STAGING_DIR)/host/bin/xslt-config $(1)/usr/bin/xslt-config
+
 	$(SED) \
 		's,^\(prefix\|exec_prefix\)=.*,\1=$(STAGING_DIR)/usr,g' \
 		$(2)/bin/xslt-config
