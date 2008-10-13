@@ -50,6 +50,16 @@ endef
 
 $(eval $(call BuildPackage,firmwarehotplug))
 
-$(eval $(call RequireCommand,sdcc-nf, \
+define Require/working-sdcc
+	sdcc -v | awk '($$$$1 == "SDCC") && ($$$$3 == "mcs51/gbz80/z80/avr/ds390/pic16/pic14/TININative/xa51/ds400/hc08") { print "ok" }' | grep ok > /dev/null
+endef
+
+$(eval $(call RequireCommand,sdcc, \
         $(PKG_NAME) requires the SDCC Cross Compiler (sdcc). \
+))
+
+$(eval $(call Require,working-sdcc, \
+        $(PKG_NAME) requires a SDCC Cross Compiler (sdcc) that supports the following targets : \
+	mcs51/gbz80/z80/avr/ds390/pic16/pic14/TININative/xa51/ds400/hc08. You might consider \
+	installing the non-free version. \
 ))
