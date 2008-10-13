@@ -53,7 +53,7 @@ define Build/InstallDev
 
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libusb*.{la,so*} \
+		$(PKG_INSTALL_DIR)/usr/lib/libusb*.{la,so*,a} \
 		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
