@@ -46,13 +46,14 @@ define Build/InstallDev
 		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
 		$(1)/usr/lib/pkgconfig/
 
-	$(INSTALL_DIR) $(2)/bin
+	$(INSTALL_DIR) $(2)/bin $(1)/usr/bin
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/imlib2-config \
 		$(2)/bin/
 	$(SED) \
 		's,^\(prefix\|exec_prefix\)=.*,\1=$(STAGING_DIR)/usr,g' \
 		$(2)/bin/imlib2-config
+	ln -sf $(STAGING_DIR)/host/bin/imlib2-config $(1)/usr/bin/imlib2-config
 endef
 
 define Package/imlib2/install
