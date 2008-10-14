@@ -18,8 +18,6 @@ PKG_MD5SUM:=05bf0487c885a1ef6df615e02cac5ea6
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
-TARGET_LDFLAGS+=-I/home/lars/Projects/openwrt-olpc/staging_dir/i386/usr/include/python2.5
-
 EXTRA_LDFLAGS+= \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib/
