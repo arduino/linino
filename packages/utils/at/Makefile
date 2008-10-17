@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,6 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=at
 PKG_VERSION:=3.1.10ubuntu4
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://archive.ubuntu.com/ubuntu/pool/main/a/at
@@ -33,7 +34,8 @@ endef
 export SENDMAIL=/bin/true
 EXTRA_CFLAGS:=-DNEED_YYWRAP -I$(PKG_BUILD_DIR) -I$(STAGING_DIR)/usr/include/libelf \
 		-L$(STAGING_DIR)/usr/lib
-CONFIGURE_ARGS+=--with-daemon_username=nobody --with-daemon_groupname=nogroup
+CONFIGURE_ARGS+=--with-daemon_username=nobody --with-daemon_groupname=nogroup \
+		--with-jobdir=/var/spool/cron/atjobs --with-atspool=/var/spool/cron/atspool
 
 define Package/at/install
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/sbin $(1)/etc/init.d/
