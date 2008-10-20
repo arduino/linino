@@ -48,7 +48,7 @@ prepare-tmpinfo: FORCE
 	touch $(TOPDIR)/tmp/.build
 
 .config: ./scripts/config/conf prepare-tmpinfo $(if $(CONFIG_HAVE_DOT_CONFIG),,FORCE)
-	@+if [ \! -f .config ] || ! grep CONFIG_HAVE_DOT_CONFIG .config >/dev/null; then \
+	@+if [ \! -e .config ] || ! grep CONFIG_HAVE_DOT_CONFIG .config >/dev/null; then \
 		[ -e $(HOME)/.openwrt/defconfig ] && cp $(HOME)/.openwrt/defconfig .config; \
 		$(_SINGLE)$(NO_TRACE_MAKE) menuconfig $(PREP_MK); \
 	fi
@@ -75,7 +75,7 @@ oldconfig: scripts/config/conf prepare-tmpinfo FORCE
 	$< -$(if $(CONFDEFAULT),$(CONFDEFAULT),o) Config.in
 
 menuconfig: scripts/config/mconf prepare-tmpinfo FORCE
-	if [ \! -f .config -a -e $(HOME)/.openwrt/defconfig ]; then \
+	if [ \! -e .config -a -e $(HOME)/.openwrt/defconfig ]; then \
 		cp $(HOME)/.openwrt/defconfig .config; \
 	fi
 	$< Config.in
