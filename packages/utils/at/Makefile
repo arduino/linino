@@ -34,8 +34,11 @@ endef
 export SENDMAIL=/bin/true
 EXTRA_CFLAGS:=-DNEED_YYWRAP -I$(PKG_BUILD_DIR) -I$(STAGING_DIR)/usr/include/libelf \
 		-L$(STAGING_DIR)/usr/lib
-CONFIGURE_ARGS+=--with-daemon_username=nobody --with-daemon_groupname=nogroup \
-		--with-jobdir=/var/spool/cron/atjobs --with-atspool=/var/spool/cron/atspool
+CONFIGURE_ARGS+=--with-daemon_username=nobody \
+		--with-daemon_groupname=nogroup \
+		--with-jobdir=/var/spool/cron/atjobs \
+		--with-atspool=/var/spool/cron/atspool \
+		--without-pam \
 
 define Package/at/install
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/sbin $(1)/etc/init.d/
