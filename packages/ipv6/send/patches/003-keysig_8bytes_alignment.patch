@@ -1,0 +1,22 @@
+This patch aligns the structure describing the RSA signature
+option to 8 bytes. Before that, send was padding with N bytes
+(4 on 32-bits architectures) using a cast in sendd/proto_sig.c :
+
+	so = (struct snd_opt_sig *)(nd_so);
+
+which would align to the number of bytes representing a pointer
+on your architecture.
+
+Index: sendd-0.2/sendd/snd_proto.h
+============================================================
+--- sendd-0.2/sendd/snd_proto.h	2008-04-18 16:21:46.000000000 +0200
++++ sendd-0.2.new/sendd/snd_proto.h	2008-10-05 16:08:34.000000000 +0200
+@@ -69,7 +69,7 @@
+ 	uint32_t		reserved;	/* opt hdr + reserved */
+ 	uint8_t			keyhash[SND_KEYHASH_LEN];
+ 	uint8_t			sig[0];
+-};
++} __attribute__((aligned(8)));
+ 
+ struct snd_opt_timestamp {
+ 	uint8_t			type;
