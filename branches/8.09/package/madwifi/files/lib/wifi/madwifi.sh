@@ -186,25 +186,23 @@ enable_atheros() {
 		esac
 		if [ -n "$antgpio" ]; then
 			softled=0
-			config_get polarity "$device" polarity
-			case "$polarity" in
+			config_get antenna "$device" antenna
+			case "$antenna" in
+				external) antdiv=0; antrx=1; anttx=1 ;;
 				horizontal) antdiv=0; antrx=1; anttx=1 ;;
 				vertical) antdiv=0; antrx=2; anttx=2 ;;
 				auto) antdiv=1; antrx=0; anttx=0 ;;
 			esac
-			config_get antenna "$device" antenna
+			
 			[ -x "$(which gpioctl 2>/dev/null)" ] || antenna=
 			case "$antenna" in
-				internal)
+				horizontal|vertical|auto)
 					gpioctl "dirout" "$antgpio" >/dev/null 2>&1
 					gpioctl "set" "$antgpio" >/dev/null 2>&1
 				;;
 				external)
 					gpioctl "dirout" "$antgpio" >/dev/null 2>&1
 					gpioctl "clear" "$antgpio" >/dev/null 2>&1
-					antdiv=0
-					antrx=1
-					anttx=1
 				;;
 			esac
 		fi
@@ -334,8 +332,7 @@ detect_atheros() {
 			NanoStation*)
 				EXTRA_DEV="
 # Ubiquiti NanoStation features
-	option antenna	internal
-	option polarity	auto # (auto|horizontal|vertical)
+	option antenna	auto # (auto|horizontal|vertical|external)
 "
 			;;
 		esac
