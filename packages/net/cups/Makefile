@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cups
 PKG_VERSION:=1.3.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-source.tar.bz2
 PKG_SOURCE_URL:= \
@@ -92,6 +92,7 @@ define Package/cups/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/cups/templates/*.tmpl $(1)/usr/share/cups/templates/
 	$(INSTALL_DIR) $(1)/usr/share/doc/cups
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/cups/index.html $(1)/usr/share/doc/cups/
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/cups/*.css $(1)/usr/share/doc/cups/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/cups/images $(1)/usr/share/doc/cups/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
