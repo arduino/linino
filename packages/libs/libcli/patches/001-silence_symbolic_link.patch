@@ -1,0 +1,28 @@
+diff -urN libcli-1.9.3/Makefile libcli-1.9.3.new/Makefile
+--- libcli-1.9.3/Makefile	2008-07-28 03:13:16.000000000 +0200
++++ libcli-1.9.3.new/Makefile	2008-10-25 19:30:09.000000000 +0200
+@@ -19,8 +19,8 @@
+ $(LIB): libcli.o
+ 	$(CC) -o $(LIB).$(MAJOR).$(MINOR).$(REVISION) $^ $(LDFLAGS) $(LIBS)
+ 	-rm -f $(LIB) $(LIB).$(MAJOR).$(MINOR)
+-	ln -s $(LIB).$(MAJOR).$(MINOR).$(REVISION) $(LIB).$(MAJOR).$(MINOR)
+-	ln -s $(LIB).$(MAJOR).$(MINOR) $(LIB)
++	-ln -s $(LIB).$(MAJOR).$(MINOR).$(REVISION) $(LIB).$(MAJOR).$(MINOR)
++	-ln -s $(LIB).$(MAJOR).$(MINOR) $(LIB)
+ 
+ %.o: %.c
+ 	$(CC) $(CPPFLAGS) $(CFLAGS) -fPIC -o $@ -c $<
+@@ -40,9 +40,10 @@
+ 	install -d $(DESTDIR)$(PREFIX)/include $(DESTDIR)$(PREFIX)/lib
+ 	install -m 0644 libcli.h $(DESTDIR)$(PREFIX)/include
+ 	install -m 0755 $(LIB).$(MAJOR).$(MINOR).$(REVISION) $(DESTDIR)$(PREFIX)/lib
+-	cd $(DESTDIR)$(PREFIX)/lib && \
+-	    ln -s $(LIB).$(MAJOR).$(MINOR).$(REVISION) $(LIB).$(MAJOR).$(MINOR) && \
+-	    ln -s $(LIB).$(MAJOR).$(MINOR) $(LIB)
++	cd $(DESTDIR)$(PREFIX)/lib
++	-rm -f $(LIB) $(LIB).$(MAJOR).$(MINOR)
++	ln -s $(LIB).$(MAJOR).$(MINOR).$(REVISION) $(LIB).$(MAJOR).$(MINOR)
++	ln -s $(LIB).$(MAJOR).$(MINOR) $(LIB)
+ 
+ rpm:
+ 	mkdir libcli-$(MAJOR).$(MINOR).$(REVISION)
