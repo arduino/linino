@@ -10,11 +10,12 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libatomicops
 PKG_VERSION:=1.2
+PKG_EXTRA_VERSION:=+cvs20080819.orig
 PKG_RELEASE:=1
 
-PKG_SOURCE:=libatomic_ops-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.hpl.hp.com/research/linux/atomic_ops/download/
-PKG_MD5SUM:=1b65e48271c81e3fa2d7a9a69bab7504
+PKG_SOURCE:=libatomic-ops_$(PKG_VERSION)$(PKG_EXTRA_VERSION).tar.gz
+PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/liba/libatomic-ops/
+PKG_MD5SUM:=bf26c062f28796e3daaab586a38abec1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libatomic_ops-$(PKG_VERSION)
 
