@@ -13,7 +13,7 @@ PKG_VERSION:=0.2-4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)d_$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://rfc.1924.fr/debian-mobisend/pool/main/s/sendd/
+PKG_SOURCE_URL:=http://mobisend.org/debian-mobisend/pool/main/s/sendd/
 PKG_MD5SUM:=57907178cad20fe3a21e2e449de1dc13
 PKG_BUILD_DIR:=$(BUILD_DIR)/sendd-0.2
 
@@ -23,7 +23,7 @@ define Package/send
   SECTION:=ipv6
   CATEGORY:=IPv6
   TITLE:=Secure Neighbor Discovery implementation
-  URL:=http://rfc.1924.fr/debian-mobisend.html
+  URL:=http://mobisend.org/debian-mobisend.html
   DEPENDS:=+kmod-ipv6 +ip6tables +libnetfilter-queue +libopenssl +libreadline +libncurses
 endef
 

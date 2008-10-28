@@ -1,3 +1,9 @@
+# Update sendd to:
+#
+# - use $DESTDIR for prefix (Debian interest)
+# - use libnetfilter_queue instead of deprecated libipq
+#
+# Under GPLv2 - Copyright (C) 2008 - EADS - Arnaud Ebalard <arno@natisbad.org>
 Index: sendd-0.2/Makefile.config
 ===================================================================
 --- sendd-0.2.orig/Makefile.config	2008-05-27 16:53:49.238160776 +0200
