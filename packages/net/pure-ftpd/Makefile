@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pure-ftpd
-PKG_VERSION:=1.0.21
+PKG_VERSION:=1.0.22
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://download.pureftpd.org/pub/pure-ftpd/releases/
-PKG_MD5SUM:=ca8a8dbec0cd9c8ea92fc4c37ea9c410
+PKG_SOURCE_URL:=http://download.pureftpd.org/pub/pure-ftpd/releases/snapshots/
+PKG_MD5SUM:=68308d7143aea092356f910859785e4a
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,6 +36,7 @@ endef
 
 CONFIGURE_ARGS += \
 	--with-everything \
+	--with-virtualchroot \
 
 define Package/pure-ftpd/install
 	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/init.d $(1)/usr/sbin
