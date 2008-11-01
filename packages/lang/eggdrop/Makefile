@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/eggdrop
   SECTION:=lang
-  CATEGORY:=Language
+  CATEGORY:=Languages
   TITLE:=EggDrop IRC BOT
   DEPENDS:=+tcl
   URL:=http://www.eggheads.org
