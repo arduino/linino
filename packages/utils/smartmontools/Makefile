@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/smartmontools
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libstdcpp
+  DEPENDS:=+uclibcxx
   TITLE:=S.M.A.R.T Monitoring Tool
   URL:=http://smartmontools.sourceforge.net/
 endef
@@ -38,7 +38,11 @@ endef
 define Build/Configure	
 	(cd $(PKG_BUILD_DIR); ./autogen.sh );
 	$(call Build/Configure/Default,, \
-	ac_libc_have_working_snprintf=yes \
+		ac_libc_have_working_snprintf=yes \
+		CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
+		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
+		LDFLAGS="$$$$LDFLAGS" \
+		LIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
 	)
 endef
 
