@@ -25,7 +25,7 @@ define Package/libsigcxx
   CATEGORY:=Libraries
   TITLE:=typesafe callback system for standard C++
   URL:=http://libsigc++.sourceforge.net/
-  DEPENDS:=+libstdcpp
+  DEPENDS:=+uclibcxx
 endef
 
 define Package/libsigcxx/description
@@ -41,7 +41,10 @@ CONFIGURE_ARGS += \
 	--enable-static \
 
 CONFIGURE_VARS += \
-	CXXFLAGS="$$$$CXXFLAGS -fno-rtti"  \
+	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
+	LDFLAGS="$$$$LDFLAGS" \
+	LIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
