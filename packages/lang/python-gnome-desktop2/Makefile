@@ -50,8 +50,8 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
-		$(if, $(CONFIG_PACKGE_python-rsvg), --enable-rsvg, --disable-rsvg), \
-		$(if, $(CONFIG_PACKGE_python-wnck), --enable-wnck, --disable-wnck), \
+		$(if $(CONFIG_PACKAGE_python-rsvg), --enable-rsvg, --disable-rsvg) \
+		$(if $(CONFIG_PACKAGE_python-wnck), --enable-wnck, --disable-wnck) \
 	)
 endef
 
