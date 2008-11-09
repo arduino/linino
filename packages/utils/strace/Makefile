@@ -14,7 +14,15 @@ PKG_RELEASE:=2
 ifneq ($(CONFIG_LINUX_2_6_27),y)
   PKG_VERSION:=4.5.16
   PKG_MD5SUM:=77f66d09aa82981bb6d65fa19a2c1ba9
-else
+endif
+
+ifeq ($(CONFIG_TARGET_uml),y)
+  PKG_VERSION:=4.5.18
+  PKG_MD5SUM:=e9449fcee97e6a8ed73934c883c870e0
+  PATCH_DIR:=./none
+endif
+
+ifeq ($(CONFIG_LINUX_2_6_27),y)
   PKG_VERSION:=4.5.18
   PKG_MD5SUM:=e9449fcee97e6a8ed73934c883c870e0
   PATCH_DIR:=./none
