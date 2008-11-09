@@ -1,0 +1,30 @@
+--- mg-20070529.orig/sysdef.h	2006-08-01 16:34:08.000000000 -0700
++++ mg-20070529/sysdef.h	2007-09-16 15:07:53.000000000 -0700
+@@ -20,9 +20,10 @@
+ 
+ /* necesarry to get asprintf & friends with glibc XXX doesn't work for some
+  * mysterious reason! */
+-/* #ifdef __GLIBC__ */
+-/* #  define _GNU_SOURCE */
+-/* #endif */
++#ifdef __GLIBC__
++#  define _GNU_SOURCE
++#  define _USE_GNU
++#endif
+ #include <stdio.h>
+ 
+ #include <unistd.h>
+@@ -56,13 +57,6 @@
+ extern size_t strlcat(char *, const char *, size_t);
+ #endif
+ 
+-/* Manpage says: #define _GNU_SOURCE, does that work? No! */
+-#ifdef __GLIBC__
+-extern int asprintf (char **, const char *, ...);
+-extern int vasprintf (char **, const char *, _G_va_list);
+-#endif
+-
+-
+ /* not provided by glibc stdio.h */
+ #ifdef HAVE_NOFGETLN
+ extern char * fgetln(FILE *, size_t *);
