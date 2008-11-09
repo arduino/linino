@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=psybnc
 PKG_VERSION:=2.3.2-7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=psyBNC-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.psybnc.info/download/beta/
@@ -24,7 +24,6 @@ define Package/psybnc
   SUBMENU:=Instant Messaging
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=
   TITLE:=An IRC-Bouncer with many features
   URL:=http://www.psybnc.info/
 endef
@@ -37,12 +36,22 @@ define Package/psybnc/description
 	functions are included.
 endef
 
+ifneq ($(SDK)$(CONFIG_BIG_ENDIAN),)
+  ENDIANESS:=1
+else
+  ENDIANESS:=0
+endif
+
 define Build/Compile	
 	$(call Build/Compile/Default, \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		HOSTCC="$(HOSTCC)" \
 		all \
 	)
+endef
+
+define Package/psybnc/conffiles
+/etc/psybnc.conf
 endef
 
 define Package/psybnc/install	
@@ -53,6 +62,8 @@ define Package/psybnc/install
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/psybnc.conf $(1)/usr/share/psybnc/
 	$(INSTALL_DIR) $(1)/usr/share/psybnc/lang
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lang/english.lng $(1)/usr/share/psybnc/lang/
+	$(INSTALL_DIR) $(1)/etc/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/psybnc.conf $(1)/etc
 endef
 
 $(eval $(call BuildPackage,psybnc))
