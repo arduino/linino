@@ -23,6 +23,7 @@ PKG_BUILD_DEPENDS:=glib2 libintl
 define Package/nbd
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=@LINUX_2_6
   TITLE:=Network Block Device utilities
   URL:=http://nbd.sourceforge.net
 endef
