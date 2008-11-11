@@ -108,6 +108,8 @@ endif
 #		depends PACKAGE_xorg-server || BROKEN
 #endef
 
+STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(BOARD)
+
 define Package/xorg-server/Default
   SECTION:=xorg-server
   CATEGORY:=Xorg
