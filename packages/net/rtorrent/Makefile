@@ -26,7 +26,7 @@ define Package/rtorrent
   CATEGORY:=Network
   TITLE:=BitTorrent client for ncurses
   URL:=http://libtorrent.rakshasa.no/
-  DEPENDS:=+libcurl +libtorrent +libncurses
+  DEPENDS:=+libcurl +libtorrent +libncurses +libsigcxx
 endef
 
 define Package/rtorrent/description
@@ -42,7 +42,7 @@ CONFIGURE_ARGS+= \
 	--disable-debug \
 
 CONFIGURE_VARS += \
-	LIBS="-lm" \
+	LIBS="-lm -luClibc++" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
