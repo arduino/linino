@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=shorewall-shell
-PKG_VERSION:=4.0.13
+PKG_VERSION:=4.2.1
 PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=http://www1.shorewall.net/pub/shorewall/4.0/shorewall-$(PKG_VERSION)/
+PKG_SOURCE_URL:=http://www1.shorewall.net/pub/shorewall/4.2/shorewall-$(PKG_VERSION)/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=938f12b6f9345bd1ff820185548a86c3
+PKG_MD5SUM:=7790bb23c7df834549f4f4ec195f37ee
 
 include $(INCLUDE_DIR)/package.mk
 

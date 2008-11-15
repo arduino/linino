@@ -1,12 +1,2 @@
 #!/bin/sh
-
-. /etc/functions.sh
-hostname="OpenWrt"
-config_cb () {
-	echo a $1
-	config_get hostname "$1" hostname
-	echo b $hostname
-}
-config_load "system"
-
-echo "$hostname"
+cat /proc/sys/kernel/hostname
