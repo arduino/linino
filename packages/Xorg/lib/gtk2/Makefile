@@ -9,13 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gtk2
-PKG_VERSION:=2.14.3
-PKG_RELEASE:=3
+PKG_VERSION:=2.14.4
+PKG_RELEASE:=4
 
 PKG_SOURCE:=gtk+-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/gtk+/2.14
 PKG_BUILD_DIR=$(BUILD_DIR)/gtk+-$(PKG_VERSION)
-PKG_MD5SUM:=359e44c8e47dfe04a09ac09b8e015e58
+PKG_MD5SUM:=72bf65a54d2d29a6644dc0d28313ee67
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -66,7 +66,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/gtk-2.0/include/* $(1)/usr/include/
 
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{la,so*} \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
 		$(1)/usr/lib/
 
 	$(INSTALL_DATA) \
@@ -82,18 +82,18 @@ define Package/gtk2/install
 
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} \
+		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib/
 
 	$(foreach d,engines immodules loaders, \
 		$(INSTALL_DIR) $(1)/usr/lib/gtk-2.0/2.10.0/$(d); \
 		$(INSTALL_DATA) \
-			$(PKG_INSTALL_DIR)/usr/lib/gtk-2.0/2.10.0/$(d)/*.{so,a} \
+			$(PKG_INSTALL_DIR)/usr/lib/gtk-2.0/2.10.0/$(d)/*.so \
 			$(1)/usr/lib/gtk-2.0/2.10.0/$(d)/;\
 	)
 	$(INSTALL_DIR) $(1)/usr/lib/gtk-2.0/2.10.0/printbackends/
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/gtk-2.0/2.10.0/printbackends/libprintbackend-{file,lpr}.{so,a} \
+		$(PKG_INSTALL_DIR)/usr/lib/gtk-2.0/2.10.0/printbackends/libprintbackend-{file,lpr}.so \
 		$(1)/usr/lib/gtk-2.0/2.10.0/printbackends/
 
 	$(INSTALL_DIR) $(1)/usr/bin/
@@ -113,7 +113,7 @@ endef
 define Package/gtk2-cups/install
 	$(INSTALL_DIR) $(1)/usr/lib/gtk-2.0/2.10.0/printbackends/
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/gtk-2.0/2.10.0/printbackends/libprintbackend-cups.{so,a} \
+		$(PKG_INSTALL_DIR)/usr/lib/gtk-2.0/2.10.0/printbackends/libprintbackend-cups.so \
 		$(1)/usr/lib/gtk-2.0/2.10.0/printbackends/
 endef
 
