@@ -13,7 +13,7 @@ PKG_VERSION:=2.0.2
 PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://dast.nlanr.net/Projects/Iperf2.0
+PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
 PKG_MD5SUM:=bb658aba58a5af0356f5b1342dfe8f53
 
 include $(INCLUDE_DIR)/package.mk
