@@ -1,0 +1,91 @@
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id: Makefile 12228 2008-08-06 22:43:15Z nbd $
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=edje
+PKG_VERSION:=
+PKG_RELEASE:=1
+
+PKG_SOURCE:=e17.libs.$(PKG_NAME)_anoncvs.enlightenment.org__20080825.tar.gz
+PKG_SOURCE_URL:=http://downloads.openmoko.org/sources/
+PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}/
+
+PKG_FIXUP = libtool
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/edje
+  SECTION:=xorg-lib
+  CATEGORY:=Xorg
+  SUBMENU:=lib
+  TITLE:=Edje is a graphical design and layout library
+  URL:=http://wiki.enlightenment.org/index.php/Edje
+  DEPENDS:=+libjpeg +zlib +eet +evas +ecore +embryo
+endef
+
+define Package/edje/description
+Edje is a graphical design and layout library based on Evas that provides an abstraction layer between the application code and the interface, while allowing extremely flexible dynamic layouts and animations.
+endef
+
+EXTRA_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+
+define Build/Configure
+	(cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
+	$(call Build/Configure/Default \
+		--disable-edje-cc \
+	)
+endef
+
+#edge provides an own compiler (edge_cc) which needs be compiled for the host-system
+#define Build/Compile
+#	mkdir -p $(PKG_INSTALL_DIR)/host $(PKG_INSTALL_DIR)/target
+#	$(MAKE) -C $(PKG_BUILD_DIR) all
+#	DESTDIR="$(PKG_INSTALL_DIR)/target" $(MAKE) -C $(PKG_BUILD_DIR) all install
+#	$(MAKE) -C $(PKG_BUILD_DIR) clean
+#	(cd $(PKG_BUILD_DIR); rm -f config.cache; \
+#		./configure \
+#			--prefix=/usr \
+#			--exec-prefix=/usr \
+#			--bindir=/usr/bin \
+#			--datadir=/usr/share \
+#			--includedir=/usr/include \
+#			--infodir=/usr/share/info \
+#			--libdir=/usr/lib \
+#			--libexecdir=/usr/lib \
+#			--localstatedir=/var \
+#			--mandir=/usr/share/man \
+#			--sbindir=/usr/sbin \
+#			--sysconfdir=/etc \
+#			LDFLAGS="-L$(STAGING_DIR_HOST)/usr/lib" \
+#			CFLAGS="-I$(STAGING_DIR_HOST)/usr/include" \
+#			EDGE_LDFLAGS=-L$(STAGING_DIR_HOST)/usr/lib \
+			EDGE_CFLAGS=-I$(STAGING_DIR_HOST)/usr/include \
+#	);
+#	$(MAKE) -C $(PKG_BUILD_DIR) all CC="$(HOSTCC)" LDFLAGS="-L$(STAGING_DIR_HOST)/usr/lib" "CFLAGS=-I$(STAGING_DIR_HOST)/usr/include"
+#	DESTDIR="$(PKG_INSTALL_DIR)/host" $(MAKE) -C $(PKG_BUILD_DIR) all install
+#endef
+
+#define Build/InstallDev
+#	$(INSTALL_DIR) $(1)/usr/include $(1)/usr/lib $(1)/usr/bin $(STAGING_DIR_HOST)/usr/include $(STAGING_DIR_HOST)/usr/lib $(STAGING_DIR_HOST)/usr/bin
+#	$(CP) $(PKG_INSTALL_DIR)/target/usr/include/* $(1)/usr/include/
+#	$(CP) $(PKG_INSTALL_DIR)/target/usr/lib/* $(1)/usr/lib/
+#	$(CP) $(PKG_INSTALL_DIR)/target/usr/bin/edje_cc $(1)/usr/bin/
+#	$(CP) $(PKG_INSTALL_DIR)/host/usr/lib/* $(STAGING_DIR_HOST)/usr/lib/
+#	$(CP) $(PKG_INSTALL_DIR)/host/usr/bin/edje_cc $(STAGING_DIR_HOST)/usr/bin/
+#endef
+
+#define Package/edje/install
+#	$(INSTALL_DIR) $(1)/usr/lib $(1)/usr/bin $(STAGING_DIR_HOST)/usr/lib $(STAGING_DIR_HOST)/usr/bin
+#	$(CP) $(PKG_INSTALL_DIR)/target/usr/lib/*.so* $(1)/usr/lib/
+#	$(CP) $(PKG_INSTALL_DIR)/target/usr/bin/edje_cc $(1)/usr/bin/
+#	$(CP) $(PKG_INSTALL_DIR)/host/usr/lib/*.so* $(STAGING_DIR_HOST)/usr/lib/
+#	$(CP) $(PKG_INSTALL_DIR)/host/usr/bin/edje_cc $(STAGING_DIR_HOST)/usr/bin/
+#endef
+
+$(eval $(call BuildPackage,edje))

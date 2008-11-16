@@ -1,0 +1,18 @@
+diff -ruN edje.orig/src/bin/edje_cc_parse.c edje/src/bin/edje_cc_parse.c
+--- edje.orig/src/bin/edje_cc_parse.c	2008-10-08 03:40:17.000000000 +0200
++++ edje/src/bin/edje_cc_parse.c	2008-10-08 03:41:59.000000000 +0200
+@@ -667,12 +667,12 @@
+ 	 * Redirecting the output is required for MacOS 10.3, and works fine
+ 	 * on other systems.
+ 	 */
+-	snprintf(buf, sizeof(buf), "cat %s | cpp -I%s %s > %s",
++	snprintf(buf, sizeof(buf), "cat %s | /usr/bin/cpp -I%s %s > %s",
+ 		 file_in, inc, def, tmpn);
+ 	ret = system(buf);
+ 	if (ret < 0)
+ 	  {
+-	     snprintf(buf, sizeof(buf), "gcc -I%s %s -E -o %s %s",
++	     snprintf(buf, sizeof(buf), "/usr/bin/gcc -I%s %s -E -o %s %s",
+ 		      inc, def, tmpn, file_in);
+ 	     ret = system(buf);
+ 	  }

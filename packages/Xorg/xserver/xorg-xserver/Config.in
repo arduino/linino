@@ -1,0 +1,31 @@
+#comment "type of xserver ---"
+
+#config X_KDRIVE
+#	bool
+#	prompt "use kdrive instead of xorg"
+
+comment "library support for xserver ---"
+
+config X_TSLIB
+	bool
+	prompt "enable support for tslib"
+
+#config X_XCALIBRATE
+#	bool
+#	prompt "enable support for xcalibrate"
+
+#config X_DRI
+#	bool
+#	prompt "enable support for DRI"
+
+config X_COMPOSITE
+	bool
+	prompt "enable support for composite"
+
+config X_XINERAMA
+	bool
+	prompt "enable support for xinerama"
+
+#config X_GLX
+#	bool
+#	prompt "enable support for GLX"
