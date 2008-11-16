@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=librsvg
-PKG_VERSION:=2.22.2
-PKG_RELEASE:=1
+PKG_VERSION:=2.22.3
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/2.22
-PKG_MD5SUM:=aae602677ce201b1a0ed6a0c18c207f2
+PKG_MD5SUM:=c4ec4fdb2b1842e221ca39127e85682d
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -24,8 +24,6 @@ PKG_INSTALL=1
 EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
                -L$(STAGING_DIR)/usr/lib/libintl/lib/ \
                -L$(STAGING_DIR)/usr/lib/libiconv/lib/
-
-TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include/libcroco-0.6
 
 STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_librsvg CONFIG_PACKAGE_librsvg-pixbuf-loader)
 
