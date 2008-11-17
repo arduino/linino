@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vte
-PKG_VERSION:=0.16.14
+PKG_VERSION:=0.17.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/0.16
-PKG_MD5SUM:=9df3e35b81b209952ac1cf7904f7b620
+PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/0.17
+PKG_MD5SUM:=ec6cb2668db7146eae7cfc48af98f3ed
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -64,9 +64,14 @@ define Build/Configure
 endef
 
 define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/include/vte
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/vte/*.h \
+		$(1)/usr/include/vte/
+
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,la,a} \
 		$(1)/usr/lib
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
@@ -83,7 +88,7 @@ define Package/vte/install
 
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} \
+		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib
 
 	$(INSTALL_DIR) $(1)/usr/lib/vte
@@ -95,7 +100,7 @@ endef
 define Package/python-vte/install
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)/gtk-2.0
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/gtk-2.0/*.{so*,a} \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/gtk-2.0/*.so* \
 		$(1)$(PYTHON_PKG_DIR)/gtk-2.0
 endef
 
