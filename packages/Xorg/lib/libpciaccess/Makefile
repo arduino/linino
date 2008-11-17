@@ -40,19 +40,12 @@ define Build/Configure
 	)
 endef
 
-define Package/libpciaccess/install
+define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/include/*.h \
 		$(1)/usr/include
 
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libpciaccess.so* \
-		$(1)/usr/lib/
-endef
-
-define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/libpciaccess.{so*,a,la} \
@@ -61,6 +54,13 @@ define Build/InstallDev
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
 		$(1)/usr/lib/pkgconfig/
+endef
+
+define Package/libpciaccess/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libpciaccess.so* \
+		$(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libpciaccess))
