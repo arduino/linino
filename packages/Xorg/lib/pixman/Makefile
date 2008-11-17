@@ -1,51 +1,50 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org 
+
 include $(TOPDIR)/rules.mk
 
 PKG_BASE_NAME:=pixman
 PKG_NAME:=pixman
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_VERSION:=0.12.0
+
 PKG_SOURCE_URL:=http://cairographics.org/releases/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
+PKG_MD5SUM:=09357cc74975b01714e00c5899ea1881
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+PKG_INSTALL:=1
 
 define Package/pixman
   SECTION:=xorg-lib
   CATEGORY:=Xorg
   SUBMENU:=lib
-  DEPENDS:=@DISPLAY_SUPPORT
   TITLE:=pixman
-  URL:=http://xorg.freedesktop.org/
-endef
-
-define Build/Compile
-	$(call $(PKG_NAME)/Compile)
-	make -C $(PKG_BUILD_DIR)
-	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
-	find $(PKG_INSTALL_DIR) -name *.la | xargs rm -rf
+  URL:=http://cairographics.org/
 endef
 
 define Build/Configure
-	$(call Build/Configure/Default, --enable-malloc0returnsnull)
+	$(call Build/Configure/Default, \
+		--disable-gtk \
+	)
+endef
+
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 endef
 
 define Package/pixman/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
-endef
-
-define Build/InstallDev
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
+		$(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,pixman))
