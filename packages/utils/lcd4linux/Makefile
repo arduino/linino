@@ -9,9 +9,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lcd4linux
-PKG_REV:=877
+PKG_REV:=899
 PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=3
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://ssl.bulix.org/svn/lcd4linux/trunk/
