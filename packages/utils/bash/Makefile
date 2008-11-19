@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bash
 PKG_VERSION:=3.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.gnu.org/gnu/bash/
@@ -33,7 +33,7 @@ define Package/bash/description
 endef
 
 
-define Build/Configure	
+define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-restricted \
 		--without-bash-malloc \
@@ -48,6 +48,12 @@ define Build/Compile
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		SHELL="/bin/bash" \
 		all install
+endef
+
+define Package/bash/postinst
+#!/bin/sh
+grep bash $${IPKG_INSTROOT}/etc/shells || \
+	echo "/bin/bash" >> $${IPKG_INSTROOT}/etc/shells
 endef
 
 define Package/bash/install
