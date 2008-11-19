@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeradius2
 PKG_VERSION:=2.1.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=freeradius-server-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/freeradius/
@@ -393,7 +393,7 @@ $(eval $(call BuildPackage,freeradius2))
 $(eval $(call BuildPackage,freeradius2-democerts))
 $(eval $(call BuildPlugin,freeradius2-mod-chap,rlm_chap,))
 $(eval $(call BuildPlugin,freeradius2-mod-detail,rlm_detail,))
-$(eval $(call BuildPlugin,freeradius2-mod-eap,libeap rlm_eap,eap.conf))
+$(eval $(call BuildPlugin,freeradius2-mod-eap,libfreeradius-eap rlm_eap,eap.conf))
 $(eval $(call BuildPlugin,freeradius2-mod-eap-gtc,rlm_eap_gtc,))
 $(eval $(call BuildPlugin,freeradius2-mod-eap-md5,rlm_eap_md5,))
 $(eval $(call BuildPlugin,freeradius2-mod-eap-mschapv2,rlm_eap_mschapv2,))
