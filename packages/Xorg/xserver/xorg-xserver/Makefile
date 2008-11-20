@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -17,29 +17,43 @@ PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/xserver/xorg-server-$(PKG_VERSION)/
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_CFLAGS+= -I${STAGING_DIR}/usr/include/X11/GL -I${STAGING_DIR}/usr/include/X11/dri/ -I${STAGING_DIR}/usr/include/X11/ -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+EXTRA_CFLAGS+= \
+	-I$(STAGING_DIR)/usr/include/X11/GL \
+	-I$(STAGING_DIR)/usr/include/X11/dri/ \
+	-I$(STAGING_DIR)/usr/include/X11/ \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
-CONFIGURE_ARGS+= --disable-dga \
-		--disable-xf86misc \
-		--disable-xf86vidmode \
-		--disable-xf86bigfont \
-		--disable-xorgcfg \
-		--disable-xkb \
-		--disable-xnest \
-		--disable-xvfb \
-		--disable-xevie \
-		--disable-xprint \
-		--disable-xtrap \
-		--disable-dmx \
-		--disable-w100 \
-		--disable-glx \
-		--enable-xfbdev \
-		--enable-kdrive \
-		--disable-xorg \
-		--disable-xephyr \
-		--enable-builtin-fonts \
-		--disable-kdrive-vesa \
-		--with-default-font-path=built-ins \
+CONFIGURE_ARGS+= \
+	--disable-aiglx \
+	--disable-glx-tls \
+	--disable-dga \
+	--disable-xdmcp \
+	--disable-xdm-auth-1 \
+	--disable-dri \
+	--disable-config-hal \
+	--disable-xf86misc \
+	--disable-xf86vidmode \
+	--disable-xf86bigfont \
+	--disable-xorgcfg \
+	--disable-xkb \
+	--disable-xnest \
+	--disable-xquartz \
+	--disable-xwin \
+	--disable-x11app \
+	--disable-xsdl \
+	--disable-xfake \
+	--disable-install-setuid \
+	--disable-kbd_mode \
+	--disable-xvfb \
+	--disable-xevie \
+	--disable-xprint \
+	--disable-xtrap \
+	--disable-dmx \
+	--disable-glx \
+	--enable-xorg \
+	--disable-xephyr \
+	--enable-builtin-fonts \
+	--with-default-font-path=built-ins \
 
 CONFIGURE_VARS+=ac_cv_file__usr_share_sgml_X11_defs_ent=yes
 
@@ -90,47 +104,31 @@ CONFIGURE_VARS+=ac_cv_file__usr_share_sgml_X11_defs_ent=yes
 #		+pixman \
 #		@DISPLAY_SUPPORT
 
-define Package/xorg-server/config
-	menu "Configuration"
-	depends on PACKAGE_xorg-server
+define Package/xserver-common/config
 	source "$(SOURCE)/Config.in"
-	endmenu
 endef
 
-X_BIN_FILE=Xfbdev # no Xorg-binary when xorg is disabled :)
-#ifneq ($(CONFIG_X_KDRIVE),)
-# CONFIGURE_ARGS+=--enable-kdrive --disable-xorg
-#  X_BIN_FILE=Xfbdev # no Xorg-binary when xorg is disabled :)
-#else
-#  CONFIGURE_ARGS+=--disable-kdrive --enable-xorg
-#  X_BIN_FILE=Xorg
-#endif
-
+# TODO: Move config file to indepedndent packages
 ifeq ($(CONFIG_TARGET_olpc),y)
-  #XORG_CONFIG_FILE=xorg-olpc.conf
   X_CONFIG=olpc
-endif
+else
 ifeq ($(CONFIG_TARGET_om_gta02),y)
-  #XORG_CONFIG_FILE=xorg-om_gta02.conf
   X_CONFIG=om_gta02
+else
+  X_CONFIG=generic
+endif
 endif
 
-define Package/xorg-server/Default
+define Package/xorg/Default
   SECTION:=xorg-server
   CATEGORY:=Xorg
+  SUBMENU:=server
   URL:=http://xorg.freedesktop.org/
 endef
 
-define Package/xorg-server
-$(call Package/xorg-server/Default) 
-  TITLE:=Xorg server
-  MENU:=1
-  DEPENDS:=+X_TSLIB:tslib \
-  +X_DRI:xf86driproto \
-  +X_DRI:libdrm \
-  +X_XCALIBRATE:calibrateproto \
-  +X_COMPOSITE:compositeproto \
-  +X_XINERAMA:xineramaproto \
+define Package/xserver/Default
+$(call Package/xorg/Default)
+  DEPENDS:=+xserver-common \
   +libpthread \
   +randrproto \
   +renderproto \
@@ -157,69 +155,150 @@ $(call Package/xorg-server/Default)
   @DISPLAY_SUPPORT
 endef
 
-define Package/xorg-server-config
-$(call Package/xorg-server/Default) 
-  TITLE:=Xorg server configuration tools 
-  DEPENDS:=xorg-server
+define Package/xserver-xorg
+$(call Package/xserver/Default)
+  PROVIDES:=xserver
+  TITLE:=Xorg xserver
+endef
+
+define Package/xserver-kdrive-xvesa
+$(call Package/xserver/Default)
+  PROVIDES:=xserver
+  TITLE:=Kdrive vesa xserver
+  DEPENDS+=+X_TSLIB:tslib \
+  +X_DRI:xf86driproto \
+  +X_DRI:libdrm \
+  +X_XCALIBRATE:calibrateproto \
+  +X_COMPOSITE:compositeproto \
+  +X_XINERAMA:xineramaproto
+endef
+
+define Package/xserver-kdrive-xfbdev
+$(call Package/xserver/Default)
+  PROVIDES:=xserver
+  TITLE:=Kdrive framebuffer xserver
+  DEPENDS+=+X_TSLIB:tslib \
+  +X_DRI:xf86driproto \
+  +X_DRI:libdrm \
+  +X_XCALIBRATE:calibrateproto \
+  +X_COMPOSITE:compositeproto \
+  +X_XINERAMA:xineramaproto
+endef
+
+define Package/xserver-xorg-config
+$(call Package/xorg/Default)
+  TITLE:=Xorg server configuration tools
+  DEPENDS:=xserver-xorg
+endef
+
+define Package/xserver-common
+$(call Package/xorg/Default)
+  TITLE:=Files shared by the different webservers
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR) \
-		$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-		$(CONFIGURE_VARS) \
-		$(CONFIGURE_CMD) \
-		$(CONFIGURE_ARGS_XTRA) \
-		$(CONFIGURE_ARGS) \
-		$(if $(CONFIG_X_TSLIB),--enable-tslib) \
-		$(if $(CONFIG_X_COMPOSITE),,--disable-composite) \
-		$(if $(CONFIG_X_XINERAMA),,--disable-xinerama) \
-		$(if $(CONFIG_X_DRI),,--disable-dri) \
-		$(if $(CONFIG_X_XCALIBRATE),--enable-xcalibrate) \
-		);
+	$(call Build/Configure/Default, \
+		$(if $(CONFIG_PACKAGE_xserver-xorg),--enable-xorg,--disable-xorg) \
+		$(if $(CONFIG_PACKAGE_xserver-xvesa), \
+			--enable-kdrive-vesa, \
+			--disable-kdrive-vesa) \
+		$(if $(CONFIG_PACKAGE_xserver-xfbdev), \
+			--enable-xfbdev, \
+			--disable-xfbdev) \
+		$(if $(CONFIG_PACKAGE_xserver-xfbdev)$(CONFIG_PACKAGE_xserver-xvesa), \
+			--enable-kdrive, \
+			--disable-kdrive) \
+		$(if $(CONFIG_X_TSLIB),--enable-tslib,--disable-tslib) \
+		$(if $(CONFIG_X_COMPOSITE),--enable-composite,--disable-composite) \
+		$(if $(CONFIG_X_XINERAMA),--enable-xinerama,--disable-xinerama) \
+		$(if $(CONFIG_X_DRI),--enable-dri,--disable-dri) \
+		$(if $(CONFIG_X_XCALIBRATE),--enable-xcalibrate,--disable-xcalibrate) \
+	)
 endef
 
 define Build/Compile
 	DESTDIR="$(PKG_INSTALL_DIR)" $(MAKE) -C $(PKG_BUILD_DIR) install
 endef
 
-define Package/xorg-server/install
-	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/lib $(1)/etc/init.d $(1)/etc/config
-	#$(CP) $(PKG_INSTALL_DIR)/usr/bin/$(X_BIN_FILE) $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
-	$(CP) ./files/x.init $(1)/etc/init.d/x11
-	$(if $(X_CONFIG),$(CP) ./files/config/$(X_CONFIG) $(1)/etc/config/x11)
-	cd $(1)/usr/bin; ln -sf $(X_BIN_FILE) X
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
+define Package/xserver-common/install
+	$(INSTALL_DIR) $(1)/etc/{init.d,config}
+	$(INSTALL_DATA) \
+		./files/x.init \
+		$(1)/etc/init.d/x11
+	$(if $(X_CONFIG), \
+		$(INSTALL_DATA) \
+			./files/config/$(X_CONFIG) \
+			$(1)/etc/config/x11 \
+	)
+
+	$(INSTALL_DIR) $(1)/usr/lib/xorg
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/xorg/protocol.txt \
+		$(1)/usr/lib/xorg/
 endef
 
-#define Package/xorg-server/install
-#	$(INSTALL_DIR) $(1)/usr/bin
-#	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(XORG_BIN_FILE) $(1)/usr/bin/
-#	cd $(1)/usr/bin; ln -sf $(XORG_BIN_FILE) X
-#	$(INSTALL_DIR) $(1)/usr/share
-#	$(CP) $(PKG_INSTALL_DIR)/usr/share/* $(1)/usr/share/
-#	$(INSTALL_DIR) $(1)/usr/lib/xserver
-#	$(CP) $(PKG_INSTALL_DIR)/usr/lib/xserver/* $(1)/usr/lib/xserver
-#	$(INSTALL_DIR) $(1)/usr/lib/xorg/
-#	$(CP) -r $(PKG_INSTALL_DIR)/usr/lib/xorg/* $(1)/usr/lib/xorg/
-#	find $(1)/usr/lib/xorg/ -name *.la | xargs rm -rf
-#	$(INSTALL_DIR) $(1)/usr/lib/X11/
-#	$(CP) -r $(PKG_INSTALL_DIR)/usr/lib/X11/* $(1)/usr/lib/X11/
-#	rm -rf $(1)/usr/share/X11 $(1)/usr/lib/X11/xserver	
-#	$(INSTALL_DIR) $(1)/var/log/
-#	$(INSTALL_DIR) $(1)/etc/X11/
-#	$(CP) files/$(XORG_CONFIG_FILE) $(1)/etc/X11/xorg.conf
-#endef
+define Package/xserver-xfdev/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) \
+		$(1)/usr/bin/Xfbdev \
+		$(PKG_INSTALL_DIR)/usr/bin/Xfbdev
+endef
+
+define Package/xserver-xvesa/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) \
+		$(1)/usr/bin/Xvesa \
+		$(PKG_INSTALL_DIR)/usr/bin/Xvesa
+endef
+
+define Package/xserver-xorg/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/Xorg \
+		$(1)/usr/bin/
+
+	$(INSTALL_DIR) $(1)/usr/lib/X11
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/X11/* \
+		$(1)/usr/lib/X11/
+
+	$(INSTALL_DIR) $(1)/usr/lib/xorg/modules/{extensions,fonts,linux,multimedia}
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/xorg/modules/*.so \
+		$(1)/usr/lib/xorg/modules/
+
+	$(for dir,extensions fonts linux multimedia, \
+		$(INSTALL_DATA) \
+			$(PKG_INSTALL_DIR)/usr/lib/xorg/modules/$(d)/*.so \
+			$(1)/usr/lib/xorg/modules/$(d) \
+	)
+endef
 
 define Packages/xorg-server-config/install
 	$(INSTALL_DIR) $(1)/usr/bin
-   $(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/xorgconfig $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/xorgconfig $(1)/usr/bin/
 endef
 
 define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/share/aclocal/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/share/aclocal/* \
+		$(1)/usr/share/aclocal/
+
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
+		$(1)/usr/lib/pkgconfig/
+	$(if $(CONFIG_PACKAGE_xserver-xorg), \
+		$(INSTALL_DIR) $(1)/usr/include/xorg; \
+		$(INSTALL_DATA) \
+			$(PKG_INSTALL_DIR)/usr/include/xorg/*.h \
+			$(1)/usr/include/xorg/; \
+	)
 endef
 
-$(eval $(call BuildPackage,xorg-server))
-$(eval $(call BuildPackage,xorg-server-config))
+$(eval $(call BuildPackage,xserver-common))
+$(eval $(call BuildPackage,xserver-xorg))
+$(eval $(call BuildPackage,xserver-kdrive-xvesa))
+$(eval $(call BuildPackage,xserver-kdrive-xfbdev))
+$(eval $(call BuildPackage,xserver-xorg-config))

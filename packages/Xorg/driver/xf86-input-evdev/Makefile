@@ -21,7 +21,7 @@ define Package/xf86-input-evdev
   SECTION:=xorg-driver
   CATEGORY:=Xorg
   SUBMENU:=driver
-  DEPENDS:=+xorg-server  @DISPLAY_SUPPORT
+  DEPENDS:=+xserver-xorg
   TITLE:=xf86-input-evdev
   URL:=http://xorg.freedesktop.org/
 endef

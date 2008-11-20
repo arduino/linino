@@ -21,7 +21,7 @@ define Package/xf86-input-mouse
   SECTION:=xorg-driver
   CATEGORY:=Xorg
   SUBMENU:=driver
-  DEPENDS:=+xorg-server  @DISPLAY_SUPPORT
+  DEPENDS:=+xserver-xorg @DISPLAY_SUPPORT
   TITLE:=xf86-input-mouse
   URL:=http://xorg.freedesktop.org/
 endef

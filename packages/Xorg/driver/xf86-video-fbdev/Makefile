@@ -17,55 +17,28 @@ PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
 
 include $(INCLUDE_DIR)/package.mk
 
+PKG_INSTALL:=1
+
 define Package/xf86-video-fbdev
   SECTION:=xorg-driver
   CATEGORY:=Xorg
   SUBMENU:=driver
-  DEPENDS:=+xorg-server  @DISPLAY_SUPPORT
+  DEPENDS:=+xserver-xorg +libpciaccess
   TITLE:=xf86-video-fbdev
   URL:=http://xorg.freedesktop.org/
 endef
 
-define Build/InstallDev
-	DESTDIR="$(1)" $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
-endef
-
-EXTRA_CPPFLAGS= -I$(STAGING_DIR)/usr/include/xorg \
-		-I$(STAGING_DIR)/usr/include/X11/ \
-		-I$(STAGING_DIR)/usr/include/ \
-		-I$(STAGING_DIR)/include/
-
-EXTRA_CFLAGS+= $(EXTRA_CPPFLAGS)
-
-acvar=$(subst -,_,$(subst .,_,$(subst /,_,$(1))))
-
-CONFIGURE_VARS +=DRI_CFLAGS="-I$(STAGING_DIR)/usr/include/X11/dri/" ac_cv_file__usr_share_sgml_X11_defs_ent=yes \
-	sdkdir=$(STAGING_DIR) 
-
 define Build/Configure
-	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
-	if [ -x $(CONFIGURE_CMD) ]; then \
-		$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-		$(foreach a,dri.h sarea.h dristruct.h exa.h damage.h,export ac_cv_file_$(call acvar,$(STAGING_DIR)/usr/include/xorg/$(a))=yes;) \
-		sed -i "s|sdkdir=.*|sdkdir=$(STAGING_DIR)/usr/include/xorg|g" $(PKG_BUILD_DIR)/configure ;\
-		$(CONFIGURE_VARS) \
-		$(CONFIGURE_CMD) \
-		$(CONFIGURE_ARGS_XTRA) \
-		$(CONFIGURE_ARGS) \
-		CPPFLAGS="$(EXTRA_CPPFLAGS)" ;\
-	fi \
+	$(call Build/Configure/Default, \
+		--enable-pciaccess \
 	)
 endef
 
-define Build/Compile
-	make -C $(PKG_BUILD_DIR)
-	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
-	find $(PKG_INSTALL_DIR) -name *a | xargs rm -rf
-endef
-
 define Package/xf86-video-fbdev/install
-	$(INSTALL_DIR) $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/xorg/modules/drivers
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/xorg/modules/drivers/*.so \
+		$(1)/usr/lib/xorg/modules/drivers
 endef
 
 $(eval $(call BuildPackage,xf86-video-fbdev))

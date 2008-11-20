@@ -21,7 +21,7 @@ define Package/xf86-video-vesa
   SECTION:=xorg-driver
   CATEGORY:=Xorg
   SUBMENU:=driver
-  DEPENDS:=+xorg-server  @DISPLAY_SUPPORT
+  DEPENDS:=+xserver-xorg
   TITLE:=xf86-video-vesa
   URL:=http://xorg.freedesktop.org/
 endef

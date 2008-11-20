@@ -21,7 +21,7 @@ define Package/font-jis-misc
   SECTION:=xorg-font
   CATEGORY:=Xorg
   SUBMENU:=font
-  DEPENDS:= +xorg-server +font-util @DISPLAY_SUPPORT
+  DEPENDS:= +xserver +font-util @DISPLAY_SUPPORT
   TITLE:=font-jis-misc
   URL:=http://xorg.freedesktop.org/
 endef

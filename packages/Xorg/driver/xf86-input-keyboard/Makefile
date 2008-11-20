@@ -21,7 +21,7 @@ define Package/xf86-input-keyboard
   SECTION:=xorg-driver
   CATEGORY:=Xorg
   SUBMENU:=driver
-  DEPENDS:=+xorg-server  @DISPLAY_SUPPORT
+  DEPENDS:=+xserver-xorg  @DISPLAY_SUPPORT
   TITLE:=xf86-input-keyboard
   URL:=http://xorg.freedesktop.org/
 endef

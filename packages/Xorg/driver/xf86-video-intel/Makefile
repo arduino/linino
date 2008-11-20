@@ -21,7 +21,7 @@ define Package/xf86-video-intel
   SECTION:=xorg-driver
   CATEGORY:=Xorg
   SUBMENU:=driver
-  DEPENDS:=+xorg-server  @DISPLAY_SUPPORT
+  DEPENDS:=+xserver-xorg
   TITLE:=xf86-video-intel
   URL:=http://xorg.freedesktop.org/
 endef

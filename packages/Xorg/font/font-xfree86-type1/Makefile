@@ -21,7 +21,7 @@ define Package/font-xfree86-type1
   SECTION:=xorg-font
   CATEGORY:=Xorg
   SUBMENU:=font
-  DEPENDS:= +xorg-server +font-util @DISPLAY_SUPPORT
+  DEPENDS:= +xserver +font-util @DISPLAY_SUPPORT
   TITLE:=font-xfree86-type1
   URL:=http://xorg.freedesktop.org/
 endef

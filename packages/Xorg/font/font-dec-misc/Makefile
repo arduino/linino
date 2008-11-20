@@ -21,7 +21,7 @@ define Package/font-dec-misc
   SECTION:=xorg-font
   CATEGORY:=Xorg
   SUBMENU:=font
-  DEPENDS:= +xorg-server +font-util @DISPLAY_SUPPORT
+  DEPENDS:= +xserver +font-util @DISPLAY_SUPPORT
   TITLE:=font-dec-misc
   URL:=http://xorg.freedesktop.org/
 endef
