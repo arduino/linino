@@ -10,13 +10,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=collectd
 PKG_VERSION:=4.4.4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://collectd.org/files/
 PKG_MD5SUM:=9e0e89150b1ff28fc0fdd8a198c9ac5e
 
 PKG_FIXUP=libtool
+PKG_BUILD_DEPENDS:=+libxml2 +libnetsnmp +libcurl +librrd1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -172,6 +173,12 @@ define Package/collectd-mod-ntpd
         DEPENDS:=collectd
 endef
 
+define Package/collectd-mod-nut
+        $(call Package/collectd/common_info)
+        TITLE:=collectd - UPS monitoring input plugin
+        DEPENDS:=collectd @BROKEN
+endef
+
 define Package/collectd-mod-ping
         $(call Package/collectd/common_info)
         TITLE:=collectd - ping status input plugin
@@ -195,6 +202,12 @@ define Package/collectd-mod-rrdtool1
         $(call Package/collectd/common_info)
         TITLE:=collectd - rrdtool 1.0.x output plugin
         DEPENDS:=collectd +librrd1
+endef
+
+define Package/collectd-mod-sensors
+        $(call Package/collectd/common_info)
+        TITLE:=collectd - lm_sensors input plugin
+        DEPENDS:=collectd +libsensors @BROKEN
 endef
 
 define Package/collectd-mod-snmp
@@ -271,12 +284,12 @@ CONFIGURE_VARS+= \
 
 # list of permanently disabled plugins
 disabled_plugins := apple_sensors battery cpufreq entropy hddtemp ipmi ipvs libvirt mbmon memcached \
-			multimeter mysql nfs nut perl sensors serial swap tape uuid vserver xmms
+			multimeter mysql nfs perl serial swap tape uuid vserver xmms
 
 # list of selectable plugins
 selectable_plugins := apache apcups ascent cpu csv df disk dns email exec interface iptables irq load \
-			logfile memory netlink network nginx ntpd ping powerdns processes snmp \
-			syslog tail tcpconns teamspeak2 unixsock users vmem wireless
+			logfile memory netlink network nginx ntpd nut ping powerdns processes sensors \
+			snmp syslog tail tcpconns teamspeak2 unixsock users vmem wireless
 
 # makro to enable / disable plugin
 define enable_plugin
@@ -301,7 +314,7 @@ endif
 # exception: mod-rrdtool(1) needs rrdtool
 ifneq ($(CONFIG_PACKAGE_collectd-mod-rrdtool1),)
 	PKG_CONFIGURE_OPTS += --with-rrdtool=$(wildcard $(BUILD_DIR)/rrdtool-1.0.*)
-	TARGET_LDFLAGS := -L$(wildcard $(BUILD_DIR)/rrdtool-1.0.*)/src/.libs $(TARGET_LDFLAGS)
+	TARGET_LDFLAGS := -L$(wildcard $(BUILD_DIR)/rrdtool-1.0.*)/src/.libs -lz $(TARGET_LDFLAGS)
 endif
 
 
@@ -415,6 +428,11 @@ define Package/collectd-mod-ntpd/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/ntpd.so $(1)/usr/lib/collectd/
 endef
 
+define Package/collectd-mod-nut/install
+	$(INSTALL_DIR) $(1)/usr/lib/collectd
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/nut.so $(1)/usr/lib/collectd/
+endef
+
 define Package/collectd-mod-ping/install
 	$(INSTALL_DIR) $(1)/usr/lib/collectd
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/ping.so $(1)/usr/lib/collectd/
@@ -433,6 +451,11 @@ endef
 define Package/collectd-mod-rrdtool1/install
 	$(INSTALL_DIR) $(1)/usr/lib/collectd
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/rrdtool.so $(1)/usr/lib/collectd/
+endef
+
+define Package/collectd-mod-sensors/install
+	$(INSTALL_DIR) $(1)/usr/lib/collectd
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/sensors.so $(1)/usr/lib/collectd/
 endef
 
 define Package/collectd-mod-snmp/install
@@ -501,10 +524,12 @@ $(eval $(call BuildPackage,collectd-mod-netlink))
 $(eval $(call BuildPackage,collectd-mod-network))
 $(eval $(call BuildPackage,collectd-mod-nginx))
 $(eval $(call BuildPackage,collectd-mod-ntpd))
+$(eval $(call BuildPackage,collectd-mod-nut))
 $(eval $(call BuildPackage,collectd-mod-ping))
 $(eval $(call BuildPackage,collectd-mod-powerdns))
 $(eval $(call BuildPackage,collectd-mod-processes))
 $(eval $(call BuildPackage,collectd-mod-rrdtool1))
+$(eval $(call BuildPackage,collectd-mod-sensors))
 $(eval $(call BuildPackage,collectd-mod-snmp))
 $(eval $(call BuildPackage,collectd-mod-syslog))
 $(eval $(call BuildPackage,collectd-mod-tail))
