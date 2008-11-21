@@ -29,7 +29,6 @@ CONFIGURE_ARGS+= \
 	--disable-dga \
 	--disable-xdmcp \
 	--disable-xdm-auth-1 \
-	--disable-dri \
 	--disable-config-hal \
 	--disable-xf86misc \
 	--disable-xf86vidmode \
@@ -50,8 +49,6 @@ CONFIGURE_ARGS+= \
 	--disable-xtrap \
 	--disable-dmx \
 	--disable-glx \
-	--enable-xorg \
-	--disable-xephyr \
 	--enable-builtin-fonts \
 	--with-default-font-path=built-ins \
 
@@ -108,15 +105,12 @@ define Package/xserver-common/config
 	source "$(SOURCE)/Config.in"
 endef
 
-# TODO: Move config file to indepedndent packages
+X_CONFIG=generic
 ifeq ($(CONFIG_TARGET_olpc),y)
   X_CONFIG=olpc
-else
+endif
 ifeq ($(CONFIG_TARGET_om_gta02),y)
   X_CONFIG=om_gta02
-else
-  X_CONFIG=generic
-endif
 endif
 
 define Package/xorg/Default
@@ -185,6 +179,18 @@ $(call Package/xserver/Default)
   +X_XINERAMA:xineramaproto
 endef
 
+define Package/xserver-kdrive-xephyr
+$(call Package/xserver/Default)
+  PROVIDES:=xserver
+  TITLE:=Kdrive ephyr xserver
+  DEPENDS+=+X_TSLIB:tslib \
+  +X_DRI:xf86driproto \
+  +X_DRI:libdrm \
+  +X_XCALIBRATE:calibrateproto \
+  +X_COMPOSITE:compositeproto \
+  +X_XINERAMA:xineramaproto
+endef
+
 define Package/xserver-xorg-config
 $(call Package/xorg/Default)
   TITLE:=Xorg server configuration tools
@@ -193,21 +199,21 @@ endef
 
 define Package/xserver-common
 $(call Package/xorg/Default)
-  TITLE:=Files shared by the different webservers
+  TITLE:=meta-package
 endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
-		$(if $(CONFIG_PACKAGE_xserver-xorg),--enable-xorg,--disable-xorg) \
-		$(if $(CONFIG_PACKAGE_xserver-xvesa), \
+		$(if $(CONFIG_PACKAGE_xserver-xorg),--enable-xorg --disable-kdrive,--disable-xorg --enable-kdrive) \
+		$(if $(CONFIG_PACKAGE_xserver-kdrive-xvesa), \
 			--enable-kdrive-vesa, \
 			--disable-kdrive-vesa) \
-		$(if $(CONFIG_PACKAGE_xserver-xfbdev), \
+		$(if $(CONFIG_PACKAGE_xserver-kdrive-xfbdev), \
 			--enable-xfbdev, \
 			--disable-xfbdev) \
-		$(if $(CONFIG_PACKAGE_xserver-xfbdev)$(CONFIG_PACKAGE_xserver-xvesa), \
-			--enable-kdrive, \
-			--disable-kdrive) \
+		$(if $(CONFIG_PACKAGE_xserver-kdrive-xephyr), \
+			--enable-xephyr, \
+			--disable-xephyr) \
 		$(if $(CONFIG_X_TSLIB),--enable-tslib,--disable-tslib) \
 		$(if $(CONFIG_X_COMPOSITE),--enable-composite,--disable-composite) \
 		$(if $(CONFIG_X_XINERAMA),--enable-xinerama,--disable-xinerama) \
