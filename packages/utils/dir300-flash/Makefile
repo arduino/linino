@@ -23,7 +23,6 @@ define Package/dir300-flash
   CATEGORY:=Utilities
   TITLE:=Flashes a custom firmware on the DIR-300 wireless router
   URL:=http://x-alina.freifunk-potsdam.de/
-  DEPENDS:=unzip
 endef
 
 define Download/ap61.ram
