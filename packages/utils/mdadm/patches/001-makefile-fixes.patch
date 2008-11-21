@@ -1,0 +1,24 @@
+Only in mdadm-2.6.7.2: .prepared_52c8003c1cfc25b1e96897208f1a6856
+Only in mdadm-2.6.7.2.orig/: .prepared_b70de0be5a277506820fdcd9a21e9deb
+diff -ur mdadm-2.6.7.2.orig/Makefile mdadm-2.6.7.2/Makefile
+--- mdadm-2.6.7.2.orig/Makefile	2008-11-21 18:21:35.000000000 +0100
++++ mdadm-2.6.7.2/Makefile	2008-11-21 19:13:54.000000000 +0100
+@@ -52,7 +52,7 @@
+ CONFFILE2 = $(SYSCONFDIR)/mdadm/mdadm.conf
+ MAILCMD =/usr/sbin/sendmail -t
+ CONFFILEFLAGS = -DCONFFILE=\"$(CONFFILE)\" -DCONFFILE2=\"$(CONFFILE2)\"
+-CFLAGS = $(CWFLAGS) $(CXFLAGS) -DSendmail=\""$(MAILCMD)"\" $(CONFFILEFLAGS)
++#CFLAGS = $(CWFLAGS) $(CXFLAGS) -DSendmail=\""$(MAILCMD)"\" $(CONFFILEFLAGS)
+ 
+ # If you want a static binary, you might uncomment these
+ # LDFLAGS = -static
+@@ -124,7 +124,7 @@
+ 
+ mdassemble : $(ASSEMBLE_SRCS) mdadm.h
+ 	rm -f $(OBJS)
+-	$(DIET_GCC) $(ASSEMBLE_FLAGS) -o mdassemble $(ASSEMBLE_SRCS)  $(STATICSRC)
++	$(CC) $(ASSEMBLE_FLAGS) -o mdassemble $(ASSEMBLE_SRCS)  $(STATICSRC)
+ 
+ mdassemble.static : $(ASSEMBLE_SRCS) mdadm.h
+ 	rm -f $(OBJS)
+Only in mdadm-2.6.7.2: mdadm
