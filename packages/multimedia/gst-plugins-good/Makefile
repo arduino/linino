@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gst-plugins-good
 PKG_VERSION:=0.10.10
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gst-plugins-good/
@@ -41,7 +41,7 @@ define Package/gst-plugins-good
   CATEGORY:=Multimedia
   TITLE:=gst-plugins-good
   URL:=http://gstreamer.freedesktop.org/
-  DEPENDS:=+gstreamer +liboil +pango +cairo +libpng +taglib +libspeex +libjpeg +zlib
+  DEPENDS:=+gstreamer +liboil +pango +cairo +libpng +taglib +libspeex +libjpeg +zlib +gst-plugins-base
 endef
 
 define Package/gst-plugins-good/description
