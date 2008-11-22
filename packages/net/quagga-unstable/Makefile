@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=quagga-unstable
 PKG_VERSION:=0.99.11
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=903e40c744730ad4d62bee872eeb813b
 
 PKG_SOURCE_URL:=http://www.quagga.net/download/ \
