@@ -25,7 +25,7 @@ define Package/xeyes
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:=@DISPLAY_SUPPORT
+  DEPENDS:=+libX11 +libXt +libXext +libXmu
   TITLE:=xeyes
   URL:=http://xorg.freedesktop.org/
 endef
