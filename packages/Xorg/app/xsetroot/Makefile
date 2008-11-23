@@ -25,7 +25,7 @@ define Package/xsetroot
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:=+xbitmaps @DISPLAY_SUPPORT
+  DEPENDS:=+xbitmaps +libXmuu +libX11
   TITLE:=xsetroot
   URL:=http://xorg.freedesktop.org/
 endef
