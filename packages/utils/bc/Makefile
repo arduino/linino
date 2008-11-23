@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bc
-PKG_VERSION:=1.06
+PKG_VERSION:=1.06.94
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=@GNU/
-PKG_MD5SUM:=d44b5dddebd8a7a7309aea6c36fda117
+PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
+PKG_SOURCE_URL:=ftp://ftp.debian.org/debian/pool/main/b/bc
+PKG_MD5SUM:=ea7704fc02b359ce92fa4360c802fb23
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/bc/Default
   SECTION:=utils
   CATEGORY:=Utilities
-  URL:=http://www.gnu.org/software/bc/
+  URL:=http://packages.debian.org/sid/bc
 endef
 
 define Package/bc
