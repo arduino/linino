@@ -1,43 +1,56 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org 
+# blogic@openwrt.org
+
 include $(TOPDIR)/rules.mk
 
 PKG_BASE_NAME:=libXmu
 PKG_NAME:=libXmu
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_VERSION:=1.0.4
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
+PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_BUILD_DEPENDS:=libXt libXext xextproto
 
 include $(INCLUDE_DIR)/package.mk
+
+PKG_INSTALL:=1
 
 define Package/libXmu
   SECTION:=xorg-lib
   CATEGORY:=Xorg
   SUBMENU:=lib
-  DEPENDS:= +libXt +libXext +xextproto @DISPLAY_SUPPORT
+  DEPENDS:=+libXt +libXext
   TITLE:=libXmu
   URL:=http://xorg.freedesktop.org/
 endef
 
-CONFIGURE_ARGS += --enable-malloc0returnsnull --without-xcb
-
-define Build/Compile
-	$(call $(PKG_NAME)/Compile)
-	make -C $(PKG_BUILD_DIR)
-	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
-	find $(PKG_INSTALL_DIR) -name *.la | xargs rm -rf
+define Package/libXmuu
+  SECTION:=xorg-lib
+  CATEGORY:=Xorg
+  SUBMENU:=lib
+  DEPENDS:=+libX11
+  TITLE:=libXmuu
+  URL:=http://xorg.freedesktop.org/
 endef
 
 define Package/libXmu/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libXmu.so* \
+		$(1)/usr/lib/
+endef
+
+define Package/libXmuu/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libXmuu.so* \
+		$(1)/usr/lib/
 endef
 
 define Build/InstallDev
@@ -45,3 +58,4 @@ define Build/InstallDev
 endef
 
 $(eval $(call BuildPackage,libXmu))
+$(eval $(call BuildPackage,libXmuu))
