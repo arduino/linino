@@ -146,6 +146,7 @@ $(call Package/xorg/Default)
   +libfontenc \
   +pixman \
   +libopenssl \
+  +libpciaccess \
   @DISPLAY_SUPPORT
 endef
 
