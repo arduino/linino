@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
 PKG_VERSION:=5.2.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
@@ -171,6 +171,12 @@ define Package/php5-mod-apc
   TITLE:=APC Extension
 endef
 
+define Package/php5-mod-exif
+  $(call Package/php5/Default)
+  DEPENDS:=php5
+  TITLE:=EXIF Extension
+endef
+
 PKG_CONFIGURE_LIBS:= -lcrypto -lssl
 PKG_CONFIGURE_OPTS:= \
 	--enable-shared \
@@ -294,6 +300,11 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-apc),)
   PKG_CONFIGURE_LIBS+= -lrt
 else
   PKG_CONFIGURE_OPTS+= --disable-apc
+endif
+ifneq ($(CONFIG_PACKAGE_php5-mod-exif),)
+  PKG_CONFIGURE_OPTS+= --enable-exif
+else
+  PKG_CONFIGURE_OPTS+= --disable-exif
 endif
 
 define Build/Configure
@@ -421,3 +432,4 @@ $(eval $(call BuildPlugin,php5-mod-pdo,pdo))
 $(eval $(call BuildPlugin,php5-mod-pdo-sqlite,pdo_sqlite))
 $(eval $(call BuildPlugin,php5-mod-xml,xml))
 $(eval $(call BuildPlugin,php5-mod-apc))
+$(eval $(call BuildPlugin,php5-mod-exif))
