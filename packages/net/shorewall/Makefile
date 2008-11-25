@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=shorewall
 PKG_VERSION:=3.4.8
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE_URL:=http://www1.shorewall.net/pub/$(PKG_NAME)/3.4/$(PKG_NAME)-$(PKG_VERSION)/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/shorewall
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+iptables +iptables-mod-extra
+  DEPENDS:=+iptables +iptables-mod-extra +ip
   TITLE:=Shorewall firewall
   URL:=http://www.shorewall.net/
   SUBMENU:=firewall
