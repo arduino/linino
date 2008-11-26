@@ -171,7 +171,7 @@ define Build/Configure
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		lt_sys_lib_dlsearch_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
 		lt_sys_lib_search_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
-		shrext_cmds=".so"
+		shrext_cmds=".so" \
 		./configure \
 			$(CONFIGURE_ARGS) \
 	);
