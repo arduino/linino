@@ -25,7 +25,7 @@ define Package/imlib2
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=Image library
-  DEPENDS:=+libX11 +giflib +libtiff +libjpeg +gtk1 +libnotimpl +libfreetype
+  DEPENDS:=+libX11 +giflib +libtiff +libjpeg +gtk1 +libnotimpl +libfreetype +libXext
 endef
 
 CONFIGURE_ARGS+=--disable-gtktest LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
