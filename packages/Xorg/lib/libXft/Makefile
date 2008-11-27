@@ -23,7 +23,7 @@ define Package/libXft
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+fontconfig +libSM @DISPLAY_SUPPORT
+  DEPENDS:=+fontconfig +libfreetype +libXrender
   TITLE:=libXft
   URL:=http://xorg.freedesktop.org/
 endef
