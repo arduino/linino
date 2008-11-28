@@ -1,10 +1,11 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org 
+# blogic@openwrt.org
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libmatchbox
@@ -20,22 +21,45 @@ EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib/
 
 include $(INCLUDE_DIR)/package.mk
 
+PKG_INSTALL:=1
+
 define Package/libmatchbox
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+libX11 +libXft +libpng +libjpeg +libXau +libXdmcp
+  DEPENDS:=+libX11 +libXft +libpng +libjpeg +libXext +pango
   TITLE:=libmatchbox
   URL:=http://matchbox-project.org
 endef
 
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--enable-pango \
+		--enable-jpeg \
+		--enable-png \
+		--enable-Xft \
+	)
+endef
+
 define Build/InstallDev
-	DESTDIR=$(1) $(MAKE) -C $(PKG_BUILD_DIR)/ $(MAKE_FLAGS) install
+	$(INSTALL_DIR) $(1)/usr/include/libmb
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/libmb/*.h \
+		$(1)/usr/include/libmb/
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libmb.{so*,a,la} \
+		$(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
+		$(1)/usr/lib/pkgconfig/
 endef
 
 define Package/libmatchbox/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/libmb/.libs/libmb.so* $(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/libmb.so* \
+		$(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libmatchbox))
