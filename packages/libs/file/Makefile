@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=file
-PKG_VERSION:=4.19
+PKG_VERSION:=4.26
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.astron.com/pub/file/
-PKG_MD5SUM:=a61ef3aa8339d5987148089afde25f60
+PKG_MD5SUM:=74cd5466416136da30a4e69f74dbc7a0
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -79,8 +79,8 @@ define Package/file/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/share/file
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/file $(1)/usr/bin
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/magic/Magdir/linux $(1)/usr/share/file/magic
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/magic/magic.mime $(1)/usr/share/file/magic.mime
+	(cd $(PKG_BUILD_DIR)/magic/Magdir; for file in `ls`; do cat $$$${file} >> magic.mime; done)
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/magic/Magdir/magic.mime $(1)/usr/share/file/magic
 endef
 
 $(eval $(call BuildPackage,libmagic))
