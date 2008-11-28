@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sqlite
-PKG_VERSION:=3.4.2
+PKG_VERSION:=3.5.9
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sqlite.org/
-PKG_MD5SUM:=2feec9b429f9298c9f288420c8b449f8
+PKG_MD5SUM:=b58412904b42fe49e5a281e99da0fd72
 
 PKG_BUILD_DEPENDS:=libncurses libreadline
 
@@ -34,9 +34,9 @@ define Package/libsqlite3
 endef
 
 define Package/libsqlite3/description
-=
 	SQLite is a small C library that implements a self-contained, embeddable, 
-	zero-configuration SQL database engine.	This package contains the SQLite (v3.x) shared library, used by other programs.
+	zero-configuration SQL database engine.	This package contains the SQLite
+	(v3.x) shared library, used by other programs.
 endef
 
 define Package/sqlite3-cli
@@ -48,7 +48,6 @@ define Package/sqlite3-cli
 endef
 
 define Package/sqlite3-cli/description
-=
 	SQLite is a small C library that implements a self-contained, embeddable, 
 	zero-configuration SQL database engine.	
 	This package contains a terminal-based front-end to the SQLite (v3.x) library 
