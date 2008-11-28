@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libmpcdec
-PKG_VERSION:=1.2.4
+PKG_VERSION:=1.2.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://files.musepack.net/source/
-PKG_MD5SUM:=9ce052b671df5a76e0e7f2b2eb037798
+PKG_MD5SUM:=7f7a060e83b4278acf4b77d7a7b9d2c0
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
