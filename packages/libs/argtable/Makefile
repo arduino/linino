@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=argtable
-PKG_VERSION:=2.7
+PKG_VERSION:=2.9
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)2-7.tar.gz
-PKG_SOURCE_URL:=@SF/argtable
-PKG_MD5SUM:=a84130293aab3bc09631cbee717ede93
+PKG_SOURCE:=$(PKG_NAME)2-9.tar.gz
+PKG_SOURCE_URL:=@SF/argtable/
+PKG_MD5SUM:=a7fcddef768db0ae66534ec4c4a51dee
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)2-7
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)2-9
 
 include $(INCLUDE_DIR)/package.mk
 
