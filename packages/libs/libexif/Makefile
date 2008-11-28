@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libexif
-PKG_VERSION:=0.6.13
+PKG_VERSION:=0.6.16
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/libexif
-PKG_MD5SUM:=1b1e2b495c5aa20c08725f30545a110b
+PKG_MD5SUM:=deee153b1ded5a944ea05d041d959eca
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,6 +23,12 @@ define Package/libexif
   CATEGORY:=Libraries
   TITLE:=library for jpeg files with exif tags
   URL:=http://libexif.sourceforge.net/
+endef
+
+define Package/libexif/description
+  libexif is a library for parsing, editing, and saving EXIF data. It is
+  intended to replace lots of redundant implementations in command-line
+  utilities and programs with GUIs.
 endef
 
 define Build/Configure
