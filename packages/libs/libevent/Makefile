@@ -9,13 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libevent
-PKG_VERSION:=1.1
+PKG_VERSION:=1.4.4
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-stable
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-stable.tar.gz
 PKG_SOURCE_URL:=http://www.monkey.org/~provos/
-PKG_MD5SUM:=a5bd281aeb41bdaa48fbbf0495423d20
+PKG_MD5SUM:=5d7591aa6301f06315b52bade472bf2f
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -51,15 +51,15 @@ MAKE_FLAGS += \
 
 define Build/InstallDev
 	mkdir -p $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/event.h $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
 	mkdir -p $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevent.{a,so} $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevent-$(PKG_VERSION).so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevent-1.4.so* $(1)/usr/lib/
 endef
 
 define Package/libevent/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevent-$(PKG_VERSION).so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevent-1.4.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libevent))
