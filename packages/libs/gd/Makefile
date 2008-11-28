@@ -9,12 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gd
-PKG_VERSION:=2.0.33
-PKG_RELEASE:=2
+PKG_VERSION:=2.0.35
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.boutell.com/gd/http
-PKG_MD5SUM:=be0a6d326cd8567e736fbc75df0a5c45
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://www.libgd.org/releases
+PKG_MD5SUM:=6c6c3dbb7bf079e0bb5fbbfd3bb8a71c
+
+PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -24,6 +26,11 @@ define Package/libgd
   DEPENDS:=+libjpeg +libpng
   TITLE:=The GD graphics library
   URL:=http://www.boutell.com/gd/
+endef
+
+define Package/libgd/description
+  GD is an open source code library for the dynamic creation of images by
+  programmers. GD creates PNG, JPEG and GIF images, among other formats.
 endef
 
 CONFIGURE_ARGS += \
