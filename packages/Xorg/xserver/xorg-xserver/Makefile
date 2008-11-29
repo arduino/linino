@@ -244,18 +244,18 @@ define Package/xserver-common/install
 		$(1)/usr/lib/xorg/
 endef
 
-define Package/xserver-xfdev/install
+define Package/xserver-kdrive-xfbdev/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) \
-		$(1)/usr/bin/Xfbdev \
-		$(PKG_INSTALL_DIR)/usr/bin/Xfbdev
+		$(PKG_INSTALL_DIR)/usr/bin/Xfbdev \
+		$(1)/usr/bin/Xfbdev
 endef
 
-define Package/xserver-xvesa/install
+define Package/xserver-kdrive-xvesa/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) \
-		$(1)/usr/bin/Xvesa \
-		$(PKG_INSTALL_DIR)/usr/bin/Xvesa
+		$(PKG_INSTALL_DIR)/usr/bin/Xvesa \
+		$(1)/usr/bin/Xvesa
 endef
 
 define Package/xserver-xorg/install
