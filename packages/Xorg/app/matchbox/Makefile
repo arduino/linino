@@ -17,13 +17,16 @@ PKG_SOURCE_URL:=http://matchbox-project.org/sources/matchbox-window-manager/$(PK
 
 PKG_FIXUP = libtool
 
+TARGET_LDFLAGS+= \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/matchbox
   TITLE:=matchbox window manager
   SECTION:=xorg-wm
   CATEGORY:=Xorg
-  DEPENDS:=+libX11 +zlib +libfreetype +fontconfig +libmatchbox @DISPLAY_SUPPORT
+  DEPENDS:=+libX11 +zlib +libfreetype +fontconfig +libmatchbox
 endef
 
 define Build/Compile
