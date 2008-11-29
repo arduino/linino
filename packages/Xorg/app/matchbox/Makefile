@@ -18,7 +18,9 @@ PKG_SOURCE_URL:=http://matchbox-project.org/sources/matchbox-window-manager/$(PK
 PKG_FIXUP = libtool
 
 TARGET_LDFLAGS+= \
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib/libiconv/lib \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib/libintl/lib
 
 include $(INCLUDE_DIR)/package.mk
 
