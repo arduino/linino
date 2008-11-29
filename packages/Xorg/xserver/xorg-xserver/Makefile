@@ -139,6 +139,7 @@ $(call Package/xorg/Default)
   +kbproto \
   +videoproto \
   +resourceproto \
+  +xf86dgaproto \
   +xtrans \
   +libxkbfile \
   +libXfont \
