@@ -41,5 +41,5 @@ start() {
 	#config_foreach start_with_x start
 	X $ARGS &
 	#eval $START # not used yet, because the buildroot lacks of the functionality of editing uci-values while building a package
-	DISPLAY=":0" WM & # workaround
+	sleep 1 && DISPLAY=":0" WM & # workaround
 }
