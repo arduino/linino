@@ -230,7 +230,7 @@ endef
 
 define Package/xserver-common/install
 	$(INSTALL_DIR) $(1)/etc/{init.d,config}
-	$(INSTALL_DATA) \
+	$(INSTALL_BIN) \
 		./files/x.init \
 		$(1)/etc/init.d/x11
 	$(if $(X_CONFIG), \
