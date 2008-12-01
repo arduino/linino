@@ -25,7 +25,7 @@ define Package/xset
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:=@DISPLAY_SUPPORT
+  DEPENDS:=
   TITLE:=xset
   URL:=http://xorg.freedesktop.org/
 endef

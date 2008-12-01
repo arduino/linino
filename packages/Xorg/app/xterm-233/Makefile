@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -22,7 +22,7 @@ define Package/xterm
   CATEGORY:=Xorg
   SUBMENU:=terminals
   TITLE:=xterm
-  DEPENDS:=+libX11 +libncurses +libXaw @DISPLAY_SUPPORT
+  DEPENDS:=+libX11 +libncurses +libXaw
 endef
 
 define Build/Configure

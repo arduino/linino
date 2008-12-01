@@ -16,11 +16,7 @@ PKG_VERSION:=1.0.2
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/app
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-
-_DEPEND:=
-ifneq (iceauth,xinit)
-_DEPEND+=xorg-server-essentials
-endif
+PKG_BUILD_DEPENDS:=xproto
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -32,7 +28,7 @@ define Package/iceauth
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:= @DISPLAY_SUPPORT
+  DEPENDS:=+libICE
   TITLE:=iceauth
   URL:=http://xorg.freedesktop.org/
 endef
@@ -45,12 +41,6 @@ define Package/iceauth/install
 	$(INSTALL_DIR) $(1)
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 	rm -rf $(1)/usr/man/
-endef
-
-define Package/xinit/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/xinit $(1)/usr/bin/xinit
-	cd $(1)/usr/bin/; ln -s xinit startx
 endef
 
 $(eval $(call BuildPackage,iceauth))

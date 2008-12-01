@@ -1,10 +1,10 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org 
+# blogic@openwrt.org
 
 include $(TOPDIR)/rules.mk
 
@@ -22,7 +22,7 @@ define Package/xclipboard
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:=@DISPLAY_SUPPORT
+  DEPENDS:=
   TITLE:=xclipboard
   URL:=http://xorg.freedesktop.org/
 endef

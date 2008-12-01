@@ -14,6 +14,10 @@ PKG_VERSION:=1.5.1
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/xserver/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/xserver/xorg-server-$(PKG_VERSION)/
+PKG_BUILD_DEPENDS:=randrproto renderproto fixesproto damageproto xcmiscproto \
+                   xextproto xproto scrnsaverproto bigreqsproto resourceproto \
+                   fontsproto inputproto kbproto videoproto resourceproto \
+                   xf86dgaproto
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -124,22 +128,6 @@ define Package/xserver/Default
 $(call Package/xorg/Default)
   DEPENDS:=+xserver-common \
   +libpthread \
-  +randrproto \
-  +renderproto \
-  +fixesproto \
-  +damageproto \
-  +xcmiscproto \
-  +xextproto \
-  +xproto \
-  +scrnsaverproto \
-  +bigreqsproto \
-  +resourceproto \
-  +fontsproto \
-  +inputproto \
-  +kbproto \
-  +videoproto \
-  +resourceproto \
-  +xf86dgaproto \
   +xtrans \
   +libxkbfile \
   +libXfont \

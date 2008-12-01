@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -28,7 +28,7 @@ endef
 define Package/eterm
 $(call Package/eterm/Default)  
   TITLE:=eterm
-  DEPENDS:=+libX11 +libXcursor +imlib2 +libast +libiconv @DISPLAY_SUPPORT
+  DEPENDS:=+libX11 +libXcursor +imlib2 +libast +libiconv
 endef
 
 define Package/esetroot

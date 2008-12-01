@@ -1,10 +1,11 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org 
+# blogic@openwrt.org
+
 include $(TOPDIR)/rules.mk
 
 PKG_BASE_NAME:=libXxf86vm
@@ -13,7 +14,8 @@ PKG_RELEASE:=2
 PKG_VERSION:=1.0.2
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
+PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_BUILD_DEPENDS:=xproto xextproto xf86vidmodeproto
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -21,7 +23,7 @@ define Package/libXxf86vm
   SECTION:=xorg-lib
   CATEGORY:=Xorg
   SUBMENU:=lib
-  DEPENDS:= +xproto +libX11 +xextproto +libXext +xf86vidmodeproto @DISPLAY_SUPPORT
+  DEPENDS:=+libX11 +libXext
   TITLE:=libXxf86vm
   URL:=http://xorg.freedesktop.org/
 endef

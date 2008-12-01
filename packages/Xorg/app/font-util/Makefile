@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -22,7 +22,7 @@ define Package/font-util
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=misc tool to generate x fonts
-  DEPENDS:=+xserver @DISPLAY_SUPPORT
+  DEPENDS:=+xserver
 endef
 
 define Build/Configure
