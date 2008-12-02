@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pulseaudio
-PKG_VERSION:=0.9.10
+PKG_VERSION:=0.9.13
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://0pointer.de/lennart/projects/pulseaudio/
-PKG_MD5SUM:=9187ac1b302b9ab45f355242f453882e
+PKG_MD5SUM:=279fb92f08393a6a992d55e3ac9a006b
 
 PKG_FIXUP = libtool
 
@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/pulseaudio
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+liboil +libsamplerate +libsndfile +libatomicops +libltdl +dbus +libintl +libiconv @BROKEN
+  DEPENDS:=+speex +libgdbm +liboil +libsamplerate +libsndfile +libatomicops +libltdl +dbus +libintl +libiconv @BROKEN
   TITLE:=Network sound server
   URL:=http://www.pulseaudio.org
 endef
@@ -34,17 +34,23 @@ CONFIGURE_ARGS += \
 	--with-realtime-group=root \
 	--with-access-group=root \
 	--without-x \
-	--enable-static-bins \
-	--enable-ltdl-install \
 	--disable-dbus \
 	--disable-hal \
 	--disable-gconf \
 	--disable-tcpwrap \
+	--disable-nls \
+	--disable-solaris \
+	--disable-glib2 \
+	--disable-jack \
+	--disable-asyncns \
+	--disable-polkit \
+	--disable-samplerate \
+	--disable-lirc \
+	--disable-bluez \
+	--without-caps
 
 CONFIGURE_VARS += \
-	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-	LIBOIL_CFLAGS="-I$(STAGING_DIR)/usr/include/liboil-0.3/" \
-	LIBOIL_LIBS="-L$(STAGING_DIR)/usr/lib/" \
+	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
 
 SUPP_LIBS:=-L$(STAGING_DIR)/usr/lib/libintl/lib -L$(STAGING_DIR)/usr/lib/libiconv/lib
 
