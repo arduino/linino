@@ -53,6 +53,7 @@ define Build/Configure
 		--without-python \
 		--without-php \
 		--enable-shared \
+		--disable-dbus \
 		--disable-pam \
 		--disable-slp \
 		--disable-gnutls \
