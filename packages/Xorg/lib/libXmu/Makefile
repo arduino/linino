@@ -18,8 +18,6 @@ PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 PKG_FIXUP:=libtool
 PKG_BUILD_DEPENDS:=libXt libXext xextproto
 
-PKG_FIXUP = libtool
-
 include $(INCLUDE_DIR)/package.mk
 
 PKG_INSTALL:=1
