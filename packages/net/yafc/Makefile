@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -26,7 +26,7 @@ define Package/yafc
   CATEGORY:=Network
   DEPENDS:=+libncurses +libreadline
   TITLE:=Yafc is yet another ftp client.
-  URL:=http://yacf.sourceforge.net/
+  URL:=http://yafc.sourceforge.net/
 endef
 
 # uses GNU configure
