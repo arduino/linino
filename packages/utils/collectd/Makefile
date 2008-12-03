@@ -20,6 +20,7 @@ PKG_FIXUP=libtool
 PKG_BUILD_DEPENDS:=+libxml2 +libnetsnmp +libcurl +librrd1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/kernel.mk
 
 define Package/collectd/common_info
   SECTION:=utils
@@ -281,6 +282,7 @@ PKG_CONFIGURE_OPTS:= \
 
 CONFIGURE_VARS+= \
 	CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2 $$$$CPPFLAGS" \
+	KERNEL_DIR="$(LINUX_DIR)"
 
 # list of permanently disabled plugins
 disabled_plugins := apple_sensors battery cpufreq entropy hddtemp ipmi ipvs libvirt mbmon memcached \
