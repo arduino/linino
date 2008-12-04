@@ -13,7 +13,7 @@ PKG_VERSION:=0.3.18
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.balabit.com/downloads/libol/0.3
+PKG_SOURCE_URL:=http://www.balabit.com/downloads/files/libol/0.3
 PKG_MD5SUM:=cbadf4b7ea276dfa85acc38a1cc5ff17
 PKG_FIXUP:=libtool
 
@@ -58,14 +58,14 @@ define Build/InstallDev
 		$(1)/usr/include/libol/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libol.{la,so*} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libol.{a,la,so*} \
 		$(1)/usr/lib/
 endef
 
 define Package/libol/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libol.{a,so*} \
 		$(1)/usr/lib/
 endef
