@@ -1,0 +1,20 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=99
+
+ARGS=""
+
+screen() {
+	local cfg="$1"
+	config_get resolution $cfg resolution
+	config_get dpi $cfg dpi
+	[ -n "$resolution" ] && ARGS="$ARGS -screen $resolution"
+	[ -n "$dpi" ] && ARGS="$ARGS -dpi $dpi"
+}
+
+start() {
+	config_load x11
+	config_foreach screen screen
+	TSLIB_TSDEVICE="/dev/event1" Xglamo $ARGS &
+	DISPLAY=":0" WM & # workaround
+}
