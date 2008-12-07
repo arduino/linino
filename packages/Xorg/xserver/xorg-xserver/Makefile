@@ -48,6 +48,7 @@ CONFIGURE_ARGS+= \
 	--disable-install-setuid \
 	--disable-kbd_mode \
 	--disable-xvfb \
+	--disable-xv \
 	--disable-xevie \
 	--disable-xprint \
 	--disable-xtrap \
@@ -149,7 +150,8 @@ define Package/xserver-kdrive-xvesa
 $(call Package/xserver/Default)
   PROVIDES:=xserver
   TITLE:=Kdrive vesa xserver
-  DEPENDS+=+X_TSLIB:tslib \
+  DEPENDS+=@TARGET_x86 \
+  +X_TSLIB:tslib \
   +X_DRI:xf86driproto \
   +X_DRI:libdrm \
   +X_XCALIBRATE:calibrateproto \
@@ -237,14 +239,21 @@ define Package/xserver-kdrive-xfbdev/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/Xfbdev \
-		$(1)/usr/bin/Xfbdev
+		$(1)/usr/bin/
 endef
 
 define Package/xserver-kdrive-xvesa/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/Xvesa \
-		$(1)/usr/bin/Xvesa
+		$(1)/usr/bin/
+endef
+
+define Package/xserver-kdrive-xephyr/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/Xephyr \
+		$(1)/usr/bin/
 endef
 
 define Package/xserver-xorg/install
@@ -297,4 +306,5 @@ $(eval $(call BuildPackage,xserver-common))
 $(eval $(call BuildPackage,xserver-xorg))
 $(eval $(call BuildPackage,xserver-kdrive-xvesa))
 $(eval $(call BuildPackage,xserver-kdrive-xfbdev))
+$(eval $(call BuildPackage,xserver-kdrive-xephyr))
 $(eval $(call BuildPackage,xserver-xorg-config))
