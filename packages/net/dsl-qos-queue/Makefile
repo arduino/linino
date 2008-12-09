@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/dsl-qos-queue
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+iptables +kmod-ipt-queue @!LINUX_2_6_25 @!LINUX_2_6_26
+  DEPENDS:=+iptables +kmod-ipt-queue @!LINUX_2_6_25 @!LINUX_2_6_26 @!LINUX_2_6_27
   TITLE:=ADSL/ATM Bandwith management
 endef
 
@@ -32,7 +32,7 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/Default, \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libipq -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
 		all \
 	)
