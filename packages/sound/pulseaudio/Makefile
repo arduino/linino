@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/pulseaudio
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+speex +libgdbm +liboil +libsamplerate +libsndfile +libatomicops +libltdl +dbus +libintl +libiconv @BROKEN
+  DEPENDS:=+libspeex +libgdbm +liboil +libsamplerate +libsndfile +libatomicops +libltdl +dbus +libintl +libiconv @BROKEN
   TITLE:=Network sound server
   URL:=http://www.pulseaudio.org
 endef
