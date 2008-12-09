@@ -28,6 +28,7 @@ define Package/matchbox
   TITLE:=matchbox window manager
   SECTION:=xorg-wm
   CATEGORY:=Xorg
+  SUBMENU:=window manager
   DEPENDS:=+libX11 +zlib +libfreetype +fontconfig +libmatchbox
 endef
 

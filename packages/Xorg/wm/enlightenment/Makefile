@@ -27,6 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/enlightenment
   SECTION:=xorg-wm
   CATEGORY:=Xorg
+  SUBMENU:=window manager
   TITLE:=Enlightenment e17 window manager
   URL:=http://enlightenment.org
   DEPENDS:=+libintl +libpthread +eet +evas +ecore +edje +efreet +edbus +dbus-utils +dejavu-fonts-ttf
@@ -74,7 +75,7 @@ define Package/enlightenment/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/* $(1)/usr/share/
 	echo "#!/bin/sh" > $(1)/usr/bin/WM
-	echo -n "test -d ~/.e || /usr/bin/enlightenment_start -profile " >> $(1)/usr/bin/WM
+	echo -n "/usr/bin/enlightenment_start -profile " >> $(1)/usr/bin/WM
 	$(if $(CONFIG_E17_ILLUME),echo "illume" >> $(1)/usr/bin/WM)
 	$(if $(CONFIG_E17_MINIMALIST),echo "minimalist" >> $(1)/usr/bin/WM)
 	$(if $(CONFIG_E17_NETBOOK),echo "netbook" >> $(1)/usr/bin/WM)

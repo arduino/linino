@@ -27,6 +27,7 @@ CONFIGURE_ARGS+=--disable-xmb
 define Package/fluxbox/Default
   SECTION:=xorg-wm
   CATEGORY:=Xorg
+  SUBMENU:=window manager
 endef
 
 define Package/fluxbox
