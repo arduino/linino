@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=@SF/ocf-linux
 PKG_MD5SUM:=d20377afefa707fe528b161c2174e874
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
-PKG_BUILD_DEPENDS:=libopenssl
+PKG_BUILD_DEPENDS:=libopenssl ocf-crypto-headers
 
 include $(INCLUDE_DIR)/package.mk
 
