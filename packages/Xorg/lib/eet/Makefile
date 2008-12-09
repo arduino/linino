@@ -41,6 +41,7 @@ define Build/Configure
 	(cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
 	$(call Build/Configure/Default, \
 		--disable-openssl \
+		--disable-gnutls \
 	)
 endef
 

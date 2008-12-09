@@ -67,6 +67,7 @@ define Build/Configure
                 --disable-poll \
                 --disable-curl \
                 --disable-ecore-desktop \
+                --disable-gnutls \
 	)
 endef
 
