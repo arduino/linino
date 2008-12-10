@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iperf
-PKG_VERSION:=2.0.2
-PKG_RELEASE:=2
+PKG_VERSION:=2.0.4
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
-PKG_MD5SUM:=bb658aba58a5af0356f5b1342dfe8f53
+PKG_SOURCE_URL:=@SF/$(PKG_NAME)
+PKG_MD5SUM:=8c5bc14cc2ea55f18f22afe3c23e3dcb
 
 include $(INCLUDE_DIR)/package.mk
 
