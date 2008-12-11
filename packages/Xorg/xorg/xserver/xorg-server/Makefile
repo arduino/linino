@@ -48,7 +48,6 @@ CONFIGURE_ARGS+= \
 	--disable-install-setuid \
 	--disable-kbd_mode \
 	--disable-xvfb \
-	--disable-xv \
 	--disable-xevie \
 	--disable-xprint \
 	--disable-xtrap \
@@ -133,6 +132,7 @@ $(call Package/xorg/Default)
   +libxkbfile \
   +libXfont \
   +libXau \
+  +libXv \
   +libfontenc \
   +pixman \
   +libopenssl \
