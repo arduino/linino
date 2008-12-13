@@ -1,20 +1,20 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: $
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=radsecproxy
-PKG_VERSION:=1.1
+PKG_VERSION:=1.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://software.uninett.no/radsecproxy/
-PKG_MD5SUM:=f7d0eaf1e9d963557affc90e61c0d1ae
+PKG_MD5SUM:=e209054731b3316301d0920c15a0a5b2
 
 include $(INCLUDE_DIR)/package.mk
 
