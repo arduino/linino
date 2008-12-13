@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/radsecproxy
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +libpthread +zlib
+  DEPENDS:=+libopenssl +libpthread
   TITLE:=radsecproxy
   URL:=http://software.uninett.no/radsecproxy
 endef
@@ -32,8 +32,6 @@ endef
 
 CONFIGURE_ARGS+= \
 	--with-ssl="$(STAGING_DIR)/usr"
-
-#LIBS="-lz" \
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
