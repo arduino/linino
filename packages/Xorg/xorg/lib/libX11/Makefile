@@ -18,6 +18,8 @@ PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 PKG_BUILD_DEPENDS:=bigreqsproto xproto xextproto xcmiscproto xf86bigfontproto \
                    kbproto inputproto
 
+PKG_FIXUP:=libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libX11
@@ -36,12 +38,11 @@ define Build/Compile
 	$(call $(PKG_NAME)/Compile)
 	make -C $(PKG_BUILD_DIR)
 	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
-	find $(PKG_INSTALL_DIR) -name *.la | xargs rm -rf
 endef
 
 define Package/libX11/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{so,a}* $(1)/usr/lib/
 endef
 
 define Build/InstallDev
