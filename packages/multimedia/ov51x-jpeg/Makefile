@@ -10,13 +10,13 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=ov51x-jpeg
-PKG_VERSION:=1.5.7
+PKG_VERSION:=1.5.9
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.rastageeks.org/downloads/ov51x-jpeg/ \
 	http://www.rastageeks.org/downloads/ov51x-jpeg/old-releases/
-PKG_MD5SUM:=7de1f426a48bdb55218913e2d713f813
+PKG_MD5SUM:=95041de8e908f1548df3d4e1f6ed2a94
 
 include $(INCLUDE_DIR)/package.mk
 
