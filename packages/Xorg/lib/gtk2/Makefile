@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gtk2
 PKG_VERSION:=2.14.4
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE:=gtk+-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/gtk+/2.14
@@ -27,8 +27,8 @@ TARGET_CFLAGS+=\
 
 EXTRA_LDFLAGS+=\
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-    -L$(STAGING_DIR)/usr/lib/libintl/lib/ \
-    -L$(STAGING_DIR)/usr/lib/libiconv/lib/ \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib/ \
 	-L$(STAGING_DIR)/usr/lib/
 
 STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_gtk2 CONFIG_PACKAGE_gtk-cups2)
@@ -38,7 +38,9 @@ define Package/gtk2
   CATEGORY:=Xorg
   SUBMENU:=framework
   TITLE:=GTK+-2.0
-  DEPENDS:=+cairo +pango +libpng +libjpeg +atk +libtiff +libX11 +libXext +libXrender
+  DEPENDS:=+cairo +pango +libpng +libjpeg +atk +libtiff +libX11 +libXext \
+  +libXrender +libXfixes +libXrandr +libXcursor +libXdamage +libXcomposite \
+  +libXi
 endef
 
 define Package/gtk2-cups
@@ -51,11 +53,14 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
+		--enable-shm \
+		--disable-xkb \
 		--disable-glibtest \
 		--disable-gdiplus \
 		--disable-xinerama \
 		--without-libjasper \
-		$(if $(CONFIG_PACKAGE_gtk2-cups),--enable-cups=auto,--disable-cups), \
+		--with-xinput \
+		$(if $(CONFIG_PACKAGE_gtk2-cups),--enable-cups,--disable-cups), \
 		gio_can_sniff=no \
 	)
 endef
