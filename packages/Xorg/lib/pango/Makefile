@@ -32,7 +32,7 @@ define Package/pango
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=Text layout and rendering library
-  DEPENDS:=+cairo +glib2
+  DEPENDS:=+cairo +glib2 +fontconfig +libXft
 endef
 
 define Package/pango/description
