@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/peerguardian
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:= +kmod-ipt-queue +libncurses +libpthread +uclibcxx
+  DEPENDS:= +kmod-ipt-queue +libncurses +libpthread +uclibcxx +libnetfilter-queue +libnfnetlink
   TITLE:=PeerGuardian for Linux
   URL:=http://phoenixlabs.org/
 endef
@@ -41,7 +41,7 @@ define Package/peerguardian/conffiles
 endef
 
 CONFIGURE_VARS+= \
-	CXXFLAGS="$$$$CXXFLAGS $$$$CPPFLAGS -fno-builtin -fno-rtti" \
+	CXXFLAGS="$$$$CXXFLAGS $$$$CPPFLAGS -fno-builtin -fno-rtti -I$(STAGING_DIR)/usr/include/libnetfilter_queue/" \
 	LIBS="-nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm -lgcc" \
 
 define Build/Compile
