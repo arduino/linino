@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libtheora
-PKG_VERSION:=1.0beta3
-PKG_RELEASE:=1
+PKG_VERSION:=1.0
+PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.xiph.org/releases/theora/
+PKG_MD5SUM:=c963937053f45a7878954bed37ceb182
 PKG_FIXUP:=libtool
-PKG_MD5SUM:=04b3e1055da49daba6afce93f3214b1f
 
 include $(INCLUDE_DIR)/package.mk
 
