@@ -8,13 +8,16 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_BASE_NAME:=libXxf86misc
 PKG_NAME:=libXxf86misc
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_VERSION:=1.0.1
+
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=7cee0df63903cef7f7a3fb68cdd99eef
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 PKG_BUILD_DEPENDS:=xproto xextproto xf86miscproto
 
 include $(INCLUDE_DIR)/package.mk
@@ -28,22 +31,27 @@ define Package/libXxf86misc
   URL:=http://xorg.freedesktop.org/
 endef
 
-CONFIGURE_ARGS += --enable-malloc0returnsnull --without-xcb
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--enable-malloc0returnsnull \
+	)
+endef
 
-define Build/Compile
-	$(call $(PKG_NAME)/Compile)
-	make -C $(PKG_BUILD_DIR)
-	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
-	find $(PKG_INSTALL_DIR) -name *.la | xargs rm -rf
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
+		$(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
+		$(1)/usr/lib/pkgconfig/
 endef
 
 define Package/libXxf86misc/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
-endef
-
-define Build/InstallDev
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
+		$(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libXxf86misc))

@@ -8,13 +8,15 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_BASE_NAME:=xtrans
 PKG_NAME:=xtrans
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_VERSION:=1.2.1
+
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=96e142331edd498a9364887b2548f1bb
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,27 +24,24 @@ define Package/xtrans
   SECTION:=xorg-lib
   CATEGORY:=Xorg
   SUBMENU:=lib
-  DEPENDS:=
   TITLE:=xtrans
   URL:=http://xorg.freedesktop.org/
 endef
 
-CONFIGURE_ARGS += --enable-malloc0returnsnull --without-xcb
-
-define Build/Compile
-	$(call $(PKG_NAME)/Compile)
-	make -C $(PKG_BUILD_DIR)
-	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
-	find $(PKG_INSTALL_DIR) -name *.la | xargs rm -rf
-endef
-
-define Package/xtrans/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
-endef
-
 define Build/InstallDev
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+	$(INSTALL_DIR) $(1)/usr/{lib/pkgconfig,include/X11/Xtrans}
+
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
+		$(1)/usr/lib/pkgconfig/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/X11/Xtrans/* \
+		$(1)/usr/include/X11/Xtrans/
+
+	$(INSTALL_DIR) $(1)/usr/share/aclocal
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/share/aclocal/* \
+		$(1)/usr/share/aclocal/
 endef
 
 $(eval $(call BuildPackage,xtrans))

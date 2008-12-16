@@ -8,14 +8,17 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_BASE_NAME:=libXpm
 PKG_NAME:=libXpm
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_VERSION:=3.5.7
+
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_BUID_DEPENDS:=xproto
+PKG_MD5SUM:=cd15ee542d9f515538b4462a6f79d977
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
+PKG_BUID_DEPENDS:=xproto xextproto
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,27 +26,29 @@ define Package/libXpm
   SECTION:=xorg-lib
   CATEGORY:=Xorg
   SUBMENU:=lib
-  DEPENDS:=+libX11
+  DEPENDS:=+libX11 +libXt +libXext
   TITLE:=libXpm
   URL:=http://xorg.freedesktop.org/
 endef
 
-CONFIGURE_ARGS += --enable-malloc0returnsnull --without-xcb LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
-
-define Build/Compile
-	$(call $(PKG_NAME)/Compile)
-	make -C $(PKG_BUILD_DIR)
-	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
-	find $(PKG_INSTALL_DIR) -name *.la | xargs rm -rf
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/{lib/pkgconfig,include/X11}
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
+		$(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
+		$(1)/usr/lib/pkgconfig/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/X11/* \
+		$(1)/usr/include/X11/
 endef
 
 define Package/libXpm/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
-endef
-
-define Build/InstallDev
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
+		$(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libXpm))

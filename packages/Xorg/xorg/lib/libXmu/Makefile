@@ -8,19 +8,20 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_BASE_NAME:=libXmu
 PKG_NAME:=libXmu
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 PKG_VERSION:=1.0.4
+
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=fb372a5f3ab42b5ba16d7af4d833a0cb
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 PKG_BUILD_DEPENDS:=libXt libXext xextproto
 
 include $(INCLUDE_DIR)/package.mk
 
-PKG_INSTALL:=1
 
 define Package/libXmu
   SECTION:=xorg-lib
@@ -40,6 +41,19 @@ define Package/libXmuu
   URL:=http://xorg.freedesktop.org/
 endef
 
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/{lib/pkgconfig,include/X11/Xmu}
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
+		$(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
+		$(1)/usr/lib/pkgconfig/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/X11/Xmu/* \
+		$(1)/usr/include/X11/Xmu/
+endef
+
 define Package/libXmu/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_DATA) \
@@ -52,10 +66,6 @@ define Package/libXmuu/install
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/libXmuu.so* \
 		$(1)/usr/lib/
-endef
-
-define Build/InstallDev
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 $(eval $(call BuildPackage,libXmu))

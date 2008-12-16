@@ -7,19 +7,19 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_BASE_NAME:=libXi
 PKG_NAME:=libXi
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_VERSION:=1.1.3
+
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=7c510abb0cad8dc20493fb27ff7859d8
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 PKG_BUILD_DEPENDS:=xproto xextproto inputproto
 
 include $(INCLUDE_DIR)/package.mk
-
-PKG_INSTALL:=1
 
 define Package/libXi
   SECTION:=xorg-libraries
