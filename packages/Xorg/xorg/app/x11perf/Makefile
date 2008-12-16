@@ -9,11 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=x11perf
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_VERSION:=1.5
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/app
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=31283bfc3c78718ac1bd71e510d4e774
 
 include $(INCLUDE_DIR)/package.mk
 

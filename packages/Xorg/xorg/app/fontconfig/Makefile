@@ -9,11 +9,12 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fontconfig
 PKG_VERSION:=2.3.95
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://fontconfig.org/release/
-PKG_FIXUP=libtool
+PKG_MD5SUM:=6860be35882f6d34636d52345efd5944
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
