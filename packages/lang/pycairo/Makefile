@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pycairo
-PKG_VERSION:=1.6.4
-PKG_RELEASE:=2
+PKG_VERSION:=1.8.0
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.cairographics.org/releases/
-PKG_MD5SUM:=2c3aa21e6e610321498f9f81f7b625df
+PKG_MD5SUM:=847f5377c32228a656819f5bd18eb6b4
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
