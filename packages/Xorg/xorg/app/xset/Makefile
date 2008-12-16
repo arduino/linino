@@ -33,7 +33,7 @@ endef
 
 define Package/xset/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_DATA) \
+	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/* \
 		$(1)/usr/bin
 endef
