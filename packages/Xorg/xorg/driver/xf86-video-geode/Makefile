@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xf86-video-geode
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_VERSION:=2.10.1
 
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/driver/

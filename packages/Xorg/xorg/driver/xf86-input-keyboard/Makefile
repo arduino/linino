@@ -9,11 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xf86-input-keyboard
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 PKG_VERSION:=1.3.1
+
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/driver
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=ebe5dcf8eed819103909f18321fc3b9d
 PKG_BUILD_DEPENDS:=randrproto inputproto kbproto xproto
 
 include $(INCLUDE_DIR)/package.mk

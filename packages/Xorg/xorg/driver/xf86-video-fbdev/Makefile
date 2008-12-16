@@ -7,13 +7,14 @@
 # blogic@openwrt.org
 include $(TOPDIR)/rules.mk
 
-PKG_BASE_NAME:=xf86
 PKG_NAME:=xf86-video-fbdev
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_VERSION:=0.4.0
+
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/driver
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
+PKG_MD5SUM:=6572b39fec77b8e6de1c858a93992924
 
 include $(INCLUDE_DIR)/package.mk
 
