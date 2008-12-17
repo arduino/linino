@@ -1,0 +1,27 @@
+diff -pruN ezxml-0.8.6.orig/GNUmakefile ezxml-0.8.6/GNUmakefile
+--- ezxml-0.8.6.orig/GNUmakefile	2008-12-16 15:22:46.773434689 +0100
++++ ezxml-0.8.6/GNUmakefile	2008-12-16 15:22:27.337440224 +0100
+@@ -28,6 +28,7 @@ RM = rm -f
+ DEBUG_CFLAGS = -O0 -g
+ OBJS = ezxml.o
+ LIB = libezxml.a
++DYN = libezxml.so
+ TEST = ezxmltest
+ ifdef NOMMAP
+ CFLAGS += -D EZXML_NOMMAP
+@@ -36,11 +37,14 @@ ifdef DEBUG
+ CFLAGS += $(DEBUG_CFLAGS)
+ endif
+ 
+-all: $(LIB)
++all: $(LIB) $(DYN)
+ 
+ $(LIB): $(OBJS)
+ 	$(AR) rcs $(LIB) $(OBJS)
+ 
++$(DYN): $(OBJS)
++	$(CC) -shared -o $(DYN) $(OBJS)
++
+ nommap: CFLAGS += -D EZXML_NOMMAP
+ nommap: all
+ 
