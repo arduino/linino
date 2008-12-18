@@ -9,12 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
-PKG_VERSION:=1.4.21
+PKG_VERSION:=1.4.22
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
-PKG_MD5SUM:=c4cf69eb6eae3105806b08d3efc28ec7
+#PKG_MD5SUM:=c4cf69eb6eae3105806b08d3efc28ec7
+PKG_MD5SUM:=7626febc4a01e16e012dfccb9e4ab9d2
 
 PKG_BUILD_DEPENDS:= libopenh323 pwlib
 
@@ -334,6 +335,7 @@ define Package/asterisk14-rawplayer/description
 endef
 
 
+#	--with-ltdl="$(STAGING_DIR)/usr" \
 CONFIGURE_ARGS+= \
 	--without-curl \
 	--without-curses \
@@ -341,7 +343,6 @@ CONFIGURE_ARGS+= \
 	--without-imap \
 	--without-isdnnet \
 	--without-kde \
-	--with-ltdl="$(STAGING_DIR)/usr" \
 	--without-misdn \
 	--without-nbs \
 	--with-ncurses="$(STAGING_DIR)/usr" \
@@ -530,15 +531,15 @@ define Package/asterisk14/conffiles
 /etc/asterisk/users.conf
 endef
 
-define Package/asterisk14/postinst
-#!/bin/sh
-ROOT=`echo $${PKG_ROOT} | sed 's:[\/]:\\\&:g' -`
-/bin/sed -i 's/\ \/etc/\ '$${ROOT}'etc/g' $${PKG_ROOT}/etc/asterisk/asterisk.conf
-/bin/sed -i 's/\ \/var/\ '$${ROOT}'var/g' $${PKG_ROOT}/etc/asterisk/asterisk.conf
-/bin/sed -i 's/\ \/usr/\ '$${ROOT}'usr/g' $${PKG_ROOT}/etc/asterisk/asterisk.conf
-/bin/sed -i 's/^DEST=/DEST='$${ROOT}'/g' $${PKG_ROOT}/etc/init.d/asterisk
-/bin/sed -i 's/OPTIONS=\"\"/OPTIONS=\"-C\ '$${ROOT}'etc\/asterisk\/asterisk.conf\"/g' $${PKG_ROOT}/etc/default/asterisk
-endef
+#define Package/asterisk14/postinst
+##!/bin/sh
+#ROOT=`echo $${PKG_ROOT} | sed 's:[\/]:\\\&:g' -`
+#/bin/sed -i 's/\ \/etc/\ '$${ROOT}'etc/g' $${PKG_ROOT}/etc/asterisk/asterisk.conf
+#/bin/sed -i 's/\ \/var/\ '$${ROOT}'var/g' $${PKG_ROOT}/etc/asterisk/asterisk.conf
+#/bin/sed -i 's/\ \/usr/\ '$${ROOT}'usr/g' $${PKG_ROOT}/etc/asterisk/asterisk.conf
+#/bin/sed -i 's/^DEST=/DEST='$${ROOT}'/g' $${PKG_ROOT}/etc/init.d/asterisk
+#/bin/sed -i 's/OPTIONS=\"\"/OPTIONS=\"-C\ '$${ROOT}'etc\/asterisk\/asterisk.conf\"/g' $${PKG_ROOT}/etc/default/asterisk
+#endef
 
 define Package/asterisk14/install
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)

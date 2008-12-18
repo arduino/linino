@@ -1,7 +1,7 @@
-diff -urN asterisk-1.4.11.orig/acinclude.m4 asterisk-1.4.11/acinclude.m4
---- asterisk-1.4.11.orig/acinclude.m4	2008-09-13 04:34:47.000000000 +0200
-+++ asterisk-1.4.11/acinclude.m4	2008-09-13 04:35:19.000000000 +0200
-@@ -585,7 +585,7 @@
+diff -Nru asterisk-1.4.22.org/acinclude.m4 asterisk-1.4.22/acinclude.m4
+--- asterisk-1.4.22.org/acinclude.m4	2008-07-22 22:49:41.000000000 +0200
++++ asterisk-1.4.22/acinclude.m4	2008-11-29 15:08:07.000000000 +0100
+@@ -664,7 +664,7 @@
  	[assume the C compiler uses GNU ld @<:@default=no@:>@])],
      [test "$withval" = no || with_gnu_ld=yes],
      [with_gnu_ld=no])
@@ -10,7 +10,7 @@ diff -urN asterisk-1.4.11.orig/acinclude.m4 asterisk-1.4.11/acinclude.m4
  AC_REQUIRE([AC_PROG_CC])dnl
  AC_REQUIRE([AC_CANONICAL_HOST])dnl
  AC_REQUIRE([AC_CANONICAL_BUILD])dnl
-@@ -690,28 +690,6 @@
+@@ -769,28 +769,6 @@
   AC_SUBST([EGREP])
  ])]) # AST_PROG_EGREP
  
