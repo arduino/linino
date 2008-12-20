@@ -20,6 +20,10 @@ config LCD4LINUX_DRV_Cwlinux
 	bool
 	prompt "Cwlinux"
 
+config LCD4LINUX_DRV_D4D
+	bool
+	prompt "D4D"
+
 config LCD4LINUX_DRV_G15
 	bool
 	prompt "G15"
@@ -27,6 +31,10 @@ config LCD4LINUX_DRV_G15
 config LCD4LINUX_DRV_HD44780
 	bool
 	prompt "HD44780"
+
+config LCD4LINUX_DRV_IRLCD
+	bool
+	prompt "IRLCD"
 
 config LCD4LINUX_DRV_LCD2USB
 	bool
@@ -85,6 +93,10 @@ config LCD4LINUX_DRV_picoLCD
 	bool
 	prompt "picoLCD"
 
+config LCD4LINUX_DRV_PICOLCDGRAPHIC
+	bool
+	prompt "picoLCDGraphic"
+
 config LCD4LINUX_DRV_RouterBoard
 	bool
 	prompt "RouterBoard"
@@ -116,6 +128,10 @@ config LCD4LINUX_DRV_USBLCD
 config LCD4LINUX_DRV_USBHUB
 	bool
 	prompt "USBHUB"
+
+config LCD4LINUX_DRV_ULA200
+	bool
+	prompt "ULA200"
 
 config LCD4LINUX_DRV_WincorNixdorf
 	bool

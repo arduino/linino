@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lcd4linux
-PKG_REV:=899
+PKG_REV:=903
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -54,7 +54,9 @@ LCD4LINUX_DRIVERS:= \
 	CrystalFontz \
 	Curses \
 	Cwlinux \
+	D4D \
 	G15 \
+	IRLCD \
 	HD44780 \
 	LCD2USB \
 	LCDLinux \
@@ -70,6 +72,7 @@ LCD4LINUX_DRIVERS:= \
 	PPM \
 	Pertelian \
 	picoLCD \
+	picoLCDGraphic \
 	RouterBoard \
 	serdisplib \
 	SimpleLCD \
@@ -78,6 +81,7 @@ LCD4LINUX_DRIVERS:= \
 	Trefon \
 	USBLCD \
 	USBHUB \
+	ULA200 \
 	WincorNixdorf \
 	X11 \
 
