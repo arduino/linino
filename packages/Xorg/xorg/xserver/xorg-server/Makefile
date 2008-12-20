@@ -118,6 +118,7 @@ ifeq ($(CONFIG_TARGET_om_gta02),y)
 endif
 
 define Package/xorg/Default
+  PROVIDES:=xserver
   SECTION:=xorg-server
   CATEGORY:=Xorg
   SUBMENU:=server
@@ -144,43 +145,34 @@ define Package/xserver-xorg
 $(call Package/xserver/Default)
   PROVIDES:=xserver
   TITLE:=Xorg xserver
+  DEPENDS+=+libdrm \
+  +xf86driproto
+endef
+
+define Package/xserver-kdrive/Default
+$(call Package/xserver/Default)
+  DEPENDS+=+X_TSLIB:tslib \
+  +X_DRI:xf86driproto \
+  +X_DRI:libdrm \
+  +X_XCALIBRATE:calibrateproto \
+  +X_COMPOSITE:compositeproto \
+  +X_XINERAMA:xineramaproto
 endef
 
 define Package/xserver-kdrive-xvesa
-$(call Package/xserver/Default)
-  PROVIDES:=xserver
+$(call Package/xserver-kdrive/Default)
   TITLE:=Kdrive vesa xserver
-  DEPENDS+=@TARGET_x86 \
-  +X_TSLIB:tslib \
-  +X_DRI:xf86driproto \
-  +X_DRI:libdrm \
-  +X_XCALIBRATE:calibrateproto \
-  +X_COMPOSITE:compositeproto \
-  +X_XINERAMA:xineramaproto
+  DEPENDS+=@TARGET_x86
 endef
 
 define Package/xserver-kdrive-xfbdev
-$(call Package/xserver/Default)
-  PROVIDES:=xserver
+$(call Package/xserver-kdrive/Default)
   TITLE:=Kdrive framebuffer xserver
-  DEPENDS+=+X_TSLIB:tslib \
-  +X_DRI:xf86driproto \
-  +X_DRI:libdrm \
-  +X_XCALIBRATE:calibrateproto \
-  +X_COMPOSITE:compositeproto \
-  +X_XINERAMA:xineramaproto
 endef
 
 define Package/xserver-kdrive-xephyr
-$(call Package/xserver/Default)
-  PROVIDES:=xserver
+$(call Package/xserver-kdrive/Default)
   TITLE:=Kdrive ephyr xserver
-  DEPENDS+=+X_TSLIB:tslib \
-  +X_DRI:xf86driproto \
-  +X_DRI:libdrm \
-  +X_XCALIBRATE:calibrateproto \
-  +X_COMPOSITE:compositeproto \
-  +X_XINERAMA:xineramaproto
 endef
 
 define Package/xserver-xorg-config
@@ -196,7 +188,7 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
-		$(if $(CONFIG_PACKAGE_xserver-xorg),--enable-xorg --disable-kdrive,--disable-xorg --enable-kdrive) \
+		$(if $(CONFIG_PACKAGE_xserver-xorg),--enable-xorg --enable-dri,--disable-xorg --disable-dri) \
 		$(if $(CONFIG_PACKAGE_xserver-kdrive-xvesa), \
 			--enable-kdrive-vesa, \
 			--disable-kdrive-vesa) \
@@ -209,7 +201,6 @@ define Build/Configure
 		$(if $(CONFIG_X_TSLIB),--enable-tslib,--disable-tslib) \
 		$(if $(CONFIG_X_COMPOSITE),--enable-composite,--disable-composite) \
 		$(if $(CONFIG_X_XINERAMA),--enable-xinerama,--disable-xinerama) \
-		$(if $(CONFIG_X_DRI),--enable-dri,--disable-dri) \
 		$(if $(CONFIG_X_XCALIBRATE),--enable-xcalibrate,--disable-xcalibrate) \
 	)
 endef
