@@ -146,7 +146,9 @@ $(call Package/xserver/Default)
   PROVIDES:=xserver
   TITLE:=Xorg xserver
   DEPENDS+=+libdrm \
-  +xf86driproto
+  +xf86driproto \
+  +libgl-mesa \
+  +xineramaproto
 endef
 
 define Package/xserver-kdrive/Default
