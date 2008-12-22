@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 PKG_NAME:=owfs
 PKG_VERSION:=2.7p7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
@@ -68,12 +68,6 @@ define Package/libow-capi
   TITLE:=OWFS - C-API library
 endef
 
-define Package/libow-perl
-  $(call Package/owfs/Library)
-  DEPENDS:=+libow +perlbase-autoloader +perlbase-config +perlbase-dynaloader +perlbase-essential +perlbase-io
-  TITLE:=OWFS - Perl-API library
-endef
-
 
 #
 # utilities
@@ -119,33 +113,12 @@ PKG_CONFIGURE_OPTS:= \
 		--disable-parport \
 		--disable-ownfsd \
 		--disable-ownet \
-		--disable-owpython
-
-
-ifneq ($(CONFIG_PACKAGE_libow-perl),)
-PKG_CONFIGURE_OPTS+= --enable-libow-perl
-ENABLE_SWIG:=1
-else
-PKG_CONFIGURE_OPTS+= --disable-libow-perl
-endif
-ifneq ($(CONFIG_PACKAGE_owtcl),)
-PKG_CONFIGURE_OPTS+= --enable-owtcl
-ENABLE_SWIG:=1
-else
-PKG_CONFIGURE_OPTS+= --disable-owtcl
-PKG_CONFIGURE_OPTS+= --disable-owside
-endif
-ifneq ($(CONFIG_PACKAGE_owphp),)
-PKG_CONFIGURE_OPTS+= --enable-owphp
-ENABLE_SWIG:=1
-else
-PKG_CONFIGURE_OPTS+= --disable-owphp
-endif
-ifneq ($(ENABLE_SWIG),)
-PKG_CONFIGURE_OPTS+= --enable-swig
-else
-PKG_CONFIGURE_OPTS+= --disable-swig
-endif
+		--disable-owpython \
+		--disable-libow-perl \
+		--disable-owphp \
+		--disable-owtcl \
+		--disable-owside \
+		--disable-swig
 
 CONFIGURE_ARGS += \
 	--prefix=/usr \
@@ -154,7 +127,6 @@ CONFIGURE_ARGS += \
 	--enable-owserver \
 	--enable-owhttpd \
 	--enable-owfs \
-	--with-perl5=$(STAGING_DIR)/usr/bin/perl \
 	--with-fuseinclude="$(STAGING_DIR)/usr/include" \
 	--with-fuselib="$(STAGING_DIR)/usr/lib" \
 	$(PKG_CONFIGURE_OPTS) \
@@ -239,12 +211,6 @@ define Package/libow-capi/install
 	#$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/include/{owcapi,owfs_config}.h $(1)/usr/include/
 endef
 
-define Package/libow-perl/install
-	install -d -m0755 $(1)/usr/lib/perl5
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/perl5/* $(1)/usr/lib/perl5
-	-rm -f $(1)/usr/lib/perl5/*/perllocal.pod
-endef
-
 
 $(eval $(call BuildPackage,owfs))
 $(eval $(call BuildPackage,owshell))
@@ -255,4 +221,3 @@ $(eval $(call BuildPackage,owftpd))
 
 $(eval $(call BuildPackage,libow))
 $(eval $(call BuildPackage,libow-capi))
-$(eval $(call BuildPackage,libow-perl))
