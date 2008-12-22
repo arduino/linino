@@ -31,7 +31,7 @@ EXTRA_LDFLAGS+=\
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib/ \
 	-L$(STAGING_DIR)/usr/lib/
 
-STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_gtk2 CONFIG_PACKAGE_gtk-cups2)
+STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_gtk2 CONFIG_PACKAGE_gtk2-cups)
 
 define Package/gtk2
   SECTION:=xorg-framework
@@ -60,7 +60,7 @@ define Build/Configure
 		--disable-xinerama \
 		--without-libjasper \
 		--with-xinput \
-		$(if $(CONFIG_PACKAGE_gtk2-cups),--enable-cups,--disable-cups), \
+		$(if $(CONFIG_PACKAGE_gtk2-cups),--enable-cups=auto,--disable-cups), \
 		gio_can_sniff=no \
 	)
 endef
