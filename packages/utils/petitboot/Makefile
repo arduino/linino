@@ -27,7 +27,10 @@ define Package/petitboot
 endef
 
 define Build/Configure
+
 endef
+
+TARGET_CPPFLAGS += -I$(PKG_BUILD_DIR)
 
 define Build/Compile
 	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
@@ -35,6 +38,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CPPFLAGS) $(TARGET_CFLAGS)" \
 		all install
 endef
 

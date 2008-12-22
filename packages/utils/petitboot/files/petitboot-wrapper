@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# wrapper script for petitboot - re-exec as required.
+mkdir -p /var/tmp/mnt
+
+while :
+do
+	/usr/sbin/petitboot -u >/var/log/petitboot.log 2>&1
+
+	# cleanup
+	for dir in /var/tmp/mnt/*
+	do
+		umount "$dir"
+		rmdir "$dir"
+	done
+done
