@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miniupnpd
 PKG_VERSION:=1.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_MD5SUM:=a0f6651476721db9b554668c8c83b151
 
 PKG_SOURCE_URL:=http://miniupnp.free.fr/files
@@ -36,12 +36,12 @@ define Build/Compile
 endef
 
 define Package/miniupnpd/install
-	$(INSTALL_DIR) $(1)/usr/bin $(1)/etc/init.d $(1)/etc/config $(1)/etc/hotplug.d/iface
+	$(INSTALL_DIR) $(1)/usr/bin $(1)/etc/init.d $(1)/etc/config $(1)/etc/hotplug.d/iface $(1)/lib/miniupnpd
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/miniupnpd $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/netfilter/*.sh $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/miniupnpd.init $(1)/etc/init.d/miniupnpd
 	$(INSTALL_DATA) ./files/upnpd.config $(1)/etc/config/upnpd
 	$(INSTALL_DATA) ./files/miniupnpd.hotplug $(1)/etc/hotplug.d/iface/20-miniupnpd
+	$(INSTALL_DATA) ./files/miniupnpd.firewall $(1)/lib/miniupnpd/firewall.sh
 endef
 
 $(eval $(call BuildPackage,miniupnpd))
