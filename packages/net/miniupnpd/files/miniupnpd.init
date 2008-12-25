@@ -17,7 +17,6 @@ start() {
 	config_get download config download
 	config_get_bool logging config log_output 0
 
-	scan_interfaces
 	config_get extif ${extif:-wan} ifname
 	
 	if [ -n "$extif" ]; then
@@ -41,7 +40,7 @@ start() {
 		if [ "$logging" = "1" ]; then
 			eval start-stop-daemon -S -x miniupnpd -- $args -d | logger -t miniupnpd &
 		else
-			eval start-stop-daemon -S -x miniupnpd -- $args
+			eval start-stop-daemon -S -x miniupnpd -- $args 2>/dev/null
 		fi
 	else
 		logger -t "upnp daemon" "external interface not found, not starting"
