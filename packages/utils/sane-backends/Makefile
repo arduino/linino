@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sane-backends
 PKG_VERSION:=1.0.19
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.sane-project.org/pub/sane/$(PKG_NAME)-$(PKG_VERSION)/
@@ -53,6 +53,19 @@ $(call Package/sane-backends/Default/description)
  This package contains the SANE shared libraries.
 endef
  
+define Package/sane-frontends
+  $(call Package/sane-backends/Default)
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=+sane-backends
+  TITLE+= (frontends)
+endef
+
+define Package/sane-frontends/description
+$(call Package/sane-backends/Default/description)
+ This package contains the SANE frontends.
+endef
+ 
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \
@@ -71,11 +84,11 @@ define Package/sane-backends/conffiles
 /etc/sane.d/saned.conf
 endef
 
-define Package/sane-backends/install	
+define Package/sane-backends/install
 	$(INSTALL_DIR) $(1)/etc/sane.d
 	$(CP) $(PKG_INSTALL_DIR)/etc/sane.d/*.conf $(1)/etc/sane.d/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/saned $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
 endef
 
 define Package/sane-libs/install
@@ -83,6 +96,11 @@ define Package/sane-libs/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsane.so.* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/sane
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/sane/libsane-*.so.* $(1)/usr/lib/sane/
+endef
+
+define Package/sane-frontends/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 endef
 
 define Build/InstallDev
@@ -94,3 +112,4 @@ endef
 
 $(eval $(call BuildPackage,sane-backends))
 $(eval $(call BuildPackage,sane-libs))
+$(eval $(call BuildPackage,sane-frontends))
