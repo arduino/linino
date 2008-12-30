@@ -1,0 +1,41 @@
+diff -urb lldpd-0.3.orig/src/priv.c lldpd-0.3/src/priv.c
+--- lldpd-0.3.orig/src/priv.c	2008-12-30 07:35:28.000000000 +0100
++++ lldpd-0.3/src/priv.c	2008-12-30 07:40:55.000000000 +0100
+@@ -522,12 +522,14 @@
+ 		fatal("[priv]: unable to create socket pair for privilege separation");
+ 
+ 	/* Get users */
++	/*
+ 	if ((user = getpwnam(PRIVSEP_USER)) == NULL)
+ 		fatal("[priv]: no " PRIVSEP_USER " user for privilege separation");
+ 	uid = user->pw_uid;
+ 	if ((group = getgrnam(PRIVSEP_GROUP)) == NULL)
+ 		fatal("[priv]: no " PRIVSEP_GROUP " group for privilege separation");
+ 	gid = group->gr_gid;
++	*/
+ 
+ 	/* Spawn off monitor */
+ 	if ((monitored = fork()) < 0)
+@@ -535,17 +537,17 @@
+ 	switch (monitored) {
+ 	case 0:
+ 		/* We are in the children, drop privileges */
+-		if (chroot(chrootdir) == -1)
+-			fatal("[priv]: unable to chroot");
+-		if (chdir("/") != 0)
++		/*if (chroot(chrootdir) == -1)
++			fatal("[priv]: unable to chroot");*/
++		if (chdir("/tmp") != 0)
+ 			fatal("[priv]: unable to chdir");
+ 		gidset[0] = gid;
+-		if (setresgid(gid, gid, gid) == -1)
++		/*if (setresgid(gid, gid, gid) == -1)
+ 			fatal("[priv]: setresgid() failed");
+ 		if (setgroups(1, gidset) == -1)
+ 			fatal("[priv]: setgroups() failed");
+ 		if (setresuid(uid, uid, uid) == -1)
+-			fatal("[priv]: setresuid() failed");
++			fatal("[priv]: setresuid() failed");*/
+ 		remote = pair[0];
+ 		close(pair[1]);
+ 		priv_ping();
