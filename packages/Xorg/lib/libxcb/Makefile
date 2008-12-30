@@ -17,7 +17,7 @@ PKG_SOURCE_URL:=http://xcb.freedesktop.org/dist/
 PKG_MD5SUM:=
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
-PKG_BUILD_DEPENDS:=xcbproto pthread-stubs
+PKG_BUILD_DEPENDS:=xcbproto libpthread-stubs
 
 include $(INCLUDE_DIR)/package.mk
 
