@@ -45,7 +45,7 @@ CONFIGURE_ARGS += \
 	--enable-dot3 \
 
 CONFIGURE_VARS += \
-	ac_cv_lib_nl_nl_connect=no \
+	ac_cv_lib_nl_nl_connect=no
 
 define Package/lldpd/install
 	$(INSTALL_DIR) $(1)/etc/init.d
