@@ -45,7 +45,7 @@ define Package/libgl-mesa-dri-$(1)
   SECTION:=xorg-lib
   CATEGORY:=Xorg
   SUBMENU:=lib
-  DEPENDS:=libgl-mesa
+  DEPENDS:=libgl-mesa @DISPLAY_SUPPORT
   TITLE:=mesa dri $(1)
   URL:=http://mesa3d.org
 endef
