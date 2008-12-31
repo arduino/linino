@@ -14,11 +14,10 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://xcb.freedesktop.org/dist/
-PKG_MD5SUM:=
+PKG_MD5SUM:=774eabaf33440d534efe108ef9130a7d
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
 
 define Package/libpthread-stubs
   SECTION:=libs
@@ -28,6 +27,15 @@ define Package/libpthread-stubs
 endef
 
 define Package/libpthread-stubs/description
+This library provides weak aliases for pthread functions not provided in libc
+or otherwise available by default.  Libraries like libxcb rely on pthread
+stubs to use pthreads optionally, becoming thread-safe when linked to
+libpthread, while avoiding any performance hit when running single-threaded.
+libpthread-stubs supports this behavior even on platforms which do not supply
+all the necessary pthread stubs.  On platforms which already supply all the
+necessary pthread stubs, this package ships only the pkg-config file
+pthread-stubs.pc, to allow libraries to unconditionally express a dependency
+on pthread-stubs and still obtain correct behavior.
 endef
 
 define Build/InstallDev
