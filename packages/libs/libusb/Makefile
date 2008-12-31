@@ -65,7 +65,7 @@ endef
 define Package/libusb/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libusb*.so.* \
+		$(PKG_INSTALL_DIR)/usr/lib/libusb*.so* \
 		$(1)/usr/lib/
 endef
 
