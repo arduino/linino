@@ -14,32 +14,16 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://xcb.freedesktop.org/dist/
-PKG_MD5SUM:=
-PKG_FIXUP:=libtool
+PKG_MD5SUM:=d9275a714e83ab9c1f9b260c6eff1609
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-
-TARGET_CFLAGS+=\
-	-I$(STAGING_DIR)/usr/lib/libintl/include/
-
-EXTRA_LDFLAGS+=\
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-
-STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_xcbproto CONFIG_PACKAGE_gtk-cups2)
 
 define Package/xcbproto
   SECTION:=xorg-libs
   CATEGORY:=Xorg
   SUBMENU:=lib
   TITLE:=xcbproto
-  DEPENDS:=
-endef
-
-define Build/Configure
-	$(call Build/Configure/Default, \
-	)
 endef
 
 define Build/InstallDev

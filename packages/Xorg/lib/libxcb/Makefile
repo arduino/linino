@@ -14,24 +14,15 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://xcb.freedesktop.org/dist/
-PKG_MD5SUM:=
+PKG_MD5SUM:=9310b02433273d75d42f10da3c7455aa
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 PKG_BUILD_DEPENDS:=xcbproto libpthread-stubs
 
 include $(INCLUDE_DIR)/package.mk
 
-
-TARGET_CFLAGS+=\
-	-I$(STAGING_DIR)/usr/lib/libintl/include/
-
-EXTRA_LDFLAGS+=\
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-
-STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_libxcb CONFIG_PACKAGE_gtk-cups2)
-
 PROTOS:=composite damage dpms glx randr record render res screensaver shape \
-		shm sync xevie xf86dri xfixes xinerama xprint xtest xvmc xv
+        shm sync xevie xf86dri xfixes xinerama xprint xtest xvmc xv
 
 define Package/libxcb
   SECTION:=xorg-libs
@@ -50,7 +41,7 @@ define Package/libxcb-xlib
   SECTION:=xorg-libs
   CATEGORY:=Xorg
   SUBMENU:=lib
-  TITLE:=libxcb-proto
+  TITLE:=libxcb-xlib
   DEPENDS:=+libxcb
 endef
 
@@ -88,7 +79,7 @@ define Package/libxcb/install
 		$(1)/usr/lib/
 endef
 
-define Package/libxcb/install
+define Package/libxcb-xlib/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/libxcb-xlib.so* \
@@ -105,7 +96,6 @@ endef
 endef
 
 $(foreach proto,$(PROTOS),$(eval $(call Package/libxcb-proto/install/Default,$(proto))))
-
 
 $(eval $(call BuildPackage,libxcb))
 $(eval $(call BuildPackage,libxcb-xlib))
