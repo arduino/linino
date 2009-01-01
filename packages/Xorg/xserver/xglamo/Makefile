@@ -52,8 +52,13 @@ CONFIGURE_ARGS += --disable-dga \
 
 CONFIGURE_VARS+=ac_cv_file__usr_share_sgml_X11_defs_ent=yes
 
-ifeq ($(CONFIG_TARGET_om_gta02),y)
+ifeq ($(CONFIG_TARGET_s3c24xx_openmoko-gta02-graphical),y)
   X_CONFIG=om_gta02
+  TS_POINTERCAL=om_gta02
+endif
+ifeq ($(CONFIG_TARGET_s3c24xx_openmoko-gta02-minimal),y)
+  X_CONFIG=om_gta02
+  TS_POINTERCAL=om_gta02
 endif
 
 define Package/xglamo
@@ -120,7 +125,8 @@ define Package/xglamo/install
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/lib $(1)/etc/init.d $(1)/etc/config
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/Xglamo $(1)/usr/bin/
 	$(CP) ./files/x.init $(1)/etc/init.d/x11
-	$(if $(X_CONFIG),$(CP) ./files/config/$(X_CONFIG) $(1)/etc/config/x11)
+	$(if $(TS_POINTERCAL),$(CP) ./files/pointercal.$(TS_POINTERCAL) $(1)/etc/pointercal)
+	$(if $(X_CONFIG),$(CP) ./files/config/x11.$(X_CONFIG) $(1)/etc/config/x11)
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
 endef
 
