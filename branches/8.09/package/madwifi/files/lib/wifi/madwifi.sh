@@ -253,6 +253,9 @@ enable_atheros() {
 		config_get_bool doth "$vif" doth 0
 		[ -n "$doth" ] && iwpriv "$ifname" doth "$doth"
 
+		config_get_bool probereq "$vif" probereq
+		[ -n "$probereq" ] && iwpriv "$ifname" probereq "$probereq"
+
 		config_get maclist "$vif" maclist
 		[ -n "$maclist" ] && {
 			# flush MAC list
