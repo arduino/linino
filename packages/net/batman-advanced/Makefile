@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=batmand-adv
-PKG_REV:=1103
+PKG_REV:=1176
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 PKG_BRANCH:=batman-adv-userspace
@@ -21,7 +21,7 @@ PKG_SOURCE_URL:=http://downloads.open-mesh.net/svn/batman/trunk/
 PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
 
-PKG_KMOD_BUILD_DIR:=$(PKG_BUILD_DIR)/batman-adv-kernelland/batman-core
+PKG_KMOD_BUILD_DIR:=$(PKG_BUILD_DIR)/batman-adv-kernelland
 
 PKG_TOOL_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-battool-install
 PKG_TOOL_BUILD_DIR:=$(PKG_BUILD_DIR)/battool
@@ -57,17 +57,17 @@ define Package/battool/description
 B.A.T.M.A.N. layer 2 debug tools
 endef
 
-define KernelPackage/batman-adv-core
+define KernelPackage/batman-advanced
 $(call Package/batman-adv/Default)
   SUBMENU:=Network Support
   DEPENDS:=@LINUX_2_6
   TITLE:=Kernel routing module for B.A.T.M.A.N. layer 2
-  FILES:=$(PKG_KMOD_BUILD_DIR)/batman-adv-core.$(LINUX_KMOD_SUFFIX)
-  AUTOLOAD:=$(call AutoLoad,50,batman-adv-core)
+  FILES:=$(PKG_KMOD_BUILD_DIR)/batman-adv.$(LINUX_KMOD_SUFFIX)
+  AUTOLOAD:=$(call AutoLoad,50,batman-adv)
 endef
 
 
-define KernelPackage/batman-adv-core/description
+define KernelPackage/batman-advanced/description
 Kernel routing module for B.A.T.M.A.N. layer 2
 endef
 
@@ -125,4 +125,4 @@ endef
 
 $(eval $(call BuildPackage,batmand-adv))
 $(eval $(call BuildPackage,battool))
-$(eval $(call KernelPackage,batman-adv-core))
+$(eval $(call KernelPackage,batman-advanced))
