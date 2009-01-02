@@ -14,6 +14,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=4c189f64a1a6110bef19639a36c3b0e1
 
+PKG_FIXUP = libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 
@@ -140,7 +142,7 @@ define Build/Configure
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) $(CFLAGS_LARGEFILE)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(TOOLCHAIN_DIR)/lib" \
 		lt_sys_lib_dlsearch_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
 		lt_sys_lib_search_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
 		shrext_cmds=".so" \
