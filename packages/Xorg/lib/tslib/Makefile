@@ -24,6 +24,7 @@ define Package/tslib
   CATEGORY:=Xorg
   SUBMENU:=lib
   TITLE:=Tslib is an abstraction layer for touchscreen panel events.
+  DEPENDS:=@!LINUX_2_4
   URL:=http://tslib.berlios.de/
 endef
 
