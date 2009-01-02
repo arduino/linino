@@ -100,7 +100,8 @@ define Package/xglamo
   +pixman \
   +libopenssl \
   +util-macros \
-  @DISPLAY_SUPPORT
+  @DISPLAY_SUPPORT \
+  @arm||armeb
 endef
 
 define Package/xglamo/description
