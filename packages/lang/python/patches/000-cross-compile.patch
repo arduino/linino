@@ -30,10 +30,11 @@ Index: Python-2.5.1/Makefile.pre.in
  	esac
  
  # Build static library
-@@ -470,7 +471,7 @@
+@@ -470,8 +471,8 @@
  
  
  $(GRAMMAR_H) $(GRAMMAR_C): $(PGEN) $(GRAMMAR_INPUT)
+ 		-@ mkdir Include
 -		-$(PGEN) $(GRAMMAR_INPUT) $(GRAMMAR_H) $(GRAMMAR_C)
 +		-$(HOSTPGEN) $(GRAMMAR_INPUT) $(GRAMMAR_H) $(GRAMMAR_C)
  

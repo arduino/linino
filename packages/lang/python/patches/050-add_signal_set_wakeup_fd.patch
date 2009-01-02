@@ -23,15 +23,13 @@ diff -urN Python-2.5.1.orig/Modules/signalmodule.c Python-2.5.1/Modules/signalmo
  #ifndef SIG_ERR
  #define SIG_ERR ((PyOS_sighandler_t)(-1))
  #endif
-@@ -75,6 +77,8 @@
+@@ -75,4 +77,6 @@
          PyObject *func;
  } Handlers[NSIG];
  
 +static int wakeup_fd = -1;
 +
- static int is_tripped = 0; /* Speed up sigcheck() when none tripped */
- 
- static PyObject *DefaultHandler;
+ /* Speed up sigcheck() when none tripped */
 @@ -112,6 +116,7 @@
  static void
  signal_handler(int sig_num)
