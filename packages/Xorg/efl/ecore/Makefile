@@ -30,7 +30,7 @@ define Package/ecore
   SUBMENU:=lib
   TITLE:=Ecore is the core event abstraction layer and X abstraction layer
   URL:=http://wiki.enlightenment.org/index.php/Ecore
-  DEPENDS:=+eet +evas +libXcursor +libXrandr +libXtst +libiconv
+  DEPENDS:=+eet +evas +libXcursor +libXrandr +libXtst +libiconv @!LINUX_2_4
 endef
 
 define Package/ecore/description
