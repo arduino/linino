@@ -28,7 +28,7 @@ define Package/telepathy-python
 endef
 
 define Package/telepathy-python/description
-  telepathy python bingings
+  telepathy python bindings
 endef
 
 define Build/Compile
