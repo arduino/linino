@@ -15,6 +15,8 @@ PKG_SOURCE:=Cython-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.cython.org/
 PKG_BUILD_DIR:=$(BUILD_DIR)/Cython-$(PKG_VERSION)
 
+PKG_BUILD_DEPENDS:=python
+
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
