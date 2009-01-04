@@ -1,0 +1,24 @@
+diff -ruN python-etk-r37637.orig/setup.py python-etk-r37637/setup.py
+--- python-etk-r37637.orig/setup.py	2009-01-04 12:54:25.000000000 +0100
++++ python-etk-r37637/setup.py	2009-01-04 12:57:48.000000000 +0100
+@@ -1,10 +1,7 @@
+ import sys
+ import os
+ 
+-from ez_setup import use_setuptools
+-use_setuptools('0.6c3')
+-
+-from setuptools import setup, find_packages, Extension
++from distutils.core import setup, Extension
+ from distutils.sysconfig import get_python_inc
+ from glob import glob
+ import commands
+@@ -74,7 +71,7 @@
+       long_description = long_description,
+       keywords = 'wrapper binding ui etk graphics',
+       classifiers = trove_classifiers,
+-      packages = find_packages(),
++      packages = ['etk'],
+       install_requires = ['python-evas>=0.2.1', 'python-ecore>=0.2.1'],
+       setup_requires = ['python-evas>=0.2.1', 'python-ecore>=0.2.1'],
+       headers = headers,

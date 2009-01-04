@@ -1,0 +1,24 @@
+diff -ruN python-edje-r37637.orig/setup.py python-edje-r37637/setup.py
+--- python-edje-r37637.orig/setup.py	2009-01-04 11:55:43.000000000 +0100
++++ python-edje-r37637/setup.py	2009-01-04 11:57:55.000000000 +0100
+@@ -1,10 +1,7 @@
+ import sys
+ import os
+ 
+-from ez_setup import use_setuptools
+-use_setuptools('0.6c3')
+-
+-from setuptools import setup, find_packages, Extension
++from distutils.core import setup, Extension
+ import subprocess
+ import shlex
+ 
+@@ -128,7 +125,7 @@
+       long_description=long_description,
+       keywords='wrapper binding enlightenment graphics raster evas canvas theme',
+       classifiers=trove_classifiers,
+-      packages=find_packages(),
++      packages=['edje'],
+       install_requires=['python-evas>=0.3.1'],
+       setup_requires=['python-evas>=0.3.1'],
+       ext_modules=[edjemodule],
