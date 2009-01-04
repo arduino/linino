@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libgpg-error
 PKG_VERSION:=1.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.gnupg.org/gcrypt/libgpg-error/ \
@@ -65,8 +65,8 @@ define Build/InstallDev
 		$(1)/usr/include/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libgpg-error.{la,so*} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libgpg-error.{la,a,so*} \
 		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/share/aclocal
@@ -77,7 +77,7 @@ endef
 
 define Package/libgpg-error/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libgpg-error.so.* \
 		$(1)/usr/lib/
 endef

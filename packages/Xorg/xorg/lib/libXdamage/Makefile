@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libXdamage
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_VERSION:=1.1.1
 
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
@@ -34,7 +34,7 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{lib/pkgconfig,include/X11/extensions}
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
 		$(1)/usr/lib/
 	$(INSTALL_DATA) \
@@ -47,7 +47,7 @@ endef
 
 define Package/libXdamage/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib/
 endef

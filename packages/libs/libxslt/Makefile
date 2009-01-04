@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libxslt
 PKG_VERSION:=1.1.24
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://xmlsoft.org/sources/ \
@@ -78,8 +78,8 @@ define Build/InstallDev
 		$(PKG_INSTALL_DIR)/usr/include/libxslt/* \
 		$(1)/usr/include/libxslt/
 
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libxslt.{la,so*} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxslt.{la,a,so*} \
 		$(1)/usr/lib/
 
 	$(INSTALL_DATA) \
@@ -93,7 +93,7 @@ endef
 
 define Package/libxslt/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libxslt.so.* \
 		$(1)/usr/lib/
 endef

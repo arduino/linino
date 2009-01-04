@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gettext
 PKG_VERSION:=0.16.1
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/gettext
@@ -50,16 +50,16 @@ define Build/Install
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
-define Build/InstallDev	
+define Build/InstallDev
 	mkdir -p $(1)/usr/lib/libintl/include
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/include/libintl.h $(1)/usr/lib/libintl/include/
 	mkdir -p $(1)/usr/lib/libintl/lib
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/libintl.{a,so*} $(1)/usr/lib/libintl/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libintl.{a,so*} $(1)/usr/lib/libintl/lib/
 endef
 
 define Package/libintl/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/libintl.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libintl.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libintl))

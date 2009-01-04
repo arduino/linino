@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libmatchbox
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_VERSION:=1.9
 PKG_SOURCE_URL:=http://matchbox-project.org/sources/libmatchbox/$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -47,7 +47,7 @@ define Build/InstallDev
 		$(PKG_INSTALL_DIR)/usr/include/libmb/*.h \
 		$(1)/usr/include/libmb/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libmb.{so*,a,la} \
 		$(1)/usr/lib/
 	$(INSTALL_DATA) \
@@ -57,7 +57,7 @@ endef
 
 define Package/libmatchbox/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libmb.so* \
 		$(1)/usr/lib/
 endef

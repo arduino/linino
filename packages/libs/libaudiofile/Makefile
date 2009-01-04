@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libaudiofile
 PKG_VERSION:=0.2.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.cti.ecp.fr/~beauxir5/peercast
@@ -59,8 +59,8 @@ define Build/InstallDev
 		$(1)/usr/include/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libaudiofile.{la,so*} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libaudiofile.{la,a,so*} \
 		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
@@ -71,7 +71,7 @@ endef
 
 define Package/libaudiofile/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libaudiofile.so.* \
 		$(1)/usr/lib/
 endef

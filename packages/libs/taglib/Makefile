@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=taglib
 PKG_VERSION:=1.4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://developer.kde.org/~wheeler/files/src/
@@ -52,8 +52,8 @@ define Build/InstallDev
 		$(2)/bin/taglib-config
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libtag.{la,so*} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libtag.{la,a,so*} \
 		$(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/include/taglib
 	$(INSTALL_DATA) \

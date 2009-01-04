@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nfs-utils
 PKG_VERSION:=1.1.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.sourceforge.net/nfs/
@@ -51,7 +51,8 @@ endef
 
 define Package/nfs-utils/install
 	$(INSTALL_DIR) $(1)/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/sbin/mount* $(1)/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/sbin/mount.nfs $(1)/sbin/
+	(cd $(1)/sbin; ln -s mount.nfs mount.nfs4; ln mount.nfs umount.nfs; ln -s mount.nfs umount.nfs4)
 endef
 
 $(eval $(call BuildPackage,nfs-utils))

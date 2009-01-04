@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_BASE_NAME:=pixman
 PKG_NAME:=pixman
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 PKG_VERSION:=0.12.0
 
 PKG_SOURCE_URL:=http://cairographics.org/releases/
@@ -42,7 +42,7 @@ endef
 
 define Package/pixman/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib/
 endef

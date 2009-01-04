@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 PKG_NAME:=owfs
 PKG_VERSION:=2.7p7
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
@@ -203,12 +203,12 @@ endef
 
 define Package/libow/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/libow-*.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libow-*.so.* $(1)/usr/lib/
 endef
 
 define Package/libow-capi/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/libowcapi-*.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libowcapi-*.so.* $(1)/usr/lib/
 	#$(INSTALL_DIR) $(1)/usr/include
 	#$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/include/{owcapi,owfs_config}.h $(1)/usr/include/
 endef

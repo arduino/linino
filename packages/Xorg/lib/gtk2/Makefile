@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gtk2
 PKG_VERSION:=2.14.4
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 
 PKG_SOURCE:=gtk+-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/gtk+/2.14
@@ -70,7 +70,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/gtk-2.0/include/* $(1)/usr/include/
 
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
 		$(1)/usr/lib/
 
@@ -86,7 +86,7 @@ define Package/gtk2/install
 		$(1)/etc/gtk-2.0/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib/
 

@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gst-plugins-good
 PKG_VERSION:=0.10.10
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gst-plugins-good/
@@ -75,15 +75,15 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-0.10
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.{so*,la} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.{so*,a,la} \
 		$(1)/usr/lib/gstreamer-0.10
 endef
 
 define Package/gst-plugins-good/install
 	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-0.10
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.{so*,a} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.so* \
 		$(1)/usr/lib/gstreamer-0.10
 endef
 

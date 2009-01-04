@@ -11,7 +11,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lame
 PKG_VERSION:=398
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/lame
 PKG_MD5SUM:=f44b9f8e1b5d8835d0a77f9cc9cedd1c
@@ -54,7 +54,7 @@ endef
 
 define Package/lame-lib/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/lib*so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*so* $(1)/usr/lib/
 endef
 
 define Build/InstallDev
@@ -63,7 +63,7 @@ define Build/InstallDev
 		$(PKG_INSTALL_DIR)/usr/include/lame/*.h \
 		$(1)/usr/include/lame/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.{la,so*} \
 		$(1)/usr/lib/
 endef

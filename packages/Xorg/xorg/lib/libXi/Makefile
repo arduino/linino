@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libXi
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_VERSION:=1.1.3
 
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
@@ -36,14 +36,14 @@ endef
 
 define Package/libXi/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libXi.so* \
 		$(1)/usr/lib/
 endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libXi.{so*,a,la} \
 		$(1)/usr/lib/
 

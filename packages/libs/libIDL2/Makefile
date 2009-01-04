@@ -11,7 +11,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libIDL2
 PKG_VERSION:=0.8.11
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=libIDL-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/libIDL-$(PKG_VERSION)
@@ -62,8 +62,8 @@ define Build/InstallDev
 		$(1)/usr/include/libIDL-2.0/libIDL/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
 		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
@@ -74,8 +74,8 @@ endef
 
 define Package/libIDL2/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib/
 endef
 

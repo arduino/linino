@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openslp
 PKG_VERSION:=1.2.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://prdownloads.sourceforge.net/openslp/
@@ -35,7 +35,7 @@ define Package/openslp/install
 	$(INSTALL_DIR) $(1)/etc $(1)/lib $(1)/usr/bin $(1)/etc/init.d
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/slpd/slpd $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/slptool/.libs/slptool $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/libslp/.libs/libslp.so* $(1)/lib
+	$(CP) $(PKG_BUILD_DIR)/libslp/.libs/libslp.so* $(1)/lib
 	$(INSTALL_DATA) ./files/etc/slp.* $(1)/etc
 	$(INSTALL_BIN) ./files/etc/init.d/* $(1)/etc/init.d
 endef

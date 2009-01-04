@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=imlib2
 PKG_VERSION:=1.4.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/enlightenment
@@ -37,8 +37,8 @@ define Build/InstallDev
 		$(PKG_INSTALL_DIR)/usr/include/* \
 		$(1)/usr/include/
 
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{la,so*} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{la,so*,a} \
 		$(1)/usr/lib/
 
 	$(INSTALL_DATA) \
@@ -56,7 +56,7 @@ endef
 
 define Package/imlib2/install
 	$(INSTALL_DIR) $(1)/usr/lib/imlib2/{loaders,filters}
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib/
 

@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vte
 PKG_VERSION:=0.17.4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/0.17
@@ -70,7 +70,7 @@ define Build/InstallDev
 		$(1)/usr/include/vte/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,la,a} \
 		$(1)/usr/lib
 
@@ -87,7 +87,7 @@ define Package/vte/install
 		$(1)/usr/share/vte/termcap
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib
 
@@ -99,12 +99,10 @@ endef
 
 define Package/python-vte/install
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)/gtk-2.0
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/gtk-2.0/*.so* \
 		$(1)$(PYTHON_PKG_DIR)/gtk-2.0
 endef
 
 $(eval $(call BuildPackage,vte))
 $(eval $(call BuildPackage,python-vte))
-
-

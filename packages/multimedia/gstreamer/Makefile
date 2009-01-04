@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gstreamer
 PKG_VERSION:=0.10.21
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gstreamer/
@@ -61,13 +61,13 @@ define Build/InstallDev
 		$(1)/usr/include/
 
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
 		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-0.10/
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.{so*,la} \
+		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.{so*,a,la} \
 		$(1)/usr/lib/gstreamer-0.10
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
@@ -86,13 +86,13 @@ define Package/gstreamer/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-0.10/
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.{so*,a} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.so* \
 		$(1)/usr/lib/gstreamer-0.10
 endef
 

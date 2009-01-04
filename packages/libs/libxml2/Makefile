@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libxml2
 PKG_VERSION:=2.7.2
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://xmlsoft.org/sources/ \
@@ -78,8 +78,8 @@ define Build/InstallDev
 		$(1)/usr/include/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libxml2.{la,so*} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxml2.{la,a,so*} \
 		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
@@ -95,7 +95,7 @@ endef
 
 define Package/libxml2/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libxml2.so.* \
 		$(1)/usr/lib/
 endef

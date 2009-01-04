@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hippo-canvas
 PKG_VERSION:=0.3.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/0.3/
@@ -62,8 +62,8 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
 		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
@@ -79,13 +79,13 @@ endef
 
 define Package/hippo-canvas/install
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
 endef
 
 define Package/python-hippo-canvas/install
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/*.{so*,a} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/*.so* \
 		$(1)$(PYTHON_PKG_DIR)
 endef
 

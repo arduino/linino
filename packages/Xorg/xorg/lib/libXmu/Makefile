@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libXmu
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 PKG_VERSION:=1.0.4
 
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
@@ -43,7 +43,7 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{lib/pkgconfig,include/X11/Xmu}
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
 		$(1)/usr/lib/
 	$(INSTALL_DATA) \
@@ -56,14 +56,14 @@ endef
 
 define Package/libXmu/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libXmu.so* \
 		$(1)/usr/lib/
 endef
 
 define Package/libXmuu/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libXmuu.so* \
 		$(1)/usr/lib/
 endef

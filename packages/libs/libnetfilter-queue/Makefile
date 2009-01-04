@@ -56,8 +56,8 @@ define Build/InstallDev
 		$(1)/usr/include/libnetfilter_queue/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libnetfilter_queue*.{so*,la} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libnetfilter_queue*.{so*,a,la} \
 		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
@@ -68,7 +68,7 @@ endef
 
 define Package/libnetfilter-queue/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/libnetfilter_queue*.{so*,a} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnetfilter_queue*.so* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libnetfilter-queue))

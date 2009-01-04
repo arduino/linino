@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libmpd
 PKG_VERSION:=0.14.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.neophob.com/files/owrt/
@@ -48,7 +48,7 @@ endef
 
 define Package/libmpd/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/libmpd.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmpd.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libmpd))

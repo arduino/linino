@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xapian-core
 PKG_VERSION:=1.0.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://oligarchy.co.uk/xapian/$(PKG_VERSION)
@@ -49,8 +49,8 @@ define Build/InstallDev
 		$(1)/usr/include/xapian
 
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
 		$(1)/usr/lib/
 	$(INSTALL_DIR) $(2)/bin
 	$(INSTALL_BIN) \
@@ -66,8 +66,8 @@ endef
 
 define Package/libxapian/install
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib
 	$(INSTALL_DIR) $(1)/usr/bin/
 	$(INSTALL_BIN) \
@@ -76,5 +76,3 @@ define Package/libxapian/install
 endef
 
 $(eval $(call BuildPackage,libxapian))
-
-

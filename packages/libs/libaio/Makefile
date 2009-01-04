@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libaio
 PKG_VERSION:=0.3.106
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/liba/libaio/
@@ -56,7 +56,7 @@ endef
 
 define Package/libaio/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/src/libaio.so.* $(1)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/src/libaio.so.* $(1)/usr/lib/
 	ln -sf libaio.so.$(LIBAIO_SOVER) $(1)/usr/lib/libaio.so
 	ln -sf libaio.so.$(LIBAIO_SOVER) $(1)/usr/lib/libaio.so.1
 endef

@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libogg
 PKG_VERSION:=1.1.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.xiph.org/releases/ogg/
 PKG_FIXUP:=libtool
@@ -39,7 +39,7 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/ogg/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/include/ogg/* $(1)/usr/include/ogg/
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
 	$(INSTALL_DIR) $(1)/usr/share/aclocal/
@@ -48,7 +48,7 @@ endef
 
 define Package/libogg/install
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libogg))

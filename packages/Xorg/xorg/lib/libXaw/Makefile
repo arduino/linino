@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libXaw
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 PKG_VERSION:=1.0.4
 
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
@@ -40,7 +40,7 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{lib/pkgconfig,include/X11/Xaw}
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
 		$(1)/usr/lib/
 	$(INSTALL_DATA) \
@@ -58,7 +58,7 @@ endef
 
 define Package/libXaw/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib/
 endef

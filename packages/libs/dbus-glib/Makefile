@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dbus-glib
 PKG_VERSION:=0.76
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dbus.freedesktop.org/releases/dbus-glib/
@@ -53,8 +53,8 @@ define Build/InstallDev
 		$(1)/usr/include/dbus-1.0/dbus/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libdbus-glib-1.{la,so*} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libdbus-glib-1.{la,a,so*} \
 		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
@@ -65,7 +65,7 @@ endef
 
 define Package/libdbus-glib/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/libdbus-glib-1.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdbus-glib-1.so.* $(1)/usr/lib/
 endef
 
 

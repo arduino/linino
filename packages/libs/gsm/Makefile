@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gsm
 PKG_VERSION:=1.0.10
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-1.0-pl10
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -73,7 +73,8 @@ endef
 
 define Package/gsm-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/toast $(1)/usr/bin/
+	(cd $(1)/usr/bin; ln -s toast untoast; ln -s toast tcat)
 endef
 
 define Build/InstallDev

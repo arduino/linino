@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cairo
 PKG_VERSION:=1.8.6
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://cairographics.org/releases/
@@ -43,7 +43,7 @@ TARGET_CFLAGS+=-L$(STAGING_DIR)/usr/lib
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
 	$(INSTALL_DIR) $(1)/usr/include/cairo/
@@ -52,7 +52,7 @@ endef
 
 define Package/cairo/install
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,cairo))

@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=opencdk
 PKG_VERSION:=0.6.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.gnutls.org/pub/gnutls/opencdk/ \
@@ -66,14 +66,14 @@ define Build/InstallDev
 		$(1)/usr/include/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libopencdk.{la,so*} \
 		$(1)/usr/lib/
 endef
 
 define Package/libopencdk/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libopencdk.so.* \
 		$(1)/usr/lib/
 endef

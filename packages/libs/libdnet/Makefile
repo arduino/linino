@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libdnet
 PKG_VERSION:=1.10
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
@@ -77,14 +77,14 @@ define Build/InstallDev
 		$(1)/usr/include/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libdnet.{la,so*} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libdnet.{la,a,so*} \
 		$(1)/usr/lib/
 endef
 
 define Package/libdnet/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libdnet.so.* \
 		$(1)/usr/lib/
 

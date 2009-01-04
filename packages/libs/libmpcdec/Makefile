@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libmpcdec
 PKG_VERSION:=1.2.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://files.musepack.net/source/
@@ -41,15 +41,15 @@ define Build/InstallDev
 		$(1)/usr/include/mpcdec/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
 		$(1)/usr/lib/
 endef
 
 define Package/libmpcdec/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libmpcdec.{so*,a} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libmpcdec.so* \
 		$(1)/usr/lib/
 endef
 

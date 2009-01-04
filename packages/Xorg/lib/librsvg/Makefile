@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=librsvg
 PKG_VERSION:=2.22.3
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/2.22
@@ -63,7 +63,7 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
 	$(INSTALL_DIR) $(1)/usr/include/
@@ -72,13 +72,13 @@ endef
 
 define Package/librsvg/install
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
 endef
 
 define Package/librsvg-pixbuf-loader/install
 	$(INSTALL_DIR) $(1)/usr/lib/gtk-2.0/2.10.0/loaders
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/gtk-2.0/2.10.0/loaders/*.{so*,a} \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/gtk-2.0/2.10.0/loaders/*.so* \
 		$(1)/usr/lib/gtk-2.0/2.10.0/loaders
 endef
 

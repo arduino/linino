@@ -11,7 +11,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pango
 PKG_VERSION:=1.22.2
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/1.22/
@@ -45,11 +45,11 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{lib/pkgconfig,lib/pango/1.6.0/modules,include}
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
 		$(1)/usr/lib
 
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/pango/1.6.0/modules/*.{so*,a,la} \
 		$(1)/usr/lib/pango/1.6.0/modules/
 
@@ -64,11 +64,11 @@ endef
 
 define Package/pango/install
 	$(INSTALL_DIR) $(1)/usr/{lib/pango/1.6.0/modules,bin}
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib/
 
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/pango/1.6.0/modules/*.so* \
 		$(1)/usr/lib/pango/1.6.0/modules/
 

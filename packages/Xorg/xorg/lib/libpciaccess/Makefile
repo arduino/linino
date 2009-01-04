@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_BASE_NAME:=libpciaccess
 PKG_NAME:=libpciaccess
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_VERSION:=0.10.3
 
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
@@ -49,7 +49,7 @@ define Build/InstallDev
 		$(1)/usr/include
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libpciaccess.{so*,a,la} \
 		$(1)/usr/lib/
 
@@ -60,7 +60,7 @@ endef
 
 define Package/libpciaccess/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libpciaccess.so* \
 		$(1)/usr/lib/
 endef

@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libxcb
 PKG_VERSION:=1.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://xcb.freedesktop.org/dist/
@@ -63,7 +63,7 @@ define Build/InstallDev
 		$(PKG_INSTALL_DIR)/usr/include/xcb/* \
 		$(1)/usr/include/xcb/
 
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
 		$(1)/usr/lib/
 
@@ -74,14 +74,14 @@ endef
 
 define Package/libxcb/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libxcb.so* \
 		$(1)/usr/lib/
 endef
 
 define Package/libxcb-xlib/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libxcb-xlib.so* \
 		$(1)/usr/lib/
 endef
@@ -89,7 +89,7 @@ endef
 define Package/libxcb-proto/install/Default
 define Package/libxcb-$(1)/install
 	$(INSTALL_DIR) $$(1)/usr/lib
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libxcb-$(1).so* \
 		$$(1)/usr/lib/
 endef

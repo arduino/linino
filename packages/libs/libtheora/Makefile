@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libtheora
 PKG_VERSION:=1.0
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.xiph.org/releases/theora/
 PKG_MD5SUM:=c963937053f45a7878954bed37ceb182
@@ -50,14 +50,14 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/theora/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/include/theora/* $(1)/usr/include/theora/
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
 endef
 
 define Package/libtheora/install
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/*.{so*,a} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libtheora))

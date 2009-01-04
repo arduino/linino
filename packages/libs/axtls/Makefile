@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=axtls
 PKG_VERSION:=1.1.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=axTLS-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/axtls http://www.leroc.com.au/axTLS/
@@ -63,7 +63,7 @@ endef
 
 define Package/libaxtls/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/libaxtls.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libaxtls.so.* $(1)/usr/lib/
 endef
 
 define Package/axhttpd/install
