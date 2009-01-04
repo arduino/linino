@@ -4,11 +4,12 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pthsem
 PKG_VERSION:=2.0.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.auto.tuwien.ac.at/~mkoegler/pth/
 PKG_MD5SUM:=b277716ee1224ca9925176fa29e1f0c5
+PKG_FIXUP:=libtool
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
