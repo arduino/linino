@@ -18,7 +18,7 @@ PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 PKG_MD5SUM:=ac0ce6b0063a9858c8f24ddb4c60487d
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
-PKG_BUILD_DEPENDS:=xproto xextproto fixesproto
+PKG_BUILD_DEPENDS:=xproto xextproto fixesproto xdamageproto
 
 include $(INCLUDE_DIR)/package.mk
 
