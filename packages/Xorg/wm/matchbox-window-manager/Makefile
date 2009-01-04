@@ -24,7 +24,7 @@ TARGET_LDFLAGS+= \
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/matchbox
+define Package/matchbox-window-manager
   TITLE:=matchbox window manager
   SECTION:=xorg-wm
   CATEGORY:=Xorg
@@ -39,9 +39,9 @@ define Build/Compile
 		all install 
 endef
 
-define Package/matchbox/install
+define Package/matchbox-window-manager/install
 	$(INSTALL_DIR) $(1)/
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
-$(eval $(call BuildPackage,matchbox))
+$(eval $(call BuildPackage,matchbox-window-manager))
