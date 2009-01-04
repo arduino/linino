@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpc
-PKG_VERSION:=0.12.1
-PKG_RELEASE:=2
+PKG_VERSION:=0.14
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.musicpd.org/uploads/files/
-PKG_MD5SUM:=a93a390315aacfec061c8df89fb5e35f
+PKG_SOURCE_URL:=@SF/musicpd
+PKG_MD5SUM:=f4218602342cf322872a41dfe0cc72e1
 
 include $(INCLUDE_DIR)/package.mk
 
