@@ -10,12 +10,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lftp
-PKG_VERSION:=3.7.3
+PKG_VERSION:=3.7.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://ftp.yars.free.net/pub/source/lftp/old/
-PKG_MD5SUM:=fc98506620b059d712341d624eb720d6
+PKG_SOURCE_URL:=http://ftp.yars.free.net/pub/source/lftp/
+PKG_MD5SUM:=7b1c58a6289448140b1cd328e1d51f94
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -44,7 +44,7 @@ CONFIGURE_VARS += \
         CXXFLAGS="$$$$CXXFLAGS -fno-builtin -I$(STAGING_DIR)/usr/include/uClibc++ -nostdinc++" \
         CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
         LDFLAGS="$$$$LDFLAGS" \
-        LIBS="-nodefaultlibs -lz -lutil -luClibc++ -lcurses -lgcc_s -ldl" \
+        LIBS="-nodefaultlibs -lz -lutil -luClibc++ -lcurses -lgcc -lgcc_s -ldl" \
 
 define Build/Compile
         $(MAKE) -C $(PKG_BUILD_DIR) \

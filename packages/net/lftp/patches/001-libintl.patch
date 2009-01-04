@@ -1,6 +1,6 @@
-diff -burN lftp-3.7.4.org/lib/gettext.h lftp-3.7.4/lib/gettext.h
---- lftp-3.7.4.org/lib/gettext.h	2008-05-18 07:58:27.000000000 +0200
-+++ lftp-3.7.4/lib/gettext.h	2008-11-05 16:03:37.769820993 +0100
+diff -burN lftp-3.7.7/lib/gettext.h lftp-3.7.7.patched/lib/gettext.h
+--- lftp-3.7.7/lib/gettext.h	2008-05-16 18:28:43.000000000 +0200
++++ lftp-3.7.7.patched/lib/gettext.h	2009-01-03 18:59:05.374184151 +0100
 @@ -22,7 +22,6 @@
  #if ENABLE_NLS
  

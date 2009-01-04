@@ -1,0 +1,23 @@
+diff -burN lftp-3.7.7/lib/sys_time.in.h lftp-3.7.7.patched/lib/sys_time.in.h
+--- lftp-3.7.7/lib/sys_time.in.h	2008-10-24 16:00:33.000000000 +0200
++++ lftp-3.7.7.patched/lib/sys_time.in.h	2009-01-03 21:20:34.129104049 +0100
+@@ -39,6 +39,10 @@
+ #  include <time.h>
+ # endif
+ 
++#ifdef __cplusplus
++extern "C" {
++#endif 
++
+ # if ! @HAVE_STRUCT_TIMEVAL@
+ struct timeval
+ {
+@@ -53,4 +57,8 @@
+ int gettimeofday (struct timeval *restrict, void *restrict);
+ # endif
+ 
++#ifdef __cplusplus
++}
++#endif 
++
+ #endif /* _GL_SYS_TIME_H */
