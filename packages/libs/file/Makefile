@@ -79,7 +79,7 @@ define Package/file/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/share/file
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/file $(1)/usr/bin
-	(cd $(PKG_BUILD_DIR)/magic/Magdir; for file in `ls`; do cat $$$${file} >> magic.mime; done)
+	(cd $(PKG_BUILD_DIR)/magic/Magdir; rm -f magic.mime; for file in `ls`; do cat $$$${file} >> magic.mime; done)
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/magic/Magdir/magic.mime $(1)/usr/share/file/magic
 endef
 
