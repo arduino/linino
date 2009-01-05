@@ -192,12 +192,15 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		$(if $(CONFIG_PACKAGE_xserver-xorg),--enable-xorg --enable-dri,--disable-xorg --disable-dri) \
 		$(if $(CONFIG_PACKAGE_xserver-kdrive-xvesa), \
+			--enable-kdrive \
 			--enable-kdrive-vesa, \
 			--disable-kdrive-vesa) \
 		$(if $(CONFIG_PACKAGE_xserver-kdrive-xfbdev), \
+			--enable-kdrive \
 			--enable-xfbdev, \
 			--disable-xfbdev) \
 		$(if $(CONFIG_PACKAGE_xserver-kdrive-xephyr), \
+			--enable-kdrive \
 			--enable-xephyr, \
 			--disable-xephyr) \
 		$(if $(CONFIG_X_TSLIB),--enable-tslib,--disable-tslib) \
