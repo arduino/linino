@@ -24,6 +24,7 @@ define Package/libsndfile
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Library for reading/writing audio files
+  DEPENDS:=@!avr32
   URL:=http://www.mega-nerd.com/libsndfile/
 endef
 
