@@ -37,7 +37,7 @@ CONFIGURE_VARS += \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
 	CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include/uClibc++" \
 	LDFLAGS="$$$$LDFLAGS" \
-	LIBS="-nodefaultlibs -luClibc++ -lpthread -lgcc_s" \
+	LIBS="-nodefaultlibs -luClibc++ -lpthread $(LIBGCC_S)" \
 
 define Build/Configure
 	$(call Build/Configure/Default,\

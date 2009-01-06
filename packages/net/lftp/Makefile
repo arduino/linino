@@ -44,7 +44,7 @@ CONFIGURE_VARS += \
         CXXFLAGS="$$$$CXXFLAGS -fno-builtin -I$(STAGING_DIR)/usr/include/uClibc++ -nostdinc++" \
         CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
         LDFLAGS="$$$$LDFLAGS" \
-        LIBS="-nodefaultlibs -lz -lutil -luClibc++ -lcurses -lgcc -lgcc_s -ldl" \
+        LIBS="-nodefaultlibs -lz -lutil -luClibc++ -lcurses -lgcc $(LIBGCC_S) -ldl" \
 
 define Build/Compile
         $(MAKE) -C $(PKG_BUILD_DIR) \

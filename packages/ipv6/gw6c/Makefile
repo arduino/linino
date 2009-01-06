@@ -56,7 +56,7 @@ define Build/Compile
 			-I$(PKG_BUILD_DIR)/gw6c/src/gw6c/platform/openwrt -I$(PKG_BUILD_DIR)/gw6c/src/gw6c" \
 		LDFLAGS="-L$(PKG_BUILD_DIR)/gw6c/src/gw6c/gw6cconfig \
 			-L$(PKG_BUILD_DIR)/gw6c/src/gw6c/gw6cmessaging \
-			-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -nodefaultlibs -luClibc++ -lgcc_s" \
+			-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -nodefaultlibs -luClibc++ $(LIBGCC_S)" \
 		target="openwrt" \
 		installdir="$(PKG_INSTALL_DIR)"
 endef

@@ -42,7 +42,7 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/software \
 		CXX="$(TARGET_CROSS)g++ $(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++ -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/uClibc++" \
-		LFLAGS="-L$(STAGING_DIR)/usr/lib -nodefaultlibs -luClibc++ -lusb -lgcc_s" \
+		LFLAGS="-L$(STAGING_DIR)/usr/lib -nodefaultlibs -luClibc++ -lusb $(LIBGCC_S)" \
 		all
 endef
 
