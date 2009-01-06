@@ -19,7 +19,7 @@ EXTRA_LDFLAGS:="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
 
 include $(INCLUDE_DIR)/package.mk
 
-CONFIGURE_VARS+=LIBS="-nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm" \
+CONFIGURE_VARS+=LIBS="-nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm $(LIBGCC_S)" \
 		CXXLD="$(TARGET_CC)" 
 
 CONFIGURE_ARGS+=--disable-xmb
