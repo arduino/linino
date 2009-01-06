@@ -37,15 +37,11 @@ $(call Package/eterm/Default)
   DEPENDS:=eterm
 endef
 
-CONFIGURE_ARGS+=--with-imlib=$(STAGING_DIR)/usr/
+CONFIGURE_ARGS += \
+	--with-imlib=$(STAGING_DIR)/usr/
 
-define Build/Configure
-	cd  $(PKG_BUILD_DIR)/; $(TARGET_CONFIGURE_OPTS)	$(CONFIGURE_VARS) \
-		$(CONFIGURE_CMD) \
-		$(CONFIGURE_ARGS_XTRA) \
-		$(CONFIGURE_ARGS) \
-		LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
-endef
+CONFIGURE_VARS += \
+	LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)\
