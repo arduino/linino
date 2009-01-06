@@ -122,6 +122,7 @@ define Package/xorg/Default
   SECTION:=xorg-server
   CATEGORY:=Xorg
   SUBMENU:=server
+  DEPENDS:=@!avr32
   URL:=http://xorg.freedesktop.org/
 endef
 
