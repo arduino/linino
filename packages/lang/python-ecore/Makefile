@@ -30,7 +30,7 @@ define Package/python-ecore
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=python-ecore
-  DEPENDS:=python-core ecore eina
+  DEPENDS:=python-core ecore evas eina python-evas
 endef
 
 define Package/python-ecore/description
