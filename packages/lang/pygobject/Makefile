@@ -36,10 +36,10 @@ define Package/python-gobject/description
 endef
 
 define Build/Compile
-	(cd $(PKG_BUILD_DIR)/gobject; \
-	 $(HOSTCC) -I$(STAGING_DIR)/usr/lib/glib-2.0/include/ \
-	           -I$(STAGING_DIR)/usr/include/glib-2.0/ \
-			    generate-constants.c -o generate-constants);
+#	(cd $(PKG_BUILD_DIR)/gobject; \
+#	 $(HOSTCC) -I$(STAGING_DIR)/usr/lib/glib-2.0/include/ \
+#	           -I$(STAGING_DIR)/usr/include/glib-2.0/ \
+#			    generate-constants.c -o generate-constants);
 	$(call Build/Compile/Default)
 	$(call Build/Install/Default)
 endef
