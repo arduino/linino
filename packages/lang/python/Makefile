@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python
 PKG_VERSION:=2.5.4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=Python-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.python.org/ftp/python/$(PKG_VERSION)/
@@ -41,7 +41,7 @@ endef
 define Package/python
 $(call Package/python/Default)
   TITLE+= (full)
-  DEPENDS:=+libpthread +zlib
+  DEPENDS:=+libpthread +zlib +libffi
   PROVIDES:=python-core
 endef
 
@@ -95,7 +95,7 @@ MAKE_OPTS:=\
 	CFLAGS="$(TARGET_CFLAGS) -fno-inline" \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
 	LD="$(TARGET_CC)" \
-	HOSTPYTHON=$(PKG_INSTALL_DIR)/host/bin/python \
+	HOSTPYTHON=./hostpython \
 	HOSTPGEN=./hostpgen \
 
 define Build/Configure
@@ -115,6 +115,10 @@ define Build/Compile
 		HOSTPYTHON=$(PKG_BUILD_DIR)/python \
 		sharedmods install
 	(cd $(PKG_BUILD_DIR);mv Parser/pgen hostpgen)
+
+    # The python executable needs to stay in the rootdir since its location will
+    # be used to compute the path of the config files.
+	$(CP) $(PKG_BUILD_DIR)/python $(PKG_BUILD_DIR)/hostpython
 	$(MAKE) -C $(PKG_BUILD_DIR) distclean
 
 	$(call Build/Configure/Default, \
@@ -123,6 +127,7 @@ define Build/Compile
 		--disable-ipv6 \
 		--without-cxx-main \
 		--with-threads \
+		--with-system-ffi \
 		ac_cv_lib_readline_readline=no \
 		OPT="$(TARGET_CFLAGS)" \
 	)
