@@ -56,6 +56,7 @@ define Build/Compile/PyMod
 		CPPFLAGS="$(TARGET_CPPFLAGS)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 		$(3) \
-		$(PYTHON) ./setup.py $(2) \
+		$(PYTHON) ./setup.py $(2); \
+		find $(PKG_INSTALL_DIR) -name "*\.pyc" -o -name "*\.pyo" | xargs rm -f \
 	);
 endef
