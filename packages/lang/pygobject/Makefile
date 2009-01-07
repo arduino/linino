@@ -9,11 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pygobject
-PKG_VERSION:=2.15.1
-PKG_RELEASE:=2
+PKG_VERSION:=2.16.0
+PKG_RELEASE:=1
+
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/2.15
-PKG_MD5SUM:=05bf0487c885a1ef6df615e02cac5ea6
+PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/2.16
+PKG_MD5SUM:=431e7d4632163b93d1ee43cd071a389c
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
@@ -35,13 +38,10 @@ define Package/python-gobject/description
   GLib bindings for python
 endef
 
-define Build/Compile
-#	(cd $(PKG_BUILD_DIR)/gobject; \
-#	 $(HOSTCC) -I$(STAGING_DIR)/usr/lib/glib-2.0/include/ \
-#	           -I$(STAGING_DIR)/usr/include/glib-2.0/ \
-#			    generate-constants.c -o generate-constants);
-	$(call Build/Compile/Default)
-	$(call Build/Install/Default)
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--with-libffi \
+	)
 endef
 
 define Build/InstallDev
@@ -54,6 +54,11 @@ define Build/InstallDev
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
 		$(1)/usr/lib/pkgconfig/
+
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so,a,la} \
+		$(1)/usr/lib/
 
 	$(SED) \
 		"s,^\(prefix\|exec_prefix\|datadir\)=,\1=$(STAGING_DIR),g" \
@@ -80,6 +85,11 @@ define Build/InstallDev
 endef
 
 define Package/python-gobject/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
+		$(1)/usr/lib
+
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/*.{pth,py} \
@@ -90,7 +100,7 @@ define Package/python-gobject/install
 		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/gtk-2.0/*.py \
 		$(1)$(PYTHON_PKG_DIR)/gtk-2.0/
 
-	$(foreach d,gobject gio, \
+	$(foreach d,gobject gio glib, \
 		$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)/gtk-2.0/$(d); \
 		$(INSTALL_DATA) \
 			$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/gtk-2.0/$(d)/*.{py,so} \
