@@ -9,11 +9,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=paroli
 PKG_VERSION:=20090104
-PKG_REV:=39c30cb16cc04c478f79cd34fec7719c730469f7
-PKG_RELEASE:=1
+PKG_REV:=b966ed25a0b0550daa883e9288bf1855d1f1be2a
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=git://git.openmoko.org/git/paroli.git
+PKG_SOURCE_URL:=http://git.paroli-project.org/paroli.git
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
