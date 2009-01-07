@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dosfstools
 PKG_VERSION:=2.11
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).src.tar.gz
 PKG_SOURCE_URL:=ftp://ftp.uni-erlangen.de/pub/Linux/LOCAL/dosfstools/
@@ -51,9 +51,9 @@ endef
 define Package/dosfstools/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dosfsck $(1)/usr/sbin/
-	(cd $(1)/usr/sbin; ln -s dosfsck fsck.msdos; ln -s dosfsck fsck.vfat)
+	(cd $(1)/usr/sbin; ln -sf dosfsck fsck.msdos; ln -sf dosfsck fsck.vfat)
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/mkdosfs $(1)/usr/sbin/
-	(cd $(1)/usr/sbin; ln -s mkdofs mkfs.msdos; ln -s mkdofs mkfs.vfat)
+	(cd $(1)/usr/sbin; ln -sf mkdofs mkfs.msdos; ln -sf mkdofs mkfs.vfat)
 endef
 
 $(eval $(call BuildPackage,dosfstools))

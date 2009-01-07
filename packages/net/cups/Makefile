@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cups
 PKG_VERSION:=1.3.7
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-source.tar.bz2
 PKG_SOURCE_URL:= \
@@ -99,7 +99,7 @@ define Package/cups/install
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/sbin/{accept,cupsaddsmb,cupsctl,cupsd,cupsfilter,lpadmin,lpc,lpinfo,lpmove} \
 		$(1)/usr/sbin/
-	(cd $(1)/usr/sbin; ln -s accept reject; ln -s accept cupsenable; ln -s accept cupsdisable;)
+	(cd $(1)/usr/sbin; ln -sf accept reject; ln -sf accept cupsenable; ln -sf accept cupsdisable;)
 	# overwrite default config with our own
 	$(CP) ./files/etc/cups/* $(1)/etc/cups/
 	# install initscript with priority 60
