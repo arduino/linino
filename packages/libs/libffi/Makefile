@@ -24,6 +24,7 @@ define Package/libffi
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=libffi
+  DEPENDS:=@!avr32
   URL:=http://sourceware.org/libffi/
 endef
 
