@@ -24,6 +24,7 @@ define Package/lldpd
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Link Layer Discovery Protocol damon
+  DEPENDS:=@!LINUX_2_4
   URL:=http://www.bitwizard.nl/lldpd/
 endef
 
