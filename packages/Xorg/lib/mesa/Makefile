@@ -25,7 +25,7 @@ PKG_INSTALL:=1
 define Package/libgl-mesa
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libX11 +libXext +libXfixes +libXdamage +libXxf86vm +libdrm
   TITLE:=Mesa OpenGL library
   URL:=http://mesa3d.org
@@ -34,7 +34,7 @@ endef
 define Package/libglu-mesa
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libgl-mesa
   TITLE:=Mesa OpenGL utility library
   URL:=http://mesa3d.org
@@ -44,7 +44,7 @@ define Package/libgl-mesa-dri/Default
 define Package/libgl-mesa-dri-$(1)
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=libgl-mesa @DISPLAY_SUPPORT
   TITLE:=mesa dri $(1)
   URL:=http://mesa3d.org

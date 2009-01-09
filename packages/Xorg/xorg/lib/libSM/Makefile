@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libSM
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libICE
   TITLE:=libSM
   URL:=http://xorg.freedesktop.org/

@@ -27,7 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/edbus
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=Edbus
   URL:=http://wiki.enlightenment.org/index.php
   DEPENDS:=+dbus +ecore

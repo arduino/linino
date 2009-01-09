@@ -27,7 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/evas
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=Evas is a hardware-accelerated canvas API for X-Windows
   URL:=http://wiki.enlightenment.org/index.php/Evas
   DEPENDS:=+eet +libfreetype +libjpeg +libpng +libX11 +libXext +libXrender +fontconfig

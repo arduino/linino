@@ -27,7 +27,7 @@ PROTOS:=composite damage dpms glx randr record render res screensaver shape \
 define Package/libxcb
   SECTION:=xorg-libs
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=libxcb
   DEPENDS:=+libXau +libXdmcp
 endef
@@ -40,7 +40,7 @@ endef
 define Package/libxcb-xlib
   SECTION:=xorg-libs
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=libxcb-xlib
   DEPENDS:=+libxcb
 endef
@@ -49,7 +49,7 @@ define Package/libxcb-proto/Default
 define Package/libxcb-$(1)
   SECTION:=xorg-libs
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=libxcb-$(1)
   DEPENDS:=+libxcb
 endef

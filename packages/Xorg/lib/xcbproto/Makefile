@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/xcbproto
   SECTION:=xorg-libs
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=xcbproto
 endef
 

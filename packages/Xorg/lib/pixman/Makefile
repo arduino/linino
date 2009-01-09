@@ -24,7 +24,7 @@ PKG_INSTALL:=1
 define Package/pixman
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=pixman
   URL:=http://cairographics.org/
 endef

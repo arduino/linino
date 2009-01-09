@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libfontenc
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+zlib
   TITLE:=libfontenc
   URL:=http://xorg.freedesktop.org/

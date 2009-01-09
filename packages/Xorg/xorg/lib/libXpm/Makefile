@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libXpm
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libX11 +libXt +libXext
   TITLE:=libXpm
   URL:=http://xorg.freedesktop.org/

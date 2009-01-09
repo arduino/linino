@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libXcursor
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libXrender +libXfixes +libX11
   TITLE:=libXcursor
   URL:=http://xorg.freedesktop.org/

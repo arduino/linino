@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/xtrans
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=xtrans
   URL:=http://xorg.freedesktop.org/
 endef

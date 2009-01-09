@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libdrm
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=
   TITLE:=libdrm
   URL:=http://dri.freedesktop.org/

@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libXrender
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libX11
   TITLE:=libXrender
   URL:=http://xorg.freedesktop.org/

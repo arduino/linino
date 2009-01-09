@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libXfont
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+zlib +libfontenc +libfreetype
   TITLE:=libXfont
   URL:=http://xorg.freedesktop.org/

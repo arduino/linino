@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libXvMC
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libXext +libXv +libX11
   TITLE:=libXvMC
   URL:=http://xorg.freedesktop.org/

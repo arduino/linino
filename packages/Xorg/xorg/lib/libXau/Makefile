@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libXau
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=libXau
   URL:=http://xorg.freedesktop.org/
 endef

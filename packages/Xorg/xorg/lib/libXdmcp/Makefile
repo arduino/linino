@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libXdmcp
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=libXdmcp
   URL:=http://xorg.freedesktop.org/
 endef

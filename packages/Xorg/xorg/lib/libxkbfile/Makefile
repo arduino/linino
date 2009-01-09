@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libxkbfile
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libX11
   TITLE:=libxkbfile
   URL:=http://xorg.freedesktop.org/

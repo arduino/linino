@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/tslib
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=Tslib is an abstraction layer for touchscreen panel events.
   DEPENDS:=@!LINUX_2_4
   URL:=http://tslib.berlios.de/

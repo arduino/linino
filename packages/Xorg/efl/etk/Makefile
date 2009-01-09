@@ -27,7 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/etk
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=Etk is a toolkit based on the EFL
   URL:=http://wiki.enlightenment.org/index.php/Etk
   DEPENDS:=+evas +ecore +edje

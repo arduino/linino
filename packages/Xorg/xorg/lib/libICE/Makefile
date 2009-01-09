@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libICE
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=libICE
   URL:=http://xorg.freedesktop.org/
 endef

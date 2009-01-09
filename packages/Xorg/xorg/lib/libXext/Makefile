@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libXext
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libX11 +libXau
   TITLE:=libXext
   URL:=http://xorg.freedesktop.org/

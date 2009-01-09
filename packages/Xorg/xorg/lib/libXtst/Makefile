@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libXtst
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libX11 +libXext
   TITLE:=libXtst
   URL:=http://xorg.freedesktop.org/

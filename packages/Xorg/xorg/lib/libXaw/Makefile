@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libXaw
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libX11 +libXext +libXt +libXmu +libXpm +libXau
   TITLE:=libXaw
   URL:=http://xorg.freedesktop.org/

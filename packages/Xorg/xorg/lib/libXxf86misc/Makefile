@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libXxf86misc
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libX11 +libXext
   TITLE:=libXxf86misc
   URL:=http://xorg.freedesktop.org/

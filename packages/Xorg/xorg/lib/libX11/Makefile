@@ -28,7 +28,7 @@ TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 define Package/libX11
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libXdmcp +libXau
   TITLE:=libX11
   URL:=http://xorg.freedesktop.org/

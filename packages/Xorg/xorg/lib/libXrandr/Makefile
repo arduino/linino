@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libXrandr
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libXext +libXrender +libX11
   TITLE:=libXrandr
   URL:=http://xorg.freedesktop.org/

@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libXdamage
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libX11 +libXfixes
   TITLE:=libXdamage
   URL:=http://xorg.freedesktop.org/

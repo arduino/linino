@@ -27,7 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/embryo
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=Embryo implements a C like scripting language used in various parts of the Enlightenment project (edje)
   URL:=http://wiki.enlightenment.org/index.php/Embryo
   DEPENDS:=+eet +evas +libXtst +libXcursor +libXrandr 

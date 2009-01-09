@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libXcomposite
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libX11 +libXfixes +libXext
   TITLE:=libXcomposite
   URL:=http://xorg.freedesktop.org/

@@ -27,7 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/eet
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=EET is a tiny library designed to write an arbitary set of chunks of data to a file
   URL:=http://wiki.enlightenment.org/index.php/Eet
   DEPENDS:=+libjpeg +zlib +eina

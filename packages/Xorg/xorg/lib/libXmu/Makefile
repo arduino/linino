@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libXmu
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libXt +libXext
   TITLE:=libXmu
   URL:=http://xorg.freedesktop.org/
@@ -35,7 +35,7 @@ endef
 define Package/libXmuu
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libX11
   TITLE:=libXmuu
   URL:=http://xorg.freedesktop.org/

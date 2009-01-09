@@ -27,7 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/eina
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   TITLE:=Eina
   URL:=http://wiki.enlightenment.org/index.php/Eina
 #  DEPENDS:=+libjpeg +zlib +eet +evas +ecore +embryo

@@ -31,7 +31,7 @@ endef
 define Package/libXxf86vm
   SECTION:=xorg-lib
   CATEGORY:=Xorg
-  SUBMENU:=lib
+  SUBMENU:=libraries
   DEPENDS:=+libX11 +libXext
   TITLE:=libXxf86vm
   URL:=http://xorg.freedesktop.org/
