@@ -33,7 +33,7 @@ endef
 
 define Package/pydnet
   SECTION:=libs
-  DEPENDS:=libdnet +python
+  DEPENDS:=libdnet python-core
   CATEGORY:=Libraries
   TITLE:=Low-level network library
   URL:=http://sourceforge.net/projects/libdnet/
