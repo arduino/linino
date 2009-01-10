@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ipcad
 PKG_VERSION:=3.7.3
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/ipcad
@@ -36,24 +36,19 @@ define Package/ipcad/conffiles/
 /etc/ipcad.conf
 endef
 
-# XXX: don't detect/use netfilter ipq capture
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); touch \
-		cfglex.c \
-		cslex.c \
-	);
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--disable-static \
-		--with-psrc=pcap \
-		--with-pcap-include="$(STAGING_DIR)/usr/include" \
-		--with-pcap-libraries="$(STAGING_DIR)/usr/lib" \
-		, \
-		ac_cv_func_getifaddrs=no \
-		ac_cv_header_ifaddrs_h=no \
-		ac_cv_header_linux_netfilter_ipv4_ip_queue_h=no \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--disable-static \
+	--with-psrc=pcap \
+	--with-pcap-include="$(STAGING_DIR)/usr/include" \
+	--with-pcap-libraries="$(STAGING_DIR)/usr/lib" \
+
+# XXX: don't detect/use netfilter QUEUE/ULOG captures
+CONFIGURE_VARS += \
+	ac_cv_func_getifaddrs=no \
+	ac_cv_header_ifaddrs_h=no \
+	ac_cv_header_linux_netfilter_ipv4_ip_queue_h=no \
+	ac_cv_header_linux_netfilter_ipv4_ipt_ULOG_h=no \
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
