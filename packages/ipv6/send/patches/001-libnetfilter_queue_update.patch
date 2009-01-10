@@ -4,11 +4,9 @@
 # - use libnetfilter_queue instead of deprecated libipq
 #
 # Under GPLv2 - Copyright (C) 2008 - EADS - Arnaud Ebalard <arno@natisbad.org>
-Index: sendd-0.2/Makefile.config
-===================================================================
---- sendd-0.2.orig/Makefile.config	2008-05-27 16:53:49.238160776 +0200
-+++ sendd-0.2/Makefile.config	2008-05-27 16:53:52.866156255 +0200
-@@ -19,7 +19,7 @@
+--- a/Makefile.config
++++ b/Makefile.config
+@@ -19,7 +19,7 @@ OS=linux
  #CC=gcc-4.0
  
  # Where to install
@@ -17,11 +15,9 @@ Index: sendd-0.2/Makefile.config
  
  # Set to "y" to build MT versions of sendd and cgatool
  USE_THREADS=n
-Index: sendd-0.2/README
-===================================================================
---- sendd-0.2.orig/README	2008-05-27 16:53:49.246168775 +0200
-+++ sendd-0.2/README	2008-05-27 16:53:52.866156255 +0200
-@@ -20,7 +20,7 @@
+--- a/README
++++ b/README
+@@ -20,7 +20,7 @@ Linux:
    o CONFIG_NETFILTER, CONFIG_IPV6, CONFIG_IP6_NF_QUEUE, CONFIG_IP6_NF_IPTABLES,
      CONFIG_IP6_NF_FILTER enabled in your kernel config.
    o netfilter ip6tables command
@@ -30,11 +26,9 @@ Index: sendd-0.2/README
  
  FreeBSD:
    o NETGRAPH, NETGRAPH_BPF, NETGRAPH_ETHER, NETGRAPH_SOCKET enabled in
-Index: sendd-0.2/cgatool/Makefile
-===================================================================
---- sendd-0.2.orig/cgatool/Makefile	2008-05-27 16:53:49.278164104 +0200
-+++ sendd-0.2/cgatool/Makefile	2008-05-27 16:53:52.866156255 +0200
-@@ -25,7 +25,7 @@
+--- a/cgatool/Makefile
++++ b/cgatool/Makefile
+@@ -25,7 +25,7 @@ endif
  
  ifeq ($(USE_CONSOLE),y)
  ifeq ($(USE_READLINE),y)
@@ -43,11 +37,9 @@ Index: sendd-0.2/cgatool/Makefile
  endif
  endif
  
-Index: sendd-0.2/sendd/Makefile
-===================================================================
---- sendd-0.2.orig/sendd/Makefile	2008-05-27 16:53:49.286173430 +0200
-+++ sendd-0.2/sendd/Makefile	2008-05-27 16:53:52.878156241 +0200
-@@ -37,7 +37,7 @@
+--- a/sendd/Makefile
++++ b/sendd/Makefile
+@@ -37,7 +37,7 @@ endif
  
  ifeq ($(USE_CONSOLE),y)
  ifeq ($(USE_READLINE),y)
@@ -56,10 +48,8 @@ Index: sendd-0.2/sendd/Makefile
  endif
  endif
  
-Index: sendd-0.2/sendd/os-linux/Makefile
-===================================================================
---- sendd-0.2.orig/sendd/os-linux/Makefile	2008-05-27 16:53:49.294197424 +0200
-+++ sendd-0.2/sendd/os-linux/Makefile	2008-05-27 16:53:52.910156597 +0200
+--- a/sendd/os-linux/Makefile
++++ b/sendd/os-linux/Makefile
 @@ -1,23 +1,5 @@
  
  OBJS += os/addr.o os/ipq.o os/rand.o os/snd_linux.o
@@ -86,10 +76,8 @@ Index: sendd-0.2/sendd/os-linux/Makefile
 -# installed in include/libipq/libipq.h. This rule helps cpp to find it.
 -os/ipq.o: CPPFLAGS += -I/usr/include/libipq -I/usr/local/include/libipq
 +os/ipq.o: CPPFLAGS += -I/usr/include/libnetfilter_queue
-Index: sendd-0.2/sendd/os-linux/ipq.c
-===================================================================
---- sendd-0.2.orig/sendd/os-linux/ipq.c	2008-05-27 16:53:49.306181136 +0200
-+++ sendd-0.2/sendd/os-linux/ipq.c	2008-05-27 16:55:57.602168158 +0200
+--- a/sendd/os-linux/ipq.c
++++ b/sendd/os-linux/ipq.c
 @@ -33,7 +33,7 @@
  #include <sys/select.h>
  #include <netinet/in.h>
@@ -344,10 +332,8 @@ Index: sendd-0.2/sendd/os-linux/ipq.c
 +	if (h != NULL)
 +		nfq_close(h);
  }
-Index: sendd-0.2/sendd/os-linux/snd_linux.c
-===================================================================
---- sendd-0.2.orig/sendd/os-linux/snd_linux.c	2008-05-27 16:53:49.314164060 +0200
-+++ sendd-0.2/sendd/os-linux/snd_linux.c	2008-05-27 16:53:52.914160667 +0200
+--- a/sendd/os-linux/snd_linux.c
++++ b/sendd/os-linux/snd_linux.c
 @@ -40,13 +40,13 @@
  void
  os_specific_add_fds(fd_set *fds, int *maxfd)
@@ -364,7 +350,7 @@ Index: sendd-0.2/sendd/os-linux/snd_linux.c
  }
  
  int
-@@ -59,7 +59,7 @@
+@@ -59,7 +59,7 @@ int
  os_specific_init(void)
  {
  	if (linux_rand_init() < 0 ||
@@ -373,7 +359,7 @@ Index: sendd-0.2/sendd/os-linux/snd_linux.c
  		return (-1);
  	}
  	return (0);
-@@ -68,6 +68,6 @@
+@@ -68,6 +68,6 @@ os_specific_init(void)
  void
  os_specific_fini(void)
  {
@@ -381,10 +367,8 @@ Index: sendd-0.2/sendd/os-linux/snd_linux.c
 +	linux_nfq_fini();
  	linux_rand_fini();
  }
-Index: sendd-0.2/sendd/os-linux/snd_linux.h
-===================================================================
---- sendd-0.2.orig/sendd/os-linux/snd_linux.h	2008-05-27 16:53:49.330169232 +0200
-+++ sendd-0.2/sendd/os-linux/snd_linux.h	2008-05-27 16:53:52.914160667 +0200
+--- a/sendd/os-linux/snd_linux.h
++++ b/sendd/os-linux/snd_linux.h
 @@ -33,10 +33,10 @@
  #ifndef	_SEND_LINUX_H
  #define	_SEND_LINUX_H
