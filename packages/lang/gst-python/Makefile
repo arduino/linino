@@ -9,22 +9,21 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gst-python
-PKG_VERSION:=0.10.11
+PKG_VERSION:=0.10.13
 PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gst-python/
+PKG_MD5SUM:=870440c6aad304112961ef5700d7698f
 PKG_FIXUP:=libtool
-PKG_MD5SUM:=2c633a06c140024dd0d59db1e87e6945
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
-PKG_INSTALL=1
 
 TARGET_CFLAGS += $(FPIC) \
 	-I$(STAGING_DIR)/usr/lib/libintl/include \
 	-I$(STAGING_DIR)/usr/lib/libiconv/include \
-	-I$(STAGING_DIR)/usr/include/gstreamer-0.10
 
 TARGET_LDFLAGS += \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib \
@@ -38,7 +37,7 @@ define Package/gst-python
   CATEGORY:=Languages
   TITLE:=python bindings for gstreamer
   URL:=http://gstreamer.freedesktop.org/
-  DEPENDS:=+gstreamer +gst-plugins-base +python-gtk
+  DEPENDS:=+gstreamer +gst-plugins-base +python-gobject
 endef
 
 define Package/gst-python/description
@@ -46,13 +45,34 @@ define Package/gst-python/description
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
+		$(1)/usr/lib/pkgconfig/
+
+	$(SED) \
+		"s,^defsdir=.*,defsdir=$(STAGING_DIR)/usr/share/gst-python/0.10/defs/,g" \
+		$(1)/usr/lib/pkgconfig/gst-python-0.10.pc
+
+	$(INSTALL_DIR) $(1)/usr/share/gst-python/0.10/defs
+	$(INSTALL_DATA) \
+		$(IPKG_INSTALL_DIR)/usr/share/gst-python/0.10/defs/* \
+		$(1)/usr/share/gst-python/0.10/defs/
 endef
 
 define Package/gst-python/install
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)/gst-0.10/gst/extend
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/{gstoption.so,pygst.pth,pygst.py} \
+		$(1)$(PYTHON_PKG_DIR)/
+
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/gst-0.10/gst/*.{so,py} \
+		$(1)$(PYTHON_PKG_DIR)/gst-0.10/gst/
+
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/gst-0.10/gst/extend/*.py \
+		$(1)$(PYTHON_PKG_DIR)/gst-0.10/gst/extend/
 endef
 
 $(eval $(call BuildPackage,gst-python))
