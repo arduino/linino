@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -43,16 +43,13 @@ CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
 
-CONFIGURE_VARS += \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libiconv/include" \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libintl/include" \
-	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
-	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libintl/lib" \
-	LIBS="-lnotimpl" \
-	ac_cv_lib_m_rintf=no \
-
+# XXX: VFP_CFLAGS is set to '-mfpu=vfp' on arm by configure, but that breaks 
+# final linking stages, so override it until we find why
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		VFP_CFLAGS="" \
+		all install
 endef
 
 define Build/InstallDev
