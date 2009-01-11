@@ -73,7 +73,6 @@ CONFIGURE_VARS += \
 	config_TARGET_CFLAGS="$(TARGET_CFLAGS)" \
 	config_TARGET_READLINE_INC="-I$(STAGING_DIR)/usr/include" \
 	config_TARGET_READLINE_LIBS="-L$(STAGING_DIR)/usr/lib -lreadline -lncurses" \
-endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
