@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -21,9 +21,14 @@ PKG_BUILD_DEPENDS:=libncurses libreadline
 include $(INCLUDE_DIR)/package.mk
 
 define Package/sqlite3/Default
+  SUBMENU:=database
   TITLE:=SQLite (v3.x) database engine
   URL:=http://www.sqlite.org/
-  SUBMENU:=database
+endef
+
+define Package/sqlite3/Default/description
+ SQLite is a small C library that implements a self-contained, embeddable,
+ zero-configuration SQL database engine.
 endef
 
 define Package/libsqlite3
@@ -34,9 +39,9 @@ define Package/libsqlite3
 endef
 
 define Package/libsqlite3/description
-	SQLite is a small C library that implements a self-contained, embeddable, 
-	zero-configuration SQL database engine.	This package contains the SQLite
-	(v3.x) shared library, used by other programs.
+$(call Package/sqlite3/Default/description)
+ This package contains the SQLite (v3.x) shared library, used by other
+ programs.
 endef
 
 define Package/sqlite3-cli
@@ -48,28 +53,26 @@ define Package/sqlite3-cli
 endef
 
 define Package/sqlite3-cli/description
-	SQLite is a small C library that implements a self-contained, embeddable, 
-	zero-configuration SQL database engine.	
-	This package contains a terminal-based front-end to the SQLite (v3.x) library 
-	that can evaluate queries interactively and display the results in 
-	multiple formats.
+$(call Package/sqlite3/Default/description)
+ This package contains a terminal-based front-end to the SQLite (v3.x) library
+ that can evaluate queries interactively and display the results in multiple
+ formats.
 endef
 
 TARGET_CFLAGS += $(FPIC)
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--disable-tcl \
-		, \
-		config_BUILD_CC="$(HOSTCC)" \
-		config_BUILD_CFLAGS="-O2" \
-		config_TARGET_CC="$(TARGET_CC)" \
-		config_TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-		config_TARGET_READLINE_INC="-I$(STAGING_DIR)/usr/include" \
-		config_TARGET_READLINE_LIBS="-L$(STAGING_DIR)/usr/lib -lreadline -lncurses" \
-	)
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--disable-tcl \
+
+CONFIGURE_VARS += \
+	config_BUILD_CC="$(HOSTCC)" \
+	config_BUILD_CFLAGS="-O2" \
+	config_TARGET_CC="$(TARGET_CC)" \
+	config_TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+	config_TARGET_READLINE_INC="-I$(STAGING_DIR)/usr/include" \
+	config_TARGET_READLINE_LIBS="-L$(STAGING_DIR)/usr/lib -lreadline -lncurses" \
 endef
 
 define Build/Compile
@@ -79,11 +82,11 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/sqlite3.h $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsqlite3.{a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/sqlite3.pc $(1)/usr/lib/pkgconfig/
 endef
 
