@@ -97,42 +97,42 @@ define Package/squid-mod-ntlm-auth-smb-auth
   TITLE:=Samba NTLM authentication helper
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--datadir=/usr/share/squid \
-		--libexecdir=/usr/lib/squid \
-		--sysconfdir=/etc/squid \
-		--enable-shared \
-		--enable-static \
-		--enable-x-accelerator-vary \
-		--with-pthreads \
-		--with-dl \
-		--enable-icmp \
-		--enable-kill-parent-hack \
-		--enable-arp-acl \
-		--enable-ssl \
-		--enable-htcp \
-		--enable-err-languages=English \
-		--enable-default-err-language=English \
-		--enable-linux-netfilter \
-		--enable-icmp \
-		--enable-external-acl-helpers="" \
-		--enable-underscores \
-		--enable-cache-digests \
-		--enable-referer-log \
-		--enable-delay-pools \
-		--enable-useragent-log \
-		--with-openssl=$(STAGING_DIR)/usr \
-		--enable-auth="basic digest ntlm" \
-		--enable-basic-auth-helpers="getpwnam NCSA SMB" \
-		--enable-ntlm-auth-helpers="fakeauth SMB" \
-		--enable-digest-auth-helpers="password" \
-		--enable-external-acl-helpers="ip_user unix_group" \
-		--enable-epoll \
-		--with-maxfd=4096 \
-	)
-endef
+CONFIGURE_ARGS += \
+	--datadir=/usr/share/squid \
+	--libexecdir=/usr/lib/squid \
+	--sysconfdir=/etc/squid \
+	--enable-shared \
+	--enable-static \
+	--enable-x-accelerator-vary \
+	--with-pthreads \
+	--with-dl \
+	--enable-icmp \
+	--enable-kill-parent-hack \
+	--enable-arp-acl \
+	--enable-ssl \
+	--enable-htcp \
+	--enable-err-languages=English \
+	--enable-default-err-language=English \
+	--enable-linux-netfilter \
+	--enable-icmp \
+	--enable-external-acl-helpers="" \
+	--enable-underscores \
+	--enable-cache-digests \
+	--enable-referer-log \
+	--enable-delay-pools \
+	--enable-useragent-log \
+	--with-openssl=$(STAGING_DIR)/usr \
+	--enable-auth="basic digest ntlm" \
+	--enable-basic-auth-helpers="getpwnam NCSA SMB" \
+	--enable-ntlm-auth-helpers="fakeauth SMB" \
+	--enable-digest-auth-helpers="password" \
+	--enable-external-acl-helpers="ip_user unix_group" \
+	--enable-epoll \
+	--with-maxfd=4096 \
 	
+CONFIGURE_VARS += \
+	ac_cv_header_linux_netfilter_ipv4_h=yes \
+
 define Build/Compile
 	# pass INCLUDES to compile host sources against our OpenSSL, not the host one
 	$(MAKE) -C $(PKG_BUILD_DIR)/lib \
@@ -140,7 +140,7 @@ define Build/Compile
 		all
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+		install
 endef
 
 define BuildPlugin
