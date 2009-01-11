@@ -1,7 +1,6 @@
-diff -ruN pglinux-1.5beta-old/Makefile.in pglinux-1.5beta-new/Makefile.in
---- pglinux-1.5beta-old/Makefile.in	2005-03-31 09:40:29.000000000 +0200
-+++ pglinux-1.5beta-new/Makefile.in	2006-10-31 17:04:22.000000000 +0100
-@@ -74,8 +74,8 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -74,8 +74,8 @@ peerguardnf_SOURCES = Main.cpp PeerGuard
  pgtext_SOURCES = pgtext.cpp
  peerguardnf_LDADD = -lipq -lpthread
  pgtext_LDADD = -lncurses -lpthread
