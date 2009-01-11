@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -37,15 +37,15 @@ TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += \
 	--enable-static \
 	--enable-shared \
+
+CONFIGURE_VARS += \
 	LIBNFNETLINK_CFLAGS="-I$(STAGING_DIR)/usr/include" \
 	LIBNFNETLINK_LIBS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib"
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -lc -L$(TOOLCHAIN_DIR)/lib" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+	$(MAKE) -C $(PKG_BUILD_DIR) all
+	$(call libtool_fixup_libdir)
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
 
@@ -68,7 +68,7 @@ endef
 
 define Package/libnetfilter-queue/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnetfilter_queue*.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnetfilter_queue*.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libnetfilter-queue))
