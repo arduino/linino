@@ -1,7 +1,6 @@
-diff -ur xsupplicant.old/configure xsupplicant.dev/configure
---- xsupplicant.old/configure	2006-10-05 14:09:58.019206000 +0200
-+++ xsupplicant.dev/configure	2006-10-05 14:12:12.466767016 +0200
-@@ -5449,19 +5449,6 @@
+--- a/configure
++++ b/configure
+@@ -5362,19 +5362,6 @@ _ACEOF
    FRAMER="generic"
  fi
  

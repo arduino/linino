@@ -1,7 +1,6 @@
-diff -urN xsupplicant-1.2.8/lib/libxsupgui/Makefile.in xsupplicant-1.2.8.new/lib/libxsupgui/Makefile.in
---- xsupplicant-1.2.8/lib/libxsupgui/Makefile.in	2006-10-03 05:02:31.000000000 +0200
-+++ xsupplicant-1.2.8.new/lib/libxsupgui/Makefile.in	2006-11-27 22:52:03.000000000 +0100
-@@ -91,7 +91,7 @@
+--- a/lib/libxsupgui/Makefile.in
++++ b/lib/libxsupgui/Makefile.in
+@@ -91,7 +91,7 @@ install_sh = @install_sh@
  with_openssl_libs = @with_openssl_libs@
  AUTOMAKE_OPTIONS = foreign no-dependencies
  
