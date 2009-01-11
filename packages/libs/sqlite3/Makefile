@@ -65,6 +65,7 @@ CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
 	--disable-tcl \
+	--disable-amalgamation \
 
 CONFIGURE_VARS += \
 	config_BUILD_CC="$(HOSTCC)" \
