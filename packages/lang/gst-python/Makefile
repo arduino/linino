@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -56,7 +56,7 @@ define Build/InstallDev
 
 	$(INSTALL_DIR) $(1)/usr/share/gst-python/0.10/defs
 	$(INSTALL_DATA) \
-		$(IPKG_INSTALL_DIR)/usr/share/gst-python/0.10/defs/* \
+		$(PKG_INSTALL_DIR)/usr/share/gst-python/0.10/defs/* \
 		$(1)/usr/share/gst-python/0.10/defs/
 endef
 
