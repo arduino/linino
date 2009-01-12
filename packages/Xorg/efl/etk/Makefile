@@ -64,3 +64,6 @@ define Package/etk/install
 endef
 
 $(eval $(call BuildPackage,etk))
+$(eval $(call RequireCommand,edje_cc, \
+	Command <edje_cc> not found - please install edje with edje-cc enabled \
+))
