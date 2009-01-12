@@ -6,6 +6,7 @@
 #
 
 include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=fxload
 PKG_VERSION:=2002_04_11
@@ -29,7 +30,7 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/Default, \
-		CFLAGS="$(TARGET_CFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) -I$(LINUX_DIR)/include" \
 	)
 endef
 
