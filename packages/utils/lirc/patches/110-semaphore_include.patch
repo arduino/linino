@@ -1,0 +1,15 @@
+diff -urN lirc-0.8.3/drivers/lirc_dev/lirc_dev.c lirc-0.8.3.new/drivers/lirc_dev/lirc_dev.c
+--- lirc-0.8.3/drivers/lirc_dev/lirc_dev.c	2008-01-13 11:45:02.000000000 +0100
++++ lirc-0.8.3.new/drivers/lirc_dev/lirc_dev.c	2009-01-13 00:23:56.000000000 +0100
+@@ -49,7 +49,11 @@
+ #include <linux/uaccess.h>
+ #include <linux/errno.h>
+ #endif
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27)
+ #include <asm/semaphore.h>
++#else
++#include <linux/semaphore.h>
++#endif
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 0)
+ #include <linux/wrapper.h>
+ #endif
