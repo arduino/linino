@@ -46,7 +46,9 @@ define Build/Configure
 endef
 
 define Build/Compile
+	ln -sf `which edje_cc` $(STAGING_DIR_HOST)/usr/bin/
 	DESTDIR="$(PKG_INSTALL_DIR)" $(MAKE) -C $(PKG_BUILD_DIR) all install
+	rm -f $(STAGING_DIR_HOST)/usr/bin/edje_cc
 endef
 
 define Build/InstallDev
