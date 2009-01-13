@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -23,7 +23,6 @@ PKG_INSTALL=1
 EXTRA_LDFLAGS+= \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
-	-L$(TOOLCHAIN_DIR)/lib
 
 define Package/libxapian
   SECTION:=lib
@@ -60,7 +59,7 @@ define Build/InstallDev
 
 	#FIXME: Libtool should handle this
 	$(SED) \
-		"s,$(STAGING_DIR)/usr/lib/libstdc++,$(TOOLCHAIN_DIR)/lib/libstdc++,g" \
+		"s,$(STAGING_DIR)/usr/lib/libstdc++,$(TOOLCHAIN_DIR)/usr/lib/libstdc++,g" \
 		$(1)/usr/lib/libxapian.la
 endef
 
