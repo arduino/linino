@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=paroli
-PKG_VERSION:=20090104
-PKG_REV:=b966ed25a0b0550daa883e9288bf1855d1f1be2a
+PKG_VERSION:=20090112
+PKG_REV:=81db9c1a2abd7d56300867b04d4c541e34bb8165
 PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -36,17 +36,22 @@ define Package/paroli/description
 endef
 
 define Build/Compile
+	$(call Build/Compile/PyMod,,build)
 	$(call Build/Compile/PyMod,,install --prefix="$(PKG_INSTALL_DIR)/usr")
 endef
 
 define Package/paroli/install
-	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR) $(1)/usr/bin $(1)/etc $(1)/usr/share/applications/paroli
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR) $(1)/usr/bin $(1)/etc/init.d $(1)/usr/share/applications/paroli $(1)/usr/share/paroli
 	$(CP) \
 		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
 		$(1)$(PYTHON_PKG_DIR)
-	$(CP) \
+	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/* \
 		$(1)/usr/bin/
+	$(INSTALL_BIN) ./files/paroli.init $(1)/etc/init.d/paroli
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/paroli/* \
+		$(1)/usr/share/paroli/
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/applications/* \
 		$(1)/usr/share/applications/paroli/
