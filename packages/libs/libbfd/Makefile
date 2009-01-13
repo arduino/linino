@@ -20,6 +20,13 @@ include $(INCLUDE_DIR)/package.mk
 
 TARGETS:=$(GNU_TARGET_NAME)
 
+define Package/libbfd
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=The Binutils BFD library
+  URL:=ftp://ftp.gnu.org/gnu/binutils
+endef
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-install-libbfd \
@@ -51,4 +58,4 @@ define Build/InstallDev
 		$(1)/usr/lib/
 endef
 
-$(eval $(call Build/DefaultTargets))
+$(eval $(call BuildPackage,libbfd))
