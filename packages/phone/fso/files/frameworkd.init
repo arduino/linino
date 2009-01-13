@@ -1,0 +1,11 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2008 OpenWrt.org
+START=80
+
+start() {
+    /usr/bin/frameworkd &
+}
+    
+stop() {
+    killall frameworkd
+}

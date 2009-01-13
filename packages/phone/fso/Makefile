@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fso
-PKG_VERSION:=20090103
-PKG_REV:=cbddf72db7ee7f06c5863bce6d4055652e66b25b
+PKG_VERSION:=20090112
+PKG_REV:=2c47aa00f530c4ec698c024b583f250373185b09
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -23,11 +23,18 @@ PKG_BUILD_DEPENDS:=cython python
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
+ifeq ($(CONFIG_TARGET_s3c24xx_openmoko-gta02-graphical),y)
+  CONFIG=om_gta02
+endif
+ifeq ($(CONFIG_TARGET_s3c24xx_openmoko-gta02-minimal),y)
+  CONFIG=om_gta02
+endif
+
 define Package/fso
   SECTION:=phone
   CATEGORY:=Phone
   TITLE:=freesmartphone.org DBus API reference implementation
-  DEPENDS:=python-core +dbus
+  DEPENDS:=python-core +dbus-python +python-gobject +pyserial +pyyaml +gst-python
   URL:=http://www.freesmartphone.org
 endef
 
@@ -40,16 +47,18 @@ define Build/Compile
 endef
 
 define Package/fso/install
-	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR) $(1)/usr/bin $(1)/etc
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR) $(1)/usr/bin $(1)/etc/init.d
 	$(CP) \
 		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
 		$(1)$(PYTHON_PKG_DIR)
-	$(CP) \
+	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/* \
 		$(1)/usr/bin/
+	$(INSTALL_BIN) ./files/frameworkd.init $(1)/etc/init.d/frameworkd
 	$(CP) \
 		$(PKG_INSTALL_DIR)/etc/* \
 		$(1)/etc/
+	$(if $(CONFIG),$(INSTALL_CONF) ./files/frameworkd.conf.$(CONFIG) $(1)/etc/frameworkd.conf,$(CP) ./files/frameworkd.conf $(1)/etc/frameworkd.conf)
 endef
 
 $(eval $(call BuildPackage,fso))

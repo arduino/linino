@@ -1,0 +1,56 @@
+diff -ruN fso-20090103.orig/framework/cxnet/common.py fso-20090103/framework/cxnet/common.py
+--- fso-20090103.orig/framework/cxnet/common.py	2009-01-05 10:09:43.000000000 +0100
++++ fso-20090103/framework/cxnet/common.py	2009-01-07 11:10:52.000000000 +0100
+@@ -38,7 +38,14 @@
+ else:
+ 	cx_int = c_uint64
+ 
+-libc = CDLL("libc.so.6")
++from os import listdir
++from re import compile
++re = compile('^libc.so.[0-9]$')
++libs = listdir('/lib')
++for lib in libs:
++	if re.match(lib):
++		libc = CDLL(lib)
++		break
+ 
+ def hdump(name,msg,size=0):
+ 	"""
+diff -ruN fso-20090103.orig/framework/patterns/kobject.py fso-20090103/framework/patterns/kobject.py
+--- fso-20090103.orig/framework/patterns/kobject.py	2009-01-05 10:09:43.000000000 +0100
++++ fso-20090103/framework/patterns/kobject.py	2009-01-07 13:37:58.000000000 +0100
+@@ -88,7 +88,13 @@
+             self._watchR = gobject.io_add_watch( self._socketR.fileno(), gobject.IO_IN, self._onActivityR )
+ 
+         # for rtnetlink assistance
+-        self._libc = ctypes.CDLL( "libc.so.6" )
++        from re import compile
++        re = compile('^libc.so.[0-9]$')
++        libs = os.listdir('/lib')
++        for lib in libs:
++            if re.match(lib):
++                self._libc = ctypes.CDLL(lib)
++                break
+         self._parser = RtNetlinkParser()
+ 
+     def __del__( self ):
+Binary files fso-20090103.orig/framework/patterns/.kobject.py.swp and fso-20090103/framework/patterns/.kobject.py.swp differ
+diff -ruN fso-20090103.orig/framework/subsystems/odeviced/pyglet/linux.py fso-20090103/framework/subsystems/odeviced/pyglet/linux.py
+--- fso-20090103.orig/framework/subsystems/odeviced/pyglet/linux.py	2009-01-05 10:09:43.000000000 +0100
++++ fso-20090103/framework/subsystems/odeviced/pyglet/linux.py	2009-01-07 12:15:13.000000000 +0100
+@@ -15,7 +15,13 @@
+ import struct
+ import sys
+ 
+-c = ctypes.cdll.LoadLibrary('libc.so.6')
++from re import compile
++re = compile('^libc.so.[0-9]$')
++libs = os.listdir('/lib')
++for lib in libs:
++    if re.match(lib):
++        c = ctypes.cdll.LoadLibrary(lib)
++        break
+ 
+ _IOC_NRBITS = 8
+ _IOC_TYPEBITS = 8
