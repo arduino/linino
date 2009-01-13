@@ -58,9 +58,15 @@ define Build/InstallDev
 	$(SED) 's,prefix=",prefix="$(STAGING_DIR),g' $(2)/bin/xapian-config
 
 	#FIXME: Libtool should handle this
-	$(SED) \
+	if [ -f $(TOOLCHAIN_DIR)/usr/lib/libstdc++.la ]; then \
+	  $(SED) \
 		"s,$(STAGING_DIR)/usr/lib/libstdc++,$(TOOLCHAIN_DIR)/usr/lib/libstdc++,g" \
-		$(1)/usr/lib/libxapian.la
+		$(1)/usr/lib/libxapian.la ; \
+	else \
+	  $(SED) \
+		"s,$(STAGING_DIR)/usr/lib/libstdc++,$(TOOLCHAIN_DIR)/lib/libstdc++,g" \
+		$(1)/usr/lib/libxapian.la ; \
+	fi
 endef
 
 define Package/libxapian/install
