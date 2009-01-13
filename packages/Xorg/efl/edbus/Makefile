@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=e_dbus
-PKG_REV:=37637
+PKG_REV:=38564
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 

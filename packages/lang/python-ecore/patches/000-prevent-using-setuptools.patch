@@ -1,12 +1,12 @@
-diff -ruN python-ecore-r37637.orig/setup.py python-ecore-r37637/setup.py
---- python-ecore-r37637.orig/setup.py	2009-01-04 12:06:41.000000000 +0100
-+++ python-ecore-r37637/setup.py	2009-01-04 12:09:58.000000000 +0100
+diff -ruN python-ecore-r38564.orig/setup.py python-ecore-r38564/setup.py
+--- python-ecore-r38564.orig/setup.py	2009-01-13 10:27:34.000000000 +0100
++++ python-ecore-r38564/setup.py	2009-01-13 11:08:26.000000000 +0100
 @@ -1,10 +1,7 @@
  import sys
  import os
  
 -from ez_setup import use_setuptools
--use_setuptools('0.6c3')
+-use_setuptools('0.6c9')
 -
 -from setuptools import setup, find_packages, Extension
 +from distutils.core import setup, Extension

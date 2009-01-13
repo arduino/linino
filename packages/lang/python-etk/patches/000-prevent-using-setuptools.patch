@@ -1,12 +1,12 @@
-diff -ruN python-etk-r37637.orig/setup.py python-etk-r37637/setup.py
---- python-etk-r37637.orig/setup.py	2009-01-04 12:54:25.000000000 +0100
-+++ python-etk-r37637/setup.py	2009-01-04 12:57:48.000000000 +0100
+diff -ruN python-etk-r38564.orig/setup.py python-etk-r38564/setup.py
+--- python-etk-r38564.orig/setup.py	2009-01-13 11:20:07.000000000 +0100
++++ python-etk-r38564/setup.py	2009-01-13 11:22:59.000000000 +0100
 @@ -1,10 +1,7 @@
  import sys
  import os
  
 -from ez_setup import use_setuptools
--use_setuptools('0.6c3')
+-use_setuptools('0.6c9')
 -
 -from setuptools import setup, find_packages, Extension
 +from distutils.core import setup, Extension
