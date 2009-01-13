@@ -1,0 +1,11 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2008 OpenWrt.org
+START=70
+
+start() {
+    /usr/sbin/gsm0710muxd -d
+}
+    
+stop() {
+    killall gsm0710muxd
+}
