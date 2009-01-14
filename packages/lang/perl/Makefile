@@ -109,7 +109,7 @@ define Build/perl/Configure
 		-e 's!%%LDFLAGS%%!-rdynamic -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib!g' \
 		-e 's!%%LIBDIRS%%!$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib!g' \
 		-e 's!%%INCDIRS%%!$(STAGING_DIR)/include $(STAGING_DIR)/usr/include!g' \
-		files/config.sh-$(REAL_GNU_TARGET_NAME).in \
+		files/config.sh-$(patsubst i386,i486,$(ARCH)).in \
 		> $(PKG_BUILD_DIR)/config.sh
 	(cd $(PKG_BUILD_DIR) && ./Configure -S)
 endef
