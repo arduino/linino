@@ -25,7 +25,7 @@ define Package/pyyaml
   CATEGORY:=Languages
   TITLE:=pyyaml
   URL:=http://pyyaml.org
-  DEPENDS:=python-core
+  DEPENDS:=python-core +libyaml
 endef
 
 define Package/pyyaml/description
@@ -33,7 +33,7 @@ define Package/pyyaml/description
 endef
 
 define Build/Compile
-	$(call Build/Compile/PyMod,,install --prefix="$(PKG_INSTALL_DIR)/usr")
+	$(call Build/Compile/PyMod,,--with-libyaml install --prefix="$(PKG_INSTALL_DIR)/usr")
 endef
 
 define Package/pyyaml/install
