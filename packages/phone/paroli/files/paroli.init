@@ -3,7 +3,7 @@
 START=99
 
 start() {
-    LD_PRELOAD=/usr/lib/libX11.so /usr/bin/paroli-launcher & # LD_PRELOAD to workaround some runtime linking problems - needs to be fixed
+    (sleep 10 && DISPLAY=":0" LD_PRELOAD=/usr/lib/libX11.so /usr/bin/paroli-launcher) & # sleep to wait until the xserver is started | LD_PRELOAD to workaround some runtime linking problems - needs to be fixed
 }
     
 stop() {
