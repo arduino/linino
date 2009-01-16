@@ -1,13 +1,21 @@
+#
+# Copyright (C) 2009 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id$
+
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=digitemp
-PKG_VERSION:=3.5.0
+PKG_VERSION:=3.6.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.digitemp.com/software/linux
-PKG_MD5SUM:=72bda9c8a66b017aa969c19dedb3225b
-PKG_CAT:=zcat
+PKG_MD5SUM:=9be2e48db37920f21925ae6e88f83b84
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,7 +37,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) -DLINUX -I$(STAGING_DIR)/usr/include \
-			-I/.src -I./userial -DOWUSB" \
+			-I./src -I./userial -DOWUSB" \
 		LIBS="-L$(STAGING_DIR)/usr/lib -lusb -lm" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		ds2490
