@@ -30,7 +30,7 @@ endef
 
 define Package/owfs/Server
   $(call Package/owfs/Default)
-  DEPENDS:=+owfs
+  DEPENDS:=+owfs +libpthread
   SECTION:=net
   CATEGORY:=Network
 endef
@@ -142,7 +142,7 @@ define Build/Configure
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) $(CFLAGS_LARGEFILE)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(TOOLCHAIN_DIR)/lib" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(TOOLCHAIN_DIR)/usr/lib" \
 		lt_sys_lib_dlsearch_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
 		lt_sys_lib_search_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
 		shrext_cmds=".so" \
