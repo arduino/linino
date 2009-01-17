@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=subversion
 PKG_VERSION:=1.5.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://subversion.tigris.org/downloads/
@@ -24,7 +24,7 @@ define Package/subversion/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A compelling replacement for CVS
-  DEPENDS:=+zlib +libneon +libintl +libapr +libaprutil +libsasl2
+  DEPENDS:=+zlib +libneon +libintl +libapr +libaprutil +libpthread
   URL:=http://subversion.tigris.org/
   SUBMENU:=subversion
 endef
@@ -83,6 +83,7 @@ CONFIGURE_ARGS += \
 	--disable-neon-version-check \
 	--with-apxs=no \
 	--with-apache=no \
+	--without-sasl \
 
 CONFIGURE_VARS += \
 	svn_lib_neon=yes \
