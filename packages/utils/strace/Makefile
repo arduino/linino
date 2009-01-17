@@ -22,7 +22,7 @@ ifeq ($(CONFIG_TARGET_uml),y)
   PATCH_DIR:=./none
 endif
 
-ifeq ($(CONFIG_LINUX_2_6_27),y)
+ifeq ($(CONFIG_LINUX_2_6_27)$(CONFIG_LINUX_2_6_28),y)
   PKG_VERSION:=4.5.18
   PKG_MD5SUM:=e9449fcee97e6a8ed73934c883c870e0
   PATCH_DIR:=./none
