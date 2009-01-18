@@ -281,7 +281,7 @@ PKG_CONFIGURE_OPTS:= \
 	--with-fp-layout=nothing
 
 CONFIGURE_VARS+= \
-	CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2 $$$$CPPFLAGS" \
+	CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2 $$$$CPPFLAGS $(FPIC)" \
 	KERNEL_DIR="$(LINUX_DIR)"
 
 # list of permanently disabled plugins
