@@ -11,21 +11,14 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=strace
 PKG_RELEASE:=2
 
-ifneq ($(CONFIG_LINUX_2_6_27),y)
+OLD_KERNEL=$(findstring y,$(foreach v,23 24 25 26,$(CONFIG_LINUX_2_6_$(v))))
+ifneq ($(OLD_KERNEL),)
   PKG_VERSION:=4.5.16
   PKG_MD5SUM:=77f66d09aa82981bb6d65fa19a2c1ba9
-endif
-
-ifeq ($(CONFIG_TARGET_uml),y)
+  PATCH_DIR:=patches-4.5.16
+else
   PKG_VERSION:=4.5.18
   PKG_MD5SUM:=e9449fcee97e6a8ed73934c883c870e0
-  PATCH_DIR:=./none
-endif
-
-ifeq ($(CONFIG_LINUX_2_6_27)$(CONFIG_LINUX_2_6_28),y)
-  PKG_VERSION:=4.5.18
-  PKG_MD5SUM:=e9449fcee97e6a8ed73934c883c870e0
-  PATCH_DIR:=./none
 endif
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
