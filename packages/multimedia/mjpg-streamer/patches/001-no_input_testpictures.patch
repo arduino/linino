@@ -1,0 +1,12 @@
+diff -urN mjpg-streamer-r68/Makefile mjpg-streamer-r68.new/Makefile
+--- mjpg-streamer-r68/Makefile	2008-09-27 16:26:56.000000000 +0200
++++ mjpg-streamer-r68.new/Makefile	2009-01-18 16:11:32.000000000 +0100
+@@ -28,7 +28,7 @@
+ APP_BINARY = mjpg_streamer
+ 
+ # define the names and targets of the plugins
+-PLUGINS = input_uvc.so output_file.so output_http.so input_testpicture.so output_autofocus.so input_gspcav1.so
++PLUGINS = input_uvc.so output_file.so output_http.so output_autofocus.so input_gspcav1.so
+ 
+ # define the names of object files
+ OBJECTS=mjpg_streamer.o utils.o
