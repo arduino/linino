@@ -27,6 +27,8 @@ define Package/libtwin
   URL:=
 endef
 
+TARGET_CFLAGS += -flax-vector-conversions
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
