@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rtorrent
-PKG_VERSION:=0.7.9
-PKG_RELEASE:=3
+PKG_VERSION:=0.8.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://libtorrent.rakshasa.no/downloads/
-PKG_MD5SUM:=136202fdd540a92aafbcee29f849d228
+PKG_MD5SUM:=a2456182e1767e5aed7341dbbd058f60
 
 PKG_FIXUP = libtool
 
