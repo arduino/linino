@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/petitboot
   SECTION:=boot
   CATEGORY:=Boot Loaders
-  DEPENDS:=+libtwin +udev +udevextras +kexec-tools
+  DEPENDS:=+libtwin +udev +udevextras +kexec-tools @TARGET_ps3
   TITLE:=Graphical bootloader
   URL:=http://ozlabs.org/~jk/projects/petitboot/
 endef

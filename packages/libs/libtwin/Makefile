@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libtwin
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+zlib +libpng +libjpeg
+  DEPENDS:=+zlib +libpng +libjpeg @TARGET_ps3
   TITLE:=The tiny windowing system libraries
   URL:=
 endef
