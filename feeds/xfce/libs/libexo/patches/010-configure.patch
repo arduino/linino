@@ -1,0 +1,17 @@
+--- exo-0.3.4.orig/configure	2008-09-15 00:56:32.000000000 +0200
++++ exo-0.3.4/configure	2008-09-15 01:04:43.000000000 +0200
+@@ -22619,13 +22619,7 @@
+ fi
+ 
+ 
+-if test "$cross_compiling" = yes; then
+-  { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
+-See \`config.log' for more details." >&5
+-echo "$as_me: error: cannot run test program while cross compiling
+-See \`config.log' for more details." >&2;}
+-   { (exit 1); exit 1; }; }
+-else
++if test "$cross_compiling" != yes; then
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+ _ACEOF

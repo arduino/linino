@@ -1,0 +1,33 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -23,8 +23,7 @@ SUBDIRS =								\
+ 	pixmaps								\
+ 	po								\
+ 	po-doc								\
+-	$(PYTHON_SUBDIR)						\
+-	tests
++	$(PYTHON_SUBDIR)
+ 
+ AUTOMAKE_OPTIONS =							\
+ 	1.8								\
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -66,7 +66,7 @@ ETAGS = etags
+ CTAGS = ctags
+ DIST_SUBDIRS = exo exo-csource exo-support exo-desktop-item-edit \
+ 	exo-hal exo-helper exo-mount exo-mount-notify exo-open docs \
+-	icons pixmaps po po-doc python tests
++	icons pixmaps po po-doc python
+ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ distdir = $(PACKAGE)-$(VERSION)
+ top_distdir = $(distdir)
+@@ -306,8 +306,7 @@ SUBDIRS = \
+ 	pixmaps								\
+ 	po								\
+ 	po-doc								\
+-	$(PYTHON_SUBDIR)						\
+-	tests
++	$(PYTHON_SUBDIR)
+ 
+ AUTOMAKE_OPTIONS = \
+ 	1.8								\

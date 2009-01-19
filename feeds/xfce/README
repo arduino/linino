@@ -1,0 +1,2 @@
+Feed containing packages for the xfce desktop environment.
+NOTE: You also need svn://dev.openwrt.org/feeds/desktop in your feeds.conf
