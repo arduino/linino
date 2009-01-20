@@ -13,9 +13,8 @@ PKG_VERSION:=1.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://matchbox-project.org/sources/matchbox-window-manager/$(PKG_VERSION)
-
-PKG_FIXUP = libtool
+PKG_SOURCE_URL:=http://matchbox-project.org/sources/$(PKG_NAME)/$(PKG_VERSION)
+PKG_FIXUP:=libtool
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
@@ -34,14 +33,31 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		LIBMB_LIBS="-L$(STAGING_DIR)/usr/lib -lfontconfig -lXrender -lz -lexpat -lfreetype -lXft -lmb -lX11 -lXext -lXau -lXdmcp -lpng12" \
+		DESTDIR=$(PKG_INSTALL_DIR) \
+		LIBMB_LIBS="-L$(STAGING_DIR)/usr/lib -lfontconfig -lXrender \
+		-lz -lexpat -lfreetype -lXft -lmb -lX11 -lXext -lXau -lXdmcp \
+		-lpng12" \
 		all install 
 endef
 
 define Package/matchbox-window-manager/install
-	$(INSTALL_DIR) $(1)/
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+	$(INSTALL_DIR) $(1)/etc/matchbox
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/etc/matchbox/kbdconfig \
+		$(1)/etc/matchbox/
+
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/* \
+		$(1)/usr/bin/
+	
+	$(INSTALL_DIR) $(1)/usr/share/{matchbox,themes}
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/share/matchbox/* \
+		$(1)/usr/share/matchbox/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/share/themes/* \
+		$(1)/usr/share/themes/
 endef
 
 $(eval $(call BuildPackage,matchbox-window-manager))
