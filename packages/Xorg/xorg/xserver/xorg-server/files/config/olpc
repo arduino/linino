@@ -10,3 +10,5 @@ config graphic
 config input mouse
 	option	device	/dev/event1
 	option	driver	tslib
+
+config 'desktop'

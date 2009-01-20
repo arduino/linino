@@ -13,3 +13,5 @@ config input mouse
 
 config input keybd
 	option	driver	keyboard
+
+config 'desktop'
