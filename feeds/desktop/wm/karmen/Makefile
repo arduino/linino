@@ -12,7 +12,7 @@ PKG_VERSION:=0.15
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://ovh.dl.sourceforge.net/sourceforge/$(PKG_NAME)/
+PKG_SOURCE_URL:=http://prdownloads.sourceforge.net/sourceforge/$(PKG_NAME)/
 PKG_MD5SUM:=8f800b71b454d6f0de2e9dd5ad34f9e3
 
 TARGET_LDFLAGS+= \
