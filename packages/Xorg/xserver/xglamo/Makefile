@@ -123,7 +123,7 @@ define Build/Compile
 endef
 
 define Package/xglamo/install
-	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/lib $(1)/etc/init.d $(1)/etc/config
+	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/lib $(1)/etc/init.d $(1)/etc/config $(1)/etc/uci-defaults
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/Xglamo $(1)/usr/bin/
 	$(CP) ./files/x.init $(1)/etc/init.d/x11
 	$(if $(TS_POINTERCAL),$(CP) ./files/pointercal.$(TS_POINTERCAL) $(1)/etc/pointercal)

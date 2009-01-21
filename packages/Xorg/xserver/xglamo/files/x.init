@@ -12,9 +12,21 @@ screen() {
 	[ -n "$dpi" ] && ARGS="$ARGS -dpi $dpi"
 }
 
+desktop() {
+	local cfg="$1"
+	config_get autostart $cfg autostart
+	[ -n "$autostart" ] && eval $autostart &
+}
+
 start() {
+	export DISPLAY=":0"
 	config_load x11
 	config_foreach screen screen
 	TSLIB_TSDEVICE="/dev/event1" Xglamo $ARGS &
-	DISPLAY=":0" WM & # workaround
+	config_foreach desktop desktop
+	#test -d /etc/xdg/autostart || exit
+	#for elem in `ls /etc/xdg/autostart/`; do               
+	#	exec=`grep "^Exec=" "/etc/xdg/autostart/$elem"`
+	#	eval ${exec#*=} &
+	#done
 }

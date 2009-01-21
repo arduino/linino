@@ -68,9 +68,10 @@ define Package/fluxbox/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/fluxbox/styles/* $(1)/usr/share/fluxbox/styles/
 	$(CP) files/init $(1)/usr/share/fluxbox/
 	$(CP) files/menu $(1)/usr/share/fluxbox/
-	echo "#!/bin/sh" > $(1)/usr/bin/WM
-	echo "/usr/bin/fluxbox" >> $(1)/usr/bin/WM
-	chmod +x $(1)/usr/bin/WM
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
+	$(INSTALL_DATA) \
+		./files/uci-defaults/x11 \
+		$(1)/etc/uci-defaults/
 endef
 
 define Package/fbsetbg/install
@@ -86,6 +87,13 @@ endef
 define Package/fbrun/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/fbrun $(1)/usr/bin/
+endef
+
+define Package/fluxbox/postinst
+	#!/bin/sh
+	[ -n "$${IPKG_INSTROOT}" ] && exit
+	. /etc/functions.sh
+	uci_apply_defaults
 endef
 
 $(eval $(call BuildPackage,fbrun))

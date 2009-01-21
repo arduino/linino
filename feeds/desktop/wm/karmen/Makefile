@@ -45,6 +45,17 @@ define Package/karmen/install
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/* \
 		$(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
+	$(INSTALL_DATA) \
+		./files/uci-defaults/x11 \
+		$(1)/etc/uci-defaults/
+endef
+
+define Package/karmen/postinst
+	#!/bin/sh
+	[ -n "$${IPKG_INSTROOT}" ] && exit
+	. /etc/functions.sh
+	uci_apply_defaults
 endef
 
 $(eval $(call BuildPackage,karmen))

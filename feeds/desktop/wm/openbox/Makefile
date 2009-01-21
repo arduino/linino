@@ -106,6 +106,18 @@ define Build/InstallDev
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
 		$(1)/usr/lib/pkgconfig/
+
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
+	$(INSTALL_DATA) \
+		./files/uci-defaults/* \
+		$(1)/etc/uci-defaults/
+endef
+
+define Package/openbox/postinst
+	#!/bin/sh
+	[ -n "$${IPKG_INSTROOT}" ] && exit
+	. /etc/functions.sh
+	uci_apply_defaults
 endef
 
 $(eval $(call BuildPackage,openbox))

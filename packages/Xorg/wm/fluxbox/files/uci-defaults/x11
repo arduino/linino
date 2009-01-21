@@ -1,0 +1,1 @@
+uci set x11.@desktop[0].autostart=enlightenment_start

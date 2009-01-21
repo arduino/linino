@@ -65,6 +65,18 @@ define Package/xfwm4/install
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/share/xfwm4/* \
 		$(1)/usr/share/xfwm4/
+
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
+	$(INSTALL_DATA) \
+		./files/uci-defaults/x11 \
+		$(1)/etc/uci-defaults/
+endef
+
+define Package/xfwm4/postinst
+	#!/bin/sh
+	[ -n "$${IPKG_INSTROOT}" ] && exit
+	. /etc/functions.sh
+	uci_apply_defaults
 endef
 
 $(eval $(call BuildPackage,xfwm4))

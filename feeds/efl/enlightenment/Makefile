@@ -62,7 +62,7 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include $(1)/usr/lib $(1)/usr/bin $(1)/usr/share
+	$(INSTALL_DIR) $(1)/usr/include $(1)/usr/lib $(1)/usr/bin $(1)/usr/share
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
@@ -70,20 +70,25 @@ define Build/InstallDev
 endef
 
 define Package/enlightenment/install
-	$(INSTALL_DIR) $(1)/usr/lib $(1)/usr/bin $(1)/usr/share
+	$(INSTALL_DIR) $(1)/usr/lib $(1)/usr/bin $(1)/usr/share $(1)/etc/uci-defaults
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/* $(1)/usr/share/
-	echo "#!/bin/sh" > $(1)/usr/bin/WM
-	echo -n "/usr/bin/enlightenment_start -profile " >> $(1)/usr/bin/WM
-	$(if $(CONFIG_E17_ILLUME),echo "illume" >> $(1)/usr/bin/WM)
-	$(if $(CONFIG_E17_MINIMALIST),echo "minimalist" >> $(1)/usr/bin/WM)
-	$(if $(CONFIG_E17_NETBOOK),echo "netbook" >> $(1)/usr/bin/WM)
-	$(if $(CONFIG_E17_SCALEABLE),echo "scaleable" >> $(1)/usr/bin/WM)
-	$(if $(CONFIG_E17_STANDARD),echo "standard" >> $(1)/usr/bin/WM)
-	chmod +x $(1)/usr/bin/WM
+	$(INSTALL_DATA) ./files/uci-defaults/x11 $(1)/etc/uci-defaults/
+	$(if $(CONFIG_E17_ILLUME),echo "illume" >> $(1)/etc/uci-defaults/x11)
+	$(if $(CONFIG_E17_MINIMALIST),echo "minimalist" >> $(1)/etc/uci-defaults/x11)
+	$(if $(CONFIG_E17_NETBOOK),echo "netbook" >> $(1)/etc/uci-defaults/x11)
+	$(if $(CONFIG_E17_SCALEABLE),echo "scaleable" >> $(1)/etc/uci-defaults/x11)
+	$(if $(CONFIG_E17_STANDARD),echo "standard" >> $(1)/etc/uci-defaults/x11)
 	find $(1)/ -name *.la | xargs rm -f
 	find $(1)/ -name *.a | xargs rm -f
+endef
+
+define Package/enlightenment/postinst
+	#!/bin/sh
+	[ -n "$${IPKG_INSTROOT}" ] && exit
+	. /etc/functions.sh
+	uci_apply_defaults
 endef
 
 $(eval $(call BuildPackage,enlightenment))
