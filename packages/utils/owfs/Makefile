@@ -7,12 +7,12 @@
 
 include $(TOPDIR)/rules.mk
 PKG_NAME:=owfs
-PKG_VERSION:=2.7p7
-PKG_RELEASE:=3
+PKG_VERSION:=2.7p13
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=4c189f64a1a6110bef19639a36c3b0e1
+PKG_MD5SUM:=285483508f7fa42af3500b04f792058c
 
 PKG_FIXUP = libtool
 
@@ -30,7 +30,7 @@ endef
 
 define Package/owfs/Server
   $(call Package/owfs/Default)
-  DEPENDS:=+owfs +libpthread
+  DEPENDS:=+libow +libpthread
   SECTION:=net
   CATEGORY:=Network
 endef
