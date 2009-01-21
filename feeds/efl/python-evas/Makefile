@@ -30,7 +30,7 @@ define Package/python-evas
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=python-evas
-  DEPENDS:=python-core evas eina
+  DEPENDS:=python-core +evas +eina
 endef
 
 define Package/python-evas/description
