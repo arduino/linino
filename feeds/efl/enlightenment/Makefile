@@ -75,11 +75,12 @@ define Package/enlightenment/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/* $(1)/usr/share/
 	$(INSTALL_DATA) ./files/uci-defaults/x11 $(1)/etc/uci-defaults/
-	$(if $(CONFIG_E17_ILLUME),echo "illume" >> $(1)/etc/uci-defaults/x11)
-	$(if $(CONFIG_E17_MINIMALIST),echo "minimalist" >> $(1)/etc/uci-defaults/x11)
-	$(if $(CONFIG_E17_NETBOOK),echo "netbook" >> $(1)/etc/uci-defaults/x11)
-	$(if $(CONFIG_E17_SCALEABLE),echo "scaleable" >> $(1)/etc/uci-defaults/x11)
-	$(if $(CONFIG_E17_STANDARD),echo "standard" >> $(1)/etc/uci-defaults/x11)
+	$(if $(CONFIG_E17_ILLUME),echo -n "illume" >> $(1)/etc/uci-defaults/x11)
+	$(if $(CONFIG_E17_MINIMALIST),echo -n "minimalist" >> $(1)/etc/uci-defaults/x11)
+	$(if $(CONFIG_E17_NETBOOK),echo -n "netbook" >> $(1)/etc/uci-defaults/x11)
+	$(if $(CONFIG_E17_SCALEABLE),echo -n "scaleable" >> $(1)/etc/uci-defaults/x11)
+	$(if $(CONFIG_E17_STANDARD),echo -n "standard" >> $(1)/etc/uci-defaults/x11)
+	echo "'" >> $(1)/etc/uci-defaults/x11
 	find $(1)/ -name *.la | xargs rm -f
 	find $(1)/ -name *.a | xargs rm -f
 endef
