@@ -1,0 +1,20 @@
+--- a/networking/udhcp/dhcpc.c
++++ b/networking/udhcp/dhcpc.c
+@@ -352,7 +352,7 @@
+ 
+ 			switch (state) {
+ 			case INIT_SELECTING:
+-				if (packet_num < discover_retries) {
++				if (!discover_retries || packet_num < discover_retries) {
+ 					if (packet_num == 0)
+ 						xid = random_xid();
+ 
+@@ -382,7 +382,7 @@
+ 				continue;
+ 			case RENEW_REQUESTED:
+ 			case REQUESTING:
+-				if (packet_num < discover_retries) {
++				if (!discover_retries || packet_num < discover_retries) {
+ 					/* send request packet */
+ 					if (state == RENEW_REQUESTED) /* unicast */
+ 						send_renew(xid, server_addr, requested_ip);

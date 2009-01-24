@@ -1,0 +1,14 @@
+
+	Copyright (C) 2006 Markus Wigge
+
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -53,7 +53,7 @@
+ CC = @CC@
+ CCOPT = @V_CCOPT@
+ INCLS = -I. @V_INCLS@
+-DEFS = @DEFS@ @V_DEFS@
++DEFS = -D_BSD_SOURCE @DEFS@ @V_DEFS@
+ LIBS = @V_LIBS@
+ DAGLIBS = @DAGLIBS@
+ DYEXT = @DYEXT@

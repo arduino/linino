@@ -1,0 +1,10 @@
+--- a/networking/httpd.c
++++ b/networking/httpd.c
+@@ -1808,6 +1808,7 @@
+ 	char *header_ptr = header_ptr;
+ 	Htaccess_Proxy *proxy_entry;
+ #endif
++	xchdir(home_httpd);
+ 
+ 	/* Allocation of iobuf is postponed until now
+ 	 * (IOW, server process doesn't need to waste 8k) */

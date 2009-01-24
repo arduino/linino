@@ -1,0 +1,15 @@
+Index: pcmcia-cs-3.2.8/etc/config
+===================================================================
+--- pcmcia-cs-3.2.8.orig/etc/config	2007-06-04 13:23:59.533683400 +0200
++++ pcmcia-cs-3.2.8/etc/config	2007-06-04 13:23:59.600673216 +0200
+@@ -2413,6 +2413,10 @@
+   pci 0x115d, 0x0101
+   bind "serial_cb"
+ 
++card "Novatel Wireless - Merlin U630 UMTS Modem"
++  manfid 0x00a4, 0x0276
++  bind "serial_cs" to 0, "serial_cs" to 1
++
+ # Include configuration files for add-on drivers
+ 
+ source ./*.conf
