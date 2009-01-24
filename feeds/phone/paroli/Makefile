@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=paroli
-PKG_VERSION:=20090112
-PKG_REV:=81db9c1a2abd7d56300867b04d4c541e34bb8165
+PKG_VERSION:=20090121
+PKG_REV:=9279b50ed72a94100d7f0f49090043134302f2eb
 PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -27,9 +27,15 @@ define Package/paroli
   SECTION:=phone
   CATEGORY:=Phone
   TITLE:=integrated phone application
-  DEPENDS:=python-core +fso
+  DEPENDS:=python-core +fso +python-evas +python-ecore +python-edje +python-e_dbus +python-etk
   URL:=http://wiki.openmoko.org/wiki/Paroli
 endef
+
+COMPONENTS:= \
+	paroli-dialer \
+	paroli-contacts \
+	paroli-i-o \
+	paroli-msgs \
 
 define Package/paroli/description
   Paroli is an integrated phone application written in Python which uses the FSO (freesmartphone.org) DBus API
@@ -41,7 +47,7 @@ define Build/Compile
 endef
 
 define Package/paroli/install
-	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR) $(1)/usr/bin $(1)/etc/init.d $(1)/usr/share/applications/paroli $(1)/usr/share/paroli
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR) $(1)/usr/bin $(1)/etc/init.d $(1)/usr/share/applications/paroli $(1)/usr/share/paroli/services $(1)/usr/share/icons/paroli $(1)/etc/xdg/autostart
 	$(CP) \
 		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
 		$(1)$(PYTHON_PKG_DIR)
@@ -49,14 +55,25 @@ define Package/paroli/install
 		$(PKG_INSTALL_DIR)/usr/bin/* \
 		$(1)/usr/bin/
 	$(INSTALL_BIN) ./files/paroli.init $(1)/etc/init.d/paroli
+	$(foreach c, $(COMPONENTS), \
+		$(INSTALL_DIR) $(1)/usr/share/paroli/applications/$(c)
+		$(CP) $(PKG_INSTALL_DIR)/../usr/share/paroli/applications/$(c)/$(c).{py,edj} $(1)/usr/share/paroli/applications/$(c)/
+		$(CP) $(PKG_INSTALL_DIR)/../usr/share/paroli/applications/$(c)/icon.png $(1)/usr/share/icons/paroli/$(c).png
+	)
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/paroli/* \
-		$(1)/usr/share/paroli/
+		$(PKG_INSTALL_DIR)/../usr/share/paroli/services/* \
+		$(1)/usr/share/paroli/services/
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/applications/* \
+		$(PKG_INSTALL_DIR)/../data/tichy \
+		$(1)/usr/share/icons/paroli/tichy.png
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/applications/*.desktop \
 		$(1)/usr/share/applications/paroli/
 	$(CP) \
-		$(PKG_INSTALL_DIR)/etc/* \
+		$(PKG_INSTALL_DIR)/usr/applications/paroli-launcher.desktop \
+		$(1)/etc/xdg/autostart/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/../etc/* \
 		$(1)/etc/
 endef
 
