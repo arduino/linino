@@ -34,7 +34,8 @@ define Package/fso
   SECTION:=phone
   CATEGORY:=Phone
   TITLE:=freesmartphone.org DBus API reference implementation
-  DEPENDS:=python-core +dbus-python +python-gobject +pyserial +pyyaml +gst-python
+  DEPENDS:=python-core +dbus-python +python-gobject +pyserial +pyyaml \
+           +gst-python +alsa-utils +freerunner-alsa-scenarios
   URL:=http://www.freesmartphone.org
 endef
 
