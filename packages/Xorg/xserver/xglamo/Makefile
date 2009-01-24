@@ -52,11 +52,7 @@ CONFIGURE_ARGS += --disable-dga \
 
 CONFIGURE_VARS+=ac_cv_file__usr_share_sgml_X11_defs_ent=yes
 
-ifeq ($(CONFIG_TARGET_s3c24xx_openmoko-gta02-graphical),y)
-  X_CONFIG=om_gta02
-  TS_POINTERCAL=om_gta02
-endif
-ifeq ($(CONFIG_TARGET_s3c24xx_openmoko-gta02-minimal),y)
+ifeq ($(CONFIG_TARGET_s3c24xx),y)
   X_CONFIG=om_gta02
   TS_POINTERCAL=om_gta02
 endif

@@ -23,10 +23,7 @@ PKG_BUILD_DEPENDS:=cython python
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
-ifeq ($(CONFIG_TARGET_s3c24xx_openmoko-gta02-graphical),y)
-  CONFIG=om_gta02
-endif
-ifeq ($(CONFIG_TARGET_s3c24xx_openmoko-gta02-minimal),y)
+ifeq ($(CONFIG_TARGET_s3c24xx),y)
   CONFIG=om_gta02
 endif
 
