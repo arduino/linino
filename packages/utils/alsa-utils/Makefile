@@ -9,12 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=alsa-utils
-PKG_VERSION:=1.0.13
+PKG_VERSION:=1.0.19
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.alsa-project.org/pub/utils/
-PKG_MD5SUM:=dfe4bb5d3217f3ec662b172ce8397cf0
+PKG_MD5SUM:=5ff0379c707c1a29083233edc9ab4e06
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,13 +30,9 @@ endef
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-rpath \
+		--disable-alsatest \
+		--disable-xmlto \
 	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Package/alsa-utils/install
@@ -44,6 +41,11 @@ define Package/alsa-utils/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/alsamixer $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/aplay $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/alsactl $(1)/usr/sbin/
+
+	$(INSTALL_DIR) $(1)/usr/share/alsa/init
+	$(INSTALL_DATA) \
+	    $(PKG_INSTALL_DIR)/usr/share/alsa/init/* \
+	    $(1)/usr/share/alsa/init/
 endef
 
 $(eval $(call BuildPackage,alsa-utils))

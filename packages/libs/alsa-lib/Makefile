@@ -9,14 +9,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=alsa-lib
-PKG_VERSION:=1.0.13
+PKG_VERSION:=1.0.19
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.alsa-project.org/pub/lib/
-PKG_MD5SUM:=d55a9d7d2a79d738a1b7a511cffda4b6
+PKG_MD5SUM:=73db3666c211e5fb023bb77450cf430d
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -40,34 +41,54 @@ define Package/alsa-lib/description
 endef
 
 TARGET_CFLAGS += $(FPIC)
-CONFIGURE_ARGS += \
-	--enable-shared \
-	--enable-static \
-	--disable-debugging \
-	--disable-profiling \
-	--with-softfloat \
-	--with-versioned=no \
 
-define Build/Compile
-	# override AM_CFLAGS holding inappropriate optimization flags
-	$(MAKE) -C $(PKG_BUILD_DIR) AM_CFLAGS="" all
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+define Build/Configure
+	$(call Build/Configure/Default, \
+	    --enable-static \
+		--disable-python \
+		--disable-debug \
+		--without-debug \
+		$(SOFT_FLOAT_CONFIG_OPTION) \
+		--with-versioned=no \
+	)
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/alsa $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libasound.{la,a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/alsa.pc $(1)/usr/lib/pkgconfig/
+	$(INSTALL_DIR) $(1)/usr/include/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/alsa \
+		$(1)/usr/include/
+
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libasound.{la,a,so*} \
+		$(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/alsa.pc \
+		$(1)/usr/lib/pkgconfig/
+
+	$(INSTALL_DIR) $(1)/usr/share/aclocal
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/share/aclocal/alsa.m4 \
+		$(1)/usr/share/aclocal/
 endef
 
 define Package/alsa-lib/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libasound.so.* $(1)/usr/lib/
-	$(INSTALL_DIR) $(1)/usr/share/alsa/
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/alsa/alsa.conf $(1)/usr/share/alsa/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libasound.so.* \
+		$(1)/usr/lib/
+
+	$(INSTALL_DIR) $(1)/usr/share/alsa/{cards,pcm}
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/share/alsa/alsa.conf \
+		$(1)/usr/share/alsa/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/share/alsa/pcm/* \
+		$(1)/usr/share/alsa/pcm/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/share/alsa/cards/* \
+		$(1)/usr/share/alsa/cards/
 endef
 
 $(eval $(call BuildPackage,alsa-lib))
