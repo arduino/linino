@@ -16,6 +16,7 @@ start() {
 	local upload
 	local download
 	local logging
+	local secure
 
 	config_load "upnpd"
 	config_get extif    config external_iface
@@ -23,6 +24,7 @@ start() {
 	config_get upload   config upload
 	config_get download config download
 	config_get_bool logging config log_output 0
+	config_get_bool secure config secure_mode 0
 
 	config_load "network"
 	config_get extiface ${extif:-wan} ifname
@@ -42,6 +44,9 @@ start() {
 
 		[ -n "$upload" -a -n "$download" ] && \
 			append args "-B $(($download * 1024 * 8)) $(($upload * 1024 * 8))"
+
+		[ "$secure" -gt 0 ] && \
+			append args "-S"
 
 		if [ "$logging" = "1" ]; then
 			eval start-stop-daemon -S -x miniupnpd -- $args -d | logger -t miniupnpd &

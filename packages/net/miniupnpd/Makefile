@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miniupnpd
 PKG_VERSION:=1.1
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 PKG_MD5SUM:=a0f6651476721db9b554668c8c83b151
 
 PKG_SOURCE_URL:=http://miniupnp.free.fr/files
