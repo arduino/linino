@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ntp
 PKG_VERSION:=4.2.4p6
-PKG_RELEASE:=4
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/
@@ -99,7 +99,8 @@ define Build/Configure
 		--enable-NMEA \
 		--enable-LOCAL-CLOCK \
 		--enable-SHM \
-		--enable-linuxcaps \
+		--enable-linuxcaps, \
+		ac_cv_lib_rt_sched_setscheduler=no \
 	)
 endef
 
