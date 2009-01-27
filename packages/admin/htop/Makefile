@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=htop
-PKG_VERSION:=0.8
+PKG_VERSION:=0.8.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=b6955f8d75cdb5a3ccea83415cb18815
+PKG_MD5SUM:=f0b259ca29175656de48bf0fa0a2e619
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,7 +36,7 @@ CONFIGURE_VARS += \
 	ac_cv_file__proc_stat=yes \
 	ac_cv_file__proc_meminfo=yes \
 
-define Package/htop/install	
+define Package/htop/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/bin/
 endef
