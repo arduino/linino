@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=freerunner-alsa-scenarios
 PKG_VERSION:=20090124
 PKG_REV:=4900
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://svn.openmoko.org/trunk/src/target/audio/om-gta02
@@ -23,22 +23,20 @@ include $(INCLUDE_DIR)/package.mk
 define Package/freerunner-alsa-scenarios
   SECTION:=phone
   CATEGORY:=Phone
-  TITLE:=alsa audio scenarios for the openmoko neo freefreerunner
+  TITLE:=alsa audio scenarios for the openmoko neo freerunner
 endef
 
 define Build/Configure
-	true
 endef
 
 define Build/Compile
-	true
 endef
 
 define Package/freerunner-alsa-scenarios/install
-	$(INSTALL_DIR) $(1)/etc/alsa/scenarios
+	$(INSTALL_DIR) $(1)/etc/alsa/scenario
 	$(INSTALL_DATA) \
 		$(PKG_BUILD_DIR)/*.state \
-		$(1)/etc/alsa/scenarios/
+		$(1)/etc/alsa/scenario/
 endef
 
 $(eval $(call BuildPackage,freerunner-alsa-scenarios))
