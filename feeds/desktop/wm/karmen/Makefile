@@ -25,7 +25,7 @@ define Package/karmen
   SECTION:=xorg-wm
   CATEGORY:=Xorg
   SUBMENU:=window manager
-  DEPENDS:=+libX11
+  DEPENDS:=+libX11 +freedesktop-compliant
   URL:=http://karmen.sourceforge.net/
 endef
 

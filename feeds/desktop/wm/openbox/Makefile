@@ -29,7 +29,8 @@ define Package/openbox
   CATEGORY:=Xorg
   SUBMENU:=window manager
   DEPENDS:=+glib2 +libxml2 +fontconfig +libXft +libXrandr +libXt \
-+libXcursor +pango +xextproto +xf86vidmodeproto +dejavu-fonts-ttf
++libXcursor +pango +xextproto +xf86vidmodeproto +dejavu-fonts-ttf \
++freedesktop-compliant
   URL:=http://icculus.org/openbox/
 endef
 

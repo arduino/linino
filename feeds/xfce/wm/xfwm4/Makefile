@@ -32,7 +32,7 @@ define Package/xfwm4
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=xfwm4
-  DEPENDS:=+libxfce4util +libxfcegui4 +libxfconf +libdbus-glib +libwnck
+  DEPENDS:=+libxfce4util +libxfcegui4 +libxfconf +libdbus-glib +libwnck +freedesktop-compliant
 endef
 
 define Package/xfwm4/install
