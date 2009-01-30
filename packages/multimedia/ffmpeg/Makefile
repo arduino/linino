@@ -68,16 +68,24 @@ $(call Package/ffmpeg/Default)
 endef
 
 define Package/libffmpeg/config
-        menu "Configuration"
-                depends on PACKAGE_libffmpeg
+		menu "Configuration"
+				depends on PACKAGE_libffmpeg
 		source "$(SOURCE)/Config.in"
-        endmenu
+		endmenu
 endef
 
 define Package/libffmeg/description
 $(call Package/ffmpeg/Default/description)
  .
  This package contains FFmpeg shared libraries.
+endef
+
+define Package/libpostproc
+ SECTION:=libs
+ CATEGORY:=Libraries
+ TITLE:=libpostproc
+ URL:=http://ffmpeg.mplayerhq.hu/
+ DEPENDS:=+libffmpeg
 endef
 
 FFMPEG_ENCODERS:= \
@@ -141,32 +149,32 @@ FFMPEG_PROTOCOLS:= \
 
 FFMPEG_CONFIGURE_ENCODERS:= \
 	$(foreach c, $(FFMPEG_ENCODERS), \
-                $(if $(CONFIG_FFMPEG_ENCODER_$(c)),--enable-encoder="$(c)") \
+		$(if $(CONFIG_FFMPEG_ENCODER_$(c)),--enable-encoder="$(c)") \
 	)
 
 FFMPEG_CONFIGURE_DECODERS:= \
 	$(foreach c, $(FFMPEG_DECODERS), \
-                $(if $(CONFIG_FFMPEG_DECODER_$(c)),--enable-decoder="$(c)") \
+		$(if $(CONFIG_FFMPEG_DECODER_$(c)),--enable-decoder="$(c)") \
 	)
 
 FFMPEG_CONFIGURE_MUXERS:= \
 	$(foreach c, $(FFMPEG_MUXERS), \
-                $(if $(CONFIG_FFMPEG_MUXER_$(c)),--enable-muxer="$(c)") \
+		$(if $(CONFIG_FFMPEG_MUXER_$(c)),--enable-muxer="$(c)") \
 	)
 
 FFMPEG_CONFIGURE_DEMUXERS:= \
 	$(foreach c, $(FFMPEG_DEMUXERS), \
-                $(if $(CONFIG_FFMPEG_DEMUXER_$(c)),--enable-demuxer="$(c)") \
+		$(if $(CONFIG_FFMPEG_DEMUXER_$(c)),--enable-demuxer="$(c)") \
 	)
 
 FFMPEG_CONFIGURE_PARSERS:= \
 	$(foreach c, $(FFMPEG_PARSERS), \
-                $(if $(CONFIG_FFMPEG_PARSER_$(c)),--enable-parser="$(c)") \
+		$(if $(CONFIG_FFMPEG_PARSER_$(c)),--enable-parser="$(c)") \
 	)
 
 FFMPEG_CONFIGURE_PROTOCOLS:= \
 	$(foreach c, $(FFMPEG_PROTOCOLS), \
-                $(if $(CONFIG_FFMPEG_PROTOCOL_$(c)),--enable-protocol="$(c)") \
+		$(if $(CONFIG_FFMPEG_PROTOCOL_$(c)),--enable-protocol="$(c)") \
 	)
 
 define Build/Configure
@@ -193,6 +201,7 @@ define Build/Configure
 		--disable-stripping \
 		--disable-vhook \
 		--enable-zlib \
+		--enable-postproc \
 		\
 		--disable-encoders \
 		$(FFMPEG_CONFIGURE_ENCODERS) \
@@ -219,10 +228,13 @@ endef
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libav{codec,device,format,util} $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpostproc $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libav{codec,device,format,util}.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpostproc.{a,so*} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libav{codec,device,format,util}.pc $(1)/usr/lib/pkgconfig/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libpostproc.pc $(1)/usr/lib/pkgconfig/
 endef
 
 define Package/ffmpeg/install
@@ -240,6 +252,12 @@ define Package/libffmpeg/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libav{codec,device,format,util}.so.* $(1)/usr/lib/
 endef
 
+define Package/libffmpeg/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpostproc.so.* $(1)/usr/lib/
+endef
+
 $(eval $(call BuildPackage,ffmpeg))
 $(eval $(call BuildPackage,ffserver))
 $(eval $(call BuildPackage,libffmpeg))
+$(eval $(call BuildPackage,libpostproc))
