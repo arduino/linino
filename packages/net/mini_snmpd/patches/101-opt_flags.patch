@@ -1,0 +1,13 @@
+--- a/Makefile
++++ b/Makefile
+@@ -30,8 +30,9 @@ HEADERS	= mini_snmpd.h
+ SOURCES	= mini_snmpd.c protocol.c mib.c globals.c utils.c linux.c freebsd.c
+ VERSION = 1.0
+ VENDOR	= .1.3.6.1.4.1
++OFLAGS	= -O2 -DDEBUG
+ CFLAGS	= -Wall -Werror -DVERSION="\"$(VERSION)\"" -DVENDOR="\"$(VENDOR)\"" \
+-	  -O2 -DDEBUG -D__LINUX__ -D__DEMO__
++	  $(OFLAGS) -D__LINUX__ -D__DEMO__
+ TARGET	= mini_snmpd
+ MAN 	= mini_snmpd.8
+ DOC 	= CHANGELOG COPYING README TODO
