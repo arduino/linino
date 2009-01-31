@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sysstat
 PKG_VERSION:=8.0.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=sysstat-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://perso.orange.fr/sebastien.godard
@@ -47,7 +47,6 @@ define Package/sysstat/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/{sadc,sa1,sa2} $(1)/usr/lib/sysstat
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/{sar,sadf,iostat,mpstat} $(1)/usr/bin
-	$(INSTALL_DIR) $(1)/var/log/sysstat
 	$(INSTALL_DIR) $(1)/etc/sysstat
 	$(CP) $(PKG_BUILD_DIR)/sysstat.ioconf $(1)/etc/sysstat
 	$(CP) ./files/config $(1)/etc/sysstat/config
