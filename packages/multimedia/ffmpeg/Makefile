@@ -252,7 +252,7 @@ define Package/libffmpeg/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libav{codec,device,format,util}.so.* $(1)/usr/lib/
 endef
 
-define Package/libffmpeg/install
+define Package/libpostproc/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpostproc.so.* $(1)/usr/lib/
 endef
