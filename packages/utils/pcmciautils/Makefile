@@ -41,6 +41,7 @@ define Package/pcmciautils/install
 	$(CP) $(PKG_BUILD_DIR)/pccardctl $(1)/usr/sbin/
 	$(CP) $(PKG_BUILD_DIR)/pcmcia-check-broken-cis $(1)/usr/sbin/
 	$(CP) $(PKG_BUILD_DIR)/pcmcia-socket-startup $(1)/usr/sbin/
+	rm -f $(1)/usr/sbin/lspcmcia
 	ln -s pccardctl $(1)/usr/sbin/lspcmcia
 	$(INSTALL_DIR) $(1)/etc/pcmcia/
 	$(CP) $(PKG_BUILD_DIR)/config/config.opts $(1)/etc/pcmcia/
