@@ -122,7 +122,8 @@ enable_broadcom() {
 	config_get_bool frameburst "$device" frameburst
 	config_get macfilter "$device" macfilter
 	config_get maclist "$device" maclist
-	local vif_pre_up vif_post_up vif_do_up txpower
+	config_get txpower "$device" txpower
+	local vif_pre_up vif_post_up vif_do_up vif_txpower
 
 	_c=0
 	nas="$(which nas)"
@@ -151,7 +152,7 @@ enable_broadcom() {
 	esac
 
 	for vif in $vifs; do
-		config_get txpower "$vif" txpower
+		config_get vif_txpower "$vif" txpower
 
 		config_get mode "$vif" mode
 		append vif_pre_up "vif $_c" "$N"
@@ -303,7 +304,11 @@ EOF
 	wlc stdin <<EOF
 $vif_do_up
 EOF
-	[ -z "$txpower" ] || iwconfig $device txpower ${txpower}dBm 
+
+	# use vif_txpower (from last wifi-iface) instead of txpower (from
+	# wifi-device) if the latter does not exist
+	txpower=${txpower:-$vif_txpower}
+	[ -z "$txpower" ] || iwconfig $device txpower ${txpower}dBm
 
 	eval "$nas_cmd"
 }

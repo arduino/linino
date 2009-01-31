@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=mac80211
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_VERSION:=2008-08-06
 PKG_SOURCE:=compat-wireless-$(PKG_VERSION).tar.bz2
