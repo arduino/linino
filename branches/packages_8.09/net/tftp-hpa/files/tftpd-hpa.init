@@ -1,0 +1,14 @@
+#!/bin/sh /etc/rc.common
+
+START=50
+
+RUN_D=/var/tftpd-hpa
+
+start() {
+	[ -d $RUN_D ] || mkdir -p $RUN_D
+	tftpd-hpa -l -s $RUN_D
+}
+
+stop() {
+	killall tftpd-hpa
+}

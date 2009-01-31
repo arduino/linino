@@ -1,0 +1,54 @@
+--- owfs-2.2p0RC/configure.orig	2006-02-02 04:18:08.000000000 +0100
++++ owfs-2.2p0RC/configure	2006-02-08 20:30:34.000000000 +0100
+@@ -8035,6 +8035,12 @@
+ else
+   sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
+ fi
++if test "x$lt_sys_lib_search_path_spec" != "x"; then
++  sys_lib_search_path_spec="$lt_sys_lib_search_path_spec $sys_lib_search_path_spec"
++fi
++if test "x$lt_sys_lib_dlsearch_path_spec" != "x"; then
++  sys_lib_dlsearch_path_spec="$lt_sys_lib_search_path_spec $sys_lib_search_path_spec"
++fi
+ need_lib_prefix=unknown
+ hardcode_into_libs=no
+ 
+@@ -11827,6 +11833,12 @@
+ else
+   sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
+ fi
++if test "x$lt_sys_lib_search_path_spec" != "x"; then
++  sys_lib_search_path_spec="$lt_sys_lib_search_path_spec $sys_lib_search_path_spec"
++fi
++if test "x$lt_sys_lib_dlsearch_path_spec" != "x"; then
++  sys_lib_dlsearch_path_spec="$lt_sys_lib_search_path_spec $sys_lib_search_path_spec"
++fi
+ need_lib_prefix=unknown
+ hardcode_into_libs=no
+ 
+@@ -15100,6 +15112,12 @@
+ else
+   sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
+ fi
++if test "x$lt_sys_lib_search_path_spec" != "x"; then
++  sys_lib_search_path_spec="$lt_sys_lib_search_path_spec $sys_lib_search_path_spec"
++fi
++if test "x$lt_sys_lib_dlsearch_path_spec" != "x"; then
++  sys_lib_dlsearch_path_spec="$lt_sys_lib_search_path_spec $sys_lib_search_path_spec"
++fi
+ need_lib_prefix=unknown
+ hardcode_into_libs=no
+ 
+@@ -17574,6 +17592,12 @@
+ else
+   sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
+ fi
++if test "x$lt_sys_lib_search_path_spec" != "x"; then
++  sys_lib_search_path_spec="$lt_sys_lib_search_path_spec $sys_lib_search_path_spec"
++fi
++if test "x$lt_sys_lib_dlsearch_path_spec" != "x"; then
++  sys_lib_dlsearch_path_spec="$lt_sys_lib_search_path_spec $sys_lib_search_path_spec"
++fi
+ need_lib_prefix=unknown
+ hardcode_into_libs=no
+ 

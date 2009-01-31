@@ -1,0 +1,11 @@
+--- tcl8.4.16/unix/configure.in.orig	2007-09-21 17:07:02.000000000 +0000
++++ tcl8.4.16/unix/configure.in	2008-03-19 05:48:57.000000000 +0000
+@@ -308,7 +308,7 @@
+     fi
+ fi
+ if test $tcl_ok = 0; then
+-    LIBOBJS="$LIBOBJS strtod.o"
++   :; # LIBOBJS="$LIBOBJS strtod.o"
+ fi
+ 
+ #--------------------------------------------------------------------

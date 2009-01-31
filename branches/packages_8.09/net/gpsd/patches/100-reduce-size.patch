@@ -1,0 +1,26 @@
+--- a/gpsd.c
++++ b/gpsd.c
+@@ -42,6 +42,7 @@
+ #include <locale.h>
+ #endif
+ 
++#undef DBUS_ENABLE
+ #ifdef DBUS_ENABLE
+ #include <gpsd_dbus.h>
+ #endif
+@@ -297,6 +298,7 @@
+  * This array fills from the bottom, so as an extreme case you could
+  * reduce LIMITED_MAX_DEVICES to 1.
+  */
++#define LIMITED_MAX_DEVICES 1
+ #ifdef LIMITED_MAX_DEVICES
+ #define MAXDEVICES	LIMITED_MAX_DEVICES
+ #else
+@@ -304,6 +306,7 @@
+ #define MAXDEVICES	4
+ #endif
+ 
++#define LIMITED_MAX_CLIENTS 16
+ #ifdef LIMITED_MAX_CLIENTS
+ #define MAXSUBSCRIBERS LIMITED_MAX_CLIENTS
+ #else

@@ -1,0 +1,105 @@
+diff --git a/src/glu/glu.pc.in b/src/glu/glu.pc.in
+index 8606b9b..4ed39f9 100644
+--- a/src/glu/glu.pc.in
++++ b/src/glu/glu.pc.in
+@@ -1,10 +1,10 @@
+-prefix=@INSTALL_DIR@
+-exec_prefix=${prefix}
+-libdir=@INSTALL_LIB_DIR@
+-includedir=@INSTALL_INC_DIR@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
+ 
+ Name: glu
+ Description: Mesa OpenGL Utility library
+ Requires: gl
+-Version: @VERSION@
++Version: @PACKAGE_VERSION@
+ Libs: -L${libdir} -lGLU
+diff --git a/src/glw/glw.pc.in b/src/glw/glw.pc.in
+index 25f3f73..2b9a343 100644
+--- a/src/glw/glw.pc.in
++++ b/src/glw/glw.pc.in
+@@ -1,10 +1,10 @@
+-prefix=@INSTALL_DIR@
+-exec_prefix=${prefix}
+-libdir=@INSTALL_LIB_DIR@
+-includedir=@INSTALL_INC_DIR@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
+ 
+ Name: glw
+ Description: Mesa OpenGL widget library
+ Requires: gl
+-Version: @VERSION@
++Version: @PACKAGE_VERSION@
+ Libs: -L${libdir} -lGLw
+diff --git a/src/mesa/drivers/dri/dri.pc.in b/src/mesa/drivers/dri/dri.pc.in
+index c47ee9c..3abb846 100644
+--- a/src/mesa/drivers/dri/dri.pc.in
++++ b/src/mesa/drivers/dri/dri.pc.in
+@@ -1,10 +1,10 @@
+-prefix=@INSTALL_DIR@
+-exec_prefix=${prefix}
+-libdir=@INSTALL_LIB_DIR@
+-includedir=@INSTALL_INC_DIR@
+-dridriverdir=@DRI_DRIVER_DIR@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
++dridriverdir=@DRI_DRIVER_INSTALL_DIR@
+ 
+ Name: dri
+ Description: Direct Rendering Infrastructure
+-Version: @VERSION@
++Version: @PACKAGE_VERSION@
+ Cflags: -I${includedir}
+diff --git a/src/mesa/gl.pc.in b/src/mesa/gl.pc.in
+index 1927880..716876b 100644
+--- a/src/mesa/gl.pc.in
++++ b/src/mesa/gl.pc.in
+@@ -1,10 +1,10 @@
+-prefix=@INSTALL_DIR@
+-exec_prefix=${prefix}
+-libdir=@INSTALL_LIB_DIR@
+-includedir=@INSTALL_INC_DIR@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
+ 
+ Name: gl
+ Description: Mesa OpenGL library
+ Requires:
+-Version: @VERSION@
++Version: @PACKAGE_VERSION@
+ Libs: -L${libdir} -lGL
+diff --git a/configure b/configure
+index 77bc39b..4767483 100755
+--- a/configure
++++ b/configure
+@@ -8858,7 +8858,7 @@ fi
+ LDFLAGS="$_SAVE_LDFLAGS"
+ CPPFLAGS="$_SAVE_CPPFLAGS"
+ 
+-ac_config_files="$ac_config_files configs/autoconf"
++ac_config_files="$ac_config_files configs/autoconf src/glu/glu.pc src/glw/glw.pc src/mesa/drivers/dri/dri.pc src/mesa/gl.pc"
+ 
+ 
+ ac_config_commands="$ac_config_commands configs"
+@@ -9435,6 +9435,10 @@ cat >>$CONFIG_STATUS <<\_ACEOF
+ for ac_config_target in $ac_config_targets
+ do
+   case $ac_config_target in
++    "src/glu/glu.pc") CONFIG_FILES="$CONFIG_FILES src/glu/glu.pc" ;;
++    "src/glw/glw.pc") CONFIG_FILES="$CONFIG_FILES src/glw/glw.pc" ;;
++    "src/mesa/drivers/dri/dri.pc") CONFIG_FILES="$CONFIG_FILES src/mesa/drivers/dri/dri.pc" ;;
++    "src/mesa/gl.pc") CONFIG_FILES="$CONFIG_FILES src/mesa/gl.pc" ;;
+     "configs/autoconf") CONFIG_FILES="$CONFIG_FILES configs/autoconf" ;;
+     "configs") CONFIG_COMMANDS="$CONFIG_COMMANDS configs" ;;
+ 

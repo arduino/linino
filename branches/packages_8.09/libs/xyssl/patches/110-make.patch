@@ -1,0 +1,13 @@
+--- xyssl-0.9/Makefile.orig	2008-03-16 15:14:56.000000000 +0100
++++ xyssl-0.9/Makefile	2008-08-06 17:11:20.000000000 +0200
+@@ -5,8 +5,8 @@
+ .SILENT:
+ 
+ all:
+-	cd library  && make all && cd ..
+-	cd programs && make all && cd ..
++	cd library  && $(MAKE) all && cd ..
++	cd programs && $(MAKE) all && cd ..
+ 
+ install:
+ 	mkdir -p $(DESTDIR)/include/xyssl

@@ -1,0 +1,11 @@
+--- a/shorewall-lite
++++ b/shorewall-lite
+@@ -153,7 +153,7 @@
+ 
+     export VERBOSE
+ 
+-    [ -n "${HOSTNAME:=$(hostname)}" ]
++    [ -n "${HOSTNAME:=$(${SHAREDIR}/hostname)}" ]
+ 
+ }
+ 

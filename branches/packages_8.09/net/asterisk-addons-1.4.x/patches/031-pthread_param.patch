@@ -1,0 +1,19 @@
+*** asterisk-addons-1.4.7/channels/ooh323c/src/ooCmdChannel.c.orig	2008-06-27 18:12:50.000000000 +0800
+--- asterisk-addons-1.4.7/channels/ooh323c/src/ooCmdChannel.c	2008-06-27 18:12:11.000000000 +0800
+***************
+*** 37,43 ****
+     if ((ret = pipe(thePipe)) == -1) {
+        return OO_FAILED;
+     }
+!    pthread_mutex_init(&gCmdChanLock);
+  
+     gH323ep.cmdSock = dup(thePipe[0]);
+     close(thePipe[0]);
+--- 37,43 ----
+     if ((ret = pipe(thePipe)) == -1) {
+        return OO_FAILED;
+     }
+!    pthread_mutex_init(&gCmdChanLock, NULL);
+  
+     gH323ep.cmdSock = dup(thePipe[0]);
+     close(thePipe[0]);

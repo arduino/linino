@@ -1,0 +1,37 @@
+--- st2205tool/Makefile.orig	2008-01-22 00:43:38.000000000 +0100
++++ st2205tool/Makefile	2008-04-22 16:01:46.000000000 +0200
+@@ -6,26 +6,26 @@
+ all:	libst2205/libst2205.so setpic/setpic phack splice bgrep
+ 
+ install: all
+-	make -C libst2205 install
++	$(MAKE) -C libst2205 install
+ 
+ libst2205/libst2205.so: 
+-	make -C libst2205
++	$(MAKE) -C libst2205
+ 
+ setpic/setpic:
+-	make -C setpic
++	$(MAKE) -C setpic
+ 
+ phack:	$(OBJ) $(SRC)
+-	gcc -o $(@) $(OBJ) $(LIBS) $(FLAGS)
++	$(GCC) -o $(@) $(OBJ) $(LIBS) $(FLAGS)
+ 
+ splice:	splice.o splice.c
+-	gcc -o splice splice.o
++	$(GCC) -o splice splice.o
+ 
+ bgrep:	bgrep.o bgrep.c
+-	gcc -o bgrep bgrep.o
++	$(GCC) -o bgrep bgrep.o
+ 
+ clean:	
+-	make -C libst2205 clean
+-	make -C setpic clean
++	$(MAKE) -C libst2205 clean
++	$(MAKE) -C setpic clean
+ 	rm -f $(OBJ) phack splice splice.o bgrep bgrep.o
+ 
+ distclean: clean

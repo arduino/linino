@@ -1,0 +1,31 @@
+#!/bin/sh /etc/rc.common
+
+START=46
+start() {
+        touch /var/log/messages
+        mkdir -p /var/lock/subsys
+        /sbin/shorewall -f start 1>/dev/null &
+}
+
+stop() {
+        /sbin/shorewall stop 1>/dev/null
+}
+
+restart() {
+        if [ -f /var/lib/shorewall/restore ] ; then
+        /sbin/shorewall restore
+        else
+        /sbin/shorewall restart 1>/dev/null
+        fi
+}
+refresh() {
+        /sbin/shorewall refresh
+}
+
+check() {
+        /sbin/shorewall check
+}
+
+reset() {
+        /sbin/shorewall reset
+}

@@ -1,0 +1,70 @@
+diff -ur wavemon-0.4.0b-orig/conf.c wavemon-0.4.0b/conf.c
+--- wavemon-0.4.0b-orig/conf.c	2005-07-08 23:49:09.000000000 -0400
++++ wavemon-0.4.0b/conf.c	2005-07-08 23:48:05.000000000 -0400
+@@ -409,8 +409,8 @@
+ 										fatal_error("parse error in %s, line %d: '%s' is not a valid argument here", cfname, lnum, rv);
+ 									}
+ 									break;
+-					case t_sep: 	/* gcc -Wall sucks */
+-					case t_func:
++					case t_sep: ; 	/* gcc -Wall sucks */
++					case t_func: ;
+ 				}
+ 			}
+ 		}
+@@ -481,7 +481,7 @@
+ 							break;
+ 				case t_listval: sprintf(rv, "%s", (char *)ci->v);
+ 				case t_sep: break;
+-				case t_func:
++				case t_func: ;
+ 			}
+ 			
+ 			add = 1;
+diff -ur wavemon-0.4.0b-orig/conf_scr.c wavemon-0.4.0b/conf_scr.c
+--- wavemon-0.4.0b-orig/conf_scr.c	2005-07-08 23:49:09.000000000 -0400
++++ wavemon-0.4.0b/conf_scr.c	2005-07-08 23:48:05.000000000 -0400
+@@ -63,7 +63,7 @@
+ 			case t_listval:	strncpy(s, (char *)item->v, 32);
+ 							break;
+ 			case t_sep:		/* gcc -Wall sucks */
+-			case t_func:
++			case t_func: ;
+ 		}
+ 
+ 		if (!item->unit) {
+@@ -135,8 +135,8 @@
+ 						}
+ 						strncpy((char *)item->v, ll_get(item->list, tmp), 32);
+ 						break;
+-		case t_sep:		/* gcc -Wall sucks */
+-		case t_func:
++		case t_sep: ;		/* gcc -Wall sucks */
++		case t_func: ;
+ 	}
+ }	
+ 
+diff -ur wavemon-0.4.0b-orig/llist.c wavemon-0.4.0b/llist.c
+--- wavemon-0.4.0b-orig/llist.c	2005-07-08 23:46:09.000000000 -0400
++++ wavemon-0.4.0b/llist.c	2005-07-08 23:47:28.000000000 -0400
+@@ -352,7 +352,7 @@
+ 					*((int *)l->e) = va_arg(*ap, int);
+ 					break;
+ 		case 's':	l->e = (void *)malloc(sizeof(char *));
+-					(char *)l->e = strdup(va_arg(*ap, char *));
++					l->e = strdup(va_arg(*ap, char *));
+ 					break;
+ 		case 'f':	l->e = (void *)malloc(sizeof(double));
+ 					*((double *)l->e) = va_arg(*ap, double);
+diff -ur wavemon-0.4.0b-orig/wavemon.c wavemon-0.4.0b/wavemon.c
+--- wavemon-0.4.0b-orig/wavemon.c	2005-07-08 23:49:09.000000000 -0400
++++ wavemon-0.4.0b/wavemon.c	2005-07-08 23:48:05.000000000 -0400
+@@ -170,7 +170,7 @@
+ 
+ 	if (conf.dump == 1) {
+ 	  dump_parameters(&conf);
+-	  exit();
++	  exit(0);
+ 	}
+ 
+ 	/* initialize the ncurses interface */

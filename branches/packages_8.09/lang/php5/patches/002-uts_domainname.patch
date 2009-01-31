@@ -1,0 +1,13 @@
+Index: php-5.2.4/ext/posix/posix.c
+===================================================================
+--- php-5.2.4.orig/ext/posix/posix.c	2007-09-02 12:24:45.000000000 +0200
++++ php-5.2.4/ext/posix/posix.c	2007-09-02 12:24:45.000000000 +0200
+@@ -468,7 +468,7 @@
+ 	add_assoc_string(return_value, "version",  u.version,  1);
+ 	add_assoc_string(return_value, "machine",  u.machine,  1);
+ #ifdef _GNU_SOURCE
+-	add_assoc_string(return_value, "domainname", u.domainname, 1);
++	add_assoc_string(return_value, "domainname", u.__domainname, 1);
+ #endif
+ }
+ /* }}} */

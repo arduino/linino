@@ -1,0 +1,14 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=50
+
+RARPD=/usr/sbin/rarpd
+DEFAULT=/etc/default/rarpd
+
+start() {
+	[ -f $DEFAULT ] && . $DEFAULT
+	$RARPD $OPTIONS
+}
+stop() {
+	killall rarpd
+}

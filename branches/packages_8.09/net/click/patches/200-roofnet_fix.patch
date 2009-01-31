@@ -1,0 +1,30 @@
+diff -urN click-cvs.2006.03.02.old/conf/wifi/gen_config_roofnet.sh click-cvs.2006.03.02/conf/wifi/gen_config_roofnet.sh
+--- click-cvs.2006.03.02.old/conf/wifi/gen_config_roofnet.sh	2007-05-12 09:12:48.346397229 +0100
++++ click-cvs.2006.03.02/conf/wifi/gen_config_roofnet.sh	2007-05-12 10:00:52.579345023 +0100
+@@ -12,7 +12,7 @@
+ fi
+ 
+ 
+-mac=$(/sbin/ifconfig ath0 | sed -n 's/^.*HWaddr \([0-9A-Za-z:]*\).*/\1/p')
++mac=$(/sbin/ifconfig wifi0 | sed -n 's/^.*HWaddr \([0-9A-Za-z-]*\).*/\1/p'| sed 's/-/:/g' | cut -c -17)
+ # extract the bottom three octects to use as IP
+                             
+ hi_hex=$(echo $mac | sed -n 's/.*:.*:.*:\([0-9A-Za-z:]*\):.*:.*.*/\1/p')
+@@ -23,7 +23,7 @@
+ mid="0x$mid_hex";           
+ lo="0x$lo_hex";             
+ 
+-SUFFIX=$(printf "%d.%d.%d" $hi $mid $lo)
++SUFFIX=$(printf "%d.%d.%d" $((hi)) $((mid)) $((lo)))
+ WIRELESS_MAC=$mac
+ SRCR_IP="5.$SUFFIX"
+ SRCR_NM="255.0.0.0"
+@@ -40,7 +40,7 @@
+ /sbin/ifconfig $DEV txqueuelen 5
+ /sbin/ifconfig $DEV up
+ echo '804' >  /proc/sys/net/$DEV/dev_type
+-/sbin/modprobe tun > /dev/null 2>&1
++/sbin/insmod tun > /dev/null 2>&1
+ 
+ MODE="g"
+ PROBES="2 60 2 1500 4 1500 11 1500 22 1500"

@@ -1,0 +1,13 @@
+diff -urN arpd/configure arpd.new/configure
+--- arpd/configure	2003-02-09 19:31:28.000000000 +0100
++++ arpd.new/configure	2008-10-12 14:23:35.000000000 +0200
+@@ -2170,8 +2170,7 @@
+         DNETLIB="`$withval/bin/dnet-config --libs`"
+      else
+         { { echo "$as_me:2172: error: dnet-config not found in $withval/bin" >&5
+-echo "$as_me: error: dnet-config not found in $withval/bin" >&2;}
+-   { (exit 1); exit 1; }; }
++echo "$as_me: error: dnet-config not found in $withval/bin" >&2;} }
+      fi
+      ;;
+   esac

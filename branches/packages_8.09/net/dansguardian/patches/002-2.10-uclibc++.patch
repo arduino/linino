@@ -1,0 +1,11 @@
+--- dansguardian-2.10/src/IPList.cpp.orig	2008-11-19 07:45:54 +0000
++++ dansguardian-2.10/src/IPList.cpp	2008-11-19 07:46:44 +0000
+@@ -81,7 +81,7 @@
+ 			hostnames.reset(new std::deque<String>);
+ 			hostnames->push_back(*host);
+ 		}
+-		for (std::deque<String>::const_iterator i = hostnames->begin(); i != hostnames->end(); ++i) 
++		for (std::deque<String>::iterator i = hostnames->begin(); i != hostnames->end(); ++i) 
+ 		{
+ 			if (std::binary_search(hostlist.begin(), hostlist.end(), *i))
+ 			{

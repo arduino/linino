@@ -1,0 +1,13 @@
+--- a/mpdctrl.c
++++ b/mpdctrl.c
+@@ -160,8 +160,8 @@
+     }
+ 
+     /* OpenWRT needs a type cast */
+-    /* iconv_value = iconv(i, (const char **)&p1, &fromlen, &p2, &tolen); */
+-    iconv_value = iconv(i, &p1, &fromlen, &p2, &tolen);
++    iconv_value = iconv(i, (const char **)&p1, &fromlen, &p2, &tolen);
++    /* iconv_value = iconv(i, &p1, &fromlen, &p2, &tolen); */
+     if (iconv_value == (size_t) -1) {
+         error ("ICONV ERROR3: failed to convert string, error: %d\n", errno);
+ 	return "ICONV ERROR3";

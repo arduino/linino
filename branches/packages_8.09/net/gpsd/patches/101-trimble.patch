@@ -1,0 +1,40 @@
+--- a/drivers.c
++++ b/drivers.c
+@@ -202,9 +202,13 @@
+ 	/* probe for the FV-18 -- expect $PFEC,GPint followed by data */
+ 	(void)nmea_send(session->gpsdata.gps_fd, "$PFEC,GPint");
+ 	break;
++    case 3:
++	/* probe for the Trimble Copernicus */
++	(void)nmea_send(session->gpsdata.gps_fd, "$PTNLSNM,0139,01");
++	break;
+ #endif /* NMEA_ENABLE */
+ #ifdef EVERMORE_ENABLE
+-    case 3:
++    case 4:
+ 	/* Enable checksum and GGA(1s), GLL(0s), GSA(1s), GSV(1s), RMC(1s), VTG(0s), PEMT101(1s) */
+ 	/* EverMore will reply with: \x10\x02\x04\x38\x8E\xC6\x10\x03 */
+ 	(void)gpsd_write(session,
+@@ -212,19 +216,19 @@
+ 	break;
+ #endif /* EVERMORE_ENABLE */
+ #ifdef ITRAX_ENABLE
+-    case 4:
++    case 5:
+ 	/* probe for iTrax, looking for "$PFST,OK" */
+ 	(void)nmea_send(session->gpsdata.gps_fd, "$PFST");
+ 	break;
+ #endif /* ITRAX_ENABLE */
+ #ifdef GPSCLOCK_ENABLE
+-    case 5:
++    case 6:
+ 	/* probe for Furuno Electric GH-79L4-N (GPSClock) */
+ 	(void)nmea_send(session->gpsdata.gps_fd, "$PFEC,GPsrq");
+ 	break;
+ #endif /* GPSCLOCK_ENABLE */
+ #ifdef ASHTECH_ENABLE
+-    case 6:
++    case 7:
+ 	/* probe for Ashtech -- expect $PASHR */
+ 	(void)nmea_send(session->gpsdata.gps_fd, "$PASHQ,RID");
+ 	break;

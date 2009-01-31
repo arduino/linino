@@ -1,0 +1,19 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -32,6 +32,7 @@
+ ################################################################################
+ CFLAGS       = @CFLAGS@ -Wall -DVERSION=\"@PACKAGE_VERSION@\"  \
+ 	       -Dsysconfdir=\"$(sysconfdir)\" -Ddocdir=\"$(docdir)\"
++CPPFLAGS     = @CPPFLAGS@
+ LDFLAGS      = @LDFLAGS@
+ LIBS         = @LIBS@ 
+ VIDEO_OBJ    = @VIDEO@
+@@ -119,7 +120,7 @@
+ ################################################################################
+ $(DEPEND_FILE): *.h $(SRC)
+ 	@echo "Generating dependencies, please wait..."
+-	@$(CC) $(CFLAGS) -M $(SRC) > .tmp
++	@$(CC) $(CFLAGS) $(CPPFLAGS) -M $(SRC) > .tmp
+ 	@mv -f .tmp $(DEPEND_FILE)
+ 	@echo
+ 

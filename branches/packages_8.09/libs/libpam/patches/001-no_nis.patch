@@ -1,0 +1,89 @@
+diff -urN Linux-PAM-0.99.6.3/modules/pam_access/pam_access.c Linux-PAM-0.99.6.3.new/modules/pam_access/pam_access.c
+--- Linux-PAM-0.99.6.3/modules/pam_access/pam_access.c	2006-08-31 12:20:37.000000000 +0200
++++ Linux-PAM-0.99.6.3.new/modules/pam_access/pam_access.c	2007-01-10 22:36:57.000000000 +0100
+@@ -41,7 +41,9 @@
+ #include <errno.h>
+ #include <ctype.h>
+ #include <sys/utsname.h>
++#ifdef USE_NIS
+ #include <rpcsvc/ypclnt.h>
++#endif
+ #include <arpa/inet.h>
+ #include <netdb.h>
+ #include <sys/socket.h>
+diff -urN Linux-PAM-0.99.6.3/modules/pam_unix/pam_unix_passwd.c Linux-PAM-0.99.6.3.new/modules/pam_unix/pam_unix_passwd.c
+--- Linux-PAM-0.99.6.3/modules/pam_unix/pam_unix_passwd.c	2006-06-27 10:38:14.000000000 +0200
++++ Linux-PAM-0.99.6.3.new/modules/pam_unix/pam_unix_passwd.c	2007-01-10 23:06:20.000000000 +0100
+@@ -54,8 +54,10 @@
+ #include <sys/time.h>
+ #include <sys/stat.h>
+ #include <rpc/rpc.h>
++#ifdef USE_NIS
+ #include <rpcsvc/yp_prot.h>
+ #include <rpcsvc/ypclnt.h>
++#endif
+ 
+ #include <signal.h>
+ #include <errno.h>
+@@ -187,6 +189,7 @@
+ 
+ static char *getNISserver(pam_handle_t *pamh)
+ {
++#ifdef USE_NIS
+ 	char *master;
+ 	char *domainname;
+ 	int port, err;
+@@ -213,6 +216,9 @@
+ 		return NULL;
+ 	}
+ 	return master;
++#else
++	return NULL;
++#endif
+ }
+ 
+ #ifdef WITH_SELINUX
+diff -urN Linux-PAM-0.99.6.3/modules/pam_unix/support.c Linux-PAM-0.99.6.3.new/modules/pam_unix/support.c
+--- Linux-PAM-0.99.6.3/modules/pam_unix/support.c	2006-06-27 10:38:14.000000000 +0200
++++ Linux-PAM-0.99.6.3.new/modules/pam_unix/support.c	2007-01-10 23:10:16.000000000 +0100
+@@ -19,7 +19,9 @@
+ #include <ctype.h>
+ #include <syslog.h>
+ #include <sys/resource.h>
++#ifdef USE_NIS
+ #include <rpcsvc/ypclnt.h>
++#endif
+ 
+ #include <security/_pam_macros.h>
+ #include <security/pam_modules.h>
+@@ -253,7 +255,7 @@
+ 			fclose(passwd);
+ 		}
+ 	}
+-
++#ifdef USE_NIS
+ 	if (!matched && nis) {
+ 		char *userinfo = NULL, *domain = NULL;
+ 		int len = 0, i;
+@@ -272,6 +274,7 @@
+ 			}
+ 		}
+ 	}
++#endif
+ 
+ 	if (matched && (ret != NULL)) {
+ 		*ret = NULL;
+diff -urN Linux-PAM-0.99.6.3/modules/pam_unix/yppasswd_xdr.c Linux-PAM-0.99.6.3.new/modules/pam_unix/yppasswd_xdr.c
+--- Linux-PAM-0.99.6.3/modules/pam_unix/yppasswd_xdr.c	2005-07-20 11:46:19.000000000 +0200
++++ Linux-PAM-0.99.6.3.new/modules/pam_unix/yppasswd_xdr.c	2007-01-10 23:12:04.000000000 +0100
+@@ -13,8 +13,10 @@
+ #include "config.h"
+ 
+ #include <rpc/rpc.h>
++#ifdef USE_NIS
+ #include <rpcsvc/yp_prot.h>
+ #include <rpcsvc/ypclnt.h>
++#endif
+ #include "yppasswd.h"
+ 
+ bool_t

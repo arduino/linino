@@ -1,0 +1,13 @@
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -103,8 +103,8 @@
+ 	cd $(LIB_DIR) && $(LN_S) -f $(LIB_SHARED) lib$(LIB_NAME).so.$(VERSION_MAJOR)
+ 	cd $(LIB_DIR) && $(LN_S) -f lib$(LIB_NAME).so.$(VERSION_MAJOR) lib$(LIB_NAME).so
+ 
+-testserdisp: $(LIB_DIR)/$(LIB_STATIC) $(OBJECTS)
+-	$(CC) -o testserdisp $(OBJECTS) $(LIB_DIR)/$(LIB_STATIC) $(TARGET_LDFLAGS) $(EXTRA_LIBS)
++testserdisp: $(LIB_DIR)/$(LIB_SHARED) $(OBJECTS)
++	$(CC) -o testserdisp $(OBJECTS) $(LIB_DIR)/$(LIB_SHARED) $(TARGET_LDFLAGS) $(EXTRA_LIBS)
+ 
+ clean:
+ 	/bin/rm -f $(OBJECTS) $(LIB_OBJECTS) $(LIB_DIR)/*.a $(LIB_DIR)/*.so*

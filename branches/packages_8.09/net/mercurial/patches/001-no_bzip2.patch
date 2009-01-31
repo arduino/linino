@@ -1,0 +1,124 @@
+diff -urN mercurial-1.1.2/mercurial/archival.py mercurial-1.1.2-nobz2/mercurial/archival.py
+--- mercurial-1.1.2/mercurial/archival.py	2009-01-01 00:38:33.000000000 +0100
++++ mercurial-1.1.2-nobz2/mercurial/archival.py	2009-01-01 13:53:14.000000000 +0100
+@@ -65,8 +65,8 @@
+                 self.fileobj.write(fname + '\000')
+ 
+     def __init__(self, dest, prefix, mtime, kind=''):
+-        self.prefix = tidyprefix(dest, prefix, ['.tar', '.tar.bz2', '.tar.gz',
+-                                                '.tgz', '.tbz2'])
++        self.prefix = tidyprefix(dest, prefix, ['.tar', '.tar.gz',
++                                                '.tgz'])
+         self.mtime = mtime
+ 
+         def taropen(name, mode, fileobj=None):
+@@ -179,7 +179,6 @@
+ archivers = {
+     'files': fileit,
+     'tar': tarit,
+-    'tbz2': lambda name, prefix, mtime: tarit(name, prefix, mtime, 'bz2'),
+     'tgz': lambda name, prefix, mtime: tarit(name, prefix, mtime, 'gz'),
+     'uzip': lambda name, prefix, mtime: zipit(name, prefix, mtime, False),
+     'zip': zipit,
+diff -urN mercurial-1.1.2/mercurial/bundlerepo.py mercurial-1.1.2-nobz2/mercurial/bundlerepo.py
+--- mercurial-1.1.2/mercurial/bundlerepo.py	2009-01-01 00:38:33.000000000 +0100
++++ mercurial-1.1.2-nobz2/mercurial/bundlerepo.py	2009-01-01 13:53:59.000000000 +0100
+@@ -12,7 +12,7 @@
+ 
+ from node import hex, nullid, short
+ from i18n import _
+-import changegroup, util, os, struct, bz2, zlib, tempfile, shutil, mdiff
++import changegroup, util, os, struct, zlib, tempfile, shutil, mdiff
+ import repo, localrepo, changelog, manifest, filelog, revlog, context
+ 
+ class bundlerevlog(revlog.revlog):
+@@ -173,16 +173,13 @@
+             raise util.Abort(_("%s: not a Mercurial bundle file") % bundlename)
+         elif not header.startswith("HG10"):
+             raise util.Abort(_("%s: unknown bundle version") % bundlename)
+-        elif (header == "HG10BZ") or (header == "HG10GZ"):
++        elif (header == "HG10GZ"):
+             fdtemp, temp = tempfile.mkstemp(prefix="hg-bundle-",
+                                             suffix=".hg10un", dir=self.path)
+             self.tempfile = temp
+             fptemp = os.fdopen(fdtemp, 'wb')
+             def generator(f):
+-                if header == "HG10BZ":
+-                    zd = bz2.BZ2Decompressor()
+-                    zd.decompress("BZ")
+-                elif header == "HG10GZ":
++                if header == "HG10GZ":
+                     zd = zlib.decompressobj()
+                 for chunk in f:
+                     yield zd.decompress(chunk)
+diff -urN mercurial-1.1.2/mercurial/changegroup.py mercurial-1.1.2-nobz2/mercurial/changegroup.py
+--- mercurial-1.1.2/mercurial/changegroup.py	2009-01-01 00:38:33.000000000 +0100
++++ mercurial-1.1.2-nobz2/mercurial/changegroup.py	2009-01-01 13:52:05.000000000 +0100
+@@ -8,7 +8,7 @@
+ """
+ 
+ from i18n import _
+-import struct, os, bz2, zlib, util, tempfile
++import struct, os, zlib, util, tempfile
+ 
+ def getchunk(source):
+     """get a chunk from a changegroup"""
+@@ -49,12 +49,11 @@
+ bundletypes = {
+     "": ("", nocompress),
+     "HG10UN": ("HG10UN", nocompress),
+-    "HG10BZ": ("HG10", lambda: bz2.BZ2Compressor()),
+     "HG10GZ": ("HG10GZ", lambda: zlib.compressobj()),
+ }
+ 
+ # hgweb uses this list to communicate it's preferred type
+-bundlepriority = ['HG10GZ', 'HG10BZ', 'HG10UN']
++bundlepriority = ['HG10GZ', 'HG10UN']
+ 
+ def writebundle(cg, filename, bundletype):
+     """Write a bundle file and return its filename.
+@@ -122,12 +121,6 @@
+             zd = zlib.decompressobj()
+             for chunk in f:
+                 yield zd.decompress(chunk)
+-    elif header == 'HG10BZ':
+-        def generator(f):
+-            zd = bz2.BZ2Decompressor()
+-            zd.decompress("BZ")
+-            for chunk in util.filechunkiter(f, 4096):
+-                yield zd.decompress(chunk)
+     return util.chunkbuffer(generator(fh))
+ 
+ def readbundle(fh, fname):
+diff -urN mercurial-1.1.2/mercurial/hgweb/hgwebdir_mod.py mercurial-1.1.2-nobz2/mercurial/hgweb/hgwebdir_mod.py
+--- mercurial-1.1.2/mercurial/hgweb/hgwebdir_mod.py	2009-01-01 00:38:33.000000000 +0100
++++ mercurial-1.1.2-nobz2/mercurial/hgweb/hgwebdir_mod.py	2009-01-01 13:54:29.000000000 +0100
+@@ -178,7 +178,7 @@
+ 
+         def archivelist(ui, nodeid, url):
+             allowed = ui.configlist("web", "allow_archive", untrusted=True)
+-            for i in [('zip', '.zip'), ('gz', '.tar.gz'), ('bz2', '.tar.bz2')]:
++            for i in [('zip', '.zip'), ('gz', '.tar.gz')]:
+                 if i[0] in allowed or ui.configbool("web", "allow" + i[0],
+                                                     untrusted=True):
+                     yield {"type" : i[0], "extension": i[1],
+diff -urN mercurial-1.1.2/mercurial/hgweb/hgweb_mod.py mercurial-1.1.2-nobz2/mercurial/hgweb/hgweb_mod.py
+--- mercurial-1.1.2/mercurial/hgweb/hgweb_mod.py	2009-01-01 00:38:33.000000000 +0100
++++ mercurial-1.1.2-nobz2/mercurial/hgweb/hgweb_mod.py	2009-01-01 13:55:08.000000000 +0100
+@@ -35,7 +35,7 @@
+         hook.redirect(True)
+         self.mtime = -1
+         self.reponame = name
+-        self.archives = 'zip', 'gz', 'bz2'
++        self.archives = 'zip', 'gz'
+         self.stripecount = 1
+         # a repo owner may set web.templates in .hg/hgrc to get any file
+         # readable by the user running the CGI script
+@@ -266,7 +266,6 @@
+                 yield {"type" : i, "extension" : spec[2], "node" : nodeid}
+ 
+     archive_specs = {
+-        'bz2': ('application/x-tar', 'tbz2', '.tar.bz2', None),
+         'gz': ('application/x-tar', 'tgz', '.tar.gz', None),
+         'zip': ('application/zip', 'zip', '.zip', None),
+         }

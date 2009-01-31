@@ -1,0 +1,37 @@
+#!/bin/sh /etc/rc.common
+START=60
+
+lease_file=/tmp/dhcpd.leases
+config_file=/etc/dhcpd.conf
+pid_file=/var/run/dhcpd.pid
+
+start() {
+	echo Starting isc-dhcpd
+
+	if [ ! -e $lease_file ]; then
+		echo "  Creating $lease_file"
+		touch $lease_file
+	fi
+	
+	/usr/sbin/dhcpd -q -cf $config_file -lf $lease_file
+	
+	if [ $? -ne 0 ]; then
+		echo "  isc-dhcpd failed to start"
+	fi
+}
+
+stop() {
+	echo "Stopping isc-dhcpd"
+	if [ -e $pid_file ]; then
+		kill `cat $pid_file`
+
+		if [ $? -ne 0 ]; then
+			echo "  PID " `cat $pid_file` not found
+			echo "  Is the DHCP server running?"
+		fi
+	
+		rm $pid_file
+	else
+		echo "  $pid_file not found"
+	fi
+}

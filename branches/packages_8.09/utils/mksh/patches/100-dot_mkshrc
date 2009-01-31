@@ -1,0 +1,36 @@
+$FreeWRT$
+
+	• FreeWRT patches:
+	  – no hostname(1)
+	  – ls has no -o
+	  – yofuh doesn’t like $? in $PS1
+
+--- a/dot.mkshrc
++++ b/dot.mkshrc
+@@ -25,13 +25,15 @@
+ # sample mksh initialisation file for interactive shells; install as
+ # /etc/skel/.mkshrc (as root, for new accounts) or copy to ~/.mkshrc
+ 
+-: ${EDITOR:=/bin/ed} ${TERM:=vt100} ${HOSTNAME:=$(ulimit -c 0;hostname -s 2>&-)}
++: ${EDITOR:=/bin/ed} ${TERM:=vt100} ${HOSTNAME:=$(</proc/sys/kernel/hostname)}
+ [[ $HOSTNAME = @(localhost|*([	 ])) ]] && HOSTNAME=$(ulimit -c 0;hostname 2>&-)
+ : ${HOSTNAME:=nil}; PS1='#'; [[ "$(ulimit -c 0; id -u 2>&-)" -eq 0 ]] || PS1='$'
+ function precmd {
+ 	typeset -Ui10 e=$?
+ 
+-	(( e )) && print -n "$e|"
++# enable this back if you want the errorlevel in your prompt
++# this is default in upstream mksh, disabled locally in fwrt
++#	(( e )) && print -n "$e|"
+ }
+ PS1='$(precmd)${USER:=$(ulimit -c 0;id -un 2>&- || print \?)}@${HOSTNAME%%.*}:$(
+ 	typeset pfx=~ wd=${PWD:-?}
+@@ -53,7 +55,7 @@
+ alias l='ls -F'
+ alias la='l -a'
+ alias ll='l -l'
+-alias lo='l -alo'
++alias lo='l -al'
+ alias which='whence -p'
+ whence -p rot13 >&- || alias rot13='tr \
+     abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ \

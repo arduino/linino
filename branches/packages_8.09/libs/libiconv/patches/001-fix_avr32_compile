@@ -1,0 +1,40 @@
+--- libiconv-1.9.1/autoconf/config.sub.orig	2008-05-15 22:01:31.000000000 -0500
++++ libiconv-1.9.1/autoconf/config.sub	2008-05-15 22:01:59.000000000 -0500
+@@ -228,7 +228,7 @@
+ 	| a29k \
+ 	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
+ 	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
+-	| arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] | avr \
++	| arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] | avr | avr32 \
+ 	| clipper \
+ 	| d10v | d30v | dlx | dsp16xx \
+ 	| fr30 | frv \
+@@ -294,7 +294,7 @@
+ 	| alpha64-* | alpha64ev[4-8]-* | alpha64ev56-* | alpha64ev6[78]-* \
+ 	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* \
+ 	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
+-	| avr-* \
++	| avr-* | avr32-* \
+ 	| bs2000-* \
+ 	| c[123]* | c30-* | [cjt]90-* | c4x-* | c54x-* | c55x-* | c6x-* \
+ 	| clipper-* | cydra-* \
+--- libiconv-1.9.1/libcharset/autoconf/config.sub.orig	2008-05-15 22:08:01.000000000 -0500
++++ libiconv-1.9.1/libcharset/autoconf/config.sub	2008-05-15 22:08:28.000000000 -0500
+@@ -228,7 +228,7 @@
+ 	| a29k \
+ 	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
+ 	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
+-	| arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] | avr \
++	| arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] | avr | avr32 \
+ 	| clipper \
+ 	| d10v | d30v | dlx | dsp16xx \
+ 	| fr30 | frv \
+@@ -294,7 +294,7 @@
+ 	| alpha64-* | alpha64ev[4-8]-* | alpha64ev56-* | alpha64ev6[78]-* \
+ 	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* \
+ 	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
+-	| avr-* \
++	| avr-* | avr32-* \
+ 	| bs2000-* \
+ 	| c[123]* | c30-* | [cjt]90-* | c4x-* | c54x-* | c55x-* | c6x-* \
+ 	| clipper-* | cydra-* \

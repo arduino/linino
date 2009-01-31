@@ -1,0 +1,12 @@
+diff -urN matrixssl/src/os/linux/linux.c matrixssl.new/src/os/linux/linux.c
+--- matrixssl/src/os/linux/linux.c	2005-02-23 22:43:10.000000000 +0100
++++ matrixssl.new/src/os/linux/linux.c	2006-12-10 11:45:54.000000000 +0100
+@@ -40,7 +40,7 @@
+ #include "../osLayer.h"
+ 
+ #if defined(__i386__) || defined(RDTSC)
+-#include <asm/timex.h>
++//#include <asm/timex.h>
+ /*
+ 	As defined in asm/timex.h for x386:
+ */

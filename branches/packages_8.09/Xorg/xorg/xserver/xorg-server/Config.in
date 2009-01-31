@@ -1,0 +1,28 @@
+menu "kdrive library support"
+depends on PACKAGE_xserver-kdrive-xvesa || PACKAGE_xserver-kdrive-xfbdev || PACKAGE_xserver-kdrive-xglamo || PACKAGE_xserver-kdrive-xephyr
+
+	config X_TSLIB
+		bool
+		prompt "enable support for tslib"
+
+#	config X_XCALIBRATE
+#		bool
+#		prompt "enable support for xcalibrate"
+
+#	config X_DRI
+#		bool
+#		prompt "enable support for DRI"
+
+	config X_COMPOSITE
+		bool
+		prompt "enable support for composite"
+
+	config X_XINERAMA
+		bool
+		prompt "enable support for xinerama"
+
+#	config X_GLX
+#		bool
+#		prompt "enable support for GLX"
+
+endmenu

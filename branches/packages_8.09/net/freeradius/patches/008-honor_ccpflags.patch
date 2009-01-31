@@ -1,0 +1,17 @@
+Index: freeradius-1.1.6/src/modules/rules.mak
+===================================================================
+--- freeradius-1.1.6.orig/src/modules/rules.mak	2007-07-30 14:17:42.000000000 -0500
++++ freeradius-1.1.6/src/modules/rules.mak	2007-07-30 14:17:43.000000000 -0500
+@@ -62,10 +62,10 @@
+ #
+ #######################################################################
+ %.lo: %.c
+-	$(LIBTOOL) --mode=compile $(CC) $(CFLAGS) $(RLM_CFLAGS) -c $<
++	$(LIBTOOL) --mode=compile $(CC) $(CFLAGS) $(CPPFLAGS) $(RLM_CFLAGS) -c $<
+ 
+ %.lo: %.cpp
+-	$(LIBTOOL) --mode=compile $(CXX) $(CFLAGS) $(RLM_CFLAGS) -c $<
++	$(LIBTOOL) --mode=compile $(CXX) $(CFLAGS) $(CPPFLAGS) $(RLM_CFLAGS) -c $<
+ 
+ ifneq ($(TARGET),)
+ #######################################################################

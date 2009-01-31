@@ -1,0 +1,12 @@
+--- wavemon-0.4.0b.orig/iw_if.h	2002-12-21 06:18:30.000000000 -0600
++++ wavemon-0.4.0b/iw_if.h	2006-03-12 09:05:48.000000000 -0600
+@@ -19,6 +19,9 @@
+  */
+ 
+ #include <netdb.h>
++#include <linux/types.h>
++#include <linux/socket.h>
++#include <linux/if.h>
+ #include <linux/wireless.h>
+ 
+ #define IW_STACKSIZE 1024

@@ -1,0 +1,77 @@
+# 
+# Copyright (C) 2008 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# This Makefile is a skeleton
+#
+# $Id: $
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=
+PKG_VERSION:=
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=
+PKG_MD5SUM:=
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/package
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=package
+  URL:=
+endef
+
+define Package/package/description
+endef
+
+CONFIGURE_ARGS += \
+	--enable-static \
+	--enable-shared
+
+# If you wish to link against uclibc++ consider using the
+# following variables :
+CONFIGURE_VARS += \
+	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
+	LDFLAGS="$$$$LDFLAGS" \
+	LIBS="-nodefaultlibs -luClibc++ -lm -lnotimpl" \
+
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS)"
+
+define Build/Compile
+	# pass CFLAGS again to override -O2 set by configure
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
+endef
+
+
+define Build/InstallDev
+	mkdir -p $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/*.h $(1)/usr/include/
+	mkdir -p $(1)/usr/package
+	$(CP) $(PKG_INSTALL_DIR)/usr/package/package.{a,so*} $(1)/usr/package/
+endef
+
+define Build/UninstallDev
+	rm -rf	$(1)/usr/include/package \
+		$(1)/usr/package/package.{a,so*}
+endef
+
+define Package/package/install
+	$(INSTALL_DIR) $(1)/usr/package
+	$(CP) $(PKG_INSTALL_DIR)/usr/package/package.so.* $(1)/usr/package/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/package.init $(1)/etc/init.d/package
+	$(INSTALL_DIR) $(1)/etc/config/
+	$(INSTALL_CONF) $(1)/etc/config/package
+endef
+
+$(eval $(call BuildPackage,package))

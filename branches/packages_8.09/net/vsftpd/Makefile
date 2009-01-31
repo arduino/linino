@@ -1,0 +1,42 @@
+#
+# Copyright (C) 2006-2008 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id$
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=vsftpd
+PKG_VERSION:=2.0.6
+PKG_RELEASE:=2
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=ftp://vsftpd.beasts.org/users/cevans/
+PKG_MD5SUM:=f7a742690d7f86e356fb66d3840079c7
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/vsftpd
+  SUBMENU:=FTP
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=A fast and secure FTP server
+  URL:=http://vsftpd.beasts.org/
+endef
+
+define Package/vsftpd/conffiles
+/etc/vsftpd.conf
+endef
+
+define Package/vsftpd/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_CONF) ./files/$(PKG_NAME).conf $(1)/etc/$(PKG_NAME).conf
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
+endef
+
+$(eval $(call BuildPackage,vsftpd))

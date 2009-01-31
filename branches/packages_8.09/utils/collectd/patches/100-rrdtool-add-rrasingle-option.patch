@@ -1,0 +1,27 @@
+Index: collectd-4.4.2/src/rrdtool.c
+===================================================================
+--- collectd-4.4.2.orig/src/rrdtool.c	2008-07-17 19:30:00.000000000 +0200
++++ collectd-4.4.2/src/rrdtool.c	2008-07-17 19:30:44.000000000 +0200
+@@ -87,6 +87,7 @@
+ 	"HeartBeat",
+ 	"RRARows",
+ 	"RRATimespan",
++	"RRASingle",
+ 	"XFF"
+ };
+ static int config_keys_num = STATIC_ARRAY_SIZE (config_keys);
+@@ -1077,6 +1078,14 @@
+ 		}
+ 		xff = tmp;
+ 	}
++	else if (strcasecmp ("RRASingle", key) == 0)
++	{
++		if (strcasecmp("true", value) == 0)
++		{
++			rra_types_num = 1;
++			NOTICE ("rrdtool plugin: RRASingle = true: creating only AVERAGE RRAs");
++		}
++	}
+ 	else
+ 	{
+ 		return (-1);

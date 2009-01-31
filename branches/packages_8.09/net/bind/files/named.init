@@ -1,0 +1,35 @@
+#!/bin/sh /etc/rc.common
+START=50
+
+config_file=/etc/bind/named.conf
+pid_file=/var/run/named.pid
+
+start() {
+  echo Starting isc-bind
+
+  /usr/sbin/named -c $config_file
+
+  if [ $? -eq 0 ]
+  then
+    echo "  isc-bind failed to start"
+  fi
+}
+
+stop() {
+  echo "Stopping isc-bind"
+  if [ -e $pid_file ]
+  then
+    kill `cat $pid_file`
+
+    if [ $? -eq 0 ]
+    then
+      echo "  PID " `cat $pid_file` not found
+      echo "  Is the named server running?"
+    fi
+
+    rm $pid_file
+
+    else
+    echo "  $pid_file not found"
+  fi
+}

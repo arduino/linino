@@ -1,0 +1,27 @@
+Index: privoxy-3.0.6-stable/GNUmakefile.in
+===================================================================
+--- privoxy-3.0.6-stable.orig/GNUmakefile.in	2007-06-21 14:51:38.000000000 +0200
++++ privoxy-3.0.6-stable/GNUmakefile.in	2007-06-21 14:51:38.000000000 +0200
+@@ -55,15 +55,15 @@
+ USER         = @USER@
+ GROUP	   = @GROUP@
+ 
+-prefix       = @prefix@
+-exec_prefix  = @exec_prefix@
+-CONF_BASE    = @sysconfdir@
+-SBIN_DEST    = @sbindir@
+-MAN_DIR      = @mandir@
++prefix       = $(DESTDIR)@prefix@
++exec_prefix  = $(DESTDIR)@exec_prefix@
++CONF_BASE    = $(DESTDIR)@sysconfdir@
++SBIN_DEST    = $(DESTDIR)@sbindir@
++MAN_DIR      = $(DESTDIR)@mandir@
+ MAN_DEST     = $(MAN_DIR)/man1
+-SHARE_DEST   = @datadir@
++SHARE_DEST   = $(DESTDIR)@datadir@
+ DOC_DEST     = $(SHARE_DEST)/doc/privoxy
+-VAR_DEST     = @localstatedir@
++VAR_DEST     = $(DESTDIR)@localstatedir@
+ LOGS_DEST    = $(VAR_DEST)/log/privoxy
+ PIDS_DEST    = $(VAR_DEST)/run
+ 

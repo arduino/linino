@@ -1,0 +1,31 @@
+Index: dansguardian-2.9.9.2/configure
+===================================================================
+--- dansguardian-2.9.9.2.orig/configure	2008-02-27 17:52:06.000000000 +0100
++++ dansguardian-2.9.9.2/configure	2008-02-27 17:52:06.000000000 +0100
+@@ -799,7 +799,7 @@
+ sharedstatedir='${prefix}/com'
+ localstatedir='${prefix}/var'
+ includedir='${prefix}/include'
+-oldincludedir='/usr/include'
++oldincludedir='${prefix}/usr/include'
+ docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
+ infodir='${datarootdir}/info'
+ htmldir='${docdir}'
+@@ -6429,7 +6429,7 @@
+ # Check whether --with-zlib was given.
+ if test "${with_zlib+set}" = set; then
+   withval=$with_zlib;  # check for header & func (in library) in given prefix
+-	CPPFLAGS="${CPPFLAGS} -I${withval}/include"
++	CPPFLAGS="${CPPFLAGS}"
+ 	if test "x$staticzlib" = "xtrue"; then
+ 		LIBS="-Bstatic -L${withval} -lz -Bdynamic ${LIBS}"
+ 	else
+@@ -10753,7 +10753,7 @@
+ if test "${with_libiconv+set}" = set; then
+   withval=$with_libiconv;  # check for header & func (in library) in given prefix
+ 			if test "x$withval" != "x"; then
+-				CPPFLAGS="${CPPFLAGS} -I${withval}/include"
++				CPPFLAGS="${CPPFLAGS}"
+ 				LIBS="-L${withval}/lib -liconv ${LIBS}"
+ 			else
+ 				LIBS="-liconv ${LIBS}"

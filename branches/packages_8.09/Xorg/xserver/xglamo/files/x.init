@@ -1,0 +1,32 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=99
+
+ARGS=""
+
+screen() {
+	local cfg="$1"
+	config_get resolution $cfg resolution
+	config_get dpi $cfg dpi
+	[ -n "$resolution" ] && ARGS="$ARGS -screen $resolution"
+	[ -n "$dpi" ] && ARGS="$ARGS -dpi $dpi"
+}
+
+desktop() {
+	local cfg="$1"
+	config_get autostart $cfg autostart
+	[ -n "$autostart" ] && eval $autostart &
+}
+
+start() {
+	export DISPLAY=":0"
+	config_load x11
+	config_foreach screen screen
+	TSLIB_TSDEVICE="/dev/event1" Xglamo $ARGS &
+	config_foreach desktop desktop
+	#test -d /etc/xdg/autostart || exit
+	#for elem in `ls /etc/xdg/autostart/`; do               
+	#	exec=`grep "^Exec=" "/etc/xdg/autostart/$elem"`
+	#	eval ${exec#*=} &
+	#done
+}

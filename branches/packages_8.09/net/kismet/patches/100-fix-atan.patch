@@ -1,0 +1,11 @@
+--- a/gpsd.cc
++++ b/gpsd.cc
+@@ -478,7 +478,7 @@
+ 		if (ty == 0) {
+ 			dir = 0.0;
+ 		} else {
+-			dir = atan(tx / ty);
++			dir = atan2(tx,ty);
+ 		}
+ 
+ 		if (!finite(dir))

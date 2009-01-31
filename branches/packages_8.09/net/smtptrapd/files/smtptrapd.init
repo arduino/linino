@@ -1,0 +1,144 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2008 OpenWrt.org
+
+START=90
+
+NAME="smtptrapd"
+DAEMON="/usr/sbin/$NAME"
+RUN_D="/var/run"
+
+EXTRA_COMMANDS="list status exconf"
+EXTRA_HELP="	list	Lists available configurations
+	status	Prints status of the service
+	exconf	Shows an example config file
+
+The actions start, stop, restart, reload, status operate
+globally on all configurations unless the particular
+configuration has been provided as the next parameter.
+"
+
+check_req() {
+	if [ -x "$DAEMON" ]; then
+		return 0
+	else
+		echo "The daemon binary is missing!"
+		return 1
+	fi
+}
+
+check_section() {
+	echo "$1" | grep -vq '^cfg[[:xdigit:]]\{6\}$'
+}
+
+start_service() {
+	local cfg="$1"
+	local named="$2"
+	check_section "$cfg" || return 1
+	[ "$named" != "" -a "$cfg" != "$named" ] && return 0
+	local args listen_ip banner_host username num_threads listen_port accept_queue_len
+	config_get listen_ip "$cfg" listen_ip
+	[ -n "$listen_ip" ] && append args "-l $listen_ip"
+	config_get listen_port "$cfg" listen_port
+	[ -n "$listen_port" ] && append args "-p $listen_port"
+	config_get username "$cfg" username
+	[ -n "$username" ] && append args "-u $username"
+	config_get banner_host "$cfg" banner_host
+	[ -n "$banner_host" ] && append args "-b \"$banner_host\""
+	config_get num_threads "$cfg" num_threads
+	[ -n "$num_threads" ] && append args "-t $num_threads"
+	config_get accept_queue_len "$cfg" accept_queue_len
+	[ -n "$accept_queue_len" ] && append args "-m $accept_queue_len"
+	append args "-f ${RUN_D}/${NAME}-${cfg}.pid"
+	eval "$DAEMON $args"
+}
+
+stop_service() {
+	local cfg="$1"
+	local named="$2"
+	check_section "$cfg" || return 1
+	[ "$named" != "" -a "$cfg" != "$named" ] && return 0
+	local PID_F="${RUN_D}/${NAME}-${cfg}.pid"
+	[ -f $PID_F ] && {
+		local ppid=$(cat $PID_F)
+		ps | grep "^[[:space:]]*$ppid[[:space:]]" | grep -q "[s]mtptrapd\>" && kill $ppid
+		rm -f $PID_F
+	}
+}
+
+status_service() {
+	local cfg="$1"
+	local named="$2"
+	check_section "$cfg" || return 1
+	[ "$named" != "" -a "$cfg" != "$named" ] && return 0
+	local PID_F="${RUN_D}/${NAME}-${cfg}.pid"
+	[ -f $PID_F ] && {
+		local ppid=$(cat $PID_F)
+		if ps | grep "^[[:space:]]*$ppid[[:space:]]" | grep -q "[s]mtptrapd\>"; then
+			echo "$cfg (pid $ppid) is running"
+		else
+			echo "$cfg is not running (stale pid file exists)"
+		fi
+	}
+}
+
+list_service() {
+	local cfg="$1"
+	check_section "$cfg" || return 1
+	echo "	$cfg"
+}
+
+start() {
+	local svc_cfg="$1"
+	check_req || return 1
+	[ ! -d $RUN_D ] && mkdir -p $RUN_D
+	config_load "$NAME"
+	config_foreach start_service "$NAME" "$svc_cfg"
+}
+
+stop() {
+	local svc_cfg="$1"
+	check_req || return 1
+	config_load "/etc/config/$NAME"
+	if [ -n "$svc_cfg" ]; then
+		config_foreach stop_service "$NAME" "$svc_cfg"
+	else
+		config_foreach stop_service "$NAME"
+		local pf
+		for pf in $(ls ${RUN_D}/${NAME}*.pid 2>/dev/null); do
+			local ppid=$(cat $pf)
+			ps | grep "^[[:space:]]*$ppid[[:space:]]" | grep -q "[s]mtptrapd\>" && kill "$ppid"
+			rm -f $pf
+		done
+	fi
+}
+
+status() {
+	local svc_cfg="$1"
+	check_req || return 1
+	config_load "$NAME"
+	config_foreach status_service "$NAME" "$svc_cfg"
+}
+
+list() {
+	check_req || return 1
+	echo "Available $NAME configurations:"
+	config_load "$NAME"
+	config_foreach list_service "$NAME"
+}
+
+exconf() {
+	echo "An example configuration in /etc/config/$NAME:" >&2
+	cat <<EOF
+config '$NAME' 'myfailhost'
+	option 'num_threads' '1'
+
+# The init script operates only with named sections
+# All options (default values)
+#	option 'banner_host' '<hostname>'
+#	option 'username' 'nobody'
+#	option 'listen_ip' '<all addresses>'
+#	option 'listen_port' '25'
+#	option 'num_threads' '10'
+#	option 'accept_queue_len' '100'
+EOF
+}

@@ -1,0 +1,62 @@
+--- a/configure
++++ b/configure
+@@ -4759,6 +4759,11 @@ cat >>conftest.$ac_ext <<_ACEOF
+    #ifndef __user
+    #define __user
+    #endif
++   #include <linux/version.h>
++   #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,19)
++   #include <linux/types.h>
++   #include <linux/if.h>
++   #endif
+    #include <linux/wireless.h>
+ 
+ #include <$ac_header>
+@@ -4823,6 +4828,11 @@ cat >>conftest.$ac_ext <<_ACEOF
+ 		   #ifndef __user
+ 		   #define __user
+ 		   #endif
++		   #include <linux/version.h>
++		   #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,19)
++		   #include <linux/types.h>
++		   #include <linux/if.h>
++		   #endif
+                    #include <linux/wireless.h>
+                    #include <iwlib.h>
+ int
+--- a/configure.in
++++ b/configure.in
+@@ -119,6 +119,11 @@ if test $SYSTEM = "Linux"; then
+    #ifndef __user
+    #define __user
+    #endif
++   #include <linux/version.h>
++   #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,19)
++   #include <linux/types.h>
++   #include <linux/if.h>
++   #endif
+    #include <linux/wireless.h>])
+ 
+    AC_MSG_CHECKING([iwlib version])
+@@ -127,6 +132,11 @@ if test $SYSTEM = "Linux"; then
+ 		   #ifndef __user
+ 		   #define __user
+ 		   #endif
++		   #include <linux/version.h>
++		   #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,19)
++		   #include <linux/types.h>
++		   #include <linux/if.h>
++		   #endif
+                    #include <linux/wireless.h>
+                    #include <iwlib.h>], 
+                [iw_extract_event_stream(NULL, NULL, 0);], [AC_DEFINE(NEW_IWLIB) AC_MSG_RESULT([3 params])], [AC_MSG_RESULT([2 params])])
+--- a/src/cardif/linux/cardif_linux_wext.c
++++ b/src/cardif/linux/cardif_linux_wext.c
+@@ -204,6 +204,7 @@
+ #include <linux/types.h>
+ #include <linux/socket.h>
+ #include <linux/compiler.h>
++#include <linux/if.h>
+ #include <linux/wireless.h>
+ #include <iwlib.h>
+ #include <linux/if_packet.h>

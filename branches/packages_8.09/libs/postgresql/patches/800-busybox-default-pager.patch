@@ -1,0 +1,13 @@
+--- a/src/bin/psql/print.h
++++ b/src/bin/psql/print.h
+@@ -89,10 +89,6 @@
+ 
+ void		setDecimalLocale(void);
+ 
+-#ifndef __CYGWIN__
+-#define DEFAULT_PAGER "more"
+-#else
+ #define DEFAULT_PAGER "less"
+-#endif
+ 
+ #endif   /* PRINT_H */

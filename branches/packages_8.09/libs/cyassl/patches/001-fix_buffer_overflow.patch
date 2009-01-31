@@ -1,0 +1,12 @@
+diff -pruN cyassl-0.9.9.orig/ctaocrypt/include/hmac.h cyassl-0.9.9/ctaocrypt/include/hmac.h
+--- cyassl-0.9.9.orig/ctaocrypt/include/hmac.h	2008-12-11 16:27:12.490140301 +0100
++++ cyassl-0.9.9/ctaocrypt/include/hmac.h	2008-12-11 16:27:50.318874180 +0100
+@@ -61,7 +61,7 @@ typedef struct Hmac {
+     Hash    hash;
+     word32  ipad[HMAC_BLOCK_SIZE  / sizeof(word32)];  /* same block size all*/
+     word32  opad[HMAC_BLOCK_SIZE  / sizeof(word32)];
+-    word32  innerHash[SHA_DIGEST_SIZE / sizeof(word32)]; /* max size */
++    word32  innerHash[SHA256_DIGEST_SIZE / sizeof(word32)]; /* max size */
+     byte    macType;                                     /* md5 sha or sha256 */
+     byte    innerHashKeyed;                              /* keyed flag */
+ } Hmac;

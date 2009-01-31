@@ -1,0 +1,36 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2007 OpenWrt.org
+
+START=60
+BIN=darkstat
+RUN_D=/var/empty
+PID_F=$RUN_D/$BIN.pid
+
+start() {
+	mkdir -p $RUN_D
+	config_load darkstat
+	config_foreach start_darkstat darkstat
+}
+
+start_darkstat() {
+	local cfg="$1"
+	config_get interface "$cfg" interface
+	config_get httpaddr "$cfg" httpaddr
+	config_get httpport "$cfg" httpport
+
+	include /lib/network
+	scan_interfaces
+	config_get ifname "$interface" ifname
+
+	$BIN --debug -i "$interface" \
+		${httpaddr:+-b "$httpaddr"} \
+		${httpport:+-p "$httpport"} \
+		--chroot $RUN_D
+}
+	
+
+stop() {
+	ps aux | grep nobody | grep darkstat |  awk '{print }' | \
+		xargs kill 2> /dev/null
+}
+

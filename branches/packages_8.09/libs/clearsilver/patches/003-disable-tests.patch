@@ -1,0 +1,12 @@
+diff -ur clearsilver-0.10.5/cs/Makefile clearsilver-0.10.5_new/cs/Makefile
+--- clearsilver-0.10.5/cs/Makefile	2007-07-18 11:11:30.000000000 +0200
++++ clearsilver-0.10.5_new/cs/Makefile	2007-07-18 11:21:21.000000000 +0200
+@@ -24,7 +24,7 @@
+ 
+ LIBS += -lneo_cs -lneo_utl #  -lefence
+ 
+-TARGETS = $(CS_LIB) $(CSTEST_EXE) $(CSR_EXE) test
++TARGETS = $(CS_LIB) $(CSTEST_EXE) $(CSR_EXE) # test
+ 
+ CS_TESTS = test.cs test2.cs test3.cs test4.cs test5.cs test6.cs test7.cs \
+            test8.cs test9.cs test10.cs test11.cs test12.cs test13.cs \

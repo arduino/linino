@@ -1,0 +1,13 @@
+diff -urN libast-0.7.orig/configure libast-0.7/configure
+--- libast-0.7.orig/configure	2007-10-09 19:54:01.000000000 +0200
++++ libast-0.7/configure	2007-10-09 19:57:29.000000000 +0200
+@@ -23906,7 +23906,7 @@
+ 
+         mkdir conftest.d
+         if test "$cross_compiling" = yes; then
+-  dps_cv_symlink_open_buf=3
++  dps_cv_symlink_open_bug=3
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+

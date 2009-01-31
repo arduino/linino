@@ -1,0 +1,21 @@
+Index: srelay-0.4.6/main.c
+===================================================================
+--- srelay-0.4.6.orig/main.c	2008-02-28 13:21:29.000000000 +0100
++++ srelay-0.4.6/main.c	2008-02-28 13:21:30.000000000 +0100
+@@ -33,6 +33,7 @@
+ */
+ 
+ #include <sys/stat.h>
++#include <syslog.h>
+ #include "srelay.h"
+ 
+ /* prototypes */
+@@ -125,6 +126,8 @@
+ 
+   uid = getuid();
+ 
++  openlog("srelay", LOG_PID, LOG_DAEMON);
++
+   while((ch = getopt(ac, av, "a:c:i:m:o:p:u:frstbvh?")) != -1)
+     switch (ch) {
+     case 'a':

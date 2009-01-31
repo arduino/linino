@@ -1,0 +1,22 @@
+Index: php-5.2.4/configure
+===================================================================
+--- php-5.2.4.orig/configure	2007-09-02 12:27:37.000000000 +0200
++++ php-5.2.4/configure	2007-09-02 12:28:32.000000000 +0200
+@@ -14679,7 +14679,7 @@
+     ac_libs=$LIBS
+     LIBS="$LIBS -ldl"
+     if test "$cross_compiling" = yes; then
+-  found=no
++  found=yes
+ else
+   cat > conftest.$ac_ext <<EOF
+ #line 14686 "configure"
+@@ -53050,7 +53050,7 @@
+     _SAVE_CPPFLAGS=$CPPFLAGS
+   _SAVE_LIBS=$LIBS
+   CPPFLAGS="$CPPFLAGS -I$LDAP_INCDIR"
+-  LIBS="$LIBS $LDAP_SHARED_LIBADD"
++  LIBS="$LIBS $LDAP_SHARED_LIBADD -lsasl2"
+ 
+     echo $ac_n "checking for 3 arg ldap_set_rebind_proc""... $ac_c" 1>&6
+ echo "configure:53057: checking for 3 arg ldap_set_rebind_proc" >&5

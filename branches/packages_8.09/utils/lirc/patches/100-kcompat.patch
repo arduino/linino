@@ -1,0 +1,16 @@
+--- a/drivers/kcompat.h
++++ b/drivers/kcompat.h
+@@ -53,7 +53,13 @@
+ 
+ #else /* >= 2.6.15 */
+ 
++#if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,25)
++#define lirc_class_device_create device_create_drvdata
++#define class_device_destroy device_destroy
++#else
+ #define lirc_class_device_create class_device_create
++#endif
++
+ #define LIRC_DEVFS_PREFIX
+ 
+ #endif

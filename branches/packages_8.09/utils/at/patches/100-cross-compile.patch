@@ -1,0 +1,11 @@
+--- at-3.1.10ubuntu4/configure	2008-04-21 21:14:40.000000000 +0200
++++ at-3.1.10ubuntu4/configure	2008-04-21 21:18:09.000000000 +0200
+@@ -1037,7 +1037,7 @@
+ echo $ac_n "checking Trying to compile a trivial ANSI C program""... $ac_c" 1>&6
+ echo "configure:1039: checking Trying to compile a trivial ANSI C program" >&5
+ if test "$cross_compiling" = yes; then
+-  { echo "configure: error: Could not compile and run even a trivial ANSI C program - check CC." 1>&2; exit 1; }
++  { echo "configure: error: Could not compile and run even a trivial ANSI C program, ignoring as we're cross compiling." 1>&2 ; }
+ else
+   cat > conftest.$ac_ext <<EOF
+ #line 1044 "configure"

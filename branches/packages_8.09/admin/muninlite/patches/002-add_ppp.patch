@@ -1,0 +1,20 @@
+diff -Naur muninlite-1.0.0/munin-node.in muninlite-1.0.0-openwrt/munin-node.in
+--- muninlite-1.0.0/munin-node.in	2007-06-11 20:30:26.000000000 +0200
++++ muninlite-1.0.0-openwrt/munin-node.in	2008-05-13 14:14:25.000000000 +0200
+@@ -62,14 +62,14 @@
+ for PLUG in $PLUGINS
+ do 
+   if [ "$PLUG" = "if_" ]; then  
+-    for INTER in $(grep '^ *\(eth\|wlan\|ath\|ra\)[0-9]\{1,\}:' /proc/net/dev | cut -f1 -d: | sed 's/ //g');
++    for INTER in $(grep '^ *\(ppp\|eth\|wlan\|ath\|ra\)[0-9]\{1,\}:' /proc/net/dev | cut -f1 -d: | sed 's/ //g');
+     do
+       RES="$RES if_$INTER"
+       eval "fetch_if_${INTER}() { fetch_if $INTER $@; };"
+       eval "config_if_${INTER}() { config_if $INTER $@; };"
+     done
+   elif [ "$PLUG" = "if_err_" ]; then
+-    for INTER in $(grep '^ *\(eth\|wlan\|ath\|ra\)[0-9]\{1,\}:' /proc/net/dev | cut -f1 -d: | sed 's/ //g');
++    for INTER in $(grep '^ *\(ppp\|eth\|wlan\|ath\|ra\)[0-9]\{1,\}:' /proc/net/dev | cut -f1 -d: | sed 's/ //g');
+     do
+       RES="$RES if_err_$INTER"
+       eval "fetch_if_err_${INTER}() { fetch_if_err $INTER $@; };"

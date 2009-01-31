@@ -1,0 +1,132 @@
+Index: srelay-0.4.6/main.c
+===================================================================
+--- srelay-0.4.6.orig/main.c	2008-02-28 13:21:30.000000000 +0100
++++ srelay-0.4.6/main.c	2008-02-28 13:21:30.000000000 +0100
+@@ -44,6 +44,7 @@
+ char *ident = "srelay";
+ char *pidfile = PIDFILE;
+ char *pwdfile = PWDFILE;
++char *bindtodevice = NULL;
+ pid_t master_pid;
+ 
+ #if USE_THREAD
+@@ -75,6 +76,9 @@
+   fprintf(stderr, "options:\n"
+ 	  "\t-c file\tconfig file\n"
+ 	  "\t-i i/f\tlisten interface IP[:PORT]\n"
++#ifdef SO_BINDTODEVICE
++	  "\t-J i/f\toutbound interface name\n"
++#endif
+ 	  "\t-m num\tmax child/thread\n"
+ 	  "\t-o min\tidle timeout minutes\n"
+ 	  "\t-p file\tpid file\n"
+@@ -128,7 +132,7 @@
+ 
+   openlog("srelay", LOG_PID, LOG_DAEMON);
+ 
+-  while((ch = getopt(ac, av, "a:c:i:m:o:p:u:frstbvh?")) != -1)
++  while((ch = getopt(ac, av, "a:c:i:J:m:o:p:u:frstbvh?")) != -1)
+     switch (ch) {
+     case 'a':
+       if (optarg != NULL) {
+@@ -183,6 +187,14 @@
+       }
+       break;
+ 
++#ifdef SO_BINDTODEVICE
++    case 'J':
++      if (optarg != NULL) {
++	bindtodevice = strdup(optarg);
++      }
++      break;
++#endif
++
+     case 'o':
+       if (optarg != NULL) {
+ 	idle_timeout = atol(optarg);
+Index: srelay-0.4.6/socks.c
+===================================================================
+--- srelay-0.4.6.orig/socks.c	2008-02-28 13:21:29.000000000 +0100
++++ srelay-0.4.6/socks.c	2008-02-28 13:21:30.000000000 +0100
+@@ -990,6 +990,24 @@
+   return(-1);
+ }
+ 
++#ifdef SO_BINDTODEVICE
++#include <net/if.h>
++static int do_bindtodevice(int cs, char *dev)
++{
++  int rc;
++  struct ifreq interface;
++  
++  strncpy(interface.ifr_name, dev, IFNAMSIZ);
++  setreuid(PROCUID, 0);
++  rc = setsockopt(cs, SOL_SOCKET, SO_BINDTODEVICE,
++                  (char *)&interface, sizeof(interface));
++  setreuid(0, PROCUID);
++  if (rc < 0)
++    msg_out(crit, "setsockopt SO_BINDTODEVICE(%s) failed: %d", dev, errno);
++  return(rc);
++}
++#endif
++
+ int socks_direct_conn(int ver, struct socks_req *req)
+ {
+   int    cs, acs = 0;
+@@ -1037,6 +1055,14 @@
+         continue;
+       }
+ 
++#ifdef SO_BINDTODEVICE
++      if (bindtodevice && do_bindtodevice(cs, bindtodevice) < 0) {
++        save_errno = errno;
++        close(cs);
++        continue;
++      }
++#endif
++
+       if (connect(cs, res->ai_addr, res->ai_addrlen) < 0) {
+         /* connect fail */
+ 	save_errno = errno;
+@@ -1096,6 +1122,14 @@
+       return(-1);
+     }
+ 
++#ifdef SO_BINDTODEVICE
++    if (bindtodevice && do_bindtodevice(acs, bindtodevice) < 0) {
++      GEN_ERR_REP(req->s, ver);
++      close(acs);
++      return(-1);
++    }
++#endif
++
+     if (bind_sock(acs, req, &ba) != 0) {
+       GEN_ERR_REP(req->s, ver);
+       return(-1);
+@@ -1351,6 +1385,14 @@
+       continue;
+     }
+ 
++#ifdef SO_BINDTODEVICE
++    if (bindtodevice && do_bindtodevice(cs, bindtodevice) < 0) {
++      save_errno = errno;
++      close(cs);
++      continue;
++    }
++#endif
++
+     if (connect(cs, res->ai_addr, res->ai_addrlen) < 0) {
+       /* connect fail */
+       save_errno = errno;
+Index: srelay-0.4.6/srelay.h
+===================================================================
+--- srelay-0.4.6.orig/srelay.h	2008-02-28 13:21:29.000000000 +0100
++++ srelay-0.4.6/srelay.h	2008-02-28 13:21:30.000000000 +0100
+@@ -266,6 +266,7 @@
+ extern char *ident;
+ extern char *pidfile;
+ extern char *pwdfile;
++extern char *bindtodevice;
+ extern int max_child;
+ extern int cur_child;
+ extern char method_tab[];

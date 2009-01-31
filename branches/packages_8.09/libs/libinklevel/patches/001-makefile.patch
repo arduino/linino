@@ -1,0 +1,21 @@
+--- libinklevel-0.7.3.orig/Makefile	2008-12-10 17:09:05.052017664 +0100
++++ libinklevel-0.7.3/Makefile	2008-12-10 19:40:44.904051107 +0100
+@@ -1,7 +1,7 @@
+-DESTDIR = 
+-PREFIX = /usr/local
+-CFLAGS += -Wall -O2 -fPIC -DPIC -I.
+-CC = gcc
++#DESTDIR = 
++PREFIX = /usr
++#CFLAGS += -Wall -O2 -fPIC -DPIC -I.
++#CC = gcc
+ 
+ all: libinklevel.so.4.0.7.3
+ 
+@@ -36,5 +36,5 @@ libinklevel.so.4.0.7.3: canon.o d4lib.o 
+ 			linux.o util.o
+ 	$(CC) $(CFLAGS) -shared -Wl,-soname,libinklevel.so.4 \
+ 		-o libinklevel.so.4.0.7.3 canon.o d4lib.o epson_new.o \
+-		hp_new.o libinklevel.o linux.o util.o -lc -lieee1284
++		hp_new.o libinklevel.o linux.o util.o $(LIBS)
+ 

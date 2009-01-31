@@ -1,0 +1,20 @@
+--- radvd-1.0/config.sub.orig	2008-05-16 13:20:02.000000000 -0500
++++ radvd-1.0/config.sub	2008-05-16 13:20:23.000000000 -0500
+@@ -228,7 +228,7 @@
+ 	| a29k \
+ 	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
+ 	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
+-	| arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] | avr \
++	| arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] | avr | avr32 \
+ 	| c4x | clipper \
+ 	| d10v | d30v | dsp16xx \
+ 	| fr30 \
+@@ -282,7 +282,7 @@
+ 	| alpha64-* | alpha64ev[4-8]-* | alpha64ev56-* | alpha64ev6[78]-* \
+ 	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* \
+ 	| arm-*  | armbe-* | armle-* | armv*-* \
+-	| avr-* \
++	| avr-* | avr32-* \
+ 	| bs2000-* \
+ 	| c[123]* | c30-* | [cjt]90-* | c54x-* \
+ 	| clipper-* | cray2-* | cydra-* \

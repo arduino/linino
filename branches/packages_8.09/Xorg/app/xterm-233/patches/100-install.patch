@@ -1,0 +1,12 @@
+diff -urN xterm-223.orig/Makefile.in xterm-223/Makefile.in
+--- xterm-223.orig/Makefile.in	2007-09-17 11:56:45.000000000 +0200
++++ xterm-223/Makefile.in	2007-09-17 11:57:33.000000000 +0200
+@@ -150,7 +150,7 @@
+ @MAY_SETUID@	$(SHELL) $(srcdir)/sinstall.sh @SINSTALL_OPTS@ "$(INSTALL_PROGRAM)" xterm$x  @XTERM_PATH@ $(BINDIR)/$(binary_xterm)
+ @NOT_SETUID@	$(INSTALL_PROGRAM) xterm$x $(BINDIR)/$(binary_xterm)
+ 	$(INSTALL_PROGRAM) -m  755 resize$x $(BINDIR)/$(binary_resize)
+-	@$(SHELL) -c 'echo "... installing $(BINDIR)/$(binary_uxterm)"; \
++#	@$(SHELL) -c 'echo "... installing $(BINDIR)/$(binary_uxterm)"; \
+ 		if test "$(binary_xterm)" != "xterm"; then \
+ 			name="$(binary_xterm)"; \
+ 			sed -e "s,=xterm,=$$name," $(srcdir)/uxterm >uxterm.tmp; \

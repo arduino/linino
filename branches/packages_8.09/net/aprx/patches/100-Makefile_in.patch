@@ -1,0 +1,26 @@
+diff -ruN aprx-0.22.svn115.orig/Makefile.in aprx-0.22.svn115/Makefile.in
+--- aprx-0.22.svn115.orig/Makefile.in	2008-07-06 17:28:27.000000000 -0400
++++ aprx-0.22.svn115/Makefile.in	2008-07-06 17:29:42.000000000 -0400
+@@ -25,7 +25,8 @@
+ CFLAGS=		@CFLAGS@ $(DEFS)
+ 
+ # Linker and flags
+-LD=		@LD@
++LD=		@CC@
+ LDFLAGS=	@LDFLAGS@
++datarootdir = @datarootdir@
+ 
+ INSTALL=	$(srcdir)/install-sh
+@@ -75,10 +75,10 @@
+ all:		$(PROGAPRX) $(PROGSTAT) man aprx.conf
+ 
+ $(PROGAPRX):	$(OBJSAPRX) VERSION Makefile
+-		$(LD) $(LDFLAGS) -o $@ $(OBJSAPRX) $(LIBS)
++		$(CC) $(CFLAGS) -o $@ $(OBJSAPRX) $(LIBS)
+ 
+ $(PROGSTAT):	$(OBJSSTAT) VERSION Makefile
+-		$(LD) $(LDFLAGS) -o $@ $(OBJSSTAT) $(LIBS)
++		$(CC) $(CFLAGS) -o $@ $(OBJSSTAT) $(LIBS)
+ 
+ .PHONY:		man
+ man:		$(MAN)

@@ -1,0 +1,14 @@
+diff -urN loop-AES-v3.2c/Makefile loop-AES-v3.2c.new/Makefile
+--- loop-AES-v3.2c/Makefile	2007-06-13 17:21:00.000000000 +0200
++++ loop-AES-v3.2c.new/Makefile	2008-09-28 10:43:05.000000000 +0200
+@@ -208,10 +208,8 @@
+ ifeq ($(EXTRA_CIPHERS),y)
+ 	ln -s tmp-d-kbuild/loop_twofish.ko tmp-d-kbuild/loop_serpent.ko tmp-d-kbuild/loop_blowfish.ko .
+ endif
+-	sync
+ else
+ 	cd $(LS) && make SUBDIRS=$(TD) modules
+-	sync
+ endif
+ 
+ # 2.6 kernels older than 2.6.17 do not run depmod in "modules_install" stage,

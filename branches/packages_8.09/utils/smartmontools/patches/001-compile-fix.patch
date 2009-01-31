@@ -1,0 +1,33 @@
+--- a/configure.in
++++ b/configure.in
+@@ -88,18 +88,18 @@
+ AC_CHECK_FUNCS([uname])
+ 
+ # Check whether snprintf appends null char and returns expected length on overflow
+-AH_TEMPLATE(HAVE_WORKING_SNPRINTF, [Define to 1 if the `snprintf' function is sane])
+-AC_MSG_CHECKING([for working snprintf])
+-AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>]], [[ char buf[]="ABCDEFGHI";
+-               int i=snprintf(buf,8,"12345678"); return !(!buf[7] && i==8); ]])],
+-              [libc_have_working_snprintf=yes],
+-	      [libc_have_working_snprintf=no],
+-	      [libc_have_working_snprintf=no])
+-AC_SUBST(libc_have_working_snprintf)
+-if test "$libc_have_working_snprintf" = "yes"; then
+-  AC_DEFINE(HAVE_WORKING_SNPRINTF)
+-fi
+-AC_MSG_RESULT([$libc_have_working_snprintf])
++#AH_TEMPLATE(HAVE_WORKING_SNPRINTF, [Define to 1 if the `snprintf' function is sane])
++#AC_MSG_CHECKING([for working snprintf])
++#AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>]], [[ char buf[]="ABCDEFGHI";
++#               int i=snprintf(buf,8,"12345678"); return !(!buf[7] && i==8); ]])],
++#              [libc_have_working_snprintf=yes],
++#	      [libc_have_working_snprintf=no],
++#	      [libc_have_working_snprintf=no])
++#AC_SUBST(libc_have_working_snprintf)
++#if test "$libc_have_working_snprintf" = "yes"; then
++#  AC_DEFINE(HAVE_WORKING_SNPRINTF)
++#fi
++#AC_MSG_RESULT([$libc_have_working_snprintf])
+ 
+ # check for __attribute__((packed))
+ AH_TEMPLATE(HAVE_ATTR_PACKED, [Define to 1 if C++ compiler supports __attribute__((packed))])

@@ -1,0 +1,4 @@
+--- btpd-0.13/config.cache  2007-10-13 17:10:21.000000000 +0400
++++ btpd-0.13/config.cache  2008-01-12 01:58:20.000000000 +0300
+@@ -0,0 +1 @@
++ac_cv_func_clock_gettime=no

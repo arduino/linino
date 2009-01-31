@@ -1,0 +1,16 @@
+#!/bin/sh  /etc/rc.common
+
+RUN_D=/var/btpd
+
+start () {
+    btpd -d $RUN_D
+}
+
+stop () {
+    echo -n "stop btpd "
+    while btcli -d $RUN_D kill ; do
+        echo -n .
+        sleep 3
+    done 2>/dev/null
+    echo " done"
+}

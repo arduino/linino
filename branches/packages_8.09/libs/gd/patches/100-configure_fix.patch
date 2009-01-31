@@ -1,0 +1,172 @@
+--- a/configure
++++ b/configure
+@@ -9454,21 +9454,6 @@
+ shlibpath_overrides_runpath=unknown
+ version_type=none
+ dynamic_linker="$host_os ld.so"
+-sys_lib_dlsearch_path_spec="/lib /usr/lib"
+-if test "$GCC" = yes; then
+-  sys_lib_search_path_spec=`$CC -print-search-dirs | grep "^libraries:" | $SED -e "s/^libraries://" -e "s,=/,/,g"`
+-  if echo "$sys_lib_search_path_spec" | grep ';' >/dev/null ; then
+-    # if the path contains ";" then we assume it to be the separator
+-    # otherwise default to the standard path separator (i.e. ":") - it is
+-    # assumed that no part of a normal pathname contains ";" but that should
+-    # okay in the real world where ";" in dirpaths is itself problematic.
+-    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED -e 's/;/ /g'`
+-  else
+-    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED  -e "s/$PATH_SEPARATOR/ /g"`
+-  fi
+-else
+-  sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
+-fi
+ need_lib_prefix=unknown
+ hardcode_into_libs=no
+ 
+@@ -9816,12 +9801,6 @@
+   # before this can be enabled.
+   hardcode_into_libs=yes
+ 
+-  # Append ld.so.conf contents to the search path
+-  if test -f /etc/ld.so.conf; then
+-    lt_ld_extra=`awk '/^include / { system(sprintf("cd /etc; cat %s", \$2)); skip = 1; } { if (!skip) print \$0; skip = 0; }' < /etc/ld.so.conf | $SED -e 's/#.*//;s/[:,	]/ /g;s/=[^=]*$//;s/=[^= ]* / /g;/^$/d' | tr '\n' ' '`
+-    sys_lib_dlsearch_path_spec="/lib /usr/lib $lt_ld_extra"
+-  fi
+-
+   # We used to test for /lib/ld.so.1 and disable shared libraries on
+   # powerpc, because MkLinux only supported shared libraries with the
+   # GNU dynamic linker.  Since this was broken with cross compilers,
+@@ -13364,21 +13343,6 @@
+ shlibpath_overrides_runpath=unknown
+ version_type=none
+ dynamic_linker="$host_os ld.so"
+-sys_lib_dlsearch_path_spec="/lib /usr/lib"
+-if test "$GCC" = yes; then
+-  sys_lib_search_path_spec=`$CC -print-search-dirs | grep "^libraries:" | $SED -e "s/^libraries://" -e "s,=/,/,g"`
+-  if echo "$sys_lib_search_path_spec" | grep ';' >/dev/null ; then
+-    # if the path contains ";" then we assume it to be the separator
+-    # otherwise default to the standard path separator (i.e. ":") - it is
+-    # assumed that no part of a normal pathname contains ";" but that should
+-    # okay in the real world where ";" in dirpaths is itself problematic.
+-    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED -e 's/;/ /g'`
+-  else
+-    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED  -e "s/$PATH_SEPARATOR/ /g"`
+-  fi
+-else
+-  sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
+-fi
+ need_lib_prefix=unknown
+ hardcode_into_libs=no
+ 
+@@ -13726,12 +13690,6 @@
+   # before this can be enabled.
+   hardcode_into_libs=yes
+ 
+-  # Append ld.so.conf contents to the search path
+-  if test -f /etc/ld.so.conf; then
+-    lt_ld_extra=`awk '/^include / { system(sprintf("cd /etc; cat %s", \$2)); skip = 1; } { if (!skip) print \$0; skip = 0; }' < /etc/ld.so.conf | $SED -e 's/#.*//;s/[:,	]/ /g;s/=[^=]*$//;s/=[^= ]* / /g;/^$/d' | tr '\n' ' '`
+-    sys_lib_dlsearch_path_spec="/lib /usr/lib $lt_ld_extra"
+-  fi
+-
+   # We used to test for /lib/ld.so.1 and disable shared libraries on
+   # powerpc, because MkLinux only supported shared libraries with the
+   # GNU dynamic linker.  Since this was broken with cross compilers,
+@@ -15936,21 +15894,6 @@
+ shlibpath_overrides_runpath=unknown
+ version_type=none
+ dynamic_linker="$host_os ld.so"
+-sys_lib_dlsearch_path_spec="/lib /usr/lib"
+-if test "$GCC" = yes; then
+-  sys_lib_search_path_spec=`$CC -print-search-dirs | grep "^libraries:" | $SED -e "s/^libraries://" -e "s,=/,/,g"`
+-  if echo "$sys_lib_search_path_spec" | grep ';' >/dev/null ; then
+-    # if the path contains ";" then we assume it to be the separator
+-    # otherwise default to the standard path separator (i.e. ":") - it is
+-    # assumed that no part of a normal pathname contains ";" but that should
+-    # okay in the real world where ";" in dirpaths is itself problematic.
+-    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED -e 's/;/ /g'`
+-  else
+-    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED  -e "s/$PATH_SEPARATOR/ /g"`
+-  fi
+-else
+-  sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
+-fi
+ need_lib_prefix=unknown
+ hardcode_into_libs=no
+ 
+@@ -16298,12 +16241,6 @@
+   # before this can be enabled.
+   hardcode_into_libs=yes
+ 
+-  # Append ld.so.conf contents to the search path
+-  if test -f /etc/ld.so.conf; then
+-    lt_ld_extra=`awk '/^include / { system(sprintf("cd /etc; cat %s", \$2)); skip = 1; } { if (!skip) print \$0; skip = 0; }' < /etc/ld.so.conf | $SED -e 's/#.*//;s/[:,	]/ /g;s/=[^=]*$//;s/=[^= ]* / /g;/^$/d' | tr '\n' ' '`
+-    sys_lib_dlsearch_path_spec="/lib /usr/lib $lt_ld_extra"
+-  fi
+-
+   # We used to test for /lib/ld.so.1 and disable shared libraries on
+   # powerpc, because MkLinux only supported shared libraries with the
+   # GNU dynamic linker.  Since this was broken with cross compilers,
+@@ -18515,21 +18452,6 @@
+ shlibpath_overrides_runpath=unknown
+ version_type=none
+ dynamic_linker="$host_os ld.so"
+-sys_lib_dlsearch_path_spec="/lib /usr/lib"
+-if test "$GCC" = yes; then
+-  sys_lib_search_path_spec=`$CC -print-search-dirs | grep "^libraries:" | $SED -e "s/^libraries://" -e "s,=/,/,g"`
+-  if echo "$sys_lib_search_path_spec" | grep ';' >/dev/null ; then
+-    # if the path contains ";" then we assume it to be the separator
+-    # otherwise default to the standard path separator (i.e. ":") - it is
+-    # assumed that no part of a normal pathname contains ";" but that should
+-    # okay in the real world where ";" in dirpaths is itself problematic.
+-    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED -e 's/;/ /g'`
+-  else
+-    sys_lib_search_path_spec=`echo "$sys_lib_search_path_spec" | $SED  -e "s/$PATH_SEPARATOR/ /g"`
+-  fi
+-else
+-  sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
+-fi
+ need_lib_prefix=unknown
+ hardcode_into_libs=no
+ 
+@@ -18877,12 +18799,6 @@
+   # before this can be enabled.
+   hardcode_into_libs=yes
+ 
+-  # Append ld.so.conf contents to the search path
+-  if test -f /etc/ld.so.conf; then
+-    lt_ld_extra=`awk '/^include / { system(sprintf("cd /etc; cat %s", \$2)); skip = 1; } { if (!skip) print \$0; skip = 0; }' < /etc/ld.so.conf | $SED -e 's/#.*//;s/[:,	]/ /g;s/=[^=]*$//;s/=[^= ]* / /g;/^$/d' | tr '\n' ' '`
+-    sys_lib_dlsearch_path_spec="/lib /usr/lib $lt_ld_extra"
+-  fi
+-
+   # We used to test for /lib/ld.so.1 and disable shared libraries on
+   # powerpc, because MkLinux only supported shared libraries with the
+   # GNU dynamic linker.  Since this was broken with cross compilers,
+@@ -22026,14 +21942,14 @@
+ 
+ 
+   if test -n "$LIBPNG12_CONFIG"; then
+-    libpng_CPPFLAGS=`libpng12-config --cflags`
++    libpng_CPPFLAGS=`$LIBPNG12_CONFIG --cflags`
+     # should be --ldopts, but it's currently broken
+-    libpng_LDFLAGS=`libpng12-config --ldflags`
++    libpng_LDFLAGS=`$LIBPNG12_CONFIG --ldflags`
+     libpng_LDFLAGS=`echo " $libpng_LDFLAGS" | sed 's/ -l[^ ][^ ]*//g'`
+   elif test -n "$LIBPNG_CONFIG"; then
+-    libpng_CPPFLAGS=`libpng-config --cflags`
++    libpng_CPPFLAGS=`$LIBPNG_CONFIG --cflags`
+     # should be --ldopts, but it's currently broken
+-    libpng_LDFLAGS=`libpng-config --ldflags`
++    libpng_LDFLAGS=`$LIBPNG_CONFIG --ldflags`
+     libpng_LDFLAGS=`echo " $libpng_LDFLAGS" | sed 's/ -l[^ ][^ ]*//g'`
+   elif test -d "$withval"; then
+     libpng_CPPFLAGS="-I$withval/include"
+--- a/configure.ac
++++ b/configure.ac
+@@ -61,7 +61,7 @@
+ AC_HEADER_STDC
+ AC_CHECK_HEADERS([errno.h limits.h stddef.h stdlib.h string.h unistd.h])
+ 
+-AM_ICONV
++m4_pattern_allow([AM_ICONV])
+ # if test -n "$LIBICONV" ; then
+ #   LIBS="$LIBS $LIBICONV"
+ # fi

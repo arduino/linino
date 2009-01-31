@@ -1,0 +1,13 @@
+Index: collectd-4.4.3/configure
+===================================================================
+--- collectd-4.4.3.orig/configure	2008-09-08 11:14:03.000000000 +0200
++++ collectd-4.4.3/configure	2008-09-08 11:14:21.000000000 +0200
+@@ -31446,7 +31446,7 @@
+   withval=$with_rrdtool; 	if test "x$withval" != "xno" && test "x$withval" != "xyes"
+ 	then
+ 		librrd_cflags="-I$withval/include"
+-		librrd_ldflags="-L$withval/lib"
++		librrd_ldflags="-L$withval/lib -lz"
+ 		with_rrdtool="yes"
+ 	else
+ 		with_rrdtool="$withval"

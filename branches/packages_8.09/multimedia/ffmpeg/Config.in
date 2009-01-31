@@ -1,0 +1,261 @@
+
+# FFmpeg configuration
+
+config FFMPEG_FFSERVER_SUPPORT
+	bool
+	default y if PACKAGE_ffserver
+	select FFMPEG_MUXER_ffm
+	select FFMPEG_DEMUXER_rtsp
+	select FFMPEG_PROTOCOL_rtp
+
+config FFMPEG_LIBDLNA_SUPPORT
+	bool
+	default y if PACKAGE_libdlna
+	select FFMPEG_DECODER_ac3
+	select FFMPEG_DECODER_atrac3
+	select FFMPEG_DECODER_h264
+	select FFMPEG_DECODER_jpegls
+	select FFMPEG_DECODER_mp3
+	select FFMPEG_DECODER_mpeg1video
+	select FFMPEG_DECODER_mpeg2video
+	select FFMPEG_DECODER_mpeg4
+	select FFMPEG_DECODER_mpeg4aac
+	select FFMPEG_DECODER_mpegvideo
+	select FFMPEG_DECODER_wmav1
+	select FFMPEG_DECODER_wmav2
+	select FFMPEG_DECODER_png
+	select FFMPEG_DEMUXER_ac3
+	select FFMPEG_DEMUXER_h264
+	select FFMPEG_DEMUXER_mp3
+	select FFMPEG_DEMUXER_mpegvideo
+
+comment "Encoders ---"
+
+config FFMPEG_ENCODER_ac3
+	bool
+	prompt "AC3"
+	select FFMPEG_PARSER_ac3
+
+config FFMPEG_ENCODER_jpegls
+	bool
+	prompt "JPEG-LS"
+
+config FFMPEG_ENCODER_mpeg1video
+	bool
+	prompt "MPEG-1 Video"
+
+config FFMPEG_ENCODER_mpeg2video
+	bool
+	prompt "MPEG-2 Video"
+
+config FFMPEG_ENCODER_mpeg4
+	bool
+	prompt "MPEG-4"
+
+config FFMPEG_ENCODER_png
+	bool
+	prompt "PNG"
+	select FFMPEG_ENCODER_zlib
+
+config FFMPEG_ENCODER_zlib
+	bool
+	prompt "Zlib"
+
+comment "Decoders ---"
+
+config FFMPEG_DECODER_ac3
+	bool
+	prompt "AC3"
+	select FFMPEG_PARSER_ac3
+
+config FFMPEG_DECODER_atrac3
+	bool
+	prompt "ATRAC3"
+
+config FFMPEG_DECODER_gif
+	bool
+	prompt "GIF"
+
+config FFMPEG_DECODER_h264
+	bool
+	prompt "H.264"
+	select FFMPEG_PARSER_h264
+
+config FFMPEG_DECODER_jpegls
+	bool
+	prompt "JPEG-LS"
+
+config FFMPEG_DECODER_mp3
+	bool
+	prompt "MP3"
+	select FFMPEG_PARSER_mpegaudio
+
+config FFMPEG_DECODER_mpegvideo
+	bool
+	prompt "MPEG Video"
+
+config FFMPEG_DECODER_mpeg1video
+	bool
+	prompt "MPEG-1 Video"
+
+config FFMPEG_DECODER_mpeg2video
+	bool
+	prompt "MPEG-2 Video"
+
+config FFMPEG_DECODER_mpeg4
+	bool
+	prompt "MPEG-4"
+
+config FFMPEG_DECODER_mpeg4aac
+	bool
+	prompt "MPEG-4 (AAC)"
+
+config FFMPEG_DECODER_png
+	bool
+	prompt "PNG"
+	select FFMPEG_DECODER_zlib
+
+config FFMPEG_DECODER_wmav1
+	bool
+	prompt "WMAv1"
+
+config FFMPEG_DECODER_wmav2
+	bool
+	prompt "WMAv2"
+
+config FFMPEG_DECODER_zlib
+	bool
+	prompt "Zlib"
+
+comment "Muxers ---"
+
+config FFMPEG_MUXER_ac3
+	bool
+	prompt "AC3"
+	select FFMPEG_PARSER_ac3
+
+config FFMPEG_MUXER_ffm
+	bool
+	prompt "FFM (ffserver live feed)"
+
+config FFMPEG_MUXER_h264
+	bool
+	prompt "H.264"
+	select FFMPEG_PARSER_h264
+
+config FFMPEG_MUXER_mp3
+	bool
+	prompt "MP3"
+
+config FFMPEG_MUXER_mp4
+	bool
+	prompt "MP4"
+
+config FFMPEG_MUXER_mpeg1video
+	bool
+	prompt "MPEG-1 Video"
+
+config FFMPEG_MUXER_mpeg2video
+	bool
+	prompt "MPEG-2 Video"
+
+config FFMPEG_MUXER_mpegts
+	bool
+	prompt "MPEG-2 (TS)"
+
+config FFMPEG_MUXER_rtp
+	bool
+	prompt "RTP"
+
+comment "Demuxers ---"
+
+config FFMPEG_DEMUXER_ac3
+	bool
+	prompt "AC3"
+	select FFMPEG_PARSER_ac3
+
+config FFMPEG_DEMUXER_ffm
+	bool
+	prompt "FFM (ffserver live feed)"
+
+config FFMPEG_DEMUXER_h264
+	bool
+	prompt "H.264"
+	select FFMPEG_PARSER_h264
+
+config FFMPEG_DEMUXER_mp3
+	bool
+	prompt "MP3"
+
+config FFMPEG_DEMUXER_mpegvideo
+	bool
+	prompt "MPEG Video"
+	select FFMPEG_PARSER_mpegvideo
+
+config FFMPEG_DEMUXER_mpegps
+	bool
+	prompt "MPEG-2 (PS)"
+
+config FFMPEG_DEMUXER_mpegts
+	bool
+	prompt "MPEG-2 (TS)"
+
+config FFMPEG_DEMUXER_rtsp
+	bool
+	prompt "RTSP"
+	select FFMPEG_DEMUXER_sdp
+
+config FFMPEG_DEMUXER_sdp
+	bool
+	prompt "SDP"
+	select FFMPEG_DEMUXER_mpegts
+
+comment "Parsers ---"
+
+config FFMPEG_PARSER_ac3
+	bool
+	prompt "AC3"
+
+config FFMPEG_PARSER_h264
+	bool
+	prompt "H.264"
+
+config FFMPEG_PARSER_mpegaudio
+	bool
+	prompt "MPEG Audio"
+
+config FFMPEG_PARSER_mpegvideo
+	bool
+	prompt "MPEG Video"
+
+config FFMPEG_PARSER_mpeg4video
+	bool
+	prompt "MPEG-4 Video"
+
+comment "Protocols ---"
+
+config FFMPEG_PROTOCOL_file
+	bool
+	prompt "file:"
+
+config FFMPEG_PROTOCOL_http
+	bool
+	prompt "http:"
+
+config FFMPEG_PROTOCOL_pipe
+	bool
+	prompt "pipe:"
+
+config FFMPEG_PROTOCOL_rtp
+	bool
+	prompt "rtp:"
+	select FFMPEG_PROTOCOL_udp
+
+config FFMPEG_PROTOCOL_tcp
+	bool
+	prompt "tcp:"
+
+config FFMPEG_PROTOCOL_udp
+	bool
+	prompt "udp:"
+

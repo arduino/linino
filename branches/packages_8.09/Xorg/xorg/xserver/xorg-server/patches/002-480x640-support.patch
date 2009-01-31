@@ -1,0 +1,15 @@
+--- xorg-server-1.5.1/hw/kdrive/src/kmode.c.orig	2007-10-23 23:26:50.000000000 +0200
++++ xorg-server-1.5.1/hw/kdrive/src/kmode.c	2008-10-05 14:55:24.000000000 +0200
+@@ -78,6 +78,12 @@
+ 		   16,	    48,	    160,    KdSyncNegative, /* 31.469 */
+ 		   10,	    33,	    45,	    KdSyncNegative, /* 59.940 */
+     },
++
++    /* 480x640 modes */
++	 {   480,    640,    60,     0,                      /* VESA */
++               0,      0,     0,    KdSyncNegative, /* 31.469 */
++               0,      0,     0,     KdSyncNegative, /* 59.940 */
++    },
+     
+     /* 800x600 modes */
+     {	800,	600,	85,	56250,			    /* VESA */

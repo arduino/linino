@@ -1,0 +1,58 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=50
+
+SSD=start-stop-daemon
+PIDF=/var/run/pure-ftpd.pid
+PROG=/usr/sbin/pure-ftpd
+
+append_bool() {
+	local section="$1"
+	local option="$2"
+	local value="$3"
+	local _val
+	config_get_bool _val "$section" "$option" '0'
+	[ "$_val" -gt 0 ] && append args "$3"
+}
+
+append_string() {
+	local section="$1"
+	local option="$2"
+	local value="$3"
+	local _val
+	config_get _val "$section" "$option"
+	[ -n "$_val" ] && append args "$3 $_val"
+}
+
+start_service() {
+	local section="$1"
+	args=""
+
+	append_string "$section" port "-S"
+	append_bool "$section" noanonymous "-E"
+	append_bool "$section" chrooteveryone "-A"
+	append_string "$section" maxclientsperip "-c"
+	append_string "$section" maxclientsnumber "-C"
+	append_string "$section" peruserlimits "-y"
+	append_string "$section" umask "-U"
+	append_string "$section" authentication "-l"
+	config_get_bool "enabled" "$section" "enabled" '1'
+	[ "$enabled" -gt 0 ] && $SSD -S -p $PIDF -q -x $PROG -- -g $PIDF -B $args
+}
+
+stop_service() {
+	killall pure-ftpd 2>&1 > /dev/null
+
+	# FIXME: Fix Busybox start-stop-daemon to work with multiple PIDs
+	# $SSD -K -p $PIDF -q
+}
+
+start() {
+	config_load "pure-ftpd"
+	config_foreach start_service "pure-ftpd"
+}
+
+stop() {
+	config_load "pure-ftpd"
+	config_foreach stop_service "pure-ftpd"
+}

@@ -1,0 +1,48 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+START=60
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+NAME=reaim
+DESC="Transparent proxy for IM behind NAT"
+IPT=/usr/sbin/iptables
+
+set_rules() {
+	include /lib/network
+	scan_interfaces
+	config_get WAN wan ifname
+
+	[ -z "$WAN" ] && exit
+	$IPT $1 input_rule -i $WAN -p tcp --dport 1863:1864 -j ACCEPT
+	$IPT $1 input_rule -i $WAN -p tcp --dport 4443 -j ACCEPT
+	$IPT $1 input_rule -i $WAN -p tcp --dport 5566 -j ACCEPT
+	$IPT $1 input_rule -i $WAN -p tcp --dport 40000:40099 -j ACCEPT
+}
+
+start() {
+	if [ -e /var/run/$NAME.pid ]; then
+		echo "$DESC: $NAME already started."
+		exit 0
+	fi
+	echo -n "Starting $DESC: $NAME"
+	
+	set_rules -A
+	test -e /var/run/$NAME.pid || touch /var/run/$NAME.pid
+	/usr/sbin/$NAME
+	echo "."
+}
+
+stop() {
+	set_rules -D 2>/dev/null >/dev/null
+	
+	if [ ! -e /var/run/$NAME.pid ]; then
+		echo "$DESC: $NAME is not running."
+		exit 0
+	fi
+	echo -n "Stopping $DESC: $NAME"
+
+	killall $NAME
+	rm -f /var/run/$NAME.pid
+
+	echo "."
+}

@@ -1,0 +1,28 @@
+--- a/configure
++++ b/configure
+@@ -881,11 +881,11 @@ logfile="config.err"
+ 
+ # installation paths
+ prefix="/usr/local"
+-libdir='$(PREFIX)/lib'
++libdir='${prefix}/lib'
+ shlibdir="$libdir"
+-incdir='$(PREFIX)/include'
+-mandir='$(PREFIX)/share/man'
+-bindir='$(PREFIX)/bin'
++incdir='${prefix}/include'
++mandir='${prefix}/share/man'
++bindir='${prefix}/bin'
+ 
+ # toolchain
+ cc="gcc"
+@@ -1936,8 +1936,7 @@ echo "#ifndef FFMPEG_CONFIG_H" >> $TMPH
+ echo "#define FFMPEG_CONFIG_H" >> $TMPH
+ echo "#define FFMPEG_CONFIGURATION \"$FFMPEG_CONFIGURATION\"" >> $TMPH
+ 
+-echo "PREFIX=$prefix" >> config.mak
+-echo "prefix=\$(DESTDIR)\$(PREFIX)" >> config.mak
++echo "prefix=$prefix" >> config.mak
+ echo "LIBDIR=\$(DESTDIR)$libdir" >> config.mak
+ echo "SHLIBDIR=\$(DESTDIR)$shlibdir" >> config.mak
+ echo "INCDIR=\$(DESTDIR)$incdir" >> config.mak

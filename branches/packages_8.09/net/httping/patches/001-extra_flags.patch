@@ -1,0 +1,13 @@
+--- a/Makefile
++++ b/Makefile
+@@ -15,8 +15,8 @@
+ include version
+ 
+ DEBUG=-g # -D_DEBUG
+-LDFLAGS+=-lssl -lcrypto $(DEBUG)
+-CFLAGS+=-O2 -Wall -DVERSION=\"$(VERSION)\" $(DEBUG)
++LDFLAGS+=$(EXTRA_LDFLAGS) -lssl -lcrypto $(DEBUG)
++CFLAGS+=$(EXTRA_CFLAGS) -Wall -DVERSION=\"$(VERSION)\" $(DEBUG)
+ 
+ OBJS=mem.o http.o io.o str.o error.o utils.o main.o tcp.o mssl.o res.o
+ 

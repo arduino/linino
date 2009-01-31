@@ -1,0 +1,24 @@
+diff -urN coreutils-6.9/Makefile.am coreutils-6.9.new/Makefile.am
+--- coreutils-6.9/Makefile.am	2007-03-18 22:36:43.000000000 +0100
++++ coreutils-6.9.new/Makefile.am	2008-11-15 14:15:17.000000000 +0100
+@@ -17,7 +17,7 @@
+ # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ # 02110-1301, USA.
+ 
+-SUBDIRS = lib src doc man po tests
++SUBDIRS = lib src po
+ EXTRA_DIST = Makefile.cfg Makefile.maint GNUmakefile \
+   .gitignore \
+   .hgignore \
+diff -urN coreutils-6.9/Makefile.in coreutils-6.9.new/Makefile.in
+--- coreutils-6.9/Makefile.in	2007-03-22 22:20:26.000000000 +0100
++++ coreutils-6.9.new/Makefile.in	2008-11-15 14:15:05.000000000 +0100
+@@ -520,7 +520,7 @@
+ target_alias = @target_alias@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+-SUBDIRS = lib src doc man po tests
++SUBDIRS = lib src po 
+ EXTRA_DIST = Makefile.cfg Makefile.maint GNUmakefile \
+   .gitignore \
+   .hgignore \

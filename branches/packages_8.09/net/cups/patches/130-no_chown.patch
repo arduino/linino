@@ -1,0 +1,12 @@
+diff -urN cups-1.3.7/systemv/Makefile cups-1.3.7.new/systemv/Makefile
+--- cups-1.3.7/systemv/Makefile	2007-07-11 23:46:42.000000000 +0200
++++ cups-1.3.7.new/systemv/Makefile	2008-07-13 16:15:46.000000000 +0200
+@@ -70,7 +70,7 @@
+ 	$(INSTALL_BIN) lp $(BINDIR)
+ 	$(INSTALL_BIN) lpoptions $(BINDIR)
+ 	$(INSTALL_BIN) lpstat $(BINDIR)
+-	$(INSTALL_BIN) -m 4755 -o root lppasswd $(BINDIR) || $(INSTALL_BIN) lppasswd $(BINDIR)
++	$(INSTALL_BIN) lppasswd $(BINDIR)
+ 	if test "x$(SYMROOT)" != "x"; then \
+ 		$(INSTALL_DIR) $(SYMROOT); \
+ 		for file in $(TARGETS); do \

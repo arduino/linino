@@ -1,0 +1,19 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=50
+
+RUN_D=/var/run
+PID_F=$RUN_D/chilli.pid
+
+start() {
+	include /lib/network
+	scan_interfaces
+	/sbin/insmod tun >/dev/null 2>&1
+	[ -d $RUN_D ] || mkdir -p $RUN_D
+	config_get ipaddr lan ipaddr
+	/usr/sbin/chilli --dns1="$ipaddr"
+}
+
+stop() {
+	[ -f $PID_F ] && kill $(cat $PID_F) >/dev/null 2>&1
+}

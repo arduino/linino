@@ -1,0 +1,13 @@
+Index: liboil-0.3.12/Makefile.in
+===================================================================
+--- liboil-0.3.12.orig/Makefile.in	2007-11-21 21:53:32.000000000 +0100
++++ liboil-0.3.12/Makefile.in	2007-11-21 21:53:47.000000000 +0100
+@@ -247,7 +247,7 @@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+ AUTOMAKE_OPTIONS = foreign
+-SUBDIRS = liboil testsuite examples doc
++SUBDIRS = liboil testsuite
+ EXTRA_DIST = COPYING autogen.sh gtk-doc.make HACKING BUG-REPORTING
+ pkgconfig_DATA = liboil-$(LIBOIL_MAJORMINOR).pc
+ BUILT_SOURCES = liboil-$(LIBOIL_MAJORMINOR)-uninstalled.pc

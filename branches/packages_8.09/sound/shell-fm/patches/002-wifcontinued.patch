@@ -1,0 +1,13 @@
+--- shell-fm-0.5/source/main.c	2008-04-10 22:27:28.000000000 +0200
++++ shell-fm-0.5.new/source/main.c	2008-07-27 13:50:43.000000000 +0200
+@@ -33,6 +33,10 @@
+ #define PATH_MAX 4096
+ #endif
+ 
++#ifndef WIFCONTINUED 
++#define WIFCONTINUED(wstat)   (0) 
++#endif 
++
+ unsigned flags = RTP;
+ time_t changeTime = 0, pausetime = 0;
+ char * nextstation = NULL;

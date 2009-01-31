@@ -1,0 +1,4 @@
+config batmand-adv general
+	option interface		ath0
+	option originator_interval
+	option visualisation_srv	

@@ -1,0 +1,21 @@
+diff -Naur fftw-3.1.2/Makefile.in fftw-3.1.2-p/Makefile.in
+--- fftw-3.1.2/Makefile.in	2006-01-28 01:19:57.000000000 +0100
++++ fftw-3.1.2-p/Makefile.in	2006-03-13 20:50:29.829075989 +0100
+@@ -112,7 +112,7 @@
+ ETAGS = etags
+ CTAGS = ctags
+ DIST_SUBDIRS = support genfft genfft-k7 kernel simd dft rdft reodft \
+-	threads api libbench2 . tests doc tools
++	threads api libbench2 . doc tools
+ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ distdir = $(PACKAGE)-$(VERSION)
+ top_distdir = $(distdir)
+@@ -277,7 +277,7 @@
+ @MAINTAINER_MODE_TRUE@GENFFT = genfft genfft-k7
+ ACLOCAL_AMFLAGS = -I ./m4
+ SUBDIRS = support $(GENFFT) kernel simd dft rdft reodft threads api	\
+-libbench2 . tests doc tools
++libbench2 .
+ 
+ EXTRA_DIST = COPYRIGHT bootstrap.sh CONVENTIONS fftw.pc.in m4
+ @HAVE_SIMD_FALSE@SIMD_LIBS = 

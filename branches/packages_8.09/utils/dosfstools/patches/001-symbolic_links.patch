@@ -1,0 +1,38 @@
+diff -urN dosfstools-2.11.orig/dosfsck/Makefile dosfstools-2.11/dosfsck/Makefile
+--- dosfstools-2.11.orig/dosfsck/Makefile	1999-07-06 10:23:11.000000000 -0400
++++ dosfstools-2.11/dosfsck/Makefile	2006-11-07 07:20:54.000000000 -0500
+@@ -15,11 +15,11 @@
+ 	install -m 644 dosfsck.8 $(MANDIR)
+ 	rm -f $(SBINDIR)/fsck.msdos
+ 	rm -f $(SBINDIR)/fsck.vfat
+-	ln -s dosfsck $(SBINDIR)/fsck.msdos
+-	ln -s dosfsck $(SBINDIR)/fsck.vfat
++	ln -sf dosfsck $(SBINDIR)/fsck.msdos
++	ln -sf dosfsck $(SBINDIR)/fsck.vfat
+ 	rm -f $(MANDIR)/fsck.msdos.8
+-	ln -s dosfsck.8 $(MANDIR)/fsck.msdos.8
+-	ln -s dosfsck.8 $(MANDIR)/fsck.vfat.8
++	ln -sf dosfsck.8 $(MANDIR)/fsck.msdos.8
++	ln -sf dosfsck.8 $(MANDIR)/fsck.vfat.8
+ 
+ clean:
+ 	rm -f *.o *.s *.i *~ \#*# tmp_make .#* .new*
+diff -urN dosfstools-2.11.orig/mkdosfs/Makefile dosfstools-2.11/mkdosfs/Makefile
+--- dosfstools-2.11.orig/mkdosfs/Makefile	1999-07-06 10:23:32.000000000 -0400
++++ dosfstools-2.11/mkdosfs/Makefile	2006-11-07 07:20:38.000000000 -0500
+@@ -15,11 +15,11 @@
+ 	install -m 644 mkdosfs.8 $(MANDIR)
+ 	rm -f $(SBINDIR)/mkfs.msdos
+ 	rm -f $(SBINDIR)/mkfs.vfat
+-	ln -s mkdosfs $(SBINDIR)/mkfs.msdos
+-	ln -s mkdosfs $(SBINDIR)/mkfs.vfat
++	ln -sf mkdosfs $(SBINDIR)/mkfs.msdos
++	ln -sf mkdosfs $(SBINDIR)/mkfs.vfat
+ 	rm -f $(MANDIR)/mkfs.msdos.8
+-	ln -s mkdosfs.8 $(MANDIR)/mkfs.msdos.8
+-	ln -s mkdosfs.8 $(MANDIR)/mkfs.vfat.8
++	ln -sf mkdosfs.8 $(MANDIR)/mkfs.msdos.8
++	ln -sf mkdosfs.8 $(MANDIR)/mkfs.vfat.8
+ 
+ clean :
+ 	echo *.o *.i *.s *~ \#*# core .#* .new*

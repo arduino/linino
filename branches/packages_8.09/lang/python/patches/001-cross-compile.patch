@@ -1,0 +1,38 @@
+Index: Python-2.5.1/setup.py
+===================================================================
+--- Python-2.5.1.orig/setup.py	2007-07-30 12:55:24.000000000 -0500
++++ Python-2.5.1/setup.py	2007-07-30 12:57:03.000000000 -0500
+@@ -244,7 +244,18 @@
+         return sys.platform
+ 
+     def detect_modules(self):
+-        # Ensure that /usr/local is always used
++        try:
++            modules_include_dirs = os.environ["PYTHON_MODULES_INCLUDE"].split()
++        except KeyError:
++            modules_include_dirs = ['/usr/include']
++        try:
++            modules_lib_dirs = os.environ["PYTHON_MODULES_LIB"].split()
++        except KeyError:
++            modules_lib_dirs = ['/usr/lib']
++        for dir in modules_include_dirs:
++                add_dir_to_list(self.compiler.include_dirs, dir)
++        for dir in modules_lib_dirs:
++                add_dir_to_list(self.compiler.library_dirs, dir)
+ 
+         # Add paths specified in the environment variables LDFLAGS and
+         # CPPFLAGS for header and library files.
+@@ -286,11 +297,8 @@
+         # lib_dirs and inc_dirs are used to search for files;
+         # if a file is found in one of those directories, it can
+         # be assumed that no additional -I,-L directives are needed.
+-        lib_dirs = self.compiler.library_dirs + [
+-            '/lib64', '/usr/lib64',
+-            '/lib', '/usr/lib',
+-            ]
+-        inc_dirs = self.compiler.include_dirs + ['/usr/include']
++        lib_dirs = self.compiler.library_dirs
++        inc_dirs = self.compiler.include_dirs
+         exts = []
+ 
+         config_h = sysconfig.get_config_h_filename()

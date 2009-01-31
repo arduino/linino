@@ -1,0 +1,14 @@
+--- a/ssl.c
++++ b/ssl.c
+@@ -662,9 +662,11 @@
+     ssl->method = SSLv23_client_method();
+     break;
+ 
++#ifndef OPENSSL_NO_SSLV2
+   case SSL_VERSION_SSLV2:
+     ssl->method = SSLv2_client_method();
+     break;
++#endif
+ 
+   case SSL_VERSION_SSLV3:
+     ssl->method = SSLv3_client_method();

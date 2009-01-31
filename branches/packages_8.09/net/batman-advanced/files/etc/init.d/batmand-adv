@@ -1,0 +1,35 @@
+#!/bin/sh /etc/rc.common
+START=90
+. /lib/config/uci.sh
+uci_load batmand-adv
+start () {
+	interface=$(uci get batmand-adv.general.interface)
+	if [ "$interface" = "" ]; then
+		echo $1 Error, you must specify at least a network interface
+		exit
+	fi
+	originator_interval=$(uci get batmand-adv.general.originator_interval)
+	visualisation_srv=$(uci get batmand-adv.general.visualisation_srv)
+	batman_args=""
+
+	if [ $originator_interval ]; then
+		batman_args=${batman_args}'-o '$originator_interval' '
+	fi
+
+	if [ $visualisation_srv ]; then
+		batman_args=${batman_args}'-s '$visualisation_srv' '
+	fi
+
+	batman_args=${batman_args}$interface
+	batmand-adv $batman_args >/dev/null 2>&1
+}
+
+restart () {
+	$0 stop
+	sleep 3
+	$0 start
+}
+        
+stop () {
+	killall batmand-adv
+}

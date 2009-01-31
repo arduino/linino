@@ -1,0 +1,108 @@
+diff -urN Python-2.5.1.orig/Include/pyerrors.h Python-2.5.1/Include/pyerrors.h
+--- Python-2.5.1.orig/Include/pyerrors.h	2008-08-10 13:46:48.000000000 +0200
++++ Python-2.5.1/Include/pyerrors.h	2008-08-10 13:51:05.000000000 +0200
+@@ -239,6 +239,9 @@
+ PyAPI_FUNC(int) PyErr_CheckSignals(void);
+ PyAPI_FUNC(void) PyErr_SetInterrupt(void);
+ 
++/* In signalmodule.c */
++int PySignal_SetWakeupFd(int fd);
++
+ /* Support for adding program text to SyntaxErrors */
+ PyAPI_FUNC(void) PyErr_SyntaxLocation(const char *, int);
+ PyAPI_FUNC(PyObject *) PyErr_ProgramText(const char *, int);
+diff -urN Python-2.5.1.orig/Modules/signalmodule.c Python-2.5.1/Modules/signalmodule.c
+--- Python-2.5.1.orig/Modules/signalmodule.c	2008-08-10 13:46:48.000000000 +0200
++++ Python-2.5.1/Modules/signalmodule.c	2008-08-10 13:50:02.000000000 +0200
+@@ -12,6 +12,8 @@
+ 
+ #include <signal.h>
+ 
++#include <sys/stat.h>
++
+ #ifndef SIG_ERR
+ #define SIG_ERR ((PyOS_sighandler_t)(-1))
+ #endif
+@@ -75,4 +77,6 @@
+         PyObject *func;
+ } Handlers[NSIG];
+ 
++static int wakeup_fd = -1;
++
+ /* Speed up sigcheck() when none tripped */
+@@ -112,6 +116,7 @@
+ static void
+ signal_handler(int sig_num)
+ {
++	const char dummy_byte = '\0';
+ #ifdef WITH_THREAD
+ #ifdef WITH_PTH
+ 	if (PyThread_get_thread_ident() != main_thread) {
+@@ -125,6 +130,8 @@
+ 		is_tripped++;
+ 		Handlers[sig_num].tripped = 1;
+ 		Py_AddPendingCall(checksignals_witharg, NULL);
++		if (wakeup_fd != -1)
++			write(wakeup_fd, &dummy_byte, 1);
+ #ifdef WITH_THREAD
+ 	}
+ #endif
+@@ -264,6 +271,50 @@
+ anything else -- the callable Python object used as a handler");
+ 
+ 
++static PyObject *
++signal_set_wakeup_fd(PyObject *self, PyObject *args)
++{
++	struct stat buf;
++	int fd, old_fd;
++	if (!PyArg_ParseTuple(args, "i:set_wakeup_fd", &fd))
++		return NULL;
++#ifdef WITH_THREAD
++	if (PyThread_get_thread_ident() != main_thread) {
++		PyErr_SetString(PyExc_ValueError,
++				"set_wakeup_fd only works in main thread");
++		return NULL;
++	}
++#endif
++	if (fd != -1 && fstat(fd, &buf) != 0) {
++		PyErr_SetString(PyExc_ValueError, "invalid fd");
++		return NULL;
++	}
++	old_fd = wakeup_fd;
++	wakeup_fd = fd;
++	return PyLong_FromLong(old_fd);
++}
++
++PyDoc_STRVAR(set_wakeup_fd_doc,
++"set_wakeup_fd(fd) -> fd\n\
++\n\
++Sets the fd to be written to (with '\\0') when a signal\n\
++comes in.  A library can use this to wakeup select or poll.\n\
++The previous fd is returned.\n\
++\n\
++The fd must be non-blocking.");
++
++/* C API for the same, without all the error checking */
++int
++PySignal_SetWakeupFd(int fd)
++{
++	int old_fd = wakeup_fd;
++	if (fd < 0)
++		fd = -1;
++	wakeup_fd = fd;
++	return old_fd;
++}
++
++
+ /* List of functions defined in the module */
+ static PyMethodDef signal_methods[] = {
+ #ifdef HAVE_ALARM
+@@ -271,6 +322,7 @@
+ #endif
+ 	{"signal",	        signal_signal, METH_VARARGS, signal_doc},
+ 	{"getsignal",	        signal_getsignal, METH_VARARGS, getsignal_doc},
++	{"set_wakeup_fd",	signal_set_wakeup_fd, METH_VARARGS, set_wakeup_fd_doc},
+ #ifdef HAVE_PAUSE
+ 	{"pause",	        (PyCFunction)signal_pause,
+ 	 METH_NOARGS,pause_doc},

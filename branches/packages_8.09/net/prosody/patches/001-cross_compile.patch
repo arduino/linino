@@ -1,0 +1,28 @@
+diff -urN prosody-0.2.0/util-src/Makefile prosody-0.2.0.new/util-src/Makefile
+--- prosody-0.2.0/util-src/Makefile	2008-12-27 22:54:07.000000000 +0100
++++ prosody-0.2.0.new/util-src/Makefile	2009-01-28 12:25:44.000000000 +0100
+@@ -20,18 +20,18 @@
+ 	rm -f ../util/*.so
+ 
+ encodings.o: encodings.c
+-	gcc $(CFLAGS) -I$(LUA_INCDIR) -c -o encodings.o encodings.c
++	$(CC) $(CFLAGS) -I$(LUA_INCDIR) -c -o encodings.o encodings.c
+ encodings.so: encodings.o
+-	export MACOSX_DEPLOYMENT_TARGET="10.3"; gcc $(LFLAGS) -o encodings.so encodings.o -L/usr/local/lib -llua$(LUA_SUFFIX) -lcrypto -lidn
++	export MACOSX_DEPLOYMENT_TARGET="10.3"; $(CC) $(LFLAGS) -o encodings.so encodings.o -L$(STAGING_DIR)/usr/lib -llua$(LUA_SUFFIX) -lcrypto -lidn
+ 	
+ 
+ hashes.o: hashes.c
+-	gcc $(CFLAGS) -I$(LUA_INCDIR) -c -o hashes.o hashes.c
++	$(CC) $(CFLAGS) -I$(LUA_INCDIR) -c -o hashes.o hashes.c
+ hashes.so: hashes.o
+-	export MACOSX_DEPLOYMENT_TARGET="10.3"; gcc $(LFLAGS) -o hashes.so hashes.o -L/usr/local/lib -llua$(LUA_SUFFIX) -lcrypto -lssl
++	export MACOSX_DEPLOYMENT_TARGET="10.3"; $(CC) $(LFLAGS) -o hashes.so hashes.o -L$(STAGING_DIR)/usr/lib -llua$(LUA_SUFFIX) -lcrypto -lssl
+ 
+ pposix.o: pposix.c
+-	gcc $(CFLAGS) -I$(LUA_INCDIR) -c -o pposix.o pposix.c
++	$(CC) $(CFLAGS) -I$(LUA_INCDIR) -c -o pposix.o pposix.c
+ pposix.so: pposix.o
+-	export MACOSX_DEPLOYMENT_TARGET="10.3"; gcc $(LFLAGS) -o pposix.so pposix.o -L/usr/local/lib -llua$(LUA_SUFFIX)
++	export MACOSX_DEPLOYMENT_TARGET="10.3"; $(CC) $(LFLAGS) -o pposix.so pposix.o -L$(STAGING_DIR)/usr/lib -llua$(LUA_SUFFIX)
+ 	

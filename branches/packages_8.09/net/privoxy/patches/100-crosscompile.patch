@@ -1,0 +1,14 @@
+Index: privoxy-3.0.6-stable/configure.in
+===================================================================
+--- privoxy-3.0.6-stable.orig/configure.in	2007-06-21 14:51:38.000000000 +0200
++++ privoxy-3.0.6-stable/configure.in	2007-06-21 14:51:38.000000000 +0200
+@@ -1125,7 +1125,8 @@
+ AC_PROG_GCC_TRADITIONAL
+ dnl uncommenting does not work for swa. suse linux
+ dnl AC_FUNC_MALLOC
+-AC_FUNC_SETPGRP
++dnl uncommenting does not work for openwrt
++dnl AC_FUNC_SETPGRP
+ AC_TYPE_SIGNAL
+ dnl uncommenting does not work for swa. suse linux
+ dnl AC_FUNC_STAT

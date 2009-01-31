@@ -1,0 +1,15 @@
+Index: srelay-0.4.6/configure
+===================================================================
+--- srelay-0.4.6.orig/configure	2008-02-28 13:21:29.000000000 +0100
++++ srelay-0.4.6/configure	2008-02-28 13:21:30.000000000 +0100
+@@ -1394,8 +1394,8 @@
+ 
+ 	;;
+   linux*)
+-	case "$build_cpu" in
+-	  i*86)
++	case "$host_cpu" in
++	  i*86|mips*|powerpc*|sparc*)
+ 	    OS=LINUX
+ 	    cat >>confdefs.h <<\_ACEOF
+ #define LINUX 1

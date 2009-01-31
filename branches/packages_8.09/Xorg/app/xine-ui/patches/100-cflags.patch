@@ -1,0 +1,13 @@
+Index: xine-ui-0.99.4/configure
+===================================================================
+--- xine-ui-0.99.4.orig/configure	2007-12-23 01:23:31.650316801 +0100
++++ xine-ui-0.99.4/configure	2007-12-23 01:23:42.194917702 +0100
+@@ -31351,7 +31351,7 @@
+ SYSCONF_DIR=`eval echo "$sysconfdir"`
+ 
+ 
+-INCLUDES='-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src -I$(top_builddir)/src -I$(top_srcdir)/src/common -I$(top_builddir)/src/common -I$(top_srcdir)/src/xitk/xine-toolkit -I$(top_builddir)/src/xitk/xine-toolkit -I$(prefix)/include $(INTLDIR)'
++INCLUDES='-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/src -I$(top_builddir)/src -I$(top_srcdir)/src/common -I$(top_builddir)/src/common -I$(top_srcdir)/src/xitk/xine-toolkit -I$(top_builddir)/src/xitk/xine-toolkit $(INTLDIR)'
+ 
+ 
+ 

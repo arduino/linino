@@ -1,0 +1,20 @@
+--- yafc-1.1.1/configure	2005-10-06 08:26:31.000000000 +0200
++++ yafc-1.1.1.new/configure	2006-07-11 13:40:21.000000000 +0200
+@@ -24640,7 +24640,7 @@
+ 
+ fi
+ 
+-
++cross_compiling=no
+ echo "$as_me:$LINENO: checking for presence of POSIX-style sigsetjmp/siglongjmp" >&5
+ echo $ECHO_N "checking for presence of POSIX-style sigsetjmp/siglongjmp... $ECHO_C" >&6
+ if test "${bash_cv_func_sigsetjmp+set}" = set; then
+@@ -24659,7 +24659,7 @@
+ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+-
++cross_compiling=yes
+ #ifdef HAVE_UNISTD_H
+ #include <unistd.h>
+ #endif

@@ -1,0 +1,22 @@
+--- a/src/backend/utils/adt/float.c
++++ b/src/backend/utils/adt/float.c
+@@ -71,7 +71,9 @@
+ static int	float8_cmp_internal(float8 a, float8 b);
+ 
+ #ifndef HAVE_CBRT
+-static double cbrt(double x);
++#undef cbrt
++#define cbrt(x) pg_cbrt(x)
++static double pg_cbrt(double x);
+ #endif   /* HAVE_CBRT */
+ 
+ 
+@@ -2733,7 +2735,7 @@
+ #ifndef HAVE_CBRT
+ 
+ static double
+-cbrt(double x)
++pg_cbrt(double x)
+ {
+ 	int			isneg = (x < 0.0);
+ 	double		absx = fabs(x);

@@ -1,0 +1,13 @@
+diff --git a/hw/xfree86/os-support/linux/lnx_video.c b/hw/xfree86/os-support/linux/lnx_video.c
+index 1bd2d57..0ac829c 100644
+--- a/hw/xfree86/os-support/linux/lnx_video.c
++++ b/hw/xfree86/os-support/linux/lnx_video.c
+@@ -468,7 +468,7 @@ mapVidMem(int ScreenNum, unsigned long Base, unsigned long Size, int flags)
+         mapflags |= MAP_NONCACHED; 
+ #endif
+ 
+-#if 0
++#ifndef HAVE_MTRR
+     /* this will disappear when people upgrade their kernels */
+     fd = open(DEV_MEM,
+ 	      ((flags & VIDMEM_READONLY) ? O_RDONLY : O_RDWR) | O_SYNC);

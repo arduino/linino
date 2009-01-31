@@ -1,0 +1,26 @@
+diff -ruN openldap-2.2.26-orig/libraries/liblunicode/Makefile.in openldap-2.2.26-1/libraries/liblunicode/Makefile.in
+--- openldap-2.2.26-orig/libraries/liblunicode/Makefile.in	2005-01-20 18:01:03.000000000 +0100
++++ openldap-2.2.26-1/libraries/liblunicode/Makefile.in	2005-05-08 15:47:08.000000000 +0200
+@@ -29,8 +29,8 @@
+ LDAP_INCDIR= ../../include       
+ LDAP_LIBDIR= ../../libraries
+ 
+-ucgendat: $(XLIBS) ucgendat.o
+-	$(LTLINK) -o $@ ucgendat.o $(LIBS)
++ucgendat:
++	$(HOSTCC) -I$(LDAP_INCDIR) -o $@ ./ucdata/ucgendat.c
+ 	./ucgendat $(srcdir)/UnicodeData.txt -x $(srcdir)/CompositionExclusions.txt
+ 
+ DATFILES = case.dat cmbcl.dat comp.dat ctype.dat decomp.dat num.dat kdecomp.dat
+diff -ur openldap.old/libraries/liblunicode/ucdata/ucgendat.c openldap.dev/libraries/liblunicode/ucdata/ucgendat.c
+--- openldap.old/libraries/liblunicode/ucdata/ucgendat.c	2005-01-20 18:01:03.000000000 +0100
++++ openldap.dev/libraries/liblunicode/ucdata/ucgendat.c	2007-04-01 20:35:57.000000000 +0200
+@@ -1611,7 +1611,7 @@
+     FILE *in;
+     char *prog, *opath;
+ 
+-    prog = lutil_progname( "ucgendat", argc, argv );
++    prog = argv[0];
+ 
+     opath = 0;
+     in = stdin;

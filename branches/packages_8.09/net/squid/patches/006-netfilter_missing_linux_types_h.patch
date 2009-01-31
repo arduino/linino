@@ -1,0 +1,20 @@
+--- a/src/client_side.c
++++ b/src/client_side.c
+@@ -92,6 +92,7 @@
+ #endif
+ 
+ #if LINUX_NETFILTER
++#include <linux/types.h>
+ #include <linux/netfilter_ipv4.h>
+ #endif
+ 
+--- a/src/forward.c
++++ b/src/forward.c
+@@ -37,6 +37,7 @@
+ #include "squid.h"
+ 
+ #if LINUX_NETFILTER
++#include <linux/types.h>
+ #include <linux/netfilter_ipv4.h>
+ #endif
+ #if LINUX_TPROXY

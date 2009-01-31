@@ -1,0 +1,26 @@
+Index: freeradius-1.1.6/configure
+===================================================================
+--- freeradius-1.1.6.orig/configure	2007-07-30 14:17:42.000000000 -0500
++++ freeradius-1.1.6/configure	2007-07-30 14:17:43.000000000 -0500
+@@ -22454,7 +22454,7 @@
+ 	openssl/ssl.h \
+ 	openssl/crypto.h \
+ 	openssl/err.h \
+-	openssl/engine.h
++	
+ do
+ as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
+Index: freeradius-1.1.6/configure.in
+===================================================================
+--- freeradius-1.1.6.orig/configure.in	2007-07-30 14:17:42.000000000 -0500
++++ freeradius-1.1.6/configure.in	2007-07-30 14:17:43.000000000 -0500
+@@ -616,7 +616,7 @@
+ 	openssl/ssl.h \
+ 	openssl/crypto.h \
+ 	openssl/err.h \
+-	openssl/engine.h,
++	, 
+ 	[],
+ 	OPENSSL_LIBS=
+     )

@@ -1,0 +1,132 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2008 Alina Friedrichsen
+
+START=50
+
+start() {
+	local ifname
+	local cfgt
+
+	option_cb() {
+		local varname="$1"
+		local value="$2"
+		local cfg="$CONFIG_SECTION"
+		local cfgt
+		local item
+		local c
+
+		config_get cfgt "$cfg" TYPE
+
+		if [ "$cfgt" == siproxd ]; then
+			if [ "$varname" == config_file ]; then
+				CONFIG_FILE="$value"
+			elif [ "$varname" == if_inbound ]; then
+				IF_INBOUND="$value"
+			elif [ "$varname" == if_outbound ]; then
+				IF_OUTBOUND="$value"
+			elif [ "$varname" == mask_host ]; then
+				c=0
+				for item in $value
+				do
+					if [ "$((c % 2))" -eq 0 ]; then
+						printf '%s\n' "mask_host = $item" >> /var/etc/siproxd.conf
+					else
+						printf '%s\n' "masked_host = $item" >> /var/etc/siproxd.conf
+					fi
+					c=$((c + 1))
+				done
+			elif [ "$varname" == outbound_domain ]; then
+				c=0
+				for item in $value
+				do
+					if [ "$((c % 3))" -eq 0 ]; then
+						printf '%s\n' "outbound_domain_name = $item" >> /var/etc/siproxd.conf
+					elif [ "$((c % 3))" -eq 1 ]; then
+						printf '%s\n' "outbound_domain_host = $item" >> /var/etc/siproxd.conf
+					else
+						printf '%s\n' "outbound_domain_port = $item" >> /var/etc/siproxd.conf
+					fi
+					c=$((c + 1))
+				done
+			elif [ "$varname" == pi_shortdial_entry ]; then
+				for item in $value
+				do
+					printf '%s\n' "pi_shortdial_entry = $item" >> /var/etc/siproxd.conf
+				done
+			else
+				if [ "$varname" == hosts_allow_reg -o "$varname" == hosts_allow_sip -o "$varname" == hosts_deny_sip ]; then
+					value=$(printf '%s' "$value" | tr -s '\t ' ',')
+				fi
+				[ "$varname" == sip_listen_port ] && SIP_LISTEN_PORT=""
+				[ "$varname" == daemonize ] && DAEMONIZE=""
+				[ "$varname" == silence_log ] && SILENCE_LOG=""
+				[ "$varname" == log_calls ] && LOG_CALLS=""
+				[ "$varname" == user ] && USER=""
+				[ "$varname" == registration_file ] && REGISTRATION_FILE=""
+				[ "$varname" == pid_file ] && PID_FILE=""
+				[ "$varname" == rtp_proxy_enable ] && RTP_PROXY_ENABLE=""
+				[ "$varname" == rtp_port_low ] && RTP_PORT_LOW=""
+				[ "$varname" == rtp_port_high ] && RTP_PORT_HIGH=""
+				[ "$varname" == rtp_timeout ] && RTP_TIMEOUT=""
+				[ "$varname" == default_expires ] && DEFAULT_EXPIRES=""
+				[ "$varname" == debug_level ] && DEBUG_LEVEL=""
+				[ "$varname" == debug_port ] && DEBUG_PORT=""
+				printf '%s\n' "$varname = $value" >> /var/etc/siproxd.conf
+			fi
+		fi
+	}
+
+	mkdir -p /var/etc
+	> /var/etc/siproxd.conf
+	mkdir -p /var/lib/siproxd
+	chmod 777 /var/lib/siproxd
+	mkdir -p /var/run/siproxd
+	chmod 777 /var/run/siproxd
+	CONFIG_FILE=/var/etc/siproxd.conf
+	SIP_LISTEN_PORT=5060
+	DAEMONIZE=1
+	SILENCE_LOG=0
+	LOG_CALLS=1
+	USER=nobody
+	REGISTRATION_FILE=/var/lib/siproxd/siproxd_registrations
+	PID_FILE=/var/run/siproxd/siproxd.pid
+	RTP_PROXY_ENABLE=1
+	RTP_PORT_LOW=7070
+	RTP_PORT_HIGH=7089
+	RTP_TIMEOUT=300
+	DEFAULT_EXPIRES=600
+	DEBUG_LEVEL=0x00000000
+	DEBUG_PORT=0
+	config_load siproxd
+	[ -n "$SIP_LISTEN_PORT" ] && printf '%s\n' "sip_listen_port = $SIP_LISTEN_PORT" >> /var/etc/siproxd.conf
+	[ -n "$DAEMONIZE" ] && printf '%s\n' "daemonize = $DAEMONIZE" >> /var/etc/siproxd.conf
+	[ -n "$SILENCE_LOG" ] && printf '%s\n' "silence_log = $SILENCE_LOG" >> /var/etc/siproxd.conf
+	[ -n "$LOG_CALLS" ] && printf '%s\n' "log_calls = $LOG_CALLS" >> /var/etc/siproxd.conf
+	[ -n "$USER" ] && printf '%s\n' "user = $USER" >> /var/etc/siproxd.conf
+	[ -n "$REGISTRATION_FILE" ] && printf '%s\n' "registration_file = $REGISTRATION_FILE" >> /var/etc/siproxd.conf
+	[ -n "$PID_FILE" ] && printf '%s\n' "pid_file = $PID_FILE" >> /var/etc/siproxd.conf
+	[ -n "$RTP_PROXY_ENABLE" ] && printf '%s\n' "rtp_proxy_enable = $RTP_PROXY_ENABLE" >> /var/etc/siproxd.conf
+	[ -n "$RTP_PORT_LOW" ] && printf '%s\n' "rtp_port_low = $RTP_PORT_LOW" >> /var/etc/siproxd.conf
+	[ -n "$RTP_PORT_HIGH" ] && printf '%s\n' "rtp_port_high = $RTP_PORT_HIGH" >> /var/etc/siproxd.conf
+	[ -n "$RTP_TIMEOUT" ] && printf '%s\n' "rtp_timeout = $RTP_TIMEOUT" >> /var/etc/siproxd.conf
+	[ -n "$DEFAULT_EXPIRES" ] && printf '%s\n' "default_expires = $DEFAULT_EXPIRES" >> /var/etc/siproxd.conf
+	[ -n "$DEBUG_LEVEL" ] && printf '%s\n' "debug_level = $DEBUG_LEVEL" >> /var/etc/siproxd.conf
+	[ -n "$DEBUG_PORT" ] && printf '%s\n' "debug_port = $DEBUG_PORT" >> /var/etc/siproxd.conf
+	reset_cb
+	include /lib/network
+	scan_interfaces
+	config_load /var/state/network
+	if [ -n "$IF_INBOUND" ]; then
+		config_get IF_INBOUND "$IF_INBOUND" ifname
+		printf '%s\n' "if_inbound = $IF_INBOUND" >> /var/etc/siproxd.conf
+	fi
+	if [ -n "$IF_OUTBOUND" ]; then
+		config_get IF_OUTBOUND "$IF_OUTBOUND" ifname
+		printf '%s\n' "if_outbound = $IF_OUTBOUND" >> /var/etc/siproxd.conf
+	fi
+	/usr/sbin/siproxd --config "$CONFIG_FILE"
+}
+
+stop() {
+	killall siproxd
+}

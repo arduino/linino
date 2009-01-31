@@ -1,0 +1,24 @@
+diff -urN pygtk-2.12.1.orig/configure pygtk-2.12.1/configure
+--- pygtk-2.12.1.orig/configure	2008-09-30 17:05:56.000000000 +0200
++++ pygtk-2.12.1/configure	2008-09-30 17:06:38.000000000 +0200
+@@ -10399,8 +10399,6 @@
+ 
+ { echo "$as_me:$LINENO: checking for PySignal_SetWakeupFd in Python.h" >&5
+ echo $ECHO_N "checking for PySignal_SetWakeupFd in Python.h... $ECHO_C" >&6; }
+-py_prefix=`$PYTHON -c "import sys; print sys.prefix"`
+-PYTHON_INCLUDES="-I${py_prefix}/include/python${PYTHON_VERSION}"
+ old_CPPFLAGS=$CPPFLAGS
+ CPPFLAGS="-Wall -Werror $PYTHON_INCLUDES"
+ cat >conftest.$ac_ext <<_ACEOF
+diff -urN pygtk-2.12.1.orig/configure.in pygtk-2.12.1/configure.in
+--- pygtk-2.12.1.orig/configure.in	2008-09-30 17:05:56.000000000 +0200
++++ pygtk-2.12.1/configure.in	2008-09-30 17:06:24.000000000 +0200
+@@ -78,8 +78,6 @@
+ AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
+ 
+ AC_MSG_CHECKING([for PySignal_SetWakeupFd in Python.h])
+-py_prefix=`$PYTHON -c "import sys; print sys.prefix"`
+-PYTHON_INCLUDES="-I${py_prefix}/include/python${PYTHON_VERSION}"
+ old_CPPFLAGS=$CPPFLAGS
+ CPPFLAGS="-Wall -Werror $PYTHON_INCLUDES"
+ AC_TRY_COMPILE([#include <Python.h>],

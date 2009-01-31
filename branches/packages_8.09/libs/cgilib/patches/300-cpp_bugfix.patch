@@ -1,0 +1,23 @@
+diff -Nur cgilib-0.5.orig/cgi.h cgilib-0.5/cgi.h
+--- cgilib-0.5.orig/cgi.h	2008-01-03 18:02:08.000000000 +0100
++++ cgilib-0.5/cgi.h	2008-01-03 18:02:31.000000000 +0100
+@@ -20,6 +20,10 @@
+ #ifndef _CGI_H_
+ #define _CGI_H_
+ 
++#ifdef __cplusplus
++extern "C" {
++#endif
++
+ typedef struct var_s {
+ 	char	*name,
+ 		*value;
+@@ -112,4 +116,8 @@
+  */
+ void cgiFree (s_cgi *parms);
+ 
++#ifdef __cplusplus
++} /* end of extern "C" */
++#endif
++
+ #endif /* _CGI_H_ */

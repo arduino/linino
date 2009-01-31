@@ -1,0 +1,21 @@
+diff --exclude='*~' --exclude='.*' -I '$Id:' -urN libdnet-1.10.orig/python/dnet.c libdnet-1.10/python/dnet.c
+--- libdnet-1.10.orig/python/dnet.c	2005-05-16 14:47:35.000000000 -0400
++++ libdnet-1.10/python/dnet.c	2005-05-16 14:52:54.000000000 -0400
+@@ -2552,7 +2552,7 @@
+   PyObject *__pyx_3 = 0;
+   unsigned short __pyx_4;
+   Py_INCREF(__pyx_v_self);
+-  ((PyObject*)__pyx_v_next) = Py_None; Py_INCREF(((PyObject*)__pyx_v_next));
++  __pyx_v_next = Py_None; Py_INCREF(((PyObject*)__pyx_v_next));
+ 
+   /* "/misc/projects/libdnet/python/./dnet.pyx":628 */
+   __pyx_1 = (((struct __pyx_obj_4dnet___addr_ip4_iter *)__pyx_v_self)->cur <= ((struct __pyx_obj_4dnet___addr_ip4_iter *)__pyx_v_self)->max);
+@@ -2564,7 +2564,7 @@
+     Py_DECREF(__pyx_2); __pyx_2 = 0;
+     if (!__Pyx_TypeTest(__pyx_3, __pyx_ptype_4dnet_addr)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 629; goto __pyx_L1;}
+     Py_DECREF(((PyObject *)__pyx_v_next));
+-    ((PyObject *)__pyx_v_next) = __pyx_3;
++    __pyx_v_next = __pyx_3;
+     __pyx_3 = 0;
+ 
+     /* "/misc/projects/libdnet/python/./dnet.pyx":630 */

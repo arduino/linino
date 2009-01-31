@@ -1,0 +1,12 @@
+Index: freeradius-1.1.6/Makefile
+===================================================================
+--- freeradius-1.1.6.orig/Makefile	2007-07-30 14:17:42.000000000 -0500
++++ freeradius-1.1.6/Makefile	2007-07-30 14:17:43.000000000 -0500
+@@ -42,6 +42,7 @@
+ install:
+ 	$(INSTALL) -d -m 755	$(R)$(sbindir)
+ 	$(INSTALL) -d -m 755	$(R)$(bindir)
++	$(INSTALL) -d -m 755	$(R)$(libdir)
+ 	$(INSTALL) -d -m 755	$(R)$(raddbdir)
+ 	$(INSTALL) -d -m 755	$(R)$(mandir)
+ 	$(INSTALL) -d -m 755	$(R)$(RUNDIR)

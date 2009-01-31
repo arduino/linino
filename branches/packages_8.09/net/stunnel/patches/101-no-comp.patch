@@ -1,0 +1,27 @@
+--- a/src/ssl.c
++++ b/src/ssl.c
+@@ -62,13 +62,16 @@
+ }
+ 
+ void ssl_configure(void) { /* configure global SSL settings */
++#ifndef OPENSSL_NO_COMP
+     if(options.compression!=COMP_NONE)
+         init_compression();
++#endif
+     if(!init_prng())
+         s_log(LOG_DEBUG, "PRNG seeded successfully");
+ }
+ 
+ static void init_compression(void) {
++#ifndef OPENSSL_NO_COMP
+     int id=0;
+     COMP_METHOD *cm=NULL;
+     char *name="unknown";
+@@ -97,6 +100,7 @@
+         die(1);
+     }
+     s_log(LOG_INFO, "Compression enabled using %s method", name);
++#endif
+ }
+ 
+ static int init_prng(void) {

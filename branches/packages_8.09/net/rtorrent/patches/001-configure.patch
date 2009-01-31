@@ -1,0 +1,19 @@
+Index: rtorrent-0.7.9/configure
+===================================================================
+--- rtorrent-0.7.9.orig/configure	2008-04-20 12:43:14.000000000 +0200
++++ rtorrent-0.7.9/configure	2008-04-20 12:43:14.000000000 +0200
+@@ -20227,11 +20227,11 @@
+ echo $ECHO_N "checking for execinfo.h... $ECHO_C" >&6; }
+ 
+   if test "$cross_compiling" = yes; then
+-  { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
++  { { echo "$as_me:$LINENO: warning: cannot run test program while cross compiling
+ See \`config.log' for more details." >&5
+-echo "$as_me: error: cannot run test program while cross compiling
++echo "$as_me: warning: cannot run test program while cross compiling
+ See \`config.log' for more details." >&2;}
+-   { (exit 1); exit 1; }; }
++   }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ #include <execinfo.h>

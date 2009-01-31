@@ -1,0 +1,23 @@
+Index: srelay-0.4.6/get-bind.c
+===================================================================
+--- srelay-0.4.6.orig/get-bind.c	2008-02-28 13:21:29.000000000 +0100
++++ srelay-0.4.6/get-bind.c	2008-02-28 13:21:30.000000000 +0100
+@@ -50,6 +50,18 @@
+ #include <asm/types.h>
+ #include <linux/netlink.h>
+ #include <linux/rtnetlink.h>
++#include <linux/version.h>
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,19)
++# include <linux/if_addr.h>
++#endif
++#ifndef IFA_RTA
++# define IFA_RTA(r) ((struct rtattr *) ((char *)(r) + NLMSG_ALIGN (sizeof (struct ifaddrmsg))))
++# define IFA_PAYLOAD(n) NLMSG_PAYLOAD (n, sizeof (struct ifaddrmsg))
++#endif
++#ifndef IFLA_RTA
++# define IFLA_RTA(r) ((struct rtattr *) ((char *)(r) + NLMSG_ALIGN (sizeof (struct ifinfomsg))))
++# define IFLA_PAYLOAD(n) NLMSG_PAYLOAD (n, sizeof (struct ifinfomsg))
++#endif
+ 
+ static int get_ifconf(int, struct addrinfo *);
+ #endif /* defined(LINUX) */

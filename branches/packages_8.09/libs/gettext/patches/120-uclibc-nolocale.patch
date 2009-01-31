@@ -1,0 +1,13 @@
+Index: gettext-0.16.1/gettext-runtime/intl/localename.c
+===================================================================
+--- gettext-0.16.1.orig/gettext-runtime/intl/localename.c	2007-12-29 22:51:09.363903016 +0100
++++ gettext-0.16.1/gettext-runtime/intl/localename.c	2008-10-26 16:57:14.048169957 +0100
+@@ -988,7 +988,7 @@
+ {
+   /* Use the POSIX methods of looking to 'LC_ALL', 'LC_xxx', and 'LANG'.
+      On some systems this can be done by the 'setlocale' function itself.  */
+-#if defined HAVE_SETLOCALE && defined HAVE_LC_MESSAGES && defined HAVE_LOCALE_NULL
++#if defined HAVE_SETLOCALE && defined HAVE_LC_MESSAGES && defined HAVE_LOCALE_NULL && (!defined __UCLIBC__ || defined __UCLIBC_HAS_LOCALE__)
+   return setlocale (category, NULL);
+ #else
+   const char *retval;

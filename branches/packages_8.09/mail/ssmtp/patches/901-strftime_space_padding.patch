@@ -1,0 +1,13 @@
+Index: ssmtp-2.61/arpadate.c
+===================================================================
+--- ssmtp-2.61.orig/arpadate.c	2007-08-30 20:56:56.000000000 +0200
++++ ssmtp-2.61/arpadate.c	2007-08-30 20:56:56.000000000 +0200
+@@ -79,7 +79,7 @@
+ 	time_t now;
+ 
+ 	/* RFC822 format string borrowed from GNU shellutils date.c */
+-	const char *format = "%a, %_d %b %Y %H:%M:%S %z";
++	const char *format = "%a, %d %b %Y %H:%M:%S %z";
+ 
+ 	now = time(NULL);
+ 

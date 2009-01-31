@@ -1,0 +1,12 @@
+Index: vsftpd-2.0.6/sysdeputil.c
+===================================================================
+--- vsftpd-2.0.6.orig/sysdeputil.c	2008-04-13 11:41:08.000000000 +0200
++++ vsftpd-2.0.6/sysdeputil.c	2008-04-13 11:41:09.000000000 +0200
+@@ -159,7 +159,6 @@
+ #include <linux/capability.h>
+ #include <errno.h>
+ #include <syscall.h>
+-_syscall2(int, capset, cap_user_header_t, header, const cap_user_data_t, data)
+ /* Gross HACK to avoid warnings - linux headers overlap glibc headers */
+ #undef __NFDBITS
+ #undef __FDMASK

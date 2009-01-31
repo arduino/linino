@@ -1,0 +1,15 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=50
+
+BIN=parprouted
+DEFAULT=/etc/default/$BIN
+
+start() {
+	[ -f $DEFAULT ] && . $DEFAULT
+	$BIN $OPTIONS
+}
+
+stop() {
+	killall $BIN
+}

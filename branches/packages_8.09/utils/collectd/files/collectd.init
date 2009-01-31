@@ -1,0 +1,29 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+START=80
+BINARY="/usr/sbin/collectd"
+PIDFILE="/var/run/collectd.pid"
+DATADIR="/var/lib/collectd"
+
+start() {
+	[ -x "$BINARY" ] || exit 1;
+
+	if [ -e "$PIDFILE" ]
+	then
+		kill $(cat "$PIDFILE") 2>/dev/null
+		sleep 1
+	fi
+
+	[ -d "$DATADIR" ] || mkdir -p "$DATADIR";
+
+	$BINARY
+}
+
+stop() {
+	kill $(cat "$PIDFILE") 2>/dev/null
+}
+
+restart() {
+	start
+}

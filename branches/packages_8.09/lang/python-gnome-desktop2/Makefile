@@ -1,0 +1,92 @@
+#
+# Copyright (C) 2008 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id$
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=gnome-python-desktop
+PKG_VERSION:=2.22.0
+PKG_RELEASE:=1
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/2.22
+PKG_MD5SUM:=504877a973f6abc0788283232cd703c
+PKG_FIXUP:=libtool
+
+include $(INCLUDE_DIR)/package.mk
+include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+
+PKG_INSTALL=1
+
+EXTRA_CFLAGS += \
+	-I$(STAGING_DIR)/usr/lib/libintl/include \
+	-I$(STAGING_DIR)/usr/lib/libiconv/include \
+
+EXTRA_LDFLAGS += \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib
+
+STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_python-rsvg CONFIG_PACKAGE_python-wnck)
+
+define Package/python-gnome-desktop/Default
+  SECTION:=lang
+  SUBMENU:=Python
+  CATEGORY:=Languages
+  TITLE:=$(1) python bindings
+  URL:=http://ftp.gnome.org/
+  DEPENDS:=python-core python-gtk $(2)
+endef
+
+define Package/python-rsvg
+	$(call Package/python-gnome-desktop/Default,librsvg,+librsvg +pycairo)
+endef
+
+define Package/python-wnck
+	$(call Package/python-gnome-desktop/Default,libwnck,+libwnck)
+endef
+
+define Build/Configure
+	$(call Build/Configure/Default, \
+		$(if $(CONFIG_PACKAGE_python-rsvg), --enable-rsvg, --disable-rsvg) \
+		$(if $(CONFIG_PACKAGE_python-wnck), --enable-wnck, --disable-wnck) \
+	)
+endef
+
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/share/pygtk/2.0/defs
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/share/pygtk/2.0/defs/* \
+		$(1)/usr/share/pygtk/2.0/defs
+
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
+		$(1)/usr/lib/pkgconfig
+
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)/gtk-2.0
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/gtk-2.0/*.{so,la} \
+		$(1)$(PYTHON_PKG_DIR)/gtk-2.0
+endef
+
+define Package/python-gnome-desktop/install/Default
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)/gtk-2.0
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/gtk-2.0/$(2).{so,a} \
+		$(1)$(PYTHON_PKG_DIR)/gtk-2.0
+endef
+
+define Package/python-rsvg/install
+	$(call Package/python-gnome-desktop/install/Default,$(1),rsvg)
+endef
+
+define Package/python-wnck/install
+	$(call Package/python-gnome-desktop/install/Default,$(1),wnck)
+endef
+
+$(eval $(call BuildPackage,python-rsvg))
+$(eval $(call BuildPackage,python-wnck))
+

@@ -1,0 +1,15 @@
+Index: vsftpd-2.0.6/Makefile
+===================================================================
+--- vsftpd-2.0.6.orig/Makefile	2008-04-13 11:41:08.000000000 +0200
++++ vsftpd-2.0.6/Makefile	2008-04-13 11:41:08.000000000 +0200
+@@ -5,8 +5,8 @@
+ #CFLAGS = -g
+ CFLAGS	=	-O2 -Wall -W -Wshadow #-pedantic -Werror -Wconversion
+ 
+-LIBS	=	`./vsf_findlibs.sh`
+-LINK	=	-Wl,-s
++LIBS	=	-lcrypt -lnsl
++LINK	=
+ 
+ OBJS	=	main.o utility.o prelogin.o ftpcmdio.o postlogin.o privsock.o \
+ 		tunables.o ftpdataio.o secbuf.o ls.o \

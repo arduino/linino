@@ -1,0 +1,24 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=50
+
+start() {
+	for type in rsa dsa; do {
+		# check for keys
+		key=/etc/ssh/ssh_host_${type}_key
+		[ ! -f $key ] && {
+			# generate missing keys
+			[ -x /usr/bin/ssh-keygen ] && {
+				/usr/bin/ssh-keygen -N '' -t $type -f $key 2>&- >&- && exec /etc/rc.common "$initscript" start
+			} &
+			exit 0
+		}
+	}; done
+	mkdir -p /var/empty
+	chmod 0700 /var/empty
+	/usr/sbin/sshd
+}
+
+stop() {
+	killall sshd
+}
