@@ -50,12 +50,8 @@ enable_mac80211() {
 	local device="$1"
 	config_get channel "$device" channel
 	config_get vifs "$device" vifs
-<<<<<<< HEAD:package/mac80211/files/lib/wifi/mac80211.sh
-	
-=======
 	config_get txpower "$device" txpower
 
->>>>>>> ade9976... [package] broadcom,madwifi,mac80211: move txpower from wifi-iface to wifi-device but retain backward compatiblity:package/mac80211/files/lib/wifi/mac80211.sh
 	local first=1
 	for vif in $vifs; do
 		ifconfig "$ifname" down 2>/dev/null
