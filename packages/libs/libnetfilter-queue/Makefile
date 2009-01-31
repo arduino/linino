@@ -7,13 +7,15 @@
 # $Id$
 
 include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=libnetfilter_queue
-PKG_VERSION:=0.0.13
+PKG_VERSION:=0.0.16
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnetfilter_queue/
-PKG_MD5SUM:=660cbfd3dc8c10bf9b1803cd2b688256
+PKG_MD5SUM:=b36664e6cd39edbfe46b416a86118add
+
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -21,15 +23,14 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libnetfilter-queue
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=@LINUX_2_6 +libnfnetlink
-  TITLE:=libnetfilter_queue
-  URL:=http://www1.cs.columbia.edu/~angelos/libnetfilter_queue.html
+  DEPENDS:=@LINUX_2_6 +libnfnetlink +kmod-nfnetlink-queue
+  TITLE:=API to packets queued by the kernel packet filter
+  URL:=http://www.netfilter.org/projects/libnetfilter_queue/
 endef
 
 define Package/libnetfilter-queue/description
-	libnetfilter_queue is a userspace library providing an API to packets
-	that have been queued by the kernel packet filter. It is is part of a system
-	that deprecates the old ip_queue / libipq mechanism.
+ libnetfilter_queue is a userspace library providing an API to packets
+ that have been queued by the kernel packet filter.
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -62,7 +63,7 @@ define Build/InstallDev
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libnetfilter_queue.pc \
 		$(1)/usr/lib/pkgconfig/
 endef
 
