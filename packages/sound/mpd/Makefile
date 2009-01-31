@@ -9,19 +9,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpd
-PKG_VERSION:=0.13.2
+PKG_VERSION:=0.14
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.musicpd.org/uploads/files/
-PKG_MD5SUM:=b461896369949ff3cff955692ead9f8b
+PKG_SOURCE_URL:=@SF/musicpd
+PKG_MD5SUM:=ee282390146ead636f3d992399ed3c20
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mpd
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread +libiconv
+  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread +libiconv +glib2
   TITLE:=Music Player Daemon
   URL:=http://www.musicpd.org/
 endef
@@ -40,23 +40,31 @@ ifndef CONFIG_PACKAGE_kmod-sound-core
 	EXTRA_CONFIG_PARAM:=--disable-alsa
 endif
 
+CONFIGURE_VARS += \
+	ID3TAG_LIBS="-L$(STAGING_DIR)/usr/lib -lz -lid3tag" \
+	ID3TAG_CFLAGS="-I$(STAGING_DIR)/usr/include" \
+	MAD_LIBS="-L$(STAGING_DIR)/usr/lib -lmad" \
+	MAD_CFLAGS="-I$(STAGING_DIR)/usr/include" \
+	OGGVORBIS_LIBS="-L$(STAGING_DIR)/usr/lib -lvorbisidec" \
+	OGGVORBIS_CFLAGS="-I$(STAGING_DIR)/usr/include" \
+	GLIB_CFLAGS="-I$(STAGING_DIR)/usr/include/glib-2.0 -I$(STAGING_DIR)/usr/lib/glib-2.0/include" \
+	GLIB_LIBS="-L$(STAGING_DIR)/usr/lib/libintl/lib -lintl -L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv -L$(STAGING_DIR)/usr/lib -lglib-2.0 -lgthread-2.0 -pthread"
+
 define Build/Configure
 	$(call Build/Configure/Default, \
-	        $(EXTRA_CONFIG_PARAM) \
-	        --disable-mod \
-	        --disable-audiofile \
-	        --disable-mpc \
-	        --disable-aac \
+		$(EXTRA_CONFIG_PARAM) \
+		--disable-mod \
+		--disable-audiofile \
+		--disable-mpc \
+		--disable-aac \
 		--disable-lsr \
-	        --with-tremor \
-	        --with-id3tag-includes="$(STAGING_DIR)/usr/include" \
-	        --with-id3tag-libraries="$(STAGING_DIR)/usr/lib" \
-	        --with-libFLAC-includes="$(STAGING_DIR)/usr/include" \
-	        --with-libFLAC-libraries="$(STAGING_DIR)/usr/lib" \
-	        --with-mad-includes="$(STAGING_DIR)/usr/include" \
-	        --with-mad-libraries="$(STAGING_DIR)/usr/lib" \
-		--with-iconv-includes="$(STAGING_DIR)/usr/lib/libiconv/include" \
-		--with-iconv-libraries="$(STAGING_DIR)/usr/lib/libiconv/lib" \
+		--disable-ipv6 \
+		--disable-ao \
+		--disable-mvp \
+		--disable-lametest \
+		--disable-lame \
+		--disable-flac \
+		--with-tremor=$(STAGING_DIR)/usr/lib \
 	)
 endef
 
