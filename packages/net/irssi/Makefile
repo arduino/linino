@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=irssi
 PKG_VERSION:=0.8.10
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)a.tar.bz2
 PKG_SOURCE_URL:=http://irssi.org/files/
@@ -40,7 +40,7 @@ define Build/Configure
 		--without-file-offset-size \
 		--without-ssl \
 		--disable-ssl \
-		--disable-ipv6 \
+		--enable-ipv6 \
 		--disable-proxy \
 	)
 endef
