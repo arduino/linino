@@ -1,7 +1,7 @@
-diff -Nru asterisk-1.4.22.org/acinclude.m4 asterisk-1.4.22/acinclude.m4
---- asterisk-1.4.22.org/acinclude.m4	2008-07-22 22:49:41.000000000 +0200
-+++ asterisk-1.4.22/acinclude.m4	2008-11-29 15:08:07.000000000 +0100
-@@ -664,7 +664,7 @@
+diff -Nru asterisk-1.4.23.1.org/autoconf/ast_prog_ld.m4 asterisk-1.4.23.1/autoconf/ast_prog_ld.m4
+--- asterisk-1.4.23.1.org/autoconf/ast_prog_ld.m4	2008-10-20 06:45:56.000000000 +0200
++++ asterisk-1.4.23.1/autoconf/ast_prog_ld.m4	2009-01-31 15:46:48.000000000 +0100
+@@ -7,7 +7,7 @@
  	[assume the C compiler uses GNU ld @<:@default=no@:>@])],
      [test "$withval" = no || with_gnu_ld=yes],
      [with_gnu_ld=no])
@@ -10,10 +10,10 @@ diff -Nru asterisk-1.4.22.org/acinclude.m4 asterisk-1.4.22/acinclude.m4
  AC_REQUIRE([AC_PROG_CC])dnl
  AC_REQUIRE([AC_CANONICAL_HOST])dnl
  AC_REQUIRE([AC_CANONICAL_BUILD])dnl
-@@ -769,28 +769,6 @@
-  AC_SUBST([EGREP])
- ])]) # AST_PROG_EGREP
- 
+diff -Nru asterisk-1.4.23.1.org/autoconf/ast_prog_sed.m4 asterisk-1.4.23.1/autoconf/ast_prog_sed.m4
+--- asterisk-1.4.23.1.org/autoconf/ast_prog_sed.m4	2008-10-20 06:45:56.000000000 +0200
++++ asterisk-1.4.23.1/autoconf/ast_prog_sed.m4	1970-01-01 01:00:00.000000000 +0100
+@@ -1,21 +0,0 @@
 -# AST_PROG_SED
 -# -----------
 -# Check for a fully functional sed program that truncates
@@ -35,7 +35,3 @@ diff -Nru asterisk-1.4.22.org/acinclude.m4 asterisk-1.4.22/acinclude.m4
 - AC_SUBST([SED])dnl
 - rm -f conftest.sed
 -])# AST_PROG_SED
--
- dnl @synopsis ACX_PTHREAD([ACTION-IF-FOUND[, ACTION-IF-NOT-FOUND]])
- dnl
- dnl @summary figure out how to build C programs using POSIX threads
