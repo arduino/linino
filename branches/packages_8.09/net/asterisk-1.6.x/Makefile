@@ -57,7 +57,7 @@ endef
 define Package/asterisk16
 $(call Package/asterisk16/Default)
   TITLE:=Complete open source PBX
-  DEPENDS:= +libncurses +libpopt +libpthread +zlib @!TARGET_avr32
+  DEPENDS:= +libncurses +libpopt +libpthread +zlib @!TARGET_avr32 @!PACKAGE_asterisk14
 endef
 
 define Package/asterisk16/description
@@ -162,11 +162,11 @@ define Build/Compile
 	$(SED) 's|/var/lib/asterisk|/usr/lib/asterisk|g' $(PKG_INSTALL_DIR)/etc/asterisk/musiconhold.conf
 endef
 
-define Build/InstallDev
-	mkdir -p $(1)/usr/include/asterisk/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk/*.h $(1)/usr/include/asterisk/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk.h $(1)/usr/include/
-endef
+#define Build/InstallDev
+#	mkdir -p $(1)/usr/include/asterisk/
+#	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk/*.h $(1)/usr/include/asterisk/
+#	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk.h $(1)/usr/include/
+#endef
 
 define Package/asterisk16/conffiles
 /etc/asterisk/asterisk.conf

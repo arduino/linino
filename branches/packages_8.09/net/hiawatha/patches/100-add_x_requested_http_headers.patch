@@ -1,0 +1,11 @@
+--- a/envir.c
++++ b/envir.c
+@@ -189,6 +189,8 @@ void set_environment(t_session *session,
+ 	headerfield_to_environment(session, fcgi_buffer, "User-Agent:", "HTTP_USER_AGENT");
+ 	headerfield_to_environment(session, fcgi_buffer, "Via:", "HTTP_VIA");
+ 	headerfield_to_environment(session, fcgi_buffer, "X-Forwarded-For:", "HTTP_X_FORWARDED_FOR");
++	headerfield_to_environment(session, fcgi_buffer, "X-Requested-With:", "HTTP_X_REQUESTED_WITH");
++	headerfield_to_environment(session, fcgi_buffer, "X-Requested-Handler:", "HTTP_X_REQUESTED_HANDLER");
+ 
+ 	if (session->path_info != NULL) {
+ 		add_to_environment(fcgi_buffer, "PATH_INFO", session->path_info);

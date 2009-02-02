@@ -1,0 +1,39 @@
+commit de4ec145ea88253dc469ee81f094fa73de36b773
+Author: Lars-Peter Clausen <lars@metafoo.de>
+Date:   Sun Feb 1 16:54:55 2009 +0100
+
+    Call xf86DeleteInput in UnInit or if something goes wrong in the Init procedure.
+    If xf86DeleteInput is not called the server will end up with corrupted memory.
+
+diff --git a/src/tslib.c b/src/tslib.c
+index ad43abb..3eba078 100644
+--- a/src/tslib.c
++++ b/src/tslib.c
+@@ -271,6 +271,7 @@ xf86TslibUninit(InputDriverPtr drv, InputInfoPtr pInfo, int flags)
+ #endif
+ 	xf86TslibControlProc(pInfo->dev, DEVICE_OFF);
+ 	xfree(pInfo->private);
++    xf86DeleteInput(pInfo, 0);
+ }
+ 
+ /*
+@@ -347,15 +348,17 @@ xf86TslibInit(InputDriverPtr drv, IDevPtr dev, int flags)
+ 	s = xf86SetStrOption(pInfo->options, "Device", NULL);
+ 
+ 	priv->ts = ts_open(s, 0);
++	xfree(s);
++
+ 	if (!priv->ts) {
+ 		ErrorF("ts_open failed (device=%s)\n",s);
++        xf86DeleteInput(pInfo, 0);
+ 		return NULL;
+ 	}
+ 
+-	xfree(s);
+-
+ 	if (ts_config(priv->ts)) {
+ 		ErrorF("ts_config failed\n");
++        xf86DeleteInput(pInfo, 0);
+ 		return NULL;
+ 	}
+ 
