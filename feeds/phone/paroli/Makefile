@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=paroli
-PKG_VERSION:=20090121
-PKG_REV:=9279b50ed72a94100d7f0f49090043134302f2eb
-PKG_RELEASE:=2
+PKG_VERSION:=20090202
+PKG_REV:=497fb67c507ff58fe72c5399a37906a6aee97015
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://git.paroli-project.org/paroli.git
@@ -32,10 +32,7 @@ define Package/paroli
 endef
 
 COMPONENTS:= \
-	paroli-dialer \
-	paroli-contacts \
-	paroli-i-o \
-	paroli-msgs \
+	tele \
 
 define Package/paroli/description
   Paroli is an integrated phone application written in Python which uses the FSO (freesmartphone.org) DBus API
@@ -58,23 +55,23 @@ define Package/paroli/install
 	$(foreach c, $(COMPONENTS), \
 		$(INSTALL_DIR) $(1)/usr/share/paroli/applications/$(c)
 		$(CP) $(PKG_INSTALL_DIR)/../usr/share/paroli/applications/$(c)/$(c).{py,edj} $(1)/usr/share/paroli/applications/$(c)/
-		$(CP) $(PKG_INSTALL_DIR)/../usr/share/paroli/applications/$(c)/icon.png $(1)/usr/share/icons/paroli/$(c).png
+#		$(CP) $(PKG_INSTALL_DIR)/../usr/share/paroli/applications/$(c)/icon.png $(1)/usr/share/icons/paroli/$(c).png
+		$(CP) $(PKG_INSTALL_DIR)/../data/tichy $(1)/usr/share/icons/paroli/$(c).png
+		$(CP) $(PKG_INSTALL_DIR)/usr/applications/$(c).desktop $(1)/usr/share/applications/paroli/
 	)
 	$(CP) \
 		$(PKG_INSTALL_DIR)/../usr/share/paroli/services/* \
 		$(1)/usr/share/paroli/services/
 	$(CP) \
 		$(PKG_INSTALL_DIR)/../data/tichy \
-		$(1)/usr/share/icons/paroli/tichy.png
+		$(1)/usr/share/icons/paroli/parolid.png
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/applications/*.desktop \
-		$(1)/usr/share/applications/paroli/
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/applications/paroli-launcher.desktop \
+		$(PKG_INSTALL_DIR)/usr/applications/parolid.desktop \
 		$(1)/etc/xdg/autostart/
 	$(CP) \
 		$(PKG_INSTALL_DIR)/../etc/* \
 		$(1)/etc/
+	$(CP) ./files/paroli.cfg $(1)/etc/paroli.cfg
 endef
 
 $(eval $(call BuildPackage,paroli))
