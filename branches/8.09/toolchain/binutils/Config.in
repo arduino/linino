@@ -28,4 +28,5 @@ config BINUTILS_VERSION
 	default "2.17"            if BINUTILS_VERSION_2_17
 	default "2.18"            if BINUTILS_VERSION_2_18
 	default "2.18"            if TARGET_avr32
+	default "2.18"            if TARGET_ppc44x || TARGET_ppc40x
 	default "2.17"
