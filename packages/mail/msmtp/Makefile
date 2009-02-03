@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=msmtp
 PKG_VERSION:=1.4.17
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/msmtp
@@ -24,6 +24,10 @@ define Package/msmtp/Default
   CATEGORY:=Mail
   TITLE:=Simple sendmail SMTP forwarding
   URL:=http://msmtp.sourceforge.net/
+endef
+
+define Package/msmtp/Default/conffiles
+/etc/msmtprc
 endef
 
 define Package/msmtp/Default/description
@@ -40,6 +44,10 @@ $(call Package/msmtp/Default)
   TITLE+= (with SSL support)
 endef
 
+define Package/msmtp/conffiles
+$(call Package/msmtp/Default/conffiles)
+endef
+
 define Package/msmtp/description
 $(call Package/msmtp/Default/description)
  This package is built with SSL support.
@@ -48,6 +56,10 @@ endef
 define Package/msmtp-nossl
 $(call Package/msmtp/Default)
   TITLE+= (without SSL support)
+endef
+
+define Package/msmtp-nossl/conffiles
+$(call Package/msmtp/Default/conffiles)
 endef
 
 define Package/msmtp-nossl/description
