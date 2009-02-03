@@ -26,6 +26,7 @@ define Package/ntpclient
   CATEGORY:=Network
   TITLE:=NTP (Network Time Protocol) client
   URL:=http://doolittle.icarus.com/ntpclient/
+  DEPENDS:=+librt
 endef
 
 define Package/ntpclient/description
