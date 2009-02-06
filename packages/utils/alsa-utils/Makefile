@@ -27,6 +27,13 @@ define Package/alsa-utils
   URL:=http://www.alsa-project.org/
 endef
 
+define Package/alsa-utils-tests
+  $(call Package/alsa-utils/Default)
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=ALSA utilities test data (adds ~1.3M to image)
+endef
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-rpath \
@@ -48,4 +55,14 @@ define Package/alsa-utils/install
 	    $(1)/usr/share/alsa/init/
 endef
 
+define Package/alsa-utils-tests/install
+	$(INSTALL_DIR) $(1)/usr/{s,}bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/speaker-test $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/share/sounds/alsa
+	$(INSTALL_DATA) \
+	    $(PKG_INSTALL_DIR)/usr/share/sounds/alsa/* \
+	    $(1)/usr/share/sounds/alsa/
+endef
+
 $(eval $(call BuildPackage,alsa-utils))
+$(eval $(call BuildPackage,alsa-utils-tests))
