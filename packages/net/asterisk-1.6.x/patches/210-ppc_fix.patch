@@ -1,0 +1,10 @@
+--- a/apps/app_festival.c
++++ b/apps/app_festival.c
+@@ -120,6 +120,7 @@
+ 	int res;
+ #ifdef __PPC__ 
+ 	char c;
++	int x;
+ #endif
+ 
+ 	res = ast_safe_fork(0);
