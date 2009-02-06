@@ -104,7 +104,7 @@ start_service() {
 
 
 	[ -n "$ARGS" ] && \
-		eval "$SSD -q -b -m -p $PID -x $BIN -S -- --syslog 'openvpn($s)' $ARGS"
+		eval "$SSD -q -b -p '$PID' -x $BIN -S -- --syslog 'openvpn($s)' --writepid '$PID' $ARGS"
 }
 
 kill_service() {
