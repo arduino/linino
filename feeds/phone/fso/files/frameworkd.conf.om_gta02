@@ -57,9 +57,9 @@ disable = 0
 
 [ogsmd]
 disable = 0
-# chose your modem type, available types are: ti_calypso, freescale_neptune, singleline, muxed4line, option, ...
+# choose your modem type, available types are: ti_calypso, freescale_neptune, singleline, muxed4line, option, ...
 modemtype = ti_calypso
-# if you have a ti_calypso, you can chose the deep sleep mode. Valid values are: never, adaptive (default), always
+# if you have a ti_calypso, you can choose the deep sleep mode. Valid values are: never, adaptive (default), always
 ti_calypso_deep_sleep = adaptive
 # if you have a ti_calypso, you can choose the dsp mode for audio enhancement. Valid values are:
 #    "short-aec": Short Echo Cancellation (max)
@@ -85,6 +85,10 @@ channel = SerialChannel
 path = /dev/ttySAC1
 log_level = INFO
 
+[ousaged]
+# choose whether resources should be disabled at startup, at shutdown, always (default), or never.
+sync_resources_with_lifecycle = always
+
 [opreferencesd]
 log_level = DEBUG
 disable = 0
@@ -100,3 +104,9 @@ messages_default_folder = Unfiled
 messages_trash_folder = Trash
 sim_messages_default_folder = SMS
 rootdir = ../etc/freesmartphone/opim:/etc/freesmartphone/opim:/usr/etc/freesmartphone/opim
+
+[otimed]
+# a list of time/zone sources to use or NONE
+timesources = GPS,NTP
+zonesources = GSM
+

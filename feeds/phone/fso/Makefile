@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fso
-PKG_VERSION:=20090112
-PKG_REV:=2c47aa00f530c4ec698c024b583f250373185b09
+PKG_VERSION:=ms5
+PKG_REV:=700ab8250582767628165b7cf6f671ef756ba56d
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -54,7 +54,7 @@ define Package/fso/install
 		$(1)/usr/bin/
 	$(INSTALL_BIN) ./files/frameworkd.init $(1)/etc/init.d/frameworkd
 	$(CP) \
-		$(PKG_INSTALL_DIR)/etc/* \
+		$(PKG_INSTALL_DIR)/../etc/* \
 		$(1)/etc/
 	$(if $(CONFIG),$(INSTALL_CONF) ./files/frameworkd.conf.$(CONFIG) $(1)/etc/frameworkd.conf,$(CP) ./files/frameworkd.conf $(1)/etc/frameworkd.conf)
 endef
