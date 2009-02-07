@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=batmand-adv
-PKG_REV:=1176
+PKG_REV:=1220
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 PKG_BRANCH:=batman-adv-userspace
@@ -82,6 +82,14 @@ MAKE_ARGS += \
 	INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
 	STRIP="/bin/true" \
 	batmand-adv install
+	
+MAKE_KMOD_ARGS += \
+	CROSS_COMPILE="$(TARGET_CROSS)" \
+	ARCH="$(LINUX_KARCH)" \
+	PATH="$(TARGET_PATH)" \
+	SUBDIRS="$(PKG_KMOD_BUILD_DIR)" \
+	LINUX_VERSION="$(LINUX_VERSION)" \
+	REVISION="$(PKG_REV)" modules
 
 MAKE_TOOL_ARGS += \
 	CFLAGS="$(TARGET_CFLAGS)" \
@@ -98,17 +106,23 @@ MAKE_TOOL_ARGS += \
 define Build/Configure
 endef
 
+ifeq ($(CONFIG_PACKAGE_batmand-adv),y)
+	BUILD_ADV = $(MAKE) -C $(PKG_BUILD_DIR)/batman-adv-userspace $(MAKE_ARGS)
+endif
+
+ifeq ($(CONFIG_PACKAGE_kmod-batman-advanced),y)
+        BUILD_KMOD_ADV = $(MAKE) -C "$(LINUX_DIR)" $(MAKE_KMOD_ARGS)
+endif
+
+ifeq ($(CONFIG_PACKAGE_battool),y)
+        BUILD_BATTOOL = $(MAKE) -C $(PKG_TOOL_BUILD_DIR) $(MAKE_TOOL_ARGS)
+endif
+
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)/batman-adv-userspace $(MAKE_ARGS)
-	$(MAKE) -C $(PKG_TOOL_BUILD_DIR) $(MAKE_TOOL_ARGS)
+	$(BUILD_ADV)
 	cp $(PKG_KMOD_BUILD_DIR)/Makefile.kbuild $(PKG_KMOD_BUILD_DIR)/Makefile
-	$(MAKE) -C "$(LINUX_DIR)" \
-		CROSS_COMPILE="$(TARGET_CROSS)" \
-		ARCH="$(LINUX_KARCH)" \
-		PATH="$(TARGET_PATH)" \
-		SUBDIRS="$(PKG_KMOD_BUILD_DIR)" \
-		LINUX_VERSION="$(LINUX_VERSION)" \
-		REVISION="$(PKG_REV)" modules
+	$(BUILD_KMOD_ADV)
+	$(BUILD_BATTOOL)
 endef
 
 define Package/batmand-adv/install
