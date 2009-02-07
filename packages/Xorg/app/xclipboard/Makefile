@@ -22,7 +22,7 @@ define Package/xclipboard
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:=
+  DEPENDS:=+libXaw
   TITLE:=xclipboard
   URL:=http://xorg.freedesktop.org/
 endef
