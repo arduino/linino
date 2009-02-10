@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ruby
-PKG_VERSION:=1.8.6-p36
+PKG_VERSION:=1.8.6-p287
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.ruby-lang.org/pub/ruby/1.8/
-PKG_MD5SUM:=eb7f25818cb6993839b38d1f21bd4ea1
+PKG_MD5SUM:=80b5f3db12531d36e6c81fac6d05dda9
 
 include $(INCLUDE_DIR)/package.mk
 
