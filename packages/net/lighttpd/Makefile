@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lighttpd
 PKG_VERSION:=1.4.20
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.lighttpd.net/download/
@@ -30,7 +30,7 @@ endef
 define Package/lighttpd
   $(call Package/lighttpd/Default)
   MENU:=1
-  DEPENDS:=+libopenssl +libpcre +libpthread +libsqlite3 +libxml2
+  DEPENDS:=+libopenssl +libpcre +libpthread
   TITLE:=A flexible and lightweight web server
 endef
 
@@ -126,7 +126,7 @@ endef
 
 define Package/lighttpd-mod-webdav
   $(call Package/lighttpd/Default)
-  DEPENDS:=lighttpd
+  DEPENDS:=lighttpd +libsqlite3 +libxml2
   TITLE:=WebDAV module
 endef
 
