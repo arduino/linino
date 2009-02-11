@@ -27,7 +27,7 @@ X_CONFIG=generic
 ifeq ($(CONFIG_TARGET_olpc),y)
   X_CONFIG=olpc
 endif
-ifeq ($(CONFIG_TARGET_om_gta02),y)
+ifeq ($(CONFIG_TARGET_s3c24xx),y)
   X_CONFIG=om_gta02
 endif
 
