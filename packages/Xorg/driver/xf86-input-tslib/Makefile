@@ -21,6 +21,10 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
+ifeq ($(CONFIG_TARGET_s3c24xx),y)
+  TS_POINTERCAL=om_gta02
+endif
+
 define Package/xf86-input-tslib
   SECTION:=xorg-driver
   CATEGORY:=Xorg
@@ -31,10 +35,15 @@ define Package/xf86-input-tslib
 endef
 
 define Package/xf86-input-tslib/install
-	$(INSTALL_DIR) $(1)/usr/lib/xorg/modules/input
+	$(INSTALL_DIR) $(1)/usr/lib/xorg/modules/input $(1)/etc
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/xorg/modules/input/tslib_drv.so \
 		$(1)/usr/lib/xorg/modules/input/
+	$(if $(TS_POINTERCAL), \
+		$(INSTALL_DATA) \
+			./files/pointercal.$(TS_POINTERCAL) \
+			$(1)/etc/pointercal \
+	)
 endef
 
 $(eval $(call BuildPackage,xf86-input-tslib))
