@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=paroli
-PKG_VERSION:=20090202
-PKG_REV:=497fb67c507ff58fe72c5399a37906a6aee97015
+PKG_VERSION:=20090211
+PKG_REV:=1ea74180e5ddd39b30745f4ca98b0cbec140018f
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -33,6 +33,9 @@ endef
 
 COMPONENTS:= \
 	tele \
+	#paroli-i-o \
+	#paroli-contacts \
+	#paroli-msgs \
 
 define Package/paroli/description
   Paroli is an integrated phone application written in Python which uses the FSO (freesmartphone.org) DBus API
@@ -44,14 +47,13 @@ define Build/Compile
 endef
 
 define Package/paroli/install
-	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR) $(1)/usr/bin $(1)/etc/init.d $(1)/usr/share/applications/paroli $(1)/usr/share/paroli/services $(1)/usr/share/icons/paroli $(1)/etc/xdg/autostart
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR) $(1)/usr/bin $(1)/usr/share/applications/paroli $(1)/usr/share/paroli/services $(1)/usr/share/icons/paroli $(1)/etc/xdg/autostart
 	$(CP) \
 		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
 		$(1)$(PYTHON_PKG_DIR)
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/* \
 		$(1)/usr/bin/
-	$(INSTALL_BIN) ./files/paroli.init $(1)/etc/init.d/paroli
 	$(foreach c, $(COMPONENTS), \
 		$(INSTALL_DIR) $(1)/usr/share/paroli/applications/$(c)
 		$(CP) $(PKG_INSTALL_DIR)/../usr/share/paroli/applications/$(c)/$(c).{py,edj} $(1)/usr/share/paroli/applications/$(c)/
