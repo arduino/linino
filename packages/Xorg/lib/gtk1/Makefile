@@ -38,7 +38,7 @@ define Package/gtk1
   CATEGORY:=Xorg
   SUBMENU:=framework
   TITLE:=GTK+ 1.2.10 package
-  DEPENDS:=+glib1 +libX11 +libXt
+  DEPENDS:=+glib1 +libX11 +libXt +libnotimpl
 endef
 
 define Build/InstallDev
