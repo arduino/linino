@@ -106,15 +106,15 @@ MAKE_TOOL_ARGS += \
 define Build/Configure
 endef
 
-ifeq ($(CONFIG_PACKAGE_batmand-adv),y)
+ifneq ($(CONFIG_PACKAGE_batmand-adv),n)
 	BUILD_ADV = $(MAKE) -C $(PKG_BUILD_DIR)/batman-adv-userspace $(MAKE_ARGS)
 endif
 
-ifeq ($(CONFIG_PACKAGE_kmod-batman-advanced),y)
+ifneq ($(CONFIG_PACKAGE_kmod-batman-advanced),n)
         BUILD_KMOD_ADV = $(MAKE) -C "$(LINUX_DIR)" $(MAKE_KMOD_ARGS)
 endif
 
-ifeq ($(CONFIG_PACKAGE_battool),y)
+ifneq ($(CONFIG_PACKAGE_battool),n)
         BUILD_BATTOOL = $(MAKE) -C $(PKG_TOOL_BUILD_DIR) $(MAKE_TOOL_ARGS)
 endif
 
