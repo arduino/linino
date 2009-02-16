@@ -22,11 +22,11 @@ PKG_SOURCE_PROTO:=svn
 
 include $(INCLUDE_DIR)/package.mk
 
-define KernelPackage/video-uvc
+define KernelPackage/video-uvc-obsolete
   SUBMENU:=Video Support
-  TITLE:=USB Video Class (UVC) support
+  TITLE:=USB Video Class (UVC) support (obsolete)
   URL:=http://linux-uvc.berlios.de/
-  DEPENDS:=@LINUX_2_6 @USB_SUPPORT +kmod-usb-core +kmod-video-core
+  DEPENDS:=@LINUX_2_6_23||LINUX_2_6_24||LINUX_2_6_25 @USB_SUPPORT +kmod-usb-core +kmod-video-core
   FILES:=$(PKG_BUILD_DIR)/uvcvideo.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,90,uvcvideo)
 endef
@@ -40,4 +40,4 @@ define Build/Compile
 		modules
 endef
 
-$(eval $(call KernelPackage,video-uvc))
+$(eval $(call KernelPackage,video-uvc-obsolete))
