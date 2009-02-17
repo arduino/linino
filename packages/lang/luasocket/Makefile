@@ -22,7 +22,7 @@ define Package/luasocket
   SUBMENU:=LUA
   SECTION:=lang
   CATEGORY:=Languages
-  TITLE:=LUASec 
+  TITLE:=LUASocket
   URL:=http://luasocket.luaforge.net/
   DEPENDS:=lua
 endef
