@@ -40,6 +40,7 @@ endef
 
 define Build/Compile
 $(call Build/Compile/Default,\
+		CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
 		prefix="/usr" \
 		all \
 )
