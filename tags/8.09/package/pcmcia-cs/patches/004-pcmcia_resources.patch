@@ -1,0 +1,21 @@
+Index: pcmcia-cs-3.2.8/etc/config.opts
+===================================================================
+--- pcmcia-cs-3.2.8.orig/etc/config.opts	2007-06-04 13:23:59.471692824 +0200
++++ pcmcia-cs-3.2.8/etc/config.opts	2007-06-04 13:24:00.759497048 +0200
+@@ -17,14 +17,13 @@
+ #
+ 
+ include port 0x100-0x4ff, port 0x800-0x8ff, port 0xc00-0xcff
+-include memory 0xc0000-0xfffff
+-include memory 0xa0000000-0xa0ffffff, memory 0x60000000-0x60ffffff
++include memory 0x40004000-0x40007fff
+ 
+ # High port numbers do not always work...
+ # include port 0x1000-0x17ff
+ 
+ # Extra port range for IBM Token Ring
+-include port 0xa00-0xaff
++# include port 0xa00-0xaff
+ 
+ # Resources we should not use, even if they appear to be available
+ 
