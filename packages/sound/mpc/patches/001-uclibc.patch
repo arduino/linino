@@ -1,0 +1,12 @@
+--- ./src/main.c.orig	2009-02-02 02:04:11.000000000 +0100
++++ ./src/main.c	2009-02-17 19:48:55.000000000 +0100
+@@ -190,7 +190,8 @@
+ static struct command *
+ find_command(const char *name)
+ {
+-	for (unsigned i = 0; mpc_table[i].command != NULL; ++i)
++	unsigned i = 0;
++	for (i = 0; mpc_table[i].command != NULL; ++i)
+ 		if (strcmp(name, mpc_table[i].command) == 0)
+ 			return &mpc_table[i];
+ 
