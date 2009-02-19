@@ -22,7 +22,7 @@
 
 #define PFX	"ucmb: "
 
-#define DEBUG
+#undef DEBUG
 
 
 MODULE_LICENSE("GPL");
@@ -60,7 +60,6 @@ struct ucmb_status {
 } __attribute__((packed));
 
 #define UCMB_MAGIC		0x1337
-#define UCMB_MAX_MSG_LEN	0x200
 
 enum ucmb_status_code {
 	UCMB_STAT_OK = 0,
@@ -217,7 +216,6 @@ static ssize_t ucmb_write(struct file *filp, const char __user *user_buf,
 		goto out;
 
 	size = min_t(size_t, PAGE_SIZE, size);
-	size = min_t(size_t, UCMB_MAX_MSG_LEN, size);
 	err = -EFAULT;
 	if (copy_from_user(buf, user_buf, size))
 		goto out_free;

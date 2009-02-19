@@ -23,6 +23,19 @@ define KernelPackage/ucmb
   AUTOLOAD:=$(call AutoLoad,93,ucmb)
 endef
 
+define KernelPackage/ucmb/description
+	The Microcontroller Message Bus is a tiny SPI-GPIO based communication
+	channel used to talk to microcontrollers over GPIO pins.
+	The lowlevel protocol is CRC16 protected, so one can be pretty sure
+	that the data transmitted and received through the /dev/ucmb node is not corrupted.
+	So no further checks should be needed at upper protocol layers.
+	The device node considers every read/write to be one packet. The maximum packet
+	size is either PAGE_SIZE (at least 4kb) or the microcontroller specific packet size
+	limit, which is likely to be a lot smaller than PAGE_SIZE.
+	Example implementations for the microcontroller-side code can be found in
+	the utils/ucmb/microcontroller_examples subdirectory of the OpenWRT packages feed.
+endef
+
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
 	$(CP) ./driver/* $(PKG_BUILD_DIR)/
