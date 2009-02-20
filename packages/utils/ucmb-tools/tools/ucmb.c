@@ -13,32 +13,39 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <sys/ioctl.h>
+#include <linux/ioctl.h>
 
 
 #define UCMB_DEV	"/dev/ucmb"
 
+#define __UCMB_IOCTL		('U'|'C'|'M'|'B')
+#define UCMB_IOCTL_RESETUC	_IO(__UCMB_IOCTL, 0)
+
 
 static void usage(int argc, char **argv)
 {
-	fprintf(stderr, "Usage: %s read|write\n", argv[0]);
+	fprintf(stderr, "Usage: %s read|write|reset [" UCMB_DEV "]\n", argv[0]);
 }
 
 int main(int argc, char **argv)
 {
-	const char *command;
-	int errcode = 0;
+	const char *command, *devpath = UCMB_DEV;
+	int res, errcode = 0;
 	int ucmb_fd;
 	char *buf;
 	size_t count, buflen;
 	ssize_t nrbytes;
 
-	if (argc != 2) {
+	if (argc != 2 && argc != 3) {
 		usage(argc, argv);
 		return 1;
 	}
+	if (argc == 3)
+		devpath = argv[2];
 	command = argv[1];
 
-	ucmb_fd = open(UCMB_DEV, O_RDWR);
+	ucmb_fd = open(devpath, O_RDWR);
 	if (ucmb_fd == -1) {
 		fprintf(stderr, "Failed to open %s\n", UCMB_DEV);
 		errcode = 1;
@@ -58,22 +65,34 @@ int main(int argc, char **argv)
 		if (nrbytes < 0) {
 			fprintf(stderr, "Failed to read UCMB: %s (%d)\n",
 				strerror(errno), errno);
+			errcode = 1;
 			goto out_free;
 		}
 		if (fwrite(buf, nrbytes, 1, stdout) != 1) {
 			fprintf(stderr, "Failed to write stdout\n");
+			errcode = 1;
 			goto out_free;
 		}
 	} else if (strcasecmp(command, "write") == 0) {
 		count = fread(buf, 1, buflen, stdin);
 		if (!count) {
 			fprintf(stderr, "Failed to read stdin\n");
+			errcode = 1;
 			goto out_free;
 		}
 		nrbytes = write(ucmb_fd, buf, count);
 		if (nrbytes != count) {
 			fprintf(stderr, "Failed to write UCMB: %s (%d)\n",
 				strerror(errno), errno);
+			errcode = 1;
+			goto out_free;
+		}
+	} else if (strcasecmp(command, "reset") == 0) {
+		res = ioctl(ucmb_fd, UCMB_IOCTL_RESETUC);
+		if (res) {
+			fprintf(stderr, "RESET ioctl failed: %s (%d)\n",
+				strerror(res < 0 ? -res : res), res);
+			errcode = 1;
 			goto out_free;
 		}
 	} else {

@@ -15,6 +15,7 @@
 #include <linux/spi/spi.h>
 #include <linux/spi/spi_gpio.h>
 #include <linux/spi/spi_bitbang.h>
+#include <linux/gpio.h>
 #include <linux/gfp.h>
 #include <linux/delay.h>
 #include <linux/crc16.h>
@@ -31,7 +32,11 @@ MODULE_AUTHOR("Michael Buesch");
 
 
 struct ucmb {
+	struct mutex mutex;
+
 	unsigned int msg_delay_ms;
+	unsigned int gpio_reset;
+	bool reset_activelow;
 
 	/* Misc character device driver */
 	struct miscdevice mdev;
@@ -47,7 +52,7 @@ struct ucmb {
 
 struct ucmb_message_hdr {
 	__le16 magic;		/* UCMB_MAGIC */
-	__le16 len;		/* Payload length (excluding header) */
+	__le16 len;		/* Payload length (excluding header and footer) */
 } __attribute__((packed));
 
 struct ucmb_message_footer {
@@ -75,14 +80,16 @@ static int ucmb_spi_busnum_count = 1337;
 
 static struct ucmb_platform_data ucmb_list[] = {
 	{ //FIXME don't define it here.
-		.name		= "ucmb",
-		.gpio_cs	= 3,
-		.gpio_sck	= 0,
-		.gpio_miso	= 1,
-		.gpio_mosi	= 2,
-		.mode		= SPI_MODE_0,
-		.max_speed_hz	= 128000, /* Hz */
-		.msg_delay_ms	= 1, /* mS */
+		.name			= "ucmb",
+		.gpio_cs		= SPI_GPIO_NO_CHIPSELECT,
+		.gpio_sck		= 0,
+		.gpio_miso		= 1,
+		.gpio_mosi		= 2,
+		.gpio_reset		= 3,
+		.reset_activelow	= 0,
+		.mode			= SPI_MODE_0,
+		.max_speed_hz		= 128000, /* Hz */
+		.msg_delay_ms		= 1, /* mS */
 	},
 };
 
@@ -107,6 +114,26 @@ static struct spi_driver ucmb_spi_driver = {
 	.remove		= __devexit_p(ucmb_spi_remove),
 };
 
+static void ucmb_toggle_reset_line(struct ucmb *ucmb, bool active)
+{
+	if (ucmb->reset_activelow)
+		active = !active;
+	gpio_set_value(ucmb->gpio_reset, active);
+}
+
+static int ucmb_reset_microcontroller(struct ucmb *ucmb)
+{
+	if (ucmb->gpio_reset == UCMB_NO_RESET)
+		return -ENODEV;
+
+	ucmb_toggle_reset_line(ucmb, 1);
+	msleep(50);
+	ucmb_toggle_reset_line(ucmb, 0);
+	msleep(10);
+
+	return 0;
+}
+
 static int ucmb_status_code_to_errno(enum ucmb_status_code code)
 {
 	switch (code) {
@@ -129,6 +156,25 @@ static inline struct ucmb * filp_to_ucmb(struct file *filp)
 	return container_of(filp->f_op, struct ucmb, mdev_fops);
 }
 
+static int ucmb_ioctl(struct inode *inode, struct file *filp,
+		      unsigned int cmd, unsigned long arg)
+{
+	struct ucmb *ucmb = filp_to_ucmb(filp);
+	int ret = 0;
+
+	mutex_lock(&ucmb->mutex);
+	switch (cmd) {
+	case UCMB_IOCTL_RESETUC:
+		ret = ucmb_reset_microcontroller(ucmb);
+		break;
+	default:
+		ret = -EINVAL;
+	}
+	mutex_unlock(&ucmb->mutex);
+
+	return ret;
+}
+
 static ssize_t ucmb_read(struct file *filp, char __user *user_buf,
 			 size_t size, loff_t *offp)
 {
@@ -139,6 +185,8 @@ static ssize_t ucmb_read(struct file *filp, char __user *user_buf,
 	struct ucmb_message_footer footer;
 	struct ucmb_status status = { .magic = cpu_to_le16(UCMB_MAGIC), };
 	u16 crc = 0xFFFF;
+
+	mutex_lock(&ucmb->mutex);
 
 	size = min_t(size_t, size, PAGE_SIZE);
 
@@ -168,7 +216,7 @@ static ssize_t ucmb_read(struct file *filp, char __user *user_buf,
 	if (err)
 		goto out_free;
 
-	crc = crc16(crc, &hdr, sizeof(hdr));
+	crc = crc16(crc, (u8 *)&hdr, sizeof(hdr));
 	crc = crc16(crc, buf, size);
 	crc ^= 0xFFFF;
 	if (crc != le16_to_cpu(footer.crc)) {
@@ -193,6 +241,8 @@ out_send_status:
 out_free:
 	free_page((unsigned long)buf);
 out:
+	mutex_unlock(&ucmb->mutex);
+
 	return err ? err : size;
 }
 
@@ -210,6 +260,8 @@ static ssize_t ucmb_write(struct file *filp, const char __user *user_buf,
 	struct spi_transfer spi_data_xfer;
 	struct spi_message spi_msg;
 
+	mutex_lock(&ucmb->mutex);
+
 	err = -ENOMEM;
 	buf = (char *)__get_free_page(GFP_KERNEL);
 	if (!buf)
@@ -221,7 +273,7 @@ static ssize_t ucmb_write(struct file *filp, const char __user *user_buf,
 		goto out_free;
 	hdr.len = cpu_to_le16(size);
 
-	footer.crc = crc16(footer.crc, &hdr, sizeof(hdr));
+	footer.crc = crc16(footer.crc, (u8 *)&hdr, sizeof(hdr));
 	footer.crc = crc16(footer.crc, buf, size);
 	footer.crc ^= 0xFFFF;
 
@@ -269,6 +321,8 @@ static ssize_t ucmb_write(struct file *filp, const char __user *user_buf,
 out_free:
 	free_page((unsigned long)buf);
 out:
+	mutex_unlock(&ucmb->mutex);
+
 	return err ? err : size;
 }
 
@@ -287,7 +341,10 @@ static int __devinit ucmb_probe(struct platform_device *pdev)
 	ucmb = kzalloc(sizeof(struct ucmb), GFP_KERNEL);
 	if (!ucmb)
 		return -ENOMEM;
+	mutex_init(&ucmb->mutex);
 	ucmb->msg_delay_ms = pdata->msg_delay_ms;
+	ucmb->gpio_reset = pdata->gpio_reset;
+	ucmb->reset_activelow = pdata->reset_activelow;
 
 	/* Create the SPI GPIO bus master. */
 
@@ -336,6 +393,25 @@ static int __devinit ucmb_probe(struct platform_device *pdev)
 		goto err_free_spi_device;
 	}
 
+	/* Initialize the RESET line. */
+
+	if (pdata->gpio_reset != UCMB_NO_RESET) {
+		err = gpio_request(pdata->gpio_reset, pdata->name);
+		if (err) {
+			printk(KERN_ERR PFX
+			       "Failed to request RESET GPIO line\n");
+			goto err_unreg_spi_device;
+		}
+		err = gpio_direction_output(pdata->gpio_reset,
+					    pdata->reset_activelow);
+		if (err) {
+			printk(KERN_ERR PFX
+			       "Failed to set RESET GPIO direction\n");
+			goto err_free_reset_gpio;
+		}
+		ucmb_reset_microcontroller(ucmb);
+	}
+
 	/* Create the Misc char device. */
 
 	ucmb->mdev.minor = MISC_DYNAMIC_MINOR;
@@ -343,13 +419,14 @@ static int __devinit ucmb_probe(struct platform_device *pdev)
 	ucmb->mdev.parent = &pdev->dev;
 	ucmb->mdev_fops.read = ucmb_read;
 	ucmb->mdev_fops.write = ucmb_write;
+	ucmb->mdev_fops.ioctl = ucmb_ioctl;
 	ucmb->mdev.fops = &ucmb->mdev_fops;
 
 	err = misc_register(&ucmb->mdev);
 	if (err) {
 		printk(KERN_ERR PFX "Failed to register miscdev %s\n",
 		       ucmb->mdev.name);
-		goto err_unreg_spi_device;
+		goto err_free_reset_gpio;
 	}
 
 	platform_set_drvdata(pdev, ucmb);
@@ -358,6 +435,9 @@ static int __devinit ucmb_probe(struct platform_device *pdev)
 
 	return 0;
 
+err_free_reset_gpio:
+	if (pdata->gpio_reset != UCMB_NO_RESET)
+		gpio_free(pdata->gpio_reset);
 err_unreg_spi_device:
 	spi_unregister_device(ucmb->sdev);
 err_free_spi_device:
@@ -380,6 +460,8 @@ static int __devexit ucmb_remove(struct platform_device *pdev)
 		printk(KERN_ERR PFX "Failed to unregister miscdev %s\n",
 		       ucmb->mdev.name);
 	}
+	if (ucmb->gpio_reset != UCMB_NO_RESET)
+		gpio_free(ucmb->gpio_reset);
 	spi_unregister_device(ucmb->sdev);
 	spi_dev_put(ucmb->sdev);
 	platform_device_unregister(&ucmb->spi_gpio_pdev);
@@ -396,7 +478,7 @@ static struct platform_driver ucmb_driver = {
 		.owner	= THIS_MODULE,
 	},
 	.probe		= ucmb_probe,
-	.remove		= __devexit_p(ucmb_probe),
+	.remove		= __devexit_p(ucmb_remove),
 };
 
 static int ucmb_modinit(void)
