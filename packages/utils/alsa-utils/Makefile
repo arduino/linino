@@ -13,7 +13,9 @@ PKG_VERSION:=1.0.19
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://ftp.alsa-project.org/pub/utils/
+PKG_SOURCE_URL:=ftp://ftp.alsa-project.org/pub/utils/ \
+		http://alsa.cybermirror.org/utils/
+
 PKG_MD5SUM:=5ff0379c707c1a29083233edc9ab4e06
 PKG_INSTALL:=1
 
