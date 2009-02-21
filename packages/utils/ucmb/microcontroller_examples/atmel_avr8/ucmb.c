@@ -29,7 +29,7 @@
 
 struct ucmb_message_hdr {
 	uint16_t magic;		/* UCMB_MAGIC */
-	uint16_t len;		/* Payload length (excluding header) */
+	uint16_t len;		/* Payload length (excluding header and footer) */
 } __attribute__((packed));
 
 struct ucmb_message_footer {
@@ -62,9 +62,10 @@ static uint16_t ucmb_send_message_len;
 /* Statemachine */
 static uint8_t ucmb_state;
 enum {
-	UCMB_ST_LISTEN,
-	UCMB_ST_SENDSTATUS,
-	UCMB_ST_SENDMESSAGE,
+	UCMB_ST_LISTEN,		/* Listen for incoming messages. */
+	UCMB_ST_SENDSTATUS,	/* Send the status report. */
+	UCMB_ST_SENDMESSAGE,	/* Send the message. */
+	UCMB_ST_RETRSTATUS,	/* Retrieve the status report. */
 };
 
 #define TRAILING	1
@@ -100,7 +101,7 @@ static void ucmb_send_next_byte(void)
 		if (ucmb_buf_ptr == full_length + TRAILING) {
 			ucmb_send_message_len = 0;
 			ucmb_buf_ptr = 0;
-			ucmb_state = UCMB_ST_LISTEN;//FIXME retr status
+			ucmb_state = UCMB_ST_RETRSTATUS;
 		}
 		break;
 	} }
@@ -138,13 +139,16 @@ ISR(SPI_STC_vect)
 	uint8_t data;
 
 	data = SPDR;
+	SPDR = 0;
 
 	switch (ucmb_state) {
 	case UCMB_ST_LISTEN: {
 		struct ucmb_message_hdr *hdr;
 		struct ucmb_message_footer *footer;
 
-		ucmb_buf[ucmb_buf_ptr++] = data;
+		if (ucmb_buf_ptr < sizeof(ucmb_buf))
+			ucmb_buf[ucmb_buf_ptr] = data;
+		ucmb_buf_ptr++;
 		if (ucmb_buf_ptr < sizeof(struct ucmb_message_hdr))
 			return; /* Header RX not complete. */
 		hdr = (struct ucmb_message_hdr *)ucmb_buf;
@@ -154,10 +158,8 @@ ISR(SPI_STC_vect)
 				ucmb_buf_ptr = 0;
 				return;
 			}
-			if (hdr->len > UCMB_MAX_MSG_LEN) {
-				/* Invalid length. */
-				//FIXME don't interrupt, but poll len bytes and
-				// send an immediate failure report
+			if (hdr->len > 0x8000) {
+				/* Completely bogus length! Reset. */
 				ucmb_buf_ptr = 0;
 				return;
 			}
@@ -167,16 +169,24 @@ ISR(SPI_STC_vect)
 		if (ucmb_buf_ptr == sizeof(struct ucmb_message_hdr) +
 				    sizeof(struct ucmb_message_footer) +
 				    hdr->len) {
-			footer = (struct ucmb_message_footer *)(
-					ucmb_buf + sizeof(struct ucmb_message_hdr) +
-					hdr->len);
 			status_buf.magic = UCMB_MAGIC;
 			status_buf.code = UCMB_STAT_OK;
-			if (ucmb_calc_msg_buffer_crc() != footer->crc)
-				status_buf.code = UCMB_STAT_ECRC;
+			if (ucmb_buf_ptr > sizeof(ucmb_buf)) {
+				/* Message is way too big and was truncated. */
+				status_buf.code = UCMB_STAT_E2BIG;
+			} else {
+				footer = (struct ucmb_message_footer *)(
+						ucmb_buf + sizeof(struct ucmb_message_hdr) +
+						hdr->len);
+				if (ucmb_calc_msg_buffer_crc() != footer->crc)
+					status_buf.code = UCMB_STAT_ECRC;
+			}
 			ucmb_state = UCMB_ST_SENDSTATUS;
 			ucmb_buf_ptr = 0;
 			ucmb_send_next_byte();
+
+			if (status_buf.code != UCMB_STAT_OK)
+				return; /* Corrupt message. Don't pass it to user code. */
 
 			ucmb_send_message_len = ucmb_rx_message(
 					ucmb_buf + sizeof(struct ucmb_message_hdr),
@@ -197,7 +207,17 @@ ISR(SPI_STC_vect)
 	case UCMB_ST_SENDMESSAGE:
 		ucmb_send_next_byte();
 		break;
-	}
+	case UCMB_ST_RETRSTATUS: {
+		uint8_t *st = (uint8_t *)&status_buf;
+
+		st[ucmb_buf_ptr++] = data;
+		if (ucmb_buf_ptr == sizeof(struct ucmb_status)) {
+			/* We could possibly handle the status report here... */
+			ucmb_buf_ptr = 0;
+			ucmb_state = UCMB_ST_LISTEN;
+		}
+		break;
+	} }
 }
 
 void ucmb_init(void)
