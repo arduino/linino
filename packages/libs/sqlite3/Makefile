@@ -35,6 +35,7 @@ define Package/libsqlite3
   $(call Package/sqlite3/Default)
   SECTION:=libs
   CATEGORY:=Libraries
+  DEPENDS:=+libpthread
   TITLE+= (library)
 endef
 
