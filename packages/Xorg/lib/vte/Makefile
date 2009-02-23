@@ -106,3 +106,7 @@ endef
 
 $(eval $(call BuildPackage,vte))
 $(eval $(call BuildPackage,python-vte))
+
+$(eval $(call RequireCommand,intltool-update, \
+    $(PKG_NAME) requires intltool >= 0.35.0 \
+))
