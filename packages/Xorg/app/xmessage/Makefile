@@ -22,7 +22,7 @@ define Package/xmessage
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:=
+  DEPENDS:=+libXaw
   TITLE:=xmessage
   URL:=http://xorg.freedesktop.org/
 endef
