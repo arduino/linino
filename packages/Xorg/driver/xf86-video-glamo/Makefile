@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=video-glamo
-PKG_VERSION:=20090130
-PKG_REV:=dec6ab83d79f9087be85e78ca5e9d7178b156977
+PKG_VERSION:=20090225
+PKG_REV:=99b38c284e91efc45f9bc4c087e462abe98ae0a4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=git://github.com/larsclausen/xf86-video-glamo.git
+PKG_SOURCE_URL:=git://git.openmoko.org/git/xf86-video-glamo.git
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
