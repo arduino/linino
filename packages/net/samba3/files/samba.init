@@ -3,7 +3,7 @@
 
 . /etc/functions.sh
 
-START=45
+START=60
 
 
 smb_header() {

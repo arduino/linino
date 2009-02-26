@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=samba3
 PKG_VERSION:=3.0.24
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 #PKG_MD5SUM:=b51b2975f21006f85f7297f3fb1acde1
 
 PKG_SOURCE_URL:=ftp://ftp.samba.org/pub/samba/old-versions/
