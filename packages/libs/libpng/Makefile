@@ -16,6 +16,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/libpng
 PKG_MD5SUM:=f588cb4ee39e3a333604096f937ea157
 
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libpng
@@ -42,6 +43,10 @@ define Build/Compile
 		all install
 endef
 
+define Host/Install
+	$(MAKE) -C "$(HOST_BUILD_DIR)" install
+endef
+
 define Build/InstallDev
 	mkdir -p $(2)/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libpng{,12}-config $(2)/bin/
@@ -60,4 +65,5 @@ define Package/libpng/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpng{,12}.so.* $(1)/usr/lib/
 endef
 
+$(eval $(call HostBuild))
 $(eval $(call BuildPackage,libpng))
