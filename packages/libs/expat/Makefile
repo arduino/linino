@@ -18,8 +18,8 @@ PKG_SOURCE_URL:=@SF/expat
 
 PKG_FIXUP = libtool
 
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
-
 
 define Package/libexpat
   SECTION:=libs
@@ -43,6 +43,10 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
+define Host/Install
+	$(MAKE) -C $(HOST_BUILD_DIR) install
+endef
+
 define Build/InstallDev
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/expat{,_external}.h $(1)/usr/include/
@@ -55,6 +59,6 @@ define Package/libexpat/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libexpat.so.* $(1)/usr/lib/
 endef
 
-
+$(eval $(call HostBuild))
 $(eval $(call BuildPackage,libexpat))
 
