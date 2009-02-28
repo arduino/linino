@@ -14,8 +14,10 @@ PKG_VERSION:=1.9
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://dev.medozas.de/files/xtables/
 PKG_MD5SUM:=578176c969a70858bfc06d9ee3b5dbda
+PKG_SOURCE_URL:= \
+	http://dev.medozas.de/files/xtables/ \
+	http://dev.medozas.de/files/xtables/old
 
 PKG_BUILD_DEPENDS:=iptables
 
@@ -36,7 +38,7 @@ CONFIGURE_ARGS+= \
 	--with-xtables="$(STAGING_DIR)/usr" \
 	--with-xtlibdir="/usr/lib/iptables" \
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		ARCH="$(LINUX_KARCH)" \
 		CROSS_COMPILE="$(TARGET_CROSS)" \
