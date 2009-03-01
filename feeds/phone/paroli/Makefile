@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=paroli
-PKG_VERSION:=20090211
-PKG_REV:=1ea74180e5ddd39b30745f4ca98b0cbec140018f
+PKG_VERSION:=20090227
+PKG_REV:=08c924538448e7de202432f470564764852df8a6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -33,9 +33,8 @@ endef
 
 COMPONENTS:= \
 	tele \
-	#paroli-i-o \
-	#paroli-contacts \
-	#paroli-msgs \
+	msgs \
+	people \
 
 define Package/paroli/description
   Paroli is an integrated phone application written in Python which uses the FSO (freesmartphone.org) DBus API
