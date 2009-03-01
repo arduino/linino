@@ -43,6 +43,7 @@ endef
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{lib,include}
 	$(CP) $(PKG_BUILD_DIR)/lib/.libs/lib*so* $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/lib/.libs/libgif.a $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/lib/libgif.la $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/lib/*.h $(1)/usr/include/
 endef
