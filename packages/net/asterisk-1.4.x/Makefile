@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
 PKG_VERSION:=1.4.23.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
@@ -338,7 +338,7 @@ endef
 CONFIGURE_ARGS+= \
 	--without-curl \
 	--without-curses \
-	--with-gsm="$(STAGING_DIR)/usr" \
+	--with-gsm="internal" \
 	--without-imap \
 	--without-isdnnet \
 	--without-kde \
