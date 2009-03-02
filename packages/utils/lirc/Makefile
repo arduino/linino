@@ -11,12 +11,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=lirc
-PKG_VERSION:=0.8.3
+PKG_VERSION:=0.8.4a
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/${PKG_NAME}
-PKG_MD5SUM:=8e78eeded7b31e5ad02e328970437c0f
+PKG_MD5SUM:=606b714ed843d28060163ffc571fc1f7
 
 include $(INCLUDE_DIR)/package.mk
 
