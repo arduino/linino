@@ -32,7 +32,7 @@ define Package/libmpcdec/description
 	Musepack decoder library
 endef
 
-TARGET_CFLAGS += $(FPIC)
+TARGET_CFLAGS += $(FPIC) -DMPC_FIXED_POINT
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/mpcdec/
