@@ -22,7 +22,7 @@ define Package/libmagic
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=+zlib
-  TITLE:=Determines file type using "magic" numbers
+  TITLE:=Determines file type using 'magic' numbers
   URL:=ftp://ftp.astron.com/pub/file/
 endef
 
@@ -30,7 +30,7 @@ define Package/file
   SECTION:=utils
   CATEGORY:=Utilities
   DEPENDS:=+libmagic
-  TITLE:=Determines file type using "magic" numbers
+  TITLE:=Determines file type using 'magic' numbers
   URL:=ftp://ftp.astron.com/pub/file/
 endef
 
