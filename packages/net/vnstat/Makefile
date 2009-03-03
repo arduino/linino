@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vnstat
 PKG_VERSION:=1.6
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://humdi.net/vnstat
@@ -67,7 +67,7 @@ if [ -n $$IFACE_WAN ]; then
 	[ -e $$LIB_D/$$IFACE_WAN ] || ( [ -x $$BIN ] && $$BIN -u -i $$IFACE_WAN )
 fi
 grep -q "$$BIN_REL -u" $$CRONTAB 2>/dev/null
-[ $$? -ne 0 ] && echo "*/30 * * * *   root    if [ -x $$BIN_REL ] && [ \`ls $$LIB_D_REL | wc -l\` -ge 1 ]; then $$BIN_REL -u; fi" >> $$CRONTAB
+[ $$? -ne 0 ] && echo "*/30 * * * *    if [ -x $$BIN_REL ] && [ \`ls $$LIB_D_REL | wc -l\` -ge 1 ]; then $$BIN_REL -u; fi" >> $$CRONTAB
 true
 endef
 
