@@ -1,0 +1,11 @@
+--- polarssl-0.10.1.orig/library/Makefile	2009-01-11 00:31:23.000000000 +0100
++++ polarssl-0.10.1/library/Makefile	2009-03-05 15:11:20.352419296 +0100
+@@ -29,7 +29,7 @@ OBJS=	aes.o		arc4.o		base64.o	\
+ 
+ .SILENT:
+ 
+-all: static
++all: static shared
+ 
+ static: libpolarssl.a
+ 
