@@ -13,7 +13,7 @@ PKG_VERSION:=0.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://luaforge.net/frs/download.php/3920/ 
+PKG_SOURCE_URL:=http://luaforge.net/frs/download.php/3920/
 PKG_MD5SUM:=a88f2c05d22abfcc9ab92bd1d6f32b37
 
 include $(INCLUDE_DIR)/package.mk
