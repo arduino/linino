@@ -30,7 +30,7 @@ define Package/python-e_dbus
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=python-e_dbus
-  DEPENDS:=python-core +ecore +eina +dbus +edbus +dbus-python
+  DEPENDS:=+python-mini +ecore +eina +dbus +edbus +dbus-python
 endef
 
 define Package/python-e_dbus/description

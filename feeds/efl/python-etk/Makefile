@@ -30,7 +30,7 @@ define Package/python-etk
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=python-etk
-  DEPENDS:=python-core +etk
+  DEPENDS:=+python-mini +etk
 endef
 
 define Package/python-etk/description
