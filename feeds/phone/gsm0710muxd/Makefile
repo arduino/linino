@@ -24,20 +24,18 @@ EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include -I$(STAGING_DIR)/usr/lib/
 EXTRA_LDFLAGS+=-lintl -L$(STAGING_DIR)/usr/lib/libintl/lib -liconv -L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Package/gsm0710muxd
-  SECTION:=phone
-  CATEGORY:=Phone
-  TITLE:=GSM multiplexing daemon
-  DEPENDS:=python-core +dbus-python +python-gobject +pyserial +pyyaml +gst-python
-  URL:=http://www.freesmartphone.org
+	SECTION:=phone
+	CATEGORY:=Phone
+	TITLE:=GSM multiplexing daemon
+	URL:=http://www.freesmartphone.org
+	DEPENDS:=+glib2 +dbus +libdbus-glib
 endef
 
 define Package/gsm0710muxd/description
-  gsm0710muxd is a user space multiplexer for GSM according to the GSM 07.10 specification.
+	gsm0710muxd is a user space multiplexer for GSM according to the GSM 07.10 specification.
 endef
 
 define Build/Configure
-	mkdir -p $(STAGING_DIR_HOST)/usr/bin
-	ln -sf `which dbus-binding-tool` $(STAGING_DIR_HOST)/usr/bin/
 	(cd $(PKG_BUILD_DIR) && \
 		$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
 		$(CONFIGURE_VARS) \
