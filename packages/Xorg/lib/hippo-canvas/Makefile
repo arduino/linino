@@ -48,7 +48,7 @@ define Package/python-hippo-canvas
   SUBMENU:=Python
   TITLE:=Python bindings for hippo canvas
   URL:=http://developer.mugshot.org/wiki/Hippo_Canvas
-  DEPENDS:=python-core +PACKAGE_python-hippo-canvas:python-gtk +PACKAGE_python-hippo-canvas:pycairo +hippo-canvas
+  DEPENDS:=+python-mini +PACKAGE_python-hippo-canvas:python-gtk +PACKAGE_python-hippo-canvas:pycairo +hippo-canvas
 endef
 
 define Build/Configure

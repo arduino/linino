@@ -27,7 +27,7 @@ define Package/python-pcap
   CATEGORY:=Languages
   TITLE:=Python interface to lipcap
   URL:=http://code.google.com/p/pypcap/
-  DEPENDS:=python-core +libpcap
+  DEPENDS:=+python-mini +libpcap
 endef
 
 define PyPackage/python-pcap/filespec

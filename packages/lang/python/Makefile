@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python
-PKG_VERSION:=2.5.4
-PKG_RELEASE:=2
+PKG_VERSION:=2.6.1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=Python-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.python.org/ftp/python/$(PKG_VERSION)/
-PKG_MD5SUM:=394a5f56a5ce811fb0f023197ec0833e
+PKG_MD5SUM:=e81c2f0953aa60f8062c05a4673f2be0
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Python-$(PKG_VERSION)
 
@@ -25,7 +25,7 @@ define Package/python/Default
   SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
-  TITLE:=Python 2.5 programming language
+  TITLE:=Python $(PYTHON_VERSION) programming language
   URL:=http://www.python.org/
 endef
 
@@ -41,8 +41,7 @@ endef
 define Package/python
 $(call Package/python/Default)
   TITLE+= (full)
-  DEPENDS:=+libpthread +zlib +PACKAGE_python:libffi
-  PROVIDES:=python-core
+  DEPENDS:=+libpthread +zlib +PACKAGE_python:libffi +python-mini
 endef
 
 define Package/python/description
@@ -55,7 +54,6 @@ define Package/python-mini
 $(call Package/python/Default)
   TITLE+= (minimal)
   DEPENDS:=+libpthread +zlib
-  PROVIDES:=python-core
 endef
 
 define Package/python-mini/description
@@ -67,19 +65,25 @@ endef
 define Package/python-doc
 $(call Package/python/Default)
   TITLE:=Python interactive documentation
-  DEPENDS+= python-core
+  DEPENDS+=+python-mini
 endef
 
 define Package/python-expat
 $(call Package/python/Default)
   TITLE:=Python support for expat
-  DEPENDS+= python-core +libexpat
+  DEPENDS+=+python-mini +libexpat
 endef
 
 define Package/python-openssl
 $(call Package/python/Default)
  TITLE:=Python support for OpenSSL
- DEPENDS+= python-core +libopenssl
+ DEPENDS+=+python-mini +libopenssl
+endef
+
+define Package/python-sqlite3
+$(call Package/python/Default)
+ TITLE:=Python support for sqlite3
+ DEPENDS+=+python-mini +libsqlite3
 endef
 
 
@@ -103,6 +107,7 @@ endef
 
 define Build/Compile
 	-$(MAKE) -C $(PKG_BUILD_DIR) distclean
+	(cd $(PKG_BUILD_DIR); autoreconf --force --install || exit 0);
 	(cd $(PKG_BUILD_DIR); \
 		rm -rf config.cache; \
 		CONFIG_SITE= \
@@ -115,12 +120,10 @@ define Build/Compile
 		HOSTPYTHON=$(PKG_BUILD_DIR)/python \
 		sharedmods install
 	(cd $(PKG_BUILD_DIR);mv Parser/pgen hostpgen)
-
-    # The python executable needs to stay in the rootdir since its location will
-    # be used to compute the path of the config files.
+	# The python executable needs to stay in the rootdir since its location will
+	# be used to compute the path of the config files.
 	$(CP) $(PKG_BUILD_DIR)/python $(PKG_BUILD_DIR)/hostpython
 	$(MAKE) -C $(PKG_BUILD_DIR) distclean
-
 	$(call Build/Configure/Default, \
 		--sysconfdir=/etc \
 		--disable-shared \
@@ -129,6 +132,9 @@ define Build/Compile
 		--with-threads \
 		--with-system-ffi \
 		ac_cv_lib_readline_readline=no \
+		ac_cv_have_chflags=no \
+		ac_cv_have_lchflags=no \
+		ac_cv_py_format_size_t=no \
 		OPT="$(TARGET_CFLAGS)" \
 	)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -162,7 +168,7 @@ define Build/InstallDev
 	$(CP) \
 		$(PKG_INSTALL_DIR)/host/bin/python$(PYTHON_VERSION)-config \
 		$(2)/bin/
-	$(SED) 's,^#!.*,#!/usr/bin/env python2.5,g' $(2)/bin/python$(PYTHON_VERSION)-config
+	$(SED) 's,^#!.*,#!/usr/bin/env python$(PYTHON_VERSION),g' $(2)/bin/python$(PYTHON_VERSION)-config
 
 	(cd $(2)/bin; \
 	ln -sf python$(PYTHON_VERSION)-config python-config;)
@@ -170,7 +176,6 @@ endef
 
 define PyPackage/python/filespec
 +|/usr/bin/python$(PYTHON_VERSION)
-+|/usr/include/python$(PYTHON_VERSION)/pyconfig.h
 +|/usr/lib/python$(PYTHON_VERSION)
 -|/usr/lib/python$(PYTHON_VERSION)/bsddb/test
 -|/usr/lib/python$(PYTHON_VERSION)/config
@@ -180,9 +185,90 @@ define PyPackage/python/filespec
 -|/usr/lib/python$(PYTHON_VERSION)/distutils/tests
 -|/usr/lib/python$(PYTHON_VERSION)/email/test
 -|/usr/lib/python$(PYTHON_VERSION)/idlelib
+-|/usr/lib/python$(PYTHON_VERSION)/json/tests
 -|/usr/lib/python$(PYTHON_VERSION)/lib-tk
--|/usr/lib/python$(PYTHON_VERSION)/sqlite3/test
+-|/usr/lib/python$(PYTHON_VERSION)/sqlite3
 -|/usr/lib/python$(PYTHON_VERSION)/test
+-|/usr/lib/python$(PYTHON_VERSION)/lib2to3
+-|/usr/lib/python$(PYTHON_VERSION)/lib-old
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_sqlite3.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_ssl.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/pyexpat.so
+-|/usr/lib/python$(PYTHON_VERSION)/pydoc_topics.py
+-|/usr/lib/python$(PYTHON_VERSION)/pydoc.py
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_ctypes_test.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_testcapi.so
+-|/usr/lib/python$(PYTHON_VERSION)/__future__.py
+-|/usr/lib/python$(PYTHON_VERSION)/_abcoll.py
+-|/usr/lib/python$(PYTHON_VERSION)/abc.py
+-|/usr/lib/python$(PYTHON_VERSION)/codecs.py
+-|/usr/lib/python$(PYTHON_VERSION)/compileall.py
+-|/usr/lib/python$(PYTHON_VERSION)/ConfigParser.py
+-|/usr/lib/python$(PYTHON_VERSION)/copy.py
+-|/usr/lib/python$(PYTHON_VERSION)/copy_reg.py
+-|/usr/lib/python$(PYTHON_VERSION)/dis.py
+-|/usr/lib/python$(PYTHON_VERSION)/encodings
+-|/usr/lib/python$(PYTHON_VERSION)/fnmatch.py
+-|/usr/lib/python$(PYTHON_VERSION)/genericpath.py
+-|/usr/lib/python$(PYTHON_VERSION)/getopt.py
+-|/usr/lib/python$(PYTHON_VERSION)/glob.py
+-|/usr/lib/python$(PYTHON_VERSION)/hashlib.py
+-|/usr/lib/python$(PYTHON_VERSION)/inspect.py
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/array.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/binascii.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/cStringIO.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/fcntl.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/grp.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/itertools.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/math.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/operator.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_random.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/select.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_socket.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/strop.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_struct.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/syslog.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/time.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/unicodedata.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/zlib.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_weakref.so
+-|/usr/lib/python$(PYTHON_VERSION)/linecache.py
+-|/usr/lib/python$(PYTHON_VERSION)/md5.py
+-|/usr/lib/python$(PYTHON_VERSION)/new.py
+-|/usr/lib/python$(PYTHON_VERSION)/opcode.py
+-|/usr/lib/python$(PYTHON_VERSION)/optparse.py
+-|/usr/lib/python$(PYTHON_VERSION)/os.py
+-|/usr/lib/python$(PYTHON_VERSION)/pickle.py
+-|/usr/lib/python$(PYTHON_VERSION)/pickle.py
+-|/usr/lib/python$(PYTHON_VERSION)/pkgutil.py
+-|/usr/lib/python$(PYTHON_VERSION)/popen2.py
+-|/usr/lib/python$(PYTHON_VERSION)/posixpath.py
+-|/usr/lib/python$(PYTHON_VERSION)/py_compile.py
+-|/usr/lib/python$(PYTHON_VERSION)/random.py
+-|/usr/lib/python$(PYTHON_VERSION)/repr.py
+-|/usr/lib/python$(PYTHON_VERSION)/re.py
+-|/usr/lib/python$(PYTHON_VERSION)/sha.py
+-|/usr/lib/python$(PYTHON_VERSION)/site.py
+-|/usr/lib/python$(PYTHON_VERSION)/socket.py
+-|/usr/lib/python$(PYTHON_VERSION)/sre_compile.py
+-|/usr/lib/python$(PYTHON_VERSION)/sre_constants.py
+-|/usr/lib/python$(PYTHON_VERSION)/sre_parse.py
+-|/usr/lib/python$(PYTHON_VERSION)/sre.py
+-|/usr/lib/python$(PYTHON_VERSION)/stat.py
+-|/usr/lib/python$(PYTHON_VERSION)/StringIO.py
+-|/usr/lib/python$(PYTHON_VERSION)/stringprep.py
+-|/usr/lib/python$(PYTHON_VERSION)/string.py
+-|/usr/lib/python$(PYTHON_VERSION)/struct.py
+-|/usr/lib/python$(PYTHON_VERSION)/subprocess.py
+-|/usr/lib/python$(PYTHON_VERSION)/tempfile.py
+-|/usr/lib/python$(PYTHON_VERSION)/textwrap.py
+-|/usr/lib/python$(PYTHON_VERSION)/tokenize.py
+-|/usr/lib/python$(PYTHON_VERSION)/token.py
+-|/usr/lib/python$(PYTHON_VERSION)/traceback.py
+-|/usr/lib/python$(PYTHON_VERSION)/types.py
+-|/usr/lib/python$(PYTHON_VERSION)/UserDict.py
+-|/usr/lib/python$(PYTHON_VERSION)/warnings.py
+-|/usr/lib/python$(PYTHON_VERSION)/weakref.py
 endef
 
 define PyPackage/python/install
@@ -192,6 +278,8 @@ endef
 define PyPackage/python-mini/filespec
 +|/usr/bin/python$(PYTHON_VERSION)
 +|/usr/lib/python$(PYTHON_VERSION)/__future__.py
++|/usr/lib/python$(PYTHON_VERSION)/_abcoll.py
++|/usr/lib/python$(PYTHON_VERSION)/abc.py
 +|/usr/lib/python$(PYTHON_VERSION)/codecs.py
 +|/usr/lib/python$(PYTHON_VERSION)/compileall.py
 +|/usr/lib/python$(PYTHON_VERSION)/ConfigParser.py
@@ -200,6 +288,7 @@ define PyPackage/python-mini/filespec
 +|/usr/lib/python$(PYTHON_VERSION)/dis.py
 +|/usr/lib/python$(PYTHON_VERSION)/encodings
 +|/usr/lib/python$(PYTHON_VERSION)/fnmatch.py
++|/usr/lib/python$(PYTHON_VERSION)/genericpath.py
 +|/usr/lib/python$(PYTHON_VERSION)/getopt.py
 +|/usr/lib/python$(PYTHON_VERSION)/glob.py
 +|/usr/lib/python$(PYTHON_VERSION)/hashlib.py
@@ -221,8 +310,10 @@ define PyPackage/python-mini/filespec
 +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/time.so
 +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/unicodedata.so
 +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/zlib.so
++|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_weakref.so
 +|/usr/lib/python$(PYTHON_VERSION)/linecache.py
 +|/usr/lib/python$(PYTHON_VERSION)/md5.py
++|/usr/lib/python$(PYTHON_VERSION)/new.py
 +|/usr/lib/python$(PYTHON_VERSION)/opcode.py
 +|/usr/lib/python$(PYTHON_VERSION)/optparse.py
 +|/usr/lib/python$(PYTHON_VERSION)/os.py
@@ -256,6 +347,7 @@ define PyPackage/python-mini/filespec
 +|/usr/lib/python$(PYTHON_VERSION)/types.py
 +|/usr/lib/python$(PYTHON_VERSION)/UserDict.py
 +|/usr/lib/python$(PYTHON_VERSION)/warnings.py
++|/usr/lib/python$(PYTHON_VERSION)/weakref.py
 endef
 
 define PyPackage/python-mini/install
@@ -263,6 +355,7 @@ define PyPackage/python-mini/install
 endef
 
 define PyPackage/python-doc/filespec
++|/usr/lib/python$(PYTHON_VERSION)/pydoc_topics.py
 +|/usr/lib/python$(PYTHON_VERSION)/pydoc.py
 endef
 
@@ -285,4 +378,3 @@ $(eval $(call BuildPackage,python-mini))
 $(eval $(call BuildPackage,python-doc))
 $(eval $(call BuildPackage,python-expat))
 $(eval $(call BuildPackage,python-openssl))
-

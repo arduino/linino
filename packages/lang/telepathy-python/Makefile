@@ -24,7 +24,7 @@ define Package/telepathy-python
   CATEGORY:=Languages
   TITLE:=telepathy-python
   URL:=http://telepathy.freedesktop.org
-  DEPENDS:=python-core +dbus-python
+  DEPENDS:=+python-mini +dbus-python
 endef
 
 define Package/telepathy-python/description

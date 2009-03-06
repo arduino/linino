@@ -25,7 +25,7 @@ define Package/python-kid
   SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
-  DEPENDS:=python-core
+  DEPENDS:=+python
   TITLE:=XML-based Templating
   URL:=http://www.kid-templating.org/
 endef

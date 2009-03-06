@@ -27,7 +27,7 @@ define Package/python-bluez
   CATEGORY:=Languages
   TITLE:=Python wrapper for the BlueZ Bluetooth stack
   URL:=http://org.csail.mit.edu/pybluez/
-  DEPENDS:=python-core +bluez-libs
+  DEPENDS:=+python-mini +bluez-libs
 endef
 
 define Package/python-psycopg/description

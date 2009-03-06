@@ -27,7 +27,7 @@ define Package/python-xapian
   SUBMENU:=Python
   TITLE:=xapian python bindings
   URL:=http://oligarchy.co.uk/xapian/
-  DEPENDS:=python +libxapian
+  DEPENDS:=+python-mini +libxapian
 endef
 
 define Build/Configure

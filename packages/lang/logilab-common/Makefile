@@ -22,7 +22,7 @@ define Package/logilab-common
   CATEGORY:=Languages
   TITLE:=logilab-common
   URL:=http://www.logilab.fr
-  DEPENDS:=python-core 
+  DEPENDS:=+python-mini
 endef
 
 define Package/logilab-common/description

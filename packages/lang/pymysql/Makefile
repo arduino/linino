@@ -27,7 +27,7 @@ define Package/python-mysql
   CATEGORY:=Languages
   TITLE:=MySQL database adapter for Python
   URL:=http://mysql-python.sourceforge.net/
-  DEPENDS:=python-core +libmysqlclient
+  DEPENDS:=+python +libmysqlclient
 endef
 
 define Package/python-mysql/description

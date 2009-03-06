@@ -6,7 +6,7 @@
 #
 # $Id$
 
-PYTHON_VERSION=2.5
+PYTHON_VERSION=2.6
 
 PYTHON_DIR:=$(STAGING_DIR)/usr
 PYTHON_BIN_DIR:=$(PYTHON_DIR)/bin
@@ -25,24 +25,24 @@ define PyPackage
 		IFS='|'; \
 		while read fop fspec fperm; do \
 		  if [ "$$$$$$$$fop" = "+" ]; then \
-		    dpath=`dirname "$$$$$$$$fspec"`; \
-		    if [ -n "$$$$$$$$fperm" ]; then \
-		      dperm="-m$$$$$$$$fperm"; \
-		    else \
-		      dperm=`stat -c "%a" $(PKG_INSTALL_DIR)$$$$$$$$dpath`; \
-		    fi; \
-		    mkdir -p $$$$$$$$$dperm $$(1)$$$$$$$$dpath; \
-		    echo "copying: '$$$$$$$$fspec'"; \
-		    cp -fpR $(PKG_INSTALL_DIR)$$$$$$$$fspec $$(1)$$$$$$$$dpath/; \
-		    if [ -n "$$$$$$$$fperm" ]; then \
-		      chmod -R $$$$$$$$fperm $$(1)$$$$$$$$fspec; \
-		    fi; \
+			dpath=`dirname "$$$$$$$$fspec"`; \
+			if [ -n "$$$$$$$$fperm" ]; then \
+			  dperm="-m$$$$$$$$fperm"; \
+			else \
+			  dperm=`stat -c "%a" $(PKG_INSTALL_DIR)$$$$$$$$dpath`; \
+			fi; \
+			mkdir -p $$$$$$$$$dperm $$(1)$$$$$$$$dpath; \
+			echo "copying: '$$$$$$$$fspec'"; \
+			cp -fpR $(PKG_INSTALL_DIR)$$$$$$$$fspec $$(1)$$$$$$$$dpath/; \
+			if [ -n "$$$$$$$$fperm" ]; then \
+			  chmod -R $$$$$$$$fperm $$(1)$$$$$$$$fspec; \
+			fi; \
 		  elif [ "$$$$$$$$fop" = "-" ]; then \
-		    echo "removing: '$$$$$$$$fspec'"; \
-		    rm -fR $$(1)$$$$$$$$fspec; \
+			echo "removing: '$$$$$$$$fspec'"; \
+			rm -fR $$(1)$$$$$$$$fspec; \
 		  elif [ "$$$$$$$$fop" = "=" ]; then \
-		    echo "setting permissions: '$$$$$$$$fperm' on '$$$$$$$$fspec'"; \
-		    chmod -R $$$$$$$$fperm $$(1)$$$$$$$$fspec; \
+			echo "setting permissions: '$$$$$$$$fperm' on '$$$$$$$$fspec'"; \
+			chmod -R $$$$$$$$fperm $$(1)$$$$$$$$fspec; \
 		  fi; \
 		done; \
 	)
@@ -56,7 +56,7 @@ define Build/Compile/PyMod
 		CPPFLAGS="$(TARGET_CPPFLAGS)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 		$(3) \
-		$(PYTHON) ./setup.py $(2); \
+		$(PYTHON) ./setup.py $(2) && \
 		find $(PKG_INSTALL_DIR) -name "*\.pyc" -o -name "*\.pyo" | xargs rm -f \
 	);
 endef

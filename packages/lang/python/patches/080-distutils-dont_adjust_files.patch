@@ -1,7 +1,8 @@
-diff -ruN Python-2.5.4.orig/Lib/distutils/command/build_scripts.py Python-2.5.4/Lib/distutils/command/build_scripts.py
---- Python-2.5.4.orig/Lib/distutils/command/build_scripts.py	2009-01-11 06:17:43.000000000 +0100
-+++ Python-2.5.4/Lib/distutils/command/build_scripts.py	2009-01-11 15:01:54.000000000 +0100
-@@ -54,15 +54,10 @@
+diff --git a/Lib/distutils/command/build_scripts.py b/Lib/distutils/command/build_scripts.py
+index c0d8f70..d36e29c 100644
+--- a/Lib/distutils/command/build_scripts.py
++++ b/Lib/distutils/command/build_scripts.py
+@@ -51,10 +51,7 @@ class build_scripts (Command):
  
  
      def copy_scripts (self):
@@ -9,19 +10,20 @@ diff -ruN Python-2.5.4.orig/Lib/distutils/command/build_scripts.py Python-2.5.4/
 -        Python script in the Unix way (first line matches 'first_line_re',
 -        ie. starts with "\#!" and contains "python"), then adjust the first
 -        line to refer to the current Python interpreter as we copy.
--        """
-+        """Copy each script listed in 'self.scripts'"""
++        """Copy each script listed in 'self.scripts';
+         """
          self.mkpath(self.build_dir)
          outfiles = []
-         for script in self.scripts:
--            adjust = 0
-             script = convert_path(script)
-             outfile = os.path.join(self.build_dir, os.path.basename(script))
-             outfiles.append(outfile)
-@@ -86,34 +81,12 @@
-                     self.warn("%s is an empty file (skipping)" % script)
-                     continue
- 
+@@ -77,41 +74,9 @@ class build_scripts (Command):
+                 if not self.dry_run:
+                     raise
+                 f = None
+-            else:
+-                first_line = f.readline()
+-                if not first_line:
+-                    self.warn("%s is an empty file (skipping)" % script)
+-                    continue
+-
 -                match = first_line_re.match(first_line)
 -                if match:
 -                    adjust = 1
@@ -40,7 +42,8 @@ diff -ruN Python-2.5.4.orig/Lib/distutils/command/build_scripts.py Python-2.5.4/
 -                        outf.write("#!%s%s\n" %
 -                                   (os.path.join(
 -                            sysconfig.get_config_var("BINDIR"),
--                            "python" + sysconfig.get_config_var("EXE")),
+-                            "python" + sysconfig.get_config_var("VERSION")
+-                                     + sysconfig.get_config_var("EXE")),
 -                                    post_interp))
 -                    outf.writelines(f.readlines())
 -                    outf.close()
@@ -52,9 +55,6 @@ diff -ruN Python-2.5.4.orig/Lib/distutils/command/build_scripts.py Python-2.5.4/
 -                self.copy_file(script, outfile)
 +            if f:
 +                f.close()
-+
-+            log.info("copying %s -> %s", script,
-+                     self.build_dir)
 +            self.copy_file(script, outfile)
  
          if os.name == 'posix':

@@ -26,7 +26,7 @@ define Package/python-egenix-mx
   SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
-  DEPENDS:=python-core
+  DEPENDS:=+python-mini
   TITLE:=Egenix mxBase
   URL:=http://www.egenix.com/products/python/mxBase/
 endef

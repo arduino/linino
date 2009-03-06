@@ -25,7 +25,7 @@ define Package/pyyaml
   CATEGORY:=Languages
   TITLE:=pyyaml
   URL:=http://pyyaml.org
-  DEPENDS:=python-core +libyaml
+  DEPENDS:=+python +libyaml
 endef
 
 define Package/pyyaml/description

@@ -34,7 +34,7 @@ define Package/python-gtk
   CATEGORY:=Languages
   TITLE:=GTK bindings for python
   URL:=http://www.pygtk.org/
-  DEPENDS:=python-core +python-gobject +gtk2 +pycairo @!LINUX_2_4
+  DEPENDS:=+python-mini +python-gobject +gtk2 +pycairo @!LINUX_2_4
 endef
 
 define Package/python-gtk/description

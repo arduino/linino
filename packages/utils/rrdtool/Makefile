@@ -54,7 +54,7 @@ $(call Package/rrdtool/Default)
   SECTION:=lang
   CATEGORY:=Languages
   TITLE+= python bindings (v1.2.x)
-  DEPENDS+= python-core +librrd
+  DEPENDS+= +python-mini +librrd
 endef
 
 CONFIGURE_ARGS += \

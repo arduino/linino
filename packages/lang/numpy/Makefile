@@ -23,7 +23,7 @@ define Package/numpy
   CATEGORY:=Languages
   TITLE:=numpy
   URL:=http://numpy.sf.net
-  DEPENDS:=python-core @TARGET_x86||TARGET_olpc||TARGET_uml @BROKEN
+  DEPENDS:=+python-mini @TARGET_x86||TARGET_olpc||TARGET_uml @BROKEN
 endef
 
 define Package/numpy/description

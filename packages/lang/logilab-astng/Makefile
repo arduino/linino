@@ -22,7 +22,7 @@ define Package/logilab-astng
   CATEGORY:=Languages
   TITLE:=logilab-astng
   URL:=http://www.logilab.fr
-  DEPENDS:=python-core 
+  DEPENDS:=+python-mini
 endef
 
 define Package/logilab-astng/description

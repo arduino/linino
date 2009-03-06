@@ -25,7 +25,7 @@ define Package/pyserial
   CATEGORY:=Languages
   TITLE:=pyserial
   URL:=http://pyserial.sourceforge.net
-  DEPENDS:=python-core
+  DEPENDS:=+python-mini
 endef
 
 define Package/pyserial/description
