@@ -1,20 +1,22 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
+# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fontconfig
-PKG_VERSION:=2.3.95
-PKG_RELEASE:=2
+PKG_VERSION:=2.6.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://fontconfig.org/release/
-PKG_MD5SUM:=6860be35882f6d34636d52345efd5944
+PKG_MD5SUM:=
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -28,13 +30,15 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
-		--disable-docs, \
+		--disable-docs \
+	    --with-arch=$(ARCH) \
+        , \
 		ac_cv_prog_HASDOCBOOK=no \
 	)
 endef
 
 define Build/Compile
-	$(foreach dir,fc-case fc-lang fc-glyphname src fc-cache fc-list, $(MAKE) -C $(PKG_BUILD_DIR)/$(dir) CFLAGS="-I$(STAGING_DIR)/usr/include"  \
+	$(foreach dir,fc-arch fc-case fc-lang fc-glyphname src fc-cache fc-list, $(MAKE) -C $(PKG_BUILD_DIR)/$(dir) CFLAGS="-I$(STAGING_DIR)/usr/include"  \
 			CPPFLAGS="" LDFLAGS="-L$(STAGING_DIR)/usr/lib";)
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" DOCSRC="" install
 endef
