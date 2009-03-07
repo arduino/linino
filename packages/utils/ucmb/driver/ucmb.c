@@ -354,7 +354,7 @@ static ssize_t ucmb_write(struct file *filp, const char __user *user_buf,
 		/* The microcontroller deserves some time to process the message. */
 		if (ucmb->msg_delay_usec >= 1000000) {
 			ssleep(ucmb->msg_delay_usec / 1000000);
-			msleep(DIV_ROUND_UP(ucmb->msg_delay_usec, 1000));
+			msleep(DIV_ROUND_UP(ucmb->msg_delay_usec % 1000000, 1000));
 		} else if (ucmb->msg_delay_usec >= 1000) {
 			msleep(DIV_ROUND_UP(ucmb->msg_delay_usec, 1000));
 		} else
