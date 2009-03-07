@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iperf
 PKG_VERSION:=2.0.4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
@@ -28,8 +28,8 @@ define Package/iperf/Default
 endef
 
 define Package/iperf/Default/description
- Iperf is a modern alternative for measuring TCP and UDP bandwidth 
- performance, allowing the tuning of various parameters and 
+ Iperf is a modern alternative for measuring TCP and UDP bandwidth
+ performance, allowing the tuning of various parameters and
  characteristics.
 endef
 
