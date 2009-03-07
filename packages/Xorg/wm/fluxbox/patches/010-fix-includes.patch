@@ -1,0 +1,37 @@
+diff --git a/src/ClientPattern.cc b/src/ClientPattern.cc
+index 21224cb..b641185 100644
+--- a/src/ClientPattern.cc
++++ b/src/ClientPattern.cc
+@@ -45,6 +45,7 @@
+ #endif
+ 
+ // needed as well for index on some systems (e.g. solaris)
++#include <string.h>
+ #include <strings.h>
+ 
+ using std::string;
+diff --git a/src/FbTk/Text.cc b/src/FbTk/Text.cc
+index 8c836cc..9f4b3eb 100644
+--- a/src/FbTk/Text.cc
++++ b/src/FbTk/Text.cc
+@@ -26,6 +26,7 @@
+ #include "Font.hh"
+ #include "Theme.hh"
+ 
++#include <string.h>
+ #include <strings.h>
+ 
+ namespace FbTk {
+diff --git a/src/main.cc b/src/main.cc
+index afbf43e..3c3d17c 100644
+--- a/src/main.cc
++++ b/src/main.cc
+@@ -45,6 +45,8 @@
+   #include <stdlib.h>
+ #endif
+ 
++#include <string.h>
++
+ #include <iostream>
+ #include <fstream>
+ #include <stdexcept>

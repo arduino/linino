@@ -1,7 +1,6 @@
 --- fluxbox-1.0rc3/util/fbrun/Makefile.in.orig	2007-09-17 19:52:52.000000000 +0200
 +++ fluxbox-1.0rc3/util/fbrun/Makefile.in	2007-09-17 19:53:09.000000000 +0200
-@@ -268,7 +268,7 @@
- 	done
+@@ -236,7 +236,7 @@
  fbrun$(EXEEXT): $(fbrun_OBJECTS) $(fbrun_DEPENDENCIES) 
  	@rm -f fbrun$(EXEEXT)
 -	$(CXXLINK) $(fbrun_OBJECTS) $(fbrun_LDADD) $(LIBS)
