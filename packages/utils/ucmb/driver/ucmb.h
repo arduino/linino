@@ -10,9 +10,17 @@
 
 /** UCMB_IOCTL_RESETUC - Reset the microcontroller. */
 #define UCMB_IOCTL_RESETUC	_IO(__UCMB_IOCTL, 0)
+/** UCMB_IOCTL_GMSGDELAY - Get the delay to wait before fetching the status. */
+#define UCMB_IOCTL_GMSGDELAY	_IOR(__UCMB_IOCTL, 1, unsigned int)
+/** UCMB_IOCTL_SMSGDELAY - Set the delay to wait before fetching the status. */
+#define UCMB_IOCTL_SMSGDELAY	_IOW(__UCMB_IOCTL, 2, unsigned int)
 
 
 #ifdef __KERNEL__
+
+#include <linux/device.h>
+#include <linux/spi/spi.h>
+#include <linux/spi/spi_gpio.h>
 
 /**
  * struct ucmb_platform_data - UCMB device descriptor
@@ -33,9 +41,6 @@
  *
  * @mode:		The SPI bus mode. SPI_MODE_*
  * @max_speed_hz:	The bus speed, in Hz. If zero the speed is not limited.
- * @msg_delay_ms:	The message delay time, in milliseconds.
- *			This is the time the microcontroller takes to process
- *			one message.
  */
 struct ucmb_platform_data {
 	const char *name;
@@ -50,12 +55,14 @@ struct ucmb_platform_data {
 
 	u8 mode;
 	u32 max_speed_hz;
-	unsigned int msg_delay_ms;
 
 	struct platform_device *pdev; /* internal */
 };
 
 #define UCMB_NO_RESET		((unsigned int)-1)
+
+int ucmb_device_register(struct ucmb_platform_data *pdata);
+void ucmb_device_unregister(struct ucmb_platform_data *pdata);
 
 
 #endif /* __KERNEL__ */

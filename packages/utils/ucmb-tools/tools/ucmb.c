@@ -29,6 +29,8 @@
 
 #define __UCMB_IOCTL		('U'|'C'|'M'|'B')
 #define UCMB_IOCTL_RESETUC	_IO(__UCMB_IOCTL, 0)
+#define UCMB_IOCTL_GMSGDELAY	_IOR(__UCMB_IOCTL, 1, unsigned int)
+#define UCMB_IOCTL_SMSGDELAY	_IOW(__UCMB_IOCTL, 2, unsigned int)
 
 
 static void usage(int argc, char **argv)

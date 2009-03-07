@@ -43,7 +43,9 @@ MODULE_AUTHOR("Michael Buesch");
 struct ucmb {
 	struct mutex mutex;
 
-	unsigned int msg_delay_ms;
+	bool is_open;
+
+	unsigned int msg_delay_usec;
 	unsigned int gpio_reset;
 	bool reset_activelow;
 
@@ -58,6 +60,9 @@ struct ucmb {
 	struct spi_gpio_platform_data spi_gpio_pdata;
 	struct platform_device spi_gpio_pdev;
 };
+
+#define UCMB_MAX_MSG_DELAY	(10 * 1000 * 1000) /* 10 seconds */
+
 
 struct ucmb_message_hdr {
 	__le16 magic;		/* UCMB_MAGIC */
@@ -85,22 +90,7 @@ enum ucmb_status_code {
 
 
 static int ucmb_spi_busnum_count = 1337;
-
-
-static struct ucmb_platform_data ucmb_list[] = {
-	{ //FIXME don't define it here.
-		.name			= "ucmb",
-		.gpio_cs		= SPI_GPIO_NO_CHIPSELECT,
-		.gpio_sck		= 0,
-		.gpio_miso		= 1,
-		.gpio_mosi		= 2,
-		.gpio_reset		= 3,
-		.reset_activelow	= 0,
-		.mode			= SPI_MODE_0,
-		.max_speed_hz		= 128000, /* Hz */
-		.msg_delay_ms		= 1, /* mS */
-	},
-};
+static int ucmb_pdev_id_count;
 
 
 static int __devinit ucmb_spi_probe(struct spi_device *sdev)
@@ -138,7 +128,7 @@ static int ucmb_reset_microcontroller(struct ucmb *ucmb)
 	ucmb_toggle_reset_line(ucmb, 1);
 	msleep(50);
 	ucmb_toggle_reset_line(ucmb, 0);
-	msleep(10);
+	msleep(50);
 
 	return 0;
 }
@@ -165,6 +155,38 @@ static inline struct ucmb * filp_to_ucmb(struct file *filp)
 	return container_of(filp->f_op, struct ucmb, mdev_fops);
 }
 
+static int ucmb_open(struct inode *inode, struct file *filp)
+{
+	struct ucmb *ucmb = filp_to_ucmb(filp);
+	int err = 0;
+
+	mutex_lock(&ucmb->mutex);
+
+	if (ucmb->is_open) {
+		err = -EBUSY;
+		goto out_unlock;
+	}
+	ucmb->is_open = 1;
+	ucmb->msg_delay_usec = 0;
+
+out_unlock:
+	mutex_unlock(&ucmb->mutex);
+
+	return err;
+}
+
+static int ucmb_release(struct inode *inode, struct file *filp)
+{
+	struct ucmb *ucmb = filp_to_ucmb(filp);
+
+	mutex_lock(&ucmb->mutex);
+	WARN_ON(!ucmb->is_open);
+	ucmb->is_open = 0;
+	mutex_unlock(&ucmb->mutex);
+
+	return 0;
+}
+
 static int ucmb_ioctl(struct inode *inode, struct file *filp,
 		      unsigned int cmd, unsigned long arg)
 {
@@ -176,6 +198,26 @@ static int ucmb_ioctl(struct inode *inode, struct file *filp,
 	case UCMB_IOCTL_RESETUC:
 		ret = ucmb_reset_microcontroller(ucmb);
 		break;
+	case UCMB_IOCTL_GMSGDELAY:
+		if (put_user(ucmb->msg_delay_usec, (unsigned int __user *)arg)) {
+			ret = -EFAULT;
+			break;
+		}
+		break;
+	case UCMB_IOCTL_SMSGDELAY: {
+		unsigned int msg_delay_usec;
+
+		if (get_user(msg_delay_usec, (unsigned int __user *)arg)) {
+			ret = -EFAULT;
+			break;
+		}
+		if (msg_delay_usec > UCMB_MAX_MSG_DELAY) {
+			ret = -E2BIG;
+			break;
+		}
+		ucmb->msg_delay_usec = msg_delay_usec;
+		break;
+	}
 	default:
 		ret = -EINVAL;
 	}
@@ -308,9 +350,16 @@ static ssize_t ucmb_write(struct file *filp, const char __user *user_buf,
 	if (err)
 		goto out_free;
 
-	/* The microcontroller deserves some time to process the message. */
-	if (ucmb->msg_delay_ms)
-		msleep(ucmb->msg_delay_ms);
+	if (ucmb->msg_delay_usec) {
+		/* The microcontroller deserves some time to process the message. */
+		if (ucmb->msg_delay_usec >= 1000000) {
+			ssleep(ucmb->msg_delay_usec / 1000000);
+			msleep(DIV_ROUND_UP(ucmb->msg_delay_usec, 1000));
+		} else if (ucmb->msg_delay_usec >= 1000) {
+			msleep(DIV_ROUND_UP(ucmb->msg_delay_usec, 1000));
+		} else
+			udelay(ucmb->msg_delay_usec);
+	}
 
 	/* Get the status code. */
 	err = spi_read(ucmb->sdev, (u8 *)&status, sizeof(status));
@@ -351,7 +400,6 @@ static int __devinit ucmb_probe(struct platform_device *pdev)
 	if (!ucmb)
 		return -ENOMEM;
 	mutex_init(&ucmb->mutex);
-	ucmb->msg_delay_ms = pdata->msg_delay_ms;
 	ucmb->gpio_reset = pdata->gpio_reset;
 	ucmb->reset_activelow = pdata->reset_activelow;
 
@@ -426,6 +474,8 @@ static int __devinit ucmb_probe(struct platform_device *pdev)
 	ucmb->mdev.minor = MISC_DYNAMIC_MINOR;
 	ucmb->mdev.name = pdata->name;
 	ucmb->mdev.parent = &pdev->dev;
+	ucmb->mdev_fops.open = ucmb_open;
+	ucmb->mdev_fops.release = ucmb_release;
 	ucmb->mdev_fops.read = ucmb_read;
 	ucmb->mdev_fops.write = ucmb_write;
 	ucmb->mdev_fops.ioctl = ucmb_ioctl;
@@ -490,67 +540,69 @@ static struct platform_driver ucmb_driver = {
 	.remove		= __devexit_p(ucmb_remove),
 };
 
+int ucmb_device_register(struct ucmb_platform_data *pdata)
+{
+	struct platform_device *pdev;
+	int err;
+
+	pdev = platform_device_alloc("ucmb", ucmb_pdev_id_count++);
+	if (!pdev) {
+		printk(KERN_ERR PFX "Failed to allocate platform device.\n");
+		return -ENOMEM;
+	}
+	err = platform_device_add_data(pdev, pdata, sizeof(*pdata));
+	if (err) {
+		printk(KERN_ERR PFX "Failed to add platform data.\n");
+		platform_device_put(pdev);
+		return err;
+	}
+	err = platform_device_add(pdev);
+	if (err) {
+		printk(KERN_ERR PFX "Failed to register platform device.\n");
+		platform_device_put(pdev);
+		return err;
+	}
+	pdata->pdev = pdev;
+
+	return 0;
+}
+EXPORT_SYMBOL(ucmb_device_register);
+
+void ucmb_device_unregister(struct ucmb_platform_data *pdata)
+{
+	if (!pdata->pdev)
+		return;
+	platform_device_unregister(pdata->pdev);
+	platform_device_put(pdata->pdev);
+	pdata->pdev = NULL;
+}
+EXPORT_SYMBOL(ucmb_device_unregister);
+
 static int ucmb_modinit(void)
 {
-	struct ucmb_platform_data *pdata;
-	struct platform_device *pdev;
-	int err, i;
+	int err;
 
 	printk(KERN_INFO "Microcontroller message bus driver\n");
 
-	err = platform_driver_register(&ucmb_driver);
-	if (err) {
-		printk(KERN_ERR PFX "Failed to register platform driver\n");
-		return err;
-	}
 	err = spi_register_driver(&ucmb_spi_driver);
 	if (err) {
 		printk(KERN_ERR PFX "Failed to register SPI driver\n");
-		platform_driver_unregister(&ucmb_driver);
 		return err;
 	}
-
-	for (i = 0; i < ARRAY_SIZE(ucmb_list); i++) {
-		pdata = &ucmb_list[i];
-
-		pdev = platform_device_alloc("ucmb", i);
-		if (!pdev) {
-			printk(KERN_ERR PFX "Failed to allocate platform device.\n");
-			break;
-		}
-		err = platform_device_add_data(pdev, pdata, sizeof(*pdata));
-		if (err) {
-			printk(KERN_ERR PFX "Failed to add platform data.\n");
-			platform_device_put(pdev);
-			break;
-		}
-		err = platform_device_add(pdev);
-		if (err) {
-			printk(KERN_ERR PFX "Failed to register platform device.\n");
-			platform_device_put(pdev);
-			break;
-		}
-		pdata->pdev = pdev;
+	err = platform_driver_register(&ucmb_driver);
+	if (err) {
+		printk(KERN_ERR PFX "Failed to register platform driver\n");
+		spi_unregister_driver(&ucmb_spi_driver);
+		return err;
 	}
 
 	return 0;
 }
-module_init(ucmb_modinit);
+subsys_initcall(ucmb_modinit);
 
 static void ucmb_modexit(void)
 {
-	struct ucmb_platform_data *pdata;
-	int i;
-
-	for (i = 0; i < ARRAY_SIZE(ucmb_list); i++) {
-		pdata = &ucmb_list[i];
-
-		if (pdata->pdev) {
-			platform_device_unregister(pdata->pdev);
-			platform_device_put(pdata->pdev);
-		}
-	}
-	spi_unregister_driver(&ucmb_spi_driver);
 	platform_driver_unregister(&ucmb_driver);
+	spi_unregister_driver(&ucmb_spi_driver);
 }
 module_exit(ucmb_modexit);
