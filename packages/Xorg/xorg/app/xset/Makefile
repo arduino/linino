@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,8 +9,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xset
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_VERSION:=1.0.4
+
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/app
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
@@ -20,13 +21,15 @@ include $(INCLUDE_DIR)/package.mk
 
 PKG_INSTALL:=1
 
-TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+TARGET_LDFLAGS+= \
+    -Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+    -Wl,-rpath=/usr/lib
 
 define Package/xset
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:=
+  DEPENDS:=+libXmuu +libX11 +libXext
   TITLE:=xset
   URL:=http://xorg.freedesktop.org/
 endef
