@@ -28,7 +28,7 @@ define Package/gw6c/description
 endef
 
 define Build/Prepare
-	wget -t1 --timeout=20 -O $(DL_DIR)/$(PKG_NAME)-$(PKG_VERSION).tar.bz2 "http://www.go6.net/4105/file.asp?file_id=136"
+	wget -t1 --timeout=20 -O $(DL_DIR)/$(PKG_NAME)-$(PKG_VERSION).tar.bz2 "http://go6.net/4105/file.asp?file_id=136"
 	$(INSTALL_DIR) $(PKG_BUILD_DIR)
 	bzcat $(DL_DIR)/$(PKG_NAME)-$(PKG_VERSION).tar.bz2 | $(TAR) -C $(PKG_BUILD_DIR) -xvf -
 	$(CP) $(PKG_BUILD_DIR)/gw6c/src/gw6c-config/gw6cconfig/gw6c_c_wrapper.h $(PKG_BUILD_DIR)/gw6c/src/gw6c/include
