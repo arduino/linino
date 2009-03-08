@@ -30,7 +30,8 @@ define Package/ecore
   SUBMENU:=libraries
   TITLE:=Ecore is the core event abstraction layer and X abstraction layer
   URL:=http://wiki.enlightenment.org/index.php/Ecore
-  DEPENDS:=+eet +evas +libXcursor +libXrandr +libXtst +libiconv @!LINUX_2_4
+  DEPENDS:=+eet +evas +libXcursor +libXrandr +libXtst +libiconv @!LINUX_2_4 \
+  +libXdamage +libXfixes +libXrender +libXtest
 endef
 
 define Package/ecore/description
@@ -38,36 +39,39 @@ define Package/ecore/description
 endef
 
 EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libiconv/include
-EXTRA_LDFLAGS+=-liconv -L$(STAGING_DIR)/usr/lib/libiconv/lib
+EXTRA_LDFLAGS+= \
+	-liconv -L$(STAGING_DIR)/usr/lib/libiconv/lib \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
 	$(call Build/Configure/Default, \
-                --with-iconv-link \
-                --enable-ecore-txt \
-                --disable-ecore-config \
-                --disable-ecore-x-xcb \
-                --enable-ecore-x \
-                --enable-ecore-job \
-                --disable-ecore-directfb \
-                --disable-ecore-sdl \
-                --enable-ecore-fb \
-                --enable-ecore-evas \
-                --enable-ecore-evas-fb \
-                --disable-ecore-evas-x11-gl \
-                --enable-ecore-evas-xrender \
-                --disable-ecore-evas-dfb \
-                --disable-ecore-evas-sdl \
-                --disable-openssl \
-                --enable-abstract-sockets \
-                --enable-ecore-con \
-                --enable-ecore-ipc \
-                --enable-ecore-file \
-                --enable-inotify \
-                --disable-poll \
-                --disable-curl \
-                --disable-ecore-desktop \
-                --disable-gnutls \
+        --with-iconv-link \
+        --enable-ecore-txt \
+        --disable-ecore-config \
+        --disable-ecore-x-xcb \
+        --enable-ecore-x \
+        --enable-ecore-job \
+        --disable-ecore-directfb \
+        --disable-ecore-sdl \
+        --enable-ecore-fb \
+        --enable-ecore-evas \
+        --enable-ecore-evas-fb \
+        --disable-ecore-evas-x11-gl \
+        --enable-ecore-evas-xrender \
+        --disable-ecore-evas-dfb \
+        --disable-ecore-evas-sdl \
+        --disable-openssl \
+        --enable-abstract-sockets \
+        --enable-ecore-con \
+        --enable-ecore-ipc \
+        --enable-ecore-file \
+        --enable-inotify \
+        --disable-poll \
+        --disable-curl \
+        --disable-ecore-desktop \
+        --disable-gnutls \
 	)
 endef
 
