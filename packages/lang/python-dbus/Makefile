@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,16 +10,16 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dbus-python
 PKG_VERSION:=0.83.0
-PKG_RELEASE:=2
+PKG_RELEASE:=1
+
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dbus.freedesktop.org/releases/dbus-python/
 PKG_MD5SUM:=562c78876219bf458d79a041af18293d
-PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
-PKG_INSTALL=1
 
 EXTRA_CFLAGS += \
 	-I$(STAGING_DIR)/usr/lib/libintl/include \
@@ -58,7 +58,7 @@ endef
 define Package/dbus-python/install
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/*.{py,so,a} \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/*.{py,so} \
 		$(1)$(PYTHON_PKG_DIR)
 
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)/dbus
