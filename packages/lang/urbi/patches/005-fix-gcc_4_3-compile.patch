@@ -1,0 +1,12 @@
+diff --git a/libport/semaphore.hxx b/libport/semaphore.hxx
+index bb2546d..38b0d8e 100644
+--- a/libport/semaphore.hxx
++++ b/libport/semaphore.hxx
+@@ -5,6 +5,7 @@
+ # include "exception.hh"
+ # include <sstream>
+ # include <string>
++# include <cstring>
+ 
+ namespace libport
+ {

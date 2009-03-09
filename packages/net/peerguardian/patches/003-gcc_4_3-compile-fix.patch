@@ -1,0 +1,24 @@
+diff --git a/Main.cpp b/Main.cpp
+index 0a5ae59..0c5274c 100755
+--- a/Main.cpp
++++ b/Main.cpp
+@@ -25,6 +25,7 @@
+ #include <signal.h>
+ #include <iostream>
+ #include <fstream>
++#include <cstring>
+ 
+ using namespace PG;
+ using namespace std;
+diff --git a/PeerGuard.h b/PeerGuard.h
+index 3d0d31c..7e1d0f7 100755
+--- a/PeerGuard.h
++++ b/PeerGuard.h
+@@ -24,6 +24,7 @@
+ #include "BlockList.h"
+ 
+ #include <ostream>
++#include <cstring>
+ 
+ namespace PG {
+ 
