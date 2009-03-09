@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,19 +8,23 @@
 
 include $(TOPDIR)/rules.mk
 
+# Make sure to also update the dbus-x package
 PKG_NAME:=dbus
-PKG_VERSION:=1.2.3
-PKG_RELEASE:=2
+PKG_VERSION:=1.2.12
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dbus.freedesktop.org/releases/dbus/
-PKG_MD5SUM:=f71641385768e99361bd298568207cee
+PKG_MD5SUM:=39bd582c3b06a261cac44d4cab6fd60b
+
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-PKG_INSTALL=1
-
-TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+TARGET_LDFLAGS+= \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib/
 
 define Package/dbus/Default
   SECTION:=utils
@@ -37,18 +41,27 @@ define Package/dbus/Default/description
  their services are needed.
 endef
 
+define Package/libdbus
+$(call Package/dbus/Default)
+  CATEGORY:=Libraries
+  TITLE+= (library)
+endef
+
+define Package/libdbus/Description
+$(call Package/dbus/Default/description)
+ This package contains the D-Bus shared library.
+endef
 
 define Package/dbus
 $(call Package/dbus/Default)
  TITLE+= (daemon)
- DEPENDS:= +libexpat
+ DEPENDS:= +libexpat +libdbus
 endef
 
 define Package/dbus/Description
 $(call Package/dbus/Default/description)
  This package contains the D-Bus daemon.
 endef
-
 
 define Package/dbus-utils
 $(call Package/dbus/Default)
@@ -80,7 +93,8 @@ CONFIGURE_ARGS += \
 	--with-dbus-daemondir="/usr/sbin" \
 	--with-system-socket="/var/run/dbus/system_bus_socket" \
 	--with-system-pid-file="/var/run/dbus.pid" \
-	--without-x
+	--without-x \
+	--libexecdir=/usr/lib/dbus-1
 
 CONFIGURE_VARS+= \
 	ac_cv_have_abstract_sockets="yes" \
@@ -92,9 +106,14 @@ define Build/InstallDev
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/include/dbus-1.0 \
 		$(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/lib/dbus-1.0/include/dbus/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/dbus-1.0/include/dbus/*.h \
+		$(1)/usr/lib/dbus-1.0/include/dbus/
+
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libdbus-1.{a,so*} \
+		$(PKG_INSTALL_DIR)/usr/lib/libdbus-1.{so*,la,a} \
 		$(1)/usr/lib/
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/dbus-1.0 \
@@ -110,24 +129,54 @@ define Package/dbus/conffiles
 /etc/dbus-1/system.conf
 endef
 
-define Package/dbus/install
-	$(INSTALL_DIR) $(1)/etc
-	$(CP) $(PKG_INSTALL_DIR)/etc/dbus-1 $(1)/etc/
+define Package/libdbus/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdbus-1.so.* $(1)/usr/lib/
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dbus-daemon $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/dbus.init $(1)/etc/init.d/dbus
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libdbus-1.so.* \
+		$(1)/usr/lib/
 endef
 
+define Package/dbus/install
+	$(INSTALL_DIR) $(1)/etc
+	$(CP) \
+		$(PKG_INSTALL_DIR)/etc/dbus-1 \
+		$(1)/etc/
+
+	$(INSTALL_DIR) $(1)/usr/lib/dbus-1
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/lib/dbus-1/dbus-daemon-launch-helper \
+		$(1)/usr/lib/dbus-1/
+
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/sbin/dbus-daemon \
+		$(1)/usr/sbin/
+
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/dbus-uuidgen \
+		$(1)/usr/bin/
+
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/dbus-launch \
+		$(1)/usr/bin/dbus-launch.real
+	$(INSTALL_BIN) \
+		./files/dbus-launch \
+		$(1)/usr/bin/
+
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) \
+		./files/dbus.init \
+		$(1)/etc/init.d/dbus
+endef
 
 define Package/dbus-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/dbus-* $(1)/usr/bin/
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/dbus-{send,monitor,cleanup-sockets} \
+		$(1)/usr/bin/
 endef
 
-
+$(eval $(call BuildPackage,libdbus))
 $(eval $(call BuildPackage,dbus))
 $(eval $(call BuildPackage,dbus-utils))
-
