@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006,2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,9 +15,10 @@ PKG_RELEASE:=1
 PKG_SOURCE_URL:=http://selenic.com/mercurial/release/
 PKG_SOURCE:=mercurial-$(PKG_VERSION).tar.gz
 PKG_MD5SUM:=4fd3b9a2e5dcd025840c3849b136bec8
-PKG_BUILD_DEPENDS:=python
+PKG_BUILD_DEPENDS:=python-mini
 
 include $(INCLUDE_DIR)/package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
 define Package/mercurial
   SECTION:=net
@@ -31,19 +32,10 @@ define Package/mercurial/description
   A fast, lightweight Source Control Management system designed for efficient handling of very large distributed projects.
 endef
 
-HG_BUILDOPTS= \
-	CC="$(TARGET_CC)" \
-	LDSHARED="$(TARGET_CC) -shared" \
-	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/python2.5/" \
-	LDFLAGS="-L$(STAGING_DIR)/usr/lib -lpython2.5"
-
 define Build/Compile
-	(cd $(PKG_BUILD_DIR); \
-		$(HG_BUILDOPTS) /usr/bin/python setup.py build; \
-	);
-	(cd $(PKG_BUILD_DIR); \
-		/usr/bin/python setup.py install --prefix="$(PKG_INSTALL_DIR)"; \
-	);
+	$(call Build/Compile/PyMod,, \
+		install --prefix="$(PKG_INSTALL_DIR)", \
+    )
 endef
 
 define Package/mercurial/install
