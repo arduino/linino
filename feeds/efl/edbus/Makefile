@@ -30,7 +30,7 @@ define Package/edbus
   SUBMENU:=libraries
   TITLE:=Edbus
   URL:=http://wiki.enlightenment.org/index.php
-  DEPENDS:=+dbus +ecore
+  DEPENDS:=+libdbus +ecore
 endef
 
 EXTRA_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib

@@ -30,7 +30,7 @@ define Package/enlightenment
   SUBMENU:=window manager
   TITLE:=Enlightenment e17 window manager
   URL:=http://enlightenment.org
-  DEPENDS:=+libintl +libpthread +eet +evas +ecore +edje +efreet +edbus +dbus-utils +dejavu-fonts-ttf +freedesktop-compliant
+  DEPENDS:=+libintl +libpthread +eet +evas +ecore +edje +efreet +dbus +edbus +dejavu-fonts-ttf +freedesktop-compliant
 endef
 
 define Package/enlightenment/config
