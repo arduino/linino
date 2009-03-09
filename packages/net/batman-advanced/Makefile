@@ -30,11 +30,11 @@ include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 define Package/batman-adv/Default
-  URL:=https://www.open-mesh.net/
+  URL:=http://www.open-mesh.net/
   MAINTAINER:=Marek Lindner <lindner_marek@yahoo.de>
 endef
 
-define Package/batmand-adv
+define Package/batmand-adv-userspace
 $(call Package/batman-adv/Default)
   SECTION:=net
   CATEGORY:=Network
@@ -42,7 +42,7 @@ $(call Package/batman-adv/Default)
   TITLE:=B.A.T.M.A.N. layer 2 routing daemon
 endef
 
-define Package/batmand-adv/description
+define Package/batmand-adv-userspace/description
 B.A.T.M.A.N. layer 2 routing daemon
 endef
 
@@ -57,7 +57,7 @@ define Package/battool/description
 B.A.T.M.A.N. layer 2 debug tools
 endef
 
-define KernelPackage/batman-advanced
+define KernelPackage/batman-adv-kernelland
 $(call Package/batman-adv/Default)
   SUBMENU:=Network Support
   DEPENDS:=@LINUX_2_6
@@ -67,7 +67,7 @@ $(call Package/batman-adv/Default)
 endef
 
 
-define KernelPackage/batman-advanced/description
+define KernelPackage/batman-adv-kernelland/description
 Kernel routing module for B.A.T.M.A.N. layer 2
 endef
 
@@ -106,11 +106,11 @@ MAKE_TOOL_ARGS += \
 define Build/Configure
 endef
 
-ifneq ($(CONFIG_PACKAGE_batmand-adv),n)
+ifneq ($(CONFIG_PACKAGE_batmand-adv-userspace),n)
 	BUILD_ADV = $(MAKE) -C $(PKG_BUILD_DIR)/batman-adv-userspace $(MAKE_ARGS)
 endif
 
-ifneq ($(CONFIG_PACKAGE_kmod-batman-advanced),n)
+ifneq ($(CONFIG_PACKAGE_kmod-batman-adv-kernelland),n)
         BUILD_KMOD_ADV = $(MAKE) -C "$(LINUX_DIR)" $(MAKE_KMOD_ARGS)
 endif
 
@@ -125,11 +125,17 @@ define Build/Compile
 	$(BUILD_BATTOOL)
 endef
 
-define Package/batmand-adv/install
+define Package/batmand-adv-userspace/install
 	$(INSTALL_DIR) $(1)/usr/sbin $(1)/etc/config $(1)/etc/init.d
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/batmand-adv $(1)/usr/sbin/
-	$(INSTALL_BIN) ./files/etc/init.d/batmand-adv $(1)/etc/init.d
-	$(INSTALL_DATA) ./files/etc/config/batmand-adv $(1)/etc/config
+	$(INSTALL_BIN) ./files/etc/init.d/batmand-adv-userspace $(1)/etc/init.d
+	$(INSTALL_DATA) ./files/etc/config/batmand-adv-userspace $(1)/etc/config
+endef
+
+define Package/batmand-adv-kernelland/install
+	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/etc/init.d/batmand-adv-kernelland $(1)/etc/init.d
+	$(INSTALL_DATA) ./files/etc/config/batmand-adv-kernelland $(1)/etc/config
 endef
 
 define Package/battool/install
@@ -137,6 +143,6 @@ define Package/battool/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/battool $(1)/usr/sbin/
 endef
 
-$(eval $(call BuildPackage,batmand-adv))
+$(eval $(call BuildPackage,batmand-adv-userspace))
 $(eval $(call BuildPackage,battool))
-$(eval $(call KernelPackage,batman-advanced))
+$(eval $(call KernelPackage,batman-adv-kernelland))
