@@ -1,0 +1,26 @@
+--- fltk2/makeinclude.in	2009-01-02 02:58:26.000000000 +0100
++++ fltk2/makeinclude.in	2009-01-02 02:56:49.000000000 +0100
+@@ -54,6 +54,7 @@
+ 
+ # flags for C++ compiler:
+ OPTIM		= @OPTIM@
++CPPFLAGS	= @CPPFLAGS@
+ CFLAGS		= $(OPTIM) @CFLAGS@
+ CXXFLAGS	= $(OPTIM) @CXXFLAGS@
+ 
+--- fltk2-r6542/makeinclude.in.orig	2009-01-02 02:33:29.000000000 +0100
++++ fltk2-r6542/makeinclude.in	2009-01-02 02:37:27.000000000 +0100
+@@ -124,11 +124,11 @@
+ 
+ .c.o:
+ 	echo Compiling $<...
+-	$(CC) -I.. -I../fltk/compat $(CFLAGS) -c $<
++	$(CC) $(CPPFLAGS) -I.. -I../fltk/compat $(CFLAGS) -c $<
+ 
+ .cxx.o:
+ 	echo Compiling $<...
+-	$(CXX) -I.. -I../fltk/compat $(CXXFLAGS) -c $<
++	$(CXX) $(CPPFLAGS) -I.. -I../fltk/compat $(CXXFLAGS) -c $<
+ 
+ .man.0 .man.1 .man.3:
+ 	echo Formatting $<...

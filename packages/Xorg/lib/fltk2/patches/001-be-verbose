@@ -1,0 +1,12 @@
+--- fltk2/makeinclude.in	2009-01-02 02:28:29.000000000 +0100
++++ fltk2/makeinclude.in	2009-01-02 02:28:43.000000000 +0100
+@@ -114,9 +114,6 @@
+ CAT1EXT		= @CAT1EXT@
+ CAT3EXT		= @CAT3EXT@
+ 
+-# Be quiet when building...
+-.SILENT:
+-
+ # Build commands and filename extensions...
+ .SUFFIXES:	.0 .1 .3 .c .cxx .h .fl .man .o .z $(EXEEXT)
+ 
