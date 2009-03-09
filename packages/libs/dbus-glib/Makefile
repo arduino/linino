@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,24 +9,25 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dbus-glib
-PKG_VERSION:=0.76
-PKG_RELEASE:=3
+PKG_VERSION:=0.80
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dbus.freedesktop.org/releases/dbus-glib/
-PKG_MD5SUM:=d3b716a7e798faa1c6a867675f00306a
+PKG_MD5SUM:=86ea60ba2118a1b9deafe8257f6a6a1a
+
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-PKG_INSTALL=1
 
 define Package/libdbus-glib
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=D-Bus Glib bindings
   URL:=http://dbus.freedesktop.org/doc/dbus-glib/
-  DEPENDS:=+dbus +glib2 +libiconv +libintl
+  DEPENDS:=+libdbus +glib2 +libiconv +libintl
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -70,4 +71,3 @@ endef
 
 
 $(eval $(call BuildPackage,libdbus-glib))
-
