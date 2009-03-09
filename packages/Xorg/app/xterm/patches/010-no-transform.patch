@@ -1,0 +1,19 @@
+diff --git a/Makefile.in b/Makefile.in
+index 62a2882..159755b 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -160,10 +160,10 @@ resize$x : $(OBJS2)
+ 
+ charproc$o : main.h @CHARPROC_DEPS@
+ ################################################################################
+-actual_xterm  = `echo xterm|        sed '$(transform)'`
+-actual_resize = `echo resize|       sed '$(transform)'`
+-actual_uxterm = `echo uxterm|       sed '$(transform)'`
+-actual_k8term = `echo koi8rxterm|   sed '$(transform)'`
++actual_xterm  = xterm
++actual_resize = resize
++actual_uxterm = uxterm
++actual_k8term = koi8rxterm
+ 
+ binary_xterm  = $(actual_xterm)$x
+ binary_resize = $(actual_resize)$x
