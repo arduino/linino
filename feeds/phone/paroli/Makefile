@@ -28,7 +28,7 @@ define Package/paroli
   CATEGORY:=Phone
   TITLE:=integrated phone application
   DEPENDS:=+python +fso +python-evas +python-ecore +python-edje +python-e_dbus \
-           +python-etk +python-expat
+           +python-etk +python-expat +dbus-utils
   URL:=http://wiki.openmoko.org/wiki/Paroli
 endef
 
