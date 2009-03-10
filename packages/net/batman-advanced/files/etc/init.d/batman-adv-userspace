@@ -1,15 +1,15 @@
 #!/bin/sh /etc/rc.common
 START=90
 . /lib/config/uci.sh
-uci_load batmand-adv-userspace
+uci_load batman-adv-userspace
 start () {
-	interface=$(uci get batmand-adv-userspace.general.interface)
+	interface=$(uci get batman-adv-userspace.general.interface)
 	if [ "$interface" = "" ]; then
 		echo $1 Error, you must specify at least a network interface
 		exit
 	fi
-	originator_interval=$(uci get batmand-adv-userspace.general.originator_interval)
-	visualisation_srv=$(uci get batmand-adv-space.general.visualisation_srv)
+	originator_interval=$(uci get batman-adv-userspace.general.originator_interval)
+	visualisation_srv=$(uci get batman-adv-userspace.general.visualisation_srv)
 	batman_args=""
 
 	if [ $originator_interval ]; then

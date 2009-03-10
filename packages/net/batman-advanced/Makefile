@@ -8,7 +8,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=batmand-adv
+PKG_NAME:=batman-adv
 PKG_REV:=1220
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
@@ -34,7 +34,7 @@ define Package/batman-adv/Default
   MAINTAINER:=Marek Lindner <lindner_marek@yahoo.de>
 endef
 
-define Package/batmand-adv-userspace
+define Package/batman-adv-userspace
 $(call Package/batman-adv/Default)
   SECTION:=net
   CATEGORY:=Network
@@ -42,7 +42,7 @@ $(call Package/batman-adv/Default)
   TITLE:=B.A.T.M.A.N. layer 2 routing daemon
 endef
 
-define Package/batmand-adv-userspace/description
+define Package/batman-adv-userspace/description
 B.A.T.M.A.N. layer 2 routing daemon
 endef
 
@@ -106,7 +106,7 @@ MAKE_TOOL_ARGS += \
 define Build/Configure
 endef
 
-ifneq ($(CONFIG_PACKAGE_batmand-adv-userspace),n)
+ifneq ($(CONFIG_PACKAGE_batman-adv-userspace),n)
 	BUILD_ADV = $(MAKE) -C $(PKG_BUILD_DIR)/batman-adv-userspace $(MAKE_ARGS)
 endif
 
@@ -125,17 +125,17 @@ define Build/Compile
 	$(BUILD_BATTOOL)
 endef
 
-define Package/batmand-adv-userspace/install
+define Package/batman-adv-userspace/install
 	$(INSTALL_DIR) $(1)/usr/sbin $(1)/etc/config $(1)/etc/init.d
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/batmand-adv $(1)/usr/sbin/
-	$(INSTALL_BIN) ./files/etc/init.d/batmand-adv-userspace $(1)/etc/init.d
-	$(INSTALL_DATA) ./files/etc/config/batmand-adv-userspace $(1)/etc/config
+	$(INSTALL_BIN) ./files/etc/init.d/batman-adv-userspace $(1)/etc/init.d
+	$(INSTALL_DATA) ./files/etc/config/batman-adv-userspace $(1)/etc/config
 endef
 
-define Package/batmand-adv-kernelland/install
+define Package/batman-adv-kernelland/install
 	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/etc/init.d/batmand-adv-kernelland $(1)/etc/init.d
-	$(INSTALL_DATA) ./files/etc/config/batmand-adv-kernelland $(1)/etc/config
+	$(INSTALL_BIN) ./files/etc/init.d/batman-adv-kernelland $(1)/etc/init.d
+	$(INSTALL_DATA) ./files/etc/config/batman-adv-kernelland $(1)/etc/config
 endef
 
 define Package/battool/install
@@ -143,6 +143,6 @@ define Package/battool/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/battool $(1)/usr/sbin/
 endef
 
-$(eval $(call BuildPackage,batmand-adv-userspace))
+$(eval $(call BuildPackage,batman-adv-userspace))
 $(eval $(call BuildPackage,battool))
 $(eval $(call KernelPackage,batman-adv-kernelland))
