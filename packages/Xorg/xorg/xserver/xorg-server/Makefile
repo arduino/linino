@@ -17,7 +17,7 @@ PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/xserver/$(PKG_NAME)-$(PKG_VERSION)/
 PKG_BUILD_DEPENDS:=randrproto renderproto fixesproto damageproto xcmiscproto \
 				   xextproto xproto scrnsaverproto bigreqsproto resourceproto \
 				   fontsproto inputproto kbproto videoproto resourceproto \
-				   xf86dgaproto xtrans xf86driproto
+				   compositeproto xf86dgaproto xtrans xf86driproto
 
 PKG_INSTALL:=1
 
