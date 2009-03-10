@@ -132,7 +132,7 @@ define Package/batman-adv-userspace/install
 	$(INSTALL_DATA) ./files/etc/config/batman-adv-userspace $(1)/etc/config
 endef
 
-define Package/batman-adv-kernelland/install
+define KernelPackage/batman-adv-kernelland/install
 	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/etc/init.d/batman-adv-kernelland $(1)/etc/init.d
 	$(INSTALL_DATA) ./files/etc/config/batman-adv-kernelland $(1)/etc/config
