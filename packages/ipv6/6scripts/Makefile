@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=6scripts
 PKG_VERSION:=0.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -44,6 +44,8 @@ define Package/6scripts/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/6tunnel.init $(1)/etc/init.d/6tunnel
 	$(INSTALL_BIN) ./files/6bridge.init $(1)/etc/init.d/6bridge
+	$(INSTALL_DIR) $(1)/etc/ppp/ip-up.d/ 
+	$(INSTALL_DATA) ./files/he-tun.ppp $(1)/etc/ppp/ip-up.d/ 
 endef
 
 $(eval $(call BuildPackage,6scripts))
