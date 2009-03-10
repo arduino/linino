@@ -31,7 +31,7 @@ define Package/xf86-video-glamo
   CATEGORY:=Xorg
   SUBMENU:=driver
   URL:=http://github.com/larsclausen/xf86-video-glamo/tree/xf86-video-glamo
-  DEPENDS:=@DISPLAY_SUPPORT @arm||armeb +xserver-xorg
+  DEPENDS:=@DISPLAY_SUPPORT @arm||armeb +xserver-xorg +util-macros
 endef
 
 define Package/xf86-video-glamo/description
