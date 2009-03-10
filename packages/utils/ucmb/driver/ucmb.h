@@ -41,6 +41,13 @@
  *
  * @mode:		The SPI bus mode. SPI_MODE_*
  * @max_speed_hz:	The bus speed, in Hz. If zero the speed is not limited.
+ * @chunk_size:		The maximum chunk size to transmit/receive in one go
+ *			without sleeping. The kernel will be allowed to sleep
+ *			after each chunk.
+ *			If set to 0, the whole data will be transmitted/received
+ *			in one big rush without sleeping. Note that this might hurt
+ *			system responsiveness, if the kernel is not preemptible.
+ *			If CONFIG_PREEMPT is enabled, chunk_size will be forced to 0.
  */
 struct ucmb_platform_data {
 	const char *name;
@@ -55,6 +62,7 @@ struct ucmb_platform_data {
 
 	u8 mode;
 	u32 max_speed_hz;
+	unsigned int chunk_size;
 
 	struct platform_device *pdev; /* internal */
 };

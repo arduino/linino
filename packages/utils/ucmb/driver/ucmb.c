@@ -28,6 +28,7 @@
 #include <linux/gfp.h>
 #include <linux/delay.h>
 #include <linux/crc16.h>
+#include <linux/sched.h>
 
 #include <asm/uaccess.h>
 
@@ -47,6 +48,7 @@ struct ucmb {
 
 	bool is_open;
 
+	unsigned int chunk_size;
 	unsigned int msg_delay_usec;
 	unsigned int gpio_reset;
 	bool reset_activelow;
@@ -228,6 +230,48 @@ static int ucmb_ioctl(struct inode *inode, struct file *filp,
 	return ret;
 }
 
+static int ucmb_spi_write(struct ucmb *ucmb, const void *_buf, size_t size)
+{
+	const u8 *buf = _buf;
+	size_t i, chunk_size, current_size;
+	int err = 0;
+
+	chunk_size = ucmb->chunk_size ? : size;
+	for (i = 0; i < size; i += chunk_size) {
+		current_size = chunk_size;
+		if (i + current_size > size)
+			current_size = size - i;
+		err = spi_write(ucmb->sdev, buf + i, current_size);
+		if (err)
+			goto out;
+		if (ucmb->chunk_size && need_resched())
+			msleep(1);
+	}
+out:
+	return err;
+}
+
+static int ucmb_spi_read(struct ucmb *ucmb, void *_buf, size_t size)
+{
+	u8 *buf = _buf;
+	size_t i, chunk_size, current_size;
+	int err = 0;
+
+	chunk_size = ucmb->chunk_size ? : size;
+	for (i = 0; i < size; i += chunk_size) {
+		current_size = chunk_size;
+		if (i + current_size > size)
+			current_size = size - i;
+		err = spi_read(ucmb->sdev, buf + i, current_size);
+		if (err)
+			goto out;
+		if (ucmb->chunk_size && need_resched())
+			msleep(1);
+	}
+out:
+	return err;
+}
+
 static ssize_t ucmb_read(struct file *filp, char __user *user_buf,
 			 size_t size, loff_t *offp)
 {
@@ -248,7 +292,7 @@ static ssize_t ucmb_read(struct file *filp, char __user *user_buf,
 	if (!buf)
 		goto out;
 
-	err = spi_read(ucmb->sdev, (u8 *)&hdr, sizeof(hdr));
+	err = ucmb_spi_read(ucmb, &hdr, sizeof(hdr));
 	if (err)
 		goto out_free;
 #ifdef DEBUG
@@ -262,10 +306,10 @@ static ssize_t ucmb_read(struct file *filp, char __user *user_buf,
 	if (size < le16_to_cpu(hdr.len))
 		goto out_free;
 	size = le16_to_cpu(hdr.len);
-	err = spi_read(ucmb->sdev, buf, size);
+	err = ucmb_spi_read(ucmb, buf, size);
 	if (err)
 		goto out_free;
-	err = spi_read(ucmb->sdev, (u8 *)&footer, sizeof(footer));
+	err = ucmb_spi_read(ucmb, &footer, sizeof(footer));
 	if (err)
 		goto out_free;
 
@@ -288,7 +332,7 @@ static ssize_t ucmb_read(struct file *filp, char __user *user_buf,
 	err = 0;
 
 out_send_status:
-	res = spi_write(ucmb->sdev, (u8 *)&status, sizeof(status));
+	res = ucmb_spi_write(ucmb, &status, sizeof(status));
 	if (res && !err)
 		err = res;
 out_free:
@@ -308,10 +352,7 @@ static ssize_t ucmb_write(struct file *filp, const char __user *user_buf,
 	struct ucmb_message_hdr hdr = { .magic = cpu_to_le16(UCMB_MAGIC), };
 	struct ucmb_message_footer footer = { .crc = 0xFFFF, };
 	struct ucmb_status status;
-	struct spi_transfer spi_hdr_xfer;
-	struct spi_transfer spi_footer_xfer;
-	struct spi_transfer spi_data_xfer;
-	struct spi_message spi_msg;
+	size_t i, current_size, chunk_size;
 
 	mutex_lock(&ucmb->mutex);
 
@@ -330,25 +371,13 @@ static ssize_t ucmb_write(struct file *filp, const char __user *user_buf,
 	footer.crc = crc16(footer.crc, buf, size);
 	footer.crc ^= 0xFFFF;
 
-	spi_message_init(&spi_msg);
-
-	memset(&spi_hdr_xfer, 0, sizeof(spi_hdr_xfer));
-	spi_hdr_xfer.tx_buf = &hdr;
-	spi_hdr_xfer.len = sizeof(hdr);
-	spi_message_add_tail(&spi_hdr_xfer, &spi_msg);
-
-	memset(&spi_data_xfer, 0, sizeof(spi_data_xfer));
-	spi_data_xfer.tx_buf = buf;
-	spi_data_xfer.len = size;
-	spi_message_add_tail(&spi_data_xfer, &spi_msg);
-
-	memset(&spi_footer_xfer, 0, sizeof(spi_footer_xfer));
-	spi_footer_xfer.tx_buf = &footer;
-	spi_footer_xfer.len = sizeof(footer);
-	spi_message_add_tail(&spi_footer_xfer, &spi_msg);
-
-	/* Send the message, including header. */
-	err = spi_sync(ucmb->sdev, &spi_msg);
+	err = ucmb_spi_write(ucmb, &hdr, sizeof(hdr));
+	if (err)
+		goto out_free;
+	err = ucmb_spi_write(ucmb, buf, size);
+	if (err)
+		goto out_free;
+	err = ucmb_spi_write(ucmb, &footer, sizeof(footer));
 	if (err)
 		goto out_free;
 
@@ -364,7 +393,7 @@ static ssize_t ucmb_write(struct file *filp, const char __user *user_buf,
 	}
 
 	/* Get the status code. */
-	err = spi_read(ucmb->sdev, (u8 *)&status, sizeof(status));
+	err = ucmb_spi_read(ucmb, &status, sizeof(status));
 	if (err)
 		goto out_free;
 #ifdef DEBUG
@@ -404,6 +433,14 @@ static int __devinit ucmb_probe(struct platform_device *pdev)
 	mutex_init(&ucmb->mutex);
 	ucmb->gpio_reset = pdata->gpio_reset;
 	ucmb->reset_activelow = pdata->reset_activelow;
+	ucmb->chunk_size = pdata->chunk_size;
+
+#ifdef CONFIG_PREEMPT
+	/* A preemptible kernel does not need to sleep between
+	 * chunks, because it can sleep at desire (if IRQs are enabled).
+	 * So transmit/receive it all in one go. */
+	ucmb->chunk_size = 0;
+#endif
 
 	/* Create the SPI GPIO bus master. */
 
