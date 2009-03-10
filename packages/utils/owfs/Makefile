@@ -161,16 +161,13 @@ define Build/InstallDev
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP)	$(PKG_INSTALL_DIR)/usr/include/{owcapi,owfs_config}.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/libow.{a,so} $(PKG_INSTALL_DIR)/usr/lib/libowcapi.{a,so} $(STAGING_DIR)/usr/lib/
-	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/libow-*.so.* $(PKG_INSTALL_DIR)/usr/lib/libowcapi-*.so.* $(STAGING_DIR)/usr/lib/
+	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/libow-*.so* $(PKG_INSTALL_DIR)/usr/lib/libowcapi-*.so* $(STAGING_DIR)/usr/lib/
 endef
 
 define Build/UninstallDev
 	rm -rf	$(STAGING_DIR)/usr/include/{libow-capi,owfs_config}.h \
-		$(STAGING_DIR)/usr/lib/libow-capi-*.so.* \
-		$(STAGING_DIR)/usr/lib/libow-*.so.* \
-		$(STAGING_DIR)/usr/lib/libow-capi.{a,so} \
-		$(STAGING_DIR)/usr/lib/libow.{a,so}
+		$(STAGING_DIR)/usr/lib/libow-capi-*.so* \
+		$(STAGING_DIR)/usr/lib/libow-*.so*
 endef
 
 
