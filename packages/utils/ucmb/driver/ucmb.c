@@ -29,6 +29,8 @@
 #include <linux/delay.h>
 #include <linux/crc16.h>
 
+#include <asm/uaccess.h>
+
 
 #define PFX	"ucmb: "
 
