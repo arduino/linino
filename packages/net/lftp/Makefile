@@ -14,7 +14,7 @@ PKG_VERSION:=3.7.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://ftp.yars.free.net/pub/source/lftp/
+PKG_SOURCE_URL:=http://lftp.cybermirror.org/old/
 PKG_MD5SUM:=7b1c58a6289448140b1cd328e1d51f94
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
