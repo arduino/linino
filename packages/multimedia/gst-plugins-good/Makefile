@@ -67,6 +67,7 @@ define Build/Configure
 		--disable-directdraw \
 		--disable-directshow \
 		--disable-sunaudio \
+		--without-x \
 	)
 	mkdir -p $(PKG_BUILD_DIR)/bin
 	touch $(PKG_BUILD_DIR)/bin/gtkdoc-rebase
