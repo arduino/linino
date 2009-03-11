@@ -54,6 +54,7 @@ define Build/Configure
 		--disable-oggtest \
 		--disable-vorbistest \
 		--disable-freetypetest \
+		--without-x \
 	)
 	mkdir -p $(PKG_BUILD_DIR)/bin
 	touch $(PKG_BUILD_DIR)/bin/gtkdoc-rebase
