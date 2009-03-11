@@ -3,19 +3,19 @@ START=90
 . /lib/config/uci.sh
 uci_load batman-adv-kernelland
 start () {
-	interfaces=$(uci get batman-adv-kernalland.general.interface)
+	interfaces=$(uci get batman-adv-kernelland.general.interface)
 	if [ "$interfaces" = "" ]; then
 		echo $1 Error, you must specify at least a network interface
 		exit
 	fi
 	
-	for interface in interfaces
+	for interface in $interfaces
 	   do
 	      echo $interface > /proc/net/batman-adv/interfaces
 	   done
 	   
-	originator_interval=$(uci get batman-adv-kernalland.general.originator_interval)
-	log_level=$(uci get batman-adv-kernalland.general.log_level)
+	originator_interval=$(uci get batman-adv-kernelland.general.originator_interval)
+	log_level=$(uci get batman-adv-kernelland.general.log_level)
 
 	if [ $originator_interval ]; then
 		echo $originator_interval > /proc/net/batman-adv/originator_interval
