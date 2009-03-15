@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006,2007 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 
 START=99
 
@@ -13,4 +13,8 @@ start() {
 
 stop() {
 	[ -f $PID_F ] && kill $(cat $PID_F)
+}
+
+reload() {
+	[ -f $PID_F ] && kill -HUP $(cat $PID_F)
 }

@@ -9,19 +9,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dovecot
-PKG_VERSION:=1.0.beta8
+PKG_VERSION:=1.1.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.dovecot.org/releases/
-PKG_MD5SUM:=6a87718a86ee1ae2334c75843dd9a7df
+PKG_SOURCE_URL:=http://www.dovecot.org/releases/1.1
+PKG_MD5SUM:=fcebb6c099421049632b2f1f019f55cd
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/dovecot
   SECTION:=mail
   CATEGORY:=Mail
-  DEPENDS:=+libopenssl
+  DEPENDS:=+libopenssl +zlib
   TITLE:=An IMAP and POP3 daemon
   URL:=http://www.dovecot.org/
 endef
@@ -37,8 +37,19 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--without-gssapi \
 		--with-moduledir=/usr/lib/dovecot/modules \
+		--with-notify=dnotify \
 		, \
-		ignore_signed_size=1 \
+		RPCGEN= \
+		i_cv_signed_size_t=no \
+		i_cv_signed_time_t=no \
+		i_cv_gmtime_max_time_t=32 \
+		i_cv_mmap_plays_with_write=yes \
+		i_cv_fd_passing=yes \
+		i_cv_c99_vsnprintf=yes \
+		lib_cv_va_copy=yes \
+		lib_cv_va_copy=yes \
+		lib_cv___va_copy=yes \
+		lib_cv_va_val_copy=yes \
 	)
 endef
 
@@ -51,8 +62,7 @@ endef
 define Package/dovecot/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/dovecot.init $(1)/etc/init.d/dovecot
-	$(INSTALL_DIR) $(1)/etc/dovecot
-	$(INSTALL_DATA) ./files/dovecot.conf $(1)/etc/dovecot.conf
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/dovecot-example.conf $(1)/etc/dovecot.conf
 	$(INSTALL_DIR) $(1)/usr/lib/dovecot
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/dovecot/* $(1)/usr/lib/dovecot/
 	$(INSTALL_DIR) $(1)/usr/sbin

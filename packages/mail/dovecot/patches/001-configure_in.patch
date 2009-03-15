@@ -1,0 +1,14 @@
+--- dovecot-1.1.2-orig/configure.in	2008-07-24 01:46:52.000000000 +0200
++++ dovecot-1.1.2/configure.in	2008-07-29 15:46:47.000000000 +0200
+@@ -473,9 +473,9 @@
+ 
+ if test "$ioloop" = "best" || test "$ioloop" = "epoll"; then
+   AC_CACHE_CHECK([whether we can use epoll],i_cv_epoll_works,[
+-    AC_TRY_RUN([
++    AC_TRY_LINK([
+       #include <sys/epoll.h>
+-  
++    ], [
+       int main()
+       {
+ 	return epoll_create(5) < 1;
