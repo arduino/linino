@@ -9,19 +9,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iodine
-PKG_VERSION:=0.4.2
+PKG_VERSION:=0.5.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://code.kryo.se/iodine/
-PKG_MD5SUM:=890f13ab9ee7ea722baf0ceb3ee561c0
+PKG_MD5SUM:=af2d9062b7788fc47385d8c6c645dfa0
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/iodine/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+zlib
+  DEPENDS:=+zlib +kmod-tun
   TITLE:=IP over DNS tunneling
   URL:=http://code.kryo.se/iodine/
 endef
