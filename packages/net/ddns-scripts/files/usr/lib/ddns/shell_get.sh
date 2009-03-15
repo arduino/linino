@@ -33,7 +33,7 @@ encode_base64()
 {
 	original_str=$1
 	
-	hex_str=$( echo -n "$original_str" | hexdump -v | awk '{ for ( i = 2; i <= NF; i++ ) {  h1=substr($i, 3, 2); h2=substr($i,0,2); printf("%s%s", h1, h2); }}' | awk ' { $0~gsub(/00$/, "") };{ i=1; while(i <= length($0) ){ block= substr($0, i, 3); printf("%s ", block); i=i+3;  }}' | awk ' {$0~gsub(/ $/, "")}; { print $0 }' )
+	hex_str=$( echo -n "$original_str" | hexdump -v -e '1/1 "%02x"' | awk ' { $0~gsub(/00$/, "") };{ i=1; while(i <= length($0) ){ block= substr($0, i, 3); printf("%s ", block); i=i+3;  }}' | awk ' {$0~gsub(/ $/, "")}; { print $0 }' )
 
 	length=$(echo $hex_str | awk  '{$0~gsub(/ /, "")}; { print length($0) }')
 	remainder=$(($length % 3 ))
