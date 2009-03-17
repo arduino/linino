@@ -19,6 +19,8 @@ PKG_SOURCE_URL:=@SF/boost \
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
 
+PKG_BUILD_DEPENDS:=boost-jam/host
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/boost
@@ -26,7 +28,6 @@ define Package/boost
   CATEGORY:=Libraries
   TITLE:=Boost provides free peer-reviewed portable C++ source libraries
   URL:=http://www.boost.org/
-  DEPENDS:=+boost-jam
 endef
 
 define Build/Configure
