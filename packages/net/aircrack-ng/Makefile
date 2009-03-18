@@ -46,6 +46,7 @@ define Build/Compile
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
 		prefix="/usr" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		OSNAME=Linux \
 		all install
 endef
 
