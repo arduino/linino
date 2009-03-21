@@ -8,14 +8,14 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=libexo
-PKG_VERSION:=0.3.93
+PKG_NAME:=exo
+PKG_VERSION:=0.3.100
 PKG_RELEASE:=1
 
-PKG_SOURCE:=exo-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.5.93/src/
-PKG_MD5SUM:=
-PKG_BUILD_DIR:=$(BUILD_DIR)/exo-$(PKG_VERSION)/
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.6.0/src/
+PKG_MD5SUM:=ebded97ff55f43cd0fe6b16242992ecf
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
@@ -25,6 +25,7 @@ TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib/
 
 define Package/libexo

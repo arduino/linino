@@ -9,12 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xfwm4-themes
-PKG_VERSION:=4.5.93
+PKG_VERSION:=4.6.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-$(PKG_VERSION)/src/
-PKG_MD5SUM:=
+PKG_MD5SUM:=4dc5cb29cbd40e3b9dece12a85e20854
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

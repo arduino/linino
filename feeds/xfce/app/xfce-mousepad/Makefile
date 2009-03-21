@@ -9,13 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xfce-mousepad
-PKG_VERSION:=0.2.14
+PKG_VERSION:=0.2.16
 PKG_RELEASE:=1
 
 PKG_SOURCE:=mousepad-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/mousepad-$(PKG_VERSION)
-PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.4.3/src/
-PKG_MD5SUM:=6cfef0e424c778409e2791d0af6ab089
+PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.6.0/src/
+
+PKG_MD5SUM:=d98854edb76d823ac20b266fdf5a64a1
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -24,6 +25,7 @@ TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib
 
 define Package/xfce-mousepad

@@ -15,6 +15,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://spuriousinterrupt.org/files/xfmedia/
 PKG_MD5SUM:=6eb8bd1f67201f829e0f45e733c02bd5
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
@@ -25,6 +26,7 @@ TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib
 
 define Package/xfmedia

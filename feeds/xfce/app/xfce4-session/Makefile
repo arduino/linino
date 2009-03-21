@@ -9,12 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xfce4-session
-PKG_VERSION:=4.5.93
+PKG_VERSION:=4.6.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-$(PKG_VERSION)/src/
-PKG_MD5SUM:=7d3b5f1400cc053ef01ad61e209d5828
+PKG_MD5SUM:=79a08c3696196ef31fc8185658316706
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
@@ -24,6 +25,7 @@ TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib
 
 define Package/xfce4-session
@@ -31,7 +33,7 @@ define Package/xfce4-session
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=xfce4-session
-  DEPENDS:=+libxfce4util +libxfcegui4 +libwnck +dbus +libdbusgconf +libxfconf \
+  DEPENDS:=+libxfce4util +libxfcegui4 +libwnck +dbus +libdbus +libxfconf \
   +libglade +iceauth +libX11 +libSM +xfconf +thunar +xfce4-panel \
   +xfce4-settings +xfdesktop +xfce-utils +xfwm4
 endef

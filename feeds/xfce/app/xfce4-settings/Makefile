@@ -9,12 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xfce4-settings
-PKG_VERSION:=4.5.93
+PKG_VERSION:=4.6.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-$(PKG_VERSION)/src/
-PKG_MD5SUM:=3873c76afcb8f1d174381825fc0467cf
+PKG_MD5SUM:=ac538c4ab32e3a91f4567141adc3c898
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
@@ -25,6 +26,7 @@ TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib
 
 define Package/xfce4-settings

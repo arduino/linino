@@ -9,13 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=thunar
-PKG_VERSION:=0.9.93
+PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=Thunar-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/Thunar-$(PKG_VERSION)
-PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.5.93/src/
-PKG_MD5SUM:=8fb12c28284503929732dea8c185c413
+PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.6.0/src/
+PKG_MD5SUM:=468c240a4f65a217ec2b6132e85cd84e
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
@@ -25,6 +26,7 @@ TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib
 
 define Package/libthunar-vfs
@@ -33,7 +35,7 @@ define Package/libthunar-vfs
   SUBMENU:=libraries
   TITLE:=thunar virtual filesystem library
   DEPENDS:=+libexo +libpng +libxfce4util +libgamin +libstartup-notification \
-           +xfce4-panel
+           +xfce4-panel +dbus-launch-x +gamin-server
 endef
 
 define Package/libthunarx

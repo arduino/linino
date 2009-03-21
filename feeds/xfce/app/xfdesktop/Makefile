@@ -9,12 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xfdesktop
-PKG_VERSION:=4.5.93
+PKG_VERSION:=4.6.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-$(PKG_VERSION)/src/
-PKG_MD5SUM:=
+PKG_MD5SUM:=508b18f9d4ef27833517bba3bd6e2fbf
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
@@ -24,6 +25,7 @@ TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib
 
 define Package/xfdesktop
@@ -31,7 +33,7 @@ define Package/xfdesktop
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=xfdesktop
-  DEPENDS:=+libxfce4util +libxfcegui4 +libxfconf +libwnck +libglade +thunar
+  DEPENDS:=+libxfce4util +libxfcegui4 +libxfce4menu +libxfconf +libwnck +libglade +thunar
 endef
 
 define Package/xfdesktop/install

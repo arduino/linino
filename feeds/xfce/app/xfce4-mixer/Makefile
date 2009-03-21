@@ -9,12 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xfce4-mixer
-PKG_VERSION:=4.5.93
+PKG_VERSION:=4.6.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-$(PKG_VERSION)/src/
-PKG_MD5SUM:=bb4c4b46873a576797c74e642da5c0ad
+PKG_MD5SUM:=ee7956a73efe43da4b27ad9cd1f4d20b
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
@@ -24,6 +25,7 @@ TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib
 
 define Package/xfce4-mixer
@@ -31,7 +33,7 @@ define Package/xfce4-mixer
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=xfce4-mixer
-  DEPENDS:=+libxfce4util +libxfcegui4 +libxfce4panel +gst-plugins-base \
+  DEPENDS:=+libxfce4util +libxfcegui4 +xfce4-panel +gst-plugins-base \
   +xfce4-panel
 endef
 

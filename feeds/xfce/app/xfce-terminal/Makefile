@@ -9,13 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xfce-terminal
-PKG_VERSION:=0.2.5.8rc2
+PKG_VERSION:=0.2.10
 PKG_RELEASE:=1
 
 PKG_SOURCE:=Terminal-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/Terminal-$(PKG_VERSION)
-PKG_SOURCE_URL:=http://download.berlios.de/xfce-goodies/
-PKG_MD5SUM:=d2785c1b11c48ed012042faa708bbf94
+PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.6.0/src/
+
+PKG_MD5SUM:=f6cefa97cf5cad558187267783ffce8a
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -24,6 +25,7 @@ TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib
 
 define Package/xfce-terminal
@@ -31,7 +33,16 @@ define Package/xfce-terminal
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=xfce-terminal
-  DEPENDS:=+libxfcegui4
+  DEPENDS:=+libxfcegui4 +vte
+endef
+
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--libexecdir=/usr/lib/xfce-terminal \
+		--enable-debug=no \
+		--disable-startup-notification \
+		--disable-dbus \
+	)
 endef
 
 define Package/xfce-terminal/install
@@ -56,13 +67,10 @@ define Package/xfce-terminal/install
 		$(PKG_INSTALL_DIR)/usr/share/applications/* \
 		$(1)/usr/share/applications/
 
-	$(INSTALL_DIR) $(1)/usr/share/Terminal/apps
+	$(INSTALL_DIR) $(1)/usr/share/Terminal
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/share/Terminal/*.ui \
 		$(1)/usr/share/Terminal/
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/share/Terminal/apps/* \
-		$(1)/usr/share/Terminal/apps/
 endef
 
 $(eval $(call BuildPackage,xfce-terminal))

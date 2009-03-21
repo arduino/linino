@@ -9,12 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xfconf
-PKG_VERSION:=4.5.93
+PKG_VERSION:=4.6.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-$(PKG_VERSION)/src/
-PKG_MD5SUM:=d426da2c79f9741aeea7a55ce967ffa3
+PKG_MD5SUM:=38595f78379eb1f456e97b393fdafd20
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
@@ -24,6 +25,7 @@ TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib
 
 define Package/libxfconf
@@ -31,7 +33,7 @@ define Package/libxfconf
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=libxfconf
-  DEPENDS:=+libxfce4util +dbus +libdbus-glib +gtk2
+  DEPENDS:=+libxfce4util +dbus +libdbus-glib +gtk2 +dbus-launch-x
 endef
 
 define Package/xfconf

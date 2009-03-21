@@ -9,12 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libxfce4menu
-PKG_VERSION:=4.5.93
+PKG_VERSION:=4.6.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-$(PKG_VERSION)/src/
-PKG_MD5SUM:=54b75f848566f179fcfd463af03281ff
+PKG_MD5SUM:=ff7f75ffa33debd3495b1156a55828a8
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 

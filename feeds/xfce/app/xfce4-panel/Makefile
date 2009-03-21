@@ -9,22 +9,23 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xfce4-panel
-PKG_VERSION:=4.5.93
+PKG_VERSION:=4.6.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-$(PKG_VERSION)/src
-PKG_MD5SUM:=96c4cccf520aa789b267b14b491359ab
+PKG_MD5SUM:=b4c7cce05cc858d11c9dcd4c2f8dbfdb
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-
 TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib/
 
 define Package/libxfce4-panel

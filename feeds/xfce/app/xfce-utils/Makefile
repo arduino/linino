@@ -9,22 +9,23 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xfce-utils
-PKG_VERSION:=4.5.92
+PKG_VERSION:=4.6.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-$(PKG_VERSION)/src/
-PKG_MD5SUM:=8700842ab643838910ec9adfa08aa01d
+PKG_MD5SUM:=b192940801a7bd9bb800e570a299ecde
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-
 TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib
 
 define Package/xfce-utils
@@ -32,7 +33,7 @@ define Package/xfce-utils
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=xfce-utils
-  DEPENDS:=+libxfce4util +libxfcegui4 +dbus
+  DEPENDS:=+libxfce4util +libxfcegui4 +dbus-launch-x
 endef
 
 define Build/Configure

@@ -9,12 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libxfcegui4
-PKG_VERSION:=4.5.93
+PKG_VERSION:=4.6.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-$(PKG_VERSION)/src/
-PKG_MD5SUM:=e8c760abcd08df81abe4a2f94ced26aa
+PKG_MD5SUM:=8627ae4fad26289f55f0afbebe238bf5
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
