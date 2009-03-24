@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=net-snmp
 PKG_VERSION:=5.1.2
-PKG_RELEASE:=2.3
+PKG_RELEASE:=2.4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/net-snmp
