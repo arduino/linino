@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kismet
 PKG_VERSION:=2008-05-R1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kismetwireless.net/code
@@ -85,6 +85,7 @@ $(call Package/kismet/Default/description)
 endef
 
 CONFIGURE_ARGS += \
+	--sysconfdir=/etc/kismet \
 	--enable-syspcap=yes \
 	--disable-dbus \
 	--disable-setuid \
