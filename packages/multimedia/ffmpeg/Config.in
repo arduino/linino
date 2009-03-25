@@ -259,3 +259,7 @@ config FFMPEG_PROTOCOL_udp
 	bool
 	prompt "udp:"
 
+config FFMPEG_PROTOCOL_IPv6
+	bool
+	prompt "IPv6"
+
