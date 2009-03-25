@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=siproxd
 PKG_VERSION:=0.7.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/siproxd
@@ -23,14 +23,14 @@ PKG_FIXUP = libtool
 define Package/siproxd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libosip2
+  DEPENDS:=+libltdl +libosip2 +libpthread
   TITLE:=SIP (Session Initiation Protocol) proxy
   URL:=http://siproxd.sourceforge.net/
 endef
 
-#define Package/siproxd/conffiles
-#/etc/siproxd.conf
-#endef
+define Package/siproxd/conffiles
+/etc/config/siproxd
+endef
 
 # uses GNU configure
 
@@ -44,10 +44,9 @@ endef
 
 define Package/siproxd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/siproxd $(1)/usr/sbin/
-#	$(INSTALL_DIR) $(1)/etc
-#	$(INSTALL_DATA) $(PKG_BUILD_DIR)/doc/siproxd.conf.example $(1)/etc/siproxd.conf
-#	$(INSTALL_CONF) $(PKG_BUILD_DIR)/doc/siproxd_passwd.cfg $(1)/etc/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/siproxd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/lib/siproxd
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/siproxd/plugin_*.so* $(1)/usr/lib/siproxd/
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/siproxd.config $(1)/etc/config/siproxd
 	$(INSTALL_DIR) $(1)/etc/init.d
