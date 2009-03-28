@@ -6,36 +6,15 @@
 #
 # $Id$
 
-# TODO:
-# - create smaller default config files (sip.conf and extensions.conf)
-# - ldd /usr/sbin/asterisk result:
-#   + libssl.so.0.9.8 dep. is missing (and zlib sub dep.) => libopenssl
-#   + libcrypto.so.0.9.8 dep. is missing => libopenssl
-#   => need 1063071 and 223551 bytes!
-# - asterisk -cvvv
-#   + load_dynamic_module: Error loading module 'func_strings.so': File not found 
-#   + Unable to open Asterisk database '/var/lib/asterisk/astdb
-#   + Error loading module 'res_musiconhold.so': File not found
-# - mkdir -p /var/lib/asterisk/
-# - app_echo.so need app_playback.so
-# - I need app_macro.so
-# - Function "CALLERID not registered
-#
-# Changelog:
-# 20090111 nm build brcm47xx failde: add --without-sdl to CONFIGURE_ARGS
-#             build x86: Package gtk+-2.0 was not found in the pkg-config search path.
-#              => --without-gtk and --without-gtk2 added to CONFIGURE_ARGS but libpopt
-#                 is needed
-
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
-PKG_VERSION:=1.6.1-rc1
+PKG_VERSION:=1.6.1.0-rc3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
-PKG_MD5SUM:=29f7285b673d52b49d91c8e797acbbb0
+PKG_MD5SUM:=29c45a36653e15ef8e78f92a1de753b8
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -57,7 +36,7 @@ endef
 define Package/asterisk16
 $(call Package/asterisk16/Default)
   TITLE:=Complete open source PBX
-  DEPENDS:= +libncurses +libpopt +libpthread +zlib @!TARGET_avr32 @!PACKAGE_asterisk14
+  DEPENDS:= +libopenssl +libncurses +libpopt +libpthread +zlib @!TARGET_avr32 @!PACKAGE_asterisk14
 endef
 
 define Package/asterisk16/description
@@ -96,6 +75,18 @@ endef
 define Package/asterisk16-app-meetme/description
 $(call Package/asterisk16/Default/description)
  This package provides the MeetMe application driver Conferencing support to
+ Asterisk.
+endef
+
+define Package/asterisk16-chan-iax2
+$(call Package/asterisk16/Default)
+  TITLE:=IAX support
+  DEPENDS:= +asterisk16
+endef
+
+define Package/asterisk16-chan-iax2/description
+$(call Package/asterisk16/Default/description)
+ This package provides IAX support to
  Asterisk.
 endef
 
@@ -190,10 +181,12 @@ define Package/asterisk16/install
 		$(CP) $(PKG_INSTALL_DIR)/etc/asterisk/$$$$f.conf $(1)/etc/asterisk/ ; \
 	done
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
-	for f in app_dial chan_sip \
+	for f in app_dial app_echo app_playback app_macro \
+		chan_sip \
 		codec_ulaw codec_gsm \
 		format_gsm format_pcm format_wav format_wav_gsm \
-		pbx_config func_timeout; do \
+		pbx_config \
+		func_strings func_timeout func_callerid; do \
 		$(CP) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/$$$$f.so $(1)/usr/lib/asterisk/modules/ ; \
 	done
 	$(INSTALL_DIR) $(1)/usr/sbin
@@ -240,7 +233,21 @@ define Package/asterisk16-app-meetme/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/asterisk/sounds/en/conf-*.gsm $(1)/usr/lib/asterisk/sounds/
 endef
 
+define Package/asterisk16-chan-iax2/conffiles
+/etc/asterisk/iax.conf
+/etc/asterisk/iaxprov.conf
+endef
+
+define Package/asterisk16-chan-iax2/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/iax.conf $(1)/etc/asterisk/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/iaxprov.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_iax2.so $(1)/usr/lib/asterisk/modules/
+endef
+
 $(eval $(call BuildPackage,asterisk16))
 $(eval $(call BuildPackage,asterisk16-voicemail))
 $(eval $(call BuildPackage,asterisk16-sounds))
 #$(eval $(call BuildPackage,asterisk16-app-meetme))
+$(eval $(call BuildPackage,asterisk16-chan-iax2))
