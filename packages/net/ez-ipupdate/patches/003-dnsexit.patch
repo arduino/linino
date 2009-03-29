@@ -1,6 +1,6 @@
-diff -Naur ez-ipupdate-3.0.11b8-patched/example-dnsexit.conf ez-ipupdate-3.0.11b8-dnsexit/example-dnsexit.conf
---- ez-ipupdate-3.0.11b8-patched/example-dnsexit.conf	1970-01-01 01:00:00.000000000 +0100
-+++ ez-ipupdate-3.0.11b8-dnsexit/example-dnsexit.conf	2005-12-23 01:34:51.000000000 +0000
+diff -Nur ez-ipupdate-3.0.11b8.orig/example-dnsexit.conf ez-ipupdate-3.0.11b8/example-dnsexit.conf
+--- ez-ipupdate-3.0.11b8.orig/example-dnsexit.conf	1970-01-01 01:00:00.000000000 +0100
++++ ez-ipupdate-3.0.11b8/example-dnsexit.conf	2009-03-29 22:40:07.000000000 +0200
 @@ -0,0 +1,20 @@
 +#!/usr/sbin/ez-ipupdate -c
 +#
@@ -22,12 +22,12 @@ diff -Naur ez-ipupdate-3.0.11b8-patched/example-dnsexit.conf ez-ipupdate-3.0.11b
 +# ready to have ez-ipupdate running in the background all the time. to stop it
 +# you can use "killall -QUIT ez-ipupdate" under linux.
 +#daemon
-diff -Naur ez-ipupdate-3.0.11b8-patched/ez-ipupdate.c ez-ipupdate-3.0.11b8-dnsexit/ez-ipupdate.c
---- ez-ipupdate-3.0.11b8-patched/ez-ipupdate.c	2005-12-23 01:33:54.000000000 +0000
-+++ ez-ipupdate-3.0.11b8-dnsexit/ez-ipupdate.c	2005-12-23 02:51:19.000000000 +0000
-@@ -103,6 +103,10 @@
- #define HEIPV6TB_DEFAULT_PORT "80"
- #define HEIPV6TB_REQUEST "/index.cgi"
+diff -Nur ez-ipupdate-3.0.11b8.orig/ez-ipupdate.c ez-ipupdate-3.0.11b8/ez-ipupdate.c
+--- ez-ipupdate-3.0.11b8.orig/ez-ipupdate.c	2009-03-29 22:39:46.000000000 +0200
++++ ez-ipupdate-3.0.11b8/ez-ipupdate.c	2009-03-29 22:40:07.000000000 +0200
+@@ -108,6 +108,10 @@
+ #define EVERYDNS_REQUEST "/index.php"
+ #define EVERYDNS_VERSION "0.1"
  
 +#define DNSEXIT_DEFAULT_SERVER "www.dnsexit.com"
 +#define DNSEXIT_DEFAULT_PORT "80"
@@ -36,9 +36,9 @@ diff -Naur ez-ipupdate-3.0.11b8-patched/ez-ipupdate.c ez-ipupdate-3.0.11b8-dnsex
  #define DEFAULT_TIMEOUT 120
  #define DEFAULT_UPDATE_PERIOD 120
  #define DEFAULT_RESOLV_PERIOD 30
-@@ -344,6 +348,11 @@
- int HEIPV6TB_check_info(void);
- static char *HEIPV6TB_fields_used[] = { "server", "user", NULL };
+@@ -353,6 +357,11 @@
+ int EVERYDNS_check_info(void);
+ static char *EVERYDNS_fields_used[] = { "server", "user", "host", "address", NULL };
  
 +int DNSEXIT_update_entry(void);
 +int DNSEXIT_check_info(void);
@@ -48,9 +48,9 @@ diff -Naur ez-ipupdate-3.0.11b8-patched/ez-ipupdate.c ez-ipupdate-3.0.11b8-dnsex
  struct service_t services[] = {
    { "NULL",
      { "null", "NULL", 0, },
-@@ -517,6 +526,16 @@
-     HEIPV6TB_DEFAULT_PORT,
-     HEIPV6TB_REQUEST
+@@ -536,6 +545,16 @@
+     EVERYDNS_DEFAULT_PORT,
+     EVERYDNS_REQUEST
    },
 +  { "dnsexit",
 +	{ "dnsexit", 0, 0, },
@@ -65,7 +65,7 @@ diff -Naur ez-ipupdate-3.0.11b8-patched/ez-ipupdate.c ez-ipupdate-3.0.11b8-dnsex
  };
  
  static struct service_t *service = NULL;
-@@ -4251,6 +4270,195 @@
+@@ -4429,6 +4448,195 @@
    return(UPDATERES_OK);
  }
  

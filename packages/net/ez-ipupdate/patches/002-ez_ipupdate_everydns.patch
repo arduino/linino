@@ -1,6 +1,6 @@
-diff -Naur ez-ipupdate-3.0.11b7/ez-ipupdate.c ez-ipupdate-3.0.11b7-sr1/ez-ipupdate.c
---- ez-ipupdate-3.0.11b7/ez-ipupdate.c	2002-03-12 01:31:47.000000000 +0200
-+++ ez-ipupdate-3.0.11b7-sr1/ez-ipupdate.c	2006-10-08 17:51:40.000000000 +0200
+diff -ur ez-ipupdate-3.0.11b8.orig/ez-ipupdate.c ez-ipupdate-3.0.11b8/ez-ipupdate.c
+--- ez-ipupdate-3.0.11b8.orig/ez-ipupdate.c	2009-03-29 22:37:09.000000000 +0200
++++ ez-ipupdate-3.0.11b8/ez-ipupdate.c	2009-03-29 22:37:20.000000000 +0200
 @@ -103,6 +103,11 @@
  #define HEIPV6TB_DEFAULT_PORT "80"
  #define HEIPV6TB_REQUEST "/index.cgi"
@@ -13,7 +13,7 @@ diff -Naur ez-ipupdate-3.0.11b7/ez-ipupdate.c ez-ipupdate-3.0.11b7-sr1/ez-ipupda
  #define DEFAULT_TIMEOUT 120
  #define DEFAULT_UPDATE_PERIOD 120
  #define DEFAULT_RESOLV_PERIOD 30
-@@ -341,6 +346,10 @@
+@@ -344,6 +349,10 @@
  int HEIPV6TB_check_info(void);
  static char *HEIPV6TB_fields_used[] = { "server", "user", NULL };
  
@@ -24,7 +24,7 @@ diff -Naur ez-ipupdate-3.0.11b7/ez-ipupdate.c ez-ipupdate-3.0.11b7-sr1/ez-ipupda
  struct service_t services[] = {
    { "NULL",
      { "null", "NULL", 0, },
-@@ -514,6 +523,16 @@
+@@ -517,6 +526,16 @@
      HEIPV6TB_DEFAULT_PORT,
      HEIPV6TB_REQUEST
    },
@@ -41,7 +41,7 @@ diff -Naur ez-ipupdate-3.0.11b7/ez-ipupdate.c ez-ipupdate-3.0.11b7-sr1/ez-ipupda
  };
  
  static struct service_t *service = NULL;
-@@ -4246,6 +4265,165 @@
+@@ -4251,6 +4270,165 @@
    return(UPDATERES_OK);
  }
  
