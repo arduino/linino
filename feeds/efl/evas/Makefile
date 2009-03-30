@@ -30,7 +30,7 @@ define Package/evas
   SUBMENU:=libraries
   TITLE:=Evas is a hardware-accelerated canvas API for X-Windows
   URL:=http://wiki.enlightenment.org/index.php/Evas
-  DEPENDS:=+eet +libfreetype +libjpeg +libpng +libX11 +libXext +libXrender +fontconfig
+  DEPENDS:=+libXext +libfreetype +libX11 +fontconfig +eet +libfreetype +libjpeg +libpng +libXrender +libpthread
 endef
 
 define Package/evas/description
@@ -38,64 +38,83 @@ define Package/evas/description
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
+	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
 	$(call Build/Configure/Default, \
-		--disable-pthreads		\
-		--enable-fb			\
-		--disable-directfb		\
-		--disable-sdl			\
-		--enable-buffer			\
-		--disable-software-ddraw	\
-		--disable-software-qtopia	\
-		--enable-simple-x11		\
-		--enable-software-x11		\
-		--enable-software-16-x11	\
-		--disable-software-xcb		\
-		--disable-gl-x11		\
-		--enable-xrender-x11		\
-		--disable-xrender-xcb		\
-		--disable-glitz-x11		\
-		--enable-image-loader-eet	\
-		--disable-image-loader-edb	\
-		--disable-image-loader-gif	\
-		--enable-image-loader-png	\
-		--enable-image-loader-jpeg	\
-		--enable-image-loader-tiff	\
-		--enable-image-loader-xpm	\
-		--enable-image-loader-svg	\
-		--enable-cpu-c			\
-		--enable-fontconfig		\
-		--enable-font-loader-eet	\
-		--enable-scale-sample		\
-		--enable-scale-smooth		\
-		--enable-convert-yuv		\
-		--enable-small-dither-mask	\
-		--enable-no-dither-mask	\
-		--enable-convert-8-rgb-332	\
-		--enable-convert-8-rgb-666	\
-		--enable-convert-8-rgb-232	\
-		--enable-convert-8-rgb-222	\
-		--enable-convert-8-rgb-221	\
-		--enable-convert-8-rgb-121	\
-		--enable-convert-8-rgb-111	\
-		--enable-convert-16-rgb-565	\
-		--enable-convert-16-rgb-555	\
-		--enable-convert-16-rgb-444	\
-		--enable-convert-16-rgb-ipq	\
-		--enable-convert-16-rgb-rot-0	\
-		--enable-convert-16-rgb-rot-90	\
-		--enable-convert-16-rgb-rot-180\
-		--enable-convert-16-rgb-rot-270	\
-		--enable-convert-24-rgb-888	\
-		--enable-convert-24-bgr-888	\
-		--enable-convert-32-rgb-8888	\
-		--enable-convert-32-rgbx-8888	\
-		--enable-convert-32-bgr-8888	\
-		--enable-convert-32-bgrx-8888	\
-		--enable-convert-32-rgb-rot-0	\
-		--enable-convert-32-rgb-rot-90	\
+		--with-x \
+		--enable-fontconfig \
+		--disable-image-loader-edb \
+		--enable-image-loader-eet \
+		--enable-font-loader-eet \
+		--enable-image-loader-gif \
+		--enable-image-loader-jpeg \
+		--disable-image-loader-pmaps \
+		--enable-image-loader-png \
+		--disable-image-loader-svg \
+		--disable-image-loader-tiff \
+		--enable-image-loader-xpm \
+		--enable-evas-magic-debug \
+		--enable-convert-8-rgb-332 \
+		--enable-convert-8-rgb-666 \
+		--enable-convert-8-rgb-232 \
+		--enable-convert-8-rgb-222 \
+		--enable-convert-8-rgb-221 \
+		--enable-convert-8-rgb-121 \
+		--enable-convert-8-rgb-111 \
+		--enable-convert-16-rgb-565 \
+		--enable-convert-16-bgr-565 \
+		--enable-convert-16-rgb-555 \
+		--enable-convert-16-rgb-444 \
+		--enable-convert-16-rgb-ipq \
+		--enable-convert-16-rgb-rot-0 \
+		--enable-convert-16-rgb-rot-180 \
+		--enable-convert-16-rgb-rot-270 \
+		--enable-convert-16-rgb-rot-90 \
+		--enable-convert-24-rgb-888 \
+		--enable-convert-24-bgr-888 \
+		--enable-convert-32-rgb-8888 \
+		--enable-convert-32-rgbx-8888 \
+		--enable-convert-32-bgr-8888 \
+		--enable-convert-32-bgrx-8888 \
+		--enable-convert-32-rgb-rot-0 \
 		--enable-convert-32-rgb-rot-180 \
 		--enable-convert-32-rgb-rot-270 \
+		--enable-convert-32-rgb-rot-90 \
+		--disable-doc \
+		--disable-simple-x11 \
+		--enable-buffer \
+		--enable-software-x11 \
+		--enable-xrender-x11 \
+		--disable-gl-x11 \
+		--disable-glitz-x11 \
+		--disable-cairo-x11 \
+		--disable-software-xcb \
+		--disable-xrender-xcb \
+		--disable-software-ddraw \
+		--disable-direct3d \
+		--disable-quartz \
+		--disable-gl-glew \
+		--disable-software-sdl \
+		--disable-fb \
+		--disable-directfb \
+		--disable-software-qtopia \
+		--disable-software-16-x11 \
+		--disable-software-16-ddraw \
+		--disable-software-16-wince \
+		--disable-sdl-primitive \
+		--enable-pthreads \
+		--disable-async-events \
+		--disable-async-preload \
+		--disable-cpu-mmx \
+		--disable-cpu-sse \
+		--disable-cpu-altivec \
+		--enable-cpu-c \
+		--enable-scale-sample \
+		--enable-scale-smooth \
+		--disable-convert-yuv \
+		--disable-small-dither-mask \
+		--disable-line-dither-mask \
+		--disable-no-dither-mask \
+		--disable-valgrind \
 	)
 endef
 
@@ -113,8 +132,8 @@ define Package/evas/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevas.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/evas $(1)/usr/lib/
-	find $(1)/usr/lib/evas -name *.la | xargs rm -rf
-	find $(1)/usr/lib/evas -name *.a | xargs rm -rf
+	$(FIND) $(1)/ -name "*.la" | $(XARGS) rm
+	$(FIND) $(1)/ -name "*.a" | $(XARGS) rm
 endef
 
 $(eval $(call BuildPackage,evas))

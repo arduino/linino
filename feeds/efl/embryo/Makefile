@@ -30,7 +30,6 @@ define Package/embryo
   SUBMENU:=libraries
   TITLE:=Embryo implements a C like scripting language used in various parts of the Enlightenment project (edje)
   URL:=http://wiki.enlightenment.org/index.php/Embryo
-  DEPENDS:=+eet +evas +libXtst +libXcursor +libXrandr 
 endef
 
 define Package/embryo/description
@@ -38,8 +37,10 @@ define Package/embryo/description
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
-	$(call Build/Configure/Default)
+	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
+	$(call Build/Configure/Default, \
+		--disable-doc \
+	)
 endef
 
 define Build/Compile

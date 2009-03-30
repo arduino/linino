@@ -30,19 +30,18 @@ define Package/edje
   SUBMENU:=libraries
   TITLE:=Edje is a graphical design and layout library
   URL:=http://wiki.enlightenment.org/index.php/Edje
-  DEPENDS:=+libjpeg +zlib +eet +evas +ecore +embryo
+  DEPENDS:=+evas +ecore +embryo
 endef
 
 define Package/edje/description
-Edje is a graphical design and layout library based on Evas that provides an abstraction layer between the application code and the interface, while allowing extremely flexible dynamic layouts and animations.
+  Edje is a graphical design and layout library based on Evas that provides an abstraction layer between the application code and the interface, while allowing extremely flexible dynamic layouts and animations.
 endef
 
-EXTRA_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
-
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
+	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
 	$(call Build/Configure/Default, \
 		--disable-edje-cc \
+		--disable-doc \
 	)
 endef
 

@@ -33,11 +33,13 @@ define Package/edbus
   DEPENDS:=+libdbus +ecore
 endef
 
-EXTRA_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
-
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
-	$(call Build/Configure/Default)
+	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
+	$(call Build/Configure/Default, \
+		--enable-ehal \
+		--disable-enm \
+		--disable-enotify \
+	)
 endef
 
 define Build/Compile

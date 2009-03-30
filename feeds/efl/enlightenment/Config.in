@@ -1,24 +1,24 @@
 choice
 	prompt "default enlightenment profile"
-	default E17_STANDARD
+	default E17_standard
 
-config E17_ILLUME
+config E17_illume
 	bool
 	prompt "illume"
 
-config E17_MINIMALIST
+config E17_minimalist
 	bool
 	prompt "minimalist"
 
-config E17_NETBOOK
+config E17_netbook
 	bool
 	prompt "netbook"
 
-config E17_SCALEABLE
+config E17_scalable
 	bool
 	prompt "scalable"
 
-config E17_STANDARD
+config E17_standard
 	bool
 	prompt "standard"
 

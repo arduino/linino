@@ -38,10 +38,17 @@ define Package/eet/description
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
+	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
 	$(call Build/Configure/Default, \
-		--disable-openssl \
+		--disable-old-eet-file-format \
 		--disable-gnutls \
+		--disable-openssl \
+		--disable-cipher \
+		--disable-signature \
+		--disable-doc \
+		--disable-assert \
+		--disable-tests \
+		--disable-coverage \
 	)
 endef
 

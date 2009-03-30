@@ -30,27 +30,62 @@ define Package/enlightenment
   SUBMENU:=window manager
   TITLE:=Enlightenment e17 window manager
   URL:=http://enlightenment.org
-  DEPENDS:=+libintl +libpthread +eet +evas +ecore +edje +efreet +dbus +edbus +dejavu-fonts-ttf +freedesktop-compliant
+  DEPENDS:=+libintl +eet +evas +ecore +edje +efreet +dbus +edbus +dejavu-fonts-ttf +freedesktop-compliant
 endef
 
 define Package/enlightenment/config
-	menu "Configuration"
-	depends on PACKAGE_enlightenment
-	source "$(SOURCE)/Config.in"
-	endmenu
+  menu "Configuration"
+  depends on PACKAGE_enlightenment
+  source "$(SOURCE)/Config.in"
+  endmenu
 endef
 
 define Package/enlightenment/description
    Enlightenment is a window manager. Enlightenment is a desktop shell. Enlightenment is the building blocks to create beautiful applications. Enlightenment, or simply e, is a group of people trying to make a new generation of software.
 endef
 
-EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include
-EXTRA_LDFLAGS+=-lintl -L$(STAGING_DIR)/usr/lib/libintl/lib -Wl,-rpath-link=$(STAGING_DIR)/usr/lib 
+TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include
+TARGET_LDFLAGS+=-lintl -L$(STAGING_DIR)/usr/lib/libintl/lib
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
-	$(call Build/Configure/Default, --with-edje-cc=$(STAGING_DIR_HOST)/usr/bin/edje_cc  --with-eet-eet=$(STAGING_DIR_HOST)/usr/bin/eet)
+	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
+	$(call Build/Configure/Default, \
+		--with-x \
+		--with-edje-cc=$(STAGING_DIR_HOST)/usr/bin/edje_cc \
+		--with-eet-eet=$(STAGING_DIR_HOST)/usr/bin/eet \
+		--disable-nls \
+		--disable-rpath \
+		--enable-ibar \
+		--enable-dropshadow \
+		--enable-clock \
+		--enable-pager \
+		--enable-battery \
+		--enable-temperature \
+		--enable-cpufreq \
+		--enable-ibox \
+		--enable-start \
+		--enable-exebuf \
+		--enable-winlist \
+		--enable-fileman \
+		--disable-wizard \
+		--disable-msgbus-lang \
+		--enable-gadman \
+		--enable-mixer \
+		--disable-connman \
+		--enable-illume \
+		--enable-syscon \
+		--disable-pam \
+		--disable-simple-x11 \
+		--enable-files \
+	)
 endef
+
+PROFILES:=\
+	illume \
+	minimalist \
+	netbook \
+	scalable \
+	standard \
 
 define Build/Compile
 	mkdir -p $(STAGING_DIR_HOST)/usr/bin
@@ -58,6 +93,9 @@ define Build/Compile
 	ln -sf `which edje_cc` $(STAGING_DIR_HOST)/usr/bin/
 	ln -sf `which eet` $(STAGING_DIR_HOST)/usr/bin/
 	DESTDIR="$(PKG_INSTALL_DIR)" $(MAKE) -C $(PKG_BUILD_DIR) all install
+	$(foreach c, $(PROFILES), \
+		! [ -f ./files/config/$(c).cfg.src ] || $(STAGING_DIR_HOST)/usr/bin/eet -e $(PKG_INSTALL_DIR)/usr/share/enlightenment/data/config/$(c)/e.cfg config ./files/config/$(c).cfg.src 1
+	)
 	rm -f $(STAGING_DIR_HOST)/usr/bin/{edje_cc,eet}
 endef
 
@@ -74,22 +112,20 @@ define Package/enlightenment/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/* $(1)/usr/share/
-	$(INSTALL_DATA) ./files/uci-defaults/x11 $(1)/etc/uci-defaults/
-	$(if $(CONFIG_E17_ILLUME),echo -n "illume" >> $(1)/etc/uci-defaults/x11)
-	$(if $(CONFIG_E17_MINIMALIST),echo -n "minimalist" >> $(1)/etc/uci-defaults/x11)
-	$(if $(CONFIG_E17_NETBOOK),echo -n "netbook" >> $(1)/etc/uci-defaults/x11)
-	$(if $(CONFIG_E17_SCALEABLE),echo -n "scaleable" >> $(1)/etc/uci-defaults/x11)
-	$(if $(CONFIG_E17_STANDARD),echo -n "standard" >> $(1)/etc/uci-defaults/x11)
-	echo "'" >> $(1)/etc/uci-defaults/x11
-	find $(1)/ -name *.la | xargs rm -f
-	find $(1)/ -name *.a | xargs rm -f
+	$(foreach c, $(PROFILES), \
+		$(if $(CONFIG_E17_$(c)), \
+			$(INSTALL_DATA) ./files/uci-defaults/x11_$(c) $(1)/etc/uci-defaults/
+		)
+	)
+	$(FIND) $(1)/ -name "*.la" | $(XARGS) rm
+	$(FIND) $(1)/ -name "*.a" | $(XARGS) rm
 endef
 
 define Package/enlightenment/postinst
-	#!/bin/sh
-	[ -n "$${IPKG_INSTROOT}" ] && exit
-	. /etc/functions.sh
-	uci_apply_defaults
+  #!/bin/sh
+  [ -n "$${IPKG_INSTROOT}" ] && exit
+  . /etc/functions.sh
+  uci_apply_defaults
 endef
 
 $(eval $(call BuildPackage,enlightenment))

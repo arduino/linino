@@ -34,12 +34,16 @@ define Package/efreet
 endef
 
 define Package/efreet/description
- Efreet is an implementation of several specifications from freedesktop.org intended for use in Enlightenment DR17 (e17) and other applications using the Enlightenment Foundation Libraries (EFL).
+  Efreet is an implementation of several specifications from freedesktop.org intended for use in Enlightenment DR17 (e17) and other applications using the Enlightenment Foundation Libraries (EFL).
 endef
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
-	$(call Build/Configure/Default)
+	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
+	$(call Build/Configure/Default, \
+		--disable-sloppy-spec \
+		--disable-doc \
+		--enable-hidden-visibility \
+	)
 endef
 
 define Build/Compile

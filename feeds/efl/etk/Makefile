@@ -37,12 +37,16 @@ define Package/etk/description
   Etk is a toolkit based on the EFL
 endef
 
-EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include
-EXTRA_LDFLAGS+=-lintl -L$(STAGING_DIR)/usr/lib/libintl/lib
+TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include
+TARGET_LDFLAGS+=-lintl -L$(STAGING_DIR)/usr/lib/libintl/lib
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
-	$(call Build/Configure/Default)
+	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
+	$(call Build/Configure/Default, \
+		--disable-nls \
+		--disable-rpath \
+		--disable-ecore-fb-x11-support \
+	)
 endef
 
 define Build/Compile

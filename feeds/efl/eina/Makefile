@@ -30,18 +30,17 @@ define Package/eina
   SUBMENU:=libraries
   TITLE:=Eina
   URL:=http://wiki.enlightenment.org/index.php/Eina
-#  DEPENDS:=+libjpeg +zlib +eet +evas +ecore +embryo
 endef
-
-define Package/eina/description
-foobar
-endef
-
-EXTRA_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
-	$(call Build/Configure/Default)
+	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
+	$(call Build/Configure/Default, \
+		--disable-cpu-mmx \
+		--disable-cpu-sse \
+		--disable-cpu-sse2 \
+		--disable-magic-debug \
+		--disable-doc \
+	)
 endef
 
 define Build/Compile
@@ -57,7 +56,8 @@ endef
 define Package/eina/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
-	find $(1)/usr/lib -name *.la -name *.a | xargs rm -f
+	$(FIND) $(1)/ -name "*.la" | $(XARGS) rm
+	$(FIND) $(1)/ -name "*.a" | $(XARGS) rm
 endef
 
 $(eval $(call BuildPackage,eina))
