@@ -1,0 +1,11 @@
+diff -ruN ecore-r38886.orig/src/lib/ecore_con/ecore_con.c ecore-r38886/src/lib/ecore_con/ecore_con.c
+--- ecore-r38886.orig/src/lib/ecore_con/ecore_con.c	2009-03-17 13:23:24.000000000 +0100
++++ ecore-r38886/src/lib/ecore_con/ecore_con.c	2009-03-17 13:23:56.000000000 +0100
+@@ -10,6 +10,7 @@
+ #include <arpa/inet.h>
+ #include <sys/socket.h>
+ #include <sys/un.h>
++#include <stdio.h>
+ #include <errno.h>
+ #include <unistd.h>
+ #include <fcntl.h>
