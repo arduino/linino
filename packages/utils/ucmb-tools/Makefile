@@ -15,7 +15,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ucmb-tools
   SECTION:=utils
   CATEGORY:=Utilities
-  TITLE:=Microcontroller Message Bus tools (EXPERIMENTAL)
+  TITLE:=Microcontroller Message Bus tools
   DEPENDS:=+kmod-ucmb
 endef
 

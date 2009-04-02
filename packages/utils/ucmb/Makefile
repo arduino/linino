@@ -18,7 +18,7 @@ define KernelPackage/ucmb
   DEPENDS:=@LINUX_2_6 +kmod-spi-gpio +kmod-crc16
   KCONFIG:=CONFIG_SPI=y \
           CONFIG_SPI_MASTER=y
-  TITLE:=Microcontroller Message Bus (EXPERIMENTAL)
+  TITLE:=Microcontroller Message Bus
   FILES:=$(PKG_BUILD_DIR)/ucmb.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,93,ucmb)
 endef
@@ -32,6 +32,8 @@ define KernelPackage/ucmb/description
 	The device node considers every read/write to be one packet. The maximum packet
 	size is either PAGE_SIZE (at least 4kb) or the microcontroller specific packet size
 	limit, which is likely to be a lot smaller than PAGE_SIZE.
+	To register an ucmb device, simply create a struct ucmb_platform_data
+	and register it via ucmb_device_register() from another kernel module.
 	Example implementations for the microcontroller-side code can be found in
 	the utils/ucmb/microcontroller_examples subdirectory of the OpenWRT packages feed.
 endef
