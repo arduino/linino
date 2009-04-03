@@ -1,0 +1,10 @@
+--- a/lib/curl_transport/Makefile	2009-02-20 13:00:03.000000000 +0300
++++ b/lib/curl_transport/Makefile	2009-02-20 16:54:45.000000000 +0300
+@@ -34,6 +34,7 @@
+   -I$(BLDDIR)/include \
+   -I$(SRCDIR)/include \
+   -I$(SRCDIR)/lib/util/include \
++  -I$(STAGING_DIR)/usr/include \
+   $(CURL_INCLUDES)
+ 
+ .PHONY: clean
