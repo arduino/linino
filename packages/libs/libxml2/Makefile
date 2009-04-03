@@ -9,13 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libxml2
-PKG_VERSION:=2.7.2
-PKG_RELEASE:=3
+PKG_VERSION:=2.7.3
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://xmlsoft.org/sources/ \
 	ftp://fr.rpmfind.net/pub/libxml/
-PKG_MD5SUM:=dc43ff7ae6aded45f578c87b7b0c8766
+PKG_MD5SUM:=8f4fda3969237c2a33bdb1583b5d06b2
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
