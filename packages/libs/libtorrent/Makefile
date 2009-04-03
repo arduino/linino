@@ -9,12 +9,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libtorrent
-PKG_VERSION:=0.12.4
-PKG_RELEASE:=1
 
+PKG_REV:=1087
+PKG_VERSION:=0.12.4_r$(PKG_REV)
+PKG_RELEASE:=3
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://libtorrent.rakshasa.no/downloads/
-PKG_MD5SUM:=7e4b4c29a69c86c38e3e60ec11fc2255
+PKG_SOURCE_URL:=svn://rakshasa.no/libtorrent/trunk/libtorrent
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=$(PKG_REV)
+PKG_SOURCE_PROTO:=svn
 
 PKG_FIXUP = libtool
 
@@ -38,6 +41,9 @@ endef
 
 TARGET_CFLAGS += $(FPIC)
 
+TARGET_CPPFLAGS +=  \
+	-fno-strict-aliasing -fno-inline \
+
 # XXX: rtorrent needs encryption (--enable-openssl)
 CONFIGURE_ARGS+= \
 	--enable-shared \
@@ -45,6 +51,11 @@ CONFIGURE_ARGS+= \
 	--enable-aligned \
 	--disable-debug \
 	--enable-openssl \
+
+define Build/Configure
+	(cd $(PKG_BUILD_DIR); ./autogen.sh );
+	$(call Build/Configure/Default)
+endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
