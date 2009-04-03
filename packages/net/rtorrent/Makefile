@@ -9,12 +9,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rtorrent
-PKG_VERSION:=0.8.2
-PKG_RELEASE:=1
 
+PKG_REV:=1087
+PKG_VERSION:=0.8.4_r$(PKG_REV)
+PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://libtorrent.rakshasa.no/downloads/
-PKG_MD5SUM:=a2456182e1767e5aed7341dbbd058f60
+PKG_SOURCE_URL:=svn://rakshasa.no/libtorrent/trunk/rtorrent
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=$(PKG_REV)
+PKG_SOURCE_PROTO:=svn
 
 PKG_FIXUP = libtool
 
@@ -26,7 +29,7 @@ define Package/rtorrent
   CATEGORY:=Network
   TITLE:=BitTorrent client for ncurses
   URL:=http://libtorrent.rakshasa.no/
-  DEPENDS:=+libcurl +libtorrent +libncurses +libsigcxx @BROKEN
+  DEPENDS:=+libcurl +libtorrent +libncurses +libsigcxx +xmlrpc-c
 endef
 
 define Package/rtorrent/description
@@ -36,13 +39,19 @@ define Package/rtorrent/description
  based clients in an ncurses client.
 endef
 
+TARGET_CPPFLAGS +=  \
+	-fno-strict-aliasing -fno-inline \
+
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--disable-static \
 	--disable-debug \
+	--with-xmlrpc-c \
 
-CONFIGURE_VARS += \
-	LIBS="-lm -luClibc++" \
+define Build/Configure
+	(cd $(PKG_BUILD_DIR); ./autogen.sh );
+	$(call Build/Configure/Default)
+endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
