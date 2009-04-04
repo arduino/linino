@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=coreutils
-PKG_VERSION:=6.9
+PKG_VERSION:=7.2
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.gnu.org/gnu/coreutils/
-PKG_MD5SUM:=c9607d8495f16e98906e7ed2d9751a06
+PKG_MD5SUM:=427c2914d3eab956f317c9ec6a45e62a
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -31,11 +31,14 @@ define Package/coreutils/description
         sufficient and much smaller.
 endef
 
+CONFIGURE_ARGS += \
+	--enable-install-program=su
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		SHELL="/bin/bash" \
-		all install
+		all install install-root
 endef
 
 define Package/coreutils/install
