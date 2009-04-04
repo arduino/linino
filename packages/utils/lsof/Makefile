@@ -10,14 +10,14 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=lsof
-PKG_VERSION:=4.77
-PKG_RELEASE:=2
+PKG_VERSION:=4.81
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).dfsg.1.orig.tar.gz
 PKG_SOURCE_URL:=http://ftp2.de.debian.org/debian/pool/main/l/lsof
-PKG_MD5SUM:=6751a1cbdefb751b7cb2e22e6e5bdacb
+PKG_MD5SUM:=138b628cb1b6a3b16b32b792f77abcce
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION).dfsg.1.orig
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION).dfsg.1
 
 include $(INCLUDE_DIR)/package.mk
 
