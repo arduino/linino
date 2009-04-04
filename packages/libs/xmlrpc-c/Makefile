@@ -25,16 +25,17 @@ PKG_FIXUP = libtool
 include $(INCLUDE_DIR)/package.mk
 
 define Package/xmlrpc-c
-  SUBMENU:=xmlrpc-c
-  SECTION:=library
-  CATEGORY:=lib
-  TITLE:=xmlrpc-c library
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=XML-RPC library for C/C++ (Xmlrpc-c)
   URL:=http://xmlrpc-c.sourceforge.net/
   DEPENDS:=+libcurl +libxml2
 endef
 
 define Package/xmlrpc-c/description
- XMLRPC-C
+    Programming library for writing an XML-RPC server or client in C or C++.
+    XML-RPC is a standard network protocol to allow a client program to make 
+    a simple remote procedure call (RPC) type request of a server.
 endef
 
 CONFIGURE_ARGS+= \
