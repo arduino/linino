@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nfs-utils
-PKG_VERSION:=1.1.2
-PKG_RELEASE:=3
+PKG_VERSION:=1.1.5
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://downloads.sourceforge.net/nfs/
-PKG_MD5SUM:=76ee9274c2b867839427eba91b327f03
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=@SF/nfs
+PKG_MD5SUM:=2848072a5e53840b9bc520fbb6782b57
 
 PKG_BUILD_DEPENDS:=libgssapi librpcsecgss libnfsidmap libwrap
 
