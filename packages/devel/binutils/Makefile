@@ -27,7 +27,14 @@ define Package/binutils
   SECTION:=devel
   CATEGORY:=Development
   TITLE:=binutils
-  DEPENDS:=@TARGET_x86
+  DEPENDS:=+objdump
+endef
+
+define Package/objdump
+  SECTION:=devel
+  CATEGORY:=Development
+  TITLE:=objdump
+  DEPENDS:=+zlib
 endef
 
 define Package/binutils/description
@@ -62,10 +69,16 @@ define Build/Compile
 	$(call Build/Compile/Default)
 endef
 
+define Package/objdump/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/*-linux/bin/objdump $(1)/usr/bin/
+endef
+
 define Package/binutils/install
 	$(INSTALL_DIR) $(1)/usr
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ $(1)/usr/
 	$(CP) $(PKG_INSTALL_DIR)/usr/*-linux $(1)/usr
+	rm -f $(1)/usr/bin/objdump
 endef
 
 define Package/libbdf/install
@@ -73,4 +86,5 @@ define Package/libbdf/install
 endef
 
 $(eval $(call BuildPackage,binutils))
+$(eval $(call BuildPackage,objdump))
 $(eval $(call BuildPackage,libbfd))
