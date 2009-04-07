@@ -9,14 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=glib2
-PKG_VERSION:=2.18.1
-PKG_RELEASE:=4
+PKG_VERSION:=2.20.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=glib-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/glib-$(PKG_VERSION)
-PKG_SOURCE_URL:=@GNOME/glib/2.18
-PKG_MD5SUM:=51a9a33f49a4896d4d95d8e980666b9e
-PKG_FIXUP:=libtool
+PKG_SOURCE_URL:=@GNOME/glib/2.20
+PKG_MD5SUM:=05188e560dbd8bddd568e24ce10dd003
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -42,6 +41,8 @@ TARGET_CFLAGS+= \
 TARGET_LDFLAGS+= \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib
+
+Hooks/InstallDev/Post += libtool_fixup_libdir
 
 define Build/Configure
 	mkdir -p $(PKG_BUILD_DIR)/build/$(GNU_HOST_NAME)
