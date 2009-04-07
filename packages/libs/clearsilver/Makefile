@@ -22,7 +22,7 @@ define Package/clearsilver
   CATEGORY:=Libraries
   DEPENDS:=+libneon +zlib
   TITLE:=ClearSilver template system
-	URL:=http://www.clearsilver.net/
+  URL:=http://www.clearsilver.net/
 endef
 
 define Package/clearsilver/description
@@ -45,6 +45,7 @@ MAKE_FLAGS += \
 	$(TARGET_CONFIGURE_OPTS) \
 	AR="$(AR) cr" \
 	LD="$(TARGET_CROSS)ld -o" \
+	LIBS="-lneo_cgi -lneo_cs -lneo_utl -lz $(LIBGCC_S)" \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
 	all install
 
