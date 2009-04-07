@@ -1,24 +1,39 @@
-Index: nfs-utils-1.0.7/support/nfs/svc_socket.c
-===================================================================
---- nfs-utils-1.0.7.orig/support/nfs/svc_socket.c	2007-12-30 16:52:24.647893048 +0100
-+++ nfs-utils-1.0.7/support/nfs/svc_socket.c	2007-12-30 16:53:46.880579218 +0100
-@@ -63,9 +63,10 @@
- 	}
-     }
+diff -urN nfs-utils-1.1.5/support/nfs/svc_socket.c nfs-utils-1.1.5.new/support/nfs/svc_socket.c
+--- nfs-utils-1.1.5/support/nfs/svc_socket.c	2009-03-05 12:42:56.000000000 +0100
++++ nfs-utils-1.1.5.new/support/nfs/svc_socket.c	2009-04-07 16:04:54.000000000 +0200
+@@ -66,7 +66,7 @@
  
--  __bzero ((char *) &addr, sizeof (addr));
-+  memset((char *) &addr, 0, sizeof (addr));
+   memset (&addr, 0, sizeof (addr));
    addr.sin_family = AF_INET;
- 
-+#ifndef __UCLIBC__	/* neither getrpcbynumber() nor getrpcbynumber_r() is SuSv3 */
+-
++#ifndef __UCLIBC__ /* neither getrpcbynumber() nor getrpcbynumber_r() is SuSv3 */
    ret = getrpcbynumber_r (number, &rpcbuf, rpcdata, sizeof rpcdata,
  			  &rpcp);
    if (ret == 0 && rpcp != NULL)
-@@ -99,6 +100,7 @@
+@@ -100,6 +100,7 @@
  	}
      }
    else
-+#endif /* ! __UCLIBC__ */
++#endif /* __UCLIBC__ */
      {
-       if (bindresvport (sock, &addr))
- 	{
+ 	  addr.sin_port = 0;
+ 	  if (bind (sock, (struct sockaddr *) &addr, len) < 0)
+diff -urN nfs-utils-1.1.5/utils/mountd/cache.c nfs-utils-1.1.5.new/utils/mountd/cache.c
+--- nfs-utils-1.1.5/utils/mountd/cache.c	2009-03-05 12:42:56.000000000 +0100
++++ nfs-utils-1.1.5.new/utils/mountd/cache.c	2009-04-07 16:11:09.000000000 +0200
+@@ -142,6 +142,7 @@
+ 	pw = getpwuid(uid);
+ 	if (!pw)
+ 		rv = -1;
++#ifndef __UCLIBC__
+ 	else {
+ 		rv = getgrouplist(pw->pw_name, pw->pw_gid, groups, &ngroups);
+ 		if (rv == -1 && ngroups >= 100) {
+@@ -153,6 +154,7 @@
+ 						  groups, &ngroups);
+ 		}
+ 	}
++#endif /* __UCLIBC__ */
+ 	qword_printint(f, uid);
+ 	qword_printint(f, time(0)+30*60);
+ 	if (rv >= 0) {
