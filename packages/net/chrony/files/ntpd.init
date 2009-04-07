@@ -12,8 +12,8 @@ start() {
 		local CLIENT_NETWORKS
 		local NETNAME
 		config_load ntpd
-		config_get NTP_SERVERS cfg1 TimeServers
-		config_get CLIENT_NETWORKS cfg1 ClientAccessFrom
+		config_get NTP_SERVERS $cfg1 TimeServers
+		config_get CLIENT_NETWORKS $cfg1 ClientAccessFrom
 		CHRONY_KEY=$(awk '/^1 / { print $2; }' /etc/chrony/chrony.keys)
 		include /lib/network
 		scan_interfaces
@@ -45,7 +45,7 @@ start() {
 				config_get INTERFACE "$NETNAME" ifname
 				if [ -n "$INTERFACE" ] ; then
 					eval $(ifconfig $INTERFACE | grep inet | sed -e 's/.*addr:/IP=/' -e 's/ .*Mask:/; NETMASK=/')
-					eval $(ipcalc $IP $NETMASK)
+					eval $(ipcalc.sh $IP $NETMASK)
 					echo allow $NETWORK/$PREFIX
 				fi
 			done
