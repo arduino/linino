@@ -34,11 +34,11 @@ define KernelPackage/oprofile/description
 endef
 
 define Package/oprofile
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=devel
+  CATEGORY:=Development
   TITLE:=OProfile System Profiler
   URL:=http://oprofile.sourceforge.net
-  DEPENDS:=+libpopt +kmod-oprofile +libstdcpp
+  DEPENDS:=+libpopt +kmod-oprofile +libstdcpp +objdump
 endef
 
 define Package/oprofile/description
