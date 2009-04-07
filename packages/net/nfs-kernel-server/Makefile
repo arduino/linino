@@ -14,35 +14,39 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/nfs-utils-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
+define Package/nfs-kernel-server/Default
+  SECTION:=net
+  CATEGORY:=Network
+  URL:=http://nfs.sourceforge.net/
+endef
+
 define Package/nfs-kernel-server
-SECTION:=net
-CATEGORY:=Network
-TITLE:=Kernel NFS server support
-URL:=http://nfs.sourceforge.net/
-DEPENDS:=+kmod-fs-nfsd +kmod-fs-nfs +portmap +libwrap +libevent +libblkid
+  TITLE:=Kernel NFS server support
+  DEPENDS:=+kmod-fs-nfsd +kmod-fs-nfs +portmap +libwrap +libevent +libblkid
 endef
 
 define Package/nfs-kernel-server/description
-Kernel NFS server support
+  Kernel NFS server support
 endef
 
 define Package/nfs-kernel-server-utils
-SECTION:=net
-CATEGORY:=Network
-TITLE:=NFS server utils
-URL:=http://nfs.sourceforge.net
-DEPENDS:=+nfs-kernel-server
+  TITLE:=NFS server utils
+  DEPENDS:=+nfs-kernel-server
 endef
 
 define Package/nfs-kernel-server-utils/description
-NFS server utils
+  NFS server utils
 endef
 
 define Package/nfs-kernel-server/conffiles
 /etc/exports
 endef
 
-CONFIGURE_ARGS += --disable-gss --disable-nfsv4 --enable-static --enable-shared
+CONFIGURE_ARGS += \
+	--disable-gss \
+	--disable-nfsv4 \
+	--enable-static \
+	--enable-shared
 
 TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib 
 TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib 
