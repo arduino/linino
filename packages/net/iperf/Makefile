@@ -19,7 +19,6 @@ PKG_MD5SUM:=8c5bc14cc2ea55f18f22afe3c23e3dcb
 include $(INCLUDE_DIR)/package.mk
 
 define Package/iperf/Default
-  SUBMENU:=Monitoring
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:= +uclibcxx
