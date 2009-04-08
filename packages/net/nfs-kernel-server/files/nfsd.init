@@ -9,7 +9,6 @@ start() {
 	touch $NFS_D/rmtab
 	
 	/usr/sbin/rpc.statd
-	/usr/sbin/rpc.lockd
 	/usr/sbin/exportfs -r
 	/usr/sbin/rpc.nfsd
 	/usr/sbin/rpc.mountd
@@ -19,7 +18,6 @@ stop() {
 	killall rpc.mountd 2> /dev/null
 	killall -9 rpc.nfsd 2> /dev/null
 	/usr/sbin/exportfs -au
-	killall lockd 2> /dev/null
 	killall rpc.statd 2> /dev/null
 }
 
