@@ -1,13 +1,13 @@
 Index: vsftpd-2.0.6/tunables.c
 ===================================================================
---- vsftpd-2.0.6.orig/tunables.c	2008-04-13 11:41:08.000000000 +0200
-+++ vsftpd-2.0.6/tunables.c	2008-04-13 11:41:09.000000000 +0200
-@@ -100,7 +100,7 @@
- /* -rw------- */
- unsigned int tunable_chown_upload_mode = 0600;
+--- vsftpd-2.1.0.orig/tunables.c	2008-04-13 11:41:08.000000000 +0200
++++ vsftpd-2.1.0/tunables.c	2008-04-13 11:41:09.000000000 +0200
+@@ -242,7 +242,7 @@
+   /* -rw------- */
+   tunable_chown_upload_mode = 0600;
  
--const char* tunable_secure_chroot_dir = "/usr/share/empty";
-+const char* tunable_secure_chroot_dir = "/var/run/vsftpd";
- const char* tunable_ftp_username = "ftp";
- const char* tunable_chown_username = "root";
- const char* tunable_xferlog_file = "/var/log/xferlog";
+-  install_str_setting("/usr/share/empty", &tunable_secure_chroot_dir);
++  install_str_setting("/var/run/vsftpd", &tunable_secure_chroot_dir);
+   install_str_setting("ftp", &tunable_ftp_username);
+   install_str_setting("root", &tunable_chown_username);
+   install_str_setting("/var/log/xferlog", &tunable_xferlog_file);
