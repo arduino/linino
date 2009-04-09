@@ -11,7 +11,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=qc-usb
 PKG_VERSION:=0.6.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/qce-ga
@@ -73,6 +73,7 @@ endif
 
 define Build/Compile/user
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CC="$(TARGET_CC)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		qcset
 endef
