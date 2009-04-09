@@ -1,0 +1,36 @@
+--- hping3-20051105_orig/hping2.h	2004-06-04 09:22:38.000000000 +0200
++++ hping3-20051105/hping2.h	2009-02-26 15:42:14.000000000 +0100
+@@ -13,6 +13,7 @@
+ #ifndef _HPING2_H
+ #define _HPING2_H
+ 
++#include <endian.h>
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <netinet/in.h>
+@@ -248,10 +249,10 @@
+  * IP header
+  */
+ struct myiphdr {
+-#if defined(__LITTLE_ENDIAN_BITFIELD)
++#if __BYTE_ORDER == __LITTLE_ENDIAN
+         __u8    ihl:4,
+                 version:4;
+-#elif defined (__BIG_ENDIAN_BITFIELD)
++#elif __BYTE_ORDER == __BIG_ENDIAN
+         __u8    version:4,
+                 ihl:4;
+ #else
+@@ -287,10 +288,10 @@
+ 	__u16	th_dport;               /* destination port */
+ 	__u32	th_seq;                 /* sequence number */
+ 	__u32	th_ack;                 /* acknowledgement number */
+-#if defined (__LITTLE_ENDIAN_BITFIELD)
++#if __BYTE_ORDER == __LITTLE_ENDIAN
+ 	__u8    th_x2:4,                /* (unused) */
+ 		th_off:4;               /* data offset */
+-#elif defined (__BIG_ENDIAN_BITFIELD)
++#elif __BYTE_ORDER == __BIG_ENDIAN
+ 	__u8    th_off:4,               /* data offset */
+ 		th_x2:4;                /* (unused) */
+ #else
