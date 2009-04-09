@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rrdtool
-PKG_VERSION:=1.2.23
+PKG_VERSION:=1.2.30
 PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=http://oss.oetiker.ch/rrdtool/pub/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=dafa161bc9c61e57636a6085c87c1fe8
+PKG_MD5SUM:=19b24f7184a8dbf7b48c1bbb565ad9fb
 
 PKG_BUILD_DEPENDS:=python libnotimpl
 PKG_FIXUP = libtool
