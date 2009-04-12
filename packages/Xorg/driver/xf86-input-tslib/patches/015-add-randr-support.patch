@@ -21,7 +21,7 @@ index 3eba078..6091006 100644
  	int ret;
  	int x,y;
 +	ScrnInfoPtr pScrn = xf86Screens[priv->screen_num];
-+	Rotation rotation = rrGetScrPriv (pScrn->pScreen) ? RRGetRotation(pScrn->pScreen);
++	Rotation rotation = rrGetScrPriv (pScrn->pScreen) ? RRGetRotation(pScrn->pScreen) : RR_Rotate_0;
  
  	ret = ts_read(priv->ts, &samp, 1);
  
