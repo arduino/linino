@@ -9,7 +9,7 @@ start() {
 
   /usr/sbin/named -c $config_file
 
-  if [ $? -eq 0 ]
+  if [ $? -ne 0 ]
   then
     echo "  isc-bind failed to start"
   fi
