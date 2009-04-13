@@ -34,3 +34,19 @@
  	__u8    th_off:4,               /* data offset */
  		th_x2:4;                /* (unused) */
  #else
+diff -urN hping3-20051105/bytesex.h hping3-20051105.new/bytesex.h
+--- hping3-20051105/bytesex.h	2003-08-31 19:23:48.000000000 +0200
++++ hping3-20051105.new/bytesex.h	2009-04-13 15:14:52.000000000 +0200
+@@ -9,9 +9,11 @@
+ 
+ #if 	defined(__i386__) \
+ 	|| defined(__alpha__) \
++	|| (defined(__arm__) && (defined(ARMEL) || defined(__ARMEL__)))  \
+ 	|| (defined(__mips__) && (defined(MIPSEL) || defined (__MIPSEL__)))
+ #define BYTE_ORDER_LITTLE_ENDIAN
+-#elif 	defined(__mc68000__) \
++#elif defined(__mc68000__) \
++	|| (defined(__arm__) && (defined(ARMEB) || defined(__ARMEB__))) \
+ 	|| defined (__sparc__) \
+ 	|| defined (__sparc) \
+ 	|| defined (__PPC__) \
