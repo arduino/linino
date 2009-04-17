@@ -5,7 +5,6 @@
 # See /LICENSE for more information.
 #
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 

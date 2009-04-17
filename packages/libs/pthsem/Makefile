@@ -1,4 +1,3 @@
-#$Id: $
 
 include $(TOPDIR)/rules.mk
 

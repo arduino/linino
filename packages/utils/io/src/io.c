@@ -1,7 +1,6 @@
 /*
  * Simple app. to do memory accesses via /dev/mem.
  *
- * $Id: io.c,v 2.0 $
  *
  * Copyright (c) Richard Hirst <rhirst@linuxcare.com>
  * Copyright (c) Thomas Langer <thomas.langer@infineon.com>

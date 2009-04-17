@@ -1,6 +1,5 @@
 # Copyright (C) 2008, OpenWrt.org
 #
-# $Id: #
 
 include $(TOPDIR)/rules.mk
 

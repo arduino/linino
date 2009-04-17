@@ -4,7 +4,6 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: Makefile 12228 2009-03-12 22:43:15Z mirko $
 
 # Dude, this "boost" is really one of the most crude stuff I ported yet.
 

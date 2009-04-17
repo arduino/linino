@@ -4,7 +4,6 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: Makefile 5624 2007-09-04 00:29:07Z Dottout $
 
 include $(TOPDIR)/rules.mk
 # we use the $LINUX_DIR variable, which is defined in kernel.mk

@@ -1,4 +1,3 @@
-# $Id: Makefile 4033 2006-06-21 02:32:39Z nbd $
 
 include $(TOPDIR)/rules.mk
 

@@ -4,7 +4,6 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: Makefile 9349 2007-10-18 18:46:37Z blogic $
 
 include $(TOPDIR)/rules.mk
 

@@ -6,7 +6,6 @@
 #
 # This Makefile is a skeleton
 #
-# $Id: $
 
 include $(TOPDIR)/rules.mk
 

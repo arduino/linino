@@ -5,7 +5,6 @@
 # See /LICENSE for more information.
 #
 # blogic@openwrt.org
-# $Id: Makefile 12619 2008-09-17 18:31:15Z lars $
 
 include $(TOPDIR)/rules.mk
 

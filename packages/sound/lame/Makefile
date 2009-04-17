@@ -5,7 +5,6 @@
 # See /LICENSE for more information.
 #
 # blogic@openwrt.org
-# $Id$
 
 include $(TOPDIR)/rules.mk
 

@@ -1,4 +1,3 @@
-# $Id$
 
 EXTRA_CFLAGS := -c -I.
 PIPACS_OBJS := pipacs.o parser.o
