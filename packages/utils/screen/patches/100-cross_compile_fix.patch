@@ -511,7 +511,7 @@ diff -ur screen.old/sched.h screen.dev/sched.h
 --- screen.old/sched.h	2002-01-08 16:42:43.000000000 +0100
 +++ screen.dev/sched.h	2007-03-02 17:03:48.475830776 +0100
 @@ -22,6 +22,11 @@
-  * $Id$ FAU
+  * $Id: 100-cross_compile_fix.patch 6458 2007-03-02 16:12:30Z nbd $ FAU
   */
  
 +#ifndef __SCHED_H

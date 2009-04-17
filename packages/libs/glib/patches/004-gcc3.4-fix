@@ -5,8 +5,8 @@ Origin: self-created, http://www.uwe-dueffert.de/lfs/ownpatches/glib-1.2.10-gcc3
 Upstream Status: not reported
 Description: fix compilation of glib1 with gcc34
  
-$LastChangedBy$
-$Date$
+$LastChangedBy: pavlov $
+$Date: 2007-03-05 02:34:12 +0100 (Mon, 05 Mar 2007) $
 
 diff -Naur glib-1.2.10.orig/gstrfuncs.c glib-1.2.10/gstrfuncs.c
 --- glib-1.2.10.orig/gstrfuncs.c	2004-05-15 13:40:03.556092792 +0000
