@@ -9,12 +9,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ndisc6
-PKG_VERSION:=0.5.1
+PKG_VERSION:=0.9.8
 PKG_RELEASE:=1
-PKG_MD5SUM:=33487fe5505b195eb31468d88ba9ab56
+PKG_MD5SUM:=cb8d70564b8d40aae95e19592c6be183
 
-PKG_SOURCE_URL:=http://www.remlab.net/files/ndisc6/ \
-	http://www.remlab.net/files/ndisc6/archive/
+PKG_SOURCE_URL:=http://www.remlab.net/files/ndisc6/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -64,23 +63,23 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) -std=c99" \
 		all
 endef
 
 define Package/ndisc6/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ndisc6 $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/ndisc6 $(1)/usr/bin/
 endef
 
 define Package/rdisc6/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/rdisc6 $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/rdisc6 $(1)/usr/bin/
 endef
 
 define Package/tcptraceroute6/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tcptraceroute6 $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/tcptraceroute6 $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,ndisc6))
