@@ -9,14 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pcre
-PKG_VERSION:=7.6
-PKG_RELEASE:=2
+PKG_VERSION:=7.9
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/pcre
-PKG_MD5SUM:=2af38e083fb90ef60fa9eda7cc290e86
-
-PKG_FIXUP = libtool
+PKG_MD5SUM:=b6a9669d1863423f01ea46cdf00f93dc
 
 include $(INCLUDE_DIR)/package.mk
 
