@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=privoxy
-PKG_VERSION:=3.0.8
-PKG_RELEASE:=3
+PKG_VERSION:=3.0.12
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-stable-src.tar.gz
 PKG_SOURCE_URL:=@SF/ijbswa
-PKG_MD5SUM:=252c0e085218fb930c4bc7563e9cedd9
+PKG_MD5SUM:=c973e608d27b248ef567b47664308da1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-stable
 
@@ -46,7 +46,7 @@ define Build/Configure
 	)
 endef
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		SPECIAL_CFLAGS="-pthread -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib"
 	mkdir -p $(PKG_INSTALL_DIR)
@@ -57,7 +57,6 @@ endef
 
 define Package/privoxy/conffiles
 /etc/privoxy/config
-/etc/privoxy/user.action
 endef
 
 define Package/privoxy/install
