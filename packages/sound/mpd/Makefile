@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpd
 PKG_VERSION:=0.14.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/musicpd
@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mpd
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread +libiconv +glib2
+  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread +glib2
   TITLE:=Music Player Daemon
   URL:=http://www.musicpd.org/
 endef
@@ -43,6 +43,8 @@ endif
 CONFIGURE_VARS += \
 	ID3TAG_LIBS="-L$(STAGING_DIR)/usr/lib -lz -lid3tag" \
 	ID3TAG_CFLAGS="-I$(STAGING_DIR)/usr/include" \
+	FLAC_LIBS="-L$(STAGING_DIR)/usr/lib -lFLAC" \
+	FLAC_CFLAGS="-I$(STAGING_DIR)/usr/include/FLAC" \
 	MAD_LIBS="-L$(STAGING_DIR)/usr/lib -lmad" \
 	MAD_CFLAGS="-I$(STAGING_DIR)/usr/include" \
 	OGGVORBIS_LIBS="-L$(STAGING_DIR)/usr/lib -lvorbisidec" \
@@ -63,7 +65,7 @@ define Build/Configure
 		--disable-mvp \
 		--disable-lametest \
 		--disable-lame \
-		--disable-flac \
+		--enable-flac \
 		--with-tremor=$(STAGING_DIR)/usr/lib \
 	)
 endef
