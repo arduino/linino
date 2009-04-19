@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2008 OpenWrt.org
+# Copyright (C) 2005-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnutls
-PKG_VERSION:=2.4.1
-PKG_RELEASE:=2
+PKG_VERSION:=2.6.4
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.gnu.org/pub/gnu/gnutls/ \
-	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/ \
-	http://josefsson.org/gnutls/releases/
-PKG_MD5SUM:=573db36cb3f8472b0293cfa1f52c607a
+	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/
+PKG_MD5SUM:=747111ab0d86e7b06a4bb120ba456ad8
 
 PKG_FIXUP = libtool
 
@@ -31,8 +30,7 @@ endef
 define Package/gnutls/Default/description
  GnuTLS is a project that aims to develop a library which provides a
  secure layer, over a reliable transport layer. Currently the GnuTLS
- library implements the proposed standards by the IETF's TLS working
- group.
+ library implements the SSL 3.0, TLS 1.0, and TLS 1.1 protocols.
 endef
 
 
