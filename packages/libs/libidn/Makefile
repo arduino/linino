@@ -7,12 +7,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libidn
-PKG_VERSION:=1.12
+PKG_VERSION:=1.13
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/libidn
-PKG_MD5SUM:=49db2165868d3ec2af00e0b7d0924dd8
+PKG_MD5SUM:=101f13b1cb698080c77e38b8e8d4c6a4
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,14 +23,14 @@ define Package/libidn
   URL:=http://www.gnu.org/software/libidn/
 endef
 
-define Package/libgmp/description
+define Package/libidn/description
   GNU Libidn is a fully documented implementation of the Stringprep,
   Punycode and IDNA specifications. Libidn's purpose is to encode and
   decode internationalized domain names.
 endef
 
 TARGET_CFLAGS += $(FPIC)
-CONFIGURE_VARS += CC="$(TARGET_CROSS)gcc"
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
