@@ -51,4 +51,4 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libclinkc.a $(1)/usr/lib/
 endef
 
-$(eval $(call BuildPackage/libclinkc))
+$(eval $(call BuildPackage,libclinkc))
