@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2008 OpenWrt.org
+# Copyright (C) 2005-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libgcrypt
-PKG_VERSION:=1.4.1
-PKG_RELEASE:=2
+PKG_VERSION:=1.4.4
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.gnupg.org/gcrypt/libgcrypt/
-PKG_MD5SUM:=26703ecef4bbe113b8e6a87572b80b32
+PKG_MD5SUM:=34105aa927e23c217741966496b97e67
 
 PKG_FIXUP:=libtool
 
