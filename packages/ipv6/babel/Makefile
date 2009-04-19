@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=babel
 PKG_VERSION:=0.94
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/
@@ -48,6 +48,8 @@ define Package/babel/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/babel $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/babel.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/babel.init $(1)/etc/init.d/babel
 endef
 
 $(eval $(call BuildPackage,babel))

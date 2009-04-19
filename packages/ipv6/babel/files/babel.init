@@ -10,7 +10,7 @@ babel_config() {
 }
 
 start() {
-	if [ -x /etc/init.d/ahcpd ] ; then
+	if [ -x /etc/rc.d/S71ahcpd ] ; then
 		echo 'Not starting babel -- will be started by ahcpd.'
 		exit 0
 	fi
@@ -20,7 +20,7 @@ start() {
 	if [ -e $pidfile ] ; then
 		echo "$pidfile exists -- not starting babel." >&2
 	else
-		/usr/bin/babel -D -I $pidfile $interfaces
+		/usr/sbin/babel -D -I $pidfile $interfaces
 	fi
 }
 
@@ -28,5 +28,5 @@ stop() {
 	[ -e $pidfile ] && kill $(cat $pidfile)
 	[ -e $pidfile ] && sleep 2
 	[ -e $pidfile ] && sleep 4
-	[ -e $pidfile ] && echo "Failed to stop ahcpd ($pidfile still exists)."
+	[ -e $pidfile ] && echo "Failed to stop babel ($pidfile still exists)."
 }
