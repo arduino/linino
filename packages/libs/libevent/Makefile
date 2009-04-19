@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libevent
-PKG_VERSION:=1.4.4
+PKG_VERSION:=1.4.9
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-stable
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-stable.tar.gz
 PKG_SOURCE_URL:=http://www.monkey.org/~provos/
-PKG_MD5SUM:=5d7591aa6301f06315b52bade472bf2f
+PKG_MD5SUM:=5154fd4582d64077d6b17851f04d6957
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -39,6 +39,8 @@ endef
 
 TARGET_CFLAGS += $(FPIC)
 
+Hooks/InstallDev/Post += libtool_fixup_libdir
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
@@ -52,7 +54,7 @@ define Build/InstallDev
 	mkdir -p $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
 	mkdir -p $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevent.{a,so} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevent.{la,a,so} $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevent-1.4.so* $(1)/usr/lib/
 endef
 
