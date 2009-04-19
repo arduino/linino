@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2008 OpenWrt.org
+# Copyright (C) 2005-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,15 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libgpg-error
-PKG_VERSION:=1.6
-PKG_RELEASE:=2
+PKG_VERSION:=1.7
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.gnupg.org/gcrypt/libgpg-error/ \
 	http://mirrors.rootmode.com/ftp.gnupg.org/libgpg-error/ \
 	http://gulus.usherbrooke.ca/pub/appl/GnuPG/libgpg-error/ \
 	http://gnupg.unixmexico.org/ftp/libgpg-error/
-PKG_MD5SUM:=f3e9870e213518b407a959f8d29cd554
+PKG_MD5SUM:=62c0d09d1e76c5b6da8fff92314c4665
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
