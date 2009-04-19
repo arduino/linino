@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007 - 2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpd
 PKG_VERSION:=0.14
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/musicpd
@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mpd
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread +libiconv +glib2
+  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +glib2 +CONFIG_PACKAGE_kmod-sound-core:alsa-lib
   TITLE:=Music Player Daemon
   URL:=http://www.musicpd.org/
 endef
@@ -36,37 +36,46 @@ define Package/mpd/conffiles
 /etc/mpd.conf
 endef
 
-ifndef CONFIG_PACKAGE_kmod-sound-core
-	EXTRA_CONFIG_PARAM:=--disable-alsa
+CONFIGURE_ARGS += \
+	--disable-aac \
+	--disable-ao \
+	--disable-audiofile \
+	--disable-curl \
+	--disable-ffmpeg \
+	--enable-flac \
+	--disable-ipv6 \
+	--disable-jack \
+	--disable-lame \
+	--disable-lametest \
+	--disable-lsr \
+	--disable-mod \
+	--disable-mpc \
+	--disable-mvp \
+	--disable-oggflac \
+	--disable-pulse \
+	--disable-shout-mp3 \
+	--disable-shout-ogg \
+	--disable-wavpack \
+	--with-tremor="$(STAGING_DIR)/usr" \
+	--with-zeroconf=no \
+
+ifneq ($(CONFIG_PACKAGE_kmod-sound-core),)
+  CONFIGURE_ARGS += --enable-alsa
+else
+  CONFIGURE_ARGS += --disable-alsa
 endif
 
 CONFIGURE_VARS += \
-	ID3TAG_LIBS="-L$(STAGING_DIR)/usr/lib -lz -lid3tag" \
+	FLAC_CFLAGS="-I$(STAGING_DIR)/usr/include" \
+	FLAC_LIBS="-L$(STAGING_DIR)/usr/lib -lFLAC" \
 	ID3TAG_CFLAGS="-I$(STAGING_DIR)/usr/include" \
-	MAD_LIBS="-L$(STAGING_DIR)/usr/lib -lmad" \
+	ID3TAG_LIBS="-L$(STAGING_DIR)/usr/lib -lz -lid3tag" \
 	MAD_CFLAGS="-I$(STAGING_DIR)/usr/include" \
-	OGGVORBIS_LIBS="-L$(STAGING_DIR)/usr/lib -lvorbisidec" \
+	MAD_LIBS="-L$(STAGING_DIR)/usr/lib -lmad" \
 	OGGVORBIS_CFLAGS="-I$(STAGING_DIR)/usr/include" \
+	OGGVORBIS_LIBS="-L$(STAGING_DIR)/usr/lib -lvorbisidec" \
 	GLIB_CFLAGS="-I$(STAGING_DIR)/usr/include/glib-2.0 -I$(STAGING_DIR)/usr/lib/glib-2.0/include" \
 	GLIB_LIBS="-L$(STAGING_DIR)/usr/lib/libintl/lib -lintl -L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv -L$(STAGING_DIR)/usr/lib -lglib-2.0 -lgthread-2.0 -pthread"
-
-define Build/Configure
-	$(call Build/Configure/Default, \
-		$(EXTRA_CONFIG_PARAM) \
-		--disable-mod \
-		--disable-audiofile \
-		--disable-mpc \
-		--disable-aac \
-		--disable-lsr \
-		--disable-ipv6 \
-		--disable-ao \
-		--disable-mvp \
-		--disable-lametest \
-		--disable-lame \
-		--disable-flac \
-		--with-tremor=$(STAGING_DIR)/usr/lib \
-	)
-endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
