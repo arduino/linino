@@ -3,6 +3,7 @@
 START=50
 
 start() {
+	mkdir -p /var/cache/cups
 	mkdir -p /var/cups
 	mkdir -p /var/spool/cups/tmp
 	/usr/sbin/cupsd
