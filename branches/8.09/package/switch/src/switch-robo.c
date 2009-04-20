@@ -67,6 +67,9 @@
 #define bool int
 #endif
 
+
+extern char *nvram_get(const char *name);
+
 /* Data structure for a Roboswitch device. */
 struct robo_switch {
 	char *device;			/* The device name string (ethX) */
@@ -270,8 +273,9 @@ static int robo_switch_enable(void)
 			robo_write16(ROBO_CTRL_PAGE, i, 0);
 	}
 
-	/* WAN port LED */
-	robo_write16(ROBO_CTRL_PAGE, 0x16, 0x1F);
+	/* WAN port LED, except for Netgear WGT634U */
+	if (strcmp(nvram_get("nvram_type"), "cfe"))
+		robo_write16(ROBO_CTRL_PAGE, 0x16, 0x1F);
 
 	return 0;
 }
