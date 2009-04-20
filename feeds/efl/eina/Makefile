@@ -22,6 +22,7 @@ PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 
 PKG_FIXUP = libtool
 
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/eina
@@ -35,6 +36,17 @@ endef
 define Build/Configure
 	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
 	$(call Build/Configure/Default, \
+		--disable-cpu-mmx \
+		--disable-cpu-sse \
+		--disable-cpu-sse2 \
+		--disable-magic-debug \
+		--disable-doc \
+	)
+endef
+
+define Host/Configure
+	( cd $(HOST_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
+	$(call Host/Configure/Default, \
 		--disable-cpu-mmx \
 		--disable-cpu-sse \
 		--disable-cpu-sse2 \
@@ -60,4 +72,5 @@ define Package/eina/install
 	$(FIND) $(1)/ -name "*.a" | $(XARGS) rm
 endef
 
+$(eval $(call HostBuild))
 $(eval $(call BuildPackage,eina))
