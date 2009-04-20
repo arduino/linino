@@ -22,7 +22,7 @@ define Package/libspe2
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=SPE Runtime Management Library for the Cell Broadband Engine
-  DEPENDS:=@TARGET_ps3
+  DEPENDS:=@TARGET_ps3||TARGET_ps3chk
   URL:=http://sourceforge.net/projects/libspe/
 endef
 

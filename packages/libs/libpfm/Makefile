@@ -21,7 +21,7 @@ define Package/libpfm
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Perfmon2 Kernel performance monitoring interface
-  DEPENDS:=@TARGET_ps3
+  DEPENDS:=@TARGET_ps3||TARGET_ps3chk
   URL:=http://perfmon2.sourceforge.net/
 endef
 
