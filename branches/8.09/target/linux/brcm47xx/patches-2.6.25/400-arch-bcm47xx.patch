@@ -131,7 +131,7 @@
  {
  	int i = 0;
  
-@@ -72,52 +102,141 @@
+@@ -72,52 +102,142 @@
  	}
  }
  
@@ -274,6 +274,7 @@
 +
 +		memset(&s, 0, sizeof(s));
 +		s.line = i;
++		s.mapbase = (unsigned int) port->regs;
 +		s.membase = port->regs;
 +		s.irq = port->irq + 2;
 +		s.uartclk = port->baud_base;
