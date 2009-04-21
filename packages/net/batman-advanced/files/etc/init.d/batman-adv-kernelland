@@ -26,12 +26,8 @@ start () {
 	fi
 }
 
-restart () {
-	$0 stop
-	sleep 3
-	$0 start
-}
-        
 stop () {
-	echo "" > /proc/net/batman-adv/interfaces
+        echo "" > /proc/net/batman-adv/interfaces
 }
+
+        

@@ -4,6 +4,7 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
+# $Id: Makefile 5624 2006-11-23 00:29:07Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -11,7 +12,6 @@ PKG_NAME:=batman-adv
 PKG_REV:=1220
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
-PKG_BRANCH:=batman-adv-userspace
 
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
@@ -70,7 +70,7 @@ define KernelPackage/batman-adv-kernelland/description
 Kernel routing module for B.A.T.M.A.N. layer 2
 endef
 
-MAKE_ARGS += \
+MAKE_BATADV_USERSPACE_ARGS += \
 	CFLAGS="$(TARGET_CFLAGS)" \
 	CCFLAGS="$(TARGET_CFLAGS)" \
 	OFLAGS="$(TARGET_CFLAGS)" \
@@ -82,7 +82,7 @@ MAKE_ARGS += \
 	STRIP="/bin/true" \
 	batmand-adv install
 	
-MAKE_KMOD_ARGS += \
+MAKE_BATADV_KERNELLAND_ARGS += \
 	CROSS_COMPILE="$(TARGET_CROSS)" \
 	ARCH="$(LINUX_KARCH)" \
 	PATH="$(TARGET_PATH)" \
@@ -90,7 +90,7 @@ MAKE_KMOD_ARGS += \
 	LINUX_VERSION="$(LINUX_VERSION)" \
 	REVISION="$(PKG_REV)" modules
 
-MAKE_TOOL_ARGS += \
+MAKE_BATTOOL_ARGS += \
 	CFLAGS="$(TARGET_CFLAGS)" \
 	CCFLAGS="$(TARGET_CFLAGS)" \
 	OFLAGS="$(TARGET_CFLAGS)" \
@@ -105,16 +105,16 @@ MAKE_TOOL_ARGS += \
 define Build/Configure
 endef
 
-ifneq ($(CONFIG_PACKAGE_batman-adv-userspace),n)
-	BUILD_ADV = $(MAKE) -C $(PKG_BUILD_DIR)/batman-adv-userspace $(MAKE_ARGS)
+ifneq ($(CONFIG_DEVEL)$(CONFIG_PACKAGE_batman-adv-userspace),)
+	BUILD_ADV = $(MAKE) -C $(PKG_BUILD_DIR)/batman-adv-userspace $(MAKE_BATADV_USERSPACE_ARGS)
 endif
 
-ifneq ($(CONFIG_PACKAGE_kmod-batman-adv-kernelland),n)
-        BUILD_KMOD_ADV = $(MAKE) -C "$(LINUX_DIR)" $(MAKE_KMOD_ARGS)
+ifneq ($(CONFIG_DEVEL)$(CONFIG_PACKAGE_kmod-batman-adv-kernelland),)
+        BUILD_KMOD_ADV = $(MAKE) -C "$(LINUX_DIR)" $(MAKE_BATADV_KERNELLAND_ARGS)
 endif
 
-ifneq ($(CONFIG_PACKAGE_battool),n)
-        BUILD_BATTOOL = $(MAKE) -C $(PKG_TOOL_BUILD_DIR) $(MAKE_TOOL_ARGS)
+ifneq ($(CONFIG_DEVEL)$(CONFIG_PACKAGE_battool),)
+        BUILD_BATTOOL = $(MAKE) -C $(PKG_TOOL_BUILD_DIR) $(MAKE_BATTOOL_ARGS)
 endif
 
 define Build/Compile
