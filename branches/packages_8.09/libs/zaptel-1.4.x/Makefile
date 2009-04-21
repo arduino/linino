@@ -11,7 +11,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=zaptel
 PKG_VERSION:=1.4.9.2
-PKG_RELEASE:=2
+PKG_RELEASE:=1.1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.digium.com/pub/zaptel/releases/

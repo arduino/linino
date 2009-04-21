@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freetype
 PKG_VERSION:=2.3.7
-PKG_RELEASE:=2
+PKG_RELEASE:=1.1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/freetype

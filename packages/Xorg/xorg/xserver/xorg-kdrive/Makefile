@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xserver-kdrive
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_VERSION:=1.5.1
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/xserver/
 PKG_SOURCE:=xorg-server-$(PKG_VERSION).tar.bz2

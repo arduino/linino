@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xorg-server
-PKG_RELEASE:=1
+PKG_RELEASE:=1.1
 PKG_VERSION:=1.5.1
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/xserver/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2

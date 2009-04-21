@@ -9,11 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mini_snmpd
-PKG_RELEASE:=1
+PKG_VERSION:=1.0
+PKG_RELEASE:=1.1
 
 PKG_SOURCE:=mini_snmpd.tar.gz
 PKG_SOURCE_URL:=http://members.aon.at/linuxfreak/linux/
 PKG_MD5SUM:=13f2202ff01ff6b6463989f34f453063
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 

@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xf86-input-tslib
-PKG_RELEASE:=1
+PKG_RELEASE:=1.1
 PKG_VERSION:=0.0.5
 
 PKG_SOURCE_URL:=http://www.pengutronix.de/software/xf86-input-tslib/download/
