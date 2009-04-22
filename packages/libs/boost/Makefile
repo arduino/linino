@@ -39,9 +39,9 @@ LIBRARIES:= \
 	serialization \
 
 define Build/Compile
-	(cd $(PKG_BUILD_DIR) ; \
-		echo "using gcc : : $(TOOLCHAIN_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc : <cflags>$(CFLAGS) <cxxflags>$(CXXFLAGS) <linkflags>$(LDFLAGS) ;" > tools/build/v2/site-config.jam ; \
-		$(STAGING_DIR_HOST)/usr/bin/bjam \
+	( cd $(PKG_BUILD_DIR) ; \
+		echo "using gcc : : $(GNU_TARGET_NAME)-gcc : <cflags>$(CFLAGS) <cxxflags>$(CXXFLAGS) <linkflags>$(LDFLAGS) ;" > tools/build/v2/site-config.jam ; \
+		bjam \
 			'-sBUILD=release <optimization>space <inlining>on <debug-symbols>off' \
 			--toolset=gcc \
 			$(foreach c, $(LIBRARIES), \
