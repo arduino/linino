@@ -32,8 +32,8 @@ define Host/Compile
 endef
 
 define Host/Install
-	$(INSTALL_DIR) $(STAGING_DIR_HOST)/usr/bin
-	$(CP) $(HOST_BUILD_DIR)/bin.*/bjam $(STAGING_DIR_HOST)/usr/bin/
+	$(INSTALL_DIR) $(STAGING_DIR_HOST)/bin
+	$(CP) $(HOST_BUILD_DIR)/bin.*/bjam $(STAGING_DIR_HOST)/bin/
 endef
 
 $(eval $(call HostBuild))
