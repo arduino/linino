@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=peerguardian
 PKG_VERSION:=1.5beta
-PKG_RELEASE:=1
+PKG_RELEASE:=1.1
 
 PKG_SOURCE:=pglinux-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/peerguardian
@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/peerguardian
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:= +kmod-ipt-queue +libncurses +libpthread +uclibcxx +libnetfilter-queue +libnfnetlink
+  DEPENDS:= +libncurses +libpthread +uclibcxx +libnetfilter-queue
   TITLE:=PeerGuardian for Linux
   URL:=http://phoenixlabs.org/
 endef
