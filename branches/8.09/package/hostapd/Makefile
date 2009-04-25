@@ -27,7 +27,7 @@ define Package/hostapd/Default
   CATEGORY:=Network
   TITLE:=IEEE 802.1x Authenticator
   URL:=http://hostap.epitest.fi/
-  DEPENDS:=@!TARGET_avr32 @!TARGET_etrax
+  DEPENDS:=@!TARGET_avr32
 endef
 
 define Package/hostapd
