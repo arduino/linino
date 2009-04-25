@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -18,7 +18,7 @@ PKG_MD5SUM:=611435c8e61e1a330ee0aa8ddc9c124a
 include $(INCLUDE_DIR)/package.mk
 
 define Package/luaprofiler
-  SUBMENU:=LUA
+  SUBMENU:=Lua
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=Lua Profiler

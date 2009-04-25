@@ -18,10 +18,10 @@ PKG_MD5SUM:=a88f2c05d22abfcc9ab92bd1d6f32b37
 include $(INCLUDE_DIR)/package.mk
 
 define Package/luasec
-  SUBMENU:=LUA
+  SUBMENU:=Lua
   SECTION:=lang
   CATEGORY:=Languages
-  TITLE:=LUASec 
+  TITLE:=LuaSec 
   URL:=http://luasec.luaforge.net/
   DEPENDS:=lua +libopenssl +luasocket
 endef

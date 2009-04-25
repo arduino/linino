@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -18,16 +18,16 @@ PKG_MD5SUM:=fe2fa6decc48f0267b4f09975750280e
 include $(INCLUDE_DIR)/package.mk
 
 define Package/liblua-filesystem
-  SUBMENU:=LUA
+  SUBMENU:=Lua
   SECTION:=lang
   CATEGORY:=Languages
-  TITLE:=luafilsystem - library for the LUA programming language
+  TITLE:=LuaFileSystem
   URL:=http://www.luaforge.net/projects/luafilesystem
   DEPENDS:=+liblua
 endef
 
 define Package/luafilesystem/description
- This package contains the luafilesystem library, a set of portable
+ This package contains the LuaFileSystem library, a set of portable
  functions for directory creation, listing and deletion and for file
  locking.
 endef

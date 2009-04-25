@@ -18,10 +18,10 @@ PKG_MD5SUM:=41445b138deb7bcfe97bff957503da8e
 include $(INCLUDE_DIR)/package.mk
 
 define Package/luasocket
-  SUBMENU:=LUA
+  SUBMENU:=Lua
   SECTION:=lang
   CATEGORY:=Languages
-  TITLE:=LUASocket
+  TITLE:=LuaSocket
   URL:=http://luasocket.luaforge.net/
   DEPENDS:=lua
 endef

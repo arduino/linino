@@ -18,10 +18,10 @@ PKG_MD5SUM:=6ecb895ccf5cff1e7f2facd438b1f8d0
 include $(INCLUDE_DIR)/package.mk
 
 define Package/luaexpat
-  SUBMENU:=LUA
+  SUBMENU:=Lua
   SECTION:=lang
   CATEGORY:=Languages
-  TITLE:=LUAexpat 
+  TITLE:=LuaExpat 
   URL:=http://www.keplerproject.org/luaexpat/
   DEPENDS:=lua +libexpat
 endef

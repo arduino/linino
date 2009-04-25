@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -57,13 +57,13 @@ endef
 
 define Package/weechat-mod-lua
 $(call Package/weechat/Default)
- TITLE+= (LUA plugin)
+ TITLE+= (Lua plugin)
  DEPENDS:=weechat +liblua
 endef
 
 define Package/weechat-mod-lua/description
 $(call Package/weechat/Default/description)
- This packages contains an LUA scripting plugin for Weechat.
+ This packages contains an Lua scripting plugin for Weechat.
 endef
 
 
