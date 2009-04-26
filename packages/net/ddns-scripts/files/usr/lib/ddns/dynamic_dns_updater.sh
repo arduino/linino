@@ -9,11 +9,6 @@
 #
 
 . /usr/lib/ddns/dynamic_dns_functions.sh
-. /usr/lib/ddns/shell_get.sh
-
-
-
-
 
 
 service_id=$1
@@ -90,17 +85,7 @@ fi
 
 #some constants
 
-retrieve_prog="/usr/bin/wget --no-check-certificate -O - ";
-if [ -h "/usr/bin/wget" ]
-then
-	busybox_wget=$(ls -l /usr/bin/wget | awk ' { if ($0~/busybox/) { print "BUSYBOX"}} ')
-	if [ -n "$busybox_wget" ]; then
-		retrieve_prog="shell_get"
-	fi
-fi
-
-verbose_echo "retrieve_prog=\"$retrieve_prog\""
-
+retrieve_prog="/usr/bin/wget -O - ";
 service_file="/usr/lib/ddns/services"
 
 ip_regex="[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"
