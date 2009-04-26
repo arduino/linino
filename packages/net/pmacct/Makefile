@@ -90,7 +90,7 @@ endef
 
 define Compile/Template
 
-$(PKG_BUILD_DIR)/nfacctd$(1) $(PKG_BUILD_DIR)/pmacctd$(1): $(PKG_BUILD_DIR)/.configured
+$(PKG_BUILD_DIR)/nfacctd$(1) $(PKG_BUILD_DIR)/pmacctd$(1): $(STAMP_CONFIGURED)
 	-$(MAKE) -C $(PKG_BUILD_DIR) distclean
 	$(call Build/Configure/Default, \
 		--with-pcap-includes="$(STAGING_DIR)/usr/include" \

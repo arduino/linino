@@ -45,7 +45,7 @@ endef
 
 define Compile/Template
 
-$(PKG_BUILD_DIR)/snort$(1): $(PKG_BUILD_DIR)/.configured
+$(PKG_BUILD_DIR)/snort$(1): $(STAMP_CONFIGURED)
 	touch -r $(PKG_BUILD_DIR)/Makefile.am $(PKG_BUILD_DIR)/configure.in 
 	touch -r $(PKG_BUILD_DIR)/Makefile.in $(PKG_BUILD_DIR)/configure
 	-$(MAKE) -C $(PKG_BUILD_DIR) distclean
