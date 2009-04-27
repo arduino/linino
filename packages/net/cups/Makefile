@@ -8,15 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cups
-PKG_VERSION:=1.3.7
-PKG_RELEASE:=5
+PKG_VERSION:=1.3.10
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-source.tar.bz2
 PKG_SOURCE_URL:= \
 	http://ftp.rz.tu-bs.de/pub/mirror/ftp.easysw.com/ftp/pub/cups/$(PKG_VERSION) \
 	ftp://ftp.easysw.com/pub/cups/$(PKG_VERSION) \
 	ftp://ftp3.easysw.com/pub/cups/$(PKG_VERSION)
-PKG_MD5SUM:=db4a45a17104f10f3ee599d88267c9e5
+PKG_MD5SUM:=84fffe96b8537c81a463faccead80026
 
 PKG_BUILD_DEPENDS:=zlib
 
