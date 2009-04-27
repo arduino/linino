@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,29 +8,32 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=icmptx
-PKG_VERSION:=0.01
+PKG_VERSION:=0.2
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://thomer.com/icmptx/
-PKG_MD5SUM:=f83d1d7789a1b100abcc00d1a56ee95d
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=git://github.com/jakkarth/icmptx.git
+PKG_SOURCE_VERSION:=33e0b826f99df290ee792f6aa587af273d674309
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/icmptx
   SECTION:=net
   CATEGORY:=Network
-  TITLE:=allows you to pass IP packets via ICMP queries 
-  URL:=http://thomer.com/icmptx/
+  TITLE:=IP-over-ICMP tunnel 
+  URL:=http://github.com/jakkarth/icmptx
 endef
 
 define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) CC="$(TARGET_CC)"
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CC="$(TARGET_CC)" \
+		OPT_FLAGS="$(TARGET_CFLAGS)" \
+		icmptx
 endef
 
 define Package/icmptx/install
