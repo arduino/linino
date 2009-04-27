@@ -17,6 +17,10 @@ PKG_MD5SUM:=19b24f7184a8dbf7b48c1bbb565ad9fb
 
 PKG_BUILD_DEPENDS:=python
 
+PKG_CONFIG_DEPENDS:= \
+	CONFIG_PACKAGE_python-rrd \
+	CONFIG_PACKAGE_rrdcgi \
+
 PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
