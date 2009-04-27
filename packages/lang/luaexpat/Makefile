@@ -23,7 +23,7 @@ define Package/luaexpat
   CATEGORY:=Languages
   TITLE:=LuaExpat 
   URL:=http://www.keplerproject.org/luaexpat/
-  DEPENDS:=lua +libexpat
+  DEPENDS:=+lua +libexpat
 endef
 
 define Package/luaexpat/description
