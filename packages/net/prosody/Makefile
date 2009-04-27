@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=prosody
-PKG_VERSION:=0.3.0
+PKG_VERSION:=0.4.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://prosody.im/downloads/source/
-PKG_MD5SUM:=97b19d75b3d6770fb9b46b6452f945dd
+PKG_MD5SUM:=c143532a289a72d5d48b81b5bdac7c25
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,10 +36,11 @@ define Package/prosody/conffiles
 endef
 
 define Build/Configure
+	# this is *NOT* GNU autoconf stuff
 	(cd $(PKG_BUILD_DIR); ./configure \
 		--prefix=/usr \
 		--with-lua="$(STAGING_DIR)/host/bin" \
-		--with-lua-include="$(STAGING_DIR)/usr/include/" \
+		--with-lua-include="$(STAGING_DIR)/usr/include" \
 		--with-lua-lib="$(STAGING_DIR)/usr/lib" \
 		--cflags="$(TARGET_CFLAGS)" \
 	)
@@ -56,7 +57,7 @@ define Build/Compile
 endef
 
 define Package/prosody/install
-	$(INSTALL_DIR) $(1)/
+	$(INSTALL_DIR) $(1)
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
