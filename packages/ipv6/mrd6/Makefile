@@ -17,8 +17,6 @@ PKG_SOURCE_URL:=http://fivebits.net/files/mrd6/ \
 	http://hng.av.it.pt/mrd6/download/
 PKG_MD5SUM:=361322198dafcc5ffab5e8e23197012b
 
-PKG_BUILD_DEPENDS:=libnotimpl
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mrd6
@@ -45,7 +43,7 @@ define Build/Compile
 		SPACE_OPTIMIZE=yes \
 		FULL_STATIC=no \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -DNO_INET6_OPTION -fno-builtin -fno-rtti" \
-		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -ldl -lgcc -lm -lnotimpl" \
+		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -ldl -lgcc -lm" \
 		MODULE_CXX="\$$$$(CC) -shared \$$$$(CXXFLAGS) \$$$$(LDFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		PREFIX="/usr" \

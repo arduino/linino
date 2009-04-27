@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kismetwireless.net/code
 PKG_MD5SUM:=6ee365d36354b4dee4945e67f8149294
 
-PKG_BUILD_DEPENDS:=libnotimpl libpcap libncurses uclibcxx
+PKG_BUILD_DEPENDS:=libpcap libncurses uclibcxx
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -95,7 +95,7 @@ CONFIGURE_VARS += \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
 	LDFLAGS="$$$$LDFLAGS" \
-	LIBS="-nodefaultlibs -luClibc++ -lm -lnotimpl -lgcc" \
+	LIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \

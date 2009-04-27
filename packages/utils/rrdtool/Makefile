@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,7 +15,8 @@ PKG_SOURCE_URL:=http://oss.oetiker.ch/rrdtool/pub/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_MD5SUM:=19b24f7184a8dbf7b48c1bbb565ad9fb
 
-PKG_BUILD_DEPENDS:=python libnotimpl
+PKG_BUILD_DEPENDS:=python
+
 PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -69,7 +70,6 @@ CONFIGURE_ARGS += \
 	--with-rrd-default-font="/usr/share/rrdtool/fonts/DejaVuSansMono-Roman.ttf" \
 
 CONFIGURE_VARS += \
-	LIBS="-lnotimpl" \
 	rd_cv_ieee_works=yes \
 	rd_cv_null_realloc=nope \
 	ac_cv_func_mmap_fixed_mapped=yes \

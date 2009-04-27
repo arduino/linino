@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=postgresql
 PKG_VERSION:=8.3.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=\
@@ -19,8 +19,6 @@ PKG_SOURCE_URL:=\
 	http://ftp.be.postgresql.org/postgresql/source/v$(PKG_VERSION) \
 	ftp://ftp-archives.postgresql.org/pub/source/v$(PKG_VERSION)
 PKG_MD5SUM:=0ae4bd9620e84d3e08dcf923808d14d0
-
-PKG_BUILD_DEPENDS:=libnotimpl
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -114,7 +112,6 @@ define Build/Configure
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="$$$$CPPFLAGS $(TARGET_CPPFLAGS)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
-		LIBS="-lnotimpl" \
 		./configure \
 			--target=$(GNU_TARGET_NAME) \
 			--host=$(GNU_TARGET_NAME) \

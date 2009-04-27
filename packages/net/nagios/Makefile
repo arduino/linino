@@ -19,8 +19,6 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
-PKG_BUILD_DEPENDS:=libnotimpl
-
 define Package/nagios
   SECTION:=net
   CATEGORY:=Network
@@ -44,9 +42,6 @@ CONFIGURE_ARGS += \
 	--without-gd-inc \
 	CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)"
 	
-CONFIGURE_VARS += \
-	LIBS="-lnotimpl"
-
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \

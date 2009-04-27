@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -14,8 +14,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.us.xiph.org/releases/speex/
 PKG_MD5SUM:=b47396952c5fdd54b6468316c3bd339f
-
-PKG_BUILD_DEPENDS:=libnotimpl
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -58,8 +56,6 @@ define Package/libspeexdsp/description
 
 	This package contains the shared dsp library, needed by other programs.
 endef
-
-TARGET_LDFLAGS:=$(TARGET_LDFLAGS) -lnotimpl
 
 define Build/Configure
 	$(call Build/Configure/Default, \

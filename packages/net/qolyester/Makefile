@@ -15,8 +15,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://qolsr.lri.fr/code/
 PKG_MD5SUM:=650286fc2ea3e13c246d233aaa46f2a4
 
-PKG_BUILD_DEPENDS:=libnotimpl
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/qolyester
@@ -37,7 +35,6 @@ endef
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		LIBS="-L$(STAGING_DIR)/usr/lib -lnotimpl" \
 		all install
 endef
 

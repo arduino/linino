@@ -17,7 +17,6 @@ PKG_SOURCE_URL:=@SF/sox
 PKG_MD5SUM:=6c95af60b20b9655531bf3162c0be937
 
 PKG_FIXUP = libtool
-PKG_BUILD_DEPENDS:=libnotimpl
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -44,8 +43,6 @@ define Build/Configure
 		--disable-external-gsm \
 		--without-libltdl \
 		--with-ogg \
-		, \
-		LIBS="-lnotimpl -lm" \
 	)
 endef
 

@@ -15,7 +15,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://liboil.freedesktop.org/download/
 PKG_MD5SUM:=11dd39b1ca13ce2e0618d4df8303f137
 
-PKG_BUILD_DEPENDS:=libnotimpl
 PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
