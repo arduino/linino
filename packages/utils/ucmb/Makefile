@@ -15,7 +15,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define KernelPackage/ucmb
   SUBMENU:=Other modules
-  DEPENDS:=@LINUX_2_6 +kmod-spi-gpio +kmod-crc16
+  DEPENDS:=@LINUX_2_6_28||LINUX_2_6_29 +kmod-spi-gpio +kmod-crc16
   KCONFIG:=CONFIG_SPI=y \
           CONFIG_SPI_MASTER=y
   TITLE:=Microcontroller Message Bus
