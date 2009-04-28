@@ -44,12 +44,13 @@
  
  	if (ic->ic_dev->flags & IFF_RUNNING) {
  		/* needs to disable hardware too */
-@@ -1271,8 +1269,11 @@ ath_vap_create(struct ieee80211com *ic, 
+@@ -1271,8 +1269,12 @@ ath_vap_create(struct ieee80211com *ic, 
  		} else
  			ic_opmode = opmode;
  		break;
 -	case IEEE80211_M_HOSTAP:
  	case IEEE80211_M_WDS:
++		ic_opmode = ic->ic_opmode;
 +		if (!master)
 +			return NULL;
 +		break;
@@ -57,7 +58,7 @@
  		/* permit multiple APs and/or WDS links */
  		/* XXX sta+ap for repeater/bridge application */
  		if ((sc->sc_nvaps != 0) && (ic->ic_opmode == IEEE80211_M_STA))
-@@ -1304,7 +1305,7 @@ ath_vap_create(struct ieee80211com *ic, 
+@@ -1304,7 +1306,7 @@ ath_vap_create(struct ieee80211com *ic, 
  	}
  
  	avp = dev->priv;
@@ -66,7 +67,7 @@
  	/* override with driver methods */
  	vap = &avp->av_vap;
  	avp->av_newstate = vap->iv_newstate;
-@@ -4209,8 +4210,7 @@ ath_calcrxfilter(struct ath_softc *sc)
+@@ -4209,8 +4211,7 @@ ath_calcrxfilter(struct ath_softc *sc)
  	if (ic->ic_opmode == IEEE80211_M_STA ||
  	    sc->sc_opmode == HAL_M_IBSS ||	/* NB: AHDEMO too */
  	    (sc->sc_nostabeacons) || sc->sc_scanning ||
@@ -76,7 +77,7 @@
  		rfilt |= HAL_RX_FILTER_BEACON;
  	if (sc->sc_nmonvaps > 0)
  		rfilt |= (HAL_RX_FILTER_CONTROL | HAL_RX_FILTER_BEACON |
-@@ -9030,8 +9030,6 @@ ath_calibrate(unsigned long arg)
+@@ -9032,8 +9033,6 @@ ath_calibrate(unsigned long arg)
  		 * set sc->beacons if we might need to restart
                   * them after ath_reset. */
  		if (!sc->sc_beacons &&
@@ -680,14 +681,10 @@
  			}
  			break;
  		case IEEE80211_M_IBSS:
-@@ -540,16 +548,32 @@ ieee80211_input(struct ieee80211vap * va
+@@ -540,16 +548,28 @@ ieee80211_input(struct ieee80211vap * va
  				vap->iv_stats.is_rx_notassoc++;
  				goto err;
  			}
-+
-+			/* subif isn't fully set up yet, drop the frame */
-+			if (ni->ni_subif == ni->ni_vap)
-+				goto err;
 +
  			/*
  			 * If we're a 4 address packet, make sure we have an entry in
@@ -716,7 +713,7 @@
  
  				if (!(vap->iv_flags_ext & IEEE80211_FEXT_WDS)) {
  					IEEE80211_DISCARD(vap, IEEE80211_MSG_INPUT,
-@@ -557,7 +581,6 @@ ieee80211_input(struct ieee80211vap * va
+@@ -557,7 +577,6 @@ ieee80211_input(struct ieee80211vap * va
  					goto err;
  				}
  				wh4 = (struct ieee80211_frame_addr4 *)skb->data;
@@ -724,7 +721,7 @@
  				ni_wds = ieee80211_find_wds_node(nt, wh4->i_addr4);
  				/* Last call increments ref count if !NULL */
  				if ((ni_wds != NULL) && (ni_wds != ni)) {
-@@ -608,6 +631,11 @@ ieee80211_input(struct ieee80211vap * va
+@@ -608,6 +627,11 @@ ieee80211_input(struct ieee80211vap * va
  			goto out;
  		}
  
@@ -736,7 +733,7 @@
  		/*
  		 * Handle privacy requirements.  Note that we
  		 * must not be preempted from here until after
-@@ -680,8 +708,12 @@ ieee80211_input(struct ieee80211vap * va
+@@ -680,8 +704,12 @@ ieee80211_input(struct ieee80211vap * va
  		if (! accept_data_frame(vap, ni, key, skb, eh))
  			goto out;
  
@@ -751,15 +748,19 @@
  		IEEE80211_NODE_STAT(ni, rx_data);
  		IEEE80211_NODE_STAT_ADD(ni, rx_bytes, skb->len);
  		ic->ic_lastdata = jiffies;
-@@ -1114,6 +1146,13 @@ ieee80211_deliver_data(struct ieee80211_
+@@ -1114,6 +1142,17 @@ ieee80211_deliver_data(struct ieee80211_
  		dev = vap->iv_xrvap->iv_dev;
  #endif
  
 +	/* if the node has a wds subif, move data frames there,
 +	 * but keep EAP traffic on the master */
 +	if (ni->ni_subif && ((eh)->ether_type != __constant_htons(ETHERTYPE_PAE))) {
-+		vap = ni->ni_subif;
-+		dev = vap->iv_dev;
++		if (ni->ni_vap == ni->ni_subif) {
++			ieee80211_dev_kfree_skb(&skb);
++		} else {
++			vap = ni->ni_subif;
++			dev = vap->iv_dev;
++		}
 +	}
 +
  	/* perform as a bridge within the vap */
@@ -812,11 +813,10 @@
 +				 (vap->iv_opmode == IEEE80211_M_WDS)) &&
 +				(scan.capinfo & IEEE80211_CAPINFO_ESS))) {
 +			struct ieee80211vap *avp = NULL;
++			int found = 0;
 +
 +			IEEE80211_LOCK_IRQ(vap->iv_ic);
 +			if (vap->iv_opmode == IEEE80211_M_HOSTAP) {
-+				int found = 0;
-+
 +				TAILQ_FOREACH(avp, &vap->iv_wdslinks, iv_wdsnext) {
 +					if (!memcmp(avp->wds_mac, wh->i_addr2, IEEE80211_ADDR_LEN)) {
 +						if (avp->iv_state != IEEE80211_S_RUN)
@@ -825,15 +825,16 @@
 +						break;
 +					}
 +				}
-+				if (!found)
-+					break;
-+
-+				ni = ni_or_null = avp->iv_wdsnode;
++				if (found)
++					ni = ni_or_null = avp->iv_wdsnode;
 +			} else if (vap->iv_opmode == IEEE80211_M_WDS) {
++				found = 1;
 +				ni = ni_or_null = vap->iv_wdsnode;
 +			}
 +			IEEE80211_UNLOCK_IRQ(vap->iv_ic);
 +
++			if (!found)
++				break;
 +
  			if (ni_or_null == NULL) {
 -				/* Create a new entry in the neighbor table. */
@@ -902,7 +903,7 @@
  }
  
  /* This is overridden by ath_node_alloc in ath/if_ath.c, and so
-@@ -1134,6 +1145,62 @@ ieee80211_alloc_node(struct ieee80211vap
+@@ -1134,6 +1145,65 @@ ieee80211_alloc_node(struct ieee80211vap
  	return ni;
  }
  
@@ -956,6 +957,9 @@
 +	if (ni->ni_subif)
 +		return;
 +
++	if (!ni->ni_table)
++		return;
++
 +	ieee80211_ref_node(ni);
 +	ni->ni_subif = ni->ni_vap;
 +	IEEE80211_INIT_WORK(&ni->ni_create, ieee80211_wds_do_addif);
@@ -965,7 +969,7 @@
  /* Add wds address to the node table */
  int
  #ifdef IEEE80211_DEBUG_REFCNT
-@@ -1553,22 +1620,39 @@ ieee80211_find_rxnode(struct ieee80211co
+@@ -1553,22 +1623,39 @@ ieee80211_find_rxnode(struct ieee80211co
  	((wh->i_fc[0] & IEEE80211_FC0_SUBTYPE_MASK) == IEEE80211_FC0_SUBTYPE_PS_POLL)
  	struct ieee80211_node_table *nt;
  	struct ieee80211_node *ni;
@@ -1014,7 +1018,7 @@
  #endif
  	IEEE80211_NODE_TABLE_UNLOCK_IRQ(nt);
  
-@@ -1596,9 +1680,19 @@ ieee80211_find_txnode_debug(struct ieee8
+@@ -1596,9 +1683,19 @@ ieee80211_find_txnode_debug(struct ieee8
  ieee80211_find_txnode(struct ieee80211vap *vap, const u_int8_t *mac)
  #endif
  {
@@ -1034,7 +1038,7 @@
  	/*
  	 * The destination address should be in the node table
  	 * unless we are operating in station mode or this is a
-@@ -1669,6 +1763,11 @@ ieee80211_free_node(struct ieee80211_nod
+@@ -1669,6 +1766,11 @@ ieee80211_free_node(struct ieee80211_nod
  {
  	struct ieee80211vap *vap = ni->ni_vap;
  
@@ -1046,7 +1050,7 @@
  	atomic_dec(&ni->ni_ic->ic_node_counter);
  	node_print_message(IEEE80211_MSG_NODE|IEEE80211_MSG_NODE_REF,
  			   1 /* show counter */, 
-@@ -1781,22 +1880,6 @@ restart:
+@@ -1781,22 +1883,6 @@ restart:
  		    jiffies > ni->ni_rxfragstamp + HZ) {
  			ieee80211_dev_kfree_skb(&ni->ni_rxfrag);
  		}
@@ -1069,7 +1073,7 @@
  		ni->ni_inact--;
  		if (ni->ni_associd != 0 || isadhoc) {
  			struct ieee80211vap *vap = ni->ni_vap;
-@@ -2263,6 +2346,36 @@ ieee80211_node_leave_11g(struct ieee8021
+@@ -2263,6 +2349,35 @@ ieee80211_node_leave_11g(struct ieee8021
  	}
  }
  
@@ -1080,14 +1084,13 @@
 +	struct ieee80211vap *vap;
 +	struct ieee80211com *ic;
 +
++	/* wait for full initialization before we start the teardown
++	 * otherwise we could leak interfaces */
++	while (ni->ni_subif == ni->ni_vap)
++		schedule();
++
 +	rtnl_lock();
 +	vap = ni->ni_subif;
-+
-+	/* if addif is waiting for the timer to fire, cancel! */
-+	if (vap == ni->ni_vap) {
-+		ni->ni_subif = NULL;
-+		goto done;
-+	}
 +
 +	if (!vap)
 +		goto done;
@@ -1106,7 +1109,7 @@
  /*
   * Handle bookkeeping for a station/neighbor leaving
   * the bss when operating in ap or adhoc modes.
-@@ -2279,6 +2392,12 @@ ieee80211_node_leave(struct ieee80211_no
+@@ -2279,6 +2394,12 @@ ieee80211_node_leave(struct ieee80211_no
  			ni, "station with aid %d leaves (refcnt %u)",
  			IEEE80211_NODE_AID(ni), atomic_read(&ni->ni_refcnt));
  

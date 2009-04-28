@@ -13,7 +13,7 @@ PKG_NAME:=madwifi
 
 ifneq ($(CONFIG_MADWIFI_UPSTREAM),)
   PKG_VERSION:=0.9.4
-  PKG_RELEASE:=2
+  PKG_RELEASE:=2.1
 
   PKG_SOURCE:=madwifi-$(PKG_VERSION).tar.gz
   PKG_SOURCE_URL:=http://downloads.sourceforge.net/madwifi/
@@ -26,7 +26,7 @@ else
 # PKG_BRANCH:=madwifi-dfs
   PKG_REV:=3314
   PKG_VERSION:=r$(PKG_REV)
-  PKG_RELEASE:=2
+  PKG_RELEASE:=2.1
 
   PKG_SOURCE_PROTO:=svn
   PKG_SOURCE_VERSION:=$(PKG_REV)

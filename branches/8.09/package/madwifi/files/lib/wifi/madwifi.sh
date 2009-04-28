@@ -42,7 +42,7 @@ scan_atheros() {
 		*) echo "$device: Invalid mode combination in config"; return 1;;
 	esac
 
-	config_set "$device" vifs "${ap:+$ap }${adhoc:+$adhoc }${ahdemo:+$ahdemo }${sta:+$sta }${wds:+$wds }${monitor:+$monitor}"
+	config_set "$device" vifs "${sta:+$sta }${ap:+$ap }${adhoc:+$adhoc }${ahdemo:+$ahdemo }${wds:+$wds }${monitor:+$monitor}"
 }
 
 
@@ -67,6 +67,15 @@ disable_atheros() (
 
 enable_atheros() {
 	local device="$1"
+	# Can only set the country code to one setting for the entire system. The last country code is the one that will be applied.
+	config_get country "$device" country
+	[ -z "$country" ] && country="0"
+	local cc="0"
+	[ -e /proc/sys/dev/$device/countrycode ] && cc="$(cat /proc/sys/dev/$device/countrycode)"
+	if [ ! "$cc" = "$country" ] ; then
+		rmmod ath_pci
+		insmod ath_pci countrycode=$country
+	fi
 	config_get channel "$device" channel
 	config_get vifs "$device" vifs
 	config_get txpower "$device" txpower
@@ -111,10 +120,10 @@ enable_atheros() {
 			*fh) hwmode=fh;;
 			*) hwmode=auto;;
 		esac
-		iwpriv "$ifname" mode "$hwmode"
 		iwpriv "$ifname" pureg "$pureg"
 
 		[ "$first" = 1 ] && {
+			iwpriv "$ifname" mode "$hwmode"
 			iwconfig "$ifname" channel "$channel" >/dev/null 2>/dev/null 
 		}
 	
@@ -158,7 +167,7 @@ enable_atheros() {
 		esac
 
 		case "$mode" in
-			adhoc|ahdemo)
+			sta|adhoc|ahdemo)
 				config_get addr "$vif" bssid
 				[ -z "$addr" ] || { 
 					iwconfig "$ifname" ap "$addr"
@@ -212,9 +221,6 @@ enable_atheros() {
 		config_get distance "$device" distance
 		[ -n "$distance" ] && athctrl -i "$device" -d "$distance" >&-
 
-		config_get txpwr "$vif" txpower
-		[ -n "$txpwr" ] && iwconfig "$ifname" txpower "${txpwr%%.*}"
-
 		config_get rate "$vif" rate
 		[ -n "$rate" ] && iwconfig "$ifname" rate "${rate%%.*}"
 
@@ -251,6 +257,9 @@ enable_atheros() {
 		config_get_bool turbo "$vif" turbo
 		[ -n "$turbo" ] && iwpriv "$ifname" turbo "$turbo"
 
+		config_get_bool beacon_power "$vif" beacon_power
+		[ -n "$beacon_power" ] && iwpriv "$ifname" beacon_pwr "$beacon_power"
+
 		config_get_bool doth "$vif" doth 0
 		[ -n "$doth" ] && iwpriv "$ifname" doth "$doth"
 
@@ -281,6 +290,7 @@ enable_atheros() {
 		esac
 
 		ifconfig "$ifname" up
+
 		local net_cfg bridge
 		net_cfg="$(find_net_config "$vif")"
 		[ -z "$net_cfg" ] || {
