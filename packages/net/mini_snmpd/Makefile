@@ -30,7 +30,7 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CC="$(TARGET_CC)" \
-		OFLAGS="$(TARGET_CFLAGS)" \
+		OFLAGS="$(TARGET_CFLAGS) -DSYSLOG" \
 		STRIP="/bin/true" \
 		INSTALL_ROOT="$(PKG_INSTALL_DIR)" \
 		mini_snmpd install
