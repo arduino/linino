@@ -22,7 +22,7 @@ hostapd_setup_vif() {
 			wpa=3
 			crypto="CCMP TKIP"
 		;;
-		*) 
+		*)
 			wpa=1
 			crypto="TKIP"
 		;;
@@ -67,6 +67,7 @@ hostapd_setup_vif() {
 		;;
 		*)
 			wpa=0
+			crypto=
 		;;
 	esac
 	config_get ifname "$vif" ifname
@@ -76,25 +77,30 @@ hostapd_setup_vif() {
 	config_get channel "$device" channel
 	config_get hwmode "$device" hwmode
 	case "$hwmode" in
-		11a) hwmode=a;;
-		11b) hwmode=b;;
-		11g) hwmode=g;;
+		*a) hwmode=a;;
+		*b) hwmode=b;;
+		*g) hwmode=g;;
 		*)
 			hwmode=
-			[ "$channel" -gt 14 ] && hwmode=a
+			[ -n "$channel" ] && {
+				test $channel -gt 14 2>/dev/null && hwmode=a
+			}
 		;;
 	esac
+	config_get country "$device" country
+	[ "$channel" = auto ] && channel=
 	cat > /var/run/hostapd-$ifname.conf <<EOF
 ctrl_interface=/var/run/hostapd-$ifname
 driver=$driver
 interface=$ifname
-hw_mode=${hwmode:-g}
-channel=$channel
+${hwmode:+hw_mode=$hwmode}
+${channel:+channel=$channel}
 ${bridge:+bridge=$bridge}
 ssid=$ssid
 debug=0
 wpa=$wpa
-wpa_pairwise=$crypto
+${crypto:+wpa_pairwise=$crypto}
+${country:+country_code=$country}
 $hostapd_cfg
 EOF
 	hostapd -P /var/run/wifi-$ifname.pid -B /var/run/hostapd-$ifname.conf
