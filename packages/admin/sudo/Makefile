@@ -18,7 +18,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/sudo
   SECTION:= admin
-  CATEGORY:=Admistration
+  CATEGORY:=Administration
   TITLE:=delegate authority to run commands
   URL:=http://www.sudo.ws/
 endef
