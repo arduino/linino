@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=imlib2
 PKG_VERSION:=1.4.1
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/enlightenment
@@ -25,11 +25,10 @@ define Package/imlib2
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=Image library
-  DEPENDS:=+libX11 +giflib +libtiff +libjpeg +gtk1 +libnotimpl +libfreetype +libXext
+  DEPENDS:=+libX11 +giflib +libtiff +libjpeg +gtk1 +libfreetype +libXext
 endef
 
 CONFIGURE_ARGS+=--disable-gtktest LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
-EXTRA_LDFLAGS+=-lnotimpl
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{include,lib/pkgconfig}
