@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gtk1
 PKG_VERSION:=1.2.10
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=gtk+-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNOME/gtk+/1.2/
@@ -30,14 +30,14 @@ CONFIGURE_ARGS_XTRA+=--x-includes=$(STAGING_DIR)/usr/include/ \
 
 EXTRA_CFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include
-EXTRA_LDFLAGS+=-lnotimpl -lglib -lgmodule
+EXTRA_LDFLAGS+=-lglib -lgmodule
 
 define Package/gtk1
   SECTION:=xorg-framework
   CATEGORY:=Xorg
   SUBMENU:=framework
   TITLE:=GTK+ 1.2.10 package
-  DEPENDS:=+glib1 +libX11 +libXt +libnotimpl
+  DEPENDS:=+glib1 +libX11 +libXt
 endef
 
 define Build/InstallDev
