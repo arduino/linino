@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -32,7 +32,7 @@ define Package/mjpg-streamer/description
 	Streaming application for Linux-UVC compatible webcams
 endef
 
-EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib
+EXTRA_CFLAGS += $(TARGET_CPPFLAGS) $(TARGET_LDFLAGS)
 
 define Package/mjpg-streamer/install
 	$(INSTALL_DIR) $(1)/sbin

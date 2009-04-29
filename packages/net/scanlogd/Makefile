@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -46,9 +46,9 @@ define Build/Compile
 		$(TARGET_CONFIGURE_OPTS) \
 		CC="$(TARGET_CC)" LD="$(TARGET_CC)" CFLAGS="-c $(TARGET_CFLAGS)" \
 		LDFLAGS= \
-		PCAP_H="-I$(STAGING_DIR)/usr/include" \
-		NIDS_H="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/lib/libnet-1.0.x/include" \
-		NIDS_L="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libnet-1.0.x/lib -lnids -lnet -lpcap" \
+		PCAP_H="$(TARGET_CPPFLAGS)" \
+		NIDS_H="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/lib/libnet-1.0.x/include" \
+		NIDS_L="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib/libnet-1.0.x/lib -lnids -lnet -lpcap" \
 		libnids
 endef
 

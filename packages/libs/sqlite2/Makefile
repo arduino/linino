@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -67,8 +67,8 @@ define Build/Configure
 		config_BUILD_CFLAGS="-O2" \
 		config_TARGET_CC="$(TARGET_CC)" \
 		config_TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-		config_TARGET_READLINE_INC="-I$(STAGING_DIR)/usr/include" \
-		config_TARGET_READLINE_LIBS="-L$(STAGING_DIR)/usr/lib -lreadline -lncurses" \
+		config_TARGET_READLINE_INC="$(TARGET_CPPFLAGS)" \
+		config_TARGET_READLINE_LIBS="$(TARGET_LDFLAGS) -lreadline -lncurses" \
 		config_TARGET_TCL_INC="-DNO_TCL=1" \
 	)
 endef

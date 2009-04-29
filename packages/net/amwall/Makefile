@@ -34,7 +34,7 @@ define Build/Compile
 		V= \
 		LDIR="$(PKG_BUILD_DIR)" \
 		AMSEL_INCLUDE="$(STAGING_DIR)/usr/include" \
-		OPT_LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
+		OPT_LDFLAGS="$(TARGET_LDFLAGS)" \
 		PREFIX="/usr" \
 		CONFIG="$(PKG_BUILD_DIR)/etc/amsel" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \

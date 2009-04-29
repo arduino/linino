@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -62,7 +62,7 @@ define Build/Configure
 		--with-vorbis="$(TREMOR_DIR)" \
 		--with-xslt-config="$(STAGING_DIR)/usr/bin/xslt-config" \
 		, \
-		CPPFLAGS="-I$(TREMOR_DIR)/include -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include/libxml2 " \
+		CPPFLAGS="-I$(TREMOR_DIR)/include -I$(STAGING_DIR)/usr/include/libxml2 $(TARGET_CPPFLAGS)" \
 	)
 endef
 

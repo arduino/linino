@@ -41,8 +41,8 @@ define Build/Compile
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -Wall -Iinclude/ -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -D_REVISION=$(PKG_REV)" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		CFLAGS="$(TARGET_CFLAGS) -Wall -Iinclude/ $(TARGET_CPPFLAGS) -D_REVISION=$(PKG_REV)" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
 		prefix="/usr" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		OSNAME=Linux \

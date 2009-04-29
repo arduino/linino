@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -32,7 +32,8 @@ endef
 
 export SENDMAIL=/bin/true
 EXTRA_CFLAGS:=-DNEED_YYWRAP -I$(PKG_BUILD_DIR) -I$(STAGING_DIR)/usr/include/libelf \
-		-L$(STAGING_DIR)/usr/lib
+	$(TARGET_LDFLAGS)
+
 CONFIGURE_ARGS+=--with-daemon_username=nobody \
 		--with-daemon_groupname=nogroup \
 		--with-jobdir=/var/spool/cron/atjobs \

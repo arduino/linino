@@ -37,8 +37,8 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(foreach dir,fc-arch fc-case fc-lang fc-glyphname src fc-cache fc-list, $(MAKE) -C $(PKG_BUILD_DIR)/$(dir) CFLAGS="-I$(STAGING_DIR)/usr/include"  \
-			CPPFLAGS="" LDFLAGS="-L$(STAGING_DIR)/usr/lib";)
+	$(foreach dir,fc-arch fc-case fc-lang fc-glyphname src fc-cache fc-list, $(MAKE) -C $(PKG_BUILD_DIR)/$(dir) CFLAGS="$(TARGET_CPPFLAGS)"  \
+			CPPFLAGS="" LDFLAGS="$(TARGET_LDFLAGS)";)
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" DOCSRC="" install
 endef
 

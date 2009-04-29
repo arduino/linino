@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -86,8 +86,8 @@ define Build/Compile
 	(cd $(PKG_BUILD_DIR)/source; rm -rf config.{cache,status}; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -DNDEBUG -DSHMEM_SIZE=524288 -Dfcntl=fcntl64" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
-		LDFLAGS="$(LIBGCC_S) -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
+		CPPFLAGS="$(TARGET_CPPFLAGS)" \
+		LDFLAGS="$(TARGET_LDFLAGS) $(LIBGCC_S)" \
 		ac_cv_lib_cups_httpConnect=no \
 		samba_cv_FTRUNCATE_NEEDS_ROOT=no \
 		samba_cv_HAVE_BROKEN_FCNTL64_LOCKS=no \

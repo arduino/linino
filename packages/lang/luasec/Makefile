@@ -35,10 +35,10 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/src linux \
-	INCDIR="-I$(STAGING_DIR)/usr/include/" \
-	LIBDIR="-L$(STAGING_DIR)/usr/lib/" \
-	CC="$(TARGET_CC) $(TARGET_CFLAGS)" \
-	LD="$(TARGET_CROSS)ld -shared" 
+		INCDIR="$(TARGET_CPPFLAGS)" \
+		LIBDIR="$(TARGET_LDFLAGS)" \
+		CC="$(TARGET_CC) $(TARGET_CFLAGS)" \
+		LD="$(TARGET_CROSS)ld -shared" 
 endef
 
 

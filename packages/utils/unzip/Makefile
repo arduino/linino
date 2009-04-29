@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -43,8 +43,8 @@ define Build/Compile
 		$(TARGET_CONFIGURE_OPTS) \
 		prefix="$(PKG_INSTALL_DIR)/usr" \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		CF="$(TARGET_CFLAGS) -O -I$(STAGING_DIR)/usr/include -I. -DUNIX" \
-		LD="$(TARGET_CC) -L$(STAGING_DIR)/usr/lib" \
+		CF="$(TARGET_CFLAGS) -O $(TARGET_CPPFLAGS) -I. -DUNIX" \
+		LD="$(TARGET_CC) $(TARGET_LDFLAGS)" \
 		install
 endef
 

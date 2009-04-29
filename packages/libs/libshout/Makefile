@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -38,7 +38,7 @@ endef
 define Build/Configure
 	$(call Build/Configure/Default, \
 		VORBIS_CFLAGS="-I$(STAGING_DIR)/usr/include/tremor/"\
-		VORBIS_LIBS="-L$(STAGING_DIR)/usr/lib" \
+		VORBIS_LIBS="$(TARGET_LDFLAGS)" \
 		--enable-shared \
 		--enable-static \
 	)

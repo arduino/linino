@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -44,8 +44,8 @@ define Build/Configure
         --enable-tcp-wrapper \
         --with-libol="$(STAGING_DIR)/host/bin" \
 		, \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/libol" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libol" \
+		CPPFLAGS="-I$(STAGING_DIR)/usr/include/libol $(TARGET_CPPFLAGS)" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib/libol $(TARGET_LDFLAGS)" \
 	)
 endef
 

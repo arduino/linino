@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -48,8 +48,8 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/Default,\
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -c -DLINUX" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -lz" \
+		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -c -DLINUX" \
+		LDFLAGS="$(TARGET_LDFLAGS) -lz" \
 		all \
 	)
 endef

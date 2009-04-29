@@ -62,7 +62,7 @@ define Build/Configure
 		--disable-gssapi \
 		--disable-slp, \
 		UNAME="Linux" \
-		LIBS="-L$(STAGING_DIR)/usr/lib -lz -lpng -ljpeg" \
+		LIBS="$(TARGET_LDFLAGS) -lz -lpng -ljpeg" \
 	)
 endef
 

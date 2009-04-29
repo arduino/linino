@@ -72,8 +72,8 @@ CONFIGURE_VARS += \
 	config_BUILD_CFLAGS="-O2" \
 	config_TARGET_CC="$(TARGET_CC)" \
 	config_TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-	config_TARGET_READLINE_INC="-I$(STAGING_DIR)/usr/include" \
-	config_TARGET_READLINE_LIBS="-L$(STAGING_DIR)/usr/lib -lreadline -lncurses" \
+	config_TARGET_READLINE_INC="$(TARGET_CPPFLAGS)" \
+	config_TARGET_READLINE_LIBS="$(TARGET_LDFLAGS) -lreadline -lncurses" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \

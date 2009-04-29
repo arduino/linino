@@ -35,8 +35,8 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CFLAGS="$(TARGET_CFLAGS) -DLinux -DUSE_INTERNAL_SENDFILE -std=gnu99 -Wall -Wstrict-prototypes -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DFILE_OFFSET_BITS=64 -D_GNU_SOURCE -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/lib/libiconv/include -I$(STAGING_DIR)/usr/include/dvdread -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
+		CFLAGS="$(TARGET_CFLAGS) -DLinux -DUSE_INTERNAL_SENDFILE -std=gnu99 -Wall -Wstrict-prototypes -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DFILE_OFFSET_BITS=64 -D_GNU_SOURCE -I$(STAGING_DIR)/usr/lib/libiconv/include -I$(STAGING_DIR)/usr/include/dvdread $(TARGET_CPPFLAGS) $(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib/libiconv/lib $(TARGET_LDFLAGS)" \
 		STRIP=$(STRIP) \
 		CC="$(TARGET_CROSS)gcc" all
 endef

@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -34,9 +34,8 @@ endef
 
 EXTRA_CPPFLAGS= -I$(STAGING_DIR)/usr/include/xorg \
 		-I$(STAGING_DIR)/usr/include/X11/ \
-		-I$(STAGING_DIR)/usr/include/ \
 		-I$(STAGING_DIR)/usr/include/drm \
-		-I$(STAGING_DIR)/include/
+		$(TARGET_CPPFLAGS)
 
 EXTRA_CFLAGS+= $(EXTRA_CPPFLAGS)
 

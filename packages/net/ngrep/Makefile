@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -42,7 +42,7 @@ define Build/Configure
 		--enable-ipv6 \
 		--disable-dropprivs \
 		,\
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -lpcre" \
+		LDFLAGS="$(TARGET_LDFLAGS) -lpcre" \
 	)
 endef
 

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -51,7 +51,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) X_LIBS="-L$(STAGING_DIR)/usr/lib -lfreetype"
+	$(MAKE) -C $(PKG_BUILD_DIR) X_LIBS="$(TARGET_LDFLAGS) -lfreetype"
 	$(MAKE) -C $(PKG_BUILD_DIR)/ install DESTDIR=$(PKG_INSTALL_DIR)
 endef
 

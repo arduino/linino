@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 
 include $(TOPDIR)/rules.mk
@@ -36,7 +36,7 @@ endef
 GW6C_OPTS:= \
 	C_COMPILER="$(TARGET_CC) -c -DNO_STDLIBCXX" \
 	COMPILER="$(TARGET_CROSS)g++ -c -DNO_STDLIBCXX" \
-	CPP_FLAGS="$(TARGET_CFLAGS) -fno-builtin -nostdinc++ -I. -Wall -DNDEBUG -I$(STAGING_DIR)/usr/include/uClibc++ -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+	CPP_FLAGS="$(TARGET_CFLAGS) -fno-builtin -nostdinc++ -I. -Wall -DNDEBUG -I$(STAGING_DIR)/usr/include/uClibc++ $(TARGET_CPPFLAGS)" \
 	RANLIB="$(TARGET_CROSS)ranlib" \
 	ARCHIVER="$(TARGET_CROSS)ar" \
 	C_LINKER="$(TARGET_CC)" \
@@ -55,7 +55,7 @@ define Build/Compile
 			-I$(PKG_BUILD_DIR)/gw6c/src/gw6c/platform/openwrt -I$(PKG_BUILD_DIR)/gw6c/src/gw6c" \
 		LDFLAGS="-L$(PKG_BUILD_DIR)/gw6c/src/gw6c/gw6cconfig \
 			-L$(PKG_BUILD_DIR)/gw6c/src/gw6c/gw6cmessaging \
-			-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -nodefaultlibs -luClibc++ $(LIBGCC_S)" \
+			$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++ $(LIBGCC_S)" \
 		target="openwrt" \
 		installdir="$(PKG_INSTALL_DIR)"
 endef

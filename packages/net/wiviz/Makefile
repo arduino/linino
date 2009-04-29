@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -28,8 +28,8 @@ define Build/Prepare
 	$(CP) ./src/* $(PKG_BUILD_DIR)/
 endef
 
-EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
-EXTRA_LDFLAGS += -L$(STAGING_DIR)/usr/lib
+EXTRA_CFLAGS += $(TARGET_CPPFLAGS)
+EXTRA_LDFLAGS += $(TARGET_LDFLAGS)
 
 define Build/Compile
 	$(call Build/Compile/Default, \

@@ -35,9 +35,9 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -DLINUX -I$(STAGING_DIR)/usr/include \
+		CFLAGS="$(TARGET_CFLAGS) -DLINUX $(TARGET_CPPFLAGS) \
 			-I./src -I./userial -DOWUSB" \
-		LIBS="-L$(STAGING_DIR)/usr/lib -lusb -lm" \
+		LIBS="$(TARGET_LDFLAGS) -lusb -lm" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		ds2490
 endef

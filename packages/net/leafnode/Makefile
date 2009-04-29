@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 CONFIGURE_ARGS+=--sysconfdir=/etc/leafnode
 CONFIGURE_VARS+=LIBS=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
-EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+EXTRA_CFLAGS+= $(TARGET_CPPFLAGS)
 
 EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 

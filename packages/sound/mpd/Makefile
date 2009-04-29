@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007 - 2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -40,16 +40,16 @@ ifndef CONFIG_PACKAGE_kmod-sound-core
 endif
 
 CONFIGURE_VARS += \
-	ID3TAG_LIBS="-L$(STAGING_DIR)/usr/lib -lz -lid3tag" \
-	ID3TAG_CFLAGS="-I$(STAGING_DIR)/usr/include" \
-	FLAC_LIBS="-L$(STAGING_DIR)/usr/lib -lFLAC" \
+	ID3TAG_LIBS="$(TARGET_LDFLAGS) -lz -lid3tag" \
+	ID3TAG_CFLAGS="$(TARGET_CPPFLAGS)" \
+	FLAC_LIBS="$(TARGET_LDFLAGS) -lFLAC" \
 	FLAC_CFLAGS="-I$(STAGING_DIR)/usr/include/FLAC" \
-	MAD_LIBS="-L$(STAGING_DIR)/usr/lib -lmad" \
-	MAD_CFLAGS="-I$(STAGING_DIR)/usr/include" \
-	OGGVORBIS_LIBS="-L$(STAGING_DIR)/usr/lib -lvorbisidec" \
-	OGGVORBIS_CFLAGS="-I$(STAGING_DIR)/usr/include" \
+	MAD_LIBS="$(TARGET_LDFLAGS) -lmad" \
+	MAD_CFLAGS="$(TARGET_CPPFLAGS)" \
+	OGGVORBIS_LIBS="$(TARGET_LDLFAGS) -lvorbisidec" \
+	OGGVORBIS_CFLAGS="$TARGET_CPPFLAGS)" \
 	GLIB_CFLAGS="-I$(STAGING_DIR)/usr/include/glib-2.0 -I$(STAGING_DIR)/usr/lib/glib-2.0/include" \
-	GLIB_LIBS="-L$(STAGING_DIR)/usr/lib/libintl/lib -lintl -L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv -L$(STAGING_DIR)/usr/lib -lglib-2.0 -lgthread-2.0 -pthread"
+	GLIB_LIBS="$(TARGET_LDLFAGS) -L$(STAGING_DIR)/usr/lib/libintl/lib -lintl -L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv -lglib-2.0 -lgthread-2.0 -pthread"
 
 define Build/Configure
 	$(call Build/Configure/Default, \

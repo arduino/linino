@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -17,7 +17,7 @@ PKG_MD5SUM:=957e6fff08625fe34f4fc33d0925bbc9
 
 include $(INCLUDE_DIR)/package.mk
 
-TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
+TARGET_CFLAGS += $(TARGET_CPPFLAGS)
 
 define Package/ssmtp
   SECTION:=mail
@@ -36,7 +36,7 @@ define Package/ssmtp/description
 endef
 
 CONFIGURE_VARS += \
-	LIBS="-L$(STAGING_DIR)/usr/lib -lcrypto -lssl"
+	LIBS="$(TARGET_LDFLAGS) -lcrypto -lssl"
 
 CONFIGURE_ARGS += \
 	--enable-ssl

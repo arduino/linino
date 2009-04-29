@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -42,7 +42,7 @@ CONFIGURE_VARS += \
 	APR_BUILD_DIR="$(STAGING_DIR)/usr/share/build-1" \
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) APRUTIL_LIBS="-lsqlite3 -L$(STAGING_DIR)/usr/lib -lexpat -liconv -lapr-1 -luuid -lm -lcrypt" all
+	$(MAKE) -C $(PKG_BUILD_DIR) APRUTIL_LIBS="-lsqlite3 $(TARGET_LDFLAGS) -lexpat -liconv -lapr-1 -luuid -lm -lcrypt" all
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 

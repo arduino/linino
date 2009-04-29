@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -135,7 +135,7 @@ CONFIGURE_VARS += \
 define Build/Compile
 	# pass INCLUDES to compile host sources against our OpenSSL, not the host one
 	$(MAKE) -C $(PKG_BUILD_DIR)/lib \
-		INCLUDES="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		INCLUDES="$(TARGET_CPPFLAGS)" \
 		all
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -30,7 +30,8 @@ define Package/streamripper/description
 endef
 
 
-EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+EXTRA_CFLAGS += $(TARGET_CPPFLAGS)
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--without-ogg \

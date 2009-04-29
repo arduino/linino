@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -37,13 +37,13 @@ endef
 
 include $(INCLUDE_DIR)/package.mk
 
-export CPPFLAGS=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
-export LDFLAGS=-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib
+export CPPFLAGS=$(TARGET_CPPFLAGS)
+export LDFLAGS=$(TARGET_LDFLAGS)
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR)/server/libgsm \
 		$(TARGET_CONFIGURE_OPTS) \
-		CCINC="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		CCINC="$(TARGET_CPPFLAGS)" \
 		COPTS="$(TARGET_CFLAGS)" \
 		lib/libgsm.a
 	$(MAKE) -C $(PKG_BUILD_DIR)/server \

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -46,7 +46,7 @@ CONFIGURE_ARGS += \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib \
+		LDFLAGS="$(TARGET_LDFLAGS) \
 			-L$(STAGING_DIR)/usr/lib/libintl/lib \
 			-L$(STAGING_DIR)/usr/lib/libiconv/lib" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \

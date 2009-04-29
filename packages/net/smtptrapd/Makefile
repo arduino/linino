@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -34,11 +34,12 @@ endef
 define Build/Compile
 	$(TARGET_CC) \
 		$(TARGET_CFLAGS) \
-		-I $(STAGING_DIR)/usr/include \
+		$(TARGET_CPPFLAGS) \
 		-D_REENTRANT \
 		$(PKG_BUILD_DIR)/smtptrapd.c \
 		-o $(PKG_BUILD_DIR)/smtptrapd \
-		-L$(STAGING_DIR)/usr/lib/ -lpthread
+		$(TARGET_LDFLAGS) \
+		-lpthread
 endef
 	
 define Package/smtptrapd/install

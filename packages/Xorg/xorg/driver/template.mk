@@ -32,8 +32,7 @@ endef
 
 EXTRA_CPPFLAGS= -I$(STAGING_DIR)/usr/include/xorg \
 		-I$(STAGING_DIR)/usr/include/X11/ \
-		-I$(STAGING_DIR)/usr/include/ \
-		-I$(STAGING_DIR)/include/
+		$(TARGET_CPPFLAGS)
 
 EXTRA_CFLAGS+= $(EXTRA_CPPFLAGS)
 

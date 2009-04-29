@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -38,7 +38,7 @@ define Build/Compile
 	CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS)" \
 	LDFLAGS="$(TARGET_LDFLAGS) " \
 	CPPFLAGS="$(TARGET_CPPFLAGS)" \
-	INCL="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include -I$(STAGING_DIR)/usr/lib/libiconv/include" \
+	INCL="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include -I$(STAGING_DIR)/usr/lib/libiconv/include" \
 	MYLIBS="-lbluetooth -lglib -L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv"
 	$(STRIP) $(PKG_BUILD_DIR)/bemusedlinuxserver
 endef

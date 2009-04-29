@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -36,8 +36,8 @@ TARGET_CFLAGS += $(FPIC)
 
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CPPFLAGS) $(TARGET_CFLAGS) -I$(PKG_BUILD_DIR)/libst2205/" \
-	LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-	SETPICLIBS="-L$(STAGING_DIR)/usr/lib -lgd -ljpeg -lpng -lz -L../libst2205 -lst2205" \
+	LDFLAGS="$(TARGET_LDFLAGS)" \
+	SETPICLIBS="$(TARGET_LDFLAGS) -lgd -ljpeg -lpng -lz -L../libst2205 -lst2205" \
 
 
 define Build/InstallDev

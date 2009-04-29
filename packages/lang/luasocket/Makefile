@@ -37,8 +37,8 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/ all \
-	LIBDIR="-L$(STAGING_DIR)/usr/lib/" \
-	CC="$(TARGET_CC) $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
+	LIBDIR="$(TARGET_LDFLAGS)" \
+	CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
 	LD="$(TARGET_CROSS)ld -shared" 
 endef
 

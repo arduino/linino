@@ -1,4 +1,4 @@
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -47,13 +47,13 @@ define Build/Compile
 	    DESTDIR="$(PKG_INSTALL_DIR)" \
 	    $(TARGET_CONFIGURE_OPTS) \
 	    SSL_DIR="$(STAGING_DIR)/usr" \
-	    SSL_LIBS="-L$(STAGING_DIR)/usr/lib -lssl -lcrypto" \
-	    SSL_FLAGS="-I$(STAGING_DIR)/usr/include -DHAVE_SSL" \
+	    SSL_LIBS="$(TARGET_LDFLAGS) -lssl -lcrypto" \
+	    SSL_FLAGS="$(TARGET_CPPFLAGS) -DHAVE_SSL" \
 	    SSL_OBJS=sslstate.o \
 	    PREFIX="$(STAGING_DIR)/usr" \
 	    CXX=$(TARGET_CXX) \
-	    CXXFLAGS="$(TARGET_CXXFLAGS) $(TARGET_CFLAGS) $(FPIC) -I$(STAGING_DIR)/usr/include \
-			-L$(STAGING_DIR)/usr/lib -DHAVE_SSL" \
+	    CXXFLAGS="$(TARGET_CXXFLAGS) $(TARGET_CFLAGS) $(FPIC) $(TARGET_CPPFLAGS) \
+			$(TARGET_LDFLAGS) -DHAVE_SSL" \
 	    all
 endef
 

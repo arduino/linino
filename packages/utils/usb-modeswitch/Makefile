@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -31,9 +31,8 @@ define Package/usb-modeswitch/description
 endef
 
 define Build/Compile
-	"$(TARGET_CC)" $(TARGET_CFLAGS) -I $(STAGING_DIR)/include/ \
-		-I $(STAGING_DIR)/usr/include/ -L $(STAGING_DIR)/lib/ \
-		-L $(STAGING_DIR)/usr/lib/ -lusb \
+	"$(TARGET_CC)" $(TARGET_CFLAGS) $(TARGET_CPPFLAGS) $(TARGET_LDFLAGS) \
+		-lusb \
 		-o $(PKG_BUILD_DIR)/usb_modeswitch-OpenWrt \
 				$(PKG_BUILD_DIR)/usb_modeswitch.c
 endef

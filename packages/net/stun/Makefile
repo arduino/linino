@@ -58,9 +58,8 @@ define Build/Compile
 		CFLAGS="$(TARGET_CFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
-		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -L$(TOOLCHAIN_DIR)/usr/lib \
-			-nodefaultlibs -luClibc++ $(LIBGCC_S)" \
+		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ $(TARGET_CPPFLAGS)" \
+		LDFLAGS="$$$$LDFLAGS $(TARGET_LDFLAGS) -nodefaultlibs -luClibc++ $(LIBGCC_S)" \
 		all
 endef
 

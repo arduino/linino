@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -36,7 +36,7 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS+="-I$(STAGING_DIR)/usr/include -L$(STAGING_DIR)/usr/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib"
+		CFLAGS+="$(TARGET_CPPFLAGS) $(TARGET_LDFLAGS) -Wl,-rpath-link,$(STAGING_DIR)/usr/lib"
 endef
 
 define Package/vnstati/install	

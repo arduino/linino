@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -39,7 +39,7 @@ endef
 
 CONFIGURE_VARS+=FONTCONFIG_LIBS="-lfreetype -lfontconfig -lz -lexpat"
 CONFIGURE_ARGS+=--enable-freetype=yes
-TARGET_CFLAGS+=-L$(STAGING_DIR)/usr/lib
+TARGET_CFLAGS+=$(TARGET_LDFLAGS)
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/

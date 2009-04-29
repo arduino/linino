@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -46,7 +46,7 @@ TARGET_CFLAGS += $(FPIC)
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		LNETLIB="-L$(STAGING_DIR)/usr/lib/libnet-1.0.x/lib -lnet" \
-		PCAPLIB="-L$(STAGING_DIR)/usr/lib -lpcap" \
+		PCAPLIB="$(TARGET_LDFLAGS) -lpcap" \
 		install_prefix="$(PKG_INSTALL_DIR)" \
 		all install
 endef

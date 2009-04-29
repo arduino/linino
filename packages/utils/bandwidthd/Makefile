@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -38,8 +38,8 @@ CONFIGURE_ARGS += \
 	ac_cv_file__usr_local_pgsql_include=no \
 	ac_cv_lib_pq_PQconnectdb=no \
 
-EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
-EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib
+EXTRA_CFLAGS+= $(TARGET_CPPFLAGS)
+EXTRA_LDFLAGS+= $(TARGET_LDFLAGS) -Wl,-rpath-link,$(STAGING_DIR)/usr/lib
 
 define Package/bandwidthd/install
 	$(INSTALL_DIR) $(1)/usr/sbin

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -40,8 +40,8 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/software \
-		CXX="$(TARGET_CROSS)g++ $(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++ -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/uClibc++" \
-		LFLAGS="-L$(STAGING_DIR)/usr/lib -nodefaultlibs -luClibc++ -lusb $(LIBGCC_S)" \
+		CXX="$(TARGET_CROSS)g++ $(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++ $(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++" \
+		LFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++ -lusb $(LIBGCC_S)" \
 		all
 endef
 

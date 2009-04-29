@@ -86,11 +86,10 @@ CONFIGURE_ARGS += \
 
 CONFIGURE_VARS += \
 	svn_lib_neon=yes \
-	LDFLAGS="-lcrypt -lm -lintl -L$(STAGING_DIR)/usr/lib/libintl/lib/ \
-		-lz -L$(STAGING_DIR)/usr/lib/ -lpthread -L$(TOOLCHAIN_DIR)/usr/lib -L$(TOOLCHAIN_DIR)/lib \
+	LDFLAGS="$(TARGET_LDFLAGS) -lcrypt -lm -lintl -L$(STAGING_DIR)/usr/lib/libintl/lib/ \
+		-lz -lpthread -L$(TOOLCHAIN_DIR)/usr/lib \
 		-L$(TOOLCHAIN_DIR)/lib" \
-	CPPFLAGS="-I$(STAGING_DIR)/usr/include/ -I$(STAGING_DIR)/usr/lib/libintl/include \
-		-I$(STAGING_DIR)/include/" \
+	CPPFLAGS="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/lib/libintl/include" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all local-install

@@ -33,8 +33,7 @@ define Build/Configure
 
 endef
 
-TARGET_CFLAGS += $(FPIC) \
-	-I$(STAGING_DIR)/usr/include
+TARGET_CFLAGS += $(FPIC) $(TARGET_CPPFLAGS)
 
 TARGET_LDFLAGS += -llua
 

@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -35,7 +35,7 @@ CONFIGURE_ARGS += \
 	--with-libgnutls-prefix="$(STAGING_DIR)/usr" \
 
 CONFIGURE_VARS += \
-	LIBS="-L$(STAGING_DIR)/usr/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib -lgnutls -lgcrypt -lgpg-error" \
+	LIBS="$(TARGET_LDFLAGS) -Wl,-rpath-link,$(STAGING_DIR)/usr/lib -lgnutls -lgcrypt -lgpg-error" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install

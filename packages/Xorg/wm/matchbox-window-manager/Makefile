@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -34,7 +34,7 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR=$(PKG_INSTALL_DIR) \
-		LIBMB_LIBS="-L$(STAGING_DIR)/usr/lib -lfontconfig -lXrender \
+		LIBMB_LIBS="$(TARGET_LDFLAGS) -lfontconfig -lXrender \
 		-lz -lexpat -lfreetype -lXft -lmb -lX11 -lXext -lXau -lXdmcp \
 		-lpng12" \
 		all install 

@@ -1,4 +1,5 @@
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -58,8 +59,8 @@ define Build/Configure
 		$(TARGET_CONFIGURE_OPTS) \
 		CXXFLAGS="-static -Os -MD" \
 		CFLAGS="-static -MD" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
+		CPPFLAGS="$(TARGET_CPPFLAGS)" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
 		$(BUILDOPTS) \
 		./configure \
 		  --prefix=/usr \

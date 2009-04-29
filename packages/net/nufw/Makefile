@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -71,10 +71,10 @@ CONFIGURE_ARGS += \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/lib/libintl/include/ \
-				-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include \
-				-I$(STAGING_DIR)/usr/lib/libiconv/include" \
-		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib \
+		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) \
+			-I$(STAGING_DIR)/usr/lib/libintl/include \
+			-I$(STAGING_DIR)/usr/lib/libiconv/include" \
+		LDFLAGS="$(TARGET_LDFLAGS) \
 			-L$(STAGING_DIR)/usr/lib/libintl/lib \
 			-L$(STAGING_DIR)/usr/lib/libiconv/lib \
 			-Wl,-rpath-link,$(STAGING_DIR)/usr/lib -liconv \

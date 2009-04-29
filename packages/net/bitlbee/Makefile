@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -43,8 +43,8 @@ define Build/Configure
 	(cd $(PKG_BUILD_DIR); \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
+		CPPFLAGS="$(TARGET_CPPFLAGS)" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
 		STAGING_DIR="$(STAGING_DIR)" \
 		STRIP="$(STRIP)" \
 		./configure \
@@ -67,7 +67,7 @@ define Build/Configure
 		$(PKG_BUILD_DIR)/Makefile.settings
 	@echo 'CFLAGS+=-I$(STAGING_DIR)/usr/lib/libiconv/include' >> \
 		$(PKG_BUILD_DIR)/Makefile.settings
-	@echo 'LFLAGS+=-L$(STAGING_DIR)/usr/lib' >> \
+	@echo 'LFLAGS+=$(TARGET_LDFLAGS)' >> \
 		$(PKG_BUILD_DIR)/Makefile.settings
 	@echo 'LFLAGS+=-L$(STAGING_DIR)/usr/lib/libiconv/lib' >> \
 		$(PKG_BUILD_DIR)/Makefile.settings

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -40,7 +40,7 @@ endef
 
 MAKE_FLAGS += \
 	CC="$(TARGET_CC)" \
-	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnetfilter_queue -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnetfilter_queue $(TARGET_CPPFLAGS)" \
 	LDFLAGS="$(TARGET_LDFLAGS) -lnfnetlink" \
 
 define Package/send/install

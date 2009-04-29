@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -47,8 +47,8 @@ define Build/Compile
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		DEBUG="" \
-		INCLUDEDIR="-I../support -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDOPTS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		INCLUDEDIR="-I../support $(TARGET_CPPFLAGS)" \
+		LDOPTS="$(TARGET_LDFLAGS)" \
 		PLATFORM="-DPLATFORM=\\\"Linux/$(ARCH)\\\"" \
 		TARGET="/usr/bin" \
 		WORKDIR="/var/lib/iptraf" \

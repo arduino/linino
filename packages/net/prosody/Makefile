@@ -48,8 +48,8 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/Default,\
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
+		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		PREFIX="/usr" \
 		all install \

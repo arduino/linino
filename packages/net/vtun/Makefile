@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -36,7 +36,7 @@ define Build/Configure
 		--with-lzo-lib="$(STAGING_DIR)/usr/lib/" \
 		--with-ssl-headers="$(STAGING_DIR)/usr/include/openssl" \
 		, \
-		LIBS="-L$(STAGING_DIR)/usr/lib" \
+		LIBS="$(TARGET_LDFLAGS)" \
 		BLOWFISH_HDR_DIR="$(STAGING_DIR)/usr/include/openssl" \
 		LZO_HDR_DIR="$(STAGING_DIR)/usr/include/lzo" \
 		SSL_HDR_DIR="$(STAGING_DIR)/usr/include/openssl" \

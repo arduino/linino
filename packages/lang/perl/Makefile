@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -101,11 +101,11 @@ define Build/perl/Configure
 	-$(MAKE) -C $(PKG_BUILD_DIR) clean
 	sed \
 		-e 's!%%CC%%!$(TARGET_CC)!g' \
-		-e 's!%%CFLAGS%%!$(TARGET_CFLAGS) -DUSE_CROSS_COMPILE -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include!g' \
+		-e 's!%%CFLAGS%%!$(TARGET_CFLAGS) -DUSE_CROSS_COMPILE $(TARGET_CPPFLAGS)!g' \
 		-e 's!%%CPP%%!$(TARGET_CROSS)gcc -E!g' \
 		-e 's!%%AR%%!$(TARGET_CROSS)ar!g' \
 		-e 's!%%LD%%!$(TARGET_CROSS)gcc!g' \
-		-e 's!%%LDFLAGS%%!-rdynamic -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib!g' \
+		-e 's!%%LDFLAGS%%!-rdynamic $(TARGET_LDFLAGS)!g' \
 		-e 's!%%LIBDIRS%%!$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib!g' \
 		-e 's!%%INCDIRS%%!$(STAGING_DIR)/include $(STAGING_DIR)/usr/include!g' \
 		files/config.sh-$(patsubst i386,i486,$(ARCH)).in \

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -36,8 +36,8 @@ define Build/Configure
                 x=`echo ac_cv_file_$(PKG_BUILD_DIR)/features.conf | tr [:blank:]-/. _` && export $$$${x}=yes && \
                 $(TARGET_CONFIGURE_OPTS) \
                 CFLAGS="$(TARGET_CFLAGS)" \
-                CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-                LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+                CPPFLAGS="$(TARGET_CPPFLAGS)" \
+                LDFLAGS="$(TARGET_LDFLAGS)" \
                 ./configure \
                         --target=$(GNU_TARGET_NAME) \
                         --host=$(GNU_TARGET_NAME) \

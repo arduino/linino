@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -40,7 +40,7 @@ define Build/Compile
 		CC="$(TARGET_CC)" \
 		glib12="yes" \
 		without-libsensors="yes" \
-		GLIB12_LIB="-L$(STAGING_DIR)/usr/lib -lglib -lgmodule" \
+		GLIB12_LIB="$(TARGET_LDFLAGS) -lglib -lgmodule" \
 		GLIB12_INCLUDE="-I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include"
 endef
 

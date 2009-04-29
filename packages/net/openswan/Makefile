@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -55,11 +55,11 @@ $(call Package/openswan/Default/description)
 endef
 
 TARGET_CPPFLAGS = \
-	-I$(STAGING_DIR)/usr/include \
+	$(TARGET_CPPFLAGS) \
 	-I$(LINUX_DIR)/include
 
 TARGET_LDFLAGS = \
-	-L$(STAGING_DIR)/usr/lib
+	$(TARGET_LDFLAGS)
 
 OPENSWAN_MAKE := $(MAKE) -C $(PKG_BUILD_DIR) \
 	$(TARGET_CONFIGURE_OPTS) \
