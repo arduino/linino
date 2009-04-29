@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apache
 PKG_VERSION:=2.2.9
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_SOURCE_NAME:=httpd
 
 PKG_SOURCE:=$(PKG_SOURCE_NAME)-$(PKG_VERSION).tar.bz2
@@ -29,37 +29,34 @@ define Package/apache/Default
   URL:=http://httpd.apache.org/
 endef
 
+define Package/apache/Default/description
+ The Apache Web Server is a powerful and flexible HTTP/1.1 compliant
+ web server.  Originally designed as a replacement for the NCSA HTTP
+ Server, it has grown to be the most popular web server on the Internet.
+endef
+
 define Package/apache
-  $(call Package/apache/Default)
-  MENU=1
+$(call Package/apache/Default)
   DEPENDS:=+libapr +libaprutil +zlib +libexpat +libpcre +libopenssl +libsqlite3
 endef
 
 define Package/apache/description
-	The Apache Web Server is a powerful and flexible HTTP/1.1 compliant
-	web server.  Originally designed as a replacement for the NCSA HTTP
-	Server, it has grown to be the most popular web server on the Internet.
+$(call Package/apache/Default/description)
+ .
+ This package contains the Apache web server and utility programs.
+ .
+ Take care that you don't include apache at the moment into your image
+ please select it only as module because busybox will override
+ /usr/sbin/httpd. It'll be solved soon. If you need to include this
+ package in the image anyway, remove httpd from busybox
+ (Base system --> Configuration --> Networking Utilities --> httpd).
+ Also you should take care for the initscripts, apache's httpd isn't
+ compatible with the one from busybox, so if you want to use apache
+ for running your webif, you'll need to change the parameters in the
+ scripts and configure the rest in /etc/httpd.conf.
 endef
 
-define Package/apache-server
-  $(call Package/apache/Default)
-  TITLE:=The Apache Web Server and some tools
-  DEPENDS:=apache
-endef
-
-define Package/apache-server/description
-	Take care that you don't include apache at the moment into your image
-	please select it only as module because busybox will override
-	/usr/sbin/httpd. It'll be solved soon. If you need to include this
-	package in the image anyway, remove httpd from busybox
-	(Base system --> Configuration --> Networking Utilities --> httpd).
-	Also you should take care for the initscripts, apache's httpd isn't
-	compatible with the one from busybox, so if you want to use apache
-	for running your webif, you'll need to change the parameters in the
-	scripts and configure the rest in /etc/httpd.conf.
-endef
-
-define Package/apache-server/conffiles
+define Package/apache/conffiles
 /etc/apache/httpd.conf
 /etc/apache/extra/httpd-autoindex.conf
 /etc/apache/extra/httpd-dav.conf
@@ -77,14 +74,15 @@ define Package/apache-server/conffiles
 endef
 
 define Package/apache-icons
-  $(call Package/apache/Default)
+$(call Package/apache/Default)
   TITLE:=Icons from Apache
   DEPENDS:=apache
 endef
 
 define Package/apache-icons/description
-  $(call Package/apache/description)
-  This package contains the icons from Apache.
+$(call Package/apache/Default/description)
+ .
+ This package contains the icons from Apache.
 endef
 
 define Build/Configure	
@@ -132,13 +130,13 @@ define Build/InstallDev
 		$(1)/usr/share
 endef
 
-define Package/apache-server/preinst
+define Package/apache/preinst
 	rm /usr/sbin/httpd
 	echo -e "You should take a look in the initscripts, busybox's httpd \n\
 	uses some parameters which are maybe unsupported by apache."
 endef
 
-define Package/apache-server/install
+define Package/apache/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	# we don't need apxs on the router, it's just for building apache modules.  
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/{ab,apachectl,checkgid,dbmmanage,envvars,envvars-std,htcacheclean,htdbm,htdigest,htpasswd,httpd,httxt2dbm,logresolve,rotatelogs} $(1)/usr/sbin/
@@ -151,7 +149,7 @@ define Package/apache-server/install
 	$(CP) ./files/etc/apache/httpd.conf $(1)/etc/apache/
 endef
 
-define Package/apache-server/postrm
+define Package/apache/postrm
 	rm -rf /usr/sbin/httpd
 	ln -s /bin/busybox /usr/sbin/httpd
 	echo -e "You may need to change your initscripts back for the use \n\
@@ -164,5 +162,4 @@ define Package/apache-icons/install
 endef
 
 $(eval $(call BuildPackage,apache))
-$(eval $(call BuildPackage,apache-server))
 $(eval $(call BuildPackage,apache-icons))
