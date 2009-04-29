@@ -14,7 +14,7 @@ FEATURES:=squashfs usb
 LINUX_VERSION:=2.6.25.17
 
 include $(INCLUDE_DIR)/target.mk
-DEFAULT_PACKAGES += hostapd-mini kmod-switch kmod-diag
+DEFAULT_PACKAGES += hostapd-mini kmod-switch kmod-diag nvram-brcm47xx
 
 define Target/Description
 	Build firmware images for Broadcom based routers
