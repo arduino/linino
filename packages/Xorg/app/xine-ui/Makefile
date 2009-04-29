@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xine-ui
 PKG_VERSION:=0.99.4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.sourceforge.net/xine/
@@ -18,7 +18,7 @@ PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_LDLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -lnotimpl
+EXTRA_LDLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/xine-ui
   SECTION:=xorg-app
@@ -51,7 +51,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) X_LIBS="-L$(STAGING_DIR)/usr/lib -lnotimpl -lfreetype"
+	$(MAKE) -C $(PKG_BUILD_DIR) X_LIBS="-L$(STAGING_DIR)/usr/lib -lfreetype"
 	$(MAKE) -C $(PKG_BUILD_DIR)/ install DESTDIR=$(PKG_INSTALL_DIR)
 endef
 
