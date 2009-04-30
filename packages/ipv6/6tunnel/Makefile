@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/6tunnel
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+libpcap
+  DEPENDS:=+libpcap +kmod-sit
   TITLE:=IPv4 / IPv6 tunnel proxy
   URL:=http://toxygen.net/6tunnel/
 endef
