@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
-PKG_VERSION:=1.6.1.0-rc3
-PKG_RELEASE:=2
+PKG_VERSION:=1.6.1.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
-PKG_MD5SUM:=29c45a36653e15ef8e78f92a1de753b8
+PKG_MD5SUM:=7e4dccc79c504ae497ff42062279905d
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -89,6 +89,55 @@ $(call Package/asterisk16/Default/description)
  Asterisk.
 endef
 
+define Package/asterisk16-chan-local
+$(call Package/asterisk16/Default)
+  TITLE:=chan_local support
+  DEPENDS:= +asterisk16
+endef
+
+define Package/asterisk16-chan-local/description
+$(call Package/asterisk16/Default/description)
+ This package provides chan_local support to
+ Asterisk.
+endef
+
+define Package/asterisk16-cdr
+$(call Package/asterisk16/Default)
+  TITLE:=CDR support
+  DEPENDS:= +asterisk16
+endef
+
+define Package/asterisk16-cdr/description
+$(call Package/asterisk16/Default/description)
+ This package provides Call Detail Record support to
+ Asterisk.
+endef
+
+define Package/asterisk16-res-musiconhold
+$(call Package/asterisk16/Default)
+  TITLE:=MOH support
+  DEPENDS:= +asterisk16
+endef
+
+define Package/asterisk16-res-musiconhold/description
+$(call Package/asterisk16/Default/description)
+ This package provides Music On Hold support to
+ Asterisk.
+endef
+
+define Package/asterisk16-format-g729
+$(call Package/asterisk16/Default)
+  TITLE:=G.729 support
+  DEPENDS:= +asterisk16
+endef
+
+define Package/asterisk16-format-g729/description
+$(call Package/asterisk16/Default/description)
+ This package provides G.729 support to
+ Asterisk.
+endef
+
+
 CONFIGURE_ARGS+= \
 	--without-curl \
 	--without-curses \
@@ -141,7 +190,7 @@ define Build/Compile
 		include/asterisk/buildopts.h defaults.h \
 		makeopts.embed_rules
 	ASTCFLAGS="$(EXTRA_CFLAGS) -DLOW_MEMORY $(TARGET_CFLAGS)" \
-	ASTLDFLAGS="$(EXTRA_LDFLAGS)" \
+	ASTLDFLAGS="$(EXTRA_LDFLAGS) -lpthread" \
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		ASTVARLIBDIR="/usr/lib/asterisk" \
 		NOISY_BUILD="1" \
@@ -237,6 +286,19 @@ define Package/asterisk16-chan-iax2/conffiles
 /etc/asterisk/iaxprov.conf
 endef
 
+define Package/asterisk16-cdr/conffiles
+/etc/asterisk/cdr.conf
+/etc/asterisk/cdr_custom.conf
+/etc/asterisk/cdr_manager.conf
+/etc/asterisk/cdr_odbc.conf
+/etc/asterisk/cdr_pgsql.conf
+/etc/asterisk/cdr_tds.conf
+endef
+
+define Package/asterisk16-res-musiconhold/conffiles
+/etc/asterisk/musiconhold.conf
+endef
+
 define Package/asterisk16-chan-iax2/install
 	$(INSTALL_DIR) $(1)/etc/asterisk
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/iax.conf $(1)/etc/asterisk/
@@ -245,8 +307,36 @@ define Package/asterisk16-chan-iax2/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_iax2.so $(1)/usr/lib/asterisk/modules/
 endef
 
+define Package/asterisk16-chan-local/install
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_local.so $(1)/usr/lib/asterisk/modules/
+endef
+
+define Package/asterisk16-cdr/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/cdr*.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/*cdr*.so $(1)/usr/lib/asterisk/modules/
+endef
+
+define Package/asterisk16-res-musiconhold/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/musiconhold.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_musiconhold.so $(1)/usr/lib/asterisk/modules/
+endef
+
+define Package/asterisk16-format-g729/install
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/format_g729.so $(1)/usr/lib/asterisk/modules/
+endef
+
 $(eval $(call BuildPackage,asterisk16))
 $(eval $(call BuildPackage,asterisk16-voicemail))
 $(eval $(call BuildPackage,asterisk16-sounds))
 #$(eval $(call BuildPackage,asterisk16-app-meetme))
 $(eval $(call BuildPackage,asterisk16-chan-iax2))
+$(eval $(call BuildPackage,asterisk16-chan-local))
+$(eval $(call BuildPackage,asterisk16-cdr))
+$(eval $(call BuildPackage,asterisk16-res-musiconhold))
+$(eval $(call BuildPackage,asterisk16-format-g729))
