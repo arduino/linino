@@ -54,12 +54,7 @@ $(call Package/openswan/Default/description)
  This package contains the Openswan kernel module.
 endef
 
-TARGET_CPPFLAGS = \
-	$(TARGET_CPPFLAGS) \
-	-I$(LINUX_DIR)/include
-
-TARGET_LDFLAGS = \
-	$(TARGET_LDFLAGS)
+TARGET_CPPFLAGS += -I$(LINUX_DIR)/include
 
 OPENSWAN_MAKE := $(MAKE) -C $(PKG_BUILD_DIR) \
 	$(TARGET_CONFIGURE_OPTS) \
