@@ -190,7 +190,7 @@ define Build/Compile
 		include/asterisk/buildopts.h defaults.h \
 		makeopts.embed_rules
 	ASTCFLAGS="$(EXTRA_CFLAGS) -DLOW_MEMORY $(TARGET_CFLAGS)" \
-	ASTLDFLAGS="$(EXTRA_LDFLAGS) -lpthread" \
+	ASTLDFLAGS="$(EXTRA_LDFLAGS)" \
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		ASTVARLIBDIR="/usr/lib/asterisk" \
 		NOISY_BUILD="1" \
