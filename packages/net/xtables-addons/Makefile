@@ -9,15 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=xtables-addons
-PKG_VERSION:=1.9
+PKG_VERSION:=1.15
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=578176c969a70858bfc06d9ee3b5dbda
-PKG_SOURCE_URL:= \
-	http://dev.medozas.de/files/xtables/ \
-	http://dev.medozas.de/files/xtables/old
-
+PKG_MD5SUM:=034c3b40684a934af5ecb28a06f222b5
+PKG_SOURCE_URL:=@SF/xtables-addons
 PKG_BUILD_DEPENDS:=iptables
 
 include $(INCLUDE_DIR)/package.mk
@@ -42,6 +39,7 @@ define Build/Compile
 		ARCH="$(LINUX_KARCH)" \
 		CROSS_COMPILE="$(TARGET_CROSS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		DEPMOD="/bin/true" \
 		all install
 endef
 
@@ -94,6 +92,5 @@ $(eval $(call KernelPackage,compat-xtables))
 $(eval $(call BuildTemplate,chaos,CHAOS,xt_CHAOS,47,+kmod-compat-xtables +kmod-ipt-delude +kmod-ipt-tarpit))
 $(eval $(call BuildTemplate,condition,condition,xt_condition,46))
 $(eval $(call BuildTemplate,delude,DELUDE,xt_DELUDE,46,+kmod-compat-xtables))
-$(eval $(call BuildTemplate,portscan,portscan,xt_portscan,46))
 $(eval $(call BuildTemplate,tarpit,TARPIT,xt_TARPIT,46,+kmod-compat-xtables))
 $(eval $(call BuildTemplate,ipp2p,ipp2p,xt_ipp2p,46))
