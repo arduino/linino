@@ -17,6 +17,7 @@ PKG_MD5SUM:=d76233108aca9c9606cdbd341562ad9a
 
 PKG_FIXUP = libtool
 
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libfreetype
@@ -64,4 +65,5 @@ define Package/libfreetype/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfreetype.so.* $(1)/usr/lib/
 endef
 
+$(eval $(call HostBuild))
 $(eval $(call BuildPackage,libfreetype))
