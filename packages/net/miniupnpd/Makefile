@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miniupnpd
-PKG_VERSION:=1.1
-PKG_RELEASE:=5
-PKG_MD5SUM:=a0f6651476721db9b554668c8c83b151
+PKG_VERSION:=1.3
+PKG_RELEASE:=1
+PKG_MD5SUM:=b5e70e80dcf45b424b8fe3c966bdc613
 
 PKG_SOURCE_URL:=http://miniupnp.free.fr/files
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -30,8 +30,8 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) -f Makefile.openwrt \
 		$(TARGET_CONFIGURE_OPTS) \
 		STAGING_DIR="$(STAGING_DIR)" \
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
-		LIBS="$(STAGING_DIR)/usr/lib/libiptc.a"
+		CFLAGS="$(TARGET_CFLAGS) -I $(STAGING_DIR)/usr/include -DIPTABLES_143" \
+		LIBS="$(STAGING_DIR)/usr/lib/libiptc.so"
 endef
 
 define Package/miniupnpd/install
