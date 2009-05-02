@@ -18,6 +18,7 @@ PKG_MD5SUM:=dbd5f3b47ed13132f04c685d608a7547
 
 PKG_FIXUP = libtool
 
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/jpeg/Default
@@ -43,6 +44,10 @@ endef
 TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+
+HOST_CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
 
@@ -85,5 +90,6 @@ define Package/jpeg-tools/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/*jpeg* $(1)/usr/bin/
 endef
 
+$(eval $(call HostBuild))
 $(eval $(call BuildPackage,libjpeg))
 $(eval $(call BuildPackage,jpeg-tools))
