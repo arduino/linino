@@ -1,25 +1,0 @@
-HTTP request sent, awaiting response... 200 OK
-Length: 49450713 (47M) [application/x-tar]
-Saving to: `STDOUT'
-
-
-
-2008-09-28 21:04:13 (10.2 KB/s) - Read error at byte 519095/49450713 (Connection timed out). Retrying.
-
---2008-09-28 21:04:14--  (try: 2)  http://ftp.de.kernel.org/pub/linux/kernel/v2.6/linux-2.6.26.5.tar.bz2
-Connecting to ftp.de.kernel.org|195.71.9.196|:80... connected.
-HTTP request sent, awaiting response... 206 Partial Content
-Length: 49450713 (47M), 48931618 (47M) remaining [application/x-tar]
-Saving to: `STDOUT'
-
-
-
-2008-09-28 21:06:22 (12.7 KB/s) - Read error at byte 2177730/49450713 (Connection timed out). Retrying.
-
---2008-09-28 21:06:24--  (try: 3)  http://ftp.de.kernel.org/pub/linux/kernel/v2.6/linux-2.6.26.5.tar.bz2
-Connecting to ftp.de.kernel.org|195.71.9.196|:80... connected.
-HTTP request sent, awaiting response... 206 Partial Content
-Length: 49450713 (47M), 47272983 (45M) remaining [application/x-tar]
-Saving to: `STDOUT'
-
- 5% [++                                                  ] 2,836,764   16.7K/s  eta 1h 55m   5% [++                                                  ] 2,836,764   15.5K/s  eta 1h 55m   5% [++                                                  ] 2,836,764   14.4K/s  eta 1h 57m   5% [++                                                  ] 2,836,764   --.-K/s  eta 1h 57m   5% [++                                                  ] 2,836,764   --.-K/s  eta 1h 59m   5% [++                                                  ] 2,836,764   --.-K/s  eta 1h 59m   5% [++                                                  ] 2,836,764   --.-K/s  eta 2h 2m   
