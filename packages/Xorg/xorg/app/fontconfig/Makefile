@@ -29,10 +29,11 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
-		--disable-docs \
-	    --with-arch=$(ARCH) \
+        --disable-docs \
+        --with-cache-dir=/usr/share/fontconfig/cache \
+        --with-arch=$(ARCH) \
         , \
-		ac_cv_prog_HASDOCBOOK=no \
+        ac_cv_prog_HASDOCBOOK=no \
 	)
 endef
 
