@@ -9,14 +9,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=avahi
-PKG_VERSION:=0.6.23
-PKG_RELEASE:=2
+PKG_VERSION:=0.6.25
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://avahi.org/download/
-PKG_MD5SUM:=aab1a304851d8145ea5f6a85c10af9e9
+PKG_MD5SUM:=a83155a6e29e3988f07e5eea3287b21e
 
 PKG_BUILD_DEPENDS:=libexpat libdaemon libgdbm
+
+PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -99,7 +101,8 @@ $(call Package/avahi/Default/description)
  in a DHCP-like fashion. Especially useful on IPv6.
 endef
 
-TARGET_CFLAGS += $(FPIC)
+TARGET_CFLAGS += $(FPIC) -DGETTEXT_PACKAGE
+
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \
@@ -143,6 +146,11 @@ endif
 CONFIGURE_VARS+= \
 	CFLAGS="$$$$CFLAGS -DNDEBUG" \
 	$(if $(CONFIG_LINUX_2_4),ac_cv_header_sys_inotify_h=no)
+
+define Build/Configure
+	( cd $(PKG_BUILD_DIR); aclocal; libtoolize; autoreconf; );
+	$(call Build/Configure/Default)
+endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
