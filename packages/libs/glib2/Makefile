@@ -16,9 +16,15 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/glib-$(PKG_VERSION)
 PKG_SOURCE_URL:=@GNOME/glib/2.20
 PKG_MD5SUM:=05188e560dbd8bddd568e24ce10dd003
 
+PKG_FIXUP = libtool
+PKG_BUILD_DEPENDS := glib2/host
+
+HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/glib-$(PKG_VERSION)
+
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
-PKG_INSTALL=1
+PKG_INSTALL:=1
 
 define Package/glib2
   SECTION:=libs
@@ -41,30 +47,16 @@ TARGET_LDFLAGS+= \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib
 
-Hooks/InstallDev/Post += libtool_fixup_libdir
-
 define Build/Configure
-	mkdir -p $(PKG_BUILD_DIR)/build/$(GNU_HOST_NAME)
-	( cd $(PKG_BUILD_DIR); CONFIG_SITE= \
-		./configure \
-		--target=$(GNU_HOST_NAME) \
-		--host=$(GNU_HOST_NAME) \
-		--build=$(GNU_HOST_NAME) \
-		--prefix=$(PKG_BUILD_DIR)/build/$(GNU_HOST_NAME) \
-		--disable-shared \
-		--enable-static \
-		--enable-debug=no \
-	);
-	$(MAKE) -C $(PKG_BUILD_DIR) install clean
-
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \
 		--enable-debug=no \
+		--with-libiconv=gnu \
 		, \
 		glib_cv_stack_grows=no \
 		glib_cv_uscore=no \
-		ac_cv_path_GLIB_GENMARSHAL=$(PKG_BUILD_DIR)/build/$(GNU_HOST_NAME)/bin/glib-genmarshal \
+		ac_cv_path_GLIB_GENMARSHAL=$(STAGING_DIR_HOST)/bin/glib-genmarshal \
 		ac_cv_func_mmap_fixed_mapped=yes \
 	);
 endef
@@ -96,11 +88,6 @@ define Build/InstallDev
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/share/aclocal/*.m4  \
 		$(2)/share/aclocal/
-
-	$(INSTALL_DIR) $(2)/bin
-	$(INSTALL_BIN) \
-		$(PKG_BUILD_DIR)/build/$(GNU_HOST_NAME)/bin/* \
-		$(2)/bin
 endef
 
 define Package/glib2/install
@@ -110,5 +97,5 @@ define Package/glib2/install
 		$(1)/usr/lib/
 endef
 
-
+$(eval $(call HostBuild))
 $(eval $(call BuildPackage,glib2))
