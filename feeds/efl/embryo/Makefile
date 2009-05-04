@@ -22,6 +22,7 @@ PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 
 PKG_FIXUP = libtool
 
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/embryo
@@ -43,6 +44,13 @@ define Build/Configure
 	)
 endef
 
+define Host/Configure
+	( cd $(HOST_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
+	$(call Host/Configure/Default, \
+		--disable-doc \
+	)
+endef
+
 define Build/Compile
 	DESTDIR="$(PKG_INSTALL_DIR)" $(MAKE) -C $(PKG_BUILD_DIR) all install
 endef
@@ -59,4 +67,5 @@ define Package/embryo/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/embryo_cc $(1)/usr/bin/
 endef
 
+$(eval $(call HostBuild))
 $(eval $(call BuildPackage,embryo))

@@ -20,6 +20,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://svn.enlightenment.org/svn/e/trunk/e
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 
+PKG_BUILD_DEPENDS:=edje/host
+
 PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk

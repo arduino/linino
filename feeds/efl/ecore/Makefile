@@ -20,8 +20,11 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://svn.enlightenment.org/svn/e/trunk/$(PKG_NAME)
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 
+HOST_BUILD_DEPENDS:=eina/host evas/host
+
 PKG_FIXUP = libtool
 
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ecore
@@ -30,7 +33,7 @@ define Package/ecore
   SUBMENU:=libraries
   TITLE:=Ecore is the core event abstraction layer and X abstraction layer
   URL:=http://wiki.enlightenment.org/index.php/Ecore
-  DEPENDS:=+eet +evas +libiconv @!LINUX_2_4
+  DEPENDS:=+eina +evas +libiconv @!LINUX_2_4
 endef
 
 define Package/ecore/description
@@ -58,6 +61,54 @@ define Build/Configure
 		--enable-ecore-evas \
 		--enable-ecore-x \
 		--enable-ecore-evas-xrender-x11 \
+		--disable-ecore-evas-dfb \
+		--disable-ecore-evas-fb \
+		--disable-ecore-evas-sdl \
+		--disable-ecore-evas-quartz \
+		--enable-ecore-evas-buffer \
+		--enable-ecore-file \
+		--enable-inotify \
+		--disable-poll \
+		--enable-ecore-imf \
+		--enable-ecore-imf_evas \
+		--disable-doc \
+		--disable-simple-x11 \
+		--disable-ecore-x-xcb \
+		--disable-ecore-evas-opengl-x11 \
+		--disable-ecore-evas-software-16-x11 \
+		--disable-ecore-evas-software-xcb \
+		--disable-ecore-evas-xrender-xcb \
+		--disable-ecore-win32 \
+		--disable-ecore-evas-software-ddraw \
+		--disable-ecore-evas-direct3d \
+		--disable-ecore-evas-opengl-glew \
+		--disable-ecore-evas-software-16-ddraw \
+		--disable-ecore-wince \
+		--disable-ecore-evas-software-16-wince \
+		--disable-ecore-directfb \
+		--disable-ecore-fb \
+		--disable-ecore-sdl \
+		--disable-ecore-quartz \
+	)
+endef
+
+define Host/Configure
+	( cd $(HOST_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
+	$(call Host/Configure/Default, \
+		--without-x \
+		--with-iconv-link \
+		--disable-gnutls \
+		--disable-openssl \
+		--disable-curl \
+		--disable-abstract-sockets \
+		--enable-ecore-job \
+		--enable-ecore-con \
+		--enable-ecore-ipc \
+		--disable-ecore-config \
+		--enable-ecore-txt \
+		--enable-ecore-evas \
+		--disable-ecore-x \
+		--disable-ecore-evas-xrender-x11 \
 		--disable-ecore-evas-dfb \
 		--disable-ecore-evas-fb \
 		--disable-ecore-evas-sdl \
@@ -106,4 +157,5 @@ define Package/ecore/install
 	$(FIND) $(1)/ -name "*.a" | $(XARGS) rm
 endef
 
+$(eval $(call HostBuild))
 $(eval $(call BuildPackage,ecore))

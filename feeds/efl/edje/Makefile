@@ -20,8 +20,11 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://svn.enlightenment.org/svn/e/trunk/$(PKG_NAME)
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 
+HOST_BUILD_DEPENDS:=evas/host ecore/host eet/host embryo/host
+
 PKG_FIXUP = libtool
 
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/edje
@@ -30,7 +33,7 @@ define Package/edje
   SUBMENU:=libraries
   TITLE:=Edje is a graphical design and layout library
   URL:=http://wiki.enlightenment.org/index.php/Edje
-  DEPENDS:=+evas +ecore +embryo
+  DEPENDS:=+evas +ecore +eet +embryo
 endef
 
 define Package/edje/description
@@ -41,6 +44,14 @@ define Build/Configure
 	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
 	$(call Build/Configure/Default, \
 		--disable-edje-cc \
+		--disable-doc \
+	)
+endef
+
+define Host/Configure
+	( cd $(HOST_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
+	$(call Host/Configure/Default, \
+		--enable-edje-cc \
 		--disable-doc \
 	)
 endef
@@ -60,4 +71,5 @@ define Package/edje/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
 endef
 
+$(eval $(call HostBuild))
 $(eval $(call BuildPackage,edje))
