@@ -111,15 +111,20 @@ define Build/Configure
 endef
 
 define Package/xserver-common/install
-	$(INSTALL_DIR) $(1)/etc/{init.d,config}
+	$(INSTALL_DIR) $(1)/etc/{init.d,config,X11}
 	$(INSTALL_BIN) \
 		./files/x.init \
 		$(1)/etc/init.d/x11
-	$(if $(X_CONFIG), \
+	$(INSTALL_DATA) ./files/tmp/x11.uci \
+		$(1)/etc/config/x11
+	test -f ./files/config.xorg/$(X_CONFIG) && \
 		$(INSTALL_DATA) \
-			./files/config/$(X_CONFIG) \
-			$(1)/etc/config/x11 \
-	)
+			./files/config.xorg/$(X_CONFIG) \
+			$(1)/etc/X11/xorg.conf
+#	test -f ./files/config.uci/$(X_CONFIG) && \
+#		$(INSTALL_DATA) \
+#			./files/config.uci/$(X_CONFIG) \
+#			$(1)/etc/config/x11
 endef
 
 define Package/xserver-xorg/install

@@ -1,0 +1,34 @@
+# xorg configuration
+
+Section "ServerLayout"
+        Identifier     "Default Layout"
+        Screen      0  "Screen0" 0 0
+        InputDevice    "Mouse0" "CorePointer"
+EndSection
+
+Section "InputDevice"
+        Identifier  "Mouse0"
+        Driver      "tslib"
+        Option      "Device" "/dev/event1"
+        Option      "Width" "480"
+        Option      "Height" "640"
+EndSection
+
+Section "Monitor"
+        Identifier   "Monitor0"
+        VendorName   "Monitor Vendor"
+        ModelName    "OWRT"
+        Option       "dpms"
+EndSection
+
+Section "Device"
+        Identifier  "Videocard0"
+        Driver      "glamo"
+EndSection
+
+Section "Screen"
+    Identifier  "Screen0"
+    Device      "Videocard0"
+    Monitor     "Monitor0"
+    DefaultDepth 16
+EndSection
