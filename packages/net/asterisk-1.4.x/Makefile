@@ -333,7 +333,6 @@ define Package/asterisk14-rawplayer/description
 endef
 
 
-#	--with-ltdl="$(STAGING_DIR)/usr" \
 CONFIGURE_ARGS+= \
 	--without-curl \
 	--without-curses \
