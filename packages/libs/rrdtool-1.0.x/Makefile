@@ -97,7 +97,7 @@ Round Robin Database (RRD) management tools.
 	This package contains command line tools used to manage RRDs.
 endef
 
-TARGET_CFLAGS += $(FPIC)
+TARGET_CFLAGS += $(FPIC) --std=c99
 
 CONFIGURE_ARGS += \
 	$(DISABLE_LARGEFILE) \
