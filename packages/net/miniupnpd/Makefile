@@ -6,10 +6,11 @@
 #
 
 include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=miniupnpd
 PKG_VERSION:=1.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=b5e70e80dcf45b424b8fe3c966bdc613
 
 PKG_SOURCE_URL:=http://miniupnp.free.fr/files
@@ -30,7 +31,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) -f Makefile.openwrt \
 		$(TARGET_CONFIGURE_OPTS) \
 		STAGING_DIR="$(STAGING_DIR)" \
-		CFLAGS="$(TARGET_CFLAGS) -I $(STAGING_DIR)/usr/include -DIPTABLES_143" \
+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(KERNEL_BUILD_DIR)/iptables-1.4.3.2/include -DIPTABLES_143" \
 		LIBS="$(STAGING_DIR)/usr/lib/libiptc.so"
 endef
 
