@@ -1,9 +1,26 @@
-Only in linuxigd-1.0.orig/: .prepared_20a157cc75a461190fa4391263121d27
-Only in linuxigd-1.0: .prepared_b973ef33b8631d87e6b3e8221cc78739
 diff -ur linuxigd-1.0.orig/iptc.c linuxigd-1.0/iptc.c
---- linuxigd-1.0.orig/iptc.c	2009-05-02 04:45:15.000000000 +0200
-+++ linuxigd-1.0/iptc.c	2009-05-02 05:28:01.000000000 +0200
-@@ -17,6 +17,8 @@
+--- linuxigd-1.0.orig/iptc.c	2009-05-05 14:01:59.000000000 +0200
++++ linuxigd-1.0/iptc.c	2009-05-05 14:05:48.000000000 +0200
+@@ -7,16 +7,24 @@
+ #include <iptables.h>
+ #include <libiptc/libiptc.h>
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,22)
+-#include <linux/netfilter/nf_nat.h>
++#ifdef IPTABLES_143
++#  include <net/netfilter/nf_nat.h>
++#  define ip_nat_multi_range nf_nat_multi_range_compat
++#  define ip_nat_range nf_nat_range
+ #else
+-#include <linux/netfilter_ipv4/ip_nat.h>
++#  if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,22)
++#    include <linux/netfilter/nf_nat.h>
++#  else
++#    include <linux/netfilter_ipv4/ip_nat.h>
++#  endif
+ #endif
+ #include <arpa/inet.h> /* inet_addr */
+ #include "globals.h"
  #include "util.h"
  #include "iptc.h"
  
@@ -12,7 +29,7 @@ diff -ur linuxigd-1.0.orig/iptc.c linuxigd-1.0/iptc.c
  struct ipt_natinfo
  {
  	struct ipt_entry_target t;
-@@ -49,7 +51,7 @@
+@@ -49,7 +57,7 @@
                     const char *dnat_to,
                     const int append)
  {
@@ -21,7 +38,7 @@ diff -ur linuxigd-1.0.orig/iptc.c linuxigd-1.0/iptc.c
  	struct ipt_entry *chain_entry;
  	struct ipt_entry_match *entry_match = NULL;
  	struct ipt_entry_target *entry_target = NULL;
-@@ -126,15 +128,15 @@
+@@ -126,15 +134,15 @@
  		return;
  	}
  	if (append)
@@ -40,7 +57,7 @@ diff -ur linuxigd-1.0.orig/iptc.c linuxigd-1.0/iptc.c
  	if (!result) {
  	  trace(1, "libiptc error: Commit error, %s", iptc_strerror(errno));
  		return;
-@@ -159,7 +161,7 @@
+@@ -159,7 +167,7 @@
                        const char *target,
                        const char *dnat_to)
  {
@@ -49,7 +66,7 @@ diff -ur linuxigd-1.0.orig/iptc.c linuxigd-1.0/iptc.c
  	const struct ipt_entry *e;
  	ipt_chainlabel labelit;
  	int i, result;
-@@ -182,7 +184,7 @@
+@@ -182,7 +190,7 @@
  	}
  	
  	/* check through rules to find match */
@@ -58,7 +75,7 @@ diff -ur linuxigd-1.0.orig/iptc.c linuxigd-1.0/iptc.c
  		if (s_src != INADDR_NONE && e->ip.src.s_addr != s_src) continue;
  		if (s_dest != INADDR_NONE && e->ip.dst.s_addr != s_dest) continue;
  		if (iniface && strcmp(e->ip.iniface, iniface) != 0) continue;
-@@ -190,7 +192,7 @@
+@@ -190,7 +198,7 @@
  		if (protocol && strcmp(protocol, "TCP") == 0 && e->ip.proto != IPPROTO_TCP) continue;
  		if (protocol && strcmp(protocol, "UDP") == 0 && e->ip.proto != IPPROTO_UDP) continue;
  		if ((srcports || destports) && IPT_MATCH_ITERATE(e, matchcmp, srcports, destports) == 0) continue;
@@ -67,7 +84,7 @@ diff -ur linuxigd-1.0.orig/iptc.c linuxigd-1.0/iptc.c
  		if (dnat_to && strcmp(target, "DNAT") == 0) {
  			struct ipt_entry_target *t;
  			struct ip_nat_multi_range *mr;
-@@ -214,12 +216,12 @@
+@@ -214,12 +222,12 @@
  		break;
  	}
  	if (!e) return;
@@ -82,4 +99,3 @@ diff -ur linuxigd-1.0.orig/iptc.c linuxigd-1.0/iptc.c
  	if (!result) {
  	  trace(1, "libiptc error: Commit error, %s", iptc_strerror(errno));
  		return;
-Only in linuxigd-1.0: iptc.o

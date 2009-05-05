@@ -21,6 +21,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=iptables libupnp
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/kernel.mk
 
 define Package/linuxigd
   SECTION:=net
@@ -41,7 +42,7 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)  \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -DIPTABLES_143" \
 		BINDIR="/usr/sbin" \
 		MANDIR="/usr/man" \
 		HAVE_LIBIPTC=1 \
