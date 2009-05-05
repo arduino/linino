@@ -1,0 +1,11 @@
+--- djbdns-1.05.original/dns_rcip.c	2001-02-11 21:11:45.000000000 +0000
++++ djbdns-1.05/dns_rcip.c	2003-11-03 14:55:10.000000000 +0000
+@@ -17,7 +17,7 @@
+   x = env_get("DNSCACHEIP");
+   if (x)
+     while (iplen <= 60) {
+-      if (*x == '.')
++      if (*x == ' ' || *x == '\t' || *x == '\n')
+ 	++x;
+       else {
+         i = ip4_scan(x,ip + iplen);

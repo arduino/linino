@@ -1,0 +1,89 @@
+#
+# This patch to djbdns 1.05 modifies the dnscache program to keep a
+# counter of cache hits and cache misses.
+#
+# Two new fields are added to the ``stats'' output line:
+#  . the fifth number is the number of cache hits
+#  . the sixth number is the number of cache misses
+# e.g.
+#  @400000003fa92ccc317d70f4 stats 3 1201 1 0 21 49
+# indicates 21 hits and 49 misses.
+#
+# James Raftery <james@now.ie>  6 Nov. 2003
+#
+--- djbdns-1.05.orig/cache.c	Sun Feb 11 21:11:45 2001
++++ djbdns-1.05/cache.c	Wed Nov  5 17:21:06 2003
+@@ -7,6 +7,11 @@
+ 
+ uint64 cache_motion = 0;
+ 
++/* record cache stats */
++/* James Raftery <james@now.ie> 6 Nov. 2003 */
++uint64 cache_hit = 0;
++uint64 cache_miss = 0;
++
+ static char *x = 0;
+ static uint32 size;
+ static uint32 hsize;
+@@ -112,15 +117,20 @@
+         if (u > size - pos - 20 - keylen) cache_impossible();
+         *datalen = u;
+ 
++        cache_hit++;
+         return x + pos + 20 + keylen;
+       }
+     }
+     nextpos = prevpos ^ get4(pos);
+     prevpos = pos;
+     pos = nextpos;
+-    if (++loop > 100) return 0; /* to protect against hash flooding */
++    if (++loop > 100) { /* to protect against hash flooding */
++      cache_miss++;
++      return 0;
++    }
+   }
+ 
++  cache_miss++;
+   return 0;
+ }
+ 
+--- djbdns-1.05.orig/cache.h	Sun Feb 11 21:11:45 2001
++++ djbdns-1.05/cache.h	Wed Nov  5 17:13:36 2003
+@@ -5,6 +5,12 @@
+ #include "uint64.h"
+ 
+ extern uint64 cache_motion;
++
++/* record cache stats */
++/* James Raftery <james@now.ie> 6 Nov. 2003 */
++extern uint64 cache_hit;
++extern uint64 cache_miss;
++
+ extern int cache_init(unsigned int);
+ extern void cache_set(const char *,unsigned int,const char *,unsigned int,uint32);
+ extern char *cache_get(const char *,unsigned int,unsigned int *,uint32 *);
+--- djbdns-1.05.orig/log.c	Sun Feb 11 21:11:45 2001
++++ djbdns-1.05/log.c	Wed Nov  5 17:21:12 2003
+@@ -276,6 +276,12 @@
+ {
+   extern uint64 numqueries;
+   extern uint64 cache_motion;
++
++  /* record cache stats */
++  /* James Raftery <james@now.ie> 6 Nov. 2003 */
++  extern uint64 cache_hit;
++  extern uint64 cache_miss;
++
+   extern int uactive;
+   extern int tactive;
+ 
+@@ -283,6 +289,8 @@
+   number(numqueries); space();
+   number(cache_motion); space();
+   number(uactive); space();
+-  number(tactive);
++  number(tactive); space();
++  number(cache_hit); space();
++  number(cache_miss);
+   line();
+ }
