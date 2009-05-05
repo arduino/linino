@@ -29,7 +29,7 @@ define Package/xf86-video-glamo
   SECTION:=xorg-driver
   CATEGORY:=Xorg
   SUBMENU:=driver
-  URL:=http://github.com/larsclausen/xf86-video-glamo/tree/xf86-video-glamo
+  URL:=http://git.openmoko.org/?p=xf86-video-glamo.git
   DEPENDS:=@DISPLAY_SUPPORT @arm||armeb +xserver-xorg +util-macros
 endef
 
