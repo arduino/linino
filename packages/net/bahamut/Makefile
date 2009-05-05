@@ -25,6 +25,9 @@ define Package/bahamut
   URL:=http://bahamut.dal.net
 endef
 
+TARGET_CFLAGS += \
+	-DSYS_ERRLIST_DECLARED
+
 define Build/Configure
 	$(call Build/Configure/Default,\
 		--with-maxconnections=64 \
