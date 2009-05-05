@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aiccu
 PKG_VERSION:=20070115
-PKG_RELEASE:=2
+PKG_RELEASE:=2.1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sixxs.net/archive/sixxs/aiccu/unix
@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/aiccu
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+libpthread +ntpclient +ip +kmod-sit
+  DEPENDS:=+libpthread +ntpclient +ip +kmod-sit +kmod-tun
   TITLE:=SixXS Automatic IPv6 Connectivity Client Utility
   URL:=http://www.sixxs.net/tools/aiccu/
 endef
