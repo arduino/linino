@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cyassl
-PKG_VERSION:=0.9.9
+PKG_VERSION:=1.0.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).zip
 PKG_SOURCE_URL:=http://www.yassl.com/
-PKG_MD5SUM:=2fe084425e7c049d4f03ceed6b61af52
+PKG_MD5SUM:=23b8d695846cb5fb7eeddc5991d3c179
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
