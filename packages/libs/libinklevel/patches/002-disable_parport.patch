@@ -1,16 +1,19 @@
---- libinklevel-0.7.3.orig/linux.c	2008-12-10 17:09:05.052017664 +0100
-+++ libinklevel-0.7.3/linux.c	2008-12-10 17:19:59.362144646 +0100
-@@ -8,7 +8,9 @@
- 
- #include "inklevel.h"
+--- a/linux.c
++++ b/linux.c
+@@ -16,10 +16,11 @@
+ #include <string.h>
+ #include <sys/ioctl.h>
  
 +#ifdef WITH_PARPORT
+ /* ieee1284.h uses HAVE_IEEE1284_H, so we undefine it */
+ #undef HAVE_IEEE1284_H
  #include <ieee1284.h>
+-
 +#endif
- 
- #include <stdio.h>
- #include <sys/types.h>
-@@ -30,7 +32,9 @@ int open_printer_device(const int port, 
+ #include "internal.h"
+ #include "inklevel.h"
+ #include "platform_specific.h"
+@@ -32,7 +33,9 @@
  
  int get_device_id(const int port, const char *device_file, 
                    const int portnumber, char *device_id) {
@@ -20,7 +23,7 @@
    char tmp[BUFLEN];
    char device_file1[256];
    char device_file2[256];
-@@ -39,6 +43,7 @@ int get_device_id(const int port, const 
+@@ -41,6 +44,7 @@ int get_device_id(const int port, const 
    char *c;
    int realsize;
  
@@ -28,7 +31,7 @@
    if (port == PARPORT ) {
      /* check if we have appropiate permissions */
  
-@@ -71,7 +76,9 @@ int get_device_id(const int port, const 
+@@ -73,7 +77,9 @@ int get_device_id(const int port, const 
  
      return COULD_NOT_GET_DEVICE_ID;
  
@@ -39,7 +42,7 @@
  
      if (port == USB) {
        sprintf(device_file1, "/dev/usb/lp%d", portnumber);
-@@ -132,8 +139,10 @@ int open_printer_device(const int port, 
+@@ -138,8 +144,10 @@ int open_printer_device(const int port, 
    if (port == USB) {
      sprintf(device_file1, "/dev/usb/lp%d", portnumber);
      sprintf(device_file2, "/dev/usblp%d", portnumber);

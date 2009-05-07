@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libinklevel
-PKG_VERSION:=0.7.3
+PKG_VERSION:=0.8.0rc2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/libinklevel
-PKG_MD5SUM:=c7ccefec29d1d218d1aae240f6044fe1
+PKG_MD5SUM:=91ef91dd5c6338789ad5ae85134d7d0a
 
 include $(INCLUDE_DIR)/package.mk
 
