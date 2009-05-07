@@ -30,9 +30,27 @@ define Package/php5/Default/description
  suited for Web development and can be embedded into HTML.
 endef
 
+define Package/php5/config
+       choice
+               prompt "PHP5 SPL Options"
+               default PACKAGE_php5_without_spl
+
+       config PACKAGE_php5_with_spl
+               bool "With SPL (and pcre) static"
+
+       config PACKAGE_php5_without_spl
+               bool "without SPL (pcre may be enabled)"
+       endchoice
+endef
+
 define Package/php5
   $(call Package/php5/Default)
-  DEPENDS:=+libopenssl +zlib
+	ifneq ($(CONFIG_PACKAGE_php5_with_spl),)
+  		DEPENDS:=+libopenssl +zlib
+		CONFIG_PACKAGE_php5-mod-pcre:=
+	else
+  		DEPENDS:=+libopenssl +zlib +libpcre
+	endif
 endef
 
 define Package/php5/description
@@ -183,7 +201,6 @@ PKG_CONFIGURE_OPTS:= \
 	--disable-rpath \
 	--disable-debug \
 	--without-pear \
-	--disable-spl \
 	\
 	--with-config-file-path=/etc \
 	--disable-ipv6 \
@@ -225,7 +242,11 @@ ifneq ($(SDK),)
   CONFIG_PACKAGE_php5-mod-gmp:=m
   CONFIG_PACKAGE_php5-mod-ldap:=m
   CONFIG_PACKAGE_php5-mod-mysql:=m
-  CONFIG_PACKAGE_php5-mod-pcre:=m
+  ifneq ($(CONFIG_PACKAGE_php5_with_spl),)
+	CONFIG_PACKAGE_php5-mod-pcre:=n
+  else
+	CONFIG_PACKAGE_php5-mod-pcre:=m
+  endif
   CONFIG_PACKAGE_php5-mod-pgsql:=m
   CONFIG_PACKAGE_php5-mod-sqlite:=m
   CONFIG_PACKAGE_php5-mod-xml:=m
@@ -265,10 +286,16 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-mysql),)
 else
   PKG_CONFIGURE_OPTS+= --without-mysql
 endif
+ifneq ($(CONFIG_PACKAGE_php5_with_spl),)
+  PKG_CONFIGURE_OPTS+= --with-pcre-dir="$(STAGING_DIR)/usr"
+  PKG_CONFIGURE_OPTS+= --enable-spl
+else
+  PKG_CONFIGURE_OPTS+= --disable-spl
 ifneq ($(CONFIG_PACKAGE_php5-mod-pcre),)
   PKG_CONFIGURE_OPTS+= --with-pcre-regex=shared,"$(STAGING_DIR)/usr"
 else
   PKG_CONFIGURE_OPTS+= --without-pcre-regex
+endif
 endif
 ifneq ($(CONFIG_PACKAGE_php5-mod-pgsql),)
   PKG_CONFIGURE_OPTS+= --with-pgsql=shared,"$(STAGING_DIR)/usr"
@@ -404,7 +431,8 @@ define BuildPlugin
   define Package/$(1)/install
 	[ -z "$(2)" ] || $(INSTALL_DIR) $$(1)/usr/lib/php
 	for m in $(2); do \
-		$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/$$$$$$$${m}.so $$(1)/usr/lib/php/ ; \
+		[ -z "$(CONFIG_PACKAGE_$(1))" ] \
+			 || $(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/$$$$$$$${m}.so $$(1)/usr/lib/php/ ; \
 	done
   endef
 
