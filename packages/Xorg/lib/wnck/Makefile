@@ -8,24 +8,32 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libwnck
-PKG_VERSION:=2.22.3
-PKG_RELEASE:=3
+PKG_VERSION:=2.26.1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/2.22/
-PKG_MD5SUM:=12cf787efa0b9d95bc53613bcc7d958e
+PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/2.26/
+PKG_MD5SUM:=015b5d2e65d15448fa143513fce03541
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/ \
-              -I$(STAGING_DIR)/usr/lib/libiconv/include/
-EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
-               -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+TARGET_CFLAGS+= \
+	-I$(STAGING_DIR)/usr/lib/libintl/include/ \
+	-I$(STAGING_DIR)/usr/lib/libiconv/include/ \
+	$(FPIC)
+
+TARGET_LDFLAGS+= \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib/ \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib
 
 define Package/libwnck
-  SECTION:=libs
-  CATEGORY:=Libraries
+  SECTION:=xorg-libs
+  CATEGORY:=Xorg
+  SUBMENU:=libraries
   TITLE:=Window Navigator Construction Kit
   URL:=http://ftp.gnome.org/
   DEPENDS:=+gtk2 +glib2 +libXext
@@ -33,13 +41,6 @@ endef
 
 define Package/libwnck/description
 Window Navigator Construction Kit
-endef
-
-TARGET_CFLAGS += $(FPIC)
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
 define Build/InstallDev
