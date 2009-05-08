@@ -93,10 +93,6 @@ $(eval $(call RequireCommand,gawk, \
 	Please install GNU awk. \
 ))
 
-$(eval $(call RequireCommand,bison, \
-	Please install GNU bison. \
-))
-
 $(eval $(call RequireCommand,flex, \
 	Please install flex. \
 ))
@@ -135,10 +131,6 @@ $(eval $(call Require,gnutar, \
 
 $(eval $(call RequireCommand,svn, \
 	Please install the subversion client. \
-))
-
-$(eval $(call RequireCommand,autoconf, \
-	Please install GNU autoconf. \
 ))
 
 define Require/gnu-find
