@@ -30,7 +30,7 @@ define Build/Install
 endef
 
 define Build/Clean
-	export SHELL="$(BASH)"; $(MAKE) -C $(PKG_BUILD_DIR) uninstall
+	-export SHELL="$(BASH)"; $(MAKE) -C $(PKG_BUILD_DIR) uninstall
 	$(call Build/Clean/Default)
 endef
 

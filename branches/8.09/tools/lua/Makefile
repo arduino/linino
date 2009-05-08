@@ -34,7 +34,6 @@ define Build/Install
 endef
 
 define Build/Clean
-	$(MAKE) -C $(PKG_BUILD_DIR)/src clean
 	rm -f $(PKG_BUILD_DIR)/src/luac-host
 	$(call Build/Clean/Default)
 endef

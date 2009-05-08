@@ -28,7 +28,6 @@ ifneq ($(strip $(shell which ccache >/dev/null && echo found)),found)
 
   define Build/Clean
 	-$(MAKE) -C $(PKG_BUILD_DIR) uninstall
-	-$(MAKE) -C $(PKG_BUILD_DIR) clean
 	$(call Build/Clean/Default)
   endef
 else
