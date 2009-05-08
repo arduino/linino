@@ -4,40 +4,27 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=madwifi
 
-ifneq ($(CONFIG_MADWIFI_UPSTREAM),)
-  PKG_VERSION:=0.9.4
-  PKG_RELEASE:=2.1
+PKG_REV:=3314
+PKG_VERSION:=r$(PKG_REV)
+PKG_RELEASE:=2
 
-  PKG_SOURCE:=madwifi-$(PKG_VERSION).tar.gz
-  PKG_SOURCE_URL:=http://downloads.sourceforge.net/madwifi/
-  PKG_MD5SUM:=399d20de8d855a59f20058857c2178ad
+PKG_SOURCE_PROTO:=svn
+PKG_SOURCE_VERSION:=$(PKG_REV)
+PKG_SOURCE_SUBDIR:=$(if $(PKG_BRANCH),$(PKG_BRANCH),madwifi-trunk)-$(PKG_VERSION)
+PKG_SOURCE_URL:=http://svn.madwifi.org/madwifi/$(if $(PKG_BRANCH),branches/$(PKG_BRANCH),trunk)
+PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
 
-  PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/madwifi-$(PKG_VERSION)
+PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/$(if $(PKG_BRANCH),$(PKG_BRANCH),madwifi-trunk)-$(PKG_VERSION)
 
-  PATCH_DIR=./patches-upstream
-else
-# PKG_BRANCH:=madwifi-dfs
-  PKG_REV:=3314
-  PKG_VERSION:=r$(PKG_REV)
-  PKG_RELEASE:=2.1
+PATCH_DIR=./patches
 
-  PKG_SOURCE_PROTO:=svn
-  PKG_SOURCE_VERSION:=$(PKG_REV)
-  PKG_SOURCE_SUBDIR:=$(if $(PKG_BRANCH),$(PKG_BRANCH),madwifi-trunk)-$(PKG_VERSION)
-  PKG_SOURCE_URL:=http://svn.madwifi.org/madwifi/$(if $(PKG_BRANCH),branches/$(PKG_BRANCH),trunk)
-  PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
-
-  PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/$(if $(PKG_BRANCH),$(PKG_BRANCH),madwifi-trunk)-$(PKG_VERSION)
-
-  PATCH_DIR=./patches
-endif
+PKG_BUILD_DEPENDS:=wprobe
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -150,7 +137,7 @@ define KernelPackage/madwifi
   SUBMENU:=Wireless Drivers
   TITLE:=Driver for Atheros wireless chipsets
   URL:=http://madwifi.org/
-  DEPENDS:=+wireless-tools @PCI_SUPPORT||TARGET_atheros @!TARGET_avr32
+  DEPENDS:=+wireless-tools @PCI_SUPPORT||TARGET_atheros @!TARGET_avr32 @!TARGET_etrax @LINUX_2_6
   FILES:=$(MADWIFI_FILES)
   AUTOLOAD:=$(call AutoLoad,50,$(MADWIFI_AUTOLOAD))
 endef
@@ -163,6 +150,16 @@ define KernelPackage/madwifi/config
 	source "$(SOURCE)/Config.in"
 endef
 
+MADWIFI_INC = \
+	-I$(PKG_BUILD_DIR) \
+	-I$(PKG_BUILD_DIR)/include \
+	-I$(PKG_BUILD_DIR)/hal \
+	-I$(PKG_BUILD_DIR)/ath \
+	-I$(PKG_BUILD_DIR)/ath_hal \
+	-I$(PKG_BUILD_DIR)/net80211 \
+	-I$(STAGING_DIR)/usr/include/wprobe \
+	-include $(PKG_BUILD_DIR)/include/compat.h
+
 MAKE_ARGS:= \
 	PATH="$(TARGET_PATH)" \
 	ARCH="$(LINUX_KARCH)" \
@@ -174,6 +171,7 @@ MAKE_ARGS:= \
 	LDOPTS="--no-warn-mismatch " \
 	ATH_RATE="ath_rate/$(RATE_CONTROL)" \
 	DO_MULTI=1 \
+	INCS="$(MADWIFI_INC)" \
 	$(if $(CONFIG_MADWIFI_DEBUG),,DEBUG=) WARNINGS="-Wno-unused"
 
 MAKE_VARS:= \

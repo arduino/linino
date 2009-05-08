@@ -23,6 +23,7 @@ define Package/libnl
   CATEGORY:=Libraries
   TITLE:=netlink socket library
   URL:=http://people.suug.ch/~tgr/libnl/
+  DEPENDS:=@!LINUX_2_4
 endef
 
 define Package/libnl/description
