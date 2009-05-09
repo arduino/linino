@@ -5,7 +5,7 @@
 # See /LICENSE for more information.
 #
 
-DOWNLOAD_RDEP:=$(STAMP_PREPARED)
+DOWNLOAD_RDEP=$(STAMP_PREPARED)
 
 # Try to guess the download method from the URL
 define dl_method 
@@ -53,7 +53,7 @@ define DownloadMethod/cvs
                 cd $(TMP_DIR)/dl && \
                 rm -rf $(SUBDIR) && \
                 [ \! -d $(SUBDIR) ] && \
-                cvs -d $(URL) co -r $(VERSION) $(SUBDIR) && \
+                cvs -d $(URL) co $(VERSION) $(SUBDIR) && \
                 find $(SUBDIR) -name CVS | xargs rm -rf && \
                 echo "Packing checkout..." && \
                 $(call dl_pack,$(TMP_DIR)/dl/$(FILE),$(SUBDIR)) && \
@@ -132,7 +132,9 @@ define Download
     endif
   )
 
-  $(if $(DOWNLOAD_RDEP),$(DOWNLOAD_RDEP): $(DL_DIR)/$(FILE))
+  $(foreach dep,$(DOWNLOAD_RDEP),
+    $(dep): $(DL_DIR)/$(FILE)
+  )
   download: $(DL_DIR)/$(FILE)
 
   $(DL_DIR)/$(FILE):

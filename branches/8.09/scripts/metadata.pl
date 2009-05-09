@@ -375,7 +375,7 @@ sub mconf_depends {
 	my $res;
 	my $dep = shift;
 	my $seen = shift;
-	my $condition = shift;
+	my $parent_condition = shift;
 	$dep or $dep = {};
 	$seen or $seen = {};
 
@@ -386,6 +386,7 @@ sub mconf_depends {
 		$depend =~ s/^([@\+]+)//;
 		my $flags = $1;
 		my $vdep;
+		my $condition = $parent_condition;
 
 		if ($depend =~ /^(.+):(.+)$/) {
 			if ($1 ne "PACKAGE_$pkgname") {
@@ -522,6 +523,20 @@ EOF
 	}
 }
 
+sub get_conditional_dep($$) {
+	my $condition = shift;
+	my $depstr = shift;
+	if ($condition) {
+		if ($condition =~ /^!(.+)/) {
+			return "\$(if \$(CONFIG_$1),,$depstr)";
+		} else {
+			return "\$(if \$(CONFIG_$condition),$depstr)";
+		}
+	} else {
+		return $depstr;
+	}
+}
+
 sub gen_package_mk() {
 	my %conf;
 	my %dep;
@@ -553,6 +568,10 @@ sub gen_package_mk() {
 		next if $done{$pkg->{src}};
 		$done{$pkg->{src}} = 1;
 
+		if (@{$pkg->{buildtypes}} > 0) {
+			print "buildtypes-$pkg->{subdir}$pkg->{src} = ".join(' ', @{$pkg->{buildtypes}})."\n";
+		}
+
 		foreach my $spkg (@{$srcpackage{$pkg->{src}}}) {
 			foreach my $dep (@{$spkg->{depends}}, @{$spkg->{builddepends}}) {
 				$dep =~ /@/ or do {
@@ -561,16 +580,59 @@ sub gen_package_mk() {
 				};
 			}
 		}
+		foreach my $type (@{$pkg->{buildtypes}}) {
+			my @extra_deps;
+			my %deplines;
+
+			next unless $pkg->{"builddepends/$type"};
+			foreach my $dep (@{$pkg->{"builddepends/$type"}}) {
+				my $suffix = "";
+				my $condition;
+
+				if ($dep =~ /^(.+):(.+)/) {
+					$condition = $1;
+					$dep = $2;
+				}
+				if ($dep =~ /^(.+)(\/.+)/) {
+					$dep = $1;
+					$suffix = $2;
+				}
+				my $pkg_dep = $package{$dep};
+				next unless $pkg_dep;
+
+				my $idx = "";
+				if (defined $pkg_dep->{src}) {
+					$idx = $pkg_dep->{subdir}.$pkg_dep->{src};
+				} elsif (defined($srcpackage{$dep})) {
+					$idx = $subdir{$dep}.$dep;
+				}
+				my $depstr = "\$(curdir)/$idx$suffix/compile";
+				my $depline = get_conditional_dep($condition, $depstr);
+				if ($depline) {
+					$deplines{$dep} = $depline;
+				}
+			}
+			my $depline = join(" ", values %deplines);
+			if ($depline) {
+				$line .= "\$(curdir)/".$pkg->{subdir}."$pkg->{src}/$type/compile += $depline\n";
+			}
+		}
 
 		my $hasdeps = 0;
 		my %deplines;
 		foreach my $deps (@srcdeps) {
 			my $idx;
 			my $condition;
+			my $prefix = "";
+			my $suffix = "";
 
 			if ($deps =~ /^(.+):(.+)/) {
 				$condition = $1;
 				$deps = $2;
+			}
+			if ($deps =~ /^(.+)(\/.+)/) {
+				$deps = $1;
+				$suffix = $2;
 			}
 
 			my $pkg_dep = $package{$deps};
@@ -585,14 +647,15 @@ sub gen_package_mk() {
 			foreach my $dep (@deps) {
 				$pkg_dep = $package{$deps};
 				if (defined $pkg_dep->{src}) {
-					($pkg->{src} ne $pkg_dep->{src}) and $idx = $pkg_dep->{subdir}.$pkg_dep->{src};
+					($pkg->{src} ne $pkg_dep->{src}.$suffix) and $idx = $pkg_dep->{subdir}.$pkg_dep->{src};
 				} elsif (defined($srcpackage{$dep})) {
 					$idx = $subdir{$dep}.$dep;
 				}
+				$idx .= $suffix;
 				undef $idx if $idx =~ /^(kernel)|(base-files)$/;
 				if ($idx) {
 					my $depline;
-					next if $pkg->{src} eq $pkg_dep->{src};
+					next if $pkg->{src} eq $pkg_dep->{src}.$suffix;
 					next if $dep{$pkg->{src}."->".$idx};
 					next if $dep{$pkg->{src}."->($dep)".$idx} and $pkg_dep->{vdepends};
 					my $depstr;
@@ -604,15 +667,7 @@ sub gen_package_mk() {
 						$depstr = "\$(curdir)/$idx/compile";
 						$dep{$pkg->{src}."->".$idx} = 1;
 					}
-					if ($condition) {
-						if ($condition =~ /^!(.+)/) {
-							$depline = "\$(if \$(CONFIG_$1),,$depstr)";
-						} else {
-							$depline = "\$(if \$(CONFIG_$condition),$depstr)";
-						}
-					} else {
-						$depline = $depstr;
-					}
+					$depline = get_conditional_dep($condition, $depstr);
 					if ($depline) {
 						$deplines{$idx.$dep} = $depline;
 					}
@@ -650,6 +705,16 @@ EOF
 	}
 }
 
+sub gen_package_source() {
+	parse_package_metadata($ARGV[0]) or exit 1;
+	foreach my $name (sort {uc($a) cmp uc($b)} keys %package) {
+		my $pkg = $package{$name};
+		if ($pkg->{name} && $pkg->{source}) {
+			print "$pkg->{name}: ";
+			print "$pkg->{source}\n";
+		}
+	}
+}
 
 sub parse_command() {
 	my $cmd = shift @ARGV;
@@ -658,6 +723,7 @@ sub parse_command() {
 		/^package_mk$/ and return gen_package_mk();
 		/^package_config$/ and return gen_package_config();
 		/^kconfig/ and return gen_kconfig_overrides();
+		/^package_source$/ and return gen_package_source();
 	}
 	print <<EOF
 Available Commands:
@@ -665,6 +731,7 @@ Available Commands:
 	$0 package_mk [file]		Package metadata in makefile format
 	$0 package_config [file] 	Package metadata in Kconfig format
 	$0 kconfig [file] [config]	Kernel config overrides
+	$0 package_source [file] 	Package source file information
 
 EOF
 }

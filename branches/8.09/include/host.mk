@@ -6,7 +6,9 @@
 #
 
 TMP_DIR ?= $(TOPDIR)/tmp
--include $(TMP_DIR)/.host.mk
+ifeq ($(if $(TARGET_BUILD),,$(DUMP)),)
+  -include $(TMP_DIR)/.host.mk
+endif
 
 export TAR FIND
 

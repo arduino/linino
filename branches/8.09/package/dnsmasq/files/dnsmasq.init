@@ -36,6 +36,14 @@ append_parm() {
 	append args "$switch $_loctmp"
 }
 
+append_server() {
+	append args "-S $1"
+}
+
+append_interface() {
+	append args "-i $1"
+}
+
 dnsmasq() {
 	local cfg="$1"
 	append_bool "$cfg" authoritative "-K"
@@ -53,6 +61,7 @@ dnsmasq() {
 	append_bool "$cfg" boguspriv "-b"
 	append_bool "$cfg" expandhosts "-E"
 	append_bool "$cfg" enable_tftp "--enable-tftp"
+	append_bool "$cfg" nonwildcard "-z"
 
 	append_parm "$cfg" dnsforwardmax "-0"
 	append_parm "$cfg" port "-p"
@@ -62,6 +71,8 @@ dnsmasq() {
 	append_parm "$cfg" "queryport" "-Q"
 	append_parm "$cfg" "domain" "-s"
 	append_parm "$cfg" "local" "-S"
+	config_list_foreach "$cfg" "server" append_server
+	config_list_foreach "$cfg" "interface" append_interface
 	append_parm "$cfg" "leasefile" "-l"
 	append_parm "$cfg" "resolvfile" "-r"
 	append_parm "$cfg" "tftp_root" "--tftp-root"
@@ -177,7 +188,6 @@ dhcp_boot_add() {
 	local cfg="$1"
 
 	config_get name "$cfg" name
-	[ -n "$name" ] || return 0
 
 	config_get filename "$cfg" filename
 	[ -n "$filename" ] || return 0
@@ -188,7 +198,7 @@ dhcp_boot_add() {
 	config_get serveraddress "$cfg" serveraddress
 	[ -n "$serveraddress" ] || return 0
 
-	append args "--dhcp-boot=net:$name,$filename,$servername,$serveraddress"
+	append args "--dhcp-boot=${name:+net:$name,}$filename,$servername,$serveraddress"
 
 	dhcp_option_add "$cfg" "$name"
 }
@@ -210,7 +220,7 @@ dhcp_add() {
 		DNS_SERVERS="$DNS_SERVERS $dnsserver"
 	}
 
-	append_bool "$cfg" ignore "-2 $ifname"
+	append_bool "$cfg" ignore "-2 $ifname" && return 0
 
 	config_get proto "$net" proto
 	[ static = "$proto" ] || return 0
@@ -222,7 +232,7 @@ dhcp_add() {
 	#check for an already active dhcp server on the interface, unless 'force' is set
 	config_get_bool force "$cfg" force 0
 	[ "$force" -gt 0 ] || {
-		udhcpc -n -q -R -s /bin/true -t 1 -i $ifname >&- && return 0
+		udhcpc -n -q -s /bin/true -t 1 -i $ifname >&- && return 0
 	}
 
 	config_get start "$cfg" start

@@ -62,7 +62,7 @@ ifneq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),y)
 
   ifeq ($(CONFIG_TARGET_ROOTFS_TGZ),y)
     define Image/mkfs/tgz
-		$(TAR) -zcf $(BIN_DIR)/openwrt-$(BOARD)-rootfs.tgz --owner=root --group=root -C $(TARGET_DIR)/ .
+		$(TAR) -zcf $(BIN_DIR)/openwrt-$(BOARD)-rootfs.tgz --numeric-owner --owner=0 --group=0 -C $(TARGET_DIR)/ .
     endef
   endif
 
@@ -103,9 +103,9 @@ endif
 
 
 define Image/mkfs/prepare/default
-	find $(TARGET_DIR) -type f -not -perm +0100 -not -name 'ssh_host*' | $(XARGS) chmod 0644
-	find $(TARGET_DIR) -type f -perm +0100 | $(XARGS) chmod 0755
-	find $(TARGET_DIR) -type d | $(XARGS) chmod 0755
+	- find $(TARGET_DIR) -type f -not -perm +0100 -not -name 'ssh_host*' | $(XARGS) chmod 0644
+	- find $(TARGET_DIR) -type f -perm +0100 | $(XARGS) chmod 0755
+	- find $(TARGET_DIR) -type d | $(XARGS) chmod 0755
 	$(INSTALL_DIR) $(TARGET_DIR)/tmp
 	chmod 0777 $(TARGET_DIR)/tmp
 endef

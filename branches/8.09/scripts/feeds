@@ -15,6 +15,14 @@ my $mk=`which gmake`;	# select the right 'make' program
 chomp($mk);		# trim trailing newline
 $mk or $mk = "make";	# default to 'make'
 
+# check version of make
+my @mkver = split /\s+/, `$mk -v`, 4;
+my $valid_mk = 1;
+$mkver[0] =~ /^GNU/ or $valid_mk = 0;
+$mkver[1] =~ /^Make/ or $valid_mk = 0;
+$mkver[2] >= "3.81" or $valid_mk = 0;
+$valid_mk or die "Unsupported version of make found: $mk\n";
+
 my @feeds;
 my %build_packages;
 my %installed;
@@ -72,7 +80,7 @@ sub update_location($$)
 		return $old_url ? 1 : 0;
 	}
 
-	return 0;	
+	return 0;
 }
 
 sub update_index($)
@@ -171,9 +179,10 @@ sub search_feed {
 		my $substr;
 		my $pkgmatch = 1;
 
+		next if $pkg->{vdepends};
 		foreach my $substr (@substr) {
 			my $match;
-			foreach my $key (qw(name title description)) {
+			foreach my $key (qw(name title description src)) {
 				$pkg->{$key} and $substr and $pkg->{$key} =~ m/$substr/i and $match = 1;
 			}
 			$match or undef $pkgmatch;
@@ -204,6 +213,7 @@ sub list_feed {
 	get_feed($feed);
 	foreach my $name (sort { lc($a) cmp lc($b) } keys %package) {
 		my $pkg = $package{$name};
+		next if $pkg->{vdepends};
 		if($pkg->{name}) {
 			printf "\%-32s\t\%s\n", $pkg->{name}, $pkg->{title};
 		}
@@ -319,10 +329,11 @@ sub install_package {
 
 	# install all dependencies
 	foreach my $vpkg (@{$srcpackage{$src}}, $pkg) {
-		foreach my $dep (@{$vpkg->{depends}}, @{$vpkg->{builddepends}}) {
+		foreach my $dep (@{$vpkg->{depends}}, @{$vpkg->{builddepends}}, @{$vpkg->{"builddepends/host"}}) {
 			next if $dep =~ /@/;
 			$dep =~ s/^\+//;
 			$dep =~ s/^.+://;
+			$dep =~ s/\/.+$//;
 			next unless $dep;
 			install_package($feed, $dep) == 0 or $ret = 1;
 		}
@@ -338,7 +349,7 @@ sub refresh_config {
 	system("rm -f tmp/.packageinfo");
 
 	# refresh the config
-	if ($default) { 
+	if ($default) {
 		system("$mk oldconfig CONFDEFAULT=\"$default\" Config.in >/dev/null 2>/dev/null");
 	} else {
 		system("$mk defconfig Config.in >/dev/null 2>/dev/null");
@@ -375,6 +386,7 @@ sub install {
 				get_feed($f->[1]);
 				foreach my $name (sort { lc($a) cmp lc($b) } keys %package) {
 					my $p = $package{$name};
+					next if $p->{vdepends};
 					if( $p->{name} ) {
 						install_package($feed, $p->{name}) == 0 or $ret = 1;
 					}

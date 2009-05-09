@@ -60,9 +60,11 @@ sub parse_package_metadata($) {
 			$pkg->{src} = $src;
 			$pkg->{makefile} = $makefile;
 			$pkg->{name} = $1;
+			$pkg->{title} = "";
 			$pkg->{default} = "m if ALL";
 			$pkg->{depends} = [];
 			$pkg->{builddepends} = [];
+			$pkg->{buildtypes} = [];
 			$pkg->{subdir} = $subdir;
 			$pkg->{tristate} = 1;
 			$package{$1} = $pkg;
@@ -73,6 +75,7 @@ sub parse_package_metadata($) {
 		/^Menu: \s*(.+)\s*$/ and $pkg->{menu} = $1;
 		/^Submenu: \s*(.+)\s*$/ and $pkg->{submenu} = $1;
 		/^Submenu-Depends: \s*(.+)\s*$/ and $pkg->{submenudep} = $1;
+		/^Source: \s*(.+)\s*$/ and $pkg->{source} = $1;
 		/^Default: \s*(.+)\s*$/ and $pkg->{default} = $1;
 		/^Provides: \s*(.+)\s*$/ and do {
 			my @vpkg = split /\s+/, $1;
@@ -90,6 +93,8 @@ sub parse_package_metadata($) {
 		/^Depends: \s*(.+)\s*$/ and $pkg->{depends} = [ split /\s+/, $1 ];
 		/^Build-Only: \s*(.+)\s*$/ and $pkg->{buildonly} = 1;
 		/^Build-Depends: \s*(.+)\s*$/ and $pkg->{builddepends} = [ split /\s+/, $1 ];
+		/^Build-Depends\/(\w+): \s*(.+)\s*$/ and $pkg->{"builddepends/$1"} = [ split /\s+/, $2 ];
+		/^Build-Types:\s*(.+)\s*$/ and $pkg->{buildtypes} = [ split /\s+/, $1 ];
 		/^Category: \s*(.+)\s*$/ and do {
 			$pkg->{category} = $1;
 			defined $category{$1} or $category{$1} = {};
@@ -104,7 +109,7 @@ sub parse_package_metadata($) {
 				$type =~ /ipkg/ and $pkg->{tristate} = 1;
 			}
 		};
-		/^Config: \s*(.*)\s*$/ and $pkg->{config} = "$1\n".get_multiline(*FILE, "\t");
+		/^Config:\s*(.*)\s*$/ and $pkg->{config} = "$1\n".get_multiline(*FILE, "\t");
 		/^Prereq-Check:/ and $pkg->{prereq} = 1;
 		/^Preconfig:\s*(.+)\s*$/ and do {
 			my $pkgname = $pkg->{name};
