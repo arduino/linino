@@ -4,7 +4,7 @@
 START=70
 
 start() {
-        [ -f /etc/keepalived/keepalived ] && /usr/sbin/keepalived
+        [ -f /etc/keepalived/keepalived.conf ] && /usr/sbin/keepalived
 }
 
 stop() {
