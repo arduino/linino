@@ -24,6 +24,7 @@ define KernelPackage/wprobe
   FILES:= \
   	$(PKG_BUILD_DIR)/kernel/wprobe.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,01,wprobe)
+  DEPENDS:=@!LINUX_2_4
 endef
 
 define KernelPackage/wprobe/description
