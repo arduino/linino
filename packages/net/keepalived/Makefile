@@ -44,10 +44,10 @@ CONFIGURE_ARGS+= \
 	--disable-strip \
 	--disable-lvs \
 	--disable-lvs-syncd \
-	--with-kernel-dir="$(LINUX_DIR)" \
+	--with-kernel-dir="$(LINUX_DIR)"
 
 CONFIGURE_VARS+= \
-	ac_cv_file_$(call acvar,$(LINUX_DIR)/net/core/link_watch.c)=yes \
+	ac_cv_file_$(call acvar,$(LINUX_DIR)/net/core/link_watch.c)=yes
 
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
