@@ -48,7 +48,6 @@ CONFIGURE_ARGS+= \
 
 CONFIGURE_VARS+= \
 	ac_cv_file_$(call acvar,$(LINUX_DIR)/net/core/link_watch.c)=yes \
-	VRRP_SUPPORT=yes \
 
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
