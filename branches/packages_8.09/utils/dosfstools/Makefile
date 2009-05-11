@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -53,7 +53,7 @@ define Package/dosfstools/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dosfsck $(1)/usr/sbin/
 	(cd $(1)/usr/sbin; ln -sf dosfsck fsck.msdos; ln -sf dosfsck fsck.vfat)
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/mkdosfs $(1)/usr/sbin/
-	(cd $(1)/usr/sbin; ln -sf mkdofs mkfs.msdos; ln -sf mkdofs mkfs.vfat)
+	(cd $(1)/usr/sbin; ln -sf mkdosfs mkfs.msdos; ln -sf mkdosfs mkfs.vfat)
 endef
 
 $(eval $(call BuildPackage,dosfstools))
