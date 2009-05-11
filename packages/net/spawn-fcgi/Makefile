@@ -8,14 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=spawn-fcgi
-PKG_VERSION:=1.6.1
+PKG_VERSION:=1.6.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.lighttpd.net/download/
-PKG_MD5SUM:=ae893d12943fd4cd38a0a38835263c80
+PKG_MD5SUM:=f74a8f4d8e379c53926b5eeef84b381c
 
-PKG_FIXUP = libtool
 PKG_INSTALL = 1
 
 include $(INCLUDE_DIR)/package.mk
