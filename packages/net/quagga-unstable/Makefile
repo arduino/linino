@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=quagga-unstable
-PKG_VERSION:=0.99.11
+PKG_VERSION:=0.99.12
 PKG_RELEASE:=2
-PKG_MD5SUM:=903e40c744730ad4d62bee872eeb813b
+PKG_MD5SUM:=d2bb513f4ac113dbb300c15a0bd0a241
 
 PKG_SOURCE_URL:=http://www.quagga.net/download/ \
                 http://www.de.quagga.net/download/ \
@@ -35,10 +35,9 @@ define Package/quagga-unstable
 endef
 
 define Package/quagga-unstable/description
-	A routing software package that provides TCP/IP based routing services
-	with routing protocols support such as RIPv1, RIPv2, RIPng, OSPFv2,
-	OSPFv3, BGP-4, and BGP-4+
-
+  A routing software package that provides TCP/IP based routing services
+  with routing protocols support such as RIPv1, RIPv2, RIPng, OSPFv2,
+  OSPFv3, BGP-4, and BGP-4+
 endef
 
 define Package/quagga-unstable-libzebra
@@ -107,13 +106,13 @@ define Build/Configure
 	)
 endef
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR=$(PKG_INSTALL_DIR) \
 		all install
 endef
 
-define Package/quagga-unstable/install	
+define Package/quagga-unstable/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/zebra $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/watchquagga $(1)/usr/sbin/
@@ -128,10 +127,10 @@ endef
 
 define Package/quagga-unstable/postinst
 #!/bin/sh
-  
+
 name=quagga
 id=51
-  
+
 # do not change below
 # check if we are on real system
 if [ -z "$${IPKG_INSTROOT}" ]; then
@@ -150,18 +149,18 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 fi
 
 echo ""
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then 
+if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then
 	echo "adding group $$name to /etc/group"
-	echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group  
+	echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group
 fi
 
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then 
+if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
 	echo "adding user $$name to /etc/passwd"
 	echo "$${name}:x:$${id}:$${id}:$${name}:/tmp/.$${name}:/bin/false" >> $${IPKG_INSTROOT}/etc/passwd
 fi
 
 grep -q '^zebra[[:space:]]*2601/tcp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
-if [ $$? -ne 0 ]; then  
+if [ $$? -ne 0 ]; then
 echo "zebrasrv      2600/tcp" >>$${IPKG_INSTROOT}/etc/services
 echo "zebra         2601/tcp" >>$${IPKG_INSTROOT}/etc/services
 echo "ripd          2602/tcp" >>$${IPKG_INSTROOT}/etc/services
@@ -174,7 +173,7 @@ echo "isisd         2608/tcp" >>$${IPKG_INSTROOT}/etc/services
 fi
 endef
 
-define Package/quagga-unstable-bgpd/install	
+define Package/quagga-unstable-bgpd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/bgpd $(1)/usr/sbin/
 endef
@@ -184,27 +183,27 @@ define Package/quagga-unstable-isisd/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/isisd $(1)/usr/sbin
 endef
 
-define Package/quagga-unstable-ospfd/install	
+define Package/quagga-unstable-ospfd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ospfd $(1)/usr/sbin/
 endef
 
-define Package/quagga-unstable-ospf6d/install	
+define Package/quagga-unstable-ospf6d/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ospf6d $(1)/usr/sbin/
 endef
 
-define Package/quagga-unstable-ripd/install	
+define Package/quagga-unstable-ripd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ripd $(1)/usr/sbin/
 endef
 
-define Package/quagga-unstable-ripngd/install	
+define Package/quagga-unstable-ripngd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ripngd $(1)/usr/sbin/
 endef
 
-define Package/quagga-unstable-vtysh/install	
+define Package/quagga-unstable-vtysh/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/vtysh $(1)/usr/bin/
 endef
