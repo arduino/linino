@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeradius2
-PKG_VERSION:=2.1.1
-PKG_RELEASE:=2
+PKG_VERSION:=2.1.4
+PKG_RELEASE:=1
 
 PKG_SOURCE:=freeradius-server-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/freeradius/
@@ -35,6 +35,7 @@ endef
 define Package/freeradius2/conffiles
 /etc/freeradius2/clients.conf
 /etc/freeradius2/radiusd.conf
+/etc/freeradius2/sites/default
 endef
 
 define Package/freeradius2-democerts
@@ -49,10 +50,18 @@ define Package/freeradius2-mod-chap
   TITLE:=CHAP module
 endef
 
+define Package/freeradius2-mod-chap/conffiles
+/etc/freeradius2/modules/chap
+endef
+
 define Package/freeradius2-mod-detail
   $(call Package/freeradius2/Default)
   DEPENDS:=freeradius2
   TITLE:=Detailed accounting module
+endef
+
+define Package/freeradius2-mod-detail/conffiles
+/etc/freeradius2/modules/detail
 endef
 
 define Package/freeradius2-mod-eap
@@ -107,10 +116,52 @@ define Package/freeradius2-mod-exec
   TITLE:=EXEC module
 endef
 
+define Package/freeradius2-mod-exec/conffiles
+/etc/freeradius2/modules/exec
+endef
+
+define Package/freeradius2-mod-expiration
+  $(call Package/freeradius2/Default)
+  DEPENDS:=freeradius2
+  TITLE:=Expiration module
+endef
+
+define Package/freeradius2-mod-expiration/conffiles
+/etc/freeradius2/modules/expiration
+endef
+
+define Package/freeradius2-mod-expr
+  $(call Package/freeradius2/Default)
+  DEPENDS:=freeradius2
+  TITLE:=EXPR module
+endef
+
+define Package/freeradius2-mod-expr/conffiles
+/etc/freeradius2/modules/expr
+endef
+
+define Package/freeradius2-mod-attr-filter
+  $(call Package/freeradius2/Default)
+  DEPENDS:=freeradius2
+  TITLE:=ATTR filter module
+endef
+
+define Package/freeradius2-mod-attr-filter/conffiles
+/etc/freeradius2/modules/attr_filter
+/etc/freeradius2/attrs
+/etc/freeradius2/attrs.access_reject
+/etc/freeradius2/attrs.accounting_response
+/etc/freeradius2/attrs.pre-proxy
+endef
+
 define Package/freeradius2-mod-attr-rewrite
   $(call Package/freeradius2/Default)
   DEPENDS:=freeradius2
   TITLE:=ATTR rewrite module
+endef
+
+define Package/freeradius2-mod-attr-rewrite/conffiles
+/etc/freeradius2/modules/attr_rewrite
 endef
 
 define Package/freeradius2-mod-files
@@ -123,6 +174,7 @@ define Package/freeradius2-mod-files/conffiles
 /etc/freeradius2/acct_users
 /etc/freeradius2/preproxy_users
 /etc/freeradius2/users
+/etc/freeradius2/modules/files
 endef
 
 define Package/freeradius2-mod-ldap
@@ -133,6 +185,17 @@ endef
 
 define Package/freeradius2-mod-ldap/conffiles
 /etc/freeradius2/ldap.attrmap
+/etc/freeradius2/modules/ldap
+endef
+
+define Package/freeradius2-mod-logintime
+  $(call Package/freeradius2/Default)
+  DEPENDS:=freeradius2
+  TITLE:=Logintime module
+endef
+
+define Package/freeradius2-mod-logintime/conffiles
+/etc/freeradius2/modules/logintime
 endef
 
 define Package/freeradius2-mod-mschap
@@ -141,10 +204,18 @@ define Package/freeradius2-mod-mschap
   TITLE:=MS-CHAP and MS-CHAPv2 module
 endef
 
+define Package/freeradius2-mod-mschap/conffiles
+/etc/freeradius2/modules/mschap
+endef
+
 define Package/freeradius2-mod-pap
   $(call Package/freeradius2/Default)
   DEPENDS:=freeradius2
   TITLE:=PAP module
+endef
+
+define Package/freeradius2-mod-pap/conffiles
+/etc/freeradius2/modules/pap
 endef
 
 define Package/freeradius2-mod-preprocess
@@ -156,6 +227,7 @@ endef
 define Package/freeradius2-mod-preprocess/conffiles
 /etc/freeradius2/hints
 /etc/freeradius2/huntgroups
+/etc/freeradius2/modules/preprocess
 endef
 
 define Package/freeradius2-mod-realm
@@ -166,12 +238,17 @@ endef
 
 define Package/freeradius2-mod-realm/conffiles
 /etc/freeradius2/proxy.conf
+/etc/freeradius2/modules/realm
 endef
 
 define Package/freeradius2-mod-sql
   $(call Package/freeradius2/Default)
   DEPENDS:=freeradius2
   TITLE:=Base SQL module
+endef
+
+define Package/freeradius2-mod-sql/conffiles
+/etc/freeradius2/sql.conf
 endef
 
 define Package/freeradius2-mod-sql-mysql
@@ -198,6 +275,11 @@ define Package/freeradius2-mod-radutmp
   TITLE:=Radius UTMP module
 endef
 
+define Package/freeradius2-mod-radutmp/conffiles
+/etc/freeradius2/modules/radutmp
+/etc/freeradius2/modules/sradutmp
+endef
+
 define Package/freeradius2-utils
   $(call Package/freeradius2/Default)
   DEPENDS:=freeradius2
@@ -210,25 +292,31 @@ CONFIGURE_ARGS+= \
 	--enable-shared \
 	--disable-static \
 	--disable-developer \
+	--with-threads \
 	--with-openssl-includes="$(STAGING_DIR)/usr/include" \
 	--with-openssl-libraries="$(STAGING_DIR)/usr/lib" \
 	--enable-strict-dependencies \
 	--with-raddbdir=/etc/freeradius2 \
+	--with-radacctdir=/var/db/radacct \
+	--with-logdir=/var/log \
 	--without-edir \
 	--without-snmp \
 	--without-rlm_checkval \
-	--without-rlm_counter \
 	--without-rlm_dbm \
+	--without-rlm_counter \
+	--with-rlm_expr \
 	--with-rlm_eap \
 	--without-rlm_eap_sim \
 	--without-rlm_example \
 	--without-rlm_ippool \
 	--without-rlm_krb5 \
 	--without-rlm_otp \
+	--without-rlm_smsotp \
 	--without-rlm_pam \
 	--without-rlm_perl \
 	--without-rlm_python \
 	--without-rlm_smb \
+	--without-rlm_always \
 	--with-rlm_sql \
 	--with-rlm_sqlcounter \
 	--without-rlm_sqlhpwippool \
@@ -267,9 +355,9 @@ endif
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius2-mod-sql-mysql),)
   CONFIGURE_ARGS+= \
 		--with-mysql-include-dir="$(STAGING_DIR)/usr/include" \
-		--with-mysql-lib-dir="$(STAGING_DIR)/usr/lib/mysql" \
-		--without-threads
+		--with-mysql-lib-dir="$(STAGING_DIR)/usr/lib/mysql"
   CONFIGURE_LIBS+= -lz
+  CONFIGURE_VARS+= ac_cv_lib_mysqlclient_r_mysql_init=yes
 else
   CONFIGURE_ARGS+= --without-rlm_sql_mysql
 endif
@@ -324,6 +412,18 @@ else
   CONFIGURE_ARGS+= --without-rlm_radutmp
 endif
 
+ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius2-mod-logintime),)
+  CONFIGURE_ARGS+= --with-rlm_logintime
+else
+  CONFIGURE_ARGS+= --without-rlm_logintime
+endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius2-mod-expiration),)
+  CONFIGURE_ARGS+= --with-rlm_expiration
+else
+  CONFIGURE_ARGS+= --without-rlm_expiration
+endif
+
 CONFIGURE_VARS+= \
 	LDFLAGS="$$$$LDFLAGS" \
 	LIBS="$(CONFIGURE_LIBS)" \
@@ -334,14 +434,17 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		R="$(PKG_INSTALL_DIR)" \
 		INSTALLSTRIP="" \
-		all install
+		all certs install
 endef
 
 define Package/freeradius2/install
 	$(INSTALL_DIR) $(1)/etc/freeradius2
-	for f in clients.conf dictionary radiusd.conf; do \
+	$(INSTALL_DIR) $(1)/etc/freeradius2/modules
+	$(INSTALL_DIR) $(1)/etc/freeradius2/sites
+	for f in clients.conf dictionary radiusd.conf policy.conf; do \
 		$(CP) $(PKG_INSTALL_DIR)/etc/freeradius2/$$$${f} $(1)/etc/freeradius2/ ; \
 	done
+	$(CP) $(PKG_INSTALL_DIR)/etc/freeradius2/sites-available/default $(1)/etc/freeradius2/sites/default
 	$(INSTALL_DIR) $(1)/usr/share/freeradius2
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/freeradius/dictionary $(1)/usr/share/freeradius2/
 	$(SED) "s,^\(\$$$$INCLUDE\),#\1,g" $(1)/usr/share/freeradius2/dictionary
@@ -350,7 +453,7 @@ define Package/freeradius2/install
 		$(SED) "s,^#\(\$$$$INCLUDE dictionary\.$$$${f}\),\1,g" $(1)/usr/share/freeradius2/dictionary ; \
 	done
 	$(INSTALL_DIR) $(1)/usr/lib/freeradius2
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/freeradius2/libfreeradius-radius{,-*}.so $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/freeradius2/libfreeradius-radius{,-*}.so $(1)/usr/lib/freeradius2
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/radiusd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
@@ -364,6 +467,11 @@ define Package/freeradius2-democerts/install
 	rm -rf $(1)/etc/freeradius2/certs/new*
 	rm -rf $(1)/etc/freeradius2/certs/demoCA/index*
 	rm -rf $(1)/etc/freeradius2/certs/demoCA/serial*
+	rm -rf $(1)/etc/freeradius2/certs/bootstrap
+	rm -rf $(1)/etc/freeradius2/certs/Makefile
+	rm -rf $(1)/etc/freeradius2/certs/ca.cnf
+	rm -rf $(1)/etc/freeradius2/certs/client.cnf
+	rm -rf $(1)/etc/freeradius2/certs/server.cnf
 endef
 
 define Package/freeradius2-utils/install
@@ -375,13 +483,14 @@ endef
 
 define BuildPlugin
   define Package/$(1)/install
-	[ -z "$(2)" ] || $(INSTALL_DIR) $$(1)/usr/lib
+	[ -z "$(2)" ] || $(INSTALL_DIR) $$(1)/usr/lib/freeradius2
 	for m in $(2); do \
-		$(CP) $(PKG_INSTALL_DIR)/usr/lib/freeradius2/$$$$$$$${m}{,-*}.so $$(1)/usr/lib/ ; \
+		$(CP) $(PKG_INSTALL_DIR)/usr/lib/freeradius2/$$$$$$$${m}{,-*}.so $$(1)/usr/lib/freeradius2 ; \
 	done
 	[ -z "$(3)" ] || $(INSTALL_DIR) $$(1)/etc/freeradius2
+	[ -z "$(4)" ] || $(INSTALL_DIR) $$(1)/etc/freeradius2/$(4)
 	for f in $(3); do \
-		$(CP) $(PKG_INSTALL_DIR)/etc/freeradius2/$$$$$$$${f} $$(1)/etc/freeradius2/ ; \
+		$(CP) $(PKG_INSTALL_DIR)/etc/freeradius2/$$$$$$$${f} $$(1)/etc/freeradius2/$$$$$$$${f} ; \
 	done
   endef
 
@@ -390,8 +499,8 @@ endef
 
 $(eval $(call BuildPackage,freeradius2))
 $(eval $(call BuildPackage,freeradius2-democerts))
-$(eval $(call BuildPlugin,freeradius2-mod-chap,rlm_chap,))
-$(eval $(call BuildPlugin,freeradius2-mod-detail,rlm_detail,))
+$(eval $(call BuildPlugin,freeradius2-mod-chap,rlm_chap,modules/chap,modules,))
+$(eval $(call BuildPlugin,freeradius2-mod-detail,rlm_detail,modules/detail,modules,))
 $(eval $(call BuildPlugin,freeradius2-mod-eap,libfreeradius-eap rlm_eap,eap.conf))
 $(eval $(call BuildPlugin,freeradius2-mod-eap-gtc,rlm_eap_gtc,))
 $(eval $(call BuildPlugin,freeradius2-mod-eap-md5,rlm_eap_md5,))
@@ -399,17 +508,21 @@ $(eval $(call BuildPlugin,freeradius2-mod-eap-mschapv2,rlm_eap_mschapv2,))
 $(eval $(call BuildPlugin,freeradius2-mod-eap-peap,rlm_eap_peap,))
 $(eval $(call BuildPlugin,freeradius2-mod-eap-tls,rlm_eap_tls,))
 $(eval $(call BuildPlugin,freeradius2-mod-eap-ttls,rlm_eap_ttls,))
-$(eval $(call BuildPlugin,freeradius2-mod-exec,rlm_exec,))
-$(eval $(call BuildPlugin,freeradius2-mod-attr-rewrite,rlm_attr_rewrite))
-$(eval $(call BuildPlugin,freeradius2-mod-files,rlm_files,acct_users preproxy_users users))
-$(eval $(call BuildPlugin,freeradius2-mod-ldap,rlm_ldap,ldap.attrmap))
-$(eval $(call BuildPlugin,freeradius2-mod-mschap,rlm_mschap,))
-$(eval $(call BuildPlugin,freeradius2-mod-pap,rlm_pap,))
-$(eval $(call BuildPlugin,freeradius2-mod-preprocess,rlm_preprocess,hints huntgroups))
-$(eval $(call BuildPlugin,freeradius2-mod-realm,rlm_realm,proxy.conf))
-$(eval $(call BuildPlugin,freeradius2-mod-sql,rlm_sql,sql.conf))
+$(eval $(call BuildPlugin,freeradius2-mod-exec,rlm_exec,modules/exec modules/echo ,modules,))
+$(eval $(call BuildPlugin,freeradius2-mod-attr-rewrite,rlm_attr_rewrite,modules/attr_rewrite,modules,))
+$(eval $(call BuildPlugin,freeradius2-mod-files,rlm_files,acct_users preproxy_users users modules/files,modules,))
+$(eval $(call BuildPlugin,freeradius2-mod-ldap,rlm_ldap,ldap.attrmap modules/ldap,modules,))
+$(eval $(call BuildPlugin,freeradius2-mod-mschap,rlm_mschap,modules/mschap,modules,))
+$(eval $(call BuildPlugin,freeradius2-mod-pap,rlm_pap,modules/pap,modules,))
+$(eval $(call BuildPlugin,freeradius2-mod-preprocess,rlm_preprocess,hints huntgroups modules/preprocess,modules,))
+$(eval $(call BuildPlugin,freeradius2-mod-realm,rlm_realm,proxy.conf modules/realm modules/inner-eap,modules,))
+$(eval $(call BuildPlugin,freeradius2-mod-sql,rlm_sql,sql.conf,))
 $(eval $(call BuildPlugin,freeradius2-mod-sql-mysql,rlm_sql_mysql,))
 $(eval $(call BuildPlugin,freeradius2-mod-sql-pgsql,rlm_sql_postgresql,))
 $(eval $(call BuildPlugin,freeradius2-mod-sqlcounter,rlm_sqlcounter,))
-$(eval $(call BuildPlugin,freeradius2-mod-radutmp,rlm_radutmp,))
+$(eval $(call BuildPlugin,freeradius2-mod-radutmp,rlm_radutmp,modules/radutmp modules/sradutmp,modules,))
+$(eval $(call BuildPlugin,freeradius2-mod-logintime,rlm_logintime,modules/logintime,modules,))
+$(eval $(call BuildPlugin,freeradius2-mod-expr,rlm_expr,modules/expr,modules,))
+$(eval $(call BuildPlugin,freeradius2-mod-attr-filter,rlm_attr_filter,modules/attr_filter attrs attrs.access_reject attrs.accounting_response attrs.pre-proxy,modules,,))
+$(eval $(call BuildPlugin,freeradius2-mod-expiration,rlm_expiration,modules/expiration,modules,))
 $(eval $(call BuildPackage,freeradius2-utils))
