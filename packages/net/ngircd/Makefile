@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ngircd
-PKG_VERSION:=0.12.1
+PKG_VERSION:=14.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ngircd.barton.de/pub/ngircd/
-PKG_MD5SUM:=db8618877a4dd5fb2be50402a2cb4a14
+PKG_MD5SUM:=eef90855414c35bfb6590d17e24ee06f
 
 include $(INCLUDE_DIR)/package.mk
 
