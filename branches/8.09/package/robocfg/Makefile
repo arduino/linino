@@ -1,16 +1,15 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=robocfg
 PKG_VERSION:=0.01
-PKG_RELEASE:=1
+PKG_RELEASE:=1.1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/robocfg
 
