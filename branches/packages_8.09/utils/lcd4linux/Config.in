@@ -99,6 +99,7 @@ config LCD4LINUX_DRV_PICOLCDGRAPHIC
 
 config LCD4LINUX_DRV_RouterBoard
 	bool
+	depends on TARGET_rb532
 	prompt "RouterBoard"
 
 config LCD4LINUX_DRV_serdisplib
