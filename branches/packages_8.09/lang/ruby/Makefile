@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ruby
 PKG_VERSION:=1.8.6-p36
-PKG_RELEASE:=1
+PKG_RELEASE:=1.1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.ruby-lang.org/pub/ruby/1.8/
@@ -81,7 +81,7 @@ endef
 define Package/ruby-irb
 $(call Package/ruby/Default)
   TITLE+= (interactive shell)
-  DEPENDS:=ruby
+  DEPENDS:=ruby +ruby-core
 endef
 
 define Package/ruby-ncurses
