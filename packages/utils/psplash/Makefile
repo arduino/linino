@@ -18,6 +18,9 @@ PKG_MD5SUM:=7649b7e0fac573eca2048a2a267e242b
 PKG_INSTALL:=1
 
 IMAGE_FILE:=generic
+ifeq ($(CONFIG_TARGET_s3c24xx),y)
+  IMAGE_FILE:=480x640
+endif
 
 include $(INCLUDE_DIR)/package.mk
 
