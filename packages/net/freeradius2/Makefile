@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=freeradius-server-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/freeradius/
-PKG_MD5SUM:=4ccf748ef9851d90844d085647351ca4
+PKG_MD5SUM:=ba1fd573222ed5c8bead1cce1383a7a9
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/freeradius-server-$(PKG_VERSION)
 
