@@ -4,13 +4,12 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rtorrent
 PKG_VERSION:=0.8.2
-PKG_RELEASE:=1
+PKG_RELEASE:=1.1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://libtorrent.rakshasa.no/downloads/
@@ -26,7 +25,7 @@ define Package/rtorrent
   CATEGORY:=Network
   TITLE:=BitTorrent client for ncurses
   URL:=http://libtorrent.rakshasa.no/
-  DEPENDS:=+libcurl +libtorrent +libncurses +libsigcxx @BROKEN
+  DEPENDS:=+libcurl +libtorrent +libncurses +libsigcxx
 endef
 
 define Package/rtorrent/description
@@ -36,13 +35,13 @@ define Package/rtorrent/description
  based clients in an ncurses client.
 endef
 
+TARGET_CPPFLAGS +=  \
+	-fno-strict-aliasing -fno-inline \
+
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--disable-static \
 	--disable-debug \
-
-CONFIGURE_VARS += \
-	LIBS="-lm -luClibc++" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \

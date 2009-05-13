@@ -6,7 +6,7 @@ diff -urN libsigc++-2.2.3/Makefile.am libsigc++-2.2.3.new/Makefile.am
  # ACLOCAL_FLAGS = -I scripts
  
 -SUBDIRS      = sigc++ tests docs examples scripts MSVC_Net2005 MSVC_Net2008
-+SUBDIRS      = sigc++ scripts MSVC_Net2005 MSVC_Net2008
++SUBDIRS      = sigc++ scripts
  DIST_SUBDIRS = $(SUBDIRS)
  
  sigc_configdir = $(libdir)/sigc++-2.0/include
@@ -18,7 +18,7 @@ diff -urN libsigc++-2.2.3/Makefile.in libsigc++-2.2.3.new/Makefile.in
  EXTRA_DIST = autogen.sh sigc++config.h.in libsigc++-2.0.spec.in
  # ACLOCAL_FLAGS = -I scripts
 -SUBDIRS = sigc++ tests docs examples scripts MSVC_Net2005 MSVC_Net2008
-+SUBDIRS = sigc++ scripts MSVC_Net2005 MSVC_Net2008
++SUBDIRS = sigc++ scripts
  DIST_SUBDIRS = $(SUBDIRS)
  sigc_configdir = $(libdir)/sigc++-2.0/include
  sigc_config_DATA = sigc++config.h

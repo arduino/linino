@@ -4,13 +4,12 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libtorrent
 PKG_VERSION:=0.12.4
-PKG_RELEASE:=1
+PKG_RELEASE:=1.1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://libtorrent.rakshasa.no/downloads/
@@ -37,6 +36,9 @@ define Package/libtorrent/description
 endef
 
 TARGET_CFLAGS += $(FPIC)
+
+TARGET_CPPFLAGS +=  \
+        -fno-strict-aliasing -fno-inline \
 
 # XXX: rtorrent needs encryption (--enable-openssl)
 CONFIGURE_ARGS+= \

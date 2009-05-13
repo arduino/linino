@@ -4,13 +4,12 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libsigc++
 PKG_VERSION:=2.2.3
-PKG_RELEASE:=1
+PKG_RELEASE:=1.1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.2/
@@ -25,7 +24,7 @@ define Package/libsigcxx
   CATEGORY:=Libraries
   TITLE:=typesafe callback system for standard C++
   URL:=http://libsigc++.sourceforge.net/
-  DEPENDS:=+uclibcxx
+  DEPENDS:=+libstdcpp
 endef
 
 define Package/libsigcxx/description
@@ -36,15 +35,12 @@ endef
 
 TARGET_CFLAGS += $(FPIC)
 
+TARGET_CPPFLAGS +=  \
+	-fno-strict-aliasing -fno-inline \
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
-
-CONFIGURE_VARS += \
-	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
-	LDFLAGS="$$$$LDFLAGS" \
-	LIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
