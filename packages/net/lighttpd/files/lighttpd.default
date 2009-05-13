@@ -1,1 +1,1 @@
-OPTIONS="-f /etc/lighttpd.conf"
+OPTIONS="-f /etc/lighttpd/lighttpd.conf"

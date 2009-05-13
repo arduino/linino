@@ -9,11 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lighttpd
 PKG_VERSION:=1.4.22
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.lighttpd.net/download/
 PKG_MD5SUM:=ed4ca3897eadf419c893b03fee53c982
+
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -195,16 +197,9 @@ endef
 
 define Package/lighttpd-mod-webdav
   $(call Package/lighttpd/Default)
-  DEPENDS:=lighttpd +libsqlite3 +libxml2
+  DEPENDS:=lighttpd +libsqlite3 +libuuid +libxml2
   TITLE:=WebDAV module
 endef
-
-
-ifneq ($(CONFIG_LARGEFILE),y)
-  DISABLE_LARGEFILE:=--disable-lfs
-endif
-
-DISABLE_IPV6:=
 
 CONFIGURE_ARGS+= \
 	--libdir=/usr/lib/lighttpd \
@@ -212,8 +207,6 @@ CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \
 	--disable-rpath \
-	$(DISABLE_LARGEFILE) \
-	$(DISABLE_IPV6) \
 	--without-attr \
 	--without-bzip2 \
 	--without-fam \
@@ -225,24 +218,47 @@ CONFIGURE_ARGS+= \
 	--with-openssl="$(STAGING_DIR)/usr" \
 	--with-pcre \
 	--without-valgrind \
-	--with-webdav-props \
 
 CONFIGURE_VARS+= \
-	CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2 $$$$CPPFLAGS" \
 	PCRE_LIB="-lpcre" \
+
+ifneq ($(CONFIG_LARGEFILE),y)
+  CONFIGURE_ARGS+= \
+	--disable-lfs
+endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_lighttpd-mod-webdav),)
+  CONFIGURE_ARGS+= \
+	--with-webdav-locks \
+	--with-webdav-props
+  # XXX: needed by sqlite3 to prevent segfaults in mod_webdav.so
+  CONFIGURE_VARS+= \
+	LIBS="-lpthread"
+else
+  CONFIGURE_ARGS+= \
+	--without-webdav-locks \
+	--without-webdav-props
+endif
+
+define Build/Configure
+$(call Build/Configure/Default)
+	# XXX: override pcre (mis)detection by ./configure when cross-compiling
+	echo "#define HAVE_LIBPCRE 1" >>$(PKG_BUILD_DIR)/config.h
+	echo "#define HAVE_PCRE_H 1" >>$(PKG_BUILD_DIR)/config.h
+endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
 
 define Package/lighttpd/conffiles
-/etc/lighttpd.conf
+/etc/lighttpd/lighttpd.conf
 /etc/default/lighttpd
 endef
 
 define Package/lighttpd/install
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) ./files/lighttpd.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/lighttpd
+	$(INSTALL_DATA) ./files/lighttpd.conf $(1)/etc/lighttpd/
 	$(INSTALL_DIR) $(1)/etc/default
 	$(INSTALL_DATA) ./files/lighttpd.default $(1)/etc/default/lighttpd
 	$(INSTALL_DIR) $(1)/etc/init.d
