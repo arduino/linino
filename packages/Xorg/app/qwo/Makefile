@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -19,6 +19,7 @@ include $(INCLUDE_DIR)/package.mk
 
 PKG_INSTALL:=1
 
+TARGET_CPPFLAGS+=-I$(STAGING_DIR)/usr/include/libconfig
 TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/qwo
