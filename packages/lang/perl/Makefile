@@ -184,11 +184,11 @@ endef
 define Build/Compile
 endef
 
-$(eval $(call BuildPackage,microperl))
-$(eval $(call BuildPackage,perl))
-
 $(eval $(call RequireCommand,rsync, \
 	$(PKG_NAME) requires rsync installed on the host-system. \
 ))
+
+$(eval $(call BuildPackage,microperl))
+$(eval $(call BuildPackage,perl))
 
 -include perlbase.mk

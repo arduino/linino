@@ -121,8 +121,10 @@ define Package/gtk2-cups/install
 		$(1)/usr/lib/gtk-2.0/2.10.0/printbackends/
 endef
 
-$(eval $(call BuildPackage,gtk2))
-$(eval $(call BuildPackage,gtk2-cups))
 $(eval $(call RequireCommand,gdk-pixbuf-csource, \
 	Please install gtk2.0-dev \
 ))
+
+$(eval $(call BuildPackage,gtk2))
+$(eval $(call BuildPackage,gtk2-cups))
+

@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -48,8 +48,6 @@ define Package/firmwarehotplug/install
 	install -m644 $(PKG_BUILD_DIR)/ezusb/midi/original/ezusbmidi2x2.ihx $(1)/usr/share/usb/ezusbmidi
 endef
 
-$(eval $(call BuildPackage,firmwarehotplug))
-
 define Require/working-sdcc
 	sdcc -v 2>&1 | awk '($$$$1 == "SDCC") && ($$$$3 == "mcs51/gbz80/z80/avr/ds390/pic16/pic14/TININative/xa51/ds400/hc08") { print "ok" }' | grep ok > /dev/null
 endef
@@ -63,3 +61,6 @@ $(eval $(call Require,working-sdcc, \
 	mcs51/gbz80/z80/avr/ds390/pic16/pic14/TININative/xa51/ds400/hc08. You might consider \
 	installing the non-free version. \
 ))
+
+$(eval $(call BuildPackage,firmwarehotplug))
+

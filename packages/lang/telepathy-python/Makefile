@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -41,8 +41,9 @@ define Package/telepathy-python/install
 	    $(1)$(PYTHON_PKG_DIR)
 endef
 
-$(eval $(call BuildPackage,telepathy-python))
-
 $(eval $(call RequireCommand,xsltproc, \
 	$(PKG_NAME) requires xsltproc installed on the host-system. \
 ))
+
+$(eval $(call BuildPackage,telepathy-python))
+

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006,2007 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -84,7 +84,7 @@ define Build/Configure
 	)
 endef
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		EARLY_CONFIGURE= \
 		EXTRA_CONFIGURE= \
@@ -126,12 +126,12 @@ define Package/sablevm-mini/install
 		$(1)/usr/share/sablevm/examples/
 endef
 
-$(eval $(call BuildPackage,sablevm))
-$(eval $(call BuildPackage,sablevm-mini))
-
 $(foreach command, jikes fastjar, \
   $(eval $(call RequireCommand,$(command), \
    $(PKG_NAME) requires $(command). \
   )) \
 )
+
+$(eval $(call BuildPackage,sablevm))
+$(eval $(call BuildPackage,sablevm-mini))
 

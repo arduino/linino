@@ -1,6 +1,5 @@
 #
-
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -48,7 +47,7 @@ define Package/libavahi
 endef
 
 define Package/libavahi/description
-$(call Package/avahi/Default/description) 
+$(call Package/avahi/Default/description)
  .
  This package contains the mDNS/DNS-SD shared libraries, used by other programs.
 endef
@@ -198,12 +197,12 @@ define Package/avahi-dnsconfd/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/avahi-dnsconfd $(1)/usr/sbin/
 endef
 
+$(eval $(call RequireCommand,intltool-update, \
+	$(PKG_NAME) requires intltool >= 0.35.0 \
+))
+
 $(eval $(call BuildPackage,libavahi))
 $(eval $(call BuildPackage,avahi-autoipd))
 $(eval $(call BuildPackage,avahi-daemon))
 $(eval $(call BuildPackage,avahi-dnsconfd))
-
-$(eval $(call RequireCommand,intltool-update, \
-	$(PKG_NAME) requires intltool >= 0.35.0 \
-))
 

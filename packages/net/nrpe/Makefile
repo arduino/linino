@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -84,9 +84,9 @@ define Package/nrpe/install
 	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
 endef
 
-$(eval $(call BuildPackage,nrpe))
-
 $(eval $(call RequireCommand,openssl, \
 	$(PKG_NAME) requires openssl installed on the host-system. \
 ))
+
+$(eval $(call BuildPackage,nrpe))
 

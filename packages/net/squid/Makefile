@@ -127,8 +127,8 @@ CONFIGURE_ARGS += \
 	--enable-digest-auth-helpers="password" \
 	--enable-external-acl-helpers="ip_user unix_group" \
 	--enable-epoll \
-	--with-maxfd=4096 \
-	
+	--with-maxfd=4096
+
 CONFIGURE_VARS += \
 	ac_cv_header_linux_netfilter_ipv4_h=yes \
 
@@ -168,6 +168,11 @@ define Package/squid-mod-cachemgr/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/squid/cachemgr.cgi $(1)/www/cgi-bin/
 endef
 
+$(eval $(call RequireHeader,/usr/include/openssl/ssl.h, \
+	$(PKG_NAME) requires the openssl development (named like libssl-dev, \
+	depending of your package manager) package be installed on the host-system. \
+))
+
 $(eval $(call BuildPackage,squid))
 $(eval $(call BuildPackage,squid-mod-cachemgr))
 $(eval $(call BuildPlugin,squid-mod-basic-auth-getpwnam,getpwname_auth))
@@ -179,7 +184,3 @@ $(eval $(call BuildPlugin,squid-mod-external-acl-unix-group,squid_unix_group))
 $(eval $(call BuildPlugin,squid-mod-ntlm-auth-fakeauth,fakeauth_auth))
 $(eval $(call BuildPlugin,squid-mod-ntlm-auth-smb-auth,ntlm_auth))
 
-$(eval $(call RequireHeader,/usr/include/openssl/ssl.h, \
-	$(PKG_NAME) requires the openssl development (named like libssl-dev, \
-	depending of your package manager) package be installed on the host-system. \
-))

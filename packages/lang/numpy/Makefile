@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -39,8 +39,6 @@ define Package/numpy/install
 	cp -r $(PKG_INSTALL_DIR)/* $(1)
 endef
 
-$(eval $(call BuildPackage,numpy))
-
 define Require/python25-dev
 [ -e /usr/include/python2.5/pyconfig.h ]
 endef
@@ -48,3 +46,6 @@ endef
 $(eval $(call Require,python25-dev, \
 	Please install Python 2.5 (including development headers and libraries) \
 ))
+
+$(eval $(call BuildPackage,numpy))
+

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -103,9 +103,10 @@ define Package/python-vte/install
 		$(1)$(PYTHON_PKG_DIR)/gtk-2.0
 endef
 
-$(eval $(call BuildPackage,vte))
-$(eval $(call BuildPackage,python-vte))
-
 $(eval $(call RequireCommand,intltool-update, \
     $(PKG_NAME) requires intltool >= 0.35.0 \
 ))
+
+$(eval $(call BuildPackage,vte))
+$(eval $(call BuildPackage,python-vte))
+

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -268,8 +268,8 @@ define Package/ruby-core/install
 		\
 		$(1)/usr/lib/ruby/1.8/yaml \
 		$(1)/usr/lib/ruby/1.8/yaml.rb \
-		$(1)/usr/lib/ruby/1.8/*/syck.so \
-		
+		$(1)/usr/lib/ruby/1.8/*/syck.so
+
 	find $(1) -name '*.h' | xargs rm -f
 endef
 
@@ -411,6 +411,10 @@ define Package/ruby-zlib/install
 	) | ( cd $(1); $(TAR) -xf - )
 endef
 
+$(eval $(call RequireCommand,ruby, \
+        $(PKG_NAME) requires ruby installed on the host-system. \
+))
+
 $(eval $(call BuildPackage,ruby))
 $(eval $(call BuildPackage,libruby))
 $(eval $(call BuildPackage,ruby-core))
@@ -433,8 +437,4 @@ $(eval $(call BuildPackage,ruby-xmlrpc))
 $(eval $(call BuildPackage,ruby-xsd))
 $(eval $(call BuildPackage,ruby-yaml))
 $(eval $(call BuildPackage,ruby-zlib))
-
-$(eval $(call RequireCommand,ruby, \
-        $(PKG_NAME) requires ruby installed on the host-system. \
-))
 

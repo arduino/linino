@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -41,10 +41,11 @@ define Package/lilo/install
 	$(CP) ./files/boot.msg $(1)/etc/
 endef
 
-$(eval $(call BuildPackage,lilo))
-
 $(foreach command, as86 ld86, \
   $(eval $(call RequireCommand,$(command), \
    $(PKG_NAME) requires $(command). \
   )) \
 )
+
+$(eval $(call BuildPackage,lilo))
+

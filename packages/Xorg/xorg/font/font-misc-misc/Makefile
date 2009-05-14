@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -26,14 +26,14 @@ endef
 define Package/font-base
   $(call Package/font-misc-misc/Default)
   DEPENDS:=+xserver +font-util @DISPLAY_SUPPORT
-  TITLE:=font-base 
+  TITLE:=font-base
   URL:=http://xorg.freedesktop.org/
 endef
 
 define Package/font-misc-misc
   $(call Package/font-misc-misc/Default)
   DEPENDS:=font-base
-  TITLE:=font-misc-misc 
+  TITLE:=font-misc-misc
   URL:=http://xorg.freedesktop.org/
 endef
 
@@ -44,7 +44,7 @@ define Build/Compile
 	UTIL_DIR="$(STAGING_DIR)/usr/lib/X11/fonts/util/" make -e -C $(PKG_BUILD_DIR)
 	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS) install
 	find $(PKG_INSTALL_DIR) -name fonts.dir | \
-		xargs rm  
+		xargs rm
 endef
 
 define Build/Configure
@@ -120,9 +120,6 @@ if [ ! -z $${FILE_NEW} ]; then
 fi
 endef
 
-$(eval $(call BuildPackage,font-misc-misc))
-$(eval $(call BuildPackage,font-base))
-
 # FIXME: replace with native versions
 $(eval $(call RequireCommand,mkfontscale, \
 	Please install mkfontscale (usually in xfonts-utils) \
@@ -130,4 +127,8 @@ $(eval $(call RequireCommand,mkfontscale, \
 $(eval $(call RequireCommand,mkfontdir, \
 	Please install mkfontdir (usually in xfonts-utils) \
 ))
+
+$(eval $(call BuildPackage,font-misc-misc))
+$(eval $(call BuildPackage,font-base))
+
 
