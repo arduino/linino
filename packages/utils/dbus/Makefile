@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 
 # Make sure to also update the dbus-x package
 PKG_NAME:=dbus
-PKG_VERSION:=1.2.12
+PKG_VERSION:=1.2.4.6permissive
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dbus.freedesktop.org/releases/dbus/
-PKG_MD5SUM:=39bd582c3b06a261cac44d4cab6fd60b
+PKG_MD5SUM:=1a158fe326b078d1377a977121888496
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
