@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lcd4linux
-PKG_REV:=903
+PKG_REV:=1034
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -55,6 +55,7 @@ LCD4LINUX_DRIVERS:= \
 	Cwlinux \
 	D4D \
 	G15 \
+	GLCD2USB \
 	IRLCD \
 	HD44780 \
 	LCD2USB \
@@ -64,16 +65,19 @@ LCD4LINUX_DRIVERS:= \
 	LUIse \
 	M50530 \
 	MatrixOrbital \
+	MatrixOrbitalGX \
 	MilfordInstruments \
 	Noritake \
 	NULL \
 	PNG \
 	PPM \
 	Pertelian \
+	PHAnderson \
 	picoLCD \
 	picoLCDGraphic \
 	RouterBoard \
 	serdisplib \
+	ShuttleVFD \
 	SimpleLCD \
 	st2205 \
 	T6963 \
@@ -81,6 +85,7 @@ LCD4LINUX_DRIVERS:= \
 	USBLCD \
 	USBHUB \
 	ULA200 \
+	VNC \
 	WincorNixdorf \
 	X11 \
 
@@ -95,24 +100,30 @@ LCD4LINUX_PLUGINS:= \
 	fifo \
 	file \
 	gps \
+	hddtemp \
 	i2c_sensors \
 	iconv \
 	imon \
 	isdn \
 	kvv \
 	loadavg \
+	netdev \
+	netinfo \
 	meminfo \
 	mpd \
+	mpris_dbus \
 	mysql \
 	netdev \
 	pop3 \
 	ppp \
 	proc_stat \
 	python \
+	qnaplog \
 	seti \
 	statfs \
 	uname \
 	uptime \
+	w1retap \
 	wireless \
 	xmms \
 
@@ -164,6 +175,10 @@ endif
 
 ifneq ($(CONFIG_LCD4LINUX_DRV_Curses),)
 PKG_BUILD_DEPENDS += libncurses
+endif
+
+ifneq ($(CONFIG_LCD4LINUX_DRV_VNC),)
+PKG_BUILD_DEPENDS += libvncserver
 endif
 
 ifneq ($(CONFIG_LCD4LINUX_DRV_X11),)

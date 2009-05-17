@@ -28,6 +28,10 @@ config LCD4LINUX_DRV_G15
 	bool
 	prompt "G15"
 
+config LCD4LINUX_DRV_GLCD2USB
+	bool
+	prompt "GLCD2USB"
+
 config LCD4LINUX_DRV_HD44780
 	bool
 	prompt "HD44780"
@@ -64,6 +68,10 @@ config LCD4LINUX_DRV_MatrixOrbital
 	bool
 	prompt "MatrixOrbital"
 
+config LCD4LINUX_DRV_MatrixOrbitalGX
+	bool
+	prompt "MatrixOrbitalGX"
+
 config LCD4LINUX_DRV_MilfordInstruments
 	bool
 	prompt "MilfordInstruments"
@@ -89,6 +97,10 @@ config LCD4LINUX_DRV_Pertelian
 	bool
 	prompt "Pertelian"
 
+config LCD4LINUX_DRV_PHAnderson
+	bool
+	prompt "PHAnderson"
+
 config LCD4LINUX_DRV_picoLCD
 	bool
 	prompt "picoLCD"
@@ -105,6 +117,10 @@ config LCD4LINUX_DRV_RouterBoard
 config LCD4LINUX_DRV_serdisplib
 	bool
 	prompt "serdisplib"
+
+config LCD4LINUX_DRV_ShuttleVFD
+	bool
+	prompt "ShuttleVFD"
 
 config LCD4LINUX_DRV_SimpleLCD
 	bool
@@ -133,6 +149,10 @@ config LCD4LINUX_DRV_USBHUB
 config LCD4LINUX_DRV_ULA200
 	bool
 	prompt "ULA200"
+
+config LCD4LINUX_DRV_VNC
+	bool
+	prompt "VNC"
 
 config LCD4LINUX_DRV_WincorNixdorf
 	bool
@@ -184,6 +204,10 @@ config LCD4LINUX_PLUGIN_gps
 	bool
 	prompt "gps"
 
+config LCD4LINUX_PLUGIN_hddtemp
+	bool
+	prompt "hddtemp"
+
 config LCD4LINUX_PLUGIN_i2c_sensors
 	bool
 	prompt "i2c_sensors"
@@ -216,9 +240,21 @@ config LCD4LINUX_PLUGIN_mpd
 	bool
 	prompt "mpd"
 
+config LCD4LINUX_PLUGIN_mpris_dbus
+	bool
+	prompt "mpris_dbus"
+
 config LCD4LINUX_PLUGIN_mysql
 	bool
 	prompt "mysql"
+
+config LCD4LINUX_PLUGIN_netdev
+	bool
+	prompt "netdev"
+
+config LCD4LINUX_PLUGIN_netinfo
+	bool
+	prompt "netinfo"
 
 config LCD4LINUX_PLUGIN_pop3
 	bool
@@ -236,6 +272,10 @@ config LCD4LINUX_PLUGIN_python
 	bool
 	prompt "python"
 
+config LCD4LINUX_PLUGIN_qnaplog
+	bool
+	prompt "qnaplog"
+
 config LCD4LINUX_PLUGIN_seti
 	bool
 	prompt "seti"
@@ -251,6 +291,10 @@ config LCD4LINUX_PLUGIN_uname
 config LCD4LINUX_PLUGIN_uptime
 	bool
 	prompt "uptime"
+
+config LCD4LINUX_PLUGIN_w1retap
+	bool
+	prompt "w1retap"
 
 config LCD4LINUX_PLUGIN_wireless
 	bool
