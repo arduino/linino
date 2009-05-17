@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sqlite
-PKG_VERSION:=3.6.13
+PKG_VERSION:=3.6.14
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-amalgamation-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sqlite.org/
-PKG_MD5SUM:=652a01797e7538811e4997a5847bc026
+PKG_MD5SUM:=cfe9d3021cfdb58e2b02a36a4cb6b70c
 
 PKG_BUILD_DEPENDS:=libncurses libreadline
 
@@ -64,8 +64,6 @@ TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
-	--disable-tcl \
-	--disable-amalgamation \
 
 CONFIGURE_VARS += \
 	config_BUILD_CC="$(HOSTCC)" \
