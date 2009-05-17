@@ -9,8 +9,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xmlrpc-c
-PKG_REV:=1686
-PKG_VERSION:=1.17.7_r$(PKG_REV)
+PKG_REV:=1724
+PKG_VERSION:=1.18.3_r$(PKG_REV)
 PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://xmlrpc-c.svn.sourceforge.net/svnroot/xmlrpc-c/advanced
