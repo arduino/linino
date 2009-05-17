@@ -1,6 +1,6 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2006 OpenWrt.org
-START=50
+START=60
 
 DEFAULT=/etc/default/samba
 RUN_D=/var/run/samba
