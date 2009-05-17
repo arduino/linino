@@ -1,0 +1,13 @@
+--- LibVNCServer-0.9.7/Makefile.in.orig	2009-01-12 03:53:15.000000000 +0100
++++ LibVNCServer-0.9.7/Makefile.in	2009-05-02 00:23:00.000000000 +0200
+@@ -228,8 +228,8 @@
+ target_alias = @target_alias@
+ with_ffmpeg = @with_ffmpeg@
+ @WITH_X11VNC_TRUE@X11VNC = x11vnc
+-SUBDIRS = libvncserver examples contrib libvncclient vncterm classes client_examples test $(X11VNC)
+-DIST_SUBDIRS = libvncserver examples contrib libvncclient vncterm classes client_examples test
++SUBDIRS = libvncserver
++DIST_SUBDIRS = libvncserver
+ bin_SCRIPTS = libvncserver-config
+ #include_HEADERS=rfb.h rfbconfig.h rfbint.h rfbproto.h keysym.h rfbregion.h
+ include_HEADERS = rfb/rfb.h rfb/rfbconfig.h rfb/rfbint.h rfb/rfbproto.h \
