@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openldap
-PKG_VERSION:=2.2.29
+PKG_VERSION:=2.4.16
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/ \
 	ftp://sunsite.cnlab-switch.ch/mirror/OpenLDAP/openldap-release/ \
 	ftp://ftp.nl.uu.net/pub/unix/db/openldap/openldap-release/ \
 	ftp://ftp.plig.org/pub/OpenLDAP/openldap-release/
-PKG_MD5SUM:=6c4c72a1336aa45b463e738034c078d6
+PKG_MD5SUM:=ed5b86e9d2b372d10edfe3bb59fee165
 
 PKG_FIXUP = libtool
 
@@ -101,8 +101,6 @@ define Package/libopenldap/install
 	$(CP) $(PKG_INSTALL_DIR)/etc/openldap/ldap.conf $(1)/etc/openldap/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{lber,ldap}*.so.* $(1)/usr/lib/
-	$(INSTALL_DIR) $(1)/usr/share/openldap
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/openldap/* $(1)/usr/share/openldap/
 endef
 	
 define Package/openldap-utils/install
