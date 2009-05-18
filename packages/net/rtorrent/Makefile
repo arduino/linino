@@ -11,7 +11,7 @@ PKG_NAME:=rtorrent
 
 PKG_REV:=1087
 PKG_VERSION:=0.8.4_r$(PKG_REV)
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=svn://rakshasa.no/libtorrent/trunk/rtorrent
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
@@ -28,7 +28,7 @@ define Package/rtorrent
   CATEGORY:=Network
   TITLE:=BitTorrent client for ncurses
   URL:=http://libtorrent.rakshasa.no/
-  DEPENDS:=+libcurl +libtorrent +libncurses +libsigcxx +xmlrpc-c
+  DEPENDS:=+libcurl +libtorrent +libncurses +xmlrpc-c
 endef
 
 define Package/rtorrent/description
@@ -45,6 +45,7 @@ CONFIGURE_ARGS+= \
 	--enable-shared \
 	--disable-static \
 	--disable-debug \
+	--disable-tls \
 	--with-xmlrpc-c \
 
 define Build/Configure

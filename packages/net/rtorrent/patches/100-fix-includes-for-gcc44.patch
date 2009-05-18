@@ -1,0 +1,88 @@
+diff -urN rtorrent-0.8.4.orig/src/command_download.cc rtorrent-0.8.4/src/command_download.cc
+--- rtorrent-0.8.4.orig/src/command_download.cc	2009-05-01 11:44:18.928024917 +0000
++++ rtorrent-0.8.4/src/command_download.cc	2009-05-01 11:52:00.204784723 +0000
+@@ -38,6 +38,7 @@
+ 
+ #include <functional>
+ #include <unistd.h>
++#include <cstdio>
+ #include <rak/file_stat.h>
+ #include <rak/error_number.h>
+ #include <rak/path.h>
+diff -urN rtorrent-0.8.4.orig/src/command_events.cc rtorrent-0.8.4/src/command_events.cc
+--- rtorrent-0.8.4.orig/src/command_events.cc	2009-05-01 11:44:18.956025193 +0000
++++ rtorrent-0.8.4/src/command_events.cc	2009-05-01 11:52:53.176878174 +0000
+@@ -37,6 +37,7 @@
+ #include "config.h"
+ 
+ #include <functional>
++#include <cstdio>
+ #include <rak/file_stat.h>
+ #include <rak/path.h>
+ #include <rak/string_manip.h>
+diff -urN rtorrent-0.8.4.orig/src/command_network.cc rtorrent-0.8.4/src/command_network.cc
+--- rtorrent-0.8.4.orig/src/command_network.cc	2009-05-01 11:44:18.954025149 +0000
++++ rtorrent-0.8.4/src/command_network.cc	2009-05-01 11:53:38.894790846 +0000
+@@ -37,6 +37,7 @@
+ #include "config.h"
+ 
+ #include <functional>
++#include <cstdio>
+ #include <rak/address_info.h>
+ #include <rak/path.h>
+ #include <torrent/connection_manager.h>
+diff -urN rtorrent-0.8.4.orig/src/display/utils.cc rtorrent-0.8.4/src/display/utils.cc
+--- rtorrent-0.8.4.orig/src/display/utils.cc	2009-05-01 11:44:18.958025168 +0000
++++ rtorrent-0.8.4/src/display/utils.cc	2009-05-01 11:46:00.280024662 +0000
+@@ -37,6 +37,7 @@
+ #include "config.h"
+ 
+ #include <cstring>
++#include <cstdio>
+ #include <sstream>
+ #include <iomanip>
+ #include <rak/socket_address.h>
+diff -urN rtorrent-0.8.4.orig/src/display/utils.h rtorrent-0.8.4/src/display/utils.h
+--- rtorrent-0.8.4.orig/src/display/utils.h	2009-05-01 11:44:18.958025168 +0000
++++ rtorrent-0.8.4/src/display/utils.h	2009-05-01 11:54:46.317784833 +0000
+@@ -38,6 +38,7 @@
+ #define RTORRENT_DISPLAY_UTILS_H
+ 
+ #include <ctime>
++#include <cstdio>
+ #include <string>
+ 
+ namespace core {
+diff -urN rtorrent-0.8.4.orig/src/rpc/parse.cc rtorrent-0.8.4/src/rpc/parse.cc
+--- rtorrent-0.8.4.orig/src/rpc/parse.cc	2009-05-01 11:44:18.955025625 +0000
++++ rtorrent-0.8.4/src/rpc/parse.cc	2009-05-01 11:48:42.406775254 +0000
+@@ -37,6 +37,7 @@
+ #include "config.h"
+ 
+ #include <cstring>
++#include <cstdio>
+ #include <locale>
+ #include <rak/path.h>
+ #include <torrent/exceptions.h>
+diff -urN rtorrent-0.8.4.orig/src/rpc/scgi_task.cc rtorrent-0.8.4/src/rpc/scgi_task.cc
+--- rtorrent-0.8.4.orig/src/rpc/scgi_task.cc	2009-05-01 11:44:18.955025625 +0000
++++ rtorrent-0.8.4/src/rpc/scgi_task.cc	2009-05-01 11:49:52.988070476 +0000
+@@ -37,6 +37,7 @@
+ #include "config.h"
+ 
+ #include <rak/error_number.h>
++#include <cstdio>
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <torrent/exceptions.h>
+diff -urN rtorrent-0.8.4.orig/src/utils/lockfile.cc rtorrent-0.8.4/src/utils/lockfile.cc
+--- rtorrent-0.8.4.orig/src/utils/lockfile.cc	2009-05-01 11:44:18.956025193 +0000
++++ rtorrent-0.8.4/src/utils/lockfile.cc	2009-05-01 11:50:57.780779606 +0000
+@@ -40,6 +40,7 @@
+ #include <cctype>
+ #include <cerrno>
+ #include <cstring>
++#include <cstdio>
+ #include <sstream>
+ #include <fcntl.h>
+ #include <signal.h>
