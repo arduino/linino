@@ -1,0 +1,45 @@
+diff -urN libtorrent-0.12.4.orig/src/protocol/extensions.cc libtorrent-0.12.4/src/protocol/extensions.cc
+--- libtorrent-0.12.4.orig/src/protocol/extensions.cc	2009-05-01 11:21:41.646024324 +0000
++++ libtorrent-0.12.4/src/protocol/extensions.cc	2009-05-01 11:41:30.107790553 +0000
+@@ -39,6 +39,8 @@
+ #include <limits>
+ #include <sstream>
+ 
++#include <cstdio>
++
+ #include "download/available_list.h"
+ #include "download/download_main.h"
+ #include "protocol/peer_connection_base.h"
+diff -urN libtorrent-0.12.4.orig/src/torrent/poll_epoll.cc libtorrent-0.12.4/src/torrent/poll_epoll.cc
+--- libtorrent-0.12.4.orig/src/torrent/poll_epoll.cc	2009-05-01 11:21:41.656024827 +0000
++++ libtorrent-0.12.4/src/torrent/poll_epoll.cc	2009-05-01 11:40:31.152785407 +0000
+@@ -38,6 +38,7 @@
+ 
+ #include <cerrno>
+ #include <cstring>
++#include <cstdio>
+ 
+ #include <unistd.h>
+ #include <torrent/exceptions.h>
+diff -urN libtorrent-0.12.4.orig/src/tracker/tracker_dht.cc libtorrent-0.12.4/src/tracker/tracker_dht.cc
+--- libtorrent-0.12.4.orig/src/tracker/tracker_dht.cc	2009-05-01 11:21:41.658024592 +0000
++++ libtorrent-0.12.4/src/tracker/tracker_dht.cc	2009-05-01 11:41:43.124798870 +0000
+@@ -37,6 +37,7 @@
+ #include "config.h"
+ 
+ #include <sstream>
++#include <cstdio>
+ 
+ #include "dht/dht_router.h"
+ #include "torrent/connection_manager.h"
+diff -urN libtorrent-0.12.4.orig/src/tracker/tracker_udp.cc libtorrent-0.12.4/src/tracker/tracker_udp.cc
+--- libtorrent-0.12.4.orig/src/tracker/tracker_udp.cc	2009-05-01 11:21:41.658024592 +0000
++++ libtorrent-0.12.4/src/tracker/tracker_udp.cc	2009-05-01 11:39:57.184784529 +0000
+@@ -38,6 +38,7 @@
+ 
+ #include <sigc++/adaptors/bind.h>
+ #include <torrent/connection_manager.h>
++#include <cstdio>
+ 
+ #include "download/download_info.h"
+ #include "net/address_list.h"
