@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=batman-adv
-PKG_REV:=1220
+PKG_REV:=1267
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -60,14 +60,14 @@ define KernelPackage/batman-adv-kernelland
 $(call Package/batman-adv/Default)
   SUBMENU:=Network Support
   DEPENDS:=@LINUX_2_6
-  TITLE:=Kernel routing module for B.A.T.M.A.N. layer 2
+  TITLE:=B.A.T.M.A.N. layer 2
   FILES:=$(PKG_KMOD_BUILD_DIR)/batman-adv.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,50,batman-adv)
 endef
 
 
 define KernelPackage/batman-adv-kernelland/description
-Kernel routing module for B.A.T.M.A.N. layer 2
+B.A.T.M.A.N. layer 2
 endef
 
 MAKE_BATADV_USERSPACE_ARGS += \
@@ -105,15 +105,15 @@ MAKE_BATTOOL_ARGS += \
 define Build/Configure
 endef
 
-ifneq ($(CONFIG_DEVEL)$(CONFIG_PACKAGE_batman-adv-userspace),)
+ifneq ($(DEVELOPER)$(CONFIG_PACKAGE_batman-adv-userspace),)
 	BUILD_ADV = $(MAKE) -C $(PKG_BUILD_DIR)/batman-adv-userspace $(MAKE_BATADV_USERSPACE_ARGS)
 endif
 
-ifneq ($(CONFIG_DEVEL)$(CONFIG_PACKAGE_kmod-batman-adv-kernelland),)
+ifneq ($(DEVELOPER)$(CONFIG_PACKAGE_kmod-batman-adv-kernelland),)
         BUILD_KMOD_ADV = $(MAKE) -C "$(LINUX_DIR)" $(MAKE_BATADV_KERNELLAND_ARGS)
 endif
 
-ifneq ($(CONFIG_DEVEL)$(CONFIG_PACKAGE_battool),)
+ifneq ($(DEVELOPER)$(CONFIG_PACKAGE_battool),)
         BUILD_BATTOOL = $(MAKE) -C $(PKG_TOOL_BUILD_DIR) $(MAKE_BATTOOL_ARGS)
 endif
 
