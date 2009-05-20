@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=axtls
-PKG_VERSION:=1.1.6
-PKG_RELEASE:=2
+PKG_VERSION:=1.2.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=axTLS-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=@SF/axtls http://www.leroc.com.au/axTLS/
-PKG_MD5SUM:=50e63d5fe002399e2ae63591908f7f5a
+PKG_SOURCE_URL:=@SF/axtls
+PKG_MD5SUM:=03471b5a5874e2ce86025f24b3fa0958
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/axTLS
 
@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libaxtls
   SECTION:=libs
   CATEGORY:=Libraries
+  SUBMENU:=ssl
   TITLE:=Embedded client/server TLSv1 SSL library
   URL:=http://sourceforge.net/projects/axtls
 endef
@@ -54,9 +55,10 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/axTLS $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libaxtls.{a,so*} $(1)/usr/lib/
 endef
 
