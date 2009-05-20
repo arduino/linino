@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=jamvm
-PKG_VERSION:=1.5.0
-PKG_RELEASE:=2
+PKG_VERSION:=1.5.3
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/jamvm
-PKG_MD5SUM:=a965452442cdbfc94caba57d0dd25a8f
+PKG_MD5SUM:=ce886163658d748113b0570dfae12aea
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,7 +23,7 @@ define Package/jamvm
   CATEGORY:=Languages
   TITLE:=A compact Java Virtual Machine
   URL:=http://sourceforge.net/projects/jamvm
-  DEPENDS:=+libffi-sable +libpthread @!mips
+  DEPENDS:=+libffi +zlib +libpthread @!mips
 endef
 
 define Package/jamvm/description
