@@ -366,6 +366,11 @@ define PyPackage/python-openssl/filespec
 +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_ssl.so
 endef
 
+define PyPackage/python-sqlite3/filespec
++|/usr/lib/python$(PYTHON_VERSION)/sqlite3
++|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_sqlite3.so
+endef
+
 $(eval $(call PyPackage,python))
 $(eval $(call PyPackage,python-mini))
 $(eval $(call PyPackage,python-doc))
