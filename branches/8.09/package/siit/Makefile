@@ -17,6 +17,7 @@ include $(INCLUDE_DIR)/package.mk
 define KernelPackage/siit
   SUBMENU:=Network Devices
   TITLE:=Stateless IP ICMP Translation Algorithm
+  DEPENDS:=@!LINUX_2_6_23
   FILES:=$(PKG_BUILD_DIR)/siit.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,50,siit)
 endef
