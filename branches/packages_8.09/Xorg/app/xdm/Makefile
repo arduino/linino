@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_BASE_NAME:=xdm
 PKG_NAME:=xdm
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_VERSION:=1.1.6
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/app
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -22,7 +22,7 @@ define Package/xdm
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:=
+  DEPENDS:=+libX11 +libXmu +libXau +libXaw
   TITLE:=xdm
   URL:=http://xorg.freedesktop.org/
 endef
