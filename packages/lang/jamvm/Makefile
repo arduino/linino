@@ -36,6 +36,8 @@ define Package/jamvm/description
 endef
 
 CONFIGURE_ARGS+= \
+	--with-classpath-install-dir=/usr \
+	--disable-tls \
 	--enable-ffi \
 	--disable-int-threading \
 

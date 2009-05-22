@@ -45,10 +45,10 @@ define Build/Compile
 endef
 
 define Package/classpath/install
-	$(INSTALL_DIR) $(1)/usr/local/classpath/share/classpath/
-	$(INSTALL_DIR) $(1)/usr/local/classpath/lib/classpath/
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/classpath/glibj.zip $(1)/usr/local/classpath/share/classpath/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/classpath/* $(1)/usr/local/classpath/lib/classpath/
+	$(INSTALL_DIR) $(1)/usr/share/classpath
+	$(INSTALL_DIR) $(1)/usr/lib/classpath
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/classpath/glibj.zip $(1)/usr/share/classpath/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/classpath/* $(1)/usr/lib/classpath/
 endef
 
 $(eval $(call BuildPackage,classpath))
