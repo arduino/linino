@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=karma
 PKG_VERSION:=20060124
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://theta44.org/software/
@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/karma
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+kmod-madwifi +ruby +libpcap +libncurses
+  DEPENDS:=+kmod-madwifi +ruby +libpcap +libncurses @!LINUX_2_4
   TITLE:=set of tools for assessing the security of wireless clients
   URL:=http://theta44.org/karma/index.html
 endef
@@ -49,7 +49,7 @@ define Build/Compile
 		LDLIBS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -lpcap -lncurses"
 endef
 
-define Package/karma/install	
+define Package/karma/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/karma $(1)/usr/sbin/karma-ruby
 	$(CP) $(PKG_BUILD_DIR)/src/karma $(1)/usr/sbin/karma
