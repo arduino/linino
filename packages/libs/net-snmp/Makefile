@@ -95,6 +95,7 @@ SNMP_MIB_MODULES_INCLUDED = \
 	host/hr_proc \
 	host/hr_storage \
 	host/hr_system \
+	ieee802dot11 \
 	mibII/at \
 	mibII/icmp \
 	mibII/interfaces \
@@ -127,7 +128,6 @@ SNMP_MIB_MODULES_EXCLUDED = \
 	agent_mibs \
 	agentx \
 	host \
-	ieee802dot11 \
 	mibII \
 	notification \
 	snmpv3mibs \
