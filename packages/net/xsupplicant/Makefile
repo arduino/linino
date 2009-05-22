@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xsupplicant
 PKG_VERSION:=1.2.8
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/open1x
 PKG_MD5SUM:=75f89731b905eb8d36a52621661e1226
 
-PKG_BUILD_DEPENDS:=madwifi
+PKG_BUILD_DEPENDS:=PACKAGE_kmod-madwifi:madwifi
 
 include $(INCLUDE_DIR)/package.mk
 
