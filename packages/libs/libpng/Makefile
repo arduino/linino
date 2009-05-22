@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libpng
-PKG_VERSION:=1.2.29
+PKG_VERSION:=1.2.35
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/libpng
-PKG_MD5SUM:=f588cb4ee39e3a333604096f937ea157
+PKG_MD5SUM:=b8b8d09adf6bee2c5902c8e54c4f2e68
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
