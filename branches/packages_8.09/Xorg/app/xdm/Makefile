@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_BASE_NAME:=xdm
 PKG_NAME:=xdm
-PKG_RELEASE:=3
+PKG_RELEASE:=2.1
 PKG_VERSION:=1.1.6
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/app
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
