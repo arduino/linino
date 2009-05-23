@@ -51,6 +51,8 @@ define Build/Configure
 	)
 endef
 
+TARGET_LDFLAGS := -L$(STAGING_DIR)/usr/lib $(TARGET_LDFLAGS)
+
 define Package/oprofile/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) \
@@ -64,7 +66,8 @@ define Package/oprofile/install
 
 	$(INSTALL_DIR) $(1)/usr/share/oprofile
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/share/oprofile/* \
+		$(PKG_INSTALL_DIR)/usr/share/oprofile/stl.pat \
+		$(PKG_INSTALL_DIR)/usr/share/oprofile/$(LINUX_KARCH) \
 		$(1)/usr/share/oprofile/
 endef
 
