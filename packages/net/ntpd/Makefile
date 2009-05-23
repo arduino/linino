@@ -98,7 +98,7 @@ define Build/Configure
 		--enable-NMEA \
 		--enable-LOCAL-CLOCK \
 		--enable-SHM \
-		--enable-linuxcaps, \
+		--disable-linuxcaps, \
 		ac_cv_lib_rt_sched_setscheduler=no \
 	)
 endef
