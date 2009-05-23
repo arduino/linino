@@ -56,16 +56,19 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{lib,include}
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libbfd.a \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/* \
 		$(1)/usr/lib/
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/include/{symcat,ansidecl,bfd,bfdlink}.h \
+	$(CP) \
+		$(PKG_BUILD_DIR)/include/*.h \
+		$(1)/usr/include/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/* \
 		$(1)/usr/include/
 endef
 
 define Build/Compile
-	make -C $(PKG_BUILD_DIR)/bfd/doc/ CFLAGS="-I$(PKG_BUILD_DIR)/include" chew
+	$(MAKE) -C $(PKG_BUILD_DIR)/bfd/doc/ CFLAGS="-I$(PKG_BUILD_DIR)/include" chew
 	$(call Build/Compile/Default)
 endef
 
