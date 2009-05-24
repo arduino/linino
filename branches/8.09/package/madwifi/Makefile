@@ -12,7 +12,7 @@ PKG_NAME:=madwifi
 
 PKG_REV:=3314
 PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=1.1
+PKG_RELEASE:=2
 
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
@@ -24,9 +24,23 @@ PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/$(if $(PKG_BRANCH),$(PKG_BRANCH),madwifi-trun
 
 PATCH_DIR=./patches
 
+HAL_VERSION:=20090508
+HAL_FILE:=ath_hal-$(HAL_VERSION).tgz
+HAL_MD5SUM:=4ab7ae8bdb96c0be388c98bf8f92d5ca
+
 PKG_BUILD_DEPENDS:=wprobe
 
 include $(INCLUDE_DIR)/package.mk
+
+COMPRESSION:=1
+
+define Download/hal
+  FILE:=$(HAL_FILE)
+  URL:=http://mirror2.openwrt.org/sources
+  MD5SUM:=$(HAL_MD5SUM)
+endef
+$(eval $(call Download,hal))
+
 
 ifneq ($(CONFIG_TARGET_atheros),)
   BUS:=AHB
@@ -125,7 +139,7 @@ ifeq ($(findstring PCI,$(BUS)),PCI)
   MADWIFI_AUTOLOAD+= ath_pci
 endif
 
-MADWIFI_APPLETS:=80211stats athchans athctrl athkey athstats wlanconfig ath_info
+MADWIFI_APPLETS:=80211stats athchans athkey athstats wlanconfig ath_info
 ifdef CONFIG_MADWIFI_DEBUG
   MADWIFI_APPLETS += athdebug 80211debug
 endif
@@ -163,6 +177,7 @@ MADWIFI_INC = \
 MAKE_ARGS:= \
 	PATH="$(TARGET_PATH)" \
 	ARCH="$(LINUX_KARCH)" \
+	ARCH-y="$(LINUX_KARCH)" \
 	CROSS_COMPILE="$(TARGET_CROSS)" \
 	TARGET="$(HAL_TARGET)" \
 	TOOLPREFIX="$(KERNEL_CROSS)" \
@@ -170,6 +185,7 @@ MAKE_ARGS:= \
 	KERNELPATH="$(LINUX_DIR)" \
 	LDOPTS="--no-warn-mismatch " \
 	ATH_RATE="ath_rate/$(RATE_CONTROL)" \
+	ATH_CAP_SUPERG_COMP="$(COMPRESSION)" \
 	DO_MULTI=1 \
 	INCS="$(MADWIFI_INC)" \
 	$(if $(CONFIG_MADWIFI_DEBUG),,DEBUG=) WARNINGS="-Wno-unused"
@@ -178,14 +194,10 @@ MAKE_VARS:= \
 	COPTS="-DCONFIG_ATHEROS_RATE_DEFAULT='\"$(RATE_CONTROL)\"' -DATH_REVERSE_ENGINEERING=1" \
 
 ifeq ($(CONFIG_MADWIFI_UPSTREAM),)
-  HALFILE:=$(lastword $(sort $(wildcard ./ath_hal-*.tgz)))
-endif
-
-ifneq ($(HALFILE),)
   define Build/Prepare/HAL
 	rm -rf $(PKG_BUILD_DIR)/tmp
 	mkdir -p $(PKG_BUILD_DIR)/tmp
-	tar xvzf $(HALFILE) -C $(PKG_BUILD_DIR)/tmp
+	tar xvzf $(DL_DIR)/$(HAL_FILE) -C $(PKG_BUILD_DIR)/tmp
 	$(CP) $(PKG_BUILD_DIR)/tmp/ath_hal*/* $(PKG_BUILD_DIR)/hal/
 	rm -rf $(PKG_BUILD_DIR)/tmp
   endef
