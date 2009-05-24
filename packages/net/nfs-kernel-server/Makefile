@@ -1,9 +1,14 @@
+# Copyright (C) 2009 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nfs-kernel-server
 PKG_VERSION:=1.1.5
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_MD5SUM:=2848072a5e53840b9bc520fbb6782b57
 
 PKG_SOURCE_URL:=@SF/nfs
@@ -16,12 +21,14 @@ include $(INCLUDE_DIR)/package.mk
 define Package/nfs-kernel-server/Default
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+libwrap +libblkid
   URL:=http://nfs.sourceforge.net/
 endef
 
 define Package/nfs-kernel-server
+  $(call Package/nfs-kernel-server/Default)
   TITLE:=Kernel NFS server support
-  DEPENDS:=+kmod-fs-nfsd +kmod-fs-nfs +portmap +libwrap +libblkid
+  DEPENDS+= +kmod-fs-nfsd +kmod-fs-nfs +portmap
 endef
 
 define Package/nfs-kernel-server/description
@@ -29,8 +36,9 @@ define Package/nfs-kernel-server/description
 endef
 
 define Package/nfs-kernel-server-utils
+  $(call Package/nfs-kernel-server/Default)
   TITLE:=NFS server utils
-  DEPENDS:=+nfs-kernel-server
+  DEPENDS:=nfs-kernel-server
 endef
 
 define Package/nfs-kernel-server-utils/description
@@ -39,6 +47,16 @@ endef
 
 define Package/nfs-kernel-server/conffiles
 /etc/exports
+endef
+
+define Package/nfs-utils
+  $(call Package/nfs-kernel-server/Default)
+  DEPENDS+= +libevent
+  TITLE:=updated mount utility (includes nfs4)
+endef
+
+define Package/nfs-utils/description
+  Updated mount.nfs command - allows mounting nfs4 volumes
 endef
 
 CONFIGURE_ARGS += \
@@ -75,5 +93,12 @@ define Package/nfs-kernel-server-utils/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/utils/nfsstat/nfsstat $(1)/usr/sbin
 endef
 
+define Package/nfs-utils/install
+	$(INSTALL_DIR) $(1)/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/sbin/mount.nfs $(1)/sbin/
+	(cd $(1)/sbin; ln -sf mount.nfs mount.nfs4; ln -sf mount.nfs umount.nfs; ln -sf mount.nfs umount.nfs4)
+endef
+
 $(eval $(call BuildPackage,nfs-kernel-server))
 $(eval $(call BuildPackage,nfs-kernel-server-utils))
+$(eval $(call BuildPackage,nfs-utils))
