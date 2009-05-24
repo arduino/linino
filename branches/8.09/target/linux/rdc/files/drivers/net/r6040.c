@@ -528,7 +528,7 @@ static int r6040_phy_mode_chk(struct net_device *dev)
 			phy_dat = 0x0000;
 	}
 
-	mii_check_media(&lp->mii_if, 1, 1);
+	mii_check_media(&lp->mii_if, 0, 1);
 
 	return phy_dat;
 };
