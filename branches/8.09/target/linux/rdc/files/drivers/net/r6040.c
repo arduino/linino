@@ -24,7 +24,6 @@
 
 #include <linux/kernel.h>
 #include <linux/module.h>
-#include <linux/version.h>
 #include <linux/moduleparam.h>
 #include <linux/string.h>
 #include <linux/timer.h>
@@ -50,48 +49,12 @@
 #include <asm/processor.h>
 
 #define DRV_NAME	"r6040"
-#define DRV_VERSION	"0.19"
-#define DRV_RELDATE	"16Jun2008"
-
-/* define bits of a debug mask */
-#define DBG_PHY           0x00000001 /*!< show PHY read/write */
-#define DBG_FREE_BUFS     0x00000002 /*!< show calls to r6040_free_*bufs */
-#define DBG_RING          0x00000004 /*!< debug init./freeing of descr rings */
-#define DBG_RX_BUF        0x00000008 /*!< show alloc. of new rx buf (in IRQ context !) */
-#define DBG_TX_BUF        0x00000010 /*!< show arrival of new tx buf */
-#define DBG_TX_DONE       0x00000020 /*!< debug TX done */
-#define DBG_RX_DESCR      0x00000040 /*!< debug rx descr to be processed */
-#define DBG_RX_DATA       0x00000080 /*!< show some user data of incoming packet */
-#define DBG_EXIT          0x00000100 /*!< show exit code calls */
-#define DBG_INIT          0x00000200 /*!< show init. code calls */
-#define DBG_TX_RING_DUMP  0x00000400 /*!< dump the tx ring after creation */
-#define DBG_RX_RING_DUMP  0x00000800 /*!< dump the rx ring after creation */
-#define DBG_TX_DESCR      0x00001000 /*!< dump the setting of a descr for tx */
-#define DBG_TX_DATA       0x00002000 /*!< dump some tx data */
-#define DBG_IRQ           0x00004000 /*!< print inside the irq handler */
-#define DBG_POLL          0x00008000 /*!< dump info on poll procedure */
-#define DBG_MAC_ADDR      0x00010000 /*!< debug mac address setting */
-#define DBG_OPEN          0x00020000 /*!< debug open proc. */
-
-static int debug = 0;
-module_param(debug, int, 0);
-MODULE_PARM_DESC(debug, "debug mask (-1 for all)");
-
-/* define which debugs are left in the code during compilation */
-#define DEBUG (-1) /* all debugs */
-
-#define dbg(l, f, ...)				\
-  do { \
-    if ((DEBUG & l) && (debug & l)) { \
-      printk(KERN_INFO DRV_NAME " %s: " f, __FUNCTION__, ## __VA_ARGS__); \
-    } \
-  } while (0)
-
-#define err(f, ...) printk(KERN_WARNING DRV_NAME " %s: " f, __FUNCTION__, ## __VA_ARGS__)
+#define DRV_VERSION	"0.22"
+#define DRV_RELDATE	"25Mar2009"
 
 /* PHY CHIP Address */
 #define PHY1_ADDR	1	/* For MAC1 */
-#define PHY2_ADDR	2	/* For MAC2 */
+#define PHY2_ADDR	3	/* For MAC2 */
 #define PHY_MODE	0x3100	/* PHY CHIP Register 0 */
 #define PHY_CAP		0x01E1	/* PHY CHIP Register 4 */
 
@@ -127,15 +90,14 @@ MODULE_PARM_DESC(debug, "debug mask (-1 for all)");
 #define MISR		0x3C	/* Status register */
 #define MIER		0x40	/* INT enable register */
 #define  MSK_INT	0x0000	/* Mask off interrupts */
-#define  RX_FINISH      0x0001  /* rx finished irq */
-#define  RX_NO_DESC     0x0002  /* rx no descr. avail. irq */
-#define  RX_FIFO_FULL   0x0004  /* rx fifo full irq */
-#define  RX_EARLY       0x0008  /* rx early irq */
-#define  TX_FINISH      0x0010  /* tx finished irq */
-#define  TX_EARLY       0x0080  /* tx early irq */
-#define  EVENT_OVRFL    0x0100  /* event counter overflow irq */
-#define  LINK_CHANGED   0x0200  /* PHY link changed irq */
-
+#define  RX_FINISH	0x0001  /* RX finished */
+#define  RX_NO_DESC	0x0002  /* No RX descriptor available */
+#define  RX_FIFO_FULL	0x0004  /* RX FIFO full */
+#define  RX_EARLY	0x0008  /* RX early */
+#define  TX_FINISH	0x0010  /* TX finished */
+#define  TX_EARLY	0x0080  /* TX early */
+#define  EVENT_OVRFL	0x0100  /* Event counter overflow */
+#define  LINK_CHANGED	0x0200  /* PHY link changed */
 #define ME_CISR		0x44	/* Event counter INT status */
 #define ME_CIER		0x48	/* Event counter INT enable  */
 #define MR_CNT		0x50	/* Successfully received packet counter */
@@ -172,13 +134,23 @@ MODULE_PARM_DESC(debug, "debug mask (-1 for all)");
 #define MAX_BUF_SIZE	0x600
 #define RX_DESC_SIZE	(RX_DCNT * sizeof(struct r6040_descriptor))
 #define TX_DESC_SIZE	(TX_DCNT * sizeof(struct r6040_descriptor))
-#define MBCR_DEFAULT	0x012A	/* MAC Bus Control Register: 
-				   - wait 1 host clock until SDRAM bus request
-				     becomes high priority
-				   - RX FIFO: 32 byte
-				   - TX FIFO: 64 byte
-				   - FIFO transfer length: 16 byte */
+#define MBCR_DEFAULT	0x012A	/* MAC Bus Control Register */
 #define MCAST_MAX	4	/* Max number multicast addresses to filter */
+
+/* Descriptor status */
+#define DSC_OWNER_MAC	0x8000	/* MAC is the owner of this descriptor */
+#define DSC_RX_OK	0x4000	/* RX was successful */
+#define DSC_RX_ERR	0x0800	/* RX PHY error */
+#define DSC_RX_ERR_DRI	0x0400	/* RX dribble packet */
+#define DSC_RX_ERR_BUF	0x0200	/* RX length exceeds buffer size */
+#define DSC_RX_ERR_LONG	0x0100	/* RX length > maximum packet length */
+#define DSC_RX_ERR_RUNT	0x0080	/* RX packet length < 64 byte */
+#define DSC_RX_ERR_CRC	0x0040	/* RX CRC error */
+#define DSC_RX_BCAST	0x0020	/* RX broadcast (no error) */
+#define DSC_RX_MCAST	0x0010	/* RX multicast (no error) */
+#define DSC_RX_MCH_HIT	0x0008	/* RX multicast hit in hash table (no error) */
+#define DSC_RX_MIDH_HIT	0x0004	/* RX MID table hit (no error) */
+#define DSC_RX_IDX_MID_MASK 3	/* RX mask for the index of matched MIDx */
 
 /* PHY settings */
 #define ICPLUS_PHY_ID	0x0243
@@ -188,12 +160,12 @@ MODULE_AUTHOR("Sten Wang <sten.wang@rdc.com.tw>,"
 	"Florian Fainelli <florian@openwrt.org>");
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("RDC R6040 NAPI PCI FastEthernet driver");
+MODULE_VERSION(DRV_VERSION " " DRV_RELDATE);
 
-/*! which rx interrupts do we allow */
-#define RX_INTS                        (RX_FIFO_FULL|RX_NO_DESC|RX_FINISH)
-/*! which tx interrupts do we allow */
-#define TX_INTS                        (TX_FINISH)
-#define INT_MASK                 (RX_INTS | TX_INTS)
+/* RX and TX interrupts that we handle */
+#define RX_INTS			(RX_FIFO_FULL | RX_NO_DESC | RX_FINISH)
+#define TX_INTS			(TX_FINISH)
+#define INT_MASK		(RX_INTS | TX_INTS)
 
 struct r6040_descriptor {
 	u16	status, len;		/* 0-3 */
@@ -205,21 +177,6 @@ struct r6040_descriptor {
 	struct sk_buff *skb_ptr;	/* 18-1B */
 	u32	rev2;			/* 1C-1F */
 } __attribute__((aligned(32)));
-
-/*! defines for the status field in the r6040_descriptor */
-#define DESC_STATUS_OWNER_MAC       (1<<15) /*!< if set the MAC is the owner of this descriptor */
-#define DESC_STATUS_RX_OK           (1<<14) /*!< rx was successful */
-#define DESC_STATUS_RX_ERR          (1<<11) /*!< rx PHY error */
-#define DESC_STATUS_RX_ERR_DRIBBLE  (1<<10) /*!< rx dribble packet */
-#define DESC_STATUS_RX_ERR_BUFLEN   (1<< 9) /*!< rx length exceeded buffer size */
-#define DESC_STATUS_RX_ERR_LONG     (1<< 8) /*!< rx length > maximum packet length */
-#define DESC_STATUS_RX_ERR_RUNT     (1<< 7) /*!< rx: packet length < 64 byte */
-#define DESC_STATUS_RX_ERR_CRC      (1<< 6) /*!< rx: crc error */
-#define DESC_STATUS_RX_BROADCAST    (1<< 5) /*!< rx: broadcast (no error) */
-#define DESC_STATUS_RX_MULTICAST    (1<< 4) /*!< rx: multicast (no error) */
-#define DESC_STATUS_RX_MCH_HIT      (1<< 3) /*!< rx: multicast hit in hash table (no error) */
-#define DESC_STATUS_RX_MIDH_HIT     (1<< 2) /*!< rx: MID table hit (no error) */
-#define DESC_STATUS_RX_IDX_MID_MASK 3       /*!< rx: mask for the index of matched MIDx */
 
 struct r6040_private {
 	spinlock_t lock;		/* driver lock */
@@ -242,83 +199,34 @@ struct r6040_private {
 	void __iomem *base;
 };
 
-struct net_device *parent_dev;
-static char *parent = "wlan0";
-module_param(parent, charp, 0444);
-MODULE_PARM_DESC(parent, "Parent network device name to get the MAC address from");
-
 static char version[] __devinitdata = KERN_INFO DRV_NAME
 	": RDC R6040 NAPI net driver,"
-	"version "DRV_VERSION " (" DRV_RELDATE ")\n";
+	"version "DRV_VERSION " (" DRV_RELDATE ")";
 
 static int phy_table[] = { PHY1_ADDR, PHY2_ADDR };
 
-/* forward declarations */
-void r6040_multicast_list(struct net_device *dev);
-
-/* jal2: comment out to get more symbols for debugging */
-//#define STATIC static
-#define STATIC
-
-#if DEBUG
-/*! hexdump an memory area into a string. delim is taken as the delimiter between two bytes.
-    It is omitted if delim == '\0' */
-STATIC char *hex2str(void *addr, char *buf, int nr_bytes, int delim)
-{
-	unsigned char *src = addr;
-	char *outb = buf;
-
-#define BIN2HEXDIGIT(x) ((x) < 10 ? '0'+(x) : 'A'-10+(x))
-
-	while (nr_bytes > 0) {
-		*outb++ = BIN2HEXDIGIT(*src>>4);
-		*outb++ = BIN2HEXDIGIT(*src&0xf);
-		if (delim)
-			*outb++ = delim;
-		nr_bytes--;
-		src++;
-	}
-
-	if (delim)
-		outb--;
-	*outb = '\0';
-	return buf;
-}
-
-#endif /* #if DEBUG */
-
 /* Read a word data from PHY Chip */
-STATIC int phy_read(void __iomem *ioaddr, int phy_addr, int reg)
+static int r6040_phy_read(void __iomem *ioaddr, int phy_addr, int reg)
 {
 	int limit = 2048;
 	u16 cmd;
-	int rc;
 
 	iowrite16(MDIO_READ + reg + (phy_addr << 8), ioaddr + MMDIO);
 	/* Wait for the read bit to be cleared */
 	while (limit--) {
 		cmd = ioread16(ioaddr + MMDIO);
-		if (cmd & MDIO_READ)
+		if (!(cmd & MDIO_READ))
 			break;
 	}
 
-	if (limit <= 0)
-		err("phy addr x%x reg x%x timed out\n",
-		    phy_addr, reg);
-
-	rc=ioread16(ioaddr + MMRD);
-
-	dbg(DBG_PHY, "phy addr x%x reg x%x val x%x\n", phy_addr, reg, rc);
-	return rc;
+	return ioread16(ioaddr + MMRD);
 }
 
 /* Write a word data from PHY Chip */
-STATIC void phy_write(void __iomem *ioaddr, int phy_addr, int reg, u16 val)
+static void r6040_phy_write(void __iomem *ioaddr, int phy_addr, int reg, u16 val)
 {
 	int limit = 2048;
 	u16 cmd;
-
-	dbg(DBG_PHY, "phy addr x%x reg x%x val x%x\n", phy_addr, reg, val);
 
 	iowrite16(val, ioaddr + MMWD);
 	/* Write the command to the MDIO bus */
@@ -326,36 +234,32 @@ STATIC void phy_write(void __iomem *ioaddr, int phy_addr, int reg, u16 val)
 	/* Wait for the write bit to be cleared */
 	while (limit--) {
 		cmd = ioread16(ioaddr + MMDIO);
-		if (cmd & MDIO_WRITE)
+		if (!(cmd & MDIO_WRITE))
 			break;
 	}
-	if (limit <= 0)
-		err("phy addr x%x reg x%x val x%x timed out\n",
-		    phy_addr, reg, val);
 }
 
-STATIC int mdio_read(struct net_device *dev, int mii_id, int reg)
+static int r6040_mdio_read(struct net_device *dev, int mii_id, int reg)
 {
 	struct r6040_private *lp = netdev_priv(dev);
 	void __iomem *ioaddr = lp->base;
 
-	return (phy_read(ioaddr, lp->phy_addr, reg));
+	return (r6040_phy_read(ioaddr, lp->phy_addr, reg));
 }
 
-STATIC void mdio_write(struct net_device *dev, int mii_id, int reg, int val)
+static void r6040_mdio_write(struct net_device *dev, int mii_id, int reg, int val)
 {
 	struct r6040_private *lp = netdev_priv(dev);
 	void __iomem *ioaddr = lp->base;
 
-	phy_write(ioaddr, lp->phy_addr, reg, val);
+	r6040_phy_write(ioaddr, lp->phy_addr, reg, val);
 }
 
-void r6040_free_txbufs(struct net_device *dev)
+static void r6040_free_txbufs(struct net_device *dev)
 {
 	struct r6040_private *lp = netdev_priv(dev);
 	int i;
 
-	dbg(DBG_FREE_BUFS, "ENTER\n");
 	for (i = 0; i < TX_DCNT; i++) {
 		if (lp->tx_insert_ptr->skb_ptr) {
 			pci_unmap_single(lp->pdev,
@@ -366,16 +270,13 @@ void r6040_free_txbufs(struct net_device *dev)
 		}
 		lp->tx_insert_ptr = lp->tx_insert_ptr->vndescp;
 	}
-	dbg(DBG_FREE_BUFS, "EXIT\n");
 }
 
-/*! unmap and free all rx skb */
-void r6040_free_rxbufs(struct net_device *dev)
+static void r6040_free_rxbufs(struct net_device *dev)
 {
 	struct r6040_private *lp = netdev_priv(dev);
 	int i;
 
-	dbg(DBG_FREE_BUFS, "ENTER\n");
 	for (i = 0; i < RX_DCNT; i++) {
 		if (lp->rx_insert_ptr->skb_ptr) {
 			pci_unmap_single(lp->pdev,
@@ -386,59 +287,26 @@ void r6040_free_rxbufs(struct net_device *dev)
 		}
 		lp->rx_insert_ptr = lp->rx_insert_ptr->vndescp;
 	}
-	dbg(DBG_FREE_BUFS, "EXIT\n");
-
 }
 
-void r6040_init_ring_desc(struct r6040_descriptor *desc_ring,
+static void r6040_init_ring_desc(struct r6040_descriptor *desc_ring,
 				 dma_addr_t desc_dma, int size)
 {
 	struct r6040_descriptor *desc = desc_ring;
 	dma_addr_t mapping = desc_dma;
 
-	dbg(DBG_RING, "desc_ring %p desc_dma %08x size x%x\n",
-	    desc_ring, desc_dma, size);
-
-	
 	while (size-- > 0) {
 		mapping += sizeof(*desc);
-		memset(desc, 0, sizeof(*desc));
 		desc->ndesc = cpu_to_le32(mapping);
 		desc->vndescp = desc + 1;
 		desc++;
 	}
-
-	/* last descriptor points to first one to close the descriptor ring */
 	desc--;
 	desc->ndesc = cpu_to_le32(desc_dma);
 	desc->vndescp = desc_ring;
 }
 
-#if (DEBUG & DBG_TX_RING_DUMP)
-/*! dump the tx ring to syslog */
-STATIC void
-dump_tx_ring(struct r6040_private *lp)
-{
-	int i;
-	struct r6040_descriptor *ptr;
-
-	printk(KERN_INFO "%s: nr_desc x%x tx_ring %p tx_ring_dma %08x "
-	       "tx_insert %p tx_remove %p\n",
-	       DRV_NAME, TX_DCNT, lp->tx_ring, lp->tx_ring_dma,
-	       lp->tx_insert_ptr, lp->tx_remove_ptr);
-
-	if (lp->tx_ring) {
-		for(i=0, ptr=lp->tx_ring; i < TX_DCNT; i++, ptr++) {
-			printk(KERN_INFO "%s: %d. descr: status x%x len x%x "
-			       "ndesc %08x vbufp %p vndescp %p skb_ptr %p\n", 
-			       DRV_NAME, i, ptr->status, ptr->len,
-			       ptr->ndesc, ptr->vbufp, ptr->vndescp, ptr->skb_ptr);
-		}
-	}
-}
-#endif /* #if (DEBUG & DBG_TX_RING_DUMP) */
-
-void r6040_init_txbufs(struct net_device *dev)
+static void r6040_init_txbufs(struct net_device *dev)
 {
 	struct r6040_private *lp = netdev_priv(dev);
 
@@ -446,39 +314,9 @@ void r6040_init_txbufs(struct net_device *dev)
 
 	lp->tx_remove_ptr = lp->tx_insert_ptr = lp->tx_ring;
 	r6040_init_ring_desc(lp->tx_ring, lp->tx_ring_dma, TX_DCNT);
-
-#if (DEBUG & DBG_TX_RING_DUMP)
-	if (debug & DBG_TX_RING_DUMP) {
-		dump_tx_ring(lp);
-	}
-#endif
 }
 
-#if (DEBUG & DBG_RX_RING_DUMP)
-/*! dump the rx ring to syslog */
-STATIC void
-dump_rx_ring(struct r6040_private *lp)
-{
-	int i;
-	struct r6040_descriptor *ptr;
-
-	printk(KERN_INFO "%s: nr_desc x%x rx_ring %p rx_ring_dma %08x "
-	       "rx_insert %p rx_remove %p\n",
-	       DRV_NAME, RX_DCNT, lp->rx_ring, lp->rx_ring_dma,
-	       lp->rx_insert_ptr, lp->rx_remove_ptr);
-
-	if (lp->rx_ring) {
-		for(i=0, ptr=lp->rx_ring; i < RX_DCNT; i++, ptr++) {
-			printk(KERN_INFO "%s: %d. descr: status x%x len x%x "
-			       "ndesc %08x vbufp %p vndescp %p skb_ptr %p\n", 
-			       DRV_NAME, i, ptr->status, ptr->len,
-			       ptr->ndesc, ptr->vbufp, ptr->vndescp, ptr->skb_ptr);
-		}
-	}
-}
-#endif /* #if (DEBUG & DBG_TX_RING_DUMP) */
-
-int r6040_alloc_rxbufs(struct net_device *dev)
+static int r6040_alloc_rxbufs(struct net_device *dev)
 {
 	struct r6040_private *lp = netdev_priv(dev);
 	struct r6040_descriptor *desc;
@@ -488,61 +326,52 @@ int r6040_alloc_rxbufs(struct net_device *dev)
 	lp->rx_remove_ptr = lp->rx_insert_ptr = lp->rx_ring;
 	r6040_init_ring_desc(lp->rx_ring, lp->rx_ring_dma, RX_DCNT);
 
-	/* alloc skbs for the rx descriptors */
+	/* Allocate skbs for the rx descriptors */
 	desc = lp->rx_ring;
 	do {
-		if (!(skb=netdev_alloc_skb(dev, MAX_BUF_SIZE))) {
-			err("failed to alloc skb for rx\n");
+		skb = netdev_alloc_skb(dev, MAX_BUF_SIZE);
+		if (!skb) {
+			printk(KERN_ERR DRV_NAME "%s: failed to alloc skb for rx\n", dev->name);
 			rc = -ENOMEM;
 			goto err_exit;
 		}
 		desc->skb_ptr = skb;
 		desc->buf = cpu_to_le32(pci_map_single(lp->pdev,
-						       desc->skb_ptr->data,
-						       MAX_BUF_SIZE, PCI_DMA_FROMDEVICE));
-		desc->status = DESC_STATUS_OWNER_MAC;
+						desc->skb_ptr->data,
+						MAX_BUF_SIZE, PCI_DMA_FROMDEVICE));
+		desc->status = DSC_OWNER_MAC;
 		desc = desc->vndescp;
 	} while (desc != lp->rx_ring);
-
-#if (DEBUG & DBG_RX_RING_DUMP)
-	if (debug & DBG_RX_RING_DUMP) {
-		dump_rx_ring(lp);
-	}
-#endif
 
 	return 0;
 
 err_exit:
-	/* dealloc all previously allocated skb */
+	/* Deallocate all previously allocated skbs */
 	r6040_free_rxbufs(dev);
 	return rc;
 }
 
-/*! reset MAC and set all registers */
-void r6040_init_mac_regs(struct r6040_private *lp)
+static void r6040_init_mac_regs(struct net_device *dev)
 {
+	struct r6040_private *lp = netdev_priv(dev);
 	void __iomem *ioaddr = lp->base;
-	int limit;
-	char obuf[3*ETH_ALEN] __attribute__ ((unused));
+	int limit = 2048;
+	u16 cmd;
 
 	/* Mask Off Interrupt */
 	iowrite16(MSK_INT, ioaddr + MIER);
 
-	/* reset MAC */
+	/* Reset RDC MAC */
 	iowrite16(MAC_RST, ioaddr + MCR1);
-	udelay(100);
-	limit=2048;
-	while ((ioread16(ioaddr + MCR1) & MAC_RST) && limit-- > 0);
-
+	while (limit--) {
+		cmd = ioread16(ioaddr + MCR1);
+		if (cmd & 0x1)
+			break;
+	}
 	/* Reset internal state machine */
 	iowrite16(2, ioaddr + MAC_SM);
 	iowrite16(0, ioaddr + MAC_SM);
-	udelay(5000);
-
-	/* Restore MAC Addresses */
-	r6040_multicast_list(lp->dev);
-
-	/* TODO: restore multcast and hash table */
+	mdelay(5);
 
 	/* MAC Bus Control Register */
 	iowrite16(MBCR_DEFAULT, ioaddr + MBCR);
@@ -550,49 +379,48 @@ void r6040_init_mac_regs(struct r6040_private *lp)
 	/* Buffer Size Register */
 	iowrite16(MAX_BUF_SIZE, ioaddr + MR_BSR);
 
-	/* write tx ring start address */
+	/* Write TX ring start address */
 	iowrite16(lp->tx_ring_dma, ioaddr + MTD_SA0);
 	iowrite16(lp->tx_ring_dma >> 16, ioaddr + MTD_SA1);
 
-	/* write rx ring start address */
+	/* Write RX ring start address */
 	iowrite16(lp->rx_ring_dma, ioaddr + MRD_SA0);
 	iowrite16(lp->rx_ring_dma >> 16, ioaddr + MRD_SA1);
 
-	/* set interrupt waiting time and packet numbers */
+	/* Set interrupt waiting time and packet numbers */
 	iowrite16(0, ioaddr + MT_ICR);
 	iowrite16(0, ioaddr + MR_ICR);
 
-	/* enable interrupts */
+	/* Enable interrupts */
 	iowrite16(INT_MASK, ioaddr + MIER);
 
-	/* enable tx and rx */
+	/* Enable TX and RX */
 	iowrite16(lp->mcr0 | 0x0002, ioaddr);
 
-	/* let TX poll the descriptors - we may got called by r6040_tx_timeout which has left
-	   some unsent tx buffers */
+	/* Let TX poll the descriptors
+	 * we may got called by r6040_tx_timeout which has left
+	 * some unsent tx buffers */
 	iowrite16(0x01, ioaddr + MTPR);
 }
 
-void r6040_tx_timeout(struct net_device *dev)
+static void r6040_tx_timeout(struct net_device *dev)
 {
 	struct r6040_private *priv = netdev_priv(dev);
 	void __iomem *ioaddr = priv->base;
 
-	/* we read MISR, which clears on read (i.e. we may loose an RX interupt,
-	   but this is an error anyhow ... */
 	printk(KERN_WARNING "%s: transmit timed out, int enable %4.4x "
-	       "status %4.4x, PHY status %4.4x\n",
-	       dev->name, ioread16(ioaddr + MIER),
-	       ioread16(ioaddr + MISR),
-	       mdio_read(dev, priv->mii_if.phy_id, MII_BMSR));
+		"status %4.4x, PHY status %4.4x\n",
+		dev->name, ioread16(ioaddr + MIER),
+		ioread16(ioaddr + MISR),
+		r6040_mdio_read(dev, priv->mii_if.phy_id, MII_BMSR));
 
 	dev->stats.tx_errors++;
 
 	/* Reset MAC and re-init all registers */
-	r6040_init_mac_regs(priv);
+	r6040_init_mac_regs(dev);
 }
 
-struct net_device_stats *r6040_get_stats(struct net_device *dev)
+static struct net_device_stats *r6040_get_stats(struct net_device *dev)
 {
 	struct r6040_private *priv = netdev_priv(dev);
 	void __iomem *ioaddr = priv->base;
@@ -607,23 +435,42 @@ struct net_device_stats *r6040_get_stats(struct net_device *dev)
 }
 
 /* Stop RDC MAC and Free the allocated resource */
-void r6040_down(struct net_device *dev)
+static void r6040_down(struct net_device *dev)
 {
 	struct r6040_private *lp = netdev_priv(dev);
 	void __iomem *ioaddr = lp->base;
-	struct pci_dev *pdev = lp->pdev;
 	int limit = 2048;
-
-	dbg(DBG_EXIT, "ENTER\n");
+	u16 *adrp;
+	u16 cmd;
 
 	/* Stop MAC */
 	iowrite16(MSK_INT, ioaddr + MIER);	/* Mask Off Interrupt */
 	iowrite16(MAC_RST, ioaddr + MCR1);	/* Reset RDC MAC */
-	udelay(100);
-	while ((ioread16(ioaddr+MCR1) & 1) && limit-- > 0);
+	while (limit--) {
+		cmd = ioread16(ioaddr + MCR1);
+		if (cmd & 0x1)
+			break;
+	}
 
-	if (limit <= 0)
-		err("timeout while waiting for reset done.\n");
+	/* Restore MAC Address to MIDx */
+	adrp = (u16 *) dev->dev_addr;
+	iowrite16(adrp[0], ioaddr + MID_0L);
+	iowrite16(adrp[1], ioaddr + MID_0M);
+	iowrite16(adrp[2], ioaddr + MID_0H);
+}
+
+static int r6040_close(struct net_device *dev)
+{
+	struct r6040_private *lp = netdev_priv(dev);
+	struct pci_dev *pdev = lp->pdev;
+
+	/* deleted timer */
+	del_timer_sync(&lp->timer);
+
+	spin_lock_irq(&lp->lock);
+	napi_disable(&lp->napi);
+	netif_stop_queue(dev);
+	r6040_down(dev);
 
 	free_irq(dev->irq, dev);
 
@@ -633,49 +480,40 @@ void r6040_down(struct net_device *dev)
 	/* Free TX buffer */
 	r6040_free_txbufs(dev);
 
-	/* Free Descriptor memory */
-	pci_free_consistent(pdev, RX_DESC_SIZE, lp->rx_ring, lp->rx_ring_dma);
-	pci_free_consistent(pdev, TX_DESC_SIZE, lp->tx_ring, lp->tx_ring_dma);
-
-	dbg(DBG_EXIT, "EXIT\n");
-}
-
-int r6040_close(struct net_device *dev)
-{
-	struct r6040_private *lp = netdev_priv(dev);
-
-	dbg(DBG_EXIT, "ENTER\n");
-
-	/* deleted timer */
-	del_timer_sync(&lp->timer);
-	spin_lock_irq(&lp->lock);
-	napi_disable(&lp->napi);
-	netif_stop_queue(dev);
-	r6040_down(dev);
 	spin_unlock_irq(&lp->lock);
 
-	dbg(DBG_EXIT, "EXIT\n");
+	/* Free Descriptor memory */
+	if (lp->rx_ring) {
+		pci_free_consistent(pdev, RX_DESC_SIZE, lp->rx_ring, lp->rx_ring_dma);
+		lp->rx_ring = NULL;
+	}
+
+	if (lp->tx_ring) {
+		pci_free_consistent(pdev, TX_DESC_SIZE, lp->tx_ring, lp->tx_ring_dma);
+		lp->tx_ring = NULL;
+	}
+
 	return 0;
 }
 
-/* Status of PHY CHIP. Returns 0x8000 for full duplex, 0 for half duplex */
-STATIC int phy_mode_chk(struct net_device *dev)
+/* Status of PHY CHIP */
+static int r6040_phy_mode_chk(struct net_device *dev)
 {
 	struct r6040_private *lp = netdev_priv(dev);
 	void __iomem *ioaddr = lp->base;
 	int phy_dat;
 
 	/* PHY Link Status Check */
-	phy_dat = phy_read(ioaddr, lp->phy_addr, 1);
+	phy_dat = r6040_phy_read(ioaddr, lp->phy_addr, 1);
 	if (!(phy_dat & 0x4))
 		phy_dat = 0x8000;	/* Link Failed, full duplex */
 
 	/* PHY Chip Auto-Negotiation Status */
-	phy_dat = phy_read(ioaddr, lp->phy_addr, 1);
+	phy_dat = r6040_phy_read(ioaddr, lp->phy_addr, 1);
 	if (phy_dat & 0x0020) {
 		/* Auto Negotiation Mode */
-		phy_dat = phy_read(ioaddr, lp->phy_addr, 5);
-		phy_dat &= phy_read(ioaddr, lp->phy_addr, 4);
+		phy_dat = r6040_phy_read(ioaddr, lp->phy_addr, 5);
+		phy_dat &= r6040_phy_read(ioaddr, lp->phy_addr, 4);
 		if (phy_dat & 0x140)
 			/* Force full duplex */
 			phy_dat = 0x8000;
@@ -683,28 +521,29 @@ STATIC int phy_mode_chk(struct net_device *dev)
 			phy_dat = 0;
 	} else {
 		/* Force Mode */
-		phy_dat = phy_read(ioaddr, lp->phy_addr, 0);
+		phy_dat = r6040_phy_read(ioaddr, lp->phy_addr, 0);
 		if (phy_dat & 0x100)
 			phy_dat = 0x8000;
 		else
 			phy_dat = 0x0000;
 	}
 
-	dbg(DBG_PHY, "RETURN x%x\n", phy_dat);
+	mii_check_media(&lp->mii_if, 1, 1);
+
 	return phy_dat;
 };
 
-void r6040_set_carrier(struct mii_if_info *mii)
+static void r6040_set_carrier(struct mii_if_info *mii)
 {
-	if (phy_mode_chk(mii->dev)) {
+	if (r6040_phy_mode_chk(mii->dev)) {
 		/* autoneg is off: Link is always assumed to be up */
 		if (!netif_carrier_ok(mii->dev))
 			netif_carrier_on(mii->dev);
 	} else
-		phy_mode_chk(mii->dev);
+		r6040_phy_mode_chk(mii->dev);
 }
 
-int r6040_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
+static int r6040_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
 {
 	struct r6040_private *lp = netdev_priv(dev);
 	struct mii_ioctl_data *data = if_mii(rq);
@@ -719,43 +558,42 @@ int r6040_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
 	return rc;
 }
 
-int r6040_rx(struct net_device *dev, int limit)
+static int r6040_rx(struct net_device *dev, int limit)
 {
 	struct r6040_private *priv = netdev_priv(dev);
-	int count=0;
 	struct r6040_descriptor *descptr = priv->rx_remove_ptr;
 	struct sk_buff *skb_ptr, *new_skb;
-	char obuf[2*32+1] __attribute__ ((unused)); /* for debugging */
+	int count = 0;
+	u16 err;
 
-	while (count < limit && !(descptr->status & DESC_STATUS_OWNER_MAC)) {
-		/* limit not reached and the descriptor belongs to the CPU */
-
-		dbg(DBG_RX_DESCR, "descptr %p status x%x data len x%x\n",
-		    descptr, descptr->status, descptr->len);
-		
-		/* Check for errors */
-		if (descptr->status & DESC_STATUS_RX_ERR) {
-		
-			dev->stats.rx_errors++;
-			
-			if (descptr->status & (DESC_STATUS_RX_ERR_DRIBBLE|
-					       DESC_STATUS_RX_ERR_BUFLEN|
-					       DESC_STATUS_RX_ERR_LONG|
-					       DESC_STATUS_RX_ERR_RUNT)) {
-				/* packet too long or too short*/
+	/* Limit not reached and the descriptor belongs to the CPU */
+	while (count < limit && !(descptr->status & DSC_OWNER_MAC)) {
+		/* Read the descriptor status */
+		err = descptr->status;
+		/* Global error status set */
+		if (err & DSC_RX_ERR) {
+			/* RX dribble */
+			if (err & DSC_RX_ERR_DRI)
+				dev->stats.rx_frame_errors++;
+			/* Buffer lenght exceeded */
+			if (err & DSC_RX_ERR_BUF)
 				dev->stats.rx_length_errors++;
-			}
-
-			if (descptr->status & DESC_STATUS_RX_ERR_CRC) {
+			/* Packet too long */
+			if (err & DSC_RX_ERR_LONG)
+				dev->stats.rx_length_errors++;
+			/* Packet < 64 bytes */
+			if (err & DSC_RX_ERR_RUNT)
+				dev->stats.rx_length_errors++;
+			/* CRC error */
+			if (err & DSC_RX_ERR_CRC) {
+				spin_lock(&priv->lock);
 				dev->stats.rx_crc_errors++;
+				spin_unlock(&priv->lock);
 			}
 			goto next_descr;
 		}
 		
-		/* successful received packet */
-		
-		/* first try to allocate new skb. If this fails
-		   we drop the packet and leave the old skb there.*/
+		/* Packet successfully received */
 		new_skb = netdev_alloc_skb(dev, MAX_BUF_SIZE);
 		if (!new_skb) {
 			dev->stats.rx_dropped++;
@@ -763,42 +601,36 @@ int r6040_rx(struct net_device *dev, int limit)
 		}
 		skb_ptr = descptr->skb_ptr;
 		skb_ptr->dev = priv->dev;
+		
 		/* Do not count the CRC */
 		skb_put(skb_ptr, descptr->len - 4);
 		pci_unmap_single(priv->pdev, le32_to_cpu(descptr->buf),
-				 MAX_BUF_SIZE, PCI_DMA_FROMDEVICE);
+					MAX_BUF_SIZE, PCI_DMA_FROMDEVICE);
 		skb_ptr->protocol = eth_type_trans(skb_ptr, priv->dev);
-
-		dbg(DBG_RX_DATA, "rx len x%x: %s...\n",
-		    descptr->len, 
-		    hex2str(skb_ptr->data, obuf, sizeof(obuf)/2, '\0'));
-
+		
 		/* Send to upper layer */
 		netif_receive_skb(skb_ptr);
-		dev->last_rx = jiffies;
 		dev->stats.rx_packets++;
-		dev->stats.rx_bytes += (descptr->len-4);
+		dev->stats.rx_bytes += descptr->len - 4;
 
 		/* put new skb into descriptor */
 		descptr->skb_ptr = new_skb;
 		descptr->buf = cpu_to_le32(pci_map_single(priv->pdev,
-			descptr->skb_ptr->data,
-			MAX_BUF_SIZE, PCI_DMA_FROMDEVICE));
+						descptr->skb_ptr->data,
+					MAX_BUF_SIZE, PCI_DMA_FROMDEVICE));
 
-next_descr:		
+next_descr:
 		/* put the descriptor back to the MAC */
-		descptr->status = DESC_STATUS_OWNER_MAC;
+		descptr->status = DSC_OWNER_MAC;
 		descptr = descptr->vndescp;
-		count++; /* shall we count errors and dropped packets as well? */
-	} /* while (limit && !(descptr->status & DESC_STATUS_OWNER_MAC)) */
-
-	/* remember next descriptor to check for rx */
+		count++;
+	}
 	priv->rx_remove_ptr = descptr;
 
 	return count;
 }
 
-void r6040_tx(struct net_device *dev)
+static void r6040_tx(struct net_device *dev)
 {
 	struct r6040_private *priv = netdev_priv(dev);
 	struct r6040_descriptor *descptr;
@@ -817,10 +649,7 @@ void r6040_tx(struct net_device *dev)
 		if (err & (0x2000 | 0x4000))
 			dev->stats.tx_carrier_errors++;
 
-		dbg(DBG_TX_DONE, "descptr %p status x%x err x%x jiffies %lu\n",
-		    descptr, descptr->status, err, jiffies);
-
-		if (descptr->status & 0x8000)
+		if (descptr->status & DSC_OWNER_MAC)
 			break; /* Not complete */
 		skb_ptr = descptr->skb_ptr;
 		pci_unmap_single(priv->pdev, le32_to_cpu(descptr->buf),
@@ -839,7 +668,7 @@ void r6040_tx(struct net_device *dev)
 	spin_unlock(&priv->lock);
 }
 
-int r6040_poll(struct napi_struct *napi, int budget)
+static int r6040_poll(struct napi_struct *napi, int budget)
 {
 	struct r6040_private *priv =
 		container_of(napi, struct r6040_private, napi);
@@ -849,10 +678,8 @@ int r6040_poll(struct napi_struct *napi, int budget)
 
 	work_done = r6040_rx(dev, budget);
 
-	dbg(DBG_POLL, "budget x%x done x%x\n", budget, work_done);
-
 	if (work_done < budget) {
-		netif_rx_complete(dev, napi);
+		napi_complete(napi);
 		/* Enable RX interrupt */
 		iowrite16(ioread16(ioaddr + MIER) | RX_INTS, ioaddr + MIER);
 	}
@@ -860,48 +687,50 @@ int r6040_poll(struct napi_struct *napi, int budget)
 }
 
 /* The RDC interrupt handler. */
-irqreturn_t r6040_interrupt(int irq, void *dev_id)
+static irqreturn_t r6040_interrupt(int irq, void *dev_id)
 {
 	struct net_device *dev = dev_id;
 	struct r6040_private *lp = netdev_priv(dev);
 	void __iomem *ioaddr = lp->base;
-	u16 status;
+	u16 misr, status;
 
+	/* Save MIER */
+	misr = ioread16(ioaddr + MIER);
+	/* Mask off RDC MAC interrupt */
+	iowrite16(MSK_INT, ioaddr + MIER);
 	/* Read MISR status and clear */
 	status = ioread16(ioaddr + MISR);
-
-	dbg(DBG_IRQ, "status x%x jiffies %lu\n", status, jiffies);
 
 	if (status == 0x0000 || status == 0xffff)
 		return IRQ_NONE;
 
-	/* rx early / rx finish interrupt
-	   or rx descriptor unavail. */
+	/* RX interrupt request */
 	if (status & RX_INTS) {
 		if (status & RX_NO_DESC) {
-			/* rx descriptor unavail. */
+			/* RX descriptor unavailable */
 			dev->stats.rx_dropped++;
 			dev->stats.rx_missed_errors++;
 		}
-		/* Mask off RX interrupts */
-		iowrite16(ioread16(ioaddr + MIER) & ~RX_INTS, ioaddr + MIER);
-		netif_rx_schedule(dev, &lp->napi);
+		if (status & RX_FIFO_FULL)
+			dev->stats.rx_fifo_errors++;
+
+		/* Mask off RX interrupt */
+		misr &= ~RX_INTS;
+		napi_schedule(&lp->napi);
 	}
 
-	/* rx FIFO full */
-	if (status & RX_FIFO_FULL) {
-		dev->stats.rx_fifo_errors++;
-	}
-	
 	/* TX interrupt request */
-	if (status & 0x10)
+	if (status & TX_INTS)
 		r6040_tx(dev);
+
+	/* Restore RDC MAC interrupt */
+	iowrite16(misr, ioaddr + MIER);
 
 	return IRQ_HANDLED;
 }
 
 #ifdef CONFIG_NET_POLL_CONTROLLER
-void r6040_poll_controller(struct net_device *dev)
+static void r6040_poll_controller(struct net_device *dev)
 {
 	disable_irq(dev->irq);
 	r6040_interrupt(dev->irq, dev);
@@ -910,47 +739,46 @@ void r6040_poll_controller(struct net_device *dev)
 #endif
 
 /* Init RDC MAC */
-int r6040_up(struct net_device *dev)
+static int r6040_up(struct net_device *dev)
 {
 	struct r6040_private *lp = netdev_priv(dev);
 	void __iomem *ioaddr = lp->base;
-	int rc;
-
-	dbg(DBG_INIT, "ENTER\n");
+	int ret;
 
 	/* Initialise and alloc RX/TX buffers */
 	r6040_init_txbufs(dev);
-	if ((rc=r6040_alloc_rxbufs(dev)))
-		return rc;
+	ret = r6040_alloc_rxbufs(dev);
+	if (ret)
+		return ret;
 
 	/* Read the PHY ID */
-	lp->switch_sig = phy_read(ioaddr, 0, 2);
+	lp->switch_sig = r6040_phy_read(ioaddr, 0, 2);
 
 	if (lp->switch_sig  == ICPLUS_PHY_ID) {
-		phy_write(ioaddr, 29, 31, 0x175C); /* Enable registers */
+		r6040_phy_write(ioaddr, 29, 31, 0x175C); /* Enable registers */
 		lp->phy_mode = 0x8000;
 	} else {
 		/* PHY Mode Check */
-		phy_write(ioaddr, lp->phy_addr, 4, PHY_CAP);
-		phy_write(ioaddr, lp->phy_addr, 0, PHY_MODE);
+		r6040_phy_write(ioaddr, lp->phy_addr, 4, PHY_CAP);
+		r6040_phy_write(ioaddr, lp->phy_addr, 0, PHY_MODE);
 
 		if (PHY_MODE == 0x3100)
-			lp->phy_mode = phy_mode_chk(dev);
+			lp->phy_mode = r6040_phy_mode_chk(dev);
 		else
 			lp->phy_mode = (PHY_MODE & 0x0100) ? 0x8000:0x0;
 	}
-	
-/* configure duplex mode */
+
+	/* Set duplex mode */
 	lp->mcr0 |= lp->phy_mode;
 
 	/* improve performance (by RDC guys) */
-	phy_write(ioaddr, 30, 17, (phy_read(ioaddr, 30, 17) | 0x4000));
-	phy_write(ioaddr, 30, 17, ~((~phy_read(ioaddr, 30, 17)) | 0x2000));
-	phy_write(ioaddr, 0, 19, 0x0000);
-	phy_write(ioaddr, 0, 30, 0x01F0);
+	r6040_phy_write(ioaddr, 30, 17, (r6040_phy_read(ioaddr, 30, 17) | 0x4000));
+	r6040_phy_write(ioaddr, 30, 17, ~((~r6040_phy_read(ioaddr, 30, 17)) | 0x2000));
+	r6040_phy_write(ioaddr, 0, 19, 0x0000);
+	r6040_phy_write(ioaddr, 0, 30, 0x01F0);
 
-	/* Reset MAC and init all registers */
-	r6040_init_mac_regs(lp);
+	/* Initialize all MAC registers */
+	r6040_init_mac_regs(dev);
 
 	return 0;
 }
@@ -959,7 +787,7 @@ int r6040_up(struct net_device *dev)
   A periodic timer routine
 	Polling PHY Chip Link Status
 */
-void r6040_timer(unsigned long data)
+static void r6040_timer(unsigned long data)
 {
 	struct net_device *dev = (struct net_device *)data;
 	struct r6040_private *lp = netdev_priv(dev);
@@ -968,7 +796,7 @@ void r6040_timer(unsigned long data)
 
 	/* Polling PHY Chip Status */
 	if (PHY_MODE == 0x3100)
-		phy_mode = phy_mode_chk(dev);
+		phy_mode = r6040_phy_mode_chk(dev);
 	else
 		phy_mode = (PHY_MODE & 0x0100) ? 0x8000:0x0;
 
@@ -976,34 +804,52 @@ void r6040_timer(unsigned long data)
 		lp->phy_mode = phy_mode;
 		lp->mcr0 = (lp->mcr0 & 0x7fff) | phy_mode;
 		iowrite16(lp->mcr0, ioaddr);
-		printk(KERN_INFO "Link Change x%x \n", ioread16(ioaddr));
+		//printk(KERN_INFO "Link Change %x \n", ioread16(ioaddr));
 	}
 
 	/* Timer active again */
-	mod_timer(&lp->timer, jiffies + round_jiffies(HZ));
+	mod_timer(&lp->timer, round_jiffies(jiffies + HZ));
 }
 
-int r6040_open(struct net_device *dev)
+/* Read/set MAC address routines */
+static void r6040_mac_address(struct net_device *dev)
+{
+	struct r6040_private *lp = netdev_priv(dev);
+	void __iomem *ioaddr = lp->base;
+	u16 *adrp;
+
+	/* MAC operation register */
+	iowrite16(0x01, ioaddr + MCR1); /* Reset MAC */
+	iowrite16(2, ioaddr + MAC_SM); /* Reset internal state machine */
+	iowrite16(0, ioaddr + MAC_SM);
+	mdelay(5);
+
+	/* Restore MAC Address */
+	adrp = (u16 *) dev->dev_addr;
+	iowrite16(adrp[0], ioaddr + MID_0L);
+	iowrite16(adrp[1], ioaddr + MID_0M);
+	iowrite16(adrp[2], ioaddr + MID_0H);
+}
+
+static int r6040_open(struct net_device *dev)
 {
 	struct r6040_private *lp = netdev_priv(dev);
 	int ret;
 
-	dbg(DBG_OPEN, "ENTER\n");
 	/* Request IRQ and Register interrupt handler */
 	ret = request_irq(dev->irq, &r6040_interrupt,
 		IRQF_SHARED, dev->name, dev);
 	if (ret)
 		return ret;
 
-	dbg(DBG_OPEN, "got irq %d\n", dev->irq);
+	/* Set MAC address */
+	r6040_mac_address(dev);
 
 	/* Allocate Descriptor memory */
 	lp->rx_ring =
 		pci_alloc_consistent(lp->pdev, RX_DESC_SIZE, &lp->rx_ring_dma);
 	if (!lp->rx_ring)
 		return -ENOMEM;
-
-	dbg(DBG_OPEN, "allocated rx ring\n");
 
 	lp->tx_ring =
 		pci_alloc_consistent(lp->pdev, TX_DESC_SIZE, &lp->tx_ring_dma);
@@ -1013,16 +859,15 @@ int r6040_open(struct net_device *dev)
 		return -ENOMEM;
 	}
 
-	dbg(DBG_OPEN, "allocated tx ring\n");
-
-	if ((ret=r6040_up(dev))) {
+	ret = r6040_up(dev);
+	if (ret) {
 		pci_free_consistent(lp->pdev, TX_DESC_SIZE, lp->tx_ring,
-				    lp->tx_ring_dma);
+							lp->tx_ring_dma);
 		pci_free_consistent(lp->pdev, RX_DESC_SIZE, lp->rx_ring,
-				     lp->rx_ring_dma);
+							lp->rx_ring_dma);
 		return ret;
 	}
-		
+
 	napi_enable(&lp->napi);
 	netif_start_queue(dev);
 
@@ -1033,7 +878,7 @@ int r6040_open(struct net_device *dev)
 	return 0;
 }
 
-int r6040_start_xmit(struct sk_buff *skb, struct net_device *dev)
+static int r6040_start_xmit(struct sk_buff *skb, struct net_device *dev)
 {
 	struct r6040_private *lp = netdev_priv(dev);
 	struct r6040_descriptor *descptr;
@@ -1067,17 +912,7 @@ int r6040_start_xmit(struct sk_buff *skb, struct net_device *dev)
 	descptr->skb_ptr = skb;
 	descptr->buf = cpu_to_le32(pci_map_single(lp->pdev,
 		skb->data, skb->len, PCI_DMA_TODEVICE));
-
-	dbg(DBG_TX_DESCR, "desc @ %p: len x%x buf %08x skb->data %p skb->len x%x jiffies %lu\n",
-	    descptr, descptr->len, descptr->buf, skb->data, skb->len, jiffies);
-
-	{
-		char obuf[2*32+1];
-		dbg(DBG_TX_DATA, "tx len x%x: %s\n",
-		    descptr->len, hex2str(skb->data, obuf, sizeof(obuf)/2, '\0'));
-	}
-
-	descptr->status = 0x8000;
+	descptr->status = DSC_OWNER_MAC;
 	/* Trigger the MAC to check the TX descriptor */
 	iowrite16(0x01, ioaddr + MTPR);
 	lp->tx_insert_ptr = descptr->vndescp;
@@ -1091,8 +926,7 @@ int r6040_start_xmit(struct sk_buff *skb, struct net_device *dev)
 	return ret;
 }
 
-/*! set MAC addresses and promiscous mode */
-void r6040_multicast_list(struct net_device *dev)
+static void r6040_multicast_list(struct net_device *dev)
 {
 	struct r6040_private *lp = netdev_priv(dev);
 	void __iomem *ioaddr = lp->base;
@@ -1101,16 +935,12 @@ void r6040_multicast_list(struct net_device *dev)
 	unsigned long flags;
 	struct dev_mc_list *dmi = dev->mc_list;
 	int i;
-	char obuf[3*ETH_ALEN] __attribute__ ((unused));
 
 	/* MAC Address */
 	adrp = (u16 *)dev->dev_addr;
 	iowrite16(adrp[0], ioaddr + MID_0L);
 	iowrite16(adrp[1], ioaddr + MID_0M);
 	iowrite16(adrp[2], ioaddr + MID_0H);
-
-	dbg(DBG_MAC_ADDR, "%s: set MAC addr %s\n", 
-	    dev->name, hex2str(dev->dev_addr, obuf, ETH_ALEN, ':'));
 
 	/* Promiscous Mode */
 	spin_lock_irqsave(&lp->lock, flags);
@@ -1174,7 +1004,7 @@ void r6040_multicast_list(struct net_device *dev)
 	}
 }
 
-STATIC void netdev_get_drvinfo(struct net_device *dev,
+static void netdev_get_drvinfo(struct net_device *dev,
 			struct ethtool_drvinfo *info)
 {
 	struct r6040_private *rp = netdev_priv(dev);
@@ -1184,7 +1014,7 @@ STATIC void netdev_get_drvinfo(struct net_device *dev,
 	strcpy(info->bus_info, pci_name(rp->pdev));
 }
 
-STATIC int netdev_get_settings(struct net_device *dev, struct ethtool_cmd *cmd)
+static int netdev_get_settings(struct net_device *dev, struct ethtool_cmd *cmd)
 {
 	struct r6040_private *rp = netdev_priv(dev);
 	int rc;
@@ -1196,7 +1026,7 @@ STATIC int netdev_get_settings(struct net_device *dev, struct ethtool_cmd *cmd)
 	return rc;
 }
 
-STATIC int netdev_set_settings(struct net_device *dev, struct ethtool_cmd *cmd)
+static int netdev_set_settings(struct net_device *dev, struct ethtool_cmd *cmd)
 {
 	struct r6040_private *rp = netdev_priv(dev);
 	int rc;
@@ -1209,7 +1039,7 @@ STATIC int netdev_set_settings(struct net_device *dev, struct ethtool_cmd *cmd)
 	return rc;
 }
 
-STATIC u32 netdev_get_link(struct net_device *dev)
+static u32 netdev_get_link(struct net_device *dev)
 {
 	struct r6040_private *rp = netdev_priv(dev);
 
@@ -1223,7 +1053,7 @@ static struct ethtool_ops netdev_ethtool_ops = {
 	.get_link		= netdev_get_link,
 };
 
-int __devinit r6040_init_one(struct pci_dev *pdev,
+static int __devinit r6040_init_one(struct pci_dev *pdev,
 					 const struct pci_device_id *ent)
 {
 	struct net_device *dev;
@@ -1233,30 +1063,33 @@ int __devinit r6040_init_one(struct pci_dev *pdev,
 	static int card_idx = -1;
 	int bar = 0;
 	long pioaddr;
+	u16 *adrp;
 
 	printk(KERN_INFO "%s\n", version);
-	printk(KERN_INFO DRV_NAME ": debug %x\n", debug);
 
 	err = pci_enable_device(pdev);
 	if (err)
-		return err;
+		goto err_out;
 
 	/* this should always be supported */
-	if (pci_set_dma_mask(pdev, DMA_32BIT_MASK)) {
-		printk(KERN_ERR DRV_NAME "32-bit PCI DMA addresses"
+	err = pci_set_dma_mask(pdev, DMA_32BIT_MASK);
+	if (err) {
+		printk(KERN_ERR DRV_NAME ": 32-bit PCI DMA addresses"
 				"not supported by the card\n");
-		return -ENODEV;
+		goto err_out;
 	}
-	if (pci_set_consistent_dma_mask(pdev, DMA_32BIT_MASK)) {
-		printk(KERN_ERR DRV_NAME "32-bit PCI DMA addresses"
+	err = pci_set_consistent_dma_mask(pdev, DMA_32BIT_MASK);
+	if (err) {
+		printk(KERN_ERR DRV_NAME ": 32-bit PCI DMA addresses"
 				"not supported by the card\n");
-		return -ENODEV;
+		goto err_out;
 	}
 
 	/* IO Size check */
 	if (pci_resource_len(pdev, 0) < io_size) {
-		printk(KERN_ERR "Insufficient PCI resources, aborting\n");
-		return -EIO;
+		printk(KERN_ERR DRV_NAME ": Insufficient PCI resources, aborting\n");
+		err = -EIO;
+		goto err_out;
 	}
 
 	pioaddr = pci_resource_start(pdev, 0);	/* IO map base address */
@@ -1264,24 +1097,31 @@ int __devinit r6040_init_one(struct pci_dev *pdev,
 
 	dev = alloc_etherdev(sizeof(struct r6040_private));
 	if (!dev) {
-		printk(KERN_ERR "Failed to allocate etherdev\n");
-		return -ENOMEM;
+		printk(KERN_ERR DRV_NAME ": Failed to allocate etherdev\n");
+		err = -ENOMEM;
+		goto err_out;
 	}
 	SET_NETDEV_DEV(dev, &pdev->dev);
 	lp = netdev_priv(dev);
 
-	if (pci_request_regions(pdev, DRV_NAME)) {
+	err = pci_request_regions(pdev, DRV_NAME);
+
+	if (err) {
 		printk(KERN_ERR DRV_NAME ": Failed to request PCI regions\n");
-		err = -ENODEV;
-		goto err_out_disable;
+		goto err_out_free_dev;
 	}
 
 	ioaddr = pci_iomap(pdev, bar, io_size);
 	if (!ioaddr) {
-		printk(KERN_ERR "ioremap failed for device %s\n",
+		printk(KERN_ERR DRV_NAME ": ioremap failed for device %s\n",
 			pci_name(pdev));
-		return -EIO;
+		err = -EIO;
+		goto err_out_free_res;
 	}
+	/* If PHY status change register is still set to zero it means the
+	 * bootloader didn't initialize it */
+	if (ioread16(ioaddr + PHY_CC) == 0)
+		iowrite16(0x9f07, ioaddr + PHY_CC);
 
 	/* Init system & device */
 	lp->base = ioaddr;
@@ -1290,11 +1130,23 @@ int __devinit r6040_init_one(struct pci_dev *pdev,
 	spin_lock_init(&lp->lock);
 	pci_set_drvdata(pdev, dev);
 
+	/* Set MAC address */
 	card_idx++;
+
+	adrp = (u16 *)dev->dev_addr;
+	adrp[0] = ioread16(ioaddr + MID_0L);
+	adrp[1] = ioread16(ioaddr + MID_0M);
+	adrp[2] = ioread16(ioaddr + MID_0H);
+
+	/* Some bootloader/BIOSes do not initialize
+	 * MAC address, warn about that */
+	if (!(adrp[0] || adrp[1] || adrp[2])) {
+		printk(KERN_WARNING DRV_NAME ": MAC address not initialized, generating random\n");
+		random_ether_addr(dev->dev_addr);
+	}
 
 	/* Link new device into r6040_root_dev */
 	lp->pdev = pdev;
-
 	lp->dev = dev;
 
 	/* Init RDC private data */
@@ -1312,30 +1164,13 @@ int __devinit r6040_init_one(struct pci_dev *pdev,
 	dev->ethtool_ops = &netdev_ethtool_ops;
 	dev->tx_timeout = &r6040_tx_timeout;
 	dev->watchdog_timeo = TX_TIMEOUT;
-
-	{
-	/* TODO: fix the setting of the MAC address.
-	   Right now you must either specify a netdevice with "parent=", whose
-	   address is copied or the (default) address of the Sitecom WL-153
-	   bootloader is used */
-		static const u8 dflt_addr[ETH_ALEN] = {0,0x50,0xfc,2,3,4};
-		if (parent_dev) {
-			memcpy(dev->dev_addr, parent_dev->dev_addr, ETH_ALEN);
-		} else {
-			printk(KERN_WARNING "%s: no parent - using default mac address\n",
-			       dev->name);
-			memcpy(dev->dev_addr, dflt_addr, ETH_ALEN);
-		}
-		dev->dev_addr[ETH_ALEN-1] += card_idx ^ 1; /* + 0 or 1 */
-	}
-
 #ifdef CONFIG_NET_POLL_CONTROLLER
 	dev->poll_controller = r6040_poll_controller;
 #endif
 	netif_napi_add(dev, &lp->napi, r6040_poll, 64);
 	lp->mii_if.dev = dev;
-	lp->mii_if.mdio_read = mdio_read;
-	lp->mii_if.mdio_write = mdio_write;
+	lp->mii_if.mdio_read = r6040_mdio_read;
+	lp->mii_if.mdio_write = r6040_mdio_write;
 	lp->mii_if.phy_id = lp->phy_addr;
 	lp->mii_if.phy_id_mask = 0x1f;
 	lp->mii_if.reg_num_mask = 0x1f;
@@ -1344,23 +1179,21 @@ int __devinit r6040_init_one(struct pci_dev *pdev,
 	err = register_netdev(dev);
 	if (err) {
 		printk(KERN_ERR DRV_NAME ": Failed to register net device\n");
-		goto err_out_res;
+		goto err_out_unmap;
 	}
-
-	dbg(DBG_INIT, "%s successfully registered\n", dev->name);
 	return 0;
 
-err_out_res:
+err_out_unmap:
+	pci_iounmap(pdev, ioaddr);
+err_out_free_res:
 	pci_release_regions(pdev);
-err_out_disable:
-	pci_disable_device(pdev);
-	pci_set_drvdata(pdev, NULL);
+err_out_free_dev:
 	free_netdev(dev);
-
+err_out:
 	return err;
 }
 
-void __devexit r6040_remove_one(struct pci_dev *pdev)
+static void __devexit r6040_remove_one(struct pci_dev *pdev)
 {
 	struct net_device *dev = pci_get_drvdata(pdev);
 
@@ -1388,9 +1221,6 @@ static struct pci_driver r6040_driver = {
 
 static int __init r6040_init(void)
 {
-	if (parent)
-		parent_dev = dev_get_by_name(&init_net, parent);
-	
 	return pci_register_driver(&r6040_driver);
 }
 
