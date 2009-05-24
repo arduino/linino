@@ -27,9 +27,7 @@
 #include <linux/init.h>
 #include <asm/uaccess.h>
 #include <asm/checksum.h>
-#if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,0)
-#include <net/ip6_checksum.h>
-#endif
+
 #include <linux/in6.h>
 #include "siit.h"
 
@@ -41,26 +39,29 @@ MODULE_AUTHOR("Dmitriy Moscalev, Grigory Klyuchnikov, Felix Fietkau");
  */
 int tos_ignore_flag = 0;
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,0)
-static inline void
-skb_reset_mac_header(struct sk_buff *skb)
-{
-	skb->mac.raw=skb->data;
-}
-
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24)
 static struct net_device_stats *
 siit_get_stats(struct net_device *dev)
 {
 	return netdev_priv(dev);
 }
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,23)
+static inline void
+skb_reset_mac_header(struct sk_buff *skb)
+{
+	skb->mac.raw=skb->data;
+}
+#endif
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,0)
 static inline void random_ether_addr(u8 *addr)
 {
 	get_random_bytes (addr, ETH_ALEN);
 	addr [0] &= 0xfe;	/* clear multicast bit */
 	addr [0] |= 0x02;	/* set local assignment bit (IEEE802) */
 }
-
+#endif
 
 #define siit_stats(_dev) ((struct net_device_stats *)netdev_priv(_dev))
 #else
@@ -1381,7 +1382,7 @@ end:
 	return 0;
 }
 
-#if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,0)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24)
 static bool header_ops_init = false;
 static struct header_ops siit_header_ops ____cacheline_aligned;
 #endif
@@ -1405,7 +1406,7 @@ siit_init(struct net_device *dev)
 	dev->flags           |= IFF_NOARP;     /* ARP not used */
 	dev->tx_queue_len = 10;
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,0)
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24)
 	dev->hard_header_cache = NULL;        /* Disable caching */
 	memset(netdev_priv(dev), 0, sizeof(struct net_device_stats));
 	dev->get_stats = siit_get_stats;
@@ -1428,7 +1429,7 @@ int init_module(void)
 	int res = -ENOMEM;
 	int priv_size;
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,0)
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24)
 	priv_size = sizeof(struct net_device_stats);
 #else
 	priv_size = sizeof(struct header_ops);
