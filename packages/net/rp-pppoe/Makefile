@@ -73,7 +73,7 @@ endef
 
 TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/src/libevent
 CONFIGURE_PATH := ./src
-CONFIGURE_ARGS += ac_cv_path_PPPD=/usr/sbin/pppd --enable-plugin=../../ppp-2.4.3/ipkg-install/usr/include/
+CONFIGURE_ARGS += ac_cv_path_PPPD=/usr/sbin/pppd --enable-plugin=../../ppp-2.4.4/ipkg-install/usr/include/
 MAKE_FLAGS := DESTDIR="$(PKG_INSTALL_DIR)" install
 MAKE_PATH := ./src
 
