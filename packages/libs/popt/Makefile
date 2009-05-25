@@ -12,7 +12,7 @@ PKG_VERSION:=1.7
 PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/
+PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
 PKG_MD5SUM:=5988e7aeb0ae4dac8d83561265984cc9
 
 include $(INCLUDE_DIR)/package.mk
