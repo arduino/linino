@@ -44,7 +44,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		LDFLAGS="$(TARGET_LDFLAGS) -lncurses" \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
-		CC=$(TARGET_CC)
+		CC="$(TARGET_CC)"
 endef
 
 define Package/mg/install
