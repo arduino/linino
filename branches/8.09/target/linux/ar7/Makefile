@@ -15,6 +15,9 @@ LINUX_VERSION:=2.6.26.8
 
 include $(INCLUDE_DIR)/target.mk
 
+DEFAULT_PACKAGES+= kmod-pppoa ppp-mod-pppoa br2684ctl kmod-acx \
+		kmod-sangam-atm-annex-a kmod-sangam-atm-annex-b
+
 define Target/Description
 	Build firmware images for TI AR7 based routers
 endef
