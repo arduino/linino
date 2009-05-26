@@ -15,7 +15,7 @@ PKG_SOURCE:=axTLS-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/axtls
 PKG_MD5SUM:=03471b5a5874e2ce86025f24b3fa0958
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/axTLS
+TAR_OPTIONS:=--transform='s,axTLS,$(PKG_NAME)-$(PKG_VERSION),' -xvf -
 
 include $(INCLUDE_DIR)/package.mk
 
