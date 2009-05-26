@@ -12,7 +12,7 @@ PKG_VERSION:=0.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.zeroflux.org/knock/files/
+PKG_SOURCE_URL:=http://www.zeroflux.org/proj/knock/files/
 PKG_MD5SUM:=ca09d61458974cff90a700aba6120891
 
 include $(INCLUDE_DIR)/package.mk
@@ -22,45 +22,39 @@ define Package/knock/Default
   CATEGORY:=Network
   DEPENDS:=+libpcap
   TITLE:=Port-knocking
-  URL:=http://www.zeroflux.org/cgi-bin/cvstrac/knock/wiki
+  URL:=http://www.zeroflux.org/projects/knock
 endef
 
 define Package/knock
   $(call Package/knock/Default)
-  TITLE+= client
+  TITLE+= (client)
+endef
+
+define Package/knock/Default/description
+	It listens to all traffic on an ethernet (or PPP) interface,
+	looking for special "knock" sequences of port-hits. A client
+	makes these port-hits by sending a TCP (or UDP) packet to a
+	port on the server. This port need not be open -- since
+	knockd listens at the link-layer level, it sees all traffic
+	even if it's destined for a closed port. When the server
+	detects a specific sequence of port-hits, it runs a command
+	defined in its configuration file. This can be used to open
+	up holes in a firewall for quick access.
 endef
 
 define Package/knock/description
-=
-	It listens to all traffic on an ethernet (or PPP) interface, 
-	looking for special "knock" sequences of port-hits. A client 
-	makes these port-hits by sending a TCP (or UDP) packet to a 
-	port on the server. This port need not be open -- since 
-	knockd listens at the link-layer level, it sees all traffic 
-	even if it's destined for a closed port. When the server 
-	detects a specific sequence of port-hits, it runs a command 
-	defined in its configuration file. This can be used to open 
-	up holes in a firewall for quick access.	
-	This package contains the port-knocking client.
+  $(call Package/knock/Default/description)
+  This package contains the port-knocking client.
 endef
 
 define Package/knockd
   $(call Package/knock/Default)
-  TITLE+= server
+  TITLE+= (server)
 endef
 
 define Package/knockd/description
-=
-	It listens to all traffic on an ethernet (or PPP) interface, 
-	looking for special "knock" sequences of port-hits. A client 
-	makes these port-hits by sending a TCP (or UDP) packet to a 
-	port on the server. This port need not be open -- since 
-	knockd listens at the link-layer level, it sees all traffic 
-	even if it's destined for a closed port. When the server 
-	detects a specific sequence of port-hits, it runs a command 
-	defined in its configuration file. This can be used to open 
-	up holes in a firewall for quick access.	
-	This package contains the port-knocking server.
+  $(call Package/knock/Default/description)
+  This package contains the port-knocking server.
 endef
 
 define Package/knockd/conffiles
