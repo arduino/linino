@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ezxml
 PKG_VERSION:=0.8.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/ezxml
@@ -35,17 +35,14 @@ define Package/libezxml/description
 	ezXML is a fast and lightweight C library for parsing XML documents.
 endef
 
-TARGET_CFLAGS += -D_GNU_SOURCE
+TARGET_CFLAGS += $(FPIC) -D_GNU_SOURCE
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/ezxml.h $(1)/usr/include/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/libezxml.a $(1)/usr/lib/
-
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/libezxml.so $(1)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/libezxml.{a,so} $(1)/usr/lib/
 endef
 
 define Package/libezxml/install
