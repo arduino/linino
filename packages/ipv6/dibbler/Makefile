@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dibbler
-PKG_VERSION:=0.7.1
+PKG_VERSION:=0.7.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.gz
-PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=76a814d528274b2dc7ff7623bd6f6b45
+PKG_SOURCE_URL:=http://klub.com.pl/dhcpv6/dibbler/
+PKG_MD5SUM:=
 
 include $(INCLUDE_DIR)/package.mk
 
