@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miredo
-PKG_VERSION:=1.0.0
+PKG_VERSION:=1.1.6
 PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=http://www.remlab.net/files/miredo/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=b5a51cb98732decc2ada96b2caee5d3c
+PKG_MD5SUM:=bf49c1ddc068746760787d0cf76e40de
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -53,6 +53,7 @@ CONFIGURE_ARGS += \
 	--enable-teredo-relay \
 	--enable-teredo-server \
 	--enable-miredo-user=root \
+	--without-Judy \
 
 CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
