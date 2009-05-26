@@ -18,6 +18,7 @@ PKG_MD5SUM:=885d70f15d31eb736975e5473d8ea7ec
 include $(INCLUDE_DIR)/package.mk
 
 define Package/polarssl/Default
+  SUBMENU:=SSL
   TITLE:=Embedded SSL
   URL:=http://polarssl.org/
 endef

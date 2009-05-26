@@ -25,6 +25,7 @@ endef
 define Package/libcyassl
   $(call Package/cyassl/Default)
   SECTION:=libs
+  SUBMENU:=SSL
   CATEGORY:=Libraries
   DEPENDS:=+zlib
   TITLE+= (library)

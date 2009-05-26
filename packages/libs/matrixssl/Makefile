@@ -21,6 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/libmatrixssl
   SECTION:=libs
+  SUBMENU:=SSL
   CATEGORY:=Libraries
   DEPENDS:=+libpthread
   TITLE:=Embedded SSL implementation
