@@ -1,0 +1,11 @@
+config CLEARSILVER_ENABLE_COMPRESSION
+     bool "HTML compression support" if PACKAGE_clearsilver
+     default y if CONFIG_PACKAGE_zlib
+
+config CLEARSILVER_ENABLE_REMOTE_DEBUGGER
+     bool "Remote X CGI debugging" if PACKAGE_clearsilver
+     default n
+
+config CLEARSILVER_ENABLE_GETTEXT
+     bool "Gettext message translation" if PACKAGE_clearsilver
+     default n
