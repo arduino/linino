@@ -4,14 +4,15 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
+# $Id: Makefile 15090 2009-04-03 09:16:29Z florian $
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rtorrent
 
-PKG_REV:=1087
+PKG_REV:=1093
 PKG_VERSION:=0.8.4_r$(PKG_REV)
-PKG_RELEASE:=2
+PKG_RELEASE:=5
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=svn://rakshasa.no/libtorrent/trunk/rtorrent
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
@@ -28,7 +29,7 @@ define Package/rtorrent
   CATEGORY:=Network
   TITLE:=BitTorrent client for ncurses
   URL:=http://libtorrent.rakshasa.no/
-  DEPENDS:=+libcurl +libtorrent +libncurses +xmlrpc-c
+  DEPENDS:=+libcurl +libtorrent +libncurses +libsigcxx +xmlrpc-c
 endef
 
 define Package/rtorrent/description
@@ -38,8 +39,13 @@ define Package/rtorrent/description
  based clients in an ncurses client.
 endef
 
-TARGET_CPPFLAGS +=  \
-	-fno-strict-aliasing -fno-inline \
+ifneq ($(CONFIG_GCC_VERSION_3_4)$(CONFIG_GCC_VERSION_4_1),)
+TARGET_CPPFLAGS += -fno-strict-aliasing -fno-inline
+endif
+
+ifneq ($(CONFIG_GCC_VERSION_4_2)$(CONFIG_GCC_VERSION_4_3),)
+TARGET_CPPFLAGS +=  -fno-inline
+endif
 
 CONFIGURE_ARGS+= \
 	--enable-shared \
