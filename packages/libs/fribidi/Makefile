@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=http://fribidi.org/download
 
 PKG_INSTALL:=1
 
+PKG_FIXUP:=libtool
+
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
