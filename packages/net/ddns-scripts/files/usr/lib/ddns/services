@@ -10,7 +10,7 @@
 
 "dyndns.org"		"http://[USERNAME]:[PASSWORD]@members.dyndns.org/nic/update?hostname=[DOMAIN]&myip=[IP]"
 "changeip.com"		"http://[USERNAME]:[PASSWORD]@nic.changeip.com/nic/update?u=[USERNAME]&p=[PASSWORD]&cmd=update&hostname=[DOMAIN]&ip=[IP]"
-"zoneedit.com"		"http://[USERNAME]:[PASSWORD]@http://dynamic.zoneedit.com/auth/dynamic.html?host=[DOMAIN]&dnsto=[IP]"
+"zoneedit.com"		"http://[USERNAME]:[PASSWORD]@dynamic.zoneedit.com/auth/dynamic.html?host=[DOMAIN]&dnsto=[IP]"
 
 #noip is an alias of no-ip, so allow both names for the same service
 "no-ip.com"		"http://dynupdate.no-ip.com/ducupdate.php?username=[USERNAME]&pass=[PASSWORD]&h[]=[DOMAIN]&ip=[IP]"     
