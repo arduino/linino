@@ -20,7 +20,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://svn.enlightenment.org/svn/e/trunk/$(PKG_NAME)
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 
-HOST_BUILD_DEPENDS:=jpeg/host libpng/host libfreetype/host eet/host
+HOST_BUILD_DEPENDS:=libjpeg/host libpng/host libfreetype/host eet/host
 
 PKG_FIXUP = libtool
 
