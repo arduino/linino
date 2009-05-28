@@ -32,6 +32,7 @@ define Package/gphoto2/description
 endef
 
 CONFIGURE_ARGS += \
+	--without-aalib \
 	--without-libiconv-prefix \
 	--without-libintl-prefix \
 
