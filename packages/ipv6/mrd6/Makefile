@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mrd6
-PKG_VERSION:=0.9.5
-PKG_REVISION:=3
-PKG_RELEASE:=$(PKG_REVISION).1
+PKG_VERSION:=0.9.6
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_REVISION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://fivebits.net/files/mrd6/ \
 	http://hng.av.it.pt/mrd6/download/
-PKG_MD5SUM:=361322198dafcc5ffab5e8e23197012b
+PKG_MD5SUM:=00221326810358889e811c48cbac415a
+TAR_OPTIONS:=
 
 include $(INCLUDE_DIR)/package.mk
 

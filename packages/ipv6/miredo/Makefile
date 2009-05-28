@@ -18,8 +18,8 @@ PKG_MD5SUM:=bf49c1ddc068746760787d0cf76e40de
 include $(INCLUDE_DIR)/package.mk
 
 define Package/miredo/Default
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=ipv6
+  CATEGORY:=IPv6
   DEPENDS:=+libpthread +uclibcxx +kmod-ipv6 +kmod-tun
   SUBMENU:=miredo: Teredo (IPv6 tunneling over UDP through NAT)
   URL:=http://www.simphalempin.com/dev/miredo/
