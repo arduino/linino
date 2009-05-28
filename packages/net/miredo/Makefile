@@ -70,7 +70,7 @@ endef
 
 define Package/miredo-server/install
 	$(INSTALL_DIR) $(1)/etc/
-	$(CP) $(PKG_INSTALL_DIR)/etc/miredo-server.conf-dist $(1)/etc/miredo-server.conf
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/miredo/examples/miredo-server.conf $(1)/etc/miredo-server.conf
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/miredo-server.init $(1)/etc/init.d/miredo-server
 	$(INSTALL_DIR) $(1)/usr/sbin
@@ -79,7 +79,7 @@ endef
 
 define Package/miredo-client/install	
 	$(INSTALL_DIR) $(1)/etc
-	$(CP) $(PKG_INSTALL_DIR)/etc/miredo.conf-dist $(1)/etc/miredo.conf
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/miredo/examples/miredo.conf $(1)/etc/miredo.conf
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/miredo.init $(1)/etc/init.d/miredo
 	$(INSTALL_DIR) $(1)/usr/sbin
