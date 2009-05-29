@@ -24,7 +24,7 @@ define Package/mrd6
   CATEGORY:=IPv6
   TITLE:=IPv6 multicast routing daemon
   URL:=http://artemis.av.it.pt/mrd6/
-  DEPENDS:= +uclibcxx
+  DEPENDS:= +uclibcxx @BROKEN
 endef
 
 define Package/mrd6/description
