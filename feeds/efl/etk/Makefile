@@ -22,6 +22,8 @@ PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 
 PKG_FIXUP = libtool
 
+PKG_BUILD_DEPENDS:=edje/host
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/etk
@@ -30,7 +32,7 @@ define Package/etk
   SUBMENU:=libraries
   TITLE:=Etk is a toolkit based on the EFL
   URL:=http://wiki.enlightenment.org/index.php/Etk
-  DEPENDS:=+evas +ecore +edje
+  DEPENDS:=+evas +ecore +edje +libintl
 endef
 
 define Package/etk/description
@@ -50,9 +52,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	ln -sf `which edje_cc` $(STAGING_DIR_HOST)/usr/bin/
 	DESTDIR="$(PKG_INSTALL_DIR)" $(MAKE) -C $(PKG_BUILD_DIR) all install
-	rm -f $(STAGING_DIR_HOST)/usr/bin/edje_cc
 endef
 
 define Build/InstallDev
