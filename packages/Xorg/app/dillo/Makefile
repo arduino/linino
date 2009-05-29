@@ -27,7 +27,7 @@ define Package/dillo
   SUBMENU:=app
   TITLE:=Dillo2
   URL:=http://fltk.org/
-  DEPENDS:=+libXft +libstdcpp +libpthread +zlib +fltk2
+  DEPENDS:=+libXft +libstdcpp +libpthread +zlib +fltk2 +libjpeg +libiconv +libpng
 endef
 
 define Package/dillo/description
