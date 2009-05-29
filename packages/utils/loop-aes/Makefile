@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define KernelPackage/loop-aes
   SUBMENU:=Cryptographic API modules
-  DEPENDS:=@!PACKAGE_kmod-loop
+  DEPENDS:=@!PACKAGE_kmod-loop @!LINUX_2_6_30
   TITLE:=loopback module with built-in AES
   FILES:=$(PKG_BUILD_DIR)/loop.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,30,loop)
