@@ -23,6 +23,7 @@ define Package/luaprofiler
   CATEGORY:=Languages
   TITLE:=Lua Profiler
   URL:=http://luaprofiler.luaforge.net
+  DEPENDS:=+lua
 endef
 
 define Package/luaprofiler/description
