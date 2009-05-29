@@ -25,7 +25,7 @@ define Package/xine-lib
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=xine libraries
-  DEPENDS:=+libX11 +alsa-lib
+  DEPENDS:=+libX11 +alsa-lib +zlib
 endef
 
 define Build/Configure
