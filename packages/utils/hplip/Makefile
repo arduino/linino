@@ -38,7 +38,8 @@ CONFIGURE_ARGS += \
 	--disable-fax-build \
 	--disable-pp-build \
 	--disable-doc-build \
-	--disable-foomatic-xml-install
+	--disable-foomatic-xml-install \
+	--disable-dbus-build
 
 define Build/Configure
 	$(call Build/Configure/Default,\
