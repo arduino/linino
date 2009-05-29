@@ -33,6 +33,7 @@ define Build/Compile
 	$(call Build/Compile/Default, \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libipq $(TARGET_CPPFLAGS)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
+		LIBIPQ=$(STAGING_DIR)/usr/lib/libipq.a \
 		all \
 	)
 endef
