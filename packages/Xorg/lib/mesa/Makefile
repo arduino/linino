@@ -44,7 +44,7 @@ define Package/libgl-mesa-dri-$(1)
   SECTION:=xorg-lib
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=libgl-mesa @DISPLAY_SUPPORT
+  DEPENDS:=libgl-mesa @DISPLAY_SUPPORT $(if $(findstring swrast,$(1)),,@TARGET_x86)
   TITLE:=mesa dri $(1)
   URL:=http://mesa3d.org
 endef
