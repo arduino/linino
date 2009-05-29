@@ -39,14 +39,16 @@ endef
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR) && autoreconf --force --install)
-	$(call Build/Configure/Default)
+	$(call Build/Configure/Default, \
+		--disable-jbt6k74-set-state \
+	)
 endef
 
 define Package/xf86-video-glamo/install
 	$(INSTALL_DIR) $(1)/usr/lib/xorg/modules/drivers
 	$(CP) \
-	    $(PKG_INSTALL_DIR)/usr/lib/xorg/modules/drivers/glamo_drv.so \
-	    $(1)/usr/lib/xorg/modules/drivers/
+		$(PKG_INSTALL_DIR)/usr/lib/xorg/modules/drivers/glamo_drv.so \
+		$(1)/usr/lib/xorg/modules/drivers/
 endef
 
 $(eval $(call BuildPackage,xf86-video-glamo))
