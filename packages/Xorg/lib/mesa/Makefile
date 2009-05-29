@@ -25,7 +25,7 @@ define Package/libgl-mesa
   SECTION:=xorg-lib
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+libX11 +libXext +libXfixes +libXdamage +libXxf86vm +libdrm
+  DEPENDS:=+libX11 +libXext +libXfixes +libXdamage +libXxf86vm +libdrm +libexpat
   TITLE:=Mesa OpenGL library
   URL:=http://mesa3d.org
 endef
