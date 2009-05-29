@@ -11,11 +11,9 @@ PKG_NAME:=mrd6
 PKG_VERSION:=0.9.6
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://fivebits.net/files/mrd6/ \
-	http://hng.av.it.pt/mrd6/download/
-PKG_MD5SUM:=00221326810358889e811c48cbac415a
-TAR_OPTIONS:=
+PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
+PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/m/mrd6/
+PKG_MD5SUM:=a59d87857654ff92426062ad5664fcd6
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,8 +21,8 @@ define Package/mrd6
   SECTION:=ipv6
   CATEGORY:=IPv6
   TITLE:=IPv6 multicast routing daemon
-  URL:=http://artemis.av.it.pt/mrd6/
-  DEPENDS:= +uclibcxx @BROKEN
+  URL:=http://fivebits.net/proj/mrd6
+  DEPENDS:= +uclibcxx
 endef
 
 define Package/mrd6/description
@@ -56,8 +54,8 @@ endef
 
 define Package/mrd6/install
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_DATA) files/mrd6.conf $(1)/etc
-	$(INSTALL_BIN) files/mrd6.init $(1)/etc/init.d/mrd6
+	$(INSTALL_CONF) ./files/mrd6.conf $(1)/etc
+	$(INSTALL_BIN) ./files/mrd6.init $(1)/etc/init.d/mrd6
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/mrd $(1)/usr/sbin/mrd6
 	$(INSTALL_DIR) $(1)/usr/bin
