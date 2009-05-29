@@ -22,7 +22,7 @@ define Package/xf86-video-nv
   SECTION:=xorg-driver
   CATEGORY:=Xorg
   SUBMENU:=driver
-  DEPENDS:=+xserver-xorg
+  DEPENDS:=+xserver-xorg @TARGET_i386
   TITLE:=xf86-video-nv
   URL:=http://xorg.freedesktop.org/
 endef

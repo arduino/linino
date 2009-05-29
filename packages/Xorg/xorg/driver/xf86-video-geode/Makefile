@@ -26,7 +26,7 @@ define Package/xf86-video-geode
   SECTION:=xorg-driver
   CATEGORY:=Xorg
   SUBMENU:=driver
-  DEPENDS:=+xserver-xorg +libpciaccess
+  DEPENDS:=+xserver-xorg +libpciaccess @TARGET_x86
   TITLE:=xf86-video-geode
   URL:=http://xorg.freedesktop.org/
 endef
