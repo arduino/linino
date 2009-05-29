@@ -30,7 +30,7 @@ define Package/python-edje
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=python-edje
-  DEPENDS:=+python-mini +edje +evas +ecore +eina
+  DEPENDS:=+python-mini +edje +eina +python-ecore +python-evas
 endef
 
 define Package/python-edje/description
