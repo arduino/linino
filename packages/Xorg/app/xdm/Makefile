@@ -8,13 +8,14 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_BASE_NAME:=xdm
 PKG_NAME:=xdm
-PKG_RELEASE:=3
-PKG_VERSION:=1.1.6
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/app
+PKG_RELEASE:=1
+PKG_VERSION:=1.1.8
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/app
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,20 +28,30 @@ define Package/xdm
   URL:=http://xorg.freedesktop.org/
 endef
 
-CONFIGURE_ARGS+=--with-random-device=/dev/urandom LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib" 
+TARGET_LDFLAGS+=\
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib
 
-define Build/Compile
-	DESTDIR=$(PKG_INSTALL_DIR) make -C $(PKG_BUILD_DIR) install
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--without-pam \
+		--with-random-device=/dev/urandom \
+		--disable-dynamic-greeter \
+		--disable-xprint \
+	)
 endef
 
 define Package/xdm/install
-	$(INSTALL_DIR) $(1)
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
-	rm -rf $(1)/usr/man/
-endef
-
-define Build/InstallDev
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+	$(INSTALL_DIR) $(1)/usr/{bin,lib/X11/xdm,share/X11/app-defaults}
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/* \
+		$(1)/usr/bin/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/X11/xdm/{X*,chooser,GiveConsole,TakeConsole,xdm-config,pixmaps} \
+		$(1)/usr/lib/X11/xdm/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/share/X11/app-defaults/* \
+		$(1)/usr/share/X11/app-defaults/
 endef
 
 $(eval $(call BuildPackage,xdm))
