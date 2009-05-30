@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=matchbox-window-manager
 PKG_VERSION:=1.2
-PKG_RELEASE:=1
+PKG_RELEASE:=1.1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://matchbox-project.org/sources/$(PKG_NAME)/$(PKG_VERSION)
@@ -28,7 +28,7 @@ define Package/matchbox-window-manager
   SECTION:=xorg-wm
   CATEGORY:=Xorg
   SUBMENU:=window manager
-  DEPENDS:=+libX11 +zlib +libfreetype +fontconfig +libmatchbox +freedesktop-compliant
+  DEPENDS:=+libX11 +zlib +libfreetype +fontconfig +libmatchbox
 endef
 
 define Build/Compile
