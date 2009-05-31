@@ -21,7 +21,7 @@ define Package/6scripts
   TITLE:=IPv6 scripts
 endef
 
-define Package/6tunnel/description
+define Package/6scripts/description
 IPv6 scripts to setup ipv6 connectivy using 6to4 tunnels
 or bridged ipv6 connectivity.
 endef
