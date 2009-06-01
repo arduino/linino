@@ -1,7 +1,5 @@
-Index: linux-2.6.23.17/drivers/net/via-rhine.c
-===================================================================
---- linux-2.6.23.17.orig/drivers/net/via-rhine.c
-+++ linux-2.6.23.17/drivers/net/via-rhine.c
+--- a/drivers/net/via-rhine.c
++++ b/drivers/net/via-rhine.c
 @@ -33,6 +33,8 @@
  #define DRV_VERSION	"1.4.3"
  #define DRV_RELDATE	"2007-03-06"

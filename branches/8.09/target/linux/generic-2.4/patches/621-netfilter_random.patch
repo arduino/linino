@@ -1,6 +1,6 @@
 --- a/Documentation/Configure.help
 +++ b/Documentation/Configure.help
-@@ -2914,6 +2914,15 @@
+@@ -2914,6 +2914,15 @@ CONFIG_IP_NF_MATCH_MAC
    If you want to compile it as a module, say M here and read
    <file:Documentation/modules.txt>.  If unsure, say `N'.
  
@@ -16,7 +16,7 @@
  Netfilter MARK match support
  CONFIG_IP_NF_MATCH_MARK
    Netfilter mark matching allows you to match packets based on the
-@@ -3229,6 +3238,7 @@
+@@ -3229,6 +3238,7 @@ CONFIG_IP_NF_MATCH_HELPER
    If you want to compile it as a module, say M here and read
    Documentation/modules.txt.  If unsure, say `Y'.
  
@@ -24,7 +24,7 @@
  TCPMSS match support
  CONFIG_IP_NF_MATCH_TCPMSS
    This option adds a `tcpmss' match, which allows you to examine the
-@@ -3376,6 +3386,14 @@
+@@ -3376,6 +3386,14 @@ CONFIG_IP6_NF_MATCH_MAC
    If you want to compile it as a module, say M here and read
    <file:Documentation/modules.txt>.  If unsure, say `N'.
  
@@ -69,7 +69,7 @@
 +#endif /*_IP6T_RAND_H*/
 --- a/net/ipv4/netfilter/Config.in
 +++ b/net/ipv4/netfilter/Config.in
-@@ -48,6 +48,7 @@
+@@ -48,6 +48,7 @@ if [ "$CONFIG_IP_NF_IPTABLES" != "n" ]; 
    dep_tristate '  netfilter MARK match support' CONFIG_IP_NF_MATCH_MARK $CONFIG_IP_NF_IPTABLES
    dep_tristate '  Multiple port match support' CONFIG_IP_NF_MATCH_MULTIPORT $CONFIG_IP_NF_IPTABLES
    dep_tristate '  TOS match support' CONFIG_IP_NF_MATCH_TOS $CONFIG_IP_NF_IPTABLES
@@ -178,7 +178,7 @@
 +module_exit(fini);
 --- a/net/ipv4/netfilter/Makefile
 +++ b/net/ipv4/netfilter/Makefile
-@@ -114,6 +114,8 @@
+@@ -114,6 +114,8 @@ obj-$(CONFIG_IP_NF_MATCH_OWNER) += ipt_o
  obj-$(CONFIG_IP_NF_MATCH_TOS) += ipt_tos.o
  obj-$(CONFIG_IP_NF_MATCH_CONDITION) += ipt_condition.o
  
@@ -189,7 +189,7 @@
  obj-$(CONFIG_IP_NF_MATCH_ECN) += ipt_ecn.o
 --- a/net/ipv6/netfilter/Config.in
 +++ b/net/ipv6/netfilter/Config.in
-@@ -19,6 +19,7 @@
+@@ -19,6 +19,7 @@ if [ "$CONFIG_IP6_NF_IPTABLES" != "n" ];
    dep_tristate '  limit match support' CONFIG_IP6_NF_MATCH_LIMIT $CONFIG_IP6_NF_IPTABLES
    dep_tristate '  condition match support' CONFIG_IP6_NF_MATCH_CONDITION $CONFIG_IP6_NF_IPTABLES
    dep_tristate '  MAC address match support' CONFIG_IP6_NF_MATCH_MAC $CONFIG_IP6_NF_IPTABLES
@@ -299,7 +299,7 @@
 +module_exit(fini);
 --- a/net/ipv6/netfilter/Makefile
 +++ b/net/ipv6/netfilter/Makefile
-@@ -32,6 +32,7 @@
+@@ -32,6 +32,7 @@ obj-$(CONFIG_IP6_NF_TARGET_MARK) += ip6t
  obj-$(CONFIG_IP6_NF_TARGET_IMQ) += ip6t_IMQ.o
  obj-$(CONFIG_IP6_NF_QUEUE) += ip6_queue.o
  obj-$(CONFIG_IP6_NF_TARGET_LOG) += ip6t_LOG.o

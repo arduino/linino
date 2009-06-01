@@ -1,7 +1,5 @@
-Index: linux-2.6.23.17/arch/mips/Kconfig
-===================================================================
---- linux-2.6.23.17.orig/arch/mips/Kconfig
-+++ linux-2.6.23.17/arch/mips/Kconfig
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
 @@ -595,6 +595,20 @@ config WR_PPMC
  	  This enables support for the Wind River MIPS32 4KC PPMC evaluation
  	  board, which is based on GT64120 bridge chip.
@@ -31,10 +29,8 @@ Index: linux-2.6.23.17/arch/mips/Kconfig
  	default "5"
  
  config HAVE_STD_PC_SERIAL_PORT
-Index: linux-2.6.23.17/arch/mips/Makefile
-===================================================================
---- linux-2.6.23.17.orig/arch/mips/Makefile
-+++ linux-2.6.23.17/arch/mips/Makefile
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
 @@ -300,6 +300,13 @@ load-$(CONFIG_LEMOTE_FULONG) +=0xfffffff
  cflags-$(CONFIG_LEMOTE_FULONG) += -Iinclude/asm-mips/mach-lemote
  
@@ -49,19 +45,15 @@ Index: linux-2.6.23.17/arch/mips/Makefile
  # For all MIPS, Inc. eval boards
  #
  core-$(CONFIG_MIPS_BOARDS_GEN)	+= arch/mips/mips-boards/generic/
-Index: linux-2.6.23.17/arch/mips/pci/Makefile
-===================================================================
---- linux-2.6.23.17.orig/arch/mips/pci/Makefile
-+++ linux-2.6.23.17/arch/mips/pci/Makefile
+--- a/arch/mips/pci/Makefile
++++ b/arch/mips/pci/Makefile
 @@ -46,3 +46,4 @@ obj-$(CONFIG_TOSHIBA_RBTX4938)	+= fixup-
  obj-$(CONFIG_VICTOR_MPC30X)	+= fixup-mpc30x.o
  obj-$(CONFIG_ZAO_CAPCELLA)	+= fixup-capcella.o
  obj-$(CONFIG_WR_PPMC)		+= fixup-wrppmc.o
 +obj-$(CONFIG_MIKROTIK_RB500)	+= pci-rc32434.o ops-rc32434.o fixup-rb500.o
-Index: linux-2.6.23.17/drivers/pci/Makefile
-===================================================================
---- linux-2.6.23.17.orig/drivers/pci/Makefile
-+++ linux-2.6.23.17/drivers/pci/Makefile
+--- a/drivers/pci/Makefile
++++ b/drivers/pci/Makefile
 @@ -32,6 +32,7 @@ obj-$(CONFIG_PPC32) += setup-irq.o
  obj-$(CONFIG_PPC64) += setup-bus.o
  obj-$(CONFIG_MIPS) += setup-bus.o setup-irq.o
@@ -70,10 +62,8 @@ Index: linux-2.6.23.17/drivers/pci/Makefile
  
  #
  # ACPI Related PCI FW Functions
-Index: linux-2.6.23.17/include/asm-mips/bootinfo.h
-===================================================================
---- linux-2.6.23.17.orig/include/asm-mips/bootinfo.h
-+++ linux-2.6.23.17/include/asm-mips/bootinfo.h
+--- a/include/asm-mips/bootinfo.h
++++ b/include/asm-mips/bootinfo.h
 @@ -208,6 +208,11 @@
  #define MACH_GROUP_WINDRIVER   28	/* Windriver boards */
  #define MACH_WRPPMC             1
@@ -86,10 +76,8 @@ Index: linux-2.6.23.17/include/asm-mips/bootinfo.h
  #define CL_SIZE			COMMAND_LINE_SIZE
  
  const char *get_system_type(void);
-Index: linux-2.6.23.17/include/asm-mips/cpu.h
-===================================================================
---- linux-2.6.23.17.orig/include/asm-mips/cpu.h
-+++ linux-2.6.23.17/include/asm-mips/cpu.h
+--- a/include/asm-mips/cpu.h
++++ b/include/asm-mips/cpu.h
 @@ -217,8 +217,9 @@
  #define CPU_R14000		64
  #define CPU_LOONGSON1           65
