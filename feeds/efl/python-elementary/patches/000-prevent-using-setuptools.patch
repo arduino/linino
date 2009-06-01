@@ -1,0 +1,20 @@
+diff -ruN python-elementary.orig/setup.py python-elementary/setup.py
+--- python-elementary.orig/setup.py	2009-05-20 21:14:09.000000000 +0200
++++ python-elementary/setup.py	2009-05-20 21:22:29.000000000 +0200
+@@ -14,7 +14,6 @@
+             "http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/")
+ 
+ from distutils.core import setup
+-from setuptools import find_packages
+ from distutils.extension import Extension
+ from Cython.Distutils import build_ext
+ import commands
+@@ -75,7 +74,7 @@
+     description = 'Python bindings for Elementary',
+     long_description = '',
+     keywords = 'wrapper bindings ui elementary graphics',
+-    packages = find_packages(),
++    packages = ['elementary'],
+  #   headers = headers,
+  #   classifiers = 
+  #   packages = 

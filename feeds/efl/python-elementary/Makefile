@@ -8,7 +8,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=python-e_dbus
+PKG_NAME:=python-elementary
 
 PKG_REV:=40853
 PKG_VERSION:=r$(PKG_REV)
@@ -25,27 +25,30 @@ PKG_BUILD_DEPENDS:=cython python
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
-define Package/python-e_dbus
+define Package/python-elementary
   SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
-  TITLE:=python-e_dbus
-  DEPENDS:=+python-mini +ecore +edbus +dbus-python
+  TITLE:=python-elementary
+  DEPENDS:=+python-mini +elementary +evas +eina +python-evas
 endef
 
-define Package/python-e_dbus/description
-  e_dbus python bindings
+define Package/python-elementary/description
+  elementary python bindings
 endef
+
+TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libiconv/include
+TARGET_LDFLAGS+=-liconv -L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Build/Compile
 	$(call Build/Compile/PyMod,,install --prefix="$(PKG_INSTALL_DIR)/usr")
 endef
 
-define Package/python-e_dbus/install
+define Package/python-elementary/install
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
 	$(CP) \
 	    $(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
 	    $(1)$(PYTHON_PKG_DIR)
 endef
 
-$(eval $(call BuildPackage,python-e_dbus))
+$(eval $(call BuildPackage,python-elementary))

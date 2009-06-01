@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-evas
 
-PKG_REV:=38886
+PKG_REV:=40853
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -30,7 +30,7 @@ define Package/python-evas
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=python-evas
-  DEPENDS:=+python-mini +evas +eina
+  DEPENDS:=+python-mini +evas
 endef
 
 define Package/python-evas/description
@@ -39,6 +39,11 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/PyMod,,install --prefix="$(PKG_INSTALL_DIR)/usr")
+endef
+
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 define Package/python-evas/install

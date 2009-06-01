@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=eet
-PKG_REV:=38886
+PKG_REV:=40853
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -45,13 +45,14 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-old-eet-file-format \
 		--disable-gnutls \
+		--disable-new-gnutls-api \
 		--disable-openssl \
 		--disable-cipher \
 		--disable-signature \
-		--disable-doc \
 		--disable-assert \
 		--disable-tests \
 		--disable-coverage \
+		--disable-doc \
 	)
 endef
 
@@ -60,13 +61,14 @@ define Host/Configure
 	$(call Host/Configure/Default, \
 		--disable-old-eet-file-format \
 		--disable-gnutls \
+		--disable-new-gnutls-api \
 		--disable-openssl \
 		--disable-cipher \
 		--disable-signature \
-		--disable-doc \
 		--disable-assert \
 		--disable-tests \
 		--disable-coverage \
+		--disable-doc \
 	)
 endef
 
@@ -75,16 +77,14 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include $(1)/usr/lib $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/include $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 endef
 
 define Package/eet/install
-	$(INSTALL_DIR) $(1)/usr/lib $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libeet*.so* $(1)/usr/lib/
 endef
 
 $(eval $(call HostBuild))

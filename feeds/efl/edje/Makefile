@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=edje
-PKG_REV:=38886
+PKG_REV:=40853
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -68,7 +68,7 @@ endef
 
 define Package/edje/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libedje*.so* $(1)/usr/lib/
 endef
 
 $(eval $(call HostBuild))

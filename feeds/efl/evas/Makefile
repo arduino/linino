@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=evas
-PKG_REV:=38886
+PKG_REV:=40853
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -20,7 +20,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://svn.enlightenment.org/svn/e/trunk/$(PKG_NAME)
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 
-HOST_BUILD_DEPENDS:=libjpeg/host libpng/host libfreetype/host eet/host
+HOST_BUILD_DEPENDS:=fribidi/host jpeg/host libpng/host libfreetype/host eet/host
 
 PKG_FIXUP = libtool
 
@@ -33,31 +33,66 @@ define Package/evas
   SUBMENU:=libraries
   TITLE:=Evas is a hardware-accelerated canvas API for X-Windows
   URL:=http://wiki.enlightenment.org/index.php/Evas
-  DEPENDS:=+libXext +libfreetype +libX11 +fontconfig +eet +libjpeg +libpng +libXrender +libpthread
+  DEPENDS:=+fribidi +libXext +libfreetype +libX11 +fontconfig +eet +libjpeg +libpng +libXrender
 endef
 
 define Package/evas/description
   Evas is a hardware-accelerated canvas API for X-Windows that can draw anti-aliased text, smooth super and sub-sampled images, alpha-blend, as well as drop down to using normal X11 primitives such as pixmaps, lines and rectangles for speed if your CPU or graphics hardware are too slow.
 endef
 
-# for weird reasons libevas.so seems to not being linked against libX11
+# magic-debug needs to be enabled, otherwise e17 segmentation faults randomly...
 
 define Build/Configure
 	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
 	$(call Build/Configure/Default, \
-		--with-x \
+		--disable-strict \
+		--disable-evas-cserve \
+		--disable-simple-x11 \
 		--enable-fontconfig \
+		--enable-buffer \
+		--enable-software-x11 \
+		--enable-xrender-x11 \
+		--disable-gl-x11 \
+		--disable-software-xcb \
+		--disable-xrender-xcb \
+		--disable-software-gdi \
+		--disable-software-ddraw \
+		--disable-direct3d \
+		--disable-quartz \
+		--disable-gl-glew \
+		--disable-software-sdl \
+		--disable-fb \
+		--disable-directfb \
+		--disable-software-16-x11 \
+		--disable-software-16-ddraw \
+		--disable-software-16-wince \
+		--disable-sdl-primitive \
 		--disable-image-loader-edb \
 		--enable-image-loader-eet \
 		--enable-font-loader-eet \
-		--enable-image-loader-gif \
+		--disable-image-loader-gif \
 		--enable-image-loader-jpeg \
 		--disable-image-loader-pmaps \
 		--enable-image-loader-png \
 		--disable-image-loader-svg \
 		--disable-image-loader-tiff \
-		--enable-image-loader-xpm \
-		--disable-evas-magic-debug \
+		--disable-image-loader-xpm \
+		--enable-pthreads \
+		--disable-pipe-render \
+		--disable-async-events \
+		--disable-async-preload \
+		--disable-cpu-mmx \
+		--disable-cpu-sse \
+		--disable-cpu-altivec \
+		--disable-cpu-neon \
+		--enable-cpu-c \
+		--enable-evas-magic-debug \
+		--disable-scale-sample \
+		--enable-scale-smooth \
+		--disable-convert-yuv \
+		--disable-small-dither-mask \
+		--disable-line-dither-mask \
+		--disable-no-dither-mask \
 		--enable-convert-8-rgb-332 \
 		--enable-convert-8-rgb-666 \
 		--enable-convert-8-rgb-232 \
@@ -80,20 +115,32 @@ define Build/Configure
 		--enable-convert-32-rgbx-8888 \
 		--enable-convert-32-bgr-8888 \
 		--enable-convert-32-bgrx-8888 \
+		--enable-convert-24-rgb-ezx \
+		--enable-convert-32-rgb-ezx \
 		--enable-convert-32-rgb-rot-0 \
 		--enable-convert-32-rgb-rot-180 \
 		--enable-convert-32-rgb-rot-270 \
 		--enable-convert-32-rgb-rot-90 \
+		--disable-valgrind \
 		--disable-doc \
+		--with-x \
+	)
+endef
+
+define Host/Configure
+	( cd $(HOST_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
+	$(call Host/Configure/Default, \
+		--disable-strict \
+		--disable-evas-cserve \
 		--disable-simple-x11 \
+		--disable-fontconfig \
 		--enable-buffer \
-		--enable-software-x11 \
-		--enable-xrender-x11 \
+		--disable-software-x11 \
+		--disable-xrender-x11 \
 		--disable-gl-x11 \
-		--disable-glitz-x11 \
-		--disable-cairo-x11 \
 		--disable-software-xcb \
 		--disable-xrender-xcb \
+		--disable-software-gdi \
 		--disable-software-ddraw \
 		--disable-direct3d \
 		--disable-quartz \
@@ -101,44 +148,36 @@ define Build/Configure
 		--disable-software-sdl \
 		--disable-fb \
 		--disable-directfb \
-		--disable-software-qtopia \
 		--disable-software-16-x11 \
 		--disable-software-16-ddraw \
 		--disable-software-16-wince \
 		--disable-sdl-primitive \
-		--enable-pthreads \
-		--disable-async-events \
-		--disable-async-preload \
-		--disable-cpu-mmx \
-		--disable-cpu-sse \
-		--disable-cpu-altivec \
-		--enable-cpu-c \
-		--enable-scale-sample \
-		--enable-scale-smooth \
-		--disable-convert-yuv \
-		--disable-small-dither-mask \
-		--disable-line-dither-mask \
-		--disable-no-dither-mask \
-		--disable-valgrind \
-	)
-endef
-
-define Host/Configure
-	( cd $(HOST_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
-	$(call Host/Configure/Default, \
-		--without-x \
-		--disable-fontconfig \
 		--disable-image-loader-edb \
 		--enable-image-loader-eet \
 		--disable-font-loader-eet \
-		--enable-image-loader-gif \
+		--disable-image-loader-gif \
 		--enable-image-loader-jpeg \
 		--disable-image-loader-pmaps \
 		--enable-image-loader-png \
 		--disable-image-loader-svg \
 		--disable-image-loader-tiff \
-		--enable-image-loader-xpm \
-		--disable-evas-magic-debug \
+		--disable-image-loader-xpm \
+		--enable-pthreads \
+		--disable-pipe-render \
+		--disable-async-events \
+		--disable-async-preload \
+		--disable-cpu-mmx \
+		--disable-cpu-sse \
+		--disable-cpu-altivec \
+		--disable-cpu-neon \
+		--enable-cpu-c \
+		--enable-evas-magic-debug \
+		--disable-scale-sample \
+		--enable-scale-smooth \
+		--disable-convert-yuv \
+		--disable-small-dither-mask \
+		--disable-line-dither-mask \
+		--disable-no-dither-mask \
 		--disable-convert-8-rgb-332 \
 		--disable-convert-8-rgb-666 \
 		--disable-convert-8-rgb-232 \
@@ -161,46 +200,15 @@ define Host/Configure
 		--disable-convert-32-rgbx-8888 \
 		--disable-convert-32-bgr-8888 \
 		--disable-convert-32-bgrx-8888 \
+		--disable-convert-24-rgb-ezx \
+		--disable-convert-32-rgb-ezx \
 		--disable-convert-32-rgb-rot-0 \
 		--disable-convert-32-rgb-rot-180 \
 		--disable-convert-32-rgb-rot-270 \
 		--disable-convert-32-rgb-rot-90 \
-		--disable-doc \
-		--disable-simple-x11 \
-		--enable-buffer \
-		--disable-software-x11 \
-		--disable-xrender-x11 \
-		--disable-gl-x11 \
-		--disable-glitz-x11 \
-		--disable-cairo-x11 \
-		--disable-software-xcb \
-		--disable-xrender-xcb \
-		--disable-software-ddraw \
-		--disable-direct3d \
-		--disable-quartz \
-		--disable-gl-glew \
-		--disable-software-sdl \
-		--disable-fb \
-		--disable-directfb \
-		--disable-software-qtopia \
-		--disable-software-16-x11 \
-		--disable-software-16-ddraw \
-		--disable-software-16-wince \
-		--disable-sdl-primitive \
-		--disable-pthreads \
-		--disable-async-events \
-		--disable-async-preload \
-		--disable-cpu-mmx \
-		--disable-cpu-sse \
-		--disable-cpu-altivec \
-		--enable-cpu-c \
-		--enable-scale-sample \
-		--enable-scale-smooth \
-		--disable-convert-yuv \
-		--disable-small-dither-mask \
-		--disable-line-dither-mask \
-		--disable-no-dither-mask \
 		--disable-valgrind \
+		--disable-doc \
+		--without-x \
 	)
 endef
 
@@ -216,7 +224,7 @@ endef
 
 define Package/evas/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevas.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevas*.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/evas $(1)/usr/lib/
 	$(FIND) $(1)/ -name "*.la" | $(XARGS) rm
 	$(FIND) $(1)/ -name "*.a" | $(XARGS) rm

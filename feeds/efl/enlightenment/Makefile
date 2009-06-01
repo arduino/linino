@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=enlightenment
-PKG_REV:=38886
+PKG_REV:=40853
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -20,7 +20,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://svn.enlightenment.org/svn/e/trunk/e
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 
-PKG_BUILD_DEPENDS:=edje/host
+PKG_BUILD_DEPENDS:=edje/host eet/host
 
 PKG_FIXUP = libtool
 
@@ -52,23 +52,24 @@ TARGET_LDFLAGS+=-lintl -L$(STAGING_DIR)/usr/lib/libintl/lib
 define Build/Configure
 	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
 	$(call Build/Configure/Default, \
-		--with-x \
-		--with-edje-cc=$(STAGING_DIR_HOST)/usr/bin/edje_cc \
-		--with-eet-eet=$(STAGING_DIR_HOST)/usr/bin/eet \
+		--disable-pam \
+		--disable-simple-x11 \
 		--disable-nls \
 		--disable-rpath \
+		--enable-files \
 		--enable-ibar \
-		--enable-dropshadow \
+		--disable-dropshadow \
 		--enable-clock \
 		--enable-pager \
 		--enable-battery \
 		--enable-temperature \
-		--enable-cpufreq \
+		--disable-cpufreq \
 		--enable-ibox \
 		--enable-start \
 		--enable-exebuf \
 		--enable-winlist \
 		--enable-fileman \
+		--enable-fileman-opinfo \
 		--disable-wizard \
 		--disable-msgbus-lang \
 		--enable-gadman \
@@ -76,9 +77,9 @@ define Build/Configure
 		--disable-connman \
 		--enable-illume \
 		--enable-syscon \
-		--disable-pam \
-		--disable-simple-x11 \
-		--enable-files \
+		--with-x \
+		--with-edje-cc=$(STAGING_DIR_HOST)/bin/edje_cc \
+		--with-eet-eet=$(STAGING_DIR_HOST)/bin/eet \
 	)
 endef
 
@@ -90,22 +91,16 @@ PROFILES:=\
 	standard \
 
 define Build/Compile
-	mkdir -p $(STAGING_DIR_HOST)/usr/bin
-	# let's see who is workarounding the edje[_cc]/eet-issue most dirrty ^^
-	ln -sf `which edje_cc` $(STAGING_DIR_HOST)/usr/bin/
-	ln -sf `which eet` $(STAGING_DIR_HOST)/usr/bin/
 	DESTDIR="$(PKG_INSTALL_DIR)" $(MAKE) -C $(PKG_BUILD_DIR) all install
 	$(foreach c, $(PROFILES), \
-		! [ -f ./files/config/$(c).cfg.src ] || $(STAGING_DIR_HOST)/usr/bin/eet -e $(PKG_INSTALL_DIR)/usr/share/enlightenment/data/config/$(c)/e.cfg config ./files/config/$(c).cfg.src 1
+		! [ -f ./files/config/$(c).cfg.src ] || $(STAGING_DIR_HOST)/bin/eet -e $(PKG_INSTALL_DIR)/usr/share/enlightenment/data/config/$(c)/e.cfg config ./files/config/$(c).cfg.src 1
 	)
-	rm -f $(STAGING_DIR_HOST)/usr/bin/{edje_cc,eet}
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include $(1)/usr/lib $(1)/usr/bin $(1)/usr/share
+	$(INSTALL_DIR) $(1)/usr/include $(1)/usr/lib $(1)/usr/share
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/* $(1)/usr/share/
 endef
 
@@ -114,6 +109,7 @@ define Package/enlightenment/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/* $(1)/usr/share/
+	$(CP) $(PKG_INSTALL_DIR)/etc/* $(1)/etc/
 	$(foreach c, $(PROFILES), \
 		$(if $(CONFIG_E17_$(c)), \
 			$(INSTALL_DATA) ./files/uci-defaults/x11_$(c) $(1)/etc/uci-defaults/
@@ -124,16 +120,10 @@ define Package/enlightenment/install
 endef
 
 define Package/enlightenment/postinst
-  #!/bin/sh
-  [ -n "$${IPKG_INSTROOT}" ] && exit
-  . /etc/functions.sh
-  uci_apply_defaults
+#!/bin/sh
+[ -n "$${IPKG_INSTROOT}" ] && exit
+. /etc/functions.sh
+uci_apply_defaults
 endef
 
 $(eval $(call BuildPackage,enlightenment))
-$(eval $(call RequireCommand,edje_cc, \
-	Command <edje_cc> not found - please install edje with edje-cc enabled \
-))
-$(eval $(call RequireCommand,eet, \
-	Command <eet> not found - please install eet \
-))

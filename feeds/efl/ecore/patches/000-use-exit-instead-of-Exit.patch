@@ -1,0 +1,30 @@
+diff -ruN ecore-r40727.orig/src/lib/ecore_con/ecore_con_dns.c ecore-r40727/src/lib/ecore_con/ecore_con_dns.c
+--- ecore-r40727.orig/src/lib/ecore_con/ecore_con_dns.c	2009-05-18 18:10:45.000000000 +0200
++++ ecore-r40727/src/lib/ecore_con/ecore_con_dns.c	2009-05-18 18:21:43.000000000 +0200
+@@ -135,11 +135,7 @@
+ 	     write(fd[1], "", 1);
+ 	  }
+ 	close(fd[1]);
+-# ifdef __USE_ISOC99
+-	_Exit(0);
+-# else
+ 	_exit(0);
+-# endif
+      }
+    /* PARENT */
+    cbdata->handler = ecore_event_handler_add(ECORE_EXE_EVENT_DEL, _ecore_con_dns_exit_handler, cbdata);
+diff -ruN ecore-r40727.orig/src/lib/ecore_con/ecore_con_info.c ecore-r40727/src/lib/ecore_con/ecore_con_info.c
+--- ecore-r40727.orig/src/lib/ecore_con/ecore_con_info.c	2009-05-18 18:10:45.000000000 +0200
++++ ecore-r40727/src/lib/ecore_con/ecore_con_info.c	2009-05-18 18:21:55.000000000 +0200
+@@ -243,11 +243,7 @@
+ 	  freeaddrinfo(result);
+ 	err = write(fd[1], "", 1);
+ 	close(fd[1]);
+-# ifdef __USE_ISOC99
+-	_Exit(0);
+-# else
+ 	_exit(0);
+-# endif
+      }
+    /* PARENT */
+    cbdata->handler = ecore_event_handler_add(ECORE_EXE_EVENT_DEL, _ecore_con_info_exit_handler, cbdata);

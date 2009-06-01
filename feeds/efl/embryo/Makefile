@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=embryo
-PKG_REV:=38886
+PKG_REV:=40853
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -62,9 +62,8 @@ define Build/InstallDev
 endef
 
 define Package/embryo/install
-	$(INSTALL_DIR) $(1)/usr/lib $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libembryo.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/embryo_cc $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libembryo*.so* $(1)/usr/lib/
 endef
 
 $(eval $(call HostBuild))

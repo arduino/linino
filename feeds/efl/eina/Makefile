@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=eina
-PKG_REV:=38886
+PKG_REV:=40853
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -31,6 +31,7 @@ define Package/eina
   SUBMENU:=libraries
   TITLE:=Eina
   URL:=http://wiki.enlightenment.org/index.php/Eina
+  DEPENDS:=+libpthread
 endef
 
 define Build/Configure
@@ -39,8 +40,12 @@ define Build/Configure
 		--disable-cpu-mmx \
 		--disable-cpu-sse \
 		--disable-cpu-sse2 \
+        --disable-cpu-altivec \
 		--disable-magic-debug \
 		--disable-doc \
+        --disable-pthread \
+        --disable-tests \
+        --disable-benchmark \
 	)
 endef
 
@@ -50,8 +55,12 @@ define Host/Configure
 		--disable-cpu-mmx \
 		--disable-cpu-sse \
 		--disable-cpu-sse2 \
+        --disable-cpu-altivec \
 		--disable-magic-debug \
 		--disable-doc \
+        --disable-pthread \
+        --disable-tests \
+        --disable-benchmark \
 	)
 endef
 
@@ -66,10 +75,9 @@ define Build/InstallDev
 endef
 
 define Package/eina/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
-	$(FIND) $(1)/ -name "*.la" | $(XARGS) rm
-	$(FIND) $(1)/ -name "*.a" | $(XARGS) rm
+	$(INSTALL_DIR) $(1)/usr/lib/eina/mp
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libeina*.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/eina/mp/*.so* $(1)/usr/lib/eina/mp/
 endef
 
 $(eval $(call HostBuild))

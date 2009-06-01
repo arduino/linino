@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=etk
-PKG_REV:=38886
+PKG_REV:=40853
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -62,14 +62,10 @@ define Build/InstallDev
 endef
 
 define Package/etk/install
-	$(INSTALL_DIR) $(1)/usr/lib $(1)/usr/share $(1)/usr/bin $(1)/usr/lib/etk/engines
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib $(1)/usr/share $(1)/usr/lib/etk/engines
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libetk*.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/etk/engines/*.so* $(1)/usr/lib/etk/engines/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/etk $(1)/usr/share/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,etk))
-$(eval $(call RequireCommand,edje_cc, \
-	Command <edje_cc> not found - please install edje with edje-cc enabled \
-))

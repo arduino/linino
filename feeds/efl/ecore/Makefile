@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ecore
-PKG_REV:=38886
+PKG_REV:=40853
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -20,7 +20,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://svn.enlightenment.org/svn/e/trunk/$(PKG_NAME)
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 
-HOST_BUILD_DEPENDS:=eina/host evas/host
+HOST_BUILD_DEPENDS:=eina/host evas/host fribidi/host
 
 PKG_FIXUP = libtool
 
@@ -33,7 +33,7 @@ define Package/ecore
   SUBMENU:=libraries
   TITLE:=Ecore is the core event abstraction layer and X abstraction layer
   URL:=http://wiki.enlightenment.org/index.php/Ecore
-  DEPENDS:=+eina +evas +libiconv @!LINUX_2_4
+  DEPENDS:=+fribidi +eina +evas +libiconv +libintl @!LINUX_2_4
 endef
 
 define Package/ecore/description
@@ -42,101 +42,76 @@ endef
 
 # iconv needed for ecore-txt
 TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libiconv/include
-TARGET_LDFLAGS+=-liconv -L$(STAGING_DIR)/usr/lib/libiconv/lib
+TARGET_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv
 
 define Build/Configure
 	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
 	$(call Build/Configure/Default, \
-		--with-x \
-		--with-iconv-link \
+		--disable-simple-x11 \
+		--disable-doc \
+		--disable-ecore-x-xcb \
+		--disable-atfile-source \
+		--enable-ecore-job \
+		--disable-curl \
 		--disable-gnutls \
 		--disable-openssl \
-		--disable-curl \
-		--disable-abstract-sockets \
-		--enable-ecore-job \
-		--enable-ecore-con \
-		--enable-ecore-ipc \
-		--disable-ecore-config \
-		--enable-ecore-txt \
-		--enable-ecore-evas \
-		--enable-ecore-x \
-		--enable-ecore-evas-xrender-x11 \
-		--disable-ecore-evas-dfb \
-		--disable-ecore-evas-fb \
-		--disable-ecore-evas-sdl \
-		--disable-ecore-evas-quartz \
-		--enable-ecore-evas-buffer \
-		--enable-ecore-file \
-		--enable-inotify \
 		--disable-poll \
-		--enable-ecore-imf \
-		--enable-ecore-imf_evas \
-		--disable-doc \
-		--disable-simple-x11 \
-		--disable-ecore-x-xcb \
+		--enable-inotify \
+		--enable-ecore-evas-software-buffer \
+		--enable-ecore-evas-software-x11 \
+		--enable-ecore-evas-xrender-x11 \
 		--disable-ecore-evas-opengl-x11 \
 		--disable-ecore-evas-software-16-x11 \
 		--disable-ecore-evas-software-xcb \
 		--disable-ecore-evas-xrender-xcb \
-		--disable-ecore-win32 \
+		--disable-ecore-evas-software-gdi \
 		--disable-ecore-evas-software-ddraw \
 		--disable-ecore-evas-direct3d \
 		--disable-ecore-evas-opengl-glew \
 		--disable-ecore-evas-software-16-ddraw \
-		--disable-ecore-wince \
+		--disable-ecore-evas-quartz \
+		--disable-ecore-evas-software-sdl \
+		--disable-ecore-evas-directfb \
+		--disable-ecore-evas-fb \
 		--disable-ecore-evas-software-16-wince \
-		--disable-ecore-directfb \
-		--disable-ecore-fb \
-		--disable-ecore-sdl \
-		--disable-ecore-quartz \
+        --enable-ecore-x \
+        --with-iconv-link=-liconv \
+		--with-x \
 	)
 endef
 
 define Host/Configure
 	( cd $(HOST_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
 	$(call Host/Configure/Default, \
-		--without-x \
-		--with-iconv-link \
+		--disable-simple-x11 \
+		--disable-doc \
+		--disable-ecore-x-xcb \
+		--disable-atfile-source \
+		--enable-ecore-job \
+		--disable-curl \
 		--disable-gnutls \
 		--disable-openssl \
-		--disable-curl \
-		--disable-abstract-sockets \
-		--enable-ecore-job \
-		--enable-ecore-con \
-		--enable-ecore-ipc \
-		--disable-ecore-config \
-		--enable-ecore-txt \
-		--enable-ecore-evas \
-		--disable-ecore-x \
-		--disable-ecore-evas-xrender-x11 \
-		--disable-ecore-evas-dfb \
-		--disable-ecore-evas-fb \
-		--disable-ecore-evas-sdl \
-		--disable-ecore-evas-quartz \
-		--enable-ecore-evas-buffer \
-		--enable-ecore-file \
-		--disable-inotify \
 		--disable-poll \
-		--enable-ecore-imf \
-		--enable-ecore-imf_evas \
-		--disable-doc \
-		--disable-simple-x11 \
-		--disable-ecore-x-xcb \
+		--disable-inotify \
+		--enable-ecore-evas-software-buffer \
+		--disable-ecore-evas-software-x11 \
+		--disable-ecore-evas-xrdisder-x11 \
 		--disable-ecore-evas-opengl-x11 \
 		--disable-ecore-evas-software-16-x11 \
 		--disable-ecore-evas-software-xcb \
 		--disable-ecore-evas-xrender-xcb \
-		--disable-ecore-win32 \
+		--disable-ecore-evas-software-gdi \
 		--disable-ecore-evas-software-ddraw \
 		--disable-ecore-evas-direct3d \
 		--disable-ecore-evas-opengl-glew \
 		--disable-ecore-evas-software-16-ddraw \
-		--disable-ecore-wince \
+		--disable-ecore-evas-quartz \
+		--disable-ecore-evas-software-sdl \
+		--disable-ecore-evas-directfb \
+		--disable-ecore-evas-fb \
 		--disable-ecore-evas-software-16-wince \
-		--disable-ecore-directfb \
-		--disable-ecore-fb \
-		--disable-ecore-sdl \
-		--disable-ecore-quartz \
+        --disable-ecore-x \
+		--without-x \
 	)
 endef
 
@@ -152,9 +127,7 @@ endef
 
 define Package/ecore/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
-	$(FIND) $(1)/ -name "*.la" | $(XARGS) rm
-	$(FIND) $(1)/ -name "*.a" | $(XARGS) rm
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libecore*.so* $(1)/usr/lib/
 endef
 
 $(eval $(call HostBuild))

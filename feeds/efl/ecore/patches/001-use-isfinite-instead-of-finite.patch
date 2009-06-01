@@ -1,0 +1,13 @@
+diff -ruN ecore-r40853.orig/src/lib/ecore/ecore_main.c ecore-r40853/src/lib/ecore/ecore_main.c
+--- ecore-r40853.orig/src/lib/ecore/ecore_main.c	2009-05-31 16:27:25.000000000 +0200
++++ ecore-r40853/src/lib/ecore/ecore_main.c	2009-05-31 19:58:56.000000000 +0200
+@@ -337,7 +337,7 @@
+    Ecore_Fd_Handler *fdh;
+ 
+    t = NULL;
+-   if ((!finite(timeout)) || (timeout == 0.0))  /* finite() tests for NaN, too big, too small, and infinity.  */
++   if ((!isfinite(timeout)) || (timeout == 0.0))  /* finite() tests for NaN, too big, too small, and infinity.  */
+      {
+ 	tv.tv_sec = 0;
+ 	tv.tv_usec = 0;
+Binary files ecore-r40853.orig/src/lib/ecore/.ecore_main.c.swp and ecore-r40853/src/lib/ecore/.ecore_main.c.swp differ

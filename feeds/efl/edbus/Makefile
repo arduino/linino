@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=e_dbus
-PKG_REV:=38886
+PKG_REV:=40853
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -36,7 +36,7 @@ endef
 define Build/Configure
 	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
 	$(call Build/Configure/Default, \
-		--enable-ehal \
+       	--enable-ehal \
 		--disable-enm \
 		--disable-enotify \
 	)
@@ -47,16 +47,15 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include $(1)/usr/lib $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/include $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 endef
 
 define Package/edbus/install
 	$(INSTALL_DIR) $(1)/usr/lib $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libe{dbus,hal}*.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/e_dbus_hal $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,edbus))

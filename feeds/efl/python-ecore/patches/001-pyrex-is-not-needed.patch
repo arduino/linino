@@ -1,0 +1,15 @@
+--- efl/setup.py    (revision 40080)
++++ efl/setup.py    (working copy)
+@@ -6,12 +6,6 @@
+         import Cython
+     except ImportError:
+         raise SystemExit("You need Cython -- http://cython.org/")
+-    try:
+-        import Pyrex
+-    except ImportError:
+-        raise SystemExit(
+-            "You need Pyrex -- "
+-            "http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/")
+ 
+ 
+ from ez_setup import use_setuptools
