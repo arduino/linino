@@ -8,23 +8,22 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=glib2
-PKG_VERSION:=2.20.0
+PKG_VERSION:=2.20.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=glib-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/glib-$(PKG_VERSION)
 PKG_SOURCE_URL:=@GNOME/glib/2.20
-PKG_MD5SUM:=05188e560dbd8bddd568e24ce10dd003
+PKG_MD5SUM:=1173688c58b4b62809c83bb07a2cf71a
 
-PKG_FIXUP = libtool
-PKG_BUILD_DEPENDS := glib2/host
+PKG_FIXUP:=libtool
+PKG_BUILD_DEPENDS:=glib2/host
+PKG_INSTALL:=1
 
 HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/glib-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
-
-PKG_INSTALL:=1
 
 define Package/glib2
   SECTION:=libs
@@ -53,6 +52,8 @@ define Build/Configure
 		--enable-static \
 		--enable-debug=no \
 		--with-libiconv=gnu \
+		--disable-selinux \
+        --disable-fam \
 		, \
 		glib_cv_stack_grows=no \
 		glib_cv_uscore=no \
