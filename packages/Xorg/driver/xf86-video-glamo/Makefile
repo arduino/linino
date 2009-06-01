@@ -19,7 +19,8 @@ PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_BUILD_DEPENDS:=xproto fontsproto randrproto renderproto videoproto
+PKG_BUILD_DEPENDS:=xproto fontsproto randrproto renderproto videoproto \
+	util-macros
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -30,7 +31,7 @@ define Package/xf86-video-glamo
   CATEGORY:=Xorg
   SUBMENU:=driver
   URL:=http://git.openmoko.org/?p=xf86-video-glamo.git
-  DEPENDS:=@DISPLAY_SUPPORT @arm||armeb +xserver-xorg +util-macros
+  DEPENDS:=@DISPLAY_SUPPORT @arm||armeb +xserver-xorg
 endef
 
 define Package/xf86-video-glamo/description
