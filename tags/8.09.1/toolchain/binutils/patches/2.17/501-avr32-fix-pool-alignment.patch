@@ -1,0 +1,13 @@
+Index: a/gas/config/tc-avr32.c
+===================================================================
+--- a/gas/config/tc-avr32.c	(revision 31496)
++++ b/gas/config/tc-avr32.c	(revision 32014)
+@@ -3092,6 +3092,8 @@
+ 
+   /* Make sure the constant pool is properly aligned */
+   frag_align_code(2, 0);
++  if (bfd_get_section_alignment(stdoutput, pool->section) < 2)
++    bfd_set_section_alignment(stdoutput, pool->section, 2);
+ 
+   /* Assume none of the entries are discarded, and that we need the
+      maximum amount of alignment.  But we're not going to allocate

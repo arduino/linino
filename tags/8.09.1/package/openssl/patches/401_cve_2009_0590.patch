@@ -1,0 +1,75 @@
+http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2009-0590
+
+--- a/crypto/asn1/asn1.h
++++ b/crypto/asn1/asn1.h
+@@ -1217,6 +1217,7 @@ void ERR_load_ASN1_strings(void);
+ #define ASN1_R_BAD_OBJECT_HEADER			 102
+ #define ASN1_R_BAD_PASSWORD_READ			 103
+ #define ASN1_R_BAD_TAG					 104
++#define ASN1_R_BMPSTRING_IS_WRONG_LENGTH		 210
+ #define ASN1_R_BN_LIB					 105
+ #define ASN1_R_BOOLEAN_IS_WRONG_LENGTH			 106
+ #define ASN1_R_BUFFER_TOO_SMALL				 107
+@@ -1306,6 +1307,7 @@ void ERR_load_ASN1_strings(void);
+ #define ASN1_R_UNABLE_TO_DECODE_RSA_KEY			 157
+ #define ASN1_R_UNABLE_TO_DECODE_RSA_PRIVATE_KEY		 158
+ #define ASN1_R_UNEXPECTED_EOC				 159
++#define ASN1_R_UNIVERSALSTRING_IS_WRONG_LENGTH		 211
+ #define ASN1_R_UNKNOWN_FORMAT				 160
+ #define ASN1_R_UNKNOWN_MESSAGE_DIGEST_ALGORITHM		 161
+ #define ASN1_R_UNKNOWN_OBJECT_TYPE			 162
+--- a/crypto/asn1/asn1_err.c
++++ b/crypto/asn1/asn1_err.c
+@@ -195,6 +195,7 @@ static ERR_STRING_DATA ASN1_str_reasons[
+ {ERR_REASON(ASN1_R_BAD_OBJECT_HEADER)    ,"bad object header"},
+ {ERR_REASON(ASN1_R_BAD_PASSWORD_READ)    ,"bad password read"},
+ {ERR_REASON(ASN1_R_BAD_TAG)              ,"bad tag"},
++{ERR_REASON(ASN1_R_BMPSTRING_IS_WRONG_LENGTH),"bmpstring is wrong length"},
+ {ERR_REASON(ASN1_R_BN_LIB)               ,"bn lib"},
+ {ERR_REASON(ASN1_R_BOOLEAN_IS_WRONG_LENGTH),"boolean is wrong length"},
+ {ERR_REASON(ASN1_R_BUFFER_TOO_SMALL)     ,"buffer too small"},
+@@ -284,6 +285,7 @@ static ERR_STRING_DATA ASN1_str_reasons[
+ {ERR_REASON(ASN1_R_UNABLE_TO_DECODE_RSA_KEY),"unable to decode rsa key"},
+ {ERR_REASON(ASN1_R_UNABLE_TO_DECODE_RSA_PRIVATE_KEY),"unable to decode rsa private key"},
+ {ERR_REASON(ASN1_R_UNEXPECTED_EOC)       ,"unexpected eoc"},
++{ERR_REASON(ASN1_R_UNIVERSALSTRING_IS_WRONG_LENGTH),"universalstring is wrong length"},
+ {ERR_REASON(ASN1_R_UNKNOWN_FORMAT)       ,"unknown format"},
+ {ERR_REASON(ASN1_R_UNKNOWN_MESSAGE_DIGEST_ALGORITHM),"unknown message digest algorithm"},
+ {ERR_REASON(ASN1_R_UNKNOWN_OBJECT_TYPE)  ,"unknown object type"},
+--- a/crypto/asn1/tasn_dec.c
++++ b/crypto/asn1/tasn_dec.c
+@@ -611,7 +611,6 @@ static int asn1_template_ex_d2i(ASN1_VAL
+ 
+ 	err:
+ 	ASN1_template_free(val, tt);
+-	*val = NULL;
+ 	return 0;
+ 	}
+ 
+@@ -758,7 +757,6 @@ static int asn1_template_noexp_d2i(ASN1_
+ 
+ 	err:
+ 	ASN1_template_free(val, tt);
+-	*val = NULL;
+ 	return 0;
+ 	}
+ 
+@@ -1012,6 +1010,18 @@ int asn1_ex_c2i(ASN1_VALUE **pval, const
+ 		case V_ASN1_SET:
+ 		case V_ASN1_SEQUENCE:
+ 		default:
++		if (utype == V_ASN1_BMPSTRING && (len & 1))
++			{
++			ASN1err(ASN1_F_ASN1_EX_C2I,
++					ASN1_R_BMPSTRING_IS_WRONG_LENGTH);
++			goto err;
++			}
++		if (utype == V_ASN1_UNIVERSALSTRING && (len & 3))
++			{
++			ASN1err(ASN1_F_ASN1_EX_C2I,
++					ASN1_R_UNIVERSALSTRING_IS_WRONG_LENGTH);
++			goto err;
++			}
+ 		/* All based on ASN1_STRING and handled the same */
+ 		if (!*pval)
+ 			{

@@ -1,0 +1,169 @@
+# Copyright (C) 2006-2007 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
+mainmenu "OpenWrt Configuration"
+
+config HAVE_DOT_CONFIG
+	bool
+	default y
+
+source "target/Config.in"
+
+menu "Target Images"
+	config TARGET_ROOTFS_INITRAMFS
+		bool "ramdisk"
+		default n
+		depends LINUX_2_6
+		help
+		  Embed the rootfs into the kernel (initramfs)
+
+	config TARGET_ROOTFS_JFFS2
+		bool "jffs2"
+		default y if USES_JFFS2
+		depends !TARGET_ROOTFS_INITRAMFS
+		help
+		  Build a jffs2 root filesystem
+
+	config TARGET_ROOTFS_SQUASHFS
+		bool "squashfs"
+		default y if USES_SQUASHFS
+		depends !TARGET_ROOTFS_INITRAMFS
+		help
+		  Build a squashfs-lzma root filesystem
+
+	config TARGET_ROOTFS_TGZ
+		bool "tgz"
+		default y if USES_TGZ
+		depends !TARGET_ROOTFS_INITRAMFS
+		help
+		  Build a compressed tar archive of the the root filesystem
+		  
+	config TARGET_ROOTFS_CPIOGZ
+		bool "cpiogz"
+		default y if USES_CPIOGZ
+		depends !TARGET_ROOTFS_INITRAMFS
+		help
+		  Build a compressed cpio archive of the the root filesystem
+		  
+	config TARGET_ROOTFS_EXT2FS
+		bool "ext2"
+		default y if USES_EXT2
+		depends !TARGET_ROOTFS_INITRAMFS
+		help
+		  Ext2 file system with some free space for uml images
+
+	config TARGET_ROOTFS_ISO 
+		bool "iso" 
+		default n 
+		depends TARGET_ROOTFS_INITRAMFS && TARGET_x86 
+		help 
+		  Create some bootable ISO image 
+
+comment "Image Options"
+
+source "target/linux/*/image/Config.in"
+
+    config TARGET_ROOTFS_FSPART
+        int "Filesystem part size (in MB)"
+        depends X86_GRUB_IMAGES || TARGET_ROOTFS_EXT2FS || TARGET_rb532 || TARGET_olpc
+        default 48
+        help
+            Allows you to change the filesystem partition size
+
+    config TARGET_ROOTFS_MAXINODE
+        int "Maximum number of inodes in filesystem"
+        depends TARGET_ROOTFS_EXT2FS
+        default 6000
+        help
+            Allows you to change the maximum number of inodes in the filesystem
+
+endmenu
+
+
+config ALL
+	bool "Select all packages by default"
+	default n
+
+menuconfig DEVEL
+	bool "Advanced configuration options (for developers)"
+	default n
+	select BUILDOPTS
+	select TOOLCHAINOPTS if !NATIVE_TOOLCHAIN
+
+config BROKEN
+	bool
+	prompt "Show broken platforms / packages" if DEVEL
+	default n
+
+config DOWNLOAD_FOLDER
+	string
+	prompt "Download folder" if DEVEL
+	default ""
+
+config LOCALMIRROR
+	string
+	prompt "Local mirror for source packages" if DEVEL
+
+menuconfig BUILDOPTS
+	bool
+	prompt "Build Options" if DEVEL
+
+config DEBUG
+	bool
+	prompt "Enable debugging" if BUILDOPTS
+	select NO_STRIP
+	default n
+	help
+		Disables stripping and adds -g3 to the CFLAGS
+
+config NO_STRIP
+	bool "Do not strip generated binaries (enable for native compiling)" if BUILDOPTS
+	default n
+
+config CLEAN_IPKG
+	bool
+	prompt "Clean all ipkg files before building the rootfs" if BUILDOPTS
+	default n
+
+config AUTOREBUILD
+	bool
+	prompt "Automatic rebuild of packages" if BUILDOPTS
+	default y
+	help
+		Automatically rebuild packages when their files change
+
+config BUILD_SUFFIX
+	string
+	prompt "Build suffix to append to the BUILD_DIR variable" if BUILDOPTS
+	default ""
+	help
+		Build suffix to append to the BUILD_DIR variable, i.e: build_dir_suffix
+
+config TAR_VERBOSITY
+	bool 
+	prompt "Tar verbose" if BUILDOPTS
+	default n
+
+config CCACHE
+	bool
+	prompt "Use ccache" if BUILDOPTS
+	default n
+	help
+		Compiler cache; see http://ccache.samba.org/
+
+config EXTERNAL_KERNEL_TREE
+	string
+	prompt "Use external kernel tree" if BUILDOPTS
+	default ""
+
+source "toolchain/Config.in"
+
+source "target/imagebuilder/Config.in"
+source "target/sdk/Config.in"
+
+source "tmp/.config-package.in"
+
+
