@@ -1,1 +1,1 @@
-uci set x11.@desktop[0].autostart='xterm'
+uci set x11.@desktop[0].autostart='enlightenment_start -profile standard'
