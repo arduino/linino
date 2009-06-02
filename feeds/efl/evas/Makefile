@@ -86,7 +86,7 @@ define Build/Configure
 		--disable-cpu-altivec \
 		--disable-cpu-neon \
 		--enable-cpu-c \
-		--enable-evas-magic-debug \
+		--disable-evas-magic-debug \
 		--disable-scale-sample \
 		--enable-scale-smooth \
 		--disable-convert-yuv \
