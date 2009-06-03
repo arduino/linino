@@ -28,6 +28,7 @@ define Package/libisofs
   CATEGORY:=Libraries
   TITLE:=libisofs
   URL:=http://www.libburnia-project.org
+  DEPENDS:=+libiconv +libburn +libpthread
 endef
 
 define Package/libisofs/description
