@@ -21,7 +21,7 @@ define Package/xf86-video-ati
   SECTION:=xorg-driver
   CATEGORY:=Xorg
   SUBMENU:=driver
-  DEPENDS:=+xserver-xorg @TARGET_i386 @BROKEN
+  DEPENDS:=+xserver-xorg @TARGET_x86 @BROKEN
   TITLE:=xf86-video-ati
   URL:=http://xorg.freedesktop.org/
 endef
