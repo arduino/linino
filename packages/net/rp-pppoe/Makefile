@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://roaringpenguin.com/files/download
 PKG_MD5SUM:=d58a13cc4185bca6121a606ff456dec0
 
+PKG_BUILD_DEPENDS:=ppp
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/rp-pppoe/Default
@@ -73,7 +75,7 @@ endef
 
 TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/src/libevent
 CONFIGURE_PATH := ./src
-CONFIGURE_ARGS += ac_cv_path_PPPD=/usr/sbin/pppd --enable-plugin=../../ppp-2.4.4/ipkg-install/usr/include/
+CONFIGURE_ARGS += ac_cv_path_PPPD=/usr/sbin/pppd --enable-plugin=$(STAGING_DIR)/usr/include/
 MAKE_FLAGS := DESTDIR="$(PKG_INSTALL_DIR)" install
 MAKE_PATH := ./src
 
