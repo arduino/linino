@@ -14,7 +14,7 @@ PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://developer.kde.org/~wheeler/files/src/
 PKG_MD5SUM:=dcd50ddb2544faeae77f194804559404
-PKG_FIXUP:=libtool
+PKG_FIXUP:=libtool-ucxx
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -28,6 +28,14 @@ define Package/taglib
   URL:=http://developer.kde.org/~wheeler/taglib.html
 endef
 
+define Package/taglibc
+  SECTION:=libs
+  CATEGORY:=Libraries
+  DEPENDS:=+taglib
+  TITLE:=Audio output library
+  URL:=http://developer.kde.org/~wheeler/taglib.html
+endef
+
 TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
@@ -36,10 +44,10 @@ CONFIGURE_ARGS += \
 	--enable-final \
 
 CONFIGURE_VARS += \
-        CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
-        CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
-	LDFLAGS="$$$$LDFLAGS" \
-	LIBS="-nodefaultlibs -lz -luClibc++" \
+    CXX="g++-uc"
+
+MAKE_FLAGS += \
+    CXX="g++-uc"
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(2)/bin
@@ -52,7 +60,7 @@ define Build/InstallDev
 
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/libtag.{la,a,so*} \
+		$(PKG_INSTALL_DIR)/usr/lib/libtag{,_c}.{la,a,so*} \
 		$(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/include/taglib
 	$(INSTALL_DATA) \
@@ -65,4 +73,10 @@ define Package/taglib/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtag.so.* $(1)/usr/lib/
 endef
 
+define Package/taglibc/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtag_c.so.* $(1)/usr/lib/
+endef
+
 $(eval $(call BuildPackage,taglib))
+$(eval $(call BuildPackage,taglibc))
