@@ -1,7 +1,7 @@
-diff -Nru asterisk-1.6.1-beta4.org/build_tools/menuselect-deps.in asterisk-1.6.1-beta4/build_tools/menuselect-deps.in
---- asterisk-1.6.1-beta4.org/build_tools/menuselect-deps.in	2008-08-03 18:14:14.000000000 +0200
-+++ asterisk-1.6.1-beta4/build_tools/menuselect-deps.in	2008-12-22 21:49:16.000000000 +0100
-@@ -10,7 +10,7 @@
+diff -Nru asterisk-1.6.2.0-beta2.org/build_tools/menuselect-deps.in asterisk-1.6.2.0-beta2/build_tools/menuselect-deps.in
+--- asterisk-1.6.2.0-beta2.org/build_tools/menuselect-deps.in	2009-01-15 21:18:53.000000000 +0100
++++ asterisk-1.6.2.0-beta2/build_tools/menuselect-deps.in	2009-06-04 19:37:42.000000000 +0200
+@@ -11,7 +11,7 @@
  GTK=@PBX_GTK@
  H323=@PBX_H323@
  HOARD=@PBX_HOARD@
@@ -9,4 +9,4 @@ diff -Nru asterisk-1.6.1-beta4.org/build_tools/menuselect-deps.in asterisk-1.6.1
 +ICONV=0
  IKSEMEL=@PBX_IKSEMEL@
  IMAP_TK=@PBX_IMAP_TK@
- ISDNNET=@PBX_ISDNNET@
+ IODBC=@PBX_IODBC@

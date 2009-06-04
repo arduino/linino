@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
-PKG_VERSION:=1.6.1.0
+PKG_VERSION:=1.6.2.0-beta2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
-PKG_MD5SUM:=7e4dccc79c504ae497ff42062279905d
+PKG_MD5SUM:=ca10a82f5c6ffcec8a9168560e5107ea
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -167,6 +167,7 @@ CONFIGURE_ARGS+= \
 	--without-vorbis \
 	--without-vpb \
 	--with-z="$(STAGING_DIR)/usr" \
+	--disable-xmldoc \
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk16-app-meetme),)
   CONFIGURE_ARGS+= \
