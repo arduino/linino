@@ -15,8 +15,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dansguardian.org/downloads/2/Stable
 PKG_MD5SUM:=0a6c6d35c9e0c82fbc4a2150e8ffe977
 
-PKG_FIXUP = libtool
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/dansguardian

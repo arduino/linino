@@ -16,8 +16,6 @@ PKG_SOURCE_URL:=@SF/dtorrent \
 	http://www.rahul.net/dholmes/ctorrent/
 PKG_MD5SUM:=59b23dd05ff70791cd6449effa7fc3b6
 
-PKG_FIXUP = libtool
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ctorrent/Default
