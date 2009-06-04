@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vnstat
 PKG_VERSION:=1.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://humdi.net/vnstat
@@ -17,11 +17,15 @@ PKG_MD5SUM:=e5788e8122e34f2c93561e2a84c19432
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/vnstat
+define Package/vnstat/Default
   SECTION:=net
   CATEGORY:=Network
-  TITLE:=Console-based network traffic monitor
   URL:=http://humdi.net/vnstat/
+endef
+
+define Package/vnstat
+$(call Package/vnstat/Default)
+  TITLE:=Console-based network traffic monitor
 endef
 
 define Package/vnstat/description
@@ -31,23 +35,60 @@ define Package/vnstat/description
 	so vnStat can be used without root permissions.
 endef
 
+define Package/vnstati
+$(call Package/vnstat/Default)
+  DEPENDS+=vnstat +libgd
+  TITLE:=PNG image output support for vnStat
+endef
+
+define Package/vnstati/description
+	The purpose of vnstati is to provide image output support for statistics
+	collected using vnstat(1). However, the image file format is limited to
+	png. All basic outputs of vnStat are supported excluding live traffic
+	features. The image can be outputted either to a file or to standard
+	output.
+endef
+
 define Package/vnstat/conffiles
+/etc/vnstat.conf
 /etc/config/vnstat
 endef
 
-define Build/Compile
+define Build/Compile/vnstat
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)"
 endef
 
+define Build/Compile/vnstati
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CPPFLAGS)" \
+		LDFLAGS="$(TARGET_LDFLAGS) -Wl,-rpath-link,$(STAGING_DIR)/usr/lib" \
+		all
+endef
+
+define Build/Compile
+$(call Build/Compile/vnstat)
+$(call Build/Compile/vnstati)
+endef
+
 define Package/vnstat/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/vnstat $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/vnstatd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/vnstat.conf $(1)/etc
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DATA) ./files/vnstat.conf $(1)/etc/config/vnstat
+	$(INSTALL_DATA) ./files/vnstat-uci.conf $(1)/etc/config/vnstat
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/vnstat.init $(1)/etc/init.d/vnstat
+endef
+
+define Package/vnstati/install	
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/vnstati $(1)/usr/bin/
 endef
 
 define Package/vnstat/postinst
@@ -64,8 +105,9 @@ if [ -n $$IFACE_WAN ]; then
 	[ -e $$LIB_D/$$IFACE_WAN ] || ( [ -x $$BIN ] && $$BIN -u -i $$IFACE_WAN )
 fi
 grep -q "$$BIN_REL -u" $$CRONTAB 2>/dev/null
-[ $$? -ne 0 ] && echo "*/30 * * * *    if [ -x $$BIN_REL ] && [ \`ls $$LIB_D_REL | wc -l\` -ge 1 ]; then $$BIN_REL -u; fi" >> $$CRONTAB
+[ $$? -eq 0 ] && sed -i -e "/\/usr\/bin\/vnstat -u/d" $$CRONTAB
 true
 endef
 
 $(eval $(call BuildPackage,vnstat))
+$(eval $(call BuildPackage,vnstati))

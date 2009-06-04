@@ -4,6 +4,9 @@
 START=99
 LIB_D=/var/lib/vnstat
 WWW_D=/www/vnstat
+RUN_D=/var/run
+PID_F=$RUN_D/vnstat.pid
+VNSTATD_BIN=/usr/sbin/vnstatd
 
 system_config() {
 	local cfg="$1"
@@ -18,30 +21,27 @@ do_download() {
 
 	local cfg="$1"
 
-	config_get ifname "$cfg" "ifname"
+	config_get ifname "$cfg" ifname
 	[ -n "$ifname" ] || return 0
 	[ -e $LIB_D/$ifname ] && return 0
 
-	config_get_bool enabled "$cfg" "enabled" "1"
-	if [ "$enabled" -gt 0 ]; then
-		config_get remote_path "$cfg" "remote_path"
-		[ -n "$remote_path" ] || return 0
-		config_get remote_host "$cfg" "remote_host"
+	config_get_bool enabled "$cfg" enabled '1'
+	[ "$enabled" -gt 0 ] && {
+		config_get remote_host "$cfg" remote_host
 		[ -n "$remote_host" ] || return 0
-
-		[ -x /usr/bin/wget ] && download_command="wget http://$remote_host/$remote_path/${hostname}_$ifname -O $LIB_D/$ifname"
-		[ -n "$download_command" ] || return 0
+		config_get remote_path "$cfg" remote_path
+		[ -n "$remote_path" ] || return 0
 
 		while [ ! -e $LIB_D/$ifname ]; do
-			$download_command 2>/dev/null
+			wget http://$remote_host/$remote_path/${hostname}_$ifname -O $LIB_D/$ifname 2>/dev/null
 			[ -e $LIB_D/$ifname ] && {
-				logger -s -t "vnstat" "Successfully downloaded ${ifname}'s vnStat database backup"
-				[ -x /bin/ln ] && ln -sf $LIB_D/$ifname $WWW_D/$ifname
+				logger -t "vnstat" "Successfully downloaded ${ifname}'s vnStat database backup"
+				[ -L $WWW_D/$ifname ] || ln -s $LIB_D/$ifname $WWW_D/$ifname
 				return 0
 			}
 			sleep 30
 		done
-	fi
+	}
 }
 
 start() {
@@ -53,4 +53,15 @@ start() {
 
 	config_load vnstat
 	config_foreach do_download interface
+
+	[ ! -f $PID_F ] && $VNSTATD_BIN -d
 }
+
+stop() {
+	[ -f $PID_F ] && kill $(cat $PID_F)
+}
+
+reload() {
+	[ -f $PID_F ] && kill -HUP $(cat $PID_F)
+}
+
