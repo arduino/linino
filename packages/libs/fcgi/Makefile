@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.fastcgi.com/dist/
 PKG_MD5SUM:=d15060a813b91383a9f3c66faf84867e
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool-ucxx
 
 include $(INCLUDE_DIR)/package.mk
 

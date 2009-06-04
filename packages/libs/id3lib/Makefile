@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/id3lib
 PKG_MD5SUM:=19f27ddd2dda4b2d26a559a4f0f402a7
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool-ucxx
 
 include $(INCLUDE_DIR)/package.mk
 
