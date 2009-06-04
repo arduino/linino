@@ -4,17 +4,16 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xarchiver
-PKG_VERSION:=0.5.0beta1
+PKG_VERSION:=0.5.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=d57dcae78473681d6cd3b8dcf6e5c3d1
+PKG_MD5SUM:=2bc7f06403cc6582dd4a8029ec9d038d
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1

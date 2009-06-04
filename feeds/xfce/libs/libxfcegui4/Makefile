@@ -4,17 +4,16 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libxfcegui4
-PKG_VERSION:=4.6.0
+PKG_VERSION:=4.6.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-$(PKG_VERSION)/src/
-PKG_MD5SUM:=8627ae4fad26289f55f0afbebe238bf5
+PKG_MD5SUM:=539cff747634b8ee6f0d2362ee78a286
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -32,7 +31,7 @@ define Package/libxfcegui4
   CATEGORY:=Xorg
   SUBMENU:=framework
   TITLE:=libxfcegui4
-  DEPENDS:=+libxfce4util +gtk2 +libglade +libxfconf
+  DEPENDS:=+libxfce4util +gtk2 +libglade +libxfconf +libSM +libX11
 endef
 
 define Build/InstallDev

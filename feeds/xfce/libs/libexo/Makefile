@@ -4,17 +4,16 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=exo
-PKG_VERSION:=0.3.100
+PKG_VERSION:=0.3.101
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.6.0/src/
-PKG_MD5SUM:=ebded97ff55f43cd0fe6b16242992ecf
+PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.6.1/src/
+PKG_MD5SUM:=1c0eebb360f53eab70454b70e1bde36e
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1

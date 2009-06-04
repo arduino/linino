@@ -4,7 +4,6 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
@@ -21,7 +20,6 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-
 TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
 
 TARGET_LDFLAGS+= \
@@ -34,7 +32,7 @@ define Package/xfmedia
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=xfmedia
-  DEPENDS:=+libxfcegui4 +xine-lib +dbus +taglib
+  DEPENDS:=+libxfcegui4 +xine-lib +dbus +taglibc
 endef
 
 define Build/Configure
@@ -43,33 +41,35 @@ define Build/Configure
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR)	$(1)/usr/{lib/pkgconfig,include}
+	$(INSTALL_DIR)	$(1)/usr/{lib/pkgconfig,include/xfmedia}
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/include/* \
-		$(1)/usr/include/
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,la,a} \
-		$(1)/usr/lib/
+		$(PKG_INSTALL_DIR)/usr/include/xfmedia/* \
+		$(1)/usr/include/xfmedia/
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
 		$(1)/usr/lib/pkgconfig/
 endef
 
 define Package/xfmedia/install
-	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
-		$(1)/usr/lib/
-
 	$(INSTALL_DIR) $(1)/usr/bin/
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/* \
 		$(1)/usr/bin/
 
-	$(INSTALL_DIR) $(1)/usr/share/icons/hicolor/48x48/apps
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/share/icons/hicolor/48x48/apps/* \
-		$(1)/usr/share/icons/hicolor/48x48/apps/
+	$(INSTALL_DIR) $(1)/etc/xdg/xfmedia
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/etc/xdg/xfmedia/* \
+		$(1)/etc/xdg/xfmedia
+
+	$(INSTALL_DIR) $(1)/usr/lib/xfmedia/plugins
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/xfmedia/plugins/*.so* \
+		$(1)/usr/lib/xfmedia/plugins/
+
+	$(INSTALL_DIR) $(1)/usr/share/icons/hicolor/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/share/icons/hicolor/* \
+		$(1)/usr/share/icons/hicolor/
 
 	$(INSTALL_DIR) $(1)/usr/share/applications
 	$(INSTALL_DATA) \

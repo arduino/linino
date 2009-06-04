@@ -4,7 +4,6 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
@@ -14,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=mousepad-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/mousepad-$(PKG_VERSION)
-PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.6.0/src/
+PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.6.1/src/
 
 PKG_MD5SUM:=d98854edb76d823ac20b266fdf5a64a1
 PKG_INSTALL:=1

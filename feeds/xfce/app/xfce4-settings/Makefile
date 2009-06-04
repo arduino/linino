@@ -4,23 +4,21 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xfce4-settings
-PKG_VERSION:=4.6.0
+PKG_VERSION:=4.6.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-$(PKG_VERSION)/src/
-PKG_MD5SUM:=ac538c4ab32e3a91f4567141adc3c898
+PKG_MD5SUM:=dc1c8704471c5b0104fa10c30eb60cb6
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
 
 TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
 

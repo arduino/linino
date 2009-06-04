@@ -4,18 +4,17 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=thunar
-PKG_VERSION:=1.0.0
+PKG_VERSION:=1.0.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=Thunar-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/Thunar-$(PKG_VERSION)
-PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.6.0/src/
-PKG_MD5SUM:=468c240a4f65a217ec2b6132e85cd84e
+PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.6.1/src/
+PKG_MD5SUM:=218373aa45d74b6ba8c69c4d5af3bb19
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1

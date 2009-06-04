@@ -4,17 +4,16 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xfce4-panel
-PKG_VERSION:=4.6.0
+PKG_VERSION:=4.6.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-$(PKG_VERSION)/src
-PKG_MD5SUM:=b4c7cce05cc858d11c9dcd4c2f8dbfdb
+PKG_MD5SUM:=73a366b9892152266b465d7d9c35bef4
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -33,6 +32,7 @@ define Package/libxfce4-panel
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=libxfce4-panel
+  DEPENDS:=+libstartup-notification +libxfce4util +gtk2 +pango +libX11
 endef
 
 define Package/xfce4-panel
@@ -41,7 +41,7 @@ define Package/xfce4-panel
   SUBMENU:=app
   TITLE:=xfce4-panel
   DEPENDS:=+libxfce4util +libxfcegui4 +libexo +cairo +libwnck +libSM +libX11 \
-           +gtk2
+           +gtk2 +libxfce4-panel
 endef
 
 define Build/InstallDev
@@ -58,11 +58,6 @@ define Build/InstallDev
 endef
 
 define Package/xfce4-panel/install
-	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
-		$(1)/usr/lib/
-
 	$(INSTALL_DIR) $(1)/usr/lib/xfce4/panel-plugins
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/xfce4/panel-plugins/*.so* \
@@ -92,6 +87,13 @@ define Package/xfce4-panel/install
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/share/icons/hicolor/* \
 		$(1)/usr/share/icons/hicolor/
+endef
+
+define Package/libxfce4-panel/install
+	$(INSTALL_DIR) $(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
+		$(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libxfce4-panel))

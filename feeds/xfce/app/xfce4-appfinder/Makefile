@@ -4,17 +4,16 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xfce4-appfinder
-PKG_VERSION:=4.6.0
+PKG_VERSION:=4.6.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-$(PKG_VERSION)/src/
-PKG_MD5SUM:=414b20e3569130348d96b0e74c7d1f3f
+PKG_MD5SUM:=a1bc7d88100cfd92714a300be531589b
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -33,7 +32,7 @@ define Package/xfce4-appfinder
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=xfce4-appfinder
-  DEPENDS:=+libxfcegui4 +libxfce4menu +gtk2 +libxfconf
+  DEPENDS:=+libxfcegui4 +libxfce4menu +gtk2 +libxfconf +libthunar-vfs
 endef
 
 define Package/xfce4-appfinder/install

@@ -4,19 +4,18 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xfce-terminal
-PKG_VERSION:=0.2.10
+PKG_VERSION:=0.2.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=Terminal-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/Terminal-$(PKG_VERSION)
-PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.6.0/src/
+PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.6.1/src/
 
-PKG_MD5SUM:=f6cefa97cf5cad558187267783ffce8a
+PKG_MD5SUM:=adb419d279c9fc16d02291c052190717
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -33,7 +32,7 @@ define Package/xfce-terminal
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=xfce-terminal
-  DEPENDS:=+libxfcegui4 +vte
+  DEPENDS:=+libxfcegui4 +vte +libexo
 endef
 
 define Build/Configure
