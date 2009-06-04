@@ -1,7 +1,7 @@
-diff -Nru asterisk-1.4.22.org/channels/chan_iax2.c asterisk-1.4.22/channels/chan_iax2.c
---- asterisk-1.4.22.org/channels/chan_iax2.c	2008-09-02 20:14:57.000000000 +0200
-+++ asterisk-1.4.22/channels/chan_iax2.c	2008-11-29 15:00:00.000000000 +0100
-@@ -1815,7 +1815,7 @@
+diff -Nru asterisk-1.4.25.org/channels/chan_iax2.c asterisk-1.4.25/channels/chan_iax2.c
+--- asterisk-1.4.25.org/channels/chan_iax2.c	2009-05-05 00:37:31.000000000 +0200
++++ asterisk-1.4.25/channels/chan_iax2.c	2009-06-04 21:01:25.000000000 +0200
+@@ -1898,7 +1898,7 @@
  		last++;
  	else
  		last = s;

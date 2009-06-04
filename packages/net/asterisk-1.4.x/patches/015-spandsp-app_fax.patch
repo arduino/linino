@@ -1,6 +1,6 @@
-diff -Nru asterisk-1.4.22.org/apps/app_rxfax.c asterisk-1.4.22/apps/app_rxfax.c
---- asterisk-1.4.22.org/apps/app_rxfax.c	1970-01-01 01:00:00.000000000 +0100
-+++ asterisk-1.4.22/apps/app_rxfax.c	2008-11-29 15:02:27.000000000 +0100
+diff -Nru asterisk-1.4.25.org/apps/app_rxfax.c asterisk-1.4.25/apps/app_rxfax.c
+--- asterisk-1.4.25.org/apps/app_rxfax.c	1970-01-01 01:00:00.000000000 +0100
++++ asterisk-1.4.25/apps/app_rxfax.c	2009-06-04 21:04:59.000000000 +0200
 @@ -0,0 +1,376 @@
 +/*
 + * Asterisk -- A telephony toolkit for Linux.
@@ -378,9 +378,9 @@ diff -Nru asterisk-1.4.22.org/apps/app_rxfax.c asterisk-1.4.22/apps/app_rxfax.c
 +AST_MODULE_INFO_STANDARD(ASTERISK_GPL_KEY, "Trivial FAX Receive Application");
 +
 +/*- End of file ------------------------------------------------------------*/
-diff -Nru asterisk-1.4.22.org/apps/app_txfax.c asterisk-1.4.22/apps/app_txfax.c
---- asterisk-1.4.22.org/apps/app_txfax.c	1970-01-01 01:00:00.000000000 +0100
-+++ asterisk-1.4.22/apps/app_txfax.c	2008-11-29 15:02:27.000000000 +0100
+diff -Nru asterisk-1.4.25.org/apps/app_txfax.c asterisk-1.4.25/apps/app_txfax.c
+--- asterisk-1.4.25.org/apps/app_txfax.c	1970-01-01 01:00:00.000000000 +0100
++++ asterisk-1.4.25/apps/app_txfax.c	2009-06-04 21:04:59.000000000 +0200
 @@ -0,0 +1,303 @@
 +/*
 + * Asterisk -- A telephony toolkit for Linux.
@@ -685,9 +685,9 @@ diff -Nru asterisk-1.4.22.org/apps/app_txfax.c asterisk-1.4.22/apps/app_txfax.c
 +AST_MODULE_INFO_STANDARD(ASTERISK_GPL_KEY, "Trivial FAX Transmit Application");
 +
 +/*- End of file ------------------------------------------------------------*/
-diff -Nru asterisk-1.4.22.org/build_tools/menuselect-deps.in asterisk-1.4.22/build_tools/menuselect-deps.in
---- asterisk-1.4.22.org/build_tools/menuselect-deps.in	2008-08-14 04:02:15.000000000 +0200
-+++ asterisk-1.4.22/build_tools/menuselect-deps.in	2008-11-29 15:02:27.000000000 +0100
+diff -Nru asterisk-1.4.25.org/build_tools/menuselect-deps.in asterisk-1.4.25/build_tools/menuselect-deps.in
+--- asterisk-1.4.25.org/build_tools/menuselect-deps.in	2009-01-29 23:54:29.000000000 +0100
++++ asterisk-1.4.25/build_tools/menuselect-deps.in	2009-06-04 21:04:59.000000000 +0200
 @@ -23,6 +23,7 @@
  POPT=@PBX_POPT@
  PRI=@PBX_PRI@
@@ -696,10 +696,10 @@ diff -Nru asterisk-1.4.22.org/build_tools/menuselect-deps.in asterisk-1.4.22/bui
  SPEEX=@PBX_SPEEX@
  SPEEXDSP=@PBX_SPEEXDSP@
  SPEEX_PREPROCESS=@PBX_SPEEX_PREPROCESS@
-diff -Nru asterisk-1.4.22.org/configure.ac asterisk-1.4.22/configure.ac
---- asterisk-1.4.22.org/configure.ac	2008-09-08 18:26:00.000000000 +0200
-+++ asterisk-1.4.22/configure.ac	2008-11-29 15:02:27.000000000 +0100
-@@ -201,6 +201,7 @@
+diff -Nru asterisk-1.4.25.org/configure.ac asterisk-1.4.25/configure.ac
+--- asterisk-1.4.25.org/configure.ac	2009-04-22 23:35:03.000000000 +0200
++++ asterisk-1.4.25/configure.ac	2009-06-04 21:04:59.000000000 +0200
+@@ -205,6 +205,7 @@
  AST_EXT_LIB_SETUP([PWLIB], [PWlib], [pwlib])
  AST_EXT_LIB_SETUP([OPENH323], [OpenH323], [h323])
  AST_EXT_LIB_SETUP([RADIUS], [Radius Client], [radius])
@@ -707,7 +707,7 @@ diff -Nru asterisk-1.4.22.org/configure.ac asterisk-1.4.22/configure.ac
  AST_EXT_LIB_SETUP([SPEEX], [Speex], [speex])
  AST_EXT_LIB_SETUP([SPEEXDSP], [Speexdsp], [speexdsp])
  AST_EXT_LIB_SETUP([SQLITE], [SQLite], [sqlite])
-@@ -1302,6 +1303,8 @@
+@@ -1359,6 +1360,8 @@
  
  AST_EXT_LIB_CHECK([RADIUS], [radiusclient-ng], [rc_read_config], [radiusclient-ng.h])
  
@@ -716,9 +716,9 @@ diff -Nru asterisk-1.4.22.org/configure.ac asterisk-1.4.22/configure.ac
  AST_EXT_LIB_CHECK([SPEEX], [speex], [speex_encode], [speex/speex.h], [-lm])
  
  # See if the main speex library contains the preprocess functions
-diff -Nru asterisk-1.4.22.org/include/asterisk/plc.h asterisk-1.4.22/include/asterisk/plc.h
---- asterisk-1.4.22.org/include/asterisk/plc.h	2006-06-14 16:12:56.000000000 +0200
-+++ asterisk-1.4.22/include/asterisk/plc.h	2008-11-29 15:02:27.000000000 +0100
+diff -Nru asterisk-1.4.25.org/include/asterisk/plc.h asterisk-1.4.25/include/asterisk/plc.h
+--- asterisk-1.4.25.org/include/asterisk/plc.h	2006-06-14 16:12:56.000000000 +0200
++++ asterisk-1.4.25/include/asterisk/plc.h	2009-06-04 21:04:59.000000000 +0200
 @@ -1,18 +1,17 @@
 -/*! \file
 - * \brief SpanDSP - a series of DSP components for telephony
@@ -860,10 +860,10 @@ diff -Nru asterisk-1.4.22.org/include/asterisk/plc.h asterisk-1.4.22/include/ast
  }
  #endif
  
-diff -Nru asterisk-1.4.22.org/makeopts.in asterisk-1.4.22/makeopts.in
---- asterisk-1.4.22.org/makeopts.in	2008-06-12 21:08:20.000000000 +0200
-+++ asterisk-1.4.22/makeopts.in	2008-11-29 15:02:27.000000000 +0100
-@@ -138,6 +138,9 @@
+diff -Nru asterisk-1.4.25.org/makeopts.in asterisk-1.4.25/makeopts.in
+--- asterisk-1.4.25.org/makeopts.in	2009-03-18 02:55:22.000000000 +0100
++++ asterisk-1.4.25/makeopts.in	2009-06-04 21:04:59.000000000 +0200
+@@ -141,6 +141,9 @@
  RADIUS_INCLUDE=@RADIUS_INCLUDE@
  RADIUS_LIB=@RADIUS_LIB@
  

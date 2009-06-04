@@ -1,6 +1,6 @@
-diff -Nru asterisk-1.4.23.1.org/autoconf/ast_prog_ld.m4 asterisk-1.4.23.1/autoconf/ast_prog_ld.m4
---- asterisk-1.4.23.1.org/autoconf/ast_prog_ld.m4	2008-10-20 06:45:56.000000000 +0200
-+++ asterisk-1.4.23.1/autoconf/ast_prog_ld.m4	2009-01-31 15:46:48.000000000 +0100
+diff -Nru asterisk-1.4.25.org/autoconf/ast_prog_ld.m4 asterisk-1.4.25/autoconf/ast_prog_ld.m4
+--- asterisk-1.4.25.org/autoconf/ast_prog_ld.m4	2008-10-20 06:45:56.000000000 +0200
++++ asterisk-1.4.25/autoconf/ast_prog_ld.m4	2009-06-04 21:09:45.000000000 +0200
 @@ -7,7 +7,7 @@
  	[assume the C compiler uses GNU ld @<:@default=no@:>@])],
      [test "$withval" = no || with_gnu_ld=yes],

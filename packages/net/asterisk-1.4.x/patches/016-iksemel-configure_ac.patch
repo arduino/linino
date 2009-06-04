@@ -1,7 +1,7 @@
-diff -Nru asterisk-1.4.22.org/configure.ac asterisk-1.4.22/configure.ac
---- asterisk-1.4.22.org/configure.ac	2008-09-08 18:26:00.000000000 +0200
-+++ asterisk-1.4.22/configure.ac	2008-11-29 15:04:09.000000000 +0100
-@@ -514,7 +514,7 @@
+diff -Nru asterisk-1.4.25.org/configure.ac asterisk-1.4.25/configure.ac
+--- asterisk-1.4.25.org/configure.ac	2009-04-22 23:35:03.000000000 +0200
++++ asterisk-1.4.25/configure.ac	2009-06-04 21:06:09.000000000 +0200
+@@ -571,7 +571,7 @@
     fi
  fi
  

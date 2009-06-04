@@ -1,7 +1,7 @@
-diff -Nru asterisk-1.4.23.1.org/autoconf/ast_check_openh323.m4 asterisk-1.4.23.1/autoconf/ast_check_openh323.m4
---- asterisk-1.4.23.1.org/autoconf/ast_check_openh323.m4	2008-10-20 06:57:33.000000000 +0200
-+++ asterisk-1.4.23.1/autoconf/ast_check_openh323.m4	2009-01-31 15:30:03.000000000 +0100
-@@ -119,6 +119,7 @@
+diff -Nru asterisk-1.4.25.org/autoconf/ast_check_openh323.m4 asterisk-1.4.25/autoconf/ast_check_openh323.m4
+--- asterisk-1.4.25.org/autoconf/ast_check_openh323.m4	2009-03-18 21:02:40.000000000 +0100
++++ asterisk-1.4.25/autoconf/ast_check_openh323.m4	2009-06-04 21:07:59.000000000 +0200
+@@ -123,6 +123,7 @@
  				;;
  		esac
  		AC_MSG_RESULT(${OPENH323_BUILD})
@@ -9,10 +9,10 @@ diff -Nru asterisk-1.4.23.1.org/autoconf/ast_check_openh323.m4 asterisk-1.4.23.1
  
  		AC_SUBST([OPENH323_SUFFIX])
  		AC_SUBST([OPENH323_BUILD])
-diff -Nru asterisk-1.4.23.1.org/configure.ac asterisk-1.4.23.1/configure.ac
---- asterisk-1.4.23.1.org/configure.ac	2008-12-15 18:43:59.000000000 +0100
-+++ asterisk-1.4.23.1/configure.ac	2009-01-31 15:29:14.000000000 +0100
-@@ -1278,7 +1278,7 @@
+diff -Nru asterisk-1.4.25.org/configure.ac asterisk-1.4.25/configure.ac
+--- asterisk-1.4.25.org/configure.ac	2009-04-22 23:35:03.000000000 +0200
++++ asterisk-1.4.25/configure.ac	2009-06-04 21:07:59.000000000 +0200
+@@ -1316,7 +1316,7 @@
  	if test "${HAS_PWLIB:-unset}" != "unset"; then
  		AST_CHECK_PWLIB_PLATFORM()
  

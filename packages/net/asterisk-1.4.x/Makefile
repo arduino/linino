@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
-PKG_VERSION:=1.4.24.1
+PKG_VERSION:=1.4.25
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
-PKG_MD5SUM:=2b74744350f420b3a94d5323c489426f
+PKG_MD5SUM:=260a577330d080cb9f1fa0b942d950a5
 
 PKG_BUILD_DEPENDS:= libopenh323 pwlib
 
