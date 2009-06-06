@@ -315,7 +315,7 @@ endif
 # exception: mod-rrdtool(1) needs rrdtool
 ifneq ($(CONFIG_PACKAGE_collectd-mod-rrdtool1),)
 	PKG_CONFIGURE_OPTS += --with-rrdtool=$(wildcard $(BUILD_DIR)/rrdtool-1.0.*)
-	TARGET_LDFLAGS := -L$(wildcard $(BUILD_DIR)/rrdtool-1.0.*)/src/.libs -lz $(TARGET_LDFLAGS)
+	TARGET_LDFLAGS := -L$(wildcard $(BUILD_DIR)/rrdtool-1.0.*)/src/.libs -lz -lm $(TARGET_LDFLAGS)
 endif
 
 
