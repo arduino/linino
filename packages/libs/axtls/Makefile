@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libaxtls
   SECTION:=libs
   CATEGORY:=Libraries
-  SUBMENU:=ssl
+  SUBMENU:=SSL
   TITLE:=Embedded client/server TLSv1 SSL library
   URL:=http://sourceforge.net/projects/axtls
 endef
