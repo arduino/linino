@@ -16,7 +16,6 @@ PKG_SOURCE_URL:=http://collectd.org/files/
 PKG_MD5SUM:=9e0e89150b1ff28fc0fdd8a198c9ac5e
 
 PKG_FIXUP=libtool
-PKG_BUILD_DEPENDS:=+libxml2 +libnetsnmp +libcurl +librrd1 +zlib
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
