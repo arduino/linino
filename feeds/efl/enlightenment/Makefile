@@ -110,6 +110,7 @@ define Package/enlightenment/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/* $(1)/usr/share/
 	$(CP) $(PKG_INSTALL_DIR)/etc/* $(1)/etc/
+	$(CP) ./files/sysactions.conf $(1)/etc/enlightenment/
 	$(foreach c, $(PROFILES), \
 		$(if $(CONFIG_E17_$(c)), \
 			$(INSTALL_DATA) ./files/uci-defaults/x11_$(c) $(1)/etc/uci-defaults/
