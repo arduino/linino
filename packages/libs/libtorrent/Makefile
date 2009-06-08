@@ -11,7 +11,7 @@ PKG_NAME:=libtorrent
 
 PKG_REV:=1093
 PKG_VERSION:=0.12.4_r$(PKG_REV)
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=svn://rakshasa.no/libtorrent/trunk/libtorrent
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
@@ -39,13 +39,10 @@ define Package/libtorrent/description
 endef
 
 ifneq ($(CONFIG_GCC_VERSION_3_4)$(CONFIG_GCC_VERSION_4_1),)
-TARGET_CPPFLAGS += -fno-strict-aliasing -fno-inline
+TARGET_CPPFLAGS += -fno-strict-aliasing
 endif
 
-ifneq ($(CONFIG_GCC_VERSION_4_2)$(CONFIG_GCC_VERSION_4_3),)
 TARGET_CPPFLAGS += -fno-inline
-endif
-
 
 # XXX: rtorrent needs encryption (--enable-openssl)
 CONFIGURE_ARGS+= \
