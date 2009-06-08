@@ -25,7 +25,7 @@ start() {
 		config_get_bool requiretls $cfgs_section requiretls 0
 		config_get_bool defaultroute $cfgs_section defaultroute 1
 		config_get_bool nat $cfgs_section nat 1
-		config_get_bool heartbeat $cfgs_section heatbeat 1
+		config_get_bool heartbeat $cfgs_section heartbeat 1
 		mkdir -p /tmp/run
 		echo "username $username" > /tmp/run/aiccu-${cfgs_section}.conf
 		echo "password $password" >> /tmp/run/aiccu-${cfgs_section}.conf
