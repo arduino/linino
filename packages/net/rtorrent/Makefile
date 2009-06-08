@@ -1,10 +1,10 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: Makefile 15090 2009-04-03 09:16:29Z florian $
+#
 
 include $(TOPDIR)/rules.mk
 
@@ -12,7 +12,7 @@ PKG_NAME:=rtorrent
 
 PKG_REV:=1093
 PKG_VERSION:=0.8.4_r$(PKG_REV)
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=svn://rakshasa.no/libtorrent/trunk/rtorrent
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
@@ -40,18 +40,13 @@ define Package/rtorrent/description
 endef
 
 ifneq ($(CONFIG_GCC_VERSION_3_4)$(CONFIG_GCC_VERSION_4_1),)
-TARGET_CPPFLAGS += -fno-strict-aliasing -fno-inline
-endif
-
-ifneq ($(CONFIG_GCC_VERSION_4_2)$(CONFIG_GCC_VERSION_4_3),)
-TARGET_CPPFLAGS +=  -fno-inline
+TARGET_CPPFLAGS += -fno-strict-aliasing
 endif
 
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--disable-static \
 	--disable-debug \
-	--disable-tls \
 	--with-xmlrpc-c \
 
 define Build/Configure
