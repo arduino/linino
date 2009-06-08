@@ -1,7 +1,6 @@
 #!/bin/sh /etc/rc.common
 START=90
-. /lib/config/uci.sh
-uci_load batman-adv-kernelland
+
 start () {
 	interfaces=$(uci get batman-adv-kernelland.general.interface)
 	if [ "$interfaces" = "" ]; then
