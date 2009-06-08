@@ -8,19 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=muninlite
-PKG_VERSION:=1.0.0
-PKG_RELEASE:=2
+PKG_VERSION:=1.0.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=d8824bd98300fa6b1bf4aa6af08b7e39
+PKG_MD5SUM:=67fe45999fbd29f7d91fe342889e3dcb
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/muninlite
   SECTION:=admin
   CATEGORY:=Administration
-  DEPENDS:=xinetd
+  DEPENDS:=+xinetd
   TITLE:=Munin node implemented in shell
   URL:=http://sourceforge.net/projects/muninlite/
 endef
