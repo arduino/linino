@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hiawatha
-PKG_VERSION:=6.13
+PKG_VERSION:=6.14.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.hiawatha-webserver.org/files/
-PKG_MD5SUM:=bc1e8eb679f03ad372395bbc1e50af38
+PKG_MD5SUM:=7416cdc5f7cdf2ae7e93beb7e63d5820
 
 include $(INCLUDE_DIR)/package.mk
 
