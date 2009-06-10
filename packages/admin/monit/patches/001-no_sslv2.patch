@@ -1,6 +1,6 @@
 --- a/ssl.c
 +++ b/ssl.c
-@@ -662,9 +662,11 @@
+@@ -673,9 +673,11 @@ ssl_connection *new_ssl_connection(char 
      ssl->method = SSLv23_client_method();
      break;
  

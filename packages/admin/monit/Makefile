@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=monit
-PKG_VERSION:=5.0.2
+PKG_VERSION:=5.0.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.tildeslash.com/monit/dist/
-PKG_MD5SUM:=416db6d616ee3a44d274522103fef9af
+PKG_SOURCE_URL:=http://mmonit.com/monit/dist/
+PKG_MD5SUM:=dae7859ec10551fc941daeae60dee9d3
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,7 +22,7 @@ define Package/monit/Default
   CATEGORY:=Administration
   DEPENDS:= +libpthread
   TITLE:=System services monitoring utility
-  URL:=http://www.tildeslash.com/monit
+  URL:=http://mmonit.com/monit/
 endef
 
 define Package/monit/Default/description
