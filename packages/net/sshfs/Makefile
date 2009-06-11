@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sshfs
-PKG_VERSION:=1.8
+PKG_VERSION:=2.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-fuse-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/fuse
-PKG_MD5SUM:=3c575cf89a6d3d8ab6063c2f60bd5b25
+PKG_MD5SUM:=26e9206eb5169e87e6f95f54bc005a4f
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-fuse-$(PKG_VERSION)
 
@@ -37,12 +37,14 @@ CONFIGURE_VARS += \
 		-I$(STAGING_DIR)/usr/lib/libintl/include \
 		-I$(STAGING_DIR)/usr/lib/libiconv/include \
 		-I$(STAGING_DIR)/usr/include/glib-2.0 \
-		-I$(STAGING_DIR)/usr/lib/glib-2.0/include" \
+		-I$(STAGING_DIR)/usr/lib/glib-2.0/include \
+		-I$(STAGING_DIR)/usr/include/fuse" \
 	SSHFS_LIBS=" \
 		-lglib-2.0 -lintl -liconv -lfuse -pthread -lgthread-2.0 \
 		-L$(STAGING_DIR)/usr/lib/libintl/lib \
-		-L$(STAGING_DIR)/usr/lib/libiconv/lib"
-		
+		-L$(STAGING_DIR)/usr/lib/libiconv/lib \
+		-L$(STAGING_DIR)/usr/lib"
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		ARCH="$(LINUX_KARCH)" \
