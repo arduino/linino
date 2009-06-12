@@ -1,5 +1,6 @@
-# 
+#
 # Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (c) 2009 Thorsten Glaser <tg@mirbsd.org>
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,43 +9,55 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mksh
-PKG_VERSION:=R33d
+PKG_VERSION:=38c
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).cpio.gz
+PKG_SOURCE:=$(PKG_NAME)-R$(PKG_VERSION).cpio.gz
 PKG_SOURCE_URL:=http://www.mirbsd.org/MirOS/dist/mir/mksh
-PKG_MD5SUM:=8ad2547ad55dc3a02b13554ab9b5c9c8
+PKG_MD5SUM:=692192a6468b5f5c5e559756f1851766
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 
-# This program seems to depend on libssp, but only for GCC 4
-GCCVER:=$(if $(DUMP),4,$(word 1,$(subst ., ,$(subst ",,$(CONFIG_GCC_VERSION)))))
-#"))))
-ifeq ($(GCCVER),4)
-  DEP:=+libssp
-else
-  DEP:=
-endif
-
 define Package/mksh
   SECTION:=shells
   CATEGORY:=Base system
-  TITLE:=mksh
+  TITLE:=MirBSD Korn Shell
   DEPENDS:=$(DEP)
 endef
 
 define Package/mksh/description
-MirBSD version of ksh
+mksh is the MirBSD enhanced version of the Public Domain Korn
+shell (pdksh), a Bourne-compatible shell which is largely si-
+milar to the original AT&T Korn shell; mksh is the only pdksh
+derivate currently being actively developed.  It includes bug
+fixes and feature improvements, in order to produce a modern,
+robust shell good for interactive and especially script use.
+mksh has UTF-8 support (e.g. in the emacs editing mode); R38c
+corresponds to OpenBSD 4.5-current ksh (without GNU bash-like
+$PS1 and fancy character classes).  The code has throughoutly
+been cleaned up and simplified, bugs fixed, standards compli-
+ance added, and several enhancements (for extended compatibi-
+lity to other modern shells - as well as a couple of its own)
+have been placed.
 endef
 
 define Build/Compile
+	# -DMKSH_SMALL=1 ⇒ reduce functionality quite a lot
+	# -DMKSH_ASSUME_UTF8=0 ⇒ never automatically enable
+	#	UTF-8 mode, neither use setlocale/nl_langinfo
+	#	nor look at $LC_* and $LANG (not recommended)
+	# HAVE_CAN_FSTACKPROTECTORALL=0 ⇒ nuke libssp dependency
+	# HAVE_REALPATH=x ⇒ add the realpath builtin, which was
+	#	disabled by MKSH_SMALL, back if realpath() exists
 	cd $(PKG_BUILD_DIR); \
 		CC="$(TARGET_CC)" \
 		TARGET_OS="$(shell uname -s)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="-DMKSH_SMALL=1" \
+		CPPFLAGS="-DMKSH_SMALL=1 -DMKSH_ASSUME_UTF8=0" \
+		HAVE_CAN_FSTACKPROTECTORALL=0 \
+		HAVE_REALPATH=x \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 			$(BASH) Build.sh -Q -r
 endef
