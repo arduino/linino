@@ -1,0 +1,18 @@
+diff -ruN fso-20090609.orig/etc/freesmartphone/oevents/rules.yaml fso-20090609/etc/freesmartphone/oevents/rules.yaml
+--- fso-20090609.orig/etc/freesmartphone/oevents/rules.yaml	2009-06-10 15:55:56.000000000 +0200
++++ fso-20090609/etc/freesmartphone/oevents/rules.yaml	2009-06-10 15:57:00.000000000 +0200
+@@ -133,14 +133,3 @@
+     #
+     # Idleness Brightness Handling
+     #
+-    trigger: IdleState()
+-    filters: HasAttr(status, "busy")
+-    actions: SetDisplayBrightness("0", 90)
+--
+-    trigger: IdleState()
+-    filters: HasAttr(status, "idle_dim")
+-    actions: SetDisplayBrightness("0", 20)
+--
+-    trigger: IdleState()
+-    filters: HasAttr(status, "idle_prelock")
+-    actions: SetDisplayBrightness("0", 0)

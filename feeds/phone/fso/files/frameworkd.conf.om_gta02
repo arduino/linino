@@ -1,112 +1,55 @@
 [frameworkd]
-# indicates this configuration version, do not change
 version = 1
-# the default log_level, if not specified per module
 log_level = INFO
-# the global log_destination. Uncomment to enable
-log_to = stderr
-#log_to = file
-#log_to = syslog
-# if logging to a file, specify the destination
-log_destination = /tmp/frameworkd.log
-# persistance format, one of "pickle", "yaml"
-persist_format = pickle
-rootdir = ../etc/freesmartphone:/etc/freesmartphone:/usr/etc/freesmartphone
-
-[odeviced]
-# set log level for a subsystem or for an individual module
-# available log levels are: DEBUG, INFO, WARNING, ERROR, CRITICAL
-log_level = INFO
-
-[odeviced.kernel26]
-# set 1 to disable a module
-disable = 0
-# poll capacity once every 5 minutes
-# (usually, you do not have to change this)
-capacity_check_timeout = 300
-# set 0 to disable FB_BLANK ioctl to blank framebuffer
-# (if you have problems on Openmoko GTA02)
-fb_blank = 1
+log_to = file
+log_destination = /var/log/frameworkd.log 
 
 [odeviced.audio]
-# set directory where the alsa audio scenarios are stored
-scenario_dir = /usr/share/openmoko/scenarios
-# set default scenario loaded at startup
+# set default alsa scenario
 default_scenario = stereoout
+# set path to alsa scenario files
+scenario_dir = /usr/share/openmoko/scenarios
 
 [odeviced.idlenotifier]
-# add inut nodes to ignore for idle activity
-ignoreinput = 2,3,4
-# configure timeouts (in seconds) here. A value of 0
-# means 'never fall into this state' (except programatically)
-idle = 10
-idle_dim = 20
-idle_prelock = 12
-lock = 2
-suspend = 0
+# don't read from accellerometers for GTA02
+ignoreinput=2,3
 
 [odeviced.input]
-# format is <keyname>,<type>,<input device keycode>,<report held seconds in addition to press/release>
+# don't read from accellerometers for GTA02
+ignoreinput=2,3
+# keys
 report1 = AUX,key,169,1
 report2 = POWER,key,116,1
-report3 = CHARGER,key,356,0
+report3 = USB,key,356,0
 report4 = HEADSET,switch,2,0
 
-[odeviced.powercontrol-neo]
-disable = 0
+# disable accelerometer since it uses LOADS of CPU resources
+[odeviced.accelerometer]
+disable = 1
+accelerometer_type = gta02
 
 [ogsmd]
-disable = 0
-# choose your modem type, available types are: ti_calypso, freescale_neptune, singleline, muxed4line, option, ...
+# GTA02 has TI Calypso
 modemtype = ti_calypso
-# if you have a ti_calypso, you can choose the deep sleep mode. Valid values are: never, adaptive (default), always
-ti_calypso_deep_sleep = adaptive
-# if you have a ti_calypso, you can choose the dsp mode for audio enhancement. Valid values are:
-#    "short-aec": Short Echo Cancellation (max)
-#    "long-aec":  Long Echo Cancellation (max)
-#    "long-aec:6db": Long Echo Cancellation (-6db)
-#    "long-aec:12db": Long Echo Cancellation (-12db)
-#    "long-aec:18db": Long Echo Cancellation (-18db)
-#    "nr": Noise Reduction (max)
-#    "nr:6db": Noise Reduction (-6db)
-#    "nr:12db": Noise Reduction (-12db)
-#    "nr:18db": Noise Reduction (-18db)
-#    "aec+nr": Long Echo Cancellation (max) plus Noise Reduction (max) [default]
-#    "none": No audio processing.
-ti_calypso_dsp_mode = aec+nr
-log_level = INFO
+ti_calypso_deep_sleep = never
 
 [ogpsd]
-# possible options are NMEADevice, UBXDevice, GTA02Device, EtenDevice
 device = GTA02Device
-# possible options are SerialChannel, GllinChannel, UDPChannel, FileChannel
 channel = SerialChannel
-# For UDPChannel the path defines the port to listen to
 path = /dev/ttySAC1
-log_level = INFO
-
-[ousaged]
-# choose whether resources should be disabled at startup, at shutdown, always (default), or never.
-sync_resources_with_lifecycle = always
 
 [opreferencesd]
-log_level = DEBUG
-disable = 0
-# log_level = DEBUG
+rootdir = ../etc/freesmartphone/opreferences:/etc/freesmartphone/opreferences:/usr/etc/freesmartphone/opreferences
 
 [oeventsd]
-log_level = DEBUG
-disbale = 0
+rules_file = ../etc/freesmartphone/oevents/rules.yaml:/etc/freesmartphone/oevents/rules.yaml:/usr/etc/freesmartphone/oevents/rules.yaml
 
 [opimd]
-contacts_default_backend = CSV-Contacts
-messages_default_folder = Unfiled
-messages_trash_folder = Trash
-sim_messages_default_folder = SMS
-rootdir = ../etc/freesmartphone/opim:/etc/freesmartphone/opim:/usr/etc/freesmartphone/opim
+disable = 1
 
-[otimed]
-# a list of time/zone sources to use or NONE
-timesources = GPS,NTP
-zonesources = GSM
-
+#[otimed]
+## a list of time/zone sources to use or NONE
+#timesources = GPS,NTP
+#zonesources = GSM
+## use an ip address here, otherwise DNS resolution will block
+#ntpserver = 134.169.172.1
