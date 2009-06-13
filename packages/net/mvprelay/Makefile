@@ -21,7 +21,7 @@ define Package/mvprelay
   SECTION:=net
   CATEGORY:=Network
   TITLE:=relays requests from the MVP
-  URL:=http://downloads.openwrt.org/sources/
+  URL:=http://mvpmc.wikispaces.com/mvprelay
 endef
 
 define Package/mvprelay/description

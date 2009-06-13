@@ -24,7 +24,7 @@ define Package/bind/Default
   CATEGORY:=Network
   DEPENDS:=+bind-libs +libopenssl
   TITLE:=bind
-  URL:=http://www.isc.org/sw/bind/
+  URL:=https://www.isc.org/software/bind
   SUBMENU:=DNS
 endef
 

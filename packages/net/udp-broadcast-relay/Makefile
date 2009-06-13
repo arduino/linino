@@ -15,8 +15,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.joachim-breitner.de/udp-broadcast-relay/files/
 PKG_MD5SUM:=a32f983b7063d6ac670e6b22be9b9d24
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/udp-broadcast-relay

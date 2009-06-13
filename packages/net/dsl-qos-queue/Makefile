@@ -24,6 +24,7 @@ define Package/dsl-qos-queue
   CATEGORY:=Network
   DEPENDS:=+iptables +kmod-ipt-queue @!LINUX_2_6_25 @!LINUX_2_6_26 @!LINUX_2_6_27 @!LINUX_2_6_28
   TITLE:=ADSL/ATM Bandwith management
+  URL:=http://www.sonicspike.net/software/
 endef
 
 define Build/Configure

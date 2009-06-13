@@ -15,8 +15,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.rit.edu/~reh5586/openwrt/packages/vncrepeater/src
 PKG_MD5SUM:=5951740a8a103d7d9668558b3639c6c4
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/vncrepeater
@@ -24,7 +22,7 @@ define Package/vncrepeater
   CATEGORY:=Network
   DEPENDS:=+uclibcxx
   TITLE:=UltraVNC repeater for Linux
-  URL:=http://ultravnc.sourceforge.net/addons/repeater.html
+  URL:=http://www.uvnc.com/addons/repeater.html
 endef
 
 define Package/vncrepeater/conffiles

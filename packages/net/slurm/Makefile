@@ -12,7 +12,7 @@ PKG_VERSION:=0.3.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.wormulon.net/files/code/slurm/
+PKG_SOURCE_URL:=http://www.wormulon.net/slurm/
 PKG_MD5SUM:=e68d09202b835c644f7f6b7f070f29a2
 
 include $(INCLUDE_DIR)/package.mk
@@ -22,7 +22,7 @@ define Package/slurm
   CATEGORY:=Network
   DEPENDS:=+libncurses
   TITLE:=A realtime network interface monitor
-  URL:=http://www.wormulon.net/projects/slurm
+  URL:=http://www.wormulon.net/slurm/
 endef
 
 define Package/slurm/description

@@ -26,6 +26,7 @@ define Package/libtiff
   CATEGORY:=Libraries
   TITLE:=TIFF libraries
   DEPENDS:=+zlib +libjpeg
+  URL:=http://www.remotesensing.org/libtiff/
 endef
 
 TARGET_CFLAGS += $(FPIC)

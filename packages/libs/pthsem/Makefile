@@ -10,8 +10,6 @@ PKG_SOURCE_URL:=http://www.auto.tuwien.ac.at/~mkoegler/pth/
 PKG_MD5SUM:=b277716ee1224ca9925176fa29e1f0c5
 PKG_FIXUP:=libtool
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/pthsem

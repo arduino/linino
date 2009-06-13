@@ -8,7 +8,6 @@ PKG_MD5SUM:=358511d60eb3daba913d49236c469802
 
 PKG_SOURCE_URL:=http://search.cpan.org/CPAN/authors/id/T/TI/TIMB/
 PKG_SOURCE:=DBI-$(PKG_VERSION).tar.gz
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/perl/DBI-$(PKG_VERSION)
 

@@ -20,6 +20,7 @@ define Package/libcroco
   CATEGORY:=Libraries
   TITLE:=Croco css2 parsing libraray.
   DEPENDS:=+glib2 +libxml2
+  URL:=http://www.freespiders.org/projects/libcroco/
 endef
 
 define Package/libcroco/description

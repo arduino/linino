@@ -22,7 +22,7 @@ define Package/iperf/Default
   CATEGORY:=Network
   DEPENDS:= +uclibcxx
   TITLE:=Internet Protocol bandwidth measuring tool
-  URL:=http://dast.nlanr.net/Projects/Iperf/
+  URL:=http://sourceforge.net/projects/iperf/
 endef
 
 define Package/iperf/Default/description

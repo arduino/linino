@@ -12,7 +12,7 @@ PKG_VERSION:=2.3.2-7
 PKG_RELEASE:=2
 
 PKG_SOURCE:=psyBNC-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.psybnc.info/download/beta/
+PKG_SOURCE_URL:=http://www.psybnc.at/download/beta/
 PKG_MD5SUM:=4b893a92f914813450e0921b2894ad6c
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
@@ -24,7 +24,7 @@ define Package/psybnc
   SECTION:=net
   CATEGORY:=Network
   TITLE:=An IRC-Bouncer with many features
-  URL:=http://www.psybnc.info/
+  URL:=http://www.psybnc.at/
 endef
 
 define Package/psybnc/description

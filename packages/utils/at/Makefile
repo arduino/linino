@@ -22,6 +22,7 @@ define Package/at
   CATEGORY:=Utilities
   DEPENDS:=+libelf
   TITLE:=Delayed job execution and batch processing
+  URL:=http://packages.ubuntu.com/at
 endef
 
 define Package/at/description

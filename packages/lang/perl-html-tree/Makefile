@@ -8,7 +8,6 @@ PKG_MD5SUM:=6352f50be402301f79b580dd235d7762
 
 PKG_SOURCE_URL:=http://search.cpan.org/CPAN/authors/id/P/PE/PETEK
 PKG_SOURCE:=HTML-Tree-$(PKG_VERSION).tar.gz
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/perl/HTML-Tree-$(PKG_VERSION)
 

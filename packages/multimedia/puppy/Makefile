@@ -8,7 +8,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=puppy_$(PKG_VERSION)_src.tar.bz2
 PKG_SOURCE_URL:=@SF/puppy
 PKG_MD5SUM:=a7a53da5b8ba4fdb15e2fc8e1531b82c
-PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/puppy_$(PKG_VERSION)
 

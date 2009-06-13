@@ -23,6 +23,7 @@ define Package/airpwn
 	CATEGORY:=Network
 	TITLE:=Packet injection pwnage
 	DEPENDS:=+libnet1 +libopenssl +libpcap +libpcre
+	URL:=http://airpwn.sourceforge.net/Airpwn.html
 endef
 
 define Package/airpwn/description

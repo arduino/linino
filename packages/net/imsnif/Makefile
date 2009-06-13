@@ -10,12 +10,9 @@ PKG_VERSION:=0.04
 PKG_RELEASE:=2
 PKG_MD5SUM:=689c456f8edb77b9b4199a25514ac683
 
-PKG_SOURCE_URL:=http://kent.dl.sourceforge.net/sourceforge/im-snif
+PKG_SOURCE_URL:=@SF/im-snif
 PKG_SOURCE:=$(PKG_NAME)f_$(PKG_VERSION).tgz
-PKG_CAT:=zcat
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 PKG_UNPACK:=gzip -dc $(DL_DIR)/$(PKG_SOURCE) | $(TAR) -C $(PKG_BUILD_DIR) -xvf -
 
 include $(INCLUDE_DIR)/package.mk

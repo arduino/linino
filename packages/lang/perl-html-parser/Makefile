@@ -8,7 +8,6 @@ PKG_MD5SUM:=bddc432e5ed9df4d4153a62234f04fc2
 
 PKG_SOURCE_URL:=http://search.cpan.org/CPAN/authors/id/G/GA/GAAS
 PKG_SOURCE:=HTML-Parser-$(PKG_VERSION).tar.gz
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/perl/HTML-Parser-$(PKG_VERSION)
 

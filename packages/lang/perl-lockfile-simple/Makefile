@@ -8,7 +8,6 @@ PKG_MD5SUM:=d8966c3fb799aefcaaf80f845057a1fa
 
 PKG_SOURCE_URL:=http://search.cpan.org/CPAN/authors/id/J/JV/JV
 PKG_SOURCE:=LockFile-Simple-$(PKG_VERSION).tar.gz
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/perl/LockFile-Simple-$(PKG_VERSION)
 

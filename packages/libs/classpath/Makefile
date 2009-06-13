@@ -12,7 +12,7 @@ PKG_VERSION:=0.97.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.gnu.org/gnu/classpath/
+PKG_SOURCE_URL:=@GNU/classpath
 PKG_MD5SUM:=6a35347901ace03c31cc49751b338f31
 
 include $(INCLUDE_DIR)/package.mk

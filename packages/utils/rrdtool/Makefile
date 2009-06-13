@@ -30,6 +30,7 @@ define Package/rrdtool/Default
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Round Robin Database (RRD)
+  URL:=http://oss.oetiker.ch/rrdtool/
 endef
 
 define Package/librrd

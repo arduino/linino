@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/freeradius/Default
   SECTION:=net
   CATEGORY:=Network
-  URL:=http://www.freeradius.org/
+  URL:=http://freeradius.org/
 endef
 
 define Package/freeradius

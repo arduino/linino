@@ -15,9 +15,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/synce
 PKG_MD5SUM:=fd473d3deceda7912af4427dede1736f
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 PKG_BUILD_DEPENDS:=libiconv
@@ -26,7 +23,7 @@ define Package/libsynce
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=SynCE library
-  URL:=http://libsynce.sourceforge.net/
+  URL:=http://synce.sourceforge.net/
 endef
 
 define Package/libsynce/description

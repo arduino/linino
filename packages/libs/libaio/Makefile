@@ -15,8 +15,6 @@ PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/liba/libaio/
 PKG_MD5SUM:=9480e31cce6506091080d59211089bd4
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libaio
@@ -24,6 +22,7 @@ define Package/libaio
   CATEGORY:=Libraries
   DEPENDS:=@LINUX_2_6
   TITLE:=Linux kernel AIO interface access library
+  URL:=http://lse.sourceforge.net/io/aio.html
 endef
 
 define Build/Configure

@@ -25,6 +25,7 @@ define Package/libvncserver
   CATEGORY:=Libraries
   DEPENDS:=+zlib +libiconv
   TITLE:=VNC Server Library
+  URL:=http://libvncserver.sourceforge.net/
 endef
 
 CONFIGURE_ARGS += \

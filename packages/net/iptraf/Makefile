@@ -16,8 +16,6 @@ PKG_SOURCE_URL:=ftp://iptraf.seul.org/pub/iptraf/ \
 	ftp://the.wiretapped.net/pub/security/network-monitoring/iptraf/
 PKG_MD5SUM:=377371c28ee3c21a76f7024920649ea8
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/iptraf

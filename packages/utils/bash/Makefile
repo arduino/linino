@@ -12,7 +12,7 @@ PKG_VERSION:=3.2
 PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.gnu.org/gnu/bash/
+PKG_SOURCE_URL:=@GNU/bash
 PKG_MD5SUM:=00bfa16d58e034e3c2aa27f390390d30
 
 include $(INCLUDE_DIR)/package.mk

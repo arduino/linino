@@ -23,7 +23,7 @@ define Package/libtwin
   CATEGORY:=Libraries
   DEPENDS:=+zlib +libpng +libjpeg @TARGET_ps3
   TITLE:=The tiny windowing system libraries
-  URL:=
+  URL:=http://www.t2-project.org/packages/libtwin.html
 endef
 
 TARGET_CFLAGS += -flax-vector-conversions

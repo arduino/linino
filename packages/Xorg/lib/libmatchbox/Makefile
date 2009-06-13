@@ -14,7 +14,6 @@ PKG_VERSION:=1.9
 PKG_SOURCE_URL:=http://matchbox-project.org/sources/libmatchbox/$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_MD5SUM:=9f73e7515cc4679171a5db180dc1343b
-PKG_BUILD_DIR=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_FIXUP:=libtool
 
 EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib/

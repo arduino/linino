@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=make
 PKG_VERSION:=3.81
 PKG_RELEASE:=1
-PKG_SOURCE_URL:=http://ftp.gnu.org/gnu/make/
+PKG_SOURCE_URL:=@GNU/make
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_MD5SUM:=354853e0b2da90c527e35aabb8d6f1e6
 

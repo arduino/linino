@@ -24,7 +24,7 @@ define Package/chillispot
   CATEGORY:=Network
   DEPENDS:=+kmod-tun
   TITLE:=Wireless LAN HotSpot controller
-  URL:=http://www.chillispot.org/
+  URL:=http://www.chillispot.info/
 endef
 
 define Package/chillispot/description

@@ -12,7 +12,7 @@ PKG_VERSION:=0.0.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
-PKG_SOURCE_URL:=http://prdownloads.sourceforge.net/cmdpad/
+PKG_SOURCE_URL:=@SF/cmdpad
 PKG_MD5SUM:=6633b2354b7f23f9cd8e2bfb6e735965
 
 include $(INCLUDE_DIR)/package.mk

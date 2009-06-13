@@ -17,7 +17,6 @@ PKG_SOURCE_URL:=ftp://ftp.cpan.org/pub/CPAN/src/5.0 \
 		ftp://ftp.gmd.de/mirrors/CPAN/src/5.0 \
 		ftp://ftp.funet.fi/pub/languages/perl/CPAN/src/5.0
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/perl/$(PKG_NAME)-$(PKG_VERSION)
 

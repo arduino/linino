@@ -12,7 +12,7 @@ PKG_VERSION:=0.068
 PKG_RELEASE:=1
  
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://kent.dl.sourceforge.net/sourceforge/znc
+PKG_SOURCE_URL:=@SF/znc
 PKG_MD5SUM:=763162d90c67814780de67aa88347c38
  
 include $(INCLUDE_DIR)/package.mk

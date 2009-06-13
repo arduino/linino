@@ -14,7 +14,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://nording.ru/projects/download/openrrcp/stable
 PKG_MD5SUM:=e3d6097732af812b03dbbbedeced34d2
-PKG_CAT:=zcat
 
 include $(INCLUDE_DIR)/package.mk
 

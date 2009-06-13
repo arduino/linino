@@ -23,7 +23,7 @@ define Package/pepperspot
   CATEGORY:=Network
   DEPENDS:=+kmod-tun
   TITLE:=Wireless LAN HotSpot controller
-  URL:=http://www.pepperspot.org/
+  URL:=http://pepperspot.sourceforge.net/
 endef
 
 define Package/pepperspot/description

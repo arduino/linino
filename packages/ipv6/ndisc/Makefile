@@ -15,8 +15,6 @@ PKG_MD5SUM:=cb8d70564b8d40aae95e19592c6be183
 PKG_SOURCE_URL:=http://www.remlab.net/files/ndisc6/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ndisc

@@ -12,9 +12,8 @@ PKG_NAME:=fluxbox
 PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 
-
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://prdownloads.sourceforge.net/fluxbox/
+PKG_SOURCE_URL:=@SF/fluxbox
 PKG_MD5SUM:=990e276ead0d04421dce4080f485caca
 
 EXTRA_LDFLAGS:="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"

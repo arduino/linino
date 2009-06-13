@@ -11,7 +11,7 @@ PKG_NAME:=numpy
 PKG_VERSION:=1.0.4
 PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://downloads.sourceforge.net/numpy/
+PKG_SOURCE_URL:=@SF/numpy
 PKG_MD5SUM:=8f011e9d7697da570efaac61c51725e0
 
 include $(INCLUDE_DIR)/package.mk

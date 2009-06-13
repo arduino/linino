@@ -12,7 +12,7 @@ PKG_VERSION:=1.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://mesh.dl.sourceforge.net/sourceforge/miax/
+PKG_SOURCE_URL:=@SF/miax
 PKG_MD5SUM:=44f0d2ef46ee2697d890b7b96846adc7
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
@@ -24,7 +24,7 @@ define Package/miax
   CATEGORY:=Network
   DEPENDS:=+libpthread +bluez-libs
   TITLE:=A console iax (asterisk) client
-  URL:=http://www.eja.it/?l=gpl&testo=miax
+  URL:=http://www.eja.it/?l=en&n=miax
 endef
 
 define Package/miax/description

@@ -21,7 +21,7 @@ define Package/dhcp/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=ISC's DHCP
-  URL:=http://www.isc.org/
+  URL:=https://www.isc.org/software/dhcp
 endef
 
 define Package/dhcp-relay

@@ -22,6 +22,7 @@ define Package/nfs-server
   CATEGORY:=Network
   DEPENDS:=+portmap
   TITLE:=User Space NFS server
+  URL:=http://packages.debian.org/nfs-user-server
 endef
 
 define Package/nfs-server/description

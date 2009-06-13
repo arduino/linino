@@ -12,7 +12,7 @@ PKG_VERSION:=0.9.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://world.maxina.de/src/
+PKG_SOURCE_URL:=@SF/shat
 PKG_MD5SUM:=da06846f35838b14d1513523dad84d24
 
 include $(INCLUDE_DIR)/package.mk
@@ -21,7 +21,7 @@ define Package/shat
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Source Hardware Address Translation
-  URL:=http://www.teddy-net.com/cvs/Maxina/128gw/service/arpcatch/shat/
+  URL:=http://sourceforge.net/projects/shat/
 endef
 
 define Package/shat/description

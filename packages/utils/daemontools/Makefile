@@ -18,8 +18,6 @@ PKG_SOURCE:=${PKG_NAME}-${PKG_VERSION}.tar.gz
 PKG_SOURCE_URL:=http://cr.yp.to/daemontools/
 PKG_MD5SUM:=1871af2453d6e464034968a0fbcb2bfc
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 PKG_UNPACK += && mv $(PKG_BUILD_DIR)/../admin/* $(PKG_BUILD_DIR)/.. && rmdir $(PKG_BUILD_DIR)/../admin

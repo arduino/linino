@@ -22,7 +22,7 @@ define Package/updatedd
   CATEGORY:=Network
   MENU:=1
   TITLE:=A tool to update dynamic dns services
-  URL:=http://www.philipp-benner.de/updatedd/
+  URL:=http://savannah.nongnu.org/projects/updatedd/
 endef
 
 define Package/updatedd/description

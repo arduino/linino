@@ -8,7 +8,6 @@ PKG_MD5SUM:=1699fde3e86f2a036f135ae606d456bf
 
 PKG_SOURCE_URL:=http://search.cpan.org/CPAN/authors/id/A/AR/ARJAY
 PKG_SOURCE:=Compress-Bzip2-$(PKG_VERSION).tar.gz
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/perl/Compress-Bzip2-$(PKG_VERSION)
 

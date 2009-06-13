@@ -25,6 +25,7 @@ define Package/crypto-tools
   CATEGORY:=Utilities
   DEPENDS:=+libopenssl
   TITLE:=OCF-Linux's crypto-tools
+  URL:=http://ocf-linux.sourceforge.net/
 endef
 
 define Build/Configure

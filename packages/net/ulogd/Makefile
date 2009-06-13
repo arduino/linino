@@ -21,7 +21,7 @@ PKG_MD5SUM:=05b4ed2926b9a22aaeaf642917bbf8ff
 define Package/ulogd/Default
   SECTION:=net
   CATEGORY:=Network
-  URL:=http://gnumonks.org/projects/ulogd
+  URL:=http://www.netfilter.org/projects/ulogd/index.html
 endef
 
 define Package/ulogd

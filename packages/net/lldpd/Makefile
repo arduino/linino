@@ -15,9 +15,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.luffy.cx/lldpd/
 PKG_MD5SUM:=317e1144ec7d2781ff123ec16845a2fc
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/lldpd
@@ -25,7 +22,7 @@ define Package/lldpd
   CATEGORY:=Network
   TITLE:=Link Layer Discovery Protocol damon
   DEPENDS:=@!LINUX_2_4
-  URL:=http://www.bitwizard.nl/lldpd/
+  URL:=https://trac.luffy.cx/lldpd/
 endef
 
 define Package/lldpd/description

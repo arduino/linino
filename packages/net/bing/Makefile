@@ -16,8 +16,6 @@ PKG_SOURCE_URL:=http://fgouget.free.fr/bing/
 PKG_MD5SUM:=60aaee55277672d0cc163bf3f0b3d53f
 TAR_OPTIONS += || true
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/bing

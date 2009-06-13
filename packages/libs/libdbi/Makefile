@@ -22,6 +22,7 @@ define Package/libdbi
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= (library)
+  URL:=http://libdbi.sourceforge.net/
 endef
 
 define Package/libdbi/description

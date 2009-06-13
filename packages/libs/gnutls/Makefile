@@ -12,7 +12,7 @@ PKG_VERSION:=2.6.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://ftp.gnu.org/pub/gnu/gnutls/ \
+PKG_SOURCE_URL:=@GNU/gnutls \
 	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/
 PKG_MD5SUM:=747111ab0d86e7b06a4bb120ba456ad8
 

@@ -12,7 +12,7 @@ PKG_VERSION:=1.2.1
 PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://prdownloads.sourceforge.net/openslp/
+PKG_SOURCE_URL:=@SF/openslp
 PKG_MD5SUM:=ff9999d1b44017281dd00ed2c4d32330
 
 include $(INCLUDE_DIR)/package.mk
@@ -21,6 +21,7 @@ define Package/openslp
   SECTION:=net
   CATEGORY:=Network
   TITLE:=openslp
+  URL:=http://www.openslp.org/
 endef
 
 #CONFIGURE_ARGS += \

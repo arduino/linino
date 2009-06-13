@@ -11,8 +11,6 @@ PKG_NAME:=wiviz
 PKG_VERSION:=1.0
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/wiviz

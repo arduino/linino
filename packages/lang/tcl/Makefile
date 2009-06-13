@@ -10,13 +10,11 @@ PKG_NAME:=tcl
 PKG_VERSION:=8.4.19
 PKG_RELEASE:=1
 
-PKG_SOURCE:=tcl8.4.19.tar.gz
-PKG_SOURCE_URL:=http://heanet.dl.sourceforge.net/sourceforge/tcl/tcl8.4.19-src.tar.gz
+PKG_SOURCE:=tcl$(PKG_VERSION)-src.tar.gz
+PKG_SOURCE_URL:=@SF/tcl
 PKG_MD5SUM:=ade2c033a7b545ee108f3fdfeb629fcf
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 

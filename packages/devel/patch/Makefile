@@ -11,7 +11,7 @@ PKG_NAME:=patch
 PKG_VERSION:=2.5.4
 PKG_RELEASE:=1
 PKG_MD5SUM:=ee5ae84d115f051d87fcaaef3b4ae782
-PKG_SOURCE_URL:=http://ftp.gnu.org/gnu/patch/
+PKG_SOURCE_URL:=@GNU/patch
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 
 include $(INCLUDE_DIR)/package.mk

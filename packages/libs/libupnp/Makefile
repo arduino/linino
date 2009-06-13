@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libupnp/Default
   SECTION:=libs
   CATEGORY:=Libraries
-  URL:=http://upnp.sourceforge.net/
+  URL:=http://pupnp.sourceforge.net/
 endef
 
 define Package/libupnp

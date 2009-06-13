@@ -21,7 +21,7 @@ define Package/libpopt
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=A command line option parsing library
-  URL:=ftp://ftp.rpm.org/pub/rpm/dist/rpm-4.1.x/
+  URL:=http://rpm5.org/files/popt/
 endef
 
 define Build/Configure

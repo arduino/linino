@@ -23,7 +23,7 @@ define Package/miniupnpd
   CATEGORY:=Network
   DEPENDS:=+iptables
   TITLE:=Lightweight UPnP daemon
-  URL:=http://miniupnp.tuxfamily.org/
+  URL:=http://miniupnp.free.fr/
 endef
 
 define Build/Compile

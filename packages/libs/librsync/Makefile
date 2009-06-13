@@ -21,6 +21,7 @@ define Package/librsync
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=implementation of the rolling-checksum algorithm
+  URL:=http://librsync.sourceforge.net/
 endef
 
 define Package/librsync/description

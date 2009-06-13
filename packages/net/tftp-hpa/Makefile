@@ -12,10 +12,8 @@ PKG_VERSION:=0.48
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.kernel.org/pub/software/network/tftp
+PKG_SOURCE_URL:=@KERNEL/software/network/tftp
 PKG_MD5SUM:=73dd29dfa9062a174163f6a267e0b5f7
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 

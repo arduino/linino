@@ -25,6 +25,7 @@ define Package/sdparm
   TITLE:=Read or modify SCSI or USB disk parameters
   DEPENDS:=+kmod-scsi-generic
   SUBMENU:=disc
+  URL:=http://sg.danny.cz/sg/sdparm.html
 endef
 
 define Package/sdparm/description

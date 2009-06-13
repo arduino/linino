@@ -14,7 +14,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/apcupsd
 PKG_MD5SUM:=fd8785e7607d20cefa68dc20e44eebc4
-PKG_CAT:=zcat
 
 include $(INCLUDE_DIR)/package.mk
 

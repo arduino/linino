@@ -12,7 +12,7 @@ PKG_VERSION:=3.1.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.kernel.org/pub/software/utils/pciutils/ \
+PKG_SOURCE_URL:=@KERNEL/software/utils/pciutils \
 	ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci
 PKG_MD5SUM:=46387fd7a18c33fbb5311fdb3ab9ea12
 

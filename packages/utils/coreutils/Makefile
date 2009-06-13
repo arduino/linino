@@ -12,7 +12,7 @@ PKG_VERSION:=7.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://ftp.gnu.org/gnu/coreutils/
+PKG_SOURCE_URL:=@GNU/coreutils
 PKG_MD5SUM:=427c2914d3eab956f317c9ec6a45e62a
 
 include $(INCLUDE_DIR)/package.mk

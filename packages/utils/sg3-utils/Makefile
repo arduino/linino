@@ -22,7 +22,7 @@ define Package/sg3-utils
   CATEGORY:=Utilities
   DEPENDS:=+kmod-usb-storage
   TITLE:=sg3 scsi utilities
-  URL:=http://sg.torque.net/sg/sg3_utils.html
+  URL:=http://sg.danny.cz/sg/sg3_utils.html
 endef
 
 define Package/sg3-utils/description

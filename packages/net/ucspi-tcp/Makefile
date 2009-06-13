@@ -18,8 +18,6 @@ PKG_SOURCE:=${PKG_NAME}-${PKG_VERSION}.tar.gz
 PKG_SOURCE_URL:=http://cr.yp.to/ucspi-tcp/
 PKG_MD5SUM:=39b619147db54687c4a583a7a94c9163
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ucspi-tcp

@@ -10,7 +10,6 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=leafnode
 PKG_VERSION:=1.11.6
 PKG_RELEASE:=1
-PKG_CAT:=bzcat
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.dt.e-technik.uni-dortmund.de/~ma/leafnode/

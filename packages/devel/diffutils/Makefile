@@ -11,7 +11,7 @@ PKG_NAME:=diffutils
 PKG_VERSION:=2.8.1
 PKG_RELEASE:=1
 PKG_MD5SUM:=71f9c5ae19b60608f6c7f162da86a428
-PKG_SOURCE_URL:=http://ftp.gnu.org/gnu/diffutils/
+PKG_SOURCE_URL:=@GNU/diffutils
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 
 include $(INCLUDE_DIR)/package.mk

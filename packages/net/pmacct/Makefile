@@ -12,10 +12,8 @@ PKG_VERSION:=0.10.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.ba.cnr.it/~paolo/pmacct/
+PKG_SOURCE_URL:=http://www.pmacct.net/
 PKG_MD5SUM:=0be1ffd9d4bda73575caa3240abbf4cb
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 PKG_BUILD_DEPENDS:=libpcap
 
@@ -25,7 +23,7 @@ define Package/pmacct/Default
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=pmacct (accounting and aggregation tools)
-  URL:=http://www.ba.cnr.it/~paolo/pmacct/
+  URL:=http://www.pmacct.net/
 endef
 
 define Package/nfacctd/Default

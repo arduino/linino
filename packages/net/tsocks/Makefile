@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tsocks
-PKG_VERSION:=1.8
+PKG_VERSION:=1.8beta5
 PKG_RELEASE:=1
 PKG_MD5SUM:=51caefd77e5d440d0bbd6443db4fc0f8
 
-PKG_SOURCE_URL:=http://ftp1.sourceforge.net/tsocks/
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)beta5.tar.gz
+PKG_SOURCE_URL:=@SF/tsocks
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 
 include $(INCLUDE_DIR)/package.mk
 

@@ -13,7 +13,6 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.draisberghof.de/usb_modeswitch
-PKG_CAT:=bzcat
 PKG_MD5SUM:=1301f7b85b3cfe6647a5bc7e59845bae
 
 include $(INCLUDE_DIR)/package.mk
@@ -23,6 +22,7 @@ define Package/usb-modeswitch
   CATEGORY:=Utilities
   DEPENDS:=+libusb
   TITLE:=USB ModeSwitch
+  URL:=http://www.draisberghof.de/usb_modeswitch/
 endef
 
 define Package/usb-modeswitch/description

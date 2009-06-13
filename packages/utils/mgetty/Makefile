@@ -22,6 +22,7 @@ define Package/mgetty
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=A data/fax solution for your analog modem
+  URL:=http://mgetty.greenie.net/
 endef
 
 define Package/mgetty/description

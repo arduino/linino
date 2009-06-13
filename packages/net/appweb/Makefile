@@ -28,8 +28,6 @@ PKG_SOURCE:=$(PKG_NAME)-src-$(PKG_VERSION).tar.gz
 #	PKG_VERSION:=default
 #	PKG_MD5SUM:=
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 CONFIGURE_ARGS += -q --defaults=release --shared --tune=size --without-php \
@@ -42,6 +40,7 @@ define Package/appweb
   CATEGORY:=Network
   TITLE:=Appweb Web Server
   VERSION:=$(PKG_VERSION)
+  URL:=http://www.appwebserver.org/
 endef
 
 define Package/appweb/description

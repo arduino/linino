@@ -18,8 +18,6 @@ PKG_SOURCE_URL:=ftp://ftp.openbsd.org/pub/OpenBSD/OpenNTPD/ \
 	ftp://ftp.sunet.se/pub/OpenBSD/OpenNTPD/
 PKG_MD5SUM:=afc34175f38d08867c1403d9008600b3
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/openntpd

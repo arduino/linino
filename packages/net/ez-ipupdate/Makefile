@@ -16,8 +16,6 @@ PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/e/ez-ipupdate \
 	http://ftp.de.debian.org/debian/pool/main/e/ez-ipupdate
 PKG_MD5SUM:=000211add4c4845ffa4211841bff4fb0
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ez-ipupdate

@@ -15,7 +15,6 @@ PKG_SOURCE:=fftw-3.1.2.tar.gz
 PKG_MD5SUM:=08f2e21c9fd02f4be2bd53a62592afa4
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/fftw-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 

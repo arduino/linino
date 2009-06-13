@@ -16,7 +16,6 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/speedtouch-usb-firmware-$(PKG_VERSION)
 PKG_SOURCE:=SpeedTouch330_firmware_$(PKG_VERSION)$(PKG_RELEASE).zip
 PKG_SOURCE_URL:=http://www.speedtouch.com/download/drivers/USB/
 PKG_MD5SUM:=2551ce46ef785642f2c6768511f70ff3
-PKG_CAT:=unzip
 
 include $(INCLUDE_DIR)/package.mk
 

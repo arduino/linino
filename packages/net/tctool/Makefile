@@ -7,7 +7,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).zip
 PKG_SOURCE_URL:=http://download2.berlios.de/speedmodem50b
 PKG_MD5SUM:=df38334206d4cad106e58bd71c6f1d9a
-PKG_CAT:=unzip
 
 PKG_BUILD_DIR=$(BUILD_DIR)/$(PKG_NAME)
 

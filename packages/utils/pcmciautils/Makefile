@@ -12,7 +12,7 @@ PKG_VERSION:=015
 PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.kernel.org/pub/linux/utils/kernel/pcmcia/
+PKG_SOURCE_URL:=@KERNEL/linux/utils/kernel/pcmcia
 PKG_MD5SUM:=9e12435c8b6cf7bf59894e90e480b4aa
 
 include $(INCLUDE_DIR)/package.mk

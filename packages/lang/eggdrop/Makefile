@@ -14,10 +14,8 @@ PKG_RELEASE:=1
 PKG_SOURCE:=eggdrop$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.eggheads.org/pub/eggdrop/source/1.6
 PKG_MD5SUM:=68e181201483dee398f9904e8652e6ca
-PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 

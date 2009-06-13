@@ -12,7 +12,7 @@ PKG_VERSION:=1.2.0-beta2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz
-PKG_SOURCE_URL:=http://dircproxy.securiweb.net/pub/1.2/
+PKG_SOURCE_URL:=http://dircproxy.googlecode.com/files/
 PKG_MD5SUM:=850443437f709276ff21a173bbf98456
 
 include $(INCLUDE_DIR)/package.mk
@@ -22,7 +22,7 @@ define Package/dircproxy
   SECTION:=net
   CATEGORY:=Network
   TITLE:=An IRC proxy server
-  URL:=http://dircproxy.securiweb.net/
+  URL:=http://dircproxy.googlecode.com/
 endef
 
 # uses Build/Configure/Default

@@ -12,8 +12,7 @@ PKG_VERSION:=2.0.10
 PKG_RELEASE:=5
 PKG_MD5SUM:=54870482fe036b7e69dd48c90661eec6
 
-PKG_SOURCE_URL:=ftp://se.samba.org/pub/samba/stable \
-	ftp://ftp.easynet.be/samba/stable
+PKG_SOURCE_URL:=ftp://ftp.samba.org/pub/samba/old-versions
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 
 include $(INCLUDE_DIR)/package.mk

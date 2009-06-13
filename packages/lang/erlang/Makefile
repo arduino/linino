@@ -29,7 +29,7 @@ define Package/erlang/Default
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=Erlang/OTP programming language
-  URL:=http://www.erlnag.org/
+  URL:=http://www.erlang.org/
 endef
 
 define Package/erlang/Default/description

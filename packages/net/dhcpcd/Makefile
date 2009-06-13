@@ -14,7 +14,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.berlios.de/dhcpcd/
 PKG_MD5SUM:=e9100e53f64ca1f9fb0d392c3a623738
-PKG_CAT:=bzcat
 
 include $(INCLUDE_DIR)/package.mk
 

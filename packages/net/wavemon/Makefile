@@ -23,7 +23,7 @@ define Package/wavemon
   TITLE:=N-curses based wireless network devices monitor
   DEPENDS:= +libncurses
   SUBMENU:=wireless
-  URL:=http://www.janmorgenstern.de/projects-software.html
+  URL:=http://eden-feed.erg.abdn.ac.uk/wavemon/
 endef
 
 define Package/wavemon/description

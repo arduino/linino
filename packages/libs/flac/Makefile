@@ -15,15 +15,13 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/flac
 PKG_MD5SUM:=2bfc127cdda02834d0491ab531a20960
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libflac
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Free Lossless Audio Codec library
-  URL:=ttp://flac.sourceforge.net/
+  URL:=http://flac.sourceforge.net/
 endef
 
 define Build/Configure

@@ -25,6 +25,7 @@ define Package/mksh
   CATEGORY:=Base system
   TITLE:=MirBSD Korn Shell
   DEPENDS:=$(DEP)
+  URL:=http://mirbsd.de/mksh
 endef
 
 define Package/mksh/description
