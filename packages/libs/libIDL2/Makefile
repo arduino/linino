@@ -10,14 +10,16 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libIDL2
 PKG_VERSION:=0.8.11
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=libIDL-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/libIDL-$(PKG_VERSION)
+HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/libIDL-$(PKG_VERSION)
 PKG_SOURCE_URL:=@GNOME/libIDL/0.8
 PKG_MD5SUM:=9d0d4895fc23f7de9514fb13f0fdc9ba
 PKG_FIXUP:=libtool
 
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
 PKG_INSTALL=1
@@ -27,7 +29,6 @@ TARGET_CFLAGS += \
 	-I$(STAGING_DIR)/usr/libiconv/include
 
 TARGET_LDFLAGS += \
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib/
 
@@ -50,16 +51,6 @@ define Build/Configure
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(2)/bin
-	$(INSTALL_BIN) \
-		$(PKG_INSTALL_DIR)/usr/bin/libIDL-config-2 \
-		$(2)/bin
-
-	$(INSTALL_DIR) $(1)/usr/include/libIDL-2.0/libIDL/
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/include/libIDL-2.0/libIDL/*.h \
-		$(1)/usr/include/libIDL-2.0/libIDL/
-
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
@@ -69,6 +60,11 @@ define Build/InstallDev
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
 		$(1)/usr/lib/pkgconfig/
+
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/* \
+		$(1)/usr/include/
 endef
 
 define Package/libIDL2/install
@@ -78,4 +74,5 @@ define Package/libIDL2/install
 		$(1)/usr/lib/
 endef
 
+$(eval $(call HostBuild))
 $(eval $(call BuildPackage,libIDL2))
