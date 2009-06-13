@@ -7,7 +7,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=fso
+PKG_NAME:=fso-frameworkd
 PKG_VERSION:=20090609
 PKG_REV:=74fc21962e9bbc7f2a89c74f12c15ce1b5861bfb
 PKG_RELEASE:=1
@@ -27,16 +27,16 @@ ifeq ($(CONFIG_TARGET_s3c24xx),y)
   CONFIG=om_gta02
 endif
 
-define Package/fso
+define Package/fso-frameworkd
   SECTION:=phone
   CATEGORY:=Phone
-  TITLE:=freesmartphone.org DBus API reference implementation
+  TITLE:=framework for the freesmartphone.org DBus API reference implementation
   DEPENDS:=+python +dbus-python +python-gobject +pyserial +pyyaml \
            +gst-python +alsa-utils +freerunner-alsa-scenarios
   URL:=http://www.freesmartphone.org
 endef
 
-define Package/fso/description
+define Package/fso-frameworkd/description
   freesmartphone.org is a collaboration platform for open source and open discussion software projects working on interoperability and shared technology for Linux-based SmartPhones
 endef
 
@@ -44,7 +44,7 @@ define Build/Compile
 	$(call Build/Compile/PyMod,,install --prefix="$(PKG_INSTALL_DIR)/usr")
 endef
 
-define Package/fso/install
+define Package/fso-frameworkd/install
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR) $(1)/usr/bin $(1)/etc/init.d
 	$(CP) \
 		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
@@ -59,4 +59,4 @@ define Package/fso/install
 	$(if $(CONFIG),$(INSTALL_CONF) ./files/frameworkd.conf.$(CONFIG) $(1)/etc/frameworkd.conf,$(CP) ./files/frameworkd.conf $(1)/etc/frameworkd.conf)
 endef
 
-$(eval $(call BuildPackage,fso))
+$(eval $(call BuildPackage,fso-frameworkd))
