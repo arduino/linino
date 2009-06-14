@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index bd8d550..74c5330 100755
+--- a/configure
++++ b/configure
+@@ -24219,7 +24219,7 @@ if test "$cross_compiling" = yes; then
+ See \`config.log' for more details." >&5
+ $as_echo "$as_me: error: cannot run test program while cross compiling
+ See \`config.log' for more details." >&2;}
+-   { (exit 1); exit 1; }; }
++   }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
