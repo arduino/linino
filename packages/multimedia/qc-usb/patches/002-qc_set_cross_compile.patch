@@ -1,6 +1,5 @@
-diff -rupN original/Makefile new/Makefile
---- original/Makefile	2006-10-23 21:06:19.000000000 -0500
-+++ new/Makefile	2009-02-03 08:57:20.000000000 -0600
+--- a/Makefile
++++ b/Makefile
 @@ -183,7 +183,7 @@ install: $(MODULE_NAME)
  	-$(DEPMOD) -a
  
