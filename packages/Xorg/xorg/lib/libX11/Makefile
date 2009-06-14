@@ -23,8 +23,6 @@ PKG_BUILD_DEPENDS:=xproto xextproto xf86bigfontproto kbproto inputproto \
 
 include $(INCLUDE_DIR)/package.mk
 
-TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
-
 define Package/libX11
   SECTION:=xorg-lib
   CATEGORY:=Xorg
