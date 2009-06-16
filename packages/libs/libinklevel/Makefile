@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libinklevel
-PKG_VERSION:=0.8.0rc2
+PKG_VERSION:=0.8.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/libinklevel
-PKG_MD5SUM:=91ef91dd5c6338789ad5ae85134d7d0a
+PKG_MD5SUM:=83464cb23fe46a1d1adbe10f08b247be
 
 include $(INCLUDE_DIR)/package.mk
 
