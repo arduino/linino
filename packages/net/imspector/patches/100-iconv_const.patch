@@ -1,0 +1,11 @@
+--- a/icqprotocolplugin.cpp
++++ b/icqprotocolplugin.cpp
+@@ -668,7 +668,7 @@ int getmessage(GET_ARGS, std::string &me
+ 					char converted_string[BUFFER_SIZE];
+ 					memset(converted_string, 0, BUFFER_SIZE);
+ 					
+-					char *inbuf = string;
++					const char *inbuf = string;
+ 					char *outbuf = converted_string;
+ 					size_t inbytesleft = mylength - 4;
+ 					size_t outbytesleft = BUFFER_SIZE - 1; /* Trailing \0 */

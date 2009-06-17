@@ -1,0 +1,11 @@
+--- a/Makefile
++++ b/Makefile
+@@ -54,7 +54,7 @@ libimspector.so: $(LIBIMSPECTOR_OBJS)
+ msnprotocolplugin.so: msnprotocolplugin.o libimspector.so
+ 	$(CXX) msnprotocolplugin.o libimspector.so $(PLUGIN_FLAGS)
+ icqprotocolplugin.so: icqprotocolplugin.o libimspector.so
+-	$(CXX) icqprotocolplugin.o libimspector.so $(PLUGIN_FLAGS)
++	$(CXX) icqprotocolplugin.o libimspector.so $(PLUGIN_FLAGS) -L$(PREFIX)/lib/libiconv/lib -liconv
+ yahooprotocolplugin.so: yahooprotocolplugin.o libimspector.so
+ 	$(CXX) yahooprotocolplugin.o libimspector.so $(PLUGIN_FLAGS)
+ ircprotocolplugin.so: ircprotocolplugin.o libimspector.so
