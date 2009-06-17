@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openvpn
-PKG_VERSION:=2.1_rc15
+PKG_VERSION:=2.1_rc18
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://openvpn.net/release @SF/openvpn
-PKG_MD5SUM:=14a35b05c5a16292d149592d1dad0302
+PKG_MD5SUM:=af330c94da5200df94c4e84798ea39be
 
 include $(INCLUDE_DIR)/package.mk
 
