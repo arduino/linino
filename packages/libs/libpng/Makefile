@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libpng
-PKG_VERSION:=1.2.35
+PKG_VERSION:=1.2.37
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/libpng
-PKG_MD5SUM:=b8b8d09adf6bee2c5902c8e54c4f2e68
+PKG_MD5SUM:=6d1ee0888dbb711214943cb19c294b49
 
 PKG_FIXUP = libtool
 
