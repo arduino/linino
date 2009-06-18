@@ -41,6 +41,8 @@ define Package/libbfd
   TITLE:=libbfd
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-werror \
