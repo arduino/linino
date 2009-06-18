@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=argtable
-PKG_VERSION:=2.9
+PKG_VERSION:=2.11
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)2-9.tar.gz
-PKG_SOURCE_URL:=@SF/argtable/
-PKG_MD5SUM:=a7fcddef768db0ae66534ec4c4a51dee
+PKG_SOURCE:=$(PKG_NAME)2-11.tar.gz
+PKG_SOURCE_URL:=@SF/argtable
+PKG_MD5SUM:=6be6bdb5395b2de8063698f83db61791
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)2-9
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)2-11
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,12 +27,13 @@ define Package/argtable
 endef
 
 define Package/argtable/description
-	Argtable is an ANSI C library for parsing GNU style command line options with a minimum of fuss. 
-	It enables a program's command line syntax to be defined in the source code as an array of argtable 
-	structs. The command line is then parsed according to that specification and the resulting values 
-	are returned in those same structs where they are accessible to the main program. Both tagged 
-	(-v, --verbose, --foo=bar) and untagged arguments are supported, as are multiple instances of 
-	each argument.
+	Argtable is an ANSI C library for parsing GNU style command line options
+	with a minimum of fuss.	It enables a program's command line syntax to be
+	defined in the source code as an array of argtable structs. The command
+	line is then parsed according to that specification and the resulting
+	values are returned in those same structs where they are accessible to
+	the main program. Both tagged (-v, --verbose, --foo=bar) and untagged
+	arguments are supported, as are multiple instances of each argument.
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -56,7 +57,7 @@ define Build/UninstallDev
 	rm -rf \
 	$(STAGING_DIR)/usr/include/argtable2.h \
 	$(STAGING_DIR)/usr/lib/libargtable2.{a,so*}
-endef		
+endef
 
 define Package/argtable/install
 	$(INSTALL_DIR) $(1)/usr/lib
