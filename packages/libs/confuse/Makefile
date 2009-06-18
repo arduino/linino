@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=confuse
-PKG_VERSION:=2.5
+PKG_VERSION:=2.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://download.savannah.gnu.org/releases/confuse/
-PKG_MD5SUM:=4bc9b73d77ebd571ac834619ce0b3582
+PKG_SOURCE_URL:=http://bzero.se/confuse
+PKG_MD5SUM:=0e883d66f0f58fc33585b430c652aa30
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -25,15 +25,18 @@ define Package/confuse
 endef
 
 define Package/confuse/description
-	 libConfuse is a configuration file parser library, licensed under the terms of the LGPL, 
-	 and written in C. It supports sections and (lists of) values (strings, integers, floats, 
-	 booleans or other sections), as well as some other features (such as single/double-quoted
-	 strings, environment variable expansion, functions and nested include statements). It makes 
-	 it very easy to add configuration file capability to a program using a simple API.
-	 
-	 The goal of libConfuse is not to be the configuration file parser library with a gazillion 
-	 of features. Instead, it aims to be easy to use and quick to integrate with your code. 
-	 libConfuse was called libcfg before, but was changed to not confuse with other similar libraries. 
+	libConfuse is a configuration file parser library, licensed under the
+	terms of the ISC license, and written in C. It supports sections and
+	(lists of) values (strings, integers, floats, booleans or other
+	sections), as well as some other features (such as single/double-quoted
+	strings, environment variable expansion, functions and nested include
+	statements). It makes it very easy to add configuration file capability
+	to a program using a simple API.
+
+	The goal of libConfuse is not to be the configuration file parser
+	library with a gazillion of features. Instead, it aims to be easy to use
+	and quick to integrate with your code. libConfuse was called libcfg
+	before, but was changed to not confuse with other similar libraries.
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -42,7 +45,8 @@ CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
 	--disable-rpath \
-	--without-libiconv-prefix \                                                                                                                           --without-libintl-prefix \
+	--without-libiconv-prefix \
+	--without-libintl-prefix \
 
 MAKE_FLAGS += \
 	-C $(PKG_BUILD_DIR)/src \
@@ -61,7 +65,7 @@ define Build/UninstallDev
 	rm -rf \
 	$(STAGING_DIR)/usr/include/confuse.h \
 	$(STAGING_DIR)/usr/lib/libconfuse.{a,so*}
-endef		
+endef
 
 define Package/confuse/install
 	$(INSTALL_DIR) $(1)/usr/lib
