@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,11 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=check
-PKG_VERSION:=0.9.5
+PKG_VERSION:=0.9.6
 PKG_RELEASE:=1
+
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=@SF/check/
-PKG_MD5SUM:=30143c7974b547a12a7da47809a90951
+PKG_SOURCE_URL:=@SF/check
+PKG_MD5SUM:=6f80cd4a24d14ad706117a7714222420
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -30,12 +31,16 @@ TARGET_LDFLAGS += \
 define Package/check
   SECTION:=lib
   CATEGORY:=Libraries
-  TITLE:=check
+  TITLE:=Unit testing framework for C
   URL:=http://check.sourceforge.net/
 endef
 
 define Package/check/description
-  unit testing library
+  Check features a simple interface for defining unit tests, putting little in
+  the way of the developer. Tests are run in a separate address space, so Check
+  can catch both assertion failures and code errors that cause segmentation
+  faults or other signals. The output from unit tests can be used within source
+  code editors and IDEs.
 endef
 
 define Build/Configure
