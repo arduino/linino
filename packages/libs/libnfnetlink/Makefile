@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libnfnetlink
-PKG_VERSION:=0.0.40
+PKG_VERSION:=0.0.41
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnfnetlink/
-PKG_MD5SUM:=3fe19dc4b05ba7e7e6216123097c2819
+PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnfnetlink/ \
+	http://mirrors.evolva.ro/netfilter.org/libnfnetlink/
+PKG_MD5SUM:=5d844ea1f557bad0364d5b85cd10c796
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,9 +27,9 @@ define Package/libnfnetlink
 endef
 
 define Package/libnfnetlink/description
- libnfnetlink is is the low-level library for netfilter related kernel/userspace communication. 
- It provides a generic messaging infrastructure for in-kernel netfilter subsystems 
- (such as nfnetlink_log, nfnetlink_queue, nfnetlink_conntrack) and their respective users 
+ libnfnetlink is is the low-level library for netfilter related kernel/userspace communication.
+ It provides a generic messaging infrastructure for in-kernel netfilter subsystems
+ (such as nfnetlink_log, nfnetlink_queue, nfnetlink_conntrack) and their respective users
  and/or management tools in userspace.
 endef
 
