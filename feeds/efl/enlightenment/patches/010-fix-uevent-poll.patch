@@ -1,0 +1,28 @@
+commit ea1682259997401f95ce44ebca4bd202f7675f8c
+Author: Lars-Peter Clausen <lars@metafoo.de>
+Date:   Fri Jun 19 12:27:34 2009 +0200
+
+    Prevent the the battery applet from busy-looping for ever on a 2.6.30 kernel.
+
+diff --git a/src/modules/battery/batget.c b/src/modules/battery/batget.c
+index 541c620..74b0704 100644
+--- a/src/modules/battery/batget.c
++++ b/src/modules/battery/batget.c
+@@ -477,7 +477,7 @@ linux_sys_class_power_supply_cb_event_fd_active(void *data, Ecore_Fd_Handler *fd
+    Sys_Class_Power_Supply_Uevent *sysev;
+    
+    sysev = data;
+-   if (ecore_main_fd_handler_active_get(fd_handler, ECORE_FD_READ))
++   if (ecore_main_fd_handler_active_get(fd_handler, ECORE_FD_ERROR))
+      {
+ 	int lost = 0;
+ 	for (;;)
+@@ -668,7 +668,7 @@ linux_sys_class_power_supply_init(void)
+ 		  sysev->fd = open(buf, O_RDONLY);
+ 		  if (sysev->fd >= 0)
+ 		    sysev->fd_handler = ecore_main_fd_handler_add(sysev->fd,
+-								  ECORE_FD_READ,
++								  ECORE_FD_ERROR,
+ 								  linux_sys_class_power_supply_cb_event_fd_active,
+ 								  sysev,
+ 								  NULL, NULL);
