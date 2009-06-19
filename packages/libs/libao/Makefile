@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libao
-PKG_VERSION:=0.8.6
+PKG_VERSION:=0.8.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.xiph.org/releases/ao/
-PKG_MD5SUM:=12e136a4c0995068ff134997c84421ed
+PKG_MD5SUM:=b92cba3cbcf1ee9bc221118a85d23dcd
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,7 +26,7 @@ define Package/libao
 endef
 
 define Package/libao/description
-	Libao is a cross-platform audio library that allows programs to 
+	Libao is a cross-platform audio library that allows programs to
 	output audio using a simple API on a wide variety of platforms.
 endef
 
@@ -36,7 +36,7 @@ CONFIGURE_ARGS += \
 	--disable-esd \
 	--disable-arts \
 	--disable-nas \
-	--disable-polyp
+	--disable-pulse
 
 TARGET_CFLAGS += $(FPIC)
 
