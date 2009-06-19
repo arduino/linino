@@ -9,11 +9,13 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=libnetfilter_log
-PKG_VERSION:=0.0.15
+PKG_VERSION:=0.0.16
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnetfilter_log/
-PKG_MD5SUM:=310ddd9e0c2bb6108b5fa33cd2666008
+PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnetfilter_log/ \
+	http://mirrors.evolva.ro/netfilter.org/libnetfilter_log/
+PKG_MD5SUM:=4ffcf46dad9d0c81f6611dd185639694
 
 PKG_FIXUP:=libtool
 
@@ -28,7 +30,7 @@ define Package/libnetfilter-log
 endef
 
 define Package/libnetfilter-log/description
- libnetfilter_log is a userspace library providing interface to 
+ libnetfilter_log is a userspace library providing interface to
  packets that have been logged by the kernel packet filter.
 endef
 
@@ -47,7 +49,6 @@ define Build/Compile
 	$(call libtool_fixup_libdir)
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
-
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/libnetfilter_log
