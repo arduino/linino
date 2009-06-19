@@ -9,11 +9,13 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=libnetfilter_queue
-PKG_VERSION:=0.0.16
+PKG_VERSION:=0.0.17
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnetfilter_queue/
-PKG_MD5SUM:=b36664e6cd39edbfe46b416a86118add
+PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnetfilter_queue/ \
+	http://mirrors.evolva.ro/netfilter.org/libnetfilter_queue/
+PKG_MD5SUM:=2cde35e678ead3a8f9eb896bf807a159
 
 PKG_FIXUP:=libtool
 
@@ -47,7 +49,6 @@ define Build/Compile
 	$(call libtool_fixup_libdir)
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
-
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/libnetfilter_queue
