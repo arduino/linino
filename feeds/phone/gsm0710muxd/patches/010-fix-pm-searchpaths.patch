@@ -1,0 +1,20 @@
+commit 08393b63026649c78b38082860b655ccf29e7598
+Author: Lars-Peter Clausen <lars@metafoo.de>
+Date:   Fri Jun 19 01:21:55 2009 +0200
+
+    Fix power management search paths.
+
+diff --git a/src/gsm0710muxd.c b/src/gsm0710muxd.c
+index f6aa2e0..e2cc400 100644
+--- a/src/gsm0710muxd.c
++++ b/src/gsm0710muxd.c
+@@ -1972,8 +1972,8 @@ int main(
+ 		struct stat sb;
+ 		int i;
+ 		static char* fn[] = {
++			"/sys/bus/platform/devices/gta02-pm-gsm.0",
+ 			"/sys/bus/platform/devices/neo1973-pm-gsm.0",
+-			"/sys/bus/platform/devices/gta01-pm-gsm.0",
+ 			NULL
+ 			};
+ 		for (i=0;fn[i];i++)
