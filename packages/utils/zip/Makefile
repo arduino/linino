@@ -15,9 +15,9 @@ PKG_SOURCE:=$(PKG_NAME)232.zip
 PKG_SOURCE_URL:=@SF/infozip
 PKG_MD5SUM:=da947ed356e5fdb30ff4bc3dc7698f33
 
-PKG_UNPACK=unzip -d $(PKG_BUILD_DIR)/ $(DL_DIR)/$(PKG_SOURCE)
-
 include $(INCLUDE_DIR)/package.mk
+
+PKG_UNPACK=unzip -d $(PKG_BUILD_DIR)/ $(DL_DIR)/$(PKG_SOURCE)
 
 define Package/zip
   SECTION:=utils

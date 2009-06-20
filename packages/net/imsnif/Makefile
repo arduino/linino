@@ -13,9 +13,9 @@ PKG_MD5SUM:=689c456f8edb77b9b4199a25514ac683
 PKG_SOURCE_URL:=@SF/im-snif
 PKG_SOURCE:=$(PKG_NAME)f_$(PKG_VERSION).tgz
 
-PKG_UNPACK:=gzip -dc $(DL_DIR)/$(PKG_SOURCE) | $(TAR) -C $(PKG_BUILD_DIR) -xvf -
-
 include $(INCLUDE_DIR)/package.mk
+
+PKG_UNPACK:=gzip -dc $(DL_DIR)/$(PKG_SOURCE) | $(TAR) -C $(PKG_BUILD_DIR) -xvf -
 
 define Package/imsnif
   SECTION:=net

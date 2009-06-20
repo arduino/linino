@@ -15,10 +15,9 @@ PKG_SOURCE:=dhcpv6-linux-$(PKG_VERSION).zip
 PKG_SOURCE_URL:=@SF/dhcpv6-linux
 PKG_MD5SUM:=86193dfa62137db3ea459543db4f1102
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_UNPACK:=unzip -d $(PKG_BUILD_DIR)/ $(DL_DIR)/$(PKG_SOURCE)
-
 include $(INCLUDE_DIR)/package.mk
+
+PKG_UNPACK:=unzip -d $(PKG_BUILD_DIR)/ $(DL_DIR)/$(PKG_SOURCE)
 
 define Package/dhcp6/Default
   SECTION:=ipv6

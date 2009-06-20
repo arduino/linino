@@ -15,11 +15,11 @@ PKG_SOURCE:=$(PKG_NAME)-source.tar.gz
 PKG_SOURCE_URL:=http://home.comcast.net/~SCSIguy/SCSI_FAQ/RMiller_Tools/ftp/$(PKG_NAME)/
 PKG_MD5SUM:=5776233a2d301a50b314306538257a45
 
+include $(INCLUDE_DIR)/package.mk
+
 PKG_UNPACK= \
 	zcat $(DL_DIR)/$(PKG_SOURCE) | \
 		$(TAR) -C $(PKG_BUILD_DIR) --strip-components 2 $(TAR_OPTIONS);
-
-include $(INCLUDE_DIR)/package.mk
 
 define Package/dt
   CATEGORY:=Utilities
