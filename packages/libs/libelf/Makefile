@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libelf
-PKG_VERSION:=0.8.10
+PKG_VERSION:=0.8.11
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.mr511.de/software/
-PKG_MD5SUM:=9db4d36c283d9790d8fa7df1f4d7b4d9
+PKG_MD5SUM:=e931910b6d100f6caa32239849947fbf
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -21,7 +21,7 @@ define Package/libelf
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=ELF object file access library
-  URL:=http://www.stud.uni-hannover.de/~michael/software/
+  URL:=http://www.mr511.de/software/
 endef
 
 TARGET_CFLAGS += $(FPIC)
