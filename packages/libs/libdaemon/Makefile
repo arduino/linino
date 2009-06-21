@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libdaemon
-PKG_VERSION:=0.12
+PKG_VERSION:=0.13
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://0pointer.de/lennart/projects/libdaemon/
-PKG_MD5SUM:=76596823cc1a6d1cdf7779b782ff0ee6
+PKG_MD5SUM:=ae9113fcd825d5a7f07e5ddccb3c3102
 
 include $(INCLUDE_DIR)/package.mk
 
