@@ -7,27 +7,27 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=libdvbpsi4
-PKG_VERSION:=0.1.5
-PKG_RELEASE:=2
+PKG_NAME:=libdvbpsi5
+PKG_VERSION:=0.1.6
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.videolan.org/pub/libdvbpsi/$(PKG_VERSION)/
-PKG_MD5SUM:=407cd074b7d6eaf31b20b693ed924655
+PKG_MD5SUM:=bd2d9861be3311e1e03c91cd9345f542
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
 PKG_INSTALL=1
 
-define Package/libdvbpsi4
+define Package/libdvbpsi
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=MPEG TS and DVB PSI tables decoding and generating
   URL:=http://www.videolan.org/developers/libdvbpsi.html
 endef
 
-define Package/libdvbpsi4/description
+define Package/libdvbpsi/description
 	libdvbpsi is a simple library designed for MPEG TS and DVB PSI tables
 	decoding and generating.
 endef
@@ -45,11 +45,11 @@ define Build/InstallDev
 		$(1)/usr/lib/
 endef
 
-define Package/libdvbpsi4/install
+define Package/libdvbpsi/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libdvbpsi.so* \
 		$(1)/usr/lib/
 endef
 
-$(eval $(call BuildPackage,libdvbpsi4))
+$(eval $(call BuildPackage,libdvbpsi))
