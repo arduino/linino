@@ -8,39 +8,44 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libdnet
-PKG_VERSION:=1.10
-PKG_RELEASE:=2
+PKG_VERSION:=1.11
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=416b765e9d9961501ac85e9a366fd219
+PKG_MD5SUM:=04c394ed8e1e7fc455456e79e908916d
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/libdnet
+define Package/libdnet/Default
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Low-level network library
   URL:=http://sourceforge.net/projects/libdnet/
+endef
+
+define Package/libdnet/Default/description
+	libdnet is a library of simplified, portable interface to several
+	low-level networking routines.
+endef
+
+define Package/libdnet
+  $(call Package/libdnet/Default)
 endef
 
 define Package/libdnet/description
-	libdnet is a library of simplified, portable interface to several 
-	low-level networking routines.
+  $(call Package/libdnet/Default/description)
 endef
 
 define Package/pydnet
-  SECTION:=libs
+  $(call Package/libdnet/Default)
   DEPENDS:=libdnet +python-mini
-  CATEGORY:=Libraries
-  TITLE:=Low-level network library
-  URL:=http://sourceforge.net/projects/libdnet/
 endef
 
 define Package/pydnet/description
-	libdnet is a library of simplified, portable interface to several 
-	low-level networking routines.
+  $(call Package/libdnet/Default/description)
+  This package contains the python dnet library.
 endef
 
 TARGET_CFLAGS += $(FPIC)

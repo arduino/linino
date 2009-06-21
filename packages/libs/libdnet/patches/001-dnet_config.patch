@@ -1,6 +1,6 @@
---- libdnet-1.10/dnet-config.in.orig	2001-10-19 03:29:00.000000000 +0200
-+++ libdnet-1.10/dnet-config.in	2005-09-20 09:32:53.000000000 +0200
-@@ -45,10 +45,18 @@
+--- a/dnet-config.in
++++ b/dnet-config.in
+@@ -45,10 +45,18 @@ while test $# -gt 0; do
  done
  
  if test "$echo_cflags" = "yes"; then
