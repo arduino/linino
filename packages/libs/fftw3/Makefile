@@ -1,18 +1,19 @@
-# 
+#
 # Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fftw3
-PKG_VERSION:=3.1.2
+PKG_VERSION:=3.2.1
+PKG_RELEASE:=1
 
-
-PKG_SOURCE_URL:=http://www.fftw.org/
-PKG_SOURCE:=fftw-3.1.2.tar.gz
-PKG_MD5SUM:=08f2e21c9fd02f4be2bd53a62592afa4
+PKG_SOURCE:=fftw-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.fftw.org
+PKG_MD5SUM:=712d3f33625a0a76f5758648d4b925f7
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/fftw-$(PKG_VERSION)
 
@@ -31,7 +32,6 @@ define Package/fftw3/description
 	Discrete Fourier Transform in one or more dimensions. It
 	includes complex, real, and parallel transforms, and can
 	handle arbitrary array sizes efficiently.
-	http://www.fftw.org/
 endef
 
 TARGET_CFLAGS += $(FPIC)
