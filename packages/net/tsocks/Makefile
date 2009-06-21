@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tsocks
-PKG_VERSION:=1.8beta5
+PKG_VERSION:=1.8
 PKG_RELEASE:=1
 PKG_MD5SUM:=51caefd77e5d440d0bbd6443db4fc0f8
 
 PKG_SOURCE_URL:=@SF/tsocks
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)beta5.tar.gz
 
 include $(INCLUDE_DIR)/package.mk
 
