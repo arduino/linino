@@ -1,0 +1,122 @@
+diff --git a/framework/subsystems/odeviced/powercontrol_neo.py b/framework/subsystems/odeviced/powercontrol_neo.py
+index 6d5959f..a3a9a93 100644
+--- a/framework/subsystems/odeviced/powercontrol_neo.py
++++ b/framework/subsystems/odeviced/powercontrol_neo.py
+@@ -49,7 +49,10 @@ class NeoUsbHostPowerControl( GenericPowerControl ):
+         # mode switching
+         self.modenode = "%s/%s" % ( node, "usb_mode" )
+         # node to provide 5V/100mA to USB gadgets, only present on Neo FreeRunner
+-        self.powernode = "%s/neo1973-pm-host.0/hostmode" % os.path.dirname( node )
++        for dev in ["gta02-pm-host.0", "neo1973-pm-host.0"]:
++            path = "%s/%s/hostmode" % (os.path.dirname ( node ), dev)
++            if os.path.exists(path):
++                self.powernode = path
+ 
+     def setPower( self, power ):
+         if power:
+@@ -88,6 +91,8 @@ def factory( prefix, controller ):
+ 
+     if "neo1973-pm-bt.0" in devices:
+         objects.append( NeoBluetoothPowerControl( bus, "%s/%s" % ( DEVICE_DIR, "neo1973-pm-bt.0" ) ) )
++    if "gta02-pm-bt.0" in devices:
++        objects.append( NeoBluetoothPowerControl( bus, "%s/%s" % ( DEVICE_DIR, "gta02-pm-bt.0" ) ) )
+ 
+     if "s3c-ohci" in devices:
+         objects.append( NeoUsbHostPowerControl( bus, "%s/%s" % ( DEVICE_DIR, "s3c-ohci" ) ) )
+diff --git a/framework/subsystems/oeventsd/fso_actions.py b/framework/subsystems/oeventsd/fso_actions.py
+index d46fbfc..651125a 100644
+--- a/framework/subsystems/oeventsd/fso_actions.py
++++ b/framework/subsystems/oeventsd/fso_actions.py
+@@ -152,7 +152,7 @@ class VibratorAction(Action):
+     """
+     function_name = 'Vibration'
+     # FIXME: device specific, needs to go away from here / made generic (parametric? just take the first?)
+-    def __init__(self, target = 'neo1973_vibrator', mode = "continuous"):
++    def __init__(self, target = 'gta02_vibrator', mode = "continuous"):
+         self.mode = mode
+         self.target = target
+ 
+diff --git a/framework/subsystems/ogsmd/modems/ti_calypso/modem.py b/framework/subsystems/ogsmd/modems/ti_calypso/modem.py
+index dfe40ef..20bb36f 100644
+--- a/framework/subsystems/ogsmd/modems/ti_calypso/modem.py
++++ b/framework/subsystems/ogsmd/modems/ti_calypso/modem.py
+@@ -14,10 +14,15 @@ Module: modem
+ __version__ = "0.9.9.10"
+ MODULE_NAME = "ogsmd.modems.ti_calypso"
+ 
++if os.path.exists("/sys/bus/platform/devices/gta02-pm-gps.0"):
++    SYSFS_DEVICE = "gta02-pm-gps.0"
++else:
++    SYSFS_DEVICE = "neo1973-pm-gps.0"
++
+ DEVICE_CALYPSO_PATH             = "/dev/ttySAC0"
+-SYSFS_CALYPSO_POWER_PATH        = "/sys/bus/platform/devices/neo1973-pm-gsm.0/power_on"
+-SYSFS_CALYPSO_RESET_PATH        = "/sys/bus/platform/devices/neo1973-pm-gsm.0/reset"
+-SYSFS_CALYPSO_FLOW_CONTROL_PATH = "/sys/bus/platform/devices/neo1973-pm-gsm.0/flowcontrolled"
++SYSFS_CALYPSO_POWER_PATH        = "/sys/bus/platform/devices/%s/power_on" % SYSFS_DEVICE
++SYSFS_CALYPSO_RESET_PATH        = "/sys/bus/platform/devices/%s/reset" % SYSFS_DEVICE
++SYSFS_CALYPSO_FLOW_CONTROL_PATH = "/sys/bus/platform/devices/%s/flowcontrolled" % SYSFS_DEVICE
+ 
+ import mediator
+ 
+diff --git a/framework/subsystems/ogpsd/om.py b/framework/subsystems/ogpsd/om.py
+--- a/framework/subsystems/ogpsd/om.py
++++ b/framework/subsystems/ogpsd/om.py
+@@ -12,8 +12,8 @@ GPLv2 or later
+ __version__ = "0.9.9.4"
+ MODULE_NAME = "ogpsd"
+ 
+-DEVICE_POWER_PATH_OLD = "/sys/bus/platform/devices/neo1973-pm-gps.0/pwron"
+-DEVICE_POWER_PATH_NEW = "/sys/bus/platform/devices/neo1973-pm-gps.0/power_on"
++DEVICE_POWER_PATHS = ["/sys/bus/platform/devices/gta02-pm-gps.0/power_on",
++                      "/sys/bus/platform/devices/neo1973-pm-gps.0/power_on"]
+ 
+ from ubx import UBXDevice
+ from ubx import CLIDPAIR
+@@ -33,12 +33,17 @@ class GTA02Device( UBXDevice ):
+ 
+     def __init__( self, bus, channel ):
+ 
+-        # Make sure the GPS is off
+-        helpers.writeToFile( DEVICE_POWER_PATH_OLD, "1" )
+-        helpers.writeToFile( DEVICE_POWER_PATH_NEW, "1" )
+-        time.sleep( 0.5 )
+-        helpers.writeToFile( DEVICE_POWER_PATH_OLD, "0" )
+-        helpers.writeToFile( DEVICE_POWER_PATH_NEW, "0" )
++        self.device_path = None
++        for path in DEVICE_POWER_PATHS:
++            if os.path.exists(path):
++                self.device_path = path
++                break
++
++        if self.device_path:
++            # Make sure the GPS is off
++            helpers.writeToFile( self.device_path, "1" )
++            time.sleep( 0.5 )
++            helpers.writeToFile( self.device_path, "0" )
+ 
+         self.aidingData = persist.get( "ogpsd", "aidingdata" )
+         if self.aidingData is None:
+@@ -49,8 +54,8 @@ class GTA02Device( UBXDevice ):
+         super( GTA02Device, self ).__init__( bus, channel )
+ 
+     def initializeDevice( self ):
+-        helpers.writeToFile( DEVICE_POWER_PATH_OLD, "1" )
+-        helpers.writeToFile( DEVICE_POWER_PATH_NEW, "1" )
++        if self.device_path:
++            helpers.writeToFile( self.device_path, "1" )
+ 
+         # Wait for the device to be powered up
+         time.sleep(0.5)
+@@ -81,9 +86,8 @@ class GTA02Device( UBXDevice ):
+             self.huiTimeout = None
+ 
+         super( GTA02Device, self ).shutdownDevice()
+-
+-        helpers.writeToFile( DEVICE_POWER_PATH_OLD, "0" )
+-        helpers.writeToFile( DEVICE_POWER_PATH_NEW, "0" )
++        if self.device_path:
++            helpers.writeToFile( self.device_path, "0" )
+ 
+         # Save collected aiding data
+         persist.set( "ogpsd", "aidingdata", self.aidingData )
