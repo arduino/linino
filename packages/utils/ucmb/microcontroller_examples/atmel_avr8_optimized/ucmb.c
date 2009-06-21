@@ -23,8 +23,6 @@
  */
 
 #include "ucmb.h"
-#include "util.h"
-#include "uart.h"
 
 #include <stdint.h>
 #include <avr/io.h>
@@ -41,6 +39,17 @@
 #define __naked		__attribute__((__naked__))
 #undef __used
 #define __used		__attribute__((__used__))
+#undef __noret
+#define __noret		__attribute__((__noreturn__))
+#undef offsetof
+#define offsetof(type, member)	((size_t)&((type *)0)->member)
+#undef unlikely
+#define unlikely(x)		__builtin_expect(!!(x), 0)
+#undef mb
+#define mb()			__asm__ __volatile__("" : : : "memory") /* memory barrier */
+#ifndef ucmb_errorlog
+# define ucmb_errorlog(message)	do { /* nothing */ } while (0)
+#endif
 
 
 struct ucmb_message_hdr {
@@ -74,6 +83,7 @@ static uint8_t ucmb_buf[sizeof(struct ucmb_message_hdr) +
 static uint16_t ucmb_buf_ptr __used;
 static struct ucmb_status status_buf __used;
 static uint16_t ucmb_send_message_len __used;
+static uint8_t ucmb_received_message;
 
 /* The current IRQ handler */
 static void (*ucmb_interrupt_handler)(void) __used;
@@ -242,35 +252,12 @@ UCMB_IRQ_EPILOGUE /* reti */
 "st_listen_have_full_packet:					\n"
 "	; We have the full packet. Any SPI transfer is stopped	\n"
 "	; while we are processing the packet, so this		\n"
-"	; is a slowpath. Branch to a C function.		\n"
-"	clr __zero_reg__					\n"
-"	push r18						\n"
-"	push r19						\n"
-"	push r20						\n"
-"	push r21						\n"
-"	push r22						\n"
-"	push r23						\n"
-"	push r24						\n"
-"	push r25						\n"
-"	push r26						\n"
-"	push r27						\n"
-"	push r30						\n"
-"	push r31						\n"
-"	push __tmp_reg__					\n"
-"	rcall ucmb_received_packet				\n"
-"	pop __tmp_reg__						\n"
-"	pop r31							\n"
-"	pop r30							\n"
-"	pop r27							\n"
-"	pop r26							\n"
-"	pop r25							\n"
-"	pop r24							\n"
-"	pop r23							\n"
-"	pop r22							\n"
-"	pop r21							\n"
-"	pop r20							\n"
-"	pop r19							\n"
-"	pop r18							\n"
+"	; is a slowpath.					\n"
+"	; Disable SPI and pass control to ucmb_work to		\n"
+"	; handle the message.					\n"
+"	cbi %[_SPCR], %[_SPIE]					\n"
+"	ldi r18, 1						\n"
+"	sts ucmb_received_message, r18				\n"
 "	rjmp st_listen_out					\n"
 	: /* none */
 	: [sizeof_buf]		"i" (sizeof(ucmb_buf))
@@ -279,6 +266,8 @@ UCMB_IRQ_EPILOGUE /* reti */
 	, [offsetof_hdr_magic]	"M" (offsetof(struct ucmb_message_hdr, magic))
 	, [offsetof_hdr_len]	"M" (offsetof(struct ucmb_message_hdr, len))
 	, [_SPDR]		"M" (_SFR_IO_ADDR(SPDR))
+	, [_SPCR]		"M" (_SFR_IO_ADDR(SPCR))
+	, [_SPIE]		"i" (SPIE)
 	, [_UCMB_MAGIC]		"i" (UCMB_MAGIC)
 	: "memory"
 	);
@@ -439,35 +428,10 @@ UCMB_IRQ_EPILOGUE /* reti */
 "invalid_status_magic:						\n"
 "faulty_status_code:						\n"
 "	; Branch to the C error handler				\n"
+"	; The handler does not return, so we don't need to	\n"
+"	; push/pop the registers.				\n"
 "	clr __zero_reg__					\n"
-"	push r18						\n"
-"	push r19						\n"
-"	push r20						\n"
-"	push r21						\n"
-"	push r22						\n"
-"	push r23						\n"
-"	push r24						\n"
-"	push r25						\n"
-"	push r26						\n"
-"	push r27						\n"
-"	push r30						\n"
-"	push r31						\n"
-"	push __tmp_reg__					\n"
-"	rcall ucmb_received_faulty_status			\n"
-"	pop __tmp_reg__						\n"
-"	pop r31							\n"
-"	pop r30							\n"
-"	pop r27							\n"
-"	pop r26							\n"
-"	pop r25							\n"
-"	pop r24							\n"
-"	pop r23							\n"
-"	pop r22							\n"
-"	pop r21							\n"
-"	pop r20							\n"
-"	pop r19							\n"
-"	pop r18							\n"
-"	rjmp st_retrstatus_out					\n"
+"	rjmp ucmb_received_faulty_status			\n"
 	: /* none */
 	: [sizeof_ucmb_status]		"M" (sizeof(struct ucmb_status))
 	, [offsetof_status_magic]	"M" (offsetof(struct ucmb_status, magic))
@@ -479,12 +443,32 @@ UCMB_IRQ_EPILOGUE /* reti */
 	);
 }
 
-/* We received a full packet. This is called from assembly code. */
-static void __used ucmb_received_packet(void)
+/* We received a status report with an error condition.
+ * This is called from assembly code. The function does not return. */
+static void __used __noret ucmb_received_faulty_status(void)
+{
+	/* The master sent us a status report with an error code.
+	 * Something's wrong with us. Print a status message and
+	 * get caught by the watchdog, yummy.
+	 */
+
+	cli();
+	wdt_disable();
+	wdt_enable(WDTO_15MS);
+	ucmb_errorlog("UCMB: Received faulty status report. Triggering reset.");
+	while (1) {
+		/* "It's Coming Right For Us!" */
+	}
+}
+
+void ucmb_work(void)
 {
 	struct ucmb_message_hdr *hdr;
 	struct ucmb_message_footer *footer;
 	uint16_t payload_len;
+
+	if (!ucmb_received_message)
+		return;
 
 	hdr = (struct ucmb_message_hdr *)ucmb_buf;
 	payload_len = hdr->len;
@@ -508,7 +492,7 @@ static void __used ucmb_received_packet(void)
 	ucmb_buf_ptr++;
 
 	if (unlikely(status_buf.code != UCMB_STAT_OK))
-		return; /* Corrupt message. Don't pass it to user code. */
+		goto out; /* Corrupt message. Don't pass it to user code. */
 
 	ucmb_send_message_len = ucmb_rx_message(
 			ucmb_buf + sizeof(struct ucmb_message_hdr),
@@ -525,24 +509,12 @@ static void __used ucmb_received_packet(void)
 		ucmb_send_message_len += sizeof(struct ucmb_message_hdr) +
 					 sizeof(struct ucmb_message_footer);
 	}
-}
 
-/* We received a status report with an error condition.
- * This is called from assembly code. */
-static void __used ucmb_received_faulty_status(void)
-{
-	/* The master sent us a status report with an error code.
-	 * Something's wrong with us. Print a status message and
-	 * get caught by the watchdog, yummy.
-	 */
-
-	cli();
-	wdt_disable();
-	uart_logmsg("UCMB: Received faulty status report. Triggering reset.");
-	wdt_enable(WDTO_15MS);
-	while (1) {
-		/* "It's Coming Right For Us!" */
-	}
+out:
+	ucmb_received_message = 0;
+	mb();
+	/* Re-enable SPI */
+	SPCR |= (1 << SPIE);
 }
 
 void ucmb_init(void)
