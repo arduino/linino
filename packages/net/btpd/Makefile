@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=btpd
 PKG_VERSION:=0.13
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.murmeldjur.se/btpd/
@@ -35,6 +35,8 @@ define Package/btpd/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/cli/btinfo $(1)/usr/bin	
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/btpd.init $(1)/etc/init.d/btpd
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) ./files/btpd.config $(1)/etc/config/btpd
 endef
 
 $(eval $(call BuildPackage,btpd))
