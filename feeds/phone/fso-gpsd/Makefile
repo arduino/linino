@@ -33,7 +33,7 @@ TARGET_LDFLAGS += \
 
 define Package/fso-gpsd
   SECTION:=phone
-  CATEGORY:=phone
+  CATEGORY:=Phone
   TITLE:=FSO gps daemon
   URL:=http://freesmartphone.org
   DEPENDS:=fso-frameworkd
@@ -50,8 +50,8 @@ endef
 
 define Package/fso-gpsd/install
 	$(INSTALL_DIR) $(1)/usr/sbin $(1)/etc/init.d
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/fso-gpsd $(1)/usr/sbin/
-	$(CP) ./files/fso-gpsd.init $(1)/etc/init.d/fso-gpsd
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/fso-gpsd $(1)/usr/sbin/
+	$(INSTALL_BIN) ./files/fso-gpsd.init $(1)/etc/init.d/fso-gpsd
 endef
 
 $(eval $(call BuildPackage,fso-gpsd))
