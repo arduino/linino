@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mtr
-PKG_VERSION:=0.73
+PKG_VERSION:=0.75
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.bitwizard.nl/mtr/
-PKG_MD5SUM:=52223cc34c72092a0392865356a3dc76
+PKG_MD5SUM:=23baca52d0922c2ecba7eba05317868c
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -53,13 +53,13 @@ define Build/Configure
 	)
 endef
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
 
-define Package/mtr/install	
+define Package/mtr/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/mtr $(1)/usr/sbin/
 endef
