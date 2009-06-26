@@ -8,14 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=igmpproxy
-PKG_VERSION:=0.1-beta2
+PKG_VERSION:=0.1_beta4
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-src-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/igmpproxy
-PKG_MD5SUM:=2a5a59480f44d4b14077a6b5319e9940
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+PKG_MD5SUM:=0a16178aeca5d1bf54c129cec9597f85
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,7 +25,7 @@ define Package/igmpproxy
 endef
 
 define Package/igmpproxy/description
-	IGMPproxy is a simple dynamic Multicast Routing Daemon using 
+	IGMPproxy is a simple dynamic Multicast Routing Daemon using
 	only IGMP signalling (Internet Group Management Protocol).
 endef
 
@@ -37,16 +35,16 @@ endef
 
 TARGET_CFLAGS += -Dlog=igmpproxy_log
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/src \
 		CC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS)"
+		CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
 endef
 
-define Package/igmpproxy/install	
+define Package/igmpproxy/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/igmpproxy.conf $(1)/etc/
-	$(INSTALL_DIR) $(1)/usr/sbin $(1)/etc
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/igmpproxy $(1)/usr/sbin/
 endef
 
