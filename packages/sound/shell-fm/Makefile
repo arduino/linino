@@ -8,25 +8,27 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=shell-fm
-PKG_VERSION:=0.5
-PKG_RELEASE:=2
+PKG_VERSION:=0.6
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://nex.scrapping.cc/code/shell-fm/downloads/
-PKG_MD5SUM:=a257283b0f7e9173ee1073b88e57c5f6
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=git://github.com/jkramer/shell-fm.git
+PKG_SOURCE_VERSION:=df8bd30d280502c9ce62669e001d7de94d0dd5fe
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/shell-fm
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libao +libmad
+  DEPENDS:=+libao +madplay +libpthread
   TITLE:=Console Based Last.FM Radio Player
   URL:=http://nex.scrapping.cc
 endef
 
 define Package/shell-fm/description
-	Shell.FM is a console based player for the streams provided 
+	Shell.FM is a console based player for the streams provided
 	by Last.FM for the Linux platform. It's lightweight and easy to use.
 endef
 
@@ -42,11 +44,11 @@ define Build/Compile
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) -I./include/ $(TARGET_CPPFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		LDFLAGS="$(TARGET_LDFLAGS) -lmad -lao" \
+		LDFLAGS="$(TARGET_LDFLAGS) -lmad -lao -lpthread" \
 		all install
 endef
 
-define Package/shell-fm/install	
+define Package/shell-fm/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/shell-fm $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc

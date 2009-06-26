@@ -1,7 +1,7 @@
---- shell-fm-0.5/source/main.c	2008-04-10 22:27:28.000000000 +0200
-+++ shell-fm-0.5.new/source/main.c	2008-07-27 13:50:43.000000000 +0200
-@@ -33,6 +33,10 @@
- #define PATH_MAX 4096
+--- a/source/main.c
++++ b/source/main.c
+@@ -44,6 +44,10 @@
+ #  endif
  #endif
  
 +#ifndef WIFCONTINUED 
