@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=keepalived
-PKG_VERSION:=1.1.15
+PKG_VERSION:=1.1.17
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= http://www.keepalived.org/software
-PKG_MD5SUM:=4c93f5d8b6bfabe84b02828a5bbb7aa0
+PKG_MD5SUM:=324ef61a9eed389679f0a05edd1d1323
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
@@ -32,7 +32,7 @@ define Package/keepalived/description
 endef
 
 define Package/keepalived/conffiles
- /etc/keepalived/keepalived.conf
+/etc/keepalived/keepalived.conf
 endef
 
 acvar=$(subst -,_,$(subst .,_,$(subst /,_,$(1))))
@@ -60,11 +60,11 @@ endef
 
 define Package/keepalived/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/keepalived $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/keepalived $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/genhash $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/genhash $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/keepalived
-	$(CP) $(PKG_INSTALL_DIR)/etc/keepalived/keepalived.conf $(1)/etc/keepalived/keepalived.conf
+	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/keepalived/keepalived.conf $(1)/etc/keepalived/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/keepalived.init $(1)/etc/init.d/keepalived
 endef
