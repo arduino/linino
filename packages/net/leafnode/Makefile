@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=leafnode
-PKG_VERSION:=1.11.6
+PKG_VERSION:=1.11.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.dt.e-technik.uni-dortmund.de/~ma/leafnode/
-PKG_MD5SUM:=5a083968dbacc3d6f6d1013241c23e39
+PKG_SOURCE_URL:=@SF/leafnode
+PKG_MD5SUM:=e5e8ac28386c59df0b14ddbfcbe78509
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -24,13 +24,17 @@ EXTRA_CFLAGS+= $(TARGET_CPPFLAGS)
 
 EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
-define Package/leafnode
+define Package/leafnode/Default
   SUBMENU:=NNTP
   SECTION:=net
   CATEGORY:=Network
+  URL:=http://leafnode.sourceforge.net
+endef
+
+define Package/leafnode
+  $(call Package/leafnode/Default)
   DEPENDS:=+libpcre +xinetd
   TITLE:=Leafnode store-and-forward NNTP proxy
-  URL:=http://leafnode.sourceforge.net
 endef
 
 define Package/leafnode/description
@@ -40,12 +44,9 @@ define Package/leafnode/description
 endef
 
 define Package/leafnode-extra
-  SUBMENU:=NNTP
-  SECTION:=net
-  CATEGORY:=Network
+  $(call Package/leafnode/Default)
   DEPENDS:=leafnode
-  TITLE:=Leafnode extra programs 
-  URL:=http://leafnode.sourceforge.net
+  TITLE:=Leafnode extra programs
 endef
 
 define Package/leafnode-extra/description
