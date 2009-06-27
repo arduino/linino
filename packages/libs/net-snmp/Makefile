@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=net-snmp
-PKG_VERSION:=5.1.2
-PKG_RELEASE:=5
+PKG_VERSION:=5.4.2.1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/net-snmp
-PKG_MD5SUM:=8080555ab3f90011f25d5122042d9a8d
+PKG_MD5SUM:=984932520143f0c8bf7b7ce1fc9e1da1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -98,7 +98,7 @@ SNMP_MIB_MODULES_INCLUDED = \
 	ieee802dot11 \
 	mibII/at \
 	mibII/icmp \
-	mibII/interfaces \
+	mibII/ifTable \
 	mibII/ip \
 	mibII/snmp_mib \
 	mibII/sysORTable \
@@ -126,12 +126,19 @@ SNMP_MIB_MODULES_INCLUDED = \
 SNMP_MIB_MODULES_EXCLUDED = \
 	agent_mibs \
 	agentx \
+	disman/event \
+	disman/schedule \
+	hardware \
 	host \
+	if-mib \
 	mibII \
 	notification \
+	notification-log-mib \
 	snmpv3mibs \
 	target \
+	tcp-mib \
 	ucd_snmp \
+	udp-mib \
 	utilities \
 
 SNMP_TRANSPORTS_INCLUDED = Callback UDP
@@ -168,13 +175,14 @@ define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		LDFLAGS="$(TARGET_LDFLAGS) -lm" \
 		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
 		all install
 	( cd $(PKG_INSTALL_DIR); mv ./usr/sbin/snmpd ./usr/sbin/snmpd-shared; )
 	#ifneq ($(CONFIG_PACKAGE_snmpd-static),)
 	( cd $(PKG_BUILD_DIR); rm -f agent/snmpd; )
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		LDFLAGS="$(TARGET_LDFLAGS) -static" \
+		LDFLAGS="$(TARGET_LDFLAGS) -lm -static" \
 		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
 		all install
 	( cd $(PKG_INSTALL_DIR); mv ./usr/sbin/snmpd ./usr/sbin/snmpd-static; )

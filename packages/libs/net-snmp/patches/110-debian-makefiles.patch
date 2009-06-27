@@ -1,0 +1,40 @@
+--- net-snmp-5.1.2.orig/local/Makefile.in
++++ net-snmp-5.1.2/local/Makefile.in
+@@ -58,7 +58,7 @@
+ 
+ mib2c.made: $(srcdir)/mib2c
+ 	if test "x$(PERL)" != "x" ; then \
+-	  $(PERL) -p -e 's%^#!.*/perl.*%#!$(PERL)%;s#/usr/local/share/snmp#$(snmplibdir)#;' ${srcdir}/mib2c > mib2c.made; \
++	  $(PERL) -p -e 's%^#!.*/perl.*%#!$(PERL)%;s#/usr/local/share/snmp#$(snmplibdir)#;s#/usr/local/etc/snmp#$(SNMPCONFPATH)#;' ${srcdir}/mib2c > mib2c.made; \
+ 	else \
+ 	  touch mib2c.made; \
+         fi
+--- net-snmp-5.1.2.orig/mibs/Makefile.in
++++ net-snmp-5.1.2/mibs/Makefile.in
+@@ -43,11 +43,15 @@
+ UCDMIBS = UCD-SNMP-MIB.txt UCD-DEMO-MIB.txt UCD-IPFWACC-MIB.txt \
+ 	UCD-DLMOD-MIB.txt UCD-DISKIO-MIB.txt
+ 
++EXTRAMIBS = BGP4-MIB.txt BRIDGE-MIB.txt GNOME-SMI.txt OSPF-MIB.txt \
++	OSPF-TRAP-MIB.txt RIPv2-MIB.txt SOURCE-ROUTING-MIB.txt \
++	LM-SENSORS-MIB.txt
++
+ DEFAULTMIBS = @default_mibs_install@
+ 
+ MIBS	= $(V1MIBS) $(V2MIBS) $(V3MIBS) $(RFCMIBS) \
+ 	$(AGENTMIBS) $(IANAMIBS) \
+-	$(NETSNMPMIBS) $(UCDMIBS) $(DEFAULTMIBS)
++	$(NETSNMPMIBS) $(UCDMIBS) $(DEFAULTMIBS) $(EXTRAMIBS)
+ 
+ all: standardall
+ 
+--- net-snmp-5.1.2.orig/Makefile.top
++++ net-snmp-5.1.2/Makefile.top
+@@ -27,6 +27,7 @@
+ snmplibdir	= $(datadir)/snmp
+ mibdir		= $(snmplibdir)/mibs
+ persistentdir	= @PERSISTENT_DIRECTORY@
++sysconfdir	= @sysconfdir@
+ DESTDIR         = @INSTALL_PREFIX@
+ INSTALL_PREFIX  = @INSTALL_PREFIX@
+ 

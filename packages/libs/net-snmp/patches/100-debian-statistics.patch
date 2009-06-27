@@ -1,0 +1,22 @@
+--- net-snmp-5.1.2.orig/agent/mibgroup/mibII/interfaces.c
++++ net-snmp-5.1.2/agent/mibgroup/mibII/interfaces.c
+@@ -1598,6 +1612,10 @@
+         struct ifnet   *nnew;
+         char           *stats, *ifstart = line;
+ 
++	/* Ignore interfaces with no statistics. */
++	if (strstr(line, "No statistics available."))
++	    continue;
++
+         if (line[strlen(line) - 1] == '\n')
+             line[strlen(line) - 1] = '\0';
+ 
+@@ -1631,7 +1649,7 @@
+                                                &coll) != 5)) {
+             if ((scan_line_to_use == scan_line_2_2)
+                 && !strstr(line, "No statistics available"))
+-                snmp_log(LOG_ERR,
++                snmp_log(LOG_DEBUG,
+                          "/proc/net/dev data format error, line ==|%s|",
+                          line);
+             continue;
