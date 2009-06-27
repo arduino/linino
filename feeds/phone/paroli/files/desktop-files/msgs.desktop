@@ -1,0 +1,13 @@
+[Desktop Entry]
+GenericName=Messages
+Name=Messages
+Encoding=UTF-8
+Version=1.0
+Comment=Paroli Messages
+StartupNotify=false
+Exec=dbus-send --system --print-reply --dest=org.tichy.launcher /Launcher org.tichy.Launcher.Launch string:Paroli-Msgs
+Icon=/usr/share/icons/paroli/msgs.png
+Terminal=false
+Type=Application
+SingleInstance=true
+Categories=Telephony;TelephonyTools

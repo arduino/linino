@@ -1,0 +1,12 @@
+diff -ruN paroli-20090605.orig/paroli-core/tichy/settings.py paroli-20090605/paroli-core/tichy/settings.py
+--- paroli-20090605.orig/paroli-core/tichy/settings.py	2009-06-08 09:07:28.000000000 +0200
++++ paroli-20090605/paroli-core/tichy/settings.py	2009-06-10 15:27:15.000000000 +0200
+@@ -67,7 +67,7 @@
+                argument. The Setting value will actually be set
+                only after this tasklet returns.
+         """
+-        assert issubclass(type, Item), type
++        #assert issubclass(type, Item), type
+         self.group = group
+         self.name = name
+         self.type = type

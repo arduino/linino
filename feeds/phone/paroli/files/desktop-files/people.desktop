@@ -1,0 +1,13 @@
+[Desktop Entry]
+GenericName=People
+Name=People
+Encoding=UTF-8
+Version=1.0
+Comment=Paroli People
+StartupNotify=false
+Exec=dbus-send --system --print-reply --dest=org.tichy.launcher /Launcher org.tichy.Launcher.Launch string:Paroli-Contacts
+Icon=/usr/share/icons/paroli/people.png
+Terminal=false
+Type=Application
+SingleInstance=true
+Categories=Telephony;TelephonyTools
