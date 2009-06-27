@@ -40,9 +40,11 @@ diff --git a/framework/subsystems/ogsmd/modems/ti_calypso/modem.py b/framework/s
 index dfe40ef..20bb36f 100644
 --- a/framework/subsystems/ogsmd/modems/ti_calypso/modem.py
 +++ b/framework/subsystems/ogsmd/modems/ti_calypso/modem.py
-@@ -14,10 +14,15 @@ Module: modem
+@@ -14,10 +14,17 @@ Module: modem
  __version__ = "0.9.9.10"
  MODULE_NAME = "ogsmd.modems.ti_calypso"
++
++import os.path
  
 +if os.path.exists("/sys/bus/platform/devices/gta02-pm-gsm.0"):
 +    SYSFS_DEVICE = "gta02-pm-gsm.0"
