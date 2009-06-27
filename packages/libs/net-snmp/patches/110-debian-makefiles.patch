@@ -1,6 +1,6 @@
---- net-snmp-5.1.2.orig/local/Makefile.in
-+++ net-snmp-5.1.2/local/Makefile.in
-@@ -58,7 +58,7 @@
+--- a/local/Makefile.in
++++ b/local/Makefile.in
+@@ -100,7 +100,7 @@ tkmib.made: $(srcdir)/tkmib
  
  mib2c.made: $(srcdir)/mib2c
  	if test "x$(PERL)" != "x" ; then \
@@ -9,9 +9,9 @@
  	else \
  	  touch mib2c.made; \
          fi
---- net-snmp-5.1.2.orig/mibs/Makefile.in
-+++ net-snmp-5.1.2/mibs/Makefile.in
-@@ -43,11 +43,15 @@
+--- a/mibs/Makefile.in
++++ b/mibs/Makefile.in
+@@ -48,11 +48,15 @@ NETSNMPMIBS = NET-SNMP-TC.txt NET-SNMP-M
  UCDMIBS = UCD-SNMP-MIB.txt UCD-DEMO-MIB.txt UCD-IPFWACC-MIB.txt \
  	UCD-DLMOD-MIB.txt UCD-DISKIO-MIB.txt
  
@@ -28,13 +28,13 @@
  
  all: standardall
  
---- net-snmp-5.1.2.orig/Makefile.top
-+++ net-snmp-5.1.2/Makefile.top
-@@ -27,6 +27,7 @@
+--- a/Makefile.top
++++ b/Makefile.top
+@@ -26,6 +26,7 @@ man8dir		= $(mandir)/man8
  snmplibdir	= $(datadir)/snmp
  mibdir		= $(snmplibdir)/mibs
  persistentdir	= @PERSISTENT_DIRECTORY@
 +sysconfdir	= @sysconfdir@
  DESTDIR         = @INSTALL_PREFIX@
- INSTALL_PREFIX  = @INSTALL_PREFIX@
+ INSTALL_PREFIX  = $(DESTDIR)
  

@@ -1,6 +1,6 @@
---- net-snmp-5.1.2.orig/local/mib2c
-+++ net-snmp-5.1.2/local/mib2c
-@@ -60,8 +60,9 @@
+--- a/local/mib2c
++++ b/local/mib2c
+@@ -60,8 +60,9 @@ $currentlevel = -1;
  if($ENV{MIB2C_DIR}) {
     push @def_search_dirs, split(/:/, $ENV{MIB2C_DIR});
  }

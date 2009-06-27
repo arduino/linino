@@ -1,6 +1,5 @@
-diff -ruN net-snmp-5.4.1.orig/mibs/BGP4-MIB.txt net-snmp-5.4.1/mibs/BGP4-MIB.txt
---- net-snmp-5.4.1.orig/mibs/BGP4-MIB.txt	1970-01-01 01:00:00.000000000 +0100
-+++ net-snmp-5.4.1/mibs/BGP4-MIB.txt	2007-09-20 16:30:52.000000000 +0200
+--- /dev/null
++++ b/mibs/BGP4-MIB.txt
 @@ -0,0 +1,929 @@
 +    BGP4-MIB DEFINITIONS ::= BEGIN
 +
@@ -931,9 +930,8 @@ diff -ruN net-snmp-5.4.1.orig/mibs/BGP4-MIB.txt net-snmp-5.4.1/mibs/BGP4-MIB.txt
 +            ::= { bgpMIBGroups 5 }
 +
 +    END
-diff -ruN net-snmp-5.4.1.orig/mibs/BRIDGE-MIB.txt net-snmp-5.4.1/mibs/BRIDGE-MIB.txt
---- net-snmp-5.4.1.orig/mibs/BRIDGE-MIB.txt	1970-01-01 01:00:00.000000000 +0100
-+++ net-snmp-5.4.1/mibs/BRIDGE-MIB.txt	2007-09-20 16:30:52.000000000 +0200
+--- /dev/null
++++ b/mibs/BRIDGE-MIB.txt
 @@ -0,0 +1,1075 @@
 +BRIDGE-MIB DEFINITIONS ::= BEGIN
 +
@@ -2010,9 +2008,8 @@ diff -ruN net-snmp-5.4.1.orig/mibs/BRIDGE-MIB.txt net-snmp-5.4.1/mibs/BRIDGE-MIB
 +    ::= 2
 +
 +END
-diff -ruN net-snmp-5.4.1.orig/mibs/GNOME-SMI.txt net-snmp-5.4.1/mibs/GNOME-SMI.txt
---- net-snmp-5.4.1.orig/mibs/GNOME-SMI.txt	1970-01-01 01:00:00.000000000 +0100
-+++ net-snmp-5.4.1/mibs/GNOME-SMI.txt	2007-09-20 16:33:55.000000000 +0200
+--- /dev/null
++++ b/mibs/GNOME-SMI.txt
 @@ -0,0 +1,88 @@
 +GNOME-SMI DEFINITIONS ::= BEGIN
 +
@@ -2102,9 +2099,8 @@ diff -ruN net-snmp-5.4.1.orig/mibs/GNOME-SMI.txt net-snmp-5.4.1/mibs/GNOME-SMI.t
 +-- more to come if necessary.
 +
 +END
-diff -ruN net-snmp-5.4.1.orig/mibs/OSPF-MIB.txt net-snmp-5.4.1/mibs/OSPF-MIB.txt
---- net-snmp-5.4.1.orig/mibs/OSPF-MIB.txt	1970-01-01 01:00:00.000000000 +0100
-+++ net-snmp-5.4.1/mibs/OSPF-MIB.txt	2007-09-20 16:30:52.000000000 +0200
+--- /dev/null
++++ b/mibs/OSPF-MIB.txt
 @@ -0,0 +1,2723 @@
 +OSPF-MIB DEFINITIONS ::= BEGIN
 +
@@ -4829,9 +4825,8 @@ diff -ruN net-snmp-5.4.1.orig/mibs/OSPF-MIB.txt net-snmp-5.4.1/mibs/OSPF-MIB.txt
 +       ::= { ospfGroups 13 }
 +
 +END
-diff -ruN net-snmp-5.4.1.orig/mibs/OSPF-TRAP-MIB.txt net-snmp-5.4.1/mibs/OSPF-TRAP-MIB.txt
---- net-snmp-5.4.1.orig/mibs/OSPF-TRAP-MIB.txt	1970-01-01 01:00:00.000000000 +0100
-+++ net-snmp-5.4.1/mibs/OSPF-TRAP-MIB.txt	2007-09-20 16:30:52.000000000 +0200
+--- /dev/null
++++ b/mibs/OSPF-TRAP-MIB.txt
 @@ -0,0 +1,443 @@
 +OSPF-TRAP-MIB DEFINITIONS ::= BEGIN
 +
@@ -5276,9 +5271,8 @@ diff -ruN net-snmp-5.4.1.orig/mibs/OSPF-TRAP-MIB.txt net-snmp-5.4.1/mibs/OSPF-TR
 +
 +
 +END
-diff -ruN net-snmp-5.4.1.orig/mibs/RIPv2-MIB.txt net-snmp-5.4.1/mibs/RIPv2-MIB.txt
---- net-snmp-5.4.1.orig/mibs/RIPv2-MIB.txt	1970-01-01 01:00:00.000000000 +0100
-+++ net-snmp-5.4.1/mibs/RIPv2-MIB.txt	2007-09-20 16:30:52.000000000 +0200
+--- /dev/null
++++ b/mibs/RIPv2-MIB.txt
 @@ -0,0 +1,530 @@
 +   RIPv2-MIB DEFINITIONS ::= BEGIN
 +
@@ -5810,9 +5804,8 @@ diff -ruN net-snmp-5.4.1.orig/mibs/RIPv2-MIB.txt net-snmp-5.4.1/mibs/RIPv2-MIB.t
 +       "This group defines peer information for RIP-II systems."
 +    ::= { rip2Groups 4 }
 +END
-diff -ruN net-snmp-5.4.1.orig/mibs/SOURCE-ROUTING-MIB.txt net-snmp-5.4.1/mibs/SOURCE-ROUTING-MIB.txt
---- net-snmp-5.4.1.orig/mibs/SOURCE-ROUTING-MIB.txt	1970-01-01 01:00:00.000000000 +0100
-+++ net-snmp-5.4.1/mibs/SOURCE-ROUTING-MIB.txt	2007-09-20 16:30:52.000000000 +0200
+--- /dev/null
++++ b/mibs/SOURCE-ROUTING-MIB.txt
 @@ -0,0 +1,452 @@
 +SOURCE-ROUTING-MIB DEFINITIONS ::= BEGIN
 +
