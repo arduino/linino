@@ -44,10 +44,10 @@ index dfe40ef..20bb36f 100644
  __version__ = "0.9.9.10"
  MODULE_NAME = "ogsmd.modems.ti_calypso"
  
-+if os.path.exists("/sys/bus/platform/devices/gta02-pm-gps.0"):
-+    SYSFS_DEVICE = "gta02-pm-gps.0"
++if os.path.exists("/sys/bus/platform/devices/gta02-pm-gsm.0"):
++    SYSFS_DEVICE = "gta02-pm-gsm.0"
 +else:
-+    SYSFS_DEVICE = "neo1973-pm-gps.0"
++    SYSFS_DEVICE = "neo1973-pm-gsm.0"
 +
  DEVICE_CALYPSO_PATH             = "/dev/ttySAC0"
 -SYSFS_CALYPSO_POWER_PATH        = "/sys/bus/platform/devices/neo1973-pm-gsm.0/power_on"
