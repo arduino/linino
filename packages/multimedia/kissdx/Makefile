@@ -20,8 +20,8 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/kissdx
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=multimedia
+  CATEGORY:=Multimedia
   DEPENDS:=+libjpeg +libiconv +libdvdread
   TITLE:=PC-Link clone for KiSS media players
   URL:=http://kissdx.vidartysse.net
