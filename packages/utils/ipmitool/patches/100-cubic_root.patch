@@ -1,6 +1,6 @@
 --- ipmitool-1.8.9/lib/ipmi_sdr.c.orig	2007-07-16 13:09:13.000000000 +0200
 +++ ipmitool-1.8.9/lib/ipmi_sdr.c	2007-07-16 13:09:20.000000000 +0200
-@@ -4264,3 +4264,144 @@
+@@ -4264,3 +4264,146 @@
  
  	return rc;
  }
@@ -59,13 +59,15 @@
 +extern int isnan ( double );
 +extern int isfinite ( double );
 +#else
++/*
 +double frexp(), ldexp();
-+int isnan(), isfinite();
++int isnan(double), isfinite(double);
++*/
 +#endif
 +
-+double cbrt(x)
-+double x;
++double cbrt(double x)
 +{
++/* double x; */
 +int e, rem, sign;
 +double z;
 +
