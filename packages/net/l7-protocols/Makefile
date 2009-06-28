@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=l7-protocols
-PKG_VERSION:=2008-04-23
+PKG_VERSION:=2009-05-28
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/l7-filter
-PKG_MD5SUM:=f71420848eb60f7fdca04c2e89c78ee5
+PKG_MD5SUM:=91be154d12134dcdbc560cc7aa7fe4ce
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -28,7 +28,7 @@ endef
 
 define Package/l7-protocols-testing
 	$(call Package/l7-protocols)
-    TITLE:=testing utilities for layer7
+	TITLE:=testing utilities for layer7
 	DEPENDS+=l7-protocols +uclibcxx
 endef
 
