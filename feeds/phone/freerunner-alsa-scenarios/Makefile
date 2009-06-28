@@ -19,12 +19,22 @@ PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/kernel.mk
 
 define Package/freerunner-alsa-scenarios
   SECTION:=phone
   CATEGORY:=Phone
   TITLE:=alsa audio scenarios for the openmoko neo freerunner
 endef
+
+ifeq ($(strip $(call CompareKernelPatchVer,$(KERNEL_PATCHVER),ge,2.6.30)),1)
+define Build/Prepare
+		$(INSTALL_DIR) $(PKG_BUILD_DIR)
+		$(INSTALL_DATA) \
+			./files/* \
+			$(PKG_BUILD_DIR)
+endef
+endif
 
 define Build/Configure
 endef
