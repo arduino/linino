@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=quagga-unstable
-PKG_VERSION:=0.99.12
-PKG_RELEASE:=2
-PKG_MD5SUM:=d2bb513f4ac113dbb300c15a0bd0a241
+PKG_VERSION:=0.99.13
+PKG_RELEASE:=1
+PKG_MD5SUM:=55a7d2dcf016580a7c7412b3518cd942
 
 PKG_SOURCE_URL:=http://www.quagga.net/download/ \
                 http://www.de.quagga.net/download/ \
@@ -30,7 +30,7 @@ endef
 
 define Package/quagga-unstable
   $(call Package/quagga-unstable/Default)
-  DEPENDS:=
+  DEPENDS:= +librt
   MENU:=1
 endef
 
