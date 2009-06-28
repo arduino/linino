@@ -12,7 +12,7 @@ PKG_NAME:=rtorrent
 
 PKG_REV:=1094
 PKG_VERSION:=0.8.4_r$(PKG_REV)
-PKG_RELEASE:=7
+PKG_RELEASE:=8
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=svn://rakshasa.no/libtorrent/trunk/rtorrent
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
