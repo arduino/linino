@@ -37,7 +37,7 @@ $(call Package/net-snmp/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=+libelf
-  TITLE:=Open source SNMP implementation (librairies)
+  TITLE:=Open source SNMP implementation (libraries)
 endef
 
 define Package/libnetsnmp/description
