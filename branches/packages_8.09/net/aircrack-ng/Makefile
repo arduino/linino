@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aircrack-ng
-PKG_REV:=1142
+PKG_REV:=1396
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -46,6 +46,7 @@ define Build/Compile
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
 		prefix="/usr" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		OSNAME=Linux \
 		all install
 endef
 
