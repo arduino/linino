@@ -33,7 +33,8 @@ define Package/ecore
   SUBMENU:=libraries
   TITLE:=Ecore is the core event abstraction layer and X abstraction layer
   URL:=http://wiki.enlightenment.org/index.php/Ecore
-  DEPENDS:=+fribidi +eina +evas +libiconv +libintl @!LINUX_2_4
+  DEPENDS:=+fribidi +eina +evas +libiconv +libintl +libXtst +libXrandr +libX11 \
+  +libXcursor +libXdpms @!LINUX_2_4
 endef
 
 define Package/ecore/description
@@ -42,7 +43,10 @@ endef
 
 # iconv needed for ecore-txt
 TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libiconv/include
-TARGET_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv
+TARGET_LDFLAGS+= \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-Wl,-rpath=/usr/lib \
 
 define Build/Configure
 	( cd $(PKG_BUILD_DIR); NOCONFIGURE=YES ./autogen.sh );
@@ -74,9 +78,15 @@ define Build/Configure
 		--disable-ecore-evas-directfb \
 		--disable-ecore-evas-fb \
 		--disable-ecore-evas-software-16-wince \
-        --enable-ecore-x \
-        --with-iconv-link=-liconv \
+		--enable-ecore-x \
+		--with-iconv-link=-liconv \
 		--with-x \
+		, \
+		ac_cv_header_X11_extensions_Print_h=no \
+		ac_cv_header_X11_extensions_Xinerama_h=no \
+		ac_cv_header_X11_extensions_Xfixes_h=no \
+		ac_cv_header_X11_extensions_Xdamage_h=no \
+		ac_cv_header_X11_extensions_Xcomposite_h=no \
 	)
 endef
 
@@ -110,7 +120,7 @@ define Host/Configure
 		--disable-ecore-evas-directfb \
 		--disable-ecore-evas-fb \
 		--disable-ecore-evas-software-16-wince \
-        --disable-ecore-x \
+		--disable-ecore-x \
 		--without-x \
 	)
 endef
