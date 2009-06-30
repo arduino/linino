@@ -13,7 +13,7 @@ index 644ff04..4e1075a 100644
 +   else {
 +     const char *icon = efreet_icon_path_find(e_config->icon_theme,
 +                            desktop->icon, 32);
-+     ic->info.icon = eina_string_share_add(icon);
++     ic->info.icon = eina_stringshare_add(icon);
 +     free(icon);
 +   }
     if (desktop->url)
