@@ -1,18 +1,26 @@
+#
+# Copyright (C) 2009 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=btpd
-PKG_VERSION:=0.13
-PKG_RELEASE:=2
+PKG_VERSION:=0.15
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.murmeldjur.se/btpd/
-PRG_MD5SUM:=0d9c4a672eea6f298fa6e44d94da1657
+PRG_MD5SUM:=b64e2e8b9936e99685bc1e7246655561
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/btpd
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+libopenssl
   SUBMENU:=BitTorrent
   TITLE:=btpd - BitTorrent Protocol Daemon
   URL:=http://www.murmeldjur.se/btpd/
@@ -26,7 +34,7 @@ define Package/btpd/description
 	Efficient downloads and ease of use makes this client a good choice for the casual user as well.
 endef
 
-CONFIGURE_ARGS += -C
+CONFIGURE_ARGS += -C --with-evloop-method=poll
 
 define Package/btpd/install
 	$(INSTALL_DIR) $(1)/usr/bin
