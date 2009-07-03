@@ -33,7 +33,7 @@ endef
 
 define Package/fluxbox
 $(call Package/fluxbox/Default)
-  DEPENDS:=+uclibcxx +libXt
+  DEPENDS:=+uclibcxx +libXt +libXpm
   TITLE:=fluxbox window manager
   MENU:=1
 endef
