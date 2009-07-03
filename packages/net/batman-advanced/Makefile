@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=batman-adv
-PKG_REV:=1289
+PKG_REV:=1334
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -22,8 +22,8 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
 
 PKG_KMOD_BUILD_DIR:=$(PKG_BUILD_DIR)/batman-adv-kernelland
 
-PKG_TOOL_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-battool-install
-PKG_TOOL_BUILD_DIR:=$(PKG_BUILD_DIR)/battool
+PKG_TOOL_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-batctl-install
+PKG_TOOL_BUILD_DIR:=$(PKG_BUILD_DIR)/batctl
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
@@ -31,17 +31,6 @@ include $(INCLUDE_DIR)/kernel.mk
 define Package/batman-adv/Default
   URL:=http://www.open-mesh.net/
   MAINTAINER:=Marek Lindner <lindner_marek@yahoo.de>
-endef
-
-define Package/battool
-$(call Package/batman-adv/Default)
-  SECTION:=net
-  CATEGORY:=Network
-  TITLE:=B.A.T.M.A.N. layer 2 debug tools
-endef
-
-define Package/battool/description
-B.A.T.M.A.N. layer 2 debug tools
 endef
 
 define KernelPackage/batman-adv-kernelland
@@ -66,7 +55,7 @@ MAKE_BATADV_KERNELLAND_ARGS += \
 	LINUX_VERSION="$(LINUX_VERSION)" \
 	REVISION="$(PKG_REV)" modules
 
-MAKE_BATTOOL_ARGS += \
+MAKE_BATCTL_ARGS += \
 	CFLAGS="$(TARGET_CFLAGS)" \
 	CCFLAGS="$(TARGET_CFLAGS)" \
 	OFLAGS="$(TARGET_CFLAGS)" \
@@ -76,7 +65,7 @@ MAKE_BATTOOL_ARGS += \
 	UNAME="Linux" \
 	INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
 	STRIP="/bin/true" \
-	battool install
+	batctl install
 
 define Build/Configure
 endef
@@ -85,26 +74,21 @@ ifneq ($(DEVELOPER)$(CONFIG_PACKAGE_kmod-batman-adv-kernelland),)
         BUILD_KMOD_ADV = $(MAKE) -C "$(LINUX_DIR)" $(MAKE_BATADV_KERNELLAND_ARGS)
 endif
 
-ifneq ($(DEVELOPER)$(CONFIG_PACKAGE_battool),)
-        BUILD_BATTOOL = $(MAKE) -C $(PKG_TOOL_BUILD_DIR) $(MAKE_BATTOOL_ARGS)
+ifneq ($(DEVELOPER)$(CONFIG_PACKAGE_kmod-batman-adv-kernelland),)
+        BUILD_BATCTL = $(MAKE) -C $(PKG_TOOL_BUILD_DIR) $(MAKE_BATCTL_ARGS)
 endif
 
 define Build/Compile
 	cp $(PKG_KMOD_BUILD_DIR)/Makefile.kbuild $(PKG_KMOD_BUILD_DIR)/Makefile
 	$(BUILD_KMOD_ADV)
-	$(BUILD_BATTOOL)
+	$(BUILD_BATCTL)
 endef
 
 define KernelPackage/batman-adv-kernelland/install
-	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/init.d $(1)/usr/sbin
 	$(INSTALL_BIN) ./files/etc/init.d/batman-adv-kernelland $(1)/etc/init.d
 	$(INSTALL_DATA) ./files/etc/config/batman-adv-kernelland $(1)/etc/config
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/batctl $(1)/usr/sbin/
 endef
 
-define Package/battool/install
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/battool $(1)/usr/sbin/
-endef
-
-$(eval $(call BuildPackage,battool))
 $(eval $(call KernelPackage,batman-adv-kernelland))
