@@ -51,7 +51,7 @@ stop() {
 	args=""
 	config_foreach btpd btpd
 	
-	[ -d $direcotry ] && args="-d $directory "
+	[ -d $directory ] && args="-d $directory "
 	echo -n "stop btpd "
 	
 	while btcli $args kill ; do
