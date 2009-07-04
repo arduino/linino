@@ -53,8 +53,9 @@ define Build/InstallDev
 endef
 
 define Package/elementary/install
-	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib $(1)/usr/share/elementary/themes
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelementary*.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/elementary/themes/*.edj $(1)/usr/share/elementary/themes/
 endef
 
 $(eval $(call BuildPackage,elementary))
