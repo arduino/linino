@@ -27,7 +27,7 @@ define Package/paroli
   SECTION:=phone
   CATEGORY:=Phone
   TITLE:=integrated phone application
-  DEPENDS:=+python +fso-frameworkd +python-evas +python-ecore +python-edje +python-e_dbus +python-etk +python-elementary +python-expat +dbus-utils-x
+  DEPENDS:=+python +fso-frameworkd +python-evas +python-ecore +python-edje +python-e_dbus +python-etk +python-elementary +python-expat +dbus-launch-x +dbus-utils
   URL:=http://paroli-project.org
 endef
 
