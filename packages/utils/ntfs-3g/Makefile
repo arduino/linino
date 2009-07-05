@@ -21,7 +21,7 @@ define Package/ntfs-3g/common
   SECTION:=utils
   CATEGORY:=Utilities
   URL:=http://www.ntfs-3g.org
-  SUBMENU:=filesystem
+  SUBMENU:=Filesystem
   TITLE:=Stable Read/Write NTFS Driver (build options)
 endef
 

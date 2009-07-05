@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sslh
-PKG_VERSION:=1.6g
+PKG_VERSION:=1.6i
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://rutschle.net/tech/
-PKG_MD5SUM:=dc27a0fbcc9b3e434c203df7bc3c283a
+PKG_MD5SUM:=b2e0a207df885d7be57713449edae815
 
 include $(INCLUDE_DIR)/package.mk
 

@@ -22,9 +22,9 @@ include $(INCLUDE_DIR)/package.mk
 define Package/reiserfsprogs
   SECTION:=utils
   CATEGORY:=Utilities
+  SUBMENU:=Filesystem
   TITLE:=ReiserFS filesystems utilities
   URL:=http://www.namesys.com/
-  SUBMENU:=filesystem
 endef
 
 define Package/reiserfsprogs/description

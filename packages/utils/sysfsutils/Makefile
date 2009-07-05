@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/sysfsutils
   SECTION:=utils
   CATEGORY:=Utilities
+  SUBMENU:=Filesystem
   DEPENDS:=@LINUX_2_6
   TITLE:=sysfs Utilities
   URL:=http://linux-diag.sourceforge.net/Sysfsutils.html

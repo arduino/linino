@@ -18,6 +18,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/cifsmount
   SECTION:=utils
   CATEGORY:=Utilities
+  SUBMENU:=Filesystem
   TITLE:=CIFS mounting helper utility
 endef
 

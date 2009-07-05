@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libnfsidmap
   SECTION:=libs
   CATEGORY:=Libraries
+  SUBMENU:=Filesystem
   TITLE:=libnfsidmap, for compiling mount.nfs4
   URL:=http://www.citi.umich.edu/projects/nfsv4
 endef

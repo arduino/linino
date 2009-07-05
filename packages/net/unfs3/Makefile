@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/unfs3
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Filesystem
   DEPENDS:=+portmap
   TITLE:=User-space NFSv3 Server
   URL:=http://unfs3.sourceforge.net/

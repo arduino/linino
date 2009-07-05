@@ -22,7 +22,7 @@ define Package/dosfstools
   CATEGORY:=Utilities
   TITLE:=MS-DOS FAT filesystems utilities
   URL:=ftp://ftp.uni-erlangen.de:/pub/Linux/LOCAL/dosfstools/
-  SUBMENU:=filesystem
+  SUBMENU:=Filesystem
 endef
 
 define Package/dosfstools/description

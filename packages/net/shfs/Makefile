@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/shfs/Default
   TITLE:=ShFS
+  SUBMENU:=Filesystem
   URL:=http://shfs.sourceforge.net/
 endef
 

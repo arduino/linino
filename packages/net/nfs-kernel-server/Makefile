@@ -21,6 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/nfs-kernel-server/Default
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Filesystem
   DEPENDS:=+libwrap +libblkid
   URL:=http://nfs.sourceforge.net/
 endef
@@ -51,6 +52,8 @@ endef
 
 define Package/nfs-utils
   $(call Package/nfs-kernel-server/Default)
+  SECTION:=utils
+  CATEGORY:=Utilities
   DEPENDS+= +libevent
   TITLE:=updated mount utility (includes nfs4)
 endef

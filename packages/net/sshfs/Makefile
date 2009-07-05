@@ -24,6 +24,7 @@ define Package/sshfs
   DEPENDS:=+libfuse +fuse-utils +glib2 +libpthread
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Filesystem
   URL:=http://fuse.sourceforge.net/
 endef
 
