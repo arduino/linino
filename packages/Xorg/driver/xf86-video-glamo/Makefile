@@ -7,9 +7,9 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=video-glamo
-PKG_VERSION:=20090504
-PKG_REV:=9491d818583114e429db1330dc5e07b4668dfa35
+PKG_NAME:=xf86-video-glamo
+PKG_VERSION:=20090705
+PKG_REV:=b45d78c927715b8814404fc2a34ae0aa1d003c29
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -42,6 +42,7 @@ define Build/Configure
 	(cd $(PKG_BUILD_DIR) && autoreconf --force --install)
 	$(call Build/Configure/Default, \
 		--disable-jbt6k74-set-state \
+        --enable-engine-ioctls \
 	)
 endef
 
