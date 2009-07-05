@@ -25,6 +25,7 @@ define Package/zabbix/Default
   TITLE:=Zabbix
   URL:=http://www.zabbix.com/
   SUBMENU:=zabbix
+  DEPENDS:=libcurl
 endef
 
 define Package/zabbix-agent
