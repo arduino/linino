@@ -7,32 +7,47 @@
 
 include $(TOPDIR)/rules.mk
 PKG_NAME:=owfs
-PKG_VERSION:=2.7p13
+PKG_VERSION:=2.7p21
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=285483508f7fa42af3500b04f792058c
-
+PKG_MD5SUM:=8aea6f3bb0dc9fdb52ed3f0e9d84fa79
 PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
-
 
 #
 # templates
 #
 
-define Package/owfs/Default
+define Package/$(PKG_NAME)/Default
   TITLE:=OWFS (1-Wire File System)
   URL:=http://owfs.sourceforge.net/
-endef
-
-define Package/owfs/Server
-  $(call Package/owfs/Default)
-  DEPENDS:=+libow +libpthread
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Filesystem
+endef
+
+define Package/$(PKG_NAME)/Default/description
+  OWFS is a suite of programs that designed to make the 1-wire bus and its 
+  devices easily accessible. The underlying priciple is to create a virtual 
+  filesystem, with the unique ID being the directory, and the individual 
+  properties of the device are represented as simple files that can be read 
+  and written.
+
+  Details of the individual slave or master design are hidden behind a 
+  consistent interface. The goal is to provide an easy set of tools for a 
+  software designer to create monitoring or control applications. There are 
+  some performance enhancements in the implementation, including data caching, 
+  parallel access to bus masters, and aggregation of device communication. 
+  Still the fundemental goal has been ease of use, flexibility and correctness 
+  rather than speed.
+endef
+
+define Package/owfs-server
+  $(call Package/$(PKG_NAME)/Default)
+  DEPENDS:=+libow +libpthread
 endef
 
 define Package/owfs/Library
@@ -48,7 +63,7 @@ define Package/owfs/Utility
   DEPENDS:=+libow
 endef
 
-define Package/owfs/ServerInstall
+define Package/owfs-server/Install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(2) $(1)/usr/bin/
 endef
@@ -64,12 +79,23 @@ define Package/libow
   TITLE:=OWFS - common shared library
 endef
 
+define Package/libow/description
+  $(call Package/$(PKG_NAME)/Default/description)
+  
+  This package contains the OWFS library.
+endef
+
 define Package/libow-capi
   $(call Package/owfs/Library)
   DEPENDS:=+libow
   TITLE:=OWFS - C-API library
 endef
 
+define Package/libow-capi/description
+  $(call Package/$(PKG_NAME)/Default/description)
+  
+  This package contains the OWFS C-API library.
+endef
 
 #
 # utilities
@@ -80,35 +106,61 @@ define Package/owshell
   TITLE:=OWFS - shell utilities
 endef
 
+define Package/owshell/description
+  $(call Package/$(PKG_NAME)/Default/description)
+  
+  This package contains the OWFS shell utilities.
+endef
+
 define Package/owfs
   $(call Package/owfs/Utility)
-  SECTION:=utils
-  CATEGORY:=Utilities
-  DEPENDS+=+kmod-fuse +libfuse +fuse-utils
+  # libfuse depends on kmod-fuse, no need to declare dependency
+  DEPENDS+= +libfuse +fuse-utils
   TITLE:=OWFS - fuse file system
 endef
 
+define Package/owfs/description
+  $(call Package/$(PKG_NAME)/Default/description)
+  
+  This package contains the OWFS fuse filesystem.
+endef
 
 #
 # network daemons
 #
 
 define Package/owhttpd
-  $(call Package/owfs/Server)
+  $(call Package/owfs-server)
   TITLE:=OWFS - http server
 endef
 
+define Package/owhttpd/description
+  $(call Package/$(PKG_NAME)/Default/description)
+  
+  This package contains the OWFS http server.
+endef
+
 define Package/owftpd
-  $(call Package/owfs/Server)
+  $(call Package/owfs-server)
   TITLE:=OWFS - ftp server
 endef
 
+define Package/owftpd/description
+  $(call Package/$(PKG_NAME)/Default/description)
+  
+  This package contains the OWFS ftp server.
+endef
+
 define Package/owserver
-  $(call Package/owfs/Server)
+  $(call Package/owfs-server)
   TITLE:=OWFS - network server
 endef
 
-
+define Package/owserver/description
+  $(call Package/$(PKG_NAME)/Default/description)
+  
+  This package contains the OWFS network server.
+endef
 
 PKG_CONFIGURE_OPTS:= \
 		--enable-zero \
@@ -186,15 +238,15 @@ endef
 
 
 define Package/owserver/install
-	$(call Package/owfs/ServerInstall,$(1),owserver,70)
+	$(call Package/owfs-server/Install,$(1),owserver,70)
 endef
 
 define Package/owhttpd/install
-	$(call Package/owfs/ServerInstall,$(1),owhttpd,80)
+	$(call Package/owfs-server/Install,$(1),owhttpd,80)
 endef
 
 define Package/owftpd/install
-	$(call Package/owfs/ServerInstall,$(1),owftpd,80)
+	$(call Package/owfs-server/Install,$(1),owftpd,80)
 endef
 
 
