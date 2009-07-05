@@ -15,7 +15,6 @@ start_service() {
 	config_get localip4 "$section" localip4
 	config_get localip6 "$section" localip6
 	config_get remoteip6 "$section" remoteip6
-	config_get prefix "$section" prefix
 	config_get ttl "$section" ttl
 	config_get mtu "$section" mtu
 
@@ -25,7 +24,6 @@ start_service() {
 	ip tunnel change $tnlifname ttl $ttl
 	ip addr add $localip6 dev $tnlifname
 	ip -6 route add 2000::/3 via $remoteip6
-	ip -6 addr add $prefix dev $LAN
 }
 
 stop_service() {
@@ -41,11 +39,9 @@ stop_service() {
 	config_get localip4 "$section" localip4
 	config_get localip6 "$section" localip6
 	config_get remoteip6 "$section" remoteip6
-	config_get prefix "$section" prefix
 	config_get ttl "$section" ttl
 	config_get mtu "$section" mtu
 
-	ip -6 addr del $prefix dev $LAN
 	ip -6 ro del 2000::/3 via $remoteip6
 	ip -6 ro del ::/0 dev $tnlifname
 	ip addr del $localip6 dev $tnlifname
