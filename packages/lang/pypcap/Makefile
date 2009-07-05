@@ -33,6 +33,8 @@ define PyPackage/python-pcap/filespec
 +|$(PYTHON_PKG_DIR)/pcap.so
 endef
 
+TARGET_CFLAGS += -DHAVE_PCAP_FILE=1
+
 define Build/Compile
 	$(if $(Build/Compile/PyMod),,@echo Python packaging code not found.; false)
 	$(call Build/Compile/PyMod,., \
