@@ -39,9 +39,11 @@ define Build/Configure
 endef
 
 define Package/xterm/install
-	$(INSTALL_DIR) $(1)/usr/
+	$(INSTALL_DIR) $(1)/usr/ $(1)/usr/share/applications $(1)/usr/share/icons
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin $(1)/usr/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib $(1)/usr/
+	$(CP) ./files/xterm.desktop $(1)/usr/share/applications/
+	$(CP) ./files/terminal.png $(1)/usr/share/icons/
 endef
 
 $(eval $(call BuildPackage,xterm))
