@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=paroli
-PKG_VERSION:=20090605
-PKG_REV:=120c1aca795fd28b50e361eb908786ed25f98253
+PKG_VERSION:=20090704
+PKG_REV:=71fd25f3613c2376b980cfdd58cfee504b891e92
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -45,7 +45,7 @@ define Package/paroli/install
 		$(1)/usr/bin \
 		$(1)/usr/share/applications/paroli \
 		$(1)/usr/share/paroli/services \
-		$(1)/usr/share/icons/paroli \
+		$(1)/usr/share/icons \
         $(1)/usr/share/elementary/themes \
         $(1)/usr/share/dbus-1/system-services \
         $(1)/etc/dbus-1/system.d \
@@ -61,7 +61,7 @@ define Package/paroli/install
 		$(1)/usr/bin/
 	$(CP) \
 		$(PKG_BUILD_DIR)/data/tichy \
-		$(1)/usr/share/icons/paroli/parolid.png
+		$(1)/usr/share/icons/parolid.png
 	$(CP) \
 		./files/desktop-files/parolid.desktop \
 		$(1)/etc/xdg/autostart/
@@ -91,43 +91,43 @@ define Package/paroli/install
 		$(1)/usr/share/paroli/applications/tele2
 	$(CP) \
 		$(PKG_BUILD_DIR)/data/tichy \
-		$(1)/usr/share/icons/paroli/tele.png
+		$(1)/usr/share/icons/tele.png
 	$(CP) \
 		./files/desktop-files/tele.desktop \
 		$(1)/usr/share/applications/paroli/
-	## msgs2 (messages)
-	#$(INSTALL_DIR) $(1)/usr/share/paroli/applications/msgs2
-	#$(CP) \
-	#	$(PKG_BUILD_DIR)/paroli-applications/msgs2/*.{py,edj} \
-	#	$(1)/usr/share/paroli/applications/msgs2
-	#$(CP) \
-	#	$(PKG_BUILD_DIR)/data/tichy \
-	#	$(1)/usr/share/icons/paroli/msgs.png
-	#$(CP) \
-	#	./files/desktop-files/msgs.desktop \
-	#	$(1)/usr/share/applications/paroli/
-	## people2 (contacts)
-	#$(INSTALL_DIR) $(1)/usr/share/paroli/applications/people2
-	#$(CP) \
-	#	$(PKG_BUILD_DIR)/paroli-applications/people2/*.{py,edj} \
-	#	$(1)/usr/share/paroli/applications/people2/
-	#$(CP) \
-	#	$(PKG_BUILD_DIR)/data/tichy \
-	#	$(1)/usr/share/icons/paroli/people.png
-	#$(CP) \
-	#	./files/desktop-files/people.desktop \
-	#	$(1)/usr/share/applications/paroli/
-	## i-o2 (incoming/outgoing)
-	#$(INSTALL_DIR) $(1)/usr/share/paroli/applications/i-o2
-	#$(CP) \
-	#	$(PKG_BUILD_DIR)/paroli-applications/i-o2/*.{py,edj} \
-	#	$(1)/usr/share/paroli/applications/i-o2/
-	#$(CP) \
-	#	$(PKG_BUILD_DIR)/data/tichy \
-	#	$(1)/usr/share/icons/paroli/i-o.png
-	#$(CP) \
-	#	./files/desktop-files/i-o.desktop \
-	#	$(1)/usr/share/applications/paroli/
+	# msgs2 (messages)
+	$(INSTALL_DIR) $(1)/usr/share/paroli/applications/msgs2
+	$(CP) \
+		$(PKG_BUILD_DIR)/paroli-applications/msgs2/*.{py,edj} \
+		$(1)/usr/share/paroli/applications/msgs2
+	$(CP) \
+		$(PKG_BUILD_DIR)/data/tichy \
+		$(1)/usr/share/icons/msgs.png
+	$(CP) \
+		./files/desktop-files/msgs.desktop \
+		$(1)/usr/share/applications/paroli/
+	# people2 (contacts)
+	$(INSTALL_DIR) $(1)/usr/share/paroli/applications/people2
+	$(CP) \
+		$(PKG_BUILD_DIR)/paroli-applications/people2/*.{py,edj} \
+		$(1)/usr/share/paroli/applications/people2/
+	$(CP) \
+		$(PKG_BUILD_DIR)/data/tichy \
+		$(1)/usr/share/icons/people.png
+	$(CP) \
+		./files/desktop-files/people.desktop \
+		$(1)/usr/share/applications/paroli/
+	# i-o2 (incoming/outgoing)
+	$(INSTALL_DIR) $(1)/usr/share/paroli/applications/i-o2
+	$(CP) \
+		$(PKG_BUILD_DIR)/paroli-applications/i-o2/*.{py,edj} \
+		$(1)/usr/share/paroli/applications/i-o2/
+	$(CP) \
+		$(PKG_BUILD_DIR)/data/tichy \
+		$(1)/usr/share/icons/i-o.png
+	$(CP) \
+		./files/desktop-files/i-o.desktop \
+		$(1)/usr/share/applications/paroli/
 
 	# SERVICES
 	$(CP) \
