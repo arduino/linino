@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=http://weechat.flashtux.org/download/
 PKG_MD5SUM:=ccdecf663b0050a23049acb4b9a76193
 
 PKG_FIXUP = libtool
+PKG_CONFIG_DEPENDS = CONFIG_PACKAGE_weechat-mod-lua
 
 include $(INCLUDE_DIR)/package.mk
 
