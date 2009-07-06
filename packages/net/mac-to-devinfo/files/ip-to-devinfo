@@ -1,0 +1,29 @@
+#!/bin/sh
+
+ARP=arp
+MACTODEV=mac-to-devinfo
+
+IP=$1
+
+if [ -z "$IP" ]; then
+	echo "Must specify IP address"
+fi
+
+if [ ! -x "$(which $ARP)" ]; then
+    do_arp() {
+	cat /proc/net/arp
+    }
+    ARPMACFIELD=4
+else
+    do_arp() {
+	$ARP -n
+    }
+    ARPMACFIELD=3
+fi
+
+ping -q -c 2 $IP >/dev/null
+MAC=$(do_arp|grep "$IP "|tr -s \  | cut -f$ARPMACFIELD -d\  )
+
+$MACTODEV $MAC
+
+

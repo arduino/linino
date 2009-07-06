@@ -1,0 +1,37 @@
+#!/bin/sh
+
+IPTODEV=ip-to-devinfo
+SMAP=smap
+
+if [ "$1" == "-h" ] || [ "$2" == "-h" ] || [ -z "$1" ]; then
+    echo "Usage: $0 IP-Range [port,port,...]"
+fi
+
+if [ -n "$2" ]; then
+    FIELD=1
+    curport="$(echo $2 | cut -f$FIELD -d, )"
+    while [ "$curport" != "" ]; do
+	PORTS="$curport $PORTS"
+	FIELD=$(($FIELD + 1))
+	curport="$(echo $2 | cut -f$FIELD -d, )"
+    done
+fi
+
+prep-devinfo
+
+if [ -z "$PORTS" ]; then
+    PORTS=5060
+fi
+
+for port in $PORTS; do
+    for sip_device in $($SMAP -p $port $1 | grep -E -v 'host.? scanned' | grep 'SIP enabled' | cut -f1 -d:  ); do
+	if [ -x "$(which httping)" ]; then
+	    if httping -G -q -o 401,200 -c 2 -h $sip_device; then
+		echo "$sip_device"" | ""$($IPTODEV $sip_device)"" | ""http://$sip_device/"
+		continue
+	    fi
+	fi
+	echo "$sip_device"" | ""$(IPTODEV $sip_device)"" | "" - "
+    done
+done
+

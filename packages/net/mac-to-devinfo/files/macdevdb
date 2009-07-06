@@ -1,0 +1,19 @@
+
+config 'mactodevinfo'
+	option 'name' 'Tecom Phones'
+	option 'maclow' '00:19:15:00:00:00'
+	option 'machigh' '00:19:15:ff:ff:ff'
+	option 'vendor' 'Vertical Communications'
+	option 'devtype' 'SIP devices and various'
+	option 'model' 'varies'
+
+config 'mactodevinfo'
+	option 'name' 'Comtrend Routers'
+	option 'maclow' '00:30:da:47:b0:00'
+	option 'machigh' '00:30:da:47:dd:ff'
+	option 'vendor' 'Comtrend Co.'
+	option 'devtype' 'Networking Equipment'
+	option 'model' 'varies'
+	option 'ouiowner' 'Comtrend Co.'
+
+

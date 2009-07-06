@@ -1,0 +1,26 @@
+#!/bin/sh
+
+MACTODEV=mac-to-devinfo
+NETDISCOVER=netdiscover
+
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
+    echo "Usage: netdiscover-to-devinfo IP-range Interface Timeout"
+    exit 1
+fi
+
+prep-devinfo
+OLDIFS=$IFS
+IFS='
+'
+for line in $($NETDISCOVER -t $3 -k -m -i $2 -r $1); do
+    IFS=$OLDIFS
+    IP=$(echo $line | tr -s \  |  cut -f1 -d\  )
+    MAC=$(echo $line | tr -s \  |  cut -f2 -d\  )
+    echo "$IP"" | ""$($MACTODEV $MAC)"
+    OLDIFS=$IFS
+    IFS='
+'
+done
+
+IFS=$OLDIFS
+ 
