@@ -34,7 +34,7 @@ endef
 
 define Package/collectd
         $(call Package/collectd/common_info)
-        DEPENDS:=+libgcc +libpthread +libz
+        DEPENDS:=+libgcc +libpthread +zlib
         MENU:=1
 endef
 
