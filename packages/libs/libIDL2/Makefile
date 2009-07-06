@@ -18,11 +18,11 @@ HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/libIDL-$(PKG_VERSION)
 PKG_SOURCE_URL:=@GNOME/libIDL/0.8
 PKG_MD5SUM:=9d0d4895fc23f7de9514fb13f0fdc9ba
 PKG_FIXUP:=libtool
+HOST_BUILD_DEPENDS:=glib2/host
+PKG_INSTALL=1
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
-
-PKG_INSTALL=1
 
 TARGET_CFLAGS += \
 	-I$(STAGING_DIR)/usr/lib/libintl/include \
