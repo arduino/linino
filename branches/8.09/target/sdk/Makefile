@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -37,7 +37,6 @@ $(BIN_DIR)/$(SDK_NAME).tar.bz2: clean
 		$(TOPDIR)/LICENSE \
 		$(TOPDIR)/rules.mk \
 		$(TOPDIR)/.config \
-		./files/Config.in \
 		./files/Makefile \
 		./files/README.SDK \
 		$(SDK_BUILD_DIR)/
@@ -45,11 +44,12 @@ $(BIN_DIR)/$(SDK_NAME).tar.bz2: clean
 		./files/package/rules.mk \
 		$(TOPDIR)/package/Makefile \
 		$(SDK_BUILD_DIR)/package/
-	echo "src-svn trunk $(SVN_PACKAGE_URL)" \
+	echo "src-svn base $(SVN_PACKAGE_URL)" \
 		> $(SDK_BUILD_DIR)/feeds.conf.default
 	cat $(TOPDIR)/feeds.conf.default \
 		>> $(SDK_BUILD_DIR)/feeds.conf.default
-	echo REVISION:="$(REVISION)" > $(SDK_BUILD_DIR)/include/version.mk
+	echo -e 'KERNEL:=$(KERNEL)\nLINUX_VERSION:=$(LINUX_VERSION)\nREVISION:=$(REVISION)' \
+		>$(SDK_BUILD_DIR)/include/version.mk
 	find $(SDK_BUILD_DIR) -name .git | $(XARGS) rm -rf
 	find $(SDK_BUILD_DIR) -name .svn | $(XARGS) rm -rf
 	find $(SDK_BUILD_DIR) -name CVS | $(XARGS) rm -rf
