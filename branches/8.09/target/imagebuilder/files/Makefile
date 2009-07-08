@@ -1,6 +1,6 @@
 # Makefile for OpenWrt
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -23,6 +23,7 @@ endif
 include rules.mk
 include $(INCLUDE_DIR)/debug.mk
 include $(INCLUDE_DIR)/depends.mk
+include $(INCLUDE_DIR)/version.mk
 
 define Helptext
 Available Commands:
@@ -82,11 +83,7 @@ $(TOPDIR)/tmp/ipkg.conf: FORCE
 	@echo 'src packages file:$(PACKAGE_DIR)' >> $@
 
 BUILD_PACKAGES:=$(sort $(DEFAULT_PACKAGES) $(PACKAGES) $($(PROFILE)_PACKAGES) kernel)
-ifeq ($(KERNEL),2.4)
-BUILD_PACKAGES:=$(patsubst base-files,base-files-$(BOARD)-$(KERNEL),$(BUILD_PACKAGES))
-else
 BUILD_PACKAGES:=$(patsubst base-files,base-files-$(BOARD),$(BUILD_PACKAGES))
-endif
 # "-pkgname" in the package list means remove "pkgname" from the package list
 BUILD_PACKAGES:=$(filter-out $(filter -%,$(BUILD_PACKAGES)) $(patsubst -%,%,$(filter -%,$(BUILD_PACKAGES))),$(BUILD_PACKAGES))
 
