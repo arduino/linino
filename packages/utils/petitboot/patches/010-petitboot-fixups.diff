@@ -1,0 +1,3075 @@
+ 34 files changed, 1687 insertions(+), 235 deletions(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index 01771db..23135aa 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -21,7 +21,12 @@ ENABLE_PS3 = @ENABLE_PS3@
+ 
+ # other programs
+ INSTALL = @INSTALL@
++INSTALL_DATA = @INSTALL_DATA@
++INSTALL_PROGRAM = @INSTALL_PROGRAM@
++INSTALL_SCRIPT = @INSTALL_SCRIPT@
++INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+ SHELL = @SHELL@
++STRIP = @STRIP@
+ 
+ # paths
+ prefix = @prefix@
+@@ -34,5 +39,6 @@ localstatedir = @localstatedir@
+ builddir = @builddir@
+ srcdir = @srcdir@
+ top_srcdir = @top_srcdir@
++mandir = @mandir@
+ 
+ include $(top_srcdir)/rules.mk
+diff --git a/configure.ac b/configure.ac
+index cb43f8c..fa40f34 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -35,9 +35,7 @@ AC_ARG_ENABLE([ps3],
+ 	[],
+ 	[enable_ps3=check])
+ 
+-AS_IF([test "x$enable_ps3" != xno],
+-	[AC_SUBST([ENABLE_PS3], ["y"])],
+-	[AC_SUBST([ENABLE_PS3], ["n"])])
++AS_IF([test "x$enable_ps3" != xno], [AC_SUBST([ENABLE_PS3], ["y"])], [])
+ 
+ AC_ARG_WITH([twin],
+ 	[AS_HELP_STRING([--with-twin],
+diff --git a/discover/kboot-parser.c b/discover/kboot-parser.c
+index e688c22..7c7cb5d 100644
+--- a/discover/kboot-parser.c
++++ b/discover/kboot-parser.c
+@@ -133,10 +133,11 @@ static int kboot_parse(struct discover_context *dc)
+ 	conf = talloc_zero(dc, struct conf_context);
+ 
+ 	if (!conf)
+-		return -1;
++		return 0;
+ 
+ 	conf->dc = dc;
+ 	conf->global_options = kboot_global_options,
++	conf_init_global_options(conf);
+ 	conf->conf_files = kboot_conf_files,
+ 	conf->process_pair = kboot_process_pair;
+ 	conf->parser_info = (void *)kboot_ignored_names,
+diff --git a/discover/parser-conf.c b/discover/parser-conf.c
+index 14f847d..88e96b7 100644
+--- a/discover/parser-conf.c
++++ b/discover/parser-conf.c
+@@ -121,6 +121,18 @@ int conf_param_in_list(const char *const *list, const char *param)
+ }
+ 
+ /**
++ * conf_init_global_options - Zero the global option table.
++ */
++
++void conf_init_global_options(struct conf_context *conf)
++{
++	int i;
++
++	for (i = 0; conf->global_options[i].name; i++)
++		conf->global_options[i].value = NULL;
++}
++
++/**
+  * conf_set_global_option - Set a value in the global option table.
+  *
+  * Check if an option (name=value) is a global option. If so, store it in
+@@ -136,7 +148,7 @@ int conf_set_global_option(struct conf_context *conf, const char *name,
+ 		if (streq(name, conf->global_options[i].name)) {
+ 			conf->global_options[i].value
+ 				= talloc_strdup(conf, value);
+-			pb_log("%s: %s:%s\n", __func__, name, value);
++			pb_log("%s: @%s@%s@\n", __func__, name, value);
+ 			return 1;
+ 		}
+ 	}
+@@ -158,8 +170,11 @@ const char *conf_get_global_option(struct conf_context *conf,
+ 	int i;
+ 
+ 	for (i = 0; conf->global_options[i].name ;i++)
+-		if (streq(name, conf->global_options[i].name))
++		if (streq(name, conf->global_options[i].name)) {
++			pb_log("%s: @%s@%s@\n", __func__, name,
++				conf->global_options[i].value);
+ 			return conf->global_options[i].value;
++		}
+ 
+ 	assert(0 && "unknown global name");
+ 	return NULL;
+diff --git a/discover/parser-conf.h b/discover/parser-conf.h
+index 09015d1..3325faf 100644
+--- a/discover/parser-conf.h
++++ b/discover/parser-conf.h
+@@ -41,6 +41,7 @@ struct conf_context {
+ int conf_parse(struct conf_context *conf);
+ char *conf_get_param_pair(char *str, char **name_out, char **value_out,
+ 		char terminator);
++void conf_init_global_options(struct conf_context *conf);
+ const char *conf_get_global_option(struct conf_context *conf,
+ 	const char *name);
+ int conf_set_global_option(struct conf_context *conf, const char *name,
+diff --git a/discover/parser.c b/discover/parser.c
+index 2b4ddd2..8f2735c 100644
+--- a/discover/parser.c
++++ b/discover/parser.c
+@@ -13,16 +13,16 @@ extern struct parser __start_parsers[], __stop_parsers[];
+ void iterate_parsers(struct discover_context *ctx)
+ {
+ 	struct parser *parser;
++	unsigned int count = 0;
+ 
+ 	pb_log("trying parsers for %s\n", ctx->device_path);
+ 
+ 	for (parser = __start_parsers; parser < __stop_parsers; parser++) {
+ 		pb_log("\ttrying parser '%s'\n", parser->name);
+-		/* just use a dummy device path for now */
+-		if (parser->parse(ctx))
+-			return;
++		count += parser->parse(ctx);
+ 	}
+-	pb_log("\tno boot_options found\n");
++	if (!count)
++		pb_log("\tno boot_options found\n");
+ }
+ 
+ static int compare_parsers(const void *a, const void *b)
+diff --git a/discover/paths.c b/discover/paths.c
+index 8e2a361..fe7a876 100644
+--- a/discover/paths.c
++++ b/discover/paths.c
+@@ -81,14 +81,6 @@ char *parse_device_path(void *alloc_ctx,
+ 	if (is_prefix(dev_str, "/dev/"))
+ 		dev_str += strlen("/dev/");
+ 
+-	/* PS3 hack: if we're reading from a ps3dx device, and we refer to
+-	 * a sdx device, remap to ps3dx */
+-	if (cur_dev && is_prefix(cur_dev, "/dev/ps3d")
+-			&& is_prefix(dev_str, "sd")) {
+-		snprintf(tmp, 255, "ps3d%s", dev_str + 2);
+-		dev_str = tmp;
+-	}
+-
+ 	return join_paths(alloc_ctx, "/dev", dev_str);
+ }
+ 
+diff --git a/discover/pb-discover.c b/discover/pb-discover.c
+index d7ea0ca..bd515e3 100644
+--- a/discover/pb-discover.c
++++ b/discover/pb-discover.c
+@@ -1,5 +1,10 @@
+ 
++#if defined(HAVE_CONFIG_H)
++#include "config.h"
++#endif
++
+ #include <assert.h>
++#include <getopt.h>
+ #include <stdlib.h>
+ #include <signal.h>
+ 
+@@ -11,6 +16,79 @@
+ #include "discover-server.h"
+ #include "device-handler.h"
+ 
++static void print_version(void)
++{
++	printf("pb-discover (" PACKAGE_NAME ") " PACKAGE_VERSION "\n");
++}
++
++static void print_usage(void)
++{
++	print_version();
++	printf(
++"Usage: pb-discover [-h, --help] [-l, --log log-file] [-V, --version]\n");
++}
++
++/**
++ * enum opt_value - Tri-state options variables.
++ */
++
++enum opt_value {opt_undef = 0, opt_yes, opt_no};
++
++/**
++ * struct opts - Values from command line options.
++ */
++
++struct opts {
++	enum opt_value show_help;
++	const char *log_file;
++	enum opt_value show_version;
++};
++
++/**
++ * opts_parse - Parse the command line options.
++ */
++
++static int opts_parse(struct opts *opts, int argc, char *argv[])
++{
++	static const struct option long_options[] = {
++		{"help",           no_argument,       NULL, 'h'},
++		{"log",            required_argument, NULL, 'l'},
++		{"version",        no_argument,       NULL, 'V'},
++		{ NULL, 0, NULL, 0},
++	};
++	static const char short_options[] = "hl:V";
++	static const struct opts default_values = {
++		.log_file = "pb-discover.log",
++	};
++
++	*opts = default_values;
++
++	while (1) {
++		int c = getopt_long(argc, argv, short_options, long_options,
++			NULL);
++
++		if (c == EOF)
++			break;
++
++		switch (c) {
++		case 'h':
++			opts->show_help = opt_yes;
++			break;
++		case 'l':
++			opts->log_file = optarg;
++			break;
++		case 'V':
++			opts->show_version = opt_yes;
++			break;
++		default:
++			opts->show_help = opt_yes;
++			return -1;
++		}
++	}
++
++	return optind != argc;
++}
++
+ static int running;
+ 
+ static void sigint_handler(int __attribute__((unused)) signum)
+@@ -18,15 +96,31 @@ static void sigint_handler(int __attribute__((unused)) signum)
+ 	running = 0;
+ }
+ 
+-int main(void)
++int main(int argc, char *argv[])
+ {
+ 	struct device_handler *handler;
+ 	struct discover_server *server;
++	struct opts opts;
+ 	struct udev *udev;
+ 	struct user_event *uev;
+ 	FILE *log;
+ 
+-	log = fopen("pb-discover.log", "a");
++	if (opts_parse(&opts, argc, argv)) {
++		print_usage();
++		return EXIT_FAILURE;
++	}
++
++	if (opts.show_help == opt_yes) {
++		print_usage();
++		return EXIT_SUCCESS;
++	}
++
++	if (opts.show_version == opt_yes) {
++		print_version();
++		return EXIT_SUCCESS;
++	}
++
++	log = fopen(opts.log_file, "a");
+ 	assert(log);
+ 	pb_log_set_stream(log);
+ 
+diff --git a/discover/yaboot-parser.c b/discover/yaboot-parser.c
+index d9f2aff..6101cd8 100644
+--- a/discover/yaboot-parser.c
++++ b/discover/yaboot-parser.c
+@@ -15,7 +15,6 @@ struct yaboot_state {
+ 	struct boot_option *opt;
+ 	const char *desc_image;
+ 	char *desc_initrd;
+-	int found_suse;
+ 	int globals_done;
+ 	const char *const *known_names;
+ };
+@@ -56,6 +55,19 @@ static void yaboot_process_pair(struct conf_context *conf, const char *name,
+ 		char *value)
+ {
+ 	struct yaboot_state *state = conf->parser_info;
++	struct fixed_pair {
++		const char *image;
++		const char *initrd;
++	};
++	static const struct fixed_pair suse_fp32 = {
++		.image = "/suseboot/vmlinux32",
++		.initrd = "/suseboot/initrd32",
++	};
++	static const struct fixed_pair suse_fp64 = {
++		.image = "/suseboot/vmlinux64",
++		.initrd = "/suseboot/initrd64",
++	};
++	const struct fixed_pair *suse_fp;
+ 
+ 	/* fixup for bare values */
+ 
+@@ -73,32 +85,70 @@ static void yaboot_process_pair(struct conf_context *conf, const char *name,
+ 	/* image */
+ 
+ 	if (streq(name, "image")) {
++		const char *g_boot = conf_get_global_option(conf, "boot");
++		const char *g_part = conf_get_global_option(conf, "partition");
++
++		/* First finish any previous image. */
++
+ 		if (state->opt->boot_image_file)
+ 			yaboot_finish(conf);
+ 
+-		state->opt->boot_image_file = resolve_path(state->opt, value,
+-			conf->dc->device_path);
+-		state->desc_image = talloc_strdup(state->opt, value);
++		/* Then start the new image. */
++
++		if (g_boot && g_part) {
++			char* dev = talloc_asprintf(NULL, "%s%s", g_boot,
++				g_part);
++
++			state->opt->boot_image_file = resolve_path(state->opt,
++				value, dev);
++			state->desc_image = talloc_asprintf(state->opt,
++				"%s%s", dev, value);
++			talloc_free(dev);
++		} else if (g_boot) {
++			state->opt->boot_image_file = resolve_path(state->opt,
++				value, g_boot);
++			state->desc_image = talloc_asprintf(state->opt,
++				"%s%s", g_boot, value);
++		} else {
++			state->opt->boot_image_file = resolve_path(state->opt,
++				value, conf->dc->device_path);
++			state->desc_image = talloc_strdup(state->opt, value);
++		}
++
+ 		return;
+ 	}
+ 
+-	if (streq(name, "image[32bit]") || streq(name, "image[64bit]")) {
+-		state->found_suse = 1;
++	/* Special processing for SUSE install CD. */
++
++	if (streq(name, "image[32bit]"))
++		suse_fp = &suse_fp32;
++	else if (streq(name, "image[64bit]"))
++		suse_fp = &suse_fp64;
++	else
++		suse_fp = NULL;
++
++	if (suse_fp) {
++		/* First finish any previous image. */
+ 
+ 		if (state->opt->boot_image_file)
+ 			yaboot_finish(conf);
+ 
++		/* Then start the new image. */
++
+ 		if (*value == '/') {
+ 			state->opt->boot_image_file = resolve_path(state->opt,
+ 				value, conf->dc->device_path);
+ 			state->desc_image = talloc_strdup(state->opt, value);
+ 		} else {
+-			char *s;
+-			asprintf(&s, "/suseboot/%s", value);
+ 			state->opt->boot_image_file = resolve_path(state->opt,
+-				s, conf->dc->device_path);
+-			state->desc_image = talloc_strdup(state->opt, s);
+-			free(s);
++				suse_fp->image, conf->dc->device_path);
++			state->desc_image = talloc_strdup(state->opt,
++				suse_fp->image);
++
++			state->opt->initrd_file = resolve_path(state->opt,
++				suse_fp->initrd, conf->dc->device_path);
++			state->desc_initrd = talloc_asprintf(state, "initrd=%s",
++				suse_fp->initrd);
+ 		}
+ 
+ 		return;
+@@ -112,19 +162,28 @@ static void yaboot_process_pair(struct conf_context *conf, const char *name,
+ 	/* initrd */
+ 
+ 	if (streq(name, "initrd")) {
+-		if (!state->found_suse || (*value == '/')) {
++		const char *g_boot = conf_get_global_option(conf, "boot");
++		const char *g_part = conf_get_global_option(conf, "partition");
++
++		if (g_boot && g_part) {
++			char* dev = talloc_asprintf(NULL, "%s%s", g_boot,
++				g_part);
++
+ 			state->opt->initrd_file = resolve_path(state->opt,
+-				value, conf->dc->device_path);
+-			state->desc_initrd = talloc_asprintf(state, "initrd=%s",
+-				value);
++				value, dev);
++			state->desc_initrd = talloc_asprintf(state,
++				"initrd=%s%s", dev, value);
++			talloc_free(dev);
++		} else if (g_boot) {
++			state->opt->initrd_file = resolve_path(state->opt,
++				value, g_boot);
++			state->desc_initrd = talloc_asprintf(state,
++				"initrd=%s%s", g_boot, value);
+ 		} else {
+-			char *s;
+-			asprintf(&s, "/suseboot/%s", value);
+ 			state->opt->initrd_file = resolve_path(state->opt,
+-				s, conf->dc->device_path);
++				value, conf->dc->device_path);
+ 			state->desc_initrd = talloc_asprintf(state, "initrd=%s",
+-				s);
+-			free(s);
++				value);
+ 		}
+ 		return;
+ 	}
+@@ -236,10 +295,11 @@ static int yaboot_parse(struct discover_context *dc)
+ 	conf = talloc_zero(dc, struct conf_context);
+ 
+ 	if (!conf)
+-		return -1;
++		return 0;
+ 
+ 	conf->dc = dc;
+ 	conf->global_options = yaboot_global_options,
++	conf_init_global_options(conf);
+ 	conf->conf_files = yaboot_conf_files,
+ 	conf->process_pair = yaboot_process_pair;
+ 	conf->finish = yaboot_finish;
+diff --git a/lib/system/system.c b/lib/system/system.c
+index 380dded..7371445 100644
+--- a/lib/system/system.c
++++ b/lib/system/system.c
+@@ -3,6 +3,7 @@
+ #include "config.h"
+ #endif
+ 
++#include <assert.h>
+ #include <errno.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -19,6 +20,7 @@ const struct pb_system_apps pb_system_apps = {
+ 	.cp = "/bin/cp",
+ 	.kexec = "/sbin/kexec",
+ 	.mount = "/bin/mount",
++	.shutdown = "/sbin/shutdown",
+ 	.sftp = "/usr/bin/sftp",
+ 	.tftp = "/usr/bin/tftp",
+ 	.umount = "/bin/umount",
+@@ -104,13 +106,13 @@ int pb_rmdir_recursive(const char *base, const char *dir)
+ 
+ int pb_run_cmd(const char *const *cmd_argv)
+ {
+-	int status;
+-	pid_t pid;
+ #if defined(DEBUG)
+ 	enum {do_debug = 1};
+ #else
+ 	enum {do_debug = 0};
+ #endif
++	int status;
++	pid_t pid;
+ 
+ 	if (do_debug) {
+ 		const char *const *p = cmd_argv;
+@@ -125,12 +127,23 @@ int pb_run_cmd(const char *const *cmd_argv)
+ 		pb_log("%s: %s\n", __func__, cmd_argv[0]);
+ 
+ 	pid = fork();
++
+ 	if (pid == -1) {
+ 		pb_log("%s: fork failed: %s\n", __func__, strerror(errno));
+ 		return -1;
+ 	}
+ 
+ 	if (pid == 0) {
++		int log = fileno(pb_log_get_stream());
++
++		/* Redirect child output to log. */
++
++		status = dup2(log, STDOUT_FILENO);
++		assert(status != -1);
++
++		status = dup2(log, STDERR_FILENO);
++		assert(status != -1);
++
+ 		execvp(cmd_argv[0], (char *const *)cmd_argv);
+ 		pb_log("%s: exec failed: %s\n", __func__, strerror(errno));
+ 		exit(EXIT_FAILURE);
+diff --git a/lib/system/system.h b/lib/system/system.h
+index 47c7c02..1918309 100644
+--- a/lib/system/system.h
++++ b/lib/system/system.h
+@@ -5,6 +5,7 @@ struct pb_system_apps {
+ 	const char *cp;
+ 	const char *kexec;
+ 	const char *mount;
++	const char *shutdown;
+ 	const char *sftp;
+ 	const char *tftp;
+ 	const char *umount;
+diff --git a/man/pb-cui.8 b/man/pb-cui.8
+new file mode 100644
+index 0000000..e671c20
+--- /dev/null
++++ b/man/pb-cui.8
+@@ -0,0 +1,67 @@
++.\" Copyright (C) 2009 Sony Computer Entertainment Inc.
++.\" Copyright 2009 Sony Corp.
++.\"
++.\" This program is free software; you can redistribute it and/or modify
++.\" it under the terms of the GNU General Public License as published by
++.\" the Free Software Foundation; version 2 of the License.
++.\"
++.\" This program is distributed in the hope that it will be useful,
++.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
++.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++.\" GNU General Public License for more details.
++.\"
++.\" You should have received a copy of the GNU General Public License
++.\" along with this program; if not, write to the Free Software
++.\" Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++.\"
++.\" Maintainer's Notes:
++.\"  * For syntax help see the man pages for 'mdoc' and 'mdoc.samples'.
++.\"  * To check syntax use this:
++.\"    'groff -C -mtty-char -Tutf8 -man pb-cui.8'.
++.\"  * To check format use this: 'less pb-cui.8'.
++.\"
++.Dd ""
++.Dt pb-cui 8
++.Os
++.\"
++.Sh NAME
++.\" ====
++.Nm pb-cui
++.Nd Petitboot ncurses bootloader UI
++.\"
++.Sh SYNOPSIS
++.\" ========
++.Nm
++.Op Fl h, -help
++.Op Fl l, -log Ar log-file
++.Op Fl V, -version
++.\"
++.Sh DESCRIPTION
++.\" ===========
++pb-cui is an ncurses based interface to the Petitboot bootloader.
++.Pp
++Petitboot is a Linux kexec based bootloader that supports loading Linux
++kernel and initrd images from any device that can be mounted by Linux.
++It can also load images from the network using the
++HTTP, HTTPS, NFS, SFTP, and TFTP
++protocols.
++.\"
++.Sh OPTIONS
++.\" =======
++.Bl -tag -width indent
++.\"
++.It Fl h, -help
++Print a help message.
++.\"
++.It Fl l, -log Ar log-file
++Log messages to the file
++.Ar log-file .
++The default log is a file pb-cui.log in the directory where pb-cui
++is started.  New messages are appended to an existing log file.
++.\"
++.It Fl V, -version
++Display the program version number.
++.El
++.Sh SEE ALSO
++.\" ========
++.Xr petitboot 8 , Xr pb-discover 8 , Xr pb-event 8
+diff --git a/man/pb-discover.8 b/man/pb-discover.8
+new file mode 100644
+index 0000000..9123e0f
+--- /dev/null
++++ b/man/pb-discover.8
+@@ -0,0 +1,44 @@
++.\" Copyright (C) 2009 Sony Computer Entertainment Inc.
++.\" Copyright 2009 Sony Corp.
++.\"
++.\" This program is free software; you can redistribute it and/or modify
++.\" it under the terms of the GNU General Public License as published by
++.\" the Free Software Foundation; version 2 of the License.
++.\"
++.\" This program is distributed in the hope that it will be useful,
++.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
++.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++.\" GNU General Public License for more details.
++.\"
++.\" You should have received a copy of the GNU General Public License
++.\" along with this program; if not, write to the Free Software
++.\" Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++.\"
++.\" Maintainer's Notes:
++.\"  * For syntax help see the man pages for 'mdoc' and 'mdoc.samples'.
++.\"  * To check syntax use this:
++.\"    'groff -C -mtty-char -Tutf8 -man pb-discover.8'.
++.\"  * To check format use this: 'less pb-discover.8'.
++.\"
++.Dd ""
++.Dt pb-discover 8
++.Os
++.\"
++.Sh NAME
++.\" ====
++.Nm pb-discover
++.Nd The dynamic device discovery daemon of the Petitboot bootloader
++.\"
++.Sh SYNOPSIS
++.\" ========
++.Nm
++.\"
++.Sh DESCRIPTION
++.\" ===========
++pb-discover maintains a dynamic list of boot options available to
++the system.  On startup, the petitboot user interface clients connect to
++pb-discover daemon and receive boot option information.
++.\"
++.Sh SEE ALSO
++.\" ========
++.Xr petitboot 8 , Xr pb-cui 8 , Xr pb-event 8
+diff --git a/man/pb-event.8 b/man/pb-event.8
+new file mode 100644
+index 0000000..dc123e1
+--- /dev/null
++++ b/man/pb-event.8
+@@ -0,0 +1,43 @@
++.\" Copyright (C) 2009 Sony Computer Entertainment Inc.
++.\" Copyright 2009 Sony Corp.
++.\"
++.\" This program is free software; you can redistribute it and/or modify
++.\" it under the terms of the GNU General Public License as published by
++.\" the Free Software Foundation; version 2 of the License.
++.\"
++.\" This program is distributed in the hope that it will be useful,
++.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
++.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++.\" GNU General Public License for more details.
++.\"
++.\" You should have received a copy of the GNU General Public License
++.\" along with this program; if not, write to the Free Software
++.\" Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++.\"
++.\" Maintainer's Notes:
++.\"  * For syntax help see the man pages for 'mdoc' and 'mdoc.samples'.
++.\"  * To check syntax use this:
++.\"    'groff -C -mtty-char -Tutf8 -man pb-event.8'.
++.\"  * To check format use this: 'less pb-event.8'.
++.\"
++.Dd ""
++.Dt pb-event 8
++.Os
++.\"
++.Sh NAME
++.\" ====
++.Nm pb-event
++.Nd Event helper for the Petitboot bootloader
++.\"
++.Sh SYNOPSIS
++.\" ========
++.Nm
++.\"
++.Sh DESCRIPTION
++.\" ===========
++The pb-event utility is used to send user mode events to pb-discover, the
++petitboot device discovery daemon.
++.\"
++.Sh SEE ALSO
++.\" ========
++.Xr petitboot 8 , Xr pb-cui 8 , Xr pb-discover 8
+diff --git a/man/petitboot.8 b/man/petitboot.8
+new file mode 100644
+index 0000000..9dc2222
+--- /dev/null
++++ b/man/petitboot.8
+@@ -0,0 +1,47 @@
++.\" Copyright (C) 2009 Sony Computer Entertainment Inc.
++.\" Copyright 2009 Sony Corp.
++.\"
++.\" This program is free software; you can redistribute it and/or modify
++.\" it under the terms of the GNU General Public License as published by
++.\" the Free Software Foundation; version 2 of the License.
++.\"
++.\" This program is distributed in the hope that it will be useful,
++.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
++.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++.\" GNU General Public License for more details.
++.\"
++.\" You should have received a copy of the GNU General Public License
++.\" along with this program; if not, write to the Free Software
++.\" Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++.\"
++.\" Maintainer's Notes:
++.\"  * For syntax help see the man pages for 'mdoc' and 'mdoc.samples'.
++.\"  * To check syntax use this:
++.\"    'groff -C -mtty-char -Tutf8 -man petitboot.8'.
++.\"  * To check format use this: 'less petitboot.8'.
++.\"
++.Dd ""
++.Dt petitboot 8
++.Os
++.\"
++.Sh NAME
++.\" ====
++.Nm petitboot
++.Nd The Petitboot bootloader
++.\"
++.Sh DESCRIPTION
++.\" ===========
++Petitboot is a platform independent bootloader based on Linux kexec.
++Petitboot can load Linux kernel and initrd images from any device that
++can be mounted by Linux, and can also load images from the network
++using the
++HTTP, HTTPS, NFS, SFTP, and TFTP
++protocols.
++.Pp
++Petitboot looks for bootloader configuration files on mountable devices
++in the system, and can also be configured to use boot information
++from a DHCP server.
++.\"
++.Sh SEE ALSO
++.\" ========
++.Xr pb-cui 8 , Xr pb-discover 8 , Xr pb-event 8
+diff --git a/rules.mk b/rules.mk
+index e743338..3b1dcfe 100644
+--- a/rules.mk
++++ b/rules.mk
+@@ -19,8 +19,8 @@ parser_test = test/parser-test
+ # install targets and components
+ daemons = $(pb_discover)
+ parsers = event kboot yaboot
+-uis = $(pb_cui) $(pb_test)
+-tests = $(parser_test)
++uis = $(pb_cui)
++tests = $(parser_test) $(pb_test)
+ utils = $(pb_event)
+ 
+ ifeq ($(PBTWIN),y)
+@@ -29,6 +29,7 @@ endif
+ 
+ # other to install
+ artwork = background.jpg cdrom.png hdd.png usbpen.png tux.png cursor.gz
++man8 = pb-cui.8 pb-discover.8 pb-event.8 petitboot.8
+ rules = utils/99-petitboot.rules
+ udhcpc = utils/udhcpc
+ 
+@@ -48,10 +49,11 @@ discover_objs = discover/event.o discover/user-event.o discover/udev.o \
+ 	discover/parser-utils.o
+ 
+ # client objs
+-ui_common_objs = ui/common/discover-client.o ui/common/loader.o \
+-	ui/common/ui-system.o ui/common/url.o
+-ncurses_objs = ui/ncurses/nc-scr.o ui/ncurses/nc-menu.o \
+-	 ui/ncurses/nc-ked.o ui/ncurses/nc-cui.o
++ui_common_objs = ui/common/discover-client.o ui/common/joystick.o \
++	ui/common/loader.o ui/common/ui-system.o ui/common/timer.o \
++	ui/common/url.o
++ncurses_objs = ui/ncurses/nc-scr.o ui/ncurses/nc-menu.o ui/ncurses/nc-ked.o \
++	ui/ncurses/nc-cui.o
+ twin_objs = ui/twin/pb-twin.o
+ 
+ # Makefiles
+@@ -68,6 +70,7 @@ client_objs = $(lib_objs) $(ui_common_objs)
+ all: $(uis) $(daemons) $(utils)
+ 
+ # ncurses cui
++pb_cui_objs-y$(ENABLE_PS3) += ui/ncurses/pb-cui.o
+ pb_cui_objs-$(ENABLE_PS3) += ui/ncurses/ps3-cui.o ui/common/ps3.o
+ pb_cui_ldflags-$(ENABLE_PS3) += -lps3-utils
+ 
+@@ -120,13 +123,16 @@ parser-test: $(parser_test)
+ 
+ install: all $(rules) $(udhcpc)
+ 	$(INSTALL) -d $(DESTDIR)$(sbindir)/
+-	$(INSTALL) $(daemons) $(uis) $(utils) $(DESTDIR)$(sbindir)/
++	$(INSTALL_PROGRAM) $(daemons) $(uis) $(utils) $(DESTDIR)$(sbindir)/
+ 	$(INSTALL) -d $(DESTDIR)$(pkgdatadir)/artwork/
+-	$(INSTALL) $(addprefix $(top_srcdir)/ui/twin/artwork/,$(artwork)) \
++	$(INSTALL_DATA) $(addprefix $(top_srcdir)/ui/twin/artwork/,$(artwork)) \
+ 		$(DESTDIR)$(pkgdatadir)/artwork/
+ 	$(INSTALL) -d $(DESTDIR)$(pkgdatadir)/utils
+-	$(INSTALL) -m 644 $(top_srcdir)/$(rules) $(DESTDIR)$(pkgdatadir)/utils
+-	$(INSTALL) -m 644 $(top_srcdir)/$(udhcpc) $(DESTDIR)$(pkgdatadir)/utils
++	$(INSTALL_DATA) $(top_srcdir)/$(rules) $(DESTDIR)$(pkgdatadir)/utils
++	$(INSTALL_DATA) $(top_srcdir)/$(udhcpc) $(DESTDIR)$(pkgdatadir)/utils
++	$(INSTALL) -d $(DESTDIR)$(mandir)/man8/
++	$(INSTALL_DATA) $(addprefix $(top_srcdir)/man/, $(man8)) \
++		$(DESTDIR)$(mandir)/man8/
+ 
+ dist: $(PACKAGE)-$(VERSION).tar.gz
+ 
+diff --git a/ui/common/joystick.c b/ui/common/joystick.c
+new file mode 100644
+index 0000000..94c85fe
+--- /dev/null
++++ b/ui/common/joystick.c
+@@ -0,0 +1,106 @@
++/*
++ *  Copyright (C) 2009 Sony Computer Entertainment Inc.
++ *  Copyright 2009 Sony Corp.
++ *
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; version 2 of the License.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ */
++
++#if defined(HAVE_CONFIG_H)
++#include "config.h"
++#endif
++
++#define _GNU_SOURCE
++#include <assert.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <string.h>
++#include <sys/stat.h>
++#include <sys/types.h>
++
++#include "log/log.h"
++#include "talloc/talloc.h"
++#include "joystick.h"
++
++/**
++ * pjs_process_event - Read joystick event and map to UI key code.
++ *
++ * Returns a map routine UI key code or zero.
++ */
++
++int pjs_process_event(const struct pjs *pjs)
++{
++	int result;
++	struct js_event e;
++
++	assert(pjs->fd);
++
++	result = read(pjs->fd, &e, sizeof(e));
++
++	if (result != sizeof(e)) {
++		pb_log("%s: read failed: %s\n", __func__, strerror(errno));
++		return 0;
++	}
++
++	return pjs->map(&e);
++}
++
++/**
++ * pjs_destructor - The talloc destructor for a joystick handler.
++ */
++
++static int pjs_destructor(void *arg)
++{
++	struct pjs *pjs = pjs_from_arg(arg);
++
++	close(pjs->fd);
++	pjs->fd = 0;
++
++	return 0;
++}
++
++/**
++ * pjs_init - Initialize the joystick event handler.
++ */
++
++struct pjs *pjs_init(void *ctx, int (*map)(const struct js_event *))
++{
++	static const char dev_name[] = "/dev/input/js0";
++	struct pjs *pjs;
++
++	pjs = talloc_zero(ctx, struct pjs);
++
++	if (!pjs)
++		return NULL;
++
++	pjs->map = map;
++	pjs->fd = open(dev_name, O_RDONLY | O_NONBLOCK);
++
++	if (pjs->fd < 0) {
++		pb_log("%s: open %s failed: %s\n", __func__, dev_name,
++			strerror(errno));
++		goto out_err;
++	}
++
++	talloc_set_destructor(pjs, pjs_destructor);
++
++	pb_log("%s: using %s\n", __func__, dev_name);
++
++	return pjs;
++
++out_err:
++	close(pjs->fd);
++	pjs->fd = 0;
++	talloc_free(pjs);
++	return NULL;
++}
+diff --git a/ui/common/joystick.h b/ui/common/joystick.h
+new file mode 100644
+index 0000000..cf3fc45
+--- /dev/null
++++ b/ui/common/joystick.h
+@@ -0,0 +1,47 @@
++/*
++ *  Copyright (C) 2009 Sony Computer Entertainment Inc.
++ *  Copyright 2009 Sony Corp.
++ *
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; version 2 of the License.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ */
++
++#if !defined(_PB_JOYSTICK_H)
++#define _PB_JOYSTICK_H
++
++#include <linux/joystick.h>
++
++/**
++ * struct pjs - Petitboot joystick event handler.
++ * @map: Routine to map from a Linux struct js_event to a ui key code.
++ */
++
++struct pjs {
++	int fd;
++	int (*map)(const struct js_event *e);
++};
++
++struct pjs *pjs_init(void *ctx, int (*map)(const struct js_event *));
++int pjs_process_event(const struct pjs *pjs);
++
++static inline struct pjs *pjs_from_arg(void *arg)
++{
++	return arg;
++}
++
++static inline int pjs_get_fd(const struct pjs *pjs)
++{
++	return pjs->fd;
++}
++
++#endif
+diff --git a/ui/common/loader.c b/ui/common/loader.c
+index babca28..5c69533 100644
+--- a/ui/common/loader.c
++++ b/ui/common/loader.c
+@@ -227,7 +227,7 @@ enum wget_flags {
+ static char *pb_load_wget(void *ctx, struct pb_url *url, enum wget_flags flags)
+ {
+ 	int result;
+-	const char *argv[6];
++	const char *argv[7];
+ 	const char **p;
+ 	char *local;
+ 
+@@ -238,12 +238,15 @@ static char *pb_load_wget(void *ctx, struct pb_url *url, enum wget_flags flags)
+ 
+ 	p = argv;
+ 	*p++ = pb_system_apps.wget;			/* 1 */
+-	*p++ = "-O";					/* 2 */
+-	*p++ = local;					/* 3 */
+-	*p++ = url->full;				/* 4 */
++#if !defined(DEBUG)
++	*p++ = "--quiet";				/* 2 */
++#endif
++	*p++ = "-O";					/* 3 */
++	*p++ = local;					/* 4 */
++	*p++ = url->full;				/* 5 */
+ 	if (flags & wget_no_check_certificate)
+-		*p++ = "--no-check-certificate";	/* 5 */
+-	*p++ = NULL;					/* 6 */
++		*p++ = "--no-check-certificate";	/* 6 */
++	*p++ = NULL;					/* 7 */
+ 
+ 	result = pb_run_cmd(argv);
+ 
+@@ -260,16 +263,22 @@ fail:
+ /**
+  * pb_load_file - Loads a remote file and returns the local file path.
+  * @ctx: The talloc context to associate with the returned string.
++ * @remote: The remote file URL.
++ * @tempfile: An optional variable pointer to be set when a temporary local
++ *  file is created.
+  *
+  * Returns the local file path in a talloc'ed character string on success,
+  * or NULL on error.
+  */
+ 
+-char *pb_load_file(void *ctx, const char *remote)
++char *pb_load_file(void *ctx, const char *remote, unsigned int *tempfile)
+ {
+ 	char *local;
+ 	struct pb_url *url = pb_url_parse(NULL, remote);
+ 
++	if (tempfile)
++		*tempfile = 0;
++
+ 	if (!url)
+ 		return NULL;
+ 
+@@ -277,19 +286,28 @@ char *pb_load_file(void *ctx, const char *remote)
+ 	case pb_url_ftp:
+ 	case pb_url_http:
+ 		local = pb_load_wget(ctx, url, 0);
++		if (tempfile && local)
++			*tempfile = 1;
+ 		break;
+ 	case pb_url_https:
+-		local = pb_load_wget(ctx, url,
+-			wget_no_check_certificate);
++		local = pb_load_wget(ctx, url, wget_no_check_certificate);
++		if (tempfile && local)
++			*tempfile = 1;
+ 		break;
+ 	case pb_url_nfs:
+ 		local = pb_load_nfs(ctx, url);
++		if (tempfile && local)
++			*tempfile = 1;
+ 		break;
+ 	case pb_url_sftp:
+ 		local = pb_load_sftp(ctx, url);
++		if (tempfile && local)
++			*tempfile = 1;
+ 		break;
+ 	case pb_url_tftp:
+ 		local = pb_load_tftp(ctx, url);
++		if (tempfile && local)
++			*tempfile = 1;
+ 		break;
+ 	default:
+ 		local = talloc_strdup(ctx, url->full);
+diff --git a/ui/common/loader.h b/ui/common/loader.h
+index b06bb43..42d4d4b 100644
+--- a/ui/common/loader.h
++++ b/ui/common/loader.h
+@@ -19,6 +19,6 @@
+ #if !defined(_PB_FILE_LOADER_H)
+ #define _PB_FILE_LOADER_H
+ 
+-char *pb_load_file(void *ctx, const char *remote);
++char *pb_load_file(void *ctx, const char *remote, unsigned int *tempfile);
+ 
+ #endif
+diff --git a/ui/common/ps3.c b/ui/common/ps3.c
+index 5c83289..cb1c8d1 100644
+--- a/ui/common/ps3.c
++++ b/ui/common/ps3.c
+@@ -49,6 +49,11 @@ static const struct os_area_db_id id_flags =
+ 	.owner = OS_AREA_DB_OWNER_PETITBOOT, /* 3 */
+ 	.key = 3,
+ };
++static const struct os_area_db_id id_timeout =
++{
++	.owner = OS_AREA_DB_OWNER_PETITBOOT, /* 3 */
++	.key = 4,
++};
+ 
+ struct ps3_flash_ctx {
+ 	FILE *dev;
+@@ -59,6 +64,8 @@ struct ps3_flash_ctx {
+ 
+ static void ps3_flash_close(struct ps3_flash_ctx *fc)
+ {
++	assert(fc->dev);
++
+ 	fclose(fc->dev);
+ 	fc->dev = NULL;
+ }
+@@ -104,19 +111,19 @@ int ps3_flash_get_values(struct ps3_flash_values *values)
+ 	struct ps3_flash_ctx fc;
+ 	uint64_t tmp;
+ 
+-	memset(values, 0, sizeof(*values));
+-
+ 	result = ps3_flash_open(&fc, "r");
+ 
+ 	if (result)
+-		return -1;
++		goto done;
+ 
+ 	result = os_area_db_read(&fc.db, &fc.header, fc.dev);
+ 
++	ps3_flash_close(&fc);
++
+ 	if (result) {
+ 		pb_log("%s: os_area_db_read failed: %s\n", __func__,
+ 			strerror(errno));
+-		goto fail;
++		goto done;
+ 	}
+ 
+ 	sum = result = os_area_db_get(&fc.db, &id_default_item, &tmp);
+@@ -124,21 +131,25 @@ int ps3_flash_get_values(struct ps3_flash_values *values)
+ 	if (!result)
+ 		values->default_item = (uint32_t)tmp;
+ 
+-	sum += result = os_area_db_get(&fc.db, &id_video_mode, &tmp);
++	result = os_area_db_get(&fc.db, &id_timeout, &tmp);
+ 
+ 	if (!result)
+-		values->video_mode = (uint16_t)tmp;
++		values->timeout = (uint8_t)tmp;
+ 
++	sum += result = os_area_db_get(&fc.db, &id_video_mode, &tmp);
+ 
+-	pb_log("%s: default_item: %u\n", __func__, values->default_item);
+-	pb_log("%s: video_mode:   %u\n", __func__, values->video_mode);
++	if (!result)
++		values->video_mode = (uint16_t)tmp;
+ 
+-	ps3_flash_close(&fc);
+-	return !!sum;
++done:
++	pb_log("%s: default_item: %x\n", __func__,
++		(unsigned int)values->default_item);
++	pb_log("%s: timeout: %u\n", __func__,
++		(unsigned int)values->timeout);
++	pb_log("%s: video_mode:   %u\n", __func__,
++		(unsigned int)values->video_mode);
+ 
+-fail:
+-	ps3_flash_close(&fc);
+-	return -1;
++	return (result || sum) ? -1 : 0;
+ }
+ 
+ /**
+@@ -177,6 +188,8 @@ int ps3_flash_set_values(const struct ps3_flash_values *values)
+ 		}
+ 	}
+ 
++	/* timeout is currently read-only, set with ps3-bl-option */
++
+ 	result = os_area_db_set_32(&fc.db, &id_default_item,
+ 		values->default_item);
+ 	result += os_area_db_set_16(&fc.db, &id_video_mode,
+diff --git a/ui/common/ps3.h b/ui/common/ps3.h
+index 8a7fe1c..5ba8afe 100644
+--- a/ui/common/ps3.h
++++ b/ui/common/ps3.h
+@@ -33,9 +33,14 @@ enum ps3_flash_flags {
+ 	ps3_flag_telnet = 1,
+ };
+ 
++enum ps3_timeouts {
++	ps3_timeout_forever = 255,
++};
++
+ /**
+  * struct ps3_flash_values - Values from PS3 flash memory.
+  * @default_item: The default menu item.
++ * @timeout: The timeout in seconds.
+  * @video_mode: The default video_mode.
+  * @flags: Logical OR of enum ps3_flash_flags.
+  */
+@@ -44,6 +49,13 @@ struct ps3_flash_values {
+ 	uint32_t default_item;
+ 	uint16_t video_mode;
+ 	/* uint16_t flags; */
++	uint8_t timeout;
++};
++
++static const struct ps3_flash_values ps3_flash_defaults = {
++	.default_item = 0,
++	.video_mode = 1,
++	.timeout = ps3_timeout_forever,
+ };
+ 
+ int ps3_flash_get_values(struct ps3_flash_values *values);
+diff --git a/ui/common/timer.c b/ui/common/timer.c
+new file mode 100644
+index 0000000..954a18a
+--- /dev/null
++++ b/ui/common/timer.c
+@@ -0,0 +1,139 @@
++/*
++ *  Copyright (C) 2009 Sony Computer Entertainment Inc.
++ *  Copyright 2009 Sony Corp.
++ *
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; version 2 of the License.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ */
++
++#if defined(HAVE_CONFIG_H)
++#include "config.h"
++#endif
++
++#define _GNU_SOURCE
++#include <assert.h>
++#include <limits.h>
++#include <unistd.h>
++
++#include "log/log.h"
++#include "timer.h"
++
++/**
++ * ui_timer_init - Initialize the timer for use.
++ * @seconds: The final timeout value in seconds.
++ */
++
++void ui_timer_init(struct ui_timer *timer, unsigned int seconds)
++{
++	pb_log("%s: %u\n", __func__, seconds);
++	assert(!timer->disabled);
++	timer->timeout = seconds;
++}
++
++/**
++ * ui_timer_next - Calculate the next timer interval.
++ */
++
++static unsigned int ui_timer_next(unsigned int seconds)
++{
++	unsigned int next;
++
++	if (seconds == 0) {
++		next = 0;
++		goto done;
++	}
++
++	if (seconds <= 10) {
++		next = 1;
++		goto done;
++	}
++
++	if (seconds <= 60) {
++		next = seconds % 5;
++		next = next ? next : 5;
++		goto done;
++	}
++
++	next = seconds % 10;
++	next = next ? next : 10;
++
++done:
++	pb_log("%s: %u = %u\n", __func__, seconds, next);
++	return next;
++}
++
++/**
++ * ui_timer_kick - Kickstart the next timer interval.
++ */
++
++void ui_timer_kick(struct ui_timer *timer)
++{
++	unsigned int next;
++
++	if(timer->disabled)
++		return;
++
++	if (timer->update_display)
++		timer->update_display(timer, timer->timeout);
++
++	next = ui_timer_next(timer->timeout);
++	timer->timeout -= next;
++
++	if (next) {
++		alarm(next);
++		return;
++	}
++
++	pb_log("%s: timed out\n", __func__);
++
++	ui_timer_disable(timer);
++	timer->handle_timeout(timer);
++}
++
++/**
++ * ui_timer_disable - Stop and disable the timer.
++ */
++
++void ui_timer_disable(struct ui_timer *timer)
++{
++	if (timer->disabled)
++		return;
++
++	pb_log("%s\n", __func__);
++	timer->disabled = 1;
++	timer->timeout = UINT_MAX;
++	alarm(0);
++}
++
++/**
++ * ui_timer_sigalrm
++ *
++ * Called at SIGALRM.
++ */
++
++void ui_timer_sigalrm(struct ui_timer *timer)
++{
++	timer->signaled = 1;
++}
++
++/**
++ * ui_timer_process_sig - Process a timer signal
++ */
++
++void ui_timer_process_sig(struct ui_timer *timer)
++{
++	while (timer->signaled) {
++		timer->signaled = 0;
++		ui_timer_kick(timer);
++	}
++}
+diff --git a/ui/common/timer.h b/ui/common/timer.h
+new file mode 100644
+index 0000000..781b442
+--- /dev/null
++++ b/ui/common/timer.h
+@@ -0,0 +1,42 @@
++/*
++ *  Copyright (C) 2009 Sony Computer Entertainment Inc.
++ *  Copyright 2009 Sony Corp.
++ *
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; version 2 of the License.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ */
++
++#if !defined(_PB_UI_TIMER_H)
++#define _PB_UI_TIMER_H
++
++#include <signal.h>
++
++/**
++ * struct ui_timer - UI timeout.
++ */
++
++struct ui_timer {
++	unsigned int timeout;
++	unsigned int disabled;
++	sig_atomic_t signaled;
++	void (*update_display)(struct ui_timer *timer, unsigned int timeout);
++	void (*handle_timeout)(struct ui_timer *timer);
++};
++
++void ui_timer_init(struct ui_timer *timer, unsigned int seconds);
++void ui_timer_kick(struct ui_timer *timer);
++void ui_timer_disable(struct ui_timer *timer);
++void ui_timer_sigalrm(struct ui_timer *timer);
++void ui_timer_process_sig(struct ui_timer *timer);
++
++#endif
+diff --git a/ui/common/ui-system.c b/ui/common/ui-system.c
+index 3f54191..0140f0e 100644
+--- a/ui/common/ui-system.c
++++ b/ui/common/ui-system.c
+@@ -33,46 +33,80 @@
+ #include "ui-system.h"
+ 
+ /**
+- * run_kexec_local - Final kexec helper.
++ * kexec_load - kexec load helper.
+  * @l_image: The local image file for kexec to execute.
+  * @l_initrd: Optional local initrd file for kexec --initrd, can be NULL.
+  * @args: Optional command line args for kexec --append, can be NULL.
+  */
+ 
+-static int run_kexec_local(const char *l_image, const char *l_initrd,
++static int kexec_load(const char *l_image, const char *l_initrd,
+ 	const char *args)
+ {
+ 	int result;
+-	const char *argv[8];
++	const char *argv[6];
+ 	const char **p;
++	char *s_initrd = NULL;
++	char *s_args = NULL;
+ 
+ 	p = argv;
+-	*p++ = pb_system_apps.kexec;		/* 1 */
++	*p++ = pb_system_apps.kexec;	/* 1 */
++	*p++ = "-l";			/* 2 */
+ 
+ 	if (l_initrd) {
+-		*p++ = "--initrd";		/* 2 */
+-		*p++ = l_initrd;		/* 3 */
++		s_initrd = talloc_asprintf(NULL, "--initrd=%s", l_initrd);
++		assert(s_initrd);
++		*p++ = s_initrd;	 /* 3 */
+ 	}
+ 
+ 	if (args) {
+-		*p++ = "--append";		/* 4 */
+-		*p++ = args;			/* 5 */
++		s_args = talloc_asprintf(NULL, "--append=%s", args);
++		assert(s_args);
++		*p++ = s_args;		/* 4 */
+ 	}
+ 
+-	/* First try by telling kexec to run shutdown */
++	*p++ = l_image;			/* 5 */
++	*p++ = NULL;			/* 6 */
+ 
+-	*(p + 0) = l_image;
+-	*(p + 1) = NULL;
++	result = pb_run_cmd(argv);
++
++	if (result)
++		pb_log("%s: failed: (%d)\n", __func__, result);
++
++	talloc_free(s_initrd);
++	talloc_free(s_args);
++
++	return result;
++}
++
++/**
++ * kexec_reboot - Helper to boot the new kernel.
++ *
++ * Must only be called after a successful call to kexec_load().
++ */
++
++static int kexec_reboot(void)
++{
++	int result;
++	const char *argv[4];
++	const char **p;
++
++	/* First try running shutdown.  Init scripts should run 'exec -e' */
++
++	p = argv;
++	*p++ = pb_system_apps.shutdown;	/* 1 */
++	*p++ =  "-r";			/* 2 */
++	*p++ =  "now";			/* 3 */
++	*p++ =  NULL;			/* 4 */
+ 
+ 	result = pb_run_cmd(argv);
+ 
+-	/* kexec will return zero on success */
+-	/* On error, force a kexec with the -f option */
++	/* On error, force a kexec with the -e option */
+ 
+ 	if (result) {
+-		*(p + 0) = "-f";		/* 6 */
+-		*(p + 1) = l_image;		/* 7 */
+-		*(p + 2) = NULL;		/* 8 */
++		p = argv;
++		*p++ = pb_system_apps.kexec;	/* 1 */
++		*p++ = "-e";			/* 2 */
++		*p++ = NULL;			/* 3 */
+ 
+ 		result = pb_run_cmd(argv);
+ 	}
+@@ -85,38 +119,51 @@ static int run_kexec_local(const char *l_image, const char *l_initrd,
+ 
+ /**
+  * pb_run_kexec - Run kexec with the supplied boot options.
+- *
+- * For the convenience of the user, tries to load both files before
+- * returning error.
+  */
+ 
+ int pb_run_kexec(const struct pb_kexec_data *kd)
+ {
+ 	int result;
+-	char *l_image;
+-	char *l_initrd;
++	char *l_image = NULL;
++	char *l_initrd = NULL;
++	unsigned int clean_image = 0;
++	unsigned int clean_initrd = 0;
+ 
+ 	pb_log("%s: image:  '%s'\n", __func__, kd->image);
+ 	pb_log("%s: initrd: '%s'\n", __func__, kd->initrd);
+ 	pb_log("%s: args:   '%s'\n", __func__, kd->args);
+ 
+-	if (kd->image)
+-		l_image = pb_load_file(NULL, kd->image);
+-	else {
+-		l_image = NULL;
+-		pb_log("%s: error null image\n", __func__);
++	result = -1;
++
++	if (kd->image) {
++		l_image = pb_load_file(NULL, kd->image, &clean_image);
++		if (!l_image)
++			goto no_load;
++	}
++
++	if (kd->initrd) {
++		l_initrd = pb_load_file(NULL, kd->initrd, &clean_initrd);
++		if (!l_initrd)
++			goto no_load;
+ 	}
+ 
+-	l_initrd = kd->initrd ? pb_load_file(NULL, kd->initrd) : NULL;
++	if (!l_image && !l_initrd)
++		goto no_load;
++
++	result = kexec_load(l_image, l_initrd, kd->args);
+ 
+-	if (!l_image || (kd->initrd && !l_initrd))
+-		result = -1;
+-	else
+-		result = run_kexec_local(l_image, l_initrd, kd->args);
++no_load:
++	if (clean_image)
++		unlink(l_image);
++	if (clean_initrd)
++		unlink(l_initrd);
+ 
+ 	talloc_free(l_image);
+ 	talloc_free(l_initrd);
+ 
++	if (!result)
++		result = kexec_reboot();
++
+ 	return result;
+ }
+ 
+diff --git a/ui/ncurses/nc-cui.c b/ui/ncurses/nc-cui.c
+index 2a4c971..aed5ff7 100644
+--- a/ui/ncurses/nc-cui.c
++++ b/ui/ncurses/nc-cui.c
+@@ -30,7 +30,6 @@
+ #include "ui/common/discover-client.h"
+ #include "nc-cui.h"
+ 
+-
+ static struct cui_opt_data *cod_from_item(struct pmenu_item *item)
+ {
+ 	return item->data;
+@@ -61,6 +60,35 @@ void cui_resize(struct cui *cui)
+ }
+ 
+ /**
++ * cui_make_item_name - Format the menu item name srting.
++ *
++ * Returns a talloc string.
++ */
++
++static char *cui_make_item_name(struct pmenu_item *i, struct cui_opt_data *cod)
++{
++	char *name;
++
++	assert(cod->name);
++	assert(cod->kd);
++
++	name = talloc_asprintf(i, "%s:", cod->name);
++
++	if (cod->kd->image)
++		name = talloc_asprintf_append(name, " %s", cod->kd->image);
++
++	if (cod->kd->initrd)
++		name = talloc_asprintf_append(name, " initrd=%s",
++			cod->kd->initrd);
++
++	if (cod->kd->args)
++		name = talloc_asprintf_append(name, " %s", cod->kd->args);
++
++	DBGS("@%s@\n", name);
++	return name;
++}
++
++/**
+  * cui_on_exit - A generic main menu ESC callback.
+  */
+ 
+@@ -109,8 +137,8 @@ static int cui_run_kexec(struct pmenu_item *item)
+ 	assert(cui->current == &cui->main->scr);
+ 	assert(cui->on_kexec);
+ 
+-	pb_log("%s: %s\n", __func__, cod->dev->name, cod->opt->name);
+-	nc_scr_status_printf(cui->current, "Booting %s...", cod->opt->name);
++	pb_log("%s: %s\n", __func__, cod->name);
++	nc_scr_status_printf(cui->current, "Booting %s...", cod->name);
+ 
+ 	def_prog_mode();
+ 
+@@ -141,9 +169,10 @@ static void cui_ked_on_exit(struct ked *ked, enum ked_result ked_result,
+ {
+ 	struct cui *cui = cui_from_arg(ked->scr.ui_ctx);
+ 
+-	if (ked_result == ked_update || ked_result == ked_boot) {
++	if (ked_result == ked_update) {
+ 		struct pmenu_item *i = pmenu_find_selected(cui->main);
+ 		struct cui_opt_data *cod = cod_from_item(i);
++		char *name;
+ 
+ 		assert(kd);
+ 
+@@ -151,7 +180,13 @@ static void cui_ked_on_exit(struct ked *ked, enum ked_result ked_result,
+ 		talloc_free(cod->kd);
+ 		cod->kd = kd;
+ 
+-		pb_log("%s: updating opt '%s'\n", __func__, cod->opt->name);
++		name = cui_make_item_name(i, cod);
++		pmenu_item_replace(i, name);
++
++		/* FIXME: need to make item visible somehow */
++		set_current_item(cui->main->ncm, i->nci);
++
++		pb_log("%s: updating opt '%s'\n", __func__, cod->name);
+ 		pb_log(" image  '%s'\n", cod->kd->image);
+ 		pb_log(" initrd '%s'\n", cod->kd->initrd);
+ 		pb_log(" args   '%s'\n", cod->kd->args);
+@@ -160,20 +195,15 @@ static void cui_ked_on_exit(struct ked *ked, enum ked_result ked_result,
+ 	cui_set_current(cui, &cui->main->scr);
+ 
+ 	talloc_free(ked);
+-
+-	if (ked_result == ked_boot) {
+-		struct pmenu_item *i = pmenu_find_selected(cui->main);
+-		i->on_execute(i);
+-	}
+ }
+ 
+ int cui_ked_run(struct pmenu_item *item)
+ {
+ 	struct cui *cui = cui_from_item(item);
++	struct cui_opt_data *cod = cod_from_item(item);
+ 	struct ked *ked;
+ 
+-	ked = ked_init(cui, cod_from_item(item)->kd, cui_ked_on_exit);
+-
++	ked = ked_init(cui, cod->kd, cui_ked_on_exit);
+ 	cui_set_current(cui, &ked->scr);
+ 
+ 	return 0;
+@@ -200,14 +230,43 @@ struct nc_scr *cui_set_current(struct cui *cui, struct nc_scr *scr)
+ 	return old;
+ }
+ 
++/**
++ * cui_process_key - Process input on stdin.
++ */
++
+ static int cui_process_key(void *arg)
+ {
+ 	struct cui *cui = cui_from_arg(arg);
+ 
+ 	assert(cui->current);
++
++	ui_timer_disable(&cui->timer);
+ 	cui->current->process_key(cui->current);
++
++	return 0;
++}
++
++/**
++ * cui_process_js - Process joystick events.
++ */
++
++static int cui_process_js(void *arg)
++{
++	struct cui *cui = cui_from_arg(arg);
++	int c;
++
++	c = pjs_process_event(cui->pjs);
++
++	if (c) {
++		ungetch(c);
++		cui_process_key(arg);
++	}
++
+ 	return 0;
+ }
++/**
++ * cui_client_process_socket - Process a socket event from the discover server.
++ */
+ 
+ static int cui_client_process_socket(void *arg)
+ {
+@@ -218,6 +277,24 @@ static int cui_client_process_socket(void *arg)
+ }
+ 
+ /**
++ * cui_handle_timeout - Handle the timeout.
++ */
++
++static void cui_handle_timeout(struct ui_timer *timer)
++{
++	struct cui *cui = cui_from_timer(timer);
++	struct pmenu_item *i = pmenu_find_selected(cui->main);
++
++#if defined(DEBUG)
++	{
++		struct cui_opt_data *cod = cod_from_item(i);
++		assert(cod && (cod->opt_hash == cui->default_item));
++	}
++#endif
++	i->on_execute(i);
++}
++
++/**
+  * cui_handle_resize - Handle the term resize.
+  */
+ 
+@@ -243,6 +320,46 @@ static void cui_handle_resize(struct cui *cui)
+ }
+ 
+ /**
++ * cui_on_open - Open new item callback.
++ */
++
++void cui_on_open(struct pmenu *menu)
++{
++	unsigned int insert_pt;
++	struct pmenu_item *i;
++	struct cui_opt_data *cod;
++
++	menu->scr.unpost(&menu->scr);
++
++	/* This disconnects items array from menu. */
++
++	set_menu_items(menu->ncm, NULL);
++
++	/* Insert new items at insert_pt. */
++
++	insert_pt = pmenu_grow(menu, 1);
++	i = pmenu_item_alloc(menu);
++
++	i->on_edit = cui_ked_run;
++	i->on_execute = cui_run_kexec;
++	i->data = cod = talloc_zero(i, struct cui_opt_data);
++
++	cod->name = talloc_asprintf(i, "User item %u:", insert_pt);
++	cod->kd = talloc_zero(i, struct pb_kexec_data);
++
++	pmenu_item_setup(menu, i, insert_pt, talloc_strdup(i, cod->name));
++
++	/* Re-attach the items array. */
++
++	set_menu_items(menu->ncm, menu->items);
++
++	menu->scr.post(&menu->scr);
++	set_current_item(menu->ncm, i->nci);
++
++	i->on_edit(i);
++}
++
++/**
+  * cui_device_add - Client device_add callback.
+  *
+  * Creates menu_items for all the device boot_options and inserts those
+@@ -284,23 +401,11 @@ static int cui_device_add(struct device *dev, void *arg)
+ 		struct pmenu_item *i;
+ 		struct cui_opt_data *cod;
+ 		char *name;
+-		char *description;
+ 
+ 		/* Save the item in opt->ui_info for cui_device_remove() */
+ 
+ 		opt->ui_info = i = pmenu_item_alloc(cui->main);
+ 
+-		name = talloc_asprintf(i, "%s: %s", opt->name,
+-			opt->description);
+-
+-		description = talloc_asprintf(i,
+-			" kexec: image='%s' initrd='%s' args='%s'",
+-			opt->boot_image_file,
+-			opt->initrd_file,
+-			opt->boot_args);
+-
+-		pmenu_item_setup(cui->main, i, insert_pt, name, description);
+-
+ 		i->on_edit = cui_ked_run;
+ 		i->on_execute = cui_run_kexec;
+ 		i->data = cod = talloc(i, struct cui_opt_data);
+@@ -308,23 +413,29 @@ static int cui_device_add(struct device *dev, void *arg)
+ 		cod->dev = dev;
+ 		cod->opt = opt;
+ 		cod->opt_hash = pb_opt_hash(dev, opt);
++		cod->name = opt->name;
+ 		cod->kd = talloc(i, struct pb_kexec_data);
+ 
+ 		cod->kd->image = talloc_strdup(cod->kd, opt->boot_image_file);
+ 		cod->kd->initrd = talloc_strdup(cod->kd, opt->initrd_file);
+ 		cod->kd->args = talloc_strdup(cod->kd, opt->boot_args);
+ 
+-		insert_pt++;
+-
+-		/* If this is the default_item select it. */
++		name = cui_make_item_name(i, cod);
++		pmenu_item_setup(cui->main, i, insert_pt, name);
+ 
+-		if (cod->opt_hash == cui->default_item)
+-			selected = i->nci;
++		insert_pt++;
+ 
+-		pb_log("%s: adding opt '%s'\n", __func__, cod->opt->name);
++		pb_log("%s: adding opt '%s'\n", __func__, cod->name);
+ 		pb_log("   image  '%s'\n", cod->kd->image);
+ 		pb_log("   initrd '%s'\n", cod->kd->initrd);
+ 		pb_log("   args   '%s'\n", cod->kd->args);
++
++		/* If this is the default_item select it and start timer. */
++
++		if (cod->opt_hash == cui->default_item) {
++			selected = i->nci;
++			ui_timer_kick(&cui->timer);
++		}
+ 	}
+ 
+ 	/* Re-attach the items array. */
+@@ -340,6 +451,9 @@ static int cui_device_add(struct device *dev, void *arg)
+ 			item_count(cui->main->ncm) + 1);
+ 	}
+ 
++	/* FIXME: need to make item visible somehow */
++	menu_driver(cui->main->ncm, REQ_SCR_UPAGE);
++	menu_driver(cui->main->ncm, REQ_SCR_DPAGE);
+ 	set_current_item(cui->main->ncm, selected);
+ 
+ 	if (cui->current == &cui->main->scr)
+@@ -375,9 +489,15 @@ static void cui_device_remove(struct device *dev, void *arg)
+ 
+ 	list_for_each_entry(&dev->boot_options, opt, list) {
+ 		struct pmenu_item *i = pmenu_item_from_arg(opt->ui_info);
++		struct cui_opt_data *cod = cod_from_item(i);
+ 
+-		assert(pb_protocol_device_cmp(dev, cod_from_item(i)->dev));
++		assert(pb_protocol_device_cmp(dev, cod->dev));
+ 		pmenu_remove(cui->main, i);
++
++		/* If this is the default_item disable timer. */
++
++		if (cod->opt_hash == cui->default_item)
++			ui_timer_disable(&cui->timer);
+ 	}
+ 
+ 	/* Re-attach the items array. */
+@@ -397,10 +517,6 @@ static void cui_device_remove(struct device *dev, void *arg)
+ 		cui->current->post(cui->current);
+ }
+ 
+-/**
+- * cui_client_process_socket - Process a socket event from the discover server.
+- */
+-
+ static struct discover_client_ops cui_client_ops = {
+ 	.device_add = cui_device_add,
+ 	.device_remove = cui_device_remove,
+@@ -417,7 +533,8 @@ static struct discover_client_ops cui_client_ops = {
+  */
+ 
+ struct cui *cui_init(void* platform_info,
+-	int (*on_kexec)(struct cui *, struct cui_opt_data *))
++	int (*on_kexec)(struct cui *, struct cui_opt_data *),
++	int (*js_map)(const struct js_event *e))
+ {
+ 	struct cui *cui;
+ 	struct discover_client *client;
+@@ -434,6 +551,7 @@ struct cui *cui_init(void* platform_info,
+ 	cui->c_sig = pb_cui_sig;
+ 	cui->platform_info = platform_info;
+ 	cui->on_kexec = on_kexec;
++	cui->timer.handle_timeout = cui_handle_timeout;
+ 
+ 	/* Loop here for scripts that just started the server. */
+ 
+@@ -462,6 +580,15 @@ struct cui *cui_init(void* platform_info,
+ 
+ 	waiter_register(STDIN_FILENO, WAIT_IN, cui_process_key, cui);
+ 
++	if (js_map) {
++
++		cui->pjs = pjs_init(cui, js_map);
++
++		if (cui->pjs)
++			waiter_register(pjs_get_fd(cui->pjs), WAIT_IN,
++				cui_process_js, cui);
++	}
++
+ 	return cui;
+ 
+ fail_client_init:
+@@ -501,6 +628,8 @@ int cui_run(struct cui *cui, struct pmenu *main, unsigned int default_item)
+ 		if (cui->abort)
+ 			break;
+ 
++		ui_timer_process_sig(&cui->timer);
++
+ 		while (cui->resize) {
+ 			cui->resize = 0;
+ 			cui_handle_resize(cui);
+diff --git a/ui/ncurses/nc-cui.h b/ui/ncurses/nc-cui.h
+index 668776e..94fef6b 100644
+--- a/ui/ncurses/nc-cui.h
++++ b/ui/ncurses/nc-cui.h
+@@ -21,15 +21,19 @@
+ 
+ #include <signal.h>
+ 
++#include "ui/common/joystick.h"
++#include "ui/common/timer.h"
+ #include "nc-menu.h"
+ #include "nc-ked.h"
+ 
+-
+ struct cui_opt_data {
++	const char *name;
++	struct pb_kexec_data *kd;
++
++	/* optional data */
+ 	const struct device *dev;
+ 	const struct boot_option *opt;
+ 	uint32_t opt_hash;
+-	struct pb_kexec_data *kd;
+ };
+ 
+ /**
+@@ -49,13 +53,16 @@ struct cui {
+ 	sig_atomic_t resize;
+ 	struct nc_scr *current;
+ 	struct pmenu *main;
++	struct ui_timer timer;
++	struct pjs *pjs;
+ 	void *platform_info;
+ 	unsigned int default_item;
+ 	int (*on_kexec)(struct cui *cui, struct cui_opt_data *cod);
+ };
+ 
+ struct cui *cui_init(void* platform_info,
+-	int (*on_kexec)(struct cui *, struct cui_opt_data *));
++	int (*on_kexec)(struct cui *, struct cui_opt_data *),
++	int (*js_map)(const struct js_event *e));
+ struct nc_scr *cui_set_current(struct cui *cui, struct nc_scr *scr);
+ int cui_run(struct cui *cui, struct pmenu *main, unsigned int default_item);
+ int cui_ked_run(struct pmenu_item *item);
+@@ -65,6 +72,7 @@ int cui_ked_run(struct pmenu_item *item);
+ void cui_abort(struct cui *cui);
+ void cui_resize(struct cui *cui);
+ void cui_on_exit(struct pmenu *menu);
++void cui_on_open(struct pmenu *menu);
+ int cui_run_cmd(struct pmenu_item *item);
+ 
+ static inline struct cui *cui_from_arg(void *arg)
+@@ -85,4 +93,15 @@ static inline struct cui *cui_from_item(struct pmenu_item *item)
+ 	return cui_from_pmenu(item->pmenu);
+ }
+ 
++static inline struct cui *cui_from_timer(struct ui_timer *timer)
++{
++	struct cui *cui;
++
++	cui = (struct cui *)((char *)timer
++		- (size_t)&((struct cui *)0)->timer);
++	assert(cui->c_sig == pb_cui_sig);
++
++	return cui;
++}
++
+ #endif
+diff --git a/ui/ncurses/nc-ked.c b/ui/ncurses/nc-ked.c
+index 3bdbd6c..806d389 100644
+--- a/ui/ncurses/nc-ked.c
++++ b/ui/ncurses/nc-ked.c
+@@ -48,12 +48,15 @@ static struct ked *ked_from_arg(void *arg)
+  * @req: An ncurses request or char to send to form_driver().
+  */
+ 
+-static void ked_move_cursor(struct ked *ked, int req)
++static int ked_move_cursor(struct ked *ked, int req)
+ {
++	int result;
++
+ 	wchgat(ked->scr.sub_ncw, 1, ked_attr_field_selected, 0, 0);
+-	form_driver(ked->ncf, req);
++	result = form_driver(ked->ncf, req);
+ 	wchgat(ked->scr.sub_ncw, 1, ked->attr_cursor, 0, 0);
+ 	wrefresh(ked->scr.main_ncw);
++	return result;
+ }
+ 
+ /**
+@@ -93,12 +96,15 @@ static void ked_insert_mode_tog(struct ked *ked)
+  * @req: An ncurses request to send to form_driver().
+  */
+ 
+-static void ked_move_field(struct ked *ked, int req)
++static int ked_move_field(struct ked *ked, int req)
+ {
++	int result;
++
+ 	set_field_back(current_field(ked->ncf), ked_attr_field_normal);
+-	form_driver(ked->ncf, req);
++	result = form_driver(ked->ncf, req);
+ 	set_field_back(current_field(ked->ncf), ked_attr_field_selected);
+ 	ked_move_cursor(ked, REQ_END_FIELD);
++	return result;
+ }
+ 
+ static int ked_post(struct nc_scr *scr)
+@@ -143,9 +149,10 @@ static char *ked_chomp(char *s)
+ 	for (; s < s_end; s++)
+ 		if (*s != ' ' && *s != '\t')
+ 			break;
+-	start = s;
+ 
+-	for (++s; s < s_end; s++)
++	start = end = s;
++
++	for (; s < s_end; s++)
+ 		if (*s != ' ' && *s != '\t')
+ 			end = s;
+ 	*(end + 1) = 0;
+@@ -183,41 +190,33 @@ static struct pb_kexec_data *ked_prepare_data(struct ked *ked)
+ static void ked_process_key(struct nc_scr *scr)
+ {
+ 	struct ked *ked = ked_from_scr(scr);
++	struct pb_kexec_data *kd;
+ 
+ 	while (1) {
+ 		int c = getch();
+ 
++		if (c == ERR)
++			return;
++
++		/* DBGS("%d (%o)\n", c, c); */
++
+ 		switch (c) {
+ 		default:
+ 			ked_move_cursor(ked, c);
+-		break;
+-		case ERR:
+-			return;
++			break;
+ 
+ 		/* hot keys */
+-		case 2: { /* CTRL-B */
+-			struct pb_kexec_data *kd;
+-
+-			form_driver(ked->ncf, REQ_VALIDATION);
+-			kd = ked_prepare_data(ked);
+-			ked->on_exit(ked, ked_boot, kd);
+-			nc_flush_keys();
+-			return;
+-		}
+ 		case 27: /* ESC */
+ 			ked->on_exit(ked, ked_cancel, NULL);
+ 			nc_flush_keys();
+ 			return;
+ 		case '\n':
+-		case '\r': {
+-			struct pb_kexec_data *kd;
+-
++		case '\r':
+ 			form_driver(ked->ncf, REQ_VALIDATION);
+ 			kd = ked_prepare_data(ked);
+ 			ked->on_exit(ked, ked_update, kd);
+ 			nc_flush_keys();
+ 			return;
+-		}
+ 
+ 		/* insert mode */
+ 		case KEY_IC:
+@@ -252,8 +251,8 @@ static void ked_process_key(struct nc_scr *scr)
+ 			ked_move_cursor(ked, REQ_RIGHT_CHAR);
+ 			break;
+ 		case KEY_BACKSPACE:
+-			ked_move_cursor(ked, REQ_LEFT_CHAR);
+-			ked_move_cursor(ked, REQ_DEL_CHAR);
++			if (ked_move_cursor(ked, REQ_LEFT_CHAR) == E_OK)
++				ked_move_cursor(ked, REQ_DEL_CHAR);
+ 			break;
+ 		case KEY_DC:
+ 			ked_move_cursor(ked, REQ_DEL_CHAR);
+@@ -325,7 +324,7 @@ struct ked *ked_init(void *ui_ctx, const struct pb_kexec_data *kd,
+ 
+ 	ked->scr.frame.title = talloc_strdup(ked, "Petitboot Option Editor");
+ 	ked->scr.frame.help = talloc_strdup(ked,
+-		"ESC=cancel, Enter=accept, Ctrl-b=boot");
++		"ESC=cancel, Enter=accept");
+ 
+ 	ked->on_exit = on_exit;
+ 
+diff --git a/ui/ncurses/nc-ked.h b/ui/ncurses/nc-ked.h
+index 36ed4f1..62fddd6 100644
+--- a/ui/ncurses/nc-ked.h
++++ b/ui/ncurses/nc-ked.h
+@@ -20,6 +20,7 @@
+ #define _PB_NC_KED_H
+ 
+ #include <assert.h>
++#include <linux/input.h> /* This must be included before ncurses.h */
+ #include <form.h>
+ 
+ #include "pb-protocol/pb-protocol.h"
+@@ -40,13 +41,11 @@ enum ked_attr_cursor {
+  * enum ked_result - Result code for ked:on_exit().
+  * @ked_cancel: The user canceled the operation.
+  * @ked_update: The args were updated.
+- * @ked_boot: The user requested a boot of this item.
+  */
+ 
+ enum ked_result {
+ 	ked_cancel,
+ 	ked_update,
+-	ked_boot,
+ };
+ 
+ /**
+diff --git a/ui/ncurses/nc-menu.c b/ui/ncurses/nc-menu.c
+index 0a76b11..f96eb82 100644
+--- a/ui/ncurses/nc-menu.c
++++ b/ui/ncurses/nc-menu.c
+@@ -91,17 +91,17 @@ struct pmenu_item *pmenu_item_alloc(struct pmenu *menu)
+ }
+ 
+ struct pmenu_item *pmenu_item_setup(struct pmenu *menu, struct pmenu_item *i,
+-	unsigned int index, const char *name,
+-	const char *description)
++	unsigned int index, const char *name)
+ {
+ 	assert(i);
++	assert(name);
+ 
+ 	if (!i)
+ 		return NULL;
+ 
+ 	i->i_sig = pb_item_sig;
+ 	i->pmenu = menu;
+-	i->nci = new_item(name, description);
++	i->nci = new_item(name, NULL);
+ 
+ 	if (!i->nci) {
+ 		talloc_free(i);
+@@ -115,6 +115,67 @@ struct pmenu_item *pmenu_item_setup(struct pmenu *menu, struct pmenu_item *i,
+ 	return i;
+ }
+ 
++static int pmenu_item_get_index(const struct pmenu_item *item)
++{
++	unsigned int i;
++
++	for (i = 0; i < item->pmenu->item_count; i++)
++		if (item->pmenu->items[i] == item->nci)
++			return i;
++
++	pb_log("%s: not found: %p %s\n", __func__, item,
++		(item ? item->nci->name.str : "(null)"));
++	return -1;
++}
++
++/**
++ * pmenu_item_replace - Replace the menu item with a new one.
++ *
++ * Use this routine to change a menu item's text.
++ */
++
++int pmenu_item_replace(struct pmenu_item *i, const char *name)
++{
++	struct pmenu *menu;
++	ITEM *nci;
++	int index;
++
++	assert(name);
++	assert(i->nci);
++
++	menu = i->pmenu;
++	index = pmenu_item_get_index(i);
++
++	if (index < 0) {
++		assert(0 && "get_index failed");
++		return -1;
++	}
++
++	nci = new_item(name, NULL);
++
++	if (!nci) {
++		assert(0 && "new_item failed");
++		return -1;
++	}
++
++	set_item_userptr(nci, i);
++
++	menu->scr.unpost(&menu->scr);
++	set_menu_items(menu->ncm, NULL);
++
++	// FIXME: need to assure item name is a talloc string.
++	/* talloc_free((char *)item_name(i->nci)); */
++
++	free_item(i->nci);
++	menu->items[index] = nci;
++	i->nci = nci;
++
++	set_menu_items(menu->ncm, menu->items);
++	menu->scr.post(&menu->scr);
++
++	return 0;
++}
++
+ /**
+  * pmenu_move_cursor - Move the cursor.
+  * @req: An ncurses request or char to send to menu_driver().
+@@ -143,7 +204,7 @@ static void pmenu_process_key(struct nc_scr *scr)
+ 		if (c == ERR)
+ 			return;
+ 
+-		/* DBGS("%d (%o)\n", c, c); */
++		if (1) DBGS("%d (%o)\n", c, c);
+ 
+ 		if (menu->hot_key)
+ 			c = menu->hot_key(menu, item, c);
+@@ -174,13 +235,16 @@ static void pmenu_process_key(struct nc_scr *scr)
+ 		case '\t':
+ 			pmenu_move_cursor(menu, REQ_DOWN_ITEM);
+ 			break;
+-
+ 		case KEY_LEFT:
+-		case 'E':
+ 		case 'e':
+ 			if (item->on_edit)
+ 				item->on_edit(item);
+ 			break;
++		case 'o':
++			DBGS("on_open: %p\n", menu->on_open);
++			if (menu->on_open)
++				menu->on_open(menu);
++			break;
+ 		case '\n':
+ 		case '\r':
+ 			if (item->on_execute)
+@@ -228,19 +292,6 @@ unsigned int pmenu_grow(struct pmenu *menu, unsigned int count)
+ 	return tmp;
+ }
+ 
+-static int pmenu_item_get_index(const struct pmenu_item *item)
+-{
+-	unsigned int i;
+-
+-	for (i = 0; i < item->pmenu->item_count; i++)
+-		if (item->pmenu->items[i] == item->nci)
+-			return i;
+-
+-	pb_log("%s: not found: %p %s\n", __func__, item,
+-		(item ? item->nci->name.str : "(null)"));
+-	return -1;
+-}
+-
+ /**
+  * pmenu_remove - Remove an item from the item array.
+  *
+@@ -262,6 +313,9 @@ int pmenu_remove(struct pmenu *menu, struct pmenu_item *item)
+ 	if (index < 0)
+ 		return -1;
+ 
++	free_item(item->nci);
++	talloc_free(item);
++
+ 	/* Note that items array has a null terminator. */
+ 
+ 	menu->insert_pt--;
+@@ -349,7 +403,7 @@ void pmenu_delete(struct pmenu *menu)
+ 	menu->scr.sig = pb_removed_sig;
+ 
+ 	for (i = item_count(menu->ncm); i; i--)
+-		free_item(menu->items[i]);
++		free_item(menu->items[i - 1]);
+ 
+ 	free_menu(menu->ncm);
+ 	delwin(menu->scr.sub_ncw);
+diff --git a/ui/ncurses/nc-menu.h b/ui/ncurses/nc-menu.h
+index b487df9..4abec6f 100644
+--- a/ui/ncurses/nc-menu.h
++++ b/ui/ncurses/nc-menu.h
+@@ -20,6 +20,7 @@
+ #define _PB_NC_MENU_H
+ 
+ #include <assert.h>
++#include <linux/input.h> /* This must be included before ncurses.h */
+ #include <menu.h>
+ 
+ #include "log/log.h"
+@@ -45,7 +46,8 @@ struct pmenu_item {
+ 
+ struct pmenu_item *pmenu_item_alloc(struct pmenu *menu);
+ struct pmenu_item *pmenu_item_setup(struct pmenu *menu, struct pmenu_item *i,
+-	unsigned int index, const char *name, const char *description);
++	unsigned int index, const char *name);
++int pmenu_item_replace(struct pmenu_item *i, const char *name);
+ void pmenu_item_delete(struct pmenu_item *item);
+ 
+ static inline struct pmenu_item *pmenu_item_from_arg(void *arg)
+@@ -57,10 +59,9 @@ static inline struct pmenu_item *pmenu_item_from_arg(void *arg)
+ }
+ 
+ static inline struct pmenu_item *pmenu_item_init(struct pmenu *menu,
+-	unsigned int index, const char *name, const char *description)
++	unsigned int index, const char *name)
+ {
+-	return pmenu_item_setup(menu, pmenu_item_alloc(menu), index, name,
+-		description);
++	return pmenu_item_setup(menu, pmenu_item_alloc(menu), index, name);
+ }
+ 
+ /**
+@@ -77,6 +78,7 @@ struct pmenu {
+ 	unsigned int insert_pt;
+ 	int (*hot_key)(struct pmenu *menu, struct pmenu_item *item, int c);
+ 	void (*on_exit)(struct pmenu *menu);
++	void (*on_open)(struct pmenu *menu);
+ };
+ 
+ struct pmenu *pmenu_init(void *ui_ctx, unsigned int item_count,
+diff --git a/ui/ncurses/nc-scr.h b/ui/ncurses/nc-scr.h
+index c08fcd4..2374c20 100644
+--- a/ui/ncurses/nc-scr.h
++++ b/ui/ncurses/nc-scr.h
+@@ -19,6 +19,7 @@
+ #if !defined(_PB_NC_SCR_H)
+ #define _PB_NC_SCR_H
+ 
++#include <linux/input.h> /* This must be included before ncurses.h */
+ #include <ncurses.h>
+ 
+ #define DBG(fmt, args...) pb_log("DBG: " fmt, ## args)
+diff --git a/ui/ncurses/pb-cui.c b/ui/ncurses/pb-cui.c
+new file mode 100644
+index 0000000..972490a
+--- /dev/null
++++ b/ui/ncurses/pb-cui.c
+@@ -0,0 +1,289 @@
++/*
++ * Petitboot generic ncurses bootloader UI
++ *
++ *  Copyright (C) 2009 Sony Computer Entertainment Inc.
++ *  Copyright 2009 Sony Corp.
++ *
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; version 2 of the License.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ */
++
++#if defined(HAVE_CONFIG_H)
++#include "config.h"
++#endif
++
++#define _GNU_SOURCE
++#include <errno.h>
++#include <getopt.h>
++#include <signal.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/time.h>
++
++#include "log/log.h"
++#include "talloc/talloc.h"
++#include "waiter/waiter.h"
++#include "ui/common/discover-client.h"
++#include "nc-cui.h"
++
++static void print_version(void)
++{
++	printf("pb-cui (" PACKAGE_NAME ") " PACKAGE_VERSION "\n");
++}
++
++static void print_usage(void)
++{
++	print_version();
++	printf(
++"Usage: pb-cui [-h, --help] [-l, --log log-file] [-V, --version]\n");
++}
++
++/**
++ * enum opt_value - Tri-state options variables.
++ */
++
++enum opt_value {opt_undef = 0, opt_yes, opt_no};
++
++/**
++ * struct opts - Values from command line options.
++ */
++
++struct opts {
++	enum opt_value show_help;
++	const char *log_file;
++	enum opt_value show_version;
++};
++
++/**
++ * opts_parse - Parse the command line options.
++ */
++
++static int opts_parse(struct opts *opts, int argc, char *argv[])
++{
++	static const struct option long_options[] = {
++		{"help",    no_argument,       NULL, 'h'},
++		{"log",     required_argument, NULL, 'l'},
++		{"version", no_argument,       NULL, 'V'},
++		{ NULL,     0,                 NULL, 0},
++	};
++	static const char short_options[] = "hl:V";
++	static const struct opts default_values = {
++		.log_file = "pb-cui.log",
++	};
++
++	*opts = default_values;
++
++	while (1) {
++		int c = getopt_long(argc, argv, short_options, long_options,
++			NULL);
++
++		if (c == EOF)
++			break;
++
++		switch (c) {
++		case 'h':
++			opts->show_help = opt_yes;
++			break;
++		case 'l':
++			opts->log_file = optarg;
++			break;
++		case 'V':
++			opts->show_version = opt_yes;
++			break;
++		default:
++			opts->show_help = opt_yes;
++			return -1;
++		}
++	}
++
++	return 0;
++}
++
++/**
++ * struct pb_cui - Main cui program instance.
++ * @mm: Main menu.
++ * @svm: Set video mode menu.
++ */
++
++struct pb_cui {
++	struct pmenu *mm;
++	struct cui *cui;
++};
++
++static struct pb_cui *pb_from_cui(struct cui *cui)
++{
++	struct pb_cui *pb;
++
++	assert(cui->c_sig == pb_cui_sig);
++	pb = cui->platform_info;
++	assert(pb->cui->c_sig == pb_cui_sig);
++	return pb;
++}
++
++/**
++ * pb_kexec_cb - The kexec callback.
++ */
++
++static int pb_kexec_cb(struct cui *cui, struct cui_opt_data *cod)
++{
++	struct pb_cui *pb = pb_from_cui(cui);
++
++	pb_log("%s: %s\n", __func__, cod->name);
++
++	assert(pb->cui->current == &pb->cui->main->scr);
++
++	return pb_run_kexec(cod->kd);
++}
++
++/**
++ * pb_mm_init - Setup the main menu instance.
++ */
++
++static struct pmenu *pb_mm_init(struct pb_cui *pb_cui)
++{
++	int result;
++	struct pmenu *m;
++	struct pmenu_item *i;
++
++	m = pmenu_init(pb_cui->cui, 1, cui_on_exit);
++
++	if (!m) {
++		pb_log("%s: failed\n", __func__);
++		return NULL;
++	}
++
++	m->on_open = cui_on_open;
++
++	m->scr.frame.title = talloc_strdup(m, "Petitboot");
++	m->scr.frame.help = talloc_strdup(m,
++		"ESC=exit, Enter=accept, e=edit, o=open");
++	m->scr.frame.status = talloc_strdup(m, "Welcome to Petitboot");
++
++	i = pmenu_item_init(m, 0, "Exit to Shell");
++	i->on_execute = pmenu_exit_cb;
++
++	result = pmenu_setup(m);
++
++	if (result) {
++		pb_log("%s:%d: pmenu_setup failed: %s\n", __func__, __LINE__,
++			strerror(errno));
++		goto fail_setup;
++	}
++
++	menu_opts_off(m->ncm, O_SHOWDESC);
++	set_menu_mark(m->ncm, " *");
++	set_current_item(m->ncm, i->nci);
++
++	return m;
++
++fail_setup:
++	talloc_free(m);
++	return NULL;
++}
++
++static struct pb_cui pb;
++
++static void sig_handler(int signum)
++{
++	DBGS("%d\n", signum);
++
++	switch (signum) {
++	case SIGALRM:
++		if (pb.cui)
++			ui_timer_sigalrm(&pb.cui->timer);
++		break;
++	case SIGWINCH:
++		if (pb.cui)
++			cui_resize(pb.cui);
++		break;
++	default:
++		assert(0 && "unknown sig");
++		/* fall through */
++	case SIGINT:
++	case SIGHUP:
++	case SIGTERM:
++		if (pb.cui)
++			cui_abort(pb.cui);
++		break;
++	}
++}
++
++/**
++ * main - cui bootloader main routine.
++ */
++
++int main(int argc, char *argv[])
++{
++	static struct sigaction sa;
++	static struct opts opts;
++	int result;
++	int cui_result;
++	FILE *log;
++
++	result = opts_parse(&opts, argc, argv);
++
++	if (result) {
++		print_usage();
++		return EXIT_FAILURE;
++	}
++
++	if (opts.show_help == opt_yes) {
++		print_usage();
++		return EXIT_SUCCESS;
++	}
++
++	if (opts.show_version == opt_yes) {
++		print_version();
++		return EXIT_SUCCESS;
++	}
++
++	log = fopen(opts.log_file, "a");
++	assert(log);
++	pb_log_set_stream(log);
++
++#if defined(DEBUG)
++	pb_log_always_flush(1);
++#endif
++
++	pb_log("--- pb-cui ---\n");
++
++	sa.sa_handler = sig_handler;
++	result = sigaction(SIGALRM, &sa, NULL);
++	result += sigaction(SIGHUP, &sa, NULL);
++	result += sigaction(SIGINT, &sa, NULL);
++	result += sigaction(SIGTERM, &sa, NULL);
++	result += sigaction(SIGWINCH, &sa, NULL);
++
++	if (result) {
++		pb_log("%s sigaction failed.\n", __func__);
++		return EXIT_FAILURE;
++	}
++
++	pb.cui = cui_init(&pb, pb_kexec_cb, NULL);
++
++	if (!pb.cui)
++		return EXIT_FAILURE;
++
++	pb.mm = pb_mm_init(&pb);
++	ui_timer_disable(&pb.cui->timer);
++
++	cui_result = cui_run(pb.cui, pb.mm, 0);
++
++	pmenu_delete(pb.mm);
++
++	talloc_free(pb.cui);
++
++	pb_log("--- end ---\n");
++
++	return cui_result ? EXIT_FAILURE : EXIT_SUCCESS;
++}
+diff --git a/ui/ncurses/ps3-cui.c b/ui/ncurses/ps3-cui.c
+index f166c88..d9a66fa 100644
+--- a/ui/ncurses/ps3-cui.c
++++ b/ui/ncurses/ps3-cui.c
+@@ -21,9 +21,7 @@
+ /*
+  * TODO
+  * removable media event
+- * resize after video mode change
+  * ncurses mouse support
+- * timeout
+  */
+ 
+ #if defined(HAVE_CONFIG_H)
+@@ -36,6 +34,7 @@
+ #include <signal.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <sys/time.h>
+ 
+ #include "log/log.h"
+ #include "talloc/talloc.h"
+@@ -53,7 +52,8 @@ static void print_usage(void)
+ {
+ 	print_version();
+ 	printf(
+-"Usage: pb-cui [-h, --help] [-l, --log log-file] [-V, --version]\n");
++"Usage: pb-cui [-h, --help] [-l, --log log-file] [-r, --reset-defaults]\n"
++"              [-t, --timeout] [-V, --version]\n");
+ }
+ 
+ /**
+@@ -69,6 +69,8 @@ enum opt_value {opt_undef = 0, opt_yes, opt_no};
+ struct opts {
+ 	enum opt_value show_help;
+ 	const char *log_file;
++	enum opt_value reset_defaults;
++	enum opt_value use_timeout;
+ 	enum opt_value show_version;
+ };
+ 
+@@ -79,12 +81,14 @@ struct opts {
+ static int opts_parse(struct opts *opts, int argc, char *argv[])
+ {
+ 	static const struct option long_options[] = {
+-		{"help",    no_argument,       NULL, 'h'},
+-		{"log",     required_argument, NULL, 'l'},
+-		{"version", no_argument,       NULL, 'V'},
+-		{ NULL,     0,                 NULL, 0},
++		{"help",           no_argument,       NULL, 'h'},
++		{"log",            required_argument, NULL, 'l'},
++		{"reset-defaults", no_argument,       NULL, 'r'},
++		{"timeout",        no_argument,       NULL, 't'},
++		{"version",        no_argument,       NULL, 'V'},
++		{ NULL, 0, NULL, 0},
+ 	};
+-	static const char short_options[] = "hl:V";
++	static const char short_options[] = "hl:trV";
+ 	static const struct opts default_values = {
+ 		.log_file = "pb-cui.log",
+ 	};
+@@ -105,6 +109,12 @@ static int opts_parse(struct opts *opts, int argc, char *argv[])
+ 		case 'l':
+ 			opts->log_file = optarg;
+ 			break;
++		case 't':
++			opts->use_timeout = opt_yes;
++			break;
++		case 'r':
++			opts->reset_defaults = opt_yes;
++			break;
+ 		case 'V':
+ 			opts->show_version = opt_yes;
+ 			break;
+@@ -114,7 +124,7 @@ static int opts_parse(struct opts *opts, int argc, char *argv[])
+ 		}
+ 	}
+ 
+-	return 0;
++	return optind != argc;
+ }
+ 
+ /**
+@@ -147,6 +157,83 @@ static struct ps3_cui *ps3_from_item(struct pmenu_item *item)
+ }
+ 
+ /**
++ * ps3_sixaxis_map - Map a Linux joystick event to an ncurses key code.
++ *
++ */
++
++static int ps3_sixaxis_map(const struct js_event *e)
++{
++#if 0
++	static const int axis_map[] = {
++		0,		/*   0  Left thumb X	*/
++		0,		/*   1  Left thumb Y	*/
++		0,		/*   2  Right thumb X	*/
++		0,		/*   3  Right thumb Y	*/
++		0,		/*   4  nothing		*/
++		0,		/*   5  nothing		*/
++		0,		/*   6  nothing		*/
++		0,		/*   7  nothing		*/
++		0,		/*   8  Dpad Up		*/
++		0,		/*   9  Dpad Right	*/
++		0,		/*  10  Dpad Down	*/
++		0,		/*  11  Dpad Left	*/
++		0,		/*  12  L2		*/
++		0,		/*  13  R2		*/
++		0,		/*  14  L1		*/
++		0,		/*  15  R1		*/
++		0,		/*  16  Triangle	*/
++		0,		/*  17  Circle		*/
++		0,		/*  18  Cross		*/
++		0,		/*  19  Square		*/
++		0,		/*  20  nothing		*/
++		0,		/*  21  nothing		*/
++		0,		/*  22  nothing		*/
++		0,		/*  23  nothing		*/
++		0,		/*  24  nothing		*/
++		0,		/*  25  nothing		*/
++		0,		/*  26  nothing		*/
++		0,		/*  27  nothing		*/
++	};
++#endif
++	static const int button_map[] = {
++		0,		/*   0  Select		*/
++		0,		/*   1  L3		*/
++		0,		/*   2  R3		*/
++		0,		/*   3  Start		*/
++		KEY_UP,		/*   4  Dpad Up		*/
++		0,		/*   5  Dpad Right	*/
++		KEY_DOWN,	/*   6  Dpad Down	*/
++		0,		/*   7  Dpad Left	*/
++		KEY_UP,		/*   8  L2		*/
++		KEY_DOWN,	/*   9  R2		*/
++		KEY_HOME,	/*  10  L1		*/
++		KEY_END,	/*  11  R1		*/
++		0,		/*  12  Triangle	*/
++		0,		/*  13  Circle		*/
++		13,		/*  14  Cross		*/
++		0,		/*  15  Square		*/
++		0,		/*  16  PS Button	*/
++		0,		/*  17  nothing		*/
++		0,		/*  18  nothing		*/
++	};
++
++	if (!e->value)
++		return 0;
++
++	if (e->type == JS_EVENT_BUTTON
++		&& e->number < sizeof(button_map) / sizeof(button_map[0]))
++		return button_map[e->number];
++
++#if 0
++	if (e->type == JS_EVENT_AXIS
++		&& e->number < sizeof(axis_map) / sizeof(axis_map[0]))
++		return axis_map[e->number];
++#endif
++
++	return 0;
++}
++
++/**
+  * ps3_set_mode - Set video mode helper.
+  *
+  * Runs ps3_set_video_mode().
+@@ -183,22 +270,51 @@ static int ps3_svm_cb(struct pmenu_item *item)
+  * ps3_kexec_cb - The kexec callback.
+  *
+  * Writes config data to PS3 flash then calls pb_run_kexec().
++ * Adds a video mode arg to the kernel command line if needed.
+  */
+ 
+ static int ps3_kexec_cb(struct cui *cui, struct cui_opt_data *cod)
+ {
+ 	struct ps3_cui *ps3 = ps3_from_cui(cui);
++	int result;
++	int altered_args;
++	char *orig_args;
+ 
+-	pb_log("%s: %s:%s\n", __func__, cod->dev->name, cod->opt->name);
++	pb_log("%s: %s\n", __func__, cod->name);
+ 
+ 	assert(ps3->cui->current == &ps3->cui->main->scr);
+ 
+-	if (cui->default_item != cod->opt_hash || ps3->dirty_values) {
++	/* Save values to flash if needed */
++
++	if ((cod->opt_hash && cod->opt_hash != cui->default_item)
++		|| ps3->dirty_values) {
+ 		ps3->values.default_item = cod->opt_hash;
+ 		ps3_flash_set_values(&ps3->values);
+ 	}
+ 
+-	return pb_run_kexec(cod->kd);
++	/* Add a default kernel video mode. */
++
++	if (!cod->kd->args) {
++		altered_args = 1;
++		orig_args = NULL;
++		cod->kd->args = talloc_asprintf(NULL, "video=ps3fb:mode:%u",
++			(unsigned int)ps3->values.video_mode);
++	} else if (!strstr(cod->kd->args, "video=")) {
++		altered_args = 1;
++		orig_args = cod->kd->args;
++		cod->kd->args = talloc_asprintf(NULL, "%s video=ps3fb:mode:%u",
++			orig_args, (unsigned int)ps3->values.video_mode);
++	} else
++		altered_args = 0;
++
++	result = pb_run_kexec(cod->kd);
++
++	if (altered_args) {
++		talloc_free(cod->kd->args);
++		cod->kd->args = orig_args;
++	}
++
++	return result;
+ }
+ 
+ /**
+@@ -283,6 +399,21 @@ static int ps3_hot_key(struct pmenu __attribute__((unused)) *menu,
+ }
+ 
+ /**
++ * ps3_timer_update - Timer callback.
++ */
++
++static void ps3_timer_update(struct ui_timer *timer, unsigned int timeout)
++{
++	struct ps3_cui *ps3 = ps3_from_cui(cui_from_timer(timer));
++
++	//FIXME: make scr:timer.
++	// nc_scr_timer_update(&ps3.mm->scr, timeout);
++
++	nc_scr_status_printf(&ps3->mm->scr,
++		"Welcome to Petitboot (timeout %u sec)", timeout);
++}
++
++/**
+  * ps3_mm_init - Setup the main menu instance.
+  */
+ 
+@@ -291,8 +422,7 @@ static struct pmenu *ps3_mm_init(struct ps3_cui *ps3_cui)
+ 	int result;
+ 	struct pmenu *m;
+ 	struct pmenu_item *i;
+-	static const char *const bgo[] =
+-		{"/usr/sbin/ps3-boot-game-os-NOT", NULL};
++	static const char *const bgo[] = {"/usr/sbin/ps3-boot-game-os", NULL};
+ 
+ 	m = pmenu_init(ps3_cui->cui, 3, cui_on_exit);
+ 
+@@ -302,22 +432,26 @@ static struct pmenu *ps3_mm_init(struct ps3_cui *ps3_cui)
+ 	}
+ 
+ 	m->hot_key = ps3_hot_key;
++	m->on_open = cui_on_open;
++
++#if defined(DEBUG)
++	m->scr.frame.title = talloc_strdup(m,
++		"Petitboot PS3 (" PACKAGE_VERSION ")");
++#else
+ 	m->scr.frame.title = talloc_strdup(m, "Petitboot PS3");
++#endif
+ 	m->scr.frame.help = talloc_strdup(m,
+-		"ESC=exit, Enter=accept, E,e=edit");
++		"ESC=exit, Enter=accept, e=edit, o=open");
+ 	m->scr.frame.status = talloc_strdup(m, "Welcome to Petitboot");
+ 
+-	i = pmenu_item_init(m, 0, "Boot GameOS",
+-		"Reboot the PS3 into the GameOS");
++	i = pmenu_item_init(m, 0, "Boot GameOS");
+ 	i->on_execute = cui_run_cmd;
+ 	i->data = (void *)bgo;
+ 
+-	i = pmenu_item_init(m, 1, "Set Video Mode",
+-		"Display a video mode selection menu");
++	i = pmenu_item_init(m, 1, "Set Video Mode");
+ 	i->on_execute = ps3_mm_to_svm_cb;
+ 
+-	i = pmenu_item_init(m, 2, "Exit to Shell",
+-		"Exit petitboot and return to a shell prompt");
++	i = pmenu_item_init(m, 2, "Exit to Shell");
+ 	i->on_execute = pmenu_exit_cb;
+ 
+ 	result = pmenu_setup(m);
+@@ -360,53 +494,51 @@ static struct pmenu *ps3_svm_init(struct ps3_cui *ps3_cui)
+ 	m->scr.frame.title = talloc_strdup(m, "Select PS3 Video Mode");
+ 	m->scr.frame.help = talloc_strdup(m, "ESC=exit, Enter=accept");
+ 
+-	i = pmenu_item_init(m, 0, "auto detect",
+-		"Auto detect the best HDMI video mode");
++	i = pmenu_item_init(m, 0, "auto detect");
+ 	i->on_execute = ps3_svm_cb;
+ 	i->data = (void *)0;
+ 
+-	i = pmenu_item_init(m, 1, "480i    (576 x 384)", NULL);
++	i = pmenu_item_init(m, 1, "480i    (576 x 384)");
+ 	i->on_execute = ps3_svm_cb;
+ 	i->data = (void *)1;
+ 
+-	i = pmenu_item_init(m, 2, "480p    (576 x 384)", NULL);
++	i = pmenu_item_init(m, 2, "480p    (576 x 384)");
+ 	i->on_execute = ps3_svm_cb;
+ 	i->data = (void *)2;
+ 
+-	i = pmenu_item_init(m, 3, "576i    (576 x 460)", NULL);
++	i = pmenu_item_init(m, 3, "576i    (576 x 460)");
+ 	i->on_execute = ps3_svm_cb;
+ 	i->data = (void *)6;
+ 
+-	i = pmenu_item_init(m, 4, "576p    (576 x 460)", NULL);
++	i = pmenu_item_init(m, 4, "576p    (576 x 460)");
+ 	i->on_execute = ps3_svm_cb;
+ 	i->data = (void *)7;
+ 
+-	i = pmenu_item_init(m, 5, "720p   (1124 x 644)", NULL);
++	i = pmenu_item_init(m, 5, "720p   (1124 x 644)");
+ 	i->on_execute = ps3_svm_cb;
+ 	i->data = (void *)3;
+ 
+-	i = pmenu_item_init(m, 6, "1080i  (1688 x 964)", NULL);
++	i = pmenu_item_init(m, 6, "1080i  (1688 x 964)");
+ 	i->on_execute = ps3_svm_cb;
+ 	i->data = (void *)4;
+ 
+-	i = pmenu_item_init(m, 7, "1080p  (1688 x 964)", NULL);
++	i = pmenu_item_init(m, 7, "1080p  (1688 x 964)");
+ 	i->on_execute = ps3_svm_cb;
+ 	i->data = (void *)5;
+ 
+-	i = pmenu_item_init(m, 8, "wxga   (1280 x 768)", NULL);
++	i = pmenu_item_init(m, 8, "wxga   (1280 x 768)");
+ 	i->on_execute = ps3_svm_cb;
+ 	i->data = (void *)11;
+ 
+-	i = pmenu_item_init(m, 9, "sxga   (1280 x 1024)", NULL);
++	i = pmenu_item_init(m, 9, "sxga   (1280 x 1024)");
+ 	i->on_execute = ps3_svm_cb;
+ 	i->data = (void *)12;
+ 
+-	i = pmenu_item_init(m, 10, "wuxga  (1920 x 1200)", NULL);
++	i = pmenu_item_init(m, 10, "wuxga  (1920 x 1200)");
+ 	i->on_execute = ps3_svm_cb;
+ 	i->data = (void *)13;
+ 
+-	i = pmenu_item_init(m, 11, "Return",
+-		"Return to the main menu");
++	i = pmenu_item_init(m, 11, "Return");
+ 	i->on_execute = ps3_svm_to_mm_cb;
+ 
+ 	result = pmenu_setup(m);
+@@ -434,6 +566,10 @@ static void sig_handler(int signum)
+ 	DBGS("%d\n", signum);
+ 
+ 	switch (signum) {
++	case SIGALRM:
++		if (ps3.cui)
++			ui_timer_sigalrm(&ps3.cui->timer);
++		break;
+ 	case SIGWINCH:
+ 		if (ps3.cui)
+ 			cui_resize(ps3.cui);
+@@ -491,8 +627,9 @@ int main(int argc, char *argv[])
+ 	pb_log("--- pb-cui ---\n");
+ 
+ 	sa.sa_handler = sig_handler;
+-	result = sigaction(SIGINT, &sa, NULL);
++	result = sigaction(SIGALRM, &sa, NULL);
+ 	result += sigaction(SIGHUP, &sa, NULL);
++	result += sigaction(SIGINT, &sa, NULL);
+ 	result += sigaction(SIGTERM, &sa, NULL);
+ 	result += sigaction(SIGWINCH, &sa, NULL);
+ 
+@@ -501,7 +638,10 @@ int main(int argc, char *argv[])
+ 		return EXIT_FAILURE;
+ 	}
+ 
+-	ps3.dirty_values = ps3_flash_get_values(&ps3.values);
++	ps3.values = ps3_flash_defaults;
++
++	if (opts.reset_defaults != opt_yes)
++		ps3.dirty_values = ps3_flash_get_values(&ps3.values);
+ 
+ 	result = ps3_get_video_mode(&mode);
+ 
+@@ -515,7 +655,7 @@ int main(int argc, char *argv[])
+ 	if (!result && (ps3.values.video_mode != (uint16_t)mode))
+ 		ps3_set_video_mode(ps3.values.video_mode);
+ 
+-	ps3.cui = cui_init(&ps3, ps3_kexec_cb);
++	ps3.cui = cui_init(&ps3, ps3_kexec_cb, ps3_sixaxis_map);
+ 
+ 	if (!ps3.cui)
+ 		return EXIT_FAILURE;
+@@ -523,6 +663,14 @@ int main(int argc, char *argv[])
+ 	ps3.mm = ps3_mm_init(&ps3);
+ 	ps3.svm = ps3_svm_init(&ps3);
+ 
++	if (opts.use_timeout != opt_yes
++		|| ps3.values.timeout == ps3_timeout_forever)
++		ui_timer_disable(&ps3.cui->timer);
++	else {
++		ps3.cui->timer.update_display = ps3_timer_update;
++		ui_timer_init(&ps3.cui->timer, ps3.values.timeout);
++	}
++
+ 	cui_result = cui_run(ps3.cui, ps3.mm, ps3.values.default_item);
+ 
+ 	pmenu_delete(ps3.mm);
