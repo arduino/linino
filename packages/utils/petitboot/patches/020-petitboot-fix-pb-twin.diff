@@ -1,0 +1,75 @@
+a work-in-progress
+
+Subject: Update PS3 twin GUI program
+
+Update the PS3 twin GUI program to work with petitboot-multi-ui.
+
+Signed-off-by: Geoff Levand <geoffrey.levand@am.sony.com>
+---
+ rules.mk           |    2 +-
+ ui/twin/ps3-twin.c |   49 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 50 insertions(+), 1 deletion(-)
+
+--- a/rules.mk
++++ b/rules.mk
+@@ -54,7 +54,7 @@ ui_common_objs = ui/common/discover-clie
+ 	ui/common/url.o
+ ncurses_objs = ui/ncurses/nc-scr.o ui/ncurses/nc-menu.o ui/ncurses/nc-ked.o \
+ 	ui/ncurses/nc-cui.o
+-twin_objs = ui/twin/pb-twin.o
++twin_objs =
+ 
+ # Makefiles
+ makefiles = Makefile $(top_srcdir)/rules.mk
+--- /dev/null
++++ b/ui/twin/ps3-twin.c
+@@ -0,0 +1,49 @@
++/*
++ * Petitboot twin bootloader for the PS3 game console
++ *
++ */
++
++#define _GNU_SOURCE
++
++#include <assert.h>
++#include <signal.h>
++
++#include <libtwin/twin.h>
++#include <libtwin/twin_fbdev.h>
++static twin_fbdev_t *pboot_fbdev;
++
++#include "log/log.h"
++
++/**
++ * main - twin bootloader main routine.
++ *
++ * Returns:
++ *   0  = Returned as success by ps3-utils programs.
++ *   1  = Error, expecting a restart.
++ *   22 = Exit to shell.
++ */
++
++int main(void)
++{
++	FILE *log;
++
++	log = fopen("pb-twin.log", "a");
++	assert(log);
++	pb_log_set_stream(log);
++
++#if defined(DEBUG)
++	pb_log_always_flush(1);
++#endif
++
++	pb_log("--- pb-twin ---\n");
++
++	pboot_fbdev = twin_fbdev_create(-1, SIGUSR1);
++	if (pboot_fbdev == NULL) {
++		perror("failed to create fbdev screen !\n");
++		return 1;
++	}
++
++	pb_log("--- end ---\n");
++
++	return 22;
++}
