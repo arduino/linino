@@ -8,53 +8,104 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=petitboot
-PKG_VERSION:=0.2
+PKG_VERSION:=53aa807ae41e48fd71653c2d00083a44a8bca14c
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://ozlabs.org/~jk/projects/petitboot/downloads/
-PKG_MD5SUM:=b320c434f38d57c1fcc6980e51d934a8
+PKG_SOURCE_URL:=git://ozlabs.org/home/jk/git/petitboot
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=$(PKG_VERSION)
+
+PKG_INSTALL=1
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/petitboot
-  SECTION:=boot
-  CATEGORY:=Boot Loaders
-  DEPENDS:=+libtwin +udev +udevextras +kexec-tools @TARGET_ps3
-  TITLE:=Graphical bootloader
-  URL:=http://ozlabs.org/~jk/projects/petitboot/
+	SECTION:=boot
+	CATEGORY:=Boot Loaders
+	TITLE:=A kexec based bootloader
+	URL:=http://ozlabs.org/~jk/projects/petitboot/
+	MAINTAINER:=Geoff Levand <geoffrey.levand@am.sony.com>
+	DEPENDS:=+kexec-tools +libncurses +libtwin +udev +ps3-utils
 endef
 
-define Build/Configure
+define Package/petitboot/description
+	Petitboot is a Linux kexec based bootloader with both
+	graphical and command-line user interfaces. The OpenWRT
+	Petitboot package has configuration options that can be
+	used to specify which Petitboot components to build, and
+	can also be used to specify that Petitboot should be run
+	automatically at system start-up.
 
+	Petitboot supports loading Linux kernel and initrd images
+	from any device that can be mounted by Linux.  It can
+	handle gzipped images and can also load images from the
+	network using TFTP, NFS, HTTP, HTTPS, and SFTP.  Petitboot
+	looks for bootloader config files on mountable devices in
+	the system, and also uses the boot configuration sent to
+	it from a DHCP server.
 endef
 
-TARGET_CPPFLAGS += -I$(PKG_BUILD_DIR)
+define Package/petitboot/config
+	source "$(SOURCE)/petitboot-config.in"
+endef
 
-define Build/Compile
-	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-	PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CPPFLAGS) $(TARGET_CFLAGS)" \
-		all install
+petitboot-config-args-y$(CONFIG_PETITBOOT_CUI) += --without-ncurses
+petitboot-config-args-y$(CONFIG_PETITBOOT_GUI) += --without-twin
+petitboot-config-args-y$(CONFIG_PETITBOOT_PS3) += --enable-ps3=no
+
+petitboot-cppflags-$(CONFIG_PETITBOOT_DEBUG) += -DDEBUG
+petitboot-cppflags-y$(CONFIG_PETITBOOT_DEBUG) += -DNDEBUG
+
+petitboot-extra-bin-$(CONFIG_PETITBOOT_CUI) += /usr/sbin/pb-cui
+petitboot-extra-bin-$(CONFIG_PETITBOOT_GUI) += /usr/sbin/pb-twin
+petitboot-extra-data-$(CONFIG_PETITBOOT_GUI) += /usr/share/petitboot/artwork/*
+
+# The platform inittab and/or initrun should check for /usr/sbin/petitboot
+# and run it on startup if found.
+
+petitboot-install-autorun-$(CONFIG_PETITBOOT_AUTORUN_CUI) = \
+	ln -sf pb-cui $(1)/usr/sbin/petitboot
+petitboot-install-autorun-$(CONFIG_PETITBOOT_AUTORUN_GUI) = \
+	ln -sf pb-twin $(1)/usr/sbin/petitboot
+
+CONFIGURE_ARGS += $(petitboot-config-args-y)
+
+EXTRA_CPPFLAGS += $(petitboot-cppflags-y)
+
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	(cd $(PKG_BUILD_DIR) && $(BASH) -x ./bootstrap)
 endef
 
 define Package/petitboot/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/petitboot $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/petitboot-udev-helper \
+	$(INSTALL_BIN) \
+		$(addprefix $(PKG_INSTALL_DIR),$(petitboot-extra-bin-y)) \
+		$(PKG_INSTALL_DIR)/usr/sbin/pb-discover \
+		$(PKG_INSTALL_DIR)/usr/sbin/pb-event \
 		$(1)/usr/sbin/
-	$(INSTALL_BIN) files/petitboot-wrapper $(1)/usr/sbin/petitboot-wrapper
-	$(INSTALL_DIR) $(1)/usr/share/petitboot/
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/petitboot/artwork \
-		$(1)/usr/share/petitboot/
-	$(INSTALL_DIR) $(1)/etc/udev/rules.d
-	$(CP) $(PKG_BUILD_DIR)/utils/99-petitboot.rules $(1)/etc/udev/rules.d/
-	$(INSTALL_DIR) $(1)/etc/init.d/
-	$(INSTALL_BIN) ./files/petitboot.init $(1)/etc/init.d/petitboot
 
+	$(INSTALL_DIR) $(1)/usr/share/petitboot/
+	$(INSTALL_DATA) \
+		$(addprefix $(PKG_INSTALL_DIR),$(petitboot-extra-data-y)) \
+		$(1)/usr/share/petitboot/
+
+	$(INSTALL_DIR) $(1)/etc/udev/rules.d
+	$(INSTALL_DATA) \
+		$(PKG_BUILD_DIR)/utils/99-petitboot.rules \
+		$(1)/etc/udev/rules.d/
+
+	$(INSTALL_DIR) $(1)/etc/
+	$(INSTALL_DATA) -T $(PKG_BUILD_DIR)/utils/udhcpc $(1)/etc/udhcpc.user
+
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) \
+		./files/petitboot.init \
+		$(1)/etc/init.d/petitboot
+
+	$(petitboot-install-autorun-y)
 endef
 
 $(eval $(call BuildPackage,petitboot))
