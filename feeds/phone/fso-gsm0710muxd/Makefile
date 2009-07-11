@@ -7,7 +7,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=gsm0710muxd
+PKG_NAME:=fso-gsm0710muxd
 PKG_VERSION:=20090121
 PKG_REV:=aae188c6b03d1fac8e4b5e4abe99235210ae6e25
 PKG_RELEASE:=1
@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include -I$(STAGING_DIR)/usr/lib/libiconv/include
 EXTRA_LDFLAGS+=-lintl -L$(STAGING_DIR)/usr/lib/libintl/lib -liconv -L$(STAGING_DIR)/usr/lib/libiconv/lib
 
-define Package/gsm0710muxd
+define Package/fso-gsm0710muxd
 	SECTION:=phone
 	CATEGORY:=Phone
 	TITLE:=GSM multiplexing daemon
@@ -31,7 +31,7 @@ define Package/gsm0710muxd
 	DEPENDS:=+glib2 +dbus +libdbus-glib
 endef
 
-define Package/gsm0710muxd/description
+define Package/fso-gsm0710muxd/description
 	gsm0710muxd is a user space multiplexer for GSM according to the GSM 07.10 specification.
 endef
 
@@ -50,13 +50,13 @@ define Build/Compile
 	rm -f $(STAGING_DIR_HOST)/usr/bin/dbus-binding-tool
 endef
 
-define Package/gsm0710muxd/install
+define Package/fso-gsm0710muxd/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 	$(INSTALL_BIN) ./files/gsm0710muxd.init $(1)/etc/init.d/gsm0710muxd
 endef
 
-$(eval $(call BuildPackage,gsm0710muxd))
+$(eval $(call BuildPackage,fso-gsm0710muxd))
 $(eval $(call RequireCommand,dbus-binding-tool, \
 	Command <dbus-binding-tool> not found - please install dbus-binding-tool \
 ))
