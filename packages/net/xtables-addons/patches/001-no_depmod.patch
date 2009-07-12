@@ -1,7 +1,6 @@
-diff -urN xtables-addons-1.17/Makefile.in xtables-addons-1.17.new/Makefile.in
---- xtables-addons-1.17/Makefile.in	2009-06-16 16:26:56.000000000 +0200
-+++ xtables-addons-1.17.new/Makefile.in	2009-06-18 15:24:34.000000000 +0200
-@@ -748,7 +748,7 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -748,7 +748,7 @@ install-dvi: install-dvi-recursive
  
  install-dvi-am:
  
