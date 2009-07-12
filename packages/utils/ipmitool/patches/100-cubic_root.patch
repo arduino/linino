@@ -1,6 +1,6 @@
---- ipmitool-1.8.9/lib/ipmi_sdr.c.orig	2007-07-16 13:09:13.000000000 +0200
-+++ ipmitool-1.8.9/lib/ipmi_sdr.c	2007-07-16 13:09:20.000000000 +0200
-@@ -4264,3 +4264,146 @@
+--- a/lib/ipmi_sdr.c
++++ b/lib/ipmi_sdr.c
+@@ -4399,3 +4399,146 @@ ipmi_sdr_main(struct ipmi_intf *intf, in
  
  	return rc;
  }
