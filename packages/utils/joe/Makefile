@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=joe
-PKG_VERSION:=3.5
+PKG_VERSION:=3.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/joe-editor
-PKG_MD5SUM:=9bdffecce7ef910feaa06452d48843de
+PKG_MD5SUM:=66de1b073e869ba12abbfcde3885c577
 
 include $(INCLUDE_DIR)/package.mk
 

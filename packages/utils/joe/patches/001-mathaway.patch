@@ -1,8 +1,6 @@
-Index: joe-3.5/umath.c
-===================================================================
---- joe-3.5.orig/umath.c	2007-08-23 13:56:53.000000000 +0200
-+++ joe-3.5/umath.c	2007-08-23 13:56:53.000000000 +0200
-@@ -378,7 +378,6 @@
+--- a/umath.c
++++ b/umath.c
+@@ -378,7 +378,6 @@ double m_cos(double n) { return cos(n); 
  double m_tan(double n) { return tan(n); }
  double m_exp(double n) { return exp(n); }
  double m_sqrt(double n) { return sqrt(n); }
@@ -10,7 +8,7 @@ Index: joe-3.5/umath.c
  double m_log(double n) { return log(n); }
  double m_log10(double n) { return log10(n); }
  double m_asin(double n) { return asin(n); }
-@@ -387,19 +386,10 @@
+@@ -387,19 +386,10 @@ double m_atan(double n) { return atan(n)
  double m_sinh(double n) { return sinh(n); }
  double m_cosh(double n) { return cosh(n); }
  double m_tanh(double n) { return tanh(n); }
@@ -30,7 +28,7 @@ Index: joe-3.5/umath.c
  
  double calc(BW *bw, unsigned char *s)
  {
-@@ -414,7 +404,6 @@
+@@ -414,7 +404,6 @@ double calc(BW *bw, unsigned char *s)
  		v = get(USTR "tan"); v->func = m_tan;
  		v = get(USTR "exp"); v->func = m_exp;
  		v = get(USTR "sqrt"); v->func = m_sqrt;
@@ -38,7 +36,7 @@ Index: joe-3.5/umath.c
  		v = get(USTR "ln"); v->func = m_log;
  		v = get(USTR "log"); v->func = m_log10;
  		v = get(USTR "asin"); v->func = m_asin;
-@@ -425,19 +414,10 @@
+@@ -425,19 +414,10 @@ double calc(BW *bw, unsigned char *s)
  		v = get(USTR "sinh"); v->func = m_sinh;
  		v = get(USTR "cosh"); v->func = m_cosh;
  		v = get(USTR "tanh"); v->func = m_tanh;
