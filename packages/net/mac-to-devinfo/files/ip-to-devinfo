@@ -3,11 +3,41 @@
 ARP=arp
 MACTODEV=mac-to-devinfo
 
-IP=$1
+usage() {
+    echo "Usage: $0 [-i interface] [-x port] IP-address"
+}
+
+if [ "$1" == "-i" ]; then
+    INTERFACE="$2"
+    if [ -z "$INTERFACE" ]; then
+	echo "-i without interface"
+	usage
+	exit 1
+    fi
+    shift
+    shift
+fi
+
+if [ "$1" == "-x" ]; then
+    PORT="-x $2"
+    if [ -z "$PORT" ]; then
+	echo "-x without the port"
+	usage
+	exit 1
+    fi
+    shift
+    shift
+fi
+
+IP="$1"
+shift
 
 if [ -z "$IP" ]; then
 	echo "Must specify IP address"
+	usage
+	exit 1
 fi
+
 
 if [ ! -x "$(which $ARP)" ]; then
     do_arp() {
@@ -21,9 +51,13 @@ else
     ARPMACFIELD=3
 fi
 
-ping -q -c 2 $IP >/dev/null
-MAC=$(do_arp|grep "$IP "|tr -s \  | cut -f$ARPMACFIELD -d\  )
+if [ -z "$INTERFACE" ]; then
+    ping -q -c 2 $IP >/dev/null
+    MAC=$(do_arp|grep "$IP "|tr -s \  | cut -f$ARPMACFIELD -d\  )
+else
+    MAC=$(arping -f -c 5 -I $INTERFACE $IP | grep 'Unicast reply from' | cut -f2 -d \[ | cut -f1 -d\])
+fi
 
-$MACTODEV $MAC
+$MACTODEV $PORT $MAC
 
 

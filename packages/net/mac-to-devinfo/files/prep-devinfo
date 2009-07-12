@@ -10,6 +10,6 @@ IABFILE=$OUIDIR/iab.txt
 
 [ -d $OUIDIR ] || mkdir -p $OUIDIR
 
-wget -q -O $OUIFILE $OUIURL
-wget -q -O $IABFILE $IABURL
+[ -r $OUIFILE ] || wget -q -O $OUIFILE $OUIURL
+[ -r $IABFILE ] || wget -q -O $IABFILE $IABURL
 
