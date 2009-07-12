@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nocatsplash
 PKG_VERSION:=0.92
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=NoCatSplash-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://wifi.rulez.org/~josephus/
@@ -23,7 +23,7 @@ define Package/nocatsplash
   SUBMENU:=Captive Portals
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+glib1
+  DEPENDS:=+glib1 +iptables-mod-ipopt +iptables-mod-nat-extra
   TITLE:=Open public network gateway daemon
   URL:=http://nocat.net
 endef
