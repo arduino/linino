@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=snort
-PKG_VERSION:=2.4.4
+PKG_VERSION:=2.8.4.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.snort.org/dl/current/
-PKG_MD5SUM:=9dc9060d1f2e248663eceffadfc45e7e
+PKG_SOURCE_URL:=http://dl.snort.org/snort-current/
+PKG_MD5SUM:=63f4e76ae96a2d133f4c7b741bad5458
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,8 +26,20 @@ define Package/snort/Default
   URL:=http://www.snort.org/
 endef
 
+define Package/snort/Default/description
+  Snort is an open source network intrusion detection and prevention system.
+  It is capable of performing real-time traffic analysis, alerting, blocking
+  and packet logging on IP networks.  It utilizes a combination of protocol
+  analysis and pattern matching in order to detect anomalies, misuse and
+  attacks.
+endef
+
 define Package/snort
   $(call Package/snort/Default)
+endef
+
+define Package/snort/description
+  $(call Package/snort/Default/description)
 endef
 
 define Package/snort-mysql
@@ -36,12 +48,21 @@ define Package/snort-mysql
   TITLE+= (MySQL)
 endef
 
+define Package/snort-mysql/description
+  $(call Package/snort/Default/description)
+  This package contains snort with support for logging to a MySQL database.
+endef
+
 define Package/snort-pgsql
   $(call Package/snort/Default)
   DEPENDS+= +libpq
   TITLE+= (PostgreSQL)
 endef
 
+define Package/snort-pgsql/description
+  $(call Package/snort/Default/description)
+  This package contains snort with support for logging to a PostgreSQL database.
+endef
 
 define Compile/Template
 
