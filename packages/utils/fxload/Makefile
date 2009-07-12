@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=fxload
-PKG_VERSION:=2002_04_11
+PKG_VERSION:=2008_10_13
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/linux-hotplug
-PKG_MD5SUM:=cafd71a5bff0c57bcd248273b2541c05
+PKG_MD5SUM:=4477a2457f064228bef4a93ba2f21692
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,9 +34,9 @@ endef
 
 define Package/fxload/install
 	$(INSTALL_DIR) $(1)/sbin
-	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/sbin/
 	$(INSTALL_DIR) $(1)/usr/share/usb
-	$(CP) $(PKG_BUILD_DIR)/a3load.hex $(1)/usr/share/usb
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/a3load.hex $(1)/usr/share/usb/
 endef
 
 $(eval $(call BuildPackage,fxload))
