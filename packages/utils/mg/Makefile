@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mg
-PKG_VERSION:=20070529
+PKG_VERSION:=20090107
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.xs4all.nl/~hanb/software/mg
-PKG_MD5SUM:=e1eaef5a61143c12a66e23deaa369e76
+PKG_SOURCE_URL:=http://www.han.dds.nl/software/mg
+PKG_MD5SUM:=f25a139da44c3a2f760ffec531bd996e
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,9 +22,10 @@ define Package/mg
   CATEGORY:=Utilities
   DEPENDS:=+libncurses
   TITLE:=microscopic GNU Emacs-style editor
-  URL:=http://www.xs4all.nl/~hanb/software/mg/
+  URL:=http://www.han.dds.nl/software/mg/
+  SUBMENU:=Editors
 endef
-	
+
 define Package/mg/description
 	This program is intended to be a small, fast, and portable
 	editor for people who can't (or don't want to) run real
@@ -49,7 +50,7 @@ endef
 
 define Package/mg/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,mg))
