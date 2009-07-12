@@ -141,15 +141,16 @@ SNMP_MIB_MODULES_EXCLUDED = \
 	udp-mib \
 	utilities \
 
-SNMP_TRANSPORTS_INCLUDED = Callback UDP
+SNMP_TRANSPORTS_INCLUDED = Callback UDP UDPIPv6
 
-SNMP_TRANSPORTS_EXCLUDED = TCP TCPv6 UDPv6 Unix
+SNMP_TRANSPORTS_EXCLUDED = TCP TCPIPv6 Unix
 
 TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
+	--enable-ipv6 \
 	--with-endianness=little \
 	--with-logfile=/var/log/snmpd.log \
 	--with-persistent-directory=/usr/lib/snmp/ \
@@ -158,7 +159,6 @@ CONFIGURE_ARGS += \
 	--with-sys-location=Unknown \
 	--enable-applications \
 	--disable-debugging \
-	--disable-ipv6 \
 	--disable-manuals \
 	--disable-mibs \
 	--disable-scripts \
