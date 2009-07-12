@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=avrdude
-PKG_VERSION:=5.5
-PKG_RELEASE:=2
+PKG_VERSION:=5.7
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:= http://download.savannah.gnu.org/releases/avrdude/
-PKG_MD5SUM:=60180d3f5f467987bfd7bc4505796fae
+PKG_SOURCE_URL:=http://download.savannah.gnu.org/releases/avrdude
+PKG_MD5SUM:=8908046583e289d7c53db7545d4a3369
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -51,9 +51,9 @@ endef
 
 define Package/avrdude/install
 	$(INSTALL_DIR) $(1)/etc
-	$(CP) $(PKG_INSTALL_DIR)/etc/avrdude.conf $(1)/etc/
+	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/avrdude.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/avrdude $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/avrdude $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,avrdude))
