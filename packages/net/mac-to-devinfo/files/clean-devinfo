@@ -1,0 +1,5 @@
+#!/bin/sh
+
+OUIDIR=/var/cache/mac-to-devinfo
+
+rm -rf $OUIDIR
