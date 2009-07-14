@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sslh
 PKG_VERSION:=1.6i
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://rutschle.net/tech/
@@ -35,7 +35,10 @@ endef
 define Package/sslh/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/sslh $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/init.d/
+	$(INSTALL_BIN) files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) files/$(PKG_NAME).config $(1)/etc/config/$(PKG_NAME)
 endef
 
 $(eval $(call BuildPackage,sslh))
-
