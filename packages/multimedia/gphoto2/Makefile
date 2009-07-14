@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gphoto2
-PKG_VERSION:=2.4.1
+PKG_VERSION:=2.4.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/gphoto
-PKG_MD5SUM:=fba6cf5f5d6a23569d97f4f6896d5e09
+PKG_MD5SUM:=cccbe437804c863b87807444ec58a8ac
 
 PKG_FIXUP = libtool
 
@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/gphoto2
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+libexif +libgphoto2 +libltdl +libpopt +libpthread
+  DEPENDS:=+libgphoto2 +libpopt +libpthread
   TITLE:=Gphoto Digital Camera Control
   URL:=http://www.gphoto.org/
 endef
