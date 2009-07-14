@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/iptables-snmp
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+snmpd
+  DEPENDS:=+snmpd @BROKEN
   TITLE:=An snmpd plugin to access iptables rules
   URL:=http://www.nobiscuit.com/iptables-snmp/
   SUBMENU:=firewall
