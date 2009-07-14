@@ -1,0 +1,27 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=50
+
+start() {
+  [ -f /etc/syslog-ng/syslog-ng.conf ] || {
+    echo "/etc/syslog-ng/syslog-ng.conf does not exist !";
+    exit 0;
+  };
+  [ -d /var/run ] || mkdir -p /var/run
+  [ -x /usr/sbin/syslog-ng ] && /usr/sbin/syslog-ng
+}
+
+stop() {
+  killall syslog-ng
+}
+
+restart() {
+	stop
+	sleep 1
+	start
+}
+
+reload() {
+	kill -HUP `cat /var/run/syslog-ng.pid` &>/dev/null
+}
+
