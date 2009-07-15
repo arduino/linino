@@ -7,12 +7,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sudo
-PKG_VERSION:=1.7.0
+PKG_VERSION:=1.7.2
 PKG_RELEASE:=1
 
-PKG_SOURCE:=sudo-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sudo.ws/sudo/dist/
-PKG_MD5SUM:=5fd96bba35fe29b464f7aa6ad255f0a6
+PKG_MD5SUM:=9caba8719c3e0f163880a05f02a48249
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,15 +27,17 @@ define Package/sudo/description
   Sudo (su "do") allows a system administrator to delegate authority to give
   certain users (or groups of users) the ability to run some (or all) commands
   as root or another user while providing an audit trail of the commands and
-  their arguments. 
+  their arguments.
 endef
 
 CONFIGURE_ARGS+= \
 	--without-pam \
 	--disable-pam-session \
+	--with-editor=/bin/vi \
 
 CONFIGURE_VARS+= \
 	sudo_cv_uid_t_len=10 \
+	sudo_cv_func_unsetenv_void=no \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
