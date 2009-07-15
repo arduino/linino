@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openvpn
 PKG_VERSION:=2.1_rc18
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://openvpn.net/release @SF/openvpn
@@ -72,6 +72,7 @@ define Package/openvpn/install
 	$(INSTALL_BIN) files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_CONF) files/$(PKG_NAME).config $(1)/etc/config/$(PKG_NAME)
+	$(INSTALL_DIR) $(1)/etc/openvpn
 endef
 
 define Package/openvpn-easy-rsa/install	
