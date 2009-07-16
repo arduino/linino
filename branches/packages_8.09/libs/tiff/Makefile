@@ -21,11 +21,25 @@ include $(INCLUDE_DIR)/package.mk
 
 PKG_INSTALL=1
 
+define Package/tiff/Default
+  TITLE:=TIFF
+  URL:=http://www.remotesensing.org/libtiff/
+endef
+
 define Package/libtiff
+$(call Package/tiff/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=TIFF libraries
+  TITLE+= libraries
   DEPENDS:=+zlib +libjpeg
+endef
+
+define Package/tiff-utils
+$(call Package/tiff/Default)
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE+= utilities
+  DEPENDS:=+libtiff
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -43,4 +57,10 @@ define Package/libtiff/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*.so.* $(1)/usr/lib/
 endef
 
+define Package/tiff-utils/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+endef
+
 $(eval $(call BuildPackage,libtiff))
+$(eval $(call BuildPackage,tiff-utils))
