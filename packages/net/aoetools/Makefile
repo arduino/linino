@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aoetools
-PKG_VERSION:=26
+PKG_VERSION:=30
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/aoetools
-PKG_MD5SUM:=9dc4a56cbd4ebd3eb226c2b46a401766
+PKG_MD5SUM:=b87eeb34d50921cdf852780f662630b9
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -37,10 +37,13 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-discover $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-flush $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-interfaces $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-mkdevs $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-mkshelf $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-revalidate $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-stat $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-version $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoecfg $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoeping $(1)/usr/bin/
 endef
 
