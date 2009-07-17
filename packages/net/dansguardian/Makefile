@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dansguardian
-PKG_VERSION:=2.10.0.2
+PKG_VERSION:=2.10.1.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dansguardian.org/downloads/2/Stable
-PKG_MD5SUM:=0a6c6d35c9e0c82fbc4a2150e8ffe977
+PKG_MD5SUM:=0987a1c9bfbdf398118386f10279611a
 
 include $(INCLUDE_DIR)/package.mk
 

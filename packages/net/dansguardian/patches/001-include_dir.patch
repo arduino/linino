@@ -1,8 +1,6 @@
-Index: dansguardian-2.9.9.2/configure
-===================================================================
---- dansguardian-2.9.9.2.orig/configure	2008-02-27 17:52:06.000000000 +0100
-+++ dansguardian-2.9.9.2/configure	2008-02-27 17:52:06.000000000 +0100
-@@ -799,7 +799,7 @@
+--- a/configure
++++ b/configure
+@@ -861,7 +861,7 @@ sysconfdir='${prefix}/etc'
  sharedstatedir='${prefix}/com'
  localstatedir='${prefix}/var'
  includedir='${prefix}/include'
@@ -11,7 +9,7 @@ Index: dansguardian-2.9.9.2/configure
  docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
  infodir='${datarootdir}/info'
  htmldir='${docdir}'
-@@ -6429,7 +6429,7 @@
+@@ -6317,7 +6317,7 @@ $as_echo_n "checking for zlib... " >&6; 
  # Check whether --with-zlib was given.
  if test "${with_zlib+set}" = set; then
    withval=$with_zlib;  # check for header & func (in library) in given prefix
@@ -20,7 +18,7 @@ Index: dansguardian-2.9.9.2/configure
  	if test "x$staticzlib" = "xtrue"; then
  		LIBS="-Bstatic -L${withval} -lz -Bdynamic ${LIBS}"
  	else
-@@ -10753,7 +10753,7 @@
+@@ -10042,7 +10042,7 @@ _ACEOF
  if test "${with_libiconv+set}" = set; then
    withval=$with_libiconv;  # check for header & func (in library) in given prefix
  			if test "x$withval" != "x"; then
