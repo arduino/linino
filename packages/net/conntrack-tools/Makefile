@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=conntrack-tools
-PKG_VERSION:=0.9.10
+PKG_VERSION:=0.9.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.netfilter.org/projects/conntrack-tools/files/
-PKG_MD5SUM:=cd46ed2d5cd4797add0cd444a209c1e7
+PKG_MD5SUM:=a082eb2354d12250a3f81363440b73f3
 
 PKG_FIXUP:=libtool
 
@@ -28,10 +28,10 @@ define Package/conntrack-tools
 endef
 
 define Package/conntrack-tools/description
- The conntrack-tools are a set of free software userspace tools for Linux 
- that allow system administrators interact with the Connection Tracking 
- System, which is the module that provides stateful packet inspection for 
- iptables. The conntrack-tools are the userspace daemon conntrackd and the 
+ The conntrack-tools are a set of free software userspace tools for Linux
+ that allow system administrators interact with the Connection Tracking
+ System, which is the module that provides stateful packet inspection for
+ iptables. The conntrack-tools are the userspace daemon conntrackd and the
  command line interface conntrack.
 endef
 
@@ -42,19 +42,19 @@ endef
 
 # uses GNU configure
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
 
-define Package/conntrack-tools/install	
+define Package/conntrack-tools/install
 	$(INSTALL_DIR) $(1)/etc/conntrackd
-	$(CP) \
+	$(INSTALL_CONF) \
 		$(PKG_BUILD_DIR)/doc/stats/conntrackd.conf \
 		$(1)/etc/conntrackd
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) \
+	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/sbin/conntrack \
 		$(PKG_INSTALL_DIR)/usr/sbin/conntrackd \
 		$(1)/usr/sbin/
