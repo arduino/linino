@@ -8,19 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpd
-PKG_VERSION:=0.14.2
-PKG_RELEASE:=2
+PKG_VERSION:=0.15
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/musicpd
-PKG_MD5SUM:=66817a4b4c05454e6488f6b821f2a6a3
+PKG_MD5SUM:=2ed93a60bd703ba46d6794e12cfb5f1d
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mpd
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread +glib2
+  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread +glib2 +libmss +libcurl
   TITLE:=Music Player Daemon
   URL:=http://www.musicpd.org/
 endef
@@ -40,6 +40,8 @@ ifndef CONFIG_PACKAGE_kmod-sound-core
 endif
 
 CONFIGURE_VARS += \
+	CURL_LIBS="-L$(STAGING_DIR)/usr/lib -lssl -lcrypto -lcurl" \
+	CURL_CFLAGS="-I$(STAGING_DIR)/usr/include" \
 	ID3TAG_LIBS="$(TARGET_LDFLAGS) -lz -lid3tag" \
 	ID3TAG_CFLAGS="$(TARGET_CPPFLAGS)" \
 	FLAC_LIBS="$(TARGET_LDFLAGS) -lFLAC" \
@@ -54,7 +56,6 @@ CONFIGURE_VARS += \
 define Build/Configure
 	$(call Build/Configure/Default, \
 		$(EXTRA_CONFIG_PARAM) \
-		--disable-mod \
 		--disable-audiofile \
 		--disable-mpc \
 		--disable-aac \
@@ -63,9 +64,11 @@ define Build/Configure
 		--disable-ao \
 		--disable-mvp \
 		--disable-lametest \
-		--disable-lame \
+		--disable-lame-encoder \
 		--enable-flac \
-		--with-tremor=$(STAGING_DIR)/usr/lib \
+		--enable-lastfm \
+		--enable-mms \
+		--with-tremor="$(STAGING_DIR)/usr/lib" \
 	)
 endef
 
