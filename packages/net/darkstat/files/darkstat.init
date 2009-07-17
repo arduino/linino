@@ -22,7 +22,7 @@ start_darkstat() {
 	scan_interfaces
 	config_get ifname "$interface" ifname
 
-	$BIN --debug -i "$interface" \
+	$BIN --verbose -i "$interface" \
 		${httpaddr:+-b "$httpaddr"} \
 		${httpport:+-p "$httpport"} \
 		--chroot $RUN_D
