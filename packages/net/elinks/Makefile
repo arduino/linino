@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=elinks
-PKG_VERSION:=0.11.4
+PKG_VERSION:=0.11.6
 PKG_RELEASE:=1
-PKG_MD5SUM:=88036a518ebc4f1150a7e14b29f9d8db
 
-PKG_SOURCE_URL:=http://elinks.or.cz/download/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://elinks.or.cz/download
+PKG_MD5SUM:=463ec007b013822a82d197580117ea16
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -84,8 +84,8 @@ define Build/Configure
 endef
 
 define Package/elinks/install
-	mkdir -p $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/src/elinks $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/elinks $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,elinks))
