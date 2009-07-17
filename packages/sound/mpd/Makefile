@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mpd
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread +glib2 +libmss +libcurl
+  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread +glib2 +libmms +libcurl
   TITLE:=Music Player Daemon
   URL:=http://www.musicpd.org/
 endef
