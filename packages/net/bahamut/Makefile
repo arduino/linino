@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bahamut
-PKG_VERSION:=1.8.4
+PKG_VERSION:=1.8.6
 PKG_RELEASE:=1
-PKG_MD5SUM:=6b9a805f4408f3887e75a9d14c69ab93
 
-PKG_SOURCE_URL:=http://bahamut.dal.net/download/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-release.tar.gz
+PKG_SOURCE_URL:=http://bahamut.dal.net/download
+PKG_MD5SUM:=a814a4e0ff1fabcf026ea8574b4a1e20
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -46,7 +46,7 @@ define Build/Compile
 	)
 endef
 
-define Package/bahamut/install	
+define Package/bahamut/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_DIR) $(1)/etc/$(PKG_NAME)
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/ircd $(1)/usr/sbin
