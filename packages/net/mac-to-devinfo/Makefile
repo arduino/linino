@@ -83,6 +83,7 @@ endef
 define Package/smap-to-devinfo/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) ./files/smap-to-devinfo $(1)/usr/bin
+	$(INSTALL_BIN) ./files/netsmap-to-devinfo $(1)/usr/bin
 endef
 
 define Package/netdiscover-to-devinfo/install

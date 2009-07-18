@@ -1,26 +1,51 @@
 #!/bin/sh
 
 MACTODEV=mac-to-devinfo
-NETDISCOVER=netdiscover
 
 if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
-    echo "Usage: netdiscover-to-devinfo IP-range Interface Timeout"
+    echo "Usage: netdiscover-to-devinfo IP-range Interface Timeout [-r repeats] [-s sleep_between_arp_requests]"
     exit 1
 fi
 
 prep-devinfo
-OLDIFS=$IFS
 IFS='
 '
-for line in $($NETDISCOVER -t $3 -k -m -i $2 -r $1); do
-    IFS=$OLDIFS
+
+IPRANGE=$1
+IFACE=$2
+TIMEOUT=$3
+
+shift 3
+
+while getopts "r:s:h" param; do
+    case "$param" in
+	h)
+	    usage
+	    exit 1
+	    ;;
+	r)
+	    REPEATS=" -c $OPTARG"
+	    ;;
+	s)
+	    SLEEPREQ="-s $OPTARG"
+	    ;;
+	?|*)
+	    usage
+	    exit 1
+	    break
+	    ;;
+
+    esac
+done
+
+
+for line in $(sh -c "netdiscover -t $TIMEOUT-k -m -i $IFACE -r $IPRANGE $REPEATS $SLEEPREQ 2>/dev/null" | grep -E '[0-9]([0-9]?[0-9])?.[0-9]([0-9]?[0-9])?.[0-9]([0-9]?[0-9])?.[0-9]([0-9]?[0-9])?.[0-9]([0-9]?[0-9])?'); do
+    unset IFS
     IP=$(echo $line | tr -s \  |  cut -f1 -d\  )
     MAC=$(echo $line | tr -s \  |  cut -f2 -d\  )
     echo "$IP"" | ""$($MACTODEV $MAC)"
-    OLDIFS=$IFS
     IFS='
 '
 done
 
-IFS=$OLDIFS
-
+unset IFS
