@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
  
 PKG_NAME:=znc
 PKG_VERSION:=0.068
-PKG_RELEASE:=1
+PKG_RELEASE:=2
  
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/znc
@@ -21,7 +21,7 @@ define Package/znc
   SUBMENU:=Instant Messaging
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+openssl +uclibcxx
+  DEPENDS:=+libopenssl +uclibcxx
   TITLE:=ZNC
   URL:=http://en.znc.in/
 endef
