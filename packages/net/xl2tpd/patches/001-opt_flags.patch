@@ -1,6 +1,6 @@
 --- a/Makefile
 +++ b/Makefile
-@@ -69,7 +69,8 @@
+@@ -90,7 +90,8 @@ OSFLAGS?= -DLINUX -I$(KERNELSRC)/include
  
  FFLAGS= -DIP_ALLOCATION
  

@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xl2tpd
-PKG_VERSION:=1.1.12
+PKG_VERSION:=1.2.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.xelerance.com/software/xl2tpd
-PKG_MD5SUM:=8ace771a29139485c0edf428091cad5d
+PKG_MD5SUM:=d94fc8a13596f12a561240dfcea9f977
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -42,7 +42,7 @@ define Package/xl2tpd/conffiles
 /etc/xl2tpd/xl2tpd.conf
 endef
 
-define Package/xl2tpd/install	
+define Package/xl2tpd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/xl2tpd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
