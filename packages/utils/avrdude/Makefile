@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=avrdude
-PKG_VERSION:=5.7
+PKG_VERSION:=5.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.savannah.gnu.org/releases/avrdude
-PKG_MD5SUM:=8908046583e289d7c53db7545d4a3369
+PKG_MD5SUM:=d459dcf47fa7fc2a29a70d68ebff4886
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,7 +22,7 @@ define Package/avrdude
   CATEGORY:=Utilities
   TITLE:=AVR Downloader/UploaDEr
   URL:=http://www.bsdhome.com/avrdude/
-  DEPENDS:=+libncurses
+  DEPENDS:=+libncurses +libusb
 endef
 
 define Package/avrdude/description
