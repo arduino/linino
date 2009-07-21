@@ -1,6 +1,6 @@
 --- a/htpdate.c
 +++ b/htpdate.c
-@@ -349,7 +349,7 @@
+@@ -359,7 +359,7 @@ static int htpdate_adjtimex( double drif
  
  	/* Read current kernel frequency */
  	tmx.modes = 0;
@@ -9,12 +9,12 @@
  
  	/* Calculate new frequency */
  	freq = (long)(65536e6 * drift);
-@@ -364,7 +364,7 @@
+@@ -377,7 +377,7 @@ static int htpdate_adjtimex( double drif
+ 		printlog( 1, "seteuid()" );
+ 		exit(1);
+ 	} else {
+-		return( ntp_adjtime(&tmx) );
++		return( adjtimex(&tmx) );
+ 	}
  
- 	/* Become root */
- 	seteuid(0);
--	return( ntp_adjtime(&tmx) );
-+	return( adjtimex(&tmx) );
  }
- 
- 

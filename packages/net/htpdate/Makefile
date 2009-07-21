@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=htpdate
-PKG_VERSION:=1.0.1
+PKG_VERSION:=1.0.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.clevervest.com/htp/archive/c/
-PKG_MD5SUM:=a0c2b7a3e89a9fedb1ae8cba17928ec3
+PKG_MD5SUM:=a13ec89839c33965794ebf53c4e690db
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -37,18 +37,17 @@ define Package/htpdate/conffiles
 /etc/default/htpdate
 endef
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)"
 endef
 
-
-define Package/htpdate/install	
+define Package/htpdate/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/htpdate $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/default/
-	$(INSTALL_DATA) ./files/htpdate.default $(1)/etc/default/htpdate
+	$(INSTALL_CONF) ./files/htpdate.default $(1)/etc/default/htpdate
 	$(INSTALL_DIR) $(1)/etc/init.d/
 	$(INSTALL_BIN) ./files/htpdate.init $(1)/etc/init.d/htpdate
 endef
