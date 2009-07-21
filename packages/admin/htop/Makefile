@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=htop
-PKG_VERSION:=0.8.1
+PKG_VERSION:=0.8.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=f0b259ca29175656de48bf0fa0a2e619
+PKG_MD5SUM:=5c9f093f9eaddf6e77aa6d54c2116d0c
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -28,7 +28,7 @@ endef
 define Package/htop/description
  Htop is an ncursed-based process viewer similar to top, but
  it allows to scroll the list vertically and horizontally to
- see all processes and their full command lines. 
+ see all processes and their full command lines.
 endef
 
 CONFIGURE_VARS += \
