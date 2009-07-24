@@ -18,6 +18,7 @@ define Package/6scripts
   CATEGORY:=IPv6
   DEPENDS:=+kmod-ipv6
   TITLE:=IPv6 scripts
+  PKGARCH:=all
 endef
 
 define Package/6scripts/description

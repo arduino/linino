@@ -25,6 +25,7 @@ define Package/speedtouch-usb-firmware
   CATEGORY:=Network
   TITLE:=SpeedTouch 330 ADSL USB firmware
   DEPENDS:=+kmod-usb-atm +kmod-usb-atm-speedtouch @LINUX_2_6
+  PKGARCH:=all
 endef
 
 define Package/speedtouch-usb-firmware/description

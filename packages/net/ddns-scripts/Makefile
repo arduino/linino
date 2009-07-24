@@ -12,6 +12,7 @@ define Package/ddns-scripts
 	SECTION:=net
 	CATEGORY:=Network
 	TITLE:=Dynamic DNS Scripts
+	PKGARCH:=all
 endef
 
 define Package/ddns-scripts/description

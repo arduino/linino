@@ -20,6 +20,7 @@ define Package/wshaper
   DEPENDS:=+kmod-sched +tc
   TITLE:=wshaper
   URL:=http://lartc.org/wondershaper/
+  PKGARCH:=all
 endef
 
 define Package/wshaper/description

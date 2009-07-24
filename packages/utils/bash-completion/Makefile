@@ -25,6 +25,7 @@ define Package/bash-completion
   TITLE:=bash completion scripts
   DEPENDS:=+libncurses +bash
   URL:=http://www.caliban.org/bash/
+  PKGARCH:=all
 endef
 
 define Package/bash-completion/description

@@ -26,6 +26,7 @@ define Package/php-pear-xmlrpc
   TITLE:=PEAR XML-RPC module
   URL:=http://pear.php.net/
   DEPENDS:=php-pear
+  PKGARCH:=all
 endef
 
 define Build/Configure

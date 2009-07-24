@@ -24,6 +24,7 @@ define Package/shorewall-common
   TITLE:=Shorewall
   URL:=http://www.shorewall.net/
   SUBMENU:=firewall
+  PKGARCH:=all
 endef
 
 define Package/shorewall-common/description
