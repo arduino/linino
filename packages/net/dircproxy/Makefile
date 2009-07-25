@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dircproxy
-PKG_VERSION:=1.2.0-beta2
+PKG_VERSION:=1.2.0-RC1
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dircproxy.googlecode.com/files/
-PKG_MD5SUM:=850443437f709276ff21a173bbf98456
+PKG_MD5SUM:=4fe2e82619c7b575599bfb236adbd872
 
 include $(INCLUDE_DIR)/package.mk
 
