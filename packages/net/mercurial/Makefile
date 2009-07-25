@@ -25,6 +25,7 @@ define Package/mercurial
   DEPENDS:=python
   TITLE:=Mercurial Source Control Management (SCM) system
   URL:=http://www.selenic.com/mercurial/
+  SUBMENU:=Version Control Systems
 endef
 
 define Package/mercurial/description

@@ -25,7 +25,7 @@ define Package/subversion/Default
   TITLE:=A compelling replacement for CVS
   DEPENDS:=+zlib +libneon +libintl +libapr +libaprutil +libpthread
   URL:=http://subversion.tigris.org/
-  SUBMENU:=subversion
+  SUBMENU:=Version Control Systems
 endef
 
 define Package/subversion/Default/description
