@@ -192,7 +192,7 @@ define Build/Configure
 		rm -rf config.{status,cache} ; \
 		./bootstrap ; \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) $(CFLAGS_LARGEFILE)" \
+		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="$(TARGET_CPPFLAGS)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 		lt_sys_lib_dlsearch_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
