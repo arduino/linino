@@ -11,6 +11,10 @@ start_service () {
 	AUTOSSH_POLL=${poll:-"600"} autossh -M ${monitorport:-"20000"} -f ${ssh}
 }
 
+boot() {
+	return
+}
+
 start() {
 	config_load "autossh"
 	config_foreach start_service autossh
@@ -18,9 +22,4 @@ start() {
 
 stop() {
 	killall autossh
-}
-
-restart() {
-	stop
-	start
 }
