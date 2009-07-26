@@ -1,8 +1,18 @@
-Index: bind-9.5.0-P1/configure
+Index: bind-9.6.0-P1/configure
 ===================================================================
---- bind-9.5.0-P1.orig/configure	2008-05-06 02:33:33.000000000 +0100
-+++ bind-9.5.0-P1/configure	2008-07-12 08:23:25.000000000 +0100
-@@ -6369,8 +6369,7 @@
+--- bind-9.6.0-P1.orig/configure	2008-05-06 02:33:33.000000000 +0100
++++ bind-9.6.0-P1/configure	2008-07-12 08:23:25.000000000 +0100
+@@ -5449,8 +5449,7 @@
+   { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
+ See \`config.log' for more details." >&5
+ echo "$as_me: error: cannot run test program while cross compiling
+-See \`config.log' for more details." >&2;}
+-   { (exit 1); exit 1; }; }
++See \`config.log' for more details." >&2;} }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+@@ -6791,8 +6790,7 @@
  else
    test "$cross_compiling" = yes &&
    { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
@@ -12,7 +22,7 @@ Index: bind-9.5.0-P1/configure
  if test -r "$devrandom"; then
    eval "$as_ac_File=yes"
  else
-@@ -25119,195 +25118,6 @@
+@@ -25535,195 +25533,6 @@
  # which provides some (all?) of the desired functions.
  #
  
@@ -208,15 +218,3 @@ Index: bind-9.5.0-P1/configure
  #
  # Look for a 4.4BSD-style sa_len member in struct sockaddr.
  #
-Index: bind-9.5.0-P1/lib/bind/configure
-===================================================================
---- bind-9.5.0-P1.orig/lib/bind/configure	2008-04-29 00:51:46.000000000 +0100
-+++ bind-9.5.0-P1/lib/bind/configure	2008-06-08 15:16:17.000000000 +0100
-@@ -5292,6 +5292,7 @@
- if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
-   echo $ECHO_N "(cached) $ECHO_C" >&6
- else
-+cross_compiling=no
-   test "$cross_compiling" = yes &&
-   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
- echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
