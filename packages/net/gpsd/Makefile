@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006,2008 OpenWrt.org
+# Copyright (C) 2006,2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gpsd
-PKG_VERSION:=2.37
-PKG_RELEASE:=3
+PKG_VERSION:=2.39
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.berlios.de/gpsd/
-PKG_MD5SUM:=6c96cc0b2df0279cb7baac1ebc5881d3
+PKG_MD5SUM:=3db437196a6840c252fca99b6c19d4d0
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool-ucxx
 
 PKG_BUILD_DEPENDS=libncurses
 
@@ -24,30 +24,29 @@ include $(INCLUDE_DIR)/package.mk
 define Package/gpsd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpthread +libstdcpp
+  DEPENDS:=+libpthread +uclibcxx
   TITLE:=An interface daemon for GPS receivers
   URL:=http://gpsd.berlios.de/
 endef
 
 CONFIGURE_ARGS += \
-	--disable-dbus \
-	--disable-python \
-	--disable-sirf \
-	--disable-tsip \
-	--disable-fv18 \
-	--disable-tripmate \
-	--disable-earthmate \
-	--disable-itrax \
-	--disable-navcom \
-	--disable-garmin \
-	--disable-ubx \
-	--disable-evermore \
-	--disable-rtcm104 \
-	--disable-ntrip \
-	--disable-ntpshm \
-	--disable-pps \
-	--disable-reconfigure \
-	--without-x \
+        --disable-dbus \
+        --disable-tsip \
+        --disable-fv18 \
+        --disable-tripmate \
+        --disable-earthmate \
+        --disable-itrax \
+        --disable-navcom \
+        --disable-ubx \
+        --disable-evermore \
+        --disable-ntrip \
+        --without-x \
+
+CONFIGURE_VARS += \
+	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
+	LDFLAGS="$$$$LDFLAGS" \
+	LIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
