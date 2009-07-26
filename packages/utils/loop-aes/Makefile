@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=loop-aes
-PKG_VERSION:=3.2e
+PKG_VERSION:=3.2g
 PKG_RELEASE:=1
 
 PKG_SOURCE:=loop-AES-v$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=bfc75a2bec78dbd5c8b5096bf06716d5
+PKG_MD5SUM:=c54bdd2b01f57fee1a93a5bbbd3ce505
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/loop-AES-v$(PKG_VERSION)
 
@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define KernelPackage/loop-aes
   SUBMENU:=Cryptographic API modules
-  DEPENDS:=@!PACKAGE_kmod-loop @!LINUX_2_6_30
+  DEPENDS:=@!PACKAGE_kmod-loop
   TITLE:=loopback module with built-in AES
   FILES:=$(PKG_BUILD_DIR)/loop.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,30,loop)
