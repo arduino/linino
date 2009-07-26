@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=ipsec-tools
 PKG_VERSION:=0.7.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/ipsec-tools
@@ -38,8 +38,7 @@ CONFIGURE_ARGS += \
 	--enable-hybrid \
 	--enable-security-context=no \
 	--enable-natt \
-	--enable-adminport \
-	--enable-ipv6
+	--enable-adminport
 
 define Build/Prepare
 	$(call Build/Prepare/Default)

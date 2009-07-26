@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ffmpeg
 PKG_VERSION:=20080419
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-export-snapshot-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
@@ -176,13 +176,6 @@ FFMPEG_CONFIGURE_PROTOCOLS:= \
 		$(if $(CONFIG_FFMPEG_PROTOCOL_$(c)),--enable-protocol="$(c)") \
 	)
 
-ifneq ($(CONFIG_FFMPEG_PROTOCOL_IPv6),)
-	FFMPEG_CONFIGURE_IPv6:= --enable-ipv6
-else
-	FFMPEG_CONFIGURE_IPv6:= --disable-ipv6
-endif
-
-
 define Build/Configure
 	# this is *NOT* GNU configure
 	( cd $(PKG_BUILD_DIR); \
@@ -221,7 +214,6 @@ define Build/Configure
 		--disable-bsfs \
 		--disable-protocols \
 		$(FFMPEG_CONFIGURE_PROTOCOLS) \
-		$(FFMPEG_CONFIGURE_IPv6) \
 	)
 endef
 

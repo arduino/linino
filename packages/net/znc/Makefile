@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=znc
 PKG_VERSION:=0.070
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/znc
@@ -42,7 +42,6 @@ CONFIGURE_VARS += \
 CONFIGURE_ARGS += \
 	$(TARGET_CONFIGURE_OPTS) \
 	--disable-perl \
-	--disable-ipv6 \
 
 MAKE_FLAGS += \
 	CXX="g++-uc"

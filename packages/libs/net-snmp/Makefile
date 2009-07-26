@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=net-snmp
 PKG_VERSION:=5.4.2.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/net-snmp
@@ -150,7 +150,6 @@ TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
-	--enable-ipv6 \
 	--with-endianness=little \
 	--with-logfile=/var/log/snmpd.log \
 	--with-persistent-directory=/usr/lib/snmp/ \

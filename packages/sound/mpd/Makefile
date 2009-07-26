@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpd
 PKG_VERSION:=0.15.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/musicpd
@@ -60,7 +60,6 @@ define Build/Configure
 		--disable-mpc \
 		--disable-aac \
 		--disable-lsr \
-		--disable-ipv6 \
 		--disable-ao \
 		--disable-mvp \
 		--disable-lametest \

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php4
 PKG_VERSION:=4.4.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=php-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://fr.php.net/distributions/
@@ -157,7 +157,6 @@ PKG_CONFIGURE_OPTS:= \
 	--without-pear \
 	\
 	--with-config-file-path=/etc \
-	--disable-ipv6 \
 	--enable-magic-quotes \
 	--enable-memory-limit \
 	--disable-overload \

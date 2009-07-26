@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python
 PKG_VERSION:=2.6.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=Python-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.python.org/ftp/python/$(PKG_VERSION)/
@@ -126,7 +126,6 @@ define Build/Compile
 	$(call Build/Configure/Default, \
 		--sysconfdir=/etc \
 		--disable-shared \
-		--disable-ipv6 \
 		--without-cxx-main \
 		--with-threads \
 		--with-system-ffi \

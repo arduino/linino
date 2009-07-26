@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ruby
 PKG_VERSION:=1.8.6-p287
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.ruby-lang.org/pub/ruby/1.8/
@@ -178,7 +178,6 @@ CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
 	--disable-rpath \
-	--enable-ipv6 \
 	--enable-wide-getaddrinfo \
 
 CONFIGURE_VARS += \

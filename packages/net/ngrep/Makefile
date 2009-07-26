@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ngrep
 PKG_VERSION:=1.45
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/ngrep
@@ -39,7 +39,6 @@ define Build/Configure
 		--with-pcap-includes=$(STAGING_DIR)/usr/include \
 		--enable-pcre \
 		--with-pcre=$(STAGING_DIR)/usr \
-		--enable-ipv6 \
 		--disable-dropprivs \
 		,\
 		LDFLAGS="$(TARGET_LDFLAGS) -lpcre" \

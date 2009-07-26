@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=irssi-glib1
 PKG_VERSION:=0.8.10
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=irssi-$(PKG_VERSION)a.tar.bz2
 PKG_SOURCE_URL:=http://irssi.org/files/
@@ -39,7 +39,6 @@ define Build/Configure
 		--without-file-offset-size \
 		--without-ssl \
 		--disable-ssl \
-		--enable-ipv6 \
 		--disable-proxy \
 	)
 endef

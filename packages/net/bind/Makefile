@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bind
 PKG_VERSION:=9.5.0-P1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= \
@@ -81,7 +81,6 @@ export BUILD_CC="$(TARGET_CC)"
 CONFIGURE_ARGS += \
 		--enable-shared \
 		--enable-static \
-		--enable-ipv6 \
 		--with-randomdev="/dev/urandom" \
 		--disable-threads \
 		--with-openssl="$(STAGING_DIR)/usr" \

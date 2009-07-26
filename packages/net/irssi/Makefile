@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=irssi
 PKG_VERSION:=0.8.13
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://irssi.org/files/
@@ -62,7 +62,6 @@ $(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
 		--without-terminfo \
 		--without-bot \
 		--without-file-offset-size \
-		--disable-ipv6 \
 		--disable-proxy \
 		$(3))
 	$(MAKE) -C $(PKG_BUILD_DIR)
