@@ -1,0 +1,64 @@
+Index: openl2tp-1.6/Makefile
+===================================================================
+--- openl2tp-1.6.orig/Makefile
++++ openl2tp-1.6/Makefile
+@@ -8,7 +8,7 @@
+ L2TP_FEATURE_LAOC_SUPPORT=	y
+ L2TP_FEATURE_LNIC_SUPPORT=	y
+ L2TP_FEATURE_LNOC_SUPPORT=	y
+-L2TP_FEATURE_LOCAL_CONF_FILE=	y
++#L2TP_FEATURE_LOCAL_CONF_FILE=	y
+ #L2TP_FEATURE_LOCAL_STAT_FILE=	y
+ 
+ # Define USE_DMALLOC to enable dmalloc memory debugging
+@@ -29,31 +29,31 @@
+ # Build for UML environment?
+ # UML_TARGET=		y
+ 
+-ARCH=$(shell uname -p)
+-ifeq ($(ARCH),x86_64)
+-SYS_LIBDIR=/usr/lib64
+-else
++#ARCH=$(shell uname -p)
++#ifeq ($(ARCH),x86_64)
++#SYS_LIBDIR=/usr/lib64
++#else
+ SYS_LIBDIR=/usr/lib
+-endif
++#endif
+ 
+ # Point to kernel source tree
+-KERNEL_SRCDIR=		/lib/modules/$(shell uname -r)/source
+-KERNEL_BLDDIR=		/lib/modules/$(shell uname -r)/build
++#KERNEL_SRCDIR=		/lib/modules/$(shell uname -r)/source
++#KERNEL_BLDDIR=		/lib/modules/$(shell uname -r)/build
+ 
+ # Points to pppd install. 
+ # By default, pppd headers are assumed to be in /usr/include/pppd. but 
+ # can be pointed to a local pppd source tree if desired.
+-PPPD_VERSION=		2.4.4
++#PPPD_VERSION=		2.4.4
+ # PPPD_SRCDIR=		/usr/local/src/ppp-2.4.4
+ # PPPD_LIBDIR=		/usr/lib/pppd/2.4.4
+ 
+ # Points to readline install root. READLINE_DIR should have lib/ & include/ subdirs
+ # If not defined, readline is assumed to be installed in the standard places that
+ # the compiler looks.
+-READLINE_DIR=		
++#READLINE_DIR=		
+ 
+ # For cross-compiling
+-CROSS_COMPILE=
++#CROSS_COMPILE=
+ 
+ # END CONFIGURABLE SETTINGS
+ 
+@@ -137,7 +137,7 @@
+ CFLAGS=			-I. -Iusl -Icli -isystem $(KERNEL_BLDDIR)/include \
+ 				-isystem $(KERNEL_SRCDIR)/include -MMD -Wall -Werror $(CPPFLAGS) $(CPPFLAGS.dmalloc) -DSYS_LIBDIR=$(SYS_LIBDIR)
+ LDFLAGS.l2tpd=		-Wl,-E -L. -Lusl -lusl -ldl $(LIBS.dmalloc) -lc
+-LDFLAGS.l2tpconfig=	-Lcli -lcli -lreadline $(LIBS.dmalloc) $(READLINE_LDFLAGS) -lc
++LDFLAGS.l2tpconfig=	-Lcli -lcli -lreadline -lncurses $(LIBS.dmalloc) $(READLINE_LDFLAGS) -lc
+ 
+ OPT_CFLAGS?=		-O
+ 

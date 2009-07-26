@@ -1,0 +1,13 @@
+Index: openl2tp-1.6/plugins/ppp_unix.c
+===================================================================
+--- openl2tp-1.6.orig/plugins/ppp_unix.c
++++ openl2tp-1.6/plugins/ppp_unix.c
+@@ -643,6 +643,8 @@
+ 
+ 		if (ppp->ppp_profile_data->proxy_arp) {
+ 			argv[arg++] = "proxyarp";
++		} else {
++			argv[arg++] = "noproxyarp";
+ 		}
+ 
+ 		argv[arg++] = "plugin";
