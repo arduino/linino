@@ -1,0 +1,23 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2009 OpenWrt.org
+START=50
+
+SSD=start-stop-daemon
+NAME=mjpg_streamer
+PIDF=/var/run/$NAME.pid
+PROG=/usr/bin/$NAME
+
+start() {
+	config_load mjpg-streamer
+	config_get device core device
+	config_get resolution core resolution
+	config_get fps core fps
+	config_get port core port
+	config_get_bool enabled core enabled
+	[ $enabled -gt 0 -a -c $device ] && sleep 3 && $SSD -S -m -p $PIDF -q -x $PROG -- --input "input_uvc.so --device $device --fps $fps --resolution $resolution" --output "output_http.so --port $port" &
+}
+
+stop() {
+	$SSD -K -p $PIDF
+}
+

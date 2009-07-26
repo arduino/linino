@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -25,7 +25,7 @@ define Package/mjpg-streamer
   CATEGORY:=Multimedia
   TITLE:=MJPG-streamer
   DEPENDS:=@LINUX_2_6 +libpthread +libjpeg
-  URL:=http://www.naaa.de/uvc_streamer.htm
+  URL:=http://mjpg-streamer.wiki.sourceforge.net/
 endef
 
 define Package/mjpg-streamer/description
@@ -35,13 +35,17 @@ endef
 EXTRA_CFLAGS += $(TARGET_CPPFLAGS) $(TARGET_LDFLAGS)
 
 define Package/mjpg-streamer/install
-	$(INSTALL_DIR) $(1)/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mjpg_streamer $(1)/sbin
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mjpg_streamer $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/config
+	$(CP) ./files/mjpg-streamer.config $(1)/etc/config/mjpg-streamer
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(CP) ./files/mjpg-streamer.init $(1)/etc/init.d/mjpg-streamer
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(foreach input_plugin,file uvc gspcav1,$(PKG_BUILD_DIR)/input_$(input_plugin).so) $(1)/usr/lib
 	$(CP) $(foreach output_plugin,http file autofocus,$(PKG_BUILD_DIR)/output_$(output_plugin).so) $(1)/usr/lib
-	$(INSTALL_DIR) $(1)/webcam_www
-	$(CP) $(PKG_BUILD_DIR)/www/* $(1)/webcam_www
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/usb
+	$(INSTALL_DATA) ./files/mjpg-streamer.hotplug $(1)/etc/hotplug.d/usb/20-mjpg-streamer
 endef
 
 $(eval $(call BuildPackage,mjpg-streamer))
