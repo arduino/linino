@@ -1,6 +1,6 @@
 --- a/configure.ac
 +++ b/configure.ac
-@@ -394,7 +394,7 @@ dnl -------------------------
+@@ -397,7 +397,7 @@ dnl -------------------------
  AC_CHECK_HEADERS([stropts.h sys/ksym.h sys/times.h sys/select.h \
  	sys/types.h linux/version.h netdb.h asm/types.h \
  	sys/param.h limits.h signal.h libutil.h \
@@ -9,7 +9,7 @@
  
  dnl Utility macro to avoid retyping includes all the time
  m4_define([QUAGGA_INCLUDES],
-@@ -774,6 +774,17 @@ AC_SUBST(RT_METHOD)
+@@ -779,6 +779,17 @@ AC_SUBST(RT_METHOD)
  AC_SUBST(KERNEL_METHOD)
  AC_SUBST(OTHER_METHOD)
  
