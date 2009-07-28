@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=mjpg-streamer
 PKG_REV:=84
 PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://mjpg-streamer.svn.sourceforge.net/svnroot/mjpg-streamer/mjpg-streamer/
@@ -40,7 +40,7 @@ define Package/mjpg-streamer/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(CP) ./files/mjpg-streamer.config $(1)/etc/config/mjpg-streamer
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(CP) ./files/mjpg-streamer.init $(1)/etc/init.d/mjpg-streamer
+	$(INSTALL_BIN) ./files/mjpg-streamer.init $(1)/etc/init.d/mjpg-streamer
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(foreach input_plugin,file uvc gspcav1,$(PKG_BUILD_DIR)/input_$(input_plugin).so) $(1)/usr/lib
 	$(CP) $(foreach output_plugin,http file autofocus,$(PKG_BUILD_DIR)/output_$(output_plugin).so) $(1)/usr/lib
