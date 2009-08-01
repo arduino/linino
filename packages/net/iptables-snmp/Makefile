@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/iptables-snmp
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+snmpd @BROKEN
+  DEPENDS:=+snmpd +libiptc
   TITLE:=An snmpd plugin to access iptables rules
   URL:=http://www.nobiscuit.com/iptables-snmp/
   SUBMENU:=firewall
@@ -33,6 +33,7 @@ endef
 define Build/Compile	
 	$(call Build/Compile/Default, \
 		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
 		all install \
 	)
 endef
