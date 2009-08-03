@@ -13,7 +13,7 @@ sslh_start()
 	# check if section is enabled (default)
 	local enabled
 	config_get_bool enabled "${section}" enable 1
-	[ ${enabled} -eq 0 ] && return 1
+	[ "${enabled}" -eq 0 ] && return 1
 
 	# increase pid file count to handle multiple instances correctly
 	PIDCOUNT="$(( ${PIDCOUNT} + 1 ))"
@@ -23,23 +23,23 @@ sslh_start()
 	local val
 	# A) listen parameter
 	config_get val "${section}" listen
-	[ ! -z ${val} ] && append args "-p ${val}"
+	[ ! -z "${val}" ] && append args "-p ${val}"
 	# B) ssh parameter
 	config_get val "${section}" ssh
-	[ ! -z ${val} ] && append args "-s ${val}"
+	[ ! -z "${val}" ] && append args "-s ${val}"
 	# C) ssl parameter
 	config_get val "${section}" ssl
-	[ ! -z ${val} ] && append args "-l ${val}"
+	[ ! -z "${val}" ] && append args "-l ${val}"
 	# D) timeout (for ssh, then ssl is assumed)
 	config_get val "${section}" timeout
-	[ ! -z ${val} ] && append args "-t ${val}"
+	[ ! -z "${val}" ] && append args "-t ${val}"
 	# E) verbose parameter
 	local verbosed
 	config_get_bool verbosed "${section}" verbose 0
-	[ ${verbosed} -ne 0 ] && append args "-v"
+	[ "${verbosed}" -ne 0 ] && append args "-v"
 
 	# execute program and return its exit code
-	[ ${verbosed} -ne 0 ] && echo "${NAME}: section ${section} starting ${PROG} ${args}"
+	[ "${verbosed}" -ne 0 ] && echo "${NAME}: section ${section} starting ${PROG} ${args}"
 	${PROG} ${args}
 	return $?
 }
@@ -70,7 +70,7 @@ stop()
 		for pid in `pidof sslh`
 		 do
 			# check if correct program
-			ps | grep ${pid} | grep ${PROG} >/dev/null
+			ps | grep "${pid}" | grep "${PROG}" >/dev/null
 			[ $? -ne 0 ] && continue
 
 			# kill process
