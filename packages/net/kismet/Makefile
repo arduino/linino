@@ -95,12 +95,12 @@ CONFIGURE_VARS += \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
 	LDFLAGS="$$$$LDFLAGS" \
-	LIBS="-nodefaultlibs -luClibc++ -lm -lgcc -lnotimpl" \
-	CLIENTLIBS="-nodefaultlibs -luClibc++ -lm -lgcc -lnotimpl" \
+	LIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
+	CLIENTLIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		LD="\$$$$(CC)" \
+		LD="$(TARGET_CXX)" \
 		all
 endef
 
