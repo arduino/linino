@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kismet
-PKG_VERSION:=2008-05-R1
-PKG_RELEASE:=2
+PKG_VERSION:=2009-06-R1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kismetwireless.net/code
-PKG_MD5SUM:=6ee365d36354b4dee4945e67f8149294
+PKG_MD5SUM:=8d77138020ace39f175a906dc0d3b267
 
 PKG_BUILD_DEPENDS:=libpcap libncurses uclibcxx
 
@@ -95,7 +95,8 @@ CONFIGURE_VARS += \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
 	LDFLAGS="$$$$LDFLAGS" \
-	LIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
+	LIBS="-nodefaultlibs -luClibc++ -lm -lgcc -lnotimpl" \
+	CLIENTLIBS="-nodefaultlibs -luClibc++ -lm -lgcc -lnotimpl" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
