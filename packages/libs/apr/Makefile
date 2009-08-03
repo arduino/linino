@@ -30,7 +30,8 @@ endef
 TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += \
 	--with-devrandom=/dev/urandom \
-	--disable-dso
+	--disable-dso \
+	--enable-ipv6
 
 CONFIGURE_VARS += \
 	apr_cv_process_shared_works=no \
