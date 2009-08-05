@@ -1,5 +1,6 @@
---- polarssl-0.10.1.orig/library/Makefile	2009-01-11 00:31:23.000000000 +0100
-+++ polarssl-0.10.1/library/Makefile	2009-03-05 15:11:20.352419296 +0100
+diff -pruN polarssl-0.12.0.orig/library/Makefile polarssl-0.12.0/library/Makefile
+--- polarssl-0.12.0.orig/library/Makefile	2009-03-28 18:53:03.000000000 +0100
++++ polarssl-0.12.0/library/Makefile	2009-08-05 17:53:55.000000000 +0200
 @@ -29,7 +29,7 @@ OBJS=	aes.o		arc4.o		base64.o	\
  
  .SILENT:
