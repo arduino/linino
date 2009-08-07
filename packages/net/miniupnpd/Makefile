@@ -31,7 +31,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) -f Makefile.openwrt \
 		$(TARGET_CONFIGURE_OPTS) \
 		STAGING_DIR="$(STAGING_DIR)" \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(KERNEL_BUILD_DIR)/iptables-1.4.3.2/include -DIPTABLES_143" \
+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(KERNEL_BUILD_DIR)/iptables-1.4.4/include -DIPTABLES_143" \
 		LIBS="$(STAGING_DIR)/usr/lib/libiptc.so"
 endef
 
