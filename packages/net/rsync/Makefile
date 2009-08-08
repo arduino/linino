@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rsync
-PKG_VERSION:=3.0.3
-PKG_RELEASE:=2
+PKG_VERSION:=3.0.6
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://rsync.samba.org/ftp/rsync
-PKG_MD5SUM:=16d41aab9ece435198af222c5415a304
+PKG_MD5SUM:=e9865d093a18e4668b9d31b635dc8e99
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,7 +27,7 @@ define Package/rsync
 endef
 
 define Package/rsync/description
-	sync is a program that allows files to be copied to
+	rsync is a program that allows files to be copied to
 	and from remote machines in much the same way as rcp.
 	It has many more options than rcp, and uses the rsync
 	remote-update protocol to greatly speed up file
