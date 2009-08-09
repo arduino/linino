@@ -2,17 +2,12 @@
 # Copyright (C) 2006 OpenWrt.org
 START=50
 
-BIN=miredo
-DEFAULT=/etc/default/$BIN
-RUN_D=/var/run
-PID_F=$RUN_D/$BIN.pid
+PID_F=/var/run/miredo.pid
 
 start() {
-	[ -f $DEFAULT ] && . $DEFAULT
-	[ -d $RUN_D ] || mkdir -p $RUN_D
-	insmod ipv6
-	insmod tun
-	$BIN $OPTIONS
+	insmod ipv6 2>/dev/null
+	insmod tun 2>/dev/null
+	miredo -c /etc/miredo.conf
 }
 
 stop() {
