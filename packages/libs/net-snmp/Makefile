@@ -143,10 +143,6 @@ SNMP_MIB_MODULES_EXCLUDED = \
 
 SNMP_TRANSPORTS_INCLUDED = Callback UDP 
 
-ifeq ($(CONFIG_IPV6),y)
-SNMP_TRANSPORTS_INCLUDED+= UDPIPv6
-endif
-
 SNMP_TRANSPORTS_EXCLUDED = TCP TCPIPv6 Unix
 
 TARGET_CFLAGS += $(FPIC)
@@ -173,6 +169,11 @@ CONFIGURE_ARGS += \
 	--without-libwrap \
 	--without-rpm \
 	--without-zlib \
+
+ifeq ($(CONFIG_IPV6),y)
+SNMP_TRANSPORTS_INCLUDED+= UDPIPv6
+CONFIGURE_ARGS+= --enable-ipv6
+endif
 
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
