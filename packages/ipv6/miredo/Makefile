@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miredo
-PKG_VERSION:=1.1.6
+PKG_VERSION:=1.1.7
 PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=http://www.remlab.net/files/miredo/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=bf49c1ddc068746760787d0cf76e40de
+PKG_MD5SUM:=4fb5e7df6a6255528e4c5380401ad3ea
 
 include $(INCLUDE_DIR)/package.mk
 
