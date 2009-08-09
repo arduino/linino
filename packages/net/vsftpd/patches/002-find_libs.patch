@@ -1,8 +1,6 @@
-Index: vsftpd-2.0.6/Makefile
-===================================================================
---- vsftpd-2.0.6.orig/Makefile	2008-04-13 11:41:08.000000000 +0200
-+++ vsftpd-2.0.6/Makefile	2008-04-13 11:41:08.000000000 +0200
-@@ -5,8 +5,8 @@
+--- a/Makefile
++++ b/Makefile
+@@ -5,8 +5,8 @@ IFLAGS  = -idirafter dummyinc
  #CFLAGS = -g
  CFLAGS	=	-O2 -Wall -W -Wshadow #-pedantic -Werror -Wconversion
  

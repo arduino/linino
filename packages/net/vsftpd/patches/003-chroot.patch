@@ -1,8 +1,6 @@
-Index: vsftpd-2.0.6/tunables.c
-===================================================================
---- vsftpd-2.1.0.orig/tunables.c	2008-04-13 11:41:08.000000000 +0200
-+++ vsftpd-2.1.0/tunables.c	2008-04-13 11:41:09.000000000 +0200
-@@ -242,7 +242,7 @@
+--- a/tunables.c
++++ b/tunables.c
+@@ -244,7 +244,7 @@ tunables_load_defaults()
    /* -rw------- */
    tunable_chown_upload_mode = 0600;
  
