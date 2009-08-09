@@ -1,12 +1,11 @@
-diff -ruN dbus-1.2.4.6permissive.orig/configure dbus-1.2.4.6permissive/configure
---- dbus-1.2.4.6permissive.orig/configure      2009-05-06 13:35:38.000000000 -0400
-+++ dbus-1.2.4.6permissive/configure   2009-08-05 17:53:25.000000000 -0400
-@@ -20927,19 +20927,6 @@
+--- a/configure
++++ b/configure
+@@ -20927,19 +20927,6 @@ if test "x$GCC" = "xyes"; then
       ;;
    esac
-
+ 
 -  case " $CFLAGS " in
--  *[\ \       ]-fPIE[\ \      ]*) ;;
+-  *[\ \	]-fPIE[\ \	]*) ;;
 -  *) if cc_supports_flag -fPIE; then
 -        PIE_CFLAGS="-fPIE"
 -        if ld_supports_flag -z,relro; then
@@ -19,5 +18,5 @@ diff -ruN dbus-1.2.4.6permissive.orig/configure dbus-1.2.4.6permissive/configure
 -  esac
 -
    ### Disabled warnings, and compiler flag overrides
-
+ 
    # Let's just ignore unused for now
