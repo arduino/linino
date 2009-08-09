@@ -3,8 +3,7 @@
 
 START=90
 
-case "$1" in
-    start|boot)
+start() {
 	if [ -s "/etc/stunnel/stunnel.pem" ]; then
 		chmod og-rwx /etc/stunnel/stunnel.pem
 		stunnel
@@ -22,9 +21,9 @@ case "$1" in
 			stunnel) &
 		}
 	fi
-	;;
-    stop)
+}
+
+stop() {
 	killall stunnel
 	killall -9 stunnel
-	;;
-esac
+}

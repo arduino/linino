@@ -1,6 +1,6 @@
 --- a/configure
 +++ b/configure
-@@ -20898,56 +20898,56 @@
+@@ -21536,56 +21536,56 @@ _ACEOF
  fi
  rm -f conftest*
  
@@ -100,7 +100,7 @@
  
  
  { echo "$as_me:$LINENO: **************************************** entropy" >&5
-@@ -23394,8 +23394,8 @@
+@@ -24033,8 +24033,8 @@ _ACEOF
  
  
  # Add SSL includes and libraries

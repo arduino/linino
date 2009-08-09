@@ -2,9 +2,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=stunnel
-PKG_VERSION:=4.25
+PKG_VERSION:=4.27
 PKG_RELEASE:=1
-PKG_MD5SUM:=7f00799f43910c0362df0e69c65965aa
+PKG_MD5SUM:=3c655d815576f50046a1c28744b88681
 PKG_SOURCE_URL:=http://www.stunnel.org/download/stunnel/src/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 
@@ -23,7 +23,7 @@ define Package/stunnel/description
 	connections inside SSL (Secure Sockets Layer) available on both Unix
 	and Windows. Stunnel can allow you to secure non-SSL aware daemons and
 	protocols (like POP, IMAP, LDAP, etc) by having Stunnel provide the
-	encryption, requiring no changes to the daemon's code. 
+	encryption, requiring no changes to the daemon's code.
 endef
 
 
@@ -35,7 +35,7 @@ define Build/Configure
 	)
 endef
 
-define Build/Compile	
+define Build/Compile
 	mkdir -p $(PKG_INSTALL_DIR)/etc/stunnel
 	echo '#dummy' > $(PKG_INSTALL_DIR)/etc/stunnel/stunnel.pem
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -43,11 +43,11 @@ define Build/Compile
 		all install
 endef
 
-define Package/stunnel/install	
+define Package/stunnel/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/stunnel $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/stunnel
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/stunnel/libstunnel.so $(1)/usr/lib/stunnel/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/stunnel/libstunnel.so $(1)/usr/lib/stunnel/
 	$(INSTALL_DIR) $(1)/etc/stunnel
 	$(INSTALL_CONF) ./files/stunnel.conf $(1)/etc/stunnel/stunnel.conf
 	$(INSTALL_DIR) $(1)/etc/init.d
