@@ -1,16 +1,16 @@
---- a/vpnc-script
-+++ b/vpnc-script
-@@ -95,7 +95,7 @@
- # =========== tunnel interface handling ====================================
- 
- do_ifconfig() {
--	ifconfig "$TUNDEV" inet "$INTERNAL_IP4_ADDRESS" $ifconfig_syntax_ptp "$INTERNAL_IP4_ADDRESS" netmask 255.255.255.255 mtu 1412 up
-+	ifconfig "$TUNDEV" "$INTERNAL_IP4_ADDRESS" $ifconfig_syntax_ptp "$INTERNAL_IP4_ADDRESS" netmask 255.255.255.255 mtu 1412 up
- }
- 
- destroy_tun_device() {
-@@ -490,6 +490,18 @@
+--- a/vpnc-script.in
++++ b/vpnc-script.in
+@@ -97,7 +97,7 @@ do_ifconfig() {
  	fi
+ 
+ 	# Point to point interface require a netmask of 255.255.255.255 on some systems
+-	ifconfig "$TUNDEV" inet "$INTERNAL_IP4_ADDRESS" $ifconfig_syntax_ptp "$INTERNAL_IP4_ADDRESS" netmask 255.255.255.255 mtu ${MTU} up
++	ifconfig "$TUNDEV" "$INTERNAL_IP4_ADDRESS" $ifconfig_syntax_ptp "$INTERNAL_IP4_ADDRESS" netmask 255.255.255.255 mtu ${MTU} up
+ 
+ 	if [ -n "$INTERNAL_IP4_NETMASK" ]; then
+ 		set_network_route $INTERNAL_IP4_NETADDR $INTERNAL_IP4_NETMASK $INTERNAL_IP4_NETMASKLEN
+@@ -503,6 +503,18 @@ do_disconnect() {
+ 	destroy_tun_device
  }
  
 +start_vpn_nat() {
@@ -28,7 +28,7 @@
  #### Main
  
  if [ -z "$reason" ]; then
-@@ -503,8 +515,10 @@
+@@ -516,8 +528,10 @@ case "$reason" in
  		;;
  	connect)
  		do_connect

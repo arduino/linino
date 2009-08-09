@@ -1,7 +1,7 @@
 --- a/Makefile
 +++ b/Makefile
 @@ -20,7 +20,7 @@
- # $Id: Makefile 236 2007-09-05 20:40:59Z Joerg Mayer $
+ # $Id: Makefile 312 2008-06-15 18:09:42Z Joerg Mayer $
  
  DESTDIR=
 -PREFIX=/usr/local
@@ -9,7 +9,7 @@
  ETCDIR=/etc/vpnc
  BINDIR=$(PREFIX)/bin
  SBINDIR=$(PREFIX)/sbin
-@@ -50,14 +50,11 @@
+@@ -51,14 +51,11 @@ RELEASE_VERSION := $(shell cat VERSION)
  #OPENSSLLIBS = -lcrypto
  
  CC=gcc

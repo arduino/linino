@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vpnc
-PKG_VERSION:=0.5.1
+PKG_VERSION:=0.5.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.unix-ag.uni-kl.de/~massar/vpnc/
-PKG_MD5SUM:=7a8e94dbe94f39a4fd89b72e0125f66f
+PKG_MD5SUM:=4378f9551d5b077e1770bbe09995afb3
 
 include $(INCLUDE_DIR)/package.mk
 
