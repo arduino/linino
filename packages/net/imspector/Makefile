@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=imspector
 PKG_VERSION:=0.8
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.imspector.org/downloads
@@ -24,7 +24,7 @@ define Package/imspector
   TITLE:=IMSpector is an Instant Messenger proxy
   URL:=http://www.imspector.org
   DEPENDS:=+libopenssl +libstdcpp +libmysqlclient +libsqlite3 +libpq \
-	+libiconv
+	+libiconv +libpthread
 endef
 
 define Package/imspector/description
