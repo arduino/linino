@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sane-backends
-PKG_VERSION:=1.0.19
-PKG_RELEASE:=3
+PKG_VERSION:=1.0.20
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.sane-project.org/pub/sane/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=8c0936272dcfd4e98c51512699f1c06f
+PKG_MD5SUM:=a0cfdfdebca2feb4f2ba5d3418b15a42
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -51,7 +51,7 @@ define Package/sane-libs/description
 $(call Package/sane-backends/Default/description)
  This package contains the SANE shared libraries.
 endef
- 
+
 define Package/sane-frontends
   $(call Package/sane-backends/Default)
   SECTION:=utils
@@ -64,7 +64,7 @@ define Package/sane-frontends/description
 $(call Package/sane-backends/Default/description)
  This package contains the SANE frontends.
 endef
- 
+
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \
@@ -72,7 +72,7 @@ CONFIGURE_ARGS+= \
 	--without-gphoto2 \
 	--disable-debug \
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
@@ -84,7 +84,7 @@ endef
 
 define Package/sane-backends/install
 	$(INSTALL_DIR) $(1)/etc/sane.d
-	$(CP) $(PKG_INSTALL_DIR)/etc/sane.d/*.conf $(1)/etc/sane.d/
+	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/sane.d/*.conf $(1)/etc/sane.d/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
 endef
