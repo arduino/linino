@@ -33,8 +33,3 @@ start() {
 stop() {
 	killall -9 svnserve
 }
-
-restart() {
-	stop
-	start
-}

@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=subversion
-PKG_VERSION:=1.5.2
-PKG_RELEASE:=3
+PKG_VERSION:=1.6.4
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://subversion.tigris.org/downloads/
-PKG_MD5SUM:=8321d0e1964846090f0174cb6bb18838
+PKG_MD5SUM:=11e3fa838c9a558cadc378f2807572e2
 
 PKG_FIXUP = libtool
 
@@ -23,7 +23,7 @@ define Package/subversion/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A compelling replacement for CVS
-  DEPENDS:=+zlib +libneon +libintl +libapr +libaprutil +libpthread
+  DEPENDS:=+zlib +libneon +libintl +libaprutil
   URL:=http://subversion.tigris.org/
   SUBMENU:=Version Control Systems
 endef
@@ -68,6 +68,10 @@ define Package/subversion-server/description
   This package contains the subversion server.
 endef
 
+define Package/subversion-server/conffiles
+/etc/config/subversion
+endef
+
 CONFIGURE_ARGS += \
 	--with-apr="$(STAGING_DIR)/usr/bin/apr-1-config" \
 	--with-apr-util="$(STAGING_DIR)/usr/bin/apu-1-config" \
@@ -109,7 +113,7 @@ define Package/subversion-server/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/svn{look,admin,dumpfilter,serve} $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DATA) ./files/subversion.config $(1)/etc/config/subversion
+	$(INSTALL_CONF) ./files/subversion.config $(1)/etc/config/subversion
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/subversion.init $(1)/etc/init.d/subversion
 endef
