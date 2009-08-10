@@ -1,15 +1,6 @@
-tcpdump explicitly checks for a static version of libpcap in
-../libpcap-[0-9]*.[0-9]*(.[0-9]*)?([ab][0-9]*)? relative to its build dir
-if found, tcpdump is linked statically against this lib
-
-The patch removes the check for the static lib and headers in this relative
-location for tcpdump's configure script.
-
-Index: tcpdump-3.9.8/configure
-===================================================================
---- tcpdump-3.9.8.orig/configure	2007-09-25 19:16:50.000000000 -0700
-+++ tcpdump-3.9.8/configure	2009-05-21 17:17:07.000000000 -0700
-@@ -9278,26 +9278,6 @@
+--- a/configure
++++ b/configure
+@@ -9280,26 +9280,6 @@ echo "${ECHO_T}Using $pfopen" >&6; }
  		    LIBS="$LIBS $pfopen"
  	    fi
      fi
@@ -36,11 +27,11 @@ Index: tcpdump-3.9.8/configure
  	    { echo "$as_me:$LINENO: checking for main in -lpcap" >&5
  echo $ECHO_N "checking for main in -lpcap... $ECHO_C" >&6; }
  if test "${ac_cv_lib_pcap_main+set}" = set; then
-@@ -9362,40 +9342,6 @@
+@@ -9364,40 +9344,6 @@ fi
  echo "$as_me: error: see the INSTALL doc for more info" >&2;}
     { (exit 1); exit 1; }; }
  	    fi
--	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    { echo "$as_me:$LINENO: checking for extraneous pcap header directories" >&5
+-	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    { echo "$as_me:$LINENO: checking for extraneous pcap header directories" >&5
 -echo $ECHO_N "checking for extraneous pcap header directories... $ECHO_C" >&6; }
 -	    if test \( ! -r /usr/local/include/pcap.h \) -a \
 -			\( ! -r /usr/include/pcap.h \); then

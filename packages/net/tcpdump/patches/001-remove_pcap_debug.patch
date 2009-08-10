@@ -1,7 +1,6 @@
-diff -urN tcpdump-3.9.8.orig/tcpdump.c tcpdump-3.9.8/tcpdump.c
---- tcpdump-3.9.8.orig/tcpdump.c	
-+++ tcpdump-3.9.8/tcpdump.c	
-@@ -765,20 +765,6 @@
+--- a/tcpdump.c
++++ b/tcpdump.c
+@@ -826,20 +826,6 @@ main(int argc, char **argv)
  				error("invalid data link type %s", gndo->ndo_dltname);
  			break;
  
@@ -19,6 +18,6 @@ diff -urN tcpdump-3.9.8.orig/tcpdump.c tcpdump-3.9.8/tcpdump.c
 -			}
 -			break;
 -#endif
- 		case 'Z':
+ 		case 'z':
  			if (optarg) {
- 				username = strdup(optarg);
+ 				zflag = strdup(optarg);

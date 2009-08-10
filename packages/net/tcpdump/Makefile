@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,15 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tcpdump
-PKG_VERSION:=3.9.8
-PKG_RELEASE:=3
+PKG_VERSION:=4.0.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.tcpdump.org/release/ \
 	http://ftp.gwdg.de/pub/misc/tcpdump/ \
 	http://www.at.tcpdump.org/ \
 	http://www.br.tcpdump.org/
-PKG_MD5SUM:=c491a78c52fe73f1f7271aa5d8c6ab2e
+PKG_MD5SUM:=b22ca72890df2301d922c9f2d17867f9
 
 include $(INCLUDE_DIR)/package.mk
 
