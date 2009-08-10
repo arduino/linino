@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vnstat
-PKG_VERSION:=1.7
-PKG_RELEASE:=2
+PKG_VERSION:=1.8
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://humdi.net/vnstat
-PKG_MD5SUM:=e5788e8122e34f2c93561e2a84c19432
+PKG_MD5SUM:=99a30716b5013e7e249e500ee6ee2985
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,9 +29,9 @@ $(call Package/vnstat/Default)
 endef
 
 define Package/vnstat/description
-	vnStat is a network traffic monitor for Linux that keeps a log of daily 
-	network traffic for the selected interface(s). vnStat isn't a packet 
-	sniffer. The traffic information is analyzed from the /proc -filesystem, 
+	vnStat is a network traffic monitor for Linux that keeps a log of daily
+	network traffic for the selected interface(s). vnStat isn't a packet
+	sniffer. The traffic information is analyzed from the /proc -filesystem,
 	so vnStat can be used without root permissions.
 endef
 
@@ -79,14 +79,14 @@ define Package/vnstat/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/vnstatd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) ./files/vnstat.conf $(1)/etc
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/cfg/vnstat.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DATA) ./files/vnstat-uci.conf $(1)/etc/config/vnstat
+	$(INSTALL_CONF) ./files/vnstat-uci.conf $(1)/etc/config/vnstat
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/vnstat.init $(1)/etc/init.d/vnstat
 endef
 
-define Package/vnstati/install	
+define Package/vnstati/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/vnstati $(1)/usr/bin/
 endef
