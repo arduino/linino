@@ -53,7 +53,7 @@ endef
 
 define Package/kismet-drone
 $(call Package/kismet/Default)
-  DEPENDS+= +libpcap +dbus
+  DEPENDS+= +libpcap
   TITLE+= drone
 endef
 
@@ -68,7 +68,7 @@ endef
 
 define Package/kismet-server
 $(call Package/kismet/Default)
-  DEPENDS+= +libpcap +dbus
+  DEPENDS+= +libpcap
   TITLE+= server
 endef
 
