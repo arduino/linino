@@ -27,7 +27,7 @@ endef
 
 define Package/usbutils/postinst
 #!/bin/sh
-$${IPKG_INSTROOT}/usr/sbin/update-usbids.sh
+(cd $${IPKG_INSTROOT}/usr/share; $${IPKG_INSTROOT}/usr/sbin/update-usbids.sh)
 endef
 
 # uses GNU configure
