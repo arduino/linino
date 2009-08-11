@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -85,11 +85,6 @@ endef
 
 CONFIGURE_ARGS += \
 	--sysconfdir=/etc/kismet \
-	--enable-syspcap=yes \
-	--disable-dbus \
-	--disable-setuid \
-	--disable-wsp100 \
-	--disable-gpsmap \
 
 CONFIGURE_VARS += \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
