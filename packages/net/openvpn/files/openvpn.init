@@ -7,6 +7,7 @@
 START=95
 BIN=/usr/sbin/openvpn
 SSD=start-stop-daemon
+EXTRA_COMMANDS="up down"
 
 LIST_SEP="
 "
@@ -141,4 +142,28 @@ reload() {
 
 restart() {
 	stop; sleep 5; start
+}
+
+up() {
+	local exists
+	local INSTANCE
+	for INSTANCE in "$@"; do
+		config_load openvpn
+		config_get exists "$INSTANCE" TYPE
+		if [ "$exists" == "openvpn" ]; then
+			start_service "$INSTANCE"
+		fi
+	done
+}
+
+down() {
+	local exists
+	local INSTANCE
+	for INSTANCE in "$@"; do
+		config_load openvpn
+		config_get exists "$INSTANCE" TYPE
+		if [ "$exists" == "openvpn" ]; then
+			stop_service "$INSTANCE"
+		fi
+	done
 }
