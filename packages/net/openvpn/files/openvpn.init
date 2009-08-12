@@ -120,6 +120,7 @@ kill_service() {
 	PID="/var/run/openvpn-$s.pid"
 
 	$SSD -q -p $PID -x $BIN -K -s $S
+	[ "$S" == "TERM" ] && rm -f "$PID"
 }
 
 hup_service()  { kill_service "$1" HUP;  }
