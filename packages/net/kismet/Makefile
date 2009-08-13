@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kismet
 PKG_VERSION:=2009-06-R1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kismetwireless.net/code
@@ -86,7 +86,7 @@ CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
 	LDFLAGS="$$$$LDFLAGS" \
 	LIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
-	CLIENTLIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
+	CLIENTCLIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
