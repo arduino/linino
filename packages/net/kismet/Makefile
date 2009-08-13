@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kismetwireless.net/code
 PKG_MD5SUM:=8d77138020ace39f175a906dc0d3b267
 
-PKG_BUILD_DEPENDS:=libpcap libncurses uclibcxx
+PKG_BUILD_DEPENDS:=libpcap libncurses uclibcxx libpcre
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -50,7 +50,7 @@ endef
 
 define Package/kismet-drone
 $(call Package/kismet/Default)
-  DEPENDS+= +libpcap
+  DEPENDS+= +libpcap +libpcre
   TITLE+= drone
 endef
 
@@ -65,7 +65,7 @@ endef
 
 define Package/kismet-server
 $(call Package/kismet/Default)
-  DEPENDS+= +libpcap
+  DEPENDS+= +libpcap +libpcre
   TITLE+= server
 endef
 
