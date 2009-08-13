@@ -148,8 +148,8 @@ restart() {
 up() {
 	local exists
 	local INSTANCE
+	config_load openvpn
 	for INSTANCE in "$@"; do
-		config_load openvpn
 		config_get exists "$INSTANCE" TYPE
 		if [ "$exists" == "openvpn" ]; then
 			start_service "$INSTANCE"
@@ -160,8 +160,8 @@ up() {
 down() {
 	local exists
 	local INSTANCE
+	config_load openvpn
 	for INSTANCE in "$@"; do
-		config_load openvpn
 		config_get exists "$INSTANCE" TYPE
 		if [ "$exists" == "openvpn" ]; then
 			stop_service "$INSTANCE"
