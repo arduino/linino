@@ -40,10 +40,7 @@ $(call Package/kismet/Default)
 endef
 
 define Package/kismet-client/conffiles
-/etc/kismet/ap_manuf
-/etc/kismet/client_manuf
 /etc/kismet/kismet.conf
-/etc/kismet/kismet_ui.conf
 endef
 
 define Package/kismet-client/description
@@ -73,8 +70,6 @@ $(call Package/kismet/Default)
 endef
 
 define Package/kismet-server/conffiles
-/etc/kismet/ap_manuf
-/etc/kismet/client_manuf
 /etc/kismet/kismet.conf
 endef
 
@@ -107,26 +102,21 @@ endef
 
 define Package/kismet-client/install
 	$(INSTALL_DIR) $(1)/etc/kismet/
-	$(INSTALL_DATA) ./files/ap_manuf $(1)/etc/kismet/
-	$(INSTALL_DATA) ./files/client_manuf $(1)/etc/kismet/
-	$(INSTALL_DATA) ./files/kismet.conf $(1)/etc/kismet/
-	$(INSTALL_DATA) ./files/kismet_ui.conf $(1)/etc/kismet/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/conf/kismet.conf $(1)/etc/kismet/
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/kismet_client $(1)/usr/bin/
 endef
 
 define Package/kismet-drone/install
 	$(INSTALL_DIR) $(1)/etc/kismet/
-	$(INSTALL_DATA) ./files/kismet_drone.conf $(1)/etc/kismet/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/conf/kismet_drone.conf $(1)/etc/kismet/
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/kismet_drone $(1)/usr/bin/
 endef
 
 define Package/kismet-server/install
 	$(INSTALL_DIR) $(1)/etc/kismet/
-	$(INSTALL_DATA) ./files/ap_manuf $(1)/etc/kismet/
-	$(INSTALL_DATA) ./files/client_manuf $(1)/etc/kismet/
-	$(INSTALL_DATA) ./files/kismet.conf $(1)/etc/kismet/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/conf/kismet.conf $(1)/etc/kismet/
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/kismet_server $(1)/usr/bin/
 endef
