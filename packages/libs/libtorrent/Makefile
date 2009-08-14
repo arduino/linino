@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,9 +9,9 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libtorrent
 
-PKG_REV:=1094
-PKG_VERSION:=0.12.4_r$(PKG_REV)
-PKG_RELEASE:=7
+PKG_REV:=1096
+PKG_VERSION:=0.12.5_r$(PKG_REV)
+PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=svn://rakshasa.no/libtorrent/trunk/libtorrent
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
