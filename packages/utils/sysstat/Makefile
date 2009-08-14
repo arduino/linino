@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sysstat
-PKG_VERSION:=8.0.1
-PKG_RELEASE:=2
+PKG_VERSION:=9.0.4
+PKG_RELEASE:=1
 
-PKG_SOURCE:=sysstat-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://perso.orange.fr/sebastien.godard
-PKG_MD5SUM:=10369aeb42290f0141e685d33cdac658
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://pagesperso-orange.fr/sebastien.godard
+PKG_MD5SUM:=4ecde27986c3745a363a95e34cf897c8
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -21,11 +21,12 @@ define Package/sysstat
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Sysstat performance monitoring tools
-  URL:=http://perso.orange.fr/sebastien.godard/index.html
+  URL:=http://pagesperso-orange.fr/sebastien.godard/index.html
 endef
 
 define Package/sysstat/description
-  The sysstat utilities are a collection of performance monitoring tools for Linux. These include sar, sadf, mpstat, iostat, pidstat and sa tools.
+  The sysstat utilities are a collection of performance monitoring tools for
+  Linux. These include sar, sadf, mpstat, iostat, pidstat and sa tools.
 endef
 
 define Package/sysstat/conffiles
@@ -45,10 +46,10 @@ define Package/sysstat/install
 	$(INSTALL_DIR) $(1)/usr/lib/sysstat
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/{sadc,sa1,sa2} $(1)/usr/lib/sysstat
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/{sar,sadf,iostat,mpstat} $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/{sar,sadf,iostat,mpstat,pidstat} $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/etc/sysstat
-	$(CP) $(PKG_BUILD_DIR)/sysstat.ioconf $(1)/etc/sysstat
-	$(CP) ./files/config $(1)/etc/sysstat/config
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/sysstat.ioconf $(1)/etc/sysstat
+	$(INSTALL_CONF) ./files/config $(1)/etc/sysstat/config
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/sysstat.init $(1)/etc/init.d/sysstat
 endef

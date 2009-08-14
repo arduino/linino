@@ -7,6 +7,6 @@ START=99
 
 start() {
 	mkdir -p /var/log/sysstat
-        /usr/lib/sysstat/sadc -d -F -L -
+	/usr/lib/sysstat/sadc -S DISK -F -L -
 }
 
