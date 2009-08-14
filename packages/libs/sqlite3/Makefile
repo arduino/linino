@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sqlite
-PKG_VERSION:=3.6.14
+PKG_VERSION:=3.6.17
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-amalgamation-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sqlite.org/
-PKG_MD5SUM:=cfe9d3021cfdb58e2b02a36a4cb6b70c
+PKG_MD5SUM:=3172f8a23e7e7f0e5b295062e339a149
 
 PKG_BUILD_DEPENDS:=libncurses libreadline
 
