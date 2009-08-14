@@ -22,6 +22,7 @@ PKG_BUILD_DEPENDS:=libncurses libreadline
 include $(INCLUDE_DIR)/package.mk
 
 define Package/sqlite2/Default
+  SUBMENU:=database
   TITLE:=SQLite (v2.x) database engine
   URL:=http://www.sqlite.org/
 endef
