@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=coova-chilli
-PKG_VERSION:=1.0.13
+PKG_VERSION:=1.0.14
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ap.coova.org/chilli/
-PKG_MD5SUM:=130c565ea117e3595190c7a2bfe5676a
+PKG_MD5SUM:=88774ec55f9943d174ea7dd26e85fd8a
 
 include $(INCLUDE_DIR)/package.mk
 
