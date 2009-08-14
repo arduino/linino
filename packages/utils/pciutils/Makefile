@@ -32,7 +32,7 @@ endef
 
 define Package/pciutils/postinst
 #!/bin/sh
-(cd $${IPKG_INSTROOT}/usr/share; $${IPKG_INSTROOT}/usr/sbin/update-pciids.sh
+(cd $${IPKG_INSTROOT}/usr/share; $${IPKG_INSTROOT}/usr/sbin/update-pciids.sh)
 exit 0
 endef
 
