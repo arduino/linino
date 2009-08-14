@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2007,2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -7,13 +7,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=input-utils
-PKG_VERSION:=20051128-143821
+PKG_VERSION:=20081014-101501
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/input/
 PKG_SOURCE:=input-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dl.bytesex.org/cvs-snapshots/
-PKG_MD5SUM:=3f8504c769c41de0456baaaca1484fa6
+PKG_MD5SUM:=a6854dc5218301b67324b483d26f1bee
 
 include $(INCLUDE_DIR)/package.mk
 
