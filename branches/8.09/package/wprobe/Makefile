@@ -20,33 +20,33 @@ include $(INCLUDE_DIR)/package.mk
 
 define KernelPackage/wprobe
   SUBMENU:=Network Support
+  DEPENDS:=@LINUX_2_6
   TITLE:=Wireless driver probe infrastructure
   FILES:= \
   	$(PKG_BUILD_DIR)/kernel/wprobe.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,01,wprobe)
-  DEPENDS:=@!LINUX_2_4
 endef
 
 define KernelPackage/wprobe/description
   A module that exports measurement data from wireless driver to user space
 endef
 
-define Package/wprobe-info
+define Package/wprobe-util
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+kmod-wprobe +libnl-tiny
   TITLE:=Wireless measurement utility
 endef
 
-define Package/wprobe-info/description
-  wprobe-info uses the wprobe kernel module to query
+define Package/wprobe-util/description
+  wprobe-util uses the wprobe kernel module to query
   wireless driver measurement data from an interface
 endef
 
 define Package/wprobe-export
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+kmod-wprobe +libnl-tiny
+  DEPENDS:=+wprobe-util
   TITLE:=Wireless measurement data exporter
 endef
 
@@ -83,6 +83,7 @@ define Build/Compile/lib
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="$(TARGET_CPPFLAGS) -I$(PKG_BUILD_DIR)/kernel" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
+		HOST_OS=Linux \
 		LIBNL="-lnl-tiny"
 endef
 
@@ -108,17 +109,18 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/kernel/linux $(1)/usr/include/wprobe
 endef
 
-define Package/wprobe-info/install
+define Package/wprobe-util/install
 	$(INSTALL_DIR) $(1)/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/user/wprobe-info $(1)/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/user/wprobe-util $(1)/sbin/
 endef
 
 define Package/wprobe-export/install
-	$(INSTALL_DIR) $(1)/sbin $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/wprobe.init $(1)/etc/init.d/
+	$(INSTALL_DIR) $(1)/sbin $(1)/etc/init.d $(1)/etc/config
+	$(INSTALL_BIN) ./files/wprobe.init $(1)/etc/init.d/wprobe
+	$(INSTALL_BIN) ./files/wprobe.config $(1)/etc/config/wprobe
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/exporter/wprobe-export $(1)/sbin/
 endef
 
 $(eval $(call KernelPackage,wprobe))
-$(eval $(call BuildPackage,wprobe-info))
+$(eval $(call BuildPackage,wprobe-util))
 $(eval $(call BuildPackage,wprobe-export))
