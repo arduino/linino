@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luafilesystem
-PKG_VERSION:=1.4.1
+PKG_VERSION:=1.4.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://luaforge.net/frs/download.php/3345
-PKG_MD5SUM:=fe2fa6decc48f0267b4f09975750280e
+PKG_SOURCE_URL:=http://luaforge.net/frs/download.php/3931
+PKG_MD5SUM:=8e7b2a9b899d669280456d0f95afd961
 
 include $(INCLUDE_DIR)/package.mk
 
