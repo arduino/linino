@@ -18,8 +18,8 @@ PKG_MD5SUM:=942094c35acf850235d60831bb0dca38
 include $(INCLUDE_DIR)/package.mk
 
 define Package/babel
-  SECTION:=ipv6
-  CATEGORY:=IPv6
+  SECTION:=net
+  CATEGORY:=Network
   TITLE:=A loop-free distance-vector routing protocol
   URL:=http://www.pps.jussieu.fr/~jch/software/babel/
   DEPENDS:=+kmod-ipv6
