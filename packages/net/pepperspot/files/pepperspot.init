@@ -9,6 +9,7 @@ start() {
 	include /lib/network
 	scan_interfaces
 	/sbin/insmod tun >/dev/null 2>&1
+	/sbin/insmod ipv6 >/dev/null 2>&1
 	[ -d $RUN_D ] || mkdir -p $RUN_D
 	config_get ipaddr lan ipaddr
 	/usr/sbin/pepper --dns1="$ipaddr"

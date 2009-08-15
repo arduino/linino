@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2008 OpenWrt.org
+#
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pepperspot
-PKG_VERSION:=0.1
+PKG_VERSION:=0.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/pepperspot
-PKG_MD5SUM:=52e5861f6cae05a972b8a159be270bf7
+PKG_MD5SUM:=a7ac2c8f93799f7d23d9ad2a0841fe4a
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -21,7 +21,7 @@ define Package/pepperspot
   SUBMENU:=Captive Portals
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+kmod-tun
+  DEPENDS:=+kmod-tun +kmod-ipv6
   TITLE:=Wireless LAN HotSpot controller
   URL:=http://pepperspot.sourceforge.net/
 endef
@@ -49,7 +49,7 @@ define Package/pepperspot/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/pepper
 	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/doc/pepper.conf $(1)/etc/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/doc/pepper.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/pepper $(1)/usr/sbin/
 endef
