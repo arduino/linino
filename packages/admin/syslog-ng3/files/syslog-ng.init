@@ -3,8 +3,8 @@
 START=50
 
 start() {
-  [ -f /etc/syslog-ng/syslog-ng.conf ] || {
-    echo "/etc/syslog-ng/syslog-ng.conf does not exist !";
+  [ -f /etc/syslog-ng.conf ] || {
+    echo "/etc/syslog-ng.conf does not exist !";
     exit 0;
   };
   [ -d /var/run ] || mkdir -p /var/run
