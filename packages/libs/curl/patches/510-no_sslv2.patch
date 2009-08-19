@@ -1,22 +1,21 @@
-diff -ruN curl-7.14.0-old/lib/ssluse.c curl-7.14.0-new/lib/ssluse.c
---- curl-7.14.0-old/lib/ssluse.c	2005-04-15 00:52:57.000000000 +0200
-+++ curl-7.14.0-new/lib/ssluse.c	2006-12-18 10:48:20.000000000 +0100
-@@ -1144,9 +1144,11 @@
+--- a/lib/ssluse.c
++++ b/lib/ssluse.c
+@@ -1384,10 +1384,12 @@ ossl_connect_step1(struct connectdata *c
    case CURL_SSLVERSION_TLSv1:
      req_method = TLSv1_client_method();
      break;
 +#ifndef OPENSSL_NO_SSL2
    case CURL_SSLVERSION_SSLv2:
      req_method = SSLv2_client_method();
+     sni = FALSE;
      break;
 +#endif
    case CURL_SSLVERSION_SSLv3:
      req_method = SSLv3_client_method();
-     break;
-diff -ruN curl-7.14.0-old/src/main.c curl-7.14.0-new/src/main.c
---- curl-7.14.0-old/src/main.c	2005-05-12 09:28:03.000000000 +0200
-+++ curl-7.14.0-new/src/main.c	2006-12-18 10:47:48.000000000 +0100
-@@ -819,7 +819,9 @@
+     sni = FALSE;
+--- a/src/main.c
++++ b/src/main.c
+@@ -824,7 +824,9 @@ static void help(void)
  #endif
      " -Y/--speed-limit   Stop transfer if below speed-limit for 'speed-time' secs",
      " -y/--speed-time    Time needed to trig speed-limit abort. Defaults to 30",
@@ -26,7 +25,7 @@ diff -ruN curl-7.14.0-old/src/main.c curl-7.14.0-new/src/main.c
      " -3/--sslv3         Use SSLv3 (SSL)",
      "    --stderr <file> Where to redirect stderr. - means stdout",
      "    --tcp-nodelay   Use the TCP_NODELAY option",
-@@ -1671,10 +1673,12 @@
+@@ -2228,10 +2230,12 @@ static ParameterError getparameter(char 
        /* TLS version 1 */
        config->ssl_version = CURL_SSLVERSION_TLSv1;
        break;

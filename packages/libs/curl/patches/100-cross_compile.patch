@@ -1,8 +1,6 @@
-Index: curl-7.19.5/configure
-===================================================================
---- curl-7.19.5.orig/configure	2009-05-25 10:09:06.000000000 +0400
-+++ curl-7.19.5/configure	2009-05-25 10:09:06.000000000 +0400	
-@@ -25173,16 +25173,6 @@
+--- a/configure
++++ b/configure
+@@ -25479,16 +25479,6 @@ fi
  rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
    fi
  
@@ -19,7 +17,7 @@ Index: curl-7.19.5/configure
  fi
  
  
-@@ -26177,19 +26167,6 @@
+@@ -26486,19 +26476,6 @@ else
  fi
  
  
@@ -39,11 +37,9 @@ Index: curl-7.19.5/configure
      fi
  
    fi
-Index: curl-7.19.5/configure.ac
-===================================================================
---- curl-7.19.5.orig/configure.ac	2009-05-25 10:40:49.000000000 +0400
-+++ curl-7.19.5/configure.ac	2009-05-25 10:40:49.000000000 +0400
-@@ -1340,18 +1340,6 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -1332,18 +1332,6 @@ if test X"$OPT_SSL" != Xno; then
      ])
    fi
  
@@ -62,7 +58,7 @@ Index: curl-7.19.5/configure.ac
  fi
  
  dnl **********************************************************************
-@@ -1615,21 +1603,6 @@
+@@ -1617,21 +1605,6 @@ if test "$OPENSSL_ENABLED" != "1"; then
           CPPFLAGS="$CLEANCPPFLAGS"
         ])
  
