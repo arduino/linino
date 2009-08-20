@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rdiff-backup
-PKG_VERSION:=1.0.5
+PKG_VERSION:=1.2.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://savannah.nongnu.org/download/rdiff-backup/
-PKG_MD5SUM:=fa2a165fa07a94be52c52e3545bc7758
+PKG_MD5SUM:=1a94dc537fcf74d6a3a80bd27808e77b
 
 PKG_BUILD_DEPENDS:=python
 
@@ -26,7 +26,7 @@ define Package/rdiff-backup
   CATEGORY:=Languages
   TITLE:=Incremental backup utility
   URL:=http://www.nongnu.org/rdiff-backup
-  DEPENDS:=+python-mini +librsync +libpopt
+  DEPENDS:=+python-mini +librsync +libpopt +openssl-util
 endef
 
 define Package/rdiff-backup/description
