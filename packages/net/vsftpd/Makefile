@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vsftpd
-PKG_VERSION:=2.1.2
+PKG_VERSION:=2.2.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://vsftpd.beasts.org/users/cevans/
-PKG_MD5SUM:=6a8c8579d50adf0d0fc07226c03bfb52
+PKG_MD5SUM:=e4eb190af270ae65d57a84274a38ec31
 
 include $(INCLUDE_DIR)/package.mk
 
