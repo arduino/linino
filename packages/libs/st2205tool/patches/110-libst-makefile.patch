@@ -1,13 +1,13 @@
---- st2205tool/libst2205/Makefile.orig	2008-01-20 20:22:32.000000000 +0100
-+++ st2205tool/libst2205/Makefile	2008-04-21 07:36:56.000000000 +0200
-@@ -6,15 +6,15 @@
+--- st2205tool/libst2205/Makefile.orig	2009-08-19 17:05:54.000000000 +0200
++++ st2205tool/libst2205/Makefile	2009-08-19 17:06:27.000000000 +0200
+@@ -7,15 +7,15 @@
  all:	libst2205.so
  
- libst2205.so: 	$(OBJ) $(SRC) 
+ libst2205.so:	$(OBJ) $(SRC) $(HEADERS) 
 -	ar -rv libst2205.a $(OBJ) 
 -	gcc -shared -Wl,-soname,libst2205.so.1 -o libst2205.so $(OBJ) $(LIBS)
 +	$(AR) -rv libst2205.a $(OBJ) 
-+	$(GCC) -shared -Wl,-soname,libst2205.so -o libst2205.so $(OBJ) $(LIBS)
++	$(GCC) -shared -Wl,-soname,libst2205.so.1 -o libst2205.so $(OBJ) $(LIBS)
  
  clean:	
  	rm -f $(OBJ) test *.a *.so
