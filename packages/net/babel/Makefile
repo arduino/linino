@@ -7,13 +7,13 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=babel
-PKG_VERSION:=0.95
-PKG_RELEASE:=2
+PKG_NAME:=babeld
+PKG_VERSION:=0.96
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/
-PKG_MD5SUM:=942094c35acf850235d60831bb0dca38
+PKG_MD5SUM:=fdb1949237ec99cd978222fe872c4f0b
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -45,7 +45,7 @@ MAKE_FLAGS += \
 
 define Package/babel/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/babel $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/babeld $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/babel.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d

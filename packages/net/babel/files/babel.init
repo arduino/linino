@@ -2,7 +2,7 @@
 
 START=70
 
-pidfile=/var/run/babel.pid
+pidfile=/var/run/babeld.pid
 
 babel_config() {
 	local cfg="$1"
@@ -20,7 +20,7 @@ start() {
 	if [ -e $pidfile ] ; then
 		echo "$pidfile exists -- not starting babel." >&2
 	else
-		/usr/sbin/babel -D -I $pidfile $interfaces
+		/usr/sbin/babeld -D -I $pidfile $interfaces
 	fi
 }
 
