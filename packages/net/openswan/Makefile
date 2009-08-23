@@ -9,19 +9,19 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=openswan
-PKG_VERSION:=2.6.18
+PKG_VERSION:=2.6.22
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.openswan.org/download
-PKG_MD5SUM:=b485b38b1074155bc337f80557c24c0d
+PKG_MD5SUM:=
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/openswan/Default
   TITLE:=Openswan
   URL:=http://www.openswan.org/
-  DEPENDS:=@LINUX_2_6 @!LINUX_2_6_30
+  DEPENDS:=@LINUX_2_6
 endef
 
 define Package/openswan/Default/description

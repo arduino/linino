@@ -1,0 +1,24 @@
+diff -urN openswan-2.6.22/programs/Makefile.program openswan-2.6.22.new/programs/Makefile.program
+--- openswan-2.6.22/programs/Makefile.program	2009-06-23 04:53:08.000000000 +0200
++++ openswan-2.6.22.new/programs/Makefile.program	2009-08-23 15:35:32.000000000 +0200
+@@ -92,7 +92,7 @@
+ all: ${PROGRAM}
+ programs: all
+ clean:	cleanall
+-install: doinstall
++install:
+ 
+ endif
+ 
+diff -urN openswan-2.6.22/programs/pluto/Makefile openswan-2.6.22.new/programs/pluto/Makefile
+--- openswan-2.6.22/programs/pluto/Makefile	2009-06-23 04:53:08.000000000 +0200
++++ openswan-2.6.22.new/programs/pluto/Makefile	2009-08-23 15:40:30.000000000 +0200
+@@ -171,7 +171,7 @@
+ all: $(BINNAMEPLUTO) $(BINNAMEADNSIFNEEDED) $(BINNAMEWHACK) #$(BINNAMEWHACKINIT) 
+ programs: $(BINNAMEPLUTO) $(BINNAMEADNSIFNEEDED) $(BINNAMEWHACK) #$(BINNAMEWHACKINIT)
+ clean:	cleanall
+-install: doinstall
++install:
+ endif
+ 
+ doinstall: all
