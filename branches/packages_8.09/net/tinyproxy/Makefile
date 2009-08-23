@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tinyproxy
 PKG_VERSION:=1.6.4
-PKG_RELEASE:=1
+PKG_RELEASE:=1.1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.banu.com/pub/tinyproxy/1.6/
