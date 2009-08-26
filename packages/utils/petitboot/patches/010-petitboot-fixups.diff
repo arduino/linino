@@ -1,4 +1,4 @@
- 9 files changed, 90 insertions(+), 33 deletions(-)
+ 12 files changed, 96 insertions(+), 40 deletions(-)
 
 diff --git a/discover/kboot-parser.c b/discover/kboot-parser.c
 index 23d48a4..7c7cb5d 100644
@@ -51,6 +51,19 @@ index 1000505..6101cd8 100644
  
  	conf->dc = dc;
  	conf->global_options = yaboot_global_options,
+diff --git a/lib/log/log.h b/lib/log/log.h
+index 2a5d375..6f44bea 100644
+--- a/lib/log/log.h
++++ b/lib/log/log.h
+@@ -3,7 +3,7 @@
+ 
+ #include <stdio.h>
+ 
+-void pb_log(const char *fmt, ...);
++void __attribute__ ((format (printf, 1, 2))) pb_log(const char *fmt, ...);
+ void pb_log_set_stream(FILE *stream);
+ FILE * pb_log_get_stream(void);
+ void pb_log_always_flush(int state);
 diff --git a/lib/system/system.c b/lib/system/system.c
 index 65bd6bf..7371445 100644
 --- a/lib/system/system.c
@@ -159,6 +172,53 @@ index b06bb43..42d4d4b 100644
 +char *pb_load_file(void *ctx, const char *remote, unsigned int *tempfile);
  
  #endif
+diff --git a/ui/common/ps3.c b/ui/common/ps3.c
+index cb1c8d1..c62a10d 100644
+--- a/ui/common/ps3.c
++++ b/ui/common/ps3.c
+@@ -87,7 +87,7 @@ static int ps3_flash_open(struct ps3_flash_ctx *fc, const char *mode)
+ 	result = os_area_fixed_read(&fc->header, &fc->params, fc->dev);
+ 
+ 	if (result) {
+-		pb_log("%s: os_area_fixed_read failed: %s\n", __func__);
++		pb_log("%s: os_area_fixed_read failed\n", __func__);
+ 		goto fail;
+ 	}
+ 
+@@ -114,7 +114,7 @@ int ps3_flash_get_values(struct ps3_flash_values *values)
+ 	result = ps3_flash_open(&fc, "r");
+ 
+ 	if (result)
+-		goto done;
++		goto fail;
+ 
+ 	result = os_area_db_read(&fc.db, &fc.header, fc.dev);
+ 
+@@ -123,7 +123,7 @@ int ps3_flash_get_values(struct ps3_flash_values *values)
+ 	if (result) {
+ 		pb_log("%s: os_area_db_read failed: %s\n", __func__,
+ 			strerror(errno));
+-		goto done;
++		goto fail;
+ 	}
+ 
+ 	sum = result = os_area_db_get(&fc.db, &id_default_item, &tmp);
+@@ -141,14 +141,13 @@ int ps3_flash_get_values(struct ps3_flash_values *values)
+ 	if (!result)
+ 		values->video_mode = (uint16_t)tmp;
+ 
+-done:
+ 	pb_log("%s: default_item: %x\n", __func__,
+ 		(unsigned int)values->default_item);
+ 	pb_log("%s: timeout: %u\n", __func__,
+ 		(unsigned int)values->timeout);
+ 	pb_log("%s: video_mode:   %u\n", __func__,
+ 		(unsigned int)values->video_mode);
+-
++fail:
+ 	return (result || sum) ? -1 : 0;
+ }
+ 
 diff --git a/ui/common/ui-system.c b/ui/common/ui-system.c
 index bd6dd31..0140f0e 100644
 --- a/ui/common/ui-system.c
@@ -315,4 +375,17 @@ index bd6dd31..0140f0e 100644
 +
  	return result;
  }
+ 
+diff --git a/ui/common/url.c b/ui/common/url.c
+index 0de0f58..544eee2 100644
+--- a/ui/common/url.c
++++ b/ui/common/url.c
+@@ -140,7 +140,7 @@ struct pb_url *pb_url_parse(void *ctx, const char *url_str)
+ 		path = strchr(p, '/');
+ 
+ 		if (!path) {
+-			pb_log("%s: parse path failed '%s'\n", p);
++			pb_log("%s: parse path failed '%s'\n", __func__ , p);
+ 			goto fail;
+ 		}
  
