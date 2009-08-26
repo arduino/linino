@@ -84,6 +84,7 @@ addif() {
 	$IPTABLES -A forward -i "$ifname" -j zone_${zone}_forward
 	uci_set_state firewall core "${network}_ifname" "$ifname"
 	uci_set_state firewall core "${network}_zone" "$zone"
+	ACTION=add ZONE="$zone" INTERFACE="$network" DEVICE="$ifname" /sbin/hotplug-call firewall
 }
 
 delif() {
@@ -105,6 +106,7 @@ delif() {
 	$IPTABLES -D forward -i "$ifname" -j zone_${zone}_forward
 	uci_revert_state firewall core "${network}_ifname"
 	uci_revert_state firewall core "${network}_zone"
+	ACTION=remove ZONE="$zone" INTERFACE="$network" DEVICE="$ifname" /sbin/hotplug-call firewall
 }
 
 load_synflood() {
