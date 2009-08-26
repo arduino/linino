@@ -1,0 +1,40 @@
+# 
+# Copyright (C) 2009 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=mdk3
+PKG_VERSION:=v5
+PKG_RELEASE:=1
+PKG_MD5SUM:=f71a1740ac6acb0d59aae3727ca2c38a
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/mdk3-$(PKG_VERSION)
+PKG_SOURCE_URL:=http://homepages.tu-darmstadt.de/~p_larbig/wlan/
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_CAT:=bzcat
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/mdk3
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libpthread
+  TITLE:= MDK3
+  URL:=http://homepages.tu-darmstadt.de/~p_larbig/wlan/
+  SUBMENU:=wireless
+endef
+
+define Package/mdk3/description
+  Tool to exploit wireless vulnerabilities
+endef
+
+define Package/mdk3/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(CP) $(PKG_BUILD_DIR)/mdk3 $(1)/usr/sbin/
+endef
+
+$(eval $(call BuildPackage,mdk3))
