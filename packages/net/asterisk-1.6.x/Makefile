@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
-PKG_VERSION:=1.6.2.0-beta2
+PKG_VERSION:=1.6.2.0-beta4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
-PKG_MD5SUM:=ca10a82f5c6ffcec8a9168560e5107ea
+PKG_MD5SUM:=a1f658207ed618056294e04d69077509
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -137,6 +137,17 @@ $(call Package/asterisk16/Default/description)
  Asterisk.
 endef
 
+define Package/asterisk16-chan-gtalk
+$(call Package/asterisk16/Default)
+  TITLE:=GTalk support
+  DEPENDS:= +asterisk16 +libiksemel
+endef
+
+define Package/asterisk16-chan-gtalk/description
+$(call Package/asterisk16/Default/description)
+ This package provides the channel chan_gtalk and res_jabber for GTalk
+ support to Asterisk.
+endef
 
 CONFIGURE_ARGS+= \
 	--without-curl \
@@ -175,6 +186,19 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk16-app-meetme),)
 else
   CONFIGURE_ARGS+= \
 	--without-dahdi
+endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk16-chan-gtalk),)
+  CONFIGURE_ARGS+= \
+	--with-gnutls="$(STAGING_DIR)/usr" \
+	--with-iksemel="$(STAGING_DIR)/usr"
+  SITE_VARS+= \
+	ac_cv_lib_iksemel_iks_start_sasl=yes \
+	ac_cv_lib_gnutls_gnutls_bye=yes
+else
+  CONFIGURE_ARGS+= \
+	--without-gnutls \
+	--without-iksemel
 endif
 
 EXTRA_CFLAGS:= $(TARGET_CPPFLAGS)
@@ -332,6 +356,20 @@ define Package/asterisk16-format-g729/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/format_g729.so $(1)/usr/lib/asterisk/modules/
 endef
 
+define Package/asterisk16-chan-gtalk/conffiles
+/etc/asterisk/gtalk.conf
+/etc/asterisk/jabber.conf
+endef
+
+define Package/asterisk16-chan-gtalk/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/gtalk.conf $(1)/etc/asterisk/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/jabber.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_gtalk.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_jabber.so $(1)/usr/lib/asterisk/modules/
+endef
+
 $(eval $(call BuildPackage,asterisk16))
 $(eval $(call BuildPackage,asterisk16-voicemail))
 $(eval $(call BuildPackage,asterisk16-sounds))
@@ -341,3 +379,4 @@ $(eval $(call BuildPackage,asterisk16-chan-local))
 $(eval $(call BuildPackage,asterisk16-cdr))
 $(eval $(call BuildPackage,asterisk16-res-musiconhold))
 $(eval $(call BuildPackage,asterisk16-format-g729))
+$(eval $(call BuildPackage,asterisk16-chan-gtalk))
