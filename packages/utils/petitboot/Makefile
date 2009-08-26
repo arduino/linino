@@ -70,7 +70,8 @@ petitboot-install-autorun-$(CONFIG_PETITBOOT_AUTORUN_CUI) = \
 petitboot-install-autorun-$(CONFIG_PETITBOOT_AUTORUN_GUI) = \
 	ln -sf pb-twin $(1)/usr/sbin/petitboot
 
-CONFIGURE_ARGS += $(petitboot-config-args-y)
+CONFIGURE_ARGS += $(petitboot-config-args-y) \
+	PACKAGE_VERSION=$(shell echo ${HOSTNAME})-$(shell date +%y.%m.%d-%H.%M)
 
 EXTRA_CPPFLAGS += $(petitboot-cppflags-y)
 
