@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=igmpproxy
 PKG_VERSION:=0.1_beta5
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/igmpproxy
@@ -44,6 +44,8 @@ endef
 define Package/igmpproxy/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/igmpproxy.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/igmpproxy.init $(1)/etc/init.d/igmpproxy
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/igmpproxy $(1)/usr/sbin/
 endef

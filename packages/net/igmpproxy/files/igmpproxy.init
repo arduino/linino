@@ -1,0 +1,42 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=99
+DEBUG=0
+#
+# The debug flag should generally be set to 0
+# otherwise igmpproxy will spam your syslog.
+# However, this is very useful for debugging
+# a non-functional configuration file.
+#
+# DEBUG=0 = NO DEBUG!!!
+# DEBUG=1 -d
+# DEBUG=2 -v
+# DEBUG=3 -v -v
+LOGFILE="/root/igmpproxy.log"
+start() {
+	echo -n "Starting igmpproxy"
+	# Normal Mode
+	if [ $DEBUG -eq 0 ]; then
+		echo " in normal mode"
+		/usr/sbin/igmpproxy /etc/igmpproxy.conf &
+	# Debug Mode
+	elif [ $DEBUG -eq 1 ]; then
+			echo " in debug mode"
+			/usr/sbin/igmpproxy -d /etc/igmpproxy.conf &
+	# Verbose Mode
+	elif [ $DEBUG -eq 2 ]; then
+			echo " in verbose mode"
+			/usr/sbin/igmpproxy -v /etc/igmpproxy.conf &
+	# Very Verbose Mode
+	elif [ $DEBUG -eq 3 ]; then
+			echo " in very verbose mode"
+			/usr/sbin/igmpproxy -v -v /etc/igmpproxy.conf &
+	else
+			echo " unkown debug mode, must be 0, 1, 2 or 3"
+	fi
+}
+
+stop() {
+	echo "Killing igmpporxy"
+	killall igmpproxy
+}
