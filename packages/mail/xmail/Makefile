@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xmail
-PKG_VERSION:=1.26-pre06
+PKG_VERSION:=1.26
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.xmailserver.org/
-PKG_MD5SUM:=b54ada0c3257b7b00e6edd05018fd9db
+PKG_MD5SUM:=26d35c2fc104d79ebb6397c7dece5b15
 
 include $(INCLUDE_DIR)/package.mk
 
