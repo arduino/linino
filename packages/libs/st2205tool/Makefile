@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=st2205tool
 PKG_VERSION:=1.4.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=st2205tool-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.neophob.com/files/
@@ -52,7 +52,7 @@ define Package/st2205tool/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/setpic/setpic $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/libst2205/libst2205.so* $(1)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/libst2205/libst2205.so $(1)/usr/lib/libst2205.so.1
 endef
 
 $(eval $(call BuildPackage,st2205tool))
