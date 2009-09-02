@@ -65,6 +65,7 @@ endef
 define Package/appweb/install
 	( cd $(PKG_BUILD_DIR) ; $(PKG_BUILD_DIR)/build/bin/makeInstall \
 		--root=$(1) --install --with-openwrt=1 binary )
+	rm -rf $(1)/var
 endef
 
 $(eval $(call BuildPackage,appweb))
