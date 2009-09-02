@@ -30,7 +30,7 @@ define Package/sane-backends
 $(call Package/sane-backends/Default)
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+sane-libs
+  DEPENDS:=+sane-libs +libtiff
   TITLE+= (backends)
 endef
 
@@ -64,6 +64,10 @@ define Package/sane-frontends/description
 $(call Package/sane-backends/Default/description)
  This package contains the SANE frontends.
 endef
+
+TARGET_LDFLAGS += \
+	-Wl,-rpath-link $(STAGING_DIR)/usr/lib \
+	-Wl,-rpath-link $(PKG_BUILD_DIR)/backend/.libs
 
 CONFIGURE_ARGS+= \
 	--enable-shared \
