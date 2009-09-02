@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://avahi.org/download/
 PKG_MD5SUM:=a83155a6e29e3988f07e5eea3287b21e
 
-PKG_BUILD_DEPENDS:=libexpat libdaemon libgdbm
+PKG_BUILD_DEPENDS:=libexpat libdaemon libgdbm intltool/host
 
 PKG_FIXUP = libtool
 
@@ -196,10 +196,6 @@ define Package/avahi-dnsconfd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/avahi-dnsconfd $(1)/usr/sbin/
 endef
-
-$(eval $(call RequireCommand,intltool-update, \
-	$(PKG_NAME) requires intltool >= 0.35.0 \
-))
 
 $(eval $(call BuildPackage,libavahi))
 $(eval $(call BuildPackage,avahi-autoipd))

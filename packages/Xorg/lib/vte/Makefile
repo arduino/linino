@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/0.17
 PKG_MD5SUM:=ec6cb2668db7146eae7cfc48af98f3ed
 PKG_FIXUP:=libtool
 
+PKG_BUILD_DEPENDS:=intltool/host
+
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
@@ -102,10 +104,6 @@ define Package/python-vte/install
 		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/gtk-2.0/*.so* \
 		$(1)$(PYTHON_PKG_DIR)/gtk-2.0
 endef
-
-$(eval $(call RequireCommand,intltool-update, \
-    $(PKG_NAME) requires intltool >= 0.35.0 \
-))
 
 $(eval $(call BuildPackage,vte))
 $(eval $(call BuildPackage,python-vte))

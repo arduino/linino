@@ -17,6 +17,8 @@ PKG_MD5SUM:=015b5d2e65d15448fa143513fce03541
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
+PKG_BUILD_DEPENDS:=intltool/host
+
 include $(INCLUDE_DIR)/package.mk
 
 TARGET_CFLAGS+= \

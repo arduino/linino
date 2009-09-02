@@ -9,7 +9,7 @@ PKG_SOURCE:=GConf-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/GConf/2.24
 PKG_FIXUP:=libtool
 
-PKG_BUILD_DEPENDS:=orbit2/host
+PKG_BUILD_DEPENDS:=orbit2/host intltool/host
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -107,8 +107,5 @@ define Package/gconf2/install
 		$(1)/usr/bin/
 endef
 
-$(eval $(call RequireCommand,intltool-update, \
-	$(PKG_NAME) requires intltool >= 0.35.0 \
-))
 $(eval $(call BuildPackage,libgconf2))
 $(eval $(call BuildPackage,gconf2))
