@@ -55,6 +55,7 @@ define Build/InstallDev
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/include/* \
 		$(1)/usr/include/
+	rm -f $(1)/usr/include/gdbm.h
 endef
 
 define Build/Compile
