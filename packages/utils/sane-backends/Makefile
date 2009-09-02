@@ -76,6 +76,11 @@ CONFIGURE_ARGS+= \
 	--without-gphoto2 \
 	--disable-debug \
 
+define Build/Configure
+	mkdir -p $(PKG_BUILD_DIR)/backend/.libs
+	$(Build/Configure/Default)
+endef
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
