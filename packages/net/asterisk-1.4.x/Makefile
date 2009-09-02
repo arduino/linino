@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
-PKG_MD5SUM:=1b42210127d6622c90fc5338de2b4aa9
+PKG_MD5SUM:=ca17be11559eb939ea16b8de98ddeefb
 
 PKG_BUILD_DEPENDS:= libopenh323 pwlib
 
