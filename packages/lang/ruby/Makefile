@@ -4,17 +4,29 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
+# $Id$
+
+#
+# To Do:
+#  - split up encodings
+#  - allow selection of either native or pure version of a library where supported
+#  +-> some native libraries are probably only supported if ruby-dl is enabled
+# anything else?
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ruby
-PKG_VERSION:=1.8.6-p287
-PKG_RELEASE:=4
+PKG_LIBVER:=1.9.1
+PKG_VERSION:=$(PKG_LIBVER)-p243
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://ftp.ruby-lang.org/pub/ruby/1.8/
-PKG_MD5SUM:=80b5f3db12531d36e6c81fac6d05dda9
+PKG_SOURCE_URL:=ftp://ftp.ruby-lang.org/pub/ruby/1.9/
+PKG_MD5SUM:=66d4f8403d13623051091347764881a0
 
+PKG_BUILD_DEPENDS:=ruby/host
+
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ruby/Default
@@ -61,7 +73,19 @@ endef
 
 define Package/ruby-cgi
 $(call Package/ruby/Default)
-  TITLE:= Ruby CGI support toolkit
+  TITLE:=Ruby CGI support toolkit
+  DEPENDS:=ruby
+endef
+
+define Package/ruby-dl
+$(call Package/ruby/Default)
+  TITLE+= (dynamic linker support) (adds 5MB+)
+  DEPENDS:=ruby
+endef
+
+define Package/ruby-enc
+$(call Package/ruby/Default)
+  TITLE+= (character re-coding library) (adds 2MB+)
   DEPENDS:=ruby
 endef
 
@@ -77,10 +101,22 @@ $(call Package/ruby/Default)
   DEPENDS:=ruby +libgdbm
 endef
 
+define Package/ruby-gems
+$(call Package/ruby/Default)
+  TITLE:=Ruby gems packet management
+  DEPENDS:=ruby +ruby-yaml +ruby-zlib +ruby-openssl +ruby-webrick +ruby-erb
+endef
+
 define Package/ruby-irb
 $(call Package/ruby/Default)
   TITLE+= (interactive shell)
   DEPENDS:=ruby +ruby-core
+endef
+
+define Package/ruby-json
+$(call Package/ruby/Default)
+  TITLE:=Ruby support for JSON
+  DEPENDS:=ruby
 endef
 
 define Package/ruby-ncurses
@@ -107,6 +143,12 @@ $(call Package/ruby/Default)
   DEPENDS:=ruby
 endef
 
+define Package/ruby-rake
+$(call Package/ruby/Default)
+  TITLE+=Ruby Rake (make replacement)
+  DEPENDS:=ruby
+endef
+
 define Package/ruby-readline
 $(call Package/ruby/Default)
   TITLE:=Ruby support for readline
@@ -125,12 +167,6 @@ $(call Package/ruby/Default)
   DEPENDS:=ruby
 endef
 
-define Package/ruby-soap
-$(call Package/ruby/Default)
-  TITLE:=Ruby SOAP toolkit
-  DEPENDS:=ruby
-endef
-
 define Package/ruby-unit
 $(call Package/ruby/Default)
   TITLE:=Ruby unit testing toolkit
@@ -143,21 +179,9 @@ $(call Package/ruby/Default)
   DEPENDS:=ruby
 endef
 
-define Package/ruby-wsdl
-$(call Package/ruby/Default)
-  TITLE:=Ruby WSDL 1.1 toolkit
-  DEPENDS:=ruby
-endef
-
 define Package/ruby-xmlrpc
 $(call Package/ruby/Default)
   TITLE:=Ruby XML-RPC toolkit
-  DEPENDS:=ruby
-endef
-
-define Package/ruby-xsd
-$(call Package/ruby/Default)
-  TITLE:=Ruby XML Schema Datatypes toolkit
   DEPENDS:=ruby
 endef
 
@@ -178,6 +202,7 @@ CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
 	--disable-rpath \
+	--enable-ipv6 \
 	--enable-wide-getaddrinfo \
 
 CONFIGURE_VARS += \
@@ -204,133 +229,155 @@ define Package/ruby-core/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby $(1)/usr/lib/
 	rm -rf	\
-		$(1)/usr/lib/ruby/1.8/*/curses.so \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/*/curses.so \
 		\
-		$(1)/usr/lib/ruby/1.8/*/gdbm.so \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/*/gdbm.so \
 		\
-		$(1)/usr/lib/ruby/1.8/kconv.rb \
-		$(1)/usr/lib/ruby/1.8/*/nkf.so \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/kconv.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/*/nkf.so \
 		\
-		$(1)/usr/lib/ruby/1.8/digest \
-		$(1)/usr/lib/ruby/1.8/digest.rb \
-		$(1)/usr/lib/ruby/1.8/*/digest \
-		$(1)/usr/lib/ruby/1.8/*/digest.so \
-		$(1)/usr/lib/ruby/1.8/openssl \
-		$(1)/usr/lib/ruby/1.8/openssl.rb \
-		$(1)/usr/lib/ruby/1.8/*/openssl.so \
-		$(1)/usr/lib/ruby/1.8/md5.rb \
-		$(1)/usr/lib/ruby/1.8/rmd160.rb \
-		$(1)/usr/lib/ruby/1.8/sha1.rb \
-		$(1)/usr/lib/ruby/1.8/sha2.rb \
-		$(1)/usr/lib/ruby/1.8/drb/ssl.rb \
-		$(1)/usr/lib/ruby/1.8/net/ftptls.rb \
-		$(1)/usr/lib/ruby/1.8/net/https.rb \
-		$(1)/usr/lib/ruby/1.8/net/telnets.rb \
-		$(1)/usr/lib/ruby/1.8/webrick/ssl.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/digest \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/digest.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/*/digest \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/*/digest.so \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/openssl \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/openssl.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/*/openssl.so \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/drb/ssl.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/net/ftptls.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/net/https.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/net/telnets.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/webrick/ssl.rb \
 		\
-		$(1)/usr/lib/ruby/1.8/*/readline.so \
-		$(1)/usr/lib/ruby/1.8/irb/completion.rb \
-		$(1)/usr/lib/ruby/1.8/irb/ext/save-history.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/*/dl.so \
 		\
-		$(1)/usr/lib/ruby/1.8/*/zlib.so \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/*/enc \
 		\
-		$(1)/usr/lib/ruby/1.8/erb.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/*/readline.so \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/irb/completion.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/irb/ext/save-history.rb \
 		\
-		$(1)/usr/lib/ruby/1.8/irb.rb \
-		$(1)/usr/lib/ruby/1.8/irb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/*/zlib.so \
 		\
-		$(1)/usr/lib/ruby/1.8/rdoc \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/erb.rb \
 		\
-		$(1)/usr/lib/ruby/1.8/cgi \
-		$(1)/usr/lib/ruby/1.8/cgi.rb \
-		$(1)/usr/lib/ruby/1.8/cgi-lib.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/json.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/json \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/*/json \
 		\
-		$(1)/usr/lib/ruby/1.8/rexml \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/irb.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/irb \
 		\
-		$(1)/usr/lib/ruby/1.8/rss \
-		$(1)/usr/lib/ruby/1.8/rss.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/rdoc \
 		\
-		$(1)/usr/lib/ruby/1.8/soap \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/rake.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/rake \
 		\
-		$(1)/usr/lib/ruby/1.8/rubyunit.rb \
-		$(1)/usr/lib/ruby/1.8/runit \
-		$(1)/usr/lib/ruby/1.8/test \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/rubygems.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/rubygems \
 		\
-		$(1)/usr/lib/ruby/1.8/webrick \
-		$(1)/usr/lib/ruby/1.8/webrick.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/cgi.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/cgi \
 		\
-		$(1)/usr/lib/ruby/1.8/wsdl \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/rexml \
 		\
-		$(1)/usr/lib/ruby/1.8/xmlrpc \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/rss \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/rss.rb \
 		\
-		$(1)/usr/lib/ruby/1.8/xsd \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/test \
 		\
-		$(1)/usr/lib/ruby/1.8/yaml \
-		$(1)/usr/lib/ruby/1.8/yaml.rb \
-		$(1)/usr/lib/ruby/1.8/*/syck.so
-
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/webrick \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/webrick.rb \
+		\
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/xmlrpc \
+		\
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/yaml \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/yaml.rb \
+		$(1)/usr/lib/ruby/$(PKG_LIBVER)/*/syck.so \
+	
 	find $(1) -name '*.h' | xargs rm -f
 endef
 
 define Package/ruby-cgi/install
-	$(INSTALL_DIR) $(1)/usr/lib/ruby/1.8
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/cgi $(1)/usr/lib/ruby/1.8/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/cgi.rb $(1)/usr/lib/ruby/1.8/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/cgi-lib.rb $(1)/usr/lib/ruby/1.8/
+	$(INSTALL_DIR) $(1)/usr/lib/ruby/$(PKG_LIBVER)
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/cgi $(1)/usr/lib/ruby/$(PKG_LIBVER)/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/cgi.rb $(1)/usr/lib/ruby/$(PKG_LIBVER)/
+endef
+
+define Package/ruby-dl/install
+	( cd $(PKG_INSTALL_DIR); $(TAR) -cf - \
+		usr/lib/ruby/$(PKG_LIBVER)/*/dl.so \
+	) | ( cd $(1); $(TAR) -xf - )
+endef
+
+define Package/ruby-enc/install
+	( cd $(PKG_INSTALL_DIR); $(TAR) -cf - \
+		usr/lib/ruby/$(PKG_LIBVER)/*/enc \
+	) | ( cd $(1); $(TAR) -xf - )
 endef
 
 define Package/ruby-erb/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/erb $(1)/usr/bin/
-	$(INSTALL_DIR) $(1)/usr/lib/ruby/1.8/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/erb.rb $(1)/usr/lib/ruby/1.8/
+	$(INSTALL_DIR) $(1)/usr/lib/ruby/$(PKG_LIBVER)/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/erb.rb $(1)/usr/lib/ruby/$(PKG_LIBVER)/
 endef
 
 define Package/ruby-gdbm/install
 	( cd $(PKG_INSTALL_DIR); $(TAR) -cf - \
-		usr/lib/ruby/1.8/*/gdbm.so \
+		usr/lib/ruby/$(PKG_LIBVER)/*/gdbm.so \
 	) | ( cd $(1); $(TAR) -xf - )
+endef
+
+define Package/ruby-gems/install
+	$(INSTALL_DIR) $(1)/usr/lib/ruby/$(PKG_LIBVER)
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/rubygems.rb $(1)/usr/lib/ruby/$(PKG_LIBVER)/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/rubygems $(1)/usr/lib/ruby/$(PKG_LIBVER)/
 endef
 
 define Package/ruby-irb/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/irb $(1)/usr/bin/
-	$(INSTALL_DIR) $(1)/usr/lib/ruby/1.8
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/irb $(1)/usr/lib/ruby/1.8/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/irb.rb $(1)/usr/lib/ruby/1.8/
+	$(INSTALL_DIR) $(1)/usr/lib/ruby/$(PKG_LIBVER)
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/irb $(1)/usr/lib/ruby/$(PKG_LIBVER)/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/irb.rb $(1)/usr/lib/ruby/$(PKG_LIBVER)/
+endef
+
+define Package/ruby-json/install
+	( cd $(PKG_INSTALL_DIR); $(TAR) -cf - \
+		usr/lib/ruby/$(PKG_LIBVER)/json.rb \
+		usr/lib/ruby/$(PKG_LIBVER)/json \
+		usr/lib/ruby/$(PKG_LIBVER)/*/json \
+	) | ( cd $(1); $(TAR) -xf - )
 endef
 
 define Package/ruby-ncurses/install
 	( cd $(PKG_INSTALL_DIR); $(TAR) -cf - \
-		usr/lib/ruby/1.8/*/curses.so \
+		usr/lib/ruby/$(PKG_LIBVER)/*/curses.so \
 	) | ( cd $(1); $(TAR) -xf - )
 endef
 
 define Package/ruby-nkf/install
 	( cd $(PKG_INSTALL_DIR); $(TAR) -cf - \
-		usr/lib/ruby/1.8/kconv.rb \
-		usr/lib/ruby/1.8/*/nkf.so \
+		usr/lib/ruby/$(PKG_LIBVER)/kconv.rb \
+		usr/lib/ruby/$(PKG_LIBVER)/*/nkf.so \
 	) | ( cd $(1); $(TAR) -xf - )
 endef
 
 define Package/ruby-openssl/install
 	( cd $(PKG_INSTALL_DIR); $(TAR) -cf - \
-		usr/lib/ruby/1.8/digest \
-		usr/lib/ruby/1.8/digest.rb \
-		usr/lib/ruby/1.8/*/digest.so \
-		usr/lib/ruby/1.8/*/digest/*.so \
-		usr/lib/ruby/1.8/openssl \
-		usr/lib/ruby/1.8/openssl.rb \
-		usr/lib/ruby/1.8/*/openssl.so \
-		usr/lib/ruby/1.8/md5.rb \
-		usr/lib/ruby/1.8/rmd160.rb \
-		usr/lib/ruby/1.8/sha1.rb \
-		usr/lib/ruby/1.8/sha2.rb \
-		usr/lib/ruby/1.8/drb/ssl.rb \
-		usr/lib/ruby/1.8/net/ftptls.rb \
-		usr/lib/ruby/1.8/net/https.rb \
-		usr/lib/ruby/1.8/net/telnets.rb \
-		usr/lib/ruby/1.8/webrick/ssl.rb \
+		usr/lib/ruby/$(PKG_LIBVER)/digest \
+		usr/lib/ruby/$(PKG_LIBVER)/digest.rb \
+		usr/lib/ruby/$(PKG_LIBVER)/*/digest.so \
+		usr/lib/ruby/$(PKG_LIBVER)/*/digest/*.so \
+		usr/lib/ruby/$(PKG_LIBVER)/openssl \
+		usr/lib/ruby/$(PKG_LIBVER)/openssl.rb \
+		usr/lib/ruby/$(PKG_LIBVER)/*/openssl.so \
+		usr/lib/ruby/$(PKG_LIBVER)/drb/ssl.rb \
+		usr/lib/ruby/$(PKG_LIBVER)/net/ftptls.rb \
+		usr/lib/ruby/$(PKG_LIBVER)/net/https.rb \
+		usr/lib/ruby/$(PKG_LIBVER)/net/telnets.rb \
+		usr/lib/ruby/$(PKG_LIBVER)/webrick/ssl.rb \
 	) | ( cd $(1); $(TAR) -xf - )
 endef
 
@@ -338,102 +385,106 @@ define Package/ruby-rdoc/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rdoc $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ri $(1)/usr/bin/
-	$(INSTALL_DIR) $(1)/usr/lib/ruby/1.8
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/rdoc $(1)/usr/lib/ruby/1.8/
+	$(INSTALL_DIR) $(1)/usr/lib/ruby/$(PKG_LIBVER)
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/rdoc $(1)/usr/lib/ruby/$(PKG_LIBVER)/
+endef
+
+define Package/ruby-rake/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rake $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/lib/ruby/$(PKG_LIBVER)
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/rake.rb $(1)/usr/lib/ruby/$(PKG_LIBVER)/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/rake $(1)/usr/lib/ruby/$(PKG_LIBVER)/
 endef
 
 define Package/ruby-readline/install
 	( cd $(PKG_INSTALL_DIR); $(TAR) -cf - \
-		usr/lib/ruby/1.8/*/readline.so \
-		usr/lib/ruby/1.8/irb/completion.rb \
-		usr/lib/ruby/1.8/irb/ext/save-history.rb \
+		usr/lib/ruby/$(PKG_LIBVER)/*/readline.so \
+		usr/lib/ruby/$(PKG_LIBVER)/irb/completion.rb \
+		usr/lib/ruby/$(PKG_LIBVER)/irb/ext/save-history.rb \
 	) | ( cd $(1); $(TAR) -xf - )
 endef
 
 define Package/ruby-rexml/install
-	$(INSTALL_DIR) $(1)/usr/lib/ruby/1.8
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/rexml $(1)/usr/lib/ruby/1.8/
+	$(INSTALL_DIR) $(1)/usr/lib/ruby/$(PKG_LIBVER)
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/rexml $(1)/usr/lib/ruby/$(PKG_LIBVER)/
 endef
+
 
 define Package/ruby-rss/install
-	$(INSTALL_DIR) $(1)/usr/lib/ruby/1.8
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/rss $(1)/usr/lib/ruby/1.8/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/rss.rb $(1)/usr/lib/ruby/1.8/
-endef
-
-define Package/ruby-soap/install
-	$(INSTALL_DIR) $(1)/usr/lib/ruby/1.8
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/soap $(1)/usr/lib/ruby/1.8/
+	$(INSTALL_DIR) $(1)/usr/lib/ruby/$(PKG_LIBVER)
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/rss $(1)/usr/lib/ruby/$(PKG_LIBVER)/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/rss.rb $(1)/usr/lib/ruby/$(PKG_LIBVER)/
 endef
 
 define Package/ruby-unit/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/testrb $(1)/usr/bin/
-	$(INSTALL_DIR) $(1)/usr/lib/ruby/1.8
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/rubyunit.rb $(1)/usr/lib/ruby/1.8/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/runit $(1)/usr/lib/ruby/1.8/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/test $(1)/usr/lib/ruby/1.8/
+	$(INSTALL_DIR) $(1)/usr/lib/ruby/$(PKG_LIBVER)
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/test $(1)/usr/lib/ruby/$(PKG_LIBVER)/
 endef
 
 define Package/ruby-webrick/install
-	$(INSTALL_DIR) $(1)/usr/lib/ruby/1.8
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/webrick $(1)/usr/lib/ruby/1.8/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/webrick.rb $(1)/usr/lib/ruby/1.8/
-endef
-
-define Package/ruby-wsdl/install
-	$(INSTALL_DIR) $(1)/usr/lib/ruby/1.8
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/wsdl $(1)/usr/lib/ruby/1.8/
+	$(INSTALL_DIR) $(1)/usr/lib/ruby/$(PKG_LIBVER)
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/webrick $(1)/usr/lib/ruby/$(PKG_LIBVER)/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/webrick.rb $(1)/usr/lib/ruby/$(PKG_LIBVER)/
 endef
 
 define Package/ruby-xmlrpc/install
-	$(INSTALL_DIR) $(1)/usr/lib/ruby/1.8
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/xmlrpc $(1)/usr/lib/ruby/1.8/
-endef
-
-define Package/ruby-xsd/install
-	$(INSTALL_DIR) $(1)/usr/lib/ruby/1.8
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/1.8/xsd $(1)/usr/lib/ruby/1.8/
+	$(INSTALL_DIR) $(1)/usr/lib/ruby/$(PKG_LIBVER)
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/xmlrpc $(1)/usr/lib/ruby/$(PKG_LIBVER)/
 endef
 
 define Package/ruby-yaml/install
 	( cd $(PKG_INSTALL_DIR); $(TAR) -cf - \
-		usr/lib/ruby/1.8/yaml \
-		usr/lib/ruby/1.8/yaml.rb \
-		usr/lib/ruby/1.8/*/syck.so \
+		usr/lib/ruby/$(PKG_LIBVER)/yaml \
+		usr/lib/ruby/$(PKG_LIBVER)/yaml.rb \
+		usr/lib/ruby/$(PKG_LIBVER)/*/syck.so \
 	) | ( cd $(1); $(TAR) -xf - )
 endef
 
 define Package/ruby-zlib/install
 	( cd $(PKG_INSTALL_DIR); $(TAR) -cf - \
-		usr/lib/ruby/1.8/*/zlib.so \
+		usr/lib/ruby/$(PKG_LIBVER)/*/zlib.so \
 	) | ( cd $(1); $(TAR) -xf - )
 endef
 
-$(eval $(call RequireCommand,ruby, \
-        $(PKG_NAME) requires ruby installed on the host-system. \
-))
+define Build/InstallDev
+	( cd $(PKG_INSTALL_DIR); $(TAR) -cf - \
+		. \
+	) | ( cd $(1); $(TAR) -xf - )
+endef
+
+define Build/Prepare
+$(call Build/Prepare/Default)
+	( cd $(PKG_BUILD_DIR) ; \
+		autoconf ; \
+	)
+endef
+
 
 $(eval $(call BuildPackage,ruby))
 $(eval $(call BuildPackage,libruby))
 $(eval $(call BuildPackage,ruby-core))
 $(eval $(call BuildPackage,ruby-cgi))
+$(eval $(call BuildPackage,ruby-dl))
+$(eval $(call BuildPackage,ruby-enc))
 $(eval $(call BuildPackage,ruby-erb))
 $(eval $(call BuildPackage,ruby-gdbm))
+$(eval $(call BuildPackage,ruby-gems))
+$(eval $(call BuildPackage,ruby-json))
 $(eval $(call BuildPackage,ruby-irb))
 $(eval $(call BuildPackage,ruby-ncurses))
 $(eval $(call BuildPackage,ruby-nkf))
 $(eval $(call BuildPackage,ruby-openssl))
+$(eval $(call BuildPackage,ruby-rake))
 $(eval $(call BuildPackage,ruby-rdoc))
 $(eval $(call BuildPackage,ruby-readline))
 $(eval $(call BuildPackage,ruby-rexml))
 $(eval $(call BuildPackage,ruby-rss))
-$(eval $(call BuildPackage,ruby-soap))
 $(eval $(call BuildPackage,ruby-unit))
 $(eval $(call BuildPackage,ruby-webrick))
-$(eval $(call BuildPackage,ruby-wsdl))
 $(eval $(call BuildPackage,ruby-xmlrpc))
-$(eval $(call BuildPackage,ruby-xsd))
 $(eval $(call BuildPackage,ruby-yaml))
 $(eval $(call BuildPackage,ruby-zlib))
-
+$(eval $(call HostBuild))
