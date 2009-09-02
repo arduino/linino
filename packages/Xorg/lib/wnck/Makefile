@@ -57,8 +57,4 @@ define Package/libwnck/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
 endef
 
-$(eval $(call RequireCommand,gdk-pixbuf-csource, \
-	Please install gtk2.0-dev \
-))
-
 $(eval $(call BuildPackage,libwnck))
