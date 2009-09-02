@@ -16,12 +16,14 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@KERNEL/linux/utils/kernel/ksymoops/v2.4/
 PKG_MD5SUM:=4a8249e182a5dbc75e566d162e9f3314
 
+PKG_BUILD_DEPENDS:=binutils
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ksymoops
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=@LINUX_2_6 @mips||mipsel||m68k||i386 +libbfd
+  DEPENDS:=@LINUX_2_6 @mips||mipsel||m68k||i386
   TITLE:=Interpret oops of the kernel
   URL:=http://www.kernel.org/pub/linux/utils/kernel/ksymoops/v2.4/
   MENU:=1

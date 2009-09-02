@@ -35,12 +35,6 @@ define Package/binutils/description
   The Binutils package contains a linker, an assembler, and other tools for handling object files
 endef
 
-define Package/libbfd
-  SECTION:=libs
-  CATEGORY:=Libraries
-  TITLE:=libbfd
-endef
-
 TARGET_CFLAGS += $(FPIC)
 
 define Build/Configure
@@ -80,10 +74,5 @@ define Package/binutils/install
 	rm -f $(1)/usr/bin/objdump
 endef
 
-define Package/libbfd/install
-    true
-endef
-
 $(eval $(call BuildPackage,binutils))
 $(eval $(call BuildPackage,objdump))
-$(eval $(call BuildPackage,libbfd))
