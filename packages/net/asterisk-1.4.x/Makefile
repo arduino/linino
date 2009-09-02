@@ -548,8 +548,7 @@ define Package/asterisk14/install
 	rm -rf $(1)/usr/bin
 	rm -rf $(1)/usr/man
 	rm -rf $(1)/usr/include
-	rm -rf $(1)/var/spool/asterisk/meetme
-	rm -rf $(1)/var/spool/asterisk/voicemail
+	rm -rf $(1)/var
 	(cd $(1)/usr/lib/asterisk; \
 		rm -rf agi-bin; \
 		rm -rf images; \
