@@ -59,7 +59,7 @@ endef
 define Package/weechat-mod-lua
 $(call Package/weechat/Default)
  TITLE+= (Lua plugin)
- DEPENDS:=weechat +liblua
+ DEPENDS:=weechat +liblua @BROKEN
 endef
 
 define Package/weechat-mod-lua/description
