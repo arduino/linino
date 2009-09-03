@@ -36,10 +36,9 @@ define Build/Compile
 	)
 endef
 
-define Package/logilad-common/install
+define Package/logilab-common/install
 	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	cp -r $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
-$(eval $(call PyPackage,logilab-common))
 $(eval $(call BuildPackage,logilab-common))
