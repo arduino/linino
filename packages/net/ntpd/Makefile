@@ -90,6 +90,9 @@ endef
 
 TARGET_CPPFLAGS += -I$(STAGING_DIR)/usr/include/libelf
 
+CONFIGURE_VARS += \
+	ac_cv_header_md5_h=no
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-all-clocks \
