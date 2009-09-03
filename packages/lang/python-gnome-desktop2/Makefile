@@ -54,6 +54,9 @@ define Build/Configure
 	)
 endef
 
+MAKE_INSTALL_FLAGS += \
+	PYGTK_DEFSDIR="$(PKG_INSTALL_DIR)/usr/share/pygtk/2.0/defs"
+
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/share/pygtk/2.0/defs
 	$(INSTALL_DATA) \
