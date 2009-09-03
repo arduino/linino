@@ -33,6 +33,7 @@ endef
 define Package/php5/config
        choice
                prompt "PHP5 SPL Options"
+			   depends PACKAGE_php5
                default PACKAGE_php5_without_spl
 
        config PACKAGE_php5_with_spl
@@ -41,6 +42,12 @@ define Package/php5/config
        config PACKAGE_php5_without_spl
                bool "without SPL (pcre may be enabled)"
        endchoice
+
+	   config PHP5_APC
+               bool "PHP5 APC support"
+
+	   config PHP5_EXIF
+               bool "PHP5 EXIF support"
 endef
 
 define Package/php5
@@ -182,18 +189,6 @@ define Package/php5-mod-xml
   TITLE:=XML module
 endef
 
-define Package/php5-mod-apc
-  $(call Package/php5/Default)
-  DEPENDS:=php5
-  TITLE:=APC Extension
-endef
-
-define Package/php5-mod-exif
-  $(call Package/php5/Default)
-  DEPENDS:=php5
-  TITLE:=EXIF Extension
-endef
-
 PKG_CONFIGURE_LIBS:= -lcrypto -lssl
 PKG_CONFIGURE_OPTS:= \
 	--enable-shared \
@@ -320,13 +315,13 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-xml),)
 else
   PKG_CONFIGURE_OPTS+= --disable-xml
 endif
-ifneq ($(CONFIG_PACKAGE_php5-mod-apc),)
+ifneq ($(CONFIG_PHP5_APC),)
   PKG_CONFIGURE_OPTS+= --enable-apc --disable-apc-mmap --disable-apc-pthreadmutex
   PKG_CONFIGURE_LIBS+= -lrt
 else
   PKG_CONFIGURE_OPTS+= --disable-apc
 endif
-ifneq ($(CONFIG_PACKAGE_php5-mod-exif),)
+ifneq ($(CONFIG_PHP5_EXIF),)
   PKG_CONFIGURE_OPTS+= --enable-exif
 else
   PKG_CONFIGURE_OPTS+= --disable-exif
@@ -457,5 +452,3 @@ $(eval $(call BuildPlugin,php5-mod-sqlite,sqlite))
 $(eval $(call BuildPlugin,php5-mod-pdo,pdo))
 $(eval $(call BuildPlugin,php5-mod-pdo-sqlite,pdo_sqlite))
 $(eval $(call BuildPlugin,php5-mod-xml,xml))
-$(eval $(call BuildPlugin,php5-mod-apc))
-$(eval $(call BuildPlugin,php5-mod-exif))
