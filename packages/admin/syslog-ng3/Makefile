@@ -37,16 +37,24 @@ define Package/syslog-ng3/conffiles
 endef
 
 define Build/Configure
-	$(call Build/Configure/Default, \
-		--disable-dependency-tracking \
-		--enable-tcp-wrapper \
-		--disable-glibtest \
-		, \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include/eventlog $(TARGET_CPPFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib/libintl/lib -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
-		PKG_CONFIG="$(STAGING_DIR_HOST)/bin/pkg-config" \
-	)
+	$(SED) 's,-I/usr/include,,' $(PKG_BUILD_DIR)/configure
+	$(Build/Configure/Default)
 endef
+
+CONFIGURE_ARGS +=  \
+	--disable-dependency-tracking \
+	--enable-tcp-wrapper \
+	--disable-glibtest
+
+TARGET_CPPFLAGS += \
+	-I$(STAGING_DIR)/usr/include/eventlog
+
+TARGET_LDFLAGS += \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib
+
+CONFIGURE_VARS += \
+	LIBDBI_CFLAGS="-I$(STAGING_DIR)/usr/include"
 
 define Package/syslog-ng3/install
 	$(INSTALL_DIR) $(1)/usr/sbin
