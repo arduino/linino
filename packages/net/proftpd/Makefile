@@ -43,7 +43,8 @@ define Package/proftpd/install
 		$(1)/usr/include \
 		$(1)/usr/share \
 		$(1)/usr/man \
-		$(1)/usr/lib/pkgconfig
+		$(1)/usr/lib/pkgconfig \
+		$(1)/var
 endef
 
 $(eval $(call BuildPackage,proftpd))
