@@ -122,7 +122,6 @@ define Package/quagga-unstable/install
 	$(INSTALL_DIR) $(1)/etc/init.d/
 	$(INSTALL_BIN) ./files/quagga $(1)/usr/sbin/quagga.init
 	$(INSTALL_BIN) ./files/quagga.init $(1)/etc/init.d/quagga
-	$(INSTALL_DIR) $(1)/var/run/quagga
 endef
 
 define Package/quagga-unstable/postinst
