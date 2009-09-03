@@ -12,8 +12,8 @@ PKG_VERSION:=1.4.3
 PKG_RELEASE:=2
 
 PKG_SOURCE:=st2205tool-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.neophob.com/files/
-PKG_MD5SUM:=c87f05a5f692e869d2d050aa3d4fd6c5
+PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
+PKG_MD5SUM:=827e3b719ebaf6bc537f2ce0ece3fccb
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
