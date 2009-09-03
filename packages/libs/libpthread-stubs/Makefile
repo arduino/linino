@@ -23,6 +23,7 @@ define Package/libpthread-stubs
   CATEGORY:=Libraries
   TITLE:=libpthread-stubs
   URL:=http://xcb.freedesktop.org/
+  BUILDONLY:=1
 endef
 
 define Package/libpthread-stubs/description
@@ -42,10 +43,6 @@ define Build/InstallDev
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
 		$(1)/usr/lib/pkgconfig/
-endef
-
-define Package/libpthread-stubs/install
-	true
 endef
 
 $(eval $(call BuildPackage,libpthread-stubs))
