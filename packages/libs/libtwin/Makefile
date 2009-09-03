@@ -35,7 +35,9 @@ endef
 
 CONFIGURE_ARGS += --enable-shared --enable-static --disable-x11
 
-EXTRA_CFLAGS += -flax-vector-conversions
+ifdef CONFIG_powerpc
+  EXTRA_CFLAGS += -flax-vector-conversions
+endif
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/libtwin
