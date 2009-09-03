@@ -59,6 +59,7 @@ endef
 define Package/prosody/install
 	$(INSTALL_DIR) $(1)
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+	rm -rf $(1)/var
 endef
 
 $(eval $(call BuildPackage,prosody))
