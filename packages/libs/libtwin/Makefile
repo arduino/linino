@@ -23,7 +23,7 @@ PKG_INSTALL=1
 define Package/libtwin
 	SECTION:=libs
 	CATEGORY:=Libraries
-	DEPENDS:=+zlib +libpng +libjpeg
+	DEPENDS:=+zlib +libpng +libjpeg +libfreetype
 	TITLE:=The tiny windowing system library
 	URL:=http://ozlabs.org/~jk/projects/petitboot/
 	MAINTAINER:=Geoff Levand <geoffrey.levand@am.sony.com>
@@ -38,6 +38,9 @@ CONFIGURE_ARGS += --enable-shared --enable-static --disable-x11
 ifdef CONFIG_powerpc
   EXTRA_CFLAGS += -flax-vector-conversions
 endif
+
+TARGET_LDFLAGS += \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/libtwin
