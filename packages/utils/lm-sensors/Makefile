@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -23,14 +23,14 @@ define Package/lm-sensors/Default
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=lm-sensors
-  DEPENDS:=+sysfsutils libsensors @LINUX_2_6
+  DEPENDS:=+sysfsutils @LINUX_2_6
   URL:=http://www.lm-sensors.org/
 endef
 
 define Package/lm-sensors
   $(call Package/lm-sensors/Default)
   TITLE+= (programs)
-  DEPENDS+= @TARGET_x86
+  DEPENDS+= +libsensors @TARGET_x86
 endef
 
 define Package/libsensors
