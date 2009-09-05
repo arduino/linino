@@ -69,7 +69,7 @@ endef
 
 define Package/quagga-unstable-ospf6d
   $(call Package/quagga-unstable/Default)
-  DEPENDS += quagga-unstable-libospf quagga-unstable-libzebra
+  DEPENDS += quagga-unstable-libospf quagga-unstable-libzebra @IPV6
   TITLE:=OSPFv3 routing engine
 endef
 
