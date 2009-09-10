@@ -68,7 +68,6 @@ CONFIGURE_ARGS += \
 
 CONFIGURE_VARS+= \
 	ac_cv_have_abstract_sockets="yes" \
-	$(if $(CONFIG_LINUX_2_4),ac_cv_header_sys_inotify_h=no)
 
 define Package/dbus-launch-x/install
 	$(INSTALL_DIR) $(1)/usr/bin
