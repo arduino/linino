@@ -83,7 +83,7 @@ start_service() {
 	append_params "$s" \
 		askpass auth auth_user_pass auth_user_pass_verify bcast_buffers ca cd cert \
 		chroot cipher client_config_dir client_connect config connect_freq \
-		connect_retry connect_timeout connect_retry_max crl_verify dev dev_node dev_type dh down \
+		connect_retry connect_timeout connect_retry_max crl_verify dev dev_node dev_type dh \
 		echo engine explicit_exit_notify fragment group hand_window hash_size \
 		http_proxy http_proxy_option http_proxy_timeout ifconfig ifconfig_pool \
 		ifconfig_pool_persist ifconfig_push inactive ipchange iroute keepalive \
@@ -97,11 +97,11 @@ start_service() {
 		route_metric route_up rport script_security secret server server_bridge setenv shaper sndbuf \
 		socks_proxy status status_version syslog tcp_queue_limit tls_auth \
 		tls_cipher tls_remote tls_timeout tls_verify tmp_dir topology tran_window \
-		tun_mtu tun_mtu_extra txqueuelen up user verb
+		tun_mtu tun_mtu_extra txqueuelen user verb
 
 	# append multi-value params
 	append_params_quoted "$s" \
-		push
+		down push up
 
 
 	[ -n "$ARGS" ] && \
