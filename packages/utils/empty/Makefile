@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=empty
-PKG_VERSION:=0.6.17b
+PKG_VERSION:=0.6.18b
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=@SF/empty
-PKG_MD5SUM:=e286fba9916df2ec6b3485cb9274dea9
+PKG_MD5SUM:=2cf5e1b8ff58c41b63738bdc7c24fbc2
 
 include $(INCLUDE_DIR)/package.mk
 
