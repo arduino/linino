@@ -1,26 +1,40 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2007-2009 OpenWrt.org
+
 START=70
 BIN=ptunnel
+PIDCOUNT=0
 
 start() {
-    config_load ptunnel
-    config_foreach start_ptunnel ptunnel
+	include /lib/network
+	scan_interfaces
+
+	config_load ptunnel
+	config_foreach start_ptunnel ptunnel
+	iptables -I OUTPUT 1 -p icmp -j ACCEPT 2> /dev/null
 }
 
 start_ptunnel() {
-    local section="$1"
-    
-    include /lib/network
-    scan_interfaces
-    
-    iptables -I OUTPUT 1 -p icmp -j ACCEPT
-    config_get interface "$section" interface
+	local section="$1"
 
-    $BIN -c "$interface" > /dev/null&
+	config_get interface "$section" interface
+	config_get ifname "$interface" ifname
+
+	[ -z "$ifname" ] && {
+		echo "Error: Interface '$interface' not found" 1>&2
+		return 1
+	}
+
+	PIDCOUNT="$(( ${PIDCOUNT} + 1))"
+	${BIN} -c "$ifname" -daemon /var/run/ptunnel."$PIDCOUNT".pid> /dev/null
 }
 
 stop() {
-        ps aux | grep ptunnel |  awk '{print }' | \
-            xargs kill 2> /dev/null
+	local pidfile
+
+	for pidfile in `ls /var/run/${BIN}.*.pid`
+	do
+		start-stop-daemon -K -s KILL -p "${pidfile}" -n "${BIN}" >/dev/null
+		rm -f "${pidfile}"
+	done
 }
