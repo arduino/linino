@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -14,6 +14,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.berlios.de/fetchmail
 PKG_MD5SUM:=43b28f296cc0024d3c727319eacae324
+PKG_INSTALL=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,20 +30,12 @@ define Package/fetchmail/description
  Very useful in conjunction with mutt.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-fallback=procmail \
-		--without-hesiod \
-		, \
-		ac_cv_path_procmail=/usr/sbin/procmail \
-	)
-endef
+CONFIGURE_ARGS += \
+	--enable-fallback=procmail \
+	--without-hesiod
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+CONFIGURE_VARS += \
+	ac_cv_path_procmail=/usr/sbin/procmail
 
 define Package/fetchmail/install
 	$(INSTALL_DIR) $(1)/usr/bin
