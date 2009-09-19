@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 START=70
 BIN=ptunnel
 
@@ -24,4 +24,3 @@ stop() {
         ps aux | grep ptunnel |  awk '{print }' | \
             xargs kill 2> /dev/null
 }
-									
