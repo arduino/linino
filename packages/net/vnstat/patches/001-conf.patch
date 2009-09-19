@@ -1,6 +1,6 @@
 --- a/cfg/vnstat.conf
 +++ b/cfg/vnstat.conf
-@@ -69,13 +69,13 @@ TrafficlessDays 1
+@@ -72,13 +72,13 @@ TrafficlessDays 1
  ##
  
  # how often (in seconds) interface data is updated
@@ -11,9 +11,9 @@
 -PollInterval 5
 +PollInterval 30
  
- # how often (in minutes) interface data is saved to file
+ # how often (in minutes) data is saved to file
 -SaveInterval 5
 +SaveInterval 30
  
- # enable / disable logging (0 = disabled, 1 = logfile, 2 = syslog)
- UseLogging 2
+ # how often (in minutes) data is saved when all interface are offline
+ OfflineSaveInterval 30
