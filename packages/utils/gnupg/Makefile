@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnupg
-PKG_VERSION:=1.4.9
+PKG_VERSION:=1.4.10
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.franken.de/pub/crypt/mirror/ftp.gnupg.org/gcrypt/gnupg \
 	ftp://ftp.gnupg.org/gcrypt/gnupg
-PKG_MD5SUM:=cc52393087480ac8d245625004a6a30c
+PKG_MD5SUM:=dcf7ed712997888d616e029637bfc303
 
 include $(INCLUDE_DIR)/package.mk
 
