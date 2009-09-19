@@ -30,6 +30,7 @@ define Package/bzip2/description
 	data compressor.
 endef
 
+TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += --prefix=/usr
 
 MAKE_FLAGS += \
