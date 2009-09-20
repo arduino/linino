@@ -7,4 +7,3 @@ a-color = 0;32          # dark green track artist names
 s-color = 1;37          # white station names
 bind = 0.0.0.0
 extern = madplay -q -
-extern-restart = 1
