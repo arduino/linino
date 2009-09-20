@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apr
-PKG_VERSION:=1.2.9
-PKG_RELEASE:=2
+PKG_VERSION:=1.3.8
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://apache.d-s-s-p.de/apr/
-PKG_MD5SUM:=6f4b063ac01a54ba0818c31280f06959
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://www.ibiblio.org/pub/mirrors/apache/apr
+PKG_MD5SUM:=3c7e3a39ae3d3573f49cb74e2dbf87a2
 
 PKG_FIXUP = libtool
 
