@@ -1,0 +1,15 @@
+--- a/configure
++++ b/configure
+@@ -39234,11 +39234,7 @@ cat >>confdefs.h <<_ACEOF
+ _ACEOF
+ 
+ 
+-if test "$ac_cv_sizeof_struct_iovec" = "0"; then
+-    have_iovec=0
+-else
+-    have_iovec=1
+-fi
++have_iovec=1
+ 
+ 
+ 
