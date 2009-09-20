@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=znc
-PKG_VERSION:=0.070
-PKG_RELEASE:=2
+PKG_VERSION:=0.074
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/znc
-PKG_MD5SUM:=18bb813cb350c6db014a0d82ecdf85fe
+PKG_MD5SUM:=378187acd114769f8f97ef2d4b19da25
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -42,6 +42,7 @@ CONFIGURE_VARS += \
 CONFIGURE_ARGS += \
 	$(TARGET_CONFIGURE_OPTS) \
 	--disable-perl \
+	--disable-c-ares \
 
 MAKE_FLAGS += \
 	CXX="g++-uc"
