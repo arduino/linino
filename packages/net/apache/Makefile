@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apache
-PKG_VERSION:=2.2.9
-PKG_RELEASE:=2
+PKG_VERSION:=2.2.13
+PKG_RELEASE:=1
 PKG_SOURCE_NAME:=httpd
 
 PKG_SOURCE:=$(PKG_SOURCE_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ftp.uni-erlangen.de/pub/mirrors/apache/httpd/ \
 		http://apache.imsam.info/httpd/
-PKG_MD5SUM:=3afa8137dc1999be695a20b62fdf032b
+PKG_MD5SUM:=8d8d904e7342125825ec70f03c5745ef
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_NAME)-$(PKG_VERSION)
 
@@ -37,7 +37,7 @@ endef
 
 define Package/apache
 $(call Package/apache/Default)
-  DEPENDS:=+libapr +libaprutil +zlib +libexpat +libpcre +libopenssl +libsqlite3
+  DEPENDS:=+libapr +libaprutil +libpcre +libopenssl
 endef
 
 define Package/apache/description
@@ -85,7 +85,7 @@ $(call Package/apache/Default/description)
  This package contains the icons from Apache.
 endef
 
-define Build/Configure	
+define Build/Configure
 	$(call Build/Configure/Default, \
 		--with-apr="$(STAGING_DIR)/usr/bin/apr-1-config" \
 		--with-apr-util="$(STAGING_DIR)/usr/bin/apu-1-config" \
@@ -98,12 +98,12 @@ define Build/Configure
 		--enable-mime-magic \
 		--without-suexec-bin \
 		--sysconfdir=/etc/apache \
-		ap_void_ptr_lt_long=no \
+		ap_cv_void_ptr_lt_long=no \
 		logfiledir="/var/log" \
 	)
 endef
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
@@ -138,15 +138,14 @@ endef
 
 define Package/apache/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	# we don't need apxs on the router, it's just for building apache modules.  
+	# we don't need apxs on the router, it's just for building apache modules.
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/{ab,apachectl,checkgid,dbmmanage,envvars,envvars-std,htcacheclean,htdbm,htdigest,htpasswd,httpd,httxt2dbm,logresolve,rotatelogs} $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/httpd.exp $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/share
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/{error,htdocs,cgi-bin,build} $(1)/usr/share/
 	$(INSTALL_DIR) $(1)/etc/apache
-	$(CP) $(PKG_INSTALL_DIR)/etc/apache/{magic,mime.types,extra} $(1)/etc/apache/
-	$(CP) ./files/etc/apache/httpd.conf $(1)/etc/apache/
+	$(CP) $(PKG_INSTALL_DIR)/etc/apache/{httpd.conf,magic,mime.types,extra} $(1)/etc/apache/
 endef
 
 define Package/apache/postrm

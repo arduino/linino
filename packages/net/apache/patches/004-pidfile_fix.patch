@@ -1,6 +1,6 @@
 --- a/include/scoreboard.h
 +++ b/include/scoreboard.h
-@@ -42,7 +42,7 @@
+@@ -42,7 +42,7 @@ extern "C" {
  
  /* Scoreboard file, if there is one */
  #ifndef DEFAULT_SCOREBOARD

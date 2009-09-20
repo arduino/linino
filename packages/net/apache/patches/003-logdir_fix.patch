@@ -1,6 +1,6 @@
 --- a/build/mkconfNW.awk
 +++ b/build/mkconfNW.awk
-@@ -24,7 +24,7 @@
+@@ -24,7 +24,7 @@ BEGIN {
      A["sysconfdir"] = "conf"
      A["iconsdir"] = "icons"
      A["manualdir"] = "manual"
