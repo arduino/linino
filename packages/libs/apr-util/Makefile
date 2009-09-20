@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apr-util
-PKG_VERSION:=1.2.8
+PKG_VERSION:=1.3.9
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://apache.autinity.de/apr/
-PKG_MD5SUM:=a2e2e54d65e9eae961f7171335cf2550
+PKG_MD5SUM:=29dd557f7bd891fc2bfdffcfa081db59
 
 PKG_FIXUP = libtool
 
