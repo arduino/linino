@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=irssi
-PKG_VERSION:=0.8.13
-PKG_RELEASE:=2
+PKG_VERSION:=0.8.14
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://irssi.org/files/
-PKG_MD5SUM:=0d6fc2203832b514eff014fffd574664
+PKG_MD5SUM:=00efe7638dd596d5930dfa2aeae87b3a
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -61,7 +61,6 @@ $(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
 		--with-textui \
 		--without-terminfo \
 		--without-bot \
-		--without-file-offset-size \
 		--disable-proxy \
 		$(3))
 	$(MAKE) -C $(PKG_BUILD_DIR)
@@ -77,7 +76,7 @@ endef
 endef
 
 EXTRA_CFLAGS+=$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/lib/libiconv/include -I$(STAGING_DIR)/usr/lib/libintl/include
-EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libiconv/lib -L$(STAGING_DIR)/usr/lib/libintl/lib
+EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libiconv/lib -L$(STAGING_DIR)/usr/lib/libintl/lib -lncurses
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_irssi),)
   define Build/without-ssl
