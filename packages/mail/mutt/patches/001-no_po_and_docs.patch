@@ -1,6 +1,6 @@
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -291,7 +291,7 @@ top_srcdir = @top_srcdir@
+@@ -340,7 +340,7 @@ top_srcdir = @top_srcdir@
  AUTOMAKE_OPTIONS = 1.6 foreign
  @BUILD_IMAP_TRUE@IMAP_SUBDIR = imap
  @BUILD_IMAP_TRUE@IMAP_INCLUDES = -I$(top_srcdir)/imap
