@@ -7,12 +7,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sudo
-PKG_VERSION:=1.7.2
+PKG_VERSION:=1.7.2p1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sudo.ws/sudo/dist/
-PKG_MD5SUM:=9caba8719c3e0f163880a05f02a48249
+PKG_MD5SUM:=4449d466a774f5ce401c9c0e3866c026
 
 include $(INCLUDE_DIR)/package.mk
 
