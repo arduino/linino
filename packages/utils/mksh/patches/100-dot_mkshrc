@@ -6,8 +6,8 @@ $Id$
 	• OpenWrt fix:
 	  – since this is not ~/.mkshrc make sure subshells find it
 
---- mksh/dot.mkshrc~	2009-05-31 19:17:57.000000000 +0200
-+++ mksh/dot.mkshrc	2009-06-12 17:37:18.000000000 +0200
+--- a/dot.mkshrc
++++ b/dot.mkshrc
 @@ -20,7 +20,7 @@
  #-
  # ~/.mkshrc: mksh initialisation file for interactive shells
@@ -26,7 +26,7 @@ $Id$
  alias which='whence -p'
  whence -p rot13 >&- || alias rot13='tr \
      abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ \
-@@ -283,4 +283,8 @@ function Lstripcom {
+@@ -304,4 +304,8 @@ function Lstripcom {
  	done; }
  }
  
