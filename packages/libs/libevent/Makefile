@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libevent
-PKG_VERSION:=1.4.9
+PKG_VERSION:=1.4.12
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-stable
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-stable.tar.gz
 PKG_SOURCE_URL:=http://www.monkey.org/~provos/
-PKG_MD5SUM:=5154fd4582d64077d6b17851f04d6957
+PKG_MD5SUM:=77b0d8b9885496871bb083165b35ba11
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,14 +26,14 @@ define Package/libevent
 endef
 
 define Package/libevent/description
-	The libevent API provides a mechanism to execute a callback function 
-	when a specific event occurs on a file descriptor or after a timeout 
-	has been reached. Furthermore, libevent also support callbacks due 
+	The libevent API provides a mechanism to execute a callback function
+	when a specific event occurs on a file descriptor or after a timeout
+	has been reached. Furthermore, libevent also support callbacks due
 	to signals or regular timeouts.
-	
-	libevent is meant to replace the event loop found in event driven 
-	network servers. An application just needs to call event_dispatch() 
-	and then add or remove events dynamically without having to change 
+
+	libevent is meant to replace the event loop found in event driven
+	network servers. An application just needs to call event_dispatch()
+	and then add or remove events dynamically without having to change
 	the event loop.
 endef
 
