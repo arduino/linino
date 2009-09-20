@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ssmtp
-PKG_VERSION:=2.61
-PKG_RELEASE:=2
+PKG_VERSION:=2.63
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/s/ssmtp/
-PKG_MD5SUM:=957e6fff08625fe34f4fc33d0925bbc9
+PKG_MD5SUM:=
 
 include $(INCLUDE_DIR)/package.mk
 
