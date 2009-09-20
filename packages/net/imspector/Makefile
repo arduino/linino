@@ -9,18 +9,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=imspector
-PKG_VERSION:=0.8
-PKG_RELEASE:=2
+PKG_VERSION:=0.9
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.imspector.org/downloads
-PKG_MD5SUM:=08a2ecdc7328d14b36f692c006e33029
+PKG_MD5SUM:=626abf7c2b8f15d56df679ad66624575
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/imspector
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Instant Messaging
   TITLE:=IMSpector is an Instant Messenger proxy
   URL:=http://www.imspector.org
   DEPENDS:=+libopenssl +libstdcpp +libmysqlclient +libsqlite3 +libpq \
