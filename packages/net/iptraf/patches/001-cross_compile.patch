@@ -1,7 +1,6 @@
-diff -urN iptraf-3.0.0/support/Makefile iptraf-3.0.0.new/support/Makefile
---- iptraf-3.0.0/support/Makefile	2002-07-19 18:31:48.000000000 +0200
-+++ iptraf-3.0.0.new/support/Makefile	2006-04-16 16:07:58.000000000 +0200
-@@ -3,16 +3,14 @@
+--- a/support/Makefile
++++ b/support/Makefile
+@@ -3,16 +3,14 @@ INCLUDEDIR		= -I/usr/include/ncurses
  OBJS			= input.o menurt.o listbox.o winops.o labels.o \
  				msgboxes.o txbox.o
  
