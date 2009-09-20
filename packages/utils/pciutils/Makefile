@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pciutils
-PKG_VERSION:=3.1.2
-PKG_RELEASE:=2
+PKG_VERSION:=3.1.4
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@KERNEL/software/utils/pciutils \
 	ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci
-PKG_MD5SUM:=46387fd7a18c33fbb5311fdb3ab9ea12
+PKG_MD5SUM:=b38142c61c52f42d19540a0fcb11050a
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -52,9 +52,9 @@ endef
 
 define Package/pciutils/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_BUILD_DIR)/{lspci,setpci,update-pciids.sh} $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/{lspci,setpci,update-pciids.sh} $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/share
-	$(CP) $(PKG_BUILD_DIR)/pci.ids $(1)/usr/share/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/pci.ids $(1)/usr/share/
 endef
 
 $(eval $(call BuildPackage,pciutils))
