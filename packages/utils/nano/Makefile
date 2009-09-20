@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nano
-PKG_VERSION:=2.0.9
+PKG_VERSION:=2.1.9
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.nano-editor.org/dist/v2.0
-PKG_MD5SUM:=4eb4fcd015e3c09e3a119250286
+PKG_SOURCE_URL:=http://www.nano-editor.org/dist/v2.1
+PKG_MD5SUM:=41e9ffb4a055eba666cdb17c4e50ba21
 
 include $(INCLUDE_DIR)/package.mk
 
