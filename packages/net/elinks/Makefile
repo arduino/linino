@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=elinks
-PKG_VERSION:=0.11.6
-PKG_RELEASE:=2
+PKG_VERSION:=0.11.7
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://elinks.or.cz/download
-PKG_MD5SUM:=463ec007b013822a82d197580117ea16
+PKG_MD5SUM:=fcd087a6d2415cd4c6fd1db53dceb646
 
 include $(INCLUDE_DIR)/package.mk
 
