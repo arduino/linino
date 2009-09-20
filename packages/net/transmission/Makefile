@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=transmission
 PKG_VERSION:=1.74
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://mirrors.m0k.org/transmission/files
@@ -29,7 +29,7 @@ endef
 
 define Package/transmission-daemon
   $(call Package/transmission/template)
-  DEPENDS:=+libcurl +libopenssl +libpthread
+  DEPENDS:=+libcurl +libopenssl +libpthread +libevent
   MENU:=1
 endef
 
@@ -84,7 +84,7 @@ endef
 define Package/transmission-web/install
 	$(INSTALL_DIR) $(1)/usr/share/transmission
 	rm -rf `find $(PKG_BUILD_DIR)/web -type d -name .svn`
-	cp -rf $(PKG_BUILD_DIR)/web $(1)/usr/share/transmission 
+	cp -rf $(PKG_BUILD_DIR)/web $(1)/usr/share/transmission
 endef
 
 $(eval $(call BuildPackage,transmission-daemon))
