@@ -1,6 +1,6 @@
---- arpd/arpd.c	Sun Feb  9 05:20:40 2003
-+++ arpd/arpd.c.new	Mon Aug  1 00:50:40 2005
-@@ -70,7 +70,7 @@
+--- a/arpd.c
++++ b/arpd.c
+@@ -70,7 +70,7 @@ static int			 arpd_sig;
  static void
  usage(void)
  {
@@ -9,7 +9,7 @@
  	exit(1);
  }
  
-@@ -182,7 +182,7 @@
+@@ -182,7 +182,7 @@ arpd_expandips(int naddresses, char **ad
  }
  
  static void
@@ -18,7 +18,7 @@
  {
  	struct bpf_program fcode;
  	char filter[1024], ebuf[PCAP_ERRBUF_SIZE], *dst;
-@@ -214,9 +214,13 @@
+@@ -214,9 +214,13 @@ arpd_init(char *dev, int naddresses, cha
  		errx(1, "bad interface configuration: not IP or Ethernet");
  	arpd_ifent.intf_addr.addr_bits = IP_ADDR_BITS;
  	
@@ -34,7 +34,7 @@
  	
  	if ((arpd_pcap = pcap_open_live(dev, 128, 0, 500, ebuf)) == NULL)
  		errx(1, "pcap_open_live: %s", ebuf);
-@@ -465,14 +469,14 @@
+@@ -465,14 +469,14 @@ main(int argc, char *argv[])
  {
  	struct event recv_ev;
  	extern int (*event_sigcb)(void);
@@ -51,7 +51,7 @@
  		switch (c) {
  		case 'd':
  			debug = 1;
-@@ -480,6 +484,9 @@
+@@ -480,6 +484,9 @@ main(int argc, char *argv[])
  		case 'i':
  			dev = optarg;
  			break;
@@ -61,7 +61,7 @@
  		default:
  			usage();
  			break;
-@@ -489,9 +496,9 @@
+@@ -489,9 +496,9 @@ main(int argc, char *argv[])
  	argv += optind;
  
  	if (argc == 0)

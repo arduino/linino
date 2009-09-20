@@ -1,6 +1,6 @@
---- arpd/arpd.c.orig	Sun Feb  9 05:20:40 2003
-+++ arpd/arpd.c	Thu Jul 21 17:05:40 2005
-@@ -265,7 +265,7 @@
+--- a/arpd.c
++++ b/arpd.c
+@@ -265,7 +265,7 @@ arpd_send(eth_t *eth, int op,
  	    spa->addr_ip, tha->addr_eth, tpa->addr_ip);
  	
  	if (op == ARP_OP_REQUEST) {
@@ -9,7 +9,7 @@
  		    addr_ntoa(tpa), addr_ntoa(spa));
  	} else if (op == ARP_OP_REPLY) {
  		syslog(LOG_INFO, "arp reply %s is-at %s",
-@@ -282,7 +282,7 @@
+@@ -282,7 +282,7 @@ arpd_lookup(struct addr *addr)
  	int error;
  
  	if (addr_cmp(addr, &arpd_ifent.intf_addr) == 0) {
@@ -18,7 +18,7 @@
  		    addr_ntoa(addr), addr_ntoa(&arpd_ifent.intf_link_addr));
  		return (0);
  	}
-@@ -291,10 +291,10 @@
+@@ -291,10 +291,10 @@ arpd_lookup(struct addr *addr)
  	error = arp_get(arpd_arp, &arpent);
  	
  	if (error == -1) {
@@ -31,7 +31,7 @@
  		    addr_ntoa(addr), addr_ntoa(&arpent.arp_ha));
  	}
  	return (error);
-@@ -423,7 +423,7 @@
+@@ -423,7 +423,7 @@ arpd_recv_cb(u_char *u, const struct pca
  		if ((req = SPLAY_FIND(tree, &arpd_reqs, &tmp)) != NULL) {
  			addr_pack(&src.arp_ha, ADDR_TYPE_ETH, ETH_ADDR_BITS,
  			    ethip->ar_sha, ETH_ADDR_LEN);

@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=arpd
 PKG_VERSION:=0.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_MD5SUM:=e2911fa9de1b92ef50deda1489ae944d
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/arpd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcap +libdnet +libevent
+  DEPENDS:=+libpcap +libdnet +libevent +librt
   TITLE:=A daemon to fake ARP replies
   URL:=http://niels.xtdnet.nl/honeyd/
 endef

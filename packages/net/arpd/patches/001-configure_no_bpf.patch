@@ -1,6 +1,6 @@
---- arpd/configure.orig	Sun Feb  9 19:31:28 2003
-+++ arpd/configure	Thu Jul 21 16:05:16 2005
-@@ -2258,8 +2258,7 @@
+--- a/configure
++++ b/configure
+@@ -2258,8 +2258,7 @@ echo "${ECHO_T}$withval" >&6
          if cd $withval; then withval=`pwd`; cd $owd; fi
          PCAPINC="-I$withval -I$withval/bpf"
          PCAPLIB="-L$withval -lpcap"
