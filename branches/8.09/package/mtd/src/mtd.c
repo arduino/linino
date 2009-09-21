@@ -1,13 +1,12 @@
 /*
  * mtd - simple memory technology device manipulation tool
  *
- * Copyright (C) 2005 Waldemar Brodkorb <wbx@dass-it.de>,
- *	                  Felix Fietkau <nbd@openwrt.org>
+ * Copyright (C) 2005      Waldemar Brodkorb <wbx@dass-it.de>,
+ * Copyright (C) 2005-2009 Felix Fietkau <nbd@openwrt.org>
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * modify it under the terms of the GNU General Public License v2
+ * as published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,7 +17,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
- * $Id$
  *
  * The code is based on the linux-mtd examples.
  */
@@ -44,6 +42,7 @@
 #include <sys/reboot.h>
 #include <linux/reboot.h>
 #include "mtd-api.h"
+#include "fis.h"
 #include "mtd.h"
 
 #define MAX_ARGS 8
@@ -120,10 +119,9 @@ int mtd_erase_block(int fd, int offset)
 	mtdEraseInfo.start = offset;
 	mtdEraseInfo.length = erasesize;
 	ioctl(fd, MEMUNLOCK, &mtdEraseInfo);
-	if (ioctl (fd, MEMERASE, &mtdEraseInfo) < 0) {
-		fprintf(stderr, "Erasing mtd failed.\n");
-		exit(1);
-	}
+	if (ioctl (fd, MEMERASE, &mtdEraseInfo) < 0)
+		return -1;
+
 	return 0;
 }
 
@@ -147,42 +145,78 @@ image_check(int imagefd, const char *mtd)
 
 static int mtd_check(const char *mtd)
 {
+	char *next = NULL;
+	char *str = NULL;
 	int fd;
 
-	fd = mtd_check_open(mtd);
-	if (!fd)
-		return 0;
+	if (strchr(mtd, ':')) {
+		str = strdup(mtd);
+		mtd = str;
+	}
 
-	if (!buf)
-		buf = malloc(erasesize);
+	do {
+		next = strchr(mtd, ':');
+		if (next) {
+			*next = 0;
+			next++;
+		}
 
-	close(fd);
+		fd = mtd_check_open(mtd);
+		if (!fd)
+			return 0;
+
+		if (!buf)
+			buf = malloc(erasesize);
+
+		close(fd);
+		mtd = next;
+	} while (next);
+
+	if (str)
+		free(str);
+
 	return 1;
 }
 
 static int
 mtd_unlock(const char *mtd)
 {
-	int fd;
 	struct erase_info_user mtdLockInfo;
+	char *next = NULL;
+	char *str = NULL;
+	int fd;
 
-	fd = mtd_check_open(mtd);
-	if(fd <= 0) {
-		fprintf(stderr, "Could not open mtd device: %s\n", mtd);
-		exit(1);
+	if (strchr(mtd, ':')) {
+		str = strdup(mtd);
+		mtd = str;
 	}
 
-	if (quiet < 2) 
-		fprintf(stderr, "Unlocking %s ...\n", mtd);
+	do {
+		next = strchr(mtd, ':');
+		if (next) {
+			*next = 0;
+			next++;
+		}
 
-	mtdLockInfo.start = 0;
-	mtdLockInfo.length = mtdsize;
-	if(ioctl(fd, MEMUNLOCK, &mtdLockInfo)) {
+		fd = mtd_check_open(mtd);
+		if(fd <= 0) {
+			fprintf(stderr, "Could not open mtd device: %s\n", mtd);
+			exit(1);
+		}
+
+		if (quiet < 2)
+			fprintf(stderr, "Unlocking %s ...\n", mtd);
+
+		mtdLockInfo.start = 0;
+		mtdLockInfo.length = mtdsize;
+		ioctl(fd, MEMUNLOCK, &mtdLockInfo);
 		close(fd);
-		return 0;
-	}
-		
-	close(fd);
+		mtd = next;
+	} while (next);
+
+	if (str)
+		free(str);
+
 	return 0;
 }
 
@@ -206,11 +240,11 @@ mtd_erase(const char *mtd)
 	for (mtdEraseInfo.start = 0;
 		 mtdEraseInfo.start < mtdsize;
 		 mtdEraseInfo.start += erasesize) {
-		
+
 		ioctl(fd, MEMUNLOCK, &mtdEraseInfo);
 		if(ioctl(fd, MEMERASE, &mtdEraseInfo))
 			fprintf(stderr, "Failed to erase block on %s at 0x%x\n", mtd, mtdEraseInfo.start);
-	}		
+	}
 
 	close(fd);
 	return 0;
@@ -245,27 +279,99 @@ mtd_refresh(const char *mtd)
 }
 
 static int
-mtd_write(int imagefd, const char *mtd)
+mtd_write(int imagefd, const char *mtd, char *fis_layout)
 {
+	char *next = NULL;
+	char *str = NULL;
 	int fd, result;
 	ssize_t r, w, e;
+	uint32_t offset = 0;
+
+#ifdef FIS_SUPPORT
+	static struct fis_part new_parts[MAX_ARGS];
+	static struct fis_part old_parts[MAX_ARGS];
+	int n_new = 0, n_old = 0;
+
+	if (fis_layout) {
+		const char *tmp = mtd;
+		char *word, *brkt;
+		int ret;
+
+		memset(&old_parts, 0, sizeof(old_parts));
+		memset(&new_parts, 0, sizeof(new_parts));
+
+		do {
+			next = strchr(tmp, ':');
+			if (!next)
+				next = (char *) tmp + strlen(tmp);
+
+			memcpy(old_parts[n_old].name, tmp, next - tmp);
+
+			n_old++;
+			tmp = next + 1;
+		} while(*next);
+
+		for (word = strtok_r(fis_layout, ",", &brkt);
+		     word;
+			 word = strtok_r(NULL, ",", &brkt)) {
+
+			tmp = strtok(word, ":");
+			strncpy((char *) new_parts[n_new].name, tmp, sizeof(new_parts[n_new].name) - 1);
+
+			tmp = strtok(NULL, ":");
+			if (!tmp)
+				goto next;
+
+			new_parts[n_new].size = strtoul(tmp, NULL, 0);
+
+			tmp = strtok(NULL, ":");
+			if (!tmp)
+				goto next;
+
+			new_parts[n_new].loadaddr = strtoul(tmp, NULL, 16);
+next:
+			n_new++;
+		}
+		ret = fis_validate(old_parts, n_old, new_parts, n_new);
+		if (ret < 0) {
+			fprintf(stderr, "Failed to validate the new FIS partition table\n");
+			exit(1);
+		}
+		if (ret == 0)
+			fis_layout = NULL;
+	}
+#endif
+
+	if (strchr(mtd, ':')) {
+		str = strdup(mtd);
+		mtd = str;
+	}
+
+	r = 0;
+
+resume:
+	next = strchr(mtd, ':');
+	if (next) {
+		*next = 0;
+		next++;
+	}
 
 	fd = mtd_check_open(mtd);
 	if(fd < 0) {
 		fprintf(stderr, "Could not open mtd device: %s\n", mtd);
 		exit(1);
 	}
-		
+
 	if (quiet < 2)
 		fprintf(stderr, "Writing from %s to %s ... ", imagefile, mtd);
 
-	r = w = e = 0;
+	w = e = 0;
 	if (!quiet)
 		fprintf(stderr, " [ ]");
 
 	for (;;) {
-		/* buffer may contain data already (from trx check) */
-		do {
+		/* buffer may contain data already (from trx check or last mtd partition write attempt) */
+		while (buflen < erasesize) {
 			r = read(imagefd, buf + buflen, erasesize - buflen);
 			if (r < 0) {
 				if ((errno == EINTR) || (errno == EAGAIN))
@@ -280,7 +386,7 @@ mtd_write(int imagefd, const char *mtd)
 				break;
 
 			buflen += r;
-		} while (buflen < erasesize);
+		}
 
 		if (buflen == 0)
 			break;
@@ -305,16 +411,33 @@ mtd_write(int imagefd, const char *mtd)
 			if (!quiet)
 				fprintf(stderr, "\b\b\b[e]");
 
-			mtd_erase_block(fd, e);
+
+			if (mtd_erase_block(fd, e) < 0) {
+				if (next) {
+					if (w < e) {
+						write(fd, buf + offset, e - w);
+						offset = e - w;
+					}
+					w = 0;
+					e = 0;
+					close(fd);
+					mtd = next;
+					fprintf(stderr, "\b\b\b   \n");
+					goto resume;
+				} else {
+					fprintf(stderr, "Failed to erase block\n");
+					exit(1);
+				}
+			}
 
 			/* erase the chunk */
 			e += erasesize;
 		}
-		
+
 		if (!quiet)
 			fprintf(stderr, "\b\b\b[w]");
-		
-		if ((result = write(fd, buf, buflen)) < buflen) {
+
+		if ((result = write(fd, buf + offset, buflen)) < buflen) {
 			if (result < 0) {
 				fprintf(stderr, "Error writing image.\n");
 				exit(1);
@@ -326,13 +449,22 @@ mtd_write(int imagefd, const char *mtd)
 		w += buflen;
 
 		buflen = 0;
+		offset = 0;
 	}
+
 	if (!quiet)
-		fprintf(stderr, "\b\b\b\b");
+		fprintf(stderr, "\b\b\b\b    ");
 
 done:
 	if (quiet < 2)
 		fprintf(stderr, "\n");
+
+#ifdef FIS_SUPPORT
+	if (fis_layout) {
+		if (fis_remap(old_parts, n_old, new_parts, n_new) < 0)
+			fprintf(stderr, "Failed to update the FIS partition table\n");
+	}
+#endif
 
 	close(fd);
 	return 0;
@@ -340,7 +472,7 @@ done:
 
 static void usage(void)
 {
-	fprintf(stderr, "Usage: mtd [<options> ...] <command> [<arguments> ...] <device>\n\n"
+	fprintf(stderr, "Usage: mtd [<options> ...] <command> [<arguments> ...] <device>[:<device>...]\n\n"
 	"The device is in the format of mtdX (eg: mtd4) or its label.\n"
 	"mtd recognizes these commands:\n"
 	"        unlock                  unlock the device\n"
@@ -356,6 +488,12 @@ static void usage(void)
 	"        -e <device>             erase <device> before executing the command\n"
 	"        -d <name>               directory for jffs2write, defaults to \"tmp\"\n"
 	"        -j <name>               integrate <file> into jffs2 data when writing an image\n"
+#ifdef FIS_SUPPORT
+	"        -F <part>[:<size>[:<entrypoint>]][,<part>...]\n"
+	"                                alter the fis partition table to create new partitions replacing\n"
+	"                                the partitions provided as argument to the write command\n"
+	"                                (only valid together with the write command)\n"
+#endif
 	"\n"
 	"Example: To write linux.trx to mtd4 labeled as linux and reboot afterwards\n"
 	"         mtd -r write linux.trx linux\n\n");
@@ -379,6 +517,7 @@ int main (int argc, char **argv)
 {
 	int ch, i, boot, imagefd = 0, force, unlocked;
 	char *erase[MAX_ARGS], *device = NULL;
+	char *fis_layout = NULL;
 	enum {
 		CMD_ERASE,
 		CMD_WRITE,
@@ -386,14 +525,18 @@ int main (int argc, char **argv)
 		CMD_REFRESH,
 		CMD_JFFS2WRITE
 	} cmd = -1;
-	
+
 	erase[0] = NULL;
 	boot = 0;
 	force = 0;
 	buflen = 0;
 	quiet = 0;
 
-	while ((ch = getopt(argc, argv, "frqe:d:j:")) != -1)
+	while ((ch = getopt(argc, argv,
+#ifdef FIS_SUPPORT
+			"F:"
+#endif
+			"frqe:d:j:")) != -1)
 		switch (ch) {
 			case 'f':
 				force = 1;
@@ -411,20 +554,25 @@ int main (int argc, char **argv)
 				i = 0;
 				while ((erase[i] != NULL) && ((i + 1) < MAX_ARGS))
 					i++;
-					
+
 				erase[i++] = optarg;
 				erase[i] = NULL;
 				break;
 			case 'd':
 				jffs2dir = optarg;
 				break;
+#ifdef FIS_SUPPORT
+			case 'F':
+				fis_layout = optarg;
+				break;
+#endif
 			case '?':
 			default:
 				usage();
 		}
 	argc -= optind;
 	argv += optind;
-	
+
 	if (argc < 2)
 		usage();
 
@@ -440,7 +588,7 @@ int main (int argc, char **argv)
 	} else if ((strcmp(argv[0], "write") == 0) && (argc == 3)) {
 		cmd = CMD_WRITE;
 		device = argv[2];
-	
+
 		if (strcmp(argv[1], "-") == 0) {
 			imagefile = "<stdin>";
 			imagefd = 0;
@@ -451,7 +599,7 @@ int main (int argc, char **argv)
 				exit(1);
 			}
 		}
-	
+
 		if (!mtd_check(device)) {
 			fprintf(stderr, "Can't open device for writing!\n");
 			exit(1);
@@ -464,7 +612,7 @@ int main (int argc, char **argv)
 	} else if ((strcmp(argv[0], "jffs2write") == 0) && (argc == 3)) {
 		cmd = CMD_JFFS2WRITE;
 		device = argv[2];
-	
+
 		imagefile = argv[1];
 		if (!mtd_check(device)) {
 			fprintf(stderr, "Can't open device for writing!\n");
@@ -475,7 +623,7 @@ int main (int argc, char **argv)
 	}
 
 	sync();
-	
+
 	i = 0;
 	unlocked = 0;
 	while (erase[i] != NULL) {
@@ -485,8 +633,7 @@ int main (int argc, char **argv)
 			unlocked = 1;
 		i++;
 	}
-	
-		
+
 	switch (cmd) {
 		case CMD_UNLOCK:
 			if (!unlocked)
@@ -500,7 +647,7 @@ int main (int argc, char **argv)
 		case CMD_WRITE:
 			if (!unlocked)
 				mtd_unlock(device);
-			mtd_write(imagefd, device);
+			mtd_write(imagefd, device, fis_layout);
 			break;
 		case CMD_JFFS2WRITE:
 			if (!unlocked)
@@ -513,7 +660,7 @@ int main (int argc, char **argv)
 	}
 
 	sync();
-	
+
 	if (boot)
 		do_reboot();
 
