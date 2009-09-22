@@ -1,6 +1,6 @@
---- djbdns-1.05.original/pickdns-data.c	2001-02-11 21:11:45.000000000 +0000
-+++ djbdns-1.05/pickdns-data.c	2003-10-19 10:47:17.000000000 +0100
-@@ -123,7 +123,7 @@
+--- a/pickdns-data.c
++++ b/pickdns-data.c
+@@ -123,7 +123,7 @@ void syntaxerror(const char *why)
  }
  void die_datatmp(void)
  {
@@ -9,7 +9,7 @@
  }
  
  int main()
-@@ -142,7 +142,7 @@
+@@ -142,7 +142,7 @@ int main()
    if (fd == -1) strerr_die2sys(111,FATAL,"unable to open data: ");
    buffer_init(&b,buffer_unixread,fd,bspace,sizeof bspace);
  
@@ -18,7 +18,7 @@
    if (fdcdb == -1) die_datatmp();
    if (cdb_make_start(&cdb,fdcdb) == -1) die_datatmp();
  
-@@ -223,8 +223,8 @@
+@@ -223,8 +223,8 @@ int main()
    if (cdb_make_finish(&cdb) == -1) die_datatmp();
    if (fsync(fdcdb) == -1) die_datatmp();
    if (close(fdcdb) == -1) die_datatmp(); /* NFS stupidity */
@@ -29,9 +29,9 @@
  
    _exit(0);
  }
---- djbdns-1.05.original/rbldns-data.c	2001-02-11 21:11:45.000000000 +0000
-+++ djbdns-1.05/rbldns-data.c	2003-10-19 10:47:30.000000000 +0100
-@@ -42,7 +42,7 @@
+--- a/rbldns-data.c
++++ b/rbldns-data.c
+@@ -42,7 +42,7 @@ void syntaxerror(const char *why)
  }
  void die_datatmp(void)
  {
@@ -40,7 +40,7 @@
  }
  
  int main()
-@@ -59,7 +59,7 @@
+@@ -59,7 +59,7 @@ int main()
    if (fd == -1) strerr_die2sys(111,FATAL,"unable to open data: ");
    buffer_init(&b,buffer_unixread,fd,bspace,sizeof bspace);
  
@@ -49,7 +49,7 @@
    if (fdcdb == -1) die_datatmp();
    if (cdb_make_start(&cdb,fdcdb) == -1) die_datatmp();
  
-@@ -121,8 +121,8 @@
+@@ -121,8 +121,8 @@ int main()
    if (cdb_make_finish(&cdb) == -1) die_datatmp();
    if (fsync(fdcdb) == -1) die_datatmp();
    if (close(fdcdb) == -1) die_datatmp(); /* NFS stupidity */
@@ -60,8 +60,8 @@
  
    _exit(0);
  }
---- djbdns-1.05.original/tinydns-data.c	2001-02-11 21:11:45.000000000 +0000
-+++ djbdns-1.05/tinydns-data.c	2003-10-19 11:59:16.000000000 +0100
+--- a/tinydns-data.c
++++ b/tinydns-data.c
 @@ -27,7 +27,7 @@
  
  void die_datatmp(void)
@@ -71,7 +71,7 @@
  }
  void nomem(void)
  {
-@@ -206,7 +206,7 @@
+@@ -207,7 +207,7 @@ int main()
  
    buffer_init(&b,buffer_unixread,fddata,bspace,sizeof bspace);
  
@@ -80,7 +80,7 @@
    if (fdcdb == -1) die_datatmp();
    if (cdb_make_start(&cdb,fdcdb) == -1) die_datatmp();
  
-@@ -449,8 +449,8 @@
+@@ -487,8 +487,8 @@ int main()
    if (cdb_make_finish(&cdb) == -1) die_datatmp();
    if (fsync(fdcdb) == -1) die_datatmp();
    if (close(fdcdb) == -1) die_datatmp(); /* NFS stupidity */

@@ -1,6 +1,6 @@
---- djbdns-1.05.original/dns_rcip.c	2001-02-11 21:11:45.000000000 +0000
-+++ djbdns-1.05/dns_rcip.c	2003-11-03 14:55:10.000000000 +0000
-@@ -17,7 +17,7 @@
+--- a/dns_rcip.c
++++ b/dns_rcip.c
+@@ -17,7 +17,7 @@ static int init(char ip[64])
    x = env_get("DNSCACHEIP");
    if (x)
      while (iplen <= 60) {

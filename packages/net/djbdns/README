@@ -62,9 +62,11 @@ Usage pointers
 - Starting the init.d scripts from the command line with the environment variable DEBUG set to 1 will prevent the servers from daemonizing and show the servers's log dumped to stdout / stderr instead of /dev/null. Example: "DEBUG=1 /etc/init.d/dnscache start"
 - By default, all logging is disabled. Each daemon has a seperate option to activate logging. When logging activated the daemon logs to syslog using facility local1.info.
 - Each djbdns server requires an IP address on which to listen on. This port of djbdns allows you to define an interface on which to listen instead of an IP address. The advantage of this is that an interface can get a different IP address assigned, the djbdns stuff will not break. The dnscache server has a patch applied so that it is possible to define multiple interfaces on which to listen, separated by slashes. Example: wan/lan .
-- By default, dnscache acts as a recursive name server. If you wish to operate in forwardonly mode, then you need to set the forwardonly flag to '1'. Then you need to do either one of the following: Put the ip addresses of the name servers you wish to use as resolvers in the UCI config (djbdns.dnscache.resolver) or alternatively you can set the useresolvconf flag which will cause the dns servers assigned by dhcp to be used.
+- By default, dnscache acts as a recursive name server. If you wish to operate in forwardonly mode, then you need to set the forwardonly flag to '1'. Then you need to do either one of the following: Put the ip addresses of the name servers you wish to use as resolvers in the UCI config (djbdns.dnscache.resolver) or alternatively you can set the useresolvconf flag which will cause the dns servers assigned by dhcp to be used. That last option is a so called set-and-forget mode which will work quite well in most home environments.
 - If you want your OpenWRT machine to make use of its own dnscache, then you must make /etc/resolv.conf reflect this. One way of doin this is as follows: uci set network.wan.dns=127.0.0.1 . If you have dnscache listening on some other interface, you would naturally replace 127.0.0.1 by the address of that interface.
 - OpenWRT has several applications that can do DNS serving in one way or another (dnsmasq, Maradns, Bind). Make sure you have none of these apps running when you start running a djbdns name server because having two DNS apps listening on the same address is not something you would usually want. A patch for the dnsmasq configuration script and its config file is included with this package. The patch will allow you to configure dnsmasq to listen only on certain interfaces, instead of on all them as it does by default on OpenWRT. Alternatively, you could completely disable and / or remove dnsmasq, if you do not intend to use any of its functionality (which is serving DNS and DHCP).
+- The ignoreip patch also has a script supplied along with it, with which you can update the ignorelist. The script contains an explanation of why you might want to do this.
+- The ignoreip functionality is disabled by default. If you want to activate it, you need to set the flag 'useignore' flag to '1' in the config. You might also want to check if you are really blocking what you want to block. Be careful with this feature. Think twice before using it.
 
 To apply the dnsmasq patch
 ==========================
@@ -204,65 +206,104 @@ In debug mode and when logging is activated, the following parameter is also act
 
 Applied patches
 ===============
-100-crosscompile.patch
+crosscompile.patch
 https://dev.openwrt.org/ticket/2497
 Patch to make djbdns compile correctly for OpenWRT. I understand that the original patch comes from FreeWRT and was adapted for OpenWRT by Alexander Tsvyashchenko.
 
-110-cachestats.patch
+dnsroots-update.patch
+Update the dnsroots.global file to be current.
+
+srv-records-and-axfrget.patch
+http://sol.truespace.ca/Files/djbdns/srv.patch
+Adds native support for srv records (not really necessary) and also patches axfr-get to decompose SRV and PTR records and write them out in native format, rather than opaque. This last thing is needed to fix a possible problem with tinydns-data.
+
+dnscache_less_chatty_log
+http://sol.truespace.ca/Files/djbdns/log.patch
+Makes dnscache log "stat" entries no more than once per 5 seconds.
+
+tinydns_mmap_leak
+http://marc.info/?l=djbdns&m=116399640808774&w=2
+This fixes the following: In the original code if cdb_read encountered an error it returned an error code and the calling function exited without closing the cdb data file resulting in an fd leak, eventually leading to a 'too many files open' error.
+
+dnscache_big_udp_packets
+http://marc.info/?l=djbdns&m=122368590802063&w=2
+Patch to support oversized UDP packets up to 4096 bytes in length, while still correctly truncating responses over 512 bytes when sending them to stub resolvers.
+
+dnscache_dpos_tcp_servfail
+http://marc.info/?l=djbdns&m=119998909915985&w=3
+Fixes broken tcp dns queries in certain situations. For example: A vanilla 1.05 will fail on "dnstxt aol.com aol.com".
+
+dnscache-cache-negatives
+http://sol.truespace.ca/Files/djbdns/nxdomain.patch
+Add support for caching of unsuccessful lookup results.
+
+tinydns_one_second
+http://www.tinydns.org/one-second.patch
+Causes tinydns to keep its mmap() of the data.cdb file open for at most one second, instead of the default one hundred queries. This improves throughput on high traffic machines.
+
+dnscache-cachestats.patch
 http://romana.now.ie/#djbdns-cachestats
 This patch modifies the dnscache program to keep a counter of cache hits and cache misses. Two new fields are added to the stats output line: the fifth number is the number of cache hits; the sixth number is the number of cache misses.
 
-120-compiler-temporary-filename.patch
+compiler-temporary-filename.patch
 http://homepages.tesco.net/~J.deBoynePollard/Softwares/djbdns/#compiler-temporary-filename
 A bit of a nit-picky patch that adjusts the names of generated temorary files to be more 'correct'. A bit silly really.
 
-130-dnscache-multiple-ip.patch
+dnscache-multiple-ip.patch
 http://danp.net/djbdns/patches.html
-When applied, dnscache will accept a /-delimited list of IP address in $IP and bind to each in turn. NOTE: This patch is only really useful on embedded systems with very limited memory. On 'big' systems, ther are other ways to achieve listening on multiple IP adresses. Example: http://www.faqts.com/knowledge_base/view.phtml/aid/9644/fid/699
+When applied, dnscache will accept a /-delimited list of IP address in $IP and bind to each in turn. NOTE: This patch is only really useful on embedded systems with very limited memory. On big systems, ther are other ways to achieve listening on multiple IP adresses. You can read more on that over here: http://www.faqts.com/knowledge_base/view.phtml/aid/9644/fid/699
 
-140-dnsnamex-extra-command.patch
+dnsnamex-extra-command.patch
 http://homepages.tesco.net/~J.deBoynePollard/Softwares/djbdns/#dnsnamex
 Not really a patch, but an extra command. dnsnamex prints all of the domain names that the IP address supplied to it maps to, on a single line.
 
-200-dnscache-cname-handling.patch
+dnscache-cname-handling.patch
 http://homepages.tesco.net/~J.deBoynePollard/FGA/#DNS
 Fixes mis-handling of client-side aliases
 
-210-dnscache-strict-forwardonly.patch
+dnscache-strict-forwardonly.patch
 http://homepages.tesco.net/~J.deBoynePollard/Softwares/djbdns/#dnscache-strict-forwardonly
 This patch modifies the behaviour of dnscache such that "forwardonly" mode is fully enforced.
 
-220-dnscacheip-space-separator.patch
+dnscacheip-space-separator.patch
 http://homepages.tesco.net/~J.deBoynePollard/FGA/djbdns-problems.html#dnscacheip-separator-character
 Patch to change the separator in ${DNSCACHEIP} to the space character
 
-230-tinydns-data-semantic-error.patch
+tinydns-data-semantic-error.patch
 http://homepages.tesco.net/~J.deBoynePollard/FGA/djbdns-problems.html#tinydns-data-semantic-error
 Fixes the fact that stock tinydns-data doesn't handle semantic errors in its input
 
-240-tinydns-alias-chain-truncation.patch
+tinydns-alias-chain-truncation.patch
 http://homepages.tesco.net/~J.deBoynePollard/FGA/djbdns-problems.html#tinydns-alias-chain-truncation
 Fixes truncation of alias chains by tinydns and axfrdns
 
-250-djbdns-1.05-slogging.patch
+dnscache-slogging.patch
 http://www.ohse.de/uwe/patches.html
 Patch to enable statistics logging of queried resource records.
 This patch is merged with the patch server-1.05-nxdomain-logging.patch that logs nxdomain queries.
 http://danp.net/djbdns/
 
-260-djbdns-1.05-dnsfilter-replace.patch
+dnsfilter-replace.patch
 http://www.ohse.de/uwe/patches.html
 This patch adds an option to the dnsfilter program (-r). It's use makes dnsfilter simply replace the IP address by the host name if possible. If the IP address cannot be determined for whatever reason then it will be left alone. -r stands for replace. 
 
-300-bugfix1-dempsky.patch
+dnscache_sigpipe_fix
+http://marc.info/?l=djbdns&m=104804013229536&w=2
+This patch tells dnscache to ignore the SIGPIPE signal.
+
+ignoreip2.patch
+http://tinydns.org/djbdns-1.05-ignoreip2.patch
+This patch change djbdns's dnscache so that it will ignore thex IP addresses given in the ignoreip file. This patch was made to boycott Verisign, amongst others, who decided to start supplying replies to non-existant and wildcard domains. NOTE: This feature is disabled in the config file by default. Be careful with this one.
+
+bugfix-dnscache-dempsky-poison.patch
 http://www.securityfocus.com/archive/1/501294/30/0/threaded
 Patch to fix a potential cache-poisoning attack. This bug only affects domains that serve DNS content using tinydns and axfrdns (only for DNS queries over TCP; clients do not need AXFR permissions) from djbdns 1.05 and allow untrusted users to include arbitrary records.
 
-310-bugfix2-merge-outgoing-requests.patch
+bugfix-dnscache-merge-outgoing-requests.patch
 http://www.your.org/dnscache/
 This patch prevents a class of poisoning attack by combining identical requests from clients into one outgoing query. Without this patch, an attacker can coerce dnscache into launching hundreds of identical queries at once, making a specific type of attack several orders of magnitude easier. 
 
-320-bugfix3-cache-soa-records.patch
+bugfix-dnscache-cache-soa-records.patch
 http://www.your.org/dnscache/
 This patch allows dnscache to store the responses of "SOA" type queries in its cache. SOA responses are the only type of response unconditionally uncached. dnscache uses its internal cache to prevent certain classes of poisoning attack. Attackers may choose to send floods of SOA requests to bypass these protections. 
 

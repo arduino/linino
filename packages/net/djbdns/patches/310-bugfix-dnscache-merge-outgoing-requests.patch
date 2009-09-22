@@ -1,8 +1,6 @@
-diff --git a/Makefile b/Makefile
-index 1429643..bc047c0 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -318,11 +318,11 @@ stralloc.h iopause.h taia.h tai.h uint64.h taia.h
+@@ -315,11 +315,11 @@ stralloc.h iopause.h taia.h tai.h uint64
  	./compile dns_txt.c
  
  dnscache: \
@@ -16,7 +14,7 @@ index 1429643..bc047c0 100644
  	env.a alloc.a buffer.a libtai.a unix.a byte.a  `cat \
  	socket.lib`
  
-@@ -343,7 +343,7 @@ compile dnscache.c env.h exit.h scan.h strerr.h error.h ip4.h \
+@@ -340,7 +340,7 @@ compile dnscache.c env.h exit.h scan.h s
  uint16.h uint64.h socket.h uint16.h dns.h stralloc.h gen_alloc.h \
  iopause.h taia.h tai.h uint64.h taia.h taia.h byte.h roots.h fmt.h \
  iopause.h query.h dns.h uint32.h alloc.h response.h uint32.h cache.h \
@@ -25,7 +23,7 @@ index 1429643..bc047c0 100644
  	./compile dnscache.c
  
  dnsfilter: \
-@@ -687,11 +687,16 @@ qlog.o: \
+@@ -685,11 +685,16 @@ qlog.o: \
  compile qlog.c buffer.h qlog.h uint16.h
  	./compile qlog.c
  
@@ -43,19 +41,17 @@ index 1429643..bc047c0 100644
  	./compile query.c
  
  random-ip: \
-diff --git a/dnscache.c b/dnscache.c
-index 8c899a3..5ccb16a 100644
 --- a/dnscache.c
 +++ b/dnscache.c
-@@ -22,6 +22,7 @@
+@@ -20,6 +20,7 @@
+ #include "response.h"
+ #include "cache.h"
+ #include "ndelay.h"
++#include "maxclient.h"
  #include "log.h"
  #include "okclient.h"
  #include "droproot.h"
-+#include "maxclient.h"
- 
- static int packetquery(char *buf,unsigned int len,char **q,char qtype[2],char qclass[2],char id[2])
- {
-@@ -54,7 +55,6 @@ uint64 numqueries = 0;
+@@ -57,7 +58,6 @@ uint64 numqueries = 0;
  
  static int udp53;
  
@@ -63,7 +59,7 @@ index 8c899a3..5ccb16a 100644
  static struct udpclient {
    struct query q;
    struct taia start;
-@@ -131,7 +131,6 @@ void u_new(void)
+@@ -134,7 +134,6 @@ void u_new(void)
  
  static int tcp53;
  
@@ -71,11 +67,9 @@ index 8c899a3..5ccb16a 100644
  struct tcpclient {
    struct query q;
    struct taia start;
-diff --git a/log.c b/log.c
-index c43e8b0..b8cd7ce 100644
 --- a/log.c
 +++ b/log.c
-@@ -150,6 +150,13 @@ void log_tx(const char *q,const char qtype[2],const char *control,const char ser
+@@ -151,6 +151,13 @@ void log_tx(const char *q,const char qty
    line();
  }
  
@@ -89,11 +83,9 @@ index c43e8b0..b8cd7ce 100644
  void log_cachedanswer(const char *q,const char type[2])
  {
    string("cached "); logtype(type); space();
-diff --git a/log.h b/log.h
-index fe62fa3..d9a829b 100644
 --- a/log.h
 +++ b/log.h
-@@ -18,6 +18,7 @@ extern void log_cachednxdomain(const char *);
+@@ -20,6 +20,7 @@ extern void log_cachednxdomain(const cha
  extern void log_cachedns(const char *,const char *);
  
  extern void log_tx(const char *,const char *,const char *,const char *,unsigned int);
@@ -101,9 +93,6 @@ index fe62fa3..d9a829b 100644
  
  extern void log_nxdomain(const char *,const char *,unsigned int);
  extern void log_nodata(const char *,const char *,const char *,unsigned int);
-diff --git a/maxclient.h b/maxclient.h
-new file mode 100644
-index 0000000..e52fcd1
 --- /dev/null
 +++ b/maxclient.h
 @@ -0,0 +1,7 @@
@@ -114,9 +103,6 @@ index 0000000..e52fcd1
 +#define MAXTCP 20
 +
 +#endif /* MAXCLIENT_H */
-diff --git a/qmerge.c b/qmerge.c
-new file mode 100644
-index 0000000..7c92299
 --- /dev/null
 +++ b/qmerge.c
 @@ -0,0 +1,115 @@
@@ -235,9 +221,6 @@ index 0000000..7c92299
 +  if (r == 1) { qm->state = 2; return 1; } /* got packet */
 +  return -1; /* bug */
 +}
-diff --git a/qmerge.h b/qmerge.h
-new file mode 100644
-index 0000000..9a58157
 --- /dev/null
 +++ b/qmerge.h
 @@ -0,0 +1,24 @@
@@ -265,11 +248,9 @@ index 0000000..9a58157
 +extern void qmerge_free(struct qmerge **);
 +
 +#endif /* QMERGE_H */
-diff --git a/query.c b/query.c
-index 46cdc00..f091fdd 100644
 --- a/query.c
 +++ b/query.c
-@@ -81,7 +81,7 @@ static void cleanup(struct query *z)
+@@ -83,7 +83,7 @@ static void cleanup(struct query *z)
    int j;
    int k;
  
@@ -278,7 +259,7 @@ index 46cdc00..f091fdd 100644
    for (j = 0;j < QUERY_MAXALIAS;++j)
      dns_domain_free(&z->alias[j]);
    for (j = 0;j < QUERY_MAXLEVEL;++j) {
-@@ -429,14 +429,8 @@ static int doit(struct query *z,int state)
+@@ -452,14 +452,8 @@ static int doit(struct query *z,int stat
    if (j == 64) goto SERVFAIL;
  
    dns_sortip(z->servers[z->level],64);
@@ -295,7 +276,7 @@ index 46cdc00..f091fdd 100644
    return 0;
  
  
-@@ -450,10 +444,10 @@ static int doit(struct query *z,int state)
+@@ -473,10 +467,10 @@ static int doit(struct query *z,int stat
  
    HAVEPACKET:
    if (++z->loop == 100) goto DIE;
@@ -309,7 +290,7 @@ index 46cdc00..f091fdd 100644
    control = z->control[z->level];
    d = z->name[z->level];
    dtype = z->level ? DNS_T_A : z->type;
-@@ -836,7 +830,7 @@ int query_start(struct query *z,char *dn,char type[2],char class[2],char localip
+@@ -902,7 +896,7 @@ int query_start(struct query *z,char *dn
  
  int query_get(struct query *z,iopause_fd *x,struct taia *stamp)
  {
@@ -318,15 +299,13 @@ index 46cdc00..f091fdd 100644
      case 1:
        return doit(z,1);
      case -1:
-@@ -847,5 +841,5 @@ int query_get(struct query *z,iopause_fd *x,struct taia *stamp)
+@@ -913,5 +907,5 @@ int query_get(struct query *z,iopause_fd
  
  void query_io(struct query *z,iopause_fd *x,struct taia *deadline)
  {
 -  dns_transmit_io(&z->dt,x,deadline);
 +  qmerge_io(z->qm,x,deadline);
  }
-diff --git a/query.h b/query.h
-index eff68b2..06feab4 100644
 --- a/query.h
 +++ b/query.h
 @@ -1,7 +1,7 @@

@@ -1,6 +1,6 @@
---- djbdns-1.05.original/log.h	2001-02-11 21:11:45.000000000 +0000
-+++ djbdns-1.05/log.h	2003-07-29 17:12:44.000000000 +0100
-@@ -23,6 +23,7 @@
+--- a/log.h
++++ b/log.h
+@@ -25,6 +25,7 @@ extern void log_nxdomain(const char *,co
  extern void log_nodata(const char *,const char *,const char *,unsigned int);
  extern void log_servfail(const char *);
  extern void log_lame(const char *,const char *,const char *);
@@ -8,9 +8,9 @@
  
  extern void log_rr(const char *,const char *,const char *,const char *,unsigned int,unsigned int);
  extern void log_rrns(const char *,const char *,const char *,unsigned int);
---- djbdns-1.05.original/log.c	2001-02-11 21:11:45.000000000 +0000
-+++ djbdns-1.05/log.c	2003-07-29 17:12:33.000000000 +0100
-@@ -196,6 +196,13 @@
+--- a/log.c
++++ b/log.c
+@@ -197,6 +197,13 @@ void log_lame(const char server[4],const
    line();
  }
  
@@ -24,9 +24,9 @@
  void log_servfail(const char *dn)
  {
    const char *x = error_str(errno);
---- djbdns-1.05.original/query.c	2001-02-11 21:11:45.000000000 +0000
-+++ djbdns-1.05/query.c	2003-07-29 17:13:13.000000000 +0100
-@@ -781,6 +781,18 @@
+--- a/query.c
++++ b/query.c
+@@ -828,6 +828,18 @@ static int doit(struct query *z,int stat
  
  
    if (!dns_domain_suffix(d,referral)) goto DIE;

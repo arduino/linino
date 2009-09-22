@@ -1,5 +1,5 @@
---- djbdns-1.05.orig/tinydns-data.c.orig	2004-01-10 02:20:08.000000000 +0000
-+++ djbdns-1.05/tinydns-data.c	2004-01-10 02:28:50.000000000 +0000
+--- a/tinydns-data.c
++++ b/tinydns-data.c
 @@ -25,6 +25,14 @@
  
  #define FATAL "tinydns-data: fatal: "
@@ -14,8 +14,8 @@
 +}
  void die_datatmp(void)
  {
-   strerr_die2sys(111,FATAL,"unable to create data.tmp: ");
-@@ -34,20 +42,39 @@
+   strerr_die2sys(111,FATAL,"unable to create data.cdb.tmp: ");
+@@ -34,20 +42,39 @@ void nomem(void)
    strerr_die1sys(111,FATAL);
  }
  
@@ -58,7 +58,7 @@
      if (!(i & 1)) ch <<= 4;
      ttd[i >> 1] |= ch;
    }
-@@ -55,6 +82,10 @@
+@@ -55,6 +82,10 @@ void ttdparse(stralloc *sa,char ttd[8])
  
  void locparse(stralloc *sa,char loc[2])
  {
@@ -69,7 +69,7 @@
    loc[0] = (sa->len > 0) ? sa->s[0] : 0;
    loc[1] = (sa->len > 1) ? sa->s[1] : 0;
  }
-@@ -187,6 +218,7 @@
+@@ -187,6 +218,7 @@ int main()
    int i;
    int j;
    int k;
@@ -77,7 +77,7 @@
    char ch;
    unsigned long ttl;
    char ttd[8];
-@@ -266,8 +298,7 @@
+@@ -267,8 +299,7 @@ int main()
  	if (!scan_ulong(f[7].s,&u)) uint32_unpack_big(defaultsoa + 16,&u);
  	uint32_pack_big(soa + 16,u);
  
@@ -87,7 +87,7 @@
  	ttdparse(&f[9],ttd);
  	locparse(&f[10],loc);
  
-@@ -282,8 +313,7 @@
+@@ -283,8 +314,7 @@ int main()
  
        case '.': case '&':
  	if (!dns_domain_fromdot(&d1,f[0].s,f[0].len)) nomem();
@@ -97,7 +97,7 @@
  	ttdparse(&f[4],ttd);
  	locparse(&f[5],loc);
  
-@@ -308,24 +338,26 @@
+@@ -309,24 +339,26 @@ int main()
  	rr_addname(d2);
  	rr_finish(d1);
  
@@ -129,7 +129,7 @@
  	  rr_start(DNS_T_A,ttl,ttd,loc);
  	  rr_add(ip,4);
  	  rr_finish(d1);
-@@ -336,13 +368,15 @@
+@@ -337,13 +369,15 @@ int main()
  	    rr_addname(d1);
  	    rr_finish(dptr);
  	  }
@@ -148,7 +148,7 @@
  	ttdparse(&f[5],ttd);
  	locparse(&f[6],loc);
  
-@@ -363,18 +397,19 @@
+@@ -401,18 +435,19 @@ int main()
  	rr_addname(d2);
  	rr_finish(d1);
  
@@ -172,7 +172,7 @@
  	ttdparse(&f[3],ttd);
  	locparse(&f[4],loc);
  
-@@ -388,8 +423,7 @@
+@@ -426,8 +461,7 @@ int main()
  
        case '\'':
  	if (!dns_domain_fromdot(&d1,f[0].s,f[0].len)) nomem();
@@ -182,7 +182,7 @@
  	ttdparse(&f[3],ttd);
  	locparse(&f[4],loc);
  
-@@ -411,8 +445,7 @@
+@@ -449,8 +483,7 @@ int main()
  
        case ':':
  	if (!dns_domain_fromdot(&d1,f[0].s,f[0].len)) nomem();

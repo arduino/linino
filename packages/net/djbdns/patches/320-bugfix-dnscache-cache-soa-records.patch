@@ -1,8 +1,6 @@
-diff --git a/query.c b/query.c
-index 46cdc00..4574e97 100644
 --- a/query.c
 +++ b/query.c
-@@ -319,6 +319,29 @@ static int doit(struct query *z,int state)
+@@ -342,6 +342,29 @@ static int doit(struct query *z,int stat
        }
      }
  
@@ -32,7 +30,7 @@ index 46cdc00..4574e97 100644
      if (typematch(DNS_T_A,dtype)) {
        byte_copy(key,2,DNS_T_A);
        cached = cache_get(key,dlen + 2,&cachedlen,&ttl);
-@@ -351,7 +374,7 @@ static int doit(struct query *z,int state)
+@@ -374,7 +397,7 @@ static int doit(struct query *z,int stat
        }
      }
  
@@ -41,7 +39,7 @@ index 46cdc00..4574e97 100644
        byte_copy(key,2,dtype);
        cached = cache_get(key,dlen + 2,&cachedlen,&ttl);
        if (cached && (cachedlen || byte_diff(dtype,2,DNS_T_ANY))) {
-@@ -585,15 +608,24 @@ static int doit(struct query *z,int state)
+@@ -601,15 +624,24 @@ static int doit(struct query *z,int stat
      else if (byte_equal(type,2,DNS_T_AXFR))
        ;
      else if (byte_equal(type,2,DNS_T_SOA)) {
@@ -67,4 +65,3 @@ index 46cdc00..4574e97 100644
      }
      else if (byte_equal(type,2,DNS_T_CNAME)) {
        pos = dns_packet_skipname(buf,len,records[j - 1]); if (!pos) goto DIE;
-

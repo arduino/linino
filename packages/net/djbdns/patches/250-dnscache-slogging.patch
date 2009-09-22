@@ -1,6 +1,6 @@
---- /home/uwe/djbdns-1.05/server.c	Sun Feb 11 21:11:45 2001
-+++ ./server.c	Fri May  4 07:40:54 2001
-@@ -25,12 +25,63 @@
+--- a/server.c
++++ b/server.c
+@@ -25,12 +25,63 @@ static int len;
  
  static char *q;
  
@@ -64,7 +64,7 @@
  
    if (len >= sizeof buf) goto NOQ;
    pos = dns_packet_copy(buf,len,0,header,12); if (!pos) goto NOQ;
-@@ -56,25 +105,37 @@
+@@ -56,25 +107,37 @@ static int doit(void)
  
    case_lowerb(q,dns_domain_length(q));
    if (!respond(q,qtype,ip)) {
@@ -103,7 +103,7 @@
    qlog(ip,port,"\0\0","","\0\0"," / ");
    return 0;
  }
-@@ -83,6 +137,7 @@
+@@ -83,6 +146,7 @@ int main()
  {
    char *x;
    int udp53;
@@ -111,7 +111,7 @@
  
    x = env_get("IP");
    if (!x)
-@@ -106,6 +161,8 @@
+@@ -106,6 +170,8 @@ int main()
    buffer_putsflush(buffer_2,starting);
  
    for (;;) {

@@ -16,9 +16,9 @@ start() {
     config_load djbdns
     config_foreach get_userids global
     mkdir -p $ROOT
-    cp -fa /etc/dnscache/ip $ROOT
-    cp -fa /etc/dnscache/servers $ROOT
+    cp -fa /etc/dnscache/* $ROOT
     rm -f $ROOT/resolvers
+    rm -f $ROOT/ignoreip
     chown -R $UID:$GID $ROOT
     config_foreach start_dnscache dnscache
 }
@@ -35,16 +35,25 @@ append_server() {
     echo $1 >> $ROOT/resolvers
 }
 
+append_ignore() {
+    echo $1 >> $ROOT/ignoreip
+}
+
 start_dnscache() {
     local cfg="$1"
     config_get logging        "$cfg" logging
     config_get useresolvconf  "$cfg" useresolvconf
-    config_get ifaces         "$cfg" interface
+    config_get iface          "$cfg" interface
     config_get ifacesend      "$cfg" interfacesend
     config_get defaultallowif "$cfg" defaultallowif
     config_get CACHESIZE      "$cfg" cachesize
     config_get FORWARDONLY    "$cfg" forwardonly
+    config_get HIDETTL        "$cfg" hidettl
     config_list_foreach       "$cfg" "resolver" append_server
+    config_get useignore      "$cfg" useignore
+    if [ "$useignore" == "1" ] ; then
+        config_list_foreach   "$cfg" "ignoreip" append_ignore
+    fi
 # Add some interface network addresses to list of allowed IP addresses (assumes /24 networks)
     include /lib/network
     scan_interfaces
@@ -58,15 +67,13 @@ start_dnscache() {
         done
     fi
 # Translate listen interface names to IP addresses
-    IP=""
-    for iface in $ifaces; do
-       config_get ipaddr "$iface" ipaddr
-       IP="$ipaddr/$IP"
-    done
-# Strip trailing slashes
-    IP=`echo $IP|sed 's/\/\+$//g'`
+    config_get IP "$iface" ipaddr
 # Translante send interface name to an IP address
     config_get IPSEND "$ifacesend" ipaddr
+# Unset HIDETTL if equal to 0
+    if [ "$HIDETTL" == "0" ] ; then
+        export -n HIDETTL
+    fi
 # If forwardingonly set then activate list of resolvers
     if [ "$FORWARDONLY" == "0" ] ; then
         # Unset FORWARDONLY if equal to '0'
@@ -90,7 +97,7 @@ start_dnscache() {
      fi
     export IP 
     export ROOT
-# dnscache likes to receive a 128bit random seed
+# dnscache likes to receive a 128 byte random seed
     dd if=/dev/urandom of=$ROOT/randomseed bs=128 count=1  > /dev/null 2>&1
     if [ "$DEBUG" == 1 ] ; then
         $DAEMON < /$ROOT/randomseed

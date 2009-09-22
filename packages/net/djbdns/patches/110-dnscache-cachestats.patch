@@ -11,8 +11,8 @@
 #
 # James Raftery <james@now.ie>  6 Nov. 2003
 #
---- djbdns-1.05.orig/cache.c	Sun Feb 11 21:11:45 2001
-+++ djbdns-1.05/cache.c	Wed Nov  5 17:21:06 2003
+--- a/cache.c
++++ b/cache.c
 @@ -7,6 +7,11 @@
  
  uint64 cache_motion = 0;
@@ -25,7 +25,7 @@
  static char *x = 0;
  static uint32 size;
  static uint32 hsize;
-@@ -112,15 +117,20 @@
+@@ -112,15 +117,20 @@ char *cache_get(const char *key,unsigned
          if (u > size - pos - 20 - keylen) cache_impossible();
          *datalen = u;
  
@@ -47,8 +47,8 @@
    return 0;
  }
  
---- djbdns-1.05.orig/cache.h	Sun Feb 11 21:11:45 2001
-+++ djbdns-1.05/cache.h	Wed Nov  5 17:13:36 2003
+--- a/cache.h
++++ b/cache.h
 @@ -5,6 +5,12 @@
  #include "uint64.h"
  
@@ -62,10 +62,10 @@
  extern int cache_init(unsigned int);
  extern void cache_set(const char *,unsigned int,const char *,unsigned int,uint32);
  extern char *cache_get(const char *,unsigned int,unsigned int *,uint32 *);
---- djbdns-1.05.orig/log.c	Sun Feb 11 21:11:45 2001
-+++ djbdns-1.05/log.c	Wed Nov  5 17:21:12 2003
-@@ -276,6 +276,12 @@
- {
+--- a/log.c
++++ b/log.c
+@@ -279,6 +279,12 @@ void log_stats(void)
+   time_t cur = time(NULL);
    extern uint64 numqueries;
    extern uint64 cache_motion;
 +
@@ -77,7 +77,7 @@
    extern int uactive;
    extern int tactive;
  
-@@ -283,6 +289,8 @@
+@@ -290,6 +296,8 @@ void log_stats(void)
    number(numqueries); space();
    number(cache_motion); space();
    number(uactive); space();

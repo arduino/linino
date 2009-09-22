@@ -1,6 +1,6 @@
---- djbdns-1.05-original/tdlookup.c	Sun Feb 11 21:11:45 2001
-+++ djbdns-1.05/tdlookup.c	Thu Apr  3 11:56:47 2003
-@@ -103,12 +103,13 @@
+--- a/tdlookup.c
++++ b/tdlookup.c
+@@ -103,12 +103,13 @@ static int doname(void)
    return response_addname(d1);
  }
  
@@ -15,7 +15,7 @@
    char *control;
    char *wild;
    int flaggavesoa;
-@@ -122,6 +123,12 @@
+@@ -122,6 +123,12 @@ static int doit(char *q,char qtype[2])
    int addrnum;
    uint32 addrttl;
    int i;
@@ -28,7 +28,7 @@
  
    anpos = response_len;
  
-@@ -136,7 +143,14 @@
+@@ -136,7 +143,14 @@ static int doit(char *q,char qtype[2])
        if (byte_equal(type,2,DNS_T_NS)) flagns = 1;
      }
      if (flagns) break;
@@ -44,25 +44,26 @@
      control += *control;
      control += 1;
    }
-@@ -172,8 +186,16 @@
+@@ -172,9 +186,17 @@ static int doit(char *q,char qtype[2])
  	continue;
        }
        if (!response_rstart(q,type,ttl)) return 0;
 -      if (byte_equal(type,2,DNS_T_NS) || byte_equal(type,2,DNS_T_CNAME) || byte_equal(type,2,DNS_T_PTR)) {
 +      if (byte_equal(type,2,DNS_T_NS) || byte_equal(type,2,DNS_T_PTR)) {
-+	if (!doname()) return 0;
-+      }
-+      else if (byte_equal(type,2,DNS_T_CNAME)) {
  	if (!doname()) return 0;
+       }
++      else if (byte_equal(type,2,DNS_T_CNAME)) {
++	if (!doname()) return 0;
 +        if (byte_diff(type,2,qtype)) {
 +	  response_rfinish(RESPONSE_ANSWER);
 +	  if (!dns_domain_copy(pqname,d1)) return 0 ;
 +	  goto RESTART ;
 +	}
-       }
++      }
        else if (byte_equal(type,2,DNS_T_MX)) {
  	if (!dobytes(2)) return 0;
-@@ -275,9 +297,21 @@
+ 	if (!doname()) return 0;
+@@ -275,9 +297,21 @@ static int doit(char *q,char qtype[2])
      }
    }
  
@@ -83,4 +84,4 @@
 +
  int respond(char *q,char qtype[2],char ip[4])
  {
-   int fd;
+   static struct tai cdb_valid = { 0 };

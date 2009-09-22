@@ -13,7 +13,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=djbdns
 PKG_VERSION:=1.05
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE:=${PKG_NAME}-${PKG_VERSION}.tar.gz
 PKG_SOURCE_URL:=http://cr.yp.to/djbdns/
@@ -100,7 +100,7 @@ endef
 
 define Package/djbdns-axfrdns/description
 	axfrdns is a DNS zone-transfer server.
-	It reads a zone-transfer request in DNS-over-TINSTALL_DATA format
+	It reads a zone-transfer request in DNS-over-TCP format
        	from its standard input and responds with locally configured
 	information. 
 endef
@@ -127,6 +127,7 @@ define Build/Compile
 	TARGET_CC="$(TARGET_CC)" \
 	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
 	TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
+	TARGET_RANLIB="$(TARGET_CROSS)ranlib" \
 	$(MAKE) -C $(PKG_BUILD_DIR)
 endef
 
@@ -138,19 +139,20 @@ endef
 define Package/djbdns-dnscache/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	(cd $(PKG_BUILD_DIR); \
-	$(INSTALL_BIN) dnscache pickdns pickdns-data \
-	$(1)/usr/bin)
-	$(INSTALL_DIR) $(1)/etc
-	$(CP) -r ./files/dnscache $(1)/etc/
+	$(INSTALL_BIN) dnscache pickdns pickdns-data $(1)/usr/bin)
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/dnscache.init $(1)/etc/init.d/dnscache
+	$(CP) -r ./files/dnscache $(1)/etc/
+	$(CP) $(PKG_BUILD_DIR)/dnsroots.global $(1)/etc/dnscache/
+	$(INSTALL_DIR) $(1)/etc/dnscache/ip
+	$(INSTALL_DIR) $(1)/etc/dnscache/servers
+	$(CP) $(PKG_BUILD_DIR)/dnsroots.global $(1)/etc/dnscache/servers/@
 endef
 
 define Package/djbdns-tinydns/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	(cd $(PKG_BUILD_DIR); \
-	$(INSTALL_BIN) tinydns tinydns-data tinydns-edit tinydns-get \
-	$(1)/usr/bin)
+	$(INSTALL_BIN) tinydns tinydns-data tinydns-edit tinydns-get $(1)/usr/bin)
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/tinydns.init $(1)/etc/init.d/tinydns
 	$(CP) -r ./files/tinydns $(1)/etc/
@@ -159,8 +161,7 @@ endef
 define Package/djbdns-axfrdns/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	(cd $(PKG_BUILD_DIR); \
-	$(INSTALL_BIN) axfrdns axfr-get \
-	$(1)/usr/bin)
+	$(INSTALL_BIN) axfrdns axfr-get $(1)/usr/bin)
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/axfrdns.init $(1)/etc/init.d/axfrdns
 	$(CP) -r ./files/axfrdns $(1)/etc/
@@ -169,8 +170,7 @@ endef
 define Package/djbdns-rbldns/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	(cd $(PKG_BUILD_DIR); \
-	$(INSTALL_BIN) rbldns rbldns-data \
-	$(1)/usr/bin)
+	$(INSTALL_BIN) rbldns rbldns-data $(1)/usr/bin)
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/rbldns.init $(1)/etc/init.d/rbldns
 	$(CP) -r ./files/rbldns $(1)/etc/
@@ -179,8 +179,7 @@ endef
 define Package/djbdns-walldns/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	(cd $(PKG_BUILD_DIR); \
-	$(INSTALL_BIN) walldns \
-	$(1)/usr/bin)
+	$(INSTALL_BIN) walldns $(1)/usr/bin)
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/walldns.init $(1)/etc/init.d/walldns
 endef

@@ -1,6 +1,6 @@
---- a/dnsfilter.c	Thu Feb 15 21:29:28 2001
-+++ b/dnsfilter.c	Thu Feb 15 21:57:36 2001
-@@ -41,6 +41,7 @@
+--- a/dnsfilter.c
++++ b/dnsfilter.c
+@@ -41,6 +41,7 @@ int inbuflen = 0;
  iopause_fd *inio;
  int flag0 = 1;
  
@@ -8,7 +8,7 @@
  iopause_fd *io;
  int iolen;
  
-@@ -51,12 +52,16 @@
+@@ -51,12 +52,16 @@ char name[DNS_NAME4_DOMAIN];
  void errout(int i)
  {
    int j;
@@ -31,7 +31,7 @@
  }
  
  int main(int argc,char **argv)
-@@ -69,7 +74,7 @@
+@@ -69,7 +74,7 @@ int main(int argc,char **argv)
    int j;
    int r;
  
@@ -40,7 +40,7 @@
      switch(opt) {
        case 'c':
  	scan_ulong(optarg,&u);
-@@ -83,8 +88,11 @@
+@@ -83,8 +88,11 @@ int main(int argc,char **argv)
  	if (u > 1000000) u = 1000000;
  	xmax = u;
  	break;
@@ -53,7 +53,7 @@
      }
  
    x = (struct line *) alloc(xmax * sizeof(struct line));
-@@ -140,8 +148,13 @@
+@@ -140,8 +148,13 @@ int main(int argc,char **argv)
  	else if (r == 1) {
  	  if (dns_name_packet(&x[i].middle,x[i].dt.packet,x[i].dt.packetlen) == -1)
  	    errout(i);

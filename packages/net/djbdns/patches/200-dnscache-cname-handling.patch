@@ -1,6 +1,6 @@
---- djbdns-1.05-original/query.c	Sun Feb 11 21:11:45 2001
-+++ djbdns-1.05/query.c	Wed Mar 26 15:48:20 2003
-@@ -91,6 +91,21 @@
+--- a/query.c
++++ b/query.c
+@@ -91,6 +91,21 @@ static void cleanup(struct query *z)
    }
  }
  
@@ -22,7 +22,7 @@
  static int rqa(struct query *z)
  {
    int i;
-@@ -123,7 +138,6 @@
+@@ -123,7 +138,6 @@ static int globalip(char *d,char ip[4])
  static char *t1 = 0;
  static char *t2 = 0;
  static char *t3 = 0;
@@ -30,7 +30,7 @@
  static char *referral = 0;
  static unsigned int *records = 0;
  
-@@ -179,15 +193,14 @@
+@@ -179,15 +193,14 @@ static int doit(struct query *z,int stat
    uint16 datalen;
    char *control;
    char *d;
@@ -47,7 +47,7 @@
    int i;
    int j;
    int k;
-@@ -252,7 +265,10 @@
+@@ -253,7 +266,10 @@ static int doit(struct query *z,int stat
  
      byte_copy(key,2,DNS_T_CNAME);
      cached = cache_get(key,dlen + 2,&cachedlen,&ttl);
@@ -59,7 +59,7 @@
        if (typematch(DNS_T_CNAME,dtype)) {
          log_cachedanswer(d,DNS_T_CNAME);
          if (!rqa(z)) goto DIE;
-@@ -261,8 +277,11 @@
+@@ -262,8 +278,11 @@ static int doit(struct query *z,int stat
  	return 1;
        }
        log_cachedcname(d,cached);
@@ -73,7 +73,7 @@
      }
  
      if (typematch(DNS_T_NS,dtype)) {
-@@ -351,7 +370,7 @@
+@@ -352,7 +371,7 @@ static int doit(struct query *z,int stat
        }
      }
  
@@ -82,9 +82,9 @@
        byte_copy(key,2,dtype);
        cached = cache_get(key,dlen + 2,&cachedlen,&ttl);
        if (cached && (cachedlen || byte_diff(dtype,2,DNS_T_ANY))) {
-@@ -471,29 +490,31 @@
-   if (rcode && (rcode != 3)) goto DIE; /* impossible; see irrelevant() */
+@@ -473,29 +492,31 @@ static int doit(struct query *z,int stat
  
+   cachettl = 0;
    flagout = 0;
 -  flagcname = 0;
    flagreferral = 0;
@@ -120,7 +120,7 @@
    posauthority = pos;
  
    for (j = 0;j < numauthority;++j) {
-@@ -515,15 +536,6 @@
+@@ -522,15 +543,6 @@ static int doit(struct query *z,int stat
    }
    posglue = pos;
  
@@ -136,7 +136,7 @@
    if (records) { alloc_free(records); records = 0; }
  
    k = numanswers + numauthority + numglue;
-@@ -670,24 +682,36 @@
+@@ -677,24 +689,36 @@ static int doit(struct query *z,int stat
  
    alloc_free(records); records = 0;
  
@@ -185,9 +185,9 @@
  
 +  /* A "no such name" error applies to the end of any CNAME chain, not to the start. */
    if (rcode == 3) {
-     log_nxdomain(whichserver,d,soattl);
-     cachegeneric(DNS_T_ANY,d,"",0,soattl);
-@@ -700,10 +724,26 @@
+     log_nxdomain(whichserver,d,cachettl);
+     cachegeneric(DNS_T_ANY,d,"",0,cachettl);
+@@ -707,10 +731,26 @@ static int doit(struct query *z,int stat
      return 1;
    }
  
@@ -216,7 +216,7 @@
            save_start();
            save_finish(dtype,d,soattl);
  	  log_nodata(whichserver,d,dtype,soattl);
-@@ -815,6 +855,7 @@
+@@ -822,6 +862,7 @@ static int doit(struct query *z,int stat
    DIE:
    cleanup(z);
    if (records) { alloc_free(records); records = 0; }
