@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nano
-PKG_VERSION:=2.1.9
+PKG_VERSION:=2.1.11
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.nano-editor.org/dist/v2.1
-PKG_MD5SUM:=41e9ffb4a055eba666cdb17c4e50ba21
+PKG_MD5SUM:=15d8c0717c646de2e946e1eb408feec7
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,8 +27,8 @@ define Package/nano
 endef
 
 define Package/nano/description
-	GNU nano (Nano's ANOther editor, or Not ANOther editor) is an enhanced clone
-	of the Pico text editor..
+  GNU nano (Nano's ANOther editor, or Not ANOther editor) is an enhanced clone
+  of the Pico text editor.
 endef
 
 CONFIGURE_ARGS += \
@@ -40,7 +40,7 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	ac_cv_header_regex_h=no \
 
-define Package/nano/install	
+define Package/nano/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(1)/usr/bin/
 endef
