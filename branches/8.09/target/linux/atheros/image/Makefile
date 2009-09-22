@@ -41,6 +41,12 @@ define Image/Build
 		-r $(BIN_DIR)/openwrt-$(BOARD)-root.$(1) \
 		-o $(BIN_DIR)/openwrt-$(BOARD)-ubnt2-pico2-$(1).bin
 
+  ifeq ($(BOARD),atheros)
+	-sh $(TOPDIR)/scripts/combined-image.sh \
+		"$(BIN_DIR)/openwrt-$(BOARD)-vmlinux.lzma" \
+		"$(BIN_DIR)/openwrt-$(BOARD)-root.$(1)" \
+		"$(BIN_DIR)/openwrt-$(BOARD)-combined.img"
+  endif
 endef
 
 $(eval $(call BuildImage))
