@@ -1,7 +1,6 @@
-diff -urN ucspi-tcp-0.88/Makefile ucspi-tcp-0.88.new/Makefile
---- ucspi-tcp-0.88/Makefile	2000-03-18 17:18:42.000000000 +0200
-+++ ucspi-tcp-0.88.new/Makefile	2007-09-30 16:32:55.000000000 +0300
-@@ -36,10 +36,6 @@
+--- a/Makefile
++++ b/Makefile
+@@ -36,10 +36,6 @@ auto-str.o: \
  compile auto-str.c buffer.h readwrite.h exit.h
  	./compile auto-str.c
  
@@ -12,7 +11,7 @@ diff -urN ucspi-tcp-0.88/Makefile ucspi-tcp-0.88.new/Makefile
  auto_home.o: \
  compile auto_home.c
  	./compile auto_home.c
-@@ -305,10 +301,6 @@
+@@ -305,10 +301,6 @@ fmt_ulong.o: \
  compile fmt_ulong.c fmt.h
  	./compile fmt_ulong.c
  
@@ -23,7 +22,7 @@ diff -urN ucspi-tcp-0.88/Makefile ucspi-tcp-0.88.new/Makefile
  getln.o: \
  compile getln.c byte.h getln.h buffer.h stralloc.h gen_alloc.h
  	./compile getln.c
-@@ -317,24 +309,6 @@
+@@ -317,24 +309,6 @@ getln2.o: \
  compile getln2.c byte.h getln.h buffer.h stralloc.h gen_alloc.h
  	./compile getln2.c
  
@@ -48,7 +47,7 @@ diff -urN ucspi-tcp-0.88/Makefile ucspi-tcp-0.88.new/Makefile
  hier.o: \
  compile hier.c auto_home.h
  	./compile hier.c
-@@ -362,10 +336,6 @@
+@@ -362,10 +336,6 @@ instcheck.o: \
  compile instcheck.c strerr.h error.h readwrite.h exit.h
  	./compile instcheck.c
  
@@ -59,7 +58,16 @@ diff -urN ucspi-tcp-0.88/Makefile ucspi-tcp-0.88.new/Makefile
  iopause.o: \
  compile iopause.c taia.h tai.h uint64.h select.h iopause.h taia.h
  	./compile iopause.c
-@@ -521,10 +491,6 @@
+@@ -404,7 +374,7 @@ warn-auto.sh systype
+ 	dgux-*) ;; \
+ 	hp-ux-*) ;; \
+ 	sco*) ;; \
+-	*) echo 'ranlib "$$main"' ;; \
++	*) echo '$(if $(TARGET_RANLIB),$(TARGET_RANLIB),ranlib) "$$main"' ;; \
+ 	esac \
+ 	) > makelib
+ 	chmod 755 makelib
+@@ -521,10 +491,6 @@ seek_set.o: \
  compile seek_set.c seek.h
  	./compile seek_set.c
  
@@ -70,7 +78,7 @@ diff -urN ucspi-tcp-0.88/Makefile ucspi-tcp-0.88.new/Makefile
  setup: \
  it install
  	./install
-@@ -791,10 +757,6 @@
+@@ -791,10 +757,6 @@ uint32_unpack.o: \
  compile uint32_unpack.c uint32.h
  	./compile uint32_unpack.c
  
@@ -81,41 +89,36 @@ diff -urN ucspi-tcp-0.88/Makefile ucspi-tcp-0.88.new/Makefile
  unix.a: \
  makelib alloc.o alloc_re.o buffer.o buffer_0.o buffer_1.o buffer_2.o \
  buffer_copy.o buffer_get.o buffer_put.o env.o error.o error_str.o \
-diff -urN ucspi-tcp-0.88/auto_home.c ucspi-tcp-0.88.new/auto_home.c
---- ucspi-tcp-0.88/auto_home.c	1970-01-01 03:00:00.000000000 +0300
-+++ ucspi-tcp-0.88.new/auto_home.c	2007-09-30 16:33:13.000000000 +0300
+--- /dev/null
++++ b/auto_home.c
 @@ -0,0 +1,3 @@
 +const char auto_home[] = "\
 +\057\165\163\162\
 +";
-diff -urN ucspi-tcp-0.88/conf-cc ucspi-tcp-0.88.new/conf-cc
---- ucspi-tcp-0.88/conf-cc	2007-09-30 14:17:05.000000000 +0300
-+++ ucspi-tcp-0.88.new/conf-cc	2007-09-30 15:13:43.000000000 +0300
+--- a/conf-cc
++++ b/conf-cc
 @@ -1,3 +1,3 @@
 -gcc -O2
 +$TARGET_CC $TARGET_CFLAGS -include errno.h
  
  This will be used to compile .c files.
-diff -urN ucspi-tcp-0.88/conf-home ucspi-tcp-0.88.new/conf-home
---- ucspi-tcp-0.88/conf-home	2000-03-18 17:18:42.000000000 +0200
-+++ ucspi-tcp-0.88.new/conf-home	2007-09-30 14:12:46.000000000 +0300
+--- a/conf-home
++++ b/conf-home
 @@ -1,4 +1,4 @@
 -/usr/local
 +/usr
  
  This is the ucspi-tcp home directory. Programs will be installed in
  .../bin.
-diff -urN ucspi-tcp-0.88/conf-ld ucspi-tcp-0.88.new/conf-ld
---- ucspi-tcp-0.88/conf-ld	2000-03-18 17:18:42.000000000 +0200
-+++ ucspi-tcp-0.88.new/conf-ld	2007-09-30 15:13:53.000000000 +0300
+--- a/conf-ld
++++ b/conf-ld
 @@ -1,3 +1,3 @@
 -gcc -s
 +$TARGET_CC -s $TARGET_LDFLAGS
  
  This will be used to link .o files into an executable.
-diff -urN ucspi-tcp-0.88/fork.h ucspi-tcp-0.88.new/fork.h
---- ucspi-tcp-0.88/fork.h	1970-01-01 03:00:00.000000000 +0300
-+++ ucspi-tcp-0.88.new/fork.h	2007-09-30 14:09:38.000000000 +0300
+--- /dev/null
++++ b/fork.h
 @@ -0,0 +1,9 @@
 +#ifndef FORK_H
 +#define FORK_H
@@ -126,32 +129,27 @@ diff -urN ucspi-tcp-0.88/fork.h ucspi-tcp-0.88.new/fork.h
 +extern int vfork();
 +
 +#endif
-diff -urN ucspi-tcp-0.88/hassgact.h ucspi-tcp-0.88.new/hassgact.h
---- ucspi-tcp-0.88/hassgact.h	1970-01-01 03:00:00.000000000 +0300
-+++ ucspi-tcp-0.88.new/hassgact.h	2007-09-30 14:09:38.000000000 +0300
+--- /dev/null
++++ b/hassgact.h
 @@ -0,0 +1,2 @@
 +/* sysdep: +sigaction */
 +#define HASSIGACTION 1
-diff -urN ucspi-tcp-0.88/hassgprm.h ucspi-tcp-0.88.new/hassgprm.h
---- ucspi-tcp-0.88/hassgprm.h	1970-01-01 03:00:00.000000000 +0300
-+++ ucspi-tcp-0.88.new/hassgprm.h	2007-09-30 14:09:38.000000000 +0300
+--- /dev/null
++++ b/hassgprm.h
 @@ -0,0 +1,2 @@
 +/* sysdep: +sigprocmask */
 +#define HASSIGPROCMASK 1
-diff -urN ucspi-tcp-0.88/hasshsgr.h ucspi-tcp-0.88.new/hasshsgr.h
---- ucspi-tcp-0.88/hasshsgr.h	1970-01-01 03:00:00.000000000 +0300
-+++ ucspi-tcp-0.88.new/hasshsgr.h	2007-09-30 14:09:38.000000000 +0300
+--- /dev/null
++++ b/hasshsgr.h
 @@ -0,0 +1 @@
 +/* sysdep: -shortsetgroups */
-diff -urN ucspi-tcp-0.88/haswaitp.h ucspi-tcp-0.88.new/haswaitp.h
---- ucspi-tcp-0.88/haswaitp.h	1970-01-01 03:00:00.000000000 +0300
-+++ ucspi-tcp-0.88.new/haswaitp.h	2007-09-30 14:09:38.000000000 +0300
+--- /dev/null
++++ b/haswaitp.h
 @@ -0,0 +1,2 @@
 +/* sysdep: +waitpid */
 +#define HASWAITPID 1
-diff -urN ucspi-tcp-0.88/iopause.h ucspi-tcp-0.88.new/iopause.h
---- ucspi-tcp-0.88/iopause.h	1970-01-01 03:00:00.000000000 +0300
-+++ ucspi-tcp-0.88.new/iopause.h	2007-09-30 14:09:38.000000000 +0300
+--- /dev/null
++++ b/iopause.h
 @@ -0,0 +1,18 @@
 +#ifndef IOPAUSE_H
 +#define IOPAUSE_H
@@ -171,9 +169,8 @@ diff -urN ucspi-tcp-0.88/iopause.h ucspi-tcp-0.88.new/iopause.h
 +extern void iopause(iopause_fd *,unsigned int,struct taia *,struct taia *);
 +
 +#endif
-diff -urN ucspi-tcp-0.88/select.h ucspi-tcp-0.88.new/select.h
---- ucspi-tcp-0.88/select.h	1970-01-01 03:00:00.000000000 +0300
-+++ ucspi-tcp-0.88.new/select.h	2007-09-30 14:09:38.000000000 +0300
+--- /dev/null
++++ b/select.h
 @@ -0,0 +1,11 @@
 +#ifndef SELECT_H
 +#define SELECT_H
@@ -186,9 +183,8 @@ diff -urN ucspi-tcp-0.88/select.h ucspi-tcp-0.88.new/select.h
 +extern int select();
 +
 +#endif
-diff -urN ucspi-tcp-0.88/uint64.h ucspi-tcp-0.88.new/uint64.h
---- ucspi-tcp-0.88/uint64.h	1970-01-01 03:00:00.000000000 +0300
-+++ ucspi-tcp-0.88.new/uint64.h	2007-09-30 14:16:22.000000000 +0300
+--- /dev/null
++++ b/uint64.h
 @@ -0,0 +1,8 @@
 +#ifndef UINT64_H
 +#define UINT64_H
