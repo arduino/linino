@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=json-c
-PKG_VERSION:=0.7
+PKG_VERSION:=0.9
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://oss.metaparadigm.com/json-c/
-PKG_MD5SUM:=
+PKG_MD5SUM:=3a13d264528dcbaf3931b0cede24abae
 
 include $(INCLUDE_DIR)/package.mk
 
