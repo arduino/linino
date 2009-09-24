@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ccrypt
-PKG_VERSION:=1.8
+PKG_VERSION:=1.9
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/ccrypt
-PKG_MD5SUM:=c8be3f35b8dddf3310ca043cd9817620
+PKG_MD5SUM:=c3f78019d7a166dd66f1d4b1390c62c2
 
 include $(INCLUDE_DIR)/package.mk
 
