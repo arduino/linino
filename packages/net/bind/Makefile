@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bind
-PKG_VERSION:=9.6.0-P1
+PKG_VERSION:=9.6.1-P1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= \
 	ftp://ftp.isc.org/isc/bind9/$(PKG_VERSION) \
 	http://www.mirrorservice.org/sites/ftp.isc.org/isc/bind9/$(PKG_VERSION)
-PKG_MD5SUM:=886b7eae55cfdc8cd8d2ca74a2f99c6e
+PKG_MD5SUM:=e6ce3b355c4e6bf5d66ef100f555da3f
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -50,7 +50,7 @@ define Package/bind-tools
   $(call Package/bind/Default)
   TITLE+= administration tools (all)
 endef
-  
+
 define Package/bind-rndc
   $(call Package/bind/Default)
   TITLE+= administration tools (rndc and rndc-confgen only)
@@ -99,7 +99,6 @@ define Build/Compile
 		LIBS="" \
 		gen
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
