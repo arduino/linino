@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=6tunnel
 PKG_VERSION:=0.11rc2
-PKG_RELEASE:=2
+PKG_RELEASE:=2.1
 PKG_MD5SUM:=74e02d4f0704b3083a01feda66033449
 
 PKG_SOURCE_URL:=http://toxygen.net/6tunnel/
@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/6tunnel
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+libpcap
+  DEPENDS:=+libpcap +kmod-sit
   TITLE:=IPv4 / IPv6 tunnel proxy
   URL:=http://toxygen.net/6tunnel/
 endef
