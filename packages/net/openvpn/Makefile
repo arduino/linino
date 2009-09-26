@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openvpn
-PKG_VERSION:=2.1_rc18
-PKG_RELEASE:=2
+PKG_VERSION:=2.1_rc19
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://openvpn.net/release @SF/openvpn
-PKG_MD5SUM:=af330c94da5200df94c4e84798ea39be
+PKG_MD5SUM:=ba2ee667a8b7606b125b7d32f47ca578
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -59,13 +59,13 @@ define Build/Configure
 	)
 endef
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
 
-define Package/openvpn/install	
+define Package/openvpn/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/openvpn $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d/
@@ -75,7 +75,7 @@ define Package/openvpn/install
 	$(INSTALL_DIR) $(1)/etc/openvpn
 endef
 
-define Package/openvpn-easy-rsa/install	
+define Package/openvpn-easy-rsa/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/easy-rsa/2.0/{build-*,clean-all,inherit-inter,list-crl,pkitool,revoke-full,sign-req,whichopensslcnf} $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/easy-rsa
