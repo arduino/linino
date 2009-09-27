@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tiff
 PKG_VERSION:=3.8.2
-PKG_RELEASE:=1.1
+PKG_RELEASE:=1.2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://libtiff.maptools.org/dl/
