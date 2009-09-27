@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wxbase
 PKG_VERSION:=2.8.7
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=wxGTK-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/wxwindows
@@ -42,6 +42,7 @@ TARGET_CFLAGS += $(FPIC)
 #	--enable-largefile
 #	--disable-no_rtti
 #	--with-regex
+#	--enable-unicode
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--disable-rpath \
@@ -70,7 +71,6 @@ CONFIGURE_ARGS+= \
 	--enable-intl \
 	--disable-backtrace \
 	--enable-exceptions \
-	--disable-unicode \
 	--disable-sound \
 	--enable-largefile \
 	\
@@ -103,6 +103,16 @@ CONFIGURE_ARGS+= \
 	--without-sdl-prefix \
 	--without-cppunit-prefix \
 
+UNICODE=yes
+
+ifeq ($(UNICODE),yes)
+CONFIGURE_ARGS += --enable-unicode
+LIB_PFX:=u
+else
+CONFIGURE_ARGS += --disable-unicode
+LIB_PFX:=
+endif
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
@@ -113,8 +123,8 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/include $(1)/usr/lib
 	$(CP) -L $(PKG_BUILD_DIR)/wx-config $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/wx-2.8 $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.8-*.so $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.8.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base$(LIB_PFX){,_net,_xml}-2.8-*.so $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base$(LIB_PFX){,_net,_xml}-2.8.so.* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/wx $(1)/usr/lib/
 	$(SED) 's,-I$$$${includedir}/wx-2.8,-I$(STAGING_DIR)/usr/include/wx-2.8,g' $(1)/usr/bin/wx-config
 	$(SED) 's,-I$$$${libdir}/wx/include,-I$(STAGING_DIR)/usr/lib/wx/include,g' $(1)/usr/bin/wx-config
@@ -122,7 +132,7 @@ endef
 
 define Package/libwxbase/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base{,_net,_xml}-2.8.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libwx_base$(LIB_PFX){,_net,_xml}-2.8.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libwxbase))
