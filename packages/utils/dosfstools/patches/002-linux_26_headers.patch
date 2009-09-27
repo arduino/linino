@@ -1,69 +1,56 @@
---- a/dosfsck/common.h
-+++ b/dosfsck/common.h
-@@ -4,9 +4,7 @@
+--- a/src/common.h
++++ b/src/common.h
+@@ -19,7 +19,7 @@
+    can be found in /usr/share/common-licenses/GPL-3 file.
+ */
  
- #include <linux/version.h>
- #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 0)
--# define __KERNEL__
 -# include <asm/types.h>
--# undef __KERNEL__
 +#include <linux/types.h>
- # define MSDOS_FAT12 4084 /* maximum number of clusters in a 12 bit FAT */
- #endif
  
---- a/dosfsck/file.c
-+++ b/dosfsck/file.c
-@@ -18,9 +18,7 @@
+ #ifndef _COMMON_H
+ #define _COMMON_H
+--- a/src/dosfsck.h
++++ b/src/dosfsck.h
+@@ -32,8 +32,8 @@
+ #define _LINUX_STRING_H_	/* hack to avoid inclusion of <linux/string.h>*/
+ #define _LINUX_FS_H             /* hack to avoid inclusion of <linux/fs.h> */
  
- #include <linux/version.h>
- #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 0)
--# define __KERNEL__
 -# include <asm/types.h>
--# undef __KERNEL__
+-# include <asm/byteorder.h>
 +#include <linux/types.h>
- #endif
++#include <asm/byteorder.h>
  
  #include <linux/msdos_fs.h>
---- a/dosfsck/io.c
-+++ b/dosfsck/io.c
-@@ -19,6 +19,10 @@
+ 
+--- a/src/file.c
++++ b/src/file.c
+@@ -34,7 +34,7 @@
+ #define _LINUX_STRING_H_	/* hack to avoid inclusion of <linux/string.h>*/
+ #define _LINUX_FS_H             /* hack to avoid inclusion of <linux/fs.h> */
+ 
+-# include <asm/types.h>
++#include <linux/types.h>
+ 
+ #include <linux/msdos_fs.h>
+ 
+--- a/src/io.c
++++ b/src/io.c
+@@ -37,6 +37,7 @@
  #include <sys/ioctl.h>
  #include <errno.h>
  #include <fcntl.h>
-+#include <linux/version.h>
-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 0)
 +#include <linux/types.h>
-+#endif
  #include <linux/fd.h>
  
  #include "dosfsck.h"
---- a/mkdosfs/mkdosfs.c
-+++ b/mkdosfs/mkdosfs.c
-@@ -68,9 +68,7 @@
+--- a/src/mkdosfs.c
++++ b/src/mkdosfs.c
+@@ -63,7 +63,7 @@
+ #include <time.h>
+ #include <errno.h>
  
- #include <linux/version.h>
- #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 0)
--# define __KERNEL__
 -# include <asm/types.h>
--# undef __KERNEL__
 +#include <linux/types.h>
- #endif
  
  #if __BYTE_ORDER == __BIG_ENDIAN
---- a/dosfsck/dosfsck.h
-+++ b/dosfsck/dosfsck.h
-@@ -15,13 +15,7 @@
- #define _LINUX_FS_H             /* hack to avoid inclusion of <linux/fs.h> */
  
- #include <linux/version.h>
--#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 0)
--# define __KERNEL__
--# include <asm/types.h>
--# include <asm/byteorder.h>
--# undef __KERNEL__
--#endif
--
-+#include <linux/types.h>
- #include <linux/msdos_fs.h>
- 
- #undef CF_LE_W
