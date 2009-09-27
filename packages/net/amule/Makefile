@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aMule
-PKG_VERSION:=2.1.3
-PKG_RELEASE:=2
+PKG_VERSION:=2.2.5
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/amule
-PKG_MD5SUM:=0aafdd159edb8ad5f0064da87998b47d
+PKG_MD5SUM:=
 
 PKG_BUILD_DEPENDS:=libgd
 
@@ -25,7 +25,7 @@ define Package/amule
   CATEGORY:=Network
   TITLE:=A multi-platform eMule-like ed2k client
   URL:=http://www.amule.org/
-  DEPENDS:=+libpng +libpthread +libncurses +libreadline +libwxbase
+  DEPENDS:=+libpng +libpthread +libncurses +libreadline +libwxbase +libcryptoxx
 endef
 
 CONFIGURE_ARGS+= \
@@ -54,12 +54,13 @@ CONFIGURE_ARGS+= \
 	--enable-embedded-crypto \
 	--enable-gsocket \
 	--disable-gtktest \
+	--disable-crypto \
 	\
 	--with-zlib="$(STAGING_DIR)/usr" \
 	--with-gdlib-prefix="$(STAGING_DIR)/usr" \
 	--with-libpng-prefix="$(STAGING_DIR)/usr" \
 	--with-wx-prefix="$(STAGING_DIR)/usr" \
-	--without-crypto-prefix \
+	--with-crypto-prefix="$(STAGING_DIR)/usr" \
 	--without-libiconv-prefix \
 	--without-libintl-prefix \
 	--without-x \
