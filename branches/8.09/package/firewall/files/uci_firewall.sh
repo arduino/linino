@@ -129,6 +129,13 @@ fw_set_chain_policy() {
 	$IPTABLES -P $chain $target
 }
 
+fw_clear() {
+	$IPTABLES -F
+	$IPTABLES -t nat -F
+	$IPTABLES -t nat -X
+	$IPTABLES -X
+}
+
 fw_defaults() {
 	[ -n "$DEFAULTS_APPLIED" ] && {
 		echo "Error: multiple defaults sections detected"
@@ -155,10 +162,7 @@ fw_defaults() {
 	$IPTABLES -P OUTPUT DROP
 	$IPTABLES -P FORWARD DROP
 
-	$IPTABLES -F
-	$IPTABLES -t nat -F
-	$IPTABLES -t nat -X
-	$IPTABLES -X
+	fw_clear
 
 	config_get_bool drop_invalid $1 drop_invalid 1
 
@@ -418,10 +422,7 @@ fw_init() {
 }
 
 fw_stop() {
-	$IPTABLES -F
-	$IPTABLES -t nat -F
-	$IPTABLES -t nat -X
-	$IPTABLES -X
+	fw_clear
 	$IPTABLES -P INPUT ACCEPT
 	$IPTABLES -P OUTPUT ACCEPT
 	$IPTABLES -P FORWARD ACCEPT
