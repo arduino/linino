@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rcs
 PKG_VERSION:=5.7
-PKG_RELEASE:=1
+PKG_RELEASE:=1.1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/$(PKG_NAME)
@@ -30,11 +30,6 @@ define Package/$(PKG_NAME)/desctiption
  automates the storing, retrieval, logging, identification, and merging of
  revisions. RCS is useful for text that is revised frequently, for example
  programs, documentation, graphics, papers, and form letters.
-endef
-
-define Build/Compile
-	touch $(PKG_BUILD_DIR)/src/conf.h
-	$(call Build/Compile/Default)
 endef
 
 define Package/$(PKG_NAME)/install
