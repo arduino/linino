@@ -52,6 +52,7 @@ create_zone() {
 	$IPTABLES -N zone_$1_nat -t nat
 	$IPTABLES -N zone_$1_prerouting -t nat
 	[ "$6" == "1" ] && $IPTABLES -t nat -A POSTROUTING -j zone_$1_nat
+	[ "$7" == "1" ] && $IPTABLES -I FORWARD 1 -j zone_$1_MSSFIX
 }
 
 addif() {
@@ -212,10 +213,12 @@ fw_zone() {
 	config_get name $1 name
 	config_get network $1 network
 	config_get masq $1 masq
+	config_get_bool mtu_fix $1 mtu_fix 0
+
 	load_policy $1
 
 	[ -z "$network" ] && network=$name
-	create_zone "$name" "$network" "$input" "$output" "$forward" "$masq"
+	create_zone "$name" "$network" "$input" "$output" "$forward" "$masq" "$mtu_fix"
 	fw_custom_chains_zone "$name"
 }
 
@@ -286,11 +289,9 @@ fw_forwarding() {
 
 	config_get src $1 src
 	config_get dest $1 dest
-	config_get_bool mtu_fix $1 mtu_fix 0
 	[ -n "$src" ] && z_src=zone_${src}_forward || z_src=forward
 	[ -n "$dest" ] && z_dest=zone_${dest}_ACCEPT || z_dest=ACCEPT
 	$IPTABLES -I $z_src 1 -j $z_dest
-	[ "$mtu_fix" -gt 0 -a -n "$dest" ] && $IPTABLES -I $z_src 1 -j zone_${dest}_MSSFIX
 }
 
 fw_redirect() {
