@@ -8,14 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=alsa-lib
-PKG_VERSION:=1.0.20
+PKG_VERSION:=1.0.21a
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.alsa-project.org/pub/lib/ \
 		http://alsa.cybermirror.org/lib/
-
-PKG_MD5SUM:=6e9080ba1faa5d3739d14dd76c62d8dc
+PKG_MD5SUM:=914685deb8c23cb4b940a4173cf8efe4
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
