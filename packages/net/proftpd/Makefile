@@ -21,6 +21,7 @@ PKG_INSTALL=1
 include $(INCLUDE_DIR)/package.mk
 
 define Package/proftpd
+  SUBMENU:=FTP
   SECTION:=net
   CATEGORY:=Network
   TITLE:=ProFTPD FTP server
@@ -32,7 +33,8 @@ TARGET_CPPFLAGS += \
 
 MAKE_FLAGS += \
 	INSTALL_USER=$(shell id -u) \
-	INSTALL_GROUP=$(shell id -g)
+	INSTALL_GROUP=$(shell id -g) \
+	INSTALL_STRIP=""
 
 CONFIGURE_ARGS += \
 	--disable-cap
