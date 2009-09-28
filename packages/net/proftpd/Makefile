@@ -33,11 +33,11 @@ TARGET_CPPFLAGS += \
 
 MAKE_FLAGS += \
 	INSTALL_USER=$(shell id -u) \
-	INSTALL_GROUP=$(shell id -g) \
-	INSTALL_STRIP=""
+	INSTALL_GROUP=$(shell id -g)
 
 CONFIGURE_ARGS += \
-	--disable-cap
+	--disable-cap \
+	--enable-devel \
 
 define Package/proftpd/install
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
