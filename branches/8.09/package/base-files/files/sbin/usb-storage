@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 logger "usb device is mass storage"
 i=0
 while [ $i -le 10 ]; do
@@ -13,9 +13,16 @@ while [ $i -le 10 ]; do
 				sleep 2
 				cd $disc
 				for node in `find . -name "sd*" | cut -d "/" -f2`; do
-					echo "mounting /dev/${node} on /mnt/usbdrive"
-					mkdir -p /mnt/usbdrive
-					mount /dev/${node} /mnt/usbdrive
+					dev="/dev/${node}"
+					if [ -e /etc/fstab ] && grep -q "^${dev}" /etc/fstab; then
+						dir=`cat /etc/fstab | grep "^${dev}" | awk '{ print $2; }'`
+					else
+						dir="/mnt/${node}"
+					fi
+					logger "mounting ${dev} on ${dir}" 
+					mkdir -p ${dir}
+					mount ${dev} ${dir}
+					ln -nsf ${dir} /mnt/usbdrive
 					i=20	
 				done
 			done
