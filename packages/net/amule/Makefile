@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aMule
-PKG_VERSION:=2.2.5
+PKG_VERSION:=2.2.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/amule
-PKG_MD5SUM:=
+PKG_MD5SUM:=530d9b48187e36f78fc21bb19e94326d
 
 PKG_BUILD_DEPENDS:=libgd
 
