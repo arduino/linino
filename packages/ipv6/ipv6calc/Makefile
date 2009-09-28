@@ -8,11 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ipv6calc
-PKG_VERSION:=0.72.2
+PKG_VERSION:=0.73.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/
-PKG_MD5SUM:=3847b73b55ab94da0c4c62722cb29162
+PKG_MD5SUM:=24141d637207532ea9a9881f968d086f
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -24,10 +25,12 @@ define Package/ipv6calc
 endef
 
 define Package/ipv6calc/description
-  ipv6calc is a small utility written in programming languate C to manipulate (not only) IPv6 addresses.
-  Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address
-  into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the
-  Perl program ip6_int into. Now only one utiltity is needed to do a lot.
+  ipv6calc is a small utility written in programming languate C to manipulate
+  (not only) IPv6 addresses. Intentions were convering a given IPv6 address
+  into compressed format, convering a given IPv6 address into the same format
+  like shown in /proc/net/if_inet6 and (because it was not difficulty)
+  migrating the Perl program ip6_int into. Now only one utiltity is needed to
+  do a lot.
 endef
 
 CONFIGURE_ARGS += \
