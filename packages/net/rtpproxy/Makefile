@@ -1,0 +1,41 @@
+#
+# Copyright (C) 2009 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=rtpproxy
+PKG_VERSION:=1.2.0
+PKG_RELEASE:=1
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://b2bua.org/chrome/site/
+PKG_MD5SUM:=eb4e650ec00618a77a35f0abb91f988a
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/rtpproxy
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=
+  TITLE:=RTP (Realtime Transport Protocol) proxy
+  URL:=http://www.rtpproxy.org/
+endef
+
+# uses GNU configure
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
+endef
+
+define Package/rtpproxy/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rtpproxy $(1)/usr/bin/
+endef
+
+$(eval $(call BuildPackage,rtpproxy))
