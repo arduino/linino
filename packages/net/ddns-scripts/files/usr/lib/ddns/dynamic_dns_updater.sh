@@ -250,7 +250,8 @@ do
 		do
 			replace_name=$(echo "\[$option_var\]" | tr 'a-z' 'A-Z')
 			replace_value=$(eval echo "\$$option_var")
-			final_url=$(echo $final_url | sed s/"$replace_name"/"$replace_value"/g )
+			replace_value=$(echo $replace_value | sed -f /usr/lib/ddns/url_escape.sed)
+			final_url=$(echo $final_url | sed s^"$replace_name"^"$replace_value"^g )
 		done	
 		final_url=$(echo $final_url | sed s/"\[IP\]"/"$current_ip"/g )
 		
