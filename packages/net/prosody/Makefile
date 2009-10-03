@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=prosody
-PKG_VERSION:=0.4.0
-PKG_RELEASE:=2
+PKG_VERSION:=0.5.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://prosody.im/downloads/source/
-PKG_MD5SUM:=c143532a289a72d5d48b81b5bdac7c25
+PKG_MD5SUM:=bcc7828c041e53b2c909822b1acdf600
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,6 +34,8 @@ endef
 define Package/prosody/conffiles
 /etc/prosody/prosody.cfg.lua
 endef
+
+TARGET_CFLAGS += $(FPIC)
 
 define Build/Configure
 	# this is *NOT* GNU autoconf stuff
@@ -57,9 +59,24 @@ define Build/Compile
 endef
 
 define Package/prosody/install
-	$(INSTALL_DIR) $(1)
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
-	rm -rf $(1)/var
+	$(INSTALL_DIR) $(1)/etc/prosody
+	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/prosody/prosody.cfg.lua $(1)/etc/prosody/
+	$(INSTALL_DIR) $(1)/etc/prosody/certs
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/prosody/certs/localhost.{cert,key} $(1)/etc/prosody/certs/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/prosody{,ctl} $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/lib/prosody
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/prosody/prosody.version $(1)/usr/lib/prosody/
+	$(INSTALL_DIR) $(1)/usr/lib/prosody/core
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/prosody/core/*.lua $(1)/usr/lib/prosody/core/
+	$(INSTALL_DIR) $(1)/usr/lib/prosody/fallbacks
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/prosody/fallbacks/*.lua $(1)/usr/lib/prosody/fallbacks/
+	$(INSTALL_DIR) $(1)/usr/lib/prosody/modules
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/prosody/modules/*.lua $(1)/usr/lib/prosody/modules/
+	$(INSTALL_DIR) $(1)/usr/lib/prosody/net
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/prosody/net/*.lua $(1)/usr/lib/prosody/net/
+	$(INSTALL_DIR) $(1)/usr/lib/prosody/util
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/prosody/util/*.{lua,so} $(1)/usr/lib/prosody/util/
 endef
 
 $(eval $(call BuildPackage,prosody))
