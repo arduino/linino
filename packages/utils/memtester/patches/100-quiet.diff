@@ -1,25 +1,27 @@
-diff -urN memtester-4.0.8.old/memtester.c memtester-4.0.8/memtester.c
---- memtester-4.0.8/memtester.c	2007-11-21 16:54:57.000000000 +0100
-+++ memtester-4.0.8/memtester.c	2008-05-22 02:15:56.925302194 +0200
-@@ -98,6 +98,14 @@
+--- a/memtester.c
++++ b/memtester.c
+@@ -123,7 +123,7 @@ int main(int argc, char **argv) {
      pagesizemask = (ptrdiff_t) ~(pagesize - 1);
      printf("pagesizemask is 0x%tx\n", pagesizemask);
  
-+    if (argc > 1 && !strcmp(argv[1], "-q")) {
-+        int j;
-+        quiet = 1;
-+        for(j = 2; j < argc; j++)
-+            argv[j - 1] = argv[j];
-+        argc--;
-+    }
-+
-     if (argc < 2) {
-         fprintf(stderr, "need memory argument, in MB\n");
-         exit(EXIT_FAIL_NONSTARTER);
-diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
---- memtester-4.0.8/tests.c	2007-11-21 16:54:57.000000000 +0100
-+++ memtester-4.0.8/tests.c	2008-05-22 02:38:46.389302357 +0200
-@@ -17,11 +17,22 @@
+-    while ((opt = getopt(argc, argv, "p:")) != -1) {
++    while ((opt = getopt(argc, argv, "qp:")) != -1) {
+         switch (opt) {
+             case 'p':
+                 errno = 0;
+@@ -150,6 +150,9 @@ int main(int argc, char **argv) {
+                 /* okay, got address */
+                 use_phys = 1;
+                 break;
++            case 'q':
++                quiet = 1;
++                break;
+             default: /* '?' */
+                 usage(argv[0]); /* doesn't return */
+         }
+--- a/tests.c
++++ b/tests.c
+@@ -17,12 +17,23 @@
  #include <stdio.h>
  #include <stdlib.h>
  #include <limits.h>
@@ -27,6 +29,7 @@ diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
  
  #include "types.h"
  #include "sizes.h"
+ #include "memtester.h"
  
 +int quiet = 0;
  char progress[] = "-\\|/";
@@ -42,7 +45,7 @@ diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
  #define PROGRESSLEN 4
  #define PROGRESSOFTEN 2500
  
-@@ -52,16 +63,16 @@
+@@ -64,16 +75,16 @@ int test_stuck_address(ulv *bufa, size_t
      printf("           ");
      fflush(stdout);
      for (j = 0; j < 16; j++) {
@@ -63,7 +66,7 @@ diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
          fflush(stdout);
          p1 = (ulv *) bufa;
          for (i = 0; i < count; i++, p1++) {
-@@ -75,7 +86,7 @@
+@@ -96,7 +107,7 @@ int test_stuck_address(ulv *bufa, size_t
              }
          }
      }
@@ -72,7 +75,7 @@ diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
      fflush(stdout);
      return 0;
  }
-@@ -90,13 +101,13 @@
+@@ -111,13 +122,13 @@ int test_random_value(ulv *bufa, ulv *bu
      fflush(stdout);
      for (i = 0; i < count; i++) {
          *p1++ = *p2++ = rand_ul();
@@ -88,7 +91,7 @@ diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
      fflush(stdout);
      return compare_regions(bufa, bufb, count);
  }
-@@ -204,23 +215,23 @@
+@@ -225,23 +236,23 @@ int test_solidbits_comparison(ulv *bufa,
      printf("           ");
      fflush(stdout);
      for (j = 0; j < 64; j++) {
@@ -117,7 +120,7 @@ diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
      fflush(stdout);
      return 0;
  }
-@@ -235,23 +246,23 @@
+@@ -256,23 +267,23 @@ int test_checkerboard_comparison(ulv *bu
      printf("           ");
      fflush(stdout);
      for (j = 0; j < 64; j++) {
@@ -146,7 +149,7 @@ diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
      fflush(stdout);
      return 0;
  }
-@@ -262,25 +273,25 @@
+@@ -283,25 +294,25 @@ int test_blockseq_comparison(ulv *bufa, 
      unsigned int j;
      size_t i;
  
@@ -178,7 +181,7 @@ diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
      fflush(stdout);
      return 0;
  }
-@@ -294,10 +305,10 @@
+@@ -315,10 +326,10 @@ int test_walkbits0_comparison(ulv *bufa,
      printf("           ");
      fflush(stdout);
      for (j = 0; j < UL_LEN * 2; j++) {
@@ -191,7 +194,7 @@ diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
          fflush(stdout);
          for (i = 0; i < count; i++) {
              if (j < UL_LEN) { /* Walk it up. */
-@@ -306,14 +317,14 @@
+@@ -327,14 +338,14 @@ int test_walkbits0_comparison(ulv *bufa,
                  *p1++ = *p2++ = 0x00000001 << (UL_LEN * 2 - j - 1);
              }
          }
@@ -209,7 +212,7 @@ diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
      fflush(stdout);
      return 0;
  }
-@@ -324,13 +335,13 @@
+@@ -345,13 +356,13 @@ int test_walkbits1_comparison(ulv *bufa,
      unsigned int j;
      size_t i;
  
@@ -226,7 +229,7 @@ diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
          fflush(stdout);
          for (i = 0; i < count; i++) {
              if (j < UL_LEN) { /* Walk it up. */
-@@ -339,14 +350,14 @@
+@@ -360,14 +371,14 @@ int test_walkbits1_comparison(ulv *bufa,
                  *p1++ = *p2++ = UL_ONEBITS ^ (0x00000001 << (UL_LEN * 2 - j - 1));
              }
          }
@@ -244,7 +247,7 @@ diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
      fflush(stdout);
      return 0;
  }
-@@ -357,13 +368,13 @@
+@@ -378,13 +389,13 @@ int test_bitspread_comparison(ulv *bufa,
      unsigned int j;
      size_t i;
  
@@ -261,7 +264,7 @@ diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
          fflush(stdout);
          for (i = 0; i < count; i++) {
              if (j < UL_LEN) { /* Walk it up. */
-@@ -378,14 +389,14 @@
+@@ -399,14 +410,14 @@ int test_bitspread_comparison(ulv *bufa,
                                      | (0x00000001 << (UL_LEN * 2 + 1 - j)));
              }
          }
@@ -279,7 +282,7 @@ diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
      fflush(stdout);
      return 0;
  }
-@@ -397,29 +408,29 @@
+@@ -418,29 +429,29 @@ int test_bitflip_comparison(ulv *bufa, u
      ul q;
      size_t i;
  
@@ -315,9 +318,8 @@ diff -urN memtester-4.0.8.old/tests.c memtester-4.0.8/tests.c
      fflush(stdout);
      return 0;
  }
-diff -urN memtester-4.0.8.old/tests.h memtester-4.0.8/tests.h
---- memtester-4.0.8.old/tests.h	2007-11-21 16:54:57.000000000 +0100
-+++ memtester-4.0.8/tests.h	2008-05-22 01:51:15.072298292 +0200
+--- a/tests.h
++++ b/tests.h
 @@ -14,6 +14,8 @@
   *
   */

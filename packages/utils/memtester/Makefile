@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=memtester
-PKG_VERSION:=4.0.8
+PKG_VERSION:=4.1.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://pyropus.ca/software/memtester/old-versions/
-PKG_MD5SUM:=a4971ed1ccaf5b2e2148fd66b0eb7363
+PKG_MD5SUM:=33c744ac434eb1f3d7e09c891f2979d6
 
 include $(INCLUDE_DIR)/package.mk
 
