@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libogg
-PKG_VERSION:=1.1.3
+PKG_VERSION:=1.1.4
 PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.xiph.org/releases/ogg/
 PKG_FIXUP:=libtool
-PKG_MD5SUM:=eaf7dc6ebbff30975de7527a80831585
+PKG_MD5SUM:=10200ec22543841d9d1c23e0aed4e5e9
 
 include $(INCLUDE_DIR)/package.mk
 
