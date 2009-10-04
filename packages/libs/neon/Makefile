@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=neon
-PKG_VERSION:=0.28.2
+PKG_VERSION:=0.29.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.webdav.org/neon/
-PKG_MD5SUM:=b99b3f44e8507ae2d17362f1b34aaf02
+PKG_MD5SUM:=18a3764b70f9317f8b61509fd90d9e7a
 
 PKG_FIXUP = libtool
 
@@ -58,7 +58,7 @@ define Build/InstallDev
 	$(SED) 's,-L$$$${libdir},,g' $(1)/usr/bin/neon-config
 endef
 
-define Package/libneon/install	
+define Package/libneon/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libneon.so.* $(1)/usr/lib/
 endef
