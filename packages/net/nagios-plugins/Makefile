@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nagios-plugins
 PKG_VERSION:=1.4.12
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/nagiosplug
@@ -31,7 +31,8 @@ endef
 CONFIGURE_ARGS += \
 	--without-mysql \
 	--with-openssl="$(STAGING_DIR)/usr" \
-	--with-ping-command="/bin/ping -c %d %s" \
+	--with-ping-command="/bin/ping -w %d -c %d %s" \
+	--with-ping6-command="/bin/ping6 -w %d -c %d %s" \
 	--with-ps-command="/bin/ps -Aopid" \
 	--with-ps-cols="6" \
 	--with-ps-format="%d %s %d %s %s %n" \
