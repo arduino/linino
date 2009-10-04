@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=collectd
 PKG_VERSION:=4.4.4
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://collectd.org/files/
@@ -28,7 +28,7 @@ define Package/collectd/common_info
 endef
 
 define Package/collectd/description
-	collectd is a small daemon which collects system information periodically 
+	collectd is a small daemon which collects system information periodically
 	and provides mechanismns to store the values in a variety of ways.
 endef
 
@@ -154,6 +154,12 @@ define Package/collectd-mod-load
         DEPENDS:=collectd
 endef
 
+define Package/collectd-mod-memory
+        $(call Package/collectd/common_info)
+        TITLE:=collectd - physical memory usage input plugin
+        DEPENDS:=collectd
+endef
+
 define Package/collectd-mod-netlink
         $(call Package/collectd/common_info)
         TITLE:=collectd - netlink input plugin (uses iproute2)
@@ -252,8 +258,8 @@ define Package/collectd-mod-wireless
 endef
 
 
-define Package/collectd/conffiles 
-/etc/collectd.conf 
+define Package/collectd/conffiles
+/etc/collectd.conf
 endef
 
 define Build/Configure
@@ -409,6 +415,11 @@ define Package/collectd-mod-logfile/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/logfile.so $(1)/usr/lib/collectd/
 endef
 
+define Package/collectd-mod-memory/install
+	$(INSTALL_DIR) $(1)/usr/lib/collectd
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/memory.so $(1)/usr/lib/collectd/
+endef
+
 define Package/collectd-mod-netlink/install
 	$(INSTALL_DIR) $(1)/usr/lib/collectd
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/netlink.so $(1)/usr/lib/collectd/
@@ -521,6 +532,7 @@ $(eval $(call BuildPackage,collectd-mod-iptables))
 $(eval $(call BuildPackage,collectd-mod-irq))
 $(eval $(call BuildPackage,collectd-mod-load))
 $(eval $(call BuildPackage,collectd-mod-logfile))
+$(eval $(call BuildPackage,collectd-mod-memory))
 $(eval $(call BuildPackage,collectd-mod-netlink))
 $(eval $(call BuildPackage,collectd-mod-network))
 $(eval $(call BuildPackage,collectd-mod-nginx))
