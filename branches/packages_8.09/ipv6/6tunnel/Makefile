@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=6tunnel
 PKG_VERSION:=0.11rc2
-PKG_RELEASE:=2.1
+PKG_RELEASE:=2.2
 PKG_MD5SUM:=74e02d4f0704b3083a01feda66033449
 
 PKG_SOURCE_URL:=http://toxygen.net/6tunnel/

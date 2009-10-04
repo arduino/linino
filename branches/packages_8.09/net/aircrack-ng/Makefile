@@ -11,7 +11,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=aircrack-ng
 PKG_REV:=1396
 PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=1
+PKG_RELEASE:=1.2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://trac.aircrack-ng.org/svn/trunk/
