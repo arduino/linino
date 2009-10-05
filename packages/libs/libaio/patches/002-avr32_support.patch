@@ -1,7 +1,6 @@
-diff -Nur libaio-0.3.106/src/libaio.h libaio-0.3.106-avr32/src/libaio.h
---- libaio-0.3.106/src/libaio.h	2007-11-27 11:07:20.000000000 +0100
-+++ libaio-0.3.106-avr32/src/libaio.h	2007-06-21 15:26:26.000000000 +0200
-@@ -106,6 +106,10 @@
+--- a/src/libaio.h
++++ b/src/libaio.h
+@@ -107,6 +107,10 @@ typedef enum io_iocb_cmd {
  #  else
  #    error "neither mipseb nor mipsel?"
  #  endif
@@ -12,9 +11,8 @@ diff -Nur libaio-0.3.106/src/libaio.h libaio-0.3.106-avr32/src/libaio.h
  #else
  #error	endian?
  #endif
-diff -Nur libaio-0.3.106/src/syscall-avr32.h libaio-0.3.106-avr32/src/syscall-avr32.h
---- libaio-0.3.106/src/syscall-avr32.h	1970-01-01 01:00:00.000000000 +0100
-+++ libaio-0.3.106-avr32/src/syscall-avr32.h	2007-06-21 15:26:26.000000000 +0200
+--- /dev/null
++++ b/src/syscall-avr32.h
 @@ -0,0 +1,91 @@
 +/*
 + * Copyright (C) 2007 Atmel Corporation
@@ -107,9 +105,8 @@ diff -Nur libaio-0.3.106/src/syscall-avr32.h libaio-0.3.106-avr32/src/syscall-av
 +			     : "memory");				\
 +	return (type) __res_r12;					\
 +}
-diff -Nur libaio-0.3.106/src/syscall.h libaio-0.3.106-avr32/src/syscall.h
---- libaio-0.3.106/src/syscall.h	2007-11-27 11:07:20.000000000 +0100
-+++ libaio-0.3.106-avr32/src/syscall.h	2007-06-21 15:26:26.000000000 +0200
+--- a/src/syscall.h
++++ b/src/syscall.h
 @@ -32,6 +32,8 @@
  #include "syscall-parisc.h"
  #elif defined(__mips__)

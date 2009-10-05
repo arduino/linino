@@ -1,5 +1,5 @@
---- libaio-0.3.106.orig/src/syscall-m68k.h
-+++ libaio-0.3.106/src/syscall-m68k.h
+--- /dev/null
++++ b/src/syscall-m68k.h
 @@ -0,0 +1,78 @@
 +#define __NR_io_setup		241
 +#define __NR_io_destroy		242
@@ -79,8 +79,8 @@
 +return (type) __res; \
 +}
 +
---- libaio-0.3.106.orig/src/syscall-sparc.h
-+++ libaio-0.3.106/src/syscall-sparc.h
+--- /dev/null
++++ b/src/syscall-sparc.h
 @@ -0,0 +1,130 @@
 +/* $Id: unistd.h,v 1.74 2002/02/08 03:57:18 davem Exp $ */
 +
@@ -212,8 +212,8 @@
 +return -1; \
 +}
 +
---- libaio-0.3.106.orig/src/syscall.h
-+++ libaio-0.3.106/src/syscall.h
+--- a/src/syscall.h
++++ b/src/syscall.h
 @@ -22,6 +22,16 @@
  #include "syscall-s390.h"
  #elif defined(__alpha__)
@@ -231,8 +231,8 @@
  #else
  #error "add syscall-arch.h"
  #endif
---- libaio-0.3.106.orig/src/syscall-mips.h
-+++ libaio-0.3.106/src/syscall-mips.h
+--- /dev/null
++++ b/src/syscall-mips.h
 @@ -0,0 +1,223 @@
 +/*
 + * This file is subject to the terms and conditions of the GNU General Public
@@ -457,9 +457,9 @@
 +
 +#endif /* (_MIPS_SIM == _MIPS_SIM_NABI32) || (_MIPS_SIM == _MIPS_SIM_ABI64) */
 +
---- libaio-0.3.106.orig/src/libaio.h
-+++ libaio-0.3.106/src/libaio.h
-@@ -72,6 +72,40 @@
+--- a/src/libaio.h
++++ b/src/libaio.h
+@@ -73,6 +73,40 @@ typedef enum io_iocb_cmd {
  #define PADDED(x, y)	unsigned y; x
  #define PADDEDptr(x, y) unsigned y; x
  #define PADDEDul(x, y)	unsigned y; unsigned long x
@@ -500,8 +500,8 @@
  #else
  #error	endian?
  #endif
---- libaio-0.3.106.orig/src/syscall-parisc.h
-+++ libaio-0.3.106/src/syscall-parisc.h
+--- /dev/null
++++ b/src/syscall-parisc.h
 @@ -0,0 +1,146 @@
 +/*
 + * Linux system call numbers.
@@ -649,8 +649,8 @@
 +    return K_INLINE_SYSCALL(sname, 5, arg1, arg2, arg3, arg4, arg5);	\
 +}
 +
---- libaio-0.3.106.orig/src/syscall-arm.h
-+++ libaio-0.3.106/src/syscall-arm.h
+--- /dev/null
++++ b/src/syscall-arm.h
 @@ -0,0 +1,116 @@
 +/*
 + *  linux/include/asm-arm/unistd.h
