@@ -8,31 +8,26 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=check
-PKG_VERSION:=0.9.6
+PKG_VERSION:=0.9.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/check
-PKG_MD5SUM:=6f80cd4a24d14ad706117a7714222420
+PKG_MD5SUM:=5d75e9a6027cde79d2c339ef261e7470
+
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-PKG_INSTALL = 1
-
-TARGET_CFLAGS += $(FPIC) \
-	-I$(STAGING_DIR)/usr/lib/libintl/include \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include
-
-TARGET_LDFLAGS += \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib
+TARGET_CFLAGS += $(FPIC)
 
 define Package/check
   SECTION:=lib
   CATEGORY:=Libraries
   TITLE:=Unit testing framework for C
   URL:=http://check.sourceforge.net/
+  DEPENDS:= +libpthread
 endef
 
 define Package/check/description
@@ -50,17 +45,17 @@ endef
 
 define Build/Install
 	$(call Build/Install/Default)
-	cd $(PKG_INSTALL_DIR)/usr/lib/ ; ln -s libcheck.so libcheck_pic.so
+	cd $(PKG_INSTALL_DIR)/usr/lib/ ; ln -nsf libcheck.so libcheck_pic.so
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 define Package/check/install
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcheck.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,check))
