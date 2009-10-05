@@ -22,7 +22,7 @@ define Package/libdlna
  CATEGORY:=Libraries
  TITLE:= Reference DLNA implementation
  URL:=http://libdlna.geexbox.org/
- DEPENDS:=+libffmpeg
+ DEPENDS:=+libffmpeg +@FFMPEG_LIBDLNA_SUPPORT
 endef
 
 define Package/libdlna/description

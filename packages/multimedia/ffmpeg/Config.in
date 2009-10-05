@@ -1,9 +1,10 @@
 
 # FFmpeg configuration
 
+if PACKAGE_libffmpeg
+
 config FFMPEG_FFSERVER_SUPPORT
 	bool
-	default y if PACKAGE_ffserver
 	select FFMPEG_MUXER_ffm
 	select FFMPEG_DEMUXER_rtsp
 	select FFMPEG_PROTOCOL_rtp
@@ -263,3 +264,4 @@ config FFMPEG_PROTOCOL_IPv6
 	bool
 	prompt "IPv6"
 
+endif

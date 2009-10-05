@@ -17,76 +17,6 @@ PKG_MD5SUM:=63aeb859941b96ed3ef7b0c7a643bf4d
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-export-2008-04-19
 
-include $(INCLUDE_DIR)/package.mk
-
-define Package/ffmpeg/Default
- TITLE:=FFmpeg
- URL:=http://ffmpeg.mplayerhq.hu/
-endef
-
-define Package/ffmpeg/Default/description
- FFmpeg is a a software package that can record, convert and stream digital 
- audio and video in numerous formats.
-endef
-
-define Package/ffmpeg
-$(call Package/ffmpeg/Default)
- SECTION:=multimedia
- CATEGORY:=Multimedia
- TITLE+= program
- DEPENDS+= +libpthread +libffmpeg
-endef
-
-define Package/ffmpeg/description
-$(call Package/ffmpeg/Default/description)
- .
- This package contains the FFmpeg command line tool.
-endef
-
-define Package/ffserver
-$(call Package/ffserver/Default)
- SECTION:=multimedia
- CATEGORY:=Multimedia
- TITLE+= streaming server
- DEPENDS+= +libpthread +libffmpeg
-endef
-
-define Package/ffserver/description
-$(call Package/ffmpeg/Default/description)
- .
- This package contains the FFmpeg streaming server.
-endef
-
-define Package/libffmpeg
-$(call Package/ffmpeg/Default)
- SECTION:=libs
- CATEGORY:=Libraries
- TITLE+= libraries
- DEPENDS+= +libpthread +libfaad2 +zlib
- MENU:=1
-endef
-
-define Package/libffmpeg/config
-		menu "Configuration"
-				depends on PACKAGE_libffmpeg
-		source "$(SOURCE)/Config.in"
-		endmenu
-endef
-
-define Package/libffmeg/description
-$(call Package/ffmpeg/Default/description)
- .
- This package contains FFmpeg shared libraries.
-endef
-
-define Package/libpostproc
- SECTION:=libs
- CATEGORY:=Libraries
- TITLE:=libpostproc
- URL:=http://ffmpeg.mplayerhq.hu/
- DEPENDS:=+libffmpeg
-endef
-
 FFMPEG_ENCODERS:= \
 	ac3 \
 	jpegls \
@@ -144,37 +74,94 @@ FFMPEG_PARSERS:= \
 	mpeg4video \
 
 FFMPEG_PROTOCOLS:= \
-	file http pipe rtp tcp udp \
+	file http pipe rtp tcp udp
 
-FFMPEG_CONFIGURE_ENCODERS:= \
-	$(foreach c, $(FFMPEG_ENCODERS), \
-		$(if $(CONFIG_FFMPEG_ENCODER_$(c)),--enable-encoder="$(c)") \
+PKG_CONFIG_DEPENDS:= \
+	$(patsubst %,CONFIG_FFMPEG_ENCODER_%,$(FFMPEG_ENCODERS)) \
+	$(patsubst %,CONFIG_FFMPEG_DECODER_%,$(FFMPEG_DECODERS)) \
+	$(patsubst %,CONFIG_FFMPEG_MUXER_%,$(FFMPEG_DEMUXERS)) \
+	$(patsubst %,CONFIG_FFMPEG_DEMUXER_%,$(FFMPEG_DEMUXERS)) \
+	$(patsubst %,CONFIG_FFMPEG_PARSER_%,$(FFMPEG_PARSERS)) \
+	$(patsubst %,CONFIG_FFMPEG_PROTOCOL_%,$(FFMPEG_PROTOCOLS))
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/ffmpeg/Default
+ TITLE:=FFmpeg
+ URL:=http://ffmpeg.mplayerhq.hu/
+endef
+
+define Package/ffmpeg/Default/description
+ FFmpeg is a a software package that can record, convert and stream digital 
+ audio and video in numerous formats.
+endef
+
+define Package/ffmpeg
+$(call Package/ffmpeg/Default)
+ SECTION:=multimedia
+ CATEGORY:=Multimedia
+ TITLE+= program
+ DEPENDS+= +libpthread +libffmpeg
+endef
+
+define Package/ffmpeg/description
+$(call Package/ffmpeg/Default/description)
+ .
+ This package contains the FFmpeg command line tool.
+endef
+
+define Package/ffserver
+$(call Package/ffserver/Default)
+ SECTION:=multimedia
+ CATEGORY:=Multimedia
+ TITLE+= streaming server
+ DEPENDS+= +libpthread +libffmpeg +@FFMPEG_FFSERVER_SUPPORT
+endef
+
+define Package/ffserver/description
+$(call Package/ffmpeg/Default/description)
+ .
+ This package contains the FFmpeg streaming server.
+endef
+
+define Package/libffmpeg
+$(call Package/ffmpeg/Default)
+ SECTION:=libs
+ CATEGORY:=Libraries
+ TITLE+= libraries
+ DEPENDS+= +libpthread +libfaad2 +zlib
+ MENU:=1
+endef
+
+define Package/libffmpeg/config
+source "$(SOURCE)/Config.in"
+endef
+
+define Package/libffmeg/description
+$(call Package/ffmpeg/Default/description)
+ .
+ This package contains FFmpeg shared libraries.
+endef
+
+define Package/libpostproc
+ SECTION:=libs
+ CATEGORY:=Libraries
+ TITLE:=libpostproc
+ URL:=http://ffmpeg.mplayerhq.hu/
+ DEPENDS:=+libffmpeg
+endef
+
+FILTER_CONFIG= \
+	$(foreach c, $(3), \
+		$(if $(CONFIG_FFMPEG_$(1)_$(c)),--enable-$(2)="$(c)") \
 	)
 
-FFMPEG_CONFIGURE_DECODERS:= \
-	$(foreach c, $(FFMPEG_DECODERS), \
-		$(if $(CONFIG_FFMPEG_DECODER_$(c)),--enable-decoder="$(c)") \
-	)
-
-FFMPEG_CONFIGURE_MUXERS:= \
-	$(foreach c, $(FFMPEG_MUXERS), \
-		$(if $(CONFIG_FFMPEG_MUXER_$(c)),--enable-muxer="$(c)") \
-	)
-
-FFMPEG_CONFIGURE_DEMUXERS:= \
-	$(foreach c, $(FFMPEG_DEMUXERS), \
-		$(if $(CONFIG_FFMPEG_DEMUXER_$(c)),--enable-demuxer="$(c)") \
-	)
-
-FFMPEG_CONFIGURE_PARSERS:= \
-	$(foreach c, $(FFMPEG_PARSERS), \
-		$(if $(CONFIG_FFMPEG_PARSER_$(c)),--enable-parser="$(c)") \
-	)
-
-FFMPEG_CONFIGURE_PROTOCOLS:= \
-	$(foreach c, $(FFMPEG_PROTOCOLS), \
-		$(if $(CONFIG_FFMPEG_PROTOCOL_$(c)),--enable-protocol="$(c)") \
-	)
+FFMPEG_CONFIGURE_ENCODERS:=$(call FILTER_CONFIG,ENCODER,encoder,$(FFMPEG_ENCODERS))
+FFMPEG_CONFIGURE_DECODERS:=$(call FILTER_CONFIG,DECODER,decoder,$(FFMPEG_DECODERS))
+FFMPEG_CONFIGURE_MUXERS:=$(call FILTER_CONFIG,MUXER,muxer,$(FFMPEG_MUXERS))
+FFMPEG_CONFIGURE_DEMUXERS:=$(call FILTER_CONFIG,DEMUXER,demuxer,$(FFMPEG_DEMUXERS))
+FFMPEG_CONFIGURE_PARSERS:=$(call FILTER_CONFIG,PARSER,parser,$(FFMPEG_PARSERS))
+FFMPEG_CONFIGURE_PROTOCOLS:=$(call FILTER_CONFIG,PROTOCOL,protocol,$(FFMPEG_PROTOCOLS))
 
 define Build/Configure
 	# this is *NOT* GNU configure
