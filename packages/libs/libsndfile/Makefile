@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libsndfile
-PKG_VERSION:=1.0.17
-PKG_RELEASE:=2
+PKG_VERSION:=1.0.20
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.mega-nerd.com/libsndfile/
-PKG_MD5SUM:=2d126c35448503f6dbe33934d9581f6b
+PKG_MD5SUM:=e0553e12c7a467af44693e95e2eac668
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,7 +35,9 @@ endef
 TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
-	--disable-flac
+	--disable-alsa \
+	--disable-external-libs \
+	--disable-sqlite \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
