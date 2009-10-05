@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libv4l
-PKG_VERSION:=0.6.0
+PKG_VERSION:=0.6.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://people.atrpms.net/~hdegoede/
-PKG_MD5SUM:=db389fdf02cabd57f289f0faa37f4060
+PKG_MD5SUM:=0d0d96d77c98871d2e5466c10cb30a0a
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -66,7 +66,7 @@ endef
 
 define Package/libv4l/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libv4l{1,2,convert}.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libv4l{1,2,convert}.so.* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/libv4l
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libv4l/v4l{1compat,2convert}.so $(1)/usr/lib/libv4l
 endef
