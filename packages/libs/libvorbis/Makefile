@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,16 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libvorbis
-PKG_VERSION:=1.2.0
-PKG_RELEASE:=2
+PKG_VERSION:=1.2.3
+PKG_RELEASE:=1
+
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.xiph.org/releases/vorbis/
-PKG_MD5SUM:=478646358c49f34aedcce58948793619
+PKG_MD5SUM:=5aa77f55c0e0aab8eb8ed982335daac8
+
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-PKG_INSTALL=1
 
 define Package/libvorbis
   SECTION:=libs
@@ -38,11 +39,8 @@ software entity may make full use of the format without license
 fee, royalty or patent concerns.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--disable-oggtest \
-	)
-endef
+CONFIGURE_ARGS+= \
+	--disable-oggtest \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/vorbis/
@@ -57,7 +55,7 @@ endef
 
 define Package/libvorbis/install
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libvorbis))
