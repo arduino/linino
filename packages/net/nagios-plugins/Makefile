@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nagios-plugins
-PKG_VERSION:=1.4.12
-PKG_RELEASE:=2
+PKG_VERSION:=1.4.14
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/nagiosplug
-PKG_MD5SUM:=af68d00bbe2c39de02803d23e5eecca3
+PKG_MD5SUM:=a1835a48a777863ed2583de3c82446a9
 
 include $(INCLUDE_DIR)/package.mk
 

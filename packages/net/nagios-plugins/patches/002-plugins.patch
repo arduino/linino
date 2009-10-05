@@ -1,6 +1,6 @@
 --- a/configure
 +++ b/configure
-@@ -27981,7 +27981,7 @@
+@@ -28209,7 +28209,7 @@ fi
  
  if test "$ac_cv_have_decl_swapctl" = "yes";
  then
@@ -9,7 +9,7 @@
  	{ echo "$as_me:$LINENO: checking for 2-arg (SVR4) swapctl" >&5
  echo $ECHO_N "checking for 2-arg (SVR4) swapctl... $ECHO_C" >&6; }
  	if test "$ac_cv_type_swaptbl_t" = "yes" -a \
-@@ -28120,7 +28120,7 @@
+@@ -28348,7 +28348,7 @@ cat >>confdefs.h <<\_ACEOF
  #define HAVE_SWAP 1
  _ACEOF
  
@@ -18,7 +18,7 @@
  fi
  if test "x$ac_cv_swap_command" != "x"
  then
-@@ -28172,7 +28172,7 @@
+@@ -28400,7 +28400,7 @@ cat >>confdefs.h <<_ACEOF
  #define PROC_MEMINFO "$ac_cv_proc_meminfo"
  _ACEOF
  
@@ -29,7 +29,7 @@
  # Extract the first word of "dig", so it can be a program name with args.
 --- a/plugins/Makefile.am
 +++ b/plugins/Makefile.am
-@@ -23,8 +23,8 @@
+@@ -34,8 +34,8 @@ libexec_PROGRAMS = check_apt check_clust
  check_tcp_programs = check_ftp check_imap check_nntp check_pop \
  	check_udp check_clamd @check_tcp_ssl@
  
@@ -42,7 +42,7 @@
  
 --- a/plugins/Makefile.in
 +++ b/plugins/Makefile.in
-@@ -35,7 +35,7 @@
+@@ -32,7 +32,7 @@ POST_UNINSTALL = :
  build_triplet = @build@
  host_triplet = @host@
  libexec_PROGRAMS = check_apt$(EXEEXT) check_cluster$(EXEEXT) \
@@ -51,7 +51,7 @@
  	check_load$(EXEEXT) check_mrtg$(EXEEXT) \
  	check_mrtgtraf$(EXEEXT) check_ntp$(EXEEXT) \
  	check_ntp_peer$(EXEEXT) check_nwstat$(EXEEXT) \
-@@ -44,8 +44,8 @@
+@@ -41,8 +41,8 @@ libexec_PROGRAMS = check_apt$(EXEEXT) ch
  	check_time$(EXEEXT) check_ntp_time$(EXEEXT) check_ups$(EXEEXT) \
  	check_users$(EXEEXT) negate$(EXEEXT) urlize$(EXEEXT) @EXTRAS@
  EXTRA_PROGRAMS = check_mysql$(EXEEXT) check_radius$(EXEEXT) \
@@ -64,7 +64,7 @@
  	check_ide_smart$(EXEEXT) check_procs$(EXEEXT) \
 --- a/plugins/check_pgsql.c
 +++ b/plugins/check_pgsql.c
-@@ -43,6 +43,7 @@
+@@ -39,6 +39,7 @@ const char *email = "nagiosplug-devel@li
  #include <libpq-fe.h>
  #include <pg_config_manual.h>
  

@@ -1,6 +1,6 @@
---- nagios-plugins-1.4.12/plugins/check_pgsql.orig.c	2008-08-01 16:05:51.000000000 -0700
-+++ nagios-plugins-1.4.12/plugins/check_pgsql.c	2008-08-01 16:06:17.000000000 -0700
-@@ -41,7 +41,7 @@
+--- a/plugins/check_pgsql.c
++++ b/plugins/check_pgsql.c
+@@ -37,7 +37,7 @@ const char *email = "nagiosplug-devel@li
  
  #include "netutils.h"
  #include <libpq-fe.h>
