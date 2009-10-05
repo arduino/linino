@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@KERNEL/linux/utils/fs/reiserfs/
-PKG_MD5SUM:=
+PKG_MD5SUM:=bc00c7c4e047902575dc4e1c64ab3ba4
 
 PKG_FIXUP:=libtool
 
