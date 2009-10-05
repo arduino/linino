@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=reiserfsprogs
-PKG_VERSION:=3.6.19
+PKG_VERSION:=3.6.21
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.namesys.com/pub/reiserfsprogs
-PKG_MD5SUM:=b42cf15f6651c3ceff5cb84996c0d539
+PKG_SOURCE_URL:=@KERNEL/linux/utils/fs/reiserfs/
+PKG_MD5SUM:=
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
