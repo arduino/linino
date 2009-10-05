@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rrdcollect
-PKG_VERSION:=0.2.3
-PKG_RELEASE:=3
+PKG_VERSION:=0.2.4
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/rrdcollect
-PKG_MD5SUM:=5e4305c612bc3cccbaf802c275c81a11
+PKG_MD5SUM:=fd7ac95195e3e5cbab0677629505d9be
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,37 +23,35 @@ define Package/rrdcollect/Default
   URL:=http://rrdcollect.sourceforge.net/
 endef
 
+define Package/rrdcollect/Default/description
+ RRDcollect is a daemon which polls ceratin files in /proc/ 
+ directory, gathering data and storing it inside RRDtool's 
+ database files. Being written in C should be both fast 
+ and resources-friendly. Supports both scanf(3)-style 
+ pattern matches and perl compatible regular expressions.	
+endef
+
 define Package/rrdcollect
-  $(call Package/rrdcollect/Default)
-  DEPENDS:=+librrd
+$(call Package/rrdcollect/Default)
+  DEPENDS:=+librrd1
   TITLE:=Round-Robin Database (RRD) collecting daemon
   MENU:=1
 endef
 
 define Package/rrdcollect/description
-=
-	RRDcollect is a daemon which polls ceratin files in /proc/ 
-	directory, gathering data and storing it inside RRDtool's 
-	database files. Being written in C should be both fast 
-	and resources-friendly. Supports both scanf(3)-style 
-	pattern matches and perl compatible regular expressions.	
-	This package contains the RRD collecting daemon.
+$(call Package/rrdcollect/Default/description)
+ This package contains the RRD collecting daemon.
 endef
 
 define Package/rrdcollect-example
-  $(call Package/rrdcollect/Default)
+$(call Package/rrdcollect/Default)
   DEPENDS:=rrdcollect
   TITLE:=Example setup for RRD collecting daemon above
 endef
 
 define Package/rrdcollect-example/description
-=
-	RRDcollect is a daemon which polls ceratin files in /proc/ 
-	directory, gathering data and storing it inside RRDtool's 
-	database files. Being written in C should be both fast 
-	and resources-friendly. Supports both scanf(3)-style 
-	pattern matches and perl compatible regular expressions.	
-	This package contains examples for the RRD collecting daemon.
+$(call Package/rrdcollect/Default/description)
+ This package contains examples for the RRD collecting daemon.
 endef
 
 define Package/rrdcollect-example/conffiles
@@ -61,21 +59,18 @@ define Package/rrdcollect-example/conffiles
 /etc/rrdcollect.conf
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--disable-static \
-		--disable-rpath \
-		--enable-exec \
-		--without-rrdtool \
-		--with-librrd \
-		--without-libpcre \
-		--without-libpcap \
-		, \
-		CFLAGS="$(TARGET_CFLAGS) -DSOCKET_COMM" \
-		LIBS="-lz -lfreetype -lpng -lart_lgpl_2" \
-	)
-endef
+CONFIGURE_ARGS+= \
+	--enable-shared \
+	--disable-static \
+	--disable-rpath \
+	--enable-exec \
+	--without-rrdtool \
+	--with-librrd="$(STAGING_DIR)/usr/lib/rrdtool-1.0" \
+	--without-libpcre \
+	--without-libpcap \
+
+CONFIGURE_VARS+= \
+	CFLAGS="$(TARGET_CFLAGS) -DSOCKET_COMM" \
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
