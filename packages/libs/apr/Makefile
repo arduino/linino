@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apr
-PKG_VERSION:=1.3.8
+PKG_VERSION:=1.3.9
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.ibiblio.org/pub/mirrors/apache/apr
-PKG_MD5SUM:=3c7e3a39ae3d3573f49cb74e2dbf87a2
+PKG_MD5SUM:=7138ac64d4458eeeaa9b9aefa4e6e51b
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,7 +33,9 @@ CONFIGURE_ARGS += \
 	--disable-dso \
 	--enable-ipv6
 
+# XXX: ac_cv_sizeof_struct_iovec=1 is just to trick configure
 CONFIGURE_VARS += \
+	ac_cv_sizeof_struct_iovec=1 \
 	apr_cv_process_shared_works=no \
 	apr_cv_mutex_robust_shared=no \
 	apr_cv_tcp_nodelay_with_cork=yes \
