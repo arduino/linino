@@ -1,7 +1,6 @@
-diff -urN tinyproxy-1.6.3/src/reqs.c tinyproxy-1.6.3.new/src/reqs.c
---- tinyproxy-1.6.3/src/reqs.c	2004-08-06 18:56:55.000000000 +0200
-+++ tinyproxy-1.6.3.new/src/reqs.c	2007-08-30 16:50:31.000000000 +0200
-@@ -726,7 +726,7 @@
+--- a/src/reqs.c
++++ b/src/reqs.c
+@@ -726,7 +726,7 @@ process_request(struct conn_s *connptr, 
  					    request->host);
  
  			indicate_http_error(connptr, 403, "Filtered",
