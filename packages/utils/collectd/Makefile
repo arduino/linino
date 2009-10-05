@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,269 +15,93 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://collectd.org/files/
 PKG_MD5SUM:=9e0e89150b1ff28fc0fdd8a198c9ac5e
 
-PKG_FIXUP=libtool
+PKG_FIXUP:=libtool
+
+COLLECTD_PLUGINS_DISABLED:= \
+	apple_sensors \
+	battery \
+	cpufreq \
+	entropy \
+	hddtemp \
+	ipmi \
+	ipvs \
+	libvirt \
+	mbmon \
+	memcached \
+	multimeter \
+	nfs \
+	perl \
+	serial \
+	swap \
+	tape \
+	uuid \
+	vserver \
+	xmms \
+
+COLLECTD_PLUGINS_SELECTED:= \
+	apache \
+	apcups \
+	ascent \
+	cpu \
+	csv \
+	df \
+	disk \
+	dns \
+	email \
+	exec \
+	interface \
+	iptables \
+	irq \
+	load \
+	logfile \
+	memory \
+	mysql \
+	netlink \
+	network \
+	nginx \
+	ntpd \
+	nut \
+	ping \
+	powerdns \
+	processes \
+	rrdtool \
+	sensors \
+	snmp \
+	syslog \
+	tail \
+	tcpconns \
+	teamspeak2 \
+	unixsock \
+	users \
+	vmem \
+	wireless \
+
+PKG_CONFIG_DEPENDS:= \
+	$(patsubst %,CONFIG_PACKAGE_collectd-mod-%,$(COLLECTD_PLUGINS_SELECTED)) \
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
 
-define Package/collectd/common_info
+define Package/collectd/Default
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Lightweight system statistics collection daemon
   URL:=http://verplant.org/collectd/
 endef
 
-define Package/collectd/description
-	collectd is a small daemon which collects system information periodically
-	and provides mechanismns to store the values in a variety of ways.
-endef
-
 define Package/collectd
-        $(call Package/collectd/common_info)
-        DEPENDS:=+libgcc +libpthread +zlib
-        MENU:=1
+$(call Package/collectd/Default)
+  DEPENDS:=+libgcc +libpthread +zlib
+  MENU:=1
 endef
 
-
-#
-# output plugins
-#
-define Package/collectd-mod-csv
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - csv output plugin
-        DEPENDS:=collectd
+define Package/collectd/description
+ collectd is a small daemon which collects system information periodically
+ and provides mechanismns to store the values in a variety of ways.
 endef
-
-define Package/collectd-mod-email
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - email output plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-logfile
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - logfile output plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-network
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - network input/output plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-syslog
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - syslog output plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-unixsock
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - unix socket output plugin
-        DEPENDS:=collectd
-endef
-
-
-#
-# input plugins
-#
-define Package/collectd-mod-apache
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - apache status input plugin
-        DEPENDS:=collectd +libcurl
-endef
-
-define Package/collectd-mod-apcups
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - apcups status input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-ascent
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - ascent status input plugin
-        DEPENDS:=collectd +libcurl +libxml2
-endef
-
-define Package/collectd-mod-cpu
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - cpu input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-df
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - disk space input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-disk
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - disk usage/timing input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-dns
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - dns traffic input plugin
-        DEPENDS:=collectd +libpcap
-endef
-
-define Package/collectd-mod-exec
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - process exec input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-interface
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - network interfaces input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-iptables
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - iptables status input plugin
-        DEPENDS:=collectd +iptables
-endef
-
-define Package/collectd-mod-irq
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - interrupt usage input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-load
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - system load input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-memory
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - physical memory usage input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-netlink
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - netlink input plugin (uses iproute2)
-        DEPENDS:=collectd +ip
-endef
-
-define Package/collectd-mod-nginx
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - nginx status input plugin
-        DEPENDS:=collectd +libcurl
-endef
-
-define Package/collectd-mod-ntpd
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - ntp daemon status input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-nut
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - UPS monitoring input plugin
-        DEPENDS:=collectd @BROKEN
-endef
-
-define Package/collectd-mod-ping
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - ping status input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-powerdns
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - powerdns server status input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-processes
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - process status plugin
-        DEPENDS:=collectd
-endef
-
-
-define Package/collectd-mod-rrdtool1
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - rrdtool 1.0.x output plugin
-        DEPENDS:=collectd +librrd1
-endef
-
-define Package/collectd-mod-sensors
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - lm_sensors input plugin
-        DEPENDS:=collectd +libsensors @BROKEN
-endef
-
-define Package/collectd-mod-snmp
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - snmp input plugin
-        DEPENDS:=collectd +libnetsnmp
-endef
-
-define Package/collectd-mod-tail
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - tail input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-teamspeak2
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - teamspeak2 input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-tcpconns
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - tcp connection tracking input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-users
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - user login status input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-vmem
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - virtual memory usage input plugin
-        DEPENDS:=collectd
-endef
-
-define Package/collectd-mod-wireless
-        $(call Package/collectd/common_info)
-        TITLE:=collectd - wireless status input plugin
-        DEPENDS:=collectd
-endef
-
-
-define Package/collectd/conffiles
-/etc/collectd.conf
-endef
-
-define Build/Configure
-endef
-
-define Build/Compile
-	-$(MAKE) -C $(PKG_BUILD_DIR) clean
-	$(call Build/Configure/Default, $(PKG_CONFIGURE_OPTS))
-	$(call Build/Compile/Default)
-endef
-
-
-#
-# Build PKG_CONFIGURE_OPTS
-#
 
 # common configure args
-PKG_CONFIGURE_OPTS:= \
+CONFIGURE_ARGS+= \
 	--disable-debug \
 	--enable-daemon \
 	--enable-getifaddrs \
@@ -285,49 +109,42 @@ PKG_CONFIGURE_OPTS:= \
 	--with-fp-layout=nothing
 
 CONFIGURE_VARS+= \
-	CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2 $$$$CPPFLAGS $(FPIC)" \
-	KERNEL_DIR="$(LINUX_DIR)"
+	CFLAGS="$$$$CFLAGS $(FPIC)" \
+	LDFLAGS="$$$$LDFLAGS -lm -lz" \
+	KERNEL_DIR="$(LINUX_DIR)" \
 
-# list of permanently disabled plugins
-disabled_plugins := apple_sensors battery cpufreq entropy hddtemp ipmi ipvs libvirt mbmon memcached \
-			multimeter mysql nfs perl serial swap tape uuid vserver xmms
+CONFIGURE_PLUGIN:= \
+	$(foreach m, $(1), \
+		$(if $(CONFIG_PACKAGE_collectd-mod-$(m)),--enable-$(m),--disable-$(m)) \
+	)
 
-# list of selectable plugins
-selectable_plugins := apache apcups ascent cpu csv df disk dns email exec interface iptables irq load \
-			logfile memory netlink network nginx ntpd nut ping powerdns processes sensors \
-			snmp syslog tail tcpconns teamspeak2 unixsock users vmem wireless
+CONFIGURE_ARGS+= \
+	$(call CONFIGURE_PLUGIN,$(COLLECTD_PLUGINS_SELECTED)) \
+	$(call CONFIGURE_PLUGIN,$(COLLECTD_PLUGINS_DISABLED)) \
 
-# makro to enable / disable plugin
-define enable_plugin
-	ifneq ($$(CONFIG_PACKAGE_collectd-mod-$(1)),)
-		PKG_CONFIGURE_OPTS += --enable-$(1)
-	else
-		PKG_CONFIGURE_OPTS += --disable-$(1)
-	endif
-endef
-
-# build args for permanently disabled plugins
-PKG_CONFIGURE_OPTS += $(foreach plugin,$(disabled_plugins),--disable-$(plugin))
-
-# build args for selectable plugins
-$(foreach plugin,$(selectable_plugins),$(eval $(call enable_plugin,$(plugin))))
-
-# exception: mod-netlink needs iproute2
+# exception: mod-ascent needs libxml2
 ifneq ($(CONFIG_PACKAGE_collectd-mod-netlink),)
-	PKG_CONFIGURE_OPTS += --with-libnetlink=$(wildcard $(BUILD_DIR)/iproute2-*)
+  CONFIGURE_VARS+= \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/libxml2"
 endif
 
-# exception: mod-rrdtool(1) needs rrdtool
-ifneq ($(CONFIG_PACKAGE_collectd-mod-rrdtool1),)
-	PKG_CONFIGURE_OPTS += --with-rrdtool=$(wildcard $(BUILD_DIR)/rrdtool-1.0.*)
-	TARGET_LDFLAGS := -L$(wildcard $(BUILD_DIR)/rrdtool-1.0.*)/src/.libs -lz $(TARGET_LDFLAGS)
+# exception: mod-netlink needs libnetlink from iproute
+ifneq ($(CONFIG_PACKAGE_collectd-mod-netlink),)
+  CONFIGURE_ARGS+= --with-libnetlink="$(STAGING_DIR)/usr"
 endif
 
-TARGET_LDFLAGS += -lm
+# exception: mod-rrdtool needs rrdtool-1.0.x
+ifneq ($(CONFIG_PACKAGE_collectd-mod-rrdtool),)
+  CONFIGURE_ARGS+= --with-rrdtool="$(STAGING_DIR)/usr/lib/rrdtool-1.0"
+endif
 
 MAKE_FLAGS += \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
 	all install
+
+define Package/collectd/conffiles
+/etc/collectd.conf
+endef
 
 define Package/collectd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
@@ -340,215 +157,69 @@ define Package/collectd/install
 	$(INSTALL_BIN) ./files/collectd.init $(1)/etc/init.d/collectd
 endef
 
-define Package/collectd-mod-apache/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/apache.so $(1)/usr/lib/collectd/
-endef
+# 1: plugin name
+# 2: plugin title/description
+# 3: files
+# 4: extra dependency
+define BuildPlugin
 
-define Package/collectd-mod-apcups/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/apcups.so $(1)/usr/lib/collectd/
-endef
+  PKG_CONFIG_DEPENDS+= CONFIG_PACKAGE_collectd-mod-$(1)
 
-define Package/collectd-mod-ascent/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/ascent.so $(1)/usr/lib/collectd/
-endef
+  define Package/collectd-mod-$(1)
+  $$(call Package/collectd/Default)
+    TITLE:=$(2) plugin
+    DEPENDS:= collectd $(4)
+  endef
 
-define Package/collectd-mod-cpu/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/cpu.so $(1)/usr/lib/collectd/
-endef
+  define Package/collectd-mod-$(1)/install
+	$(INSTALL_DIR) $$(1)/usr/lib/collectd
+	for m in $(3); do \
+		$(CP) \
+			$(PKG_INSTALL_DIR)/usr/lib/collectd/$$$$$$$${m}.so \
+			$$(1)/usr/lib/collectd/ ; \
+	done
+  endef
 
-define Package/collectd-mod-csv/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/csv.so $(1)/usr/lib/collectd/
-endef
+  $$(eval $$(call BuildPackage,collectd-mod-$(1)))
 
-define Package/collectd-mod-df/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/df.so $(1)/usr/lib/collectd/
 endef
-
-define Package/collectd-mod-disk/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/disk.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-dns/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/dns.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-email/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/email.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-exec/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/exec.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-interface/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/interface.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-iptables/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/iptables.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-irq/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/irq.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-load/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/load.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-logfile/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/logfile.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-memory/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/memory.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-netlink/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/netlink.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-network/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/network.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-nginx/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/nginx.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-ntpd/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/ntpd.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-nut/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/nut.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-ping/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/ping.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-powerdns/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/powerdns.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-processes/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/processes.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-rrdtool1/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/rrdtool.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-sensors/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/sensors.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-snmp/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/snmp.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-syslog/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/syslog.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-tail/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/tail.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-teamspeak2/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/teamspeak2.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-tcpconns/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/tcpconns.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-unixsock/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/unixsock.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-users/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/users.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-vmem/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/vmem.so $(1)/usr/lib/collectd/
-endef
-
-define Package/collectd-mod-wireless/install
-	$(INSTALL_DIR) $(1)/usr/lib/collectd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/collectd/wireless.so $(1)/usr/lib/collectd/
-endef
-
 
 $(eval $(call BuildPackage,collectd))
-$(eval $(call BuildPackage,collectd-mod-apache))
-$(eval $(call BuildPackage,collectd-mod-apcups))
-$(eval $(call BuildPackage,collectd-mod-ascent))
-$(eval $(call BuildPackage,collectd-mod-cpu))
-$(eval $(call BuildPackage,collectd-mod-csv))
-$(eval $(call BuildPackage,collectd-mod-df))
-$(eval $(call BuildPackage,collectd-mod-disk))
-$(eval $(call BuildPackage,collectd-mod-dns))
-$(eval $(call BuildPackage,collectd-mod-email))
-$(eval $(call BuildPackage,collectd-mod-exec))
-$(eval $(call BuildPackage,collectd-mod-interface))
-$(eval $(call BuildPackage,collectd-mod-iptables))
-$(eval $(call BuildPackage,collectd-mod-irq))
-$(eval $(call BuildPackage,collectd-mod-load))
-$(eval $(call BuildPackage,collectd-mod-logfile))
-$(eval $(call BuildPackage,collectd-mod-memory))
-$(eval $(call BuildPackage,collectd-mod-netlink))
-$(eval $(call BuildPackage,collectd-mod-network))
-$(eval $(call BuildPackage,collectd-mod-nginx))
-$(eval $(call BuildPackage,collectd-mod-ntpd))
-$(eval $(call BuildPackage,collectd-mod-nut))
-$(eval $(call BuildPackage,collectd-mod-ping))
-$(eval $(call BuildPackage,collectd-mod-powerdns))
-$(eval $(call BuildPackage,collectd-mod-processes))
-$(eval $(call BuildPackage,collectd-mod-rrdtool1))
-$(eval $(call BuildPackage,collectd-mod-sensors))
-$(eval $(call BuildPackage,collectd-mod-snmp))
-$(eval $(call BuildPackage,collectd-mod-syslog))
-$(eval $(call BuildPackage,collectd-mod-tail))
-$(eval $(call BuildPackage,collectd-mod-teamspeak2))
-$(eval $(call BuildPackage,collectd-mod-tcpconns))
-$(eval $(call BuildPackage,collectd-mod-unixsock))
-$(eval $(call BuildPackage,collectd-mod-users))
-$(eval $(call BuildPackage,collectd-mod-vmem))
-$(eval $(call BuildPackage,collectd-mod-wireless))
+
+#$(eval $(call BuildPlugin,NAME,DESCRIPTION,FILES,DEPENDENCIES))
+$(eval $(call BuildPlugin,apache,apache status input,apache,+libcurl))
+$(eval $(call BuildPlugin,apcups,apcups status input,apcups,))
+$(eval $(call BuildPlugin,ascent,ascent status input,ascent,+libcurl +libxml2))
+$(eval $(call BuildPlugin,cpu,CPU input,cpu,))
+$(eval $(call BuildPlugin,csv,CSV output,csv,))
+$(eval $(call BuildPlugin,df,disk space input,df,))
+$(eval $(call BuildPlugin,disk,disk usage/timing input,disk,))
+$(eval $(call BuildPlugin,dns,DNS traffic input,dns,+libpcap))
+$(eval $(call BuildPlugin,email,email output,email,))
+$(eval $(call BuildPlugin,exec,process exec input,exec,))
+$(eval $(call BuildPlugin,interface,network interfaces input,interface,))
+$(eval $(call BuildPlugin,iptables,iptables status input,iptables,+iptables))
+$(eval $(call BuildPlugin,irq,interrupt usage input,irq,))
+$(eval $(call BuildPlugin,load,system load input,load,))
+$(eval $(call BuildPlugin,logfile,log files output,logfile,))
+$(eval $(call BuildPlugin,mysql,MySQL status input,mysql,+libmysqlclient))
+$(eval $(call BuildPlugin,memory,physical memory usage input,memory,))
+$(eval $(call BuildPlugin,netlink,netlink input,netlink,+ip))
+$(eval $(call BuildPlugin,network,network input/output,network))
+$(eval $(call BuildPlugin,nginx,nginx status input,nginx,+libcurl))
+$(eval $(call BuildPlugin,ntpd,NTP daemon status input,ntpd,))
+$(eval $(call BuildPlugin,nut,UPS monitoring input,nut,@BROKEN))
+$(eval $(call BuildPlugin,ping,ping status input,ping,+liboping))
+$(eval $(call BuildPlugin,powerdns,PowerDNS server status input,powerdns,))
+$(eval $(call BuildPlugin,processes,process status input,processes,))
+$(eval $(call BuildPlugin,rrdtool,RRDtool output,rrdtool,+librrd1))
+$(eval $(call BuildPlugin,sensors,lm_sensors input,sensors,+libsensors @BROKEN))
+$(eval $(call BuildPlugin,snmp,SNMP input,snmp,+libnetsnmp))
+$(eval $(call BuildPlugin,syslog,syslog output,syslog,))
+$(eval $(call BuildPlugin,tail,tail input,tail,))
+$(eval $(call BuildPlugin,teamspeak2,TeamSpeak2 input,teamspeak2,))
+$(eval $(call BuildPlugin,tcpconns,TCP connection tracking input,tcpconns,))
+$(eval $(call BuildPlugin,unixsock,unix socket output,unixsock,))
+$(eval $(call BuildPlugin,users,user logged in status input,users,))
+$(eval $(call BuildPlugin,vmem,virtual memory usage input,vmem,))
+$(eval $(call BuildPlugin,wireless,wireless status input,wireless,))
