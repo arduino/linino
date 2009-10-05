@@ -9,11 +9,11 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=xtables-addons
-PKG_VERSION:=1.17
+PKG_VERSION:=1.18
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=eca2e3f4f4904814e3a301539876fae6
+PKG_MD5SUM:=5a8d2edbf5a3470bba58d6a60c350805
 PKG_SOURCE_URL:=@SF/xtables-addons
 PKG_BUILD_DEPENDS:=iptables
 
@@ -23,7 +23,7 @@ define Package/xtables-addons
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Extensions not distributed in the main Xtables
-  URL:=http://jengelh.medozas.de/projects/xtables/
+  URL:=http://xtables-addons.sourceforge.net/
 endef
 
 define Package/ipset
