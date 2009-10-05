@@ -1,6 +1,5 @@
-diff -urN liboil-0.3.15.new/liboil.pc.in liboil-0.3.15/liboil.pc.in
---- liboil-0.3.15.new/liboil.pc.in	2007-11-16 03:53:47.000000000 +0100
-+++ liboil-0.3.15/liboil.pc.in	2008-08-06 22:29:19.000000000 +0200
+--- a/liboil.pc.in
++++ b/liboil.pc.in
 @@ -1,7 +1,7 @@
  prefix=@prefix@
  exec_prefix=@exec_prefix@
@@ -10,7 +9,7 @@ diff -urN liboil-0.3.15.new/liboil.pc.in liboil-0.3.15/liboil.pc.in
  toolsdir=${exec_prefix}/bin
  
  
-@@ -9,6 +9,6 @@
+@@ -9,6 +9,6 @@ Name: liboil-@LIBOIL_MAJORMINOR@
  Description: Library of Optimized Inner Loops
  Version: @VERSION@
  Libs: -L${libdir} -loil-@LIBOIL_MAJORMINOR@ @LIBM@ @LIBRT@

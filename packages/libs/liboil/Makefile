@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=liboil
-PKG_VERSION:=0.3.15
+PKG_VERSION:=0.3.16
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://liboil.freedesktop.org/download/
-PKG_MD5SUM:=11dd39b1ca13ce2e0618d4df8303f137
+PKG_MD5SUM:=febb1d9f9bc4c440fcf622dc90f8b6b7
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
