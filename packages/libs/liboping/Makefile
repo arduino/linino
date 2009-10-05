@@ -8,23 +8,35 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=liboping
-PKG_VERSION:=1.3.2
+PKG_VERSION:=1.3.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://verplant.org/liboping/files
-PKG_MD5SUM:=f549c6f1f4d1dbef4dc7cc823badc20b
+PKG_MD5SUM:=4ead44ef797dc557106fdc91aa61bd97
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
+define Package/liboping/Default
+  URL:=http://verplant.org/liboping/
+endef
+
 define Package/liboping
+$(call Package/liboping/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=liboping is a C library to generate ICMP echo requests.
-  URL:=http://verplant.org/liboping/
+  TITLE:=C library to generate ICMP echo requests.
+endef
+
+define Package/oping
+$(call Package/liboping/Default)
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=Send ICMP echo request to network hosts
+  DEPENDS+= +liboping
 endef
 
 
@@ -48,9 +60,15 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liboping.{a,so*} $(1)/usr/lib/
 endef
 
-define Package/liboping/install	
+define Package/liboping/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liboping.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liboping.so.* $(1)/usr/lib/
+endef
+
+define Package/oping/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/oping $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,liboping))
+$(eval $(call BuildPackage,oping))
