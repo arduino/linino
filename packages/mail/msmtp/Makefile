@@ -9,13 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=msmtp
-PKG_VERSION:=1.4.17
-PKG_RELEASE:=3
+PKG_VERSION:=1.4.18
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/msmtp
+PKG_MD5SUM:=74f80b41c058a0ee34819d6bf5ff3b1a
 
-PKG_MD5SUM:=b0b74f1144812b60688f590c62a0d3dd
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -91,6 +92,7 @@ endef
 endef
 
 CONFIGURE_ARGS += \
+	--disable-rpath \
 	--without-libssl32 \
 	--without-libintl \
 	--without-libgsasl \
