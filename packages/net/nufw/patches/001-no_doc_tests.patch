@@ -1,21 +1,23 @@
-diff -ruN nufw-2.2.17/Makefile.am nufw-2.2.17.new/Makefile.am
---- nufw-2.2.17/Makefile.am	2008-09-29 19:06:22.000000000 +0200
-+++ nufw-2.2.17.new/Makefile.am	2008-04-04 11:15:37.000000000 +0200
+Index: nufw-2.2.21/Makefile.am
+===================================================================
+--- nufw-2.2.21.orig/Makefile.am	2008-11-18 10:12:32.000000000 +0100
++++ nufw-2.2.21/Makefile.am	2009-10-05 20:26:45.000000000 +0200
 @@ -1,4 +1,4 @@
--SUBDIRS = src scripts doc tests conf python
-+SUBDIRS = src scripts conf python
+-SUBDIRS = src scripts doc tests conf python selinux
++SUBDIRS = src scripts conf python selinux
  
  PATCH_FILES = patches/dump-connection-mark.diff 
  EXTRA_DIST = autogen.sh $(PATCH_FILES)
-diff -ruN nufw-2.2.17/Makefile.in nufw-2.2.17.new/Makefile.in
---- nufw-2.2.17/Makefile.in	2008-09-29 19:06:34.000000000 +0200
-+++ nufw-2.2.17.new/Makefile.in	2008-09-24 11:25:21.000000000 +0200
+Index: nufw-2.2.21/Makefile.in
+===================================================================
+--- nufw-2.2.21.orig/Makefile.in	2009-02-03 22:46:54.000000000 +0100
++++ nufw-2.2.21/Makefile.in	2009-10-05 20:27:05.000000000 +0200
 @@ -193,7 +193,7 @@
  target_alias = @target_alias@
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
--SUBDIRS = src scripts doc tests conf python
-+SUBDIRS = src scripts conf python
+-SUBDIRS = src scripts doc tests conf python selinux
++SUBDIRS = src scripts conf python selinux
  PATCH_FILES = patches/dump-connection-mark.diff 
  EXTRA_DIST = autogen.sh $(PATCH_FILES)
  all: all-recursive

@@ -1,6 +1,8 @@
---- nufw-2.2.11/configure	2008-01-08 22:35:36.000000000 +0100
-+++ nufw-2.2.11.new/configure	2008-02-05 12:31:52.000000000 +0100
-@@ -20555,7 +20555,7 @@
+Index: nufw-2.2.21/configure
+===================================================================
+--- nufw-2.2.21.orig/configure	2009-02-03 22:46:52.000000000 +0100
++++ nufw-2.2.21/configure	2009-10-05 20:27:16.000000000 +0200
+@@ -12546,7 +12546,7 @@
  
    if test x$libgnutls_config_prefix != x ; then
       if test x${LIBGNUTLS_CONFIG+set} != xset ; then
