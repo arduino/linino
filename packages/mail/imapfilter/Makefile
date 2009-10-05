@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=imapfilter
-PKG_VERSION:=2.0.10
+PKG_VERSION:=2.0.11
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://imapfilter.hellug.gr/source/
-PKG_MD5SUM:=7a82c69a71105da185cb4dd7c57b01f7
+PKG_MD5SUM:=752a895a17754666a490bd445577309d
 
 include $(INCLUDE_DIR)/package.mk
 
