@@ -36,6 +36,8 @@ define Package/xsupplicant/conffiles
 /etc/xsupplicant.conf
 endef
 
+TARGET_CFLAGS += --std=gnu99
+
 CONFIGURE_ARGS+= \
 	--with-openssl="$(STAGING_DIR)/usr" \
 	--with-madwifi-path="$(STAGING_DIR)/usr/include/madwifi" \

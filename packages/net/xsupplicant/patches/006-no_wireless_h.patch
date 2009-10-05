@@ -1,46 +1,5 @@
-diff -urN xsupplicant-1.2.8/configure xsupplicant-1.2.8.new/configure
---- xsupplicant-1.2.8/configure	2009-05-12 15:12:47.000000000 +0200
-+++ xsupplicant-1.2.8.new/configure	2009-05-12 15:13:29.000000000 +0200
-@@ -4764,7 +4764,6 @@
-    #include <linux/types.h>
-    #include <linux/if.h>
-    #endif
--   #include <linux/wireless.h>
- 
- #include <$ac_header>
- _ACEOF
-@@ -4833,7 +4832,6 @@
- 		   #include <linux/types.h>
- 		   #include <linux/if.h>
- 		   #endif
--                   #include <linux/wireless.h>
-                    #include <iwlib.h>
- int
- main ()
-diff -urN xsupplicant-1.2.8/configure.in xsupplicant-1.2.8.new/configure.in
---- xsupplicant-1.2.8/configure.in	2009-05-12 15:12:47.000000000 +0200
-+++ xsupplicant-1.2.8.new/configure.in	2009-05-12 15:13:57.000000000 +0200
-@@ -123,8 +123,7 @@
-    #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,19)
-    #include <linux/types.h>
-    #include <linux/if.h>
--   #endif
--   #include <linux/wireless.h>])
-+   #endif])
- 
-    AC_MSG_CHECKING([iwlib version])
-    AC_TRY_COMPILE([#define HEADERS_KERNEL
-@@ -137,7 +136,6 @@
- 		   #include <linux/types.h>
- 		   #include <linux/if.h>
- 		   #endif
--                   #include <linux/wireless.h>
-                    #include <iwlib.h>], 
-                [iw_extract_event_stream(NULL, NULL, 0);], [AC_DEFINE(NEW_IWLIB) AC_MSG_RESULT([3 params])], [AC_MSG_RESULT([2 params])])
- fi
-diff -urN xsupplicant-1.2.8/src/cardif/linux/cardif_atmel_driver.c xsupplicant-1.2.8.new/src/cardif/linux/cardif_atmel_driver.c
---- xsupplicant-1.2.8/src/cardif/linux/cardif_atmel_driver.c	2009-05-12 15:12:47.000000000 +0200
-+++ xsupplicant-1.2.8.new/src/cardif/linux/cardif_atmel_driver.c	2009-05-12 15:14:30.000000000 +0200
+--- a/src/cardif/linux/cardif_atmel_driver.c
++++ b/src/cardif/linux/cardif_atmel_driver.c
 @@ -109,7 +109,6 @@
  #include <unistd.h>
  #include <errno.h>
@@ -49,9 +8,8 @@ diff -urN xsupplicant-1.2.8/src/cardif/linux/cardif_atmel_driver.c xsupplicant-1
  
  #ifdef USE_EFENCE
  #include <efence.h>
-diff -urN xsupplicant-1.2.8/src/cardif/linux/cardif_linux.c xsupplicant-1.2.8.new/src/cardif/linux/cardif_linux.c
---- xsupplicant-1.2.8/src/cardif/linux/cardif_linux.c	2009-05-12 15:12:47.000000000 +0200
-+++ xsupplicant-1.2.8.new/src/cardif/linux/cardif_linux.c	2009-05-12 15:14:40.000000000 +0200
+--- a/src/cardif/linux/cardif_linux.c
++++ b/src/cardif/linux/cardif_linux.c
 @@ -180,7 +180,6 @@
  #include <errno.h>
  #include <unistd.h>
@@ -60,25 +18,44 @@ diff -urN xsupplicant-1.2.8/src/cardif/linux/cardif_linux.c xsupplicant-1.2.8.ne
  
  #include "xsupconfig.h"
  #include "profile.h"
-diff -urN xsupplicant-1.2.8/src/cardif/linux/cardif_linux_rtnetlink.c xsupplicant-1.2.8.new/src/cardif/linux/cardif_linux_rtnetlink.c
---- xsupplicant-1.2.8/src/cardif/linux/cardif_linux_rtnetlink.c	2009-05-12 15:12:47.000000000 +0200
-+++ xsupplicant-1.2.8.new/src/cardif/linux/cardif_linux_rtnetlink.c	2009-05-12 15:14:47.000000000 +0200
-@@ -210,7 +210,6 @@
- #include <linux/if.h>
+--- a/src/cardif/linux/cardif_linux_rtnetlink.c
++++ b/src/cardif/linux/cardif_linux_rtnetlink.c
+@@ -207,10 +207,8 @@
+ #include <sys/ioctl.h>
+ #include "netlink.h"
+ #include "rtnetlink.h"
+-#include <linux/if.h>
  #include <linux/if_packet.h>
  #include <math.h>
 -#include <linux/wireless.h>
  
  #include "profile.h"
  #include "xsupconfig.h"
-diff -urN xsupplicant-1.2.8/src/cardif/linux/cardif_linux_wext.c xsupplicant-1.2.8.new/src/cardif/linux/cardif_linux_wext.c
---- xsupplicant-1.2.8/src/cardif/linux/cardif_linux_wext.c	2009-05-12 15:12:47.000000000 +0200
-+++ xsupplicant-1.2.8.new/src/cardif/linux/cardif_linux_wext.c	2009-05-12 15:14:58.000000000 +0200
-@@ -204,7 +204,6 @@
+--- a/src/cardif/linux/cardif_linux_wext.c
++++ b/src/cardif/linux/cardif_linux_wext.c
+@@ -203,7 +203,6 @@
+ #include <netinet/in.h>
  #include <linux/types.h>
  #include <linux/socket.h>
- #include <linux/if.h>
 -#include <linux/wireless.h>
  #include <iwlib.h>
  #include <linux/if_packet.h>
  #include <linux/netlink.h>
+--- a/configure
++++ b/configure
+@@ -4759,7 +4759,6 @@ cat >>conftest.$ac_ext <<_ACEOF
+    #ifndef __user
+    #define __user
+    #endif
+-   #include <linux/wireless.h>
+ 
+ #include <$ac_header>
+ _ACEOF
+@@ -4823,7 +4822,6 @@ cat >>conftest.$ac_ext <<_ACEOF
+ 		   #ifndef __user
+ 		   #define __user
+ 		   #endif
+-                   #include <linux/wireless.h>
+                    #include <iwlib.h>
+ int
+ main ()
