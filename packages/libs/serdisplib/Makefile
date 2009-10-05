@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=serdisplib
-PKG_VERSION:=1.97.7
+PKG_VERSION:=1.97.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/serdisplib
-PKG_MD5SUM:=ae6ca7c14ca92b0fc9dbb5df4a05a4c7
+PKG_MD5SUM:=2aa91c43d01d2dfc9fbc1116e3063ae1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,12 +30,9 @@ define Package/serdisplib/description
 	with built-in controllers.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-	)
-endef
+CONFIGURE_ARGS+= \
+	--enable-shared \
+	--enable-static \
 
 TARGET_CFLAGS += $(FPIC)
 
