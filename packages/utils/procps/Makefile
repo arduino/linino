@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=procps
-PKG_VERSION:=3.2.7
+PKG_VERSION:=3.2.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://procps.sourceforge.net
-PKG_MD5SUM:=f490bca772b16472962c7b9f23b1e97d
+PKG_MD5SUM:=9532714b6846013ca9898984ba4cd7e0
 
 include $(INCLUDE_DIR)/package.mk
 
