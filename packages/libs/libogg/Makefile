@@ -10,14 +10,15 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=libogg
 PKG_VERSION:=1.1.4
 PKG_RELEASE:=2
+
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.xiph.org/releases/ogg/
-PKG_FIXUP:=libtool
 PKG_MD5SUM:=10200ec22543841d9d1c23e0aed4e5e9
 
-include $(INCLUDE_DIR)/package.mk
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
-PKG_INSTALL=1
+include $(INCLUDE_DIR)/package.mk
 
 define Package/libogg
   SECTION:=libs
@@ -47,7 +48,7 @@ endef
 
 define Package/libogg/install
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libogg))
