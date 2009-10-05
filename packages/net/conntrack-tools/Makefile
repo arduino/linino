@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=conntrack-tools
-PKG_VERSION:=0.9.12
+PKG_VERSION:=0.9.13
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.netfilter.org/projects/conntrack-tools/files/
-PKG_MD5SUM:=a082eb2354d12250a3f81363440b73f3
+PKG_MD5SUM:=bd0e2149a1626071db83c4f9714e0556
 
 PKG_FIXUP:=libtool
 

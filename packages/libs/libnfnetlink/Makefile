@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libnfnetlink
-PKG_VERSION:=0.0.41
+PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnfnetlink/ \
 	http://mirrors.evolva.ro/netfilter.org/libnfnetlink/
-PKG_MD5SUM:=5d844ea1f557bad0364d5b85cd10c796
+PKG_MD5SUM:=016fdec8389242615024c529acc1adb8
 
 include $(INCLUDE_DIR)/package.mk
 

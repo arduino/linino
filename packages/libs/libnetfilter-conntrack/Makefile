@@ -8,11 +8,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libnetfilter_conntrack
-PKG_VERSION:=0.0.99
+PKG_VERSION:=0.0.100
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnetfilter_conntrack/
-PKG_MD5SUM:=960c3d347d7f4e3fe7437aa198f36e6e
+PKG_MD5SUM:=c047cea509621cf2abed0718cb210972
 
 include $(INCLUDE_DIR)/package.mk
 
