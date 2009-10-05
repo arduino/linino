@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nbd
-PKG_VERSION:=2.9.11
+PKG_VERSION:=2.9.13
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/nbd
-PKG_MD5SUM:=7fdd912edba85b82f599e17449ccea40
+PKG_MD5SUM:=6c83f0f5bfd87ea60f10223843bd9679
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -31,21 +31,17 @@ define Package/nbd/description
   This package contains the network block device client.
 endef
 
-CONFIGURE_ARGS += \
+CONFIGURE_ARGS+= \
 	--disable-glibtest
-CONFIGURE_VARS += GLIB_CFLAGS="-I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include"
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		CPPFLAGS="$(TARGET_CPPFLAGS) -L$(STAGING_DIR)/usr/lib/libintl/lib/ $(TARGET_LDFLAGS)" \
 		nbd-client
 endef
 
 define Package/nbd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/nbd-client $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/nbd-client $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,nbd))
