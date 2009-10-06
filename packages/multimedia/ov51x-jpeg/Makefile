@@ -39,7 +39,7 @@ define KernelPackage/video-ov51x-jpeg
 $(call Package/ov51x-jpeg/Default)
   SUBMENU:=Video Support
   TITLE:=OV51x based USB webcam support (JPEG)
-  DEPENDS:=@LINUX_2_6 @!LINUX_2_6_30 @USB_SUPPORT +kmod-usb-core +kmod-video-core
+  DEPENDS:=@LINUX_2_6_25||LINUX_2_6_27||LINUX_2_6_28 @USB_SUPPORT +kmod-usb-core +kmod-video-core
   FILES:=$(PKG_BUILD_DIR)/ov51x-jpeg.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,70,ov51x-jpeg)
 endef

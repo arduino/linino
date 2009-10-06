@@ -22,7 +22,7 @@ define KernelPackage/video-nw8xx
   SUBMENU:=Video Support
   TITLE:=NW8xx based USB webcam support
   URL:=http://nw802.sourceforge.net/
-  DEPENDS:=@LINUX_2_6 @USB_SUPPORT +kmod-usb-video +kmod-video-core
+  DEPENDS:=@LINUX_2_6_25||LINUX_2_6_27||LINUX_2_6_28 @USB_SUPPORT +kmod-usb-video +kmod-video-core
   FILES:=$(PKG_BUILD_DIR)/nw8xx.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,70,nw8xx)
 endef
