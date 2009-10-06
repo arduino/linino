@@ -19,82 +19,67 @@ PKG_SOURCE_URL:= \
 	ftp://ftp.sunet.se/pub/network/monitoring/rrdtool/rrdtool-1.0.x
 PKG_MD5SUM:=c466e2e7df95fa8e318e46437da87686
 
+PKG_FIXUP:=libtool
+
 include $(INCLUDE_DIR)/package.mk
 
+define Package/rrdtool1/Default
+  TITLE:=Round Robin Database (RRD)
+  URL:=http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/
+endef
+
+define Package/rrdtool1/description/Default
+ RRD is the Acronym for Round Robin Database. RRD is a system to store and
+ display time-series data (i.e. network bandwidth, machine-room temperature,
+ server load average). It stores the data in a very compact way that will
+ not expand over time, and it presents useful graphs by processing the data
+ to enforce a certain data density. It can be used either via simple wrapper
+ scripts (from shell or Perl) or via frontends that poll network devices and
+ put friendly user interface on it.
+
+ This is version 1.0.x with cgilib-0.4, gd1.3 and libpng-1.0.9 linked into
+ librrd.so. The library is much smaller compared to the 1.2.x version with
+ separate dynamic linked libraries.
+endef
+
 define Package/librrd1
+$(call Package/rrdtool1/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=+zlib
-  TITLE:=Round Robin Database (RRD) management library
-  URL:=http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/
+  TITLE+= management library
 endef
 
 define Package/librrd1/description
-Round Robin Database (RRD) management library.
-	RRD is the Acronym for Round Robin Database. RRD is a system to store and
-	display time-series data (i.e. network bandwidth, machine-room temperature,
-	server load average). It stores the data in a very compact way that will
-	not expand over time, and it presents useful graphs by processing the data
-	to enforce a certain data density. It can be used either via simple wrapper
-	scripts (from shell or Perl) or via frontends that poll network devices and
-	put friendly user interface on it.
-
-	This is version 1.0.x with cgilib-0.4, gd1.3 and libpng-1.0.9 linked into
-	librrd.so. The library is much smaller compared to the 1.2.x version with
-	separate dynamic linked libraries.
-
-	This package contains a shared library, used by other programs.
+$(call Package/rrdtool1/description/Default)
+ This package contains a shared library, used by other programs.
 endef
 
 define Package/rrdcgi1
+$(call Package/rrdtool1/Default)
   SECTION:=utils
   CATEGORY:=Utilities
   DEPENDS:=+librrd1
-  TITLE:=Round Robin Database (RRD) CGI graphing tool
-  URL:=http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/
+  TITLE+= CGI graphing tool
 endef
 
 define Package/rrdcgi1/description
-Round Robin Database (RRD) CGI graphing tool.
-	RRD is the Acronym for Round Robin Database. RRD is a system to store and
-	display time-series data (i.e. network bandwidth, machine-room temperature,
-	server load average). It stores the data in a very compact way that will
-	not expand over time, and it presents useful graphs by processing the data
-	to enforce a certain data density. It can be used either via simple wrapper
-	scripts (from shell or Perl) or via frontends that poll network devices and
-	put friendly user interface on it.
-
-	This is version 1.0.x with cgilib-0.4, gd1.3 and libpng-1.0.9 linked into
-	librrd.so. The library is much smaller compared to the 1.2.x version with
-	separate dynamic linked libraries.
-
-	This package contains the rrdcgi tool used to create web pages containing
-	RRD graphs based on templates.
+$(call Package/rrdtool1/description/Default)
+ This package contains the rrdcgi tool used to create web pages containing
+ RRD graphs based on templates.
 endef
 
 define Package/rrdtool1
+$(call Package/rrdtool1/Default)
   SECTION:=utils
   CATEGORY:=Utilities
   DEPENDS:=+librrd1
-  TITLE:=Round Robin Database (RRD) management tools
-  URL:=http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/
+  TITLE+= management tools
 endef
 
 define Package/rrdtool1/description
-Round Robin Database (RRD) management tools.
-	RRD is the Acronym for Round Robin Database. RRD is a system to store and
-	display time-series data (i.e. network bandwidth, machine-room temperature,
-	server load average). It stores the data in a very compact way that will
-	not expand over time, and it presents useful graphs by processing the data
-	to enforce a certain data density. It can be used either via simple wrapper
-	scripts (from shell or Perl) or via frontends that poll network devices and
-	put friendly user interface on it.
-
-	This is version 1.0.x with cgilib-0.4, gd1.3 and libpng-1.0.9 linked into
-	librrd.so. The library is much smaller compared to the 1.2.x version with
-	separate dynamic linked libraries.
-
-	This package contains command line tools used to manage RRDs.
+$(call Package/rrdtool1/description/Default)
+ This package contains command line tools used to manage RRDs.
 endef
 
 TARGET_CFLAGS += $(FPIC) --std=c99
@@ -124,12 +109,12 @@ endef
 
 define Package/rrdtool1/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rrd{tool,update} $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrd{tool,update} $(1)/usr/bin/
 endef
 
 define Package/rrdcgi1/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rrdcgi $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rrdcgi $(1)/usr/bin/
 endef
 
 define Package/librrd1/install
@@ -138,10 +123,10 @@ define Package/librrd1/install
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/rrd.h $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd.{a,so*} $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/rrdtool-1.0/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/rrd.h $(1)/usr/lib/rrdtool-1.0/include/
+	$(INSTALL_DIR)  $(1)/usr/lib/rrdtool-1.0/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd.{a,so*} $(1)/usr/lib/rrdtool-1.0/lib/
 endef
 
 $(eval $(call BuildPackage,librrd1))
