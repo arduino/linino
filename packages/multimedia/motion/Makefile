@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,20 +8,20 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=motion
-PKG_VERSION:=3.2.10.1
+PKG_VERSION:=3.2.11.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.lavrsen.dk/sources/motion-daily \
 		@SF/motion
-PKG_MD5SUM:=5ffdc958313345c69d3e0d5ec5c013cd
+PKG_MD5SUM:=4e729f129d8f9b9abaed5121c3cd0037
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/motion
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+libjpeg
+  DEPENDS:=+libjpeg +libpthread
   TITLE:=webcam motion sensing and logging
   URL:=http://www.lavrsen.dk/twiki/bin/view/Motion/WebHome
 endef
@@ -30,14 +30,11 @@ define Package/motion/conffiles
 /etc/motion.conf
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--without-ffmpeg \
-		--without-jpeg-mmx \
-		--without-mysql \
-		--without-pgsql \
-	)
-endef
+CONFIGURE_ARGS+= \
+	--without-ffmpeg \
+	--without-jpeg-mmx \
+	--without-mysql \
+	--without-pgsql \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \

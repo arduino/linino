@@ -1,14 +1,14 @@
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -32,6 +32,7 @@
+@@ -31,6 +31,7 @@ examplesdir = $(datadir)/@PACKAGE_NAME@-
+ # install.                                                                     #
  ################################################################################
- CFLAGS       = @CFLAGS@ -Wall -DVERSION=\"@PACKAGE_VERSION@\"  \
- 	       -Dsysconfdir=\"$(sysconfdir)\" -Ddocdir=\"$(docdir)\"
+ CFLAGS       = @CFLAGS@ -Wall -DVERSION=\"@PACKAGE_VERSION@\" -Dsysconfdir=\"$(sysconfdir)\" 
 +CPPFLAGS     = @CPPFLAGS@
  LDFLAGS      = @LDFLAGS@
  LIBS         = @LIBS@ 
  VIDEO_OBJ    = @VIDEO@
-@@ -119,7 +120,7 @@
+@@ -118,7 +119,7 @@ endif
  ################################################################################
  $(DEPEND_FILE): *.h $(SRC)
  	@echo "Generating dependencies, please wait..."
