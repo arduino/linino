@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeradius2
-PKG_VERSION:=2.1.4
+PKG_VERSION:=2.1.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=freeradius-server-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/freeradius/
-PKG_MD5SUM:=ba1fd573222ed5c8bead1cce1383a7a9
+PKG_MD5SUM:=b8df6cf0c3df1dded205ad5f954feb78
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/freeradius-server-$(PKG_VERSION)
 
@@ -295,6 +295,8 @@ CONFIGURE_ARGS+= \
 	--with-threads \
 	--with-openssl-includes="$(STAGING_DIR)/usr/include" \
 	--with-openssl-libraries="$(STAGING_DIR)/usr/lib" \
+	--with-system-libtool \
+	--with-system-libltdl \
 	--enable-strict-dependencies \
 	--with-raddbdir=/etc/freeradius2 \
 	--with-radacctdir=/var/db/radacct \
