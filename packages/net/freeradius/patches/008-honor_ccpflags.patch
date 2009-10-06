@@ -1,8 +1,6 @@
-Index: freeradius-1.1.6/src/modules/rules.mak
-===================================================================
---- freeradius-1.1.6.orig/src/modules/rules.mak	2007-07-30 14:17:42.000000000 -0500
-+++ freeradius-1.1.6/src/modules/rules.mak	2007-07-30 14:17:43.000000000 -0500
-@@ -62,10 +62,10 @@
+--- a/src/modules/rules.mak
++++ b/src/modules/rules.mak
+@@ -62,10 +62,10 @@ $(LT_OBJS): $(SERVER_HEADERS)
  #
  #######################################################################
  %.lo: %.c

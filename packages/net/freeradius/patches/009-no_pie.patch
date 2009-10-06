@@ -1,8 +1,6 @@
-Index: freeradius-1.1.6/src/main/Makefile.in
-===================================================================
---- freeradius-1.1.6.orig/src/main/Makefile.in	2007-07-30 14:17:42.000000000 -0500
-+++ freeradius-1.1.6/src/main/Makefile.in	2007-07-30 14:17:43.000000000 -0500
-@@ -61,7 +61,7 @@
+--- a/src/main/Makefile.in
++++ b/src/main/Makefile.in
+@@ -61,7 +61,7 @@ $(SERVER_OBJS): $(INCLUDES)
  
  radiusd: $(SERVER_OBJS) $(MODULE_OBJS) ../lib/libradius.la
  	$(LIBTOOL) --mode=link $(CC) -export-dynamic -dlopen self \
