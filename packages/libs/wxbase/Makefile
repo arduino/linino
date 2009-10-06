@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wxbase
-PKG_VERSION:=2.8.7
-PKG_RELEASE:=3
+PKG_VERSION:=2.8.10
+PKG_RELEASE:=1
 
 PKG_SOURCE:=wxGTK-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/wxwindows
-PKG_MD5SUM:=b25e85eeee524903214ebb520753f4bd
+PKG_MD5SUM:=88b867bc118a183af56efc67014bdf27
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/wxGTK-$(PKG_VERSION)
 
@@ -106,11 +106,11 @@ CONFIGURE_ARGS+= \
 UNICODE=yes
 
 ifeq ($(UNICODE),yes)
-CONFIGURE_ARGS += --enable-unicode
-LIB_PFX:=u
+  CONFIGURE_ARGS+= --enable-unicode
+  LIB_PFX:=u
 else
-CONFIGURE_ARGS += --disable-unicode
-LIB_PFX:=
+  CONFIGURE_ARGS+= --disable-unicode
+  LIB_PFX:=
 endif
 
 define Build/Compile
