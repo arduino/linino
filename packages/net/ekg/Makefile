@@ -24,20 +24,30 @@ define Package/ekg
   DEPENDS:=+zlib +libncurses
 endef
 
-CONFIGURE_ARGS += \
+CONFIGURE_ARGS+= \
 	--without-c99-vsnprintf \
-	--without-libungif \
+	--without-bind \
+	--without-libgsm \
 	--without-libjpeg \
+	--without-libungif \
 	--without-openssl \
 	--disable-libgadu-openssl \
 	--enable-ui-ncurses \
 	--disable-ui-readline \
-	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
-	CFLAGS_LIBGADU="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include"
+
+CONFIGURE_VARS+= \
+	CFLAGS="$$$$CFLAGS $(TARGET_CPPFLAGS)" \
+	CFLAGS_LIBGADU="$$$$CFLAGS $(TARGET_CPPFLAGS)" \
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
+endef
 
 define Package/ekg/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/src/ekg $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ekg $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,ekg))
