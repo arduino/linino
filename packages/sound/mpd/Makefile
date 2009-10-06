@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpd
-PKG_VERSION:=0.15.1
-PKG_RELEASE:=2
+PKG_VERSION:=0.15.4
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/musicpd
-PKG_MD5SUM:=eec9f5642d4a9c59a0df0a458def3505
+PKG_MD5SUM:=addbbcbbf8a24a2ce80db1ba5a1f91ca
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,8 +35,22 @@ define Package/mpd/conffiles
 /etc/mpd.conf
 endef
 
-ifndef CONFIG_PACKAGE_kmod-sound-core
-	EXTRA_CONFIG_PARAM:=--disable-alsa
+CONFIGURE_ARGS+= \
+	--disable-audiofile \
+	--disable-mpc \
+	--disable-aac \
+	--disable-lsr \
+	--disable-ao \
+	--disable-mvp \
+	--disable-lametest \
+	--disable-lame-encoder \
+	--enable-flac \
+	--enable-lastfm \
+	--enable-mms \
+	--with-tremor="$(STAGING_DIR)/usr/lib" \
+
+ifeq ($(CONFIG_PACKAGE_kmod-sound-core),)
+	CONFIGURE_ARGS+= --disable-alsa
 endif
 
 CONFIGURE_VARS += \
@@ -52,24 +66,6 @@ CONFIGURE_VARS += \
 	OGGVORBIS_CFLAGS="$(TARGET_CPPFLAGS)" \
 	GLIB_CFLAGS="-I$(STAGING_DIR)/usr/include/glib-2.0 -I$(STAGING_DIR)/usr/lib/glib-2.0/include" \
 	GLIB_LIBS="$(TARGET_LDLFAGS) -L$(STAGING_DIR)/usr/lib/libintl/lib -lintl -L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv -lglib-2.0 -lgthread-2.0 -pthread"
-
-define Build/Configure
-	$(call Build/Configure/Default, \
-		$(EXTRA_CONFIG_PARAM) \
-		--disable-audiofile \
-		--disable-mpc \
-		--disable-aac \
-		--disable-lsr \
-		--disable-ao \
-		--disable-mvp \
-		--disable-lametest \
-		--disable-lame-encoder \
-		--enable-flac \
-		--enable-lastfm \
-		--enable-mms \
-		--with-tremor="$(STAGING_DIR)/usr/lib" \
-	)
-endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
