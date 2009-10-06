@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mc
-PKG_VERSION:=4.6.1
-PKG_RELEASE:=2
+PKG_VERSION:=4.6.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.ibiblio.org/pub/Linux/utils/file/managers/mc/
-PKG_MD5SUM:=18b20db6e40480a53bac2870c56fc3c4
-
-PKG_BUILD_DEPENDS:=glib1 libncurses
+PKG_SOURCE_URL:=http://www.midnight-commander.org/downloads/
+PKG_MD5SUM:=ec92966f4d0c8b50c344fe901859ae2a
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -24,7 +22,7 @@ define Package/mc
   CATEGORY:=Utilities
   DEPENDS:=+glib1 +libncurses
   TITLE:=midnight commander - a powerful file manager
-  URL:=http://www.ibiblio.org/mc/
+  URL:=http://www.midnight-commander.org/
   SUBMENU:=filemanager
 endef
 
@@ -39,8 +37,6 @@ define Package/mc/description
 endef
 
 CONFIGURE_ARGS += \
-	--prefix=/usr \
-	--disable-nls \
 	--with-included-gettext \
 	--with-ncurses \
 	--without-sco \
@@ -66,13 +62,11 @@ CONFIGURE_ARGS += \
 	--disable-glibtest \
 	--with-glib12 \
 	--with-glib-prefix="$(STAGING_DIR)/usr" \
-	, \
-	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
 
 define Package/mc/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/mc $(1)/usr/bin
-	ln -sf mc $(1)/usr/bin/mcedit
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/mc $(1)/usr/bin/
+	ln -nsf mc $(1)/usr/bin/mcedit
 endef
 
 $(eval $(call BuildPackage,mc))
