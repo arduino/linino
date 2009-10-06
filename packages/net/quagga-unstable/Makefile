@@ -8,15 +8,20 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=quagga-unstable
-PKG_VERSION:=0.99.14
-PKG_RELEASE:=2
-PKG_MD5SUM:=3a075fd5e26ec6d52f4a51b14a2d3c2c
+PKG_VERSION:=0.99.15
+PKG_RELEASE:=1
 
+PKG_SOURCE:=quagga-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.quagga.net/download/ \
                 http://www.de.quagga.net/download/ \
                 http://www.uk.quagga.net/download/
-PKG_SOURCE:=quagga-$(PKG_VERSION).tar.gz
+PKG_MD5SUM:=8975414c76a295f4855a417af0b5ddce
+
 PKG_BUILD_DIR:=$(BUILD_DIR)/quagga-$(PKG_VERSION)
+
+PKG_CONFIG_DEPENDS:= \
+	CONFIG_PACKAGE_quagga-unstable-isisd \
+	CONFIG_PACKAGE_quagga-unstable-ripngd \
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -52,7 +57,7 @@ endef
 
 define Package/quagga-unstable-bgpd
   $(call Package/quagga-unstable/Default)
-  DEPENDS += quagga-unstable-libzebra
+  DEPENDS+= +quagga-unstable-libzebra
   TITLE:=BGPv4, BGPv4+, BGPv4- routing engine
 endef
 
@@ -63,47 +68,51 @@ endef
 
 define Package/quagga-unstable-ospfd
   $(call Package/quagga-unstable/Default)
-  DEPENDS += quagga-unstable-libospf quagga-unstable-libzebra
+  DEPENDS+= +quagga-unstable-libospf +quagga-unstable-libzebra
   TITLE:=OSPFv2 routing engine
 endef
 
 define Package/quagga-unstable-ospf6d
   $(call Package/quagga-unstable/Default)
-  DEPENDS += quagga-unstable-libospf quagga-unstable-libzebra @IPV6
+  DEPENDS+= +quagga-unstable-libospf +quagga-unstable-libzebra @IPV6
   TITLE:=OSPFv3 routing engine
 endef
 
 define Package/quagga-unstable-ripd
   $(call Package/quagga-unstable/Default)
-  DEPENDS += quagga-unstable-libzebra
+  DEPENDS+= +quagga-unstable-libzebra
   TITLE:=RIP routing engine
 endef
 
 define Package/quagga-unstable-ripngd
   $(call Package/quagga-unstable/Default)
-  DEPENDS += quagga-unstable-libzebra
+  DEPENDS+= +quagga-unstable-libzebra @BROKEN
   TITLE:=RIPNG routing engine
 endef
 
 define Package/quagga-unstable-vtysh
   $(call Package/quagga-unstable/Default)
-  DEPENDS += quagga-unstable-libzebra +libreadline +libncurses
+  DEPENDS+= quagga-unstable-libzebra +libreadline +libncurses
   TITLE:=integrated shell for Quagga routing software
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--localstatedir=/var/run/quagga \
-		--sysconfdir=/etc/quagga/ \
-		--enable-shared \
-		--disable-static \
-		--enable-vtysh \
-		--enable-user=quagga \
-		--enable-group=quagga \
-		--enable-multipath=8 \
-		--enable-isisd \
-	)
-endef
+CONFIGURE_ARGS+= \
+	--localstatedir=/var/run/quagga \
+	--sysconfdir=/etc/quagga/ \
+	--enable-shared \
+	--disable-static \
+	--enable-vtysh \
+	--enable-user=quagga \
+	--enable-group=quagga \
+	--enable-multipath=8 \
+
+ifneq ($(CONFIG_PACKAGE_quagga-unstable-isisd),)
+  CONFIGURE_ARGS+= --enable-isisd
+endif
+
+ifneq ($(CONFIG_PACKAGE_quagga-unstable-ripngd),)
+  CONFIGURE_ARGS+= --enable-ripngd
+endif
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -113,13 +122,13 @@ endef
 
 define Package/quagga-unstable/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/zebra $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/watchquagga $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/zebra $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/watchquagga $(1)/usr/sbin/
 	# avoid /etc being set to 0750
-	$(INSTALL_DIR) $(1)/etc/quagga/
-	chmod 0750 $(1)/etc/quagga/
+	$(INSTALL_DIR) $(1)/etc/quagga
+	chmod 0750 $(1)/etc/quagga
 	$(INSTALL_DATA) ./files/quagga.conf $(1)/etc/quagga/zebra.conf
-	$(INSTALL_DIR) $(1)/etc/init.d/
+	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/quagga $(1)/usr/sbin/quagga.init
 	$(INSTALL_BIN) ./files/quagga.init $(1)/etc/init.d/quagga
 endef
@@ -174,55 +183,55 @@ endef
 
 define Package/quagga-unstable-bgpd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/bgpd $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc/quagga/
-	chmod 0750 $(1)/etc/quagga/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/bgpd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/quagga
+	chmod 0750 $(1)/etc/quagga
 	$(INSTALL_DATA) ./files/quagga.conf $(1)/etc/quagga/bgpd.conf
 endef
 
 define Package/quagga-unstable-isisd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/isisd $(1)/usr/sbin
-	$(INSTALL_DIR) $(1)/etc/quagga/
-	chmod 0750 $(1)/etc/quagga/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/isisd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/quagga
+	chmod 0750 $(1)/etc/quagga
 	$(INSTALL_DATA) ./files/quagga.conf $(1)/etc/quagga/isisd.conf
 endef
 
 define Package/quagga-unstable-ospfd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ospfd $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc/quagga/
-	chmod 0750 $(1)/etc/quagga/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ospfd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/quagga
+	chmod 0750 $(1)/etc/quagga
 	$(INSTALL_DATA) ./files/quagga.conf $(1)/etc/quagga/ospfd.conf
 endef
 
 define Package/quagga-unstable-ospf6d/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ospf6d $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc/quagga/
-	chmod 0750 $(1)/etc/quagga/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ospf6d $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/quagga
+	chmod 0750 $(1)/etc/quagga
 	$(INSTALL_DATA) ./files/quagga.conf $(1)/etc/quagga/ospf6d.conf
 endef
 
 define Package/quagga-unstable-ripd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ripd $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc/quagga/
-	chmod 0750 $(1)/etc/quagga/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ripd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/quagga
+	chmod 0750 $(1)/etc/quagga
 	$(INSTALL_DATA) ./files/quagga.conf $(1)/etc/quagga/ripd.conf
 endef
 
 define Package/quagga-unstable-ripngd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ripngd $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc/quagga/
-	chmod 0750 $(1)/etc/quagga/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ripngd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/quagga
+	chmod 0750 $(1)/etc/quagga
 	$(INSTALL_DATA) ./files/quagga.conf $(1)/etc/quagga/ripngd.conf
 endef
 
 define Package/quagga-unstable-vtysh/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/vtysh $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/vtysh $(1)/usr/bin/
 endef
 
 define Package/quagga-unstable-libospf/install
@@ -232,7 +241,7 @@ endef
 
 define Package/quagga-unstable-libzebra/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libzebra.so.* $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libzebra.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,quagga-unstable))

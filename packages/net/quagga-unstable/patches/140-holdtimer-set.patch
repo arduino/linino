@@ -1,6 +1,6 @@
 --- a/bgpd/bgp_network.c
 +++ b/bgpd/bgp_network.c
-@@ -185,8 +185,7 @@ bgp_accept (struct thread *thread)
+@@ -188,8 +188,7 @@ bgp_accept (struct thread *thread)
      peer->fd = bgp_sock;
      peer->status = Active;
      peer->local_id = peer1->local_id;
