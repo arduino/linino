@@ -33,6 +33,7 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-timelord \
 		--disable-a2boot \
+		--disable-cups \
 		--disable-tcp-wrappers \
 		--with-cnid-default-backend=dbd \
 		--with-bdb="$(STAGING_DIR)/usr/lib/db47/usr" \
