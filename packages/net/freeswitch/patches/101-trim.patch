@@ -1,0 +1,10 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -107,7 +107,6 @@ src/switch_config.c\
+ src/switch_time.c\
+ src/switch_odbc.c \
+ libs/stfu/stfu.c\
+-src/switch_cpp.cpp\
+ src/g711.c\
+ src/switch_pcm.c\
+ libs/libteletone/src/libteletone_detect.c\

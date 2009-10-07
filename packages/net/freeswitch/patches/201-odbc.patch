@@ -1,0 +1,25 @@
+--- a/build/config/odbc.m4
++++ b/build/config/odbc.m4
+@@ -112,12 +112,13 @@ AC_ARG_WITH(odbc-include,
+ 	fi])
+ 
+ 	if test "X$with_odbc" != "X"; then
+-	  if test "$with_odbc" != "yes"; then
+-	    ac_cv_odbc_where_lib=$with_odbc
++	  if test "$with_odbc" != "yes" -o "$with_odbc" != "no"; then
++	    ac_cv_odbc_where_lib=$with_odbc/lib
+ 	    ac_cv_odbc_where_inc=$with_odbc/include
+ 	  fi
+ 	fi
+ 
++	if test "$with_odbc" != "no"; then
+ 	if test "X$with_odbc_include" != "X"; then
+ 	  ac_cv_odbc_where_inc=$with_odbc_include
+ 	fi
+@@ -159,5 +160,6 @@ AC_ARG_WITH(odbc-include,
+ 	  AC_SUBST(ODBC_LIB_FLAGS)
+ 	  AC_DEFINE([HAVE_ODBC],[1],[libodbc])
+ 	fi
++	fi ## test "$with_odbc" != "no" ##
+ 	])
+ 
