@@ -4,13 +4,12 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# This Makefile is a skeleton
-#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nufw
 PKG_VERSION:=2.2.21
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.nufw.org/download/nufw/
