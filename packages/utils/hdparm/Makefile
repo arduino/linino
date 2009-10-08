@@ -8,18 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hdparm
-PKG_VERSION:=9.15
+PKG_VERSION:=9.27
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=0524dd10ad986285ff4eeb3507f7471c
+PKG_MD5SUM:=e652dabb6c9233fb8a23ef60a17a1829
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/hdparm
   SECTION:=utils
   CATEGORY:=Utilities
+  SUBMENU:=disc
   TITLE:=Hard disk drive configuration utilitity
   URL:=http://sourceforge.net/projects/hdparm/
 endef
