@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nvram-brcm47xx
-PKG_RELEASE:=5
+PKG_RELEASE:=5.2
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 

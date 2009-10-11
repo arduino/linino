@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=wprobe
-PKG_VERSION:=1.1
+PKG_VERSION:=1.2
 
 PKG_BUILD_DEPENDS:=PACKAGE_wprobe-export:libipfix
 
