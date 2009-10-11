@@ -33,6 +33,8 @@ static u32 gpiointmask = 0, gpiointval = 0;
 static inline void ar5315_gpio_irq(void)
 {
 	u32 pend;
+	u32 gpio;
+
 	sysRegWrite(AR5315_ISR, sysRegRead(AR5315_IMR) | ~AR5315_ISR_GPIO);
 
 	/* only do one gpio interrupt at a time */
@@ -40,7 +42,13 @@ static inline void ar5315_gpio_irq(void)
 	if (!pend)
 		return;
 
-	do_IRQ(AR531X_GPIO_IRQ_BASE + fls(pend) - 1);
+	gpio = fls(pend) - 1;
+
+	/* check if GPIO line is input */
+	if ((sysRegRead(AR5315_GPIO_CR) & (AR5315_GPIO_CR_M(gpio))) != AR5315_GPIO_CR_I(gpio))
+		return;
+
+	do_IRQ(AR531X_GPIO_IRQ_BASE + gpio);
 }
 
 
@@ -116,8 +124,9 @@ static void ar5315_gpio_intr_enable(unsigned int irq)
 	mask = 1 << gpio;
 	gpiointmask |= mask;
 
-	/* reconfigure GPIO line as input */
-	sysRegMask(AR5315_GPIO_CR, AR5315_GPIO_CR_M(gpio), AR5315_GPIO_CR_I(gpio));
+	/* check if GPIO line is input */
+	if ((sysRegRead(AR5315_GPIO_CR) & (AR5315_GPIO_CR_M(gpio))) != AR5315_GPIO_CR_I(gpio))
+		return;
 
 	/* Enable interrupt with edge detection */
 	sysRegMask(AR5315_GPIO_INT, AR5315_GPIO_INT_M | AR5315_GPIO_INT_LVL_M, gpio | AR5315_GPIO_INT_LVL(3));
@@ -138,6 +147,11 @@ static void ar5315_gpio_intr_disable(unsigned int irq)
 /* Turn on the specified AR531X_MISC_IRQ interrupt */
 static unsigned int ar5315_gpio_intr_startup(unsigned int irq)
 {
+	u32 gpio = irq - AR531X_GPIO_IRQ_BASE;
+
+	/* reconfigure GPIO line as input */
+	sysRegMask(AR5315_GPIO_CR, AR5315_GPIO_CR_M(gpio), AR5315_GPIO_CR_I(gpio));
+
 	ar5315_gpio_intr_enable(irq);
 	return 0;
 }
