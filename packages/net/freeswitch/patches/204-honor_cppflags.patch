@@ -1,0 +1,22 @@
+--- a/build/modmake.rules.in
++++ b/build/modmake.rules.in
+@@ -38,7 +38,7 @@ SOLINK = @SOLINK@
+ 
+ LDFLAGS=@SWITCH_AM_LDFLAGS@ @LDFLAGS@ $(OUR_LDFLAGS)
+ 
+-ALL_CFLAGS   = $(LOCAL_CFLAGS) $(MOD_CFLAGS) @SWITCH_AM_CFLAGS@ @CFLAGS@ -D_GNU_SOURCE $(OUR_CFLAGS)
++ALL_CFLAGS   = $(LOCAL_CFLAGS) $(MOD_CFLAGS) @SWITCH_AM_CFLAGS@ @CFLAGS@ @CPPFLAGS@ -D_GNU_SOURCE $(OUR_CFLAGS)
+ ALL_CXXFLAGS   = $(LOCAL_CFLAGS) $(MOD_CFLAGS) @SWITCH_AM_CXXFLAGS@ @CXXFLAGS@ -D_GNU_SOURCE $(OUR_CFLAGS)
+ 
+ COMPILE      = $(CC) $(ALL_CFLAGS) $(DEFS)
+--- a/libs/portaudio/Makefile.in
++++ b/libs/portaudio/Makefile.in
+@@ -16,7 +16,7 @@ bindir = @bindir@
+ libdir = @libdir@
+ includedir = @includedir@
+ CC = @CC@
+-CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src/common -I$(top_srcdir)/src/os/unix @CFLAGS@ @DEFS@
++CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src/common -I$(top_srcdir)/src/os/unix @CFLAGS@ @CPPFLAGS@ @DEFS@
+ LIBS = @LIBS@
+ AR = @AR@
+ RANLIB = @RANLIB@

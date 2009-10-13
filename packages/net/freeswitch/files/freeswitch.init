@@ -7,8 +7,8 @@ OPTIONS=""
 
 start() {
 	[ -f $DEFAULT ] && . $DEFAULT
-	mkdir -p $FS_DIR_LOG
 	mkdir -p $FS_DIR_DB
+	mkdir -p $FS_DIR_LOG
 	$FS_DIR/usr/bin/freeswitch $OPTIONS -c
 }
 

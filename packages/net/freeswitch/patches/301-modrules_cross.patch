@@ -1,0 +1,327 @@
+--- a/build/modmake.rules.in
++++ b/build/modmake.rules.in
+@@ -3,6 +3,10 @@
+ switch_builddir=@switch_builddir@
+ switch_srcdir=@switch_srcdir@
+ 
++build=@build@
++host=@host@
++target=$(host)
++
+ CC=@CC@
+ CXX=@CXX@
+ AWK=@AWK@
+@@ -36,6 +40,8 @@ DYNAMIC_LIB_EXTEN = @DYNAMIC_LIB_EXTEN@
+ LIBTOOL_LIB_EXTEN = @LIBTOOL_LIB_EXTEN@
+ SOLINK = @SOLINK@
+ 
++CFLAGS=@CFLAGS@
++CPPFLAGS=@CPPFLAGS@
+ LDFLAGS=@SWITCH_AM_LDFLAGS@ @LDFLAGS@ $(OUR_LDFLAGS)
+ 
+ ALL_CFLAGS   = $(LOCAL_CFLAGS) $(MOD_CFLAGS) @SWITCH_AM_CFLAGS@ @CFLAGS@ @CPPFLAGS@ -D_GNU_SOURCE $(OUR_CFLAGS)
+--- a/src/mod/applications/mod_curl/Makefile
++++ b/src/mod/applications/mod_curl/Makefile
+@@ -11,7 +11,9 @@ LOCAL_LIBADD=$(JSONLA)
+ 
+ include $(BASE)/build/modmake.rules
+ 
+-DEFAULT_ARGS=--prefix=$(PREFIX) --disable-shared --with-pic
++DEFAULT_ARGS:= --build=$(build) --host=$(host) --target=$(target)
++DEFAULT_ARGS+= --prefix=$(PREFIX) --disable-shared --with-pic
++DEFAULT_VARS:= CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" CC="$(CC)" CXX="$(CXX)"
+ 
+ $(LOCAL_OBJS): $(LOCAL_SOURCES)
+ 
+@@ -19,7 +21,7 @@ $(JSON_DIR):
+ 	$(GETLIB) $(json-c).tar.gz
+ 
+ $(JSON_DIR)/Makefile: $(JSON_DIR)
+-	cd $(JSON_DIR) && CFLAGS=$(AM_CFLAGS) CC=$(CC) CXX=$(CXX) ./configure --disable-shared --with-pic CPPFLAGS= LDFLAGS=
++	cd $(JSON_DIR) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS) 
+ 	$(TOUCH_TARGET)
+ 
+ $(JSONLA): $(JSON_DIR)/Makefile
+--- a/src/mod/asr_tts/mod_flite/Makefile
++++ b/src/mod/asr_tts/mod_flite/Makefile
+@@ -13,15 +13,21 @@ LOCAL_LIBADD=$(FLITE_A)
+ BASE=../../../..
+ include $(BASE)/build/modmake.rules
+ 
++DEFAULT_ARGS:= --build=$(build) --host=$(host) --target=$(target)
++DEFAULT_ARGS+= --prefix=$(PREFIX) --disable-shared --with-pic
++DEFAULT_ARGS+= --without-audio
++DEFAULT_VARS:= CFLAGS="$(subst -std=c99,,$(CFLAGS))" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" CC="$(CC)" CXX="$(CXX)"
++
+ $(FLITE_DIR):
+ 	$(GETLIB) $(FLITE)-latest.tar.gz
+ 
+ $(FLITE_DIR)/Makefile: $(FLITE_DIR)
+-	cd $(FLITE_DIR) && CFLAGS="`echo $(CFLAGS) | sed -e 's:-std=c99::'`" ./configure --without-audio --with-pic --disable-shared
++	cd $(FLITE_DIR) && cp -fp ../../build/config/config.sub . 
++	cd $(FLITE_DIR) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS) 
+ 	$(TOUCH_TARGET)
+ 
+ $(FLITE_A): $(FLITE_DIR) $(FLITE_DIR)/Makefile
+ 	cd $(FLITE_DIR) && $(MAKE)
+ 	test -d $(FLITE_LIBDIR) || mkdir $(FLITE_LIBDIR)
+-	cd $(FLITE_DIR) && FLITE_TMP_LIBDIR=`$(FLITE_DIR)/config.guess | sed "s/-[^-]*//" | sed "s/i[3456]86/i386/"` && cp build/$$FLITE_TMP_LIBDIR/lib/*.a $(FLITE_LIBDIR)
++	cd $(FLITE_DIR) && cp build/*/lib/*.a $(FLITE_LIBDIR)
+ 
+--- a/src/mod/directories/mod_ldap/Makefile
++++ b/src/mod/directories/mod_ldap/Makefile
+@@ -8,15 +8,18 @@ LIBLBERLA=$(LDAP_DIR)/libraries/liblber/
+ 
+ LOCAL_CFLAGS=-DWITH_OPENLDAP -DLDAP_DEPRECATED -I$(LDAP_DIR)/include
+ 
+-DEFAULT_ARGS=--prefix=$(PREFIX) --disable-shared --with-pic
+-
+ LOCAL_LIBADD=$(LDAPLA) $(LIBLBERLA)
+ 
+ include $(switch_srcdir)/build/modmake.rules
+ 
++DEFAULT_ARGS:= --build=$(build) --host=$(host) --target=$(target)
++DEFAULT_ARGS+= --prefix=$(PREFIX) --disable-shared --with-pic
++DEFAULT_ARGS+= --disable-bdb --disable-hdb --disable-slapd
++DEFAULT_VARS+= CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" CC="$(CC)" CXX="$(CXX)"
++
+ $(LDAP_DIR):
+ 	$(GETLIB) $(LDAP).tar.gz
+-	cd $(LDAP_DIR) && ./configure $(DEFAULT_ARGS) --disable-bdb --disable-hdb --disable-slapd
++	cd $(LDAP_DIR) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS)
+ 
+ $(LDAPLA) $(LIBLBERLA): $(LDAP_DIR)
+ 	cd $(LDAP_DIR) && $(MAKE)
+--- a/src/mod/codecs/mod_siren/Makefile
++++ b/src/mod/codecs/mod_siren/Makefile
+@@ -5,6 +5,10 @@ G722_1_LA=$(G722_1_DIR)/src/.libs/libg72
+ LOCAL_LIBADD=$(G722_1_LA)
+ include $(BASE)/build/modmake.rules
+ 
++DEFAULT_ARGS:= --build=$(build) --host=$(host) --target=$(target)
++DEFAULT_ARGS+= --prefix=$(PREFIX) --disable-shared --with-pic
++DEFAULT_VARS:= CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" CC="$(CC)" CXX="$(CXX)" 
++
+ $(G722_1_LA): $(G722_1_DIR)/.update	
+-	cd $(G722_1_DIR) && ./configure  --disable-shared --with-pic  && $(MAKE)
++	cd $(G722_1_DIR) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS) && $(MAKE)
+ 	$(TOUCH_TARGET)
+--- a/src/mod/languages/mod_yaml/Makefile
++++ b/src/mod/languages/mod_yaml/Makefile
+@@ -7,10 +7,15 @@ VERBOSE=1
+ 
+ include $(BASE)/build/modmake.rules
+ 
++DEFAULT_ARGS:= --build=$(build) --host=$(host) --target=$(target)
++DEFAULT_ARGS+= --prefix=$(PREFIX) --disable-shared --with-pic
++DEFAULT_ARGS+= --without-audio
++DEFAULT_VARS+= CFLAGS="$(AM_CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" CC="$(CC)" CXX="$(CXX)"
++
+ local_depend: $(LIBYAML_A)
+ 
+ $(LIBYAML_A):
+-	cd $(YAMLLIB) && ./configure $(DEFAULT_ARGS) --disable-shared --with-pic
++	cd $(YAMLLIB) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS) 
+ 	cd $(YAMLLIB) && $(MAKE)
+ 
+ yamlclean:
+--- a/src/mod/applications/mod_memcache/Makefile
++++ b/src/mod/applications/mod_memcache/Makefile
+@@ -12,7 +12,9 @@ LOCAL_LIBADD=$(MEMCACHEDLA)
+ 
+ include $(switch_srcdir)/build/modmake.rules
+ 
+-DEFAULT_ARGS=--prefix=$(PREFIX) --disable-shared --with-pic
++DEFAULT_ARGS:= --build=$(build) --host=$(host) --target=$(target)
++DEFAULT_ARGS+= --prefix=$(PREFIX) --disable-shared --with-pic
++DEFAULT_VARS:= CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" CC="$(CC)" CXX="$(CXX)"
+ 
+ $(LOCAL_OBJS): $(LOCAL_SOURCES)
+ 
+@@ -20,7 +22,7 @@ $(MEMCACHED_DIR):
+ 	$(GETLIB) $(MEMCACHED).tar.gz
+ 
+ $(MEMCACHED_DIR)/Makefile: $(MEMCACHED_DIR)
+-	cd $(MEMCACHED_DIR) && CFLAGS=$(AM_CFLAGS) CC=$(CC) CXX=$(CXX) ./configure --disable-shared --with-pic CPPFLAGS= LDFLAGS=
++	cd $(MEMCACHED_DIR) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS)
+ 	$(TOUCH_TARGET)
+ 
+ $(MEMCACHEDLA): $(MEMCACHED_DIR)/Makefile
+--- a/src/mod/applications/mod_soundtouch/Makefile
++++ b/src/mod/applications/mod_soundtouch/Makefile
+@@ -5,13 +5,16 @@ LA=$(DIRECTORY)/source/SoundTouch/.libs/
+ BASE=../../../..
+ LOCAL_CFLAGS += -I$(DIRECTORY)/include -DINTEGER_SAMPLES
+ LOCAL_LIBADD=$(LA)
+-DEFAULT_ARGS=--prefix=$(PREFIX) --disable-shared --with-pic
+ 
+ include $(BASE)/build/modmake.rules
+ 
++DEFAULT_ARGS:= --build=$(build) --host=$(host) --target=$(target)
++DEFAULT_ARGS+= --prefix=$(PREFIX) --disable-shared --with-pic
++DEFAULT_VARS:= CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" CC="$(CC)" CXX="$(CXX)"
++
+ $(DIRECTORY)/Makefile $(DIRECTORY)/config.status:
+ 	$(GETLIB) $(VERSION).tar.gz
+-	cd $(DIRECTORY) && ./configure $(DEFAULT_ARGS) --enable-integer-samples
++	cd $(DIRECTORY) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS) --enable-integer-samples
+ 	$(TOUCH_TARGET)
+ 
+ $(LA): $(DIRECTORY)/Makefile $(DIRECTORY)/config.status
+--- a/src/mod/asr_tts/mod_pocketsphinx/Makefile
++++ b/src/mod/asr_tts/mod_pocketsphinx/Makefile
+@@ -12,13 +12,19 @@ SPHINXMODEL=communicator_semi_6000_20080
+ LOCAL_CFLAGS=-I$(SPHINXBASE_DIR)/include -I$(POCKETSPHINX_DIR)/include
+ LOCAL_LIBADD=$(SPHINXBASE_LA) $(SPHINXBASE_LA2) $(POCKETSPHINX_LA) 
+ BASE=../../../..
++
+ include $(BASE)/build/modmake.rules
+ 
++DEFAULT_ARGS:= --build=$(build) --host=$(host) --target=$(target)
++DEFAULT_ARGS+= --prefix=$(PREFIX) --disable-shared --with-pic
++DEFAULT_ARGS+= --without-python
++DEFAULT_VARS:= CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" CC="$(CC)" CXX="$(CXX)"
++
+ $(SPHINXBASE_DIR):
+ 	$(GETLIB) $(SPHINXBASE)-latest.tar.gz
+ 
+ $(SPHINXBASE_DIR)/buildstamp: $(SPHINXBASE_DIR)
+-	test -f $(SPHINXBASE_DIR)/Makefile || (cd $(SPHINXBASE_DIR) && ./configure --with-pic --without-python --disable-shared CFLAGS=)
++	test -f $(SPHINXBASE_DIR)/Makefile || (cd $(SPHINXBASE_DIR) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS))
+ 	test -f $(SPHINXBASE_DIR)/buildstamp || (touch $(SPHINXBASE_DIR)/buildstamp)
+ 
+ $(SPHINXBASE_LA): $(SPHINXBASE_DIR)/buildstamp
+@@ -29,7 +35,7 @@ $(POCKETSPHINX_DIR):
+ 	$(GETLIB) $(POCKETSPHINX)-latest.tar.gz
+ 
+ $(POCKETSPHINX_DIR)/Makefile: $(POCKETSPHINX_DIR)
+-	cd $(POCKETSPHINX_DIR) && ./configure --with-pic --without-python --disable-shared --with-sphinxbase=$(SPHINXBASE_DIR) CFLAGS=
++	cd $(POCKETSPHINX_DIR) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS) --with-sphinxbase=$(SPHINXBASE_DIR)
+ 	$(TOUCH_TARGET)
+ 
+ $(POCKETSPHINX_DIR)/buildstamp: $(POCKETSPHINX_DIR)/Makefile
+--- a/src/mod/codecs/mod_celt/Makefile
++++ b/src/mod/codecs/mod_celt/Makefile
+@@ -8,11 +8,16 @@ CELT_LA=$(CELT_DIR)/libcelt/.libs/libcel
+ LOCAL_LIBADD=$(CELT_LA)
+ include $(BASE)/build/modmake.rules
+ 
++DEFAULT_ARGS:= --build=$(build) --host=$(host) --target=$(target)
++DEFAULT_ARGS+= --prefix=$(PREFIX) --disable-shared --with-pic
++DEFAULT_ARGS+= --without-ogg
++DEFAULT_VARS:= CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" CC="$(CC)" CXX="$(CXX)"
++
+ $(CELT_DIR):
+ 	$(GETLIB) $(CELT).tar.gz
+ 
+ $(CELT_DIR)/Makefile: $(CELT_DIR)
+-	cd $(CELT_DIR) && CFLAGS=$(AM_CFLAGS) ./configure --disable-shared --with-pic
++	cd $(CELT_DIR) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS)
+ 
+ $(CELT_LA): $(CELT_DIR)/Makefile
+ 	cd $(CELT_DIR) && $(MAKE)
+--- a/src/mod/event_handlers/mod_radius_cdr/Makefile
++++ b/src/mod/event_handlers/mod_radius_cdr/Makefile
+@@ -10,11 +10,15 @@ LOCAL_LIBADD=$(RADCLIENT_LA)
+ BASE=../../../..
+ include $(BASE)/build/modmake.rules
+ 
++DEFAULT_ARGS:= --build=$(build) --host=$(host) --target=$(target)
++DEFAULT_ARGS+= --prefix=$(PREFIX) --disable-shared --with-pic
++DEFAULT_VARS:= CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" CC="$(CC)" CXX="$(CXX)"
++
+ $(RADCLIENT_DIR):
+ 	$(GETLIB) $(RADCLIENT).tar.gz
+ 
+ $(RADCLIENT_DIR)/Makefile: $(RADCLIENT_DIR)
+-	cd $(RADCLIENT_DIR) && ./configure --disable-shared --with-pic
++	cd $(RADCLIENT_DIR) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS)
+ 	$(TOUCH_TARGET)
+ 
+ $(RADCLIENT_LA): $(RADCLIENT_DIR)/Makefile
+--- a/src/mod/event_handlers/mod_zeroconf/Makefile
++++ b/src/mod/event_handlers/mod_zeroconf/Makefile
+@@ -7,13 +7,15 @@ HOWLLA=$(HOWL_DIR)/src/lib/howl/libhowl.
+ LOCAL_CFLAGS=-I$(HOWL_DIR)/include
+ LOCAL_LIBADD=$(HOWLLA)
+ 
+-DEFAULT_ARGS=--prefix=$(PREFIX) --disable-shared --with-pic
+-
+ include $(switch_srcdir)/build/modmake.rules
+ 
++DEFAULT_ARGS:= --build=$(build) --host=$(host) --target=$(target)
++DEFAULT_ARGS+= --prefix=$(PREFIX) --disable-shared --with-pic
++DEFAULT_VARS:= CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" CC="$(CC)" CXX="$(CXX)"
++
+ $(HOWL_DIR):
+ 	$(GETLIB) $(HOWL).tar.gz
+-	cd $(HOWL_DIR) && ./configure $(DEFAULT_ARGS)
++	cd $(HOWL_DIR) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS)
+ 
+ $(HOWLLA): $(HOWL_DIR)
+ 	cd $(HOWL_DIR) && $(MAKE)
+--- a/src/mod/formats/mod_shout/Makefile
++++ b/src/mod/formats/mod_shout/Makefile
+@@ -22,7 +22,9 @@ LOCAL_SOURCES=$(MP3SOURCES)
+ 
+ include $(switch_srcdir)/build/modmake.rules
+ 
+-DEFAULT_ARGS=--prefix=$(PREFIX) --disable-shared --with-pic
++DEFAULT_ARGS:= --build=$(build) --host=$(host) --target=$(target)
++DEFAULT_ARGS+= --prefix=$(PREFIX) --disable-shared --with-pic
++DEFAULT_VARS:= CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" CC="$(CC)" CXX="$(CXX)"
+ 
+ $(LOCAL_OBJS): $(LOCAL_SOURCES)
+ 
+@@ -30,7 +32,7 @@ $(MPG123_DIR):
+ 	$(GETLIB) $(MPG123).tar.gz
+ 
+ $(MPG123_DIR)/Makefile: $(MPG123_DIR)
+-	cd $(MPG123_DIR) && CFLAGS=$(AM_CFLAGS) CC=$(CC) CXX=$(CXX) ./configure --disable-shared --with-pic CPPFLAGS= LDFLAGS=
++	cd $(MPG123_DIR) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS)
+ 	$(TOUCH_TARGET)
+ 
+ $(MPG123LA): $(MPG123_DIR)/Makefile
+@@ -41,7 +43,7 @@ $(LAME_DIR):
+ 	$(GETLIB) $(LAME).tar.gz
+ 
+ $(LAME_DIR)/Makefile: $(LAME_DIR)
+-	cd $(LAME_DIR) && CC=$(CC) CXX=$(CXX) ./configure $(DEFAULT_ARGS) --disable-decoder CPPFLAGS= LDFLAGS=
++	cd $(LAME_DIR) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS) --disable-decoder
+ 	$(TOUCH_TARGET)
+ 
+ $(LAMELA): $(LAME_DIR)/Makefile
+@@ -52,7 +54,7 @@ $(SHOUT_DIR):
+ 	$(GETLIB) $(SHOUT).tar.gz
+ 
+ $(SHOUT_DIR)/Makefile: $(SHOUT_DIR)
+-	cd $(SHOUT_DIR) && CC=$(CC) CXX=$(CXX) ./configure $(DEFAULT_ARGS) --without-speex --without-vorbis --without-ogg CPPFLAGS= LDFLAGS=
++	cd $(SHOUT_DIR) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS) --without-speex --without-vorbis --without-ogg
+ 	$(TOUCH_TARGET)
+ 
+ $(SHOUTLA): $(SHOUT_DIR)/Makefile
+--- a/src/mod/xml_int/mod_xml_ldap/Makefile
++++ b/src/mod/xml_int/mod_xml_ldap/Makefile
+@@ -9,16 +9,18 @@ LIBLUTILA=$(LDAP_DIR)/libraries/liblutil
+ 
+ LOCAL_CFLAGS=-DWITH_OPENLDAP -DLDAP_DEPRECATED -I$(LDAP_DIR)/include
+ 
+-DEFAULT_ARGS= --prefix=$(PREFIX) --disable-shared --with-pic --disable-slapd
+-DEFAULT_ARGS+= --disable-slurpd --disable-relay --disable-bdb --disable-hdb
+-
+ LOCAL_LIBADD=$(LDAPLA) $(LIBLBERLA) $(LIBLUTILA)
+ 
+ include $(switch_srcdir)/build/modmake.rules
+ 
++DEFAULT_ARGS:= --build=$(build) --host=$(host) --target=$(target)
++DEFAULT_ARGS+= --prefix=$(PREFIX) --disable-shared --with-pic --disable-slapd
++DEFAULT_ARGS+= --disable-slurpd --disable-relay --disable-bdb --disable-hdb
++DEFAULT_VARS:= CFLAGS="$(subst -std=c99,,$(CFLAGS))" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" CC="$(CC)" CXX="$(CXX)"
++
+ $(LDAP_DIR):
+ 	$(GETLIB) $(LDAP).tar.gz
+-	cd $(LDAP_DIR) && CFLAGS="`echo $(CFLAGS) | sed -e 's:-std=c99::'`" ./configure $(DEFAULT_ARGS)
++	cd $(LDAP_DIR) && $(DEFAULT_VARS) ./configure $(DEFAULT_ARGS)
+ 
+ $(LIBLUTILA) $(LDAPLA) $(LIBLBERLA): $(LDAP_DIR)
+ 	cd $(LDAP_DIR) && $(MAKE)
