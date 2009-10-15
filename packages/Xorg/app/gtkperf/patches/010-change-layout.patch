@@ -1,0 +1,77 @@
+--- gtkperf/src/interface.c	2005-06-07 18:15:24.000000000 +0200
++++ gtkperf.orig/src/interface.c	2009-10-15 12:17:43.000000000 +0200
+@@ -44,12 +44,13 @@
+ 	GtkWidget *vbox_main;
+ 	GtkWidget *vbox_info;
+ 	GtkWidget *hbox1;
++	GtkWidget *hbox2;
+ 	GtkWidget *button_clear;
+ 	GtkWidget *label8;
+ 	GtkObject *spinbutton_count_adj;
+ 	GtkWidget *button_start;
+ 	GtkWidget *alignment1;
+-	GtkWidget *hbox2;
++	GtkWidget *hbox_start;
+ 	GtkWidget *image1;
+ 	GtkWidget *label6;
+ 	GtkWidget *scrolledwindow1;
+@@ -91,8 +92,8 @@
+ 	appdata->window_main = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+ 	gtk_window_set_title (GTK_WINDOW (appdata->window_main),
+ 			      _("GtkPerf"));
+-	gtk_window_set_default_size (GTK_WINDOW (appdata->window_main), 500,
+-				     300);
++	gtk_window_set_default_size (GTK_WINDOW (appdata->window_main), 320,
++				     240);
+ 	gtk_widget_show(appdata->window_main);
+ 	
+ #endif
+@@ -115,6 +116,9 @@
+ 	hbox1 = gtk_hbox_new (FALSE, 10);
+ 	gtk_widget_show (hbox1);
+ 	gtk_box_pack_start (GTK_BOX (vbox_info), hbox1, FALSE, TRUE, 4);
++	hbox2 = gtk_hbox_new (FALSE, 10);
++	gtk_widget_show (hbox2);
++	gtk_box_pack_start (GTK_BOX (vbox_info), hbox2, FALSE, TRUE, 4);
+ 
+ 	button_clear = gtk_button_new_from_stock ("gtk-clear");
+ 	gtk_widget_show (button_clear);
+@@ -134,7 +138,7 @@
+ 	gtk_widget_set_size_request (appdata->spinbutton_count, 100, -1);
+ 	appdata->combobox_testtype = gtk_combo_box_new_text ();
+ 	gtk_widget_show (appdata->combobox_testtype);
+-	gtk_box_pack_start (GTK_BOX (hbox1), appdata->combobox_testtype, TRUE,
++	gtk_box_pack_start (GTK_BOX (hbox2), appdata->combobox_testtype, TRUE,
+ 			    TRUE, 0);
+ 	gtk_combo_box_append_text (GTK_COMBO_BOX (appdata->combobox_testtype),
+ 				   _("Test All"));
+@@ -169,23 +173,23 @@
+ 
+ 	button_start = gtk_button_new ();
+ 	gtk_widget_show (button_start);
+-	gtk_box_pack_start (GTK_BOX (hbox1), button_start, FALSE, FALSE, 0);
++	gtk_box_pack_start (GTK_BOX (hbox2), button_start, FALSE, FALSE, 0);
+ 
+ 	alignment1 = gtk_alignment_new (0.5, 0.5, 0, 0);
+ 	gtk_widget_show (alignment1);
+ 	gtk_container_add (GTK_CONTAINER (button_start), alignment1);
+ 
+-	hbox2 = gtk_hbox_new (FALSE, 2);
+-	gtk_widget_show (hbox2);
+-	gtk_container_add (GTK_CONTAINER (alignment1), hbox2);
++	hbox_start = gtk_hbox_new (FALSE, 2);
++	gtk_widget_show (hbox_start);
++	gtk_container_add (GTK_CONTAINER (alignment1), hbox_start);
+ 	image1 = gtk_image_new_from_stock ("gtk-execute",
+ 					   GTK_ICON_SIZE_BUTTON);
+ 	gtk_widget_show (image1);
+-	gtk_box_pack_start (GTK_BOX (hbox2), image1, FALSE, FALSE, 0);
++	gtk_box_pack_start (GTK_BOX (hbox_start), image1, FALSE, FALSE, 0);
+ 
+ 	label6 = gtk_label_new_with_mnemonic (_("Start"));
+ 	gtk_widget_show (label6);
+-	gtk_box_pack_start (GTK_BOX (hbox2), label6, FALSE, FALSE, 0);
++	gtk_box_pack_start (GTK_BOX (hbox_start), label6, FALSE, FALSE, 0);
+ 
+ 	scrolledwindow1 = gtk_scrolled_window_new (NULL, NULL);
+ 	gtk_widget_show (scrolledwindow1);
