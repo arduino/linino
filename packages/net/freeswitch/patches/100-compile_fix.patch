@@ -1,0 +1,15 @@
+--- a/src/mod/endpoints/mod_sofia/sofia.c
++++ b/src/mod/endpoints/mod_sofia/sofia.c
+@@ -1066,11 +1066,7 @@ void launch_sofia_profile_thread(sofia_p
+ 
+ static void logger(void *logarg, char const *fmt, va_list ap)
+ {
+-	if (fmt && ap) {
+-		switch_log_vprintf(SWITCH_CHANNEL_LOG_CLEAN, mod_sofia_globals.tracelevel, fmt, ap);
+-	} else if (fmt && !ap) {
+-		switch_log_printf(SWITCH_CHANNEL_LOG_CLEAN, mod_sofia_globals.tracelevel, "%s", fmt);
+-	}
++	switch_log_vprintf(SWITCH_CHANNEL_LOG_CLEAN, mod_sofia_globals.tracelevel, fmt, ap);
+ }
+ 
+ static su_log_t *sofia_get_logger(const char *name) 
