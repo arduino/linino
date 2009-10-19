@@ -1,0 +1,17 @@
+--- a/src/ejs/ejsLib.c
++++ b/src/ejs/ejsLib.c
+@@ -21544,11 +21544,13 @@ EjsVar *ejsThrowInternalError(Ejs *ejs, 
+ 
+ EjsVar *ejsThrowMemoryError(Ejs *ejs)
+ {
++    va_list     fmtArgs;
++
+     /*
+      *  Don't do double exceptions for memory errors
+      */
+     if (ejs->exception == 0) {
+-        return ejsCreateException(ejs, ES_MemoryError, 0, 0);
++        return ejsCreateException(ejs, ES_MemoryError, NULL, fmtArgs);
+     }
+     return ejs->exception;
+ }
