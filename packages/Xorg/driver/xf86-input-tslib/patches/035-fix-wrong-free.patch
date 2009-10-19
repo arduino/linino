@@ -1,0 +1,18 @@
+--- a/src/tslib.c
++++ b/src/tslib.c
+@@ -372,13 +394,14 @@ xf86TslibInit(InputDriverPtr drv, IDevPtr dev, int flags)
+ 	s = xf86SetStrOption(pInfo->options, "Device", NULL);
+ 
+ 	priv->ts = ts_open(s, 0);
+-	xfree(s);
+ 
+ 	if (!priv->ts) {
+ 		ErrorF("ts_open failed (device=%s)\n",s);
+         xf86DeleteInput(pInfo, 0);
++		xfree(s);
+ 		return NULL;
+ 	}
++	xfree(s);
+ 
+ 	if (ts_config(priv->ts)) {
+ 		ErrorF("ts_config failed\n");
