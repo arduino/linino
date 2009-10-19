@@ -175,22 +175,23 @@ SNMP_TRANSPORTS_INCLUDED+= UDPIPv6
 CONFIGURE_ARGS+= --enable-ipv6
 endif
 
-define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		LDFLAGS="$(TARGET_LDFLAGS) -lm" \
-		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
-		all install
-	( cd $(PKG_INSTALL_DIR); mv ./usr/sbin/snmpd ./usr/sbin/snmpd-shared; )
-	#ifneq ($(CONFIG_PACKAGE_snmpd-static),)
-	( cd $(PKG_BUILD_DIR); rm -f agent/snmpd; )
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+TARGET_LDFLAGS += -L$(TOOLCHAIN_DIR)/usr/lib
+
+ifdef CONFIG_PACKAGE_snmpd-static
+  define Build/Compile/static
+	$(MAKE) -C $(PKG_BUILD_DIR)/agent \
 		LDFLAGS="$(TARGET_LDFLAGS) -lm -static" \
+		EXEEXT="-static" \
+		snmpd-static
+  endef
+endif
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) \
 		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
-		all install
-	( cd $(PKG_INSTALL_DIR); mv ./usr/sbin/snmpd ./usr/sbin/snmpd-static; )
-	#endif
+		LDFLAGS="$(TARGET_LDFLAGS) -lm -lc" \
+		all install	
+	$(Build/Compile/static)
 endef
 
 define Build/InstallDev
@@ -224,7 +225,7 @@ define Package/snmpd/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/snmpd.init $(1)/etc/init.d/snmpd
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/snmpd-shared $(1)/usr/sbin/snmpd
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/snmpd $(1)/usr/sbin/snmpd
 endef
 
 define Package/snmpd-static/conffiles
@@ -242,7 +243,7 @@ define Package/snmpd-static/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/snmpd.init $(1)/etc/init.d/snmpd
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/snmpd-static $(1)/usr/sbin/snmpd
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/agent/snmpd-static $(1)/usr/sbin/snmpd
 endef
 
 define Package/snmp-utils/install
