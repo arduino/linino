@@ -246,10 +246,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/freeswitch/include/* $(1)/usr/include/freeswitch/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfreeswitch.{a,so*} $(1)/usr/lib/
-	$(INSTALL_DIR) $(1)/etc/default
-	$(INSTALL_DATA) ./files/freeswitch.default $(1)/etc/default/freeswitch
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/freeswitch.init $(1)/etc/init.d/freeswitch
 endef
 
 define Package/freeswitch/install
@@ -258,6 +254,10 @@ define Package/freeswitch/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfreeswitch.so.* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/freeswitch
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DATA) ./files/freeswitch.default $(1)/etc/default/freeswitch
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/freeswitch.init $(1)/etc/init.d/freeswitch
 endef
 
 define Package/freeswitch-default/install
