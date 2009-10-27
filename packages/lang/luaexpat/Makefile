@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luaexpat
 PKG_VERSION:=1.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://luaforge.net/frs/download.php/2469
@@ -41,7 +41,7 @@ define Build/Compile
 	LUA_LIBDIR="$(STAGING_DIR)/usr/lib/" \
 	COMPAT_DIR="$(PKG_BUILD_DIR)/compat-5.1r5" \
 	LIB_OPTION="-shared $(TARGET_LDFLAGS)" \
-	CC="$(TARGET_CC) $(TARGET_CFLAGS)" \
+	CC="$(TARGET_CC) $(TARGET_CFLAGS) -std=c99" \
 	LD="$(TARGET_CROSS)ld -shared" 
 endef
 
