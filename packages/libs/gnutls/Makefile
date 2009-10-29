@@ -104,6 +104,7 @@ CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \
 	--disable-openpgp-authentication \
+	--disable-guile \
 	--with-included-libcfg \
 	--with-included-libtasn1 \
 	--with-libgcrypt-prefix="$(STAGING_DIR)/usr" \
