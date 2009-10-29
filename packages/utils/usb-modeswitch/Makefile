@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=usb_modeswitch
 PKG_VERSION:=1.0.5
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.draisberghof.de/usb_modeswitch
@@ -31,7 +31,7 @@ define Package/usb-modeswitch/description
 endef
 
 define Build/Compile
-	"$(TARGET_CC)" $(TARGET_CFLAGS) $(TARGET_CPPFLAGS) $(TARGET_LDFLAGS) \
+	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_CPPFLAGS) $(TARGET_LDFLAGS) \
 		-lusb \
 		-o $(PKG_BUILD_DIR)/usb_modeswitch-OpenWrt \
 				$(PKG_BUILD_DIR)/usb_modeswitch.c
