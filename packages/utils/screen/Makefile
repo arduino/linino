@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=screen
 PKG_VERSION:=4.0.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.uni-erlangen.de/pub/utilities/screen \
@@ -32,7 +32,8 @@ define Package/screen/description
 endef
 
 define Build/Configure
-	$(call Build/Configure/Default,,\
+	$(call Build/Configure/Default,\
+		--with-sys-screenrc=/etc/screenrc,\
 		LIBS="-lcrypt" \
 	)
 endef
@@ -40,6 +41,8 @@ endef
 define Package/screen/install	
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/screen $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/etc/screenrc $(1)/etc/screenrc
 endef
 
 $(eval $(call BuildPackage,screen))
