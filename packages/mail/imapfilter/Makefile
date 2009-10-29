@@ -49,7 +49,7 @@ define Build/Compile
 		$(TARGET_CONFIGURE_OPTS) \
 		INCDIRS="$(TARGET_CPPFLAGS)" \
 		LIBDIRS="$(TARGET_LDFLAGS)" \
-		MYCFLAGS="$(TARGET_CFLAGS)" \
+		MYCFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
 		MYLDFLAGS="-lcrypt" 
 endef
 

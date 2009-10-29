@@ -50,7 +50,7 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/Default,\
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -std=gnu99" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		PREFIX="/usr" \
