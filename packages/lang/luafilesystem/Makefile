@@ -42,7 +42,7 @@ TARGET_LDFLAGS += -llua
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
 		LDFLAGS="$(TARGET_LDFLAGS)"
 	$(TARGET_CROSS)ar r $(PKG_BUILD_DIR)/src/liblua-filesystem.a $(PKG_BUILD_DIR)/src/lfs.o
 endef

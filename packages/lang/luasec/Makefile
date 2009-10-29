@@ -37,7 +37,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/src linux \
 		INCDIR="$(TARGET_CPPFLAGS)" \
 		LIBDIR="$(TARGET_LDFLAGS)" \
-		CC="$(TARGET_CC) $(TARGET_CFLAGS)" \
+		CC="$(TARGET_CC) $(TARGET_CFLAGS) -std=gnu99" \
 		LD="$(TARGET_CROSS)ld -shared"
 endef
 
