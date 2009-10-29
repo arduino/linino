@@ -38,7 +38,7 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/ all \
 	LIBDIR="$(TARGET_LDFLAGS)" \
-	CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
+	CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -std=gnu99" \
 	LD="$(TARGET_CROSS)ld -shared" 
 endef
 
