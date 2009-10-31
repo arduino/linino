@@ -1,18 +1,20 @@
-# 
-# Copyright (C) 2006-2008 OpenWrt.org
+#
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fontsproto
-PKG_RELEASE:=3
-PKG_VERSION:=2.0.2
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/proto/
+PKG_RELEASE:=1
+PKG_VERSION:=2.1.0
+
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/proto/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=f3a857deadca3144fba041af1dbf7603
 
 include $(INCLUDE_DIR)/package.mk
 

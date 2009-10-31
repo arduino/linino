@@ -1,27 +1,26 @@
-# 
-# Copyright (C) 2006-2008 OpenWrt.org
+#
+# Copyright (C) 2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org
+
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=xf86rushproto
-PKG_RELEASE:=3
-PKG_VERSION:=1.1.2
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/proto/
+PKG_NAME:=dri2proto
+PKG_RELEASE:=1
+PKG_VERSION:=2.1
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/proto/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/xf86rushproto
+define Package/dri2proto
   SECTION:=xorg-proto
   CATEGORY:=Xorg
   SUBMENU:=proto
-  DEPENDS:=
-  TITLE:=xf86rushproto
+  TITLE:=dri2proto
   URL:=http://xorg.freedesktop.org/
 endef
 
@@ -33,4 +32,4 @@ define Build/Compile
 	true
 endef
 
-$(eval $(call BuildPackage,xf86rushproto))
+$(eval $(call BuildPackage,dri2proto))
