@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mdk3
-PKG_VERSION:=v5
+PKG_VERSION:=v6
 PKG_RELEASE:=1
-PKG_MD5SUM:=f71a1740ac6acb0d59aae3727ca2c38a
+PKG_MD5SUM:=67705a814ded2a2e6f70522ca0dc6da9
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/mdk3-$(PKG_VERSION)
 PKG_SOURCE_URL:=http://homepages.tu-darmstadt.de/~p_larbig/wlan/
