@@ -8,18 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xf86-input-mouse
-PKG_RELEASE:=4
-PKG_VERSION:=1.3.0
+PKG_RELEASE:=1
+PKG_VERSION:=1.5.0
 
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/driver
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/driver
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=31a51b0e5ddc4fac19754f48a3adf881
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=c58629fddf0782dad5c02da6aeb35521
+
 PKG_BUILD_DEPENDS:=randrproto inputproto xproto
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-PKG_INSTALL:=1
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/xorg-driver.mk)
 
 define Package/xf86-input-mouse
   SECTION:=xorg-driver

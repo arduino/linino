@@ -1,24 +1,25 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xf86-video-fbdev
-PKG_RELEASE:=3
-PKG_VERSION:=0.4.0
+PKG_RELEASE:=1
+PKG_VERSION:=0.4.1
 
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/driver
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/driver
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
-PKG_MD5SUM:=6572b39fec77b8e6de1c858a93992924
-
-include $(INCLUDE_DIR)/package.mk
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=79ce1eb9f9d2ed56de70d8e06cb767d9
 
 PKG_INSTALL:=1
+
+include $(INCLUDE_DIR)/package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/xorg-driver.mk)
 
 define Package/xf86-video-fbdev
   SECTION:=xorg-driver

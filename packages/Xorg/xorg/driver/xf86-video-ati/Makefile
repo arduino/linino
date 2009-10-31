@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -9,13 +9,16 @@ include $(TOPDIR)/rules.mk
 
 PKG_BASE_NAME:=xf86
 PKG_NAME:=xf86-video-ati
-PKG_RELEASE:=2
-PKG_VERSION:=6.9.0
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/driver
+PKG_RELEASE:=1
+PKG_VERSION:=6.12.4
+
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/driver
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/${PKG_NAME}-$(PKG_VERSION)/
+PKG_MD5SUM:=
 
 include $(INCLUDE_DIR)/package.mk
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/xorg-driver.mk)
 
 define Package/xf86-video-ati
   SECTION:=xorg-driver
