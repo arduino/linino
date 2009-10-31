@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cairo
-PKG_VERSION:=1.8.6
-PKG_RELEASE:=5
+PKG_VERSION:=1.8.8
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://cairographics.org/releases/
-PKG_MD5SUM:=4e64139ef6f668df24450f3b81dd0771
+PKG_MD5SUM:=d3e1a1035ae563812d4dd44a74fb0dd0
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
