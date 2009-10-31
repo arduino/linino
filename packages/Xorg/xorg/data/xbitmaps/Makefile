@@ -8,13 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xbitmaps
-PKG_RELEASE:=2
-PKG_VERSION:=1.0.1
+PKG_RELEASE:=1
+PKG_VERSION:=1.1.0
 
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/data/
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.5/src/data/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=b28a9840cde3c38d7c09716372fea257
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+
+PKG_MD5SUM:=f9ddd4e70a5375508b3acaf17be0d0ab
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -37,7 +38,7 @@ define Build/InstallDev
 		$(1)/usr/include/X11/bitmaps/
 endef
 
-define Package/xbitmaps/install/Default
+define Package/xbitmaps/install
 	$(INSTALL_DIR) $(1)/usr/include/X11/bitmaps
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/include/X11/bitmaps/* \
