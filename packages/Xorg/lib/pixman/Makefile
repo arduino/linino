@@ -9,11 +9,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pixman
 PKG_RELEASE:=1
-PKG_VERSION:=0.14.0
+PKG_VERSION:=0.16.2
 
 PKG_SOURCE_URL:=http://cairographics.org/releases/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=da330524bbd975271974378b1c5e7b5d
+PKG_MD5SUM:=02bd3669f53c404c19980d5efb6f86fb
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
