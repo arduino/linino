@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,16 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=x11perf
-PKG_RELEASE:=2
-PKG_VERSION:=1.5
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/app
+PKG_RELEASE:=1
+PKG_VERSION:=1.5.1
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.5/src/app
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=31283bfc3c78718ac1bd71e510d4e774
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+
+PKG_MD5SUM:=66e4aa4645f83809071eb69553ed0222
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-PKG_INSTALL:=1
 
 define Package/x11perf
   SECTION:=xorg-app

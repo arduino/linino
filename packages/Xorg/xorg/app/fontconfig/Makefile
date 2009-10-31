@@ -36,19 +36,10 @@ CONFIGURE_VARS+= \
 	ac_cv_prog_HASDOCBOOK=no \
 
 define Build/Compile
-	# XXX: the following 4 are compiled using CC_FOR_BUILD
 	$(foreach dir,fc-arch fc-case fc-lang fc-glyphname, \
-		$(MAKE) -C $(PKG_BUILD_DIR)/$(dir) \
-			CC="$(HOSTCC)" \
-			CFLAGS="$(HOST_CFLAGS)" \
-			CPPFLAGS="" \
-			LDFLAGS="$(HOST_LDFLAGS)"\
-		; \
-	)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		DOCSRC="" \
-		install
+		$(MAKE) -C $(PKG_BUILD_DIR)/$(dir) CFLAGS="$(HOST_CFLAGS)"  \
+			CPPFLAGS="" LDFLAGS="$(HOST_LDFLAGS)" || exit 1;)
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" DOCSRC="" install
 endef
 
 define Build/InstallDev

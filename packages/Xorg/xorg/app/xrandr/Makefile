@@ -8,16 +8,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xrandr
-PKG_RELEASE:=2
-PKG_VERSION:=1.2.3
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/app
+PKG_RELEASE:=1
+PKG_VERSION:=1.3.2
+
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/app/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=41a9d0cc073fa6165a31fbf9e85f68a6
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+
+PKG_MD5SUM:=2cb19bb1c19ccf77c40032b03dbe06f0
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-PKG_INSTALL:=1
 
 TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 

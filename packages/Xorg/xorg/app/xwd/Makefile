@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,14 +10,16 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xwd
 PKG_RELEASE:=1
-PKG_VERSION:=1.0.2
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/app
+PKG_VERSION:=1.0.3
+
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.5/src/app
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+
+PKG_MD5SUM:=007cea1f389abde5c93162dcd5541351
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-PKG_INSTALL:=1
 
 TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 

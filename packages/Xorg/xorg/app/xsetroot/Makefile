@@ -4,21 +4,22 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xsetroot
-PKG_RELEASE:=4
-PKG_VERSION:=1.0.2
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/app
+PKG_RELEASE:=1
+PKG_VERSION:=1.0.3
+
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.5/src/app
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=9af7db9f3052aef0b11636720b3101dd
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+
+PKG_MD5SUM:=cbda9b9b8da5af4614110883d5a276b8
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-PKG_INSTALL:=1
 
 TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 

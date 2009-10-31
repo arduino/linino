@@ -9,17 +9,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xset
-PKG_RELEASE:=3
-PKG_VERSION:=1.0.4
+PKG_RELEASE:=1
+PKG_VERSION:=1.1.0
 
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/app
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.5/src/app
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=2f41fd983ba4d89419204854936025e2
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+
+PKG_MD5SUM:=eeb0d02f69c76bd40470dede99b4bd49
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-PKG_INSTALL:=1
 
 TARGET_LDFLAGS+= \
     -Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
