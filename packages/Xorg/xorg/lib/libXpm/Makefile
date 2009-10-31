@@ -1,21 +1,21 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libXpm
-PKG_RELEASE:=4
-PKG_VERSION:=3.5.7
+PKG_RELEASE:=1
+PKG_VERSION:=3.5.8
 
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=cd15ee542d9f515538b4462a6f79d977
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=38e58e72d476a74298a59052fde185a3
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 PKG_BUID_DEPENDS:=xproto xextproto

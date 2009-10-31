@@ -1,21 +1,21 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libXtst
-PKG_RELEASE:=3
-PKG_VERSION:=1.0.3
+PKG_RELEASE:=1
+PKG_VERSION:=1.1.0
 
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=090c1ad04e34982eada5cf3b1a0792fd
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=dd6f3e20b87310187121539f9605d977
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 PKG_BUILD_DEPENDS:=recordproto xextproto inputproto
@@ -26,7 +26,7 @@ define Package/libXtst
   SECTION:=xorg-lib
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+libX11 +libXext
+  DEPENDS:=+libX11 +libXext +libXi
   TITLE:=libXtst
   URL:=http://xorg.freedesktop.org/
 endef

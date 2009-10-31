@@ -1,21 +1,21 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libXext
-PKG_RELEASE:=4
-PKG_VERSION:=1.0.4
+PKG_RELEASE:=1
+PKG_VERSION:=1.1.1
 
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=a91f1f722ac80c597cf0b75dcb8b48c0
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=c417c0e8df39a067f90a2a2e7133637d
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 PKG_BUILD_DEPENDS:=xproto xextproto
@@ -45,6 +45,10 @@ define Build/InstallDev
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
 		$(1)/usr/lib/pkgconfig/
+	$(INSTALL_DIR) $(1)/usr/include/X11/extensions
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/X11/extensions/* \
+		$(1)/usr/include/X11/extensions/
 endef
 
 define Package/libXext/install

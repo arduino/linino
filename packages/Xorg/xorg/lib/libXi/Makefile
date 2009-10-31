@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libXi
-PKG_RELEASE:=3
-PKG_VERSION:=1.1.3
+PKG_RELEASE:=1
+PKG_VERSION:=1.3
 
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=7c510abb0cad8dc20493fb27ff7859d8
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=8df4ece9bd1efb02c28acb2b6f485e09
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 PKG_BUILD_DEPENDS:=xproto xextproto inputproto
@@ -50,6 +51,11 @@ define Build/InstallDev
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
 		$(1)/usr/lib/pkgconfig/
+
+	$(INSTALL_DIR) $(1)/usr/include/X11/extensions
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/X11/extensions/* \
+		$(1)/usr/include/X11/extensions/
 endef
 
 $(eval $(call BuildPackage,libXi))

@@ -1,21 +1,21 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libX11
-PKG_RELEASE:=4
-PKG_VERSION:=1.1.5
+PKG_RELEASE:=1
+PKG_VERSION:=1.3.2
 
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=d1512d65dadd4f48c779d4749e7753a8
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=001d780829f936e34851ef7cd37b4dfd
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 PKG_BUILD_DEPENDS:=xproto xextproto xf86bigfontproto kbproto inputproto \
@@ -42,7 +42,11 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)/src/util HOSTCC=$(HOSTCC)
+	$(MAKE) -C $(PKG_BUILD_DIR)/src/util \
+		CC="$(HOSTCC)" \
+        CFLAGS="$(HOST_CFLAGS)" \
+        LDFLAGS="$(HOST_LDFLAGS)"
+
 	$(call Build/Compile/Default)
 endef
 

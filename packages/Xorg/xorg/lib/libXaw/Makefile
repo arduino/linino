@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libXaw
-PKG_RELEASE:=4
-PKG_VERSION:=1.0.4
+PKG_RELEASE:=1
+PKG_VERSION:=1.0.7
 
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/lib/
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=73671d8f1cf36fdd81395328cc3539c9
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=815e74de989ccda684e2baf8d12cf519
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 PKG_BUILD_DEPENDS:=xproto xextproto printproto
@@ -35,6 +36,7 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-xaw6 \
 		--disable-xaw8 \
+		--disable-docs \
 	)
 endef
 
@@ -50,10 +52,6 @@ define Build/InstallDev
 		$(PKG_INSTALL_DIR)/usr/include/X11/Xaw/* \
 		$(1)/usr/include/X11/Xaw/
 
-	$(INSTALL_DIR) $(1)/usr/share/aclocal
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/share/aclocal/* \
-		$(1)/usr/share/aclocal/
 endef
 
 define Package/libXaw/install
