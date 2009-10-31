@@ -8,17 +8,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xorg-server
-PKG_RELEASE:=2
-PKG_VERSION:=1.5.1
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/xserver/
+PKG_RELEASE:=1
+PKG_VERSION:=1.7.1
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/xserver/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/xserver/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/xserver/$(PKG_NAME)-$(PKG_VERSION)/
 PKG_BUILD_DEPENDS:=randrproto renderproto fixesproto damageproto xcmiscproto \
 				   xextproto xproto scrnsaverproto bigreqsproto resourceproto \
 				   fontsproto inputproto kbproto videoproto resourceproto \
-				   compositeproto xf86dgaproto xtrans xf86driproto
+				   compositeproto xf86dgaproto xtrans xf86driproto dri2proto
 
 PKG_INSTALL:=1
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -70,43 +71,56 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
-		--enable-xorg \
-		--enable-dri \
-		--disable-kdrive \
-		--disable-cfb \
-		--disable-afb \
-		--disable-mfb \
-		--disable-aiglx \
+		--disable-dependency-tracking \
+		--disable-debug \
+		--disable-unit-tests \
+		--disable-builddocs \
 		--disable-glx-tls \
+		--disable-composite \
+		--disable-shm \
+		--disable-xres \
+		--disable-record \
+		--enable-xv \
+		--enable-xvmc \
 		--disable-dga \
+		--disable-screensaver \
 		--disable-xdmcp \
 		--disable-xdm-auth-1 \
-		--disable-config-hal \
-		--disable-xf86misc \
+		--disable-glx \
+		--enable-dri \
+		--enable-dri2 \
+		--disable-xinerama \
 		--disable-xf86vidmode \
+		--disable-xace \
+		--disable-xselinux \
+		--disable-xsecurity \
+		--disable-xcalibrate \
+		--disable-tslib \
+		--disable-multibuffer \
+		--disable-dbe \
 		--disable-xf86bigfont \
-		--disable-xorgcfg \
-		--disable-xkb \
+		--enable-dpms \
+		--disable-config-dbus \
+		--disable-config-hal \
+		--disable-xfree86-utils \
+		--disable-xaa \
+		--enable-vgahw \
+		--disable-vbe \
+		--enable-int10-module \
+		--enable-xorg \
+		--disable-dmx \
+		--disable-xvfb \
 		--disable-xnest \
 		--disable-xquartz \
+		--disable-standalone-xpbproxy \
 		--disable-xwin \
-		--disable-x11app \
-		--disable-xsdl \
+		--disable-kdrive \
 		--disable-xfake \
-		--disable-install-setuid \
-		--disable-kbd_mode \
-		--disable-xvfb \
-		--disable-xprint \
-		--disable-xtrap \
-		--disable-dmx \
-		--disable-glx \
-		--disable-xinerama \
-		--disable-xfree86-utils \
-		--disable-cup \
-		--disable-xevie \
-		--disable-evi \
-		--disable-screensaver \
-		--enable-builtin-fonts \
+		--disable-xfbdev \
+		--disable-installsetuid \
+		--disable-secure-rpc \
+		--enable-silent-rules \
+		--disable-shave \
 	)
 endef
 
@@ -155,12 +169,18 @@ define Build/InstallDev
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
 		$(1)/usr/lib/pkgconfig/
+
 	$(if $(CONFIG_PACKAGE_xserver-xorg), \
 		$(INSTALL_DIR) $(1)/usr/include/xorg; \
 		$(INSTALL_DATA) \
 			$(PKG_INSTALL_DIR)/usr/include/xorg/*.h \
 			$(1)/usr/include/xorg/; \
 	)
+	$(INSTALL_DIR) $(1)/mk
+	$(INSTALL_DATA) \
+		./files/xorg-driver.mk \
+		$(1)/mk/
+	$(SED) 's,@VERSION@,$(PKG_VERSION),' $(1)/mk/xorg-driver.mk
 endef
 
 $(eval $(call BuildPackage,xserver-common))

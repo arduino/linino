@@ -8,11 +8,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xserver-kdrive
-PKG_RELEASE:=2
-PKG_VERSION:=1.5.1
-PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.4/src/xserver/
+PKG_RELEASE:=1
+PKG_VERSION:=1.7.1
+PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/xserver/
 PKG_SOURCE:=xorg-server-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/xserver/$(PKG_NAME)/xorg-server-$(PKG_VERSION)/
+PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/xserver/$(PKG_NAME)/xorg-server-$(PKG_VERSION)/
 PKG_BUILD_DEPENDS:=randrproto renderproto fixesproto damageproto xcmiscproto \
 				   xextproto xproto bigreqsproto resourceproto \
 				   fontsproto inputproto kbproto videoproto resourceproto \
@@ -42,9 +42,9 @@ define Package/xserver-kdrive/Default
   +libfontenc \
   +pixman \
   +libopenssl \
+  +libdrm \
   @DISPLAY_SUPPORT \
   +X_TSLIB:tslib \
-  +X_DRI:libdrm
 endef
 
 define Package/xserver-kdrive-xvesa
@@ -84,39 +84,50 @@ define Build/Configure
 		$(if $(CONFIG_X_COMPOSITE),--enable-composite,--disable-composite) \
 		$(if $(CONFIG_X_XINERAMA),--enable-xinerama,--disable-xinerama) \
 		$(if $(CONFIG_X_XCALIBRATE),--enable-xcalibrate,--disable-xcalibrate) \
-		--disable-xorg \
-		--disable-aiglx \
+		--disable-dependency-tracking \
+		--disable-debug \
+		--disable-unit-tests \
+		--disable-builddocs \
 		--disable-glx-tls \
+		--disable-shm \
+		--disable-xres \
+		--disable-record \
+		--enable-xv \
+		--enable-xvmc \
 		--disable-dga \
+		--disable-screensaver \
 		--disable-xdmcp \
 		--disable-xdm-auth-1 \
-		--disable-config-hal \
-		--disable-xf86misc \
+		--disable-glx \
+		--enable-dri \
+		--disable-dri2 \
 		--disable-xf86vidmode \
+		--disable-xace \
+		--disable-xselinux \
+		--disable-xsecurity \
+		--disable-multibuffer \
+		--disable-dbe \
 		--disable-xf86bigfont \
-		--disable-xorgcfg \
-		--disable-xkb \
+		--enable-dpms \
+		--disable-config-dbus \
+		--disable-config-hal \
+		--disable-xfree86-utils \
+		--disable-xaa \
+		--enable-vgahw \
+		--disable-vbe \
+		--enable-int10-module \
+		--disable-xorg \
+		--disable-dmx \
+		--disable-xvfb \
 		--disable-xnest \
 		--disable-xquartz \
+		--disable-standalone-xpbproxy \
 		--disable-xwin \
-		--disable-x11app \
-		--disable-xsdl \
 		--disable-xfake \
-		--disable-install-setuid \
-		--disable-kbd_mode \
-		--disable-xvfb \
-		--disable-xevie \
-		--disable-xprint \
-		--disable-xtrap \
-		--disable-dmx \
-		--disable-glx \
-		--disable-xinerama \
-		--disable-xfree86-utils \
-		--disable-cup \
-		--disable-xevie \
-		--disable-evi \
-		--disable-screensaver \
-		--enable-builtin-fonts \
+		--disable-installsetuid \
+		--disable-secure-rpc \
+		--enable-silent-rules \
+		--disable-shave \
 	)
 endef
 
