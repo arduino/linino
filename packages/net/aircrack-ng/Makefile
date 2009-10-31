@@ -8,15 +8,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aircrack-ng
-PKG_REV:=1396
-PKG_VERSION:=r$(PKG_REV)
+PKG_VERSION:=1.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://trac.aircrack-ng.org/svn/trunk/
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_SOURCE_PROTO:=svn
+PKG_SOURCE_URL:=http://download.aircrack-ng.org/
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -41,7 +37,7 @@ define Build/Compile
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -Wall -Iinclude/ $(TARGET_CPPFLAGS) -D_REVISION=$(PKG_REV)" \
+		CFLAGS="$(TARGET_CFLAGS) -Wall -Iinclude/ $(TARGET_CPPFLAGS) -D_REVISION=0" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 		prefix="/usr" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
