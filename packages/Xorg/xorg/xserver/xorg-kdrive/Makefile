@@ -13,18 +13,22 @@ PKG_VERSION:=1.7.1
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/xserver/
 PKG_SOURCE:=xorg-server-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/xserver/$(PKG_NAME)/xorg-server-$(PKG_VERSION)/
+
 PKG_BUILD_DEPENDS:=randrproto renderproto fixesproto damageproto xcmiscproto \
 				   xextproto xproto bigreqsproto resourceproto \
 				   fontsproto inputproto kbproto videoproto resourceproto \
 				   xf86dgaproto xtrans xf86driproto calibrateproto \
 				   compositeproto xineramaproto
+
+PKG_CONFIG_DEPENDS := \
+	CONFIG_PACKAGE-xserver-kdrive-fbdev \
+	CONFIG_PACKAGE_xserver-kdrive-xephyr \
+    CONFIG_X_TSLIB CONFIG_X_COMPOSITE \
+	CONFIG_X_XINERAMA CONFIG_X_XCALIBRATE
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-define Package/xserver-kdrive-xvesa/config
-	source "$(SOURCE)/Config.in"
-endef
 
 define Package/xserver-kdrive/Default
   PROVIDES:=xserver
@@ -44,13 +48,7 @@ define Package/xserver-kdrive/Default
   +libopenssl \
   +libdrm \
   @DISPLAY_SUPPORT \
-  +X_TSLIB:tslib \
-endef
-
-define Package/xserver-kdrive-xvesa
-$(call Package/xserver-kdrive/Default)
-  TITLE:=Kdrive vesa xserver
-  DEPENDS+= @TARGET_x86
+  +X_TSLIB:tslib
 endef
 
 define Package/xserver-kdrive-xfbdev
@@ -61,19 +59,12 @@ endef
 define Package/xserver-kdrive-xephyr
 $(call Package/xserver-kdrive/Default)
   TITLE:=Kdrive ephyr xserver
+  DEPENDS += @BROKEN
 endef
-
-STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar, \
-	CONFIG_PACKAGE_xserver-kdrive-xvesa CONFIG_PACKAGE-xserver-kdrive-fbdev \
-	CONFIG_PACKAGE_xserver-kdrive-xephyr CONFIG_X_TSLIB CONFIG_X_COMPOSITE \
-	CONFIG_X_XINERAMA CONFIG_X_XCALIBRATE)
 
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-kdrive \
-		$(if $(CONFIG_PACKAGE_xserver-kdrive-xvesa), \
-			--enable-kdrive-vesa, \
-			--disable-kdrive-vesa) \
 		$(if $(CONFIG_PACKAGE_xserver-kdrive-xfbdev), \
 			--enable-xfbdev, \
 			--disable-xfbdev) \
@@ -138,13 +129,6 @@ define Package/xserver-kdrive-xfbdev/install
 		$(1)/usr/bin/
 endef
 
-define Package/xserver-kdrive-xvesa/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) \
-		$(PKG_INSTALL_DIR)/usr/bin/Xvesa \
-		$(1)/usr/bin/
-endef
-
 define Package/xserver-kdrive-xephyr/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) \
@@ -152,6 +136,5 @@ define Package/xserver-kdrive-xephyr/install
 		$(1)/usr/bin/
 endef
 
-$(eval $(call BuildPackage,xserver-kdrive-xvesa))
 $(eval $(call BuildPackage,xserver-kdrive-xfbdev))
 $(eval $(call BuildPackage,xserver-kdrive-xephyr))
