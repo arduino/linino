@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=base-files
-PKG_RELEASE:=14.2
+PKG_RELEASE:=14.3
 
 PKG_FILE_DEPEND:=$(PLATFORM_DIR)/ $(GENERIC_PLATFORM_DIR)/base-files/
 
@@ -155,6 +155,7 @@ define Package/base-files$(TARGET)/install
 	$(SED) 's,$$$$R,$(REVISION),g' $(1)/etc/banner
 	mkdir -p $(1)/dev
 	mkdir -p $(1)/etc/crontabs
+	mkdir -p $(1)/etc/rc.d
 	mkdir -p $(1)/jffs
 	mkdir -p $(1)/lib/firmware
 	mkdir -p $(1)/mnt
