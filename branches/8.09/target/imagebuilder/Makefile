@@ -36,6 +36,9 @@ $(BIN_DIR)/$(IB_NAME).tar.bz2: clean
 	$(CP) $(STAGING_DIR_HOST)/bin/* $(PKG_BUILD_DIR)/staging_dir/host/bin/
 	mkdir -p $(PKG_BUILD_DIR)/target/linux
 	$(CP) $(TOPDIR)/target/linux/$(BOARD) $(PKG_BUILD_DIR)/target/linux/
+        ifeq ($(BOARD),brcm47xx)
+		$(CP) $(TOPDIR)/target/linux/brcm-2.4 $(PKG_BUILD_DIR)/target/linux/
+        endif
 	rm -rf \
 		$(PKG_BUILD_DIR)/target/linux/*/files \
 		$(PKG_BUILD_DIR)/target/linux/*/patches \
