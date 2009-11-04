@@ -100,7 +100,7 @@ define KernelPackage
   $(eval $(call KernelPackage/Defaults))
   $(eval $(call KernelPackage/$(1)))
   $(eval $(call KernelPackage/$(1)/$(KERNEL)))
-  $(eval $(call KernelPackage/$(1)/$(BOARD)-$(KERNEL)))
+  $(eval $(call KernelPackage/$(1)/$(BOARD)))
 
   define Package/kmod-$(1)
     TITLE:=$(TITLE)
