@@ -871,14 +871,6 @@ state.neo1973gta02 {
 		comment.type BOOLEAN
 		comment.count 1
 		iface MIXER
-		name 'Amp State Switch'
-		value true
-	}
-	control.94 {
-		comment.access 'read write'
-		comment.type BOOLEAN
-		comment.count 1
-		iface MIXER
 		name 'Amp Spk Switch'
 		value false
 	}
