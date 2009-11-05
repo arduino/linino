@@ -74,6 +74,11 @@ $(call Package/dbus/Default/description)
 endef
 
 
+define Build/Prepare
+	$(Build/Prepare/Default)
+	$(SED) 's/-Wl,--gc-sections/--gc-sections/' $(PKG_BUILD_DIR)/configure
+endef
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
