@@ -1,24 +1,63 @@
-diff -urN openswan-2.6.22/programs/Makefile.program openswan-2.6.22.new/programs/Makefile.program
---- openswan-2.6.22/programs/Makefile.program	2009-06-23 04:53:08.000000000 +0200
-+++ openswan-2.6.22.new/programs/Makefile.program	2009-08-23 15:35:32.000000000 +0200
-@@ -92,7 +92,7 @@
- all: ${PROGRAM}
- programs: all
- clean:	cleanall
--install: doinstall
-+install:
+diff -ur openswan-2.6.23/programs/_confread/Makefile wrtfix/programs/_confread/Makefile
+--- openswan-2.6.23/programs/_confread/Makefile	2009-09-08 20:42:54.000000000 -0400
++++ wrtfix/programs/_confread/Makefile	2009-09-23 16:32:08.000000000 -0400
+@@ -16,7 +16,6 @@
+ OPENSWANSRCDIR?=$(shell cd ../..; pwd)
+ include ${OPENSWANSRCDIR}/Makefile.inc
  
- endif
+-EXTRA5MAN=ipsec.conf.5
+ CONFFILES=ipsec.conf
+ EXCONFILES=ipsec.win2k.conf
+ SOURCEDIR=_confread
+@@ -26,11 +25,3 @@
  
-diff -urN openswan-2.6.22/programs/pluto/Makefile openswan-2.6.22.new/programs/pluto/Makefile
---- openswan-2.6.22/programs/pluto/Makefile	2009-06-23 04:53:08.000000000 +0200
-+++ openswan-2.6.22.new/programs/pluto/Makefile	2009-08-23 15:40:30.000000000 +0200
-@@ -171,7 +171,7 @@
- all: $(BINNAMEPLUTO) $(BINNAMEADNSIFNEEDED) $(BINNAMEWHACK) #$(BINNAMEWHACKINIT) 
- programs: $(BINNAMEPLUTO) $(BINNAMEADNSIFNEEDED) $(BINNAMEWHACK) #$(BINNAMEWHACKINIT)
- clean:	cleanall
--install: doinstall
-+install:
- endif
+ include ${srcdir}../Makefile.program
  
- doinstall: all
+-ipsec.conf.5: ${srcdir}ipsec.conf.5.xml
+-
+-${srcdir}ipsec.conf.5.xml: $(wildcard d.ipsec.conf/*.xml) ${srcdir}d.ipsec.conf/order.txt
+-	cd ${srcdir} && cat `cat ${srcdir}d.ipsec.conf/order.txt` >ipsec.conf.5.xml
+-
+-diff:	ipsec.conf.5.xml
+-	diff -B -w -u ipsec.conf.5.xml ipsec.conf.5.xml-ref
+-
+diff -ur openswan-2.6.23/programs/pluto/Makefile wrtfix/programs/pluto/Makefile
+--- openswan-2.6.23/programs/pluto/Makefile	2009-09-08 20:42:54.000000000 -0400
++++ wrtfix/programs/pluto/Makefile	2009-09-23 16:32:38.000000000 -0400
+@@ -186,36 +186,11 @@
+ 	$(INSTALL) $(INSTBINFLAGS) $(BINNAMEPLUTO) $(BINNAMEWHACK) $(LIBEXECDIR)
+ 	#$(INSTALL) $(INSTSUIDFLAGS) $(BINNAMEWHACKINIT) $(LIBEXECDIR)
+ 	if $(USE_ADNS) ; then $(INSTALL) $(INSTBINFLAGS) $(BINNAMEADNS)  $(LIBEXECDIR) ; fi
+-	( cd ${OPENSWANSRCDIR}/programs/pluto ; xmlto man pluto.8.xml ; mv ipsec_pluto.8 pluto.8; xmlto man ipsec.secrets.5.xml)
+-	$(INSTALL) $(INSTMANFLAGS) ${srcdir}pluto.8 $(PMANDIR)/ipsec_pluto.8
+-	sh ${OPENSWANSRCDIR}/packaging/utils/manlink ${srcdir}pluto.8 | \
+-		while read from to ; \
+-		do \
+-			ln -s -f ipsec_$$from $(PMANDIR)/$$to; \
+-		done
+-	$(INSTALL) $(INSTMANFLAGS) ${srcdir}ipsec.secrets.5 $(FMANDIR)
+-	sh ${OPENSWANSRCDIR}/packaging/utils/manlink ${srcdir}ipsec.secrets.5 | \
+-		while read from to ; \
+-		do \
+-		 ln -s -f $$from $(FMANDIR)/$$to; \
+-		done
+ 
+ install_file_list:
+ 	@echo $(LIBEXECDIR)/$(BINNAMEPLUTO)
+ 	@if $(USE_ADNS) ; then echo $(LIBDIR)/$(BINNAMEADNS) ; fi
+ 	@echo $(LIBEXECDIR)/$(BINNAMEWHACK)
+-	@echo $(PMANDIR)/ipsec_pluto.8
+-	@sh ${OPENSWANSRCDIR}/packaging/utils/manlink pluto.8 | \
+-		while read from to; \
+-		do\
+-			 echo $(PMANDIR)/$$to; \
+-		done
+-	@echo $(FMANDIR)/ipsec.secrets.5
+-	@sh ${OPENSWANSRCDIR}/packaging/utils/manlink ipsec.secrets.5 | \
+-		while read from to; \
+-		do \
+-			echo $(FMANDIR)/$$to; \
+-		done
+ 
+ alg_info_test: alg_info_test.o ike_alg.o constants.o defs.o log.o db_ops.o crypto.o $(LIBDESLITE) $(OPENSWANLIB)
+ 	$(CC) -o $@ $^ $(LDFLAGS) $(LIBSPLUTO)
