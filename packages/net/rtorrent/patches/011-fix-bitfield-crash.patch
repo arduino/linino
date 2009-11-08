@@ -1,0 +1,15 @@
+# Fix crash when trying to call d.get_bitfield on a closed download. Ticket #1825 from libtorrent.rakshasa.no.
+Index: rtorrent/src/command_download.cc
+===================================================================
+--- rtorrent/src/command_download.cc	(revision 1093)
++++ rtorrent/src/command_download.cc	(working copy)
+@@ -292,6 +292,9 @@
+ 
+ torrent::Object
+ retrieve_d_bitfield(core::Download* download) {
++  if (!download->download()->file_list()->is_open())
++    throw torrent::input_error("Cannot retrieve bitfield of closed download.");
++
+   const torrent::Bitfield* bitField = download->download()->file_list()->bitfield();
+ 
+   return torrent::Object(rak::transform_hex(bitField->begin(), bitField->end()));
