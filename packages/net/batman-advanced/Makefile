@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=batman-adv
-PKG_REV:=1439
+PKG_REV:=1478
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
