@@ -1,7 +1,7 @@
-Index: squid-2.6.STABLE14/src/ctype.c
+Index: squid-2.6.STABLE23/src/ctype.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ squid-2.6.STABLE14/src/ctype.c	2007-07-25 16:04:15.000000000 -0500
++++ squid-2.6.STABLE23/src/ctype.c	2009-11-11 14:01:34.000000000 +0100
 @@ -0,0 +1,546 @@
 +/*
 + Static ctype data for IFC-7.1 / RedHat-9 workaround.
@@ -549,17 +549,17 @@ Index: squid-2.6.STABLE14/src/ctype.c
 +const uint32_t *__ctype32_tolower = b (uint32_t, tolower, 128);
 +const uint32_t *__ctype32_toupper = b (uint32_t, toupper, 128);
 +
-Index: squid-2.6.STABLE14/src/Makefile.in
+Index: squid-2.6.STABLE23/src/Makefile.in
 ===================================================================
---- squid-2.6.STABLE14.orig/src/Makefile.in	2007-07-25 16:04:15.000000000 -0500
-+++ squid-2.6.STABLE14/src/Makefile.in	2007-07-25 16:04:15.000000000 -0500
-@@ -1219,6 +1219,9 @@
- 	$(SHELL) -c "test -f squid.conf.default || ./cf_gen cf.data"
+--- squid-2.6.STABLE23.orig/src/Makefile.in	2009-09-17 01:33:37.000000000 +0200
++++ squid-2.6.STABLE23/src/Makefile.in	2009-11-11 14:02:33.000000000 +0100
+@@ -1191,6 +1191,9 @@
+ 	true
  
  cf_parser.h: cf.data cf_gen$(EXEEXT)
 +	rm -f cf_gen
 +	gcc -c ctype.c
 +	gcc -o cf_gen cf_gen.c -DNODEBUG=1 -I./ -I../ -I../include/ -L../lib -lmiscutil$(shell uname -m) -lm -lnsl -Wl,ctype.o
- 	./cf_gen cf.data 
+ 	./cf_gen cf.data $(srcdir)/cf.data.depend
  
  cf_gen_defines.h: $(srcdir)/cf_gen_defines $(srcdir)/cf.data.pre

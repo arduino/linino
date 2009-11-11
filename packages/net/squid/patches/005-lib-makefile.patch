@@ -1,8 +1,8 @@
-Index: squid-2.6.STABLE14/lib/Makefile.in
+Index: squid-2.6.STABLE23/lib/Makefile.in
 ===================================================================
---- squid-2.6.STABLE14.orig/lib/Makefile.in	2007-07-25 16:04:15.000000000 -0500
-+++ squid-2.6.STABLE14/lib/Makefile.in	2007-07-25 16:04:16.000000000 -0500
-@@ -65,7 +65,9 @@
+--- squid-2.6.STABLE23.orig/lib/Makefile.in	2009-09-17 01:33:17.000000000 +0200
++++ squid-2.6.STABLE23/lib/Makefile.in	2009-11-11 14:16:09.000000000 +0100
+@@ -61,7 +61,9 @@
  	splay.c Stack.c strsep.c stub_memaccount.c util.c uudecode.c \
  	win32lib.c
  @NEED_OWN_MD5_TRUE@am__objects_1 = md5.$(OBJEXT)
@@ -12,7 +12,7 @@ Index: squid-2.6.STABLE14/lib/Makefile.in
  @NEED_OWN_STRSEP_TRUE@am__objects_3 = strsep.$(OBJEXT)
  @ENABLE_MINGW32SPECIFIC_TRUE@am__objects_4 = win32lib.$(OBJEXT)
  am_libmiscutil_a_OBJECTS = Array.$(OBJEXT) base64.$(OBJEXT) \
-@@ -76,7 +78,19 @@
+@@ -72,7 +74,19 @@
  	$(am__objects_2) splay.$(OBJEXT) Stack.$(OBJEXT) \
  	$(am__objects_3) stub_memaccount.$(OBJEXT) util.$(OBJEXT) \
  	uudecode.$(OBJEXT) $(am__objects_4)
@@ -32,7 +32,7 @@ Index: squid-2.6.STABLE14/lib/Makefile.in
  libntlmauth_a_AR = $(AR) $(ARFLAGS)
  libntlmauth_a_DEPENDENCIES = @LIBOBJS@
  am_libntlmauth_a_OBJECTS = ntlmauth.$(OBJEXT)
-@@ -94,15 +108,19 @@
+@@ -90,15 +104,19 @@
  am__depfiles_maybe = depfiles
  COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
  	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -54,15 +54,15 @@ Index: squid-2.6.STABLE14/lib/Makefile.in
  ETAGS = etags
  CTAGS = ctags
  DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-@@ -112,6 +130,7 @@
- AMDEP_TRUE = @AMDEP_TRUE@
+@@ -106,6 +124,7 @@
+ ALLOCA = @ALLOCA@
  AMTAR = @AMTAR@
  AR = @AR@
 +HOST_AR = ar
  AR_R = @AR_R@
  AUTH_LIBS = @AUTH_LIBS@
  AUTH_MODULES = @AUTH_MODULES@
-@@ -124,6 +143,7 @@
+@@ -118,6 +137,7 @@
  CACHE_HTTP_PORT = @CACHE_HTTP_PORT@
  CACHE_ICP_PORT = @CACHE_ICP_PORT@
  CC = @CC@
@@ -70,7 +70,7 @@ Index: squid-2.6.STABLE14/lib/Makefile.in
  CCDEPMODE = @CCDEPMODE@
  CFLAGS = @CFLAGS@
  CGIEXT = @CGIEXT@
-@@ -194,6 +214,8 @@
+@@ -165,6 +185,8 @@
  NEGOTIATE_AUTH_HELPERS = @NEGOTIATE_AUTH_HELPERS@
  NTLM_AUTH_HELPERS = @NTLM_AUTH_HELPERS@
  OBJEXT = @OBJEXT@
@@ -79,7 +79,7 @@ Index: squid-2.6.STABLE14/lib/Makefile.in
  OPT_DEFAULT_HOSTS = @OPT_DEFAULT_HOSTS@
  PACKAGE = @PACKAGE@
  PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
-@@ -303,6 +325,7 @@
+@@ -264,6 +286,7 @@
  noinst_LIBRARIES = \
  	@LIBDLMALLOC@ \
  	libmiscutil.a \
@@ -87,7 +87,7 @@ Index: squid-2.6.STABLE14/lib/Makefile.in
  	libntlmauth.a \
  	@LIBREGEX@ \
  	$(LIBSSPWIN32)
-@@ -337,9 +360,34 @@
+@@ -298,9 +321,34 @@
  	uudecode.c \
  	$(WIN32SRC)
  
@@ -122,7 +122,7 @@ Index: squid-2.6.STABLE14/lib/Makefile.in
  # $(top_srcdir)/include/version.h should be a dependency
  libregex_a_SOURCES = \
  	GNUregex.c
-@@ -360,7 +408,7 @@
+@@ -321,7 +369,7 @@
  all: all-am
  
  .SUFFIXES:
@@ -131,7 +131,7 @@ Index: squid-2.6.STABLE14/lib/Makefile.in
  $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
  	@for dep in $?; do \
  	  case '$(am__configure_deps)' in \
-@@ -397,10 +445,13 @@
+@@ -358,10 +406,13 @@
  	-rm -f libdlmalloc.a
  	$(libdlmalloc_a_AR) libdlmalloc.a $(libdlmalloc_a_OBJECTS) $(libdlmalloc_a_LIBADD)
  	$(RANLIB) libdlmalloc.a
@@ -146,7 +146,7 @@ Index: squid-2.6.STABLE14/lib/Makefile.in
  libntlmauth.a: $(libntlmauth_a_OBJECTS) $(libntlmauth_a_DEPENDENCIES) 
  	-rm -f libntlmauth.a
  	$(libntlmauth_a_AR) libntlmauth.a $(libntlmauth_a_OBJECTS) $(libntlmauth_a_LIBADD)
-@@ -451,6 +502,21 @@
+@@ -412,6 +463,21 @@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util.Po@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/uudecode.Po@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/win32lib.Po@am__quote@
@@ -167,8 +167,8 @@ Index: squid-2.6.STABLE14/lib/Makefile.in
 +
  
  .c.o:
- @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
-@@ -459,6 +525,9 @@
+ @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@@ -420,6 +486,9 @@
  @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
  @am__fastdepCC_FALSE@	$(COMPILE) -c $<
  
@@ -176,5 +176,5 @@ Index: squid-2.6.STABLE14/lib/Makefile.in
 +	$(HOST_COMPILE) -o $(shell basename $< .c).o.$(shell uname -m) -c $<
 +
  .c.obj:
- @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ `$(CYGPATH_W) '$<'`; \
- @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+ @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+ @am__fastdepCC_TRUE@	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po

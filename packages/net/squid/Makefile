@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=squid
-PKG_VERSION:=2.6.STABLE14
+PKG_VERSION:=2.6.STABLE23
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.squid-cache.org/Versions/v2/2.6/
-PKG_MD5SUM:=eadb138d48320df8b99349121159c6bf
+PKG_MD5SUM:=71aa24580f8a538ad84037bf2ac6f078
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -131,6 +131,7 @@ CONFIGURE_ARGS += \
 
 CONFIGURE_VARS += \
 	ac_cv_header_linux_netfilter_ipv4_h=yes \
+	ac_cv_epoll_works=yes \
 
 define Build/Compile
 	# pass INCLUDES to compile host sources against our OpenSSL, not the host one
