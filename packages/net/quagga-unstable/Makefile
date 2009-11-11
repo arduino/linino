@@ -104,6 +104,7 @@ CONFIGURE_ARGS+= \
 	--enable-vtysh \
 	--enable-user=quagga \
 	--enable-group=quagga \
+	--enable-pie=no \
 	--enable-multipath=8 \
 
 ifneq ($(CONFIG_PACKAGE_quagga-unstable-isisd),)
