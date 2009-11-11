@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/streamripper
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+libmad
+  DEPENDS:=+libmad +libfaad2
   TITLE:=streamripper
   URL:=http://streamripper.sourceforge.net/
 endef
