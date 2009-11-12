@@ -9,12 +9,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pango
-PKG_VERSION:=1.22.2
+PKG_VERSION:=1.26.0
 PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/1.22/
-PKG_MD5SUM:=0d4dc87f9b523e9030afccb2d05afe0b
+PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/1.26/
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -31,7 +30,8 @@ define Package/pango
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=Text layout and rendering library
-  DEPENDS:=+cairo +glib2 +fontconfig +libXft
+  DEPENDS:=+cairo +glib2 +fontconfig +libfreetype \
+  +FEATURE_drawing-backend_libX11:libX11
 endef
 
 define Package/pango/description
@@ -42,8 +42,15 @@ the GTK+ widget toolkit as a test platform. Pango forms the core of text
 and font handling for GTK+-2.x.
 endef
 
+CONFIGURE_ARGS += \
+	$(if $(CONFIG_PACKAGE_libX11), --with-x, --without-x)
+
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/{lib/pkgconfig,lib/pango/1.6.0/modules,include}
+	$(INSTALL_DIR) \
+		$(1)/usr/lib/pkgconfig \
+		$(1)/usr/lib/pango/1.6.0/modules \
+		$(1)/usr/include
+
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
 		$(1)/usr/lib
@@ -62,7 +69,11 @@ define Build/InstallDev
 endef
 
 define Package/pango/install
-	$(INSTALL_DIR) $(1)/usr/{lib/pango/1.6.0/modules,bin}
+	$(INSTALL_DIR) \
+		$(1)/usr/lib/pango/1.6.0/modules \
+		$(1)/usr/bin \
+		$(1)/etc/init.d
+
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib/
@@ -75,8 +86,9 @@ define Package/pango/install
 		$(PKG_INSTALL_DIR)/usr/bin/pango-querymodules \
 		$(1)/usr/bin/
 
-	$(INSTALL_DIR) $(1)/etc/init.d/
-	$(INSTALL_BIN) ./files/pango-querymodules.init $(1)/etc/init.d/pango-querymodules
+	$(INSTALL_BIN) \
+		./files/pango-querymodules.init \
+		$(1)/etc/init.d/pango-querymodules
 endef
 
 $(eval $(call BuildPackage,pango))
