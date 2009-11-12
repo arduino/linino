@@ -24,7 +24,7 @@ define Package/fontconfig
   CATEGORY:=Xorg
   SUBMENU:=font-utils
   TITLE:=fontconfig
-  DEPENDS:=+libX11 +libexpat +libfreetype
+  DEPENDS:=+libexpat +libfreetype
 endef
 
 CONFIGURE_ARGS+= \
