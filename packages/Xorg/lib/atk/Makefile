@@ -26,7 +26,7 @@ define Package/atk
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=Accesibility library for gtk+ apps
-  DEPENDS:=+libX11 +glib2
+  DEPENDS:=+glib2
 endef
 
 
