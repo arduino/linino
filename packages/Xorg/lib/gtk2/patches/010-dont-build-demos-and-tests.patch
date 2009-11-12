@@ -1,39 +1,28 @@
---- gtk+-2.18.2.orig/Makefile.in	2009-10-10 17:23:54.000000000 +0200
-+++ gtk+-2.18.2/Makefile.in	2009-10-05 22:46:12.000000000 +0200
-@@ -464,8 +464,8 @@
- 	|| { echo "Gtk+Tests:ERROR: Failed to start Xvfb environment for X11 target tests."; exit 1; } \
- 	&& DISPLAY=:$$XID && export DISPLAY
+diff -ruN gtk+-2.17.0.orig/Makefile.am gtk+-2.17.0/Makefile.am
+--- gtk+-2.17.0.orig/Makefile.am	2009-05-03 18:39:14.000000000 +0200
++++ gtk+-2.17.0/Makefile.am	2009-10-16 23:53:15.000000000 +0200
+@@ -1,8 +1,8 @@
+ ## Makefile.am for GTK+
+ include $(top_srcdir)/Makefile.decl
  
-+SRC_SUBDIRS = gdk-pixbuf gdk gtk modules contrib
-+SUBDIRS = po po-properties $(SRC_SUBDIRS) m4macros
 -SRC_SUBDIRS = gdk-pixbuf gdk gtk modules demos tests perf contrib
 -SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros
++SRC_SUBDIRS = gdk-pixbuf gdk gtk modules contrib
++SUBDIRS = po po-properties $(SRC_SUBDIRS) m4macros
  
  # require automake 1.4
  AUTOMAKE_OPTIONS = 1.7
---- gtk+-2.18.2.orig/gdk/Makefile.in	2009-10-10 17:22:54.000000000 +0200
-+++ gtk+-2.18.2/gdk/Makefile.in	2009-10-05 22:46:07.000000000 +0200
-@@ -510,8 +510,8 @@
- 	|| { echo "Gtk+Tests:ERROR: Failed to start Xvfb environment for X11 target tests."; exit 1; } \
+diff -ruN gtk+-2.17.0.orig/Makefile.in gtk+-2.17.0/Makefile.in
+--- gtk+-2.17.0.orig/Makefile.in	2009-05-04 06:45:42.000000000 +0200
++++ gtk+-2.17.0/Makefile.in	2009-10-16 23:53:07.000000000 +0200
+@@ -523,8 +523,8 @@
  	&& DISPLAY=:$$XID && export DISPLAY
  
-+SUBDIRS = $(gdktarget) .
-+DIST_SUBDIRS = x11 directfb
--SUBDIRS = $(gdktarget) . tests
--DIST_SUBDIRS = win32 x11 quartz directfb tests
- INCLUDES = \
- 	-DG_LOG_DOMAIN=\"Gdk\"		\
- 	-DGDK_COMPILATION		\
---- gtk+-2.18.2.orig/gtk/Makefile.in	2009-10-10 17:23:29.000000000 +0200
-+++ gtk+-2.18.2/gtk/Makefile.in	2009-10-05 22:46:09.000000000 +0200
-@@ -928,8 +928,8 @@
  
- # Makefile.am for gtk+/gtk
- @USE_QUARTZ_TRUE@GTK_PRINT_PREVIEW_COMMAND = "open -a /Applications/Preview.app %f"
-+SUBDIRS = theme-bits .
-+DIST_SUBDIRS = theme-bits
--SUBDIRS = theme-bits . tests
--DIST_SUBDIRS = theme-bits tests
- @HAVE_CUPS_FALSE@@HAVE_PAPI_CUPS_FALSE@@HAVE_PAPI_FALSE@GTK_PRINT_BACKENDS = file,lpr
- @HAVE_CUPS_FALSE@@HAVE_PAPI_CUPS_FALSE@@HAVE_PAPI_TRUE@GTK_PRINT_BACKENDS = file,papi
- @HAVE_CUPS_TRUE@@HAVE_PAPI_CUPS_FALSE@GTK_PRINT_BACKENDS = file,cups
+-SRC_SUBDIRS = gdk-pixbuf gdk gtk modules demos tests perf contrib
+-SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros
++SRC_SUBDIRS = gdk-pixbuf gdk gtk modules contrib
++SUBDIRS = po po-properties $(SRC_SUBDIRS) m4macros
+ 
+ # require automake 1.4
+ AUTOMAKE_OPTIONS = 1.7
