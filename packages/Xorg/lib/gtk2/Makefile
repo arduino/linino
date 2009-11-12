@@ -14,7 +14,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=gtk+-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/gtk+/2.17
 PKG_BUILD_DIR=$(BUILD_DIR)/gtk+-$(PKG_VERSION)
-PKG_MD5SUM:=a1a1f0b66a240c31cb2733643f9170ba
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -32,14 +31,24 @@ TARGET_LDFLAGS+=\
 
 STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_gtk2 CONFIG_PACKAGE_gtk2-cups)
 
+# We can _either_ compile gtk2 with directfb-support _or_ against libX11 (libX11 is preferred when both libs are selected)
+
 define Package/gtk2
   SECTION:=xorg-framework
   CATEGORY:=Xorg
   SUBMENU:=framework
   TITLE:=GTK+-2.0
-  DEPENDS:=+cairo +pango +libpng +libjpeg +atk +libtiff +libX11 +libXext \
-  +libXrender +libXfixes +libXrandr +libXcursor +libXdamage +libXcomposite \
-  +libXi
+  DEPENDS:=+cairo +pango +libpng +libjpeg +atk +libtiff \
+  +FEATURE_drawing-backend_DirectFB:DirectFB \
+  +FEATURE_drawing-backend_libX11:libX11 \
+  +FEATURE_drawing-backend_libX11:libXext \
+  +FEATURE_drawing-backend_libX11:libXrender \
+  +FEATURE_drawing-backend_libX11:libXfixes \
+  +FEATURE_drawing-backend_libX11:libXrandr \
+  +FEATURE_drawing-backend_libX11:libXcursor \
+  +FEATURE_drawing-backend_libX11:libXdamage \
+  +FEATURE_drawing-backend_libX11:libXcomposite \
+  +FEATURE_drawing-backend_libX11:libXi
 endef
 
 define Package/gtk2-cups
@@ -58,7 +67,9 @@ define Build/Configure
 		--disable-gdiplus \
 		--disable-xinerama \
 		--without-libjasper \
-		--with-xinput \
+		--without-xinput \
+		$(if $(CONFIG_FEATURE_drawing-backend_DirectFB),--with-gdktarget=directfb,) \
+		$(if $(CONFIG_FEATURE_drawing-backend_libX11),--with-x --with-gdktarget=x11,--without-x) \
 		$(if $(CONFIG_PACKAGE_gtk2-cups),--enable-cups=auto,--disable-cups), \
 		gio_can_sniff=no \
 	)
@@ -123,4 +134,3 @@ endef
 
 $(eval $(call BuildPackage,gtk2))
 $(eval $(call BuildPackage,gtk2-cups))
-
