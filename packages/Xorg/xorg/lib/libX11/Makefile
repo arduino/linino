@@ -32,6 +32,12 @@ define Package/libX11
   URL:=http://xorg.freedesktop.org/
 endef
 
+define Feature/libX11
+  TARGET_NAME:=drawing-backend
+  TARGET_TITLE:=Drawing Backend
+  NAME:=libX11
+endef
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-malloc0returnsnull \
@@ -72,4 +78,5 @@ define Package/libX11/install
 		$(1)/usr/lib/
 endef
 
+$(eval $(call Feature,libX11))
 $(eval $(call BuildPackage,libX11))
