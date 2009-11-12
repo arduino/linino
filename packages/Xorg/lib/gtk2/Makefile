@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gtk2
-PKG_VERSION:=2.18.2
+PKG_VERSION:=2.17.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=gtk+-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=@GNOME/gtk+/2.18
+PKG_SOURCE_URL:=@GNOME/gtk+/2.17
 PKG_BUILD_DIR=$(BUILD_DIR)/gtk+-$(PKG_VERSION)
-iPKG_MD5SUM:=9477986b58d7ee5e559b96e7a124bead
+PKG_MD5SUM:=a1a1f0b66a240c31cb2733643f9170ba
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -28,8 +28,7 @@ TARGET_CFLAGS+=\
 TARGET_LDFLAGS+=\
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib/ \
-	$(TARGET_LDFLAGS)
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib/
 
 STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_gtk2 CONFIG_PACKAGE_gtk2-cups)
 
