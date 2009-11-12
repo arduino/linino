@@ -34,7 +34,7 @@ define Package/pangomm
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=Text layout and rendering library
-  DEPENDS:=+pango
+  DEPENDS:=+glibmm +cairomm +pango
 endef
 
 CONFIGURE_ARGS+= --disable-documentation
