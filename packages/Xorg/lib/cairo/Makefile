@@ -25,7 +25,9 @@ define Package/cairo
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=Multi-platform 2D graphics library
-  DEPENDS:=+fontconfig +libpng +libexpat +pixman
+  DEPENDS:=+fontconfig +libpng +libexpat +pixman \
+  +FEATURE_drawing-backend_DirectFB:DirectFB \
+  +FEATURE_drawing-backend_libX11:libX11
 endef
 
 define Package/cairo/description
@@ -38,8 +40,13 @@ drawing operations can be transformed by any affine transformation
 endef
 
 CONFIGURE_VARS+=FONTCONFIG_LIBS="-lfreetype -lfontconfig -lz -lexpat"
-CONFIGURE_ARGS+=--enable-freetype=yes
-TARGET_CFLAGS+=$(TARGET_LDFLAGS)
+
+CONFIGURE_ARGS+= \
+	--enable-freetype=yes \
+	--disable-win32 \
+	--enable-xlib-xrender=no \
+	$(if $(CONFIG_FEATURE_drawing-backend_DirectFB), --enable-directfb, --disable-directfb) \
+	$(if $(CONFIG_FEATURE_drawing-backend_libX11), --enable-xlib --with-x, --disable-xlib --without-x)
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/
