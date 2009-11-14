@@ -10,7 +10,7 @@ In file included from ./../rpc/command_map.h:45,
 
 --- a/src/rpc/command.h
 +++ b/src/rpc/command.h
-@@ -73,10 +73,8 @@ struct rt_triple : private std::pair<T1,
+@@ -87,10 +87,8 @@
    rt_triple(const T1& a, const T2& b, const T3& c) :
      base_type(a, b), third(c) {}
  
