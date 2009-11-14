@@ -166,7 +166,7 @@ FFMPEG_CONFIGURE_PROTOCOLS:=$(call FILTER_CONFIG,PROTOCOL,protocol,$(FFMPEG_PROT
 define Build/Configure
 	# this is *NOT* GNU configure
 	( cd $(PKG_BUILD_DIR); \
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) $(FPIC)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 		./configure \
 		--enable-cross-compile \
