@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=digitemp
 PKG_VERSION:=3.6.0
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.digitemp.com/software/linux
@@ -76,7 +76,7 @@ endef
 
 define Package/digitemp-usb/install	
 	mkdir -p $(1)/usr/bin/
-	$(CP) $(PKG_BUILD_DIR)/digitemp_DS9097 $(1)/usr/bin/
+	$(CP) $(PKG_BUILD_DIR)/digitemp_DS2490 $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,digitemp))
