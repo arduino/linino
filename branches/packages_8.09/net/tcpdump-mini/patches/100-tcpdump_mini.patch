@@ -19,7 +19,7 @@
 -        print-lmp.c print-lspping.c print-lwapp.c \
 -	print-lwres.c print-mobile.c print-mpcp.c print-mpls.c print-msdp.c \
 +	print-802_11.c print-aodv.c print-arp.c print-ascii.c \
-+	print-bgp.c print-bootp.c print-domain.c print-eap.c print-ether.c \
++	print-bgp.c print-bootp.c print-cdp.c print-domain.c print-eap.c print-ether.c \
 +	print-gre.c print-icmp.c print-igmp.c print-ip.c \
 +	print-l2tp.c print-lldp.c print-llc.c \
  	print-nfs.c print-ntp.c print-null.c print-olsr.c print-ospf.c \
@@ -40,7 +40,7 @@
 +
 +CSRC += \
 +	print-ah.c print-ap1394.c print-arcnet.c print-atalk.c print-atm.c \
-+	print-beep.c print-bfd.c print-bt.c print-cfm.c print-chdlc.c print-cdp.c \
++	print-beep.c print-bfd.c print-bt.c print-cfm.c print-chdlc.c \
 +	print-cip.c print-cnfp.c print-dccp.c print-decnet.c print-dtp.c \
 +	print-dvmrp.c print-eigrp.c print-enc.c print-esp.c print-fddi.c print-fr.c print-hsrp.c \
 +	print-igrp.c print-ipfc.c print-ipx.c print-ipcomp.c print-isoclns.c print-juniper.c print-lane.c \
@@ -152,13 +152,13 @@
  
  	if (ssap == LLCSAP_SNAP && dsap == LLCSAP_SNAP
  	    && control == LLC_UI) {
-@@ -444,6 +449,7 @@ snap_print(const u_char *p, u_int length
- 
- 	case OUI_CISCO:
-                 switch (et) {
-+#ifndef TCPDUMP_MINI
+@@ -447,6 +452,7 @@ snap_print(const u_char *p, u_int length
                  case PID_CISCO_CDP:
                          cdp_print(p, length, caplen);
+                         return (1);
++#ifndef TCPDUMP_MINI
+                 case PID_CISCO_DTP:
+                         dtp_print(p, length); 
                          return (1);
 @@ -456,6 +462,7 @@ snap_print(const u_char *p, u_int length
                  case PID_CISCO_VTP:
