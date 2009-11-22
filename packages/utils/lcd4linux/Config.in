@@ -105,7 +105,7 @@ config LCD4LINUX_DRV_picoLCD
 	bool
 	prompt "picoLCD"
 
-config LCD4LINUX_DRV_PICOLCDGRAPHIC
+config LCD4LINUX_DRV_picoLCDGraphic
 	bool
 	prompt "picoLCDGraphic"
 
