@@ -7,19 +7,34 @@ pidfile=/var/run/ahcpd.pid
 ahcpd_config() {
 	local cfg="$1"
 	config_get interfaces "$cfg" interfaces
-	config_get no_ipv4 "$cfg" no_ipv4
-	config_get no_dns "$cfg" no_dns
+	config_get_bool no_config "$cfg" no_config 0
+	config_get_bool ipv4_only "$cfg" ipv4_only 0
+	config_get_bool ipv6_only "$cfg" ipv6_only 0
+	config_get_bool no_dns "$cfg" no_dns 0
 }
 
 start() {
 	config_load ahcpd
 	config_foreach ahcpd_config ahcpd
 	mkdir -p /var/lib
-	[ -r /usr/lib/ahcp/ahcp.dat ] && authority="-a /usr/lib/ahcp/ahcp.dat"
+	if [ "$no_config" -eq 0 ]; then
+		unset no_config
+	fi
+	if [ "$ipv4_only" -eq 0 ]; then
+		unset ipv4_only
+	fi
+	if [ "$ipv6_only" -eq 0 ]; then
+		unset ipv6_only
+	fi
+	if [ "$no_dns" -eq 0 ]; then
+		unset no_dns
+	fi
 	if [ -e $pidfile ] ; then
 		echo "$pidfile exists -- not starting ahcpd." >&2
 	else
-		/usr/sbin/ahcpd -D -I $pidfile ${no_ipv4:+-s} ${no_dns:+-N} $authority $interfaces
+		/usr/sbin/ahcpd -s /usr/lib/ahcp/ahcp-config.sh -D -I $pidfile \
+		${ipv4_only:+-4} ${ipv6_only:+-6} ${no_dns:+-N} ${no_config:+-n} \
+		$interfaces
 	fi
 }
 

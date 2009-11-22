@@ -4,17 +4,16 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ahcpd
-PKG_VERSION:=0.5
-PKG_RELEASE:=1
+PKG_VERSION:=0.50
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/
-PKG_MD5SUM:=0e5fe1199161eeef214c43eca7eec9a1
+PKG_MD5SUM:=627ec199784c60e5250651f82511fff2
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -53,9 +52,8 @@ endef
 
 define Package/ahcpd/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ahcp-generate{,-address} $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/ahcp
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ahcp{,-dummy}-config.sh $(1)/usr/lib/ahcp/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ahcp-config.sh $(1)/usr/lib/ahcp/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ahcpd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/config
