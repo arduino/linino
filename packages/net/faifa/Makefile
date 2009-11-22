@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=faifa
-PKG_REV:=11
+PKG_REV:=50
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -36,6 +36,8 @@ define Package/faifa/description
 endef
 
 define Build/Configure
+	(cd $(PKG_BUILD_DIR); ./autogen.sh)
+	$(call Build/Configure/Default)
 endef
 
 define Build/Compile
@@ -43,7 +45,7 @@ define Build/Compile
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -DSVN_REV=$(PKG_REV) -Iinclude/ $(TARGET_CPPFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) -DSVN_REV=$(PKG_REV) $(TARGET_CPPFLAGS)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		faifa
