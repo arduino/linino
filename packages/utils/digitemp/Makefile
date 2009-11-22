@@ -57,24 +57,24 @@ define Build/Compile
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) -DLINUX $(TARGET_CPPFLAGS) \
 			-I./src -I./userial" \
-		LIBS="$(TARGET_LDFLAGS) -lusb -lm" \
+		LIBS="$(TARGET_LDFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		ds9097
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) -DLINUX $(TARGET_CPPFLAGS) \
 			-I./src -I./userial -DOWUSB" \
-		LIBS="$(TARGET_LDFLAGS) -lusb -lm" \
+		LIBS="$(TARGET_LDFLAGS) -lusb -lm -DOWUSB" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		ds2490
+		clean ds2490
 endef
 
-define Package/digitemp/install	
+define Package/digitemp/install
 	mkdir -p $(1)/usr/bin/
 	$(CP) $(PKG_BUILD_DIR)/digitemp_DS9097 $(1)/usr/bin/
 endef
 
-define Package/digitemp-usb/install	
+define Package/digitemp-usb/install
 	mkdir -p $(1)/usr/bin/
 	$(CP) $(PKG_BUILD_DIR)/digitemp_DS2490 $(1)/usr/bin/
 endef
