@@ -86,10 +86,10 @@ define Package/libdb47/install
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/lib/db47/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/db.h $(1)/usr/lib/db47/usr/include/
-	mkdir -p $(1)/usr/lib/db47/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdb*.{a,so} $(1)/usr/lib/db47/usr/lib
+	mkdir -p $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/db.h $(1)/usr/include/
+	mkdir -p $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdb*.{a,so} $(1)/usr/lib
 endef
 
 $(eval $(call BuildPackage,libdb47))
