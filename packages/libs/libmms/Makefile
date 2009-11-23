@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libmms
-PKG_VERSION:=0.4
+PKG_VERSION:=0.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://code.launchpad.net/libmms/trunk/0.4/+download/
-PKG_MD5SUM:=4a681a815186fe26bb1b02ccea57fb75
+PKG_SOURCE_URL:=http://code.launchpad.net/libmms/trunk/$(PKG_VERSION)/+download/
+PKG_MD5SUM:=cf83053ec891f14e73a04c84d9de08ee
 
 PKG_FIXUP:= libtool
 PKG_INSTALL:= 1
