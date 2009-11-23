@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sdparm
-PKG_VERSION:=1.03
+PKG_VERSION:=1.04
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://sg.torque.net/sg/p/
-PKG_MD5SUM:=12ccf6df3ce677437bfd1bc3bebd4d25
+PKG_SOURCE_URL:=http://sg.danny.cz/sg/p
+PKG_MD5SUM:=f4b8c7bfc1cd27d30fbdc066a65a44ea
 
 PKG_FIXUP = libtool
 
