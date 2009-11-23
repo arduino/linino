@@ -13,21 +13,20 @@ start() {
 		mkdir -p $pld
 	fi
 	#create mpd db
-        /usr/bin/mpd --stdout --create-db
-	
+	/usr/bin/mpd --stdout --create-db
+
 	#optional export for mpc
-        #export MPD_HOST=127.0.0.1
-	
+	#export MPD_HOST=127.0.0.1
+
 	#start mpd
-        /usr/bin/mpd
-	
+	/usr/bin/mpd
+
 	#generate playlist and start to play
-        /usr/bin/mpc listall | /usr/bin/mpc add -
-        /usr/bin/mpc play
-	/usr/bin/mpc repeat	
+	/usr/bin/mpc listall | /usr/bin/mpc add -
+	/usr/bin/mpc play
+	/usr/bin/mpc repeat
 }
 
 stop() {
         killall mpd
 }
-						

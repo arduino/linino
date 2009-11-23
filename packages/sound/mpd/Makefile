@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpd
-PKG_VERSION:=0.15.4
+PKG_VERSION:=0.15.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/musicpd
-PKG_MD5SUM:=addbbcbbf8a24a2ce80db1ba5a1f91ca
+PKG_MD5SUM:=078bd45c8266ac577e4a96fa38d1e534
 
 include $(INCLUDE_DIR)/package.mk
 
