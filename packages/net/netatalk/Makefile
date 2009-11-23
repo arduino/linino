@@ -36,7 +36,7 @@ define Build/Configure
 		--disable-cups \
 		--disable-tcp-wrappers \
 		--with-cnid-default-backend=dbd \
-		--with-bdb="$(STAGING_DIR)/usr/lib/db47/usr" \
+		--with-bdb="$(STAGING_DIR)/usr/" \
 		--with-libgcrypt-dir="$(STAGING_DIR)/usr" \
 		--with-ssl-dir="$(STAGING_DIR)/usr" \
 	)
