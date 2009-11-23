@@ -2,12 +2,12 @@
 # Copyright (C) 2007 OpenWrt.org
 
 START=60
-BIN=darkstat
 RUN_D=/var/empty
-PID_F=$RUN_D/$BIN.pid
 
 start() {
 	mkdir -p $RUN_D
+	include /lib/network
+	scan_interfaces
 	config_load darkstat
 	config_foreach start_darkstat darkstat
 }
@@ -18,19 +18,15 @@ start_darkstat() {
 	config_get httpaddr "$cfg" httpaddr
 	config_get httpport "$cfg" httpport
 
-	include /lib/network
-	scan_interfaces
 	config_get ifname "$interface" ifname
 
-	$BIN --verbose -i "$interface" \
+	/usr/sbin/darkstat --verbose \
+		-i "$ifname" \
 		${httpaddr:+-b "$httpaddr"} \
 		${httpport:+-p "$httpport"} \
 		--chroot $RUN_D
 }
-	
 
 stop() {
-	ps aux | grep nobody | grep darkstat |  awk '{print }' | \
-		xargs kill 2> /dev/null
+	killall darkstat
 }
-
