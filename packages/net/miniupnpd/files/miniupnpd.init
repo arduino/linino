@@ -3,7 +3,7 @@ START=95
 
 start() {
 	config_load "upnpd"
-	local extiface intiface upload download logging secure
+	local extiface intiface upload download logging secure enabled
 
 	config_get extiface config external_iface
 	config_get intiface config internal_iface
@@ -11,6 +11,7 @@ start() {
 	config_get download config download
 	config_get_bool logging config log_output 0
 	config_get_bool secure config secure_mode 0
+	config_get_bool enabled config enabled 0 
 
 	include /lib/network
 	scan_interfaces
@@ -37,9 +38,9 @@ start() {
 			append args "-S"
 
 		if [ "$logging" = "1" ]; then
-			eval start-stop-daemon -S -x miniupnpd -- $args -d | logger -t miniupnpd &
+			[ "$enabled" -gt 0 ] && eval start-stop-daemon -S -x miniupnpd -- $args -d | logger -t miniupnpd &
 		else
-			eval start-stop-daemon -S -x miniupnpd -- $args 2>/dev/null
+			[ "$enabled" -gt 0 ] && eval start-stop-daemon -S -x miniupnpd -- $args 2>/dev/null
 		fi
 
 		# start firewall
