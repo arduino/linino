@@ -1,0 +1,10 @@
+--- a/sslh.c
++++ b/sslh.c
+@@ -469,6 +469,7 @@
+ 
+       if (!fork())
+       {
++         close(listen_socket);
+          start_shoveler(in_socket);
+          exit(0);
+       }
