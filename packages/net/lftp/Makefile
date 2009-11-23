@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 
 # This is free software, licensed under the GNU General Public License v2.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lftp
-PKG_VERSION:=3.7.9
+PKG_VERSION:=4.0.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://lftp.cybermirror.org/old/
-PKG_MD5SUM:=3b7f85e73467d56488b32f5d746d6772
+PKG_MD5SUM:=24f4b25718fef09cbc4d26ea73bd1578
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,7 +22,7 @@ define Package/lftp
   SUBMENU:=FTP
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libncurses +libopenssl +libreadline +uclibcxx
+  DEPENDS:=+libncurses +libopenssl +libreadline +uclibcxx +libexpat
   TITLE:=lftp
   URL:=http://lftp.yar.ru/
 endef
@@ -50,9 +50,9 @@ define Build/Compile
 endef
 
 define Package/lftp/install 
-	$(INSTALL_DIR) $(1)/usr/bin 
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/lftp $(1)/usr/bin 
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/lftp $(1)/usr/bin
 endef 
 
 define Package/lftp/postinst
