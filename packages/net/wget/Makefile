@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wget
-PKG_VERSION:=1.11.4
+PKG_VERSION:=1.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNU/$(PKG_NAME)
-PKG_MD5SUM:=f5076a8c2ec2b7f334cb6e3059820f9c
+PKG_MD5SUM:=308a5476fc096a8a525d07279a6f6aa3
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -25,11 +25,11 @@ define Package/wget/Default
 endef
 
 define Package/wget/Default/description
- Wget is a network utility to retrieve files from the Web using http 
- and ftp, the two most widely used Internet	protocols. It works 
- non-interactively, so it will work in the background, after having 
- logged off. The program supports recursive retrieval of web-authoring 
- pages as well as ftp sites -- you can use wget to make mirrors of 
+ Wget is a network utility to retrieve files from the Web using http
+ and ftp, the two most widely used Internet protocols. It works
+ non-interactively, so it will work in the background, after having
+ logged off. The program supports recursive retrieval of web-authoring
+ pages as well as ftp sites -- you can use wget to make mirrors of
  archives and home pages or to travel the Web like a WWW robot.
 endef
 
@@ -72,7 +72,7 @@ define Package/$(1)/install
 endef
 
 # FIXME: check if busybox really provides a wget applet
-define Package/wget/postrm
+define Package/$(1)/postrm
 #!/bin/sh
 ln -sf ../../bin/busybox $${IPKG_INSTROOT}/usr/bin/wget
 endef
