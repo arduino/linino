@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openldap
-PKG_VERSION:=2.4.16
+PKG_VERSION:=2.4.19
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/ \
 	ftp://sunsite.cnlab-switch.ch/mirror/OpenLDAP/openldap-release/ \
 	ftp://ftp.nl.uu.net/pub/unix/db/openldap/openldap-release/ \
 	ftp://ftp.plig.org/pub/OpenLDAP/openldap-release/
-PKG_MD5SUM:=ed5b86e9d2b372d10edfe3bb59fee165
+PKG_MD5SUM:=4a6dab2711fcf141f19bb680bc335887
 
 PKG_FIXUP = libtool
 
@@ -36,7 +36,6 @@ define Package/libopenldap
 endef
 
 define Package/libopenldap/description
-=
 	OpenLDAP Software is an open source implementation of the 
 	Lightweight Directory Access Protocol (LDAP).	
 	This package contains the shared LDAP client libraries, needed by other programs.
@@ -55,10 +54,23 @@ define Package/openldap-utils
 endef
 
 define Package/openldap-utils/description
-=
 	OpenLDAP Software is an open source implementation of the 
 	Lightweight Directory Access Protocol (LDAP).	
 	This package contains client programs required to access LDAP servers.
+endef
+
+define Package/openldap-server
+  $(call Package/openldap/Default)
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libopenldap +db47
+  TITLE+= (server)
+endef
+
+define Package/openldap-server/description
+	OpenLDAP Software is an open source implementation of the 
+	Lightweight Directory Access Protocol (LDAP).	
+	This package contains server programs required to provide LDAP services.
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -70,7 +82,6 @@ CONFIGURE_ARGS += \
 	--enable-dynamic \
 	--enable-syslog \
 	--disable-local \
-	--disable-slapd \
 	--disable-slurpd \
 	--with-cyrus-sasl \
 	--without-fetch \
@@ -107,6 +118,17 @@ define Package/openldap-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ldap* $(1)/usr/bin/
 endef
+	
+define Package/openldap-server/install
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/ldap.init $(1)/etc/init.d/ldap
+	$(INSTALL_DIR) $(1)/etc/openldap/schema
+	$(CP) $(PKG_INSTALL_DIR)/etc/openldap/schema/* $(1)/etc/openldap/schema/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	# OpenLDAP installs slapd into libexecdir, not sbindir:
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/slapd $(1)/usr/sbin/
+endef
 
 $(eval $(call BuildPackage,libopenldap))
 $(eval $(call BuildPackage,openldap-utils))
+$(eval $(call BuildPackage,openldap-server))
