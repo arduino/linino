@@ -136,7 +136,6 @@ CONFIGURE_VARS += \
 define Build/Compile
 	# pass INCLUDES to compile host sources against our OpenSSL, not the host one
 	$(MAKE) -C $(PKG_BUILD_DIR)/lib \
-		INCLUDES="$(TARGET_CPPFLAGS)" \
 		all
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
