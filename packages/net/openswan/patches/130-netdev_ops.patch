@@ -101,7 +101,7 @@ diff -urN openswan-2.6.23/linux/net/ipsec/ipsec_rcv.c openswan-2.6.23.new/linux/
  		if(skb->dev && skb->dev->get_stats) {
  			struct net_device_stats *stats = skb->dev->get_stats(skb->dev);
 +#else
-+#if !(defined CONFIG_COMPAT_NET_DEV_OPS) && LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,30)
++#if !(defined CONFIG_COMPAT_NET_DEV_OPS) || LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,30)
 +		if(skb->dev && skb->dev->netdev_ops->ndo_get_stats) {
 +			struct net_device_stats *stats = skb->dev->netdev_ops->ndo_get_stats(skb->dev);
 +#endif
@@ -125,7 +125,7 @@ diff -urN openswan-2.6.23/linux/net/ipsec/ipsec_tunnel.c openswan-2.6.23.new/lin
  {
          int i;
  	struct ipsecpriv *prv = netdev_priv(dev);
-+#if !(defined CONFIG_COMPAT_NET_DEV_OPS) && LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,30)
++#if !(defined CONFIG_COMPAT_NET_DEV_OPS) || LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,30)
 +	struct net_device_ops *dev_ops;
 +	struct net_device_ops *physdev_ops;
 +#endif
@@ -143,7 +143,7 @@ diff -urN openswan-2.6.23/linux/net/ipsec/ipsec_tunnel.c openswan-2.6.23.new/lin
  	prv->hard_start_xmit = physdev->hard_start_xmit;
  	prv->get_stats = physdev->get_stats;
 +#else
-+#if !(defined CONFIG_COMPAT_NET_DEV_OPS) && LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,30)
++#if !(defined CONFIG_COMPAT_NET_DEV_OPS) || LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,30)
 +	dev_ops = (struct net_device_ops *)dev->netdev_ops;
 +	dev_ops->ndo_set_mac_address = ipsec_tunnel_set_mac_address;
 +#endif
