@@ -218,9 +218,18 @@ CONFIGURE_VARS+= \
 	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
 	LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
 	LDFLAGS="$(TARGET_LDFLAGS) -Wl,-rpath-link=\"$(STAGING_DIR)/usr/lib\"" \
+	ac_cv_dev_urandom="yes" \
 	ac_cv_file_dbd_apr_dbd_mysql_c="no" \
+	ac_cv_file__dev_random="no" \
+	ac_cv_file__dev_urandom="yes" \
+	ac_cv_file___dev_urandom_="yes" \
+	ac_cv_func_mmap_fixed_mapped="yes" \
+	ac_cv_func_pthread_rwlock_init="yes" \
+	ac_cv_struct_rlimit="yes" \
+	apr_cv_mutex_recursive="yes" \
 	apr_cv_process_shared_works="no" \
 	apr_cv_tcp_nodelay_with_cork="yes" \
+	apr_cv_type_rwlock_t="yes" \
 
 define Build/Configure
 	( cd $(PKG_BUILD_DIR); ./rebootstrap.sh; )
