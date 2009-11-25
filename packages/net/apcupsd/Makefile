@@ -8,19 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apcupsd
-PKG_VERSION:=3.14.2
+PKG_VERSION:=3.14.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/apcupsd
-PKG_MD5SUM:=fd8785e7607d20cefa68dc20e44eebc4
+PKG_MD5SUM:=bb2f8e4fc6b2f5d7b3e236eb57b81640
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/apcupsd
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libpthread
+  DEPENDS:=+libpthread +libusb
   TITLE:=UPS control software
   URL:=http://www.apcupsd.org/
 endef
@@ -30,6 +30,7 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--with-distname=unknown \
 		--sysconfdir=/etc/apcupsd \
+		--enable-usb \
 	)
 endef
 
