@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hiawatha
-PKG_VERSION:=6.15
-PKG_RELEASE:=2
+PKG_VERSION:=6.18
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.hiawatha-webserver.org/files/
-PKG_MD5SUM:=d0864612a68ba3c0251a721f8ba911a5
+PKG_MD5SUM:=cd923b80db84c6e9f356dad3343ba3f5
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,10 +35,11 @@ CONFIGURE_ARGS+= \
 	--disable-ssl
 
 CONFIGURE_VARS+= \
-	ac_cv_file__dev_urandom=yes
+	ac_cv_file__dev_urandom=yes \
+	webrootdir=/www
 
 define Package/hiawatha/conffiles
-/etc/hiawatha/httpd.conf
+/etc/hiawatha/hiawatha.conf
 /etc/hiawatha/mimetype.conf
 endef
 
@@ -46,8 +47,7 @@ define Package/hiawatha/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/hiawatha $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/hiawatha
-	$(INSTALL_DATA) ./files/httpd.conf $(1)/etc/hiawatha/
-	$(INSTALL_DATA) ./files/mimetype.conf $(1)/etc/hiawatha/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/etc/hiawatha/{hiawatha,mimetype}.conf $(1)/etc/hiawatha/
 endef
 
 $(eval $(call BuildPackage,hiawatha))
