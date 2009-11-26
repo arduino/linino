@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fetchmail
-PKG_VERSION:=6.3.11
+PKG_VERSION:=6.3.13
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.berlios.de/fetchmail
-PKG_MD5SUM:=43b28f296cc0024d3c727319eacae324
+PKG_MD5SUM:=db792fb311bc358e95ed0437389269ac
 PKG_INSTALL=1
 
 include $(INCLUDE_DIR)/package.mk
