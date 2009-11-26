@@ -1,0 +1,12 @@
+diff -durN a/scripts/common.m4 b/scripts/common.m4
+--- a/scripts/common.m4	2009-11-13 10:44:23.000000000 +0300
++++ b/scripts/common.m4	2009-11-05 11:20:35.000000000 +0300
+@@ -184,7 +183,7 @@
+ AC_DEFUN([TORRENT_CHECK_EXECINFO], [
+   AC_MSG_CHECKING(for execinfo.h)
+ 
+-  AC_RUN_IFELSE(
++  AC_LINK_IFELSE(
+     [[#include <execinfo.h>
+       int main() { backtrace((void**)0, 0); backtrace_symbols((char**)0, 0); return 0;}
+     ]],
