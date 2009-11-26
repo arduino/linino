@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=igmpproxy
-PKG_VERSION:=0.1_beta5
-PKG_RELEASE:=2
+PKG_VERSION:=0.1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/igmpproxy
-PKG_MD5SUM:=332a8db6c6541c9123e85e3ad8ebb74c
+PKG_MD5SUM:=c56f41ec195bc1fe016369bf74efc5a1
 
 include $(INCLUDE_DIR)/package.mk
 
