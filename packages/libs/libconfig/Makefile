@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libconfig
-PKG_VERSION:=1.3.2
+PKG_VERSION:=1.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.hyperrealm.com/libconfig/
-PKG_MD5SUM:=094a82afd382aa2305c6cc3c06025c2d
+PKG_MD5SUM:=c6b1c6ccb1a35b93ebf771779d915181
 
 include $(INCLUDE_DIR)/package.mk
 
