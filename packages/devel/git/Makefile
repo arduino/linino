@@ -13,7 +13,7 @@ PKG_VERSION:=1.6.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=${PKG_NAME}-${PKG_VERSION}.tar.gz
-PKG_SOURCE_URL:=http://git-scm.com
+PKG_SOURCE_URL:=http://kernel.org/pub/software/scm/git/
 PKG_MD5SUM:=91bddd06604c6f9a37c3b38f99db47d5
 
 include $(INCLUDE_DIR)/package.mk
