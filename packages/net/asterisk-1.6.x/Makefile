@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
-PKG_VERSION:=1.6.2.0-beta4
+PKG_VERSION:=1.6.2.0-rc6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
-PKG_MD5SUM:=a1f658207ed618056294e04d69077509
+PKG_MD5SUM:=770a80d306ccc928481ff9030d7fec38
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -147,6 +147,17 @@ define Package/asterisk16-chan-gtalk/description
 $(call Package/asterisk16/Default/description)
  This package provides the channel chan_gtalk and res_jabber for GTalk
  support to Asterisk.
+endef
+
+define Package/asterisk16-app-system
+$(call Package/asterisk16/Default)
+  TITLE:=System exec support
+  DEPENDS:= +asterisk16
+endef
+
+define Package/asterisk16-app-system/description
+$(call Package/asterisk16/Default/description)
+ This package provides support for executing system commands in Asterisk.
 endef
 
 CONFIGURE_ARGS+= \
@@ -370,6 +381,11 @@ define Package/asterisk16-chan-gtalk/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_jabber.so $(1)/usr/lib/asterisk/modules/
 endef
 
+define Package/asterisk16-app-system/install
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/app_system.so $(1)/usr/lib/asterisk/modules/
+endef
+
 $(eval $(call BuildPackage,asterisk16))
 $(eval $(call BuildPackage,asterisk16-voicemail))
 $(eval $(call BuildPackage,asterisk16-sounds))
@@ -380,3 +396,4 @@ $(eval $(call BuildPackage,asterisk16-cdr))
 $(eval $(call BuildPackage,asterisk16-res-musiconhold))
 $(eval $(call BuildPackage,asterisk16-format-g729))
 $(eval $(call BuildPackage,asterisk16-chan-gtalk))
+$(eval $(call BuildPackage,asterisk16-app-system))
