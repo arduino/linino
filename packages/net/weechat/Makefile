@@ -83,6 +83,8 @@ CONFIGURE_ARGS+= \
 CONFIGURE_VARS+= \
 	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib" \
 
+TARGET_LDFLAGS += -lgnutls
+
 ifneq ($(CONFIG_PACKAGE_weechat-mod-lua),)
   CONFIGURE_ARGS+= \
 	--enable-lua \
