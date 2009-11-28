@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pcre
-PKG_VERSION:=7.9
+PKG_VERSION:=8.00
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/pcre
-PKG_MD5SUM:=b6a9669d1863423f01ea46cdf00f93dc
+PKG_MD5SUM:=caf564aa69d68e965e9bf0ff2a094c65
 
 include $(INCLUDE_DIR)/package.mk
 
