@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnutls
-PKG_VERSION:=2.6.4
+PKG_VERSION:=2.8.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNU/gnutls \
 	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/
-PKG_MD5SUM:=747111ab0d86e7b06a4bb120ba456ad8
+PKG_MD5SUM:=
 
 PKG_FIXUP = libtool
 
@@ -67,6 +67,7 @@ define Package/libgnutls
 $(call Package/gnutls/Default)
  TITLE+= (library)
  DEPENDS+= +zlib +libgcrypt +libgpg-error
+ SUBMENU:=SSL
 endef
 
 define Package/libgnutls/description
@@ -79,6 +80,7 @@ define Package/libgnutls-extra
 $(call Package/gnutls/Default)
  TITLE+= (extra library)
  DEPENDS+= +libgnutls
+ SUBMENU:=SSL
 endef
 
 define Package/libgnutls-extra/description
@@ -91,6 +93,7 @@ define Package/libgnutls-openssl
 $(call Package/gnutls/Default)
  TITLE+= (OpenSSL compat library)
  DEPENDS+= +libgnutls
+ SUBMENU:=SSL
 endef
 
 define Package/libgnutls-openssl/description
@@ -126,8 +129,7 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin $(2)/bin $(1)/usr/include $(1)/usr/lib $(1)/usr/lib/pkgconfig
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libgnutls{,-extra}-config $(2)/bin/
+	mkdir -p $(1)/usr/bin $(1)/usr/include $(1)/usr/lib $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/gnutls $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgnutls{,-extra,-openssl}.{a,so*} $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/gnutls{,-extra}.pc $(1)/usr/lib/pkgconfig/

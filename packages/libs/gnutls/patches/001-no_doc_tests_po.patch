@@ -1,11 +1,13 @@
---- a/Makefile.in
-+++ b/Makefile.in
-@@ -573,7 +573,7 @@
- top_builddir = @top_builddir@
- top_srcdir = @top_srcdir@
- DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
--SUBDIRS = lgl gl includes lib libextra src doc tests po \
-+SUBDIRS = lgl gl includes lib libextra src \
- 	$(am__append_1)
- ACLOCAL_AMFLAGS = -I m4 -I gl/m4 -I lgl/m4
- EXTRA_DIST = cfg.mk maint.mk .clcopying
+Index: gnutls-2.8.5/Makefile.in
+===================================================================
+--- gnutls-2.8.5.orig/Makefile.in	2009-11-02 11:36:03.000000000 +0100
++++ gnutls-2.8.5/Makefile.in	2009-11-28 00:12:19.000000000 +0100
+@@ -147,7 +147,7 @@
+ 	distdir dist dist-all distcheck
+ ETAGS = etags
+ CTAGS = ctags
+-DIST_SUBDIRS = lib libextra gl src doc tests guile
++DIST_SUBDIRS = lib libextra gl src guile
+ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ distdir = $(PACKAGE)-$(VERSION)
+ top_distdir = $(distdir)
