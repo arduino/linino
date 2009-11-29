@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -63,7 +63,7 @@ define Package/openldap-server
   $(call Package/openldap/Default)
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenldap +db47
+  DEPENDS:=+libopenldap +libdb47
   TITLE+= (server)
 endef
 
