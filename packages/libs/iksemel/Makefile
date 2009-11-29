@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iksemel
-PKG_VERSION:=1.3
+PKG_VERSION:=1.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://iksemel.googlecode.com/files/
-PKG_MD5SUM:=36ab2d9f11980a19217b6f79a19ef8e7
+PKG_MD5SUM:=532e77181694f87ad5eb59435d11c1ca
 
 PKG_FIXUP = libtool
 
@@ -25,6 +25,13 @@ define Package/libiksemel
   TITLE:=Iksemel Jabber Library
   URL:=http://code.google.com/p/iksemel/
   DEPENDS:= +libgnutls +libtasn1
+endef
+
+define Package/libiksemel/description
+  Iksemel is an XML parser library mainly designed for Jabber applications.
+  It provides SAX, DOM, and special Jabber stream APIs. Library is coded
+  in ANSI C except the network code (which is POSIX compatible), thus
+  highly portable.
 endef
 
 TARGET_CFLAGS += $(FPIC)
