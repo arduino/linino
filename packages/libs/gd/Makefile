@@ -40,12 +40,18 @@ CONFIGURE_ARGS += \
 	--without-freetype \
 	--with-jpeg=$(STAGING_DIR)/usr \
 	--with-png=$(STAGING_DIR)/usr \
-	--without-xpm
+	--without-xpm \
+	--without-iconv
 
 CONFIGURE_VARS += \
 	LIBPNG12_CONFIG="$(STAGING_DIR)/host/bin/libpng12-config"
 
 TARGET_CFLAGS += $(FPIC)
+
+define Build/Configure
+	( cd $(PKG_BUILD_DIR); aclocal; libtoolize; autoreconf; );
+	$(call Build/Configure/Default)
+endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
