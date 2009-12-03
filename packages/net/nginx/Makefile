@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nginx
-PKG_VERSION:=0.7.61
+PKG_VERSION:=0.7.64
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://sysoev.ru/nginx/
-PKG_MD5SUM:=6ebf89b9b00a3b82734e93c32da7df07
+PKG_MD5SUM:=cfa97c0f784532820110b5eee57fef6d
 
 include $(INCLUDE_DIR)/package.mk
 
