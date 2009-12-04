@@ -1,6 +1,6 @@
 --- a/netfilter/iptcrdr.c
 +++ b/netfilter/iptcrdr.c
-@@ -415,11 +415,21 @@ delete_redirect_and_filter_rules(unsigne
+@@ -424,10 +424,20 @@ delete_redirect_and_filter_rules(unsigne
  		if(h)
  		{
  			r = delete_rule_and_commit(index, h, miniupnpd_nat_chain, "delete_redirect_rule");
@@ -10,8 +10,7 @@
 +			iptc_free(&h);
 +#endif
  		}
- 		h = iptc_init("filter");
- 		if(h && (r == 0))
+ 		if((r == 0) && (h = iptc_init("filter")))
  		{
  			r = delete_rule_and_commit(index, h, miniupnpd_forward_chain, "delete_filter_rule");
 +#ifdef IPTABLES_143
@@ -22,46 +21,3 @@
  		}
  	}
  	del_redirect_desc(eport, proto);
-@@ -509,6 +519,11 @@ iptc_init_verify_and_append(const char *
- 	{
- 		syslog(LOG_ERR, "%s : iptc_is_chain() error : %s\n",
- 		       logcaller, iptc_strerror(errno));
-+#ifdef IPTABLES_143
-+		iptc_free(h);
-+#else
-+		iptc_free(&h);
-+#endif
- 		return -1;
- 	}
- #ifdef IPTABLES_143
-@@ -519,6 +534,11 @@ iptc_init_verify_and_append(const char *
- 	{
- 		syslog(LOG_ERR, "%s : iptc_append_entry() error : %s\n",
- 		       logcaller, iptc_strerror(errno));
-+#ifdef IPTABLES_143
-+		iptc_free(h);
-+#else
-+		iptc_free(&h);
-+#endif
- 		return -1;
- 	}
- #ifdef IPTABLES_143
-@@ -529,8 +549,18 @@ iptc_init_verify_and_append(const char *
- 	{
- 		syslog(LOG_ERR, "%s : iptc_commit() error : %s\n",
- 		       logcaller, iptc_strerror(errno));
-+#ifdef IPTABLES_143
-+		iptc_free(h);
-+#else
-+		iptc_free(&h);
-+#endif
- 		return -1;
- 	}
-+#ifdef IPTABLES_143
-+	iptc_free(h);
-+#else
-+	iptc_free(&h);
-+#endif
- 	return 0;
- }
- 
