@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssh
-PKG_VERSION:=5.2p1
+PKG_VERSION:=5.3p1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/ \
 		ftp://openbsd.wiretapped.net/pub/OpenBSD/OpenSSH/portable/ \
 		ftp://ftp.belnet.be/packages/openbsd/OpenSSH/portable/ \
 		ftp://ftp.de.openbsd.org/pub/unix/OpenBSD/OpenSSH/portable/
-PKG_MD5SUM:=ada79c7328a8551bdf55c95e631e7dad
+PKG_MD5SUM:=13563dbf61f36ca9a1e4254260131041
 
 PKG_BUILD_DEPENDS:=libopenssl
 
@@ -184,12 +184,12 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 fi
 
 echo ""
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then 
+if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then
 	echo "adding group $$name to /etc/group"
-	echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group  
+	echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group
 fi
 
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then 
+if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
 	echo "adding user $$name to /etc/passwd"
 	echo "$${name}:x:$${id}:$${id}:$${name}:/var/empty/.$${name}:/bin/false" >> $${IPKG_INSTROOT}/etc/passwd
 fi
