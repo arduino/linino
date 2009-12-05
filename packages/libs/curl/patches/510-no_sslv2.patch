@@ -1,18 +1,18 @@
 --- a/lib/ssluse.c
 +++ b/lib/ssluse.c
-@@ -1397,10 +1397,12 @@
+@@ -1384,10 +1384,12 @@ ossl_connect_step1(struct connectdata *c
+   case CURL_SSLVERSION_TLSv1:
      req_method = TLSv1_client_method();
-     use_sni(TRUE);
      break;
 +#ifndef OPENSSL_NO_SSL2
    case CURL_SSLVERSION_SSLv2:
      req_method = SSLv2_client_method();
-     use_sni(FALSE);
+     sni = FALSE;
      break;
 +#endif
    case CURL_SSLVERSION_SSLv3:
      req_method = SSLv3_client_method();
-     use_sni(FALSE);
+     sni = FALSE;
 --- a/src/main.c
 +++ b/src/main.c
 @@ -824,7 +824,9 @@ static void help(void)
