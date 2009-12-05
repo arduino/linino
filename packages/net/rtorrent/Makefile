@@ -10,8 +10,8 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rtorrent
 
-PKG_REV:=1104
-PKG_VERSION:=0.8.5_r$(PKG_REV)
+PKG_REV:=1106
+PKG_VERSION:=0.8.6_r$(PKG_REV)
 PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=svn://rakshasa.no/libtorrent/trunk/rtorrent
