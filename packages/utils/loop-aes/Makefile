@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=loop-aes
-PKG_VERSION:=3.2g
+PKG_VERSION:=3.2h
 PKG_RELEASE:=1
 
 PKG_SOURCE:=loop-AES-v$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=c54bdd2b01f57fee1a93a5bbbd3ce505
+PKG_MD5SUM:=060bec1ae3c5ba98d63c7d64d906faaf
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/loop-AES-v$(PKG_VERSION)
 
