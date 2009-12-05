@@ -14,7 +14,7 @@ RUN_GROUP=$BIN
 start() {
 	[ -f $DEFAULT ] && . $DEFAULT
 	[ -d $LIB_D ] || mkdir -p $LOG_D
-	[ -d $LIB_D ] || ( mkdir -p $LIB_D && chown $RUN_USER:$RUN_GROUP $LIB_D )
+	[ -d $LIB_D ] || ( mkdir -p $LIB_D && chown $RUN_USER:$RUN_GROUP $LIB_D && chmod 0700 $LIB_D )
 	[ -d $RUN_D ] || mkdir -p $RUN_D
 	[ -f $PID_F ] || ( touch $PID_F && chown $RUN_USER:$RUN_GROUP $PID_F )
 	$BIN $OPTIONS

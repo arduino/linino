@@ -8,21 +8,21 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor
-PKG_VERSION:=0.2.1.19
+PKG_VERSION:=0.2.1.20
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.torproject.org/dist/
-PKG_MD5SUM:=2c0ca9bf5d0cfb771f4d6bec9c4360ca
+PKG_MD5SUM:=0d62ee2332fdd95de43debac7435df19
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/tor
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libevent +libopenssl +libpthread +zlib
+  DEPENDS:=+libevent +libopenssl +libpthread
   TITLE:=An anonymous Internet communication system
-  URL:=http://tor.eff.org/
+  URL:=http://www.torproject.org/
 endef
 
 define Package/tor/description
@@ -67,7 +67,7 @@ if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then
 fi
 
 if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
-        echo "adding user $name to /etc/passwd"
+        echo "adding user $$name to /etc/passwd"
         echo "$${name}:x:$${id}:$${id}:$${name}:/tmp/.$${name}:/bin/false" >> $${IPKG_INSTROOT}/etc/passwd
 fi
 endef
@@ -89,11 +89,11 @@ endef
 
 define Package/tor/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/or/tor $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/tor $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/tor.init $(1)/etc/init.d/tor
 	$(INSTALL_DIR) $(1)/etc/tor
-	$(INSTALL_DATA) ./files/torrc $(1)/etc/tor/torrc
+	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/tor/torrc.sample $(1)/etc/tor/torrc
 endef
 
 $(eval $(call BuildPackage,tor))
