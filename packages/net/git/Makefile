@@ -9,26 +9,27 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=git
-PKG_VERSION:=1.6.5
+PKG_VERSION:=1.6.5.3
 PKG_RELEASE:=1
 
-PKG_SOURCE:=${PKG_NAME}-${PKG_VERSION}.tar.gz
-PKG_SOURCE_URL:=http://kernel.org/pub/software/scm/git/
-PKG_MD5SUM:=91bddd06604c6f9a37c3b38f99db47d5
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=@KERNEL/software/scm/git
+PKG_MD5SUM:=a1dbc3da46cbf33c4367db689853c142
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/git
-  SECTION:=utils
-  CATEGORY:=Utilities
-  DEPENDS:=+libopenssl +zlib +dropbear
+  SECTION:=net
+  CATEGORY:=Network
+  SUBMENU:=Version Control Systems
+  DEPENDS:=+libopenssl +dropbear +libpthread
   TITLE:=The fast version control system
   URL:=http://git-scm.com
 endef
 
 define Package/git/description
- Git is a free & open source, distributed version control system 
- designed to handle everything from small to very large projects 
+ Git is a free & open source, distributed version control system
+ designed to handle everything from small to very large projects
  with speed and efficiency.
 endef
 
