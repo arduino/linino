@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zile
-PKG_VERSION:=2.3.12
+PKG_VERSION:=2.3.13
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/zile
-PKG_MD5SUM:=041fcfd738a75e37b324ecd89186ebb1
+PKG_MD5SUM:=61d1120a367cca13b98d6f1265551387
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,7 +22,7 @@ define Package/zile
   CATEGORY:=Utilities
   DEPENDS:=+libncurses
   TITLE:=very small emacs-like editor
-  URL:=http://zile.sourceforge.net
+  URL:=http://www.gnu.org/software/zile/
   SUBMENU:=Editors
 endef
 
