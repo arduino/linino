@@ -8,19 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dovecot
-PKG_VERSION:=1.1.2
+PKG_VERSION:=1.2.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.dovecot.org/releases/1.1
-PKG_MD5SUM:=fcebb6c099421049632b2f1f019f55cd
+PKG_SOURCE_URL:=http://www.dovecot.org/releases/1.2
+PKG_MD5SUM:=c6d6c061413d299ccea7b55c3e4faa0a
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/dovecot
   SECTION:=mail
   CATEGORY:=Mail
-  DEPENDS:=+libopenssl +zlib
+  DEPENDS:=+libopenssl +librt
   TITLE:=An IMAP and POP3 daemon
   URL:=http://www.dovecot.org/
 endef
@@ -53,7 +53,7 @@ define Build/Configure
 	)
 endef
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
@@ -62,7 +62,7 @@ endef
 define Package/dovecot/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/dovecot.init $(1)/etc/init.d/dovecot
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/dovecot-example.conf $(1)/etc/dovecot.conf
+	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/dovecot-example.conf $(1)/etc/dovecot.conf
 	$(INSTALL_DIR) $(1)/usr/lib/dovecot
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/dovecot/* $(1)/usr/lib/dovecot/
 	$(INSTALL_DIR) $(1)/usr/sbin

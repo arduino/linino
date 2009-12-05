@@ -1,6 +1,6 @@
---- dovecot-1.1.2-orig/configure.in	2008-07-24 01:46:52.000000000 +0200
-+++ dovecot-1.1.2/configure.in	2008-07-29 15:46:47.000000000 +0200
-@@ -473,9 +473,9 @@
+--- a/configure.in
++++ b/configure.in
+@@ -398,9 +398,9 @@ have_ioloop=no
  
  if test "$ioloop" = "best" || test "$ioloop" = "epoll"; then
    AC_CACHE_CHECK([whether we can use epoll],i_cv_epoll_works,[
@@ -12,3 +12,20 @@
        int main()
        {
  	return epoll_create(5) < 1;
+@@ -559,7 +559,7 @@ AC_TRY_COMPILE([
+ dnl * Old glibcs have broken posix_fallocate(). Make sure not to use it.
+ dnl * It may also be broken in AIX.
+ AC_CACHE_CHECK([whether posix_fallocate() works],i_cv_posix_fallocate_works,[
+-  AC_TRY_RUN([
++  AC_TRY_LINK([
+     #define _XOPEN_SOURCE 600
+     #include <stdio.h>
+     #include <stdlib.h>
+@@ -568,6 +568,7 @@ AC_CACHE_CHECK([whether posix_fallocate(
+     #if defined(__GLIBC__) && (__GLIBC__ < 2 || __GLIBC_MINOR__ < 7)
+       possibly broken posix_fallocate
+     #endif
++  ], [
+     int main() {
+       int fd = creat("conftest.temp", 0600);
+       int ret;
