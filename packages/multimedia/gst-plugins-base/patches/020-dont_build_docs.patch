@@ -1,36 +1,37 @@
-diff -urN gst-plugins-base-0.10.21/Makefile.am gst-plugins-base-0.10.21.new/Makefile.am
---- gst-plugins-base-0.10.21/Makefile.am	2007-12-18 00:41:14.000000000 +0100
-+++ gst-plugins-base-0.10.21.new/Makefile.am	2009-03-11 10:23:14.000000000 +0100
-@@ -11,14 +11,12 @@
+diff -u --recursive gst-plugins-base-0.10.25-vanilla/Makefile.am gst-plugins-base-0.10.25/Makefile.am
+--- gst-plugins-base-0.10.25-vanilla/Makefile.am	2009-11-14 22:55:44.260292712 -0500
++++ gst-plugins-base-0.10.25/Makefile.am	2009-11-14 22:57:07.407292800 -0500
+@@ -12,14 +12,12 @@
  	gst sys $(SUBDIRS_EXT) 	\
  	tools 			\
  	tests 			\
 -	docs			\
  	po 			\
  	common 			\
- 	m4 			\
- 	pkgconfig
+ 	m4
  
  DIST_SUBDIRS = 			\
+ 	pkgconfig		\
 -	docs			\
  	gst-libs		\
  	gst sys ext		\
  	tools 			\
-diff -urN gst-plugins-base-0.10.21/Makefile.in gst-plugins-base-0.10.21.new/Makefile.in
---- gst-plugins-base-0.10.21/Makefile.in	2009-03-11 10:22:56.000000000 +0100
-+++ gst-plugins-base-0.10.21.new/Makefile.in	2009-03-11 10:23:08.000000000 +0100
-@@ -359,14 +359,12 @@
+diff -u --recursive gst-plugins-base-0.10.25-vanilla/Makefile.in gst-plugins-base-0.10.25/Makefile.in
+--- gst-plugins-base-0.10.25-vanilla/Makefile.in	2009-11-14 23:01:05.051383435 -0500
++++ gst-plugins-base-0.10.25/Makefile.in	2009-11-14 23:00:35.186350079 -0500
+@@ -397,14 +397,12 @@
  	gst-libs 		\
  	gst sys $(SUBDIRS_EXT) 	\
  	tools 			\
 -	docs			\
  	po 			\
  	common 			\
- 	m4 			\
- 	pkgconfig
+ 	m4
  
  DIST_SUBDIRS = \
+ 	pkgconfig		\
 -	docs			\
  	gst-libs		\
  	gst sys ext		\
  	tools 			\
+Only in gst-plugins-base-0.10.25/: Makefile.in.orig

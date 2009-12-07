@@ -1,8 +1,7 @@
-diff --git a/Makefile.in b/Makefile.in
-index a09b06c..d2a920d 100644
---- a/Makefile.in
-+++ b/Makefile.in
-@@ -359,7 +359,6 @@ SUBDIRS = \
+diff -u --recursive gst-plugins-base-0.10.25-vanilla/Makefile.in gst-plugins-base-0.10.25/Makefile.in
+--- gst-plugins-base-0.10.25-vanilla/Makefile.in	2009-11-14 22:55:44.146292714 -0500
++++ gst-plugins-base-0.10.25/Makefile.in	2009-11-14 22:56:11.830296238 -0500
+@@ -397,7 +397,6 @@
  	gst-libs 		\
  	gst sys $(SUBDIRS_EXT) 	\
  	tools 			\
@@ -10,11 +9,11 @@ index a09b06c..d2a920d 100644
  	docs			\
  	po 			\
  	common 			\
-@@ -371,7 +370,6 @@ DIST_SUBDIRS = \
+@@ -409,7 +408,6 @@
  	gst-libs		\
  	gst sys ext		\
  	tools 			\
 -	tests 			\
  	po 			\
  	common 			\
- 	m4 			\
+ 	m4
