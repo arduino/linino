@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libpng
-PKG_VERSION:=1.2.40
+PKG_VERSION:=1.2.41
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/libpng
-PKG_MD5SUM:=29bbd1c3cbe54b04bfc2bda43067ccb5
+PKG_MD5SUM:=2faa7f8d81e6a35beb991cb75edbf056
 
 PKG_FIXUP = libtool
 
