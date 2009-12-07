@@ -1,0 +1,24 @@
+diff -u --recursive gst-plugins-ugly-0.10.13-vanilla/Makefile.am gst-plugins-ugly-0.10.13/Makefile.am
+--- gst-plugins-ugly-0.10.13-vanilla/Makefile.am	2009-11-28 15:17:59.253116063 -0500
++++ gst-plugins-ugly-0.10.13/Makefile.am	2009-11-28 15:19:16.508246874 -0500
+@@ -1,7 +1,7 @@
+ DISTCHECK_CONFIGURE_FLAGS=--enable-gtk-doc
+ 
+ SUBDIRS = \
+-	gst-libs gst ext docs m4 tests common po
++	gst-libs gst ext m4 tests common po
+ 
+ # include before EXTRA_DIST for win32 assignment
+ include $(top_srcdir)/common/win32.mak
+diff -u --recursive gst-plugins-ugly-0.10.13-vanilla/Makefile.in gst-plugins-ugly-0.10.13/Makefile.in
+--- gst-plugins-ugly-0.10.13-vanilla/Makefile.in	2009-11-28 15:17:59.208114358 -0500
++++ gst-plugins-ugly-0.10.13/Makefile.in	2009-11-28 15:19:23.945116771 -0500
+@@ -356,7 +356,7 @@
+ top_srcdir = @top_srcdir@
+ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
+ SUBDIRS = \
+-	gst-libs gst ext docs m4 tests common po
++	gst-libs gst ext m4 tests common po
+ 
+ 
+ # the MANIFEST contains all win32 related files that should be disted
