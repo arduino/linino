@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=scmpc
 PKG_VERSION:=0.2.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.berlios.de/scmpc
@@ -21,7 +21,7 @@ define Package/scmpc
   SECTION:=sound
   CATEGORY:=Sound
   TITLE:=A MPD client which submits your tracks to Last.Fm
-  DEPENDS:=+libcurl +libdaemon +argtable +confuse
+  DEPENDS:=+libcurl +libdaemon +argtable +confuse +libpthread
   URL:=http://scmpc.berlios.de/
 endef
 
@@ -35,7 +35,7 @@ CONFIGURE_ARGS += \
 	--disable-rpath \
 	--without-libiconv-prefix \
 	--without-libintl-prefix \
- 
+
 MAKE_FLAGS += \
 	$(TARGET_CONFIGURE_OPTS) \
 	$(1) \
