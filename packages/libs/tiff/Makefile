@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tiff
-PKG_VERSION:=3.8.2
-PKG_RELEASE:=3
+PKG_VERSION:=3.9.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://libtiff.maptools.org/dl/
-PKG_MD5SUM:=fbb6f446ea4ed18955e2714934e5b698
+PKG_SOURCE_URL:=http://download.osgeo.org/libtiff
+PKG_MD5SUM:=93e56e421679c591de7552db13384cb8
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -59,7 +59,7 @@ endef
 
 define Package/tiff-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,libtiff))
