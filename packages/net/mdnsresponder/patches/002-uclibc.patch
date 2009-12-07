@@ -1,0 +1,20 @@
+diff -u --recursive mDNSResponder-107.6-vanilla/mDNSPosix/Makefile mDNSResponder-107.6/mDNSPosix/Makefile
+--- mDNSResponder-107.6-vanilla/mDNSPosix/Makefile	1970-01-01 08:24:35.000000000 -0500
++++ mDNSResponder-107.6/mDNSPosix/Makefile	1970-01-01 08:32:57.000000000 -0500
+@@ -309,11 +309,15 @@
+ endif
+ else
+ 
+-ifeq ($(os),linux)
++# Any variant containing linux:
++ifeq ($(findstring linux,$(os)),linux)
+ CFLAGS_OS = -DNOT_HAVE_SA_LEN -DUSES_NETLINK -DHAVE_LINUX
+ JAVACFLAGS_OS += -I$(JDK)/include/linux
++# uClibc does not provide NSS, do not compile nss_mdns:
++ifneq ($(os),linux-uclibc)
+ OPTIONALTARG = nss_mdns
+ OPTINSTALL   = InstalledNSS
++endif
+ else
+ 
+ ifeq ($(os),netbsd)

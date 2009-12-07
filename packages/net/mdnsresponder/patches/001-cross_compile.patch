@@ -1,0 +1,137 @@
+Only in mDNSResponder-107.6/Clients: build
+diff -u --recursive mDNSResponder-107.6-vanilla/Clients/Makefile mDNSResponder-107.6/Clients/Makefile
+--- mDNSResponder-107.6-vanilla/Clients/Makefile	2009-10-16 07:06:53.290266578 -0400
++++ mDNSResponder-107.6/Clients/Makefile	2009-10-17 04:28:28.447826030 -0400
+@@ -49,6 +49,8 @@
+ 
+ #############################################################################
+ 
++CC = @cc
++
+ # On OS X the dns_sd library functions are included in libSystem, which is implicitly linked with every executable
+ # If /usr/lib/libSystem.dylib exists, then we're on OS X, so we don't need also to link the "dns_sd" shared library
+ ifneq "$(wildcard /usr/lib/libSystem.dylib)" ""
+@@ -66,4 +68,4 @@
+ 	mkdir build
+ 
+ build/dns-sd: build dns-sd.c
+-	cc $(filter %.c %.o, $+) $(LIBS) -I../mDNSShared -o $@
++	$(CC) $(filter %.c %.o, $+) $(LIBS) -I../mDNSShared -o $@
+diff -u --recursive mDNSResponder-107.6-vanilla/mDNSPosix/Makefile mDNSResponder-107.6/mDNSPosix/Makefile
+--- mDNSResponder-107.6-vanilla/mDNSPosix/Makefile	2009-10-16 07:06:53.303266301 -0400
++++ mDNSResponder-107.6/mDNSPosix/Makefile	2009-10-17 06:36:22.154299346 -0400
+@@ -267,8 +267,9 @@
+ SHAREDDIR = ../mDNSShared
+ JDK = /usr/jdk
+ 
+-CC = @cc
+-LD = ld -shared
++CC = @gcc
++LD = @ld
++SOOPTS = -shared
+ CP = cp
+ RM = rm
+ LN = ln -s -f
+@@ -293,7 +294,7 @@
+ CFLAGS_DEBUG = -Os -DMDNS_DEBUGMSGS=0 
+ OBJDIR = objects/prod
+ BUILDDIR = build/prod
+-STRIP = strip -S 
++STRIP = @strip -S 
+ endif
+ 
+ # Configure per-OS peculiarities
+@@ -301,7 +302,7 @@
+ CFLAGS_OS = -DNOT_HAVE_DAEMON -DNOT_HAVE_SA_LEN -DNOT_HAVE_SOCKLEN_T -DNOT_HAVE_IF_NAMETOINDEX \
+ 	 -DLOG_PERROR=0 -D_XPG4_2 -D__EXTENSIONS__ -DHAVE_BROKEN_RECVIF_NAME
+ CC = gcc
+-LD = gcc -shared
++LD = gcc
+ LINKOPTS = -lsocket -lnsl -lresolv
+ JAVACFLAGS_OS += -I$(JDK)/include/solaris
+ ifneq ($(DEBUG),1)
+@@ -347,7 +348,8 @@
+ 
+ ifeq ($(os),jaguar)
+ CFLAGS_OS = -DHAVE_IPV6 -no-cpp-precomp -Werror -DNOT_HAVE_SOCKLEN_T
+-LD = libtool -dynamic
++LD = libtool
++SOOPTS = -dynamic
+ LINKOPTS = -lSystem
+ LDSUFFIX = dylib
+ JDK = /System/Library/Frameworks/JavaVM.framework/Home
+@@ -356,7 +358,8 @@
+ 
+ ifeq ($(os),panther)
+ CFLAGS_OS = -DHAVE_IPV6 -no-cpp-precomp -Werror
+-LD = libtool -dynamic
++LD = libtool
++SOOPTS = -dynamic
+ LINKOPTS = -lSystem
+ LDSUFFIX = dylib
+ JDK = /System/Library/Frameworks/JavaVM.framework/Home
+@@ -366,7 +369,8 @@
+ ifeq ($(os),tiger)
+ CFLAGS_OS = -DHAVE_IPV6 -no-cpp-precomp -Werror -Wdeclaration-after-statement #-Wunreachable-code
+ CC = @gcc-4.0
+-LD = $(CC) -dynamiclib
++LD = $(CC)
++SOOPTS = -dynamiclib
+ LINKOPTS = -lSystem
+ LDSUFFIX = dylib
+ JDK = /System/Library/Frameworks/JavaVM.framework/Home
+@@ -390,8 +394,9 @@
+ NSSLINKNAME := $(NSSLIBNAME).so.2
+ NSSINSTPATH := /lib
+ 
+-# If not otherwise defined, we install into /usr/lib and /usr/include
++# If not otherwise defined, we install into /usr/lib, /usr/include & /etc
+ # and our startup script is called mdns (e.g. /etc/init.d/mdns)
++ETCBASE?=/etc
+ INSTBASE?=/usr
+ STARTUPSCRIPTNAME?=mdns
+ 
+@@ -473,7 +478,7 @@
+ CLIENTLIBOBJS = $(OBJDIR)/dnssd_clientlib.c.so.o $(OBJDIR)/dnssd_clientstub.c.so.o $(OBJDIR)/dnssd_ipc.c.so.o
+ 
+ $(BUILDDIR)/libdns_sd.$(LDSUFFIX): $(CLIENTLIBOBJS)
+-	@$(LD) $(LINKOPTS) -o $@ $+
++	@$(LD) $(SOOPTS) $(LINKOPTS) -o $@ $+
+ 	@$(STRIP) $@
+ 
+ Clients: setup libdns_sd ../Clients/build/dns-sd
+@@ -508,7 +513,7 @@
+ InstalledClients: $(INSTBASE)/bin/dns-sd
+ 	@echo $+ " installed"
+ 
+-InstalledNSS: $(NSSINSTPATH)/$(NSSLINKNAME) /etc/nss_mdns.conf $(MANPATH)/man5/nss_mdns.conf.5 $(MANPATH)/man8/libnss_mdns.8
++InstalledNSS: $(NSSINSTPATH)/$(NSSLINKNAME) $(ETCBASE)/nss_mdns.conf $(MANPATH)/man5/nss_mdns.conf.5 $(MANPATH)/man8/libnss_mdns.8
+ 	@echo $+ " installed"
+ 
+ # Note: If daemon already installed, we make sure it's stopped before overwriting it
+@@ -563,19 +568,21 @@
+ 
+ $(NSSINSTPATH)/$(NSSLINKNAME): $(NSSINSTPATH)/$(NSSLIBFILE)
+ 	$(LN) $< $@
+-	ldconfig
++ifdef LDCONFIG
++	$(LDCONFIG)
++endif
+ 
+ $(NSSINSTPATH)/$(NSSLIBFILE): $(BUILDDIR)/$(NSSLIBFILE)
+ 	$(CP) $< $@
+ 	chmod 444 $@
+ 
+-/etc/nss_mdns.conf: nss_mdns.conf
++$(ETCBASE)/nss_mdns.conf: nss_mdns.conf
+ 	$(CP) $< $@
+ 	chmod 444 $@
+ 	# Check the nsswitch.conf file.
+ 	# If 'mdns' does not already appear on the "hosts:" line, then add it right before 'dns'
+-	cp -f /etc/nsswitch.conf /etc/nsswitch.conf.pre-mdns
+-	sed -e '/mdns/!s/^\(hosts:.*\)dns\(.*\)/\1mdns dns\2/' /etc/nsswitch.conf.pre-mdns > /etc/nsswitch.conf
++	-[ -f $(ETCBASE)/nsswitch.conf ] && cp -f $(ETCBASE)/nsswitch.conf $(ETCBASE)/nsswitch.conf.pre-mdns
++	-[ -f $(ETCBASE)/nsswitch.conf ] && sed -e '/mdns/!s/^\(hosts:.*\)dns\(.*\)/\1mdns dns\2/' $(ETCBASE)/nsswitch.conf.pre-mdns > $(ETCBASE)/nsswitch.conf
+ 
+ #############################################################################
+ 
