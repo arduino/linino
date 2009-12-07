@@ -1,0 +1,15 @@
+diff -u --recursive gst-plugins-good-0.10.17-vanilla/common/shave-libtool.in gst-plugins-good-0.10.17/common/shave-libtool.in
+--- gst-plugins-good-0.10.17-vanilla/common/shave-libtool.in	2009-12-05 18:23:04.701431715 -0500
++++ gst-plugins-good-0.10.17/common/shave-libtool.in	2009-12-05 18:23:28.413387776 -0500
+@@ -42,11 +42,9 @@
+ case "$mode" in
+ compile)
+     # shave will be called and print the actual CC/CXX/LINK line
+-    preserved_args="$preserved_args --shave-mode=$mode"
+     pass_though=1
+     ;;
+ link)
+-    preserved_args="$preserved_args --shave-mode=$mode"
+     Q="  LINK  "
+     ;;
+ *)

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,19 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gst-plugins-good
-PKG_VERSION:=0.10.10
-PKG_RELEASE:=4
+PKG_VERSION:=0.10.17
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gst-plugins-good/
-PKG_MD5SUM:=a57b4f6bdb9a4a00351f9da74de35ae9
+PKG_MD5SUM:=833546cd2b8bbf86b8ed083b00897918
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
 export PATH:=$(PKG_BUILD_DIR)/bin:$(TARGET_PATH)
-
-#FIXME: Each plugin should be indepently selectable
 
 PKG_INSTALL=1
 
@@ -35,16 +33,32 @@ EXTRA_LDFLAGS+= \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
-define Package/gst-plugins-good
+define Package/gst-plugins-good/Default
   SECTION:=multimedia
   CATEGORY:=Multimedia
+  DEPENDS:=+gstreamer +gst-plugins-base
   TITLE:=gst-plugins-good
   URL:=http://gstreamer.freedesktop.org/
-  DEPENDS:=+gstreamer +liboil +pango +cairo +libpng +taglib +libspeex +libjpeg +zlib +gst-plugins-base
 endef
 
-define Package/gst-plugins-good/description
-	gstreamer good plugins
+define Package/gst-plugins-good-flac
+  $(call Package/gst-plugins-good/Default)
+  TITLE+= (flac)
+  DEPENDS += +libflac
+endef
+
+define Package/gst-plugins-good-flac/description
+  gstreamer FLAC plugins
+endef
+
+define Package/gst-plugins-good-id3demux
+  $(call Package/gst-plugins-good/Default)
+  TITLE+= (id3demux)
+  DEPENDS += +libid3tag
+endef
+
+define Package/gst-plugins-good-id3demux/description
+  gstreamer FLAC plugins
 endef
 
 define Build/Configure
@@ -73,18 +87,15 @@ define Build/Configure
 	chmod +x $(PKG_BUILD_DIR)/bin/gtkdoc-rebase
 endef
 
-define Build/InstallDev
+define BuildPlugin
+  define Package/gst-plugins-good-$(1)/install
 	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-0.10
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.{so*,a,la} \
+		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/libgst$(1).so \
 		$(1)/usr/lib/gstreamer-0.10
+  endef
+
+  $$(eval $$(call BuildPackage,gst-plugins-good-$(1)))
 endef
 
-define Package/gst-plugins-good/install
-	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-0.10
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.so* \
-		$(1)/usr/lib/gstreamer-0.10
-endef
-
-$(eval $(call BuildPackage,gst-plugins-good))
+$(eval $(call BuildPlugin,id3demux))
