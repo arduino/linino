@@ -89,10 +89,10 @@ endef
 
 define BuildPlugin
   define Package/gst-plugins-good-$(1)/install
-	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-0.10
+	$(INSTALL_DIR) $$(1)/usr/lib/gstreamer-0.10
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/libgst$(1).so \
-		$(1)/usr/lib/gstreamer-0.10
+		$$(1)/usr/lib/gstreamer-0.10
   endef
 
   $$(eval $$(call BuildPackage,gst-plugins-good-$(1)))
