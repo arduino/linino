@@ -1,0 +1,16 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2009 OpenWrt.org
+
+START=60
+
+start() {
+	mkdir -p /var/cache/dmapd/
+	mkdir -p /var/run/dmapd/
+	mkdir -p /var/lock/subsys/
+	
+	DMAPD_PHOTO_MODULE=null /usr/sbin/dmapd -m /var/db/BigDisk/Storage/Music/
+}
+
+stop() {
+	killall dmapd 2> /dev/null
+}
