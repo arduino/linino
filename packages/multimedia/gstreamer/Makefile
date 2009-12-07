@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gstreamer
-PKG_VERSION:=0.10.21
-PKG_RELEASE:=3
+PKG_VERSION:=0.10.25
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gstreamer/
-PKG_MD5SUM:=7bad90af3fd81a1535363cf85359125c
+PKG_MD5SUM:=88544e034a051baf472983791d233076
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -61,12 +61,12 @@ define Build/InstallDev
 
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} \
 		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-0.10/
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.{so*,a,la} \
+		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.{so*,la} \
 		$(1)/usr/lib/gstreamer-0.10
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/

@@ -1,0 +1,16 @@
+diff -u --recursive gstreamer-0.10.25-vanilla/common/shave-libtool.in gstreamer-0.10.25/common/shave-libtool.in
+--- gstreamer-0.10.25-vanilla/common/shave-libtool.in	2009-04-15 16:28:36.000000000 -0400
++++ gstreamer-0.10.25/common/shave-libtool.in	2009-11-14 23:08:34.744433657 -0500
+@@ -41,12 +41,9 @@
+ 
+ case "$mode" in
+ compile)
+-    # shave will be called and print the actual CC/CXX/LINK line
+-    preserved_args="$preserved_args --shave-mode=$mode"
+     pass_though=1
+     ;;
+ link)
+-    preserved_args="$preserved_args --shave-mode=$mode"
+     Q="  LINK  "
+     ;;
+ *)
