@@ -1,6 +1,6 @@
 --- a/src/ssl.c
 +++ b/src/ssl.c
-@@ -62,13 +62,16 @@ void ssl_init(void) { /* init SSL before
+@@ -63,13 +63,16 @@ void ssl_init(void) { /* init SSL before
  }
  
  void ssl_configure(void) { /* configure global SSL settings */
@@ -17,7 +17,7 @@
      int id=0;
      COMP_METHOD *cm=NULL;
      char *name="unknown";
-@@ -97,6 +100,7 @@ static void init_compression(void) {
+@@ -98,6 +101,7 @@ static void init_compression(void) {
          die(1);
      }
      s_log(LOG_INFO, "Compression enabled using %s method", name);
