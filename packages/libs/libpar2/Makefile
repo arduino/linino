@@ -20,8 +20,8 @@ PKG_FIXUP:=libtool
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libpar2
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=libs
+  CATEGORY:=Libraries
   DEPENDS:=+libsigcxx
   TITLE:=A library for performing common tasks related to PAR recovery sets
 endef
