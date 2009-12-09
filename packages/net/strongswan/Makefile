@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=strongswan
-PKG_VERSION:=2.8.2
-PKG_RELEASE:=2
+PKG_VERSION:=2.8.11
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.strongswan.org/
-PKG_MD5SUM:=57427f5b48123851a73b10d78dd4f8d6
+PKG_MD5SUM:=067189ae1586f0fdc5527c3c90448771
 
 include $(INCLUDE_DIR)/package.mk
 
