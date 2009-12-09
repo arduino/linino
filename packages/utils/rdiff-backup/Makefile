@@ -21,9 +21,9 @@ include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
 define Package/rdiff-backup
-  SUBMENU:=Python
-  SECTION:=lang
-  CATEGORY:=Languages
+  SUBMENU:=backup
+  SECTION:=utils
+  CATEGORY:=Utilities
   TITLE:=Incremental backup utility
   URL:=http://www.nongnu.org/rdiff-backup
   DEPENDS:=+python-mini +librsync +libpopt +openssl-util
