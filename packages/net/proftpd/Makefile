@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -9,13 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=proftpd
-PKG_VERSION:=1.3.2a
+PKG_VERSION:=1.3.2b
 PKG_RELEASE:=1
 PKG_SOURCE_URL:=ftp://ftp.proftpd.org/distrib/source
-PKG_MD5SUM:=ad3cbb5db30c5ae39e09b308892392b3
+PKG_MD5SUM:=0d6777839f37115654ce384841f68131
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -26,6 +25,10 @@ define Package/proftpd
   CATEGORY:=Network
   TITLE:=ProFTPD FTP server
   URL:=http://www.proftpd.org/
+endef
+
+define Package/proftpd/conffiles
+/etc/proftpd.conf
 endef
 
 TARGET_CPPFLAGS += \
@@ -40,13 +43,13 @@ CONFIGURE_ARGS += \
 	--enable-devel \
 
 define Package/proftpd/install
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
-	rm -rf \
-		$(1)/usr/include \
-		$(1)/usr/share \
-		$(1)/usr/man \
-		$(1)/usr/lib/pkgconfig \
-		$(1)/var
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/proftpd.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ftp{count,top,who} $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/{ftpshut,proftpd} $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/in.proftpd $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,proftpd))
