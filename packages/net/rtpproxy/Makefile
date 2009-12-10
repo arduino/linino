@@ -8,19 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rtpproxy
-PKG_VERSION:=1.2.0
+PKG_VERSION:=1.2.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://b2bua.org/chrome/site/
-PKG_MD5SUM:=eb4e650ec00618a77a35f0abb91f988a
+PKG_MD5SUM:=b0b5d6cdce3f17cdbbac473c11a2d0e5
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/rtpproxy
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=
+  DEPENDS:=+libpthread
   TITLE:=RTP (Realtime Transport Protocol) proxy
   URL:=http://www.rtpproxy.org/
 endef
@@ -35,7 +35,7 @@ endef
 
 define Package/rtpproxy/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rtpproxy $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rtpproxy $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,rtpproxy))
