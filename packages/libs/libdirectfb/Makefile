@@ -41,7 +41,6 @@ define Feature/DirectFB
   NAME:=DirectFB
 endef
 
-comma:=,
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-osx \
@@ -54,7 +53,7 @@ define Build/Configure
 		--disable-sdl \
 		--disable-vnc \
 		--enable-sysfs \
-		--with-inputdrivers=keyboard$(comma)linuxinput \
+		--with-inputdrivers=linuxinput \
 		--with-gfxdrivers=none \
 	)
 endef
