@@ -1,20 +1,20 @@
 --- a/lib.base
 +++ b/lib.base
-@@ -251,7 +251,7 @@
- 
-     [ -n "${MODULE_SUFFIX:=o gz ko o.gz ko.gz}" ]
- 
--    [ -z "$MODULESDIR" ] && MODULESDIR=/lib/modules/$(uname -r)/kernel/net/ipv4/netfilter:/lib/modules/$(uname -r)/kernel/net/netfilter
-+    [ -z "$MODULESDIR" ] && MODULESDIR=/lib/modules/$(uname -r)/kernel/net/ipv4/netfilter:/lib/modules/$(uname -r)/kernel/net/netfilter:/lib/modules/$(uname -r)
-     MODULES=$(lsmod | cut -d ' ' -f1)
- 
-     for directory in $(split $MODULESDIR); do
-@@ -283,7 +283,7 @@
-     [ -n "${MODULE_SUFFIX:=o gz ko o.gz ko.gz}" ]
+@@ -267,7 +267,7 @@ reload_kernel_modules() {
  
      [ -z "$MODULESDIR" ] && \
--	MODULESDIR=/lib/modules/$(uname -r)/kernel/net/ipv4/netfilter:/lib/modules/$(uname -r)/kernel/net/netfilter
-+	MODULESDIR=/lib/modules/$(uname -r)/kernel/net/ipv4/netfilter:/lib/modules/$(uname -r)/kernel/net/netfilter:/lib/modules/$(uname -r)
+ 	uname=$(uname -r) && \
+-	MODULESDIR=/lib/modules/$uname/kernel/net/ipv4/netfilter:/lib/modules/$uname/kernel/net/netfilter:/lib/modules/$uname/extra:/lib/modules/$uname/extra/ipset
++	MODULESDIR=/lib/modules/$uname/kernel/net/ipv4/netfilter:/lib/modules/$uname/kernel/net/netfilter:/lib/modules/$uname/extra:/lib/modules/$uname/extra/ipset:/lib/modules/$uname
+ 
+     MODULES=$(lsmod | cut -d ' ' -f1)
+ 
+@@ -306,7 +306,7 @@ load_kernel_modules() # $1 = Yes, if we 
+ 
+     [ -z "$MODULESDIR" ] && \
+ 	uname=$(uname -r) && \
+-	MODULESDIR=/lib/modules/$uname/kernel/net/ipv4/netfilter:/lib/modules/$uname/kernel/net/netfilter:/lib/modules/$uname/extra:/lib/modules/$uname/extra/ipset
++	MODULESDIR=/lib/modules/$uname/kernel/net/ipv4/netfilter:/lib/modules/$uname/kernel/net/netfilter:/lib/modules/$uname/extra:/lib/modules/$uname/extra/ipset:/lib/modules/$uname
  
      for directory in $(split $MODULESDIR); do
  	[ -d $directory ] && moduledirectories="$moduledirectories $directory"

@@ -8,18 +8,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=shorewall-lite
-PKG_VERSION:=4.0.12
+PKG_VERSION:=4.2.11
 PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=http://www.shorewall.net/pub/shorewall/4.0/shorewall-$(PKG_VERSION)/ \
-	http://www1.shorewall.net/pub/shorewall/4.0/shorewall-$(PKG_VERSION)/ \
-	http://slovakia.shorewall.net/pub/shorewall/4.0/shorewall-$(PKG_VERSION)/ \
-	http://shorewall.de/pub/shorewall/4.0/shorewall-$(PKG_VERSION)/ \
-	http://www.shorewall.com.au/4.0/shorewall-$(PKG_VERSION)/ \
-	http://shorewall.infohiiway.com/pub/shorewall/4.0/shorewall-$(PKG_VERSION)/ \
-	http://www.shorewall.com.ar/pub/shorewall/shorewall/4.0/shorewall-$(PKG_VERSION)/
+PKG_SOURCE_URL:=http://www.shorewall.net/pub/shorewall/4.2/shorewall-$(PKG_VERSION)/ \
+	http://www1.shorewall.net/pub/shorewall/4.2/shorewall-$(PKG_VERSION)/ \
+	http://slovakia.shorewall.net/pub/shorewall/4.2/shorewall-$(PKG_VERSION)/ \
+	http://shorewall.de/pub/shorewall/4.2/shorewall-$(PKG_VERSION)/ \
+	http://www.shorewall.com.au/4.2/shorewall-$(PKG_VERSION)/ \
+	http://shorewall.infohiiway.com/pub/shorewall/4.2/shorewall-$(PKG_VERSION)/ \
+	http://www.shorewall.com.ar/pub/shorewall/shorewall/4.2/shorewall-$(PKG_VERSION)/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=ab82b03f987f69536d305db40dc7692c
+PKG_MD5SUM:=cb34824f076fdff6b7457d85e124ea74
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -50,9 +50,11 @@ endef
 define Package/shorewall-lite/install
 	$(INSTALL_DIR) $(1)/sbin
 	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
 	$(INSTALL_DIR) $(1)/etc/shorewall-lite
 	$(INSTALL_DIR) $(1)/usr/share
 	$(INSTALL_BIN) ./files/shorewall-lite.init $(1)/etc/init.d/shorewall-lite
+	$(INSTALL_BIN) ./files/hotplug_iface $(1)/etc/hotplug.d/iface/05-shorewall-lite
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/sbin/shorewall-lite $(1)/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/shorewall-lite $(1)/usr/share
 	$(INSTALL_BIN) ./files/hostname $(1)/usr/share/shorewall-lite

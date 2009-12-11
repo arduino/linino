@@ -12,5 +12,9 @@ stop() {
 }
 
 restart() {
-	/sbin/shorewall-lite -qq restart
+	if [ -f /etc/shorewall-lite/state/restore ] ; then
+		/sbin/shorewall-lite -qq restore
+	else
+		/sbin/shorewall-lite -qq restart
+	fi
 }
