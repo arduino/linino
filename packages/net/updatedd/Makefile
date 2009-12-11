@@ -106,6 +106,11 @@ MAKE_FLAGS += \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
 	all install
 
+define Build/Configure
+	(cd $(PKG_BUILD_DIR); aclocal && autoconf && automake )
+	$(call Build/Configure/Default)
+endef
+
 define BuildPlugin
   define Package/$(1)/install
 	$(INSTALL_DIR) $$(1)/usr/lib/updatedd
