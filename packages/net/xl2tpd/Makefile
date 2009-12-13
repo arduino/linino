@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/xl2tpd
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+libpcap
   TITLE:=An L2TP (Layer 2 Tunneling Protocol) daemon
   URL:=http://www.xelerance.com/software/xl2tpd
   SUBMENU:=VPN
