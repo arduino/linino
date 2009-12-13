@@ -10,12 +10,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libdmapsharing
-PKG_VERSION:=1.9.0.13
+PKG_VERSION:=1.9.0.15
 PKG_RELEASE:=1
 
 PKG_SOURCE:=libdmapsharing-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.flyn.org/projects/libdmapsharing/
-PKG_MD5SUM:=c178daa4d7c9c09c1a5c2a1687fc4e09
+PKG_MD5SUM:=11839bcf9aac8f1de5e101d13e9e8422
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libdmapsharing-$(PKG_VERSION)
 
@@ -31,17 +31,13 @@ EXTRA_LDFLAGS+= \
 define Package/libdmapsharing
   SECTION:=libs
   CATAGORY:=Libraries
-  DEPENDS:=+libsoup +mdnsresponder +gst-plugins-base-app
+  DEPENDS:=+libsoup +mdnsresponder
   TITLE:=libdmapsharing
   URL:=http://www.flyn.org/projects/libdmapsharing/
 endef
 
 define Package/libdmapsharing/decription
   Libdmapsharing is a DMAP library implementation in C
-endef
-
-define Build/Configure
-	$(call Build/Configure/Default)
 endef
 
 define Build/Compile
