@@ -84,7 +84,7 @@ define BuildTemplate
  ifneq ($(3),)
   define Package/iptables-mod-$(1)
     $$(call Package/xtables-addons)
-    CATEGORY:=Base system
+    CATEGORY:=Network
     TITLE:=$(2) iptables extension
     DEPENDS:= @LINUX_2_6 iptables $(if $(4),+kmod-ipt-$(1))
   endef
