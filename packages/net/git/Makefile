@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=git
-PKG_VERSION:=1.6.5.3
+PKG_VERSION:=1.6.5.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@KERNEL/software/scm/git
-PKG_MD5SUM:=a1dbc3da46cbf33c4367db689853c142
+PKG_MD5SUM:=03aefaaecae7a236b88d04d1a83698d9
 
 include $(INCLUDE_DIR)/package.mk
 
