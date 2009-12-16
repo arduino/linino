@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=db47
 PKG_VERSION:=4.7.25.NC
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/db-$(PKG_VERSION)
 PKG_SOURCE:=db-$(PKG_VERSION).tar.gz
@@ -64,9 +64,8 @@ define Build/Configure
 			--disable-tcl \
 			--disable-rpc \
 			--enable-compat185 \
-			--enable-debug \
-			--enable-statistics \
-			--enable-replication \
+			--enable-smallbuild \
+			--disable-debug \
 			--enable-cryptography \
 	);
 endef
