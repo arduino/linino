@@ -31,20 +31,66 @@ EXTRA_LDFLAGS+= \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
-define Package/gstreamer
-  SECTION:=multimedia
-  CATEGORY:=Multimedia
+define Package/gstreamer/Default
+  DEPENDS:=+gstreamer
   TITLE:=gstreamer
   URL:=http://gstreamer.freedesktop.org/
-  DEPENDS:=+libxml2 +glib2
+  SECTION:=multimedia
+  CATEGORY:=Multimedia
 endef
 
+define Package/gstreamer
+  $(call Package/gstreamer/Default)
+  DEPENDS:=+libxml2 +glib2
+endef
+  
 define Package/gstreamer/description
 	A framework for streaming media.
 endef
 
+define Package/gstreamer-libgstcheck
+  $(call Package/gstreamer/Default)
+  TITLE+= (libgstcheck)
+endef
+  
+define Package/gstreamer-libgstcheck/description
+	gstreamer libgstcheck
+endef
+
+define Package/gstreamer-libgstcontroller
+  $(call Package/gstreamer/Default)
+  TITLE+= (libgstcontroller)
+endef
+  
+define Package/gstreamer-libgstcontroller/description
+	gstreamer libgstcontroller
+endef
+
+define Package/gstreamer-libgstdataprotocol
+  $(call Package/gstreamer/Default)
+  TITLE+= (libgstdataprotocol)
+endef
+  
+define Package/gstreamer-libgstdataprotocol/description
+	gstreamer libgstdataprotocol
+endef
+
+define Package/gstreamer-libgstnet
+  $(call Package/gstreamer/Default)
+  TITLE+= (libgstnet)
+endef
+
+define Package/gstreamer-libgstnet/description
+	gstreamer libgstnet
+endef
+
 define Build/Configure
 	$(call Build/Configure/Default,\
+		--disable-gst-debug \
+		--disable-loadsave \
+		--disable-parse \
+		--disable-debug \
+		--disable-valgrind \
 		--disable-tests \
 		--disable-examples \
 	)
@@ -81,12 +127,12 @@ define Build/InstallDev
 endef
 
 define Package/gstreamer/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
-
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
+		$(PKG_INSTALL_DIR)/usr/lib/libgstbase*.so* \
+		$(1)/usr/lib/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libgstreamer*.so* \
 		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-0.10/
@@ -95,4 +141,18 @@ define Package/gstreamer/install
 		$(1)/usr/lib/gstreamer-0.10
 endef
 
+define BuildLib
+  define Package/gstreamer-libgst$(1)/install
+	$(INSTALL_DIR) $$(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgst$(1)*.so* \
+		$$(1)/usr/lib/
+  endef
+
+  $$(eval $$(call BuildPackage,gstreamer-libgst$(1)))
+endef
+
 $(eval $(call BuildPackage,gstreamer))
+$(eval $(call BuildLib,check))
+$(eval $(call BuildLib,controller))
+$(eval $(call BuildLib,dataprotocol))
+$(eval $(call BuildLib,net))
