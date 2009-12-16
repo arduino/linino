@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lame
 PKG_VERSION:=398-2
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/lame
 PKG_MD5SUM:=719dae0ee675d0c16e0e89952930ed35
@@ -39,7 +39,6 @@ endef
 define Package/lame-lib
 $(call Package/lame/Default)
   TITLE:=lame-lib
-  DEPENDS:=lame
 endef
 
 define Package/lame-lib/description
