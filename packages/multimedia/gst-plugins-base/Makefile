@@ -34,23 +34,143 @@ EXTRA_LDFLAGS+= \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Package/gst-plugins-base/Default
-  SECTION:=multimedia
-  CATEGORY:=Multimedia
-  DEPENDS:=+gstreamer +liboil +gst-plugins-base-libs
   TITLE:=gst-plugins-base
   URL:=http://gstreamer.freedesktop.org/
+  SECTION:=multimedia
+  CATEGORY:=Multimedia
+  DEPENDS:=+gstreamer +libogg
 endef
 
-define Package/gst-plugins-base-libs
+define Package/gst-plugins-base-libgstapp
   $(call Package/gst-plugins-base/Default)
-  DEPENDS:=+gstreamer +liboil
-  TITLE:=gstreamber plugins base libraries
+  TITLE+= (libgstapp)
+endef
+
+define Package/gst-plugins-base-libgstapp/description
+  gstreamer libgstapp
+endef
+
+define Package/gst-plugins-base-libgstaudio
+  $(call Package/gst-plugins-base/Default)
+  TITLE+= (libgstaudio)
+endef
+
+define Package/gst-plugins-base-libgstaudio/description
+  gstreamer libgstaudio
+endef
+
+define Package/gst-plugins-base-libgstinterfaces
+  $(call Package/gst-plugins-base/Default)
+  TITLE+= (libgstinterfaces)
+endef
+
+define Package/gst-plugins-base-libgstinterfaces/description
+  gstreamer libgstinterfaces
+endef
+
+define Package/gst-plugins-base-libgstpbutils
+  $(call Package/gst-plugins-base/Default)
+  TITLE+= (libgstpbutils)
+endef
+
+define Package/gst-plugins-base-libgstpbutils/description
+  gstreamer libgstpbutils
+endef
+
+define Package/gst-plugins-base-libgsttag
+  $(call Package/gst-plugins-base/Default)
+  TITLE+= (libgsttag)
+endef
+
+define Package/gst-plugins-base-libgsttag/description
+  gstreamer libgsttag
+endef
+
+define Package/gst-plugins-base-libgstriff
+  $(call Package/gst-plugins-base/Default)
+  TITLE+= (libgstriff)
+endef
+
+define Package/gst-plugins-base-libgstriff/description
+  gstreamer libgstriff
+endef
+
+define Package/gst-plugins-base-libgstcdda
+  $(call Package/gst-plugins-base/Default)
+  TITLE+= (libgstcdda)
+endef
+
+define Package/gst-plugins-base-libgstcdda/description
+  gstreamer libgstcdda
+endef
+
+define Package/gst-plugins-base-libgstfft
+  $(call Package/gst-plugins-base/Default)
+  TITLE+= (libgstfft)
+endef
+
+define Package/gst-plugins-base-libgstfft/description
+  gstreamer libgstfft
+endef
+
+define Package/gst-plugins-base-libgstnetbuffer
+  $(call Package/gst-plugins-base/Default)
+  TITLE+= (libgstnetbuffer)
+endef
+
+define Package/gst-plugins-base-libgstnetbuffer/description
+  gstreamer libgstnetbuffer
+endef
+
+define Package/gst-plugins-base-libgstrtp
+  $(call Package/gst-plugins-base/Default)
+  TITLE+= (libgstrtp)
+endef
+
+define Package/gst-plugins-base-libgstrtp/description
+  gstreamer libgstrtp
+endef
+
+define Package/gst-plugins-base-libgstvideo
+  $(call Package/gst-plugins-base/Default)
+  TITLE+= (libgstvideo)
+endef
+
+define Package/gst-plugins-base-libgstvideo/description
+  gstreamer libgstvideo
+endef
+
+define Package/gst-plugins-base-libgstvideo
+  $(call Package/gst-plugins-base/Default)
+  TITLE+= (libgstvideo)
+endef
+
+define Package/gst-plugins-base-libgstvideo/description
+  gstreamer libgstvideo
+endef
+
+define Package/gst-plugins-base-libgstrtsp
+  $(call Package/gst-plugins-base/Default)
+  TITLE+= (libgstrtsp)
+endef
+
+define Package/gst-plugins-base-libgstrtsp/description
+  gstreamer libgstrtsp
+endef
+
+define Package/gst-plugins-base-libgstsdp
+  $(call Package/gst-plugins-base/Default)
+  TITLE+= (libgstsdp)
+endef
+
+define Package/gst-plugins-base-libgstsdp/description
+  gstreamer libgstsdp
 endef
 
 define Package/gst-plugins-base-ogg
   $(call Package/gst-plugins-base/Default)
-  TITLE += (ogg)
-  DEPENDS += +libogg
+  TITLE+= (ogg)
+  DEPENDS += +liboil +gst-plugins-base-libgstriff +gst-plugins-base-libgsttag +gst-plugins-base-libgstaudio +gst-plugins-base-libgstinterfaces
 endef
 
 define Package/gst-plugins-base-ogg/description
@@ -60,7 +180,7 @@ endef
 define Package/gst-plugins-base-vorbis
   $(call Package/gst-plugins-base/Default)
   TITLE+= (vorbis)
-  DEPENDS:=+gst-plugins-base-ogg +libvorbis
+  DEPENDS += +libvorbis +gst-plugins-base-ogg +gst-plugins-base-libgsttag +gst-plugins-base-libgstaudio +gst-plugins-base-libgstinterfaces
 endef
 
 define Package/gst-plugins-base-vorbis/description
@@ -70,7 +190,7 @@ endef
 define Package/gst-plugins-base-theora
   $(call Package/gst-plugins-base/Default)
   TITLE+= (theora)
-  DEPENDS:=+gst-plugins-base-ogg +libtheora
+  DEPENDS += +libogg +libtheora +gst-plugins-base-ogg
 endef
 
 define Package/gst-plugins-base-theora/description
@@ -80,6 +200,7 @@ endef
 define Package/gst-plugins-base-alsa
   $(call Package/gst-plugins-base/Default)
   TITLE+= (alsa)
+  DEPENDS += +liboil
 endef
 
 define Package/gst-plugins-base-alsa/description
@@ -89,6 +210,7 @@ endef
 define Package/gst-plugins-base-app
   $(call Package/gst-plugins-base/Default)
   TITLE+= (app)
+  DEPENDS += +liboil +gst-plugins-base-libgstapp
 endef
 
 define Package/gst-plugins-base-app/description
@@ -98,6 +220,7 @@ endef
 define Package/gst-plugins-base-audioconvert
   $(call Package/gst-plugins-base/Default)
   TITLE+= (audioconvert)
+  DEPENDS += +liboil +gst-plugins-base-libgstaudio +gst-plugins-base-libgstinterfaces
 endef
 
 define Package/gst-plugins-base-audioconvert/description
@@ -106,8 +229,7 @@ endef
 
 define Package/gst-plugins-base-gio
   $(call Package/gst-plugins-base/Default)
-  TITLE+= (gio)
-  DEPENDS += +glib2
+  DEPENDS += +liboil +glib2
 endef
 
 define Package/gst-plugins-base-gio/description
@@ -117,6 +239,7 @@ endef
 define Package/gst-plugins-base-typefindfunctions
   $(call Package/gst-plugins-base/Default)
   TITLE+= (typefind)
+  DEPENDS += +liboil
 endef
 
 define Package/gst-plugins-base-typefindfunctions/description
@@ -126,6 +249,7 @@ endef
 define Package/gst-plugins-base-decodebin
   $(call Package/gst-plugins-base/Default)
   TITLE+= (decodebin)
+  DEPENDS += +liboil +gst-plugins-base-libgstpbutils
 endef
 
 define Package/gst-plugins-base-decodebin/description
@@ -171,11 +295,6 @@ define Build/InstallDev
 		$(1)/usr/lib/pkgconfig/
 endef
 
-define Package/gst-plugins-base-libs/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib
-endef
-
 define BuildPlugin
   define Package/gst-plugins-base-$(1)/install
 	$(INSTALL_DIR) $$(1)/usr/lib/gstreamer-0.10
@@ -186,6 +305,30 @@ define BuildPlugin
   $$(eval $$(call BuildPackage,gst-plugins-base-$(1)))
 endef
 
+define BuildLib
+  define Package/gst-plugins-base-libgst$(1)/install
+	$(INSTALL_DIR) $$(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgst$(1)*.so* \
+		$$(1)/usr/lib/
+  endef
+
+  $$(eval $$(call BuildPackage,gst-plugins-base-libgst$(1)))
+endef
+
+$(eval $(call BuildLib,app))
+$(eval $(call BuildLib,audio))
+$(eval $(call BuildLib,interfaces))
+$(eval $(call BuildLib,pbutils))
+$(eval $(call BuildLib,tag))
+$(eval $(call BuildLib,riff))
+$(eval $(call BuildLib,cdda))
+$(eval $(call BuildLib,fft))
+$(eval $(call BuildLib,netbuffer))
+$(eval $(call BuildLib,rtp))
+$(eval $(call BuildLib,video))
+$(eval $(call BuildLib,rtsp))
+$(eval $(call BuildLib,sdp))
+
 $(eval $(call BuildPlugin,ogg))
 $(eval $(call BuildPlugin,vorbis))
 $(eval $(call BuildPlugin,theora))
@@ -195,4 +338,3 @@ $(eval $(call BuildPlugin,audioconvert))
 $(eval $(call BuildPlugin,gio))
 $(eval $(call BuildPlugin,typefindfunctions))
 $(eval $(call BuildPlugin,decodebin))
-$(eval $(call BuildPackage,gst-plugins-base-libs))
