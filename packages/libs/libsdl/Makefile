@@ -32,7 +32,8 @@ define Package/libsdl/description
 endef
 
 CONFIGURE_ARGS += \
-	--without-x
+	--without-x \
+	--disable-audio
 
 define Build/Compile
 	rm -rf $(PKG_INSTALL_DIR)
