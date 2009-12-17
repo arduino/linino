@@ -120,7 +120,7 @@ endef
 define Package/freeswitch
 $(call Package/freeswitch/Default)
   TITLE:=FreeSWITCH open source telephony platform
-  DEPENDS:=+libopenssl +libreadline +libncurses +libpthread
+  DEPENDS:=+libopenssl +libreadline +libncurses +libpthread +libstdcpp
   MENU:=1
 endef
 
@@ -187,6 +187,31 @@ $(call Package/freeswitch/Default)
 endef
 
 
+define Download/lib
+ define Download/$(1)
+  FILE:=$(2)
+  URL:=http://files.freeswitch.org/downloads/libs/
+  MD5SUM:=$(3)
+ endef
+ define Prepare/$(1)
+  $(CP) $(DL_DIR)/$(2) $(PKG_BUILD_DIR)/libs/
+ endef
+ $$(eval $$(call Download,$(1)))
+endef
+
+ifneq ($(CONFIG_PACKAGE_freeswitch-mod-celt),)
+ $(eval $(call Download/lib,celt,celt-0.6.1.tar.gz,2961ffb6fadb5f905d20de9f0d86e44c))
+endif
+
+ifneq ($(CONFIG_PACKAGE_freeswitch-mod-curl),)
+ $(eval $(call Download/lib,json-c,json-c-0.8.tar.gz,9c7b90dff16eec3063084829c382ebac))
+endif
+
+ifneq ($(CONFIG_PACKAGE_freeswitch-mod-flite),)
+ $(eval $(call Download/lib,flite,flite-1.3.99-latest.tar.gz,f1b144c290893f074376520b447cc07f))
+endif
+
+
 CONFIGURE_ARGS+= \
 	--prefix="/usr/freeswitch" \
 	--bindir="/usr/bin" \
@@ -230,6 +255,13 @@ CONFIGURE_VARS+= \
 	apr_cv_process_shared_works="no" \
 	apr_cv_tcp_nodelay_with_cork="yes" \
 	apr_cv_type_rwlock_t="yes" \
+
+define Build/Prepare
+$(call Build/Prepare/Default)
+	$(call Prepare/celt)
+	$(call Prepare/flite)
+	$(call Prepare/json-c)
+endef
 
 define Build/Configure
 	( cd $(PKG_BUILD_DIR); ./rebootstrap.sh; )
@@ -354,7 +386,7 @@ $(eval $(call BuildPlugin,limit,Resource limitation,mod_limit,,))
 $(eval $(call BuildPlugin,local-stream,Local streaming,mod_local_stream,,))
 $(eval $(call BuildPlugin,logfile,File logger,mod_logfile,,))
 $(eval $(call BuildPlugin,loopback,Loopback endpoint,mod_loopback,,))
-$(eval $(call BuildPlugin,lua,Lua language interface,mod_lua,,@BROKEN)) # needs C++
+$(eval $(call BuildPlugin,lua,Lua language interface,mod_lua,,+libstdcpp)) # needs C++
 $(eval $(call BuildPlugin,memcache,MemCached interface,mod_memcache,,@BROKEN)) # fails in libmemcached
 $(eval $(call BuildPlugin,native-file,Native files,mod_native_file,,))
 $(eval $(call BuildPlugin,nibblebill,Billing,mod_nibblebill,,))
@@ -380,7 +412,7 @@ $(eval $(call BuildPlugin,skypiax,Skype compatible endpoint,mod_skypiax,,@BROKEN
 $(eval $(call BuildPlugin,sndfile,Multi-Format file transcoder,mod_sndfile,,))
 $(eval $(call BuildPlugin,snom,SNOM specific features,mod_snom,,))
 $(eval $(call BuildPlugin,sofia,SIP,mod_sofia,,))
-$(eval $(call BuildPlugin,soundtouch,Sound effects,mod_soundtouch,,@BROKEN)) # needs C++
+$(eval $(call BuildPlugin,soundtouch,Sound effects,mod_soundtouch,,@BROKEN)) # fails in soundtouch
 $(eval $(call BuildPlugin,speex,Speex codec,mod_speex,,))
 $(eval $(call BuildPlugin,spidermonkey,JavaScript,mod_spidermonkey,,@BROKEN)) # fails in js
 $(eval $(call BuildPlugin,spidermonkey-core_db,JavaScript DB,mod_spidermonkey_core_db,,@BROKEN))
