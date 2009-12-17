@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dmapd
 PKG_VERSION:=0.0.19
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_SOURCE:=dmapd-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.flyn.org/projects/dmapd/
 PKG_MD5SUM:=24ead9b689d569abd87fa055625a8356
@@ -14,17 +14,13 @@ include $(INCLUDE_DIR)/package.mk
 define Package/dmapd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libdmapsharing
+  DEPENDS:=+libdmapsharing +GraphicsMagick +gstreamer +libexif
   TITLE:= dmapd
   URL:=http://www.flyn.org/projects/dmapd/
 endef
 
 define Package/dmapd/decription
 	Dmapd is a DMAP server
-endef
-
-define Build/Configure
-	$(call Build/Configure/Default)
 endef
 
 define Build/Compile
