@@ -391,7 +391,7 @@ $(eval $(call BuildPlugin,memcache,MemCached interface,mod_memcache,,@BROKEN)) #
 $(eval $(call BuildPlugin,native-file,Native files,mod_native_file,,))
 $(eval $(call BuildPlugin,nibblebill,Billing,mod_nibblebill,,))
 $(eval $(call BuildPlugin,opal,Multi-Protocol endpoint,mod_opal,,@BROKEN)) # needs Opal
-$(eval $(call BuildPlugin,openzap,Zaptel harware interface,mod_openzap ozmod_analog ozmod_analog_em ozmod_isdn ozmod_skel ozmod_ss7_boost ozmod_zt,,+libpcap))
+$(eval $(call BuildPlugin,openzap,Zaptel hardware interface,mod_openzap ozmod_analog ozmod_analog_em ozmod_isdn ozmod_skel ozmod_ss7_boost ozmod_zt,,+libpcap))
 $(eval $(call BuildPlugin,perl,Perl language interface,mod_perl,,+perl @BROKEN)) # needs Perl
 $(eval $(call BuildPlugin,pocketsphinx,PocketSphinx SR,mod_pocketsphinx,,@BROKEN)) # fails in sphinxbase
 $(eval $(call BuildPlugin,portaudio,Local audio endpoint,mod_portaudio,,+alsa-lib))
