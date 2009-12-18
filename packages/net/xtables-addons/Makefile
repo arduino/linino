@@ -26,43 +26,12 @@ define Package/xtables-addons
   URL:=http://xtables-addons.sourceforge.net/
 endef
 
-define Package/ipset
-$(call Package/xtables-addons)
-  TITLE:=IPset administration utility
-  DEPENDS:= @LINUX_2_6 +iptables-mod-ipset
-endef
-
 # uses GNU configure
 
 CONFIGURE_ARGS+= \
 	--with-kbuild="$(LINUX_DIR)" \
 	--with-xtables="$(STAGING_DIR)/usr" \
 	--with-xtlibdir="/usr/lib/iptables" \
-
-IPSET_EXT:= \
-	ipset_iphash \
-	ipset_ipmap \
-	ipset_ipporthash \
-	ipset_ipportnethash \
-	ipset_iptree \
-	ipset_iptreemap \
-	ipset_macipmap \
-	ipset_nethash \
-	ipset_portmap \
-	ipset_setlist \
-
-IPSET_MOD:= \
-	ipset/ip_set \
-	ipset/ip_set_iphash \
-	ipset/ip_set_ipmap \
-	ipset/ip_set_ipporthash \
-	ipset/ip_set_iptree \
-	ipset/ip_set_iptreemap \
-	ipset/ip_set_macipmap \
-	ipset/ip_set_nethash \
-	ipset/ip_set_portmap \
-	ipset/ipt_set \
-	ipset/ipt_SET \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -115,13 +84,6 @@ define BuildTemplate
 
 endef
 
-define Package/ipset/install
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ipset $(1)/usr/sbin/
-endef
-
-$(eval $(call BuildPackage,ipset))
-
 #$(eval $(call BuildTemplate,SUFFIX,DESCRIPTION,EXTENSION,MODULE,PRIORITY,DEPENDS))
 $(eval $(call BuildTemplate,compat-xtables,API compatibilty layer,,compat_xtables,45,))
 $(eval $(call BuildTemplate,chaos,CHAOS,xt_CHAOS,xt_CHAOS,47,+kmod-ipt-compat-xtables +kmod-ipt-delude +kmod-ipt-tarpit))
@@ -129,4 +91,3 @@ $(eval $(call BuildTemplate,condition,Condition,xt_condition,xt_condition,46,))
 $(eval $(call BuildTemplate,delude,DELUDE,xt_DELUDE,xt_DELUDE,46,+kmod-ipt-compat-xtables))
 $(eval $(call BuildTemplate,tarpit,TARPIT,xt_TARPIT,xt_TARPIT,46,+kmod-ipt-compat-xtables))
 $(eval $(call BuildTemplate,ipp2p,IPP2P,xt_ipp2p,xt_ipp2p,46,))
-$(eval $(call BuildTemplate,ipset,IPset,$(IPSET_EXT),$(IPSET_MOD),46,))
