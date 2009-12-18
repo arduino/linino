@@ -37,8 +37,8 @@ define Build/Compile
 endef
 
 define Package/logilab-astng/install
-	mkdir -p $(1)
-	cp -r $(PKG_INSTALL_DIR)/* $(1)/
+	$(INSTALL_DIR) $(1)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 $(eval $(call BuildPackage,logilab-astng))
