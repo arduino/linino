@@ -53,11 +53,11 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include/shout
+	$(INSTALL_DIR) $(1)/usr/include/shout
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/shout/shout.h $(1)/usr/include/shout
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libshout.{a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/shout.pc $(1)/usr/lib/pkgconfig/		
 endef
 

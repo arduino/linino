@@ -38,8 +38,8 @@ define Build/Compile
 endef
 
 define Package/crowdcontrol/install
-	mkdir -p $(1)/usr/sbin
-	mkdir -p $(1)/etc/crowdcontrol
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/etc/crowdcontrol
 	$(CP) $(PKG_BUILD_DIR)/crowdcontrol $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/*-{domains,expressions,urls} $(1)/etc/crowdcontrol/
 endef

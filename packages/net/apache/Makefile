@@ -113,19 +113,19 @@ define Build/InstallDev
 	rm -rf	$(PKG_INSTALL_DIR)/usr/man/ \
 		$(PKG_INSTALL_DIR)/usr/share/manual/
 	# if you need docs take a look into the build-dir :)
-	mkdir -p $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
 	$(CP)   $(PKG_INSTALL_DIR)/etc/* \
 		$(1)/etc
-	mkdir -p $(1)/usr/include/apache
+	$(INSTALL_DIR) $(1)/usr/include/apache
 	$(CP)	$(PKG_INSTALL_DIR)/usr/include/* \
 		$(1)/usr/include/apache
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/httpd.exp \
 		$(1)/usr/lib
-	mkdir -p $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP)   $(PKG_INSTALL_DIR)/usr/sbin/* \
 		$(1)/usr/sbin
-	mkdir -p $(1)/usr/share
+	$(INSTALL_DIR) $(1)/usr/share
 	$(CP)   $(PKG_INSTALL_DIR)/usr/share/* \
 		$(1)/usr/share
 endef

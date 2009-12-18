@@ -43,9 +43,9 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_BUILD_DIR)/include/serdisplib $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/lib/libserdisp.{a,so*} $(1)/usr/lib/
 endef
 

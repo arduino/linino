@@ -37,9 +37,9 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_BUILD_DIR)/include/FLAC $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/obj/release/lib/libFLAC.{a,so} $(1)/usr/lib/
 endef
 

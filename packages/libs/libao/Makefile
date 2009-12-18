@@ -47,11 +47,11 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/ao $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libao.{a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/ao.pc $(1)/usr/lib/pkgconfig/
 endef
 

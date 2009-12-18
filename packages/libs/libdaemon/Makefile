@@ -54,12 +54,12 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libdaemon $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdaemon.a $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdaemon.so* $(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libdaemon.pc $(1)/usr/lib/pkgconfig/
 endef
 

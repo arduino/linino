@@ -70,12 +70,12 @@ define Build/Compile
 endef
 
 define Package/digitemp/install
-	mkdir -p $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin/
 	$(CP) $(PKG_BUILD_DIR)/digitemp_DS9097 $(1)/usr/bin/
 endef
 
 define Package/digitemp-usb/install
-	mkdir -p $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin/
 	$(CP) $(PKG_BUILD_DIR)/digitemp_DS2490 $(1)/usr/bin/
 endef
 

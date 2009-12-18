@@ -253,18 +253,18 @@ define Build/Compile
 endef
 
 define Package/openser/install	
-	mkdir -p $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
 	$(CP) $(PKG_BUILD_DIR)/utils/gen_ha1/gen_ha1 $(1)/usr/sbin/openser_gen_ha1
 	$(CP) $(PKG_BUILD_DIR)/scripts/sc $(1)/usr/sbin/openserctl
 	chmod 744 $(1)/usr/sbin/openserctl
 	$(CP) $(PKG_BUILD_DIR)/scripts/sc.dbtext $(1)/usr/sbin/dbtextctl
 	chmod 744 $(1)/usr/sbin/dbtextctl
-	mkdir -p $(1)/usr/lib/openser/modules
+	$(INSTALL_DIR) $(1)/usr/lib/openser/modules
 	(cd $(PKG_BUILD_DIR);\
 		$(CP) $(OPENSER_MODULE_FILES) $(1)/usr/lib/openser/modules/; \
 	)
-	mkdir -p $(1)/etc/openser
+	$(INSTALL_DIR) $(1)/etc/openser
 	$(CP) $(PKG_BUILD_DIR)/etc/openser.cfg $(1)/etc/openser/
 endef
 

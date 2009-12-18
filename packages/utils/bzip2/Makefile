@@ -39,14 +39,14 @@ MAKE_FLAGS += \
 	bzip2 \
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_BUILD_DIR)/bzlib.h $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/libbz2.a $(1)/usr/lib/
 endef
 
 define Package/bzip2/install
-	mkdir -p $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/bin/
 endef
 

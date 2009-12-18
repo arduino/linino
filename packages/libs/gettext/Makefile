@@ -50,9 +50,9 @@ define Build/Install
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/lib/libintl/include
+	$(INSTALL_DIR) $(1)/usr/lib/libintl/include
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/include/libintl.h $(1)/usr/lib/libintl/include/
-	mkdir -p $(1)/usr/lib/libintl/lib
+	$(INSTALL_DIR) $(1)/usr/lib/libintl/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libintl.{a,so*} $(1)/usr/lib/libintl/lib/
 endef
 

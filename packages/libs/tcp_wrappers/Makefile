@@ -46,9 +46,9 @@ define Build/Compile
 endef
 
 define Build/InstallDev	
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_BUILD_DIR)/tcpd.h $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/libwrap.a $(1)/usr/lib/
 	$(CP) $(PKG_BUILD_DIR)/shared/libwrap.so* $(1)/usr/lib/
 endef

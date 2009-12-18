@@ -46,11 +46,11 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libtasn1-config $(1)/usr/bin/
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libtasn1.h $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtasn1.{a,so*} $(1)/usr/lib/
 	$(SED) 's,-I$$$${prefix}/include,,g' $(1)/usr/bin/libtasn1-config
 	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(1)/usr/bin/libtasn1-config

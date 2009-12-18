@@ -45,11 +45,11 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmcrypt.{a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libmcrypt-config $(1)/usr/bin/
 	$(SED) 's,-I$$$${prefix}/include,,g' $(1)/usr/bin/libmcrypt-config
 	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(1)/usr/bin/libmcrypt-config

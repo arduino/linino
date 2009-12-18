@@ -40,9 +40,9 @@ MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS)"
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include/keynote
+	$(INSTALL_DIR) $(1)/usr/include/keynote
 	$(CP) $(PKG_BUILD_DIR)/{assertion,header,keynote,signature}.h $(1)/usr/include/keynote/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/libkeynote.a $(1)/usr/lib/
 endef
 

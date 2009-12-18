@@ -49,7 +49,7 @@ define Build/InstallDev
 #		CONFIG_PFMLIB_CELL=y \
 #		CONFIG_PFMLIB_SHARED=y \
 #		install
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP)	$(PKG_BUILD_DIR)/lib/libpfm* $(1)/usr/lib/
 endef
 

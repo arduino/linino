@@ -47,9 +47,9 @@ MAKE_FLAGS += \
 	all install
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include/libconfig/
+	$(INSTALL_DIR) $(1)/usr/include/libconfig/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libconfig.h $(1)/usr/include/libconfig/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libconfig.{a,so} $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libconfig.so* $(1)/usr/lib/
 endef

@@ -51,9 +51,9 @@ MAKE_FLAGS += \
 	all install
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevent.{la,a,so} $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevent-1.4.so* $(1)/usr/lib/
 endef

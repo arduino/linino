@@ -47,10 +47,10 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include/dvdread
+	$(INSTALL_DIR) $(1)/usr/include/dvdread
 	$(CP)	$(PKG_INSTALL_DIR)/usr/include/dvdread/*.h \
 		$(1)/usr/include/dvdread
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/libdvdread.{a,so*} \
 		$(1)/usr/lib/
 endef

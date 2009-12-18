@@ -49,9 +49,9 @@ endef
 
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include/crypto++
+	$(INSTALL_DIR) $(1)/usr/include/crypto++
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/crypto--/* $(1)/usr/include/crypto++/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcrypto++.{a,so*} $(1)/usr/lib/
 endef
 

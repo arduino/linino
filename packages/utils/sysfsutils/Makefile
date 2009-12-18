@@ -38,9 +38,9 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include/sysfs
+	$(INSTALL_DIR) $(1)/usr/include/sysfs
 	$(CP) $(PKG_BUILD_DIR)/include/*.h $(1)/usr/include/sysfs
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/lib/.libs/libsysfs.{a,so*} $(1)/usr/lib/
 endef
 

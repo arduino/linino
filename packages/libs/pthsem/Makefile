@@ -39,10 +39,10 @@ define Build/InstallDev
 		's,^\(prefix\|exec_prefix\)=.*,\1=$(STAGING_DIR)/usr,g' \
 		$(2)/bin/pthsem-config
 
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP)   $(PKG_INSTALL_DIR)/usr/include/*.h \
 		$(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP)   $(PKG_INSTALL_DIR)/usr/lib/libpthsem.{a,la,so*} \
 		$(1)/usr/lib/
 endef

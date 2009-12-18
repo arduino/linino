@@ -45,35 +45,35 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)$(PYTHON_PKG_DIR)/mx/BeeBase/mxBeeBase
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)/mx/BeeBase/mxBeeBase
 	$(CP) \
 		$(PKG_BUILD_DIR)/mx/BeeBase/mxBeeBase/mxh.h \
 		$(PKG_BUILD_DIR)/mx/BeeBase/mxBeeBase/btr.h \
 		$(PKG_BUILD_DIR)/mx/BeeBase/mxBeeBase/mxBeeBase.h \
 		$(1)$(PYTHON_PKG_DIR)/mx/BeeBase/mxBeeBase/
-	mkdir -p $(1)$(PYTHON_PKG_DIR)/mx/DateTime/mxDateTime
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)/mx/DateTime/mxDateTime
 	$(CP) \
 		$(PKG_BUILD_DIR)/mx/DateTime/mxDateTime/mxh.h \
 		$(PKG_BUILD_DIR)/mx/DateTime/mxDateTime/mxDateTime.h \
 		$(1)$(PYTHON_PKG_DIR)/mx/DateTime/mxDateTime/
-	mkdir -p $(1)$(PYTHON_PKG_DIR)/mx/Proxy/mxProxy
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)/mx/Proxy/mxProxy
 	$(CP) \
 		$(PKG_BUILD_DIR)/mx/Proxy/mxProxy/mxh.h \
 		$(PKG_BUILD_DIR)/mx/Proxy/mxProxy/mxProxy.h \
 		$(1)$(PYTHON_PKG_DIR)/mx/Proxy/mxProxy/
-	mkdir -p $(1)$(PYTHON_PKG_DIR)/mx/Queue/mxQueue
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)/mx/Queue/mxQueue
 	$(CP) \
 		$(PKG_BUILD_DIR)/mx/Queue/mxQueue/mxh.h \
 		$(PKG_BUILD_DIR)/mx/Queue/mxQueue/mxQueue.h \
 		$(1)$(PYTHON_PKG_DIR)/mx/Queue/mxQueue/
-	mkdir -p $(1)$(PYTHON_PKG_DIR)/mx/TextTools/mxTextTools
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)/mx/TextTools/mxTextTools
 	$(CP) \
 		$(PKG_BUILD_DIR)/mx/TextTools/mxTextTools/mxh.h \
 		$(PKG_BUILD_DIR)/mx/TextTools/mxTextTools/mxbmse.h \
 		$(PKG_BUILD_DIR)/mx/TextTools/mxTextTools/mxte.h \
 		$(PKG_BUILD_DIR)/mx/TextTools/mxTextTools/mxTextTools.h \
 		$(1)$(PYTHON_PKG_DIR)/mx/TextTools/mxTextTools/
-	mkdir -p $(1)$(PYTHON_PKG_DIR)/mx/Tools/mxTools
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)/mx/Tools/mxTools
 	$(CP) \
 		$(PKG_BUILD_DIR)/mx/Tools/mxTools/mxh.h \
 		$(PKG_BUILD_DIR)/mx/Tools/mxTools/mxTools.h \

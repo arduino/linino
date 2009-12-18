@@ -49,14 +49,14 @@ define Host/Install
 endef
 
 define Build/InstallDev
-	mkdir -p $(2)/bin
+	$(INSTALL_DIR) $(2)/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libpng{,12}-config $(2)/bin/
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/png{,conf}.h $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpng12 $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpng{,12}.{a,so*} $(1)/usr/lib/
-	mkdir -p $(1)/usr/lib/pkgconfig
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libpng{,12}.pc $(1)/usr/lib/pkgconfig/
 	$(SED) 's,^[ILR]_opts=".\+",,g' $(2)/bin/libpng*-config
 endef

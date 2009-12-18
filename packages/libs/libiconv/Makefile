@@ -62,9 +62,9 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/lib/libiconv/include
+	$(INSTALL_DIR) $(1)/usr/lib/libiconv/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/iconv.h $(1)/usr/lib/libiconv/include/
-	mkdir -p $(1)/usr/lib/libiconv/lib
+	$(INSTALL_DIR) $(1)/usr/lib/libiconv/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcharset.{a,so*} $(1)/usr/lib/libiconv/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.{a,so*} $(1)/usr/lib/libiconv/lib/
 endef

@@ -260,15 +260,15 @@ fi
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/bin/pg_config/pg_config.host $(1)/usr/bin/pg_config
-	mkdir -p $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpq $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpq-fe.h $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/pg_config.h $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/postgres_ext.h $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/postgresql $(1)/usr/include/
-	mkdir -p $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpq.{a,so*} $(1)/usr/lib/
 	$(CP) $(PKG_BUILD_DIR)/src/interfaces/ecpg/preproc/ecpg.host $(1)/usr/bin/ecpg
 	$(CP) $(PKG_BUILD_DIR)/src/timezone/zic.host $(1)/usr/bin/zic

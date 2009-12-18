@@ -38,7 +38,7 @@ define Build/Compile
 endef
 
 define Package/wiviz/install	
-	mkdir -p $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
 	$(CP) ./files/* $(1)
 	find $(1) -name CVS | xargs rm -rf

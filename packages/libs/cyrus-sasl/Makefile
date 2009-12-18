@@ -81,13 +81,13 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/sasl $(1)/usr/include/
-	mkdir -p $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsasl2.{a,so*} $(1)/usr/lib/
 	ln -sf libsasl2.a $(1)/usr/lib/libsasl.a
 	ln -sf libsasl2.so $(1)/usr/lib/libsasl.so
-	mkdir -p $(1)/usr/lib/sasl2
+	$(INSTALL_DIR) $(1)/usr/lib/sasl2
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/sasl2/lib*.{a,so*} $(1)/usr/lib/sasl2/
 endef
 
