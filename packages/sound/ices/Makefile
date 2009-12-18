@@ -19,8 +19,8 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ices
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=sound
+  CATEGORY:=Sound
   TITLE:=ices client for Icecast media streaming servers
   URL:=http://xiph.org/
   DEPENDS:=+libshout +libxml2 +zlib +libogg +libvorbis
