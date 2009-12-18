@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeradius2
 PKG_VERSION:=2.1.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=freeradius-server-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/freeradius/
@@ -463,17 +463,13 @@ define Package/freeradius2/install
 endef
 
 define Package/freeradius2-democerts/install
-	$(INSTALL_DIR) $(1)/etc/freeradius2
-	$(CP) $(PKG_INSTALL_DIR)/etc/freeradius2/certs $(1)/etc/freeradius2/
-	rm -rf $(1)/etc/freeradius2/certs/README
-	rm -rf $(1)/etc/freeradius2/certs/new*
-	rm -rf $(1)/etc/freeradius2/certs/demoCA/index*
-	rm -rf $(1)/etc/freeradius2/certs/demoCA/serial*
-	rm -rf $(1)/etc/freeradius2/certs/bootstrap
-	rm -rf $(1)/etc/freeradius2/certs/Makefile
-	rm -rf $(1)/etc/freeradius2/certs/ca.cnf
-	rm -rf $(1)/etc/freeradius2/certs/client.cnf
-	rm -rf $(1)/etc/freeradius2/certs/server.cnf
+	$(INSTALL_DIR) $(1)/etc/freeradius2/certs
+	$(CP) \
+		$(PKG_BUILD_DIR)/raddb/certs/ca.pem \
+		$(PKG_BUILD_DIR)/raddb/certs/dh \
+		$(PKG_BUILD_DIR)/raddb/certs/random \
+		$(PKG_BUILD_DIR)/raddb/certs/server.pem \
+		$(1)/etc/freeradius2/certs/
 endef
 
 define Package/freeradius2-utils/install
