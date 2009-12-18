@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -34,21 +34,22 @@ define Build/Compile
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		all
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/sysfs
-	$(CP) $(PKG_BUILD_DIR)/include/*.h $(1)/usr/include/sysfs
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/sysfs $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/lib/.libs/libsysfs.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsysfs.{a,so*} $(1)/usr/lib/
 endef
 
 define Package/sysfsutils/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/cmd/systool $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/systool $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/lib/.libs/libsysfs.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsysfs.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,sysfsutils))
