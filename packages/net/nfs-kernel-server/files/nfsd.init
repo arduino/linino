@@ -3,11 +3,13 @@
 
 START=60
 NFS_D=/var/lib/nfs
+LOCK_D=/var/lib/nfs/sm
 
 start() {
 	mkdir -p $NFS_D
+	mkdir -p $LOCK_D
 	touch $NFS_D/rmtab
-	
+
 	/usr/sbin/rpc.statd
 	/usr/sbin/exportfs -r
 	/usr/sbin/rpc.nfsd
