@@ -1,0 +1,17 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2009 OpenWrt.org
+
+START=60
+
+start() {
+	mkdir -p /var/tmp
+	mkdir -p /var/krb5kdc
+	
+	[ -f /var/krb5kdc/principal ] || ( echo; echo ) | kdb5_util create -s
+	
+	/usr/sbin/krb5kdc
+}
+
+stop() {
+	killall krb5kdc 2> /dev/null
+}
