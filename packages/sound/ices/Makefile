@@ -27,14 +27,14 @@ define Package/ices
 endef
 
 define Package/ices/description
-    ices is a command line source client for Icecast media streaming servers.
-    It began as the successor of the old "shout" utility, and has since gained a
-    lot of useful features.
+  ices is a command line source client for Icecast media streaming servers.
+  It began as the successor of the old "shout" utility, and has since gained a
+  lot of useful features.
 endef
 
 define Package/ices/install
-    $(INSTALL_DIR) $(1)/usr/bin
-    $(CP) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(1)/usr/bin/
 endef
 
 CONFIGURE_ARGS+= \
@@ -43,15 +43,15 @@ CONFIGURE_ARGS+= \
 
 define Build/Configure
     $(call Build/Configure/Default, \
-            LDFLAGS="$(TARGET_LDFLAGS) -lz -lm" \
+      LDFLAGS="$(TARGET_LDFLAGS) -lz -lm" \
     )
 endef
 
 define Build/Compile
-    $(MAKE) -C $(PKG_BUILD_DIR) \
-    $(TARGET_CONFIGURE_OPTS) \
-    CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
-    LDFLAGS="$(TARGET_LDFLAGS) -lz -lm"
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+	  $(TARGET_CONFIGURE_OPTS) \
+	  CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
+	  LDFLAGS="$(TARGET_LDFLAGS) -lz -lm"
 endef
 
 $(eval $(call BuildPackage,ices)) 
