@@ -12,8 +12,8 @@ PKG_VERSION:=1.23
 PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:= ftp://chrony.sunsite.dk/projects/chrony/ \
-	http://chrony.sunsite.dk/download/
+PKG_SOURCE_URL:= ftp://download.tuxfamily.org/projects/chrony/ \
+	http://download.tuxfamily.org/chrony/
 PKG_MD5SUM:=ffce77695e55d8efda19ab0b78309c23
 
 include $(INCLUDE_DIR)/package.mk
