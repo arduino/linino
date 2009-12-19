@@ -1,0 +1,458 @@
+--- gtkhtml-3.29.1/gtkhtml/gtkhtml.c	2009-10-26 07:49:58.000000000 +0100
++++ gtkhtml-3.29.1.mod/gtkhtml/gtkhtml.c	2009-11-22 12:46:18.000000000 +0100
+@@ -128,8 +128,8 @@
+ 
+ static GtkLayoutClass *parent_class = NULL;
+ 
+-static GConfClient *gconf_client = NULL;
+-static GError      *gconf_error  = NULL;
++//static GConfClient *gconf_client = NULL;
++//static GError      *gconf_error  = NULL;
+ 
+ enum {
+ 	TITLE_CHANGED,
+@@ -791,7 +791,7 @@
+ 		}
+ 
+ 		if (html->priv->notify_monospace_font_id) {
+-			gconf_client_notify_remove (gconf_client, html->priv->notify_monospace_font_id);
++			//gconf_client_notify_remove (gconf_client, html->priv->notify_monospace_font_id);
+ 			html->priv->notify_monospace_font_id = 0;
+ 		}
+ 
+@@ -832,61 +832,64 @@
+ static cairo_font_options_t *
+ get_font_options (void)
+ {
+-	gchar *antialiasing, *hinting, *subpixel_order;
+-	GConfClient *gconf = gconf_client_get_default ();
++	//gchar *antialiasing, *hinting, *subpixel_order;
++	//GConfClient *gconf = gconf_client_get_default ();
+ 	cairo_font_options_t *font_options = cairo_font_options_create ();
+ 
+ 	/* Antialiasing */
+-	antialiasing = gconf_client_get_string (gconf,
+-			"/desktop/gnome/font_rendering/antialiasing", NULL);
+-	if (antialiasing == NULL) {
+-		cairo_font_options_set_antialias (font_options, CAIRO_ANTIALIAS_DEFAULT);
+-	} else {
+-		if (strcmp (antialiasing, "grayscale") == 0)
+-			cairo_font_options_set_antialias (font_options, CAIRO_ANTIALIAS_GRAY);
+-		else if (strcmp (antialiasing, "rgba") == 0)
+-			cairo_font_options_set_antialias (font_options, CAIRO_ANTIALIAS_SUBPIXEL);
+-		else if (strcmp (antialiasing, "none") == 0)
+-			cairo_font_options_set_antialias (font_options, CAIRO_ANTIALIAS_NONE);
+-		else
+-			cairo_font_options_set_antialias (font_options, CAIRO_ANTIALIAS_DEFAULT);
+-	}
+-	hinting = gconf_client_get_string (gconf,
+-			"/desktop/gnome/font_rendering/hinting", NULL);
+-	if (hinting == NULL) {
+-		cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_DEFAULT);
+-	} else {
+-		if (strcmp (hinting, "full") == 0)
+-			cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_FULL);
+-		else if (strcmp (hinting, "medium") == 0)
+-			cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_MEDIUM);
+-		else if (strcmp (hinting, "slight") == 0)
+-			cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_SLIGHT);
+-		else if (strcmp (hinting, "none") == 0)
+-			cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_NONE);
+-		else
+-			cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_DEFAULT);
+-	}
+-	subpixel_order = gconf_client_get_string (gconf,
+-			"/desktop/gnome/font_rendering/rgba_order", NULL);
+-	if (subpixel_order == NULL) {
+-		cairo_font_options_set_subpixel_order (font_options, CAIRO_SUBPIXEL_ORDER_DEFAULT);
+-	} else {
+-		if (strcmp (subpixel_order, "rgb") == 0)
+-			cairo_font_options_set_subpixel_order (font_options, CAIRO_SUBPIXEL_ORDER_RGB);
+-		else if (strcmp (subpixel_order, "bgr") == 0)
+-			cairo_font_options_set_subpixel_order (font_options, CAIRO_SUBPIXEL_ORDER_BGR);
+-		else if (strcmp (subpixel_order, "vrgb") == 0)
+-			cairo_font_options_set_subpixel_order (font_options, CAIRO_SUBPIXEL_ORDER_VRGB);
+-		else if (strcmp (subpixel_order, "vbgr") == 0)
+-			cairo_font_options_set_subpixel_order (font_options, CAIRO_SUBPIXEL_ORDER_VBGR);
+-		else
+-			cairo_font_options_set_subpixel_order (font_options, CAIRO_SUBPIXEL_ORDER_DEFAULT);
+-	}
+-	g_free (antialiasing);
+-	g_free (hinting);
+-	g_free (subpixel_order);
+-	g_object_unref (gconf);
++	//antialiasing = gconf_client_get_string (gconf,
++	//		"/desktop/gnome/font_rendering/antialiasing", NULL);
++	//if (antialiasing == NULL) {
++	//	cairo_font_options_set_antialias (font_options, CAIRO_ANTIALIAS_DEFAULT);
++	//} else {
++	//	if (strcmp (antialiasing, "grayscale") == 0)
++	//		cairo_font_options_set_antialias (font_options, CAIRO_ANTIALIAS_GRAY);
++	//	else if (strcmp (antialiasing, "rgba") == 0)
++	//		cairo_font_options_set_antialias (font_options, CAIRO_ANTIALIAS_SUBPIXEL);
++	//	else if (strcmp (antialiasing, "none") == 0)
++	//		cairo_font_options_set_antialias (font_options, CAIRO_ANTIALIAS_NONE);
++	//	else
++	//		cairo_font_options_set_antialias (font_options, CAIRO_ANTIALIAS_DEFAULT);
++	//}
++	cairo_font_options_set_antialias (font_options, CAIRO_ANTIALIAS_DEFAULT);
++	//hinting = gconf_client_get_string (gconf,
++	//		"/desktop/gnome/font_rendering/hinting", NULL);
++	//if (hinting == NULL) {
++	//	cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_DEFAULT);
++	//} else {
++	//	if (strcmp (hinting, "full") == 0)
++	//		cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_FULL);
++	//	else if (strcmp (hinting, "medium") == 0)
++	//		cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_MEDIUM);
++	//	else if (strcmp (hinting, "slight") == 0)
++	//		cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_SLIGHT);
++	//	else if (strcmp (hinting, "none") == 0)
++	//		cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_NONE);
++	//	else
++	//		cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_DEFAULT);
++	//}
++	cairo_font_options_set_hint_style (font_options, CAIRO_HINT_STYLE_DEFAULT);
++	//subpixel_order = gconf_client_get_string (gconf,
++	//		"/desktop/gnome/font_rendering/rgba_order", NULL);
++	//if (subpixel_order == NULL) {
++	//	cairo_font_options_set_subpixel_order (font_options, CAIRO_SUBPIXEL_ORDER_DEFAULT);
++	//} else {
++	//	if (strcmp (subpixel_order, "rgb") == 0)
++	//		cairo_font_options_set_subpixel_order (font_options, CAIRO_SUBPIXEL_ORDER_RGB);
++	//	else if (strcmp (subpixel_order, "bgr") == 0)
++	//		cairo_font_options_set_subpixel_order (font_options, CAIRO_SUBPIXEL_ORDER_BGR);
++	//	else if (strcmp (subpixel_order, "vrgb") == 0)
++	//		cairo_font_options_set_subpixel_order (font_options, CAIRO_SUBPIXEL_ORDER_VRGB);
++	//	else if (strcmp (subpixel_order, "vbgr") == 0)
++	//		cairo_font_options_set_subpixel_order (font_options, CAIRO_SUBPIXEL_ORDER_VBGR);
++	//	else
++	//		cairo_font_options_set_subpixel_order (font_options, CAIRO_SUBPIXEL_ORDER_DEFAULT);
++	//}
++	cairo_font_options_set_subpixel_order (font_options, CAIRO_SUBPIXEL_ORDER_DEFAULT);
++	//g_free (antialiasing);
++	//g_free (hinting);
++	//g_free (subpixel_order);
++	//g_object_unref (gconf);
+ 	return font_options;
+ }
+ 
+@@ -913,36 +916,36 @@
+ 	font_var_points = !pango_font_description_get_size_is_absolute (style->font_desc);
+ 
+ 	gtk_widget_style_get (GTK_WIDGET (top_level), "fixed_font_name", &fixed_name, NULL);
+-	if (fixed_name) {
+-		fixed_desc = pango_font_description_from_string (fixed_name);
+-		if (pango_font_description_get_family (fixed_desc)) {
+-			fixed_size = pango_font_description_get_size (fixed_desc);
+-			fixed_points = !pango_font_description_get_size_is_absolute (fixed_desc);
+-			fixed_family = pango_font_description_get_family (fixed_desc);
+-		} else {
+-			g_free (fixed_name);
+-			fixed_name = NULL;
+-		}
+-	}
+-
+-	if (!fixed_name) {
+-		GConfClient *gconf;
+-
+-		gconf = gconf_client_get_default ();
+-		fixed_name = gconf_client_get_string (gconf, "/desktop/gnome/interface/monospace_font_name", NULL);
+-		if (fixed_name) {
+-			fixed_desc = pango_font_description_from_string (fixed_name);
+-			if (fixed_desc) {
+-				fixed_size = pango_font_description_get_size (fixed_desc);
+-				fixed_points = !pango_font_description_get_size_is_absolute (fixed_desc);
+-				fixed_family = pango_font_description_get_family (fixed_desc);
+-			} else {
+-				g_free (fixed_name);
+-				fixed_name = NULL;
+-			}
+-		}
+-		g_object_unref (gconf);
+-	}
++	//if (fixed_name) {
++	//	fixed_desc = pango_font_description_from_string (fixed_name);
++	//	if (pango_font_description_get_family (fixed_desc)) {
++	//		fixed_size = pango_font_description_get_size (fixed_desc);
++	//		fixed_points = !pango_font_description_get_size_is_absolute (fixed_desc);
++	//		fixed_family = pango_font_description_get_family (fixed_desc);
++	//	} else {
++	//		g_free (fixed_name);
++	//		fixed_name = NULL;
++	//	}
++	//}
++
++	//if (!fixed_name) {
++	//	//GConfClient *gconf;
++
++	//	//gconf = gconf_client_get_default ();
++	//	//fixed_name = gconf_client_get_string (gconf, "/desktop/gnome/interface/monospace_font_name", NULL);
++	//	if (fixed_name) {
++	//		fixed_desc = pango_font_description_from_string (fixed_name);
++	//		if (fixed_desc) {
++	//			fixed_size = pango_font_description_get_size (fixed_desc);
++	//			fixed_points = !pango_font_description_get_size_is_absolute (fixed_desc);
++	//			fixed_family = pango_font_description_get_family (fixed_desc);
++	//		} else {
++	//			g_free (fixed_name);
++	//			fixed_name = NULL;
++	//		}
++	//	}
++	//	//g_object_unref (gconf);
++	//}
+ 
+ 	if (!fixed_name) {
+ 		fixed_family = "Monospace";
+@@ -2365,22 +2368,22 @@
+ 	if (!klass->properties) {
+ 		klass->properties = gtk_html_class_properties_new (GTK_WIDGET (html));
+ 
+-		if (!gconf_is_initialized ()) {
+-			gchar *argv[] = { (gchar *) "gtkhtml", NULL };
++		//if (!gconf_is_initialized ()) {
++		//	gchar *argv[] = { (gchar *) "gtkhtml", NULL };
+ 
+-			g_warning ("gconf is not initialized, please call gconf_init before using GtkHTML library. "
+-				   "Meanwhile it's initialized by gtkhtml itself.");
+-			gconf_init (1, argv, &gconf_error);
+-			if (gconf_error)
+-				g_error ("gconf error: %s\n", gconf_error->message);
+-		}
+-
+-		gconf_client = gconf_client_get_default ();
+-		if (!gconf_client)
+-			g_error ("cannot create gconf_client\n");
+-		gconf_client_add_dir (gconf_client, GTK_HTML_GCONF_DIR, GCONF_CLIENT_PRELOAD_ONELEVEL, &gconf_error);
+-		if (gconf_error)
+-			g_error ("gconf error: %s\n", gconf_error->message);
++		//	g_warning ("gconf is not initialized, please call gconf_init before using GtkHTML library. "
++		//		   "Meanwhile it's initialized by gtkhtml itself.");
++		//	//gconf_init (1, argv, &gconf_error);
++		//	//if (gconf_error)
++		//	//	g_error ("gconf error: %s\n", gconf_error->message);
++		//}
++
++		//gconf_client = gconf_client_get_default ();
++		//if (!gconf_client)
++		//	g_error ("cannot create gconf_client\n");
++		//gconf_client_add_dir (gconf_client, GTK_HTML_GCONF_DIR, GCONF_CLIENT_PRELOAD_ONELEVEL, &gconf_error);
++		//if (gconf_error)
++		//	g_error ("gconf error: %s\n", gconf_error->message);
+ 	}
+ }
+ 
+@@ -2748,41 +2751,41 @@
+ 
+ /* dnd end */
+ 
+-static void
+-read_key_theme (GtkHTMLClass *html_class)
+-{
+-	gchar *key_theme;
+-
+-	key_theme = gconf_client_get_string (gconf_client_get_default (), "/desktop/gnome/interface/gtk_key_theme", NULL);
+-	html_class->use_emacs_bindings = key_theme && !strcmp (key_theme, "Emacs");
+-	g_free (key_theme);
+-}
+-
+-static void
+-client_notify_key_theme (GConfClient* client, guint cnxn_id, GConfEntry* entry, gpointer data)
+-{
+-	read_key_theme ((GtkHTMLClass *) data);
+-}
+-
+-static void
+-client_notify_monospace_font (GConfClient* client, guint cnxn_id, GConfEntry* entry, gpointer data)
+-{
+-	GtkHTML *html = (GtkHTML *) data;
+-	HTMLEngine *e = html->engine;
+-	if (e && e->painter) {
+-		gtk_html_set_fonts (html, e->painter);
+-		html_engine_refresh_fonts (e);
+-	}
+-}
+-
+-static void
+-client_notify_cursor_blink (GConfClient* client, guint cnxn_id, GConfEntry* entry, gpointer data)
+-{
+-	if (gconf_client_get_bool (client, "/desktop/gnome/interface/cursor_blink", NULL))
+-		html_engine_set_cursor_blink_timeout (gconf_client_get_int (client, "/desktop/gnome/interface/cursor_blink_time", NULL) / 2);
+-	else
+-		html_engine_set_cursor_blink_timeout (0);
+-}
++//static void
++//read_key_theme (GtkHTMLClass *html_class)
++//{
++//	gchar *key_theme;
++//
++//	key_theme = gconf_client_get_string (gconf_client_get_default (), "/desktop/gnome/interface/gtk_key_theme", NULL);
++//	html_class->use_emacs_bindings = key_theme && !strcmp (key_theme, "Emacs");
++//	g_free (key_theme);
++//}
++
++//static void
++//client_notify_key_theme (GConfClient* client, guint cnxn_id, GConfEntry* entry, gpointer data)
++//{
++//	read_key_theme ((GtkHTMLClass *) data);
++//}
++
++//static void
++//client_notify_monospace_font (GConfClient* client, guint cnxn_id, GConfEntry* entry, gpointer data)
++//{
++//	GtkHTML *html = (GtkHTML *) data;
++//	HTMLEngine *e = html->engine;
++//	if (e && e->painter) {
++//		gtk_html_set_fonts (html, e->painter);
++//		html_engine_refresh_fonts (e);
++//	}
++//}
++
++//static void
++//client_notify_cursor_blink (GConfClient* client, guint cnxn_id, GConfEntry* entry, gpointer data)
++//{
++//	if (gconf_client_get_bool (client, "/desktop/gnome/interface/cursor_blink", NULL))
++//		html_engine_set_cursor_blink_timeout (gconf_client_get_int (client, "/desktop/gnome/interface/cursor_blink_time", NULL) / 2);
++//	else
++//		html_engine_set_cursor_blink_timeout (0);
++//}
+ 
+ static void
+ gtk_html_direction_changed (GtkWidget *widget, GtkTextDirection previous_dir)
+@@ -2823,7 +2826,7 @@
+ 	GtkLayoutClass    *layout_class;
+ 	GtkContainerClass *container_class;
+ 	gchar *filename;
+-	GConfClient *client;
++	//GConfClient *client;
+ 
+ 	html_class = (GtkHTMLClass *) klass;
+ #ifdef USE_PROPS
+@@ -3176,18 +3179,18 @@
+ 	gtk_rc_parse (filename);
+ 	g_free (filename);
+ 	html_class->emacs_bindings = gtk_binding_set_find ("gtkhtml-bindings-emacs");
+-	read_key_theme (html_class);
++	//read_key_theme (html_class);
+ 
+-	client = gconf_client_get_default ();
++	//client = gconf_client_get_default ();
+ 
+-	gconf_client_notify_add (client, "/desktop/gnome/interface/gtk_key_theme",
+-				 client_notify_key_theme, html_class, NULL, &gconf_error);
++	//gconf_client_notify_add (client, "/desktop/gnome/interface/gtk_key_theme",
++	//			 client_notify_key_theme, html_class, NULL, &gconf_error);
+ 
+-	gconf_client_notify_add (client, "/desktop/gnome/interface/cursor_blink", client_notify_cursor_blink, NULL, NULL, NULL);
+-	gconf_client_notify_add (client, "/desktop/gnome/interface/cursor_blink_time", client_notify_cursor_blink, NULL, NULL, NULL);
+-	client_notify_cursor_blink (client, 0, NULL, NULL);
++	//gconf_client_notify_add (client, "/desktop/gnome/interface/cursor_blink", client_notify_cursor_blink, NULL, NULL, NULL);
++	//gconf_client_notify_add (client, "/desktop/gnome/interface/cursor_blink_time", client_notify_cursor_blink, NULL, NULL, NULL);
++	//client_notify_cursor_blink (client, 0, NULL, NULL);
+ 
+-	g_object_unref (client);
++	//g_object_unref (client);
+ }
+ 
+ static void
+@@ -3195,8 +3198,8 @@
+ {
+ 	setup_class_properties (html);
+ 
+-	if (!gconf_client)
+-		gconf_client = gconf_client_get_default ();
++	//if (!gconf_client)
++	//	gconf_client = gconf_client_get_default ();
+ 
+ }
+ 
+@@ -3478,9 +3481,9 @@
+ 	g_signal_connect (G_OBJECT (html->priv->im_context), "delete_surrounding",
+ 			  G_CALLBACK (gtk_html_im_delete_surrounding_cb), html);
+ 
+-	html->priv->notify_monospace_font_id =
+-		gconf_client_notify_add (gconf_client_get_default (), "/desktop/gnome/interface/monospace_font_name",
+-					 client_notify_monospace_font, html, NULL, &gconf_error);
++	//html->priv->notify_monospace_font_id =
++	//	gconf_client_notify_add (gconf_client_get_default (), "/desktop/gnome/interface/monospace_font_name",
++	//				 client_notify_monospace_font, html, NULL, &gconf_error);
+ 
+ 	gtk_html_construct (html);
+ }
+@@ -3579,7 +3582,7 @@
+ 	g_signal_connect (G_OBJECT (html->engine), "object_requested",
+ 			  G_CALLBACK (html_engine_object_requested_cb), html);
+ 
+-	init_properties_widget (html);
++	//init_properties_widget (html);
+ }
+ 
+ 
+@@ -6044,7 +6047,7 @@
+ gboolean
+ gtk_html_build_with_gconf (void)
+ {
+-	return TRUE;
++	return FALSE;
+ }
+ 
+ static void
+--- gtkhtml-3.29.1/gtkhtml/gtkhtml-properties.h	2009-06-26 13:14:48.000000000 +0200
++++ gtkhtml-3.29.1.mod/gtkhtml/gtkhtml-properties.h	2009-11-22 12:20:54.000000000 +0100
+@@ -27,7 +27,7 @@
+ #define GTK_HTML_GNOME_CONFIG_PREFIX "/gtkhtml/Settings/"
+ 
+ #include <gtk/gtk.h>
+-#include <gconf/gconf-client.h>
++//#include <gconf/gconf-client.h>
+ 
+ #include "gtkhtml-types.h"
+ #include "gtkhtml.h"
+@@ -51,11 +51,11 @@
+ void                     gtk_html_class_properties_destroy   (GtkHTMLClassProperties *p);
+ void                     gtk_html_class_properties_copy      (GtkHTMLClassProperties *p1,
+ 							      GtkHTMLClassProperties *p2);
+-void                     gtk_html_class_properties_load      (GtkHTMLClassProperties *p,
+-							      GConfClient *client);
+-void                     gtk_html_class_properties_update    (GtkHTMLClassProperties *p,
+-							      GConfClient *client,
+-							      GtkHTMLClassProperties *old);
++//void                     gtk_html_class_properties_load      (GtkHTMLClassProperties *p,
++//							      GConfClient *client);
++//void                     gtk_html_class_properties_update    (GtkHTMLClassProperties *p,
++//							      GConfClient *client,
++//							      GtkHTMLClassProperties *old);
+ 
+ /* enum types */
+ 
+--- gtkhtml-3.29.1/gtkhtml/gtkhtml-properties.c	2009-10-23 12:26:15.000000000 +0200
++++ gtkhtml-3.29.1.mod/gtkhtml/gtkhtml-properties.c	2009-12-11 00:57:25.000000000 +0100
+@@ -102,20 +102,20 @@
+ 	g_free (p);
+ }
+ 
+-void
+-gtk_html_class_properties_load (GtkHTMLClassProperties *p, GConfClient *client)
+-{
+-}
++//void
++//gtk_html_class_properties_load (GtkHTMLClassProperties *p, GConfClient *client)
++//{
++//}
+ 
+ #define SET(t,x,prop) \
+         { key = g_strconcat (GTK_HTML_GCONF_DIR, x, NULL); \
+         gconf_client_set_ ## t (client, key, p->prop, NULL); \
+         g_free (key); }
+ 
+-void
+-gtk_html_class_properties_update (GtkHTMLClassProperties *p, GConfClient *client, GtkHTMLClassProperties *old)
+-{
+-}
++//void
++//gtk_html_class_properties_update (GtkHTMLClassProperties *p, GConfClient *client, GtkHTMLClassProperties *old)
++//{
++//}
+ 
+ /* enums */
+ 
