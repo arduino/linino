@@ -2,49 +2,17 @@
 
 START=70
 
-pidfile=/var/run/babeld.pid
-
-babeld_config() {
-	local cfg="$1"
-	config_get interfaces "$cfg" interfaces
+babel_addif() {
+	config_get ifname $1 ifname
+	append interfaces "$ifname"
 }
-
-start() {
-	config_load babeld
-	config_foreach babeld_config babeld
-	mkdir -p /var/lib
-	if [ -e $pidfile ] ; then
-		echo "$pidfile exists -- not starting babel." >&2
-	else
-		/usr/sbin/babeld -D -I $pidfile $interfaces
-	fi
-}
-
-stop() {
-	[ -e $pidfile ] && kill $(cat $pidfile)
-	[ -e $pidfile ] && sleep 2
-	[ -e $pidfile ] && sleep 4
-	[ -e $pidfile ] && echo "Failed to stop babel ($pidfile still exists)."
-}
-#!/bin/sh /etc/rc.common
-
-START=70
-
-pidfile=/var/run/babeld.pid
 
 babel_config() {
 	local cfg="$1"
-	config_get interfaces "$cfg" interfaces
-}
-
-start() {
-	if [ -x /etc/rc.d/S71ahcpd ] ; then
-		echo 'Not starting babel -- will be started by ahcpd.'
-		exit 0
-	fi
-	config_load babel
-	config_foreach babel_config babel
-	mkdir -p /var/lib
+	interfaces=
+	config_list_foreach "$cfg" interface babel_addif
+	pidfile=/var/run/babeld-"$cfg".pid
+	[ -z "$interfaces" ] && return 0
 	if [ -e $pidfile ] ; then
 		echo "$pidfile exists -- not starting babel." >&2
 	else
@@ -52,9 +20,19 @@ start() {
 	fi
 }
 
+start() {
+	if [ -x /etc/init.d/ahcpd ] && /etc/init.d/ahcpd enabled; then
+		echo 'Not starting babel -- will be started by ahcpd.'
+		exit 0
+	fi
+	include /lib/network
+	scan_interfaces
+	config_load babel
+	mkdir -p /var/lib
+	config_foreach babel_config babel
+}
+
 stop() {
-	[ -e $pidfile ] && kill $(cat $pidfile)
-	[ -e $pidfile ] && sleep 2
-	[ -e $pidfile ] && sleep 4
-	[ -e $pidfile ] && echo "Failed to stop babel ($pidfile still exists)."
+	kill $(cat /var/run/babeld-*.pid)
+	rm -f /var/run/babeld-*.pid
 }
