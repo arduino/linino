@@ -3,20 +3,20 @@
 START=71
 
 pidfile=/var/run/ahcpd.pid
+addif() {
+	config_get ifname $1 ifname
+	append interfaces "$ifname"
+}
 
 ahcpd_config() {
 	local cfg="$1"
-	config_get interfaces "$cfg" interfaces
+	interfaces=
+	config_list_foreach $cfg interface addif
+	[ -z "$interfaces" ] && return 0
 	config_get_bool no_config "$cfg" no_config 0
 	config_get_bool ipv4_only "$cfg" ipv4_only 0
 	config_get_bool ipv6_only "$cfg" ipv6_only 0
 	config_get_bool no_dns "$cfg" no_dns 0
-}
-
-start() {
-	config_load ahcpd
-	config_foreach ahcpd_config ahcpd
-	mkdir -p /var/lib
 	if [ "$no_config" -eq 0 ]; then
 		unset no_config
 	fi
@@ -36,6 +36,14 @@ start() {
 		${ipv4_only:+-4} ${ipv6_only:+-6} ${no_dns:+-N} ${no_config:+-n} \
 		$interfaces
 	fi
+}
+
+start() {
+	include /lib/network
+	scan_interfaces
+	config_load ahcpd
+	mkdir -p /var/lib
+	config_foreach ahcpd_config ahcpd
 }
 
 stop() {
