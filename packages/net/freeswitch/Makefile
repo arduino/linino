@@ -208,7 +208,7 @@ ifneq ($(CONFIG_PACKAGE_freeswitch-mod-curl),)
 endif
 
 ifneq ($(CONFIG_PACKAGE_freeswitch-mod-flite),)
- $(eval $(call Download/lib,flite,flite-1.3.99-latest.tar.gz,f1b144c290893f074376520b447cc07f))
+ $(eval $(call Download/lib,flite,flite-1.3.99-latest.tar.gz,))
 endif
 
 
