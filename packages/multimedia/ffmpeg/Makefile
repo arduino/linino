@@ -163,6 +163,11 @@ FFMPEG_CONFIGURE_DEMUXERS:=$(call FILTER_CONFIG,DEMUXER,demuxer,$(FFMPEG_DEMUXER
 FFMPEG_CONFIGURE_PARSERS:=$(call FILTER_CONFIG,PARSER,parser,$(FFMPEG_PARSERS))
 FFMPEG_CONFIGURE_PROTOCOLS:=$(call FILTER_CONFIG,PROTOCOL,protocol,$(FFMPEG_PROTOCOLS))
 
+# XXX: add --disable-mmx & --disable-mmx2 to fix build failure on x86
+# libpostproc/postprocess_template.c:2195: error: can't find a register in class 'GENERAL_REGS' while reloading 'asm'
+# libpostproc/postprocess_template.c:3124: error: can't find a register in class 'GENERAL_REGS' while reloading 'asm'
+# libpostproc/postprocess_template.c:3207: error: can't find a register in class 'GENERAL_REGS' while reloading 'asm'
+
 define Build/Configure
 	# this is *NOT* GNU configure
 	( cd $(PKG_BUILD_DIR); \
@@ -180,6 +185,8 @@ define Build/Configure
 		--enable-ffserver \
 		--enable-gpl \
 		--enable-libfaad \
+		--disable-mmx \
+		--disable-mmx2 \
 		--enable-pthreads \
 		--disable-optimizations \
 		--enable-small \
