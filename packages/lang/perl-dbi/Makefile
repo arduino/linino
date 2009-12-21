@@ -20,7 +20,7 @@ SECTION:=lang
 CATEGORY:=Languages
 TITLE:=Database independent interface for Perl
 URL:=http://search.cpan.org/~timb/DBI/
-DEPENDS:=perl
+DEPENDS:=perl +perlbase-essential
 endef
 
 define Build/Configure
