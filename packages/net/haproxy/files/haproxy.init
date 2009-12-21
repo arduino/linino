@@ -1,0 +1,26 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2009 OpenWrt.org
+
+START=99
+STOP=80
+
+HAPROXY_BIN="/usr/sbin/haproxy"
+HAPROXY_CONFIG="/etc/haproxy.cfg"
+HAPROXY_PID="/var/run/haproxy.pid"
+
+start() {
+	[ -x "$HAPROXY_BIN" ] || return 1
+
+	start-stop-daemon -S -x $HAPROXY_BIN -- \
+		-f "$HAPROXY_CONFIG" -V -D -d -p "$HAPROXY_PID"
+}
+
+stop() {
+	start-stop-daemon -K -x $HAPROXY_BIN -p $HAPROXY_PID
+	rm -f $HAPROXY_PID
+}
+
+reload() {
+	[ ! -f "$HAPROXY_PID" ] && start
+	$HAPROXY_BIN -f $HAPROXY_CONFIG -p $HAPROXY_PID -st $(cat $HAPROXY_PID)
+}
