@@ -27,9 +27,9 @@ start() {
 	fi
 	include /lib/network
 	scan_interfaces
-	config_load babel
+	config_load babeld
 	mkdir -p /var/lib
-	config_foreach babel_config babel
+	config_foreach babel_config babeld
 }
 
 stop() {
