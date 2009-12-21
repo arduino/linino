@@ -780,7 +780,7 @@ $(eval $(call BuildPackage,perlbase-flush))
 define Package/perlbase-gdbm-file
 $(call Package/perlbase-template)
 TITLE:=GDBM_File perl module
-DEPENDS+=libgdbm
+DEPENDS+= +libgdbm
 endef
 
 define Package/perlbase-gdbm-file/install

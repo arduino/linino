@@ -20,7 +20,7 @@ SECTION:=lang
 CATEGORY:=Languages
 TITLE:=A collection of modules that parse HTML text documents
 URL:=http://search.cpan.org/~gaas/HTML-Parser/
-DEPENDS:=perl perl-html-tagset perl-uri
+DEPENDS:=perl +perl-html-tagset +perl-uri
 endef
 
 define Build/Configure

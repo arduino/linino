@@ -20,7 +20,7 @@ SECTION:=lang
 CATEGORY:=Languages
 TITLE:=Perl bindings to libcurl
 URL:=http://search.cpan.org/~crisb/WWW-Curl-3.02/
-DEPENDS:=libcurl perl
+DEPENDS:=perl +libcurl
 endef
 
 define Build/Configure

@@ -20,7 +20,7 @@ SECTION:=lang
 CATEGORY:=Languages
 TITLE:=represent and create HTML syntax trees
 URL:=http://search.cpan.org/~petdance/HTML-Tree/
-DEPENDS:=perl perl-html-parser perl-html-tagset
+DEPENDS:=perl +perl-html-parser +perl-html-tagset
 endef
 
 define Build/Configure

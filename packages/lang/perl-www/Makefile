@@ -20,7 +20,7 @@ SECTION:=lang
 CATEGORY:=Languages
 TITLE:=WWW client/server library for Perl (aka LWP)
 URL:=http://search.cpan.org/dist/libwww-perl/
-DEPENDS:=perl perl-html-parser perl-uri
+DEPENDS:=perl +perl-html-parser +perl-uri
 endef
 
 define Build/Configure
