@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -250,7 +250,7 @@ fi
 
 if [ -z "$${RG}" -o -z "$${RU}" ]; then
   echo "Could not find user utils, you will need to create the postgres user by hand"
-  exit 
+  exit
 fi
 
 if [ "$${RG}" != "0" -o "$${RU}" != "0" ]; then
@@ -266,6 +266,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpq $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpq-fe.h $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/pg_config.h $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/pg_config_manual.h $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/postgres_ext.h $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/postgresql $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
