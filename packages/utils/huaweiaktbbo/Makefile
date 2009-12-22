@@ -18,7 +18,7 @@ define Package/huaweiaktbbo
   SECTION:=utils
   CATEGORY:=Utilities
   DEPENDS:=+libusb
-  TITLE:=Huawei e220 configuration tool
+  TITLE:=Huawei E156/E169/E220 activation tool
 endef
 
 define Build/Prepare	
