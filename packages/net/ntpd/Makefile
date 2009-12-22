@@ -35,6 +35,7 @@ endef
 
 define Package/ntpd
   $(call Package/ntpd/Default)
+  DEPENDS:=+mdnsresponder
   TITLE+= server
 endef
 
