@@ -40,6 +40,7 @@ define Build/Compile
 		CFLAGS="$(TARGET_CFLAGS)" \
 		LD="$(TARGET_CC)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
+		SMALL_OPTS="-DBUFSIZE=8192 -DMAXREWRITE=1024" \
 		all install
 endef
 
