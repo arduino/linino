@@ -35,7 +35,6 @@ endef
 
 define Package/ntpd
   $(call Package/ntpd/Default)
-  DEPENDS:=+mdnsresponder
   TITLE+= server
 endef
 
@@ -103,6 +102,7 @@ define Build/Configure
 		--enable-SHM \
 		--disable-linuxcaps, \
 		ac_cv_lib_rt_sched_setscheduler=no \
+		ac_cv_header_dns_sd_h=no \
 	)
 endef
 
