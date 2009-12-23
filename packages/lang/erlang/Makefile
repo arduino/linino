@@ -231,6 +231,7 @@ HOST_CONFIGURE_ARGS += \
 	--without-ssl \
 
 HOST_CONFIGURE_VARS += \
+	ac_cv_prog_JAVAC="" \
 	ac_cv_prog_javac_ver_1_2=no \
 
 define Host/Compile
@@ -256,6 +257,7 @@ CONFIGURE_VARS += \
 	SHLIB_LD="$(TARGET_CC)" \
 	TARGET_ARCH="$(TARGET_ARCH)" \
 	ac_cv_prog_RX_LD="$(TARGET_LD)" \
+	ac_cv_prog_JAVAC="" \
 	ac_cv_prog_javac_ver_1_2=no \
 	ac_cv_func_getaddrinfo=no \
 	ac_cv_func_mmap_fixed_mapped=yes \
