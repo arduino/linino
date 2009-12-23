@@ -32,6 +32,9 @@ define Package/zile/description
 	to Emacs; every Emacs user should feel at home with Zile.
 endef
 
+CONFIGURE_VARS += \
+	gl_cv_func_getopt_gnu=yes \
+
 define Package/zile/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(1)/usr/bin/
