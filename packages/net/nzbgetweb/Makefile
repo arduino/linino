@@ -37,12 +37,12 @@ endef
 define Package/nzbgetweb/install
 	$(INSTALL_DIR) $(1)/www/nzbgetweb
 	$(CP) $(PKG_BUILD_DIR)/*.php $(1)/www/nzbgetweb/
-	$(CP) $(PKG_BUILD_DIR)/*.css $(1)/www/nzbgetweb/	
+	$(CP) $(PKG_BUILD_DIR)/*.css $(1)/www/nzbgetweb/
 	$(CP) $(PKG_BUILD_DIR)/README $(1)/www/nzbgetweb/
 	$(CP) $(PKG_BUILD_DIR)/ChangeLog $(1)/www/nzbgetweb/
 	$(CP) $(PKG_BUILD_DIR)/images $(1)/www/nzbgetweb/
 	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) ./files/httpd.conf /etc/httpd,conf
+	$(INSTALL_DATA) ./files/httpd.conf $(1)/etc/httpd.conf
 endef
 
 $(eval $(call BuildPackage,nzbgetweb))
