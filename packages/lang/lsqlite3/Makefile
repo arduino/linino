@@ -33,7 +33,7 @@ endef
 define Build/Configure
 endef
 
-TARGET_CFLAGS += $(FPIC) $(TARGET_CPPFLAGS)
+TARGET_CFLAGS += $(FPIC) $(TARGET_CPPFLAGS) -std=c99
 
 TARGET_LDFLAGS += -llua
 
