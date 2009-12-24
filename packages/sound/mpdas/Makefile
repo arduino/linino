@@ -32,9 +32,17 @@ define Package/mpdas/description
     cache the played songs to ~/.mpdascache.
 endef
 
+EXTRA_CPPFLAGS:=\
+	-I$(STAGING_DIR)/usr/lib/libintl/include \
+	-I$(STAGING_DIR)/usr/lib/libiconv/include \
+
+EXTRA_LDFLAGS:=\
+	-L$(STAGING_DIR)/usr/lib/libintl/lib \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
+
 MAKE_FLAGS += \
-	$(TARGET_CONFIGURE_OPTS) \
-	$(1) \
+	CPPFLAGS="$(TARGET_CPPFLAGS) $(EXTRA_CPPFLAGS)" \
+	LDFLAGS="$(TARGET_LDPFLAGS) $(EXTRA_LDFLAGS)" \
 
 define Package/mpdas/install
 	$(INSTALL_DIR) $(1)/etc

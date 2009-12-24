@@ -1,0 +1,13 @@
+--- a/Makefile
++++ b/Makefile
+@@ -7,8 +7,8 @@ PREFIX = /usr/local
+ MANPREFIX = ${PREFIX}/man/man1
+ CONFIG = $(PREFIX)/etc
+ 
+-CXXFLAGS	+= `pkg-config --cflags libmpd libcurl` 
+-LIBS		= `pkg-config --libs libmpd libcurl`
++CXXFLAGS	+= $(CPPFLAGS) `pkg-config --cflags libmpd libcurl` 
++LIBS		= $(LDFLAGS) `pkg-config --libs libmpd libcurl`
+ 
+ CXXFLAGS	+= -DCONFDIR="\"$(CONFIG)\"" -DVERSION="\"$(VERSION)\""
+ 
