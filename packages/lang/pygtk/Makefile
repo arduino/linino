@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -85,7 +85,7 @@ define Package/python-gtk/install
 
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)/gtk-2.0/gtk
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/gtk-2.0/gtk/*.{py,so} \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/gtk-2.0/gtk/*.py* \
 		$(1)$(PYTHON_PKG_DIR)/gtk-2.0/gtk
 endef
 
