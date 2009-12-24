@@ -30,6 +30,9 @@ define Package/gzip/description
 	replacement for compress.
 endef
 
+CONFIGURE_VARS += \
+	gl_cv_func_getopt_gnu=yes \
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
