@@ -100,11 +100,10 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/rrd.h $(1)/usr/include/
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd.{a,so*} $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd_th.{a,so*} $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/rrdtool-1.2/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/rrd.h $(1)/usr/lib/rrdtool-1.2/include/
+	$(INSTALL_DIR) $(1)/usr/lib/rrdtool-1.2/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/librrd{,_th}.{a,so*} $(1)/usr/lib/rrdtool-1.2/lib/
 endef
 
 define Package/librrd/install
