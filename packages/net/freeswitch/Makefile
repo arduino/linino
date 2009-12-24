@@ -135,48 +135,55 @@ define Package/freeswitch-default
 $(call Package/freeswitch/Default)
   TITLE:=FreeSWITCH default config
   DEPENDS:=freeswitch \
-		+freeswitch-mod-cdr-csv \
 		+freeswitch-mod-commands \
 		+freeswitch-mod-conference \
 		+freeswitch-mod-console \
+		+freeswitch-mod-curl \
 		+freeswitch-mod-dialplan-xml \
 		+freeswitch-mod-dptools \
-		+freeswitch-mod-enum \
 		+freeswitch-mod-event-socket \
-		+freeswitch-mod-expr \
-		+freeswitch-mod-fifo \
-		+freeswitch-mod-file-string \
-		+freeswitch-mod-esf \
-		+freeswitch-mod-fsv \
-		+freeswitch-mod-iax \
-		+freeswitch-mod-limit \
+		+freeswitch-mod-g723-1 \
+		+freeswitch-mod-ilbc \
 		+freeswitch-mod-local-stream \
 		+freeswitch-mod-logfile \
-		+freeswitch-mod-loopback \
+		+freeswitch-mod-lua \
 		+freeswitch-mod-native-file \
-		+freeswitch-mod-rss \
-		+freeswitch-mod-say-en \
 		+freeswitch-mod-sndfile \
 		+freeswitch-mod-sofia \
-		+freeswitch-mod-syslog \
+		+freeswitch-mod-speex \
 		+freeswitch-mod-tone-stream \
-		+freeswitch-mod-voicemail \
 		+freeswitch-mod-voipcodecs \
-		+freeswitch-mod-xml-cdr \
+		+freeswitch-mod-xml-curl \
 		+freeswitch-mod-xml-rpc
 endef
-
 
 define Package/freeswitch-minimal
 $(call Package/freeswitch/Default)
   TITLE:=FreeSWITCH minimal config
   DEPENDS:=freeswitch \
-	+freeswitch-mod-commands \
-	+freeswitch-mod-console \
-	+freeswitch-mod-dialplan-xml \
-	+freeswitch-mod-dptools \
-	+freeswitch-mod-sofia \
-	+freeswitch-mod-voipcodecs
+		+freeswitch-mod-commands \
+		+freeswitch-mod-console \
+		+freeswitch-mod-curl \
+		+freeswitch-mod-dialplan-xml \
+		+freeswitch-mod-dptools \
+		+freeswitch-mod-local-stream \
+		+freeswitch-mod-sndfile \
+		+freeswitch-mod-sofia \
+		+freeswitch-mod-tone-stream \
+		+freeswitch-mod-voipcodecs
+endef
+
+define Package/freeswitch-sounds-en
+$(call Package/freeswitch/Default)
+  TITLE:=FreeSWITCH english sounds
+  DEPENDS:=freeswitch
+endef
+
+
+define Package/freeswitch-sounds-moh
+$(call Package/freeswitch/Default)
+  TITLE:=FreeSWITCH music-on-hold sounds
+  DEPENDS:=freeswitch
 endef
 
 
@@ -187,28 +194,40 @@ $(call Package/freeswitch/Default)
 endef
 
 
-define Download/lib
+define Download/files
  define Download/$(1)
   FILE:=$(2)
-  URL:=http://files.freeswitch.org/downloads/libs/
+  URL:=http://files.freeswitch.org/$(4)
   MD5SUM:=$(3)
  endef
  define Prepare/$(1)
-  $(CP) $(DL_DIR)/$(2) $(PKG_BUILD_DIR)/libs/
+  $(CP) $(DL_DIR)/$(2) $(PKG_BUILD_DIR)/$(5)
  endef
  $$(eval $$(call Download,$(1)))
 endef
 
+MAKE_INSTALL_TARGETS:=install
+
 ifneq ($(CONFIG_PACKAGE_freeswitch-mod-celt),)
- $(eval $(call Download/lib,celt,celt-0.6.1.tar.gz,2961ffb6fadb5f905d20de9f0d86e44c))
+ $(eval $(call Download/files,celt,celt-0.6.1.tar.gz,2961ffb6fadb5f905d20de9f0d86e44c,downloads/libs/,libs/))
 endif
 
 ifneq ($(CONFIG_PACKAGE_freeswitch-mod-curl),)
- $(eval $(call Download/lib,json-c,json-c-0.8.tar.gz,9c7b90dff16eec3063084829c382ebac))
+ $(eval $(call Download/files,json-c,json-c-0.8.tar.gz,9c7b90dff16eec3063084829c382ebac,downloads/libs/,libs/))
 endif
 
 ifneq ($(CONFIG_PACKAGE_freeswitch-mod-flite),)
- $(eval $(call Download/lib,flite,flite-1.3.99-latest.tar.gz,))
+ $(eval $(call Download/files,flite,flite-1.3.99-latest.tar.gz,,downloads/libs/,libs/))
+endif
+
+ifneq ($(CONFIG_PACKAGE_freeswitch-sounds-en),)
+ $(eval $(call Download/files,sounds-en,freeswitch-sounds-en-us-callie-8000-1.0.10.tar.gz,f7f85aaf3763673c884ec3451f1c1c3e,,))
+	MAKE_INSTALL_TARGETS+= sounds-install
+endif
+
+ifneq ($(CONFIG_PACKAGE_freeswitch-sounds-moh),)
+ $(eval $(call Download/files,sounds-moh,freeswitch-sounds-music-8000-1.0.8.tar.gz,f63ef3cc3507af079ae5c7b8b8a01e42,,))
+	MAKE_INSTALL_TARGETS+= moh-install
 endif
 
 
@@ -261,6 +280,8 @@ $(call Build/Prepare/Default)
 	$(call Prepare/celt)
 	$(call Prepare/flite)
 	$(call Prepare/json-c)
+	$(call Prepare/sounds-en)
+	$(call Prepare/sounds-moh)
 endef
 
 define Build/Configure
@@ -279,7 +300,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
-		all install
+		all $(MAKE_INSTALL_TARGETS)
 endef
 
 define Build/InstallDev
@@ -309,6 +330,16 @@ endef
 define Package/freeswitch-minimal/install
 	$(INSTALL_DIR) $(1)/etc/freeswitch
 	$(CP) $(PKG_INSTALL_DIR)/etc/freeswitch/* $(1)/etc/freeswitch/
+endef
+
+define Package/freeswitch-sounds-en/install
+	$(INSTALL_DIR) $(1)/usr/freeswitch/sounds
+	$(CP) $(PKG_INSTALL_DIR)/usr/freeswitch/sounds/en $(1)/usr/freeswitch/sounds/
+endef
+
+define Package/freeswitch-sounds-moh/install
+	$(INSTALL_DIR) $(1)/usr/freeswitch/sounds
+	$(CP) $(PKG_INSTALL_DIR)/usr/freeswitch/sounds/music $(1)/usr/freeswitch/sounds/
 endef
 
 define Package/freeswitch-tools/install
@@ -343,6 +374,8 @@ endef
 $(eval $(call BuildPackage,freeswitch))
 $(eval $(call BuildPackage,freeswitch-default))
 $(eval $(call BuildPackage,freeswitch-minimal))
+$(eval $(call BuildPackage,freeswitch-sounds-en))
+$(eval $(call BuildPackage,freeswitch-sounds-moh))
 $(eval $(call BuildPackage,freeswitch-tools))
 
 #$(eval $(call BuildPlugin,Name,Title,Files,Depends))
