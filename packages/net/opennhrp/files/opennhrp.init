@@ -1,0 +1,13 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2009 OpenWrt.org
+START=50
+# Copyright (C) 2009 Jakob Pfeiffer
+
+start() {
+	/usr/sbin/opennhrp -d
+}
+
+stop() {
+	killall opennhrp
+}
+
