@@ -51,6 +51,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/src/util \
 		CC="$(HOSTCC)" \
         CFLAGS="$(HOST_CFLAGS)" \
+        CPPFLAGS="$(HOST_CPPFLAGS)" \
         LDFLAGS="$(HOST_LDFLAGS)"
 
 	$(call Build/Compile/Default)
