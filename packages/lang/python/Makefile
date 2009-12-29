@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python
-PKG_VERSION:=2.6.1
+PKG_VERSION:=2.6.4
 PKG_RELEASE:=2
 
 PKG_SOURCE:=Python-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.python.org/ftp/python/$(PKG_VERSION)/
-PKG_MD5SUM:=e81c2f0953aa60f8062c05a4673f2be0
+PKG_MD5SUM:=fee5408634a54e721a93531aba37f8c1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Python-$(PKG_VERSION)
 
