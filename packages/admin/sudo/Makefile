@@ -7,12 +7,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sudo
-PKG_VERSION:=1.7.2p1
+PKG_VERSION:=1.7.2p2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sudo.ws/sudo/dist/
-PKG_MD5SUM:=4449d466a774f5ce401c9c0e3866c026
+PKG_MD5SUM:=2a19cf1ab4afc94fe19d0d0899d4cd45
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -38,12 +40,6 @@ CONFIGURE_ARGS+= \
 CONFIGURE_VARS+= \
 	sudo_cv_uid_t_len=10 \
 	sudo_cv_func_unsetenv_void=no \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Package/sudo/conffiles
 /etc/sudoers
