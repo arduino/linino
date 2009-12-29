@@ -1,7 +1,6 @@
-diff -urN vtun-3.0.1/configure vtun-3.0.1.new/configure
---- vtun-3.0.1/configure	2006-12-11 08:55:06.000000000 +0100
-+++ vtun-3.0.1.new/configure	2008-03-27 19:10:22.000000000 +0100
-@@ -5459,7 +5459,7 @@
+--- a/configure
++++ b/configure
+@@ -5459,7 +5459,7 @@ echo $ECHO_N "checking \"for lzo_asm.h\"
  	fi
          echo "$as_me:$LINENO: result: ($dir) yes " >&5
  echo "${ECHO_T}($dir) yes " >&6
@@ -10,7 +9,7 @@ diff -urN vtun-3.0.1/configure vtun-3.0.1.new/configure
      else
          echo "$as_me:$LINENO: result: \"no\"" >&5
  echo "${ECHO_T}\"no\"" >&6
-@@ -5504,8 +5504,7 @@
+@@ -5504,8 +5504,7 @@ echo "${ECHO_T}($dir) yes " >&6
          echo "$as_me:$LINENO: result: \"no\"" >&5
  echo "${ECHO_T}\"no\"" >&6
  	{ { echo "$as_me:$LINENO: error: LZO library not found. " >&5
@@ -20,7 +19,7 @@ diff -urN vtun-3.0.1/configure vtun-3.0.1.new/configure
  
      fi
  
-@@ -5598,13 +5597,11 @@
+@@ -5598,13 +5597,11 @@ fi
        done
        if test $havelzo = 0; then
  	    { { echo "$as_me:$LINENO: error: LZO library not found. " >&5
