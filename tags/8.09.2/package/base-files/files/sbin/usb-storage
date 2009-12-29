@@ -1,0 +1,32 @@
+#!/bin/sh
+# Copyright (C) 2007-2009 OpenWrt.org
+logger "usb device is mass storage"
+i=0
+while [ $i -le 10 ]; do
+	logger "waiting on usb drive $i ..."
+	i=$(($i+1))
+	cd /sys${DEVPATH}
+	for blk in `find host* -type d 2>/dev/null`; do
+		[ -d /sys/${DEVPATH}/${blk}/block/ ] && {
+			cd 
+			for disc in `find /sys/${DEVPATH}/${blk}/block -name "sd*"`; do
+				sleep 2
+				cd $disc
+				for node in `find . -name "sd*" | cut -d "/" -f2`; do
+					dev="/dev/${node}"
+					if [ -e /etc/fstab ] && grep -q "^${dev}" /etc/fstab; then
+						dir=`cat /etc/fstab | grep "^${dev}" | awk '{ print $2; }'`
+					else
+						dir="/mnt/${node}"
+					fi
+					logger "mounting ${dev} on ${dir}" 
+					mkdir -p ${dir}
+					mount ${dev} ${dir}
+					ln -nsf ${dir} /mnt/usbdrive
+					i=20	
+				done
+			done
+		}
+	done
+	sleep 1
+done

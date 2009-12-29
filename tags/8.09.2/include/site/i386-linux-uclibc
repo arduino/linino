@@ -1,0 +1,5 @@
+#!/bin/sh
+
+. $TOPDIR/include/site/i386-linux
+. $TOPDIR/include/site/linux-uclibc
+

@@ -1,0 +1,21 @@
+
+	Use values exported from $(TOPDIR)/rules.mk for determining
+	the target system instead of the host configuration
+
+Index: ppp-2.4.3/configure
+===================================================================
+--- ppp-2.4.3.orig/configure	2007-06-04 13:22:08.549555552 +0200
++++ ppp-2.4.3/configure	2007-06-04 13:22:08.618545064 +0200
+@@ -8,9 +8,9 @@
+ #  if [ -d /NextApps ]; then
+ #    system="NeXTStep"
+ #  else
+-  system=`uname -s`
+-  release=`uname -r`
+-  arch=`uname -m`
++  system=${UNAME_S:-`uname -s`}
++  release=${UNAME_R:-`uname -r`}
++  arch=${UNAME_M:-`uname -m`}
+ #  fi
+ state="unknown"
+ 
