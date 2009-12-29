@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2007-2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wput
-PKG_VERSION:=0.6.1
+PKG_VERSION:=0.6.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=@SF/wput
-PKG_MD5SUM:=92b41efed4db8eb4f3443c23bf7ceecf
+PKG_MD5SUM:=a14c4c13d91d04d6119bdc977e8a8bdf
 
 include $(INCLUDE_DIR)/package.mk
 
