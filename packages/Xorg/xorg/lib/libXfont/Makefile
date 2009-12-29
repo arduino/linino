@@ -31,6 +31,12 @@ define Package/libXfont
   URL:=http://xorg.freedesktop.org/
 endef
 
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--disable-devel-docs \
+	)
+endef
+
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{lib/pkgconfig,include/X11/fonts}
 	$(CP) \
