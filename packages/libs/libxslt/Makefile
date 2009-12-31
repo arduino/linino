@@ -33,10 +33,22 @@ define Package/libxslt/description
 	A library for XML transformation using XSLT.
 endef
 
+define Package/libexslt
+  SECTION:=libs
+  CATEGORY:=Libraries
+  DEPENDS:=+libxslt
+  TITLE:=Gnome XSLT library Extention
+  URL:=http://xmlsoft.org/XSLT/EXSLT/
+endef
+
+define Package/libexslt/description
+	A extention for XSLT.
+endef
+
 define Package/xsltproc
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libxml2 +libxslt
+  DEPENDS:=+libxml2 +libxslt +libexslt
   TITLE:=Gnome XSLT xsltproc Utility
   URL:=http://xmlsoft.org/XSLT/
 endef
@@ -94,6 +106,13 @@ define Package/libxslt/install
 		$(1)/usr/lib/
 endef
 
+define Package/libexslt/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libexslt.so.* \
+		$(1)/usr/lib/
+endef
+
 define Package/xsltproc/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) \
@@ -102,4 +121,5 @@ define Package/xsltproc/install
 endef
 
 $(eval $(call BuildPackage,libxslt))
+$(eval $(call BuildPackage,libexslt))
 $(eval $(call BuildPackage,xsltproc))
