@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gst-plugins-ugly
 PKG_VERSION:=0.10.13
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gst-plugins-ugly/
@@ -43,7 +43,7 @@ define Package/gst-plugins-ugly-lame
   SECTION:=multimedia
   CATEGORY:=Multimedia
   TITLE+= (lame)
-  DEPENDS:=+gstreamer +gst-plugins-base +lame
+  DEPENDS:=+gstreamer +lame-lib
 endef
 
 define Package/gst-plugins-ugly-lame/description
@@ -55,7 +55,7 @@ define Package/gst-plugins-ugly-mad
   SECTION:=multimedia
   CATEGORY:=Multimedia
   TITLE+= (mad)
-  DEPENDS:=+gstreamer +gst-plugins-base +libmad +libid3tag
+  DEPENDS:=+gstreamer +gst-plugins-base-libgsttag +gst-plugins-base-libgstaudio +gst-plugins-base-libgstinterfaces +libmad +libid3tag
 endef
 
 define Package/gst-plugins-ugly-mad/description
