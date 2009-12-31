@@ -1,0 +1,44 @@
+diff -urN radlib-2.8.4/debug/Makefile.am radlib-2.8.42/debug/Makefile.am
+--- radlib-2.8.4/debug/Makefile.am	2009-02-05 06:10:01.000000000 +0100
++++ radlib-2.8.42/debug/Makefile.am	2009-10-04 16:40:08.000000000 +0200
+@@ -43,5 +43,5 @@
+ endif
+ 
+ if CROSSCOMPILE
+-raddebug_LDFLAGS += $(prefix)/lib/crt1.o $(prefix)/lib/crti.o $(prefix)/lib/crtn.o
++#raddebug_LDFLAGS += $(prefix)/lib/crt1.o $(prefix)/lib/crti.o $(prefix)/lib/crtn.o
+ endif
+diff -urN radlib-2.8.4/debug/Makefile.in radlib-2.8.42/debug/Makefile.in
+--- radlib-2.8.4/debug/Makefile.in	2009-08-15 16:03:37.000000000 +0200
++++ radlib-2.8.42/debug/Makefile.in	2009-10-04 16:40:17.000000000 +0200
+@@ -43,7 +43,7 @@
+ @MYSQL_FALSE@@PGRESQL_TRUE@am__append_6 = -I$(prefix)/pgsql/include
+ @SQLITE_TRUE@am__append_7 = -L/usr/lib -L/usr/local/lib
+ @SQLITE_TRUE@am__append_8 = -I/usr/include -I/usr/local/include
+-@CROSSCOMPILE_TRUE@am__append_9 = $(prefix)/lib/crt1.o $(prefix)/lib/crti.o $(prefix)/lib/crtn.o
++#@CROSSCOMPILE_TRUE@am__append_9 = $(prefix)/lib/crt1.o $(prefix)/lib/crti.o $(prefix)/lib/crtn.o
+ subdir = debug
+ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+diff -urN radlib-2.8.4/msgRouter/Makefile.am radlib-2.8.42/msgRouter/Makefile.am
+--- radlib-2.8.4/msgRouter/Makefile.am	2009-02-05 06:10:01.000000000 +0100
++++ radlib-2.8.42/msgRouter/Makefile.am	2009-10-04 16:31:24.000000000 +0200
+@@ -44,5 +44,5 @@
+ endif
+ 
+ if CROSSCOMPILE
+-radmrouted_LDFLAGS += $(prefix)/lib/crt1.o $(prefix)/lib/crti.o $(prefix)/lib/crtn.o
++#radmrouted_LDFLAGS += $(prefix)/lib/crt1.o $(prefix)/lib/crti.o $(prefix)/lib/crtn.o
+ endif
+diff -urN radlib-2.8.4/msgRouter/Makefile.in radlib-2.8.42/msgRouter/Makefile.in
+--- radlib-2.8.4/msgRouter/Makefile.in	2009-08-15 16:03:37.000000000 +0200
++++ radlib-2.8.42/msgRouter/Makefile.in	2009-10-04 16:36:01.000000000 +0200
+@@ -43,7 +43,7 @@
+ @MYSQL_FALSE@@PGRESQL_TRUE@am__append_6 = -I$(prefix)/pgsql/include
+ @SQLITE_TRUE@am__append_7 = -L/usr/lib -L/usr/local/lib
+ @SQLITE_TRUE@am__append_8 = -I/usr/include -I/usr/local/include
+-@CROSSCOMPILE_TRUE@am__append_9 = $(prefix)/lib/crt1.o $(prefix)/lib/crti.o $(prefix)/lib/crtn.o
++#@CROSSCOMPILE_TRUE@am__append_9 = $(prefix)/lib/crt1.o $(prefix)/lib/crti.o $(prefix)/lib/crtn.o
+ subdir = msgRouter
+ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
