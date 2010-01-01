@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2009 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luafilesystem
 PKG_VERSION:=1.4.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://luaforge.net/frs/download.php/3931
@@ -17,7 +17,7 @@ PKG_MD5SUM:=8e7b2a9b899d669280456d0f95afd961
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/liblua-filesystem
+define Package/luafilesystem
   SUBMENU:=Lua
   SECTION:=lang
   CATEGORY:=Languages
@@ -44,31 +44,20 @@ define Build/Compile
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
 		LDFLAGS="$(TARGET_LDFLAGS)"
-	$(TARGET_CROSS)ar r $(PKG_BUILD_DIR)/src/liblua-filesystem.a $(PKG_BUILD_DIR)/src/lfs.o
+	$(TARGET_CROSS)ar r $(PKG_BUILD_DIR)/src/luafilesystem.a $(PKG_BUILD_DIR)/src/lfs.o
 endef
 
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include
-	mkdir -p $(STAGING_DIR)/usr/lib/lua/5.1/
-	$(CP) $(PKG_BUILD_DIR)/src/lfs.h $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_BUILD_DIR)/src/lfs.so \
-		$(STAGING_DIR)/usr/lib/liblua-filesystem.so.0.0.0
-	cd $(STAGING_DIR)/usr/lib/ && \
-		ln -fs liblua-filesystem.so.0.0.0 liblua-filesystem.so
-	cd $(STAGING_DIR)/usr/lib/ && \
-		ln -fs liblua-filesystem.so.0.0.0 liblua-filesystem.so.0
-	cd $(STAGING_DIR)/usr/lib/lua/5.1/ && \
-		ln -fs ../../liblua-filesystem.so.0.0.0 lfs.so
-	$(CP) $(PKG_BUILD_DIR)/src/liblua-filesystem.a $(STAGING_DIR)/usr/lib
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/include
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib/lua
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/src/lfs.h $(STAGING_DIR)/usr/include
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/lfs.so $(STAGING_DIR)/usr/lib/lua
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/src/luafilesystem.a $(STAGING_DIR)/usr/lib/lua
 endef
 
-define Package/liblua-filesystem/install
-	$(INSTALL_DIR) $(1)/usr/lib/lua/5.1
-	$(CP) $(PKG_BUILD_DIR)/src/lfs.so \
-		$(1)/usr/lib/liblua-filesystem.so.0.0.0
-	cd $(1)/usr/lib/ && ln -fs liblua-filesystem.so.0.0.0 liblua-filesystem.so
-	cd $(1)/usr/lib/lua/5.1/ && \
-		ln -fs ../../liblua-filesystem.so.0.0.0 lfs.so
+define Package/luafilesystem/install
+	$(INSTALL_DIR) $(1)/usr/lib/lua
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/lfs.so $(1)/usr/lib/lua/lfs.so
 endef
 
-$(eval $(call BuildPackage,liblua-filesystem))
+$(eval $(call BuildPackage,luafilesystem))
