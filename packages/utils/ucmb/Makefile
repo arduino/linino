@@ -55,4 +55,11 @@ define Build/Compile
 		modules
 endef
 
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) \
+		$(PKG_BUILD_DIR)/ucmb.h \
+		$(1)/usr/include
+endef
+
 $(eval $(call KernelPackage,ucmb))
