@@ -26,5 +26,9 @@ start() {
 }
 
 stop() {
-	[ -f $PID_F ] && kill -9 $(cat $PID_F) && rm -f $PID_F
+	[ -f $PID_F ] && {
+		kill $(cat $PID_F)
+		kill -9 $(cat $PID_F)
+		rm -f $PID_F
+	}
 }
