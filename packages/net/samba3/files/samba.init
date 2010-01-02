@@ -62,8 +62,10 @@ start() {
 	config_foreach smb_header samba
 	config_foreach smb_add_share sambashare
 	smbd -D
+	nmbd -D
 }
 
 stop() {
 	killall smbd
+	killall nmbd
 }
