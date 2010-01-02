@@ -29,14 +29,25 @@ define Package/boost
   URL:=http://www.boost.org/
 endef
 
+define Package/boost-serialization
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=Boost-serialization library
+  DEPENDS:=+boost
+endef
+
+define Package/boost-regex
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=Boost-regex library
+  DEPENDS:=+boost
+endef
+
 define Build/Configure
 endef
 
 # bjam does not support anything like DESTDIR
 CONFIGURE_PREFIX:=$(PKG_INSTALL_DIR)
-
-LIBRARIES:= \
-	serialization
 
 define Build/Compile
 	( cd $(PKG_BUILD_DIR) ; \
@@ -44,9 +55,8 @@ define Build/Compile
 		bjam \
 			'-sBUILD=release <optimization>space <inlining>on <debug-symbols>off' \
 			--toolset=gcc --build-type=minimal --layout=system \
-			$(foreach c, $(LIBRARIES), \
-				--with-$(c) \
-			) \
+			$(patsubst %,--with-regex,$(filter y m,$(CONFIG_PACKAGE_boost-regex))) \
+			$(patsubst %,--with-serialization,$(filter y m,$(CONFIG_PACKAGE_boost-serialization))) \
 			$(CONFIGURE_ARGS) \
 			install \
 	)
@@ -68,11 +78,6 @@ define Package/boost/install
 	$(CP) $(PKG_INSTALL_DIR)/lib/*.so* $(1)/usr/lib/
 endef
 
-# TODO: Split libboost into several smaller packages
-
-#define Package/boost-serialization/install
-#    $(INSTALL_DIR) $(1)/usr/lib
-#	$(CP) $(PKG_INSTALL_DIR)/lib/*serialization*.so* $(1)/usr/lib/
-#endef
-
+$(eval $(call BuildPackage,boost-serialization))
+$(eval $(call BuildPackage,boost-regex))
 $(eval $(call BuildPackage,boost))
