@@ -36,14 +36,14 @@ endef
 CONFIGURE_PREFIX:=$(PKG_INSTALL_DIR)
 
 LIBRARIES:= \
-	serialization \
+	serialization
 
 define Build/Compile
 	( cd $(PKG_BUILD_DIR) ; \
 		echo "using gcc : : $(GNU_TARGET_NAME)-gcc : <cflags>$(CFLAGS) <cxxflags>$(CXXFLAGS) <linkflags>$(LDFLAGS) ;" > tools/build/v2/site-config.jam ; \
 		bjam \
 			'-sBUILD=release <optimization>space <inlining>on <debug-symbols>off' \
-			--toolset=gcc \
+			--toolset=gcc --build-type=minimal --layout=system \
 			$(foreach c, $(LIBRARIES), \
 				--with-$(c) \
 			) \
@@ -58,8 +58,9 @@ endef
 
 define Build/InstallDev
     $(INSTALL_DIR) $(1)/usr/include/boost $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/include/boost-*/boost/* $(1)/usr/include/boost/ # copies _all_ header files - independent of <--with-library>-argument above
+	$(CP) $(PKG_INSTALL_DIR)/include/boost/* $(1)/usr/include/boost/ # copies _all_ header files - independent of <--with-library>-argument above
 	$(CP) $(PKG_INSTALL_DIR)/lib/*.a $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/lib/*.so* $(1)/usr/lib/
 endef
 
 define Package/boost/install
