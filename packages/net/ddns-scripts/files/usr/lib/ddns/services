@@ -13,7 +13,7 @@
 "zoneedit.com"		"http://[USERNAME]:[PASSWORD]@dynamic.zoneedit.com/auth/dynamic.html?host=[DOMAIN]&dnsto=[IP]"
 
 #noip is an alias of no-ip, so allow both names for the same service
-"no-ip.com"		"http://dynupdate.no-ip.com/ducupdate.php?username=[USERNAME]&pass=[PASSWORD]&h[]=[DOMAIN]&ip=[IP]"     
+"no-ip.com"		"http://dynupdate.no-ip.com/ducupdate.php?username=[USERNAME]&pass=[PASSWORD]&h[]=[DOMAIN]&ip=[IP]"
 "noip.com"		"http://dynupdate.no-ip.com/ducupdate.php?username=[USERNAME]&pass=[PASSWORD]&h[]=[DOMAIN]&ip=[IP]"
 
 #freedns.afraid.org is weird, you just need an update code, for which we use the password variable
@@ -27,3 +27,7 @@
 # If anyone has time they could update this file to be compatible with a bunch of them                    #
 #                                                                                                         #
 ###########################################################################################################
+
+# DNS Max and resellers' update urls
+"dnsmax.com" "http://update.dnsmax.com/update/?username=[USERNAME]&password=[PASSWORD]&resellerid=1&clientname=openwrt&clientversion=8.09&protocolversion=2.0&updatehostname=[DOMAIN]&ip=[IP]"
+"thatip.com" "http://update.dnsmax.com/update/?username=[USERNAME]&password=[PASSWORD]&resellerid=2&clientname=openwrt&clientversion=8.09&protocolversion=2.0&updatehostname=[DOMAIN]&ip=[IP]"
