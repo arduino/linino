@@ -233,7 +233,7 @@ do
 
 	current_time=$(date +%s)
 	time_since_update=$(($current_time - $last_update))
-	
+
 
 	verbose_echo "Running IP check..."
 	verbose_echo "current system ip = $current_ip"
@@ -248,13 +248,16 @@ do
 		final_url=$update_url
 		for option_var in $ALL_OPTION_VARIABLES
 		do
-			replace_name=$(echo "\[$option_var\]" | tr 'a-z' 'A-Z')
-			replace_value=$(eval echo "\$$option_var")
-			replace_value=$(echo $replace_value | sed -f /usr/lib/ddns/url_escape.sed)
-			final_url=$(echo $final_url | sed s^"$replace_name"^"$replace_value"^g )
-		done	
+			if [ "$option_var" != "update_url" ]
+			then
+				replace_name=$(echo "\[$option_var\]" | tr 'a-z' 'A-Z')
+				replace_value=$(eval echo "\$$option_var")
+				replace_value=$(echo $replace_value | sed -f /usr/lib/ddns/url_escape.sed)
+				final_url=$(echo $final_url | sed s^"$replace_name"^"$replace_value"^g )
+			fi
+		done
 		final_url=$(echo $final_url | sed s/"\[IP\]"/"$current_ip"/g )
-		
+
 
 		verbose_echo "updating with url=\"$final_url\""
 
@@ -270,10 +273,10 @@ do
 		last_update=$current_time
 		time_since_update='0'
 		registered_ip=$current_ip
-		
+
 		human_time=$(date)
 		verbose_echo "update complete, time is: $human_time"
-		
+
 		echo "$last_update" > "/var/run/dynamic_dns/$service_id.update"
 	else
 		human_time=$(date)
