@@ -2516,7 +2516,7 @@ diff -urN samba-3.0.24.orig/source/lib/iconv.c samba-3.0.24/source/lib/iconv.c
 diff -urN samba-3.0.24.orig/source/lib/pidfile.c samba-3.0.24/source/lib/pidfile.c
 --- samba-3.0.24.orig/source/lib/pidfile.c	2007-02-04 19:59:17.000000000 +0100
 +++ samba-3.0.24/source/lib/pidfile.c	2007-07-17 13:19:05.000000000 +0200
-@@ -82,19 +82,20 @@
+@@ -82,19 +82,22 @@
  {
  	int     fd;
  	char    buf[20];
@@ -2535,6 +2535,8 @@ diff -urN samba-3.0.24.orig/source/lib/pidfile.c samba-3.0.24/source/lib/pidfile
 +		char    *short_configfile = strrchr( dyn_CONFIGFILE, '/');
  		slprintf( name, sizeof( name)-1, "%s-%s", program_name, short_configfile+1);
  	}
++#else
++	strncpy( name, program_name, sizeof( name)-1);
 +#endif
  
  	slprintf(pidFile, sizeof(pidFile)-1, "%s/%s.pid", lp_piddir(), name);
@@ -2903,9 +2905,8 @@ diff -urN samba-3.0.24.orig/source/libads/authdata.c samba-3.0.24/source/libads/
  		}
  	}
  
-diff -urN samba-3.0.24.orig/source/libsmb/clifile.c samba-3.0.24/source/libsmb/clifile.c
---- samba-3.0.24.orig/source/libsmb/clifile.c	2007-02-04 19:59:20.000000000 +0100
-+++ samba-3.0.24/source/libsmb/clifile.c	2007-07-17 13:19:05.000000000 +0200
+--- samba-3.0.24/source/libsmb/clifile.c.orig	2009-12-21 07:53:20.000000000 +0100
++++ samba-3.0.24/source/libsmb/clifile.c	2009-12-21 07:51:10.000000000 +0100
 @@ -21,6 +21,8 @@
  
  #include "includes.h"
@@ -2915,33 +2916,50 @@ diff -urN samba-3.0.24.orig/source/libsmb/clifile.c samba-3.0.24/source/libsmb/c
  /****************************************************************************
   Hard/Symlink a file (UNIX extensions).
   Creates new name (sym)linked to oldname.
-@@ -71,6 +73,9 @@
+@@ -71,6 +73,8 @@
  	return True;
  }
  
 +#endif /* AVM_SMALLER */
 +
-+
  /****************************************************************************
   Map standard UNIX permissions onto wire representations.
  ****************************************************************************/
-@@ -165,6 +170,9 @@
+@@ -165,6 +169,8 @@
  	}
  }
  
-+
 +#ifndef AVM_SMALLER
 +
  /****************************************************************************
   Do a POSIX getfacl (UNIX extensions).
  ****************************************************************************/
-@@ -1759,3 +1767,6 @@
+@@ -785,6 +791,8 @@
+ 	return SVAL(cli->inbuf,smb_vwv2);
+ }
+ 
++#endif /* AVM_SMALLER */
++
+ /****************************************************************************
+  Close a file.
+ ****************************************************************************/
+@@ -813,6 +821,8 @@
+ 
+ 
+ 
++#ifndef AVM_SMALLER
++
+ /****************************************************************************
+  send a lock with a specified locktype 
+  this is used for testing LOCKING_ANDX_CANCEL_LOCK
+@@ -1760,3 +1770,6 @@
  
  	return cli_get_ea_list(cli, setup, param, 6, ctx, pnum_eas, pea_list);
  }
 +
 +#endif /* AVM_SMALLER */
 +
+ 
 diff -urN samba-3.0.24.orig/source/libsmb/namequery.c samba-3.0.24/source/libsmb/namequery.c
 --- samba-3.0.24.orig/source/libsmb/namequery.c	2007-02-04 19:59:20.000000000 +0100
 +++ samba-3.0.24/source/libsmb/namequery.c	2007-07-17 13:19:05.000000000 +0200
@@ -3252,8 +3270,7 @@ diff -urN samba-3.0.24.orig/source/Makefile samba-3.0.24/source/Makefile
 +# Also depends on  $(SECRETS_OBJ) $(LIBSAMBA_OBJ)
 +# Be sure to include them into your application
 +
-+# AR7 POPT_LIB_OBJ = lib/popt_common.o 
-+POPT_LIB_OBJ =
++POPT_LIB_OBJ = lib/popt_common.o 
 +
 +UBIQX_OBJ = ubiqx/ubi_BinTree.o ubiqx/ubi_Cache.o ubiqx/ubi_SplayTree.o \
 +            ubiqx/ubi_dLinkList.o ubiqx/ubi_sLinkList.o 
@@ -3279,6 +3296,11 @@ diff -urN samba-3.0.24.orig/source/Makefile samba-3.0.24/source/Makefile
 +	libsmb/ntlmssp.o libsmb/ntlmssp_parse.o libsmb/ntlmssp_sign.o
 +
 +LIBSMB_OBJ = \
++ 		libsmb/clientgen.o \
++ 		libsmb/cliconnect.o \
++		libsmb/clirap.o \
++		libsmb/clistr.o \
++		libsmb/clitrans.o \
 +		libsmb/clifile.o \
 +	     lib/util_seaccess.o \
 +		libsmb/clikrb5.o \
@@ -3537,8 +3559,9 @@ diff -urN samba-3.0.24.orig/source/Makefile samba-3.0.24/source/Makefile
 +            nmbd/nmbd_subnetdb.o nmbd/nmbd_winsproxy.o nmbd/nmbd_winsserver.o \
 +            nmbd/nmbd_workgroupdb.o nmbd/nmbd_synclists.o
 +
-+NMBD_OBJ = $(NMBD_OBJ1) $(PARAM_OBJ) $(LIBSMB_OBJ) $(KRBCLIENT_OBJ) $(UBIQX_OBJ) \
-+           $(PROFILE_OBJ) $(LIB_NONSMBD_OBJ) $(SECRETS_OBJ) $(POPT_LIB_OBJ) 
++NMBD_OBJ = $(NMBD_OBJ1) $(PARAM_OBJ) $(LIBSMB_OBJ) \
++           $(KRBCLIENT_OBJ) $(PROFILE_OBJ) $(LIB_NONSMBD_OBJ) \
++           $(SECRETS_OBJ) $(POPT_LIB_OBJ)
 +
 +WREPL_OBJ1 =
 +
@@ -3813,7 +3836,7 @@ diff -urN samba-3.0.24.orig/source/Makefile samba-3.0.24/source/Makefile
 +######################################################################
 +# now the rules...
 +######################################################################
-+all : SHOWFLAGS proto_exists bin/smbd  bin/smbpasswd
++all : SHOWFLAGS proto_exists bin/smbd  bin/smbpasswd  bin/nmbd
 +
 +pam_smbpass : SHOWFLAGS bin/pam_smbpass.so
 +
@@ -3935,9 +3958,9 @@ diff -urN samba-3.0.24.orig/source/Makefile samba-3.0.24/source/Makefile
 +	  dir=bin $(MAKEDIR); fi
 +	@: >> $@ || : > $@ # what a fancy emoticon!
 +
-+bin/smbd: bin/libsmbd.a $(SMBD_OBJ_MAIN) bin/.dummy
++bin/smbd: bin/libsmbd.a $(SMBD_OBJ_MAIN) $(POPT_OBJS) $(POPT_LIB_OBJ) bin/.dummy
 +	@echo Linking $@
-+	$(CC) $(FLAGS)  -o $@ $(SMBD_OBJ_MAIN) $(LDFLAGS) \
++	$(CC) $(FLAGS)  -o $@ $(SMBD_OBJ_MAIN) $(POPT_OBJS) $(POPT_LIB_OBJ) $(LDFLAGS) \
 +		$(AUTH_LIBS) \
 +		-Lbin -lsmbd \
 +		-L$(TARGETFS)/lib \

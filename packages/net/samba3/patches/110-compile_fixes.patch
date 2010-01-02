@@ -45,17 +45,7 @@ Index: samba-3.0.24/source/Makefile
  AR=ar
  LDSHFLAGS=-shared -Wl,-Bsymbolic 
  WINBIND_NSS_LDSHFLAGS=-shared -Wl,-Bsymbolic 
-@@ -238,7 +238,9 @@
- 	  lib/adt_tree.o lib/gencache.o $(TDB_OBJ) \
- 	  lib/module.o lib/ldap_escape.o  \
- 	  lib/privileges.o lib/secdesc.o lib/secace.o lib/secacl.o \
--	lib/arc4.o lib/sharesec.o lib/events.o lib/util_nscd.o
-+	lib/arc4.o lib/sharesec.o lib/events.o lib/util_nscd.o \
-+	popt/poptparse.o popt/popthelp.o popt/poptconfig.o \
-+	lib/popt_common.o popt/popt.o
- 
- LIB_NONSMBD_OBJ = $(LIB_OBJ) lib/dummysmbd.o lib/dummyroot.o
- 
+
 Index: samba-3.0.24/source/popt/popt.c
 ===================================================================
 --- samba-3.0.24.orig/source/popt/popt.c	2008-08-07 11:15:00.000000000 +0200
