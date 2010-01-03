@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vnstat
-PKG_VERSION:=1.9
+PKG_VERSION:=1.10
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://humdi.net/vnstat
-PKG_MD5SUM:=ebaf8352fa3674faea2fe2ce1001a38d
+PKG_MD5SUM:=95421d968689130590348ceb80ff74a8
+
+PKG_INSTALL:=1
+
+PKG_BUILD_DEPENDS:= libgd
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -75,11 +79,11 @@ endef
 
 define Package/vnstat/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/vnstat $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/vnstat $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/vnstatd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/vnstatd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/cfg/vnstat.conf $(1)/etc/
+	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/vnstat.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_CONF) ./files/vnstat-uci.conf $(1)/etc/config/vnstat
 	$(INSTALL_DIR) $(1)/etc/init.d
@@ -88,24 +92,20 @@ endef
 
 define Package/vnstati/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/vnstati $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/vnstati $(1)/usr/bin/
 endef
 
 define Package/vnstat/postinst
 #!/bin/sh
 BIN_REL=/usr/bin/vnstat
 BIN=$${IPKG_INSTROOT}$${BIN_REL}
-CRONTAB=$${IPKG_INSTROOT}/etc/crontabs/root
 LIB_D_REL=/var/lib/vnstat
 LIB_D=$${IPKG_INSTROOT}$${LIB_D_REL}
-mkdir -p $${IPKG_INSTROOT}/etc/crontabs/
 [ -d $$LIB_D ] || mkdir -p $$LIB_D
 IFACE_WAN=$$(uci get network.wan.ifname)
 if [ -n $$IFACE_WAN ]; then
 	[ -e $$LIB_D/$$IFACE_WAN ] || ( [ -x $$BIN ] && $$BIN -u -i $$IFACE_WAN )
 fi
-grep -q "$$BIN_REL -u" $$CRONTAB 2>/dev/null
-[ $$? -eq 0 ] && sed -i -e "/\/usr\/bin\/vnstat -u/d" $$CRONTAB
 true
 endef
 
