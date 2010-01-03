@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python
 PKG_VERSION:=2.6.4
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=Python-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.python.org/ftp/python/$(PKG_VERSION)/
@@ -85,6 +85,11 @@ $(call Package/python/Default)
  DEPENDS+=+python-mini +libsqlite3
 endef
 
+define Package/python-gdbm
+$(call Package/python/Default)
+ TITLE:=Python support for gdbm
+ DEPENDS+=+python-mini +libgdbm
+endef
 
 PY_DISABLED_MODULES:= \
 	readline _curses _curses_panel _tkinter nis
@@ -189,6 +194,7 @@ define PyPackage/python/filespec
 -|/usr/lib/python$(PYTHON_VERSION)/test
 -|/usr/lib/python$(PYTHON_VERSION)/lib2to3
 -|/usr/lib/python$(PYTHON_VERSION)/lib-old
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/gdbm.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_sqlite3.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_ssl.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/pyexpat.so
@@ -370,12 +376,17 @@ define PyPackage/python-sqlite3/filespec
 +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_sqlite3.so
 endef
 
+define PyPackage/python-gdbm/filespec
++|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/gdbm.so
+endef
+
 $(eval $(call PyPackage,python))
 $(eval $(call PyPackage,python-mini))
 $(eval $(call PyPackage,python-doc))
 $(eval $(call PyPackage,python-expat))
 $(eval $(call PyPackage,python-openssl))
 $(eval $(call PyPackage,python-sqlite3))
+$(eval $(call PyPackage,python-gdbm))
 
 $(eval $(call BuildPackage,python))
 $(eval $(call BuildPackage,python-mini))
@@ -383,3 +394,4 @@ $(eval $(call BuildPackage,python-doc))
 $(eval $(call BuildPackage,python-expat))
 $(eval $(call BuildPackage,python-openssl))
 $(eval $(call BuildPackage,python-sqlite3))
+$(eval $(call BuildPackage,python-gdbm))
