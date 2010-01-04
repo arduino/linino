@@ -58,7 +58,7 @@ endef
 
 define Package/libsdl-sound/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libSDL_sound*.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libSDL_sound*.so* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libsdl-sound))

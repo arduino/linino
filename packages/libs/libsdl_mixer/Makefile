@@ -60,7 +60,7 @@ endef
 
 define Package/libsdl-mixer/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libSDL_mixer*.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libSDL_mixer*.so* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libsdl-mixer))
