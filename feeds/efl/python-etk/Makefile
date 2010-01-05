@@ -18,7 +18,7 @@ PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://svn.enlightenment.org/svn/e/trunk/BINDINGS/python/$(PKG_NAME)
+PKG_SOURCE_URL:=http://svn.enlightenment.org/svn/e/trunk/OLD/BINDINGS/python/$(PKG_NAME)
 
 PKG_BUILD_DEPENDS:=cython python
 
