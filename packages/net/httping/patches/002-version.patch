@@ -4,12 +4,12 @@
  #include "utils.h"
  #include "error.h"
  
-+#define VERSION "1.3.1"
++#define VERSION "1.4.0"
 +
  static volatile int stop = 0;
  
  int quiet = 0;
-@@ -50,7 +52,7 @@ char last_error[ERROR_BUFFER_SIZE];
+@@ -51,7 +53,7 @@ char last_error[ERROR_BUFFER_SIZE];
  
  void version(void)
  {
@@ -18,7 +18,7 @@
  #ifndef NO_SSL
  	fprintf(stderr, "SSL support included\n");
  #endif
-@@ -449,7 +451,7 @@ int main(int argc, char *argv[])
+@@ -524,7 +526,7 @@ int main(int argc, char *argv[])
  	if (useragent)
  		sprintf(&request[strlen(request)], "User-Agent: %s\r\n", useragent);
  	else
