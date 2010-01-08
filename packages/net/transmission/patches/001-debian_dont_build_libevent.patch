@@ -1,0 +1,51 @@
+--- a/third-party/Makefile.am
++++ b/third-party/Makefile.am
+@@ -4,7 +4,7 @@ else
+   DHT_DIR =
+ endif
+ 
+-SUBDIRS = libnatpmp miniupnp libevent $(DHT_DIR)
++SUBDIRS = libnatpmp miniupnp $(DHT_DIR)
+ 
+ EXTRA_DIST = \
+   macosx-libevent-config.h \
+--- a/configure
++++ b/configure
+@@ -1047,7 +1047,7 @@ LIBNOTIFY_CFLAGS
+ LIBNOTIFY_LIBS
+ DBUS_GLIB_CFLAGS
+ DBUS_GLIB_LIBS'
+-ac_subdirs_all='third-party/libevent'
++#ac_subdirs_all='third-party/libevent'
+ 
+ # Initialize some variables set by options.
+ ac_init_help=
+@@ -19738,7 +19738,7 @@ fi
+ 
+ 
+ 
+-subdirs="$subdirs third-party/libevent"
++#subdirs="$subdirs third-party/libevent"
+ 
+ libevent_source=bundled
+ { $as_echo "$as_me:$LINENO: checking for evutil_vsnprintf in -levent" >&5
+--- a/third-party/Makefile.in
++++ b/third-party/Makefile.in
+@@ -70,7 +70,7 @@ AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGE
+ 	distdir
+ ETAGS = etags
+ CTAGS = ctags
+-DIST_SUBDIRS = libnatpmp miniupnp libevent dht
++DIST_SUBDIRS = libnatpmp miniupnp dht
+ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ am__relativize = \
+   dir0=`pwd`; \
+@@ -275,7 +275,7 @@ top_srcdir = @top_srcdir@
+ transmissionlocaledir = @transmissionlocaledir@
+ @DHT_FALSE@DHT_DIR = 
+ @DHT_TRUE@DHT_DIR = dht
+-SUBDIRS = libnatpmp miniupnp libevent $(DHT_DIR)
++SUBDIRS = libnatpmp miniupnp $(DHT_DIR)
+ EXTRA_DIST = \
+   macosx-libevent-config.h \
+   macosx-libevent-event-config.h
