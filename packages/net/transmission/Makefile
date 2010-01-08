@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=transmission
-PKG_VERSION:=1.76
+PKG_VERSION:=1.77
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://mirrors.m0k.org/transmission/files
-PKG_MD5SUM:=ac44511ba4c203998be3079626126ede
+PKG_MD5SUM:=d9457ac827faebb515062975d45835e9
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -64,27 +65,23 @@ CONFIGURE_ARGS += \
 	--disable-wx \
 	--with-wx-config="$(STAGING_DIR)/usr/bin/" \
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)"
-endef
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS)" \
 
 define Package/transmission-daemon/install
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/daemon/transmission-daemon $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/transmission-daemon $(1)/usr/bin/
 endef
 
 define Package/transmission-cli/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/cli/transmissioncli $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/daemon/transmission-remote $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/transmissioncli $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/transmission-remote $(1)/usr/bin/
 endef
 
 define Package/transmission-web/install
 	$(INSTALL_DIR) $(1)/usr/share/transmission
-	rm -rf `find $(PKG_BUILD_DIR)/web -type d -name .svn`
-	cp -rf $(PKG_BUILD_DIR)/web $(1)/usr/share/transmission
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/transmission/web $(1)/usr/share/transmission/
 endef
 
 $(eval $(call BuildPackage,transmission-daemon))
