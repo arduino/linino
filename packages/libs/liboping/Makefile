@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=liboping
-PKG_VERSION:=1.3.3
+PKG_VERSION:=1.3.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://verplant.org/liboping/files
-PKG_MD5SUM:=4ead44ef797dc557106fdc91aa61bd97
+PKG_MD5SUM:=208e185f75f9f8ac96e508bd9e17ef61
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
@@ -39,19 +40,12 @@ $(call Package/liboping/Default)
   DEPENDS+= +liboping
 endef
 
-
 TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
 	--without-perl-bindings \
 	--enable-shared \
 	--enable-static
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
@@ -67,7 +61,7 @@ endef
 
 define Package/oping/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/oping $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/oping $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,liboping))
