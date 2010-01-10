@@ -9,21 +9,23 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=batman-adv
-PKG_REV:=1478
+PKG_REV:=1545
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
+PKG_KMOD_VERSION=caf7148e887b57abf37ef89a1b5aedf314893c94
+PKG_KMOD_FNAME=batman-adv-maint-$(PKG_KMOD_VERSION)
+PKG_KMOD_BUILD_DIR:=$(BUILD_DIR)/batman-adv
+
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_SOURCE_SUBDIR:=batman-adv-$(PKG_VERSION)
-PKG_SOURCE_URL:=http://downloads.open-mesh.net/svn/batman/trunk/
+PKG_SOURCE_SUBDIR:=batctl-0.2.x-$(PKG_VERSION)
+PKG_SOURCE_URL:=http://downloads.open-mesh.net/svn/batman/branches/batctl-0.2.x/
 PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
 
-PKG_KMOD_BUILD_DIR:=$(PKG_BUILD_DIR)/batman-adv-kernelland
-
 PKG_TOOL_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-batctl-install
-PKG_TOOL_BUILD_DIR:=$(PKG_BUILD_DIR)/batctl
+PKG_TOOL_BUILD_DIR:=$(PKG_BUILD_DIR)
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
@@ -42,15 +44,25 @@ $(call Package/batman-adv/Default)
   AUTOLOAD:=$(call AutoLoad,50,batman-adv)
 endef
 
+define KernelPackage/batman-adv-kernelland/config
+	source "$(SOURCE)/Config.in"
+endef
 
 define KernelPackage/batman-adv-kernelland/description
 B.A.T.M.A.N. layer 2
 endef
 
+define Download/batman-adv-maint
+  FILE:=$(PKG_KMOD_FNAME)
+  URL:=http://git.open-mesh.org/snapshot
+endef
+$(eval $(call Download,batman-adv-maint))
+
 MAKE_BATADV_KERNELLAND_ARGS += \
 	CROSS_COMPILE="$(TARGET_CROSS)" \
 	ARCH="$(LINUX_KARCH)" \
 	PATH="$(TARGET_PATH)" \
+	$(if $(CONFIG_KMOD_BATMAN_ADV_DEBUG_LOG),EXTRA_FLAGS="-DCONFIG_BATMAN_ADV_DEBUG") \
 	SUBDIRS="$(PKG_KMOD_BUILD_DIR)" \
 	LINUX_VERSION="$(LINUX_VERSION)" \
 	REVISION="$(PKG_REV)" modules
@@ -79,9 +91,14 @@ ifneq ($(DEVELOPER)$(CONFIG_PACKAGE_kmod-batman-adv-kernelland),)
 endif
 
 define Build/Compile
+	tar xzf "$(DL_DIR)/$(PKG_KMOD_FNAME)" -C "$(BUILD_DIR)"
 	cp $(PKG_KMOD_BUILD_DIR)/Makefile.kbuild $(PKG_KMOD_BUILD_DIR)/Makefile
 	$(BUILD_KMOD_ADV)
 	$(BUILD_BATCTL)
+endef
+
+define Build/Clean
+        rm -rf $(PKG_KMOD_BUILD_DIR)
 endef
 
 define KernelPackage/batman-adv-kernelland/install

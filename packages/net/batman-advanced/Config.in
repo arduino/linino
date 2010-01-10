@@ -1,0 +1,4 @@
+config KMOD_BATMAN_ADV_DEBUG_LOG
+	bool "enable verbose debug logging"
+	depends PACKAGE_kmod-batman-adv-kernelland
+	default n
