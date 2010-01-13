@@ -1,0 +1,27 @@
+diff -u --recursive --new-file openldap-2.4.19-vanilla/servers/slapd/schema/autofs.schema openldap-2.4.19/servers/slapd/schema/autofs.schema
+--- openldap-2.4.19-vanilla/servers/slapd/schema/autofs.schema	1969-12-31 19:00:00.000000000 -0500
++++ openldap-2.4.19/servers/slapd/schema/autofs.schema	2010-01-03 19:34:36.235296300 -0500
+@@ -0,0 +1,23 @@
++attributetype ( 1.3.6.1.1.1.1.31 NAME 'automountMapName'
++	DESC 'Automount map name'
++	EQUALITY caseExactMatch
++	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE )
++			
++attributetype ( 1.3.6.1.1.1.1.32 NAME 'automountKey'
++	DESC 'Automount key value'
++	EQUALITY caseExactMatch
++	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE )
++			
++attributetype ( 1.3.6.1.1.1.1.33 NAME 'automountInformation'
++	DESC 'Automount information'
++	EQUALITY caseExactMatch
++	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE )
++			
++objectclass ( 1.3.6.1.1.1.2.16 NAME 'automountMap' SUP top STRUCTURAL
++	MUST ( automountMapName )
++	MAY ( description ) )
++					
++objectclass ( 1.3.6.1.1.1.2.17 NAME 'automount' SUP top STRUCTURAL
++	DESC 'Automount'
++	MUST ( automountKey $ automountInformation )
++	MAY description )
