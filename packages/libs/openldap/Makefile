@@ -63,7 +63,7 @@ define Package/openldap-server
   $(call Package/openldap/Default)
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenldap +libdb47
+  DEPENDS:=+libopenldap
   TITLE+= (server)
 endef
 
@@ -90,8 +90,12 @@ CONFIGURE_ARGS += \
 	--with-yielding_select="yes" \
 	--without-cyrus-sasl \
 	--without-threads \
-	--without-tls 
-
+	--without-tls \
+	--enable-null \
+	--disable-bdb \
+	--disable-hdb \
+	--disable-monitor \
+	--disable-relay
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \

@@ -5,7 +5,6 @@ START=60
 
 start() {
 	mkdir -p /var/run/openldap
-	mkdir -p /var/lib/ldap
 	
 	/usr/sbin/slapd
 }
