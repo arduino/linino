@@ -5,9 +5,9 @@ START=60
 
 start() {
 	mkdir -p /var/tmp
-	mkdir -p /var/krb5kdc
+	mkdir -p /etc/krb5kdc
 	
-	[ -f /var/krb5kdc/principal ] || ( echo; echo ) | kdb5_util create -s
+	[ -f /etc/krb5kdc/principal ] || ( echo; echo ) | kdb5_util create -s
 	
 	/usr/sbin/krb5kdc
 }
