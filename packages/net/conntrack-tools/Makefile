@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=conntrack-tools
-PKG_VERSION:=0.9.13
+PKG_VERSION:=0.9.14
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.netfilter.org/projects/conntrack-tools/files/
-PKG_MD5SUM:=bd0e2149a1626071db83c4f9714e0556
+PKG_SOURCE_URL:=http://www.netfilter.org/projects/conntrack-tools/files
+PKG_MD5SUM:=7e9344fe85bb68bcf65c35034add6655
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -39,20 +40,11 @@ define Package/conntrack-tools/conffiles
 /etc/conntrackd/conntrackd.conf
 endef
 
-
-# uses GNU configure
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
 define Package/conntrack-tools/install
 	$(INSTALL_DIR) $(1)/etc/conntrackd
 	$(INSTALL_CONF) \
 		$(PKG_BUILD_DIR)/doc/stats/conntrackd.conf \
-		$(1)/etc/conntrackd
+		$(1)/etc/conntrackd/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/sbin/conntrack \
