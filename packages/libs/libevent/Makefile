@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libevent
-PKG_VERSION:=1.4.12
+PKG_VERSION:=1.4.13
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-stable
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-stable.tar.gz
 PKG_SOURCE_URL:=http://www.monkey.org/~provos/
-PKG_MD5SUM:=77b0d8b9885496871bb083165b35ba11
+PKG_MD5SUM:=0b3ea18c634072d12b3c1ee734263664
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -47,8 +49,6 @@ CONFIGURE_ARGS += \
 
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS)" \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
