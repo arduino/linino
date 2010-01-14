@@ -11,7 +11,7 @@ HAPROXY_PID="/var/run/haproxy.pid"
 start() {
 	[ -x "$HAPROXY_BIN" ] || return 1
 
-	start-stop-daemon -S -x $HAPROXY_BIN -- \
+	start-stop-daemon -S -b -x $HAPROXY_BIN -- \
 		-f "$HAPROXY_CONFIG" -V -D -d -p "$HAPROXY_PID"
 }
 
