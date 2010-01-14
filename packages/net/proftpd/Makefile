@@ -9,10 +9,10 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=proftpd
-PKG_VERSION:=1.3.2b
+PKG_VERSION:=1.3.2c
 PKG_RELEASE:=1
 PKG_SOURCE_URL:=ftp://ftp.proftpd.org/distrib/source
-PKG_MD5SUM:=0d6777839f37115654ce384841f68131
+PKG_MD5SUM:=559fd3fb6959d42ddd66b333a03b0c49
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_INSTALL=1
