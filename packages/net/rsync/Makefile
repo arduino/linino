@@ -1,20 +1,21 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
-#
 #
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rsync
-PKG_VERSION:=3.0.6
+PKG_VERSION:=3.0.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://rsync.samba.org/ftp/rsync
-PKG_MD5SUM:=e9865d093a18e4668b9d31b635dc8e99
+PKG_SOURCE_URL:=http://rsync.samba.org/ftp/rsync/src
+PKG_MD5SUM:=b53525900817cf1ba7ad3a516ab5bfe9
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -47,7 +48,7 @@ CONFIGURE_ARGS += \
 
 define Package/rsync/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,rsync))
