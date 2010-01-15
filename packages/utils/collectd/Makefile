@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=collectd
-PKG_VERSION:=4.9.0
+PKG_VERSION:=4.9.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://collectd.org/files/
-PKG_MD5SUM:=5b2e5f57716f2485a3b4eb57774a3818
+PKG_MD5SUM:=5753496651c8c84afaea1fe290876bfc
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 COLLECTD_PLUGINS_DISABLED:= \
 	apple_sensors \
@@ -147,7 +148,7 @@ CONFIGURE_VARS+= \
 	LDFLAGS="$$$$LDFLAGS -lm -lz" \
 	KERNEL_DIR="$(LINUX_DIR)" \
 
-CONFIGURE_PLUGIN:= \
+CONFIGURE_PLUGIN= \
 	$(foreach m, $(1), \
 		$(if $(CONFIG_PACKAGE_collectd-mod-$(m)),--enable-$(m),--disable-$(m)) \
 	)
@@ -176,10 +177,6 @@ endif
 ifneq ($(CONFIG_PACKAGE_collectd-mod-rrdtool),)
   CONFIGURE_ARGS+= --with-librrd="$(STAGING_DIR)/usr/lib/rrdtool-1.0"
 endif
-
-MAKE_FLAGS += \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install
 
 define Package/collectd/conffiles
 /etc/collectd.conf
