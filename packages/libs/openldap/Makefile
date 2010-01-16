@@ -130,6 +130,7 @@ endef
 define Package/openldap-server/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/ldap.init $(1)/etc/init.d/ldap
+	$(INSTALL_DIR) $(1)/etc/openldap/ldif
 	$(INSTALL_DIR) $(1)/etc/openldap/schema
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/openldap/schema/* $(1)/etc/openldap/schema/
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/openldap/slapd.conf $(1)/etc/openldap/
