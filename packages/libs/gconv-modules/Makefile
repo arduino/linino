@@ -15,9 +15,9 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/gconv-modules
   SECTION:=libs
-  CATEGORY:=Base system
+  CATEGORY:=Libraries
   DEPENDS:=@USE_GLIBC
-  DEFAULT:=y
+  DEFAULT:=n
   TITLE:=The GNU libc charset conversion modules
 endef
 
