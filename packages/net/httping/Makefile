@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=httping
-PKG_VERSION:=1.4.0
+PKG_VERSION:=1.4.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://www.vanheusden.com/httping/
-PKG_MD5SUM:=d2bd46b12c6f2bcb5ec27bb44afd95b0
+PKG_MD5SUM:=bde1ff3c01343d2371d8f34fbf8a1d9a
 
 PKG_INSTALL:=1
 
