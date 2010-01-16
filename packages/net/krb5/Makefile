@@ -60,6 +60,7 @@ define Build/Prepare
 	tar xzf "$(BUILD_DIR)/krb5-$(PKG_VERSION).tar.gz" -C "$(BUILD_DIR)"
 	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/001-uclibc-symbol-collision-fix.patch"
 	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/002-krb5kdc-dir-to-etc.patch"
+	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/003-krb5kdc-com-err-fix.patch"
 endef
 
 CONFIGURE_PATH = ./src

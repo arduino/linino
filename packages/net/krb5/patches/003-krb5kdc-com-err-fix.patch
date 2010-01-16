@@ -1,0 +1,15 @@
+diff -u --recursive krb5-1.7-vanilla/src/config/shlib.conf krb5-1.7/src/config/shlib.conf
+--- krb5-1.7-vanilla/src/config/shlib.conf	2008-12-08 17:33:07.000000000 -0500
++++ krb5-1.7/src/config/shlib.conf	2010-01-15 22:04:16.345151448 -0500
+@@ -409,9 +409,9 @@
+ 	SHLIBEXT=.so
+ 	# Linux ld doesn't default to stuffing the SONAME field...
+ 	# Use objdump -x to examine the fields of the library
+-	LDCOMBINE='$(CC) -shared -fPIC -Wl,-h,$(LIBPREFIX)$(LIBBASE)$(SHLIBSEXT),--no-undefined $(LDFLAGS)'
++	LDCOMBINE='$(CC) -shared -fPIC -Wl,-h,$(LIBPREFIX)$(LIBBASE)$(SHLIBSEXT),--no-undefined'
+ 	# 
+-	LDCOMBINE_TAIL='-Wl,--version-script binutils.versions && $(PERL) -w $(SRCTOP)/util/export-check.pl $(SHLIB_EXPORT_FILE) $@'
++	LDCOMBINE_TAIL='-Wl,--version-script binutils.versions $(LDFLAGS) && $(PERL) -w $(SRCTOP)/util/export-check.pl $(SHLIB_EXPORT_FILE) $@'
+ 	SHLIB_EXPORT_FILE_DEP=binutils.versions
+ 	# For cases where we do have dependencies on other libraries
+ 	# built in this tree...
