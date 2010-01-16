@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dosfstools
-PKG_VERSION:=3.0.6
+PKG_VERSION:=3.0.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.daniel-baumann.ch/software/dosfstools/
-PKG_MD5SUM:=ae64c11d3963cd49758aba2854a60b6e
+PKG_MD5SUM:=2df41f537941ac9dff0dd747f2d635c8
 
 include $(INCLUDE_DIR)/package.mk
 
