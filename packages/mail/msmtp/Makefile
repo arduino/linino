@@ -1,6 +1,6 @@
 #
 # Copyright (C) 2009 David Cooper <dave@kupesoft.com>
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=msmtp
-PKG_VERSION:=1.4.18
+PKG_VERSION:=1.4.19
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/msmtp
-PKG_MD5SUM:=74f80b41c058a0ee34819d6bf5ff3b1a
+PKG_MD5SUM:=f0afdc943bf7c8a3a3bf3fe1a73072c4
 
 PKG_FIXUP:=libtool
 
@@ -81,7 +81,7 @@ $(STAMP_BUILT): $(STAMP_BUILT)-$(2)
 
 define Package/$(1)/install
 	$(INSTALL_DIR) $$(1)/etc
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/doc/msmtprc-system.example \
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/doc/msmtprc-system.example \
 		$$(1)/etc/msmtprc
 	$(INSTALL_DIR) $$(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/msmtp-$(2) $$(1)/usr/bin/msmtp
