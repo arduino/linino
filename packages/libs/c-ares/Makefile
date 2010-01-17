@@ -1,15 +1,20 @@
-# $Id: Makefile xxxx 2009-11-18 07:14:33Z nbd $
+#
+# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009 Jakob Pfeiffer
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=c-ares
-PKG_VERSION:=1.6.0
+PKG_VERSION:=1.7.0
 PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=http://c-ares.haxx.se/
-PKG_SOURCE:=c-ares-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=4503b0db3dd79d3c1f58d87722dbab46
-PKG_CAT:=zcat
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://c-ares.haxx.se
+PKG_MD5SUM:=15ab7852306b554b0b1145f41005a3bb
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -24,7 +29,8 @@ define Package/libcares
 endef
 
 define Package/libcares/description
-  c-ares is a C library that performs DNS requests and name resolves asynchronously.
+  c-ares is a C library that performs DNS requests and name resolves
+  asynchronously.
 endef
 
 define Package/libcares/install
