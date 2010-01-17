@@ -1,20 +1,11 @@
---- a/shorewall6-lite	2009-12-05 22:35:20.000000000 -0500
-+++ b/shorewall6-lite	2009-12-05 22:35:27.000000000 -0500
-@@ -95,7 +95,7 @@
- 
-     if ( ps ax 2> /dev/null | grep -v grep |  qt grep 'syslogd.*-C' ) ; then
- 	LOGREAD="logread | tac"
--    elif [ -f $LOGFILE ]; then
-+    elif [ -r $LOGFILE ]; then
- 	LOGREAD="tac $LOGFILE"
-     else
- 	echo "LOGFILE ($LOGFILE) does not exist!" >&2
 --- a/shorewall6-lite.conf	2009-12-05 22:37:43.000000000 -0500
 +++ b/shorewall6-lite.conf	2009-12-05 22:37:51.000000000 -0500
-@@ -46,4 +46,6 @@
+@@ -28,7 +28,7 @@
+ #			       L O G G I N G
+ ###############################################################################
  
- RESTOREFILE=
- 
+-LOGFILE=
 +LOGFILE=/dev/null
-+
- #LAST LINE -- DO NOT REMOVE
+ 
+ LOGFORMAT=
+ 

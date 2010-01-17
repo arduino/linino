@@ -1,6 +1,6 @@
 --- a/install.sh
 +++ b/install.sh
-@@ -337,13 +337,15 @@ cd manpages
+@@ -294,13 +294,15 @@ cd manpages
  
  for f in *.5; do
      gzip -c $f > $f.gz

@@ -8,19 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=shorewall6-lite
-PKG_VERSION:=4.2.11.2
-PKG_VERSION_DIR:=4.2.11
+PKG_VERSION:=4.4.5.4
+PKG_DIRECTORY:=4.4.5
 PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=http://www.shorewall.net/pub/shorewall/4.2/shorewall-$(PKG_VERSION_DIR)/ \
-	http://www1.shorewall.net/pub/shorewall/4.2/shorewall-$(PKG_VERSION_DIR)/ \
-	http://slovakia.shorewall.net/pub/shorewall/4.2/shorewall-$(PKG_VERSION_DIR)/ \
-	http://shorewall.de/pub/shorewall/4.2/shorewall-$(PKG_VERSION_DIR)/ \
-	http://www.shorewall.com.au/4.2/shorewall-$(PKG_VERSION_DIR)/ \
-	http://shorewall.infohiiway.com/pub/shorewall/4.2/shorewall-$(PKG_VERSION_DIR)/ \
-	http://www.shorewall.com.ar/pub/shorewall/shorewall/4.2/shorewall-$(PKG_VERSION_DIR)/
+PKG_SOURCE_URL:=http://www.shorewall.net/pub/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/ \
+	http://www1.shorewall.net/pub/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/ \
+	http://slovakia.shorewall.net/pub/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/ \
+	http://shorewall.de/pub/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/ \
+	http://www.shorewall.com.au/4.4/shorewall-$(PKG_DIRECTORY)/ \
+	http://shorewall.infohiiway.com/pub/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/ \
+	http://www.shorewall.com.ar/pub/shorewall/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=ade665881a4bb0b5592276e8d90c4681
+PKG_MD5SUM:=498f622be657df38beec256876adabb6
 
 include $(INCLUDE_DIR)/package.mk
 
