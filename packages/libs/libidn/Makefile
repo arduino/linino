@@ -1,4 +1,5 @@
-# Copyright (C) 2009 OpenWrt.org
+#
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -7,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libidn
-PKG_VERSION:=1.15
+PKG_VERSION:=1.16
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/libidn
-PKG_MD5SUM:=482a25b7b223e52f967fafd284a1a992
+PKG_MD5SUM:=a6af62602fa71bc1b90ce246dd208bd6
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,13 +38,8 @@ CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
 
-define Build/Compile
-	$(call Build/Compile/Default, \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		CC="$(TARGET_CC)" \
-		all install \
-	)
-endef
+MAKE_FLAGS += \
+	CC="$(TARGET_CC)" \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
