@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=neon
-PKG_VERSION:=0.29.0
+PKG_VERSION:=0.29.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.webdav.org/neon/
-PKG_MD5SUM:=18a3764b70f9317f8b61509fd90d9e7a
+PKG_MD5SUM:=ba1015b59c112d44d7797b62fe7bee51
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,7 +28,6 @@ define Package/libneon
   DEPENDS:=+libopenssl +libexpat
 endef
 
-
 TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
@@ -36,14 +36,10 @@ CONFIGURE_ARGS += \
 	--with-expat \
 	--with-ssl="openssl" \
 	--without-egd \
-	--without-socks \
+	--without-libproxy \
 
 CONFIGURE_VARS += \
 	LDFLAGS="$$$$LDFLAGS -lcrypto -lssl"
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -54,7 +50,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libneon.{a,so*} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/neon.pc $(1)/usr/lib/pkgconfig/
-	$(SED) 's,-I$$$${includedir}/,-I$(1)/usr/include/,g' $(1)/usr/bin/neon-config
+	$(SED) 's,-I$$$${includedir}/,-I$(STAGING_DIR)/usr/include/,g' $(1)/usr/bin/neon-config
 	$(SED) 's,-L$$$${libdir},,g' $(1)/usr/bin/neon-config
 endef
 

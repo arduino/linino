@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=subversion
 PKG_VERSION:=1.6.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://subversion.tigris.org/downloads/
 PKG_MD5SUM:=e5109da756d74c7d98f683f004a539af
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -75,7 +75,7 @@ endef
 CONFIGURE_ARGS += \
 	--with-apr="$(STAGING_DIR)/usr/bin/apr-1-config" \
 	--with-apr-util="$(STAGING_DIR)/usr/bin/apu-1-config" \
-	--with-neon="$(STAGING_DIR)/usr/include/neon" \
+	--with-neon="$(STAGING_DIR)/usr" \
 	--disable-mod-activation \
 	--without-ruby-sitedir \
 	--without-swig \
@@ -85,7 +85,6 @@ CONFIGURE_ARGS += \
 	--with-ssl \
 	--disable-neon-version-check \
 	--with-apxs=no \
-	--with-apache=no \
 	--without-sasl \
 
 CONFIGURE_VARS += \
