@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nano
-PKG_VERSION:=2.2.1
+PKG_VERSION:=2.2.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.nano-editor.org/dist/v2.2
-PKG_MD5SUM:=12eb7808ab1b8df4d20e87df22c38143
+PKG_MD5SUM:=7e3fa2c9877664f377372ef378b9f230
 
 include $(INCLUDE_DIR)/package.mk
 
