@@ -1,0 +1,22 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -559,7 +559,7 @@
+ #
+ # Build shared libraries
+ #
+-libgps_la_LDFLAGS = -version-number 19:0:0
++libgps_la_LDFLAGS = -version-number 19:0:0 $(LDFLAGS)
+ lib_LTLIBRARIES = libgps.la
+ libgpsd_c_sources = \
+ 	ais_json.c \
+@@ -616,8 +616,8 @@
+ BUILT_SOURCES = packet_names.h gpsd.h revision.h ais_json.i maskdump.c
+ libgps_la_SOURCES = $(libgpsd_c_sources) $(libgpsd_h_sources) \
+ 	driver_rtcm2.h packet_states.h $(am__append_2)
+-@LIBGPSMM_ENABLE_FALSE@libgps_la_LINK = /bin/sh ./libtool --tag=CC --mode=link gcc $(libgps_la_LDFLAGS) -o $@
+-@LIBGPSMM_ENABLE_TRUE@libgps_la_LINK = /bin/sh ./libtool --tag=CXX --mode=link g++ $(libgps_la_LDFLAGS) -o $@
++@LIBGPSMM_ENABLE_FALSE@libgps_la_LINK = /bin/sh ./libtool --tag=CC --mode=link $(CC) $(libgps_la_LDFLAGS) -o $@
++@LIBGPSMM_ENABLE_TRUE@libgps_la_LINK = /bin/sh ./libtool --tag=CXX --mode=link $(CXX) $(libgps_la_LDFLAGS) -o $@
+ nodist_libgps_la_SOURCES = packet_names.h ais_json.i
+ libgps_la_LIBADD = $(LIBM) $(LIBC) $(LIBNSL) $(LIBSOCKET) $(LIBPTHREAD)
+ 

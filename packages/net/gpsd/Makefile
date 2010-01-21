@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gpsd
-PKG_VERSION:=2.39
-PKG_RELEASE:=2
+PKG_VERSION:=2.90
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.berlios.de/gpsd/
-PKG_MD5SUM:=3db437196a6840c252fca99b6c19d4d0
+PKG_MD5SUM:=a23c728b8734c542d559c485857238d2
 
 PKG_FIXUP:=libtool-ucxx
 
@@ -45,8 +45,9 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
-	LDFLAGS="$$$$LDFLAGS" \
+	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib" \
 	LIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
+	CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
