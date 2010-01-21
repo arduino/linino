@@ -11,15 +11,16 @@
  # then just skip this whole process.
  if ! touch ${DEST} >/dev/null 2>&1 ; then
  	${quiet} || echo "${DEST} is read-only, exiting." 1>&2
-@@ -18,7 +17,6 @@ fi
+@@ -18,7 +17,7 @@ fi
  if [ -n "$PCI_COMPRESSED_IDS" ] ; then
  	DECOMP="cat"
  	SRC="$SRC.gz"
 -	GREP=zgrep
++	DEST="$DEST.gz"
  elif which bzip2 >/dev/null 2>&1 ; then
  	DECOMP="bzip2 -d"
  	SRC="$SRC.bz2"
-@@ -53,7 +51,7 @@ if ! $DECOMP <$DEST.new >$DEST.neww ; th
+@@ -53,7 +52,7 @@ if ! $DECOMP <$DEST.new >$DEST.neww ; th
  	exit 1
  fi
  

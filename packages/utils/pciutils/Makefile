@@ -34,7 +34,8 @@ endef
 
 define Package/pciutils/postinst
 #!/bin/sh
-$${IPKG_INSTROOT}/usr/sbin/update-pciids
+(cd $${IPKG_INSTROOT}/usr/share; $${IPKG_INSTROOT}/usr/sbin/update-pciids)
+exit 0
 endef
 
 MAKE_FLAGS += \
