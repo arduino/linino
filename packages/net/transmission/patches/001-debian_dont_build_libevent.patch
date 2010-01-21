@@ -1,18 +1,8 @@
---- a/third-party/Makefile.am
-+++ b/third-party/Makefile.am
-@@ -4,7 +4,7 @@ else
-   DHT_DIR =
- endif
- 
--SUBDIRS = libnatpmp miniupnp libevent $(DHT_DIR)
-+SUBDIRS = libnatpmp miniupnp $(DHT_DIR)
- 
- EXTRA_DIST = \
-   macosx-libevent-config.h \
---- a/configure
-+++ b/configure
-@@ -1047,7 +1047,7 @@ LIBNOTIFY_CFLAGS
- LIBNOTIFY_LIBS
+diff -Nuar transmission-1.80/configure transmission-1.80.orig/configure
+--- transmission-1.80/configure	2010-01-21 08:11:08.000000000 +0100
++++ transmission-1.80.orig/configure	2010-01-21 18:46:35.000000000 +0100
+@@ -1058,7 +1058,7 @@
+ LIBGCONF_LIBS
  DBUS_GLIB_CFLAGS
  DBUS_GLIB_LIBS'
 -ac_subdirs_all='third-party/libevent'
@@ -20,7 +10,7 @@
  
  # Initialize some variables set by options.
  ac_init_help=
-@@ -19738,7 +19738,7 @@ fi
+@@ -19881,7 +19881,7 @@
  
  
  
@@ -29,23 +19,24 @@
  
  libevent_source=bundled
  { $as_echo "$as_me:$LINENO: checking for evutil_vsnprintf in -levent" >&5
---- a/third-party/Makefile.in
-+++ b/third-party/Makefile.in
-@@ -70,7 +70,7 @@ AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGE
- 	distdir
- ETAGS = etags
- CTAGS = ctags
--DIST_SUBDIRS = libnatpmp miniupnp libevent dht
-+DIST_SUBDIRS = libnatpmp miniupnp dht
- DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
- am__relativize = \
-   dir0=`pwd`; \
-@@ -275,7 +275,7 @@ top_srcdir = @top_srcdir@
+diff -Nuar transmission-1.80/third-party/Makefile.am transmission-1.80.orig/third-party/Makefile.am
+--- transmission-1.80/third-party/Makefile.am	2010-01-21 03:03:53.000000000 +0100
++++ transmission-1.80.orig/third-party/Makefile.am	2010-01-21 18:43:29.000000000 +0100
+@@ -1,4 +1,4 @@
+-SUBDIRS = libnatpmp miniupnp libevent dht
++SUBDIRS = libnatpmp miniupnp dht
+ 
+ EXTRA_DIST = \
+   macosx-libevent-config.h \
+diff -Nuar transmission-1.80/third-party/Makefile.in transmission-1.80.orig/third-party/Makefile.in
+--- transmission-1.80/third-party/Makefile.in	2010-01-21 08:11:06.000000000 +0100
++++ transmission-1.80.orig/third-party/Makefile.in	2010-01-21 18:44:38.000000000 +0100
+@@ -279,7 +279,7 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
  transmissionlocaledir = @transmissionlocaledir@
- @DHT_FALSE@DHT_DIR = 
- @DHT_TRUE@DHT_DIR = dht
--SUBDIRS = libnatpmp miniupnp libevent $(DHT_DIR)
-+SUBDIRS = libnatpmp miniupnp $(DHT_DIR)
+-SUBDIRS = libnatpmp miniupnp libevent dht
++SUBDIRS = libnatpmp miniupnp dht
  EXTRA_DIST = \
    macosx-libevent-config.h \
    macosx-libevent-event-config.h
