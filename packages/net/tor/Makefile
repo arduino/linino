@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor
-PKG_VERSION:=0.2.1.21
+PKG_VERSION:=0.2.1.22
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.torproject.org/dist/
-PKG_MD5SUM:=54f7a801d824cd9c13ce672d483926d6
+PKG_SOURCE_URL:=http://www.torproject.org/dist
+PKG_MD5SUM:=583501a989ed0c39e209b604c3671ecd
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -80,12 +82,8 @@ CONFIGURE_VARS += \
 	CROSS_COMPILE="yes" \
 
 # pass CFLAGS again to override -O2 set by configure
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS)" \
 
 define Package/tor/install
 	$(INSTALL_DIR) $(1)/usr/sbin
