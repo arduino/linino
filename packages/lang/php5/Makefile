@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
-PKG_VERSION:=5.2.6
-PKG_RELEASE:=3
+PKG_VERSION:=5.3.1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
-PKG_MD5SUM:=7380ffecebd95c6edb317ef861229ebd
+PKG_MD5SUM:=63e97ad450f0f7259e785100b634c797
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -31,33 +31,22 @@ define Package/php5/Default/description
 endef
 
 define Package/php5/config
-       choice
-               prompt "PHP5 SPL Options"
-			   depends PACKAGE_php5
-               default PACKAGE_php5_without_spl
+	config PHP5_APC
+		bool "PHP5 APC support"
+		depends PACKAGE_php5
 
-       config PACKAGE_php5_with_spl
-               bool "With SPL (and pcre) static"
+	config PHP5_EXIF
+		bool "PHP5 EXIF support"
+		depends PACKAGE_php5
 
-       config PACKAGE_php5_without_spl
-               bool "without SPL (pcre may be enabled)"
-       endchoice
-
-	   config PHP5_APC
-               bool "PHP5 APC support"
-
-	   config PHP5_EXIF
-               bool "PHP5 EXIF support"
+	config PHP5_SYSVIPC
+		bool "PHP5 Semaphore, Shared Memory and IPC support"
+		depends PACKAGE_php5
 endef
 
 define Package/php5
   $(call Package/php5/Default)
-	ifneq ($(CONFIG_PACKAGE_php5_with_spl),)
-  		DEPENDS:=+libopenssl +zlib
-		CONFIG_PACKAGE_php5-mod-pcre:=
-	else
-  		DEPENDS:=+libopenssl +zlib +libpcre
-	endif
+  DEPENDS:=+libopenssl +libpcre +zlib
 endef
 
 define Package/php5/description
@@ -90,7 +79,7 @@ endef
 
 define Package/php5-fastcgi
   $(call Package/php5/Default)
-  DEPENDS:=php5
+  DEPENDS:=php5 +php5-cgi
   TITLE+= (FastCGI)
 endef
 
@@ -141,12 +130,6 @@ define Package/php5-mod-openssl
   TITLE:=OpenSSL module
 endef
 
-define Package/php5-mod-pcre
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libpcre
-  TITLE:=PCRE module
-endef
-
 define Package/php5-mod-pgsql
   $(call Package/php5/Default)
   DEPENDS:=php5 +libpq
@@ -169,6 +152,12 @@ define Package/php5-mod-sqlite
   $(call Package/php5/Default)
   DEPENDS:=php5 +libsqlite2
   TITLE:=SQLite module
+endef
+
+define Package/php5-mod-sqlite3
+  $(call Package/php5/Default)
+  DEPENDS:=php5 +libsqlite3
+  TITLE:=SQLite3 module
 endef
 
 define Package/php5-mod-pdo
@@ -199,7 +188,6 @@ PKG_CONFIGURE_OPTS:= \
 	\
 	--with-config-file-path=/etc \
 	--enable-magic-quotes \
-	--enable-memory-limit \
 	--disable-short-tags \
 	\
 	--disable-ctype \
@@ -223,10 +211,13 @@ PKG_CONFIGURE_OPTS:= \
 	--disable-tokenizer \
 	--with-zlib="$(STAGING_DIR)/usr" \
 	  --with-zlib-dir="$(STAGING_DIR)/usr" \
-	--disable-filter
+	--with-pcre-regex="$(STAGING_DIR)/usr" \
+	--disable-filter \
+	--disable-fileinfo \
+	--disable-phar
 
 ifneq ($(SDK),)
-  PKG_BUILD_DEPENDS:=libopenssl zlib libcurl libgd libgmp libopenldap libmysqlclient libpq libsqlite2 libexpat
+  PKG_BUILD_DEPENDS:=libopenssl zlib libcurl libgd libgmp libopenldap libmysqlclient libpq libsqlite2 libsqlite3 libexpat
 # force PKG_CONFIGURE_{LIBS,OPTS} below when built in the SDK
   CONFIG_PACKAGE_php5-cli:=m
   CONFIG_PACKAGE_php5-cgi:=m
@@ -236,13 +227,9 @@ ifneq ($(SDK),)
   CONFIG_PACKAGE_php5-mod-gmp:=m
   CONFIG_PACKAGE_php5-mod-ldap:=m
   CONFIG_PACKAGE_php5-mod-mysql:=m
-  ifneq ($(CONFIG_PACKAGE_php5_with_spl),)
-	CONFIG_PACKAGE_php5-mod-pcre:=n
-  else
-	CONFIG_PACKAGE_php5-mod-pcre:=m
-  endif
   CONFIG_PACKAGE_php5-mod-pgsql:=m
   CONFIG_PACKAGE_php5-mod-sqlite:=m
+  CONFIG_PACKAGE_php5-mod-sqlite3:=m
   CONFIG_PACKAGE_php5-mod-xml:=m
 endif
 
@@ -280,17 +267,6 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-mysql),)
 else
   PKG_CONFIGURE_OPTS+= --without-mysql
 endif
-ifneq ($(CONFIG_PACKAGE_php5_with_spl),)
-  PKG_CONFIGURE_OPTS+= --with-pcre-dir="$(STAGING_DIR)/usr"
-  PKG_CONFIGURE_OPTS+= --enable-spl
-else
-  PKG_CONFIGURE_OPTS+= --disable-spl
-ifneq ($(CONFIG_PACKAGE_php5-mod-pcre),)
-  PKG_CONFIGURE_OPTS+= --with-pcre-regex=shared,"$(STAGING_DIR)/usr"
-else
-  PKG_CONFIGURE_OPTS+= --without-pcre-regex
-endif
-endif
 ifneq ($(CONFIG_PACKAGE_php5-mod-pgsql),)
   PKG_CONFIGURE_OPTS+= --with-pgsql=shared,"$(STAGING_DIR)/usr"
 else
@@ -301,10 +277,17 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-sqlite),)
 else
   PKG_CONFIGURE_OPTS+= --without-sqlite
 endif
+ifneq ($(CONFIG_PACKAGE_php5-mod-sqlite3),)
+  PKG_CONFIGURE_OPTS+= --with-sqlite3=shared,"$(STAGING_DIR)/usr"
+  PKG_CONFIGURE_LIBS+= -lsqlite3
+else
+  PKG_CONFIGURE_OPTS+= --without-sqlite3
+endif
 ifneq ($(CONFIG_PACKAGE_php5-mod-pdo),)
   PKG_CONFIGURE_OPTS+= --enable-pdo=shared
   ifneq ($(CONFIG_PACKAGE_php5-mod-pdo-sqlite),)
     PKG_CONFIGURE_OPTS+= --with-pdo-sqlite=shared,"$(STAGING_DIR)/usr"
+    PKG_CONFIGURE_LIBS+= -lsqlite3
   endif
 else
   PKG_CONFIGURE_OPTS+= --disable-pdo
@@ -326,6 +309,11 @@ ifneq ($(CONFIG_PHP5_EXIF),)
 else
   PKG_CONFIGURE_OPTS+= --disable-exif
 endif
+ifneq ($(CONFIG_PHP5_SYSVIPC),)
+  PKG_CONFIGURE_OPTS+= --enable-sysvsem --enable-sysvshm --enable-sysvmsg
+else
+  PKG_CONFIGURE_OPTS+= --disable-sysvsem --disable-sysvshm --disable-sysvmsg
+endif
 
 define Build/Configure
 endef
@@ -337,9 +325,6 @@ ifneq ($(CONFIG_PACKAGE_php5-cli),)
 		$(PKG_CONFIGURE_OPTS) \
 		--enable-cli \
 		--disable-cgi \
-		--disable-fastcgi \
-		--enable-force-cgi-redirect \
-		--enable-discard-path \
 		, \
 		LIBS="$(PKG_CONFIGURE_LIBS)" \
 		php_cv_cc_rpath="no" \
@@ -356,9 +341,6 @@ ifneq ($(CONFIG_PACKAGE_php5-cgi),)
 		$(PKG_CONFIGURE_OPTS) \
 		--disable-cli \
 		--enable-cgi \
-		--disable-fastcgi \
-		--enable-force-cgi-redirect \
-		--enable-discard-path \
 		, \
 		LIBS="$(PKG_CONFIGURE_LIBS)" \
 		php_cv_cc_rpath="no" \
@@ -368,31 +350,9 @@ ifneq ($(CONFIG_PACKAGE_php5-cgi),)
   endef
 endif
 
-ifneq ($(CONFIG_PACKAGE_php5-fastcgi),)
-  define Build/Compile/php5-fastcgi
-	-$(MAKE) -C $(PKG_BUILD_DIR) clean
-	rm $(PKG_BUILD_DIR)/configure
-	cd $(PKG_BUILD_DIR) && ./buildconf --force
-	$(call Build/Configure/Default, \
-		$(PKG_CONFIGURE_OPTS) \
-		--disable-cli \
-		--enable-cgi \
-		--enable-fastcgi \
-		--enable-force-cgi-redirect \
-		--enable-discard-path \
-		, \
-		LIBS="$(PKG_CONFIGURE_LIBS)" \
-		php_cv_cc_rpath="no" \
-	)
-	$(MAKE) -C $(PKG_BUILD_DIR)
-	mv $(PKG_BUILD_DIR)/sapi/cgi/php-cgi $(PKG_BUILD_DIR)/php-fcgi
-  endef
-endif
-
 define Build/Compile
 	$(call Build/Compile/php5-cli)
 	$(call Build/Compile/php5-cgi)
-	$(call Build/Compile/php5-fastcgi)
 endef
 
 define Package/php5/conffiles
@@ -416,7 +376,7 @@ endef
 
 define Package/php5-fastcgi/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/php-fcgi $(1)/usr/bin/php-fcgi
+	ln -sf php-cgi $(1)/usr/bin/php-fcgi
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/php.init $(1)/etc/init.d/php
 endef
@@ -444,11 +404,11 @@ $(eval $(call BuildPlugin,php5-mod-gmp,gmp))
 $(eval $(call BuildPlugin,php5-mod-ldap,ldap))
 $(eval $(call BuildPlugin,php5-mod-mysql,mysql))
 $(eval $(call BuildPlugin,php5-mod-openssl,openssl))
-$(eval $(call BuildPlugin,php5-mod-pcre,pcre))
 $(eval $(call BuildPlugin,php5-mod-pgsql,pgsql))
 $(eval $(call BuildPlugin,php5-mod-session,session))
 $(eval $(call BuildPlugin,php5-mod-sockets,sockets))
 $(eval $(call BuildPlugin,php5-mod-sqlite,sqlite))
+$(eval $(call BuildPlugin,php5-mod-sqlite3,sqlite3))
 $(eval $(call BuildPlugin,php5-mod-pdo,pdo))
 $(eval $(call BuildPlugin,php5-mod-pdo-sqlite,pdo_sqlite))
 $(eval $(call BuildPlugin,php5-mod-xml,xml))
