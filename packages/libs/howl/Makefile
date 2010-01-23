@@ -49,7 +49,7 @@ endef
 
 define Package/howl-mdnsresponder
   $(call Package/howl/Default)
-  DEPENDS:=+libhowl
+  DEPENDS:=+libhowl +libpthread
   TITLE:=An mDNS (Multicast DNS) service responder daemon
 endef
 
