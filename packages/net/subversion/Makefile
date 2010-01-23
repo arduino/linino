@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=subversion
-PKG_VERSION:=1.6.6
-PKG_RELEASE:=2
+PKG_VERSION:=1.6.9
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://subversion.tigris.org/downloads/
-PKG_MD5SUM:=e5109da756d74c7d98f683f004a539af
+PKG_SOURCE_URL:=http://subversion.tigris.org/downloads
+PKG_MD5SUM:=9c30a47b1d48664e7afef68bb4834c53
 
 PKG_FIXUP:=libtool
 
