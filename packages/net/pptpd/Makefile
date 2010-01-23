@@ -8,19 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pptpd
-PKG_VERSION:=1.3.0
+PKG_VERSION:=1.3.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/poptop
-PKG_MD5SUM:=75d494e881f7027f4e60b114163f6b67
+#PKG_MD5SUM:=75d494e881f7027f4e60b114163f6b67 #1.3.0
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/pptpd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+kmod-ppp +kmod-gre
+  DEPENDS:=+kmod-ppp +kmod-gre +ppp
   TITLE:=PopTop pptp server
   URL:=http://www.poptop.org/
   SUBMENU:=VPN
