@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mt-daapd
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libgdbm +libhowl +libid3tag
+  DEPENDS:=+libgdbm +libhowl +libid3tag +libpthread
   TITLE:=A multi-threaded DAAP (Digital Audio Access Protocol) daemon
   URL:=http://www.mt-daapd.org/
 endef
