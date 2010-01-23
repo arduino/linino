@@ -1,7 +1,6 @@
-diff -Nuar transmission-1.80/configure transmission-1.80.orig/configure
---- transmission-1.80/configure	2010-01-21 08:11:08.000000000 +0100
-+++ transmission-1.80.orig/configure	2010-01-21 18:46:35.000000000 +0100
-@@ -1058,7 +1058,7 @@
+--- a/configure
++++ b/configure
+@@ -1058,7 +1058,7 @@ LIBGCONF_CFLAGS
  LIBGCONF_LIBS
  DBUS_GLIB_CFLAGS
  DBUS_GLIB_LIBS'
@@ -10,7 +9,7 @@ diff -Nuar transmission-1.80/configure transmission-1.80.orig/configure
  
  # Initialize some variables set by options.
  ac_init_help=
-@@ -19881,7 +19881,7 @@
+@@ -19881,7 +19881,7 @@ fi
  
  
  
@@ -19,19 +18,17 @@ diff -Nuar transmission-1.80/configure transmission-1.80.orig/configure
  
  libevent_source=bundled
  { $as_echo "$as_me:$LINENO: checking for evutil_vsnprintf in -levent" >&5
-diff -Nuar transmission-1.80/third-party/Makefile.am transmission-1.80.orig/third-party/Makefile.am
---- transmission-1.80/third-party/Makefile.am	2010-01-21 03:03:53.000000000 +0100
-+++ transmission-1.80.orig/third-party/Makefile.am	2010-01-21 18:43:29.000000000 +0100
+--- a/third-party/Makefile.am
++++ b/third-party/Makefile.am
 @@ -1,4 +1,4 @@
 -SUBDIRS = libnatpmp miniupnp libevent dht
 +SUBDIRS = libnatpmp miniupnp dht
  
  EXTRA_DIST = \
    macosx-libevent-config.h \
-diff -Nuar transmission-1.80/third-party/Makefile.in transmission-1.80.orig/third-party/Makefile.in
---- transmission-1.80/third-party/Makefile.in	2010-01-21 08:11:06.000000000 +0100
-+++ transmission-1.80.orig/third-party/Makefile.in	2010-01-21 18:44:38.000000000 +0100
-@@ -279,7 +279,7 @@
+--- a/third-party/Makefile.in
++++ b/third-party/Makefile.in
+@@ -278,7 +278,7 @@ top_build_prefix = @top_build_prefix@
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  transmissionlocaledir = @transmissionlocaledir@
