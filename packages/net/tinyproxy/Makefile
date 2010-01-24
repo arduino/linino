@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tinyproxy
-PKG_VERSION:=1.6.5
+PKG_VERSION:=1.8.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.banu.com/pub/tinyproxy/1.6/
-PKG_MD5SUM:=2b2862ba33d2939e4572688d442ba415
+PKG_SOURCE_URL:=http://www.banu.com/pub/tinyproxy/1.8/
+PKG_MD5SUM:=09843d47828261394d0a30af0b058997
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -31,7 +31,8 @@ endef
 
 CONFIGURE_ARGS+= \
 	--enable-filter \
-	--enable-transparent-proxy \
+	--enable-transparent \
+	--enable-regexcheck=no \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
