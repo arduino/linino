@@ -1,11 +1,12 @@
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -753,7 +753,7 @@ install-dvi: install-dvi-recursive
- 
+@@ -751,8 +751,7 @@
  install-dvi-am:
  
--install-exec-am: install-exec-local
-+install-exec-am:
- 
+ install-exec-am:
+-	@$(NORMAL_INSTALL)
+-	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
++
  install-html: install-html-recursive
  
+ install-html-am:
