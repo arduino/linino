@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gconv-modules
-PKG_VERSION:=1
-PKG_RELEASE:=1
+PKG_VERSION:=$(CONFIG_GLIBC_VERSION)
+PKG_RELEASE:=2
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -17,7 +17,6 @@ define Package/gconv-modules
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=@USE_GLIBC
-  DEFAULT:=n
   TITLE:=The GNU libc charset conversion modules
 endef
 
