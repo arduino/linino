@@ -8,22 +8,22 @@ start () {
 		exit
 	fi
 	
-	batctl interface $interfaces
+	echo $interfaces > /proc/net/batman-adv/interfaces 
 	
 	originator_interval=$(uci get batman-adv-kernelland.general.originator_interval)
 	log_level=$(uci get batman-adv-kernelland.general.log_level)
 
 	if [ $originator_interval ]; then
-		batctl interval $originator_interval
+		echo $originator_interval > /proc/net/batman-adv/orig_interval 
 	fi
 	
 	if [ $log_level ]; then
-		batctl loglevel $log_level
+		echo $log_level > /sys/module/batman_adv/parameters/debug 2>&-
 	fi
 }
 
 stop () {
-	batctl interface none
+	echo "" > /proc/net/batman-adv/interfaces
 }
 
         
