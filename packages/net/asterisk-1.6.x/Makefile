@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
-PKG_VERSION:=1.6.2.0-rc6
+PKG_VERSION:=1.6.2.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
-PKG_MD5SUM:=770a80d306ccc928481ff9030d7fec38
+PKG_MD5SUM:=8fbc60f9d80e686c749ae95292e225d8
 
 include $(INCLUDE_DIR)/package.mk
 
