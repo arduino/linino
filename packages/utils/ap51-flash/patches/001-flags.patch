@@ -1,0 +1,12 @@
+--- a/Makefile
++++ b/Makefile
+@@ -21,7 +21,8 @@ AR      = $(CROSS)ar
+ STRIP   = $(CROSS)strip
+ OBJCOPY = $(CROSS)objcopy
+ WINDRES = $(CROSS)windres
+-CFLAGS  = -Wall -ggdb -I. -IWpdPack/Include/ -fno-strict-aliasing -fpack-struct -Os
++OFLAGS  = -Os -ggdb
++CFLAGS  = -Wall -I. -IWpdPack/Include/ -fno-strict-aliasing -fpack-struct $(OFLAGS)
+ LIB_OBJS= ap51-flash.o uip.o uip_arp.o timer.o clock-arch.o psock.o packet.o
+ OBJS    = $(LIB_OBJS) main.o
+ AP51_RC = ap51-flash-res

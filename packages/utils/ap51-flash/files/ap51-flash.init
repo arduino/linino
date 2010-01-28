@@ -1,0 +1,45 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2007 OpenWrt.org
+
+START=20
+
+NAME=ap51-flash
+
+start_daemon() {
+	local cfg="$1"
+
+	config_get ifname "$cfg" ifname
+	config_get rootfs "$cfg" rootfs
+	config_get kernel "$cfg" kernel
+	config_get ubntimg "$cfg" ubntimg
+	if [ -n "$ifname" -a -n "$rootfs" -a -n "$kernel" ]; then
+		[ -n "`ls /var/run/$NAME-$ifname.pid 2> /dev/null`" ] && {
+			echo "Can't start more than one ap51-flash for interface $ifname!"
+			return 0
+		}
+		start-stop-daemon -S -b -m -p /var/run/$NAME-$ifname.pid -n $NAME -x /usr/sbin/$NAME -- $ifname $rootfs $kernel
+	elif [ -n "$ifname" -a -n "$ubntimg" ]; then
+		[ -n "`ls /var/run/$NAME-$ifname-ubnt.pid 2> /dev/null`" ] && {
+			echo "Can't start more than one ap51-flash (ubnt) for interface $ifname!"
+			return 0
+		}
+		start-stop-daemon -S -b -m -p /var/run/$NAME-$ifname-ubnt.pid -n $NAME -x /usr/sbin/$NAME -- $ifname $ubntimg
+	fi
+}
+
+start() {
+	config_load ap51-flash
+	config_foreach start_daemon flash
+}
+
+stop() {
+	# Terminating all ap51-flash processes
+	echo "WARNING: Going to teminate all ap51-flash processes! (hope you made sure that they're not flashing right now)"
+	echo "OR you can stop this with Ctrl+c within 10 seconds"
+	sleep 10
+	local pidfile
+	for pidfile in `ls /var/run/${NAME}-*.pid 2> /dev/null`; do
+		start-stop-daemon -K -s TERM -p "${pidfile}" -n "${NAME}" >/dev/null
+		rm -f "${pidfile}"
+	done
+}
