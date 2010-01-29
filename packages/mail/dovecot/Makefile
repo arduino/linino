@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dovecot
-PKG_VERSION:=1.2.9
+PKG_VERSION:=1.2.10
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.dovecot.org/releases/1.2
-PKG_MD5SUM:=036ff97fb248dae3bd4b796a0644634f
+PKG_MD5SUM:=b7d0081b17ff6afae85e8dc14157fa57
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,34 +31,30 @@ define Package/dovecot/description
  Dovecot is a program which provides POP3 and IMAP services.
 endef
 
+CONFIGURE_ARGS += \
+	--without-gssapi \
+	--without-pam \
+	--with-moduledir=/usr/lib/dovecot/modules \
+	--with-notify=dnotify \
+
+CONFIGURE_VARS += \
+	RPCGEN= \
+	i_cv_signed_size_t=no \
+	i_cv_signed_time_t=no \
+	i_cv_gmtime_max_time_t=32 \
+	i_cv_mmap_plays_with_write=yes \
+	i_cv_fd_passing=yes \
+	i_cv_c99_vsnprintf=yes \
+	lib_cv_va_copy=yes \
+	lib_cv_va_copy=yes \
+	lib_cv___va_copy=yes \
+	lib_cv_va_val_copy=yes \
+
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status}; \
 		autoconf \
 	);
-	$(call Build/Configure/Default, \
-		--without-gssapi \
-		--without-pam \
-		--with-moduledir=/usr/lib/dovecot/modules \
-		--with-notify=dnotify \
-		, \
-		RPCGEN= \
-		i_cv_signed_size_t=no \
-		i_cv_signed_time_t=no \
-		i_cv_gmtime_max_time_t=32 \
-		i_cv_mmap_plays_with_write=yes \
-		i_cv_fd_passing=yes \
-		i_cv_c99_vsnprintf=yes \
-		lib_cv_va_copy=yes \
-		lib_cv_va_copy=yes \
-		lib_cv___va_copy=yes \
-		lib_cv_va_val_copy=yes \
-	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+	$(call Build/Configure/Default)
 endef
 
 define Package/dovecot/install
