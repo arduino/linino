@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/btrfs-progs
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libuuid
+  DEPENDS:=+libuuid +zlib
   TITLE:=Btrfs filesystems utilities
   URL:=http://btrfs.wiki.kernel.org/
 endef
