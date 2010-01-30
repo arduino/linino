@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=strace
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 ifeq ($(CONFIG_LINUX_2_6_25),y) 
   PKG_VERSION:=4.5.16
