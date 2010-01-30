@@ -30,6 +30,11 @@ define Package/coreutils/description
         sufficient and much smaller.
 endef
 
+CONFIGURE_VARS += \
+	gl_cv_func_mbrtowc_incomplete_state=yes \
+	gl_cv_func_mbrtowc_retval=yes \
+	gl_cv_func_wcrtomb_retval=yes
+
 CONFIGURE_ARGS += \
 	--enable-install-program=su
 
