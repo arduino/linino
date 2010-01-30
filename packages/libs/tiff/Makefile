@@ -15,11 +15,13 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.osgeo.org/libtiff
 PKG_MD5SUM:=93e56e421679c591de7552db13384cb8
-PKG_FIXUP:=libtool
+
+PKG_FIXUP:=libtool-uclibcxx
+PKG_INSTALL:=1
+
+PKG_CONFIG_DEPENDS:=CONFIG_PACKAGE_libtiffxx
 
 include $(INCLUDE_DIR)/package.mk
-
-PKG_INSTALL=1
 
 define Package/tiff/Default
   TITLE:=TIFF
@@ -30,8 +32,16 @@ define Package/libtiff
 $(call Package/tiff/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE+= libraries
+  TITLE+= library
   DEPENDS:=+zlib +libjpeg
+endef
+
+define Package/libtiffxx
+$(call Package/tiff/Default)
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE+= library(c++ bindings)
+  DEPENDS:=+libtiff +uclibcxx
 endef
 
 define Package/tiff-utils
@@ -44,7 +54,32 @@ endef
 
 TARGET_CFLAGS += $(FPIC)
 
-CONFIGURE_ARGS += --without-x
+MAKE_FLAGS += \
+    CXX="g++-uc"
+
+define Build/Configure
+	$(call Build/Configure/Default, \
+		$(if $(CONFIG_PACKAGE_libtiffxx), \
+			--enable-cxx, \
+			--disable-cxx \
+		) \
+		--enable-ccitt \
+		--enable-packbits \
+		--enable-lzw \
+		--enable-thunder \
+		--enable-next \
+		--enable-logluv \
+		--enable-mdi \
+		--enable-zlib \
+		--enable-jpeg \
+		--disable-old-jpeg \
+		--disable-jbig \
+		--without-x \
+		--with-apple-opengl-framework \
+		, \
+		CXX="g++-uc" \
+	)
+endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{lib,include}
@@ -54,7 +89,12 @@ endef
 
 define Package/libtiff/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtiff.so.* $(1)/usr/lib/
+endef
+
+define Package/libtiffxx/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtiffxx.so.* $(1)/usr/lib/
 endef
 
 define Package/tiff-utils/install
@@ -63,4 +103,5 @@ define Package/tiff-utils/install
 endef
 
 $(eval $(call BuildPackage,libtiff))
+$(eval $(call BuildPackage,libtiffxx))
 $(eval $(call BuildPackage,tiff-utils))
