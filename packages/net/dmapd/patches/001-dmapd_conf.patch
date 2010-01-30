@@ -1,0 +1,10 @@
+--- a/distro/dmapd.conf
++++ b/distro/dmapd.conf
+@@ -1,6 +1,6 @@
+ [General]
+ # Name that will be used to identify share:
+-Share-Name=dmapd
++Share-Name=OpenWrt
+ 
+ # User that dmapd will run as, current user if undefined:
+ # User=dmapd
