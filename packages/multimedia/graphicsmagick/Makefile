@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,18 +8,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=GraphicsMagick
-PKG_VERSION:=1.3.7
+PKG_VERSION:=1.3.8
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://prdownloads.sourceforge.net/graphicsmagick
-PKG_MD5SUM:=ac019a9ece8c45f5213bf31981588c63
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=@SF/graphicsmagick
+PKG_MD5SUM:=c0428886ea07736b0f1872d256ab7ebd
 
 include $(INCLUDE_DIR)/package.mk
 
 export PATH:=$(PKG_BUILD_DIR)/bin:$(TARGET_PATH)
 
-PKG_INSTALL=1
+PKG_INSTALL:=1
 
 define Package/GraphicsMagick/Default
   SECTION:=multimedia
@@ -46,13 +46,12 @@ define Package/GraphicsMagick-jpeg/description
   GraphicsMagick JPEG module
 endef
 
-
 CONFIGURE_ARGS += \
-		  --with-modules \
-		  --enable-shared \
-		  --enable-static \
-		  --without-xml \
-		  --without-x
+	  --with-modules \
+	  --enable-shared \
+	  --enable-static \
+	  --without-xml \
+	  --without-x \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/GraphicsMagick/magick
