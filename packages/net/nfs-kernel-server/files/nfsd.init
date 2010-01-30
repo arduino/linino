@@ -2,6 +2,8 @@
 # Copyright (C) 2006 OpenWrt.org
 
 START=60
+STOP=60
+
 NFS_D=/var/lib/nfs
 LOCK_D=/var/lib/nfs/sm
 
