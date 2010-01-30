@@ -1,0 +1,84 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+BIN=/usr/bin/transmission-daemon
+SSD=start-stop-daemon
+
+LIST_SEP="
+"
+append_params() {
+	local p; local v; local s="$1"; shift
+	for p in $*; do
+		config_get v "$s" "$p"
+		IFS="$LIST_SEP"
+		for v in $v; do
+			[ -n "$v" ] && (
+				echo "		\""$p"\": "$v"," | sed -e 's|_|-|g' >> $config_dir/settings.json
+			)
+		done
+		unset IFS
+	done
+}
+
+append_params_quotes() {
+	local p; local v; local s="$1"; shift
+	for p in $*; do
+		config_get v "$s" "$p"
+		IFS="$LIST_SEP"
+		for v in $v; do
+			[ -n "$v" ] && (
+				echo "		\""$p"\": \""$v"\"," | sed -e 's|/|\\/|g;s|_|-|g' >> $config_dir/settings.json
+			)
+		done
+		unset IFS
+	done
+}
+
+start_service() {
+	local s="$1"
+	local enable=0
+
+	# disabled?
+	config_get_bool enable "$s" enable 0
+	[ "$enable" == 0 ] && return 0
+	config_get config_dir "$s" config_dir ''
+	mkdir -p "$config_dir"
+
+	echo "{" > $config_dir/settings.json
+
+	append_params "$s" \
+		alt_speed_down alt_speed_enabled alt_speed_time_begin alt_speed_time_day \
+		alt_speed_time_enabled alt_speed_time_end alt_speed_up bind_address_ipv4 \
+		bind_address_ipv6 blocklist_enabled dht_enabled encryption \
+		incomplete_dir_enabled lazy_bitfield_enabled message_level \
+		open_file_limit peer_limit_global peer_limit_per_torrent peer_port \
+		peer_port_random_high peer_port_random_low peer_port_random_on_start \
+		peer_socket_tos pex_enabled port_forwarding_enabled preallocation \
+		proxy_auth_enabled proxy_enabled proxy_port proxy_type ratio_limit \
+		ratio_limit_enabled rename_partial_files rpc_authentication_required \
+		rpc_enabled rpc_port rpc_whitelist_enabled speed_limit_down \
+		speed_limit_down_enabled speed_limit_up speed_limit_up_enabled umask \
+		upload_slots_per_torrent watch_dir watch_dir_enabled
+
+	append_params_quotes "$s" \
+		download_dir incomplete_dir proxy proxy_auth_password proxy_auth_username \
+		rpc_bind_address rpc_password rpc_username rpc_whitelist
+
+	echo "		\""invalid-key"\": false" >> $config_dir/settings.json
+	echo "}" >> $config_dir/settings.json
+	
+	eval "$SSD -q -b -x $BIN -S -- -g $config_dir"
+}
+
+start() {
+	config_load transmission
+	config_foreach start_service transmission
+}
+
+stop() {
+	killall `basename $BIN`
+}
+
+restart() {
+	stop; sleep 5; start
+}
