@@ -22,8 +22,38 @@ define Package/coreutils
   CATEGORY:=Utilities
   TITLE:=The GNU core utilities
   URL:=http://www.gnu.org/software/coreutils/
+  DEPENDS:= \
+  	+coreutils-base64 +coreutils-basename +coreutils-cat \
+	+coreutils-chcon +coreutils-chgrp +coreutils-chmod \
+	+coreutils-chown +coreutils-chroot +coreutils-cksum \
+	+coreutils-comm +coreutils-cp +coreutils-csplit \
+	+coreutils-cut +coreutils-date +coreutils-dd \
+	+coreutils-dir +coreutils-dircolors +coreutils-dirname \
+	+coreutils-du +coreutils-echo +coreutils-env \
+	+coreutils-expand +coreutils-expr +coreutils-factor \
+	+coreutils-false +coreutils-fmt +coreutils-fold \
+	+coreutils-groups +coreutils-head +coreutils-hostid \
+	+coreutils-id +coreutils-install +coreutils-join \
+	+coreutils-kill +coreutils-link +coreutils-ln \
+	+coreutils-logname +coreutils-ls +coreutils-md5sum \
+	+coreutils-mkdir +coreutils-mkfifo +coreutils-mknod \
+	+coreutils-mktemp +coreutils-mv +coreutils-nice +coreutils-nl \
+	+coreutils-nohup +coreutils-od +coreutils-paste +coreutils-pathchk \
+	+coreutils-pinky +coreutils-pr +coreutils-printenv \
+	+coreutils-printf +coreutils-ptx +coreutils-pwd +coreutils-readlink \
+	+coreutils-rm +coreutils-rmdir +coreutils-runcon +coreutils-seq \
+	+coreutils-sha1sum +coreutils-sha224sum +coreutils-sha256sum \
+	+coreutils-sha384sum +coreutils-sha512sum +coreutils-shred \
+	+coreutils-shuf +coreutils-sleep +coreutils-sort +coreutils-split \
+	+coreutils-stat +coreutils-stty +coreutils-su +coreutils-sum \
+	+coreutils-sync +coreutils-tac +coreutils-tail +coreutils-tee \
+	+coreutils-test +coreutils-timeout +coreutils-touch +coreutils-tr \
+	+coreutils-true +coreutils-truncate +coreutils-tsort +coreutils-tty \
+	+coreutils-uname +coreutils-unexpand +coreutils-uniq \
+	+coreutils-unlink +coreutils-uptime +coreutils-users +coreutils-vdir \
+	+coreutils-wc +coreutils-who +coreutils-whoami +coreutils-yes
 endef
-	
+
 define Package/coreutils/description
 	Full versions of standard GNU utilities.  Normally, you would not
 	use this package, since the functionality in BusyBox is more than
@@ -46,8 +76,7 @@ define Build/Compile
 endef
 
 define Package/coreutils/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+	true
 endef
 
 define Package/coreutils-base64
