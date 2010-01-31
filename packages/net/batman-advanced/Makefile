@@ -36,6 +36,15 @@ PKG_TOOL_BUILD_DIR:=$(PKG_BUILD_DIR)/batctl
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
 
+# have to set this variable after including the Makefiles
+ifneq ($(CONFIG_BATMAN_ADV_DEV),)
+	STAMP_PREPARED:=$(STAMP_PREPARED)_dev
+else
+	STAMP_PREPARED:=$(STAMP_PREPARED)_maint
+endif
+STAMP_PREPARED:=$(STAMP_PREPARED)$(if $(CONFIG_KMOD_BATMAN_ADV_BATCTL),_batctl)
+STAMP_BUILT:=$(STAMP_BUILT)$(if $(CONFIG_KMOD_BATMAN_ADV_DEBUG_LOG),_debug)
+
 define Package/batman-adv/Default
   URL:=http://www.open-mesh.org/
   MAINTAINER:=Marek Lindner <lindner_marek@yahoo.de>
