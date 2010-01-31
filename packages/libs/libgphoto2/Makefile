@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libgphoto2
-PKG_VERSION:=2.4.7
+PKG_VERSION:=2.4.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/gphoto
-PKG_MD5SUM:=3c1f1b1e56214e83b97e2bc7aadba4c5
+PKG_MD5SUM:=7753f17dff15702466337aab05209a71
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -58,12 +59,8 @@ CONFIGURE_VARS += \
 	LIBUSB_LIBS="$$$$LDFLAGS -lusb" \
 	LIBS="-lltdl" \
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		LIBLTDL="" \
-		all install
-endef
+MAKE_FLAGS += \
+	LIBLTDL="" \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/bin
