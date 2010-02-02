@@ -8,7 +8,10 @@ start () {
 		exit
 	fi
 	
-	echo $interfaces > /proc/net/batman-adv/interfaces 
+	for interface in $interfaces 
+	   do 
+	      echo $interface > /proc/net/batman-adv/interfaces 
+	done 	
 	
 	originator_interval=$(uci get batman-adv-kernelland.general.originator_interval)
 	log_level=$(uci get batman-adv-kernelland.general.log_level)
