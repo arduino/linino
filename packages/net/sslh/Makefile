@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sslh
-PKG_VERSION:=1.6i
-PKG_RELEASE:=3
+PKG_VERSION:=1.7a
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://rutschle.net/tech/
-PKG_MD5SUM:=b2e0a207df885d7be57713449edae815
+PKG_MD5SUM:=ee124654412198a5e11fe28acf10634d
 
 include $(INCLUDE_DIR)/package.mk
 

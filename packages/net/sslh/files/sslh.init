@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 
 NAME=sslh
 PROG=/usr/sbin/sslh
@@ -60,7 +60,7 @@ stop()
 	# killing all server processes
 	for pidfile in `ls /var/run/${NAME}.*.pid`
 	 do
-		start-stop-daemon -K -s KILL -p "${pidfile}" -n "${NAME}" >/dev/null
+		start-stop-daemon -q -K -s KILL -p "${pidfile}" -n "${NAME}"
 		[ $? -ne 0 ] && rc=1
 		rm -f "${pidfile}"
 	done
@@ -103,12 +103,10 @@ killclients()
 		server=`echo ${connection} | cut -d ' ' -f 7 | cut -d '/' -f 1`
 
 		# check if client connection
-		ps | grep -e "^[ ]*${server} " | grep -e "${PROG}" >/dev/null
-		if [ $? -eq 0 ]
-		 then
+		grep -F -q -e "${PROG}" "/proc/${server}/cmdline" && {
 			append ignore "${server}"
 			break
-		fi
+		}
 	done
 
 	# get all server pids that should be ignored
@@ -121,9 +119,10 @@ killclients()
 	local skip
 	for pid in `pidof "${NAME}"`
 	 do
-		# check if correct program
-		ps | grep -e "^[ ]*${pid} " | grep -e "${PROG}" >/dev/null
-		[ $? -ne 0 ] && continue
+		# check if correct program, otherwise process next pid
+		grep -F -q -e "${PROG}" "/proc/${pid}/cmdline" || {
+			continue
+		}
 
 		# check if pid should be ignored (servers, ourself)
 		skip=0
