@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=coova-chilli
-PKG_VERSION:=1.0.14
+PKG_VERSION:=1.2.1
 PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ap.coova.org/chilli/
-PKG_MD5SUM:=88774ec55f9943d174ea7dd26e85fd8a
+PKG_MD5SUM:=f4c0cdb903b6a830cd7c8a54db2334e8
 
 include $(INCLUDE_DIR)/package.mk
 
