@@ -1,7 +1,7 @@
 --- a/conf/functions.in
 +++ b/conf/functions.in
-@@ -153,6 +153,7 @@
-     if [ "x$HS_RADCONF" != "xon" -a "x$HS_RADCONF" != "xurl" ]; then 
+@@ -164,6 +164,7 @@
+     if [ "$HS_RADCONF" != "on" -a "$HS_RADCONF" != "url" ]; then 
  	[ "$HS_PAP_OK" = "on" ] && addconfig2 "papalwaysok"
  	[ "$HS_MACAUTH" = "on" ] && addconfig2 "macauth"
 +	[ "$HS_MACAUTH" = "on" -a -n "$HS_MACPASSWD" ] && addconfig2 "macpasswd $HS_MACPASSWD"
