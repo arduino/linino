@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 Thomas Heil <heil@terminal-consulting.de>
+# Copyright (C) 2009-2010 Thomas Heil <heil@terminal-consulting.de> 
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -7,12 +7,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=haproxy
-PKG_VERSION:=1.3.22
-PKG_RELEASE:=2
+PKG_VERSION:=1.3.23
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://haproxy.1wt.eu/download/1.3/src/
-PKG_MD5SUM:=b84e0935cfea99eda43645d53bb82367
+PKG_MD5SUM:=4ffe926ccf4f4d53f149290eb001fad5
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -40,7 +40,7 @@ define Build/Compile
 		CFLAGS="$(TARGET_CFLAGS)" \
 		LD="$(TARGET_CC)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
-		SMALL_OPTS="-DBUFSIZE=8192 -DMAXREWRITE=1024" \
+		SMALL_OPTS="-DBUFSIZE=16060 -DMAXREWRITE=4096" \
 		all install
 endef
 
