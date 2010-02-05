@@ -8,12 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luafilesystem
-PKG_VERSION:=1.4.2
-PKG_RELEASE:=2
+PKG_REV:=8ff20138af779f6f38cbff12d22df1a3151d9fa6
+PKG_VERSION:=1.5.0
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://luaforge.net/frs/download.php/3931
-PKG_MD5SUM:=8e7b2a9b899d669280456d0f95afd961
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=git://github.com/keplerproject/luafilesystem.git
+PKG_SOURCE_VERSION:=$(PKG_REV)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,7 +25,7 @@ define Package/luafilesystem
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=LuaFileSystem
-  URL:=http://www.luaforge.net/projects/luafilesystem
+  URL:=http://keplerproject.github.com/luafilesystem/
   DEPENDS:=+liblua
 endef
 
