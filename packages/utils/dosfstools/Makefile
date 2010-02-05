@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dosfstools
-PKG_VERSION:=3.0.7
+PKG_VERSION:=3.0.9
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.daniel-baumann.ch/software/dosfstools/
-PKG_MD5SUM:=2df41f537941ac9dff0dd747f2d635c8
+PKG_MD5SUM:=7f159ec44d3b9c502904bab0236050e4
 
 include $(INCLUDE_DIR)/package.mk
 
