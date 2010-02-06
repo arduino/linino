@@ -178,7 +178,6 @@ define Build/InstallDev
 endef
 
 define PyPackage/python/filespec
-+|/usr/bin/python$(PYTHON_VERSION)
 +|/usr/lib/python$(PYTHON_VERSION)
 -|/usr/lib/python$(PYTHON_VERSION)/bsddb/test
 -|/usr/lib/python$(PYTHON_VERSION)/config
