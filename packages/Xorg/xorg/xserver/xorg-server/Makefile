@@ -45,6 +45,7 @@ $(call Package/xorg/Default)
   TITLE:=Xorg xserver
   DEPENDS:=+xserver-common \
   +libpthread \
+  +libxkbcomp \
   +libxkbfile \
   +libXfont \
   +libXau \
