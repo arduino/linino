@@ -274,10 +274,6 @@ define PyPackage/python/filespec
 -|/usr/lib/python$(PYTHON_VERSION)/weakref.py
 endef
 
-define PyPackage/python/install
-	ln -sf python$(PYTHON_VERSION) $(1)/usr/bin/python
-endef
-
 define PyPackage/python-mini/filespec
 +|/usr/bin/python$(PYTHON_VERSION)
 +|/usr/lib/python$(PYTHON_VERSION)/__future__.py
