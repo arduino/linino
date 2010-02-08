@@ -43,7 +43,9 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)/util
+	$(MAKE) -C $(PKG_BUILD_DIR)/util \
+        CPPFLAGS="$(HOST_CPPFLAGS)"
+
 	$(call Build/Compile/Default)
 endef
 
