@@ -16,7 +16,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.osgeo.org/libtiff
 PKG_MD5SUM:=93e56e421679c591de7552db13384cb8
 
-PKG_FIXUP:=libtool-uclibcxx
+PKG_FIXUP:=libtool-ucxx
 PKG_INSTALL:=1
 
 PKG_CONFIG_DEPENDS:=CONFIG_PACKAGE_libtiffxx
