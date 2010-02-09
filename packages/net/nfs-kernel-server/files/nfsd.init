@@ -20,7 +20,7 @@ start() {
 
 stop() {
 	killall rpc.mountd 2> /dev/null
-	killall -9 rpc.nfsd 2> /dev/null
+	rpc.nfsd 0 2> /dev/null
 	/usr/sbin/exportfs -au
 	killall rpc.statd 2> /dev/null
 }
