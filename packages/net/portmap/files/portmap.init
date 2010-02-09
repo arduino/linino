@@ -2,6 +2,8 @@
 # Copyright (C) 2006-2008 OpenWrt.org
 
 START=19
+STOP=19
+
 NAME=portmap
 PROG=/usr/sbin/$NAME
 DEFAULT=/etc/default/$NAME
