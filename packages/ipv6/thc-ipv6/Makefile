@@ -56,7 +56,7 @@ endef
 
 
 #$(eval $(call BuildTool,NAME,TITLE,DESCRIPTION))
-$(eval $(call BuildTool,parasite6,\"ARP spoofer\" for IPv6,Provides false answers to Neighbor Solitication requests))
+$(eval $(call BuildTool,parasite6,ARP spoofer for IPv6,Provides false answers to Neighbor Solitication requests))
 $(eval $(call BuildTool,dos-new-ip6,DAD spoofer,Prevents new IPv6 interfaces to come up by spoofing DAD))
 $(eval $(call BuildTool,detect-new-ip6,Host detector,Detects new IPv6 addresses joining the network))
 $(eval $(call BuildTool,fake_router6,Router spoofer,Send Router Advertisements and try to become the default router))
