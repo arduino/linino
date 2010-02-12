@@ -14,9 +14,8 @@ include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 define Package/chillisocket
-  SECTION:=Testing
-  CATEGORY:=Testing
-#  DEPENDS:=
+  SECTION:=net
+  CATEGORY:=Network
   TITLE:=Socket library server client
 endef
 
