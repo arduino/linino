@@ -26,6 +26,9 @@ PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 
+CONFIGURE_VARS += \
+	ac_cv_header_linux_netlink_h=yes
+
 define Package/strace
   SECTION:=utils
   CATEGORY:=Utilities
