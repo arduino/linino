@@ -23,7 +23,7 @@ PKG_SOURCE_URL:=http://svn.enlightenment.org/svn/e/trunk/BINDINGS/python/$(PKG_N
 PKG_BUILD_DEPENDS:=cython python
 
 include $(INCLUDE_DIR)/package.mk
-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
 define Package/python-evas
   SUBMENU:=Python
