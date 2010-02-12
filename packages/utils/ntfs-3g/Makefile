@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ntfs-3g
-PKG_VERSION:=2009.4.4
+PKG_VERSION:=2010.1.16
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
-PKG_SOURCE_URL:=http://www.ntfs-3g.org/
-PKG_MD5SUM:=e0b5c170f088a8d82968f0a6b34d31da
+PKG_SOURCE_URL:=http://www.tuxera.com/opensource/
+PKG_MD5SUM:=e104c914e8d7d29ee83e63d46afbba25
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -81,13 +83,8 @@ define Build/Configure
         )
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-	ARCH="$(LINUX_KARCH)" \
-	CROSS_COMPILE="$(TARGET_CROSS)" \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install
-endef
+MAKE_ARGS += ARCH="$(LINUX_KARCH)" \
+	     CROSS_COMPILE="$(TARGET_CROSS)"
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
