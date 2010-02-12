@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,15 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=syslog-ng
 PKG_VERSION:=1.6.12
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=a3cbfdb6e1e5beea181a7349749719f3
 
 PKG_SOURCE_URL:= \
 	http://www.balabit.com/downloads/files/syslog-ng/sources/1.6/src \
 	http://www.balabit.com/downloads/files/syslog-ng/stable/src
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -47,10 +49,6 @@ define Build/Configure
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include/libol $(TARGET_CPPFLAGS)" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib/libol $(TARGET_LDFLAGS)" \
 	)
-endef
-
-define Build/Compile
-	$(call Build/Compile/Default,DESTDIR="$(PKG_INSTALL_DIR)" all install)
 endef
 
 define Package/syslog-ng/install
