@@ -1,0 +1,38 @@
+=== modified file 'LVM2.2.02.43/make.tmpl.in'
+--- LVM2.2.02.43/make.tmpl.in  2009-01-16 15:02:27 +0000
++++ LVM2.2.02.43/make.tmpl.in  2009-01-16 15:02:45 +0000
+@@ -84,11 +84,9 @@
+ endif
+
+ LDFLAGS += -L$(top_srcdir)/libdm -L$(top_srcdir)/lib
+-CLDFLAGS += -L$(top_srcdir)/libdm -L$(top_srcdir)/lib
+
+ ifeq ("@DMEVENTD@", "yes")
+   LDFLAGS += -L$(top_srcdir)/daemons/dmeventd
+-  CLDFLAGS += -L$(top_srcdir)/daemons/dmeventd
+ endif
+
+ ifeq ("@DM_COMPAT@", "yes")
+@@ -202,18 +200,18 @@
+ ifeq ("@LIB_SUFFIX@","so")
+ $(LIB_SHARED): $(OBJECTS) $(LDDEPS)
+       $(CC) -shared -Wl,-soname,$(notdir $@).$(LIB_VERSION) \
+-      $(CFLAGS) $(CLDFLAGS) $(OBJECTS) $(LIBS) -o $@
++      $(CFLAGS) $(CLDFLAGS) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $@
+ endif
+
+ ifeq ("@LIB_SUFFIX@","dylib")
+ $(LIB_SHARED): $(OBJECTS) $(LDDEPS)
+       $(CC) -dynamiclib -dylib_current_version,$(LIB_VERSION) \
+-      $(CFLAGS) $(CLDFLAGS) $(OBJECTS) $(LIBS) -o $@
++      $(CFLAGS) $(CLDFLAGS) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $@
+ endif
+
+ %.so: %.a
+       $(CC) -shared -Wl,-soname,$(notdir $@).$(LIB_VERSION) \
+-      $(CFLAGS) $(CLDFLAGS) $(LIBS) -o $@ \
++      $(CFLAGS) $(CLDFLAGS) $(LDFLAGS) $(LIBS) -o $@ \
+       @CLDWHOLEARCHIVE@ $< @CLDNOWHOLEARCHIVE@
+
+ $(LIB_STATIC): $(OBJECTS)
+
