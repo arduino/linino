@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tcpdump
 PKG_VERSION:=4.0.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.tcpdump.org/release/ \
@@ -19,6 +19,8 @@ PKG_SOURCE_URL:=http://www.tcpdump.org/release/ \
 PKG_MD5SUM:=b22ca72890df2301d922c9f2d17867f9
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -48,21 +50,14 @@ CONFIGURE_VARS += \
 	HOSTCC="$(HOSTCC)" \
 	td_cv_buggygetaddrinfo="no"
 
+MAKE_FLAGS := \
+	CCOPT="$(TARGET_CFLAGS)" INCLS="-I. $(TARGET_CPPFLAGS)"
+
 ifeq ($(BUILD_VARIANT),mini)
   TARGET_CFLAGS += -DTCPDUMP_MINI
   CONFIGURE_ARGS += --disable-smb
-  MAKE_FLAGS := TCPDUMP_MINI=1
-else
-  MAKE_FLAGS :=
+  MAKE_FLAGS += TCPDUMP_MINI=1
 endif
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CCOPT="$(TARGET_CFLAGS)" INCLS="-I. $(TARGET_CPPFLAGS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		$(MAKE_FLAGS) \
-		all install
-endef
 
 define Package/tcpdump/install
 	$(INSTALL_DIR) $(1)/usr/sbin
