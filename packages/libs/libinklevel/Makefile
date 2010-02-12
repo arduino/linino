@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,11 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libinklevel
 PKG_VERSION:=0.8.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/libinklevel
 PKG_MD5SUM:=83464cb23fe46a1d1adbe10f08b247be
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,22 +28,12 @@ define Package/libinklevel
 endef
 
 define Package/libinklevel/description
-        Libinklevel is a library for checking the ink level of your printer on a system which runs Linux.
+  Libinklevel is a library for checking the ink level of your printer on a system which runs Linux.
 endef
 
 TARGET_CFLAGS += $(FPIC)
 TARGET_LIBS += $(if $(WITH_PARPORT), -lieee1284)
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="$(TARGET_CPPFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		LIBS="$(TARGET_LIBS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+MAKE_ARGS += LIBS="$(TARGET_LIBS)"
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
