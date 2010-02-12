@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libol
 PKG_VERSION:=0.3.18
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.balabit.com/downloads/files/libol/0.3
 PKG_MD5SUM:=cbadf4b7ea276dfa85acc38a1cc5ff17
+
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,13 +36,8 @@ endef
 
 TARGET_CFLAGS += $(FPIC)
 
-define Build/Compile
-	# pass CFLAGS again to override -O2 set by configure
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+# pass CFLAGS again to override -O2 set by configure
+MAKE_ARGS += CFLAGS="$(TARGET_CFLAGS)"
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(2)/bin
