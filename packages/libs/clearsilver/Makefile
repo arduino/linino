@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,11 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=clearsilver
 PKG_VERSION:=0.10.5
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.clearsilver.net/downloads/
 PKG_MD5SUM:=b8c0c7fbe0ef5e06e0c935f134304d44
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -68,9 +70,7 @@ endif
 MAKE_FLAGS += \
 	$(TARGET_CONFIGURE_OPTS) \
 	AR="$(AR) cr" \
-	LD="$(TARGET_CC) -o" \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install
+	LD="$(TARGET_CC) -o"
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
@@ -84,8 +84,6 @@ define Build/InstallDev
 endef
 
 define Package/clearsilver/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/libs/libneo_*.a $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,clearsilver))
