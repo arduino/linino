@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,11 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ethtool
 PKG_VERSION:=6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/gkernel
 PKG_MD5SUM:=3b721ec27f17ebf320ba8c505cf66d9c
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -25,15 +27,7 @@ define Package/ethtool
 endef
 
 define Package/ethtool/description
-	ethtool is used for querying settings of an ethernet device and changing them.
-endef
-
-# uses GNU configure
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+ethtool is used for querying settings of an ethernet device and changing them.
 endef
 
 define Package/ethtool/install
