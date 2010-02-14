@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dbus-python
 PKG_VERSION:=0.83.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dbus.freedesktop.org/releases/dbus-python/
@@ -20,11 +20,11 @@ include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
 
-EXTRA_CFLAGS += \
+TARGET_CFLAGS += \
 	-I$(STAGING_DIR)/usr/lib/libintl/include \
 	-I$(STAGING_DIR)/usr/lib/libiconv/include
 
-EXTRA_LDFLAGS += \
+TARGET_LDFLAGS += \
 	-Wl,-rpath=$(STAGING_DIR)/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib
@@ -35,7 +35,7 @@ define Package/dbus-python
   CATEGORY:=Languages
   TITLE:=Python bindings for dbus
   URL:=http://dbus.freedesktop.org/
-  DEPENDS:=+python +libdbus-glib
+  DEPENDS:=+python +python-expat +libdbus-glib
 endef
 
 define Package/dbus-python/description
