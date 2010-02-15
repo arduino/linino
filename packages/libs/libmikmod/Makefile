@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -9,12 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libmikmod
 PKG_VERSION:=3.1.12
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
-PKG_SOURCE:=libmikmod-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://prdownloads.sourceforge.net/mikmod
 PKG_MD5SUM:=9f3c740298260d5f88981fc0d51f6f16
-PKG_BUILD_DIR:=$(BUILD_DIR)/libmikmod-$(PKG_VERSION)
+
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,23 +25,25 @@ define Package/libmikmod
   CATEGORY:=Libraries
   TITLE:=Mikmod sound library
   URL:=http://mikmod.raphnet.net/
-  DEPENDS:=+alsa-lib
+  DEPENDS:=+alsa-lib +libpthread
 endef
 
 define Package/libmikmod/description
   Mikmod is a library supporting many formats, including mod, s3m, it, and xm.
 endef
 
-CONFIGURE_ARGS += \
-	--disable-esd \
-	--disable-oss \
-	--enable-alsa
-
-define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--disable-af \
+		--enable-alsa \
+		--disable-oss \
+		--disable-esd \
+		--disable-sam9407 \
+		--disable-ultra \
+		--enable-dl \
+		--disable-debug \
+		--enable-threads \
+	)
 endef
 
 define Build/InstallDev
@@ -48,8 +52,21 @@ define Build/InstallDev
 		$(PKG_INSTALL_DIR)/usr/include/mikmod.h \
 		$(1)/usr/include/
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/libmikmod.{a,so*} \
+		$(PKG_INSTALL_DIR)/usr/lib/libmikmod.{a,la,so*} \
 		$(1)/usr/lib/
+
+	$(INSTALL_DIR) $(2)/bin
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/libmikmod-config \
+		$(2)/bin
+
+	$(SED) 's,^\(exec_prefix\|prefix\)=.*,\1=\"$(STAGING_DIR)/usr/\",g' \
+		$(2)/bin/libmikmod-config
+
+	$(INSTALL_DIR) $(1)/usr/share/aclocal
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/share/aclocal/* \
+		$(1)/usr/share/aclocal/
 endef
 
 define Package/libmikmod/install
