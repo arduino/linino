@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hiawatha
-PKG_VERSION:=6.19
+PKG_VERSION:=7.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.hiawatha-webserver.org/files/
-PKG_MD5SUM:=1e9d4790ab4566f3ad4f8b1ea4997dca
+PKG_MD5SUM:=1e48a61d67e03ff6f03b92778050d04e
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -32,7 +32,9 @@ endef
 
 CONFIGURE_ARGS+= \
 	--disable-cache \
-	--disable-ssl
+	--disable-monitor \
+	--disable-ssl \
+	--disable-xslt
 
 CONFIGURE_VARS+= \
 	ac_cv_file__dev_urandom=yes \
