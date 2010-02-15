@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lighttpd
-PKG_VERSION:=1.4.25
+PKG_VERSION:=1.4.26
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.lighttpd.net/lighttpd/releases-1.4.x/
-PKG_MD5SUM:=2027c49fb46530e45338c5e2da13c02f
+PKG_MD5SUM:=a682c8efce47a2f4263a247ba0813c9b
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -245,10 +246,6 @@ $(call Build/Configure/Default)
 	# XXX: override pcre (mis)detection by ./configure when cross-compiling
 	echo "#define HAVE_LIBPCRE 1" >>$(PKG_BUILD_DIR)/config.h
 	echo "#define HAVE_PCRE_H 1" >>$(PKG_BUILD_DIR)/config.h
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
 
 define Package/lighttpd/conffiles
