@@ -38,7 +38,7 @@ endef
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-libc \
-		$(if $(CONFIG_AUDIO_SUPPORT),
+		$(if $(CONFIG_AUDIO_SUPPORT), \
 			--enable-audio \
 			--enable-alsa \
 			, \
