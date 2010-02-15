@@ -18,6 +18,8 @@ PKG_MD5SUM:=e52086d1b508fa0b76c52ee30b55bec4
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
+PKG_CONFIG_DEPENDS:=CONFIG_AUDIO_SUPPORT
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libsdl
@@ -25,7 +27,7 @@ define Package/libsdl
   CATEGORY:=Libraries
   TITLE:=Simple DirectMedia Layer
   URL:=http://www.libsdl.org
-  DEPENDS:=+DirectFB +zlib +libpthread
+  DEPENDS:=+DirectFB +zlib +libpthread +AUDIO_SUPPORT:alsa-lib
 endef
 
 define Package/libsdl/description
@@ -36,11 +38,17 @@ endef
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-libc \
-		--disable-audio \
+		$(if $(CONFIG_AUDIO_SUPPORT),
+			--enable-audio \
+			--enable-alsa \
+			, \
+			--disable-audio \
+			--disable-alsa \
+		) \
 		--enable-video \
-		--disable-events \
-		--disable-joystick \
-		--disable-cdrom \
+		--enable-events \
+		--enable-joystick \
+		--enable-cdrom \
 		--enable-threads \
 		--enable-timers \
 		--enable-file \
@@ -48,7 +56,6 @@ define Build/Configure
 		--enable-cpuinfo \
 		--enable-assembly \
 		--disable-oss \
-		--disable-alsa \
 		--disable-alsatest \
 		--enable-alsa-shared \
 		--disable-esd \
