@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,31 +8,27 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cyassl
-PKG_VERSION:=1.2.0
+PKG_VERSION:=1.3.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).zip
 PKG_SOURCE_URL:=http://www.yassl.com/
-PKG_MD5SUM:=de12e76b3faf760107e45af487adcbde
+PKG_MD5SUM:=f8b6cdcc2c299c66c74b7e4305745350
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/cyassl/Default
-  TITLE:=CyaSSL
-  URL:=http://www.yassl.com/
-endef
-
 define Package/libcyassl
-  $(call Package/cyassl/Default)
   SECTION:=libs
   SUBMENU:=SSL
   CATEGORY:=Libraries
   DEPENDS:=+zlib
-  TITLE+= (library)
+  TITLE:=CyaSSL library
+  URL:=http://www.yassl.com/
 endef
 
 define Package/libcyassl/description
-	CyaSSL is an SSL library optimized for small footprint, both on disk and for memory use.
+CyaSSL is an SSL library optimized for small footprint, both on disk and for
+memory use.
 endef
 
 TARGET_CFLAGS += $(FPIC)
