@@ -48,7 +48,8 @@ CONFIGURE_ARGS += --without-crypto
 CONFIGURE_VARS += \
 	BUILD_CC="$(TARGET_CC)" \
 	HOSTCC="$(HOSTCC)" \
-	td_cv_buggygetaddrinfo="no"
+	td_cv_buggygetaddrinfo="no" \
+	ac_cv_linux_vers=$(LINUX_VERSION)
 
 MAKE_FLAGS := \
 	CCOPT="$(TARGET_CFLAGS)" INCLS="-I. $(TARGET_CPPFLAGS)"
