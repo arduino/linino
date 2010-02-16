@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libconfig
-PKG_VERSION:=1.4
+PKG_VERSION:=1.4.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.hyperrealm.com/libconfig/
-PKG_MD5SUM:=c6b1c6ccb1a35b93ebf771779d915181
+PKG_MD5SUM:=295f580a7bc3a03a44d520d6ace55ee6
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -40,11 +42,6 @@ CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
 	--disable-cxx
-
-MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/libconfig/
