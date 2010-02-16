@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,17 +9,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rtorrent
-
-PKG_REV:=1123
+PKG_REV:=1130
 PKG_VERSION:=0.8.6_r$(PKG_REV)
-PKG_RELEASE:=2
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_RELEASE:=1
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=svn://rakshasa.no/libtorrent/trunk/rtorrent
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=svn
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,7 +30,7 @@ define Package/rtorrent
   CATEGORY:=Network
   TITLE:=BitTorrent client for ncurses
   URL:=http://libtorrent.rakshasa.no/
-  DEPENDS:=+libcurl +libtorrent +libncurses +libsigcxx +xmlrpc-c
+  DEPENDS:=+libcurl +libtorrent +libncurses +libsigcxx +xmlrpc-c +libpthread
 endef
 
 define Package/rtorrent/description
@@ -43,6 +44,8 @@ ifneq ($(CONFIG_GCC_VERSION_3_4)$(CONFIG_GCC_VERSION_4_1),)
 TARGET_CPPFLAGS += -fno-strict-aliasing
 endif
 
+TARGET_LDFLAGS += -lpthread
+
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--disable-static \
@@ -54,15 +57,9 @@ define Build/Configure
 	$(call Build/Configure/Default)
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
 define Package/rtorrent/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/rtorrent $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rtorrent $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,rtorrent))

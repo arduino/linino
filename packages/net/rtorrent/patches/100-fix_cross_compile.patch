@@ -1,7 +1,6 @@
-diff -durN a/scripts/common.m4 b/scripts/common.m4
---- a/scripts/common.m4	2009-11-13 10:44:23.000000000 +0300
-+++ b/scripts/common.m4	2009-11-05 11:20:35.000000000 +0300
-@@ -184,7 +183,7 @@
+--- a/scripts/common.m4
++++ b/scripts/common.m4
+@@ -209,7 +209,7 @@ dnl   Need to fix this so that it uses t
  AC_DEFUN([TORRENT_CHECK_EXECINFO], [
    AC_MSG_CHECKING(for execinfo.h)
  

@@ -1,9 +1,0 @@
---- a/src/thread_base.cc	2010-01-26 09:40:34.000000000 +0300
-+++ b/src/thread_base.cc	2010-01-31 18:38:25.000000000 +0300
-@@ -191,5 +191,5 @@
- void
- ThreadBase::queue_item(thread_base_func newFunc) {
-   m_threadQueue->push_back(newFunc);
--  pthread_kill(m_thread, SIGUSR1);
-+  if(m_thread != NULL) pthread_kill(m_thread, SIGUSR1);
- }
