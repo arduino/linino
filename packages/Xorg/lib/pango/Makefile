@@ -31,7 +31,8 @@ define Package/pango
   SUBMENU:=libraries
   TITLE:=Text layout and rendering library
   DEPENDS:=+cairo +glib2 +fontconfig +libfreetype \
-  +FEATURE_drawing-backend_libX11:libX11
+  +FEATURE_drawing-backend_libX11:libX11 \
+  +FEATURE_drawing-backend_libX11:libXft
 endef
 
 define Package/pango/description
@@ -44,6 +45,9 @@ endef
 
 CONFIGURE_ARGS += \
 	$(if $(CONFIG_PACKAGE_libX11), --with-x, --without-x)
+
+CONFIGURE_VARS += \
+	CXX=$(TARGET_CC)
 
 define Build/InstallDev
 	$(INSTALL_DIR) \
