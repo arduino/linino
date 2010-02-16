@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.hiawatha-webserver.org/files/
-PKG_MD5SUM:=1e48a61d67e03ff6f03b92778050d04e
+PKG_MD5SUM:=876111ba94b183745b90ca27d4f2b0ed
 
 include $(INCLUDE_DIR)/package.mk
 
