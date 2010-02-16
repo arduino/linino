@@ -1,8 +1,6 @@
-Index: libtorrent/src/net/socket_datagram.cc
-===================================================================
---- libtorrent/src/net/socket_datagram.cc	(revision 1121)
-+++ libtorrent/src/net/socket_datagram.cc	(working copy)
-@@ -73,6 +73,23 @@
+--- a/src/net/socket_datagram.cc
++++ b/src/net/socket_datagram.cc
+@@ -73,6 +73,23 @@ SocketDatagram::write_datagram(const voi
    int r;
  
    if (sa != NULL) {

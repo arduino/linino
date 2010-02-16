@@ -1,8 +1,6 @@
-Index: libtorrent/rak/allocators.h
-===================================================================
---- libtorrent/rak/allocators.h	(revision 1121)
-+++ libtorrent/rak/allocators.h	(working copy)
-@@ -74,17 +74,13 @@
+--- a/rak/allocators.h
++++ b/rak/allocators.h
+@@ -74,17 +74,13 @@ public:
    size_type max_size () const throw() { return std::numeric_limits<size_t>::max() / sizeof(T); }
  
    pointer allocate(size_type num, const_void_pointer hint = 0) { return alloc_size(num*sizeof(T)); }
@@ -11,19 +9,19 @@ Index: libtorrent/rak/allocators.h
 -  static pointer alloc_size(size_type size) {
 -    pointer ptr = NULL;
 -    int __UNUSED result = posix_memalign((void**)&ptr, LT_SMP_CACHE_BYTES, size);
+-
+-    return ptr;
+-  }
 +  static pointer alloc_size(size_type size);
 +  static void dealloc_size(pointer p, size_type size);
  
--    return ptr;
--  }
--
    void construct (pointer p, const T& value) { new((void*)p)T(value); }
    void destroy (pointer p) { p->~T(); }
 -  void deallocate (pointer p, size_type num) { ::operator delete((void*)p); }
  };
  
  
-@@ -98,8 +94,38 @@
+@@ -98,6 +94,36 @@ bool operator!= (const cacheline_allocat
    return false;
  }
  
@@ -46,8 +44,8 @@ Index: libtorrent/rak/allocators.h
 +#endif
 +
 +  return ptr;
- }
- 
++}
++
 +template <class T>
 +inline void cacheline_allocator<T>::dealloc_size(pointer p, size_type size) {
 +#if HAVE_POSIX_MEMALIGN
@@ -57,8 +55,6 @@ Index: libtorrent/rak/allocators.h
 +#endif
 +}
 +
-+}
-+
- //
- // Operator new with custom allocators:
+ }
+ 
  //

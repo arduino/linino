@@ -1,8 +1,6 @@
-Index: libtorrent/src/net/socket_set.h
-===================================================================
---- libtorrent/src/net/socket_set.h	(revision 1121)
-+++ libtorrent/src/net/socket_set.h	(working copy)
-@@ -53,12 +53,12 @@
+--- a/src/net/socket_set.h
++++ b/src/net/socket_set.h
+@@ -53,12 +53,12 @@ namespace torrent {
  
  // Propably should rename to EventSet...
  
