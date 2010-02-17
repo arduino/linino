@@ -12,13 +12,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=uanytun
-PKG_VERSION:=0.3.2
+PKG_VERSION:=0.3.3
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.anytun.org/download/
-PKG_MD5SUM:=d861328e33ec0d34cccecd9ca2a284b6
+PKG_MD5SUM:=ca39dab02e91b0737e2b3f0839e74f6a
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -88,17 +88,26 @@ define Package/uanytun-nocrypt/description
   $(call Package/uanytun/desc-template)
 endef
 
-
+define Package/uanytun/configure
+	(cd $(1)/$(2)/src; \
+    touch include.mk; \
+    ln -s linux/tun.c .; \
+    echo '#ifndef UANYTUN_version_h_INCLUDED' > version.h; \
+    echo '#define UANYTUN_version_h_INCLUDED' >> version.h; \
+    echo '' >> version.h; \
+    echo '#define VERSION_STRING_0 "uanytun version '`cat $(1)/version`'"' >> version.h; \
+    echo '#define VERSION_STRING_1 "built on '`hostname`', '`date +"%d.%m.%Y %H:%M:%S %Z"`'"' >> version.h; \
+    echo '' >> version.h; \
+    echo '#endif' >> version.h \
+  )
+endef
 
 ifneq ($(CONFIG_PACKAGE_uanytun-nocrypt),)
  define Build/Configure/uanytun-nocrypt
 	rm -rf $(PKG_BUILD_DIR)/uanytun-nocrypt
 	mkdir -p $(PKG_BUILD_DIR)/uanytun-nocrypt
 	$(CP) -r $(PKG_BUILD_DIR)/src $(PKG_BUILD_DIR)/uanytun-nocrypt
-	(cd $(PKG_BUILD_DIR)/uanytun-nocrypt/src; \
-    touch include.mk; \
-    ln -s linux/tun.c . \
-  )
+	$(call Package/uanytun/configure,$(PKG_BUILD_DIR),uanytun-nocrypt)
  endef
 
  define Build/Compile/uanytun-nocrypt
@@ -117,10 +126,7 @@ ifneq ($(CONFIG_PACKAGE_uanytun-sslcrypt),)
 	rm -rf $(PKG_BUILD_DIR)/uanytun-sslcrypt
 	mkdir -p $(PKG_BUILD_DIR)/uanytun-sslcrypt
 	$(CP) -r $(PKG_BUILD_DIR)/src $(PKG_BUILD_DIR)/uanytun-sslcrypt
-	(cd $(PKG_BUILD_DIR)/uanytun-sslcrypt/src; \
-    touch include.mk; \
-    ln -s linux/tun.c . \
-  )
+	$(call Package/uanytun/configure,$(PKG_BUILD_DIR),uanytun-sslcrypt)
  endef
 
  define Build/Compile/uanytun-sslcrypt
@@ -138,10 +144,7 @@ ifneq ($(CONFIG_PACKAGE_uanytun),)
 	rm -rf $(PKG_BUILD_DIR)/uanytun
 	mkdir -p $(PKG_BUILD_DIR)/uanytun
 	$(CP) -r $(PKG_BUILD_DIR)/src $(PKG_BUILD_DIR)/uanytun
-	(cd $(PKG_BUILD_DIR)/uanytun/src; \
-    touch include.mk; \
-    ln -s linux/tun.c . \
-  )
+	$(call Package/uanytun/configure,$(PKG_BUILD_DIR),uanytun)
  endef
 
  define Build/Compile/uanytun-default
