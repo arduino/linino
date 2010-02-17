@@ -1,18 +1,17 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
 
 include $(TOPDIR)/rules.mk
-include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=proftpd
-PKG_VERSION:=1.3.2c
+PKG_VERSION:=1.3.2d
 PKG_RELEASE:=1
 PKG_SOURCE_URL:=ftp://ftp.proftpd.org/distrib/source
-PKG_MD5SUM:=559fd3fb6959d42ddd66b333a03b0c49
+PKG_MD5SUM:=0941935e30199a3f22f7225fe76bc489
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_INSTALL=1
