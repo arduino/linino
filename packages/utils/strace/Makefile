@@ -6,6 +6,7 @@
 #
 
 include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=strace
 PKG_RELEASE:=2
@@ -28,6 +29,9 @@ include $(INCLUDE_DIR)/package.mk
 
 CONFIGURE_VARS += \
 	ac_cv_header_linux_netlink_h=yes
+
+TARGET_CFLAGS += \
+	-I$(LINUX_DIR)/include
 
 define Package/strace
   SECTION:=utils
