@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 Stefan Monnier
+# Copyright (C) 2009, 2010 Stefan Monnier
 #
 # This is free software, licensed under the GNU General Public License v3+.
 # See /LICENSE for more information.
@@ -7,14 +7,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=LVM2
-PKG_VERSION:=2.02.44
+PKG_VERSION:=2.02.60
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME).$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=ftp://sources.redhat.com/pub/lvm2/
-PKG_MD5SUM:=4ed7b99903a6fc5165b7b0b8def42486
+PKG_MD5SUM:=33e0e0f4b4582d495ff619696c634b2a
 # 2.02.43 = fc34655706a2aa116b92328b24fad619
 # 2.02.44 = 4ed7b99903a6fc5165b7b0b8def42486
+# 2.02.53 = f9ae3579bf15467b7f1d7aea8b9ed9b3
+# 2.02.60 = 33e0e0f4b4582d495ff619696c634b2a
 
 # OpenWRT normally expects the tarball to expand into
 # $(PKG_NAME)-$(PKG_VERSION), and this magic incantation seems to make it
@@ -80,29 +82,29 @@ endef
 CONFIGURE_ARGS += --disable-o_direct
 
 define Build/InstallDev
-       mkdir -p $(1)/usr/include
-       $(INSTALL_DATA) $(PKG_BUILD_DIR)/include/libdevmapper.h $(1)/usr/include/
-       mkdir -p $(1)/usr/lib
-       $(CP) $(PKG_BUILD_DIR)/libdm/ioctl/libdevmapper.{a,so} $(1)/usr/lib/
-       mkdir -p $(1)/usr/lib/pkgconfig
-       $(CP) $(PKG_BUILD_DIR)/libdm/libdevmapper.pc $(1)/usr/lib/pkgconfig/
+	mkdir -p $(1)/usr/include
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/include/libdevmapper.h $(1)/usr/include/
+	mkdir -p $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/libdm/ioctl/libdevmapper.so $(1)/usr/lib/
+	mkdir -p $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_BUILD_DIR)/libdm/libdevmapper.pc $(1)/usr/lib/pkgconfig/
 endef
 
 define Package/libdevmapper/install
-       $(INSTALL_DIR) $(1)/usr/lib
-       $(INSTALL_DATA) $(PKG_BUILD_DIR)/libdm/libdevmapper.so.* $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/libdm/libdevmapper.so.* $(1)/usr/lib/
 endef
 
 # This rule only installs the `lvm' executable.  Debian also installs
 # a whole bunch of symlinks so that instead of `lvm <foo>' you can directly
 # run `<foo>'.
 define Package/lvm2/install
-       $(INSTALL_DIR) $(1)/sbin
-       $(INSTALL_BIN) $(PKG_BUILD_DIR)/tools/lvm $(1)/sbin/
-       $(INSTALL_DIR) $(1)/etc/lvm
-       $(INSTALL_DATA) $(PKG_BUILD_DIR)/doc/example.conf $(1)/etc/lvm/lvm.conf
-       $(INSTALL_DIR) $(1)/etc/init.d
-       $(INSTALL_BIN) ./files/lvm2.init $(1)/etc/init.d/lvm2
+	$(INSTALL_DIR) $(1)/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tools/lvm $(1)/sbin/
+	$(INSTALL_DIR) $(1)/etc/lvm
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/doc/example.conf $(1)/etc/lvm/lvm.conf
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/lvm2.init $(1)/etc/init.d/lvm2
 endef
 
 define Package/lvm2/conffiles
