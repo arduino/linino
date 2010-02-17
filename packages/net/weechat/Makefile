@@ -79,11 +79,11 @@ CONFIGURE_ARGS+= \
 	--disable-python \
 	--disable-ruby \
 	LUACONFIG="" \
+	ac_cv_path_LIBGNUTLS_CONFIG="pkg-config gnutls" \
 
-CONFIGURE_VARS+= \
-	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib -Wl,-rpath-link,$(STAGING_DIR)/usr/lib" \
-
-TARGET_LDFLAGS += -lgnutls
+TARGET_LDFLAGS += \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
+	-Wl,-rpath-link,$(STAGING_DIR)/usr/lib
 
 ifneq ($(CONFIG_PACKAGE_weechat-mod-lua),)
   CONFIGURE_ARGS+= \
@@ -108,7 +108,7 @@ define Build/Compile
 		all install
 endef
 
-define Package/weechat/install	
+define Package/weechat/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/weechat-curses $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/weechat/plugins
@@ -116,7 +116,7 @@ endef
 
 define BuildPlugin
 
-  define Package/weechat-mod-$(1)/install	
+  define Package/weechat-mod-$(1)/install
 	$(INSTALL_DIR) $$(1)/usr/lib/weechat/plugins
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/weechat/plugins/$(1).so* $$(1)/usr/lib/weechat/plugins/
   endef
