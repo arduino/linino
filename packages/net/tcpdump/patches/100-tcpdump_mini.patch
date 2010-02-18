@@ -723,3 +723,48 @@
                  else if (ISPORT(SIP_PORT))
  			sip_print((const u_char *)(up + 1), length);
                  else if (ISPORT(SYSLOG_PORT))
+--- a/print-ip6.c
++++ b/print-ip6.c
+@@ -160,9 +160,11 @@ ip6_print(register const u_char *bp, reg
+ 		case IPPROTO_SCTP:
+ 			sctp_print(cp, (const u_char *)ip6, len);
+ 			return;
++#ifndef TCPDUMP_MINI
+ 		case IPPROTO_DCCP:
+ 			dccp_print(cp, (const u_char *)ip6, len);
+ 			return;
++#endif
+ 		case IPPROTO_TCP:
+ 			tcp_print(cp, len, (const u_char *)ip6, fragmented);
+ 			return;
+@@ -172,6 +174,7 @@ ip6_print(register const u_char *bp, reg
+ 		case IPPROTO_ICMPV6:
+ 			icmp6_print(cp, len, (const u_char *)ip6, fragmented);
+ 			return;
++#ifndef TCPDUMP_MINI
+ 		case IPPROTO_AH:
+ 			advance = ah_print(cp);
+ 			nh = *cp;
+@@ -195,7 +198,7 @@ ip6_print(register const u_char *bp, reg
+ 		case IPPROTO_PIM:
+ 			pim_print(cp, len);
+ 			return;
+-
++#endif
+ 		case IPPROTO_OSPF:
+ 			ospf6_print(cp, len);
+ 			return;
+@@ -207,11 +210,11 @@ ip6_print(register const u_char *bp, reg
+ 		case IPPROTO_IPV4:
+ 		        ip_print(gndo, cp, len);
+ 			return;
+-
++#ifndef TCPDUMP_MINI
+                 case IPPROTO_PGM:
+                         pgm_print(cp, len, (const u_char *)ip6);
+                         return;
+-
++#endif
+ 		case IPPROTO_GRE:
+ 			gre_print(cp, len);
+ 			return;

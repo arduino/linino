@@ -43,7 +43,9 @@ define Package/tcpdump-mini
   VARIANT:=mini
 endef
 
-CONFIGURE_ARGS += --without-crypto
+CONFIGURE_ARGS += \
+	--without-crypto \
+	--enable-ipv6
 
 CONFIGURE_VARS += \
 	BUILD_CC="$(TARGET_CC)" \
