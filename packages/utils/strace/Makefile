@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,9 +9,10 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=strace
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
-ifeq ($(CONFIG_LINUX_2_6_25),y) 
+OLD_KERNEL=$(findstring y,$(foreach v,21 25,$(CONFIG_LINUX_2_6_$(v))))
+ifneq ($(OLD_KERNEL),)
   PKG_VERSION:=4.5.16
   PKG_MD5SUM:=77f66d09aa82981bb6d65fa19a2c1ba9
   PATCH_DIR:=patches-4.5.16
@@ -41,19 +42,16 @@ define Package/strace
 endef
 
 define Package/strace/description
-	A useful diagnostic, instructional, and debugging tool.
-	Allows you to track what system calls a program makes while it is
-	running.
+A useful diagnostic, instructional, and debugging tool. Allows you to track what
+system calls a program makes while it is running.
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)"
-endef
+CONFIGURE_VARS += \
+	ac_cv_header_linux_netlink_h=yes
 
 define Package/strace/install
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/strace $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,strace))
