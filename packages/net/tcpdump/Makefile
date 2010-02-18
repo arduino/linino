@@ -51,14 +51,17 @@ CONFIGURE_VARS += \
 	td_cv_buggygetaddrinfo="no" \
 	ac_cv_linux_vers=$(LINUX_VERSION)
 
-MAKE_FLAGS := \
-	CCOPT="$(TARGET_CFLAGS)" INCLS="-I. $(TARGET_CPPFLAGS)"
+MAKE_FLAGS :=
 
 ifeq ($(BUILD_VARIANT),mini)
   TARGET_CFLAGS += -DTCPDUMP_MINI
   CONFIGURE_ARGS += --disable-smb
   MAKE_FLAGS += TCPDUMP_MINI=1
 endif
+
+MAKE_FLAGS += \
+	CCOPT="$(TARGET_CFLAGS)" INCLS="-I. $(TARGET_CPPFLAGS)"
+
 
 define Package/tcpdump/install
 	$(INSTALL_DIR) $(1)/usr/sbin
