@@ -14,6 +14,8 @@ PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/libc/libcrypto++/
 PKG_MD5SUM:=
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libcryptoxx
@@ -40,13 +42,6 @@ define Build/Configure
 		LDFLAGS="$(TARGET_LDFLAGS) -lpthread" \
 	)
 endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/crypto++

@@ -10,7 +10,11 @@ PKG_MD5SUM:=9f7b3402b4731a7fa543db193bf1b564
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
+
+MAKE_PATH:=src
 
 define Package/krb5/Default
 	SECTION:=net
@@ -81,16 +85,6 @@ CONFIGURE_ARGS += \
 
 define Build/Configure
 	$(call Build/Configure/Default)
-endef
-
-define Build/Compile
-	rm -rf "$(PKG_INSTALL_DIR)"
-	mkdir -p "$(PKG_INSTALL_DIR)"
-	$(MAKE) -C $(PKG_BUILD_DIR)/src \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CC="$(TARGET_CC)" \
-		all install
 endef
 
 define Package/krb5-libs/install

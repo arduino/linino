@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=@SF/aa-project
 PKG_MD5SUM:=790434e0f2005fc95559ab3eab42e746
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -24,20 +25,17 @@ define Package/libaa
   CATEGORY:=Libraries
   TITLE:=Ascii-Art rendering library
   URL:=http://aa-project.sourceforge.net/
-  DEPENDS:= +libncurses
+  DEPENDS:=+libncurses
 endef
 
-CONFIGURE_ARGS+= \
-	--enable-shared \
-	--enable-static \
-	--without-x \
-	--without-x11-driver \
-	--without-slang-driver \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) all \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--enable-static \
+		--without-x \
+		--without-x11-driver \
+		--without-slang-driver \
+	)
 endef
 
 define Build/InstallDev

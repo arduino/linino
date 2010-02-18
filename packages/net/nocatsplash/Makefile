@@ -17,6 +17,8 @@ PKG_MD5SUM:=e0fcc0effe52e63bc31070d16d0b4a81
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/NoCatSplash-$(PKG_VERSION)
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/nocatsplash
@@ -48,16 +50,9 @@ define Build/Configure
 	)
 endef
 
-define Build/Compile	
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
-define Package/nocatsplash/install	
+define Package/nocatsplash/install
 	$(INSTALL_DIR) $(1)
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/ 
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 $(eval $(call BuildPackage,nocatsplash))

@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,13 +10,15 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=libatomicops
 PKG_VERSION:=1.2
 PKG_EXTRA_VERSION:=+cvs20080819.orig
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=libatomic-ops_$(PKG_VERSION)$(PKG_EXTRA_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/liba/libatomic-ops/
 PKG_MD5SUM:=bf26c062f28796e3daaab586a38abec1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libatomic_ops-$(PKG_VERSION)
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -43,12 +45,6 @@ TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/

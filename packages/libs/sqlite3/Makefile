@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=http://www.sqlite.org/
 PKG_MD5SUM:=4bb3e9ee5d25e88b8ff8533fbeb168aa
 
 PKG_BUILD_DEPENDS:=libncurses libreadline
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -72,12 +73,6 @@ CONFIGURE_VARS += \
 	config_TARGET_CFLAGS="$(TARGET_CFLAGS)" \
 	config_TARGET_READLINE_INC="$(TARGET_CPPFLAGS)" \
 	config_TARGET_READLINE_LIBS="$(TARGET_LDFLAGS) -lreadline -lncurses" \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include

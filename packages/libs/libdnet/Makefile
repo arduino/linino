@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libdnet
 PKG_VERSION:=1.11
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=04c394ed8e1e7fc455456e79e908916d
+
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -58,10 +60,6 @@ CONFIGURE_ARGS += \
 
 CONFIGURE_VARS += \
 	ac_cv_dnet_bsd_bpf=no
-
-MAKE_FLAGS += \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(2)/bin

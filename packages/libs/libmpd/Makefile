@@ -15,7 +15,12 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.sarine.nl/Programs/gmpc/$(PKG_VERSION)/
 PKG_MD5SUM:=a994f5f25a22c778926a3684c3e3050d
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
+
+TARGET_CFLAGS += $(FPIC)
+
 
 define Package/libmpd
   SECTION:=libs
@@ -26,14 +31,6 @@ endef
 
 define Package/libmpd/description
 It's wraps around libmpdclient and provides a higher level api.
-endef
-
-TARGET_CFLAGS += $(FPIC)
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Build/InstallDev

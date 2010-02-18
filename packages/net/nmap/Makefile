@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.insecure.org/nmap/dist
 PKG_MD5SUM:=ea50419f99472200c4184a304e3831ea
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/nmap
@@ -41,13 +43,7 @@ CONFIGURE_VARS += \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
 	LIBS="-nodefaultlibs -luClibc++ -lgcc" \
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
-define Package/nmap/install	
+define Package/nmap/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/nmap $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/share/nmap

@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/macchanger
 PKG_MD5SUM:=79b7cdaeca3d8ebafa764c4b0dd03ab7
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/macchanger
@@ -29,13 +31,7 @@ define Package/macchanger/description
 	of network interfaces.
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
-define Package/macchanger/install	
+define Package/macchanger/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/macchanger $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/share

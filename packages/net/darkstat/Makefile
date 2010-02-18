@@ -39,7 +39,6 @@ CONFIGURE_ARGS += \
 	--with-chroot-dir /var/empty
 
 define Build/Compile
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(HOSTCC) $(PKG_BUILD_DIR)/static/c-ify.c \
 		-o $(PKG_BUILD_DIR)/c-ify
 	$(MAKE) -C $(PKG_BUILD_DIR) \

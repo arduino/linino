@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006-2009 OpenWrt.org
+#
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -18,8 +18,11 @@ PKG_MD5SUM:=838dbac20b56d2c4292e98848505a05b
 PKG_BUILD_DIR:=$(BUILD_DIR)/sqlite-$(PKG_VERSION)
 
 PKG_BUILD_DEPENDS:=libncurses libreadline
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+
+TARGET_CFLAGS += $(FPIC)
 
 define Package/sqlite2/Default
   SUBMENU:=database
@@ -35,7 +38,6 @@ define Package/libsqlite2
 endef
 
 define Package/libsqlite2/description
-=
 	SQLite is a small C library that implements a self-contained, embeddable, 
 	zero-configuration SQL database engine.	
 	This package contains the SQLite (v2.x) shared library, used by other programs.
@@ -51,7 +53,6 @@ define Package/sqlite2-cli
 endef
 
 define Package/sqlite2-cli/description
-=
 	SQLite is a small C library that implements a self-contained, embeddable, 
 	zero-configuration SQL database engine.	
 	This package contains a terminal-based front-end to the SQLite (v2.x) library 
@@ -72,14 +73,6 @@ define Build/Configure
 		config_TARGET_READLINE_LIBS="$(TARGET_LDFLAGS) -lreadline -lncurses" \
 		config_TARGET_TCL_INC="-DNO_TCL=1" \
 	)
-endef
-
-TARGET_CFLAGS += $(FPIC)
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Build/InstallDev

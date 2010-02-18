@@ -24,7 +24,6 @@ define Package/ucmb-tools/description
 endef
 
 define Build/Prepare
-	mkdir -p $(PKG_BUILD_DIR)
 	$(CP) ./tools/* $(PKG_BUILD_DIR)/
 endef
 

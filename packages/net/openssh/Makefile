@@ -122,8 +122,6 @@ endif
 CONFIGURE_VARS += LD="$(TARGET_CC)"
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		LIBS="" \
@@ -145,7 +143,7 @@ endef
 
 define Package/openssh-client-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(foreach bin,add agent keyscan keysign,$(PKG_BUILD_DIR)/ssh-$(bin)) $(1)/usr/bin/
+	$(INSTALL_BIN) $(foreach bin,add agent keyscan keysign keygen,$(PKG_BUILD_DIR)/ssh-$(bin)) $(1)/usr/bin/
 endef
 
 define Package/openssh-server/install

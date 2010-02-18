@@ -14,6 +14,8 @@ PKG_RELEASE:=1
 PKG_SOURCE_URL:=http://www.balabit.com/downloads/files/eventlog/0.2/
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libeventlog
@@ -26,12 +28,6 @@ define Package/eventlog/description
   A new API to format and send structured log messages. It supports multiple message
   representations (plain, XML attributes and XML tags) and multiple output methods
   (local syslogd).
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Build/InstallDev

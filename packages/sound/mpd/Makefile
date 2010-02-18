@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2007-2009 OpenWrt.org
+#
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpd
-PKG_VERSION:=0.15.5
+PKG_VERSION:=0.15.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/musicpd
-PKG_MD5SUM:=078bd45c8266ac577e4a96fa38d1e534
+PKG_MD5SUM:=
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -54,6 +56,8 @@ ifeq ($(CONFIG_PACKAGE_kmod-sound-core),)
 	CONFIGURE_ARGS+= --disable-alsa
 endif
 
+TARGET_CFLAGS+=-std=gnu99
+
 CONFIGURE_VARS += \
 	CURL_LIBS="-L$(STAGING_DIR)/usr/lib -lssl -lcrypto -lcurl" \
 	CURL_CFLAGS="-I$(STAGING_DIR)/usr/include" \
@@ -67,12 +71,6 @@ CONFIGURE_VARS += \
 	OGGVORBIS_CFLAGS="$(TARGET_CPPFLAGS)" \
 	GLIB_CFLAGS="-I$(STAGING_DIR)/usr/include/glib-2.0 -I$(STAGING_DIR)/usr/lib/glib-2.0/include" \
 	GLIB_LIBS="$(TARGET_LDLFAGS) -L$(STAGING_DIR)/usr/lib/libintl/lib -lintl -L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv -lglib-2.0 -lgthread-2.0 -pthread"
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Package/mpd/install
 	$(INSTALL_DIR) $(1)/etc

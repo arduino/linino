@@ -18,7 +18,8 @@ PKG_SOURCE_SUBDIR:=lcd4linux-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=svn
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -221,10 +222,6 @@ CONFIGURE_ARGS += \
 	--with-drivers="$(strip $(LCD4LINUX_CONFIGURE_DRIVERS))" \
 	--with-plugins="$(strip $(LCD4LINUX_CONFIGURE_PLUGINS))" \
 
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
-endef
 
 define Package/lcd4linux/install
 	$(INSTALL_DIR) $(1)/usr/bin

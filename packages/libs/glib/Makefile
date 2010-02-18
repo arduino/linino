@@ -18,7 +18,8 @@ PKG_SOURCE_URL:=ftp://ftp.gtk.org/pub/gtk/v1.2 \
 	http://www.mirrorservice.org/sites/ftp.gimp.org/pub/gtk/v1.2/
 PKG_MD5SUM:=6fe30dad87c77b91b632def29dd69ef9
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,6 +37,7 @@ define Package/glib1/description
 endef
 
 TARGET_CFLAGS += $(FPIC)
+TARGET_LDFLAGS += -L$(TOOLCHAIN_DIR)/lib
 
 CONFIGURE_ARGS += \
 	--enable-shared \
@@ -56,11 +58,6 @@ CONFIGURE_VARS += \
 	glib_cv_func_pthread_cond_timedwait_posix=yes \
 	glib_cv_sizeof_gmutex=24 \
 	glib_cv_byte_contents_gmutex="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" \
-
-TARGET_LDFLAGS += -L$(TOOLCHAIN_DIR)/lib
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1) $(2)/bin

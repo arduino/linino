@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=http://www.lavrsen.dk/sources/motion-daily \
 		@SF/motion
 PKG_MD5SUM:=4e729f129d8f9b9abaed5121c3cd0037
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/motion
@@ -35,12 +37,6 @@ CONFIGURE_ARGS+= \
 	--without-jpeg-mmx \
 	--without-mysql \
 	--without-pgsql \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Package/motion/install
 	$(INSTALL_DIR) $(1)/etc

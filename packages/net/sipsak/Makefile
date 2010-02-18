@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=http://download.berlios.de/sipsak/ \
 	http://ftp.iptel.org/pub/sipsak/
 PKG_MD5SUM:=c4eb8e282902e75f4f040f09ea9d99d5
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/sipsak
@@ -25,17 +27,14 @@ define Package/sipsak
   TITLE:=SIP (Session Initiation Protocol) stress and diagnostics utility
   URL:=http://www.sipsak.org/
 endef
-			
-CONFIGURE_ARGS += \
-	--disable-gnutls \
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--disable-gnutls \
+	)
 endef
 
-define Package/sipsak/install	
+define Package/sipsak/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/sipsak $(1)/usr/bin/
 endef

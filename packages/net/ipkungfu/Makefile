@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.linuxkungfu.org/ipkungfu
 PKG_MD5SUM:=89f6bc0df356dd4ee650882c54ec9074
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ipkungfu
@@ -66,12 +68,6 @@ CONFIGURE_VARS+= \
 		 ac_cv_path_GREP="/bin/grep" \
 		 ac_cv_path_SED="/bin/sed" \
 		 ac_cv_path_AWK="/usr/bin/awk" \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Package/ipkungfu/install
 	$(INSTALL_DIR) $(1)/usr/sbin

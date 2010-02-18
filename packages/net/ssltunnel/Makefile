@@ -15,6 +15,8 @@ PKG_SOURCE:=${PKG_NAME}-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.hsc.fr/ressources/outils/ssltunnel/download
 PKG_MD5SUM:=4039b50566a33a4077883ea974e476d5
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ssltunnel
@@ -41,12 +43,6 @@ define Build/Configure
 		BUILD_CC="$(TARGET_CC)" \
 		HOSTCC="$(HOSTCC)" \
 	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Package/ssltunnel/install	

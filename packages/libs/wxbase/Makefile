@@ -17,6 +17,8 @@ PKG_MD5SUM:=88b867bc118a183af56efc67014bdf27
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/wxGTK-$(PKG_VERSION)
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libwxbase
@@ -112,12 +114,6 @@ else
   CONFIGURE_ARGS+= --disable-unicode
   LIB_PFX:=
 endif
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/include $(1)/usr/lib

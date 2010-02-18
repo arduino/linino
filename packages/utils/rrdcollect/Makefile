@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/rrdcollect
 PKG_MD5SUM:=fd7ac95195e3e5cbab0677629505d9be
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/rrdcollect/Default
@@ -72,18 +74,12 @@ CONFIGURE_ARGS+= \
 CONFIGURE_VARS+= \
 	CFLAGS="$(TARGET_CFLAGS) -DSOCKET_COMM" \
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
-define Package/rrdcollect/install	
+define Package/rrdcollect/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/rrdcollect $(1)/usr/sbin/
 endef
 
-define Package/rrdcollect-example/install	
+define Package/rrdcollect-example/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/rrd.conf $(1)/etc/
 	$(INSTALL_DATA) ./files/rrdcollect.conf $(1)/etc/

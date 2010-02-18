@@ -17,7 +17,8 @@ PKG_MD5SUM:=a83155a6e29e3988f07e5eea3287b21e
 
 PKG_BUILD_DEPENDS:=libexpat libdaemon libgdbm intltool/host
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -42,7 +43,7 @@ define Package/libavahi
   $(call Package/avahi/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libdaemon +libpthread
+  DEPENDS:=+libdaemon +libpthread +libgdbm
   TITLE+= (library)
 endef
 
@@ -148,12 +149,6 @@ CONFIGURE_VARS+= \
 define Build/Configure
 	( cd $(PKG_BUILD_DIR); aclocal; libtoolize; autoreconf; );
 	$(call Build/Configure/Default)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Build/InstallDev

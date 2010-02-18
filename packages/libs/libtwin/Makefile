@@ -59,10 +59,6 @@ define Build/InstallDev
 		$(1)/usr/lib/pkgconfig/
 endef
 
-define Build/UninstallDev
-	rm -rf $(1)/usr/include/libtwin
-endef
-
 define Package/libtwin/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_BIN) \

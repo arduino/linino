@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://vgpd.freaknet.org/files/
 PKG_MD5SUM:=b8c25b5dfcb944f78bbc584be9c230c7
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/vgp
@@ -33,12 +35,6 @@ define Package/vgp/description
 endef
 
 # uses GNU configure
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Package/vgp/install
 	$(INSTALL_DIR) $(1)/usr/bin

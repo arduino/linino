@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=ftp://ftp.gnupg.org/gcrypt/libgcrypt/
 PKG_MD5SUM:=34105aa927e23c217741966496b97e67
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -48,12 +49,6 @@ CONFIGURE_ARGS+= \
 	--enable-digests="md5 rmd160 sha1 sha256 sha512" \
 	--enable-ciphers="arcfour des aes" \
 	--enable-pubkey-ciphers="rsa dsa" \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/bin $(2)/bin $(1)/usr/include $(1)/usr/lib $(1)/usr/share/aclocal

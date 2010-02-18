@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -14,7 +14,8 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.berlios.de/tslib/
 
-PKG_FIXUP = libtool
+PKG_INSTALL:=1
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -31,7 +32,7 @@ define Package/tslib/description
 	Tslib is an abstraction layer for touchscreen panel events,
 	as well as a filter stack for the manipulation of those events.
 	It was created by Russell King, of arm.linux.org.uk.
-	Examples of implemented filters include jitter smoothing and the calibration transform. 
+	Examples of implemented filters include jitter smoothing and the calibration transform.
 endef
 
 ifeq ($(CONFIG_TARGET_om_gta02),y)
@@ -41,10 +42,6 @@ endif
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); ./autogen.sh );
 	$(call Build/Configure/Default, --enable-malloc0returnsnull)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
 
 define Build/InstallDev

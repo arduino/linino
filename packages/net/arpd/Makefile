@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/arpd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcap +libdnet +libevent +librt
+  DEPENDS:=+libpcap +libdnet +libevent +librt @BROKEN
   TITLE:=A daemon to fake ARP replies
   URL:=http://niels.xtdnet.nl/honeyd/
 endef

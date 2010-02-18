@@ -35,13 +35,7 @@ TARGET_CFLAGS := \
 	-I$(STAGING_DIR)/usr/include \
 	$(TARGET_CFLAGS)
 
-define Build/Compile
-	CC="$(TARGET_CC)" \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="$(TARGET_LDFLAGS)" \
-	$(MAKE) -C $(PKG_BUILD_DIR)/src \
-		all
-endef
+MAKE_PATH:=src
 
 define Package/umurmur/install
 	$(INSTALL_DIR) $(1)/usr/bin

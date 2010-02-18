@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2007-2008 OpenWrt.org
+#
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mutella
 PKG_VERSION:=0.4.5
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=1a676eacf562e3b8de90493f99fe059c
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -46,10 +47,6 @@ define Build/Prepare
 	$(call Build/Prepare/Default)
 	$(SED) 's,-I$$$$(includedir),,g' $(PKG_BUILD_DIR)/{mutella,util}/Makefile.in
 	$(SED) 's,-L$$$$(libdir),,g' $(PKG_BUILD_DIR)/{mutella,util}/Makefile.in
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
 endef
 
 define Package/mutella/install

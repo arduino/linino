@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.wormulon.net/slurm/
 PKG_MD5SUM:=e68d09202b835c644f7f6b7f070f29a2
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/slurm
@@ -34,7 +36,7 @@ define Package/slurm/description
 	- it's themeable.
 endef
 
-define Build/Configure	
+define Build/Configure
 	(cd $(PKG_BUILD_DIR); touch \
 		configure.in \
 		aclocal.m4 \
@@ -49,13 +51,7 @@ define Build/Configure
 	)
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
-define Package/slurm/install	
+define Package/slurm/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/slurm $(1)/usr/bin/
 endef

@@ -15,9 +15,12 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/faac
 PKG_MD5SUM:=4c332fa23febc0e4648064685a3d4332
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+
+TARGET_CFLAGS += $(FPIC)
 
 define Package/faad2/Default
   URL:=http://www.audiocoding.com/faad2.html
@@ -70,12 +73,6 @@ define Build/Configure
 		FAAD2_CPPFLAGS="-fno-builtin-cos -fno-builtin-sin -fno-builtin-log" \
 	)
 endef
-
-TARGET_CFLAGS += $(FPIC)
-
-MAKE_FLAGS += \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include

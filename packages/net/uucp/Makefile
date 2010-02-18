@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2008 OpenWrt.org
+#
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,10 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=uucp
 PKG_VERSION:=1.07
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/u/uucp/
 PKG_MD5SUM:=
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -32,14 +35,6 @@ endef
 CONFIGURE_ARGS += \
 	--enable-static \
 	--enable-shared
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
 
 define Package/uucp/install
 	$(INSTALL_DIR) $(1)/usr/bin/

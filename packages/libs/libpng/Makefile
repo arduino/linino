@@ -15,10 +15,13 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/libpng
 PKG_MD5SUM:=2faa7f8d81e6a35beb991cb75edbf056
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
+
+TARGET_CFLAGS += $(FPIC)
 
 define Package/libpng
   SECTION:=libs
@@ -34,18 +37,6 @@ define Build/Configure
 		--enable-static \
 		--with-zlib="$(STAGING_DIR)/usr" \
 	)
-endef
-
-TARGET_CFLAGS += $(FPIC)
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
-define Host/Install
-	$(MAKE) -C "$(HOST_BUILD_DIR)" install
 endef
 
 define Build/InstallDev

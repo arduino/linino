@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://software.uninett.no/radsecproxy/
 PKG_MD5SUM:=565b389268d906c3b465f63750938667
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/radsecproxy
@@ -31,12 +33,6 @@ endef
 
 CONFIGURE_ARGS+= \
 	--with-ssl="$(STAGING_DIR)/usr"
-
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Package/radsecproxy/install
 	$(INSTALL_DIR) $(1)/usr/sbin/

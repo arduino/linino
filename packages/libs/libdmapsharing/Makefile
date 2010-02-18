@@ -19,12 +19,14 @@ PKG_MD5SUM:=11839bcf9aac8f1de5e101d13e9e8422
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libdmapsharing-$(PKG_VERSION)
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_CFLAGS+= \
+TARGET_CFLAGS+= \
 	-I$(STAGING_DIR)/usr/lib/libintl/include
 
-EXTRA_LDFLAGS+= \
+TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib
 
@@ -38,12 +40,6 @@ endef
 
 define Package/libdmapsharing/decription
   Libdmapsharing is a DMAP library implementation in C
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Build/InstallDev

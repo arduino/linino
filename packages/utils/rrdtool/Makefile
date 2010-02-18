@@ -21,7 +21,8 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_python-rrd \
 	CONFIG_PACKAGE_rrdcgi \
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
@@ -96,7 +97,7 @@ endif
 
 define Build/Compile
 	$(if $(Build/Compile/PyMod),,@echo Python packaging code not found.; false)
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
+	$(call Build/Compile/Default)
 endef
 
 define Build/InstallDev

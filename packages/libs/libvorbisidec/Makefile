@@ -15,7 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/libv/libvorbisidec/
 PKG_MD5SUM:=bc617d4af1cd74b38d7c51451dd6eff0
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -41,12 +42,6 @@ define Build/Configure
 		--enable-shared \
 		--enable-static \
 	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Build/InstallDev

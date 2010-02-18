@@ -14,7 +14,9 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://matchbox-project.org/sources/$(PKG_NAME)/$(PKG_VERSION)
+
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
@@ -37,7 +39,7 @@ define Build/Compile
 		LIBMB_LIBS="$(TARGET_LDFLAGS) -lfontconfig -lXrender \
 		-lz -lexpat -lfreetype -lXft -lmb -lX11 -lXext -lXau -lXdmcp \
 		-lpng12" \
-		all install 
+		all
 endef
 
 define Package/matchbox-window-manager/install
@@ -50,7 +52,7 @@ define Package/matchbox-window-manager/install
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/* \
 		$(1)/usr/bin/
-	
+
 	$(INSTALL_DIR) $(1)/usr/share/{matchbox,themes}
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/share/matchbox/* \

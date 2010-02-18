@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2009 OpenWrt.org
+#
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,11 +8,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ekg
 PKG_VERSION:=1.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ekg.chmurka.net/
 PKG_MD5SUM:=2aa92b56517fdf09d75519a105772b74
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -38,12 +40,6 @@ CONFIGURE_ARGS+= \
 CONFIGURE_VARS+= \
 	CFLAGS="$$$$CFLAGS $(TARGET_CPPFLAGS)" \
 	CFLAGS_LIBGADU="$$$$CFLAGS $(TARGET_CPPFLAGS)" \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Package/ekg/install
 	$(INSTALL_DIR) $(1)/usr/bin

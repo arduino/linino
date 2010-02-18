@@ -19,6 +19,8 @@ PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
+TARGET_CFLAGS += $(FPIC)
+
 define Package/libyaml
   SUBMENU:=Python
   SECTION:=lang

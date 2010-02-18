@@ -82,7 +82,7 @@ define Build/Configure
 		--disable-sunaudio \
 		--without-x \
 	)
-	mkdir -p $(PKG_BUILD_DIR)/bin
+	$(INSTALL_DIR) $(PKG_BUILD_DIR)/bin
 	touch $(PKG_BUILD_DIR)/bin/gtkdoc-rebase
 	chmod +x $(PKG_BUILD_DIR)/bin/gtkdoc-rebase
 endef

@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ngircd.barton.de/pub/ngircd/
 PKG_MD5SUM:=c183a85eba6fe51255983848f099c8ae
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ngircd
@@ -34,16 +36,6 @@ endef
 
 define Package/ngircd/conffiles
 /etc/ngircd.conf
-endef
-
-define Build/Configure
-	$(call Build/Configure/Default)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Package/ngircd/install

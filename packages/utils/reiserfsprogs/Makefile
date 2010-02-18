@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=@KERNEL/linux/utils/fs/reiserfs/
 PKG_MD5SUM:=bc00c7c4e047902575dc4e1c64ab3ba4
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,12 +31,6 @@ endef
 define Package/reiserfsprogs/description
 	This package contains utilities to create, check,
 	resize, and debug ReiserFS filesystems.
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Package/reiserfsprogs/install

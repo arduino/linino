@@ -53,12 +53,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libargtable2.{a,so*} $(1)/usr/lib/
 endef
 
-define Build/UninstallDev
-	rm -rf \
-	$(STAGING_DIR)/usr/include/argtable2.h \
-	$(STAGING_DIR)/usr/lib/libargtable2.{a,so*}
-endef
-
 define Package/argtable/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libargtable2.so.* $(1)/usr/lib/

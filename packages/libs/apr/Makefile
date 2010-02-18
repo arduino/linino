@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=http://www.ibiblio.org/pub/mirrors/apache/apr
 PKG_MD5SUM:=7138ac64d4458eeeaa9b9aefa4e6e51b
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -40,10 +41,6 @@ CONFIGURE_VARS += \
 	apr_cv_mutex_robust_shared=no \
 	apr_cv_tcp_nodelay_with_cork=yes \
 	LDFLAGS="$$$$LDFLAGS -lpthread" \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/include/apr-1 $(1)/usr/lib $(1)/usr/lib/pkgconfig $(1)/usr/share/build-1

@@ -27,7 +27,7 @@ define Package/io/description
 endef
 
 define Build/Prepare
-	mkdir -p $(PKG_BUILD_DIR)
+	$(INSTALL_DIR) $(PKG_BUILD_DIR)
 	$(CP) ./src/* $(PKG_BUILD_DIR)/
 endef
 

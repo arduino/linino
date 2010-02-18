@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/wccpd
 PKG_MD5SUM:=5f15c274de61dfb88e0dbfc1ccbe6b67
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/wccpd
@@ -29,16 +31,6 @@ define Package/wccpd/description
 	It allows a router (running Linux) to redirect web traffic to a 
 	group of Squid servers using WCCP as the monitoring/controling 
 	protocol.
-endef
-
-define Build/Configure
-	$(call Build/Configure/Default)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install 
 endef
 
 define Package/wccpd/install

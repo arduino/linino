@@ -17,7 +17,11 @@ PKG_SOURCE_URL:=http://www.tinc-vpn.org/packages \
 	http://www.mirrors.wiretapped.net/security/network-security/tinc/
 PKG_MD5SUM:=ee0b1a3366c6e379cae34be6fa5dcb15
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
+
+TARGET_CFLAGS+=-std=gnu99
 
 define Package/tinc
   SECTION:=net
@@ -39,12 +43,6 @@ define Build/Configure
 		--with-zlib="$(STAGING_DIR)/usr" \
 		--with-lzo-include="$(STAGING_DIR)/usr/include/lzo" \
 	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Package/tinc/install

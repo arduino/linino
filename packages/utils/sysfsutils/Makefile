@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/linux-diag
 PKG_MD5SUM:=14e7dcd0436d2f49aa403f67e1ef7ddc
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/sysfsutils
@@ -24,18 +26,6 @@ define Package/sysfsutils
   DEPENDS:=@LINUX_2_6
   TITLE:=sysfs Utilities
   URL:=http://linux-diag.sourceforge.net/Sysfsutils.html
-endef
-
-define Build/Configure
-	$(call Build/Configure/Default)
-endef
-
-define Build/Compile
-	$(MAKE) -C "$(PKG_BUILD_DIR)" \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Build/InstallDev

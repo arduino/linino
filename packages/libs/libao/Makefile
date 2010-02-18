@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.xiph.org/releases/ao/
 PKG_MD5SUM:=b92cba3cbcf1ee9bc221118a85d23dcd
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libao
@@ -39,12 +41,6 @@ CONFIGURE_ARGS += \
 	--disable-pulse
 
 TARGET_CFLAGS += $(FPIC)
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include

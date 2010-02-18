@@ -23,6 +23,8 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_quagga-unstable-isisd \
 	CONFIG_PACKAGE_quagga-unstable-ripngd
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/quagga-unstable/Default
@@ -114,12 +116,6 @@ endif
 ifneq ($(CONFIG_PACKAGE_quagga-unstable-ripngd),)
   CONFIGURE_ARGS+= --enable-ripngd
 endif
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR=$(PKG_INSTALL_DIR) \
-		all install
-endef
 
 define Package/quagga-unstable/install
 	$(INSTALL_DIR) $(1)/usr/sbin

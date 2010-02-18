@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=@SF/open1x
 PKG_MD5SUM:=75f89731b905eb8d36a52621661e1226
 
 PKG_BUILD_DEPENDS:=PACKAGE_kmod-madwifi:madwifi
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -55,13 +56,7 @@ define Build/Prepare
 	);
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
-define Package/xsupplicant/install	
+define Package/xsupplicant/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/xsupplicant.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/bin

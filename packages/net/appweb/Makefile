@@ -49,8 +49,6 @@ define Package/appweb/description
 endef
 
 define Build/Prepare
-	rm -rf $(PKG_BUILD_DIR)
-	mkdir -p $(PKG_BUILD_DIR)
 	tar xzf "$(DL_DIR)/$(PKG_SOURCE)" --strip-components 1 -C "$(PKG_BUILD_DIR)"
 endef
 

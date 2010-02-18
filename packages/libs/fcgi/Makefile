@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=http://www.fastcgi.com/dist/
 PKG_MD5SUM:=d15060a813b91383a9f3c66faf84867e
 
 PKG_FIXUP:=libtool-ucxx
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -43,10 +44,6 @@ CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClic++" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
 	LIBS="-nodefaultlibs -luClibc++ -lm" \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include

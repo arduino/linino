@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://nixgeneration.com/~jaime/netdiscover/releases/
 PKG_MD5SUM:=0919227a91ecaeeb2443cff249417be2
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/netdiscover
@@ -28,12 +30,6 @@ endef
 CONFIGURE_VARS+= \
 	CPPFLAGS="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/lib/libnet-1.1.x/include" \
 	LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib/libnet-1.1.x/lib" \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Package/netdiscover/install
 	$(INSTALL_DIR) $(1)/usr/sbin

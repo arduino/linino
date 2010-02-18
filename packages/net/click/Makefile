@@ -76,8 +76,6 @@ endef
 
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(CONF_OPTS) \
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(BUILDOPTS) \

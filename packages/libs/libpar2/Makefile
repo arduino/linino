@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=@SF/parchive
 PKG_MD5SUM:=94c6df4e38efe08056ecde2a04e0be91
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,14 +34,6 @@ endef
 CONFIGURE_ARGS += \
 	--disable-static \
 	--disable-nls \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/libpar2

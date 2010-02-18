@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006,2007 OpenWrt.org
+#
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libosip2
 PKG_VERSION:=3.1.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/osip
 PKG_MD5SUM:=7eb305608256ac2a7a27b66ce52627c8
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,17 +34,16 @@ endef
 
 TARGET_CFLAGS += $(FPIC)
 
-CONFIGURE_ARGS+= \
-	--enable-shared \
-	--enable-static \
-	--disable-debug \
-	--disable-trace \
-	--enable-pthread \
-	--enable-semaphore \
-	--enable-ntimer \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--enable-static \
+		--disable-debug \
+		--disable-trace \
+		--enable-pthread \
+		--enable-semaphore \
+		--enable-ntimer \
+	)
 endef
 
 define Build/InstallDev

@@ -35,6 +35,8 @@ define Package/python-egenix-mx/description
  python packages.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 define Build/Compile
 	$(if $(Build/Compile/PyMod),,@echo Python packaging code not found.; false)
 	$(call Build/Compile/PyMod,., \

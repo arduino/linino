@@ -15,7 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= @SF/$(PKG_NAME)
 PKG_MD5SUM:=e3ecacba67a91b6ea3c1072ba6c5a0b4
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -39,10 +40,6 @@ define Package/wifidog/conffiles
 /etc/wifidog.conf
 endef
 
-MAKE_FLAGS += \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install
-	
 define Package/wifidog/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/init.d/wifidog $(1)/usr/bin/wifidog-init

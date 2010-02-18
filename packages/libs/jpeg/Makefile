@@ -62,8 +62,7 @@ define Build/Prepare
 endef
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)/usr/{include,lib,bin,man/man1}
+	$(INSTALL_DIR) $(PKG_INSTALL_DIR)/usr/{include,lib,bin,man/man1}
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		LIBTOOL="./libtool --tag=CC" \
 		prefix="$(PKG_INSTALL_DIR)/usr" \

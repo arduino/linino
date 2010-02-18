@@ -28,7 +28,7 @@ endef
 define Build/Configure
 endef
 
-LIBAIO_CFLAGS:=-nostdlib -nostartfiles -I. $(TARGET_CFLAGS) $(TARGET_CPPFLAGS)
+LIBAIO_CFLAGS:=-nostdlib -nostartfiles -I. $(TARGET_CFLAGS) $(TARGET_CPPFLAGS) $(FPIC)
 
 TARGET_CFLAGS += $(FPIC)
 

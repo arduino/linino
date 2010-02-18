@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://qolsr.lri.fr/code/
 PKG_MD5SUM:=650286fc2ea3e13c246d233aaa46f2a4
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/qolyester
@@ -32,13 +34,8 @@ define Package/qolyester/description
 endef
 
 # uses GNU configure
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
-define Package/qolyester/install	
+define Package/qolyester/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/qolsrd $(1)/usr/bin/
 endef

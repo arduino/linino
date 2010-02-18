@@ -19,11 +19,11 @@ PKG_FIXUP:=libtool
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
-EXTRA_CFLAGS+= \
+TARGET_CFLAGS+= \
 	-I$(STAGING_DIR)/usr/lib/libintl/include/ \
 	-I$(STAGING_DIR)/usr/lib/libiconv/include/
 
-EXTRA_LDFLAGS+= \
+TARGET_LDFLAGS+= \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 

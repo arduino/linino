@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=http://www.packetfactory.net/libnet/dist/deprecated/
 PKG_MD5SUM:=ddf53f0f484184390e8c2a1bd0853667
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Libnet-$(PKG_VERSION)
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -53,14 +54,6 @@ define Build/Configure
 		configure \
 	);
 	$(call Build/Configure/Default)
-endef
-
-define Build/Compile
-	# pass CFLAGS again to override -O2 set by configure
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Build/InstallDev

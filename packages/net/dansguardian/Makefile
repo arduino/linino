@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dansguardian.org/downloads/2/Stable
 PKG_MD5SUM:=0987a1c9bfbdf398118386f10279611a
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/dansguardian
@@ -44,12 +46,6 @@ define Build/Configure
 		--with-proxygroup=root \
 		--disable-pcre \
 	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Package/dansguardian/install

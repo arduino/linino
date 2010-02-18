@@ -26,8 +26,6 @@ define Package/pcmciautils
 endef
 
 define Build/Compile
-	rm -rf "$(PKG_INSTALL_DIR)"
-	mkdir -p "$(PKG_INSTALL_DIR)"
 	$(call Build/Compile/Default, \
 		LD="$(TARGET_CC)" UDEV=false \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) \

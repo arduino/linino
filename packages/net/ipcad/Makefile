@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/ipcad
 PKG_MD5SUM:=125605249958894148ec26d3c88189f5
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ipcad
@@ -49,13 +51,7 @@ CONFIGURE_VARS += \
 	ac_cv_header_linux_netfilter_ipv4_ip_queue_h=no \
 	ac_cv_header_linux_netfilter_ipv4_ipt_ULOG_h=no \
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
-define Package/ipcad/install	
+define Package/ipcad/install
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/ipcad.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/bin

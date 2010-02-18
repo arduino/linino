@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=madplay
 PKG_VERSION:=0.15.2b
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/mad \
 	ftp://ftp.mars.org/pub/mpeg/
 PKG_MD5SUM:=6814b47ceaa99880c754c5195aa1aac1
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -49,13 +51,7 @@ define Build/Configure
 	)
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
-define Package/madplay/install	
+define Package/madplay/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/madplay $(1)/usr/bin/
 endef

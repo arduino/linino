@@ -15,7 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://iksemel.googlecode.com/files/
 PKG_MD5SUM:=532e77181694f87ad5eb59435d11c1ca
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,17 +36,18 @@ define Package/libiksemel/description
 endef
 
 TARGET_CFLAGS += $(FPIC)
+TARGET_LDFLAGS += \
+	-Wl,-rpath-link,$(STAGING_DIR)/usr/lib \
+	-lgnutls -lgcrypt -lgpg-error
 
-CONFIGURE_ARGS += \
-	--enable-shared \
-	--enable-static \
-	--with-libgnutls-prefix="$(STAGING_DIR)/usr" \
-
-CONFIGURE_VARS += \
-	LIBS="$(TARGET_LDFLAGS) -Wl,-rpath-link,$(STAGING_DIR)/usr/lib -lgnutls -lgcrypt -lgpg-error" \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--enable-static \
+		--with-libgnutls-prefix="$(STAGING_DIR)/usr" \
+		, \
+		LIBS="$(TARGET_LDFLAGS)" \
+	)
 endef
 
 define Build/InstallDev

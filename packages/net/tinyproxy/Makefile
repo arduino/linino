@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.banu.com/pub/tinyproxy/1.8/
 PKG_MD5SUM:=09843d47828261394d0a30af0b058997
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/tinyproxy
@@ -29,15 +31,12 @@ define Package/tinyproxy/conffiles
 /etc/config/tinyproxy
 endef
 
-CONFIGURE_ARGS+= \
-	--enable-filter \
-	--enable-transparent \
-	--enable-regexcheck=no \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--enable-filter \
+		--enable-transparent \
+		--enable-regexcheck=no \
+	)
 endef
 
 define Package/tinyproxy/install

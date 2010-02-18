@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=http://www.mega-nerd.com/SRC/
 PKG_MD5SUM:=ad093e60ec44f0a60de8e29983ddbc0f
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,12 +37,6 @@ TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
 	--disable-fftw \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)

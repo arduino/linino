@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/miau
 PKG_MD5SUM:=cbce4182d66430a965a5fff26738ce3f
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/miau
@@ -39,12 +41,8 @@ CONFIGURE_ARGS += \
 	--enable-privlog \
 	--enable-onconnect
 
-MAKE_FLAGS += \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install
-
-define Package/miau/install	
-	$(INSTALL_DIR) $(1)/usr/bin  	
+define Package/miau/install
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DIR) $(1)/etc/default

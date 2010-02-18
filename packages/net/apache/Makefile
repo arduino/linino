@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apache
 PKG_VERSION:=2.2.14
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_SOURCE_NAME:=httpd
 
 PKG_SOURCE:=$(PKG_SOURCE_NAME)-$(PKG_VERSION).tar.bz2
@@ -18,6 +18,8 @@ PKG_SOURCE_URL:=http://ftp.uni-erlangen.de/pub/mirrors/apache/httpd/ \
 PKG_MD5SUM:=a5226203aaf97e5b941c41a71c112704
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_NAME)-$(PKG_VERSION)
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -101,12 +103,6 @@ define Build/Configure
 		ap_cv_void_ptr_lt_long=no \
 		logfiledir="/var/log" \
 	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Build/InstallDev

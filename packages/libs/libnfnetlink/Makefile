@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnfnetlink/ \
 	http://mirrors.evolva.ro/netfilter.org/libnfnetlink/
 PKG_MD5SUM:=016fdec8389242615024c529acc1adb8
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libnfnetlink
@@ -38,13 +40,6 @@ TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += \
 	--enable-static \
 	--enable-shared
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/libnfnetlink

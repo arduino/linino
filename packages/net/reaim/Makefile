@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/reaim
 PKG_MD5SUM:=647d2ab72ec454f89294accfb3182c09
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/reaim
@@ -30,15 +32,7 @@ define Package/reaim/description
 ReAIM is a proxy for file transfers with MSN/AIM.
 endef
 
-define Build/Compile	
-	$(call Build/Compile/Default, \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install \
-	)
-endef
-
-define Package/reaim/install	
+define Package/reaim/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/reaim $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d

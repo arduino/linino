@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.berlios.de/dhcpcd/
 PKG_MD5SUM:=e9100e53f64ca1f9fb0d392c3a623738
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/dhcpcd
@@ -27,14 +29,6 @@ endef
 define Package/dhcpcd/description
 	Simple configuration: supports executions of a script when the
 	IP address changes.
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		CC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		all install
 endef
 
 define Package/dhcpcd/install

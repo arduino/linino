@@ -41,8 +41,6 @@ endef
 TARGET_CFLAGS += $(FPIC)
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CROSS="$(TARGET_CROSS)" \
 		OPTFLAGS="$(TARGET_CFLAGS)" \

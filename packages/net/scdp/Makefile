@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/scdp
 PKG_MD5SUM:=7eafaf5a422e37d04715613993ed5d95
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/scdp
@@ -30,7 +32,7 @@ define Package/scdp/description
 	selected interfaces and tells the connected switch (cisco only)
 	where the host is connected.
 endef
-			
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		, \
@@ -38,12 +40,6 @@ define Build/Configure
 		LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libnet-1.0.x/lib" \
 		PATH="$(STAGING_DIR)/usr/lib/libnet-1.0.x/bin:$$$$PATH" \
 	)
-endef
-
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Package/scdp/install

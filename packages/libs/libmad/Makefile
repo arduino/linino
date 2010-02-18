@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libmad
 PKG_VERSION:=0.15.1b
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/mad \
 	ftp://ftp.mars.org/pub/mpeg/
 PKG_MD5SUM:=1be543bc30c56fb6bea1d7bf6a64e66c
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -45,17 +47,15 @@ endef
 
 TARGET_CFLAGS += $(FPIC)
 
-CONFIGURE_ARGS += \
-	--enable-shared \
-	--enable-static \
-	--enable-fpm="$(FPM)" \
-	--disable-debugging \
-	--enable-speed \
-
-MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--enable-static \
+		--enable-fpm="$(FPM)" \
+		--disable-debugging \
+		--enable-speed \
+	)
+endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include

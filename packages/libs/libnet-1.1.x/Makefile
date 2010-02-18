@@ -17,6 +17,8 @@ PKG_MD5SUM:=be845c41170d72c7db524f3411b50256
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libnet
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libnet1
@@ -53,14 +55,6 @@ define Build/Configure
 		configure \
 	);
 	$(call Build/Configure/Default)
-endef
-
-define Build/Compile
-	# pass CFLAGS again to override -O2 set by configure
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Build/InstallDev

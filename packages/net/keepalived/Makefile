@@ -50,8 +50,6 @@ CONFIGURE_VARS+= \
 	ac_cv_file_$(call acvar,$(LINUX_DIR)/net/core/link_watch.c)=yes
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		STRIP="/bin/true" \

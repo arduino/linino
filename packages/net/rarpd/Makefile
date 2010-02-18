@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.dementia.org/pub/net-tools
 PKG_MD5SUM:=04e2ca849e758d0b88c8281775ec3b58
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/rarpd
@@ -42,13 +44,7 @@ define Build/Configure
 	)
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
-define Package/rarpd/install	
+define Package/rarpd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/rarpd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/default

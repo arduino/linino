@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,11 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libid3tag
 PKG_VERSION:=0.15.1b
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/mad
 PKG_MD5SUM:=e5808ad997ba32c498803822078748c3
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -39,12 +41,6 @@ define Build/Configure
 		--disable-debugging \
 		--disable-profiling \
 	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Build/InstallDev

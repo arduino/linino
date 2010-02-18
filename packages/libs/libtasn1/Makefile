@@ -19,7 +19,8 @@ PKG_SOURCE_URL:=ftp://ftp.gnutls.org/pub/gnutls/libtasn1/ \
 	http://josefsson.org/gnutls/releases/libtasn1/
 PKG_MD5SUM:=a733ecdfed3517910e627d24e050979f
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -40,10 +41,6 @@ TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += \
 		--enable-shared \
 		--enable-static
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/bin

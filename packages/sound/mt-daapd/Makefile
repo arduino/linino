@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=67bef9fb14d487693b0dfb792c3f1b05
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mt-daapd
@@ -43,12 +45,6 @@ CONFIGURE_ARGS += \
 	--with-howl-includes="$(STAGING_DIR)/usr/include/howl" \
 	--with-howl-libs="$(STAGING_DIR)/usr/lib" \
 	--without-static-libs \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Package/mt-daapd/install
 	$(INSTALL_DIR) $(1)/etc

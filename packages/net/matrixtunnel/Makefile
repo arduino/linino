@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=matrixtunnel
 PKG_VERSION:=0.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://znerol.ch/files
@@ -17,7 +17,11 @@ PKG_MD5SUM:=af169751efc7d87d500716a48d74ddc5
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
+
+MAKE_PATH:=src
 
 define Package/matrixtunnel
   SECTION:=net
@@ -39,12 +43,6 @@ define Build/Configure
 		--without-libintl-prefix \
 		--with-matrixssl-src="$(BUILD_DIR)/matrixssl" \
 	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)/src \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Package/matrixtunnel/install

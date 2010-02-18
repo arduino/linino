@@ -15,6 +15,8 @@ PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.bz2
 PKG_MD5SUM:=f03446105ed043cd5dbd1ab95484d27f
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/updatedd
@@ -101,10 +103,6 @@ define Package/updatedd-mod-zoneedit
   DEPENDS:=updatedd
   TITLE:=zoneedit.com
 endef
-
-MAKE_FLAGS += \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); aclocal && autoconf && automake )

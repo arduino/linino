@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://alioth.debian.org/frs/download.php/3080
 PKG_MD5SUM:=727dc7eb4d560f81fe70a766a96de970
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ccid
@@ -35,12 +37,6 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 	  --enable-usbdropdir=/usr/lib/pcsc/drivers \
 	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Package/ccid/install

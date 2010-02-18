@@ -15,7 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.libgd.org/releases
 PKG_MD5SUM:=6c6c3dbb7bf079e0bb5fbbfd3bb8a71c
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -51,12 +52,6 @@ TARGET_CFLAGS += $(FPIC)
 define Build/Configure
 	( cd $(PKG_BUILD_DIR); aclocal; libtoolize; autoreconf; );
 	$(call Build/Configure/Default)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Build/InstallDev

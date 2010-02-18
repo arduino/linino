@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.sane-project.org/pub/sane/$(PKG_NAME)-$(PKG_VERSION)/
 PKG_MD5SUM:=a0cfdfdebca2feb4f2ba5d3418b15a42
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/sane-backends/Default
@@ -79,12 +81,6 @@ CONFIGURE_ARGS+= \
 define Build/Configure
 	mkdir -p $(PKG_BUILD_DIR)/backend/.libs
 	$(Build/Configure/Default)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Package/sane-backends/conffiles

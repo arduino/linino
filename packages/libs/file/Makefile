@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -14,6 +14,8 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.astron.com/pub/file/
 PKG_MD5SUM:=74cd5466416136da30a4e69f74dbc7a0
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -40,22 +42,22 @@ define Package/file/description
  that succeeds causes the file type to be printed.
 
  Starting with version 4, the file command is not much more than
- a wrapper around the "magic" library. 
+ a wrapper around the "magic" library.
 endef
+
+MAKE_PATH:=src
 
 TARGET_CFLAGS += $(FPIC)
 
-CONFIGURE_ARGS += \
-	--enable-shared \
-	--enable-static \
-	--disable-rpath \
-	--without-libiconv-prefix \
-	--without-libintl-prefix \
-
-MAKE_FLAGS += \
-	-C $(PKG_BUILD_DIR)/src \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install \
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--enable-static \
+		--disable-rpath \
+		--without-libiconv-prefix \
+		--without-libintl-prefix \
+	)
+endef
 
 define Build/Prepare
 	$(call Build/Prepare/Default)

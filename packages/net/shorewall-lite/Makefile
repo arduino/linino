@@ -43,8 +43,6 @@ define Package/shorewall-lite/conffiles
 endef
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	PREFIX=$(PKG_INSTALL_DIR) $(PKG_BUILD_DIR)/install.sh
 endef
 

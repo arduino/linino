@@ -67,8 +67,6 @@ define Build/Configure
 endef
 
 define Build/Compile
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		DSTROOT="$(PKG_INSTALL_DIR)" \

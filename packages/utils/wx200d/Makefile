@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/wx200d
 PKG_MD5SUM:=0f90c099dddcdd46ac568d707822ec4c
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/wx200d
@@ -33,13 +35,7 @@ endef
 
 # uses GNU configure
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
-define Package/wx200d/install	
+define Package/wx200d/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP)	$(PKG_INSTALL_DIR)/usr/bin/wx200 \
 		$(PKG_INSTALL_DIR)/usr/bin/wxstdout \

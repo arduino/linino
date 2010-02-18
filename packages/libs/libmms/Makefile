@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2009 OpenWrt.org
+#
+# Copyright (C) 2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,8 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://code.launchpad.net/libmms/trunk/$(PKG_VERSION)/+download/
 PKG_MD5SUM:=cf83053ec891f14e73a04c84d9de08ee
 
-PKG_FIXUP:= libtool
-PKG_INSTALL:= 1
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -42,12 +42,6 @@ define Build/Configure
 	$(call Build/Configure/Default)
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libmms $(1)/usr/include/
@@ -55,14 +49,6 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmms.{a,so*} $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig $(1)/usr/lib/
 endef
-
-define Build/UninstallDev
-	rm -rf \
-		$(STAGING_DIR)/usr/include/libmms \
-		$(STAGING_DIR)/usr/lib/libmms.{a,so*} \
-		$(STAGING_DIR)/usr/lib/pkgconfig/libmms.pc
-endef
-
 
 define Package/libmms/install
 	$(INSTALL_DIR) $(1)/usr/lib

@@ -15,7 +15,11 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
 PKG_MD5SUM:=5988e7aeb0ae4dac8d83561265984cc9
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
+
+TARGET_CFLAGS += $(FPIC)
 
 define Package/libpopt
   SECTION:=libs
@@ -29,14 +33,6 @@ define Build/Configure
 		--enable-shared \
 		--enable-static \
 	)
-endef
-
-TARGET_CFLAGS += $(FPIC)
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Build/InstallDev

@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://openvpn.net/release @SF/openvpn
 PKG_MD5SUM:=452a83326ae198cf961e9ae02539c8fb
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/openvpn
@@ -57,12 +59,6 @@ define Build/Configure
 		,\
 		ac_cv_func_epoll_create=no \
 	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Package/openvpn/install

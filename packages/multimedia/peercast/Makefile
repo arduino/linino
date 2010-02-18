@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,11 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=peercast
 PKG_VERSION:=0.1214
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.cti.ecp.fr/~beauxir5/peercast
 PKG_MD5SUM:=4e8449cde7135ad97f788e67e1bd64ee
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -44,13 +46,7 @@ CONFIGURE_VARS += \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
 	LIBS="-nodefaultlibs -luClibc++ -lpthread" \
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
-define Package/peercast/install	
+define Package/peercast/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/peercast $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/share/peercast/html

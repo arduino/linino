@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/pepperspot
 PKG_MD5SUM:=a7ac2c8f93799f7d23d9ad2a0841fe4a
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/pepperspot
@@ -38,12 +40,6 @@ define Package/pepperspot/conffiles
 endef
 
 # uses GNU configure
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Package/pepperspot/install
 	$(INSTALL_DIR) $(1)/etc/init.d

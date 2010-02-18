@@ -17,6 +17,8 @@ PKG_SOURCE_PROTO:=git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=262f56eb307f9a0d4bee04d38e0adde7e4257d87
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/hasciicam
@@ -31,13 +33,7 @@ endef
 CONFIGURE_VARS += \
 	LIBS="-lncurses" \
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
-define Package/hasciicam/install	
+define Package/hasciicam/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/hasciicam $(1)/usr/bin/
 endef

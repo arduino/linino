@@ -16,6 +16,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/ipsec-tools
 PKG_MD5SUM:=821bd84e8d4ad5a93bf594b8b3d66e1e
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ipsec-tools
@@ -58,12 +60,6 @@ define Build/Configure
 endef
 
 # override CFLAGS holding "-Werror" that break builds on compile warnings
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		all install
-endef
 
 define Package/ipsec-tools/install
 	$(INSTALL_DIR) $(1)/etc

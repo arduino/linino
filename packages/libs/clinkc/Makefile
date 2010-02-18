@@ -18,6 +18,7 @@ PKG_MD5SUM:=4c8ac54a15da47203a86daf77fbc2664
 PKG_BUILD_DIR:=$(BUILD_DIR)/CyberLinkC
 
 PKG_BUILD_DEPENDS:=libexpat
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -39,9 +40,7 @@ TARGET_CFLAGS += $(FPIC)
 
 define Build/Compile
 	chmod +x $(PKG_BUILD_DIR)/config/install-sh
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+	$(call Build/Compile/Default)
 endef
 
 define Build/InstallDev

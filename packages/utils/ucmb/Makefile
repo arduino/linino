@@ -42,7 +42,6 @@ define KernelPackage/ucmb/description
 endef
 
 define Build/Prepare
-	mkdir -p $(PKG_BUILD_DIR)
 	$(CP) ./driver/* $(PKG_BUILD_DIR)/
 endef
 

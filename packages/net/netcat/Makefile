@@ -8,6 +8,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=0a29eff1736ddb5effd0b1ec1f6fe0ef
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/netcat
@@ -27,12 +29,6 @@ define Build/Configure
 		--disable-rpath \
 		--with-included-getopt \
 	)
-endef
-
-define Build/Compile
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-	all install
 endef
 
 define Package/netcat/install

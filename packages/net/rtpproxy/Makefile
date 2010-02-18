@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://b2bua.org/chrome/site/
 PKG_MD5SUM:=b0b5d6cdce3f17cdbbac473c11a2d0e5
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/rtpproxy
@@ -26,12 +28,6 @@ define Package/rtpproxy
 endef
 
 # uses GNU configure
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Package/rtpproxy/install
 	$(INSTALL_DIR) $(1)/usr/bin

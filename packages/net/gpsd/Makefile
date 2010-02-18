@@ -16,8 +16,9 @@ PKG_SOURCE_URL:=http://download.berlios.de/gpsd/
 PKG_MD5SUM:=a23c728b8734c542d559c485857238d2
 
 PKG_FIXUP:=libtool-ucxx
+PKG_INSTALL:=1
 
-PKG_BUILD_DEPENDS=libncurses
+PKG_BUILD_DEPENDS:=libncurses
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -48,12 +49,6 @@ CONFIGURE_VARS += \
 	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib" \
 	LIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
 	CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include

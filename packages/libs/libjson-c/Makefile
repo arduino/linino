@@ -15,7 +15,11 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://oss.metaparadigm.com/json-c/
 PKG_MD5SUM:=3a13d264528dcbaf3931b0cede24abae
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
+
+TARGET_CFLAGS += $(FPIC)
 
 define Package/libjson
   SECTION:=libs
@@ -26,14 +30,6 @@ endef
 
 define Package/libjson/description
  This package contains a library for javascript object notation backends.
-endef
-
-TARGET_CFLAGS += $(FPIC)
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Build/InstallDev

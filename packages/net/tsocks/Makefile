@@ -16,6 +16,8 @@ PKG_MD5SUM:=51caefd77e5d440d0bbd6443db4fc0f8
 PKG_SOURCE_URL:=@SF/tsocks
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)beta5.tar.gz
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/tsocks
@@ -32,13 +34,6 @@ endef
 define Build/Configure
 	$(call Build/Configure/Default,\
                   --with-conf=/etc/tsocks.conf \
-	)
-endef
-
-define Build/Compile
-	$(call Build/Compile/Default,\
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install \
 	)
 endef
 

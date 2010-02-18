@@ -60,7 +60,7 @@ endef
 define Build/microperl/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) -f Makefile.micro \
 		CC="$(TARGET_CC)" OPTIMIZE="$(TARGET_CFLAGS)"
-	mkdir -p $(PKG_INSTALL_DIR)/usr/bin/
+	$(INSTALL_DIR) $(PKG_INSTALL_DIR)/usr/bin/
 	$(CP) $(PKG_BUILD_DIR)/microperl $(PKG_INSTALL_DIR)/usr/bin/
 endef
 

@@ -13,7 +13,9 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=8aea6f3bb0dc9fdb52ed3f0e9d84fa79
-PKG_FIXUP = libtool
+
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -194,25 +196,19 @@ define Build/Configure
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="$(TARGET_CPPFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		lt_sys_lib_dlsearch_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
-		lt_sys_lib_search_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
+		LDFLAGS="$(TARGET_LDFLAGS) -Wl,-rpath-link=$(STAGING_DIR)/usr/lib -Wl,-rpath-link=$(TOOLCHAIN_DIR)/usr/lib" \
+		lt_cv_sys_lib_dlsearch_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
+		lt_cv_sys_lib_search_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
 		shrext_cmds=".so" \
 		./configure \
 			$(CONFIGURE_ARGS) \
 	);
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
 define Build/InstallDev
-	mkdir -p $(STAGING_DIR)/usr/include
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/include
 	$(CP)	$(PKG_INSTALL_DIR)/usr/include/{owcapi,owfs_config}.h $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
 	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/libow-*.so* $(PKG_INSTALL_DIR)/usr/lib/libowcapi-*.so* $(STAGING_DIR)/usr/lib/
 endef
 

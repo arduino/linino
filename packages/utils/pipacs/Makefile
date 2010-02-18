@@ -20,19 +20,18 @@ define Package/pipacs
   TITLE:=UNIX socket accounting/wiewer program
 endef
 
-define Build/Prepare	
-	mkdir -p $(PKG_BUILD_DIR)
+define Build/Prepare
 	$(CP) ./src/* $(PKG_BUILD_DIR)
 endef
 
-define Build/Compile	
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
 		all
 endef
 
-define Package/pipacs/install	
+define Package/pipacs/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pipacs $(1)/usr/bin/
 endef

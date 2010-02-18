@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.bitwizard.nl/mtr/
 PKG_MD5SUM:=23baca52d0922c2ecba7eba05317868c
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mtr
@@ -51,12 +53,6 @@ define Build/Configure
 		, \
 		ac_cv_lib_resolv_res_mkquery=yes \
 	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Package/mtr/install

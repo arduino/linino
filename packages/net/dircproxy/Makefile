@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dircproxy.googlecode.com/files/
 PKG_MD5SUM:=4fe2e82619c7b575599bfb236adbd872
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/dircproxy
@@ -26,12 +28,6 @@ define Package/dircproxy
 endef
 
 # uses Build/Configure/Default
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Package/dircproxy/install
 	$(INSTALL_DIR) $(1)/usr/bin
