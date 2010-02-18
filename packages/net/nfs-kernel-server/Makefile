@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nfs-kernel-server
 PKG_VERSION:=1.1.5
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 PKG_MD5SUM:=2848072a5e53840b9bc520fbb6782b57
 
 PKG_SOURCE_URL:=@SF/nfs
