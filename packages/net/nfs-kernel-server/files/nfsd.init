@@ -12,10 +12,11 @@ start() {
 	mkdir -p $LOCK_D
 	touch $NFS_D/rmtab
 
-	/usr/sbin/rpc.statd
+        sysctl -w fs.nfs.nlm_tcpport=32777 fs.nfs.nlm_udpport=32777 > /dev/null
+	/usr/sbin/rpc.statd -p 32778 -o 32779
 	/usr/sbin/exportfs -r
 	/usr/sbin/rpc.nfsd
-	/usr/sbin/rpc.mountd
+	/usr/sbin/rpc.mountd -p 32780
 }
 
 stop() {
