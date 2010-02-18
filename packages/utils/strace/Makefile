@@ -11,8 +11,7 @@ include $(INCLUDE_DIR)/kernel.mk
 PKG_NAME:=strace
 PKG_RELEASE:=3
 
-OLD_KERNEL=$(findstring y,$(foreach v,21 25,$(CONFIG_LINUX_2_6_$(v))))
-ifneq ($(OLD_KERNEL),)
+ifeq ($(CONFIG_LINUX_2_6_25),y)
   PKG_VERSION:=4.5.16
   PKG_MD5SUM:=77f66d09aa82981bb6d65fa19a2c1ba9
   PATCH_DIR:=patches-4.5.16
@@ -24,15 +23,10 @@ endif
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-CONFIGURE_VARS += \
-	ac_cv_header_linux_netlink_h=yes
-
-TARGET_CFLAGS += \
-	-I$(LINUX_DIR)/include
 
 define Package/strace
   SECTION:=utils
@@ -48,6 +42,9 @@ endef
 
 CONFIGURE_VARS += \
 	ac_cv_header_linux_netlink_h=yes
+
+TARGET_CFLAGS += \
+	-I$(LINUX_DIR)/include
 
 define Package/strace/install
 	$(INSTALL_DIR) $(1)/usr/bin
