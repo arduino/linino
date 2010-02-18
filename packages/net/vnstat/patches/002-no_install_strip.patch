@@ -1,7 +1,6 @@
-diff -urN vnstat-1.10/Makefile vnstat-1.10.new/Makefile
---- vnstat-1.10/Makefile	2009-08-01 21:23:43.000000000 +0200
-+++ vnstat-1.10.new/Makefile	2010-01-03 21:51:31.000000000 +0100
-@@ -54,11 +54,11 @@
+--- a/Makefile
++++ b/Makefile
+@@ -54,11 +54,11 @@ install:
  
  # install everything else
  	install -d -m 755 $(BIN) $(SBIN) $(MAN)/man1 $(MAN)/man5 $(DESTDIR)/var/lib/vnstat
@@ -17,7 +16,7 @@ diff -urN vnstat-1.10/Makefile vnstat-1.10.new/Makefile
  	fi
  
  # update man pages, gzip it if previous version was done so	
-@@ -127,12 +127,12 @@
+@@ -127,12 +127,12 @@ bsdinstall:
  
  # install binaries
  	install -dm 755 $(DESTDIR)/var/db/vnstat
