@@ -35,6 +35,7 @@ define Build/Configure
 		--without-x \
 		--without-x11-driver \
 		--without-slang-driver \
+		--with-ncurses=$(STAGING_DIR)/usr \
 	)
 endef
 
