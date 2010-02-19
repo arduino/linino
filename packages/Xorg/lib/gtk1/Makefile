@@ -46,6 +46,9 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(2)/bin
 	mv $(1)/usr/bin/gtk-config $(2)/bin/
 	$(SED) "s,libdirs=-L.*,libdirs=,g" $(2)/bin/gtk-config
+	$(SED) \
+		's,^\(prefix\|exec_prefix\)=.*,\1="$(STAGING_DIR)/usr",g' \
+		$(2)/bin/gtk-config
 endef
 
 $(eval $(call BuildPackage,gtk1))
