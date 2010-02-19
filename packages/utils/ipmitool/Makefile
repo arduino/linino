@@ -1,15 +1,17 @@
-# Copyright (C) 2008, OpenWrt.org
+# Copyright (C) 2008-2010, OpenWrt.org
 #
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ipmitool
 PKG_VERSION:=1.8.11
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/ipmitool
 PKG_MD5SUM:=1d0da20add7388d64c549f95538b6858
+
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 

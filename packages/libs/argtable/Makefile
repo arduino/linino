@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=argtable
 PKG_VERSION:=2.11
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)2-11.tar.gz
 PKG_SOURCE_URL:=@SF/argtable
 PKG_MD5SUM:=6be6bdb5395b2de8063698f83db61791
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)2-11
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 

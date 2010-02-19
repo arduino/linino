@@ -5,13 +5,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=curlftpfs
 PKG_VERSION:=0.9.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/curlftpfs
 PKG_MD5SUM:=b452123f755114cd4461d56c648d9f12
 
 PKG_BUILD_DEPENDS:=libiconv
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 

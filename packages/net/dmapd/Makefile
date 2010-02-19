@@ -9,15 +9,19 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dmapd
 PKG_VERSION:=0.0.21
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.flyn.org/projects/dmapd
 PKG_MD5SUM:=f9ce3f4222dc7918257d3a4e53b7a462
 
+PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+
+TARGET_LDFLAGS+=\
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
 
 define Package/dmapd
   SECTION:=net

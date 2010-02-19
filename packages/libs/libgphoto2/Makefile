@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=@SF/gphoto
 PKG_MD5SUM:=7753f17dff15702466337aab05209a71
 
 PKG_FIXUP:=libtool
+PKG_LIBTOOL_PATHS:=. libgphoto2_port
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

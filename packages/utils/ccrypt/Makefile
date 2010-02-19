@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2009 OpenWrt.org
+#
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,11 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ccrypt
 PKG_VERSION:=1.9
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/ccrypt
 PKG_MD5SUM:=c3f78019d7a166dd66f1d4b1390c62c2
+
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 

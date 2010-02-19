@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006-2009 OpenWrt.org
+#
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,15 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeradius
 PKG_VERSION:=1.1.8
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/radius/old/ \
 	http://freeradius.portal-to-web.de/ \
 	ftp://ftp.uk.freeradius.org/pub/radius/
 PKG_MD5SUM:=d367452a837bbe8d9c8731e21dc43593
+
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 

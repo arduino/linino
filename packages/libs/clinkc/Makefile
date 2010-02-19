@@ -18,6 +18,7 @@ PKG_MD5SUM:=4c8ac54a15da47203a86daf77fbc2664
 PKG_BUILD_DIR:=$(BUILD_DIR)/CyberLinkC
 
 PKG_BUILD_DEPENDS:=libexpat
+PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

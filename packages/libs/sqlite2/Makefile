@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sqlite2
 PKG_VERSION:=2.8.17
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=sqlite-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sqlite.org/
@@ -18,6 +18,7 @@ PKG_MD5SUM:=838dbac20b56d2c4292e98848505a05b
 PKG_BUILD_DIR:=$(BUILD_DIR)/sqlite-$(PKG_VERSION)
 
 PKG_BUILD_DEPENDS:=libncurses libreadline
+PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

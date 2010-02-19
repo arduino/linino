@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,11 +10,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=eterm
 PKG_VERSION:=0.9.4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=Eterm-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.eterm.org/download/
 PKG_BUILD_DIR:=$(BUILD_DIR)/Eterm-$(PKG_VERSION)
+
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,13 +28,13 @@ define Package/eterm/Default
 endef
 
 define Package/eterm
-$(call Package/eterm/Default)  
+$(call Package/eterm/Default)
   TITLE:=eterm
   DEPENDS:=+libX11 +libXcursor +imlib2 +libast +libiconv
 endef
 
 define Package/esetroot
-$(call Package/eterm/Default)  
+$(call Package/eterm/Default)
   TITLE:=esetroot
   DEPENDS:=eterm
 endef

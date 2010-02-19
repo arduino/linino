@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2009 OpenWrt.org
+#
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,15 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=db47
 PKG_VERSION:=4.7.25.NC
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/db-$(PKG_VERSION)
 PKG_SOURCE:=db-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.oracle.com/berkeley-db/
 PKG_MD5SUM:=073ab7f20d24b3872a51ca762f5090e7
+
+PKG_FIXUP:=libtool
+PKG_LIBTOOL_PATHS:=. build_unix
 
 include $(INCLUDE_DIR)/package.mk
 

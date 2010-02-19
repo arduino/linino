@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,10 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=netatalk
 PKG_VERSION:=20090920
-PKG_RELEASE:=1
+PKG_RELEASE:=2
+
 PKG_SOURCE:=netatalk-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.flyn.org/SRPMS/
 PKG_MD5SUM:=99577e66bac6312a8bd5d552ed971f12
+
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 

@@ -16,7 +16,8 @@ PKG_SOURCE_URL:=@GNU/gnutls \
 	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/
 PKG_MD5SUM:=
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_LIBTOOL_PATHS:=. lib libextra
 
 include $(INCLUDE_DIR)/package.mk
 

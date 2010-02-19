@@ -14,12 +14,11 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.infodrom.org/projects/cgilib/download
 PKG_MD5SUM:=2c7053f58dfb06f7a80a112797ed7e86
-PKG_FIXUP = libtool
 
+PKG_FIXUP:=libtool
 LIBTOOL="$(STAGING_DIR)/host/bin/libtool"
 
 include $(INCLUDE_DIR)/package.mk
-
 
 define Package/cgilib
   SECTION:=libs

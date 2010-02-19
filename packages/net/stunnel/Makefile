@@ -3,11 +3,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=stunnel
 PKG_VERSION:=4.29
-PKG_RELEASE:=2
+PKG_RELEASE:=3
+
 PKG_MD5SUM:=14dc3f8412947f0548975cbce74d6863
 PKG_SOURCE_URL:=http://www.stunnel.org/download/stunnel/src/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 
+PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

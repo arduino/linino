@@ -13,6 +13,9 @@ PKG_RELEASE:=2
 PKG_SOURCE_URL:=@GNU/binutils
 PKG_SOURCE:=binutils-$(PKG_VERSION).tar.bz2
 PATCH_DIR:=$(TOPDIR)/toolchain/binutils/patches/$(PKG_VERSION)
+
+PKG_FIXUP:=libtool
+PKG_LIBTOOL_PATHS:=. gas bfd opcodes gprof binutils ld
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -42,6 +45,18 @@ define Build/Configure
 		--disable-werror \
 		--disable-nls \
 	)
+	$(call Build/Compile/Default, \
+		configure-bfd \
+		configure-binutils \
+		configure-etc \
+		configure-gas \
+		configure-gprof \
+		configure-intl \
+		configure-ld \
+		configure-libiberty \
+		configure-opcodes \
+	)
+	$(MAKE) -C $(PKG_BUILD_DIR)/bfd/po Makefile
 endef
 
 define Build/InstallDev

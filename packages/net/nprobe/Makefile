@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nprobe
 PKG_VERSION:=4.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=nProbe-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://downloads.openwrt.org/sources
 PKG_MD5SUM:=32ed12f60eab771a79bd5f90622fa2a3
 
 BUILD_DEPENDS:=libwrap
+PKG_FIXUP:=libtool
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/nProbe
 

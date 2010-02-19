@@ -14,7 +14,8 @@ PKG_SOURCE:=airpwn-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=@SF/airpwn
 PKG_BUILD_DEPENDS:=libnet1 libopenssl libpcap libpcre
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_LIBTOOL_PATHS:=. lorcon
 
 include $(INCLUDE_DIR)/package.mk
 

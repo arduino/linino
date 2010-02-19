@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006-2008 OpenWrt.org
+#
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,12 +15,14 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.berlios.de/radiusclient-ng/
 PKG_MD5SUM:=6fb7d4d0aefafaee7385831ac46a8e9c
 
+PKG_FIXUP:=libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/radiusclient-ng/Default
   URL:=http://developer.berlios.de/projects/radiusclient-ng/
 endef
-  
+
 define Package/radiusclient-ng/Default/description
  Purpose of this project is to build a portable, easy-to-use and 
  standard compliant library suitable for developing free and commercial 

@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2007-2009 OpenWrt.org
+#
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,11 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nufw
 PKG_VERSION:=2.2.21
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.nufw.org/download/nufw/
 PKG_MD5SUM:=7eb500e7ddb3db622dc6c5d43b495c9a
+
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 

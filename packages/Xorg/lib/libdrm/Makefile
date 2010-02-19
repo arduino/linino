@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,15 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_BASE_NAME:=libdrm
 PKG_NAME:=libdrm
-PKG_RELEASE:=2
 PKG_VERSION:=2.3.1
+PKG_RELEASE:=3
+
 PKG_SOURCE_URL:=http://dri.freedesktop.org/libdrm
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
+
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 

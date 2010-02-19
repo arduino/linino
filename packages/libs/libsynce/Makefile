@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libsynce
 PKG_VERSION:=0.12
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/synce
@@ -18,6 +18,7 @@ PKG_MD5SUM:=fd473d3deceda7912af4427dede1736f
 include $(INCLUDE_DIR)/package.mk
 
 PKG_BUILD_DEPENDS:=libiconv
+PKG_FIXUP:=libtool
 
 define Package/libsynce
   SECTION:=libs

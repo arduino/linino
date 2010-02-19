@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=GraphicsMagick
 PKG_VERSION:=1.3.8
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/graphicsmagick
@@ -19,6 +19,7 @@ include $(INCLUDE_DIR)/package.mk
 
 export PATH:=$(PKG_BUILD_DIR)/bin:$(TARGET_PATH)
 
+PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 define Package/GraphicsMagick/Default

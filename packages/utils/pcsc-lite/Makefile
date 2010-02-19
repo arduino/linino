@@ -2,11 +2,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pcsc-lite
 PKG_VERSION:=1.5.5
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://alioth.debian.org/frs/download.php/3082
 PKG_MD5SUM:=6707e967fc8bb398a5d1b1089d4dff63
+
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 

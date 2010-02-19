@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,11 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=osiris
 PKG_VERSION:=4.2.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://osiris.shmoo.com/data/
 PKG_MD5SUM:=1951c7dc0fe729af9ffaf58910340d12
+
+PKG_FIXUP:=libtool
+PKG_LIBTOOL_PATHS:=src/db-4.2.52/build_unix
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,7 +39,7 @@ MAKE_FLAGS += \
 		INTERACTIVE=0 \
 		all install
 
-define Package/osirisd/install	
+define Package/osirisd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/osirisd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d

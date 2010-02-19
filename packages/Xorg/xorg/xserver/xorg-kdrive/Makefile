@@ -8,8 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xserver-kdrive
-PKG_RELEASE:=1
 PKG_VERSION:=1.7.1
+PKG_RELEASE:=1
+
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/xserver/
 PKG_SOURCE:=xorg-server-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/xserver/$(PKG_NAME)/xorg-server-$(PKG_VERSION)/
@@ -26,6 +27,7 @@ PKG_CONFIG_DEPENDS := \
     CONFIG_X_TSLIB CONFIG_X_COMPOSITE \
 	CONFIG_X_XINERAMA CONFIG_X_XCALIBRATE
 
+PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
