@@ -63,6 +63,17 @@ CONFIGURE_ARGS += \
 	--with-glib12 \
 	--with-glib-prefix="$(STAGING_DIR)/usr" \
 
+
+AM_HOST=$(firstword $(wildcard $(STAGING_DIR_HOST)/share/automake-*))
+
+define Build/Prepare
+	$(Build/Prepare/Default)
+	for script in config.guess config.sub depcomp install-sh missing; do \
+		rm -f $(PKG_BUILD_DIR)/config/$$$$script; \
+		ln -s $(AM_HOST)/$$$$script $(PKG_BUILD_DIR)/config/$$$$script; \
+	done
+endef
+
 define Package/mc/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/mc $(1)/usr/bin/
