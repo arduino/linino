@@ -10,8 +10,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=PyYAML
 PKG_VERSION:=3.08
 PKG_RELEASE:=1
+
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://pyyaml.org/download/pyyaml/
+PKG_MD5SUM:=a4163a2017fa57f448c66815511fa555
 
 PKG_BUILD_DEPENDS:=python
 

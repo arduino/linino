@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,8 +10,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=mgen
 PKG_VERSION:=5.01b
 PKG_RELEASE:=1
+
 PKG_SOURCE:=src-$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://downloads.pf.itd.nrl.navy.mil/mgen/
+PKG_MD5SUM:=1e467131446d649c8a0aebdcd8e5f2a9
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 

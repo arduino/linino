@@ -15,7 +15,7 @@ PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/driver
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
 
-PKG_MD5SUM:=
+PKG_MD5SUM:=61a1dc9a22991bd04d0ff98f800775c1
 PKG_BUILD_DEPENDS:=xproto fontsproto randrproto renderproto xextproto
 PKG_INSTALL:=1
 

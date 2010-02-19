@@ -1,10 +1,9 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# blogic@openwrt.org
 
 include $(TOPDIR)/rules.mk
 
@@ -14,11 +13,12 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/2.26/
+PKG_MD5SUM:=37f54dc8e6cb73ed923b22f313352156
+
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-PKG_INSTALL=1
 
 TARGET_CFLAGS+=\
 	-I$(STAGING_DIR)/usr/lib/libintl/include/ \

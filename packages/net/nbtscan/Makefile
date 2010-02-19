@@ -12,7 +12,7 @@ PKG_VERSION:=1.5.1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/n/nbtscan/
-PKG_MD5SUM:=
+PKG_MD5SUM:=85bb085077c380b82a6ff73e0de0c154
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)a
 

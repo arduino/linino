@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006-2008 OpenWrt.org
+#
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -14,6 +14,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).src.tgz
 PKG_SOURCE_URL:=http://downloads.xiph.org/releases/cdparanoia/
 PKG_SOURCE_TARGETDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_MD5SUM:=b304bbe8ab63373924a744eac9ebc652
 
 include $(INCLUDE_DIR)/package.mk
 

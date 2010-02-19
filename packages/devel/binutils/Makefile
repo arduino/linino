@@ -10,8 +10,11 @@ PKG_NAME:=binutils
 PKG_VERSION:=$(strip $(subst ",, $(CONFIG_BINUTILS_VERSION)))
 #"))
 PKG_RELEASE:=2
+
 PKG_SOURCE_URL:=@GNU/binutils
 PKG_SOURCE:=binutils-$(PKG_VERSION).tar.bz2
+PKG_MD5SUM:=
+
 PATCH_DIR:=$(TOPDIR)/toolchain/binutils/patches/$(PKG_VERSION)
 
 PKG_FIXUP:=libtool

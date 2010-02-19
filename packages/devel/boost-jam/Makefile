@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2006 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -13,6 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=@SF/boost
+PKG_MD5SUM:=f4afd896788f2327fd35c128ddc6e340
 PKG_HOST_ONLY:=1
 
 include $(INCLUDE_DIR)/host-build.mk

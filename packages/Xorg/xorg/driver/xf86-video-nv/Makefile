@@ -15,7 +15,7 @@ PKG_VERSION:=2.1.15
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/driver
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/${PKG_NAME}-$(PKG_VERSION)/
-PKG_MD5SUM:=
+PKG_MD5SUM:=1b22188bd9012a148206940708b52ea6
 
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/xorg-driver.mk)

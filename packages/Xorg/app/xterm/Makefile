@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -14,6 +14,8 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://mirror1.openwrt.org/
+PKG_MD5SUM:=663fa3aac8e30e4c2d4bf07c0aee4dca
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

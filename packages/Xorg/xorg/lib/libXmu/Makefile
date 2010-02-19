@@ -14,7 +14,7 @@ PKG_VERSION:=1.0.5
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/lib/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=
+PKG_MD5SUM:=fc4d66be7a1a1eb474954728415e46d6
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1

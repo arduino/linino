@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2009 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -14,11 +14,12 @@ PKG_RELEASE:=1
 PKG_SOURCE:=gtk+-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/gtk+/2.17
 PKG_BUILD_DIR=$(BUILD_DIR)/gtk+-$(PKG_VERSION)
+PKG_MD5SUM:=a1a1f0b66a240c31cb2733643f9170ba
+
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-PKG_INSTALL:=1
 
 TARGET_CFLAGS+=\
 	-I$(STAGING_DIR)/usr/lib/libintl/include/ \

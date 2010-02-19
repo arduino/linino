@@ -12,7 +12,7 @@ PKG_VERSION:=0.9b3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.rtfm.com/ssldump/
-PKG_MD5SUM:=
+PKG_MD5SUM:=ac8c28fe87508d6bfb06344ec496b1dd
 
 include $(INCLUDE_DIR)/package.mk
 

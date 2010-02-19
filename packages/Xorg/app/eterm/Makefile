@@ -15,6 +15,7 @@ PKG_RELEASE:=2
 PKG_SOURCE:=Eterm-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.eterm.org/download/
 PKG_BUILD_DIR:=$(BUILD_DIR)/Eterm-$(PKG_VERSION)
+PKG_MD5SUM:=b8869ee9c9b9516231af9eefa595cee3
 
 PKG_FIXUP:=libtool
 

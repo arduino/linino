@@ -14,6 +14,7 @@ PKG_VERSION:=1.0.1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/font
+PKG_MD5SUM:=c4776b6f0f2ecdb7670b6fe64b5d2a2d
 
 include $(INCLUDE_DIR)/package.mk
 

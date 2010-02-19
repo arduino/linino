@@ -13,7 +13,7 @@ PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.gz
 PKG_SOURCE_URL:=http://klub.com.pl/dhcpv6/dibbler/
-PKG_MD5SUM:=
+PKG_MD5SUM:=39be72da38c2e6d33fd43a2811a276b1
 
 PKG_FIXUP:=libtool
 PKG_LIBTOOL_PATHS:=poslib

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -14,6 +14,7 @@ PKG_RELEASE:=1
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/xserver/
 PKG_SOURCE:=xorg-server-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/xserver/$(PKG_NAME)/xorg-server-$(PKG_VERSION)/
+PKG_MD5SUM:=dda7842467cda6018fdc87e6002e4db1
 
 PKG_BUILD_DEPENDS:=randrproto renderproto fixesproto damageproto xcmiscproto \
 				   xextproto xproto bigreqsproto resourceproto \

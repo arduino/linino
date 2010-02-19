@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,8 +10,11 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=airpwn
 PKG_RELEASE:=1
 PKG_VERSION:=1.3
+
 PKG_SOURCE:=airpwn-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=@SF/airpwn
+PKG_MD5SUM:=15b6f1cd287b4bb20dd586bb6c83628d
+
 PKG_BUILD_DEPENDS:=libnet1 libopenssl libpcap libpcre
 
 PKG_FIXUP:=libtool

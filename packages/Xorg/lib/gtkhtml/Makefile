@@ -8,16 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gtkhtml
-PKG_RELEASE:=2
 PKG_VERSION:=3.29.1
+PKG_RELEASE:=2
+
 PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/3.29
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_MD5SUM:=899228059480ee3020ad49207d03b620
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-PKG_INSTALL:=1
 
 define Package/gtkhtml
   SECTION:=xorg-app

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2009 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -13,13 +13,14 @@ PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://oligarchy.co.uk/xapian/$(PKG_VERSION)
+PKG_MD5SUM:=b4acff50028120852d4a8d943065f6d2
+
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-PKG_INSTALL=1
-
-EXTRA_LDFLAGS+= \
+TARGET_LDFLAGS+= \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
 

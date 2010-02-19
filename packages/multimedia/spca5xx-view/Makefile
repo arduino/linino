@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=spca5xx-view.tar.bz2
 PKG_SOURCE_URL:=http://www.acmesystems.it/download/owrt
-PKG_MD5SUM:=
+PKG_MD5SUM:=113357f8fbc3b994424ae37644529d55
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 

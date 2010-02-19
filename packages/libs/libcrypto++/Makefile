@@ -13,7 +13,7 @@ PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/libc/libcrypto++/
-PKG_MD5SUM:=
+PKG_MD5SUM:=681f830145bf93cbc16113eaf61fbe2a
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1

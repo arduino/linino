@@ -13,6 +13,7 @@ PKG_VERSION:=1.04
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 PKG_SOURCE_URL:=http://fedorahosted.org/releases/l/i/liberation-fonts/
+PKG_MD5SUM:=4846797ef0fc70b0cbaede2514677c58
 
 include $(INCLUDE_DIR)/package.mk
 

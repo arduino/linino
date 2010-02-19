@@ -13,7 +13,7 @@ PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/u/uucp/
-PKG_MD5SUM:=
+PKG_MD5SUM:=64c54d43787339a7cced48390eb3e1d0
 
 PKG_INSTALL:=1
 

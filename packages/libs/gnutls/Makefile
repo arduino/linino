@@ -14,7 +14,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNU/gnutls \
 	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/
-PKG_MD5SUM:=
+PKG_MD5SUM:=e3b2788b79bfc82acbe717e3c54d4e92
 
 PKG_FIXUP:=libtool
 PKG_LIBTOOL_PATHS:=. lib libextra

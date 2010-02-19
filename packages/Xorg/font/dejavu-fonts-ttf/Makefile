@@ -1,18 +1,19 @@
-# 
-# Copyright (C) 2008 OpenWrt.org
+#
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
 include $(TOPDIR)/rules.mk
 
-PKG_BASE_NAME:=font
 PKG_NAME:=dejavu-fonts-ttf
-PKG_RELEASE:=1
 PKG_VERSION:=2.23
+PKG_RELEASE:=1
+
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/${PKG_NAME}-$(PKG_VERSION)/
 PKG_SOURCE_URL:=@SF/dejavu
+PKG_MD5SUM:=ff871dff0b3e8a11cd5c54478f11073f
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,11 +27,11 @@ define Package/dejavu-fonts-ttf
 endef
 
 define Build/Compile
-	echo
+	true
 endef
 
 define Build/Configure
-	echo
+	true
 endef
 
 define Package/dejavu-fonts-ttf/install

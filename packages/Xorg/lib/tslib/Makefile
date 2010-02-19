@@ -13,6 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.berlios.de/tslib/
+PKG_MD5SUM:=92b2eb55b1e4ef7e2c0347069389390e
 
 PKG_INSTALL:=1
 PKG_FIXUP:=libtool

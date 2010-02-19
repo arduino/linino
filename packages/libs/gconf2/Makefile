@@ -7,9 +7,10 @@ PKG_RELEASE:=1
 PKG_BUILD_DIR:=$(BUILD_DIR)/GConf-$(PKG_VERSION)
 PKG_SOURCE:=GConf-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/GConf/2.24
-PKG_FIXUP:=libtool
+PKG_MD5SUM:=4971d96f5ba94fe4a69396267bd5afe8
 
 PKG_BUILD_DEPENDS:=orbit2/host intltool/host
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 

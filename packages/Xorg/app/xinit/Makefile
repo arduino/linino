@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,15 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xinit
-PKG_RELEASE:=1
 PKG_VERSION:=1.0.5
+PKG_RELEASE:=1
+
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/X11R7.3/src/app
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-
-include $(INCLUDE_DIR)/package.mk
+PKG_MD5SUM:=9a2aad51042141a0e6ad066015397595
 
 PKG_INSTALL:=1
+
+include $(INCLUDE_DIR)/package.mk
 
 TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 

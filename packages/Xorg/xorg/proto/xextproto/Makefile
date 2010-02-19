@@ -1,18 +1,21 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
 # blogic@openwrt.org
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xextproto
 PKG_RELEASE:=1
 PKG_VERSION:=7.1.1
+
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/proto/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
+PKG_MD5SUM:=fb6ccaae76db7a35e49b12aea60ca6ff
 
 include $(INCLUDE_DIR)/package.mk
 
