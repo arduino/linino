@@ -39,7 +39,7 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)  \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -DIPTABLES_143" \
+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -DIPTABLES_143 -Wl,-rpath-link=$(STAGING_DIR)/usr/lib" \
 		BINDIR="/usr/sbin" \
 		MANDIR="/usr/man" \
 		HAVE_LIBIPTC=1 \
