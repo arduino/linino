@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=babeld
-PKG_VERSION:=0.97
+PKG_VERSION:=0.98
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/
-PKG_MD5SUM:=be0748c382dfe60bd35aa6b661e6077d
+PKG_MD5SUM:=85af76e90914b82d9ece497e15df252f
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,6 +22,7 @@ define Package/babeld
   CATEGORY:=Network
   TITLE:=A loop-free distance-vector routing protocol
   URL:=http://www.pps.jussieu.fr/~jch/software/babel/
+  MAINTAINER:=Gabriel Kerneis <kerneis@pps.jussieu.fr>
   DEPENDS:=+kmod-ipv6 +librt
 endef
 
@@ -37,11 +38,8 @@ endef
 
 define Package/babeld/conffiles
 /etc/babeld.conf
+/etc/config/babeld
 endef
-
-MAKE_FLAGS += \
-	CC="$(TARGET_CC)" \
-	CFLAGS="$(TARGET_CFLAGS)" \
 
 define Package/babeld/install
 	$(INSTALL_DIR) $(1)/usr/sbin
@@ -49,7 +47,7 @@ define Package/babeld/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/babeld.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DATA) ./files/babeld.config $(1)/etc/config/babeld
+	$(INSTALL_CONF) ./files/babeld.config $(1)/etc/config/babeld
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/babeld.init $(1)/etc/init.d/babeld
 endef
