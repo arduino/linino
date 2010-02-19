@@ -34,6 +34,7 @@ define Build/Configure
 		--with-openssl="$(STAGING_DIR)/usr/lib" \
 		,\
 		ac_cv_func_dn_skipname=yes \
+		ZLIB_HOME="$(STAGING_DIR)/usr" \
 	)
 endef
 
