@@ -1,0 +1,17 @@
+diff --git a/configure b/configure
+index 713e65e..9879341 100755
+--- a/configure
++++ b/configure
+@@ -27152,10 +27152,10 @@ fi;
+ 
+ 
+ 
+-    CPPFLAGS=`eval eval eval eval eval echo "-I$includedir -I$prefix/include $CPPFLAGS"`
++    CPPFLAGS=`eval eval eval eval eval echo "$CPPFLAGS"`
+     CPPFLAGS=`echo $CPPFLAGS | tr ' ' '\n' | uniq | grep -v NONE | tr '\n' ' '`
+     CFLAGS=${CFLAGS--O}
+-    LDFLAGS=`eval eval eval eval eval echo "-L$libdir -L$prefix/lib ${LDFLAGS--O}"`
++    LDFLAGS=`eval eval eval eval eval echo "${LDFLAGS--O}"`
+     LDFLAGS=`echo $LDFLAGS | tr ' ' '\n' | uniq | grep -v NONE | tr '\n' ' '`
+     LIBS="$GRLIBS $X_PRE_LIBS $LIBS $X_EXTRA_LIBS"
+ 
