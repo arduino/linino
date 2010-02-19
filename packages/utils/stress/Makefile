@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=stress
-PKG_VERSION:=1.0.2
+PKG_VERSION:=1.0.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://weather.ou.edu/~apw/projects/stress/
-PKG_MD5SUM:=ad53eb802150bda8f898be9ebf3b4b36
+PKG_SOURCE_URL:=http://weather.ou.edu/~apw/projects/stress
+PKG_MD5SUM:=48486b13a9baddc6b7e005bd0562bc49
 
 PKG_INSTALL:=1
 
@@ -40,7 +40,7 @@ MAKE_FLAGS += \
 
 define Package/stress/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/stress $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/stress $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,stress))
