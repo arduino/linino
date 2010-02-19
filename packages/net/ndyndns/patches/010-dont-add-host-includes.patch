@@ -1,0 +1,14 @@
+diff --git a/configure b/configure
+index 73ac9e1..3d3c187 100755
+--- a/configure
++++ b/configure
+@@ -3520,8 +3520,7 @@ fi
+ fi
+ 
+ 
+-CURLINC=-I`curl-config --prefix`/include
+-
++CURLINC=`curl-config --cflags`
+ CURLLIB=`curl-config --libs`
+ 
+ 
