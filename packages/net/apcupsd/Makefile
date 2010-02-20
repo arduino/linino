@@ -31,6 +31,7 @@ define Build/Configure
 		--with-distname=unknown \
 		--sysconfdir=/etc/apcupsd \
 		--enable-usb \
+		--without-x \
 	)
 endef
 
