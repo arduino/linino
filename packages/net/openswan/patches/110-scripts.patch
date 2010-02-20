@@ -1,16 +1,14 @@
-diff -urN openswan.old/programs/loggerfix openswan.dev/programs/loggerfix
---- openswan.old/programs/loggerfix	1970-01-01 01:00:00.000000000 +0100
-+++ openswan.dev/programs/loggerfix	2006-10-08 20:41:08.000000000 +0200
+--- /dev/null
++++ b/programs/loggerfix
 @@ -0,0 +1,5 @@
 +#!/bin/sh
 +# use filename instead of /dev/null to log, but dont log to flash or ram
 +# pref. log to nfs mount
 +echo "$*" >> /dev/null
 +exit 0
-diff -urN openswan.old/programs/_plutorun/_plutorun.in openswan.dev/programs/_plutorun/_plutorun.in
---- openswan.old/programs/_plutorun/_plutorun.in	2006-10-08 20:43:21.000000000 +0200
-+++ openswan.dev/programs/_plutorun/_plutorun.in	2006-10-08 20:41:08.000000000 +0200
-@@ -147,7 +147,7 @@
+--- a/programs/_plutorun/_plutorun.in
++++ b/programs/_plutorun/_plutorun.in
+@@ -156,7 +156,7 @@
  			exit 1
  		fi
  	else
@@ -19,15 +17,14 @@ diff -urN openswan.old/programs/_plutorun/_plutorun.in openswan.dev/programs/_pl
  		then
  			echo Cannot write to directory to create \"$stderrlog\".
  			exit 1
-diff -urN openswan.old/programs/_realsetup/_realsetup.in openswan.dev/programs/_realsetup/_realsetup.in
---- openswan.old/programs/_realsetup/_realsetup.in	2006-10-08 20:43:21.000000000 +0200
-+++ openswan.dev/programs/_realsetup/_realsetup.in	2006-10-08 20:41:08.000000000 +0200
-@@ -232,7 +232,7 @@
+--- a/programs/_realsetup/_realsetup.in
++++ b/programs/_realsetup/_realsetup.in
+@@ -282,7 +282,7 @@
  
  	# misc pre-Pluto setup
  
 -	perform test -d `dirname $subsyslock` "&&" touch $subsyslock
 +	perform test -d `echo $subsyslock | sed -r 's/(^.*\/)(.*$)/\1/'` "&&" touch $subsyslock "&&" rm -f $subsyslock
  
- 	if test " $IPSECforwardcontrol" = " yes"
- 	then
+ 	manualconns
+ 

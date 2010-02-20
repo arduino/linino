@@ -1,6 +1,5 @@
-diff -ur openswan-2.6.23/programs/_confread/Makefile wrtfix/programs/_confread/Makefile
---- openswan-2.6.23/programs/_confread/Makefile	2009-09-08 20:42:54.000000000 -0400
-+++ wrtfix/programs/_confread/Makefile	2009-09-23 16:32:08.000000000 -0400
+--- a/programs/_confread/Makefile
++++ b/programs/_confread/Makefile
 @@ -16,7 +16,6 @@
  OPENSWANSRCDIR?=$(shell cd ../..; pwd)
  include ${OPENSWANSRCDIR}/Makefile.inc
@@ -21,14 +20,12 @@ diff -ur openswan-2.6.23/programs/_confread/Makefile wrtfix/programs/_confread/M
 -diff:	ipsec.conf.5.xml
 -	diff -B -w -u ipsec.conf.5.xml ipsec.conf.5.xml-ref
 -
-diff -ur openswan-2.6.23/programs/pluto/Makefile wrtfix/programs/pluto/Makefile
---- openswan-2.6.23/programs/pluto/Makefile	2009-09-08 20:42:54.000000000 -0400
-+++ wrtfix/programs/pluto/Makefile	2009-09-23 16:32:38.000000000 -0400
-@@ -186,36 +186,11 @@
+--- a/programs/pluto/Makefile
++++ b/programs/pluto/Makefile
+@@ -188,35 +188,11 @@
  	$(INSTALL) $(INSTBINFLAGS) $(BINNAMEPLUTO) $(BINNAMEWHACK) $(LIBEXECDIR)
  	#$(INSTALL) $(INSTSUIDFLAGS) $(BINNAMEWHACKINIT) $(LIBEXECDIR)
  	if $(USE_ADNS) ; then $(INSTALL) $(INSTBINFLAGS) $(BINNAMEADNS)  $(LIBEXECDIR) ; fi
--	( cd ${OPENSWANSRCDIR}/programs/pluto ; xmlto man pluto.8.xml ; mv ipsec_pluto.8 pluto.8; xmlto man ipsec.secrets.5.xml)
 -	$(INSTALL) $(INSTMANFLAGS) ${srcdir}pluto.8 $(PMANDIR)/ipsec_pluto.8
 -	sh ${OPENSWANSRCDIR}/packaging/utils/manlink ${srcdir}pluto.8 | \
 -		while read from to ; \
