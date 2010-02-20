@@ -1,0 +1,12 @@
+diff -pruN upx-3.04.orig//Makefile upx-3.04/Makefile
+--- upx-3.04.orig//Makefile	2010-02-18 15:07:46.894410571 +0100
++++ upx-3.04/Makefile	2010-02-18 15:08:32.758657685 +0100
+@@ -35,7 +35,7 @@ ifeq ($(BUILD_STUB),1)
+ 	$(MAKE) -C src/stub $@
+ endif
+ 	$(MAKE) -C src $@
+-	$(MAKE) -C doc $@
++#	$(MAKE) -C doc $@
+ 
+ 
+ ifneq ($(wildcard .hg/.),)
