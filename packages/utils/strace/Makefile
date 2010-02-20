@@ -40,11 +40,16 @@ A useful diagnostic, instructional, and debugging tool. Allows you to track what
 system calls a program makes while it is running.
 endef
 
+# needed when compiling against Linux 2.4
 CONFIGURE_VARS += \
 	ac_cv_header_linux_netlink_h=yes
 
+# needed when compiling with an external toolchain
 TARGET_CFLAGS += \
 	-I$(LINUX_DIR)/include
+
+MAKE_FLAGS := \
+	CCOPT="$(TARGET_CFLAGS)"
 
 define Package/strace/install
 	$(INSTALL_DIR) $(1)/usr/bin
