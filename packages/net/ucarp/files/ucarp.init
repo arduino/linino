@@ -1,0 +1,64 @@
+#!/bin/sh
+
+CONF=/etc/persistent/ucarp.conf
+MODE="$1"
+
+if [ "${MODE}" = "stop" ]
+then
+    echo "Killing them all and letting init sort them out"
+    killall ucarp
+    exit 0
+fi
+
+if [ -f "${CONF}" ]
+then
+   
+   if [ "${MODE}" = "test" ]
+   then
+       daemon=""
+   else
+       echo "Starting UCARP using ${CONF} as a daemon, use test parameter to run in foreground"
+       daemon="--daemonize"
+   fi
+
+   . ${CONF}
+   
+   cat > /var/run/ucarp-vip-up <<EOF
+#!/bin/sh
+
+/bin/ip addr add ${VIP}/${VMASK} dev ${IF}
+
+EOF
+   for ip in ${PINGIP}
+   do
+	cat >> /var/run/ucarp-vip-up <<EOF
+${arping}/bin/arping -c 2 -I ${IF} -s ${VIP} ${ip}
+EOF
+   done
+
+
+   chmod a+x /var/run/ucarp-vip-up
+
+   cat > /var/run/ucarp-vip-down <<EOF
+#!/bin/sh
+
+/bin/ip addr del ${VIP}/${VMASK} dev ${IF}
+
+EOF
+   chmod a+x /var/run/ucarp-vip-down
+
+   /sbin/ucarp --interface=${IF} --srcip=${MYIP} --vhid=1 --pass=${PASSWORD} \
+         --addr=${VIP} --nomcast $daemon \
+         --upscript=/var/run/ucarp-vip-up --downscript=/var/run/ucarp-vip-down
+
+   if [ "${MODE}" = "test" ]
+   then
+       echo "UCARP has exited."
+   else
+       echo "UCARP has been started."
+   fi
+
+else 
+   echo "UCARP is not enabled"
+   exit 0
+fi
