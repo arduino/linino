@@ -1,8 +1,7 @@
-Index: gettext-0.16.1/gettext-runtime/intl/intl-compat.c
-===================================================================
---- gettext-0.16.1.orig/gettext-runtime/intl/intl-compat.c	2007-12-29 22:51:09.363903016 +0100
-+++ gettext-0.16.1/gettext-runtime/intl/intl-compat.c	2007-12-29 22:51:14.048169957 +0100
-@@ -131,3 +131,7 @@
+diff -pruN gettext-0.17.orig/gettext-runtime/intl/intl-compat.c gettext-0.17/gettext-runtime/intl/intl-compat.c
+--- gettext-0.17.orig/gettext-runtime/intl/intl-compat.c	2009-05-19 17:15:41.881718113 +0200
++++ gettext-0.17/gettext-runtime/intl/intl-compat.c	2009-05-19 17:16:33.585732221 +0200
+@@ -131,3 +131,7 @@ bind_textdomain_codeset (const char *dom
  {
    return libintl_bind_textdomain_codeset (domainname, codeset);
  }

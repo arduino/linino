@@ -1,0 +1,99 @@
+diff -pruN gettext-0.17.orig//gettext-runtime/intl/Makefile.in gettext-0.17/gettext-runtime/intl/Makefile.in
+--- gettext-0.17.orig//gettext-runtime/intl/Makefile.in	2010-02-17 16:33:29.922429524 +0100
++++ gettext-0.17/gettext-runtime/intl/Makefile.in	2010-02-17 16:40:47.294419311 +0100
+@@ -191,7 +191,7 @@ libintl.a libgnuintl.a: $(OBJECTS)
+ 	$(RANLIB) $@
+ 
+ libintl.la libgnuintl.la: $(OBJECTS) $(OBJECTS_RES_@WOE32@)
+-	$(LIBTOOL) --mode=link \
++	$(LIBTOOL) --tag=CC --mode=link \
+ 	  $(CC) $(CPPFLAGS) $(CFLAGS) $(XCFLAGS) $(LDFLAGS) -o $@ \
+ 	  $(OBJECTS) @LTLIBICONV@ @INTL_MACOSX_LIBS@ $(LIBS) @LTLIBTHREAD@ @LTLIBC@ \
+ 	  $(OBJECTS_RES_@WOE32@) \
+@@ -219,59 +219,59 @@ LTV_AGE=0
+ 	rm -f $*.h
+ 
+ bindtextdom.lo: $(srcdir)/bindtextdom.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/bindtextdom.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/bindtextdom.c
+ dcgettext.lo: $(srcdir)/dcgettext.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/dcgettext.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/dcgettext.c
+ dgettext.lo: $(srcdir)/dgettext.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/dgettext.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/dgettext.c
+ gettext.lo: $(srcdir)/gettext.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/gettext.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/gettext.c
+ finddomain.lo: $(srcdir)/finddomain.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/finddomain.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/finddomain.c
+ hash-string.lo: $(srcdir)/hash-string.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/hash-string.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/hash-string.c
+ loadmsgcat.lo: $(srcdir)/loadmsgcat.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/loadmsgcat.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/loadmsgcat.c
+ localealias.lo: $(srcdir)/localealias.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/localealias.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/localealias.c
+ textdomain.lo: $(srcdir)/textdomain.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/textdomain.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/textdomain.c
+ l10nflist.lo: $(srcdir)/l10nflist.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/l10nflist.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/l10nflist.c
+ explodename.lo: $(srcdir)/explodename.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/explodename.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/explodename.c
+ dcigettext.lo: $(srcdir)/dcigettext.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/dcigettext.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/dcigettext.c
+ dcngettext.lo: $(srcdir)/dcngettext.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/dcngettext.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/dcngettext.c
+ dngettext.lo: $(srcdir)/dngettext.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/dngettext.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/dngettext.c
+ ngettext.lo: $(srcdir)/ngettext.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/ngettext.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/ngettext.c
+ plural.lo: $(srcdir)/plural.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/plural.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/plural.c
+ plural-exp.lo: $(srcdir)/plural-exp.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/plural-exp.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/plural-exp.c
+ localcharset.lo: $(srcdir)/localcharset.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/localcharset.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/localcharset.c
+ lock.lo: $(srcdir)/lock.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/lock.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/lock.c
+ relocatable.lo: $(srcdir)/relocatable.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/relocatable.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/relocatable.c
+ langprefs.lo: $(srcdir)/langprefs.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/langprefs.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/langprefs.c
+ localename.lo: $(srcdir)/localename.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/localename.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/localename.c
+ log.lo: $(srcdir)/log.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/log.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/log.c
+ printf.lo: $(srcdir)/printf.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/printf.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/printf.c
+ version.lo: $(srcdir)/version.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/version.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/version.c
+ osdep.lo: $(srcdir)/osdep.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/osdep.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/osdep.c
+ intl-compat.lo: $(srcdir)/intl-compat.c
+-	$(LIBTOOL) --mode=compile $(COMPILE) $(srcdir)/intl-compat.c
++	$(LIBTOOL) --tag=CC --mode=compile $(COMPILE) $(srcdir)/intl-compat.c
+ 
+ # This rule is executed only on Woe32 systems.
+ # The following sed expressions come from the windres-options script. They are

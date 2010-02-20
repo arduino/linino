@@ -1,7 +1,7 @@
-diff -ruN gettext-0.16.1-old/autoconf-lib-link/Makefile.in gettext-0.16.1-new/autoconf-lib-link/Makefile.in
---- gettext-0.16.1-old/autoconf-lib-link/Makefile.in	2006-11-27 18:33:54.000000000 +0100
-+++ gettext-0.16.1-new/autoconf-lib-link/Makefile.in	2007-08-22 21:18:41.000000000 +0200
-@@ -204,7 +204,7 @@
+diff -pruN gettext-0.17.orig/autoconf-lib-link/Makefile.in gettext-0.17/autoconf-lib-link/Makefile.in
+--- gettext-0.17.orig/autoconf-lib-link/Makefile.in	2009-05-19 17:11:00.057467286 +0200
++++ gettext-0.17/autoconf-lib-link/Makefile.in	2009-05-19 17:12:04.539791314 +0200
+@@ -206,7 +206,7 @@ EXTRA_DIST = config.rpath
  DISTCLEANFILES = build-aux/config.guess build-aux/config.sub \
  	build-aux/install-sh build-aux/ltmain.sh build-aux/missing \
  	build-aux/config.rpath
@@ -10,10 +10,10 @@ diff -ruN gettext-0.16.1-old/autoconf-lib-link/Makefile.in gettext-0.16.1-new/au
  
  # Subdirectories with separate autoconfiguration.
  CONFIGURES_RPATHX = $(srcdir)/tests/rpathx/Makefile.in $(srcdir)/tests/rpathx/aclocal.m4 $(srcdir)/tests/rpathx/configure
-diff -ruN gettext-0.16.1-old/gettext-runtime/Makefile.in gettext-0.16.1-new/gettext-runtime/Makefile.in
---- gettext-0.16.1-old/gettext-runtime/Makefile.in	2006-11-27 18:34:14.000000000 +0100
-+++ gettext-0.16.1-new/gettext-runtime/Makefile.in	2007-08-22 21:18:12.000000000 +0200
-@@ -140,7 +140,7 @@
+diff -pruN gettext-0.17.orig/gettext-runtime/Makefile.in gettext-0.17/gettext-runtime/Makefile.in
+--- gettext-0.17.orig/gettext-runtime/Makefile.in	2009-05-19 17:10:59.798239310 +0200
++++ gettext-0.17/gettext-runtime/Makefile.in	2009-05-19 17:12:40.225999245 +0200
+@@ -154,7 +154,7 @@ RECURSIVE_CLEAN_TARGETS = mostlyclean-re
  ETAGS = etags
  CTAGS = ctags
  DIST_SUBDIRS = doc intl intl-java intl-csharp gnulib-lib libasprintf \
@@ -22,15 +22,15 @@ diff -ruN gettext-0.16.1-old/gettext-runtime/Makefile.in gettext-0.16.1-new/gett
  DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
  distdir = $(PACKAGE)-$(VERSION)
  top_distdir = $(distdir)
-diff -ruN gettext-0.16.1-old/gettext-tools/Makefile.in gettext-0.16.1-new/gettext-tools/Makefile.in
---- gettext-0.16.1-old/gettext-tools/Makefile.in	2006-11-27 18:34:56.000000000 +0100
-+++ gettext-0.16.1-new/gettext-tools/Makefile.in	2007-08-22 21:19:11.000000000 +0200
-@@ -484,7 +484,7 @@
+diff -pruN gettext-0.17.orig/gettext-tools/Makefile.in gettext-0.17/gettext-tools/Makefile.in
+--- gettext-0.17.orig/gettext-tools/Makefile.in	2009-05-19 17:11:00.269723630 +0200
++++ gettext-0.17/gettext-tools/Makefile.in	2009-05-19 17:14:09.041478317 +0200
+@@ -724,7 +724,7 @@ top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  AUTOMAKE_OPTIONS = 1.5 gnu no-dependencies
  ACLOCAL_AMFLAGS = -I m4 -I ../gettext-runtime/m4 -I ../autoconf-lib-link/m4 -I ../m4 -I gnulib-m4 -I libgettextpo/gnulib-m4
--SUBDIRS = doc intl gnulib-lib libgrep libuniname src libgettextpo po projects misc man m4 tests examples
-+SUBDIRS = doc intl gnulib-lib libgrep libuniname src libgettextpo po projects misc man m4
+-SUBDIRS = doc intl gnulib-lib libgrep src libgettextpo po projects styles misc man m4 tests gnulib-tests examples
++SUBDIRS = doc intl gnulib-lib libgrep src libgettextpo po projects styles misc man m4
  
  # Allow users to use "gnulib-tool --update".
  

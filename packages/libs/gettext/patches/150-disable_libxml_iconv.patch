@@ -1,0 +1,24 @@
+diff -pruN gettext-0.17.orig//gettext-tools/gnulib-lib/libxml/xmlversion.in.h gettext-0.17/gettext-tools/gnulib-lib/libxml/xmlversion.in.h
+--- gettext-0.17.orig//gettext-tools/gnulib-lib/libxml/xmlversion.in.h	2010-02-17 17:35:35.758950208 +0100
++++ gettext-0.17/gettext-tools/gnulib-lib/libxml/xmlversion.in.h	2010-02-17 17:56:56.510418934 +0100
+@@ -263,7 +263,7 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(i
+  *
+  * Whether iconv support is available
+  */
+-#if 1
++#if 0
+ #define LIBXML_ICONV_ENABLED
+ #endif
+ 
+diff -pruN gettext-0.17.orig//gnulib-local/lib/libxml/xmlversion.in.h gettext-0.17/gnulib-local/lib/libxml/xmlversion.in.h
+--- gettext-0.17.orig//gnulib-local/lib/libxml/xmlversion.in.h	2010-02-17 17:35:34.787184901 +0100
++++ gettext-0.17/gnulib-local/lib/libxml/xmlversion.in.h	2010-02-17 17:56:49.578484210 +0100
+@@ -263,7 +263,7 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(i
+  *
+  * Whether iconv support is available
+  */
+-#if 1
++#if 0
+ #define LIBXML_ICONV_ENABLED
+ #endif
+ 

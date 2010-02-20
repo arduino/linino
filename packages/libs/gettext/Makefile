@@ -8,18 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gettext
-PKG_VERSION:=0.16.1
-PKG_RELEASE:=5
+PKG_VERSION:=0.17
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/gettext
-PKG_MD5SUM:=3d9ad24301c6d6b17ec30704a13fe127
+PKG_MD5SUM:=58a2bc6d39c0ba57823034d55d65d606
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
 
 define Package/libintl
   SECTION:=libs
@@ -46,13 +45,12 @@ CONFIGURE_ARGS += \
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/libintl/include
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/include/libintl.h $(1)/usr/lib/libintl/include/
+
 	$(INSTALL_DIR) $(1)/usr/lib/libintl/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libintl.{a,so*} $(1)/usr/lib/libintl/lib/
 
 	$(INSTALL_DIR) $(1)/usr/share/aclocal
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/share/aclocal/* \
-		$(1)/usr/share/aclocal/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/aclocal/* $(1)/usr/share/aclocal/
 endef
 
 define Package/libintl/install
