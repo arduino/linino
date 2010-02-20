@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libnfc
-PKG_VERSION:=1.2.1
+PKG_VERSION:=1.3.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://libnfc.googlecode.com/files/
-PKG_MD5SUM:=90ce5d0445c6228f0e80ae3b62709f96
+PKG_MD5SUM:=88aeb2f6c3ddf32ae52aedc9b179e49c
 
 PKG_FIXUP = libtool
 
@@ -35,11 +35,18 @@ define Package/libnfc/description
   on the NXP PN53x NFC Controller.
 endef
 
-define Package/nfc-tools
+define Package/libnfc-examples
   $(call Package/libnfc/Default)
   SECTION:=utils
   CATEGORY:=Utilities
   DEPENDS:=+libnfc
+endef
+
+define Package/libnfc-examples/description
+  libnfc is provided with some examples like:
+   * tag listing
+   * relaying NFC
+   * simple UID emulation
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -52,7 +59,7 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libnfc $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/nfc $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnfc.{a,so*} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
@@ -64,14 +71,10 @@ define Package/libnfc/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnfc.so.* $(1)/usr/lib/
 endef
 
-define Package/nfc-tools/install
+define Package/libnfc-examples/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-anticol $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-list $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-mftool $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-relay $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-emulate $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc* $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,libnfc))
-$(eval $(call BuildPackage,nfc-tools))
+$(eval $(call BuildPackage,libnfc-examples))
