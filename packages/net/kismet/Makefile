@@ -83,7 +83,7 @@ CONFIGURE_ARGS += \
 
 CONFIGURE_VARS += \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	LDFLAGS="$$$$LDFLAGS" \
 	LIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
 	CLIENTCLIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
