@@ -274,6 +274,7 @@ CONFIGURE_VARS+= \
 	apr_cv_process_shared_works="no" \
 	apr_cv_tcp_nodelay_with_cork="yes" \
 	apr_cv_type_rwlock_t="yes" \
+	ac_cv_path_LIBGNUTLS_CONFIG="no" \
 
 define Build/Prepare
 $(call Build/Prepare/Default)
