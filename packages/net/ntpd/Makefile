@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ntp
 PKG_VERSION:=4.2.6
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/
@@ -43,6 +43,17 @@ endef
 define Package/ntpd/description
 	$(call Package/ntpd/Default/description)
 	This package contains the ntpd server.
+endef
+
+define Package/ntpd-openssl
+  $(call Package/ntpd/Default)
+  TITLE+= server (with OpenSSL support)
+  DEPENDS:=+openssl
+endef
+
+define Package/ntpd-openssl/description
+	$(call Package/ntpd/Default/description)
+	This package contains the ntpd server with OpenSSL support.
 endef
 
 define Package/ntpdate
@@ -93,29 +104,74 @@ endef
 TARGET_CPPFLAGS += -I$(STAGING_DIR)/usr/include/libelf
 
 CONFIGURE_VARS += \
-	ac_cv_header_md5_h=no
+	ac_cv_header_md5_h=no \
+	ac_cv_lib_rt_sched_setscheduler=no \
+	ac_cv_header_dns_sd_h=no 
 
-define Build/Configure
+define Build/Template
+
+$(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
+	-$(MAKE) -C $(PKG_BUILD_DIR) clean
 	$(call Build/Configure/Default, \
 		--disable-all-clocks \
 		--disable-parse-clocks \
 		--enable-NMEA \
 		--enable-LOCAL-CLOCK \
 		--enable-SHM \
-		--disable-linuxcaps, \
-		ac_cv_lib_rt_sched_setscheduler=no \
-		ac_cv_header_dns_sd_h=no \
-	)
+		--disable-linuxcaps \
+		$(3))
+	$(MAKE) -C $(PKG_BUILD_DIR) CFLAGS="$(TARGET_CFLAGS)"
+	( cd $(PKG_BUILD_DIR); mv -f ntpd/ntpd $(PKG_NAME)-$(2) )
+	touch $$@
+
+$(STAMP_BUILT): $(STAMP_BUILT)-$(2)
+
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CFLAGS="$(TARGET_CFLAGS)"
-endef
+ifneq ($(SDK)$(CONFIG_PACKAGE_ntpd-openssl),)
+  define Build/with-openssl
+    $(call Build/Template,ntpd-openssl,with-openssl, \
+		--with-crypto \
+		--with-openssl-incdir="$(STAGING_DIR)/usr/include" \
+		--with-openssl-libdir="$(STAGING_DIR)/usr/lib" \
+    )
+  endef
+endif
+$(eval $(Build/with-openssl))
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_ntpd),)
+  define Build/without-ssl
+    $(call Build/Template,ntpd,without-ssl)
+  endef
+endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_ntpdate),)
+  define Build/without-ssl
+    $(call Build/Template,ntpd,without-ssl)
+  endef
+endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_ntp-utils),)
+  define Build/without-ssl
+    $(call Build/Template,ntpd,without-ssl)
+  endef
+endif
+$(eval $(Build/without-ssl))
 
 define Package/ntpd/install
 	$(INSTALL_DIR) $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ntpd/ntpd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME)-without-ssl $(1)/usr/sbin/$(PKG_NAME)
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_CONF) ./files/ntp.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/ntpd.init $(1)/etc/init.d/ntpd
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
+	$(INSTALL_BIN) ./files/ntpd.hotplug $(1)/etc/hotplug.d/iface/20-ntpd
+endef
+
+define Package/ntpd-openssl/install
+	$(INSTALL_DIR) $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME)-with-openssl $(1)/usr/sbin/$(PKG_NAME)
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/ntp.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
@@ -137,6 +193,7 @@ define Package/ntp-utils/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ntpq/ntpq $(1)/usr/sbin/
 endef
 
+$(eval $(call BuildPackage,ntpd-openssl))
 $(eval $(call BuildPackage,ntpd))
 $(eval $(call BuildPackage,ntpdate))
 $(eval $(call BuildPackage,ntp-utils))
