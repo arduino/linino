@@ -48,7 +48,7 @@ endef
 define Package/ntpd-openssl
   $(call Package/ntpd/Default)
   TITLE+= server (with OpenSSL support)
-  DEPENDS:=+openssl
+  DEPENDS:=+libopenssl
 endef
 
 define Package/ntpd-openssl/description
