@@ -66,8 +66,8 @@ define Build/Configure
 		--enable-fixed-point \
 		--disable-oggtest \
 		--disable-float-api \
-		--disable-vbr, \
-		OGG_CFLAGS="" \
+		--disable-vbr \
+		--with-ogg=$(STAGING_DIR)/usr \
 	)
 endef
 
