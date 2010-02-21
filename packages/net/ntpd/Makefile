@@ -160,7 +160,7 @@ $(eval $(Build/without-ssl))
 
 define Package/ntpd/install
 	$(INSTALL_DIR) $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME)-without-ssl $(1)/usr/sbin/$(PKG_NAME)
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME)-without-ssl $(1)/usr/sbin/ntpd
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/ntp.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
@@ -171,7 +171,7 @@ endef
 
 define Package/ntpd-openssl/install
 	$(INSTALL_DIR) $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME)-with-openssl $(1)/usr/sbin/$(PKG_NAME)
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME)-with-openssl $(1)/usr/sbin/ntpd
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/ntp.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
