@@ -30,7 +30,15 @@ define Package/imlib2
   DEPENDS:=+libX11 +giflib +libtiff +libjpeg +gtk1 +libfreetype +libXext
 endef
 
-CONFIGURE_ARGS+=--disable-gtktest LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
+TARGET_CFLAGS += "-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
+
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--x-includes="$(STAGING_DIR)/usr/include/X11" \
+		--x-libraries="$(STAGING_DIR)/usr/lib/" \
+		--disable-gtktest \
+	)
+endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{include,lib/pkgconfig}
