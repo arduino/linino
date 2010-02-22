@@ -1,54 +1,31 @@
 #!/bin/sh /etc/rc.common
 
 START=71
+PID_F="/var/run/ahcpd.pid"
+EXTRA_COMMANDS="status"
+EXTRA_HELP="        status Print ahcpd's status to the log file."
 
-pidfile=/var/run/ahcpd.pid
-addif() {
-	config_get ifname $1 ifname
-	append interfaces "$ifname"
-}
-
-ahcpd_config() {
-	local cfg="$1"
-	interfaces=
-	config_list_foreach $cfg interface addif
-	[ -z "$interfaces" ] && return 0
-	config_get_bool no_config "$cfg" no_config 0
-	config_get_bool ipv4_only "$cfg" ipv4_only 0
-	config_get_bool ipv6_only "$cfg" ipv6_only 0
-	config_get_bool no_dns "$cfg" no_dns 0
-	if [ "$no_config" -eq 0 ]; then
-		unset no_config
-	fi
-	if [ "$ipv4_only" -eq 0 ]; then
-		unset ipv4_only
-	fi
-	if [ "$ipv6_only" -eq 0 ]; then
-		unset ipv6_only
-	fi
-	if [ "$no_dns" -eq 0 ]; then
-		unset no_dns
-	fi
-	if [ -e $pidfile ] ; then
-		echo "$pidfile exists -- not starting ahcpd." >&2
-	else
-		/usr/sbin/ahcpd -s /usr/lib/ahcp/ahcp-config.sh -D -I $pidfile \
-		${ipv4_only:+-4} ${ipv6_only:+-6} ${no_dns:+-N} ${no_config:+-n} \
-		$interfaces
-	fi
-}
+. /lib/network/ahcp.sh
 
 start() {
-	include /lib/network
-	scan_interfaces
-	config_load ahcpd
 	mkdir -p /var/lib
-	config_foreach ahcpd_config ahcpd
+	config_load ahcpd
+	unset args
+	unset interfaces
+	config_foreach ahcp_config ahcpd
+	config_foreach ahcp_server ahcpd
+	[ -z "$interfaces" ] && return 0
+	eval "/usr/sbin/ahcpd -D -I $PID_F $args $interfaces"
 }
 
 stop() {
-	[ -e $pidfile ] && kill $(cat $pidfile)
-	[ -e $pidfile ] && sleep 2
-	[ -e $pidfile ] && sleep 4
-	[ -e $pidfile ] && echo "Failed to stop ahcpd ($pidfile still exists)."
+	[ -f "$PID_F" ] && kill $(cat "$PID_F")
+}
+
+status() {
+	[ -f $PID_F ] && kill -USR1 $(cat $PID_F)
+}
+
+reload() {
+	[ -f $PID_F ] && kill -USR2 $(cat $PID_F)
 }
