@@ -20,6 +20,8 @@ PKG_SOURCE_PROTO:=svn
 
 include $(INCLUDE_DIR)/package.mk
 
+TARGET_CFLAGS += $(FPIC)
+
 define Package/faifa
   SECTION:=net
   CATEGORY:=Network

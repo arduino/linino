@@ -22,6 +22,8 @@ PKG_BUILD_DEPENDS:=curl expat libxml2 mysql openldap openssl pcre postgresql rad
 
 include $(INCLUDE_DIR)/package.mk
 
+TARGET_CFLAGS += $(FPIC)
+
 define Package/kamailio/Default
   SECTION:=net
   CATEGORY:=Network

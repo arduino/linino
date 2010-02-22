@@ -20,6 +20,8 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-sdk
 
 include $(INCLUDE_DIR)/package.mk
 
+TARGET_CFLAGS += $(FPIC)
+
 define Package/urbi
   SECTION:=lang
   CATEGORY:=Languages
