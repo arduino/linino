@@ -44,7 +44,11 @@ endef
 CONFIGURE_ARGS +=  \
 	--disable-dependency-tracking \
 	--enable-tcp-wrapper \
-	--disable-glibtest
+	--disable-glibtest \
+	--disable-spoof-source \
+	--disable-sql \
+	--enable-prce \
+	--disable-linux-caps \
 
 TARGET_CPPFLAGS += \
 	-I$(STAGING_DIR)/usr/include/eventlog
