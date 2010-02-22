@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=transmission
-PKG_VERSION:=1.90
+PKG_VERSION:=1.91
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://mirrors.m0k.org/transmission/files
-PKG_MD5SUM:=91cc216807745a7d287150a6947e9bac
+PKG_MD5SUM:=2c6993300988d5aa2e3fc24a439d3633
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
