@@ -1,6 +1,6 @@
 --- a/conf/functions.in
 +++ b/conf/functions.in
-@@ -164,6 +164,7 @@
+@@ -173,6 +173,7 @@ writeconfig() {
      if [ "$HS_RADCONF" != "on" -a "$HS_RADCONF" != "url" ]; then 
  	[ "$HS_PAP_OK" = "on" ] && addconfig2 "papalwaysok"
  	[ "$HS_MACAUTH" = "on" ] && addconfig2 "macauth"
