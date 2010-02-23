@@ -1,0 +1,15 @@
+Tue Feb 23 14:24:12 CET 2010  Gabriel Kerneis <kerneis@pps.jussieu.fr>
+  * Add missing header in config.c
+  
+  This is necessary to build with a 2.4 kernel.  See rtnetlink(7).
+diff -rN -u old-babeld/config.c new-babeld/config.c
+--- old-babeld/config.c 2010-02-23 14:33:50.000000000 +0100
++++ new-babeld/config.c 2010-02-23 14:33:50.000000000 +0100
+@@ -26,6 +26,7 @@
+ 
+ #ifndef __APPLE__
+ /* For RTPROT_BOOT */
++#include <asm/types.h>
+ #include <sys/socket.h>
+ #include <linux/netlink.h>
+ #include <linux/rtnetlink.h>
