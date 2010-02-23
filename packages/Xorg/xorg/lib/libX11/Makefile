@@ -27,7 +27,7 @@ define Package/libX11
   SECTION:=xorg-lib
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+libXdmcp +libXau
+  DEPENDS:=+libXdmcp +libXau @FEATURE_drawing-backend_libX11
   TITLE:=libX11
   URL:=http://xorg.freedesktop.org/
 endef
