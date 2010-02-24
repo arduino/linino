@@ -18,7 +18,7 @@ PKG_MD5SUM:=1a94dc537fcf74d6a3a80bd27808e77b
 PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 define Package/rdiff-backup
   SUBMENU:=backup

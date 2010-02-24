@@ -19,7 +19,7 @@ PKG_INSTALL:=1
 PKG_BUILD_DEPENDS:=PACKAGE_python:python PACKAGE_python-mini:python
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,PACKAGE_python PACKAGE_python-mini)
 

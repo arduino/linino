@@ -23,7 +23,7 @@ PKG_INSTALL:=1
 
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/xorg-driver.mk)
+$(call include_mk, xorg-driver.mk)
 
 define Package/xf86-video-geode
   SECTION:=xorg-driver

@@ -18,7 +18,7 @@ PKG_MD5SUM:=532268f02870bea18c1d465e88afff30
 PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 define Package/python-mysql
   SUBMENU:=Python

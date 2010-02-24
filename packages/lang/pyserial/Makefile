@@ -18,7 +18,7 @@ PKG_MD5SUM:=eec19df59fd75ba5a136992897f8e468
 PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 define Package/pyserial
   SUBMENU:=Python

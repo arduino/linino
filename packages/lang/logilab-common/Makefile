@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=ftp://ftp.logilab.fr/pub/common/
 PKG_MD5SUM:=90f679e0d4ed19e2bf083fb932cde922
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 define Package/logilab-common
   SUBMENU:=Python

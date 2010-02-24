@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=http://www.amk.ca/files/python/crypto/
 PKG_MD5SUM:=4d5674f3898a573691ffb335e8d749cd
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 define Package/python-crypto
 	SECTION:=lang-python

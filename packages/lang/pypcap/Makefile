@@ -18,7 +18,7 @@ PKG_MD5SUM:=034c3cbbfa81aa19e8f685b767c65764
 PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 define Package/python-pcap
   SUBMENU:=Python

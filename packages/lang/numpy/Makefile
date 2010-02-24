@@ -15,7 +15,7 @@ PKG_SOURCE_URL:=@SF/numpy
 PKG_MD5SUM:=8f011e9d7697da570efaac61c51725e0
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 define Package/numpy
   SUBMENU:=Python

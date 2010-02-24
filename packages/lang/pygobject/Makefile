@@ -18,7 +18,7 @@ PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 EXTRA_LDFLAGS+= \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \

@@ -18,7 +18,7 @@ PKG_MD5SUM:=31e7156698a6f214b4067afb9e13728f
 PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 define Package/python-kid
   SUBMENU:=Python

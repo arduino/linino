@@ -18,7 +18,7 @@ PKG_MD5SUM:=a31f79f68d6d32898d6f24e11369a106
 PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 define Package/python-psycopg
   SUBMENU:=Python

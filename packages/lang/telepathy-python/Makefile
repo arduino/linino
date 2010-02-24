@@ -15,7 +15,7 @@ PKG_SOURCE_URL:=http://telepathy.freedesktop.org/releases/telepathy-python/
 PKG_MD5SUM:=594a66a70764052e30df9428b5be52b2
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 define Package/telepathy-python
   SUBMENU:=Python

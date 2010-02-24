@@ -18,7 +18,7 @@ PKG_MD5SUM:=eb38d423b49255a7b9f5ba1f50844b53
 PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 define Package/python-bluez
   SUBMENU:=Python

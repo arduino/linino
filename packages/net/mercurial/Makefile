@@ -17,7 +17,7 @@ PKG_MD5SUM:=4fd3b9a2e5dcd025840c3849b136bec8
 PKG_BUILD_DEPENDS:=python-mini
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 define Package/mercurial
   SECTION:=net

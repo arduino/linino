@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=ftp://ftp.logilab.fr/pub/astng/
 PKG_MD5SUM:=a654d65a4644fb984d840906cf8b27d5
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 define Package/logilab-astng
   SUBMENU:=Python

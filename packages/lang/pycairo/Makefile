@@ -17,7 +17,7 @@ PKG_MD5SUM:=847f5377c32228a656819f5bd18eb6b4
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 PKG_INSTALL=1
 

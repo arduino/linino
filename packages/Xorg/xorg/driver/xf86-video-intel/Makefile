@@ -20,7 +20,7 @@ PKG_BUILD_DEPENDS:=xf86driproto glproto
 PKG_MD5SUM:=8951d0366c16991badb7f9050556f4f3
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/xorg-driver.mk)
+$(call include_mk, xorg-driver.mk)
 
 define Package/xf86-video-intel
   SECTION:=xorg-driver

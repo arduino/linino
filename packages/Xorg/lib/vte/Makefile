@@ -19,7 +19,7 @@ PKG_FIXUP:=libtool
 PKG_BUILD_DEPENDS:=intltool/host
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 PKG_INSTALL=1
 

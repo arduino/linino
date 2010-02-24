@@ -18,7 +18,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/${PKG_NAME}-$(PKG_VERSION)/
 PKG_MD5SUM:=1b22188bd9012a148206940708b52ea6
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/xorg-driver.mk)
+$(call include_mk, xorg-driver.mk)
 
 define Package/xf86-video-nv
   SECTION:=xorg-driver

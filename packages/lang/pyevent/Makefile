@@ -18,7 +18,7 @@ PKG_MD5SUM:=584912c92d08bf005283fb29a47a6e4d
 PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 define Package/python-event
   SUBMENU:=Python

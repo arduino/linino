@@ -18,7 +18,7 @@ PKG_MD5SUM:=a4163a2017fa57f448c66815511fa555
 PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 define Package/pyyaml
   SUBMENU:=Python

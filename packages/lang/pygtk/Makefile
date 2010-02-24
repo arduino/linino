@@ -17,7 +17,7 @@ PKG_MD5SUM:=a816346d750d61e3fa67a200e4292694
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
--include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
+$(call include_mk, python-package.mk)
 
 TARGET_CFLAGS+= \
 	-I$(STAGING_DIR)/usr/lib/libintl/include/ \
