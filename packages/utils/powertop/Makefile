@@ -24,6 +24,7 @@ define Package/powertop
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=PowerTOP
+  DEFAULT:=n
   DEPENDS:=+libncurses +libgcc
   KCONFIG:=CONFIG_DEBUG_KERNEL=y CONFIG_TIMER_STATS=y
   URL:=http://www.lesswatts.org
