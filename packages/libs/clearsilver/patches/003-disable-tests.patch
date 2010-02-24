@@ -1,7 +1,6 @@
-diff -ur clearsilver-0.10.5/cs/Makefile clearsilver-0.10.5_new/cs/Makefile
---- clearsilver-0.10.5/cs/Makefile	2007-07-18 11:11:30.000000000 +0200
-+++ clearsilver-0.10.5_new/cs/Makefile	2007-07-18 11:21:21.000000000 +0200
-@@ -24,7 +24,7 @@
+--- a/cs/Makefile
++++ b/cs/Makefile
+@@ -24,7 +24,7 @@ CSDUMP_OBJ = $(CSDUMP_SRC:%.c=%.o)
  
  LIBS += -lneo_cs -lneo_utl #  -lefence
  

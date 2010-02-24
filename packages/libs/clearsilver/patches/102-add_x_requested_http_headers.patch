@@ -1,6 +1,5 @@
-diff -pruN clearsilver-0.10.5.orig/cgi/cgi.c clearsilver-0.10.5/cgi/cgi.c
---- clearsilver-0.10.5.orig/cgi/cgi.c	2007-07-12 04:38:03.000000000 +0200
-+++ clearsilver-0.10.5/cgi/cgi.c	2008-01-28 12:04:50.000000000 +0100
+--- a/cgi/cgi.c
++++ b/cgi/cgi.c
 @@ -201,6 +201,8 @@ struct _http_vars
    {"HTTP_IF_MODIFIED_SINCE", "IfModifiedSince"},
    {"HTTP_REFERER", "Referer"},

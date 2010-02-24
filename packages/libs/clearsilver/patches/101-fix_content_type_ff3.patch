@@ -1,7 +1,6 @@
-diff -pruN clearsilver-0.10.5.orig/cgi/cgi.c clearsilver-0.10.5/cgi/cgi.c
---- clearsilver-0.10.5.orig/cgi/cgi.c	2008-05-29 17:59:56.000000000 +0200
-+++ clearsilver-0.10.5/cgi/cgi.c	2008-05-29 18:02:51.000000000 +0200
-@@ -642,7 +642,7 @@ NEOERR *cgi_parse (CGI *cgi)
+--- a/cgi/cgi.c
++++ b/cgi/cgi.c
+@@ -640,7 +640,7 @@ NEOERR *cgi_parse (CGI *cgi)
  
    if (!strcmp(method, "POST"))
    {

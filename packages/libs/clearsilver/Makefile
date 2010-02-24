@@ -9,12 +9,18 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=clearsilver
 PKG_VERSION:=0.10.5
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.clearsilver.net/downloads/
 PKG_MD5SUM:=b8c0c7fbe0ef5e06e0c935f134304d44
 
+PKG_CONFIG_DEPENDS:= \
+	CONFIG_CLEARSILVER_ENABLE_COMPRESSION \
+	CONFIG_CLEARSILVER_ENABLE_REMOTE_DEBUGGER \
+	CONFIG_CLEARSILVER_ENABLE_GETTEXT
+
+PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -24,16 +30,25 @@ define Package/clearsilver
   CATEGORY:=Libraries
   TITLE:=ClearSilver template system
   URL:=http://www.clearsilver.net/
-  MENU:=1
+  MAINTAINER:=Raphaël HUCK <rhk@cksum.org>
+  DEPENDS:=+CLEARSILVER_ENABLE_COMPRESSION:zlib
+endef
+
+define Package/clearsilver/config
+  menu "Configuration"
+  depends on PACKAGE_clearsilver
+  source "$(SOURCE)/Config.in"
+  endmenu
 endef
 
 define Package/clearsilver/description
-  Clearsilver is a fast, powerful, and language-neutral HTML template system. In both static content sites and dynamic HTML applications, it provides a separation between presentation code and application logic which makes working with your project easier.
+Clearsilver is a fast, powerful, and language-neutral HTML template system. In
+both static content sites and dynamic HTML applications, it provides a separation
+between presentation code and application logic which makes working with your
+project easier.
 endef
 
-TARGET_CFLAGS += $(FPIC)
-
-CONFIGURE_ARGS += \
+CONFIGURE_ARGS+= \
 	--disable-wdb \
 	--disable-apache \
 	--disable-python \
@@ -43,31 +58,33 @@ CONFIGURE_ARGS += \
 	--disable-csharp \
 	--prefix=/usr
 
-ifneq ($(SDK)$(CONFIG_CLEARSILVER_ENABLE_COMPRESSION),y)
-  CONFIGURE_ARGS+= \
-        --disable-compression
+ifeq ($(SDK)$(CONFIG_CLEARSILVER_ENABLE_COMPRESSION),y)
+	CONFIGURE_ARGS+= \
+		--enable-compression
 else
-  CONFIGURE_ARGS+= \
-        --enable-compression
+	CONFIGURE_ARGS+= \
+		--disable-compression
 endif
 
-ifneq ($(SDK)$(CONFIG_CLEARSILVER_ENABLE_REMOTE_DEBUGGER),y)
-  CONFIGURE_ARGS+= \
-        --disable-remote-debugger
+ifeq ($(SDK)$(CONFIG_CLEARSILVER_ENABLE_REMOTE_DEBUGGER),y)
+	CONFIGURE_ARGS+= \
+		--enable-remote-debugger
 else
-  CONFIGURE_ARGS+= \
-        --enable-remote-debugger
+	CONFIGURE_ARGS+= \
+		--disable-remote-debugger
 endif
 
-ifneq ($(SDK)$(CONFIG_CLEARSILVER_ENABLE_GETTEXT),y)
-  CONFIGURE_ARGS+= \
-        --disable-gettext
+ifeq ($(SDK)$(CONFIG_CLEARSILVER_ENABLE_GETTEXT),y)
+	CONFIGURE_ARGS+= \
+		--enable-gettext
 else
-  CONFIGURE_ARGS+= \
-        --enable-gettext
+	CONFIGURE_ARGS+= \
+		--disable-gettext
 endif
 
-MAKE_FLAGS += \
+TARGET_CFLAGS+=$(FPIC)
+
+MAKE_FLAGS+= \
 	$(TARGET_CONFIGURE_OPTS) \
 	AR="$(AR) cr" \
 	LD="$(TARGET_CC) -o"
