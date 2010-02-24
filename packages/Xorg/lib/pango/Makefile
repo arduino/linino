@@ -17,10 +17,9 @@ PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/1.26/
 PKG_MD5SUM:=74ce18cfcc3ad0008a6ad56cfc535061
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-PKG_INSTALL=1
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
@@ -49,7 +48,7 @@ CONFIGURE_ARGS += \
 	$(if $(CONFIG_PACKAGE_libX11), --with-x, --without-x)
 
 CONFIGURE_VARS += \
-	CXX=$(TARGET_CC)
+	CXX="$(TARGET_CC)"
 
 define Build/InstallDev
 	$(INSTALL_DIR) \
