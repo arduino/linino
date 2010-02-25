@@ -26,7 +26,7 @@ stop() {
 	rpc.nfsd 0 2> /dev/null
 	/usr/sbin/exportfs -au
 	killall rpc.statd 2> /dev/null
-	grep -q /proc/fs/nfsd /proc/mounts &&
+	grep -q /proc/fs/nfsd /proc/mounts && \
 		umount /proc/fs/nfsd
 }
 
