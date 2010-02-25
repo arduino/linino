@@ -8,7 +8,7 @@ NFS_D=/var/lib/nfs
 LOCK_D=/var/lib/nfs/sm
 
 start() {
-	grep -q /proc/fs/nsfd /proc/mounts || \
+	grep -q /proc/fs/nfsd /proc/mounts || \
 		mount -t nfsd nfsd /proc/fs/nfsd
 	mkdir -p $NFS_D
 	mkdir -p $LOCK_D
