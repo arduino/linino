@@ -21,8 +21,10 @@ case "$ACTION" in
 		    config_get enabled $cfg enabled
 		    enabled=${enabled:-1}
 
+		    config_get service  $cfg service
+
 		    config_get pidfile $cfg pidfile
-		    pidfile=${pidfile:-/var/run/$NAME-$dev.pid}
+		    pidfile=${pidfile:-/var/run/$NAME-$service-$dev.pid}
 			    
 		    case "$ACTION" in
 			ifdown)
@@ -33,12 +35,11 @@ case "$ACTION" in
 				1|yes|true)
 				    [ ! -e $pidfile ] && {
 					config_get cache $cfg cache
-					[ -z "$cache" ] && cache=/tmp/$NAME-$dev.cache
+					[ -z "$cache" ] && cache=/tmp/$NAME-$service-$dev.cache
 					
 					config_get config $cfg config
 					[ -z "$config" ] && {
-					    config=/var/run/$NAME-$dev.conf
-					    config_get service  $cfg service
+					    config=/var/run/$NAME-$service-$dev.conf
 					    config_get username $cfg username
 					    config_get password $cfg password
 					    config_get hostname $cfg hostname
@@ -54,7 +55,7 @@ quiet
 EOF
 					}
 					
-					$COMMAND -d -c $config 2>&1 | logger -t $NAME &
+					$COMMAND -c $config 2>&1 | logger -t $NAME &
 				    }
 				    ;;
 				*)
