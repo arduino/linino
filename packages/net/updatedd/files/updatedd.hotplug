@@ -2,7 +2,7 @@ NAME=updatedd
 CONFIG=/etc/config/$NAME
 COMMAND=/usr/bin/$NAME
 
-[ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" ] && {
+[ "$ACTION" = "ifup" ] && {
         [ -x $COMMAND ] && [ -r $CONFIG ] && {
                                 include /lib/network
                                 scan_interfaces
