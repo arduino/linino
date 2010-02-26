@@ -44,8 +44,10 @@ case "$ACTION" in
 					    config_get password $cfg password
 					    config_get hostname $cfg hostname
 					    service=${service:-"dyndns"}
+					    config_get server	$cfg server
 					    cat > $config <<EOF
 service-type=$service
+server=$server
 user=$username:$password
 host=$hostname
 cache-file=$cache
