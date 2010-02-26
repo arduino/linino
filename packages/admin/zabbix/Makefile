@@ -60,6 +60,8 @@ PKG_CONFIGURE_OPTIONS+= \
 	--with-sqlite3="$(STAGING_DIR)/usr"
 endif
 
+MAKE_FLAGS += ARCH="linux"
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		$(PKG_CONFIGURE_OPTIONS) \
