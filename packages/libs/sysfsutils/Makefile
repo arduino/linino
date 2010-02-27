@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sysfsutils
 PKG_VERSION:=2.1.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/linux-diag
@@ -20,27 +20,50 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
+define Package/libsysfs
+  SECTION:=libs
+  CATEGORY:=Libraries
+  SUBMENU:=Filesystem
+  DEPENDS:=@LINUX_2_6
+  TITLE:=Sysfs library
+  URL:=http://linux-diag.sourceforge.net/Sysfsutils.html
+endef
+
 define Package/sysfsutils
   SECTION:=utils
   CATEGORY:=Utilities
   SUBMENU:=Filesystem
-  DEPENDS:=@LINUX_2_6
-  TITLE:=sysfs Utilities
+  DEPENDS:=@LINUX_2_6 +libsysfs
+  TITLE:=System Utilities Based on Sysfs
   URL:=http://linux-diag.sourceforge.net/Sysfsutils.html
+endef
+
+define Package/libsysfs/description
+The library's purpose is to provide a consistant and stable interface for
+querying system device information exposed through sysfs.
+endef
+
+define Package/sysfsutils/description
+A utility built upon libsysfs that lists devices by bus, class, and topology.
 endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/sysfs $(1)/usr/include/
+
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsysfs.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsysfs.{a,so*,la} $(1)/usr/lib/
+endef
+
+define Package/libsysfs/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsysfs.so* $(1)/usr/lib/
 endef
 
 define Package/sysfsutils/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/systool $(1)/usr/bin/
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsysfs.so.* $(1)/usr/lib/
 endef
 
+$(eval $(call BuildPackage,libsysfs))
 $(eval $(call BuildPackage,sysfsutils))
