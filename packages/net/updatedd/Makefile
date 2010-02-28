@@ -35,6 +35,10 @@ Updatedd is a small tool that will update one of many dynamic
 
 endef
 
+define Package/updatedd/conffiles
+/etc/config/updatedd
+endef
+
 define Package/updatedd-mod-changeip
   SECTION:=net
   CATEGORY:=Network
