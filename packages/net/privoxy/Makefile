@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=privoxy
-PKG_VERSION:=3.0.12
+PKG_VERSION:=3.0.16
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-stable-src.tar.gz
 PKG_SOURCE_URL:=@SF/ijbswa
-PKG_MD5SUM:=c973e608d27b248ef567b47664308da1
+PKG_MD5SUM:=64d3ffcdf8307e04a375773bb4eb255e
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-stable
 
@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/privoxy
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Proxy Servers
   DEPENDS:=+libpcre +libpthread
   TITLE:=web proxy with advanced filtering capabilities
   URL:=http://www.privoxy.org/
@@ -48,7 +49,6 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		SPECIAL_CFLAGS="-pthread $(TARGET_LDFLAGS)"
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		install
