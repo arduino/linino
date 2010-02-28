@@ -17,6 +17,8 @@ PKG_MD5SUM:=00efe7638dd596d5930dfa2aeae87b3a
 
 PKG_FIXUP:=libtool
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/irssi/Default
@@ -24,7 +26,7 @@ define Package/irssi/Default
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+glib2 +libncurses
-  TITLE:=console irc client
+  TITLE:=Console IRC client
   URL:=http://irssi.org/
 endef
 
@@ -34,71 +36,55 @@ endef
 
 define Package/irssi
 $(call Package/irssi/Default)
-  TITLE+= (without OpenSSL support)
+  TITLE+= (with OpenSSL support)
+  DEPENDS+= +libopenssl
+  VARIANT:=ssl
 endef
 
 define Package/irssi/description
 $(call Package/irssi/Default/description)
- This package is built without OpenSSL support.
-endef
-
-define Package/irssi-openssl
-$(call Package/irssi/Default)
-  TITLE+= (with OpenSSL support)
-  DEPENDS+= +libopenssl
-endef
-
-define Package/irssi-openssl/description
-$(call Package/irssi/Default/description)
  This package is built with OpenSSL support.
 endef
 
-define Build/Template
-
-$(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
-	-$(MAKE) -C $(PKG_BUILD_DIR) clean
-	$(call Build/Configure/Default, \
-		--with-perl=no \
-		--with-glib-prefix="$(STAGING_DIR)/usr" \
-		--with-textui \
-		--without-terminfo \
-		--without-bot \
-		--disable-proxy \
-		$(3))
-	$(MAKE) -C $(PKG_BUILD_DIR)
-	( cd $(PKG_BUILD_DIR); mv -f src/fe-text/irssi $(PKG_NAME)-$(2) )
-	touch $$@
-
-$(STAMP_BUILT): $(STAMP_BUILT)-$(2)
-
-define Package/$(1)/install
-	$(INSTALL_DIR) $$(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME)-$(2)  $$(1)/usr/bin/$(PKG_NAME)
+define Package/irssi-nossl
+$(call Package/irssi/Default)
+  TITLE+= (without OpenSSL support)
+  VARIANT:=nossl
 endef
+
+define Package/irssi-nossl/description
+$(call Package/irssi/Default/description)
+ This package is built without OpenSSL support.
 endef
+
+CONFIGURE_ARGS += \
+	--with-perl=no \
+	--with-glib-prefix="$(STAGING_DIR)/usr" \
+	--with-textui \
+	--without-terminfo \
+	--without-bot \
+	--disable-proxy
 
 EXTRA_CFLAGS+=$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/lib/libiconv/include -I$(STAGING_DIR)/usr/lib/libintl/include
 EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libiconv/lib -L$(STAGING_DIR)/usr/lib/libintl/lib -lncurses
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_irssi),)
-  define Build/without-ssl
-    $(call Build/Template,irssi,without-ssl, \
-		--without-ssl \
-		--disable-ssl \
-    )
-  endef
+ifeq ($(BUILD_VARIANT),ssl)
+	CONFIGURE_ARGS += \
+		--with-ssl="$(STAGING_DIR)/usr"
 endif
-$(eval $(Build/without-ssl))
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_irssi-openssl),)
-  define Build/with-openssl
-    $(call Build/Template,irssi-openssl,with-openssl, \
-        --with-ssl="$(STAGING_DIR)/usr" \
-    )
-  endef
+ifeq ($(BUILD_VARIANT),nossl)
+	CONFIGURE_ARGS += \
+		--without-ssl \
+		--disable-ssl
 endif
-$(eval $(Build/with-openssl))
+
+define Package/irssi/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/fe-text/$(PKG_NAME) $(1)/usr/bin/$(PKG_NAME)
+endef
+
+Package/irssi-nossl/install = $(Package/irssi/install)
 
 $(eval $(call BuildPackage,irssi))
-$(eval $(call BuildPackage,irssi-openssl))
-
+$(eval $(call BuildPackage,irssi-nossl))
