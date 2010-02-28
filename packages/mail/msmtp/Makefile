@@ -18,6 +18,8 @@ PKG_MD5SUM:=f0afdc943bf7c8a3a3bf3fe1a73072c4
 
 PKG_FIXUP:=libtool
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/msmtp/Default
@@ -43,6 +45,7 @@ define Package/msmtp
 $(call Package/msmtp/Default)
   DEPENDS+= +libopenssl
   TITLE+= (with SSL support)
+  VARIANT:=ssl
 endef
 
 define Package/msmtp/conffiles
@@ -57,6 +60,7 @@ endef
 define Package/msmtp-nossl
 $(call Package/msmtp/Default)
   TITLE+= (without SSL support)
+  VARIANT:=nossl
 endef
 
 define Package/msmtp-nossl/conffiles
@@ -68,29 +72,6 @@ $(call Package/msmtp/Default/description)
  This package is built without SSL support.
 endef
 
-define Build/Template
-
-$(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
-	-$(MAKE) -C $(PKG_BUILD_DIR) clean
-	$(call Build/Configure/Default,$(3))
-	$(MAKE) -C $(PKG_BUILD_DIR)
-	( cd $(PKG_BUILD_DIR)/src; mv -f msmtp msmtp-$(2) )
-	touch $$@
-
-$(STAMP_BUILT): $(STAMP_BUILT)-$(2)
-
-define Package/$(1)/install
-	$(INSTALL_DIR) $$(1)/etc
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/doc/msmtprc-system.example \
-		$$(1)/etc/msmtprc
-	$(INSTALL_DIR) $$(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/msmtp-$(2) $$(1)/usr/bin/msmtp
-	$(INSTALL_DIR) $$(1)/usr/sbin
-	ln -sf /usr/bin/msmtp $$(1)/usr/sbin/sendmail
-endef
-
-endef
-
 CONFIGURE_ARGS += \
 	--disable-rpath \
 	--without-libssl32 \
@@ -98,24 +79,30 @@ CONFIGURE_ARGS += \
 	--without-libgsasl \
 	--without-libidn
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_msmtp),)
-  define Build/with-ssl
-	$(call Build/Template,msmtp,with-ssl, \
-		--with-ssl=openssl \
-		--with-libssl-prefix="$(STAGING_DIR)/usr/include" \
-	)
-  endef
-endif
-$(eval $(Build/with-ssl))
+MAKE_FLAGS :=
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_msmtp-nossl),)
-  define Build/without-ssl
-	$(call Build/Template,msmtp-nossl,without-ssl, \
-		--with-ssl=no \
-	)
-  endef
+ifeq ($(BUILD_VARIANT),ssl)
+	CONFIGURE_ARGS += \
+		--with-ssl=openssl \
+		--with-libssl-prefix="$(STAGING_DIR)/usr/include"
 endif
-$(eval $(Build/without-ssl))
+
+ifeq ($(BUILD_VARIANT),nossl)
+	CONFIGURE_ARGS += \
+		--with-ssl=no
+endif
+
+define Package/msmtp/install
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/doc/msmtprc-system.example \
+		$(1)/etc/msmtprc
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/msmtp $(1)/usr/bin/msmtp
+	$(INSTALL_DIR) $(1)/usr/sbin
+	ln -sf /usr/bin/msmtp $(1)/usr/sbin/sendmail
+endef
+
+Package/msmtp-nossl/install = $(Package/msmtp/install)
 
 $(eval $(call BuildPackage,msmtp))
 $(eval $(call BuildPackage,msmtp-nossl))
