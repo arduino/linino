@@ -19,9 +19,8 @@ include $(INCLUDE_DIR)/package.mk
 define Package/memcached
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libevent librt
+  DEPENDS:=+libevent
   TITLE:=The high-performance, distributed memory object caching system
-  SUBMENU:=Web
   MAINTAINER:=Thomas Heil <heil@terminal-consulting.de>
 endef
 
@@ -48,7 +47,7 @@ define Package/memcached/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/memcached $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_CONF) ./files/memcached $(1)/etc/config/memcached
+	$(INSTALL_CONF) ./files/memcached.config $(1)/etc/config/memcached
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/memcached.init $(1)/etc/init.d/memcached
 endef
