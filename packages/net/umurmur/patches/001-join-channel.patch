@@ -1,0 +1,17 @@
+diff -ruN umurmur-0.2.1/src/channel.c umurmur-0.2.1.new/src/channel.c
+--- umurmur-0.2.1/src/channel.c	2010-02-13 23:36:54.000000000 +0100
++++ umurmur-0.2.1.new/src/channel.c	2010-02-28 00:00:43.661542508 +0100
+@@ -276,9 +276,12 @@
+ int Chan_userJoin(channel_t *ch, client_t *client)
+ {
+ 	int leaving_id;
++
++	/* Do nothing if user already is in this channel */
++	if ((channel_t *)client->channel == ch)
++		return 0;
+ 	
+ 	Log_debug("Add user %s to channel %s", client->username, ch->name); 
+-
+ 	/* Only allowed in one channel at a time */
+ 	leaving_id = Chan_userLeave(client);
+ 	list_add_tail(&client->chan_node, &ch->clients);
