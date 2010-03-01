@@ -65,8 +65,15 @@ CONFIGURE_ARGS += \
 	--without-bot \
 	--disable-proxy
 
-EXTRA_CFLAGS+=$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/lib/libiconv/include -I$(STAGING_DIR)/usr/lib/libintl/include
-EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libiconv/lib -L$(STAGING_DIR)/usr/lib/libintl/lib -lncurses
+EXTRA_CFLAGS+= \
+	$(TARGET_CPPFLAGS) \
+	-I$(STAGING_DIR)/usr/lib/libiconv/include \
+	-I$(STAGING_DIR)/usr/lib/libintl/include
+
+EXTRA_LDFLAGS+= \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib \
+	-lncurses
 
 ifeq ($(BUILD_VARIANT),ssl)
 	CONFIGURE_ARGS += \
