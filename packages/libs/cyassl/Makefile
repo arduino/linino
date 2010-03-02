@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cyassl
-PKG_VERSION:=1.3.0
-PKG_RELEASE:=2
+PKG_VERSION:=1.4.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).zip
 PKG_SOURCE_URL:=http://www.yassl.com/
-PKG_MD5SUM:=f8b6cdcc2c299c66c74b7e4305745350
+PKG_MD5SUM:=037397c7df84b9a12e614bf46135df1c
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,20 +37,19 @@ endef
 TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
-	--with-zlib="$(STAGING_DIR)/usr"
+	--with-libz="$(STAGING_DIR)/usr"
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/ctaocrypt
-	$(CP) $(PKG_BUILD_DIR)/ctaocrypt/include/*.h $(1)/usr/include/ctaocrypt
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/src/.libs/libcyassl.{a,so*} $(1)/usr/lib/
-	$(CP) $(PKG_BUILD_DIR)/src/libcyassl.la $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcyassl.{a,so*,la} $(1)/usr/lib/
 endef
 
 define Package/libcyassl/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/src/.libs/libcyassl.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcyassl.so* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libcyassl))
