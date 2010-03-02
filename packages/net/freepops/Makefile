@@ -25,7 +25,7 @@ define Package/freepops
   SECTION:=net
   CATEGORY:=Network
   TITLE:=POP3 interface to several webmails
-  DEPENDS:=+libpthread +liblua +luafilesystem +luacurl +luaexpat
+  DEPENDS:=+libpthread +liblua +luafilesystem +luacurl +luaexpat @BROKEN
   URL:=http://www.freepops.org
 endef
 
