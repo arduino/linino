@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=batman-adv
-PKG_REV:=1568
+PKG_REV:=1578
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -19,12 +19,12 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_TOOL_VERSION=$(PKG_REV)
 
 ifneq ($(CONFIG_BATMAN_ADV_DEV),)
-	PKG_KMOD_VERSION=060c4d34077550d57cd57c5375dd5f8758391eb5
+	PKG_KMOD_VERSION=7e44e9275aafce871a91b9ab5f710ed953dda74c
 	PKG_KMOD_FNAME=batman-adv-dev-$(PKG_REV).tar.gz
 	PKG_TOOL_URL=http://downloads.open-mesh.org/svn/batman/trunk/batctl
 	PKG_TOOL_FNAME:=batctl-dev-$(PKG_TOOL_VERSION).tar.gz
 else
-	PKG_KMOD_VERSION=1b58d49b4342caabb9624243bc76e037eaac2673
+	PKG_KMOD_VERSION=9234caa91ce04d0bba893738da960b88154e5474
 	PKG_KMOD_FNAME=batman-adv-maint-$(PKG_REV).tar.gz
 	PKG_TOOL_URL=http://downloads.open-mesh.org/svn/batman/branches/batctl-0.2.x/
 	PKG_TOOL_FNAME:=batctl-maint-$(PKG_TOOL_VERSION).tar.gz
@@ -106,13 +106,13 @@ ifneq ($(DEVELOPER)$(CONFIG_BATMAN_ADV_DEV),)
 endif
 endif
 	mv "$(PKG_BUILD_DIR)/batman-adv" "$(PKG_KMOD_BUILD_DIR)"
-	cp $(PKG_KMOD_BUILD_DIR)/Makefile.kbuild $(PKG_KMOD_BUILD_DIR)/Makefile
 	$(call PatchDir,$(PKG_BUILD_DIR),$(PATCH_DIR),)
 ifneq ($(CONFIG_BATMAN_ADV_DEV),)
 	$(call PatchDir,$(PKG_BUILD_DIR),$(PATCH_DIR)/dev,)
 else
 	$(call PatchDir,$(PKG_BUILD_DIR),$(PATCH_DIR)/maint,)
 endif
+	cp $(PKG_KMOD_BUILD_DIR)/Makefile.kbuild $(PKG_KMOD_BUILD_DIR)/Makefile
 endef
 
 MAKE_BATADV_KERNELLAND_ARGS += \
