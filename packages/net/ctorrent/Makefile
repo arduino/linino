@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ctorrent
 PKG_VERSION:=dnh3.3.2
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/dtorrent \
@@ -60,7 +60,8 @@ endef
 
 CONFIGURE_VARS += \
 	CXX="g++-uc" \
-	CXXFLAGS="$$$$CXXFLAGS -fno-rtti" 
+	CXXFLAGS="$$$$CXXFLAGS -fno-rtti" \
+	LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++"
 
 ifeq ($(BUILD_VARIANT),ssl)
 	CONFIGURE_ARGS += \
