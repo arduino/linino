@@ -1,8 +1,6 @@
-Only in ucarp-1.5.1: autom4te.cache
-diff -ur ucarp-1.5.1.clean/configure ucarp-1.5.1/configure
---- ucarp-1.5.1.clean/configure	2010-01-30 00:03:55.000000000 +0100
-+++ ucarp-1.5.1/configure	2010-01-30 00:36:06.000000000 +0100
-@@ -30117,174 +30117,11 @@
+--- a/configure
++++ b/configure
+@@ -30129,174 +30129,11 @@ _ACEOF
  
  fi
  
