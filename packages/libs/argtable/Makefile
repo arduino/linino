@@ -8,15 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=argtable
-PKG_VERSION:=2.11
-PKG_RELEASE:=2
+PKG_VERSION:=2.12
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)2-11.tar.gz
+PKG_SOURCE:=$(PKG_NAME)2-12.tar.gz
 PKG_SOURCE_URL:=@SF/argtable
-PKG_MD5SUM:=6be6bdb5395b2de8063698f83db61791
+PKG_MD5SUM:=291e249ea60f4d0637e467356a8ae41a
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)2-11
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)2-12
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -42,10 +43,7 @@ CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
 
-MAKE_FLAGS += \
-	-C $(PKG_BUILD_DIR)/src \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install \
+MAKE_PATH = ./src
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
