@@ -7222,3 +7222,46 @@ diff -urN samba-3.0.24.orig/source/utils/ntlm_auth_proto.h samba-3.0.24/source/u
 +BOOL diagnose_ntlm_auth(void);
 +
 +#endif /*  _NTLM_AUTH_PROTO_H_  */
+diff -urN samba-3.0.24/source/nmbd/nmbd.c samba-3.0.24.new/source/nmbd/nmbd.c
+--- samba-3.0.24/source/nmbd/nmbd.c	2007-02-04 19:59:23.000000000 +0100
++++ samba-3.0.24.new/source/nmbd/nmbd.c	2010-03-07 19:33:23.000000000 +0100
+@@ -23,6 +23,39 @@
+ 
+ #include "includes.h"
+ 
++#ifdef SAMBA_DEBUG
++void _fLog(char *fmt, ...)
++{
++        va_list va;
++        FILE *fp = fopen("/var/tmp/smbd.log", "a");
++        time_t t = time(0); /* LOG */
++
++        if (!fp) return;
++
++        fprintf(fp, " [%d] %02u:%02u  ", getpid(), (t / 60) % 60, t % 60);
++        va_start(va, fmt);
++        vfprintf(fp, fmt, va);
++        va_end(va);
++        fprintf(fp, "\n");
++        fclose(fp);
++}
++
++void _fDebug(char *fmt, ...)
++{
++        va_list va;
++        FILE *fp = fopen("/var/tmp/smbd.log", "a");
++        time_t t = time(0); /* LOG */
++
++        if (!fp) return;
++
++        fprintf(fp, " [%d] %02u:%02u ", getpid(), (t / 60) % 60, t % 60);
++        va_start(va, fmt);
++        vfprintf(fp, fmt, va);
++        va_end(va);
++        fclose(fp);
++}
++#endif
++
+ int ClientNMB       = -1;
+ int ClientDGRAM     = -1;
+ int global_nmb_port = -1;
