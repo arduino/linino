@@ -7233,7 +7233,7 @@ diff -urN samba-3.0.24/source/nmbd/nmbd.c samba-3.0.24.new/source/nmbd/nmbd.c
 +void _fLog(char *fmt, ...)
 +{
 +        va_list va;
-+        FILE *fp = fopen("/var/tmp/smbd.log", "a");
++        FILE *fp = fopen("/var/tmp/nmbd.log", "a");
 +        time_t t = time(0); /* LOG */
 +
 +        if (!fp) return;
@@ -7249,7 +7249,7 @@ diff -urN samba-3.0.24/source/nmbd/nmbd.c samba-3.0.24.new/source/nmbd/nmbd.c
 +void _fDebug(char *fmt, ...)
 +{
 +        va_list va;
-+        FILE *fp = fopen("/var/tmp/smbd.log", "a");
++        FILE *fp = fopen("/var/tmp/nmbd.log", "a");
 +        time_t t = time(0); /* LOG */
 +
 +        if (!fp) return;
