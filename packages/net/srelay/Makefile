@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=srelay
 PKG_VERSION:=0.4.6
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/socks-relay
@@ -31,9 +31,10 @@ endef
 
 CONFIGURE_ARGS += \
 	--disable-thread \
+	--with-libwrap="$(STAGING_DIR)/usr" \
 
 CONFIGURE_VARS += \
-	CPPFLAGS="-DLINUX" \
+	CPPFLAGS="-DLINUX $$$$CPPFLAGS" \
 
 define Package/srelay/install	
 	$(INSTALL_DIR) $(1)/usr/bin
