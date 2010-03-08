@@ -12,7 +12,9 @@ PKG_VERSION:=0.0.101
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnetfilter_conntrack
+PKG_SOURCE_URL:= \
+	http://www.netfilter.org/projects/libnetfilter_conntrack/files/ \
+	ftp://ftp.netfilter.org/pub/libnetfilter_conntrack/
 PKG_MD5SUM:=3c4b4048c914f2694c3ca6de2bb457dc
 
 PKG_FIXUP:=libtool

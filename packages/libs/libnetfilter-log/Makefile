@@ -13,7 +13,9 @@ PKG_VERSION:=0.0.16
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnetfilter_log/ \
+PKG_SOURCE_URL:= \
+	http://www.netfilter.org/projects/libnetfilter_log/files/ \
+	ftp://ftp.netfilter.org/pub/libnetfilter_log/ \
 	http://mirrors.evolva.ro/netfilter.org/libnetfilter_log/
 PKG_MD5SUM:=4ffcf46dad9d0c81f6611dd185639694
 

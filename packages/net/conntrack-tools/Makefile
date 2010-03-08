@@ -12,7 +12,10 @@ PKG_VERSION:=0.9.14
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.netfilter.org/projects/conntrack-tools/files
+PKG_SOURCE_URL:= \
+	http://www.netfilter.org/projects/conntrack-tools/files/ \
+	ftp://ftp.netfilter.org/pub/conntrack-tools/ \
+	http://mirrors.evolva.ro/netfilter.org/conntrack-tools/
 PKG_MD5SUM:=7e9344fe85bb68bcf65c35034add6655
 
 PKG_FIXUP:=libtool

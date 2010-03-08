@@ -12,7 +12,9 @@ PKG_VERSION:=1.0.0
 PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnfnetlink/ \
+PKG_SOURCE_URL:= \
+	http://www.netfilter.org/projects/libnfnetlink/files/ \
+	ftp://ftp.netfilter.org/pub/libnfnetlink/ \
 	http://mirrors.evolva.ro/netfilter.org/libnfnetlink/
 PKG_MD5SUM:=016fdec8389242615024c529acc1adb8
 

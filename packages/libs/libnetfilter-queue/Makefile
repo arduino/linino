@@ -13,7 +13,9 @@ PKG_VERSION:=0.0.17
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://ftp.netfilter.org/pub/libnetfilter_queue/ \
+PKG_SOURCE_URL:= \
+	http://www.netfilter.org/projects/libnetfilter_queue/files/ \
+	ftp://ftp.netfilter.org/pub/libnetfilter_queue/ \
 	http://mirrors.evolva.ro/netfilter.org/libnetfilter_queue/
 PKG_MD5SUM:=2cde35e678ead3a8f9eb896bf807a159
 
