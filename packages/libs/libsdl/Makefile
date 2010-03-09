@@ -35,92 +35,93 @@ define Package/libsdl/description
  framebuffer, audio output, mouse, and keyboard.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-libc \
-		$(if $(CONFIG_AUDIO_SUPPORT), \
-			--enable-audio \
-			--enable-alsa \
-			, \
-			--disable-audio \
-			--disable-alsa \
-		) \
-		--enable-video \
-		--enable-events \
-		--enable-joystick \
-		--enable-cdrom \
-		--enable-threads \
-		--enable-timers \
-		--enable-file \
-		--enable-loadso \
-		--enable-cpuinfo \
-		--enable-assembly \
-		--disable-oss \
-		--disable-alsatest \
-		--enable-alsa-shared \
-		--disable-esd \
-		--disable-esdtest \
-		--enable-esd-shared \
-		--disable-pulseaudio \
-		--enable-pulseaudio-shared \
-		--disable-arts \
-		--enable-arts-shared \
-		--disable-nas \
-		--enable-nas-shared \
-		--disable-diskaudio \
-		--disable-dummyaudio \
-		--disable-mintaudio \
-		--disable-nasm \
-		--disable-altivec \
-		--disable-ipod \
-		--disable-nanox \
-		--disable-video-x11 \
-		--enable-x11-shared \
-		--enable-dga \
-		--enable-video-dga \
-		--enable-video-x11-dgamouse \
-		--enable-video-x11-vm \
-		--enable-video-x11-xv \
-		--disable-video-x11-xinerama \
-		--disable-video-x11-xme \
-		--disable-video-x11-xrandr \
-		--disable-video-photon \
-		--disable-video-carbon \
-		--disable-video-cocoa \
-		--disable-video-fbcon \
-		--enable-video-directfb \
-		--disable-video-ps2gs \
-		--disable-video-ps3 \
-		--disable-video-ggi \
-		--disable-video-svga \
-		--disable-video-vgl \
-		--disable-video-wscons \
-		--disable-video-aalib \
-		--disable-video-caca \
-		--disable-video-qtopia \
-		--disable-video-picogui \
-		--disable-video-xbios \
-		--disable-video-gem \
-		--disable-video-dummy \
-		--disable-video-opengl \
-		--disable-osmesa-shared \
-		--disable-screensaver \
-		--enable-input-events \
-		--disable-input-tslib \
-		--enable-pth \
-		--enable-pthreads \
-		--enable-pthread-sem \
-		--disable-stdio-redirect \
-		--disable-directx \
-		--enable-sdl-dlopen \
-		--disable-atari-ldg \
-		--disable-clock_gettime \
-		--without-x \
-		--enable-rpath \
-		, \
+CONFIGURE_ARGS+= \
+	--enable-libc \
+	--enable-video \
+	--enable-events \
+	--enable-joystick \
+	--enable-cdrom \
+	--enable-threads \
+	--enable-timers \
+	--enable-file \
+	--enable-loadso \
+	--enable-cpuinfo \
+	--enable-assembly \
+	--disable-oss \
+	--disable-alsatest \
+	--enable-alsa-shared \
+	--disable-esd \
+	--disable-esdtest \
+	--enable-esd-shared \
+	--disable-pulseaudio \
+	--enable-pulseaudio-shared \
+	--disable-arts \
+	--enable-arts-shared \
+	--disable-nas \
+	--enable-nas-shared \
+	--disable-diskaudio \
+	--disable-dummyaudio \
+	--disable-mintaudio \
+	--disable-nasm \
+	--disable-altivec \
+	--disable-ipod \
+	--disable-nanox \
+	--disable-video-x11 \
+	--enable-x11-shared \
+	--enable-dga \
+	--enable-video-dga \
+	--enable-video-x11-dgamouse \
+	--enable-video-x11-vm \
+	--enable-video-x11-xv \
+	--disable-video-x11-xinerama \
+	--disable-video-x11-xme \
+	--disable-video-x11-xrandr \
+	--disable-video-photon \
+	--disable-video-carbon \
+	--disable-video-cocoa \
+	--disable-video-fbcon \
+	--enable-video-directfb \
+	--disable-video-ps2gs \
+	--disable-video-ps3 \
+	--disable-video-ggi \
+	--disable-video-svga \
+	--disable-video-vgl \
+	--disable-video-wscons \
+	--disable-video-aalib \
+	--disable-video-caca \
+	--disable-video-qtopia \
+	--disable-video-picogui \
+	--disable-video-xbios \
+	--disable-video-gem \
+	--disable-video-dummy \
+	--disable-video-opengl \
+	--disable-osmesa-shared \
+	--disable-screensaver \
+	--enable-input-events \
+	--disable-input-tslib \
+	--enable-pth \
+	--enable-pthreads \
+	--enable-pthread-sem \
+	--disable-stdio-redirect \
+	--disable-directx \
+	--enable-sdl-dlopen \
+	--disable-atari-ldg \
+	--disable-clock_gettime \
+	--without-x \
+	--disable-rpath \
+
+ifneq ($(CONFIG_AUDIO_SUPPORT),)
+  CONFIGURE_ARGS+= \
+	--enable-audio \
+	--enable-alsa
+else
+  CONFIGURE_ARGS+= \
+	--disable-audio \
+	--disable-alsa
+endif
+
+CONFIGURE_VARS+= \
 		ac_cv_path_DIRECTFBCONFIG=no \
-	)
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include $(1)/usr/lib/pkgconfig
@@ -140,13 +141,16 @@ define Build/InstallDev
 		$(PKG_INSTALL_DIR)/usr/share/aclocal/* \
 		$(1)/usr/share/aclocal/
 
-	$(INSTALL_DIR) $(1)/host/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/sdl-config \
-		$(1)/host/bin
+		$(1)/usr/bin/
 
 	$(SED) 's,^\(exec_prefix\|prefix\)=.*,\1=\"$(STAGING_DIR)/usr/\",g' \
-		$(1)/host/bin/sdl-config
+		$(1)/usr/bin/sdl-config
+
+	$(INSTALL_DIR) $(1)/host/bin
+	ln -sf ../../usr/bin/sdl-config $(1)/host/bin/
 endef
 
 define Package/libsdl/install
