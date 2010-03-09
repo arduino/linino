@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/upx
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libucl
+  DEPENDS:=+libucl +libstdcpp +zlib
   TITLE:=The Ultimate Packer for eXecutables
   URL:=http://upx.sourceforge.net/
 endef
@@ -35,15 +35,12 @@ or other drawbacks for most of the formats supported, because of in-place
 decompression.
 endef
 
+MAKE_PATH := src
 MAKE_VARS += \
-	UPX_UCLDIR="$(STAGING_DIR)/usr/include/ucl" \
 	exeext=""
 
-define Build/Compile
-	$(call Build/Compile/Default, \
-		all \
-	)
-endef
+TARGET_CPPFLAGS += \
+	-DUCL_NO_ASM \
 
 define Package/upx/install
 	$(INSTALL_DIR) $(1)/usr/bin
