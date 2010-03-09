@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssh
-PKG_VERSION:=5.3p1
+PKG_VERSION:=5.4p1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/ \
 		ftp://openbsd.wiretapped.net/pub/OpenBSD/OpenSSH/portable/ \
 		ftp://ftp.belnet.be/packages/openbsd/OpenSSH/portable/ \
 		ftp://ftp.de.openbsd.org/pub/unix/OpenBSD/OpenSSH/portable/
-PKG_MD5SUM:=13563dbf61f36ca9a1e4254260131041
+PKG_MD5SUM:=da10af8a789fa2e83e3635f3a1b76f5e
 
 PKG_BUILD_DEPENDS:=libopenssl
 
@@ -42,7 +42,7 @@ endef
 define Package/openssh-client-utils
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=openssh-client
+  DEPENDS:=+openssh-client +openssh-keygen
   TITLE:=OpenSSH client utilities
   URL:=http://www.openssh.com/
   SUBMENU:=SSH
@@ -52,10 +52,23 @@ define Package/openssh-client-utils/description
 OpenSSH client utilities.
 endef
 
-define Package/openssh-server
+define Package/openssh-keygen
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libopenssl +zlib
+  TITLE:=OpenSSH keygen
+  URL:=http://www.openssh.com/
+  SUBMENU:=SSH
+endef
+
+define Package/openssh-keygen/description
+OpenSSH keygen.
+endef
+
+define Package/openssh-server
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libopenssl +zlib +openssh-keygen
   TITLE:=OpenSSH server
   URL:=http://www.openssh.com/
   SUBMENU:=SSH
@@ -143,8 +156,14 @@ endef
 
 define Package/openssh-client-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(foreach bin,add agent keyscan keysign keygen,$(PKG_BUILD_DIR)/ssh-$(bin)) $(1)/usr/bin/
+	$(INSTALL_BIN) $(foreach bin,add agent keyscan keysign,$(PKG_BUILD_DIR)/ssh-$(bin)) $(1)/usr/bin/
 endef
+
+define Package/openssh-keygen/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ssh-keygen $(1)/usr/bin/
+endef
+
 
 define Package/openssh-server/install
 	$(INSTALL_DIR) $(1)/etc/ssh
@@ -152,8 +171,6 @@ define Package/openssh-server/install
 	$(CP) $(PKG_INSTALL_DIR)/etc/ssh/sshd_config $(1)/etc/ssh/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/sshd.init $(1)/etc/init.d/sshd
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ssh-keygen $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/sshd $(1)/usr/sbin/
 endef
@@ -212,6 +229,7 @@ endef
 
 $(eval $(call BuildPackage,openssh-client))
 $(eval $(call BuildPackage,openssh-client-utils))
+$(eval $(call BuildPackage,openssh-keygen))
 $(eval $(call BuildPackage,openssh-server))
 $(eval $(call BuildPackage,openssh-sftp-client))
 $(eval $(call BuildPackage,openssh-sftp-server))
