@@ -17,8 +17,6 @@ PKG_MD5SUM:=35124cc05f893efba1310e2ec7c876ff
 
 include $(INCLUDE_DIR)/package.mk
 
-TARGET_CFLAGS += $(TARGET_CPPFLAGS)
-
 define Package/nullmailer
   SECTION:=mail
   CATEGORY:=Mail
@@ -32,12 +30,9 @@ define Package/nullmailer/description
  simple to configure, secure, and easily extendable.
 endef
 
-CONFIGURE_ARGS += \
-	--prefix=/usr \
-	--sysconfdir=/etc \
-	--libexecdir=/usr/lib
+TARGET_CFLAGS += $(TARGET_CPPFLAGS)
 
-define Package/nullmailer/install	
+define Package/nullmailer/install
 	$(INSTALL_DIR) $(1)/etc/nullmailer
 	echo "# List of smart relays" > $(1)/etc/nullmailer/remotes
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -48,9 +43,9 @@ define Package/nullmailer/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/nullmailer-send $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/sendmail $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/lib/nullmailer
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/protocols/qmqp $(1)/usr/lib/nullmailer
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/protocols/smtp $(1)/usr/lib/nullmailer
-	ln -sf ../sbin/sendmail $(1)/usr/lib
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/protocols/qmqp $(1)/usr/lib/nullmailer/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/protocols/smtp $(1)/usr/lib/nullmailer/
+	ln -sf ../sbin/sendmail $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,nullmailer))
