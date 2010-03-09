@@ -1,12 +1,11 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
 
 include $(TOPDIR)/rules.mk
-include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=libnetfilter_queue
 PKG_VERSION:=0.0.17
@@ -20,6 +19,7 @@ PKG_SOURCE_URL:= \
 PKG_MD5SUM:=2cde35e678ead3a8f9eb896bf807a159
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -45,12 +45,6 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	LIBNFNETLINK_CFLAGS="$(TARGET_CPPFLAGS)" \
 	LIBNFNETLINK_LIBS="$(TARGET_LDFLAGS)"
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) all
-	$(call libtool_fixup_libdir)
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/libnetfilter_queue
