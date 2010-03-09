@@ -8,12 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libffi
-PKG_VERSION:=3.0.8
-PKG_RELEASE:=2
+PKG_VERSION:=3.0.9
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://sourceware.org/pub/libffi/
-PKG_MD5SUM:=188a4f79fdac2310044b44b7d3918ef9
+PKG_MD5SUM:=1f300a7a7f975d4046f51c3022fa5ff1
+
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
@@ -22,8 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libffi
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=libffi
-  DEPENDS:=@!avr32
+  TITLE:=Foreign Function Interface (FFI) library
   URL:=http://sourceware.org/libffi/
 endef
 
@@ -45,20 +45,20 @@ define Build/InstallDev
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libffi.{so*,a,la} \
 		$(1)/usr/lib/
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
 		$(1)/usr/lib/pkgconfig/
 
 	$(INSTALL_DIR) $(1)/usr/include
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/libffi-3.0.8/include/*.h \
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libffi-$(PKG_VERSION)/include/*.h \
 		$(1)/usr/include/
 endef
 
 define Package/libffi/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/libffi.so* \
+		$(PKG_INSTALL_DIR)/usr/lib/libffi.so.* \
 		$(1)/usr/lib/
 endef
 
