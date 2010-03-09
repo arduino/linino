@@ -121,7 +121,8 @@ CONFIGURE_ARGS += \
 	--enable-NMEA \
 	--enable-LOCAL-CLOCK \
 	--enable-SHM \
-	--disable-linuxcaps
+	--disable-linuxcaps \
+	--without-ntpsnmpd \
 
 ifeq ($(BUILD_VARIANT),ssl)
 	CONFIGURE_ARGS += \
