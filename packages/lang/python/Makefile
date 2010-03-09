@@ -40,7 +40,7 @@ endef
 define Package/python
 $(call Package/python/Default)
   TITLE+= (full)
-  DEPENDS:=+libpthread +zlib +PACKAGE_python:libffi +python-mini
+  DEPENDS:=+libpthread +zlib +libffi +python-mini
 endef
 
 define Package/python/description
