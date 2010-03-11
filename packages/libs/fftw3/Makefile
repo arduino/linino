@@ -21,7 +21,7 @@ PKG_FIXUP:=libtool
 include $(INCLUDE_DIR)/package.mk
 
 define Package/fftw3
-  SECTION:=Libraries
+  SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=@!avr32
   TITLE:=Fast Fourier transform library
