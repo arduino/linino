@@ -23,6 +23,12 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
+define Package/libbfd
+  SECTION:=devel
+  CATEGORY:=Development
+  TITLE:=libbfd
+endef
+
 define Package/binutils
   SECTION:=devel
   CATEGORY:=Development
@@ -34,7 +40,7 @@ define Package/objdump
   SECTION:=devel
   CATEGORY:=Development
   TITLE:=objdump
-  DEPENDS:=+zlib
+  DEPENDS:=+zlib +libbfd
 endef
 
 define Package/binutils/description
@@ -81,6 +87,14 @@ define Build/Compile
 	$(call Build/Compile/Default)
 endef
 
+define Package/libbfd/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libopcodes-$(PKG_VERSION).so \
+		$(PKG_INSTALL_DIR)/usr/lib/libbfd-$(PKG_VERSION).so \
+		$(1)/usr/lib/
+endef
+
 define Package/objdump/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/*-linux/bin/objdump $(1)/usr/bin/
@@ -93,5 +107,6 @@ define Package/binutils/install
 	rm -f $(1)/usr/bin/objdump
 endef
 
+$(eval $(call BuildPackage,libbfd))
 $(eval $(call BuildPackage,binutils))
 $(eval $(call BuildPackage,objdump))
