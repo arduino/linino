@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=quagga-unstable
-PKG_VERSION:=0.99.15
-PKG_RELEASE:=2
+PKG_VERSION:=0.99.16
+PKG_RELEASE:=1
 
 PKG_SOURCE:=quagga-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.quagga.net/download/ \
                 http://www.de.quagga.net/download/ \
                 http://www.uk.quagga.net/download/
-PKG_MD5SUM:=8975414c76a295f4855a417af0b5ddce
+PKG_MD5SUM:=350fb150be526cdfc4d2b093cb4d69a7
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/quagga-$(PKG_VERSION)
 
