@@ -25,7 +25,3 @@ stop() {
 status() {
 	[ -f $PID_F ] && kill -USR1 $(cat $PID_F)
 }
-
-reload() {
-	[ -f $PID_F ] && kill -USR2 $(cat $PID_F)
-}
