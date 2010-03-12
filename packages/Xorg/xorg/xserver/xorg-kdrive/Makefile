@@ -50,6 +50,8 @@ define Package/xserver-kdrive/Default
   +pixman \
   +libopenssl \
   +libdrm \
+  +xkbcomp \
+  +xkbdata \
   @DISPLAY_SUPPORT \
   +X_TSLIB:tslib
 endef

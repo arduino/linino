@@ -13,3 +13,14 @@
      
      /* 800x600 modes */
      {	800,	600,	85,	56250,			    /* VESA */
+@@ -102,6 +108,10 @@ const KdMonitorTiming  kdMonitorTimings[] = {
+ 		    24,	    128,    224,    KdSyncPositive, /* 35.156 */
+ 		    1,	    22,	    25,	    KdSyncPositive, /* 56.250 */
+     },
++    {	600,	800,	56,	36000,			    /* VESA */
++		    24,	    128,    224,    KdSyncPositive, /* 35.156 */
++		    1,	    22,	    25,	    KdSyncPositive, /* 56.250 */
++    },
+     
+     /* 1024x768 modes */
+     {	1024,	768,	85,	94500,			    /* VESA */
