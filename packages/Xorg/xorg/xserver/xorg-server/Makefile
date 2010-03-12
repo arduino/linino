@@ -24,6 +24,8 @@ PKG_BUILD_DEPENDS:=randrproto renderproto fixesproto damageproto xcmiscproto \
 PKG_INSTALL:=1
 PKG_FIXUP:=libtool
 
+PKG_CONFIG_DEPENDS:=CONFIG_PACKAGE_xserver-xorg CONFIG_PACKAGE_xserver-common
+
 include $(INCLUDE_DIR)/package.mk
 
 X_CONFIG=generic
@@ -60,12 +62,6 @@ $(call Package/xorg/Default)
   +libdrm \
   +libgl-mesa \
   @DISPLAY_SUPPORT
-endef
-
-define Package/xserver-xorg-config
-$(call Package/xorg/Default)
-  TITLE:=Xorg server configuration tools
-  DEPENDS:=xserver-xorg
 endef
 
 define Package/xserver-common
