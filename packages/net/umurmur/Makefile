@@ -7,13 +7,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=umurmur
-PKG_VERSION:=0.2.1
-PKG_RELEASE:=2
+PKG_VERSION:=0.2.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://umurmur.googlecode.com/files/
-PKG_MD5SUM:=e3471fb925dadc60e3b307efe2a1cc80
+PKG_MD5SUM:=a841cf38de7fbc8bdacafbd481561da7
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,6 +35,7 @@ define Package/umurmur-openssl
   $(call Package/umurmur/Default)
   TITLE+= (with OpenSSL support)
   DEPENDS+= +libopenssl
+  VARIANT:=openssl
 endef
 
 define Package/umurmur-openssl/description
@@ -45,6 +47,7 @@ define Package/umurmur-polarssl
   $(call Package/umurmur/Default)
   TITLE+= (with PolarSSL support)
   DEPENDS+= +libpolarssl
+  VARIANT:=polarssl
 endef
 
 define Package/umurmur-polarssl/description
@@ -53,50 +56,39 @@ define Package/umurmur-polarssl/description
 endef
 
 define Build/Compile
+	CC="$(TARGET_CC)" \
+	CFLAGS="$(TARGET_CFLAGS)" \
+	LDFLAGS="$(TARGET_LDFLAGS)" \
+	$(MAKE) -C $(PKG_BUILD_DIR)/src all
 endef
 
-define Build/Template
-
-$(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
-	-$(MAKE) -C $(PKG_BUILD_DIR)/src clean
-	CC="$(TARGET_CC)" \
-	CFLAGS="$(3) -DWRT_TARGET -I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-	LDFLAGS="$(4) $(TARGET_LDFLAGS)" \
-	$(MAKE) -C $(PKG_BUILD_DIR)/src all
-	( cd $(PKG_BUILD_DIR)/src; mv -f umurmurd umurmurd-$(2))
-	touch $$@
-
-$(STAMP_BUILT): $(STAMP_BUILT)-$(2)
-
-define Package/$(1)/conffiles
+define Package/umurmur-openssl/conffiles
 /etc/umurmur.conf
 endef
 
-define Package/$(1)/install
-	$(INSTALL_DIR) $$(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/umurmurd-$(2) $$(1)/usr/bin/umurmurd
-	$(INSTALL_DIR) $$(1)/etc
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/openwrt/files/umurmur.conf $$(1)/etc/
-	$(INSTALL_DIR) $$(1)/etc/init.d
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/openwrt/files/umurmur.init $$(1)/etc/init.d/umurmur
-	$(INSTALL_DIR) $$(1)/etc/umurmur
+Package/umurmur-polarssl/conffiles = $(Package/umurmur-openssl/conffiles)
+
+define Package/umurmur-openssl/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/umurmurd $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/openwrt/files/umurmur.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/openwrt/files/umurmur.init $(1)/etc/init.d/umurmur
+	$(INSTALL_DIR) $(1)/etc/umurmur
 endef
-endef
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_umurmur-openssl),)
-  define Build/with-openssl
-    $(call Build/Template,umurmur-openssl,openssl,,-lcrypto -lssl)
-  endef
+Package/umurmur-polarssl/install = $(Package/umurmur-openssl/install)
+
+ifeq ($(BUILD_VARIANT),openssl)
+  TARGET_CFLAGS += -DWRT_TARGET -I$(STAGING_DIR)/usr/include
+  TARGET_LDFLAGS += -lcrypto -lssl
 endif
-$(eval $(Build/with-openssl))
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_umurmur-polarssl),)
-  define Build/with-polarssl
-    $(call Build/Template,umurmur-polarssl,polarssl,-DUSE_POLARSSL,-lpolarssl)
-  endef
+ifeq ($(BUILD_VARIANT),polarssl)
+  TARGET_CFLAGS += -DUSE_POLARSSL -DWRT_TARGET -I$(STAGING_DIR)/usr/include
+  TARGET_LDFLAGS += -lpolarssl
 endif
-$(eval $(Build/with-polarssl))
-
 
 $(eval $(call BuildPackage,umurmur-openssl))
 $(eval $(call BuildPackage,umurmur-polarssl))
