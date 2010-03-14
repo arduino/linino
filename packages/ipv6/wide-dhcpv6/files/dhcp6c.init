@@ -1,0 +1,131 @@
+#!/bin/sh /etc/rc.common 
+
+DHCP6C_REQUEST_OPTIONS='domain_name_servers domain_name ntp_servers sip_server_address sip_domain_name nis_server_address nis_domain_name nisp_server_address nisp_domain_name bcmcs_server_address bcmcs_domain_name'
+
+get_ifname() {
+	local interface=$1
+	local ifname
+	scan_interfaces
+	config_get ifname "$interface" ifname
+	printf '%s\n' "$ifname"
+	return 0
+}
+
+dhcp6c_write_interface() {
+	local cfg=$1
+	local sla_id
+	local sla_len
+	local enabled
+	
+	config_get_bool enabled "$cfg" enabled 0
+	 
+	if [ $enabled -ne 0 ]; then
+	
+		config_get sla_id "$cfg" sla_id
+		config_get sla_len "$cfg" sla_len
+
+		printf '\tprefix-interface %s {\n' "$(get_ifname $cfg)"
+		printf '\t\tsla-id %s;\n' "$sla_id"
+		printf '\t\tsla-len %s;\n' "$sla_len"
+		printf '\t};\n'
+	
+	fi
+	
+}
+
+dhcp6c_write_request() {
+	printf '\trequest %s;\n' $1 | sed -e s/_/-/g
+}
+
+dhcp6c_write_config() {
+
+	local pd
+	local na
+	config_get_bool pd basic pd 0
+	config_get_bool na basic na 0
+	
+	printf 'interface %s {\n' "$client_ifname"
+	
+	if [ $pd -ne 0 ]; then
+		printf '\tsend ia-pd 0;\n'
+	fi
+	
+	if [ $na -ne 0 ]; then
+		printf '\tsend ia-na 0;\n'
+	fi
+	
+	local rapid_commit
+	config_get_bool rapid_commit basic rapid_commit 0
+	[ $rapid_commit -ne 0 ] && printf '\tsend rapid-commit;\n'
+	
+	local script
+	config_get script basic script
+	[ "$script" != "" ] && printf '\tscript "%s";\n' "$script"
+	
+	local request
+	local value
+	for request in $DHCP6C_REQUEST_OPTIONS; do
+		config_get_bool value basic "$request" 0
+		[ $value -ne 0 ] && dhcp6c_write_request "$request"
+	done
+
+	printf '};\n\n'
+	
+	if [ $pd -ne 0 ]; then
+		printf 'id-assoc pd 0 {\n'
+		config_foreach dhcp6c_write_interface interface
+		printf '};\n\n'
+	fi
+	
+	if [ $na -ne 0 ]; then
+		printf 'id-assoc na 0 {\n'
+		printf '};\n\n'
+	fi
+	
+	return 0
+}
+
+start() {
+
+	[ ! -e /etc/dhcp6cctlkey ] && `dd if=/dev/urandom count=1 2> /dev/null | md5sum | cut -d" " -f1 > /etc/dhcp6cctlkey`
+
+	[ -e /var/run/dhcp6c.pid ] && return 0
+
+	include /lib/network
+
+	config_load "dhcp6c"
+	
+	local enabled
+	config_get_bool enabled basic enabled 0
+	[ $enabled -eq 0 ] && return 0
+	
+	logger starting dhcp6c
+	
+	local client_interface
+	config_get client_interface basic interface
+	local client_ifname=$(get_ifname "$client_interface")
+	
+	local config_file="/var/etc/dhcp6c.conf"
+	mkdir -m 755 -p /var/etc
+	dhcp6c_write_config > $config_file
+	
+	/usr/sbin/dhcp6c -c $config_file $client_ifname
+	
+	sleep 3
+	ACTION=start /sbin/hotplug-call dhcp6c
+	
+	return 0
+	
+}
+
+stop() {
+
+	logger stopping dhcp6c
+	rm -f /var/etc/dhcp6c.conf
+	kill -TERM `cat /var/run/dhcp6c.pid`
+	ACTION=stop /sbin/hotplug-call dhcp6c
+	return 0
+	
+}
+
+
