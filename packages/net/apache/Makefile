@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apache
-PKG_VERSION:=2.2.14
+PKG_VERSION:=2.2.15
 PKG_RELEASE:=2
 PKG_SOURCE_NAME:=httpd
 
 PKG_SOURCE:=$(PKG_SOURCE_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ftp.uni-erlangen.de/pub/mirrors/apache/httpd/ \
 		http://apache.imsam.info/httpd/
-PKG_MD5SUM:=a5226203aaf97e5b941c41a71c112704
+PKG_MD5SUM:=016cec97337eccead2aad6a7c27f2e14
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_NAME)-$(PKG_VERSION)
 
