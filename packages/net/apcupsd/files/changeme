@@ -13,5 +13,5 @@ MSG="$HOSTNAME UPS battery needs changing NOW."
    echo "$MSG"
    echo " "
    /usr/sbin/apcaccess status
-) | $MAILPROG -h $MAILHOST -F $FROM -s "$MSG" $TO
+) | $MAILPROG -h $MAILHOST -f $FROM -s "$MSG" $TO
 exit 0
