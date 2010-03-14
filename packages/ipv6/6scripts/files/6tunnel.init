@@ -17,13 +17,16 @@ start_service() {
 	config_get remoteip6 "$section" remoteip6
 	config_get ttl "$section" ttl
 	config_get mtu "$section" mtu
+	config_get delegatedip6 "$section" delegatedip6
 
 	ip tunnel add $tnlifname mode sit remote $remoteip4 local $localip4 ttl 255
 	ifconfig $tnlifname up
 	ip link set mtu $mtu dev $tnlifname
 	ip tunnel change $tnlifname ttl $ttl
 	ip addr add $localip6 dev $tnlifname
+	ip -6 route ::/0 dev $tnlifname
 	ip -6 route add 2000::/3 via $remoteip6
+	ip -6 route add $delegatedip6 dev $LAN
 }
 
 stop_service() {
@@ -41,7 +44,9 @@ stop_service() {
 	config_get remoteip6 "$section" remoteip6
 	config_get ttl "$section" ttl
 	config_get mtu "$section" mtu
+	config_get delegatedip6 "$section" delegatedip6
 
+	ip -6 ro del $delegatedip6 dev $LAN
 	ip -6 ro del 2000::/3 via $remoteip6
 	ip -6 ro del ::/0 dev $tnlifname
 	ip addr del $localip6 dev $tnlifname
