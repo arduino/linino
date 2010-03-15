@@ -17,7 +17,7 @@ PKG_MD5SUM:=9a0f64eb0258a3e8ba710eff9798a7d0
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
-$(call include_mk, python-package.mk)
+-include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
 PKG_INSTALL:=1
 
@@ -33,7 +33,7 @@ define Package/hippo-canvas
   SUBMENU:=libraries
   TITLE:=Hippo Canvas
   URL:=http://developer.mugshot.org/wiki/Hippo_Canvas
-  DEPENDS:=+librsvg +gtk2 +cairo +libcroco +pango
+  DEPENDS:=+librsvg +gtk2 +cairo +libcroco +pango @FEATURE_drawing-backend_libX11
 endef
 
 define Package/hippo-canvas/description
