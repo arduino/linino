@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=transmission
-PKG_VERSION:=1.91
+PKG_VERSION:=1.92
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://mirrors.m0k.org/transmission/files
-PKG_MD5SUM:=2c6993300988d5aa2e3fc24a439d3633
+PKG_MD5SUM:=561357621331f294c87f78e22783a283
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -44,6 +44,7 @@ define Package/transmission-web
   DEPENDS:=transmission-daemon
 endef
 
+
 define Package/transmission-daemon/description
  Transmission is a simple BitTorrent client.
  It features a very simple, intuitive interface
@@ -57,6 +58,10 @@ endef
 
 define Package/transmission-web/description
  Webinterface resources for transmission.
+endef
+
+define Package/transmission-daemon/conffiles
+/etc/config/transmission
 endef
 
 CONFIGURE_ARGS += \
