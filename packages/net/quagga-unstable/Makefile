@@ -98,6 +98,34 @@ define Package/quagga-unstable-vtysh
   TITLE:=integrated shell for Quagga routing software
 endef
 
+define Package/quagga-unstable/conffiles
+/etc/quagga/zebra.conf
+endef
+
+define Package/quagga-unstable-bgpd/conffiles
+/etc/quagga/bgpd.conf
+endef
+
+define Package/quagga-unstable-isisd/conffiles
+/etc/quagga/isisd.conf
+endef
+
+define Package/quagga-unstable-ospfd/conffiles
+/etc/quagga/ospfd.conf
+endef
+
+define Package/quagga-unstable-ospf6d/conffiles
+/etc/quagga/ospf6d.conf
+endef
+
+define Package/quagga-unstable-ripd/conffiles
+/etc/quagga/ripd.conf
+endef
+
+define Package/quagga-unstable-ripngd/conffiles
+/etc/quagga/ripngd.conf
+endef
+
 CONFIGURE_ARGS+= \
 	--localstatedir=/var/run/quagga \
 	--sysconfdir=/etc/quagga/ \
