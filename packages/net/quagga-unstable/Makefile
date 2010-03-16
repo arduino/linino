@@ -124,7 +124,7 @@ define Package/quagga-unstable/install
 	# avoid /etc being set to 0750
 	$(INSTALL_DIR) $(1)/etc/quagga
 	chmod 0750 $(1)/etc/quagga
-	$(INSTALL_DATA) ./files/quagga.conf $(1)/etc/quagga/zebra.conf
+	$(INSTALL_CONF) ./files/quagga.conf $(1)/etc/quagga/zebra.conf
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/quagga $(1)/usr/sbin/quagga.init
 	$(INSTALL_BIN) ./files/quagga.init $(1)/etc/init.d/quagga
@@ -183,7 +183,7 @@ define Package/quagga-unstable-bgpd/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/bgpd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/quagga
 	chmod 0750 $(1)/etc/quagga
-	$(INSTALL_DATA) ./files/quagga.conf $(1)/etc/quagga/bgpd.conf
+	$(INSTALL_CONF) ./files/quagga.conf $(1)/etc/quagga/bgpd.conf
 endef
 
 define Package/quagga-unstable-isisd/install
@@ -191,7 +191,7 @@ define Package/quagga-unstable-isisd/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/isisd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/quagga
 	chmod 0750 $(1)/etc/quagga
-	$(INSTALL_DATA) ./files/quagga.conf $(1)/etc/quagga/isisd.conf
+	$(INSTALL_CONF) ./files/quagga.conf $(1)/etc/quagga/isisd.conf
 endef
 
 define Package/quagga-unstable-ospfd/install
@@ -199,7 +199,7 @@ define Package/quagga-unstable-ospfd/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ospfd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/quagga
 	chmod 0750 $(1)/etc/quagga
-	$(INSTALL_DATA) ./files/quagga.conf $(1)/etc/quagga/ospfd.conf
+	$(INSTALL_CONF) ./files/quagga.conf $(1)/etc/quagga/ospfd.conf
 endef
 
 define Package/quagga-unstable-ospf6d/install
@@ -207,7 +207,7 @@ define Package/quagga-unstable-ospf6d/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ospf6d $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/quagga
 	chmod 0750 $(1)/etc/quagga
-	$(INSTALL_DATA) ./files/quagga.conf $(1)/etc/quagga/ospf6d.conf
+	$(INSTALL_CONF) ./files/quagga.conf $(1)/etc/quagga/ospf6d.conf
 endef
 
 define Package/quagga-unstable-ripd/install
@@ -215,7 +215,7 @@ define Package/quagga-unstable-ripd/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ripd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/quagga
 	chmod 0750 $(1)/etc/quagga
-	$(INSTALL_DATA) ./files/quagga.conf $(1)/etc/quagga/ripd.conf
+	$(INSTALL_CONF) ./files/quagga.conf $(1)/etc/quagga/ripd.conf
 endef
 
 define Package/quagga-unstable-ripngd/install
@@ -223,7 +223,7 @@ define Package/quagga-unstable-ripngd/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ripngd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/quagga
 	chmod 0750 $(1)/etc/quagga
-	$(INSTALL_DATA) ./files/quagga.conf $(1)/etc/quagga/ripngd.conf
+	$(INSTALL_CONF) ./files/quagga.conf $(1)/etc/quagga/ripngd.conf
 endef
 
 define Package/quagga-unstable-vtysh/install
