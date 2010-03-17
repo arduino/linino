@@ -20,6 +20,8 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
+TARGET_LDFLAGS += -Wl,-rpath-link,$(STAGING_DIR)/usr/lib
+
 define Package/libsdl-mixer
   SECTION:=libs
   CATEGORY:=Libraries
