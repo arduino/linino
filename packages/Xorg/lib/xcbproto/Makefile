@@ -16,12 +16,12 @@ PKG_SOURCE_URL:=http://xcb.freedesktop.org/dist/
 PKG_MD5SUM:=d9275a714e83ab9c1f9b260c6eff1609
 PKG_INSTALL:=1
 
-PKG_BUILD_DEPENDS:=PACKAGE_python:python PACKAGE_python-mini:python
+#PKG_BUILD_DEPENDS:=python-mini/host
 
 include $(INCLUDE_DIR)/package.mk
-$(call include_mk, python-package.mk)
+#$(call include_mk, python-package.mk)
 
-STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,PACKAGE_python PACKAGE_python-mini)
+#STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,PACKAGE_python PACKAGE_python-mini)
 
 define Package/xcbproto
   SECTION:=xorg-libs
@@ -31,17 +31,15 @@ define Package/xcbproto
   TITLE:=xcbproto
 endef
 
-ifneq ($(CONFIG_PACKAGE_python)$(CONFIG_PACKAGE_python-mini),)
-  define InstallPy
-	$(INSTALL_DIR) $(1)/host/lib/$(PYTHON)/site-packages/xcbgen
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/$(PYTHON)/site-packages/xcbgen/*.py \
-		$(1)/host/lib/$(PYTHON)/site-packages/xcbgen/
-  endef
-endif
+#define InstallPy
+#	$(INSTALL_DIR) $(1)/host/lib/$(PYTHON)/site-packages/xcbgen
+#	$(INSTALL_DATA) \
+#		$(PKG_INSTALL_DIR)/usr/lib/$(PYTHON)/site-packages/xcbgen/*.py \
+#		$(1)/host/lib/$(PYTHON)/site-packages/xcbgen/
+#endef
 
 define Build/InstallDev
-	$(call InstallPy,$(1),$(2))
+#	$(call InstallPy,$(1),$(2))
 	$(INSTALL_DIR) \
 		$(1)/usr/lib/pkgconfig \
 		$(1)/host/share/xcb
