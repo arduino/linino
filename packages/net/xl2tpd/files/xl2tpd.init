@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 
 START=60
 BIN=xl2tpd
@@ -16,4 +16,3 @@ start() {
 stop() {
 	[ -f $PID_F ] && kill $(cat $PID_F)
 }
-
