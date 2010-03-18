@@ -26,7 +26,7 @@ define Package/rblibtorrent
   CATEGORY:=Libraries
   TITLE:=Rasterbar BitTorrent library
   URL:=http://www.rasterbar.com/products/libtorrent/
-  DEPENDS:=+boost +boost-python +boost-filesystem +boost-regex +boost-thread +boost-program_options +boost-system +libopenssl
+  DEPENDS:=+boost +boost-python +boost-filesystem +boost-regex +boost-thread +boost-program_options +boost-system +libopenssl @BROKEN
 endef
 
 define Package/rblibtorrent/description
