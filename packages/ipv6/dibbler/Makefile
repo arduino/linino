@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dibbler
 PKG_VERSION:=0.7.3
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.gz
 PKG_SOURCE_URL:=http://klub.com.pl/dhcpv6/dibbler/
@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/dibbler/Default
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+uclibcxx @LINUX_2_6
+  DEPENDS:=+uclibcxx @LINUX_2_6 +libpthread
   TITLE:=Dibbler, a portable DHCPv6 implementation
   URL:=http://klub.com.pl/dhcpv6/
 endef
@@ -33,6 +33,16 @@ define Package/dibbler/Default/description
 	Dibbler is a portable DHCPv6 implementation. It supports stateful (i.e.
 	IPv6 address granting) as well as stateless (i.e. option granting)
 	autoconfiguration for IPv6.
+endef
+
+define Package/dibbler-poslib
+  $(call Package/dibbler/Default)
+  TITLE+= (helper lib)
+endef
+
+define Package/dibbler-poslib/description
+  $(call Package/dibbler/Default/description)
+  This package contains the pos library.
 endef
 
 define Package/dibbler-client
@@ -57,6 +67,7 @@ endef
 
 define Package/dibbler-server
   $(call Package/dibbler/Default)
+  DEPENDS += +dibbler-poslib
   TITLE+= (server)
 endef
 
@@ -109,6 +120,11 @@ define Build/Compile
 		server client relay
 endef
 
+define Package/dibbler-poslib/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/./poslib/poslib/.libs/libposlib.so* $(1)/usr/lib/
+endef
+
 define Package/dibbler-client/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dibbler-client $(1)/usr/sbin/
@@ -124,6 +140,7 @@ define Package/dibbler-server/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dibbler-server $(1)/usr/sbin/
 endef
 
+$(eval $(call BuildPackage,dibbler-poslib))
 $(eval $(call BuildPackage,dibbler-client))
 $(eval $(call BuildPackage,dibbler-relay))
 $(eval $(call BuildPackage,dibbler-server))
