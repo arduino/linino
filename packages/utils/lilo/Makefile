@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lilo
 PKG_VERSION:=22.8
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).src.tar.gz
 PKG_SOURCE_URL:=ftp://metalab.unc.edu/pub/Linux/system/boot/lilo/
@@ -30,7 +30,9 @@ define Package/lilo/conffiles
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) alles
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CC="$(HOSTCC) -m32" \
+		alles
 endef
 
 define Package/lilo/install
