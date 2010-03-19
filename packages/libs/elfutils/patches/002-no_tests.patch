@@ -1,0 +1,24 @@
+diff -urN elfutils-0.143/Makefile.am elfutils-0.143.new/Makefile.am
+--- elfutils-0.143/Makefile.am	2009-02-11 02:14:48.000000000 +0100
++++ elfutils-0.143.new/Makefile.am	2010-03-14 19:32:48.000000000 +0100
+@@ -31,7 +31,7 @@
+ 
+ # Add doc back when we have some real content.
+ SUBDIRS = config m4 lib libelf libebl libdwfl libdw libcpu libasm backends \
+-	  src po tests
++	  src po
+ 
+ EXTRA_DIST = elfutils.spec GPG-KEY NOTES EXCEPTION
+ 
+diff -urN elfutils-0.143/Makefile.in elfutils-0.143.new/Makefile.in
+--- elfutils-0.143/Makefile.in	2009-09-21 17:43:49.000000000 +0200
++++ elfutils-0.143.new/Makefile.in	2010-03-14 19:32:56.000000000 +0100
+@@ -246,7 +246,7 @@
+ 
+ # Add doc back when we have some real content.
+ SUBDIRS = config m4 lib libelf libebl libdwfl libdw libcpu libasm backends \
+-	  src po tests
++	  src po
+ 
+ EXTRA_DIST = elfutils.spec GPG-KEY NOTES EXCEPTION
+ 

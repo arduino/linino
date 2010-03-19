@@ -1,0 +1,14 @@
+--- elfutils-0.143/libelf/libelf.h	2009-06-14 00:24:43.000000000 +0200
++++ elfutils-0.143.new/libelf/libelf.h	2010-03-14 20:14:09.000000000 +0100
+@@ -55,6 +55,11 @@
+ /* Get the ELF types.  */
+ #include <elf.h>
+ 
++#ifndef _LIBC
++#ifndef __mempcpy
++#define __mempcpy mempcpy
++#endif
++#endif
+ 
+ /* Known translation types.  */
+ typedef enum

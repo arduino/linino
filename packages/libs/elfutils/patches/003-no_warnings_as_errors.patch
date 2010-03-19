@@ -1,0 +1,62 @@
+diff -urN elfutils-0.143/src/Makefile.am elfutils-0.143.new/src/Makefile.am
+--- elfutils-0.143/src/Makefile.am	2009-07-25 21:44:03.000000000 +0200
++++ elfutils-0.143.new/src/Makefile.am	2010-03-14 19:41:18.000000000 +0100
+@@ -31,8 +31,8 @@
+ else
+ AM_CFLAGS =
+ endif
+-AM_CFLAGS += -Wall -Wshadow -std=gnu99 $(native_ld_cflags) \
+-	     $(if $($(*F)_no_Werror),,-Werror) \
++AM_CFLAGS += -Wall -Wshadow -std=gnu99 -Wno-error $(native_ld_cflags) \
++	     $(if $($(*F)_no_Werror),,) \
+ 	     $(if $($(*F)_no_Wunused),,-Wunused -Wextra) \
+ 	     $(if $($(*F)_no_Wformat),-Wno-format,-Wformat=2) $(CFLAGS_$(*F))
+ 
+diff -urN elfutils-0.143/src/Makefile.in elfutils-0.143.new/src/Makefile.in
+--- elfutils-0.143/src/Makefile.in	2009-09-21 17:43:50.000000000 +0200
++++ elfutils-0.143.new/src/Makefile.in	2010-03-14 19:40:45.000000000 +0100
+@@ -314,13 +314,13 @@
+ zip_LIBS = @zip_LIBS@
+ @MUDFLAP_FALSE@AM_CFLAGS = -Wall -Wshadow -std=gnu99 \
+ @MUDFLAP_FALSE@	$(native_ld_cflags) $(if \
+-@MUDFLAP_FALSE@	$($(*F)_no_Werror),,-Werror) $(if \
++@MUDFLAP_FALSE@	$($(*F)_no_Werror),,) $(if \
+ @MUDFLAP_FALSE@	$($(*F)_no_Wunused),,-Wunused -Wextra) $(if \
+ @MUDFLAP_FALSE@	$($(*F)_no_Wformat),-Wno-format,-Wformat=2) \
+ @MUDFLAP_FALSE@	$(CFLAGS_$(*F))
+ @MUDFLAP_TRUE@AM_CFLAGS = -fmudflap -Wall -Wshadow -std=gnu99 \
+ @MUDFLAP_TRUE@	$(native_ld_cflags) $(if \
+-@MUDFLAP_TRUE@	$($(*F)_no_Werror),,-Werror) $(if \
++@MUDFLAP_TRUE@	$($(*F)_no_Werror),,) $(if \
+ @MUDFLAP_TRUE@	$($(*F)_no_Wunused),,-Wunused -Wextra) $(if \
+ @MUDFLAP_TRUE@	$($(*F)_no_Wformat),-Wno-format,-Wformat=2) \
+ @MUDFLAP_TRUE@	$(CFLAGS_$(*F))
+diff -urN elfutils-0.143/libelf/Makefile.am elfutils-0.143.new/libelf/Makefile.am
+--- elfutils-0.143/libelf/Makefile.am	2009-08-12 16:23:22.000000000 +0200
++++ elfutils-0.143.new/libelf/Makefile.am	2010-03-14 20:01:28.000000000 +0100
+@@ -33,7 +33,7 @@
+ if BUILD_STATIC
+ AM_CFLAGS += -fpic
+ endif
+-AM_CFLAGS += -Wall -Wshadow -Werror -Wunused -Wextra -Wformat=2 -std=gnu99 \
++AM_CFLAGS += -Wall -Wshadow -Wunused -Wextra -Wformat=2 -std=gnu99 \
+ 	     $($(*F)_CFLAGS)
+ INCLUDES = -I$(srcdir) -I$(top_srcdir)/lib -I..
+ GCC_INCLUDE = -I$(shell $(CC) -print-file-name=include)
+diff -urN elfutils-0.143/libelf/Makefile.in elfutils-0.143.new/libelf/Makefile.in
+--- elfutils-0.143/libelf/Makefile.in	2009-09-21 17:43:50.000000000 +0200
++++ elfutils-0.143.new/libelf/Makefile.in	2010-03-14 20:01:16.000000000 +0100
+@@ -274,11 +274,11 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ zip_LIBS = @zip_LIBS@
+-@MUDFLAP_FALSE@AM_CFLAGS = $(am__append_1) -Wall -Wshadow -Werror \
++@MUDFLAP_FALSE@AM_CFLAGS = $(am__append_1) -Wall -Wshadow \
+ @MUDFLAP_FALSE@	-Wunused -Wextra -Wformat=2 -std=gnu99 \
+ @MUDFLAP_FALSE@	$($(*F)_CFLAGS)
+ @MUDFLAP_TRUE@AM_CFLAGS = -fmudflap $(am__append_1) -Wall -Wshadow \
+-@MUDFLAP_TRUE@	-Werror -Wunused -Wextra -Wformat=2 -std=gnu99 \
++@MUDFLAP_TRUE@	-Wunused -Wextra -Wformat=2 -std=gnu99 \
+ @MUDFLAP_TRUE@	$($(*F)_CFLAGS)
+ INCLUDES = -I$(srcdir) -I$(top_srcdir)/lib -I..
+ GCC_INCLUDE = -I$(shell $(CC) -print-file-name=include)
