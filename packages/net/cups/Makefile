@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cups
-PKG_VERSION:=1.3.10
+PKG_VERSION:=1.4.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-source.tar.bz2
@@ -16,7 +16,7 @@ PKG_SOURCE_URL:= \
 	http://ftp.rz.tu-bs.de/pub/mirror/ftp.easysw.com/ftp/pub/cups/$(PKG_VERSION) \
 	ftp://ftp.easysw.com/pub/cups/$(PKG_VERSION) \
 	ftp://ftp3.easysw.com/pub/cups/$(PKG_VERSION)
-PKG_MD5SUM:=84fffe96b8537c81a463faccead80026
+PKG_MD5SUM:=d95e2d588e3d36e563027a963b117b1b
 
 PKG_BUILD_DEPENDS:=zlib
 
@@ -27,7 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/cups
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+zlib +libpthread +libpng +libjpeg
+  DEPENDS:=+zlib +libpthread +libpng +libjpeg +libstdcpp
   TITLE:=Common UNIX Printing System
   URL:=http://www.cups.org/
   SUBMENU:=printing
@@ -52,6 +52,7 @@ define Build/Configure
 		--without-python \
 		--without-php \
 		--enable-shared \
+		--enable-image \
 		--disable-dbus \
 		--disable-pam \
 		--disable-slp \
@@ -84,10 +85,12 @@ define Package/cups/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	rm -f $(1)/usr/bin/cups-config
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcups.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcups*.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/cups $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/share/cups/templates
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/cups/templates/*.tmpl $(1)/usr/share/cups/templates/
+	$(INSTALL_DIR) $(1)/usr/share/cups/mime
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/cups/mime/* $(1)/usr/share/cups/mime/
 	$(INSTALL_DIR) $(1)/usr/share/doc/cups
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/cups/index.html $(1)/usr/share/doc/cups/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/cups/*.css $(1)/usr/share/doc/cups/
@@ -110,7 +113,7 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/cups $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcups.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcups*.so* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,cups))
