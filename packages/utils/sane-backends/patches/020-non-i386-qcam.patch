@@ -4,7 +4,7 @@
  
  #include "qcam.h"
  
-+#ifndef __i386__
++#if !defined( __i386__) && !defined(__arm__)
 +static inline unsigned char inb(unsigned int port)
 +{
 +	return 0;
