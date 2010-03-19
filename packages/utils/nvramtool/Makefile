@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -13,8 +13,8 @@ PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_SOURCE_SUBDIR:=nvramtool-$(PKG_VERSION)
-PKG_SOURCE_URL:=svn://coreboot.org/repos/trunk/util/nvramtool
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_URL:=svn://coreboot.org/coreboot/trunk/util/nvramtool
 PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
 
 include $(INCLUDE_DIR)/package.mk
@@ -28,8 +28,11 @@ define Package/nvramtool
 endef
 
 define Package/nvramtool/description
-	nvramtool (previously known as lxbios and cmos_util) is a utility for reading/writing coreboot parameters and displaying information from the coreboot table in CMOS/NVRAM.
-	The program is intended only for x86-based Linux systems that use coreboot, but can also be used for non-coreboot systems (e.g. for dumping all NVRAM bytes).
+nvramtool (previously known as lxbios and cmos_util) is a utility for
+reading/writing coreboot parameters and displaying information from the coreboot
+table in CMOS/NVRAM.
+The program is intended only for x86-based Linux systems that use coreboot, but
+can also be used for non-coreboot systems (e.g. for dumping all NVRAM bytes).
 endef
 
 define Build/Configure
