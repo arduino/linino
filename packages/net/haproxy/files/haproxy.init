@@ -8,6 +8,12 @@ HAPROXY_BIN="/usr/sbin/haproxy"
 HAPROXY_CONFIG="/etc/haproxy.cfg"
 HAPROXY_PID="/var/run/haproxy.pid"
 
+boot() {
+
+	#Do nothing on boot
+	exit 0
+}
+
 start() {
 	[ -x "$HAPROXY_BIN" ] || return 1
 
