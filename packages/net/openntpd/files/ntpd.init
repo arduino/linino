@@ -14,5 +14,6 @@ start() {
 }
 
 stop() {
-	killall ntpd
+	# -1 seems insufficient to kill one of the two underlying processes.
+	killall -9 ntpd
 }
