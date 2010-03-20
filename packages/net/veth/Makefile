@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -12,7 +12,7 @@ PKG_VERSION:=1.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.geocities.com/nestorjpg/veth/
+PKG_SOURCE_URL:=http://w3.epca.com.ve/projects/veth
 PKG_MD5SUM:=11536388d9c76552a4b736638a458361
 
 include $(INCLUDE_DIR)/package.mk
@@ -22,7 +22,7 @@ define Package/veth
   CATEGORY:=Network
   DEPENDS:=+kmod-tun
   TITLE:=Virtual Ethernet Device for Linux
-  URL:=http://www.geocities.com/nestorjpg/veth/
+  URL:=http://w3.epca.com.ve/projects/veth/
 endef
 
 define Package/veth/description
