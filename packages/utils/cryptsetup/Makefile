@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/cryptsetup/Default
-  URL:=http://cryptsetup.googlecode.com/files/
+  URL:=http://code.google.com/p/cryptsetup/
 endef
 
 define Package/cryptsetup
