@@ -8,12 +8,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=syslog-ng
-PKG_VERSION:=3.0.4
+PKG_VERSION:=3.0.5
 PKG_RELEASE:=1
-PKG_MD5SUM:=86c39779261545d2289e9c309e262b8d
+PKG_MD5SUM:=28f0d9ff2243b330e8cd6311ef9b2f12
 
-PKG_SOURCE_URL:= \
-	http://www.balabit.com/downloads/files/syslog-ng/open-source-edition/3.0.4/source/
+PKG_SOURCE_URL:=http://www.balabit.com/downloads/files/syslog-ng/open-source-edition/$(PKG_VERSION)/source/
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 
 include $(INCLUDE_DIR)/package.mk
