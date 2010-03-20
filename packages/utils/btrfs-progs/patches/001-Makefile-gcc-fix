@@ -1,5 +1,5 @@
 diff --git a/Makefile b/Makefile
-index 3349079..cf5392f 100644
+index 8097b5a..63a734b 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -36,37 +36,37 @@ version:
@@ -17,9 +17,9 @@ index 3349079..cf5392f 100644
 -	gcc $(CFLAGS) -o btrfs-show btrfs-show.o $(objects) $(LDFLAGS) $(LIBS)
 +	$(CC) $(CFLAGS) -o btrfs-show btrfs-show.o $(objects) $(LDFLAGS) $(LIBS)
  
- btrfsck: $(objects) btrfsck.o bit-radix.o
--	gcc $(CFLAGS) -o btrfsck btrfsck.o $(objects) bit-radix.o $(LDFLAGS) $(LIBS)
-+	$(CC) $(CFLAGS) -o btrfsck btrfsck.o $(objects) bit-radix.o $(LDFLAGS) $(LIBS)
+ btrfsck: $(objects) btrfsck.o
+-	gcc $(CFLAGS) -o btrfsck btrfsck.o $(objects) $(LDFLAGS) $(LIBS)
++	$(CC) $(CFLAGS) -o btrfsck btrfsck.o $(objects) $(LDFLAGS) $(LIBS)
  
  mkfs.btrfs: $(objects) mkfs.o
 -	gcc $(CFLAGS) -o mkfs.btrfs $(objects) mkfs.o $(LDFLAGS) $(LIBS)
@@ -49,5 +49,5 @@ index 3349079..cf5392f 100644
 -	gcc $(CFLAGS) -o btrfs-convert $(objects) convert.o -lext2fs $(LDFLAGS) $(LIBS)
 +	$(CC) $(CFLAGS) -o btrfs-convert $(objects) convert.o -lext2fs $(LDFLAGS) $(LIBS)
  
- clean :
- 	rm -f $(progs) cscope.out *.o .*.d btrfs-convert
+ manpages:
+ 	cd man; make

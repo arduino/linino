@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=btrfs-progs
-PKG_VERSION:=0.18
+PKG_VERSION:=0.19
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kernel.org/pub/linux/kernel/people/mason/btrfs/
-PKG_MD5SUM:=1dfe59152a558eb2f79a4c398de6c4ef
+PKG_MD5SUM:=69e29ecd922e3f9dcb74a3a8f80b4f68
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -32,8 +32,7 @@ define Package/btrfs-progs/description
  GPL and open for contribution from anyone. 
 endef
 
-progs = btrfsctl btrfsck mkfs.btrfs btrfs-debug-tree btrfs-show btrfs-vol \
-	btrfstune btrfs-image
+progs = btrfsctl mkfs.btrfs btrfs-debug-tree btrfs-show btrfs-vol btrfsck
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -48,6 +47,8 @@ endef
 define Package/btrfs-progs/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(addprefix $(PKG_INSTALL_DIR)/usr/bin/, $(progs)) $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/btrfs-scan.init $(1)/etc/init.d/btrfs-scan
 endef
 
 $(eval $(call BuildPackage,btrfs-progs))
