@@ -4,27 +4,21 @@ START=93
 
 start() {
 	#create mpd directories
-	md=`grep music_directory /etc/mpd.conf | cut -d "\"" -f 2 | sed "s/~/\/root/g"`
-	if [ ! -d $md ]; then
-		mkdir -p $md
-	fi
 	pld=`grep playlist_directory /etc/mpd.conf | cut -d "\"" -f 2 | sed "s/~/\/root/g"`
 	if [ ! -d $pld ]; then
 		mkdir -p $pld
 	fi
-	#create mpd db
-	/usr/bin/mpd --stdout --create-db
-
-	#optional export for mpc
-	#export MPD_HOST=127.0.0.1
+	# Set the initial volume to something manageable
+	amixer set PCM 40
 
 	#start mpd
-	/usr/bin/mpd
-
-	#generate playlist and start to play
-	/usr/bin/mpc listall | /usr/bin/mpc add -
-	/usr/bin/mpc play
-	/usr/bin/mpc repeat
+	if [ -x /bin/nice ]; then
+		# This has real-time constraints, so let's at least tell the OS
+		# that this should have higher priority to avoid skipping
+		# when doing other things in the background.
+		nice="nice -n -10"
+	fi
+	$nice /usr/bin/mpd
 }
 
 stop() {
