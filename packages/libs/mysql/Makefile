@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mysql
 PKG_VERSION:=5.0.18
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=\
@@ -24,12 +24,21 @@ PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/libmysqlclient
+define Package/libmysqlclient/Default
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=+zlib
   TITLE:=MySQL client library
   URL:=http://dev.mysql.com/
+endef
+
+define Package/libmysqlclient
+  $(call Package/libmysqlclient/Default)
+endef
+
+define Package/libmysqlclient_r
+  $(call Package/libmysqlclient/Default)
+  TITLE += threadsafe
 endef
 
 define Build/Configure
@@ -43,6 +52,7 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \
+		--enable-thread-safe-client \
 		--disable-assembler \
 		--with-pthread \
 		--without-raid \
@@ -84,6 +94,10 @@ define Build/Compile
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
+		SUBDIRS="libmysql_r" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
+	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		SUBDIRS="scripts" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		bin_SCRIPTS="mysql_config" \
@@ -105,5 +119,10 @@ define Package/libmysqlclient/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/mysql/libmysqlclient.so.* $(1)/usr/lib/
 endef
+define Package/libmysqlclient_r/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/mysql/libmysqlclient_r.so.* $(1)/usr/lib/
+endef
 
 $(eval $(call BuildPackage,libmysqlclient))
+$(eval $(call BuildPackage,libmysqlclient_r))
