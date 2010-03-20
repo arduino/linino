@@ -1,0 +1,11 @@
+--- openconnect-2.01/Makefile	2009-06-24 12:30:34.000000000 -0500
++++ openconnect-2.01.openwrt/Makefile	2009-09-20 18:06:39.000000000 -0500
+@@ -15,7 +15,7 @@
+ # dir; there's no need to install it anywhere (we link it statically).
+ ifdef OPENSSL
+ SSL_CFLAGS += -I$(OPENSSL)/include
+-SSL_LDFLAGS += -lz $(OPENSSL)/libssl.a $(OPENSSL)/libcrypto.a -ldl
++SSL_LDFLAGS += -lz $(OPENSSL)/lib/libssl.a $(OPENSSL)/lib/libcrypto.a -ldl
+ else
+ ifeq ($(wildcard /usr/include/openssl),)
+ $(error "No OpenSSL in /usr/include/openssl. Cannot continue");
