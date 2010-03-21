@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2009 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 TARGET_CFLAGS += $(FPIC)
 
 define Package/check
-  SECTION:=lib
+  SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Unit testing framework for C
   URL:=http://check.sourceforge.net/

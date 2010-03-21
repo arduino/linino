@@ -25,7 +25,7 @@ TARGET_LDFLAGS+= \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Package/libgconf2
-  SECTION:=lib
+  SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=GConf2 library
   URL:=http://www.gnome.org/projects/gconf/

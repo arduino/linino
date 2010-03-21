@@ -25,7 +25,7 @@ TARGET_LDFLAGS+= \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
 
 define Package/libxapian
-  SECTION:=lib
+  SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=xapian
   URL:=http://xapian.org
