@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dibbler
 PKG_VERSION:=0.7.3
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.gz
 PKG_SOURCE_URL:=http://klub.com.pl/dhcpv6/dibbler/
@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/dibbler/Default
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+uclibcxx @LINUX_2_6 +libpthread
+  DEPENDS:=+libstdcpp @LINUX_2_6 +libpthread
   TITLE:=Dibbler, a portable DHCPv6 implementation
   URL:=http://klub.com.pl/dhcpv6/
 endef
@@ -106,12 +106,12 @@ define Build/Configure
 endef
 
 # link stuff missing from uClibc++ but present in stdc++ statically
-CXX_LIBS:= -nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm -lgcc
+CXX_LIBS:= -lstdc++ -lm -lgcc
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		PORT_CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -fno-builtin" \
+		PORT_CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
 		PORT_LDFLAGS="$(TARGET_LDFLAGS)" \
 		DEBUGINFO= \
 		CXXLD="$(TARGET_CC)" \
