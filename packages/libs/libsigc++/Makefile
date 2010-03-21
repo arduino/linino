@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -23,7 +23,7 @@ define Package/libsigcxx
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=typesafe callback system for standard C++
-  URL:=http://libsigc++.sourceforge.net/
+  URL:=http://libsigc.sourceforge.net/
   DEPENDS:=+libstdcpp
 endef
 

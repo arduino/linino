@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -25,7 +25,7 @@ define Package/python2-chardet
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=Universal Encoding Detector
-  URL:=http://chardet.feedparser.org/ http://code.google.com/p/chardet/
+  URL:=http://chardet.feedparser.org/
   DEPENDS:=+python
 endef
 

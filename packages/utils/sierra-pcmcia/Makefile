@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -21,7 +21,7 @@ define KernelPackage/pcmcia-serial-sierra
   SUBMENU:=Other modules
   TITLE:=Sierra AirCard PCMCIA support
   DEPENDS:=kmod-pcmcia-serial @LINUX_2_6
-  URL:="http://www.sierrawireless.com/faq/ShowFAQ.aspx?ID=118"
+  URL:=http://www.sierrawireless.com/faq/ShowFAQ.aspx?ID=118
 endef
 
 define KernelPackage/pcmcia-serial-sierra/description
