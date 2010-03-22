@@ -20,64 +20,256 @@ PKG_MD5SUM:=a4fc691c4e7c49b3b9b54a667d8f5529
 
 PKG_BUILD_DEPENDS:=boost-jam/host
 
+PKG_CONFIG_DEPENDS := \
+	CONFIG_PACKAGE_boost-date_time \
+	CONFIG_PACKAGE_boost-filesystem \
+	CONFIG_PACKAGE_boost-graph \
+	CONFIG_PACKAGE_boost-iostreams \
+	CONFIG_PACKAGE_boost-math \
+	CONFIG_PACKAGE_boost-program_options \
+	CONFIG_PACKAGE_boost-python \
+	CONFIG_PACKAGE_boost-regex \
+	CONFIG_PACKAGE_boost-serialization \
+	CONFIG_PACKAGE_boost-signals \
+	CONFIG_PACKAGE_boost-system \
+	CONFIG_PACKAGE_boost-test \
+	CONFIG_PACKAGE_boost-thread \
+	CONFIG_PACKAGE_boost-wave \
+
 include $(INCLUDE_DIR)/package.mk
 
-define Package/boost
+define Package/boost/Default
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=Boost provides free peer-reviewed portable C++ source libraries
-  URL:=http://www.boost.org/
+  TITLE:=Boost C++ source libraries
+  URL:=http://www.boost.org
+  DEPENDS:=+libstdcpp
 endef
 
-define Package/boost-serialization
-  SECTION:=libs
-  CATEGORY:=Libraries
-  TITLE:=Boost-serialization library
-  DEPENDS:=+boost
+define Package/boost/Default/description
+  Boost provides free peer-reviewed portable C++ source libraries
+endef
+
+define Package/boost-date_time
+  $(call Package/boost/Default)
+  TITLE+= (date_time)
+endef
+
+define Package/boost-filesystem
+  $(call Package/boost/Default)
+  TITLE+= (filesystem)
+endef
+
+define Package/boost-function_types
+  $(call Package/boost/Default)
+  TITLE+= (function_types)
+  BUILD_ONLY:=1
+endef
+
+define Package/boost-graph
+  $(call Package/boost/Default)
+  TITLE+= (graph)
+endef
+
+define Package/boost-iostreams
+  $(call Package/boost/Default)
+  TITLE+= (iostreams)
+  DEPENDS+= +zlib
+endef
+
+define Package/boost-math
+  $(call Package/boost/Default)
+  TITLE+= (math)
+endef
+
+#define Package/boost-mpi
+#  $(call Package/boost/Default)
+#  TITLE+= (mpi)
+#endef
+
+define Package/boost-program_options
+  $(call Package/boost/Default)
+  TITLE+= (program_options)
+endef
+
+define Package/boost-python
+  $(call Package/boost/Default)
+  TITLE+= (python)
+  DEPENDS+= +python
 endef
 
 define Package/boost-regex
-  SECTION:=libs
-  CATEGORY:=Libraries
-  TITLE:=Boost-regex library
-  DEPENDS:=+boost
+  $(call Package/boost/Default)
+  TITLE+= (regex)
+endef
+
+define Package/boost-serialization
+  $(call Package/boost/Default)
+  TITLE+= (serialization)
+endef
+
+define Package/boost-signals
+  $(call Package/boost/Default)
+  TITLE+= (signals)
+endef
+
+define Package/boost-system
+  $(call Package/boost/Default)
+  TITLE+= (system)
+endef
+
+define Package/boost-test
+  $(call Package/boost/Default)
+  TITLE+= (test)
+endef
+
+define Package/boost-thread
+  $(call Package/boost/Default)
+  TITLE+= (thread)
+endef
+
+define Package/boost-wave
+  $(call Package/boost/Default)
+  TITLE+= (wave)
+endef
+
+define Package/boost
+  $(call Package/boost/Default)
+  TITLE+= (header-only)
+  BUILDONLY:=1
 endef
 
 define Build/Configure
 endef
 
-# bjam does not support anything like DESTDIR
 CONFIGURE_PREFIX:=$(PKG_INSTALL_DIR)
-
 define Build/Compile
 	( cd $(PKG_BUILD_DIR) ; \
-		echo "using gcc : : $(GNU_TARGET_NAME)-gcc : <cflags>$(CFLAGS) <cxxflags>$(CXXFLAGS) <linkflags>$(LDFLAGS) ;" > tools/build/v2/site-config.jam ; \
+		echo "using gcc : : $(GNU_TARGET_NAME)-gcc : <cflags>$(TARGET_CFLAGS) <cxxflags>$(TARGET_CXXFLAGS) <linkflags>$(TARGET_LDFLAGS) ;" > tools/build/v2/site-config.jam ; \
+		$(if $(CONFIG_PACKAGE_boost-python), \
+			echo "using python : : $(STAGING_DIR_ROOT)/usr/bin/python :	$(STAGING_DIR)/usr/include/python2.6/ ;" >> \
+				tools/build/v2/site-config.jam; \
+		) \
 		bjam \
 			'-sBUILD=release <optimization>space <inlining>on <debug-symbols>off' \
 			--toolset=gcc --build-type=minimal --layout=system \
-			$(patsubst %,--with-regex,$(filter y m,$(CONFIG_PACKAGE_boost-regex))) \
-			$(patsubst %,--with-serialization,$(filter y m,$(CONFIG_PACKAGE_boost-serialization))) \
+			--disable-long-double \
 			$(CONFIGURE_ARGS) \
+			$(if $(CONFIG_PACKAGE_boost-date_time),--with-date_time,--without-date_time) \
+			$(if $(CONFIG_PACKAGE_boost-filesystem),--with-filesystem,--without-filesystem) \
+			$(if $(CONFIG_PACKAGE_boost-function_types),--with-function_types,--without-function_types) \
+			$(if $(CONFIG_PACKAGE_boost-graph),--with-graph,--without-graph) \
+			$(if $(CONFIG_PACKAGE_boost-iostreams),--with-iostreams,--without-iostreams) \
+			$(if $(CONFIG_PACKAGE_boost-math),--with-math,--without-math) \
+			$(if $(CONFIG_PACKAGE_boost-mpi),--with-mpi,--without-mpi) \
+			$(if $(CONFIG_PACKAGE_boost-program_options),--with-program_options,--without-program_options) \
+			$(if $(CONFIG_PACKAGE_boost-python),--with-python,--without-python) \
+			$(if $(CONFIG_PACKAGE_boost-regex),--with-regex,--without-regex) \
+			$(if $(CONFIG_PACKAGE_boost-serialization),--with-serialization,--without-serialization) \
+			$(if $(CONFIG_PACKAGE_boost-signals),--with-signals,--without-signals) \
+			$(if $(CONFIG_PACKAGE_boost-system),--with-system,--without-system) \
+			$(if $(CONFIG_PACKAGE_boost-test),--with-test,--without-test) \
+			$(if $(CONFIG_PACKAGE_boost-thread),--with-thread,--without-thread) \
+			$(if $(CONFIG_PACKAGE_boost-wave),--with-wave,--without-wave) \
+			\
+			$(if $(CONFIG_PACKAGE_boost-iostreams),-sNO_BZIP2=1 -sZLIB_INCLUDE=$(STAGING_DIR)/usr/include \
+				-sZLIB_LIBPATH=$(STAGING_DIR)/usr/lib) \
 			install \
 	)
 endef
 
-define Package/boost/description
-    Boost provides free peer-reviewed portable C++ source libraries
-endef
-
 define Build/InstallDev
-    $(INSTALL_DIR) $(1)/usr/include/boost $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/include/boost/
 	$(CP) $(PKG_INSTALL_DIR)/include/boost/* $(1)/usr/include/boost/ # copies _all_ header files - independent of <--with-library>-argument above
-	$(CP) $(PKG_INSTALL_DIR)/lib/*.a $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/lib/*.so* $(1)/usr/lib/
+
+	if [ -d $(PKG_INSTALL_DIR)/lib ]; then \
+		$(INSTALL_DIR) $(1)/usr/lib; \
+		$(CP) $(PKG_INSTALL_DIR)/lib/*.a $(1)/usr/lib/; \
+		$(CP) $(PKG_INSTALL_DIR)/lib/*.so* $(1)/usr/lib/; \
+	fi
 endef
 
-define Package/boost/install
-    $(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/lib/*.so* $(1)/usr/lib/
+define Package/boost/Default/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/lib/libboost_$(2)*.so* $(1)/usr/lib/
 endef
 
-$(eval $(call BuildPackage,boost-serialization))
-$(eval $(call BuildPackage,boost-regex))
+define Package/boost-date_time/install
+  $(call Package/boost/Default/install,$(1),date_time)
+endef
+
+define Package/boost-filesystem/install
+  $(call Package/boost/Default/install,$(1),filesystem)
+endef
+
+define Package/boost-graph/install
+  $(call Package/boost/Default/install,$(1),graph)
+endef
+
+define Package/boost-iostreams/install
+  $(call Package/boost/Default/install,$(1),iostreams)
+endef
+
+define Package/boost-math/install
+  $(call Package/boost/Default/install,$(1),math)
+endef
+
+#define Package/boost-mpi/install
+#  $(call Package/boost/Default/install,$(1),mpi)
+#endef
+
+define Package/boost-program_options/install
+  $(call Package/boost/Default/install,$(1),program_options)
+endef
+
+define Package/boost-python/install
+  $(call Package/boost/Default/install,$(1),python)
+endef
+
+define Package/boost-regex/install
+  $(call Package/boost/Default/install,$(1),regex)
+endef
+
+define Package/boost-serialization/install
+  $(call Package/boost/Default/install,$(1),serialization)
+endef
+
+define Package/boost-signals/install
+  $(call Package/boost/Default/install,$(1),signals)
+endef
+
+define Package/boost-system/install
+  $(call Package/boost/Default/install,$(1),system)
+endef
+
+define Package/boost-test/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/lib/libboost_unit_test_framework*.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/lib/libboost_prg_exec_monitor*.so* $(1)/usr/lib/
+endef
+
+define Package/boost-thread/install
+  $(call Package/boost/Default/install,$(1),thread)
+endef
+
+define Package/boost-wave/install
+  $(call Package/boost/Default/install,$(1),wave)
+endef
+
 $(eval $(call BuildPackage,boost))
+$(eval $(call BuildPackage,boost-date_time))
+$(eval $(call BuildPackage,boost-filesystem))
+$(eval $(call BuildPackage,boost-function_types))
+$(eval $(call BuildPackage,boost-graph))
+$(eval $(call BuildPackage,boost-iostreams))
+$(eval $(call BuildPackage,boost-math))
+#$(eval $(call BuildPackage,boost-mpi))
+$(eval $(call BuildPackage,boost-program_options))
+$(eval $(call BuildPackage,boost-python))
+$(eval $(call BuildPackage,boost-regex))
+$(eval $(call BuildPackage,boost-serialization))
+$(eval $(call BuildPackage,boost-signals))
+$(eval $(call BuildPackage,boost-system))
+$(eval $(call BuildPackage,boost-test))
+$(eval $(call BuildPackage,boost-thread))
+$(eval $(call BuildPackage,boost-wave))
