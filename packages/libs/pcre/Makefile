@@ -52,7 +52,7 @@ endef
 
 define Package/libpcre/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpcre{,posix}.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpcre{,posix}.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libpcre))
