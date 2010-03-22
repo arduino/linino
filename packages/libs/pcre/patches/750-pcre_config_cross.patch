@@ -1,8 +1,6 @@
-Index: pcre-7.6/pcre-config.in
-===================================================================
---- pcre-7.6.orig/pcre-config.in	2008-02-16 11:13:56.000000000 +0100
-+++ pcre-7.6/pcre-config.in	2008-02-16 11:13:57.000000000 +0100
-@@ -21,6 +21,10 @@
+--- a/pcre-config.in
++++ b/pcre-config.in
+@@ -24,6 +24,10 @@ case `uname -s` in
    libR=" -Wl,-R@libdir@"
    ;;
  esac
@@ -13,8 +11,8 @@ Index: pcre-7.6/pcre-config.in
  
  while test $# -gt 0; do
    case "$1" in
-@@ -55,10 +59,10 @@
-       echo $includes
+@@ -58,10 +62,10 @@ while test $# -gt 0; do
+       echo $includes @PCRE_STATIC_CFLAG@
        ;;
      --libs-posix)
 -      echo -L@libdir@$libR -lpcreposix -lpcre
@@ -24,5 +22,5 @@ Index: pcre-7.6/pcre-config.in
 -      echo -L@libdir@$libR -lpcre
 +      echo $libS$libR -lpcre
        ;;
-     *)
-       echo "${usage}" 1>&2
+     --libs-cpp)
+       if test @enable_cpp@ = yes ; then
