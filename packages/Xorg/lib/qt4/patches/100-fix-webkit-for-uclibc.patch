@@ -1,0 +1,114 @@
+diff -ruN qt-everywhere-opensource-src-4.6.2.orig/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp qt-everywhere-opensource-src-4.6.2/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp
+--- qt-everywhere-opensource-src-4.6.2.orig/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp	2010-02-11 16:55:20.000000000 +0100
++++ qt-everywhere-opensource-src-4.6.2/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp	2010-02-25 04:34:49.855131784 +0100
+@@ -74,6 +74,18 @@
+ #endif
+ #include <unistd.h>
+ 
++#if defined(__UCLIBC__)
++// versions of uClibc 0.9.28 and below do not have
++// pthread_getattr_np or pthread_attr_getstack.
++#if __UCLIBC_MAJOR__ == 0 && \
++    (__UCLIBC_MINOR__ < 9 || \
++    (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 30))
++#define UCLIBC_USE_PROC_SELF_MAPS 1
++#include <stdio_ext.h>
++extern int *__libc_stack_end;
++#endif
++#endif
++
+ #if PLATFORM(SOLARIS)
+ #include <thread.h>
+ #else
+@@ -630,24 +642,10 @@
+     return static_cast<void*>(pTib->StackBase);
+ #elif PLATFORM(QNX)
+     return currentThreadStackBaseQNX();
+-#elif PLATFORM(HPUX)
+-    return hpux_get_stack_base();
+ #elif PLATFORM(SOLARIS)
+     stack_t s;
+     thr_stksegment(&s);
+     return s.ss_sp;
+-#elif PLATFORM(AIX)
+-    pthread_t thread = pthread_self();
+-    struct __pthrdsinfo threadinfo;
+-    char regbuf[256];
+-    int regbufsize = sizeof regbuf;
+-
+-    if (pthread_getthrds_np(&thread, PTHRDSINFO_QUERY_ALL,
+-                            &threadinfo, sizeof threadinfo,
+-                            &regbuf, &regbufsize) == 0)
+-        return threadinfo.__pi_stackaddr;
+-
+-    return 0;
+ #elif PLATFORM(OPENBSD)
+     pthread_t thread = pthread_self();
+     stack_t stack;
+@@ -667,16 +665,58 @@
+     get_thread_info(find_thread(NULL), &threadInfo);
+     return threadInfo.stack_end;
+ #elif PLATFORM(UNIX)
++#ifdef UCLIBC_USE_PROC_SELF_MAPS
++    // Read /proc/self/maps and locate the line whose address
++    // range contains __libc_stack_end.
++    FILE *file = fopen("/proc/self/maps", "r");
++    if (!file)
++        return 0;
++    __fsetlocking(file, FSETLOCKING_BYCALLER);
++    char *line = NULL;
++    size_t lineLen = 0;
++    while (!feof_unlocked(file)) {
++        if (getdelim(&line, &lineLen, '\n', file) <= 0)
++            break;
++
++        long from;
++        long to;
++        if (sscanf (line, "%lx-%lx", &from, &to) != 2)
++            continue;
++        if (from <= (long)__libc_stack_end && (long)__libc_stack_end < to) {
++            fclose(file);
++            free(line);
++#ifdef _STACK_GROWS_UP
++            return (void *)from;
++#else
++            return (void *)to;
++#endif
++        }
++    }
++    fclose(file);
++    free(line);
++    return 0;
++#else
+     static void* stackBase = 0;
+     static size_t stackSize = 0;
+     static pthread_t stackThread;
+     pthread_t thread = pthread_self();
+     if (stackBase == 0 || thread != stackThread) {
++#if defined(QT_LINUXBASE)
++        // LinuxBase is missing pthread_getattr_np - resolve it once at runtime instead
++        // see http://bugs.linuxbase.org/show_bug.cgi?id=2364
++        typedef int (*GetAttrPtr)(pthread_t, pthread_attr_t *);
++        static int (*pthread_getattr_np_ptr)(pthread_t, pthread_attr_t *) = 0;
++        if (!pthread_getattr_np_ptr)
++            *(void **)&pthread_getattr_np_ptr = dlsym(RTLD_DEFAULT, "pthread_getattr_np");
++#endif
+         pthread_attr_t sattr;
+         pthread_attr_init(&sattr);
+ #if HAVE(PTHREAD_NP_H) || PLATFORM(NETBSD)
+         // e.g. on FreeBSD 5.4, neundorf@kde.org
+         pthread_attr_get_np(thread, &sattr);
++#elif defined(QT_LINUXBASE)
++        if (pthread_getattr_np_ptr)
++            pthread_getattr_np_ptr(thread, &sattr);
+ #else
+         // FIXME: this function is non-portable; other POSIX systems may have different np alternatives
+         pthread_getattr_np(thread, &sattr);
+@@ -688,6 +728,7 @@
+         stackThread = thread;
+     }
+     return static_cast<char*>(stackBase) + stackSize;
++#endif
+ #elif PLATFORM(WINCE)
+     if (g_stackBase)
+         return g_stackBase;
