@@ -29,6 +29,7 @@ define Package/qt4/Default
   SUBMENU:=framework
   TITLE:=qt4
   DEPENDS:=qt4
+  URL:=http://qt.nokia.com/
 endef
 
 define Package/qt4
