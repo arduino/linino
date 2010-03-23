@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=batman-adv
-PKG_REV:=1578
+PKG_REV:=1611
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -19,12 +19,12 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_TOOL_VERSION=$(PKG_REV)
 
 ifneq ($(CONFIG_BATMAN_ADV_DEV),)
-	PKG_KMOD_VERSION=7e44e9275aafce871a91b9ab5f710ed953dda74c
+	PKG_KMOD_VERSION=f9c84f3d20df87f4ebbc38b754b6b13fc1593ce2
 	PKG_KMOD_FNAME=batman-adv-dev-$(PKG_REV).tar.gz
 	PKG_TOOL_URL=http://downloads.open-mesh.org/svn/batman/trunk/batctl
 	PKG_TOOL_FNAME:=batctl-dev-$(PKG_TOOL_VERSION).tar.gz
 else
-	PKG_KMOD_VERSION=9234caa91ce04d0bba893738da960b88154e5474
+	PKG_KMOD_VERSION=5c4633c532a7a9b5adfe5dbf3f5e97fff307216e
 	PKG_KMOD_FNAME=batman-adv-maint-$(PKG_REV).tar.gz
 	PKG_TOOL_URL=http://downloads.open-mesh.org/svn/batman/branches/batctl-0.2.x/
 	PKG_TOOL_FNAME:=batctl-maint-$(PKG_TOOL_VERSION).tar.gz
