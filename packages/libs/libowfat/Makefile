@@ -33,13 +33,12 @@ define Build/Configure
 endef
 
 TARGET_CFLAGS += $(FPIC)
-LOWFAT_MAKEOPTS = \
-               $(TARGET_CONFIGURE_OPTS) \
-               COPTS="$(TARGET_CFLAGS)" \
-               DEBUG="$(DEBUG)" \
-               VERSION="$(LOWFAT_VERSION)" \
-               CPPFLAGS="-I$(PKG_BUILD_DIR) -I$(STAGING_DIR)/usr/include" \
-               OS="Linux"
+LOWFAT_MAKEOPTS = $(TARGET_CONFIGURE_OPTS) \
+	COPTS="$(TARGET_CFLAGS)" \
+	DEBUG="$(DEBUG)" \
+	VERSION="$(LOWFAT_VERSION)" \
+	CPPFLAGS="-I$(PKG_BUILD_DIR) -I$(STAGING_DIR)/usr/include" \
+	OS="Linux"
 
 # work around a nasty gcc bug
 ifneq ($(CONFIG_GCC_VERSION_4_2_4),)
@@ -47,14 +46,14 @@ ifneq ($(CONFIG_GCC_VERSION_4_2_4),)
 endif
 
 define Build/Compile
-       $(MAKE) -C $(PKG_BUILD_DIR) $(LOWFAT_MAKEOPTS)
+	$(MAKE) -C $(PKG_BUILD_DIR) $(LOWFAT_MAKEOPTS)
 endef
 
 define Build/InstallDev
-       mkdir -p $(1)/usr/include/libowfat
-       $(CP) $(PKG_BUILD_DIR)/*.h $(1)/usr/include/libowfat
-       $(INSTALL_DIR) $(1)/usr/lib
-       $(CP) $(PKG_BUILD_DIR)/*.a $(1)/usr/lib
+	mkdir -p $(1)/usr/include/libowfat
+	$(CP) $(PKG_BUILD_DIR)/*.h $(1)/usr/include/libowfat
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/*.a $(1)/usr/lib
 endef
 
 $(eval $(call BuildPackage,libowfat))
