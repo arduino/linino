@@ -1,10 +1,9 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
@@ -27,6 +26,7 @@ define Package/libowfat
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=reimplemented libdjb under GPL
+  URL:=http://www.fefe.de/libowfat/
 endef
 
 define Build/Configure
