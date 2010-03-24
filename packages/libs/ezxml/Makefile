@@ -15,8 +15,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/ezxml
 PKG_MD5SUM:=e22ae17a0bd82dfa2a66f9876f1a8fd7
 
-TAR_OPTIONS:=--transform='s,$(PKG_NAME),$(PKG_NAME)-$(PKG_VERSION),' -xvf -
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ezxml/Default
@@ -34,6 +32,8 @@ endef
 define Package/libezxml/description
 	ezXML is a fast and lightweight C library for parsing XML documents.
 endef
+
+TAR_CMD:=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components 1 $(TAR_OPTIONS)
 
 TARGET_CFLAGS += $(FPIC) -D_GNU_SOURCE
 

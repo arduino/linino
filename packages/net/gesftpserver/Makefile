@@ -20,8 +20,6 @@ PKG_SOURCE_VERSION:=$(PKG_REV)
 
 PKG_INSTALL:=1
 
-TAR_OPTIONS:=--transform='s,$(PKG_NAME),$(PKG_NAME)-$(PKG_VERSION),' -xvf -
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/gesftpserver
@@ -40,6 +38,8 @@ an SSH server, but rather runs as a subsystem of one.
 endef
 
 CONFIGURE_CMD:=./prepare
+
+TAR_CMD:=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components 1 $(TAR_OPTIONS)
 
 TARGET_CFLAGS+= \
 	-I$(STAGING_DIR)/usr/lib/libiconv/include/

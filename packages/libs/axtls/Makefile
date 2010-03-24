@@ -15,8 +15,6 @@ PKG_SOURCE:=axTLS-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/axtls
 PKG_MD5SUM:=03471b5a5874e2ce86025f24b3fa0958
 
-TAR_OPTIONS:=--transform='s,axTLS,$(PKG_NAME)-$(PKG_VERSION),' -xvf -
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libaxtls
@@ -40,6 +38,8 @@ define Build/Configure
 	$(CP) ./files/config $(PKG_BUILD_DIR)/config/.config
 	$(MAKE) -C $(PKG_BUILD_DIR) oldconfig
 endef
+
+TAR_CMD:=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components 1 $(TAR_OPTIONS)
 
 TARGET_CFLAGS += $(FPIC)
 

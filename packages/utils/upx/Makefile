@@ -15,8 +15,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.bz2
 PKG_SOURCE_URL:=http://upx.sourceforge.net/download/
 PKG_MD5SUM:=68d662b1f831335460f9bfdbf632c6ce
 
-TAR_OPTIONS+=--transform='s,$(PKG_NAME)-$(PKG_VERSION)-src,$(PKG_NAME)-$(PKG_VERSION),'
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/upx
@@ -38,6 +36,8 @@ endef
 MAKE_PATH := src
 MAKE_VARS += \
 	exeext=""
+
+TAR_CMD:=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components 1 $(TAR_OPTIONS)
 
 TARGET_CPPFLAGS += \
 	-DUCL_NO_ASM \
