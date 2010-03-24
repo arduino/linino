@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -22,7 +22,7 @@ define Package/procps
   CATEGORY:=Utilities
   DEPENDS:=+libncurses
   TITLE:=proc utilities
-  URL:=http://sourceforge.net/projects/procps/
+  URL:=http://procps.sourceforge.net/
 endef
 
 define Package/procps/description

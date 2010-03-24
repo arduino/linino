@@ -25,7 +25,7 @@ define Package/osirisd
   CATEGORY:=Administration
   DEPENDS:=+libopenssl +libpthread
   TITLE:=Host integrity monitoring system (scanning agent)
-  URL:=http://www.hostintegrity.com/osiris
+  URL:=http://osiris.shmoo.com/
 endef
 
 CONFIGURE_ARGS += \

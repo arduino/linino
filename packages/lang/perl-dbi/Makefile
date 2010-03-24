@@ -19,7 +19,7 @@ SUBMENU:=Perl
 SECTION:=lang
 CATEGORY:=Languages
 TITLE:=Database independent interface for Perl
-URL:=http://search.cpan.org/~timb/DBI/
+URL:=http://search.cpan.org/dist/DBI/
 DEPENDS:=perl +perlbase-essential
 endef
 

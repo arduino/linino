@@ -27,7 +27,7 @@ define Package/python-xapian
   CATEGORY:=Languages
   SUBMENU:=Python
   TITLE:=xapian python bindings
-  URL:=http://oligarchy.co.uk/xapian/
+  URL:=http://xapian.org/
   DEPENDS:=+python-mini +libxapian
 endef
 

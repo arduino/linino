@@ -32,6 +32,7 @@ define Package/matchbox-window-manager
   CATEGORY:=Xorg
   SUBMENU:=window manager
   DEPENDS:=+libX11 +zlib +libfreetype +fontconfig +libmatchbox
+  URL:=http://matchbox-project.org/
 endef
 
 define Build/Compile

@@ -19,7 +19,7 @@ SUBMENU:=Perl
 SECTION:=lang
 CATEGORY:=Languages
 TITLE:=Perl bindings to libcurl
-URL:=http://search.cpan.org/~crisb/WWW-Curl-3.02/
+URL:=http://search.cpan.org/dist/WWW-Curl/
 DEPENDS:=perl +libcurl
 endef
 

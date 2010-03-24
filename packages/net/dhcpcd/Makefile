@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -23,7 +23,7 @@ define Package/dhcpcd
   SECTION:=net
   CATEGORY:=Network
   TITLE:=DHCP client for automatically configuring IPv4 networking
-  URL:=http://dhcpcd.berlios.de/
+  URL:=http://roy.marples.name/projects/dhcpcd
 endef
 
 define Package/dhcpcd/description

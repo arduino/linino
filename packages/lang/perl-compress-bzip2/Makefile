@@ -19,7 +19,7 @@ define Package/perl-compress-bzip2
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=Perl interface to bzip2 compression library
-  URL:=http://search.cpan.org/~arjay/Compress-Bzip2-2.09/
+  URL:=http://search.cpan.org/dist/Compress-Bzip2/
   DEPENDS:=perl +bzip2
 endef
 

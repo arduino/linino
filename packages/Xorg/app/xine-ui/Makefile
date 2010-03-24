@@ -28,6 +28,7 @@ define Package/xine-ui
   SUBMENU:=app
   TITLE:=xine user interface
   DEPENDS:=+xine-lib +libpng +curl +libiconv +libXv +libICE +libXxf86vm
+  URL:=http://www.xine-project.org/
 endef
 
 CONFIGURE_VARS+= \

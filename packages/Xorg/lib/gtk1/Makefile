@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -38,6 +38,7 @@ define Package/gtk1
   SUBMENU:=framework
   TITLE:=GTK+ 1.2.10 package
   DEPENDS:=+glib1 +libX11 +libXt
+  URL:=http://www.gtk.org/
 endef
 
 define Build/InstallDev

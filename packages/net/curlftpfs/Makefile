@@ -21,6 +21,7 @@ define Package/curlftpfs
   CATEGORY:=Network
   DEPENDS:=+libcurl +libfuse +glib2
   TITLE:=CurlFtpFS
+  URL:=http://curlftpfs.sourceforge.net/
 endef
 
 define Package/curlftpfs/description

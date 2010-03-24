@@ -22,6 +22,7 @@ define Package/memcached
   DEPENDS:=+libevent
   TITLE:=The high-performance, distributed memory object caching system
   MAINTAINER:=Thomas Heil <heil@terminal-consulting.de>
+  URL:=http://memcached.org/
 endef
 
 define Package/memcached/description

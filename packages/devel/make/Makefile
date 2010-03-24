@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -19,6 +19,7 @@ define Package/make
   SECTION:=devel
   CATEGORY:=Development
   TITLE:=make
+  URL:=http://www.gnu.org/software/make/
 endef
 
 define Package/make/description

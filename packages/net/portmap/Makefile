@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -24,7 +24,7 @@ define Package/portmap
   CATEGORY:=Network
   DEPENDS:=+libwrap
   TITLE:=The RPC Portmapper
-  URL:=ftp://ftp.porcupine.org/pub/security
+  URL:=http://neil.brown.name/portmap/
 endef
 
 define Package/portmap/description

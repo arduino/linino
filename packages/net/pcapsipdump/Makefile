@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -22,7 +22,7 @@ define Package/pcapsipdump
   CATEGORY:=Network
   DEPENDS:=+libpcap +uclibcxx
   TITLE:=SIP sessions dumping tool
-  URL:=http://psipdump.sourceforge.net/
+  URL:=http://sourceforge.net/projects/pcapsipdump/
 endef
 
 define Package/pcapsipdump/description

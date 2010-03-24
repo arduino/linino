@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006,2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -11,7 +11,7 @@ PKG_NAME:=mercurial
 PKG_VERSION:=1.1.2
 PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=http://selenic.com/mercurial/release/
+PKG_SOURCE_URL:=http://mercurial.selenic.com/release
 PKG_SOURCE:=mercurial-$(PKG_VERSION).tar.gz
 PKG_MD5SUM:=4fd3b9a2e5dcd025840c3849b136bec8
 PKG_BUILD_DEPENDS:=python-mini
@@ -24,7 +24,7 @@ define Package/mercurial
   CATEGORY:=Network
   DEPENDS:=python
   TITLE:=Mercurial Source Control Management (SCM) system
-  URL:=http://www.selenic.com/mercurial/
+  URL:=http://mercurial.selenic.com/
   SUBMENU:=Version Control Systems
 endef
 

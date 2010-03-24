@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -12,7 +12,7 @@ PKG_VERSION:=0.2.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://weechat.flashtux.org/download/
+PKG_SOURCE_URL:=http://www.weechat.org/files/src
 PKG_MD5SUM:=ccdecf663b0050a23049acb4b9a76193
 
 PKG_FIXUP = libtool
@@ -25,7 +25,7 @@ define Package/weechat/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Lightweight IRC client
-  URL:=http://weechat.flashtux.org/
+  URL:=http://www.weechat.org/
 endef
 
 define Package/weechat/Default/description

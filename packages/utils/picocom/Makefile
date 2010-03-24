@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -12,7 +12,7 @@ PKG_VERSION:=1.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://efault.net/npat/hacks/picocom/dist/
+PKG_SOURCE_URL:=http://picocom.googlecode.com/files
 PKG_MD5SUM:=08fcc5f6bb9e7676a2569386d5ea9f70
 
 include $(INCLUDE_DIR)/package.mk
@@ -21,7 +21,7 @@ define Package/picocom
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=A minimal dumb-terminal emulation program
-  URL:=http://efault.net/npat/hacks/picocom/
+  URL:=http://code.google.com/p/picocom/
   SUBMENU:=terminal
 endef
 

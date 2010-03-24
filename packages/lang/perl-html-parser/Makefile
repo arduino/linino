@@ -19,7 +19,7 @@ SUBMENU:=Perl
 SECTION:=lang
 CATEGORY:=Languages
 TITLE:=A collection of modules that parse HTML text documents
-URL:=http://search.cpan.org/~gaas/HTML-Parser/
+URL:=http://search.cpan.org/dist/HTML-Parser/
 DEPENDS:=perl +perl-html-tagset +perl-uri
 endef
 

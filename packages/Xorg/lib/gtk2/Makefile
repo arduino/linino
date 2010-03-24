@@ -50,6 +50,7 @@ define Package/gtk2
   +FEATURE_drawing-backend_libX11:libXdamage \
   +FEATURE_drawing-backend_libX11:libXcomposite \
   +FEATURE_drawing-backend_libX11:libXi
+  URL:=http://www.gtk.org/
 endef
 
 define Package/gtk2-cups

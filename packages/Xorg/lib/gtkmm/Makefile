@@ -35,6 +35,7 @@ define Package/gtkmm
   SUBMENU:=framework
   TITLE:=GTK+-2.0
   DEPENDS:=+gtk2 +cairomm +pangomm +glibmm
+  URL:=http://www.gtkmm.org/
 endef
 
 CONFIGURE_ARGS+= --disable-docs --disable-demos

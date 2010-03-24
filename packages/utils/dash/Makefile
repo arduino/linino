@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -21,7 +21,7 @@ define Package/dash
   SECTION:=base
   CATEGORY:=Base system
   TITLE:=Debian Almquist shell
-  URL:=http://gondor.apana.org.au/~herbert/dash/files/
+  URL:=http://gondor.apana.org.au/~herbert/dash/
 endef
 
 define Package/dash/description

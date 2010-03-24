@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -25,7 +25,7 @@ define Package/python-bluez
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=Python wrapper for the BlueZ Bluetooth stack
-  URL:=http://org.csail.mit.edu/pybluez/
+  URL:=http://code.google.com/p/pybluez/
   DEPENDS:=+python-mini +bluez-libs
 endef
 

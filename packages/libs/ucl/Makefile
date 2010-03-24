@@ -23,9 +23,8 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libucl
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=
-  TITLE:=The Ultimate Packer for eXecutables
-  URL:=http://upx.sourceforge.net/
+  TITLE:=Portable lossless data compression library
+  URL:=http://www.oberhumer.com/opensource/ucl/
 endef
 
 define Package/libucl/description

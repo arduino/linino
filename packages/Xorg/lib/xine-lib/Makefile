@@ -28,6 +28,7 @@ define Package/xine-lib
   SUBMENU:=libraries
   TITLE:=xine libraries
   DEPENDS:=+libX11 +alsa-lib +zlib +libfreetype
+  URL:=http://www.xine-project.org/
 endef
 
 define Build/Configure

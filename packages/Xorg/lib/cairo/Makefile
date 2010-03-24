@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2009 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -28,6 +28,7 @@ define Package/cairo
   DEPENDS:=+fontconfig +libpng +libexpat +pixman \
   +FEATURE_drawing-backend_DirectFB:DirectFB \
   +FEATURE_drawing-backend_libX11:libX11
+  URL:=http://cairographics.org/
 endef
 
 define Package/cairo/description

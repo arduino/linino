@@ -28,6 +28,7 @@ define Package/imlib2
   SUBMENU:=libraries
   TITLE:=Image library
   DEPENDS:=+libX11 +giflib +libtiff +libjpeg +gtk1 +libfreetype +libXext
+  URL:=http://docs.enlightenment.org/api/imlib2/html/
 endef
 
 TARGET_CFLAGS += "-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"

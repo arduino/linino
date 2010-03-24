@@ -26,6 +26,7 @@ define Package/cairomm
   SUBMENU:=libraries
   TITLE:=Multi-platform 2D graphics library
   DEPENDS:=+libsigcxx +cairo
+  URL:=http://cairographics.org/cairomm/
 endef
 
 define Package/cairomm/description

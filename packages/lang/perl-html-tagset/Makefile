@@ -19,7 +19,7 @@ SUBMENU:=Perl
 SECTION:=lang
 CATEGORY:=Languages
 TITLE:=Data tables pertaining to HTML
-URL:=http://search.cpan.org/~petdance/HTML-Tagset/
+URL:=http://search.cpan.org/dist/HTML-Tagset/
 DEPENDS:=perl
 endef
 

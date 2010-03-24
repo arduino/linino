@@ -34,6 +34,7 @@ define Package/pango
   DEPENDS:=+cairo +glib2 +fontconfig +libfreetype \
   +FEATURE_drawing-backend_libX11:libX11 \
   +FEATURE_drawing-backend_libX11:libXft
+  URL:=http://www.pango.org/
 endef
 
 define Package/pango/description

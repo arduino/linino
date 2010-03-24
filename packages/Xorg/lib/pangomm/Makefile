@@ -35,6 +35,7 @@ define Package/pangomm
   SUBMENU:=libraries
   TITLE:=Text layout and rendering library
   DEPENDS:=+glibmm +cairomm +pango
+  URL:=http://www.pango.org/
 endef
 
 CONFIGURE_ARGS+= --disable-documentation

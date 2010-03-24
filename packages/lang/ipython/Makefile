@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2009 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -22,7 +22,7 @@ define Package/ipython
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=ipython
-  URL:=http://ipython.scipy.org/dist/
+  URL:=http://ipython.scipy.org/
 endef
 
 define Package/ipython/description

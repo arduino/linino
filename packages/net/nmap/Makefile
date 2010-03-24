@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -24,7 +24,7 @@ define Package/nmap
   CATEGORY:=Network
   DEPENDS:=+libdnet +libpcap +libpcre +uclibcxx
   TITLE:=Network exploration and/or security auditing utility
-  URL:=http://www.insecure.org/nmap/
+  URL:=http://nmap.org/
 endef
 
 define Package/nmap/description

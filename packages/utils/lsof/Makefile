@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -24,7 +24,7 @@ define Package/lsof
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=LiSt Open Files - a diagnostic tool
-  URL:=http://www.akadia.com/services/lsof_intro.html
+  URL:=http://people.freebsd.org/~abe/
 endef
 
 define Build/Configure

@@ -1,3 +1,4 @@
+#
 # Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -28,6 +29,7 @@ define Package/radlib
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Rapid Application Development Library
+  URL:=http://www.radlib.teel.ws/
 endef
 
 define Package/radlib/description

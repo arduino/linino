@@ -19,7 +19,7 @@ SUBMENU:=Perl
 SECTION:=lang
 CATEGORY:=Languages
 TITLE:=Simple advisory file locking
-URL:=http://search.cpan.org/~ram/LockFile-Simple/
+URL:=http://search.cpan.org/dist/LockFile-Simple/
 DEPENDS:=perl
 endef
 

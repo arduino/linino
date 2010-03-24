@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -25,6 +25,7 @@ define Package/libpar2
   CATEGORY:=Libraries
   DEPENDS:=+libsigcxx
   TITLE:=A library for performing common tasks related to PAR recovery sets
+  URL:=http://parchive.sourceforge.net/
 endef
 
 define Package/libpar2/description

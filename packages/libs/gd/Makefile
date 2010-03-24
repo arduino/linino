@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -25,7 +25,7 @@ define Package/libgd
   CATEGORY:=Libraries
   DEPENDS:=+libjpeg +libpng
   TITLE:=The GD graphics library
-  URL:=http://www.boutell.com/gd/
+  URL:=http://www.libgd.org/
 endef
 
 define Package/libgd/description
