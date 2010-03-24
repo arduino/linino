@@ -26,6 +26,7 @@ define Package/classpath
   TITLE:=GNU Classpath
   URL:=http://www.gnu.org/software/classpath/
   MAINTAINER:=Roberto Riggio (roberto.riggio@create-net.org)
+  DEPENDS:=@BROKEN
 endef
 
 define Package/classpath/Description

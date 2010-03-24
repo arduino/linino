@@ -26,7 +26,7 @@ define Package/twisted/default
   SECTION:=lang
   CATEGORY:=Languages
   URL:=http://twistedmatrix.com/
-  DEPENDS:=+python-mini
+  DEPENDS:=+python-mini @BROKEN
 endef
 
 define Package/twisted/default/description

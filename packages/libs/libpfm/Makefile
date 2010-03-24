@@ -22,6 +22,7 @@ define Package/libpfm
   CATEGORY:=Libraries
   TITLE:=Perfmon2 Kernel performance monitoring interface
   URL:=http://perfmon2.sourceforge.net/
+  DEPENDS:=@BROKEN
 endef
 
 define Build/Compile
