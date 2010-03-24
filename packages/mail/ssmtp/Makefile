@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ssmtp
 PKG_VERSION:=2.64
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.bz2
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/s/ssmtp
@@ -52,7 +52,10 @@ define Package/ssmtp/install
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/revaliases $(1)/etc/ssmtp/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ssmtp $(1)/usr/sbin/
-	ln -sf ssmtp $(1)/usr/sbin/sendmail
+endef
+
+define Package/ssmtp/postinstall
+	ln -sf ssmtp $${IPKG_INSTROOT}/usr/sbin/sendmail
 endef
 
 $(eval $(call BuildPackage,ssmtp))

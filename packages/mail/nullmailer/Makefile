@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nullmailer
 PKG_VERSION:=1.05
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://untroubled.org/nullmailer/
@@ -41,11 +41,15 @@ define Package/nullmailer/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/nullmailer-queue $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/nullmailer-send $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/sendmail $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/sendmail $(1)/usr/sbin/nullmailer-sendmail
 	$(INSTALL_DIR) $(1)/usr/lib/nullmailer
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/protocols/qmqp $(1)/usr/lib/nullmailer/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/protocols/smtp $(1)/usr/lib/nullmailer/
-	ln -sf ../sbin/sendmail $(1)/usr/lib/
+endef
+
+define Package/nullmailer/postinstall
+	ln -sf ../sbin/sendmail $(1)/usr/lib/sendmail
+	ln -sf nullmailer-sendmail $(1)/usr/sbin/sendmail
 endef
 
 $(eval $(call BuildPackage,nullmailer))

@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=msmtp
 PKG_VERSION:=1.4.19
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/msmtp
@@ -99,10 +99,14 @@ define Package/msmtp/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/msmtp $(1)/usr/bin/msmtp
 	$(INSTALL_DIR) $(1)/usr/sbin
-	ln -sf /usr/bin/msmtp $(1)/usr/sbin/sendmail
+endef
+
+define Package/msmtp/postinstall
+	ln -sf ../bin/msmtp $${IPKG_INSTROOT}/usr/sbin/sendmail
 endef
 
 Package/msmtp-nossl/install = $(Package/msmtp/install)
+Package/msmtp-nossl/postinstall = $(Package/msmtp/postinstall)
 
 $(eval $(call BuildPackage,msmtp))
 $(eval $(call BuildPackage,msmtp-nossl))
