@@ -11,7 +11,7 @@ PKG_MD5SUM:=9496422c7d218f27bae1be42a04d122e
 
 include $(INCLUDE_DIR)/package.mk
 
-ifeq ($(CONFIG_LINUX_2_6_31),)
+ifneq ($(CONFIG_LINUX_2_6_25),)
   MODULE:=$(PKG_BUILD_DIR)/et131x.$(LINUX_KMOD_SUFFIX)
 else
   MODULE:=$(LINUX_DIR)/drivers/staging/et131x/et131x.$(LINUX_KMOD_SUFFIX)
@@ -33,7 +33,7 @@ define KernelPackage/et131x/description
   This package contains the et131x kernel module.
 endef
 
-ifeq ($(CONFIG_LINUX_2_6_31),)
+ifneq ($(CONFIG_LINUX_2_6_25),)
   define Build/Compile
 	$(MAKE) -C "$(LINUX_DIR)" \
 		ARCH="$(LINUX_KARCH)" \
