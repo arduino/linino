@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=faifa
-PKG_REV:=55
+PKG_REV:=56
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
