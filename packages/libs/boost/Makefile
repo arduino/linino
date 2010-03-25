@@ -155,22 +155,22 @@ define Build/Compile
 			--toolset=gcc --build-type=minimal --layout=system \
 			--disable-long-double \
 			$(CONFIGURE_ARGS) \
-			$(if $(CONFIG_PACKAGE_boost-date_time),--with-date_time,--without-date_time) \
-			$(if $(CONFIG_PACKAGE_boost-filesystem),--with-filesystem,--without-filesystem) \
-			$(if $(CONFIG_PACKAGE_boost-function_types),--with-function_types,--without-function_types) \
-			$(if $(CONFIG_PACKAGE_boost-graph),--with-graph,--without-graph) \
-			$(if $(CONFIG_PACKAGE_boost-iostreams),--with-iostreams,--without-iostreams) \
-			$(if $(CONFIG_PACKAGE_boost-math),--with-math,--without-math) \
-			$(if $(CONFIG_PACKAGE_boost-mpi),--with-mpi,--without-mpi) \
-			$(if $(CONFIG_PACKAGE_boost-program_options),--with-program_options,--without-program_options) \
-			$(if $(CONFIG_PACKAGE_boost-python),--with-python,--without-python) \
-			$(if $(CONFIG_PACKAGE_boost-regex),--with-regex,--without-regex) \
-			$(if $(CONFIG_PACKAGE_boost-serialization),--with-serialization,--without-serialization) \
-			$(if $(CONFIG_PACKAGE_boost-signals),--with-signals,--without-signals) \
-			$(if $(CONFIG_PACKAGE_boost-system),--with-system,--without-system) \
-			$(if $(CONFIG_PACKAGE_boost-test),--with-test,--without-test) \
-			$(if $(CONFIG_PACKAGE_boost-thread),--with-thread,--without-thread) \
-			$(if $(CONFIG_PACKAGE_boost-wave),--with-wave,--without-wave) \
+			$(if $(CONFIG_PACKAGE_boost-date_time),--with-date_time) \
+			$(if $(CONFIG_PACKAGE_boost-filesystem),--with-filesystem) \
+			$(if $(CONFIG_PACKAGE_boost-function_types),--with-function_types) \
+			$(if $(CONFIG_PACKAGE_boost-graph),--with-graph) \
+			$(if $(CONFIG_PACKAGE_boost-iostreams),--with-iostreams) \
+			$(if $(CONFIG_PACKAGE_boost-math),--with-math) \
+			$(if $(CONFIG_PACKAGE_boost-mpi),--with-mpi) \
+			$(if $(CONFIG_PACKAGE_boost-program_options),--with-program_options) \
+			$(if $(CONFIG_PACKAGE_boost-python),--with-python) \
+			$(if $(CONFIG_PACKAGE_boost-regex),--with-regex) \
+			$(if $(CONFIG_PACKAGE_boost-serialization),--with-serialization) \
+			$(if $(CONFIG_PACKAGE_boost-signals),--with-signals) \
+			$(if $(CONFIG_PACKAGE_boost-system),--with-system) \
+			$(if $(CONFIG_PACKAGE_boost-test),--with-test) \
+			$(if $(CONFIG_PACKAGE_boost-thread),--with-thread) \
+			$(if $(CONFIG_PACKAGE_boost-wave),--with-wave) \
 			\
 			$(if $(CONFIG_PACKAGE_boost-iostreams),-sNO_BZIP2=1 -sZLIB_INCLUDE=$(STAGING_DIR)/usr/include \
 				-sZLIB_LIBPATH=$(STAGING_DIR)/usr/lib) \
