@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cyassl
 PKG_VERSION:=1.4.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).zip
 PKG_SOURCE_URL:=http://www.yassl.com/
@@ -37,7 +37,8 @@ endef
 TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
-	--with-libz="$(STAGING_DIR)/usr"
+	--without-zlib \
+	--enable-singleThreaded
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
