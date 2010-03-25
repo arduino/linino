@@ -24,7 +24,7 @@ define Package/unrar
   CATEGORY:=Utilities
   TITLE:=unrar application
   URL:=http://www.rarlab.com/
-  DEPENDS:=+uclibcxx
+  DEPENDS:=+libstdcpp
 endef
 
 define Package/unrar/description
