@@ -102,6 +102,7 @@ CONFIGURE_ARGS += \
 
 CONFIGURE_VARS+= \
 	ac_cv_have_abstract_sockets="yes" \
+	ac_cv_lib_expat_XML_ParserCreate_MM="yes" \
 
 
 define Build/InstallDev
