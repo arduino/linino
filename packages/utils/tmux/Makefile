@@ -32,7 +32,8 @@ endef
 
 define Build/Compile
 	CC="$(TARGET_CC)" \
-	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
+	CFLAGS="$(TARGET_CFLAGS)" \
+	CPPFLAGS="$(TARGET_CPPFLAGS)" \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
 	TMUX_PLATFORM="Linux" \
 	$(MAKE) -C $(PKG_BUILD_DIR) all
