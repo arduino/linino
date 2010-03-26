@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -39,13 +39,12 @@ TARGET_LDFLAGS += -llua
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		SQLITE3INC="$(STAGING_DIR)/usr/include/" \
-		SQLITE3LIB="$(STAGING_DIR)/usr/lib/" \
-		LUAINC="$(TARGET_CPPFLAGS)" \
-		LUALIB="$(TARGET_LDFLAGS)" \
-		LIBS="-shared $(TARGET_LDFLAGS)" \
-		CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
-		LD="$(TARGET_CROSS)ld -shared"
+		CC="$(TARGET_CC)" \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		INCS="$(TARGET_CPPFLAGS)" \
+		LIBS="$(TARGET_LDFLAGS)" \
+		SHFLAGS="-shared" \
+		UNAME="Linux" 
 endef
 
 define Package/lsqlite3/install
