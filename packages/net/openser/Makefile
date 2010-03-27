@@ -247,7 +247,7 @@ define Build/Compile
 		extra_defs="-DUSE_PTHREAD_MUTEX "  \
 		CC="$(TARGET_CC)" \
 		ARCH="$(ARCH)"  \
-		CFLAGS="$(TARGET_CFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) $(FPIC)" \
 		LOCALBASE="$(STAGING_DIR)/usr" \
 		all utils/gen_ha1/gen_ha1
 endef
