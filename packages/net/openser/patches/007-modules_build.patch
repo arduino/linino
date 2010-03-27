@@ -6,7 +6,7 @@
  # if not set on the cmd. line or the env, exclude this modules:
 -exclude_modules?= 		jabber cpl-c pa postgres mysql \
 -						avp_radius auth_radius group_radius uri_radius
-+exclude_modules?= 		jabber cpl-c pa
++exclude_modules?= 		jabber cpl-c pa postgres
  # always exclude the CVS dir
  override exclude_modules+= CVS $(skip_modules)
  
