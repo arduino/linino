@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dibbler
 PKG_VERSION:=0.7.3
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.gz
 PKG_SOURCE_URL:=http://klub.com.pl/dhcpv6/dibbler/
@@ -138,6 +138,8 @@ endef
 define Package/dibbler-server/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dibbler-server $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/dibbler.init $(1)/etc/init.d/
 endef
 
 $(eval $(call BuildPackage,dibbler-poslib))
