@@ -34,7 +34,6 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
-		--disable-restricted \
 		--without-bash-malloc \
                 --bindir=/bin \
 	)
@@ -53,11 +52,13 @@ define Package/bash/postinst
 #!/bin/sh
 grep bash $${IPKG_INSTROOT}/etc/shells || \
 	echo "/bin/bash" >> $${IPKG_INSTROOT}/etc/shells
+	echo "/bin/rbash" >> $${IPKG_INSTROOT}/etc/shells
 endef
 
 define Package/bash/install
 	$(INSTALL_DIR) $(1)/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/bash $(1)/bin/
+	ln -sf bash $(1)/bin/rbash
 endef
 
 $(eval $(call BuildPackage,bash))
