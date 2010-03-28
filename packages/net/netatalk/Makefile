@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=netatalk
 PKG_VERSION:=2.1beta1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=netatalk-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/netatalk
@@ -42,10 +42,14 @@ CONFIGURE_ARGS += \
 	--with-cnid-default-backend=dbd \
 	--with-bdb="$(STAGING_DIR)/usr/" \
 	--with-libgcrypt-dir="$(STAGING_DIR)/usr" \
-	--with-ssl-dir="$(STAGING_DIR)/usr"
+	--with-ssl-dir="$(STAGING_DIR)/usr" \
+	--with-uams-path="/usr/lib/uams"
 
 define Package/netatalk/install
 	$(INSTALL_DIR) $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/lib/uams/
+	$(INSTALL_DIR) $(1)/etc/netatalk/
+	$(INSTALL_DIR) $(1)/etc/init.d/
 	$(CP) \
 		$(PKG_BUILD_DIR)/etc/afpd/afpd \
 		$(1)/usr/bin/
@@ -58,6 +62,13 @@ define Package/netatalk/install
 	$(CP) \
 		$(PKG_BUILD_DIR)/etc/cnid_dbd/dbd \
 		$(1)/usr/bin/
+	$(CP) \
+		$(PKG_BUILD_DIR)/etc/uams/.libs/*.so \
+		$(1)/usr/lib/uams/
+	$(CP) ./files/afpd.init $(1)/etc/init.d/afpd
+	$(CP) ./files/AppleVolumes.default $(1)/etc/netatalk/
+	$(CP) ./files/AppleVolumes.system $(1)/etc/netatalk/
+	$(INSTALL_BIN) ./files/afpd.conf $(1)/etc/netatalk/
 endef
 
 $(eval $(call BuildPackage,netatalk))
