@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -19,7 +19,7 @@ PKG_MD5SUM:=2a57f6188c41d4bc1b88ca3d08ad011d
 include $(INCLUDE_DIR)/package.mk
 
 define Package/font-misc-misc/Default
-  SECTION:=xorg-fonts
+  SECTION:=xorg-font
   CATEGORY:=Xorg
   SUBMENU:=font
 endef
