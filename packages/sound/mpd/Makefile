@@ -23,7 +23,7 @@ define Package/mpd
   SECTION:=sound
   CATEGORY:=Sound
   DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread +glib2 \
-  	+libmms +libcurl +libsqlite3 +libstdcpp +libvorbis +libshout
+  	+libmms +libcurl +libsqlite3 +libvorbis +libshout
   TITLE:=Music Player Daemon
   URL:=http://www.musicpd.org/
 endef
