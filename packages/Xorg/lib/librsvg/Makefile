@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -27,7 +27,7 @@ EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
 STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_librsvg CONFIG_PACKAGE_librsvg-pixbuf-loader)
 
 define Package/librsvg
-  SECTION:=xorg-libs
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=SVG rendering library
@@ -36,7 +36,7 @@ define Package/librsvg
 endef
 
 define Package/librsvg-pixbuf-loader
-  SECTION:=xorg-libs
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=SVG rendering library

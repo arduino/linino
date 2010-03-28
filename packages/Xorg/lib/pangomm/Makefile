@@ -30,7 +30,7 @@ TARGET_LDFLAGS+=\
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib/
 
 define Package/pangomm
-  SECTION:=xorg-libs
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=Text layout and rendering library

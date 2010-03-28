@@ -1,3 +1,10 @@
+#
+# Copyright (C) 2009-2010 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=orbit2
@@ -48,7 +55,7 @@ CONFIGURE_VARS += \
 	ac_cv_alignof_CORBA_pointer=4
 
 define Package/orbit2
-  SECTION:=xorg-libs
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=ORBit2

@@ -26,7 +26,7 @@ TARGET_LDFLAGS += \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
 
 define Package/atk
-  SECTION:=xorg-libs
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=Accesibility library for gtk+ apps

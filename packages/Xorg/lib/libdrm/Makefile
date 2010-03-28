@@ -22,7 +22,7 @@ PKG_FIXUP:=libtool
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libdrm
-  SECTION:=xorg-lib
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   DEPENDS:=

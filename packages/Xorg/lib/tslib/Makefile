@@ -21,7 +21,7 @@ PKG_FIXUP:=libtool
 include $(INCLUDE_DIR)/package.mk
 
 define Package/tslib
-  SECTION:=xorg-lib
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=Tslib is an abstraction layer for touchscreen panel events.

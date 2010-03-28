@@ -24,7 +24,7 @@ PROTOS:=composite damage dpms glx randr record render res screensaver shape \
         shm sync xevie xf86dri xfixes xinerama xprint xtest xvmc xv
 
 define Package/libxcb
-  SECTION:=xorg-libs
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=libxcb
@@ -38,7 +38,7 @@ replaces the current Xlib interface.
 endef
 
 define Package/libxcb-xlib
-  SECTION:=xorg-libs
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=libxcb-xlib
@@ -47,7 +47,7 @@ endef
 
 define Package/libxcb-proto/Default
 define Package/libxcb-$(1)
-  SECTION:=xorg-libs
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=libxcb-$(1)

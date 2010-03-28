@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 CONFIGURE_ARGS_XTRA+=--enable-static --disable-vcd --disable-imagemagick
 
 define Package/xine-lib
-  SECTION:=xorg-lib
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=xine libraries

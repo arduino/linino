@@ -27,7 +27,7 @@ TARGET_LDFLAGS+= \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib
 
 define Package/pango
-  SECTION:=xorg-libs
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=Text layout and rendering library

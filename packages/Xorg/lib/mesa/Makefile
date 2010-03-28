@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 PKG_INSTALL:=1
 
 define Package/libgl-mesa
-  SECTION:=xorg-lib
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   DEPENDS:=+libX11 +libXext +libXfixes +libXdamage +libXxf86vm +libdrm +libexpat
@@ -31,7 +31,7 @@ define Package/libgl-mesa
 endef
 
 define Package/libglu-mesa
-  SECTION:=xorg-lib
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   DEPENDS:=+libgl-mesa
@@ -41,7 +41,7 @@ endef
 
 define Package/libgl-mesa-dri/Default
 define Package/libgl-mesa-dri-$(1)
-  SECTION:=xorg-lib
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   DEPENDS:=libgl-mesa @DISPLAY_SUPPORT $(if $(findstring swrast,$(1)),,@TARGET_x86)

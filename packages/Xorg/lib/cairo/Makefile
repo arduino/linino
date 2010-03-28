@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 PKG_INSTALL:=1
 
 define Package/cairo
-  SECTION:=xorg-libs
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=Multi-platform 2D graphics library

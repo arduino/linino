@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 #STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,PACKAGE_python PACKAGE_python-mini)
 
 define Package/xcbproto
-  SECTION:=xorg-libs
+  SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   BUILDONLY:=1
