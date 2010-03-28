@@ -2,19 +2,23 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=et131x
-PKG_VERSION:=1.2.3-3
-PKG_RELEASE:=1
+ifdef CONFIG_LINUX_2_6_25
+  PKG_VERSION:=1.2.3-3
+  PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=@SF/et131x
-PKG_MD5SUM:=9496422c7d218f27bae1be42a04d122e
+  PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+  PKG_SOURCE_URL:=@SF/et131x
+  PKG_MD5SUM:=9496422c7d218f27bae1be42a04d122e
+endif
 
 include $(INCLUDE_DIR)/package.mk
 
-ifneq ($(CONFIG_LINUX_2_6_25),)
+ifdef CONFIG_LINUX_2_6_25
   MODULE:=$(PKG_BUILD_DIR)/et131x.$(LINUX_KMOD_SUFFIX)
+  KMOD_BUILD_DIR=$(PKG_BUILD_DIR)
 else
   MODULE:=$(LINUX_DIR)/drivers/staging/et131x/et131x.$(LINUX_KMOD_SUFFIX)
+  KMOD_BUILD_DIR=$(LINUX_DIR)/drivers/staging/et131x
 endif
 
 define KernelPackage/et131x
@@ -33,26 +37,22 @@ define KernelPackage/et131x/description
   This package contains the et131x kernel module.
 endef
 
-ifneq ($(CONFIG_LINUX_2_6_25),)
-  define Build/Compile
-	$(MAKE) -C "$(LINUX_DIR)" \
-		ARCH="$(LINUX_KARCH)" \
-		CROSS_COMPILE="$(TARGET_CROSS)" \
-		SUBDIRS="$(PKG_BUILD_DIR)" \
-		$(PKG_EXTRA_KCONFIG) \
-		EXTRA_CFLAGS="$(PKG_EXTRA_CFLAGS)"
-  endef
-else
+ifndef CONFIG_LINUX_2_6_25
   define Build/Prepare
     # nothing to do
   endef
   define Build/Configure
     # nothing to do
   endef
-  define Build/Compile
-    # nothing to do
-  endef
 endif
+
+define Build/Compile
+	$(MAKE) -C "$(LINUX_DIR)" \
+		ARCH="$(LINUX_KARCH)" \
+		CROSS_COMPILE="$(TARGET_CROSS)" \
+		SUBDIRS="$(KMOD_BUILD_DIR)" \
+		CONFIG_ET131X=m
+endef
 
 $(eval $(call KernelPackage,et131x))
 
