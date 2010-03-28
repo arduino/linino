@@ -1,0 +1,1659 @@
+Index: ipsec-tools-0.7.3/src/racoon/admin.c
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/admin.c	2009-04-20 15:32:57.000000000 +0200
++++ ipsec-tools-0.7.3/src/racoon/admin.c	2010-03-28 17:07:57.000000000 +0200
+@@ -76,6 +76,7 @@
+ #include "evt.h"
+ #include "pfkey.h"
+ #include "ipsec_doi.h"
++#include "policy.h"
+ #include "admin.h"
+ #include "admin_var.h"
+ #include "isakmp_inf.h"
+@@ -147,16 +148,18 @@
+ 		goto end;
+ 	}
+ 
+-	if (com.ac_cmd == ADMIN_RELOAD_CONF) {
+-		/* reload does not work at all! */
+-		signal_handler(SIGHUP);
+-		goto end;
+-	}
++	plog(LLV_DEBUG, LOCATION, NULL,
++	     "[%d] admin connection established\n", so2);
+ 
+ 	error = admin_process(so2, combuf);
+ 
+-    end:
+-	(void)close(so2);
++end:
++	if (error != -2) {
++		plog(LLV_DEBUG, LOCATION, NULL,
++		     "[%d] admin connection closed\n", so2);
++		(void)close(so2);
++	}
++
+ 	if (combuf)
+ 		racoon_free(combuf);
+ 
+@@ -177,6 +180,8 @@
+ 	vchar_t *key = NULL;
+ 	int idtype = 0;
+ 	int error = -1;
++	int send_events = 0;
++	struct evt_listener_list *event_list = NULL;
+ 
+ 	com->ac_errno = 0;
+ 
+@@ -208,9 +213,7 @@
+ 	}
+ 
+ 	case ADMIN_SHOW_EVT:
+-		/* It's not really an error, don't force racoonctl to quit */
+-		if ((buf = evt_dump()) == NULL)
+-			com->ac_errno = 0; 
++		send_events = 1;
+ 		break;
+ 
+ 	case ADMIN_SHOW_SA:
+@@ -393,17 +396,17 @@
+ 	/* FALLTHROUGH */
+ 	case ADMIN_ESTABLISH_SA:
+ 	    {
++		struct admin_com_indexes *ndx;
+ 		struct sockaddr *dst;
+ 		struct sockaddr *src;
+-		src = (struct sockaddr *)
+-			&((struct admin_com_indexes *)
+-			    ((caddr_t)com + sizeof(*com)))->src;
+-		dst = (struct sockaddr *)
+-			&((struct admin_com_indexes *)
+-			    ((caddr_t)com + sizeof(*com)))->dst;
++
++		ndx = (struct admin_com_indexes *) ((caddr_t)com + sizeof(*com));
++		src = (struct sockaddr *) &ndx->src;
++		dst = (struct sockaddr *) &ndx->dst;
+ 
+ 		switch (com->ac_proto) {
+ 		case ADMIN_PROTO_ISAKMP: {
++			struct ph1handle *ph1;
+ 			struct remoteconf *rmconf;
+ 			struct sockaddr *remote = NULL;
+ 			struct sockaddr *local = NULL;
+@@ -411,6 +414,17 @@
+ 
+ 			com->ac_errno = -1;
+ 
++			/* connected already? */
++			ph1 = getph1byaddrwop(src, dst);
++			if (ph1 != NULL) {
++				event_list = &ph1->evt_listeners;
++				if (ph1->status == PHASE1ST_ESTABLISHED)
++					com->ac_errno = EEXIST;
++				else
++					com->ac_errno = 0;
++				break;
++			}
++
+ 			/* search appropreate configuration */
+ 			rmconf = getrmconf(dst);
+ 			if (rmconf == NULL) {
+@@ -461,9 +475,11 @@
+ 				"%s\n", saddrwop2str(remote));
+ 
+ 			/* begin ident mode */
+-			if (isakmp_ph1begin_i(rmconf, remote, local) < 0)
++			ph1 = isakmp_ph1begin_i(rmconf, remote, local);
++			if (ph1 == NULL)
+ 				goto out1;
+ 
++			event_list = &ph1->evt_listeners;
+ 			com->ac_errno = 0;
+ out1:
+ 			if (local != NULL)
+@@ -473,8 +489,105 @@
+ 			break;
+ 		}
+ 		case ADMIN_PROTO_AH:
+-		case ADMIN_PROTO_ESP:
++		case ADMIN_PROTO_ESP: {
++			struct ph2handle *iph2;
++			struct secpolicy *sp_out = NULL, *sp_in = NULL;
++			struct policyindex spidx;
++
++			com->ac_errno = -1;
++
++			/* got outbound policy */
++			memset(&spidx, 0, sizeof(spidx));
++			spidx.dir = IPSEC_DIR_OUTBOUND;
++			memcpy(&spidx.src, src, sizeof(spidx.src));
++			memcpy(&spidx.dst, dst, sizeof(spidx.dst));
++			spidx.prefs = ndx->prefs;
++			spidx.prefd = ndx->prefd;
++			spidx.ul_proto = ndx->ul_proto;
++
++			sp_out = getsp_r(&spidx);
++			if (sp_out) {
++				plog(LLV_DEBUG, LOCATION, NULL,
++					"suitable outbound SP found: %s.\n",
++					spidx2str(&sp_out->spidx));
++			} else {
++				com->ac_errno = ENOENT;
++				plog(LLV_NOTIFY, LOCATION, NULL,
++					"no outbound policy found: %s\n",
++					spidx2str(&spidx));
++				break;
++			}
++
++			iph2 = getph2byid(src, dst, sp_out->id);
++			if (iph2 != NULL) {
++				event_list = &iph2->evt_listeners;
++				if (iph2->status == PHASE2ST_ESTABLISHED)
++					com->ac_errno = EEXIST;
++				else
++					com->ac_errno = 0;
++				break;
++			}
++
++			/* get inbound policy */
++			memset(&spidx, 0, sizeof(spidx));
++			spidx.dir = IPSEC_DIR_INBOUND;
++			memcpy(&spidx.src, dst, sizeof(spidx.src));
++			memcpy(&spidx.dst, src, sizeof(spidx.dst));
++			spidx.prefs = ndx->prefd;
++			spidx.prefd = ndx->prefs;
++			spidx.ul_proto = ndx->ul_proto;
++
++			sp_in = getsp_r(&spidx);
++			if (sp_in) {
++				plog(LLV_DEBUG, LOCATION, NULL,
++					"suitable inbound SP found: %s.\n",
++					spidx2str(&sp_in->spidx));
++			} else {
++				com->ac_errno = ENOENT;
++				plog(LLV_NOTIFY, LOCATION, NULL,
++					"no inbound policy found: %s\n",
++					spidx2str(&spidx));
++				break;
++			}
++
++			/* allocate a phase 2 */
++			iph2 = newph2();
++			if (iph2 == NULL) {
++				plog(LLV_ERROR, LOCATION, NULL,
++					"failed to allocate phase2 entry.\n");
++				break;
++			}
++			iph2->side = INITIATOR;
++			iph2->satype = admin2pfkey_proto(com->ac_proto);
++			iph2->spid = sp_out->id;
++			iph2->seq = pk_getseq();
++			iph2->status = PHASE2ST_STATUS2;
++
++			/* set end addresses of SA */
++			iph2->dst = dupsaddr(dst);
++			iph2->src = dupsaddr(src);
++			if (iph2->dst == NULL || iph2->src == NULL) {
++				delph2(iph2);
++				break;
++			}
++
++			if (isakmp_get_sainfo(iph2, sp_out, sp_in) < 0) {
++				delph2(iph2);
++				break;
++			}
++
++			insph2(iph2);
++			if (isakmp_post_acquire(iph2) < 0) {
++				unbindph12(iph2);
++				remph2(iph2);
++				delph2(iph2);
++				break;
++			}
++
++			event_list = &iph2->evt_listeners;
++			com->ac_errno = 0;
+ 			break;
++		}
+ 		default:
+ 			/* ignore */
+ 			com->ac_errno = -1;
+@@ -491,7 +604,8 @@
+ 	if ((error = admin_reply(so2, com, buf)) != 0)
+ 		goto out;
+ 
+-	error = 0;
++	if (send_events || event_list != NULL)
++		error = evt_subscribe(event_list, so2);
+ out:
+ 	if (buf != NULL)
+ 		vfree(buf);
+Index: ipsec-tools-0.7.3/src/racoon/evt.c
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/evt.c	2006-09-09 18:22:09.000000000 +0200
++++ ipsec-tools-0.7.3/src/racoon/evt.c	2010-03-28 17:07:57.000000000 +0200
+@@ -46,113 +46,219 @@
+ #include "plog.h"
+ #include "misc.h"
+ #include "admin.h"
++#include "handler.h"
+ #include "gcmalloc.h"
+ #include "evt.h"
+ 
+ #ifdef ENABLE_ADMINPORT
+-struct evtlist evtlist = TAILQ_HEAD_INITIALIZER(evtlist);
+-int evtlist_len = 0;
++static EVT_LISTENER_LIST(evt_listeners);
++static EVT_LISTENER_LIST(evt_fds);
+ 
+-void
+-evt_push(src, dst, type, optdata)
+-	struct sockaddr *src;
+-	struct sockaddr *dst;
++struct evtdump {
++       struct admin_com adm;
++       struct evt_common evt;
++};
++
++static struct evtdump *
++evtdump_create(type, optdata)
+ 	int type;
+ 	vchar_t *optdata;
+ {
+-	struct evtdump *evtdump;
+-	struct evt *evt;
++	struct evtdump *e;
+ 	size_t len;
+ 
+-	/* If admin socket is disabled, silently discard anything */
+-	if (adminsock_path == NULL)
++	len = sizeof(struct admin_com) + sizeof(struct evt_common);
++	if (optdata != NULL)
++	    len += optdata->l;
++
++	if ((e = racoon_malloc(len)) == NULL) {
++		plog(LLV_ERROR, LOCATION, NULL, "Cannot allocate event: %s\n",
++		strerror(errno));
++		return NULL;
++	}
++
++	memset(e, 0, sizeof(struct evtdump));
++	e->adm.ac_len = len;
++	e->adm.ac_cmd = ADMIN_SHOW_EVT;
++	e->adm.ac_errno = 0;
++	e->adm.ac_proto = 0;
++	e->evt.ec_type = type;
++	time(&e->evt.ec_timestamp);
++	if (optdata != NULL)
++	    memcpy(e + 1, optdata->v, optdata->l);
++
++	return e;
++}
++
++static void
++evt_unsubscribe(l)
++	struct evt_listener *l;
++{
++	plog(LLV_DEBUG, LOCATION, NULL,
++	    "[%d] admin connection released\n", l->fd);
++
++	LIST_REMOVE(l, ll_chain);
++	LIST_REMOVE(l, fd_chain);
++	close(l->fd);
++	racoon_free(l);
++}
++
++static void
++evtdump_broadcast(ll, e)
++	const struct evt_listener_list *ll;
++	struct evtdump *e;
++{
++	struct evt_listener *l, *nl;
++
++	for (l = LIST_FIRST(ll); l != NULL; l = nl) {
++		nl = LIST_NEXT(l, ll_chain);
++
++		if (send(l->fd, e, e->adm.ac_len,
++			MSG_NOSIGNAL | MSG_DONTWAIT) < 0) {
++			plog(LLV_DEBUG, LOCATION, NULL, "Cannot send event to fd: %s\n",
++				strerror(errno));
++			evt_unsubscribe(l);
++		}
++
++	}
++
++}
++
++void
++evt_generic(type, optdata)
++	int type;
++	vchar_t *optdata;
++{
++	struct evtdump *e;
++
++
++	if ((e = evtdump_create(type, optdata)) == NULL)
+ 		return;
+ 
+-	/* If we are above the limit, don't record anything */
+-	if (evtlist_len > EVTLIST_MAX) {
+-		plog(LLV_DEBUG, LOCATION, NULL, 
+-		    "Cannot record event: event queue overflowed\n");
++	evtdump_broadcast(&evt_listeners, e);
++
++	racoon_free(e);
++}
++
++void
++evt_phase1(ph1, type, optdata)
++	const struct ph1handle *ph1;
++	int type;
++	vchar_t *optdata;
++{
++	struct evtdump *e;
++
++	if ((e = evtdump_create(type, optdata)) == NULL)
++                return;
++		
++			if (ph1->local)
++				memcpy(&e->evt.ec_ph1src, ph1->local, sysdep_sa_len(ph1->local));
++			if (ph1->remote)
++				memcpy(&e->evt.ec_ph1dst, ph1->remote, sysdep_sa_len(ph1->remote));
++		
++			evtdump_broadcast(&ph1->evt_listeners, e);
++			evtdump_broadcast(&evt_listeners, e);
++		
++			racoon_free(e);
++		}
++
++void
++evt_phase2(ph2, type, optdata)
++	const struct ph2handle *ph2;
++	int type;
++	vchar_t *optdata;
++{
++	struct evtdump *e;
++	struct ph1handle *ph1 = ph2->ph1;
++
++	if ((e = evtdump_create(type, optdata)) == NULL)
+ 		return;
++
++	if (ph1) {
++		if (ph1->local)
++			memcpy(&e->evt.ec_ph1src, ph1->local, sysdep_sa_len(ph1->local));
++	if (ph1->remote)
++		memcpy(&e->evt.ec_ph1dst, ph1->remote, sysdep_sa_len(ph1->remote));
+ 	}
++	e->evt.ec_ph2msgid = ph2->msgid;
+ 
+-	/* If we hit the limit, record an overflow event instead */
+-	if (evtlist_len == EVTLIST_MAX) {
+-		plog(LLV_ERROR, LOCATION, NULL, 
+-		    "Cannot record event: event queue overflow\n");
+-		src = NULL;
+-		dst = NULL;
+-		type = EVTT_OVERFLOW;
+-		optdata = NULL;
+-	}
+-
+-	len = sizeof(*evtdump);
+-	if (optdata)
+-		len += optdata->l;
+-
+-	if ((evtdump = racoon_malloc(len)) == NULL) {
+-		plog(LLV_ERROR, LOCATION, NULL, "Cannot record event: %s\n",
+-		    strerror(errno));
+-		return;
++	evtdump_broadcast(&ph2->evt_listeners, e);
++	if (ph1)
++		evtdump_broadcast(&ph1->evt_listeners, e);
++		evtdump_broadcast(&evt_listeners, e);
++
++		racoon_free(e);
+ 	}
+ 
+-	if ((evt = racoon_malloc(sizeof(*evt))) == NULL) {
+-		plog(LLV_ERROR, LOCATION, NULL, "Cannot record event: %s\n",
+-		    strerror(errno));
+-		racoon_free(evtdump);
+-		return;
++int
++evt_subscribe(list, fd)
++	struct evt_listener_list *list;
++	int fd;
++{
++	struct evt_listener *l;
++
++	if ((l = racoon_malloc(sizeof(*l))) == NULL) {
++		plog(LLV_ERROR, LOCATION, NULL,
++			"Cannot allocate event listener: %s\n",
++			strerror(errno));
++	    return errno;
+ 	}
+ 
+-	if (src)
+-		memcpy(&evtdump->src, src, sysdep_sa_len(src));
+-	if (dst)
+-		memcpy(&evtdump->dst, dst, sysdep_sa_len(dst));
+-	evtdump->len = len;
+-	evtdump->type = type;
+-	time(&evtdump->timestamp);
++	if (list == NULL)
++		list = &evt_listeners;
+ 
+-	if (optdata)
+-		memcpy(evtdump + 1, optdata->v, optdata->l);
++	LIST_INSERT_HEAD(list, l, ll_chain);
++	LIST_INSERT_HEAD(&evt_fds, l, fd_chain);
++	l->fd = fd;
+ 
+-	evt->dump = evtdump;
+-	TAILQ_INSERT_TAIL(&evtlist, evt, next);
++	plog(LLV_DEBUG, LOCATION, NULL,
++		"[%d] admin connection is polling events\n", fd);
+ 
+-	evtlist_len++;
++	return -2;
++}
+ 
+-	return;
++void
++evt_list_init(list)
++	struct evt_listener_list *list;
++{
++	LIST_INIT(list);
+ }
+ 
+-struct evtdump *
+-evt_pop(void) {
+-	struct evtdump *evtdump;
+-	struct evt *evt;
+ 
+-	if ((evt = TAILQ_FIRST(&evtlist)) == NULL)
+-		return NULL;
++void
++evt_list_cleanup(list)
++	struct evt_listener_list *list;
++{
++	while (!LIST_EMPTY(list))
++		evt_unsubscribe(LIST_FIRST(list));
++}
+ 
+-	evtdump = evt->dump;
+-	TAILQ_REMOVE(&evtlist, evt, next);
+-	racoon_free(evt);
+-	evtlist_len--;
+-
+-	return evtdump;
+-}
+-
+-vchar_t *
+-evt_dump(void) {
+-	struct evtdump *evtdump;
+-	vchar_t *buf = NULL;
+-
+-	if ((evtdump = evt_pop()) != NULL) {
+-		if ((buf = vmalloc(evtdump->len)) == NULL) {
+-			plog(LLV_ERROR, LOCATION, NULL, 
+-			    "evt_dump failed: %s\n", strerror(errno));
+-			return NULL;
+-		}
+-		memcpy(buf->v, evtdump, evtdump->len);	
+-		racoon_free(evtdump);
++int
++evt_get_fdmask(nfds, fdset)
++	int nfds;
++	fd_set *fdset;
++{
++	struct evt_listener *l;
++	LIST_FOREACH(l, &evt_fds, fd_chain) {
++		FD_SET(l->fd, fdset);
++		if (l->fd + 1 > nfds)
++			nfds = l->fd + 1;
+ 	}
++	return nfds;
++}
+ 
+-	return buf;
++void
++evt_handle_fdmask(fdset)
++	fd_set *fdset;
++{
++	struct evt_listener *l, *nl;
++
++	for (l = LIST_FIRST(&evt_fds); l != NULL; l = nl) {
++	nl = LIST_NEXT(l, ll_chain);
++
++		if (FD_ISSET(l->fd, fdset))
++			evt_unsubscribe(l);
++	}
+ }
+ 
+ #endif /* ENABLE_ADMINPORT */
+Index: ipsec-tools-0.7.3/src/racoon/evt.h
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/evt.h	2006-09-09 18:22:09.000000000 +0200
++++ ipsec-tools-0.7.3/src/racoon/evt.h	2010-03-28 17:07:57.000000000 +0200
+@@ -34,12 +34,27 @@
+ #ifndef _EVT_H
+ #define _EVT_H
+ 
+-struct evtdump {
+-	size_t len;	
+-	struct sockaddr_storage src;
+-	struct sockaddr_storage dst;
+-	time_t timestamp;
+-	int type;
++#ifdef ENABLE_ADMINPORT
++
++struct evt_listener {
++       LIST_ENTRY(evt_listener) ll_chain;
++       LIST_ENTRY(evt_listener) fd_chain;
++       int fd;
++};
++LIST_HEAD(evt_listener_list, evt_listener);
++#define EVT_LISTENER_LIST(x) struct evt_listener_list x;
++
++struct ph1handle;
++struct ph2handle;
++
++struct evt_common {
++	uint32_t ec_type;
++	time_t ec_timestamp;
++
++	struct sockaddr_storage ec_ph1src;
++	struct sockaddr_storage ec_ph1dst;
++	u_int32_t ec_ph2msgid;
++
+ 	/* 
+ 	 * Optionnal list of struct isakmp_data 
+ 	 * for type EVTT_ISAKMP_CFG_DONE
+@@ -47,42 +62,46 @@
+ };
+ 
+ /* type */
+-#define EVTT_UNSEPC		0
+-#define EVTT_PHASE1_UP		1
+-#define EVTT_PHASE1_DOWN	2
+-#define EVTT_XAUTH_SUCCESS	3
+-#define EVTT_ISAKMP_CFG_DONE	4
+-#define EVTT_PHASE2_UP		5
+-#define EVTT_PHASE2_DOWN	6
+-#define EVTT_DPD_TIMEOUT	7
+-#define EVTT_PEER_NO_RESPONSE	8
+-#define EVTT_PEER_DELETE	9
+-#define EVTT_RACOON_QUIT	10
+-#define EVTT_XAUTH_FAILED	11
+-#define EVTT_OVERFLOW		12	/* Event queue overflowed */
+-#define EVTT_PEERPH1AUTH_FAILED	13
+-#define EVTT_PEERPH1_NOPROP	14	/* NO_PROPOSAL_CHOSEN & friends */
+-#define EVTT_NO_ISAKMP_CFG	15	/* no need to wait for mode_cfg */
+-
+-struct evt {
+-	struct evtdump *dump;
+-	TAILQ_ENTRY(evt) next;
+-};
+-
+-TAILQ_HEAD(evtlist, evt);
+-
+-#define EVTLIST_MAX	32
++#define EVTT_RACOON_QUIT               0x0001
++#define EVTT_PHASE1_UP                 0x0100
++#define EVTT_PHASE1_DOWN               0x0101
++#define EVTT_PHASE1_NO_RESPONSE                0x0102
++#define EVTT_PHASE1_NO_PROPOSAL                0x0103
++#define EVTT_PHASE1_AUTH_FAILED                0x0104
++#define EVTT_PHASE1_DPD_TIMEOUT                0x0105
++#define EVTT_PHASE1_PEER_DELETED       0x0106
++#define EVTT_PHASE1_MODE_CFG           0x0107
++#define EVTT_PHASE1_XAUTH_SUCCESS      0x0108
++#define EVTT_PHASE1_XAUTH_FAILED       0x0109
++
++#define EVTT_PHASE2_NO_PHASE1          0x0200
++#define EVTT_PHASE2_UP                 0x0201
++#define EVTT_PHASE2_DOWN               0x0202
++#define EVTT_PHASE2_NO_RESPONSE                0x0203
++
++void evt_generic __P((int type, vchar_t *optdata));
++void evt_phase1 __P((const struct ph1handle *ph1, int type, vchar_t *optdata));
++void evt_phase2 __P((const struct ph2handle *ph2, int type, vchar_t *optdata));
++
++int  evt_subscribe __P((struct evt_listener_list *list, int fd));
++void evt_list_init __P((struct evt_listener_list *list));
++void evt_list_cleanup __P((struct evt_listener_list *list));
++int  evt_get_fdmask __P((int nfds, fd_set *fdset));
++void evt_handle_fdmask __P((fd_set *fdset));
++ 
++#else
+ 
+-#ifdef ENABLE_ADMINPORT
+-struct evtdump *evt_pop(void);
+-vchar_t *evt_dump(void);
+-void evt_push(struct sockaddr *, struct sockaddr *, int, vchar_t *);
+-#endif
++#define EVT_LISTENER_LIST(x)
++#define evt_generic(type, optdata) ;
++#define evt_phase1(ph1, type, optdata) ;
++#define evt_phase2(ph2, type, optdata) ;
++
++#define evt_subscribe(eventlist, fd) ;
++#define evt_list_init(eventlist) ;
++#define evt_list_cleanup(eventlist) ;
++#define evt_get_fdmask(nfds, fdset) nfds
++#define evt_handle_fdmask(fdset) ;
+ 
+-#ifdef ENABLE_ADMINPORT
+-#define EVT_PUSH(src, dst, type, optdata) evt_push(src, dst, type, optdata);
+-#else
+-#define EVT_PUSH(src, dst, type, optdata) ;
+-#endif
++#endif /* ENABLE_ADMINPORT */
+ 
+ #endif /* _EVT_H */
+Index: ipsec-tools-0.7.3/src/racoon/handler.c
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/handler.c	2009-04-20 15:25:27.000000000 +0200
++++ ipsec-tools-0.7.3/src/racoon/handler.c	2010-03-28 17:07:57.000000000 +0200
+@@ -289,8 +289,7 @@
+ 
+ 	/* SA down shell script hook */
+ 	script_hook(iph1, SCRIPT_PHASE1_DOWN);
+-
+-	EVT_PUSH(iph1->local, iph1->remote, EVTT_PHASE1_DOWN, NULL);
++	evt_list_cleanup(&iph1->evt_listeners);
+ 
+ #ifdef ENABLE_NATT
+ 	if (iph1->natt_flags & NAT_KA_QUEUED)
+Index: ipsec-tools-0.7.3/src/racoon/handler.h
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/handler.h	2008-01-11 15:12:01.000000000 +0100
++++ ipsec-tools-0.7.3/src/racoon/handler.h	2010-03-28 17:07:57.000000000 +0200
+@@ -41,6 +41,7 @@
+ 
+ #include "isakmp_var.h"
+ #include "oakley.h"
++#include "evt.h"
+ 
+ /* Phase 1 handler */
+ /*
+@@ -211,7 +212,7 @@
+ #ifdef ENABLE_HYBRID
+ 	struct isakmp_cfg_state *mode_cfg;	/* ISAKMP mode config state */
+ #endif       
+-
++	EVT_LISTENER_LIST(evt_listeners);
+ };
+ 
+ /* Phase 2 handler */
+@@ -320,6 +321,7 @@
+ 
+ 	LIST_ENTRY(ph2handle) chain;
+ 	LIST_ENTRY(ph2handle) ph1bind;	/* chain to ph1handle */
++	EVT_LISTENER_LIST(evt_listeners);
+ };
+ 
+ /*
+Index: ipsec-tools-0.7.3/src/racoon/isakmp_agg.c
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/isakmp_agg.c	2006-09-30 23:49:37.000000000 +0200
++++ ipsec-tools-0.7.3/src/racoon/isakmp_agg.c	2010-03-28 17:07:57.000000000 +0200
+@@ -587,8 +587,7 @@
+ 			/* message printed inner oakley_validate_auth() */
+ 			goto end;
+ 		}
+-		EVT_PUSH(iph1->local, iph1->remote, 
+-		    EVTT_PEERPH1AUTH_FAILED, NULL);
++		evt_phase1(iph1, EVTT_PHASE1_AUTH_FAILED, NULL);
+ 		isakmp_info_send_n1(iph1, ptype, NULL);
+ 		goto end;
+ 	}
+@@ -1486,8 +1485,7 @@
+ 			/* message printed inner oakley_validate_auth() */
+ 			goto end;
+ 		}
+-		EVT_PUSH(iph1->local, iph1->remote, 
+-		    EVTT_PEERPH1AUTH_FAILED, NULL);
++		evt_phase1(iph1, EVTT_PHASE1_AUTH_FAILED, NULL);
+ 		isakmp_info_send_n1(iph1, ptype, NULL);
+ 		goto end;
+ 	}
+Index: ipsec-tools-0.7.3/src/racoon/isakmp_base.c
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/isakmp_base.c	2006-10-02 23:51:33.000000000 +0200
++++ ipsec-tools-0.7.3/src/racoon/isakmp_base.c	2010-03-28 17:07:57.000000000 +0200
+@@ -716,8 +716,7 @@
+ 			/* message printed inner oakley_validate_auth() */
+ 			goto end;
+ 		}
+-		EVT_PUSH(iph1->local, iph1->remote, 
+-		    EVTT_PEERPH1AUTH_FAILED, NULL);
++		evt_phase1(iph1, EVTT_PHASE1_AUTH_FAILED, NULL);
+ 		isakmp_info_send_n1(iph1, ptype, NULL);
+ 		goto end;
+ 	}
+@@ -1242,8 +1241,7 @@
+ 			/* message printed inner oakley_validate_auth() */
+ 			goto end;
+ 		}
+-		EVT_PUSH(iph1->local, iph1->remote, 
+-		    EVTT_PEERPH1AUTH_FAILED, NULL);
++		evt_phase1(iph1, EVTT_PHASE1_AUTH_FAILED, NULL);
+ 		isakmp_info_send_n1(iph1, ptype, NULL);
+ 		goto end;
+ 	}
+Index: ipsec-tools-0.7.3/src/racoon/isakmp.c
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/isakmp.c	2008-09-25 11:34:39.000000000 +0200
++++ ipsec-tools-0.7.3/src/racoon/isakmp.c	2010-03-28 17:10:11.000000000 +0200
+@@ -88,6 +88,9 @@
+ #include "pfkey.h"
+ #include "crypto_openssl.h"
+ #include "policy.h"
++#include "algorithm.h"
++#include "proposal.h"
++#include "sainfo.h"
+ #include "isakmp_ident.h"
+ #include "isakmp_agg.h"
+ #include "isakmp_base.h"
+@@ -1015,7 +1018,7 @@
+ }
+ 
+ /* new negotiation of phase 1 for initiator */
+-int
++struct ph1handle *
+ isakmp_ph1begin_i(rmconf, remote, local)
+ 	struct remoteconf *rmconf;
+ 	struct sockaddr *remote, *local;
+@@ -1028,7 +1031,7 @@
+ 	/* get new entry to isakmp status table. */
+ 	iph1 = newph1();
+ 	if (iph1 == NULL)
+-		return -1;
++		return NULL;
+ 
+ 	iph1->status = PHASE1ST_START;
+ 	iph1->rmconf = rmconf;
+@@ -1043,7 +1046,7 @@
+ #ifdef ENABLE_HYBRID
+ 	if ((iph1->mode_cfg = isakmp_cfg_mkstate()) == NULL) {
+ 		delph1(iph1);
+-		return -1;
++		return NULL;
+ 	}
+ #endif
+ #ifdef ENABLE_FRAG
+@@ -1059,7 +1062,7 @@
+ 	/* XXX copy remote address */
+ 	if (copy_ph1addresses(iph1, rmconf, remote, local) < 0) {
+ 		delph1(iph1);
+-		return -1;
++		return NULL;
+ 	}
+ 
+ 	(void)insph1(iph1);
+@@ -1095,7 +1098,7 @@
+ 		remph1(iph1);
+ 		delph1(iph1);
+ 
+-		return -1;
++		return NULL;
+ 	}
+ 
+ #ifdef ENABLE_STATS
+@@ -1106,7 +1109,7 @@
+ 		timedelta(&start, &end));
+ #endif
+ 
+-	return 0;
++	return iph1;
+ }
+ 
+ /* new negotiation of phase 1 for responder */
+@@ -1887,8 +1890,7 @@
+ 		plog(LLV_ERROR, LOCATION, NULL,
+ 			"phase1 negotiation failed due to time up. %s\n",
+ 			isakmp_pindex(&iph1->index, iph1->msgid));
+-		EVT_PUSH(iph1->local, iph1->remote, 
+-		    EVTT_PEER_NO_RESPONSE, NULL);
++		evt_phase1(iph1, EVTT_PHASE1_NO_RESPONSE, NULL);
+ 
+ 		return -1;
+ 	}
+@@ -1897,8 +1899,7 @@
+ 		plog(LLV_ERROR, LOCATION, NULL,
+ 			 "phase1 negotiation failed due to send error. %s\n",
+ 			 isakmp_pindex(&iph1->index, iph1->msgid));
+-		EVT_PUSH(iph1->local, iph1->remote, 
+-				 EVTT_PEER_NO_RESPONSE, NULL);
++		evt_phase1(iph1, EVTT_PHASE1_NO_RESPONSE, NULL);
+ 		return -1;
+ 	}
+ 
+@@ -1947,7 +1948,7 @@
+ 		plog(LLV_ERROR, LOCATION, NULL,
+ 			"phase2 negotiation failed due to time up. %s\n",
+ 				isakmp_pindex(&iph2->ph1->index, iph2->msgid));
+-		EVT_PUSH(iph2->src, iph2->dst, EVTT_PEER_NO_RESPONSE, NULL);
++		evt_phase2(iph2, EVTT_PHASE2_NO_RESPONSE, NULL);
+ 		unbindph12(iph2);
+ 		return -1;
+ 	}
+@@ -1956,8 +1957,7 @@
+ 		plog(LLV_ERROR, LOCATION, NULL,
+ 			"phase2 negotiation failed due to send error. %s\n",
+ 				isakmp_pindex(&iph2->ph1->index, iph2->msgid));
+-		EVT_PUSH(iph2->src, iph2->dst, EVTT_PEER_NO_RESPONSE, NULL);
+-
++		evt_phase2(iph2, EVTT_PHASE2_NO_RESPONSE, NULL);
+ 		return -1;
+ 	}
+ 
+@@ -2048,7 +2048,7 @@
+ 	plog(LLV_INFO, LOCATION, NULL,
+ 		"ISAKMP-SA deleted %s-%s spi:%s\n",
+ 		src, dst, isakmp_pindex(&iph1->index, 0));
+-	EVT_PUSH(iph1->local, iph1->remote, EVTT_PHASE1_DOWN, NULL);
++	evt_phase1(iph1, EVTT_PHASE1_DOWN, NULL);
+ 	racoon_free(src);
+ 	racoon_free(dst);
+ 
+@@ -2195,7 +2195,7 @@
+ 			saddrwop2str(iph2->dst));
+ 
+ 		/* start phase 1 negotiation as a initiator. */
+-		if (isakmp_ph1begin_i(rmconf, iph2->dst, iph2->src) < 0) {
++		if (isakmp_ph1begin_i(rmconf, iph2->dst, iph2->src) == NULL) {
+ 			SCHED_KILL(sc);
+ 			return -1;
+ 		}
+@@ -2228,6 +2228,71 @@
+ 	return 0;
+ }
+ 
++int
++isakmp_get_sainfo(iph2, sp_out, sp_in)
++	struct ph2handle *iph2;
++	struct secpolicy *sp_out, *sp_in;
++{
++	int remoteid=0;
++
++	plog(LLV_DEBUG, LOCATION, NULL,
++		"new acquire %s\n", spidx2str(&sp_out->spidx));
++
++	/* get sainfo */
++	{
++		vchar_t *idsrc, *iddst;
++
++		idsrc = ipsecdoi_sockaddr2id((struct sockaddr *)&sp_out->spidx.src,
++			sp_out->spidx.prefs, sp_out->spidx.ul_proto);
++		if (idsrc == NULL) {
++			plog(LLV_ERROR, LOCATION, NULL,
++				"failed to get ID for %s\n",
++				spidx2str(&sp_out->spidx));
++			return -1;
++		}
++		iddst = ipsecdoi_sockaddr2id((struct sockaddr *)&sp_out->spidx.dst,
++			sp_out->spidx.prefd, sp_out->spidx.ul_proto);
++		if (iddst == NULL) {
++			plog(LLV_ERROR, LOCATION, NULL,
++				"failed to get ID for %s\n",
++				spidx2str(&sp_out->spidx));
++			vfree(idsrc);
++			return -1;
++		}
++		{
++			struct remoteconf *conf;
++			conf = getrmconf(iph2->dst);
++			if (conf != NULL)
++				remoteid=conf->ph1id;
++			else{
++				plog(LLV_DEBUG, LOCATION, NULL, "Warning: no valid rmconf !\n");
++				remoteid=0;
++			}
++		}
++		iph2->sainfo = getsainfo(idsrc, iddst, NULL, remoteid);
++		vfree(idsrc);
++		vfree(iddst);
++		if (iph2->sainfo == NULL) {
++			plog(LLV_ERROR, LOCATION, NULL,
++				"failed to get sainfo.\n");
++			return -1;
++			/* XXX should use the algorithm list from register message */
++		}
++
++		plog(LLV_DEBUG, LOCATION, NULL,
++			"selected sainfo: %s\n", sainfo2str(iph2->sainfo));
++	}
++
++	if (set_proposal_from_policy(iph2, sp_out, sp_in) < 0) {
++		plog(LLV_ERROR, LOCATION, NULL,
++			"failed to create saprop.\n");
++		return -1;
++	}
++
++	return 0;
++}
++
++
+ /*
+  * receive GETSPI from kernel.
+  */
+@@ -2931,9 +2996,9 @@
+ 		src, dst,
+ 		isakmp_pindex(&iph1->index, 0));
+ 	
+-	EVT_PUSH(iph1->local, iph1->remote, EVTT_PHASE1_UP, NULL);
++	evt_phase1(iph1, EVTT_PHASE1_UP, NULL);
+ 	if(!iph1->rmconf->mode_cfg)
+-		EVT_PUSH(iph1->local, iph1->remote, EVTT_NO_ISAKMP_CFG, NULL);
++		evt_phase1(iph1, EVTT_PHASE1_MODE_CFG, NULL);
+ 
+ 	racoon_free(src);
+ 	racoon_free(dst);
+Index: ipsec-tools-0.7.3/src/racoon/isakmp_cfg.c
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/isakmp_cfg.c	2008-11-27 16:25:20.000000000 +0100
++++ ipsec-tools-0.7.3/src/racoon/isakmp_cfg.c	2010-03-28 17:07:57.000000000 +0200
+@@ -473,8 +473,7 @@
+ 			    "Cannot allocate memory: %s\n", strerror(errno));
+ 		} else {
+ 			memcpy(buf->v, attrpl + 1, buf->l);
+-			EVT_PUSH(iph1->local, iph1->remote, 
+-			    EVTT_ISAKMP_CFG_DONE, buf);
++			evt_phase1(iph1, EVTT_PHASE1_MODE_CFG, buf);
+ 			vfree(buf);
+ 		}
+ 	}
+Index: ipsec-tools-0.7.3/src/racoon/isakmp_ident.c
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/isakmp_ident.c	2006-10-02 23:41:59.000000000 +0200
++++ ipsec-tools-0.7.3/src/racoon/isakmp_ident.c	2010-03-28 17:07:57.000000000 +0200
+@@ -788,8 +788,7 @@
+ 				/* msg printed inner oakley_validate_auth() */
+ 				goto end;
+ 			}
+-			EVT_PUSH(iph1->local, iph1->remote, 
+-			    EVTT_PEERPH1AUTH_FAILED, NULL);
++			evt_phase1(iph1, EVTT_PHASE1_AUTH_FAILED, NULL);
+ 			isakmp_info_send_n1(iph1, type, NULL);
+ 			goto end;
+ 		}
+@@ -1537,8 +1536,7 @@
+ 				/* msg printed inner oakley_validate_auth() */
+ 				goto end;
+ 			}
+-			EVT_PUSH(iph1->local, iph1->remote, 
+-			    EVTT_PEERPH1AUTH_FAILED, NULL);
++			evt_phase1(iph1, EVTT_PHASE1_AUTH_FAILED, NULL);
+ 			isakmp_info_send_n1(iph1, type, NULL);
+ 			goto end;
+ 		}
+Index: ipsec-tools-0.7.3/src/racoon/isakmp_inf.c
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/isakmp_inf.c	2009-05-18 19:07:46.000000000 +0200
++++ ipsec-tools-0.7.3/src/racoon/isakmp_inf.c	2010-03-28 17:07:57.000000000 +0200
+@@ -510,8 +510,7 @@
+ 		del_ph1=getph1byindex((isakmp_index *)(delete + 1));
+ 		if(del_ph1 != NULL){
+ 
+-			EVT_PUSH(del_ph1->local, del_ph1->remote,
+-			EVTT_PEERPH1_NOPROP, NULL);
++			evt_phase1(iph1, EVTT_PHASE1_PEER_DELETED, NULL);
+ 			if (del_ph1->scr)
+ 				SCHED_KILL(del_ph1->scr);
+ 
+@@ -532,8 +531,6 @@
+ 				delete->spi_size, delete->proto_id);
+ 			return 0;
+ 		}
+-		EVT_PUSH(iph1->local, iph1->remote, 
+-		    EVTT_PEER_DELETE, NULL);
+ 		purge_ipsec_spi(iph1->remote, delete->proto_id,
+ 		    (u_int32_t *)(delete + 1), num_spi);
+ 		break;
+@@ -1630,7 +1627,7 @@
+ 			"DPD: remote (ISAKMP-SA spi=%s) seems to be dead.\n",
+ 			isakmp_pindex(&iph1->index, 0));
+ 
+-		EVT_PUSH(iph1->local, iph1->remote, EVTT_DPD_TIMEOUT, NULL);
++		evt_phase1(iph1, EVTT_PHASE1_DPD_TIMEOUT, NULL);
+ 		purge_remote(iph1);
+ 
+ 		/* Do not reschedule here: phase1 is deleted,
+Index: ipsec-tools-0.7.3/src/racoon/isakmp_var.h
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/isakmp_var.h	2007-02-20 10:08:49.000000000 +0100
++++ ipsec-tools-0.7.3/src/racoon/isakmp_var.h	2010-03-28 17:07:57.000000000 +0200
+@@ -35,6 +35,7 @@
+ #define _ISAKMP_VAR_H
+ 
+ #include "vmbuf.h"
++#include "policy.h"
+ 
+ #define PORT_ISAKMP 500
+ #define PORT_ISAKMP_NATT 4500
+@@ -62,8 +63,8 @@
+ struct isakmp_pl_nonce;	/* XXX */
+ 
+ extern int isakmp_handler __P((int));
+-extern int isakmp_ph1begin_i __P((struct remoteconf *, struct sockaddr *,
+-	struct sockaddr *));
++extern struct ph1handle *isakmp_ph1begin_i __P((struct remoteconf *,
++	struct sockaddr *, struct sockaddr *));
+ 
+ extern vchar_t *isakmp_parsewoh __P((int, struct isakmp_gen *, int));
+ extern vchar_t *isakmp_parse __P((vchar_t *));
+@@ -87,6 +88,7 @@
+ extern void isakmp_ph2delete_stub __P((void *));
+ extern void isakmp_ph2delete __P((struct ph2handle *));
+ 
++extern int isakmp_get_sainfo __P((struct ph2handle *, struct secpolicy *, struct secpolicy *));
+ extern int isakmp_post_acquire __P((struct ph2handle *));
+ extern int isakmp_post_getspi __P((struct ph2handle *));
+ extern void isakmp_chkph1there_stub __P((void *));
+Index: ipsec-tools-0.7.3/src/racoon/isakmp_xauth.c
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/isakmp_xauth.c	2009-04-20 15:35:36.000000000 +0200
++++ ipsec-tools-0.7.3/src/racoon/isakmp_xauth.c	2010-03-28 17:07:57.000000000 +0200
+@@ -1568,13 +1568,11 @@
+ 			plog(LLV_ERROR, LOCATION, NULL, 
+ 			    "Xauth authentication failed\n");
+ 
+-			EVT_PUSH(iph1->local, iph1->remote, 
+-			    EVTT_XAUTH_FAILED, NULL);
++			evt_phase1(iph1, EVTT_PHASE1_XAUTH_FAILED, NULL);
+ 
+ 			iph1->mode_cfg->flags |= ISAKMP_CFG_DELETE_PH1;
+ 		} else {
+-			EVT_PUSH(iph1->local, iph1->remote, 
+-			    EVTT_XAUTH_SUCCESS, NULL);
++			evt_phase1(iph1, EVTT_PHASE1_XAUTH_SUCCESS, NULL);
+ 		}
+ 
+ 
+Index: ipsec-tools-0.7.3/src/racoon/pfkey.c
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/pfkey.c	2008-03-05 23:14:24.000000000 +0100
++++ ipsec-tools-0.7.3/src/racoon/pfkey.c	2010-03-28 17:07:57.000000000 +0200
+@@ -92,6 +92,7 @@
+ #include "algorithm.h"
+ #include "sainfo.h"
+ #include "admin.h"
++#include "evt.h"
+ #include "privsep.h"
+ #include "strnames.h"
+ #include "backupsa.h"
+@@ -1266,6 +1267,7 @@
+ 	
+ 	/* update status */
+ 	iph2->status = PHASE2ST_ESTABLISHED;
++	evt_phase2(iph2, EVTT_PHASE2_UP, NULL);
+ 
+ #ifdef ENABLE_STATS
+ 	gettimeofday(&iph2->end, NULL);
+@@ -1636,7 +1638,6 @@
+ 	struct ph2handle *iph2[MAXNESTEDSA];
+ 	struct sockaddr *src, *dst;
+ 	int n;	/* # of phase 2 handler */
+-	int remoteid=0;
+ #ifdef HAVE_SECCTX
+ 	struct sadb_x_sec_ctx *m_sec_ctx;
+ #endif /* HAVE_SECCTX */
+@@ -1825,63 +1826,11 @@
+ 		return -1;
+ 	}
+ 
+-	plog(LLV_DEBUG, LOCATION, NULL,
+-		"new acquire %s\n", spidx2str(&sp_out->spidx));
+-
+-	/* get sainfo */
+-    {
+-	vchar_t *idsrc, *iddst;
+-
+-	idsrc = ipsecdoi_sockaddr2id((struct sockaddr *)&sp_out->spidx.src,
+-				sp_out->spidx.prefs, sp_out->spidx.ul_proto);
+-	if (idsrc == NULL) {
+-		plog(LLV_ERROR, LOCATION, NULL,
+-			"failed to get ID for %s\n",
+-			spidx2str(&sp_out->spidx));
+-		delph2(iph2[n]);
+-		return -1;
+-	}
+-	iddst = ipsecdoi_sockaddr2id((struct sockaddr *)&sp_out->spidx.dst,
+-				sp_out->spidx.prefd, sp_out->spidx.ul_proto);
+-	if (iddst == NULL) {
+-		plog(LLV_ERROR, LOCATION, NULL,
+-			"failed to get ID for %s\n",
+-			spidx2str(&sp_out->spidx));
+-		vfree(idsrc);
+-		delph2(iph2[n]);
+-		return -1;
+-	}
+-	{
+-		struct remoteconf *conf;
+-		conf = getrmconf(iph2[n]->dst);
+-		if (conf != NULL)
+-			remoteid=conf->ph1id;
+-		else{
+-			plog(LLV_DEBUG, LOCATION, NULL, "Warning: no valid rmconf !\n");
+-			remoteid=0;
+-		}
+-	}
+-	iph2[n]->sainfo = getsainfo(idsrc, iddst, NULL, remoteid);
+-	vfree(idsrc);
+-	vfree(iddst);
+-	if (iph2[n]->sainfo == NULL) {
+-		plog(LLV_ERROR, LOCATION, NULL,
+-			"failed to get sainfo.\n");
++	if (isakmp_get_sainfo(iph2[n], sp_out, sp_in) < 0) {
+ 		delph2(iph2[n]);
+ 		return -1;
+-		/* XXX should use the algorithm list from register message */
+ 	}
+ 
+-	plog(LLV_DEBUG, LOCATION, NULL,
+-		"selected sainfo: %s\n", sainfo2str(iph2[n]->sainfo));
+-    }
+-
+-	if (set_proposal_from_policy(iph2[n], sp_out, sp_in) < 0) {
+-		plog(LLV_ERROR, LOCATION, NULL,
+-			"failed to create saprop.\n");
+-		delph2(iph2[n]);
+-		return -1;
+-	}
+ #ifdef HAVE_SECCTX
+ 	if (m_sec_ctx) {
+ 		set_secctx_in_proposal(iph2[n], spidx);
+Index: ipsec-tools-0.7.3/src/racoon/racoonctl.c
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/racoonctl.c	2009-04-20 15:32:57.000000000 +0200
++++ ipsec-tools-0.7.3/src/racoon/racoonctl.c	2010-03-28 17:07:57.000000000 +0200
+@@ -135,26 +135,24 @@
+ struct evtmsg {
+ 	int type;
+ 	char *msg;
+-	enum { UNSPEC, ERROR, INFO } level;
+ } evtmsg[] = {
+-	{ EVTT_PHASE1_UP, "Phase 1 established", INFO },
+-	{ EVTT_PHASE1_DOWN, "Phase 1 deleted", INFO },
+-	{ EVTT_XAUTH_SUCCESS, "Xauth exchange passed", INFO },
+-	{ EVTT_ISAKMP_CFG_DONE, "ISAKMP mode config done", INFO },
+-	{ EVTT_PHASE2_UP, "Phase 2 established", INFO },
+-	{ EVTT_PHASE2_DOWN, "Phase 2 deleted", INFO },
+-	{ EVTT_DPD_TIMEOUT, "Peer not reachable anymore", ERROR },
+-	{ EVTT_PEER_NO_RESPONSE, "Peer not responding", ERROR },
+-	{ EVTT_PEER_DELETE, "Peer terminated security association", ERROR },
+-	{ EVTT_RACOON_QUIT, "Raccon terminated", ERROR },
+-	{ EVTT_OVERFLOW, "Event queue overflow", ERROR },
+-	{ EVTT_XAUTH_FAILED, "Xauth exchange failed", ERROR },
+-	{ EVTT_PEERPH1AUTH_FAILED, "Peer failed phase 1 authentication "
+-	    "(certificate problem?)", ERROR },
+-	{ EVTT_PEERPH1_NOPROP, "Peer failed phase 1 initiation "
+-	    "(proposal problem?)", ERROR },
+-	{ 0, NULL, UNSPEC },
+-	{ EVTT_NO_ISAKMP_CFG, "No need for ISAKMP mode config ", INFO },
++	{ EVTT_RACOON_QUIT,		"Racoon terminated" },
++
++	{ EVTT_PHASE1_UP,		"Phase 1 established" },
++	{ EVTT_PHASE1_DOWN,		"Phase 1 deleted" },
++	{ EVTT_PHASE1_NO_RESPONSE,	"Phase 1 error: peer not responding" },
++	{ EVTT_PHASE1_NO_PROPOSAL,	"Phase 1 error: no proposal chosen" },
++	{ EVTT_PHASE1_AUTH_FAILED,
++	  "Phase 1 error: authentication failed (bad certificate?)" },
++	{ EVTT_PHASE1_DPD_TIMEOUT,	"Phase 1 error: dead peer detected" },
++	{ EVTT_PHASE1_MODE_CFG,		"Phase 1 mode configuration done" },
++	{ EVTT_PHASE1_XAUTH_SUCCESS,	"Phase 1 Xauth succeeded" },
++	{ EVTT_PHASE1_XAUTH_FAILED,	"Phase 1 Xauth failed" },
++
++	{ EVTT_PHASE2_NO_PHASE1,	"Phase 2 error: no suitable phase 1" },
++	{ EVTT_PHASE2_UP,		"Phase 2 established" },
++	{ EVTT_PHASE2_DOWN,		"Phase 2 deleted" },
++	{ EVTT_PHASE2_NO_RESPONSE,	"Phase 2 error: no response" },
+ };
+ 
+ static int get_proto __P((char *));
+@@ -184,6 +182,7 @@
+ 	{ IPPROTO_ICMP,	"icmp" },
+ 	{ IPPROTO_TCP,	"tcp" },
+ 	{ IPPROTO_UDP,	"udp" },
++	{ IPPROTO_GRE,  "gre" },
+ 	{ 0, NULL },
+ };
+ 
+@@ -193,31 +192,13 @@
+ 
+ char *pname;
+ int long_format = 0;
+-
+-#define EVTF_NONE		0x0000	/* Ignore any events */
+-#define EVTF_LOOP		0x0001	/* Loop awaiting for new events */
+-#define EVTF_CFG_STOP		0x0002	/* Stop after ISAKMP mode config */
+-#define EVTF_CFG		0x0004	/* Print ISAKMP mode config info */
+-#define EVTF_ALL		0x0008	/* Print any events */
+-#define EVTF_PURGE		0x0010	/* Print all available events */
+-#define EVTF_PH1DOWN_STOP	0x0020	/* Stop when phase 1 SA gets down */
+-#define EVTF_PH1DOWN		0x0040	/* Print that phase 1 SA got down */
+-#define EVTF_ERR		0x0080	/* Print any error */
+-#define EVTF_ERR_STOP		0x0100	/* Stop on any error */
+-
+-int evt_filter = EVTF_NONE;
+-time_t evt_start;
++int evt_quit_event = 0;
+ 
+ void dump_isakmp_sa __P((char *, int));
+ void dump_internal __P((char *, int));
+ char *pindex_isakmp __P((isakmp_index *));
+ void print_schedule __P((caddr_t, int));
+-void print_evt __P((caddr_t, int));
+-void print_cfg __P((caddr_t, int));
+-void print_err __P((caddr_t, int));
+-void print_ph1down __P((caddr_t, int));
+-void print_ph1up __P((caddr_t, int));
+-int evt_poll __P((void));
++void print_evt __P((struct evt_common *));
+ char * fixed_addr __P((char *, char *, int));
+ 
+ static void
+@@ -226,13 +207,15 @@
+ 	printf(
+ "Usage:\n"
+ "  %s reload-config\n"
++"  %s show-schedule\n"
+ "  %s [-l [-l]] show-sa [protocol]\n"
+ "  %s flush-sa [protocol]\n"
+ "  %s delete-sa <saopts>\n"
+-"  %s establish-sa [-u identity] <saopts>\n"
++"  %s establish-sa [-u identity] [-w] <saopts>\n"
+ "  %s vpn-connect [-u identity] vpn_gateway\n"
+ "  %s vpn-disconnect vpn_gateway\n"
+-"\n"
++"  %s show-event\n"
++"  %s logout-user login\n""\n"
+ "    <protocol>: \"isakmp\", \"esp\" or \"ah\".\n"
+ "        In the case of \"show-sa\" or \"flush-sa\", you can use \"ipsec\".\n"
+ "\n"
+@@ -240,8 +223,8 @@
+ "            : {\"esp\",\"ah\"} <family> <src/prefixlen/port> <dst/prefixlen/port>\n"
+ "                              <ul_proto>\n"
+ "    <family>: \"inet\" or \"inet6\"\n"
+-"    <ul_proto>: \"icmp\", \"tcp\", \"udp\" or \"any\"\n",
+-	pname, pname, pname, pname, pname, pname, pname);
++"    <ul_proto>: \"icmp\", \"tcp\", \"udp\", \"gre\" or \"any\"\n",
++    pname, pname, pname, pname, pname, pname, pname, pname, pname, pname);
+ }
+ 
+ /*
+@@ -312,53 +295,24 @@
+ 
+ 	vfree(combuf);
+ 
+-	if (com_recv(&combuf) != 0)
+-		goto bad;
+-	if (handle_recv(combuf) != 0)
+-		goto bad;
+-
+-	vfree(combuf);
++	do {
++		if (com_recv(&combuf) != 0)
++			goto bad;
++		if (handle_recv(combuf) != 0)
++			goto bad;
++		vfree(combuf);
++	} while (evt_quit_event != 0);
+ 
+-	if (evt_filter != EVTF_NONE)
+-		if (evt_poll() != 0)
+-			goto bad;	
+-	
++	close(so);
+ 	exit(0);
+ 
+-    bad:
++bad:
++	close(so);
++	if (errno == EEXIST)
++		exit(0);
+ 	exit(1);
+ }
+ 
+-int
+-evt_poll(void) {
+-	struct timeval tv;
+-	vchar_t *recvbuf;
+-	vchar_t *sendbuf;
+-
+-	if ((sendbuf = f_getevt(0, NULL)) == NULL)
+-		errx(1, "Cannot make combuf");
+-
+-
+-	while (evt_filter & (EVTF_LOOP|EVTF_PURGE)) {
+-		/* handle_recv closes the socket time, so open it each time */
+-		com_init();
+-
+-		if (com_send(sendbuf) != 0)
+-			errx(1, "Cannot send combuf");
+-
+-		if (com_recv(&recvbuf) == 0) {
+-			handle_recv(recvbuf);
+-			vfree(recvbuf);
+-		}
+-
+-		tv.tv_sec = 0;
+-		tv.tv_usec = 10;
+-		(void)select(0, NULL, NULL, NULL, &tv);
+-	}
+-
+-	vfree(sendbuf);
+-	return 0;
+-}
+ 
+ /* %%% */
+ /*
+@@ -422,20 +376,8 @@
+ 	vchar_t *buf;
+ 	struct admin_com *head;
+ 
+-	/*
+-	 * There are 3 ways of getting here
+-	 * 1) racoonctl vc => evt_filter = (EVTF_LOOP|EVTF_CFG| ... )
+-	 * 2) racoonctl es => evt_filter = EVTF_NONE
+-	 * 3) racoonctl es -l => evt_filter = EVTF_LOOP
+-	 * Catch the second case: show-event is here to purge all
+-	 */
+-	if (evt_filter == EVTF_NONE)
+-		evt_filter = (EVTF_ALL|EVTF_PURGE);
+-
+-	if ((ac >= 1) && (strcmp(av[0], "-l") == 0))
+-		evt_filter |= EVTF_LOOP;
+-
+-	if (ac >= 2)
++	evt_quit_event = -1;
++	if (ac >= 1)
+ 		errx(1, "too many arguments");
+ 
+ 	buf = vmalloc(sizeof(*head));
+@@ -653,6 +595,7 @@
+ 	char *id = NULL;
+ 	char *key = NULL;
+ 	struct admin_com_psk *acp;
++	int wait = 0;
+ 
+ 	if (ac < 1)
+ 		errx(1, "insufficient arguments");
+@@ -673,6 +616,12 @@
+ 		ac -= 2;
+ 	}
+ 
++	if (ac >= 1 && strcmp(av[0], "-w") == 0) {
++		wait = 1;
++		av++;
++		ac--;
++	}
++
+ 	/* need protocol */
+ 	if (ac < 1)
+ 		errx(1, "insufficient arguments");
+@@ -687,12 +636,16 @@
+ 		index = get_index(ac, av);
+ 		if (index == NULL)
+ 			return NULL;
++		if (wait)
++			evt_quit_event = EVTT_PHASE1_MODE_CFG;
+ 		break;
+ 	case ADMIN_PROTO_AH:
+ 	case ADMIN_PROTO_ESP:
+ 		index = get_index(ac, av);
+ 		if (index == NULL)
+ 			return NULL;
++		if (wait)
++			evt_quit_event = EVTT_PHASE2_UP;
+ 		break;
+ 	default:
+ 		errno = EPROTONOSUPPORT;
+@@ -749,8 +702,7 @@
+ 	if (ac < 1)
+ 		errx(1, "insufficient arguments");
+ 
+-	evt_filter = (EVTF_LOOP|EVTF_CFG|EVTF_CFG_STOP|EVTF_ERR|EVTF_ERR_STOP);
+-	time(&evt_start);
++	evt_quit_event = EVTT_PHASE1_MODE_CFG;
+ 	
+ 	/* Optional -u identity */
+ 	if (strcmp(av[0], "-u") == 0) {
+@@ -814,8 +766,7 @@
+ 	if (ac > 1)
+ 		warnx("Extra arguments");
+ 
+-	evt_filter = 
+-	    (EVTF_PH1DOWN|EVTF_PH1DOWN_STOP|EVTF_LOOP|EVTF_ERR|EVTF_ERR_STOP);
++	evt_quit_event = EVTT_PHASE1_DOWN;
+ 
+ 	nav[nac++] = isakmp;
+ 	nav[nac++] = inet;
+@@ -1337,84 +1288,32 @@
+ 
+ 
+ void
+-print_evt(buf, len)
+-	caddr_t buf;
+-	int len;
++print_evt(evtdump)
++	struct evt_common *evtdump;
+ {
+-	struct evtdump *evtdump = (struct evtdump *)buf;
+ 	int i;
+ 	char *srcstr;
+ 	char *dststr;
+ 	
+-	for (i = 0; evtmsg[i].msg; i++)
+-		if (evtmsg[i].type == evtdump->type)
+-			break;				
+-	
+-	if (evtmsg[i].msg == NULL) 
+-		printf("Event %d: ", evtdump->type);
++	for (i = 0; i < sizeof(evtmsg) / sizeof(evtmsg[0]); i++)
++		if (evtmsg[i].type == evtdump->ec_type)
++			break;
++
++	if (evtmsg[i].msg == NULL)
++		printf("Event %d: ", evtdump->ec_type);
+ 	else
+ 		printf("%s : ", evtmsg[i].msg);
+ 
+-	if ((srcstr = saddr2str((struct sockaddr *)&evtdump->src)) == NULL)
++	if ((srcstr = saddr2str((struct sockaddr *)&evtdump->ec_ph1src)) == NULL)
+ 		printf("unknown");
+ 	else 
+ 		printf("%s", srcstr);
+ 	printf(" -> ");
+-	if ((dststr = saddr2str((struct sockaddr *)&evtdump->dst)) == NULL)
++	if ((dststr = saddr2str((struct sockaddr *)&evtdump->ec_ph1dst)) == NULL)
+ 		printf("unknown");
+ 	else 
+ 		printf("%s", dststr);
+ 	printf("\n");
+-
+-	return;
+-}
+-
+-void
+-print_err(buf, len)
+-	caddr_t buf;
+-	int len;
+-{
+-	struct evtdump *evtdump = (struct evtdump *)buf;
+-	int i;
+-	
+-	
+-	for (i = 0; evtmsg[i].msg; i++)
+-		if (evtmsg[i].type == evtdump->type)
+-			break;				
+-
+-	if (evtmsg[i].level != ERROR)
+-		return;
+-	
+-	if (evtmsg[i].msg == NULL) 
+-		printf("Error: Event %d\n", evtdump->type);
+-	else
+-		printf("Error: %s\n", evtmsg[i].msg);
+-
+-	if (evt_filter & EVTF_ERR_STOP)
+-		evt_filter &= ~EVTF_LOOP;
+-
+-	return;
+-}
+-
+-/*
+- * Print a message when phase 1 SA goes down
+- */
+-void
+-print_ph1down(buf, len)
+-	caddr_t buf;
+-	int len;
+-{
+-	struct evtdump *evtdump = (struct evtdump *)buf;
+-	
+-	if (evtdump->type != EVTT_PHASE1_DOWN)
+-		return;
+-
+-	printf("VPN connexion terminated\n");
+-
+-	if (evt_filter & EVTF_PH1DOWN_STOP)
+-		evt_filter &= ~EVTF_LOOP;
+-	
+-	return;
+ }
+ 
+ /*
+@@ -1425,15 +1324,14 @@
+ 	caddr_t buf;
+ 	int len;
+ {
+-	struct evtdump *evtdump = (struct evtdump *)buf;
++	struct evt_common *evtdump = (struct evt_common *)buf;
+ 	struct isakmp_data *attr;
+ 	char *banner = NULL;
+ 	struct in_addr addr4;
+ 	
+ 	memset(&addr4, 0, sizeof(addr4));
+ 
+-	if (evtdump->type != EVTT_ISAKMP_CFG_DONE && 
+-	    evtdump->type != EVTT_NO_ISAKMP_CFG)
++	if (evtdump->ec_type != EVTT_PHASE1_MODE_CFG)
+ 		return;
+ 
+ 	len -= sizeof(*evtdump);
+@@ -1487,7 +1385,7 @@
+ 		}
+ 	}
+ 	
+-	if (evtdump->type == EVTT_ISAKMP_CFG_DONE)
++	if (len > 0)
+ 		printf("Bound to address %s\n", inet_ntoa(addr4));
+ 	else
+ 		printf("VPN connexion established\n");
+@@ -1508,11 +1406,6 @@
+ 		printf("\n");
+ 		racoon_free(banner);
+ 	}
+-	
+-	if (evt_filter & EVTF_CFG_STOP)
+-		evt_filter &= ~EVTF_LOOP;
+-	
+-	return;
+ }
+ 	
+ 
+@@ -1563,32 +1456,28 @@
+ 		break;
+ 
+ 	case ADMIN_SHOW_EVT: {
+-		struct evtdump *evtdump;
++		struct evt_common *ec;
+ 
+-		/* We got no event */
+-		if (len == 0) {
+-			/* If we were purging the queue, it is now done */
+-			if (evt_filter & EVTF_PURGE)
+-				evt_filter &= ~EVTF_PURGE;
++		/* We got no event? */
++		if (len == 0)
+ 			break;
+-		}
++		if (len < sizeof(struct evt_common))
++			errx(1, "Short buffer\n");
+ 
+-		if (len < sizeof(struct evtdump))
+-			errx(1, "Short buffer\n");		
+-
+-		/* Toss outdated events */
+-		evtdump = (struct evtdump *)buf;
+-		if (evtdump->timestamp < evt_start)
+-			break;
+-
+-		if (evt_filter & EVTF_ALL)
+-			print_evt(buf, len);
+-		if (evt_filter & EVTF_ERR)
+-			print_err(buf, len);
+-		if (evt_filter & EVTF_CFG)
+-			print_cfg(buf, len);
+-		if (evt_filter & EVTF_PH1DOWN)
+-			print_ph1down(buf, len);
++		ec = (struct evt_common *) buf;
++		if (evt_quit_event <= 0)
++			print_evt(ec);
++		else if (evt_quit_event == ec->ec_type) {
++			switch (ec->ec_type) {
++			case EVTT_PHASE1_MODE_CFG:
++				print_cfg(ec, len);
++				break;
++			default:
++				print_evt(ec);
++				break;
++			};
++			evt_quit_event = 0;
++		}
+ 		break;
+ 	}
+ 
+@@ -1645,10 +1534,8 @@
+ 		break;
+ 	}
+ 
+-	close(so);
+ 	return 0;
+ 
+-    bad:
+-	close(so);
++bad:
+ 	return -1;
+ }
+Index: ipsec-tools-0.7.3/src/racoon/session.c
+===================================================================
+--- ipsec-tools-0.7.3.orig/src/racoon/session.c	2007-08-01 13:52:22.000000000 +0200
++++ ipsec-tools-0.7.3/src/racoon/session.c	2010-03-28 17:07:57.000000000 +0200
+@@ -192,6 +192,7 @@
+ 		/* scheduling */
+ 		timeout = schedular();
+ 
++		nfds = evt_get_fdmask(nfds, &rfds);
+ 		error = select(nfds, &rfds, (fd_set *)0, (fd_set *)0, timeout);
+ 		if (error < 0) {
+ 			switch (errno) {
+@@ -211,6 +212,7 @@
+ 		    (FD_ISSET(lcconf->sock_admin, &rfds)))
+ 			admin_handler();
+ #endif
++		evt_handle_fdmask(&rfds);
+ 
+ 		for (p = lcconf->myaddrs; p; p = p->next) {
+ 			if (!p->addr)
+@@ -451,7 +453,7 @@
+ 		case SIGTERM:			
+ 			plog(LLV_INFO, LOCATION, NULL, 
+ 			    "caught signal %d\n", sig);
+-			EVT_PUSH(NULL, NULL, EVTT_RACOON_QUIT, NULL);
++			evt_generic(EVTT_RACOON_QUIT, NULL);
+ 			pfkey_send_flush(lcconf->sock_pfkey, 
+ 			    SADB_SATYPE_UNSPEC);
+ #ifdef ENABLE_FASTQUIT
