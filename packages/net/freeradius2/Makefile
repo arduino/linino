@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeradius2
 PKG_VERSION:=2.1.7
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=freeradius-server-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/freeradius/
@@ -444,6 +444,7 @@ define Package/freeradius2/install
 	$(INSTALL_DIR) $(1)/etc/freeradius2
 	$(INSTALL_DIR) $(1)/etc/freeradius2/modules
 	$(INSTALL_DIR) $(1)/etc/freeradius2/sites
+	chmod 771 $(1)/etc/freeradius2
 	for f in clients.conf dictionary radiusd.conf policy.conf; do \
 		$(CP) $(PKG_INSTALL_DIR)/etc/freeradius2/$$$${f} $(1)/etc/freeradius2/ ; \
 	done
@@ -457,6 +458,8 @@ define Package/freeradius2/install
 	done
 	$(INSTALL_DIR) $(1)/usr/lib/freeradius2
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/freeradius2/libfreeradius-radius{,-*}.so $(1)/usr/lib/freeradius2
+	ln -s freeradius2/libfreeradius-radius-$(PKG_VERSION).so $(1)/usr/lib/
+	ln -s freeradius2/libfreeradius-eap-$(PKG_VERSION).so $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/radiusd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
