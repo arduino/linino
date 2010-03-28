@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ucarp
 PKG_VERSION:=1.5.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.pureftpd.org/pub/ucarp
@@ -23,7 +23,7 @@ define Package/ucarp
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Lets several hosts share one IP
-  DEPENDS:=+libpcap
+  DEPENDS:=+ip +libpcap
   URL:=http://www.ucarp.org/project/ucarp
 endef
 
@@ -35,11 +35,6 @@ endef
 
 define Package/ucarp/conffiles
 /etc/ucarp.conf
-endef
-
-define Package/ucarp/config
-  select BUSYBOX_CONFIG_IP
-  select BUSYBOX_CONFIG_FEATURE_IP_ADDRESS
 endef
 
 define Package/ucarp/install
