@@ -23,7 +23,7 @@ define Package/libv4l
   CATEGORY:=Libraries
   TITLE:=Video 4 Linux wrapper libraries
   URL:=http://people.atrpms.net/~hdegoede/
-  DEPENDS:=+libpthread
+  DEPENDS:=+libpthread @LINUX_2_6
 endef
 
 define Package/libv4l/description
@@ -32,7 +32,7 @@ define Package/libv4l/description
   easy for application writers to support a wide variety of devices without
   having to write separate code for different devices in the same class. libv4l
   consists of 3 different libraries: libv4lconvert, libv4l1 and libv4l2.
-  
+
   libv4l1 offers the (deprecated) v4l1 API on top of v4l2 devices, independent
   of the drivers for those devices supporting v4l1 compatibility (which many
   v4l2 drivers do not).
