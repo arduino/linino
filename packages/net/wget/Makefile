@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,11 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wget
 PKG_VERSION:=1.12
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNU/$(PKG_NAME)
 PKG_MD5SUM:=308a5476fc096a8a525d07279a6f6aa3
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -37,6 +39,7 @@ define Package/wget
 $(call Package/wget/Default)
   DEPENDS+= +libopenssl
   TITLE+= (with SSL support)
+  VARIANT:=ssl
 endef
 
 define Package/wget/description
@@ -47,6 +50,7 @@ endef
 define Package/wget-nossl
 $(call Package/wget/Default)
   TITLE+= (without SSL support)
+  VARIANT:=nossl
 endef
 
 define Package/wget-nossl/description
@@ -54,52 +58,65 @@ $(call Package/wget/Default/description)
  This package is built without SSL support.
 endef
 
-
-define Build/Template
-
-$(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
-	-$(MAKE) -C $(PKG_BUILD_DIR) clean
-	$(call Build/Configure/Default,$(3))
-	$(MAKE) -C $(PKG_BUILD_DIR)
-	( cd $(PKG_BUILD_DIR)/src; mv -f wget wget-$(2) )
-	touch $$@
-
-$(STAMP_BUILT): $(STAMP_BUILT)-$(2)
-
-define Package/$(1)/install
-	$(INSTALL_DIR) $$(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/wget-$(2) $$(1)/usr/bin/wget
-endef
-
-# FIXME: check if busybox really provides a wget applet
-define Package/$(1)/postrm
-#!/bin/sh
-ln -sf ../../bin/busybox $${IPKG_INSTROOT}/usr/bin/wget
-endef
-
-endef
-
-CONFIGURE_ARGS += \
+CONFIGURE_ARGS+= \
 	--disable-rpath
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_wget),)
-  define Build/with-ssl
-	$(call Build/Template,wget,with-ssl, \
+ifeq ($(BUILD_VARIANT),ssl)
+	CONFIGURE_ARGS+= \
 		--with-ssl \
-		--with-libssl-prefix="$(STAGING_DIR)/usr" \
-	)
-  endef
+		--with-libssl-prefix="$(STAGING_DIR)/usr"
 endif
-$(eval $(Build/with-ssl))
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_wget-nossl),)
-  define Build/without-ssl
-	$(call Build/Template,wget-nossl,without-ssl, \
-		--without-ssl \
-	)
-  endef
+ifeq ($(BUILD_VARIANT),nossl)
+	CONFIGURE_ARGS+= \
+		--without-ssl
 endif
-$(eval $(Build/without-ssl))
+
+define Package/wget/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/wget $(1)/usr/bin/wget-ssl
+endef
+
+define Package/wget-nossl/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/wget $(1)/usr/bin/wget-nossl
+endef
+
+define Package/wget/postinst
+#!/bin/sh
+if [ -e $${IPKG_INSTROOT}/usr/bin/wget ]; then
+  rm -rf $${IPKG_INSTROOT}/usr/bin/wget;
+fi
+ln -sf ./wget-ssl $${IPKG_INSTROOT}/usr/bin/wget
+endef
+
+define Package/wget/postrm
+#!/bin/sh
+rm $${IPKG_INSTROOT}/usr/bin/wget
+[ -x $${IPKG_INSTROOT}/usr/bin/wget-nossl ] && ln -s ./wget-nossl $${IPKG_INSTROOT}/usr/bin/wget || {
+  ln -s ../../bin/busybox $${IPKG_INSTROOT}/usr/bin/wget
+  $${IPKG_INSTROOT}/usr/bin/wget 2>&1 | grep 'applet not found' > /dev/null 2>&1 && rm $${IPKG_INSTROOT}/usr/bin/wget
+}
+exit 0
+endef
+
+define Package/wget-nossl/postinst
+#!/bin/sh
+if [ -e $${IPKG_INSTROOT}/usr/bin/wget ]; then
+  rm -rf $${IPKG_INSTROOT}/usr/bin/wget;
+fi
+ln -s ./wget-nossl $${IPKG_INSTROOT}/usr/bin/wget
+endef
+
+define Package/wget-nossl/postrm
+#!/bin/sh
+rm $${IPKG_INSTROOT}/usr/bin/wget
+[ -x $${IPKG_INSTROOT}/usr/bin/wget-ssl ] && ln -s ./wget-ssl $${IPKG_INSTROOT}/usr/bin/wget || {
+  ln -s ../../bin/busybox $${IPKG_INSTROOT}/usr/bin/wget
+  $${IPKG_INSTROOT}/usr/bin/wget 2>&1 | grep 'applet not found' > /dev/null 2>&1 && rm $${IPKG_INSTROOT}/usr/bin/wget
+}
+exit 0
+endef
 
 $(eval $(call BuildPackage,wget))
 $(eval $(call BuildPackage,wget-nossl))
