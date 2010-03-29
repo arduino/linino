@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=libtorrent
 PKG_REV:=1130
 PKG_VERSION:=0.12.6_r$(PKG_REV)
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2

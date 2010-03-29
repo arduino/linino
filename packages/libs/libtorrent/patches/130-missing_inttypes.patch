@@ -1,0 +1,11 @@
+diff -urN libtorrent-0.12.6_r1130/rak/allocators.h libtorrent-0.12.6_r1130.new/rak/allocators.h
+--- libtorrent-0.12.6_r1130/rak/allocators.h	2009-12-26 12:16:21.000000000 +0100
++++ libtorrent-0.12.6_r1130.new/rak/allocators.h	2010-03-29 11:49:51.000000000 +0200
+@@ -43,6 +43,7 @@
+ #include <limits>
+ #include <stdlib.h>
+ #include <sys/types.h>
++#include <inttypes.h>
+ 
+ namespace rak {
+ 
