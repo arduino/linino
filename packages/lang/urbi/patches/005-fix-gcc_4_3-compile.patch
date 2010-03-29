@@ -10,3 +10,13 @@ index bb2546d..38b0d8e 100644
  
  namespace libport
  {
+--- a/src/liburbi/uconversion.cc	2007-01-31 11:37:04.000000000 +0100
++++ b/src/liburbi/uconversion.cc	2010-03-29 09:43:00.000000000 +0200
+@@ -1,5 +1,7 @@
+ #include "urbi/uconversion.hh"
+ 
++#include <cstdio>
++
+ #ifndef NO_IMAGE_CONVERSION
+ # include <setjmp.h>
+ 
