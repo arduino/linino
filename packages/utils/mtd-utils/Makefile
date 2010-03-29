@@ -38,6 +38,11 @@ MAKE_FLAGS += \
 	BUILDDIR="$(PKG_BUILD_DIR)" \
 	WITHOUT_XATTR=1
 
+ifeq ($(CONFIG_LINUX_2_4),y)
+MAKE_FLAGS += \
+	SUBDIRS=""
+endif
+
 define Package/mtd-utils/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
