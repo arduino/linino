@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pcapsipdump
 PKG_VERSION:=0.1.4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/psipdump
@@ -30,7 +30,7 @@ define Package/pcapsipdump/description
         fashion similar to "tcpdump -w" (format is exactly the same), but one file per sip session
         (even if there is thousands of concurrect SIP sessions).
 endef
-	
+
 define Build/Compile
 	$(TARGET_CONFIGURE_OPTS) \
 		$(MAKE) -C $(PKG_BUILD_DIR) \
