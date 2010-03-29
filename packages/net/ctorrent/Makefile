@@ -61,7 +61,7 @@ endef
 CONFIGURE_VARS += \
 	CXX="g++-uc" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-rtti" \
-	LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++"
+	LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++ $(LIBGCC_S) -lc"
 
 ifeq ($(BUILD_VARIANT),ssl)
 	CONFIGURE_ARGS += \
