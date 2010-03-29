@@ -1,0 +1,22 @@
+--- xapian-core-1.0.7/Makefile.am	2008-07-16 06:42:35.000000000 +0200
++++ xapian-core-1.0.7.new/Makefile.am	2010-03-29 11:01:13.000000000 +0200
+@@ -14,7 +14,7 @@
+ endif
+ 
+ # Order is relevant: when building, tests must be after ".".
+-SUBDIRS = . docs tests
++SUBDIRS = .
+ 
+ noinst_HEADERS =
+ BUILT_SOURCES =
+--- xapian-core-1.0.7/Makefile.in	2008-07-16 06:46:51.000000000 +0200
++++ xapian-core-1.0.7.new/Makefile.in	2010-03-29 11:01:24.000000000 +0200
+@@ -847,7 +847,7 @@
+ 	$(am__append_1) $(am__append_25)
+ 
+ # Order is relevant: when building, tests must be after ".".
+-SUBDIRS = . docs tests
++SUBDIRS = .
+ noinst_HEADERS = api/maptermlist.h api/editdistance.h $(am__append_9) \
+ 	$(am__append_12) backends/multi/multi_postlist.h \
+ 	backends/multi/multi_termlist.h $(am__append_15) \
