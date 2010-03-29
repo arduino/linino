@@ -56,6 +56,9 @@ ifeq ($(CONFIG_PACKAGE_kmod-sound-core),)
 	CONFIGURE_ARGS+= --disable-alsa
 endif
 
+# use gcc instead of g++ to avoid unnecessary linking against libstdc++
+TARGET_CXX=$(TARGET_CC)
+
 TARGET_CFLAGS+=-std=gnu99
 
 CONFIGURE_VARS += \
