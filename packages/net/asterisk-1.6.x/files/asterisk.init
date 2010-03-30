@@ -8,7 +8,7 @@ OPTIONS=""
 
 start() {
 	[ -f $DEFAULT ] && . $DEFAULT
-	[ -d $DEST/var/run ] || mkdir -p $DEST/var/run
+	[ -d $DEST/var/run/asterisk ] || mkdir -p $DEST/var/run/asterisk
 	[ -d $DEST/var/log/asterisk ] || mkdir -p $DEST/var/log/asterisk
 	[ -d $DEST/var/spool/asterisk ] || mkdir -p $DEST/var/spool/asterisk
         [ -d /var/spool/asterisk ] || mkdir -p /var/spool/asterisk
@@ -17,5 +17,5 @@ start() {
 }
 
 stop() {
-	[ -f $DEST/var/run/asterisk.pid ] && kill $(cat $DEST/var/run/asterisk.pid) >/dev/null 2>&1
+	[ -f $DEST/var/run/asterisk/asterisk.pid ] && kill $(cat $DEST/var/run/asterisk/asterisk.pid) >/dev/null 2>&1
 }

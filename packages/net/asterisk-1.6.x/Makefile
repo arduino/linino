@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
-PKG_VERSION:=1.6.2.1
+PKG_VERSION:=1.6.2.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
-PKG_MD5SUM:=8fbc60f9d80e686c749ae95292e225d8
+PKG_MD5SUM:=f068ef2433eebdc7f6dd635986f36d77
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -250,6 +250,7 @@ define Package/asterisk16/conffiles
 /etc/asterisk/sip.conf
 /etc/asterisk/sip_notify.conf
 /etc/asterisk/features.conf
+/etc/asterisk/indications.conf
 /etc/asterisk/logger.conf
 /etc/asterisk/manager.conf
 /etc/asterisk/rtp.conf
@@ -260,7 +261,7 @@ endef
 define Package/asterisk16/install
 	$(INSTALL_DIR) $(1)/etc/asterisk
 	for f in asterisk extensions features \
-		logger manager modules \
+		indications logger manager modules \
 		sip sip_notify rtp; do \
 		$(CP) $(PKG_INSTALL_DIR)/etc/asterisk/$$$$f.conf $(1)/etc/asterisk/ ; \
 	done
