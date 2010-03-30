@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=binutils
 PKG_VERSION:=$(strip $(subst ",, $(CONFIG_BINUTILS_VERSION)))
 #"))
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE_URL:=@GNU/binutils
 PKG_SOURCE:=binutils-$(PKG_VERSION).tar.bz2
@@ -47,13 +47,22 @@ define Package/binutils/description
   The Binutils package contains a linker, an assembler, and other tools for handling object files
 endef
 
+CONFIGURE_ARGS = \
+		--target=$(REAL_GNU_TARGET_NAME) \
+		--host=$(REAL_GNU_TARGET_NAME) \
+		--build=$(GNU_HOST_NAME) \
+		--with-sysroot=$(PKG_INSTALL_DIR) \
+		--prefix=/usr \
+		--disable-multilib \
+		--disable-werror \
+		--disable-nls \
+		$(SOFT_FLOAT_CONFIG_OPTION) \
+		$(call qstrip,$(CONFIG_EXTRA_BINUTILS_CONFIG_OPTIONS))
+
 TARGET_CFLAGS += $(FPIC)
 
 define Build/Configure
-	$(call Build/Configure/Default, \
-		--disable-werror \
-		--disable-nls \
-	)
+	$(call Build/Configure/Default)
 	$(call Build/Compile/Default, \
 		configure-bfd \
 		configure-binutils \
@@ -97,13 +106,13 @@ endef
 
 define Package/objdump/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/*-linux/bin/objdump $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin/objdump $(1)/usr/bin/
 endef
 
 define Package/binutils/install
 	$(INSTALL_DIR) $(1)/usr
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ $(1)/usr/
-	$(CP) $(PKG_INSTALL_DIR)/usr/*-linux $(1)/usr
+	$(CP) $(PKG_INSTALL_DIR)/usr/$(REAL_GNU_TARGET_NAME) $(1)/usr
 	rm -f $(1)/usr/bin/objdump
 endef
 
