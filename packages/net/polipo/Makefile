@@ -10,7 +10,6 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=polipo
 PKG_VERSION:=1.0.4.1
 PKG_RELEASE:=1
-MAINTAINER:=Gabriel Kerneis <kerneis@pps.jussieu.fr>
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://freehaven.net/~chrisd/polipo/
@@ -24,6 +23,7 @@ define Package/polipo
   CATEGORY:=Network
   TITLE:=A caching web proxy
   URL:=http://www.pps.jussieu.fr/~jch/software/polipo/
+  MAINTAINER:=Gabriel Kerneis <kerneis@pps.jussieu.fr>
 endef
 
 define Package/polipo/description
