@@ -26,6 +26,7 @@ define Package/transmission/template
   CATEGORY:=Network
   TITLE:=A free, lightweight BitTorrent client
   URL:=http://www.transmissionbt.com
+  MAINTAINER:=Cezary Jackiewicz <cezary@eko.one.pl> 
 endef
 
 define Package/transmission-daemon

@@ -26,6 +26,7 @@ define Package/proftpd
   CATEGORY:=Network
   TITLE:=ProFTPD FTP server
   URL:=http://www.proftpd.org/
+  MAINTAINER:=Cezary Jackiewicz <cezary@eko.one.pl> 
 endef
 
 define Package/proftpd/conffiles
