@@ -23,11 +23,13 @@ TARGET_LDFLAGS+=-Wl,-rpath-link="$(STAGING_DIR)/usr/lib"
 TARGET_CFLAGS += $(FPIC)
 
 define Package/nzbget
+  SUBMENU:=NNTP
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libxml2 +libpar2 +libopenssl +libpthread
   URL:=http://nzbget.sourceforge.net/
   TITLE:=Binary newsgrabber
+  MAINTAINER:=Artur Wronowski <arteqw@gmail.com>
 endef
 
 define Package/nzbget/description

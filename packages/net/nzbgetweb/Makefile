@@ -20,11 +20,13 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)/nzbgetweb
 include $(INCLUDE_DIR)/package.mk
 
 define Package/nzbgetweb
+  SUBMENU:=NNTP
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+nzbget +php5-cgi +php5-mod-session +php5-mod-gd +php5-mod-xml
+  DEPENDS:=+nzbget +php5 +php5-cgi +php5-mod-session +php5-mod-gd +php5-mod-xml
   URL:=http://nzbget.sourceforge.net/
   TITLE:=Web interface for nzbget
+  MAINTAINER:=Artur Wronowski <arteqw@gmail.com>
 endef
 
 define Package/nzbgetweb/description
