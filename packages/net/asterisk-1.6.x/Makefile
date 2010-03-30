@@ -11,6 +11,8 @@ PKG_NAME:=asterisk
 PKG_VERSION:=1.6.2.6
 PKG_RELEASE:=1
 
+MAINTAINER:=Hans Zandbelt <hans.zandbelt@gmail.com>
+
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
 PKG_MD5SUM:=f068ef2433eebdc7f6dd635986f36d77
