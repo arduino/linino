@@ -91,4 +91,5 @@ $(eval $(call BuildTemplate,chaos,CHAOS,xt_CHAOS,xt_CHAOS,47,+kmod-ipt-compat-xt
 $(eval $(call BuildTemplate,condition,Condition,xt_condition,xt_condition,46,))
 $(eval $(call BuildTemplate,delude,DELUDE,xt_DELUDE,xt_DELUDE,46,+kmod-ipt-compat-xtables))
 $(eval $(call BuildTemplate,tarpit,TARPIT,xt_TARPIT,xt_TARPIT,46,+kmod-ipt-compat-xtables))
+$(eval $(call BuildTemplate,tee,TEE,xt_TEE,xt_TEE,46,+kmod-ipt-compat-xtables))
 $(eval $(call BuildTemplate,ipp2p,IPP2P,xt_ipp2p,xt_ipp2p,46,))
