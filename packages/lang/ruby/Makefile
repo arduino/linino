@@ -244,9 +244,7 @@ define Package/ruby-core/install
 		$(1)/usr/lib/ruby/$(PKG_LIBVER)/openssl.rb \
 		$(1)/usr/lib/ruby/$(PKG_LIBVER)/*/openssl.so \
 		$(1)/usr/lib/ruby/$(PKG_LIBVER)/drb/ssl.rb \
-		$(1)/usr/lib/ruby/$(PKG_LIBVER)/net/ftptls.rb \
 		$(1)/usr/lib/ruby/$(PKG_LIBVER)/net/https.rb \
-		$(1)/usr/lib/ruby/$(PKG_LIBVER)/net/telnets.rb \
 		$(1)/usr/lib/ruby/$(PKG_LIBVER)/webrick/ssl.rb \
 		\
 		$(1)/usr/lib/ruby/$(PKG_LIBVER)/*/dl.so \
@@ -374,9 +372,7 @@ define Package/ruby-openssl/install
 		usr/lib/ruby/$(PKG_LIBVER)/openssl.rb \
 		usr/lib/ruby/$(PKG_LIBVER)/*/openssl.so \
 		usr/lib/ruby/$(PKG_LIBVER)/drb/ssl.rb \
-		usr/lib/ruby/$(PKG_LIBVER)/net/ftptls.rb \
 		usr/lib/ruby/$(PKG_LIBVER)/net/https.rb \
-		usr/lib/ruby/$(PKG_LIBVER)/net/telnets.rb \
 		usr/lib/ruby/$(PKG_LIBVER)/webrick/ssl.rb \
 	) | ( cd $(1); $(TAR) -xf - )
 endef
