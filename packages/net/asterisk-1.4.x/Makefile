@@ -11,8 +11,6 @@ PKG_NAME:=asterisk
 PKG_VERSION:=1.4.25.1
 PKG_RELEASE:=2
 
-MAINTAINER:=Hans Zandbelt <hans.zandbelt@gmail.com>
-
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
 PKG_MD5SUM:=ca17be11559eb939ea16b8de98ddeefb
@@ -38,6 +36,7 @@ define Package/asterisk14/Default
   SECTION:=net
   CATEGORY:=Network
   URL:=http://www.asterisk.org/
+  MAINTAINER:=Hans Zandbelt <hans.zandbelt@gmail.com>
 endef
 
 define Package/asterisk14/Default/description

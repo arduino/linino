@@ -11,8 +11,6 @@ PKG_NAME:=asterisk-addons
 PKG_VERSION:=1.4.8
 PKG_RELEASE:=1
 
-MAINTAINER:=Hans Zandbelt <hans.zandbelt@gmail.com>
-
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
 PKG_MD5SUM:=d4e75c39f737b5ba2a75a4420e1a5a78
@@ -27,6 +25,7 @@ define Package/asterisk-addons/Default
   CATEGORY:=Network
   TITLE:=Asterisk addons
   URL:=http://www.asterisk.org/
+  MAINTAINER:=Hans Zandbelt <hans.zandbelt@gmail.com>
 endef
 
 define Package/asterisk-addons/Default/description

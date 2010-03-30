@@ -11,8 +11,6 @@ PKG_NAME:=radsecproxy
 PKG_VERSION:=1.3.1
 PKG_RELEASE:=1
 
-MAINTAINER:=Hans Zandbelt <hans.zandbelt@gmail.com>
-
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://software.uninett.no/radsecproxy/
 PKG_MD5SUM:=565b389268d906c3b465f63750938667
@@ -27,6 +25,7 @@ define Package/radsecproxy
   DEPENDS:=+libopenssl +libpthread
   TITLE:=radsecproxy
   URL:=http://software.uninett.no/radsecproxy
+  MAINTAINER:=Hans Zandbelt <hans.zandbelt@gmail.com>
 endef
 
 define Package/radsecproxy/description
