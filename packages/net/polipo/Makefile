@@ -10,6 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=polipo
 PKG_VERSION:=1.0.4.1
 PKG_RELEASE:=1
+MAINTAINER:=Gabriel Kerneis <kerneis@pps.jussieu.fr>
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://freehaven.net/~chrisd/polipo/
