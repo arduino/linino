@@ -24,6 +24,7 @@ define Package/miniupnpd
   DEPENDS:=+iptables
   TITLE:=Lightweight UPnP daemon
   URL:=http://miniupnp.free.fr/
+  MAINTAINER:=Daniel Dickinson <ddickinson@vertical.com>
 endef
 
 define Package/miniupnpd/conffiles

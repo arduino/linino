@@ -26,6 +26,7 @@ define Package/smap
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A SIP network discovery tool
+  MAINTAINER:=Daniel Dickinson <ddickinson@vertical.com>
   URL:=http://www.wormulon.net/smap/
   DEPENDS:=+libpthread
 endef

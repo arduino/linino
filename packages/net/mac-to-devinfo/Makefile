@@ -19,6 +19,7 @@ define Package/mac-to-devinfo
   SECTION:=net
   CATEGORY:=Network
   TITLE:=MAC Address to Device Information
+  MAINTAINER:=Daniel Dickinson <ddickinson@vertical.com>
 endef
 
 define Package/mac-to-devinfo/description
