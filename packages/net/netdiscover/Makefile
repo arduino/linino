@@ -26,6 +26,7 @@ define Package/netdiscover
   DEPENDS:=+libpcap +libnet1 +libpthread
   TITLE:=An active/passive address reconnaissance tool
   URL:=http://nixgeneration.com/~jaime/netdiscover/
+  MAINTAINER:=Daniel Dickinson <ddickinson@vertical.com>
 endef
 
 CONFIGURE_VARS+= \
