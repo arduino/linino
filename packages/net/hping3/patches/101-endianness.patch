@@ -1,5 +1,5 @@
---- hping3-20051105_orig/hping2.h	2004-06-04 09:22:38.000000000 +0200
-+++ hping3-20051105/hping2.h	2009-02-26 15:42:14.000000000 +0100
+--- a/hping2.h
++++ b/hping2.h
 @@ -13,6 +13,7 @@
  #ifndef _HPING2_H
  #define _HPING2_H
@@ -21,7 +21,7 @@
          __u8    version:4,
                  ihl:4;
  #else
-@@ -287,10 +288,10 @@
+@@ -287,10 +288,10 @@ struct mytcphdr {
  	__u16	th_dport;               /* destination port */
  	__u32	th_seq;                 /* sequence number */
  	__u32	th_ack;                 /* acknowledgement number */
@@ -34,9 +34,8 @@
  	__u8    th_off:4,               /* data offset */
  		th_x2:4;                /* (unused) */
  #else
-diff -urN hping3-20051105/bytesex.h hping3-20051105.new/bytesex.h
---- hping3-20051105/bytesex.h	2003-08-31 19:23:48.000000000 +0200
-+++ hping3-20051105.new/bytesex.h	2009-04-13 15:14:52.000000000 +0200
+--- a/bytesex.h
++++ b/bytesex.h
 @@ -9,9 +9,11 @@
  
  #if 	defined(__i386__) \

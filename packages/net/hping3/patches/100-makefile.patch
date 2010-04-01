@@ -1,5 +1,5 @@
---- hping3-20051105_orig/Makefile	2005-11-05 11:31:41.000000000 +0100
-+++ hping3-20051105/Makefile	2009-02-26 13:44:40.000000000 +0100
+--- a/Makefile
++++ b/Makefile
 @@ -6,15 +6,15 @@
  # $date: Sun Jul 25 17:56:15 MET DST 1999$ 
  # $rev: 3$ 
@@ -22,7 +22,7 @@
  PCAP=-lpcap
  
  ARSOBJ = ars.o apd.o split.o rapd.o
-@@ -50,20 +50,16 @@
+@@ -50,20 +50,16 @@ libars.a: $(ARSOBJ)
  	$(RANLIB) $@
  
  hping3: byteorder.h $(OBJ)
