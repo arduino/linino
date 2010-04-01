@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/yaddns
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=
+  DEPENDS:=@BROKEN
   TITLE:=Yet Another DDNS client
   URL:=http://patatrac.info/yaddns
 endef
