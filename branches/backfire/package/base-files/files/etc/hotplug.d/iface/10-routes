@@ -1,0 +1,74 @@
+add_route() {
+	local config="$1"
+
+	# is this route intended for the
+	# $INTERFACE of this hotplug event
+	config_get interface "$config" interface
+	[ "$interface" != "$INTERFACE" ] && return 0
+	
+	# get the real interface name from network config
+	config_get dev "$interface" ifname
+
+	config_get target "$config" target
+	config_get netmask "$config" netmask
+	config_get gateway "$config" gateway
+	config_get metric "$config" metric
+
+	# make sure there is a gateway and a target
+	[ -n "$target" ] || {
+		echo "Missing target in route section $config"
+		return 1
+	}
+	[ -n "$gateway" ] || {
+		config_get gateway "$interface" gateway
+	}
+
+	# handle "0.0.0.0" as "no gateway given" to allow
+	# defining gateway-less routes while still keeping
+	# the possibility to have static routes with a
+	# proper gateway on interfaces with dynamic ips 
+	[ "$gateway" = "0.0.0.0" ] && gateway=""
+
+	dest="${netmask:+-net "$target" netmask "$netmask"}"
+	dest="${dest:--host "$target"}"
+	
+	/sbin/route add $dest ${gateway:+gw "$gateway"} \
+		${dev:+dev "$dev"} ${metric:+ metric "$metric"}
+}
+
+add_route6() {
+	local config="$1"
+
+	# is this route intended for the
+	# $INTERFACE of this hotplug event
+	config_get interface "$config" interface
+	[ "$interface" != "$INTERFACE" ] && return 0
+	
+	# get the real interface name from network config
+	config_get dev "$interface" ifname
+
+	config_get target "$config" target
+	config_get gateway "$config" gateway
+	config_get metric "$config" metric
+
+	# make sure there is a gateway and a target
+	[ -n "$target" ] || {
+		echo "Missing target in route section $config"
+		return 1
+	}
+	[ -n "$gateway" ] || {
+		config_get gateway "$interface" gateway
+	}
+
+	/sbin/route -A inet6 add $target ${gateway:+gw "$gateway"} \
+		${dev:+dev "$dev"} ${metric:+ metric "$metric"}
+}
+
+case "$ACTION" in
+	ifup)
+		include /lib/network
+		scan_interfaces
+		config_foreach "add_route" route
+		config_foreach "add_route6" route6
+	;;
+esac

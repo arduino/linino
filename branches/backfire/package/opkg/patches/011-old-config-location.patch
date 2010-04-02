@@ -1,0 +1,14 @@
+--- a/src/opkg-cl.c
++++ b/src/opkg-cl.c
+@@ -172,7 +172,10 @@ args_parse(int argc, char *argv[])
+ 			printf("Confusion: getopt_long returned %d\n", c);
+ 		}
+ 	}
+-    
++
++	if(!conf->conf_file)
++		conf->conf_file = xstrdup("/etc/opkg.conf");
++
+ 	if (parse_err)
+ 		return parse_err;
+ 	else

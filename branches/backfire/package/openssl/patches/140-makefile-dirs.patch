@@ -1,0 +1,11 @@
+--- a/Makefile.org
++++ b/Makefile.org
+@@ -132,7 +132,7 @@ FIPSCANLIB=
+ 
+ BASEADDR=
+ 
+-DIRS=   crypto fips ssl engines apps test tools
++DIRS=   crypto fips ssl apps
+ SHLIBDIRS= crypto ssl fips
+ 
+ # dirs in crypto to build

@@ -1,0 +1,17 @@
+--- a/arch/powerpc/boot/dts/kilauea.dts
++++ b/arch/powerpc/boot/dts/kilauea.dts
+@@ -157,12 +157,8 @@
+ 						reg = <0x001e0000 0x00020000>;
+ 					};
+ 					partition@200000 {
+-						label = "root";
+-						reg = <0x00200000 0x00200000>;
+-					};
+-					partition@400000 {
+-						label = "user";
+-						reg = <0x00400000 0x03b60000>;
++						label = "rootfs";
++						reg = <0x00200000 0x03d60000>;
+ 					};
+ 					partition@3f60000 {
+ 						label = "env";
