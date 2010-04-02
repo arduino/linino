@@ -47,7 +47,7 @@ case "$ACTION" in
 					    config_get server	$cfg server
 					    cat > $config <<EOF
 service-type=$service
-server=$server
+${server:+server=$server}
 user=$username:$password
 host=$hostname
 cache-file=$cache
