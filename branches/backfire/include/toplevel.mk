@@ -6,7 +6,7 @@
 # See /LICENSE for more information.
 #
 
-RELEASE:=Kamikaze
+RELEASE:=Backfire
 SHELL:=/usr/bin/env bash
 PREP_MK= OPENWRT_BUILD= QUIET=0
 
