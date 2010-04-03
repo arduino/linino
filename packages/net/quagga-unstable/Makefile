@@ -33,6 +33,7 @@ define Package/quagga-unstable/Default
   DEPENDS:=quagga-unstable
   TITLE:=The Quagga Software Routing Suite
   URL:=http://www.quagga.net
+  MAINTAINER:=Vasilis Tsiligiannis <b_tsiligiannis@silverton.gr>
 endef
 
 define Package/quagga-unstable
