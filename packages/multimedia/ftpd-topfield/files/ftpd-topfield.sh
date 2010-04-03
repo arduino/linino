@@ -20,7 +20,7 @@ config_cb() {
 			case "$elpf" in
 				yes|on|enabled|1) elpf=1;;
 			esac
-			TOPFIELD_ARGS="-D ${turbo:+--turbo }${port:+-p $port }${elpf:+-E}"
+			TOPFIELD_ARGS="-D ${turbo:+--turbo }${port:+-P $port }${elpf:+-E}"
 		;;
 	esac
 }
