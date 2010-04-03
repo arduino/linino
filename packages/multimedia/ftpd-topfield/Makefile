@@ -32,7 +32,7 @@ define Package/ftpd-topfield/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/ftpd-topfield.sh $(1)/etc/init.d/ftpd-topfield
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DATA) ./files/ftpd-topfield.conf $(1)/etc/init.d/ftpd-topfield
+	$(INSTALL_DATA) ./files/ftpd-topfield.conf $(1)/etc/config/ftpd-topfield
 endef
 
 $(eval $(call BuildPackage,ftpd-topfield))
