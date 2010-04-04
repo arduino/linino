@@ -9,12 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=streamripper
 PKG_VERSION:=1.62.0
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=1a8353af3c36d56f2d8ee8552f632071
 
+PKG_INSTALL:=1
 PKG_FIXUP:=libtool
 PKG_LIBTOOL_PATHS:=. tre-0.7.2
 
@@ -35,22 +36,13 @@ endef
 
 EXTRA_CFLAGS += $(TARGET_CPPFLAGS)
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--without-ogg \
-		--with-included-argv \
-		--without-libiconv-prefix \
-		--with-included-tre \
-		--with-gnu-ld \
-	)
-endef
-
-define Build/Compile
-	$(call Build/Compile/Default,\
-               DESTDIR="$(PKG_INSTALL_DIR)" \
-               all install \
-	)
-endef
+CONFIGURE_ARGS+= \
+	--without-ogg \
+	--with-included-argv \
+	--without-included-libmad \
+	--without-libiconv-prefix \
+	--with-included-tre \
+	--with-gnu-ld \
 
 define Package/streamripper/install
 	$(INSTALL_DIR) $(1)/usr/bin
