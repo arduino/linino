@@ -7,7 +7,7 @@
 -SUBDIRS      += mousecalibration simpledecoration
 +SUBDIRS      += mousecalibration
 +
-+contains( decorations, default ) {
++!isEmpty( decorations ) {
 +	SUBDIRS	+= simpledecoration
 +}
  
