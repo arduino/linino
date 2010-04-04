@@ -158,7 +158,7 @@ CONFIGURE_ARGS+= \
 	$(call CONFIGURE_PLUGIN,$(COLLECTD_PLUGINS_DISABLED)) \
 
 # exception: mod-ascent needs libxml2
-ifneq ($(CONFIG_PACKAGE_collectd-mod-netlink),)
+ifneq ($(CONFIG_PACKAGE_collectd-mod-ascent),)
   CONFIGURE_VARS+= \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/libxml2"
 endif
@@ -241,14 +241,14 @@ $(eval $(call BuildPlugin,exec,process exec input,exec,))
 $(eval $(call BuildPlugin,filecount,file count input,filecount,))
 $(eval $(call BuildPlugin,fscache,file-system based caching framework input,fscache,))
 $(eval $(call BuildPlugin,interface,network interfaces input,interface,))
-$(eval $(call BuildPlugin,iptables,iptables status input,iptables,+iptables))
+$(eval $(call BuildPlugin,iptables,iptables status input,iptables,+iptables @(!LINUX_2_4||BROKEN)))
 $(eval $(call BuildPlugin,irq,interrupt usage input,irq,))
 $(eval $(call BuildPlugin,load,system load input,load,))
 $(eval $(call BuildPlugin,logfile,log files output,logfile,))
 $(eval $(call BuildPlugin,madwifi,MadWifi status input,madwifi,))
 $(eval $(call BuildPlugin,mysql,MySQL status input,mysql,+libmysqlclient))
 $(eval $(call BuildPlugin,memory,physical memory usage input,memory,))
-$(eval $(call BuildPlugin,netlink,netlink input,netlink,+ip))
+$(eval $(call BuildPlugin,netlink,netlink input,netlink,+ip @(!LINUX_2_4||BROKEN)))
 $(eval $(call BuildPlugin,network,network input/output,network))
 $(eval $(call BuildPlugin,nginx,nginx status input,nginx,+libcurl))
 $(eval $(call BuildPlugin,ntpd,NTP daemon status input,ntpd,))
