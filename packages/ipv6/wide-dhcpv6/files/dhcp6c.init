@@ -109,7 +109,11 @@ start() {
 	mkdir -m 755 -p /var/etc
 	dhcp6c_write_config > $config_file
 	
-	/usr/sbin/dhcp6c -c $config_file $client_ifname
+	local debug
+	local debug_option
+	config_get_bool debug basic debug 0
+	[ $debug -eq 1 ] && debug_option="-D"
+	/usr/sbin/dhcp6c -c $config_file $debug_option $client_ifname
 	
 	sleep 3
 	ACTION=start /sbin/hotplug-call dhcp6c
