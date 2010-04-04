@@ -48,15 +48,22 @@ endef
 
 TARGET_CFLAGS += $(FPIC)
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--enable-fpm="$(FPM)" \
-		--disable-debugging \
-		--enable-speed \
-	)
-endef
+CONFIGURE_ARGS+= \
+	--enable-shared \
+	--enable-static \
+	--enable-fpm="$(FPM)" \
+	--disable-debugging \
+	--enable-speed \
+
+# XXX: configure is parsing and "optimizing" CFLAGS, adding unsupported 
+# XXX: compiler args to it (like -fforce-mem)
+# XXX: so pass an empty one to configure
+CONFIGURE_VARS+= \
+	CFLAGS="" \
+
+# XXX: and pass our own to make
+MAKE_FLAGS+= \
+	CFLAGS="$(TARGET_CFLAGS)" \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
