@@ -26,6 +26,7 @@ define Package/nano
   TITLE:=An enhanced clone of the Pico text editor
   URL:=http://www.nano-editor.org/
   SUBMENU:=Editors
+  MAINTAINER:=Bernhard Loos <bernhardloos@googlemail.com>
 endef
 
 define Package/nano/description
