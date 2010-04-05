@@ -18,6 +18,7 @@ define Package/wide-dhcpv6/Default
   SUBMENU:=wide-dhcpv6
   DEPENDS:=+kmod-ipv6 
   URL:=https://sourceforge.net/projects/wide-dhcpv6/
+  MAINTAINER:=Andrew Byrne <openwrt@andy.id.au>
 endef
 
 define Package/wide-dhcpv6-client
