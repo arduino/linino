@@ -41,6 +41,7 @@ define Package/appweb
   TITLE:=Appweb Web Server
   VERSION:=$(PKG_VERSION)
   URL:=http://www.appwebserver.org/
+  DEPENDS:=@!avr32
 endef
 
 define Package/appweb/description
