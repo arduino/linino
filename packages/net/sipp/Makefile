@@ -15,8 +15,6 @@ PKG_SOURCE:=$(PKG_NAME).$(PKG_VERSION).src.tar.gz
 PKG_SOURCE_URL:=@SF/sipp
 PKG_MD5SUM:=452a6f88f2d314dbb2f44e318a60982b
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME).svn
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/sipp
@@ -34,7 +32,12 @@ define Package/sipp/description
  methods.
 endef
 
-define Build/Compile	
+TAR_CMD:=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components 1 $(TAR_OPTIONS)
+
+define Build/Configure
+endef
+
+define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CC_linux="$(TARGET_CC)" \
@@ -43,11 +46,11 @@ define Build/Compile
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS_linux="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++" \
 		LFLAGS_linux="$(TARGET_LDFLAGS)" \
-		LIBS="-nodefaultlibs -lncurses -luClibc++ -ldl -lpthread -lm -lgcc" \
+		LIBS="-nodefaultlibs -lncurses -luClibc++ -ldl -lpthread -lm $(LIBGCC_S)" \
 		all
 endef
 
-define Package/sipp/install	
+define Package/sipp/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/sipp $(1)/usr/sbin/
 endef
