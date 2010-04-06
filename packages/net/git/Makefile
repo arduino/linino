@@ -16,6 +16,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@KERNEL/software/scm/git
 PKG_MD5SUM:=03aefaaecae7a236b88d04d1a83698d9
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/git
@@ -33,6 +35,20 @@ define Package/git/description
  with speed and efficiency.
 endef
 
+MAKE_FLAGS := \
+	CC="$(TARGET_CC)" \
+	LD="$(TARGET_CC)" \
+	CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
+	CPPFLAGS="$(TARGET_CPPFLAGS)" \
+	LDFLAGS="$(TARGET_LDFLAGS)" \
+	NO_PERL="YesPlease" \
+	NO_EXPAT="YesPlease" \
+	NO_WISH="YesPlease" \
+	NO_ICONV="YesPlease" \
+	NO_NSEC="YesPlease" \
+	NO_CURL="YesPlease" \
+	NO_TCLTK="YesPlease" \
+
 define Build/Configure
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		configure
@@ -43,39 +59,9 @@ define Build/Configure
 	);
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		LD="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
-		CPPFLAGS="$(TARGET_CPPFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		NO_PERL="YesPlease" \
-		NO_EXPAT="YesPlease" \
-		NO_WISH="YesPlease" \
-		NO_ICONV="YesPlease" \
-		NO_NSEC="YesPlease" \
-		NO_CURL="YesPlease" \
-		NO_TCLTK="YesPlease" \
-		all
-endef
-
 define Package/git/install
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(1)" \
-		CC="$(TARGET_CC)" \
-		LD="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
-		CPPFLAGS="$(TARGET_CPPFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		NO_PERL="YesPlease" \
-		NO_EXPAT="YesPlease" \
-		NO_WISH="YesPlease" \
-		NO_ICONV="YesPlease" \
-		NO_NSEC="YesPlease" \
-		NO_CURL="YesPlease" \
-		NO_TCLTK="YesPlease" \
-		install
+	$(INSTALL_DIR) $(1)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 $(eval $(call BuildPackage,git))
