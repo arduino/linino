@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aprx
-PKG_VERSION:=0.99
-PKG_RELEASE:=svn121
+PKG_REV:=121
+PKG_VERSION:=0.99_r$(PKG_REV)
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).$(PKG_RELEASE).tar.gz
-PKG_SOURCE_URL:=http://ham.zmailer.org/oh2mqk/aprx
-PKG_MD5SUM:=095ec0aa24432196002ae717593bfe5c
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION).$(PKG_RELEASE)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://repo.ham.fi/svn/aprx/trunk/
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=$(PKG_REV)
+PKG_SOURCE_PROTO:=svn
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -31,11 +32,8 @@ define Package/aprx/description
 	It then forwards appropriate packets to APRS-IS servers.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--with-embedded \
-	)
-endef
+CONFIGURE_ARGS += \
+	--with-embedded \
 
 define Package/aprx/install	
 	$(INSTALL_DIR) $(1)/etc/init.d
