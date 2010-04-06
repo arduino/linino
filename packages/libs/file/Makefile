@@ -20,50 +20,49 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/libmagic
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=+zlib
-  TITLE:=Determines file type using 'magic' numbers
+define Package/file/Default
+  TITLE:=File type determination
   URL:=ftp://ftp.astron.com/pub/file/
 endef
 
 define Package/file
+$(call package/file/Default)
   SECTION:=utils
   CATEGORY:=Utilities
+  TITLE+= utility
   DEPENDS:=+libmagic
-  TITLE:=Determines file type using 'magic' numbers
-  URL:=ftp://ftp.astron.com/pub/file/
 endef
 
-define Package/file/description
- File tests each argument in an attempt to classify it. There
- are three sets of tests, performed in this order: filesystem
- tests, magic number tests, and language tests. The first test
- that succeeds causes the file type to be printed.
-
- Starting with version 4, the file command is not much more than
- a wrapper around the "magic" library.
+define Package/libmagic
+$(call package/file/Default)
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE+= library
+  DEPENDS:=+zlib
 endef
 
-MAKE_PATH:=src
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+
+MAKE_PATH := src
 
 TARGET_CFLAGS += $(FPIC)
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--disable-rpath \
-		--without-libiconv-prefix \
-		--without-libintl-prefix \
-	)
+define Build/Compile/magic
+	( cd $(PKG_BUILD_DIR)/magic/Magdir; \
+		for f in `ls`; do \
+			cat $$$${f}; \
+		done \
+	) > $(PKG_BUILD_DIR)/magic/magic
 endef
+Hooks/Compile/Post += Build/Compile/magic
 
-define Build/Prepare
-	$(call Build/Prepare/Default)
-	chmod -R u+w $(PKG_BUILD_DIR)
+define Build/Install/magic
+	$(INSTALL_DIR) $(PKG_INSTALL_DIR)/usr/share/file
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/magic/magic $(PKG_INSTALL_DIR)/usr/share/file/
 endef
+Hooks/Install/Post += Build/Install/magic
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
@@ -72,18 +71,17 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmagic.{a,so*} $(1)/usr/lib/
 endef
 
+define Package/file/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/file $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/share/file
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/file/magic $(1)/usr/share/file/
+endef
+
 define Package/libmagic/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmagic.so.* $(1)/usr/lib/
 endef
 
-define Package/file/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_DIR) $(1)/usr/share/file
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/file $(1)/usr/bin
-	(cd $(PKG_BUILD_DIR)/magic/Magdir; rm -f magic.mime; for file in `ls`; do cat $$$${file} >> magic.mime; done)
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/magic/Magdir/magic.mime $(1)/usr/share/file/magic
-endef
-
-$(eval $(call BuildPackage,libmagic))
 $(eval $(call BuildPackage,file))
+$(eval $(call BuildPackage,libmagic))
