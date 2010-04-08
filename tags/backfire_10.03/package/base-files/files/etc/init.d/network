@@ -1,0 +1,35 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+START=40
+STOP=90
+
+boot() {
+	setup_switch() { return 0; }
+
+	include /lib/network
+	setup_switch
+	grep -qs config /etc/config/wireless && {
+		/sbin/wifi up
+	} || {
+		rm -f /etc/config/wireless
+		/sbin/wifi detect > /etc/config/wireless
+	}
+}
+
+start() {
+	setup_switch() { return 0; }
+	
+	include /lib/network
+	setup_switch
+	ifup -a
+	/sbin/wifi up
+}
+
+stop() {
+	ifdown -a
+}
+
+restart() {
+	start
+}

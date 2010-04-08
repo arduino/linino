@@ -1,0 +1,157 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006 Carlos Sobrinho
+
+NAME=dropbear
+PROG=/usr/sbin/dropbear
+START=50
+STOP=50
+PIDCOUNT=0
+EXTRA_COMMANDS="killclients"
+EXTRA_HELP="	killclients Kill ${NAME} processes except servers and yourself"
+
+dropbear_start()
+{
+	local section="$1"
+
+	# check if section is enabled (default)
+	local enabled
+	config_get_bool enabled "${section}" enable 1
+	[ "${enabled}" -eq 0 ] && return 1
+
+	# verbose parameter
+	local verbosed
+	config_get_bool verbosed "${section}" verbose 0
+
+	# increase pid file count to handle multiple instances correctly
+	PIDCOUNT="$(( ${PIDCOUNT} + 1))"
+
+	# prepare parameters
+	# A) password authentication
+	local nopasswd
+	local passauth
+	config_get_bool passauth "${section}" PasswordAuth 1
+	[ "${passauth}" -eq 0 ] && nopasswd=1
+	# B) listen port
+	local port
+	config_get port "${section}" Port
+	# C) banner file
+	local bannerfile
+	config_get bannerfile "${section}" BannerFile
+	[ -f "$bannerfile" ] || bannerfile=''
+	# D) gatewayports
+	local gatewayports
+	config_get_bool gatewayports "${section}" GatewayPorts 0
+	[ "${gatewayports}" -eq 1 ] || gatewayports=''
+	# E) root password authentication
+	local norootpasswd
+	local rootpassauth
+	config_get_bool rootpassauth "${section}" RootPasswordAuth 1
+	[ "${rootpassauth}" -eq 0 ] && norootpasswd=1
+	# concatenate parameters
+	local args
+	args="${nopasswd:+-s }${norootpasswd:+-g }${port:+-p ${port} }${bannerfile:+-b $bannerfile }${gatewayports:+-a }-P /var/run/${NAME}.${PIDCOUNT}.pid"
+
+	# execute program and return its exit code
+	[ "${verbosed}" -ne 0 ] && echo "${initscript}: section ${section} starting ${PROG} ${args}"
+	${PROG} ${args}
+	return $?
+}
+
+keygen()
+{
+	for keytype in rsa dss; do
+		# check for keys
+		key=dropbear/dropbear_${keytype}_host_key
+		[ -f /tmp/$key -o -s /etc/$key ] || {
+			# generate missing keys
+			mkdir -p /tmp/dropbear
+			[ -x /usr/bin/dropbearkey ] && {
+				/usr/bin/dropbearkey -t $keytype -f /tmp/$key 2>&- >&- && exec /etc/rc.common "$initscript" start
+			} &
+		exit 0
+		}
+	done
+
+	lock /tmp/.switch2jffs
+	mkdir -p /etc/dropbear
+	mv /tmp/dropbear/dropbear_* /etc/dropbear/
+	lock -u /tmp/.switch2jffs
+	chown root /etc/dropbear
+	chmod 0700 /etc/dropbear
+}
+
+start()
+{
+	[ -s /etc/dropbear/dropbear_rsa_host_key -a \
+	  -s /etc/dropbear/dropbear_dss_host_key ] || keygen
+
+	config_load "${NAME}"
+	config_foreach dropbear_start dropbear
+}
+
+stop()
+{
+	# killing all server processes
+	local pidfile
+	for pidfile in `ls /var/run/${NAME}.*.pid`
+	 do
+		start-stop-daemon -q -K -s KILL -p "${pidfile}" -n "${NAME}"
+		rm -f "${pidfile}"
+	done
+	[ -z "${pidfile}" ] && echo "${initscript}: no pid files, if you get problems with start then try killclients"
+}
+
+killclients()
+{
+	local ignore=''
+	local server
+	local pid
+
+	# if this script is run from inside a client session, then ignore that session
+	pid="$$"
+	while [ "${pid}" -ne 0 ]
+	 do
+		# get parent process id
+		pid=`cut -d ' ' -f 4 "/proc/${pid}/stat"`
+		[ "${pid}" -eq 0 ] && break
+
+		# check if client connection
+		grep -F -q -e "${PROG}" "/proc/${pid}/cmdline" && {
+			append ignore "${pid}"
+			break
+		}
+	done
+
+	# get all server pids that should be ignored
+	for server in `cat /var/run/${NAME}.*.pid`
+	 do
+		append ignore "${server}"
+	done
+
+	# get all running pids and kill client connections
+	local skip
+	for pid in `pidof "${NAME}"`
+	 do
+		# check if correct program, otherwise process next pid
+		grep -F -q -e "${PROG}" "/proc/${pid}/cmdline" || {
+			continue
+		}
+
+		# check if pid should be ignored (servers, ourself)
+		skip=0
+		for server in ${ignore}
+		 do
+			if [ "${pid}" == "${server}" ]
+			 then
+				skip=1
+				break
+			fi
+		done
+		[ "${skip}" -ne 0 ] && continue
+
+		# kill process
+		echo "${initscript}: Killing ${pid}..."
+		kill -KILL ${pid}
+	done
+}

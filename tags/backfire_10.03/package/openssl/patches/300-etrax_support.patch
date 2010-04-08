@@ -1,0 +1,13 @@
+--- a/Configure
++++ b/Configure
+@@ -403,6 +403,10 @@ my %table=(
+ "QNX6",       "gcc:-DTERMIOS::::-lsocket::${no_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+ "QNX6-i386",  "gcc:-DL_ENDIAN -DTERMIOS -O2 -Wall::::-lsocket:${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:bsd-gcc-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+ 
++# cris
++"linux-cris",	"\$(TARGET_CC):-DL_ENDIAN -DTERMIO -fomit-frame-pointer::-D_REENTRANT::-ldl:BN_LLONG THIRTY_TWO_BIT RC4_CHAR::::::::::::dlfcn:linux-shared:-fpic::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)::",
++
++
+ #### SCO/Caldera targets.
+ #
+ # Originally we had like unixware-*, unixware-*-pentium, unixware-*-p6, etc.

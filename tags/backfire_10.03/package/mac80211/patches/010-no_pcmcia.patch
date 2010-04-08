@@ -1,0 +1,29 @@
+--- a/config.mk
++++ b/config.mk
+@@ -8,7 +8,7 @@ ifeq ($(wildcard $(KLIB_BUILD)/.config),
+ # These will be ignored by compat autoconf
+  CONFIG_PCI=y
+  CONFIG_USB=y
+- CONFIG_PCMCIA=y
++# CONFIG_PCMCIA=y
+  CONFIG_SSB=m
+ else
+ include $(KLIB_BUILD)/.config
+@@ -194,7 +194,7 @@ CONFIG_B43=m
+ CONFIG_B43_HWRNG=y
+ CONFIG_B43_PCI_AUTOSELECT=y
+ ifneq ($(CONFIG_PCMCIA),)
+-CONFIG_B43_PCMCIA=y
++# CONFIG_B43_PCMCIA=y
+ endif
+ CONFIG_B43_LEDS=y
+ CONFIG_B43_PHY_LP=y
+@@ -246,7 +246,7 @@ CONFIG_SSB_BLOCKIO=y
+ CONFIG_SSB_PCIHOST=y
+ CONFIG_SSB_B43_PCI_BRIDGE=y
+ ifneq ($(CONFIG_PCMCIA),)
+-CONFIG_SSB_PCMCIAHOST=y
++# CONFIG_SSB_PCMCIAHOST=y
+ endif
+ # CONFIG_SSB_DEBUG=y
+ CONFIG_SSB_DRIVER_PCICORE=y
