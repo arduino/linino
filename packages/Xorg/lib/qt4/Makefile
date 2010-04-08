@@ -261,7 +261,7 @@ define Build/Configure
 			-$(if $(CONFIG_PACKAGE_qt4-glib),glib,no-glib) \
 			-$(if $(CONFIG_PACKAGE_qt4-qt3support),qt3support,no-qt3support) \
 			-$(if $(CONFIG_FEATURE_drawing-backend_DirectFB),qt-gfx-directfb,) \
-			-no-gfx-linuxfb \
+			-qt-gfx-linuxfb \
 			-no-gfx-multiscreen \
 	)
 endef
