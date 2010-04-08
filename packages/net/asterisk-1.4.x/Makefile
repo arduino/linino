@@ -61,7 +61,7 @@ endef
 define Package/asterisk14-mini
 $(call Package/asterisk14/Default)
   TITLE:=Minimal open source PBX
-  DEPENDS:=+libncurses +libpthread @!TARGET_avr32
+  DEPENDS:=+libncurses +libpopt +libpthread @!TARGET_avr32
 endef
 
 define Package/asterisk14-mini/description
