@@ -79,7 +79,7 @@ CONFIGURE_ARGS+= \
 	--disable-video-photon \
 	--disable-video-carbon \
 	--disable-video-cocoa \
-	--disable-video-fbcon \
+	--enable-video-fbcon \
 	--enable-video-directfb \
 	--disable-video-ps2gs \
 	--disable-video-ps3 \
