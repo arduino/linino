@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=stress
-PKG_VERSION:=1.0.3
+PKG_VERSION:=1.0.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://weather.ou.edu/~apw/projects/stress
-PKG_MD5SUM:=48486b13a9baddc6b7e005bd0562bc49
+PKG_MD5SUM:=a607afa695a511765b40993a64c6e2f4
 
 PKG_INSTALL:=1
 
@@ -28,8 +28,8 @@ define Package/stress
 endef
 
 define Package/stress/description
-	stress is a simple tool that imposes certain types of compute \	stress
-	on UNIX-like operating systems.
+stress is a simple tool that imposes certain types of compute \ stress on
+UNIX-like operating systems.
 endef
 
 CONFIGURE_ARGS += \
