@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=darkstat
-PKG_VERSION:=3.0.712
+PKG_VERSION:=3.0.713
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://dmr.ath.cx/net/darkstat
-PKG_MD5SUM:=b711f64319091d6948a05bc33a4954b3
+PKG_MD5SUM:=3fd2a4ddb123ad11bb99f1094a6206d9
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -21,14 +23,14 @@ define Package/darkstat
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libpcap +zlib
-  TITLE:=Network bandwith monitor
+  TITLE:=Network bandwidth monitor
   URL:=http://dmr.ath.cx/net/darkstat/
 endef
 
 define Package/darkstat/description
-	darkstat is a packet sniffer that runs as a background process on a
-	cable/DSL router, gathers all sorts of statistics about network usage,
-	and serves them over HTTP.
+darkstat is a packet sniffer that runs as a background process on a cable/DSL
+router, gathers all sorts of statistics about network usage, and serves them
+over HTTP.
 endef
 
 define Package/darkstat/conffiles
@@ -36,14 +38,12 @@ define Package/darkstat/conffiles
 endef
 
 CONFIGURE_ARGS += \
-	--with-chroot-dir /var/empty
+	--with-chroot-dir=/var/empty
 
 define Build/Compile
 	$(HOSTCC) $(PKG_BUILD_DIR)/static/c-ify.c \
 		-o $(PKG_BUILD_DIR)/c-ify
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+	$(call Build/Compile/Default)
 endef
 
 define Package/darkstat/install
