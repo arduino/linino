@@ -8,8 +8,8 @@ PIDFILE="/var/run/afpd.pid"
 
 start()
 {
-	/usr/bin/cnid_metad
-	/usr/bin/afpd -F ${CONFIGFILE} -P ${PIDFILE} -c ${MAXCONS}
+	/usr/sbin/cnid_metad
+	/usr/sbin/afpd -F ${CONFIGFILE} -P ${PIDFILE} -c ${MAXCONS}
 }
 
 stop()
