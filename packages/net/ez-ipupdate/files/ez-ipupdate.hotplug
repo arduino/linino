@@ -25,7 +25,7 @@ case "$ACTION" in
 
 		    config_get pidfile $cfg pidfile
 		    pidfile=${pidfile:-/var/run/$NAME-$service-$dev.pid}
-			    
+
 		    case "$ACTION" in
 			ifdown)
 			    cleanup $pidfile
@@ -36,7 +36,7 @@ case "$ACTION" in
 				    [ ! -e $pidfile ] && {
 					config_get cache $cfg cache
 					[ -z "$cache" ] && cache=/tmp/$NAME-$service-$dev.cache
-					
+
 					config_get config $cfg config
 					[ -z "$config" ] && {
 					    config=/var/run/$NAME-$service-$dev.conf
@@ -45,9 +45,13 @@ case "$ACTION" in
 					    config_get hostname $cfg hostname
 					    service=${service:-"dyndns"}
 					    config_get server	$cfg server
+					    server_line=""
+					    [ -n "$server" ] && {
+						server_line="server=$server"
+					    }
 					    cat > $config <<EOF
 service-type=$service
-${server:+server=$server}
+$server_line
 user=$username:$password
 host=$hostname
 cache-file=$cache
@@ -56,7 +60,7 @@ interface=$dev
 quiet
 EOF
 					}
-					
+
 					$COMMAND -c $config 2>&1 | logger -t $NAME &
 				    }
 				    ;;
@@ -68,12 +72,12 @@ EOF
 		}
 	    }
 	}
-	
-	
+
+
 	include /lib/network
 	scan_interfaces
 	config_load ddns
-	
+
 	config_foreach ddns ddns
 	;;
 esac
