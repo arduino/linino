@@ -12,7 +12,7 @@ PKG_VERSION:=0.93pre2
 PKG_RELEASE:=2
 
 PKG_SOURCE:=NoCatSplash-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://wifi.rulez.org/~josephus/
+PKG_SOURCE_URL:=http://nocat.net/downloads/NoCatSplash/
 PKG_MD5SUM:=b0aa5cc33a3bbdd8e65726ff3cfe3cd1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/NoCatSplash-$(PKG_VERSION)
