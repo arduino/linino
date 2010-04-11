@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lcd4linux
-PKG_REV:=1037
+PKG_REV:=1116
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -102,6 +102,7 @@ LCD4LINUX_PLUGINS:= \
 	file \
 	gps \
 	hddtemp \
+	huawei \
 	i2c_sensors \
 	iconv \
 	imon \

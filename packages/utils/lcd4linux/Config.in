@@ -208,6 +208,10 @@ config LCD4LINUX_PLUGIN_hddtemp
 	bool
 	prompt "hddtemp"
 
+config LCD4LINUX_PLUGIN_huawei
+	bool
+	prompt "huawei"
+
 config LCD4LINUX_PLUGIN_i2c_sensors
 	bool
 	prompt "i2c_sensors"
