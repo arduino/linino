@@ -1,0 +1,11 @@
+--- e169/Makefile.orig	2009-06-23 09:39:38.000000000 +0200
++++ e169/Makefile	2010-04-05 22:57:56.000000000 +0200
+@@ -1,7 +1,7 @@
+ all: e169-stats
+ 
+ e169-stats: e169-stats.c
+-	gcc -Wall -o e169-stats e169-stats.c -lcurses
++	$(CC) -Wall -o e169-stats e169-stats.c -lcurses -I$(STAGING_DIR)/usr/include -L$(STAGING_DIR)/usr/lib
+ 
+ clean:
+ 	-rm e169-stats *.core
