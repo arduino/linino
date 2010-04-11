@@ -31,6 +31,9 @@
 # (e.g. "eth1") and whatever the current ip of this interface is
 # will be associated with the domain when an update is performed.
 #
+# If "ip_source" is "script" you specify a script to obtain ip address.
+# The "ip_script" option should contain path to your script.
+#
 # The last possibility is that "ip_source" is "web", which means
 # that in order to obtain our ip address we will connect to a 
 # website, and the first valid ip address listed on that page
@@ -76,6 +79,9 @@ config service "myddns"
 
 	#option ip_source	"interface"
 	#option ip_interface	"eth0.1"
+
+	#option ip_source	"script"
+	#option	ip_script	"path to your scrip"
 
 	#option ip_source	"web"
 	#option ip_url		"http://www.whatismyip.com/automation/n09230945.asp"

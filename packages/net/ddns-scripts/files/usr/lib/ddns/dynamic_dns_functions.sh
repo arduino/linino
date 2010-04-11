@@ -53,7 +53,7 @@ get_current_ip()
 {
 
 	#if ip source is not defined, assume we want to get ip from wan 
-	if [ "$ip_source" != "interface" ] && [ "$ip_source" != "web" ]
+	if [ "$ip_source" != "interface" ] && [ "$ip_source" != "web" ] && [ "$ip_source" != "script" ]
 	then
 		ip_source="network"
 		ip_network="wan"
@@ -74,6 +74,10 @@ get_current_ip()
 	if [ "$ip_source" = "network" ] || [ "$ip_source" = "interface" ]
 	then
 		current_ip=$(ifconfig $ip_interface | grep -o 'inet addr:[0-9.]*' | grep -o "$ip_regex")
+	elif [ "$ip_source" = "script" ]
+	then
+		# get ip from script
+		current_ip=$($ip_script)
 	else
 		# get ip from web
 		# we check each url in order in ip_url variable, and if no ips are found we use dyndns ip checker
