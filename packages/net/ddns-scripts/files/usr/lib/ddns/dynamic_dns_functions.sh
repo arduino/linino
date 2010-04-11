@@ -28,7 +28,7 @@ load_all_config_options()
 	# after we're done with it.  For reference
 	# the $1 variable is the name of the option
 	# and $2 is the name of the section
-	config_cb() 
+	config_cb()
 	{
 		if [ ."$2" = ."$section_id" ]; then
 			option_cb()
@@ -89,7 +89,7 @@ get_current_ip()
 				current_ip=$(echo $( wget -O - $addr 2>/dev/null) | grep -o "$ip_regex")
 			fi
 		done
-		
+
 		#here we hard-code the dyndns checkip url in case no url was specified
 		if [ -z "$current_ip" ]
 		then
@@ -120,6 +120,6 @@ start_daemon_for_all_ddns_sections()
 
 	for section in $SECTIONS
 	do
-		/usr/lib/ddns/dynamic_dns_updater.sh $section 0&
+		/usr/lib/ddns/dynamic_dns_updater.sh $section 0 > /dev/null 2>&1 &
 	done
 }
