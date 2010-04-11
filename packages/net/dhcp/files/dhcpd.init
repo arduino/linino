@@ -6,6 +6,11 @@ config_file=/etc/dhcpd.conf
 pid_file=/var/run/dhcpd.pid
 
 start() {
+	if [ -e $pid_file ] ; then
+            echo "  dhcpd already running with PID `cat $pid_file`"
+    	    return 1
+        fi
+
 	echo Starting isc-dhcpd
 
 	if [ ! -e $lease_file ]; then
@@ -23,14 +28,14 @@ start() {
 stop() {
 	echo "Stopping isc-dhcpd"
 	if [ -e $pid_file ]; then
-		kill `cat $pid_file`
+		kill -KILL `cat $pid_file`
 
 		if [ $? -ne 0 ]; then
 			echo "  PID " `cat $pid_file` not found
 			echo "  Is the DHCP server running?"
 		fi
 	
-		rm $pid_file
+		rm -f $pid_file
 	else
 		echo "  $pid_file not found"
 	fi
