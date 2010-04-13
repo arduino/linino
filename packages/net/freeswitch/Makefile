@@ -1,5 +1,4 @@
-#
-# Copyright (C) 2009 OpenWrt.org
+# (C) 2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +7,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeswitch
-PKG_VERSION:=1.0.4
+PKG_VERSION:=1.0.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_URL:=http://files.freeswitch.org/
-PKG_MD5SUM:=86e34bdd8cc027d71772cb0dc51388da
+PKG_MD5SUM:=388effee587887a81fe7f411b7350590
 
 PKG_FIXUP:=libtool
 
@@ -21,9 +21,11 @@ FS_MOD_AVAILABLE:= \
 	alsa \
 	amr \
 	amrwb \
+	bv \
 	cdr-csv \
 	celt \
 	cepstral \
+	cidlookup \
 	cluechoo \
 	commands \
 	conference \
@@ -34,6 +36,8 @@ FS_MOD_AVAILABLE:= \
 	dialplan-directory \
 	dialplan-xml \
 	dingaling \
+	directory \
+	distributor \
 	dptools \
 	easyroute \
 	enum \
@@ -50,6 +54,7 @@ FS_MOD_AVAILABLE:= \
 	g723-1 \
 	g729 \
 	h26x \
+	h323 \
 	iax \
 	ilbc \
 	lcr \
@@ -59,6 +64,7 @@ FS_MOD_AVAILABLE:= \
 	logfile \
 	loopback \
 	lua \
+	managed \
 	memcache \
 	native-file \
 	nibblebill \
@@ -67,6 +73,7 @@ FS_MOD_AVAILABLE:= \
 	perl \
 	pocketsphinx \
 	portaudio \
+	portaudio-stream \
 	python \
 	radius-cdr \
 	rss \
@@ -77,10 +84,17 @@ FS_MOD_AVAILABLE:= \
 	say-it \
 	say-nl \
 	say-ru \
+	say-th \
 	say-zh \
+	shell-stream \
 	shout \
+	silk \
 	siren \
-	skypiax \
+	skinny \
+	skypopen \
+	sangoma-codec \
+	snapshot \
+	snipe-hunt \
 	sndfile \
 	snom \
 	sofia \
@@ -93,9 +107,11 @@ FS_MOD_AVAILABLE:= \
 	spidermonkey-socket \
 	spidermonkey-teletone \
 	spy \
+	stress \
 	syslog \
 	tone-stream \
 	unimrcp \
+	valet-parking \
 	vmd \
 	voicemail \
 	voipcodecs \
@@ -120,7 +136,7 @@ endef
 define Package/freeswitch
 $(call Package/freeswitch/Default)
   TITLE:=FreeSWITCH open source telephony platform
-  DEPENDS:=+libopenssl +libreadline +libncurses +libpthread +libstdcpp
+  DEPENDS:= +libopenssl +libreadline +libncurses +libpthread +libstdcpp
   MENU:=1
 endef
 
@@ -131,10 +147,11 @@ define Package/freeswitch/description
 endef
 
 
+
 define Package/freeswitch-default
 $(call Package/freeswitch/Default)
   TITLE:=FreeSWITCH default config
-  DEPENDS:=freeswitch \
+  DEPENDS:= freeswitch \
 		+freeswitch-mod-commands \
 		+freeswitch-mod-conference \
 		+freeswitch-mod-console \
@@ -160,7 +177,7 @@ endef
 define Package/freeswitch-minimal
 $(call Package/freeswitch/Default)
   TITLE:=FreeSWITCH minimal config
-  DEPENDS:=freeswitch \
+  DEPENDS:= freeswitch \
 		+freeswitch-mod-commands \
 		+freeswitch-mod-console \
 		+freeswitch-mod-curl \
@@ -176,21 +193,21 @@ endef
 define Package/freeswitch-sounds-en
 $(call Package/freeswitch/Default)
   TITLE:=FreeSWITCH english sounds
-  DEPENDS:=freeswitch
+  DEPENDS:= freeswitch
 endef
 
 
 define Package/freeswitch-sounds-moh
 $(call Package/freeswitch/Default)
   TITLE:=FreeSWITCH music-on-hold sounds
-  DEPENDS:=freeswitch
+  DEPENDS:= freeswitch
 endef
 
 
 define Package/freeswitch-tools
 $(call Package/freeswitch/Default)
   TITLE:=FreeSWITCH control tools
-  DEPENDS:=freeswitch
+  DEPENDS:= freeswitch
 endef
 
 
@@ -217,7 +234,7 @@ ifneq ($(CONFIG_PACKAGE_freeswitch-mod-curl),)
 endif
 
 ifneq ($(CONFIG_PACKAGE_freeswitch-mod-flite),)
- $(eval $(call Download/files,flite,flite-1.3.99-latest.tar.gz,,downloads/libs/,libs/))
+ $(eval $(call Download/files,flite,flite-1.3.99.tar.gz,,downloads/libs/,libs/))
 endif
 
 ifneq ($(CONFIG_PACKAGE_freeswitch-sounds-en),)
@@ -230,6 +247,15 @@ ifneq ($(CONFIG_PACKAGE_freeswitch-sounds-moh),)
 	MAKE_INSTALL_TARGETS+= moh-install
 endif
 
+FS_TARGET_CFLAGS = ${TARGET_CFLAGS} -DLUA_USE_LINUX $(FPIC) -std=gnu99
+FS_TARGET_CXXFLAGS = ${TARGET_CXXFLAGS} -DLUA_USE_LINUX $(FPIC)
+FS_TARGET_CPPFLAGS = -I. -I./lua ${TARGET_CPPFLAGS}
+
+ifneq ($(CONFIG_USE_EGLIBC),)
+  ifeq ($(CONFIG_EGLIBC_OPTION_EGLIBC_UTMP),)
+    TARGET_CFLAGS += -DNO_GETLOGIN
+  endif
+endif
 
 CONFIGURE_ARGS+= \
 	--prefix="/usr/freeswitch" \
@@ -244,24 +270,29 @@ CONFIGURE_ARGS+= \
 	--with-random="/dev/urandom" \
 	--without-erlang \
 	--without-java \
-	--without-odbc \
 	--without-mysql \
 	--without-pgsql \
 	--without-python \
 	--disable-zrtp \
 
 CONFIGURE_VARS+= \
-	config_BUILD_CC="$(HOSTCC)" \
-	config_BUILD_CFLAGS="$(HOST_CFLAGS)" \
-	config_TARGET_CC="$(TARGET_CC)" \
-	config_TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-	config_TARGET_READLINE_INC="$(TARGET_CPPFLAGS)" \
-	config_TARGET_READLINE_LIBS="$(TARGET_LDFLAGS) -lreadline -lncurses" \
-	config_TARGET_LIBS="$(TARGET_LDFLAGS) -lpthread" \
-	CC_FOR_BUILD="$(HOSTCC)" \
-	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
-	LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
-	LDFLAGS="$(TARGET_LDFLAGS) -Wl,-rpath-link=\"$(STAGING_DIR)/usr/lib\"" \
+	config_TARGET_CC="${TARGET_CC}" \
+	config_TARGET_CFLAGS="${FS_TARGET_CPPFLAGS} ${FS_TARGET_CFLAGS}" \
+	config_TARGET_CXX="${TARGET_CXX}" \
+	config_TARGET_CXXFLAGS="${FS_TARGET_CPPFLAGS} ${FS_TARGET_CXXFLAGS}" \
+	config_TARGET_CPPFLAGS="${FS_TARGET_CPPFLAGS}" \
+	config_BUILD_CC="${HOSTCC}" \
+	config_TARGET_READLINE_INC="${FS_TARGET_CPPFLAGS}" \
+	config_TARGET_READLINE_LIBS="${TARGET_LDFLAGS} -lreadline -lncurses" \
+	config_TARGET_LIBS="${TARGET_LDFLAGS} -lpthread" \
+	CC_FOR_BUILD="${HOSTCC}" \
+	LDFLAGS_FOR_BUILD="${HOST_LDFLAGS}" \
+	CC="${TARGET_CC}" \
+	CXX="${TARGET_CXX}" \
+	CFLAGS="${FS_TARGET_CPPFLAGS} ${FS_TARGET_CFLAGS}" \
+	CXXFLAGS="${FS_TARGET_CPPFLAGS} ${FS_TARGET_CXXFLAGS}" \
+	CPPFLAGS="${FS_TARGET_CPPFLAGS}" \
+	LDFLAGS="${TARGET_LDFLAGS} -Wl,-rpath-link=\"${STAGING_DIR}/usr/lib\"" \
 	ac_cv_dev_urandom="yes" \
 	ac_cv_file_dbd_apr_dbd_mysql_c="no" \
 	ac_cv_file__dev_random="no" \
@@ -270,11 +301,13 @@ CONFIGURE_VARS+= \
 	ac_cv_func_mmap_fixed_mapped="yes" \
 	ac_cv_func_pthread_rwlock_init="yes" \
 	ac_cv_struct_rlimit="yes" \
+	ac_cv_func_setpgrp_void="yes" \
 	apr_cv_mutex_recursive="yes" \
 	apr_cv_process_shared_works="no" \
 	apr_cv_tcp_nodelay_with_cork="yes" \
 	apr_cv_type_rwlock_t="yes" \
 	ac_cv_path_LIBGNUTLS_CONFIG="no" \
+
 
 define Build/Prepare
 $(call Build/Prepare/Default)
@@ -286,7 +319,6 @@ $(call Build/Prepare/Default)
 endef
 
 define Build/Configure
-	( cd $(PKG_BUILD_DIR); ./rebootstrap.sh; )
 $(call Build/Configure/Default)
 	$(foreach m,$(FS_MOD_AVAILABLE),
 		$(if $(CONFIG_PACKAGE_freeswitch-mod-$(m)),
@@ -321,6 +353,10 @@ define Package/freeswitch/install
 	$(INSTALL_DATA) ./files/freeswitch.default $(1)/etc/default/freeswitch
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/freeswitch.init $(1)/etc/init.d/freeswitch
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
+	$(INSTALL_DATA) ./files/freeswitch.hotplug $(1)/etc/hotplug.d/iface/90-freeswitch
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/freeswitch.config $(1)/etc/config/freeswitch
 endef
 
 define Package/freeswitch-default/install
@@ -356,8 +392,8 @@ endef
 define BuildPlugin
   define Package/freeswitch-mod-$(1)
     $$(call Package/freeswitch/Default)
-    TITLE:= FS $(2) module
-    DEPENDS:=freeswitch $$(foreach m,$(4),+freeswitch-mod-$$m) $(5)
+    TITLE:= FS $(2) module (snapshot)
+    DEPENDS:= freeswitch $$(foreach m,$(4),+freeswitch-mod-$$m) $(5)
   endef
 
   define Package/freeswitch-mod-$(1)/install
@@ -383,19 +419,23 @@ $(eval $(call BuildPackage,freeswitch-tools))
 $(eval $(call BuildPlugin,alsa,Alsa endpoint,mod_alsa,,+alsa-lib))
 $(eval $(call BuildPlugin,amr,GSM-AMR codec,mod_amr,,))
 $(eval $(call BuildPlugin,amrwb,GSM-AMRWB,mod_amrwb,,))
+$(eval $(call BuildPlugin,bv,codec mod_bv,mod_bv,,))
 $(eval $(call BuildPlugin,cdr-csv,CSV-CDR handler,mod_cdr_csv,,))
-$(eval $(call BuildPlugin,celt,CELT ultra-low delay codec,mod_celt,,))
+$(eval $(call BuildPlugin,celt,CELT ultra-low delay codec,mod_celt,,+libogg))
 $(eval $(call BuildPlugin,cepstral,Cepstral interface,mod_cepstral,,@BROKEN)) # needs <swift.h>
+$(eval $(call BuildPlugin,cidlookup,applications mod_cidlookup,mod_cidlookup,,))
 $(eval $(call BuildPlugin,cluechoo,Framework Demo,mod_cluechoo,,))
 $(eval $(call BuildPlugin,commands,API commands,mod_commands,,))
 $(eval $(call BuildPlugin,conference,Conference room,mod_conference,,))
 $(eval $(call BuildPlugin,console,Console logger,mod_console,,))
-$(eval $(call BuildPlugin,curl,HTTP request,mod_curl,,))
+$(eval $(call BuildPlugin,curl,HTTP request,mod_curl,,+libcurl))
 $(eval $(call BuildPlugin,dahdi-codec,DAHDI codecs,mod_dahdi_codec,,))
 $(eval $(call BuildPlugin,dialplan-asterisk,Asterisk dialplan parser,mod_dialplan_asterisk,,))
 $(eval $(call BuildPlugin,dialplan-directory,Dialplan-Directory interface,mod_dialplan_directory,,))
 $(eval $(call BuildPlugin,dialplan-xml,Dialplan-XML interface,mod_dialplan_xml,,))
-$(eval $(call BuildPlugin,dingaling,Jabber interface,mod_dingaling,,))
+$(eval $(call BuildPlugin,dingaling,Jabber interface,mod_dingaling,,+libgnutls-openssl)) 
+$(eval $(call BuildPlugin,directory,application mod_directory,mod_directory,,))
+$(eval $(call BuildPlugin,distributor,application mod_distributor,mod_distributor,,))
 $(eval $(call BuildPlugin,dptools,Dialplan tools,mod_dptools,,))
 $(eval $(call BuildPlugin,easyroute,DID routing,mod_easyroute,,))
 $(eval $(call BuildPlugin,enum,ENUM routing,mod_enum,,))
@@ -404,7 +444,7 @@ $(eval $(call BuildPlugin,esf,Extra SIP Functionality,mod_esf,,))
 $(eval $(call BuildPlugin,event-multicast,Multicast event handler,mod_event_multicast,,))
 $(eval $(call BuildPlugin,event-socket,Socket event handler,mod_event_socket,,))
 $(eval $(call BuildPlugin,expr,Expression evaluation,mod_expr,,))
-$(eval $(call BuildPlugin,fax,Fax,mod_fax,,@BROKEN)) # fails in spandsp
+$(eval $(call BuildPlugin,fax,Fax,mod_fax,,@BROKEN +libjpeg)) # fails in spandsp
 $(eval $(call BuildPlugin,fifo,FIFO,mod_fifo,,))
 $(eval $(call BuildPlugin,file-string,File streaming,mod_file_string,,))
 $(eval $(call BuildPlugin,flite,Festival TTS,mod_flite,,))
@@ -412,7 +452,9 @@ $(eval $(call BuildPlugin,fsv,Video,mod_fsv,,))
 $(eval $(call BuildPlugin,g723-1,G.723.1 codec,mod_g723_1,,))
 $(eval $(call BuildPlugin,g729,G.729 codec,mod_g729,,))
 $(eval $(call BuildPlugin,h26x,H26X linear codec,mod_h26x,,))
+$(eval $(call BuildPlugin,h323,h323 endpoint,mod_h323,,@BROKEN)) # missing header files (other packages needed)
 $(eval $(call BuildPlugin,iax,IAX2 interface,mod_iax,,))
+$(eval $(call BuildPlugin,java,Java language interface,mod_java,,@BROKEN)) # needs java
 $(eval $(call BuildPlugin,ilbc,ILBC codec,mod_ilbc,,))
 $(eval $(call BuildPlugin,lcr,Least Cost Routing,mod_lcr,,))
 $(eval $(call BuildPlugin,ldap,LDAP interface,mod_ldap,,@BROKEN)) # fails in openldap
@@ -420,7 +462,8 @@ $(eval $(call BuildPlugin,limit,Resource limitation,mod_limit,,))
 $(eval $(call BuildPlugin,local-stream,Local streaming,mod_local_stream,,))
 $(eval $(call BuildPlugin,logfile,File logger,mod_logfile,,))
 $(eval $(call BuildPlugin,loopback,Loopback endpoint,mod_loopback,,))
-$(eval $(call BuildPlugin,lua,Lua language interface,mod_lua,,+libstdcpp)) # needs C++
+$(eval $(call BuildPlugin,lua,Lua language interface,mod_lua,,+libstdcpp))
+$(eval $(call BuildPlugin,managed,language mod_managed,mod_managed,,@BROKEN)) # needs Mono
 $(eval $(call BuildPlugin,memcache,MemCached interface,mod_memcache,,@BROKEN)) # fails in libmemcached
 $(eval $(call BuildPlugin,native-file,Native files,mod_native_file,,))
 $(eval $(call BuildPlugin,nibblebill,Billing,mod_nibblebill,,))
@@ -429,6 +472,7 @@ $(eval $(call BuildPlugin,openzap,Zaptel hardware interface,mod_openzap ozmod_an
 $(eval $(call BuildPlugin,perl,Perl language interface,mod_perl,,+perl @BROKEN)) # needs Perl
 $(eval $(call BuildPlugin,pocketsphinx,PocketSphinx SR,mod_pocketsphinx,,@BROKEN)) # fails in sphinxbase
 $(eval $(call BuildPlugin,portaudio,Local audio endpoint,mod_portaudio,,+alsa-lib))
+$(eval $(call BuildPlugin,portaudio-stream,format mod_portaudio_stream,mod_portaudio_stream,,))
 $(eval $(call BuildPlugin,python,Python language interface,mod_python,,+python @BROKEN)) # needs Python
 $(eval $(call BuildPlugin,radius-cdr,Radius-CDR interface,mod_radius_cdr,,@BROKEN)) # fails in freeradius-client
 $(eval $(call BuildPlugin,rss,RRS feeds via TTS,mod_rss,,))
@@ -439,10 +483,17 @@ $(eval $(call BuildPlugin,say-fr,French say,mod_say_fr,,))
 $(eval $(call BuildPlugin,say-it,Italian say,mod_say_it,,))
 $(eval $(call BuildPlugin,say-nl,Dutch say,mod_say_nl,,))
 $(eval $(call BuildPlugin,say-ru,Russian say,mod_say_ru,,))
+$(eval $(call BuildPlugin,say-th,mod_th say,mod_say_th,,))
 $(eval $(call BuildPlugin,say-zh,Chineese say,mod_say_zh,,))
+$(eval $(call BuildPlugin,shell-stream,,mod_shell_stream,,))
 $(eval $(call BuildPlugin,shout,MP3 and Shoutcast stream,mod_shout,,@BROKEN)) # needs Ogg/Vorbis
-$(eval $(call BuildPlugin,siren,G.722.1 codec,mod_siren,,@BROKEN)) # fails in libg722_1
-$(eval $(call BuildPlugin,skypiax,Skype compatible endpoint,mod_skypiax,,@BROKEN)) # needs <X11/Xlib.h>
+$(eval $(call BuildPlugin,silk,codec mod_silk,mod_silk,,))
+$(eval $(call BuildPlugin,siren,G.722.1 codec,mod_siren,,@BROKEN)) # fails in libg722_1 - attempts to execute cross-compiled binary on host
+$(eval $(call BuildPlugin,skinny,endpoint mod_skinny,mod_skinny,,))
+$(eval $(call BuildPlugin,skypopen,Skype compatible endpoint,mod_skypopen,,@BROKEN)) # needs <X11/Xlib.h>
+$(eval $(call BuildPlugin,sangoma-codec,codec sangoma-codec,mod_sangoma_codec,,@BROKEN)) # Untested
+$(eval $(call BuildPlugin,snapshot,application mod_snapshot,mod_snapshot,,))
+$(eval $(call BuildPlugin,snipe-hunt,application mod_snipe_hunt,mod_snipe_hunt,,))
 $(eval $(call BuildPlugin,sndfile,Multi-Format file transcoder,mod_sndfile,,))
 $(eval $(call BuildPlugin,snom,SNOM specific features,mod_snom,,))
 $(eval $(call BuildPlugin,sofia,SIP,mod_sofia,,))
@@ -455,9 +506,11 @@ $(eval $(call BuildPlugin,spidermonkey-odbc,JavaScript ODBC,mod_spidermonkey_odb
 $(eval $(call BuildPlugin,spidermonkey-socket,JavaScript socket,mod_spidermonkey_socket,,@BROKEN))
 $(eval $(call BuildPlugin,spidermonkey-teletone,JavaScript teletone,mod_spidermonkey_teletone,,@BROKEN))
 $(eval $(call BuildPlugin,spy,User spy,mod_spy,,))
+$(eval $(call BuildPlugin,stress,application mod_stress,mod_stress,,))
 $(eval $(call BuildPlugin,syslog,SysLog logger,mod_syslog,,))
 $(eval $(call BuildPlugin,tone-stream,Tone generation stream,mod_tone_stream,,))
 $(eval $(call BuildPlugin,unimrcp,MRCP interface,mod_unimrcp,,))
+$(eval $(call BuildPlugin,valet-parking,application mod_valet_parking,mod_valet_parking,,))
 $(eval $(call BuildPlugin,vmd,VoiceMail beep detection,mod_vmd,,))
 $(eval $(call BuildPlugin,voicemail,VoiceMail,mod_voicemail,,))
 $(eval $(call BuildPlugin,voipcodecs,VoIP codecs,mod_voipcodecs,,))
@@ -466,3 +519,4 @@ $(eval $(call BuildPlugin,xml-curl,XML-Curl gateway,mod_xml_curl,,+libcurl))
 $(eval $(call BuildPlugin,xml-ldap,LDAP-XML gateway,mod_xml_ldap,,@BROKEN)) # fails in openldap
 $(eval $(call BuildPlugin,xml-rpc,XML-RPC interface,mod_xml_rpc,,))
 $(eval $(call BuildPlugin,yaml,YAML dialplans,mod_yaml,,))
+

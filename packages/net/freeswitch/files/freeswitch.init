@@ -5,11 +5,16 @@ START=90
 DEFAULT=/etc/default/freeswitch
 OPTIONS=""
 
+boot() {
+	# Do nothing on boot
+	exit 0
+}
+
 start() {
 	[ -f $DEFAULT ] && . $DEFAULT
 	mkdir -p $FS_DIR_DB
 	mkdir -p $FS_DIR_LOG
-	$FS_DIR/usr/bin/freeswitch $OPTIONS -c
+	{ $FS_DIR/usr/bin/freeswitch $OPTIONS -c >$FS_DIR_LOG/console.log ; } &
 }
 
 stop() {
