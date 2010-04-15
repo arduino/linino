@@ -61,6 +61,18 @@ define Package/qt4-network
   TITLE+=(network)
 endef
 
+define Package/qt4-sqlite
+  $(call Package/qt4/Default)
+  TITLE+=(sqlite)
+  DEPENDS+=+libsqlite3
+endef
+
+define Package/qt4-mysql
+  $(call Package/qt4/Default)
+  TITLE+=(mysql)
+  DEPENDS+=+libmysqlclient
+endef
+
 #define Package/qt4-multimedia
 #  $(call Package/qt4/Default)
 #  TITLE+=(multimedia)
@@ -222,6 +234,8 @@ define Build/Configure
 			-system-libjpeg \
 			-system-freetype \
 			-system-sqlite \
+			$(if $(CONFIG_PACKAGE_qt4-sqlite),-plugin-sql-sqlite,) \
+			$(if $(CONFIG_PACKAGE_qt4-mysql),-plugin-sql-mysql,) \
 			-no-decoration-styled \
 			-no-decoration-windows \
 			-no-decoration-default \
@@ -387,6 +401,32 @@ define Package/qt4-network/install
 		$(1)/usr/lib/
 endef
 
+define Package/qt4-sqlite/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib/Qt/plugins/sqldrivers
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libQtSql.so* \
+		$(1)/usr/lib/
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/Qt/plugins/sqldrivers/libqsqlite.so \
+		$(1)/usr/lib/Qt/plugins/sqldrivers/
+endef
+
+define Package/qt4-mysql/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib/Qt/plugins/sqldrivers
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libQtSql.so* \
+		$(1)/usr/lib/
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/Qt/plugins/sqldrivers/libqsqlmysql.so \
+		$(1)/usr/lib/Qt/plugins/sqldrivers/
+endef
+
 #define Package/qt4-multimedia/install
 #	$(INSTALL_DIR) \
 #		$(1)/usr/bin
@@ -492,6 +532,8 @@ $(eval $(call BuildPackage,qt4-gui))
 $(eval $(call BuildPackage,qt4-demos))
 $(eval $(call BuildPackage,qt4-examples))
 $(eval $(call BuildPackage,qt4-network))
+$(eval $(call BuildPackage,qt4-sqlite))
+$(eval $(call BuildPackage,qt4-mysql))
 #$(eval $(call BuildPackage,qt4-multimedia))
 #$(eval $(call BuildPackage,qt4-audio-backend))
 $(eval $(call BuildPackage,qt4-phonon))
