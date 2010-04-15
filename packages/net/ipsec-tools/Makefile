@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ipsec-tools
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=@LINUX_2_6 +libopenssl
+  DEPENDS:=@LINUX_2_6 +libopenssl +kmod-ipsec
   TITLE:=IPsec management tools
   URL:=http://ipsec-tools.sourceforge.net/
 endef
