@@ -129,6 +129,7 @@ define Package/freeswitch/Default
   SECTION:=net
   CATEGORY:=Network
   URL:=http://www.freeswitch.org/
+  MAINTAINER:=Daniel Dickinson <ddickinson@vertical.com>
 endef
 
 
