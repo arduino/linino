@@ -1,0 +1,63 @@
+
+config 'multiwan' 'config'
+	option 'default_route' 'balancer'
+	option 'resolv_conf' '/tmp/resolv.conf.auto'
+
+config 'interface' 'wan'
+	option 'weight' '5'
+	option 'health_interval' '10'
+	option 'icmp_hosts' 'dns'
+	option 'timeout' '3'
+	option 'health_fail_retries' '3'
+	option 'health_recovery_retries' '5'
+	option 'failover_to' 'balancer'
+
+config 'interface' 'wan2'
+	option 'weight' '5'
+	option 'health_interval' '10'
+	option 'icmp_hosts' 'dns'
+	option 'timeout' '3'
+	option 'health_fail_retries' '3'
+	option 'health_recovery_retries' '5'
+	option 'failover_to' 'wan3'
+
+config 'interface' 'wan3'
+	option 'weight' 'disable'
+	option 'health_interval' 'disable'
+	option 'icmp_hosts' 'gateway'
+	option 'timeout' '3'
+	option 'health_fail_retries' '3'
+	option 'health_recovery_retries' '5'
+	option 'failover_to' 'disable'
+
+config 'interface' 'wan4'
+	option 'weight' '3'
+	option 'health_interval' '20'
+        option 'icmp_hosts' '208.67.222.222 208.67.220.220'
+	option 'timeout' '3'
+	option 'health_fail_retries' '3'
+	option 'health_recovery_retries' '5'
+	option 'failover_to' 'wan'
+
+config 'mwanfw'
+        option 'src' '192.168.1.0/24'
+        option 'dst' 'ftp.netlab7.com'
+        option 'proto' 'tcp'
+        option 'ports' '21'
+        option 'wanrule' 'wan4'
+
+config 'mwanfw'
+        option 'proto' 'tcp'
+        option 'ports' '21'
+        option 'wanrule' 'wan2'
+
+config 'mwanfw'
+	option 'src' '192.168.0.3'
+        option 'proto' 'icmp'
+        option 'wanrule' 'wan'
+
+config 'mwanfw'
+        option 'dst' 'www.whatismyip.com'
+        option 'wanrule' 'balancer'
+
+

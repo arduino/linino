@@ -1,0 +1,15 @@
+#!/bin/sh /etc/rc.common
+START=99
+
+start () {
+   sh /usr/bin/multiwan agent
+}
+
+stop () {
+  sh /usr/bin/multiwan stop
+}
+
+restart () {
+  sh /usr/bin/multiwan restart
+}
+  
