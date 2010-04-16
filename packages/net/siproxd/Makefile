@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=@SF/siproxd
 PKG_MD5SUM:=45e5a44803181e2bf3361d562060c904
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -31,15 +32,12 @@ define Package/siproxd/conffiles
 /etc/config/siproxd
 endef
 
-# uses GNU configure
+CONFIGURE_ARGS+= \
+	--with-libosip-prefix="$(STAGING_DIR)/usr" \
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		SUBDIRS="src scripts contrib" \
-		LIBLTDL="$(STAGING_DIR)/usr/lib/libltdl.la" \
-		all install
-endef
+MAKE_FLAGS+= \
+	SUBDIRS="src scripts contrib" \
+	LIBLTDL="$(STAGING_DIR)/usr/lib/libltdl.la" \
 
 define Package/siproxd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
