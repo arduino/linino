@@ -300,7 +300,6 @@ CONFIGURE_VARS+= \
 	ac_cv_func_mmap_fixed_mapped="yes" \
 	ac_cv_func_pthread_rwlock_init="yes" \
 	ac_cv_struct_rlimit="yes" \
-	ac_cv_func_setpgrp_void="yes" \
 	apr_cv_mutex_recursive="yes" \
 	apr_cv_process_shared_works="no" \
 	apr_cv_tcp_nodelay_with_cork="yes" \
@@ -391,7 +390,7 @@ endef
 define BuildPlugin
   define Package/freeswitch-mod-$(1)
     $$(call Package/freeswitch/Default)
-    TITLE:= FS $(2) module (snapshot)
+    TITLE:= FS $(2) module
     DEPENDS:= freeswitch $$(foreach m,$(4),+freeswitch-mod-$$m) $(5)
   endef
 
