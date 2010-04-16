@@ -14,7 +14,7 @@ start() {
 	[ -f $DEFAULT ] && . $DEFAULT
 	mkdir -p $FS_DIR_DB
 	mkdir -p $FS_DIR_LOG
-	{ $FS_DIR/usr/bin/freeswitch $OPTIONS -c >$FS_DIR_LOG/console.log ; } &
+	$FS_DIR/usr/bin/freeswitch $OPTIONS -c &
 }
 
 stop() {
