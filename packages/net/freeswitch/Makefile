@@ -55,7 +55,6 @@ FS_MOD_AVAILABLE:= \
 	g729 \
 	h26x \
 	h323 \
-	iax \
 	ilbc \
 	lcr \
 	ldap \
@@ -453,7 +452,6 @@ $(eval $(call BuildPlugin,g723-1,G.723.1 codec,mod_g723_1,,))
 $(eval $(call BuildPlugin,g729,G.729 codec,mod_g729,,))
 $(eval $(call BuildPlugin,h26x,H26X linear codec,mod_h26x,,))
 $(eval $(call BuildPlugin,h323,h323 endpoint,mod_h323,,@BROKEN)) # missing header files (other packages needed)
-$(eval $(call BuildPlugin,iax,IAX2 interface,mod_iax,,))
 $(eval $(call BuildPlugin,java,Java language interface,mod_java,,@BROKEN)) # needs java
 $(eval $(call BuildPlugin,ilbc,ILBC codec,mod_ilbc,,))
 $(eval $(call BuildPlugin,lcr,Least Cost Routing,mod_lcr,,))
