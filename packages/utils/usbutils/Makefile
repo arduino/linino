@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=usbutils
 PKG_VERSION:=0.86
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/linux-usb
@@ -29,7 +29,7 @@ endef
 
 define Package/usbutils/postinst
 #!/bin/sh
-(cd $${IPKG_INSTROOT}/usr/share; $${IPKG_INSTROOT}/usr/sbin/update-usbids.sh)
+(cd $${IPKG_INSTROOT}/usr/share; $${PKG_ROOT}/usr/sbin/update-usbids.sh)
 exit 0
 endef
 

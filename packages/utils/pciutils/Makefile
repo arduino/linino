@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pciutils
 PKG_VERSION:=3.1.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@KERNEL/software/utils/pciutils
@@ -34,7 +34,7 @@ endef
 
 define Package/pciutils/postinst
 #!/bin/sh
-(cd $${IPKG_INSTROOT}/usr/share; $${IPKG_INSTROOT}/usr/sbin/update-pciids)
+(cd $${PKG_ROOT}/usr/share; $${PKG_ROOT}/usr/sbin/update-pciids)
 exit 0
 endef
 
