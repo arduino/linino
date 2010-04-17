@@ -228,6 +228,11 @@ ifneq ($(CONFIG_LARGEFILE),y)
 	--disable-lfs
 endif
 
+ifeq ($(CONFIG_IPV6),y)
+  CONFIGURE_ARGS+= \
+	--enable-ipv6
+endif
+
 ifneq ($(SDK)$(CONFIG_PACKAGE_lighttpd-mod-webdav),)
   CONFIGURE_ARGS+= \
 	--with-webdav-locks \
