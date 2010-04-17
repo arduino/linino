@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.orgv
+# Copyright (C) 2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mini_snmpd
 PKG_VERSION:=1.0
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 
 PKG_SOURCE:=mini_snmpd.tar.gz
 PKG_SOURCE_URL:=http://members.aon.at/linuxfreak/linux/
@@ -24,17 +24,20 @@ define Package/mini-snmpd
   CATEGORY:=Network
   TITLE:=SNMP server for embedded systems
   URL:=http://members.aon.at/linuxfreak/linux/mini_snmpd.html
+  DEPENDS:=+IPV6:kmod-ipv6
 endef
 
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		OFLAGS="$(TARGET_CFLAGS) -DSYSLOG" \
-		STRIP="/bin/true" \
-		INSTALL_ROOT="$(PKG_INSTALL_DIR)" \
-		mini_snmpd install
-endef
+MAKE_FLAGS+= \
+	STRIP="/bin/true" \
+	INSTALL_ROOT="$(PKG_INSTALL_DIR)" \
+	mini_snmpd install
+
+ifeq ($(CONFIG_IPV6),y)
+MAKE_FLAGS+= OFLAGS="$(TARGET_CFLAGS) -DSYSLOG -DIPV6"
+else
+MAKE_FLAGS+= OFLAGS="$(TARGET_CFLAGS) -DSYSLOG"
+endif
 
 define Package/mini-snmpd/install
 	$(INSTALL_DIR) $(1)/usr/bin

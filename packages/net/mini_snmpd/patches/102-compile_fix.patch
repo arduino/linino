@@ -1,6 +1,6 @@
 --- a/mini_snmpd.c
 +++ b/mini_snmpd.c
-@@ -134,7 +134,7 @@
+@@ -134,7 +134,7 @@ static void handle_udp_client(void)
  	} else if (rv != g_udp_client.size) {
  		lprintf(LOG_WARNING, "could not send packet to UDP client %s:%d: "
  			"only %d of %d bytes written\n", inet_ntoa(sockaddr.sin_addr),
@@ -9,7 +9,7 @@
  	}
  #ifdef DEBUG
  	dump_packet(&g_udp_client);
-@@ -211,7 +211,7 @@
+@@ -211,7 +211,7 @@ static void handle_tcp_client_write(clie
  	} else if (rv != client->size) {
  		lprintf(LOG_WARNING, "could not send packet to TCP client %s:%d: "
  			"only %d of %d bytes written\n", inet_ntoa(sockaddr.sin_addr),
@@ -20,7 +20,7 @@
  		return;
 --- a/utils.c
 +++ b/utils.c
-@@ -106,7 +106,7 @@
+@@ -106,7 +106,7 @@ void dump_packet(const client_t *client)
  		}
  	}
  	lprintf(LOG_DEBUG, "%s %u bytes %s %s:%d (%s)\n",

@@ -1,107 +1,116 @@
+--- a/globals.c
++++ b/globals.c
+@@ -27,6 +27,9 @@
+  * Global variables
+  */
+ 
++#ifndef IPV6
++const struct in_addr inaddr_any = { INADDR_ANY };
++#endif
+ in_port_t g_udp_port = 161;
+ in_port_t g_tcp_port = 161;
+ int g_timeout = 1;
 --- a/mini_snmpd.c
 +++ b/mini_snmpd.c
-@@ -90,9 +90,10 @@
+@@ -90,9 +90,10 @@ static void handle_signal(int signo)
  
  static void handle_udp_client(void)
  {
 -	struct sockaddr_in sockaddr;
-+	struct sockaddr_in6 sockaddr;
++	struct my_sockaddr_t sockaddr;
  	socklen_t socklen;
  	int rv;
-+	char straddr[INET6_ADDRSTRLEN];
++	char straddr[my_inet_addrstrlen];
  
  	/* Read the whole UDP packet from the socket at once */
  	socklen = sizeof (sockaddr);
-@@ -105,8 +106,8 @@
+@@ -105,22 +106,23 @@ static void handle_udp_client(void)
  	}
  	g_udp_client.timestamp = time(NULL);
  	g_udp_client.sockfd = g_udp_sockfd;
 -	g_udp_client.addr = sockaddr.sin_addr.s_addr;
 -	g_udp_client.port = sockaddr.sin_port;
-+	g_udp_client.addr = sockaddr.sin6_addr;
-+	g_udp_client.port = sockaddr.sin6_port;
++	g_udp_client.addr = sockaddr.my_sin_addr;
++	g_udp_client.port = sockaddr.my_sin_port;
  	g_udp_client.size = rv;
  	g_udp_client.outgoing = 0;
  #ifdef DEBUG
-@@ -114,13 +115,14 @@
+ 	dump_packet(&g_udp_client);
  #endif
++	inet_ntop(my_af_inet, &sockaddr.my_sin_addr, straddr, sizeof(straddr));
  
  	/* Call the protocol handler which will prepare the response packet */
-+	inet_ntop(AF_INET6, &sockaddr.sin6_addr, straddr, sizeof(straddr));
  	if (snmp(&g_udp_client) == -1) {
  		lprintf(LOG_WARNING, "could not handle packet from UDP client %s:%d: %m\n",
 -			inet_ntoa(sockaddr.sin_addr), sockaddr.sin_port);
-+			straddr, sockaddr.sin6_port);
++			straddr, sockaddr.my_sin_port);
  		return;
  	} else if (g_udp_client.size == 0) {
  		lprintf(LOG_WARNING, "could not handle packet from UDP client %s:%d: ignored\n",
 -			inet_ntoa(sockaddr.sin_addr), sockaddr.sin_port);
-+			straddr, sockaddr.sin6_port);
++			straddr, sockaddr.my_sin_port);
  		return;
  	}
  	g_udp_client.outgoing = 1;
-@@ -128,13 +130,14 @@
- 	/* Send the whole UDP packet to the socket at once */
- 	rv = sendto(g_udp_sockfd, g_udp_client.packet, g_udp_client.size,
+@@ -130,11 +132,11 @@ static void handle_udp_client(void)
  		MSG_DONTWAIT, (struct sockaddr *)&sockaddr, socklen);
-+	inet_ntop(AF_INET6, &sockaddr.sin6_addr, straddr, sizeof(straddr));
  	if (rv == -1) {
  		lprintf(LOG_WARNING, "could not send packet to UDP client %s:%d: %m\n",
 -			inet_ntoa(sockaddr.sin_addr), sockaddr.sin_port);
-+			straddr, sockaddr.sin6_port);
++			straddr, sockaddr.my_sin_port);
  	} else if (rv != g_udp_client.size) {
  		lprintf(LOG_WARNING, "could not send packet to UDP client %s:%d: "
 -			"only %d of %d bytes written\n", inet_ntoa(sockaddr.sin_addr),
 -			sockaddr.sin_port, rv, (int) g_udp_client.size);
 +			"only %d of %d bytes written\n", straddr,
-+			sockaddr.sin6_port, rv, (int) g_udp_client.size);
++			sockaddr.my_sin_port, rv, (int) g_udp_client.size);
  	}
  #ifdef DEBUG
  	dump_packet(&g_udp_client);
-@@ -143,11 +146,12 @@
+@@ -143,11 +145,12 @@ static void handle_udp_client(void)
  
  static void handle_tcp_connect(void)
  {
 -	struct sockaddr_in tmp_sockaddr;
 -	struct sockaddr_in sockaddr;
-+	struct sockaddr_in6 tmp_sockaddr;
-+	struct sockaddr_in6 sockaddr;
++	struct my_sockaddr_t tmp_sockaddr;
++	struct my_sockaddr_t sockaddr;
  	socklen_t socklen;
  	client_t *client;
  	int rv;
-+	char straddr[INET6_ADDRSTRLEN];
++	char straddr[my_inet_addrstrlen];
  
  	/* Accept the new connection (remember the client's IP address and port) */
  	socklen = sizeof (sockaddr);
-@@ -168,10 +172,11 @@
+@@ -168,10 +171,11 @@ static void handle_tcp_connect(void)
  			lprintf(LOG_ERR, "could not accept TCP connection: internal error");
  			exit(EXIT_SYSCALL);
  		}
 -		tmp_sockaddr.sin_addr.s_addr = client->addr;
 -		tmp_sockaddr.sin_port = client->port;
-+		tmp_sockaddr.sin6_addr = client->addr;
-+		tmp_sockaddr.sin6_port = client->port;
-+		inet_ntop(AF_INET6, &tmp_sockaddr.sin6_addr, straddr, sizeof(straddr));
++		tmp_sockaddr.my_sin_addr = client->addr;
++		tmp_sockaddr.my_sin_port = client->port;
++		inet_ntop(my_af_inet, &tmp_sockaddr.my_sin_addr, straddr, sizeof(straddr));
  		lprintf(LOG_WARNING, "maximum number of %d clients reached, kicking out %s:%d\n",
 -			MAX_NR_CLIENTS, inet_ntoa(tmp_sockaddr.sin_addr), tmp_sockaddr.sin_port);
-+			MAX_NR_CLIENTS, straddr, tmp_sockaddr.sin6_port);
++			MAX_NR_CLIENTS, straddr, tmp_sockaddr.my_sin_port);
  		close(client->sockfd);
  	} else {
  		client = malloc(sizeof (client_t));
-@@ -183,35 +188,38 @@
+@@ -183,35 +187,38 @@ static void handle_tcp_connect(void)
  	}
  
  	/* Now fill out the client control structure values */
-+	inet_ntop(AF_INET6, &sockaddr.sin6_addr, straddr, sizeof(straddr));
++	inet_ntop(my_af_inet, &sockaddr.my_sin_addr, straddr, sizeof(straddr));
  	lprintf(LOG_DEBUG, "connected TCP client %s:%d\n",
 -		inet_ntoa(sockaddr.sin_addr), sockaddr.sin_port);
-+		straddr, sockaddr.sin6_port);
++		straddr, sockaddr.my_sin_port);
  	client->timestamp = time(NULL);
  	client->sockfd = rv;
 -	client->addr = sockaddr.sin_addr.s_addr;
 -	client->port = sockaddr.sin_port;
-+	client->addr = sockaddr.sin6_addr;
-+	client->port = sockaddr.sin6_port;
++	client->addr = sockaddr.my_sin_addr;
++	client->port = sockaddr.my_sin_port;
  	client->size = 0;
  	client->outgoing = 0;
  }
@@ -109,21 +118,21 @@
  static void handle_tcp_client_write(client_t *client)
  {
 -	struct sockaddr_in sockaddr;
-+	struct sockaddr_in6 sockaddr;
++	struct my_sockaddr_t sockaddr;
  	int rv;
-+	char straddr[INET6_ADDRSTRLEN];
++	char straddr[my_inet_addrstrlen];
  
  	/* Send the packet atomically and close socket if that did not work */
 -	sockaddr.sin_addr.s_addr = client->addr;
 -	sockaddr.sin_port = client->port;
-+	sockaddr.sin6_addr = client->addr;
-+	sockaddr.sin6_port = client->port;
++	sockaddr.my_sin_addr = client->addr;
++	sockaddr.my_sin_port = client->port;
  	rv = send(client->sockfd, client->packet, client->size, 0);
-+	inet_ntop(AF_INET6, &sockaddr.sin6_addr, straddr, sizeof(straddr));
++	inet_ntop(my_af_inet, &sockaddr.my_sin_addr, straddr, sizeof(straddr));
  	if (rv == -1) {
  		lprintf(LOG_WARNING, "could not send packet to TCP client %s:%d: %m\n",
 -			inet_ntoa(sockaddr.sin_addr), sockaddr.sin_port);
-+			straddr, sockaddr.sin6_port);
++			straddr, sockaddr.my_sin_port);
  		close(client->sockfd);
  		client->sockfd = -1;
  		return;
@@ -132,81 +141,81 @@
 -			"only %d of %d bytes written\n", inet_ntoa(sockaddr.sin_addr),
 -			sockaddr.sin_port, rv, (int) client->size);
 +			"only %d of %d bytes written\n", straddr,
-+			sockaddr.sin6_port, rv, (int) client->size);
++			sockaddr.my_sin_port, rv, (int) client->size);
  		close(client->sockfd);
  		client->sockfd = -1;
  		return;
-@@ -227,23 +235,25 @@
+@@ -227,23 +234,25 @@ static void handle_tcp_client_write(clie
  
  static void handle_tcp_client_read(client_t *client)
  {
 -	struct sockaddr_in sockaddr;
-+	struct sockaddr_in6 sockaddr;
++	struct my_sockaddr_t sockaddr;
  	int rv;
-+	char straddr[INET6_ADDRSTRLEN];
++	char straddr[my_inet_addrstrlen];
  
  	/* Read from the socket what arrived and put it into the buffer */
 -	sockaddr.sin_addr.s_addr = client->addr;
 -	sockaddr.sin_port = client->port;
-+	sockaddr.sin6_addr = client->addr;
-+	sockaddr.sin6_port = client->port;
++	sockaddr.my_sin_addr = client->addr;
++	sockaddr.my_sin_port = client->port;
  	rv = read(client->sockfd, client->packet + client->size,
  		sizeof (client->packet) - client->size);
-+	inet_ntop(AF_INET6, &sockaddr.sin6_addr, straddr, sizeof(straddr));
++	inet_ntop(my_af_inet, &sockaddr.my_sin_addr, straddr, sizeof(straddr));
  	if (rv == -1) {
  		lprintf(LOG_WARNING, "could not read packet from TCP client %s:%d: %m\n",
 -			inet_ntoa(sockaddr.sin_addr), sockaddr.sin_port);
-+			straddr, sockaddr.sin6_port);
++			straddr, sockaddr.my_sin_port);
  		close(client->sockfd);
  		client->sockfd = -1;
  		return;
  	} else if (rv == 0) {
  		lprintf(LOG_DEBUG, "disconnected TCP client %s:%d\n",
 -			inet_ntoa(sockaddr.sin_addr), sockaddr.sin_port);
-+			straddr, sockaddr.sin6_port);
++			straddr, sockaddr.my_sin_port);
  		close(client->sockfd);
  		client->sockfd = -1;
  		return;
-@@ -255,7 +265,7 @@
+@@ -255,7 +264,7 @@ static void handle_tcp_client_read(clien
  	rv = snmp_packet_complete(client);
  	if (rv == -1) {
  		lprintf(LOG_WARNING, "could not handle packet from TCP client %s:%d: %m\n",
 -			inet_ntoa(sockaddr.sin_addr), sockaddr.sin_port);
-+			straddr, sockaddr.sin6_port);
++			straddr, sockaddr.my_sin_port);
  		close(client->sockfd);
  		client->sockfd = -1;
  		return;
-@@ -270,13 +280,13 @@
+@@ -270,13 +279,13 @@ static void handle_tcp_client_read(clien
  	/* Call the protocol handler which will prepare the response packet */
  	if (snmp(client) == -1) {
  		lprintf(LOG_WARNING, "could not handle packet from TCP client %s:%d: %m\n",
 -			inet_ntoa(sockaddr.sin_addr), sockaddr.sin_port);
-+			straddr, sockaddr.sin6_port);
++			straddr, sockaddr.my_sin_port);
  		close(client->sockfd);
  		client->sockfd = -1;
  		return;
  	} else if (client->size == 0) {
  		lprintf(LOG_WARNING, "could not handle packet from TCP client %s:%d: ignored\n",
 -			inet_ntoa(sockaddr.sin_addr), sockaddr.sin_port);
-+			straddr, sockaddr.sin6_port);
++			straddr, sockaddr.my_sin_port);
  		close(client->sockfd);
  		client->sockfd = -1;
  		return;
-@@ -313,7 +323,7 @@
+@@ -313,7 +322,7 @@ int main(int argc, char *argv[])
  	int option_index = 1;
  	int c;
  
 -	struct sockaddr_in sockaddr;
-+	struct sockaddr_in6 sockaddr;
++	struct my_sockaddr_t sockaddr;
  	socklen_t socklen;
  	fd_set rfds;
  	fd_set wfds;
-@@ -399,14 +409,14 @@
+@@ -399,14 +408,14 @@ int main(int argc, char *argv[])
  #endif
  
  	/* Open the server's UDP port and prepare it for listening */
 -	g_udp_sockfd = socket(PF_INET, SOCK_DGRAM, 0);
-+	g_udp_sockfd = socket(PF_INET6, SOCK_DGRAM, 0);
++	g_udp_sockfd = socket(my_pf_inet, SOCK_DGRAM, 0);
  	if (g_udp_sockfd == -1) {
  		lprintf(LOG_ERR, "could not create UDP socket: %m\n");
  		exit(EXIT_SYSCALL);
@@ -214,54 +223,92 @@
 -	sockaddr.sin_family = AF_INET;
 -	sockaddr.sin_port = htons(g_udp_port);
 -	sockaddr.sin_addr.s_addr = INADDR_ANY;
-+	sockaddr.sin6_family = AF_INET6;
-+	sockaddr.sin6_port = htons(g_udp_port);
-+	sockaddr.sin6_addr = in6addr_any;
++	sockaddr.my_sin_family = my_af_inet;
++	sockaddr.my_sin_port = htons(g_udp_port);
++	sockaddr.my_sin_addr = my_inaddr_any;
  	socklen = sizeof (sockaddr);
  	if (bind(g_udp_sockfd, (struct sockaddr *)&sockaddr, socklen) == -1) {
  		lprintf(LOG_ERR, "could not bind UDP socket to port %d: %m\n", g_udp_port);
-@@ -414,7 +424,7 @@
+@@ -414,7 +423,7 @@ int main(int argc, char *argv[])
  	}
  
  	/* Open the server's TCP port and prepare it for listening */
 -	g_tcp_sockfd = socket(PF_INET, SOCK_STREAM, 0);
-+	g_tcp_sockfd = socket(PF_INET6, SOCK_STREAM, 0);
++	g_tcp_sockfd = socket(my_pf_inet, SOCK_STREAM, 0);
  	if (g_tcp_sockfd == -1) {
  		lprintf(LOG_ERR, "could not create TCP socket: %m\n");
  		exit(EXIT_SYSCALL);
-@@ -424,9 +434,9 @@
+@@ -424,9 +433,9 @@ int main(int argc, char *argv[])
  		lprintf(LOG_WARNING, "could not set SO_REUSEADDR on TCP socket: %m\n");
  		exit(EXIT_SYSCALL);
  	}
 -	sockaddr.sin_family = AF_INET;
 -	sockaddr.sin_port = htons(g_tcp_port);
 -	sockaddr.sin_addr.s_addr = INADDR_ANY;
-+	sockaddr.sin6_family = AF_INET6;
-+	sockaddr.sin6_port = htons(g_tcp_port);
-+	sockaddr.sin6_addr = in6addr_any;
++	sockaddr.my_sin_family = my_af_inet;
++	sockaddr.my_sin_port = htons(g_tcp_port);
++	sockaddr.my_sin_addr = my_inaddr_any;
  	socklen = sizeof (sockaddr);
  	if (bind(g_tcp_sockfd, (struct sockaddr *)&sockaddr, socklen) == -1) {
  		lprintf(LOG_ERR, "could not bind TCP socket to port %d: %m\n", g_tcp_port);
 --- a/mini_snmpd.h
 +++ b/mini_snmpd.h
-@@ -129,7 +129,7 @@
+@@ -120,6 +120,27 @@
+ 	} while (0)
+ #endif
+ 
++#ifdef IPV6
++#define my_sockaddr_t		sockaddr_in6
++#define my_sin_addr		sin6_addr
++#define my_sin_port		sin6_port
++#define my_sin_family		sin6_family
++#define my_af_inet		AF_INET6
++#define my_pf_inet		PF_INET6
++#define my_in_addr_t		in6_addr
++#define my_inaddr_any		in6addr_any
++#define my_inet_addrstrlen	INET6_ADDRSTRLEN
++#else
++#define my_sockaddr_t		sockaddr_in
++#define my_sin_addr		sin_addr
++#define my_sin_port		sin_port
++#define my_sin_family		sin_family
++#define my_af_inet		AF_INET
++#define my_pf_inet		PF_INET
++#define my_in_addr_t		in_addr
++#define my_inaddr_any		inaddr_any
++#define my_inet_addrstrlen	INET_ADDRSTRLEN
++#endif
+ 
+ 
+ /* -----------------------------------------------------------------------------
+@@ -129,7 +150,7 @@
  typedef struct client_s {
  	time_t timestamp;
  	int sockfd;
 -	in_addr_t addr;
-+	struct in6_addr addr;
++	struct my_in_addr_t addr;
  	in_port_t port;
  	unsigned char packet[MAX_PACKET_SIZE];
  	size_t size;
+@@ -236,6 +257,9 @@ extern char *g_description;
+ extern char *g_vendor;
+ extern char *g_location;
+ extern char *g_contact;
++#ifndef IPV6
++extern const struct in_addr inaddr_any;
++#endif
+ extern char *g_disk_list[MAX_NR_DISKS];
+ extern int g_disk_list_length;
+ extern char *g_interface_list[MAX_NR_INTERFACES];
 --- a/utils.c
 +++ b/utils.c
-@@ -91,12 +91,13 @@
+@@ -91,12 +91,13 @@ void read_values(const char *buffer, con
  
  void dump_packet(const client_t *client)
  {
 -	struct in_addr client_addr;
-+	struct in6_addr client_addr;
-+	char straddr[INET6_ADDRSTRLEN];
++	struct my_in_addr_t client_addr;
++	char straddr[my_inet_addrstrlen];
  	char buffer[BUFSIZ];
  	int len;
  	int i;
@@ -271,11 +318,11 @@
  	len = 0;
  	for (i = 0; i < client->size; i++) {
  		len += snprintf(buffer + len, sizeof (buffer) - len,
-@@ -105,9 +106,10 @@
+@@ -105,9 +106,10 @@ void dump_packet(const client_t *client)
  			break;
  		}
  	}
-+	inet_ntop(AF_INET6, &client_addr, straddr, sizeof(straddr));
++	inet_ntop(my_af_inet, &client_addr, straddr, sizeof(straddr));
  	lprintf(LOG_DEBUG, "%s %u bytes %s %s:%d (%s)\n",
  		client->outgoing ? "transmitted" : "received", (int) client->size,
 -		client->outgoing ? "to" : "from", inet_ntoa(client_addr),
