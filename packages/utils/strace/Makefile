@@ -44,9 +44,9 @@ endef
 CONFIGURE_VARS += \
 	ac_cv_header_linux_netlink_h=yes
 
-# needed when compiling with an external toolchain
-TARGET_CFLAGS += \
-	-I$(LINUX_DIR)/include
+ifneq ($(CONFIG_EXTERNAL_TOOLCHAIN),)
+  TARGET_CPPFLAGS += -I$(LINUX_DIR)/include
+endif
 
 MAKE_FLAGS := \
 	CCOPT="$(TARGET_CFLAGS)"
