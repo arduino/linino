@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssh
-PKG_VERSION:=5.4p1
+PKG_VERSION:=5.5p1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/ \
 		ftp://openbsd.wiretapped.net/pub/OpenBSD/OpenSSH/portable/ \
 		ftp://ftp.belnet.be/packages/openbsd/OpenSSH/portable/ \
 		ftp://ftp.de.openbsd.org/pub/unix/OpenBSD/OpenSSH/portable/
-PKG_MD5SUM:=da10af8a789fa2e83e3635f3a1b76f5e
+PKG_MD5SUM:=88633408f4cb1eb11ec7e2ec58b519eb
 
 PKG_BUILD_DEPENDS:=libopenssl
 
@@ -179,7 +179,7 @@ define Package/openssh-server/postinst
 #!/bin/sh
 
 name=sshd
-id=99
+id=22
 
 # do not change below
 # check if we are on real system
