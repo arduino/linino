@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libsndfile
-PKG_VERSION:=1.0.20
-PKG_RELEASE:=2
+PKG_VERSION:=1.0.21
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.mega-nerd.com/libsndfile/
-PKG_MD5SUM:=e0553e12c7a467af44693e95e2eac668
+PKG_SOURCE_URL:=http://www.mega-nerd.com/libsndfile/files/
+PKG_MD5SUM:=880a40ec636ab2185b97f8927299b292
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -24,8 +24,8 @@ define Package/libsndfile
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Library for reading/writing audio files
-  DEPENDS:=@!avr32
   URL:=http://www.mega-nerd.com/libsndfile/
+  DEPENDS:=@!avr32
 endef
 
 define Package/libsndfile/description
@@ -33,16 +33,13 @@ define Package/libsndfile/description
  containing sampled audio data.
 endef
 
-TARGET_CFLAGS += $(FPIC)
+CONFIGURE_ARGS+= \
+	--disable-alsa \
+	--disable-external-libs \
+	--disable-sqlite \
+	--disable-shave \
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--disable-alsa \
-		--disable-external-libs \
-		--disable-sqlite \
-		--disable-shave \
-	)
-endef
+TARGET_CFLAGS += $(FPIC)
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)
