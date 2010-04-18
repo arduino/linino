@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libxml2
-PKG_VERSION:=2.7.6
-PKG_RELEASE:=2
+PKG_VERSION:=2.7.7
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://xmlsoft.org/sources/ \
 	ftp://fr.rpmfind.net/pub/libxml/
-PKG_MD5SUM:=7740a8ec23878a2f50120e1faa2730f2
+PKG_MD5SUM:=9abc9959823ca9ff904f1fbcf21df066
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -24,9 +24,9 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libxml2
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libpthread +zlib
   TITLE:=Gnome XML library
   URL:=http://xmlsoft.org/
+  DEPENDS:=+libpthread +zlib
 endef
 
 define Package/libxml2/description
