@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -24,7 +24,7 @@ define Package/php-pear
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=PEAR
-  URL:=http://pear.php.net/
+  URL:=http://pear.php.net/package/PEAR
   DEPENDS:=+php5
 endef
 
