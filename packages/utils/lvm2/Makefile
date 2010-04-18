@@ -28,14 +28,18 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME).$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
+define Package/libdevmapper/Default
+  SUBMENU:=disc
+  MAINTAINER:=Stefan Monnier <monnier@iro.umontreal.ca>
+endef
+
 define Package/libdevmapper
+  $(call Package/libdevmapper/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  SUBMENU:=disc
   DEPENDS:=+kmod-dm
   TITLE:=The Linux Kernel Device Mapper userspace library
   URL:=http://sourceware.org/dm/
-  MAINTAINER:=Stefan Monnier <monnier@iro.umontreal.ca>
 endef
 
 define Package/libdevmapper/description
@@ -51,9 +55,9 @@ define Package/libdevmapper/description
 endef
 
 define Package/lvm2
+  $(call Package/libdevmapper/Default)
   SECTION:=utils
   CATEGORY:=Utilities
-  SUBMENU:=disc
   TITLE:=The Linux Logical Volume Manager
   DEPENDS:=+libdevmapper +libreadline
   URL:=http://sourceware.org/lvm2/
