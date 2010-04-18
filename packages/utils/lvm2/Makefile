@@ -3,10 +3,9 @@
 #
 # This is free software, licensed under the GNU General Public License v3+.
 # See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
-
-MAINTAINER:=Stefan Monnier <monnier@iro.umontreal.ca>
 
 PKG_NAME:=LVM2
 PKG_VERSION:=2.02.63
@@ -36,6 +35,7 @@ define Package/libdevmapper
   DEPENDS:=+kmod-dm
   TITLE:=The Linux Kernel Device Mapper userspace library
   URL:=http://sourceware.org/dm/
+  MAINTAINER:=Stefan Monnier <monnier@iro.umontreal.ca>
 endef
 
 define Package/libdevmapper/description
