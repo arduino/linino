@@ -15,9 +15,61 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.strongswan.org/
 PKG_MD5SUM:=e071f46b6c463ce76900758734e6143e
 
+PKG_MOD_AVAILABLE:= \
+	aes \
+	agent \
+	attr \
+	attr-sql \
+	blowfish \
+	curl \
+	des \
+	dnskey \
+	eap-md5 \
+	eap-mschapv2 \
+	eap-radius \
+	fips-prf \
+	gcrypt \
+	gmp \
+	hmac \
+	kernel-klips \
+	kernel-netlink \
+	kernel-pfkey \
+	ldap \
+	load-tester \
+	md5 \
+	medcli \
+	medsrv \
+	mysql \
+	padlock \
+	pem \
+	pgp \
+	pkcs1 \
+	pubkey \
+	random \
+	resolve \
+	sha1 \
+	sha2 \
+	smp \
+	sql \
+	sqlite \
+	stroke \
+	uci \
+	updown \
+	x509 \
+	xcbc \
+
 PKG_BUILD_DEPENDS:= \
 	clearsilver \
 	fcgi \
+
+PKG_CONFIG_DEPENDS:= \
+	CONFIG_STRONGSWAN4_ENABLE_CISCO_QUIRKS \
+	CONFIG_STRONGSWAN4_ENABLE_NAT_TRANSPORT \
+	CONFIG_STRONGSWAN4_DEVICE_RANDOM \
+	CONFIG_STRONGSWAN4_DEVICE_URANDOM \
+	CONFIG_STRONGSWAN4_ROUTING_TABLE \
+	CONFIG_STRONGSWAN4_ROUTING_TABLE_PRIO \
+	$(patsubst %,CONFIG_PACKAGE_strongswan4-mod-%,$(PKG_MOD_AVAILABLE)) \
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -199,12 +251,6 @@ define BuildPlugin
 endef
 
 
-# 1. Name
-define ConfigurePlugin
-$(if $(CONFIG_PACKAGE_strongswan4-mod-$(1)),--enable-$(1),--disable-$(1))
-endef
-
-
 CONFIGURE_ARGS+= \
 	$(if $(CONFIG_STRONGSWAN4_ENABLE_CISCO_QUIRKS),--enable-cisco-quirks,--disable-cisco-quirks) \
 	$(if $(CONFIG_STRONGSWAN4_ENABLE_NAT_TRANSPORT),--enable-nat-transport,--disable-nat-transport) \
@@ -215,48 +261,9 @@ CONFIGURE_ARGS+= \
 	--with-urandom-device="$(call qstrip,$(CONFIG_STRONGSWAN4_DEVICE_RANDOM))" \
 	--with-routing-table="$(call qstrip,$(CONFIG_STRONGSWAN4_ROUTING_TABLE))" \
 	--with-routing-table-prio="$(call qstrip,$(CONFIG_STRONGSWAN4_ROUTING_TABLE_PRIO))" \
-	$(call ConfigurePlugin,aes) \
-	$(call ConfigurePlugin,agent) \
-	$(call ConfigurePlugin,attr) \
-	$(call ConfigurePlugin,attr-sql) \
-	$(call ConfigurePlugin,blowfish) \
-	$(call ConfigurePlugin,curl) \
-	$(call ConfigurePlugin,des) \
-	$(call ConfigurePlugin,dnskey) \
-	$(call ConfigurePlugin,eap-md5) \
-	$(call ConfigurePlugin,eap-mschapv2) \
-	$(call ConfigurePlugin,eap-radius) \
-	$(call ConfigurePlugin,fips-prf) \
-	$(call ConfigurePlugin,gcrypt) \
-	$(call ConfigurePlugin,gmp) \
-	$(call ConfigurePlugin,hmac) \
-	$(call ConfigurePlugin,kernel-klips) \
-	$(call ConfigurePlugin,kernel-netlink) \
-	$(call ConfigurePlugin,kernel-pfkey) \
-	$(call ConfigurePlugin,ldap) \
-	$(call ConfigurePlugin,load-tester) \
-	$(call ConfigurePlugin,md5) \
-	$(call ConfigurePlugin,medcli) \
-	$(call ConfigurePlugin,medsrv) \
-	$(call ConfigurePlugin,mysql) \
-	$(call ConfigurePlugin,padlock) \
-	$(call ConfigurePlugin,pem) \
-	$(call ConfigurePlugin,pgp) \
-	$(call ConfigurePlugin,pkcs1) \
-	$(call ConfigurePlugin,pubkey) \
-	$(call ConfigurePlugin,random) \
-	$(call ConfigurePlugin,resolve) \
-	$(call ConfigurePlugin,sha1) \
-	$(call ConfigurePlugin,sha2) \
-	$(call ConfigurePlugin,smp) \
-	$(call ConfigurePlugin,sql) \
-	$(call ConfigurePlugin,sqlite) \
-	$(call ConfigurePlugin,stroke) \
-	$(call ConfigurePlugin,uci) \
-	$(call ConfigurePlugin,updown) \
-	$(call ConfigurePlugin,x509) \
-	$(call ConfigurePlugin,xcbc) \
-	#$(call ConfigurePlugin,openssl,OpenSSL,openssl,,+libopenssl))
+	$(foreach m,$(PKG_MOD_AVAILABLE), \
+	  $(if $(CONFIG_PACKAGE_strongswan4-mod-$(m)),--enable-$(m),--disable-$(m)) \
+	) \
 
 EXTRA_CPPFLAGS+= -I$(STAGING_DIR)/usr/include/ClearSilver
 
@@ -392,4 +399,3 @@ $(eval $(call BuildPlugin,uci,UCI config interface,+libuci))
 $(eval $(call BuildPlugin,updown,updown firewall,))
 $(eval $(call BuildPlugin,x509,x509 certificate,))
 $(eval $(call BuildPlugin,xcbc,xcbc crypto,))
-#$(eval $(call BuildPlugin,openssl,OpenSSL,+libopenssl))
