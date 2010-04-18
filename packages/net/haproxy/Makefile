@@ -1,28 +1,30 @@
 #
+# Copyright (C) 2010 OpenWrt.org
 # Copyright (C) 2009-2010 Thomas Heil <heil@terminal-consulting.de> 
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=haproxy
-PKG_VERSION:=1.4.1
+PKG_VERSION:=1.4.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://haproxy.1wt.eu/download/1.4/src/
-PKG_MD5SUM:=7f27c2dec3d67fce1b113be5fe878c33
+PKG_MD5SUM:=825c2c77257f0a2099e193bc690ffd60
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/haproxy
+  SUBMENU:=Proxy Servers
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcre +libltdl
   TITLE:=The Reliable, High Performance TCP/HTTP Load Balancer
   URL:=http://haproxy.1wt.eu/
-  SUBMENU:=Proxy Servers
+  DEPENDS:=+libpcre +libltdl
 endef
 
 define Package/haproxy/conffiles
@@ -35,13 +37,12 @@ endef
 
 define Build/Compile
 	$(MAKE) TARGET=$(if $(CONFIG_LINUX_2_4),linux24,linux26) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
 		CC="$(TARGET_CC)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		LD="$(TARGET_CC)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 		SMALL_OPTS="-DBUFSIZE=16060 -DMAXREWRITE=4096" \
-		all install
+		all
 endef
 
 define Package/haproxy/install
