@@ -23,7 +23,7 @@ define Package/ruby-sqlite3
   CATEGORY:=Languages
   TITLE:=Ruby interface for SQLite
   URL:=http://www.ruby-lang.org/
-  DEPENDS:=+libruby +libsqlite3
+  DEPENDS:=+libruby +libsqlite3 @BROKEN
 endef
 
 RUBY:= \
@@ -42,8 +42,8 @@ define Build/Compile
 endef
 
 define Package/ruby-sqlite3/install
-	$(INSTALL_DIR) $(1)/usr/lib/ruby/1.8
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/site_ruby/1.8/* $(1)/usr/lib/ruby/1.8/
+	$(INSTALL_DIR) $(1)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 
 endef
 
