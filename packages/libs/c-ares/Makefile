@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=c-ares
-PKG_VERSION:=1.7.0
+PKG_VERSION:=1.7.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://c-ares.haxx.se
-PKG_MD5SUM:=15ab7852306b554b0b1145f41005a3bb
+PKG_MD5SUM:=dc7e0f32e92613aed9aff233a6b69753
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -35,7 +35,7 @@ endef
 
 define Package/libcares/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so.* $(1)/usr/lib/
 endef
 
 define Build/InstallDev
