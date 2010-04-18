@@ -25,7 +25,7 @@ define Package/classpath
   CATEGORY:=Libraries
   TITLE:=GNU Classpath
   URL:=http://www.gnu.org/software/classpath/
-  MAINTAINER:=Roberto Riggio (roberto.riggio@create-net.org)
+  MAINTAINER:=Roberto Riggio <roberto.riggio@create-net.org>
   DEPENDS:=@BROKEN
 endef
 
