@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cups
 PKG_VERSION:=1.4.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-source.tar.bz2
 PKG_SOURCE_URL:= \
@@ -46,14 +46,17 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
-		--with-cups-user=root \
-		--with-cups-group=root \
+		--with-cups-user="nobody" \
+		--with-cups-group="nogroup" \
 		--without-perl \
 		--without-python \
 		--without-php \
 		--enable-shared \
 		--enable-image \
 		--disable-dbus \
+		--disable-dnssd \
+		--disable-launchd \
+		--disable-ldap \
 		--disable-pam \
 		--disable-slp \
 		--disable-gnutls \
@@ -61,7 +64,7 @@ define Build/Configure
 		--disable-cdsassl \
 		--disable-ssl \
 		--disable-gssapi \
-		--disable-slp, \
+		--disable-tiff, \
 		UNAME="Linux" \
 		LIBS="$(TARGET_LDFLAGS) -lz -lpng -ljpeg" \
 	)
