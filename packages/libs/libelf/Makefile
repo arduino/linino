@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libelf
-PKG_VERSION:=0.8.12
+PKG_VERSION:=0.8.13
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.mr511.de/software/
-PKG_MD5SUM:=e21f8273d9f5f6d43a59878dc274fec7
+PKG_MD5SUM:=4136d7b4c04df68b686570afa26988ac
 
 include $(INCLUDE_DIR)/package.mk
 
