@@ -6,18 +6,21 @@
 
 include $(TOPDIR)/rules.mk
 
+MAINTAINER:=Stefan Monnier <monnier@iro.umontreal.ca>
+
 PKG_NAME:=LVM2
-PKG_VERSION:=2.02.60
+PKG_VERSION:=2.02.63
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME).$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=ftp://sources.redhat.com/pub/lvm2/ \
 		http://netbsd.mirrors.tds.net/pub/sourceware.org/lvm2/
-PKG_MD5SUM:=33e0e0f4b4582d495ff619696c634b2a
+PKG_MD5SUM:=74bb3beeefe68d539ab712e92fddfb39
 # 2.02.43 = fc34655706a2aa116b92328b24fad619
 # 2.02.44 = 4ed7b99903a6fc5165b7b0b8def42486
 # 2.02.53 = f9ae3579bf15467b7f1d7aea8b9ed9b3
 # 2.02.60 = 33e0e0f4b4582d495ff619696c634b2a
+# 2.02.63 = 74bb3beeefe68d539ab712e92fddfb39
 
 # OpenWRT normally expects the tarball to expand into
 # $(PKG_NAME)-$(PKG_VERSION), and this magic incantation seems to make it
