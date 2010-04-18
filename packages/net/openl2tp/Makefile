@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -26,7 +26,7 @@ define Package/openl2tp
   CATEGORY:=Network
   DEPENDS:=+kmod-pppol2tp +ppp +portmap +libreadline +libncurses @LINUX_2_6
   TITLE:=An L2TP (Layer 2 Tunneling Protocol) daemon
-  URL:=http://opensource.katalix.com/openl2tp
+  URL:=http://www.openl2tp.org/
   SUBMENU:=VPN
 endef
 
