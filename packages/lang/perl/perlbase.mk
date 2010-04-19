@@ -1173,6 +1173,17 @@ endef
 
 $(eval $(call BuildPackage,perlbase-perlio))
 
+define Package/perlbase-pod
+$(call Package/perlbase-template)
+TITLE:=Pod perl module
+endef
+
+define Package/perlbase-pod/install
+$(call perlmod/Install,$(1),Pod,)
+endef
+
+$(eval $(call BuildPackage,perlbase-pod))
+
 
 define Package/perlbase-posix
 $(call Package/perlbase-template)
