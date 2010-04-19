@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libgphoto2
-PKG_VERSION:=2.4.8
+PKG_VERSION:=2.4.9
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/gphoto
-PKG_MD5SUM:=7753f17dff15702466337aab05209a71
+PKG_MD5SUM:=32b233189e3df7e5e67d2a81163682b8
 
 PKG_FIXUP:=libtool
 PKG_LIBTOOL_PATHS:=. libgphoto2_port
@@ -40,8 +40,6 @@ define Package/libgphoto2-drivers
   TITLE:=Gphoto2 drivers for various cameras
 endef
 
-TARGET_CFLAGS += $(FPIC)
-
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
@@ -62,6 +60,8 @@ CONFIGURE_VARS += \
 
 MAKE_FLAGS += \
 	LIBLTDL="" \
+
+TARGET_CFLAGS += $(FPIC)
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/bin
