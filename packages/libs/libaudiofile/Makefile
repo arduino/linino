@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -7,18 +7,20 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=libaudiofile
-PKG_VERSION:=0.2.6
-PKG_RELEASE:=2
+PKG_NAME:=audiofile
+PKG_VERSION:=0.2.7
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.cti.ecp.fr/~beauxir5/peercast
-PKG_MD5SUM:=460f848ce5f4a33ae66b15a4fb7720ec
+PKG_SOURCE_URL:= \
+	http://github.com/downloads/mpruett/audiofile/ \
+	http://www.68k.org/~michael/audiofile/
+PKG_MD5SUM:=a39be317a7b1971b408805dc5e371862
+
 PKG_FIXUP:=libtool
+PKG_INSTALL=1
 
 include $(INCLUDE_DIR)/package.mk
-
-PKG_INSTALL=1
 
 define Package/libaudiofile
   SECTION:=libs
@@ -28,24 +30,21 @@ define Package/libaudiofile
 endef
 
 define Package/libaudiofile/description
-	The audiofile library allows the processing of audio data to and from audio 
-	files of many common formats (currently AIFF, AIFF-C, WAVE, NeXT/Sun, BICS, 
-	and raw data).
+ The audiofile library allows the processing of audio data to and from audio 
+ files of many common formats (currently AIFF, AIFF-C, WAVE, NeXT/Sun, BICS, 
+ and raw data).
 endef
 
-TARGET_CFLAGS += $(FPIC)
+CONFIGURE_ARGS+= \
+	--enable-shared \
+	--enable-static \
+	--with-build-cc="$(HOSTCC)" \
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--with-build-cc="$(HOSTCC)" \
-	)
-endef
+TARGET_CFLAGS+= $(FPIC) -std=c99
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(2)/bin
-	$(INSTALL_BIN) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/bin/audiofile-config \
 		$(2)/bin/
 	$(SED) \
@@ -53,7 +52,7 @@ define Build/InstallDev
 		$(2)/bin/audiofile-config
 
 	$(INSTALL_DIR) $(1)/usr/include
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/include/{af_vfs,audiofile,aupvlist}.h \
 		$(1)/usr/include/
 
@@ -63,7 +62,7 @@ define Build/InstallDev
 		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
-	$(INSTALL_DATA) \
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/audiofile.pc \
 		$(1)/usr/lib/pkgconfig/
 endef
