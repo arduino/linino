@@ -1,14 +1,22 @@
+#
+# Copyright (C) 2010 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libnfc
-PKG_VERSION:=1.3.3
+PKG_VERSION:=1.3.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://libnfc.googlecode.com/files/
-PKG_MD5SUM:=88aeb2f6c3ddf32ae52aedc9b179e49c
+PKG_MD5SUM:=
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -18,7 +26,7 @@ define Package/libnfc/Default
 endef
 
 define Package/libnfc
-  $(call Package/libnfc/Default)
+$(call Package/libnfc/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=+libpcsclite +libusb +pcscd +ccid
@@ -36,7 +44,7 @@ define Package/libnfc/description
 endef
 
 define Package/libnfc-examples
-  $(call Package/libnfc/Default)
+$(call Package/libnfc/Default)
   SECTION:=utils
   CATEGORY:=Utilities
   DEPENDS:=+libnfc
@@ -50,12 +58,6 @@ define Package/libnfc-examples/description
 endef
 
 TARGET_CFLAGS += $(FPIC)
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
