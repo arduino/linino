@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gphoto2
-PKG_VERSION:=2.4.8
+PKG_VERSION:=2.4.9
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/gphoto
-PKG_MD5SUM:=401e403ea6e8301d6c87cbe7cd892b8b
+PKG_MD5SUM:=a08a93a425cde03ca8f9bade83bbd26a
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -23,13 +23,13 @@ include $(INCLUDE_DIR)/package.mk
 define Package/gphoto2
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+libgphoto2 +libpopt +libpthread
   TITLE:=Gphoto Digital Camera Control
   URL:=http://www.gphoto.org/
+  DEPENDS:=+libgphoto2 +libpopt +libpthread
 endef
 
 define Package/gphoto2/description
-	For downloading and controlling digital cameras
+ For downloading and controlling digital cameras
 endef
 
 CONFIGURE_ARGS += \
@@ -47,7 +47,7 @@ CONFIGURE_VARS += \
 
 define Package/gphoto2/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,gphoto2))
