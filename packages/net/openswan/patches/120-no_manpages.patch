@@ -8,7 +8,7 @@
  CONFFILES=ipsec.conf
  EXCONFILES=ipsec.win2k.conf
  SOURCEDIR=_confread
-@@ -26,11 +25,3 @@
+@@ -26,11 +25,3 @@ CONFDFILES=clear clear-or-private privat
  
  include ${srcdir}../Makefile.program
  
@@ -22,7 +22,7 @@
 -
 --- a/programs/pluto/Makefile
 +++ b/programs/pluto/Makefile
-@@ -188,35 +188,11 @@
+@@ -188,35 +188,11 @@ doinstall: all
  	$(INSTALL) $(INSTBINFLAGS) $(BINNAMEPLUTO) $(BINNAMEWHACK) $(LIBEXECDIR)
  	#$(INSTALL) $(INSTSUIDFLAGS) $(BINNAMEWHACKINIT) $(LIBEXECDIR)
  	if $(USE_ADNS) ; then $(INSTALL) $(INSTBINFLAGS) $(BINNAMEADNS)  $(LIBEXECDIR) ; fi

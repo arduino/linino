@@ -1,6 +1,6 @@
 --- a/linux/include/openswan/ipsec_kversion.h
 +++ b/linux/include/openswan/ipsec_kversion.h
-@@ -339,6 +339,12 @@
+@@ -351,6 +351,12 @@
  # define HAVE_CURRENT_UID
  #endif
  

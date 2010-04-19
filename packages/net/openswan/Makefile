@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=openswan
-PKG_VERSION:=2.6.24
+PKG_VERSION:=2.6.25
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.openswan.org/download
-PKG_MD5SUM:=1c76b6982c05392f7c360afb92699661
+PKG_MD5SUM:=c1223786c9eb58950a4be0ab2d0a84d1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,11 +30,11 @@ endef
 
 define Package/openswan
 $(call Package/openswan/Default)
+  SUBMENU:=VPN
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS+= +kmod-openswan +libgmp +ip
   TITLE+= (daemon)
-  URL:=http://www.openswan.org/
+  DEPENDS+= +kmod-openswan +libgmp +ip
 endef
 
 define Package/openswan/description
