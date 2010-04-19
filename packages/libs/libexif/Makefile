@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libexif
-PKG_VERSION:=0.6.17
-PKG_RELEASE:=2
+PKG_VERSION:=0.6.19
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/libexif
-PKG_MD5SUM:=f7cf4e623a48c9a3b13f7f95f0a41015
+PKG_MD5SUM:=56144a030a4c875c600b1ccf713f69f7
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -32,23 +33,14 @@ define Package/libexif/description
   utilities and programs with GUIs.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--disable-rpath \
-		--without-libiconv-prefix \
-		--without-libintl-prefix \
-	)
-endef
+CONFIGURE_ARGS+= \
+	--enable-shared \
+	--enable-static \
+	--disable-rpath \
+	--without-libiconv-prefix \
+	--without-libintl-prefix \
 
 TARGET_CFLAGS += $(FPIC)
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
