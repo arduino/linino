@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://libnfc.googlecode.com/files/
-PKG_MD5SUM:=
+PKG_MD5SUM:=f89f58e70b72bf4aac0567d0741719c8
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
