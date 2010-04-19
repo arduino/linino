@@ -8,22 +8,22 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tinyproxy
-PKG_VERSION:=1.8.0
+PKG_VERSION:=1.8.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.banu.com/pub/tinyproxy/1.8/
-PKG_MD5SUM:=09843d47828261394d0a30af0b058997
+PKG_MD5SUM:=e1f0977592f020ef509262c24c3284fb
 
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/tinyproxy
+  SUBMENU:=Proxy Servers
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=Proxy Servers
-  TITLE:=Tinyproxy is a lightweight HTTP and HTTPS proxy.
+  TITLE:=Tinyproxy is a lightweight HTTP and HTTPS proxy
   URL:=http://tinyproxy.sourceforge.net/
 endef
 
@@ -31,17 +31,14 @@ define Package/tinyproxy/conffiles
 /etc/config/tinyproxy
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-filter \
-		--enable-transparent \
-		--enable-regexcheck=no \
-	)
-endef
+CONFIGURE_ARGS+= \
+	--enable-filter \
+	--enable-transparent \
+	--disable-regexcheck \
 
 define Package/tinyproxy/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/tinyproxy $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/tinyproxy $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/share/tinyproxy
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/tinyproxy/*.html $(1)/usr/share/tinyproxy/
 	$(INSTALL_DIR) $(1)/etc/config

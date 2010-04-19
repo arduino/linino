@@ -1,5 +1,3 @@
-diff --git a/Makefile.am b/Makefile.am
-index 7de41f2..9d1f99b 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -2,9 +2,7 @@ SUBDIRS = \
@@ -12,8 +10,6 @@ index 7de41f2..9d1f99b 100644
  
  # tools want this on a single line
  ACLOCAL_AMFLAGS = -I m4macros
-diff --git a/Makefile.in b/Makefile.in
-index d0ec918..5be49d4 100644
 --- a/Makefile.in
 +++ b/Makefile.in
 @@ -221,9 +221,7 @@ SUBDIRS = \
@@ -26,11 +22,9 @@ index d0ec918..5be49d4 100644
  
  
  # tools want this on a single line
-diff --git a/configure b/configure
-index 01d6883..facfadd 100755
 --- a/configure
 +++ b/configure
-@@ -9012,67 +9012,8 @@ $as_echo "$as_me: error: Your system's regexec() function is broken." >&2;}
+@@ -9012,67 +9012,8 @@ $as_echo "$as_me: error: Your system's r
  fi
  
  
