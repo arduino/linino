@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2009 OpenWrt.org
+# Copyright (C) 2005-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,20 +8,22 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnutls
-PKG_VERSION:=2.8.5
+PKG_VERSION:=2.8.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNU/gnutls \
 	ftp://ftp.mirrors.wiretapped.net/pub/security/network-security/gnutls/
-PKG_MD5SUM:=e3b2788b79bfc82acbe717e3c54d4e92
+PKG_MD5SUM:=eb0a6d7d3cb9ac684d971c14f9f6d3ba
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 PKG_LIBTOOL_PATHS:=. lib libextra
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/gnutls/Default
+  SUBMENU:=SSL
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=GNU TLS
@@ -66,9 +68,8 @@ endef
 
 define Package/libgnutls
 $(call Package/gnutls/Default)
- TITLE+= (library)
- DEPENDS+= +zlib +libgcrypt +libgpg-error
- SUBMENU:=SSL
+  TITLE+= (library)
+  DEPENDS+= +zlib +libgcrypt +libgpg-error
 endef
 
 define Package/libgnutls/description
@@ -79,9 +80,8 @@ endef
 
 define Package/libgnutls-extra
 $(call Package/gnutls/Default)
- TITLE+= (extra library)
- DEPENDS+= +libgnutls
- SUBMENU:=SSL
+  TITLE+= (extra library)
+  DEPENDS+= +libgnutls
 endef
 
 define Package/libgnutls-extra/description
@@ -92,17 +92,14 @@ endef
 
 define Package/libgnutls-openssl
 $(call Package/gnutls/Default)
- TITLE+= (OpenSSL compat library)
- DEPENDS+= +libgnutls
- SUBMENU:=SSL
+  TITLE+= (OpenSSL compat library)
+  DEPENDS+= +libgnutls
 endef
 
 define Package/libgnutls-openssl/description
 $(call Package/gnutls/Default/description)
  This package contains the GnuTLS OpenSSL compatibility layer shared library.
 endef
-
-TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS+= \
 	--enable-shared \
@@ -114,10 +111,13 @@ CONFIGURE_ARGS+= \
 	--with-libgcrypt-prefix="$(STAGING_DIR)/usr" \
 	--with-libreadline-prefix="$(STAGING_DIR)/usr" \
 	--with-libz-prefix="$(STAGING_DIR)/usr" \
+	--without-lzo \
 
 # XXX: AM_CFLAGS duplicates with CFLAGS
-MAKE_ARGS:= \
+MAKE_FLAGS:= \
 	AM_CFLAGS="" \
+
+TARGET_CFLAGS += $(FPIC)
 
 define Build/Configure
 	$(SED) 's,-I$$$${includedir},,g' $(PKG_BUILD_DIR)/configure
@@ -125,15 +125,17 @@ define Build/Configure
 	$(call Build/Configure/Default)
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) $(MAKE_ARGS) DESTDIR="$(PKG_INSTALL_DIR)" all install
-endef
-
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/include $(1)/usr/lib $(1)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/gnutls $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgnutls{,-extra,-openssl}.{a,so*} $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/gnutls{,-extra}.pc $(1)/usr/lib/pkgconfig/
+	$(INSTALL_DIR) $(1)/usr/include $(1)/usr/lib/pkgconfig
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/gnutls \
+		$(1)/usr/include/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libgnutls{,-extra,-openssl}.{a,so*} \
+		$(1)/usr/lib/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/gnutls{,-extra}.pc \
+		$(1)/usr/lib/pkgconfig/
 endef
 
 define Package/certtool/conffiles
@@ -144,15 +146,17 @@ define Package/certtool/install
 	$(INSTALL_DIR) $(1)/etc/gnutls
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/doc/certtool.cfg $(1)/etc/gnutls/
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/certtool $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/certtool $(1)/usr/bin/
 endef
 
 
 define Package/gnutls-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/gnutls-{cli,serv} $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/psktool $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/srptool $(1)/usr/bin/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/bin/gnutls-{cli,serv} \
+		$(PKG_INSTALL_DIR)/usr/bin/psktool \
+		$(PKG_INSTALL_DIR)/usr/bin/srptool \
+		$(1)/usr/bin/
 endef
 
 

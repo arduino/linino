@@ -1,8 +1,6 @@
-Index: gnutls-2.8.5/Makefile.in
-===================================================================
---- gnutls-2.8.5.orig/Makefile.in	2009-11-02 11:36:03.000000000 +0100
-+++ gnutls-2.8.5/Makefile.in	2009-11-28 00:12:19.000000000 +0100
-@@ -147,7 +147,7 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -147,7 +147,7 @@ AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGE
  	distdir dist dist-all distcheck
  ETAGS = etags
  CTAGS = ctags
