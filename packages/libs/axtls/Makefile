@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,16 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=axtls
-PKG_VERSION:=1.2.2
+PKG_VERSION:=1.2.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=axTLS-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/axtls
-PKG_MD5SUM:=03471b5a5874e2ce86025f24b3fa0958
+PKG_MD5SUM:=4b7a6dafbe45357f63813410dae676fd
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libaxtls
+  SUBMENU:=SSL
   SECTION:=libs
   CATEGORY:=Libraries
   SUBMENU:=SSL
@@ -26,12 +27,22 @@ define Package/libaxtls
 endef
 
 define Package/axhttpd
+  SUBMENU:=Web
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=A small embedded web server using the axTLS library
+  URL:=http://www.axtls.co.nr/
+  DEPENDS:=+libaxtls
+endef
+
+define Package/axtlswrap
+  SUBMENU:=SSL
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Web
+  TITLE:=A simple TLS/SSL wrapper using the axTLS library
+  URL:=http://sourceforge.net/projects/axtls
   DEPENDS:=+libaxtls
-  TITLE:=A small embedded web server using the axTLS library
-  URL:=http://www.axtls.co.nr/
 endef
 
 define Build/Configure
@@ -69,8 +80,14 @@ endef
 
 define Package/axhttpd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/axhttpd $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/axhttpd $(1)/usr/sbin/
+endef
+
+define Package/axtlswrap/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/_stage/axtlswrap $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,libaxtls))
 $(eval $(call BuildPackage,axhttpd))
+$(eval $(call BuildPackage,axtlswrap))

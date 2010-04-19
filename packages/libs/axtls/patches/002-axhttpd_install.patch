@@ -1,7 +1,6 @@
-diff -ru axtls-1.2.2/Makefile axtls-1.2.2-new/Makefile
---- axtls-1.2.2/Makefile	2007-12-01 16:42:23.000000000 -0800
-+++ axtls-1.2.2-new/Makefile	2009-05-27 22:41:44.000000000 -0700
-@@ -88,8 +88,11 @@
+--- a/Makefile
++++ b/Makefile
+@@ -91,8 +91,11 @@ win32_demo:
  install: $(PREFIX) all
  	cp --no-dereference $(STAGE)/libax* $(PREFIX)/lib
  	chmod 755 $(PREFIX)/lib/libax* 

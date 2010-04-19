@@ -1,6 +1,5 @@
-diff -pruN axTLS.orig/config/makefile.conf axTLS/config/makefile.conf
---- axTLS.orig/config/makefile.conf	2009-05-20 15:27:07.425684975 +0200
-+++ axTLS/config/makefile.conf	2009-05-20 15:29:51.697489368 +0200
+--- a/config/makefile.conf
++++ b/config/makefile.conf
 @@ -105,20 +105,23 @@ endif
  endif
  
