@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,19 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libart
-PKG_VERSION:=2.3.20
-PKG_RELEASE:=3
+PKG_VERSION:=2.3.21
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_lgpl-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)_lgpl/2.3
-PKG_MD5SUM:=d0ce67f2ebcef1e51a83136c69242a73
+PKG_MD5SUM:=08559ff3c67fd95d57b0c5e91a6b4302
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_lgpl-$(PKG_VERSION)
+
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-PKG_INSTALL=1
 
 define Package/libart
   SECTION:=libs
@@ -30,28 +30,21 @@ define Package/libart
 endef
 
 define Package/libart/description
-	A library of functions for 2D graphics supporting a superset of the 
-	PostScript imaging model, designed to be integrated with graphics, artwork, 
-	and illustration programs. It is written in optimized C, and is fully 
-	compatible with C++. With a small footprint of 10,000 lines of code, it is 
-	especially suitable for embedded applications.
+ A library of functions for 2D graphics supporting a superset of the
+ PostScript imaging model, designed to be integrated with graphics,
+ artwork, and illustration programs. It is written in optimized C, and
+ is fully compatible with C++. With a small footprint of 10,000 lines of
+ code, it is especially suitable for embedded applications.
 endef
+
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
 
 TARGET_CFLAGS += $(FPIC)
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) HOSTCC="$(HOSTCC)"
-endef
-
 define Build/InstallDev
-	$(INSTALL_DIR) $(2)/bin $(1)/usr/include $(1)/usr/lib $(1)/usr/lib/pkgconfig
+	$(INSTALL_DIR) $(2)/bin $(1)/usr/include $(1)/usr/lib/pkgconfig
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/libart2-config \
 		$(2)/bin/
