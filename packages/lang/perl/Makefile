@@ -160,7 +160,7 @@ endef
 define Package/perl/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/perl$(PKG_VERSION) $(1)/usr/bin
-	ln -f $(1)/usr/bin/perl$(PKG_VERSION) $(1)/usr/bin/perl
+	ln -nsf perl$(PKG_VERSION) $(1)/usr/bin/perl
 endef
 
 ifneq ($(CONFIG_PACKAGE_microperl),)
