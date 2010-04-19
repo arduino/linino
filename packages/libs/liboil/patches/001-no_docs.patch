@@ -1,8 +1,8 @@
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -270,7 +270,7 @@ sys_symbol_underscore = @sys_symbol_unde
- sysconfdir = @sysconfdir@
- target_alias = @target_alias@
+@@ -278,7 +278,7 @@ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
  AUTOMAKE_OPTIONS = foreign
 -SUBDIRS = liboil testsuite examples doc
 +SUBDIRS = liboil testsuite
