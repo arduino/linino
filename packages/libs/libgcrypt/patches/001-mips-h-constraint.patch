@@ -1,9 +1,9 @@
 The MIPS port for GCC-4.4 no longer recognizes the h asm constraint.
 Patch from: https://forum.openwrt.org/viewtopic.php?id=20520
 
---- libgcrypt/mpi/longlong.h-asdf	2009-08-04 09:58:51.000000000 +0930
-+++ libgcrypt/mpi/longlong.h	2009-08-04 10:10:27.000000000 +0930
-@@ -710,18 +710,35 @@
+--- a/mpi/longlong.h
++++ b/mpi/longlong.h
+@@ -710,18 +710,35 @@ extern USItype __udiv_qrnnd ();
  #endif /* __m88110__ */
  #endif /* __m88000__ */
  
@@ -41,7 +41,7 @@ Patch from: https://forum.openwrt.org/viewtopic.php?id=20520
  #define umul_ppmm(w1, w0, u, v) \
    __asm__ ("multu %2,%3 \n" \
  	   "mflo %0 \n"     \
-@@ -739,14 +756,24 @@
+@@ -739,14 +756,24 @@ extern USItype __udiv_qrnnd ();
   **************  MIPS/64  **************
   ***************************************/
  #if (defined (__mips) && __mips >= 3) && W_TYPE_SIZE == 64

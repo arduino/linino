@@ -1,6 +1,6 @@
---- libgcrypt-1.4.4/Makefile.am~	2008-08-19 17:20:08.000000000 +0200
-+++ libgcrypt-1.4.4/Makefile.am	2009-03-18 00:13:06.000000000 +0100
-@@ -22,8 +22,8 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -22,8 +22,8 @@ AUTOMAKE_OPTIONS = dist-bzip2
  DISTCHECK_CONFIGURE_FLAGS = --enable-random-daemon \
    --enable-ciphers=arcfour:blowfish:cast5:des:aes:twofish:serpent:rfc2268:seed:camellia
  
@@ -11,9 +11,9 @@
  EXTRA_DIST = autogen.sh README.SVN
  DISTCLEANFILES = 
  
---- libgcrypt-1.4.4/Makefile.in~	2009-01-22 19:16:51.000000000 +0100
-+++ libgcrypt-1.4.4/Makefile.in	2009-03-18 00:13:18.000000000 +0100
-@@ -237,8 +237,8 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -239,8 +239,8 @@ AUTOMAKE_OPTIONS = dist-bzip2
  DISTCHECK_CONFIGURE_FLAGS = --enable-random-daemon \
    --enable-ciphers=arcfour:blowfish:cast5:des:aes:twofish:serpent:rfc2268:seed:camellia
  
