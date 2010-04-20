@@ -35,7 +35,7 @@ define Build/Configure
 	# this is *NOT* GNU configure
 	( cd $(PKG_BUILD_DIR); \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS) -lfaad -lpthread -lavcodec -lavformat -lavutil -lz" \
+		LDFLAGS="$(TARGET_LDFLAGS) -lpthread -lavcodec -lavformat -lavutil -lz" \
 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
 		./configure \

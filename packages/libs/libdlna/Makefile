@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://libdlna.geexbox.org/releases/
 PKG_MD5SUM:=2c974f95b711e5fd07f78fc4ebfcca66
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libdlna
@@ -37,7 +39,7 @@ define Build/Configure
 	# this is *NOT* GNU configure
 	( cd $(PKG_BUILD_DIR); \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS) -lfaad -lpthread -lz" \
+		LDFLAGS="$(TARGET_LDFLAGS) -lpthread -lz" \
 		HOST_CC="$(HOSTCC)" \
 		./configure \
 		--cross-compile \
@@ -52,13 +54,6 @@ define Build/Configure
 endef
 
 TARGET_CFLAGS += $(FPIC)
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		INSTALL="install" \
-		all install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
