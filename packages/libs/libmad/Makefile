@@ -37,6 +37,7 @@ define Package/libmad
   CATEGORY:=Libraries
   TITLE:=An high-quality MPEG audio decoding library
   URL:=http://www.underbit.com/products/mad/
+  DEPENDS:=@BUILD_PATENTED
 endef
 
 define Package/libmad/description
