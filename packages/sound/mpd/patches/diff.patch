@@ -1,0 +1,10 @@
+--- mpd-0.15.9/configure.orig	2010-04-13 22:40:51.998295776 +0200
++++ mpd-0.15.9/configure	2010-04-13 22:41:15.868300133 +0200
+@@ -9162,6 +9162,7 @@
+ # Check whether --with-faad was given.
+ if test "${with_faad+set}" = set; then :
+   withval=$with_faad;
++  faad_prefix=$with_faad;
+ else
+   faad_prefix=""
+ fi

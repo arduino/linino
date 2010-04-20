@@ -22,8 +22,8 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mpd
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libflac +libid3tag +libmad +libvorbisidec +libpthread +glib2 \
-  	+libmms +libcurl +libsqlite3 +libvorbis +libshout
+  # libvorbis and therewith libogg are needed for shout support
+  DEPENDS:=+libflac +BUILD_PATENTED:libfaad2 +BUILD_PATENTED:libmad +libvorbisidec +libpthread +glib2 +libmms +libcurl +libshout +alsa-lib +libvorbis
   TITLE:=Music Player Daemon
   URL:=http://www.musicpd.org/
 endef
@@ -38,42 +38,55 @@ define Package/mpd/conffiles
 /etc/mpd.conf
 endef
 
+TARGET_CFLAGS += \
+	-I$(STAGING_DIR)/usr/lib/libintl/include/ \
+	-I$(STAGING_DIR)/usr/lib/libiconv/include/
+
+TARGET_LDFLAGS += \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib/
+
+# oggflac is not compatible with tremor
 CONFIGURE_ARGS+= \
-	--disable-audiofile \
+	--$(if $(CONFIG_BUILD_PATENTED),enable-mad,disable-mad) \
+	--enable-alsa \
+	--enable-audiofile \
 	--disable-mpc \
-	--disable-aac \
+	--$(if $(CONFIG_BUILD_PATENTED),enable-aac,disable-aac) \
 	--disable-lsr \
 	--disable-ao \
 	--disable-mvp \
-	--disable-lametest \
 	--disable-lame-encoder \
+	--disable-ffmpeg \
 	--enable-flac \
+	--enable-vorbis \
+	--disable-oggflac \
+	--disable-sqlite \
+	--enable-shout \
+	--enable-id3 \
 	--enable-lastfm \
 	--enable-mms \
-	--with-tremor="$(STAGING_DIR)/usr/lib" \
-
-ifeq ($(CONFIG_PACKAGE_kmod-sound-core),)
-	CONFIGURE_ARGS+= --disable-alsa
-endif
+	--enable-curl \
+	--disable-oss \
+	--enable-aac \
+	--with-zeroconf=no \
+	--disable-libOggFLACtest \
+	--disable-test \
+	--with-tremor=yes \
+	--with-faad="$(STAGING_DIR)/usr" \
 
 # use gcc instead of g++ to avoid unnecessary linking against libstdc++
 TARGET_CXX=$(TARGET_CC)
 
 TARGET_CFLAGS+=-std=gnu99
 
+
 CONFIGURE_VARS += \
-	CURL_LIBS="-L$(STAGING_DIR)/usr/lib -lssl -lcrypto -lcurl" \
-	CURL_CFLAGS="-I$(STAGING_DIR)/usr/include" \
-	ID3TAG_LIBS="$(TARGET_LDFLAGS) -lz -lid3tag" \
-	ID3TAG_CFLAGS="$(TARGET_CPPFLAGS)" \
+	FLAC_CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/FLAC" \
 	FLAC_LIBS="$(TARGET_LDFLAGS) -lFLAC" \
-	FLAC_CFLAGS="-I$(STAGING_DIR)/usr/include/FLAC" \
-	MAD_LIBS="$(TARGET_LDFLAGS) -lmad" \
-	MAD_CFLAGS="$(TARGET_CPPFLAGS)" \
-	OGGVORBIS_LIBS="$(TARGET_LDLFAGS) -lvorbisidec" \
-	OGGVORBIS_CFLAGS="$(TARGET_CPPFLAGS)" \
-	GLIB_CFLAGS="-I$(STAGING_DIR)/usr/include/glib-2.0 -I$(STAGING_DIR)/usr/lib/glib-2.0/include" \
-	GLIB_LIBS="$(TARGET_LDLFAGS) -L$(STAGING_DIR)/usr/lib/libintl/lib -lintl -L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv -lglib-2.0 -lgthread-2.0 -pthread"
+	$(if $(CONFIG_BUILD_PATENTED),MAD_CFLAGS="$(TARGET_CFLAGS)") \
+	$(if $(CONFIG_BUILD_PATENTED),MAD_LIBS="$(TARGET_LDFLAGS) -lmad") \
 
 define Package/mpd/install
 	$(INSTALL_DIR) $(1)/etc
