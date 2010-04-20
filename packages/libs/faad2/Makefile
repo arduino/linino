@@ -51,6 +51,7 @@ $(call Package/faad2/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+=library
+  DEPENDS:=@BUILD_PATENTED
 endef
 
 define Package/libfaad2/description
