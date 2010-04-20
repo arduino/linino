@@ -8,25 +8,25 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nano
-PKG_VERSION:=2.2.3
+PKG_VERSION:=2.2.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.nano-editor.org/dist/v2.2
-PKG_MD5SUM:=91918a484f54f94fedaebe00dc393a50
+PKG_MD5SUM:=6304308afb1f7ef4a5e93eb99206632a
 
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/nano
+  SUBMENU:=Editors
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libncurses
   TITLE:=An enhanced clone of the Pico text editor
   URL:=http://www.nano-editor.org/
-  SUBMENU:=Editors
   MAINTAINER:=Bernhard Loos <bernhardloos@googlemail.com>
+  DEPENDS:=+libncurses
 endef
 
 define Package/nano/description
@@ -45,7 +45,7 @@ CONFIGURE_VARS += \
 
 define Package/nano/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,nano))
