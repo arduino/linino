@@ -18,14 +18,19 @@ PKG_MD5SUM:=6c95af60b20b9655531bf3162c0be937
 
 PKG_FIXUP = libtool
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
+
+TARGET_LDFLAGS+= \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 # NOTE: libflac is out of date for 8.09's freeze and can't be compiled in
 
 define Package/sox
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libmad +libvorbis +libvorbisidec +libgsm
+  DEPENDS:=+BUILD_PATENTED:lame-lib +BUILD_PATENTED:libmad +BUILD_PATENTED:libid3tag +libvorbis +libvorbisidec +libgsm
   TITLE:=Sox is a general purpose sound converter/player/recorder
   URL:=http://sox.sourceforge.net/
 endef
@@ -41,16 +46,21 @@ endef
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-external-gsm \
+		--disable-oss \
+		--enable-alsa \
+		--disable-libao \
 		--without-libltdl \
 		--with-ogg \
+		--without-flac \
+		--without-ffmpeg \
+		--without-amr-wb \
+		--without-amr-nb \
+		--without-samplerate \
+		--without-ladspa \
+		--$(if $(CONFIG_BUILD_PATENTED),with-mad,without-mad) \
+		--$(if $(CONFIG_BUILD_PATENTED),with-lame,without-lame) \
+		--$(if $(CONFIG_BUILD_PATENTED),with-id3tag,without-id3tag) \
 	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		STAGING_DIR="$(STAGING_DIR)" \
-		all install
 endef
 
 define Package/sox/install
