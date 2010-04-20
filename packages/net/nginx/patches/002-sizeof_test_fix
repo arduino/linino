@@ -1,5 +1,3 @@
-diff --git a/auto/types/sizeof b/auto/types/sizeof
-index 4d65dca..2d5da3e 100644
 --- a/auto/types/sizeof
 +++ b/auto/types/sizeof
 @@ -23,8 +23,13 @@ $NGX_INCLUDE_UNISTD_H
@@ -17,7 +15,7 @@ index 4d65dca..2d5da3e 100644
      return 0;
  }
  
-@@ -38,7 +43,7 @@ eval "$ngx_test >> $NGX_AUTOCONF_ERR 2>&1"
+@@ -38,7 +43,7 @@ eval "$ngx_test >> $NGX_AUTOCONF_ERR 2>&
  
  
  if [ -x $NGX_AUTOTEST ]; then

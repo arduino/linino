@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,21 +8,21 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nginx
-PKG_VERSION:=0.7.64
+PKG_VERSION:=0.7.65
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://sysoev.ru/nginx/
-PKG_MD5SUM:=cfa97c0f784532820110b5eee57fef6d
+PKG_MD5SUM:=abc4f76af450eedeb063158bd963feaa
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/nginx
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcre +libopenssl
   TITLE:=Nginx web server
   URL:=http://nginx.net/
+  DEPENDS:=+libpcre +libopenssl
 endef
 
 define Package/nginx/description

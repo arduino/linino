@@ -1,5 +1,3 @@
-diff --git a/auto/cc/conf b/auto/cc/conf
-index 4823900..1e676f4 100644
 --- a/auto/cc/conf
 +++ b/auto/cc/conf
 @@ -135,7 +135,8 @@ if [ "$NGX_PLATFORM" != win32 ]; then
@@ -22,8 +20,6 @@ index 4823900..1e676f4 100644
       fi
  
  
-diff --git a/auto/cc/name b/auto/cc/name
-index d197fc5..28b74b0 100644
 --- a/auto/cc/name
 +++ b/auto/cc/name
 @@ -13,12 +13,12 @@ if [ "$NGX_PLATFORM" != win32 ]; then
@@ -45,11 +41,9 @@ index d197fc5..28b74b0 100644
  
  fi
  
-diff --git a/auto/os/linux b/auto/os/linux
-index 0bd0488..9cb0aa1 100644
 --- a/auto/os/linux
 +++ b/auto/os/linux
-@@ -49,7 +49,8 @@ ngx_feature_test="int efd = 0, fd = 1, n;
+@@ -49,7 +49,8 @@ ngx_feature_test="int efd = 0, fd = 1, n
                    ee.data.ptr = NULL;
                    efd = epoll_create(100);
                    if (efd == -1) return 1;"
@@ -79,7 +73,7 @@ index 0bd0488..9cb0aa1 100644
  
  
  ngx_include="sys/prctl.h"; . auto/include
-@@ -108,7 +111,8 @@ ngx_feature_incs="#include <sys/prctl.h>"
+@@ -108,7 +111,8 @@ ngx_feature_incs="#include <sys/prctl.h>
  ngx_feature_path=
  ngx_feature_libs=
  ngx_feature_test="if (prctl(PR_SET_DUMPABLE, 1, 0, 0, 0) == -1) return 1"
@@ -89,8 +83,6 @@ index 0bd0488..9cb0aa1 100644
  
  
  # sched_setaffinity()
-diff --git a/auto/unix b/auto/unix
-index 687a23a..23e8b78 100755
 --- a/auto/unix
 +++ b/auto/unix
 @@ -117,7 +117,7 @@ ngx_feature_path=
