@@ -38,7 +38,7 @@ define Package/vte
   SUBMENU:=libraries
   TITLE:=Virtual Terminal Widget
   URL:=http://developer.gnome.org/arch/gnome/widgets/vte.html
-  DEPENDS:=+gtk2 +libncurses +libX11 @FEATURE_drawing-backend_libX11
+  DEPENDS:=+gtk2 +libncurses +libX11
 endef
 
 define Package/python-vte
