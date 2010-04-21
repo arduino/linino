@@ -34,6 +34,8 @@ to a Canon printer. It currently supports Cups 1.2 and Cups 1.3 and
 is designed by reverse engineering.
 endef
 
+CONFIGURE_ARGS += --with-cupsbackenddir=$(STAGING_DIR)/usr/include/cups
+
 TARGET_CFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/cups-bjnp/install
