@@ -1,6 +1,6 @@
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -417,11 +417,11 @@ install-dirs:
+@@ -412,11 +412,11 @@ install-dirs:
  	    $(DESTDIR)$(noexecdir)
  
  install-binaries: install-dirs $(PROGS)

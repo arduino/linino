@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sudo
-PKG_VERSION:=1.7.2p5
+PKG_VERSION:=1.7.2p6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sudo.ws/sudo/dist
-PKG_MD5SUM:=398f584e831bd75b3c0179e28368c2a3
+PKG_MD5SUM:=c4f1a43e8ba94f6bf06d2211442148c4
 
 PKG_INSTALL:=1
 
@@ -27,10 +27,10 @@ define Package/sudo
 endef
 
 define Package/sudo/description
-Sudo (su "do") allows a system administrator to delegate authority to give
-certain users (or groups of users) the ability to run some (or all) commands as
-root or another user while providing an audit trail of the commands and their
-arguments.
+ Sudo (su "do") allows a system administrator to delegate authority to
+ give certain users (or groups of users) the ability to run some (or
+ all) commands as root or another user while providing an audit trail of
+ the commands and their arguments.
 endef
 
 define Package/sudo/conffiles
