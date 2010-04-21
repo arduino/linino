@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bc
-PKG_VERSION:=1.06.94
+PKG_VERSION:=1.06.95
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=ftp://ftp.debian.org/debian/pool/main/b/bc
-PKG_MD5SUM:=ea7704fc02b359ce92fa4360c802fb23
+PKG_MD5SUM:=24d0831812d8262b6cac8316b0bac483
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,19 +29,19 @@ define Package/bc
 endef
 
 define Package/bc/description
-	bc is a language that supports arbitrary precision numbers with interactive 
-	execution of statements.
+ bc is a language that supports arbitrary precision numbers with 
+ interactive execution of statements.
 endef
 
 define Package/dc
   $(call Package/bc/Default)
-  DEPENDS:=bc
   TITLE:=Arbitrary precision reverse-polish calculator
+  DEPENDS:=bc
 endef
 
 define Package/dc/description
-	dc is a reverse-polish desk calculator which supports unlimited precision 
-	arithmetic.
+ dc is a reverse-polish desk calculator which supports unlimited 
+ precision arithmetic.
 endef
 
 define Package/bc/install
