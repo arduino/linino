@@ -30,6 +30,7 @@ define Package/uboot-lantiq
   DEPENDS:=@TARGET_ifxmips
   TITLE:=U-Boot for Lantiq reference boards
   URL:=http://www.denx.de/wiki/U-Boot
+  MENU:=1
 endef
 
 define Build/Prepare
