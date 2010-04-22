@@ -44,7 +44,7 @@ define Package/python-rsvg
 endef
 
 define Package/python-wnck
-	$(call Package/python-gnome-desktop/Default,libwnck,+libwnck)
+	$(call Package/python-gnome-desktop/Default,libwnck,+PACKAGE_python-wnck:libwnck)
 endef
 
 define Build/Configure
