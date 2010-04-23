@@ -24,7 +24,7 @@ start_service() {
 	ip link set mtu $mtu dev $tnlifname
 	ip tunnel change $tnlifname ttl $ttl
 	ip addr add $localip6 dev $tnlifname
-	ip -6 route ::/0 dev $tnlifname
+	ip -6 route add ::/0 dev $tnlifname
 	ip -6 route add 2000::/3 via $remoteip6
 	ip -6 route add $delegatedip6 dev $LAN
 }
