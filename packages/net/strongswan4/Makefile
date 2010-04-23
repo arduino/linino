@@ -143,7 +143,7 @@ $(call Package/strongswan4/Default)
 	+strongswan4-mod-medcli \
 	+strongswan4-mod-medsrv \
 	+strongswan4-mod-mysql \
-	+strongswan4-mod-padlock \
+	+TARGET_x86:strongswan4-mod-padlock \
 	+strongswan4-mod-pem \
 	+strongswan4-mod-pgp \
 	+strongswan4-mod-pkcs1 \
@@ -431,7 +431,7 @@ $(eval $(call BuildPlugin,md5,MD5 crypto,))
 $(eval $(call BuildPlugin,medcli,mediation client configuration database,))
 $(eval $(call BuildPlugin,medsrv,mediation server configuration database,))
 $(eval $(call BuildPlugin,mysql,MySQL database interface,+strongswan4-mod-sql +libmysqlclient))
-$(eval $(call BuildPlugin,padlock,VIA PadLock crypto,))
+$(eval $(call BuildPlugin,padlock,VIA PadLock crypto,@TARGET_x86))
 $(eval $(call BuildPlugin,pem,PEM decoding,))
 $(eval $(call BuildPlugin,pgp,PGP key decoding,))
 $(eval $(call BuildPlugin,pkcs1,PKCS1 key decoding,))
