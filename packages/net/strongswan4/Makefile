@@ -297,8 +297,6 @@ CONFIGURE_ARGS+= \
 	$(if $(CONFIG_STRONGSWAN4_ENABLE_NAT_TRANSPORT),--enable-nat-transport,--disable-nat-transport) \
 	$(if $(CONFIG_STRONGSWAN4_ENABLE_VENDOR_ID),--enable-vendor-id,--disable-vendor-id) \
 	$(if $(CONFIG_STRONGSWAN4_ENABLE_XAUTH_VID),--enable-xauth-vid,--disable-xauth-vid) \
-	CONFIG_STRONGSWAN4_ENABLE_VENDOR_ID \
-	CONFIG_STRONGSWAN4_ENABLE_XAUTH_VID \
 	--disable-scripts \
 	--disable-static \
 	$(if $(CONFIG_PACKAGE_strongswan4-utils),--enable-tools,--disable-tools) \
