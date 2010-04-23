@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=strongswan
 PKG_VERSION:=4.3.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.strongswan.org/
@@ -65,6 +65,8 @@ PKG_BUILD_DEPENDS:= \
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_STRONGSWAN4_ENABLE_CISCO_QUIRKS \
 	CONFIG_STRONGSWAN4_ENABLE_NAT_TRANSPORT \
+	CONFIG_STRONGSWAN4_ENABLE_VENDOR_ID \
+	CONFIG_STRONGSWAN4_ENABLE_XAUTH_VID \
 	CONFIG_STRONGSWAN4_DEVICE_RANDOM \
 	CONFIG_STRONGSWAN4_DEVICE_URANDOM \
 	CONFIG_STRONGSWAN4_ROUTING_TABLE \
@@ -78,6 +80,7 @@ include $(INCLUDE_DIR)/package.mk
 
 
 define Package/strongswan4/Default
+  SUBMENU:=VPN
   SECTION:=net
   CATEGORY:=Network
   TITLE:=StrongSwan
@@ -93,6 +96,7 @@ endef
 define Package/strongswan4
 $(call Package/strongswan4/Default)
   DEPENDS:= +libpthread +ip \
+	+kmod-crypto-authenc \
 	+kmod-ipsec +kmod-ipsec4 \
 	+kmod-ipt-ipsec +iptables-mod-ipsec
   MENU:=1
@@ -166,6 +170,43 @@ $(call Package/strongswan4/description/Default)
 endef
 
 
+define Package/strongswan4-default
+$(call Package/strongswan4/Default)
+  TITLE+= (default)
+  DEPENDS:= strongswan4 \
+	+strongswan4-app-charon \
+	+strongswan4-app-pluto \
+	+strongswan4-mod-aes \
+	+strongswan4-mod-attr \
+	+strongswan4-mod-des \
+	+strongswan4-mod-dnskey \
+	+strongswan4-mod-fips-prf \
+	+strongswan4-mod-gmp \
+	+strongswan4-mod-hmac \
+	+strongswan4-mod-md5 \
+	+strongswan4-mod-pem \
+	+strongswan4-mod-pgp \
+	+strongswan4-mod-pkcs1 \
+	+strongswan4-mod-pubkey \
+	+strongswan4-mod-random \
+	+strongswan4-mod-resolve \
+	+strongswan4-mod-sha1 \
+	+strongswan4-mod-sha2 \
+	+strongswan4-mod-stroke \
+	+strongswan4-mod-updown \
+	+strongswan4-mod-x509 \
+	+strongswan4-mod-xcbc \
+	+strongswan4-utils
+endef
+
+define Package/strongswan4-default/description
+$(call Package/strongswan4/description/Default)
+ .
+ This meta-package contains only dependencies to match upstream
+ defaults.
+endef
+
+
 define Package/strongswan4-minimal
 $(call Package/strongswan4/Default)
   TITLE+= (minimal)
@@ -235,7 +276,7 @@ endef
 define BuildPlugin
   define Package/strongswan4-mod-$(1)
     $$(call Package/strongswan4/Default)
-    TITLE:= StronSwan $(2) plugin
+    TITLE:= StrongSwan $(2) plugin
     DEPENDS:= strongswan4 $(3)
   endef
 
@@ -254,11 +295,15 @@ endef
 CONFIGURE_ARGS+= \
 	$(if $(CONFIG_STRONGSWAN4_ENABLE_CISCO_QUIRKS),--enable-cisco-quirks,--disable-cisco-quirks) \
 	$(if $(CONFIG_STRONGSWAN4_ENABLE_NAT_TRANSPORT),--enable-nat-transport,--disable-nat-transport) \
+	$(if $(CONFIG_STRONGSWAN4_ENABLE_VENDOR_ID),--enable-vendor-id,--disable-vendor-id) \
+	$(if $(CONFIG_STRONGSWAN4_ENABLE_XAUTH_VID),--enable-xauth-vid,--disable-xauth-vid) \
+	CONFIG_STRONGSWAN4_ENABLE_VENDOR_ID \
+	CONFIG_STRONGSWAN4_ENABLE_XAUTH_VID \
 	--disable-scripts \
 	--disable-static \
 	$(if $(CONFIG_PACKAGE_strongswan4-utils),--enable-tools,--disable-tools) \
 	--with-random-device="$(call qstrip,$(CONFIG_STRONGSWAN4_DEVICE_RANDOM))" \
-	--with-urandom-device="$(call qstrip,$(CONFIG_STRONGSWAN4_DEVICE_RANDOM))" \
+	--with-urandom-device="$(call qstrip,$(CONFIG_STRONGSWAN4_DEVICE_URANDOM))" \
 	--with-routing-table="$(call qstrip,$(CONFIG_STRONGSWAN4_ROUTING_TABLE))" \
 	--with-routing-table-prio="$(call qstrip,$(CONFIG_STRONGSWAN4_ROUTING_TABLE_PRIO))" \
 	$(foreach m,$(PKG_MOD_AVAILABLE), \
@@ -294,6 +339,11 @@ define Package/strongswan4/install
 		./files/ipsec.secrets \
 		./files/strongswan.conf \
 		$(1)/etc/
+endef
+
+
+define Package/strongswan4-default/install
+	true
 endef
 
 
@@ -352,6 +402,7 @@ endef
 
 
 $(eval $(call BuildPackage,strongswan4))
+$(eval $(call BuildPackage,strongswan4-default))
 $(eval $(call BuildPackage,strongswan4-full))
 $(eval $(call BuildPackage,strongswan4-minimal))
 $(eval $(call BuildPackage,strongswan4-app-charon))

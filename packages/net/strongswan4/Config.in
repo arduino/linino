@@ -13,6 +13,18 @@ config STRONGSWAN4_ENABLE_NAT_TRANSPORT
 	prompt "Enable NAT traversal with IPsec transport mode in"
 	default y
 
+# --enable-vendor-id
+config STRONGSWAN4_ENABLE_VENDOR_ID
+	bool
+	prompt "Enable sending of the strongSwan vendor ID"
+	default y
+
+# --enable-xauth-vid
+config STRONGSWAN4_ENABLE_XAUTH_VID
+	bool
+	prompt "Enable sending of the XAUTH vendor ID"
+	default y
+
 # --with-random-device
 config STRONGSWAN4_DEVICE_RANDOM
 	string
