@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpd
 PKG_VERSION:=0.15.8
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/musicpd
@@ -22,38 +22,34 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mpd
   SECTION:=sound
   CATEGORY:=Sound
-  # libvorbis and therewith libogg are needed for shout support
-  DEPENDS:=+libflac +BUILD_PATENTED:libfaad2 +BUILD_PATENTED:libmad +libvorbisidec +libpthread +glib2 +libmms +libcurl +libshout +alsa-lib +libvorbis
   TITLE:=Music Player Daemon
   URL:=http://www.musicpd.org/
+# libvorbis and therewith libogg are needed for shout support
+  DEPENDS:= \
+	+AUDIO_SUPPORT:alsa-lib \
+	+BUILD_PATENTED:libfaad2 +BUILD_PATENTED:libmad \
+	+glib2 +libcurl +libflac +libmms +libpthread +libshout \
+	+libvorbis +libvorbisidec 
 endef
 
 define Package/mpd/description
-	MPD is a music player supporting flac, mp3 and ogg files.
-	It is typically controlled over a network using one of it's many
-	clients including mpc(console), gmpc(gnome), phpmp(php) etc.
+ MPD is a music player supporting flac, mp3 and ogg files. It is
+ typically controlled over a network using one of it's many clients
+ including mpc(console), gmpc(gnome), phpmp(php), etc...
 endef
 
 define Package/mpd/conffiles
+/etc/avahi/services/mpd.service
 /etc/mpd.conf
 endef
 
-TARGET_CFLAGS += \
-	-I$(STAGING_DIR)/usr/lib/libintl/include/ \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include/
-
-TARGET_LDFLAGS += \
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib/
-
 # oggflac is not compatible with tremor
-CONFIGURE_ARGS+= \
-	--$(if $(CONFIG_BUILD_PATENTED),enable-mad,disable-mad) \
-	--enable-alsa \
+CONFIGURE_ARGS += \
+	$(call autoconf_bool,CONFIG_BUILD_PATENTED,mad) \
+	$(call autoconf_bool,CONFIG_AUDIO_SUPPORT,alsa) \
 	--enable-audiofile \
 	--disable-mpc \
-	--$(if $(CONFIG_BUILD_PATENTED),enable-aac,disable-aac) \
+	$(call autoconf_bool,CONFIG_BUILD_PATENTED,aac) \
 	--disable-lsr \
 	--disable-ao \
 	--disable-mvp \
@@ -62,6 +58,11 @@ CONFIGURE_ARGS+= \
 	--enable-flac \
 	--enable-vorbis \
 	--disable-oggflac \
+	--disable-cue \
+	--disable-jack \
+	--disable-modplug \
+	--disable-pulse \
+	--disable-sidplay \
 	--disable-sqlite \
 	--enable-shout \
 	--enable-id3 \
@@ -76,17 +77,24 @@ CONFIGURE_ARGS+= \
 	--with-tremor=yes \
 	--with-faad="$(STAGING_DIR)/usr" \
 
-# use gcc instead of g++ to avoid unnecessary linking against libstdc++
-TARGET_CXX=$(TARGET_CC)
-
-TARGET_CFLAGS+=-std=gnu99
-
-
 CONFIGURE_VARS += \
 	FLAC_CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/FLAC" \
 	FLAC_LIBS="$(TARGET_LDFLAGS) -lFLAC" \
 	$(if $(CONFIG_BUILD_PATENTED),MAD_CFLAGS="$(TARGET_CFLAGS)") \
 	$(if $(CONFIG_BUILD_PATENTED),MAD_LIBS="$(TARGET_LDFLAGS) -lmad") \
+
+TARGET_CFLAGS += \
+	-std=gnu99 \
+	-I$(STAGING_DIR)/usr/lib/libintl/include/ \
+	-I$(STAGING_DIR)/usr/lib/libiconv/include/ \
+
+TARGET_LDFLAGS += \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib/ \
+
+# use gcc instead of g++ to avoid unnecessary linking against libstdc++
+TARGET_CXX:=$(TARGET_CC)
 
 define Package/mpd/install
 	$(INSTALL_DIR) $(1)/etc
@@ -95,6 +103,8 @@ define Package/mpd/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mpd $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/mpd.init $(1)/etc/init.d/mpd
+	$(INSTALL_DIR) $(1)/etc/avahi/services
+	$(INSTALL_DATA) ./files/mpd.service $(1)/etc/avahi/services/
 endef
 
 $(eval $(call BuildPackage,mpd))
