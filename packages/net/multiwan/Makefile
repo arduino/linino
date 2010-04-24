@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=multiwan
-PKG_VERSION:=1.0k
+PKG_VERSION:=1.0l
 PKG_RELEASE:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -16,9 +16,10 @@ include $(INCLUDE_DIR)/package.mk
 define Package/multiwan
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+ip +iptables +iptables-utils +iptables-mod-conntrack +iptables-mod-conntrack-extra
+  DEPENDS:=+ip +iptables +iptables-utils +iptables-mod-conntrack +iptables-mod-conntrack-extra +iptables-mod-ipopt
   TITLE:=Simple multi WAN configuration
   URL:=ftp://ftp.netlab7.com/
+  MAINTAINER:=Craig M. Coffee <craigc@netlab7.com>
 endef
 
 define Package/multiwan/description
