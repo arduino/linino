@@ -475,7 +475,7 @@ dns=$(echo $dns | sed -e "s/ /\n/g")
 if [ ! -z "$dns" -a "$failchk" != "x" -a "$ipaddr" != "x" -a "$gateway" != "x" -a "$ifname" != "x" ]; then
 echo "$dns" | while read dns_server 
 do
-	iptables -t mangle -A MultiWanDNS -d $dns_server -p UDP --dport 53 -j FW${i}MARK
+	iptables -t mangle -A MultiWanDNS -d $dns_server -j FW${i}MARK
 
 		compile_dns="nameserver $dns_server"
 		echo "$compile_dns" >> $resolv_conf
