@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=irssi
-PKG_VERSION:=0.8.14
-PKG_RELEASE:=2
+PKG_VERSION:=0.8.15
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://irssi.org/files/
-PKG_MD5SUM:=00efe7638dd596d5930dfa2aeae87b3a
+PKG_MD5SUM:=1dcb3f511b88df94b0c996f36668c7da
 
 PKG_FIXUP:=libtool
 
