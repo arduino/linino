@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=clearsilver
 PKG_VERSION:=0.10.5
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.clearsilver.net/downloads/
@@ -31,7 +31,7 @@ define Package/clearsilver
   TITLE:=ClearSilver template system
   URL:=http://www.clearsilver.net/
   MAINTAINER:=Raphaël HUCK <rhk@cksum.org>
-  DEPENDS:=+CLEARSILVER_ENABLE_COMPRESSION:zlib
+  DEPENDS:=+CLEARSILVER_ENABLE_COMPRESSION:zlib +CLEARSILVER_ENABLE_GETTEXT:libintl
 endef
 
 define Package/clearsilver/config
@@ -90,17 +90,11 @@ MAKE_FLAGS+= \
 	LD="$(TARGET_CC) -o"
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/ClearSilver $(1)/usr/include/
-
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libneo_*.a $(1)/usr/lib/
-
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 define Package/clearsilver/install
+	$(INSTALL_DIR) $(1)/usr/lib
 endef
 
 $(eval $(call BuildPackage,clearsilver))
