@@ -40,11 +40,7 @@ fi
 
 del() {
 if [ "$existing_failover" == "3" ]; then
-	if [ "$failover_to" != "balancer" -a "failover_to" != "disable" -a "$failover_to_wanid" != "$wanid" ]; then
-		iptables -D FW${wanid}MARK -t mangle -j FW${failover_to_wanid}MARK
-	elif [ "$failover_to" == "balancer" ]; then
-		iptables -D FW${wanid}MARK -t mangle -j LoadBalancer
-	fi
+		iptables -D FW${wanid}MARK 2 -t mangle
 fi
         mwnote "$1 has recovered and is back online!"
 }

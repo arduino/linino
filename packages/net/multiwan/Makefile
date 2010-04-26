@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=multiwan
-PKG_VERSION:=1.0l
-PKG_RELEASE:=2
+PKG_VERSION:=1.0m
+PKG_RELEASE:=1
 
 include $(INCLUDE_DIR)/package.mk
 
