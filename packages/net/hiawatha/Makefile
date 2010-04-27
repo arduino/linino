@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hiawatha
-PKG_VERSION:=7.0
+PKG_VERSION:=7.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.hiawatha-webserver.org/files/
-PKG_MD5SUM:=876111ba94b183745b90ca27d4f2b0ed
+PKG_MD5SUM:=192a9fecea71cc4655dd68e2446919c7
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,11 +25,12 @@ define Package/hiawatha
   SUBMENU:=Web
   TITLE:=A very lightweight web server
   URL:=http://www.hiawatha-webserver.org/
+  MAINTAINER:=Raphaël HUCK <rhk@cksum.org>
   DEPENDS:=+libpthread
 endef
 
 define Package/hiawatha/description
-  Hiawatha is a webserver for Unix.
+Hiawatha is a webserver for Unix.
 endef
 
 CONFIGURE_ARGS+= \
@@ -47,9 +50,10 @@ endef
 
 define Package/hiawatha/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/hiawatha $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/hiawatha $(1)/usr/sbin/
+
 	$(INSTALL_DIR) $(1)/etc/hiawatha
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/etc/hiawatha/{hiawatha,mimetype}.conf $(1)/etc/hiawatha/
+	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/hiawatha/{hiawatha,mimetype}.conf $(1)/etc/hiawatha/
 endef
 
 $(eval $(call BuildPackage,hiawatha))
