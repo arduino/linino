@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 
 . /etc/functions.sh
 
@@ -22,6 +22,7 @@ smb_header() {
 	[ -z "$description" ] && description=openwrt
 
 	cp /etc/samba/smb.conf.template /tmp/smb.conf
+	[ -L /etc/samba/smb.conf ] || ln -nsf /tmp/smb.conf /etc/samba/smb.conf
 	sed -i "s/|NAME|/$name/g" /tmp/smb.conf
 	sed -i "s/|WORKGROUP|/$workgroup/g" /tmp/smb.conf
 	sed -i "s/|DESCRIPTION|/$description/g" /tmp/smb.conf
