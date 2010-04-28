@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ushare.geexbox.org/releases/
 PKG_MD5SUM:=5bbcdbf1ff85a9710fa3d4e82ccaa251
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ushare
@@ -31,11 +33,14 @@ define Package/ushare/description
  multimedia files.
 endef
 
+MAKE_INSTALL_FLAGS+= \
+	INSTALL="install" \
+
 define Build/Configure
 	# this is *NOT* GNU configure
 	( cd $(PKG_BUILD_DIR); \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS) -lpthread -lavcodec -lavformat -lavutil -lz" \
+		LDFLAGS="$(TARGET_LDFLAGS) -Wl,-rpath-link=$(STAGING_DIR)/usr/lib" \
 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
 		./configure \
@@ -49,13 +54,6 @@ define Build/Configure
 		--disable-optimize \
 		--disable-strip \
 	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		INSTALL="install" \
-		all install
 endef
 
 define Package/ushare/conffiles
