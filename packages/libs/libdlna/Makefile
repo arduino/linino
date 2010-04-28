@@ -39,7 +39,7 @@ define Build/Configure
 	# this is *NOT* GNU configure
 	( cd $(PKG_BUILD_DIR); \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS) -lpthread -lz" \
+		LDFLAGS="$(TARGET_LDFLAGS) -Wl,-rpath-link=$(STAGING_DIR)/usr/lib" \
 		HOST_CC="$(HOSTCC)" \
 		./configure \
 		--cross-compile \
@@ -52,6 +52,11 @@ define Build/Configure
 		--disable-strip \
 	)
 endef
+
+# XXX: fix build on systems where install is not at its usual location
+# INSTALL defaults to /usr/bin/install
+MAKE_INSTALL_FLAGS += \
+	INSTALL="install" \
 
 TARGET_CFLAGS += $(FPIC)
 
