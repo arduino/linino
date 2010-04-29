@@ -445,14 +445,13 @@ local gateway
 local ifname
 local failchk
 local compile_dns
-local resolv_conf
 local dns_server
 local i
 
 iptables -F MultiWanDNS -t mangle
 
-rm $resolv_conf
-touch $resolv_conf
+rm /tmp/resolv.conf.auto
+touch /tmp/resolv.conf.auto
 
 echo "## Refreshing DNS Resolution and Tables ##"
 
@@ -465,7 +464,12 @@ ipaddr=$(query_config ipaddr $group)
 ifname=$(query_config ifname $group)
 failchk=$(query_config failchk $group)
 
+dns=`uci -q -P /var/state get multiwan.${group}.dns`
+
+if [ -z "$dns" -o "$dns" == "auto" ]; then
 dns=`uci -q -P /var/state get network.${group}.dns`
+fi
+
 dns=$(echo $dns | sed -e "s/ /\n/g")
 
 if [ ! -z "$dns" -a "$failchk" != "x" -a "$ipaddr" != "x" -a "$gateway" != "x" -a "$ifname" != "x" ]; then
@@ -474,7 +478,7 @@ do
 	iptables -t mangle -A MultiWanDNS -d $dns_server -j FW${i}MARK
 
 		compile_dns="nameserver $dns_server"
-		echo "$compile_dns" >> $resolv_conf
+		echo "$compile_dns" >> /tmp/resolv.conf.auto
 done
 fi
 done
@@ -832,7 +836,10 @@ if [ "$icmp_hosts" != "disable" -a "$ifname" != "x" -a "$ipaddr" != "x" -a "$gat
 	if [ "$icmp_hosts" == "gateway" -o -z "$icmp_hosts" ]; then
 		icmp_hosts_acquire=$gateway
 	elif [ "$icmp_hosts" == "dns" ]; then
-		icmp_hosts_acquire=`uci -q -P /var/state get network.$1.dns`
+                icmp_hosts_acquire=`uci -q -P /var/state get multiwan.$1.dns`
+                if [ -z "$icmp_hosts_acquire" -o "$icmp_hosts_acquire" == "auto" ]; then
+                icmp_hosts_acquire=`uci -q -P /var/state get network.$1.dns`
+                fi
 	else
 		icmp_hosts_acquire=$icmp_hosts
 	fi
@@ -940,7 +947,6 @@ wancount=0
 config_clear
 config_load "multiwan"
 config_get default_route    config default_route
-config_get resolv_conf      config resolv_conf
 config_get debug            config debug 
 
 config_foreach acquire_wan_data interface
