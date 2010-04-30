@@ -34,7 +34,7 @@
  	
  	if ((arpd_pcap = pcap_open_live(dev, 128, 0, 500, ebuf)) == NULL)
  		errx(1, "pcap_open_live: %s", ebuf);
-@@ -465,14 +469,14 @@ main(int argc, char *argv[])
+@@ -465,14 +469,15 @@ main(int argc, char *argv[])
  {
  	struct event recv_ev;
  	extern int (*event_sigcb)(void);
@@ -44,6 +44,7 @@
  	FILE *fp;
  
  	dev = NULL;
++	and_pcap_exp = NULL;
  	debug = 0;
  	
 -	while ((c = getopt(argc, argv, "di:h?")) != -1) {
@@ -51,7 +52,7 @@
  		switch (c) {
  		case 'd':
  			debug = 1;
-@@ -480,6 +484,9 @@ main(int argc, char *argv[])
+@@ -480,6 +485,9 @@ main(int argc, char *argv[])
  		case 'i':
  			dev = optarg;
  			break;
@@ -61,7 +62,7 @@
  		default:
  			usage();
  			break;
-@@ -489,9 +496,9 @@ main(int argc, char *argv[])
+@@ -489,9 +497,9 @@ main(int argc, char *argv[])
  	argv += optind;
  
  	if (argc == 0)
