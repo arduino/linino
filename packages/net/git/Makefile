@@ -48,6 +48,7 @@ MAKE_FLAGS := \
 	NO_NSEC="YesPlease" \
 	NO_CURL="YesPlease" \
 	NO_TCLTK="YesPlease" \
+	NO_MKSTEMPS="YesPlease" \
 
 define Build/Configure
 	$(MAKE) -C $(PKG_BUILD_DIR) \
