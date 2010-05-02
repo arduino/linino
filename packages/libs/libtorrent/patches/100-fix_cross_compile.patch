@@ -1,0 +1,24 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -17,7 +17,6 @@
+ 
+ AM_INIT_AUTOMAKE
+ AM_CONFIG_HEADER(config.h)
+-AM_PATH_CPPUNIT(1.9.6)
+ AC_DISABLE_STATIC
+ 
+ AM_DISABLE_STATIC
+@@ -117,5 +116,4 @@
+ 	src/protocol/Makefile
+ 	src/tracker/Makefile
+ 	src/utils/Makefile
+-        test/Makefile
+ ])
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,4 +1,4 @@
+-SUBDIRS = src test
++SUBDIRS = src
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = libtorrent.pc
