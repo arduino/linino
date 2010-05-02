@@ -1,3 +1,30 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -2,7 +2,6 @@
+ 
+ AM_INIT_AUTOMAKE
+ AM_CONFIG_HEADER(config.h)
+-AM_PATH_CPPUNIT(1.9.6)
+ 
+ AC_PROG_CXX
+ AC_PROG_LIBTOOL
+@@ -64,5 +63,4 @@
+ 	src/rpc/Makefile
+ 	src/ui/Makefile
+ 	src/utils/Makefile
+-        test/Makefile
+ ])
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,7 +1,4 @@
+-SUBDIRS = \
+-	doc \
+-	src \
+-	test
++SUBDIRS = src
+ 
+ EXTRA_DIST= \
+ 	autogen.sh \
 --- a/scripts/common.m4
 +++ b/scripts/common.m4
 @@ -209,7 +209,7 @@ dnl   Need to fix this so that it uses t

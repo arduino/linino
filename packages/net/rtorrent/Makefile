@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rtorrent
-PKG_REV:=1130
+PKG_REV:=1165
 PKG_VERSION:=0.8.6_r$(PKG_REV)
 PKG_RELEASE:=1
 
