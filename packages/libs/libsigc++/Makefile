@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libsigc++
-PKG_VERSION:=2.2.4.2
-PKG_RELEASE:=2
+PKG_VERSION:=2.2.6
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/libsigc++/2.2
-PKG_MD5SUM:=545edbb7b54eec4f723323d3158c0e0c
+PKG_MD5SUM:=d216ef85785e0d17eda9b0326cfdcf71
 
 PKG_FIXUP = libtool
 
@@ -28,8 +28,8 @@ define Package/libsigcxx
 endef
 
 define Package/libsigcxx/description
- It allows you to define signals and to connect those signals to any 
- callback function, either global or a member function, regardless of 
+ It allows you to define signals and to connect those signals to any
+ callback function, either global or a member function, regardless of
  whether it is static or virtual.
 endef
 
