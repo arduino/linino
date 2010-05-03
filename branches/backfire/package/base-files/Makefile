@@ -434,8 +434,10 @@ ifeq ($(CONFIG_EXTERNAL_TOOLCHAIN),)
 		$(TOOLCHAIN_DIR)/lib/libuClibc-$(LIBC_SO_VERSION).so \
 		$(1)/lib/
 	for file in libcrypt libdl libm libnsl libresolv libutil; do \
-		$(CP) $(TOOLCHAIN_DIR)/lib/$$$$file.so.* $(1)/lib/; \
-		$(CP) $(TOOLCHAIN_DIR)/lib/$$$$file-$(LIBC_SO_VERSION).so $(1)/lib/; \
+		$(CP) \
+			$(TOOLCHAIN_DIR)/lib/$$$$file.so.* \
+			$(TOOLCHAIN_DIR)/lib/$$$$file-$(LIBC_SO_VERSION).so \
+			$(1)/lib/; \
 	done
   endef
 
