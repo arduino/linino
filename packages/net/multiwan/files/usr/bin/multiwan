@@ -829,6 +829,8 @@ local check_test
 local health_interval
 local check_for_job
 
+. /tmp/.mwan/cache
+
 timeout=`uci -q -P /var/state get multiwan.${1}.timeout`
 icmp_hosts=`uci -q -P /var/state get multiwan.${1}.icmp_hosts`
 health_interval=`uci -q -P /var/state get multiwan.${1}.health_interval`
