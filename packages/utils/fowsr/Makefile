@@ -9,11 +9,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fowsr
 PKG_VERSION:=1.0
-PKG_RELEASE:=20100403
+PKG_RELEASE:=20100501
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_RELEASE).tar.gz
 PKG_SOURCE_URL:=http://fowsr.googlecode.com/files
-PKG_MD5SUM:=e3f66ae504ce92a969279cd4e77b165d
+PKG_MD5SUM:=aab66ea115fb304e0f5a6171dd6df2ba
 
 include $(INCLUDE_DIR)/package.mk
 
