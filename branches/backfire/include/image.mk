@@ -25,25 +25,6 @@ else
   SQUASHFS_OPTS :=  -le
 endif
 
-ifeq ($(CONFIG_JFFS2_RTIME),y)
-  JFFS2OPTS += -X rtime
-endif
-ifeq ($(CONFIG_JFFS2_ZLIB),y) 
-  JFFS2OPTS += -X zlib
-endif
-ifeq ($(CONFIG_JFFS2_LZMA),y)
-  JFFS2OPTS += -X lzma --compression-mode=size
-endif
-ifneq ($(CONFIG_JFFS2_RTIME),y)
-  JFFS2OPTS +=  -x rtime
-endif
-ifneq ($(CONFIG_JFFS2_ZLIB),y)
-  JFFS2OPTS += -x zlib
-endif
-ifneq ($(CONFIG_JFFS2_LZMA),y)
-  JFFS2OPTS += -x lzma
-endif
-
 ifneq ($(CONFIG_LINUX_2_4)$(CONFIG_LINUX_2_6_25),)
   USE_SQUASHFS3 := y
 endif
