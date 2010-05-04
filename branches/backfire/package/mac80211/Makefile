@@ -10,12 +10,12 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=mac80211
 
-PKG_VERSION:=2010-03-24
-PKG_RELEASE:=5
+PKG_VERSION:=2010-04-28
+PKG_RELEASE:=1
 PKG_SOURCE_URL:=http://mirror2.openwrt.org/sources
 #	http://www.orbit-lab.org/kernel/compat-wireless-2.6/2010/11 \
 #	http://wireless.kernel.org/download/compat-wireless-2.6
-PKG_MD5SUM:=73357c52b5d6888ea3228b2ca8aa5eca
+PKG_MD5SUM:=4b8c23ac7f33af7556034635af744c67
 
 PKG_SOURCE:=compat-wireless-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/compat-wireless-$(PKG_VERSION)
@@ -425,6 +425,7 @@ define KernelPackage/ath9k/config
 
 	config PACKAGE_ATH9K_USE_MINSTREL
 		bool "use the new minstrel_ht rate control for ath9k"
+		default y
 
 	endmenu
 endef
@@ -529,6 +530,20 @@ define KernelPackage/net-ipw2200/description
  Kernel support for Intel IPW2200
  Includes:
  - ipw2200
+endef
+
+
+define KernelPackage/mwl8k
+  $(call KernelPackage/mac80211/Default)
+  TITLE:=Driver for Marvell TOPDOG 802.11 Wireless cards
+  URL:=http://wireless.kernel.org/en/users/Drivers/mwl8k
+  DEPENDS+= @PCI_SUPPORT +kmod-mac80211
+  FILES:=$(PKG_BUILD_DIR)/drivers/net/wireless/mwl8k.$(LINUX_KMOD_SUFFIX)
+  AUTOLOAD:=$(call AutoLoad,27,mwl8k)
+endef
+
+define KernelPackage/mwl8k/description
+ Kernel modules for Marvell TOPDOG 802.11 Wireless cards
 endef
 
 #Broadcom firmware
@@ -852,7 +867,7 @@ MAKE_OPTS:= \
 	CONFIG_LIB80211_CRYPT_TKIP= \
 	CONFIG_IWLWIFI= \
 	CONFIG_IWLAGN= \
-	CONFIG_MWL8K= \
+	CONFIG_MWL8K=$(if $(CONFIG_PACKAGE_kmod-mwl8k),m) \
 	CONFIG_ATMEL= \
 	CONFIG_PCMCIA_ATMEL= \
 	CONFIG_ADM8211= \
@@ -1051,3 +1066,4 @@ $(eval $(call KernelPackage,b43legacy))
 $(eval $(call KernelPackage,net-libipw))
 $(eval $(call KernelPackage,net-ipw2100))
 $(eval $(call KernelPackage,net-ipw2200))
+$(eval $(call KernelPackage,mwl8k))

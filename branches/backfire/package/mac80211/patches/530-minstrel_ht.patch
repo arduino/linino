@@ -13,7 +13,7 @@
  mac80211-$(CONFIG_MAC80211_RC_MINSTREL) += $(rc80211_minstrel-y)
 --- a/net/mac80211/main.c
 +++ b/net/mac80211/main.c
-@@ -714,6 +714,10 @@ static int __init ieee80211_init(void)
+@@ -716,6 +716,10 @@ static int __init ieee80211_init(void)
  	if (ret)
  		return ret;
  
@@ -24,7 +24,7 @@
  	ret = rc80211_pid_init();
  	if (ret)
  		goto err_pid;
-@@ -726,6 +730,8 @@ static int __init ieee80211_init(void)
+@@ -728,6 +732,8 @@ static int __init ieee80211_init(void)
   err_netdev:
  	rc80211_pid_exit();
   err_pid:
@@ -33,7 +33,7 @@
  	rc80211_minstrel_exit();
  
  	return ret;
-@@ -734,6 +740,7 @@ static int __init ieee80211_init(void)
+@@ -736,6 +742,7 @@ static int __init ieee80211_init(void)
  static void __exit ieee80211_exit(void)
  {
  	rc80211_pid_exit();
@@ -68,7 +68,7 @@
  
 --- /dev/null
 +++ b/net/mac80211/rc80211_minstrel_ht.c
-@@ -0,0 +1,815 @@
+@@ -0,0 +1,822 @@
 +/*
 + * Copyright (C) 2010 Felix Fietkau <nbd@openwrt.org>
 + *
@@ -389,9 +389,9 @@
 +		if (!mg->supported)
 +			continue;
 +
-+		if (++mg->index > MCS_GROUP_RATES) {
++		if (++mg->index >= MCS_GROUP_RATES) {
 +			mg->index = 0;
-+			if (++mg->column > ARRAY_SIZE(sample_table))
++			if (++mg->column >= ARRAY_SIZE(sample_table))
 +				mg->column = 0;
 +		}
 +		break;
@@ -474,7 +474,7 @@
 +	mi->ampdu_len += info->status.ampdu_len;
 +
 +	if (!mi->sample_wait && !mi->sample_tries && mi->sample_count > 0) {
-+		mi->sample_wait = 4 + MINSTREL_TRUNC(mi->avg_ampdu_len);
++		mi->sample_wait = 4 + 2 * MINSTREL_TRUNC(mi->avg_ampdu_len);
 +		mi->sample_tries = 3;
 +		mi->sample_count--;
 +	}
@@ -660,6 +660,7 @@
 +	if (!msp->is_ht)
 +		return mac80211_minstrel.get_rate(priv, sta, &msp->legacy, txrc);
 +
++	info->flags |= mi->tx_flags;
 +	sample_idx = minstrel_get_sample_rate(mp, mi);
 +	if (sample_idx >= 0) {
 +		minstrel_ht_set_rate(mp, mi, &ar[0], sample_idx,
@@ -732,6 +733,12 @@
 +		mi->sample_wait = 8;
 +	}
 +	mi->sample_tries = 4;
++
++	if (sta_cap & IEEE80211_HT_CAP_TX_STBC)
++		mi->tx_flags |= IEEE80211_TX_CTL_STBC;
++
++	if (sta_cap & IEEE80211_HT_CAP_LDPC_CODING)
++		mi->tx_flags |= IEEE80211_TX_CTL_LDPC;
 +
 +	if (oper_chan_type != NL80211_CHAN_HT40MINUS &&
 +	    oper_chan_type != NL80211_CHAN_HT40PLUS)
@@ -886,7 +893,7 @@
 +}
 --- /dev/null
 +++ b/net/mac80211/rc80211_minstrel_ht.h
-@@ -0,0 +1,125 @@
+@@ -0,0 +1,128 @@
 +/*
 + * Copyright (C) 2010 Felix Fietkau <nbd@openwrt.org>
 + *
@@ -899,10 +906,10 @@
 +#define __RC_MINSTREL_HT_H
 +
 +/*
-+ * maximum number of spatial streams to make use of
-+ * set this value to 3 once we have drivers that support it
++ * The number of streams can be changed to 2 to reduce code
++ * size and memory footprint.
 + */
-+#define MINSTREL_MAX_STREAMS	2
++#define MINSTREL_MAX_STREAMS	3
 +#define MINSTREL_STREAM_GROUPS	4
 +
 +/* scaled fraction values */
@@ -982,6 +989,9 @@
 +
 +	unsigned int total_packets;
 +	unsigned int sample_packets;
++
++	/* tx flags to add for frames for this sta */
++	u32 tx_flags;
 +
 +	u8 sample_wait;
 +	u8 sample_tries;
