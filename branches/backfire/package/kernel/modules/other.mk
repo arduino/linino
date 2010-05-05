@@ -62,6 +62,7 @@ $(eval $(call KernelPackage,crc7))
 define KernelPackage/crc16
   SUBMENU:=$(OTHER_MENU)
   TITLE:=CRC16 support
+  DEPENDS:=@!(LINUX_2_4||TARGET_xburst)
   KCONFIG:=CONFIG_CRC16
   FILES:=$(LINUX_DIR)/lib/crc16.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,20,crc16,1)
@@ -275,7 +276,7 @@ $(eval $(call KernelPackage,ssb))
 define KernelPackage/bluetooth
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Bluetooth support
-  DEPENDS:=@USB_SUPPORT +kmod-crc16 +kmod-usb-core +!TARGET_x86:kmod-hid \
+  DEPENDS:=@USB_SUPPORT +!(LINUX_2_4||TARGET_xburst):kmod-crc16 +kmod-usb-core +!TARGET_x86:kmod-hid \
 	+(TARGET_x86||TARGET_s3c24xx||TARGET_brcm47xx||TARGET_ar71xx):kmod-rfkill
   KCONFIG:= \
 	CONFIG_BLUEZ \
