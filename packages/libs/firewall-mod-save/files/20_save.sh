@@ -2,7 +2,7 @@
 
 . /etc/functions.sh
 
-savedynamic_print_table_chain() {
+save_print_table_chain() {
 	local table="$1"
 	local chain="$2"
 	local fsave="$3"
@@ -28,7 +28,7 @@ savedynamic_print_table_chain() {
         rm -f "$fsavetmp"
 }
 
-savedynamic_save_fw_chain() {
+save_save_fw_chain() {
 	local chain
 	local table
 	local fsave="/tmp/.firewall/save"
@@ -38,11 +38,11 @@ savedynamic_save_fw_chain() {
 	[ -z "$chain" ] && return 0
 	mkdir -p /tmp/.firewall
 	iptables-save >"$fsave"
-	savedynamic_print_table_chain $table $chain "$fsave" > /tmp/.firewall/save-$table-$chain
+	save_print_table_chain $table $chain "$fsave" > /tmp/.firewall/save-$table-$chain
 
 }
 
-savedynamic_load_fw_chain() {
+save_load_fw_chain() {
 	local chain
 	local table
 
@@ -57,16 +57,17 @@ savedynamic_load_fw_chain() {
 	}
 }
 
-savedynamic_pre_stop_cb() {
+save_pre_stop_cb() {
 	echo "Saving dynamic firewall chains"
 	config_load firewall
 
-	config_foreach savedynamic_save_fw_chain save
+	config_foreach save_save_fw_chain save
 }
 
-savedynamic_post_core_cb() {
+save_post_core_cb() {
 	echo "Loading dynamic firewall chains"
 
 	config_load firewall
-	config_foreach savedynamic_load_fw_chain save
+	config_foreach save_load_fw_chain save
 }
+
