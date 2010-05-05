@@ -666,8 +666,16 @@ $(eval $(call KernelPackage,sc520-wdt))
 define KernelPackage/input-core
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Input device core
-  DEPENDS:=@LINUX_2_6 @!TARGET_x86
+  DEPENDS:=@!TARGET_x86
   KCONFIG:=CONFIG_INPUT
+endef
+
+define KernelPackage/input-core/2.4
+  FILES:=$(LINUX_DIR)/drivers/input/input.$(LINUX_KMOD_SUFFIX)
+  AUTOLOAD:=$(call AutoLoad,19,input)
+endef
+
+define KernelPackage/input-core/2.6
   FILES:=$(LINUX_DIR)/drivers/input/input-core.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,19,input-core)
 endef
