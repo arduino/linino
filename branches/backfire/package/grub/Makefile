@@ -31,9 +31,11 @@ define Package/grub
   DEPENDS:=@TARGET_x86
 endef
 
+
 MY_CONFIGURE_ARGS += \
 	--disable-auto-linux-mem-opt \
 	--disable-hercules \
+	--without-curses \
 
 MY_CONFIGURE_VARS += \
 	grub_cv_prog_objcopy_absolute=yes \
