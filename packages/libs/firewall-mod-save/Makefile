@@ -11,7 +11,6 @@ include $(INCLUDE_DIR)/kernel.mk
 PKG_NAME:=firewall-mod-save
 PKG_VERSION:=1.0
 PKG_RELEASE:=2
-MAINTAINER:=Daniel Dickinson <cshore@csolve.net>
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
@@ -21,6 +20,7 @@ define Package/firewall-mod-save/Default
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Preserve dynamic chains during firewall restart
+  MAINTAINER:=Daniel Dickinson <cshore@csolve.net>
 endef
 
 define Package/firewall-mod-save
