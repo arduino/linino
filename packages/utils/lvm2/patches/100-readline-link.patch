@@ -1,58 +1,37 @@
-*** LVM2.2.02.63/make.tmpl.in	2010-04-17 17:18:45.407964881 -0700
---- LVM2.2.02.63/make.tmpl.in	2010-04-17 17:21:38.467947847 -0700
-***************
-*** 113,123 ****
-  endif
-  
-  LDFLAGS += -L$(top_builddir)/libdm -L$(top_builddir)/lib
-- CLDFLAGS += -L$(top_builddir)/libdm -L$(top_builddir)/lib
-  
-  ifeq ("@DMEVENTD@", "yes")
-    LDFLAGS += -L$(top_builddir)/daemons/dmeventd
--   CLDFLAGS += -L$(top_builddir)/daemons/dmeventd
-  endif
-  
-  ifeq ("@DM_COMPAT@", "yes")
---- 113,121 ----
-***************
-*** 288,298 ****
-  $(LIB_SHARED).$(LIB_VERSION): $(OBJECTS) $(LDDEPS)
-  ifeq ("@LIB_SUFFIX@","so")
-  	$(CC) -shared -Wl,-soname,$(notdir $@) \
-! 		$(CFLAGS) $(CLDFLAGS) $(OBJECTS) $(LIBS) -o $@
-  endif
-  ifeq ("@LIB_SUFFIX@","dylib")
-  	$(CC) -dynamiclib -dylib_current_version,$(LIB_VERSION) \
-! 		$(CFLAGS) $(CLDFLAGS) $(OBJECTS) $(LIBS) -o $@
-  endif
-  
-  $(LIB_SHARED): $(LIB_SHARED).$(LIB_VERSION)
---- 286,296 ----
-  $(LIB_SHARED).$(LIB_VERSION): $(OBJECTS) $(LDDEPS)
-  ifeq ("@LIB_SUFFIX@","so")
-  	$(CC) -shared -Wl,-soname,$(notdir $@) \
-! 		$(CFLAGS) $(CLDFLAGS) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $@
-  endif
-  ifeq ("@LIB_SUFFIX@","dylib")
-  	$(CC) -dynamiclib -dylib_current_version,$(LIB_VERSION) \
-! 		$(CFLAGS) $(CLDFLAGS) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $@
-  endif
-  
-  $(LIB_SHARED): $(LIB_SHARED).$(LIB_VERSION)
-***************
-*** 310,316 ****
-  
-  %.so: %.a
-  	$(CC) -shared -Wl,-soname,$(notdir $@).$(LIB_VERSION) \
-! 	$(CFLAGS) $(CLDFLAGS) $(LIBS) -o $@ \
-  	@CLDWHOLEARCHIVE@ $< @CLDNOWHOLEARCHIVE@
-  
-  $(LIB_STATIC): $(OBJECTS)
---- 308,314 ----
-  
-  %.so: %.a
-  	$(CC) -shared -Wl,-soname,$(notdir $@).$(LIB_VERSION) \
-! 	$(CFLAGS) $(CLDFLAGS) $(LDFLAGS) $(LIBS) -o $@ \
-  	@CLDWHOLEARCHIVE@ $< @CLDNOWHOLEARCHIVE@
-  
-  $(LIB_STATIC): $(OBJECTS)
+--- a/make.tmpl.in
++++ b/make.tmpl.in
+@@ -116,11 +116,9 @@ ifeq ("@INTL@", "yes")
+ endif
+ 
+ LDFLAGS += -L$(top_builddir)/libdm -L$(top_builddir)/lib
+-CLDFLAGS += -L$(top_builddir)/libdm -L$(top_builddir)/lib
+ 
+ ifeq ("@DMEVENTD@", "yes")
+   LDFLAGS += -L$(top_builddir)/daemons/dmeventd
+-  CLDFLAGS += -L$(top_builddir)/daemons/dmeventd
+ endif
+ 
+ ifeq ("@DM_COMPAT@", "yes")
+@@ -291,11 +289,11 @@ TARGETS += $(LIB_SHARED).$(LIB_VERSION)
+ $(LIB_SHARED).$(LIB_VERSION): $(OBJECTS) $(LDDEPS)
+ ifeq ("@LIB_SUFFIX@","so")
+ 	$(CC) -shared -Wl,-soname,$(notdir $@) \
+-		$(CFLAGS) $(CLDFLAGS) $(OBJECTS) $(LIBS) -o $@
++		$(CFLAGS) $(CLDFLAGS) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $@
+ endif
+ ifeq ("@LIB_SUFFIX@","dylib")
+ 	$(CC) -dynamiclib -dylib_current_version,$(LIB_VERSION) \
+-		$(CFLAGS) $(CLDFLAGS) $(OBJECTS) $(LIBS) -o $@
++		$(CFLAGS) $(CLDFLAGS) $(LDFLAGS) $(OBJECTS) $(LIBS) -o $@
+ endif
+ 
+ $(LIB_SHARED): $(LIB_SHARED).$(LIB_VERSION)
+@@ -313,7 +311,7 @@ endif
+ 
+ %.so: %.a
+ 	$(CC) -shared -Wl,-soname,$(notdir $@).$(LIB_VERSION) \
+-	$(CFLAGS) $(CLDFLAGS) $(LIBS) -o $@ \
++	$(CFLAGS) $(CLDFLAGS) $(LDFLAGS) $(LIBS) -o $@ \
+ 	@CLDWHOLEARCHIVE@ $< @CLDNOWHOLEARCHIVE@
+ 
+ $(LIB_STATIC): $(OBJECTS)

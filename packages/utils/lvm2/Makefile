@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=LVM2
-PKG_VERSION:=2.02.63
+PKG_VERSION:=2.02.64
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME).$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=ftp://sources.redhat.com/pub/lvm2/ \
 		http://netbsd.mirrors.tds.net/pub/sourceware.org/lvm2/
-PKG_MD5SUM:=74bb3beeefe68d539ab712e92fddfb39
+PKG_MD5SUM:=59fc0f7f6703a8c7f12df6b7d2e509fb
 # 2.02.43 = fc34655706a2aa116b92328b24fad619
 # 2.02.44 = 4ed7b99903a6fc5165b7b0b8def42486
 # 2.02.53 = f9ae3579bf15467b7f1d7aea8b9ed9b3
