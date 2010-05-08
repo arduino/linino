@@ -86,7 +86,7 @@ ifneq ($(CONFIG_X86_GRUB_IMAGES),)
  else
 
   define Image/Build/grub
-	PADDING="$(CONFIG_X86_GRUB_IMAGES_PAD)" PATH="$(TARGET_PATH)" NOGRUB=1 ./gen_image_x86.sh 
+	PADDING="$(CONFIG_X86_GRUB_IMAGES_PAD)" PATH="$(TARGET_PATH)" NOGRUB=1 ./gen_image_x86.sh \
 		$(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).img \
 		$(CONFIG_X86_GRUB_KERNELPART) "" \
 		$(CONFIG_TARGET_ROOTFS_FSPART) $(KDIR)/root.$(1)
