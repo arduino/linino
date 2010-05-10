@@ -20,7 +20,7 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/DirectFB
+define Package/directfb
     TITLE:=DirectFB
     SECTION:=libs
     CATEGORY:=Libraries
@@ -28,7 +28,7 @@ define Package/DirectFB
     DEPENDS:=+libpng +libjpeg +libpthread +libfreetype
 endef
 
-define Package/DirectFB/description
+define Package/directfb/description
     DirectFB is a thin library that provides hardware graphics acceleration, input device handling and abstraction, integrated windowing system with support for translucent windows and multiple display layers, not only on top of the Linux Framebuffer Device. It is a complete hardware abstraction layer with software fallbacks for every graphics operation that is not supported by the underlying hardware.
 endef
 
@@ -74,7 +74,7 @@ define Build/InstallDev
 		$(1)/usr/lib/
 endef
 
-define Package/DirectFB/install
+define Package/directfb/install
 	$(INSTALL_DIR) \
 		$(1)/usr/bin \
 		$(1)/usr/lib \
@@ -111,4 +111,4 @@ define Package/DirectFB/install
 endef
 
 $(eval $(call Feature,DirectFB))
-$(eval $(call BuildPackage,DirectFB))
+$(eval $(call BuildPackage,directfb))
