@@ -636,6 +636,7 @@ local weight
 local nexthop
 local pre_nexthop_chk
 local rand_probability
+local last_probability
 local total_weight
 local i
 
@@ -657,6 +658,7 @@ ip route flush table 123 > /dev/null 2>&1
          done
 
 total_weight=0
+last_probability=0
 
 iptables -F MultiWanLoadBalancer -t mangle
 
@@ -685,7 +687,8 @@ weight=`uci -q -P /var/state get multiwan.${group}.weight`
 
 if [ "$gateway" != "x" -a "$ifname" != "x" -a "$failchk" != "x" -a "$weight" != "disable" ]; then
 nexthop="$nexthop nexthop via $gateway dev $ifname weight $weight"
-rand_probability=$(expr $(expr $weight \* 100) / $total_weight)
+rand_probability=$(expr $(expr $weight \* 100) / $total_weight + $last_probability)
+last_probability=$rand_probability
 
         if [ $rand_probability -lt 10 ]; then
                 rand_probability="0.0${rand_probability}"
