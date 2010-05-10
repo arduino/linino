@@ -692,7 +692,7 @@ last_probability=$rand_probability
 
         if [ $rand_probability -lt 10 ]; then
                 rand_probability="0.0${rand_probability}"
-        elif [ $rand_probability -lt 100 ]; then
+        elif [ $rand_probability -lt 100 -a $i != $wancount ]; then
                 rand_probability="0.${rand_probability}"
         else
                 rand_probability="1.0"
