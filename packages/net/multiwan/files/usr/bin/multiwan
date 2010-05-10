@@ -664,8 +664,13 @@ i=0
 while [ $i -lt $wancount ]; do 
 i=`expr $i + 1` 
 group=$(query_config group $i)
+failchk=$(query_config failchk $group)
+gateway=$(query_config gateway $group)
+ifname=$(query_config ifname $group)
 weight=`uci -q -P /var/state get multiwan.${group}.weight`
-total_weight=$(expr $total_weight + $weight)
+        if [ "$gateway" != "x" -a "$ifname" != "x" -a "$failchk" != "x" -a "$weight" != "disable" ]; then
+                total_weight=$(expr $total_weight + $weight)
+        fi
 done
 
 i=0
@@ -682,11 +687,13 @@ if [ "$gateway" != "x" -a "$ifname" != "x" -a "$failchk" != "x" -a "$weight" != 
 nexthop="$nexthop nexthop via $gateway dev $ifname weight $weight"
 rand_probability=$(expr $(expr $weight \* 100) / $total_weight)
 
-	if [ $rand_probability -lt 10 ]; then
-		rand_probability="0.0${rand_probability}"
-	else 
-		rand_probability="0.${rand_probability}"
-	fi
+        if [ $rand_probability -lt 10 ]; then
+                rand_probability="0.0${rand_probability}"
+        elif [ $rand_probability -lt 100 ]; then
+                rand_probability="0.${rand_probability}"
+        else
+                rand_probability="1.0"
+        fi
 
 	if [ -z "$CHKFORMODULE" ]; then
 		iptables -A MultiWanLoadBalancer -t mangle -m mark --mark 0x123 -m statistic --mode random --probability $rand_probability -j FW${i}MARK
