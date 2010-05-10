@@ -27,7 +27,7 @@ define Package/libsdl
   CATEGORY:=Libraries
   TITLE:=Simple DirectMedia Layer
   URL:=http://www.libsdl.org
-  DEPENDS:=+DirectFB +zlib +libpthread +AUDIO_SUPPORT:alsa-lib
+  DEPENDS:=+directfb +zlib +libpthread +AUDIO_SUPPORT:alsa-lib
 endef
 
 define Package/libsdl/description

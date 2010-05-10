@@ -34,12 +34,12 @@ endef
 
 define Package/qt4
   $(call Package/qt4/Default)
-  DEPENDS:=@FEATURE_drawing-backend_DirectFB +FEATURE_drawing-backend_DirectFB:DirectFB +zlib +libstdcpp +libsqlite3 # require directfb for now, as other systems (libX11, xcb) are untested
+  DEPENDS:=@FEATURE_drawing-backend_DirectFB +FEATURE_drawing-backend_DirectFB:directfb +zlib +libstdcpp +libsqlite3 # require directfb for now, as other systems (libX11, xcb) are untested
 endef
 
 define Package/qt4-gui
   $(call Package/qt4/Default)
-  #DEPENDS+=+FEATURE_drawing-backend_DirectFB:DirectFB +libpng +libtiff +libjpeg +libfreetype
+  #DEPENDS+=+FEATURE_drawing-backend_DirectFB:directfb +libpng +libtiff +libjpeg +libfreetype
   DEPENDS+=+libpng +libtiff +libjpeg +libfreetype
   TITLE+=(gui)
 endef

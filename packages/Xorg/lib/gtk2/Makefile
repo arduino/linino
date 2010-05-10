@@ -40,7 +40,7 @@ define Package/gtk2
   SUBMENU:=framework
   TITLE:=GTK+-2.0
   DEPENDS:=+cairo +pango +libpng +libjpeg +atk +libtiff \
-  +FEATURE_drawing-backend_DirectFB:DirectFB \
+  +FEATURE_drawing-backend_DirectFB:directfb \
   +FEATURE_drawing-backend_libX11:libX11 \
   +FEATURE_drawing-backend_libX11:libXext \
   +FEATURE_drawing-backend_libX11:libXrender \
