@@ -563,6 +563,7 @@ iptables -t mangle -N MultiWanRules
 iptables -t mangle -N MultiWanDNS
 iptables -t mangle -N MultiWanPreHandler
 iptables -t mangle -N MultiWanPostHandler
+iptables -t mangle -N MultiWanLoadBalancer
 
 echo "## Creating FW Rules ##"
 i=0
@@ -578,12 +579,24 @@ iptables -t mangle -A LoadBalancer -j MARK --set-mark 0x123
 iptables -t mangle -A LoadBalancer -j CONNMARK --save-mark
 
 iptables -t mangle -I PREROUTING -j MultiWan
+iptables -t mangle -I PREROUTING 2 -j MultiWanPreHandler
+iptables -t mangle -I PREROUTING 3 -j MultiWanDNS
+iptables -t mangle -I PREROUTING 4 -j MultiWanRules
+iptables -t mangle -I PREROUTING 5 -j MultiWanLoadBalancer
+
 iptables -t mangle -I FORWARD -j MultiWan
+
 iptables -t mangle -I OUTPUT -j MultiWan
+iptables -t mangle -I OUTPUT 2 -j MultiWanDNS
+iptables -t mangle -I OUTPUT 3 -j MultiWanRules
+iptables -t mangle -I OUTPUT 4 -j MultiWanLoadBalancer
+iptables -t mangle -I OUTPUT 5 -j MultiWanPostHandler
+
+
 iptables -t mangle -I POSTROUTING -j MultiWan
+iptables -t mangle -I POSTROUTING 2 -j MultiWanPostHandler
 
 iptables -t mangle -A MultiWan -j CONNMARK --restore-mark
-iptables -t mangle -A MultiWan -j MultiWanPreHandler
 
 refresh_dns
 
@@ -597,10 +610,6 @@ else
 iptables -t mangle -A MultiWanRules -m mark --mark 0x0 -j LoadBalancer
 fi
 
-iptables -t mangle -A MultiWan -j MultiWanRules
-iptables -t mangle -A MultiWan -j MultiWanDNS
-iptables -t mangle -A MultiWan -j MultiWanPostHandler
-
 i=0
 while [ $i -lt $wancount ]; do 
 i=`expr $i + 1` 
@@ -611,7 +620,10 @@ iptables -t mangle -A MultiWanPostHandler -o $ifname -m mark --mark 0x123 -j FW$
 done
 
 if [ ! -z "$CHKFORQOS" ]; then
-iptables -t mangle -A MultiWan -j MultiWanQoS
+iptables -t mangle -I PREROUTING 6 -j MultiWanQoS
+iptables -t mangle -A FORWARD -j MultiWanQoS
+iptables -t mangle -A OUTPUT -j MultiWanQoS
+iptables -t mangle -A POSTROUTING -j MultiWanQoS
 fi
 }
 
@@ -623,8 +635,9 @@ local failchk
 local weight
 local nexthop
 local pre_nexthop_chk
+local rand_probability
+local total_weight
 local i
-
 
 echo "## Refreshing Load Balancer ##"
 
@@ -643,6 +656,18 @@ ip route flush table 123 > /dev/null 2>&1
                 done
          done
 
+total_weight=0
+
+iptables -F MultiWanLoadBalancer -t mangle
+
+i=0
+while [ $i -lt $wancount ]; do 
+i=`expr $i + 1` 
+group=$(query_config group $i)
+weight=`uci -q -P /var/state get multiwan.${group}.weight`
+total_weight=$(expr $total_weight + $weight)
+done
+
 i=0
 while [ $i -lt $wancount ]; do 
 i=`expr $i + 1` 
@@ -655,7 +680,19 @@ weight=`uci -q -P /var/state get multiwan.${group}.weight`
 
 if [ "$gateway" != "x" -a "$ifname" != "x" -a "$failchk" != "x" -a "$weight" != "disable" ]; then
 nexthop="$nexthop nexthop via $gateway dev $ifname weight $weight"
+rand_probability=$(expr $(expr $weight \* 100) / $total_weight)
+
+	if [ $rand_probability -lt 10 ]; then
+		rand_probability="0.0${rand_probability}"
+	else 
+		rand_probability="0.${rand_probability}"
+	fi
+
+	if [ -z "$CHKFORMODULE" ]; then
+		iptables -A MultiWanLoadBalancer -t mangle -m mark --mark 0x123 -m statistic --mode random --probability $rand_probability -j FW${i}MARK
+	fi
 fi
+
 done
 
 pre_nexthop_chk=`echo $nexthop | awk -F "nexthop" '{print NF-1}'`
@@ -773,7 +810,6 @@ mkdir /tmp/.mwan > /dev/null 2>&1
 mwan_kill
 flush
 
-refresh_loadbalancer
 
 echo "## IP Rules Initialization ##"
 i=0
@@ -784,6 +820,8 @@ done
 
 refresh_routes
 iptables_init
+
+refresh_loadbalancer
 
 RP_PATH=/proc/sys/net/ipv4/conf
 for IFACE in `ls $RP_PATH`; do
@@ -1002,6 +1040,7 @@ config_foreach acquire_wan_data interface
 update_cache
 
 CHKFORQOS=`iptables -n -L Default -t mangle 2>&1 | grep "Chain Default"`
+CHKFORMODULE=`iptables -m statistic 2>&1 | grep -o "File not found"`
 
 jobfile="/tmp/.mwan/jobqueue"
 
