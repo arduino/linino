@@ -639,9 +639,11 @@ local rand_probability
 local last_probability
 local total_weight
 local total_wans
+local roundme
+local roundlen
 local i
 local x
-local y
+local n
 
 echo "## Refreshing Load Balancer ##"
 
@@ -660,13 +662,10 @@ ip route flush table 123 > /dev/null 2>&1
                 done
          done
 
+iptables -F MultiWanLoadBalancer -t mangle
+
 total_weight=0
 total_wans=0
-last_probability=0
-x=0
-y=0 
-
-iptables -F MultiWanLoadBalancer -t mangle
 
 i=0
 while [ $i -lt $wancount ]; do 
@@ -682,6 +681,12 @@ weight=`uci -q -P /var/state get multiwan.${group}.weight`
         fi
 done
 
+last_probability=0
+roundme=0
+roundlen=0
+x=0
+n=0 
+
 i=0
 while [ $i -lt $wancount ]; do 
 i=`expr $i + 1` 
@@ -694,14 +699,24 @@ weight=`uci -q -P /var/state get multiwan.${group}.weight`
 
 if [ "$gateway" != "x" -a "$ifname" != "x" -a "$failchk" != "x" -a "$weight" != "disable" ]; then
 nexthop="$nexthop nexthop via $gateway dev $ifname weight $weight"
-y=$last_probability
-last_probability=$(expr $x / $(expr $wancount - $i + 1))
-rand_probability=$(expr $(expr $(expr $weight \* 100) / $total_weight) + $last_probability + $y)
+
+n=$(expr $n + $last_probability)
+last_probability=$(expr $x / $(expr $total_wans - $i + 1))
+rand_probability=$(expr $(expr $weight \* 1000) / $total_weight)
+roundlen=`expr length $rand_probability - 1`
+roundme=${rand_probability:$roundlen}
+rand_probability=$(echo $rand_probability | sed s/$roundme//)
+	
+	if [ $roundme -ge 5 ]; then
+		rand_probability=$(expr $rand_probability + 1)
+	fi
+
+rand_probability=$(expr $rand_probability + $n + $last_probability)
 x=$rand_probability
 
         if [ $rand_probability -lt 10 ]; then
                 rand_probability="0.0${rand_probability}"
-        elif [ $rand_probability -lt 100 -a $i != $total_wans ]; then
+        elif [ $rand_probability -lt 100 ]; then
                 rand_probability="0.${rand_probability}"
         else
                 rand_probability="1.0"
