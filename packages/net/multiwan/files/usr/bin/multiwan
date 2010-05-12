@@ -705,7 +705,7 @@ last_probability=$(expr $x / $(expr $total_wans - $i + 1))
 rand_probability=$(expr $(expr $weight \* 1000) / $total_weight)
 roundlen=`expr length $rand_probability - 1`
 roundme=${rand_probability:$roundlen}
-rand_probability=$(echo $rand_probability | sed s/$roundme//)
+rand_probability=$(echo $rand_probability | sed 's/\(..\)\(.\)/\1/g')
 	
 	if [ $roundme -ge 5 ]; then
 		rand_probability=$(expr $rand_probability + 1)
