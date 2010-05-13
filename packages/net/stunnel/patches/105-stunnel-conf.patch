@@ -1,17 +1,17 @@
 --- a/tools/stunnel.conf-sample.in
 +++ b/tools/stunnel.conf-sample.in
-@@ -7,7 +7,7 @@ cert = @sysconfdir@/stunnel/stunnel.pem
+@@ -8,7 +8,7 @@ cert = @sysconfdir@/stunnel/stunnel.pem
  ;key = @sysconfdir@/stunnel/stunnel.pem
  
- ; Protocol version (all, SSLv2, SSLv3, TLSv1)
+ ; protocol version (all, SSLv2, SSLv3, TLSv1)
 -sslVersion = SSLv3
 +sslVersion = all
  
- ; Some security enhancements for UNIX systems - comment them out on Win32
- chroot = @localstatedir@
-@@ -46,21 +46,26 @@ socket = r:TCP_NODELAY=1
+ ; security enhancements for UNIX systems - comment them out on Win32
+ ; for chroot a copy of some devices and files is needed within the jail
+@@ -49,21 +49,26 @@ socket = r:TCP_NODELAY=1
  
- ; Service-level configuration
+ ; service-level configuration
  
 -[pop3s]
 -accept  = 995

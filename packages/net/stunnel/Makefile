@@ -1,11 +1,17 @@
+#
+# Copyright (C) 2006-2010 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=stunnel
-PKG_VERSION:=4.29
-PKG_RELEASE:=4
+PKG_VERSION:=4.33
+PKG_RELEASE:=1
 
-PKG_MD5SUM:=14dc3f8412947f0548975cbce74d6863
+PKG_MD5SUM:=559a864066d8cc4afd8a97682c90d41c
 PKG_SOURCE_URL:=http://www.stunnel.org/download/stunnel/src/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 
