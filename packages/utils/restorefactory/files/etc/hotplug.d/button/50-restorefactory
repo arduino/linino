@@ -1,9 +1,9 @@
-# /bin/sh
+#!/bin/sh
 
 system_config() {
-        config_get button "$1" button "reset"
+	config_get button "$1" button "reset"
 	config_get action "$1" action "pressed"
-	config_get timeout "$1" timeout "5"   
+	config_get timeout "$1" timeout "5"
 }
 
 config_load system
@@ -13,19 +13,19 @@ config_foreach system_config restorefactory
 
 	[ -f /tmp/run/restorefactory.pid ] && read PID < /tmp/run/restorefactory.pid && kill $PID && rm /tmp/run/restorefactory.pid && logger -p user.info -t "restorefactory" "restore to factory defaults aborted"
 
-        [ "$ACTION" = "$action" ] && {
+	[ "$ACTION" = "$action" ] && {
 
-        	if [ "$timeout" -gt 0 ]
+		if [ "$timeout" -gt 0 ]
 		then
 			sleep "$timeout" && firstboot && reboot &
-                	echo $! > /tmp/run/restorefactory.pid
-                	logger -p user.info -t "restorefactory" "restoring to factory defaults in $timeout seconds"
+			echo $! > /tmp/run/restorefactory.pid
+			logger -p user.info -t "restorefactory" "restoring to factory defaults in $timeout seconds"
 		elif [ "$timeout" -eq 0 ]
-		then		
+		then
 			firstboot && reboot &
 		else
 			logger -p user.info -t "restorefactory" "invalid timeout value ($timeout)"
 		fi
-        }
+	}
 } 
 
