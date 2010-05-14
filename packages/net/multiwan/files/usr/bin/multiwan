@@ -39,10 +39,12 @@ add() {
 	update_cache
 
 if [ "$existing_failover" == "2" ]; then
-	if [ "$failover_to" != "balancer" -a "$failover_to" != "disable" -a "$failover_to_wanid" != "$wanid" ]; then
+	if [ "$failover_to" != "balancer" -a "$failover_to" != "fastbalancer" -a "$failover_to" != "disable" -a "$failover_to_wanid" != "$wanid" ]; then
 		iptables -I FW${wanid}MARK 2 -t mangle -j FW${failover_to_wanid}MARK
 	elif [ "$failover_to" == "balancer" ]; then
 		iptables -I FW${wanid}MARK 2 -t mangle -j LoadBalancer
+	elif [ "$failover_to" == "fastbalancer" ]; then
+		iptables -I FW${wanid}MARK 2 -t mangle -j FastBalancer
 	fi
 fi
         mwnote "$1 has failed and is currently offline."
@@ -317,6 +319,8 @@ iptables -t mangle -F MultiWanPostHandler
 iptables -t mangle -X MultiWanPostHandler
 iptables -t mangle -F LoadBalancer
 iptables -t mangle -X LoadBalancer
+iptables -t mangle -F FastBalancer
+iptables -t mangle -X FastBalancer
 
 i=0
 while [ $i -lt $wancount ]; do 
@@ -429,11 +433,13 @@ mwanrule() {
           return
        fi
 
-    if [ "$wanrule" != "balancer" ]; then
+    if [ "$wanrule" != "balancer" -a "$wanrule" != "fastbalancer" ]; then
        wanrule=$(query_config wanid ${wanrule})
        wanrule="FW${wanrule}MARK"
     elif [ "$wanrule" == "balancer" ]; then
        wanrule="LoadBalancer"
+    elif [ "$wanrule" == "fastbalancer" ]; then
+       wanrule="FastBalancer"
     fi
     if [ "$dst" == "all" ]; then
 	dst=$NULL
@@ -559,11 +565,12 @@ fi
 
 iptables -t mangle -N MultiWan
 iptables -t mangle -N LoadBalancer
+iptables -t mangle -N FastBalancer
 iptables -t mangle -N MultiWanRules
 iptables -t mangle -N MultiWanDNS
 iptables -t mangle -N MultiWanPreHandler
 iptables -t mangle -N MultiWanPostHandler
-iptables -t mangle -N MultiWanLoadBalancer
+iptables -t mangle -N MultiWanFastBalancer
 
 echo "## Creating FW Rules ##"
 i=0
@@ -578,18 +585,27 @@ done
 iptables -t mangle -A LoadBalancer -j MARK --set-mark 0x123
 iptables -t mangle -A LoadBalancer -j CONNMARK --save-mark
 
+if [ -z "$CHKFORMODULE" ]; then
+iptables -t mangle -A FastBalancer -j MARK --set-mark 0x124
+iptables -t mangle -A FastBalancer -j CONNMARK --save-mark
+else
+mwnote "Fast Balancer is unavailable due to missing netfilter statistics module, resorting to standard route based load balancer."
+iptables -t mangle -A FastBalancer -j MARK --set-mark 0x123
+iptables -t mangle -A FastBalancer -j CONNMARK --save-mark
+fi
+
 iptables -t mangle -I PREROUTING -j MultiWan
 iptables -t mangle -I PREROUTING 2 -j MultiWanPreHandler
 iptables -t mangle -I PREROUTING 3 -j MultiWanDNS
 iptables -t mangle -I PREROUTING 4 -j MultiWanRules
-iptables -t mangle -I PREROUTING 5 -j MultiWanLoadBalancer
+iptables -t mangle -I PREROUTING 5 -j MultiWanFastBalancer
 
 iptables -t mangle -I FORWARD -j MultiWan
 
 iptables -t mangle -I OUTPUT -j MultiWan
 iptables -t mangle -I OUTPUT 2 -j MultiWanDNS
 iptables -t mangle -I OUTPUT 3 -j MultiWanRules
-iptables -t mangle -I OUTPUT 4 -j MultiWanLoadBalancer
+iptables -t mangle -I OUTPUT 4 -j MultiWanFastBalancer
 iptables -t mangle -I OUTPUT 5 -j MultiWanPostHandler
 
 
@@ -603,9 +619,11 @@ refresh_dns
 config_load "multiwan"
 config_foreach mwanrule mwanfw
 
-if [ "$default_route" != "balancer" ]; then 
+if [ "$default_route" != "balancer" -a "$default_route" != "fastbalancer" ]; then 
 default_route_id=$(query_config wanid $default_route)
 iptables -t mangle -A MultiWanRules -m mark --mark 0x0 -j FW${default_route_id}MARK
+elif [ "$default_route" == "fastbalancer" ]; then
+iptables -t mangle -A MultiWanRules -m mark --mark 0x0 -j FastBalancer
 else
 iptables -t mangle -A MultiWanRules -m mark --mark 0x0 -j LoadBalancer
 fi
@@ -636,14 +654,8 @@ local weight
 local nexthop
 local pre_nexthop_chk
 local rand_probability
-local last_probability
 local total_weight
-local total_wans
-local roundme
-local roundlen
 local i
-local x
-local n
 
 echo "## Refreshing Load Balancer ##"
 
@@ -662,10 +674,9 @@ ip route flush table 123 > /dev/null 2>&1
                 done
          done
 
-iptables -F MultiWanLoadBalancer -t mangle
+iptables -F MultiWanFastBalancer -t mangle
 
 total_weight=0
-total_wans=0
 
 i=0
 while [ $i -lt $wancount ]; do 
@@ -677,15 +688,8 @@ ifname=$(query_config ifname $group)
 weight=`uci -q -P /var/state get multiwan.${group}.weight`
         if [ "$gateway" != "x" -a "$ifname" != "x" -a "$failchk" != "x" -a "$weight" != "disable" ]; then
                 total_weight=$(expr $total_weight + $weight)
-		total_wans=$i
         fi
 done
-
-last_probability=0
-roundme=0
-roundlen=0
-x=0
-n=0 
 
 i=0
 while [ $i -lt $wancount ]; do 
@@ -700,19 +704,8 @@ weight=`uci -q -P /var/state get multiwan.${group}.weight`
 if [ "$gateway" != "x" -a "$ifname" != "x" -a "$failchk" != "x" -a "$weight" != "disable" ]; then
 nexthop="$nexthop nexthop via $gateway dev $ifname weight $weight"
 
-n=$(expr $n + $last_probability)
-last_probability=$(expr $x / $(expr $total_wans - $i + 1))
-rand_probability=$(expr $(expr $weight \* 1000) / $total_weight)
-roundlen=`expr length $rand_probability - 1`
-roundme=${rand_probability:$roundlen}
-rand_probability=$(echo $rand_probability | sed 's/\(..\)\(.\)/\1/g')
-	
-	if [ $roundme -ge 5 ]; then
-		rand_probability=$(expr $rand_probability + 1)
-	fi
-
-rand_probability=$(expr $rand_probability + $n + $last_probability)
-x=$rand_probability
+rand_probability=$(expr $(expr $weight \* 100) / $total_weight)
+total_weight=$(expr $total_weight - $weight)
 
         if [ $rand_probability -lt 10 ]; then
                 rand_probability="0.0${rand_probability}"
@@ -723,7 +716,7 @@ x=$rand_probability
         fi
 
 	if [ -z "$CHKFORMODULE" ]; then
-		iptables -A MultiWanLoadBalancer -t mangle -m mark --mark 0x123 -m statistic --mode random --probability $rand_probability -j FW${i}MARK
+		iptables -A MultiWanFastBalancer -t mangle -m mark --mark 0x124 -m statistic --mode random --probability $rand_probability -j FW${i}MARK
 	fi
 fi
 

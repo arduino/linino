@@ -32,10 +32,10 @@ config 'mwanfw'
 config 'mwanfw'
 	option 'src' '192.168.0.3'
         option 'proto' 'icmp'
-        option 'wanrule' 'wan'
+        option 'wanrule' 'balancer'
 
 config 'mwanfw'
         option 'dst' 'www.whatismyip.com'
-        option 'wanrule' 'balancer'
+        option 'wanrule' 'fastbalancer'
 
 
