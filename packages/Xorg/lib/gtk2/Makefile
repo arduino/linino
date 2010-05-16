@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gtk2
 PKG_VERSION:=2.17.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=gtk+-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/gtk+/2.17

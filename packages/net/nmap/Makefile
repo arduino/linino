@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nmap
 PKG_VERSION:=4.20
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.insecure.org/nmap/dist
@@ -41,7 +41,7 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
-	LIBS="-nodefaultlibs -luClibc++ -lgcc" \
+	LIBS="-nodefaultlibs -luClibc++ $(LIBGCC_S)" \
 
 define Package/nmap/install
 	$(INSTALL_DIR) $(1)/usr/bin
