@@ -589,7 +589,8 @@ if [ -z "$CHKFORMODULE" ]; then
 iptables -t mangle -A FastBalancer -j MARK --set-mark 0x124
 iptables -t mangle -A FastBalancer -j CONNMARK --save-mark
 else
-mwnote "Fast Balancer is unavailable due to missing netfilter statistics module, resorting to standard route based load balancer."
+mwnote "Fast Balancer is unavailable due to current kernel limitations.."
+mwnote "All Fast Balancer traffic will be diverted to the Load Balancer."
 iptables -t mangle -A FastBalancer -j MARK --set-mark 0x123
 iptables -t mangle -A FastBalancer -j CONNMARK --save-mark
 fi
