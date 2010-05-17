@@ -24,7 +24,7 @@ define Package/jtg
   SUBMENU:=Monitoring
   SECTION:=net
   CATEGORY:=Network
-  MAINTAINER:=Roberto Riggio (roberto.riggio@create-net.org)
+  MAINTAINER:=Roberto Riggio <roberto.riggio@create-net.org>
   URL:=https://hoslab.cs.helsinki.fi/savane/projects/jtg/
 endef
 
