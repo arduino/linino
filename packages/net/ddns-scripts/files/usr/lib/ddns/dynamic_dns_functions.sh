@@ -56,7 +56,6 @@ get_current_ip()
 	if [ "$ip_source" != "interface" ] && [ "$ip_source" != "web" ] && [ "$ip_source" != "script" ]
 	then
 		ip_source="network"
-		ip_network="wan"
 	fi
 
 	if [ "$ip_source" = "network" ]
