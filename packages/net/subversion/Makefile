@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=subversion
-PKG_VERSION:=1.6.9
+PKG_VERSION:=1.6.11
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://subversion.tigris.org/downloads
-PKG_MD5SUM:=9c30a47b1d48664e7afef68bb4834c53
+PKG_MD5SUM:=75419159b50661092c4137449940b5cc
 
 PKG_FIXUP:=libtool
 
@@ -24,7 +24,7 @@ define Package/subversion/Default
   CATEGORY:=Network
   TITLE:=A compelling replacement for CVS
   DEPENDS:=+zlib +libneon +libintl +libaprutil
-  URL:=http://subversion.tigris.org/
+  URL:=http://subversion.apache.org/
   SUBMENU:=Version Control Systems
 endef
 
