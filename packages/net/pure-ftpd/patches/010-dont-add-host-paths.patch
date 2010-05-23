@@ -1,5 +1,3 @@
-diff --git a/configure b/configure
-index f771720..d1c40f4 100755
 --- a/configure
 +++ b/configure
 @@ -4893,18 +4893,6 @@ fi

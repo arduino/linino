@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pure-ftpd
-PKG_VERSION:=1.0.28
+PKG_VERSION:=1.0.29
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.pureftpd.org/pub/pure-ftpd/releases
-PKG_MD5SUM:=a6f63e31be494df4e3174535bf8d6be1
+PKG_MD5SUM:=12a074824b509f9e7684fab333ed6915
 
 PKG_INSTALL:=1
 
