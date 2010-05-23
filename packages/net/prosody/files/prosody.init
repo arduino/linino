@@ -1,0 +1,32 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2010 OpenWrt.org
+
+START=99
+EXTRA_COMMANDS="status"
+EXTRA_HELP="	status	Print the status of the service"
+
+BIN=/usr/bin/prosodyctl
+LOG_D=/var/log/prosody
+RUN_D=/var/run/prosody
+PID_F=$RUN_D/prosody.pid
+RUN_USER=prosody
+RUN_GROUP=prosody
+
+start() {
+	[ -d $LOG_D ] || ( mkdir -p $LOG_D && chown $RUN_USER:$RUN_GROUP $LOG_D )
+	[ -d $RUN_D ] || ( mkdir -p $RUN_D && chown $RUN_USER:$RUN_GROUP $RUN_D )
+
+	$BIN start
+}
+
+stop() {
+	$BIN stop
+}
+
+reload() {
+	[ -f $PID_F ] && kill -HUP $(cat $PID_F)
+}
+
+status() {
+	$BIN status
+}
