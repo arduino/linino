@@ -9,23 +9,42 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=batman-adv
-PKG_REV:=1611
-PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=1
 
+# Versions to download for maintenance build
+PKG_REV_MAINT:=1611
+PKG_KMOD_VERSION_MAINT:=5c4633c532a7a9b5adfe5dbf3f5e97fff307216e
+# just for the package version numbering
+PKG_VERSION_MAINT:=0.2.1
+# Versions to download for development build
+PKG_REV_DEV:=1679
+PKG_KMOD_VERSION_DEV:=de32ed5ba4b6487dbd3c4cad6c9ba8240d79c421
+# just for the package version numbering
+PKG_VERSION_DEV:=0.3.0a
+## Make sure git-commit hash and svn revision number fit! ##
+
+PKG_RELEASE:=1
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
-PKG_TOOL_VERSION=$(PKG_REV)
 
 ifneq ($(CONFIG_BATMAN_ADV_DEV),)
-	PKG_KMOD_VERSION=f9c84f3d20df87f4ebbc38b754b6b13fc1593ce2
+	PKG_REV:=$(PKG_REV_DEV)
+	PKG_VERSION:=$(PKG_VERSION_DEV)
+	PKG_KMOD_VERSION=$(PKG_KMOD_VERSION_DEV)
+	PKG_KMOD_URL=http://git.open-mesh.org/snapshot/$(PKG_KMOD_VERSION)/
 	PKG_KMOD_FNAME=batman-adv-dev-$(PKG_REV).tar.gz
+	PKG_TOOL_VERSION=$(PKG_REV)
+	PKG_TOOL_PROTO=svn
 	PKG_TOOL_URL=http://downloads.open-mesh.org/svn/batman/trunk/batctl
 	PKG_TOOL_FNAME:=batctl-dev-$(PKG_TOOL_VERSION).tar.gz
 else
-	PKG_KMOD_VERSION=5c4633c532a7a9b5adfe5dbf3f5e97fff307216e
+	PKG_REV:=$(PKG_REV_MAINT)
+	PKG_VERSION:=$(PKG_VERSION_MAINT)
+	PKG_KMOD_VERSION=$(PKG_KMOD_VERSION_MAINT)
+	PKG_KMOD_URL=http://git.open-mesh.org/snapshot/$(PKG_KMOD_VERSION)/
 	PKG_KMOD_FNAME=batman-adv-maint-$(PKG_REV).tar.gz
+	PKG_TOOL_VERSION=$(PKG_REV)
+	PKG_TOOL_PROTO=svn
 	PKG_TOOL_URL=http://downloads.open-mesh.org/svn/batman/branches/batctl-0.2.x/
 	PKG_TOOL_FNAME:=batctl-maint-$(PKG_TOOL_VERSION).tar.gz
 endif
@@ -69,7 +88,7 @@ endef
 
 define Download/batman-adv-kernelland
   FILE:=$(PKG_KMOD_FNAME)
-  URL:=http://git.open-mesh.org/snapshot/$(PKG_KMOD_VERSION)/
+  URL:=$(PKG_KMOD_URL)
 endef
 $(eval $(call Download,batman-adv-kernelland))
 
@@ -77,7 +96,7 @@ ifneq ($(DEVELOPER)$(CONFIG_KMOD_BATMAN_ADV_BATCTL),)
 define Download/batctl
   FILE:=$(PKG_TOOL_FNAME)
   URL:=$(PKG_TOOL_URL)
-  PROTO:=svn
+  PROTO:=$(PKG_TOOL_PROTO)
   VERSION:=$(PKG_TOOL_VERSION)
   SUBDIR:=$(PKG_SOURCE_SUBDIR)/batctl
 endef
@@ -157,8 +176,8 @@ endef
 
 define KernelPackage/batman-adv-kernelland/install
 	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/etc/init.d/batman-adv-kernelland $(1)/etc/init.d
-	$(INSTALL_DATA) ./files/etc/config/batman-adv-kernelland $(1)/etc/config
+	$(INSTALL_BIN) ./files/etc/init.d/batman-adv $(1)/etc/init.d
+	$(INSTALL_DATA) ./files/etc/config/batman-adv $(1)/etc/config
 ifneq ($(DEVELOPER)$(CONFIG_KMOD_BATMAN_ADV_BATCTL),)
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/batctl $(1)/usr/sbin/
