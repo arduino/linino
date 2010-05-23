@@ -774,7 +774,7 @@
  	# Uncomment it if you want to use ldap for authentication
  	#
  	# Note that this means "check plain-text password against
-@@ -307,13 +252,13 @@ authenticate {
+@@ -307,8 +252,8 @@ authenticate {
  #
  #  Pre-accounting.  Decide which accounting type to use.
  #
@@ -784,6 +784,9 @@
 +#	preprocess
  
  	#
+ 	#  Session start times are *implied* in RADIUS.
+@@ -331,7 +276,7 @@ preacct {
+ 	#
  	#  Ensure that we have a semi-unique identifier for every
  	#  request, and many NAS boxes are broken.
 -	acct_unique
@@ -791,7 +794,7 @@
  
  	#
  	#  Look for IPASS-style 'realm/', and if not found, look for
-@@ -323,13 +268,13 @@ preacct {
+@@ -341,13 +286,13 @@ preacct {
  	#  Accounting requests are generally proxied to the same
  	#  home server as authentication requests.
  #	IPASS
@@ -808,7 +811,7 @@
  
  #
  #  Accounting.  Log the accounting data.
-@@ -339,14 +284,9 @@ accounting {
+@@ -357,14 +302,9 @@ accounting {
  	#  Create a 'detail'ed log of the packets.
  	#  Note that accounting requests which are proxied
  	#  are also logged in the detail file.
@@ -824,7 +827,7 @@
  	#
  	#  For Simultaneous-Use tracking.
  	#
-@@ -355,9 +295,6 @@ accounting {
+@@ -373,9 +313,6 @@ accounting {
  	radutmp
  #	sradutmp
  
@@ -834,7 +837,7 @@
  	#
  	#  Log traffic to an SQL database.
  	#
-@@ -374,7 +311,7 @@ accounting {
+@@ -406,7 +343,7 @@ accounting {
  #	pgsql-voip
  
  	#  Filter attributes from the accounting response.
@@ -843,7 +846,7 @@
  
  	#
  	#  See "Autz-Type Status-Server" for how this works.
-@@ -400,10 +337,7 @@ session {
+@@ -432,10 +369,7 @@ session {
  #  Post-Authentication
  #  Once we KNOW that the user has been authenticated, there are
  #  additional steps we can take.
@@ -855,7 +858,7 @@
  	#
  	#  If you want to have a log of authentication replies,
  	#  un-comment the following line, and the 'detail reply_log'
-@@ -429,7 +363,7 @@ post-auth {
+@@ -461,7 +395,7 @@ post-auth {
  	#
  #	ldap
  
@@ -864,7 +867,7 @@
  
  	#
  	#  Calculate the various WiMAX keys.  In order for this to work,
-@@ -473,10 +407,10 @@ post-auth {
+@@ -505,10 +439,10 @@ post-auth {
  	#  Add the ldap module name (or instance) if you have set 
  	#  'edir_account_policy_check = yes' in the ldap module configuration
  	#
@@ -879,7 +882,7 @@
  
  #
  #  When the server decides to proxy a request to a home server,
-@@ -486,7 +420,7 @@ post-auth {
+@@ -518,7 +452,7 @@ post-auth {
  #
  #  Only a few modules currently have this method.
  #
@@ -888,7 +891,7 @@
  #	attr_rewrite
  
  	#  Uncomment the following line if you want to change attributes
-@@ -502,14 +436,14 @@ pre-proxy {
+@@ -534,14 +468,14 @@ pre-proxy {
  	#  server, un-comment the following line, and the
  	#  'detail pre_proxy_log' section, above.
  #	pre_proxy_log
@@ -905,7 +908,7 @@
  
  	#  If you want to have a log of replies from a home server,
  	#  un-comment the following line, and the 'detail post_proxy_log'
-@@ -533,7 +467,7 @@ post-proxy {
+@@ -565,7 +499,7 @@ post-proxy {
  	#  hidden inside of the EAP packet, and the end server will
  	#  reject the EAP request.
  	#
@@ -914,7 +917,7 @@
  
  	#
  	#  If the server tries to proxy a request and fails, then the
-@@ -555,6 +489,5 @@ post-proxy {
+@@ -587,6 +521,5 @@ post-proxy {
  #	Post-Proxy-Type Fail {
  #			detail
  #	}

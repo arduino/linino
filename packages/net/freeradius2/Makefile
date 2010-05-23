@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeradius2
-PKG_VERSION:=2.1.7
+PKG_VERSION:=2.1.8
 PKG_RELEASE:=3
 
 PKG_SOURCE:=freeradius-server-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/freeradius/
-PKG_MD5SUM:=b8df6cf0c3df1dded205ad5f954feb78
+PKG_MD5SUM:=d326525490bfba273471d77560471fcb
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/freeradius-server-$(PKG_VERSION)
 PKG_FIXUP:=libtool
