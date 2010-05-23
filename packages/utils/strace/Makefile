@@ -9,15 +9,16 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=strace
-PKG_RELEASE:=3
 
 ifeq ($(CONFIG_LINUX_2_6_25),y)
   PKG_VERSION:=4.5.16
+  PKG_RELEASE:=3
   PKG_MD5SUM:=77f66d09aa82981bb6d65fa19a2c1ba9
   PATCH_DIR:=patches-4.5.16
 else
-  PKG_VERSION:=4.5.19
-  PKG_MD5SUM:=2415e435d61e40315a298c80aced0cda
+  PKG_VERSION:=4.5.20
+  PKG_RELEASE:=1
+  PKG_MD5SUM:=64dfe10d9db0c1e34030891695ffca4b
 endif
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
