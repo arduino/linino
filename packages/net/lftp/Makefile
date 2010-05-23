@@ -1,7 +1,6 @@
 #
 # Copyright (C) 2008-2010 OpenWrt.org
 #
-
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
@@ -9,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lftp
-PKG_VERSION:=4.0.5
-PKG_RELEASE:=2
+PKG_VERSION:=4.0.7
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://lftp.cybermirror.org \
   http://lftp.cybermirror.org/old
-PKG_MD5SUM:=5400cad5f91e131ac2ded7c24aea594c
+PKG_MD5SUM:=a40e4518fc477c82ffcc5b04d9ff64ff
 
 PKG_INSTALL:=1
 
@@ -58,7 +57,7 @@ MAKE_VARS += \
 define Package/lftp/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/lftp $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/lftp $(1)/usr/bin/
 endef
 
 define Package/lftp/postinst
