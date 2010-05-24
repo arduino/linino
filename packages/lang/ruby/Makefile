@@ -17,7 +17,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=ruby
 PKG_LIBVER:=1.9.1
 PKG_VERSION:=$(PKG_LIBVER)-p376
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.ruby-lang.org/pub/ruby/1.9/
@@ -334,6 +334,8 @@ define Package/ruby-gdbm/install
 endef
 
 define Package/ruby-gems/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/gem $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/ruby/$(PKG_LIBVER)
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/rubygems.rb $(1)/usr/lib/ruby/$(PKG_LIBVER)/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ruby/$(PKG_LIBVER)/rubygems $(1)/usr/lib/ruby/$(PKG_LIBVER)/
