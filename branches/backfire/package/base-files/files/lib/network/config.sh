@@ -66,6 +66,35 @@ add_vlan() {
 	return 1
 }
 
+# add dns entries if they are not in resolv.conf yet
+add_dns() {
+	local cfg="$1"; shift
+
+	local dns
+	local add
+	for dns in "$@"; do
+		grep -qsF "nameserver $dns" /tmp/resolv.conf.auto || {
+			add="${add:+$add }$dns"
+			echo "nameserver $dns" >> /tmp/resolv.conf.auto
+		}
+	done
+
+	uci_set_state network "$cfg" dns "$add"
+}
+
+# remove dns entries of the given iface
+remove_dns() {
+	local cfg="$1"
+
+	local dns
+	config_get dns "$cfg" dns
+	for dns in $dns; do
+		sed -i -e "/^nameserver $dns$/d" /tmp/resolv.conf.auto
+	done
+
+	uci_revert_state network "$cfg" dns
+}
+
 # sort the device list, drop duplicates
 sort_list() {
 	local arg="$*"
@@ -264,7 +293,6 @@ setup_interface() {
 	}
 	set_interface_ifname "$config" "$iface_main"
 
-	pidfile="/var/run/$iface_main.pid"
 	[ -n "$proto" ] || config_get proto "$config" proto
 	case "$proto" in
 		static)
@@ -272,11 +300,14 @@ setup_interface() {
 			setup_interface_static "$iface_main" "$config"
 		;;
 		dhcp)
+			local lockfile="/var/lock/dhcp-$iface_main"
+			lock "$lockfile"
+
 			# prevent udhcpc from starting more than once
-			lock "/var/lock/dhcp-$iface_main"
+			local pidfile="/var/run/dhcp-${iface_main}.pid"
 			local pid="$(cat "$pidfile" 2>/dev/null)"
-			if [ -d "/proc/$pid" ] && grep udhcpc "/proc/${pid}/cmdline" >/dev/null 2>/dev/null; then
-				lock -u "/var/lock/dhcp-$iface_main"
+			if [ -d "/proc/$pid" ] && grep -qs udhcpc "/proc/${pid}/cmdline"; then
+				lock -u "$lockfile"
 			else
 				local ipaddr netmask hostname proto1 clientid
 				config_get ipaddr "$config" ipaddr
@@ -292,7 +323,7 @@ setup_interface() {
 				local dhcpopts
 				[ ."$proto1" != ."$proto" ] && dhcpopts="-n -q"
 				$DEBUG eval udhcpc -t 0 -i "$iface_main" ${ipaddr:+-r $ipaddr} ${hostname:+-H $hostname} ${clientid:+-c $clientid} -b -p "$pidfile" ${dhcpopts:- -O rootpath -R &}
-				lock -u "/var/lock/dhcp-$iface_main"
+				lock -u "$lockfile"
 			fi
 		;;
 		none)
@@ -329,6 +360,21 @@ setup_interface() {
 
 stop_interface_dhcp() {
 	local config="$1"
+
+	local iface
+	config_get ifname "$config" ifname
+
+	local lock="/var/lock/dhcp-${ifname}"
+	[ -f "$lock" ] && lock -u "$lock"
+
+	local pidfile="/var/run/dhcp-${ifname}.pid"
+	local pid="$(cat "$pidfile" 2>/dev/null)"
+	[ -d "/proc/$pid" ] && {
+		grep -qs udhcpc "/proc/$pid/cmdline" && kill -TERM $pid && \
+			while grep -qs udhcpc "/proc/$pid/cmdline"; do sleep 1; done
+		rm -f "$pidfile"
+	}
+
 	uci -P /var/state revert "network.$config"
 }
 

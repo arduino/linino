@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=ppp
 PKG_VERSION:=2.4.4
-PKG_RELEASE:=6
+PKG_RELEASE:=7
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.samba.org/pub/ppp/
@@ -140,7 +140,7 @@ define Package/ppp/install
 	$(INSTALL_BIN) ./files/etc/ppp/ipv6-up $(1)/etc/ppp/
 	$(INSTALL_BIN) ./files/etc/ppp/ipv6-down $(1)/etc/ppp/
 	$(INSTALL_DATA) ./files/etc/ppp/options $(1)/etc/ppp/
-	ln -sf /tmp/resolv.conf.auto $(1)/etc/ppp/resolv.conf
+	ln -sf /tmp/resolv.conf.ppp $(1)/etc/ppp/resolv.conf
 endef
 	
 define Package/ppp-mod-pppoa/install
@@ -149,6 +149,8 @@ define Package/ppp-mod-pppoa/install
 		$(1)/usr/lib/pppd/$(PKG_VERSION)/
 	$(INSTALL_DIR) $(1)/lib/network
 	$(INSTALL_BIN) ./files/pppoa.sh $(1)/lib/network/
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/atm
+	$(INSTALL_DATA) ./files/etc/hotplug.d/atm/20-atm-modem $(1)/etc/hotplug.d/atm/
 endef
 
 define Package/ppp-mod-pppoe/install
