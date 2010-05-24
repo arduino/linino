@@ -1,10 +1,9 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 #
 # To Do:
@@ -17,12 +16,12 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ruby
 PKG_LIBVER:=1.9.1
-PKG_VERSION:=$(PKG_LIBVER)-p243
+PKG_VERSION:=$(PKG_LIBVER)-p376
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.ruby-lang.org/pub/ruby/1.9/
-PKG_MD5SUM:=66d4f8403d13623051091347764881a0
+PKG_MD5SUM:=ebb20550a11e7f1a2fbd6fdec2a3e0a3
 
 PKG_BUILD_DEPENDS:=ruby/host
 
@@ -214,6 +213,13 @@ MAKE_FLAGS += \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
 	SHELL="/bin/bash" \
 	all install
+
+define Build/Prepare
+$(call Build/Prepare/Default)
+	( cd $(PKG_BUILD_DIR) ; \
+		autoconf ; \
+	)
+endef
 
 define Package/ruby/install
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -450,14 +456,6 @@ define Build/InstallDev
 		. \
 	) | ( cd $(1); $(TAR) -xf - )
 endef
-
-define Build/Prepare
-$(call Build/Prepare/Default)
-	( cd $(PKG_BUILD_DIR) ; \
-		autoconf ; \
-	)
-endef
-
 
 $(eval $(call BuildPackage,ruby))
 $(eval $(call BuildPackage,libruby))
