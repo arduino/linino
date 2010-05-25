@@ -1,0 +1,17 @@
+--- transmission/libtransmission/tr-lpd.c.orig	2010-05-23 03:49:23.000000000 +0200
++++ transmission/libtransmission/tr-lpd.c	2010-05-25 19:44:03.000000000 +0200
+@@ -439,12 +439,13 @@
+ 
+     char hashString[lengthof( t->info.hashString )];
+     char query[lpd_maxDatagramLength + 1] = { };
++    size_t i;
+ 
+     if( t == NULL )
+         return FALSE;
+ 
+     /* make sure the hash string is normalized, just in case */
+-    for( size_t i = 0; i < sizeof hashString; i++ )
++    for( i = 0; i < sizeof hashString; i++ )
+         hashString[i] = toupper( t->info.hashString[i] );
+ 
+     /* prepare a zero-terminated announce message */
