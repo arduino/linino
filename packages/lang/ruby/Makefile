@@ -21,7 +21,7 @@ PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.ruby-lang.org/pub/ruby/1.9/
-PKG_MD5SUM:=ebb20550a11e7f1a2fbd6fdec2a3e0a3
+PKG_MD5SUM:=e019ae9c643c5efe91be49e29781fb94
 
 PKG_BUILD_DEPENDS:=ruby/host
 
