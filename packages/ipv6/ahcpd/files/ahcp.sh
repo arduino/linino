@@ -17,10 +17,20 @@ append_parm() {
 	append args "$switch $_loctmp"
 }
 
-append_args() {
+append_stmt() {
 	local name="$1"
 	local switch="$2"
-	append args "$switch $name"
+	append args "-C '$switch $name'"
+}
+
+append_opt_stmt() {
+	local section="$1"
+	local option="$2"
+	local switch="$3"
+	local _loctmp
+	config_get _loctmp "$section" "$option"
+	[ -z "$_loctmp" ] && return 0
+	append args "-C '$switch $_loctmp'"
 }
 
 ahcp_addif() {
@@ -32,15 +42,11 @@ ahcp_addif() {
 ahcp_server() {
 	local cfg="$1"
 
-	append args "-C '"
-
-	append_parm "$cfg" 'mode' 'mode'
-	append_parm "$cfg" 'lease_dir' 'lease-dir'
-	config_list_foreach "$cfg" 'prefix' append_args 'prefix'
-	config_list_foreach "$cfg" 'name_server' append_args 'name-server'
-	config_list_foreach "$cfg" 'ntp_server' append_args 'ntp-server'
-
-	append args ' ' "'"
+	append_opt_stmt "$cfg" 'mode' 'mode'
+	append_opt_stmt "$cfg" 'lease_dir' 'lease-dir'
+	config_list_foreach "$cfg" 'prefix' append_stmt 'prefix'
+	config_list_foreach "$cfg" 'name_server' append_stmt 'name-server'
+	config_list_foreach "$cfg" 'ntp_server' append_stmt 'ntp-server'
 
 	append_parm "$cfg" 'id_file' '-i'
 	append_parm "$cfg" 'log_file' '-L'
