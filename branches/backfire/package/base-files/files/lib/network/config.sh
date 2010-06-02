@@ -164,6 +164,15 @@ prepare_interface() {
 			local macaddr
 			config_get macaddr "$config" macaddr
 			[ -x /usr/sbin/brctl ] && {
+				# Remove IPv6 link local addr before adding the iface to the bridge
+				local llv6="$(ifconfig "$iface")"
+				case "$llv6" in
+					*fe80:*/64*)
+						llv6="${llv6#* fe80:}"
+						ifconfig "$iface" del "fe80:${llv6%% *}"
+					;;
+				esac
+
 				ifconfig "br-$config" 2>/dev/null >/dev/null && {
 					local newdevs devices
 					config_get devices "$config" device
@@ -246,6 +255,25 @@ setup_interface_alias() {
 	config_get cfg "$config" interface
 	[ "$parent" == "$cfg" ] || return 0
 
+	# parent device and ifname
+	local p_device p_type
+	config_get p_device "$cfg" device
+	config_get p_type   "$cfg" type
+
+	# select alias ifname
+	local layer use_iface
+	config_get layer "$config" layer 2
+	case "$layer:$p_type" in
+		# layer 3: e.g. pppoe-wan or pptp-vpn
+		3:*)      use_iface="$iface" ;;
+
+		# layer 2 and parent is bridge: e.g. br-wan
+		2:bridge) use_iface="br-$cfg" ;;
+
+		# layer 1: e.g. eth0 or ath0
+		*)        use_iface="$p_device" ;;
+	esac
+
 	# alias counter
 	local ctr
 	config_get ctr "$parent" alias_count 0
@@ -258,14 +286,14 @@ setup_interface_alias() {
 	append list "$config"
 	config_set "$parent" aliases "$list"
 
-	iface="$iface:$ctr"
-	set_interface_ifname "$config" "$iface"
+	use_iface="$use_iface:$ctr"
+	set_interface_ifname "$config" "$use_iface"
 
 	local proto
 	config_get proto "$config" proto "static"
 	case "${proto}" in
 		static)
-			setup_interface_static "$iface" "$config"
+			setup_interface_static "$use_iface" "$config"
 		;;
 		*)
 			echo "Unsupported type '$proto' for alias config '$config'"
@@ -275,100 +303,89 @@ setup_interface_alias() {
 }
 
 setup_interface() {
-	local iface_main="$1"
+	local iface="$1"
 	local config="$2"
 	local proto="$3"
 	local vifmac="$4"
-	local ip6addr_main=
 
 	[ -n "$config" ] || {
-		config=$(find_config "$iface_main")
+		config=$(find_config "$iface")
 		[ "$?" = 0 ] || return 1
 	}
 
-	prepare_interface "$iface_main" "$config" "$vifmac" || return 0
+	prepare_interface "$iface" "$config" "$vifmac" || return 0
 
-	[ "$iface_main" = "br-$config" ] && {
+	[ "$iface" = "br-$config" ] && {
 		# need to bring up the bridge and wait a second for
 		# it to switch to the 'forwarding' state, otherwise
 		# it will lose its routes...
-		ifconfig "$iface_main" up
+		ifconfig "$iface" up
 		sleep 1
 	}
 
 	# Interface settings
-	grep "$iface_main:" /proc/net/dev > /dev/null && {
+	grep "$iface:" /proc/net/dev > /dev/null && {
 		local mtu macaddr
 		config_get mtu "$config" mtu
 		config_get macaddr "$config" macaddr
-		[ -n "$macaddr" ] && $DEBUG ifconfig "$iface_main" down
-		$DEBUG ifconfig "$iface_main" ${macaddr:+hw ether "$macaddr"} ${mtu:+mtu $mtu} up
+		[ -n "$macaddr" ] && $DEBUG ifconfig "$iface" down
+		$DEBUG ifconfig "$iface" ${macaddr:+hw ether "$macaddr"} ${mtu:+mtu $mtu} up
 	}
-	set_interface_ifname "$config" "$iface_main"
+	set_interface_ifname "$config" "$iface"
 
 	[ -n "$proto" ] || config_get proto "$config" proto
 	case "$proto" in
 		static)
-			config_get ip6addr_main "$config" ip6addr
-			setup_interface_static "$iface_main" "$config"
+			setup_interface_static "$iface" "$config"
 		;;
 		dhcp)
-			local lockfile="/var/lock/dhcp-$iface_main"
+			local lockfile="/var/lock/dhcp-$iface"
 			lock "$lockfile"
 
 			# prevent udhcpc from starting more than once
-			local pidfile="/var/run/dhcp-${iface_main}.pid"
+			local pidfile="/var/run/dhcp-${iface}.pid"
 			local pid="$(cat "$pidfile" 2>/dev/null)"
 			if [ -d "/proc/$pid" ] && grep -qs udhcpc "/proc/${pid}/cmdline"; then
 				lock -u "$lockfile"
 			else
-				local ipaddr netmask hostname proto1 clientid
+				local ipaddr netmask hostname proto1 clientid broadcast
 				config_get ipaddr "$config" ipaddr
 				config_get netmask "$config" netmask
 				config_get hostname "$config" hostname
 				config_get proto1 "$config" proto
 				config_get clientid "$config" clientid
+				config_get_bool broadcast "$config" broadcast 0
 
 				[ -z "$ipaddr" ] || \
-					$DEBUG ifconfig "$iface_main" "$ipaddr" ${netmask:+netmask "$netmask"}
+					$DEBUG ifconfig "$iface" "$ipaddr" ${netmask:+netmask "$netmask"}
 
 				# don't stay running in background if dhcp is not the main proto on the interface (e.g. when using pptp)
 				local dhcpopts
 				[ ."$proto1" != ."$proto" ] && dhcpopts="-n -q"
-				$DEBUG eval udhcpc -t 0 -i "$iface_main" ${ipaddr:+-r $ipaddr} ${hostname:+-H $hostname} ${clientid:+-c $clientid} -b -p "$pidfile" ${dhcpopts:- -O rootpath -R &}
+				[ "$broadcast" = 1 ] && broadcast="-O broadcast" || broadcast=
+
+				$DEBUG eval udhcpc -t 0 -i "$iface" \
+					${ipaddr:+-r $ipaddr} \
+					${hostname:+-H $hostname} \
+					${clientid:+-c $clientid} \
+					-b -p "$pidfile" $broadcast \
+					${dhcpopts:- -O rootpath -R &}
+
 				lock -u "$lockfile"
 			fi
 		;;
 		none)
-			setup_interface_none "$iface_main" "$config"
+			setup_interface_none "$iface" "$config"
 		;;
 		*)
 			if ( eval "type setup_interface_$proto" ) >/dev/null 2>/dev/null; then
-				eval "setup_interface_$proto '$iface_main' '$config' '$proto'"
+				eval "setup_interface_$proto '$iface' '$config' '$proto'"
 			else
 				echo "Interface type $proto not supported."
 				return 1
 			fi
 		;;
 	esac
-	[ "$proto" = none ] || {
-		for ifn in `ifconfig | grep "^$iface_main:" | awk '{print $1}'`; do
-			ifconfig "$ifn" down
-		done
-	}
-
-	local aliases
-	config_set "$config" aliases ""
-	config_set "$config" alias_count 0
-	config_foreach setup_interface_alias alias "$config" "$iface_main"
-	config_get aliases "$config" aliases
-	[ -z "$aliases" ] || uci_set_state network "$config" aliases "$aliases"
-
-	# put the ip6addr back to the beginning to become the main ip again
-	[ -z "$ip6addr_main" ] || {
-		$DEBUG ifconfig "$iface_main" del "$ip6addr_main"
-		$DEBUG ifconfig "$iface_main" add "$ip6addr_main"
-	}
 }
 
 stop_interface_dhcp() {
