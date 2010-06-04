@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=babeld
 PKG_VERSION:=1.0.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/
@@ -40,6 +40,9 @@ define Package/babeld/conffiles
 /etc/babeld.conf
 /etc/config/babeld
 endef
+
+MAKE_FLAGS+= \
+	CFLAGS="$(TARGET_CFLAGS)" \
 
 define Package/babeld/install
 	$(INSTALL_DIR) $(1)/usr/sbin
