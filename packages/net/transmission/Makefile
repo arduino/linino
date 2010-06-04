@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=transmission
-PKG_VERSION:=2.00b1
+PKG_VERSION:=2.00b2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://mirrors.m0k.org/transmission/files
-PKG_MD5SUM:=43540a46a4eeac88e53a67573feca21a
+PKG_MD5SUM:=db1dd960d92bdc62d61dedeb1d3e3873
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -65,14 +65,15 @@ define Package/transmission-daemon/conffiles
 /etc/config/transmission
 endef
 
+CONFIGURE_VARS += \
+	LIBEVENT_LIBS="$(STAGING_DIR)/usr/lib/libevent.so"
+
 CONFIGURE_ARGS += \
 	--enable-daemon \
-	--disable-gtk \
-	--disable-wx \
-	--with-wx-config="$(STAGING_DIR)/usr/bin/" \
+	--disable-gtk
 
 MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS)" \
+	CFLAGS="$(TARGET_CFLAGS)"
 
 define Package/transmission-daemon/install
 	$(INSTALL_DIR) $(1)/usr/bin
