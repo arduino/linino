@@ -20,7 +20,7 @@ append_ifname() {
 	local switch="$3"
 	local _name
 	config_get _name "$section" "$option"
-	[ -z "$name" ] && return 0
+	[ -z "$_name" ] && return 0
 	local _uciname=`uci get -q -P /var/state network.$_name.ifname`
 	append args "$switch ${_uciname:-$_name}"
 }
