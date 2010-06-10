@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
 PKG_VERSION:=1.6.2.6
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
@@ -125,9 +125,21 @@ $(call Package/asterisk16/Default/description)
  This package provides the channel chan_gtalk and res_jabber for GTalk
  support to Asterisk.
 endef
+
+define Package/asterisk16-curl
+$(call Package/asterisk16/Default)
+  TITLE:=CURL support
+  DEPENDS:= +asterisk16 +libcurl
+endef
+
+define Package/asterisk16-curl/description
+$(call Package/asterisk16/Default/description)
+ This package provides CURL
+ support to Asterisk.
+endef
+
  
 CONFIGURE_ARGS+= \
-	--without-curl \
 	--without-curses \
 	--with-gsm=internal \
 	--without-gtk \
@@ -177,6 +189,15 @@ else
 	--without-gnutls \
 	--without-iksemel
 endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk16-curl),)
+  CONFIGURE_ARGS+= \
+	--with-curl="$(STAGING_DIR)/usr"
+else
+  CONFIGURE_ARGS+= \
+	--without-curl
+endif
+
 
 EXTRA_CFLAGS:= $(TARGET_CPPFLAGS)
 EXTRA_LDFLAGS:= $(TARGET_LDFLAGS)
@@ -338,6 +359,12 @@ define Package/asterisk16-chan-gtalk/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_jabber.so $(1)/usr/lib/asterisk/modules/
 endef
 
+define Package/asterisk16-curl/install
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/func_curl.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_curl.so $(1)/usr/lib/asterisk/modules/
+endef
+
 define BuildAsterisk16ModuleTemplate
 
   define Package/asterisk16-$(subst _,-,$(1))
@@ -367,6 +394,7 @@ $(eval $(call BuildPackage,asterisk16-chan-iax2))
 $(eval $(call BuildPackage,asterisk16-cdr))
 $(eval $(call BuildPackage,asterisk16-res-musiconhold))
 $(eval $(call BuildPackage,asterisk16-chan-gtalk))
+$(eval $(call BuildPackage,asterisk16-curl))
 $(eval $(call BuildAsterisk16ModuleTemplate,app_authenticate,Authenticate,support for executing arbitrary authenticate commands))
 $(eval $(call BuildAsterisk16ModuleTemplate,app_chanisavail,Channel availability check,support for checking if a channel is available))
 $(eval $(call BuildAsterisk16ModuleTemplate,app_chanspy,Channel listen in,support for listening in on any channel))
