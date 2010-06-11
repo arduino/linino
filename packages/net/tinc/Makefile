@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tinc
-PKG_VERSION:=1.0.11
+PKG_VERSION:=1.0.13
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.tinc-vpn.org/packages \
 	http://ftp.yi.se/pub/tinc/ \
 	http://www.mirrors.wiretapped.net/security/network-security/tinc/
-PKG_MD5SUM:=ee0b1a3366c6e379cae34be6fa5dcb15
+PKG_MD5SUM:=86263994d38c750431efd17e9a91a248
 
 PKG_INSTALL:=1
 
