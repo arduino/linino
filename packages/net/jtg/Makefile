@@ -11,9 +11,7 @@ PKG_NAME:=jtg
 PKG_VERSION:=1.95
 PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-v$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:= \
-	http://hoslab.cs.helsinki.fi/downloads/jtg \
-	http://www.netlab.tkk.fi/~jmanner/jtg
+PKG_SOURCE_URL:=http://www.netlab.tkk.fi/~jmanner/jtg
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-v$(PKG_VERSION)
 
