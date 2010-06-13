@@ -58,7 +58,8 @@ endef
 
 define Package/rdnssd
   $(call Package/ndisc)
-  TITLE:=DNS server discovery deamon
+  TITLE:=DNS server discovery daemon
+  DEPENDS:=+librt
 endef
 
 define Package/rdnssd/description
