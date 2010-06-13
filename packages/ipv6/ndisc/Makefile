@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ndisc6
-PKG_VERSION:=0.9.8
+PKG_VERSION:=0.9.9
 PKG_RELEASE:=1
-PKG_MD5SUM:=cb8d70564b8d40aae95e19592c6be183
+PKG_MD5SUM:=aab2209fa7bf6b02ed2f49e7b8e9fa18
 
 PKG_SOURCE_URL:=http://www.remlab.net/files/ndisc6/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -56,6 +56,16 @@ define Package/tcptraceroute6/description
 A TCP/IPv6-based traceroute implementation
 endef
 
+define Package/rdnssd
+  $(call Package/ndisc)
+  TITLE:=DNS server discovery deamon
+endef
+
+define Package/rdnssd/description
+A recursive DNS server discovery daemon gathering
+information through stateless IPv6 autoconfiguration (RFC5006)
+endef
+
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -79,6 +89,12 @@ define Package/tcptraceroute6/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/tcptraceroute6 $(1)/usr/bin/
 endef
 
+define Package/rdnssd/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/rdnssd/rdnssd $(1)/usr/bin/
+endef
+
 $(eval $(call BuildPackage,ndisc6))
 $(eval $(call BuildPackage,rdisc6))
 $(eval $(call BuildPackage,tcptraceroute6))
+$(eval $(call BuildPackage,rdnssd))

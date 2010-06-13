@@ -1,7 +1,6 @@
-diff -urN ndisc6-0.9.8/rdnssd/Makefile.am ndisc6-0.9.8.new/rdnssd/Makefile.am
---- ndisc6-0.9.8/rdnssd/Makefile.am	2008-05-01 14:52:28.000000000 +0200
-+++ ndisc6-0.9.8.new/rdnssd/Makefile.am	2009-04-17 15:47:51.000000000 +0200
-@@ -27,7 +27,8 @@
+--- a/rdnssd/Makefile.am
++++ b/rdnssd/Makefile.am
+@@ -27,7 +27,8 @@ conf_SCRIPTS = merge-hook
  # rdnssd
  rdnssd_SOURCES = rdnssd.c rdnssd.h \
  	icmp.c \
@@ -11,10 +10,9 @@ diff -urN ndisc6-0.9.8/rdnssd/Makefile.am ndisc6-0.9.8.new/rdnssd/Makefile.am
  rdnssd_LDADD = $(LIBRT) \
  		@top_builddir@/compat/libcompat.a
  
-diff -urN ndisc6-0.9.8/rdnssd/Makefile.in ndisc6-0.9.8.new/rdnssd/Makefile.in
---- ndisc6-0.9.8/rdnssd/Makefile.in	2008-05-01 14:52:45.000000000 +0200
-+++ ndisc6-0.9.8.new/rdnssd/Makefile.in	2009-04-17 15:47:39.000000000 +0200
-@@ -58,7 +58,7 @@
+--- a/rdnssd/Makefile.in
++++ b/rdnssd/Makefile.in
+@@ -58,7 +58,7 @@ CONFIG_CLEAN_FILES =
  am__installdirs = "$(DESTDIR)$(sbindir)" "$(DESTDIR)$(confdir)"
  sbinPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
  PROGRAMS = $(sbin_PROGRAMS)
@@ -23,7 +21,7 @@ diff -urN ndisc6-0.9.8/rdnssd/Makefile.in ndisc6-0.9.8.new/rdnssd/Makefile.in
  rdnssd_OBJECTS = $(am_rdnssd_OBJECTS)
  am__DEPENDENCIES_1 =
  rdnssd_DEPENDENCIES = $(am__DEPENDENCIES_1) \
-@@ -211,7 +211,8 @@
+@@ -213,7 +213,8 @@ conf_SCRIPTS = merge-hook
  # rdnssd
  rdnssd_SOURCES = rdnssd.c rdnssd.h \
  	icmp.c \
@@ -33,7 +31,7 @@ diff -urN ndisc6-0.9.8/rdnssd/Makefile.in ndisc6-0.9.8.new/rdnssd/Makefile.in
  
  rdnssd_LDADD = $(LIBRT) \
  		@top_builddir@/compat/libcompat.a
-@@ -334,6 +335,7 @@
+@@ -336,6 +337,7 @@ distclean-compile:
  
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icmp.Po@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/netlink.Po@am__quote@
@@ -41,9 +39,8 @@ diff -urN ndisc6-0.9.8/rdnssd/Makefile.in ndisc6-0.9.8.new/rdnssd/Makefile.in
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rdnssd.Po@am__quote@
  
  .c.o:
-diff -urN ndisc6-0.9.8/rdnssd/strverscmp.c ndisc6-0.9.8.new/rdnssd/strverscmp.c
---- ndisc6-0.9.8/rdnssd/strverscmp.c	1970-01-01 01:00:00.000000000 +0100
-+++ ndisc6-0.9.8.new/rdnssd/strverscmp.c	2009-04-17 15:46:24.000000000 +0200
+--- /dev/null
++++ b/rdnssd/strverscmp.c
 @@ -0,0 +1,131 @@
 +/* Compare strings while treating digits characters numerically.
 +   Copyright (C) 1997, 2000, 2002, 2004 Free Software Foundation, Inc.

@@ -1,6 +1,5 @@
-diff -urN ndisc6-0.9.8/src/trace-tcp.c ndisc6-0.9.8.new/src/trace-tcp.c
---- ndisc6-0.9.8/src/trace-tcp.c	2008-05-01 14:52:28.000000000 +0200
-+++ ndisc6-0.9.8.new/src/trace-tcp.c	2009-04-17 15:39:54.000000000 +0200
+--- a/src/trace-tcp.c
++++ b/src/trace-tcp.c
 @@ -24,6 +24,7 @@
  
  #undef _GNU_SOURCE
@@ -9,9 +8,8 @@ diff -urN ndisc6-0.9.8/src/trace-tcp.c ndisc6-0.9.8.new/src/trace-tcp.c
  
  #include <string.h>
  #include <inttypes.h>
-diff -urN ndisc6-0.9.8/src/trace-udp.c ndisc6-0.9.8.new/src/trace-udp.c
---- ndisc6-0.9.8/src/trace-udp.c	2008-05-01 14:52:28.000000000 +0200
-+++ ndisc6-0.9.8.new/src/trace-udp.c	2009-04-17 15:40:36.000000000 +0200
+--- a/src/trace-udp.c
++++ b/src/trace-udp.c
 @@ -24,6 +24,7 @@
  
  #undef _GNU_SOURCE

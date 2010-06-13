@@ -1,6 +1,6 @@
 --- a/compat/fixups.h
 +++ b/compat/fixups.h
-@@ -50,13 +50,25 @@
+@@ -50,13 +50,25 @@ int inet6_rth_add (void *bp, const struc
  # define IPV6_RTHDR_TYPE_0 0
  #endif
  
