@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ffmpeg
-PKG_VERSION:=20080419
-PKG_RELEASE:=2
+PKG_VERSION:=0.5.2
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-export-snapshot-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
-PKG_MD5SUM:=63aeb859941b96ed3ef7b0c7a643bf4d
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-export-2008-04-19
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://ffmpeg.org/releases/
+PKG_MD5SUM:=
 
 FFMPEG_ENCODERS:= \
 	ac3 \
@@ -23,6 +21,8 @@ FFMPEG_ENCODERS:= \
 	mpeg1video \
 	mpeg2video \
 	mpeg4 \
+	pcm_s16be \
+	pcm_s16le \
 	png \
 	zlib \
 
@@ -38,6 +38,8 @@ FFMPEG_DECODERS:= \
 	mpeg4 \
 	mpeg4aac \
 	mpegvideo \
+	pcm_s16be \
+	pcm_s16le \
 	png \
 	wmav1 \
 	wmav2 \
@@ -52,6 +54,7 @@ FFMPEG_MUXERS:= \
 	mpeg1video \
 	mpeg2video \
 	mpegts \
+	oss \
 	rtp \
 
 FFMPEG_DEMUXERS:= \
@@ -62,6 +65,7 @@ FFMPEG_DEMUXERS:= \
 	mpegps \
 	mpegts \
 	mpegvideo \
+	rm \
 	rtsp \
 	sdp \
 	v4l2 \
@@ -129,7 +133,7 @@ $(call Package/ffmpeg/Default)
  SECTION:=libs
  CATEGORY:=Libraries
  TITLE+= libraries
- DEPENDS+= +libpthread +libfaad2 +zlib
+ DEPENDS+= +libpthread +zlib
  MENU:=1
 endef
 
@@ -184,7 +188,7 @@ define Build/Configure
 		--enable-ffmpeg \
 		--enable-ffserver \
 		--enable-gpl \
-		--enable-libfaad \
+		--disable-libfaad \
 		--disable-mmx \
 		--disable-mmx2 \
 		--enable-pthreads \
@@ -195,6 +199,10 @@ define Build/Configure
 		--enable-zlib \
 		--enable-postproc \
 		\
+		$(if $(CONFIG_FFMPEG_IPV6),,--disable-ipv6) \
+		\
+		--disable-bsfs \
+		--disable-devices \
 		--disable-encoders \
 		$(FFMPEG_CONFIGURE_ENCODERS) \
 		--disable-decoders \
@@ -205,7 +213,6 @@ define Build/Configure
 		$(FFMPEG_CONFIGURE_DEMUXERS) \
 		--disable-parsers \
 		$(FFMPEG_CONFIGURE_PARSERS) \
-		--disable-bsfs \
 		--disable-protocols \
 		$(FFMPEG_CONFIGURE_PROTOCOLS) \
 	)
