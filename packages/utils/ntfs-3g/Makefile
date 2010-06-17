@@ -8,24 +8,34 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ntfs-3g
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
-PKG_UCLIBC_VERSION:=$(call qstrip,$(CONFIG_UCLIBC_VERSION))
-ifneq (,$(or $(findstring !0.9.29,!$(PKG_UCLIBC_VERSION)),$(findstring !0.9.30.1!,!$(PKG_UCLIBC_VERSION)!) ))
-	PKG_VERSION:=2010.1.16
-else
-	PKG_VERSION:=2010.3.6
-endif
+PKG_VERSION:=2010.5.22
+
+## 2010.3.6 needs a recent uclibc 0.9.30.2 or greater
+## this has been fixed in 2010.5.16, keeping this in case this happens again
+#PKG_UCLIBC_VERSION:=$(call qstrip,$(CONFIG_UCLIBC_VERSION))
+#ifneq (,$(or $(findstring !0.9.29,!$(PKG_UCLIBC_VERSION)),$(findstring !0.9.30.1!,!$(PKG_UCLIBC_VERSION)!) ))
+#	PKG_VERSION:=2010.1.16
+#endif
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://www.tuxera.com/opensource/
 
 PKG_MD5SUM_2010.1.16:=e104c914e8d7d29ee83e63d46afbba25
 PKG_MD5SUM_2010.3.6:=12ce21aa044c6068a4df6e8cbd3c5cfa
-PKG_MD5SUM=$(PKG_MD5SUM_$(PKG_VERSION))
+PKG_MD5SUM_2010.5.16:=aeff7659a4943c9223d79116f051a863
+PKG_MD5SUM_2010.5.22:=caa08c73220a7106c76f697b7a7915ec
+PKG_MD5SUM:=$(PKG_MD5SUM_$(PKG_VERSION))
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
+
+# release contains fuseext/int hint
+PKG_RELEASE:=$(PKG_RELEASE)$(if $(CONFIG_PACKAGE_NTFS-3G_USE_LIBFUSE),-fuseext,-fuseint)
+
+# define build dir, respect fuseext/int
+PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-$(PKG_RELEASE)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -59,13 +69,15 @@ endef
 
 define Package/ntfs-3g/config
 config PACKAGE_NTFS-3G_USE_LIBFUSE
-	bool "use external FUSE library (package libfuse)"
-	depends PACKAGE_ntfs-3g
+	bool "use external FUSE library, selects package libfuse"
+	default n
+	depends on PACKAGE_ntfs-3g
 	---help---
-	Ntfs-3g by default uses a minimalized lite version of FUSE. 
-	If libfuse is part of your filesystem anyway (because of sshfs, owfs 
-	etc.) it makes sense to activate this option and save some kilobytes 
+	Ntfs-3g by default uses a minimalized lite version of FUSE.
+	If libfuse is part of your filesystem anyway (because of sshfs, owfs
+	etc.) it makes sense to activate this option and save some kilobytes
 	of space.
+
 endef
 
 define Package/ntfs-3g-utils
@@ -89,21 +101,27 @@ CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static
 
-# insert config with external libfuse
+# configure/make according selection
 ifdef CONFIG_PACKAGE_NTFS-3G_USE_LIBFUSE
-	CONFIGURE_ARGS += --with-fuse=external 
-	PKG_RELEASE:=$(PKG_RELEASE)-fuseext
+	CONFIGURE_ARGS += --with-fuse=external
+	TARGET_CPPFLAGS:=-I$(STAGING_DIR)/usr/include/fuse $(TARGET_CPPFLAGS)
 else
 	CONFIGURE_ARGS += --with-fuse=internal
-	TARGET_CPPFLAGS:=-I../include/fuse-lite $(TARGET_CPPFLAGS) 
-	PKG_RELEASE:=$(PKG_RELEASE)-fuseint
+	TARGET_CPPFLAGS:=-I../include/fuse-lite $(TARGET_CPPFLAGS)
 endif
+
+# redefine prepare to extract to our build dir
+define Build/Prepare
+	rm -rf $(PKG_BUILD_DIR)/
+	mkdir -p $(PKG_BUILD_DIR)/
+	$(TAR) -xzf $(DL_DIR)/$(PKG_SOURCE) -C $(PKG_BUILD_DIR) --strip 1
+endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP)	$(PKG_INSTALL_DIR)/usr/include/ntfs-3g $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/libntfs-3g.{a,so*} $(1)/usr/lib/
+	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/libntfs-3g.{la,a,so*} $(1)/usr/lib/
 endef
 
 define Package/ntfs-3g/install
