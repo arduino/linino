@@ -975,8 +975,6 @@ elif [ "$icmp_hosts" == "disable" ]; then
 echo "$1.pass" >> $jobfile
 fi
 
-sh /usr/sbin/natloopback.sh $1 lan
-
 sleep $health_interval
 done
 }
