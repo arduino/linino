@@ -334,10 +334,10 @@ i=0
 while [ $i -lt $wancount ]; do 
 i=`expr $i + 1` 
 group=$(query_config group $i)
-iptables -t mangle -F ${group}
-iptables -t mangle -F ${group}_ct
-iptables -t mangle -X ${group}
-iptables -t mangle -X ${group}_ct
+iptables -t mangle -F qos_${group}
+iptables -t mangle -F qos_${group}_ct
+iptables -t mangle -X qos_${group}
+iptables -t mangle -X qos_${group}_ct
 done
 
 fi
@@ -379,11 +379,11 @@ fi
 
 queue_count=`expr $queue_count + 1`
 
-iptables -t mangle -N ${1}
-iptables -t mangle -N ${1}_ct
+iptables -t mangle -N qos_${1}
+iptables -t mangle -N qos_${1}_ct
 
 get_wan_tc=$(tc filter list dev $ifname | grep "0x" | sed -e "s/filter /tc filter add dev $ifname /g" -e "s/pref/prio/g" -e "s/fw//g") 
-get_wan_iptables=$(iptables-save | egrep  '(-A Default )|(-A Default_ct )' | grep -v "MultiWanQoS" | sed -e "s/Default /${1} /g" -e "s/Default_ct /${1}_ct /g" -e "s/-A/iptables -t mangle -A/g")
+get_wan_iptables=$(iptables-save | egrep  '(-A Default )|(-A Default_ct )' | grep -v "MultiWanQoS" | sed -e "s/Default /qos_${1} /g" -e "s/Default_ct /qos_${1}_ct /g" -e "s/-A/iptables -t mangle -A/g")
 
 
 i=0
@@ -412,7 +412,7 @@ while [ $i -lt $queue_count ]; do
 if [ $i -lt $(expr $queue_count - 1) ]; then
   ip rule add fwmark 0x$(expr $p + 1 - 300) table $(expr $iprule + 300) prio $(expr $p + 2)
 fi
-  iptables -t mangle -A MultiWanQoS -m mark --mark 0x$(expr $p - 300) -j ${1}
+  iptables -t mangle -A MultiWanQoS -m mark --mark 0x$(expr $p - 300) -j qos_${1}
   i=`expr $i + 1`
 done
 }
