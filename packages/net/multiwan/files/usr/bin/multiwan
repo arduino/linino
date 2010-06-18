@@ -152,8 +152,6 @@ fi
 }
 
 acquire_wan_data() {
-if [ $wancount -lt 9 ]; then
-
 local ipaddr
 local gateway
 local ifname
@@ -198,8 +196,8 @@ check_old_map=`echo $wan_id_map 2>&1 | grep -o "$1\["`
                 if [ "$old_ifname" != "$ifname" ]; then
 		iptables -D MultiWanPreHandler -t mangle -i $old_$ifname -m state --state NEW -j FW${get_wanid}MARK
 		iptables -A MultiWanPreHandler -t mangle -i $ifname -m state --state NEW -j FW${get_wanid}MARK 
-		iptables -D MultiWanPostHandler -t mangle -o $old_$ifname -m mark --mark 0x123 -j FW${get_wanid}MARK
-		iptables -A MultiWanPostHandler -t mangle -o $ifname -m mark --mark 0x123 -j FW${get_wanid}MARK 
+		iptables -D MultiWanPostHandler -t mangle -o $old_$ifname -m mark --mark 0x1 -j FW${get_wanid}MARK
+		iptables -A MultiWanPostHandler -t mangle -o $ifname -m mark --mark 0x1 -j FW${get_wanid}MARK 
                 fi 
 
                 if [ "$ifname" != "x" -a "$ipaddr" != "x" -a "$gateway" != "x" ]; then
@@ -214,9 +212,6 @@ check_old_map=`echo $wan_id_map 2>&1 | grep -o "$1\["`
                 refresh_dns
 		update_cache
 	fi
-else
-wancount=9
-fi
 }
 
 update_cache() {
@@ -277,10 +272,6 @@ echo "## Refreshing Interfaces ##"
 		fdown $group > /dev/null 2>&1
 		ifup $group > /dev/null 2>&1 &
 	done
-
-if [ ! -z "$CHKFORQOS" ]; then
-/etc/init.d/qos restart & > /dev/null 2>&1
-fi
 
 echo "## Unloaded, updating syslog and exiting. ##"
 mwnote "Succesfully Unloaded on $(exec date -R)."
@@ -343,10 +334,10 @@ i=0
 while [ $i -lt $wancount ]; do 
 i=`expr $i + 1` 
 group=$(query_config group $i)
-iptables -t mangle -F MultiWanQoS_${group}
-iptables -t mangle -F MultiWanQoS_${group}_ct
-iptables -t mangle -X MultiWanQoS_${group}
-iptables -t mangle -X MultiWanQoS_${group}_ct
+iptables -t mangle -F ${group}
+iptables -t mangle -F ${group}_ct
+iptables -t mangle -X ${group}
+iptables -t mangle -X ${group}_ct
 done
 
 fi
@@ -360,14 +351,25 @@ local get_wan_iptables
 local add_qos_iptables
 local add_qos_tc
 local execute
+local iprule
+local qos_if_test
 local i 
 local p
 
 ifname=$(query_config ifname $1)
+iprule=$(expr $2 \* 10)
 
 if [ "$ifname" == "x" ]; then
 return
 fi
+
+qos_if_test=$(echo $qos_if_done | grep $ifname.)
+
+if [ ! -z "$qos_if_test" ]; then
+return
+fi
+
+qos_if_done=$(echo ${qos_if_done}.${ifname})
 
 queue_count=$(tc filter list dev $ifname | tail -n 1 | awk -F " " '{print $10}' | sed "s/0x//g")
 
@@ -377,15 +379,16 @@ fi
 
 queue_count=`expr $queue_count + 1`
 
-iptables -t mangle -N MultiWanQoS_${1}
-iptables -t mangle -N MultiWanQoS_${1}_ct
+iptables -t mangle -N ${1}
+iptables -t mangle -N ${1}_ct
 
 get_wan_tc=$(tc filter list dev $ifname | grep "0x" | sed -e "s/filter /tc filter add dev $ifname /g" -e "s/pref/prio/g" -e "s/fw//g") 
-get_wan_iptables=$(iptables-save | egrep  '(-A Default )|(-A Default_ct )' | grep -v "MultiWanQoS" | sed -e "s/Default /MultiWanQoS_${1} /g" -e "s/Default_ct /MultiWanQoS_${1}_ct /g" -e "s/-A/iptables -t mangle -A/g")
+get_wan_iptables=$(iptables-save | egrep  '(-A Default )|(-A Default_ct )' | grep -v "MultiWanQoS" | sed -e "s/Default /${1} /g" -e "s/Default_ct /${1}_ct /g" -e "s/-A/iptables -t mangle -A/g")
+
 
 i=0
 while [ $i -lt $queue_count ]; do 
-echo "s/\(0x$i \|0x$i\/0xffffffff\)/0x${2}${i} /g" >> /tmp/.mwan/qos.$1.sedfilter
+echo "s/\(0x$i \|0x$i\/0xffffffff\)/0x$(expr $iprule + $i) /g" >> /tmp/.mwan/qos.$1.sedfilter
 i=`expr $i + 1` 
 done
 
@@ -405,11 +408,11 @@ rm /tmp/.mwan/qos.$1.sedfilter
 
 i=0
 while [ $i -lt $queue_count ]; do
-  p=`expr $i + $2 \* 10`
+  p=`expr $i + $(expr $2 \* 10) + 300`
 if [ $i -lt $(expr $queue_count - 1) ]; then
-  ip rule add fwmark 0x$(expr $p + 1) table $(expr $2 \* 10) prio $(expr $p + 2)
+  ip rule add fwmark 0x$(expr $p + 1 - 300) table $(expr $iprule + 300) prio $(expr $p + 2)
 fi
-  iptables -t mangle -A MultiWanQoS -m mark --mark 0x$p -j MultiWanQoS_${1}
+  iptables -t mangle -A MultiWanQoS -m mark --mark 0x$(expr $p - 300) -j ${1}
   i=`expr $i + 1`
 done
 }
@@ -515,7 +518,8 @@ dns=$(echo $dns | sed -e "s/ /\n/g")
 if [ ! -z "$dns" -a "$failchk" != "x" -a "$ipaddr" != "x" -a "$gateway" != "x" -a "$ifname" != "x" ]; then
 echo "$dns" | while read dns_server 
 do
-	iptables -t mangle -A MultiWanDNS -d $dns_server -j FW${i}MARK
+	iptables -t mangle -A MultiWanDNS -d $dns_server -p tcp --dport 53 -j FW${i}MARK
+	iptables -t mangle -A MultiWanDNS -d $dns_server -p udp --dport 53 -j FW${i}MARK
 
 		compile_dns="nameserver $dns_server"
 		echo "$compile_dns" >> /tmp/resolv.conf.auto
@@ -570,7 +574,7 @@ iptables -t mangle -N MultiWanRules
 iptables -t mangle -N MultiWanDNS
 iptables -t mangle -N MultiWanPreHandler
 iptables -t mangle -N MultiWanPostHandler
-iptables -t mangle -N MultiWanFastBalancer
+iptables -t mangle -N MultiWanLoadBalancer
 
 echo "## Creating FW Rules ##"
 i=0
@@ -582,32 +586,32 @@ iptables -t mangle -A FW${i}MARK -j MARK --set-mark 0x${iprule}
 iptables -t mangle -A FW${i}MARK -j CONNMARK --save-mark
 done
 
-iptables -t mangle -A LoadBalancer -j MARK --set-mark 0x123
+iptables -t mangle -A LoadBalancer -j MARK --set-mark 0x1
 iptables -t mangle -A LoadBalancer -j CONNMARK --save-mark
 
 if [ -z "$CHKFORMODULE" ]; then
-iptables -t mangle -A FastBalancer -j MARK --set-mark 0x124
+iptables -t mangle -A FastBalancer -j MARK --set-mark 0x2
 iptables -t mangle -A FastBalancer -j CONNMARK --save-mark
 else
-mwnote "Fast Balancer is unavailable due to current kernel limitations.."
-mwnote "All Fast Balancer traffic will be diverted to the Load Balancer."
-iptables -t mangle -A FastBalancer -j MARK --set-mark 0x123
+mwnote "Performance load balancer(fastbalanacer) is unavailable due to current kernel limitations.."
+iptables -t mangle -A FastBalancer -j MARK --set-mark 0x1
 iptables -t mangle -A FastBalancer -j CONNMARK --save-mark
 fi
 
 iptables -t mangle -I PREROUTING -j MultiWan
 iptables -t mangle -I PREROUTING 2 -j MultiWanPreHandler
-iptables -t mangle -I PREROUTING 3 -j MultiWanDNS
-iptables -t mangle -I PREROUTING 4 -j MultiWanRules
-iptables -t mangle -I PREROUTING 5 -j MultiWanFastBalancer
+iptables -t mangle -I PREROUTING 3 -j MultiWanRules
+iptables -t mangle -I PREROUTING 4 -j MultiWanLoadBalancer
+iptables -t mangle -I PREROUTING 5 -j MultiWanDNS
+
 
 iptables -t mangle -I FORWARD -j MultiWan
 
 iptables -t mangle -I OUTPUT -j MultiWan
-iptables -t mangle -I OUTPUT 2 -j MultiWanDNS
-iptables -t mangle -I OUTPUT 3 -j MultiWanRules
-iptables -t mangle -I OUTPUT 4 -j MultiWanFastBalancer
-iptables -t mangle -I OUTPUT 5 -j MultiWanPostHandler
+iptables -t mangle -I OUTPUT 2 -j MultiWanRules
+iptables -t mangle -I OUTPUT 3 -j MultiWanLoadBalancer
+iptables -t mangle -I OUTPUT 4 -j MultiWanPostHandler
+iptables -t mangle -I OUTPUT 5 -j MultiWanDNS
 
 
 iptables -t mangle -I POSTROUTING -j MultiWan
@@ -635,7 +639,7 @@ i=`expr $i + 1`
 group=$(query_config group $i)
 ifname=$(query_config ifname $group)
 iptables -t mangle -A MultiWanPreHandler -i $ifname -m state --state NEW -j FW${i}MARK
-iptables -t mangle -A MultiWanPostHandler -o $ifname -m mark --mark 0x123 -j FW${i}MARK
+iptables -t mangle -A MultiWanPostHandler -o $ifname -m mark --mark 0x1 -j FW${i}MARK
 done
 
 if [ ! -z "$CHKFORQOS" ]; then
@@ -662,12 +666,12 @@ echo "## Refreshing Load Balancer ##"
 
 CHKIPROUTE=`cat /etc/iproute2/rt_tables | grep LoadBalancer`
  if [ -z "$CHKIPROUTE" ]; then
-echo "123     LoadBalancer" >> /etc/iproute2/rt_tables
+echo "300     LoadBalancer" >> /etc/iproute2/rt_tables
  fi
-ip rule del prio 123 > /dev/null 2>&1 
-ip route flush table 123 > /dev/null 2>&1
+ip rule del prio 300 > /dev/null 2>&1 
+ip route flush table 300 > /dev/null 2>&1
 
-        for TABLE in 123
+        for TABLE in 300
         do
                 ip route | grep link | grep -Ev ^default | while read ROUTE
                 do
@@ -675,7 +679,7 @@ ip route flush table 123 > /dev/null 2>&1
                 done
          done
 
-iptables -F MultiWanFastBalancer -t mangle
+iptables -F MultiWanLoadBalancer -t mangle
 
 total_weight=0
 
@@ -717,7 +721,7 @@ total_weight=$(expr $total_weight - $weight)
         fi
 
 	if [ -z "$CHKFORMODULE" ]; then
-		iptables -A MultiWanFastBalancer -t mangle -m mark --mark 0x124 -m statistic --mode random --probability $rand_probability -j FW${i}MARK
+		iptables -A MultiWanLoadBalancer -t mangle -m mark --mark 0x2 -m statistic --mode random --probability $rand_probability -j FW${i}MARK
 	fi
 fi
 
@@ -725,12 +729,12 @@ done
 
 pre_nexthop_chk=`echo $nexthop | awk -F "nexthop" '{print NF-1}'`
 if [ "$pre_nexthop_chk" == "1" ]; then
-ip route add default via $(echo $nexthop | awk -F " " '{print $3}') dev $(echo $nexthop | awk -F " " '{print $5}') proto static table 123
+ip route add default via $(echo $nexthop | awk -F " " '{print $3}') dev $(echo $nexthop | awk -F " " '{print $5}') proto static table 300
 elif [ "$pre_nexthop_chk" -gt "1" ]; then
-ip route add proto static table 123 default scope global $nexthop
+ip route add proto static table 300 default scope global $nexthop
 fi
 
-ip rule add fwmark 0x123 table 123 prio 123
+ip rule add fwmark 0x1 table 300 prio 300
 ip route flush cache
 }
 
@@ -753,7 +757,7 @@ gateway=$(query_config gateway $group)
 ifname=$(query_config ifname $group)
 ipaddr=$(query_config ipaddr $group)
 
-iprule=$(expr $i \* 10)
+iprule=$(expr $(expr $i \* 10) + 300)
 ip route flush table $iprule > /dev/null 2>&1
 
         for TABLE in $iprule
@@ -780,14 +784,14 @@ local group
 local gateway
 local ipaddr
 
-iprule=$(expr $1 \* 10)
+iprule=$(expr $(expr $1 \* 10) + 300)
 group=$(query_config group $1)
 gateway=$(query_config gateway $group)
 ipaddr=$(query_config ipaddr $group)
 
 CHKIPROUTE=`cat /etc/iproute2/rt_tables | grep MWAN${1}`
  if [ -z "$CHKIPROUTE" ]; then
-echo "$iprule      MWAN${1}" >> /etc/iproute2/rt_tables
+echo "$iprule     MWAN${1}" >> /etc/iproute2/rt_tables
  fi
 
 ip rule del prio $iprule > /dev/null 2>&1 
@@ -795,7 +799,7 @@ ip rule del prio $(expr $iprule + 1) > /dev/null 2>&1
 
 if [ "$gateway" != "x" -a "$ipaddr" != "x" ]; then
 ip rule add from $ipaddr table $iprule prio $iprule
-ip rule add fwmark 0x${iprule} table $iprule prio $(expr $iprule + 1)
+ip rule add fwmark 0x$(expr $iprule - 300) table $iprule prio $(expr $iprule + 1)
 fi
 }
 
@@ -809,7 +813,7 @@ ip rule flush > /dev/null 2>&1
 ip rule add lookup main prio 32766 > /dev/null 2>&1
 ip rule add lookup default prio 32767 > /dev/null 2>&1
 
-ip route flush table 123 > /dev/null
+ip route flush table 300 > /dev/null
 
 	i=0
 	while [ $i -lt $wancount ]; do 
@@ -970,6 +974,8 @@ check_test=$(ping_test)
 elif [ "$icmp_hosts" == "disable" ]; then 
 echo "$1.pass" >> $jobfile
 fi
+
+sh /usr/sbin/natloopback.sh $1 lan
 
 sleep $health_interval
 done
