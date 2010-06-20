@@ -9,11 +9,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ffmpeg
 PKG_VERSION:=0.5.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ffmpeg.org/releases/
-PKG_MD5SUM:=
+PKG_MD5SUM:=451eb428ca97a72c00555d50944cdb24
 
 FFMPEG_ENCODERS:= \
 	ac3 \
@@ -105,7 +105,7 @@ $(call Package/ffmpeg/Default)
  SECTION:=multimedia
  CATEGORY:=Multimedia
  TITLE+= program
- DEPENDS+= +libpthread +libffmpeg
+ DEPENDS+= +libpthread +libffmpeg +libpostproc
 endef
 
 define Package/ffmpeg/description
