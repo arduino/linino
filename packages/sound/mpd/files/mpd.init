@@ -1,10 +1,10 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 START=93
 
 start() {
 	#create mpd directories
-	pld=`grep playlist_directory /etc/mpd.conf | cut -d "\"" -f 2 | sed "s/~/\/root/g"`
+	pld=`grep ^playlist_directory /etc/mpd.conf | cut -d "\"" -f 2 | sed "s/~/\/root/g"`
 	if [ ! -d $pld ]; then
 		mkdir -p $pld
 	fi
