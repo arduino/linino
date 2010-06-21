@@ -25,7 +25,7 @@ define Package/minicom
   DEPENDS:=+libncurses
   TITLE:=Terminal emulation program
   URL:=http://alioth.debian.org/projects/minicom/
-  SUBMENU:=terminal
+  SUBMENU:=Terminal
 endef
 
 define Package/minicom/install

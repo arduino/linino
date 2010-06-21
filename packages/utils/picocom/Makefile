@@ -22,7 +22,7 @@ define Package/picocom
   CATEGORY:=Utilities
   TITLE:=A minimal dumb-terminal emulation program
   URL:=http://code.google.com/p/picocom/
-  SUBMENU:=terminal
+  SUBMENU:=Terminal
 endef
 
 define Package/picocom/description
