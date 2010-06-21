@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=unbound
-PKG_VERSION:=1.4.3
+PKG_VERSION:=1.4.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.unbound.net/downloads
-PKG_MD5SUM:=2dffdd42f94b8238447a41835439d129
+PKG_MD5SUM:=f1f6c97b90b15ca503a80b888c311d6c
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
