@@ -102,20 +102,20 @@ if [ -z "$${IPKG_INSTROOT}" ]; then
 			cp /rom/etc/passwd /etc/passwd
 		fi
 	fi
-fi
 
-echo ""
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then
-	echo "adding group $$name to /etc/group"
-	echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group
-fi
+	echo ""
+	if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then
+		echo "adding group $$name to /etc/group"
+		echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group
+	fi
 
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
-	echo "adding user $$name to /etc/passwd"
-	echo "$${name}:x:$${id}:$${id}:$${name}:/tmp/.$${name}:/bin/false" >> $${IPKG_INSTROOT}/etc/passwd
-fi
+	if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
+		echo "adding user $$name to /etc/passwd"
+		echo "$${name}:x:$${id}:$${id}:$${name}:/tmp/.$${name}:/bin/false" >> $${IPKG_INSTROOT}/etc/passwd
+	fi
 
-chown $${name} $${IPKG_INSTROOT}/etc/zabbix/zabbix_agentd.conf
+	chown $${name} $${IPKG_INSTROOT}/etc/zabbix/zabbix_agentd.conf
+fi
 
 endef
 
