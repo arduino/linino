@@ -290,6 +290,8 @@ define Build/Configure
 endef
 
 define Build/Compile
+	# just passing <make install> results in not building 3rdparty/webkit/JavaScriptCore
+	$(MAKE) -C $(PKG_BUILD_DIR)
 	INSTALL_ROOT=$(PKG_INSTALL_DIR) \
 		$(MAKE) -C $(PKG_BUILD_DIR) install
 endef
