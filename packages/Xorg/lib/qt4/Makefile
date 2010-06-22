@@ -14,8 +14,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=qt4
-PKG_VERSION:=4.6.2
-PKG_RELEASE:=2
+PKG_VERSION:=4.7.0-beta1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=qt-everywhere-opensource-src-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.qt.nokia.com/qt/source
@@ -242,6 +242,8 @@ define Build/Configure
 			-verbose \
 			-$(if $(CONFIG_PACKAGE_qt4-multimedia),multimedia,no-multimedia) \
 			-$(if $(CONFIG_PACKAGE_qt4-audio-backend),audio-backend,no-audio-backend) \
+			-no-mediaservices \
+			-no-media-backend \
 			-$(if $(CONFIG_PACKAGE_qt4-phonon),phonon,no-phonon) \
 			-$(if $(CONFIG_PACKAGE_qt4-phonon-backend),phonon-backend,no-phonon-backend) \
 			-svg \
@@ -253,6 +255,7 @@ define Build/Configure
 			-no-declarative \
 			-no-openssl \
 			-no-nis \
+			$(if $(CONFIG_PACKAGE_qt4-gui),,-no-gui) \
 			-$(if $(CONFIG_PACKAGE_qt4-cups),cups,no-cups) \
 			-no-iconv \
 			-$(if $(CONFIG_PACKAGE_qt4-dbus),dbus,no-dbus) \
