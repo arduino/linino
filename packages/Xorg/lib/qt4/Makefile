@@ -155,6 +155,12 @@ define Package/qt4-qt3support
   TITLE+=(qt3support)
 endef
 
+define Package/qt4-declarative
+  $(call Package/qt4/Default)
+  TITLE+=(declarative)
+  DEPENDS+=+qt4-scripttools
+endef
+
 TARGET_CFLAGS+="-I$(STAGING_DIR)/usr/include/freetype2"
 
 define Build/Configure
@@ -248,11 +254,11 @@ define Build/Configure
 			-$(if $(CONFIG_PACKAGE_qt4-phonon-backend),phonon-backend,no-phonon-backend) \
 			-svg \
 			-$(if $(CONFIG_PACKAGE_qt4-webkit),webkit,no-webkit) \
-			-$(if $(CONFIG_PACKAGE_qt4-javascript-jit),javascript-jit,no-javascript-jit) \
+			-no-javascript-jit \
 			-$(if $(CONFIG_PACKAGE_qt4-script),script,no-script) \
 			-$(if $(CONFIG_PACKAGE_qt4-scripttools),scripttools,no-scripttools) \
 			-$(if $(CONFIG_PACKAGE_qt4-accessibility),accessibility,no-accessibility) \
-			-no-declarative \
+			-$(if $(CONFIG_PACKAGE_qt4-declarative),declarative,no-declarative) \
 			-no-openssl \
 			-no-nis \
 			$(if $(CONFIG_PACKAGE_qt4-gui),,-no-gui) \
@@ -530,6 +536,15 @@ define Package/qt4-qt3-support/install
 	#	$(1)/usr/lib/Qt/plugins/
 endef
 
+define Package/qt4-declarative/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libQtDeclarative.so* \
+		$(1)/usr/lib/
+endef
+
 $(eval $(call BuildPackage,qt4))
 $(eval $(call BuildPackage,qt4-gui))
 $(eval $(call BuildPackage,qt4-demos))
@@ -552,3 +567,4 @@ $(eval $(call BuildPackage,qt4-dbus))
 #$(eval $(call BuildPackage,qt4-gtkstyle))
 #$(eval $(call BuildPackage,qt4-glib))
 $(eval $(call BuildPackage,qt4-qt3support))
+$(eval $(call BuildPackage,qt4-declarative))
