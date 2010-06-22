@@ -1,6 +1,6 @@
 choice
 	prompt "branch"
-	depends PACKAGE_kmod-batman-adv-kernelland
+	depends PACKAGE_kmod-batman-adv
 	default BATMAN_ADV_MAINTENANCE
 	help
 	  This option allows you to select the version of B.A.T.M.A.N.-Advanced.
@@ -24,11 +24,11 @@ endchoice
 
 config KMOD_BATMAN_ADV_DEBUG_LOG
 	bool "enable verbose debug logging"
-	depends PACKAGE_kmod-batman-adv-kernelland
+	depends PACKAGE_kmod-batman-adv
 	default n
 config KMOD_BATMAN_ADV_BATCTL
 	bool "enable batctl"
-	depends PACKAGE_kmod-batman-adv-kernelland
+	depends PACKAGE_kmod-batman-adv
 	default y
 	help
 	  batctl is a more intuitive managment utility for B.A.T.M.A.N.-Advanced.

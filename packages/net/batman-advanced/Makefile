@@ -16,8 +16,8 @@ PKG_KMOD_VERSION_MAINT:=5c4633c532a7a9b5adfe5dbf3f5e97fff307216e
 # just for the package version numbering
 PKG_VERSION_MAINT:=0.2.1
 # Versions to download for development build
-PKG_REV_DEV:=1679
-PKG_KMOD_VERSION_DEV:=de32ed5ba4b6487dbd3c4cad6c9ba8240d79c421
+PKG_REV_DEV:=1715
+PKG_KMOD_VERSION_DEV:=520e8f9d66bc972e6f818c57e063efffb7f52be4
 # just for the package version numbering
 PKG_VERSION_DEV:=0.3.0a
 ## Make sure git-commit hash and svn revision number fit! ##
@@ -49,7 +49,7 @@ else
 	PKG_TOOL_FNAME:=batctl-maint-$(PKG_TOOL_VERSION).tar.gz
 endif
 
-PKG_KMOD_BUILD_DIR:=$(PKG_BUILD_DIR)/batman-adv-kernelland
+PKG_KMOD_BUILD_DIR:=$(PKG_BUILD_DIR)/batman-adv
 PKG_TOOL_BUILD_DIR:=$(PKG_BUILD_DIR)/batctl
 
 include $(INCLUDE_DIR)/package.mk
@@ -69,7 +69,7 @@ define Package/batman-adv/Default
   MAINTAINER:=Marek Lindner <lindner_marek@yahoo.de>
 endef
 
-define KernelPackage/batman-adv-kernelland
+define KernelPackage/batman-adv
 $(call Package/batman-adv/Default)
   SUBMENU:=Network Support
   DEPENDS:=@LINUX_2_6
@@ -78,24 +78,24 @@ $(call Package/batman-adv/Default)
   AUTOLOAD:=$(call AutoLoad,50,batman-adv)
 endef
 
-define KernelPackage/batman-adv-kernelland/config
+define KernelPackage/batman-adv/config
 	source "$(SOURCE)/Config.in"
 endef
 
-define KernelPackage/batman-adv-kernelland/description
+define KernelPackage/batman-adv/description
 B.A.T.M.A.N. layer 2
 endef
 
-define Download/batman-adv-kernelland
+define Download/batman-adv
   FILE:=$(PKG_KMOD_FNAME)
   URL:=$(PKG_KMOD_URL)
 endef
-$(eval $(call Download,batman-adv-kernelland))
+$(eval $(call Download,batman-adv))
 
 ifneq ($(DEVELOPER)$(CONFIG_KMOD_BATMAN_ADV_BATCTL),)
 define Download/batctl
   FILE:=$(PKG_TOOL_FNAME)
-  URL:=$(PKG_TOOL_URL)
+  URL:=$(PKG_TOOL_URL)@$(PKG_TOOL_VERSION)
   PROTO:=$(PKG_TOOL_PROTO)
   VERSION:=$(PKG_TOOL_VERSION)
   SUBDIR:=$(PKG_SOURCE_SUBDIR)/batctl
@@ -124,7 +124,7 @@ ifneq ($(DEVELOPER)$(CONFIG_BATMAN_ADV_DEV),)
 	tar xzf "$(DL_DIR)/batman-$(PKG_REV).tar.gz" -C "$(BUILD_DIR)"
 endif
 endif
-	mv "$(PKG_BUILD_DIR)/batman-adv" "$(PKG_KMOD_BUILD_DIR)"
+	#mv "$(PKG_BUILD_DIR)/batman-adv" "$(PKG_KMOD_BUILD_DIR)"
 	$(call PatchDir,$(PKG_BUILD_DIR),$(PATCH_DIR),)
 ifneq ($(CONFIG_BATMAN_ADV_DEV),)
 	$(call PatchDir,$(PKG_BUILD_DIR),$(PATCH_DIR)/dev,)
@@ -134,7 +134,7 @@ endif
 	cp $(PKG_KMOD_BUILD_DIR)/Makefile.kbuild $(PKG_KMOD_BUILD_DIR)/Makefile
 endef
 
-MAKE_BATADV_KERNELLAND_ARGS += \
+MAKE_BATMAN_ADV_ARGS += \
 	CROSS_COMPILE="$(TARGET_CROSS)" \
 	ARCH="$(LINUX_KARCH)" \
 	PATH="$(TARGET_PATH)" \
@@ -158,8 +158,8 @@ MAKE_BATCTL_ARGS += \
 define Build/Configure
 endef
 
-ifneq ($(DEVELOPER)$(CONFIG_PACKAGE_kmod-batman-adv-kernelland),)
-        BUILD_KMOD_ADV = $(MAKE) -C "$(LINUX_DIR)" $(MAKE_BATADV_KERNELLAND_ARGS)
+ifneq ($(DEVELOPER)$(CONFIG_PACKAGE_kmod-batman-adv),)
+        BUILD_KMOD_ADV = $(MAKE) -C "$(LINUX_DIR)" $(MAKE_BATMAN_ADV_ARGS)
         BUILD_BATCTL = $(MAKE) -C $(PKG_TOOL_BUILD_DIR) $(MAKE_BATCTL_ARGS)
 endif
 
@@ -174,7 +174,7 @@ define Build/Clean
         rm -rf $(PKG_KMOD_BUILD_DIR)
 endef
 
-define KernelPackage/batman-adv-kernelland/install
+define KernelPackage/batman-adv/install
 	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/etc/init.d/batman-adv $(1)/etc/init.d
 	$(INSTALL_DATA) ./files/etc/config/batman-adv $(1)/etc/config
@@ -184,4 +184,4 @@ ifneq ($(DEVELOPER)$(CONFIG_KMOD_BATMAN_ADV_BATCTL),)
 endif
 endef
 
-$(eval $(call KernelPackage,batman-adv-kernelland))
+$(eval $(call KernelPackage,batman-adv))
