@@ -1,0 +1,11 @@
+--- qt-everywhere-opensource-src-4.7.0-beta1/src/network/kernel/qhostinfo_unix.cpp	2010-05-04 02:43:25.000000000 +0200
++++ qt-everywhere-opensource-src-4.7.0-beta1/src/network/kernel/qhostinfo_unix.cpp.new	2010-06-20 14:43:48.565315801 +0200
+@@ -326,7 +326,7 @@
+ 
+ QString QHostInfo::localDomainName()
+ {
+-#if !defined(Q_OS_VXWORKS)
++#if 0
+     resolveLibrary();
+     if (local_res_ninit) {
+         // using thread-safe version
