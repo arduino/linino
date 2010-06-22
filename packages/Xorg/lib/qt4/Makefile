@@ -104,13 +104,13 @@ endef
 define Package/qt4-webkit
   $(call Package/qt4/Default)
   TITLE+=(webkit)
-  DEPENDS+=@USE_GLIBC||@USE_EGLIBC # until we do not have nptl-support within uclibc javascriptcore will fail to link against uclibc
+  DEPENDS+=@USE_GLIBC||@USE_EGLIBC||@UCLIBC_VERSION_0_9_32 # versions of uclibc prior 0.9.32 do not have nptl support
 endef
 
 define Package/qt4-script
   $(call Package/qt4/Default)
   TITLE+=(script)
-  DEPENDS+=@USE_GLIBC||@USE_EGLIBC # until we do not have nptl-support within uclibc, javascriptcore will fail to link against uclibc
+  DEPENDS+=@USE_GLIBC||@USE_EGLIBC||@UCLIBC_VERSION_0_9_32 # versions of uclibc prior 0.9.32 do not have nptl support
 endef
 
 define Package/qt4-scripttools
