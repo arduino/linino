@@ -28,7 +28,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/glib2
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libiconv +libintl
+  DEPENDS:=+libiconv +libintl +gettext
   TITLE:=glib 2.0
   URL:=http://www.gtk.org/
 endef
