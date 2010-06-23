@@ -36,7 +36,7 @@ endef
 define Package/usbip
 $(call Package/usbip/Default)
   TITLE+= (common)
-  DEPENDS+= +glib2 +libsysfs +libwrap
+  DEPENDS+= +glib2 +sysfsutils +libwrap
 endef
 
 define Package/usbip-client
