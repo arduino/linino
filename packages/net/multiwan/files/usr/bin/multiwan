@@ -179,6 +179,10 @@ check_old_map=`echo $wan_id_map 2>&1 | grep -o "$1\["`
 
 	if [ -z $check_old_map ]; then
 		wancount=`expr $wancount + 1`
+		if [ $wancount -gt 20 ]; then
+		   wancount=20
+                   return
+                fi
 		wan_if_map="$wan_if_map${1}[${ifname}]"
 		wan_id_map="$wan_id_map${1}[${wancount}]"
 		wan_gw_map="$wan_gw_map${1}[${gateway}]"
@@ -357,7 +361,6 @@ local i
 local p
 
 ifname=$(query_config ifname $1)
-iprule=$(expr $2 \* 10)
 
 if [ "$ifname" == "x" ]; then
 return
@@ -388,7 +391,7 @@ get_wan_iptables=$(iptables-save | egrep  '(-A Default )|(-A Default_ct )' | gre
 
 i=0
 while [ $i -lt $queue_count ]; do 
-echo "s/\(0x$i \|0x$i\/0xffffffff\)/0x$(expr $iprule + $i) /g" >> /tmp/.mwan/qos.$1.sedfilter
+echo "s/\(0x$i \|0x$i\/0xffffffff\)/0x$(expr $2 \* 10 + $i) /g" >> /tmp/.mwan/qos.$1.sedfilter
 i=`expr $i + 1` 
 done
 
@@ -408,11 +411,10 @@ rm /tmp/.mwan/qos.$1.sedfilter
 
 i=0
 while [ $i -lt $queue_count ]; do
-  p=`expr $i + $(expr $2 \* 10) + 300`
 if [ $i -lt $(expr $queue_count - 1) ]; then
-  ip rule add fwmark 0x$(expr $p + 1 - 300) table $(expr $iprule + 300) prio $(expr $p + 2)
+  ip rule add fwmark 0x$(expr $2 \* 10 + $i + 1) table $(expr $2 + 170) prio $(expr $2 \* 10 + $i + 2)
 fi
-  iptables -t mangle -A MultiWanQoS -m mark --mark 0x$(expr $p - 300) -j qos_${1}
+  iptables -t mangle -A MultiWanQoS -m mark --mark 0x$(expr $2 \* 10 + $i) -j qos_${1}
   i=`expr $i + 1`
 done
 }
@@ -664,14 +666,10 @@ local i
 
 echo "## Refreshing Load Balancer ##"
 
-CHKIPROUTE=`cat /etc/iproute2/rt_tables | grep LoadBalancer`
- if [ -z "$CHKIPROUTE" ]; then
-echo "300     LoadBalancer" >> /etc/iproute2/rt_tables
- fi
-ip rule del prio 300 > /dev/null 2>&1 
-ip route flush table 300 > /dev/null 2>&1
+ip rule del prio 9 > /dev/null 2>&1 
+ip route flush table 170 > /dev/null 2>&1
 
-        for TABLE in 300
+        for TABLE in 170
         do
                 ip route | grep link | grep -Ev ^default | while read ROUTE
                 do
@@ -729,12 +727,12 @@ done
 
 pre_nexthop_chk=`echo $nexthop | awk -F "nexthop" '{print NF-1}'`
 if [ "$pre_nexthop_chk" == "1" ]; then
-ip route add default via $(echo $nexthop | awk -F " " '{print $3}') dev $(echo $nexthop | awk -F " " '{print $5}') proto static table 300
+ip route add default via $(echo $nexthop | awk -F " " '{print $3}') dev $(echo $nexthop | awk -F " " '{print $5}') proto static table 170
 elif [ "$pre_nexthop_chk" -gt "1" ]; then
-ip route add proto static table 300 default scope global $nexthop
+ip route add proto static table 170 default scope global $nexthop
 fi
 
-ip rule add fwmark 0x1 table 300 prio 300
+ip rule add fwmark 0x1 table 170 prio 9
 ip route flush cache
 }
 
@@ -757,10 +755,9 @@ gateway=$(query_config gateway $group)
 ifname=$(query_config ifname $group)
 ipaddr=$(query_config ipaddr $group)
 
-iprule=$(expr $(expr $i \* 10) + 300)
-ip route flush table $iprule > /dev/null 2>&1
+ip route flush table $(expr $i + 170) > /dev/null 2>&1
 
-        for TABLE in $iprule
+        for TABLE in $(expr $i + 170)
         do
                 ip route | grep link | grep -Ev ^default | while read ROUTE
                 do
@@ -769,7 +766,7 @@ ip route flush table $iprule > /dev/null 2>&1
          done
 
 if [ "$gateway" != "x" -a "$ipaddr" != "x" -a "$ifname" != "x" ]; then
-ip route add default via $gateway table $iprule src $ipaddr proto static
+ip route add default via $gateway table $(expr $i + 170) src $ipaddr proto static
 route add default gw $gateway dev $ifname 
 fi
 done
@@ -784,27 +781,25 @@ local group
 local gateway
 local ipaddr
 
-iprule=$(expr $(expr $1 \* 10) + 300)
 group=$(query_config group $1)
 gateway=$(query_config gateway $group)
 ipaddr=$(query_config ipaddr $group)
 
 CHKIPROUTE=`cat /etc/iproute2/rt_tables | grep MWAN${1}`
  if [ -z "$CHKIPROUTE" ]; then
-echo "$iprule     MWAN${1}" >> /etc/iproute2/rt_tables
+echo "$(expr $1 + 170) MWAN${1}" >> /etc/iproute2/rt_tables
  fi
 
-ip rule del prio $iprule > /dev/null 2>&1 
-ip rule del prio $(expr $iprule + 1) > /dev/null 2>&1
+ip rule del prio $(expr $1 \* 10) > /dev/null 2>&1 
+ip rule del prio $(expr $1 \* 10 + 1) > /dev/null 2>&1
 
 if [ "$gateway" != "x" -a "$ipaddr" != "x" ]; then
-ip rule add from $ipaddr table $iprule prio $iprule
-ip rule add fwmark 0x$(expr $iprule - 300) table $iprule prio $(expr $iprule + 1)
+ip rule add from $ipaddr table $(expr $1 + 170) prio $(expr $1 \* 10)
+ip rule add fwmark 0x$(expr $1 \* 10) table $(expr $1 + 170) prio $(expr $(expr $1 \* 10) + 1)
 fi
 }
 
 flush() {
-local iprule
 local i
 
 echo "## Flushing IP Rules & Routes ##"
@@ -813,14 +808,13 @@ ip rule flush > /dev/null 2>&1
 ip rule add lookup main prio 32766 > /dev/null 2>&1
 ip rule add lookup default prio 32767 > /dev/null 2>&1
 
-ip route flush table 300 > /dev/null
+ip route flush table 170 > /dev/null
 
 	i=0
 	while [ $i -lt $wancount ]; do 
 		i=`expr $i + 1` 
-		iprule=$(expr $i \* 10)
                 ip route del default > /dev/null 2>&1
-                ip route flush table $iprule > /dev/null 2>&1
+                ip route flush table $(expr $i + 170) > /dev/null 2>&1
 	done
 
 echo "## Clearing Rules ##"
@@ -844,6 +838,13 @@ flush
 
 
 echo "## IP Rules Initialization ##"
+
+CHKIPROUTE=`cat /etc/iproute2/rt_tables | grep LoadBalancer`
+ if [ -z "$CHKIPROUTE" ]; then
+echo "#" >> /etc/iproute2/rt_tables
+echo "170 LoadBalancer" >> /etc/iproute2/rt_tables
+ fi
+
 i=0
 while [ $i -lt $wancount ]; do 
 i=`expr $i + 1` 
