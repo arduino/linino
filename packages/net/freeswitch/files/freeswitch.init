@@ -15,7 +15,7 @@ start() {
 	mkdir -p $FS_DIR_DB
 	mkdir -p $FS_DIR_LOG
 	ulimit -s 240
-	$FS_DIR/usr/bin/freeswitch $OPTIONS -c &
+	$FS_DIR/usr/bin/freeswitch $OPTIONS -nc
 }
 
 stop() {
@@ -35,3 +35,4 @@ restart() {
 	sleep 10
 	start
 }
+

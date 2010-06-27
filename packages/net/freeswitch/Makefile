@@ -164,7 +164,7 @@ $(call Package/freeswitch/Default)
   DEPENDS:= freeswitch \
 		+freeswitch-mod-commands \
 		+freeswitch-mod-conference \
-		+freeswitch-mod-console \
+		+freeswitch-mod-syslog \
 		+freeswitch-mod-curl \
 		+freeswitch-mod-dialplan-xml \
 		+freeswitch-mod-dptools \
@@ -193,7 +193,7 @@ $(call Package/freeswitch/Default)
   TITLE:=FreeSWITCH minimal config
   DEPENDS:= freeswitch \
 		+freeswitch-mod-commands \
-		+freeswitch-mod-console \
+		+freeswitch-mod-syslog \
 		+freeswitch-mod-dialplan-xml \
 		+freeswitch-mod-dptools \
 		+freeswitch-mod-event-socket \
@@ -349,6 +349,8 @@ define Build/Compile
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
 		all $(MAKE_INSTALL_TARGETS)
+	$(SED) 's|^\([:blank:]*\)\(.*\)"mod_console"\(.*\)$$$$|\1<!-- \2"mod_console"\3 -->|' $(PKG_INSTALL_DIR)/etc/freeswitch/autoload_configs/modules.conf.xml
+	$(SED) 's|^\([:blank:]*\)<!-- \(.*\)"mod_syslog"\(.*\) -->\(.*\)$$$$|\1\2"mod_syslog"\3\4 -->|' $(PKG_INSTALL_DIR)/etc/freeswitch/autoload_configs/modules.conf.xml
 endef
 
 define Build/InstallDev
