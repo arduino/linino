@@ -143,7 +143,7 @@ endef
 define Package/freeswitch/description
   FreeSWITCH is an open source telephony platform designed to 
   facilitate the creation of voice and chat driven products scaling 
-  from a soft-phone up to a soft-switch.
+  from a soft-phone up to a soft-switch.  See http://wiki.freeswitch.org
 endef
 
 define Package/freeswitch-example-config
@@ -400,7 +400,7 @@ define Package/freeswitch/install
 	$(INSTALL_DATA) ./files/freeswitch.config $(1)/etc/config/freeswitch
 endef
 
-define Package/freeswitch-collection-default/install
+define Package/freeswitch-collection-upstream-defaults/install
 	$(INSTALL_DIR) $(1)/etc/freeswitch
 endef
 
