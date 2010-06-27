@@ -194,6 +194,7 @@ $(call Package/freeswitch/Default)
 		+freeswitch-mod-event-socket \
 		+freeswitch-mod-g723-1 \
 		+freeswitch-mod-ilbc \
+		+freeswitch-mod-limit \
 		+freeswitch-mod-local-stream \
 		+freeswitch-mod-logfile \
 		+freeswitch-mod-lua \
