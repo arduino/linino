@@ -181,7 +181,8 @@ $(call Package/freeswitch/Default)
 		+freeswitch-mod-tone-stream \
 		+freeswitch-mod-voipcodecs \
 		+freeswitch-mod-xml-curl \
-		+freeswitch-mod-xml-rpc
+		+freeswitch-mod-xml-rpc \
+		+freeswitch-tools
 endef
 
 # mod_lua is included in FreeSWITCH minimal because it is intended to be used
@@ -195,12 +196,14 @@ $(call Package/freeswitch/Default)
 		+freeswitch-mod-console \
 		+freeswitch-mod-dialplan-xml \
 		+freeswitch-mod-dptools \
+		+freeswitch-mod-event-socket \
 		+freeswitch-mod-local-stream \
 		+freeswitch-mod-sndfile \
 		+freeswitch-mod-sofia \
 		+freeswitch-mod-tone-stream \
 		+freeswitch-mod-voipcodecs \
-		+freeswitch-mod-lua
+		+freeswitch-mod-lua \
+		+freeswitch-tools
 endef
 
 define Package/freeswitch-sounds-en

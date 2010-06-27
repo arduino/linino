@@ -22,3 +22,16 @@ stop() {
 	[ -f $DEFAULT ] && . $DEFAULT
 	$FS_DIR/usr/bin/freeswitch $OPTIONS -stop
 }
+
+restart() {
+	# stopping freeswitch is non-blocking, so we wait until freeswitch's 
+	# event socket is down, and then wait an additional ten seconds so that 
+	# freeswitch should be completely shutdown before we start it again
+	local retval
+	stop
+	fs_cli -x status >/dev/null 2>&1
+	retval=$?
+	while [ $retval -eq 0 ]; do sleep 1; fs_cli -x status >/dev/null 2>&1; retval=$?; done
+	sleep 10
+	start
+}
