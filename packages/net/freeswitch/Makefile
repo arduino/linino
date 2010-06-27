@@ -184,20 +184,23 @@ $(call Package/freeswitch/Default)
 		+freeswitch-mod-xml-rpc
 endef
 
+# mod_lua is included in FreeSWITCH minimal because it is intended to be used
+# by the LuCI / ucitrigger interface to FreeSWITCH on OpenWRT
+
 define Package/freeswitch-minimal
 $(call Package/freeswitch/Default)
   TITLE:=FreeSWITCH minimal config
   DEPENDS:= freeswitch \
 		+freeswitch-mod-commands \
 		+freeswitch-mod-console \
-		+freeswitch-mod-curl \
 		+freeswitch-mod-dialplan-xml \
 		+freeswitch-mod-dptools \
 		+freeswitch-mod-local-stream \
 		+freeswitch-mod-sndfile \
 		+freeswitch-mod-sofia \
 		+freeswitch-mod-tone-stream \
-		+freeswitch-mod-voipcodecs
+		+freeswitch-mod-voipcodecs \
+		+freeswitch-mod-lua
 endef
 
 define Package/freeswitch-sounds-en
