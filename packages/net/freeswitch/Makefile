@@ -146,7 +146,17 @@ define Package/freeswitch/description
   from a soft-phone up to a soft-switch.
 endef
 
+define Package/freeswitch-example-config
+$(call Package/freeswitch/Default)
+  TITLE:=FreeSWITCH example config (commented)
+  DEPENDS:= freeswitch
+endef
 
+define Package/freeswitch-example-config/description
+  The default configuration included with FreeSWITCH. It is not intended to be
+  a final product, and is thus moved to /usr/share/freeswitch/examples/conf to
+  be an example of how FreeSWITCH can be configured.
+endef
 
 define Package/freeswitch-default
 $(call Package/freeswitch/Default)
@@ -363,9 +373,13 @@ define Package/freeswitch-default/install
 	$(CP) $(PKG_INSTALL_DIR)/etc/freeswitch/* $(1)/etc/freeswitch/
 endef
 
+define Package/freeswitch-example-config/install
+	$(INSTALL_DIR) $(1)/usr/share/freeswitch/examples/conf
+	$(CP) $(PKG_INSTALL_DIR)/etc/freeswitch/* $(1)/usr/share/freeswitch/examples/conf/
+endef
+
 define Package/freeswitch-minimal/install
 	$(INSTALL_DIR) $(1)/etc/freeswitch
-	$(CP) $(PKG_INSTALL_DIR)/etc/freeswitch/* $(1)/etc/freeswitch/
 endef
 
 define Package/freeswitch-sounds-en/install
@@ -413,6 +427,7 @@ $(eval $(call BuildPackage,freeswitch-minimal))
 $(eval $(call BuildPackage,freeswitch-sounds-en))
 $(eval $(call BuildPackage,freeswitch-sounds-moh))
 $(eval $(call BuildPackage,freeswitch-tools))
+$(eval $(call BuildPackage,freeswitch-example-config))
 
 #$(eval $(call BuildPlugin,Name,Title,Files,Depends))
 $(eval $(call BuildPlugin,alsa,Alsa endpoint,mod_alsa,,+alsa-lib))
