@@ -2,8 +2,8 @@
   <modules>
     
     <!-- Loggers (I'd load these first) -->
-    <load module="mod_console"/>
-    <!-- <load module="mod_logfile"/> -->
+    <!-- <load module="mod_console"/> -->
+    <load module="mod_logfile"/>
     <!-- <load module="mod_syslog"/> -->
 
     <!--<load module="mod_yaml"/>-->
