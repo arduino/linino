@@ -26,7 +26,7 @@ define Package/rdiff-backup
   CATEGORY:=Utilities
   TITLE:=Incremental backup utility
   URL:=http://www.nongnu.org/rdiff-backup
-  DEPENDS:=+python-mini +librsync +libpopt +openssl-util
+  DEPENDS:=+python +librsync +libpopt +openssl-util
 endef
 
 define Package/rdiff-backup/description
