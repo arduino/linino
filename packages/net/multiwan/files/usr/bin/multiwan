@@ -600,26 +600,18 @@ iptables -t mangle -A FastBalancer -j MARK --set-mark 0x1
 iptables -t mangle -A FastBalancer -j CONNMARK --save-mark
 fi
 
+iptables -t mangle -A MultiWan -m conntrack --ctstate ESTABLISHED,RELATED -j CONNMARK --restore-mark
+iptables -t mangle -A MultiWan -j MultiWanPreHandler
+iptables -t mangle -A MultiWan -j MultiWanRules
+iptables -t mangle -A MultiWan -j MultiWanLoadBalancer
+iptables -t mangle -A MultiWan -j MultiWanDNS
+iptables -t mangle -A MultiWan -j MultiWanPostHandler
+
 iptables -t mangle -I PREROUTING -j MultiWan
-iptables -t mangle -I PREROUTING 2 -j MultiWanPreHandler
-iptables -t mangle -I PREROUTING 3 -j MultiWanRules
-iptables -t mangle -I PREROUTING 4 -j MultiWanLoadBalancer
-iptables -t mangle -I PREROUTING 5 -j MultiWanDNS
-
-
 iptables -t mangle -I FORWARD -j MultiWan
-
 iptables -t mangle -I OUTPUT -j MultiWan
-iptables -t mangle -I OUTPUT 2 -j MultiWanRules
-iptables -t mangle -I OUTPUT 3 -j MultiWanLoadBalancer
-iptables -t mangle -I OUTPUT 4 -j MultiWanPostHandler
-iptables -t mangle -I OUTPUT 5 -j MultiWanDNS
-
-
 iptables -t mangle -I POSTROUTING -j MultiWan
-iptables -t mangle -I POSTROUTING 2 -j MultiWanPostHandler
 
-iptables -t mangle -A MultiWan -j CONNMARK --restore-mark
 
 refresh_dns
 
@@ -645,11 +637,9 @@ iptables -t mangle -A MultiWanPostHandler -o $ifname -m mark --mark 0x1 -j FW${i
 done
 
 if [ ! -z "$CHKFORQOS" ]; then
-iptables -t mangle -I PREROUTING 6 -j MultiWanQoS
-iptables -t mangle -A FORWARD -j MultiWanQoS
-iptables -t mangle -A OUTPUT -j MultiWanQoS
-iptables -t mangle -A POSTROUTING -j MultiWanQoS
+iptables -t mangle -A MultiWan -j MultiWanQoS
 fi
+
 }
 
 refresh_loadbalancer() {
@@ -742,6 +732,7 @@ local gateway
 local group
 local ifname
 local ipaddr
+local lanip
 local i
 
 echo "## Refreshing Routing Tables ##"
@@ -754,7 +745,6 @@ group=$(query_config group $i)
 gateway=$(query_config gateway $group)
 ifname=$(query_config ifname $group)
 ipaddr=$(query_config ipaddr $group)
-
 ip route flush table $(expr $i + 170) > /dev/null 2>&1
 
         for TABLE in $(expr $i + 170)
@@ -767,7 +757,15 @@ ip route flush table $(expr $i + 170) > /dev/null 2>&1
 
 if [ "$gateway" != "x" -a "$ipaddr" != "x" -a "$ifname" != "x" ]; then
 ip route add default via $gateway table $(expr $i + 170) src $ipaddr proto static
-route add default gw $gateway dev $ifname 
+ip route del default > /dev/null 2>&1
+
+   if [ ! -z $lan_if ]; then
+      lanip=`uci -q -P /var/state get network.${lan_if}.ipaddr`
+   else
+      lanip=`uci -q -P /var/state get network.lan.ipaddr`
+   fi
+
+ip route add default via $lanip > /dev/null 2>&1
 fi
 done
 
@@ -1066,6 +1064,7 @@ wancount=0
 config_clear
 config_load "multiwan"
 config_get default_route    config default_route
+config_get lan_if           config lan_if
 config_get debug            config debug 
 
 config_foreach acquire_wan_data interface

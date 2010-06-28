@@ -1,6 +1,7 @@
 
 config 'multiwan' 'config'
 	option 'default_route' 'balancer'
+	option 'lan_if' 'lan'
 
 config 'interface' 'wan'
 	option 'weight' '10'
