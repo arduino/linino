@@ -7,6 +7,9 @@ hostapd_set_bss_options() {
 	config_get wpa_group_rekey "$vif" wpa_group_rekey
 	config_get_bool ap_isolate "$vif" isolate 0
 
+	config_get device "$vif" device
+	config_get hwmode "$device" hwmode
+
 	if [ "$ap_isolate" -gt 0 ]; then
 		append "$var" "ap_isolate=$ap_isolate" "$N"
 	fi
@@ -38,9 +41,14 @@ hostapd_set_bss_options() {
 
 	# explicit override for crypto setting
 	case "$enc" in
-		*tkip+aes|*tkip+ccmp) crypto="CCMP TKIP";;
+		*tkip+aes|*tkip+ccmp|*aes+tkip|*ccmp+tkip) crypto="CCMP TKIP";;
 		*aes|*ccmp) crypto="CCMP";;
 		*tkip) crypto="TKIP";;
+	esac
+
+	# enforce CCMP for 11ng and 11na
+	case "$hwmode" in
+		*ng|*na) crypto="CCMP";;
 	esac
 
 	# use crypto/auth settings for building the hostapd config
