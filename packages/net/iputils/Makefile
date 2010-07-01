@@ -62,6 +62,7 @@ define Package/iputils-ping6
   CATEGORY:=Network
   TITLE:=iputils - ping6
   URL:=http://www.skbuff.net/iputils
+  DEPENDS += @IPV6
 endef
 
 define Package/iputils-ping6/description
@@ -98,6 +99,7 @@ define Package/iputils-tracepath6
   CATEGORY:=Network
   TITLE:=iputils - tracepath6
   URL:=http://www.skbuff.net/iputils
+  DEPENDS += @IPV6
 endef
 
 define Package/iputils-tracepath6/description
@@ -110,6 +112,7 @@ define Package/iputils-traceroute6
   CATEGORY:=Network
   TITLE:=iputils - traceroute6
   URL:=http://www.skbuff.net/iputils
+  DEPENDS += @IPV6
 endef
 
 define Package/iputils-traceroute6/description
@@ -163,8 +166,10 @@ endef
 $(eval $(call BuildPackage,iputils-arping))
 $(eval $(call BuildPackage,iputils-clockdiff))
 $(eval $(call BuildPackage,iputils-ping))
-$(eval $(call BuildPackage,iputils-ping6))
 $(eval $(call BuildPackage,iputils-tftpd))
 $(eval $(call BuildPackage,iputils-tracepath))
-$(eval $(call BuildPackage,iputils-tracepath6))
-$(eval $(call BuildPackage,iputils-traceroute6))
+ifeq ($(CONFIG_IPV6),y)
+	$(eval $(call BuildPackage,iputils-ping6))
+	$(eval $(call BuildPackage,iputils-tracepath6))
+	$(eval $(call BuildPackage,iputils-traceroute6))
+endif
