@@ -10,8 +10,9 @@ config FFMPEG_PATENTED
 	default BUILD_PATENTED
 
 config FFMPEG_FFSERVER_SUPPORT
-	bool "Include support for FFmpeg streaming support"
+	bool "Include support for ffserver (FFmpeg streaming server)"
 	select FFMPEG_MUXER_ffm
+	select FFMPEG_DEMUXER_ffm
 	select FFMPEG_DEMUXER_rtsp
 	select FFMPEG_PROTOCOL_rtp
 

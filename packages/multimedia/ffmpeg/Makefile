@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ffmpeg
 PKG_VERSION:=0.5.2
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ffmpeg.org/releases/
@@ -185,8 +185,6 @@ define Build/Configure
 		--enable-shared \
 		--enable-static \
 		--disable-debug \
-		--enable-ffmpeg \
-		--enable-ffserver \
 		--enable-gpl \
 		--disable-libfaad \
 		--disable-mmx \
@@ -199,6 +197,8 @@ define Build/Configure
 		--enable-zlib \
 		--enable-postproc \
 		\
+		$(if $(CONFIG_PACKAGE_ffmpeg),,--disable-ffmpeg) \
+		$(if $(CONFIG_PACKAGE_ffserver),,--disable-ffserver) \
 		$(if $(CONFIG_FFMPEG_IPV6),,--disable-ipv6) \
 		\
 		--disable-bsfs \
