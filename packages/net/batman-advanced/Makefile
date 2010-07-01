@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,128 +10,38 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=batman-adv
 
-# Versions to download for maintenance build
-PKG_REV_MAINT:=1611
-PKG_KMOD_VERSION_MAINT:=5c4633c532a7a9b5adfe5dbf3f5e97fff307216e
-# just for the package version numbering
-PKG_VERSION_MAINT:=0.2.1
-# Versions to download for development build
-PKG_REV_DEV:=1715
-PKG_KMOD_VERSION_DEV:=520e8f9d66bc972e6f818c57e063efffb7f52be4
-# just for the package version numbering
-PKG_VERSION_DEV:=0.3.0a
-## Make sure git-commit hash and svn revision number fit! ##
+PKG_VERSION:=2010.0.0
+PKG_MD5SUM:=2a7dc62e23d8940ff70c87b0504cab95
+BATCTL_MD5SUM:=a13cc78988c8a6422756e979ba561aca
 
-PKG_RELEASE:=1
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://downloads.open-mesh.org/batman/releases/batman-adv-$(PKG_VERSION)
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
-
-ifneq ($(CONFIG_BATMAN_ADV_DEV),)
-	PKG_REV:=$(PKG_REV_DEV)
-	PKG_VERSION:=$(PKG_VERSION_DEV)
-	PKG_KMOD_VERSION=$(PKG_KMOD_VERSION_DEV)
-	PKG_KMOD_URL=http://git.open-mesh.org/snapshot/$(PKG_KMOD_VERSION)/
-	PKG_KMOD_FNAME=batman-adv-dev-$(PKG_REV).tar.gz
-	PKG_TOOL_VERSION=$(PKG_REV)
-	PKG_TOOL_PROTO=svn
-	PKG_TOOL_URL=http://downloads.open-mesh.org/svn/batman/trunk/batctl
-	PKG_TOOL_FNAME:=batctl-dev-$(PKG_TOOL_VERSION).tar.gz
-else
-	PKG_REV:=$(PKG_REV_MAINT)
-	PKG_VERSION:=$(PKG_VERSION_MAINT)
-	PKG_KMOD_VERSION=$(PKG_KMOD_VERSION_MAINT)
-	PKG_KMOD_URL=http://git.open-mesh.org/snapshot/$(PKG_KMOD_VERSION)/
-	PKG_KMOD_FNAME=batman-adv-maint-$(PKG_REV).tar.gz
-	PKG_TOOL_VERSION=$(PKG_REV)
-	PKG_TOOL_PROTO=svn
-	PKG_TOOL_URL=http://downloads.open-mesh.org/svn/batman/branches/batctl-0.2.x/
-	PKG_TOOL_FNAME:=batctl-maint-$(PKG_TOOL_VERSION).tar.gz
-endif
-
-PKG_KMOD_BUILD_DIR:=$(PKG_BUILD_DIR)/batman-adv
-PKG_TOOL_BUILD_DIR:=$(PKG_BUILD_DIR)/batctl
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_TOOL_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)/batctl-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
 
-# have to set this variable after including the Makefiles
-ifneq ($(CONFIG_BATMAN_ADV_DEV),)
-	STAMP_PREPARED:=$(STAMP_PREPARED)_dev
-else
-	STAMP_PREPARED:=$(STAMP_PREPARED)_maint
-endif
-STAMP_PREPARED:=$(STAMP_PREPARED)$(if $(CONFIG_KMOD_BATMAN_ADV_BATCTL),_batctl)
-STAMP_BUILT:=$(STAMP_BUILT)$(if $(CONFIG_KMOD_BATMAN_ADV_DEBUG_LOG),_debug)
-
-define Package/batman-adv/Default
+define KernelPackage/batman-adv
   URL:=http://www.open-mesh.org/
   MAINTAINER:=Marek Lindner <lindner_marek@yahoo.de>
-endef
-
-define KernelPackage/batman-adv
-$(call Package/batman-adv/Default)
   SUBMENU:=Network Support
   DEPENDS:=@LINUX_2_6
-  TITLE:=B.A.T.M.A.N. layer 2
-  FILES:=$(PKG_KMOD_BUILD_DIR)/batman-adv.$(LINUX_KMOD_SUFFIX)
+  TITLE:=B.A.T.M.A.N. Adv
+  FILES:=$(PKG_BUILD_DIR)/batman-adv.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,50,batman-adv)
+endef
+
+define KernelPackage/batman-adv/description
+B.A.T.M.A.N. advanced is a kernel module which allows to
+build layer 2 mesh networks. This package contains the
+version $(PKG_VERSION) of the kernel module plus its user space
+configuration & managerment tool batctl.
 endef
 
 define KernelPackage/batman-adv/config
 	source "$(SOURCE)/Config.in"
-endef
-
-define KernelPackage/batman-adv/description
-B.A.T.M.A.N. layer 2
-endef
-
-define Download/batman-adv
-  FILE:=$(PKG_KMOD_FNAME)
-  URL:=$(PKG_KMOD_URL)
-endef
-$(eval $(call Download,batman-adv))
-
-ifneq ($(DEVELOPER)$(CONFIG_KMOD_BATMAN_ADV_BATCTL),)
-define Download/batctl
-  FILE:=$(PKG_TOOL_FNAME)
-  URL:=$(PKG_TOOL_URL)@$(PKG_TOOL_VERSION)
-  PROTO:=$(PKG_TOOL_PROTO)
-  VERSION:=$(PKG_TOOL_VERSION)
-  SUBDIR:=$(PKG_SOURCE_SUBDIR)/batctl
-endef
-$(eval $(call Download,batctl))
-endif
-
-ifneq ($(DEVELOPER)$(CONFIG_KMOD_BATMAN_ADV_BATCTL),)
-ifneq ($(DEVELOPER)$(CONFIG_BATMAN_ADV_DEV),)
-define Download/batman
-  FILE:=batman-$(PKG_REV).tar.gz
-  URL:=http://downloads.open-mesh.org/svn/batman/trunk/batman
-  PROTO:=svn
-  VERSION:=$(PKG_REV)
-  SUBDIR:=$(PKG_SOURCE_SUBDIR)/batman
-endef
-$(eval $(call Download,batman))
-endif
-endif
-
-define Build/Prepare
-	tar xzf "$(DL_DIR)/$(PKG_KMOD_FNAME)" -C "$(PKG_BUILD_DIR)"
-ifneq ($(DEVELOPER)$(CONFIG_KMOD_BATMAN_ADV_BATCTL),)
-	tar xzf "$(DL_DIR)/$(PKG_TOOL_FNAME)" -C "$(BUILD_DIR)"
-ifneq ($(DEVELOPER)$(CONFIG_BATMAN_ADV_DEV),)
-	tar xzf "$(DL_DIR)/batman-$(PKG_REV).tar.gz" -C "$(BUILD_DIR)"
-endif
-endif
-	#mv "$(PKG_BUILD_DIR)/batman-adv" "$(PKG_KMOD_BUILD_DIR)"
-	$(call PatchDir,$(PKG_BUILD_DIR),$(PATCH_DIR),)
-ifneq ($(CONFIG_BATMAN_ADV_DEV),)
-	$(call PatchDir,$(PKG_BUILD_DIR),$(PATCH_DIR)/dev,)
-else
-	$(call PatchDir,$(PKG_BUILD_DIR),$(PATCH_DIR)/maint,)
-endif
-	cp $(PKG_KMOD_BUILD_DIR)/Makefile.kbuild $(PKG_KMOD_BUILD_DIR)/Makefile
 endef
 
 MAKE_BATMAN_ADV_ARGS += \
@@ -139,15 +49,15 @@ MAKE_BATMAN_ADV_ARGS += \
 	ARCH="$(LINUX_KARCH)" \
 	PATH="$(TARGET_PATH)" \
 	$(if $(CONFIG_KMOD_BATMAN_ADV_DEBUG_LOG),EXTRA_CFLAGS="-DCONFIG_BATMAN_ADV_DEBUG") \
-	SUBDIRS="$(PKG_KMOD_BUILD_DIR)" \
+	SUBDIRS="$(PKG_BUILD_DIR)" \
 	LINUX_VERSION="$(LINUX_VERSION)" \
-	REVISION="$(PKG_REV)" modules
+	REVISION="" modules
 
 MAKE_BATCTL_ARGS += \
 	CFLAGS="$(TARGET_CFLAGS)" \
 	CCFLAGS="$(TARGET_CFLAGS)" \
 	OFLAGS="$(TARGET_CFLAGS)" \
-	REVISION="$(PKG_REV)" \
+	REVISION="" \
 	CC="$(TARGET_CC)" \
 	NODEBUG=1 \
 	UNAME="Linux" \
@@ -155,33 +65,42 @@ MAKE_BATCTL_ARGS += \
 	STRIP="/bin/true" \
 	batctl install
 
-define Build/Configure
+ifneq ($(DEVELOPER)$(CONFIG_KMOD_BATMAN_ADV_BATCTL),)
+define Download/batctl
+  FILE:=batctl-$(PKG_VERSION).tar.gz
+  URL:=$(PKG_SOURCE_URL)
+  MD5SUM:=$(BATCTL_MD5SUM)
 endef
+$(eval $(call Download,batctl))
 
-ifneq ($(DEVELOPER)$(CONFIG_PACKAGE_kmod-batman-adv),)
-        BUILD_KMOD_ADV = $(MAKE) -C "$(LINUX_DIR)" $(MAKE_BATMAN_ADV_ARGS)
-        BUILD_BATCTL = $(MAKE) -C $(PKG_TOOL_BUILD_DIR) $(MAKE_BATCTL_ARGS)
+BUILD_BATCTL = $(MAKE) -C $(PKG_TOOL_BUILD_DIR) $(MAKE_BATCTL_ARGS)
 endif
 
 define Build/Compile
-	$(BUILD_KMOD_ADV)
-ifneq ($(DEVELOPER)$(CONFIG_KMOD_BATMAN_ADV_BATCTL),)
+	tar xzf "$(DL_DIR)/batctl-$(PKG_VERSION).tar.gz" -C "$(BUILD_DIR)/$(PKG_NAME)"
+	cp $(PKG_BUILD_DIR)/Makefile.kbuild $(PKG_BUILD_DIR)/Makefile
+	$(MAKE) -C "$(LINUX_DIR)" $(MAKE_BATMAN_ADV_ARGS)
 	$(BUILD_BATCTL)
-endif
 endef
 
 define Build/Clean
-        rm -rf $(PKG_KMOD_BUILD_DIR)
+        rm -rf $(BUILD_DIR)/$(PKG_NAME)/
 endef
 
+ifneq ($(DEVELOPER)$(CONFIG_KMOD_BATMAN_ADV_BATCTL),)
 define KernelPackage/batman-adv/install
 	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/etc/init.d/batman-adv $(1)/etc/init.d
 	$(INSTALL_DATA) ./files/etc/config/batman-adv $(1)/etc/config
-ifneq ($(DEVELOPER)$(CONFIG_KMOD_BATMAN_ADV_BATCTL),)
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/batctl $(1)/usr/sbin/
-endif
 endef
+else
+define KernelPackage/batman-adv/install
+	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/etc/init.d/batman-adv $(1)/etc/init.d
+	$(INSTALL_DATA) ./files/etc/config/batman-adv $(1)/etc/config
+endef
+endif
 
 $(eval $(call KernelPackage,batman-adv))

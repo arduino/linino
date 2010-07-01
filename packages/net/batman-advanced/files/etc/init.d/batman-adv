@@ -1,84 +1,68 @@
 #!/bin/sh /etc/rc.common
 START=90
 
-MODULE_DIR="/sys/module/batman_adv"
+is_module_loaded() {
 
-detect_version() {
-	local version
-	
-	if [ ! -d "$MODULE_DIR" ]; then
-		echo "batman-adv module directory not found - is the module loaded ?" >&2
-		return 1
+	if [ ! -d "/sys/module/batman_adv" ]; then
+		echo "batman-adv module directory not found - was the kernel module loaded ?" >&2
+		return 0
 	fi
-	
-	version=$(cat $MODULE_DIR/version)
 
-	if [ "$version" != "${version#0.3*}" ]; then
-		BAT_VER="0.3"
-	elif [ "$version" != "${version#0.2*}" ]; then
-		BAT_VER="0.2"
-	else
-		echo "Error - unknown version encountered: $version" >&2
-		return 1
-	fi
-	
-	return 0
+	return 1
 }
 
 start_mesh () {
 	local meshif="$1"
-	
-	detect_version
-	[ $? -ne 0 ] && return 1
+	local interfaces orig_interval log_level aggregate_ogm vis_mode
+
+	is_module_loaded
+	[ $? -ne 1 ] && return
 
 	config_get interfaces "$meshif" interfaces
 	config_get orig_interval "$meshif" orig_interval
 	config_get log_level "$meshif" log_level
+	config_get aggregate_ogm "$meshif" aggregate_ogm
+	config_get vis_mode "$meshif" vis_mode
 
 	if [ "$interfaces" = "" ]; then
 		echo Error, you must specify at least a network interface
 		return
 	fi
-	
-	for interface in $interfaces 
-	   do 
-	   	if [ "$BAT_VER" = "0.2" ]; then
-			echo $interface > /proc/net/batman-adv/interfaces 
-		else
-			[ ! -f "/sys/class/net/$interface/batman_adv/mesh_iface" ] && echo "Can't add interface $interface - ignoring" && continue
-			echo $meshif > /sys/class/net/$interface/batman_adv/mesh_iface
-		fi
-	   done 	
-	
+
+	for interface in $interfaces
+	   do
+		[ ! -f "/sys/class/net/$interface/batman_adv/mesh_iface" ] && echo "Can't add interface $interface - ignoring" && continue
+		echo $meshif > /sys/class/net/$interface/batman_adv/mesh_iface
+	   done
+
 	if [ $orig_interval ]; then
-		if [ "$BAT_VER" = "0.2" ]; then
-			echo $orig_interval > /proc/net/batman-adv/orig_interval 
-		else
-			echo $orig_interval > /sys/class/net/$meshif/batman_adv/originator_interval
-		fi
+		echo $orig_interval > /sys/class/net/$meshif/batman_adv/originator_interval
 	fi
-	
+
 	if [ $log_level ]; then
 		echo $log_level > /sys/module/batman_adv/parameters/debug 2>&-
+	fi
+
+	if [ $aggregate_ogm ]; then
+		echo $aggregate_ogm > /sys/class/net/$meshif/batman_adv/aggregate_ogm
+	fi
+
+	if [ $vis_mode ]; then
+		echo $vis_mode > /sys/class/net/$meshif/batman_adv/vis_mode
 	fi
 }
 
 stop_mesh() {
 	local meshif="$1"
-	
-	detect_version
-        [ $? -ne 0 ] && return 1
-        
-        if [ "$BAT_VER" = "0.2" ]; then
-		echo "" > /proc/net/batman-adv/interfaces
-		return
-	fi
-	
+
+	is_module_loaded
+	[ $? -ne 1 ] && return
+
 	for iface in $(ls /sys/class/net/*)
 	   do
 		 [ ! -f "$iface/batman_adv/mesh_iface" ] && continue
 		 [ "$(head -1 $iface/batman_adv/mesh_iface)" != "status: $meshif" ] && continue
-		 
+
 		 echo "none" > $iface/batman_adv/mesh_iface
 	   done
 }
@@ -86,8 +70,8 @@ stop_mesh() {
 # can also be used with "batman-adv start bat0"
 start() {
 	config_load batman-adv
-	
-	if [ -n "$1" ]; then 
+
+	if [ -n "$1" ]; then
 		start_mesh $1
 	else
 		config_foreach start_mesh mesh
@@ -97,7 +81,7 @@ start() {
 # can also be used with "batman-adv stop bat0"
 stop () {
 	config_load batman-adv
-	
+
 	if [ -n "$1" ]; then
 		stop_mesh $1
 	else
@@ -105,4 +89,4 @@ stop () {
 	fi
 }
 
-        
+
