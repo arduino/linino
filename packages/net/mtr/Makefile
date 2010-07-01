@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mtr
-PKG_VERSION:=0.75
+PKG_VERSION:=0.79
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.bitwizard.nl/mtr/
-PKG_MD5SUM:=23baca52d0922c2ecba7eba05317868c
+PKG_MD5SUM:=f7c1f873e68e7176f60ae9fbb2ca20f4
 
 PKG_INSTALL:=1
 
