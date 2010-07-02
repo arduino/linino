@@ -707,6 +707,24 @@
  	    first = 0;
  	  }
  	vty_show_ip_route (vty, rn, rib);
+@@ -872,7 +878,7 @@ DEFUN (show_ip_route_prefix_longer,
+ 	  if (first)
+ 	    {
+ 	      vty_out (vty, SHOW_ROUTE_V4_HEADER, VTY_NEWLINE,
+-		       VTY_NEWLINE, VTY_NEWLINE);
++		       VTY_NEWLINE, VTY_NEWLINE, VTY_NEWLINE);
+ 	      first = 0;
+ 	    }
+ 	  vty_show_ip_route (vty, rn, rib);
+@@ -911,7 +917,7 @@ DEFUN (show_ip_route_supernets,
+ 	    if (first)
+ 	      {
+ 		vty_out (vty, SHOW_ROUTE_V4_HEADER, VTY_NEWLINE,
+-			 VTY_NEWLINE, VTY_NEWLINE);
++			 VTY_NEWLINE, VTY_NEWLINE, VTY_NEWLINE);
+ 		first = 0;
+ 	      }
+ 	    vty_show_ip_route (vty, rn, rib);
 @@ -922,7 +928,7 @@ DEFUN (show_ip_route_supernets,
  
  DEFUN (show_ip_route_protocol,
@@ -745,6 +763,15 @@
    else 
      {
        vty_out (vty, "Unknown route type%s", VTY_NEWLINE);
+@@ -971,7 +983,7 @@ DEFUN (show_ip_route_protocol,
+ 	{
+ 	  if (first)
+ 	    {
+-	      vty_out (vty, SHOW_ROUTE_V4_HEADER,
++	      vty_out (vty, SHOW_ROUTE_V4_HEADER, VTY_NEWLINE,
+ 		       VTY_NEWLINE, VTY_NEWLINE, VTY_NEWLINE);
+ 	      first = 0;
+ 	    }
 @@ -1560,7 +1572,10 @@ vty_show_ipv6_route_detail (struct vty *
        if (rib->type == ZEBRA_ROUTE_RIPNG
  	  || rib->type == ZEBRA_ROUTE_OSPF6
