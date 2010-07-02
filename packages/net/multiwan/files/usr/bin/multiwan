@@ -732,7 +732,6 @@ local gateway
 local group
 local ifname
 local ipaddr
-local lanip
 local i
 
 echo "## Refreshing Routing Tables ##"
@@ -757,15 +756,7 @@ ip route flush table $(expr $i + 170) > /dev/null 2>&1
 
 if [ "$gateway" != "x" -a "$ipaddr" != "x" -a "$ifname" != "x" ]; then
 ip route add default via $gateway table $(expr $i + 170) src $ipaddr proto static
-ip route del default > /dev/null 2>&1
-
-   if [ ! -z $lan_if ]; then
-      lanip=`uci -q -P /var/state get network.${lan_if}.ipaddr`
-   else
-      lanip=`uci -q -P /var/state get network.lan.ipaddr`
-   fi
-
-ip route add default via $lanip > /dev/null 2>&1
+route add default gw $gateway > /dev/null 2>&1
 fi
 done
 
@@ -1064,7 +1055,6 @@ wancount=0
 config_clear
 config_load "multiwan"
 config_get default_route    config default_route
-config_get lan_if           config lan_if
 config_get debug            config debug 
 
 config_foreach acquire_wan_data interface
