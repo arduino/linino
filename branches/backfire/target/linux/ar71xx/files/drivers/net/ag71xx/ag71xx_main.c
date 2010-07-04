@@ -435,6 +435,12 @@ static void ag71xx_dma_reset(struct ag71xx *ag)
 	ag71xx_wr(ag, AG71XX_REG_RX_CTRL, 0);
 	ag71xx_wr(ag, AG71XX_REG_TX_CTRL, 0);
 
+	/*
+	 * give the hardware some time to really stop all rx/tx activity
+	 * clearing the descriptors too early causes random memory corruption
+	 */
+	mdelay(1);
+
 	/* clear descriptor addresses */
 	ag71xx_wr(ag, AG71XX_REG_TX_DESC, 0);
 	ag71xx_wr(ag, AG71XX_REG_RX_DESC, 0);
@@ -553,6 +559,8 @@ static int ag71xx_open(struct net_device *dev)
 	ret = ag71xx_rings_init(ag);
 	if (ret)
 		goto err;
+
+	ag71xx_hw_init(ag);
 
 	napi_enable(&ag->napi);
 
