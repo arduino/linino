@@ -37,12 +37,14 @@ append_params_quotes() {
 start_service() {
 	local s="$1"
 	local enable=0
+	local run_as_usr='root'
 
 	# disabled?
 	config_get_bool enable "$s" enable 0
 	[ "$enable" == 0 ] && return 0
 	config_get config_dir "$s" config_dir '/tmp/transmission'
 	mkdir -p "$config_dir"
+	config_get run_as_usr "$s" run_daemon_as_user 'root' 
 
 	echo "{" > $config_dir/settings.json
 
@@ -69,7 +71,7 @@ start_service() {
 	echo "\""invalid-key"\": false" >> $config_dir/settings.json
 	echo "}" >> $config_dir/settings.json
 	
-	eval "$SSD -q -b -x $BIN -S -- -g $config_dir"
+	eval "$SSD -c $run_as_usr -q -b -x $BIN -S -- -g $config_dir"
 }
 
 start() {
