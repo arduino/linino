@@ -27,7 +27,7 @@ endef
 
 define Package/psmisc/description
  psmisc is a set of additional small useful utilities that use
- the proc filesystem: fuser, killall, pstree, and pidof
+ the proc filesystem: fuser, killall, pstree, and prtstat
 endef
 
 MAKE_FLAGS += \
@@ -41,6 +41,7 @@ define Package/psmisc/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/killall $(1)/usr/sbin
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/pstree $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/prtstat $(1)/usr/bin
 endef
 
 $(eval $(call BuildPackage,psmisc))
