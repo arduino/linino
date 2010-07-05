@@ -1,37 +1,36 @@
-diff -u --recursive gstreamer-0.10.25-vanilla/Makefile.am gstreamer-0.10.25/Makefile.am
---- gstreamer-0.10.25-vanilla/Makefile.am	2009-11-14 23:04:56.812541974 -0500
-+++ gstreamer-0.10.25/Makefile.am	2009-11-14 23:05:22.744511310 -0500
-@@ -13,14 +13,12 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -8,7 +8,6 @@ aclocal_DATA = gst-element-check-@GST_MA
  
  SUBDIRS = pkgconfig \
  	gst libs plugins tools tests \
 -	docs \
  	po \
+ 	m4 \
  	common
- 
+@@ -16,7 +15,6 @@ SUBDIRS = pkgconfig \
  # These are all the possible subdirs
  DIST_SUBDIRS = pkgconfig \
  	gst libs plugins tools tests \
 -	docs \
  	po \
+ 	m4 \
  	common
- 
-diff -u --recursive gstreamer-0.10.25-vanilla/Makefile.in gstreamer-0.10.25/Makefile.in
---- gstreamer-0.10.25-vanilla/Makefile.in	2009-11-14 23:04:56.775542524 -0500
-+++ gstreamer-0.10.25/Makefile.in	2009-11-14 23:05:28.561389821 -0500
-@@ -397,7 +397,6 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -445,7 +445,6 @@ aclocaldir = $(datadir)/aclocal
  aclocal_DATA = gst-element-check-@GST_MAJORMINOR@.m4
  SUBDIRS = pkgconfig \
  	gst libs plugins tools tests \
 -	docs \
  	po \
+ 	m4 \
  	common
- 
-@@ -405,7 +404,6 @@
+@@ -454,7 +453,6 @@ SUBDIRS = pkgconfig \
  # These are all the possible subdirs
  DIST_SUBDIRS = pkgconfig \
  	gst libs plugins tools tests \
 -	docs \
  	po \
+ 	m4 \
  	common
- 

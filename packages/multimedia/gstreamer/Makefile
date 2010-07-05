@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,151 +8,187 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gstreamer
-PKG_VERSION:=0.10.25
+PKG_VERSION:=0.10.29
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gstreamer/
-PKG_MD5SUM:=88544e034a051baf472983791d233076
+PKG_MD5SUM:=c92d6bce4fc65fa9d5a3ad35cdd1a466
+
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-export PATH:=$(PKG_BUILD_DIR)/bin:$(TARGET_PATH)
+define Package/gstreamer/Default
+  CATEGORY:=Multimedia
+  SECTION:=multimedia
+  TITLE:=GStreamer
+  URL:=http://gstreamer.freedesktop.org/
+endef
 
-PKG_INSTALL=1
+define Package/gstreamer/description/Default
+ GStreamer open source multimedia framework
+endef
 
-EXTRA_CFLAGS+= \
-	-I$(STAGING_DIR)/usr/lib/libintl/include \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include
+
+define Package/gstreamer
+$(call Package/gstreamer/Default)
+  TITLE+= framework
+  DEPENDS+= +libgstreamer \
+	+libgstcheck \
+	+libgstcontroller \
+	+libgstdataprotocol \
+	+libgstnet
+endef
+
+define Package/gstreamer/description
+$(call Package/gstreamer/description/Default)
+ .
+ This meta package contains only dependencies on the other GStreamer
+ componenents.
+endef
+
+
+define Package/gstreamer-utils
+$(call Package/gstreamer/Default)
+  TITLE+= utilities
+  DEPENDS+= +libgstreamer
+endef
+
+define Package/gstreamer-utils/description
+$(call Package/gstreamer/description/Default)
+ .
+ This package contains the GStreamer utilities.
+endef
+
+
+define Package/libgstreamer
+$(call Package/gstreamer/Default)
+  TITLE+= library (core)
+  DEPENDS:= +glib2 +libpthread +libxml2
+endef
+
+define Package/libgstreamer/description
+$(call Package/gstreamer/description/Default)
+ .
+ This package contains the GStreamer core library.
+endef
+  
+
+GST_VERSION:=0.10
+
+CONFIGURE_ARGS += \
+	--disable-debug \
+	--disable-examples \
+	--disable-tests \
+	--disable-valgrind \
+	\
+	--disable-gst-debug \
+	\
+	--without-libiconv-prefix \
+	--without-libintl-prefix \
+	--without-x \
 
 EXTRA_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
-define Package/gstreamer/Default
-  DEPENDS:=+gstreamer
-  TITLE:=gstreamer
-  URL:=http://gstreamer.freedesktop.org/
-  SECTION:=multimedia
-  CATEGORY:=Multimedia
-endef
-
-define Package/gstreamer
-  $(call Package/gstreamer/Default)
-  DEPENDS:=+libxml2 +glib2
-endef
-  
-define Package/gstreamer/description
-	A framework for streaming media.
-endef
-
-define Package/gstreamer-libgstcheck
-  $(call Package/gstreamer/Default)
-  TITLE+= (libgstcheck)
-endef
-  
-define Package/gstreamer-libgstcheck/description
-	gstreamer libgstcheck
-endef
-
-define Package/gstreamer-libgstcontroller
-  $(call Package/gstreamer/Default)
-  TITLE+= (libgstcontroller)
-endef
-  
-define Package/gstreamer-libgstcontroller/description
-	gstreamer libgstcontroller
-endef
-
-define Package/gstreamer-libgstdataprotocol
-  $(call Package/gstreamer/Default)
-  TITLE+= (libgstdataprotocol)
-endef
-  
-define Package/gstreamer-libgstdataprotocol/description
-	gstreamer libgstdataprotocol
-endef
-
-define Package/gstreamer-libgstnet
-  $(call Package/gstreamer/Default)
-  TITLE+= (libgstnet)
-endef
-
-define Package/gstreamer-libgstnet/description
-	gstreamer libgstnet
-endef
-
-define Build/Configure
-	$(call Build/Configure/Default,\
-		--disable-gst-debug \
-		--disable-loadsave \
-		--disable-parse \
-		--disable-debug \
-		--disable-valgrind \
-		--disable-tests \
-		--disable-examples \
-	)
-	mkdir -p $(PKG_BUILD_DIR)/bin
-	touch $(PKG_BUILD_DIR)/bin/gtkdoc-rebase
-	chmod +x $(PKG_BUILD_DIR)/bin/gtkdoc-rebase
-endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/include/* \
-		$(1)/usr/include/
-
-	$(INSTALL_DIR) $(1)/usr/lib/
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} \
-		$(1)/usr/lib/
-
-	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-0.10/
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.{so*,la} \
-		$(1)/usr/lib/gstreamer-0.10
-
-	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
-		$(1)/usr/lib/pkgconfig/
-
-	$(INSTALL_DIR) $(2)/share/aclocal/
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/share/aclocal/* \
-		$(2)/share/aclocal/
+	$(INSTALL_DIR) $(1)/usr/include/gstreamer-$(GST_VERSION)
+	( cd $(PKG_INSTALL_DIR); $(CP) \
+		./usr/include/gstreamer-$(GST_VERSION)/* \
+		$(1)/usr/include/gstreamer-$(GST_VERSION)/ \
+	)
+	$(INSTALL_DIR) $(1)/usr/lib
+	( cd $(PKG_INSTALL_DIR); $(CP) \
+		./usr/lib/libgst*-$(GST_VERSION).{a,la,so*} \
+		$(1)/usr/lib/ \
+	)
+	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-$(GST_VERSION)
+	( cd $(PKG_INSTALL_DIR); $(CP) \
+		./usr/lib/gstreamer-$(GST_VERSION)/libgst*.{la,so} \
+		$(1)/usr/lib/gstreamer-$(GST_VERSION)/ \
+	)
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	( cd $(PKG_INSTALL_DIR); $(CP) \
+		./usr/lib/pkgconfig/gstreamer*-$(GST_VERSION).pc \
+		$(1)/usr/lib/pkgconfig/ \
+	)
+	$(INSTALL_DIR) $(2)/share/aclocal
+	( cd $(PKG_INSTALL_DIR); $(CP) \
+		./usr/share/aclocal/* \
+		$(2)/share/aclocal/ \
+	)
 endef
 
 define Package/gstreamer/install
-	$(INSTALL_DIR) $(1)/usr/lib/
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/libgstbase*.so* \
-		$(1)/usr/lib/
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/libgstreamer*.so* \
-		$(1)/usr/lib/
-
-	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-0.10/
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/gstreamer-0.10/*.so* \
-		$(1)/usr/lib/gstreamer-0.10
+	/bin/true
 endef
 
-define BuildLib
-  define Package/gstreamer-libgst$(1)/install
-	$(INSTALL_DIR) $$(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgst$(1)*.so* \
-		$$(1)/usr/lib/
+define Package/gstreamer-utils/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	( cd $(PKG_INSTALL_DIR); $(CP) \
+		./usr/bin/gst-feedback* \
+		./usr/bin/gst-launch* \
+		./usr/bin/gst-inspect* \
+		./usr/bin/gst-typefind* \
+		./usr/bin/gst-xmlinspect* \
+		./usr/bin/gst-xmllaunch* \
+		$(1)/usr/bin/ \
+	)
+endef
+
+define Package/libgstreamer/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	( cd $(PKG_INSTALL_DIR); $(CP) \
+		./usr/lib/libgstbase-$(GST_VERSION).so.* \
+		./usr/lib/libgstreamer-$(GST_VERSION).so.* \
+		$(1)/usr/lib/ \
+	)
+	$(INSTALL_DIR) $(1)/usr/lib/gstreamer-$(GST_VERSION)
+	( cd $(PKG_INSTALL_DIR); $(CP) \
+		./usr/lib/gstreamer-$(GST_VERSION)/libgst*.so \
+		$(1)/usr/lib/gstreamer-$(GST_VERSION)/ \
+	)
+endef
+
+
+# 1: short name
+# 2: description
+# 3: dependencies on other gstreamer libraries (short name)
+# 4: dependencies on other packages
+define GstBuildLibrary
+
+  define Package/libgst$(1)
+    $(call Package/gstreamer/Default)
+    TITLE+= $(2) library (core)
+    DEPENDS+= +libgstreamer $$(foreach p,$(3),+libgst$$(p)) $(4)
   endef
 
-  $$(eval $$(call BuildPackage,gstreamer-libgst$(1)))
+  define Package/libgst$(1)/description
+   $(call Package/gstreamer/description/Default)
+   .
+   This package contains the GStreamer $(2) library.
+  endef
+
+  define Package/libgst$(1)/install
+	$(INSTALL_DIR) $$(1)/usr/lib
+	( cd $(PKG_INSTALL_DIR); $(CP) \
+		./usr/lib/libgst$(1)-$(GST_VERSION).so.* \
+		$$(1)/usr/lib/ \
+	)
+  endef
+
+  $$(eval $$(call BuildPackage,libgst$(1)))
 endef
 
+$(eval $(call GstBuildLibrary,check,check unit testing))
+$(eval $(call GstBuildLibrary,controller,dynamic parameter control))
+$(eval $(call GstBuildLibrary,dataprotocol,data protocol))
+$(eval $(call GstBuildLibrary,net,network classes))
+
 $(eval $(call BuildPackage,gstreamer))
-$(eval $(call BuildLib,check))
-$(eval $(call BuildLib,controller))
-$(eval $(call BuildLib,dataprotocol))
-$(eval $(call BuildLib,net))
+$(eval $(call BuildPackage,gstreamer-utils))
+$(eval $(call BuildPackage,libgstreamer))
+
