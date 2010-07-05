@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ffmpeg
 PKG_VERSION:=0.5.2
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ffmpeg.org/releases/
@@ -24,14 +24,17 @@ FFMPEG_ENCODERS:= \
 	pcm_s16be \
 	pcm_s16le \
 	png \
+	vorbis \
 	zlib \
 
 FFMPEG_DECODERS:= \
+	aac \
 	ac3 \
 	atrac3 \
 	gif \
 	h264 \
 	jpegls \
+	mp2 \
 	mp3 \
 	mpeg1video \
 	mpeg2video \
@@ -41,6 +44,7 @@ FFMPEG_DECODERS:= \
 	pcm_s16be \
 	pcm_s16le \
 	png \
+	vorbis \
 	wmav1 \
 	wmav2 \
 	zlib \
@@ -54,6 +58,7 @@ FFMPEG_MUXERS:= \
 	mpeg1video \
 	mpeg2video \
 	mpegts \
+	ogg \
 	oss \
 	rtp \
 
@@ -65,12 +70,14 @@ FFMPEG_DEMUXERS:= \
 	mpegps \
 	mpegts \
 	mpegvideo \
+	ogg \
 	rm \
 	rtsp \
 	sdp \
 	v4l2 \
 
 FFMPEG_PARSERS:= \
+	aac \
 	ac3 \
 	h264 \
 	mpegaudio \

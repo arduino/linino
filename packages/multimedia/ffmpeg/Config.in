@@ -68,10 +68,18 @@ config FFMPEG_ENCODER_png
 	bool "PNG"
 	select FFMPEG_ENCODER_zlib
 
+config FFMPEG_ENCODER_vorbis
+	bool "Vorbis"
+
 config FFMPEG_ENCODER_zlib
 	bool "Zlib"
 
 comment "Decoders ---"
+
+config FFMPEG_DECODER_aac
+	bool "AAC (Advanced Audio Coding)"
+	depends FFMPEG_PATENTED
+	select FFMPEG_PARSER_aac
 
 config FFMPEG_DECODER_ac3
 	bool "AC3"
@@ -92,8 +100,12 @@ config FFMPEG_DECODER_h264
 config FFMPEG_DECODER_jpegls
 	bool "JPEG-LS"
 
+config FFMPEG_DECODER_mp2
+	bool "MP2 (MPEG Audio Layer 2)"
+	depends FFMPEG_PATENTED
+
 config FFMPEG_DECODER_mp3
-	bool "MP3"
+	bool "MP3 (MPEG Audio Layer 2)"
 	depends FFMPEG_PATENTED
 
 config FFMPEG_DECODER_mpegvideo
@@ -124,6 +136,9 @@ config FFMPEG_DECODER_png
 	bool "PNG"
 	select FFMPEG_DECODER_zlib
 
+config FFMPEG_DECODER_vorbis
+	bool "Vorbis"
+
 config FFMPEG_DECODER_wmav1
 	bool "WMAv1"
 	depends FFMPEG_PATENTED
@@ -149,7 +164,7 @@ config FFMPEG_MUXER_h264
 	depends FFMPEG_PATENTED
 
 config FFMPEG_MUXER_mp3
-	bool "MP3"
+	bool "MP3 (MPEG Audio Layer 3)"
 
 config FFMPEG_MUXER_mp4
 	bool "MP4"
@@ -162,6 +177,9 @@ config FFMPEG_MUXER_mpeg2video
 
 config FFMPEG_MUXER_mpegts
 	bool "MPEG-2 (TS)"
+
+config FFMPEG_MUXER_ogg
+	bool "Ogg"
 
 config FFMPEG_MUXER_oss
 	bool "OSS (Open Sound System playback)"
@@ -182,7 +200,7 @@ config FFMPEG_DEMUXER_h264
 	depends FFMPEG_PATENTED
 
 config FFMPEG_DEMUXER_mp3
-	bool "MP3"
+	bool "MP3 (MPEG Audio Layer 3)"
 
 config FFMPEG_DEMUXER_mpegvideo
 	bool "MPEG Video"
@@ -192,6 +210,9 @@ config FFMPEG_DEMUXER_mpegps
 
 config FFMPEG_DEMUXER_mpegts
 	bool "MPEG-2 (TS)"
+
+config FFMPEG_DEMUXER_ogg
+	bool "Ogg"
 
 config FFMPEG_DEMUXER_rm
 	bool "RM"
@@ -208,6 +229,10 @@ config FFMPEG_DEMUXER_sdp
 	select FFMPEG_DEMUXER_mpegts
 
 comment "Parsers ---"
+
+config FFMPEG_PARSER_aac
+	bool "AAC (Advanced Audio Coding)"
+	depends FFMPEG_PATENTED
 
 config FFMPEG_PARSER_ac3
 	bool "AC3"
