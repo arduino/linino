@@ -12,7 +12,7 @@ PKG_VERSION:=22.11
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://psmisc.sourceforge.net
+PKG_SOURCE_URL:=@SF/psmisc
 PKG_MD5SUM:=b5d32aa285b75c59dee96d3ea26a4881
 
 include $(INCLUDE_DIR)/package.mk
