@@ -12,7 +12,8 @@ PKG_VERSION:=1.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://download.aircrack-ng.org/
+PKG_SOURCE_URL:=http://download.aircrack-ng.org/ \
+	http://archive.aircrack-ng.org/aircrack-ng/$(PKG_VERSION)/
 PKG_MD5SUM:=dafbfaf944ca9d523fde4bae86f0c067
 
 include $(INCLUDE_DIR)/package.mk
