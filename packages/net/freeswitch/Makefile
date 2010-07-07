@@ -375,7 +375,7 @@ define Build/Compile
 		LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
 		all $(MAKE_INSTALL_TARGETS)
 	$(SED) 's|^\([ \t]*\)\(.*\)"mod_console"\(.*\)$$$$|\1<!-- \2"mod_console"\3 -->|' $(PKG_INSTALL_DIR)/etc/freeswitch/autoload_configs/modules.conf.xml
-	$(SED) 's|^\([ \t]*\)<!-- \(.*\)"mod_syslog"\(.*\) -->\(.*\)$$$$|\1\2"mod_syslog"\3\4|' $(PKG_INSTALL_DIR)/etc/freeswitch/autoload_configs/modules.conf.xml
+	$(SED) 's|^\([ \t]*\)<!-- *\(.*\)"mod_syslog"\(.*\) *-->\(.*\)$$$$|\1\2"mod_syslog"\3\4|' $(PKG_INSTALL_DIR)/etc/freeswitch/autoload_configs/modules.conf.xml
 endef
 
 define Build/InstallDev
