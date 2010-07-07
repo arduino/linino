@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iputils
-PKG_VERSION:=20071127
+PKG_VERSION:=20100418
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-s$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.skbuff.net/iputils
-PKG_MD5SUM:=12245e9927d60ff5cf4a99d265bcb7d3
+PKG_MD5SUM:=df6b0062118cdc5c62e3c810f831e976
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-s$(PKG_VERSION)
 
@@ -26,6 +26,7 @@ define Package/iputils-arping
   CATEGORY:=Network
   TITLE:=iputils - arping
   URL:=http://www.skbuff.net/iputils
+  DEPENDS:= +sysfsutils
 endef
 
 define Package/iputils-arping/description
@@ -121,7 +122,7 @@ define Package/iputils-traceroute6/description
 endef
 
 MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS)"
+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -L$(STAGING_DIR)/usr/lib" 
 
 define Package/iputils-arping/install
 	$(INSTALL_DIR) $(1)/usr/bin

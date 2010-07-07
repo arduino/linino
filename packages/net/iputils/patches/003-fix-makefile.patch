@@ -1,0 +1,16 @@
+--- a/Makefile
++++ b/Makefile
+@@ -30,9 +30,11 @@ all: $(TARGETS)
+ 
+ 
+ tftpd: tftpd.o tftpsubs.o
+-arping: arping.o -lsysfs
++arping: arping.o 
++	$(CC) $(CFLAGS) -o $@ arping.o -lsysfs
+ ping: ping.o ping_common.o
+-ping6: ping6.o ping_common.o -lresolv -lcrypto
++ping6: ping6.o ping_common.o 
++	$(CC) $(CFLAGS) -o $@  ping6.o ping_common.o -lresolv -lcrypto
+ ping.o ping6.o ping_common.o: ping_common.h
+ tftpd.o tftpsubs.o: tftp.h
+ 

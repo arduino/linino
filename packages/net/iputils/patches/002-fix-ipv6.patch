@@ -12,12 +12,3 @@
  
  LASTTAG:=`git-describe HEAD | sed -e 's/-.*//'`
  TAG:=`date +s%Y%m%d`
-@@ -29,7 +32,7 @@ all: $(TARGETS)
- tftpd: tftpd.o tftpsubs.o
- ping: ping.o ping_common.o
- ping6: ping6.o ping_common.o
--ping.o ping6.o ping_common.o: ping_common.h
-+ping.o ping_common.o: ping_common.h
- tftpd.o tftpsubs.o: tftp.h
- 
- rdisc_srv: rdisc_srv.o
