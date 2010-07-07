@@ -206,7 +206,7 @@
  		if (!eflag)
 --- a/tcpdump.c
 +++ b/tcpdump.c
-@@ -138,11 +138,14 @@ struct printer {
+@@ -139,11 +139,14 @@ struct printer {
  };
  
  static struct printer printers[] = {
@@ -221,7 +221,7 @@
  	{ token_if_print,	DLT_IEEE802 },
  #ifdef DLT_LANE8023
  	{ lane_if_print,        DLT_LANE8023 },
-@@ -157,19 +160,23 @@ static struct printer printers[] = {
+@@ -158,19 +161,23 @@ static struct printer printers[] = {
  #ifdef DLT_SLIP_BSDOS
  	{ sl_bsdos_if_print,	DLT_SLIP_BSDOS },
  #endif
@@ -245,7 +245,7 @@
  	{ atm_if_print,		DLT_ATM_RFC1483 },
  #ifdef DLT_C_HDLC
  	{ chdlc_if_print,	DLT_C_HDLC },
-@@ -180,15 +187,19 @@ static struct printer printers[] = {
+@@ -181,15 +188,19 @@ static struct printer printers[] = {
  #ifdef DLT_PPP_SERIAL
  	{ ppp_hdlc_if_print,    DLT_PPP_SERIAL },
  #endif
@@ -265,7 +265,7 @@
  #ifdef DLT_LTALK
  	{ ltalk_if_print,	DLT_LTALK },
  #endif
-@@ -207,12 +218,14 @@ static struct printer printers[] = {
+@@ -208,12 +219,14 @@ static struct printer printers[] = {
  #ifdef DLT_IP_OVER_FC
  	{ ipfc_if_print,	DLT_IP_OVER_FC },
  #endif
@@ -280,7 +280,7 @@
  #ifdef DLT_ENC
  	{ enc_if_print, 	DLT_ENC },
  #endif
-@@ -222,9 +235,11 @@ static struct printer printers[] = {
+@@ -223,9 +236,11 @@ static struct printer printers[] = {
  #ifdef DLT_APPLE_IP_OVER_IEEE1394
  	{ ap1394_if_print,	DLT_APPLE_IP_OVER_IEEE1394 },
  #endif
@@ -292,7 +292,7 @@
  #ifdef DLT_JUNIPER_ATM1
  	{ juniper_atm1_print,	DLT_JUNIPER_ATM1 },
  #endif
-@@ -276,6 +291,7 @@ static struct printer printers[] = {
+@@ -277,6 +292,7 @@ static struct printer printers[] = {
  #if defined(DLT_BLUETOOTH_HCI_H4_WITH_PHDR) && defined(HAVE_PCAP_BLUETOOTH_H)
  	{ bt_if_print, DLT_BLUETOOTH_HCI_H4_WITH_PHDR},
  #endif
