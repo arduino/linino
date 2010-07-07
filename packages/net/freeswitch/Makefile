@@ -172,12 +172,24 @@ endef
 
 define Package/freeswitch-config-minimal
 $(call Package/freeswitch/Default)
-  TITLE:=FreeSWITCH minimal OpenWRT config
+  TITLE:=FreeSWITCH a minimal FS config
   DEPENDS:= freeswitch
 endef
 
 define Package/freeswitch-config-minimal/description
-  The OpenWRT configuration for the OpenWRT FreeSWITCH minimal package collection.
+  A minimal configuration of FreeSWITCH for OpenWRT devices.  Is what the UCI 
+  configuration began with.
+  
+endef
+
+define Package/freeswitch-config-uci
+$(call Package/freeswitch/Default)
+  TITLE:=UCI-configuration for FreeSWITCH 
+  DEPENDS:= freeswitch
+endef
+
+define Package/freeswitch-config-uci/description
+  The UCI configuration system for FreeSWITCH on OpenWRT.
 endef
 
 define Package/freeswitch-collection-upstream-defaults
@@ -209,14 +221,32 @@ $(call Package/freeswitch/Default)
 		+freeswitch-tools
 endef
 
+define Package/freeswitch-collection-minimal
+$(call Package/freeswitch/Default)
+  TITLE:=A FreeSWITCH minimal package collection
+  DEPENDS:= freeswitch \
+  		+freeswitch-config-minimal \
+		+freeswitch-mod-commands \
+		+freeswitch-mod-syslog \
+		+freeswitch-mod-dialplan-xml \
+		+freeswitch-mod-dptools \
+		+freeswitch-mod-event-socket \
+		+freeswitch-mod-local-stream \
+		+freeswitch-mod-sndfile \
+		+freeswitch-mod-sofia \
+		+freeswitch-mod-tone-stream \
+		+freeswitch-mod-voipcodecs \
+		+freeswitch-tools
+endef
+
 # mod_lua is included in FreeSWITCH minimal because it is intended to be used
 # by the LuCI / ucitrigger interface to FreeSWITCH on OpenWRT
 
-define Package/freeswitch-collection-minimal
+define Package/freeswitch-collection-uci-minimal
 $(call Package/freeswitch/Default)
-  TITLE:=FreeSWITCH on OpenWRT minimal config
+  TITLE:=FreeSWITCH on OpenWRT minimal collection of packages
   DEPENDS:= freeswitch \
-  		+freeswitch-config-minimal \
+  		+freeswitch-config-uci \
 		+freeswitch-mod-commands \
 		+freeswitch-mod-syslog \
 		+freeswitch-mod-dialplan-xml \
@@ -419,9 +449,20 @@ define Package/freeswitch-collection-minimal/install
 	$(INSTALL_DIR) $(1)/etc/freeswitch
 endef
 
+define Package/freeswitch-collection-uci-minimal/install
+	$(INSTALL_DIR) $(1)/etc/freeswitch
+endef
+
 define Package/freeswitch-config-minimal/install
 	$(INSTALL_DIR) $(1)/etc/freeswitch
 	$(CP) ./files/etc.minimal/* $(1)/etc/freeswitch/
+endef
+
+define Package/freeswitch-config-uci/install
+	$(INSTALL_DIR) $(1)/etc/freeswitch
+	$(CP) ./files/etc.uci/* $(1)/etc/freeswitch/
+	$(INSTALL_DIR) $(1)/usr/lib/freeswitch/uci
+	$(CP) ./files/uci/* $(1)/usr/lib/freeswitch/uci/
 endef
 
 define Package/freeswitch-sounds-en/install
@@ -466,12 +507,14 @@ endef
 $(eval $(call BuildPackage,freeswitch))
 $(eval $(call BuildPackage,freeswitch-collection-upstream-defaults))
 $(eval $(call BuildPackage,freeswitch-collection-minimal))
+$(eval $(call BuildPackage,freeswitch-collection-uci-minimal))
 $(eval $(call BuildPackage,freeswitch-sounds-en))
 $(eval $(call BuildPackage,freeswitch-sounds-moh))
 $(eval $(call BuildPackage,freeswitch-tools))
 $(eval $(call BuildPackage,freeswitch-example-config))
 $(eval $(call BuildPackage,freeswitch-config-upstream-defaults))
 $(eval $(call BuildPackage,freeswitch-config-minimal))
+$(eval $(call BuildPackage,freeswitch-config-uci))
 
 #$(eval $(call BuildPlugin,Name,Title,Files,Depends))
 $(eval $(call BuildPlugin,alsa,Alsa endpoint,mod_alsa,,+alsa-lib))
