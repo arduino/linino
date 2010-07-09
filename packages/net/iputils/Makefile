@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iputils
 PKG_VERSION:=20100418
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-s$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.skbuff.net/iputils
 PKG_MD5SUM:=df6b0062118cdc5c62e3c810f831e976
 
+PKG_BUILD_DEPENDS:=sysfsutils
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-s$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
@@ -26,7 +27,7 @@ define Package/iputils-arping
   CATEGORY:=Network
   TITLE:=iputils - arping
   URL:=http://www.skbuff.net/iputils
-  DEPENDS:= +sysfsutils
+  DEPENDS:= +libsysfs
 endef
 
 define Package/iputils-arping/description
@@ -169,8 +170,6 @@ $(eval $(call BuildPackage,iputils-clockdiff))
 $(eval $(call BuildPackage,iputils-ping))
 $(eval $(call BuildPackage,iputils-tftpd))
 $(eval $(call BuildPackage,iputils-tracepath))
-ifeq ($(CONFIG_IPV6),y)
-	$(eval $(call BuildPackage,iputils-ping6))
-	$(eval $(call BuildPackage,iputils-tracepath6))
-	$(eval $(call BuildPackage,iputils-traceroute6))
-endif
+$(eval $(call BuildPackage,iputils-ping6))
+$(eval $(call BuildPackage,iputils-tracepath6))
+$(eval $(call BuildPackage,iputils-traceroute6))
