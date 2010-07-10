@@ -21,13 +21,17 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-s$(PKG_VERSION)
 include $(INCLUDE_DIR)/package.mk
 
 
-
-define Package/iputils-arping
+define Package/iputils/Default
   SECTION:=net
   CATEGORY:=Network
-  TITLE:=iputils - arping
   URL:=http://www.skbuff.net/iputils
-  DEPENDS:= +libsysfs
+endef
+
+
+define Package/iputils-arping
+$(call Package/iputils/Default)
+  TITLE:=iputils - arping
+  DEPENDS+= +libsysfs
 endef
 
 define Package/iputils-arping/description
@@ -35,11 +39,10 @@ define Package/iputils-arping/description
   Sends ARP REQUEST to a neighbour host.
 endef
 
+
 define Package/iputils-clockdiff
-  SECTION:=net
-  CATEGORY:=Network
+$(call Package/iputils/Default)
   TITLE:=iputils - clockdiff
-  URL:=http://www.skbuff.net/iputils
 endef
 
 define Package/iputils-clockdiff/description
@@ -47,11 +50,10 @@ define Package/iputils-clockdiff/description
   Measures clock difference between hosts.
 endef
 
+
 define Package/iputils-ping
-  SECTION:=net
-  CATEGORY:=Network
+$(call Package/iputils/Default)
   TITLE:=iputils - ping
-  URL:=http://www.skbuff.net/iputils
 endef
 
 define Package/iputils-ping/description
@@ -59,12 +61,11 @@ define Package/iputils-ping/description
   Sends ICMP ECHO_REQUEST to network hosts (IPv4).
 endef
 
+
 define Package/iputils-ping6
-  SECTION:=net
-  CATEGORY:=Network
+$(call Package/iputils/Default)
   TITLE:=iputils - ping6
-  URL:=http://www.skbuff.net/iputils
-  DEPENDS += @IPV6
+  DEPENDS+= @IPV6 @BROKEN
 endef
 
 define Package/iputils-ping6/description
@@ -72,11 +73,10 @@ define Package/iputils-ping6/description
   Sends ICMP ECHO_REQUEST to network hosts (IPv6).
 endef
 
+
 define Package/iputils-tftpd
-  SECTION:=net
-  CATEGORY:=Network
+$(call Package/iputils/Default)
   TITLE:=iputils - tftpd
-  URL:=http://www.skbuff.net/iputils
 endef
 
 define Package/iputils-tftpd/description
@@ -84,11 +84,10 @@ define Package/iputils-tftpd/description
   Trivial File Transfer Protocol server.
 endef
 
+
 define Package/iputils-tracepath
-  SECTION:=net
-  CATEGORY:=Network
+$(call Package/iputils/Default)
   TITLE:=iputils - tracepath
-  URL:=http://www.skbuff.net/iputils
 endef
 
 define Package/iputils-tracepath/description
@@ -96,12 +95,11 @@ define Package/iputils-tracepath/description
   Traces path to a network host discovering MTU along this path (IPv4).
 endef
 
+
 define Package/iputils-tracepath6
-  SECTION:=net
-  CATEGORY:=Network
+$(call Package/iputils/Default)
   TITLE:=iputils - tracepath6
-  URL:=http://www.skbuff.net/iputils
-  DEPENDS += @IPV6
+  DEPENDS+= @IPV6 @BROKEN
 endef
 
 define Package/iputils-tracepath6/description
@@ -109,12 +107,11 @@ define Package/iputils-tracepath6/description
   Traces path to a network host discovering MTU along this path (IPv6).
 endef
 
+
 define Package/iputils-traceroute6
-  SECTION:=net
-  CATEGORY:=Network
+$(call Package/iputils/Default)
   TITLE:=iputils - traceroute6
-  URL:=http://www.skbuff.net/iputils
-  DEPENDS += @IPV6
+  DEPENDS+= @IPV6 @BROKEN
 endef
 
 define Package/iputils-traceroute6/description
@@ -122,8 +119,9 @@ define Package/iputils-traceroute6/description
   Traces path to a network host (IPv6).
 endef
 
+
 MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -L$(STAGING_DIR)/usr/lib" 
+	CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) $(TARGET_LDFLAGS)" \
 
 define Package/iputils-arping/install
 	$(INSTALL_DIR) $(1)/usr/bin
