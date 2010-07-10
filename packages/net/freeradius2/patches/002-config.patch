@@ -129,7 +129,7 @@
  		#  These test certificates SHOULD NOT be used in a normal
  		#  deployment.  They are created only to make it easier
  		#  to install the server, and to perform some simple
-@@ -201,7 +181,7 @@
+@@ -205,7 +185,7 @@
  			#  In these cases, fragment size should be
  			#  1024 or less.
  			#
@@ -138,7 +138,7 @@
  
  			#  include_length is a flag which is
  			#  by default set to yes If set to
-@@ -211,7 +191,7 @@
+@@ -215,7 +195,7 @@
  			#  message is included ONLY in the
  			#  First packet of a fragment series.
  			#
@@ -147,7 +147,7 @@
  
  			#  Check the Certificate Revocation List
  			#
-@@ -220,83 +200,74 @@
+@@ -224,83 +204,74 @@
  			#    'c_rehash' is OpenSSL's command.
  			#  3) uncomment the line below.
  			#  5) Restart radiusd
@@ -289,7 +289,7 @@
  		}
  
  		#  The TTLS module implements the EAP-TTLS protocol,
-@@ -320,7 +291,7 @@
+@@ -324,7 +295,7 @@
  		#
  		#  in the control items for a request.
  		#
@@ -298,7 +298,7 @@
  			#  The tunneled EAP session needs a default
  			#  EAP type which is separate from the one for
  			#  the non-tunneled EAP module.  Inside of the
-@@ -328,7 +299,7 @@
+@@ -332,7 +303,7 @@
  			#  If the request does not contain an EAP
  			#  conversation, then this configuration entry
  			#  is ignored.
@@ -307,7 +307,7 @@
  
  			#  The tunneled authentication request does
  			#  not usually contain useful attributes
-@@ -344,7 +315,7 @@
+@@ -348,7 +319,7 @@
  			#  is copied to the tunneled request.
  			#
  			# allowed values: {no, yes}
@@ -316,7 +316,7 @@
  
  			#  The reply attributes sent to the NAS are
  			#  usually based on the name of the user
-@@ -357,7 +328,7 @@
+@@ -361,7 +332,7 @@
  			#  the tunneled request.
  			#
  			# allowed values: {no, yes}
@@ -325,7 +325,7 @@
  
  			#
  			#  The inner tunneled request can be sent
-@@ -369,13 +340,13 @@
+@@ -373,13 +344,13 @@
  			#  the virtual server that processed the
  			#  outer requests.
  			#
@@ -341,7 +341,7 @@
  
  		##################################################
  		#
-@@ -438,26 +409,16 @@
+@@ -448,26 +419,16 @@
  
  			#  the PEAP module also has these configuration
  			#  items, which are the same as for TTLS.
@@ -473,7 +473,7 @@
  #
 --- a/raddb/proxy.conf
 +++ b/raddb/proxy.conf
-@@ -559,9 +559,8 @@ home_server_pool my_auth_failover {
+@@ -566,9 +566,8 @@ home_server_pool my_auth_failover {
  #  This section defines a new-style "realm".  Note the in version 2.0,
  #  there are many fewer configuration items than in 1.x for a realm.
  #
@@ -867,22 +867,25 @@
  
  	#
  	#  Calculate the various WiMAX keys.  In order for this to work,
-@@ -505,10 +439,10 @@ post-auth {
+@@ -505,12 +439,12 @@ post-auth {
  	#  Add the ldap module name (or instance) if you have set 
  	#  'edir_account_policy_check = yes' in the ldap module configuration
  	#
 -	Post-Auth-Type REJECT {
+-		# log failed authentications in SQL, too.
++#	Post-Auth-Type REJECT {
++#		# log failed authentications in SQL, too.
+ #		sql
 -		attr_filter.access_reject
 -	}
 -}
-+#	Post-Auth-Type REJECT {
 +#		attr_filter.access_reject
 +#	}
 +#}
  
  #
  #  When the server decides to proxy a request to a home server,
-@@ -518,7 +452,7 @@ post-auth {
+@@ -520,7 +454,7 @@ post-auth {
  #
  #  Only a few modules currently have this method.
  #
@@ -891,7 +894,7 @@
  #	attr_rewrite
  
  	#  Uncomment the following line if you want to change attributes
-@@ -534,14 +468,14 @@ pre-proxy {
+@@ -536,14 +470,14 @@ pre-proxy {
  	#  server, un-comment the following line, and the
  	#  'detail pre_proxy_log' section, above.
  #	pre_proxy_log
@@ -908,7 +911,7 @@
  
  	#  If you want to have a log of replies from a home server,
  	#  un-comment the following line, and the 'detail post_proxy_log'
-@@ -565,7 +499,7 @@ post-proxy {
+@@ -567,7 +501,7 @@ post-proxy {
  	#  hidden inside of the EAP packet, and the end server will
  	#  reject the EAP request.
  	#
@@ -917,11 +920,10 @@
  
  	#
  	#  If the server tries to proxy a request and fails, then the
-@@ -587,6 +521,5 @@ post-proxy {
+@@ -589,5 +523,5 @@ post-proxy {
  #	Post-Proxy-Type Fail {
  #			detail
  #	}
--
 -}
 +#}
  
