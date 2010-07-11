@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -85,8 +85,8 @@ CONFIGURE_VARS += \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	LDFLAGS="$$$$LDFLAGS" \
-	LIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
-	CLIENTCLIBS="-nodefaultlibs -luClibc++ -lm -lgcc" \
+	LIBS="-nodefaultlibs -luClibc++ -lm $(LIBGCC_S)" \
+	CLIENTCLIBS="-nodefaultlibs -luClibc++ -lm $(LIBGCC_S)" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -41,7 +41,7 @@ endef
 
 CONFIGURE_VARS+= \
 	CXXFLAGS="$$$$CXXFLAGS $$$$CPPFLAGS -fno-builtin -fno-rtti -I$(STAGING_DIR)/usr/include/libnetfilter_queue/" \
-	LIBS="-nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm -lgcc" \
+	LIBS="-nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm $(LIBGCC_S)" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \

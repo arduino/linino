@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006,2007 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -41,7 +41,7 @@ define Build/Compile
 		SPACE_OPTIMIZE=yes \
 		FULL_STATIC=no \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -DNO_INET6_OPTION -fno-builtin -fno-rtti" \
-		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -ldl -lgcc -lm" \
+		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -ldl -lm $(LIBGCC_S) -lc" \
 		MODULE_CXX="\$$$$(CC) -shared \$$$$(CXXFLAGS) \$$$$(LDFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		PREFIX="/usr" \

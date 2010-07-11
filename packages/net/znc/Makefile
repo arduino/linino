@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -37,7 +37,7 @@ CONFIGURE_VARS += \
 	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
 	CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 	LDFLAGS="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib"
-	LIBS="-luClibc++ -lc -lm -lgcc -lssl"
+	LIBS="-luClibc++ -lm -lssl $(LIBGCC_S) -lc"
 
 CONFIGURE_ARGS += \
 	$(TARGET_CONFIGURE_OPTS) \
