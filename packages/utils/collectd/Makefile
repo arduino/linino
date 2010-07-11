@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=collectd
 PKG_VERSION:=4.9.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://collectd.org/files/
@@ -126,7 +126,7 @@ endef
 
 define Package/collectd
 $(call Package/collectd/Default)
-  DEPENDS:=+libgcc +libpthread +zlib
+  DEPENDS:= +libpthread +zlib
   MENU:=1
 endef
 
@@ -223,47 +223,47 @@ endef
 $(eval $(call BuildPackage,collectd))
 
 #$(eval $(call BuildPlugin,NAME,DESCRIPTION,FILES,DEPENDENCIES))
-$(eval $(call BuildPlugin,apache,apache status input,apache,+PACKAGE_collectd_mod_apache:libcurl))
+$(eval $(call BuildPlugin,apache,apache status input,apache,+PACKAGE_collectd-mod-apache:libcurl))
 $(eval $(call BuildPlugin,apcups,apcups status input,apcups,))
-$(eval $(call BuildPlugin,ascent,ascent status input,ascent,+PACKAGE_collectd_mod_ascent:libcurl +PACKAGE_collectd_mod_ascent:libxml2))
-$(eval $(call BuildPlugin,bind,BIND server/zone input,bind,+PACKAGE_collectd_mod_bind:libcurl +PACKAGE_collectd_mod_bind:libxml2))
+$(eval $(call BuildPlugin,ascent,ascent status input,ascent,+PACKAGE_collectd-mod-ascent:libcurl +PACKAGE_collectd-mod-ascent:libxml2))
+$(eval $(call BuildPlugin,bind,BIND server/zone input,bind,+PACKAGE_collectd-mod-bind:libcurl +PACKAGE_collectd-mod-bind:libxml2))
 $(eval $(call BuildPlugin,conntrack,connection tracking table size input,conntrack,))
 $(eval $(call BuildPlugin,contextswitch,context switch input,contextswitch,))
 $(eval $(call BuildPlugin,cpu,CPU input,cpu,))
 $(eval $(call BuildPlugin,csv,CSV output,csv,))
-$(eval $(call BuildPlugin,curl,cURL input,curl,+PACKAGE_collectd_mod_curl:libcurl))
-$(eval $(call BuildPlugin,dbi,relational database input,dbi,+PACKAGE_collectd_mod_dbi:libdbi))
+$(eval $(call BuildPlugin,curl,cURL input,curl,+PACKAGE_collectd-mod-curl:libcurl))
+$(eval $(call BuildPlugin,dbi,relational database input,dbi,+PACKAGE_collectd-mod-dbi:libdbi))
 $(eval $(call BuildPlugin,df,disk space input,df,))
 $(eval $(call BuildPlugin,disk,disk usage/timing input,disk,))
-$(eval $(call BuildPlugin,dns,DNS traffic input,dns,+PACKAGE_collectd_mod_dns:libpcap))
+$(eval $(call BuildPlugin,dns,DNS traffic input,dns,+PACKAGE_collectd-mod-dns:libpcap))
 $(eval $(call BuildPlugin,email,email output,email,))
 $(eval $(call BuildPlugin,exec,process exec input,exec,))
 $(eval $(call BuildPlugin,filecount,file count input,filecount,))
 $(eval $(call BuildPlugin,fscache,file-system based caching framework input,fscache,))
 $(eval $(call BuildPlugin,interface,network interfaces input,interface,))
-$(eval $(call BuildPlugin,iptables,iptables status input,iptables,+PACKAGE_collectd_mod_iptables:iptables @(!LINUX_2_4||BROKEN)))
+$(eval $(call BuildPlugin,iptables,iptables status input,iptables,+PACKAGE_collectd-mod-iptables:iptables @(!LINUX_2_4||BROKEN)))
 $(eval $(call BuildPlugin,irq,interrupt usage input,irq,))
 $(eval $(call BuildPlugin,load,system load input,load,))
 $(eval $(call BuildPlugin,logfile,log files output,logfile,))
 $(eval $(call BuildPlugin,madwifi,MadWifi status input,madwifi,))
-$(eval $(call BuildPlugin,mysql,MySQL status input,mysql,+PACKAGE_collectd_mod_mysql:libmysqlclient))
+$(eval $(call BuildPlugin,mysql,MySQL status input,mysql,+PACKAGE_collectd-mod-mysql:libmysqlclient))
 $(eval $(call BuildPlugin,memory,physical memory usage input,memory,))
-$(eval $(call BuildPlugin,netlink,netlink input,netlink,+PACKAGE_collectd_mod_netlink:ip @(!LINUX_2_4||BROKEN)))
+$(eval $(call BuildPlugin,netlink,netlink input,netlink,+PACKAGE_collectd-mod-netlink:ip @(!LINUX_2_4||BROKEN)))
 $(eval $(call BuildPlugin,network,network input/output,network))
-$(eval $(call BuildPlugin,nginx,nginx status input,nginx,+PACKAGE_collectd_mod_nginx:libcurl))
+$(eval $(call BuildPlugin,nginx,nginx status input,nginx,+PACKAGE_collectd-mod-nginx:libcurl))
 $(eval $(call BuildPlugin,ntpd,NTP daemon status input,ntpd,))
 $(eval $(call BuildPlugin,nut,UPS monitoring input,nut,@BROKEN))
 $(eval $(call BuildPlugin,olsrd,OLSRd status input,olsrd,))
-$(eval $(call BuildPlugin,onewire,onewire sensor input,onewire,+PACKAGE_collectd_mod_onewire:libow-capi @BROKEN))
+$(eval $(call BuildPlugin,onewire,onewire sensor input,onewire,+PACKAGE_collectd-mod-onewire:libow-capi @BROKEN))
 $(eval $(call BuildPlugin,openvpn,OpenVPN traffic/compression input,openvpn,))
-$(eval $(call BuildPlugin,ping,ping status input,ping,+PACKAGE_collectd_mod_ping:liboping))
-$(eval $(call BuildPlugin,postgresql,PostgreSQL status input,postgresql,+PACKAGE_collectd_mod_postgresql:libpq))
+$(eval $(call BuildPlugin,ping,ping status input,ping,+PACKAGE_collectd-mod-ping:liboping))
+$(eval $(call BuildPlugin,postgresql,PostgreSQL status input,postgresql,+PACKAGE_collectd-mod-postgresql:libpq))
 $(eval $(call BuildPlugin,powerdns,PowerDNS server status input,powerdns,))
 $(eval $(call BuildPlugin,processes,process status input,processes,))
 $(eval $(call BuildPlugin,protocols,network protocols input,protocols,))
-$(eval $(call BuildPlugin,rrdtool,RRDtool output,rrdtool,+PACKAGE_collectd_mod_rrdtool:librrd1))
-$(eval $(call BuildPlugin,sensors,lm_sensors input,sensors,+PACKAGE_collectd_mod_sensors:libsensors @BROKEN))
-$(eval $(call BuildPlugin,snmp,SNMP input,snmp,+PACKAGE_collectd_mod_snmp:libnetsnmp))
+$(eval $(call BuildPlugin,rrdtool,RRDtool output,rrdtool,+PACKAGE_collectd-mod-rrdtool:librrd1))
+$(eval $(call BuildPlugin,sensors,lm_sensors input,sensors,+PACKAGE_collectd-mod-sensors:libsensors @BROKEN))
+$(eval $(call BuildPlugin,snmp,SNMP input,snmp,+PACKAGE_collectd-mod-snmp:libnetsnmp))
 $(eval $(call BuildPlugin,syslog,syslog output,syslog,))
 $(eval $(call BuildPlugin,tail,tail input,tail,))
 $(eval $(call BuildPlugin,table,table-like structured file input,table,))
@@ -276,4 +276,4 @@ $(eval $(call BuildPlugin,uptime,uptime status input,uptime,))
 $(eval $(call BuildPlugin,users,user logged in status input,users,))
 $(eval $(call BuildPlugin,vmem,virtual memory usage input,vmem,))
 $(eval $(call BuildPlugin,wireless,wireless status input,wireless,))
-$(eval $(call BuildPlugin,write_http,HTTP POST output,write_http,+PACKAGE_collectd_mod_write_http:libcurl))
+$(eval $(call BuildPlugin,write-http,HTTP POST output,write_http,+PACKAGE_collectd-mod-write_http:libcurl))
