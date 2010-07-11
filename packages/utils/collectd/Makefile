@@ -112,7 +112,7 @@ COLLECTD_PLUGINS_SELECTED:= \
 	write_http \
 
 PKG_CONFIG_DEPENDS:= \
-	$(patsubst %,CONFIG_PACKAGE_collectd-mod-%,$(COLLECTD_PLUGINS_SELECTED)) \
+	$(patsubst %,CONFIG_PACKAGE_collectd-mod-%,$(subst _,-,$(COLLECTD_PLUGINS_SELECTED))) \
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
@@ -150,7 +150,7 @@ CONFIGURE_VARS+= \
 
 CONFIGURE_PLUGIN= \
 	$(foreach m, $(1), \
-		$(if $(CONFIG_PACKAGE_collectd-mod-$(m)),--enable-$(m),--disable-$(m)) \
+		$(if $(CONFIG_PACKAGE_collectd-mod-$(subst _,-,$(m))),--enable-$(m),--disable-$(m)) \
 	)
 
 CONFIGURE_ARGS+= \
@@ -161,6 +161,10 @@ CONFIGURE_ARGS+= \
 ifneq ($(CONFIG_PACKAGE_collectd-mod-ascent),)
   CONFIGURE_VARS+= \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/libxml2"
+endif
+
+ifneq ($(CONFIG_PACKAGE_collectd-mod-mysql),)
+  CONFIGURE_ARGS+= --with-libmysql="$(STAGING_DIR)/usr/"
 endif
 
 # exception: mod-netlink needs libnetlink from iproute
