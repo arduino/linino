@@ -1,5 +1,4 @@
-#
-# Copyright (C) 2009-2010 OpenWrt.org
+## Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -66,7 +65,6 @@ CONFIGURE_ARGS += \
 	--disable-dv1394 \
 	--disable-effectv \
 	--disable-esd \
-	--disable-flac \
 	--disable-flv \
 	--disable-flx \
 	--disable-gconf \
@@ -156,7 +154,7 @@ $(eval $(call GstBuildPlugin,autodetect,format auto-detection,,,))
 $(eval $(call GstBuildPlugin,cutter,audio cutter,audio,,))
 $(eval $(call GstBuildPlugin,debug,debugging,,,))
 $(eval $(call GstBuildPlugin,equalizer,audio equalizer,audio controller,,))
-#$(eval $(call GstBuildPlugin,flac,FLAC codec,pbutils tag,,+libflac @BROKEN))
+$(eval $(call GstBuildPlugin,flac,FLAC codec,pbutils tag,,+libflac))
 $(eval $(call GstBuildPlugin,id3demux,ID3v1/v2 demuxer,pbutils tag,,))
 $(eval $(call GstBuildPlugin,interleave,audio interleave,audio,,))
 $(eval $(call GstBuildPlugin,level,audio level,audio,,))
