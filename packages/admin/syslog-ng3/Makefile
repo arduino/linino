@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,11 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=syslog-ng
 PKG_VERSION:=3.0.5
-PKG_RELEASE:=1
-PKG_MD5SUM:=28f0d9ff2243b330e8cd6311ef9b2f12
+PKG_RELEASE:=2
 
 PKG_SOURCE_URL:=http://www.balabit.com/downloads/files/syslog-ng/open-source-edition/$(PKG_VERSION)/source/
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
+PKG_MD5SUM:=28f0d9ff2243b330e8cd6311ef9b2f12
+
+PKG_CONFIG_DEPENDS:= \
+	CONFIG_IPV6 \
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -41,6 +44,7 @@ define Build/Configure
 endef
 
 CONFIGURE_ARGS +=  \
+	$(call autoconf_bool,CONFIG_IPV6,ipv6) \
 	--disable-dependency-tracking \
 	--enable-tcp-wrapper \
 	--disable-glibtest \
