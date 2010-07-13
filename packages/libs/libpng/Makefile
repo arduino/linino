@@ -8,20 +8,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libpng
-PKG_VERSION:=1.2.41
+PKG_VERSION:=1.2.44
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/libpng
-PKG_MD5SUM:=2faa7f8d81e6a35beb991cb75edbf056
+PKG_MD5SUM:=e3ac7879d62ad166a6f0c7441390d12b
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
-
-TARGET_CFLAGS += $(FPIC)
 
 define Package/libpng
   SECTION:=libs
@@ -31,25 +29,29 @@ define Package/libpng
   URL:=http://www.libpng.org/pub/png/libpng.html
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-		--with-zlib="$(STAGING_DIR)/usr" \
-	)
-endef
+TARGET_CFLAGS += $(FPIC)
+
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(2)/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/libpng{,12}-config $(2)/bin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libpng{,12}-config $(1)/usr/bin/
+	$(SED) \
+		's,^\(prefix\|exec_prefix\)=.*,\1=$(STAGING_DIR)/usr,g' \
+		$(1)/usr/bin/libpng{,12}-config
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/png{,conf}.h $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpng12 $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpng{,12}.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpng{,12}.{a,la,so*} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libpng{,12}.pc $(1)/usr/lib/pkgconfig/
-	$(SED) 's,^[ILR]_opts=".\+",,g' $(2)/bin/libpng*-config
+	$(INSTALL_DIR) $(2)/bin
+	for f in libpng{,12}-config; do \
+		$(LN) ../../usr/bin/$$$$f $(2)/bin/ ; \
+	done
 endef
 
 define Package/libpng/install
