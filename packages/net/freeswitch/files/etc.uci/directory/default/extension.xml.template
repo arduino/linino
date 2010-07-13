@@ -1,0 +1,18 @@
+<include>
+  <user id="[{FS_EXTENSION_ID}]">
+    <params>
+      <param name="password" value="[{FS_EXTENSION_PASSWORD}]"/>
+      <param name="vm-password" value="[{FS_EXTENSION_VM_PASSWORD}]"/>
+    </params>
+    <variables>
+      <variable name="toll_allow" value="[{FS_EXTENSION_TOLL_ALLOW}]"/>
+      <variable name="accountcode" value="[{FS_EXTENSION_ACCOUNT_CODE}]"/>
+      <variable name="user_context" value="default"/>
+      <variable name="effective_caller_id_name" value="[{FS_EXTENSION_EFFECTIVE_CALLERID_NAME}]"/>
+      <variable name="effective_caller_id_number" value="[{FS_EXTENSION_EFFECTIVE_CALLERID_NUMBER}]"/>
+      <variable name="outbound_caller_id_name" value="[{FS_EXTENSION_OUTBOUND_CALLERID_NAME}]"/>
+      <variable name="outbound_caller_id_number" value="[{FS_EXTENSION_OUTBOUND_CALLERID_NUMBER}]"/>
+      <variable name="callgroup" value="[{FS_EXTENSION_CALLGROUP}]"/>
+    </variables>
+  </user>
+</include>

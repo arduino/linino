@@ -20,12 +20,6 @@
       </condition>
     </extension>
 
-    <extension name="redial">
-      <condition field="destination_number" expression="^870$">
-	<action application="transfer" data="${hash(select/${domain_name}-last_dial/${caller_id_number})}"/>
-      </condition>
-    </extension>
-
     <extension name="global" continue="true">
       <condition field="${call_debug}" expression="^true$" break="never">
 	<action application="info"/>
@@ -48,14 +42,8 @@
     </extension>
     -->
 
-    <extension name="call_return">
-      <condition field="destination_number" expression="^\*69$|^869$|^lcr$">
-	<action application="transfer" data="${hash(select/${domain_name}-call_return/${caller_id_number})}"/>
-      </condition>
-    </extension>
-
     <extension name="extension-intercom">
-      <condition field="destination_number" expression="^8(100[0-4])$">
+      <condition field="destination_number" expression="^8([{FS_DIALPLAN_PHONES}])$">
 	<action application="set" data="dialed_extension=$1"/>
 	<action application="export" data="sip_auto_answer=true"/>
 	<action application="bridge" data="user/${dialed_extension}@${domain_name}"/>
@@ -63,12 +51,12 @@
     </extension>
 
     <!-- 
-	 dial the extension (1000-1004) for 2 minutes before giving up 
-	 otherwise hang up after a successful bridge (hangup_after-bridge=true).
-	 Record call if *2 is pressed during call.
+	 dial the extension (filled in from UCI config) 2 minutes before giving
+	 up, otherwise hang up after a successful bridge (hangup_after-bridge=true).
+	 Record call if *2 is pressed during call (by called extension).
     -->
     <extension name="Local_Extension">
-      <condition field="destination_number" expression="^(100[0-4])$">
+      <condition field="destination_number" expression="^([{FS_DIALPLAN_PHONES}])$">
 	<action application="set" data="dialed_extension=$1"/>
 	<action application="export" data="dialed_extension=$1"/>
 	<!-- bind_meta_app can have these args <key> [a|b|ab] [a|b|o|s] <app> -->

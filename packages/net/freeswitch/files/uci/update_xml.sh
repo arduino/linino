@@ -12,4 +12,5 @@ fs_init_xml() {
 	fs_profile_external_top "external_top" "/etc/freeswitch/sip_profiles/external.xml"
 	fs_profile_gateway "external_example" "/etc/freeswitch/sip_profiles/external/example.xml"
 	fs_profile_gateway "internal_example" "/etc/freeswitch/sip_profiles/internal/example.xml"
+	fs_extensions_all
 }
