@@ -1,6 +1,6 @@
 --- a/src/Reporter.c
 +++ b/src/Reporter.c
-@@ -309,6 +309,11 @@ ReportHeader* InitReport( thread_Setting
+@@ -308,6 +308,11 @@ ReportHeader* InitReport( thread_Setting
  #else
          // set start time
          gettimeofday( &(reporthdr->report.startTime), NULL );

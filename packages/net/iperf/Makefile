@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iperf
-PKG_VERSION:=2.0.4
-PKG_RELEASE:=2
+PKG_VERSION:=2.0.5
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=8c5bc14cc2ea55f18f22afe3c23e3dcb
+PKG_MD5SUM:=44b5536b67719f4250faed632a3cd016
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -31,7 +31,6 @@ define Package/iperf/Default/description
  characteristics.
 endef
 
-
 define Package/iperf
 $(call Package/iperf/Default)
   TITLE+= (with single thread support)
@@ -41,7 +40,6 @@ define Package/iperf/description
 $(call Package/iperf/Default/description)
  This package is built with single thread support.
 endef
-
 
 define Package/iperf-mt
 $(call Package/iperf/Default)
@@ -53,7 +51,6 @@ define Package/iperf-mt/description
 $(call Package/iperf/Default/description)
  This package is built with multithread support.
 endef
-
 
 define Build/Template
 
@@ -79,7 +76,6 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	CXX="g++-uc" \
 	CXXFLAGS="$$$$CXX_CFLAGS -fno-rtti" \
-
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_iperf),)
   define Build/singlethread
