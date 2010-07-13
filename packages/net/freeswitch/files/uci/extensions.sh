@@ -6,7 +6,7 @@
 fs_escape_slash() {
 	local inval="$1"
 	[ -z "$inval" ] && return 0
-	echo "$inval" | sed -e 's/([/\\$\^\[\]])/\\\1/g'
+	echo "$inval" | sed -e 's/\([/\\]\)/\\\1/g'
 }
 
 fs_ext_entry() {
