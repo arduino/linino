@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ntp
-PKG_VERSION:=4.2.6
-PKG_RELEASE:=4
+PKG_VERSION:=4.2.6p2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/
-PKG_MD5SUM:=4d64a99592b818aa9419fc9dcb149746
+PKG_MD5SUM:=cf73cd85f248232c62f8029e6eb05938
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -32,55 +32,59 @@ define Package/ntpd/Default
 endef
 
 define Package/ntpd/Default/description
-	The ISC ntp suite is a collection of tools used to synchronize
-	the system clock with remote NTP time servers and run/montior
-	local NTP servers.
+ The ISC ntp suite is a collection of tools used to synchronize the
+ system clock with remote NTP time servers and run/montior local NTP
+ servers.
 endef
 
 define Package/ntpd
-  $(call Package/ntpd/Default)
+$(call Package/ntpd/Default)
   TITLE+= server
   VARIANT:=nossl
 endef
 
 define Package/ntpd/description
-	$(call Package/ntpd/Default/description)
-	This package contains the ntpd server.
+$(call Package/ntpd/Default/description)
+ .
+ This package contains the ntpd server.
 endef
 
 define Package/ntpd-ssl
-  $(call Package/ntpd/Default)
+$(call Package/ntpd/Default)
   TITLE+= server (with OpenSSL support)
+  VARIANT:=ssl
   DEPENDS:=+libopenssl
-   VARIANT:=ssl
 endef
 
 define Package/ntpd-ssl/description
-	$(call Package/ntpd/Default/description)
-	This package contains the ntpd server with OpenSSL support.
+$(call Package/ntpd/Default/description)
+ .
+ This package contains the ntpd server with OpenSSL support.
 endef
 
 define Package/ntpdate
-  $(call Package/ntpd/Default)
+$(call Package/ntpd/Default)
   TITLE+=date
   VARIANT:=nossl
 endef
 
 define Package/ntpdate/description
-	$(call Package/ntpd/Default/description)
-	This package contains ntpdate.
+$(call Package/ntpd/Default/description)
+ .
+ This package contains ntpdate.
 endef
 
 define Package/ntp-utils
-  $(call Package/ntpd/Default)
-  DEPENDS:=+libncurses
+$(call Package/ntpd/Default)
   TITLE+= utilities
   VARIANT:=nossl
+  DEPENDS:=+libncurses
 endef
 
 define Package/ntp-utils/description
-	$(call Package/ntpd/Default/description)
-	This package contains ntpdc and ntpq.
+$(call Package/ntpd/Default/description)
+ .
+ This package contains ntpdc and ntpq.
 endef
 
 define Package/ntpd/conffiles
@@ -96,15 +100,15 @@ grep -q '^ntp[[:space:]]*123/tcp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
 endef
 
 define Package/ntpdate/postinst
-  $(call Package/ntpd/Default/postinst)
+$(call Package/ntpd/Default/postinst)
 endef
 
 define Package/ntpd/postinst
-  $(call Package/ntpd/Default/postinst)
+$(call Package/ntpd/Default/postinst)
 endef
 
 define Package/ntp-utils/postinst
-  $(call Package/ntpd/Default/postinst)
+$(call Package/ntpd/Default/postinst)
 endef
 
 TARGET_CPPFLAGS += \
@@ -125,15 +129,15 @@ CONFIGURE_ARGS += \
 	--without-ntpsnmpd \
 
 ifeq ($(BUILD_VARIANT),ssl)
-	CONFIGURE_ARGS += \
-		--with-crypto \
-		--with-openssl-incdir="$(STAGING_DIR)/usr/include" \
-		--with-openssl-libdir="$(STAGING_DIR)/usr/lib"
+  CONFIGURE_ARGS += \
+	--with-crypto \
+	--with-openssl-incdir="$(STAGING_DIR)/usr/include" \
+	--with-openssl-libdir="$(STAGING_DIR)/usr/lib"
 endif
 
 define Package/ntpd/install
-	$(INSTALL_DIR) $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ntpd/ntpd $(1)/usr/sbin/ntpd
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ntpd/ntpd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/ntp.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
@@ -142,17 +146,19 @@ define Package/ntpd/install
 	$(INSTALL_BIN) ./files/ntpd.hotplug $(1)/etc/hotplug.d/iface/20-ntpd
 endef
 
+Package/ntpd-ssl/conffiles = $(Package/ntpd/conffiles)
 Package/ntpd-ssl/install = $(Package/ntpd/install)
+Package/ntpd-ssl/postinst = $(Package/ntpd/postinst)
 
 define Package/ntpdate/install
-	$(INSTALL_DIR) $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ntpdate/ntpdate $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/ntpdate.init $(1)/etc/init.d/ntpdate
 endef
 
 define Package/ntp-utils/install
-	$(INSTALL_DIR) $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ntpdc/ntpdc $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ntpq/ntpq $(1)/usr/sbin/
 endef
