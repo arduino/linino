@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeswitch
 PKG_VERSION:=1.0.6
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -297,19 +297,19 @@ endef
 MAKE_INSTALL_TARGETS:=install
 
 ifneq ($(CONFIG_PACKAGE_freeswitch-mod-celt),)
- $(eval $(call Download/files,celt,celt-0.6.1.tar.gz,2961ffb6fadb5f905d20de9f0d86e44c,downloads/libs/,libs/))
+ $(eval $(call Download/files,celt,celt-0.7.1.tar.gz,c7f6b8346e132b1a48dae0eff77ea9f0,downloads/libs/,libs/))
 endif
 
 ifneq ($(CONFIG_PACKAGE_freeswitch-mod-curl),)
- $(eval $(call Download/files,json-c,json-c-0.8.tar.gz,9c7b90dff16eec3063084829c382ebac,downloads/libs/,libs/))
+ $(eval $(call Download/files,json-c,json-c-0.9.tar.gz,4653b3b9c568bb9c782178abfaac128d,downloads/libs/,libs/))
 endif
 
 ifneq ($(CONFIG_PACKAGE_freeswitch-mod-flite),)
- $(eval $(call Download/files,flite,flite-1.3.99.tar.gz,,downloads/libs/,libs/))
+ $(eval $(call Download/files,flite,flite-1.3.99-latest.tar.gz,,downloads/libs/,libs/))
 endif
 
 ifneq ($(CONFIG_PACKAGE_freeswitch-sounds-en),)
- $(eval $(call Download/files,sounds-en,freeswitch-sounds-en-us-callie-8000-1.0.10.tar.gz,f7f85aaf3763673c884ec3451f1c1c3e,,))
+ $(eval $(call Download/files,sounds-en,freeswitch-sounds-en-us-callie-8000-1.0.12.tar.gz,d700439027dd95dd118e5e85f38e4d81,,))
 	MAKE_INSTALL_TARGETS+= sounds-install
 endif
 
