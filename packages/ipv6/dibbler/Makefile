@@ -105,18 +105,12 @@ define Build/Configure
 	);
 endef
 
-# link stuff missing from uClibc++ but present in stdc++ statically
-CXX_LIBS:= -lstdc++ -lm -lgcc
-
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		PORT_CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
 		PORT_LDFLAGS="$(TARGET_LDFLAGS)" \
 		DEBUGINFO= \
-		CXXLD="$(TARGET_CC)" \
-		CLNT_LIBS="$(CXX_LIBS)" \
-		SRV_LIBS="$(CXX_LIBS)" \
 		server client relay
 endef
 
