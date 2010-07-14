@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=subversion
-PKG_VERSION:=1.6.11
+PKG_VERSION:=1.6.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://subversion.tigris.org/downloads
-PKG_MD5SUM:=75419159b50661092c4137449940b5cc
+PKG_MD5SUM:=a4b1d0d7f3a4587c59da9c1acf9dedd0
 
 PKG_FIXUP:=libtool
 
@@ -95,7 +95,9 @@ CONFIGURE_VARS += \
 	CPPFLAGS="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/lib/libintl/include" \
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" all local-install
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all local-install
 endef
 
 define Package/subversion-libs/install
