@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dash
-PKG_VERSION:=0.5.5.1
+PKG_VERSION:=0.5.6.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://gondor.apana.org.au/~herbert/dash/files/
-PKG_MD5SUM:=7ac832b440b91f5a52cf8eb68e172616
+PKG_SOURCE_URL:=http://gondor.apana.org.au/~herbert/dash/files
+PKG_MD5SUM:=1c846f4f5a33c0050b2045a6f7037e56
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -28,18 +30,12 @@ define Package/dash/description
  A small footprint, POSIX complied unix shell
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		BINDIR="/bin" \
-		AWK="awk" \
-		all
-endef
+MAKE_FLAGS += \
+	AWK="awk" \
 
 define Package/dash/install
 	$(INSTALL_DIR) $(1)/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/dash $(1)/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/dash $(1)/bin/
 endef
 
 $(eval $(call BuildPackage,dash))
