@@ -25,6 +25,7 @@ define Package/usbip/Common
   TITLE:=USB-over-IP
   URL:=http://usbip.sourceforge.net/
   DEPENDS:=@LINUX_2_6 @USB_SUPPORT
+  MAINTAINER:=Nuno Goncalves <nunojpg@gmail.com>
 endef
 
 define Package/usbip/Default
@@ -114,10 +115,10 @@ define Package/usbip/install
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libusbip.so.* \
 		$(1)/usr/lib/
-	$(INSTALL_DIR) $(1)/usr/share/usbip
+	$(INSTALL_DIR) $(1)/usr/share/hwdata
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/share/usbip/usb.ids \
-		$(1)/usr/share/usbip/
+		$(1)/usr/share/hwdata/
 endef
 
 define Package/usbip-client/install
@@ -130,9 +131,11 @@ endef
 define Package/usbip-server/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/bin/bind_driver \
 		$(PKG_INSTALL_DIR)/usr/bin/usbipd \
 		$(1)/usr/bin/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/bin/bind_driver \
+		$(1)/usr/bin/usbip_bind_driver
 endef
 
 $(eval $(call BuildPackage,usbip))
