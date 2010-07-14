@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=opendchub
-PKG_VERSION:=0.7.15
+PKG_VERSION:=0.8.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/opendchub
-PKG_MD5SUM:=8f9ab5bb7f85730f4b1ce7cceb6aef96
+PKG_MD5SUM:=e812ac26323f3a8113ce1a0761ce9544
 
 PKG_INSTALL:=1
 
@@ -25,7 +25,7 @@ define Package/opendchub
   CATEGORY:=Network
   DEPENDS:=+libopenssl +libpthread
   TITLE:=software for the Direct Connect network
-  URL:=http://opendchub.sourceforge.net
+  URL:=http://opendchub.sourceforge.net/
 endef
 
 define Package/opendchub/description
@@ -33,11 +33,8 @@ define Package/opendchub/description
 	for the Direct Connect network
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default,\
-		--disable-perl \
-	)
-endef
+CONFIGURE_ARGS += \
+	--disable-perl \
 
 define Package/opendchub/install
 	$(INSTALL_DIR) $(1)/usr/bin
