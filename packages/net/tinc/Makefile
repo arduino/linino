@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -21,8 +21,6 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-TARGET_CFLAGS+=-std=gnu99
-
 define Package/tinc
   SECTION:=net
   CATEGORY:=Network
@@ -37,13 +35,17 @@ define Package/tinc/description
   encryption to create a secure private network between hosts on the Internet.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--with-kernel="$(LINUX_DIR)" \
-		--with-zlib="$(STAGING_DIR)/usr" \
-		--with-lzo-include="$(STAGING_DIR)/usr/include/lzo" \
-	)
-endef
+TARGET_CFLAGS += -std=gnu99
+
+CONFIGURE_ARGS += \
+	--with-kernel="$(LINUX_DIR)" \
+	--with-zlib="$(STAGING_DIR)/usr" \
+	--with-lzo-include="$(STAGING_DIR)/usr/include/lzo" \
+
+# XXX: checking for SHA1_version(), which is a variable, not a function,
+# fails on PowerPC, so just override it for now
+CONFIGURE_VARS += \
+	ac_cv_lib_crypto_SHA1_version="yes" \
 
 define Package/tinc/install
 	$(INSTALL_DIR) $(1)/usr/sbin
