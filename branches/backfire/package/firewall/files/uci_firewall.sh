@@ -356,6 +356,9 @@ fw_redirect() {
 	[ -z "$src" -o -z "$dest_ip" ] && { \
 		echo "redirect needs src and dest_ip"; return ; }
 
+	find_item "$src" $CONNTRACK_ZONES || \
+		append CONNTRACK_ZONES "$src"
+
 	src_port_first=${src_port%-*}
 	src_port_last=${src_port#*-}
 	[ "$src_port_first" != "$src_port_last" ] && { \
@@ -391,6 +394,7 @@ fw_redirect() {
 			${src_mac:+-m mac --mac-source $src_mac} \
 			-j ACCEPT
 	}
+
 	[ "$proto" == "tcpudp" -o -z "$proto" ] && {
 		proto=tcp
 		add_rule
