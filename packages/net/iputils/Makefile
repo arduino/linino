@@ -25,6 +25,7 @@ define Package/iputils/Default
   SECTION:=net
   CATEGORY:=Network
   URL:=http://www.skbuff.net/iputils
+  DEPENDS:= @!LINUX_2_4
 endef
 
 
