@@ -15,12 +15,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ruby
-PKG_LIBVER:=1.9.1
-PKG_VERSION:=$(PKG_LIBVER)-p376
-PKG_RELEASE:=2
+PKG_VERSION:=1.9.1-p376
+PKG_RELEASE:=3
+
+PKG_LIBVER:=1.9
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://ftp.ruby-lang.org/pub/ruby/1.9/
+PKG_SOURCE_URL:=ftp://ftp.ruby-lang.org/pub/ruby/$(PKG_LIBVER)/
 PKG_MD5SUM:=e019ae9c643c5efe91be49e29781fb94
 
 PKG_BUILD_DEPENDS:=ruby/host
@@ -59,6 +60,7 @@ $(call Package/ruby/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= (shared library)
+  DEPENDS+= +libpthread
 endef
 
 # Ongoing work to break up ruby's standard library into coherent pieces
@@ -203,9 +205,7 @@ CONFIGURE_ARGS += \
 	--disable-rpath \
 	--enable-ipv6 \
 	--enable-wide-getaddrinfo \
-
-CONFIGURE_VARS += \
-	ac_cv_func_setpgrp_void=yes
+	--with-ruby-version=minor \
 
 TARGET_LDFLAGS += -L$(PKG_BUILD_DIR)
 
