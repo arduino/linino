@@ -135,6 +135,10 @@ define Package/collectd/description
  and provides mechanismns to store the values in a variety of ways.
 endef
 
+ifneq ($(CONFIG_avr32),)
+  TARGET_CFLAGS += -fsigned-char
+endif
+
 # common configure args
 CONFIGURE_ARGS+= \
 	--disable-debug \
