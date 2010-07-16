@@ -17,26 +17,32 @@ PKG_SOURCE_VERSION:=2100f14c612471084434b364501e3818c7f4144e
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/libcwiid
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=+bluez-libs
+define Package/cwiid/Default
   TITLE:=Linux Nintendo Wiimote interface
   URL:=http://abstrakraft.org/cwiid/
+  DEPENDS:= @!LINUX_2_4
+endef
+
+define Package/libcwiid
+$(call Package/cwiid/Default)
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE+= (library)
+  DEPENDS+= +bluez-libs
 endef
 
 define Package/wminput
+$(call Package/cwiid/Default)
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libcwiid
-  TITLE:=Linux Nintendo Wiimote interface
-  URL:=http://abstrakraft.org/cwiid/
+  TITLE+= (utility)
+  DEPENDS+= +libcwiid
 endef
 
 CONFIGURE_ARGS += \
-		--without-python \
-		--disable-ldconfig \
-		--enable-shared \
+	--without-python \
+	--disable-ldconfig \
+	--enable-shared \
 
 TARGET_CFLAGS += $(FPIC)
 
@@ -57,9 +63,9 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_BUILD_DIR)/libcwiid/*.h $(1)/usr/include/
-	mkdir -p $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/libcwiid/*.so $(1)/usr/lib/
 endef
 
