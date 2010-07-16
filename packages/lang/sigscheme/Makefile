@@ -25,6 +25,7 @@ define Package/sigscheme
   CATEGORY:=Languages
   TITLE:=SigScheme
   URL:=http://code.google.com/p/sigscheme/
+  DEPENDS:=@!avr32
 endef
 
 define Package/sigscheme/description
