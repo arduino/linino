@@ -30,6 +30,10 @@ define Package/libortp
   DEPENDS:= +libpthread
 endef
 
+ifneq ($(CONFIG_avr32),)
+  TARGET_CFLAGS += -fsigned-char
+endif
+
 CONFIGURE_ARGS += \
 	--disable-debug \
 	--enable-ipv6 \
