@@ -11,22 +11,20 @@ PKG_NAME:=fswebcam
 PKG_VERSION:=20100405
 PKG_RELEASE:=1
 
-PKG_INSTALL=1
-
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.firestorm.cx/fswebcam/files/
 PKG_MD5SUM:=1ca864c8cef096fb4ace71cf14085424
 
-include $(INCLUDE_DIR)/package.mk
+PKG_INSTALL:=1
 
-PKG_BUILD_DEPENDS:=libgd
+include $(INCLUDE_DIR)/package.mk
 
 define Package/fswebcam
   SECTION:=multimedia
   CATEGORY:=Multimedia
   TITLE:=fswebcam
   URL:=http://www.firestorm.cx/fswebcam/
-  DEPENDS:=+libgd
+  DEPENDS:= @!LINUX_2_4 +libgd
 endef
 
 define Package/fswebcam/description
