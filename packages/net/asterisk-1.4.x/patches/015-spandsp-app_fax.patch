@@ -1,6 +1,5 @@
-diff -Nru asterisk-1.4.25.org/apps/app_rxfax.c asterisk-1.4.25/apps/app_rxfax.c
---- asterisk-1.4.25.org/apps/app_rxfax.c	1970-01-01 01:00:00.000000000 +0100
-+++ asterisk-1.4.25/apps/app_rxfax.c	2009-06-04 21:04:59.000000000 +0200
+--- /dev/null
++++ b/apps/app_rxfax.c
 @@ -0,0 +1,376 @@
 +/*
 + * Asterisk -- A telephony toolkit for Linux.
@@ -378,9 +377,8 @@ diff -Nru asterisk-1.4.25.org/apps/app_rxfax.c asterisk-1.4.25/apps/app_rxfax.c
 +AST_MODULE_INFO_STANDARD(ASTERISK_GPL_KEY, "Trivial FAX Receive Application");
 +
 +/*- End of file ------------------------------------------------------------*/
-diff -Nru asterisk-1.4.25.org/apps/app_txfax.c asterisk-1.4.25/apps/app_txfax.c
---- asterisk-1.4.25.org/apps/app_txfax.c	1970-01-01 01:00:00.000000000 +0100
-+++ asterisk-1.4.25/apps/app_txfax.c	2009-06-04 21:04:59.000000000 +0200
+--- /dev/null
++++ b/apps/app_txfax.c
 @@ -0,0 +1,303 @@
 +/*
 + * Asterisk -- A telephony toolkit for Linux.
@@ -685,10 +683,9 @@ diff -Nru asterisk-1.4.25.org/apps/app_txfax.c asterisk-1.4.25/apps/app_txfax.c
 +AST_MODULE_INFO_STANDARD(ASTERISK_GPL_KEY, "Trivial FAX Transmit Application");
 +
 +/*- End of file ------------------------------------------------------------*/
-diff -Nru asterisk-1.4.25.org/build_tools/menuselect-deps.in asterisk-1.4.25/build_tools/menuselect-deps.in
---- asterisk-1.4.25.org/build_tools/menuselect-deps.in	2009-01-29 23:54:29.000000000 +0100
-+++ asterisk-1.4.25/build_tools/menuselect-deps.in	2009-06-04 21:04:59.000000000 +0200
-@@ -23,6 +23,7 @@
+--- a/build_tools/menuselect-deps.in
++++ b/build_tools/menuselect-deps.in
+@@ -23,6 +23,7 @@ PGSQL=@PBX_PGSQL@
  POPT=@PBX_POPT@
  PRI=@PBX_PRI@
  RADIUS=@PBX_RADIUS@
@@ -696,10 +693,9 @@ diff -Nru asterisk-1.4.25.org/build_tools/menuselect-deps.in asterisk-1.4.25/bui
  SPEEX=@PBX_SPEEX@
  SPEEXDSP=@PBX_SPEEXDSP@
  SPEEX_PREPROCESS=@PBX_SPEEX_PREPROCESS@
-diff -Nru asterisk-1.4.25.org/configure.ac asterisk-1.4.25/configure.ac
---- asterisk-1.4.25.org/configure.ac	2009-04-22 23:35:03.000000000 +0200
-+++ asterisk-1.4.25/configure.ac	2009-06-04 21:04:59.000000000 +0200
-@@ -205,6 +205,7 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -205,6 +205,7 @@ AST_EXT_LIB_SETUP([PRI], [ISDN PRI], [pr
  AST_EXT_LIB_SETUP([PWLIB], [PWlib], [pwlib])
  AST_EXT_LIB_SETUP([OPENH323], [OpenH323], [h323])
  AST_EXT_LIB_SETUP([RADIUS], [Radius Client], [radius])
@@ -707,7 +703,7 @@ diff -Nru asterisk-1.4.25.org/configure.ac asterisk-1.4.25/configure.ac
  AST_EXT_LIB_SETUP([SPEEX], [Speex], [speex])
  AST_EXT_LIB_SETUP([SPEEXDSP], [Speexdsp], [speexdsp])
  AST_EXT_LIB_SETUP([SQLITE], [SQLite], [sqlite])
-@@ -1359,6 +1360,8 @@
+@@ -1359,6 +1360,8 @@ fi
  
  AST_EXT_LIB_CHECK([RADIUS], [radiusclient-ng], [rc_read_config], [radiusclient-ng.h])
  
@@ -716,9 +712,8 @@ diff -Nru asterisk-1.4.25.org/configure.ac asterisk-1.4.25/configure.ac
  AST_EXT_LIB_CHECK([SPEEX], [speex], [speex_encode], [speex/speex.h], [-lm])
  
  # See if the main speex library contains the preprocess functions
-diff -Nru asterisk-1.4.25.org/include/asterisk/plc.h asterisk-1.4.25/include/asterisk/plc.h
---- asterisk-1.4.25.org/include/asterisk/plc.h	2006-06-14 16:12:56.000000000 +0200
-+++ asterisk-1.4.25/include/asterisk/plc.h	2009-06-04 21:04:59.000000000 +0200
+--- a/include/asterisk/plc.h
++++ b/include/asterisk/plc.h
 @@ -1,18 +1,17 @@
 -/*! \file
 - * \brief SpanDSP - a series of DSP components for telephony
@@ -800,7 +795,7 @@ diff -Nru asterisk-1.4.25.org/include/asterisk/plc.h asterisk-1.4.25/include/ast
  \section plc_page_sec_2 How does it work?
  While good packets are being received, the plc_rx() routine keeps a record of the trailing
  section of the known speech signal. If a packet is missed, plc_fillin() is called to produce
-@@ -83,7 +81,7 @@
+@@ -83,7 +81,7 @@ are needed to obtain smooth pleasant sou
    correct steadily fall. Therefore, the volume of the synthesized signal is made to decay
    linearly, such that after 50ms of missing audio it is reduced to silence.
  
@@ -809,7 +804,7 @@ diff -Nru asterisk-1.4.25.org/include/asterisk/plc.h asterisk-1.4.25/include/ast
    start of the real speech. If the erasure is small, this smoothes the transition. If the erasure
    is long, and the synthetic signal has faded to zero, the blending softens the start up of the
    real signal, avoiding a kind of "click" or "pop" effect that might occur with a sudden onset.
-@@ -110,6 +108,9 @@
+@@ -110,6 +108,9 @@ That's it!
      the pitch assessment. */
  #define PLC_HISTORY_LEN         (CORRELATION_SPAN + PLC_PITCH_MIN)
  
@@ -819,7 +814,7 @@ diff -Nru asterisk-1.4.25.org/include/asterisk/plc.h asterisk-1.4.25/include/ast
  typedef struct
  {
      /*! Consecutive erased samples */
-@@ -127,12 +128,13 @@
+@@ -127,12 +128,13 @@ typedef struct
  } plc_state_t;
  
  
@@ -837,7 +832,7 @@ diff -Nru asterisk-1.4.25.org/include/asterisk/plc.h asterisk-1.4.25/include/ast
      \param s The packet loss concealer context.
      \param amp The audio sample buffer.
      \param len The number of samples in the buffer.
-@@ -147,13 +149,18 @@
+@@ -147,13 +149,18 @@ int plc_rx(plc_state_t *s, int16_t amp[]
      \return The number of samples synthesized. */
  int plc_fillin(plc_state_t *s, int16_t amp[], int len);
  
@@ -860,10 +855,9 @@ diff -Nru asterisk-1.4.25.org/include/asterisk/plc.h asterisk-1.4.25/include/ast
  }
  #endif
  
-diff -Nru asterisk-1.4.25.org/makeopts.in asterisk-1.4.25/makeopts.in
---- asterisk-1.4.25.org/makeopts.in	2009-03-18 02:55:22.000000000 +0100
-+++ asterisk-1.4.25/makeopts.in	2009-06-04 21:04:59.000000000 +0200
-@@ -141,6 +141,9 @@
+--- a/makeopts.in
++++ b/makeopts.in
+@@ -141,6 +141,9 @@ PWLIB_LIB=@PWLIB_LIB@
  RADIUS_INCLUDE=@RADIUS_INCLUDE@
  RADIUS_LIB=@RADIUS_LIB@
  
