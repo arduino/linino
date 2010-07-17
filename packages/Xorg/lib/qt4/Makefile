@@ -14,7 +14,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=qt4
-PKG_VERSION:=4.7.0-beta1
+PKG_VERSION:=4.7.0-beta2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=qt-everywhere-opensource-src-$(PKG_VERSION).tar.gz
@@ -248,8 +248,6 @@ define Build/Configure
 			-verbose \
 			-$(if $(CONFIG_PACKAGE_qt4-multimedia),multimedia,no-multimedia) \
 			-$(if $(CONFIG_PACKAGE_qt4-audio-backend),audio-backend,no-audio-backend) \
-			-no-mediaservices \
-			-no-media-backend \
 			-$(if $(CONFIG_PACKAGE_qt4-phonon),phonon,no-phonon) \
 			-$(if $(CONFIG_PACKAGE_qt4-phonon-backend),phonon-backend,no-phonon-backend) \
 			-svg \
