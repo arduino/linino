@@ -240,30 +240,29 @@ define Build/Configure
 			-system-libjpeg \
 			-system-freetype \
 			-system-sqlite \
-			$(if $(CONFIG_PACKAGE_qt4-sqlite),-plugin-sql-sqlite,) \
-			$(if $(CONFIG_PACKAGE_qt4-mysql),-plugin-sql-mysql,) \
+			-plugin-sql-sqlite \
+			-plugin-sql-mysql \
 			-no-decoration-styled \
 			-no-decoration-windows \
 			-no-decoration-default \
 			-verbose \
-			-$(if $(CONFIG_PACKAGE_qt4-multimedia),multimedia,no-multimedia) \
-			-$(if $(CONFIG_PACKAGE_qt4-audio-backend),audio-backend,no-audio-backend) \
-			-$(if $(CONFIG_PACKAGE_qt4-phonon),phonon,no-phonon) \
-			-$(if $(CONFIG_PACKAGE_qt4-phonon-backend),phonon-backend,no-phonon-backend) \
+			-no-multimedia \
+			-no-audio-backend \
+			-phonon \
+			-no-phonon-backend \
 			-svg \
-			-$(if $(CONFIG_PACKAGE_qt4-webkit),webkit,no-webkit) \
+			-webkit \
 			-no-javascript-jit \
-			-$(if $(CONFIG_PACKAGE_qt4-script),script,no-script) \
-			-$(if $(CONFIG_PACKAGE_qt4-scripttools),scripttools,no-scripttools) \
-			-$(if $(CONFIG_PACKAGE_qt4-accessibility),accessibility,no-accessibility) \
-			-$(if $(CONFIG_PACKAGE_qt4-declarative),declarative,no-declarative) \
+			-script \
+			-scripttools \
+			-no-accessibility \
+			-declarative \
 			-no-openssl \
 			-no-nis \
-			$(if $(CONFIG_PACKAGE_qt4-gui),,-no-gui) \
-			-$(if $(CONFIG_PACKAGE_qt4-cups),cups,no-cups) \
+			-no-cups \
 			-no-iconv \
-			-$(if $(CONFIG_PACKAGE_qt4-dbus),dbus,no-dbus) \
-			-$(if $(CONFIG_PACKAGE_qt4-gtkstyle),gtkstyle,no-gtkstyle) \
+			-dbus \
+			-no-gtkstyle \
 			-no-nas-sound \
 			-no-opengl \
 			-no-openvg \
@@ -279,9 +278,9 @@ define Build/Configure
 			-no-fontconfig \
 			-no-xinput \
 			-no-xkb \
-			-$(if $(CONFIG_PACKAGE_qt4-glib),glib,no-glib) \
-			-$(if $(CONFIG_PACKAGE_qt4-qt3support),qt3support,no-qt3support) \
-			-$(if $(CONFIG_FEATURE_drawing-backend_DirectFB),qt-gfx-directfb,) \
+			-no-glib \
+			-qt3support \
+			-qt-gfx-directfb \
 			-qt-gfx-linuxfb \
 			-no-gfx-multiscreen \
 	)
