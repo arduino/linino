@@ -161,7 +161,7 @@ define Package/qt4-declarative
   DEPENDS+=+qt4-scripttools
 endef
 
-TARGET_CFLAGS+="-I$(STAGING_DIR)/usr/include/freetype2"
+TARGET_CFLAGS+="-I$(STAGING_DIR)/usr/include/freetype2 -I$(PKG_BUILD_DIR)/include"
 
 define Build/Configure
 	# demos/examples: which demos are going to be built depends on which features are going to to be compiled into qt
