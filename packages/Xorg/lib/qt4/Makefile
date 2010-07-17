@@ -168,6 +168,7 @@ define Build/Configure
 	# svg: svg support always compiled in, as once qt is built without, strange include errors occur when we're going to compile qt4-svg afterwards
 	# linuxfb/directfb: since directfb is not much overhead compared to plain framebuffer, force using directfb
 	# do not use fontconfig as it doesn't work anyway for qte
+	# bindir: bindir is where the host tools (qmake, moc, rcc, uic) will get installed into - they are just used on the host and not goig to be packaged
 	( \
 		cd $(PKG_BUILD_DIR); \
 		QPATH='mkspecs/qws/linux-openwrt-g++' ; \
@@ -294,6 +295,14 @@ define Build/Compile
 endef
 
 define Build/InstallDev
+	$(INSTALL_DIR) \
+		$(STAGING_DIR_HOST)/bin
+
+	# host tools (qmake, moc, rcc, uic)
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/bin/{qmake,moc,rcc,uic} \
+		$(STAGING_DIR_HOST)/bin/
+
 	$(INSTALL_DIR) \
 		$(1)/usr/share/mkspecs \
 		$(1)/usr/lib/pkgconfig \
