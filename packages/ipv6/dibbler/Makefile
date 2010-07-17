@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dibbler
 PKG_VERSION:=0.7.3
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.gz
 PKG_SOURCE_URL:=http://klub.com.pl/dhcpv6/dibbler/
