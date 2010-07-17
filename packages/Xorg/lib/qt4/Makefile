@@ -40,7 +40,7 @@ endef
 define Package/qt4-gui
   $(call Package/qt4/Default)
   #DEPENDS+=+FEATURE_drawing-backend_DirectFB:directfb +libpng +libtiff +libjpeg +libfreetype
-  DEPENDS+=+libpng +libtiff +libjpeg +libfreetype
+  DEPENDS+=+libpng +libtiff +libjpeg +libfreetype +qt4-network
   TITLE+=(gui)
 endef
 
@@ -86,7 +86,7 @@ endef
 define Package/qt4-phonon
   $(call Package/qt4/Default)
   TITLE+=(phonon)
-  DEPENDS+=+qt4-gui
+  DEPENDS+=+qt4-gui +qt4-xml +qt4-dbus +qt4-network
 endef
 
 #define Package/qt4-phonon-backend
@@ -98,13 +98,13 @@ define Package/qt4-svg
   $(call Package/qt4/Default)
   TITLE+=(svg)
   #DEPENDS+=+qt4-gui @BROKEN
-  DEPENDS+=+qt4-gui
+  DEPENDS+=+qt4-gui +qt4-network
 endef
 
 define Package/qt4-webkit
   $(call Package/qt4/Default)
   TITLE+=(webkit)
-  DEPENDS+=@USE_GLIBC||@USE_EGLIBC||@UCLIBC_VERSION_0_9_32 # versions of uclibc prior 0.9.32 do not have nptl support
+  DEPENDS+=@USE_GLIBC||@USE_EGLIBC||@UCLIBC_VERSION_0_9_32 +libsqlite3 +qt4-phonon +qt4-dbus +qt4-xml +qt4-gui +qt4-network # versions of uclibc prior 0.9.32 do not have nptl support
 endef
 
 define Package/qt4-script
@@ -116,7 +116,7 @@ endef
 define Package/qt4-scripttools
   $(call Package/qt4/Default)
   TITLE+=(scripttools)
-  DEPENDS+=+qt4-script
+  DEPENDS+=+qt4-script +qt4-gui +qt4-network
 endef
 
 #define Package/qt4-accessibility
@@ -137,7 +137,7 @@ endef
 define Package/qt4-dbus
   $(call Package/qt4/Default)
   TITLE+=(dbus)
-  DEPENDS+=+libdbus
+  DEPENDS+=+libdbus +qt4-xml
 endef
 
 #define Package/qt4-gtkstyle
@@ -153,22 +153,29 @@ endef
 define Package/qt4-qt3support
   $(call Package/qt4/Default)
   TITLE+=(qt3support)
+  DEPENDS+=+qt4-gui +qt4-xml
 endef
 
 define Package/qt4-declarative
   $(call Package/qt4/Default)
   TITLE+=(declarative)
-  DEPENDS+=+qt4-scripttools
+  DEPENDS+=+qt4-script +qt4-xml +qt4-gui +qt4-network
+endef
+
+define Package/qt4-xml
+  $(call Package/qt4/Default)
+  TITLE+=(xml)
 endef
 
 TARGET_CFLAGS+="-I$(STAGING_DIR)/usr/include/freetype2 -I$(PKG_BUILD_DIR)/include"
 
 define Build/Configure
-	# demos/examples: which demos are going to be built depends on which features are going to to be compiled into qt
-	# svg: svg support always compiled in, as once qt is built without, strange include errors occur when we're going to compile qt4-svg afterwards
-	# linuxfb/directfb: since directfb is not much overhead compared to plain framebuffer, force using directfb
-	# do not use fontconfig as it doesn't work anyway for qte
-	# bindir: bindir is where the host tools (qmake, moc, rcc, uic) will get installed into - they are just used on the host and not goig to be packaged
+	# NOTES:
+	#  demos/examples: which demos are going to be built depends on which features are going to to be compiled into qt
+	#  svg: always compile in svg-support, as once qt is built without, strange include errors occur when we're going to compile qt4-svg afterwards
+	#  linuxfb/directfb: since directfb is not much overhead compared to plain framebuffer, force using directfb
+	#  do not use fontconfig as it doesn't work anyway for qte
+	#  bindir: bindir is where the host tools (qmake, moc, rcc, uic) will get installed into - they are just used on the host and not goig to be packaged
 	( \
 		cd $(PKG_BUILD_DIR); \
 		QPATH='mkspecs/qws/linux-openwrt-g++' ; \
@@ -291,7 +298,7 @@ define Build/Compile
 	# just passing <make install> results in not building 3rdparty/webkit/JavaScriptCore
 	$(MAKE) -C $(PKG_BUILD_DIR)
 	INSTALL_ROOT=$(PKG_INSTALL_DIR) \
-		$(MAKE) -C $(PKG_BUILD_DIR) install
+		$(MAKE) -j5 -C $(PKG_BUILD_DIR) install
 endef
 
 define Build/InstallDev
@@ -553,6 +560,16 @@ define Package/qt4-declarative/install
 		$(1)/usr/lib/
 endef
 
+define Package/qt4-xml/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libQtXml.so* \
+		$(1)/usr/lib/
+endef
+
+
 $(eval $(call BuildPackage,qt4))
 $(eval $(call BuildPackage,qt4-gui))
 $(eval $(call BuildPackage,qt4-demos))
@@ -576,3 +593,4 @@ $(eval $(call BuildPackage,qt4-dbus))
 #$(eval $(call BuildPackage,qt4-glib))
 $(eval $(call BuildPackage,qt4-qt3support))
 $(eval $(call BuildPackage,qt4-declarative))
+$(eval $(call BuildPackage,qt4-xml))
