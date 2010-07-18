@@ -73,10 +73,22 @@ $(call Package/python/Default)
   DEPENDS+=+python-mini +libexpat
 endef
 
+define Package/python-gzip
+$(call Package/python/Default)
+  TITLE:=Python support for gzip
+  DEPENDS+=+python-mini
+endef
+
 define Package/python-openssl
 $(call Package/python/Default)
  TITLE:=Python support for OpenSSL
  DEPENDS+=+python-mini +libopenssl
+endef
+
+define Package/python-shutil
+$(call Package/python/Default)
+  TITLE:=Python support for shutil
+  DEPENDS+=+python-mini
 endef
 
 define Package/python-sqlite3
@@ -224,9 +236,13 @@ define PyPackage/python/filespec
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/grp.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/itertools.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/math.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_md5.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/operator.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_random.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/select.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_sha.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_sha256.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_sha512.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_socket.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/strop.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_struct.so
@@ -366,8 +382,16 @@ define PyPackage/python-expat/filespec
 +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/pyexpat.so
 endef
 
+define PyPackage/python-gzip/filespec
++|/usr/lib/python$(PYTHON_VERSION)/gzip.py
+endef
+
 define PyPackage/python-openssl/filespec
 +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_ssl.so
+endef
+
+define PyPackage/python-shutil/filespec
++|/usr/lib/python$(PYTHON_VERSION)/shutil.py
 endef
 
 define PyPackage/python-sqlite3/filespec
@@ -383,7 +407,9 @@ $(eval $(call PyPackage,python))
 $(eval $(call PyPackage,python-mini))
 $(eval $(call PyPackage,python-doc))
 $(eval $(call PyPackage,python-expat))
+$(eval $(call PyPackage,python-gzip))
 $(eval $(call PyPackage,python-openssl))
+$(eval $(call PyPackage,python-shutil))
 $(eval $(call PyPackage,python-sqlite3))
 $(eval $(call PyPackage,python-gdbm))
 
@@ -391,6 +417,8 @@ $(eval $(call BuildPackage,python))
 $(eval $(call BuildPackage,python-mini))
 $(eval $(call BuildPackage,python-doc))
 $(eval $(call BuildPackage,python-expat))
+$(eval $(call BuildPackage,python-gzip))
 $(eval $(call BuildPackage,python-openssl))
+$(eval $(call BuildPackage,python-shutil))
 $(eval $(call BuildPackage,python-sqlite3))
 $(eval $(call BuildPackage,python-gdbm))
