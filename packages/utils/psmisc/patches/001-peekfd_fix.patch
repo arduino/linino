@@ -1,0 +1,55 @@
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -1,6 +1,6 @@
+ dnl Process this file with autoconf to produce a configure script.
+ AC_PREREQ(2.61)
+-AC_INIT([psmisc],[22.12])
++AC_INIT([psmisc],[22.12])
+ AC_CONFIG_SRCDIR([src/comm.h])
+ AC_CONFIG_HEADER([config.h])
+ AC_CONFIG_AUX_DIR([config])
+@@ -56,6 +56,12 @@ AC_TYPE_PID_T
+ AC_TYPE_SIZE_T
+ AC_CHECK_MEMBERS([struct stat.st_rdev])
+ AC_TYPE_UID_T
++
++dnl Check for language stuff
++AM_GNU_GETTEXT([external])
++AM_GNU_GETTEXT_VERSION([0.16.1])
++
++dnl Must be after the gettext stuff as it sets build_cpu
+ AC_CHECK_MEMBERS([struct user_regs_struct.orig_eax,
+ 		struct user_regs_struct.eax,
+ 		struct user_regs_struct.ebx,
+@@ -66,11 +72,13 @@ AC_CHECK_MEMBERS([struct user_regs_struct.orig_eax,
+ 		struct user_regs_struct.rdi,
+ 		struct user_regs_struct.rsi,
+ 		struct user_regs_struct.rdx], [],[],
+-    [#include <sys/user.h>])
++    [#include <bits/types.h>
++     #include <sys/user.h>])
+ AC_CHECK_MEMBERS([struct pt_regs.orig_gpr3,
+ 		struct pt_regs.gpr], [],[], [#include <linux/ptrace.h>])
+ AC_CHECK_MEMBERS([struct pt_regs.uregs],[],[], [#include <asm/ptrace.h>])
+-AC_CHECK_MEMBERS([struct pt_regs.regs],[],[], [#include <asm/ptrace.h>])
++AC_CHECK_MEMBERS([struct pt_regs.regs,
++                  struct pt_regs.cp0_status],[],[], [#include <asm/ptrace.h>])
+ 
+ AM_CONDITIONAL(WANT_PEEKFD_I386,
+  test $ac_cv_member_struct_user_regs_struct_orig_eax = yes &&
+@@ -90,11 +98,9 @@ AM_CONDITIONAL(WANT_PEEKFD_PPC,
+ AM_CONDITIONAL(WANT_PEEKFD_ARM,
+    test $ac_cv_member_struct_pt_regs_uregs = yes)
+ AM_CONDITIONAL(WANT_PEEKFD_MIPS,
+-   test $ac_cv_member_struct_pt_regs_regs = yes)
+-
+-dnl Check for language stuff
+-AM_GNU_GETTEXT([external])
+-AM_GNU_GETTEXT_VERSION([0.16.1])
++   test $build_cpu = mipsel &&
++   test $ac_cv_member_struct_pt_regs_regs = yes &&
++   test $ac_cv_member_struct_pt_regs_cp0_status = yes)
+ 
+ dnl Checks for library functions.
+ AC_FUNC_CLOSEDIR_VOID
