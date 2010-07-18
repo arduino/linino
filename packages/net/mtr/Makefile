@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mtr
-PKG_VERSION:=0.79
+PKG_VERSION:=0.80
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.bitwizard.nl/mtr/
-PKG_MD5SUM:=f7c1f873e68e7176f60ae9fbb2ca20f4
+PKG_SOURCE_URL:=ftp://ftp.bitwizard.nl/mtr
+PKG_MD5SUM:=fa68528eaec1757f52bacf9fea8c68a9
 
 PKG_INSTALL:=1
 
@@ -38,6 +38,12 @@ define Package/mtr/description
 	running statistics about each machine.
 endef
 
+CONFIGURE_ARGS += \
+	--without-gtk \
+
+CONFIGURE_VARS += \
+	ac_cv_lib_resolv_res_mkquery=yes \
+
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); touch \
 		configure.in \
@@ -48,11 +54,7 @@ define Build/Configure
 		config.h.in \
 		configure \
 	);
-	$(call Build/Configure/Default, \
-		--without-gtk \
-		, \
-		ac_cv_lib_resolv_res_mkquery=yes \
-	)
+	$(call Build/Configure/Default)
 endef
 
 define Package/mtr/install
