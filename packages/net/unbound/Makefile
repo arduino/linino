@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=unbound
 PKG_VERSION:=1.4.5
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.unbound.net/downloads
@@ -51,8 +51,8 @@ define Package/unbound/install
 		$(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/unbound
 	$(INSTALL_CONF) ./files/unbound.conf $(1)/etc/unbound/
-	$(INSTALL_CONF) ./files/dlv.isc.org.key $(1)/etc/unbound/
-	$(INSTALL_CONF) ./files/anchors.mf $(1)/etc/unbound/
+	$(INSTALL_CONF) ./files/root.autokey $(1)/etc/unbound/
+	$(INSTALL_CONF) ./files/named.cache $(1)/etc/unbound/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/unbound.init $(1)/etc/init.d/unbound
 endef
