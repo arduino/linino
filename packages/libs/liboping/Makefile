@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=liboping
-PKG_VERSION:=1.3.4
+PKG_VERSION:=1.4.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://verplant.org/liboping/files
-PKG_MD5SUM:=208e185f75f9f8ac96e508bd9e17ef61
+PKG_MD5SUM:=b3d3ef82c8b963266e0ce8db1509cac4
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -40,6 +40,14 @@ $(call Package/liboping/Default)
   DEPENDS+= +liboping
 endef
 
+define Package/noping
+$(call Package/liboping/Default)
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=Ncurses application to send ICMP echo request to network hosts
+  DEPENDS+= +liboping +libncurses
+endef
+
 TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
@@ -64,5 +72,11 @@ define Package/oping/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/oping $(1)/usr/bin/
 endef
 
+define Package/noping/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/noping $(1)/usr/bin/
+endef
+
 $(eval $(call BuildPackage,liboping))
 $(eval $(call BuildPackage,oping))
+$(eval $(call BuildPackage,noping))
