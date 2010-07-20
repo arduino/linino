@@ -545,7 +545,7 @@ $(eval $(call BuildPlugin,esf,Extra SIP Functionality,mod_esf,,))
 $(eval $(call BuildPlugin,event-multicast,Multicast event handler,mod_event_multicast,,))
 $(eval $(call BuildPlugin,event-socket,Socket event handler,mod_event_socket,,))
 $(eval $(call BuildPlugin,expr,Expression evaluation,mod_expr,,))
-$(eval $(call BuildPlugin,fax,Fax,mod_fax,,@BROKEN +libjpeg)) # fails in spandsp
+$(eval $(call BuildPlugin,fax,Fax,mod_fax,,+libjpeg)) # fails in spandsp
 $(eval $(call BuildPlugin,fifo,FIFO,mod_fifo,,))
 $(eval $(call BuildPlugin,file-string,File streaming,mod_file_string,,))
 $(eval $(call BuildPlugin,flite,Festival TTS,mod_flite,,@!TARGET_avr32 @!TARGET_ixp4xx))
