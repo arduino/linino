@@ -548,7 +548,7 @@ $(eval $(call BuildPlugin,expr,Expression evaluation,mod_expr,,))
 $(eval $(call BuildPlugin,fax,Fax,mod_fax,,@BROKEN +libjpeg)) # fails in spandsp
 $(eval $(call BuildPlugin,fifo,FIFO,mod_fifo,,))
 $(eval $(call BuildPlugin,file-string,File streaming,mod_file_string,,))
-$(eval $(call BuildPlugin,flite,Festival TTS,mod_flite,,))
+$(eval $(call BuildPlugin,flite,Festival TTS,mod_flite,,@!TARGET_avr32 @!TARGET_ixp4xx))
 $(eval $(call BuildPlugin,fsv,Video,mod_fsv,,))
 $(eval $(call BuildPlugin,g723-1,G.723.1 codec,mod_g723_1,,))
 $(eval $(call BuildPlugin,g729,G.729 codec,mod_g729,,))
