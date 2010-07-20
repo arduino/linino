@@ -34,7 +34,7 @@ endef
 define Package/curl
   $(call Package/curl/Default)
   DEPENDS:=+libcurl
-  TITLE:=A client-side URL transfer library
+  TITLE:=A client-side URL transfer utility
 endef
 
 define Package/libcurl
@@ -42,7 +42,7 @@ define Package/libcurl
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=+libopenssl +zlib
-  TITLE:=A client-side URL transfer utility
+  TITLE:=A client-side URL transfer library
 endef
 
 TARGET_CFLAGS += $(FPIC)
