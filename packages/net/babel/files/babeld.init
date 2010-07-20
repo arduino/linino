@@ -7,11 +7,10 @@ EXTRA_COMMANDS="status"
 EXTRA_HELP="        status Dump Babel's table to the log file."
 
 listen_ifname() {
-	local name="$1"
+	local ifname=$(uci_get_state network "$1" ifname "$1")
 	local switch="$2"
-	local _uciname=`uci get -q -P /var/state network.$name.ifname`
-	append args "$switch ${_uciname:-$name}"
-	append interfaces "${_uciname:-$name}"
+	append args "$switch $ifname"
+	append interfaces "$ifname"
 }
 
 append_ifname() {
@@ -21,8 +20,8 @@ append_ifname() {
 	local _name
 	config_get _name "$section" "$option"
 	[ -z "$_name" ] && return 0
-	local _uciname=`uci get -q -P /var/state network.$_name.ifname`
-	append args "$switch ${_uciname:-$_name}"
+	local ifname=$(uci_get_state network "$_name" ifname "$_name")
+	append args "$switch $ifname"
 }
 
 append_bool() {
