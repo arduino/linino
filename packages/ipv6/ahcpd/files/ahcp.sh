@@ -34,9 +34,8 @@ append_opt_stmt() {
 }
 
 ahcp_addif() {
-	local name="$1"
-	local _uciname=`uci get -q -P /var/state network.$name.ifname`
-	append interfaces "${_uciname:-$name}"
+	local ifname=$(uci_get_state network "$1" ifname "$1")
+	append interfaces "$ifname"
 }
 
 ahcp_server() {

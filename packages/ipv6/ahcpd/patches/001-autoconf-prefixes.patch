@@ -1,0 +1,14 @@
+Tue Jul 20 00:25:27 CEST 2010  Juliusz Chroboczek <jch@pps.jussieu.fr>
+  * Fix typo -- ignore autoconf prefixes for plen > 64.
+  Thanks to Gabriel Kerneis.
+--- old-ahcpd/configure.c	2010-07-20 09:31:19.000000000 +0200
++++ new-ahcpd/configure.c	2010-07-20 09:31:19.000000000 +0200
+@@ -505,7 +505,7 @@
+         if(config->ipv6_address) {
+             config->our_ipv6_address = copy_prefix_list(config->ipv6_address);
+         } else if(config->ipv6_prefix && config->ipv6_prefix->n > 0 &&
+-                  config->ipv6_prefix->l[0].plen >= 64) {
++                  config->ipv6_prefix->l[0].plen <= 64) {
+             unsigned char address[16];
+             int have_address = 0;
+ 
