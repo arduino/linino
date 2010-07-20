@@ -517,7 +517,7 @@ $(eval $(call BuildPackage,freeswitch-config-minimal))
 $(eval $(call BuildPackage,freeswitch-config-uci))
 
 #$(eval $(call BuildPlugin,Name,Title,Files,Depends))
-$(eval $(call BuildPlugin,alsa,Alsa endpoint,mod_alsa,,+alsa-lib))
+$(eval $(call BuildPlugin,alsa,Alsa endpoint,mod_alsa,,))
 $(eval $(call BuildPlugin,amr,GSM-AMR codec,mod_amr,,))
 $(eval $(call BuildPlugin,amrwb,GSM-AMRWB,mod_amrwb,,))
 $(eval $(call BuildPlugin,bv,codec mod_bv,mod_bv,,))
