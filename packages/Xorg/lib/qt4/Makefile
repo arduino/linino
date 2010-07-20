@@ -23,6 +23,17 @@ PKG_BUILD_DIR=$(BUILD_DIR)/qt-everywhere-opensource-src-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
+# this should be moved to a more generic place later, as other packages are configured different as well depending on available nptl support
+ifeq ($(CONFIG_USE_GLIBC),y)
+  NPTL:=y
+endif
+ifeq ($(CONFIG_USE_EGLIBC),y)
+  NPTL:=y
+endif
+ifeq ($(CONFIG_UCLIBC_VERSION_0_9_32),y)
+  NPTL:=y
+endif
+
 define Package/qt4/Default
   SECTION:=xorg-framework
   CATEGORY:=Xorg
@@ -230,8 +241,8 @@ define Build/Configure
 			-no-rpath \
 			-force-pkg-config \
 			-nomake tools \
-			-$(if $(CONFIG_PACKAGE_qt4-demos),make demos,nomake demos) \
-			-$(if $(CONFIG_PACKAGE_qt4-examples),make examples,nomake examples) \
+			-make demos \
+			-make examples \
 			-nomake docs \
 			-nomake translations \
 			-embedded openwrt \
@@ -259,12 +270,12 @@ define Build/Configure
 			-phonon \
 			-no-phonon-backend \
 			-svg \
-			-webkit \
+			-$(if $(NPTL),webkit,-no-webkit) \
 			-no-javascript-jit \
-			-script \
-			-scripttools \
+			-$(if $(NPTL),script,-no-script) \
+			-$(if $(NPTL),scripttools,-no-scripttools) \
 			-no-accessibility \
-			-declarative \
+			-$(if $(NPTL),declarative,-no-declarative) \
 			-no-openssl \
 			-no-nis \
 			-no-cups \
@@ -298,7 +309,7 @@ define Build/Compile
 	# just passing <make install> results in not building 3rdparty/webkit/JavaScriptCore
 	$(MAKE) -C $(PKG_BUILD_DIR)
 	INSTALL_ROOT=$(PKG_INSTALL_DIR) \
-		$(MAKE) -j5 -C $(PKG_BUILD_DIR) install
+		$(MAKE) -C $(PKG_BUILD_DIR) install
 endef
 
 define Build/InstallDev
