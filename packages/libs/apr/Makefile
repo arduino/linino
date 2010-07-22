@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apr
-PKG_VERSION:=1.3.9
+PKG_VERSION:=1.4.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.ibiblio.org/pub/mirrors/apache/apr
-PKG_MD5SUM:=7138ac64d4458eeeaa9b9aefa4e6e51b
+PKG_MD5SUM:=4b00e8f70c067893d075577962656b35
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
