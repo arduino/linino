@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vpzone
 PKG_VERSION:=0.1.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/vpzone
@@ -26,7 +26,7 @@ define Package/vpzone
   SUBMENU:=VPN
   TITLE:=A flexible multipurpose layer 3 VPN daemon
   URL:=http://vpzone.sourceforge.net/
-  DEPENDS:=+libcares +libevent +libgnutls +kmod-ipv6
+  DEPENDS:=+libcares +libevent +libgnutls +kmod-ipv6 +kmod-tun
 endef
 
 define Package/vpzone/conffiles
