@@ -9,13 +9,16 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cwiid
 PKG_VERSION:=0.6.00
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://abstrakraft.org/cwiid/downloads/
 PKG_SOURCE_VERSION:=2100f14c612471084434b364501e3818c7f4144e
 
+PKG_BUILD_DEPENDS:=python
+
 include $(INCLUDE_DIR)/package.mk
+$(call include_mk, python-package.mk)
 
 define Package/cwiid/Default
   TITLE:=Linux Nintendo Wiimote interface
@@ -39,12 +42,23 @@ $(call Package/cwiid/Default)
   DEPENDS+= +libcwiid
 endef
 
+define Package/python-cwiid
+$(call Package/cwiid/Default)
+  SUBMENU:=Python
+  SECTION:=lang
+  CATEGORY:=Languages
+  TITLE:=Python bindings for the cwiid libs
+  DEPENDS:= +python-mini +libcwiid
+endef
+
 CONFIGURE_ARGS += \
 	--without-python \
 	--disable-ldconfig \
 	--enable-shared \
+	--enable-static \
 
 TARGET_CFLAGS += $(FPIC)
+TARGET_CPPFLAGS += -I$(PKG_BUILD_DIR)/libcwiid/
 
 define Build/Prepare
 	$(call Build/Prepare/Default)
@@ -60,6 +74,10 @@ define Build/Compile
 		CPPFLAGS="$(TARGET_CPPFLAGS)" \
 		LDFLAGS="$(TARGET_LDFLAGS) -L../libcwiid/" \
 		all
+	$(if $(Build/Compile/PyMod),,@echo Python packaging code not found.; false)
+	$(call Build/Compile/PyMod,./python/, \
+		install --prefix="$(PKG_INSTALL_DIR)/usr", \
+	)
 endef
 
 define Build/InstallDev
@@ -80,5 +98,11 @@ define Package/wminput/install
 	$(CP) $(PKG_BUILD_DIR)/lswm/lswm $(1)/usr/bin/
 endef
 
+define PyPackage/python-cwiid/filespec
++|$(PYTHON_PKG_DIR)/cwiid.so
+endef
+
 $(eval $(call BuildPackage,libcwiid))
 $(eval $(call BuildPackage,wminput))
+$(eval $(call PyPackage,python-cwiid))
+$(eval $(call BuildPackage,python-cwiid))
