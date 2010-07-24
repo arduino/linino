@@ -1,0 +1,13 @@
+Index: i2c-tools-3.0.2/py-smbus/smbusmodule.c
+===================================================================
+--- i2c-tools-3.0.2.orig/py-smbus/smbusmodule.c	2010-07-23 23:09:16.000000000 +0200
++++ i2c-tools-3.0.2/py-smbus/smbusmodule.c	2010-07-23 23:09:29.000000000 +0200
+@@ -21,6 +21,7 @@
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <fcntl.h>
++#include <linux/i2c.h>
+ #include <linux/i2c-dev.h>
+ 
+ /*
+
