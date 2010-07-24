@@ -17,6 +17,8 @@ PKG_MD5SUM:=1ceef3209cca88be8f1bd9de99735954
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/uClibc++-$(PKG_VERSION)
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/uclibcxx
@@ -60,18 +62,11 @@ define Build/Configure
 	fi
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(MAKE_FLAGS) \
-		DESTDIR="$(PKG_INSTALL_DIR)/usr" \
-		all install
-endef
-
 define Build/InstallDev
 	$(INSTALL_DIR) $(2)/bin $(1)/usr/include/uClibc++ $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/g++-uc $(2)/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/uClibc++/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libuClibc++*.{a,so*} $(1)/usr/lib/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/g++-uc $(2)/bin/
+	$(CP) $(PKG_INSTALL_DIR)/include/* $(1)/usr/include/uClibc++/
+	$(CP) $(PKG_INSTALL_DIR)/lib/libuClibc++*.a $(1)/usr/lib/
 	$(SED) 's|-I/include/|-I$(STAGING_DIR)/usr/include/uClibc++/|g' $(2)/bin/g++-uc
 	$(SED) 's|-L/lib/|-L$(STAGING_DIR)/usr/lib/|g' $(2)/bin/g++-uc
 # add another wrapper which links against both uClibc++ and libstdc++ 
@@ -83,8 +78,8 @@ endef
 
 define Package/uclibcxx/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libuClibc++.so.* $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libuClibc++-*.so $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/lib/libuClibc++.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/lib/libuClibc++-*.so $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,uclibcxx))
