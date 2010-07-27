@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=netatalk
 PKG_VERSION:=2.0.5
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 PKG_SOURCE:=netatalk-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/netatalk/
 PKG_MD5SUM:=f35cd7a4ce26c780de380cd2bcae5ce6

@@ -14,12 +14,11 @@ start()
 
 stop()
 {
-	killall afpd
+	kill `cat "${PIDFILE}"`
 	killall cnid_metad
 }
 
 reload()
 {
-	kill -s HUP `cat ${PIDFILE}`
-	start
+	kill -s HUP `cat "${PIDFILE}"`
 }
