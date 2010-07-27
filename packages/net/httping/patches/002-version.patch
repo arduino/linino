@@ -4,7 +4,7 @@
  #include "utils.h"
  #include "error.h"
  
-+#define VERSION "1.4.3"
++#define VERSION "1.4.4"
 +
  static volatile int stop = 0;
  
