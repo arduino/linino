@@ -661,7 +661,7 @@ ip route flush table 170 > /dev/null 2>&1
 
         for TABLE in 170
         do
-                ip route | grep link | grep -Ev ^default | while read ROUTE
+                ip route | grep -Ev ^default | while read ROUTE
                 do
                 ip route add table $TABLE to $ROUTE
                 done
@@ -748,7 +748,7 @@ ip route flush table $(expr $i + 170) > /dev/null 2>&1
 
         for TABLE in $(expr $i + 170)
         do
-                ip route | grep link | grep -Ev ^default | while read ROUTE
+                ip route | grep -Ev ^default | while read ROUTE
                 do
                 ip route add table $TABLE to $ROUTE
                 done
