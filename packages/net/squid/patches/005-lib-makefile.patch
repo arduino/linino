@@ -1,38 +1,37 @@
-Index: squid-2.6.STABLE23/lib/Makefile.in
-===================================================================
---- squid-2.6.STABLE23.orig/lib/Makefile.in	2009-09-17 01:33:17.000000000 +0200
-+++ squid-2.6.STABLE23/lib/Makefile.in	2009-11-11 14:16:09.000000000 +0100
-@@ -61,7 +61,9 @@
+--- a/lib/Makefile.in
++++ b/lib/Makefile.in
+@@ -60,8 +60,10 @@ am__libmiscutil_a_SOURCES_DIST = Array.c
+ 	rfc1123.c rfc1738.c rfc2617.c safe_inet_addr.c snprintf.c \
  	splay.c Stack.c strsep.c stub_memaccount.c util.c uudecode.c \
  	win32lib.c
- @NEED_OWN_MD5_TRUE@am__objects_1 = md5.$(OBJEXT)
 +@NEED_OWN_MD5_TRUE@am__host_objects_1 = md5.$(HOST_OBJEXT)
- @NEED_OWN_SNPRINTF_TRUE@am__objects_2 = snprintf.$(OBJEXT)
+ @NEED_OWN_SNPRINTF_TRUE@am__objects_1 = snprintf.$(OBJEXT)
+ @NEED_OWN_STRSEP_TRUE@am__objects_2 = strsep.$(OBJEXT)
 +@NEED_OWN_SNPRINTF_TRUE@am__host_objects_2 = snprintf.$(HOST_OBJEXT)
- @NEED_OWN_STRSEP_TRUE@am__objects_3 = strsep.$(OBJEXT)
- @ENABLE_MINGW32SPECIFIC_TRUE@am__objects_4 = win32lib.$(OBJEXT)
+ @ENABLE_MINGW32SPECIFIC_TRUE@am__objects_3 = win32lib.$(OBJEXT)
  am_libmiscutil_a_OBJECTS = Array.$(OBJEXT) base64.$(OBJEXT) \
-@@ -72,7 +74,19 @@
- 	$(am__objects_2) splay.$(OBJEXT) Stack.$(OBJEXT) \
- 	$(am__objects_3) stub_memaccount.$(OBJEXT) util.$(OBJEXT) \
- 	uudecode.$(OBJEXT) $(am__objects_4)
+ 	getfullhostname.$(OBJEXT) hash.$(OBJEXT) heap.$(OBJEXT) \
+@@ -71,7 +73,19 @@ am_libmiscutil_a_OBJECTS = Array.$(OBJEX
+ 	$(am__objects_1) splay.$(OBJEXT) Stack.$(OBJEXT) \
+ 	$(am__objects_2) stub_memaccount.$(OBJEXT) util.$(OBJEXT) \
+ 	uudecode.$(OBJEXT) $(am__objects_3)
 +am_libmiscutil_a_HOST_OBJECTS = Array.$(HOST_OBJEXT) \
-+			base64.$(HOST_OBJEXT) getfullhostname.$(HOST_OBJEXT) \
-+			hash.$(HOST_OBJEXT) heap.$(HOST_OBJEXT) \
-+        		html_quote.$(HOST_OBJEXT) iso3307.$(HOST_OBJEXT) \
-+			$(am__host_objects_1) radix.$(HOST_OBJEXT) \
-+			rfc1035.$(HOST_OBJEXT) rfc1123.$(HOST_OBJEXT) \
-+			rfc1738.$(HOST_OBJEXT) rfc2617.$(HOST_OBJEXT) \
-+			safe_inet_addr.$(HOST_OBJEXT) $(am__host_objects_2) \
-+			splay.$(HOST_OBJEXT) Stack.$(HOST_OBJEXT) \
-+        		stub_memaccount.$(HOST_OBJEXT) util.$(HOST_OBJEXT) \
-+			uudecode.$(HOST_OBJEXT)
++	base64.$(HOST_OBJEXT) getfullhostname.$(HOST_OBJEXT) \
++	hash.$(HOST_OBJEXT) heap.$(HOST_OBJEXT) \
++	html_quote.$(HOST_OBJEXT) iso3307.$(HOST_OBJEXT) \
++	$(am__host_objects_1) radix.$(HOST_OBJEXT) \
++	rfc1035.$(HOST_OBJEXT) rfc1123.$(HOST_OBJEXT) \
++	rfc1738.$(HOST_OBJEXT) rfc2617.$(HOST_OBJEXT) \
++	safe_inet_addr.$(HOST_OBJEXT) $(am__host_objects_2) \
++	splay.$(HOST_OBJEXT) Stack.$(HOST_OBJEXT) \
++	stub_memaccount.$(HOST_OBJEXT) util.$(HOST_OBJEXT) \
++	uudecode.$(HOST_OBJEXT)
  libmiscutil_a_OBJECTS = $(am_libmiscutil_a_OBJECTS)
 +libmiscutil_a_HOST_OBJECTS = $(am_libmiscutil_a_HOST_OBJECTS)
  libntlmauth_a_AR = $(AR) $(ARFLAGS)
  libntlmauth_a_DEPENDENCIES = @LIBOBJS@
  am_libntlmauth_a_OBJECTS = ntlmauth.$(OBJEXT)
-@@ -90,15 +104,19 @@
+@@ -89,15 +103,19 @@ depcomp = $(SHELL) $(top_srcdir)/cfgaux/
  am__depfiles_maybe = depfiles
  COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
  	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -54,7 +53,7 @@ Index: squid-2.6.STABLE23/lib/Makefile.in
  ETAGS = etags
  CTAGS = ctags
  DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-@@ -106,6 +124,7 @@
+@@ -105,6 +123,7 @@ ACLOCAL = @ACLOCAL@
  ALLOCA = @ALLOCA@
  AMTAR = @AMTAR@
  AR = @AR@
@@ -62,7 +61,7 @@ Index: squid-2.6.STABLE23/lib/Makefile.in
  AR_R = @AR_R@
  AUTH_LIBS = @AUTH_LIBS@
  AUTH_MODULES = @AUTH_MODULES@
-@@ -118,6 +137,7 @@
+@@ -117,6 +136,7 @@ BASIC_AUTH_HELPERS = @BASIC_AUTH_HELPERS
  CACHE_HTTP_PORT = @CACHE_HTTP_PORT@
  CACHE_ICP_PORT = @CACHE_ICP_PORT@
  CC = @CC@
@@ -70,8 +69,8 @@ Index: squid-2.6.STABLE23/lib/Makefile.in
  CCDEPMODE = @CCDEPMODE@
  CFLAGS = @CFLAGS@
  CGIEXT = @CGIEXT@
-@@ -165,6 +185,8 @@
- NEGOTIATE_AUTH_HELPERS = @NEGOTIATE_AUTH_HELPERS@
+@@ -164,6 +184,8 @@ NEGOTIATE_AUTH_HELPERS = @NEGOTIATE_AUTH
+ NIS_LIBS = @NIS_LIBS@
  NTLM_AUTH_HELPERS = @NTLM_AUTH_HELPERS@
  OBJEXT = @OBJEXT@
 +HOST_OBJEXT = @OBJEXT@.$(shell uname -m)
@@ -79,7 +78,7 @@ Index: squid-2.6.STABLE23/lib/Makefile.in
  OPT_DEFAULT_HOSTS = @OPT_DEFAULT_HOSTS@
  PACKAGE = @PACKAGE@
  PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
-@@ -264,6 +286,7 @@
+@@ -261,6 +283,7 @@ EXTRA_LIBRARIES = \
  noinst_LIBRARIES = \
  	@LIBDLMALLOC@ \
  	libmiscutil.a \
@@ -87,7 +86,7 @@ Index: squid-2.6.STABLE23/lib/Makefile.in
  	libntlmauth.a \
  	@LIBREGEX@ \
  	$(LIBSSPWIN32)
-@@ -298,9 +321,34 @@
+@@ -300,9 +323,34 @@ libmiscutil_a_SOURCES = \
  	uudecode.c \
  	$(WIN32SRC)
  
@@ -122,7 +121,7 @@ Index: squid-2.6.STABLE23/lib/Makefile.in
  # $(top_srcdir)/include/version.h should be a dependency
  libregex_a_SOURCES = \
  	GNUregex.c
-@@ -321,7 +369,7 @@
+@@ -323,7 +371,7 @@ INCLUDES = -I$(top_builddir)/include -I$
  all: all-am
  
  .SUFFIXES:
@@ -131,7 +130,7 @@ Index: squid-2.6.STABLE23/lib/Makefile.in
  $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
  	@for dep in $?; do \
  	  case '$(am__configure_deps)' in \
-@@ -358,10 +406,13 @@
+@@ -360,10 +408,13 @@ libdlmalloc.a: $(libdlmalloc_a_OBJECTS)
  	-rm -f libdlmalloc.a
  	$(libdlmalloc_a_AR) libdlmalloc.a $(libdlmalloc_a_OBJECTS) $(libdlmalloc_a_LIBADD)
  	$(RANLIB) libdlmalloc.a
@@ -146,7 +145,7 @@ Index: squid-2.6.STABLE23/lib/Makefile.in
  libntlmauth.a: $(libntlmauth_a_OBJECTS) $(libntlmauth_a_DEPENDENCIES) 
  	-rm -f libntlmauth.a
  	$(libntlmauth_a_AR) libntlmauth.a $(libntlmauth_a_OBJECTS) $(libntlmauth_a_LIBADD)
-@@ -412,6 +463,21 @@
+@@ -417,6 +468,21 @@ distclean-compile:
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util.Po@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/uudecode.Po@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/win32lib.Po@am__quote@
@@ -168,7 +167,7 @@ Index: squid-2.6.STABLE23/lib/Makefile.in
  
  .c.o:
  @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@@ -420,6 +486,9 @@
+@@ -425,6 +491,9 @@ distclean-compile:
  @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
  @am__fastdepCC_FALSE@	$(COMPILE) -c $<
  

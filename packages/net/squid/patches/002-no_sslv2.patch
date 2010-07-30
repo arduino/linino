@@ -1,8 +1,6 @@
-Index: squid-2.6.STABLE14/src/ssl_support.c
-===================================================================
---- squid-2.6.STABLE14.orig/src/ssl_support.c	2007-07-25 16:04:15.000000000 -0500
-+++ squid-2.6.STABLE14/src/ssl_support.c	2007-07-25 16:04:15.000000000 -0500
-@@ -442,10 +442,12 @@
+--- a/src/ssl_support.c
++++ b/src/ssl_support.c
+@@ -446,10 +446,12 @@ sslCreateServerContext(const char *certf
      ERR_clear_error();
      debug(83, 1) ("Initialising SSL.\n");
      switch (version) {

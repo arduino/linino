@@ -1,8 +1,6 @@
-Index: squid-2.6.STABLE14/include/autoconf.h.in
-===================================================================
---- squid-2.6.STABLE14.orig/include/autoconf.h.in	2007-07-25 16:04:15.000000000 -0500
-+++ squid-2.6.STABLE14/include/autoconf.h.in	2007-07-25 16:04:16.000000000 -0500
-@@ -319,10 +319,10 @@
+--- a/include/autoconf.h.in
++++ b/include/autoconf.h.in
+@@ -313,10 +313,10 @@
  #undef HAVE_OPENSSL_ERR_H
  
  /* Define to 1 if you have the <openssl/md5.h> header file. */
