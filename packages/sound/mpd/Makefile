@@ -29,7 +29,7 @@ define Package/mpd
 	+AUDIO_SUPPORT:alsa-lib \
 	+BUILD_PATENTED:libfaad2 +BUILD_PATENTED:libmad \
 	+glib2 +libcurl +libflac +libmms +libpthread +libshout \
-	+libvorbis +libvorbisidec 
+	+libvorbis +libvorbisidec +libid3tag
 endef
 
 define Package/mpd/description
