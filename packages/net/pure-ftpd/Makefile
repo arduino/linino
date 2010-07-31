@@ -15,17 +15,31 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.pureftpd.org/pub/pure-ftpd/releases
 PKG_MD5SUM:=12a074824b509f9e7684fab333ed6915
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/pure-ftpd
+define Package/pure-ftpd/Default
   SUBMENU:=FTP
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libelf
   TITLE:=Secure FTP made easy!
   URL:=http://www.pureftpd.org/project/pure-ftpd
+endef
+
+define Package/pure-ftpd
+  $(call Package/pure-ftpd/Default)
+  TITLE+= (no TLS)
+  VARIANT:=notls
+endef
+
+define Package/pure-ftpd-tls
+  $(call Package/pure-ftpd/Default)
+  TITLE+= (TLS)
+  VARIANT:=tls
 endef
 
 define Package/pure-ftpd/description
@@ -36,13 +50,23 @@ define Package/pure-ftpd/description
  personal users as well as hosting providers.
 endef
 
+Package/pure-ftpd-tls/description=$(Package/pure-ftpd/description)
+
 define Package/pure-ftpd/conffiles
 /etc/config/pure-ftpd
 endef
 
+Package/pure-ftpd-tls/conffiles=$(Package/pure-ftpd/conffiles)
+
 CONFIGURE_ARGS += \
 	--with-everything \
-	--with-virtualchroot \
+	--with-virtualchroot
+
+ifeq ($(BUILD_VARIANT),tls)
+CONFIGURE_ARGS += \
+	--with-certfile=/etc/ssl/private/pure-ftpd.pem \
+	--with-tls
+endif
 
 define Package/pure-ftpd/install
 	$(INSTALL_DIR) $(1)/etc/config
@@ -60,4 +84,7 @@ define Package/pure-ftpd/install
 		$(1)/usr/sbin/
 endef
 
+Package/pure-ftpd-tls/install=$(Package/pure-ftpd/install)
+
 $(eval $(call BuildPackage,pure-ftpd))
+$(eval $(call BuildPackage,pure-ftpd-tls))
