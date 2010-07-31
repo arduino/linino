@@ -74,9 +74,13 @@ endef
 
 define Package/libX11/install
 	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/share/X11
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib/
+	$(CP)  \
+		$(PKG_INSTALL_DIR)/usr/share/X11/* \
+		$(1)/usr/share/X11
 endef
 
 $(eval $(call Feature,libX11))
