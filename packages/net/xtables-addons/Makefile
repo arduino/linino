@@ -9,11 +9,11 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=xtables-addons
-PKG_VERSION:=1.22
+PKG_VERSION:=1.24
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=990e2d84a1767c8247c92ae7b11e53a9
+PKG_MD5SUM:=1b538a25ef82edb7a7ea7411d599d6b9
 PKG_SOURCE_URL:=@SF/xtables-addons
 PKG_BUILD_DEPENDS:=iptables
 
@@ -93,3 +93,5 @@ $(eval $(call BuildTemplate,delude,DELUDE,xt_DELUDE,xt_DELUDE,46,+kmod-ipt-compa
 $(eval $(call BuildTemplate,tarpit,TARPIT,xt_TARPIT,xt_TARPIT,46,+kmod-ipt-compat-xtables))
 $(eval $(call BuildTemplate,tee,TEE,xt_TEE,xt_TEE,46,+kmod-ipt-compat-xtables))
 $(eval $(call BuildTemplate,ipp2p,IPP2P,xt_ipp2p,xt_ipp2p,46,))
+$(eval $(call BuildTemplate,rawpost,RAWPOST,,iptable_rawpost,46,+kmod-ipt-compat-xtables))
+$(eval $(call BuildTemplate,rawnat,RAWNAT,xt_RAWDNAT xt_RAWSNAT,xt_RAWNAT,46,+kmod-ipt-compat-xtables))
