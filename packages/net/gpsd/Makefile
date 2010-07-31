@@ -8,14 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gpsd
-PKG_VERSION:=2.90
+PKG_VERSION:=2.94
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.berlios.de/gpsd/
-PKG_MD5SUM:=a23c728b8734c542d559c485857238d2
+PKG_MD5SUM:=ce70bcd707ac1df861d4c72f503c09d1
 
-PKG_FIXUP:=libtool-ucxx
 PKG_INSTALL:=1
 
 PKG_BUILD_DEPENDS:=libncurses
@@ -25,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/gpsd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpthread +uclibcxx
+  DEPENDS:=+libpthread
   TITLE:=An interface daemon for GPS receivers
   URL:=http://gpsd.berlios.de/
 endef
@@ -41,14 +40,8 @@ CONFIGURE_ARGS += \
         --disable-ubx \
         --disable-evermore \
         --disable-ntrip \
+	--disable-libgpsmm \
         --without-x \
-
-CONFIGURE_VARS += \
-	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
-	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib" \
-	LIBS="-nodefaultlibs -luClibc++ -lm $(LIBGCC_S)" \
-	CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
@@ -58,6 +51,12 @@ define Build/InstallDev
 endef
 
 define Package/gpsd/install
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) ./files/gpsd.config $(1)/etc/config/gpsd
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/gpsd.init $(1)/etc/init.d/gpsd
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/usb
+	$(INSTALL_DATA) ./files/gpsd.hotplug $(1)/etc/hotplug.d/usb/20-gpsd
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgps.so.* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/sbin
