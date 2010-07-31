@@ -40,30 +40,30 @@ PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-$(PKG_RELEASE)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ntfs-3g/common
-	SECTION:=utils
-	CATEGORY:=Utilities
-	URL:=http://www.tuxera.com
-	SUBMENU:=Filesystem
-	TITLE:=Stable Read/Write NTFS Driver
-	MAINTAINER:=Bud <wrt_buddhay@gmx.net>
+  SECTION:=utils
+  CATEGORY:=Utilities
+  URL:=http://www.tuxera.com
+  SUBMENU:=Filesystem
+  TITLE:=Stable Read/Write NTFS Driver
+  MAINTAINER:=Bud <wrt_buddhay@gmx.net>
 endef
 
 define Package/ntfs-3g
-	$(call Package/ntfs-3g/common)
-	DEPENDS:= +kmod-fuse +PACKAGE_NTFS-3G_USE_LIBFUSE:libfuse
-	DEPENDS+= +libpthread
+  $(call Package/ntfs-3g/common)
+  DEPENDS:= +kmod-fuse +PACKAGE_NTFS-3G_USE_LIBFUSE:libfuse
+  DEPENDS+= +libpthread
 endef
 
 define Package/ntfs-3g/description
-Ntfs-3g is a NTFS driver, which can create, remove, rename, 
-move files, directories, hard links, and streams. It can read 
-and write files, including streams and sparse files. It can 
-handle special files like symbolic links, devices, and FIFOs. 
-Moreover it can also read transparently compressed files.
+  Ntfs-3g is a NTFS driver, which can create, remove, rename,
+  move files, directories, hard links, and streams. It can read
+  and write files, including streams and sparse files. It can
+  handle special files like symbolic links, devices, and FIFOs.
+  Moreover it can also read transparently compressed files.
 
-Contains:
- - ntfs-3g
- - ntfs-3g.probe
+  Contains:
+   - ntfs-3g
+   - ntfs-3g.probe
 
 endef
 
@@ -81,20 +81,31 @@ config PACKAGE_NTFS-3G_USE_LIBFUSE
 endef
 
 define Package/ntfs-3g-utils
-	$(call Package/ntfs-3g/common)
-	TITLE:=ntfs-3g utilities (ntfs-3g.secaudit, ntfs-3g.usermap)
-	DEFAULT:=n
-	DEPENDS+= +ntfs-3g
+  $(call Package/ntfs-3g/common)
+  TITLE:=ntfs-3g utilities (ntfs-3g.secaudit, ntfs-3g.usermap)
+  DEFAULT:=n
+  DEPENDS+= +ntfs-3g
 endef
 
 define Package/ntfs-3g-utils/description
-Additional ntfs-3g utilities. Not included by default for size 
-considerations. All binaries except ntfs-3g, ntfs-3g.probe.
+  Additional ntfs-3g utilities. Not included by default for size
+  considerations. All binaries except ntfs-3g, ntfs-3g.probe.
 
-Currently:
- - ntfs-3g.secaudit
- - ntfs-3g.usermap
+  Currently:
+   - ntfs-3g.secaudit
+   - ntfs-3g.usermap
 
+endef
+
+define Package/mount.ntfs-3g
+  $(call Package/ntfs-3g/common)
+  TITLE:=ntfs-3g mount helper
+  DEFAULT:=y
+  DEPENDS+= +ntfs-3g
+endef
+
+define Package/mount.ntfs-3g/description
+  ntfs-3g mount helper. You must enable busybox mount helper too.
 endef
 
 CONFIGURE_ARGS += \
@@ -131,6 +142,20 @@ define Package/ntfs-3g/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libntfs-3g.so.* $(1)/usr/lib/
 endef
 
+define Package/mount.ntfs-3g/install
+	$(INSTALL_DIR) $(1)/sbin
+	$(CP) $(PKG_INSTALL_DIR)/sbin/mount.ntfs-3g $(1)/sbin/
+endef
+
+define Package/mount.ntfs-3g/postinst
+#!/bin/sh
+
+if [ -z "$$(grep ^\\ntfs-3g: $${IPKG_INSTROOT}/etc/filesystems)" ]; then
+	echo "ntfs-3g" >> $${IPKG_INSTROOT}/etc/filesystems
+fi
+
+endef
+
 define Package/ntfs-3g-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(FIND) $(PKG_INSTALL_DIR)/usr/bin/ -type f ! -name ntfs-3g.probe ! -name ntfs-3g -exec $(INSTALL_BIN) {} $(1)/usr/bin/ \;
@@ -138,4 +163,5 @@ endef
 
 $(eval $(call BuildPackage,ntfs-3g))
 $(eval $(call BuildPackage,ntfs-3g-utils))
+$(eval $(call BuildPackage,mount.ntfs-3g))
 
