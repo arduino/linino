@@ -6,8 +6,6 @@
 #
 
 # TODO:
-#  - handle software which uses qmake in a more generic way (move functionality / generic qmake-config into buildroot)
-#  - use generic qmake, moc, etc. executables since building them within the qt stack will get redundant and annyoing when other sw will need them as well
 #  - test/add X11/xcb support
 #  - handle plugins in a granular way (find out which packages should provide which plugins)
 
@@ -45,7 +43,7 @@ endef
 
 define Package/qt4
   $(call Package/qt4/Default)
-  DEPENDS:=@FEATURE_drawing-backend_DirectFB +FEATURE_drawing-backend_DirectFB:directfb +zlib +libstdcpp +libsqlite3 # require directfb for now, as other systems (libX11, xcb) are untested
+  DEPENDS:=@FEATURE_drawing-backend_DirectFB +FEATURE_drawing-backend_DirectFB:directfb +zlib +libstdcpp +libsqlite3 +tslib # require directfb for now, as other systems (libX11, xcb) are untested
 endef
 
 define Package/qt4-gui
@@ -178,7 +176,10 @@ define Package/qt4-xml
   TITLE+=(xml)
 endef
 
-TARGET_CFLAGS+="-I$(STAGING_DIR)/usr/include/freetype2 -I$(PKG_BUILD_DIR)/include"
+TARGET_INCDIRS+=$(STAGING_DIR)/include $(STAGING_DIR)/usr/include $(TOOLCHAIN_DIR)/include $(TOOLCHAIN_DIR)/usr/include
+TARGET_LIBDIRS+=$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib $(TOOLCHAIN_DIR)/lib $(TOOLCHAIN_DIR)/usr/lib
+TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib,-rpath-link=$(PKG_BUILD_DIR)/lib
+TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/include/freetype2 -I$(PKG_BUILD_DIR)/include
 
 define Build/Configure
 	# NOTES:
@@ -187,49 +188,22 @@ define Build/Configure
 	#  linuxfb/directfb: since directfb is not much overhead compared to plain framebuffer, force using directfb
 	#  do not use fontconfig as it doesn't work anyway for qte
 	#  bindir: bindir is where the host tools (qmake, moc, rcc, uic) will get installed into - they are just used on the host and not goig to be packaged
-	( \
-		cd $(PKG_BUILD_DIR); \
-		QPATH='mkspecs/qws/linux-openwrt-g++' ; \
-		mkdir $$$$QPATH ; \
-		echo '#include "../../linux-g++/qplatformdefs.h"' \
-			>> $$$$QPATH/qplatformdefs.h ; \
-		echo 'include(../../common/g++.conf)' \
-			>> $$$$QPATH/qmake.conf ; \
-		echo 'include(../../common/linux.conf)' \
-			>> $$$$QPATH/qmake.conf ; \
-		echo 'include(../../common/qws.conf)' \
-			>> $$$$QPATH/qmake.conf ; \
-		echo "QMAKE_CC 			= $(TARGET_CC)" \
-			>> $$$$QPATH/qmake.conf ; \
-		echo "QMAKE_CXX 		= $(TARGET_CXX)" \
-			>> $$$$QPATH/qmake.conf ; \
-		echo "QMAKE_AR 			= $(TARGET_CROSS)ar cqs" \
-			>> $$$$QPATH/qmake.conf ; \
-		echo "QMAKE_OBJCOPY	 	= $(TARGET_CROSS)objcopy" \
-			>> $$$$QPATH/qmake.conf ; \
-		echo "QMAKE_RANLIB 		= $(TARGET_CROSS)ranlib" \
-			>> $$$$QPATH/qmake.conf ; \
-		echo "QMAKE_CFLAGS 		= $(TARGET_CFLAGS) $(EXTRA_CFLAGS) $(TARGET_CPPFLAGS) $(EXTRA_CPPFLAGS)" \
-			>> $$$$QPATH/qmake.conf ; \
-		echo "QMAKE_CXXFLAGS 		= $(TARGET_CFLAGS) $(EXTRA_CFLAGS) $(TARGET_CPPFLAGS) $(EXTRA_CPPFLAGS)" \
-			>> $$$$QPATH/qmake.conf ; \
-		echo "QMAKE_LINK 		= $(TARGET_CXX)" \
-			>> $$$$QPATH/qmake.conf ; \
-		echo "QMAKE_LINK_SHLIB 		= $(TARGET_CXX)" \
-			>> $$$$QPATH/qmake.conf ; \
-		echo "QMAKE_LINK_C 		= $(TARGET_CC)" \
-			>> $$$$QPATH/qmake.conf ; \
-		echo "QMAKE_LINK_C_SHLIB 	= $(TARGET_CC)" \
-			>> $$$$QPATH/qmake.conf ; \
-		echo "QMAKE_LFLAGS 		= -L$(PKG_BUILD_DIR)/lib $(TARGET_LDFLAGS) -Wl,-rpath-link=$(STAGING_DIR)/usr/lib" \
-			>> $$$$QPATH/qmake.conf ; \
-		echo "QMAKE_STRIP 		= : " \
-			>> $$$$QPATH/qmake.conf ; \
-		echo "QMAKE_STRIPFLAGS_LIB  	= " \
-			>> $$$$QPATH/qmake.conf ; \
-		echo 'load(qt_config)' \
-			>> $$$$QPATH/qmake.conf ; \
-		echo yes | ./configure \
+	mkdir -p $(PKG_BUILD_DIR)/mkspecs/qws/linux-openwrt-g++
+	cp -a ./files/{qmake.conf,qplatformdefs.h} $(PKG_BUILD_DIR)/mkspecs/qws/linux-openwrt-g++/
+	( cd $(PKG_BUILD_DIR) ; \
+		TARGET_CC="$(TARGET_CROSS)gcc" \
+		TARGET_CXX="$(TARGET_CROSS)g++" \
+		TARGET_AR="$(TARGET_CROSS)ar cqs" \
+		TARGET_OBJCOPY="$(TARGET_CROSS)objcopy" \
+		TARGET_RANLIB="$(TARGET_CROSS)ranlib" \
+		TARGET_CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
+		TARGET_CXXFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
+		TARGET_LDFLAGS="$(TARGET_LDFLAGS) $(EXTRA_LDFLAGS)" \
+		TARGET_INCDIRS="$(TARGET_INCDIRS)" \
+		TARGET_LIBDIRS="$(TARGET_LIBDIRS)" \
+		STAGING_DIR="$(STAGING_DIR)" \
+		STAGING_DIR_HOST="$(STAGING_DIR)/../host" \
+		./configure \
 			-prefix $(CONFIGURE_PREFIX) \
 			-bindir $(CONFIGURE_PREFIX)/bin \
 			-libdir $(CONFIGURE_PREFIX)/lib \
@@ -245,9 +219,11 @@ define Build/Configure
 			-make examples \
 			-nomake docs \
 			-nomake translations \
-			-embedded openwrt \
+			-xplatform qws/linux-openwrt-g++ \
 			-platform linux-g++ \
+			-embedded \
 			-release \
+			-confirm-license \
 			-opensource \
 			-no-mmx \
 			-no-3dnow \
@@ -299,14 +275,42 @@ define Build/Configure
 			-no-xkb \
 			-no-glib \
 			-qt3support \
-			-qt-gfx-directfb \
-			-qt-gfx-linuxfb \
+			-no-gfx-transformed \
+			-no-gfx-qvfb \
+			-no-gfx-vnc \
 			-no-gfx-multiscreen \
+			-no-gfx-qnx \
+			-plugin-gfx-directfb \
+			-plugin-gfx-linuxfb \
+			-no-mouse-qvfb \
+			-no-mouse-qnx \
+			-qt-mouse-linuxinput \
+			-plugin-mouse-linuxtp \
+			-plugin-mouse-pc \
+			-plugin-mouse-tslib \
+			-no-kbd-qvfb \
+			-no-kbd-qnx \
+			-qt-kbd-tty \
+			-plugin-kbd-linuxinput \
 	)
 endef
 
 define Build/Compile
 	# just passing <make install> results in not building 3rdparty/webkit/JavaScriptCore
+	# unfortunately in this particular case, <make> makes further <qmake> calls, therewith
+	#  uses the qmake.conf which needs get the cross-compiling vars passed once again
+	TARGET_CC="$(TARGET_CROSS)gcc" \
+	TARGET_CXX="$(TARGET_CROSS)g++" \
+	TARGET_AR="$(TARGET_CROSS)ar cqs" \
+	TARGET_OBJCOPY="$(TARGET_CROSS)objcopy" \
+	TARGET_RANLIB="$(TARGET_CROSS)ranlib" \
+	TARGET_CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
+	TARGET_CXXFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
+	TARGET_LDFLAGS="$(TARGET_LDFLAGS) $(EXTRA_LDFLAGS)" \
+	TARGET_INCDIRS="$(TARGET_INCDIRS)" \
+	TARGET_LIBDIRS="$(TARGET_LIBDIRS)" \
+	STAGING_DIR="$(STAGING_DIR)" \
+	STAGING_DIR_HOST="$(STAGING_DIR)/../host" \
 	$(MAKE) -C $(PKG_BUILD_DIR)
 	INSTALL_ROOT=$(PKG_INSTALL_DIR) \
 		$(MAKE) -C $(PKG_BUILD_DIR) install
@@ -322,11 +326,16 @@ define Build/InstallDev
 		$(STAGING_DIR_HOST)/bin/
 
 	$(INSTALL_DIR) \
+		$(1)/mk \
 		$(1)/usr/share/mkspecs \
 		$(1)/usr/lib/pkgconfig \
 		$(1)/usr/lib \
 		$(1)/usr/include \
 		$(1)/usr/lib/Qt/plugins
+
+	$(CP) \
+		./files/qmake.mk \
+		$(1)/mk/
 
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/share/Qt/mkspecs/* \
