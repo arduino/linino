@@ -176,6 +176,55 @@ define Package/qt4-xml
   TITLE+=(xml)
 endef
 
+###
+define Package/qt4-drivers-mouse/Default
+  $(call Package/qt4/Default)
+  TITLE+=mousedrivers
+endef
+
+define Package/qt4-drivers-mouse-tpmousedriver
+  $(call Package/qt4-drivers-mouse/Default)
+  TITLE+=tpmousedriver
+endef
+
+define Package/qt4-drivers-mouse-pcmousedriver
+  $(call Package/qt4-drivers-mouse/Default)
+  TITLE+=pcmousedriver
+endef
+
+define Package/qt4-drivers-mouse-tslibmousedriver
+  $(call Package/qt4-drivers-mouse/Default)
+  TITLE+=tslibmousedriver
+endef
+
+###
+define Package/qt4-drivers-gfx/Default
+  $(call Package/qt4/Default)
+  TITLE+=gfxdrivers
+endef
+
+define Package/qt4-drivers-gfx-directfb
+  $(call Package/qt4-drivers-gfx/Default)
+  TITLE+=directfb
+endef
+
+define Package/qt4-drivers-gfx-linuxfb
+  $(call Package/qt4-drivers-gfx/Default)
+  TITLE+=linuxfb
+endef
+
+###
+define Package/qt4-drivers-kbd/Default
+  $(call Package/qt4/Default)
+  TITLE+=kbddrivers
+endef
+
+define Package/qt4-drivers-kbd-linuxinput
+  $(call Package/qt4-drivers-kbd/Default)
+  TITLE+=linuxinput
+endef
+
+
 TARGET_INCDIRS+=$(STAGING_DIR)/include $(STAGING_DIR)/usr/include $(TOOLCHAIN_DIR)/include $(TOOLCHAIN_DIR)/usr/include
 TARGET_LIBDIRS+=$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib $(TOOLCHAIN_DIR)/lib $(TOOLCHAIN_DIR)/usr/lib
 TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib,-rpath-link=$(PKG_BUILD_DIR)/lib
@@ -589,6 +638,66 @@ define Package/qt4-xml/install
 		$(1)/usr/lib/
 endef
 
+# plugins
+#  mouse drivers
+define Package/qt4-drivers-mouse-tpmousedriver/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib/Qt/plugins/mousedrivers
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/Qt/plugins/mousedrivers/libqlinuxtpmousedriver.so \
+		$(1)/usr/lib/Qt/plugins/mousedrivers/
+endef
+
+define Package/qt4-drivers-mouse-pcmousedriver/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib/Qt/plugins/mousedrivers
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/Qt/plugins/mousedrivers/libqpcmousedriver.so \
+		$(1)/usr/lib/Qt/plugins/mousedrivers/
+endef
+
+define Package/qt4-drivers-mouse-tslibmousedriver/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib/Qt/plugins/mousedrivers
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/Qt/plugins/mousedrivers/libqtslibmousedriver.so \
+		$(1)/usr/lib/Qt/plugins/mousedrivers/
+endef
+
+#  graphics drivers
+define Package/qt4-drivers-gfx-directfb/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib/Qt/plugins/gfxdrivers
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/Qt/plugins/gfxdrivers/libqdirectfbscreen.so \
+		$(1)/usr/lib/Qt/plugins/gfxdrivers/
+endef
+
+define Package/qt4-drivers-gfx-linuxfb/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib/Qt/plugins/gfxdrivers
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/Qt/plugins/gfxdrivers/libqscreenlinuxfb.so \
+		$(1)/usr/lib/Qt/plugins/gfxdrivers/
+endef
+
+#  keyboard drivers
+define Package/qt4-drivers-kbd-linuxinput/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib/Qt/plugins/kbddrivers
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/Qt/plugins/kbddrivers/libqlinuxinputkbddriver.so \
+		$(1)/usr/lib/Qt/plugins/kbddrivers/
+endef
+
+
+
 
 $(eval $(call BuildPackage,qt4))
 $(eval $(call BuildPackage,qt4-gui))
@@ -614,3 +723,12 @@ $(eval $(call BuildPackage,qt4-dbus))
 $(eval $(call BuildPackage,qt4-qt3support))
 $(eval $(call BuildPackage,qt4-declarative))
 $(eval $(call BuildPackage,qt4-xml))
+
+$(eval $(call BuildPackage,qt4-drivers-mouse-tpmousedriver))
+$(eval $(call BuildPackage,qt4-drivers-mouse-pcmousedriver))
+$(eval $(call BuildPackage,qt4-drivers-mouse-tslibmousedriver))
+
+$(eval $(call BuildPackage,qt4-drivers-gfx-directfb))
+$(eval $(call BuildPackage,qt4-drivers-gfx-linuxfb))
+
+$(eval $(call BuildPackage,qt4-drivers-kbd-linuxinput))
