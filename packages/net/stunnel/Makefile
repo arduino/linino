@@ -11,9 +11,9 @@ PKG_NAME:=stunnel
 PKG_VERSION:=4.33
 PKG_RELEASE:=1
 
-PKG_MD5SUM:=559a864066d8cc4afd8a97682c90d41c
 PKG_SOURCE_URL:=http://www.stunnel.org/download/stunnel/src/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_MD5SUM:=559a864066d8cc4afd8a97682c90d41c
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -40,13 +40,10 @@ define Package/stunnel/conffiles
 /etc/stunnel/stunnel.conf
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--with-random=/dev/urandom \
-		--with-threads=fork \
-		--with-ssl=$(STAGING_DIR)/usr \
-	)
-endef
+CONFIGURE_ARGS+= \
+	--with-random=/dev/urandom \
+	--with-threads=fork \
+	--with-ssl=$(STAGING_DIR)/usr \
 
 define Build/Compile
 	mkdir -p $(PKG_INSTALL_DIR)/etc/stunnel
