@@ -81,15 +81,16 @@ endef
 export BUILD_CC="$(TARGET_CC)"
 
 CONFIGURE_ARGS += \
-		--enable-shared \
-		--enable-static \
-		--with-randomdev="/dev/urandom" \
-		--disable-threads \
-		--with-openssl="$(STAGING_DIR)/usr" \
-		--with-libtool \
-		--with-libxml2=no \
-		, \
-		BUILD_CC="$(TARGET_CC)" \
+	--enable-shared \
+	--enable-static \
+	--with-randomdev="/dev/urandom" \
+	--disable-threads \
+	--with-openssl="$(STAGING_DIR)/usr" \
+	--with-libtool \
+	--with-libxml2=no \
+
+CONFIGURE_VARS += \
+	BUILD_CC="$(TARGET_CC)" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/lib/dns \
