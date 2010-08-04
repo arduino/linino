@@ -51,7 +51,7 @@ TARGET_CPPFLAGS += -fno-inline
 # ./staging_dir/toolchain-arm_v5t_gcc-4.3.3+cs_uClibc-0.9.30.1_eabi/usr/lib/gcc/arm-openwrt-linux-uclibcgnueabi/4.3.3/../../../../arm-openwrt-linux-uclibcgnueabi/bin/ld: conftest: hidden symbol `__sync_add_and_fetch_4' in /media/Scratch/OpenWrt/backfire/build.d/orion/staging_dir/toolchain-arm_v5t_gcc-4.3.3+cs_uClibc-0.9.30.1_eabi/usr/lib/gcc/arm-openwrt-linux-uclibcgnueabi/4.3.3/libgcc.a(linux-atomic.o) is referenced by DSO
 # ./staging_dir/toolchain-arm_v5t_gcc-4.3.3+cs_uClibc-0.9.30.1_eabi/usr/lib/gcc/arm-openwrt-linux-uclibcgnueabi/4.3.3/../../../../arm-openwrt-linux-uclibcgnueabi/bin/ld: final link failed: Nonrepresentable section on output
 #
-ifneq ($(CONFIG_arm),)
+ifneq ($(CONFIG_arm)$(CONFIG_armeb),)
   TARGET_LDFLAGS += -Wl,--whole-archive -lgcc -lgcc_s -Wl,--no-whole-archive
 endif
 
