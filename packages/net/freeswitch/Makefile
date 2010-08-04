@@ -1,4 +1,5 @@
-# (C) 2009 OpenWrt.org
+#
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeswitch
 PKG_VERSION:=1.0.6
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -568,7 +569,7 @@ $(eval $(call BuildPlugin,memcache,MemCached interface,mod_memcache,,@BROKEN)) #
 $(eval $(call BuildPlugin,native-file,Native files,mod_native_file,,))
 $(eval $(call BuildPlugin,nibblebill,Billing,mod_nibblebill,,))
 $(eval $(call BuildPlugin,opal,Multi-Protocol endpoint,mod_opal,,@BROKEN)) # needs Opal
-$(eval $(call BuildPlugin,openzap,Zaptel hardware interface,mod_openzap ozmod_analog ozmod_analog_em ozmod_isdn ozmod_skel ozmod_ss7_boost ozmod_zt,,+libpcap))
+$(eval $(call BuildPlugin,openzap,Zaptel hardware interface,mod_openzap ozmod_analog ozmod_analog_em ozmod_isdn ozmod_skel ozmod_zt,,+libpcap))
 $(eval $(call BuildPlugin,perl,Perl language interface,mod_perl,,+perl @BROKEN)) # needs Perl
 $(eval $(call BuildPlugin,pocketsphinx,PocketSphinx SR,mod_pocketsphinx,,@BROKEN)) # fails in sphinxbase
 $(eval $(call BuildPlugin,portaudio,Local audio endpoint,mod_portaudio,,+alsa-lib))
