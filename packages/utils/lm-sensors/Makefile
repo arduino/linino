@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lm-sensors
-PKG_VERSION:=3.1.1
+PKG_VERSION:=3.1.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=lm_sensors-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://dl.lm-sensors.org/lm-sensors/releases/
-PKG_MD5SUM:=613d7cfa23b70c0abae3fabb0a72ff5f
+PKG_MD5SUM:=58a9a225808ac4587c4c8cbd12b40b5c
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/lm_sensors-$(PKG_VERSION)
 
@@ -23,21 +23,21 @@ define Package/lm-sensors/Default
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=lm-sensors
-  DEPENDS:=+sysfsutils @LINUX_2_6
+  DEPENDS:=+sysfsutils
   URL:=http://www.lm-sensors.org/
 endef
 
 define Package/lm-sensors
   $(call Package/lm-sensors/Default)
-  TITLE+= (programs)
-  DEPENDS+= +libsensors @TARGET_x86
+  TITLE+=(programs)
+  DEPENDS+=+libsensors
 endef
 
 define Package/libsensors
   $(call Package/lm-sensors/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE+= libraries
+  TITLE+=libraries
 endef
 
 define Package/lm-sensors/description
