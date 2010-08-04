@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/dsl-qos-queue
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+iptables +kmod-ipt-queue +iptables-mod-ipopt @!LINUX_2_6_25 @!LINUX_2_6_26 @!LINUX_2_6_27 @!LINUX_2_6_28
+  DEPENDS:=+iptables +kmod-ipt-queue +iptables-mod-ipopt +libipq @!LINUX_2_6_25 @!LINUX_2_6_26 @!LINUX_2_6_27 @!LINUX_2_6_28
   TITLE:=ADSL/ATM Bandwith management
   URL:=http://www.sonicspike.net/software/
 endef
@@ -34,7 +34,7 @@ define Build/Compile
 	$(call Build/Compile/Default, \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libipq $(TARGET_CPPFLAGS)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
-		LIBIPQ=$(STAGING_DIR)/usr/lib/libipq.a \
+		LIBIPQ=$(STAGING_DIR)/usr/lib/libipq.so \
 		all \
 	)
 endef
