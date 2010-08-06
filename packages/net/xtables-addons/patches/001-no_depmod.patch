@@ -1,6 +1,6 @@
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -751,8 +751,7 @@
+@@ -752,8 +752,7 @@ install-dvi: install-dvi-recursive
  install-dvi-am:
  
  install-exec-am:
