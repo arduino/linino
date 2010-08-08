@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=l2tpv3tun
 PKG_VERSION:=0.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://www.openl2tp.org/releases/
@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/l2tpv3tun
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libnl @LINUX_2_6_35
+  DEPENDS:=+libnl +ip +kmod-l2tp +kmod-l2tp-ip +kmod-l2tp-eth
   TITLE:=Control utility for static L2TP v3 (Pseudowire) tunnels
   MAINTAINER:=Thomas Heil <heil@terminal-consulting.de>
   URL:=http://www.openl2tp.org
@@ -44,6 +44,8 @@ endef
 define Package/l2tpv3tun/install
 		$(INSTALL_DIR) $(1)/usr/sbin
 		$(INSTALL_BIN) $(PKG_BUILD_DIR)/l2tpv3tun $(1)/usr/sbin/
+		$(INSTALL_DIR) $(1)/lib/network
+		$(INSTALL_BIN) ./files/l2tp.sh $(1)/lib/network/
 endef
 
 $(eval $(call BuildPackage,l2tpv3tun))
