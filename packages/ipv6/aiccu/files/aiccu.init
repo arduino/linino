@@ -34,8 +34,8 @@ start() {
 		[ -n "$interface" ] && echo "ipv6_interface $interface" >> /tmp/run/aiccu-${cfgs_section}.conf
 		[ -n "$tunnel_id" ] && echo "tunnel_id $tunnel_id" >> /tmp/run/aiccu-${cfgs_section}.conf
 		[ "$requiretls" = "1" ] && echo "requiretls true" >> /tmp/run/aiccu-${cfgs_section}.conf
-		[ "$defaultroute" != "1" ] && echo "defaultroute false >> /tmp/run/aiccu-${cfgs_section}.conf
-		[ "$nat" = "1" ] && echo "behindnat true >> /tmp/run/aiccu-${cfgs_section}.conf
+		[ "$defaultroute" != "1" ] && echo "defaultroute false" >> /tmp/run/aiccu-${cfgs_section}.conf
+		[ "$nat" = "1" ] && echo "behindnat true" >> /tmp/run/aiccu-${cfgs_section}.conf
 		[ "$heartbeat" != "1" ] && echo "makebeats false" >> /tmp/run/aiccu-${cfgs_section}.conf
 		echo 'daemonize true' >> /tmp/run/aiccu-${cfgs_section}.conf
 		echo "pidfile /var/run/aiccu-${cfgs_section}.pid" >> /tmp/run/aiccu-${cfgs_section}.conf
