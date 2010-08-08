@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=transmission
 PKG_VERSION:=2.03
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://mirrors.m0k.org/transmission/files
@@ -40,6 +40,11 @@ define Package/transmission-cli
   DEPENDS:=transmission-daemon
 endef
 
+define Package/transmission-remote
+  $(call Package/transmission/template)
+  DEPENDS:=transmission-daemon
+endef
+
 define Package/transmission-web
   $(call Package/transmission/template)
   DEPENDS:=transmission-daemon
@@ -57,6 +62,10 @@ define Package/transmission-cli/description
  CLI utilities for transmission.
 endef
 
+define Package/transmission-remote/description
+ CLI remote interface for transmission.
+endef
+
 define Package/transmission-web/description
  Webinterface resources for transmission.
 endef
@@ -70,6 +79,7 @@ CONFIGURE_VARS += \
 
 CONFIGURE_ARGS += \
 	--enable-daemon \
+	--enable-cli \
 	--disable-gtk
 
 MAKE_FLAGS += \
@@ -87,6 +97,10 @@ endef
 define Package/transmission-cli/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/transmissioncli $(1)/usr/bin/
+endef
+
+define Package/transmission-remote/install
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/transmission-remote $(1)/usr/bin/
 endef
 
@@ -97,4 +111,5 @@ endef
 
 $(eval $(call BuildPackage,transmission-daemon))
 $(eval $(call BuildPackage,transmission-cli))
+$(eval $(call BuildPackage,transmission-remote))
 $(eval $(call BuildPackage,transmission-web))
