@@ -50,8 +50,7 @@ endef
 
 define Package/ntfs-3g
   $(call Package/ntfs-3g/common)
-  DEPENDS:= +kmod-fuse +PACKAGE_NTFS-3G_USE_LIBFUSE:libfuse
-  DEPENDS+= +libpthread
+  DEPENDS+= +kmod-fuse +PACKAGE_NTFS-3G_USE_LIBFUSE:libfuse +libpthread
 endef
 
 define Package/ntfs-3g/description
@@ -70,7 +69,6 @@ endef
 define Package/ntfs-3g/config
 config PACKAGE_NTFS-3G_USE_LIBFUSE
 	bool "use external FUSE library, selects package libfuse"
-	default n
 	depends on PACKAGE_ntfs-3g
 	---help---
 	Ntfs-3g by default uses a minimalized lite version of FUSE.
@@ -83,7 +81,6 @@ endef
 define Package/ntfs-3g-utils
   $(call Package/ntfs-3g/common)
   TITLE:=ntfs-3g utilities (ntfs-3g.secaudit, ntfs-3g.usermap)
-  DEFAULT:=n
   DEPENDS+= +ntfs-3g
 endef
 
@@ -100,7 +97,6 @@ endef
 define Package/mount.ntfs-3g
   $(call Package/ntfs-3g/common)
   TITLE:=ntfs-3g mount helper
-  DEFAULT:=y
   DEPENDS+= +ntfs-3g
 endef
 
