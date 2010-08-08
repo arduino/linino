@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vsftpd
-PKG_VERSION:=2.2.2
+PKG_VERSION:=2.3.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://vsftpd.beasts.org/users/cevans/
-PKG_MD5SUM:=6d6bc136af14c23f8fef6f1a51f55418
+PKG_MD5SUM:=90ea878fcfba32f764cce4dc264a3d68
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,7 +23,7 @@ define Package/vsftpd
   CATEGORY:=Network
   TITLE:=A fast and secure FTP server
   URL:=http://vsftpd.beasts.org/
-  MAINTAINER:=Cezary Jackiewicz <cezary@eko.one.pl> 
+  MAINTAINER:=Cezary Jackiewicz <cezary@eko.one.pl>
 endef
 
 define Package/vsftpd/conffiles
