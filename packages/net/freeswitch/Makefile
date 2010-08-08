@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeswitch
 PKG_VERSION:=1.0.6
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -319,15 +319,21 @@ ifneq ($(CONFIG_PACKAGE_freeswitch-sounds-moh),)
 	MAKE_INSTALL_TARGETS+= moh-install
 endif
 
-FS_TARGET_CFLAGS = ${TARGET_CFLAGS} -DLUA_USE_LINUX $(FPIC) -std=gnu99 -fgnu89-inline -Wno-format
-FS_TARGET_CXXFLAGS = ${TARGET_CXXFLAGS} -DLUA_USE_LINUX $(FPIC) -fgnu89-inline -Wno-format
-FS_TARGET_CPPFLAGS = -I. -I./lua ${TARGET_CPPFLAGS}
+# XXX: -fgnu89-inline is not supported on all compiler versions, so only enable it on avr32 where it solves build issues
+ifneq ($(CONFIG_avr32),)
+  TARGET_CFLAGS += -fgnu89-inline
+  TARGET_CXXFLAGS += -fgnu89-inline
+endif
 
 ifneq ($(CONFIG_USE_EGLIBC),)
   ifeq ($(CONFIG_EGLIBC_OPTION_EGLIBC_UTMP),)
     TARGET_CFLAGS += -DNO_GETLOGIN
   endif
 endif
+
+FS_TARGET_CFLAGS:= ${TARGET_CFLAGS} -DLUA_USE_LINUX $(FPIC) -std=gnu99 -Wno-format
+FS_TARGET_CXXFLAGS:= ${TARGET_CXXFLAGS} -DLUA_USE_LINUX $(FPIC) -Wno-format
+FS_TARGET_CPPFLAGS:= -I. -I./lua ${TARGET_CPPFLAGS}
 
 CONFIGURE_ARGS+= \
 	--prefix="/usr/freeswitch" \
@@ -546,10 +552,10 @@ $(eval $(call BuildPlugin,esf,Extra SIP Functionality,mod_esf,,))
 $(eval $(call BuildPlugin,event-multicast,Multicast event handler,mod_event_multicast,,))
 $(eval $(call BuildPlugin,event-socket,Socket event handler,mod_event_socket,,))
 $(eval $(call BuildPlugin,expr,Expression evaluation,mod_expr,,))
-$(eval $(call BuildPlugin,fax,Fax,mod_fax,,+libjpeg)) # fails in spandsp
+$(eval $(call BuildPlugin,fax,Fax,mod_fax,,+libjpeg @(!(powerpc)||BROKEN))) # fails in spandsp
 $(eval $(call BuildPlugin,fifo,FIFO,mod_fifo,,))
 $(eval $(call BuildPlugin,file-string,File streaming,mod_file_string,,))
-$(eval $(call BuildPlugin,flite,Festival TTS,mod_flite,,@!TARGET_avr32 @!TARGET_ixp4xx))
+$(eval $(call BuildPlugin,flite,Festival TTS,mod_flite,,@(!(armeb||avr32)||BROKEN)))
 $(eval $(call BuildPlugin,fsv,Video,mod_fsv,,))
 $(eval $(call BuildPlugin,g723-1,G.723.1 codec,mod_g723_1,,))
 $(eval $(call BuildPlugin,g729,G.729 codec,mod_g729,,))
@@ -614,7 +620,7 @@ $(eval $(call BuildPlugin,unimrcp,MRCP interface,mod_unimrcp,,))
 $(eval $(call BuildPlugin,valet-parking,application mod_valet_parking,mod_valet_parking,,))
 $(eval $(call BuildPlugin,vmd,VoiceMail beep detection,mod_vmd,,))
 $(eval $(call BuildPlugin,voicemail,VoiceMail,mod_voicemail,,))
-$(eval $(call BuildPlugin,voipcodecs,VoIP codecs,mod_voipcodecs,,))
+$(eval $(call BuildPlugin,voipcodecs,VoIP codecs,mod_voipcodecs,,@(!(powerpc)||BROKEN))) # fails in spandsp
 $(eval $(call BuildPlugin,xml-cdr,XML-CDR handler,mod_xml_cdr,,+libcurl))
 $(eval $(call BuildPlugin,xml-curl,XML-Curl gateway,mod_xml_curl,,+libcurl))
 $(eval $(call BuildPlugin,xml-ldap,LDAP-XML gateway,mod_xml_ldap,,@BROKEN)) # fails in openldap
