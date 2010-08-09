@@ -154,7 +154,7 @@ ifneq ($(CONFIG_X86_VDI_IMAGES),)
     # left here because the image builder doesnt need these
     ifeq ($(1),ext2)
 		rm $(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).vdi || true
-		VBoxManage convertfromraw -format VDI \
+		qemu-img convert -f raw -O vdi \
 			$(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).img \
 			$(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).vdi
 		# XXX: VBoxManage insists on setting perms to 0600
@@ -202,15 +202,3 @@ define Image/Build
 endef
 
 $(eval $(call BuildImage))
-
-ifneq ($(CONFIG_X86_VDI_IMAGES),)
-  $(eval $(call RequireCommand,VBoxManage, \
-	You need VBoxManage to generate VirtualBox images. \
-  ))
-endif
-
-ifneq ($(CONFIG_X86_VMDK_IMAGES),)
-  $(eval $(call RequireCommand,qemu-img, \
-	You need qemu-img to generate VMware images. \
-  ))
-endif
