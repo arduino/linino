@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/l2tpv3tun
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libnl +ip +kmod-l2tp +kmod-l2tp-ip +kmod-l2tp-eth
+  DEPENDS:=+libnl +ip +kmod-l2tp +kmod-l2tp-ip +kmod-l2tp-eth @LINUX_2_6_35
   TITLE:=Control utility for static L2TP v3 (Pseudowire) tunnels
   MAINTAINER:=Thomas Heil <heil@terminal-consulting.de>
   URL:=http://www.openl2tp.org
