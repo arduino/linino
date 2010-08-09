@@ -24,21 +24,16 @@
  # tools want this on a single line
 --- a/configure
 +++ b/configure
-@@ -9012,67 +9012,8 @@ $as_echo "$as_me: error: Your system's r
- fi
+@@ -6816,59 +6816,8 @@ fi
  
  
--
--
--
--
--
+ 
 -# Check for asciidoc
 -# Extract the first word of "a2x", so it can be a program name with args.
 -set dummy a2x; ac_word=$2
--{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 -$as_echo_n "checking for $ac_word... " >&6; }
--if test "${ac_cv_path_A2X+set}" = set; then
+-if test "${ac_cv_path_A2X+set}" = set; then :
 -  $as_echo_n "(cached) " >&6
 -else
 -  case $A2X in
@@ -51,14 +46,14 @@
 -do
 -  IFS=$as_save_IFS
 -  test -z "$as_dir" && as_dir=.
--  for ac_exec_ext in '' $ac_executable_extensions; do
+-    for ac_exec_ext in '' $ac_executable_extensions; do
 -  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
 -    ac_cv_path_A2X="$as_dir/$ac_word$ac_exec_ext"
--    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
 -    break 2
 -  fi
 -done
--done
+-  done
 -IFS=$as_save_IFS
 -
 -  test -z "$ac_cv_path_A2X" && ac_cv_path_A2X="no"
@@ -67,10 +62,10 @@
 -fi
 -A2X=$ac_cv_path_A2X
 -if test -n "$A2X"; then
--  { $as_echo "$as_me:$LINENO: result: $A2X" >&5
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $A2X" >&5
 -$as_echo "$A2X" >&6; }
 -else
--  { $as_echo "$as_me:$LINENO: result: no" >&5
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 -$as_echo "no" >&6; }
 -fi
 -
@@ -84,11 +79,8 @@
 -fi
 -
 -if test x"$A2X" = x"no"; then
--  { { $as_echo "$as_me:$LINENO: error: Test for asciidoc failed. See the file 'INSTALL' for help." >&5
--$as_echo "$as_me: error: Test for asciidoc failed. See the file 'INSTALL' for help." >&2;}
--   { (exit 1); exit 1; }; }
+-  as_fn_error "Test for asciidoc failed. See the file 'INSTALL' for help." "$LINENO" 5
 -fi
--
- ac_config_files="$ac_config_files Makefile src/Makefile data/Makefile data/templates/Makefile etc/Makefile docs/Makefile docs/man5/Makefile docs/man5/tinyproxy.conf.txt docs/man8/Makefile docs/man8/tinyproxy.txt m4macros/Makefile tests/Makefile tests/scripts/Makefile"
  
+ ac_config_files="$ac_config_files Makefile src/Makefile data/Makefile data/templates/Makefile etc/Makefile docs/Makefile docs/man5/Makefile docs/man5/tinyproxy.conf.txt docs/man8/Makefile docs/man8/tinyproxy.txt m4macros/Makefile tests/Makefile tests/scripts/Makefile"
  
