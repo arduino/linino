@@ -17,8 +17,9 @@ append_string() {
 	local section="$1"
 	local option="$2"
 	local value="$3"
+	local default="$4"
 	local _val
-	config_get _val "$section" "$option"
+	config_get _val "$section" "$option" "$default"
 	[ -n "$_val" ] && append args "$3 $_val"
 }
 
@@ -29,6 +30,18 @@ hcid_config() {
 	append_string "$cfg" config "-f"
 	config_get_bool enabled "$cfg" "enabled" '1'
 	[ "$enabled" -gt 0 ] && /usr/sbin/hcid $args
+}
+
+hciattach_config() {
+	local cfg="$1"
+	args=""
+	append_string "$cfg" initspeed "-s" "115200"
+	append_string "$cfg" tty " " "ttyS1"
+	append_string "$cfg" type " " "csr"
+	append_string "$cfg" speed " " "115200"
+	append_string "$cfg" flow " " "noflow"
+	config_get_bool enabled "$cfg" "enabled" '1'
+	[ "$enabled" -gt 0 ] && /usr/sbin/hciattach $args
 }
 
 rfcomm_config() {
@@ -101,6 +114,7 @@ start() {
 	config_load bluetooth
 
 	config_foreach hcid_config hcid
+	config_foreach hciattach_config hciattach
 	config_foreach rfcomm_config rfcomm
 	config_foreach dund_config dund
 	config_foreach pand_config pand
@@ -110,5 +124,6 @@ stop() {
 	killall dund
 	killall pand
 	/usr/bin/rfcomm release all
+	killall hciattach
 	killall hcid
 }
