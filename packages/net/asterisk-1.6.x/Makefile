@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
-PKG_VERSION:=1.6.2.9
+PKG_VERSION:=1.6.2.11
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
-PKG_MD5SUM:=1f947d951c419b8039d53a6e6168fd69
+PKG_MD5SUM:=2d6757a0354cff87c9e1776ada077aae
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -258,7 +258,7 @@ define Package/asterisk16/install
 		codec_ulaw codec_gsm \
 		format_gsm format_pcm format_wav format_wav_gsm \
 		pbx_config \
-		func_strings func_timeout func_callerid; do \
+		func_strings func_timeout func_callerid func_logic; do \
 		$(CP) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/$$$$f.so $(1)/usr/lib/asterisk/modules/ ; \
 	done
 	$(INSTALL_DIR) $(1)/usr/sbin
