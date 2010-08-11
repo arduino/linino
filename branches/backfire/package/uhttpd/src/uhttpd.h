@@ -64,8 +64,12 @@ struct config {
 	char docroot[PATH_MAX];
 	char *realm;
 	char *file;
+	char *index_file;
+	char *error_handler;
 	int no_symlinks;
+	int no_dirlists;
 	int network_timeout;
+	int rfc1918_filter;
 #ifdef HAVE_CGI
 	char *cgi_prefix;
 #endif
@@ -124,6 +128,7 @@ struct auth_realm {
 struct http_request {
 	int	method;
 	float version;
+	int redirect_status;
 	char *url;
 	char *headers[UH_LIMIT_HEADERS];
 	struct auth_realm *realm;
