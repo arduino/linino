@@ -266,7 +266,8 @@ static struct http_request * uh_http_header_parse(struct client *cl, char *buffe
 		}
 
 		/* check version */
-		if( strcmp(version, "HTTP/0.9") && strcmp(version, "HTTP/1.0") && strcmp(version, "HTTP/1.1") )
+		if( (version == NULL) || (strcmp(version, "HTTP/0.9") &&
+		    strcmp(version, "HTTP/1.0") && strcmp(version, "HTTP/1.1")) )
 		{
 			/* unsupported version */
 			uh_http_response(cl, 400, "Bad Request");
@@ -999,13 +1000,6 @@ int main (int argc, char **argv)
 									"No such file or directory");
 							}
 						}
-					}
-
-					/* 400 */
-					else
-					{
-						uh_http_sendhf(cl, 400, "Bad Request",
-							"Malformed request received");
 					}
 
 #ifdef HAVE_TLS
