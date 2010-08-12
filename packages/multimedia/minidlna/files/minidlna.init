@@ -1,0 +1,15 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2010 OpenWrt.org
+
+START=50
+BIN=/usr/bin/minidlna
+PID=/var/run/minidlna.pid
+SSD=start-stop-daemon
+
+start() {
+	$SSD -p $PID -S -x $BIN -- -P $PID -R
+}
+
+stop() {
+	$SSD -p $PID -K -s SIGINT
+}
