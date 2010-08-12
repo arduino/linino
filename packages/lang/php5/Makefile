@@ -367,6 +367,9 @@ endef
   depends on PHP5_LIBXML
 endef
 
+CONFIGURE_VARS += \
+	ac_cv_c_bigendian_php=$(if $(CONFIG_BIG_ENDIAN),yes,no)
+
 PKG_CONFIGURE_OPTS:= \
 	--enable-shared \
 	--disable-static \
