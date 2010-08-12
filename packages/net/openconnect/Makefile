@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openconnect
-PKG_VERSION:=2.01
+PKG_VERSION:=2.25
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.infradead.org/pub/openconnect/
-PKG_MD5SUM:=8fa1f0883c136800dbb992e64a2d579e
+PKG_MD5SUM:=796a32b611ee6210a5367eb9684d6778
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,8 +36,8 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/Default, \
-                OPENSSL="$(STAGING_DIR)/usr" \
-		OFLAGS="$(TARGET_CFLAGS)" \
+		SSL_CFLAGS="" \
+		OPT_FLAGS="$(TARGET_CPPFLAGS) $(TARGET_CFLAGS)" \
 		OS="Linux" \
 		STAGING_DIR="$(STAGING_DIR)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
