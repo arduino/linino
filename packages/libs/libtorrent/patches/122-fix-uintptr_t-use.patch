@@ -1,0 +1,18 @@
+fix the following build error on octeon & ppc
+
+In file included from ../../rak/priority_queue_default.h:41,
+                 from ./../dht/dht_router.h:40,
+                 from tracker_dht.cc:42:
+../../rak/allocators.h: In static member function 'static T* rak::cacheline_allocator<T>::alloc_size(size_t)':
+../../rak/allocators.h:109: error: 'uintptr_t' was not declared in this scope
+
+--- a/rak/allocators.h
++++ b/rak/allocators.h
+@@ -41,6 +41,7 @@
+ 
+ #include <cstddef>
+ #include <limits>
++#include <stdint.h>  /* for uintptr_t */
+ #include <stdlib.h>
+ #include <sys/types.h>
+ 
