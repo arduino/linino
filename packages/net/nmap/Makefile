@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nmap
-PKG_VERSION:=4.20
-PKG_RELEASE:=2
+PKG_VERSION:=5.35DC1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.insecure.org/nmap/dist
-PKG_MD5SUM:=ea50419f99472200c4184a304e3831ea
+PKG_MD5SUM:=5bc2f8629f26716aa78d4bfe474a5d3a
 
 PKG_INSTALL:=1
 
@@ -34,13 +34,14 @@ endef
 CONFIGURE_ARGS += \
 	--without-openssl \
 	--without-nmapfe \
-	--with-libdnet="$(STAGING_DIR)/usr" \
+	--without-liblua \
+	--with-libdnet=included \
 	--with-libpcap="$(STAGING_DIR)/usr" \
-	--with-libpcre="$(STAGING_DIR)/usr" \
 
 CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
+	LDFLAGS="$$$$LDFLAGS -lm" \
 	LIBS="-nodefaultlibs -luClibc++ $(LIBGCC_S)" \
 
 define Package/nmap/install

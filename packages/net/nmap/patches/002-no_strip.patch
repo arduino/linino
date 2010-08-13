@@ -1,12 +1,11 @@
-diff -urN nmap-4.01.old/Makefile.in nmap-4.01.dev/Makefile.in
---- nmap-4.01.old/Makefile.in	2006-02-09 19:22:27.000000000 -0700
-+++ nmap-4.01.dev/Makefile.in	2006-03-29 23:14:12.000000000 -0700
-@@ -152,7 +152,7 @@
- 
- install-nmap: $(TARGET)
- 	$(SHTOOL) mkdir -f -p -m 755 $(DESTDIR)$(bindir) $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(nmapdatadir)
--	$(INSTALL) -c -m 755 -s nmap $(DESTDIR)$(bindir)/nmap
-+	$(INSTALL) -c -m 755 nmap $(DESTDIR)$(bindir)/nmap
- 	$(INSTALL) -c -m 644 docs/$(TARGET).1 $(DESTDIR)$(mandir)/man1/$(TARGET).1
- 	$(INSTALL) -c -m 644 docs/nmap.xsl $(DESTDIR)$(nmapdatadir)/
- 	$(INSTALL) -c -m 644 docs/nmap.dtd $(DESTDIR)$(nmapdatadir)/
+--- a/ncat/Makefile.in
++++ b/ncat/Makefile.in
+@@ -136,7 +136,7 @@ $(NSOCKDIR)/libnsock.a: $(NSOCKDIR)/Make
+ install: $(TARGET)
+ 	@echo Installing Ncat;
+ 	$(SHTOOL) mkdir -f -p -m 755 $(DESTDIR)$(bindir) $(DESTDIR)$(pkgdatadir) $(DESTDIR)$(mandir)/man1
+-	$(INSTALL) -c -m 755 -s ncat $(DESTDIR)$(bindir)/ncat
++	$(INSTALL) -c -m 755 ncat $(DESTDIR)$(bindir)/ncat
+ 	if [ -n "$(DATAFILES)" ]; then \
+ 		$(INSTALL) -c -m 644 $(DATAFILES) $(DESTDIR)$(pkgdatadir)/; \
+ 	fi
