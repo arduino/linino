@@ -1,6 +1,0 @@
-<extension name="did-[{FS_INCOMING_DID}]">
-   <condition field="destination_number" expression="[{FS_INCOMING_DID}]">
-     <action application="transfer" data="[{FS_EXTENSION_NUMBER}] XML default"/>
-   </condition>
-</extension>
-
