@@ -5,9 +5,7 @@ START=50
 PID_F=/var/run/miredo-server.pid
 
 start() {
-	insmod ipv6 2>/dev/null
-	insmod tun 2>/dev/null
-	miredo-server -c /etc/miredo-server.conf
+	miredo-server
 }
 
 stop() {

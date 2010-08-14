@@ -9,51 +9,57 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miredo
 PKG_VERSION:=1.1.7
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE_URL:=http://www.remlab.net/files/miredo/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_MD5SUM:=4fb5e7df6a6255528e4c5380401ad3ea
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/miredo/Default
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+libpthread +uclibcxx +kmod-ipv6 +kmod-tun
   SUBMENU:=miredo: Teredo (IPv6 tunneling over UDP through NAT)
   URL:=http://www.simphalempin.com/dev/miredo/
+endef
+
+define Package/miredo-common
+$(call Package/miredo/Default)
+  TITLE:=Teredo (IPv6 tunneling over UDP through NAT) shared libraries
+  DEPENDS+= +libpthread +uclibcxx +kmod-ipv6 +kmod-tun
 endef
 
 define Package/miredo-server
 $(call Package/miredo/Default)
   TITLE:=Teredo (IPv6 tunneling over UDP through NAT) server daemon
+  DEPENDS+= +miredo-common
 endef
 
 define Package/miredo-server/conffiles
-/etc/miredo-server.conf
+/etc/miredo/miredo-server.conf
 endef
 
 define Package/miredo-client
 $(call Package/miredo/Default)
   TITLE:=Teredo (IPv6 tunneling over UDP through NAT) client and relay daemon
+  DEPENDS+= +miredo-common
 endef
 
 define Package/miredo-client/conffiles
-/etc/miredo.conf
+/etc/miredo/miredo.conf
 endef
 
 CONFIGURE_ARGS += \
-	--disable-shared \
+	--enable-shared \
 	--enable-static \
 	--with-gnu-ld \
 	--disable-rpath \
 	--disable-chroot \
 	--enable-teredo-client \
-	--enable-teredo-relay \
-	--enable-teredo-server \
 	--enable-miredo-user=root \
 	--without-Judy \
 
@@ -63,16 +69,18 @@ CONFIGURE_VARS += \
 	LIBS="-nodefaultlibs -luClibc++ -lm" \
 	ac_cv_file__proc_self_maps=yes\
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CXXLINK="\$$$$(LINK)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+# XXX: override (:=), don't append (+=)
+MAKE_FLAGS := \
+	CXXLINK="\$$$$(LINK)" \
+
+define Package/miredo-common/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/lib{teredo,tun6}.so.* $(1)/usr/lib/
 endef
 
 define Package/miredo-server/install
-	$(INSTALL_DIR) $(1)/etc/
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/miredo/examples/miredo-server.conf $(1)/etc/miredo-server.conf
+	$(INSTALL_DIR) $(1)/etc/miredo
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/miredo/examples/miredo-server.conf $(1)/etc/miredo/miredo-server.conf
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/miredo-server.init $(1)/etc/init.d/miredo-server
 	$(INSTALL_DIR) $(1)/usr/sbin
@@ -80,13 +88,14 @@ define Package/miredo-server/install
 endef
 
 define Package/miredo-client/install	
-	$(INSTALL_DIR) $(1)/etc
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/miredo/examples/miredo.conf $(1)/etc/miredo.conf
+	$(INSTALL_DIR) $(1)/etc/miredo
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/miredo/examples/miredo.conf $(1)/etc/miredo/miredo.conf
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/miredo.init $(1)/etc/init.d/miredo
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/miredo $(1)/usr/sbin/
 endef
 
+$(eval $(call BuildPackage,miredo-common))
 $(eval $(call BuildPackage,miredo-server))
 $(eval $(call BuildPackage,miredo-client))
