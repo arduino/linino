@@ -167,6 +167,10 @@ ifneq ($(CONFIG_PACKAGE_collectd-mod-ascent),)
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/libxml2"
 endif
 
+ifneq ($(CONFIG_PACKAGE_collectd-mod-postgresql),)
+  CONFIGURE_ARGS+= --with-libpq="$(STAGING_DIR)/usr/"
+endif
+
 ifneq ($(CONFIG_PACKAGE_collectd-mod-mysql),)
   CONFIGURE_ARGS+= --with-libmysql="$(STAGING_DIR)/usr/"
 endif
