@@ -33,7 +33,7 @@ define Package/wing
   TITLE:=Wireless mesh networking toolkit
   SECTION:=net
   CATEGORY:=Network
-  MAINTAINER:=Roberto Riggio (roberto.riggio@create-net.org)
+  MAINTAINER:=Roberto Riggio <roberto.riggio@create-net.org>
   DEPENDS:=+kmod-tun
   URL:=http://www.wing-project.org/
 endef
