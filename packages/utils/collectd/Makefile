@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=collectd
 PKG_VERSION:=4.9.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://collectd.org/files/
@@ -145,7 +145,6 @@ CONFIGURE_ARGS+= \
 	--enable-daemon \
 	--enable-getifaddrs \
 	--with-nan-emulation \
-	--with-fp-layout=nothing
 
 CONFIGURE_VARS+= \
 	CFLAGS="$$$$CFLAGS $(FPIC)" \
@@ -165,6 +164,12 @@ CONFIGURE_ARGS+= \
 ifneq ($(CONFIG_PACKAGE_collectd-mod-ascent),)
   CONFIGURE_VARS+= \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/libxml2"
+endif
+
+ifneq ($(CONFIG_BIG_ENDIAN),)
+  CONFIGURE_ARGS+= --with-fp-layout=endianflip
+else
+  CONFIGURE_ARGS+= --with-fp-layout=nothing
 endif
 
 ifneq ($(CONFIG_PACKAGE_collectd-mod-postgresql),)
