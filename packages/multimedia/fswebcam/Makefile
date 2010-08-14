@@ -12,7 +12,7 @@ PKG_VERSION:=20100405
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.firestorm.cx/fswebcam/files/
+PKG_SOURCE_URL:=http://www.sanslogic.co.uk/fswebcam/files/
 PKG_MD5SUM:=1ca864c8cef096fb4ace71cf14085424
 
 PKG_INSTALL:=1
@@ -23,7 +23,7 @@ define Package/fswebcam
   SECTION:=multimedia
   CATEGORY:=Multimedia
   TITLE:=fswebcam
-  URL:=http://www.firestorm.cx/fswebcam/
+  URL:=http://www.sanslogic.co.uk/fswebcam/
   DEPENDS:= @!LINUX_2_4 +libgd
 endef
 
