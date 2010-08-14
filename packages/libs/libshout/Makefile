@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2009 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libshout
 PKG_VERSION:=2.2.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.us.xiph.org/releases/libshout/
@@ -24,7 +24,7 @@ TARGET_CFLAGS += $(FPIC)
 
 define Package/libshout
   SECTION:=libs
-  DEPENDS:=+libvorbisidec
+  DEPENDS:= +libspeex +libtheora +libvorbisidec
   CATEGORY:=Libraries
   TITLE:=Library which can be used to write a source client like ices
   URL:=http://www.icecast.org/download.php
