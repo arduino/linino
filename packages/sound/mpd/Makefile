@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpd
 PKG_VERSION:=0.15.8
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/musicpd
@@ -27,6 +27,7 @@ define Package/mpd
 # libvorbis and therewith libogg are needed for shout support
   DEPENDS:= \
 	+AUDIO_SUPPORT:alsa-lib \
+	+libaudiofile \
 	+BUILD_PATENTED:libfaad2 +BUILD_PATENTED:libmad \
 	+glib2 +libcurl +libflac +libmms +libpthread +libshout \
 	+libvorbis +libvorbisidec +libid3tag
