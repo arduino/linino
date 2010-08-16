@@ -8,7 +8,7 @@ config X86_GRUB_IMAGES
 config X86_GRUB_CONSOLE
 	bool "Use Console Terminal (in addition to Serial)"
 	depends X86_GRUB_IMAGES
-	default n if (TARGET_x86_generic_Soekris45xx || TARGET_x86_generic_Soekris48xx)
+	default y if !(TARGET_x86_generic_Soekris45xx || TARGET_x86_generic_Soekris48xx)
 
 config X86_GRUB_SERIAL
 	string "Serial port device"
