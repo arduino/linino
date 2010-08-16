@@ -307,8 +307,8 @@ static int rtl8366_mc_is_used(struct rtl8366_smi *smi, int mc_index, int *used)
 	return 0;
 }
 
-int rtl8366_set_vlan(struct rtl8366_smi *smi, int vid, u32 member, u32 untag,
-		     u32 fid)
+static int rtl8366_set_vlan(struct rtl8366_smi *smi, int vid, u32 member,
+			    u32 untag, u32 fid)
 {
 	struct rtl8366_vlan_4k vlan4k;
 	int err;
@@ -347,47 +347,8 @@ int rtl8366_set_vlan(struct rtl8366_smi *smi, int vid, u32 member, u32 untag,
 
 	return err;
 }
-EXPORT_SYMBOL_GPL(rtl8366_set_vlan);
 
-int rtl8366_reset_vlan(struct rtl8366_smi *smi)
-{
-	struct rtl8366_vlan_mc vlanmc;
-	int err;
-	int i;
-
-	/* clear VLAN member configurations */
-	vlanmc.vid = 0;
-	vlanmc.priority = 0;
-	vlanmc.member = 0;
-	vlanmc.untag = 0;
-	vlanmc.fid = 0;
-	for (i = 0; i < smi->num_vlan_mc; i++) {
-		err = smi->ops->set_vlan_mc(smi, i, &vlanmc);
-		if (err)
-			return err;
-	}
-
-	for (i = 0; i < smi->num_ports; i++) {
-		if (i == smi->cpu_port)
-			continue;
-
-		err = rtl8366_set_vlan(smi, (i + 1),
-					(1 << i) | (1 << smi->cpu_port),
-					(1 << i) | (1 << smi->cpu_port),
-					0);
-		if (err)
-			return err;
-
-		err = rtl8366_set_pvid(smi, i, (i + 1));
-		if (err)
-			return err;
-	}
-
-	return 0;
-}
-EXPORT_SYMBOL_GPL(rtl8366_reset_vlan);
-
-int rtl8366_get_pvid(struct rtl8366_smi *smi, int port, int *val)
+static int rtl8366_get_pvid(struct rtl8366_smi *smi, int port, int *val)
 {
 	struct rtl8366_vlan_mc vlanmc;
 	int err;
@@ -404,9 +365,9 @@ int rtl8366_get_pvid(struct rtl8366_smi *smi, int port, int *val)
 	*val = vlanmc.vid;
 	return 0;
 }
-EXPORT_SYMBOL_GPL(rtl8366_get_pvid);
 
-int rtl8366_set_pvid(struct rtl8366_smi *smi, unsigned port, unsigned vid)
+static int rtl8366_set_pvid(struct rtl8366_smi *smi, unsigned port,
+			    unsigned vid)
 {
 	struct rtl8366_vlan_mc vlanmc;
 	struct rtl8366_vlan_4k vlan4k;
@@ -486,7 +447,44 @@ int rtl8366_set_pvid(struct rtl8366_smi *smi, unsigned port, unsigned vid)
 
 	return -ENOSPC;
 }
-EXPORT_SYMBOL_GPL(rtl8366_set_pvid);
+
+int rtl8366_reset_vlan(struct rtl8366_smi *smi)
+{
+	struct rtl8366_vlan_mc vlanmc;
+	int err;
+	int i;
+
+	/* clear VLAN member configurations */
+	vlanmc.vid = 0;
+	vlanmc.priority = 0;
+	vlanmc.member = 0;
+	vlanmc.untag = 0;
+	vlanmc.fid = 0;
+	for (i = 0; i < smi->num_vlan_mc; i++) {
+		err = smi->ops->set_vlan_mc(smi, i, &vlanmc);
+		if (err)
+			return err;
+	}
+
+	for (i = 0; i < smi->num_ports; i++) {
+		if (i == smi->cpu_port)
+			continue;
+
+		err = rtl8366_set_vlan(smi, (i + 1),
+					(1 << i) | (1 << smi->cpu_port),
+					(1 << i) | (1 << smi->cpu_port),
+					0);
+		if (err)
+			return err;
+
+		err = rtl8366_set_pvid(smi, i, (i + 1));
+		if (err)
+			return err;
+	}
+
+	return 0;
+}
+EXPORT_SYMBOL_GPL(rtl8366_reset_vlan);
 
 #ifdef CONFIG_RTL8366S_PHY_DEBUG_FS
 int rtl8366_debugfs_open(struct inode *inode, struct file *file)
@@ -517,6 +515,34 @@ static ssize_t rtl8366_read_debugfs_vlan_mc(struct file *file,
 				"%2d %6d %4d 0x%04x 0x%04x %3d\n",
 				i, vlanmc.vid, vlanmc.priority,
 				vlanmc.member, vlanmc.untag, vlanmc.fid);
+	}
+
+	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
+}
+
+static ssize_t rtl8366_read_debugfs_pvid(struct file *file,
+					 char __user *user_buf,
+					 size_t count, loff_t *ppos)
+{
+	struct rtl8366_smi *smi = (struct rtl8366_smi *)file->private_data;
+	char *buf = smi->buf;
+	int len = 0;
+	int i;
+
+	len += snprintf(buf + len, sizeof(smi->buf) - len, "%4s %4s\n",
+			"port", "pvid");
+
+	for (i = 0; i < smi->num_ports; i++) {
+		int pvid;
+		int err;
+
+		err = rtl8366_get_pvid(smi, i, &pvid);
+		if (err)
+			len += snprintf(buf + len, sizeof(smi->buf) - len,
+				"%4d error\n", i);
+		else
+			len += snprintf(buf + len, sizeof(smi->buf) - len,
+				"%4d %4d\n", i, pvid);
 	}
 
 	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
@@ -636,6 +662,12 @@ static const struct file_operations fops_rtl8366_vlan_mc = {
 	.owner	= THIS_MODULE
 };
 
+static const struct file_operations fops_rtl8366_pvid = {
+	.read	= rtl8366_read_debugfs_pvid,
+	.open	= rtl8366_debugfs_open,
+	.owner	= THIS_MODULE
+};
+
 static const struct file_operations fops_rtl8366_mibs = {
 	.read = rtl8366_read_debugfs_mibs,
 	.open = rtl8366_debugfs_open,
@@ -678,6 +710,14 @@ static void rtl8366_debugfs_init(struct rtl8366_smi *smi)
 	if (!node) {
 		dev_err(smi->parent, "Creating debugfs file '%s' failed\n",
 			"vlan_mc");
+		return;
+	}
+
+	node = debugfs_create_file("pvid", S_IRUSR, root, smi,
+				   &fops_rtl8366_pvid);
+	if (!node) {
+		dev_err(smi->parent, "Creating debugfs file '%s' failed\n",
+			"pvid");
 		return;
 	}
 
@@ -741,12 +781,167 @@ static void rtl8366_smi_mii_cleanup(struct rtl8366_smi *smi)
 	mdiobus_free(smi->mii_bus);
 }
 
+int rtl8366_sw_get_port_pvid(struct switch_dev *dev, int port, int *val)
+{
+	struct rtl8366_smi *smi = sw_to_rtl8366_smi(dev);
+	return rtl8366_get_pvid(smi, port, val);
+}
+EXPORT_SYMBOL_GPL(rtl8366_sw_get_port_pvid);
+
+int rtl8366_sw_set_port_pvid(struct switch_dev *dev, int port, int val)
+{
+	struct rtl8366_smi *smi = sw_to_rtl8366_smi(dev);
+	return rtl8366_set_pvid(smi, port, val);
+}
+EXPORT_SYMBOL_GPL(rtl8366_sw_set_port_pvid);
+
+int rtl8366_sw_get_port_mib(struct switch_dev *dev,
+			    const struct switch_attr *attr,
+			    struct switch_val *val)
+{
+	struct rtl8366_smi *smi = sw_to_rtl8366_smi(dev);
+	int i, len = 0;
+	unsigned long long counter = 0;
+	char *buf = smi->buf;
+
+	if (val->port_vlan >= smi->num_ports)
+		return -EINVAL;
+
+	len += snprintf(buf + len, sizeof(smi->buf) - len,
+			"Port %d MIB counters\n",
+			val->port_vlan);
+
+	for (i = 0; i < smi->num_mib_counters; ++i) {
+		len += snprintf(buf + len, sizeof(smi->buf) - len,
+				"%-36s: ", smi->mib_counters[i].name);
+		if (!smi->ops->get_mib_counter(smi, i, val->port_vlan,
+					       &counter))
+			len += snprintf(buf + len, sizeof(smi->buf) - len,
+					"%llu\n", counter);
+		else
+			len += snprintf(buf + len, sizeof(smi->buf) - len,
+					"%s\n", "error");
+	}
+
+	val->value.s = buf;
+	val->len = len;
+	return 0;
+}
+EXPORT_SYMBOL_GPL(rtl8366_sw_get_port_mib);
+
+int rtl8366_sw_get_vlan_info(struct switch_dev *dev,
+			     const struct switch_attr *attr,
+			     struct switch_val *val)
+{
+	int i;
+	u32 len = 0;
+	struct rtl8366_vlan_4k vlan4k;
+	struct rtl8366_smi *smi = sw_to_rtl8366_smi(dev);
+	char *buf = smi->buf;
+	int err;
+
+	if (!smi->ops->is_vlan_valid(smi, val->port_vlan))
+		return -EINVAL;
+
+	memset(buf, '\0', sizeof(smi->buf));
+
+	err = smi->ops->get_vlan_4k(smi, val->port_vlan, &vlan4k);
+	if (err)
+		return err;
+
+	len += snprintf(buf + len, sizeof(smi->buf) - len,
+			"VLAN %d: Ports: '", vlan4k.vid);
+
+	for (i = 0; i < smi->num_ports; i++) {
+		if (!(vlan4k.member & (1 << i)))
+			continue;
+
+		len += snprintf(buf + len, sizeof(smi->buf) - len, "%d%s", i,
+				(vlan4k.untag & (1 << i)) ? "" : "t");
+	}
+
+	len += snprintf(buf + len, sizeof(smi->buf) - len,
+			"', members=%04x, untag=%04x, fid=%u",
+			vlan4k.member, vlan4k.untag, vlan4k.fid);
+
+	val->value.s = buf;
+	val->len = len;
+
+	return 0;
+}
+EXPORT_SYMBOL_GPL(rtl8366_sw_get_vlan_info);
+
+int rtl8366_sw_get_vlan_ports(struct switch_dev *dev, struct switch_val *val)
+{
+	struct rtl8366_smi *smi = sw_to_rtl8366_smi(dev);
+	struct switch_port *port;
+	struct rtl8366_vlan_4k vlan4k;
+	int i;
+
+	if (!smi->ops->is_vlan_valid(smi, val->port_vlan))
+		return -EINVAL;
+
+	smi->ops->get_vlan_4k(smi, val->port_vlan, &vlan4k);
+
+	port = &val->value.ports[0];
+	val->len = 0;
+	for (i = 0; i < smi->num_ports; i++) {
+		if (!(vlan4k.member & BIT(i)))
+			continue;
+
+		port->id = i;
+		port->flags = (vlan4k.untag & BIT(i)) ?
+					0 : BIT(SWITCH_PORT_FLAG_TAGGED);
+		val->len++;
+		port++;
+	}
+	return 0;
+}
+EXPORT_SYMBOL_GPL(rtl8366_sw_get_vlan_ports);
+
+int rtl8366_sw_set_vlan_ports(struct switch_dev *dev, struct switch_val *val)
+{
+	struct rtl8366_smi *smi = sw_to_rtl8366_smi(dev);
+	struct switch_port *port;
+	u32 member = 0;
+	u32 untag = 0;
+	int i;
+
+	if (!smi->ops->is_vlan_valid(smi, val->port_vlan))
+		return -EINVAL;
+
+	port = &val->value.ports[0];
+	for (i = 0; i < val->len; i++, port++) {
+		member |= BIT(port->id);
+
+		if (!(port->flags & BIT(SWITCH_PORT_FLAG_TAGGED)))
+			untag |= BIT(port->id);
+	}
+
+	return rtl8366_set_vlan(smi, val->port_vlan, member, untag, 0);
+}
+EXPORT_SYMBOL_GPL(rtl8366_sw_set_vlan_ports);
+
+struct rtl8366_smi *rtl8366_smi_alloc(struct device *parent)
+{
+	struct rtl8366_smi *smi;
+
+	BUG_ON(!parent);
+
+	smi = kzalloc(sizeof(*smi), GFP_KERNEL);
+	if (!smi) {
+		dev_err(parent, "no memory for private data\n");
+		return NULL;
+	}
+
+	smi->parent = parent;
+	return smi;
+}
+EXPORT_SYMBOL_GPL(rtl8366_smi_alloc);
+
 int rtl8366_smi_init(struct rtl8366_smi *smi)
 {
 	int err;
-
-	if (!smi->parent)
-		return -EINVAL;
 
 	if (!smi->ops)
 		return -EINVAL;
@@ -773,6 +968,12 @@ int rtl8366_smi_init(struct rtl8366_smi *smi)
 	err = smi->ops->detect(smi);
 	if (err) {
 		dev_err(smi->parent, "chip detection failed, err=%d\n", err);
+		goto err_free_sck;
+	}
+
+	err = smi->ops->setup(smi);
+	if (err) {
+		dev_err(smi->parent, "chip setup failed, err=%d\n", err);
 		goto err_free_sck;
 	}
 

@@ -12,6 +12,7 @@
 #define _RTL8366_SMI_H
 
 #include <linux/phy.h>
+#include <linux/switch.h>
 
 struct rtl8366_smi_ops;
 struct rtl8366_vlan_ops;
@@ -34,6 +35,7 @@ struct rtl8366_smi {
 	spinlock_t		lock;
 	struct mii_bus		*mii_bus;
 	int			mii_irq[PHY_MAX_ADDR];
+	struct switch_dev	sw_dev;
 
 	unsigned int		cpu_port;
 	unsigned int		num_ports;
@@ -67,6 +69,7 @@ struct rtl8366_vlan_4k {
 
 struct rtl8366_smi_ops {
 	int	(*detect)(struct rtl8366_smi *smi);
+	int	(*setup)(struct rtl8366_smi *smi);
 
 	int	(*mii_read)(struct mii_bus *bus, int addr, int reg);
 	int	(*mii_write)(struct mii_bus *bus, int addr, int reg, u16 val);
@@ -83,22 +86,36 @@ struct rtl8366_smi_ops {
 	int	(*set_mc_index)(struct rtl8366_smi *smi, int port, int index);
 	int	(*get_mib_counter)(struct rtl8366_smi *smi, int counter,
 				   int port, unsigned long long *val);
+	int	(*is_vlan_valid)(struct rtl8366_smi *smi, unsigned vlan);
 };
 
+struct rtl8366_smi *rtl8366_smi_alloc(struct device *parent);
 int rtl8366_smi_init(struct rtl8366_smi *smi);
 void rtl8366_smi_cleanup(struct rtl8366_smi *smi);
 int rtl8366_smi_write_reg(struct rtl8366_smi *smi, u32 addr, u32 data);
 int rtl8366_smi_read_reg(struct rtl8366_smi *smi, u32 addr, u32 *data);
 int rtl8366_smi_rmwr(struct rtl8366_smi *smi, u32 addr, u32 mask, u32 data);
 
-int rtl8366_set_vlan(struct rtl8366_smi *smi, int vid, u32 member, u32 untag,
-		     u32 fid);
 int rtl8366_reset_vlan(struct rtl8366_smi *smi);
-int rtl8366_get_pvid(struct rtl8366_smi *smi, int port, int *val);
-int rtl8366_set_pvid(struct rtl8366_smi *smi, unsigned port, unsigned vid);
 
 #ifdef CONFIG_RTL8366S_PHY_DEBUG_FS
 int rtl8366_debugfs_open(struct inode *inode, struct file *file);
 #endif
+
+static inline struct rtl8366_smi *sw_to_rtl8366_smi(struct switch_dev *sw)
+{
+	return container_of(sw, struct rtl8366_smi, sw_dev);
+}
+
+int rtl8366_sw_get_port_pvid(struct switch_dev *dev, int port, int *val);
+int rtl8366_sw_set_port_pvid(struct switch_dev *dev, int port, int val);
+int rtl8366_sw_get_port_mib(struct switch_dev *dev,
+			    const struct switch_attr *attr,
+			    struct switch_val *val);
+int rtl8366_sw_get_vlan_info(struct switch_dev *dev,
+			     const struct switch_attr *attr,
+			     struct switch_val *val);
+int rtl8366_sw_get_vlan_ports(struct switch_dev *dev, struct switch_val *val);
+int rtl8366_sw_set_vlan_ports(struct switch_dev *dev, struct switch_val *val);
 
 #endif /*  _RTL8366_SMI_H */
