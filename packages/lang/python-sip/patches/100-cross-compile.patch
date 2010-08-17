@@ -1,0 +1,82 @@
+---
+ configure.py |   52 ++++++++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 44 insertions(+), 8 deletions(-)
+
+--- sip-4.10.5.orig/configure.py
++++ sip-4.10.5/configure.py
+@@ -302,6 +302,11 @@ def create_optparser():
+     def store_abspath(option, opt_str, value, parser):
+         setattr(parser.values, option.dest, os.path.abspath(value))
+ 
++    def store_abspath_file(option, opt_str, value, parser):
++        if not os.path.isfile(value):
++            raise optparse.OptionValueError("'%s' is not a file" % value)
++        setattr(parser.values, option.dest, os.path.abspath(value))
++
+     p = optparse.OptionParser(usage="python %prog [opts] [macro=value] "
+             "[macro+=value]", version=sip_version_str)
+ 
+@@ -369,9 +374,38 @@ def create_optparser():
+             "are normally installed [default: %s]" % default_sipsipdir)
+     p.add_option_group(g)
+ 
++    # Crosscompilation
++    g = optparse.OptionGroup(p, title="Crosscompilation")
++    g.add_option("--crosscompile", action="store_true",
++                 default=False, dest="crosscompile",
++                 help="Set, if cross-compiling")
++    g.add_option("--sipconfig-macros", action="callback", metavar="FILE",
++                 default=None, dest="sipconfig_macros", type="string",
++                 callback=store_abspath_file,
++                 help="Path to a file containing sipconfig macros")
++    p.add_option_group(g)
++
+     return p
+ 
+ 
++def load_sipconfig_macros(filename):
++    macros = {}
++    fd = file(filename, "r")
++    for line in fd.readlines():
++        line = line.split()
++        try:
++            key = line[0]
++        except IndexError:
++            sipconfig.error("Invalid sipconfig macros file format")
++        value = ""
++        try:
++            value = " ".join(line[1:])
++        except IndexError:
++            pass
++        macros[key] = value
++    return macros
++
++
+ def main(argv):
+     """Create the configuration module module.
+ 
+@@ -434,14 +468,16 @@ def main(argv):
+     else:
+         opts.universal = ''
+ 
+-    # Get the platform specific macros for building.
+-    macros = siputils.parse_build_macros(
+-            os.path.join(src_dir, "specs", opts.platform), build_macro_names,
+-            args)
+-
+-    if macros is None:
+-        p.print_help()
+-        sys.exit(2)
++    if opts.sipconfig_macros:
++        macros = load_sipconfig_macros(opts.sipconfig_macros)
++    else:
++        # Get the platform specific macros for building.
++        macros = siputils.parse_build_macros(
++                os.path.join(src_dir, "specs", opts.platform), build_macro_names,
++                args)
++        if macros is None:
++            p.print_help()
++            sys.exit(2)
+ 
+     # Tell the user what's been found.
+     inform_user()
