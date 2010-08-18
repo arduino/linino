@@ -18,6 +18,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=qt-everywhere-opensource-src-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.qt.nokia.com/qt/source
 PKG_BUILD_DIR=$(BUILD_DIR)/qt-everywhere-opensource-src-$(PKG_VERSION)
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -360,7 +361,7 @@ define Build/Compile
 	TARGET_LIBDIRS="$(TARGET_LIBDIRS)" \
 	STAGING_DIR="$(STAGING_DIR)" \
 	STAGING_DIR_HOST="$(STAGING_DIR)/../host" \
-	$(MAKE) -C $(PKG_BUILD_DIR)
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)
 	INSTALL_ROOT=$(PKG_INSTALL_DIR) \
 		$(MAKE) -C $(PKG_BUILD_DIR) install
 endef
