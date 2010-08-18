@@ -20,6 +20,10 @@ PKG_SOURCE_URL:=ftp://ftp.qt.nokia.com/qt/source
 PKG_BUILD_DIR=$(BUILD_DIR)/qt-everywhere-opensource-src-$(PKG_VERSION)
 PKG_BUILD_PARALLEL:=1
 
+PKG_CONFIG_DEPENDS:= \
+	CONFIG_PACKAGE_qt4-demos \
+	CONFIG_PACKAGE_qt4-examples
+
 include $(INCLUDE_DIR)/package.mk
 
 # this should be moved to a more generic place later, as other packages are configured different as well depending on available nptl support
@@ -265,8 +269,8 @@ define Build/Configure
 			-no-rpath \
 			-force-pkg-config \
 			-nomake tools \
-			-make demos \
-			-make examples \
+			$(if $(CONFIG_PACKAGE_qt4-demos),-make,-nomake) demos \
+			$(if $(CONFIG_PACKAGE_qt4-examples),-make,-nomake) examples \
 			-nomake docs \
 			-nomake translations \
 			-xplatform qws/linux-openwrt-g++ \
