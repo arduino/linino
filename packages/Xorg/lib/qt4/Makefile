@@ -295,12 +295,12 @@ define Build/Configure
 			-phonon \
 			-no-phonon-backend \
 			-svg \
-			-$(if $(NPTL),webkit,-no-webkit) \
+			$(if $(NPTL),-webkit,-no-webkit) \
 			-no-javascript-jit \
-			-$(if $(NPTL),script,-no-script) \
-			-$(if $(NPTL),scripttools,-no-scripttools) \
+			$(if $(NPTL),-script,-no-script) \
+			$(if $(NPTL),-scripttools,-no-scripttools) \
 			-no-accessibility \
-			-$(if $(NPTL),declarative,-no-declarative) \
+			$(if $(NPTL),-declarative,-no-declarative) \
 			-no-openssl \
 			-no-nis \
 			-no-cups \
