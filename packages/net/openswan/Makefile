@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=openswan
-PKG_VERSION:=2.6.25
+PKG_VERSION:=2.6.28
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.openswan.org/download
-PKG_MD5SUM:=c1223786c9eb58950a4be0ab2d0a84d1
+PKG_MD5SUM:=37f2ad2664dd89e6ad96ae82f6378166
 
 include $(INCLUDE_DIR)/package.mk
 

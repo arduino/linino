@@ -1,7 +1,7 @@
 --- a/linux/include/openswan/ipsec_kversion.h
 +++ b/linux/include/openswan/ipsec_kversion.h
-@@ -351,6 +351,12 @@
- # define HAVE_CURRENT_UID
+@@ -363,6 +363,12 @@
+ #endif
  #endif
  
 +#if LINUX_VERSION_CODE == KERNEL_VERSION(2,6,30)
@@ -11,5 +11,5 @@
 +#endif
 +
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31)
- # define HAVE_SKB_DST 1
- #endif
+ # define USE_NETDEV_OPS
+ #else
