@@ -22,7 +22,13 @@ PKG_BUILD_PARALLEL:=1
 
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_qt4-demos \
-	CONFIG_PACKAGE_qt4-examples
+	CONFIG_PACKAGE_qt4-examples \
+	CONFIG_PACKAGE_qt4-svg \
+	CONFIG_PACKAGE_qt4-qt3support \
+	CONFIG_PACKAGE_qt4-dbus \
+	CONFIG_PACKAGE_qt4-phonon \
+	CONFIG_PACKAGE_qt4-sqlite \
+	CONFIG_PACKAGE_qt4-mysql
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -53,7 +59,6 @@ endef
 
 define Package/qt4-gui
   $(call Package/qt4/Default)
-  #DEPENDS+=+FEATURE_drawing-backend_DirectFB:directfb +libpng +libtiff +libjpeg +libfreetype
   DEPENDS+=+libpng +libtiff +libjpeg +libfreetype +qt4-network
   TITLE+=(gui)
 endef
@@ -67,7 +72,7 @@ endef
 define Package/qt4-examples
   $(call Package/qt4/Default)
   TITLE+=(examples)
-  DEPENDS+=+qt4-gui
+  DEPENDS+=+qt4-gui +qt4-svg
 endef
 
 define Package/qt4-network
@@ -111,7 +116,6 @@ endef
 define Package/qt4-svg
   $(call Package/qt4/Default)
   TITLE+=(svg)
-  #DEPENDS+=+qt4-gui @BROKEN
   DEPENDS+=+qt4-gui +qt4-network
 endef
 
@@ -238,7 +242,6 @@ TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/include/freetype2 -I$(PKG_BUILD_DIR)/include
 define Build/Configure
 	# NOTES:
 	#  demos/examples: which demos are going to be built depends on which features are going to to be compiled into qt
-	#  svg: always compile in svg-support, as once qt is built without, strange include errors occur when we're going to compile qt4-svg afterwards
 	#  linuxfb/directfb: since directfb is not much overhead compared to plain framebuffer, force using directfb
 	#  do not use fontconfig as it doesn't work anyway for qte
 	#  bindir: bindir is where the host tools (qmake, moc, rcc, uic) will get installed into - they are just used on the host and not goig to be packaged
@@ -289,17 +292,17 @@ define Build/Configure
 			-system-libjpeg \
 			-system-freetype \
 			-system-sqlite \
-			-plugin-sql-sqlite \
-			-plugin-sql-mysql \
+			$(if $(CONFIG_PACKAGE_qt4-sqlite),-plugin-sql-sqlite) \
+			$(if $(CONFIG_PACKAGE_qt4-mysql),-plugin-sql-mysql) \
 			-no-decoration-styled \
 			-no-decoration-windows \
 			-no-decoration-default \
 			-verbose \
 			-no-multimedia \
 			-no-audio-backend \
-			-phonon \
+			$(if $(CONFIG_PACKAGE_qt4-phonon),-phonon,-no-phonon) \
 			-no-phonon-backend \
-			-svg \
+			$(if $(CONFIG_PACKAGE_qt4-svg),-svg,-no-svg) \
 			$(if $(NPTL),-webkit,-no-webkit) \
 			-no-javascript-jit \
 			$(if $(NPTL),-script,-no-script) \
@@ -310,7 +313,7 @@ define Build/Configure
 			-no-nis \
 			-no-cups \
 			-no-iconv \
-			-dbus \
+			$(if $(CONFIG_PACKAGE_qt4-dbus),-dbus,-no-dbus) \
 			-no-gtkstyle \
 			-no-nas-sound \
 			-no-opengl \
@@ -328,7 +331,7 @@ define Build/Configure
 			-no-xinput \
 			-no-xkb \
 			-no-glib \
-			-qt3support \
+			$(if $(CONFIG_PACKAGE_qt4-qt3support),-qt3support,-no-qt3support) \
 			-no-gfx-transformed \
 			-no-gfx-qvfb \
 			-no-gfx-vnc \
