@@ -29,6 +29,7 @@ define Package/python-sip
   SECTION:=devel
   CATEGORY:=Development
   TITLE:=Python SIP
+  DEPENDS:=+python
   URL:=http://www.riverbankcomputing.co.uk/software/sip/download
 endef
 
