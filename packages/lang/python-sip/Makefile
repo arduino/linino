@@ -15,6 +15,8 @@ PKG_SOURCE:=sip-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.riverbankcomputing.co.uk/static/Downloads/sip4
 PKG_MD5SUM:=0a591ef6e59aa16e56822d3eb9fe21b8
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
+HOST_BUILD_PARALLEL:=1
 HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/sip-$(PKG_VERSION)
 PKG_BUILD_DIR:=$(BUILD_DIR)/sip-$(PKG_VERSION)
 
@@ -53,7 +55,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		CC="$(TARGET_CROSS)gcc" \
 		CXX="$(TARGET_CROSS)g++" \
 		LINK="$(TARGET_CROSS)g++" \
@@ -94,7 +96,7 @@ define Host/Configure
 endef
 
 define Host/Compile
-	$(MAKE) -C $(HOST_BUILD_DIR) \
+	$(MAKE) $(HOST_JOBS) -C $(HOST_BUILD_DIR) \
 		CC="$(HOSTCC)" \
 		CXX="g++" \
 		LINK="g++" \
