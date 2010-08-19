@@ -1,0 +1,30 @@
+---
+ Makefile.in |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+--- gpxview-0.9.1.orig/Makefile.in
++++ gpxview-0.9.1/Makefile.in
+@@ -20,17 +20,17 @@ APP = @PACKAGE@
+ VERSION = $${VERSION_PREFIX}@PACKAGE_VERSION@$${VERSION_SUFFIX}
+ 
+ all:
+-	cd src && make
+-	cd data && make
++	$(MAKE) -C src
++	$(MAKE) -C data
+ 
+ install:
+-	cd src && make install
+-	cd data && make install
++	$(MAKE) -C src install
++	$(MAKE) -C data install
+ 
+ clean:
+ 	rm -f *~ \#*\# *.bak *-stamp
+-	cd src && make clean
+-	cd data && make clean
++	$(MAKE) -C src clean
++	$(MAKE) -C data clean
+ 
+ distclean: clean
+ 	rm -f Makefile src/Makefile data/Makefile config.log config.status
