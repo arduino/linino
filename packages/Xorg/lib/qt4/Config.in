@@ -1,0 +1,18 @@
+choice
+	prompt "qt4 window system"
+	depends on PACKAGE_qt4
+	default QT4_WS_QWS
+
+config QT4_WS_QWS
+	bool "QWS window system"
+	help
+	  Use QT4's internal QWS window system.
+
+config QT4_WS_X11
+	bool "X11 window system"
+	depends on FEATURE_drawing-backend_libX11 && BROKEN
+	select PACKAGE_libX11
+	help
+	  Use X11
+
+endchoice

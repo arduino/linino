@@ -21,6 +21,8 @@ PKG_BUILD_DIR=$(BUILD_DIR)/qt-everywhere-opensource-src-$(PKG_VERSION)
 PKG_BUILD_PARALLEL:=1
 
 PKG_CONFIG_DEPENDS:= \
+	CONFIG_QT4_WS_QWS \
+	CONFIG_QT4_WS_X11 \
 	CONFIG_PACKAGE_qt4-demos \
 	CONFIG_PACKAGE_qt4-examples \
 	CONFIG_PACKAGE_qt4-svg \
@@ -42,6 +44,10 @@ endif
 ifeq ($(CONFIG_UCLIBC_VERSION_0_9_32),y)
   NPTL:=y
 endif
+
+define Package/qt4/config
+	source "$(SOURCE)/Config.in"
+endef
 
 define Package/qt4/Default
   SECTION:=xorg-framework
@@ -239,6 +245,13 @@ TARGET_LIBDIRS+=$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib $(TOOLCHAIN_DIR)/lib $
 TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib,-rpath-link=$(PKG_BUILD_DIR)/lib
 TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/include/freetype2 -I$(PKG_BUILD_DIR)/include
 
+ifeq ($(CONFIG_QT4_WS_QWS),y)
+  FILEPFX:=qws-
+endif
+ifeq ($(CONFIG_QT4_WS_X11),y)
+  FILEPFX:=x11-
+endif
+
 define Build/Configure
 	# NOTES:
 	#  demos/examples: which demos are going to be built depends on which features are going to to be compiled into qt
@@ -246,8 +259,8 @@ define Build/Configure
 	#  do not use fontconfig as it doesn't work anyway for qte
 	#  bindir: bindir is where the host tools (qmake, moc, rcc, uic) will get installed into - they are just used on the host and not goig to be packaged
 	mkdir -p $(PKG_BUILD_DIR)/mkspecs/qws/linux-openwrt-g++
-	$(CP) ./files/qws-qmake.conf $(PKG_BUILD_DIR)/mkspecs/qws/linux-openwrt-g++/qmake.conf
-	$(CP) ./files/qws-qplatformdefs.h $(PKG_BUILD_DIR)/mkspecs/qws/linux-openwrt-g++/qplatformdefs.h
+	$(CP) ./files/$(FILEPFX)qmake.conf $(PKG_BUILD_DIR)/mkspecs/qws/linux-openwrt-g++/qmake.conf
+	$(CP) ./files/$(FILEPFX)qplatformdefs.h $(PKG_BUILD_DIR)/mkspecs/qws/linux-openwrt-g++/qplatformdefs.h
 	( cd $(PKG_BUILD_DIR) ; \
 		TARGET_CC="$(TARGET_CROSS)gcc" \
 		TARGET_CXX="$(TARGET_CROSS)g++" \
