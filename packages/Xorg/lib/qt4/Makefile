@@ -246,7 +246,8 @@ define Build/Configure
 	#  do not use fontconfig as it doesn't work anyway for qte
 	#  bindir: bindir is where the host tools (qmake, moc, rcc, uic) will get installed into - they are just used on the host and not goig to be packaged
 	mkdir -p $(PKG_BUILD_DIR)/mkspecs/qws/linux-openwrt-g++
-	cp -a ./files/{qmake.conf,qplatformdefs.h} $(PKG_BUILD_DIR)/mkspecs/qws/linux-openwrt-g++/
+	$(CP) ./files/qws-qmake.conf $(PKG_BUILD_DIR)/mkspecs/qws/linux-openwrt-g++/qmake.conf
+	$(CP) ./files/qws-qplatformdefs.h $(PKG_BUILD_DIR)/mkspecs/qws/linux-openwrt-g++/qplatformdefs.h
 	( cd $(PKG_BUILD_DIR) ; \
 		TARGET_CC="$(TARGET_CROSS)gcc" \
 		TARGET_CXX="$(TARGET_CROSS)g++" \
