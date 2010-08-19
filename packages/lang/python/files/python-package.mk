@@ -20,7 +20,7 @@ define PyPackage
   $(call shexport,PyPackage/$(1)/filespec)
 
   define Package/$(1)/install
-	@getvar $$(call shvar,PyPackage/$(1)/filespec) | ( \
+	@$(SH_FUNC) getvar $$(call shvar,PyPackage/$(1)/filespec) | ( \
 		IFS='|'; \
 		while read fop fspec fperm; do \
 		  if [ "$$$$$$$$fop" = "+" ]; then \
