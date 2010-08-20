@@ -34,6 +34,7 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_qt4-mysql
 
 include $(INCLUDE_DIR)/package.mk
+-include $(if $(DUMP),,./files/qmake.mk)
 
 # this should be moved to a more generic place later, as other packages are configured different as well depending on available nptl support
 ifeq ($(CONFIG_USE_GLIBC),y)
