@@ -1,9 +1,10 @@
-# 
-# Copyright (C) 2006 - 2010 OpenWrt.org
+#
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sed
@@ -13,7 +14,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNU/$(PKG_NAME)
 PKG_MD5SUM:=7d310fbd76e01a01115075c1fd3f455a
-PKG_CAT:=bzcat
 
 PKG_INSTALL:=1
 
@@ -27,7 +27,7 @@ define Package/sed
 endef
 
 define Package/sed/description
-	Sed (streams editor) takes text input and performs some operation 
+	Sed (streams editor) takes text input and performs some operation
 	(or set of operations) on it and outputs the modified text.
 endef
 

@@ -1,4 +1,11 @@
 #
+# Copyright (C) 2010 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
+#
 # High Capacity Media card driver. Handles high capacity and standard multimedia
 # and secure digital cards
 #
@@ -15,7 +22,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.4mul8.ca/openwrt/source/broadcom-sdhc-2.0.2
 PKG_MD5SUM:=6238463bce27e64829eda1d88f1a7edd
-PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -30,7 +36,7 @@ define KernelPackage/broadcom-sdhc
 	$(PKG_BUILD_DIR)/sdhc.$(LINUX_KMOD_SUFFIX)\
 	$(PKG_BUILD_DIR)/sdhcd.$(LINUX_KMOD_SUFFIX)
   URL:=http://www.4mul8.ca/openwrt
-endef 
+endef
 
 define KernelPackage/broadcom-sdhc/description
 	Driver for Linksys WRT54G/GS/GL MM/SD card modification.

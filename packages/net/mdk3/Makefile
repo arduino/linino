@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2009 OpenWrt.org
+#
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,7 +15,6 @@ PKG_MD5SUM:=67705a814ded2a2e6f70522ca0dc6da9
 PKG_BUILD_DIR:=$(BUILD_DIR)/mdk3-$(PKG_VERSION)
 PKG_SOURCE_URL:=http://homepages.tu-darmstadt.de/~p_larbig/wlan/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_CAT:=bzcat
 
 include $(INCLUDE_DIR)/package.mk
 
