@@ -8,7 +8,7 @@
  };
  
  template <typename T>
-+static inline
++static inline __attribute__((__always_inline__))
  void qRegisterAnimationInterpolator(QVariant (*func)(const T &from, const T &to, qreal progress)) {
      QVariantAnimation::registerInterpolator(reinterpret_cast<QVariantAnimation::Interpolator>(func), qMetaTypeId<T>());
  }
