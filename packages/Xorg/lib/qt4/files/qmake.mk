@@ -5,7 +5,8 @@
 # See /LICENSE for more information.
 #
 
-QMAKE_SPECFILE:=$(STAGING_DIR)/usr/share/mkspecs/qws/linux-openwrt-g++
+QMAKE_PLATFORM_PREFIX:=$(if $(CONFIG_QT4_WS_QWS),qws/)
+QMAKE_SPECFILE:=$(STAGING_DIR)/usr/share/mkspecs/$(QMAKE_PLATFORM_PREFIX)linux-openwrt-g++
 
 TARGET_INCDIRS+=$(STAGING_DIR)/include $(STAGING_DIR)/usr/include $(TOOLCHAIN_DIR)/include $(TOOLCHAIN_DIR)/usr/include
 TARGET_LIBDIRS+=$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib $(TOOLCHAIN_DIR)/lib $(TOOLCHAIN_DIR)/usr/lib

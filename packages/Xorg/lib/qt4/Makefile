@@ -6,7 +6,7 @@
 #
 
 # TODO:
-#  - test/add X11/xcb support
+#  - test/add xcb support
 #  - handle plugins in a granular way (find out which packages should provide which plugins)
 
 include $(TOPDIR)/rules.mk
@@ -23,6 +23,7 @@ PKG_BUILD_PARALLEL:=1
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_QT4_WS_QWS \
 	CONFIG_QT4_WS_X11 \
+	CONFIG_PACKAGE_directfb \
 	CONFIG_PACKAGE_qt4-demos \
 	CONFIG_PACKAGE_qt4-examples \
 	CONFIG_PACKAGE_qt4-svg \
@@ -60,7 +61,7 @@ endef
 
 define Package/qt4
   $(call Package/qt4/Default)
-  DEPENDS:=@FEATURE_drawing-backend_DirectFB +FEATURE_drawing-backend_DirectFB:directfb +zlib +libstdcpp +libsqlite3 +tslib # require directfb for now, as other systems (libX11, xcb) are untested
+  DEPENDS:=@FEATURE_drawing-backend_DirectFB||@FEATURE_drawing-backend_libX11 +zlib +libstdcpp +libsqlite3
 endef
 
 define Package/qt4-gui
@@ -195,6 +196,7 @@ endef
 define Package/qt4-drivers-mouse/Default
   $(call Package/qt4/Default)
   TITLE+=mousedrivers
+  DEPENDS+=@QT4_WS_QWS
 endef
 
 define Package/qt4-drivers-mouse-tpmousedriver
@@ -216,11 +218,13 @@ endef
 define Package/qt4-drivers-gfx/Default
   $(call Package/qt4/Default)
   TITLE+=gfxdrivers
+  DEPENDS+=@QT4_WS_QWS
 endef
 
 define Package/qt4-drivers-gfx-directfb
   $(call Package/qt4-drivers-gfx/Default)
   TITLE+=directfb
+  DEPENDS+=@FEATURE_drawing-backend_DirectFB +FEATURE_drawing-backend_DirectFB:directfb
 endef
 
 define Package/qt4-drivers-gfx-linuxfb
@@ -232,6 +236,7 @@ endef
 define Package/qt4-drivers-kbd/Default
   $(call Package/qt4/Default)
   TITLE+=kbddrivers
+  DEPENDS+=@QT4_WS_QWS
 endef
 
 define Package/qt4-drivers-kbd-linuxinput
@@ -258,9 +263,9 @@ define Build/Configure
 	#  linuxfb/directfb: since directfb is not much overhead compared to plain framebuffer, force using directfb
 	#  do not use fontconfig as it doesn't work anyway for qte
 	#  bindir: bindir is where the host tools (qmake, moc, rcc, uic) will get installed into - they are just used on the host and not goig to be packaged
-	mkdir -p $(PKG_BUILD_DIR)/mkspecs/qws/linux-openwrt-g++
-	$(CP) ./files/$(FILEPFX)qmake.conf $(PKG_BUILD_DIR)/mkspecs/qws/linux-openwrt-g++/qmake.conf
-	$(CP) ./files/$(FILEPFX)qplatformdefs.h $(PKG_BUILD_DIR)/mkspecs/qws/linux-openwrt-g++/qplatformdefs.h
+	mkdir -p $(PKG_BUILD_DIR)/mkspecs/$(QMAKE_PLATFORM_PREFIX)linux-openwrt-g++
+	$(CP) ./files/$(FILEPFX)qmake.conf $(PKG_BUILD_DIR)/mkspecs/$(QMAKE_PLATFORM_PREFIX)linux-openwrt-g++/qmake.conf
+	$(CP) ./files/$(FILEPFX)qplatformdefs.h $(PKG_BUILD_DIR)/mkspecs/$(QMAKE_PLATFORM_PREFIX)linux-openwrt-g++/qplatformdefs.h
 	( cd $(PKG_BUILD_DIR) ; \
 		TARGET_CC="$(TARGET_CROSS)gcc" \
 		TARGET_CXX="$(TARGET_CROSS)g++" \
@@ -275,6 +280,7 @@ define Build/Configure
 		STAGING_DIR="$(STAGING_DIR)" \
 		STAGING_DIR_HOST="$(STAGING_DIR)/../host" \
 		./configure \
+			-arch $(ARCH) \
 			-prefix $(CONFIGURE_PREFIX) \
 			-bindir $(CONFIGURE_PREFIX)/bin \
 			-libdir $(CONFIGURE_PREFIX)/lib \
@@ -290,9 +296,10 @@ define Build/Configure
 			$(if $(CONFIG_PACKAGE_qt4-examples),-make,-nomake) examples \
 			-nomake docs \
 			-nomake translations \
-			-xplatform qws/linux-openwrt-g++ \
+			-xplatform $(QMAKE_PLATFORM_PREFIX)linux-openwrt-g++ \
 			-platform linux-g++ \
-			-embedded \
+			$(if $(CONFIG_QT4_WS_QWS),-embedded) \
+			$(if $(CONFIG_QT4_WS_X11),-x11) \
 			-release \
 			-confirm-license \
 			-opensource \
@@ -334,16 +341,16 @@ define Build/Configure
 			-no-openvg \
 			-no-sm \
 			-no-xshape \
-			-no-xsync \
+			$(if $(CONFIG_QT4_WS_X11),-no-xsync,-xsync) \
 			-no-xinerama \
-			-no-xcursor \
+			$(if $(CONFIG_QT4_WS_X11),-no-xcursor,-xcursor) \
 			-no-xfixes \
 			-no-xrandr \
 			-no-xrender \
-			-no-mitshm \
-			-no-fontconfig \
-			-no-xinput \
-			-no-xkb \
+			$(if $(CONFIG_QT4_WS_X11),-no-mitshm,-mitshm) \
+			$(if $(CONFIG_QT4_WS_X11),-no-fontconfig,-fontconfig) \
+			$(if $(CONFIG_QT4_WS_X11),-no-xinput,-xinput) \
+			$(if $(CONFIG_QT4_WS_X11),-no-xkb,-xkb) \
 			-no-glib \
 			$(if $(CONFIG_PACKAGE_qt4-qt3support),-qt3support,-no-qt3support) \
 			-no-gfx-transformed \
@@ -351,7 +358,7 @@ define Build/Configure
 			-no-gfx-vnc \
 			-no-gfx-multiscreen \
 			-no-gfx-qnx \
-			-plugin-gfx-directfb \
+			$(if $(CONFIG_PACKAGE_directfb),-plugin-gfx-directfb) \
 			-plugin-gfx-linuxfb \
 			-no-mouse-qvfb \
 			-no-mouse-qnx \
