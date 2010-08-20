@@ -15,8 +15,6 @@ start() {
 	mkdir -p $FS_DIR_DB
 	mkdir -p $FS_DIR_LOG
 	ulimit -s 240
-	include /usr/lib/freeswitch/uci
-	fs_init_xml
 	$FS_DIR/usr/bin/freeswitch $OPTIONS -nc
 }
 
