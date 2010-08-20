@@ -1,4 +1,9 @@
-# $Id$
+#
+# Copyright (C) 2010 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
@@ -6,11 +11,10 @@ PKG_NAME:=dudders
 PKG_VERSION:=1.04
 PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_SHA1SUM:=ae3fc90804698468c8f8e285c2387eb629c25dbf
-PKG_CAT:=bzcat
+PKG_MD5SUM:=1d368a86f3c284e95d260a94767a8ded
+
 PKG_BUILD_DEPENDS:=+libopenssl +libgcrypt
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -22,8 +26,7 @@ define Package/dudders
   CATEGORY:=Network
   SUBMENU:=DNS
   TITLE:=DNS Update SIG(0) client
-  MAINTAINER:=<dos@scarff.id.au>
-  DEPENDS:=
+  MAINTAINER:=Dean Scarff <dos@scarff.id.au>
   URL:=http://dudders.sourceforge.net/
 endef
 
@@ -44,20 +47,20 @@ endef
 EXTRA_CFLAGS:= -DNDEBUG -std=gnu99
 
 CONFIGURE_ARGS+= \
-                --with-libgcrypt-prefix="$(STAGING_DIR)/usr"
+	--with-libgcrypt-prefix="$(STAGING_DIR)/usr"
 
 define Package/dudders/install
-        $(INSTALL_DIR) $(1)/usr/bin
-       $(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/dudders $(1)/usr/bin
-       $(INSTALL_DIR) $(1)/usr/lib/dudders
-       $(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/dudders/crypt_gcrypt.so \
-                      $(1)/usr/lib/dudders
-       $(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/dudders/crypt_openssl.so \
-                       $(1)/usr/lib/dudders
-       $(INSTALL_DIR) $(1)/etc/config
-       $(INSTALL_CONF) ./files/dudders.conf $(1)/etc/config/dudders
-       $(INSTALL_DIR) $(1)/etc/hotplug.d/iface
-       $(INSTALL_BIN) ./files/dudders.hotplug $(1)/etc/hotplug.d/iface/30-dudders
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/dudders $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/lib/dudders
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/dudders/crypt_gcrypt.so \
+		       $(1)/usr/lib/dudders/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/dudders/crypt_openssl.so \
+		       $(1)/usr/lib/dudders/
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) ./files/dudders.conf $(1)/etc/config/dudders
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
+	$(INSTALL_BIN) ./files/dudders.hotplug $(1)/etc/hotplug.d/iface/30-dudders
 endef
 
 $(eval $(call BuildPackage,dudders))
