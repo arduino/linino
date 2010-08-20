@@ -18,7 +18,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/PyQt-x11-gpl-$(PKG_VERSION)
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 
-PKG_BUILD_DEPENDS:=python-sip qt4
+PKG_BUILD_DEPENDS:=python-sip/host
 
 include $(INCLUDE_DIR)/package.mk
 $(call include_mk, python-package.mk)
