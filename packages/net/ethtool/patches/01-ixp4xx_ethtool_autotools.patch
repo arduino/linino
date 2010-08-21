@@ -4,33 +4,32 @@
  		  amd8111e.c de2104x.c e100.c e1000.c igb.c	\
  		  fec_8xx.c ibm_emac.c ixgb.c ixgbe.c natsemi.c	\
  		  pcnet32.c realtek.c tg3.c marvell.c vioc.c	\
--		  smsc911x.c at76c50x-usb.c
-+		  smsc911x.c at76c50x-usb.c ixp4xx.c
+-		  smsc911x.c at76c50x-usb.c sfc.c
++		  smsc911x.c at76c50x-usb.c sfc.c ixp4xx.c
  
  dist-hook:
  	cp $(top_srcdir)/ethtool.spec $(distdir)
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -55,7 +55,8 @@ am_ethtool_OBJECTS = ethtool.$(OBJEXT) a
- 	fec_8xx.$(OBJEXT) ibm_emac.$(OBJEXT) ixgb.$(OBJEXT) \
+@@ -56,7 +56,7 @@ am_ethtool_OBJECTS = ethtool.$(OBJEXT) a
  	ixgbe.$(OBJEXT) natsemi.$(OBJEXT) pcnet32.$(OBJEXT) \
  	realtek.$(OBJEXT) tg3.$(OBJEXT) marvell.$(OBJEXT) \
--	vioc.$(OBJEXT) smsc911x.$(OBJEXT) at76c50x-usb.$(OBJEXT)
-+	vioc.$(OBJEXT) smsc911x.$(OBJEXT) at76c50x-usb.$(OBJEXT) \
-+	ixp4xx.$(OBJEXT)
+ 	vioc.$(OBJEXT) smsc911x.$(OBJEXT) at76c50x-usb.$(OBJEXT) \
+-	sfc.$(OBJEXT)
++	sfc.$(OBJEXT) ixp4xx.$(OBJEXT)
  ethtool_OBJECTS = $(am_ethtool_OBJECTS)
  ethtool_LDADD = $(LDADD)
  DEFAULT_INCLUDES = -I.@am__isrc@
-@@ -198,7 +199,7 @@ ethtool_SOURCES = ethtool.c ethtool-copy
+@@ -199,7 +199,7 @@ ethtool_SOURCES = ethtool.c ethtool-copy
  		  amd8111e.c de2104x.c e100.c e1000.c igb.c	\
  		  fec_8xx.c ibm_emac.c ixgb.c ixgbe.c natsemi.c	\
  		  pcnet32.c realtek.c tg3.c marvell.c vioc.c	\
--		  smsc911x.c at76c50x-usb.c
-+		  smsc911x.c at76c50x-usb.c ixp4xx.c
+-		  smsc911x.c at76c50x-usb.c sfc.c
++		  smsc911x.c at76c50x-usb.c sfc.c ixp4xx.c
  
  all: ethtool-config.h
  	$(MAKE) $(AM_MAKEFLAGS) all-am
-@@ -316,6 +317,7 @@ distclean-compile:
+@@ -317,6 +317,7 @@ distclean-compile:
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/igb.Po@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ixgb.Po@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ixgbe.Po@am__quote@
@@ -52,7 +51,7 @@
 +++ /dev/null
 @@ -1,42 +0,0 @@
 -Name		: ethtool
--Version		: 2.6.34
+-Version		: 2.6.35
 -Release		: 1
 -Group		: Utilities
 -
