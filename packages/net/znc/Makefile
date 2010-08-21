@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=znc
 PKG_VERSION:=0.078
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/znc
@@ -36,14 +36,14 @@ CONFIGURE_VARS += \
 	CXX="$(TARGET_CROSS)-g++-uc"
 	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
 	CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-	LDFLAGS="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib"
+	LDFLAGS="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
 	LIBS="-luClibc++ -lm -lssl $(LIBGCC_S) -lc"
 
 CONFIGURE_ARGS += \
 	$(TARGET_CONFIGURE_OPTS) \
 	--disable-c-ares \
 	--disable-modules \
-	--disable-perl \
+	--disable-perl
 
 MAKE_FLAGS += \
 	CXX="g++-uc"
