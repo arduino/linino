@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miredo
-PKG_VERSION:=1.1.7
-PKG_RELEASE:=4
+PKG_VERSION:=1.2.3
+PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=http://www.remlab.net/files/miredo/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=4fb5e7df6a6255528e4c5380401ad3ea
+PKG_MD5SUM:=6ba484ad5e331514a8a3452da2b144e7
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -76,20 +76,24 @@ MAKE_FLAGS := \
 define Package/miredo-common/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/lib{teredo,tun6}.so.* $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/miredo
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/miredo/miredo-privproc $(1)/usr/lib/miredo
 endef
 
 define Package/miredo-server/install
 	$(INSTALL_DIR) $(1)/etc/miredo
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/miredo/examples/miredo-server.conf $(1)/etc/miredo/miredo-server.conf
+	$(INSTALL_BIN) ./files/client-hook $(1)/etc/miredo/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/miredo-server.init $(1)/etc/init.d/miredo-server
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/miredo-server $(1)/usr/sbin/
 endef
 
-define Package/miredo-client/install	
+define Package/miredo-client/install
 	$(INSTALL_DIR) $(1)/etc/miredo
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/doc/miredo/examples/miredo.conf $(1)/etc/miredo/miredo.conf
+	$(INSTALL_BIN) ./files/client-hook $(1)/etc/miredo/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/miredo.init $(1)/etc/init.d/miredo
 	$(INSTALL_DIR) $(1)/usr/sbin
