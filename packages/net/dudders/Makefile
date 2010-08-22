@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dudders
 PKG_VERSION:=1.04
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
@@ -60,7 +60,7 @@ define Package/dudders/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_CONF) ./files/dudders.conf $(1)/etc/config/dudders
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
-	$(INSTALL_BIN) ./files/dudders.hotplug $(1)/etc/hotplug.d/iface/30-dudders
+	$(INSTALL_BIN) ./files/dudders.hotplug $(1)/etc/hotplug.d/iface/50-dudders
 endef
 
 $(eval $(call BuildPackage,dudders))
