@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libusb-1.0
-PKG_VERSION:=1.0.6
+PKG_VERSION:=1.0.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=libusb-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.sourceforge.net/project/libusb/libusb-1.0/libusb-$(PKG_VERSION)
-PKG_MD5SUM:=818c7c02112a53e0c182666ee83f2057
+PKG_MD5SUM:=37d34e6eaa69a4b645a19ff4ca63ceef
 PKG_BUILD_DIR:=$(BUILD_DIR)/libusb-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
