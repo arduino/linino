@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aprx
-PKG_REV:=121
-PKG_VERSION:=0.99_r$(PKG_REV)
+PKG_REV:=421
+PKG_VERSION:=2.00_r$(PKG_REV)
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -35,7 +35,7 @@ endef
 CONFIGURE_ARGS += \
 	--with-embedded \
 
-define Package/aprx/install	
+define Package/aprx/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/aprx.init $(1)/etc/init.d/aprx
 	$(INSTALL_DIR) $(1)/etc
