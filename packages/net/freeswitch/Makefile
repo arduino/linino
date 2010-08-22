@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeswitch
 PKG_VERSION:=1.0.6
-PKG_RELEASE:=9
+PKG_RELEASE:=10
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -477,12 +477,12 @@ define BuildPlugin
 
   define Package/freeswitch-mod-$(1)/postinst
 #!/bin/sh
-sed -i -e 's|^\([ \t]*\)<!-- *\(.*\)"mod_$(1)"\(.*\) *-->\(.*\)$$$$|\1\2"mod_$(1)"\3\4|' $$$${IPKG_INSTROOT}/etc/freeswitch/autoload_configs/modules.conf.xml
+sed -i -e 's|^\([ \t]*\)<!-- *\(.*\)"mod_$(subst -,_,$(1))"\(.*\) *-->\(.*\)$$$$|\1\2"mod_$(subst -,_,$(1))"\3\4|' $$$${IPKG_INSTROOT}/etc/freeswitch/autoload_configs/modules.conf.xml
   endef
 
   define Package/freeswitch-mod-$(1)/postrm
 #!/bin/sh
-sed -i -e 's|^\([ \t]*\)\(.*\)"mod_$(1)"\(.*\)$$$$|\1<!-- \2"mod_$(1)"\3 -->|' $$$${IPKG_INSTROOT}/etc/freeswitch/autoload_configs/modules.conf.xml
+sed -i -e 's|^\([ \t]*\)\(.*\)"mod_$(subst -,_,$(1))"\(.*\)$$$$|\1<!-- \2"mod_$(subst -,_,$(1))"\3 -->|' $$$${IPKG_INSTROOT}/etc/freeswitch/autoload_configs/modules.conf.xml
   endef
 
   $$(eval $$(call BuildPackage,freeswitch-mod-$(1)))
