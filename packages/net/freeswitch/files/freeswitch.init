@@ -14,6 +14,8 @@ start() {
 	[ -f $DEFAULT ] && . $DEFAULT
 	mkdir -p $FS_DIR_DB
 	mkdir -p $FS_DIR_LOG
+	mkdir -p $FS_DIR_RECORDINGS
+	mkdir -p $FS_DIR_VM_STORAGE
 	ulimit -s 240
 	$FS_DIR/usr/bin/freeswitch $OPTIONS -nc
 }

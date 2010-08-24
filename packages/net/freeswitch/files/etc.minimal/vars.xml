@@ -199,5 +199,5 @@
   <X-PRE-PROCESS cmd="set" data="external_ssl_dir=$${base_dir}/conf/ssl"/>
   
   <!-- Call recordings directory -->
-  <X-PRE-PROCESS cmd="set" data="recordings_dir=/home/freeswitch/recordings" />
+  <X-PRE-PROCESS cmd="set" data="recordings_dir=/var/lib/freeswitch/recordings" />
 </include>
