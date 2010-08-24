@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeswitch
 PKG_VERSION:=1.0.6
-PKG_RELEASE:=10
+PKG_RELEASE:=11
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -304,7 +304,7 @@ FS_TARGET_CXXFLAGS:= ${TARGET_CXXFLAGS} -DLUA_USE_LINUX $(FPIC) -Wno-format
 FS_TARGET_CPPFLAGS:= -I. -I./lua ${TARGET_CPPFLAGS}
 
 CONFIGURE_ARGS+= \
-	--prefix="/usr/freeswitch" \
+	--prefix="/usr/share/freeswitch" \
 	--bindir="/usr/bin" \
 	--libdir="/usr/lib" \
 	--sysconfdir="/etc/freeswitch" \
@@ -385,7 +385,7 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/freeswitch
-	$(CP) $(PKG_INSTALL_DIR)/usr/freeswitch/include/* $(1)/usr/include/freeswitch/
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/freeswitch/include/* $(1)/usr/include/freeswitch/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfreeswitch.{a,so*} $(1)/usr/lib/
 endef
@@ -434,13 +434,13 @@ define Package/freeswitch-config-minimal/install
 endef
 
 define Package/freeswitch-sounds-en/install
-	$(INSTALL_DIR) $(1)/usr/freeswitch/sounds
-	$(CP) $(PKG_INSTALL_DIR)/usr/freeswitch/sounds/en $(1)/usr/freeswitch/sounds/
+	$(INSTALL_DIR) $(1)/usr/share/freeswitch/sounds
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/freeswitch/sounds/en $(1)/usr/share/freeswitch/sounds/
 endef
 
 define Package/freeswitch-sounds-moh/install
-	$(INSTALL_DIR) $(1)/usr/freeswitch/sounds
-	$(CP) $(PKG_INSTALL_DIR)/usr/freeswitch/sounds/music $(1)/usr/freeswitch/sounds/
+	$(INSTALL_DIR) $(1)/usr/share/freeswitch/sounds
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/freeswitch/sounds/music $(1)/usr/share/freeswitch/sounds/
 endef
 
 define Package/freeswitch-tools/install
