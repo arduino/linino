@@ -78,6 +78,7 @@ define Package/directfb/install
 	$(INSTALL_DIR) \
 		$(1)/usr/bin \
 		$(1)/usr/lib \
+		$(1)/usr/share/directfb-1.4.2 \
 		$(1)/usr/lib/directfb-1.4-0/interfaces/IDirectFBFont \
 		$(1)/usr/lib/directfb-1.4-0/interfaces/IDirectFBImageProvider \
 		$(1)/usr/lib/directfb-1.4-0/interfaces/IDirectFBVideoProvider \
@@ -87,6 +88,9 @@ define Package/directfb/install
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/bin/* \
 		$(1)/usr/bin/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/share/directfb-1.4.2/* \
+		$(1)/usr/share/directfb-1.4.2/
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/lib{direct,fusion}*.so* \
 		$(1)/usr/lib/
