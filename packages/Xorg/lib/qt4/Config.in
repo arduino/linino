@@ -7,7 +7,6 @@ config QT4_WS_QWS
 	bool "QWS window system"
 	depends on FEATURE_drawing-backend_DirectFB
 	select PACKAGE_directfb
-	select PACKAGE_tslib
 	help
 	  Use QT4's internal QWS window system.
 
