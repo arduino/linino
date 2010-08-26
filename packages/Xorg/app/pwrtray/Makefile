@@ -28,7 +28,7 @@ define Package/pwrtray
   SUBMENU:=app
   TITLE:=pwrtray
   URL:=http://bu3sch.de/gitweb?p=pwrtray.git;a=summary
-  DEPENDS:=+qt4
+  DEPENDS:=+qt4 +qt4-gui
 endef
 
 define Package/pwrtray/description
