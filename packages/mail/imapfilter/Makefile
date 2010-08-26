@@ -63,7 +63,7 @@ define Package/imapfilter/install
 	$(INSTALL_DIR) $(1)/etc/imapfilter
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/sample.config.lua $(1)/etc/imapfilter/config.lua
 	$(INSTALL_DIR) $(1)/usr/share/imapfilter
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/{account,auxiliary,common,mailbox,message,options,regex,set}.lua $(1)/usr/share/imapfilter/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/{account,auxiliary,common,mailbox,message,options,regex,set,deprecated}.lua $(1)/usr/share/imapfilter/
 endef
 
 $(eval $(call BuildPackage,imapfilter))
