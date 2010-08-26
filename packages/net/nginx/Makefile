@@ -22,7 +22,8 @@ define Package/nginx
   CATEGORY:=Network
   TITLE:=Nginx web server
   URL:=http://nginx.net/
-  DEPENDS:=+libpcre +libopenssl
+  DEPENDS:=+libpcre
+  MENU:=1
 endef
 
 define Package/nginx/description
@@ -31,10 +32,41 @@ define Package/nginx/description
 	written by Igor Sysoev.
 endef
 
+define Package/nginx/config
+	source "$(SOURCE)/Config.in"
+endef
+
 config_files=nginx.conf mime.types fastcgi_params koi-utf koi-win win-utf
 
+define Package/nginx/conffiles
+/etc/nginx/nginx.conf
+/etc/nginx/mime.types
+/etc/nginx/fastcgi_params
+/etc/nginx/koi-utf
+/etc/nginx/koi-win
+/etc/nginx/win-utf
+endef
+
+ADDITIONAL_MODULES:=
+
+ifeq ($(CONFIG_IPV6),y)
+  ADDITIONAL_MODULES += --with-ipv6
+endif
+ifeq ($(CONFIG_NGINX_STUB_STATUS),y)
+  ADDITIONAL_MODULES += --with-http_stub_status_module
+endif
+ifeq ($(CONFIG_NGINX_FLV),y)
+  ADDITIONAL_MODULES += --with-http_flv_module
+endif
+ifeq ($(CONFIG_NGINX_SSL),y)
+  ADDITIONAL_MODULES += --with-http_ssl_module
+endif
+ifeq ($(CONFIG_NGINX_DAV),y)
+  ADDITIONAL_MODULES += --with-http_dav_module
+endif
+
 define Build/Configure
-	# fix --crossbuild
+	# TODO: fix --crossbuild
 	(cd $(PKG_BUILD_DIR) ;\
 		./configure \
 			--crossbuild=Linux::$(ARCH) \
@@ -50,9 +82,7 @@ define Build/Configure
 			--with-cc="$(TARGET_CC)" \
 			--with-cc-opt="$(TARGET_CPPFLAGS) $(TARGET_CFLAGS)" \
 			--with-ld-opt="$(TARGET_LDFLAGS)" \
-			--with-http_stub_status_module \
-			--with-http_ssl_module \
-			--with-ipv6 )
+			$(ADDITIONAL_MODULES) )
 endef
 
 define Build/Compile
@@ -66,6 +96,10 @@ define Package/nginx/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/nginx $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/nginx
 	$(INSTALL_DATA) $(addprefix $(PKG_INSTALL_DIR)/etc/nginx/,$(config_files)) $(1)/etc/nginx
+	# make nginx bind on both IPv4 and IPv6 by default, when available
+  ifeq ($(CONFIG_IPV6),y)
+	$(SED) 's/listen\( \+\)80;/listen\1[::]:80;/' $(1)/etc/nginx/nginx.conf
+  endif
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/nginx.init $(1)/etc/init.d/nginx
 endef
