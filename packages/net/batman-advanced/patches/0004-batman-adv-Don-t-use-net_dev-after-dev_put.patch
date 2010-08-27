@@ -1,0 +1,80 @@
+From 91235b4ca86709f2974fc954c2ff81fd8e5ac926 Mon Sep 17 00:00:00 2001
+From: Sven Eckelmann <sven.eckelmann@gmx.de>
+Date: Fri, 20 Aug 2010 19:16:11 +0000
+Subject: [PATCH 09/10] batman-adv: Don't use net_dev after dev_put
+
+dev_put allows a device to be freed when all its references are dropped.
+After that we are not allowed to access that information anymore. Access
+to the data structure of a net_device must be surrounded a dev_hold
+and ended using dev_put.
+
+batman-adv adds a device to its own management structure in
+hardif_add_interface and will release it in hardif_remove_interface.
+Thus it must hold a reference all the time between those functions to
+prevent any access to the already released net_device structure.
+
+Reported-by: Tim Glaremin <Tim.Glaremin@web.de>
+Signed-off-by: Sven Eckelmann <sven.eckelmann@gmx.de>
+Cc: stable <stable@kernel.org>
+---
+ hard-interface.c |   11 ++++++-----
+ 1 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/hard-interface.c b/hard-interface.c
+index 1670ec8..ce6819a 100644
+--- a/hard-interface.c
++++ b/hard-interface.c
+@@ -196,8 +196,6 @@ static void hardif_activate_interface(struct net_device *net_dev,
+ 	if (batman_if->if_status != IF_INACTIVE)
+ 		return;
+ 
+-	dev_hold(batman_if->net_dev);
+-
+ 	update_mac_addresses(batman_if);
+ 	batman_if->if_status = IF_TO_BE_ACTIVATED;
+ 
+@@ -224,8 +222,6 @@ static void hardif_deactivate_interface(struct net_device *net_dev,
+ 	   (batman_if->if_status != IF_TO_BE_ACTIVATED))
+ 		return;
+ 
+-	dev_put(batman_if->net_dev);
+-
+ 	batman_if->if_status = IF_INACTIVE;
+ 
+ 	bat_info(net_dev, "Interface deactivated: %s\n", batman_if->dev);
+@@ -322,12 +318,14 @@ static struct batman_if *hardif_add_interface(struct net_device *net_dev)
+ 	if (ret != 1)
+ 		goto out;
+ 
++	dev_hold(net_dev);
++
+ 	batman_if = kmalloc(sizeof(struct batman_if), GFP_ATOMIC);
+ 	if (!batman_if) {
+ 		printk(KERN_ERR "batman-adv:"
+ 		       "Can't add interface (%s): out of memory\n",
+ 		       net_dev->name);
+-		goto out;
++		goto release_dev;
+ 	}
+ 
+ 	batman_if->dev = kstrdup(net_dev->name, GFP_ATOMIC);
+@@ -348,6 +346,8 @@ free_dev:
+ 	kfree(batman_if->dev);
+ free_if:
+ 	kfree(batman_if);
++release_dev:
++	dev_put(net_dev);
+ out:
+ 	return NULL;
+ }
+@@ -376,6 +376,7 @@ static void hardif_remove_interface(struct batman_if *batman_if)
+ 	batman_if->if_status = IF_TO_BE_REMOVED;
+ 	list_del_rcu(&batman_if->list);
+ 	sysfs_del_hardif(&batman_if->hardif_obj);
++	dev_put(batman_if->net_dev);
+ 	call_rcu(&batman_if->rcu, hardif_free_interface);
+ }
+ 
+-- 
+1.7.1
+

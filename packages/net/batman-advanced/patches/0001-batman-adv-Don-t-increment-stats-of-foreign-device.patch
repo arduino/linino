@@ -1,0 +1,44 @@
+From 3a50ba56201d00b700111c29b05e4cf4b49236d3 Mon Sep 17 00:00:00 2001
+From: Sven Eckelmann <sven.eckelmann@gmx.de>
+Date: Tue, 20 Jul 2010 23:05:04 +0200
+Subject: [PATCH 01/10] batman-adv: Don't increment stats of foreign device
+
+The receive hook for batman-adv ethernet frames tried to get the last
+device which processed the skb before us. It only used that information
+to update the rx_bytes and rx_packets stat of that foreign device which
+already has updated it using its own receive functions.
+
+Signed-off-by: Sven Eckelmann <sven.eckelmann@gmx.de>
+---
+ compat.h         |    8 --------
+ hard-interface.c |    8 --------
+ 2 files changed, 0 insertions(+), 16 deletions(-)
+
+diff --git a/hard-interface.c b/hard-interface.c
+index 6a37c33..e3e1e9e 100644
+--- a/hard-interface.c
++++ b/hard-interface.c
+@@ -440,7 +440,6 @@ int batman_skb_recv(struct sk_buff *skb, struct net_device *dev,
+ {
+ 	struct batman_packet *batman_packet;
+ 	struct batman_if *batman_if;
+-	struct net_device_stats *stats;
+ 	int ret;
+ 
+ 	skb = skb_share_check(skb, GFP_ATOMIC);
+@@ -469,12 +468,6 @@ int batman_skb_recv(struct sk_buff *skb, struct net_device *dev,
+ 	if (batman_if->if_status != IF_ACTIVE)
+ 	goto err_free;
+ 
+-	stats = (struct net_device_stats *)dev_get_stats(skb->dev);
+-	if (stats) {
+-		stats->rx_packets++;
+-		stats->rx_bytes += skb->len;
+-	}
+-
+ 	batman_packet = (struct batman_packet *)skb->data;
+ 
+ 	if (batman_packet->version != COMPAT_VERSION) {
+-- 
+1.7.1
+

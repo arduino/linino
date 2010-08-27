@@ -1,0 +1,45 @@
+From 3bb2899bd37b1bb127adaa6808f4b1fa716df0de Mon Sep 17 00:00:00 2001
+From: Sven Eckelmann <sven.eckelmann@gmx.de>
+Date: Fri, 20 Aug 2010 19:16:00 +0000
+Subject: [PATCH 08/10] batman-adv: Create batman_if only on register event
+
+We try to get all events for all net_devices to be able to add special
+sysfs folders for the batman-adv configuration. This also includes such
+events like NETDEV_POST_INIT which has no valid kobject according to
+v2.6.32-rc3-13-g7ffbe3f. This would create an oops in that situation.
+
+It is enough to create the batman_if only on NETDEV_REGISTER events
+because we will also receive those events for devices which already
+existed when we registered the notifier call.
+
+Signed-off-by: Sven Eckelmann <sven.eckelmann@gmx.de>
+Cc: stable <stable@kernel.org>
+---
+ hard-interface.c |    6 ++----
+ 1 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/hard-interface.c b/hard-interface.c
+index e3e1e9e..1670ec8 100644
+--- a/hard-interface.c
++++ b/hard-interface.c
+@@ -395,15 +395,13 @@ static int hard_if_event(struct notifier_block *this,
+ 	/* FIXME: each batman_if will be attached to a softif */
+ 	struct bat_priv *bat_priv = netdev_priv(soft_device);
+ 
+-	if (!batman_if)
+-		batman_if = hardif_add_interface(net_dev);
++	if (!batman_if && event == NETDEV_REGISTER)
++			batman_if = hardif_add_interface(net_dev);
+ 
+ 	if (!batman_if)
+ 		goto out;
+ 
+ 	switch (event) {
+-	case NETDEV_REGISTER:
+-		break;
+ 	case NETDEV_UP:
+ 		hardif_activate_interface(soft_device, bat_priv, batman_if);
+ 		break;
+-- 
+1.7.1
+
