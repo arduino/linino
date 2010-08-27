@@ -1,6 +1,6 @@
 choice
 	prompt "qt4 window system"
-	depends on PACKAGE_qt4
+	depends on PACKAGE_qt4 && PACKAGE_qt4-gui
 	default QT4_WS_QWS
 
 config QT4_WS_QWS

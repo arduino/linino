@@ -258,6 +258,11 @@ endif
 ifeq ($(CONFIG_QT4_WS_X11),y)
   FILEPFX:=x11-
 endif
+ifeq ($(CONFIG_PACKAGE_qt4-gui),)
+  # If GUI is disabled, we use the X11 prefix. That's good enough, for now.
+  # The X11 files also work for non-GUI.
+  FILEPFX:=x11-
+endif
 
 define Build/Configure
 	# NOTES:
@@ -300,8 +305,7 @@ define Build/Configure
 			-nomake translations \
 			-xplatform $(QMAKE_PLATFORM_PREFIX)linux-openwrt-g++ \
 			-platform linux-g++ \
-			$(if $(CONFIG_QT4_WS_QWS),-embedded) \
-			$(if $(CONFIG_QT4_WS_X11),-x11) \
+			$(if $(CONFIG_QT4_WS_X11),-x11,-embedded) \
 			-release \
 			-confirm-license \
 			-opensource \
