@@ -1,0 +1,17 @@
+#!/bin/sh /etc/rc.common
+START=99
+
+start()
+{
+	/usr/sbin/chaosvpn_config.sh
+	[ $? = 0 ] || {
+		logger "not starting chaosvpn, check your config"
+		exit 1
+	}
+	/usr/sbin/chaosvpn -f -c /etc/tinc/chaosvpn.conf >/dev/null 2>&1 &
+}
+
+stop()
+{
+	killall chaosvpn
+}
