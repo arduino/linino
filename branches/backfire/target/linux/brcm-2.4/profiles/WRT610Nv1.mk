@@ -6,7 +6,7 @@
 #
 
 define Profile/WRT610Nv1
-  NAME:=Linksys WRT300N v1.1
+  NAME:=Linksys WRT610N v1.1
   PACKAGES:=kmod-brcm-wl-mimo wlc nas kmod-wlcompat kmod-brcm-57xx kmod-usb-core kmod-usb-ohci kmod-usb2
 endef
 
