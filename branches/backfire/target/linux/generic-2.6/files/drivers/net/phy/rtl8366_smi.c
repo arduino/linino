@@ -905,6 +905,7 @@ int rtl8366_sw_set_vlan_ports(struct switch_dev *dev, struct switch_val *val)
 	struct switch_port *port;
 	u32 member = 0;
 	u32 untag = 0;
+	int err;
 	int i;
 
 	if (!smi->ops->is_vlan_valid(smi, val->port_vlan))
@@ -916,6 +917,14 @@ int rtl8366_sw_set_vlan_ports(struct switch_dev *dev, struct switch_val *val)
 
 		if (!(port->flags & BIT(SWITCH_PORT_FLAG_TAGGED)))
 			untag |= BIT(port->id);
+
+		/*
+		 * To ensure that we have a valid MC entry for this VLAN,
+		 * initialize the port VLAN ID here.
+		 */
+		err = rtl8366_set_pvid(smi, port->id, val->port_vlan);
+		if (err < 0)
+			return err;
 	}
 
 	return rtl8366_set_vlan(smi, val->port_vlan, member, untag, 0);
