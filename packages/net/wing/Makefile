@@ -10,13 +10,13 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=wing
 
 ifneq ($(CONFIG_WING_STABLE),)
-  PKG_VERSION:=20100805
-  PKG_RELEASE:=1
-  PKG_REV:=21aae2ae5bea85426aded47b055b4fe62c2cea2e
+	PKG_VERSION:=20100827
+	PKG_RELEASE:=2
+	PKG_REV:=6f238baa6c4f357f1fe0e55f1b71db7816747b33
 else 
-  PKG_VERSION:=$(shell date +%Y%m%d)
-  PKG_RELEASE:=1
-  PKG_REV:=HEAD
+	PKG_VERSION:=$(shell date +%Y%m%d)
+	PKG_RELEASE:=1
+	PKG_REV:=HEAD
 endif
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -30,12 +30,12 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/wing
-  TITLE:=Wireless mesh networking toolkit
-  SECTION:=net
-  CATEGORY:=Network
-  MAINTAINER:=Roberto Riggio <roberto.riggio@create-net.org>
-  DEPENDS:=+kmod-tun
-  URL:=http://www.wing-project.org/
+	TITLE:=Wireless mesh networking toolkit
+	SECTION:=net
+	CATEGORY:=Network
+	MAINTAINER:=Roberto Riggio (roberto.riggio@create-net.org)
+	DEPENDS:=+kmod-tun
+	URL:=http://www.wing-project.org/
 endef
 
 define Package/wing/Description 
