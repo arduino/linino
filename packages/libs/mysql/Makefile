@@ -32,6 +32,19 @@ define Package/libmysqlclient/Default
   URL:=http://dev.mysql.com/
 endef
 
+define Package/mysql-server/Default
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=+zlib +libmysqlclient +uclibcxx
+  TITLE:=MySQL Server
+  URL:=http://dev.mysql.com/
+  SUBMENU:=database
+endef
+
+define Package/mysql-server
+  $(call Package/mysql-server/Default)
+endef
+
 define Package/libmysqlclient
   $(call Package/libmysqlclient/Default)
 endef
@@ -41,6 +54,14 @@ define Package/libmysqlclient_r
   TITLE += threadsafe
 endef
 
+CONFIGURE_VARS += \
+        CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
+        CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
+        LDFLAGS="$$$$LDFLAGS" \
+        LIBS="-nodefaultlibs -luClibc++ -lm $(LIBGCC_S)" \
+        CLIENTCLIBS="-nodefaultlibs -luClibc++ -lm $(LIBGCC_S)" \
+
+
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); touch \
 		configure.in \
@@ -49,26 +70,31 @@ define Build/Configure
 		config.h.in \
 		configure \
 	);
+
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \
 		--enable-thread-safe-client \
 		--disable-assembler \
 		--with-pthread \
+		--with-server \
+		--without-mysqlmanager \
 		--without-raid \
+		--with-mysqld-user=root \
 		--with-unix-socket-path=/tmp \
 		--without-libwrap \
 		--without-pstack \
 		--with-low-memory \
-		--without-server \
 		--without-embedded-server \
 		--without-query-cache \
 		--without-mysqlfs \
 		--without-vio \
 		--without-openssl \
 		--without-docs \
+		--without-man \
 		--without-bench \
 		--without-readline \
+		--without-debug \
 		--with-named-thread-libs=-lpthread \
 		, \
 		mysql_cv_compress=yes \
@@ -102,7 +128,11 @@ define Build/Compile
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		bin_SCRIPTS="mysql_config" \
 		install
+	$(MAKE) -C "$(PKG_BUILD_DIR)" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		install
 endef
+
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(2)/bin $(1)/usr/bin $(1)/usr/include $(1)/usr/lib
@@ -124,5 +154,25 @@ define Package/libmysqlclient_r/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/mysql/libmysqlclient_r.so.* $(1)/usr/lib/
 endef
 
+define Package/mysql-server/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mysql $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/mysqld $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/myisamchk $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mysqladmin $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mysqldump $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mysql_install_db $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mysql_create_system_tables $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/my_print_defaults $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/init.d/
+	$(INSTALL_BIN) files/mysqld.init $(1)/etc/init.d/mysqld
+	$(INSTALL_CONF) conf/my.cnf $(1)/etc/
+	$(INSTALL_DIR) $(1)/usr/share/mysql
+	$(INSTALL_DIR) $(1)/usr/share/mysql/english
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/share/mysql/english/errmsg.sys $(1)/usr/share/mysql/english
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/share/mysql/fill_help_tables.sql $(1)/usr/share/mysql/
+endef
+
+$(eval $(call BuildPackage,mysql-server))
 $(eval $(call BuildPackage,libmysqlclient))
 $(eval $(call BuildPackage,libmysqlclient_r))

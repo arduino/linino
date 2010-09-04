@@ -1,0 +1,33 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2010 OpenWrt.org
+START=95
+STOP=10
+
+
+PID=/var/run/mysqld.pid
+CMD=/usr/bin/mysqld
+
+start() {
+    DATADIR=`grep datadir /etc/my.cnf | cut -f 2 -d =`
+    if [ !  -d $DATADIR ]; then
+    	echo "Error: datadir in /etc/my.cnf ($DATADIR) doesn't exist"
+    	return 1
+    elif [ ! -f $DATADIR/mysql/tables_priv.MYD ]; then
+	echo "Error: I didn't detect a privileges table, you might need to run mysql_install_db --force to initialize the system tables"
+	return 1
+    else
+	start-stop-daemon -x $CMD -p $PID -b -m -S
+    fi
+}
+
+stop() {
+    echo -n "Stopping Mysqld..."
+    start-stop-daemon -x $CMD -p $PID -K
+    ret=$?
+    if [ -f "$PID" ]; then
+        rm "$PID"
+    fi
+    return ${ret}
+}
+
+

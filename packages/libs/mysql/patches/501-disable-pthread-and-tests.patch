@@ -1,0 +1,112 @@
+--- mysql.old/sql/Makefile.am	2005-12-21 12:39:32.000000000 -0700
++++ mysql.dev/sql/Makefile.am	2010-08-07 15:13:34.399776279 -0600
+@@ -148,8 +148,8 @@
+ 		@echo "If it fails, re-run configure with --with-low-memory"
+ 		$(CXXCOMPILE) $(LM_CFLAGS) -c $<
+ 
+-lex_hash.h:	gen_lex_hash$(EXEEXT)
+-		./gen_lex_hash$(EXEEXT) > $@
++#lex_hash.h:	gen_lex_hash$(EXEEXT)
++#		./gen_lex_hash$(EXEEXT) > $@
+ 
+ # For testing of udf_example.so;  Works on platforms with gcc
+ # (This is not part of our build process but only provided as an example)
+
+--- mysql.old/sql/Makefile.in	2005-12-21 12:41:41.000000000 -0700
++++ mysql.dev/sql/Makefile.in	2010-08-07 15:15:39.747273400 -0600
+@@ -1253,8 +1253,8 @@
+ 		@echo "If it fails, re-run configure with --with-low-memory"
+ 		$(CXXCOMPILE) $(LM_CFLAGS) -c $<
+ 
+-lex_hash.h:	gen_lex_hash$(EXEEXT)
+-		./gen_lex_hash$(EXEEXT) > $@
++#lex_hash.h:	gen_lex_hash$(EXEEXT)
++#		./gen_lex_hash$(EXEEXT) > $@
+ 
+ # For testing of udf_example.so;  Works on platforms with gcc
+ # (This is not part of our build process but only provided as an example)
+
+
+--- mysql.old/extra/Makefile.am	2005-12-21 12:39:55.000000000 -0700
++++ mysql.dev/extra/Makefile.am	2010-08-07 16:44:45.649771408 -0600
+@@ -29,14 +29,14 @@
+ DIST_SUBDIRS=           yassl
+ 
+ # This will build mysqld_error.h and sql_state.h
+-$(top_builddir)/include/mysqld_error.h: comp_err$(EXEEXT)
+-	$(top_builddir)/extra/comp_err$(EXEEXT) \
+-	--charset=$(top_srcdir)/sql/share/charsets \
+-	--out-dir=$(top_builddir)/sql/share/ \
+-	--header_file=$(top_builddir)/include/mysqld_error.h \
+-	--name_file=$(top_builddir)/include/mysqld_ername.h \
+-	--state_file=$(top_builddir)/include/sql_state.h \
+-	--in_file=$(top_srcdir)/sql/share/errmsg.txt
++#$(top_builddir)/include/mysqld_error.h: comp_err$(EXEEXT)
++#	$(top_builddir)/extra/comp_err$(EXEEXT) \
++#	--charset=$(top_srcdir)/sql/share/charsets \
++#	--out-dir=$(top_builddir)/sql/share/ \
++#	--header_file=$(top_builddir)/include/mysqld_error.h \
++#	--name_file=$(top_builddir)/include/mysqld_ername.h \
++#	--state_file=$(top_builddir)/include/sql_state.h \
++#	--in_file=$(top_srcdir)/sql/share/errmsg.txt
+ $(top_builddir)/include/mysqld_ername.h: $(top_builddir)/include/mysqld_error.h
+ $(top_builddir)/include/sql_state.h: $(top_builddir)/include/mysqld_error.h
+ 
+--- mysql.old/extra/Makefile.in	2005-12-21 12:41:16.000000000 -0700
++++ mysql.dev/extra/Makefile.in	2010-08-07 16:44:29.537273634 -0600
+@@ -870,14 +870,14 @@
+ 
+ 
+ # This will build mysqld_error.h and sql_state.h
+-$(top_builddir)/include/mysqld_error.h: comp_err$(EXEEXT)
+-	$(top_builddir)/extra/comp_err$(EXEEXT) \
+-	--charset=$(top_srcdir)/sql/share/charsets \
+-	--out-dir=$(top_builddir)/sql/share/ \
+-	--header_file=$(top_builddir)/include/mysqld_error.h \
+-	--name_file=$(top_builddir)/include/mysqld_ername.h \
+-	--state_file=$(top_builddir)/include/sql_state.h \
+-	--in_file=$(top_srcdir)/sql/share/errmsg.txt
++#$(top_builddir)/include/mysqld_error.h: comp_err$(EXEEXT)
++#	$(top_builddir)/extra/comp_err$(EXEEXT) \
++#	--charset=$(top_srcdir)/sql/share/charsets \
++#	--out-dir=$(top_builddir)/sql/share/ \
++#	--header_file=$(top_builddir)/include/mysqld_error.h \
++#	--name_file=$(top_builddir)/include/mysqld_ername.h \
++#	--state_file=$(top_builddir)/include/sql_state.h \
++#	--in_file=$(top_srcdir)/sql/share/errmsg.txt
+ $(top_builddir)/include/mysqld_ername.h: $(top_builddir)/include/mysqld_error.h
+ $(top_builddir)/include/sql_state.h: $(top_builddir)/include/mysqld_error.h
+
+--- mysql.old/sql/Makefile.am	2010-08-07 16:53:38.047275454 -0600
++++ mysql.dev/sql/Makefile.am	2010-08-07 17:20:05.947271939 -0600
+@@ -40,7 +40,7 @@
+ 			$(top_builddir)/strings/libmystrings.a @ZLIB_LIBS@ @NDB_SCI_LIBS@
+ 
+ mysqld_LDADD =		@MYSQLD_EXTRA_LDFLAGS@ \
+-			@bdb_libs@ @innodb_libs@ @pstack_libs@ \
++			@bdb_libs@ @innodb_libs@ \
+                         @innodb_system_libs@ \
+ 			@ndbcluster_libs@ @ndbcluster_system_libs@ \
+ 			$(LDADD)  $(CXXLDFLAGS) $(WRAPLIBS) @LIBDL@ \
+
+--- mysql.old/sql/Makefile.in	2010-08-07 16:53:38.047275454 -0600
++++ mysql.dev/sql/Makefile.in	2010-08-07 17:20:23.197362907 -0600
+@@ -483,8 +483,6 @@
+ openssl_libs = @openssl_libs@
+ prefix = @prefix@
+ program_transform_name = @program_transform_name@
+-pstack_dirs = @pstack_dirs@
+-pstack_libs = @pstack_libs@
+ readline_basedir = @readline_basedir@
+ readline_dir = @readline_dir@
+ readline_h_ln_cmd = @readline_h_ln_cmd@
+@@ -533,7 +531,7 @@
+ 			$(top_builddir)/strings/libmystrings.a @ZLIB_LIBS@ @NDB_SCI_LIBS@
+ 
+ mysqld_LDADD = @MYSQLD_EXTRA_LDFLAGS@ \
+-			@bdb_libs@ @innodb_libs@ @pstack_libs@ \
++			@bdb_libs@ @innodb_libs@ \
+                         @innodb_system_libs@ \
+ 			@ndbcluster_libs@ @ndbcluster_system_libs@ \
+ 			$(LDADD)  $(CXXLDFLAGS) $(WRAPLIBS) @LIBDL@ \
+
