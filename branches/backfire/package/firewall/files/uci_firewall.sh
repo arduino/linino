@@ -484,7 +484,6 @@ fw_event() {
 		;;
 		ifdown)
 			config_get up "$interface" up
-			logger -t "EVENT" "$action $interface $up"
 
 			for z in $ZONE; do 
 				local masq_src masq_dest
