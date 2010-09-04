@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=picocom
-PKG_VERSION:=1.4
+PKG_VERSION:=1.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://picocom.googlecode.com/files
-PKG_MD5SUM:=08fcc5f6bb9e7676a2569386d5ea9f70
+PKG_MD5SUM:=426c3d30b82cbc80b0dafdccd6020c6c
 
 include $(INCLUDE_DIR)/package.mk
 
