@@ -69,13 +69,18 @@ addif() {
 	local network="$1"
 	local ifname="$2"
 	local zone="$3"
+	local masq_src="$4"
+	local masq_dest="$5"
 
 	local n_if n_zone
 	config_get n_if core "${network}_ifname"
 	config_get n_zone core "${network}_zone"
 	[ -n "$n_zone" ] && {
 		if [ "$n_zone" != "$zone" ]; then
-			delif "$network" "$n_if" "$n_zone"
+			local n_masq_src n_masq_dest
+			config_get n_masq_src core "${n_zone}_masq_src"
+			config_get n_masq_dest core "${n_zone}_masq_dest"
+			delif "$network" "$n_if" "$n_zone" "$n_masq_src" "$n_masq_dest"
 		else
 			return
 		fi
@@ -90,12 +95,23 @@ addif() {
 	$IPTABLES -I zone_${zone}_ACCEPT 1 -i "$ifname" -j ACCEPT
 	$IPTABLES -I zone_${zone}_DROP 1 -i "$ifname" -j DROP
 	$IPTABLES -I zone_${zone}_REJECT 1 -i "$ifname" -j reject
-	$IPTABLES -I zone_${zone}_nat 1 -t nat -o "$ifname" -j MASQUERADE
+
+	local msrc mdst
+	for msrc in ${masq_src:-0.0.0.0/0}; do
+		[ "${msrc#!}" != "$msrc" ] && msrc="! -s ${msrc#!}" || msrc="-s $msrc"
+		for mdst in ${masq_dest:-0.0.0.0/0}; do
+			[ "${mdst#!}" != "$mdst" ] && mdst="! -d ${mdst#!}" || mdst="-d $mdst"
+			$IPTABLES -I zone_${zone}_nat 1 -t nat -o "$ifname" $msrc $mdst -j MASQUERADE
+		done
+	done
+
 	$IPTABLES -I PREROUTING 1 -t nat -i "$ifname" -j zone_${zone}_prerouting
 	$IPTABLES -A forward -i "$ifname" -j zone_${zone}_forward
 	$IPTABLES -t raw -I PREROUTING 1 -i "$ifname" -j zone_${zone}_notrack
 	uci_set_state firewall core "${network}_ifname" "$ifname"
 	uci_set_state firewall core "${network}_zone" "$zone"
+	uci_set_state firewall core "${zone}_masq_src" "$masq_src"
+	uci_set_state firewall core "${zone}_masq_dest" "$masq_dest"
 	ACTION=add ZONE="$zone" INTERFACE="$network" DEVICE="$ifname" /sbin/hotplug-call firewall
 }
 
@@ -103,6 +119,8 @@ delif() {
 	local network="$1"
 	local ifname="$2"
 	local zone="$3"
+	local masq_src="$4"
+	local masq_dest="$5"
 
 	logger "removing $network ($ifname) from firewall zone $zone"
 	$IPTABLES -D input -i "$ifname" -j zone_$zone
@@ -113,11 +131,22 @@ delif() {
 	$IPTABLES -D zone_${zone}_ACCEPT -i "$ifname" -j ACCEPT
 	$IPTABLES -D zone_${zone}_DROP -i "$ifname" -j DROP
 	$IPTABLES -D zone_${zone}_REJECT -i "$ifname" -j reject
-	$IPTABLES -D zone_${zone}_nat -t nat -o "$ifname" -j MASQUERADE
+
+	local msrc mdst
+	for msrc in ${masq_src:-0.0.0.0/0}; do
+		[ "${msrc#!}" != "$msrc" ] && msrc="! -s ${msrc#!}" || msrc="-s $msrc"
+		for mdst in ${masq_dest:-0.0.0.0/0}; do
+			[ "${mdst#!}" != "$mdst" ] && mdst="! -d ${mdst#!}" || mdst="-d $mdst"
+			$IPTABLES -D zone_${zone}_nat -t nat -o "$ifname" $msrc $mdst -j MASQUERADE
+		done
+	done
+
 	$IPTABLES -D PREROUTING -t nat -i "$ifname" -j zone_${zone}_prerouting
 	$IPTABLES -D forward -i "$ifname" -j zone_${zone}_forward
 	uci_revert_state firewall core "${network}_ifname"
 	uci_revert_state firewall core "${network}_zone"
+	uci_revert_state firewall core "${zone}_masq_src"
+	uci_revert_state firewall core "${zone}_masq_dest"
 	ACTION=remove ZONE="$zone" INTERFACE="$network" DEVICE="$ifname" /sbin/hotplug-call firewall
 }
 
@@ -416,11 +445,19 @@ get_interface_zones() {
 	local interface="$2"
 	local name
 	local network
+	local masq_src
+	local masq_dest
 	config_get name $1 name
 	config_get network $1 network
+	config_get masq_src $1 masq_src
+	config_get masq_dest $1 masq_dest
 	[ -z "$network" ] && network=$name 
 	for n in $network; do
-		[ "$n" = "$interface" ] && append add_zone "$name"
+		[ "$n" = "$interface" ] && {
+			append add_zone "$name"
+			append add_masq_src "$masq_src"
+			append add_masq_dest "$masq_dest"
+		}
 	done
 }
 
@@ -428,7 +465,9 @@ fw_event() {
 	local action="$1"
 	local interface="$2"
 	local ifname="$(sh -c ". /etc/functions.sh; include /lib/network; scan_interfaces; config_get "$interface" ifname")"
-	add_zone=
+	local add_zone=
+	local add_masq_src=
+	local add_masq_dest=
 	local up
 
 	[ -z "$ifname" ] && return 0
@@ -438,16 +477,20 @@ fw_event() {
 	case "$action" in
 		ifup)
 			for z in $add_zone; do 
-				local loaded
+				local loaded masq_src masq_dest
 				config_get loaded core loaded
-				[ -n "$loaded" ] && addif "$interface" "$ifname" "$z"
+				[ -n "$loaded" ] && addif "$interface" "$ifname" "$z" "$add_masq_src" "$add_masq_dest"
 			done
 		;;
 		ifdown)
 			config_get up "$interface" up
+			logger -t "EVENT" "$action $interface $up"
 
 			for z in $ZONE; do 
-				[ "$up" == "1" ] && delif "$interface" "$ifname" "$z"
+				local masq_src masq_dest
+				config_get masq_src core "${z}_masq_src"
+				config_get masq_dest core "${z}_masq_dest"
+				[ "$up" == "1" ] && delif "$interface" "$ifname" "$z" "$masq_src" "$masq_dest"
 			done
 		;;
 	esac
