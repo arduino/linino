@@ -92,7 +92,7 @@ if [ "$ACTION" = add ]; then
 	[ -d "/etc/usb_modeswitch.d" ] && [ -x "$modeswitch" ] && {
 		case "$DEVICENAME" in
 			*-*:*.*) : ;;
-			*) log "Not handling $DEVICENAME"; exit 0 ;;
+			*) exit 0 ;;
 		esac
 
 		find_usb_attrs
@@ -121,8 +121,6 @@ if [ "$ACTION" = add ]; then
 		[ -n "$configs" ] && {
 			log "$DEVICENAME: Selecting ${configs%% *} for mode switching"
 			$modeswitch -c "${configs%% *}"
-		} || {
-			log "$DEVICENAME: Device does not seem to need mode switching"
 		}
 	}
 fi
