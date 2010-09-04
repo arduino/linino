@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=owfs
-PKG_VERSION:=2.7p21
-PKG_RELEASE:=2
+PKG_VERSION:=2.8p1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=8aea6f3bb0dc9fdb52ed3f0e9d84fa79
+PKG_MD5SUM:=1f7e5482e86d7c2a916fc020b8d4d584
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -33,18 +33,18 @@ define Package/$(PKG_NAME)/Default
 endef
 
 define Package/$(PKG_NAME)/Default/description
-  OWFS is a suite of programs that designed to make the 1-wire bus and its 
-  devices easily accessible. The underlying priciple is to create a virtual 
-  filesystem, with the unique ID being the directory, and the individual 
-  properties of the device are represented as simple files that can be read 
+  OWFS is a suite of programs that designed to make the 1-wire bus and its
+  devices easily accessible. The underlying priciple is to create a virtual
+  filesystem, with the unique ID being the directory, and the individual
+  properties of the device are represented as simple files that can be read
   and written.
 
-  Details of the individual slave or master design are hidden behind a 
-  consistent interface. The goal is to provide an easy set of tools for a 
-  software designer to create monitoring or control applications. There are 
-  some performance enhancements in the implementation, including data caching, 
-  parallel access to bus masters, and aggregation of device communication. 
-  Still the fundemental goal has been ease of use, flexibility and correctness 
+  Details of the individual slave or master design are hidden behind a
+  consistent interface. The goal is to provide an easy set of tools for a
+  software designer to create monitoring or control applications. There are
+  some performance enhancements in the implementation, including data caching,
+  parallel access to bus masters, and aggregation of device communication.
+  Still the fundemental goal has been ease of use, flexibility and correctness
   rather than speed.
 endef
 
@@ -78,7 +78,7 @@ endef
 
 define Package/libow/description
   $(call Package/$(PKG_NAME)/Default/description)
-  
+
   This package contains the OWFS library.
 endef
 
@@ -90,7 +90,7 @@ endef
 
 define Package/libow-capi/description
   $(call Package/$(PKG_NAME)/Default/description)
-  
+
   This package contains the OWFS C-API library.
 endef
 
@@ -105,7 +105,7 @@ endef
 
 define Package/owshell/description
   $(call Package/$(PKG_NAME)/Default/description)
-  
+
   This package contains the OWFS shell utilities.
 endef
 
@@ -118,7 +118,7 @@ endef
 
 define Package/owfs/description
   $(call Package/$(PKG_NAME)/Default/description)
-  
+
   This package contains the OWFS fuse filesystem.
 endef
 
@@ -133,7 +133,7 @@ endef
 
 define Package/owhttpd/description
   $(call Package/$(PKG_NAME)/Default/description)
-  
+
   This package contains the OWFS http server.
 endef
 
@@ -144,7 +144,7 @@ endef
 
 define Package/owftpd/description
   $(call Package/$(PKG_NAME)/Default/description)
-  
+
   This package contains the OWFS ftp server.
 endef
 
@@ -155,7 +155,7 @@ endef
 
 define Package/owserver/description
   $(call Package/$(PKG_NAME)/Default/description)
-  
+
   This package contains the OWFS network server.
 endef
 
@@ -184,11 +184,6 @@ CONFIGURE_VARS += \
 	lt_cv_sys_lib_dlsearch_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
 	lt_cv_sys_lib_search_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
 	shrext_cmds=".so" \
-
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); ./bootstrap)
-	$(call Build/Configure/Default)
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(STAGING_DIR)/usr/include
