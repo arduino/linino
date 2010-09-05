@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mercurial
 PKG_VERSION:=1.6.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE_URL:=http://mercurial.selenic.com/release
 PKG_SOURCE:=mercurial-$(PKG_VERSION).tar.gz
@@ -22,7 +22,7 @@ $(call include_mk, python-package.mk)
 define Package/mercurial
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=python
+  DEPENDS:=+python
   TITLE:=Mercurial Source Control Management (SCM) system
   URL:=http://mercurial.selenic.com/
   SUBMENU:=Version Control Systems
