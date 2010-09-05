@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=psfreedom
-PKG_REV:=83445097c1c7687b5e6ccadca90126ca7a9a38b9
+PKG_REV:=d62f4aedf33c1ad5222a8c970e623da5441c40db
 PKG_VERSION:=$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -41,6 +41,22 @@ define Build/Compile
 		PWD="$(PKG_BUILD_DIR)" \
 		EXTRA_CFLAGS="-DENABLE_MUSB_CONTROLLER" \
 		modules
+endef
+
+define KernelPackage/psfreedom/install
+	$(INSTALL_DIR) $(1)/lib/firmware
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/payload_bdemu.bin \
+		$(1)/lib/firmware/psfreedom_payload_bdemu.bin
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/payload_no_bdemu.bin \
+		$(1)/lib/firmware/psfreedom_payload_no_bdemu.bin
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/shellcode_exec_payload.bin \
+		$(1)/lib/firmware/psfreedom_shellcode_exec_payload.bin
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/shellcode_panic.bin \
+		$(1)/lib/firmware/psfreedom_shellcode_panic.bin
+	( cd $(1)/lib/firmware; \
+		$(LN) psfreedom_payload_bdemu.bin psfreedom_payload.bin; \
+		$(LN) psfreedom_shellcode_exec_payload.bin psfreedom_shellcode.bin; \
+	)
 endef
 
 $(eval $(call KernelPackage,psfreedom))
