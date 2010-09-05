@@ -372,6 +372,7 @@ fw_redirect() {
 	local dest_ip
 	local dest_port dest_port2
 	local proto
+	local target
 
 	config_get src $1 src
 	config_get src_ip $1 src_ip
@@ -382,8 +383,24 @@ fw_redirect() {
 	config_get dest_ip $1 dest_ip
 	config_get dest_port $1 dest_port
 	config_get proto $1 proto
+	config_get target $1 target
+
 	[ -z "$src" -o -z "$dest_ip$dest_port" ] && { \
 		echo "redirect needs src and dest_ip or dest_port"; return ; }
+
+	local chain destopt destaddr
+	if [ "${target:-DNAT}" == "DNAT" ]; then
+		chain="zone_${src}_prerouting"
+		destopt="--to-destination"
+		destaddr="$dest_ip"
+	elif [ "$target" == "SNAT" ]; then
+		chain="zone_${src}_nat"
+		destopt="--to-source"
+		destaddr="$src_dip"
+	else
+		echo "redirect target must be either DNAT or SNAT"
+		return
+	fi
 
 	find_item "$src" $CONNTRACK_ZONES || \
 		append CONNTRACK_ZONES "$src"
@@ -405,19 +422,19 @@ fw_redirect() {
 		dest_port2="$dest_port_first:$dest_port_last"; }
 
 	add_rule() {
-		$IPTABLES -A zone_${src}_prerouting -t nat \
+		$IPTABLES -A $chain -t nat \
 			${proto:+-p $proto} \
 			${src_ip:+-s $src_ip} \
 			${src_dip:+-d $src_dip} \
 			${src_port:+--sport $src_port} \
 			${src_dport:+--dport $src_dport} \
 			${src_mac:+-m mac --mac-source $src_mac} \
-			-j DNAT --to-destination $dest_ip${dest_port:+:$dest_port}
+			-j ${target:-DNAT} $destopt $dest_ip${dest_port:+:$dest_port}
 
-		[ -n "$dest_ip" ] && \
+		[ -n "$destaddr" ] && \
 		$IPTABLES -I zone_${src}_forward 1 \
 			${proto:+-p $proto} \
-			-d $dest_ip \
+			-d $destaddr \
 			${src_ip:+-s $src_ip} \
 			${src_port:+--sport $src_port} \
 			${dest_port2:+--dport $dest_port2} \
