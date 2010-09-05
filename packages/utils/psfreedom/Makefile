@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define KernelPackage/psfreedom
   SUBMENU:=USB Support
-  DEPENDS:=@TARGET_omap24xx +usb-tahvo +musb-hdrc
+  DEPENDS:=@TARGET_omap24xx +kmod-usb-tahvo +kmod-musb-hdrc
   TITLE:=PSFreedom PS3 USB exploit
   FILES:=$(PKG_BUILD_DIR)/psfreedom.ko
   AUTOLOAD:=$(call AutoLoad,99,psfreedom)
