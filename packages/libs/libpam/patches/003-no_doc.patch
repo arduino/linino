@@ -1,5 +1,5 @@
---- Linux-PAM-0.99.6.3/Makefile.am	2006-08-05 11:06:20.000000000 +0200
-+++ Linux-PAM-0.99.6.3.new/Makefile.am	2007-01-10 23:24:06.000000000 +0100
+--- a/Makefile.am
++++ b/Makefile.am
 @@ -5,9 +5,9 @@
  AUTOMAKE_OPTIONS = 1.9 gnu dist-bzip2 check-news
  
@@ -12,10 +12,10 @@
  endif
  
  CLEANFILES = *~
---- Linux-PAM-0.99.6.3/Makefile.in	2006-09-06 13:31:39.000000000 +0200
-+++ Linux-PAM-0.99.6.3.new/Makefile.in	2007-01-10 23:24:20.000000000 +0100
-@@ -72,7 +72,7 @@
- 	uninstall-recursive
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -74,7 +74,7 @@ RECURSIVE_CLEAN_TARGETS = mostlyclean-re
+   distclean-recursive maintainer-clean-recursive
  ETAGS = etags
  CTAGS = ctags
 -DIST_SUBDIRS = libpam tests libpamc libpam_misc modules po conf doc \
@@ -23,14 +23,14 @@
  	examples xtests
  DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
  distdir = $(PACKAGE)-$(VERSION)
-@@ -257,8 +257,8 @@
- sysconfdir = @sysconfdir@
- target_alias = @target_alias@
+@@ -249,8 +249,8 @@ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
  AUTOMAKE_OPTIONS = 1.9 gnu dist-bzip2 check-news
 -@STATIC_MODULES_FALSE@SUBDIRS = libpam tests libpamc libpam_misc modules po conf doc examples xtests
 -@STATIC_MODULES_TRUE@SUBDIRS = modules libpam libpamc libpam_misc tests po conf doc examples xtests
 +@STATIC_MODULES_FALSE@SUBDIRS = libpam tests libpamc libpam_misc modules po conf examples xtests
 +@STATIC_MODULES_TRUE@SUBDIRS = modules libpam libpamc libpam_misc tests po conf examples xtests
  CLEANFILES = *~
- M4_FILES = $(shell ls $(srcdir)/m4/*.m4)
- EXTRA_DIST = config.rpath mkinstalldirs pgp.keys.asc CHANGELOG \
+ M4_FILES = m4/gettext.m4 m4/iconv.m4 m4/intlmacosx.m4 \
+ 	m4/japhar_grep_cflags.m4 m4/jh_path_xml_catalog.m4 \
