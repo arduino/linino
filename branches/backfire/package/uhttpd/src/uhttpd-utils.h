@@ -36,6 +36,13 @@
 #define fd_cloexec(fd) \
 	fcntl(fd, F_SETFD, fcntl(fd, F_GETFD) | FD_CLOEXEC)
 
+#define ensure_out(x) \
+	do { if((x) < 0) goto out; } while(0)
+
+#define ensure_ret(x) \
+	do { if((x) < 0) return -1; } while(0)
+
+
 struct path_info {
 	char *root;
 	char *phys;
@@ -100,5 +107,10 @@ struct listener * uh_listener_lookup(int sock);
 struct client * uh_client_add(int sock, struct listener *serv);
 struct client * uh_client_lookup(int sock);
 void uh_client_remove(int sock);
+
+#ifdef HAVE_CGI
+struct interpreter * uh_interpreter_add(const char *extn, const char *path);
+struct interpreter * uh_interpreter_lookup(const char *path);
+#endif
 
 #endif
