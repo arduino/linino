@@ -29,7 +29,7 @@
  dnl --------------------------
 --- a/lib/command.h
 +++ b/lib/command.h
-@@ -101,6 +101,7 @@ enum node_type 
+@@ -101,6 +101,7 @@ enum node_type
    DUMP_NODE,			/* Packet dump node. */
    FORWARDING_NODE,		/* IP forwarding node. */
    PROTOCOL_NODE,                /* protocol filtering node */

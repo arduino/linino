@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=quagga-unstable
-PKG_VERSION:=0.99.16
+PKG_VERSION:=0.99.17
 PKG_RELEASE:=1
 
 PKG_SOURCE:=quagga-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.quagga.net/download/ \
                 http://www.de.quagga.net/download/ \
                 http://www.uk.quagga.net/download/
-PKG_MD5SUM:=350fb150be526cdfc4d2b093cb4d69a7
+PKG_MD5SUM:=37b9022adca04b03863d2d79787e643f
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/quagga-$(PKG_VERSION)
 
@@ -274,9 +274,9 @@ $(eval $(call BuildPackage,quagga-unstable))
 $(eval $(call BuildPackage,quagga-unstable-libzebra))
 $(eval $(call BuildPackage,quagga-unstable-libospf))
 $(eval $(call BuildPackage,quagga-unstable-bgpd))
-$(eval $(call BuildPackage,quagga-unstable-isisd))
+#$(eval $(call BuildPackage,quagga-unstable-isisd))
 $(eval $(call BuildPackage,quagga-unstable-ospfd))
-$(eval $(call BuildPackage,quagga-unstable-ospf6d))
+#$(eval $(call BuildPackage,quagga-unstable-ospf6d))
 $(eval $(call BuildPackage,quagga-unstable-ripd))
-$(eval $(call BuildPackage,quagga-unstable-ripngd))
+#$(eval $(call BuildPackage,quagga-unstable-ripngd))
 $(eval $(call BuildPackage,quagga-unstable-vtysh))

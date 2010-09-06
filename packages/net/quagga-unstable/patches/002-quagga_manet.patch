@@ -1,6 +1,6 @@
 --- a/bgpd/bgp_vty.c
 +++ b/bgpd/bgp_vty.c
-@@ -8228,8 +8228,14 @@ bgp_str2route_type (int afi, const char 
+@@ -8228,8 +8228,14 @@ bgp_str2route_type (int afi, const char
  	return ZEBRA_ROUTE_STATIC;
        else if (strncmp (str, "r", 1) == 0)
  	return ZEBRA_ROUTE_RIP;
@@ -16,7 +16,7 @@
      }
    if (afi == AFI_IP6)
      {
-@@ -8241,21 +8247,30 @@ bgp_str2route_type (int afi, const char 
+@@ -8241,21 +8247,30 @@ bgp_str2route_type (int afi, const char
  	return ZEBRA_ROUTE_STATIC;
        else if (strncmp (str, "r", 1) == 0)
  	return ZEBRA_ROUTE_RIPNG;
@@ -435,7 +435,7 @@
  
  ## help strings
  ZEBRA_ROUTE_SYSTEM, "Reserved route type, for internal use only"
-@@ -71,4 +67,5 @@ ZEBRA_ROUTE_OSPF6,  "Open Shortest Path 
+@@ -71,4 +67,5 @@ ZEBRA_ROUTE_OSPF6,  "Open Shortest Path
  ZEBRA_ROUTE_ISIS,   "Intermediate System to Intermediate System (IS-IS)"
  ZEBRA_ROUTE_BGP,    "Border Gateway Protocol (BGP)"
  ZEBRA_ROUTE_HSLS,   "Hazy-Sighted Link State Protocol (HSLS)"
@@ -553,7 +553,7 @@
    ospf6_asbr_routemap_unset (type);
 --- a/ospfd/ospf_vty.c
 +++ b/ospfd/ospf_vty.c
-@@ -107,8 +107,14 @@ str2distribute_source (const char *str, 
+@@ -107,8 +107,14 @@ str2distribute_source (const char *str,
      *source = ZEBRA_ROUTE_STATIC;
    else if (strncmp (str, "r", 1) == 0)
      *source = ZEBRA_ROUTE_RIP;
@@ -613,7 +613,7 @@
        if (! client->redist[type])
  	{
  	  client->redist[type] = 1;
-@@ -283,6 +286,9 @@ zebra_redistribute_delete (int command, 
+@@ -283,6 +286,9 @@ zebra_redistribute_delete (int command,
      case ZEBRA_ROUTE_OSPF:
      case ZEBRA_ROUTE_OSPF6:
      case ZEBRA_ROUTE_BGP:
