@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+f	# Copyright (C) 2008 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -100,9 +100,9 @@ endif
 
 ifeq ($(CONFIG_VOICE_CPE_VMMC_WITH_DEVICE_DANUBE_extract),y)
 define Download/decode
-  FILE:=ifxmips_fw_decode.tar.bz2
+  FILE:=ifxmips_fw_decodev2.tar.bz2
   URL:=http://downloads.openwrt.org/sources/
-  MD5SUM:=1197ff6cace6a7c86492a468f5fbfe07
+  MD5SUM:=9f4ebfae5cb9d9e8fca46057a653ae27
 endef
 $(eval $(call Download,decode))
 endif
