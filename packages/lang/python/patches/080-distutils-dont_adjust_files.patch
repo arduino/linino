@@ -1,8 +1,10 @@
-Index: build_scripts.py
-===================================================================
---- a/Lib/distutils/command/build_scripts.py
-+++ b/Lib/distutils/command/build_scripts.py
-@@ -52,10 +52,7 @@
+---
+ Lib/distutils/command/build_scripts.py |   43 +++------------------------------
+ 1 file changed, 4 insertions(+), 39 deletions(-)
+
+--- Python-2.6.4.orig/Lib/distutils/command/build_scripts.py
++++ Python-2.6.4/Lib/distutils/command/build_scripts.py
+@@ -54,10 +54,7 @@ class build_scripts (Command):
  
  
      def copy_scripts (self):
@@ -14,7 +16,7 @@ Index: build_scripts.py
          """
          self.mkpath(self.build_dir)
          outfiles = []
-@@ -78,41 +75,9 @@
+@@ -80,41 +77,9 @@ class build_scripts (Command):
                  if not self.dry_run:
                      raise
                  f = None

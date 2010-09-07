@@ -1,7 +1,9 @@
-diff --git a/setup.py b/setup.py
-index f7f190f..6ca7a1d 100644
---- a/setup.py
-+++ b/setup.py
+---
+ setup.py |   30 ------------------------------
+ 1 file changed, 30 deletions(-)
+
+--- Python-2.6.4.orig/setup.py
++++ Python-2.6.4/setup.py
 @@ -270,36 +270,6 @@ class PyBuildExt(build_ext):
          ext_filename = os.path.join(
              self.build_lib,
@@ -36,6 +38,6 @@ index f7f190f..6ca7a1d 100644
 -                          'failed with %s: %s' % (ext.name, exc_type, why),
 -                          level=3)
 -            self.failed.append(ext.name)
-
-    def get_platform(self):
  
+     def get_platform(self):
+         # Get value of sys.platform

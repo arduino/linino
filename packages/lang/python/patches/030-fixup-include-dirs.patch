@@ -1,7 +1,9 @@
-diff --git a/setup.py b/setup.py
-index 32e1af8..f7f190f 100644
---- a/setup.py
-+++ b/setup.py
+---
+ setup.py |   15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
+
+--- Python-2.6.4.orig/setup.py
++++ Python-2.6.4/setup.py
 @@ -309,9 +309,6 @@ class PyBuildExt(build_ext):
          return sys.platform
  

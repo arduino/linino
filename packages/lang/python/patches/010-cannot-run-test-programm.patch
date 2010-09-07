@@ -1,8 +1,10 @@
-diff --git a/configure.in b/configure.in
-index 14095a1..e7ab47f 100644
---- a/configure.in
-+++ b/configure.in
-@@ -2559,6 +2559,7 @@ AC_CHECK_LIB(c, inet_aton, [$ac_cv_prog_TRUE],
+---
+ configure.in |   46 ++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 34 insertions(+), 12 deletions(-)
+
+--- Python-2.6.4.orig/configure.in
++++ Python-2.6.4/configure.in
+@@ -2653,6 +2653,7 @@ AC_CHECK_LIB(c, inet_aton, [$ac_cv_prog_
  # On Tru64, chflags seems to be present, but calling it will
  # exit Python
  AC_MSG_CHECKING(for chflags)
@@ -10,7 +12,7 @@ index 14095a1..e7ab47f 100644
  AC_TRY_RUN([
  #include <sys/stat.h>
  #include <unistd.h>
-@@ -2568,12 +2569,19 @@ int main(int argc, char*argv[])
+@@ -2662,12 +2663,19 @@ int main(int argc, char*argv[])
      return 1;
    return 0;
  }
@@ -34,7 +36,7 @@ index 14095a1..e7ab47f 100644
  AC_TRY_RUN([
  #include <sys/stat.h>
  #include <unistd.h>
-@@ -2583,10 +2591,16 @@ int main(int argc, char*argv[])
+@@ -2677,10 +2685,16 @@ int main(int argc, char*argv[])
      return 1;
    return 0;
  }
@@ -55,7 +57,7 @@ index 14095a1..e7ab47f 100644
  
  dnl Check if system zlib has *Copy() functions
  dnl
-@@ -3664,6 +3664,7 @@ else
+@@ -3781,6 +3795,7 @@ else
  fi
  
  AC_MSG_CHECKING(for %zd printf() format support)
@@ -63,7 +65,7 @@ index 14095a1..e7ab47f 100644
  AC_TRY_RUN([#include <stdio.h>
  #include <stddef.h>
  #include <string.h>
-@@ -3697,10 +3698,17 @@ int main()
+@@ -3814,10 +3829,17 @@ int main()
  	return 1;
  
      return 0;
