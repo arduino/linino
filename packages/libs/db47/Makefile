@@ -18,6 +18,7 @@ PKG_MD5SUM:=073ab7f20d24b3872a51ca762f5090e7
 
 PKG_FIXUP:=libtool
 PKG_LIBTOOL_PATHS:=. build_unix
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -76,6 +77,8 @@ endef
 TARGET_CFLAGS += $(FPIC)
 
 define Build/Compile
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/build_unix \
+		DESTDIR="$(PKG_INSTALL_DIR)" all
 	$(MAKE) -C $(PKG_BUILD_DIR)/build_unix \
 		DESTDIR="$(PKG_INSTALL_DIR)" install
 endef

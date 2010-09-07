@@ -13,6 +13,7 @@ PKG_RELEASE:=4
 PKG_SOURCE:=netatalk-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/netatalk/
 PKG_MD5SUM:=f35cd7a4ce26c780de380cd2bcae5ce6
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 

@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=44b5536b67719f4250faed632a3cd016
 
+PKG_BUILD_PARALLEL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/iperf/Default
@@ -57,7 +59,7 @@ define Build/Template
 $(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
 	-$(MAKE) -C $(PKG_BUILD_DIR) clean
 	$(call Build/Configure/Default,$(3))
-	$(MAKE) -C $(PKG_BUILD_DIR)
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)
 	( cd $(PKG_BUILD_DIR)/src; mv -f iperf iperf-$(2) )
 	touch $$@
 

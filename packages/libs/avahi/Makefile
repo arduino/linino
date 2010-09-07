@@ -19,6 +19,7 @@ PKG_BUILD_DEPENDS:=libexpat libdaemon libgdbm intltool/host
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -195,4 +196,3 @@ $(eval $(call BuildPackage,libavahi))
 $(eval $(call BuildPackage,avahi-autoipd))
 $(eval $(call BuildPackage,avahi-daemon))
 $(eval $(call BuildPackage,avahi-dnsconfd))
-

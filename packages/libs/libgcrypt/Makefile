@@ -17,6 +17,7 @@ PKG_MD5SUM:=cc2017ad09b4543f8b3b5e9a53cfd89d
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 

@@ -15,7 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_MD5SUM:=ee8b492592568805593f81f8cdf2a04c
 PKG_SOURCE_URL:=@SF/expat
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
@@ -39,7 +40,7 @@ CONFIGURE_ARGS += \
 	--enable-static
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
 define Host/Install

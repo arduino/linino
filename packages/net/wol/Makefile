@@ -15,6 +15,8 @@ PKG_SOURCE_URL:=@SF/ahh
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_MD5SUM:=c2fa9d7e771134ac8c89d56b8197d4ca
 
+PKG_BUILD_PARALLEL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/wol

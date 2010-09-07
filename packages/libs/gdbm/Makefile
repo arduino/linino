@@ -15,7 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/gdbm
 PKG_MD5SUM:=1d1b1d5c0245b1c00aff92da751e9aa1
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,7 +34,7 @@ CONFIGURE_ARGS += \
 	--enable-static \
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		BINOWN=`id -u` \
 		BINGRP=`id -g` \
 		INSTALL_ROOT="$(PKG_INSTALL_DIR)" \

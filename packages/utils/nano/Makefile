@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=http://www.nano-editor.org/dist/v2.2
 PKG_MD5SUM:=77a10a49589f975ce98350a4527a2ebf
 
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 

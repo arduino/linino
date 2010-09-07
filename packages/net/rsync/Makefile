@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=http://rsync.samba.org/ftp/rsync/src
 PKG_MD5SUM:=b53525900817cf1ba7ad3a516ab5bfe9
 
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 

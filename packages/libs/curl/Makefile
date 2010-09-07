@@ -21,7 +21,8 @@ PKG_SOURCE_URL:=http://curl.haxx.se/download/ \
 	http://curl.mirrors.cyberservers.net/download/
 PKG_MD5SUM:=8402c1f654c51ad7287aad57c3aa79be
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -86,7 +87,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		CC="$(TARGET_CC)" \
 		install

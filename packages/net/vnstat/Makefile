@@ -17,7 +17,8 @@ PKG_MD5SUM:=95421d968689130590348ceb80ff74a8
 
 PKG_INSTALL:=1
 
-PKG_BUILD_DEPENDS:= libgd
+PKG_BUILD_DEPENDS:=libgd
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -59,13 +60,13 @@ define Package/vnstat/conffiles
 endef
 
 define Build/Compile/vnstat
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)"
 endef
 
 define Build/Compile/vnstati
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="$(TARGET_LDFLAGS) -Wl,-rpath-link,$(STAGING_DIR)/usr/lib" \
