@@ -67,7 +67,10 @@ endef
 
 define Package/qt4-gui
   $(call Package/qt4/Default)
-  DEPENDS+=+libpng +libtiff +libjpeg +libfreetype +qt4-network +FEATURE_drawing-backend_DirectFB:directfb +FEATURE_drawing-backend_libX11:libX11
+  DEPENDS+=+libpng +libtiff +libjpeg +libfreetype +qt4-network \
+	+FEATURE_drawing-backend_DirectFB:directfb \
+	+FEATURE_drawing-backend_libX11:libX11 \
+	+FEATURE_drawing-backend_libX11:libXext
   TITLE+=(gui)
 endef
 
