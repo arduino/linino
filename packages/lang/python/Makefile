@@ -14,6 +14,7 @@ PKG_RELEASE:=3
 PKG_SOURCE:=Python-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.python.org/ftp/python/$(PKG_VERSION)/
 PKG_MD5SUM:=fee5408634a54e721a93531aba37f8c1
+PKG_BUILD_PARALLEL:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Python-$(PKG_VERSION)
 
@@ -130,11 +131,14 @@ define Build/Compile
 		OPT="$(HOST_CFLAGS)" \
 		./configure --without-cxx-main --without-threads --prefix=$(PKG_INSTALL_DIR)/host; \
 	);
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		python Parser/pgen
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+		HOSTPYTHON=$(PKG_BUILD_DIR)/python \
+		sharedmods
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		HOSTPYTHON=$(PKG_BUILD_DIR)/python \
-		sharedmods install
+		install
 	(cd $(PKG_BUILD_DIR);mv Parser/pgen hostpgen)
 	# The python executable needs to stay in the rootdir since its location will
 	# be used to compute the path of the config files.
@@ -152,10 +156,14 @@ define Build/Compile
 		ac_cv_py_format_size_t=no \
 		OPT="$(TARGET_CFLAGS)" \
 	)
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+		$(MAKE_OPTS) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(MAKE_OPTS) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+		install
 endef
 
 define Build/InstallDev
