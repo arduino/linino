@@ -10,9 +10,9 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=wing
 
 ifneq ($(CONFIG_WING_STABLE),)
-	PKG_VERSION:=20100827
-	PKG_RELEASE:=2
-	PKG_REV:=6f238baa6c4f357f1fe0e55f1b71db7816747b33
+	PKG_VERSION:=20100903
+	PKG_RELEASE:=3
+	PKG_REV:=520e3168a5af4d26bec3779cfa4901d128a4bc6f
 else 
 	PKG_VERSION:=$(shell date +%Y%m%d)
 	PKG_RELEASE:=1
@@ -64,7 +64,7 @@ define Build/Configure
 		-f $(PKG_BUILD_DIR)/conf/wing/sample.click \
 		-A --all -E Discard -E Print -E Null \
 		-E InfiniteSource -E RatedSource -E EtherEncap -E UDPIPEncap \
-		-E AthdescEncap -E AthdescDecap -E RadiotapDecap -E RadiotapEncap \
+		-E RadiotapDecap -E RadiotapEncap \
 		-E ProbeTXRate -E MadwifiRate -E AutoRateFallback \
 		-E RoundRobinSched -E DRRSched; \
 	)

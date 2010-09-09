@@ -132,6 +132,7 @@ wing_list_interfaces() {
 	config_get device $1 device
 	config_get hwmode $device hwmode "11bg"
 	freq=$(iwlist $ifname freq | grep "Current Frequency" | sed -n "s/^.*Current Frequency:\([0-9.]*\) GHz (Channel \([0-9]*\))/\1/p" | awk '{print $1*1000}')
+	freq=${freq:-"0"}
 	hwaddr=$(/sbin/ifconfig $ifname 2>&1 | sed -n 's/^.*HWaddr \([0-9A-Za-z\-]*\).*/\1/p' | sed -e 's/\-/:/g' | cut -c1-17)
 	freqs=${freqs:+"$freqs "}$freq
 	hwmodes=${hwmodes:+"$hwmodes "}$hwmode
