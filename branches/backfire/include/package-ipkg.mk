@@ -13,6 +13,7 @@ OPKG:= \
   IPKG_OFFLINE_ROOT=$(TARGET_DIR) \
   $(STAGING_DIR_HOST)/bin/opkg \
 	-f $(STAGING_DIR)/etc/opkg.conf \
+	--offline-root $(TARGET_DIR) \
 	--force-depends \
 	--force-overwrite \
 	--force-run-hooks
@@ -129,7 +130,6 @@ ifeq ($(DUMP),)
 	mkdir -p $(STAGING_DIR)/etc
 	( echo "dest root /"				> $@; \
 	  echo "arch all 100"				>> $@; \
-	  echo "arch $(PKGARCH) 200"			>> $@; \
-	  echo "option offline_root $(TARGET_DIR)"	>> $@ )
+	  echo "arch $(PKGARCH) 200"			>> $@ )
 
 endif
