@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pwrtray
-PKG_REV:=89c0d75ecb9efdb7ef2288635d617348c1fe5480
+PKG_REV:=e1cf5f9d31152a383612b2298f694894584127ab
 PKG_VERSION:=$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -36,7 +36,9 @@ define Package/pwrtray/description
 endef
 
 EXTRA_CFLAGS:= \
-	-I$(PKG_BUILD_DIR)/moc
+	-I$(PKG_BUILD_DIR)/tray/moc \
+	-I$(STAGING_DIR)/usr/include/QtCore \
+	-I$(STAGING_DIR)/usr/include/QtGui
 
 EXTRA_LDFLAGS:= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
@@ -50,7 +52,9 @@ MAKE_VARS+= \
 #	V=1
 
 define Package/pwrtray/install
-	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/share
+	$(INSTALL_DIR) $(1)/etc/init.d $(1)/usr/bin $(1)/usr/share
+	$(INSTALL_BIN) ./files/etc/init.d/* $(1)/etc/init.d/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray-backend $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/pwrtray $(1)/usr/share/
 endef
