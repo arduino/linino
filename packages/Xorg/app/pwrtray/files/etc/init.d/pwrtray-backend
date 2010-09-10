@@ -4,7 +4,7 @@
 START=99
 
 start() {
-	[ -x /usr/bin/pwrtray-backend ] && /usr/bin/pwrtray-backend
+	[ -x /usr/bin/pwrtray-backend ] && /usr/bin/pwrtray-backend -B -f
 }
 
 stop() {
