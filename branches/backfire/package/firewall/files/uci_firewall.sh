@@ -31,6 +31,19 @@ find_item() {
 	return 1
 }
 
+get_portrange() {
+	local _var="$1"
+	local _range="$2"
+	local _delim="${3:-:}"
+
+	local _min="${_range%%[:-]*}"
+	local _max="${_range##*[:-]}"
+
+	[ -n "$_min" ] && [ -n "$_max" ] && [ "$_min" != "$_max" ] && \
+		export -n -- "$_var=$_min$_delim$_max" || \
+		export -n -- "$_var=${_min:-$_max}"
+}
+
 load_policy() {
 	config_get input $1 input
 	config_get output $1 output
@@ -42,26 +55,46 @@ load_policy() {
 }
 
 create_zone() {
+	local name="$1"
+	local network="$2"
+	local input="$3"
+	local output="$4"
+	local forward="$5"
+	local mtu_fix="$6"
+	local masq="$7"
+	local masq_src="$8"
+	local masq_dest="$9"
+
 	local exists
 
-	[ "$1" == "loopback" ] && return
+	[ "$name" == "loopback" ] && return
 
-	config_get exists $ZONE_LIST $1
+	config_get exists $ZONE_LIST $name
 	[ -n "$exists" ] && return
-	config_set $ZONE_LIST $1 1
+	config_set $ZONE_LIST $name 1
 
-	$IPTABLES -N zone_$1
-	$IPTABLES -N zone_$1_MSSFIX
-	$IPTABLES -N zone_$1_ACCEPT
-	$IPTABLES -N zone_$1_DROP
-	$IPTABLES -N zone_$1_REJECT
-	$IPTABLES -N zone_$1_forward
-	[ "$4" ] && $IPTABLES -A output -j zone_$1_$4
-	$IPTABLES -N zone_$1_nat -t nat
-	$IPTABLES -N zone_$1_prerouting -t nat
-	$IPTABLES -t raw -N zone_$1_notrack
-	[ "$6" == "1" ] && $IPTABLES -t nat -A POSTROUTING -j zone_$1_nat
-	[ "$7" == "1" ] && $IPTABLES -I FORWARD 1 -j zone_$1_MSSFIX
+	$IPTABLES -N zone_${name}
+	$IPTABLES -N zone_${name}_MSSFIX
+	$IPTABLES -N zone_${name}_ACCEPT
+	$IPTABLES -N zone_${name}_DROP
+	$IPTABLES -N zone_${name}_REJECT
+	$IPTABLES -N zone_${name}_forward
+	[ "$output" ] && $IPTABLES -A output -j zone_${name}_${output}
+	$IPTABLES -N zone_${name}_nat -t nat
+	$IPTABLES -N zone_${name}_prerouting -t nat
+	$IPTABLES -t raw -N zone_${name}_notrack
+	[ "$mtu_fix" == "1" ] && $IPTABLES -I FORWARD 1 -j zone_${name}_MSSFIX
+
+	if [ "$masq" == "1" ]; then
+		local msrc mdst
+		for msrc in ${masq_src:-0.0.0.0/0}; do
+			[ "${msrc#!}" != "$msrc" ] && msrc="! -s ${msrc#!}" || msrc="-s $msrc"
+			for mdst in ${masq_dest:-0.0.0.0/0}; do
+				[ "${mdst#!}" != "$mdst" ] && mdst="! -d ${mdst#!}" || mdst="-d $mdst"
+				$IPTABLES -A zone_${name}_nat -t nat $msrc $mdst -j MASQUERADE
+			done
+		done
+	fi
 }
 
 
@@ -69,18 +102,13 @@ addif() {
 	local network="$1"
 	local ifname="$2"
 	local zone="$3"
-	local masq_src="$4"
-	local masq_dest="$5"
 
 	local n_if n_zone
 	config_get n_if core "${network}_ifname"
 	config_get n_zone core "${network}_zone"
 	[ -n "$n_zone" ] && {
 		if [ "$n_zone" != "$zone" ]; then
-			local n_masq_src n_masq_dest
-			config_get n_masq_src core "${n_zone}_masq_src"
-			config_get n_masq_dest core "${n_zone}_masq_dest"
-			delif "$network" "$n_if" "$n_zone" "$n_masq_src" "$n_masq_dest"
+			delif "$network" "$n_if" "$n_zone"
 		else
 			return
 		fi
@@ -96,22 +124,14 @@ addif() {
 	$IPTABLES -I zone_${zone}_DROP 1 -i "$ifname" -j DROP
 	$IPTABLES -I zone_${zone}_REJECT 1 -i "$ifname" -j reject
 
-	local msrc mdst
-	for msrc in ${masq_src:-0.0.0.0/0}; do
-		[ "${msrc#!}" != "$msrc" ] && msrc="! -s ${msrc#!}" || msrc="-s $msrc"
-		for mdst in ${masq_dest:-0.0.0.0/0}; do
-			[ "${mdst#!}" != "$mdst" ] && mdst="! -d ${mdst#!}" || mdst="-d $mdst"
-			$IPTABLES -I zone_${zone}_nat 1 -t nat -o "$ifname" $msrc $mdst -j MASQUERADE
-		done
-	done
-
 	$IPTABLES -I PREROUTING 1 -t nat -i "$ifname" -j zone_${zone}_prerouting
+	$IPTABLES -I POSTROUTING 1 -t nat -o "$ifname" -j zone_${zone}_nat
 	$IPTABLES -A forward -i "$ifname" -j zone_${zone}_forward
-	$IPTABLES -t raw -I PREROUTING 1 -i "$ifname" -j zone_${zone}_notrack
+	$IPTABLES -I PREROUTING 1 -t raw -i "$ifname" -j zone_${zone}_notrack
+
 	uci_set_state firewall core "${network}_ifname" "$ifname"
 	uci_set_state firewall core "${network}_zone" "$zone"
-	uci_set_state firewall core "${zone}_masq_src" "$masq_src"
-	uci_set_state firewall core "${zone}_masq_dest" "$masq_dest"
+
 	ACTION=add ZONE="$zone" INTERFACE="$network" DEVICE="$ifname" /sbin/hotplug-call firewall
 }
 
@@ -119,8 +139,6 @@ delif() {
 	local network="$1"
 	local ifname="$2"
 	local zone="$3"
-	local masq_src="$4"
-	local masq_dest="$5"
 
 	logger "removing $network ($ifname) from firewall zone $zone"
 	$IPTABLES -D input -i "$ifname" -j zone_$zone
@@ -132,21 +150,14 @@ delif() {
 	$IPTABLES -D zone_${zone}_DROP -i "$ifname" -j DROP
 	$IPTABLES -D zone_${zone}_REJECT -i "$ifname" -j reject
 
-	local msrc mdst
-	for msrc in ${masq_src:-0.0.0.0/0}; do
-		[ "${msrc#!}" != "$msrc" ] && msrc="! -s ${msrc#!}" || msrc="-s $msrc"
-		for mdst in ${masq_dest:-0.0.0.0/0}; do
-			[ "${mdst#!}" != "$mdst" ] && mdst="! -d ${mdst#!}" || mdst="-d $mdst"
-			$IPTABLES -D zone_${zone}_nat -t nat -o "$ifname" $msrc $mdst -j MASQUERADE
-		done
-	done
-
 	$IPTABLES -D PREROUTING -t nat -i "$ifname" -j zone_${zone}_prerouting
+	$IPTABLES -D POSTROUTING -t nat -o "$ifname" -j zone_${zone}_nat
 	$IPTABLES -D forward -i "$ifname" -j zone_${zone}_forward
+	$IPTABLES -D PREROUTING -t raw -i "$ifname" -j zone_${zone}_notrack
+
 	uci_revert_state firewall core "${network}_ifname"
 	uci_revert_state firewall core "${network}_zone"
-	uci_revert_state firewall core "${zone}_masq_src"
-	uci_revert_state firewall core "${zone}_masq_dest"
+
 	ACTION=remove ZONE="$zone" INTERFACE="$network" DEVICE="$ifname" /sbin/hotplug-call firewall
 }
 
@@ -266,18 +277,27 @@ fw_zone_defaults() {
 fw_zone() {
 	local name
 	local network
+	local mtu_fix
+	local conntrack
 	local masq
+	local masq_src
+	local masq_dest
 
 	config_get name $1 name
 	config_get network $1 network
 	config_get_bool masq $1 masq "0"
 	config_get_bool conntrack $1 conntrack "0"
 	config_get_bool mtu_fix $1 mtu_fix 0
+	config_get masq_src $1 masq_src
+	config_get masq_dest $1 masq_dest
 
 	load_policy $1
 	[ "$conntrack" = "1" -o "$masq" = "1" ] && append CONNTRACK_ZONES "$name"
 	[ -z "$network" ] && network=$name
-	create_zone "$name" "$network" "$input" "$output" "$forward" "$masq" "$mtu_fix"
+
+	create_zone "$name" "$network" "$input" "$output" "$forward" "$mtu_fix" \
+		"$masq" "$masq_src" "$masq_dest"
+
 	fw_custom_chains_zone "$name"
 }
 
@@ -307,15 +327,9 @@ fw_rule() {
 	config_get target $1 target
 	config_get ruleset $1 ruleset
 
-	src_port_first=${src_port%-*}
-	src_port_last=${src_port#*-}
-	[ "$src_port_first" -ne "$src_port_last" ] && { \
-		src_port="$src_port_first:$src_port_last"; }
-
-	dest_port_first=${dest_port%-*}
-	dest_port_last=${dest_port#*-}
-	[ "$dest_port_first" -ne "$dest_port_last" ] && { \
-		dest_port="$dest_port_first:$dest_port_last"; }
+	local srcports destports
+	get_portrange srcports "$src_port" ":"
+	get_portrange destports "$dest_port" ":"
 
 	ZONE=input
 	TARGET=$target
@@ -331,20 +345,17 @@ fw_rule() {
 			${proto:+-p $proto} \
 			${icmp_type:+--icmp-type $icmp_type} \
 			${src_ip:+-s $src_ip} \
-			${src_port:+--sport $src_port} \
+			${srcports:+--sport $srcports} \
 			${src_mac:+-m mac --mac-source $src_mac} \
 			${dest_ip:+-d $dest_ip} \
-			${dest_port:+--dport $dest_port} \
+			${destports:+--dport $destports} \
 			-j $TARGET
 	}
-	[ "$proto" == "tcpudp" -o -z "$proto" ] && {
-		proto=tcp
+
+	[ "$proto" == "tcpudp" ] && proto="tcp udp"
+	for proto in ${proto:-tcp udp}; do
 		add_rule
-		proto=udp
-		add_rule
-		return
-	}
-	add_rule
+	done
 }
 
 fw_forwarding() {
@@ -366,11 +377,13 @@ fw_forwarding() {
 fw_redirect() {
 	local src
 	local src_ip
+	local src_dip
 	local src_port
 	local src_dport
 	local src_mac
+	local dest
 	local dest_ip
-	local dest_port dest_port2
+	local dest_port
 	local proto
 	local target
 
@@ -380,76 +393,85 @@ fw_redirect() {
 	config_get src_port $1 src_port
 	config_get src_dport $1 src_dport
 	config_get src_mac $1 src_mac
+	config_get dest $1 dest
 	config_get dest_ip $1 dest_ip
 	config_get dest_port $1 dest_port
 	config_get proto $1 proto
 	config_get target $1 target
 
-	[ -z "$src" -o -z "$dest_ip$dest_port" ] && { \
-		echo "redirect needs src and dest_ip or dest_port"; return ; }
-
-	local chain destopt destaddr
+	local fwdchain natchain natopt nataddr natports srcdaddr srcdports
 	if [ "${target:-DNAT}" == "DNAT" ]; then
-		chain="zone_${src}_prerouting"
-		destopt="--to-destination"
-		destaddr="$dest_ip"
+		[ -n "$src" -a -n "$dest_ip$dest_port" ] || {
+			echo "DNAT redirect needs src and dest_ip or dest_port"
+			return
+		}
+
+		fwdchain="zone_${src}_forward"
+
+		natopt="--to-destination"
+		natchain="zone_${src}_prerouting"
+		nataddr="$dest_ip"
+		get_portrange natports "$dest_port" "-"
+
+		srcdaddr="$src_dip"
+		get_portrange srcdports "$src_dport" ":"
+
+		find_item "$src" $CONNTRACK_ZONES || \
+			append CONNTRACK_ZONES "$src"
+
 	elif [ "$target" == "SNAT" ]; then
-		chain="zone_${src}_nat"
-		destopt="--to-source"
-		destaddr="$src_dip"
+		[ -n "$dest" -a -n "$src_dip" ] || {
+			echo "SNAT redirect needs dest and src_dip"
+			return
+		}
+
+		fwdchain="${src:+zone_${src}_forward}"
+
+		natopt="--to-source"
+		natchain="zone_${dest}_nat"
+		nataddr="$src_dip"
+		get_portrange natports "$src_dport" "-"
+
+		srcdaddr="$dest_ip"
+		get_portrange srcdports "$dest_port" ":"
+
+		find_item "$dest" $CONNTRACK_ZONES || \
+			append CONNTRACK_ZONES "$dest"
+
 	else
 		echo "redirect target must be either DNAT or SNAT"
 		return
 	fi
 
-	find_item "$src" $CONNTRACK_ZONES || \
-		append CONNTRACK_ZONES "$src"
-
-	src_port_first=${src_port%-*}
-	src_port_last=${src_port#*-}
-	[ "$src_port_first" != "$src_port_last" ] && { \
-		src_port="$src_port_first:$src_port_last"; }
-
-	src_dport_first=${src_dport%-*}
-	src_dport_last=${src_dport#*-}
-	[ "$src_dport_first" != "$src_dport_last" ] && { \
-		src_dport="$src_dport_first:$src_dport_last"; }
-
-	dest_port2=${dest_port:-$src_dport}
-	dest_port_first=${dest_port2%-*}
-	dest_port_last=${dest_port2#*-}
-	[ "$dest_port_first" != "$dest_port_last" ] && { \
-		dest_port2="$dest_port_first:$dest_port_last"; }
+	local srcports destports
+	get_portrange srcports "$src_port" ":"
+	get_portrange destports "${dest_port-$src_dport}" ":"
 
 	add_rule() {
-		$IPTABLES -A $chain -t nat \
+		$IPTABLES -I $natchain 1 -t nat \
 			${proto:+-p $proto} \
 			${src_ip:+-s $src_ip} \
-			${src_dip:+-d $src_dip} \
-			${src_port:+--sport $src_port} \
-			${src_dport:+--dport $src_dport} \
+			${srcports:+--sport $srcports} \
+			${srcdaddr:+-d $srcdaddr} \
+			${srcdports:+--dport $srcdports} \
 			${src_mac:+-m mac --mac-source $src_mac} \
-			-j ${target:-DNAT} $destopt $dest_ip${dest_port:+:$dest_port}
+			-j ${target:-DNAT} $natopt $nataddr${natports:+:$natports}
 
-		[ -n "$destaddr" ] && \
-		$IPTABLES -I zone_${src}_forward 1 \
+		[ -n "$dest_ip" ] && \
+		$IPTABLES -I ${fwdchain:-forward} 1 \
 			${proto:+-p $proto} \
-			-d $destaddr \
 			${src_ip:+-s $src_ip} \
-			${src_port:+--sport $src_port} \
-			${dest_port2:+--dport $dest_port2} \
+			${srcports:+--sport $srcports} \
+			${dest_ip:+-d $dest_ip} \
+			${destports:+--dport $destports} \
 			${src_mac:+-m mac --mac-source $src_mac} \
 			-j ACCEPT
 	}
 
-	[ "$proto" == "tcpudp" -o -z "$proto" ] && {
-		proto=tcp
+	[ "$proto" == "tcpudp" ] && proto="tcp udp"
+	for proto in ${proto:-tcp udp}; do
 		add_rule
-		proto=udp
-		add_rule
-		return
-	}
-	add_rule
+	done
 }
 
 fw_include() {
