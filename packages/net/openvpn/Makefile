@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openvpn
 PKG_VERSION:=2.1.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://openvpn.net/release @SF/openvpn
@@ -54,7 +54,8 @@ CONFIGURE_ARGS+= \
 	--disable-plugins \
 	--enable-management \
 	--disable-socks \
-	--enable-password-save
+	--enable-password-save \
+	--enable-small
 
 define Build/Configure
 	$(call Build/Configure/Default, \
