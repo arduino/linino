@@ -48,14 +48,17 @@ define Package/openvpn-easy-rsa/conffiles
 /etc/easy-rsa/vars
 endef
 
+CONFIGURE_ARGS+= \
+	--disable-pthread \
+	--disable-debug \
+	--disable-plugins \
+	--enable-management \
+	--disable-socks \
+	--enable-password-save
+
 define Build/Configure
 	$(call Build/Configure/Default, \
-		--disable-pthread \
-		--disable-debug \
-		--disable-plugins \
-		--enable-management \
-		--disable-socks \
-		--enable-password-save \
+		$(CONFIGURE_ARGS) \
 		,\
 		ac_cv_func_epoll_create=no \
 	)
