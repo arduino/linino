@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=netatalk
-PKG_VERSION:=2.0.5
-PKG_RELEASE:=4
+PKG_VERSION:=2.1.3
+PKG_RELEASE:=1
 PKG_SOURCE:=netatalk-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/netatalk/
-PKG_MD5SUM:=f35cd7a4ce26c780de380cd2bcae5ce6
 PKG_BUILD_PARALLEL:=1
+PKG_MD5SUM:=785e287f5b5e5c9cce9397f9bce02a22
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -32,6 +32,9 @@ define Package/netatalk/decription
 endef
 
 EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/include
+
+CONFIGURE_VARS += \
+	CFLAGS="$(TARGET_CFLAGS) -std=gnu99 -DNO_DEBUG "
 
 CONFIGURE_ARGS += \
 	--disable-afs \
