@@ -35,6 +35,9 @@ endif
 ifeq ($(CONFIG_TARGET_s3c24xx),y)
   X_CONFIG=om_gta02
 endif
+ifeq ($(CONFIG_TARGET_omap24xx_n810-gui),y)
+  X_CONFIG=nokia_n810
+endif
 
 define Package/xorg/Default
   SECTION:=xorg-server
