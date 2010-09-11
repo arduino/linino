@@ -22,7 +22,7 @@ define Package/bandwidthd
   CATEGORY:=Utilities
   TITLE:=Bandwidthd
   URL:=http://bandwidthd.sourceforge.net/
-  DEPENDS:=+libpng +libgd +libpcap
+  DEPENDS:=+libgd +libpcap
 endef
 
 define Package/bandwidthd/daemon
