@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=heyu
-PKG_VERSION:=2.3.2
+PKG_VERSION:=2.9.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://heyu.tanj.com/download/
-PKG_MD5SUM:=af3eeeaa8c432e5b3510f4df6dd39f4f
+PKG_MD5SUM:=e0d0788ce1049647023ed096a3007552
 
 include $(INCLUDE_DIR)/package.mk
 
