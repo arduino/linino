@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dmapd
-PKG_VERSION:=0.0.23
+PKG_VERSION:=0.0.27
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.flyn.org/projects/dmapd
-PKG_MD5SUM:=50b0665c6626c3cb2572b43a9fe810ad
+PKG_MD5SUM:=d0ae572e0db7aa09c00decce7101363c
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -23,9 +23,10 @@ include $(INCLUDE_DIR)/package.mk
 define Package/dmapd
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+libdmapsharing +gstreamer
   TITLE:= dmapd
   URL:=http://www.flyn.org/projects/dmapd/
-  DEPENDS:=+libdmapsharing +GraphicsMagick +gstreamer +libexif
+  MAINTAINER:=W. Michael Petullo <mike@flyn.org>
 endef
 
 define Package/dmapd/decription
