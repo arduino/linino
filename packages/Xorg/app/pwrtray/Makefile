@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pwrtray
-PKG_REV:=e1cf5f9d31152a383612b2298f694894584127ab
+PKG_REV:=ca4cf695f80d5d1f221f64abddb7184aad1a08c0
 PKG_VERSION:=$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -57,6 +57,8 @@ define Package/pwrtray/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray-backend $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/pwrtray $(1)/usr/share/
+	[ -e $(1)/etc/pwrtray-backendrc ] || \
+		$(INSTALL_DATA) ./files/etc/pwrtray-backendrc $(1)/etc/
 endef
 
 $(eval $(call BuildPackage,pwrtray))
