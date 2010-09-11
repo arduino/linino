@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openvpn
 PKG_VERSION:=2.1.1
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://openvpn.net/release @SF/openvpn
@@ -22,10 +22,17 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openvpn
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+kmod-tun +libopenssl +liblzo
+  DEPENDS:=+kmod-tun +libopenssl +PACKAGE_openvpn_complzo:liblzo
   TITLE:=Open source VPN solution using SSL
   URL:=http://openvpn.net
   SUBMENU:=VPN
+endef
+
+define Package/openvpn/config
+config PACKAGE_openvpn_complzo
+	bool "Enable --comp-lzo compression option"
+	depends on PACKAGE_openvpn
+	default y
 endef
 
 define Package/openvpn/conffiles
@@ -56,6 +63,11 @@ CONFIGURE_ARGS+= \
 	--disable-socks \
 	--enable-password-save \
 	--enable-small
+
+ifndef CONFIG_PACKAGE_openvpn_complzo
+CONFIGURE_ARGS += \
+	--disable-lzo
+endif
 
 define Build/Configure
 	$(call Build/Configure/Default, \
