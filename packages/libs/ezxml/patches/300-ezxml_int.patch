@@ -1,6 +1,5 @@
-diff -pruN ezxml-0.8.6.orig/ezxml.c ezxml-0.8.6/ezxml.c
---- ezxml-0.8.6.orig/ezxml.c	2008-12-16 17:02:17.262312778 +0100
-+++ ezxml-0.8.6/ezxml.c	2008-12-16 17:03:24.231073153 +0100
+--- a/ezxml.c
++++ b/ezxml.c
 @@ -25,6 +25,7 @@
  #include <stdlib.h>
  #include <stdio.h>
@@ -86,9 +85,8 @@ diff -pruN ezxml-0.8.6.orig/ezxml.c ezxml-0.8.6/ezxml.c
  // sets a flag for the given tag and returns the tag
  ezxml_t ezxml_set_flag(ezxml_t xml, short flag)
  {
-diff -pruN ezxml-0.8.6.orig/ezxml.h ezxml-0.8.6/ezxml.h
---- ezxml-0.8.6.orig/ezxml.h	2008-12-16 17:02:17.262312778 +0100
-+++ ezxml-0.8.6/ezxml.h	2008-12-16 17:03:44.189450448 +0100
+--- a/ezxml.h
++++ b/ezxml.h
 @@ -95,9 +95,13 @@ ezxml_t ezxml_idx(ezxml_t xml, int idx);
  // returns the given tag's character content or empty string if none
  #define ezxml_txt(xml) ((xml) ? xml->txt : "")
