@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hiawatha
-PKG_VERSION:=7.2
+PKG_VERSION:=7.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.hiawatha-webserver.org/files/
-PKG_MD5SUM:=192a9fecea71cc4655dd68e2446919c7
+PKG_MD5SUM:=52fd6bf798c07298e12ff69b882f3d76
 
 PKG_INSTALL:=1
 
@@ -30,7 +30,7 @@ define Package/hiawatha
 endef
 
 define Package/hiawatha/description
-Hiawatha is a webserver for Unix.
+Hiawatha is an open source webserver with a focus on security.
 endef
 
 CONFIGURE_ARGS+= \
