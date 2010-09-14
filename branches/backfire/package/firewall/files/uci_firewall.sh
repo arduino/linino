@@ -15,6 +15,7 @@ config_load firewall
 
 config fw_zones
 ZONE_LIST=$CONFIG_SECTION
+ZONE_NAMES=
 
 CUSTOM_CHAINS=1
 DEF_INPUT=DROP
@@ -22,6 +23,25 @@ DEF_OUTPUT=DROP
 DEF_FORWARD=DROP
 CONNTRACK_ZONES=
 NOTRACK_DISABLED=
+
+add_state() {
+	local var="$1"
+	local item="$2"
+
+	local val="$(uci_get_state firewall core $var)"
+	uci_set_state firewall core $var "${val:+$val }$item"
+}
+
+del_state() {
+	local var="$1"
+	local item="$2"
+
+	local val=" $(uci_get_state firewall core $var) "
+	val="${val// $item / }"
+	val="${val# }"
+	val="${val% }"
+	uci_set_state firewall core $var "$val"
+}
 
 find_item() {
 	local item="$1"; shift
@@ -95,6 +115,8 @@ create_zone() {
 			done
 		done
 	fi
+
+	append ZONE_NAMES "$name"
 }
 
 
@@ -132,6 +154,8 @@ addif() {
 	uci_set_state firewall core "${network}_ifname" "$ifname"
 	uci_set_state firewall core "${network}_zone" "$zone"
 
+	add_state "${zone}_networks" "$network"
+
 	ACTION=add ZONE="$zone" INTERFACE="$network" DEVICE="$ifname" /sbin/hotplug-call firewall
 }
 
@@ -157,6 +181,8 @@ delif() {
 
 	uci_revert_state firewall core "${network}_ifname"
 	uci_revert_state firewall core "${network}_zone"
+
+	del_state "${zone}_networks" "$network"
 
 	ACTION=remove ZONE="$zone" INTERFACE="$network" DEVICE="$ifname" /sbin/hotplug-call firewall
 }
@@ -605,9 +631,22 @@ fw_init() {
 	for interface in $INTERFACES; do
 		fw_event ifup "$interface"
 	done
+
+	uci_set_state firewall core zones "$ZONE_NAMES"
 }
 
 fw_stop() {
+	local z n i
+	config_get z core zones
+	for z in $z; do
+		config_get n core "${z}_networks"
+		for n in $n; do
+			config_get i core "${n}_ifname"
+			[ -n "$i" ] && env -i ACTION=remove ZONE="$z" INTERFACE="$n" DEVICE="$i" \
+				/sbin/hotplug-call firewall
+		done
+	done
+
 	fw_clear
 	$IPTABLES -P INPUT ACCEPT
 	$IPTABLES -P OUTPUT ACCEPT
