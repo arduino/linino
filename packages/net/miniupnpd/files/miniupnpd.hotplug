@@ -1,46 +1,50 @@
 #!/bin/sh
 
-/etc/init.d/miniupnpd enabled && {
+miniupnpd_add_rules() {
+	local zone="$1"
+	local network="$2"
+	local iface="$3"
 
-	local state="${ZONE}_${INTERFACE}"
-	local extif initifs
+	miniupnpd_remove_rules
 
-	config_load upnpd
-	config_get extif config external_iface
+	logger -t miniupnpd "adding firewall rules for $iface to zone $zone"
 
-	if [ "$ACTION" = "add" ] && [ "$INTERFACE" = "$extif" ]; then
+	iptables -t nat -N MINIUPNPD 2>/dev/null
+	iptables -t nat -A zone_${zone}_prerouting -i $iface -j MINIUPNPD
+	iptables -t filter -N MINIUPNPD 2>/dev/null
+	iptables -t filter -A zone_${zone}_forward -i $iface ! -o $iface -j MINIUPNPD
 
-		local active
-		config_get active "$state" ifname
-
-		[ -z "$active" ] && {
-			local ipaddr
-			config_get ipaddr "$extif" ipaddr
-
-			logger -t "upnp" "adding $INTERFACE ($DEVICE - $ipaddr) to firewall"
-
-			iptables -t nat -N MINIUPNPD 2>/dev/null
-			iptables -t nat -A prerouting_rule -i $DEVICE -d $ipaddr -j MINIUPNPD
-			iptables -t filter -N MINIUPNPD 2>/dev/null
-			iptables -t filter -A forwarding_rule -i $DEVICE ! -o $DEVICE -j MINIUPNPD
-
-			uci_set_state upnpd "$state" "" "firewall"
-			uci_set_state upnpd "$state" ifname "$DEVICE"
-			uci_set_state upnpd "$state" ipaddr "$ipaddr"
-		}
-	
-	elif [ "$ACTION" = "remove" ] && [ "$INTERFACE" = "$extif" ]; then
-
-		local ifname ipaddr
-		config_get ifname "$state" ifname
-		config_get ipaddr "$state" ipaddr
-
-		[ -n "$ifname" ] && [ -n "$ipaddr" ] && {
-			logger -t "upnp" "removing $INTERFACE ($ifname - $ipaddr) from firewall"
-			iptables -t nat -D prerouting_rule -i $ifname -d $ipaddr -j MINIUPNPD
-			iptables -t filter -D forwarding_rule -i $DEVICE ! -o $DEVICE -j MINIUPNPD
-			uci_revert_state upnpd "$state"
-		}
-	fi
+	uci_set_state upnpd state "" state
+	uci_set_state upnpd state zone "$zone"
+	uci_set_state upnpd state ifname "$iface"
+	uci_set_state upnpd state network "$network"
 }
 
+miniupnpd_remove_rules() {
+	local zone="$(uci_get_state upnpd state zone)"
+	local iface="$(uci_get_state upnpd state ifname)"
+
+	[ -n "$zone" ] && [ -n "$iface" ] && {
+		logger -t miniupnpd "removing firewall rules for $iface from zone $zone"
+
+		while iptables -t nat -D zone_${zone}_prerouting \
+			-i $iface -j MINIUPNPD 2>/dev/null; do :; done
+
+		while iptables -t filter -D zone_${zone}_forward \
+			-i $iface ! -o $iface -j MINIUPNPD 2>/dev/null; do :; done
+	}
+
+	uci_revert_state upnpd
+}
+
+/etc/init.d/miniupnpd enabled && [ -n "`pidof miniupnpd`" ] && {
+
+	local extif="$(uci_get upnpd config external_iface)"
+	local curif="$(uci_get_state upnpd state network)"
+
+	if [ "$ACTION" = "add" ] && [ "$INTERFACE" = "$extif" ]; then
+		miniupnpd_add_rules "$ZONE" "$INTERFACE" "$DEVICE"
+	elif [ "$ACTION" = "remove" ] && [ "$INTERFACE" = "$curif" ]; then
+		miniupnpd_remove_rules
+	fi
+}

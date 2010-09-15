@@ -2,6 +2,9 @@
 START=95
 
 start() {
+	type miniupnpd_add_rules >/dev/null 2>/dev/null || \
+		ACTION=- . /etc/hotplug.d/firewall/50-miniupnpd
+
 	config_load "upnpd"
 	local extiface intiface upload download logging secure enabled
 
@@ -48,41 +51,23 @@ start() {
 		config_load firewall
 		config_get zone core "${extiface:-wan}_zone"
 		[ -n "$zone" ] && \
-			ACTION="add" ZONE="$zone" INTERFACE="${extiface:-wan}" DEVICE="$ifname" \
-				. /etc/hotplug.d/firewall/50-miniupnpd 
+			miniupnpd_add_rules "$zone" "${extiface:-wan}" "$ifname"
 	else
 		logger -t "upnp daemon" "external interface not found, not starting"
 	fi
-}
-
-clear_rule() {
-	local state="$1"
-	local ifname ipaddr
-
-	config_get ifname "$state" ifname
-	config_get ipaddr "$state" ipaddr
-
-	[ -n "$ifname" ] && [ -n "$ipaddr" ] && {
-		iptables -t nat -D prerouting_rule -i $ifname -d $ipaddr -j MINIUPNPD
-		iptables -t filter -D forwarding_rule -i $ifname ! -o $ifname -j MINIUPNPD
-		uci_revert_state upnpd "$state"
-		unset "CONFIG_${state}_ifname"
-		unset "CONFIG_${state}_ipaddr"
-	}
 }
 
 stop() {
 	start-stop-daemon -K -q -x miniupnpd -p /var/run/miniupnpd.pid
 	rm -f /var/run/miniupnpd.pid
 
-	logger -t "upnp" "removing firewall rules"
+	type miniupnpd_remove_rules >/dev/null 2>/dev/null || \
+		ACTION=- . /etc/hotplug.d/firewall/50-miniupnpd
 
-	config_load upnpd
-	config_foreach clear_rule firewall
+	miniupnpd_remove_rules
 
 	iptables -t nat -F MINIUPNPD 2>/dev/null
 	iptables -t nat -X MINIUPNPD 2>/dev/null
 	iptables -t filter -F MINIUPNPD 2>/dev/null
 	iptables -t filter -X MINIUPNPD 2>/dev/null
 }
-
