@@ -10,9 +10,9 @@ miniupnpd_add_rules() {
 	logger -t miniupnpd "adding firewall rules for $iface to zone $zone"
 
 	iptables -t nat -N MINIUPNPD 2>/dev/null
-	iptables -t nat -A zone_${zone}_prerouting -i $iface -j MINIUPNPD
+	iptables -t nat -I zone_${zone}_prerouting -i $iface -j MINIUPNPD
 	iptables -t filter -N MINIUPNPD 2>/dev/null
-	iptables -t filter -A zone_${zone}_forward -i $iface ! -o $iface -j MINIUPNPD
+	iptables -t filter -I zone_${zone}_forward -i $iface ! -o $iface -j MINIUPNPD
 
 	uci_set_state upnpd state "" state
 	uci_set_state upnpd state zone "$zone"

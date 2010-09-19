@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=miniupnpd
 PKG_VERSION:=1.4
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_MD5SUM:=ffa33d4ed8732c662bdb7d511e86db76
 
 PKG_SOURCE_URL:=http://miniupnp.free.fr/files
