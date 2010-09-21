@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bzip2
-PKG_VERSION:=1.0.5
+PKG_VERSION:=1.0.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.bzip.org/$(PKG_VERSION)
-PKG_MD5SUM:=3c15a0c8d1d3ee1c46a1634d00617b1a
+PKG_MD5SUM:=00b516f4704d4a7cb50a1d97e6e8e15b
 
 include $(INCLUDE_DIR)/package.mk
 
