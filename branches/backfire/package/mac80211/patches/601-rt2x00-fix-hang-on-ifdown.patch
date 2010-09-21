@@ -16,7 +16,7 @@ Signed-off-by: Helmut Schaa <helmut.schaa@googlemail.com>
 
 --- a/drivers/net/wireless/rt2x00/rt2800pci.c
 +++ b/drivers/net/wireless/rt2x00/rt2800pci.c
-@@ -661,6 +661,10 @@ static void rt2800pci_kill_tx_queue(stru
+@@ -585,6 +585,10 @@ static void rt2800pci_kill_tx_queue(stru
  		return;
  	}
  
@@ -25,5 +25,5 @@ Signed-off-by: Helmut Schaa <helmut.schaa@googlemail.com>
 +	rt2800_register_write(rt2x00dev, WPDMA_GLO_CFG, reg);
 +
  	rt2800_register_read(rt2x00dev, WPDMA_RST_IDX, &reg);
- 	rt2x00_set_field32(&reg, WPDMA_RST_IDX_DTX_IDX0, (qid == QID_AC_BE));
- 	rt2x00_set_field32(&reg, WPDMA_RST_IDX_DTX_IDX1, (qid == QID_AC_BK));
+ 	rt2x00_set_field32(&reg, WPDMA_RST_IDX_DTX_IDX0, (queue->qid == QID_AC_BE));
+ 	rt2x00_set_field32(&reg, WPDMA_RST_IDX_DTX_IDX1, (queue->qid == QID_AC_BK));
