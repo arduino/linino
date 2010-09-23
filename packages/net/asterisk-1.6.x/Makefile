@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
 PKG_VERSION:=1.6.2.11
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
@@ -137,38 +137,7 @@ $(call Package/asterisk16/Default/description)
  This package provides CURL
  support to Asterisk.
 endef
-
  
-CONFIGURE_ARGS+= \
-	--without-curses \
-	--with-gsm=internal \
-	--without-gtk \
-	--without-gtk2 \
-	--without-isdnnet \
-	--without-kde \
-	--without-misdn \
-	--without-nbs \
-	--with-ncurses="$(STAGING_DIR)/usr" \
-	--without-netsnmp \
-	--without-newt \
-	--without-odbc \
-	--without-ogg \
-	--without-osptk \
-	--with-popt="$(STAGING_DIR)/usr" \
-	--without-pri \
-	--without-qt \
-	--without-radius \
-	--without-sdl \
-	--without-spandsp \
-	--without-suppserv \
-	--without-tds \
-	--without-termcap \
-	--without-tinfo \
-	--without-vorbis \
-	--without-vpb \
-	--with-z="$(STAGING_DIR)/usr" \
-	--disable-xmldoc \
-
 ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk16-app-meetme),)
   CONFIGURE_ARGS+= \
 	--with-dahdi="$(STAGING_DIR)/usr"
@@ -198,9 +167,38 @@ else
 	--without-curl
 endif
 
+CONFIGURE_ARGS+= \
+	--without-curses \
+	--with-gsm=internal \
+	--without-gtk \
+	--without-gtk2 \
+	--without-isdnnet \
+	--without-kde \
+	--without-misdn \
+	--without-nbs \
+	--with-ncurses="$(STAGING_DIR)/usr" \
+	--without-netsnmp \
+	--without-newt \
+	--without-odbc \
+	--without-ogg \
+	--without-osptk \
+	--with-popt="$(STAGING_DIR)/usr" \
+	--without-pri \
+	--without-qt \
+	--without-radius \
+	--without-sdl \
+	--without-spandsp \
+	--without-suppserv \
+	--without-tds \
+	--without-termcap \
+	--without-tinfo \
+	--without-vorbis \
+	--without-vpb \
+	--with-z="$(STAGING_DIR)/usr" \
+	--disable-xmldoc
 
-EXTRA_CFLAGS:= $(TARGET_CPPFLAGS)
-EXTRA_LDFLAGS:= $(TARGET_LDFLAGS)
+EXTRA_CFLAGS+= $(TARGET_CPPFLAGS)
+EXTRA_LDFLAGS+= $(TARGET_LDFLAGS)
 
 define Build/Configure
 	-rm $(PKG_BUILD_DIR)/menuselect.makeopts
@@ -212,7 +210,7 @@ define Build/Compile
 		include/asterisk/version.h \
 		include/asterisk/buildopts.h defaults.h \
 		makeopts.embed_rules
-	ASTCFLAGS="$(EXTRA_CFLAGS) -DLOW_MEMORY $(TARGET_CFLAGS)" \
+	ASTCFLAGS="$(EXTRA_CFLAGS) -DLOW_MEMORY" \
 	ASTLDFLAGS="$(EXTRA_LDFLAGS)" \
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		ASTVARLIBDIR="/usr/lib/asterisk" \
