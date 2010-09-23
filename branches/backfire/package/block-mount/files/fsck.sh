@@ -32,5 +32,5 @@ libmount_fsck() {
 
 libmount_known_fsck=""
 
-include /lib/functions/fsck
+pi_include /lib/functions/fsck
 
