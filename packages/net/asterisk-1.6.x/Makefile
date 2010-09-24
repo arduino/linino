@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
-PKG_VERSION:=1.6.2.11
-PKG_RELEASE:=2
+PKG_VERSION:=1.6.2.13
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
-PKG_MD5SUM:=2d6757a0354cff87c9e1776ada077aae
+PKG_MD5SUM:=1e184a4d9301e2e4b9de3bc98b507d4f
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -425,4 +425,6 @@ $(eval $(call BuildAsterisk16ModuleTemplate,func_global,Global variable,global v
 $(eval $(call BuildAsterisk16ModuleTemplate,func_shell,Shell,support for shell execution))
 $(eval $(call BuildAsterisk16ModuleTemplate,pbx_ael,Asterisk Extension Logic,support for symbolic Asterisk Extension Logic))
 $(eval $(call BuildAsterisk16ModuleTemplate,res_ael_share,Shareable AEL code,support for shareable AEL code mainly between internal and external modules))
+$(eval $(call BuildAsterisk16ModuleTemplate,pbx_spool,Call Spool,outgoing call spool support))
 $(eval $(call BuildAsterisk16ModuleTemplate,res_agi,Asterisk Gateway Interface,support for the Asterisk Gateway Interface extension))
+
