@@ -12,8 +12,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=qt4
-PKG_VERSION:=4.7.0-beta2
+PKG_VERSION:=4.7.0
 PKG_RELEASE:=1
+PKG_MD5SUM:=3a2f25b9b115037277f4fb759194a7a5
 
 PKG_SOURCE:=qt-everywhere-opensource-src-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.qt.nokia.com/qt/source
