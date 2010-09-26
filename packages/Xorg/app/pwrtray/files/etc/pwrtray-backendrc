@@ -10,3 +10,7 @@ autodim_max=80
 # Enable auto-dimming by default?
 autodim_default_on=1
 
+[SCREEN]
+# Framebuffer device for screen blanking
+fbdev=/dev/fb0
+
