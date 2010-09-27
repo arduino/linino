@@ -58,6 +58,10 @@ define Package/lxpanel/install
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/share/lxpanel/* \
 		$(1)/usr/share/lxpanel/
+	$(INSTALL_DIR) $(1)/usr/share/lxpanel/profile/default
+	$(CP) \
+		./files/default_config/* \
+		$(1)/usr/share/lxpanel/profile/default/
 endef
 
 $(eval $(call BuildPackage,lxpanel))
