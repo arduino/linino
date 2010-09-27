@@ -1,0 +1,19 @@
+---
+ configure |    6 ------
+ 1 file changed, 6 deletions(-)
+
+--- lxshortcut-0.1.1.orig/configure
++++ lxshortcut-0.1.1/configure
+@@ -6042,12 +6042,6 @@ $as_echo "no" >&6; }
+ fi
+ 
+ 
+-if test "$GTK_BUILDER_CONVERT" = "false"; then
+-  { { $as_echo "$as_me:$LINENO: error: gtk-builder-convert not found" >&5
+-$as_echo "$as_me: error: gtk-builder-convert not found" >&2;}
+-   { (exit 1); exit 1; }; }
+-fi
+-
+ GETTEXT_PACKAGE=lxshortcut
+ 
+ 

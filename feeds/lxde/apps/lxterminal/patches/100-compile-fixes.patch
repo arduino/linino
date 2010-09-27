@@ -1,0 +1,28 @@
+---
+ src/lxterminal.c |    2 +-
+ src/lxterminal.h |    3 +++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+--- lxterminal-0.1.9.orig/src/lxterminal.c
++++ lxterminal-0.1.9/src/lxterminal.c
+@@ -833,7 +833,7 @@ static void terminal_settings_apply_to_t
+     vte_terminal_set_scrollback_lines(VTE_TERMINAL(term->vte), setting->scrollback);
+     vte_terminal_set_allow_bold(VTE_TERMINAL(term->vte), ! setting->disallow_bold);
+     vte_terminal_set_cursor_blink_mode(VTE_TERMINAL(term->vte), ((setting->cursor_blink) ? VTE_CURSOR_BLINK_ON : VTE_CURSOR_BLINK_OFF));
+-    vte_terminal_set_cursor_shape(VTE_TERMINAL(term->vte), ((setting->cursor_underline) ? VTE_CURSOR_SHAPE_UNDERLINE : VTE_CURSOR_SHAPE_BLOCK));
++//    vte_terminal_set_cursor_shape(VTE_TERMINAL(term->vte), ((setting->cursor_underline) ? VTE_CURSOR_SHAPE_UNDERLINE : VTE_CURSOR_SHAPE_BLOCK));
+     vte_terminal_set_audible_bell(VTE_TERMINAL(term->vte), setting->audible_bell);
+ 
+     /* Background and foreground colors. */
+--- lxterminal-0.1.9.orig/src/lxterminal.h
++++ lxterminal-0.1.9/src/lxterminal.h
+@@ -23,6 +23,9 @@
+ 
+ #include "setting.h"
+ 
++#include <unistd.h>
++#include <sys/types.h>
++
+ #define NEW_WINDOW_ACCEL "<CTRL><SHIFT>N"
+ #define NEW_TAB_ACCEL "<CTRL><SHIFT>T"
+ #define CLOSE_TAB_ACCEL "<CTRL><SHIFT>W"

@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=menu-cache
-PKG_VERSION:=0.2.2
+PKG_VERSION:=0.3.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -52,12 +52,10 @@ define Build/InstallDev
 endef
 
 define Package/libmenu-cache/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) \
-		$(PKG_INSTALL_DIR)/usr/bin/menu-{cached,cache-gen} \
-		$(1)/usr/bin
-
 	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/lib/menu-{cached,cache-gen} \
+		$(1)/usr/lib/
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib/
