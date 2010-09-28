@@ -64,6 +64,16 @@ get_portrange() {
 		export -n -- "$_var=${_min:-$_max}"
 }
 
+get_negation() {
+	local _var="$1"
+	local _flag="$2"
+	local _ipaddr="$3"
+
+	[ "${_ipaddr#!}" != "$_ipaddr" ] && \
+		export -n -- "$_var=! $_flag ${_ipaddr#!}" || \
+		export -n -- "$_var=${_ipaddr:+$_flag $_ipaddr}"
+}
+
 load_policy() {
 	config_get input $1 input
 	config_get output $1 output
@@ -108,9 +118,9 @@ create_zone() {
 	if [ "$masq" == "1" ]; then
 		local msrc mdst
 		for msrc in ${masq_src:-0.0.0.0/0}; do
-			[ "${msrc#!}" != "$msrc" ] && msrc="! -s ${msrc#!}" || msrc="-s $msrc"
+			get_negation msrc '-s' "$msrc"
 			for mdst in ${masq_dest:-0.0.0.0/0}; do
-				[ "${mdst#!}" != "$mdst" ] && mdst="! -d ${mdst#!}" || mdst="-d $mdst"
+				get_negation mdst '-d' "$mdst"
 				$IPTABLES -A zone_${name}_nat -t nat $msrc $mdst -j MASQUERADE
 			done
 		done
@@ -353,27 +363,40 @@ fw_rule() {
 	config_get target $1 target
 	config_get ruleset $1 ruleset
 
+	[ "$target" != "NOTRACK" ] || [ -n "$src" ] || {
+		echo "NOTRACK rule needs src"
+		return
+	}
+
+	local srcaddr destaddr
+	get_negation srcaddr '-s' "$src_ip"
+	get_negation destaddr '-d' "$dest_ip"
+
 	local srcports destports
 	get_portrange srcports "$src_port" ":"
 	get_portrange destports "$dest_port" ":"
 
 	ZONE=input
-	TARGET=$target
-	[ -z "$target" ] && target=DROP
-	[ -n "$src" -a -z "$dest" ] && ZONE=zone_$src
-	[ -n "$src" -a -n "$dest" ] && ZONE=zone_${src}_forward
-	[ -n "$dest" ] && TARGET=zone_${dest}_$target
+	TABLE=filter
+	TARGET="${target:-DROP}"
+
+	if [ "$TARGET" = "NOTRACK" ]; then
+		TABLE=raw
+		ZONE="zone_${src}_notrack"
+	else
+		[ -n "$src" ] && ZONE="zone_${src}${dest:+_forward}"
+		[ -n "$dest" ] && TARGET="zone_${dest}_${TARGET}"
+	fi
 
 	eval 'RULE_COUNT=$((++RULE_COUNT_'$ZONE'))'
 
 	add_rule() {
-		$IPTABLES -I $ZONE $RULE_COUNT \
+		$IPTABLES -t $TABLE -I $ZONE $RULE_COUNT \
+			$srcaddr $destaddr \
 			${proto:+-p $proto} \
 			${icmp_type:+--icmp-type $icmp_type} \
-			${src_ip:+-s $src_ip} \
 			${srcports:+--sport $srcports} \
 			${src_mac:+-m mac --mac-source $src_mac} \
-			${dest_ip:+-d $dest_ip} \
 			${destports:+--dport $destports} \
 			-j $TARGET
 	}
@@ -439,7 +462,7 @@ fw_redirect() {
 		nataddr="$dest_ip"
 		get_portrange natports "$dest_port" "-"
 
-		srcdaddr="$src_dip"
+		get_negation srcdaddr '-d' "$src_dip"
 		get_portrange srcdports "$src_dport" ":"
 
 		find_item "$src" $CONNTRACK_ZONES || \
@@ -458,7 +481,7 @@ fw_redirect() {
 		nataddr="$src_dip"
 		get_portrange natports "$src_dport" "-"
 
-		srcdaddr="$dest_ip"
+		get_negation srcdaddr '-d' "$dest_ip"
 		get_portrange srcdports "$dest_port" ":"
 
 		find_item "$dest" $CONNTRACK_ZONES || \
@@ -469,26 +492,28 @@ fw_redirect() {
 		return
 	fi
 
+	local srcaddr destaddr
+	get_negation srcaddr '-s' "$src_ip"
+	get_negation destaddr '-d' "$dest_ip"
+
 	local srcports destports
 	get_portrange srcports "$src_port" ":"
 	get_portrange destports "${dest_port-$src_dport}" ":"
 
 	add_rule() {
 		$IPTABLES -I $natchain 1 -t nat \
+			$srcaddr $srcdaddr \
 			${proto:+-p $proto} \
-			${src_ip:+-s $src_ip} \
 			${srcports:+--sport $srcports} \
-			${srcdaddr:+-d $srcdaddr} \
 			${srcdports:+--dport $srcdports} \
 			${src_mac:+-m mac --mac-source $src_mac} \
 			-j ${target:-DNAT} $natopt $nataddr${natports:+:$natports}
 
 		[ -n "$dest_ip" ] && \
 		$IPTABLES -I ${fwdchain:-forward} 1 \
+			$srcaddr $destaddr \
 			${proto:+-p $proto} \
-			${src_ip:+-s $src_ip} \
 			${srcports:+--sport $srcports} \
-			${dest_ip:+-d $dest_ip} \
 			${destports:+--dport $destports} \
 			${src_mac:+-m mac --mac-source $src_mac} \
 			-j ACCEPT
