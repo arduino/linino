@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pwrtray
-PKG_REV:=5f61c465b6f14909cda0d18bf9ccf5bb34d86e5b
+PKG_REV:=00222f1a487efcae711128c44aca499f4327743f
 PKG_VERSION:=$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -27,12 +27,13 @@ define Package/pwrtray
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=pwrtray
+  MAINTAINER:=Michael Buesch <mb@bu3sch.de>
   URL:=http://bu3sch.de/gitweb?p=pwrtray.git;a=summary
-  DEPENDS:=+qt4 +qt4-gui
+  DEPENDS:=+qt4 +qt4-gui +FEATURE_drawing-backend_libX11:libX11
 endef
 
 define Package/pwrtray/description
-  Tiny power control tray application.
+  Tiny system power control daemon with a small system-tray frontend.
 endef
 
 EXTRA_CFLAGS:= \
@@ -46,7 +47,8 @@ EXTRA_LDFLAGS:= \
 
 MAKE_VARS+= \
 	MOC="$(STAGING_DIR_HOST)/bin/moc" \
-	STRIP="$(STRIP)"
+	STRIP="$(STRIP)" \
+	$(if $(CONFIG_PACKAGE_libX11),FEATURE_XLOCK=y,FEATURE_XLOCK=n)
 
 #MAKE_FLAGS+= \
 #	V=1
@@ -55,6 +57,7 @@ define Package/pwrtray/install
 	$(INSTALL_DIR) $(1)/etc/init.d $(1)/usr/bin $(1)/usr/share
 	$(INSTALL_BIN) ./files/etc/init.d/* $(1)/etc/init.d/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray-backend $(1)/usr/bin/
+	$(if $(CONFIG_PACKAGE_libX11),$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray-xlock $(1)/usr/bin/)
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/pwrtray $(1)/usr/share/
 	[ -e $(1)/etc/pwrtray-backendrc ] || \
