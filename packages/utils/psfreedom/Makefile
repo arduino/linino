@@ -26,6 +26,7 @@ define KernelPackage/psfreedom
   DEPENDS:=@TARGET_omap24xx +TARGET_omap24xx:kmod-usb-tahvo +TARGET_omap24xx:kmod-musb-hdrc
   TITLE:=PSFreedom PS3 USB exploit
   FILES:=$(PKG_BUILD_DIR)/psfreedom.ko
+  MAINTAINER:=Michael Buesch <mb@bu3sch.de>
 endef
 
 define KernelPackage/psfreedom/description

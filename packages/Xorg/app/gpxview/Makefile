@@ -27,6 +27,7 @@ define Package/gpxview
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=GPXView Geocaching app
+  MAINTAINER:=Michael Buesch <mb@bu3sch.de>
   URL:=http://www.harbaum.org/till/maemo/index.shtml#gpxview
   DEPENDS:=+gpsd +libxml2 +libcurl +libsoup +gtkhtml +gtk2 +libintl +libiconv
 endef

@@ -24,6 +24,7 @@ define KernelPackage/ucmb
   TITLE:=Microcontroller Message Bus
   FILES:=$(PKG_BUILD_DIR)/ucmb.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,93,ucmb)
+  MAINTAINER:=Michael Buesch <mb@bu3sch.de>
 endef
 
 define KernelPackage/ucmb/description

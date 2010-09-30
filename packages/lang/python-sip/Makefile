@@ -30,6 +30,7 @@ define Package/python-sip
   CATEGORY:=Development
   TITLE:=Python SIP
   DEPENDS:=+python
+  MAINTAINER:=Michael Buesch <mb@bu3sch.de>
   URL:=http://www.riverbankcomputing.co.uk/software/sip/download
 endef
 

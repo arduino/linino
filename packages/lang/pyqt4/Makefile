@@ -29,6 +29,7 @@ define Package/pyqt4
   CATEGORY:=Languages
   SUBMENU:=Python
   TITLE:=Python QT4
+  MAINTAINER:=Michael Buesch <mb@bu3sch.de>
   URL:=http://www.riverbankcomputing.co.uk/software/pyqt/download
   DEPENDS:=+qt4 +dbus-python +python-sip @QT4_WS_X11
 endef

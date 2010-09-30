@@ -17,6 +17,7 @@ define Package/ucmb-tools
   CATEGORY:=Utilities
   TITLE:=Microcontroller Message Bus tools
   DEPENDS:=+kmod-ucmb
+  MAINTAINER:=Michael Buesch <mb@bu3sch.de>
 endef
 
 define Package/ucmb-tools/description
