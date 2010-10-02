@@ -76,7 +76,7 @@ define Package/pwrtray-backend/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray-backend $(1)/usr/bin/
 	$(if $(CONFIG_PACKAGE_libX11),$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray-xlock $(1)/usr/bin/)
 	$(if $(CONFIG_PACKAGE_pwrtray),$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray $(1)/usr/bin/)
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/pwrtray $(1)/usr/share/
+	$(if $(CONFIG_PACKAGE_pwrtray),$(CP) $(PKG_INSTALL_DIR)/usr/share/pwrtray $(1)/usr/share/)
 	[ -e $(1)/etc/pwrtray-backendrc ] || \
 		$(INSTALL_DATA) ./files/etc/pwrtray-backendrc $(1)/etc/
 endef
