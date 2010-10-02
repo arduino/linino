@@ -118,7 +118,7 @@ endif
 
 define Build/Compile/vim-runtime
 	$(MAKE) -C $(PKG_BUILD_DIR)/src DESTDIR="$(PKG_INSTALL_DIR)" installrtbase
-	(cd $(PKG_INSTALL_DIR) && tar -czf $(PKG_BUILD_DIR)/docs.tgz ./usr/share/vim/vim$(VIMVER)/doc)
+	(cd $(PKG_INSTALL_DIR) && tar -cf $(PKG_BUILD_DIR)/docs.tar ./usr/share/vim/vim$(VIMVER)/doc)
 	rm -rf $(PKG_INSTALL_DIR)/usr/share/vim/vim$(VIMVER)/doc
 	rm -rf $(PKG_INSTALL_DIR)/usr/man
 endef
@@ -153,7 +153,7 @@ define Package/vim-runtime/install
 endef
 
 define Package/vim-help/install
-	tar -C $(1) -xzf $(PKG_BUILD_DIR)/docs.tgz 
+	tar -C $(1) -xf $(PKG_BUILD_DIR)/docs.tar
 endef
 
 $(eval $(call BuildPackage,vim))
