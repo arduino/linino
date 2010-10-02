@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pwrtray
-PKG_REV:=bf85a6f4c26a225709deceec718aa76d727020d2
+PKG_REV:=3994c1c31958a53be7f838f86d62629b1349b2bd
 PKG_VERSION:=$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -22,18 +22,34 @@ PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
+define Package/pwrtray-common
+  MAINTAINER:=Michael Buesch <mb@bu3sch.de>
+  URL:=http://bu3sch.de/gitweb?p=pwrtray.git;a=summary
+endef
+
+define Package/pwrtray-backend
+  $(call Package/pwrtray-common)
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=System power control daemon
+  DEPENDS:=+FEATURE_drawing-backend_libX11:libX11
+endef
+
+define Package/pwrtray-backend/description
+  Tiny system power control daemon.
+endef
+
 define Package/pwrtray
+  $(call Package/pwrtray-common)
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  TITLE:=pwrtray
-  MAINTAINER:=Michael Buesch <mb@bu3sch.de>
-  URL:=http://bu3sch.de/gitweb?p=pwrtray.git;a=summary
-  DEPENDS:=+qt4 +qt4-gui +FEATURE_drawing-backend_libX11:libX11
+  TITLE:=Frontend to pwrtray-backend daemon
+  DEPENDS:=+pwrtray-backend +qt4 +qt4-gui
 endef
 
 define Package/pwrtray/description
-  Tiny system power control daemon with a small system-tray frontend.
+  Small system-tray frontend to the power control daemon.
 endef
 
 EXTRA_CFLAGS:= \
@@ -48,20 +64,22 @@ EXTRA_LDFLAGS:= \
 MAKE_VARS+= \
 	MOC="$(STAGING_DIR_HOST)/bin/moc" \
 	STRIP="$(STRIP)" \
-	$(if $(CONFIG_PACKAGE_libX11),FEATURE_XLOCK=y,FEATURE_XLOCK=n)
+	$(if $(CONFIG_PACKAGE_libX11),FEATURE_XLOCK=y,FEATURE_XLOCK=n) \
+	$(if $(CONFIG_PACKAGE_pwrtray),FEATURE_TRAY=y,FEATURE_TRAY=n)
 
 #MAKE_FLAGS+= \
 #	V=1
 
-define Package/pwrtray/install
+define Package/pwrtray-backend/install
 	$(INSTALL_DIR) $(1)/etc/init.d $(1)/usr/bin $(1)/usr/share
 	$(INSTALL_BIN) ./files/etc/init.d/* $(1)/etc/init.d/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray-backend $(1)/usr/bin/
 	$(if $(CONFIG_PACKAGE_libX11),$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray-xlock $(1)/usr/bin/)
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray $(1)/usr/bin/
+	$(if $(CONFIG_PACKAGE_pwrtray),$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray $(1)/usr/bin/)
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/pwrtray $(1)/usr/share/
 	[ -e $(1)/etc/pwrtray-backendrc ] || \
 		$(INSTALL_DATA) ./files/etc/pwrtray-backendrc $(1)/etc/
 endef
 
+$(eval $(call BuildPackage,pwrtray-backend))
 $(eval $(call BuildPackage,pwrtray))
