@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,12 +10,14 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=vim
 PKG_VERSION:=7.1
 PKG_RELEASE:=3
+VIMVER:=71
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.vim.org/pub/vim/unix/
 PKG_MD5SUM:=44c6b4914f38d6f9aa959640b89da329
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)71
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)$(VIMVER)
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -94,7 +96,7 @@ define Build/Compile/vim
 	  --with-features=tiny \
 	 )
 	$(MAKE) -C $(PKG_BUILD_DIR) clean
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 	  DESTDIR="$(PKG_INSTALL_DIR)" \
 	  all
 	$(CP) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(PKG_BUILD_DIR)/vim_tiny
@@ -107,17 +109,17 @@ define Build/Compile/vim-full
 	  --with-features=normal \
 	)
 	$(MAKE) -C $(PKG_BUILD_DIR) clean
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 	  DESTDIR="$(PKG_INSTALL_DIR)" \
 	  all
 	$(CP) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(PKG_BUILD_DIR)/vim_normal
 endef
-endif    
+endif
 
 define Build/Compile/vim-runtime
 	$(MAKE) -C $(PKG_BUILD_DIR)/src DESTDIR="$(PKG_INSTALL_DIR)" installrtbase
-	tar -czf $(PKG_BUILD_DIR)/docs.tgz $(PKG_INSTALL_DIR)/usr/share/vim/vim*/doc 
-	rm -rf $(PKG_INSTALL_DIR)/usr/share/vim/vim*/doc
+	(cd $(PKG_INSTALL_DIR) && tar -czf $(PKG_BUILD_DIR)/docs.tgz ./usr/share/vim/vim$(VIMVER)/doc)
+	rm -rf $(PKG_INSTALL_DIR)/usr/share/vim/vim$(VIMVER)/doc
 	rm -rf $(PKG_INSTALL_DIR)/usr/man
 endef
 
@@ -147,7 +149,7 @@ endef
 
 define Package/vim-runtime/install
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)
-	rm -rf $(1)/usr/share/vim/vim*/doc
+	rm -rf $(1)/usr/share/vim/vim$(VIMVER)/doc
 endef
 
 define Package/vim-help/install
