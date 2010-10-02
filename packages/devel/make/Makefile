@@ -12,6 +12,8 @@ PKG_RELEASE:=1
 PKG_SOURCE_URL:=@GNU/make
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_MD5SUM:=354853e0b2da90c527e35aabb8d6f1e6
+PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -25,8 +27,6 @@ endef
 define Package/make/description
 	The Make package contains a program for compiling packages
 endef
-
-MAKE_FLAGS += all install DESTDIR="$(PKG_INSTALL_DIR)"
 
 define Package/make/install
 	$(INSTALL_DIR) $(1)/usr/bin
