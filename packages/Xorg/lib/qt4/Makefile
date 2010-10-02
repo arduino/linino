@@ -357,7 +357,7 @@ define Build/Configure
 			-no-xfixes \
 			-no-xrandr \
 			-no-xrender \
-			$(if $(CONFIG_QT4_WS_X11),-no-mitshm,-mitshm) \
+			-no-mitshm \
 			$(if $(CONFIG_QT4_WS_X11),-no-fontconfig,-fontconfig) \
 			$(if $(CONFIG_QT4_WS_X11),-no-xinput,-xinput) \
 			$(if $(CONFIG_QT4_WS_X11),-no-xkb,-xkb) \
