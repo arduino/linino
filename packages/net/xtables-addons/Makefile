@@ -9,13 +9,15 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=xtables-addons
-PKG_VERSION:=1.28
+PKG_VERSION:=1.29
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=2d81508449ddd7295e9dc08aff72d377
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
+PKG_MD5SUM:=25e3d7de905d8ed7cfb5e297a316bfc8
 PKG_SOURCE_URL:=@SF/xtables-addons
 PKG_BUILD_DEPENDS:=iptables
+PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,13 +36,23 @@ CONFIGURE_ARGS+= \
 	--with-xtlibdir="/usr/lib/iptables" \
 
 define Build/Compile
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+		ARCH="$(LINUX_KARCH)" \
+		CROSS_COMPILE="$(TARGET_CROSS)" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		DEPMOD="/bin/true" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		all
+endef
+
+define Build/Install
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		ARCH="$(LINUX_KARCH)" \
 		CROSS_COMPILE="$(TARGET_CROSS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		DEPMOD="/bin/true" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
-		all install
+		install
 endef
 
 # 1: extension/module suffix used in package name
