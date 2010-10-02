@@ -17,3 +17,14 @@
  		then
  			echo Cannot write to directory to create \"$stderrlog\".
  			exit 1
+--- a/programs/_realsetup/_realsetup.in
++++ b/programs/_realsetup/_realsetup.in
+@@ -283,7 +283,7 @@ case "$1" in
+ 
+ 	# misc pre-Pluto setup
+ 
+-	perform test -d $subsysdir "&&" touch $subsyslock
++	rm test -d `echo $subsyslock | sed -r 's/(^.*\/)(.*$)/\1/'` "&&" touch $subsyslock "&&" rm -f $subsyslock
+ 
+ 	manualconns
+ 
