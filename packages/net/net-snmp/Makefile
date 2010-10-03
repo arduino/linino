@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=net-snmp
 PKG_VERSION:=5.4.2.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/net-snmp
@@ -111,6 +111,7 @@ SNMP_MIB_MODULES_INCLUDED = \
 	mibII/vacm_vars \
 	snmpv3/snmpEngine \
 	snmpv3/snmpMPDStats \
+	snmpv3/usmConf \
 	snmpv3/usmStats \
 	snmpv3/usmUser \
 	tunnel \
