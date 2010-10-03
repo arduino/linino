@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 START=99
 
 append_bool() {
@@ -25,7 +25,7 @@ directory=""
 
 btpd() {
 	local cfg="$1"
-	append_boot "$cfg" useipv4 "-4"
+	append_bool "$cfg" useipv4 "-4"
 	append_bool "$cfg" useipv6 "-6"
 	append_bool "$cfg" emptystart "--empty-start"
 	append_parm "$cfg" port "-p"
