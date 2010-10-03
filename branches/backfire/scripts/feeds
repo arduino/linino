@@ -26,6 +26,10 @@ $valid_mk or die "Unsupported version of make found: $mk\n";
 my @feeds;
 my %build_packages;
 my %installed;
+my %feed_cache;
+
+my $feed_package = {};
+my $feed_src = {};
 
 sub parse_config() {
 	my $line = 0;
@@ -148,16 +152,22 @@ sub update_feed_via($$$$) {
 
 sub get_feed($) {
 	my $feed = shift;
-	my $file = "./feeds/$feed.index";
 
-	clear_packages();
+	if (!defined($feed_cache{$feed})) {
+		my $file = "./feeds/$feed.index";
 
-	-f $file or do {
-		print "Ignoring feed '$feed' - index missing\n";
-		return;
-	};
-	parse_package_metadata($file) or return;
-	return { %package };
+		clear_packages();
+		-f $file or do {
+			print "Ignoring feed '$feed' - index missing\n";
+			return;
+		};
+		parse_package_metadata($file) or return;
+		$feed_cache{$feed} = [ { %package }, { %srcpackage } ];
+	}
+
+	$feed_package = $feed_cache{$feed}->[0];
+	$feed_src = $feed_cache{$feed}->[1];
+	return $feed_cache{$feed}->[0];
 }
 
 sub get_installed() {
@@ -174,8 +184,8 @@ sub search_feed {
 
 	return unless @substr > 0;
 	get_feed($feed);
-	foreach my $name (sort { lc($a) cmp lc($b) } keys %package) {
-		my $pkg = $package{$name};
+	foreach my $name (sort { lc($a) cmp lc($b) } keys %$feed_package) {
+		my $pkg = $feed_package->{$name};
 		my $substr;
 		my $pkgmatch = 1;
 
@@ -211,8 +221,8 @@ sub list_feed {
 	my $feed = shift;
 
 	get_feed($feed);
-	foreach my $name (sort { lc($a) cmp lc($b) } keys %package) {
-		my $pkg = $package{$name};
+	foreach my $name (sort { lc($a) cmp lc($b) } keys %$feed_package) {
+		my $pkg = $feed_package->{$name};
 		next if $pkg->{vdepends};
 		if($pkg->{name}) {
 			printf "\%-32s\t\%s\n", $pkg->{name}, $pkg->{title};
@@ -293,9 +303,12 @@ sub install_package {
 	$feed or do {
 		$installed{$name} and return 0;
 		# TODO: check if it's already installed within ./package directory
-		$srcpackage{$name} or -d "./package/$name" or warn "WARNING: No feed for package '$name' found, maybe it's already part of the standard packages?\n";
+		$feed_src->{$name} or -d "./package/$name" or warn "WARNING: No feed for package '$name' found, maybe it's already part of the standard packages?\n";
 		return 0;
 	};
+
+	# switch to the metadata for the selected feed
+	get_feed($feed->[1]);
 
 	my $pkg = $feed{$feed->[1]}->{$name} or return 1;
 	$pkg->{name} or do {
@@ -327,8 +340,8 @@ sub install_package {
 		return 1;
 	};
 
-	# install all dependencies
-	foreach my $vpkg (@{$srcpackage{$src}}, $pkg) {
+	# install all dependencies referenced from the source package
+	foreach my $vpkg (@{$feed_src->{$src}}) {
 		foreach my $dep (@{$vpkg->{depends}}, @{$vpkg->{builddepends}}, @{$vpkg->{"builddepends/host"}}) {
 			next if $dep =~ /@/;
 			$dep =~ s/^\+//;
@@ -384,11 +397,12 @@ sub install {
 			if (!defined($opts{p}) or $opts{p} eq $f->[1]) {
 				printf "Installing all packages from feed %s.\n", $f->[1];
 				get_feed($f->[1]);
-				foreach my $name (sort { lc($a) cmp lc($b) } keys %package) {
-					my $p = $package{$name};
+				foreach my $name (sort { lc($a) cmp lc($b) } keys %$feed_package) {
+					my $p = $feed_package->{$name};
 					next if $p->{vdepends};
 					if( $p->{name} ) {
 						install_package($feed, $p->{name}) == 0 or $ret = 1;
+						get_feed($f->[1]);
 					}
 				}
 			}
