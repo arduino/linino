@@ -98,6 +98,7 @@ ifeq ($(DUMP),)
 		echo "Provides: $(PROVIDES)"; \
 		echo "Source: $(SOURCE)"; \
 		echo "Section: $(SECTION)"; \
+		echo "Status: install $(if $(filter hold,$(PKG_FLAGS)),hold,ok) not-installed"; \
 		echo "Priority: $(PRIORITY)"; \
 		echo "Maintainer: $(MAINTAINER)"; \
 		echo "Architecture: $(PKGARCH)"; \
@@ -120,6 +121,7 @@ ifeq ($(DUMP),)
     $$(INFO_$(1)): $$(IPKG_$(1))
 	@[ -d $(TARGET_DIR)/tmp ] || mkdir -p $(TARGET_DIR)/tmp
 	$(OPKG) install $$(IPKG_$(1))
+	$(if $(PKGFLAGS),for flag in $(PKGFLAGS); do $(OPKG) flag $$$$flag $(1); done)
 
     $(1)-clean:
 	rm -f $(PACKAGE_DIR)/$(1)_*
