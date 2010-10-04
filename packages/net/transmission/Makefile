@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=transmission
-PKG_VERSION:=2.04
-PKG_RELEASE:=2
+PKG_VERSION:=2.10b1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://mirrors.m0k.org/transmission/files
-PKG_MD5SUM:=84fe15eb7e000fdc369def513299358b
+PKG_MD5SUM:=6bf66d6b2690071459761eb6487d2a77
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -98,7 +98,11 @@ endef
 
 define Package/transmission-cli/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/transmissioncli $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/transmission-cli \
+			$(PKG_INSTALL_DIR)/usr/bin/transmission-create \
+			$(PKG_INSTALL_DIR)/usr/bin/transmission-edit \
+			$(PKG_INSTALL_DIR)/usr/bin/transmission-show \
+			$(1)/usr/bin/
 endef
 
 define Package/transmission-remote/install

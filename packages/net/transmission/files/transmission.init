@@ -37,21 +37,23 @@ append_params_quotes() {
 start_service() {
 	local s="$1"
 	local enable=0
+	local enabled=0
 	local run_as_usr='root'
 
 	# disabled?
-	config_get_bool enable "$s" enable 0
-	[ "$enable" == 0 ] && return 0
+	config_get_bool enable "$s" enable 0 # compatibility with prev version
+	config_get_bool enabled "$s" enabled 0
+	[ "$enabled" == 0 -a "$enable" == 0 ] && return 0
 	config_get config_dir "$s" config_dir '/tmp/transmission'
 	mkdir -p "$config_dir"
-	config_get run_as_usr "$s" run_daemon_as_user 'root' 
+	config_get run_as_usr "$s" run_daemon_as_user 'root'
 
 	echo "{" > $config_dir/settings.json
 
 	append_params "$s" \
 		alt_speed_down alt_speed_enabled alt_speed_time_begin alt_speed_time_day \
-		alt_speed_time_enabled alt_speed_time_end alt_speed_up \
-		blocklist_enabled dht_enabled encryption \
+		alt_speed_time_enabled alt_speed_time_end alt_speed_up blocklist_enabled \
+		cache_size_mb dht_enabled encryption idle_seeding_limit idle_seeding_limit_enabled \
 		incomplete_dir_enabled lazy_bitfield_enabled lpd_enabled message_level \
 		open_file_limit peer_limit_global peer_limit_per_torrent peer_port \
 		peer_port_random_high peer_port_random_low peer_port_random_on_start \
