@@ -24,7 +24,7 @@ define Package/speedtouch-usb-firmware
   SECTION:=net
   CATEGORY:=Network
   TITLE:=SpeedTouch 330 ADSL USB firmware
-  DEPENDS:=+kmod-usb-atm +kmod-usb-atm-speedtouch @LINUX_2_6
+  DEPENDS:=+kmod-usb-atm +kmod-usb-atm-speedtouch @!LINUX_2_4
   PKGARCH:=all
 endef
 
@@ -57,6 +57,8 @@ define Package/speedtouch-usb-firmware/install
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/speedtch-1.bin.4 $(1)/lib/firmware
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/speedtch-2.bin.2 $(1)/lib/firmware
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/speedtch-2.bin.4 $(1)/lib/firmware
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/atm
+	$(INSTALL_DATA) ./files/atm.hotplug $(1)/etc/hotplug.d/atm/20-speedtouch
 endef
 
 define Package/speedtouch-usb-firmware/postinst

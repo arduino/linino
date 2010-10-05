@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libnfnetlink
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=@LINUX_2_6
+  DEPENDS:=@!LINUX_2_4
   TITLE:=A low-level library for netfilter related kernel/userspace communication
   URL:=http://netfilter.org/projects/libnfnetlink/
 endef

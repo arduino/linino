@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libnetfilter-queue
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=@LINUX_2_6 +libnfnetlink +kmod-nfnetlink-queue
+  DEPENDS:=@!LINUX_2_4 +libnfnetlink +kmod-nfnetlink-queue
   TITLE:=API to packets queued by the kernel packet filter
   URL:=http://www.netfilter.org/projects/libnetfilter_queue/
 endef

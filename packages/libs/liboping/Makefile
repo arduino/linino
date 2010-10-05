@@ -48,7 +48,7 @@ $(call Package/liboping/Default)
   DEPENDS+= +liboping +libncurses
 endef
 
-TARGET_CFLAGS += $(FPIC)
+TARGET_CFLAGS += $(FPIC) -I$(STAGING_DIR)/usr/include
 
 CONFIGURE_ARGS += \
 	--without-perl-bindings \

@@ -254,13 +254,15 @@ endef
 
 define Package/freeradius2-mod-sql-mysql
   $(call Package/freeradius2/Default)
-  DEPENDS:=freeradius2-mod-sql +libmysqlclient
+  DEPENDS:=freeradius2-mod-sql \
+  	+PACKAGE_freeradius2-mod-sql-mysql:libmysqlclient
   TITLE:=MySQL module
 endef
 
 define Package/freeradius2-mod-sql-pgsql
   $(call Package/freeradius2/Default)
-  DEPENDS:=freeradius2-mod-sql +libpq
+  DEPENDS:=freeradius2-mod-sql \
+  	+PACKAGE_freeradius2-mod-sql-pgsql:libpq
   TITLE:=PostgreSQL module
 endef
 

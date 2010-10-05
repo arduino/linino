@@ -24,7 +24,7 @@ define Package/mjpg-streamer
   SECTION:=multimedia
   CATEGORY:=Multimedia
   TITLE:=MJPG-streamer
-  DEPENDS:=@LINUX_2_6 +libpthread +libjpeg
+  DEPENDS:=@!LINUX_2_4 +libpthread +libjpeg
   URL:=http://mjpg-streamer.wiki.sourceforge.net/
 endef
 

@@ -28,7 +28,7 @@ define Package/libtorrent
   CATEGORY:=Libraries
   TITLE:=Rakshasa's BitTorrent library
   URL:=http://libtorrent.rakshasa.no/
-  DEPENDS:=+libopenssl +libsigcxx @LINUX_2_6
+  DEPENDS:=+libopenssl +libsigcxx @!LINUX_2_4
 endef
 
 define Package/libtorrent/description

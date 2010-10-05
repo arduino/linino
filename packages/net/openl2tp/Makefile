@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openl2tp
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+kmod-pppol2tp +ppp +portmap +libreadline +libncurses @LINUX_2_6
+  DEPENDS:=+kmod-pppol2tp +ppp +portmap +libreadline +libncurses @!LINUX_2_4
   TITLE:=An L2TP (Layer 2 Tunneling Protocol) daemon
   URL:=http://www.openl2tp.org/
   SUBMENU:=VPN

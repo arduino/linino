@@ -21,7 +21,7 @@ define Package/btrfs-progs
   SECTION:=utils
   CATEGORY:=Utilities
   SUBMENU:=Filesystem
-  DEPENDS:=@LINUX_2_6 +libuuid +zlib
+  DEPENDS:=@!LINUX_2_4 +libuuid +zlib
   TITLE:=Btrfs filesystems utilities
   URL:=http://btrfs.wiki.kernel.org/
 endef

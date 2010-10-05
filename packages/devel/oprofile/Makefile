@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/kernel.mk
 define KernelPackage/oprofile
   SUBMENU:=Other modules
   TITLE:=OProfile profiling support
-  KCONFIG:=CONFIG_OPROFILE @LINUX_2_6
+  KCONFIG:=CONFIG_OPROFILE @!LINUX_2_4
   FILES:=$(LINUX_DIR)/arch/$(LINUX_KARCH)/oprofile/oprofile.$(LINUX_KMOD_SUFFIX)
   DEPENDS:=@KERNEL_PROFILING
 endef

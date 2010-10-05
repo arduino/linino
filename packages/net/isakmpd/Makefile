@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/kernel.mk
 define Package/isakmpd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=@LINUX_2_6 +libopenssl +keynote +libgmp
+  DEPENDS:=@!LINUX_2_4 +libopenssl +keynote +libgmp
   TITLE:=IPsec management tools
   URL:=http://isakmpd.sourceforge.net/
 endef

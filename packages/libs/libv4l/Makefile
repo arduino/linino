@@ -23,7 +23,7 @@ define Package/libv4l
   CATEGORY:=Libraries
   TITLE:=Video 4 Linux wrapper libraries
   URL:=http://people.atrpms.net/~hdegoede/
-  DEPENDS:=+libpthread @LINUX_2_6
+  DEPENDS:=+libpthread @!LINUX_2_4
 endef
 
 define Package/libv4l/description
