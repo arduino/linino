@@ -37,19 +37,19 @@ endef
 define Package/usbip
 $(call Package/usbip/Default)
   TITLE+= (common)
-  DEPENDS+= +glib2 +sysfsutils +libwrap
+  DEPENDS+= +glib2 +sysfsutils +libwrap +kmod-usbip
 endef
 
 define Package/usbip-client
 $(call Package/usbip/Default)
   TITLE+= (client)
-  DEPENDS+= +usbip +kmod-usbip-client
+  DEPENDS+= usbip +kmod-usbip-client
 endef
 
 define Package/usbip-server
 $(call Package/usbip/Default)
   TITLE+= (server)
-  DEPENDS+= +usbip +kmod-usbip-server
+  DEPENDS+= usbip +kmod-usbip-server
 endef
 
 define KernelPackage/usbip/Default
@@ -69,7 +69,7 @@ define KernelPackage/usbip-client
 $(call KernelPackage/usbip/Default)
   SUBMENU:=USB Support
   TITLE+= (kernel client driver)
-  DEPENDS+= +kmod-usbip
+  DEPENDS+= kmod-usbip
   KCONFIG:= USB_IP_VHCI_HCD=m
   FILES:=$(LINUX_DIR)/drivers/staging/usbip/vhci-hcd.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,99,vhci-hcd)
@@ -79,7 +79,7 @@ define KernelPackage/usbip-server
 $(call KernelPackage/usbip/Default)
   SUBMENU:=USB Support
   TITLE+= (kernel host driver)
-  DEPENDS+= +kmod-usbip
+  DEPENDS+= kmod-usbip
   KCONFIG:= USB_IP_HOST=m
   FILES:=$(LINUX_DIR)/drivers/staging/usbip/usbip.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,99,usbip)
