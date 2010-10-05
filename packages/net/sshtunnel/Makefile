@@ -8,21 +8,22 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sshtunnel
-PKG_VERSION:=1
-PKG_RELEASE:=1
+PKG_VERSION:=2
+PKG_RELEASE:=2
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/sshtunnel
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=SSH
   TITLE:=Manages Local and Remote openssh ssh(1) tunnels
   MAINTAINER:=Nuno Goncalves <nunojpg@gmail.com>
   DEPENDS:=+openssh-client
 endef
 
 define Package/sshtunnel/description
-Creates openssh ssh(1) Local and Remote tunnels configured in UCI file. Can be user to allow remote connections, possibly over NATed connections or without public IP/DNS
+Creates openssh ssh(1) Local and Remote tunnels configured in UCI file. Can be used to allow remote connections, possibly over NATed connections or without public IP/DNS
 endef
 
 define Package/sshtunnel/conffiles
