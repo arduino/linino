@@ -22,12 +22,10 @@ start() {
 }
 
 stop() {
-	start-stop-daemon -q -K -x $HAPROXY_BIN -p $HAPROXY_PID
-	sleep 3
-	kill -0 `cat $HAPROXY_PID` 2>/dev/null && \
-		start-stop-daemon -q -K -s KILL -x $HAPROXY_BIN -p $HAPROXY_PID
+        service_kill ${HAPROXY_BIN##*/} $HAPROXY_PID
+        rm -f $HAPROXY_PID
 }
 
 reload() {
-	$HAPROXY_BIN -f $HAPROXY_CONFIG -p $HAPROXY_PID -st $(cat $HAPROXY_PID)
+        $HAPROXY_BIN -f $HAPROXY_CONFIG -p $HAPROXY_PID -sf $(<$HAPROXY_PID)
 }
