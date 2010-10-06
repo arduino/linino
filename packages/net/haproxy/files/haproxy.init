@@ -27,5 +27,5 @@ stop() {
 }
 
 reload() {
-        $HAPROXY_BIN -f $HAPROXY_CONFIG -p $HAPROXY_PID -sf $(<$HAPROXY_PID)
+        $HAPROXY_BIN -f $HAPROXY_CONFIG -D -V -p $HAPROXY_PID -sf $(cat $HAPROXY_PID)
 }
