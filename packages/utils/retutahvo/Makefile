@@ -18,7 +18,7 @@ define Package/retutahvo
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Retu/Tahvo userspace tool
-  DEPENDS:=+TARGET_omap24xx
+  DEPENDS:=@TARGET_omap24xx
   MAINTAINER:=Michael Buesch <mb@bu3sch.de>
 endef
 
