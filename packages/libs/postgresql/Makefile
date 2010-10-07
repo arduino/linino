@@ -19,6 +19,7 @@ PKG_SOURCE_URL:=\
 	http://ftp.be.postgresql.org/postgresql/source/v$(PKG_VERSION) \
 	ftp://ftp-archives.postgresql.org/pub/source/v$(PKG_VERSION)
 PKG_MD5SUM:=0ae4bd9620e84d3e08dcf923808d14d0
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -159,9 +160,12 @@ endef
 TARGET_CFLAGS += $(FPIC)
 
 define Build/Compile
-	$(MAKE) -C "$(PKG_BUILD_DIR)" \
+	$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+		all
+	$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		install
 endef
 
 define Package/libpq/install
