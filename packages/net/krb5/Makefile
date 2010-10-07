@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=krb5
-PKG_VERSION:=1.7
+PKG_VERSION:=1.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=krb5-$(PKG_VERSION)-signed.tar
-PKG_SOURCE_URL:=http://web.mit.edu/kerberos/dist/krb5/1.7/
-PKG_MD5SUM:=9f7b3402b4731a7fa543db193bf1b564
+PKG_SOURCE_URL:=http://web.mit.edu/kerberos/dist/krb5/$(PKG_VERSION)/
+PKG_MD5SUM:=74257d68373a8df8b9391fc093d594be
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -43,16 +43,6 @@ define Package/krb5-client
 	TITLE:=Kerberos 5 Client
 endef
 
-define Package/krb5-apps
-	$(call Package/krb5/Default)
-	TITLE:=Kerberized Network Applications
-endef
-
-define Package/krb5-daemons
-	$(call Package/krb5/Default)
-	TITLE:=Kerberized Network Daemons
-endef
-
 define Package/krb5/decription
 	Kerberos
 endef
@@ -62,9 +52,7 @@ define Build/Prepare
 	# containing source code.
 	tar xf "$(DL_DIR)/$(PKG_SOURCE)" -C "$(BUILD_DIR)"
 	tar xzf "$(BUILD_DIR)/krb5-$(PKG_VERSION).tar.gz" -C "$(BUILD_DIR)"
-	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/001-uclibc-symbol-collision-fix.patch"
-	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/002-krb5kdc-dir-to-etc.patch"
-	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/003-krb5kdc-com-err-fix.patch"
+	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/001-krb5kdc-dir-to-etc.patch"
 endef
 
 CONFIGURE_PATH = ./src
@@ -126,28 +114,6 @@ define Package/krb5-server/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/sserver $(1)/usr/sbin
 endef
 
-define Package/krb5-apps/install
-	$(INSTALL_DIR) $(1)/usr/kerberos
-	$(INSTALL_DIR) $(1)/usr/kerberos/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ftp $(1)/usr/kerberos/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rcp $(1)/usr/kerberos/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rlogin $(1)/usr/kerberos/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rsh $(1)/usr/kerberos/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/telnet $(1)/usr/kerberos/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/uuclient $(1)/usr/kerberos/bin
-endef
-
-define Package/krb5-daemons/install
-	$(INSTALL_DIR) $(1)/usr/kerberos/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ftpd $(1)/usr/kerberos/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/klogind $(1)/usr/kerberos/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/login.krb5 $(1)/usr/kerberos/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/telnetd $(1)/usr/kerberos/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/uuserver $(1)/usr/kerberos/sbin
-endef
-
 $(eval $(call BuildPackage,krb5-libs))
 $(eval $(call BuildPackage,krb5-server))
 $(eval $(call BuildPackage,krb5-client))
-$(eval $(call BuildPackage,krb5-apps))
-$(eval $(call BuildPackage,krb5-daemons))
