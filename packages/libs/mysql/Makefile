@@ -20,6 +20,7 @@ PKG_SOURCE_URL:=\
 PKG_MD5SUM:=f18153b0239aaa03fc5a751f2d82cb71
 
 PKG_BUILD_DEPENDS:=libncurses libreadline
+PKG_BUILD_PARALLEL:=1
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -105,29 +106,44 @@ endef
 TARGET_CFLAGS += $(FPIC)
 
 define Build/Compile
+	$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)" \
+		SUBDIRS="include" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		SUBDIRS="include" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-	$(MAKE) -C "$(PKG_BUILD_DIR)/libmysql" \
+		install
+	$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)/libmysql" \
 		CC="$(HOSTCC)" \
 		LINK="$(HOSTCC) -o conf_to_src -lc" \
 		CFLAGS="" \
 		CPPFLAGS="" \
 		conf_to_src
+	$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)" \
+		SUBDIRS="libmysql" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		SUBDIRS="libmysql" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+		install
+	$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)" \
+		SUBDIRS="libmysql_r" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		SUBDIRS="libmysql_r" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+		install
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		SUBDIRS="scripts" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		bin_SCRIPTS="mysql_config" \
 		install
+	$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		install
