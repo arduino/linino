@@ -1,7 +1,13 @@
-diff -uNr flite-1.3-release/config/common_make_rules flite-1.3-release-mod/config/common_make_rules
---- flite-1.3-release/config/common_make_rules	2004-12-20 00:20:43.000000000 +0200
-+++ flite-1.3-release-mod/config/common_make_rules	2006-11-12 12:17:25.000000000 +0200
-@@ -59,27 +59,35 @@
+---
+ Makefile                 |    2 -
+ config/common_make_rules |   34 ++++++++++++--------
+ lib/Makefile             |   78 +++++++++++++++++++++++++++++++++++++++++++++++
+ main/Makefile            |    4 +-
+ 4 files changed, 102 insertions(+), 16 deletions(-)
+
+--- flite-1.3-release.orig/config/common_make_rules
++++ flite-1.3-release/config/common_make_rules
+@@ -59,27 +59,35 @@ BUILDDIR=$(TOP)/build/$(TARGET_PLATFORM)
  endif
  OBJDIR=$(BUILDDIR)/obj/$(DIRNAME)
  BINDIR=$(BUILDDIR)/bin
@@ -42,30 +48,33 @@ diff -uNr flite-1.3-release/config/common_make_rules flite-1.3-release-mod/confi
  # Only do some directories when you are not cross compiling
  ifeq ($(HOST_PLATFORM),$(TARGET_PLATFORM))
  OTHER_BUILD_DIRS = $(HOST_ONLY_DIRS)
-@@ -117,14 +125,14 @@
+@@ -117,15 +125,15 @@ $(OBJDIR)/.build_so: $(FULLSOOBJS)
  	@ touch $(OBJDIR)/.build_so
  
  # Used in the lib/ directory and in building new voices
 -$(OBJDIR)/%.so: %.shared.a
 +%.so: %.shared.a
  	@ echo making $@
- 	@ rm -rf shared_os && mkdir shared_os
+-	@ rm -rf shared_os && mkdir shared_os
 -	@ rm -f $@ $(LIBDIR)/$@.${PROJECT_VERSION} $(LIBDIR)/$@.${PROJECT_SHLIB_VERSION} 
-+	@ rm -f $@ $@.${PROJECT_VERSION} $@.${PROJECT_SHLIB_VERSION} 
- 	@ (cd shared_os && ar x ../$<)
+-	@ (cd shared_os && ar x ../$<)
 -	@ (cd shared_os && $(CC) -shared -Wl,-soname,$@.${PROJECT_SHLIB_VERSION} -o ../$@.${PROJECT_VERSION} *.os)
 -	@ ln -s $(LIBDIR)/$@.${PROJECT_VERSION} $(LIBDIR)/$@.${PROJECT_SHLIB_VERSION}
 -	@ ln -s $(LIBDIR)/$@.${PROJECT_SHLIB_VERSION} $(LIBDIR)/$@
-+	@ (cd shared_os && $(CC) -shared -Wl,-soname,$@.${PROJECT_SHLIB_VERSION} -o ../$@.${PROJECT_VERSION} *.os -L../ $($(@:%.so=%_LDLIBS)))
+-	@ rm -rf shared_os
++	@ rm -rf shared_os-$@ && mkdir shared_os-$@
++	@ rm -f $@ $@.${PROJECT_VERSION} $@.${PROJECT_SHLIB_VERSION} 
++	@ (cd shared_os-$@ && ar x ../$<)
++	@ (cd shared_os-$@ && $(CC) -shared -Wl,-soname,$@.${PROJECT_SHLIB_VERSION} -o ../$@.${PROJECT_VERSION} *.os -L../ $($(@:%.so=%_LDLIBS)))
 +	@ ln -s $@.${PROJECT_VERSION} $@.${PROJECT_SHLIB_VERSION}
 +	@ ln -s $@.${PROJECT_SHLIB_VERSION} $@
- 	@ rm -rf shared_os
++	@ rm -rf shared_os-$@
  
  $(OBJDIR)/.make_build_dirs:
-diff -uNr flite-1.3-release/lib/Makefile flite-1.3-release-mod/lib/Makefile
---- flite-1.3-release/lib/Makefile	1970-01-01 02:00:00.000000000 +0200
-+++ flite-1.3-release-mod/lib/Makefile	2006-11-12 12:17:40.000000000 +0200
-@@ -0,0 +1,73 @@
+ 	@ echo making in $(DIRNAME) ...
+--- /dev/null
++++ flite-1.3-release/lib/Makefile
+@@ -0,0 +1,78 @@
 +###########################################################################
 +##                                                                       ##
 +##                  Language Technologies Institute                      ##
@@ -128,10 +137,15 @@ diff -uNr flite-1.3-release/lib/Makefile flite-1.3-release-mod/lib/Makefile
 +shared_libs: $(SHAREDLIBS)
 +libflite_LDLIBS = -lm $(AUDIOLIBS)
 +libflite_cmulex_LDLIBS = -lflite
++libflite_cmulex.so: libflite.so
 +libflite_usenglish_LDLIBS = -lflite
++libflite_usenglish.so: libflite.so
 +libflite_cmu_us_kal_LDLIBS = -lflite_cmulex -lflite_usenglish
++libflite_cmu_us_kal.so: libflite_cmulex.so libflite_usenglish.so
 +libflite_cmu_us_kal16_LDLIBS = -lflite_cmulex -lflite_usenglish
++libflite_cmu_us_kal16.so: libflite_cmulex.so libflite_usenglish.so
 +libflite_cmu_time_awb_LDLIBS = -lflite -lflite_cmulex -lflite_usenglish
++libflite_cmu_time_awb.so: libflite.so libflite_cmulex.so libflite_usenglish.so
 +else
 +shared_libs: nothing
 +endif
@@ -139,10 +153,9 @@ diff -uNr flite-1.3-release/lib/Makefile flite-1.3-release-mod/lib/Makefile
 +install:
 +	@ tar cvf - $(ALL_LIBS) | ( cd $(INSTALLLIBDIR) && tar xf -)
 +
-diff -uNr flite-1.3-release/main/Makefile flite-1.3-release-mod/main/Makefile
---- flite-1.3-release/main/Makefile	2005-08-08 00:38:42.000000000 +0200
-+++ flite-1.3-release-mod/main/Makefile	2006-11-12 11:44:46.000000000 +0200
-@@ -50,11 +50,11 @@
+--- flite-1.3-release.orig/main/Makefile
++++ flite-1.3-release/main/Makefile
+@@ -50,11 +50,11 @@ ALL = $(BINDIR)/flite$(EXEEXT) $(BINDIR)
  
  flite_LIBS = flite_$(FL_VOX) flite_$(FL_LANG) flite_$(FL_LEX) 
  flite_LIBS_flags = -L$(LIBDIR) $(flite_LIBS:%=-l%)
@@ -156,9 +169,8 @@ diff -uNr flite-1.3-release/main/Makefile flite-1.3-release-mod/main/Makefile
  
  include $(TOP)/config/common_make_rules
  
-diff -uNr flite-1.3-release/Makefile flite-1.3-release-mod/Makefile
---- flite-1.3-release/Makefile	2005-11-01 15:40:45.000000000 +0200
-+++ flite-1.3-release-mod/Makefile	2006-11-12 11:44:46.000000000 +0200
+--- flite-1.3-release.orig/Makefile
++++ flite-1.3-release/Makefile
 @@ -41,7 +41,7 @@
  ###########################################################################
  TOP=.
