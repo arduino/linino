@@ -10,12 +10,14 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=lirc
-PKG_VERSION:=0.8.4a
+PKG_VERSION:=0.8.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/${PKG_NAME}
-PKG_MD5SUM:=606b714ed843d28060163ffc571fc1f7
+PKG_MD5SUM:=fb1dcddbc8ca3d03c7f3a2d40cf28b71
+
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -99,11 +101,11 @@ CONFIGURE_ARGS += \
 	--disable-nls \
 	--disable-static \
 	--with-kerneldir="$(LINUX_DIR)" \
-	--with-driver="mceusb2" \
+	--with-driver="mceusb" \
 	--without-x \
 	--with-pic \
 	--with-gnu-ld \
-	--enable-sandboxed \
+	--enable-sandboxed
 
 define Package/lirc/conffiles
 /etc/lircd.conf
@@ -111,8 +113,7 @@ endef
 
 MAKE_FLAGS += \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
-	ARCH="$(LINUX_KARCH)" \
-	all
+	ARCH="$(LINUX_KARCH)"
 
 define  Package/lirc/install
 	$(INSTALL_DIR) $(1)/usr/sbin/
