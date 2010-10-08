@@ -18,6 +18,8 @@ PKG_MD5SUM:=fd473d3deceda7912af4427dede1736f
 include $(INCLUDE_DIR)/package.mk
 
 PKG_BUILD_DEPENDS:=libiconv
+PKG_BUILD_PARALLEL:=1
+PKG_INSTALL:=1
 PKG_FIXUP:=libtool
 
 define Package/libsynce
@@ -35,8 +37,7 @@ endef
 MAKE_FLAGS += \
 	OPTIM="$(TARGET_CFLAGS)" \
 	CFLAGS="$(TARGET_CFLAGS)" \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install 
+	DESTDIR="$(PKG_INSTALL_DIR)"
 
 CONFIGURE_ARGS += \
 	--enable-hal-support=no \
