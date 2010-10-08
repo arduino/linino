@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=http://members.aon.at/linuxfreak/linux/
 PKG_MD5SUM:=13f2202ff01ff6b6463989f34f453063
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)
+PKG_BUILD_PARALLEL:=1
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -50,8 +52,11 @@ endif
 MAKE_FLAGS+= \
 	OFLAGS="$(PKG_OFLAGS)" \
 	STRIP="/bin/true" \
-	INSTALL_ROOT="$(PKG_INSTALL_DIR)" \
-	mini_snmpd install
+	INSTALL_ROOT="$(PKG_INSTALL_DIR)"
+
+define Build/Compile
+	$(call Build/Compile/Default,mini_snmpd)
+endef
 
 define Package/mini-snmpd/install
 	$(INSTALL_DIR) $(1)/usr/bin
