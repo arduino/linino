@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.citi.umich.edu/projects/nfsv4/linux/libgssapi/
 PKG_MD5SUM:=0e5b4c7267724f8ddf64bc35514c272e
 
+PKG_BUILD_PARALLEL:=1
+PKG_INSTALL:=1
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -35,8 +37,7 @@ TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib $(FPIC)
 MAKE_FLAGS += \
 	OPT="$(TARGET_CFLAGS)" \
 	INSTALLSUID="install -m 4755" \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install
+	DESTDIR="$(PKG_INSTALL_DIR)"
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/gssglue/gssapi
