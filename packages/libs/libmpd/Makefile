@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=http://download.sarine.nl/Programs/gmpc/$(PKG_VERSION)/
 PKG_MD5SUM:=a994f5f25a22c778926a3684c3e3050d
 
 PKG_FIXUP:=libtool
+PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
