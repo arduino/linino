@@ -26,6 +26,7 @@ TARGET_CFLAGS += $(FPIC)
 define Package/libmpd
   SECTION:=libs
   CATEGORY:=Libraries
+  DEPENDS:=+glib2
   TITLE:=Libmpd is an a library to easily connect to a mpd server
   URL:=http://gmpc.wikia.com/wiki/LIBMPD_RELEASES
 endef
