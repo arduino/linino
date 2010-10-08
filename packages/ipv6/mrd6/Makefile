@@ -9,11 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mrd6
 PKG_VERSION:=0.9.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/m/mrd6/
 PKG_MD5SUM:=a59d87857654ff92426062ad5664fcd6
+
+PKG_BUILD_PARALLEL:=1
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,7 +25,6 @@ define Package/mrd6
   CATEGORY:=IPv6
   TITLE:=IPv6 multicast routing daemon
   URL:=http://fivebits.net/proj/mrd6
-  DEPENDS:= +uclibcxx
 endef
 
 define Package/mrd6/description
@@ -34,18 +36,23 @@ define Package/mrd6/description
  and provides MLDv2 (as well as MLDv1), PIM-SM and MBGP support.
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR)/src \
-		$(TARGET_CONFIGURE_OPTS) \
-		OPTIMIZE=yes \
-		SPACE_OPTIMIZE=yes \
-		FULL_STATIC=no \
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -DNO_INET6_OPTION -fno-builtin -fno-rtti" \
-		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -ldl -lm $(LIBGCC_S) -lc" \
-		MODULE_CXX="\$$$$(CC) -shared \$$$$(CXXFLAGS) \$$$$(LDFLAGS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		PREFIX="/usr" \
-		install
+MRD6_MAKEFLAGS:= \
+	$(TARGET_CONFIGURE_OPTS) \
+	OPTIMIZE=yes \
+	SPACE_OPTIMIZE=yes \
+	FULL_STATIC=no \
+	CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -DNO_INET6_OPTION -fno-builtin -fno-rtti" \
+	LDFLAGS="$(TARGET_LDFLAGS) -ldl -lm" \
+	MODULE_CXX="\$$$$(CC) -shared \$$$$(CXXFLAGS) \$$$$(LDFLAGS)" \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	PREFIX="/usr"
+
+define Build/Compile
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/src $(MRD6_MAKEFLAGS) all
+endef
+
+define Build/Install
+	$(MAKE) -C $(PKG_BUILD_DIR)/src $(MRD6_MAKEFLAGS) install
 endef
 
 define Package/mrd6/conffiles
