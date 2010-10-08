@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=http://www.citi.umich.edu/projects/nfsv4/linux/librpcsecgss/
 PKG_MD5SUM:=0d4cdee46a98731b1b71e30504589281
 
 PKG_BUILD_DEPENDS:=libgssapi
+PKG_BUILD_PARALLEL:=1
+PKG_INSTALL:=1
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -37,8 +39,7 @@ MAKE_FLAGS += \
 	OPT="$(TARGET_CFLAGS)" \
 	INSTALLSUID="install -m 4755" \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
-        GSSAPI_LIBS="usr/lib/libgssapi.a" \
-	all install
+        GSSAPI_LIBS="usr/lib/libgssapi.a"
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/rpcsecgss/rpc
