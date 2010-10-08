@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNU/gmp
 PKG_MD5SUM:=26cec15a90885042dd4a15c4003b08ae
 
+PKG_BUILD_PARALLEL:=1
+PKG_INSTALL:=1
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -41,7 +43,7 @@ define Build/Compile
 	$(call Build/Compile/Default, \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		CC="$(TARGET_CC)" \
-		all install \
+		all \
 	)
 endef
 
