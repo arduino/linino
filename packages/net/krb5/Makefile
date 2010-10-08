@@ -10,6 +10,7 @@ PKG_MD5SUM:=74257d68373a8df8b9391fc093d594be
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
+PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -69,10 +70,6 @@ CONFIGURE_ARGS += \
 	--without-krb4 \
 	--without-tcl \
 	--disable-ipv6
-
-define Build/Configure
-	$(call Build/Configure/Default)
-endef
 
 define Package/krb5-libs/install
 	$(INSTALL_DIR) $(1)/usr/lib
