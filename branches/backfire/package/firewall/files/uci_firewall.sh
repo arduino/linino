@@ -388,10 +388,11 @@ fw_rule() {
 		[ -n "$dest" ] && TARGET="zone_${dest}_${TARGET}"
 	fi
 
-	eval 'RULE_COUNT=$((++RULE_COUNT_'$ZONE'))'
+	local pos
+	eval 'pos=$((++FW__RULE_COUNT_'$ZONE'))'
 
 	add_rule() {
-		$IPTABLES -t $TABLE -I $ZONE $RULE_COUNT \
+		$IPTABLES -t $TABLE -I $ZONE $pos \
 			$srcaddr $destaddr \
 			${proto:+-p $proto} \
 			${icmp_type:+--icmp-type $icmp_type} \
@@ -501,7 +502,10 @@ fw_redirect() {
 	get_portrange destports "${dest_port-$src_dport}" ":"
 
 	add_rule() {
-		$IPTABLES -I $natchain 1 -t nat \
+		local pos
+		eval 'pos=$((++FW__REDIR_COUNT_'$natchain'))'
+
+		$IPTABLES -I $natchain $pos -t nat \
 			$srcaddr $srcdaddr \
 			${proto:+-p $proto} \
 			${srcports:+--sport $srcports} \
