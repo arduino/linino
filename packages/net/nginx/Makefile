@@ -9,11 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nginx
 PKG_VERSION:=0.7.67
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://sysoev.ru/nginx/
 PKG_MD5SUM:=b6e175f969d03a4d3c5643aaabc6a5ff
+
+PKG_BUILD_PARALLEL:=1
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,7 +25,7 @@ define Package/nginx
   CATEGORY:=Network
   TITLE:=Nginx web server
   URL:=http://nginx.net/
-  DEPENDS:=+libpcre
+  DEPENDS:=+libpcre +libopenssl
   MENU:=1
 endef
 
@@ -86,9 +89,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR=$(PKG_INSTALL_DIR) \
-		build install
+	$(call Build/Compile/Default,build)
 endef
 
 define Package/nginx/install
