@@ -16,6 +16,8 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/mdk3-$(PKG_VERSION)
 PKG_SOURCE_URL:=http://homepages.tu-darmstadt.de/~p_larbig/wlan/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 
+PKG_BUILD_PARALLEL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mdk3
