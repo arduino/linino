@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=transmission
-PKG_VERSION:=2.10b1
+PKG_VERSION:=2.10
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://mirrors.m0k.org/transmission/files
-PKG_MD5SUM:=6bf66d6b2690071459761eb6487d2a77
+PKG_MD5SUM:=3b32d981d746abf8b0292c6ab01d10d4
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -27,7 +27,7 @@ define Package/transmission/template
   CATEGORY:=Network
   TITLE:=A free, lightweight BitTorrent client
   URL:=http://www.transmissionbt.com
-  MAINTAINER:=Cezary Jackiewicz <cezary@eko.one.pl> 
+  MAINTAINER:=Cezary Jackiewicz <cezary@eko.one.pl>
 endef
 
 define Package/transmission-daemon
