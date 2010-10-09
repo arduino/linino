@@ -2,7 +2,7 @@
  *   Microcontroller Message Bus
  *   Linux kernel driver
  *
- *   Copyright (c) 2009 Michael Buesch <mb@bu3sch.de>
+ *   Copyright (c) 2009-2010 Michael Buesch <mb@bu3sch.de>
  *
  *   This program is free software; you can redistribute it and/or
  *   modify it under the terms of the GNU General Public License
@@ -17,6 +17,7 @@
 
 #include "ucmb.h"
 
+#include <linux/version.h>
 #include <linux/module.h>
 #include <linux/platform_device.h>
 #include <linux/miscdevice.h>
@@ -191,8 +192,13 @@ static int ucmb_release(struct inode *inode, struct file *filp)
 	return 0;
 }
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36)
+static long ucmb_ioctl(struct file *filp,
+		       unsigned int cmd, unsigned long arg)
+#else
 static int ucmb_ioctl(struct inode *inode, struct file *filp,
 		      unsigned int cmd, unsigned long arg)
+#endif
 {
 	struct ucmb *ucmb = filp_to_ucmb(filp);
 	int ret = 0;
@@ -352,7 +358,6 @@ static ssize_t ucmb_write(struct file *filp, const char __user *user_buf,
 	struct ucmb_message_hdr hdr = { .magic = cpu_to_le16(UCMB_MAGIC), };
 	struct ucmb_message_footer footer = { .crc = 0xFFFF, };
 	struct ucmb_status status;
-	size_t i, current_size, chunk_size;
 
 	mutex_lock(&ucmb->mutex);
 
@@ -517,7 +522,11 @@ static int __devinit ucmb_probe(struct platform_device *pdev)
 	ucmb->mdev_fops.release = ucmb_release;
 	ucmb->mdev_fops.read = ucmb_read;
 	ucmb->mdev_fops.write = ucmb_write;
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36)
+	ucmb->mdev_fops.unlocked_ioctl = ucmb_ioctl;
+#else
 	ucmb->mdev_fops.ioctl = ucmb_ioctl;
+#endif
 	ucmb->mdev.fops = &ucmb->mdev_fops;
 
 	err = misc_register(&ucmb->mdev);
