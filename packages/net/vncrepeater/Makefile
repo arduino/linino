@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vncrepeater
 PKG_VERSION:=0.12
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.rit.edu/~reh5586/openwrt/packages/vncrepeater/src
@@ -41,7 +41,7 @@ endef
 define Build/Compile
 	$(call Build/Compile/Default, \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++" \
-		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++" \
+		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++ -lc $(LIBGCC_S)" \
 		repeater \
 	)
 endef
