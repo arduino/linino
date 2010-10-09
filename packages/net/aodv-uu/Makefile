@@ -54,7 +54,7 @@ $(call Package/aodv-uu/Default/description)
  This package contains the AODV kernel module.
 endef
 
-ifeq ($(CONFIG_LINUX_2_6),y)
+ifneq ($(CONFIG_LINUX_2_4),y)
   define Build/Compile/linux26
 	$(MAKE) -C $(LINUX_DIR) \
 		ARCH="$(LINUX_KARCH)" \
