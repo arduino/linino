@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=@SF/peerguardian
 PKG_MD5SUM:=0fb2bc5501b031604fc56eec3bd35fa4
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/pglinux-$(PKG_VERSION)
+PKG_BUILD_PARALLE:=1
 
 PKG_BUILD_DEPENDS:=iptables
 
@@ -45,7 +46,7 @@ CONFIGURE_VARS+= \
 	LIBS="-lm"
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		CXXLD="$(TARGET_CXX)"
 endef
 
