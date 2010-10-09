@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=peerguardian
 PKG_VERSION:=1.5beta
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=pglinux-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/peerguardian
