@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,15 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=openswan
-PKG_VERSION:=2.6.28
+PKG_VERSION:=2.6.29
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.openswan.org/download
-PKG_MD5SUM:=37f2ad2664dd89e6ad96ae82f6378166
+PKG_MD5SUM:=cd6c127585ec6db63780e9a40d5387fb
+
+PKG_BUILD_PARALLEL:=1
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -54,9 +57,10 @@ $(call Package/openswan/Default/description)
  This package contains the Openswan kernel module.
 endef
 
-TARGET_CPPFLAGS += -I$(LINUX_DIR)/include
+TARGET_CPPFLAGS += -I$(LINUX_DIR)/include -D__EXPORTED_HEADERS__
 
-OPENSWAN_MAKE := $(MAKE) -C $(PKG_BUILD_DIR) \
+OPENSWAN_MAKEFLAGS:= \
+	-C $(PKG_BUILD_DIR) \
 	$(TARGET_CONFIGURE_OPTS) \
 	LINUX_RELEASE="$(LINUX_RELEASE)" \
 	KERNELSRC="$(LINUX_DIR)" \
@@ -71,8 +75,12 @@ OPENSWAN_MAKE := $(MAKE) -C $(PKG_BUILD_DIR) \
 	DESTDIR="$(PKG_INSTALL_DIR)"
 
 define Build/Compile
-	$(OPENSWAN_MAKE) \
-		programs module install
+	$(MAKE) $(PKG_JOBS) $(OPENSWAN_MAKEFLAGS) programs
+	$(MAKE) $(PKG_JOBS) $(OPENSWAN_MAKEFLAGS) module
+endef
+
+define Build/Install
+	$(MAKE) $(OPENSWAN_MAKEFLAGS) install
 endef
 
 define Package/openswan/install
