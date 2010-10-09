@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=http://www.php.net/distributions/
 PKG_MD5SUM:=63e97ad450f0f7259e785100b634c797
 
 PKG_FIXUP:=libtool
+PKG_BUILD_PARALLEL:=1 
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -642,7 +643,7 @@ ifneq ($(CONFIG_PACKAGE_php5-cli),)
 		iconv_impl_name="gnu_libiconv" \
 		ac_cv_php_xml2_config_path="$(STAGING_DIR)/host/bin/xml2-config" \
 	)
-	$(MAKE) -C $(PKG_BUILD_DIR)
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)
 	mv $(PKG_BUILD_DIR)/sapi/cli/php $(PKG_BUILD_DIR)/php-cli
   endef
 endif
@@ -660,7 +661,7 @@ ifneq ($(CONFIG_PACKAGE_php5-cgi),)
 		iconv_impl_name="gnu_libiconv" \
 		ac_cv_php_xml2_config_path="$(STAGING_DIR)/host/bin/xml2-config" \
 	)
-	$(MAKE) -C $(PKG_BUILD_DIR)
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)
 	mv $(PKG_BUILD_DIR)/sapi/cgi/php-cgi $(PKG_BUILD_DIR)/php-cgi
   endef
 endif
