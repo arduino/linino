@@ -1,6 +1,10 @@
---- st2205tool/Makefile.orig	2008-01-22 00:43:38.000000000 +0100
-+++ st2205tool/Makefile	2008-04-22 16:01:46.000000000 +0200
-@@ -6,26 +6,26 @@
+---
+ Makefile |   20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+--- st2205tool.orig/Makefile
++++ st2205tool/Makefile
+@@ -6,27 +6,27 @@ LIBS	=
  all:	libst2205/libst2205.so setpic/setpic phack splice bgrep
  
  install: all
@@ -11,8 +15,9 @@
 -	make -C libst2205
 +	$(MAKE) -C libst2205
  
- setpic/setpic:
+-setpic/setpic:
 -	make -C setpic
++setpic/setpic: libst2205/libst2205.so
 +	$(MAKE) -C setpic
  
  phack:	$(OBJ) $(SRC)
@@ -35,3 +40,6 @@
  	rm -f $(OBJ) phack splice splice.o bgrep bgrep.o
  
  distclean: clean
+-	rm -f fwimage.bak memimage.bak fwimage.bin
+\ No newline at end of file
++	rm -f fwimage.bak memimage.bak fwimage.bin

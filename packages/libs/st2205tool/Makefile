@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
 PKG_MD5SUM:=827e3b719ebaf6bc537f2ce0ece3fccb
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
