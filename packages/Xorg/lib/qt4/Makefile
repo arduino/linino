@@ -217,7 +217,7 @@ endef
 define Package/qt4-drivers-mouse-tslibmousedriver
   $(call Package/qt4-drivers-mouse/Default)
   TITLE+=tslibmousedriver
-  DEPENDS:=+tslib
+  DEPENDS+=+tslib
 endef
 
 ###
