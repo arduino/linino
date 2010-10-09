@@ -98,9 +98,10 @@ define Build/Configure
 	echo "LIBDIR_OPENGL		$(TARGET_LIBDIRS)" >> $(SIPCFGFILE); \
 	echo "LIBDIR_X11		$(TARGET_LIBDIRS)" >> $(SIPCFGFILE); \
 	( \
-		export PYTHONPATH="$(STAGING_DIR_HOST)/$(PYTHON_PKG_DIR)"; \
 		cd "$(PKG_BUILD_DIR)"; \
-		python -B ./configure.py \
+		export PYTHONPATH="$(STAGING_DIR_HOST)/$(PYTHON_PKG_DIR)"; \
+		export PYTHONDONTWRITEBYTECODE=1; \
+		python ./configure.py \
 		        --use-arch="$(ARCH)" \
 			--qmake="$(STAGING_DIR_HOST)/bin/qmake" \
 			--qmake-spec="$(STAGING_DIR)/usr/share/mkspecs/linux-openwrt-g++" \

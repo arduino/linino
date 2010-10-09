@@ -47,7 +47,8 @@ define Build/Configure
 	echo "AR			$(TARGET_CROSS)ar cqs" >> $(PYTHON_SIP_CONFIG_TEMPLATE); \
 	echo "STRIP			$(STRIP)" >> $(PYTHON_SIP_CONFIG_TEMPLATE); \
 	(	cd "$(PKG_BUILD_DIR)"; \
-		python -E -B ./configure.py \
+		export PYTHONDONTWRITEBYTECODE=1; \
+		python -E ./configure.py \
 			--bindir=$(PKG_INSTALL_DIR)/usr/bin \
 			--destdir=$(PKG_INSTALL_DIR)/$(PYTHON_PKG_DIR) \
 			--incdir=$(PKG_INSTALL_DIR)/usr/include \
@@ -89,7 +90,8 @@ endef
 
 define Host/Configure
 	(	cd "$(HOST_BUILD_DIR)"; \
-		python -E -B ./configure.py \
+		export PYTHONDONTWRITEBYTECODE=1; \
+		python -E ./configure.py \
 			--bindir=$(STAGING_DIR_HOST)/usr/bin \
 			--destdir=$(STAGING_DIR_HOST)/$(PYTHON_PKG_DIR) \
 			--incdir=$(STAGING_DIR_HOST)/usr/include \
