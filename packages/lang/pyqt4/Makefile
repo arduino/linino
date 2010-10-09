@@ -31,7 +31,7 @@ define Package/pyqt4
   TITLE:=Python QT4
   MAINTAINER:=Michael Buesch <mb@bu3sch.de>
   URL:=http://www.riverbankcomputing.co.uk/software/pyqt/download
-  DEPENDS:=+qt4 +dbus-python +python-sip
+  DEPENDS:=+qt4 +dbus-python +python-sip @FEATURE_drawing-backend_libX11
 endef
 
 define Package/pyqt4/Description
