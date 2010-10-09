@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/sablevm
 PKG_MD5SUM:=18a7c1a92b0748a206f9767a76a6b3bb
 
+PKG_BUILD_PARALLEL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/sablevm/Default
@@ -85,11 +87,16 @@ define Build/Configure
 endef
 
 define Build/Compile
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+		EARLY_CONFIGURE= \
+		EXTRA_CONFIGURE= \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		EARLY_CONFIGURE= \
 		EXTRA_CONFIGURE= \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+		install
 	$(CP) ./files/mini.classlist $(PKG_BUILD_DIR)/sablevm-classpath/lib/
 	( cd $(PKG_BUILD_DIR)/sablevm-classpath/lib; \
 		fastjar -Mcf mini.jar -@ < mini.classlist; \
