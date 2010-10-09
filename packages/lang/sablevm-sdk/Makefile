@@ -64,8 +64,8 @@ define Build/Configure
 	)
 	$(call Build/Configure/Default, \
 		--srcdir="./../sablevm" \
-		--with-fastjar=/usr/bin/fastjar \
-		--with-jikes=/usr/bin/jikes \
+		--with-fastjar=$$$$(which fastjar) \
+		--with-jikes=$$$$(which jikes) \
 		--with-internal-libffi=yes \
 		--with-internal-libpopt=no \
 		,\
@@ -74,8 +74,8 @@ define Build/Configure
 	)
 	$(call Build/Configure/Default, \
 		--srcdir=./../sablevm-classpath \
-		--with-fastjar=/usr/bin/fastjar \
-		--with-jikes=/usr/bin/jikes \
+		--with-fastjar=$$$$(which fastjar) \
+		--with-jikes=$$$$(which jikes) \
 		--disable-gtk-peer \
 		--disable-gtk-cairo \
 		--without-x \
