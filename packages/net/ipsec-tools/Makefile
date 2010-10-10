@@ -42,6 +42,10 @@ CONFIGURE_ARGS += \
 	--enable-natt \
 	--enable-adminport
 
+# override CFLAGS holding "-Werror" that break builds on compile warnings
+MAKE_FLAGS+=\
+	CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS) $(TARGET_CPPFLAGS) $(EXTRA_CPPFLAGS)"
+
 define Build/Prepare
 	$(call Build/Prepare/Default)
 	chmod -R u+w $(PKG_BUILD_DIR)
@@ -58,8 +62,6 @@ define Build/Configure
 	$(call Build/Configure/Default)
 	echo "#undef HAVE_SHADOW_H" >> $(PKG_BUILD_DIR)/config.h
 endef
-
-# override CFLAGS holding "-Werror" that break builds on compile warnings
 
 define Package/ipsec-tools/install
 	$(INSTALL_DIR) $(1)/etc
