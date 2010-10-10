@@ -1,8 +1,9 @@
 #!/bin/sh /etc/rc.common
 START=99
+EXTRA_COMMANDS="single"
 
 start () {
-   sh /usr/bin/multiwan agent
+   /usr/bin/multiwan agent &
 }
 
 stop () {
@@ -10,6 +11,10 @@ stop () {
 }
 
 restart () {
-  sh /usr/bin/multiwan restart
+  /usr/bin/multiwan restart &
+}
+
+single () {
+  /usr/bin/multiwan single &
 }
   

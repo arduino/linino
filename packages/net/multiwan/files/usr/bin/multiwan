@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/bin/sh
 
 . /etc/functions.sh
 
@@ -15,26 +15,19 @@ mwnote() {
 }
 
 failover() {
-    local failover_to
-    local failover_to_wanid
-    local failchk
-    local recovrychk
-    local wanid
-    local existing_failover
+    local failchk=$(query_config failchk $2)
+    local recvrychk=$(query_config recvrychk $2)
 
-    failchk=$(query_config failchk $2)
-    recvrychk=$(query_config recvrychk $2)
+    local wanid=$(query_config wanid $2)
+    local failover_to=$(uci_get_state multiwan ${2} failover_to)
+    local failover_to_wanid=$(query_config wanid $failover_to)
 
-    wanid=$(query_config wanid $2)
-    failover_to=`uci -q -P /var/state get multiwan.${2}.failover_to`
-    failover_to_wanid=$(query_config wanid $failover_to)
-
-    existing_failover=$(iptables -n -L FW${wanid}MARK -t mangle | echo $(expr $(wc -l) - 2))
+    local existing_failover=$(iptables -n -L FW${wanid}MARK -t mangle | echo $(($(wc -l) - 2)))
 
     add() {
 
 	wan_fail_map=$(echo $wan_fail_map | sed -e "s/${1}\[${failchk}\]//g")
-	wan_fail_map=$(echo $wan_fail_map${1}[x])
+	wan_fail_map="$wan_fail_map${1}[x]"
 	wan_recovery_map=$(echo $wan_recovery_map | sed -e "s/${1}\[${recvrychk}\]//g")
 	update_cache
 
@@ -69,57 +62,44 @@ failover() {
 }
 
 fail_wan() {
-    local failchk
-    local recvrychk
     local new_fail_count
-    local health_fail_retries
-    local weight 
 
-    health_fail_retries=`uci -q -P /var/state get multiwan.${1}.health_fail_retries`
-    weight=`uci -q -P /var/state get multiwan.${1}.weight`
+    local health_fail_retries=$(uci_get_state multiwan ${1} health_fail_retries)
+    local weight=$(uci_get_state multiwan ${1} weight)
 
-    failchk=$(query_config failchk $1)
-    recvrychk=$(query_config recvrychk $1)
+    local failchk=$(query_config failchk $1)
+    local recvrychk=$(query_config recvrychk $1)
     wan_recovery_map=$(echo $wan_recovery_map | sed -e "s/${1}\[${recvrychk}\]//g")
 
     if [ -z "$failchk" ]; then
+	failchk=1
 	wan_fail_map="$wan_fail_map${1}[1]"
-	update_cache
-	if [ "$health_fail_retries" == "1" ]; then
-	    fail_wan $1
-	fi
-    else
-	if [ "$failchk" != "x" ]; then
-	    new_fail_count=$(expr $failchk + 1)
-	    if [ "$new_fail_count" -lt "$health_fail_retries" ]; then
-		wan_fail_map=$(echo $wan_fail_map | sed -e "s/${1}\[${failchk}\]/$1\[${new_fail_count}\]/g")
-		update_cache
-	    else
-		failover add $1
-		refresh_dns
-		if [ "$weight" != "disable" ]; then
-		    refresh_loadbalancer
-		fi
-	    fi
+    fi
 
+    if [ "$failchk" != "x" ]; then
+	new_fail_count=$(($failchk + 1))
+	if [ "$new_fail_count" -lt "$health_fail_retries" ]; then
+	    wan_fail_map=$(echo $wan_fail_map | sed -e "s/${1}\[${failchk}\]/$1\[${new_fail_count}\]/g")
+	else
+	    failover add $1
+	    refresh_dns
+	    if [ "$weight" != "disable" ]; then
+		refresh_loadbalancer
+	    fi
 	fi
     fi
+    update_cache
 }
 
 recover_wan() {
-    local failchk
-    local recvrychk
     local new_fail_count
-    local wanid
-    local health_recovery_retires
-    local weight
 
-    health_recovery_retries=`uci -q -P /var/state get multiwan.${1}.health_recovery_retries`
-    weight=`uci -q -P /var/state get multiwan.${1}.weight`
+    local health_recovery_retries=$(uci_get_state multiwan ${1} health_recovery_retries)
+    local weight=$(uci_get_state multiwan ${1} weight)
 
-    failchk=$(query_config failchk $1)
-    recvrychk=$(query_config recvrychk $1)
-    wanid=$(query_config wanid $1)
+    local failchk=$(query_config failchk $1)
+    local recvrychk=$(query_config recvrychk $1)
+    local wanid=$(query_config wanid $1)
 
     if [ ! -z "$failchk" -a "$failchk" != "x" ]; then
 	wan_fail_map=$(echo $wan_fail_map | sed -e "s/${1}\[${failchk}\]//g")
@@ -134,7 +114,7 @@ recover_wan() {
 		recover_wan $1
 	    fi
 	else
-	    new_recovery_count=$(expr $recvrychk + 1)
+	    new_recovery_count=$(($recvrychk + 1))
 	    if [ "$new_recovery_count" -lt "$health_recovery_retries" ]; then
 		wan_recovery_map=$(echo $wan_recovery_map | sed -e "s/${1}\[${recvrychk}\]/$1\[${new_recovery_count}\]/g")
 		update_cache
@@ -150,33 +130,20 @@ recover_wan() {
 }
 
 acquire_wan_data() {
-    local ipaddr
-    local gateway
-    local ifname
     local check_old_map
     local get_wanid
     local old_ifname
     local old_ipaddr
     local old_gateway
 
-    ifname=`uci -q -P /var/state get network.${1}.ifname`
-    ipaddr=`uci -q -P /var/state get network.${1}.ipaddr`
-    gateway=`uci -q -P /var/state get network.${1}.gateway`
+    local ifname=$(uci_get_state network ${1} ifname 'x')
+    local ipaddr=$(uci_get_state network ${1} ipaddr 'x')
+    local gateway=$(uci_get_state network ${1} gateway 'x')
 
-    if [ -z "$ifname" ]; then
-	ifname="x"
-    fi
-    if [ -z "$ipaddr" ]; then
-	ipaddr="x"
-    fi
-    if [ -z "$gateway" ]; then
-	gateway="x"
-    fi
-
-    check_old_map=`echo $wan_id_map 2>&1 | grep -o "$1\["`
+    check_old_map=$(echo $wan_id_map 2>&1 | grep -o "$1\[")
 
     if [ -z $check_old_map ]; then
-	wancount=`expr $wancount + 1`
+	wancount=$(($wancount + 1))
 	if [ $wancount -gt 20 ]; then
 	    wancount=20
 	    return
@@ -217,7 +184,6 @@ acquire_wan_data() {
 }
 
 update_cache() {
-
     if [ ! -d /tmp/.mwan ]; then
 	mkdir /tmp/.mwan > /dev/null 2>&1
     fi
@@ -232,17 +198,18 @@ update_cache() {
     echo "wan_gw_map=\"$wan_gw_map\"" >> /tmp/.mwan/cache
     echo "wan_fail_map=\"$wan_fail_map\"" >> /tmp/.mwan/cache
     echo "wan_recovery_map=\"$wan_recovery_map\"" >> /tmp/.mwan/cache
+    echo "wan_monitor_map=\"$wan_monitor_map\"" >> /tmp/.mwan/cache
 }
 
 query_config() {
     case $1 in
-	update) update_cache_data;;
 	ifname) echo $wan_if_map | grep -o "$2\[\w*.*\]" | awk -F "[" '{print $2}' | awk -F "]" '{print $1}';; 
 	ipaddr) echo $wan_ip_map | grep -o "$2\[\w*.*\]" | awk -F "[" '{print $2}' | awk -F "]" '{print $1}';;
 	gateway) echo $wan_gw_map | grep -o "$2\[\w*.*\]" | awk -F "[" '{print $2}' | awk -F "]" '{print $1}';;
 	wanid) echo $wan_id_map | grep -o "$2\[\w*.*\]" | awk -F "[" '{print $2}' | awk -F "]" '{print $1}';;
 	failchk) echo $wan_fail_map | grep -o "$2\[\w*.*\]" | awk -F "[" '{print $2}' | awk -F "]" '{print $1}';;
 	recvrychk) echo $wan_recovery_map | grep -o "$2\[\w*.*\]" | awk -F "[" '{print $2}' | awk -F "]" '{print $1}';;
+	monitor) echo $wan_monitor_map | grep -o "$2\[\w*.*\]" | awk -F "[" '{print $2}' | awk -F "]" '{print $1}';;
 	group) echo $wan_id_map | grep -o "\w*\[$2\]" | awk -F "[" '{print $1}';;
     esac
 }
@@ -253,43 +220,42 @@ mwan_kill() {
     sleep 2
 }
 
+# For system shutdownl: stop
+#   A plain stop will leave network in a limp state, without wan access
+# stop single: restore to a single wan
+# stop restart: restart multiple wan's
 stop() {
-    local group
-    local i
-
     mwan_kill
-    flush
+    flush $1
 
-    if [ "$1" != "restart" ]; then
+    if [ "$1" == "single" ]; then
+	# ifup is quite expensive--do it only when single wan is requested
 	echo "## Refreshing Interfaces ##"
-	i=0
-	while [ $i -lt $wancount ]; do 
-	    i=`expr $i + 1` 
-	    group=$(query_config group $i)
-	    # ifdown $group > /dev/null 2>&1
-	    ifup $group > /dev/null 2>&1
+	local i=0
+	while [ $((i++)) -lt $wancount ]; do 
+	    local group=$(query_config group $i)
+	    ifup $group >&- 2>&- && sleep 1
 	done
 
 	echo "## Unloaded, updating syslog and exiting. ##"
 	mwnote "Succesfully Unloaded on $(exec date -R)."
-	ip route flush cache
-	rm -r /tmp/.mwan > /dev/null 2>&1
+	rm -fr /tmp/.mwan >&- 2>&-
+    fi
+    ip route flush cache
 
-    else
-
+    if [ "$1" == "restart" ]; then
 	echo "## Restarting Multi-WAN. ##"
 	mwnote "Reinitializing Multi-WAN Configuration."
-	ip route flush cache
-	rm -r /tmp/.mwan > /dev/null 2>&1
-	/etc/init.d/multiwan start & > /dev/null 2>&1
+	rm -fr /tmp/.mwan >&- 2>&-
+	/etc/init.d/multiwan start >&- 2>&-
     fi
 
     exit
 }
 
 clear_rules() {
+    local restore_single=$1
     local group 
-    local i
 
     iptables -t mangle -F PREROUTING 
     iptables -t mangle -F FORWARD
@@ -309,35 +275,31 @@ clear_rules() {
     iptables -t mangle -X LoadBalancer
     iptables -t mangle -F FastBalancer
     iptables -t mangle -X FastBalancer
+    iptables -t mangle -F MultiWanLoadBalancer
+    iptables -t mangle -X MultiWanLoadBalancer
 
-    i=0
-    while [ $i -lt $wancount ]; do 
-	i=`expr $i + 1`
+    local i=0
+    while [ $((i++)) -lt $wancount ]; do 
 	iptables -t mangle -F FW${i}MARK
-    done
-
-    i=0
-    while [ $i -lt $wancount ]; do 
-	i=`expr $i + 1`
 	iptables -t mangle -X FW${i}MARK
     done
 
     if [ ! -z "$CHKFORQOS" ]; then
-
 	iptables -t mangle -F MultiWanQoS
 	iptables -t mangle -X MultiWanQoS
 
 	i=0
-	while [ $i -lt $wancount ]; do 
-	    i=`expr $i + 1` 
+	while [ $((i++)) -lt $wancount ]; do 
 	    group=$(query_config group $i)
 	    iptables -t mangle -F qos_${group}
 	    iptables -t mangle -F qos_${group}_ct
 	    iptables -t mangle -X qos_${group}
 	    iptables -t mangle -X qos_${group}_ct
 	done
-
     fi
+
+    [ "$restore_single" == 'single' ] &&
+	/etc/init.d/qos restart > /dev/null 2>&1
 }
 
 qos_init() {
@@ -350,8 +312,6 @@ qos_init() {
     local execute
     local iprule
     local qos_if_test
-    local i 
-    local p
 
     ifname=$(query_config ifname $1)
 
@@ -373,7 +333,7 @@ qos_init() {
 	return
     fi
 
-    queue_count=`expr $queue_count + 1`
+    queue_count=$(($queue_count + 1))
 
     iptables -t mangle -N qos_${1}
     iptables -t mangle -N qos_${1}_ct
@@ -382,10 +342,10 @@ qos_init() {
     get_wan_iptables=$(iptables-save | egrep  '(-A Default )|(-A Default_ct )' | grep -v "MultiWanQoS" | sed -e "s/Default /qos_${1} /g" -e "s/Default_ct /qos_${1}_ct /g" -e "s/-A/iptables -t mangle -A/g")
 
 
-    i=0
+    local i=0
     while [ $i -lt $queue_count ]; do 
-	echo "s/\(0x$i \|0x$i\/0xffffffff\)/0x$(expr $2 \* 10 + $i) /g" >> /tmp/.mwan/qos.$1.sedfilter
-	i=`expr $i + 1` 
+	echo "s/\(0x$i \|0x$i\/0xffffffff\)/0x$(($2 * 10 + $i)) /g" >> /tmp/.mwan/qos.$1.sedfilter
+	i=$(($i + 1))
     done
 
     add_qos_iptables=$(echo "$get_wan_iptables" | sed -f /tmp/.mwan/qos.$1.sedfilter)
@@ -395,7 +355,7 @@ qos_init() {
     i=1
     while [ $i -lt $queue_count ]; do 
 	echo "s/0x$i /0x${2}${i} fw /g" >> /tmp/.mwan/qos.$1.sedfilter
-	i=`expr $i + 1` 
+	i=$(($i + 1))
     done
 
     add_qos_tc=$(echo "$get_wan_tc" | sed -f /tmp/.mwan/qos.$1.sedfilter)
@@ -404,11 +364,11 @@ qos_init() {
 
     i=0
     while [ $i -lt $queue_count ]; do
-	if [ $i -lt $(expr $queue_count - 1) ]; then
-	    ip rule add fwmark 0x$(expr $2 \* 10 + $i + 1) table $(expr $2 + 170) prio $(expr $2 \* 10 + $i + 2)
+	if [ $i -lt $(($queue_count - 1)) ]; then
+	    ip rule add fwmark 0x$(($2 * 10 + $i + 1)) table $(($2 + 170)) prio $(( $2 * 10 + $i + 2))
 	fi
-	iptables -t mangle -A MultiWanQoS -m mark --mark 0x$(expr $2 \* 10 + $i) -j qos_${1}
-	i=`expr $i + 1`
+	iptables -t mangle -A MultiWanQoS -m mark --mark 0x$(($2 * 10 + $i)) -j qos_${1}
+	i=$(($i + 1))
     done
 }
 
@@ -454,10 +414,8 @@ mwanrule() {
 	if [ "$src" == "all" ]; then
 	    src=$NULL
 	fi
-	iptables -t mangle -A MultiWanRules -m mark --mark 0x0\
-	    ${proto:+-p $proto} \
-	    ${src:+-s $src} \
-	    ${dst:+-d $dst} \
+	iptables -t mangle -A MultiWanRules ${src:+-s $src} ${dst:+-d $dst} \
+	    -m mark --mark 0x0 ${proto:+-p $proto -m $proto} \
 	    ${ports:+-m multiport --$port_type $ports} \
 	    -j $wanrule
     }
@@ -480,7 +438,6 @@ refresh_dns() {
     local failchk
     local compile_dns
     local dns_server
-    local i
 
     iptables -F MultiWanDNS -t mangle
 
@@ -489,21 +446,16 @@ refresh_dns() {
 
     echo "## Refreshing DNS Resolution and Tables ##"
 
-    i=0
-    while [ $i -lt $wancount ]; do
-	i=`expr $i + 1`
+    local i=0
+    while [ $((i++)) -lt $wancount ]; do
 	group=$(query_config group $i)
 	gateway=$(query_config gateway $group)
 	ipaddr=$(query_config ipaddr $group)
 	ifname=$(query_config ifname $group)
 	failchk=$(query_config failchk $group)
 
-	dns=`uci -q -P /var/state get multiwan.${group}.dns`
-
-	if [ -z "$dns" -o "$dns" == "auto" ]; then
-	    dns=`uci -q -P /var/state get network.${group}.dns`
-	fi
-
+	dns=$(uci_get_state multiwan ${group} dns 'auto')
+	[ "$dns" == "auto" ] && dns=$(uci_get_state network ${group} dns)
 	dns=$(echo $dns | sed -e "s/ /\n/g")
 
 	if [ ! -z "$dns" -a "$failchk" != "x" -a "$ipaddr" != "x" -a "$gateway" != "x" -a "$ifname" != "x" ]; then
@@ -535,7 +487,7 @@ iptables_init() {
 
 	/etc/init.d/qos restart > /dev/null 2>&1
 
-	IMQ_NFO=`iptables -n -L PREROUTING -t mangle -v | grep IMQ |  awk -F " " '{print $6,$12}'`
+	IMQ_NFO=$(iptables -n -L PREROUTING -t mangle -v | grep IMQ | awk -F " " '{print $6,$12}')
 
 	iptables -t mangle -F PREROUTING 
 	iptables -t mangle -F FORWARD
@@ -549,8 +501,7 @@ iptables_init() {
 	iptables -t mangle -N MultiWanQoS
 
 	i=0
-	while [ $i -lt $wancount ]; do 
-	    i=`expr $i + 1` 
+	while [ $((i++)) -lt $wancount ]; do 
 	    qos_init $(query_config group $i) $i
 	done
 
@@ -567,9 +518,8 @@ iptables_init() {
 
     echo "## Creating FW Rules ##"
     i=0
-    while [ $i -lt $wancount ]; do 
-	i=`expr $i + 1` 
-	iprule=$(expr $i \* 10)
+    while [ $((i++)) -lt $wancount ]; do 
+	iprule=$(($i * 10))
 	iptables -t mangle -N FW${i}MARK
 	iptables -t mangle -A FW${i}MARK -j MARK --set-mark 0x${iprule}
 	iptables -t mangle -A FW${i}MARK -j CONNMARK --save-mark
@@ -615,8 +565,7 @@ iptables_init() {
     fi
 
     i=0
-    while [ $i -lt $wancount ]; do 
-	i=`expr $i + 1` 
+    while [ $((i++)) -lt $wancount ]; do 
 	group=$(query_config group $i)
 	ifname=$(query_config ifname $group)
 	iptables -t mangle -A MultiWanPreHandler -i $ifname -m state --state NEW -j FW${i}MARK
@@ -626,7 +575,6 @@ iptables_init() {
     if [ ! -z "$CHKFORQOS" ]; then
 	iptables -t mangle -A MultiWan -j MultiWanQoS
     fi
-
 }
 
 refresh_loadbalancer() {
@@ -638,8 +586,6 @@ refresh_loadbalancer() {
     local nexthop
     local pre_nexthop_chk
     local rand_probability
-    local total_weight
-    local i
 
     echo "## Refreshing Load Balancer ##"
 
@@ -654,36 +600,34 @@ refresh_loadbalancer() {
 
     iptables -F MultiWanLoadBalancer -t mangle
 
-    total_weight=0
+    local total_weight=0
 
-    i=0
-    while [ $i -lt $wancount ]; do 
-	i=`expr $i + 1` 
+    local i=0
+    while [ $((i++)) -lt $wancount ]; do 
 	group=$(query_config group $i)
 	failchk=$(query_config failchk $group)
 	gateway=$(query_config gateway $group)
 	ifname=$(query_config ifname $group)
-	weight=`uci -q -P /var/state get multiwan.${group}.weight`
+	weight=$(uci_get_state multiwan ${group} weight)
 	if [ "$gateway" != "x" -a "$ifname" != "x" -a "$failchk" != "x" -a "$weight" != "disable" ]; then
-	    total_weight=$(expr $total_weight + $weight)
+	    total_weight=$(($total_weight + $weight))
 	fi
     done
 
     i=0
-    while [ $i -lt $wancount ]; do 
-	i=`expr $i + 1` 
+    while [ $((i++)) -lt $wancount ]; do 
 	group=$(query_config group $i)
 	failchk=$(query_config failchk $group)
 	gateway=$(query_config gateway $group)
 	ifname=$(query_config ifname $group)
 
-	weight=`uci -q -P /var/state get multiwan.${group}.weight`
+	weight=$(uci_get_state multiwan ${group} weight)
 
 	if [ "$gateway" != "x" -a "$ifname" != "x" -a "$failchk" != "x" -a "$weight" != "disable" ]; then
 	    nexthop="$nexthop nexthop via $gateway dev $ifname weight $weight"
 
-	    rand_probability=$(expr $(expr $weight \* 100) / $total_weight)
-	    total_weight=$(expr $total_weight - $weight)
+	    rand_probability=$(($weight * 100 / $total_weight))
+	    total_weight=$(($total_weight - $weight))
 
 	    if [ $rand_probability -lt 10 ]; then
 		rand_probability="0.0${rand_probability}"
@@ -700,7 +644,7 @@ refresh_loadbalancer() {
 
     done
 
-    pre_nexthop_chk=`echo $nexthop | awk -F "nexthop" '{print NF-1}'`
+    pre_nexthop_chk=$(echo $nexthop | awk -F "nexthop" '{print NF-1}')
     if [ "$pre_nexthop_chk" == "1" ]; then
 	ip route add default via $(echo $nexthop | awk -F " " '{print $3}') dev $(echo $nexthop | awk -F " " '{print $5}') proto static table 170
     elif [ "$pre_nexthop_chk" -gt "1" ]; then
@@ -717,27 +661,24 @@ refresh_routes() {
     local group
     local ifname
     local ipaddr
-    local i
 
     echo "## Refreshing Routing Tables ##"
 
-    i=0
-    while [ $i -lt $wancount ]; do 
-	i=`expr $i + 1` 
+    local i=0
+    while [ $((i++)) -lt $wancount ]; do 
 	group=$(query_config group $i)
 	gateway=$(query_config gateway $group)
 	ifname=$(query_config ifname $group)
 	ipaddr=$(query_config ipaddr $group)
-	ip route flush table $(expr $i + 170) > /dev/null 2>&1
+	ip route flush table $(($i + 170)) > /dev/null 2>&1
 
-	for TABLE in $(expr $i + 170); do
-	    ip route | grep -Ev ^default | while read ROUTE; do
-		ip route add table $TABLE to $ROUTE
-	    done
+	TABLE=$(($i + 170))
+	ip route | grep -Ev ^default | while read ROUTE; do
+	    ip route add table $TABLE to $ROUTE
 	done
 
 	if [ "$gateway" != "x" -a "$ipaddr" != "x" -a "$ifname" != "x" ]; then
-	    ip route add default via $gateway table $(expr $i + 170) src $ipaddr proto static
+	    ip route add default via $gateway table $(($i + 170)) src $ipaddr proto static
 	    route add default gw $gateway > /dev/null 2>&1
 	fi
     done
@@ -746,7 +687,6 @@ refresh_routes() {
 }
 
 iprules_config() {
-
     local iprule
     local group
     local gateway
@@ -756,23 +696,22 @@ iprules_config() {
     gateway=$(query_config gateway $group)
     ipaddr=$(query_config ipaddr $group)
 
-    CHKIPROUTE=`cat /etc/iproute2/rt_tables | grep MWAN${1}`
+    CHKIPROUTE=$(grep MWAN${1} /etc/iproute2/rt_tables)
     if [ -z "$CHKIPROUTE" ]; then
-	echo "$(expr $1 + 170) MWAN${1}" >> /etc/iproute2/rt_tables
+	echo "$(($1 + 170)) MWAN${1}" >> /etc/iproute2/rt_tables
     fi
 
-    ip rule del prio $(expr $1 \* 10) > /dev/null 2>&1 
-    ip rule del prio $(expr $1 \* 10 + 1) > /dev/null 2>&1
+    ip rule del prio $(($1 * 10)) > /dev/null 2>&1 
+    ip rule del prio $(($1 * 10 + 1)) > /dev/null 2>&1
 
     if [ "$gateway" != "x" -a "$ipaddr" != "x" ]; then
-	ip rule add from $ipaddr table $(expr $1 + 170) prio $(expr $1 \* 10)
-	ip rule add fwmark 0x$(expr $1 \* 10) table $(expr $1 + 170) prio $(expr $(expr $1 \* 10) + 1)
+	ip rule add from $ipaddr table $(($1 + 170)) prio $(($1 * 10))
+	ip rule add fwmark 0x$(($1 * 10)) table $(($1 + 170)) prio $(($1 * 10 + 1))
     fi
 }
 
 flush() {
-    local i
-
+    local restore_single=$1
     echo "## Flushing IP Rules & Routes ##"
 
     ip rule flush > /dev/null 2>&1
@@ -781,24 +720,22 @@ flush() {
 
     ip route flush table 170 > /dev/null
 
-    i=0
-    while [ $i -lt $wancount ]; do 
-	i=`expr $i + 1` 
+    local i=0
+    while [ $((i++)) -lt $wancount ]; do 
 	ip route del default > /dev/null 2>&1
-	ip route flush table $(expr $i + 170) > /dev/null 2>&1
+	ip route flush table $(($i + 170)) > /dev/null 2>&1
     done
 
     echo "## Clearing Rules ##"
-    clear_rules > /dev/null 2>&1
+    clear_rules $restore_single > /dev/null 2>&1
 
     rm $jobfile > /dev/null 2>&1
 }
 
 main_init() {
-    local RP_PATH
+    local RP_PATH IFACE
     local group
     local health_interval
-    local i
 
     echo "## Main Initialization ##"
 
@@ -807,18 +744,16 @@ main_init() {
     mwan_kill
     flush
 
-
     echo "## IP Rules Initialization ##"
 
-    CHKIPROUTE=`cat /etc/iproute2/rt_tables | grep LoadBalancer`
+    CHKIPROUTE=$(grep LoadBalancer /etc/iproute2/rt_tables)
     if [ -z "$CHKIPROUTE" ]; then
 	echo "#" >> /etc/iproute2/rt_tables
 	echo "170 LoadBalancer" >> /etc/iproute2/rt_tables
     fi
 
-    i=0
-    while [ $i -lt $wancount ]; do 
-	i=`expr $i + 1` 
+    local i=0
+    while [ $((i++)) -lt $wancount ]; do 
 	iprules_config $i
     done
 
@@ -828,89 +763,49 @@ main_init() {
     refresh_loadbalancer
 
     RP_PATH=/proc/sys/net/ipv4/conf
-    for IFACE in `ls $RP_PATH`; do
+    for IFACE in $(ls $RP_PATH); do
 	echo 0 > $RP_PATH/$IFACE/rp_filter
     done
-    echo "## Initialization Complete, switching to background mode. ##"
-    mwnote "Succesfully Initialized on $(exec date -R)."
+    mwnote "Succesfully Initialized on $(date -R)."
     fail_start_check
 
-    stagger_health_monitors() {
-	i=0
-	while [ $i -lt $wancount ]; do 
-	    i=`expr $i + 1`
-	    group=$(query_config group $i) 
-	    health_interval=`uci -q -P /var/state get multiwan.${group}.health_interval`
-	    if [ ! -z "$health_interval" -a "$health_interval" != "disable" -a "$health_interval" -gt 0 ]; then
-		health_monitor $group &
-		sleep 3
-	    fi
-	done
-    }
-
-    stagger_health_monitors &
-    bg_task &
-
-    exit
+    while :; do
+	schedule_tasks
+	do_tasks
+    done
 }
 
-health_monitor() {
-    local ipaddr_cur
-    local gateway_cur
-    local ifname_cur
-    local ifname
-    local ipaddr
-    local gateway
-    local failchk
-    local icmp_hosts
-    local icmp_hosts_acquire
-    local default_routes_check
-    local icmp_test_host
-    local timeout
+monitor_wan() {
+    local ifname ipaddr gateway icmp_hosts_acquire icmp_test_host
     local check_test
-    local health_interval
-    local check_for_job
 
     . /tmp/.mwan/cache
 
-    timeout=`uci -q -P /var/state get multiwan.${1}.timeout`
-    icmp_hosts=`uci -q -P /var/state get multiwan.${1}.icmp_hosts`
-    health_interval=`uci -q -P /var/state get multiwan.${1}.health_interval`
-    ifname_cur=$(query_config ifname $1)
-    ipaddr_cur=$(query_config ipaddr $1)
-    gateway_cur=$(query_config gateway $1)
+    local timeout=$(uci_get_state multiwan ${1} timeout)
+    local icmp_hosts=$(uci_get_state multiwan ${1} icmp_hosts)
+    local icmp_count=$(uci_get_state multiwan ${1} icmp_count '1')
+    local health_interval=$(uci_get_state multiwan ${1} health_interval)
+    local ifname_cur=$(query_config ifname $1)
+    local ipaddr_cur=$(query_config ipaddr $1)
+    local gateway_cur=$(query_config gateway $1)
 
-    while [ 1 ]; do
+    while :; do
+	[ "${health_monitor%.*}" = 'parallel' ] && sleep $health_interval
 
-	ifname=`uci -q -P /var/state get network.${1}.ifname`
-	ipaddr=`uci -q -P /var/state get network.${1}.ipaddr`
-	gateway=`uci -q -P /var/state get network.${1}.gateway`
-
-	if [ -z "$ifname" ]; then
-	    ifname="x"
-	fi
-
-	if [ -z "$ipaddr" ]; then
-	    ipaddr="x"
-	fi
-
-	if [ -z "$gateway" ]; then
-	    gateway="x"
-	fi
+	ifname=$(uci_get_state network ${1} ifname 'x')
+	ipaddr=$(uci_get_state network ${1} ipaddr 'x')
+	gateway=$(uci_get_state network ${1} gateway 'x')
 
 	if [ "$ifname_cur" != "$ifname" -o "$ipaddr_cur" != "$ipaddr" -o "$gateway_cur" != "$gateway" ]; then
-	    echo $1.acquire >> $jobfile
-	    exit
-	else
-	    if [ "$gateway" != "x" ]; then
-		default_routes_check=`ip route | grep -o $gateway`
-		if [ -z "$default_routes_check" ]; then
-		    check_for_job=`cat $jobfile 2>&1 | grep -o "route.refresh"`
-		    if [ -z "$check_for_job" ]; then
-			echo route.refresh >> $jobfile
-		    fi
-		fi
+	    add_task "$1" acquire
+	    if [ "${health_monitor%.*}" = 'parallel' ]; then
+		exit
+	    else
+		return
 	    fi
+	else
+	    [ "$gateway" != "x" ] && ! ip route | grep -o $gateway >&- 2>&- &&
+		add_task route refresh
 	fi
 
 	if [ "$icmp_hosts" != "disable" -a "$ifname" != "x" -a "$ipaddr" != "x" -a "$gateway" != "x" ]; then
@@ -918,10 +813,9 @@ health_monitor() {
 	    if [ "$icmp_hosts" == "gateway" -o -z "$icmp_hosts" ]; then
 		icmp_hosts_acquire=$gateway
 	    elif [ "$icmp_hosts" == "dns" ]; then
-		icmp_hosts_acquire=`uci -q -P /var/state get multiwan.$1.dns`
-		if [ -z "$icmp_hosts_acquire" -o "$icmp_hosts_acquire" == "auto" ]; then
-		    icmp_hosts_acquire=`uci -q -P /var/state get network.$1.dns`
-		fi
+		icmp_hosts_acquire=$(uci_get_state multiwan $1 dns 'auto')
+		[ "$icmp_hosts_acquire" == "auto" ] &&
+		    icmp_hosts_acquire=$(uci_get_state network $1 dns)
 	    else
 		icmp_hosts_acquire=$icmp_hosts
 	    fi
@@ -930,45 +824,119 @@ health_monitor() {
 
 	    ping_test() {
 		echo "$icmp_hosts" | while read icmp_test_host; do
-		    ping -c 1 -W $timeout -I $ifname $icmp_test_host 2>&1 | grep -o "round-trip"
+		    ping -c "$icmp_count" -W $timeout -I $ifname $icmp_test_host 2>&1 | grep -o "round-trip"
 		done
 	    }
 
 	    check_test=$(ping_test)
 
 	    if [ -z "$check_test" ]; then
-		echo "$1.fail" >> $jobfile
+		add_task "$1" fail
 	    else
-		echo "$1.pass" >> $jobfile
+		add_task "$1" pass
 	    fi       	        
 
 	elif [ "$icmp_hosts" == "disable" ]; then 
-	    echo "$1.pass" >> $jobfile
+	    add_task "$1" pass
 	fi
 
-	sleep $health_interval
+	[ "$health_monitor" = 'serial' ] && {
+	    wan_monitor_map=$(echo $wan_monitor_map | sed -e "s/$1\[\w*\]/$1\[$(date +%s)\]/g")
+	    update_cache
+	    break
+	}
     done
 }
 
-bg_task() {
+# Add a task to the $jobfile while ensuring
+# no duplicate tasks for the specified group
+add_task() {
+    local group=$1
+    local task=$2
+    grep -o "$group.$task" $jobfile >&- 2>&- || echo "$group.$task" >> $jobfile
+}
+
+# For health_monitor "parallel", start a background monitor for each group.
+# For health_monitor "serial", queue monitor tasks for do_tasks.
+schedule_tasks() {
+    local group health_interval monitored_last_at current_time diff delay
+    local i=0
+
+    get_health_interval() {
+	group=$(query_config group $1)
+	health_interval=$(uci_get_state multiwan ${group} health_interval 'disable')
+	[ "$health_interval" = "disable" ] && health_interval=0
+    }
+
+    [ "$health_monitor" = 'parallel' ] && {
+	while [ $((i++)) -lt $wancount ]; do
+	    get_health_interval $i
+	    if [ "$health_interval" -gt 0 ]; then
+		monitor_wan $group &
+		sleep 1
+	    fi
+	done
+	echo "## Started background monitor_wan ##"
+	health_monitor="parallel.started"
+    }
+
+    [ "$health_monitor" = 'serial' ] && {
+	local monitor_disabled=1
+
+	until [ -f $jobfile ]; do
+	    current_time=$(date +%s)
+	    delay=$max_interval
+	    i=0
+
+	    while [ $((i++)) -lt $wancount ]; do
+		get_health_interval $i
+		if [ "$health_interval" -gt 0 ]; then
+		    monitor_disabled=0
+
+		    monitored_last=$(query_config monitor $group)
+		    [ -z "$monitored_last" ] && {
+			monitored_last=$current_time
+			wan_monitor_map="${wan_monitor_map}${group}[$monitored_last]"
+			update_cache
+		    }
+
+		    will_monitor_at=$(($monitored_last + $health_interval))
+		    diff=$(($will_monitor_at - $current_time))
+		    [ $diff -le 0 ] && add_task "$group" 'monitor'
+
+		    delay=$(($delay > $diff ? $diff : $delay))
+		fi
+	    done
+
+	    [ "$monitor_disabled" -eq 1 ] && {
+		# Although health monitors are disabled, still
+		# need to check up on iptables rules in do_tasks
+		sleep "$iptables_interval"
+		break
+	    }
+	    [ $delay -gt 0 ] && sleep $delay
+	done
+    }
+}
+
+rule_counter=0
+# Process each task in the $jobfile in FIFO order
+do_tasks() {
     local check_iptables
     local queued_task
-    local bg_counter
     local current_resolv_file
 
-    bg_counter=0
-
-    while [ 1 ]; do
+    while :; do
 
 	. /tmp/.mwan/cache
 
-	if [ "$bg_counter" -eq 5 ]; then
+	if [ "$((++rule_counter))" -eq 5 -o "$health_monitor" = 'serial' ]; then
 
 	    check_iptables=$(iptables -n -L MultiWan -t mangle | grep "references" | awk -F "(" '{print $2}' | cut -d " " -f 1)
 
 	    if [ -z "$check_iptables" -o "$check_iptables" -lt 4 ]; then
 		mwnote "Netfilter rules appear to of been altered."
-		/etc/init.d/multiwan restart &
+		/etc/init.d/multiwan restart
 		exit
 	    fi
 
@@ -978,8 +946,7 @@ bg_task() {
 		refresh_dns
 	    fi
 
-	    bg_counter=0
-
+	    rule_counter=0
 	fi
 
 	if [ -f $jobfile ]; then
@@ -992,21 +959,31 @@ bg_task() {
 		    case $2 in 
 			fail) fail_wan $1;;
 			pass) recover_wan $1;;
-			acquire) acquire_wan_data $1 && health_monitor $1 &;;
+			acquire)
+			    acquire_wan_data $1
+			    [ "${health_monitor%.* }" = 'parallel' ] && {
+				monitor_wan $1 &
+				echo "## Started background monitor_wan ##"
+			    }
+			    ;;
+			monitor) monitor_wan $1;;
 			refresh) refresh_routes;;
+			*) echo "## Unknown task command: $2 ##";;
 		    esac
 		}
 
-		queued_task=`echo $LINE | awk -F "." '{print $1,$2}'`
+		queued_task=$(echo $LINE | awk -F "." '{print $1,$2}')
 		execute_task $queued_task
 	    done < $jobfile.work
 
 	    rm $jobfile.work
 	fi
 
-	bg_counter=$(expr $bg_counter + 1)
-
-	sleep 1
+	if [ "$health_monitor" = 'serial' ]; then
+	    break
+	else
+	    sleep 1
+	fi
     done
 }
 
@@ -1016,9 +993,8 @@ fail_start_check(){
     local ifname
     local group
 
-    i=0
-    while [ $i -lt $wancount ]; do 
-	i=`expr $i + 1` 
+    local i=0
+    while [ $((i++)) -lt $wancount ]; do 
 	group=$(query_config group $i)
 	ifname=$(query_config ifname $group)
 	ipaddr=$(query_config ipaddr $group)
@@ -1031,24 +1007,29 @@ fail_start_check(){
 }
 
 wancount=0
+max_interval=$(((1<<31) - 1))
 
 config_clear
 config_load "multiwan"
-config_get default_route    config default_route
-config_get debug            config debug
+config_get default_route	config default_route
+config_get health_monitor	config health_monitor
+config_get iptables_interval	config iptables_interval '30'
+config_get debug		config debug
+
+[ "$health_monitor" = 'serial' ] || health_monitor='parallel'
 
 config_foreach acquire_wan_data interface
 
 update_cache
 
-CHKFORQOS=`iptables -n -L Default -t mangle 2>&1 | grep "Chain Default"`
-CHKFORMODULE=`iptables -m statistic 2>&1 | grep -o "File not found"`
+CHKFORQOS=$(iptables -n -L Default -t mangle 2>&1 | grep "Chain Default")
+CHKFORMODULE=$(iptables -m statistic 2>&1 | grep -o "File not found")
 
 jobfile="/tmp/.mwan/jobqueue"
 
 case $1 in
     agent) silencer main_init;;
-    restart) silencer stop restart;;
     stop) silencer stop;;
+    restart) silencer stop restart;;
+    single) silencer stop single;;
 esac
-
