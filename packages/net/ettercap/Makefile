@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=@SF/ettercap
 PKG_MD5SUM:=28fb15cd024162c55249888fe1b97820
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -57,9 +59,7 @@ CONFIGURE_ARGS += \
 
 MAKE_FLAGS += \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
- 	AM_LDFLAGS="-L$(STAGING_DIR)/usr/lib/libiconv/lib" \
-	all install
-
+ 	AM_LDFLAGS="-L$(STAGING_DIR)/usr/lib/libiconv/lib"
 
 define Package/ettercap/install
 	$(INSTALL_DIR) $(1)/etc
