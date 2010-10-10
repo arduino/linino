@@ -34,7 +34,7 @@ endef
 CONFIGURE_ARGS+=\
 	--prefix="$(PKG_INSTALL_DIR)/eggdrop" \
 	--enable-threads \
-	--with-tcllib="$(STAGING_DIR)/usr/lib/libtcl8.4.so" \
+	--with-tcllib="$(STAGING_DIR)/usr/lib/libtcl8.5.so" \
 	--with-tclinc="$(STAGING_DIR)/usr/include/tcl.h"
 
 define Build/Compile
