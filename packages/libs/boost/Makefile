@@ -19,6 +19,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
 PKG_MD5SUM:=a4fc691c4e7c49b3b9b54a667d8f5529
 
 PKG_BUILD_DEPENDS:=boost-jam/host
+PKG_BUILD_PARALLEL:=1
 
 PKG_CONFIG_DEPENDS := \
 	CONFIG_PACKAGE_boost-date_time \
@@ -152,6 +153,7 @@ define Build/Compile
 		) \
 		bjam \
 			'-sBUILD=release <optimization>space <inlining>on <debug-symbols>off' \
+			$(filter -j%,$(PKG_JOBS)) \
 			--toolset=gcc --build-type=minimal --layout=system \
 			--disable-long-double \
 			$(CONFIGURE_ARGS) \
