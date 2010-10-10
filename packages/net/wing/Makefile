@@ -11,7 +11,7 @@ PKG_NAME:=wing
 
 ifneq ($(CONFIG_WING_STABLE),)
 	PKG_VERSION:=20100903
-	PKG_RELEASE:=3
+	PKG_RELEASE:=4
 	PKG_REV:=520e3168a5af4d26bec3779cfa4901d128a4bc6f
 else 
 	PKG_VERSION:=$(shell date +%Y%m%d)
@@ -26,6 +26,7 @@ PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -48,6 +49,18 @@ define Package/wing/config
 	source "$(SOURCE)/Config.in"
 endef
 
+EXTRA_LDFLAGS:=-ldl
+
+MAKE_FLAGS+=\
+	V=1 \
+	MINDRIVER=$(PKG_NAME) \
+	BUILD_CC=$(TARGET_CC) \
+	BUILD_CXX=$(TARGET_CXX)
+
+HOST_MAKE_FLAGS:=\
+	V=1 \
+	MINDRIVER=$(PKG_NAME)
+
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); \
 		rm -rf config.{cache,status}; \
@@ -58,9 +71,19 @@ define Build/Configure
 			--enable-wing \
 			--disable-linuxmodule \
 	);
-	$(MAKE) -C $(PKG_BUILD_DIR) tools elementmap.xml
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) $(HOST_MAKE_FLAGS) tools
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) $(HOST_MAKE_FLAGS) elementmap.xml
+	$(CP) $(PKG_BUILD_DIR)/tools/click-mkmindriver/click-mkmindriver $(PKG_BUILD_DIR)/
+	rm -rf $(PKG_BUILD_DIR)/config.{cache,status}
+	$(call Build/Configure/Default, \
+		--enable-tools=mixed \
+		--enable-userlevel \
+		--enable-wifi \
+		--enable-wing \
+		--disable-linuxmodule \
+	)
 	(cd $(PKG_BUILD_DIR)/userlevel; \
-		../tools/click-mkmindriver/click-mkmindriver -p $(PKG_NAME) -C .. \
+		../click-mkmindriver -p $(PKG_NAME) -C .. \
 		-f $(PKG_BUILD_DIR)/conf/wing/sample.click \
 		-A --all -E Discard -E Print -E Null \
 		-E InfiniteSource -E RatedSource -E EtherEncap -E UDPIPEncap \
@@ -68,30 +91,6 @@ define Build/Configure
 		-E ProbeTXRate -E MadwifiRate -E AutoRateFallback \
 		-E RoundRobinSched -E DRRSched; \
 	)
-	(cd $(PKG_BUILD_DIR); \
-		rm -rf config.{cache,status} ; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CXXFLAGS="-static -O2 -MD" CFLAGS="-static -MD" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		./configure \
-			--prefix=/usr \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--enable-tools=mixed \
-			--enable-userlevel \
-			--enable-wifi \
-			--enable-wing \
-			--disable-linuxmodule \
-	);
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		MINDRIVER=$(PKG_NAME) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
 endef
 
 define Package/wing/install
