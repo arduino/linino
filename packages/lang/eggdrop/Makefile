@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=ftp://ftp.eggheads.org/pub/eggdrop/source/1.6
 PKG_MD5SUM:=68e181201483dee398f9904e8652e6ca
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)$(PKG_VERSION)
+PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -39,13 +41,13 @@ CONFIGURE_ARGS+=\
 
 define Build/Compile
 	$(MAKE) config -C $(PKG_BUILD_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install; \
-	rm -Rvf $(PKG_INSTALL_DIR)/eggdrop/doc/*;\
-	rmdir $(PKG_INSTALL_DIR)/eggdrop/doc;
+	$(call Build/Compile/Default)
 endef
 
+define Build/Install
+	$(call Build/Install/Default)
+	rm -Rvf $(PKG_INSTALL_DIR)/eggdrop/doc
+endef
 
 define Package/eggdrop/install
 	$(INSTALL_DIR) $(1)/eggdrop
