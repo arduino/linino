@@ -263,6 +263,8 @@ CONFIGURE_VARS += \
 	ac_cv_func_mmap_fixed_mapped=yes \
 	ac_cv_path_WX_CONFIG_PATH=no \
 
+EXTRA_LDFLAGS+=-lz
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		noboot
