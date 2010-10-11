@@ -228,11 +228,11 @@ HOST_CONFIGURE_ARGS += \
 	--disable-hipe \
 	--disable-smp-support \
 	--without-java \
-	--without-ssl \
+	--without-ssl
 
 HOST_CONFIGURE_VARS += \
 	ac_cv_prog_JAVAC="" \
-	ac_cv_prog_javac_ver_1_2=no \
+	ac_cv_prog_javac_ver_1_2=no
 
 define Host/Compile
 	$(MAKE) -C $(HOST_BUILD_DIR) all
@@ -251,7 +251,7 @@ CONFIGURE_ARGS += \
 	--disable-threads \
 	--without-java \
 	--with-ssl="$(STAGING_DIR)/usr" \
-	--enable-dynamic-ssl-lib \
+	--enable-dynamic-ssl-lib
 
 CONFIGURE_VARS += \
 	SHLIB_LD="$(TARGET_CC)" \
@@ -261,7 +261,7 @@ CONFIGURE_VARS += \
 	ac_cv_prog_javac_ver_1_2=no \
 	ac_cv_func_getaddrinfo=no \
 	ac_cv_func_mmap_fixed_mapped=yes \
-	ac_cv_path_WX_CONFIG_PATH=no \
+	ac_cv_path_WX_CONFIG_PATH=no
 
 EXTRA_LDFLAGS+=-lz
 
