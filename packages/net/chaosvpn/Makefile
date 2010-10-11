@@ -10,8 +10,6 @@ PKG_NAME:=chaosvpn
 PKG_VERSION:=2.0
 PKG_RELEASE:=2
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/${PKG_NAME}-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 PKG_SOURCE:=${PKG_NAME}-${PKG_VERSION}.tar.gz
 PKG_SOURCE_URL:=http://github.com/downloads/ryd/chaosvpn/
 PKG_MD5SUM:=4263202d65bf4ab0d1356b149d7c53af
@@ -31,14 +29,8 @@ define Package/chaosvpn/description
 	Configure tincd for the chaosvpn network
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/lib" \
-		LIB="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib -lz -lcrypto -Wl,-rpath-link,$(STAGING_DIR)/usr/lib" \
-		INCLUDES="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LIBDIRS="-L$(STAGING_DIR)/usr/lib"
-endef
+MAKE_FLAGS += \
+	COPT="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) $(TARGET_LDFLAGS)"
 
 define Package/chaosvpn/install
 	$(INSTALL_DIR) $(1)/etc/tinc/chaos/ $(1)/usr/sbin/ $(1)/etc/init.d/ $(1)/etc/hotplug.d/iface/
