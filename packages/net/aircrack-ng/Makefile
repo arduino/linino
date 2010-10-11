@@ -9,12 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aircrack-ng
 PKG_VERSION:=1.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.aircrack-ng.org/ \
 	http://archive.aircrack-ng.org/aircrack-ng/$(PKG_VERSION)/
 PKG_MD5SUM:=f7a24ed8fad122c4187d06bfd6f998b4
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -31,19 +33,13 @@ define Package/aircrack-ng/description
 Aircrack-ng is the next generation of aircrack with new features
 endef
 
-define Build/Configure
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -Wall -Iinclude/ $(TARGET_CPPFLAGS) -D_REVISION=0" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		prefix="/usr" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		OSNAME=Linux \
-		all install
-endef
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS) -Wall -Iinclude/ $(TARGET_CPPFLAGS) -D_REVISION=0" \
+	LDFLAGS="$(TARGET_LDFLAGS)" \
+	OSNAME=Linux \
+	prefix="/usr" \
+	sqlite="false" \
+	unstable="true" \
 
 define Package/aircrack-ng/install
 	$(INSTALL_DIR) $(1)/usr/bin
