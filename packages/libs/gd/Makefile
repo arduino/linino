@@ -34,6 +34,8 @@ define Package/libgd/description
   programmers. GD creates PNG, JPEG and GIF images, among other formats.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
@@ -48,23 +50,25 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	LIBPNG12_CONFIG="$(STAGING_DIR)/host/bin/libpng12-config"
 
-TARGET_CFLAGS += $(FPIC)
-
 define Build/Configure
-	( cd $(PKG_BUILD_DIR); aclocal; libtoolize; autoreconf; );
+	( cd $(PKG_BUILD_DIR); aclocal; libtoolize --force; autoreconf; );
 	$(call Build/Configure/Default)
 endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/gdlib-config $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/gdlib-config $(1)/usr/bin/
+	$(SED) \
+		's,^\(prefix\|exec_prefix\)=.*,\1=$(STAGING_DIR)/usr,g' \
+		$(1)/usr/bin/gdlib-config
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/entities.h $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/gd{,_io,cache,fontg,fontl,fontmb,fonts,fontt,fx}.h \
 		$(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgd.{a,so*} $(1)/usr/lib/
-	$(SED) 's,-I$$$${prefix}/include,,g' $(1)/usr/bin/gdlib-config
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgd.{a,la,so*} $(1)/usr/lib/
+	$(INSTALL_DIR) $(2)/bin
+	$(LN) ../../usr/bin/gdlib-config $(2)/bin/
 endef
 
 define Package/libgd/install
