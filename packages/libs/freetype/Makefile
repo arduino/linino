@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freetype
-PKG_VERSION:=2.3.9
-PKG_RELEASE:=2
+PKG_VERSION:=2.3.12
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/freetype
-PKG_MD5SUM:=d76233108aca9c9606cdbd341562ad9a
+PKG_MD5SUM:=e974a82e5939be8e05ee65f07275d7c5
 
 PKG_FIXUP:=libtool
 PKG_LIBTOOL_PATHS:=builds/unix
@@ -24,9 +24,9 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libfreetype
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+zlib
   TITLE:=A free, high-quality and portable font engine
   URL:=http://www.freetype.org/
+  DEPENDS:=+zlib
 endef
 
 define Package/libfreetype/description
