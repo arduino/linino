@@ -17,6 +17,7 @@ PKG_SOURCE_URL:=@SF/openl2tp
 PKG_MD5SUM:=87f035ca5ddf7c61e720f422cdc997cf
 
 PKG_BUILD_DEPENDS:=libreadline libncurses
+PKG_BUILD_PARALLEL:=1
 PKG_PPPD_VERSION:=2.4.4
 
 include $(INCLUDE_DIR)/package.mk
