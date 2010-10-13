@@ -8,14 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lsm
-PKG_VERSION:=0.53
+PKG_VERSION:=0.60
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://lsm.foobar.fi/download
-PKG_MD5SUM:=983911b434a3c649fcefdc99e6ea2f37
+PKG_MD5SUM:=f4748308c0a1caa98d7e756778954116
 
 include $(INCLUDE_DIR)/package.mk
+
+PKG_UNPACK += && rmdir $(PKG_BUILD_DIR) && mv $(BUILD_DIR)/lsm $(PKG_BUILD_DIR)
 
 define Package/lsm
   SECTION:=net
@@ -32,12 +34,6 @@ endef
 
 define Package/lsm/conffiles
 /etc/lsm/lsm.conf
-endef
-
-define Build/Prepare
-	$(call Build/Prepare/Default)
-	rmdir $(PKG_BUILD_DIR)
-	mv $(BUILD_DIR)/lsm $(PKG_BUILD_DIR)
 endef
 
 define Build/Compile
