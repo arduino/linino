@@ -18,6 +18,12 @@ PKG_MD5SUM:=b6e175f969d03a4d3c5643aaabc6a5ff
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
 
+PKG_CONFIG_DEPENDS:=\
+	CONFIG_NGINX_STUB_STATUS \
+	CONFIG_NGINX_FLV \
+	CONFIG_NGINX_SSL \
+	CONFIG_NGINX_DAV
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/nginx
@@ -25,7 +31,7 @@ define Package/nginx
   CATEGORY:=Network
   TITLE:=Nginx web server
   URL:=http://nginx.net/
-  DEPENDS:=+libpcre +libopenssl
+  DEPENDS:=+libpcre +NGINX_SSL:libopenssl
   MENU:=1
 endef
 
@@ -63,6 +69,8 @@ ifeq ($(CONFIG_NGINX_FLV),y)
 endif
 ifeq ($(CONFIG_NGINX_SSL),y)
   ADDITIONAL_MODULES += --with-http_ssl_module
+else
+  ADDITIONAL_MODULES += --without-http-cache
 endif
 ifeq ($(CONFIG_NGINX_DAV),y)
   ADDITIONAL_MODULES += --with-http_dav_module

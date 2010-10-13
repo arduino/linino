@@ -26,7 +26,6 @@ config NGINX_SSL
 	bool
 	prompt "Enable SSL module"
 	default n
-	select PACKAGE_libopenssl
 	help
 		Enable HTTPS/SSL support.
 
