@@ -15,6 +15,9 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
 PKG_MD5SUM:=b569066ac2ba1356c2112b118a7d74d0
 
+# Force -j1
+PKG_JOBS:=
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/keynote
