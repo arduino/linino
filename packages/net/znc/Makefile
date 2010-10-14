@@ -40,7 +40,6 @@ CONFIGURE_VARS += \
 	LIBS="-luClibc++ -lm -lssl $(LIBGCC_S) -lc"
 
 CONFIGURE_ARGS += \
-	$(TARGET_CONFIGURE_OPTS) \
 	--disable-c-ares \
 	--disable-modules \
 	--disable-perl
