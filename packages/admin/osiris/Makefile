@@ -17,6 +17,8 @@ PKG_MD5SUM:=1951c7dc0fe729af9ffaf58910340d12
 
 PKG_FIXUP:=libtool
 PKG_LIBTOOL_PATHS:=src/db-4.2.52/build_unix
+PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,8 +38,7 @@ CONFIGURE_ARGS += \
 
 MAKE_FLAGS += \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		INTERACTIVE=0 \
-		all install
+		INTERACTIVE=0
 
 define Package/osirisd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
