@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,10 +10,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=zabbix
 PKG_VERSION:=1.6
 PKG_RELEASE:=2
-PKG_MD5SUM:=39d4c871439b1b4f0429964b4abbfc45
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/zabbix
+PKG_MD5SUM:=39d4c871439b1b4f0429964b4abbfc45
 
 PKG_BUILD_DEPENDS:=libsqlite3
 PKG_INSTALL:=1
@@ -50,23 +50,17 @@ ifneq ($(SDK),)
 CONFIG_PACKAGE_zabbix-server:=m
 endif
 
-PKG_CONFIGURE_OPTIONS:= \
+CONFIGURE_ARGS+= \
 	--bindir="/usr/sbin" \
 	--enable-agent
 
 ifneq ($(CONFIG_PACKAGE_zabbix-server),)
-PKG_CONFIGURE_OPTIONS+= \
+  CONFIGURE_ARGS+= \
 	--enable-server \
 	--with-sqlite3="$(STAGING_DIR)/usr"
 endif
 
 MAKE_FLAGS += ARCH="linux"
-
-define Build/Configure
-	$(call Build/Configure/Default, \
-		$(PKG_CONFIGURE_OPTIONS) \
-	)
-endef
 
 define Package/zabbix-agent/conffiles
 /etc/zabbix/zabbix_agentd.conf
