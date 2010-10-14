@@ -42,6 +42,8 @@ endif
 SCAN_COOKIE?=$(shell echo $$$$)
 export SCAN_COOKIE
 
+SUBMAKE:=umask 022; $(SUBMAKE)
+
 prepare-mk: FORCE ;
 
 prepare-tmpinfo: FORCE
