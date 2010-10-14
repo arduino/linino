@@ -17,6 +17,8 @@ PKG_SOURCE_URL:=http://www.quagga.net/download/ \
                 http://www.uk.quagga.net/download/
 PKG_MD5SUM:=37b9022adca04b03863d2d79787e643f
 
+PKG_BUILD_PARALLEL:=1
+
 PKG_BUILD_DIR:=$(BUILD_DIR)/quagga-$(PKG_VERSION)
 
 PKG_CONFIG_DEPENDS:= \
