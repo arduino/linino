@@ -17,6 +17,7 @@ PKG_SOURCE_URL:=@SF/opennhrp
 PKG_MD5SUM:=6f6f8571ccc0a9f97e52c6240fe9002a
 
 PKG_FIXUP:=libtool
+PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
