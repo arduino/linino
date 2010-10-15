@@ -33,7 +33,7 @@ define Package/znc/description
 endef
 
 CONFIGURE_VARS += \
-	CXX="$(TARGET_CROSS)-g++-uc"
+	CXX="$(STAGING_DIR)/host/bin/g++-uc"
 	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
 	CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 	LDFLAGS="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
@@ -45,7 +45,7 @@ CONFIGURE_ARGS += \
 	--disable-perl
 
 MAKE_FLAGS += \
-	CXX="g++-uc"
+	CXX="$(STAGING_DIR)/host/bin/g++-uc"
 
 define Build/Configure
 	$(call Build/Configure/Default,)
