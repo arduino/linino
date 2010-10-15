@@ -25,6 +25,8 @@ PKG_SOURCE_URL:=ftp://ftp.ruby-lang.org/pub/ruby/$(PKG_LIBVER)/
 PKG_MD5SUM:=e019ae9c643c5efe91be49e29781fb94
 
 PKG_BUILD_DEPENDS:=ruby/host
+PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
@@ -211,8 +213,7 @@ TARGET_LDFLAGS += -L$(PKG_BUILD_DIR)
 
 MAKE_FLAGS += \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
-	SHELL="/bin/bash" \
-	all install
+	SHELL="/bin/bash"
 
 define Build/Prepare
 $(call Build/Prepare/Default)
