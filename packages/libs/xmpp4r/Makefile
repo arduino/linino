@@ -33,7 +33,7 @@ endef
 define Build/Compile
 	(cd $(PKG_BUILD_DIR); \
 		ruby $(PKG_BUILD_DIR)/setup.rb config \
-			--rbconfig=$(wildcard $(STAGING_DIR)/usr/lib/ruby/1.9.1/*-linux/rbconfig.rb); \
+			--rbconfig=$(wildcard $(STAGING_DIR)/usr/lib/ruby/*.*/*-linux/rbconfig.rb); \
 		ruby $(PKG_BUILD_DIR)/setup.rb install --prefix="$(PKG_INSTALL_DIR)"; \
 	)
 endef
