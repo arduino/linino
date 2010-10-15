@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/znc
 PKG_MD5SUM:=b1379bd6609353ebbc8df7ec19bd004f
 
+PKG_BUILD_PARALLEL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/znc
@@ -50,10 +52,6 @@ MAKE_FLAGS += \
 define Build/Configure
 	$(call Build/Configure/Default,)
 	$(call libtool_disable_rpath)
-endef
-
-define Build/Compile
-	$(call Build/Compile/Default,)
 endef
 
 define Package/znc/install
