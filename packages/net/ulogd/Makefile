@@ -98,6 +98,7 @@ define Build/Configure
 		, \
 		ac_cv_header_pcap_h=$(ULOGD_PCAP_HEADER) \
 	)
+	$(SED) 's/-lgcc_s//g' $(PKG_BUILD_DIR)/Rules.make
 endef
 
 define Build/Compile
