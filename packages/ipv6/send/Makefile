@@ -16,6 +16,9 @@ PKG_SOURCE_URL:=http://mobisend.org/debian-mobisend/pool/main/s/sendd/
 PKG_MD5SUM:=99c18e5d965e57d580f146d00145251a
 PKG_BUILD_DIR:=$(BUILD_DIR)/sendd-0.2
 
+# Force -j1
+PKG_JOBS:=
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/send
