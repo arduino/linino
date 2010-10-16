@@ -15,6 +15,8 @@ PKG_SOURCE_URL:=@SF/nfs
 PKG_SOURCE:=nfs-utils-$(PKG_VERSION).tar.bz2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/nfs-utils-$(PKG_VERSION)
+PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -71,14 +73,10 @@ CONFIGURE_ARGS += \
 TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib 
 TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib 
 
-define Build/Compile
-        $(call Build/Compile/Default, \
-                OPT="$(TARGET_CFLAGS)" \
-                INSTALLSUID="install -m 4755" \
-                DESTDIR="$(PKG_INSTALL_DIR)" \
-                all install \
-        )
-endef
+MAKE_FLAGS += \
+	OPT="$(TARGET_CFLAGS)" \
+	INSTALLSUID="install -m 4755" \
+	DESTDIR="$(PKG_INSTALL_DIR)"
 
 define Package/nfs-kernel-server/install
 	$(INSTALL_DIR) $(1)/etc/init.d $(1)/usr/sbin
