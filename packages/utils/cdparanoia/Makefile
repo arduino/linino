@@ -16,6 +16,9 @@ PKG_SOURCE_URL:=http://downloads.xiph.org/releases/cdparanoia/
 PKG_SOURCE_TARGETDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_MD5SUM:=b304bbe8ab63373924a744eac9ebc652
 
+# Force -j1
+PKG_JOBS:=
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/cdparanoia
