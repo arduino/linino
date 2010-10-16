@@ -17,6 +17,9 @@ PKG_MD5SUM:=aa4e0e5c57f94489463ea6576591ce9d
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/mDNSResponder-$(PKG_VERSION)
 
+# Force -j1
+PKG_JOBS:=
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mdnsresponder
