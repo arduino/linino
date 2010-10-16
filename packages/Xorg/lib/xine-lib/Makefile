@@ -17,10 +17,26 @@ PKG_SOURCE_URL:=@SF/xine
 PKG_MD5SUM:=b1f42602c776bb93e3cbf127e220cbfd
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-CONFIGURE_ARGS_XTRA+=--enable-static --disable-vcd --disable-imagemagick
+CONFIGURE_ARGS+=\
+	--enable-static \
+	--disable-vcd \
+	--disable-imagemagick \
+	--disable-flac
+
+XINE_LIB_FLAGS:=\
+	LIBFLAC_CFLAGS="" \
+	LIBFLAC_LIBS="" \
+	X_CFLAGS="" \
+	X_LIBS="" \
+	XINE_ACFLAGS="" \
+	CXXFLAGS="$(TARGET_CFLAGS)"
+
+CONFIGURE_VARS+=$(XINE_LIB_FLAGS)
 
 define Package/xine-lib
   SECTION:=xorg-libraries
@@ -31,21 +47,7 @@ define Package/xine-lib
   URL:=http://www.xine-project.org/
 endef
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
-		if [ -x $(CONFIGURE_CMD) ]; then \
-			$(CP) $(SCRIPT_DIR)/config.{guess,sub} $(PKG_BUILD_DIR)/ && \
-			$(CONFIGURE_VARS) \
-			$(CONFIGURE_CMD) \
-			$(CONFIGURE_ARGS_XTRA) \
-			$(CONFIGURE_ARGS) ;\
-		fi \
-	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)/ all install DESTDIR=$(PKG_INSTALL_DIR)
-endef
+MAKE_FLAGS+=$(XINE_LIB_FLAGS)
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)
