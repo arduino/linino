@@ -427,4 +427,6 @@ $(eval $(call BuildAsterisk16ModuleTemplate,pbx_ael,Asterisk Extension Logic,sup
 $(eval $(call BuildAsterisk16ModuleTemplate,res_ael_share,Shareable AEL code,support for shareable AEL code mainly between internal and external modules))
 $(eval $(call BuildAsterisk16ModuleTemplate,pbx_spool,Call Spool,outgoing call spool support))
 $(eval $(call BuildAsterisk16ModuleTemplate,res_agi,Asterisk Gateway Interface,support for the Asterisk Gateway Interface extension))
-
+$(eval $(call BuildAsterisk16ModuleTemplate,app_alarmreceiver,Alarm receiver,Central Station Alarm receiver for Ademco Contact ID))
+$(eval $(call BuildAsterisk16ModuleTemplate,app_setcallerid,Set callerid,support for setting callerid))
+$(eval $(call BuildAsterisk16ModuleTemplate,app_verbose,Verbose logging,Verbose logging application))
