@@ -34,6 +34,12 @@ define Package/python-sip
   URL:=http://www.riverbankcomputing.co.uk/software/sip/download
 endef
 
+
+# ===> TARGET <===
+
+EXTRA_CFLAGS:=\
+	$(FPIC)
+
 define Build/Configure
 	$(INSTALL_DIR) "$(PYTHON_SIP_CONFIG_TEMPLATE_DIR)"; \
 	$(CP) ./files/sipconfig.macros.template "$(PYTHON_SIP_CONFIG_TEMPLATE)"; \
@@ -62,8 +68,8 @@ define Build/Compile
 		CC="$(TARGET_CROSS)gcc" \
 		CXX="$(TARGET_CROSS)g++" \
 		LINK="$(TARGET_CROSS)g++" \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CXXFLAGS="$(TARGET_CFLAGS)"
+		CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
+		CXXFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)"
 endef
 
 define Build/InstallDev
@@ -76,8 +82,8 @@ define Build/Install
 		CC="$(TARGET_CROSS)gcc" \
 		CXX="$(TARGET_CROSS)g++" \
 		LINK="$(TARGET_CROSS)g++" \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CXXFLAGS="$(TARGET_CFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
+		CXXFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
 		DESTDIR="" \
 		install
 endef
@@ -87,6 +93,9 @@ define Package/python-sip/install
 	$(INSTALL_DIR) $(1)/$(PYTHON_PKG_DIR)
 	$(CP) $(PKG_INSTALL_DIR)/$(PYTHON_PKG_DIR)/* $(1)/$(PYTHON_PKG_DIR)
 endef
+
+
+# ===> HOST <===
 
 define Host/Configure
 	(	cd "$(HOST_BUILD_DIR)"; \
