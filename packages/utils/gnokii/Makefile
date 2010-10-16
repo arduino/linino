@@ -40,8 +40,8 @@ define Build/Configure
 		--without-libiconv-prefix \
 		--without-libintl-prefix \
 		--disable-rlpdebug \
-        --disable-xdebug \
-        --disable-debug \
+		--disable-xdebug \
+		--disable-debug \
 		--enable-shared \
 		--disable-static \
 		--without-x \
