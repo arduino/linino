@@ -50,7 +50,7 @@ MAEMO_KRNL_SRC:=$(if $(CONFIG_MAEMO_KEXEC_DOWNLOAD_KERNEL),\
 
 define Package/maemo-kexec/install
 	$(INSTALL_DIR) $(1)/boot $(1)/sbin
-	$(INSTALL_BIN) ./files/sbin/boot-maemo $(1)/sbin/
+	$(INSTALL_BIN) ./files/sbin/bootmaemo $(1)/sbin/
 	$(INSTALL_DATA) $(MAEMO_KRNL_SRC) $(1)/boot/maemo.zImage
 endef
 
