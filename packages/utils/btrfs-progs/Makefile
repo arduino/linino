@@ -37,7 +37,7 @@ progs = btrfsctl mkfs.btrfs btrfs-debug-tree btrfs-show btrfs-vol btrfsck
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) \
+		CC="$(TARGET_CC)" \
 		CFLAGS="$(TARGET_CPPFLAGS) $(TARGET_CFLAGS)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 		prefix=/usr \
