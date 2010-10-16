@@ -97,7 +97,8 @@ define Package/xglamo
   +libopenssl \
   +util-macros \
   @DISPLAY_SUPPORT \
-  @arm||armeb
+  @arm||armeb \
+  @TARGET_s3c24xx
 endef
 
 define Package/xglamo/description
