@@ -27,6 +27,7 @@ define Package/openssh-client
   CATEGORY:=Network
   DEPENDS:=+libopenssl +zlib
   TITLE:=OpenSSH client
+  MAINTAINER:=Peter Wagner <tripolar@gmx.at>
   URL:=http://www.openssh.com/
   SUBMENU:=SSH
 endef

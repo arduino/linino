@@ -28,6 +28,7 @@ define Package/ntpd/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=ISC ntp
+  MAINTAINER:=Peter Wagner <tripolar@gmx.at>
   URL:=http://www.ntp.org/
 endef
 

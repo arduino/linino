@@ -27,6 +27,7 @@ define Package/irssi/Default
   CATEGORY:=Network
   DEPENDS:=+glib2 +libncurses
   TITLE:=Console IRC client
+  MAINTAINER:=Peter Wagner <tripolar@gmx.at>
   URL:=http://irssi.org/
 endef
 

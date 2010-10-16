@@ -26,6 +26,7 @@ define Package/ctorrent/Default
   CATEGORY:=Network
   DEPENDS:=+uclibcxx
   TITLE:=console-based BitTorrent client
+  MAINTAINER:=Peter Wagner <tripolar@gmx.at>
   URL:=http://www.rahul.net/dholmes/ctorrent/
 endef
 
