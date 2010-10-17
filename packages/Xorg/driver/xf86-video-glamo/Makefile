@@ -31,7 +31,7 @@ define Package/xf86-video-glamo
   CATEGORY:=Xorg
   SUBMENU:=driver
   URL:=http://git.openmoko.org/?p=xf86-video-glamo.git
-  DEPENDS:=@DISPLAY_SUPPORT @arm||armeb +xserver-xorg
+  DEPENDS:=@DISPLAY_SUPPORT @arm||armeb @TARGET_s3c24xx +xserver-xorg
 endef
 
 define Package/xf86-video-glamo/description
