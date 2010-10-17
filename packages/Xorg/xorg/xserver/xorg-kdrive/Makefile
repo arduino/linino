@@ -124,6 +124,7 @@ define Build/Configure
 		--disable-secure-rpc \
 		--enable-silent-rules \
 		--disable-shave \
+		--disable-xsdl \
 	)
 endef
 
