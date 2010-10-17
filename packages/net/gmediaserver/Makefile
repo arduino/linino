@@ -15,6 +15,9 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://savannah.nongnu.org/download/gmediaserver/
 PKG_MD5SUM:=c422de386331e2a1a859d45f6fa270a3
 
+PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/gmediaserver
@@ -46,8 +49,7 @@ CONFIGURE_ARGS += \
 MAKE_FLAGS += \
 	AR="$(TARGET_CROSS)ar" \
 	LTLIBICONV="" \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	all install \
+	DESTDIR="$(PKG_INSTALL_DIR)"
 
 define Package/gmediaserver/install
 	$(INSTALL_DIR) $(1)/usr/sbin
