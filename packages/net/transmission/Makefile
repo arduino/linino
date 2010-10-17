@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=transmission
-PKG_VERSION:=2.10
+PKG_VERSION:=2.11
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://mirrors.m0k.org/transmission/files
-PKG_MD5SUM:=3b32d981d746abf8b0292c6ab01d10d4
+PKG_MD5SUM:=ef2b40ddc2c17a57c47bfe15b1f23cc4
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -43,7 +43,6 @@ endef
 
 define Package/transmission-remote
   $(call Package/transmission/template)
-  DEPENDS:=transmission-daemon
 endef
 
 define Package/transmission-web
