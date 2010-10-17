@@ -25,11 +25,12 @@ PKG_BUILD_DEPENDS:=randrproto renderproto fixesproto damageproto xcmiscproto \
 PKG_CONFIG_DEPENDS := \
 	CONFIG_PACKAGE-xserver-kdrive-fbdev \
 	CONFIG_PACKAGE_xserver-kdrive-xephyr \
-    CONFIG_X_TSLIB CONFIG_X_COMPOSITE \
+	CONFIG_X_TSLIB CONFIG_X_COMPOSITE \
 	CONFIG_X_XINERAMA CONFIG_X_XCALIBRATE
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
