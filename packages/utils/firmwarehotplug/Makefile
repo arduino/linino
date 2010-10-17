@@ -15,6 +15,9 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/linux-hotplug
 PKG_MD5SUM:=e5cf352b172f498e27b160167b981f24
 
+PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 # workaround for fedora sdcc naming changes
@@ -30,14 +33,10 @@ define Package/firmwarehotplug
   URL:=http://linux-hotplug.sourceforge.net/
 endef
 
-define Build/Compile
-	$(call Build/Compile/Default, \
-		OPT="$(TARGET_CFLAGS)" \
-		-C $(PKG_BUILD_DIR)/ezusb/midi/original \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-                all install \
-	)
-endef
+MAKE_PATH:=ezusb/midi/original
+
+MAKE_FLAGS+=\
+	OPT="$(TARGET_CFLAGS)"
 
 define Package/firmwarehotplug/install
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/usb
