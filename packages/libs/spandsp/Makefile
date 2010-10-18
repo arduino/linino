@@ -10,9 +10,10 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=spandsp
 PKG_VERSION:=0.0.6
-PKG_RELEASE:=17
+PKG_VERSION_SUFFIX:=pre17
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)pre17.tgz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)$(PKG_VERSION_SUFFIX).tgz
 PKG_SOURCE_URL:=http://www.soft-switch.org/downloads/spandsp/
 PKG_MD5SUM:=cc860f77270cf3b881f8ccd42d2d0238
 
