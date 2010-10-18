@@ -43,8 +43,8 @@ define Package/libgsl/install
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/gsl/*.h $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/include/gsl $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/gsl/*.h $(1)/usr/include/gsl
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgsl.* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgslcblas.* $(1)/usr/lib/
 endef
