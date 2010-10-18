@@ -17,6 +17,7 @@ PKG_SOURCE_URL:=http://www.soft-switch.org/downloads/spandsp/
 PKG_MD5SUM:=cc860f77270cf3b881f8ccd42d2d0238
 
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -28,6 +29,7 @@ define Package/libspandsp
 endef
 
 CONFIGURE_ARGS+= LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
+
 TARGET_CFLAGS += $(FPIC)
 
 define Build/InstallDev
