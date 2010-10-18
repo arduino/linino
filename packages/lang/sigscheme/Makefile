@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sigscheme
 PKG_VERSION:=0.8.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://sigscheme.googlecode.com/files/
@@ -39,8 +39,9 @@ define Package/sigscheme/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{gcroots,sscm}.so.* $(1)/usr/lib
 
-	$(INSTALL_DIR) $(1)/usr/share
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/sigscheme/ $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/share/sigscheme/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/sigscheme/lib/* \
+		$(1)/usr/share/sigscheme/lib/
 
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/sscm $(1)/usr/bin
