@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=heyu
-PKG_VERSION:=2.9.0
+PKG_VERSION:=2.9.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://heyu.tanj.com/download/
-PKG_MD5SUM:=e0d0788ce1049647023ed096a3007552
+PKG_MD5SUM:=89d20d7f45109e7add5f0a141eac04eb
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -47,9 +47,10 @@ define Build/Compile
 	)
 endef
 
-define Package/heyu/install	
+define Package/heyu/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/heyu $(1)/usr/bin/
+
 	$(INSTALL_DIR) $(1)/etc/$(PKG_NAME)
 	$(INSTALL_DATA) ./files/x10.conf $(1)/etc/$(PKG_NAME)/x10.conf
 endef
