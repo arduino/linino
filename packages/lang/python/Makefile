@@ -375,6 +375,7 @@ define PyPackage/python-mini/filespec
 +|/usr/lib/python$(PYTHON_VERSION)/UserDict.py
 +|/usr/lib/python$(PYTHON_VERSION)/warnings.py
 +|/usr/lib/python$(PYTHON_VERSION)/weakref.py
++|/usr/include/python$(PYTHON_VERSION)/pyconfig.h
 endef
 
 define PyPackage/python-mini/install
