@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2008 OpenWrt.org
+# Copyright (C) 2005-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -24,7 +24,7 @@ define Package/mt-daapd
   CATEGORY:=Sound
   DEPENDS:=+libgdbm +libhowl +libid3tag +libpthread
   TITLE:=A multi-threaded DAAP (Digital Audio Access Protocol) daemon
-  URL:=http://www.mt-daapd.org/
+  URL:=http://www.fireflymediaserver.org/
 endef
 
 define Package/mt-daapd/description
