@@ -24,7 +24,7 @@ define Package/miredo/Default
   SECTION:=ipv6
   CATEGORY:=IPv6
   SUBMENU:=miredo: Teredo (IPv6 tunneling over UDP through NAT)
-  URL:=http://www.simphalempin.com/dev/miredo/
+  URL:=http://www.remlab.net/miredo/
 endef
 
 define Package/miredo-common
