@@ -79,13 +79,6 @@
  
 --- a/drivers/head/usbip_common.c
 +++ b/drivers/head/usbip_common.c
-@@ -27,7 +27,7 @@
- #include "usbip_common.h"
- 
- /* version information */
--#define DRIVER_VERSION "$Id: usbip_common.c 66 2008-04-20 13:19:42Z hirofuchi $"
-+#define DRIVER_VERSION "$Id$"
- #define DRIVER_AUTHOR "Takahiro Hirofuchi <hirofuchi _at_ users.sourceforge.net>"
  #define DRIVER_DESC "usbip common driver"
  
 @@ -55,10 +55,7 @@ static ssize_t show_flag(struct device *
@@ -154,15 +147,6 @@
  
 --- a/drivers/head/vhci_hcd.c
 +++ b/drivers/head/vhci_hcd.c
-@@ -24,7 +24,7 @@
- #include "usbip_common.h"
- #include "vhci.h"
- 
--#define DRIVER_VERSION " $Id: vhci_hcd.c 66 2008-04-20 13:19:42Z hirofuchi $ "
-+#define DRIVER_VERSION " $Id$ "
- #define DRIVER_AUTHOR "Takahiro Hirofuchi"
- #define DRIVER_DESC "Virtual Host Controller Interface Driver for USB/IP"
- #define DRIVER_LICENCE "GPL"
 @@ -58,7 +58,7 @@ static void vhci_stop(struct usb_hcd *hc
  static int vhci_get_frame_number(struct usb_hcd *hcd);
  
