@@ -21,5 +21,5 @@ start() {
 }
 
 stop() {
-	killall sshd
+	kill $(cat /var/run/sshd.pid)
 }
