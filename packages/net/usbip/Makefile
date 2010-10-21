@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/usbip/Common
   TITLE:=USB-over-IP
   URL:=http://usbip.sourceforge.net/
-  DEPENDS:=@!LINUX_2_4 @USB_SUPPORT
+  DEPENDS:=@!LINUX_2_4 @USB_SUPPORT +glib2 +sysfsutils
   MAINTAINER:=Nuno Goncalves <nunojpg@gmail.com>
 endef
 
@@ -91,9 +91,11 @@ CONFIGURE_PATH:=./src
 MAKE_PATH:=./src
 LIBTOOL_PATHS:=./src
 
+CFLAGS+="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include"
+
 define Build/Prepare
 $(call Build/Prepare/Default)
-	(cd $(PKG_BUILD_DIR)/src; [ -x ./configure ] || ./autogen.sh )
+	(cd $(PKG_BUILD_DIR)/src; ./autogen.sh )
 endef
 
 define Build/Compile/kmod
