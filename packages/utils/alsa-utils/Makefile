@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=alsa-utils
-PKG_VERSION:=1.0.21
-PKG_RELEASE:=2
+PKG_VERSION:=1.0.23
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.alsa-project.org/pub/utils/ \
 		http://alsa.cybermirror.org/utils/
-PKG_MD5SUM:=3672287c2608040d111ce45495ba7602
+PKG_MD5SUM:=cb0cf46029ac9549cf3a31bff6a4f4e1
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
