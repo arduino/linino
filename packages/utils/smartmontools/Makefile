@@ -34,28 +34,22 @@ endef
 
 # uses GNU configure
 
-define Build/Configure	
-	(cd $(PKG_BUILD_DIR); \
-	./autogen.sh \
-	./configure \
-		CC="$(TARGET_CC)" \
-		CXX="$(TARGET_CXX)" \
-		CPP="$(TARGET_CPP)" \
-		CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
-		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
-		LDFLAGS="$$$$LDFLAGS" \
-		LIBS="-nodefaultlibs -luClibc++ -lm $(LIBGCC_S) -lc" \
-		--prefix=/usr \
-		--build=$(GNU_BUILD_NAME) \
-		--host=$(GNU_HOST_NAME) \
-		--target=$(GNU_TARGET_NAME) \
+CONFIGURE_VARS += \
+	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
+	LDFLAGS="$$$$LDFLAGS" \
+	LIBS="-nodefaultlibs -luClibc++ -lm $(LIBGCC_S) -lc" \
+
+define Build/Configure
+	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
+		./autogen.sh \
 	);
-	$(call Build/Configure/Default,, \
-	)
+	$(call Build/Configure/Default)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) 
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		LD="$(TARGET_CXX)" 
 endef
 
 define Package/smartmontools/install
