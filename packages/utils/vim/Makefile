@@ -84,7 +84,6 @@ CONFIGURE_ARGS += \
 	--disable-gtktest \
 	--disable-xim \
 	--without-x \
-	--disable-multibyte \
 	--disable-netbeans \
 	--disable-cscope \
 	--disable-gpm \
@@ -94,6 +93,7 @@ ifneq ($(CONFIG_PACKAGE_vim),)
 define Build/Compile/vim
 	$(call Build/Configure/Default, \
 	  --with-features=tiny \
+	  --disable-multibyte \
 	 )
 	$(MAKE) -C $(PKG_BUILD_DIR) clean
 	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
@@ -107,6 +107,7 @@ ifneq ($(CONFIG_PACKAGE_vim-full),)
 define Build/Compile/vim-full
 	$(call Build/Configure/Default, \
 	  --with-features=normal \
+	  --enable-multibyte \
 	)
 	$(MAKE) -C $(PKG_BUILD_DIR) clean
 	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
