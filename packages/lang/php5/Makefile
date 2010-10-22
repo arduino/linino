@@ -266,7 +266,7 @@ endef
 
 define Package/php5-mod-pdo-sqlite
   $(call Package/php5/Default)
-  DEPENDS:=php5-mod-pdo +libsqlite3
+  DEPENDS:=php5-mod-pdo +libsqlite3 +libpthread
   TITLE:=PDO driver for SQLite (3.x)
 endef
 
@@ -318,7 +318,7 @@ endef
 
 define Package/php5-mod-sqlite3
   $(call Package/php5/Default)
-  DEPENDS:=php5 +libsqlite3
+  DEPENDS:=php5 +libsqlite3 +libpthread
   TITLE:=SQLite3 shared module (3.x)
 endef
 define Package/php5-mod-sqlite3/config
@@ -390,7 +390,7 @@ PKG_CONFIGURE_OPTS:= \
 	--disable-phar
 
 ifneq ($(SDK),)
-  PKG_BUILD_DEPENDS:=libopenssl zlib libcurl libgd libgmp libopenldap libmysqlclient libpq libsqlite2 libsqlite3 libpcre libxml2
+  PKG_BUILD_DEPENDS:=libopenssl zlib libcurl libgd libgmp libopenldap libmysqlclient libpq libsqlite2 libpthread libsqlite3 libpcre libxml2
 # force PKG_CONFIGURE_{LIBS,OPTS} below when built in the SDK
   CONFIG_PACKAGE_php5-cli:=m
   CONFIG_PACKAGE_php5-cgi:=m
@@ -527,7 +527,7 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-pdo),)
   endif
   ifneq ($(CONFIG_PACKAGE_php5-mod-pdo-sqlite),)
     PKG_CONFIGURE_OPTS+= --with-pdo-sqlite=shared,"$(STAGING_DIR)/usr"
-    PKG_CONFIGURE_LIBS+= -lsqlite3
+    PKG_CONFIGURE_LIBS+= -lsqlite3 -lpthread
   else
     PKG_CONFIGURE_OPTS+= --without-pdo-sqlite
   endif
@@ -567,7 +567,7 @@ endif
 
 ifneq ($(CONFIG_PACKAGE_php5-mod-sqlite3),)
   PKG_CONFIGURE_OPTS+= --with-sqlite3=shared,"$(STAGING_DIR)/usr"
-  PKG_CONFIGURE_LIBS+= -lsqlite3
+  PKG_CONFIGURE_LIBS+= -lsqlite3 -lpthread
 else
   PKG_CONFIGURE_OPTS+= --without-sqlite3
 endif
