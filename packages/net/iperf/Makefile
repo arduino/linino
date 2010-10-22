@@ -77,7 +77,7 @@ CONFIGURE_ARGS += \
 
 CONFIGURE_VARS += \
 	CXX="g++-uc" \
-	CXXFLAGS="$$$$CXX_CFLAGS -fno-rtti" \
+	CXXFLAGS="$$$$CXXFLAGS -fno-rtti" \
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_iperf),)
   define Build/singlethread
