@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=smartmontools
-PKG_VERSION:=5.38
+PKG_VERSION:=5.40
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/smartmontools
-PKG_MD5SUM:=a282846532ecbd6b4a28072373b3a70b
+PKG_MD5SUM:=0f0be0239914ad87830a4fff594bda5b
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,19 +35,27 @@ endef
 # uses GNU configure
 
 define Build/Configure	
-	(cd $(PKG_BUILD_DIR); ./autogen.sh );
-	$(call Build/Configure/Default,, \
-		ac_libc_have_working_snprintf=yes \
+	(cd $(PKG_BUILD_DIR); \
+	./autogen.sh \
+	./configure \
+		CC="$(TARGET_CC)" \
+		CXX="$(TARGET_CXX)" \
+		CPP="$(TARGET_CPP)" \
 		CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
 		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
 		LDFLAGS="$$$$LDFLAGS" \
 		LIBS="-nodefaultlibs -luClibc++ -lm $(LIBGCC_S) -lc" \
+		--prefix=/usr \
+		--build=$(GNU_BUILD_NAME) \
+		--host=$(GNU_HOST_NAME) \
+		--target=$(GNU_TARGET_NAME) \
+	);
+	$(call Build/Configure/Default,, \
 	)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)"
+	$(MAKE) -C $(PKG_BUILD_DIR) 
 endef
 
 define Package/smartmontools/install
