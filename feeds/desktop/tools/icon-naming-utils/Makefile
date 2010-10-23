@@ -51,4 +51,12 @@ define Package/icon-naming-utils/install
 	true
 endef
 
+define Require/perl-xml-simple
+  perl -e 'use XML::Simple;'
+endef
+
+$(eval $(call Require,perl-xml-simple, \
+	Please install Perl XML::Simple \
+))
+
 $(eval $(call BuildPackage,icon-naming-utils))
