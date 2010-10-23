@@ -108,6 +108,8 @@ define Host/Configure
 	)
 endef
 
+HOST_CFLAGS+=$(HOST_FPIC)
+
 define Host/Compile
 	$(MAKE) $(HOST_JOBS) -C $(HOST_BUILD_DIR) \
 		CC="$(HOSTCC)" \
