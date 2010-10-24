@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xkbdata
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_VERSION:=1.0.1
 
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/data/
@@ -25,6 +25,7 @@ define Package/xkbdata
   CATEGORY:=Xorg
   SUBMENU:=data
   TITLE:=xkbdata
+  DEPENDS:=+xkbcomp
   URL:=http://xorg.freedesktop.org/
 endef
 
