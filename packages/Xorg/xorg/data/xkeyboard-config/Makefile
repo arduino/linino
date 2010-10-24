@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xkeyboard-config
 PKG_VERSION:=1.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://xlibs.freedesktop.org/xkbdesc/
@@ -24,6 +24,7 @@ define Package/xkeyboard-config
   CATEGORY:=Xorg
   SUBMENU:=data
   TITLE:=xkeyboard-config
+  DEPENDS:=+xkbcomp
   URL:=http://freedesktop.org/wiki/Software/XKeyboardConfig
 endef
 
