@@ -33,7 +33,7 @@ define Package/gpxview
 endef
 
 define Package/gpxview/description
-  GPXView is a viewer for Geocaching.com GPX files.
+  GPXView is a viewer for Geocaching.com GPX files and a simple GPS navigation software.
 endef
 
 EXTRA_CFLAGS:= \
@@ -46,13 +46,8 @@ EXTRA_LDFLAGS:= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
 	-Wl,-rpath=/usr/lib/
 
-define Build/Install
-	$(MAKE_VARS) \
-	$(MAKE) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) \
-		bindir="/bin" \
-		$(MAKE_INSTALL_FLAGS) \
-		install
-endef
+MAKE_INSTALL_FLAGS+= \
+	bindir="/bin"
 
 define Package/gpxview/install
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/share/gpxview
