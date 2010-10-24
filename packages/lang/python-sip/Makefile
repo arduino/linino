@@ -136,9 +136,9 @@ define Require/python2-dev
   [ -e /usr/include/python2.6/Python.h ]
 endef
 
-$(eval $(call Require,python2-dev, \
-	Please install Python 2.x headers (python-dev) \
-))
+#$(eval $(call Require,python2-dev, \
+#	Please install Python 2.x headers (python-dev) \
+#))
 
 $(eval $(call RequireCommand,python, \
 	Please install Python 2.x \
