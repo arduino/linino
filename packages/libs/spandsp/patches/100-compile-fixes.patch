@@ -1,0 +1,13 @@
+Index: spandsp-0.0.6/src/spandsp/fast_convert.h
+===================================================================
+--- spandsp-0.0.6.orig/src/spandsp/fast_convert.h	2010-10-24 12:20:25.000000000 +0200
++++ spandsp-0.0.6/src/spandsp/fast_convert.h	2010-10-24 12:21:39.000000000 +0200
+@@ -197,7 +197,7 @@
+     {
+         return (long int) (x);
+     }
+-#elif defined(__ppc__)  ||   defined(__powerpc__)
++#elif defined(THISISNOTDEFINEDYADDAYADDA)
+     static __inline__ long int lfastrint(register double x)
+     {
+         int res[2];
