@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=monit
-PKG_VERSION:=5.0.3
+PKG_VERSION:=5.1.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://mmonit.com/monit/dist/
-PKG_MD5SUM:=dae7859ec10551fc941daeae60dee9d3
+PKG_MD5SUM:=4bbd3845ae1cbab13ec211824e0486dc
 
 include $(INCLUDE_DIR)/package.mk
 
