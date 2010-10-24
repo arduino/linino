@@ -1,5 +1,5 @@
---- a/lib.base
-+++ b/lib.base
+--- a/lib.common
++++ b/lib.common
 @@ -220,7 +220,7 @@ reload_kernel_modules() {
  
      [ -z "$MODULESDIR" ] && \

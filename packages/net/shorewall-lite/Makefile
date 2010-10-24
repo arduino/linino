@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=shorewall-lite
-PKG_VERSION:=4.4.5.4
-PKG_DIRECTORY:=4.4.5
+PKG_VERSION:=4.4.12.2
+PKG_DIRECTORY:=4.4.12
 PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=http://www.shorewall.net/pub/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/ \
@@ -20,7 +20,7 @@ PKG_SOURCE_URL:=http://www.shorewall.net/pub/shorewall/4.4/shorewall-$(PKG_DIREC
 	http://shorewall.infohiiway.com/pub/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/ \
 	http://www.shorewall.com.ar/pub/shorewall/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=3e8fb21ccff0f2c7503d8c3bf8607dd7
+PKG_MD5SUM:=b030e988c36fc1ef8c0e27447faef2a6
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -49,6 +49,7 @@ endef
 define Package/shorewall-lite/install
 	$(INSTALL_DIR) $(1)/sbin
 	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/lsm/script.d
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
 	$(INSTALL_DIR) $(1)/etc/shorewall-lite
 	$(INSTALL_DIR) $(1)/usr/share
