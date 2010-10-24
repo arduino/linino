@@ -43,8 +43,6 @@ endef
 
 TARGET_CFLAGS += $(FPIC)
 
-Hooks/InstallDev/Post += libtool_fixup_libdir
-
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
