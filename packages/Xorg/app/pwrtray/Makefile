@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pwrtray
-PKG_REV:=48007ac9edf6c0496ea9938d1e70fce4c8112077
+PKG_REV:=42323a7fea02494aa3ae4e74ffc01f0f4fa35ff4
 PKG_VERSION:=$(PKG_REV)
 PKG_RELEASE:=1
 
