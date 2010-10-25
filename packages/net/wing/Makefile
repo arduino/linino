@@ -8,16 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wing
-
-ifneq ($(CONFIG_WING_STABLE),)
-	PKG_VERSION:=20100903
-	PKG_RELEASE:=4
-	PKG_REV:=520e3168a5af4d26bec3779cfa4901d128a4bc6f
-else 
-	PKG_VERSION:=$(shell date +%Y%m%d)
-	PKG_RELEASE:=1
-	PKG_REV:=HEAD
-endif
+PKG_VERSION:=20101023
+PKG_RELEASE:=1
+PKG_REV:=daffb8d7642c4a343951d67159504ff4f4da49ed
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://github.com/create-net/click-wing.git
@@ -26,72 +19,58 @@ PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_BUILD_PARALLEL:=1
-PKG_INSTALL:=1
+
+PKG_BUILD_DEPENDS:=wing/host
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/host-build.mk
 
 define Package/wing
 	TITLE:=Wireless mesh networking toolkit
 	SECTION:=net
 	CATEGORY:=Network
 	MAINTAINER:=Roberto Riggio <roberto.riggio@create-net.org>
-	DEPENDS:=+kmod-tun
+	DEPENDS:=+kmod-tun +libpcap +libstdcpp
 	URL:=http://www.wing-project.org/
 endef
 
 define Package/wing/Description 
 	Wing is a wireless mesh routing software. The routing protocol
-	is derived from Roofnet. It supports multiple radio interfaces and
-	link quality routing using the ETX, ETT, and WCETT metrics.
+	is derived from Roofnet. It supports multiple radio interfaces 
+	and link quality routing using the ETX, ETT, or WCETT metric.
 endef 
 
-define Package/wing/config
-	source "$(SOURCE)/Config.in"
+EXTRA_CFLAGS=-MD
+
+CONFIGURE_ARGS += \
+	--enable-tools=host \
+	--enable-userlevel \
+	--enable-wifi \
+	--enable-wing \
+	--disable-linuxmodule \
+	--disable-dynamic-linking \
+
+HOST_CONFIGURE_ARGS += \
+	--enable-userlevel \
+	--enable-wifi \
+	--enable-wing \
+	--disable-linuxmodule \
+
+define Host/Compile
+	$(call Host/Install/Default, tools elementmap.xml install)
 endef
 
-EXTRA_LDFLAGS:=-ldl
-
-MAKE_FLAGS+=\
-	V=1 \
-	MINDRIVER=$(PKG_NAME) \
-	BUILD_CC=$(TARGET_CC) \
-	BUILD_CXX=$(TARGET_CXX)
-
-HOST_MAKE_FLAGS:=\
-	V=1 \
-	MINDRIVER=$(PKG_NAME)
-
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); \
-		rm -rf config.{cache,status}; \
-		 ./configure \
-			--prefix=/usr \
-			--enable-userlevel \
-			--enable-wifi \
-			--enable-wing \
-			--disable-linuxmodule \
-	);
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) $(HOST_MAKE_FLAGS) tools
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) $(HOST_MAKE_FLAGS) elementmap.xml
-	$(CP) $(PKG_BUILD_DIR)/tools/click-mkmindriver/click-mkmindriver $(PKG_BUILD_DIR)/
-	rm -rf $(PKG_BUILD_DIR)/config.{cache,status}
-	$(call Build/Configure/Default, \
-		--enable-tools=mixed \
-		--enable-userlevel \
-		--enable-wifi \
-		--enable-wing \
-		--disable-linuxmodule \
-	)
+define Build/Compile
 	(cd $(PKG_BUILD_DIR)/userlevel; \
-		../click-mkmindriver -p $(PKG_NAME) -C .. \
+		$(STAGING_DIR_HOST)/bin/click-mkmindriver -p $(PKG_NAME) -C $(STAGING_DIR_HOST) \
 		-f $(PKG_BUILD_DIR)/conf/wing/sample.click \
 		-A --all -E Discard -E Print -E Null \
 		-E InfiniteSource -E RatedSource -E EtherEncap -E UDPIPEncap \
 		-E RadiotapDecap -E RadiotapEncap \
-		-E ProbeTXRate -E MadwifiRate -E AutoRateFallback \
+		-E ProbeTXRate -E MadwifiRate -E AutoRateFallback -E Minstrel \
 		-E RoundRobinSched -E DRRSched; \
-	)
+	);
+	$(call Build/Install/Default, MINDRIVER=$(PKG_NAME) install)
 endef
 
 define Package/wing/install
@@ -108,5 +87,6 @@ define Package/wing/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/click/elementmap.xml $(1)/usr/share/click/elementmap.xml
 endef
 
+$(eval $(call HostBuild))
 $(eval $(call BuildPackage,wing))
 
