@@ -1,0 +1,92 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2010 Openwrt.org
+
+START=60
+
+PID_FILE=/tmp/etc/znc/znc.pid
+ZNC_CONFIG=/tmp/etc/znc/configs/znc.conf
+
+add_param() {
+       echo "$1 = $2" >> $ZNC_CONFIG
+}
+
+znc_global() {
+       local znc="$1"
+       local anoniplimit
+       local maxbuffersize
+       local connectdelay
+       local serverthrottle
+
+
+       config_get anoniplimit "$znc" anoniplimit
+       config_get maxbuffersize "$znc" maxbuffersize
+       config_get connectdelay "$znc" connectdelay
+       config_get serverthrottle "$znc" serverthrottle
+
+       [ -z $anoniplimit ] || echo "AnonIPLimit = $anoniplimit" >> $ZNC_CONFIG
+       [ -z $maxbuffersize ] || echo "MaxBufferSize = $maxbuffersize" >> $ZNC_CONFIG
+       [ -z $connectdelay ] || echo "ConnectDelay = $connectdelay" >> $ZNC_CONFIG
+       [ -z $serverthrottle ] || echo "ServerThrottle = $anoniplimit" >> $ZNC_CONFIG
+
+       echo "PidFile = $PID_FILE" >> $ZNC_CONFIG
+
+       config_list_foreach "$znc" listener "add_param Listener"
+       config_list_foreach "$znc" module "add_param LoadModule"
+}
+
+add_user() {
+       local user="$1"
+       local password
+       local nick
+       local altnick
+       local ident
+       local realname
+       local buffer
+       local quitmsg
+       local chanmodes
+       local vhost
+
+       config_get password "$user" password
+       config_get nick "$user" nick
+       config_get altnick "$user" altnick
+       config_get ident "$user" ident
+       config_get realname "$user" realname
+       config_get buffer "$user" buffer
+       config_get quitmsg "$user" quitmsg
+       config_get chanmodes "$user" chanmodes
+       config_get vhost "$user" vhost
+
+       echo "<User $user>" >> $ZNC_CONFIG
+       echo "  Pass = plain#$password" >> $ZNC_CONFIG
+       echo "  Nick = $nick" >> $ZNC_CONFIG
+       echo "  AltNick = ${altnick:-$nick"_"}" >> $ZNC_CONFIG
+       echo "  Ident = ${ident:-$nick}" >> $ZNC_CONFIG
+       echo "  RealName = ${realname:-$nick}" >> $ZNC_CONFIG
+       [ -z "$vhost" ] || echo "       VHost = $vhost" >> $ZNC_CONFIG
+       echo "  Buffer = ${buffer:-50}"  >> $ZNC_CONFIG
+       echo "  KeepBuffer = false" >> $ZNC_CONFIG
+       echo "  ChanModes = ${chanmodes:-"+stn"}" >> $ZNC_CONFIG
+       [ -z "$quitmsg" ] || echo "     QuitMsg = $quitmsg" >> $ZNC_CONFIG
+
+       config_list_foreach "$user" server "add_param \"        Server\""
+       config_list_foreach "$user" module "add_param \"        LoadModule\""
+       echo "</User>" >> $ZNC_CONFIG
+}
+
+
+start() {
+       mkdir -p /tmp/etc/znc/configs/
+       [ -f "$ZNC_CONFIG" ] && rm "$ZNC_CONFIG"
+       config_load znc
+       config_foreach znc_global znc
+       config_foreach add_listener listener
+       config_foreach add_user user
+
+       chown -R nobody:nogroup /tmp/etc/znc
+       su -s /bin/ash -c "/usr/bin/znc -d/tmp/etc/znc" nobody
+}
+
+stop() {
+       [ -f "$PID_FILE" ] && kill $(cat "$PID_FILE")
+}
+
