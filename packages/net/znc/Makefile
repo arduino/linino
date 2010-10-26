@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=znc
 PKG_VERSION:=0.094
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/znc
@@ -29,7 +29,7 @@ endef
 
 define Package/znc
   $(Package/znc/default)
-  DEPENDS:=+libopenssl +uclibcxx +coreutils-su
+  DEPENDS:=+libopenssl +uclibcxx
   MENU:=1
 endef
 
@@ -53,6 +53,7 @@ CONFIGURE_VARS += \
 
 CONFIGURE_ARGS += \
 	--disable-c-ares \
+	--enable-extra \
 	--disable-perl
 
 MAKE_FLAGS += \
@@ -72,6 +73,8 @@ define Package/znc/install
 	$(INSTALL_BIN) ./files/znc.init $(1)/etc/init.d/znc
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/znc.conf $(1)/etc/config/znc
+	$(INSTALL_DIR) $(1)/usr/lib/znc/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/extra/droproot.so $(1)/usr/lib/znc/
 endef
 
 
@@ -90,7 +93,7 @@ define module
 
   define Package/znc-mod-$(1)/install
 	$(INSTALL_DIR) $$(1)/usr/lib/znc/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/$(subst -,_,$(1)).so $$(1)/usr/lib/znc/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/$(3)$(subst -,_,$(1)).so $$(1)/usr/lib/znc/
   endef
 
   ZNC_MODULES += znc-mod-$(1)
@@ -181,6 +184,38 @@ $(eval $(call module,stickychan,Keeps you sticked to specific channels.))
 $(eval $(call module,watch,Monitor activity for specific text patterns from \
 	specific users and have the text sent to a special query window.))
 
+$(eval $(call module,antiidle,Hides your idle time.,extra/))
+
+$(eval $(call module,autovoice,Autovoices everyone who joins some channel., \
+	extra/))
+
+$(eval $(call module,block-motd,This module blocks the server's Message of the \
+	Day.,extra/))
+
+$(eval $(call module,ctcpflood,This module tries to block ctcp floods.,extra/))
+
+$(eval $(call module,fakeonline,This module fakes the online status of \
+	ZNC-*users.,extra/))
+
+$(eval $(call module,flooddetach,This module detaches you from channels which \
+	are flooded.,extra/))
+
+$(eval $(call module,listsockets,This module displays a list of all open \
+	sockets in ZNC.,extra/))
+
+$(eval $(call module,log,Log conversations to file.,extra/))
+
+$(eval $(call module,motdfile,Reads a MOTD from a file and displays it to \
+	users when they login.,extra/))
+
+$(eval $(call module,notify-connect,Sends a notice to all admins when a user \
+	logs in or out.,extra/))
+
+$(eval $(call module,send-raw,Allows you to send raw traffic to IRC from \
+	other users.,extra/))
+
+$(eval $(call module,shell,Have your unix shell in a query window right inside \
+	of your IRC client.,extra/))
 
 $(eval $(call BuildPackage,znc))
 

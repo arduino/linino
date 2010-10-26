@@ -32,6 +32,8 @@ znc_global() {
 
 	config_list_foreach "$znc" listener "add_param Listener"
 	config_list_foreach "$znc" module "add_param LoadModule"
+
+	add_param LoadModule "droproot nobody nogroup"
 }
 
 add_user() {
@@ -83,7 +85,7 @@ start() {
 	config_foreach add_user user
 
 	chown -R nobody:nogroup /tmp/etc/znc
-	su -s /bin/ash -c "/usr/bin/znc -d/tmp/etc/znc" nobody
+	/usr/bin/znc -d/tmp/etc/znc -r >/dev/null &
 }
 
 stop() {
