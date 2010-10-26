@@ -57,6 +57,8 @@ define Build/Compile
 	mkdir -p $(PKG_INSTALL_DIR)
 	(cd $(PKG_BUILD_DIR)/source ; rm -rf config.{cache,status} ; \
 		./configure \
+			$(HOST_CONFIGURE_VARS) \
+			$(HOST_CONFIGURE_ARGS) \
 			--program-prefix="" \
 			--program-suffix="" \
 			--prefix=/usr \
