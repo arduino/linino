@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kismetwireless.net/code
 PKG_MD5SUM:=85e59186eb529889118b5635f35cf57d
 
-PKG_BUILD_DEPENDS:=libpcap libncurses uclibcxx libpcre
+PKG_BUILD_DEPENDS:=libpcap libncurses uclibcxx libpcre libnl-tiny
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,7 +23,7 @@ define Package/kismet/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Kismet
-  DEPENDS:= +uclibcxx
+  DEPENDS:= +uclibcxx +libnl-tiny
   URL:=http://www.kismetwireless.net/
   SUBMENU:=wireless
 endef
@@ -87,6 +87,7 @@ CONFIGURE_VARS += \
 	LDFLAGS="$$$$LDFLAGS" \
 	LIBS="-nodefaultlibs -luClibc++ -lm $(LIBGCC_S)" \
 	CLIENTCLIBS="-nodefaultlibs -luClibc++ -lm $(LIBGCC_S)" \
+	libnl1_LIBS="-libnl-tiny"
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
