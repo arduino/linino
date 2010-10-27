@@ -18,7 +18,14 @@ PKG_MD5SUM:=04c394ed8e1e7fc455456e79e908916d
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
+PKG_CONFIG_DEPENDS:=\
+	CONFIG_PACKAGE_libdnet \
+	CONFIG_PACKAGE_pydnet
+
+PKG_BUILD_DEPENDS:=PACKAGE_pydnet:python
+
 include $(INCLUDE_DIR)/package.mk
+$(call include_mk, python-package.mk)
 
 define Package/libdnet/Default
   SECTION:=libs
@@ -61,6 +68,26 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	ac_cv_dnet_bsd_bpf=no
 
+define Build/Compile
+	$(call Build/Compile/Default)
+	$(if $(CONFIG_PACKAGE_pydnet), \
+		$(call Build/Compile/PyMod, \
+			python/, \
+			build \
+		) \
+	)
+endef
+
+define Build/Install
+	$(call Build/Install/Default)
+	$(if $(CONFIG_PACKAGE_pydnet), \
+		$(call Build/Compile/PyMod, \
+			python/, \
+			install --no-compile --prefix $(PKG_INSTALL_DIR)/usr \
+		) \
+	)
+endef
+
 define Build/InstallDev
 	$(INSTALL_DIR) $(2)/bin
 	$(INSTALL_BIN) \
@@ -98,11 +125,7 @@ endef
 
 define Package/pydnet/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	cd $(PKG_BUILD_DIR)/python; \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	$(STAGING_DIR)/usr/bin/hostpython ./setup.py install \
-		--no-compile --prefix $(PKG_INSTALL_DIR)/usr
-	cp -a $(PKG_INSTALL_DIR)/usr/lib/python* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/python* $(1)/usr/lib/
 endef
 
 

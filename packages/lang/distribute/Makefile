@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 $(call include_mk, python-package.mk)
 
-PYTHON:=$(STAGING_DIR)/usr/bin/hostpython
+PYTHON:=$(HOST_PYTHON_BIN)
 
 define Package/distribute
   SUBMENU:=Python

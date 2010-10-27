@@ -12,9 +12,20 @@ PYTHON_BIN_DIR:=$(PYTHON_DIR)/bin
 PYTHON_INC_DIR:=$(PYTHON_DIR)/include/python$(PYTHON_VERSION)
 PYTHON_LIB_DIR:=$(PYTHON_DIR)/lib/python$(PYTHON_VERSION)
 
+PYTHON_PKG_DIR:=/usr/lib/python$(PYTHON_VERSION)/site-packages
+
 PYTHON:=python$(PYTHON_VERSION)
 
-PYTHON_PKG_DIR:=/usr/lib/python$(PYTHON_VERSION)/site-packages
+HOST_PYTHON_BIN:=$(STAGING_DIR)/usr/bin/hostpython
+
+define HostPython
+	(	export PYTHONPATH="$(PYTHON_LIB_DIR):$(STAGING_DIR)/$(PYTHON_PKG_DIR)"; \
+		export PYTHONOPTIMIZE=""; \
+		export PYTHONDONTWRITEBYTECODE=1; \
+		$(1) \
+		$(HOST_PYTHON_BIN) $(2); \
+	)
+endef
 
 define PyPackage
   $(call shexport,PyPackage/$(1)/filespec)
@@ -49,13 +60,18 @@ define PyPackage
   endef
 endef
 
+# $(1) => build subdir
+# $(2) => additional arguments to setup.py
+# $(3) => additional variables
 define Build/Compile/PyMod
-	( cd $(PKG_BUILD_DIR)/$(1); \
+	$(call HostPython, \
+		cd $(PKG_BUILD_DIR)/$(strip $(1)); \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="$(TARGET_CPPFLAGS)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 		$(3) \
-		$(PYTHON) ./setup.py $(2) && \
-		find $(PKG_INSTALL_DIR) -name "*\.pyc" -o -name "*\.pyo" | xargs rm -f \
-	);
+		, \
+		./setup.py $(2) \
+	)
+	find $(PKG_INSTALL_DIR) -name "*\.pyc" -o -name "*\.pyo" | xargs rm -f
 endef
