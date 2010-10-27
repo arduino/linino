@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xkbcomp
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_VERSION:=1.1.1
 
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/app
@@ -28,7 +28,7 @@ define Package/xkbcomp
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
-  DEPENDS:=+libX11
+  DEPENDS:=+libX11 +libxkbfile
   TITLE:=xkbcomp
   URL:=http://xorg.freedesktop.org/
 endef
