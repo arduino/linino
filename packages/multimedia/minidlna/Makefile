@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=@SF/minidlna
 PKG_MD5SUM:=8681b100242f0a2fef93cab7cdef061e
 PKG_BUILD_DIR:=$(BUILD_DIR)/minidlna
 
+PKG_BUILD_PARALLEL:=0
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/minidlna
