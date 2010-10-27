@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pure-ftpd
 PKG_VERSION:=1.0.29
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.pureftpd.org/pub/pure-ftpd/releases
@@ -40,6 +40,7 @@ define Package/pure-ftpd-tls
   $(call Package/pure-ftpd/Default)
   TITLE+= (TLS)
   VARIANT:=tls
+  DEPENDS+=+libopenssl
 endef
 
 define Package/pure-ftpd/description
