@@ -20,6 +20,9 @@ HOST_BUILD_PARALLEL:=1
 HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/sip-$(PKG_VERSION)
 PKG_BUILD_DIR:=$(BUILD_DIR)/sip-$(PKG_VERSION)
 
+PKG_BUILD_DEPENDS:=python
+HOST_BUILD_DEPENDS:=python
+
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 $(call include_mk, python-package.mk)
@@ -41,25 +44,33 @@ EXTRA_CFLAGS:=\
 	$(FPIC)
 
 define Build/Configure
-	$(INSTALL_DIR) "$(PYTHON_SIP_CONFIG_TEMPLATE_DIR)"; \
-	$(CP) ./files/sipconfig.macros.template "$(PYTHON_SIP_CONFIG_TEMPLATE)"; \
-	echo "CC			$(TARGET_CROSS)gcc" >> $(PYTHON_SIP_CONFIG_TEMPLATE); \
-	echo "CFLAGS			$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" >> $(PYTHON_SIP_CONFIG_TEMPLATE); \
-	echo "CXX			$(TARGET_CROSS)g++" >> $(PYTHON_SIP_CONFIG_TEMPLATE); \
-	echo "CXXFLAGS			$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" >> $(PYTHON_SIP_CONFIG_TEMPLATE); \
-	echo "LINK			$(TARGET_CROSS)g++" >> $(PYTHON_SIP_CONFIG_TEMPLATE); \
-	echo "LINK_SHLIB		$(TARGET_CROSS)g++" >> $(PYTHON_SIP_CONFIG_TEMPLATE); \
-	echo "LFLAGS			$(TARGET_LDFLAGS) $(EXTRA_LDFLAGS)" >> $(PYTHON_SIP_CONFIG_TEMPLATE); \
-	echo "AR			$(TARGET_CROSS)ar cqs" >> $(PYTHON_SIP_CONFIG_TEMPLATE); \
-	echo "STRIP			$(STRIP)" >> $(PYTHON_SIP_CONFIG_TEMPLATE); \
-	(	cd "$(PKG_BUILD_DIR)"; \
-		export PYTHONDONTWRITEBYTECODE=1; \
-		python -E ./configure.py \
+	$(INSTALL_DIR) "$(PYTHON_SIP_CONFIG_TEMPLATE_DIR)"
+	$(CP) ./files/sipconfig.macros.template "$(PYTHON_SIP_CONFIG_TEMPLATE)"
+	echo "CC			$(TARGET_CROSS)gcc" >> $(PYTHON_SIP_CONFIG_TEMPLATE)
+	echo "CFLAGS			$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" >> $(PYTHON_SIP_CONFIG_TEMPLATE)
+	echo "CXX			$(TARGET_CROSS)g++" >> $(PYTHON_SIP_CONFIG_TEMPLATE)
+	echo "CXXFLAGS			$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" >> $(PYTHON_SIP_CONFIG_TEMPLATE)
+	echo "LINK			$(TARGET_CROSS)g++" >> $(PYTHON_SIP_CONFIG_TEMPLATE)
+	echo "LINK_SHLIB		$(TARGET_CROSS)g++" >> $(PYTHON_SIP_CONFIG_TEMPLATE)
+	echo "LFLAGS			$(TARGET_LDFLAGS) $(EXTRA_LDFLAGS)" >> $(PYTHON_SIP_CONFIG_TEMPLATE)
+	echo "AR			$(TARGET_CROSS)ar cqs" >> $(PYTHON_SIP_CONFIG_TEMPLATE)
+	echo "STRIP			$(STRIP)" >> $(PYTHON_SIP_CONFIG_TEMPLATE)
+	$(call HostPython, \
+		cd "$(PKG_BUILD_DIR)"; \
+		, \
+		./configure.py \
+			--crosscompile \
 			--bindir=$(PKG_INSTALL_DIR)/usr/bin \
 			--destdir=$(PKG_INSTALL_DIR)/$(PYTHON_PKG_DIR) \
 			--incdir=$(PKG_INSTALL_DIR)/usr/include \
 			--sipdir=$(PKG_INSTALL_DIR)/usr/share/sip \
 			--sipconfig-macros="$(PYTHON_SIP_CONFIG_TEMPLATE)" \
+			--py-site-dir=$(STAGING_DIR)/$(PYTHON_PKG_DIR) \
+			--py-inc-dir=$(PYTHON_INC_DIR) \
+			--py-conf-inc-dir=$(PKG_BUILD_DIR) \
+			--py-lib-dir=$(PYTHON_LIB_DIR) \
+			--py-bin-dir=$(PYTHON_BIN_DIR) \
+			--py-sip-dir=$(STAGING_DIR)/usr/share/sip \
 	)
 endef
 
@@ -73,8 +84,9 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/mk
+	$(INSTALL_DIR) $(1)/mk $(1)/$(PYTHON_PKG_DIR)
 	$(INSTALL_DATA) ./files/python-sip-package.mk $(1)/mk/
+	$(CP) $(PKG_INSTALL_DIR)/$(PYTHON_PKG_DIR)/* $(1)/$(PYTHON_PKG_DIR)
 endef
 
 define Build/Install
@@ -97,18 +109,21 @@ endef
 
 # ===> HOST <===
 
+HOST_CFLAGS+= \
+	$(HOST_FPIC) \
+	-I$(STAGING_DIR_HOST)/include/python$(PYTHON_VERSION)
+
 define Host/Configure
-	(	cd "$(HOST_BUILD_DIR)"; \
-		export PYTHONDONTWRITEBYTECODE=1; \
-		python -E ./configure.py \
+	$(call HostPython, \
+		cd "$(HOST_BUILD_DIR)"; \
+		, \
+		./configure.py \
 			--bindir=$(STAGING_DIR_HOST)/usr/bin \
 			--destdir=$(STAGING_DIR_HOST)/$(PYTHON_PKG_DIR) \
 			--incdir=$(STAGING_DIR_HOST)/usr/include \
 			--sipdir=$(STAGING_DIR_HOST)/usr/share/sip \
 	)
 endef
-
-HOST_CFLAGS+=$(HOST_FPIC)
 
 define Host/Compile
 	$(MAKE) $(HOST_JOBS) -C $(HOST_BUILD_DIR) \
@@ -128,21 +143,6 @@ define Host/Install
 		CXXFLAGS="$(HOST_CFLAGS)" \
 		install
 endef
-
-define Require/python2-dev
-  [ -e /usr/include/Python.h ] || \
-  [ -e /usr/include/python/Python.h ] || \
-  [ -e /usr/include/python2.5/Python.h ] || \
-  [ -e /usr/include/python2.6/Python.h ]
-endef
-
-#$(eval $(call Require,python2-dev, \
-#	Please install Python 2.x headers (python-dev) \
-#))
-
-$(eval $(call RequireCommand,python, \
-	Please install Python 2.x \
-))
 
 $(eval $(call HostBuild))
 $(eval $(call BuildPackage,python-sip))

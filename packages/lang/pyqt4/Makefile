@@ -31,7 +31,7 @@ define Package/pyqt4
   TITLE:=Python QT4
   MAINTAINER:=Michael Buesch <mb@bu3sch.de>
   URL:=http://www.riverbankcomputing.co.uk/software/pyqt/download
-  DEPENDS:=+qt4 +dbus-python +python-sip @FEATURE_drawing-backend_libX11
+  DEPENDS:=+qt4 +dbus-python +python +python-sip @FEATURE_drawing-backend_libX11
 endef
 
 define Package/pyqt4/Description
@@ -73,35 +73,35 @@ QT_EDITION:=./files/qt_versioning.sh edition "$(STAGING_DIR)/usr/include" "$(PKG
 # Welcome to cross compilation hell. Dinner is served!
 
 define Build/Configure
-	echo "$(STAGING_DIR)/usr" > $(QTDIRSFILE); \
-	echo "$(STAGING_DIR)/usr/include" >> $(QTDIRSFILE); \
-	echo "$(STAGING_DIR)/usr/lib" >> $(QTDIRSFILE); \
-	echo "$(STAGING_DIR)/usr/bin" >> $(QTDIRSFILE); \
-	echo "$(STAGING_DIR)/usr/share" >> $(QTDIRSFILE); \
-	echo "$(STAGING_DIR)/usr/lib/Qt/plugins" >> $(QTDIRSFILE); \
-	$(QT_VERSION) >> $(QTDIRSFILE); \
-	$(QT_EDITION) >> $(QTDIRSFILE); \
-	echo "Open Source" >> $(QTDIRSFILE); \
-	echo "shared" >> $(QTDIRSFILE); \
-	\
-	$(CP) "$(PYTHON_SIP_CONFIG_TEMPLATE)" "$(SIPCFGFILE)"; \
-	echo "INCDIR_QT			$(STAGING_DIR)/usr/include" >> $(SIPCFGFILE); \
-	echo "LIBDIR_QT			$(STAGING_DIR)/usr/lib" >> $(SIPCFGFILE); \
-	echo "MOC			$(STAGING_DIR_HOST)/bin/moc" >> $(SIPCFGFILE); \
-	echo "QT_INSTALL_BINS		$(STAGING_DIR)/usr/bin" >> $(SIPCFGFILE); \
-	echo "QT_INSTALL_HEADERS	$(STAGING_DIR)/usr/include" >> $(SIPCFGFILE); \
-	echo "QT_INSTALL_LIBS		$(STAGING_DIR)/usr/lib" >> $(SIPCFGFILE); \
-	echo "INCDIR			$(TARGET_INCDIRS)" >> $(SIPCFGFILE); \
-	echo "INCDIR_OPENGL		$(TARGET_INCDIRS)" >> $(SIPCFGFILE); \
-	echo "INCDIR_X11		$(TARGET_INCDIRS)" >> $(SIPCFGFILE); \
-	echo "LIBDIR			$(TARGET_LIBDIRS)" >> $(SIPCFGFILE); \
-	echo "LIBDIR_OPENGL		$(TARGET_LIBDIRS)" >> $(SIPCFGFILE); \
-	echo "LIBDIR_X11		$(TARGET_LIBDIRS)" >> $(SIPCFGFILE); \
-	( \
+	echo "$(STAGING_DIR)/usr" > $(QTDIRSFILE)
+	echo "$(STAGING_DIR)/usr/include" >> $(QTDIRSFILE)
+	echo "$(STAGING_DIR)/usr/lib" >> $(QTDIRSFILE)
+	echo "$(STAGING_DIR)/usr/bin" >> $(QTDIRSFILE)
+	echo "$(STAGING_DIR)/usr/share" >> $(QTDIRSFILE)
+	echo "$(STAGING_DIR)/usr/lib/Qt/plugins" >> $(QTDIRSFILE)
+	$(QT_VERSION) >> $(QTDIRSFILE)
+	$(QT_EDITION) >> $(QTDIRSFILE)
+	echo "Open Source" >> $(QTDIRSFILE)
+	echo "shared" >> $(QTDIRSFILE)
+
+	$(CP) "$(PYTHON_SIP_CONFIG_TEMPLATE)" "$(SIPCFGFILE)"
+	echo "INCDIR_QT			$(STAGING_DIR)/usr/include" >> $(SIPCFGFILE)
+	echo "LIBDIR_QT			$(STAGING_DIR)/usr/lib" >> $(SIPCFGFILE)
+	echo "MOC			$(STAGING_DIR_HOST)/bin/moc" >> $(SIPCFGFILE)
+	echo "QT_INSTALL_BINS		$(STAGING_DIR)/usr/bin" >> $(SIPCFGFILE)
+	echo "QT_INSTALL_HEADERS	$(STAGING_DIR)/usr/include" >> $(SIPCFGFILE)
+	echo "QT_INSTALL_LIBS		$(STAGING_DIR)/usr/lib" >> $(SIPCFGFILE)
+	echo "INCDIR			$(TARGET_INCDIRS)" >> $(SIPCFGFILE)
+	echo "INCDIR_OPENGL		$(TARGET_INCDIRS)" >> $(SIPCFGFILE)
+	echo "INCDIR_X11		$(TARGET_INCDIRS)" >> $(SIPCFGFILE)
+	echo "LIBDIR			$(TARGET_LIBDIRS)" >> $(SIPCFGFILE)
+	echo "LIBDIR_OPENGL		$(TARGET_LIBDIRS)" >> $(SIPCFGFILE)
+	echo "LIBDIR_X11		$(TARGET_LIBDIRS)" >> $(SIPCFGFILE)
+
+	$(call HostPython, \
 		cd "$(PKG_BUILD_DIR)"; \
-		export PYTHONPATH="$(STAGING_DIR_HOST)/$(PYTHON_PKG_DIR)"; \
-		export PYTHONDONTWRITEBYTECODE=1; \
-		python ./configure.py \
+		, \
+		./configure.py \
 		        --use-arch="$(ARCH)" \
 			--qmake="$(STAGING_DIR_HOST)/bin/qmake" \
 			--qmake-spec="$(STAGING_DIR)/usr/share/mkspecs/linux-openwrt-g++" \
@@ -117,6 +117,7 @@ define Build/Configure
 			--qmake-prefix='TARGET_LIBDIRS="$(TARGET_LIBDIRS)"' \
 			--qmake-prefix='STAGING_DIR_HOST="$(STAGING_DIR)/../host"' \
 			--qtdirs-file="$(QTDIRSFILE)" \
+			--host-sip-bin="$(STAGING_DIR_HOST)/usr/bin/sip" \
 			--sipconfig-macros="$(SIPCFGFILE)" \
 			--dbus="$(STAGING_DIR)/usr/include/dbus-1.0" \
 			--bindir="$(PKG_INSTALL_DIR)/usr/bin" \
@@ -130,12 +131,9 @@ define Build/Configure
 			--no-qsci-api \
 			--confirm-license \
 			--verbose \
-	); \
+	)
 	./files/fixup.sh "$(PKG_BUILD_DIR)"
 endef
-
-#FIXME: Something still puts the host Python include path into the CFLAGS.
-#       I'm currently unsure who does this. Most likely SIP. arghh..
 
 define Build/Compile
 	$(MAKE_VARS) $(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)
@@ -152,9 +150,5 @@ define Package/pyqt4/install
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/$(PYTHON_PKG_DIR)/qt.so $(1)/$(PYTHON_PKG_DIR)
 	$(CP) $(PKG_INSTALL_DIR)/$(PYTHON_PKG_DIR)/PyQt4 $(1)/$(PYTHON_PKG_DIR)
 endef
-
-$(eval $(call RequireCommand,python, \
-	Please install Python 2.x \
-))
 
 $(eval $(call BuildPackage,pyqt4))
