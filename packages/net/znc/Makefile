@@ -81,22 +81,22 @@ endef
 ZNC_MODULES :=
 
 define module
-  define Package/znc-mod-$(1)
+  define Package/znc-mod-$(strip $(1))
     $(Package/znc/default)
-    TITLE+= ($(1) plugin)
+    TITLE+= ($(strip $(1)) plugin)
     DEPENDS:=znc
   endef
 
-  define Package/znc-mod-$(1)/description
+  define Package/znc-mod-$(strip $(1))/description
    $(strip $(2))
   endef
 
-  define Package/znc-mod-$(1)/install
+  define Package/znc-mod-$(strip $(1))/install
 	$(INSTALL_DIR) $$(1)/usr/lib/znc/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/$(3)$(subst -,_,$(1)).so $$(1)/usr/lib/znc/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/$(strip $(3))$(subst -,_,$(strip $(1))).so $$(1)/usr/lib/znc/
   endef
 
-  ZNC_MODULES += znc-mod-$(1)
+  ZNC_MODULES += znc-mod-$(strip $(1))
 endef
 
 
