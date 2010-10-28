@@ -2,9 +2,11 @@
  configure |    6 ------
  1 file changed, 6 deletions(-)
 
---- lxsession-edit-0.1.1.orig/configure
-+++ lxsession-edit-0.1.1/configure
-@@ -6174,12 +6174,6 @@ $as_echo "no" >&6; }
+Index: lxsession-edit-0.1.1/configure
+===================================================================
+--- lxsession-edit-0.1.1.orig/configure	2009-07-06 18:05:59.000000000 +0200
++++ lxsession-edit-0.1.1/configure	2010-10-28 21:11:20.699000002 +0200
+@@ -6174,12 +6174,6 @@
  fi
  
  
@@ -17,3 +19,15 @@
  GETTEXT_PACKAGE=lxsession-edit
  
  
+Index: lxsession-edit-0.1.1/po/Makefile.in.in
+===================================================================
+--- lxsession-edit-0.1.1.orig/po/Makefile.in.in	2010-10-28 21:11:26.368000001 +0200
++++ lxsession-edit-0.1.1/po/Makefile.in.in	2010-10-28 21:11:36.501999261 +0200
+@@ -211,6 +211,7 @@
+ 	cd $(top_builddir) \
+ 	  && CONFIG_FILES=$(subdir)/Makefile.in CONFIG_HEADERS= CONFIG_LINKS= \
+ 	       $(SHELL) ./config.status
++	touch stamp-it
+ 
+ # Tell versions [3.59,3.63) of GNU make not to export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.

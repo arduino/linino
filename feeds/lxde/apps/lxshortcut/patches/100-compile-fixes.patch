@@ -2,9 +2,11 @@
  configure |    6 ------
  1 file changed, 6 deletions(-)
 
---- lxshortcut-0.1.1.orig/configure
-+++ lxshortcut-0.1.1/configure
-@@ -6042,12 +6042,6 @@ $as_echo "no" >&6; }
+Index: lxshortcut-0.1.1/configure
+===================================================================
+--- lxshortcut-0.1.1.orig/configure	2009-07-06 01:26:21.000000000 +0200
++++ lxshortcut-0.1.1/configure	2010-10-28 21:08:23.831000002 +0200
+@@ -6042,12 +6042,6 @@
  fi
  
  
@@ -17,3 +19,15 @@
  GETTEXT_PACKAGE=lxshortcut
  
  
+Index: lxshortcut-0.1.1/po/Makefile.in.in
+===================================================================
+--- lxshortcut-0.1.1.orig/po/Makefile.in.in	2010-10-28 21:08:45.144000002 +0200
++++ lxshortcut-0.1.1/po/Makefile.in.in	2010-10-28 21:08:54.438000078 +0200
+@@ -211,6 +211,7 @@
+ 	cd $(top_builddir) \
+ 	  && CONFIG_FILES=$(subdir)/Makefile.in CONFIG_HEADERS= CONFIG_LINKS= \
+ 	       $(SHELL) ./config.status
++	touch stamp-it
+ 
+ # Tell versions [3.59,3.63) of GNU make not to export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.

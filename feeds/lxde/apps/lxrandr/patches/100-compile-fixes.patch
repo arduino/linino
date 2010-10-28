@@ -1,0 +1,12 @@
+Index: lxrandr-0.1.1/po/Makefile.in.in
+===================================================================
+--- lxrandr-0.1.1.orig/po/Makefile.in.in	2010-10-28 21:05:19.353000001 +0200
++++ lxrandr-0.1.1/po/Makefile.in.in	2010-10-28 21:05:40.722998360 +0200
+@@ -211,6 +211,7 @@
+ 	cd $(top_builddir) \
+ 	  && CONFIG_FILES=$(subdir)/Makefile.in CONFIG_HEADERS= CONFIG_LINKS= \
+ 	       $(SHELL) ./config.status
++	touch stamp-it
+ 
+ # Tell versions [3.59,3.63) of GNU make not to export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
