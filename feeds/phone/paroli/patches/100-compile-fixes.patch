@@ -1,0 +1,80 @@
+Index: paroli-20090704/paroli-applications/build.sh
+===================================================================
+--- paroli-20090704.orig/paroli-applications/build.sh	2010-10-28 17:54:12.000000000 +0200
++++ paroli-20090704/paroli-applications/build.sh	2010-10-28 17:54:16.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ flag_io=
+ flag_launcher=
+Index: paroli-20090704/paroli-applications/i-o2/build.sh
+===================================================================
+--- paroli-20090704.orig/paroli-applications/i-o2/build.sh	2010-10-28 17:53:54.000000000 +0200
++++ paroli-20090704/paroli-applications/i-o2/build.sh	2010-10-28 17:53:57.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ echo "building i-o.edj..."
+ edje_cc $@ -id edje/default/images -id ../common-for-edje/images -fd ../common-for-edje/fonts edje/default/i-o.edc -o i-o.edj
+Index: paroli-20090704/paroli-applications/msgs2/build.sh
+===================================================================
+--- paroli-20090704.orig/paroli-applications/msgs2/build.sh	2010-10-28 17:54:46.000000000 +0200
++++ paroli-20090704/paroli-applications/msgs2/build.sh	2010-10-28 17:54:50.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ echo "building msgs.edj..."
+ edje_cc $@ -id edje/default/images -id ../common-for-edje/images -fd . edje/default/msgs.edc -fd ../common-for-edje/fonts -o msgs.edj
+Index: paroli-20090704/paroli-applications/paroli-launcher2/build.sh
+===================================================================
+--- paroli-20090704.orig/paroli-applications/paroli-launcher2/build.sh	2010-10-28 17:54:35.000000000 +0200
++++ paroli-20090704/paroli-applications/paroli-launcher2/build.sh	2010-10-28 17:54:38.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ echo "building paroli-launcher.edj..."
+ edje_cc $@ -id edje/default/images -id ../common-for-edje/images -fd ../common-for-edje/fonts edje/default/paroli-launcher.edc -o paroli-launcher.edj
+Index: paroli-20090704/paroli-applications/people2/build.sh
+===================================================================
+--- paroli-20090704.orig/paroli-applications/people2/build.sh	2010-10-28 17:53:37.000000000 +0200
++++ paroli-20090704/paroli-applications/people2/build.sh	2010-10-28 17:53:42.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ echo "building people.edj..."
+ edje_cc $@ -id edje/default/images -id ../common-for-edje/images -fd ../common-for-edje/fonts edje/default/people.edc -o people.edj
+Index: paroli-20090704/paroli-applications/settings/build.sh
+===================================================================
+--- paroli-20090704.orig/paroli-applications/settings/build.sh	2010-10-28 17:54:03.000000000 +0200
++++ paroli-20090704/paroli-applications/settings/build.sh	2010-10-28 17:54:05.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ echo "building settings.edj"
+ edje_cc $@ -id edje/default/images -id ../common-for-edje/images -fd . -fd ../common-for-edje/fonts edje/default/settings.edc -o settings.edj
+Index: paroli-20090704/paroli-applications/tele2/build.sh
+===================================================================
+--- paroli-20090704.orig/paroli-applications/tele2/build.sh	2010-10-28 17:54:25.000000000 +0200
++++ paroli-20090704/paroli-applications/tele2/build.sh	2010-10-28 17:54:28.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ 
+ echo "building tele.edj..."
+ edje_cc $@ -id edje/default/images -id ../common-for-edje/images -fd ../common-for-edje/fonts edje/default/tele.edc -o tele.edj
+Index: paroli-20090704/paroli-scripts/build-gui.sh
+===================================================================
+--- paroli-20090704.orig/paroli-scripts/build-gui.sh	2010-10-28 17:54:59.000000000 +0200
++++ paroli-20090704/paroli-scripts/build-gui.sh	2010-10-28 17:55:07.000000000 +0200
+@@ -1,4 +1,4 @@
+-#! /bin/sh
++#!/bin/bash
+ 
+ echo "cd ../paroli-applications"
+ cd ../paroli-applications
