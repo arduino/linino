@@ -24,11 +24,11 @@ EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include -I$(STAGING_DIR)/usr/lib/
 EXTRA_LDFLAGS+=-lintl -L$(STAGING_DIR)/usr/lib/libintl/lib -liconv -L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Package/fso-gsm0710muxd
-	SECTION:=phone
-	CATEGORY:=Phone
-	TITLE:=GSM multiplexing daemon
-	URL:=http://www.freesmartphone.org
-	DEPENDS:=+glib2 +dbus +libdbus-glib
+  SECTION:=phone
+  CATEGORY:=Phone
+  TITLE:=GSM multiplexing daemon
+  URL:=http://www.freesmartphone.org
+  DEPENDS:=+glib2 +dbus +libdbus-glib
 endef
 
 define Package/fso-gsm0710muxd/description
@@ -56,7 +56,8 @@ define Package/fso-gsm0710muxd/install
 	$(INSTALL_BIN) ./files/gsm0710muxd.init $(1)/etc/init.d/gsm0710muxd
 endef
 
-$(eval $(call BuildPackage,fso-gsm0710muxd))
 $(eval $(call RequireCommand,dbus-binding-tool, \
-	Command <dbus-binding-tool> not found - please install dbus-binding-tool \
+	Command <dbus-binding-tool> not found - please install GLIB dbus-binding-tool \
 ))
+
+$(eval $(call BuildPackage,fso-gsm0710muxd))
