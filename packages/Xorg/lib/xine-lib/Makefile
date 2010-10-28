@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xine-lib
 PKG_VERSION:=1.1.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/xine
@@ -43,7 +43,7 @@ define Package/xine-lib
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=xine libraries
-  DEPENDS:=+libX11 +alsa-lib +zlib +libfreetype
+  DEPENDS:=+libX11 +libXext +alsa-lib +zlib +libfreetype
   URL:=http://www.xine-project.org/
 endef
 
