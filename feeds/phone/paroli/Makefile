@@ -135,4 +135,8 @@ define Package/paroli/install
 		$(1)/usr/share/paroli/services/
 endef
 
+$(eval $(call RequireCommand,edje_cc, \
+	Please install edje_cc. \
+))
+
 $(eval $(call BuildPackage,paroli))
