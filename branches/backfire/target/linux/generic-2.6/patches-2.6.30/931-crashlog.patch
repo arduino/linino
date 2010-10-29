@@ -1,6 +1,6 @@
 --- a/init/Kconfig
 +++ b/init/Kconfig
-@@ -723,6 +723,9 @@
+@@ -723,6 +723,9 @@ config NET_NS
  	  Allow user space to create what appear to be multiple instances
  	  of the network stack.
  
@@ -12,7 +12,7 @@
  	depends on BROKEN || !FRV
 --- a/kernel/Makefile
 +++ b/kernel/Makefile
-@@ -95,6 +95,7 @@
+@@ -95,6 +95,7 @@ obj-$(CONFIG_FUNCTION_TRACER) += trace/
  obj-$(CONFIG_TRACING) += trace/
  obj-$(CONFIG_SMP) += sched_cpupri.o
  obj-$(CONFIG_SLOW_WORK) += slow-work.o
@@ -30,7 +30,7 @@
  
  #include <asm/bug.h>
  #include <asm/io.h>
-@@ -151,6 +152,7 @@
+@@ -151,6 +152,7 @@ static unsigned long __init free_all_boo
  	if (!bdata->node_bootmem_map)
  		return 0;
  

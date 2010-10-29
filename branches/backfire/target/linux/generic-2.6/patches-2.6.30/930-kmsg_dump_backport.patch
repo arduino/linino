@@ -55,7 +55,7 @@
  #include <linux/kallsyms.h>
  #include <linux/notifier.h>
  #include <linux/module.h>
-@@ -74,6 +75,7 @@
+@@ -74,6 +75,7 @@ NORET_TYPE void panic(const char * fmt, 
  	dump_stack();
  #endif
  
@@ -63,7 +63,7 @@
  	/*
  	 * If we have crashed and we have a crash kernel loaded let it handle
  	 * everything else.
-@@ -337,6 +339,7 @@
+@@ -337,6 +339,7 @@ void oops_exit(void)
  {
  	do_oops_enter_exit();
  	print_oops_end_marker();
@@ -81,7 +81,7 @@
  
  #include <asm/uaccess.h>
  
-@@ -1322,3 +1323,121 @@
+@@ -1322,3 +1323,121 @@ bool printk_timed_ratelimit(unsigned lon
  }
  EXPORT_SYMBOL(printk_timed_ratelimit);
  #endif
