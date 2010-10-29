@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=karmen
 PKG_VERSION:=0.15
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://prdownloads.sourceforge.net/sourceforge/$(PKG_NAME)/
@@ -25,14 +25,14 @@ define Package/karmen
   SECTION:=xorg-wm
   CATEGORY:=Xorg
   SUBMENU:=window manager
-  DEPENDS:=+libX11 +freedesktop-compliant
+  DEPENDS:=+libX11 +libSM +libICE +freedesktop-compliant
   URL:=http://karmen.sourceforge.net/
 endef
 
 define Package/karmen/description
   Karmen is a window manager for x, written by Johan Veenhuizen. 
   It is designed to just work. There is no configuration file and no 
-  library dependencies other than Xlib. The input focus model is 
+  library dependencies other than Xlib/libSM/libICE. The input focus model is 
   click-to-focus. Karmen aims at icccm and ewmh compliance.
 endef
 
