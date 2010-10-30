@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iodine
 PKG_VERSION:=0.6.0-rc1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://code.kryo.se/iodine/
@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/iodine/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+zlib +kmod-tun
+  DEPENDS:= +kmod-tun
   TITLE:=IP over DNS tunneling
   URL:=http://code.kryo.se/iodine/
 endef
@@ -44,14 +44,6 @@ define Package/iodined/description
 endef
 
 define Build/Configure
-endef
-
-define Build/Compile
-	$(call Build/Compile/Default,\
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -c -DLINUX" \
-		LDFLAGS="$(TARGET_LDFLAGS) -lz" \
-		all \
-	)
 endef
 
 define Package/iodine/install
