@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=LVM2
 PKG_VERSION:=2.02.64
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME).$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=ftp://sources.redhat.com/pub/lvm2/ \
@@ -59,7 +59,7 @@ define Package/lvm2
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=The Linux Logical Volume Manager
-  DEPENDS:=+libdevmapper +libreadline
+  DEPENDS:=+libdevmapper +libreadline +libncurses
   URL:=http://sourceware.org/lvm2/
 endef
 
