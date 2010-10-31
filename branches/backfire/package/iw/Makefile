@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iw
-PKG_VERSION:=0.9.19
+PKG_VERSION:=0.9.21
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://wireless.kernel.org/download/iw/
-PKG_MD5SUM:=3b88743f9c6ce8a7e2f5fd7d18fdea42
+PKG_MD5SUM:=726db5f1fd6bc316434414770513ef81
 PKG_BUILD_DEPENDS:=mac80211
 
 include $(INCLUDE_DIR)/package.mk
@@ -48,11 +48,9 @@ MAKE_FLAGS += \
 	LIBS="-lm -lnl-tiny" \
 	V=1
 
-ifneq ($(CONFIG_LINUX_2_6),)
-  define Package/iw/install
+define Package/iw/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/iw $(1)/usr/sbin/
-  endef
-endif
+endef
 
 $(eval $(call BuildPackage,iw))

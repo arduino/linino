@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hostapd
-PKG_VERSION:=20100418
-PKG_RELEASE:=2
-PKG_REV:=0b86f67a2970403d1b1b6d34ce49f5485ef5dbb3
+PKG_VERSION:=20100705
+PKG_RELEASE:=1
+PKG_REV:=2f1ce78bf78cecd7021385b04a4f55f22e76ab97
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=git://w1.fi/srv/git/hostap.git
@@ -30,7 +30,8 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_kmod-madwifi \
 	CONFIG_PACKAGE_hostapd \
 	CONFIG_PACKAGE_hostapd-mini \
-	CONFIG_PACKAGE_kmod-hostap
+	CONFIG_PACKAGE_kmod-hostap \
+	CONFIG_WPA_RFKILL_SUPPORT
 
 LOCAL_TYPE=$(strip \
 		$(if $(findstring wpad,$(BUILD_VARIANT)),wpad, \
@@ -64,7 +65,8 @@ DRIVER_MAKEOPTS= \
 	CONFIG_DRIVER_MADWIFI=$(CONFIG_PACKAGE_kmod-madwifi) \
 	CONFIG_DRIVER_HOSTAP=$(CONFIG_PACKAGE_kmod-hostap) \
 	CONFIG_IEEE80211N=$(HOSTAPD_IEEE80211N) \
-	CONFIG_IEEE80211W=$(CONFIG_PACKAGE_kmod-ath9k)
+	CONFIG_IEEE80211W=$(CONFIG_PACKAGE_kmod-ath9k) \
+	$(if $(CONFIG_WPA_RFKILL_SUPPORT),NEED_RFKILL=y)
 
 ifneq ($(LOCAL_TYPE),hostapd)
   ifdef CONFIG_WPA_SUPPLICANT_OPENSSL
@@ -80,7 +82,7 @@ ifneq ($(LOCAL_TYPE),hostapd)
 	CONFIG_DRIVER_ROBOSWITCH=$(CONFIG_PACKAGE_kmod-switch)
 endif
 
-DRV_DEPENDS:=+PACKAGE_kmod-mac80211:libnl-tiny +PACKAGE_kmod-mac80211:crda @(!(TARGET_avr32||TARGET_etrax)||BROKEN)
+DRV_DEPENDS:=+PACKAGE_kmod-mac80211:libnl-tiny @(!(TARGET_avr32||TARGET_etrax)||BROKEN)
 
 define Package/hostapd/Default
   SECTION:=net
@@ -115,7 +117,7 @@ endef
 define Package/hostapd-utils
   $(call Package/hostapd/Default)
   TITLE+= (utils)
-  DEPENDS:=@PACKAGE_hostapd||PACKAGE_hostapd-mini
+  DEPENDS:=@PACKAGE_hostapd||PACKAGE_hostapd-mini||PACKAGE_wpad||PACKAGE_wpad-mini
 endef
 
 define Package/hostapd-utils/description
@@ -186,7 +188,7 @@ endef
 define Package/wpa-cli
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=wpa-supplicant
+  DEPENDS:=@PACKAGE_wpa-supplicant||PACKAGE_wpad-mini||PACKAGE_wpad
   TITLE:=WPA Supplicant command line interface
   MAINTAINER:=Felix Fietkau <nbd@openwrt.org>
 endef
@@ -237,7 +239,7 @@ endef
 define Build/Compile/wpad
 	echo ` \
 		$(call Build/RunMake,hostapd,-s MULTICALL=1 dump_cflags); \
-		$(call Build/RunMake,wpa_supplicant,-s dump_cflags) | \
+		$(call Build/RunMake,wpa_supplicant,-s MULTICALL=1 dump_cflags) | \
 		sed -e 's,-n ,,g' -e 's,$(TARGET_CFLAGS),,' \
 	` > $(PKG_BUILD_DIR)/.cflags
 	$(call Build/RunMake,hostapd, \
@@ -294,8 +296,9 @@ Package/hostapd-mini/install = $(Package/hostapd/install)
 
 ifneq ($(LOCAL_TYPE),supplicant)
   define Package/hostapd-utils/install
-	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin $(1)/etc/hotplug.d/button
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/hostapd/hostapd_cli $(1)/usr/sbin/
+	$(INSTALL_DATA) ./files/wps-hotplug.sh $(1)/etc/hotplug.d/button/50-wps
   endef
 endif
 

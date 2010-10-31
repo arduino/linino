@@ -165,6 +165,14 @@ scan_mac80211() {
 	config_set "$device" vifs "${ap:+$ap }${adhoc:+$adhoc }${sta:+$sta }${monitor:+$monitor }${mesh:+$mesh}"
 }
 
+list_phy_interfaces() {
+	local phy="$1"
+	if [ -d "/sys/class/ieee80211/${phy}/device/net" ]; then
+		ls "/sys/class/ieee80211/${phy}/device/net" 2>/dev/null;
+	else
+		ls "/sys/class/ieee80211/${phy}/device" 2>/dev/null | grep net: | sed -e 's,net:,,g'
+	fi
+}
 
 disable_mac80211() (
 	local device="$1"
@@ -181,7 +189,7 @@ disable_mac80211() (
 	done
 
 	include /lib/network
-	for wdev in $(ls /sys/class/ieee80211/${phy}/device/net 2>/dev/null); do
+	for wdev in $(list_phy_interfaces "$phy"); do
 		[ -f "/var/run/$wdev.pid" ] && kill $(cat /var/run/$wdev.pid) >&/dev/null 2>&1
 		for pid in `pidof wpa_supplicant`; do
 			grep "$wdev" /proc/$pid/cmdline >/dev/null && \
@@ -214,6 +222,7 @@ enable_mac80211() {
 	local macidx=0
 	local apidx=0
 	fixed=""
+	local hostapd_ctrl=""
 
 	[ -n "$country" ] && iw reg set "$country"
 	[ "$channel" = "auto" -o "$channel" = "0" ] || {
@@ -336,6 +345,7 @@ enable_mac80211() {
 			config_get mode "$vif" mode
 			config_get ifname "$vif" ifname
 			[ "$mode" = "ap" ] || continue
+			hostapd_ctrl="${hostapd_ctrl:-/var/run/hostapd-$phy/$ifname}"
 			mac80211_start_vif "$vif" "$ifname"
 		done
 	}
@@ -352,11 +362,18 @@ enable_mac80211() {
 				adhoc)
 					config_get bssid "$vif" bssid
 					config_get ssid "$vif" ssid
-					iw dev "$ifname" ibss join "$ssid" $freq ${fixed:+fixed-freq} $bssid
+					config_get mcast_rate "$vif" mcast_rate
+					local mcval=""
+					[ -n "$mcast_rate" ] && {
+						mcval="$(($mcast_rate / 1000))"
+						mcsub="$(( ($mcast_rate / 100) % 10 ))"
+						[ "$mcsub" -gt 0 ] && mcval="$mcval.$mcsub"
+					}
+					iw dev "$ifname" ibss join "$ssid" $freq ${fixed:+fixed-freq} $bssid ${mcval:+mcast-rate $mcval}
 				;;
 				sta)
 					if eval "type wpa_supplicant_setup_vif" 2>/dev/null >/dev/null; then
-						wpa_supplicant_setup_vif "$vif" wext || {
+						wpa_supplicant_setup_vif "$vif" nl80211 "${hostapd_ctrl:+-H $hostapd_ctrl}" || {
 							echo "enable_mac80211($device): Failed to set up wpa_supplicant for interface $ifname" >&2
 							# make sure this wifi interface won't accidentally stay open without encryption
 							ifconfig "$ifname" down
@@ -408,6 +425,7 @@ detect_mac80211() {
 
 			list="	list ht_capab"
 			[ "$(($ht_cap & 1))" -eq 1 ] && append ht_capab "$list	LDPC" "$N"
+			[ "$(($ht_cap & 16))" -eq 16 ] && append ht_capab "$list	GF" "$N"
 			[ "$(($ht_cap & 32))" -eq 32 ] && append ht_capab "$list	SHORT-GI-20" "$N"
 			[ "$(($ht_cap & 64))" -eq 64 ] && append ht_capab "$list	SHORT-GI-40" "$N"
 			[ "$(($ht_cap & 128))" -eq 128 ] && append ht_capab "$list	TX-STBC" "$N"
