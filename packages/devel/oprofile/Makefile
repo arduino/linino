@@ -46,6 +46,14 @@ define Package/oprofile/description
  A transparent low-overhead system-wide profiler.
 endef
 
+define Package/oprofile-utils
+  SECTION:=devel
+  CATEGORY:=Development
+  TITLE:=OProfile System Profiler (extra utilities)
+  URL:=http://oprofile.sourceforge.net
+  DEPENDS:=oprofile
+endef
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--with-kernel-support \
@@ -55,11 +63,25 @@ endef
 
 TARGET_LDFLAGS := -L$(STAGING_DIR)/usr/lib $(TARGET_LDFLAGS)
 
+define Package/oprofile-utils/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/opannotate \
+		$(PKG_INSTALL_DIR)/usr/bin/oparchive \
+		$(PKG_INSTALL_DIR)/usr/bin/opgprof \
+		$(1)/usr/bin
+endef
+
 define Package/oprofile/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/* \
 		$(1)/usr/bin
+
+	rm -f \
+		$(1)/usr/bin/opannotate \
+		$(1)/usr/bin/oparchive \
+		$(1)/usr/bin/opgprof
 
 	$(INSTALL_DIR) $(1)/usr/lib/oprofile
 	$(CP) \
@@ -74,4 +96,5 @@ define Package/oprofile/install
 endef
 
 $(eval $(call BuildPackage,oprofile))
+$(eval $(call BuildPackage,oprofile-utils))
 $(eval $(call KernelPackage,oprofile))
