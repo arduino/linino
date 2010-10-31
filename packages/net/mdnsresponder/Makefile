@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mDNSResponder
-PKG_VERSION:=107.6
+PKG_VERSION:=214.3.2
 PKG_RELEASE:=1
 PKG_INSTALL:=1
 PKG_SOURCE:=mDNSResponder-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.opensource.apple.com/darwinsource/tarballs/other/
-PKG_MD5SUM:=aa4e0e5c57f94489463ea6576591ce9d
+PKG_SOURCE_URL:=http://opensource.apple.com/tarballs/mDNSResponder/
+PKG_MD5SUM:=05d39f40767ccece4b740c5afad14a23
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/mDNSResponder-$(PKG_VERSION)
 
