@@ -9,16 +9,16 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=openl2tp
-PKG_VERSION:=1.6
+PKG_VERSION:=1.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/openl2tp
-PKG_MD5SUM:=87f035ca5ddf7c61e720f422cdc997cf
+PKG_MD5SUM:=2fd12112cf50c67dc3c7d848beb34947
 
 PKG_BUILD_DEPENDS:=libreadline libncurses
 PKG_BUILD_PARALLEL:=1
-PKG_PPPD_VERSION:=2.4.4
+PPPD_VERSION:=2.4.4
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -52,9 +52,9 @@ define Package/openl2tp/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/l2tpconfig  $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/openl2tpd $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/usr/lib/pppd/$(PKG_PPPD_VERSION)
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pppd/openl2tp.so $(1)/usr/lib/pppd/$(PKG_PPPD_VERSION)/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pppd/pppol2tp.so $(1)/usr/lib/pppd/$(PKG_PPPD_VERSION)/
+	$(INSTALL_DIR) $(1)/usr/lib/pppd/$(PPPD_VERSION)
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pppd/openl2tp.so $(1)/usr/lib/pppd/$(PPPD_VERSION)/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pppd/pppol2tp.so $(1)/usr/lib/pppd/$(PPPD_VERSION)/
 	$(INSTALL_DIR) $(1)/usr/lib/openl2tp
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/plugins/event_sock.so $(1)/usr/lib/openl2tp/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/plugins/ipsec.so $(1)/usr/lib/openl2tp/

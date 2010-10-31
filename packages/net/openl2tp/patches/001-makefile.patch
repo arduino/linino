@@ -1,12 +1,6 @@
----
- Makefile     |   26 +++++++++++++-------------
- cli/Makefile |    2 +-
- usl/Makefile |    2 +-
- 3 files changed, 15 insertions(+), 15 deletions(-)
-
---- openl2tp-1.6.orig/Makefile
-+++ openl2tp-1.6/Makefile
-@@ -8,7 +8,7 @@ L2TP_FEATURE_LAIC_SUPPORT=	y
+--- orig/Makefile	2010-03-18 14:04:47.000000000 +0500
++++ new/Makefile	2010-10-28 07:30:10.673418106 +0600
+@@ -8,7 +8,7 @@
  L2TP_FEATURE_LAOC_SUPPORT=	y
  L2TP_FEATURE_LNIC_SUPPORT=	y
  L2TP_FEATURE_LNOC_SUPPORT=	y
@@ -15,7 +9,7 @@
  #L2TP_FEATURE_LOCAL_STAT_FILE=	y
  
  # Define USE_DMALLOC to enable dmalloc memory debugging
-@@ -29,31 +29,31 @@ L2TP_USE_ASYNC_RPC=	y
+@@ -29,31 +29,31 @@
  # Build for UML environment?
  # UML_TARGET=		y
  
@@ -40,10 +34,10 @@
  # Points to pppd install. 
  # By default, pppd headers are assumed to be in /usr/include/pppd. but 
  # can be pointed to a local pppd source tree if desired.
--PPPD_VERSION=		2.4.4
-+#PPPD_VERSION=		2.4.4
- # PPPD_SRCDIR=		/usr/local/src/ppp-2.4.4
- # PPPD_LIBDIR=		/usr/lib/pppd/2.4.4
+-PPPD_VERSION=		2.4.5
++#PPPD_VERSION=		2.4.5
+ # PPPD_SRCDIR=		/usr/local/src/ppp-2.4.5
+ # PPPD_LIBDIR=		/usr/lib/pppd/2.4.5
  
  # Points to readline install root. READLINE_DIR should have lib/ & include/ subdirs
  # If not defined, readline is assumed to be installed in the standard places that
@@ -57,7 +51,7 @@
  
  # END CONFIGURABLE SETTINGS
  
-@@ -135,9 +135,9 @@ endif
+@@ -142,9 +142,9 @@
  
  CPPFLAGS=		$(CPPFLAGS.l2tptest) $(CPPFLAGS-y)
  CFLAGS=			-I. -Iusl -Icli -isystem $(KERNEL_BLDDIR)/include \
@@ -69,9 +63,9 @@
  
  OPT_CFLAGS?=		-O
  
---- openl2tp-1.6.orig/cli/Makefile
-+++ openl2tp-1.6/cli/Makefile
-@@ -7,7 +7,7 @@ CLI_SRCS_TEST.o=	$(CLI_SRCS_TEST.c:%.c=%
+--- orig/cli/Makefile	2008-02-03 19:55:30.000000000 +0500
++++ new/cli/Makefile	2010-10-28 07:15:39.000000000 +0600
+@@ -7,7 +7,7 @@
  
  LDFLAGS.cli_test=	-L.. -L. $(READLINE_LDFLAGS) -lcli -lusl -lreadline -lcurses -lc
  
@@ -80,9 +74,9 @@
  
  .PHONY:			all test clean
  
---- openl2tp-1.6.orig/usl/Makefile
-+++ openl2tp-1.6/usl/Makefile
-@@ -14,7 +14,7 @@ LIBS.dmalloc=		-ldmalloc
+--- orig/usl/Makefile	2008-02-24 16:52:50.000000000 +0500
++++ new/usl/Makefile	2010-10-28 07:15:39.000000000 +0600
+@@ -14,7 +14,7 @@
  endif
  
  CPPFLAGS+=		$(CFLAGS.optimize) -g
