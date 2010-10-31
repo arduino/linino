@@ -11,7 +11,7 @@ config_get pgctl config PG_CTL
 config_get pglog config PGLOG
 
 start() {
-    if [ ! -e /bin/su ]; then
+    if [ ! -e /usr/bin/su ]; then
         echo "The su command is requred to run postgres"
         exit 1
     fi
@@ -36,7 +36,7 @@ start() {
     if [ -n "${pgopts}" ]; then
         pgopts="-o ${pgopts}"
     fi
-    /bin/su ${pguser} -c "/usr/bin/postmaster -D '${pgdata}' &" >> ${pglog} 2>&1
+    /usr/bin/su ${pguser} -c "/usr/bin/postmaster -D '${pgdata}' &" >> ${pglog} 2>&1
 
     while :
     do
@@ -60,7 +60,7 @@ start() {
 
 stop() {
     echo "stopping postgres..."
-    /bin/su ${pguser} -c "${pgctl} stop -D '${pgdata}' -s -m fast"
+    /usr/bin/su ${pguser} -c "${pgctl} stop -D '${pgdata}' -s -m fast"
     ret=$?
     if [ -f ${pgdata}/postmaster.pid ]; then
         rm ${pgdata}/postmaster.pid
@@ -71,23 +71,23 @@ stop() {
 
 restart() {
     echo "restarting postgres..."
-    /bin/su ${pguser} -c "${pgctl} stop -D '${pgdata}' -s -m fast -w"
+    /usr/bin/su ${pguser} -c "${pgctl} stop -D '${pgdata}' -s -m fast -w"
     if [ -f ${pgdata}/postmaster.pid ]; then
         rm ${pgdata}/postmaster.pid
     fi
-    /bin/su ${pguser} -c "/usr/bin/postmaster -D '${pgdata}' &" >> ${pglog} 2>&1
+    /usr/bin/su ${pguser} -c "/usr/bin/postmaster -D '${pgdata}' &" >> ${pglog} 2>&1
     echo "ok"
     return $?
 }
 
 reload() {
     echo "reloading postgres..."
-    /bin/su ${pguser} -c "${pgctl} reload -D '${pgdata}' -s"
+    /usr/bin/su ${pguser} -c "${pgctl} reload -D '${pgdata}' -s"
     echo "ok"
 }
 
 status() {
     echo "status postgres..."
-    /bin/su ${pguser} -c "${pgctl} status -D '${pgdata}'"
+    /usr/bin/su ${pguser} -c "${pgctl} status -D '${pgdata}'"
     echo "ok"
 }
