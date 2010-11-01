@@ -1,7 +1,7 @@
 Index: openl2tp-1.7/Makefile
 ===================================================================
 --- openl2tp-1.7.orig/Makefile	2010-03-18 10:04:47.000000000 +0100
-+++ openl2tp-1.7/Makefile	2010-11-01 15:59:00.279999805 +0100
++++ openl2tp-1.7/Makefile	2010-11-01 18:25:19.785000816 +0100
 @@ -8,7 +8,7 @@
  L2TP_FEATURE_LAOC_SUPPORT=	y
  L2TP_FEATURE_LNIC_SUPPORT=	y
@@ -65,6 +65,27 @@ Index: openl2tp-1.7/Makefile
  
  OPT_CFLAGS?=		-O
  
+@@ -171,7 +171,7 @@
+ 
+ .PHONY:			all clean distclean install daemon app test check
+ 
+-all:			check generated-files daemon $(APP)
++all:			check daemon $(APP)
+ 
+ check:
+ 			@if [ ! -f $(KERNEL_SRCDIR)/include/linux/if_pppol2tp.h ]; then \
+@@ -179,9 +179,9 @@
+ 				false ;\
+ 			fi
+ 
+-daemon:			generated-files $(SUBDIRS:%=subdir-%) openl2tpd
++daemon:			$(SUBDIRS:%=subdir-%) openl2tpd
+ 
+-app:			generated-files l2tpconfig
++app:			l2tpconfig
+ 
+ test:			subdir-test
+ 			$(MAKE) -C $@ $(MFLAGS) $@
 @@ -189,7 +189,7 @@
  
  .PHONY:			$(SUBDIRS:%=subdir-%)
@@ -74,21 +95,32 @@ Index: openl2tp-1.7/Makefile
  			$(MAKE) -C $(@:subdir-%=%) $(MFLAGS) EXTRA_CFLAGS="$(CPPFLAGS)"
  
  ifeq ($(L2TP_FEATURE_LOCAL_CONF_FILE),y)
-@@ -260,8 +260,8 @@
+@@ -257,9 +257,13 @@
+ 			@for d in $(SUBDIRS); do $(MAKE) -C $$d $(MFLAGS) $@; done
+ 			etags $(wildcard *.c) $(wildcard *.h)
+ 
++$(L2TPD_SRCS.o):	generated-files
++
  openl2tpd:		$(L2TPD_SRCS.o)
  			$(CC) -o $@ $^ $(LDFLAGS.l2tpd)
  
--l2tpconfig:		$(L2TPCONFIG_SRCS.o)
--			$(CC) -o $@ $^ $(LDFLAGS.l2tpconfig)
-+l2tpconfig:		generated-files $(L2TPCONFIG_SRCS.o)
-+			$(CC) -o $@ $(L2TPCONFIG_SRCS.o) $(LDFLAGS.l2tpconfig)
++$(L2TPCONFIG_SRCS.o):	generated-files
++
+ l2tpconfig:		$(L2TPCONFIG_SRCS.o)
+ 			$(CC) -o $@ $^ $(LDFLAGS.l2tpconfig)
  
- %.o:	%.c
- 			$(CC) -c $(CFLAGS) $< -o $@
+@@ -309,6 +313,7 @@
+ 	else \
+ 		mv $@.tmp $@ ;\
+ 	fi
++	@echo '$@ generated.'
+ 
+ .PHONY:			all install-all install-daemon install-app
+ 
 Index: openl2tp-1.7/cli/Makefile
 ===================================================================
 --- openl2tp-1.7.orig/cli/Makefile	2008-02-03 15:55:30.000000000 +0100
-+++ openl2tp-1.7/cli/Makefile	2010-11-01 15:56:22.938000001 +0100
++++ openl2tp-1.7/cli/Makefile	2010-11-01 18:06:06.945000001 +0100
 @@ -7,7 +7,7 @@
  
  LDFLAGS.cli_test=	-L.. -L. $(READLINE_LDFLAGS) -lcli -lusl -lreadline -lcurses -lc
@@ -101,7 +133,7 @@ Index: openl2tp-1.7/cli/Makefile
 Index: openl2tp-1.7/usl/Makefile
 ===================================================================
 --- openl2tp-1.7.orig/usl/Makefile	2008-02-24 12:52:50.000000000 +0100
-+++ openl2tp-1.7/usl/Makefile	2010-11-01 15:56:22.938000001 +0100
++++ openl2tp-1.7/usl/Makefile	2010-11-01 18:06:06.945000001 +0100
 @@ -14,7 +14,7 @@
  endif
  
