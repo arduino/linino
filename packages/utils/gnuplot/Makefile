@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnuplot
 PKG_VERSION:=4.4.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_INSTALL=1
 
@@ -12,8 +12,14 @@ PKG_MD5SUM:=e708665bd512153ad5c35252fe499059
 
 include $(INCLUDE_DIR)/package.mk
 
-EXTRA_LDFLAGS += \
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+TARGET_CFLAGS += \
+	-I$(STAGING_DIR)/usr/lib/libintl/include \
+	-I$(STAGING_DIR)/usr/lib/libiconv/include
+
+TARGET_LDFLAGS+= \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib \
+       	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
@@ -23,7 +29,7 @@ CONFIGURE_VARS += \
 define Package/gnuplot
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libncurses +uclibcxx +zlib +libpng +libfreetype +libgd
+  DEPENDS:=+libncurses +uclibcxx +zlib +libpng +libfreetype +libgd +libintl +libiconv
   TITLE:=A portable command-line driven graphing utility
   URL:=http://sourceforge.net/projects/gnuplot/
 endef
