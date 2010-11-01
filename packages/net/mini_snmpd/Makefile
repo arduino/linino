@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mini_snmpd
-PKG_VERSION:=1.0
-PKG_RELEASE:=7
+PKG_VERSION:=1.2b
+PKG_RELEASE:=1
 
-PKG_SOURCE:=mini_snmpd.tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://members.aon.at/linuxfreak/linux/
-PKG_MD5SUM:=13f2202ff01ff6b6463989f34f453063
+PKG_MD5SUM:=9e432c50ba8216d7fab0983b11b7112a
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)/$(PKG_NAME)
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
 
@@ -30,23 +30,15 @@ define Package/mini-snmpd
 $(call Package/mini-snmpd/Default)
   SECTION:=net
   CATEGORY:=Network
-  TITLE+= (IPv4 only)
-  VARIANT:=ipv4
+  TITLE+= Mini Snmpd
 endef
-
-define Package/mini-snmpd6
-$(call Package/mini-snmpd/Default)
-  SECTION:=ipv6
-  CATEGORY:=IPv6
-  TITLE+= (IPv6 only)
-  VARIANT:=ipv6
-  DEPENDS:=+kmod-ipv6
-endef
-
 
 PKG_OFLAGS:=$(TARGET_CFLAGS) -DSYSLOG
-ifeq ($(BUILD_VARIANT),ipv6)
-  PKG_OFLAGS+= -DIPV6
+
+ifeq ($(CONFIG_IPV6),y)
+  PKG_OFLAGS+= -D__IPV6__
+else
+  PKG_OFLAGS+= -D__IPV4__
 endif
 
 MAKE_FLAGS+= \
@@ -70,4 +62,3 @@ endef
 Package/mini-snmpd6/install=$(Package/mini-snmpd/install)
 
 $(eval $(call BuildPackage,mini-snmpd))
-$(eval $(call BuildPackage,mini-snmpd6))
