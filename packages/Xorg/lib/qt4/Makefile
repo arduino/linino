@@ -63,7 +63,7 @@ endef
 
 define Package/qt4
   $(call Package/qt4/Default)
-  DEPENDS:=+zlib +libstdcpp +libsqlite3
+  DEPENDS:=+zlib +libstdcpp +libsqlite3 @DISPLAY_SUPPORT
 endef
 
 define Package/qt4-gui
