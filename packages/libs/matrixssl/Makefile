@@ -17,6 +17,8 @@ PKG_MD5SUM:=771c1489488e62668d673478311d63ca
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
+PKG_BUILD_PARALLEL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libmatrixssl
@@ -34,7 +36,7 @@ endef
 TARGET_CFLAGS += $(FPIC)
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)/src \
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/src \
 		$(TARGET_CONFIGURE_OPTS) \
 		DFLAGS="$(TARGET_CFLAGS) -Wall"
 endef
