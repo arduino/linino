@@ -25,6 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openldap/Default
   TITLE:=LDAP implementation
   URL:=http://www.openldap.org/
+  MAINTAINER:=W. Michael Petullo <mike@flyn.org>
 endef
 
 define Package/libopenldap
