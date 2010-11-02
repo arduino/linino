@@ -1,0 +1,13 @@
+Index: openswan-2.6.29/programs/pluto/adns.c
+===================================================================
+--- openswan-2.6.29.orig/programs/pluto/adns.c	2010-11-03 00:50:53.088000003 +0100
++++ openswan-2.6.29/programs/pluto/adns.c	2010-11-03 00:54:26.985000001 +0100
+@@ -187,7 +187,7 @@
+     res_query(dname, class, type, answer, anslen)
+ # define res_nclose(statp) res_close()
+ 
+-static struct __res_state *statp = &_res;
++#define statp	((struct __res_state *)(&_res))
+ 
+ #else /* !OLD_RESOLVER */
+ 
