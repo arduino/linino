@@ -19,18 +19,20 @@ MAKE_PATH:=src
 
 define Package/krb5/Default
 	SECTION:=net
-	CATAGORY:=Network
+	CATEGORY:=Network
 	TITLE:=Kerberos
 	URL:=http://web.mit.edu/kerberos/
+	MAINTAINER:=W. Michael Petullo <mike@flyn.org>
 endef
 
 define Package/krb5-libs
 	SECTION:=net
-	CATAGORY:=Network
+	CATEGORY:=Network
 	TITLE:=Kerberos
 	DEPENDS:=+libncurses
 	TITLE:=Kerberos 5 Shared Libraries
 	URL:=http://web.mit.edu/kerberos/
+	MAINTAINER:=W. Michael Petullo <mike@flyn.org>
 endef
 
 define Package/krb5-server
