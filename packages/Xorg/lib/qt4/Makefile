@@ -58,20 +58,22 @@ define Package/qt4/Default
   SUBMENU:=framework
   TITLE:=qt4
   DEPENDS:=qt4
+  DEFAULT:=m if PACKAGE_qt4-gui && ALL
   URL:=http://qt.nokia.com/
 endef
 
 define Package/qt4
   $(call Package/qt4/Default)
-  DEPENDS:=+zlib +libstdcpp +libsqlite3 @DISPLAY_SUPPORT
+  DEPENDS:=+zlib +libstdcpp +libsqlite3
 endef
 
 define Package/qt4-gui
   $(call Package/qt4/Default)
+  DEFAULT:=
   DEPENDS+=+libpng +libtiff +libjpeg +libfreetype +qt4-network \
 	+FEATURE_drawing-backend_DirectFB:directfb \
 	+FEATURE_drawing-backend_libX11:libX11 \
-	+FEATURE_drawing-backend_libX11:libXext
+	+FEATURE_drawing-backend_libX11:libXext @DISPLAY_SUPPORT
   TITLE+=(gui)
 endef
 
