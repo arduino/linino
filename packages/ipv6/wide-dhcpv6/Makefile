@@ -73,6 +73,8 @@ define Package/wide-dhcpv6-control/description
 	This package installs the client and server control utility.
 endef
 
+TARGET_CFLAGS+=-D_GNU_SOURCE
+
 define Build/Configure
 	$(call Build/Configure/Default,--with-localdbdir=/var)
 endef
@@ -80,6 +82,7 @@ endef
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
+		EXTRA_CFLAGS="-include debug.h" \
 		all 
 endef
 
