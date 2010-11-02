@@ -15,6 +15,7 @@ PKG_SOURCE_URL:=http://ekg.chmurka.net/
 PKG_MD5SUM:=2aa92b56517fdf09d75519a105772b74
 
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
