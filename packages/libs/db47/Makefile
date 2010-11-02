@@ -28,6 +28,7 @@ define Package/libdb47
   DEPENDS:=+libxml2
   TITLE:=Berkeley DB library (4.7)
   URL:=http://www.sleepycat.com/products/db.shtml
+  MAINTAINER:=W. Michael Petullo <mike@flyn.org>
 endef
 
 define Package/libdb47/description
