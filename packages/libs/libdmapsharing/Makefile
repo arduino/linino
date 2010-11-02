@@ -10,12 +10,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libdmapsharing
-PKG_VERSION:=2.1.6
+PKG_VERSION:=2.1.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=libdmapsharing-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.flyn.org/projects/libdmapsharing/
-PKG_MD5SUM:=ad54ac6b97d5b9d629e84a35ef75ad34
+PKG_MD5SUM:=88583f0c6160142567e8b521f210443b
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libdmapsharing-$(PKG_VERSION)
 
