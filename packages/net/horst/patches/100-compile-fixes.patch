@@ -1,0 +1,23 @@
+Index: horst-2.0-rc1/Makefile
+===================================================================
+--- horst-2.0-rc1.orig/Makefile	2010-11-02 16:26:44.449999688 +0100
++++ horst-2.0-rc1/Makefile	2010-11-02 16:27:13.640982158 +0100
+@@ -28,9 +28,7 @@
+ LIBS+=-lpcap
+ endif
+ 
+-buildstamp=.build_debug$(DEBUG)pcap$(PCAP)
+-
+-all: $(buildstamp) $(NAME)
++all: $(NAME)
+ 
+ # include dependencies
+ protocol_parser.o: protocol_parser.h ieee80211.h ieee80211_radiotap.h ieee80211_util.h \
+@@ -48,7 +46,3 @@
+ 	-rm -f *.o *~
+ 	-rm -f $(NAME)
+ 	-rm -f .build_*
+-
+-$(buildstamp):
+-	make clean
+-	touch $@
