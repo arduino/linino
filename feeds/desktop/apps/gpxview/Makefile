@@ -11,7 +11,7 @@ PKG_NAME:=gpxview
 PKG_VERSION_BASE:=0.9.1
 PKG_VERSION_SUFFIX:=-1
 PKG_VERSION:=$(PKG_VERSION_BASE)$(PKG_VERSION_SUFFIX)
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=gpxview_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://repository.maemo.org/extras/pool/chinook/free/source/g/gpxview/
@@ -29,7 +29,7 @@ define Package/gpxview
   TITLE:=GPXView Geocaching app
   MAINTAINER:=Michael Buesch <mb@bu3sch.de>
   URL:=http://www.harbaum.org/till/maemo/index.shtml#gpxview
-  DEPENDS:=+gpsd +libxml2 +libcurl +libsoup +gtkhtml +gtk2 +libintl +libiconv
+  DEPENDS:=+gpsd +libxml2 +libcurl +libsoup +gtkhtml +gtk2 +glib2 +libintl +libiconv +libsqlite3
 endef
 
 define Package/gpxview/description
