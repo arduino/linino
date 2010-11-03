@@ -40,6 +40,8 @@ define Package/send/conffiles
 /etc/sendd/params.conf
 endef
 
+TARGET_CPPFLAGS+=-D_GNU_SOURCE
+
 MAKE_FLAGS += \
 	CC="$(TARGET_CC)" \
 	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnetfilter_queue $(TARGET_CPPFLAGS)" \
