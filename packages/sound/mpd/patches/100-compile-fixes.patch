@@ -1,0 +1,27 @@
+Index: mpd-0.15.8/configure
+===================================================================
+--- mpd-0.15.8.orig/configure	2010-11-04 00:14:37.187000000 +0100
++++ mpd-0.15.8/configure	2010-11-04 00:15:00.156000001 +0100
+@@ -9191,6 +9191,7 @@
+ # Check whether --with-faad was given.
+ if test "${with_faad+set}" = set; then :
+   withval=$with_faad;
++  faad_prefix=$with_faad;
+ else
+   faad_prefix=""
+ fi
+Index: mpd-0.15.8/src/input/file_input_plugin.c
+===================================================================
+--- mpd-0.15.8.orig/src/input/file_input_plugin.c	2010-11-04 00:15:41.467000002 +0100
++++ mpd-0.15.8/src/input/file_input_plugin.c	2010-11-04 00:15:49.194999211 +0100
+@@ -65,10 +65,6 @@
+ 
+ 	is->size = st.st_size;
+ 
+-#ifdef POSIX_FADV_SEQUENTIAL
+-	posix_fadvise(fd, (off_t)0, is->size, POSIX_FADV_SEQUENTIAL);
+-#endif
+-
+ 	is->plugin = &input_plugin_file;
+ 	is->data = GINT_TO_POINTER(fd);
+ 	is->ready = true;
