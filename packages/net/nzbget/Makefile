@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nzbget
 PKG_VERSION:=0.7.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/nzbget
@@ -26,9 +26,9 @@ define Package/nzbget
   SUBMENU:=NNTP
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libxml2 +libpar2 +libopenssl +libpthread
+  DEPENDS:=+libxml2 +libpar2 +libopenssl +libpthread +libncurses
   URL:=http://nzbget.sourceforge.net/
-  TITLE:=Binary newsgrabber
+  TITLE:=Binary newsgrabber for nzb-files
   MAINTAINER:=Artur Wronowski <arteqw@gmail.com>
 endef
 
@@ -39,7 +39,6 @@ endef
 CONFIGURE_ARGS += \
 	--disable-static \
 	--disable-nls \
-	--disable-curses \
 	--with-tlslib=OpenSSL \
 	--with-libpar2-includes=$(STAGING_DIR)/usr/include/libpar2 \
 	--with-libpar2-libraries=$(STAGING_DIR)/usr/lib \
@@ -47,6 +46,8 @@ CONFIGURE_ARGS += \
 	--with-libsigc-libraries=$(STAGING_DIR)/usr/lib \
 	--with-openssl-includes=$(STAGING_DIR)/usr/include \
 	--with-openssl-libraries=$(STAGING_DIR)/usr/lib \
+	--with-libcurses-includes=$(STAGING_DIR)/usr/include \
+	--with-libcurses-libraries=$(STAGING_DIR)/usr/lib \
 	, \
 	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
 
