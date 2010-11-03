@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=http://download.aircrack-ng.org/ \
 	http://archive.aircrack-ng.org/aircrack-ng/$(PKG_VERSION)/
 PKG_MD5SUM:=f7a24ed8fad122c4187d06bfd6f998b4
 
-PKG_BUILD_PARALLEL:=1
+PKG_BUILD_PARALLEL:=0
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
