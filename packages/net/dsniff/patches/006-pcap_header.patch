@@ -1,7 +1,8 @@
-diff -Nur dsniff-2.3/configure dsniff-2.3.patched/configure
---- dsniff-2.3/configure	2000-12-03 05:35:46.000000000 +0100
-+++ dsniff-2.3.patched/configure	2005-06-09 11:44:33.000000000 +0200
-@@ -3023,7 +3023,7 @@
+Index: dsniff-2.4/configure
+===================================================================
+--- dsniff-2.4.orig/configure	2010-11-03 23:42:52.921000006 +0100
++++ dsniff-2.4/configure	2010-11-03 23:43:00.504000001 +0100
+@@ -3033,7 +3033,7 @@
  	PCAPINC="-I$withval -I$withval/bpf"
  	PCAPLIB="-L$withval -lpcap"
       elif test -f $withval/include/pcap.h -a \
