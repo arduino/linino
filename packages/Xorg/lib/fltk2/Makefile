@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=fltk2
 PKG_REV:=6671
 PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
@@ -30,7 +30,7 @@ define Package/fltk2
   SUBMENU:=framework
   TITLE:=Fltk2
   URL:=http://fltk.org/
-  DEPENDS:=+libXi +libstdcpp
+  DEPENDS:=+libXi +libstdcpp +libfreetype
 endef
 
 define Package/fltk2/description
