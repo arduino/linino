@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=@SF/musicpd
 PKG_MD5SUM:=824e1ce46c0f468865d9e5e403cdaf5d
 
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
