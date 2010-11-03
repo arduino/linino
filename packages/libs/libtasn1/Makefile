@@ -49,6 +49,8 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libtasn1.h $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libtasn1.{a,so*} $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libtasn1*.pc $(1)/usr/lib/pkgconfig/
 	$(SED) 's,-I$$$${prefix}/include,,g' $(1)/usr/bin/libtasn1-config
 	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(1)/usr/bin/libtasn1-config
 endef
