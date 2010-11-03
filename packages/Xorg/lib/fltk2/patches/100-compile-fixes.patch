@@ -1,0 +1,14 @@
+Index: fltk2-r6671/src/filename_list.cxx
+===================================================================
+--- fltk2-r6671.orig/src/filename_list.cxx	2010-11-03 02:17:17.243001500 +0100
++++ fltk2-r6671/src/filename_list.cxx	2010-11-03 02:24:13.400999350 +0100
+@@ -62,6 +62,9 @@
+   // This version is when we define our own scandir (WIN32 and perhaps
+   // some Unix systems):
+   int n = scandir(d, list, 0, sort);
++#elif defined(__UCLIBC_MAJOR__) && \
++      __UCLIBC_MAJOR__ >= 0 && __UCLIBC_MINOR__ >= 9 && __UCLIBC_SUBLEVEL__ >= 31
++  int n = scandir(d, list, 0, (int(*)(const dirent **, const dirent **))sort);
+ #elif defined(__linux) || defined (__FreeBSD__) || defined (__NetBSD__)
+   int n = scandir(d, list, 0, (int(*)(const void*,const void*))sort);
+ #elif defined(__hpux) || defined(__CYGWIN__)
