@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nginx
 PKG_VERSION:=0.7.67
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://sysoev.ru/nginx/
@@ -31,7 +31,7 @@ define Package/nginx
   CATEGORY:=Network
   TITLE:=Nginx web server
   URL:=http://nginx.net/
-  DEPENDS:=+libpcre +NGINX_SSL:libopenssl
+  DEPENDS:=+libpcre +NGINX_SSL:libopenssl +zlib
   MENU:=1
 endef
 
