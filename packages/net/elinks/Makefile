@@ -30,10 +30,14 @@ define Package/elinks/description
 An advanced text based web browser
 endef
 
+SHVAR_TRANS:= \
+	$(STAGING_DIR_HOST)/bin/sed -e \
+	'y%*+%pp%;s%[^_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789]%_%g'
+
 define Build/Configure
  (cd $(PKG_BUILD_DIR); rm -rf config.cache; \
-                x=`echo ac_cv_file_./features.conf | tr [:blank:]-/. _` && export $$$${x}=yes && \
-                x=`echo ac_cv_file_$(PKG_BUILD_DIR)/features.conf | tr [:blank:]-/. _` && export $$$${x}=yes && \
+                x=`echo ac_cv_file_./features.conf | $(SHVAR_TRANS)` && export $$$${x}=yes && \
+                x=`echo ac_cv_file_$(abspath $(PKG_BUILD_DIR)/features.conf) | $(SHVAR_TRANS)` && export $$$${x}=yes && \
                 $(TARGET_CONFIGURE_OPTS) \
                 CFLAGS="$(TARGET_CFLAGS)" \
                 CPPFLAGS="$(TARGET_CPPFLAGS)" \
