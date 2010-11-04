@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pcmanfm
 PKG_VERSION:=0.5
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/pcmanfm
@@ -31,7 +31,7 @@ define Package/pcmanfm
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=pcmanfm
-  DEPENDS:=+gtk2
+  DEPENDS:=+gtk2 +libstartup-notification +libgamin
 endef
 
 define Build/Configure
