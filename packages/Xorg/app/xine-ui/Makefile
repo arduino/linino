@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xine-ui
 PKG_VERSION:=0.99.4
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/xine
@@ -27,19 +27,26 @@ define Package/xine-ui
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=xine user interface
-  DEPENDS:=+xine-lib +libpng +curl +libiconv +libXv +libICE +libXxf86vm
+  DEPENDS:=+xine-lib +libpng +curl +libiconv +libXv +libXt +libICE +libXxf86vm +libpng +libfreetype
   URL:=http://www.xine-project.org/
 endef
 
 CONFIGURE_VARS+= \
-	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
+	X_LIBS="" \
+	X_CFLAGS=""
 
 EXTRA_LDFLAGS:=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
-CONFIGURE_ARGS+=--without-aalib \
-			--without-libcaca \
-			--disable-lirc \
-			--without-readline
+CONFIGURE_ARGS+= \
+	--x-includes="$(STAGING_DIR)/usr/include" \
+	--x-libraries="$(STAGING_DIR)/usr/lib" \
+	--without-aalib \
+	--without-libcaca \
+	--disable-lirc \
+	--without-readline \
+	--disable-shm \
+	--disable-xft
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR)/$(CONFIGURE_PATH); \
@@ -54,7 +61,9 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) X_LIBS="$(TARGET_LDFLAGS) -lfreetype"
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		X_LIBS="$(TARGET_LDFLAGS) -lfreetype" \
+		X_CFLAGS=""
 	$(MAKE) -C $(PKG_BUILD_DIR)/ install DESTDIR=$(PKG_INSTALL_DIR)
 endef
 
