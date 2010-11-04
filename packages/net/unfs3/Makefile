@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=ddf679a5d4d80096a59f3affc64f16e5
 
+PKG_BUILD_PARALLEL:=0
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/unfs3
