@@ -46,7 +46,9 @@ define Build/Configure
 endef
 
 define Build/Compile
-	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) install
+	DESTDIR=$(PKG_INSTALL_DIR) $(MAKE) -C $(PKG_BUILD_DIR) \
+		DBUS_BINDING_TOOL="LD_LIBRARY_PATH=/usr/lib:/usr/local/lib $(shell which dbus-binding-tool)" \
+		install
 	rm -f $(STAGING_DIR_HOST)/usr/bin/dbus-binding-tool
 endef
 
