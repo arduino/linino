@@ -103,7 +103,9 @@ define Build/Configure
 	mv $(PKG_BUILD_DIR)/src/interfaces/ecpg/preproc/ecpg \
 		$(PKG_BUILD_DIR)/src/interfaces/ecpg/preproc/ecpg.host
 	$(MAKE) -C $(PKG_BUILD_DIR)/src/timezone CC="$(HOSTCC)"
-	mv $(PKG_BUILD_DIR)/src/timezone/zic $(STAGING_DIR)/host/bin/zic
+	mv $(PKG_BUILD_DIR)/src/timezone/zic $(PKG_BUILD_DIR)/host-zic
+	$(INSTALL_DIR) $(STAGING_DIR)/host/bin/
+	$(CP) $(PKG_BUILD_DIR)/host-zic $(STAGING_DIR)/host/bin/zic
 	$(MAKE) -C $(PKG_BUILD_DIR)/src/bin/pg_config CC="$(HOSTCC)"
 	mv $(PKG_BUILD_DIR)/src/bin/pg_config/pg_config \
 		$(PKG_BUILD_DIR)/src/bin/pg_config/pg_config.host
@@ -236,7 +238,7 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpq.{a,so*} $(1)/usr/lib/
 	$(CP) $(PKG_BUILD_DIR)/src/interfaces/ecpg/preproc/ecpg.host $(1)/usr/bin/ecpg
-	$(CP) $(STAGING_DIR)/host/bin/zic $(1)/usr/bin/zic
+	$(CP) $(PKG_BUILD_DIR)/host-zic $(1)/usr/bin/zic
 endef
 
 $(eval $(call BuildPackage,libpq))
