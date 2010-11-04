@@ -75,6 +75,7 @@ PKG_CONFIG_DEPENDS:= \
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
