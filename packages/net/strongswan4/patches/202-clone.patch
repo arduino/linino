@@ -1,6 +1,8 @@
---- a/src/libstrongswan/utils/identification.c
-+++ b/src/libstrongswan/utils/identification.c
-@@ -798,7 +798,7 @@ int identification_printf_hook(char *dst
+Index: strongswan-4.3.7/src/libstrongswan/utils/identification.c
+===================================================================
+--- strongswan-4.3.7.orig/src/libstrongswan/utils/identification.c	2010-11-04 01:34:00.492000001 +0100
++++ strongswan-4.3.7/src/libstrongswan/utils/identification.c	2010-11-04 01:34:06.791999987 +0100
+@@ -810,7 +810,7 @@
  	return print_in_hook(dst, len, "%*s", spec->width, buf);
  }
  
@@ -9,7 +11,7 @@
  	private_identification_t *this)
  {
  	private_identification_t *clone = malloc_thing(private_identification_t);
-@@ -830,7 +830,7 @@ static private_identification_t *identif
+@@ -842,7 +842,7 @@
  			.get_encoding = _get_encoding,
  			.get_type = _get_type,
  			.create_part_enumerator = _create_part_enumerator,
