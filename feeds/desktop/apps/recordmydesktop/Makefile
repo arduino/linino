@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=recordmydesktop
 PKG_VERSION:=0.3.8.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
@@ -34,7 +34,7 @@ define Package/recordmydesktop
   TITLE:=A X desktop session recorder
   URL:=http://recordmydesktop.sourceforge.net
   DEPENDS:=+libX11 +libSM +libICE +libXext +libXfixes +libXdamage +libvorbis \
-  +libtheora +libogg +libpthread
+  +libtheora +libogg +libpthread +zlib
 endef
 
 define Build/Configure
