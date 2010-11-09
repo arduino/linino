@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=haproxy
-PKG_VERSION:=1.4.8
-PKG_RELEASE:=4
+PKG_VERSION:=1.4.9
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://haproxy.1wt.eu/download/1.4/src
-PKG_MD5SUM:=104f4985b37bd9bac7a33e20fb6aaadf
+PKG_MD5SUM:=2cbcc95b54c0d803edaa13e7b4aeec25
 
 include $(INCLUDE_DIR)/package.mk
 
