@@ -49,6 +49,7 @@ struct path_info {
 	char *name;
 	char *info;
 	char *query;
+	int redirected;
 	struct stat stat;
 };
 
