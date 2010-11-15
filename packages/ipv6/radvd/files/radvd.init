@@ -107,7 +107,7 @@ radvd_add_interface() {
 	local list_interface
 	local exist
 
-	config_get ignore "$cfg" ignore
+	config_get_bool ignore "$cfg" ignore 0
 	[ "$ignore" -ne 0 ] && return 0
 
 	config_get interfaces "$cfg" interface
