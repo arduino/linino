@@ -113,7 +113,7 @@ proxy_flag() {
 	local TRUE="${3:-On}"
 	local FALSE="${4:-Off}"
 
-	config_get_bool _value "$SECTION" "$OPTION"
+	config_get_bool _value "$SECTION" "$OPTION" 0
 	[ "$_value" -eq "1" ] && _value="$TRUE" || _value="$FALSE"
 	echo "$OPTION $_value"
 }
