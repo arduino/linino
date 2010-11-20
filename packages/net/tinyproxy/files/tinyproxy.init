@@ -40,7 +40,7 @@ start_proxy() {
 
 	proxy_string "$1" DefaultErrorFile >> $CFGFILE
 	proxy_string "$1" StatFile >> $CFGFILE
-	proxy_string "$1" Logfile >> $CFGFILE
+	proxy_string "$1" LogFile >> $CFGFILE
 
 	proxy_flag "$1" SysLog >> $CFGFILE
 
