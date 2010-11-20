@@ -39,6 +39,7 @@ start_proxy() {
 	proxy_string "$1" ErrorFile_503 "ErrorFile 503" >> $CFGFILE
 
 	proxy_string "$1" DefaultErrorFile >> $CFGFILE
+	proxy_string "$1" StatHost StatHost 127.0.0.1 >> $CFGFILE
 	proxy_string "$1" StatFile >> $CFGFILE
 	proxy_string "$1" LogFile >> $CFGFILE
 
@@ -102,8 +103,10 @@ proxy_string() {
 	local SECTION=$1
 	local OPTION=$2
 	local ALIAS=$3
+	local DEFAULT=$4
 
 	config_get _value "$SECTION" "$OPTION"
+	[ -z "$_value" ] && _value="$DEFAULT"
 	[ -n "$_value" ] && echo "${ALIAS:-${OPTION}} "'"'"$_value"'"'
 }
 
