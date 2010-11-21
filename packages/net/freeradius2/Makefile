@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeradius2
-PKG_VERSION:=2.1.9
-PKG_RELEASE:=4
+PKG_VERSION:=2.1.10
+PKG_RELEASE:=1
 
 PKG_SOURCE:=freeradius-server-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/freeradius/
-PKG_MD5SUM:=5e16a0869acdf448b191c7e30f6507d8
+PKG_MD5SUM:=8ea2bd39460a06212decf2c14fdf3fb8
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/freeradius-server-$(PKG_VERSION)
 PKG_FIXUP:=libtool
@@ -265,7 +265,7 @@ endef
 define Package/freeradius2-mod-sql-mysql
   $(call Package/freeradius2/Default)
   DEPENDS:=freeradius2-mod-sql \
-  	+PACKAGE_freeradius2-mod-sql-mysql:libmysqlclient
+  	+PACKAGE_freeradius2-mod-sql-mysql:libmysqlclient_r
   TITLE:=MySQL module
 endef
 

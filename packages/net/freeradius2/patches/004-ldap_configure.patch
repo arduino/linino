@@ -482,7 +482,7 @@
  Try \`$0 --help' for more information." >&2
     { (exit 1); exit 1; }; }
      ;;
-@@ -1000,16 +1064,16 @@ Try \`$0 --help' for more information." 
+@@ -1000,16 +1064,16 @@ Try \`$0 --help' for more information."
      ac_envvar=`expr "x$ac_option" : 'x\([^=]*\)='`
      # Reject names that are not valid shell variable names.
      expr "x$ac_envvar" : ".*[^_$as_cr_alnum]" >/dev/null &&
