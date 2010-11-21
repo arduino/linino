@@ -1,7 +1,6 @@
-diff -ruN openldap-2.4.16-orig/clients/tools/Makefile.in openldap-2.4.16/clients/tools/Makefile.in
---- openldap-2.4.16-orig/clients/tools/Makefile.in
-+++ openldap-2.4.16/clients/tools/Makefile.in
-@@ -120,7 +120,7 @@
+--- a/clients/tools/Makefile.in
++++ b/clients/tools/Makefile.in
+@@ -120,7 +120,7 @@ install-local:	FORCE
  	-$(MKDIR) $(DESTDIR)$(bindir)
  	@(								\
  	    for prg in $(PROGRAMS); do					\
@@ -10,10 +9,9 @@ diff -ruN openldap-2.4.16-orig/clients/tools/Makefile.in openldap-2.4.16/clients
  		    $(DESTDIR)$(bindir);				\
  	    done							\
  	)
-diff -ruN openldap-2.4.16-orig/servers/slapd/Makefile.in openldap-2.4.16-1/servers/slapd/Makefile.in
---- openldap-2.4.16-orig/servers/slapd/Makefile.in
-+++ openldap-2.4.16/servers/slapd/Makefile.in
-@@ -375,7 +375,7 @@
+--- a/servers/slapd/Makefile.in
++++ b/servers/slapd/Makefile.in
+@@ -375,7 +375,7 @@ install-local-srv: install-slapd install
  install-slapd: FORCE
  	-$(MKDIR) $(DESTDIR)$(libexecdir)
  	-$(MKDIR) $(DESTDIR)$(localstatedir)/run
