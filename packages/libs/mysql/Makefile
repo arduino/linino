@@ -8,16 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mysql
-PKG_VERSION:=5.0.18
+PKG_VERSION:=5.1.53
 PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=\
-	http://mysql.planetmirror.com/Downloads/MySQL-5.0/ \
-	http://mysql.he.net/Downloads/MySQL-5.0/ \
-	http://www.linorg.usp.br/mysql/Downloads/MySQL-5.0/ \
-	http://mysql.holywar.net/Downloads/MySQL-5.0/
-PKG_MD5SUM:=f18153b0239aaa03fc5a751f2d82cb71
+	http://mysql.planetmirror.com/Downloads/MySQL-5.1/ \
+	http://mysql.he.net/Downloads/MySQL-5.1/ \
+	http://www.linorg.usp.br/mysql/Downloads/MySQL-5.1/ \
+	http://mysql.holywar.net/Downloads/MySQL-5.1/
+PKG_MD5SUM:=e5e7c5b0b5c382489e6a66778703bc46
 
 PKG_BUILD_DEPENDS:=libncurses libreadline
 PKG_BUILD_PARALLEL:=1
@@ -71,6 +71,7 @@ define Build/Configure
 		config.h.in \
 		configure \
 	);
+	$(CP) files/lex_hash.h $(PKG_BUILD_DIR)/sql/lex_hash.h
 
 	$(call Build/Configure/Default, \
 		--enable-shared \
@@ -90,7 +91,7 @@ define Build/Configure
 		--without-query-cache \
 		--without-mysqlfs \
 		--without-vio \
-		--without-openssl \
+		--without-ssl \
 		--without-docs \
 		--without-man \
 		--without-bench \
@@ -100,6 +101,7 @@ define Build/Configure
 		, \
 		mysql_cv_compress=yes \
 		mysql_cv_gethostname_style=glibc2 \
+		ac_cv_c_stack_direction=-1 \
 	);
 endef
 
@@ -178,7 +180,6 @@ define Package/mysql-server/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mysqladmin $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mysqldump $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mysql_install_db $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mysql_create_system_tables $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/my_print_defaults $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d/
 	$(INSTALL_BIN) files/mysqld.init $(1)/etc/init.d/mysqld
