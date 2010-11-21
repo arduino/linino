@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeradius2
 PKG_VERSION:=2.1.9
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=freeradius-server-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/freeradius/
@@ -129,6 +129,16 @@ endef
 
 define Package/freeradius2-mod-expiration/conffiles
 /etc/freeradius2/modules/expiration
+endef
+
+define Package/freeradius2-mod-always
+  $(call Package/freeradius2/Default)
+  DEPENDS:=freeradius2
+  TITLE:=Always module
+endef
+
+define Package/freeradius2-mod-always/conffiles
+/etc/freeradius2/modules/always
 endef
 
 define Package/freeradius2-mod-expr
@@ -429,6 +439,12 @@ else
   CONFIGURE_ARGS+= --without-rlm_expiration
 endif
 
+ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius2-mod-always),)
+  CONFIGURE_ARGS+= --with-rlm_always
+else
+  CONFIGURE_ARGS+= --without-rlm_always
+endif
+
 CONFIGURE_VARS+= \
 	LDFLAGS="$$$$LDFLAGS" \
 	LIBS="$(CONFIGURE_LIBS)" \
@@ -529,4 +545,5 @@ $(eval $(call BuildPlugin,freeradius2-mod-logintime,rlm_logintime,modules/logint
 $(eval $(call BuildPlugin,freeradius2-mod-expr,rlm_expr,modules/expr,modules,))
 $(eval $(call BuildPlugin,freeradius2-mod-attr-filter,rlm_attr_filter,modules/attr_filter attrs attrs.access_reject attrs.accounting_response attrs.pre-proxy,modules,,))
 $(eval $(call BuildPlugin,freeradius2-mod-expiration,rlm_expiration,modules/expiration,modules,))
+$(eval $(call BuildPlugin,freeradius2-mod-always,rlm_always,modules/always,modules,))
 $(eval $(call BuildPackage,freeradius2-utils))
