@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=yaddns
-PKG_VERSION:=0.1.1
+PKG_VERSION:=0.1.2
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/yaddns
-PKG_MD5SUM:=2708d3e47a486b1872ef9c5537cd2f0d
+PKG_MD5SUM:=b76aad36ca3341814d5f0c17d6420e8a
 
 PKG_INSTALL:=1
 
@@ -22,7 +22,6 @@ include $(INCLUDE_DIR)/package.mk
 define Package/yaddns
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=@BROKEN
   TITLE:=Yet Another DDNS client
   URL:=http://patatrac.info/yaddns
 endef
