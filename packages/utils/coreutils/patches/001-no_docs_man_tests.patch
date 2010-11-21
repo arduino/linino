@@ -1,24 +1,22 @@
-diff -urN coreutils-6.9/Makefile.am coreutils-6.9.new/Makefile.am
---- coreutils-6.9/Makefile.am	2007-03-18 22:36:43.000000000 +0100
-+++ coreutils-6.9.new/Makefile.am	2008-11-15 14:15:17.000000000 +0100
-@@ -15,7 +15,7 @@
- # You should have received a copy of the GNU General Public License
- # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -17,7 +17,7 @@
+ 
+ ALL_RECURSIVE_TARGETS =
  
 -SUBDIRS = lib src doc man po tests gnulib-tests
 +SUBDIRS = lib src po
- EXTRA_DIST = cfg.mk maint.mk \
-   .prev-version THANKS-to-translators THANKStt.in \
-   .version \
-diff -urN coreutils-6.9/Makefile.in coreutils-6.9.new/Makefile.in
---- coreutils-6.9/Makefile.in	2007-03-22 22:20:26.000000000 +0100
-+++ coreutils-6.9.new/Makefile.in	2008-11-15 14:15:05.000000000 +0100
-@@ -918,7 +918,7 @@
- top_build_prefix = @top_build_prefix@
- top_builddir = @top_builddir@
- top_srcdir = @top_srcdir@
+ 
+ changelog_etc =				\
+   ChangeLog-2005			\
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -1238,7 +1238,7 @@ top_srcdir = @top_srcdir@
+ 
+ # Some tests always need root privileges, others need them only sometimes.
+ ALL_RECURSIVE_TARGETS = install-root check-root distcheck-hook
 -SUBDIRS = lib src doc man po tests gnulib-tests
 +SUBDIRS = lib src po
- EXTRA_DIST = cfg.mk maint.mk \
-   .prev-version THANKS-to-translators THANKStt.in \
-   .version \
+ changelog_etc = \
+   ChangeLog-2005			\
+   ChangeLog-2006			\

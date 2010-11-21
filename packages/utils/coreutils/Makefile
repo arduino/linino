@@ -8,12 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=coreutils
-PKG_VERSION:=7.2
+PKG_VERSION:=8.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/coreutils
-PKG_MD5SUM:=427c2914d3eab956f317c9ec6a45e62a
+PKG_MD5SUM:=3c1ae9531159447083ae8f25ae554b81
+PKG_BUILD_DEPENDS:=libpthread
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -51,7 +52,8 @@ define Package/coreutils
 	+coreutils-true +coreutils-truncate +coreutils-tsort +coreutils-tty \
 	+coreutils-uname +coreutils-unexpand +coreutils-uniq \
 	+coreutils-unlink +coreutils-uptime +coreutils-users +coreutils-vdir \
-	+coreutils-wc +coreutils-who +coreutils-whoami +coreutils-yes
+	+coreutils-wc +coreutils-who +coreutils-whoami +coreutils-yes \
+	+coreutils-nproc +coreutils-stdbuf
 endef
 
 define Package/coreutils/description
@@ -63,7 +65,8 @@ endef
 CONFIGURE_VARS += \
 	gl_cv_func_mbrtowc_incomplete_state=yes \
 	gl_cv_func_mbrtowc_retval=yes \
-	gl_cv_func_wcrtomb_retval=yes
+	gl_cv_func_wcrtomb_retval=yes \
+	ac_cv_type_pthread_spinlock_t=no
 
 CONFIGURE_ARGS += \
 	--enable-install-program=su
@@ -925,6 +928,24 @@ define Package/coreutils-nohup/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nohup $(1)/usr/bin/
 endef
 
+define Package/coreutils-nproc
+  SECTION:utils
+  CATEGORY:=Utilities
+  TITLE:=Utility nproc from the GNU core utilites
+  URL:=http://www.gnu.org/software/coreutils/
+endef
+
+define Package/coreutils-nproc/description
+	Full version of standard GNU nproc utility.  Normally, you would not
+	use this package, since the functionality in BusyBox is more than
+	sufficient.
+endef
+
+define Package/coreutils-nproc/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nproc $(1)/usr/bin/
+endef
+
 define Package/coreutils-od
   SECTION:utils
   CATEGORY:=Utilities
@@ -1324,6 +1345,7 @@ endef
 define Package/coreutils-sort
   SECTION:utils
   CATEGORY:=Utilities
+  DEPENDS:=+libpthread
   TITLE:=Utility sort from the GNU core utilites
   URL:=http://www.gnu.org/software/coreutils/
 endef
@@ -1373,6 +1395,24 @@ endef
 define Package/coreutils-stat/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/stat $(1)/usr/bin/
+endef
+
+define Package/coreutils-stdbuf
+  SECTION:utils
+  CATEGORY:=Utilities
+  TITLE:=Utility stdbuf from the GNU core utilites
+  URL:=http://www.gnu.org/software/coreutils/
+endef
+
+define Package/coreutils-stdbuf/description
+	Full version of standard GNU stdbuf utility.  Normally, you would not
+	use this package, since the functionality in BusyBox is more than
+	sufficient.
+endef
+
+define Package/coreutils-stdbuf/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/stdbuf $(1)/usr/bin/
 endef
 
 define Package/coreutils-stty
@@ -1892,6 +1932,7 @@ $(eval $(call BuildPackage,coreutils-mv))
 $(eval $(call BuildPackage,coreutils-nice))
 $(eval $(call BuildPackage,coreutils-nl))
 $(eval $(call BuildPackage,coreutils-nohup))
+$(eval $(call BuildPackage,coreutils-nproc))
 $(eval $(call BuildPackage,coreutils-od))
 $(eval $(call BuildPackage,coreutils-paste))
 $(eval $(call BuildPackage,coreutils-pathchk))
@@ -1917,6 +1958,7 @@ $(eval $(call BuildPackage,coreutils-sleep))
 $(eval $(call BuildPackage,coreutils-sort))
 $(eval $(call BuildPackage,coreutils-split))
 $(eval $(call BuildPackage,coreutils-stat))
+$(eval $(call BuildPackage,coreutils-stdbuf))
 $(eval $(call BuildPackage,coreutils-stty))
 $(eval $(call BuildPackage,coreutils-su))
 $(eval $(call BuildPackage,coreutils-sum))
