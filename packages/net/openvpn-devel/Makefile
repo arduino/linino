@@ -5,14 +5,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openvpn-devel
-PKG_VERSION:=201035
+PKG_VERSION:=201045
 PKG_RELEASE:=1
 
 PKG_SOURCE:=openvpn-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.secure-computing.net/pub/FreeBSD/ports/openvpn-devel/
-PKG_MD5SUM:=1f0d2cbfb735df92d7fd8bef5d80a291
+PKG_MD5SUM:=0c54fe19381e8756f40bc1050d7016d8
 
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 PKG_BUILD_DIR:=$(BUILD_DIR)/openvpn-devel
 
 include $(INCLUDE_DIR)/package.mk
@@ -44,6 +45,7 @@ define Build/Configure
 		--disable-socks \
 		--enable-password-save \
 		--enable-iproute2 \
+		--enable-small \
 		--with-iproute-path=/usr/sbin/ip \
 		,\
 		ac_cv_func_epoll_create=no \
