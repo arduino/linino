@@ -8,17 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=postgresql
-PKG_VERSION:=9.0.0
+PKG_VERSION:=9.0.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=\
-	http://ftp7.us.postgresql.org/pub/postgresql/source/v$(PKG_VERSION) \
-	http://ftp8.us.postgresql.org/pub/postgresql/source/v$(PKG_VERSION) \
-	http://ftp9.us.postgresql.org/pub/postgresql/source/v$(PKG_VERSION) \
+	http://ftp9.us.postgresql.org/pub/mirrors/postgresql/source/v$(PKG_VERSION) \
 	http://ftp.be.postgresql.org/postgresql/source/v$(PKG_VERSION) \
 	ftp://ftp-archives.postgresql.org/pub/source/v$(PKG_VERSION)
-PKG_MD5SUM:=14c2122cc322e69ab2ab702ed7714bbe
+PKG_MD5SUM:=57ba57e43cfe29e16dacbf5789be98d1
 PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
