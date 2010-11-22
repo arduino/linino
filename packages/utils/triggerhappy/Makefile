@@ -6,8 +6,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=triggerhappy
-PKG_VERSION:=0.1.3
-PKG_REV:=f7c42167127fb8377f99440f943ab863433b14b5
+PKG_VERSION:=0.1.6
+PKG_REV:=01bedc72451f8afd0c35649dd67c428c44a0f737
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -15,7 +15,6 @@ PKG_SOURCE_URL:=git://github.com/wertarbyte/triggerhappy
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_MD5SUM:=7da137a7d2ba1ce396231e821e68de4e
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,6 +32,7 @@ define Package/triggerhappy/description
 endef
 
 MAKE_FLAGS += \
+	LINUX_INPUT_H=$(TOOLCHAIN_DIR)/include/linux/input.h \
 	$(TARGET_CONFIGURE_OPTS) \
 	$(1)
 
