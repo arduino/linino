@@ -13,7 +13,7 @@ is_module_loaded() {
 
 start_mesh () {
 	local meshif="$1"
-	local interfaces orig_interval log_level aggregated_ogms bonding vis_mode
+	local interfaces orig_interval log_level aggregated_ogms bonding fragmentation vis_mode
 
 	is_module_loaded
 	[ $? -ne 1 ] && return
@@ -23,6 +23,7 @@ start_mesh () {
 	config_get log_level "$meshif" log_level
 	config_get aggregated_ogms "$meshif" aggregated_ogms
 	config_get bonding "$meshif" bonding
+	config_get fragmentation "$meshif" fragmentation
 	config_get vis_mode "$meshif" vis_mode
 
 	if [ "$interfaces" = "" ]; then
@@ -50,6 +51,10 @@ start_mesh () {
 	
 	if [ $bonding ]; then
 		echo $bonding > /sys/class/net/$meshif/mesh/bonding
+	fi
+	
+	if [ $fragmentation ]; then
+		echo $fragmentation > /sys/class/net/$meshif/mesh/fragmentation
 	fi
 
 	if [ $vis_mode ]; then

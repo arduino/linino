@@ -10,9 +10,9 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=batman-adv
 
-PKG_VERSION:=2010.1.0
-PKG_MD5SUM:=81aef7e965b516d5ba75f92b0039ddd1
-BATCTL_MD5SUM:=ae1996621d0d72c0822d33a463cdaf70
+PKG_VERSION:=2010.2.0
+PKG_MD5SUM:=c233f06bd94432d7697ad78241e8bdd6
+BATCTL_MD5SUM:=f16d7332576c7b4fc9f8a37add235225
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.open-mesh.org/batman/releases/batman-adv-$(PKG_VERSION)
