@@ -27,7 +27,8 @@ append_params_quotes() {
 		IFS="$LIST_SEP"
 		for v in $v; do
 			[ -n "$v" ] && (
-				echo "\""$p"\": \""$v"\"," | sed -e 's|/|\\/|g;s|_|-|g' >> $config_dir/settings.json
+				echo -n "\""$p | sed -e 's|/|\\/|g;s|_|-|g' >> $config_dir/settings.json; \
+				echo "\": \""$v"\"," >> $config_dir/settings.json
 			)
 		done
 		unset IFS
