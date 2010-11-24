@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
-PKG_VERSION:=1.6.2.13
+PKG_VERSION:=1.6.2.14
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
-PKG_MD5SUM:=1e184a4d9301e2e4b9de3bc98b507d4f
+PKG_MD5SUM:=4f0414c9b2d449222b2fc7096cbaffe7
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -432,3 +432,4 @@ $(eval $(call BuildAsterisk16ModuleTemplate,app_setcallerid,Set callerid,support
 $(eval $(call BuildAsterisk16ModuleTemplate,app_verbose,Verbose logging,Verbose logging application))
 $(eval $(call BuildAsterisk16ModuleTemplate,func_channel,Channel info,Channel info dialplan function))
 $(eval $(call BuildAsterisk16ModuleTemplate,func_blacklist,Blacklist on callerid,looking up the callerid number, and see if it is blacklisted))
+$(eval $(call BuildAsterisk16ModuleTemplate,app_originate,Originate a call,originating an outbound call and connecting it to a specified extension or application))
