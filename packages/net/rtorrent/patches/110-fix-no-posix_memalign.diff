@@ -1,3 +1,5 @@
+diff --git a/rak/allocators.h b/rak/allocators.h
+index 0a1b711..2d7b98e 100644
 --- a/rak/allocators.h
 +++ b/rak/allocators.h
 @@ -42,6 +42,7 @@
@@ -25,11 +27,11 @@
  
    void construct (pointer p, const T& value) { new((void*)p)T(value); }
    void destroy (pointer p) { p->~T(); }
--  void deallocate (pointer p, size_type num) { ::operator delete((void*)p); }
+-  void deallocate (pointer p, size_type num) { free((void*)p); }
  };
  
  
-@@ -98,6 +95,36 @@ bool operator!= (const cacheline_allocat
+@@ -98,6 +95,36 @@ bool operator!= (const cacheline_allocator<T1>&, const cacheline_allocator<T2>&)
    return false;
  }
  
