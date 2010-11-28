@@ -1,0 +1,235 @@
+diff -Nur git-1.7.3.2-orig/builtin/daemon.c git-1.7.3.2/builtin/daemon.c
+--- git-1.7.3.2-orig/builtin/daemon.c	1970-01-01 01:00:00.000000000 +0100
++++ git-1.7.3.2/builtin/daemon.c	2010-11-17 12:30:47.977921001 +0100
+@@ -0,0 +1 @@
++#include "../daemon.c"
+diff -Nur git-1.7.3.2-orig/builtin/fast-import.c git-1.7.3.2/builtin/fast-import.c
+--- git-1.7.3.2-orig/builtin/fast-import.c	1970-01-01 01:00:00.000000000 +0100
++++ git-1.7.3.2/builtin/fast-import.c	2010-11-17 12:30:47.977921001 +0100
+@@ -0,0 +1 @@
++#include "../fast-import.c"
+diff -Nur git-1.7.3.2-orig/builtin/http-backend.c git-1.7.3.2/builtin/http-backend.c
+--- git-1.7.3.2-orig/builtin/http-backend.c	1970-01-01 01:00:00.000000000 +0100
++++ git-1.7.3.2/builtin/http-backend.c	2010-11-17 12:30:47.977921001 +0100
+@@ -0,0 +1 @@
++#include "../http-backend.c"
+diff -Nur git-1.7.3.2-orig/builtin/imap-send.c git-1.7.3.2/builtin/imap-send.c
+--- git-1.7.3.2-orig/builtin/imap-send.c	1970-01-01 01:00:00.000000000 +0100
++++ git-1.7.3.2/builtin/imap-send.c	2010-11-17 12:30:47.977921001 +0100
+@@ -0,0 +1 @@
++#include "../imap-send.c"
+diff -Nur git-1.7.3.2-orig/builtin/shell.c git-1.7.3.2/builtin/shell.c
+--- git-1.7.3.2-orig/builtin/shell.c	1970-01-01 01:00:00.000000000 +0100
++++ git-1.7.3.2/builtin/shell.c	2010-11-17 12:30:47.977921001 +0100
+@@ -0,0 +1 @@
++#include "../shell.c"
+diff -Nur git-1.7.3.2-orig/builtin/upload-pack.c git-1.7.3.2/builtin/upload-pack.c
+--- git-1.7.3.2-orig/builtin/upload-pack.c	1970-01-01 01:00:00.000000000 +0100
++++ git-1.7.3.2/builtin/upload-pack.c	2010-11-17 12:30:47.977921001 +0100
+@@ -0,0 +1 @@
++#include "../upload-pack.c"
+diff -Nur git-1.7.3.2-orig/builtin.h git-1.7.3.2/builtin.h
+--- git-1.7.3.2-orig/builtin.h	2010-10-22 05:49:16.000000000 +0200
++++ git-1.7.3.2/builtin.h	2010-11-17 12:30:47.977921001 +0100
+@@ -139,5 +139,11 @@
+ extern int cmd_show_ref(int argc, const char **argv, const char *prefix);
+ extern int cmd_pack_refs(int argc, const char **argv, const char *prefix);
+ extern int cmd_replace(int argc, const char **argv, const char *prefix);
++extern int cmd_shell(int argc, char **argv, const char *prefix);
++extern int cmd_upload_pack(int argc, char **argv, const char *prefix);
++extern int cmd_http_backend(int argc, char **argv, const char *prefix);
++extern int cmd_daemon(int argc, char **argv, const char *prefix);
++extern int cmd_imap_send(int argc, char **argv, const char *prefix);
++extern int cmd_fast_import(int argc, const char **argv, const char *prefix);
+ 
+ #endif
+diff -Nur git-1.7.3.2-orig/daemon.c git-1.7.3.2/daemon.c
+--- git-1.7.3.2-orig/daemon.c	2010-10-22 05:49:16.000000000 +0200
++++ git-1.7.3.2/daemon.c	2010-11-17 12:30:47.977921001 +0100
+@@ -963,7 +963,7 @@
+ 	return service_loop(socknum, socklist);
+ }
+ 
+-int main(int argc, char **argv)
++int cmd_daemon(int argc, char **argv, const char *prefix)
+ {
+ 	int listen_port = 0;
+ 	char *listen_addr = NULL;
+diff -Nur git-1.7.3.2-orig/fast-import.c git-1.7.3.2/fast-import.c
+--- git-1.7.3.2-orig/fast-import.c	2010-10-22 05:49:16.000000000 +0200
++++ git-1.7.3.2/fast-import.c	2010-11-17 12:30:47.977921001 +0100
+@@ -2912,7 +2912,7 @@
+ 		read_marks();
+ }
+ 
+-int main(int argc, const char **argv)
++int cmd_fast_import(int argc, const char **argv, const char *prefix)
+ {
+ 	unsigned int i;
+ 
+diff -Nur git-1.7.3.2-orig/git.c git-1.7.3.2/git.c
+--- git-1.7.3.2-orig/git.c	2010-10-22 05:49:16.000000000 +0200
++++ git-1.7.3.2/git.c	2010-11-17 12:30:47.977921001 +0100
+@@ -240,11 +240,11 @@
+ 
+ struct cmd_struct {
+ 	const char *cmd;
+-	int (*fn)(int, const char **, const char *);
++	int (*fn)(int, char **, const char *);
+ 	int option;
+ };
+ 
+-static int run_builtin(struct cmd_struct *p, int argc, const char **argv)
++static int run_builtin(struct cmd_struct *p, int argc, char **argv)
+ {
+ 	int status, help;
+ 	struct stat st;
+@@ -293,7 +293,7 @@
+ 	return 0;
+ }
+ 
+-static void handle_internal_command(int argc, const char **argv)
++static void handle_internal_command(int argc, char **argv)
+ {
+ 	const char *cmd = argv[0];
+ 	static struct cmd_struct commands[] = {
+@@ -405,6 +405,12 @@
+ 		{ "verify-pack", cmd_verify_pack },
+ 		{ "show-ref", cmd_show_ref, RUN_SETUP },
+ 		{ "pack-refs", cmd_pack_refs, RUN_SETUP },
++		{ "shell", cmd_shell },
++		{ "upload-pack", cmd_upload_pack },
++		{ "http-backend", cmd_http_backend },
++		{ "daemon", cmd_daemon },
++		{ "imap-send", cmd_imap_send },
++		{ "fast-import", cmd_fast_import },
+ 	};
+ 	int i;
+ 	static const char ext[] = STRIP_EXTENSION;
+diff -Nur git-1.7.3.2-orig/http-backend.c git-1.7.3.2/http-backend.c
+--- git-1.7.3.2-orig/http-backend.c	2010-10-22 05:49:16.000000000 +0200
++++ git-1.7.3.2/http-backend.c	2010-11-17 12:30:47.977921001 +0100
+@@ -542,7 +542,7 @@
+ 	{"POST", "/git-receive-pack$", service_rpc}
+ };
+ 
+-int main(int argc, char **argv)
++int cmd_http_backend(int argc, char **argv, const char *prefix)
+ {
+ 	char *method = getenv("REQUEST_METHOD");
+ 	char *dir;
+diff -Nur git-1.7.3.2-orig/imap-send.c git-1.7.3.2/imap-send.c
+--- git-1.7.3.2-orig/imap-send.c	2010-10-22 05:49:16.000000000 +0200
++++ git-1.7.3.2/imap-send.c	2010-11-17 12:30:47.977921001 +0100
+@@ -1528,7 +1528,7 @@
+ 	return 0;
+ }
+ 
+-int main(int argc, char **argv)
++int cmd_imap_send(int argc, char **argv, const char *prefix)
+ {
+ 	struct msg_data all_msgs, msg;
+ 	struct store *ctx = NULL;
+diff -Nur git-1.7.3.2-orig/Makefile git-1.7.3.2/Makefile
+--- git-1.7.3.2-orig/Makefile	2010-10-22 05:49:16.000000000 +0200
++++ git-1.7.3.2/Makefile	2010-11-17 12:46:11.309922603 +0100
+@@ -398,12 +398,7 @@
+ # ... and all the rest that could be moved out of bindir to gitexecdir
+ PROGRAMS += $(EXTRA_PROGRAMS)
+ 
+-PROGRAM_OBJS += fast-import.o
+-PROGRAM_OBJS += imap-send.o
+-PROGRAM_OBJS += shell.o
+ PROGRAM_OBJS += show-index.o
+-PROGRAM_OBJS += upload-pack.o
+-PROGRAM_OBJS += http-backend.o
+ 
+ PROGRAMS += $(patsubst %.o,git-%$X,$(PROGRAM_OBJS))
+ 
+@@ -750,6 +745,12 @@
+ BUILTIN_OBJS += builtin/verify-pack.o
+ BUILTIN_OBJS += builtin/verify-tag.o
+ BUILTIN_OBJS += builtin/write-tree.o
++BUILTIN_OBJS += builtin/shell.o
++BUILTIN_OBJS += builtin/upload-pack.o
++BUILTIN_OBJS += builtin/http-backend.o
++BUILTIN_OBJS += builtin/daemon.o
++BUILTIN_OBJS += builtin/imap-send.o
++BUILTIN_OBJS += builtin/fast-import.o
+ 
+ GITLIBS = $(LIB_FILE) $(XDIFF_LIB)
+ EXTLIBS =
+@@ -1244,10 +1245,9 @@
+ EXTLIBS += -lz
+ 
+ ifndef NO_POSIX_ONLY_PROGRAMS
+-	PROGRAM_OBJS += daemon.o
+ endif
+ ifndef NO_OPENSSL
+-	OPENSSL_LIBSSL = -lssl
++	EXTLIBS += -lssl
+ 	ifdef OPENSSLDIR
+ 		BASIC_CFLAGS += -I$(OPENSSLDIR)/include
+ 		OPENSSL_LINK = -L$(OPENSSLDIR)/$(lib) $(CC_LD_DYNPATH)$(OPENSSLDIR)/$(lib)
+@@ -1919,10 +1919,6 @@
+ git-%$X: %.o $(GITLIBS)
+ 	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) $(filter %.o,$^) $(LIBS)
+ 
+-git-imap-send$X: imap-send.o $(GITLIBS)
+-	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) $(filter %.o,$^) \
+-		$(LIBS) $(OPENSSL_LINK) $(OPENSSL_LIBSSL)
+-
+ git-http-fetch$X: revision.o http.o http-walker.o http-fetch.o $(GITLIBS)
+ 	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) $(filter %.o,$^) \
+ 		$(LIBS) $(CURL_LIBCURL)
+@@ -2120,23 +2116,22 @@
+ 
+ 	bindir=$$(cd '$(DESTDIR_SQ)$(bindir_SQ)' && pwd) && \
+ 	execdir=$$(cd '$(DESTDIR_SQ)$(gitexec_instdir_SQ)' && pwd) && \
++	ln -s ../../bin/git "$$execdir/git" && \
+ 	{ test "$$bindir/" = "$$execdir/" || \
+-	  for p in git$X $(filter $(install_bindir_programs),$(ALL_PROGRAMS)); do \
++	  for p in $(filter $(install_bindir_programs),$(ALL_PROGRAMS)); do \
+ 		$(RM) "$$execdir/$$p" && \
+ 		test -z "$(NO_CROSS_DIRECTORY_HARDLINKS)" && \
+-		ln "$$bindir/$$p" "$$execdir/$$p" 2>/dev/null || \
++		ln -s git "$$execdir/$$p" 2>/dev/null || \
+ 		cp "$$bindir/$$p" "$$execdir/$$p" || exit; \
+ 	  done; \
+ 	} && \
+ 	for p in $(filter $(install_bindir_programs),$(BUILT_INS)); do \
+ 		$(RM) "$$bindir/$$p" && \
+-		ln "$$bindir/git$X" "$$bindir/$$p" 2>/dev/null || \
+ 		ln -s "git$X" "$$bindir/$$p" 2>/dev/null || \
+ 		cp "$$bindir/git$X" "$$bindir/$$p" || exit; \
+ 	done && \
+ 	for p in $(BUILT_INS); do \
+ 		$(RM) "$$execdir/$$p" && \
+-		ln "$$execdir/git$X" "$$execdir/$$p" 2>/dev/null || \
+ 		ln -s "git$X" "$$execdir/$$p" 2>/dev/null || \
+ 		cp "$$execdir/git$X" "$$execdir/$$p" || exit; \
+ 	done && \
+diff -Nur git-1.7.3.2-orig/shell.c git-1.7.3.2/shell.c
+--- git-1.7.3.2-orig/shell.c	2010-10-22 05:49:16.000000000 +0200
++++ git-1.7.3.2/shell.c	2010-11-17 12:30:47.981921001 +0100
+@@ -45,7 +45,7 @@
+ 	{ NULL },
+ };
+ 
+-int main(int argc, char **argv)
++int cmd_shell(int argc, char **argv, const char *prefix)
+ {
+ 	char *prog;
+ 	struct commands *cmd;
+diff -Nur git-1.7.3.2-orig/upload-pack.c git-1.7.3.2/upload-pack.c
+--- git-1.7.3.2-orig/upload-pack.c	2010-10-22 05:49:16.000000000 +0200
++++ git-1.7.3.2/upload-pack.c	2010-11-17 12:30:47.981921001 +0100
+@@ -676,7 +676,7 @@
+ 	}
+ }
+ 
+-int main(int argc, char **argv)
++int cmd_upload_pack(int argc, char **argv, const char *prefix)
+ {
+ 	char *dir;
+ 	int i;

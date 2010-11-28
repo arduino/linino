@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=git
-PKG_VERSION:=1.6.5.6
+PKG_VERSION:=1.7.3.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@KERNEL/software/scm/git
-PKG_MD5SUM:=03aefaaecae7a236b88d04d1a83698d9
+PKG_MD5SUM:=902f7f07a789fedc0d2ac03656b85969
 
 PKG_INSTALL:=1
 
@@ -24,7 +24,7 @@ define Package/git
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Version Control Systems
-  DEPENDS:=+libopenssl +dropbear +libpthread
+  DEPENDS:=+libopenssl +libpthread
   TITLE:=The fast version control system
   URL:=http://git-scm.com
 endef
@@ -49,6 +49,7 @@ MAKE_FLAGS := \
 	NO_CURL="YesPlease" \
 	NO_TCLTK="YesPlease" \
 	NO_MKSTEMPS="YesPlease" \
+	NO_PYTHON="YesPlease" \
 
 define Build/Configure
 	$(MAKE) -C $(PKG_BUILD_DIR) \
