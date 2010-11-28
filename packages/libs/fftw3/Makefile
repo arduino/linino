@@ -57,7 +57,8 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/fftw3.h $(1)/usr/include
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfftw3*.{a,so,la} $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfftw3*.{a,la} $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfftw3*.so* $(1)/usr/lib
 endef
 
 define Package/fftw3/install
