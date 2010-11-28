@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=msmtp
 PKG_VERSION:=1.4.19
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/msmtp
@@ -98,6 +98,9 @@ define Package/msmtp/install
 		$(1)/etc/msmtprc
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/msmtp $(1)/usr/bin/msmtp
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/msmtpqueue/msmtp-enqueue.sh $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/msmtpqueue/msmtp-listqueue.sh $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/msmtpqueue/msmtp-runqueue.sh $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/sbin
 endef
 
