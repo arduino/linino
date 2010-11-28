@@ -69,14 +69,6 @@ CONFIGURE_ARGS += \
 	--disable-lzo
 endif
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		$(CONFIGURE_ARGS) \
-		,\
-		ac_cv_func_epoll_create=no \
-	)
-endef
-
 define Package/openvpn/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/openvpn $(1)/usr/sbin/
