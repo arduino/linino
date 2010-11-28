@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=coreutils
 PKG_VERSION:=8.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/coreutils
@@ -62,11 +62,18 @@ define Package/coreutils/description
         sufficient and much smaller.
 endef
 
+ifneq ($(CONFIG_USE_UCLIBC),)
 CONFIGURE_VARS += \
 	gl_cv_func_mbrtowc_incomplete_state=yes \
 	gl_cv_func_mbrtowc_retval=yes \
 	gl_cv_func_wcrtomb_retval=yes \
 	ac_cv_type_pthread_spinlock_t=no
+else
+CONFIGURE_VARS += \
+	gl_cv_func_mbrtowc_incomplete_state=yes \
+	gl_cv_func_mbrtowc_retval=yes \
+	gl_cv_func_wcrtomb_retval=yes
+endif
 
 CONFIGURE_ARGS += \
 	--enable-install-program=su
