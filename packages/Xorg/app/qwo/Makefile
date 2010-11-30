@@ -21,7 +21,6 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-TARGET_CPPFLAGS+=-I$(STAGING_DIR)/usr/include/libconfig
 TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/qwo
