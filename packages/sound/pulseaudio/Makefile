@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://0pointer.de/lennart/projects/pulseaudio/
-#PKG_MD5SUM:=279fb92f08393a6a992d55e3ac9a006b
+PKG_MD5SUM:=ca85ab470669b05e100861654cf5eb3c
 
 PKG_FIXUP = libtool
 
