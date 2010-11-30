@@ -45,8 +45,8 @@ CONFIGURE_ARGS += \
 	--disable-cxx
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/libconfig/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libconfig.h $(1)/usr/include/libconfig/
+	$(INSTALL_DIR) $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/libconfig.h $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libconfig.{a,so} $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libconfig.so* $(1)/usr/lib/
