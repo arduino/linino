@@ -17,13 +17,24 @@ PKG_MD5SUM:=ca85ab470669b05e100861654cf5eb3c
 
 PKG_FIXUP = libtool
 
+PKG_INSTALL = 1
+
 include $(INCLUDE_DIR)/package.mk
 
+#TODO: split pulse into executable and library (or even better into several libraries since they're used as loadable modules, so not linked into)
 define Package/pulseaudio
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libspeexdsp +libgdbm +liboil +libsamplerate +libsndfile +libatomicops +libltdl +dbus +libintl +libiconv @BROKEN
+  DEPENDS:=+libspeexdsp +libgdbm +liboil +libsamplerate +libsndfile +libatomicops +libltdl +dbus +libpthread +librt +libintl +libiconv @BROKEN
   TITLE:=Network sound server
+  URL:=http://www.pulseaudio.org
+endef
+
+define Package/pa-tools
+  SECTION:=sound
+  CATEGORY:=Sound
+  DEPENDS:=+libgdbm +libsndfile +pulseaudio #+libpulse
+  TITLE:=Tools for Pulseaudio
   URL:=http://www.pulseaudio.org
 endef
 
@@ -48,24 +59,45 @@ CONFIGURE_ARGS += \
 	--disable-bluez \
 	--without-caps
 
+
 CONFIGURE_VARS += \
 	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
 
-SUPP_LIBS:=-L$(STAGING_DIR)/usr/lib/libintl/lib -L$(STAGING_DIR)/usr/lib/libiconv/lib
+#SUPP_LIBS:=-L$(STAGING_DIR)/usr/lib/libintl/lib -L$(STAGING_DIR)/usr/lib/libiconv/lib
+TARGET_CFLAGS += -std=gnu99
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS) $(SUPP_LIBS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		LIBLTDL="$(STAGING_DIR)/usr/lib/libltdl.la" \
-		X_CFLAGS="" \
-		all install
+define Package/pulseaudio/install
+	$(INSTALL_DIR) \
+		$(1)/usr/bin \
+		$(1)/usr/lib \
+		$(1)/usr/lib/pulse-$(PKG_VERSION)/modules \
+		$(1)/etc/pulse
+
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/pulseaudio \
+		$(1)/usr/bin/pulseaudio
+
+	$(INSTALL_CONF) \
+		$(PKG_INSTALL_DIR)/etc/pulse/* \
+		$(1)/etc/pulse
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
+		$(1)/usr/lib/
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/pulse-$(PKG_VERSION)/modules/*.so \
+		$(1)/usr/lib/pulse-$(PKG_VERSION)/modules/
 endef
 
-define Package/pulseaudio/install	
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+define Package/pa-tools/install
+	$(INSTALL_DIR) \
+		$(1)/usr/bin
+
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/pa* \
+		$(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,pulseaudio))
+$(eval $(call BuildPackage,pa-tools))
