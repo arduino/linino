@@ -10,6 +10,14 @@ add_param() {
 	echo "$1 = $2" >> $ZNC_CONFIG
 }
 
+add_chan() {
+	chan=${2% *}
+	pass=${1#* }
+	echo "	<Chan $chan>" >> $ZNC_CONFIG
+	[ "$chan" != "$pass" ] && echo "		Key = $pass" >> $ZNC_CONFIG
+	echo "	</Chan>" >> $ZNC_CONFIG
+}
+
 znc_global() {
 	local znc="$1"
 	local anoniplimit
@@ -72,6 +80,7 @@ add_user() {
 
 	config_list_foreach "$user" server "add_param \"	Server\""
 	config_list_foreach "$user" module "add_param \"	LoadModule\""
+	config_list_foreach "$user" channel "add_chan"
 	echo "</User>" >> $ZNC_CONFIG
 }
 
