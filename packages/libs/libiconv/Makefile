@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/libiconv
 PKG_MD5SUM:=d42b97f6ef5dd0ba4469d520ed732fed
 
-#PKG_FIXUP = libtool
+PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -58,7 +58,6 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CC="$(TARGET_CC)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		HOST_CPU="$(PKGARCH)" \
 		install
 endef
 
