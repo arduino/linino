@@ -1,8 +1,6 @@
-Index: libiconv-1.12/libcharset/configure.ac
-===================================================================
---- libiconv-1.12.orig/libcharset/configure.ac	2007-03-05 01:56:23.000000000 +0100
-+++ libiconv-1.12/libcharset/configure.ac	2008-06-06 22:59:25.487260530 +0200
-@@ -16,17 +16,17 @@
+--- a/libcharset/configure.ac
++++ b/libcharset/configure.ac
+@@ -16,17 +16,17 @@ dnl along with the GNU CHARSET Library;
  dnl write to the Free Software Foundation, Inc., 51 Franklin Street,
  dnl Fifth Floor, Boston, MA 02110-1301, USA.
  
@@ -27,11 +25,9 @@ Index: libiconv-1.12/libcharset/configure.ac
  
  dnl           checks for basic programs
  
-Index: libiconv-1.12/configure.ac
-===================================================================
---- libiconv-1.12.orig/configure.ac	2007-10-24 01:32:52.000000000 +0200
-+++ libiconv-1.12/configure.ac	2008-06-06 22:59:25.487260530 +0200
-@@ -24,6 +24,8 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -24,6 +24,8 @@ AM_INIT_AUTOMAKE(libiconv, 1.11)
  AC_CONFIG_HEADERS(config.h lib/config.h)
  AC_PROG_MAKE_SET
  
@@ -40,10 +36,8 @@ Index: libiconv-1.12/configure.ac
  dnl           checks for basic programs
  
  AC_PROG_CC
-Index: libiconv-1.12/libcharset/m4/libtool.m4
-===================================================================
---- libiconv-1.12.orig/libcharset/m4/libtool.m4	2007-10-27 02:46:10.000000000 +0200
-+++ libiconv-1.12/libcharset/m4/libtool.m4	2008-06-06 23:00:06.407256379 +0200
+--- a/libcharset/m4/libtool.m4
++++ b/libcharset/m4/libtool.m4
 @@ -1,107 +1,186 @@
  # libtool.m4 - Configure libtool for the host system. -*-Autoconf-*-
 -## Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2006
@@ -13030,10 +13024,8 @@ Index: libiconv-1.12/libcharset/m4/libtool.m4
 +    ;;
 +  esac
  ])
-Index: libiconv-1.12/m4/libtool.m4
-===================================================================
---- libiconv-1.12.orig/m4/libtool.m4	2007-10-27 02:46:10.000000000 +0200
-+++ libiconv-1.12/m4/libtool.m4	2008-06-06 23:00:22.883921710 +0200
+--- a/m4/libtool.m4
++++ b/m4/libtool.m4
 @@ -1,107 +1,186 @@
  # libtool.m4 - Configure libtool for the host system. -*-Autoconf-*-
 -## Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2006

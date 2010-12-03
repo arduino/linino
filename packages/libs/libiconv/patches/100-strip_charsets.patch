@@ -1,6 +1,5 @@
-diff -urN libiconv-1.11.old/lib/aliases_dos.h libiconv-1.11.new/lib/aliases_dos.h
---- libiconv-1.11.old/lib/aliases_dos.h	2005-05-19 19:08:39.000000000 +0200
-+++ libiconv-1.11.new/lib/aliases_dos.h	2007-11-11 14:38:31.000000000 +0100
+--- a/lib/aliases_dos.h
++++ b/lib/aliases_dos.h
 @@ -2,47 +2,3 @@
    S(dos_1, "IBM437", ei_cp437 )
    S(dos_2, "437", ei_cp437 )
@@ -49,10 +48,9 @@ diff -urN libiconv-1.11.old/lib/aliases_dos.h libiconv-1.11.new/lib/aliases_dos.
 -  S(dos_45, "CP-GR", ei_cp869 )
 -  S(dos_46, "CSIBM869", ei_cp869 )
 -  S(dos_47, "CP1125", ei_cp1125 )
-diff -urN libiconv-1.11.old/lib/aliases.gperf libiconv-1.11.new/lib/aliases.gperf
---- libiconv-1.11.old/lib/aliases.gperf	2006-05-18 14:45:17.000000000 +0200
-+++ libiconv-1.11.new/lib/aliases.gperf	2007-11-11 14:38:02.000000000 +0100
-@@ -48,8 +48,6 @@
+--- a/lib/aliases.gperf
++++ b/lib/aliases.gperf
+@@ -48,8 +48,6 @@ UCS-2-INTERNAL, ei_ucs2internal
  UCS-2-SWAPPED, ei_ucs2swapped
  UCS-4-INTERNAL, ei_ucs4internal
  UCS-4-SWAPPED, ei_ucs4swapped
@@ -61,7 +59,7 @@ diff -urN libiconv-1.11.old/lib/aliases.gperf libiconv-1.11.new/lib/aliases.gper
  ISO-8859-1, ei_iso8859_1
  ISO_8859-1, ei_iso8859_1
  ISO_8859-1:1987, ei_iso8859_1
-@@ -68,285 +66,16 @@
+@@ -68,285 +66,16 @@ LATIN2, ei_iso8859_2
  L2, ei_iso8859_2
  CSISOLATIN2, ei_iso8859_2
  ISO8859-2, ei_iso8859_2
@@ -347,9 +345,8 @@ diff -urN libiconv-1.11.old/lib/aliases.gperf libiconv-1.11.new/lib/aliases.gper
 -CSISO2022KR, ei_iso2022_kr
  CHAR, ei_local_char
  WCHAR_T, ei_local_wchar_t
-diff -urN libiconv-1.11.old/lib/aliases.h libiconv-1.11.new/lib/aliases.h
---- libiconv-1.11.old/lib/aliases.h	2006-05-18 14:45:18.000000000 +0200
-+++ libiconv-1.11.new/lib/aliases.h	2007-11-11 14:39:47.000000000 +0100
+--- a/lib/aliases.h
++++ b/lib/aliases.h
 @@ -1,6 +1,6 @@
  /* ANSI-C code produced by gperf version 3.0.2 */
  /* Command-line: gperf -m 10 lib/aliases.gperf  */
@@ -376,7 +373,7 @@ diff -urN libiconv-1.11.old/lib/aliases.h libiconv-1.11.new/lib/aliases.h
  
  #ifdef __GNUC__
  __inline
-@@ -49,38 +49,31 @@
+@@ -49,38 +49,31 @@ inline
  static unsigned int
  aliases_hash (register const char *str, register unsigned int len)
  {
@@ -429,7 +426,7 @@ diff -urN libiconv-1.11.old/lib/aliases.h libiconv-1.11.new/lib/aliases.h
        case 7:
          hval += asso_values[(unsigned char)str[6]];
        /*FALLTHROUGH*/
-@@ -94,11 +87,7 @@
+@@ -94,11 +87,7 @@ aliases_hash (register const char *str,
          hval += asso_values[(unsigned char)str[3]];
        /*FALLTHROUGH*/
        case 3:
@@ -441,7 +438,7 @@ diff -urN libiconv-1.11.old/lib/aliases.h libiconv-1.11.new/lib/aliases.h
          break;
      }
    return hval + asso_values[(unsigned char)str[len - 1]];
-@@ -106,1576 +95,306 @@
+@@ -106,1576 +95,306 @@ aliases_hash (register const char *str,
  
  struct stringpool_t
    {
@@ -2264,9 +2261,8 @@ diff -urN libiconv-1.11.old/lib/aliases.h libiconv-1.11.new/lib/aliases.h
    };
  
  #ifdef __GNUC__
-diff -urN libiconv-1.11.old/lib/canonical_dos.h libiconv-1.11.new/lib/canonical_dos.h
---- libiconv-1.11.old/lib/canonical_dos.h	2005-05-19 19:08:39.000000000 +0200
-+++ libiconv-1.11.new/lib/canonical_dos.h	2007-11-11 14:41:34.000000000 +0100
+--- a/lib/canonical_dos.h
++++ b/lib/canonical_dos.h
 @@ -1,15 +1 @@
    (int)(long)&((struct stringpool2_t *)0)->stringpool_dos_0,
 -  (int)(long)&((struct stringpool2_t *)0)->stringpool_dos_4,
@@ -2283,9 +2279,8 @@ diff -urN libiconv-1.11.old/lib/canonical_dos.h libiconv-1.11.new/lib/canonical_
 -  (int)(long)&((struct stringpool2_t *)0)->stringpool_dos_38,
 -  (int)(long)&((struct stringpool2_t *)0)->stringpool_dos_42,
 -  (int)(long)&((struct stringpool2_t *)0)->stringpool_dos_47,
-diff -urN libiconv-1.11.old/lib/canonical.h libiconv-1.11.new/lib/canonical.h
---- libiconv-1.11.old/lib/canonical.h	2006-05-18 14:45:20.000000000 +0200
-+++ libiconv-1.11.new/lib/canonical.h	2007-11-11 15:05:29.000000000 +0100
+--- a/lib/canonical.h
++++ b/lib/canonical.h
 @@ -1,107 +1 @@
 -  (int)(long)&((struct stringpool_t *)0)->stringpool_str380,
 -  (int)(long)&((struct stringpool_t *)0)->stringpool_str297,
@@ -2394,17 +2389,15 @@ diff -urN libiconv-1.11.old/lib/canonical.h libiconv-1.11.new/lib/canonical.h
 -  (int)(long)&((struct stringpool_t *)0)->stringpool_str194,
 -  (int)(long)&((struct stringpool_t *)0)->stringpool_str721,
 -  (int)(long)&((struct stringpool_t *)0)->stringpool_str405,
-diff -urN libiconv-1.11.old/lib/canonical_local.h libiconv-1.11.new/lib/canonical_local.h
---- libiconv-1.11.old/lib/canonical_local.h	2006-05-18 14:45:20.000000000 +0200
-+++ libiconv-1.11.new/lib/canonical_local.h	2007-11-11 15:20:08.000000000 +0100
+--- a/lib/canonical_local.h
++++ b/lib/canonical_local.h
 @@ -1,2 +1 @@
 -  (int)(long)&((struct stringpool_t *)0)->stringpool_str169,
 -  (int)(long)&((struct stringpool_t *)0)->stringpool_str267,
 +
-diff -urN libiconv-1.11.old/lib/converters.h libiconv-1.11.new/lib/converters.h
---- libiconv-1.11.old/lib/converters.h	2006-05-18 14:43:55.000000000 +0200
-+++ libiconv-1.11.new/lib/converters.h	2007-11-11 14:44:59.000000000 +0100
-@@ -129,161 +129,15 @@
+--- a/lib/converters.h
++++ b/lib/converters.h
+@@ -129,161 +129,15 @@ struct conv_struct {
  #include "ucs2swapped.h"
  #include "ucs4internal.h"
  #include "ucs4swapped.h"
@@ -2566,10 +2559,9 @@ diff -urN libiconv-1.11.old/lib/converters.h libiconv-1.11.new/lib/converters.h
 -#include "riscos1.h"
  #endif
 -
-diff -urN libiconv-1.11.old/lib/encodings.def libiconv-1.11.new/lib/encodings.def
---- libiconv-1.11.old/lib/encodings.def	2006-05-18 14:43:55.000000000 +0200
-+++ libiconv-1.11.new/lib/encodings.def	2007-11-11 14:59:15.000000000 +0100
-@@ -161,16 +161,6 @@
+--- a/lib/encodings.def
++++ b/lib/encodings.def
+@@ -161,16 +161,6 @@ DEFENCODING(( "UCS-4-SWAPPED",
              ucs4swapped,
              { ucs4swapped_mbtowc, NULL }, { ucs4swapped_wctomb, NULL })
  
@@ -2586,7 +2578,7 @@ diff -urN libiconv-1.11.old/lib/encodings.def libiconv-1.11.new/lib/encodings.de
  /* Standard 8-bit encodings */
  
  DEFENCODING(( "ISO-8859-1",             /* IANA */
-@@ -203,148 +193,6 @@
+@@ -203,148 +193,6 @@ DEFENCODING(( "ISO-8859-2",
              iso8859_2,
              { iso8859_2_mbtowc, NULL },   { iso8859_2_wctomb, NULL })
  
@@ -2735,7 +2727,7 @@ diff -urN libiconv-1.11.old/lib/encodings.def libiconv-1.11.new/lib/encodings.de
  DEFENCODING(( "ISO-8859-15",            /* IANA, glibc */
                "ISO_8859-15",            /* IANA */
                "ISO_8859-15:1998",       /* glibc */
-@@ -356,17 +204,6 @@
+@@ -356,17 +204,6 @@ DEFENCODING(( "ISO-8859-15",
              iso8859_15,
              { iso8859_15_mbtowc, NULL },  { iso8859_15_wctomb, NULL })
  
@@ -2753,7 +2745,7 @@ diff -urN libiconv-1.11.old/lib/encodings.def libiconv-1.11.new/lib/encodings.de
  DEFENCODING(( "KOI8-R",                 /* IANA, RFC 1489, X11R6.4, JDK 1.1 */
                "csKOI8R",                /* IANA */
              /*"CP20866",                   Windows */
-@@ -374,16 +211,6 @@
+@@ -374,16 +211,6 @@ DEFENCODING(( "KOI8-R",
              koi8_r,
              { koi8_r_mbtowc, NULL },      { koi8_r_wctomb, NULL })
  
@@ -2770,7 +2762,7 @@ diff -urN libiconv-1.11.old/lib/encodings.def libiconv-1.11.new/lib/encodings.de
  /* Windows 8-bit encodings */
  
  DEFENCODING(( "CP1250",                 /* JDK 1.1 */
-@@ -393,61 +220,6 @@
+@@ -393,61 +220,6 @@ DEFENCODING(( "CP1250",
              cp1250,
              { cp1250_mbtowc, NULL },      { cp1250_wctomb, NULL })
  
@@ -2832,7 +2824,7 @@ diff -urN libiconv-1.11.old/lib/encodings.def libiconv-1.11.new/lib/encodings.de
  /* DOS 8-bit encodings */
  
  DEFENCODING(( "CP850",                  /* IANA, JDK 1.1 */
-@@ -458,431 +230,3 @@
+@@ -458,431 +230,3 @@ DEFENCODING(( "CP850",
              cp850,
              { cp850_mbtowc, NULL },       { cp850_wctomb, NULL })
  
@@ -3264,10 +3256,9 @@ diff -urN libiconv-1.11.old/lib/encodings.def libiconv-1.11.new/lib/encodings.de
 -            iso2022_kr,
 -            { iso2022_kr_mbtowc, NULL },  { iso2022_kr_wctomb, iso2022_kr_reset })
 -
-diff -urN libiconv-1.11.old/lib/encodings_dos.def libiconv-1.11.new/lib/encodings_dos.def
---- libiconv-1.11.old/lib/encodings_dos.def	2005-05-19 18:19:21.000000000 +0200
-+++ libiconv-1.11.new/lib/encodings_dos.def	2007-11-11 14:57:20.000000000 +0100
-@@ -26,102 +26,3 @@
+--- a/lib/encodings_dos.def
++++ b/lib/encodings_dos.def
+@@ -26,102 +26,3 @@ DEFENCODING(( "CP437",
              cp437,
              { cp437_mbtowc, NULL },       { cp437_wctomb, NULL })
  
@@ -3370,9 +3361,8 @@ diff -urN libiconv-1.11.old/lib/encodings_dos.def libiconv-1.11.new/lib/encoding
 -            ),
 -            cp1125,
 -            { cp1125_mbtowc, NULL },      { cp1125_wctomb, NULL })
-diff -urN libiconv-1.11.old/lib/loop_unicode.h libiconv-1.11.new/lib/loop_unicode.h
---- libiconv-1.11.old/lib/loop_unicode.h	2006-01-23 14:16:12.000000000 +0100
-+++ libiconv-1.11.new/lib/loop_unicode.h	2007-11-11 14:28:10.000000000 +0100
+--- a/lib/loop_unicode.h
++++ b/lib/loop_unicode.h
 @@ -24,14 +24,15 @@
  static int unicode_transliterate (conv_t cd, ucs4_t wc,
                                    unsigned char* outptr, size_t outleft)
@@ -3392,7 +3382,7 @@ diff -urN libiconv-1.11.old/lib/loop_unicode.h libiconv-1.11.new/lib/loop_unicod
        state_t backup_state = cd->ostate;
        unsigned char* backup_outptr = outptr;
        size_t backup_outleft = outleft;
-@@ -57,9 +58,9 @@
+@@ -57,9 +58,9 @@ static int unicode_transliterate (conv_t
      }
    }
    {
@@ -3404,7 +3394,7 @@ diff -urN libiconv-1.11.old/lib/loop_unicode.h libiconv-1.11.new/lib/loop_unicod
      int indx = -1;
      if (wc == 0x3006)
        indx = 0;
-@@ -105,20 +106,20 @@
+@@ -105,20 +106,20 @@ static int unicode_transliterate (conv_t
      }
    }
    if (wc >= 0x2018 && wc <= 0x201a) {
@@ -3429,7 +3419,7 @@ diff -urN libiconv-1.11.old/lib/loop_unicode.h libiconv-1.11.new/lib/loop_unicod
      int indx = translit_index(wc);
      if (indx >= 0) {
        const unsigned int * cp = &translit_data[indx];
-@@ -135,7 +136,7 @@
+@@ -135,7 +136,7 @@ static int unicode_transliterate (conv_t
          }
          sub_outcount = cd->ofuncs.xxx_wctomb(cd,outptr,cp[i],outleft);
          if (sub_outcount == RET_ILUNI)
@@ -3438,7 +3428,7 @@ diff -urN libiconv-1.11.old/lib/loop_unicode.h libiconv-1.11.new/lib/loop_unicod
            sub_outcount = unicode_transliterate(cd,cp[i],outptr,outleft);
          if (sub_outcount <= RET_ILUNI)
            goto translit_failed;
-@@ -151,6 +152,7 @@
+@@ -151,6 +152,7 @@ static int unicode_transliterate (conv_t
          return RET_TOOSMALL;
      }
    }

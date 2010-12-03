@@ -1,5 +1,5 @@
 --- /dev/null
-+++ a/Makefile.am
++++ b/Makefile.am
 @@ -0,0 +1,2 @@
 +ACLOCAL_AMFLAGS = -I m4
 +SUBDIRS = .
@@ -9,7 +9,7 @@
 +ACLOCAL_AMFLAGS = -I m4
 --- a/configure.ac
 +++ b/configure.ac
-@@ -52,7 +52,7 @@ AC_ISC_POSIX
+@@ -54,7 +54,7 @@ AC_ISC_POSIX
  
  dnl           checks for installer options
  
