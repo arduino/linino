@@ -1,6 +1,6 @@
 --- a/src/Makefile.in
 +++ b/src/Makefile.in
-@@ -321,7 +321,7 @@ INCLUDES = -I. -I$(srcdir) -I$(top_srcdi
+@@ -322,7 +322,7 @@ INCLUDES = -I. -I$(srcdir) -I$(top_srcdi
  	-I$(srcdir)/../libdw -I$(srcdir)/../libdwfl \
  	-I$(srcdir)/../libasm
  AM_CFLAGS = -std=gnu99 -Wall -Wshadow $(if \
@@ -11,7 +11,7 @@
  	$(am__append_1)
 --- a/libelf/Makefile.in
 +++ b/libelf/Makefile.in
-@@ -279,7 +279,7 @@ top_srcdir = @top_srcdir@
+@@ -280,7 +280,7 @@ top_srcdir = @top_srcdir@
  zip_LIBS = @zip_LIBS@
  INCLUDES = -I. -I$(srcdir) -I$(top_srcdir)/lib -I..
  AM_CFLAGS = -std=gnu99 -Wall -Wshadow $(if \

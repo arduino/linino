@@ -7,12 +7,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=elfutils
-PKG_VERSION:=0.147
+PKG_VERSION:=0.150
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://fedorahosted.org/releases/e/l/elfutils/
-PKG_MD5SUM:=ccb6bba1d96c096f1b5dbd34444554a3
+PKG_SOURCE_URL:=http://fedorahosted.org/releases/e/l/$(PKG_NAME)/$(PKG_VERSION)
+PKG_MD5SUM:=3dcfb28fa339090a1d29a9e148cce469
 
 PKG_INSTALL:=1
 

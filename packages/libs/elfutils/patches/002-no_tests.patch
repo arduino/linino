@@ -11,7 +11,7 @@
  
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -248,7 +248,7 @@ pkginclude_HEADERS = version.h
+@@ -249,7 +249,7 @@ pkginclude_HEADERS = version.h
  
  # Add doc back when we have some real content.
  SUBDIRS = config m4 lib libelf libebl libdwfl libdw libcpu libasm backends \
