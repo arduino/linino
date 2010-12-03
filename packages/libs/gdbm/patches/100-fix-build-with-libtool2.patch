@@ -1,0 +1,21 @@
+diff -urN gdbm-1.8.3.ori/Makefile.in gdbm-1.8.3.new/Makefile.in
+--- gdbm-1.8.3.ori/Makefile.in	2002-10-08 18:09:12.000000000 +0200
++++ gdbm-1.8.3.new/Makefile.in	2009-04-29 10:14:48.000000000 +0200
+@@ -130,7 +130,7 @@
+ 	$(srcdir)/mkinstalldirs $(INSTALL_ROOT)$(libdir) \
+ 		$(INSTALL_ROOT)$(includedir) $(INSTALL_ROOT)$(man3dir) \
+ 		$(INSTALL_ROOT)$(infodir)
+-	$(LIBTOOL) $(INSTALL) -c libgdbm.la $(INSTALL_ROOT)$(libdir)/libgdbm.la
++	$(LIBTOOL) --mode=install $(INSTALL) -c libgdbm.la $(INSTALL_ROOT)$(libdir)/libgdbm.la
+ 	$(INSTALL_DATA) -o $(BINOWN) -g $(BINGRP) gdbm.h \
+ 		$(INSTALL_ROOT)$(includedir)/gdbm.h
+ 	$(INSTALL_DATA) -o $(BINOWN) -g $(BINGRP) $(srcdir)/gdbm.3 \
+@@ -141,7 +141,7 @@
+ install-compat:
+ 	$(srcdir)/mkinstalldirs $(INSTALL_ROOT)$(libdir) \
+ 		$(INSTALL_ROOT)$(includedir)
+-	$(LIBTOOL) $(INSTALL) -c libgdbm_compat.la \
++	$(LIBTOOL) --mode=install $(INSTALL) -c libgdbm_compat.la \
+ 		$(INSTALL_ROOT)$(libdir)/libgdbm_compat.la
+ 	$(INSTALL_DATA) -o $(BINOWN) -g $(BINGRP) $(srcdir)/dbm.h \
+ 		$(INSTALL_ROOT)$(includedir)/dbm.h
