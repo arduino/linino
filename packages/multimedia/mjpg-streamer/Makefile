@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mjpg-streamer
-PKG_REV:=94
+PKG_REV:=136
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
