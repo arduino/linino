@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=collectd
-PKG_VERSION:=4.9.1
-PKG_RELEASE:=3
+PKG_VERSION:=4.10.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://collectd.org/files/
-PKG_MD5SUM:=5753496651c8c84afaea1fe290876bfc
+PKG_MD5SUM:=85d9d8d0a1327782661e3c89800aa70e
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -199,6 +199,13 @@ endif
 define Package/collectd/conffiles
 /etc/collectd.conf
 endef
+
+#define Build/Configure
+#	(cd $(PKG_BUILD_DIR); \
+#		autoreconf -v --install || exit 1 \
+#	);
+#	$(call Build/Configure/Default)
+#endef
 
 define Package/collectd/install
 	$(INSTALL_DIR) $(1)/usr/sbin

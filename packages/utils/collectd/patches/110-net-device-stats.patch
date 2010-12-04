@@ -2,8 +2,8 @@
  src/interface.c |   33 ++++++++++++++++++++++++++++++++-
  1 file changed, 32 insertions(+), 1 deletion(-)
 
---- collectd-4.9.1.orig/src/interface.c
-+++ collectd-4.9.1/src/interface.c
+--- a/src/interface.c
++++ b/src/interface.c
 @@ -203,7 +203,38 @@ static int interface_read (void)
  #  define IFA_RX_ERROR rx_errors
  #  define IFA_TX_ERROR tx_errors

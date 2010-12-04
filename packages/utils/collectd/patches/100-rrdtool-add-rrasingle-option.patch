@@ -17,7 +17,7 @@
  	/* consolidation_functions = */ NULL,
  	/* consolidation_functions_num = */ 0
  };
-@@ -976,6 +979,14 @@ static int rrd_config (const char *key, 
+@@ -1027,6 +1030,14 @@ static int rrd_config (const char *key,
  
  		free (value_copy);
  	}
