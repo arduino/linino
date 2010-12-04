@@ -58,11 +58,11 @@ define Build/InstallDev
 		$(1)/usr/include
 
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
+		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
 		$(1)/usr/lib
 
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/pango/1.6.0/modules/*.{so*,a,la} \
+		$(PKG_INSTALL_DIR)/usr/lib/pango/1.6.0/modules/*.so* \
 		$(1)/usr/lib/pango/1.6.0/modules/
 
 	$(INSTALL_DATA) \
