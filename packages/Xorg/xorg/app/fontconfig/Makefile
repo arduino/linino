@@ -36,6 +36,8 @@ CONFIGURE_ARGS+= \
 CONFIGURE_VARS+= \
 	ac_cv_prog_HASDOCBOOK=no \
 
+TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+
 define Build/Compile
 	$(foreach dir,fc-arch fc-case fc-lang fc-glyphname, \
 		$(MAKE) -C $(PKG_BUILD_DIR)/$(dir) CFLAGS="$(HOST_CFLAGS)"  \
