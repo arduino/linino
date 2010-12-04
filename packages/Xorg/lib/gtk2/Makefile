@@ -83,7 +83,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/gtk-2.0/include/* $(1)/usr/include/
 
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
+		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,la} \
 		$(1)/usr/lib/
 
 	$(INSTALL_DATA) \
