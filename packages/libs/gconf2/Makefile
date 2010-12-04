@@ -22,7 +22,8 @@ TARGET_CFLAGS+= \
 
 TARGET_LDFLAGS+= \
 	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/libgconf2
   SECTION:=libs
