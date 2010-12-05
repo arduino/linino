@@ -113,7 +113,7 @@ polipo_atom() {
 	local SECTION=$1
 	local OPTION=$2
 	local QUOTE=$3
-	local EMPTY_DISABLED=$4
+	local EMPTY_DISABLED=${4:-0}
 
 	config_get _value "$SECTION" "$OPTION"
 	[ -n "$_value" -o "$EMPTY_DISABLED" -eq "1" ] && {
@@ -138,6 +138,14 @@ polipo_list() {
 	local QUOTE=$3
 
 	config_get _value "$SECTION" "$OPTION"
+	
+	[ "$SECTION" = general ] && [ "$OPTION" = allowedClients ] && {
+		case "$_value" in
+			*127.0.0.1*) : ;;
+			*) _value="127.0.0.1 $_value" ;;
+		esac
+	}
+	
 	[ -n "$_value" ] && {
 		echo -n "$OPTION = "
 		
