@@ -1,6 +1,6 @@
---- a/gettext-runtime/Makefile.in	2009-05-19 17:10:59.798239310 +0200
-+++ b/gettext-runtime/Makefile.in	2009-05-19 17:12:40.225999245 +0200
-@@ -154,7 +154,7 @@ RECURSIVE_CLEAN_TARGETS = mostlyclean-re
+--- a/gettext-runtime/Makefile.in
++++ b/gettext-runtime/Makefile.in
+@@ -208,7 +208,7 @@ AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGE
  ETAGS = etags
  CTAGS = ctags
  DIST_SUBDIRS = doc intl intl-java intl-csharp gnulib-lib libasprintf \

@@ -1,7 +1,6 @@
-diff -pruN gettext-0.17.orig/gettext-runtime/intl/localename.c gettext-0.17/gettext-runtime/intl/localename.c
---- gettext-0.17.orig/gettext-runtime/intl/localename.c	2009-05-19 17:25:21.925748747 +0200
-+++ gettext-0.17/gettext-runtime/intl/localename.c	2009-05-19 17:26:12.773472555 +0200
-@@ -996,7 +996,7 @@ gl_locale_name_posix (int category, cons
+--- a/gettext-runtime/intl/localename.c
++++ b/gettext-runtime/intl/localename.c
+@@ -2780,7 +2780,7 @@ gl_locale_name_posix (int category, cons
  {
    /* Use the POSIX methods of looking to 'LC_ALL', 'LC_xxx', and 'LANG'.
       On some systems this can be done by the 'setlocale' function itself.  */
@@ -9,4 +8,4 @@ diff -pruN gettext-0.17.orig/gettext-runtime/intl/localename.c gettext-0.17/gett
 +#if defined HAVE_SETLOCALE && defined HAVE_LC_MESSAGES && defined HAVE_LOCALE_NULL && (!defined __UCLIBC__ || defined __UCLIBC_HAS_LOCALE__)
    return setlocale (category, NULL);
  #else
-   const char *retval;
+   /* On other systems we ignore what setlocale reports and instead look at the
