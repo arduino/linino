@@ -1,0 +1,14 @@
+--- a/gettext-tools/gnulib-lib/spawn.h
++++ b/gettext-tools/gnulib-lib/spawn.h
+@@ -32,8 +32,10 @@
+ 
+ /* Get definitions of 'struct sched_param' and 'sigset_t'.
+    But avoid namespace pollution on glibc systems.  */
+-#ifndef __GLIBC__
++#ifndef __GLIBC__ || __UCLIBC__
+ # include <sched.h>
++#endif
++#ifndef __GLIBC__
+ # include <signal.h>
+ #endif
+ 
