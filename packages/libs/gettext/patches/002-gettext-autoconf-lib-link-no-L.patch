@@ -1,0 +1,24 @@
+--- a/gettext-runtime/gnulib-m4/lib-link.m4
++++ b/gettext-runtime/gnulib-m4/lib-link.m4
+@@ -312,6 +312,9 @@ AC_DEFUN([AC_LIB_LINKFLAGS_BODY],
+               fi
+             fi
+           fi
++          dnl Just let the compiler find the library, the compiler and user are smarter then this script
++          dnl when cross compiling and working with a relocated install.
++          found_dir=""
+           if test "X$found_dir" = "X"; then
+             for x in $LDFLAGS $LTLIB[]NAME; do
+               AC_LIB_WITH_FINAL_PREFIX([eval x=\"$x\"])
+--- a/gettext-tools/gnulib-m4/lib-link.m4
++++ b/gettext-tools/gnulib-m4/lib-link.m4
+@@ -312,6 +312,9 @@ AC_DEFUN([AC_LIB_LINKFLAGS_BODY],
+               fi
+             fi
+           fi
++          dnl Just let the compiler find the library, the compiler and user are smarter then this script
++          dnl when cross compiling and working with a relocated install.
++          found_dir=""
+           if test "X$found_dir" = "X"; then
+             for x in $LDFLAGS $LTLIB[]NAME; do
+               AC_LIB_WITH_FINAL_PREFIX([eval x=\"$x\"])
