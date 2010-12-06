@@ -82,10 +82,6 @@ CONFIGURE_VARS += \
 	LDFLAGS="$$$$LDFLAGS -lcrypto -lssl -lz" \
 	CC="$(filter-out ccache,$(TARGET_CC))"
 
-define Build/Configure
-	$(call Build/Configure/Default,,bash)
-endef
-
 define Build/Compile
 	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
