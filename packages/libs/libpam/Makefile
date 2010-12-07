@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libpam
-PKG_VERSION:=1.1.2
+PKG_VERSION:=1.1.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=Linux-PAM-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=@KERNEL/linux/libs/pam/pre/library
-PKG_MD5SUM:=81173dfeffe69d726081f9c5667cd3e7
+PKG_SOURCE_URL:=@KERNEL/linux/libs/pam/library
+PKG_MD5SUM:=6db7fcb5db6253350e3a4648ceac40e7
 PKG_INSTALL:=1
 PKG_FIXUP:=libtool
 
@@ -37,7 +37,7 @@ endef
 TARGET_CFLAGS += $(FPIC)
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); aclocal -I m4 && autoconf && automake)
+	(cd $(PKG_BUILD_DIR); autoreconf -v -f --install || exit 1)
 	$(call Build/Configure/Default, \
 		--enable-shared \
 		--enable-static \
@@ -49,6 +49,8 @@ define Build/Configure
 		--disable-rpath \
 	)
 endef
+
+
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/lib

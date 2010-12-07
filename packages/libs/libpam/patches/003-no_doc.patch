@@ -23,7 +23,7 @@
  	examples xtests
  DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
  distdir = $(PACKAGE)-$(VERSION)
-@@ -249,8 +249,8 @@ top_build_prefix = @top_build_prefix@
+@@ -253,8 +253,8 @@ top_build_prefix = @top_build_prefix@
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  AUTOMAKE_OPTIONS = 1.9 gnu dist-bzip2 check-news
