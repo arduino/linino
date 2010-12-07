@@ -130,7 +130,7 @@ define Package/freeswitch/Default
   SECTION:=net
   CATEGORY:=Network
   URL:=http://www.freeswitch.org/
-  MAINTAINER:=Daniel Dickinson <ddickinson@vertical.com>
+  MAINTAINER:=Daniel Dickinson <openwrt@cshore.neomailbox.net>
 endef
 
 
@@ -180,14 +180,13 @@ endef
 define Package/freeswitch-config-minimal/description
   A minimal configuration of FreeSWITCH for OpenWRT devices.  Is what the UCI 
   configuration began with.
-  
 endef
 
 define Package/freeswitch-collection-upstream-defaults
 $(call Package/freeswitch/Default)
   TITLE:=FreeSWITCH upstream default (sample) config
   DEPENDS:= freeswitch \
-  		+freeswitch-config-upstream-defaults \
+		+freeswitch-config-upstream-defaults \
 		+freeswitch-mod-commands \
 		+freeswitch-mod-conference \
 		+freeswitch-mod-syslog \
@@ -216,7 +215,7 @@ define Package/freeswitch-collection-minimal
 $(call Package/freeswitch/Default)
   TITLE:=A FreeSWITCH minimal package collection
   DEPENDS:= freeswitch \
-  		+freeswitch-config-minimal \
+		+freeswitch-config-minimal \
 		+freeswitch-mod-commands \
 		+freeswitch-mod-syslog \
 		+freeswitch-mod-dialplan-xml \

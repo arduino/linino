@@ -20,7 +20,7 @@ define Package/firewall-mod-save/Default
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Preserve dynamic chains during firewall restart
-  MAINTAINER:=Daniel Dickinson <cshore@csolve.net>
+  MAINTAINER:=Daniel Dickinson <openwrt@cshore.neomailbox.net>
 endef
 
 define Package/firewall-mod-save

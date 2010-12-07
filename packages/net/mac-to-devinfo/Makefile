@@ -19,7 +19,7 @@ define Package/mac-to-devinfo
   SECTION:=net
   CATEGORY:=Network
   TITLE:=MAC Address to Device Information
-  MAINTAINER:=Daniel Dickinson <ddickinson@vertical.com>
+  MAINTAINER:=Daniel Dickinson <openwrt@cshore.neomailbox.net>
 endef
 
 define Package/mac-to-devinfo/description
