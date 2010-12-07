@@ -58,6 +58,11 @@ define Package/rp-pppoe-server
   TITLE+= server
 endef
 
+define Package/rp-pppoe-server/conffiles
+/etc/ppp/pppoe-server-options
+/etc/default/pppoe-server
+endef
+
 define Package/rp-pppoe-server/description
         $(call Package/rp-pppoe/Default/description)
         This package contains pppoe-server.
