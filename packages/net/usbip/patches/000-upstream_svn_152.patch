@@ -79,8 +79,6 @@
  
 --- a/drivers/head/usbip_common.c
 +++ b/drivers/head/usbip_common.c
- #define DRIVER_DESC "usbip common driver"
- 
 @@ -55,10 +55,7 @@ static ssize_t show_flag(struct device *
  static ssize_t store_flag(struct device *dev, struct device_attribute *attr,
  		const char *buf, size_t count)

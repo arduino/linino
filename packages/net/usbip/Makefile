@@ -93,9 +93,14 @@ LIBTOOL_PATHS:=./src
 
 CFLAGS+="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include"
 
+TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
+TARGET_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libintl/lib/
+TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libiconv/include/
+TARGET_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libiconv/lib/
+
 define Build/Prepare
 $(call Build/Prepare/Default)
-	(cd $(PKG_BUILD_DIR)/src; ./autogen.sh )
+	(cd $(PKG_BUILD_DIR)/src; autoreconf -v --install || exit 1 )
 endef
 
 define Build/Compile/kmod
