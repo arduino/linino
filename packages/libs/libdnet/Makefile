@@ -68,6 +68,17 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	ac_cv_dnet_bsd_bpf=no
 
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+
+define Build/Configure
+	(cd $(PKG_BUILD_DIR); \
+		ln -sf config/acinclude.m4 . ; \
+		autoreconf -v --install || exit 1 \
+	);
+	$(call Build/Configure/Default)
+endef
+
 define Build/Compile
 	$(call Build/Compile/Default)
 	$(if $(CONFIG_PACKAGE_pydnet), \
