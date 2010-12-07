@@ -33,6 +33,10 @@ define Package/gkrellmd/description
 	monitors collect their data from the server.
 endef
 
+define Package/gkrellmd/conffiles
+/etc/$(PKG_NAME).conf
+endef
+
 define Build/Compile
 	CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS)" \
 	LDFLAGS="$(EXTRA_LDFLAGS) " \
