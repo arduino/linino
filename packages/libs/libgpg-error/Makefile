@@ -17,7 +17,7 @@ PKG_SOURCE_URL:=ftp://ftp.gnupg.org/gcrypt/libgpg-error/ \
 	http://gulus.usherbrooke.ca/pub/appl/GnuPG/libgpg-error/ \
 	http://gnupg.unixmexico.org/ftp/libgpg-error/
 PKG_MD5SUM:=62c0d09d1e76c5b6da8fff92314c4665
-PKG_FIXUP:=libtool
+PKG_FIXUP:=libtool no-autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 
