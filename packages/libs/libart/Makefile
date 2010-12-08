@@ -18,6 +18,8 @@ PKG_MD5SUM:=08559ff3c67fd95d57b0c5e91a6b4302
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_lgpl-$(PKG_VERSION)
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
