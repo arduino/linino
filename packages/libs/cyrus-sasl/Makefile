@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=http://ftp.andrew.cmu.edu/pub/cyrus-mail/
 PKG_MD5SUM:=268ead27f4ac39bcfe17d9e38e0f2977
 
 PKG_BUILD_DEPENDS:=libopenssl
-PKG_FIXUP = libtool
+PKG_FIXUP = libtool no-autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 
