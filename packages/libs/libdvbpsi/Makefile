@@ -14,7 +14,9 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.videolan.org/pub/libdvbpsi/$(PKG_VERSION)/
 PKG_MD5SUM:=bd2d9861be3311e1e03c91cd9345f542
+
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=acinclude.m4 aclocal.m4 autotools/ltmain.sh
 
 include $(INCLUDE_DIR)/package.mk
 
