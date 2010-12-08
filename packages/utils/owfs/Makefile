@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=owfs
-PKG_VERSION:=2.8p1
+PKG_VERSION:=2.8p4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=1f7e5482e86d7c2a916fc020b8d4d584
+PKG_MD5SUM:=beccd8765184b2abea0a3f28dc466ea3
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=libtool 
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -185,11 +185,19 @@ CONFIGURE_VARS += \
 	lt_cv_sys_lib_search_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
 	shrext_cmds=".so" \
 
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CC="$(TARGET_CC)" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		HOST_CPU="$(PKGARCH)" \
+		all install
+endef
+
 define Build/InstallDev
 	$(INSTALL_DIR) $(STAGING_DIR)/usr/include
 	$(CP)	$(PKG_INSTALL_DIR)/usr/include/ow{capi,fs_config}.h $(STAGING_DIR)/usr/include/
 	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
-	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/libow{,capi}*.{a,so*} $(STAGING_DIR)/usr/lib/
+	$(CP)	$(PKG_INSTALL_DIR)/usr/lib/libow{,capi}*.so* $(STAGING_DIR)/usr/lib/
 endef
 
 define Package/owfs/install
