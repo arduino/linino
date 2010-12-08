@@ -16,7 +16,10 @@ PKG_SOURCE_URL:=http://www.sqlite.org/
 PKG_MD5SUM:=61b85f108760f91b79afc7833e6e6cb4
 
 PKG_BUILD_DEPENDS:=libncurses libreadline
+
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=acinlude.m4 aclocal.m4 ltmain.sh
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
