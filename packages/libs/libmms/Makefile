@@ -36,6 +36,9 @@ define Package/libmms/description
 endef
 
 TARGET_CFLAGS += $(FPIC)
+TARGET_LDFLAGS += \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); ./autogen.sh );
