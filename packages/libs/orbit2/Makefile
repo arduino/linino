@@ -16,7 +16,9 @@ HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/ORBit2-$(PKG_VERSION)
 PKG_SOURCE:=ORBit2-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNOME/ORBit2/2.14
 #PKG_MD5SUM:=d7fb9eb41e8196f1aacf2f08375ae555
+
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=ltmain.sh
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk

@@ -1,0 +1,10 @@
+--- a/acinclude.m4
++++ b/acinclude.m4
+@@ -228,3 +228,7 @@ AC_DEFUN([AX_CFLAGS_GCC_OPTION],[ifelse(
+ 
+ AC_DEFUN([AX_CXXFLAGS_GCC_OPTION],[ifelse(m4_bregexp([$2],[-]),-1,
+ [AX_CXXFLAGS_GCC_OPTION_NEW($@)],[AX_CXXFLAGS_GCC_OPTION_OLD($@)])])
++
++
++dnl fake GTK Doc check
++AC_DEFUN([GTK_DOC_CHECK],[AM_CONDITIONAL(ENABLE_GTK_DOC,false)])
