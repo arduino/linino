@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.gnupg.org/gcrypt/libgcrypt/
 PKG_MD5SUM:=cc2017ad09b4543f8b3b5e9a53cfd89d
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=libtool no-autoreconf
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 
