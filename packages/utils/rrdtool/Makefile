@@ -22,6 +22,8 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_rrdcgi \
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=aclocal.me ltmain.sh
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
