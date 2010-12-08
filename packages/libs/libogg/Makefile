@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=http://downloads.xiph.org/releases/ogg/
 PKG_MD5SUM:=10200ec22543841d9d1c23e0aed4e5e9
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=aclocal.m4 acinclude.m4 ltmain.sh
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
