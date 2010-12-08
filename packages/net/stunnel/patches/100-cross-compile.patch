@@ -111,3 +111,16 @@
  
  # Check for obsolete RSAref library
  { echo "$as_me:$LINENO: checking for obsolete RSAref library" >&5
+--- a/configure.ac
++++ b/configure.ac
+@@ -44,10 +44,6 @@ AC_EGREP_HEADER(socklen_t, sys/socket.h,
+     AC_MSG_RESULT([no (defined as int)])
+     AC_DEFINE(socklen_t, int))
+ 
+-AC_MSG_NOTICE([**************************************** PTY device files])
+-AC_CHECK_FILE("/dev/ptmx", AC_DEFINE(HAVE_DEV_PTMX))
+-AC_CHECK_FILE("/dev/ptc", AC_DEFINE(HAVE_DEV_PTS_AND_PTC))
+-
+ AC_MSG_NOTICE([**************************************** entropy])
+ 
+ AC_ARG_WITH(egd-socket,
