@@ -1,0 +1,5 @@
+--- /dev/null
++++ b/acinclude.m4
+@@ -0,0 +1,2 @@
++dnl fake GTK doc check
++AC_DEFUN([GTK_DOC_CHECK],[AM_CONDITIONAL(ENABLE_GTK_DOC,false)])
