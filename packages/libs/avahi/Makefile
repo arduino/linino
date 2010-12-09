@@ -18,6 +18,8 @@ PKG_MD5SUM:=d0143a5aa3265019072e53ab497818d0
 PKG_BUILD_DEPENDS:=libexpat libdaemon libgdbm intltool/host
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=autogen.sh ltmain.sh common/libtool.m4
+
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 
@@ -147,11 +149,6 @@ endif
 
 CONFIGURE_VARS+= \
 	CFLAGS="$$$$CFLAGS -DNDEBUG -DDISABLE_SYSTEMD" \
-
-define Build/Configure
-	( cd $(PKG_BUILD_DIR); autoreconf -f; );
-	$(call Build/Configure/Default)
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
