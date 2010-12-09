@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=@SF/liblo
 PKG_MD5SUM:=5351de14262560e15e7f23865293b16f
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=autogen.sh aclocal.m4 ltmain.sh
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -50,7 +52,7 @@ define Build/InstallDev
 	)
 	$(INSTALL_DIR) $(1)/usr/lib
 	( cd $(PKG_INSTALL_DIR); $(CP) \
-		./usr/lib/liblo.{a,so*} \
+		./usr/lib/liblo.so* \
 		$(1)/usr/lib/ \
 	)
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
