@@ -17,6 +17,7 @@ PKG_MD5SUM:=85d9d8d0a1327782661e3c89800aa70e
 
 PKG_FIXUP:=libtool
 PKG_LIBTOOL_PATHS:=. libltdl
+PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh libltdl/aclocal.m4 libltdl/ltmain.sh
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
@@ -46,6 +47,7 @@ COLLECTD_PLUGINS_DISABLED:= \
 	openvz \
 	oracle \
 	perl \
+	pinba \
 	python \
 	routeros \
 	rrdcached \
@@ -201,13 +203,6 @@ endif
 define Package/collectd/conffiles
 /etc/collectd.conf
 endef
-
-#define Build/Configure
-#	(cd $(PKG_BUILD_DIR); \
-#		autoreconf -v --install || exit 1 \
-#	);
-#	$(call Build/Configure/Default)
-#endef
 
 define Package/collectd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
