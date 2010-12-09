@@ -21,7 +21,8 @@ PKG_MD5SUM:=e5e7c5b0b5c382489e6a66778703bc46
 
 PKG_BUILD_DEPENDS:=libncurses libreadline
 PKG_BUILD_PARALLEL:=1
-PKG_FIXUP:=libtool
+
+PKG_FIXUP:=libtool no-autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 
