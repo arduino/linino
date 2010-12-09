@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/net-snmp
 PKG_MD5SUM:=984932520143f0c8bf7b7ce1fc9e1da1
 
-PKG_FIXUP = libtool
+PKG_FIXUP = libtool no-autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 
