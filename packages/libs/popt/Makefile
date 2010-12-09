@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
 PKG_MD5SUM:=5988e7aeb0ae4dac8d83561265984cc9
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=autogen.sh aclocal.m4 ltmain.sh
+
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 
