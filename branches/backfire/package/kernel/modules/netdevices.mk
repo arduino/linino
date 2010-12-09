@@ -391,3 +391,17 @@ define KernelPackage/macvlan/description
 endef
 
 $(eval $(call KernelPackage,macvlan))
+
+define KernelPackage/dummy
+  SUBMENU:=$(NETWORK_DEVICES_MENU)
+  TITLE:=Dummy network device
+  KCONFIG:=CONFIG_DUMMY
+  FILES:=$(LINUX_DIR)/drivers/net/dummy.$(LINUX_KMOD_SUFFIX)
+  AUTOLOAD:=$(call AutoLoad,34,dummy)
+endef
+
+define KernelPackage/dummy/description
+  The dummy network device
+endef
+
+$(eval $(call KernelPackage,dummy))
