@@ -15,6 +15,9 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ftp.pld-linux.org/software/shadow
 PKG_MD5SUM:=4fa404ebb4e29828232b3c9a2abddefd
 
+PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -38,6 +41,11 @@ endef
 
 define Package/shadow/install
 	true
+endef
+
+define Build/Configure
+	(cd $(PKG_BUILD_DIR); autoreconf --force --install)
+	$(call Build/Configure/Default)
 endef
 
 
