@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
 PKG_MD5SUM:=63e97ad450f0f7259e785100b634c797
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=libtool no-autoreconf
 PKG_BUILD_PARALLEL:=1 
 
 include $(INCLUDE_DIR)/package.mk
