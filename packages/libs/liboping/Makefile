@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=http://verplant.org/liboping/files
 PKG_MD5SUM:=b3d3ef82c8b963266e0ce8db1509cac4
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/host-build.mk
