@@ -17,7 +17,7 @@ PKG_MD5SUM:=be845c41170d72c7db524f3411b50256
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libnet
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=libtool no-autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
