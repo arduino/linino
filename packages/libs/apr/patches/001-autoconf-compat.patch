@@ -1,0 +1,10 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -3,6 +3,7 @@ srcdir=@srcdir@
+ VPATH=@srcdir@
+ top_srcdir=@apr_srcdir@
+ top_blddir=@apr_builddir@
++top_builddir=@top_builddir@
+ 
+ #
+ # APR (Apache Portable Runtime) library Makefile.

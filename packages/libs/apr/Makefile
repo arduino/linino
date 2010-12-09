@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=http://www.ibiblio.org/pub/mirrors/apache/apr
 PKG_MD5SUM:=4b00e8f70c067893d075577962656b35
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=build/libtool.m4 build/ltmain.sh
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
