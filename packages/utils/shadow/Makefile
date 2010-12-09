@@ -43,11 +43,6 @@ define Package/shadow/install
 	true
 endef
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); autoreconf --force --install)
-	$(call Build/Configure/Default)
-endef
-
 
 define program
   define Package/shadow-$(1)
