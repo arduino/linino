@@ -17,7 +17,7 @@ PKG_SOURCE_URL:=http://download.osgeo.org/libtiff
 PKG_MD5SUM:=93e56e421679c591de7552db13384cb8
 
 PKG_FIXUP:=libtool-ucxx
-PKG_REMOVE_FILES:=autogen.sh aclocal.m4 m4/libtool.mk
+PKG_REMOVE_FILES:=autogen.sh aclocal.m4
 
 PKG_INSTALL:=1
 

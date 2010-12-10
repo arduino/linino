@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=@GNU/libidn
 PKG_MD5SUM:=66f115347439f56386f37a3ad92c1da2
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=GNUmakefile aclocal.m4 m4/libtool.m4
+PKG_REMOVE_FILES:=GNUmakefile aclocal.m4
 
 PKG_INSTALL:=1
 

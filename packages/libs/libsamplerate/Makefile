@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=http://www.mega-nerd.com/SRC/
 PKG_MD5SUM:=ad093e60ec44f0a60de8e29983ddbc0f
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=autogen.sh ltmain.sh M4/libtool.m4
+PKG_REMOVE_FILES:=autogen.sh
 
 PKG_INSTALL:=1
 

@@ -18,7 +18,7 @@ PKG_MD5SUM:=d0143a5aa3265019072e53ab497818d0
 PKG_BUILD_DEPENDS:=libexpat libdaemon libgdbm intltool/host
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=autogen.sh ltmain.sh common/libtool.m4
+PKG_REMOVE_FILES:=autogen.sh
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
