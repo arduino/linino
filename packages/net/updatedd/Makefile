@@ -16,6 +16,8 @@ PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.bz2
 PKG_MD5SUM:=f03446105ed043cd5dbd1ab95484d27f
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -107,11 +109,6 @@ define Package/updatedd-mod-zoneedit
   CATEGORY:=Network
   DEPENDS:=updatedd
   TITLE:=zoneedit.com
-endef
-
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); aclocal && autoconf && automake )
-	$(call Build/Configure/Default)
 endef
 
 define BuildPlugin
