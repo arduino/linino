@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libnetfilter_log
-PKG_VERSION:=0.0.16
+PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -16,9 +16,11 @@ PKG_SOURCE_URL:= \
 	http://www.netfilter.org/projects/libnetfilter_log/files/ \
 	ftp://ftp.netfilter.org/pub/libnetfilter_log/ \
 	http://mirrors.evolva.ro/netfilter.org/libnetfilter_log/
-PKG_MD5SUM:=4ffcf46dad9d0c81f6611dd185639694
+PKG_MD5SUM:=acdb188a1e7504e95636d0770ade393c
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=aclocal.m4 acinclude.m4 ltmain.sh
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
