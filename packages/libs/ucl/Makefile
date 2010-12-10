@@ -16,7 +16,6 @@ PKG_SOURCE_URL:=http://www.oberhumer.com/opensource/ucl/download/
 PKG_MD5SUM:=852bd691d8abc75b52053465846fba34
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=aclocal.m4 acconfig/ltmain.sh
 
 PKG_INSTALL:=1
 

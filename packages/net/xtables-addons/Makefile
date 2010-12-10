@@ -20,7 +20,6 @@ PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=aclocal.m4 autoconf/ltmain.sh
 
 include $(INCLUDE_DIR)/package.mk
 

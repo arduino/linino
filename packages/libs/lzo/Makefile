@@ -16,7 +16,6 @@ PKG_SOURCE_URL:=http://www.oberhumer.com/opensource/lzo/download/
 PKG_MD5SUM:=a383c7055a310e2a71b9ecd19cfea238
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=aclocal.m4 autoconf/ltmain.sh
 
 PKG_INSTALL:=1
 

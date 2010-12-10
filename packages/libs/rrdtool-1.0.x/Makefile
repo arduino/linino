@@ -20,7 +20,6 @@ PKG_SOURCE_URL:= \
 PKG_MD5SUM:=c466e2e7df95fa8e318e46437da87686
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=aclocal.m4 contrib/php4/ltmain.sh config/ltmain.sh
 
 include $(INCLUDE_DIR)/package.mk
 
