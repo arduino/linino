@@ -8,16 +8,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libnetfilter_conntrack
-PKG_VERSION:=0.0.101
+PKG_VERSION:=0.9.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:= \
 	http://www.netfilter.org/projects/libnetfilter_conntrack/files/ \
 	ftp://ftp.netfilter.org/pub/libnetfilter_conntrack/
-PKG_MD5SUM:=3c4b4048c914f2694c3ca6de2bb457dc
+PKG_MD5SUM:=67e6b44c4d9343a8b3d3ba36bb0a4a8b
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=libtool 
+PKG_REMOVE_FILES:=aclocal.m4 acinclude.m4 ltmain.sh
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
