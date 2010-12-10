@@ -1,6 +1,6 @@
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -38,7 +38,7 @@ EXTRA_DIST = CHANGES COPYING maketgz Mak
+@@ -37,7 +37,7 @@ EXTRA_DIST = CHANGES COPYING maketgz Mak
  bin_SCRIPTS = curl-config
  
  SUBDIRS = lib src
@@ -11,7 +11,7 @@
  pkgconfig_DATA = libcurl.pc
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -298,7 +298,7 @@ EXTRA_DIST = CHANGES COPYING maketgz Mak
+@@ -312,7 +312,7 @@ EXTRA_DIST = CHANGES COPYING maketgz Mak
  
  bin_SCRIPTS = curl-config
  SUBDIRS = lib src

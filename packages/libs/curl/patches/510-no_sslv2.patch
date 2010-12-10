@@ -25,7 +25,7 @@
      " -3/--sslv3         Use SSLv3 (SSL)",
      "    --stderr <file> Where to redirect stderr. - means stdout",
      "    --tcp-nodelay   Use the TCP_NODELAY option",
-@@ -2445,10 +2447,12 @@ static ParameterError getparameter(char
+@@ -2445,10 +2447,12 @@ static ParameterError getparameter(char 
        /* TLS version 1 */
        config->ssl_version = CURL_SSLVERSION_TLSv1;
        break;
