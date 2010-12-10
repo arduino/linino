@@ -18,7 +18,6 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
 PKG_MD5SUM:=7f2c40852eb337b237ad944ca5c30d49
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
 
 PKG_INSTALL:=1
 PKG_BUILD_DEPENDS:=xproto fixesproto xextproto

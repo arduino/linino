@@ -10,7 +10,6 @@ PKG_SOURCE_URL:=@GNOME/GConf/2.24
 PKG_MD5SUM:=4971d96f5ba94fe4a69396267bd5afe8
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
 
 include $(INCLUDE_DIR)/package.mk
 

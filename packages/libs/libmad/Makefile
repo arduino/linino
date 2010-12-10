@@ -17,7 +17,6 @@ PKG_SOURCE_URL:=@SF/mad \
 PKG_MD5SUM:=1be543bc30c56fb6bea1d7bf6a64e66c
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
 
 PKG_INSTALL:=1
 

@@ -14,7 +14,6 @@ PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME).tar.gz
 PKG_SOURCE_URL:=http://www.packetfactory.net/libnet/dist/
 PKG_MD5SUM:=be845c41170d72c7db524f3411b50256
-PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libnet
 

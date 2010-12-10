@@ -16,7 +16,6 @@ PKG_SOURCE_URL:=http://ftp.pld-linux.org/software/shadow
 PKG_MD5SUM:=4fa404ebb4e29828232b3c9a2abddefd
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
 
 PKG_INSTALL:=1
 

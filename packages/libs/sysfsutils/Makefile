@@ -16,7 +16,6 @@ PKG_SOURCE_URL:=@SF/linux-diag
 PKG_MD5SUM:=14e7dcd0436d2f49aa403f67e1ef7ddc
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
 
 PKG_INSTALL:=1
 

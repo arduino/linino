@@ -16,7 +16,6 @@ PKG_SOURCE_URL:=http://www.fastcgi.com/dist/
 PKG_MD5SUM:=d15060a813b91383a9f3c66faf84867e
 
 PKG_FIXUP:=libtool-ucxx
-PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
 
 PKG_INSTALL:=1
 

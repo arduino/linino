@@ -16,7 +16,6 @@ PKG_SOURCE_URL:=http://www.libgd.org/releases
 PKG_MD5SUM:=6c6c3dbb7bf079e0bb5fbbfd3bb8a71c
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1

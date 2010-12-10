@@ -16,7 +16,6 @@ PKG_SOURCE_URL:=http://iksemel.googlecode.com/files/
 PKG_MD5SUM:=532e77181694f87ad5eb59435d11c1ca
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
 
 PKG_INSTALL:=1
 

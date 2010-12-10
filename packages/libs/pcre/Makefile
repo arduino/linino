@@ -16,7 +16,6 @@ PKG_SOURCE_URL:=@SF/pcre
 PKG_MD5SUM:=780867a700e9d4e4b9cb47aa5453e4b2
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
 
 PKG_INSTALL:=1
 
