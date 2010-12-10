@@ -17,7 +17,7 @@ PKG_MD5SUM:=85d9d8d0a1327782661e3c89800aa70e
 
 PKG_FIXUP:=libtool
 PKG_LIBTOOL_PATHS:=. libltdl
-PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh libltdl/aclocal.m4 libltdl/ltmain.sh
+PKG_REMOVE_FILES:=aclocal.m4 libltdl/aclocal.m4
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1

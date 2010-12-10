@@ -16,7 +16,7 @@ PKG_MD5SUM:=ee8b492592568805593f81f8cdf2a04c
 PKG_SOURCE_URL:=@SF/expat
 
 PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=conftools/libtool.m4 conftools/ltmain.sh
+PKG_REMOVE_FILES:=conftools/libtool.m4
 
 PKG_BUILD_PARALLEL:=1
 
