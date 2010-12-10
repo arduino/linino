@@ -19,8 +19,7 @@ PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_BUILD_DEPENDS:=xproto fontsproto randrproto renderproto videoproto \
-	util-macros
+PKG_BUILD_DEPENDS:=xproto fontsproto randrproto renderproto videoproto
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
