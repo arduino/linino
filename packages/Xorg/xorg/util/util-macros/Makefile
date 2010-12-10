@@ -42,8 +42,8 @@ endef
 #endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(2)/share/aclocal
-	$(CP) $(PKG_BUILD_DIR)/*.m4 $(2)/share/aclocal/
+	$(INSTALL_DIR) $(STAGING_DIR)/host/share/aclocal
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/xorg-macros.m4 $(STAGING_DIR)/host/share/aclocal/
 endef
 
 $(eval $(call BuildPackage,util-macros))
