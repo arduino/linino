@@ -1,4 +1,0 @@
---- /dev/null
-+++ b/m4/stub.m4
-@@ -0,0 +1 @@
-+dnl Make aclocal happy
