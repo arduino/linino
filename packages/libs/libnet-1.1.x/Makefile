@@ -14,10 +14,11 @@ PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME).tar.gz
 PKG_SOURCE_URL:=http://www.packetfactory.net/libnet/dist/
 PKG_MD5SUM:=be845c41170d72c7db524f3411b50256
+PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libnet
 
-PKG_FIXUP:=libtool no-autoreconf
+PKG_FIXUP:=libtool autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -45,7 +46,7 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	ac_cv_libnet_endianess=$(ENDIANESS) \
 	ac_libnet_have_pf_packet=yes \
-	LL_INT_TYPE=linux
+	LL_INT_TYPE=libnet_link_linux
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); touch \
