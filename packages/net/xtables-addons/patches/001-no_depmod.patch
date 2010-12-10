@@ -2,8 +2,8 @@
  Makefile.in |    3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
---- xtables-addons-1.29.orig/Makefile.in
-+++ xtables-addons-1.29/Makefile.in
+--- a/Makefile.in
++++ b/Makefile.in
 @@ -754,8 +754,7 @@ install-dvi: install-dvi-recursive
  install-dvi-am:
  
