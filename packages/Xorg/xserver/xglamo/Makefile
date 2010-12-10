@@ -95,7 +95,6 @@ define Package/xglamo
   +libfontenc \
   +pixman \
   +libopenssl \
-  +util-macros \
   @DISPLAY_SUPPORT \
   @arm||armeb \
   @TARGET_s3c24xx
