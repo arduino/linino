@@ -62,17 +62,14 @@ define Package/coreutils/description
         sufficient and much smaller.
 endef
 
-ifneq ($(CONFIG_USE_UCLIBC),)
-CONFIGURE_VARS += \
-	gl_cv_func_mbrtowc_incomplete_state=yes \
-	gl_cv_func_mbrtowc_retval=yes \
-	gl_cv_func_wcrtomb_retval=yes \
-	ac_cv_type_pthread_spinlock_t=no
-else
 CONFIGURE_VARS += \
 	gl_cv_func_mbrtowc_incomplete_state=yes \
 	gl_cv_func_mbrtowc_retval=yes \
 	gl_cv_func_wcrtomb_retval=yes
+
+ifneq ($(CONFIG_USE_UCLIBC),)
+  CONFIGURE_VARS += \
+	ac_cv_type_pthread_spinlock_t=$(if $(filter 0.9.30% 0.9.2% 0.9.31%,$(call qstrip,$(CONFIG_UCLIBC_VERSION))),no,yes)
 endif
 
 CONFIGURE_ARGS += \
