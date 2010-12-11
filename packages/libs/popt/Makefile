@@ -19,6 +19,7 @@ PKG_FIXUP:=libtool
 PKG_REMOVE_FILES:=autogen.sh aclocal.m4
 
 PKG_INSTALL:=1
+PKG_BUILD_DEPENDS:=libintl
 PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
