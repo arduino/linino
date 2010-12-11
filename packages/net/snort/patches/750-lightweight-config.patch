@@ -1,7 +1,5 @@
-Index: snort-2.8.4.1/etc/snort.conf
-===================================================================
---- snort-2.8.4.1.orig/etc/snort.conf	2009-04-21 21:39:51.000000000 +0200
-+++ snort-2.8.4.1/etc/snort.conf	2009-07-12 19:54:47.000000000 +0200
+--- a/etc/snort.conf
++++ b/etc/snort.conf
 @@ -6,6 +6,7 @@
  #
  ###################################################
@@ -23,7 +21,7 @@ Index: snort-2.8.4.1/etc/snort.conf
  
  # Configure your server lists.  This allows snort to only look for attacks to
  # systems that have a service up.  Why look for HTTP attacks if you are not
-@@ -107,8 +108,8 @@
+@@ -107,8 +108,8 @@ var AIM_SERVERS [64.12.24.0/23,64.12.28.
  # Path to your rules files (this can be a relative path)
  # Note for Windows users:  You are advised to make this an absolute path,
  # such as:  c:\snort\rules
@@ -34,7 +32,7 @@ Index: snort-2.8.4.1/etc/snort.conf
  
  # Configure the snort decoder
  # ============================
-@@ -307,11 +308,11 @@
+@@ -307,11 +308,11 @@ preprocessor stream5_tcp: policy first, 
  # lots of options available here. See doc/README.http_inspect.
  # unicode.map should be wherever your snort.conf lives, or given
  # a full path to where snort can find it.
@@ -50,7 +48,7 @@ Index: snort-2.8.4.1/etc/snort.conf
  
  #
  #  Example unique server configuration
-@@ -345,7 +346,7 @@
+@@ -345,7 +346,7 @@ preprocessor http_inspect_server: server
  # no_alert_incomplete - don't alert when a single segment
  #                       exceeds the current packet size
  
@@ -59,7 +57,7 @@ Index: snort-2.8.4.1/etc/snort.conf
  
  # bo: Back Orifice detector
  # -------------------------
-@@ -368,7 +369,7 @@
+@@ -368,7 +369,7 @@ preprocessor rpc_decode: 111 32771
  #   3       Back Orifice Server Traffic Detected
  #   4       Back Orifice Snort Buffer Attack
  
@@ -68,7 +66,7 @@ Index: snort-2.8.4.1/etc/snort.conf
  
  # ftp_telnet: FTP & Telnet normalizer, protocol enforcement and buff overflow
  # ---------------------------------------------------------------------------
-@@ -391,32 +392,32 @@
+@@ -391,32 +392,32 @@ preprocessor bo
  # or use commandline option
  # --dynamic-preprocessor-lib <full path to libsf_ftptelnet_preproc.so>
  
@@ -121,7 +119,7 @@ Index: snort-2.8.4.1/etc/snort.conf
  
  # smtp: SMTP normalizer, protocol enforcement and buffer overflow
  # ---------------------------------------------------------------------------
-@@ -434,15 +435,15 @@
+@@ -434,15 +435,15 @@ preprocessor ftp_telnet_protocol: ftp cl
  # or use commandline option
  # --dynamic-preprocessor-lib <full path to libsf_smtp_preproc.so>
  
@@ -146,7 +144,7 @@ Index: snort-2.8.4.1/etc/snort.conf
  
  # sfPortscan
  # ----------
-@@ -498,9 +499,9 @@
+@@ -498,9 +499,9 @@ preprocessor smtp: \
  #       false alerts, especially under heavy load with dropped packets; which is why
  #       the option is off by default.
  #
@@ -159,7 +157,7 @@ Index: snort-2.8.4.1/etc/snort.conf
  
  # arpspoof
  #----------------------------------------
-@@ -623,9 +624,9 @@
+@@ -623,9 +624,9 @@ preprocessor dcerpc2_server: default
  # or use commandline option
  # --dynamic-preprocessor-lib <full path to libsf_dns_preproc.so>
  
@@ -172,7 +170,7 @@ Index: snort-2.8.4.1/etc/snort.conf
  
  # SSL
  #----------------------------------------
-@@ -649,7 +650,7 @@
+@@ -649,7 +650,7 @@ preprocessor dns: \
  #   To add reassembly on port 443 to Stream5, use 'port both 443' in the 
  #   Stream5 configuration.
  
@@ -181,7 +179,7 @@ Index: snort-2.8.4.1/etc/snort.conf
  
  
  ####################################################################
-@@ -811,41 +812,41 @@
+@@ -811,41 +812,41 @@ include $RULE_PATH/local.rules
  include $RULE_PATH/bad-traffic.rules
  include $RULE_PATH/exploit.rules
  include $RULE_PATH/scan.rules
@@ -257,7 +255,7 @@ Index: snort-2.8.4.1/etc/snort.conf
  # include $RULE_PATH/web-attacks.rules
  # include $RULE_PATH/backdoor.rules
  # include $RULE_PATH/shellcode.rules
-@@ -859,7 +860,7 @@
+@@ -859,7 +860,7 @@ include $RULE_PATH/other-ids.rules
  # include $RULE_PATH/p2p.rules
  # include $RULE_PATH/spyware-put.rules
  # include $RULE_PATH/specific-threats.rules

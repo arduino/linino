@@ -1,6 +1,6 @@
 --- a/configure
 +++ b/configure
-@@ -20770,8 +20770,7 @@
+@@ -20768,8 +20768,7 @@ echo $ECHO_N "checking for sparc %time r
    { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
  See \`config.log' for more details." >&5
  echo "$as_me: error: cannot run test program while cross compiling
@@ -10,7 +10,7 @@
  else
    cat >conftest.$ac_ext <<_ACEOF
  /* confdefs.h.  */
-@@ -22981,8 +22980,7 @@
+@@ -22979,8 +22978,7 @@ if test "$cross_compiling" = yes; then
    { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
  See \`config.log' for more details." >&5
  echo "$as_me: error: cannot run test program while cross compiling
@@ -20,7 +20,7 @@
  else
    cat >conftest.$ac_ext <<_ACEOF
  /* confdefs.h.  */
-@@ -23766,8 +23764,7 @@
+@@ -23764,8 +23762,7 @@ echo $ECHO_N "checking for libpcap versi
    { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
  See \`config.log' for more details." >&5
  echo "$as_me: error: cannot run test program while cross compiling
@@ -30,7 +30,7 @@
  else
    cat >conftest.$ac_ext <<_ACEOF
  /* confdefs.h.  */
-@@ -23854,8 +23851,7 @@
+@@ -23852,8 +23849,7 @@ echo $ECHO_N "checking for libpcap versi
    { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
  See \`config.log' for more details." >&5
  echo "$as_me: error: cannot run test program while cross compiling
@@ -40,10 +40,7 @@
  else
    cat >conftest.$ac_ext <<_ACEOF
  /* confdefs.h.  */
-diff -urN snort-2.8.4.1/configure snort-2.8.4.1.new/configure
---- snort-2.8.4.1/configure	2009-04-21 21:39:16.000000000 +0200
-+++ snort-2.8.4.1.new/configure	2009-07-12 19:59:26.000000000 +0200
-@@ -23766,8 +23766,7 @@
+@@ -23939,8 +23935,7 @@ if test "$cross_compiling" = yes; then
    { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
  See \`config.log' for more details." >&5
  echo "$as_me: error: cannot run test program while cross compiling
@@ -53,9 +50,7 @@ diff -urN snort-2.8.4.1/configure snort-2.8.4.1.new/configure
  else
    cat >conftest.$ac_ext <<_ACEOF
  /* confdefs.h.  */
---- snort-2.8.4.1/configure	2009-07-12 20:33:36.000000000 +0200
-+++ snort-2.8.4.1.new/configure	2009-07-12 20:34:10.000000000 +0200
-@@ -24651,8 +24651,7 @@
+@@ -24654,8 +24649,7 @@ echo $ECHO_N "checking for mysql default
    { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
  See \`config.log' for more details." >&5
  echo "$as_me: error: cannot run test program while cross compiling
@@ -65,7 +60,7 @@ diff -urN snort-2.8.4.1/configure snort-2.8.4.1.new/configure
  else
    cat >conftest.$ac_ext <<_ACEOF
  /* confdefs.h.  */
-@@ -24719,8 +24718,7 @@
+@@ -24722,8 +24716,7 @@ echo $ECHO_N "checking for mysql reconne
    { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
  See \`config.log' for more details." >&5
  echo "$as_me: error: cannot run test program while cross compiling

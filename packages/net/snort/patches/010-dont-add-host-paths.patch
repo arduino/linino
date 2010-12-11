@@ -1,5 +1,3 @@
-diff --git a/configure b/configure
-index 205be9c..df159e3 100755
 --- a/configure
 +++ b/configure
 @@ -20668,8 +20668,6 @@ cat >>confdefs.h <<\_ACEOF
@@ -11,7 +9,7 @@ index 205be9c..df159e3 100755
      ;;
    *-hpux10*|*-hpux11*)
  
-@@ -26209,7 +26207,6 @@ if test "x$enable_flexresp" != "xno" -a "x$enable_flexresp" = "xyes"; then
+@@ -26218,7 +26216,6 @@ if test "x$enable_flexresp" != "xno" -a 
      fi
  
      if test `libnet-config --cflags | wc -c` = "1"; then
@@ -19,7 +17,7 @@ index 205be9c..df159e3 100755
          LIBNET_CONFIG_BROKEN_CFLAGS="yes"
      fi
  
-@@ -26220,7 +26217,6 @@ echo "$as_me: WARNING: libnet-config --libs is broken on your system.  If you" >
+@@ -26229,7 +26226,6 @@ echo "$as_me: WARNING: libnet-config --l
  echo "$as_me: WARNING: are using a precompiled package please notify the" >&2;}
          { echo "$as_me:$LINENO: WARNING: maintainer." >&5
  echo "$as_me: WARNING: maintainer." >&2;}
@@ -27,7 +25,7 @@ index 205be9c..df159e3 100755
          LIBS="${LIBS} -lnet"
      fi
  
-@@ -26795,7 +26791,6 @@ if test "x$enable_react" != "xno" -a "x$enable_react" = "xyes"; then
+@@ -26804,7 +26800,6 @@ if test "x$enable_react" != "xno" -a "x$
      fi
  
      if test `libnet-config --cflags | wc -c` = "1"; then
@@ -35,7 +33,7 @@ index 205be9c..df159e3 100755
          LIBNET_CONFIG_BROKEN_CFLAGS="yes"
      fi
  
-@@ -26806,7 +26801,6 @@ echo "$as_me: WARNING: libnet-config --libs is broken on your system.  If you" >
+@@ -26815,7 +26810,6 @@ echo "$as_me: WARNING: libnet-config --l
  echo "$as_me: WARNING: are using a precompiled package please notify the" >&2;}
          { echo "$as_me:$LINENO: WARNING: maintainer." >&5
  echo "$as_me: WARNING: maintainer." >&2;}

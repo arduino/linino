@@ -1,6 +1,6 @@
 --- a/src/snort.c
 +++ b/src/snort.c
-@@ -4140,7 +4140,7 @@
+@@ -4198,7 +4198,7 @@ static char *ConfigFileSearch(void)
  {
      struct stat st;
      int i;
@@ -9,7 +9,7 @@
      char *fname = NULL;
      char *rval = NULL;
  
-@@ -4159,30 +4159,6 @@
+@@ -4217,30 +4217,6 @@ static char *ConfigFileSearch(void)
          i++;
      }
  
