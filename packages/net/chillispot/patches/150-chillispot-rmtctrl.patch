@@ -1,6 +1,5 @@
-diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
---- chillispot-1.1.0.orig/src/chilli.c	2009-08-11 15:10:56.000000000 -0300
-+++ chillispot-1.1.0/src/chilli.c	2009-08-13 13:17:24.000000000 -0300
+--- a/src/chilli.c
++++ b/src/chilli.c
 @@ -102,6 +102,7 @@
  #include "dhcp.h"
  #include "cmdline.h"
@@ -9,7 +8,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
  
  struct options_t options;
  
-@@ -127,6 +128,12 @@
+@@ -127,6 +128,12 @@ static int do_sighup = 0;
  /* Forward declarations */
  int static acct_req(struct app_conn_t *conn, int status_type);
  int static config_radius();
@@ -22,7 +21,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
  
  /* Fireman catches falling childs and eliminates zombies */
  void static fireman(int signum) { 
-@@ -180,19 +187,18 @@
+@@ -180,19 +187,18 @@ int static leaky_bucket(struct app_conn_
    struct timeval timenow;
    uint64_t timediff; /* In microseconds */
    int result = 0;
@@ -47,7 +46,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
      /* Subtract what the leak since last time we visited */
      if (conn->bucketup > ((timediff * conn->bandwidthmaxup)/8000000)) {
        conn->bucketup -= (timediff * conn->bandwidthmaxup) / 8000000;
-@@ -200,9 +206,9 @@
+@@ -200,9 +206,9 @@ int static leaky_bucket(struct app_conn_
      else {
        conn->bucketup = 0;
      }
@@ -59,7 +58,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
        result = -1;
      }
      else {
-@@ -217,9 +223,10 @@
+@@ -217,9 +223,10 @@ int static leaky_bucket(struct app_conn_
      else {
        conn->bucketdown = 0;
      }
@@ -71,7 +70,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
        result = -1;
      }
      else {
-@@ -233,6 +240,7 @@
+@@ -233,6 +240,7 @@ int static leaky_bucket(struct app_conn_
  }
  #endif /* ifndef NO_LEAKY_BUCKET */
  
@@ -79,7 +78,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
  /* Run external script */
  
  int set_env(char *name, char *value, int len, struct in_addr *addr,
-@@ -550,7 +558,7 @@
+@@ -550,7 +558,7 @@ int static process_options(int argc, cha
      return -1;
    }
  
@@ -88,7 +87,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
      sys_err(LOG_ERR, __FILE__, __LINE__, 0,
  	    "Failed to parse configuration file: %s!", 
  	    args_info.conf_arg);
-@@ -1056,7 +1064,21 @@
+@@ -1056,7 +1064,21 @@ int static process_options(int argc, cha
  		       strlen(args_info.macallowed_arg[numargs]))) 
        return -1;
    }
@@ -111,7 +110,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
  
    /* foreground                                                   */
    /* If flag not given run as a daemon                            */
-@@ -1095,7 +1117,6 @@
+@@ -1095,7 +1117,6 @@ void static reprocess_options(int argc, 
      memcpy(&options, &options2, sizeof(options));
      return;
    }
@@ -119,7 +118,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
    /* Options which we do not allow to be affected */
    /* fg, conf and statedir are not stored in options */
    options.net = options2.net; /* net */
-@@ -1123,6 +1144,13 @@
+@@ -1123,6 +1144,13 @@ void static reprocess_options(int argc, 
    options.eapolenable = options2.eapolenable; /* eapolenable */
    options.pidfile = options2.pidfile; /* pidfile */
  
@@ -133,7 +132,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
    /* Reinit DHCP parameters */
    (void) dhcp_set(dhcp, (options.debug & DEBUG_DHCP),
  		  options.uamserver, options.uamserverlen, options.uamanydns,
-@@ -3099,9 +3127,8 @@
+@@ -3099,9 +3127,8 @@ int cb_radius_auth_conf(struct radius_t 
        appconn->bucketupsize = BUCKET_SIZE_MIN;
  #endif
    }
@@ -144,7 +143,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
    
    /* Bandwidth down */
    if (!radius_getattr(pack, &attr, RADIUS_ATTR_VENDOR_SPECIFIC,
-@@ -3116,9 +3143,8 @@
+@@ -3116,9 +3143,8 @@ int cb_radius_auth_conf(struct radius_t 
        appconn->bucketdownsize = BUCKET_SIZE_MIN;
  #endif
    }
@@ -155,7 +154,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
  
  #ifdef RADIUS_ATTR_CHILLISPOT_BANDWIDTH_MAX_UP
    /* Bandwidth up */
-@@ -3623,7 +3649,7 @@
+@@ -3623,7 +3649,7 @@ int cb_dhcp_data_ind(struct dhcp_conn_t 
      appconn->input_octets +=len;
  #ifndef NO_LEAKY_BUCKET
  #ifdef COUNT_UPLINK_DROP
@@ -164,7 +163,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
  #endif /* ifdef COUNT_UPLINK_DROP */
  #endif /* ifndef NO_LEAKY_BUCKET */
    }
-@@ -3889,6 +3915,10 @@
+@@ -3889,6 +3915,10 @@ int main(int argc, char **argv)
    struct sigaction act;
    struct itimerval itval;
  
@@ -175,7 +174,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
    /* open a connection to the syslog daemon */
    /*openlog(PACKAGE, LOG_PID, LOG_DAEMON);*/
    openlog(PACKAGE, (LOG_PID | LOG_PERROR), LOG_DAEMON);
-@@ -4046,6 +4076,8 @@
+@@ -4046,6 +4076,8 @@ int main(int argc, char **argv)
    if (options.debug) 
      printf("Waiting for client request...\n");
  
@@ -184,7 +183,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
  
    /******************************************************************/
    /* Main select loop                                               */
-@@ -4053,6 +4085,8 @@
+@@ -4053,6 +4085,8 @@ int main(int argc, char **argv)
  
    while (keep_going) {
  
@@ -193,7 +192,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
      if (do_timeouts) {
        /*if (options.debug) printf("Do timeouts!\n");*/
        (void) radius_timeout(radius);
-@@ -4178,3 +4212,487 @@
+@@ -4178,3 +4212,487 @@ int main(int argc, char **argv)
    return 0;
    
  }
@@ -681,9 +680,8 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.c chillispot-1.1.0/src/chilli.c
 +	rslt += send_number(client, MSG_PART, 0, "\tbandwidthmaxdown=%s\n",options.bandwidthmaxdown);
 +	rslt += rmtctrl_write_msg(client,MSG_END,0, "End of configuration\n");
 +}
-diff -Nur chillispot-1.1.0.orig/src/chilli.h chillispot-1.1.0/src/chilli.h
---- chillispot-1.1.0.orig/src/chilli.h	2009-08-11 15:10:56.000000000 -0300
-+++ chillispot-1.1.0/src/chilli.h	2009-08-12 13:52:24.000000000 -0300
+--- a/src/chilli.h
++++ b/src/chilli.h
 @@ -50,8 +50,8 @@
  /* If the constants below are defined packets which have been dropped
     by the traffic shaper will be counted towards accounting and
@@ -704,7 +702,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.h chillispot-1.1.0/src/chilli.h
  
  /* Time length of leaky bucket in milliseconds */
  /* Bucket size = BUCKET_TIME * Bandwidth-Max radius attribute */
-@@ -194,12 +194,14 @@
+@@ -194,12 +194,14 @@ struct app_conn_t {
    struct in_addr dns1;
    struct in_addr dns2;
    struct timeval last_time; /* Last time a packet was received or sent */
@@ -723,7 +721,7 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.h chillispot-1.1.0/src/chilli.h
  
    /* UAM information */
    uint8_t uamchal[REDIR_MD5LEN];
-@@ -305,6 +307,11 @@
+@@ -305,6 +307,11 @@ struct options_t {
    int macoklen;                   /* Number of MAC addresses */
    char* macsuffix;               /* Suffix to add to MAC address */
    char* macpasswd;               /* Password to use for MAC authentication */  
@@ -735,11 +733,9 @@ diff -Nur chillispot-1.1.0.orig/src/chilli.h chillispot-1.1.0/src/chilli.h
  };
  
  extern struct app_conn_t connection[APP_NUM_CONN];
-Los ficheros binarios chillispot-1.1.0.orig/src/chilli.o y chillispot-1.1.0/src/chilli.o son distintos
-diff -Nur chillispot-1.1.0.orig/src/cmdline.c chillispot-1.1.0/src/cmdline.c
---- chillispot-1.1.0.orig/src/cmdline.c	2006-09-24 14:48:26.000000000 -0300
-+++ chillispot-1.1.0/src/cmdline.c	2009-08-11 16:17:58.000000000 -0300
-@@ -113,6 +113,11 @@
+--- a/src/cmdline.c
++++ b/src/cmdline.c
+@@ -113,6 +113,11 @@ void clear_given (struct gengetopt_args_
    args_info->macallowed_given = 0 ;
    args_info->macsuffix_given = 0 ;
    args_info->macpasswd_given = 0 ;
@@ -751,7 +747,7 @@ diff -Nur chillispot-1.1.0.orig/src/cmdline.c chillispot-1.1.0/src/cmdline.c
  }
  
  static
-@@ -216,7 +221,19 @@
+@@ -216,7 +221,19 @@ void clear_args (struct gengetopt_args_i
    args_info->macsuffix_orig = NULL;
    args_info->macpasswd_arg = gengetopt_strdup ("password");
    args_info->macpasswd_orig = NULL;
@@ -772,7 +768,7 @@ diff -Nur chillispot-1.1.0.orig/src/cmdline.c chillispot-1.1.0/src/cmdline.c
  }
  
  void
-@@ -284,7 +301,12 @@
+@@ -284,7 +301,12 @@ cmdline_parser_print_help (void)
    printf("%s\n","      --macauth                 Authenticate based on MAC address  \n                                  (default=off)");
    printf("%s\n","      --macallowed=STRING       List of allowed MAC addresses");
    printf("%s\n","      --macsuffix=STRING        Suffix to add to the MAC address");
@@ -786,7 +782,7 @@ diff -Nur chillispot-1.1.0.orig/src/cmdline.c chillispot-1.1.0/src/cmdline.c
    
  }
  
-@@ -675,6 +697,11 @@
+@@ -675,6 +697,11 @@ cmdline_parser_release (struct gengetopt
        free (args_info->uamport_orig); /* free previous argument */
        args_info->uamport_orig = 0;
      }
@@ -798,7 +794,7 @@ diff -Nur chillispot-1.1.0.orig/src/cmdline.c chillispot-1.1.0/src/cmdline.c
    if (args_info->uamallowed_arg)
      {
        for (i = 0; i < args_info->uamallowed_given; ++i)
-@@ -739,6 +766,34 @@
+@@ -739,6 +766,34 @@ cmdline_parser_release (struct gengetopt
        free (args_info->macpasswd_orig); /* free previous argument */
        args_info->macpasswd_orig = 0;
      }
@@ -833,7 +829,7 @@ diff -Nur chillispot-1.1.0.orig/src/cmdline.c chillispot-1.1.0/src/cmdline.c
    
    clear_given (args_info);
  }
-@@ -1109,7 +1164,41 @@
+@@ -1109,7 +1164,41 @@ cmdline_parser_file_save(const char *fil
        fprintf(outfile, "%s\n", "macpasswd");
      }
    }
@@ -876,7 +872,7 @@ diff -Nur chillispot-1.1.0.orig/src/cmdline.c chillispot-1.1.0/src/cmdline.c
    fclose (outfile);
  
    i = EXIT_SUCCESS;
-@@ -1221,6 +1310,7 @@
+@@ -1221,6 +1310,7 @@ cmdline_parser_internal (int argc, char 
  {
    int c;	/* Character of the parsed option.  */
    char *multi_token, *multi_next; /* for multiple options */
@@ -884,7 +880,7 @@ diff -Nur chillispot-1.1.0.orig/src/cmdline.c chillispot-1.1.0/src/cmdline.c
  
    int i;        /* Counter */
  
-@@ -1299,6 +1389,11 @@
+@@ -1299,6 +1389,11 @@ cmdline_parser_internal (int argc, char 
          { "macallowed",	1, NULL, 0 },
          { "macsuffix",	1, NULL, 0 },
          { "macpasswd",	1, NULL, 0 },
@@ -896,7 +892,7 @@ diff -Nur chillispot-1.1.0.orig/src/cmdline.c chillispot-1.1.0/src/cmdline.c
          { NULL,	0, NULL, 0 }
        };
  
-@@ -1380,8 +1475,6 @@
+@@ -1380,8 +1475,6 @@ cmdline_parser_internal (int argc, char 
              free (args_info->net_orig); /* free previous string */
            args_info->net_orig = gengetopt_strdup (optarg);
            break;
@@ -905,7 +901,7 @@ diff -Nur chillispot-1.1.0.orig/src/cmdline.c chillispot-1.1.0/src/cmdline.c
          case 0:	/* Long option with no short option */
            /* Which modules to print debug messages for.  */
            if (strcmp (long_options[option_index].name, "debugfacility") == 0)
-@@ -2273,7 +2366,93 @@
+@@ -2273,7 +2366,93 @@ cmdline_parser_internal (int argc, char 
                free (args_info->macpasswd_orig); /* free previous string */
              args_info->macpasswd_orig = gengetopt_strdup (optarg);
            }
@@ -1000,10 +996,9 @@ diff -Nur chillispot-1.1.0.orig/src/cmdline.c chillispot-1.1.0/src/cmdline.c
            break;
          case '?':	/* Invalid option.  */
            /* `getopt_long' already printed an error message.  */
-diff -Nur chillispot-1.1.0.orig/src/cmdline.ggo chillispot-1.1.0/src/cmdline.ggo
---- chillispot-1.1.0.orig/src/cmdline.ggo	2006-09-24 14:48:26.000000000 -0300
-+++ chillispot-1.1.0/src/cmdline.ggo	2009-08-11 16:17:58.000000000 -0300
-@@ -119,3 +119,12 @@
+--- a/src/cmdline.ggo
++++ b/src/cmdline.ggo
+@@ -119,3 +119,12 @@ option "macallowed"  - "List of allowed 
  option "macsuffix"   - "Suffix to add to the MAC address" string no
  option "macpasswd"   - "Password used when performing MAC authentication" string default="password" no
  
@@ -1016,10 +1011,9 @@ diff -Nur chillispot-1.1.0.orig/src/cmdline.ggo chillispot-1.1.0/src/cmdline.ggo
 +option "bandwidthmaxup" - "Default bandwidth control to apply when account don't have setting" int no
 +option "bandwidthmaxdown" - "Default bandwidth control to apply when account don't have setting" int no
 +
-diff -Nur chillispot-1.1.0.orig/src/cmdline.h chillispot-1.1.0/src/cmdline.h
---- chillispot-1.1.0.orig/src/cmdline.h	2006-09-24 14:48:26.000000000 -0300
-+++ chillispot-1.1.0/src/cmdline.h	2009-08-11 16:17:58.000000000 -0300
-@@ -122,6 +122,17 @@
+--- a/src/cmdline.h
++++ b/src/cmdline.h
+@@ -122,6 +122,17 @@ struct gengetopt_args_info
    char * macsuffix_orig;	/* Suffix to add to the MAC address original value given at command line.  */
    char * macpasswd_arg;	/* Password used when performing MAC authentication (default='password').  */
    char * macpasswd_orig;	/* Password used when performing MAC authentication original value given at command line.  */
@@ -1037,7 +1031,7 @@ diff -Nur chillispot-1.1.0.orig/src/cmdline.h chillispot-1.1.0/src/cmdline.h
    
    int help_given ;	/* Whether help was given.  */
    int version_given ;	/* Whether version was given.  */
-@@ -177,7 +188,11 @@
+@@ -177,7 +188,11 @@ struct gengetopt_args_info
    unsigned int macallowed_given ;	/* Whether macallowed was given.  */
    int macsuffix_given ;	/* Whether macsuffix was given.  */
    int macpasswd_given ;	/* Whether macpasswd was given.  */
@@ -1050,10 +1044,9 @@ diff -Nur chillispot-1.1.0.orig/src/cmdline.h chillispot-1.1.0/src/cmdline.h
  } ;
  
  int cmdline_parser (int argc, char * const *argv, struct gengetopt_args_info *args_info);
-diff -Nur chillispot-1.1.0.orig/src/Makefile chillispot-1.1.0/src/Makefile
---- chillispot-1.1.0.orig/src/Makefile	2009-08-11 15:11:28.000000000 -0300
-+++ chillispot-1.1.0/src/Makefile	2009-08-11 16:18:32.000000000 -0300
-@@ -54,7 +54,7 @@
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -54,7 +54,7 @@ PROGRAMS = $(sbin_PROGRAMS)
  am_chilli_OBJECTS = chilli.$(OBJEXT) tun.$(OBJEXT) cmdline.$(OBJEXT) \
  	ippool.$(OBJEXT) radius.$(OBJEXT) md5.$(OBJEXT) \
  	redir.$(OBJEXT) dhcp.$(OBJEXT) syserr.$(OBJEXT) \
@@ -1062,7 +1055,7 @@ diff -Nur chillispot-1.1.0.orig/src/Makefile chillispot-1.1.0/src/Makefile
  chilli_OBJECTS = $(am_chilli_OBJECTS)
  chilli_LDADD = $(LDADD)
  DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
-@@ -172,7 +172,7 @@
+@@ -172,7 +172,7 @@ target_alias = 
  
  # add -pg to enable gprof
  AM_CFLAGS = -D_GNU_SOURCE -fno-builtin -DSBINDIR='"$(sbindir)"' 
@@ -1071,10 +1064,9 @@ diff -Nur chillispot-1.1.0.orig/src/Makefile chillispot-1.1.0/src/Makefile
  all: all-am
  
  .SUFFIXES:
-diff -Nur chillispot-1.1.0.orig/src/Makefile.in chillispot-1.1.0/src/Makefile.in
---- chillispot-1.1.0.orig/src/Makefile.in	2006-09-24 16:34:58.000000000 -0300
-+++ chillispot-1.1.0/src/Makefile.in	2009-08-11 16:17:58.000000000 -0300
-@@ -54,7 +54,7 @@
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -54,7 +54,7 @@ PROGRAMS = $(sbin_PROGRAMS)
  am_chilli_OBJECTS = chilli.$(OBJEXT) tun.$(OBJEXT) cmdline.$(OBJEXT) \
  	ippool.$(OBJEXT) radius.$(OBJEXT) md5.$(OBJEXT) \
  	redir.$(OBJEXT) dhcp.$(OBJEXT) syserr.$(OBJEXT) \
@@ -1083,7 +1075,7 @@ diff -Nur chillispot-1.1.0.orig/src/Makefile.in chillispot-1.1.0/src/Makefile.in
  chilli_OBJECTS = $(am_chilli_OBJECTS)
  chilli_LDADD = $(LDADD)
  DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
-@@ -172,7 +172,7 @@
+@@ -172,7 +172,7 @@ target_alias = @target_alias@
  
  # add -pg to enable gprof
  AM_CFLAGS = -D_GNU_SOURCE -fno-builtin -DSBINDIR='"$(sbindir)"' 
@@ -1092,9 +1084,8 @@ diff -Nur chillispot-1.1.0.orig/src/Makefile.in chillispot-1.1.0/src/Makefile.in
  all: all-am
  
  .SUFFIXES:
-diff -Nur chillispot-1.1.0.orig/src/remotectrl.c chillispot-1.1.0/src/remotectrl.c
---- chillispot-1.1.0.orig/src/remotectrl.c	1969-12-31 21:00:00.000000000 -0300
-+++ chillispot-1.1.0/src/remotectrl.c	2009-08-11 16:17:58.000000000 -0300
+--- /dev/null
++++ b/src/remotectrl.c
 @@ -0,0 +1,340 @@
 +#include <stdio.h>          
 +#include <sys/types.h>
@@ -1436,9 +1427,8 @@ diff -Nur chillispot-1.1.0.orig/src/remotectrl.c chillispot-1.1.0/src/remotectrl
 +	return buffer;
 +}
 +
-diff -Nur chillispot-1.1.0.orig/src/remotectrl.h chillispot-1.1.0/src/remotectrl.h
---- chillispot-1.1.0.orig/src/remotectrl.h	1969-12-31 21:00:00.000000000 -0300
-+++ chillispot-1.1.0/src/remotectrl.h	2009-08-11 16:17:58.000000000 -0300
+--- /dev/null
++++ b/src/remotectrl.h
 @@ -0,0 +1,86 @@
 +#include <stdarg.h>
 +#ifndef _RMTCTRL_H
@@ -1526,4 +1516,14 @@ diff -Nur chillispot-1.1.0.orig/src/remotectrl.h chillispot-1.1.0/src/remotectrl
 +int send_number( struct rmt_socket_t *client, int msg_type, int msg_extra, char *fmt, uint64_t value);
 +
 +#endif	/* !_RMTCTRL_H */
-Los ficheros binarios chillispot-1.1.0.orig/src/remotectrl.o y chillispot-1.1.0/src/remotectrl.o son distintos
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -3,7 +3,7 @@ sbin_PROGRAMS = chilli
+ # add -pg to enable gprof
+ AM_CFLAGS = -D_GNU_SOURCE -fno-builtin -DSBINDIR='"$(sbindir)"' 
+ 
+-chilli_SOURCES = chilli.c defs.h tun.c tun.h cmdline.c cmdline.h ippool.c ippool.h radius.h radius.c md5.c md5.h redir.h redir.c dhcp.c dhcp.h syserr.c syserr.h iphash.c iphash.h lookup.c lookup.h
++chilli_SOURCES = chilli.c defs.h tun.c tun.h cmdline.c cmdline.h ippool.c ippool.h radius.h radius.c md5.c md5.h redir.h redir.c dhcp.c dhcp.h syserr.c syserr.h iphash.c iphash.h lookup.c lookup.h remotectrl.c remotectrl.h
+ 
+ # chilli_LDFLAGS = -lcrypt
+ 
