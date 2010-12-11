@@ -1,0 +1,124 @@
+commit b3e670443b7fb8a2d29831b62b44a039c283e351
+Author: Christian Lamparter <chunkeey@googlemail.com>
+Date:   Tue Aug 3 02:32:28 2010 +0200
+
+    USB: fix thread-unsafe anchor utiliy routines
+    
+    This patch fixes a race condition in two utility routines
+    related to the removal/unlinking of urbs from an anchor.
+    
+    If two threads are concurrently accessing the same anchor,
+    both could end up with the same urb - thinking they are
+    the exclusive owner.
+    
+    Alan Stern pointed out a related issue in
+    usb_unlink_anchored_urbs:
+    
+    "The URB isn't removed from the anchor until it completes
+     (as a by-product of completion, in fact), which might not
+     be for quite some time after the unlink call returns.
+     In the meantime, the subroutine will keep trying to unlink
+     it, over and over again."
+    
+    Cc: stable <stable@kernel.org>
+    Cc: Oliver Neukum <oneukum@suse.de>
+    Cc: Greg Kroah-Hartman <greg@kroah.com>
+    Acked-by: Alan Stern <stern@rowland.harvard.edu>
+    Signed-off-by: Christian Lamparter <chunkeey@googlemail.com>
+    Signed-off-by: Greg Kroah-Hartman <gregkh@suse.de>
+
+--- a/drivers/usb/core/urb.c
++++ b/drivers/usb/core/urb.c
+@@ -137,6 +137,16 @@ void usb_anchor_urb(struct urb *urb, str
+ }
+ EXPORT_SYMBOL_GPL(usb_anchor_urb);
+ 
++/* Callers must hold anchor->lock */
++static void __usb_unanchor_urb(struct urb *urb, struct usb_anchor *anchor)
++{
++	urb->anchor = NULL;
++	list_del(&urb->anchor_list);
++	usb_put_urb(urb);
++	if (list_empty(&anchor->urb_list))
++		wake_up(&anchor->wait);
++}
++
+ /**
+  * usb_unanchor_urb - unanchors an URB
+  * @urb: pointer to the urb to anchor
+@@ -156,17 +166,14 @@ void usb_unanchor_urb(struct urb *urb)
+ 		return;
+ 
+ 	spin_lock_irqsave(&anchor->lock, flags);
+-	if (unlikely(anchor != urb->anchor)) {
+-		/* we've lost the race to another thread */
+-		spin_unlock_irqrestore(&anchor->lock, flags);
+-		return;
+-	}
+-	urb->anchor = NULL;
+-	list_del(&urb->anchor_list);
++	/*
++	 * At this point, we could be competing with another thread which
++	 * has the same intention. To protect the urb from being unanchored
++	 * twice, only the winner of the race gets the job.
++	 */
++	if (likely(anchor == urb->anchor))
++		__usb_unanchor_urb(urb, anchor);
+ 	spin_unlock_irqrestore(&anchor->lock, flags);
+-	usb_put_urb(urb);
+-	if (list_empty(&anchor->urb_list))
+-		wake_up(&anchor->wait);
+ }
+ EXPORT_SYMBOL_GPL(usb_unanchor_urb);
+ 
+@@ -713,20 +720,11 @@ EXPORT_SYMBOL_GPL(usb_unpoison_anchored_
+ void usb_unlink_anchored_urbs(struct usb_anchor *anchor)
+ {
+ 	struct urb *victim;
+-	unsigned long flags;
+ 
+-	spin_lock_irqsave(&anchor->lock, flags);
+-	while (!list_empty(&anchor->urb_list)) {
+-		victim = list_entry(anchor->urb_list.prev, struct urb,
+-				    anchor_list);
+-		usb_get_urb(victim);
+-		spin_unlock_irqrestore(&anchor->lock, flags);
+-		/* this will unanchor the URB */
++	while ((victim = usb_get_from_anchor(anchor)) != NULL) {
+ 		usb_unlink_urb(victim);
+ 		usb_put_urb(victim);
+-		spin_lock_irqsave(&anchor->lock, flags);
+ 	}
+-	spin_unlock_irqrestore(&anchor->lock, flags);
+ }
+ EXPORT_SYMBOL_GPL(usb_unlink_anchored_urbs);
+ 
+@@ -763,12 +761,11 @@ struct urb *usb_get_from_anchor(struct u
+ 		victim = list_entry(anchor->urb_list.next, struct urb,
+ 				    anchor_list);
+ 		usb_get_urb(victim);
+-		spin_unlock_irqrestore(&anchor->lock, flags);
+-		usb_unanchor_urb(victim);
++		__usb_unanchor_urb(victim, anchor);
+ 	} else {
+-		spin_unlock_irqrestore(&anchor->lock, flags);
+ 		victim = NULL;
+ 	}
++	spin_unlock_irqrestore(&anchor->lock, flags);
+ 
+ 	return victim;
+ }
+@@ -790,12 +787,7 @@ void usb_scuttle_anchored_urbs(struct us
+ 	while (!list_empty(&anchor->urb_list)) {
+ 		victim = list_entry(anchor->urb_list.prev, struct urb,
+ 				    anchor_list);
+-		usb_get_urb(victim);
+-		spin_unlock_irqrestore(&anchor->lock, flags);
+-		/* this may free the URB */
+-		usb_unanchor_urb(victim);
+-		usb_put_urb(victim);
+-		spin_lock_irqsave(&anchor->lock, flags);
++		__usb_unanchor_urb(victim, anchor);
+ 	}
+ 	spin_unlock_irqrestore(&anchor->lock, flags);
+ }
