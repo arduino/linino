@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=http://subversion.tigris.org/downloads
 PKG_MD5SUM:=113fca1d9e4aa389d7dc2b210010fa69
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=autogen.sh build/libtool.m4
 
 include $(INCLUDE_DIR)/package.mk
 
