@@ -14,7 +14,9 @@ PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.ossp.org/pkg/lib/js/
 PKG_MD5SUM:=07f6cad7e03fd74a949588c3d4b333de
-PKG_FIXUP:=libtool no-autoreconf
+
+PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=aclocal.m4 libtool.m4
 
 include $(INCLUDE_DIR)/package.mk
 
