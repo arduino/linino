@@ -16,7 +16,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_URL:=http://files.freeswitch.org/
 PKG_MD5SUM:=388effee587887a81fe7f411b7350590
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=libtool no-autoreconf
 
 FS_MOD_AVAILABLE:= \
 	alsa \
