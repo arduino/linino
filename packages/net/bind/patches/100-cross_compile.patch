@@ -1,6 +1,6 @@
 --- a/configure
 +++ b/configure
-@@ -22023,8 +22023,7 @@ $as_echo_n "checking epoll support... " 
+@@ -22418,8 +22418,7 @@ $as_echo_n "checking epoll support... " 
    { { $as_echo "$as_me:$LINENO: error: cannot run test program while cross compiling
  See \`config.log' for more details." >&5
  $as_echo "$as_me: error: cannot run test program while cross compiling
@@ -10,7 +10,7 @@
  else
    cat >conftest.$ac_ext <<_ACEOF
  /* confdefs.h.  */
-@@ -23564,8 +23563,7 @@ if { as_var=$as_ac_File; eval "test \"\$
+@@ -24275,8 +24274,7 @@ if { as_var=$as_ac_File; eval "test \"\$
  else
    test "$cross_compiling" = yes &&
    { { $as_echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
@@ -20,7 +20,7 @@
  if test -r "$devrandom"; then
    eval "$as_ac_File=yes"
  else
-@@ -27069,73 +27067,6 @@ rm -f core conftest.err conftest.$ac_obj
+@@ -27949,73 +27947,6 @@ rm -f core conftest.err conftest.$ac_obj
  # which provides some (all?) of the desired functions.
  #
  

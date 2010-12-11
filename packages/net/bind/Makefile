@@ -88,6 +88,7 @@ CONFIGURE_ARGS += \
 	--with-openssl="$(STAGING_DIR)/usr" \
 	--with-libtool \
 	--with-libxml2=no \
+	--enable-epoll=yes \
 
 CONFIGURE_VARS += \
 	BUILD_CC="$(TARGET_CC)" \
