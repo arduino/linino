@@ -12,7 +12,7 @@ BOARDNAME:=x86
 FEATURES:=squashfs jffs2 ext2 vdi vmdk pcmcia targz
 SUBTARGETS=generic olpc xen_domu ep80579
 
-LINUX_VERSION:=2.6.32.25
+LINUX_VERSION:=2.6.32.27
 
 include $(INCLUDE_DIR)/target.mk
 
