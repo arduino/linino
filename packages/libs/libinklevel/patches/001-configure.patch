@@ -1,6 +1,6 @@
 --- a/configure
 +++ b/configure
-@@ -12028,7 +12028,7 @@ fi
+@@ -12070,7 +12070,7 @@ fi
  ## Check for optional  header files
  
  
@@ -9,7 +9,7 @@
  do
  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
  if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-@@ -13648,235 +13648,6 @@ case $host in
+@@ -13690,235 +13690,6 @@ case $host in
  cat >>confdefs.h <<_ACEOF
  #define HOST_OS LINUX
  _ACEOF
@@ -245,3 +245,30 @@
  ;;
  
    *-*-solaris2.*)
+--- a/configure.in
++++ b/configure.in
+@@ -60,7 +60,7 @@ fi
+ 
+ 
+ ## Check for optional  header files
+-AC_CHECK_HEADERS([ifaddrs.h ieee1284.h])
++AC_CHECK_HEADERS([ifaddrs.h])
+ 
+ ## Check for mandatory header files
+ 
+@@ -95,15 +95,6 @@ AC_TYPE_UINT32_T
+ AC_TYPE_UINT8_T
+ AC_DEFINE_UNQUOTED(LINUX,1,[Define value for Linux OS])
+ AC_DEFINE_UNQUOTED(OPENSOLARIS,2,[Define value for OpenSolaris OS])
+-case $host in
+-  *-*-linux*) AC_DEFINE_UNQUOTED(HOST_OS,LINUX,[Host OS])
+-  	      AC_CHECK_HEADERS([ieee1284.h],,
+-				AC_MSG_ERROR(( required header file ieee1284.h missing)))
+-  	      AC_CHECK_LIB([ieee1284],ieee1284_open,, AC_MSG_ERROR(Library not found),);;
+-
+-  *-*-solaris2.*) AC_DEFINE(HOST_OS,OPENSOLARIS,[HOST OS]);;
+-  *-*-*) AC_MSG_ERROR( Host OS not (yet) supported) ;;
+-esac
+ 
+ ## Variables to be exported
+ 
