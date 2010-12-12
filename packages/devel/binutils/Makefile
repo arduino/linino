@@ -18,7 +18,8 @@ PKG_MD5SUM:=
 PATCH_DIR:=$(TOPDIR)/toolchain/binutils/patches/$(PKG_VERSION)
 
 PKG_FIXUP:=libtool
-PKG_LIBTOOL_PATHS:=. gas bfd opcodes gprof binutils ld
+PKG_LIBTOOL_PATHS:=. gas bfd opcodes gprof binutils ld libiberty gold intl
+PKG_REMOVE_FILES:=libtool.m4
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
