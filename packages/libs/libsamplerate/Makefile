@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.mega-nerd.com/SRC/
 PKG_MD5SUM:=ad093e60ec44f0a60de8e29983ddbc0f
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=libtool autoreconf
 PKG_REMOVE_FILES:=autogen.sh
 
 PKG_INSTALL:=1
