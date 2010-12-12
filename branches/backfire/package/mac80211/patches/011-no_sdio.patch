@@ -1,6 +1,6 @@
 --- a/config.mk
 +++ b/config.mk
-@@ -452,7 +452,7 @@ endif #CONFIG_SPI_MASTER end of SPI driv
+@@ -467,7 +467,7 @@ endif #CONFIG_SPI_MASTER end of SPI driv
  
  ifdef CONFIG_MMC
  
@@ -8,4 +8,4 @@
 +# CONFIG_B43_SDIO=y
  
  ifdef CONFIG_CRC7
- CONFIG_WL1251_SDIO=m
+ ifdef CONFIG_WL12XX_PLATFORM_DATA

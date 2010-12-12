@@ -1,6 +1,6 @@
 --- a/compat/compat-2.6.28.c
 +++ b/compat/compat-2.6.28.c
-@@ -168,7 +168,7 @@ EXPORT_SYMBOL(pcmcia_loop_config);
+@@ -165,7 +165,7 @@ EXPORT_SYMBOL(pcmcia_loop_config);
  
  #endif /* CONFIG_PCMCIA */
  
@@ -11,7 +11,7 @@
  {
 --- a/compat/compat-2.6.29.c
 +++ b/compat/compat-2.6.29.c
-@@ -52,7 +52,7 @@ void netdev_attach_ops(struct net_device
+@@ -49,7 +49,7 @@ void netdev_attach_ops(struct net_device
  EXPORT_SYMBOL(netdev_attach_ops);
  
  #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23))
@@ -33,7 +33,7 @@
  #endif
 --- a/config.mk
 +++ b/config.mk
-@@ -389,7 +389,7 @@ endif #CONFIG_COMPAT_KERNEL_29
+@@ -405,7 +405,7 @@ endif #CONFIG_COMPAT_KERNEL_29
  # This activates a threading fix for usb urb.
  # this is mainline commit: b3e670443b7fb8a2d29831b62b44a039c283e351
  # This fix will be included in some stable releases.
