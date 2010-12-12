@@ -11,7 +11,7 @@ add_param() {
 }
 
 add_chan() {
-	chan=${2% *}
+	chan=${1% *}
 	pass=${1#* }
 	echo "	<Chan $chan>" >> $ZNC_CONFIG
 	[ "$chan" != "$pass" ] && echo "		Key = $pass" >> $ZNC_CONFIG
