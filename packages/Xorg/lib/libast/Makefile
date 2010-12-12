@@ -48,6 +48,7 @@ endif
 CONFIGURE_VARS+= \
 	dps_cv_snprintf_bug=0 \
 	dps_cv_vsnprintf_bug=0 \
+	dps_cv_symlink_open_bug=0 \
 
 EXTRA_LDFLAGS+= -Wl,-rpath-link,$(STAGING_DIR)/usr/lib
 
