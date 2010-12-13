@@ -1,0 +1,379 @@
+--- /dev/null
++++ b/acinclude.m4
+@@ -0,0 +1,376 @@
++# CFLAGS and library paths for XMMS
++# written 15 December 1999 by Ben Gertzfield <che@debian.org>
++
++dnl Usage:
++dnl AM_PATH_XMMS([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
++dnl
++dnl Example:
++dnl AM_PATH_XMMS(0.9.5.1, , AC_MSG_ERROR([*** XMMS >= 0.9.5.1 not installed - please install first ***]))
++dnl
++dnl Defines XMMS_CFLAGS, XMMS_LIBS, XMMS_DATA_DIR, XMMS_PLUGIN_DIR, 
++dnl XMMS_VISUALIZATION_PLUGIN_DIR, XMMS_INPUT_PLUGIN_DIR, 
++dnl XMMS_OUTPUT_PLUGIN_DIR, XMMS_GENERAL_PLUGIN_DIR, XMMS_EFFECT_PLUGIN_DIR,
++dnl and XMMS_VERSION for your plugin pleasure.
++dnl
++
++dnl XMMS_TEST_VERSION(AVAILABLE-VERSION, NEEDED-VERSION [, ACTION-IF-OKAY [, ACTION-IF-NOT-OKAY]])
++AC_DEFUN([XMMS_TEST_VERSION], [
++
++# Determine which version number is greater. Prints 2 to stdout if	
++# the second number is greater, 1 if the first number is greater,	
++# 0 if the numbers are equal.						
++									
++# Written 15 December 1999 by Ben Gertzfield <che@debian.org>		
++# Revised 15 December 1999 by Jim Monty <monty@primenet.com>		
++									
++    AC_PROG_AWK
++    xmms_got_version=[` $AWK '						\
++BEGIN {									\
++    print vercmp(ARGV[1], ARGV[2]);					\
++}									\
++									\
++function vercmp(ver1, ver2,    ver1arr, ver2arr,			\
++                               ver1len, ver2len,			\
++                               ver1int, ver2int, len, i, p) {		\
++									\
++    ver1len = split(ver1, ver1arr, /\./);				\
++    ver2len = split(ver2, ver2arr, /\./);				\
++									\
++    len = ver1len > ver2len ? ver1len : ver2len;			\
++									\
++    for (i = 1; i <= len; i++) {					\
++        p = 1000 ^ (len - i);						\
++        ver1int += ver1arr[i] * p;					\
++        ver2int += ver2arr[i] * p;					\
++    }									\
++									\
++    if (ver1int < ver2int)						\
++        return 2;							\
++    else if (ver1int > ver2int)						\
++        return 1;							\
++    else								\
++        return 0;							\
++}' $1 $2`]								
++
++    if test $xmms_got_version -eq 2; then 	# failure
++	ifelse([$4], , :, $4)			
++    else  					# success!
++	ifelse([$3], , :, $3)
++    fi
++])
++
++AC_DEFUN([AM_PATH_XMMS],
++[
++AC_ARG_WITH(xmms-prefix,[  --with-xmms-prefix=PFX  Prefix where XMMS is installed (optional)],
++	xmms_config_prefix="$withval", xmms_config_prefix="")
++AC_ARG_WITH(xmms-exec-prefix,[  --with-xmms-exec-prefix=PFX Exec prefix where XMMS is installed (optional)],
++	xmms_config_exec_prefix="$withval", xmms_config_exec_prefix="")
++
++if test x$xmms_config_exec_prefix != x; then
++    xmms_config_args="$xmms_config_args --exec-prefix=$xmms_config_exec_prefix"
++    if test x${XMMS_CONFIG+set} != xset; then
++	XMMS_CONFIG=$xmms_config_exec_prefix/bin/xmms-config
++    fi
++fi
++
++if test x$xmms_config_prefix != x; then
++    xmms_config_args="$xmms_config_args --prefix=$xmms_config_prefix"
++    if test x${XMMS_CONFIG+set} != xset; then
++  	XMMS_CONFIG=$xmms_config_prefix/bin/xmms-config
++    fi
++fi
++
++AC_PATH_PROG(XMMS_CONFIG, xmms-config, no)
++min_xmms_version=ifelse([$1], ,0.9.5.1, $1)
++
++if test "$XMMS_CONFIG" = "no"; then
++    no_xmms=yes
++else
++    XMMS_CFLAGS=`$XMMS_CONFIG $xmms_config_args --cflags`
++    XMMS_LIBS=`$XMMS_CONFIG $xmms_config_args --libs`
++    XMMS_VERSION=`$XMMS_CONFIG $xmms_config_args --version`
++    XMMS_DATA_DIR=`$XMMS_CONFIG $xmms_config_args --data-dir`
++    XMMS_PLUGIN_DIR=`$XMMS_CONFIG $xmms_config_args --plugin-dir`
++    XMMS_VISUALIZATION_PLUGIN_DIR=`$XMMS_CONFIG $xmms_config_args \
++					--visualization-plugin-dir`
++    XMMS_INPUT_PLUGIN_DIR=`$XMMS_CONFIG $xmms_config_args --input-plugin-dir`
++    XMMS_OUTPUT_PLUGIN_DIR=`$XMMS_CONFIG $xmms_config_args --output-plugin-dir`
++    XMMS_EFFECT_PLUGIN_DIR=`$XMMS_CONFIG $xmms_config_args --effect-plugin-dir`
++    XMMS_GENERAL_PLUGIN_DIR=`$XMMS_CONFIG $xmms_config_args --general-plugin-dir`
++
++    XMMS_TEST_VERSION($XMMS_VERSION, $min_xmms_version, ,no_xmms=version)
++fi
++
++AC_MSG_CHECKING(for XMMS - version >= $min_xmms_version)
++
++if test "x$no_xmms" = x; then
++    AC_MSG_RESULT(yes)
++    ifelse([$2], , :, [$2])
++else
++    AC_MSG_RESULT(no)
++
++    if test "$XMMS_CONFIG" = "no" ; then
++	echo "*** The xmms-config script installed by XMMS could not be found."
++      	echo "*** If XMMS was installed in PREFIX, make sure PREFIX/bin is in"
++	echo "*** your path, or set the XMMS_CONFIG environment variable to the"
++	echo "*** full path to xmms-config."
++    else
++	if test "$no_xmms" = "version"; then
++	    echo "*** An old version of XMMS, $XMMS_VERSION, was found."
++	    echo "*** You need a version of XMMS newer than $min_xmms_version."
++	    echo "*** The latest version of XMMS is always available from"
++	    echo "*** http://www.xmms.org/"
++	    echo "***"
++
++            echo "*** If you have already installed a sufficiently new version, this error"
++            echo "*** probably means that the wrong copy of the xmms-config shell script is"
++            echo "*** being found. The easiest way to fix this is to remove the old version"
++            echo "*** of XMMS, but you can also set the XMMS_CONFIG environment to point to the"
++            echo "*** correct copy of xmms-config. (In this case, you will have to"
++            echo "*** modify your LD_LIBRARY_PATH enviroment variable, or edit /etc/ld.so.conf"
++            echo "*** so that the correct libraries are found at run-time)"
++	fi
++    fi
++    XMMS_CFLAGS=""
++    XMMS_LIBS=""
++    ifelse([$3], , :, [$3])
++fi
++AC_SUBST(XMMS_CFLAGS)
++AC_SUBST(XMMS_LIBS)
++AC_SUBST(XMMS_VERSION)
++AC_SUBST(XMMS_DATA_DIR)
++AC_SUBST(XMMS_PLUGIN_DIR)
++AC_SUBST(XMMS_VISUALIZATION_PLUGIN_DIR)
++AC_SUBST(XMMS_INPUT_PLUGIN_DIR)
++AC_SUBST(XMMS_OUTPUT_PLUGIN_DIR)
++AC_SUBST(XMMS_GENERAL_PLUGIN_DIR)
++AC_SUBST(XMMS_EFFECT_PLUGIN_DIR)
++])
++
++# Configure paths for libogg
++# Jack Moffitt <jack@icecast.org> 10-21-2000
++# Shamelessly stolen from Owen Taylor and Manish Singh
++
++dnl XIPH_PATH_OGG([ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
++dnl Test for libogg, and define OGG_CFLAGS and OGG_LIBS
++dnl
++AC_DEFUN([XIPH_PATH_OGG],
++[dnl 
++dnl Get the cflags and libraries
++dnl
++AC_ARG_WITH(ogg,[  --with-ogg=PFX   Prefix where libogg is installed (optional)], ogg_prefix="$withval", ogg_prefix="")
++AC_ARG_WITH(ogg-libraries,[  --with-ogg-libraries=DIR   Directory where libogg library is installed (optional)], ogg_libraries="$withval", ogg_libraries="")
++AC_ARG_WITH(ogg-includes,[  --with-ogg-includes=DIR   Directory where libogg header files are installed (optional)], ogg_includes="$withval", ogg_includes="")
++AC_ARG_ENABLE(oggtest, [  --disable-oggtest       Do not try to compile and run a test Ogg program],, enable_oggtest=yes)
++
++  if test "x$ogg_libraries" != "x" ; then
++    OGG_LIBS="-L$ogg_libraries"
++  elif test "x$ogg_prefix" != "x" ; then
++    OGG_LIBS="-L$ogg_prefix/lib"
++  elif test "x$prefix" != "xNONE" ; then
++    OGG_LIBS="-L$prefix/lib"
++  fi
++
++  OGG_LIBS="$OGG_LIBS -logg"
++
++  if test "x$ogg_includes" != "x" ; then
++    OGG_CFLAGS="-I$ogg_includes"
++  elif test "x$ogg_prefix" != "x" ; then
++    OGG_CFLAGS="-I$ogg_prefix/include"
++  elif test "x$prefix" != "xNONE"; then
++    OGG_CFLAGS="-I$prefix/include"
++  fi
++
++  AC_MSG_CHECKING(for Ogg)
++  no_ogg=""
++
++
++  if test "x$enable_oggtest" = "xyes" ; then
++    ac_save_CFLAGS="$CFLAGS"
++    ac_save_LIBS="$LIBS"
++    CFLAGS="$CFLAGS $OGG_CFLAGS"
++    LIBS="$LIBS $OGG_LIBS"
++dnl
++dnl Now check if the installed Ogg is sufficiently new.
++dnl
++      rm -f conf.oggtest
++      AC_TRY_RUN([
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <ogg/ogg.h>
++
++int main ()
++{
++  system("touch conf.oggtest");
++  return 0;
++}
++
++],, no_ogg=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
++       CFLAGS="$ac_save_CFLAGS"
++       LIBS="$ac_save_LIBS"
++  fi
++
++  if test "x$no_ogg" = "x" ; then
++     AC_MSG_RESULT(yes)
++     ifelse([$1], , :, [$1])     
++  else
++     AC_MSG_RESULT(no)
++     if test -f conf.oggtest ; then
++       :
++     else
++       echo "*** Could not run Ogg test program, checking why..."
++       CFLAGS="$CFLAGS $OGG_CFLAGS"
++       LIBS="$LIBS $OGG_LIBS"
++       AC_TRY_LINK([
++#include <stdio.h>
++#include <ogg/ogg.h>
++],     [ return 0; ],
++       [ echo "*** The test program compiled, but did not run. This usually means"
++       echo "*** that the run-time linker is not finding Ogg or finding the wrong"
++       echo "*** version of Ogg. If it is not finding Ogg, you'll need to set your"
++       echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
++       echo "*** to the installed location  Also, make sure you have run ldconfig if that"
++       echo "*** is required on your system"
++       echo "***"
++       echo "*** If you have an old version installed, it is best to remove it, although"
++       echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"],
++       [ echo "*** The test program failed to compile or link. See the file config.log for the"
++       echo "*** exact error that occured. This usually means Ogg was incorrectly installed"
++       echo "*** or that you have moved Ogg since it was installed." ])
++       CFLAGS="$ac_save_CFLAGS"
++       LIBS="$ac_save_LIBS"
++     fi
++     OGG_CFLAGS=""
++     OGG_LIBS=""
++     ifelse([$2], , :, [$2])
++  fi
++  AC_SUBST(OGG_CFLAGS)
++  AC_SUBST(OGG_LIBS)
++  rm -f conf.oggtest
++])
++
++# iconv.m4 serial AM4 (gettext-0.11.3)
++dnl Copyright (C) 2000-2002 Free Software Foundation, Inc.
++dnl This file is free software; the Free Software Foundation
++dnl gives unlimited permission to copy and/or distribute it,
++dnl with or without modifications, as long as this notice is preserved.
++
++dnl From Bruno Haible.
++
++AC_DEFUN([AM_ICONV_LINKFLAGS_BODY],
++[
++  dnl Prerequisites of AC_LIB_LINKFLAGS_BODY.
++  AC_REQUIRE([AC_LIB_PREPARE_PREFIX])
++  AC_REQUIRE([AC_LIB_RPATH])
++
++  dnl Search for libiconv and define LIBICONV, LTLIBICONV and INCICONV
++  dnl accordingly.
++  AC_LIB_LINKFLAGS_BODY([iconv])
++])
++
++AC_DEFUN([AM_ICONV_LINK],
++[
++  dnl Some systems have iconv in libc, some have it in libiconv (OSF/1 and
++  dnl those with the standalone portable GNU libiconv installed).
++
++  dnl Search for libiconv and define LIBICONV, LTLIBICONV and INCICONV
++  dnl accordingly.
++  AC_REQUIRE([AM_ICONV_LINKFLAGS_BODY])
++
++  dnl Add $INCICONV to CPPFLAGS before performing the following checks,
++  dnl because if the user has installed libiconv and not disabled its use
++  dnl via --without-libiconv-prefix, he wants to use it. The first
++  dnl AC_TRY_LINK will then fail, the second AC_TRY_LINK will succeed.
++  am_save_CPPFLAGS="$CPPFLAGS"
++  AC_LIB_APPENDTOVAR([CPPFLAGS], [$INCICONV])
++
++  AC_CACHE_CHECK(for iconv, am_cv_func_iconv, [
++    am_cv_func_iconv="no, consider installing GNU libiconv"
++    am_cv_lib_iconv=no
++    AC_TRY_LINK([#include <stdlib.h>
++#include <iconv.h>],
++      [iconv_t cd = iconv_open("","");
++       iconv(cd,NULL,NULL,NULL,NULL);
++       iconv_close(cd);],
++      am_cv_func_iconv=yes)
++    if test "$am_cv_func_iconv" != yes; then
++      am_save_LIBS="$LIBS"
++      LIBS="$LIBS $LIBICONV"
++      AC_TRY_LINK([#include <stdlib.h>
++#include <iconv.h>],
++        [iconv_t cd = iconv_open("","");
++         iconv(cd,NULL,NULL,NULL,NULL);
++         iconv_close(cd);],
++        am_cv_lib_iconv=yes
++        am_cv_func_iconv=yes)
++      LIBS="$am_save_LIBS"
++    fi
++  ])
++  if test "$am_cv_func_iconv" = yes; then
++    AC_DEFINE(HAVE_ICONV, 1, [Define if you have the iconv() function.])
++  fi
++  if test "$am_cv_lib_iconv" = yes; then
++    AC_MSG_CHECKING([how to link with libiconv])
++    AC_MSG_RESULT([$LIBICONV])
++  else
++    dnl If $LIBICONV didn't lead to a usable library, we don't need $INCICONV
++    dnl either.
++    CPPFLAGS="$am_save_CPPFLAGS"
++    LIBICONV=
++    LTLIBICONV=
++  fi
++  AC_SUBST(LIBICONV)
++  AC_SUBST(LTLIBICONV)
++])
++
++AC_DEFUN([AM_ICONV],
++[
++  AM_ICONV_LINK
++  if test "$am_cv_func_iconv" = yes; then
++    AC_MSG_CHECKING([for iconv declaration])
++    AC_CACHE_VAL(am_cv_proto_iconv, [
++      AC_TRY_COMPILE([
++#include <stdlib.h>
++#include <iconv.h>
++extern
++#ifdef __cplusplus
++"C"
++#endif
++#if defined(__STDC__) || defined(__cplusplus)
++size_t iconv (iconv_t cd, char * *inbuf, size_t *inbytesleft, char * *outbuf, size_t *outbytesleft);
++#else
++size_t iconv();
++#endif
++], [], am_cv_proto_iconv_arg1="", am_cv_proto_iconv_arg1="const")
++      am_cv_proto_iconv="extern size_t iconv (iconv_t cd, $am_cv_proto_iconv_arg1 char * *inbuf, size_t *inbytesleft, char * *outbuf, size_t *outbytesleft);"])
++    am_cv_proto_iconv=`echo "[$]am_cv_proto_iconv" | tr -s ' ' | sed -e 's/( /(/'`
++    AC_MSG_RESULT([$]{ac_t:-
++         }[$]am_cv_proto_iconv)
++    AC_DEFINE_UNQUOTED(ICONV_CONST, $am_cv_proto_iconv_arg1,
++      [Define as const if the declaration of iconv() needs const.])
++  fi
++])
++
++# codeset.m4 serial AM1 (gettext-0.10.40)
++dnl Copyright (C) 2000-2002 Free Software Foundation, Inc.
++dnl This file is free software; the Free Software Foundation
++dnl gives unlimited permission to copy and/or distribute it,
++dnl with or without modifications, as long as this notice is preserved.
++
++dnl From Bruno Haible.
++
++AC_DEFUN([AM_LANGINFO_CODESET],
++[
++  AC_CACHE_CHECK([for nl_langinfo and CODESET], am_cv_langinfo_codeset,
++    [AC_TRY_LINK([#include <langinfo.h>],
++      [char* cs = nl_langinfo(CODESET);],
++      am_cv_langinfo_codeset=yes,
++      am_cv_langinfo_codeset=no)
++    ])
++  if test $am_cv_langinfo_codeset = yes; then
++    AC_DEFINE(HAVE_LANGINFO_CODESET, 1,
++      [Define if you have <langinfo.h> and nl_langinfo(CODESET).])
++  fi
++])
++
