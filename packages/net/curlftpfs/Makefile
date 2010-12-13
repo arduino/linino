@@ -29,7 +29,14 @@ define Package/curlftpfs/description
   based on FUSE and libcurl.
 endef
 
-EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/lib/libiconv/include -DICONV_CONST=const
+EXTRA_CFLAGS += \
+	-I$(STAGING_DIR)/usr/lib/libiconv/include \
+	-I$(STAGING_DIR)/usr/include/fuse \
+	-DICONV_CONST=const
+
+EXTRA_LDFLAGS += \
+	-L$(STAGING_DIR)/usr/lib/libintl/lib \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Package/curlftpfs/install
 	$(INSTALL_DIR) $(1)/usr/bin
