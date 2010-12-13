@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gstreamer/
 PKG_MD5SUM:=c92d6bce4fc65fa9d5a3ad35cdd1a466
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=autogen.sh aclocal.m4
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -93,7 +95,8 @@ CONFIGURE_ARGS += \
 
 EXTRA_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-
+	-L$(STAGING_DIR)/usr/lib/libintl/lib \
+	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/gstreamer-$(GST_VERSION)
