@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=832d074183a36ee15b47553ed5962fce
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=autogen.sh aclocal.m4
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,6 +30,8 @@ define Package/yafc
 endef
 
 # uses GNU configure
+CONFIGURE_VARS += \
+	bash_cv_func_sigsetjmp=missing
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)
