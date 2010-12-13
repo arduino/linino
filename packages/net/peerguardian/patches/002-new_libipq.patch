@@ -5,7 +5,7 @@
  peerguardnf_SOURCES=Main.cpp PeerGuard.cpp BlockList.cpp Blocker_Linux.cpp Blocker_BSD.cpp HttpServer.cpp HttpRequest.cpp sha1.cpp
  pgtext_SOURCES=pgtext.cpp
 -peerguardnf_LDADD=-lipq -lpthread
-+peerguardnf_LDADD=-lnetfilter_queue_libipq -lnetfilter_queue -lnfnetlink -lpthread
++peerguardnf_LDADD=-lipq -lnetfilter_queue -lnfnetlink -lpthread
  pgtext_LDADD=-lncurses -lpthread
  peerguardnf_LDFLAGS=$(all_includes) -I/usr/include/libipq
  AM_CPPFLAGS=$(ALL_INCLUDES) -I/usr/include/libipq
@@ -16,7 +16,7 @@
  peerguardnf_SOURCES = Main.cpp PeerGuard.cpp BlockList.cpp Blocker_Linux.cpp Blocker_BSD.cpp HttpServer.cpp HttpRequest.cpp sha1.cpp
  pgtext_SOURCES = pgtext.cpp
 -peerguardnf_LDADD = -lipq -lpthread
-+peerguardnf_LDADD = -lnetfilter_queue_libipq -lnetfilter_queue -lnfnetlink -lpthread
++peerguardnf_LDADD = -lipq -lnetfilter_queue -lnfnetlink -lpthread
  pgtext_LDADD = -lncurses -lpthread
  peerguardnf_LDFLAGS = $(all_includes)
  AM_CPPFLAGS = $(ALL_INCLUDES)
