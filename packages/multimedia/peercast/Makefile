@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=http://www.cti.ecp.fr/~beauxir5/peercast
 PKG_MD5SUM:=4e8449cde7135ad97f788e67e1bd64ee
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=aclocal.m4 acinclude.m4
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
