@@ -67,7 +67,16 @@ add_user() {
 	config_get vhost "$user" vhost
 
 	echo "<User $user>" >> $ZNC_CONFIG
-	echo "	Pass = plain#$password" >> $ZNC_CONFIG
+
+	case "$password" in
+	"md5#"* | "sha256#"* | "plain#"*)
+		echo "  Pass = $password" >> $ZNC_CONFIG
+		;;
+	*)
+		echo "	Pass = plain#$password" >> $ZNC_CONFIG
+		;;
+	esac
+
 	echo "	Nick = $nick" >> $ZNC_CONFIG
 	echo "	AltNick = ${altnick:-$nick"_"}" >> $ZNC_CONFIG
 	echo "	Ident = ${ident:-$nick}" >> $ZNC_CONFIG

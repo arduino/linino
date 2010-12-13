@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=znc
-PKG_VERSION:=0.094
-PKG_RELEASE:=2
+PKG_VERSION:=0.096
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/znc
-PKG_MD5SUM:=db101f7a7756285d824b59e3b33e3ad5
+PKG_MD5SUM:=38eec4f1911a68b4d2fc704170e7cbf6
 
 PKG_BUILD_PARALLEL:=1
 
@@ -45,11 +45,11 @@ endef
 
 
 CONFIGURE_VARS += \
-	CXX="$(STAGING_DIR)/host/bin/g++-uc"
+	CXX="$(STAGING_DIR)/host/bin/g++-uc" \
 	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
 	CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 	LDFLAGS="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-	LIBS="-luClibc++ -lm -lssl $(LIBGCC_S) -lc"
+	LIBS="-luClibc++ -lm -lssl -lcrypto $(LIBGCC_S) -lc"
 
 CONFIGURE_ARGS += \
 	--disable-c-ares \
@@ -191,6 +191,9 @@ $(eval $(call module,autovoice,Autovoices everyone who joins some channel., \
 
 $(eval $(call module,block-motd,This module blocks the server's Message of the \
 	Day.,extra/))
+
+$(eval $(call module,clearbufferonmsg,This module keeps the buffer until the \
+	next message from the client.,extra/))
 
 $(eval $(call module,ctcpflood,This module tries to block ctcp floods.,extra/))
 
