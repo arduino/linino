@@ -23,3 +23,7 @@ start() {
 stop() {
 	kill $(cat /var/run/sshd.pid)
 }
+
+shutdown() {
+	killall sshd
+}
