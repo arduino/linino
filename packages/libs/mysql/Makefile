@@ -189,6 +189,7 @@ define Package/mysql-server/install
 	$(INSTALL_DIR) $(1)/usr/share/mysql/english
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/share/mysql/english/errmsg.sys $(1)/usr/share/mysql/english
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/share/mysql/fill_help_tables.sql $(1)/usr/share/mysql/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/share/mysql/mysql_system_tables.sql $(1)/usr/share/mysql/
 endef
 
 $(eval $(call BuildPackage,mysql-server))
