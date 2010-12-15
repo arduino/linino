@@ -39,6 +39,7 @@ EXTRA_CPPFLAGS:=\
 EXTRA_LDFLAGS:=\
 	-L$(STAGING_DIR)/usr/lib/libintl/lib \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 MAKE_FLAGS += \
 	CPPFLAGS="$(TARGET_CPPFLAGS) $(EXTRA_CPPFLAGS)" \
