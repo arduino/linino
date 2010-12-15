@@ -256,7 +256,7 @@
  
  ## Check for mandatory header files
  
-@@ -95,15 +95,6 @@ AC_TYPE_UINT32_T
+@@ -95,15 +95,7 @@ AC_TYPE_UINT32_T
  AC_TYPE_UINT8_T
  AC_DEFINE_UNQUOTED(LINUX,1,[Define value for Linux OS])
  AC_DEFINE_UNQUOTED(OPENSOLARIS,2,[Define value for OpenSolaris OS])
@@ -269,6 +269,7 @@
 -  *-*-solaris2.*) AC_DEFINE(HOST_OS,OPENSOLARIS,[HOST OS]);;
 -  *-*-*) AC_MSG_ERROR( Host OS not (yet) supported) ;;
 -esac
++AC_DEFINE_UNQUOTED(HOST_OS,LINUX,[Host OS])
  
  ## Variables to be exported
  
