@@ -24,7 +24,7 @@ TARGET_CFLAGS += $(FPIC)
 
 define Package/libshout
   SECTION:=libs
-  DEPENDS:= +libspeex +libtheora +libvorbisidec
+  DEPENDS:= +libspeex +libtheora +libvorbis
   CATEGORY:=Libraries
   TITLE:=Library which can be used to write a source client like ices
   URL:=http://www.icecast.org/download.php
@@ -41,7 +41,7 @@ endef
 define Build/Configure
 	$(call Build/Configure/Default, \
 		VORBIS_CFLAGS="-I$(STAGING_DIR)/usr/include/tremor/"\
-		VORBIS_LIBS="$(TARGET_LDFLAGS)" \
+		VORBIS_LIBS="$(TARGET_LDFLAGS) -lvorbis" \
 		--enable-shared \
 		--enable-static \
 	)
