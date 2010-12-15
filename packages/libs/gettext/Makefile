@@ -44,11 +44,11 @@ CONFIGURE_ARGS += \
 	--without-emacs
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/lib/libintl/include
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/include/libintl.h $(1)/usr/lib/libintl/include/
+	$(INSTALL_DIR) $(1)/usr/include
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/include/libintl.h $(1)/usr/include/
 
-	$(INSTALL_DIR) $(1)/usr/lib/libintl/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libintl.{a,so*} $(1)/usr/lib/libintl/lib/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libintl.{a,so*} $(1)/usr/lib
 
 	$(INSTALL_DIR) $(1)/usr/share/aclocal
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/aclocal/* $(1)/usr/share/aclocal/
