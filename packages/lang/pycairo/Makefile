@@ -21,6 +21,8 @@ $(call include_mk, python-package.mk)
 
 PKG_INSTALL=1
 
+CONFIGURE_ARGS += --enable-static
+
 define Package/pycairo
   SUBMENU:=Python
   SECTION:=lang
