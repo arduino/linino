@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/psmisc
 PKG_MD5SUM:=16c83a351c292cfc845b27d6395e05fb
 
+PKG_FIXUP:=libtool
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/psmisc
