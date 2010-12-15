@@ -1,0 +1,24 @@
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -26,8 +26,7 @@ AM_CFLAGS = -Wall -D_GNU_SOURCE \
+ # Siproxd itself
+ #
+ sbin_PROGRAMS = siproxd
+-siproxd_LDFLAGS=-export-dynamic
+-siproxd_LDADD = $(LIBLTDL)
++siproxd_LDFLAGS=-export-dynamic -lltdl
+ siproxd_SOURCES = siproxd.c proxy.c register.c sock.c utils.c \
+ 		  sip_utils.c sip_layer.c log.c readconf.c rtpproxy.c \
+ 		  rtpproxy_relay.c accessctl.c route_processing.c \
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -259,8 +259,7 @@ target_vendor = @target_vendor@
+ AM_CFLAGS = -Wall -D_GNU_SOURCE \
+             -DBUILDSTR="\"`cat .buildno`\""
+ 
+-siproxd_LDFLAGS = -export-dynamic
+-siproxd_LDADD = $(LIBLTDL)
++siproxd_LDFLAGS = -export-dynamic -lltdl
+ siproxd_SOURCES = siproxd.c proxy.c register.c sock.c utils.c \
+ 		  sip_utils.c sip_layer.c log.c readconf.c rtpproxy.c \
+ 		  rtpproxy_relay.c accessctl.c route_processing.c \
