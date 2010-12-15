@@ -32,7 +32,7 @@ TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
 	--enable-shared \
-	--disable-static
+	--enable-static
 
 #CONFIGURE_VARS += \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti"  \
