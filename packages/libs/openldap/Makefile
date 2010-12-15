@@ -18,7 +18,7 @@ PKG_SOURCE_URL:=ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/ \
 	ftp://ftp.plig.org/pub/OpenLDAP/openldap-release/
 PKG_MD5SUM:=90150b8c0d0192e10b30157e68844ddf
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
 

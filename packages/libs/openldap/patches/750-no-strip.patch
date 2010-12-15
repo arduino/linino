@@ -1,6 +1,6 @@
 --- a/clients/tools/Makefile.in
 +++ b/clients/tools/Makefile.in
-@@ -120,7 +120,7 @@ install-local:	FORCE
+@@ -122,7 +122,7 @@ install-local:	FORCE
  	-$(MKDIR) $(DESTDIR)$(bindir)
  	@(								\
  	    for prg in $(PROGRAMS); do					\
@@ -11,7 +11,7 @@
  	)
 --- a/servers/slapd/Makefile.in
 +++ b/servers/slapd/Makefile.in
-@@ -375,7 +375,7 @@ install-local-srv: install-slapd install
+@@ -377,7 +377,7 @@ install-local-srv: install-slapd install
  install-slapd: FORCE
  	-$(MKDIR) $(DESTDIR)$(libexecdir)
  	-$(MKDIR) $(DESTDIR)$(localstatedir)/run
