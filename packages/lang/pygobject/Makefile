@@ -25,6 +25,7 @@ EXTRA_LDFLAGS+= \
 	-L$(STAGING_DIR)/usr/lib/libiconv/lib/
 
 TARGET_CFLAGS += $(FPIC)
+CONFIGURE_ARGS += --enable-static
 
 define Package/python-gobject
   SUBMENU:=Python
