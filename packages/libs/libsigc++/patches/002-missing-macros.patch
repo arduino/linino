@@ -1,0 +1,370 @@
+--- /dev/null
++++ b/acinclude.m4
+@@ -0,0 +1,367 @@
++AC_DEFUN([_MM_PRE_INIT], [m4_pattern_forbid([^_?MM_])])
++
++m4_define([_MM_PREREQ],
++[dnl
++m4_if(m4_quote(m4_version_compare([$2], [$3])), [-1],
++      [m4_fatal([$4 requires $1 $3 (version $2 is installed)])])[]dnl
++])
++
++AC_DEFUN([MM_PREREQ],
++[dnl
++m4_assert([$# >= 1])[]dnl
++AC_REQUIRE([_MM_PRE_INIT])[]dnl
++_MM_PREREQ([mm-common], [0.9.2], [$1], m4_defn([AC_PACKAGE_NAME]))[]dnl
++])
++
++
++#serial 20100107
++
++m4_define([_MM_CONFIG_DOCTOOL_DIR],
++[dnl
++AC_PROVIDE([$0])[]dnl
++AC_REQUIRE([PKG_PROG_PKG_CONFIG])[]dnl
++dnl
++AC_MSG_CHECKING([location of documentation utilities])
++AS_IF([test "x$MMDOCTOOLDIR" = x],
++[
++  MMDOCTOOLDIR=`$PKG_CONFIG --variable=doctooldir glibmm-2.4 2>&AS_MESSAGE_LOG_FD`
++  AS_IF([test "[$]?" -ne 0],
++        [AC_MSG_ERROR([[not found
++The required module glibmm could not be found on this system.  If you
++are running a binary distribution and the glibmm package is installed,
++make sure that any separate development package for glibmm is installed
++as well.  If you built glibmm yourself, it may be necessary to adjust
++the PKG_CONFIG_PATH environment variable for pkg-config to find it.
++]])])
++])
++AC_MSG_RESULT([$MMDOCTOOLDIR])[]dnl
++])
++
++AC_DEFUN([MM_CONFIG_DOCTOOL_DIR],
++[dnl
++AC_REQUIRE([_MM_PRE_INIT])[]dnl
++AC_REQUIRE([MM_CHECK_GNU_MAKE])[]dnl
++m4_ifval([$1], [MMDOCTOOLDIR='[$]{top_srcdir}/$1'], [AC_REQUIRE([_MM_CONFIG_DOCTOOL_DIR])])
++AC_SUBST([MMDOCTOOLDIR])[]dnl
++])
++
++m4_define([_MM_ARG_ENABLE_DOCUMENTATION],
++[dnl
++AC_PROVIDE([$0])[]dnl
++dnl
++AC_ARG_VAR([DOT], [path to dot utility])[]dnl
++AC_ARG_VAR([DOXYGEN], [path to Doxygen utility])[]dnl
++AC_ARG_VAR([XSLTPROC], [path to xsltproc utility])[]dnl
++dnl
++AC_PATH_PROG([DOT], [dot], [dot])
++AC_PATH_PROG([DOXYGEN], [doxygen], [doxygen])
++AC_PATH_PROG([XSLTPROC], [xsltproc], [xsltproc])
++dnl
++AC_ARG_ENABLE([documentation],
++              [AS_HELP_STRING([--disable-documentation],
++                              [do not build or install the documentation])],
++              [ENABLE_DOCUMENTATION=$enableval],
++              [ENABLE_DOCUMENTATION=auto])
++AS_IF([test "x$ENABLE_DOCUMENTATION" != xno],
++[
++  mm_err=
++  AS_IF([test "x$MMDOCTOOLDIR" = x], [mm_err='dnl
++The glibmm module is available, but the installation of glibmm on this
++machine is missing the shared documentation utilities of the GNOME C++
++bindings.  It may be necessary to upgrade to a more recent release of
++glibmm in order to build '$PACKAGE_NAME' and install the documentation.'],
++        [test "x$PERL" = xperl], [mm_err='Perl is required for installing the documentation.'],
++        [test "x$USE_MAINTAINER_MODE" != xno],
++  [
++    test "x$DOT" != xdot || mm_err=' dot'
++    test "x$DOXYGEN" != xdoxygen || mm_err="$mm_err doxygen"
++    test "x$XSLTPROC" != xxsltproc || mm_err="$mm_err xsltproc"
++    test -z "$mm_err" || mm_err='The documentation cannot be generated because
++not all of the required tools are available:'$mm_err
++  ])
++  AS_IF([test -z "$mm_err"], [ENABLE_DOCUMENTATION=yes],
++        [test "x$ENABLE_DOCUMENTATION" = xyes], [AC_MSG_FAILURE([[$mm_err]])],
++        [ENABLE_DOCUMENTATION=no; AC_MSG_WARN([[$mm_err]])])
++])
++AM_CONDITIONAL([ENABLE_DOCUMENTATION], [test "x$ENABLE_DOCUMENTATION" = xyes])
++AC_SUBST([DOXYGEN_TAGFILES], [[]])
++AC_SUBST([DOCINSTALL_FLAGS], [[]])[]dnl
++])
++
++AC_DEFUN([MM_ARG_ENABLE_DOCUMENTATION],
++[dnl
++AC_BEFORE([$0], [MM_ARG_WITH_TAGFILE_DOC])[]dnl
++AC_REQUIRE([_MM_PRE_INIT])[]dnl
++AC_REQUIRE([MM_CONFIG_DOCTOOL_DIR])[]dnl
++AC_REQUIRE([MM_PATH_PERL])[]dnl
++AC_REQUIRE([_MM_ARG_ENABLE_DOCUMENTATION])[]dnl
++])
++
++m4_define([_MM_TR_URI],
++[dnl
++[`expr "X$1" : 'X\(.*[^\\/]\)[\\/]*' 2>&]AS_MESSAGE_LOG_FD[ |]dnl
++[ sed 's|[\\]|/|g;s| |%20|g;s|^/|file:///|;s|^.:/|file:///&|' 2>&]AS_MESSAGE_LOG_FD[`]dnl
++])
++
++m4_define([_MM_ARG_WITH_TAGFILE_DOC],
++[dnl
++  AC_MSG_CHECKING([for $1 documentation])
++  AC_ARG_WITH([$1-doc],
++              [AS_HELP_STRING([[--with-$1-doc=[TAGFILE@]HTMLREFDIR]],
++                              [Link to external $1 documentation]m4_ifval([$4], [[ [auto]]]))],
++  [
++    mm_htmlrefdir=`[expr "X@$withval" : '.*@\(.*\)' 2>&]AS_MESSAGE_LOG_FD`
++    mm_tagname=`[expr "X/$withval" : '[^@]*[\\/]\([^\\/@]*\)@' 2>&]AS_MESSAGE_LOG_FD`
++    mm_tagpath=`[expr "X$withval" : 'X\([^@]*\)@' 2>&]AS_MESSAGE_LOG_FD`
++    test "x$mm_tagname" != x || mm_tagname="$3"
++    test "x$mm_tagpath" != x || mm_tagpath=$mm_tagname[]dnl
++  ], [
++    mm_htmlrefdir=
++    mm_tagname="$3"
++    mm_tagpath=$mm_tagname[]dnl
++  ])
++  # Prepend working direcory if the tag file path starts with ./ or ../
++  AS_CASE([$mm_tagpath], [[.[\\/]*|..[\\/]*]], [mm_tagpath=`pwd`/$mm_tagpath])
++
++m4_ifval([$4], [dnl
++  # If no local directory was specified, get the default from the .pc file
++  AS_IF([test "x$mm_htmlrefdir" = x],
++  [
++    mm_htmlrefdir=`$PKG_CONFIG --variable=htmlrefdir "$4" 2>&AS_MESSAGE_LOG_FD`dnl
++  ])
++  # If the user specified a Web URL, allow it to override the public location
++  AS_CASE([$mm_htmlrefdir], [[http://*|https://*]], [mm_htmlrefpub=$mm_htmlrefdir],
++  [
++    mm_htmlrefpub=`$PKG_CONFIG --variable=htmlrefpub "$4" 2>&AS_MESSAGE_LOG_FD`
++    test "x$mm_htmlrefpub" != x || mm_htmlrefpub=$mm_htmlrefdir
++    test "x$mm_htmlrefdir" != x || mm_htmlrefdir=$mm_htmlrefpub
++  ])
++  # The user-supplied tag-file name takes precedence if it includes the path
++  AS_CASE([$mm_tagpath], [[*[\\/]*]],,
++  [
++    mm_doxytagfile=`$PKG_CONFIG --variable=doxytagfile "$4" 2>&AS_MESSAGE_LOG_FD`
++    test "x$mm_doxytagfile" = x || mm_tagpath=$mm_doxytagfile
++  ])
++  # Remove trailing slashes and translate to URI
++  mm_htmlrefpub=_MM_TR_URI([$mm_htmlrefpub])
++])[]dnl
++  mm_htmlrefdir=_MM_TR_URI([$mm_htmlrefdir])
++
++  AC_MSG_RESULT([$mm_tagpath@$mm_htmlrefdir])
++
++  AS_IF([test "x$USE_MAINTAINER_MODE" != xno && test ! -f "$mm_tagpath"],
++        [AC_MSG_WARN([Doxygen tag file $3 not found])])
++  AS_IF([test "x$mm_htmlrefdir" = x],
++        [AC_MSG_WARN([Location of external $1 documentation not set])],
++        [AS_IF([test "x$DOCINSTALL_FLAGS" = x],
++               [DOCINSTALL_FLAGS="-l '$mm_tagname@$mm_htmlrefdir/'"],
++               [DOCINSTALL_FLAGS="$DOCINSTALL_FLAGS -l '$mm_tagname@$mm_htmlrefdir/'"])])
++
++  AS_IF([test "x$mm_$2" = x], [mm_val=$mm_tagpath], [mm_val="$mm_tagpath=$mm_$2"])
++  AS_IF([test "x$DOXYGEN_TAGFILES" = x],
++        [DOXYGEN_TAGFILES=[\]"$mm_val[\]"],
++        [DOXYGEN_TAGFILES="$DOXYGEN_TAGFILES "[\]"$mm_val[\]"])[]dnl
++])
++
++AC_DEFUN([MM_ARG_WITH_TAGFILE_DOC],
++[dnl
++m4_assert([$# >= 1])[]dnl
++m4_ifval([$2], [AC_REQUIRE([PKG_PROG_PKG_CONFIG])])[]dnl
++AC_REQUIRE([MM_CONFIG_DOCTOOL_DIR])[]dnl
++AC_REQUIRE([_MM_ARG_ENABLE_DOCUMENTATION])[]dnl
++dnl
++AS_IF([test "x$ENABLE_DOCUMENTATION" != xno],
++      [_MM_ARG_WITH_TAGFILE_DOC(m4_quote(m4_bpatsubst([$1], [[+]*\([-+][0123456789]\|[._]\).*$])),
++                                [htmlref]m4_ifval([$2], [[pub]], [[dir]]), [$1], [$2])])[]dnl
++])
++
++
++#serial 20091228
++
++m4_define([_MM_INIT_MODULE_VERSION],
++[dnl
++m4_ifval([$3],
++[AC_SUBST([$2][_MAJOR_VERSION], [$3])
++AC_DEFINE([$2][_MAJOR_VERSION], [$3], [Major version number of $1.])
++])[]dnl
++m4_ifval([$4],
++[AC_SUBST([$2][_MINOR_VERSION], [$4])
++AC_DEFINE([$2][_MINOR_VERSION], [$4], [Minor version number of $1.])
++])[]dnl
++m4_ifval([$5],
++[AC_SUBST([$2][_MICRO_VERSION], [$5])
++AC_DEFINE([$2][_MICRO_VERSION], [$5], [Micro version number of $1.])
++])[]dnl
++])
++
++m4_define([_MM_INIT_MODULE_SUBST],
++[dnl
++AC_SUBST([$5][_MODULE_NAME], ['$1'])
++AC_SUBST([$5][_VERSION], ['$2'])
++m4_ifval([$4],
++[AC_SUBST([$5][_API_VERSION], ['$4'])
++])[]dnl
++_MM_INIT_MODULE_VERSION([$3], [$5], m4_bpatsubst([$2], [[^0123456789]+], [,]))[]dnl
++])
++
++m4_define([_MM_INIT_MODULE_BASENAME],
++          [_MM_INIT_MODULE_SUBST([$1], [$2], [$3], [$4],
++                                 m4_quote(AS_TR_CPP(m4_quote(m4_translit([$3], [+], [X])))))])
++
++AC_DEFUN([MM_INIT_MODULE],
++[dnl
++m4_assert([$# >= 1])[]dnl
++AC_REQUIRE([_MM_PRE_INIT])[]dnl
++AC_REQUIRE([MM_CHECK_GNU_MAKE])[]dnl
++_MM_INIT_MODULE_BASENAME([$1],
++                 m4_quote(m4_ifval([$2], [$2], m4_defn([AC_PACKAGE_VERSION]))),
++                 m4_quote(m4_bpatsubst([$1], [[-.0123456789]+$])),
++                 m4_quote(m4_bregexp([$1], [-?\([.0123456789]+\)$], [\1])))[]dnl
++])
++
++
++#serial 20090822
++
++m4_define([_MM_CHECK_GNU_MAKE],
++[dnl
++AC_PROVIDE([$0])[]dnl
++AC_MSG_CHECKING([whether [$]{MAKE-make} supports GNU make features])
++cat >conftest.make <<'_MMEOF'
++override reverse = [$](2)[$](subst ,, )[$](1)
++override result := [$](word 2,[$](call reverse,success,failure))
++all: ; test '[$](result)' = success
++.PHONY: all
++_MMEOF
++AS_IF([[$]{MAKE-make} -f conftest.make >&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD],
++      [mm_gnu_make=yes], [mm_gnu_make=no])
++rm -f conftest.make
++AC_MSG_RESULT([$mm_gnu_make])
++AS_IF([test "x$mm_gnu_make" != xyes],
++      [AC_MSG_FAILURE([[The GNU make program is required to build $PACKAGE_NAME.]])])[]dnl
++])
++
++AC_DEFUN([MM_CHECK_GNU_MAKE],
++[dnl
++AC_REQUIRE([_MM_PRE_INIT])[]dnl
++AC_REQUIRE([_MM_CHECK_GNU_MAKE])[]dnl
++])
++
++m4_define([_MM_PATH_PERL],
++[dnl
++AC_PROVIDE([$0])[]dnl
++AC_ARG_VAR([PERL], [path to Perl interpreter])[]dnl
++AC_PATH_PROG([PERL], [perl], [perl])[]dnl
++])
++
++AC_DEFUN([MM_PATH_PERL],
++[dnl
++AC_REQUIRE([_MM_PRE_INIT])[]dnl
++AC_REQUIRE([_MM_PATH_PERL])[]dnl
++])
++
++m4_define([_MM_CHECK_PERL],
++[dnl
++AS_IF([$PERL -e "require v$1; exit 0;" >&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD],
++      [$2], m4_ifval([$2$3], [[$3]],
++            [[AC_MSG_FAILURE([[At least Perl ]$1[ is required to build $PACKAGE_NAME.]])]]))[]dnl
++])
++
++AC_DEFUN([MM_CHECK_PERL],
++[dnl
++AC_REQUIRE([_MM_PRE_INIT])[]dnl
++AC_REQUIRE([_MM_PATH_PERL])[]dnl
++_MM_CHECK_PERL(m4_ifval([$1], [[$1]], [[5.6.0]]), [$2], [$3])[]dnl
++])
++
++AC_DEFUN([MM_PKG_CONFIG_SUBST],
++[dnl
++m4_assert([$# >= 2])[]dnl
++AC_REQUIRE([_MM_PRE_INIT])[]dnl
++AC_REQUIRE([PKG_PROG_PKG_CONFIG])[]dnl
++AC_MSG_CHECKING([for $1])
++dnl
++AS_IF([test -z "[$]{$1+set}"],
++      [$1=`$PKG_CONFIG $2 2>&AS_MESSAGE_LOG_FD`
++       AS_IF([test "[$]?" -eq 0], [$3], [$4])])
++dnl
++AC_MSG_RESULT([[$]$1])
++AC_SUBST([$1])[]dnl
++])
++
++
++#serial 20091103
++
++m4_define([_MM_ARG_ENABLE_WARNINGS_OPTION],
++[dnl
++AC_PROVIDE([$0])[]dnl
++AC_ARG_ENABLE([warnings],
++              [AS_HELP_STRING([[--enable-warnings[=min|max|fatal|no]]],
++                              [set compiler pedantry level [default=min]])],
++              [mm_enable_warnings=$enableval],
++              [mm_enable_warnings=min])[]dnl
++])
++
++AC_DEFUN([MM_ARG_ENABLE_WARNINGS],
++[dnl
++m4_assert([$# >= 3])[]dnl
++AC_REQUIRE([_MM_PRE_INIT])[]dnl
++AC_REQUIRE([_MM_ARG_ENABLE_WARNINGS_OPTION])[]dnl
++dnl
++AS_CASE([$ac_compile],
++        [[*'$CXXFLAGS '*]], [mm_lang='C++' mm_cc=$CXX mm_conftest="conftest.[$]{ac_ext-cc}"],
++        [[*'$CFLAGS '*]],   [mm_lang=C mm_cc=$CC mm_conftest="conftest.[$]{ac_ext-c}"],
++        [AC_MSG_ERROR([[current language is neither C nor C++]])])
++dnl
++AC_MSG_CHECKING([which $mm_lang compiler warning flags to use])
++m4_ifval([$4], [mm_deprecation_flags=
++])mm_tested_flags=
++dnl
++AS_CASE([$mm_enable_warnings],
++        [no],    [mm_warning_flags=],
++        [max],   [mm_warning_flags="$3"],
++        [fatal], [mm_warning_flags="$3 -Werror"[]m4_ifval([$4], [
++         for mm_prefix in $4
++         do
++           mm_deprecation_flags="$mm_deprecation_flags-D[$]{mm_prefix}_DISABLE_DEPRECATED "
++         done])],
++        [mm_warning_flags="$2"])
++dnl
++AS_IF([test "x$mm_warning_flags" != x],
++[
++  # Keep in mind that the dummy source must be devoid of any
++  # problems that might cause diagnostics.
++  AC_LANG_CONFTEST([AC_LANG_SOURCE([[
++int main(int argc, char** argv) { return (argv != 0) ? argc : 0; }
++]])])
++  for mm_flag in $mm_warning_flags
++  do
++    # Test whether the compiler accepts the flag.  Look at standard output,
++    # since GCC only shows a warning message if an option is not supported.
++    mm_cc_out=`$mm_cc $mm_tested_flags $mm_flag -c "$mm_conftest" 2>&1 || echo failed`
++    rm -f "conftest.[$]{OBJEXT-o}"
++
++    AS_IF([test "x$mm_cc_out" = x],
++          [AS_IF([test "x$mm_tested_flags" = x],
++                 [mm_tested_flags=$mm_flag],
++                 [mm_tested_flags="$mm_tested_flags $mm_flag"])],
++[cat <<_MMEOF >&AS_MESSAGE_LOG_FD
++$mm_cc: $mm_cc_out
++_MMEOF
++])
++  done
++  rm -f "$mm_conftest"
++])
++mm_all_flags=m4_ifval([$4], [$mm_deprecation_flags])$mm_tested_flags
++AC_SUBST([$1], [$mm_all_flags])
++dnl
++test "x$mm_all_flags" != x || mm_all_flags=none
++AC_MSG_RESULT([$mm_all_flags])[]dnl
++])
++
++m4_include([build/cxx.m4])
++m4_include([build/cxx_std.m4])
++m4_include([build/libtool.m4])
++m4_include([build/ltoptions.m4])
++m4_include([build/ltsugar.m4])
++m4_include([build/ltversion.m4])
++m4_include([build/lt~obsolete.m4])
