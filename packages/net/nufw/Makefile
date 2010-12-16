@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=http://www.nufw.org/download/nufw/
 PKG_MD5SUM:=7eb500e7ddb3db622dc6c5d43b495c9a
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=autogen.sh aclocal.m4
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -71,7 +72,7 @@ CONFIGURE_ARGS += \
 	--with-libsasl-prefix="$(STAGING_DIR)/usr/"
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR) ; ./autogen.sh )
+	(cd $(PKG_BUILD_DIR) ; test -x ./autogen.sh && ./autogen.sh || true)
 	$(call Build/Configure/Default)
 endef
 
