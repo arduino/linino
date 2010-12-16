@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor
-PKG_VERSION:=0.2.1.26
+PKG_VERSION:=0.2.1.27
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.torproject.org/dist
-PKG_MD5SUM:=f7b30a144e1da41aa43f496bd47ffba7
+PKG_MD5SUM:=1719642b3f25a23c3b3843ee99be18fb
 
 PKG_INSTALL:=1
 
