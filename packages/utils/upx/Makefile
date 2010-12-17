@@ -8,12 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=upx
-PKG_VERSION:=3.05
+PKG_VERSION:=3.07
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.bz2
-PKG_SOURCE_URL:=http://upx.sourceforge.net/download
-PKG_MD5SUM:=1f0ca94c8c26a816402274dd7e628334
+PKG_SOURCE_URL:=http://upx.sourceforge.net/download \
+	http://upx.sourceforge.net/download/00-OLD-VERSIONS
+PKG_MD5SUM:=8186ab103288242f7e8ecad1acd4af03
 
 include $(INCLUDE_DIR)/package.mk
 
