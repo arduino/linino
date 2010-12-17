@@ -27,26 +27,26 @@ endef
 #PKG_MAKE_OPTS += USE_MYSQL=
 
 define Build/Compile
-       $(MAKE) -C $(PKG_BUILD_DIR) \
-               CC="$(TARGET_CC)" \
-               EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
-               DESTDIR="$(PKG_INSTALL_DIR)" \
-               $(PKG_MAKE_OPTS) \
-               SYSROOT="$(TOOLCHAIN_DIR)" \
-               SYSROOT_ALT="$(STAGING_DIR)/usr" \
-               RELEASE=1 \
-               all install
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CC="$(TARGET_CC)" \
+		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		$(PKG_MAKE_OPTS) \
+		SYSROOT="$(TOOLCHAIN_DIR)" \
+		SYSROOT_ALT="$(STAGING_DIR)/usr" \
+		RELEASE=1 \
+		all install
 endef
 
 define Package/restund/install
-       $(INSTALL_DIR) $(1)/usr/sbin
-       $(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/restund $(1)/usr/sbin/
-       $(INSTALL_DIR) $(1)/usr/lib/$(PKG_NAME)/modules
-       $(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/$(PKG_NAME)/modules/*.so $(1)/usr/lib/$(PKG_NAME)/modules/.
-       $(INSTALL_DIR) $(1)/etc
-       $(INSTALL_CONF) $(PKG_BUILD_DIR)/etc/restund.conf $(1)/etc/
-       $(INSTALL_DIR) $(1)/etc/init.d
-       $(INSTALL_BIN) ./files/restund.init $(1)/etc/init.d/restund
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/restund $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/lib/$(PKG_NAME)/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/$(PKG_NAME)/modules/*.so $(1)/usr/lib/$(PKG_NAME)/modules/.
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/etc/restund.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/restund.init $(1)/etc/init.d/restund
 endef
 
 $(eval $(call BuildPackage,restund))
