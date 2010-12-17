@@ -4,23 +4,22 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $ sav $
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xmlrpc-c
-PKG_REV:=1913
-PKG_VERSION:=1.22.2_r$(PKG_REV)
+PKG_REV:=2042
+PKG_VERSION:=1.24.4_r$(PKG_REV)
 PKG_RELEASE:=1
+
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://xmlrpc-c.svn.sourceforge.net/svnroot/xmlrpc-c/advanced
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=svn
 
-PKG_BUILD_DEPENDS:=libcurl libxml2
-
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,7 +33,7 @@ endef
 
 define Package/xmlrpc-c/description
     Programming library for writing an XML-RPC server or client in C or C++.
-    XML-RPC is a standard network protocol to allow a client program to make 
+    XML-RPC is a standard network protocol to allow a client program to make
     a simple remote procedure call (RPC) type request of a server.
 endef
 
@@ -45,10 +44,6 @@ CONFIGURE_ARGS+= \
 	--disable-abyss-server \
 	--disable-cplusplus \
 	--disable-static \
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
