@@ -43,12 +43,6 @@ endef
 CONFIGURE_VARS += \
 	CXXFLAGS="$$$$CXXFLAGS -fno-rtti"  \
 
-define Build/Prepare
-	$(call Build/Prepare/Default)
-	$(SED) 's,-I$$$$(includedir),,g' $(PKG_BUILD_DIR)/{mutella,util}/Makefile.in
-	$(SED) 's,-L$$$$(libdir),,g' $(PKG_BUILD_DIR)/{mutella,util}/Makefile.in
-endef
-
 define Package/mutella/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mutella{,_sio} $(1)/usr/bin/
