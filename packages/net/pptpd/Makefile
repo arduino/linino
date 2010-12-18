@@ -31,6 +31,9 @@ endef
 CONFIGURE_ARGS += \
 	--enable-bcrelay \
 
+CONFIGURE_VARS += \
+	ac_cv_header_libintl_h=no \
+
 MAKE_FLAGS += \
 	COPTS="$(TARGET_CFLAGS)" \
 	INSTALL="install" \
