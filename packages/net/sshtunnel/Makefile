@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sshtunnel
-PKG_VERSION:=2
-PKG_RELEASE:=2
+PKG_VERSION:=3
+PKG_RELEASE:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,7 +34,9 @@ define Build/Compile
 endef
 
 define Package/sshtunnel/install
-	$(CP) ./files/* $(1)
+	$(CP) ./files/uci_sshtunnel $(1)/etc/config/sshtunnel
+	$(CP) ./files/initd_sshtunnel $(1)/etc/initd/sshtunnel
+	$(CP) ./files/sshtunnel.sh $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,sshtunnel))
