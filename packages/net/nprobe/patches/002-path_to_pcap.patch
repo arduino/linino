@@ -1,7 +1,7 @@
---- nProbe/configure	2007-05-07 16:42:28.041884250 -0500
-+++ nProbe.new/configure	2007-05-07 16:57:49.183452000 -0500
-@@ -23567,8 +23567,8 @@
- 
+--- a/configure.in
++++ b/configure.in
+@@ -331,8 +331,8 @@ dnl> user defined directory passed as op
+ dnl>
  if test ".${PCAP_ROOT}" != .; then
    if test -d $PCAP_ROOT &&
 -     test -r $PCAP_ROOT/libpcap.a &&

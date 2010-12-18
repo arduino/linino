@@ -1,6 +1,6 @@
---- nProbe/nprobe.c	2006-06-09 05:30:39.000000000 -0500
-+++ nProbe.new/nprobe.c	2007-05-07 17:35:37.677224000 -0500
-@@ -241,8 +241,10 @@
+--- a/nprobe.c
++++ b/nprobe.c
+@@ -241,8 +241,10 @@ void processPacket(u_char *_deviceId,
    u_short eth_type, off=0, numPkts = 1;
    u_int8_t flags = 0, proto = 0;
    struct ip ip;
@@ -11,7 +11,7 @@
    struct tcphdr tp;
    struct udphdr up;
    struct icmp icmpPkt;
-@@ -362,7 +364,9 @@
+@@ -362,7 +364,9 @@ void processPacket(u_char *_deviceId,
  	isFragment = (ntohs(ip.ip_off) & 0x3fff) ? 1 : 0;
  
  	off = ntohs(ip.ip_off);
@@ -22,7 +22,7 @@
  	memcpy(&ipv6, p+ehshift, sizeof(struct ip6_hdr));
  	if(((ipv6.ip6_vfc >> 4) & 0x0f) != 6) return; /* IP v6 only */
  	estimatedLen = sizeof(struct ip6_hdr)+ehshift+htons(ipv6.ip6_plen);
-@@ -392,7 +396,9 @@
+@@ -392,7 +396,9 @@ void processPacket(u_char *_deviceId,
  	  hlen += (ipv6ext.ip6e_len+1)*8;
  	  proto = ipv6ext.ip6e_nxt;
  	}
