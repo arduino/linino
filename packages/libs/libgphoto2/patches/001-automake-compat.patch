@@ -18,3 +18,36 @@
  AM_ICONV()
  GP_GETTEXT_FLAGS()
  
+--- a/libgphoto2_port/libgphoto2_port/Makefile.in
++++ b/libgphoto2_port/libgphoto2_port/Makefile.in
+@@ -14,6 +14,8 @@
+ 
+ @SET_MAKE@
+ 
++SHELL = @SHELL@
++
+ VPATH = @srcdir@
+ pkgdatadir = $(datadir)/@PACKAGE@
+ pkglibdir = $(libdir)/@PACKAGE@
+--- a/libgphoto2_port/Makefile.in
++++ b/libgphoto2_port/Makefile.in
+@@ -14,7 +14,7 @@
+ 
+ @SET_MAKE@
+ 
+-
++SHELL = @SHELL@
+ 
+ VPATH = @srcdir@
+ pkgdatadir = $(datadir)/@PACKAGE@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -19,7 +19,7 @@
+ ########################################################################
+ # put file lists and special compile rules here
+ 
+-
++SHELL = @SHELL@
+ 
+ VPATH = @srcdir@
+ pkgdatadir = $(datadir)/@PACKAGE@
