@@ -1,0 +1,39 @@
+# 
+# Copyright (C) 2010 segal.di.ubi.pt 
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=watchcat
+PKG_VERSION:=1
+PKG_RELEASE:=1
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/watchcat
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Enable the configuration of programed reboots
+  MAINTAINER:=Nuno Goncalves <nunojpg@gmail.com>
+endef
+
+define Package/watchcat/description
+Allows to configure a periodically reboot, or after loosing internet connectivity. Configured trough UCI /etc/config/system
+endef
+
+define Package/watchcat/conffiles
+/etc/config/system
+endef
+
+define Build/Compile
+endef
+
+define Package/watchcat/install
+	$(CP) ./files/initd_watchcat $(1)/etc/init.d/watchcat
+	$(CP) ./files/uci_defaults_watchcat $(1)/etc/defaults/50-watchcat
+endef
+
+$(eval $(call BuildPackage,watchcat))
