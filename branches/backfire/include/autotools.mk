@@ -69,14 +69,14 @@ ifneq ($(filter autoreconf,$(PKG_FIXUP)),)
 endif
 
 ifneq ($(filter libtool,$(PKG_FIXUP)),)
-  PKG_BUILD_DEPENDS += libtool
+  PKG_BUILD_DEPENDS += libtool libintl libiconv
   Hooks/Configure/Pre += update_libtool remove_version_check
   Hooks/Configure/Post += update_libtool
   Hooks/InstallDev/Post += libtool_fixup_libdir
 endif
 
 ifneq ($(filter libtool-ucxx,$(PKG_FIXUP)),)
-  PKG_BUILD_DEPENDS += libtool
+  PKG_BUILD_DEPENDS += libtool libintl libiconv
   Hooks/Configure/Pre += update_libtool_ucxx remove_version_check
   Hooks/Configure/Post += update_libtool_ucxx
   Hooks/InstallDev/Post += libtool_fixup_libdir
