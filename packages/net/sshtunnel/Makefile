@@ -34,9 +34,12 @@ define Build/Compile
 endef
 
 define Package/sshtunnel/install
-	$(CP) ./files/uci_sshtunnel $(1)/etc/config/sshtunnel
-	$(CP) ./files/initd_sshtunnel $(1)/etc/initd/sshtunnel
-	$(CP) ./files/sshtunnel.sh $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/initd_sshtunnel $(1)/etc/init.d/sshtunnel
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) ./files/sshtunnel.sh $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/uci_sshtunnel $(1)/etc/config/sshtunnel
 endef
 
 $(eval $(call BuildPackage,sshtunnel))
