@@ -35,15 +35,11 @@ endef
 CONFIGURE_VARS += \
 	SSHFS_CFLAGS=" \
 		-D_FILE_OFFSET_BITS=64 \
-		-I$(STAGING_DIR)/usr/lib/libintl/include \
-		-I$(STAGING_DIR)/usr/lib/libiconv/include \
 		-I$(STAGING_DIR)/usr/include/glib-2.0 \
 		-I$(STAGING_DIR)/usr/lib/glib-2.0/include \
 		-I$(STAGING_DIR)/usr/include/fuse" \
 	SSHFS_LIBS=" \
-		-lglib-2.0 -lintl -liconv -lfuse -pthread -lgthread-2.0 \
-		-L$(STAGING_DIR)/usr/lib/libintl/lib \
-		-L$(STAGING_DIR)/usr/lib/libiconv/lib \
+		-lglib-2.0 -liconv -lfuse -pthread -lgthread-2.0 \
 		-L$(STAGING_DIR)/usr/lib"
 
 define Build/Compile
