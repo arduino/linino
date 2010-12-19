@@ -51,7 +51,6 @@ define Build/Configure
 		--enable-shared \
 		--enable-static \
 		--enable-debug=no \
-		--with-libiconv=gnu \
 		--disable-selinux \
         --disable-fam \
 		, \
