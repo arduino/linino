@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://0pointer.de/lennart/projects/pulseaudio/
 PKG_MD5SUM:=ca85ab470669b05e100861654cf5eb3c
 
+PKG_BUILD_DEPENDS:=intltool/host
+
 PKG_FIXUP = libtool
 
 PKG_INSTALL = 1
@@ -25,7 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/pulseaudio
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libspeexdsp +libgdbm +liboil +libsamplerate +libsndfile +libatomicops +libltdl +dbus +libpthread +librt +libintl +libiconv intltool/host @BROKEN
+  DEPENDS:=+libspeexdsp +libgdbm +liboil +libsndfile +libatomicops +libltdl +dbus +libpthread +librt +libintl +libiconv @BROKEN
   TITLE:=Network sound server
   URL:=http://www.pulseaudio.org
 endef
