@@ -6,6 +6,7 @@
 #define _LIBINTL_H      1
 
 #include <features.h>
+#include <locale.h>
 
 #if defined(__UCLIBC__) && !defined(__UCLIBC_HAS_GETTEXT_AWARENESS__)
 
