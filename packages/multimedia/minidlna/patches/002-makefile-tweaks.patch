@@ -30,7 +30,7 @@
  ALLOBJS = $(BASEOBJS) $(LNXOBJS)
  
 -LIBS = -lpthread -lexif -ljpeg -lsqlite3 -lavformat -lid3tag -lFLAC -lvorbis
-+LIBS = -lintl -liconv -lpthread -lexif -ljpeg -lsqlite3 -lavformat -lid3tag -lFLAC -lvorbis -luuid
++LIBS = -liconv -lpthread -lexif -ljpeg -lsqlite3 -lavformat -lid3tag -lFLAC -lvorbis -luuid
  #STATIC_LINKING: LIBS = -lvorbis -logg -lm -lsqlite3 -lpthread -lexif -ljpeg -lFLAC -lm -lid3tag -lz -lavformat -lavutil -lavcodec -lm
  
  TESTUPNPDESCGENOBJS = testupnpdescgen.o upnpdescgen.o
