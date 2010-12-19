@@ -32,8 +32,10 @@ define Build/Compile
 endef
 
 define Package/watchcat/install
-	$(CP) ./files/initd_watchcat $(1)/etc/init.d/watchcat
-	$(CP) ./files/uci_defaults_watchcat $(1)/etc/defaults/50-watchcat
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/initd_watchcat $(1)/etc/init.d/watchcat
+	$(INSTALL_DIR) $(1)/etc/init.d	
+	$(INSTALL_BIN) ./files/uci_defaults_watchcat $(1)/etc/defaults/50-watchcat
 endef
 
 $(eval $(call BuildPackage,watchcat))
