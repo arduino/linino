@@ -10,7 +10,7 @@ append_params() {
 	local p; local v; local args;
 	for p in $*; do
 		eval "v=\$$p"
-		[ -n "$v" ] && args="$args -O $p=$v"
+		[ -n "$v" ] && args="$args -o $p=$v"
 	done
 	
 	ARGS_options="${args# *}"
