@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lsqlite3
-PKG_VERSION:=6
+PKG_VERSION:=7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://luaforge.net/frs/download.php/2565
-PKG_MD5SUM:=368da52fc52b9c5ba122f8f348db332b
+PKG_SOURCE_URL:=http://luaforge.net/frs/download.php/4472
+PKG_MD5SUM:=ef7afdd3ea7a29333daa951cda3175bb
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -37,15 +37,13 @@ TARGET_CFLAGS += $(FPIC) $(TARGET_CPPFLAGS) -std=c99
 
 TARGET_LDFLAGS += -llua
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		INCS="$(TARGET_CPPFLAGS)" \
-		LIBS="$(TARGET_LDFLAGS)" \
-		SHFLAGS="-shared" \
-		UNAME="Linux" 
-endef
+MAKE_FLAGS += \
+	CC="$(TARGET_CC)" \
+	CFLAGS="$(TARGET_CFLAGS)" \
+	INCS="$(TARGET_CPPFLAGS)" \
+	LIBS="$(TARGET_LDFLAGS)" \
+	SHFLAGS="-shared" \
+	UNAME="Linux"
 
 define Package/lsqlite3/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua
