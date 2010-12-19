@@ -15,14 +15,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ruby
-PKG_VERSION:=1.9.1-p376
-PKG_RELEASE:=3
+PKG_VERSION:=1.9.2-p0
+PKG_RELEASE:=1
 
 PKG_LIBVER:=1.9
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.ruby-lang.org/pub/ruby/$(PKG_LIBVER)/
-PKG_MD5SUM:=e019ae9c643c5efe91be49e29781fb94
+PKG_MD5SUM:=d8a02cadf57d2571cd4250e248ea7e4b
 
 PKG_BUILD_DEPENDS:=ruby/host
 PKG_INSTALL:=1
@@ -383,7 +383,6 @@ define Package/ruby-openssl/install
 		usr/lib/ruby/$(PKG_LIBVER)/*/openssl.so \
 		usr/lib/ruby/$(PKG_LIBVER)/drb/ssl.rb \
 		usr/lib/ruby/$(PKG_LIBVER)/net/https.rb \
-		usr/lib/ruby/$(PKG_LIBVER)/webrick/ssl.rb \
 	) | ( cd $(1); $(TAR) -xf - )
 endef
 
@@ -406,8 +405,6 @@ endef
 define Package/ruby-readline/install
 	( cd $(PKG_INSTALL_DIR); $(TAR) -cf - \
 		usr/lib/ruby/$(PKG_LIBVER)/*/readline.so \
-		usr/lib/ruby/$(PKG_LIBVER)/irb/completion.rb \
-		usr/lib/ruby/$(PKG_LIBVER)/irb/ext/save-history.rb \
 	) | ( cd $(1); $(TAR) -xf - )
 endef
 
