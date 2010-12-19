@@ -5,6 +5,8 @@
 #ifndef _ICONV_H
 #define _ICONV_H 1
 
+#include <stddef.h>
+
 typedef void *iconv_t;
 
 extern iconv_t
