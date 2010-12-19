@@ -29,9 +29,6 @@ endef
 CONFIGURE_OPTS += \
 	--disable-generic \
 
-EXTRA_CPPFLAGS:=-I$(STAGING_DIR)/usr/lib/libintl/include
-EXTRA_LDFLAGS:=-L$(STAGING_DIR)/usr/lib/libintl/lib -lintl
-
 MAKE_PATH:=./libelf
 
 define Build/InstallDev
