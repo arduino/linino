@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=restorefactory
 PKG_VERSION:=1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,7 +29,10 @@ define Build/Compile
 endef
 
 define Package/restorefactory/install
-	$(CP) ./files/* $(1)
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/button
+	$(INSTALL_BIN) ./files/hotplug_restorefactory $(1)/etc/hotplug.d/button/50-restorefactory
+	$(INSTALL_DIR) $(1)/etc/defaults
+	$(INSTALL_BIN) ./files/uci_defaults_restorefactory $(1)/etc/defaults/50-restorefactory
 endef
 
 $(eval $(call BuildPackage,restorefactory))

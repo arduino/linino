@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=watchcat
 PKG_VERSION:=1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,7 +34,7 @@ endef
 define Package/watchcat/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/initd_watchcat $(1)/etc/init.d/watchcat
-	$(INSTALL_DIR) $(1)/etc/init.d	
+	$(INSTALL_DIR) $(1)/etc/defaults	
 	$(INSTALL_BIN) ./files/uci_defaults_watchcat $(1)/etc/defaults/50-watchcat
 endef
 
