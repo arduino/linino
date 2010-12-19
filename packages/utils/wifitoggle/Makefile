@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wifitoggle
 PKG_VERSION:=1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,7 +33,10 @@ define Build/Compile
 endef
 
 define Package/wifitoggle/install
-	$(CP) ./files/* $(1)
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/button
+	$(INSTALL_BIN) ./files/hotplug_wifitoggle $(1)/etc/hotplug.d/button/50-wifitoggle
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/uci_wifitoggle $(1)/etc/config/wifitoggle
 endef
 
 $(eval $(call BuildPackage,wifitoggle))
