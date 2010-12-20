@@ -27,7 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/pulseaudio
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libspeexdsp +libgdbm +liboil +libsndfile +libatomicops +libltdl +dbus +libpthread +librt +libintl +libiconv @BROKEN
+  DEPENDS:=+libspeexdsp +libgdbm +liboil +libsndfile +libatomicops +libltdl +dbus +libpthread +librt +libintl +libiconv +alsa-lib @BROKEN
   TITLE:=Network sound server
   URL:=http://www.pulseaudio.org
 endef
@@ -46,6 +46,7 @@ CONFIGURE_ARGS += \
 	--with-realtime-group=root \
 	--with-access-group=root \
 	--without-x \
+	--enable-alsa \
 	--disable-dbus \
 	--disable-hal \
 	--disable-gconf \
