@@ -31,8 +31,6 @@
 #define gettext(String) (String)
 #define dgettext(Domain, String) (String)
 #define dcgettext(Domain, String, Type) (String)
-#define dgettext(Domain, String) (String)
-#define dcgettext(Domain, String, Type) (String)
 
 #define ngettext(Singular, Plural, Count) \
 	((Count) == 1 ? (const char *) (Singular) : (const char *) (Plural))
