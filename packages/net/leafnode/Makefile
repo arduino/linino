@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=leafnode
-PKG_VERSION:=1.11.7
+PKG_VERSION:=1.11.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/leafnode
-PKG_MD5SUM:=e5e8ac28386c59df0b14ddbfcbe78509
+PKG_MD5SUM:=a3edafeb854efaa3fbb0f7951d02160f
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -65,28 +67,29 @@ define Package/leafnode/postinst
 #!/bin/sh
 grep -q '^nntp[[:space:]]*119/tcp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
 [ $$? -ne 0 ] && echo "nntp 119/tcp  # USENET News Transfer Protocol" >>$${IPKG_INSTROOT}/etc/services || exit 0
-grep -q '^news:' $${IPKG_INSTROOT}/etc/services 2>/dev/null
-[ $$? -ne 0 ] && echo "news:*:31:31:news:/var/spool/news:/bin/true"  >>$${IPKG_INSTROOT}/etc/passwd || echo "news:x:31:" >>$${IPKG_INSTROOT}/etc/group || exit 0
+grep -q '^news:' $${IPKG_INSTROOT}/etc/passwd 2>/dev/null
+[ $$? -ne 0 ] && echo "news:*:31:31:news:/var/spool/news:/bin/true" >>$${IPKG_INSTROOT}/etc/passwd && echo "news:x:31:" >>$${IPKG_INSTROOT}/etc/group || exit 0
 endef
 
 define Package/leafnode/install
   	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/leafnode $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/fetchnews $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/texpire $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/leafnode $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/fetchnews $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/texpire $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/leafnode
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/config.example $(1)/etc/leafnode
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/leafnode/config.example $(1)/etc/leafnode/
 	$(INSTALL_DIR) $(1)/etc/xinetd.d
-	$(INSTALL_DATA) ./files/nntp $(1)/etc/xinetd.d
+	$(INSTALL_DATA) ./files/nntp $(1)/etc/xinetd.d/
 	$(INSTALL_DIR) $(1)/etc/crontabs
-	$(INSTALL_DATA) ./files/news $(1)/etc/crontabs
+	$(INSTALL_DATA) ./files/news $(1)/etc/crontabs/
 endef
 
 define Package/leafnode-extra/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/checkgroups $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/applyfilter $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/leafnode-version $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/checkgroups $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/applyfilter $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/leafnode-version $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,leafnode))
