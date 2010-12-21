@@ -11,12 +11,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor-alpha
-PKG_VERSION:=0.2.2.19-alpha
+PKG_VERSION:=0.2.2.20-alpha
 PKG_RELEASE:=1
 
 PKG_SOURCE:=tor-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://www.torproject.org/dist
-PKG_MD5SUM:=619f0c4243adc67360e8a99710935697
+PKG_MD5SUM:=e6c994419df864e2e89abfcf832d5961
 PKG_BUILD_DIR=$(BUILD_DIR)/tor-$(PKG_VERSION)/
 
 PKG_INSTALL:=1
