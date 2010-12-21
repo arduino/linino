@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lftp
-PKG_VERSION:=4.0.9
+PKG_VERSION:=4.1.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://lftp.cybermirror.org \
   http://lftp.cybermirror.org/old
-PKG_MD5SUM:=d3f0cd7569e31e50370208dd77a7c41b
+PKG_MD5SUM:=87717c30869a626cc53817c1c0a585ef
 
 PKG_INSTALL:=1
 
@@ -35,8 +35,6 @@ define Package/lftp/description
   library is used for input.
 endef
 
-# uses GNU configure
-
 CONFIGURE_ARGS += \
 	--without-libiconv-prefix \
 	--without-libintl-prefix \
@@ -46,37 +44,19 @@ CONFIGURE_ARGS += \
 	--disable-static
 
 CONFIGURE_VARS += \
-        CXXFLAGS="$$$$CXXFLAGS -fno-builtin -I$(STAGING_DIR)/usr/include/uClibc++ -nostdinc++" \
-        CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
-        LDFLAGS="$$$$LDFLAGS" \
-        LIBS="-nodefaultlibs -lz -lutil -luClibc++ -lcurses $(LIBGCC_S) -ldl" \
+	CXX="$(STAGING_DIR)/host/bin/g++-uc" \
+	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -I$(STAGING_DIR)/usr/include/uClibc++ -nostdinc++" \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
+	LDFLAGS="$$$$LDFLAGS" \
+	LIBS="-nodefaultlibs -lz -lutil -luClibc++ -lcurses $(LIBGCC_S) -ldl" \
+	i_cv_posix_fallocate_works=no
 
 MAKE_VARS += \
 	LD="\$$$$(CC)" \
 
 define Package/lftp/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/lftp $(1)/usr/bin/
-endef
-
-define Package/lftp/postinst
-# check for real system
-if [ -z "$${IPKG_INSTROOT}" ]; then
-	if [ ! -e $${IPKG_INSTROOT}/usr/lib/libstdc\+\+.so.6 ]; then
-		ln -s $${IPKG_INSTROOT}/usr/lib/libuClibc++.so.0 $${IPKG_INSTROOT}/usr/lib/libstdc\+\+.so.6
-	fi
-fi
-
-endef
-
-define Package/lftp/postrm
-if [ -z "$${IPKG_INSTROOT}" ]; then
-        if [ -L $${IPKG_INSTROOT}/usr/lib/libstdc\+\+.so.6 ]; then
-		rm $${IPKG_INSTROOT}/usr/lib/libstdc\+\+.so.6
-	fi
-fi
-
 endef
 
 $(eval $(call BuildPackage,lftp))
