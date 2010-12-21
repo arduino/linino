@@ -60,7 +60,7 @@ endef
 define KernelPackage/usbip
 $(call KernelPackage/usbip/Default)
   TITLE+= (kernel support)
-  KCONFIG:= CONFIG_USB_IP_COMMON=m
+  KCONFIG:= CONFIG_USB_IP_COMMON CONFIG_USB_IP_DEBUG_ENABLE=n
   FILES:=$(LINUX_DIR)/drivers/staging/usbip/usbip_common_mod.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,98,usbip_common_mod)
 endef
@@ -70,7 +70,7 @@ $(call KernelPackage/usbip/Default)
   SUBMENU:=USB Support
   TITLE+= (kernel client driver)
   DEPENDS+= kmod-usbip
-  KCONFIG:= CONFIG_USB_IP_VHCI_HCD=m
+  KCONFIG:= CONFIG_USB_IP_VHCI_HCD
   FILES:=$(LINUX_DIR)/drivers/staging/usbip/vhci-hcd.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,99,vhci-hcd)
 endef
@@ -80,7 +80,7 @@ $(call KernelPackage/usbip/Default)
   SUBMENU:=USB Support
   TITLE+= (kernel host driver)
   DEPENDS+= kmod-usbip
-  KCONFIG:= CONFIG_USB_IP_HOST=m
+  KCONFIG:= CONFIG_USB_IP_HOST
   FILES:=$(LINUX_DIR)/drivers/staging/usbip/usbip.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,99,usbip)
 endef
