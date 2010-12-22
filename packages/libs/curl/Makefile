@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=curl
-PKG_VERSION:=7.21.2
+PKG_VERSION:=7.21.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -19,7 +19,7 @@ PKG_SOURCE_URL:=http://curl.haxx.se/download/ \
 	ftp://ftp.planetmirror.com/pub/curl/ \
 	http://www.mirrormonster.com/curl/download/ \
 	http://curl.mirrors.cyberservers.net/download/
-PKG_MD5SUM:=ca96df88e044c7c25d19692ec8b250b2
+PKG_MD5SUM:=5b57fee22090b5c43a6886fdd35af2ce
 
 PKG_FIXUP:=libtool
 PKG_BUILD_PARALLEL:=1
