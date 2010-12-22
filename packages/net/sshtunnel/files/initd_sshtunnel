@@ -135,11 +135,11 @@ load_server() {
 	[ -n "$error" ] 	&& { logger -p user.err -t "sshtunnel" "tunnels to $server not started - $error"; return; }
 	[ "$count" -eq 0 ] 	&& { logger -p user.err -t "sshtunnel" "tunnels to $server not started - no tunnels defined"; return; }
 
-	append_params CheckHostIP Compression CompressionLevel IdentityFile LogLevel PKCS11Provider ServerAliveCountMax ServerAliveInterval StrickHostKeyChecking TCPKeepAlive VerifyHostKeyDNS
+	append_params CheckHostIP Compression CompressionLevel IdentityFile LogLevel PKCS11Provider ServerAliveCountMax ServerAliveInterval StrictHostKeyChecking TCPKeepAlive VerifyHostKeyDNS
 	ARGS="$ARGS_options -o ExitOnForwardFailure=yes -o BatchMode=yes -nN $ARGS_tunnels $user@$hostname"
 
 	/usr/bin/sshtunnel.sh "$ARGS" "$retrydelay" "$server" &
-	echo $! >> "$PIDFILE".pids
+	echo $! >> "${PIDFILE}.pids"
 	logger -p user.info -t "sshtunnel" "started tunnels to $server (pid=$!;retrydelay=$retrydelay)" 
 }
 
@@ -150,13 +150,18 @@ stop() {
                 
                 while read pid
                 do
-			start-stop-daemon -K -p "$PIDFILE"_"$pid".pid
-			kill $pid
-			logger -p daemon.info -t "sshtunnel[$pid]" "tunnel stopped"
-			rm "$PIDFILE"_"$pid".pid
-		done < "$PIDFILE".pids
+			kill "$pid"	# kill mother process first
 
-		rm "$PIDFILE".pids
+			[ -f "${PIDFILE}_${pid}.pid" ] && { # if ssh was running, kill it also (mother process could be in retry wait)
+				start-stop-daemon -K -p "${PIDFILE}_${pid}.pid"
+				rm "${PIDFILE}_${pid}.pid"
+			}
+			
+			logger -p daemon.info -t "sshtunnel[$pid]" "tunnel stopped"
+			
+		done < "${PIDFILE}.pids"
+
+		rm "${PIDFILE}.pids"
 
                 logger -p user.info -t "sshtunnel" "all tunnels stopped"
         else
@@ -165,7 +170,7 @@ stop() {
 }
 
 start() {
-        [ -f "$PIDFILE".pids ] && stop
+        [ -f "${PIDFILE}.pids" ] && stop
         
 	config_load sshtunnel
 	if [ -n "$(uci show sshtunnel.@server[0])" ] # at least one server section exists
