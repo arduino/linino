@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
-PKG_VERSION:=5.3.1
-PKG_RELEASE:=4
+PKG_VERSION:=5.3.4
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
-PKG_MD5SUM:=63e97ad450f0f7259e785100b634c797
+PKG_MD5SUM:=2c069d8f690933e3bf6a8741ed818150
 
 PKG_FIXUP:=libtool no-autoreconf
 PKG_BUILD_PARALLEL:=1 
@@ -390,7 +390,7 @@ PKG_CONFIGURE_OPTS:= \
 	--disable-phar
 
 ifneq ($(SDK),)
-  PKG_BUILD_DEPENDS:=libopenssl zlib libcurl libgd libgmp libopenldap libmysqlclient libpq libsqlite2 libpthread libsqlite3 libpcre libxml2
+  PKG_BUILD_DEPENDS+=libopenssl zlib libcurl libgd libgmp libopenldap libmysqlclient libpq libsqlite2 libpthread libsqlite3 libpcre libxml2 libiconv
 # force PKG_CONFIGURE_{LIBS,OPTS} below when built in the SDK
   CONFIG_PACKAGE_php5-cli:=m
   CONFIG_PACKAGE_php5-cgi:=m
@@ -469,7 +469,7 @@ else
 endif
 
 ifneq ($(CONFIG_PACKAGE_php5-mod-iconv),)
-  PKG_CONFIGURE_OPTS+= --with-iconv=shared,"$(STAGING_DIR)/usr/lib/libiconv"
+  PKG_CONFIGURE_OPTS+= --with-iconv=shared,"$(STAGING_DIR)/usr"
 else
   PKG_CONFIGURE_OPTS+= --without-iconv
 endif
