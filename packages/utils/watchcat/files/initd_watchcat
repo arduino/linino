@@ -5,57 +5,12 @@ START=01
 PIDFILE="/tmp/run/watchcat"
 
 append_string() {
-	local varname="$1"; local actual="${!varname}"; local add="$2"; local separator="${3:- }"
+	local varname="$1"; local add="$2"; local separator="${3:- }"; local actual
+	eval "actual=\$$varname"
+
 	new="${actual:+$actual$separator}$add"
 	eval "$varname=\$new"
 }
-
-shutdown_now() {
-	local forcedelay="$1"
-
-	reboot &
-	
-	[ "$forcedelay" -ge 1 ] && {
-		sleep $forcedelay
-
-		echo b > /proc/sysrq-trigger # Will immediately reboot the system without syncing or unmounting your disks.
-	}
-}
-
-watchcat_allways() {
-	local period="$1"; local forcedelay="$2" 
-	
-	sleep $period && shutdown_now "$forcedelay"
-}
-
-watchcat_ping() {
-	local period="$1"; local forcedelay="$2"; local pinghosts="$3"; local pingperiod="$4"
-	
-	time=$(cat /proc/uptime) && time=${time%%.*}
-	last=$time
-
-	while true
-	do
-		sleep $pingperiod
-	
-		time=$(cat /proc/uptime) && time=${time%%.*}
-		
- 		for host in "$pinghosts" 
-		do
-			if ping -c 1 "$host" &> /dev/null 
-			then 
-				last=$time
-			else
-				diff=$((time-last))
-				logger -p daemon.info -t "watchcat[$$]" "no internet connectivity for $diff seconds. Reseting when reaching $period"	
-			fi
-		done
-
-		diff=$((time-last))
-		[ $diff -ge $period ] && shutdown_now "$forcedelay"
-	
-	done
-} 
 
 timetoseconds() {
 	local time=$1
@@ -79,15 +34,15 @@ load_watchcat() {
 
 	timetoseconds "$period"
 	period="$seconds"
-        [ "$period" -ge 1 ] \
+	[ "$period" -ge 1 ] \
 		|| append_string "error" "period is not set or not recognized" "; "
-        [ "$mode" = "allways" -o "$mode" = "ping" ] \
+	[ "$mode" = "allways" -o "$mode" = "ping" ] \
 		|| append_string "error" "mode must be 'allways' or 'ping'" "; "
-        [ -n "$pinghosts" -o "$mode" = "allways" ] \
+	[ -n "$pinghosts" -o "$mode" = "allways" ] \
 		|| append_string "error" "pinghosts must be set in 'ping' mode" "; "
 	timetoseconds "$pingperiod"
 	pingperiod="$seconds"
-	[ "$pingperiod" -l "$period" -o "$mode" = "allways" ] \
+	[ "$pingperiod" -lt "$period" -o "$mode" = "allways" ] \
 		|| append_string "error" "pingperiod is not recognized" "; "
 	[ "$forcedelay" -ge 0 ] \
 		|| append_string "error" "forcedelay must be a integer greater or equal than 0, where 0 means disabled" "; "
@@ -96,44 +51,44 @@ load_watchcat() {
 
 	if [ "$mode" = "allways" ]
 	then
-		watchcat_allways "$period" "$forcedelay" &
+		/usr/bin/watchcat.sh "allways" "$period" "$forcedelay" &
+		logger -p user.info -t "wathchat" "started task (mode=$mode;period=$period;forcedelay=$forcedelay)" 
 	else
-		watchcat_ping "$period" "$forcedelay" "$pinghosts" "$pingperiod" &
+		/usr/bin/watchcat.sh "period" "$period" "$forcedelay" "$pinghosts" "$pingperiod" &
+		logger -p user.info -t "wathchat" "started task (mode=$mode;pinghosts=$pinghosts;pingperiod=$pingperiod;forcedelay=$forcedelay)" 
 	fi
 
-	echo $! >> "$PIDFILE".pids
-	
-	logger -p user.info -t "sshtunnel" "started tunnels to $server (pid=$!;retrydelay=$retrydelay)" 
+	echo $! >> "${PIDFILE}.pids"
 }
 
 stop() {
-        if [ -f "$PIDFILE".pids ]
-        then
-                logger -p user.info -t "watchcat" "stopping all reboot programs"
-                
-                while read pid
-                do
-			kill $pid
-		done < "$PIDFILE".pids
+	if [ -f "${PIDFILE}.pids" ]
+	then
+		logger -p user.info -t "watchcat" "stopping all tasks"
 
-		rm "$PIDFILE".pids
+		while read pid
+		do
+			kill "$pid"
+		done < "${PIDFILE}.pids"
 
-                logger -p user.info -t "watchcat" "all reboot programs stopped"
-        else
-                logger -p user.info -t "watchcat" "no reboot programs running"
-        fi
+		rm "${PIDFILE}.pids"
+
+		logger -p user.info -t "watchcat" "all tasks stopped"
+	else
+		logger -p user.info -t "watchcat" "no tasks running"
+	fi
 }
 
 start() {
-	[ -f "$PIDFILE".pids ] && stop
-        
+	[ -f "${PIDFILE}.pids" ] && stop
+
 	config_load system
 	if [ -n "$(uci show system.@watchcat[0])" ] # at least one watchcat section exists
-	then        
-		logger -p user.info -t "watchcat" "starting all reboot programs"
+	then
+		logger -p user.info -t "watchcat" "starting all tasks"
 		config_foreach load_watchcat watchcat
-		logger -p user.info -t "watchcat" "all reboot programs started"	
+		logger -p user.info -t "watchcat" "all tasks started"	
 	else
-		logger -p user.info -t "watchcat" "no reboot programs defined"
+		logger -p user.info -t "watchcat" "no tasks defined"
 	fi
 }

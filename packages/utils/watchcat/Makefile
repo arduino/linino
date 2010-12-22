@@ -34,6 +34,8 @@ endef
 define Package/watchcat/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/initd_watchcat $(1)/etc/init.d/watchcat
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) ./files/watchcat.sh $(1)/usr/bin/watchcat.sh
 	$(INSTALL_DIR) $(1)/etc/defaults	
 	$(INSTALL_BIN) ./files/uci_defaults_watchcat $(1)/etc/defaults/50-watchcat
 endef
