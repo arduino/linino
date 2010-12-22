@@ -63,11 +63,12 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/libiconv-full
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/iconv.h $(1)/usr/include/libiconv-full/
-	$(INSTALL_DIR) $(1)/usr/lib/libiconv-full
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcharset.{a,so*} $(1)/usr/lib/libiconv-full/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.{a,so*} $(1)/usr/lib/libiconv-full/
+	$(INSTALL_DIR) $(1)/usr/lib/libiconv-full/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/iconv.h $(1)/usr/lib/libiconv-full/include/
+
+	$(INSTALL_DIR) $(1)/usr/lib/libiconv-full/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcharset.{a,so*} $(1)/usr/lib/libiconv-full/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.{a,so*} $(1)/usr/lib/libiconv-full/lib/
 endef
 
 define Package/libcharset/install
