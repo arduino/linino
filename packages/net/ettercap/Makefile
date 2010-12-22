@@ -51,15 +51,14 @@ CONFIGURE_ARGS += \
 	--with-libnet="$(STAGING_DIR)/usr/lib/libnet-1.1.x" \
 	--with-openssl="$(STAGING_DIR)/usr" \
 	--with-libpcre="$(STAGING_DIR)/usr" \
-	--with-iconv="$(STAGING_DIR)/usr/lib/libiconv" \
+	--with-iconv="$(STAGING_DIR)/usr" \
 	--with-libncurses="$(STAGING_DIR)/usr" \
 	--disable-gtk \
 	--disable-debug \
 	--enable-plugins
 
 MAKE_FLAGS += \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
- 	AM_LDFLAGS="-L$(STAGING_DIR)/usr/lib/libiconv/lib"
+	DESTDIR="$(PKG_INSTALL_DIR)"
 
 define Package/ettercap/install
 	$(INSTALL_DIR) $(1)/etc
