@@ -3,8 +3,9 @@
  */
 
 #include <stddef.h>
+#include <iconv.h>
 
-typedef void *iconv_t;
+int _libiconv_version = _LIBICONV_VERSION;
 
 iconv_t iconv_open (const char *tocode, const char *fromcode)
 {

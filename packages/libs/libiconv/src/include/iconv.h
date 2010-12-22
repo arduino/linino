@@ -5,6 +5,9 @@
 #ifndef _ICONV_H
 #define _ICONV_H 1
 
+#define _LIBICONV_VERSION 0x010B    /* version number: (major<<8) + minor */
+extern  int _libiconv_version; /* Likewise */
+
 #include <stddef.h>
 
 typedef void *iconv_t;
