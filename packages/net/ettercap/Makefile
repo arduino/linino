@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ettercap
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcap +libnet1 +libopenssl +libpcre +libiconv +libncurses +libltdl +libpthread +zlib
+  DEPENDS:=+libpcap +libnet1 +libopenssl +libpcre +libiconv-full +libncurses +libltdl +libpthread +zlib
   TITLE:=Ettercap is a suite for man in the middle attacks on LAN.
   URL:=http://ettercap.sourceforge.net
 endef
@@ -51,7 +51,7 @@ CONFIGURE_ARGS += \
 	--with-libnet="$(STAGING_DIR)/usr/lib/libnet-1.1.x" \
 	--with-openssl="$(STAGING_DIR)/usr" \
 	--with-libpcre="$(STAGING_DIR)/usr" \
-	--with-iconv="$(STAGING_DIR)/usr" \
+	--with-iconv="$(STAGING_DIR)/usr/lib/libiconv-full" \
 	--with-libncurses="$(STAGING_DIR)/usr" \
 	--disable-gtk \
 	--disable-debug \
