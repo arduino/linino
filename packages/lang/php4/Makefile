@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php4
-PKG_VERSION:=4.4.7
-PKG_RELEASE:=3
+PKG_VERSION:=4.4.9
+PKG_RELEASE:=1
 
 PKG_SOURCE:=php-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://fr.php.net/distributions/
-PKG_MD5SUM:=3f21b44d37a57ca3876d3aea713c700d
+PKG_SOURCE_URL:=http://www.php.net/distributions/
+PKG_MD5SUM:=2e3b2a0e27f10cb84fd00e5ecd7a1880
 PKG_BUILD_DIR:=$(BUILD_DIR)/php-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
