@@ -1,6 +1,24 @@
-diff -urN btpd-0.15/btpd/content.c btpd-0.15-new/btpd/content.c
---- btpd-0.15/btpd/content.c	2009-02-03 10:15:01.000000000 -0500
-+++ btpd-0.15-new/btpd/content.c	2009-06-19 15:02:48.000000000 -0400
+--- a/btpd/btpd.c
++++ b/btpd/btpd.c
+@@ -1,6 +1,6 @@
+ #include "btpd.h"
+ 
+-#include <openssl/sha.h>
++#include "sha1.h"
+ #include <signal.h>
+ 
+ static uint8_t m_peer_id[20];
+@@ -114,7 +114,7 @@ btpd_init(void)
+     idcon[sizeof(idcon) - 1] = '\0';
+     n = strlen(idcon);
+ 
+-    SHA1(idcon, n, m_peer_id);
++    sha1_buffer(idcon, n, m_peer_id);
+     bcopy(m_peer_id, &seed, sizeof(seed));
+     bcopy(BTPD_VERSION, m_peer_id, sizeof(BTPD_VERSION) - 1);
+     m_peer_id[sizeof(BTPD_VERSION) - 1] = '|';
+--- a/btpd/content.c
++++ b/btpd/content.c
 @@ -1,6 +1,6 @@
  #include "btpd.h"
  
@@ -9,20 +27,48 @@ diff -urN btpd-0.15/btpd/content.c btpd-0.15-new/btpd/content.c
  #include <stream.h>
  
  struct content {
-diff -urN btpd-0.15/btpd/download_subr.c btpd-0.15-new/btpd/download_subr.c
---- btpd-0.15/btpd/download_subr.c	2009-02-07 16:45:36.000000000 -0500
-+++ btpd-0.15-new/btpd/download_subr.c	2009-06-19 15:03:06.000000000 -0400
-@@ -21,7 +21,6 @@
+@@ -60,16 +60,16 @@ static struct timeout m_workev;
+ static int
+ test_hash(struct torrent *tp, uint8_t *hash, uint32_t piece)
+ {
+-    char piece_hash[SHA_DIGEST_LENGTH];
++    char piece_hash[SHA1_DIGEST_SIZE];
+     tlib_read_hash(tp->tl, tp->pieces_off, piece, piece_hash);
+-    return bcmp(hash, piece_hash, SHA_DIGEST_LENGTH);
++    return bcmp(hash, piece_hash, SHA1_DIGEST_SIZE);
+ }
+ 
+ static int
+ test_piece(struct torrent *tp, uint32_t piece, int *ok)
+ {
+     int err;
+-    uint8_t hash[SHA_DIGEST_LENGTH];
++    uint8_t hash[SHA1_DIGEST_SIZE];
+     if ((err = bts_sha(tp->cm->rds, piece * tp->piece_length,
+              torrent_piece_size(tp, piece), hash)) != 0) {
+         btpd_log(BTPD_L_ERROR, "io error on '%s' (%s).\n",
+--- a/btpd/download_subr.c
++++ b/btpd/download_subr.c
+@@ -21,7 +21,7 @@
  
  #include "btpd.h"
  
 -#include <openssl/sha.h>
++#include "sha1.h"
  #include <stream.h>
  
  static void
-diff -urN btpd-0.15/btpd/torrent.c btpd-0.15-new/btpd/torrent.c
---- btpd-0.15/btpd/torrent.c	2009-01-26 16:15:10.000000000 -0500
-+++ btpd-0.15-new/btpd/torrent.c	2009-06-19 15:03:24.000000000 -0400
+@@ -42,7 +42,7 @@ piece_log_hashes(struct piece *pc)
+     for (unsigned i = 0; i < pc->nblocks; i++) {
+         uint32_t bsize = torrent_block_size(tp, pc->index, pc->nblocks, i);
+         cm_get_bytes(tp, pc->index, i * PIECE_BLOCKLEN, bsize, &buf);
+-        SHA1(buf, bsize, &log->hashes[i * 20]);
++        sha1_buffer(buf, bsize, &log->hashes[i * 20]);
+         free(buf);
+     }
+ }
+--- a/btpd/torrent.c
++++ b/btpd/torrent.c
 @@ -1,7 +1,5 @@
  #include "btpd.h"
  
@@ -31,10 +77,9 @@ diff -urN btpd-0.15/btpd/torrent.c btpd-0.15-new/btpd/torrent.c
  #define SAVE_INTERVAL 300
  
  static unsigned m_nghosts;
-diff -urN btpd-0.15/configure.ac btpd-0.15-new/configure.ac
---- btpd-0.15/configure.ac	2009-02-09 16:04:53.000000000 -0500
-+++ btpd-0.15-new/configure.ac	2009-06-19 15:04:12.000000000 -0400
-@@ -29,13 +29,6 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -29,13 +29,6 @@ rm -f conftest.c conftest.$OBJEXT
  rm -f conftest.c conftest.$OBJEXT
  [$3]))
  
@@ -48,7 +93,7 @@ diff -urN btpd-0.15/configure.ac btpd-0.15-new/configure.ac
  AC_ARG_WITH(evloop-method,
  [  --with-evloop-method    select evloop method (epoll,poll,kqueue)],
      evloop_methods=$withval,
-@@ -76,11 +69,6 @@
+@@ -76,11 +69,6 @@ CC_ARGS_OK_IFELSE(-Wno-pointer-sign,
  ,
      AC_MSG_RESULT(no))
  
@@ -60,68 +105,8 @@ diff -urN btpd-0.15/configure.ac btpd-0.15-new/configure.ac
  for m in $evloop_methods; do
      case $m in
      epoll)
-diff -urN btpd-0.15/Makefile.in btpd-0.15-new/Makefile.in
---- btpd-0.15/Makefile.in	2009-02-09 16:08:59.000000000 -0500
-+++ btpd-0.15-new/Makefile.in	2009-06-19 15:21:05.000000000 -0400
-@@ -58,7 +58,8 @@
- am_misc_libmisc_a_OBJECTS = misc/benc.$(OBJEXT) misc/btpd_if.$(OBJEXT) \
- 	misc/metainfo.$(OBJEXT) misc/hashtable.$(OBJEXT) \
- 	misc/http_client.$(OBJEXT) misc/iobuf.$(OBJEXT) \
--	misc/stream.$(OBJEXT) misc/subr.$(OBJEXT)
-+	misc/stream.$(OBJEXT) misc/subr.$(OBJEXT) \
-+	misc/sha1.$(OBJEXT) 
- misc_libmisc_a_OBJECTS = $(am_misc_libmisc_a_OBJECTS)
- am__installdirs = "$(DESTDIR)$(bindir)"
- binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-@@ -213,8 +214,8 @@
- top_builddir = @top_builddir@
- top_srcdir = @top_srcdir@
- AM_CFLAGS = -std=c99 -Wall @WARNNPS@
--AM_CPPFLAGS = -D_FILE_OFFSET_BITS=64 -D@EVLOOP_METHOD@ -I$(top_srcdir)/misc -I$(top_srcdir)/evloop @openssl_CPPFLAGS@
--AM_LDFLAGS = @openssl_LDFLAGS@
-+AM_CPPFLAGS = -D_FILE_OFFSET_BITS=64 -D@EVLOOP_METHOD@ -I$(top_srcdir)/misc -I$(top_srcdir)/evloop 
-+AM_LDFLAGS = 
- noinst_LIBRARIES = misc/libmisc.a evloop/libevloop.a
- EXTRA_DIST = COPYRIGHT CHANGES
- 
-@@ -256,7 +257,8 @@
- 	misc/iobuf.c misc/iobuf.h\
- 	misc/queue.h\
- 	misc/stream.c misc/stream.h\
--	misc/subr.c misc/subr.h
-+	misc/subr.c misc/subr.h\
-+	misc/sha1.c misc/sha1.h
- 
- 
- # evloop
-@@ -349,6 +351,8 @@
- 	misc/$(DEPDIR)/$(am__dirstamp)
- misc/subr.$(OBJEXT): misc/$(am__dirstamp) \
- 	misc/$(DEPDIR)/$(am__dirstamp)
-+misc/sha1.$(OBJEXT): misc/$(am__dirstamp) \
-+	misc/$(DIPDIR)/$(am__dirstamp)
- misc/libmisc.a: $(misc_libmisc_a_OBJECTS) $(misc_libmisc_a_DEPENDENCIES) misc/$(am__dirstamp)
- 	-rm -f misc/libmisc.a
- 	$(misc_libmisc_a_AR) misc/libmisc.a $(misc_libmisc_a_OBJECTS) $(misc_libmisc_a_LIBADD)
-@@ -492,6 +496,7 @@
- 	-rm -f misc/metainfo.$(OBJEXT)
- 	-rm -f misc/stream.$(OBJEXT)
- 	-rm -f misc/subr.$(OBJEXT)
-+	-rm -f misc/sha1.$(OBJEXT)
- 
- distclean-compile:
- 	-rm -f *.tab.c
-@@ -538,6 +543,7 @@
- @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/metainfo.Po@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/stream.Po@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/subr.Po@am__quote@
-+@AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/sha1.Po@am__quote@
- 
- .c.o:
- @am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-diff -urN btpd-0.15/misc/metainfo.c btpd-0.15-new/misc/metainfo.c
---- btpd-0.15/misc/metainfo.c	2009-01-12 17:43:18.000000000 -0500
-+++ btpd-0.15-new/misc/metainfo.c	2009-06-19 15:02:20.000000000 -0400
+--- a/misc/metainfo.c
++++ b/misc/metainfo.c
 @@ -6,8 +6,7 @@
  #include <string.h>
  #include <strings.h>
@@ -132,7 +117,7 @@ diff -urN btpd-0.15/misc/metainfo.c btpd-0.15-new/misc/metainfo.c
  #include "benc.h"
  #include "metainfo.h"
  #include "subr.h"
-@@ -159,7 +158,7 @@
+@@ -159,7 +158,7 @@ mi_info_hash(const char *p, uint8_t *has
      if (hash == NULL)
          if ((hash = malloc(20)) == NULL)
              return NULL;
@@ -141,14 +126,14 @@ diff -urN btpd-0.15/misc/metainfo.c btpd-0.15-new/misc/metainfo.c
  }
  
  char *
-diff -urN btpd-0.15/misc/sha1.c btpd-0.15-new/misc/sha1.c
---- btpd-0.15/misc/sha1.c	1969-12-31 19:00:00.000000000 -0500
-+++ btpd-0.15-new/misc/sha1.c	2009-06-19 15:02:20.000000000 -0400
-@@ -0,0 +1,423 @@
+--- /dev/null
++++ b/misc/sha1.c
+@@ -0,0 +1,428 @@
 +/* sha1.c - Functions to compute SHA1 message digest of files or
 +   memory blocks according to the NIST specification FIPS-180-1.
 +
-+   Copyright (C) 2000, 2001, 2003, 2004, 2005 Free Software Foundation, Inc.
++   Copyright (C) 2000, 2001, 2003, 2004, 2005, 2006, 2008, 2009, 2010 Free
++   Software Foundation, Inc.
 +
 +   This program is free software; you can redistribute it and/or modify it
 +   under the terms of the GNU General Public License as published by the
@@ -169,21 +154,17 @@ diff -urN btpd-0.15/misc/sha1.c btpd-0.15-new/misc/sha1.c
 +      Robert Klep <robert@ilse.nl>  -- Expansion function fix
 +*/
 +
-+#ifdef HAVE_CONFIG_H
-+# include <config.h>
-+#endif
++#include <config.h>
 +
 +#include "sha1.h"
 +
 +#include <stddef.h>
++#include <stdlib.h>
 +#include <string.h>
 +
 +#if USE_UNLOCKED_IO
 +# include "unlocked-io.h"
 +#endif
-+
-+/* SWAP does an endian swap on architectures that are little-endian,
-+   as SHA1 needs some data in a big-endian form.  */
 +
 +#ifdef WORDS_BIGENDIAN
 +# define SWAP(n) (n)
@@ -192,7 +173,7 @@ diff -urN btpd-0.15/misc/sha1.c btpd-0.15-new/misc/sha1.c
 +    (((n) << 24) | (((n) & 0xff00) << 8) | (((n) >> 8) & 0xff00) | ((n) >> 24))
 +#endif
 +
-+#define BLOCKSIZE 4096
++#define BLOCKSIZE 32768
 +#if BLOCKSIZE % 64 != 0
 +# error "invalid BLOCKSIZE"
 +#endif
@@ -202,11 +183,9 @@ diff -urN btpd-0.15/misc/sha1.c btpd-0.15-new/misc/sha1.c
 +static const unsigned char fillbuf[64] = { 0x80, 0 /* , 0, 0, ...  */ };
 +
 +
-+/*
-+  Takes a pointer to a 160 bit block of data (five 32 bit ints) and
-+  intializes it to the start constants of the SHA1 algorithm.  This
-+  must be called before using hash in the call to sha1_hash.
-+*/
++/* Take a pointer to a 160 bit block of data (five 32 bit ints) and
++   initialize it to the start constants of the SHA1 algorithm.  This
++   must be called before using hash in the call to sha1_hash.  */
 +void
 +sha1_init_ctx (struct sha1_ctx *ctx)
 +{
@@ -220,50 +199,52 @@ diff -urN btpd-0.15/misc/sha1.c btpd-0.15-new/misc/sha1.c
 +  ctx->buflen = 0;
 +}
 +
-+/* Put result from CTX in first 20 bytes following RESBUF.  The result
-+   must be in little endian byte order.
++/* Copy the 4 byte value from v into the memory location pointed to by *cp,
++   If your architecture allows unaligned access this is equivalent to
++   * (uint32_t *) cp = v  */
++static inline void
++set_uint32 (char *cp, uint32_t v)
++{
++  memcpy (cp, &v, sizeof v);
++}
 +
-+   IMPORTANT: On some systems it is required that RESBUF is correctly
-+   aligned for a 32 bits value.  */
++/* Put result from CTX in first 20 bytes following RESBUF.  The result
++   must be in little endian byte order.  */
 +void *
 +sha1_read_ctx (const struct sha1_ctx *ctx, void *resbuf)
 +{
-+  ((uint32_t *) resbuf)[0] = SWAP (ctx->A);
-+  ((uint32_t *) resbuf)[1] = SWAP (ctx->B);
-+  ((uint32_t *) resbuf)[2] = SWAP (ctx->C);
-+  ((uint32_t *) resbuf)[3] = SWAP (ctx->D);
-+  ((uint32_t *) resbuf)[4] = SWAP (ctx->E);
++  char *r = resbuf;
++  set_uint32 (r + 0 * sizeof ctx->A, SWAP (ctx->A));
++  set_uint32 (r + 1 * sizeof ctx->B, SWAP (ctx->B));
++  set_uint32 (r + 2 * sizeof ctx->C, SWAP (ctx->C));
++  set_uint32 (r + 3 * sizeof ctx->D, SWAP (ctx->D));
++  set_uint32 (r + 4 * sizeof ctx->E, SWAP (ctx->E));
 +
 +  return resbuf;
 +}
 +
 +/* Process the remaining bytes in the internal buffer and the usual
-+   prolog according to the standard and write the result to RESBUF.
-+
-+   IMPORTANT: On some systems it is required that RESBUF is correctly
-+   aligned for a 32 bits value.  */
++   prolog according to the standard and write the result to RESBUF.  */
 +void *
 +sha1_finish_ctx (struct sha1_ctx *ctx, void *resbuf)
 +{
 +  /* Take yet unprocessed bytes into account.  */
 +  uint32_t bytes = ctx->buflen;
-+  size_t pad;
++  size_t size = (bytes < 56) ? 64 / 4 : 64 * 2 / 4;
 +
 +  /* Now count remaining bytes.  */
 +  ctx->total[0] += bytes;
 +  if (ctx->total[0] < bytes)
 +    ++ctx->total[1];
 +
-+  pad = bytes >= 56 ? 64 + 56 - bytes : 56 - bytes;
-+  memcpy (&ctx->buffer[bytes], fillbuf, pad);
-+
 +  /* Put the 64-bit file length in *bits* at the end of the buffer.  */
-+  *(uint32_t *) &ctx->buffer[bytes + pad + 4] = SWAP (ctx->total[0] << 3);
-+  *(uint32_t *) &ctx->buffer[bytes + pad] = SWAP ((ctx->total[1] << 3) |
-+						    (ctx->total[0] >> 29));
++  ctx->buffer[size - 2] = SWAP ((ctx->total[1] << 3) | (ctx->total[0] >> 29));
++  ctx->buffer[size - 1] = SWAP (ctx->total[0] << 3);
++
++  memcpy (&((char *) ctx->buffer)[bytes], fillbuf, (size - 2) * 4 - bytes);
 +
 +  /* Process last bytes.  */
-+  sha1_process_block (ctx->buffer, bytes + pad + 8, ctx);
++  sha1_process_block (ctx->buffer, size * 4, ctx);
 +
 +  return sha1_read_ctx (ctx, resbuf);
 +}
@@ -275,8 +256,11 @@ diff -urN btpd-0.15/misc/sha1.c btpd-0.15-new/misc/sha1.c
 +sha1_stream (FILE *stream, void *resblock)
 +{
 +  struct sha1_ctx ctx;
-+  char buffer[BLOCKSIZE + 72];
 +  size_t sum;
++
++  char *buffer = malloc (BLOCKSIZE + 72);
++  if (!buffer)
++    return 1;
 +
 +  /* Initialize the computation context.  */
 +  sha1_init_ctx (&ctx);
@@ -285,40 +269,43 @@ diff -urN btpd-0.15/misc/sha1.c btpd-0.15-new/misc/sha1.c
 +  while (1)
 +    {
 +      /* We read the file in blocks of BLOCKSIZE bytes.  One call of the
-+	 computation function processes the whole buffer so that with the
-+	 next round of the loop another block can be read.  */
++         computation function processes the whole buffer so that with the
++         next round of the loop another block can be read.  */
 +      size_t n;
 +      sum = 0;
 +
 +      /* Read block.  Take care for partial reads.  */
 +      while (1)
-+	{
-+	  n = fread (buffer + sum, 1, BLOCKSIZE - sum, stream);
++        {
++          n = fread (buffer + sum, 1, BLOCKSIZE - sum, stream);
 +
-+	  sum += n;
++          sum += n;
 +
-+	  if (sum == BLOCKSIZE)
-+	    break;
++          if (sum == BLOCKSIZE)
++            break;
 +
-+	  if (n == 0)
-+	    {
-+	      /* Check for the error flag IFF N == 0, so that we don't
-+		 exit the loop after a partial read due to e.g., EAGAIN
-+		 or EWOULDBLOCK.  */
-+	      if (ferror (stream))
-+		return 1;
-+	      goto process_partial_block;
-+	    }
++          if (n == 0)
++            {
++              /* Check for the error flag IFF N == 0, so that we don't
++                 exit the loop after a partial read due to e.g., EAGAIN
++                 or EWOULDBLOCK.  */
++              if (ferror (stream))
++                {
++                  free (buffer);
++                  return 1;
++                }
++              goto process_partial_block;
++            }
 +
-+	  /* We've read at least one byte, so ignore errors.  But always
-+	     check for EOF, since feof may be true even though N > 0.
-+	     Otherwise, we could end up calling fread after EOF.  */
-+	  if (feof (stream))
-+	    goto process_partial_block;
-+	}
++          /* We've read at least one byte, so ignore errors.  But always
++             check for EOF, since feof may be true even though N > 0.
++             Otherwise, we could end up calling fread after EOF.  */
++          if (feof (stream))
++            goto process_partial_block;
++        }
 +
 +      /* Process buffer with BLOCKSIZE bytes.  Note that
-+			BLOCKSIZE % 64 == 0
++                        BLOCKSIZE % 64 == 0
 +       */
 +      sha1_process_block (buffer, BLOCKSIZE, &ctx);
 +    }
@@ -331,10 +318,11 @@ diff -urN btpd-0.15/misc/sha1.c btpd-0.15-new/misc/sha1.c
 +
 +  /* Construct result in desired memory.  */
 +  sha1_finish_ctx (&ctx, resblock);
++  free (buffer);
 +  return 0;
 +}
 +
-+/* Compute MD5 message digest for LEN bytes beginning at BUFFER.  The
++/* Compute SHA1 message digest for LEN bytes beginning at BUFFER.  The
 +   result is always in little endian byte order, so that a byte-wise
 +   output yields to the wanted ASCII representation of the message
 +   digest.  */
@@ -363,18 +351,19 @@ diff -urN btpd-0.15/misc/sha1.c btpd-0.15-new/misc/sha1.c
 +      size_t left_over = ctx->buflen;
 +      size_t add = 128 - left_over > len ? len : 128 - left_over;
 +
-+      memcpy (&ctx->buffer[left_over], buffer, add);
++      memcpy (&((char *) ctx->buffer)[left_over], buffer, add);
 +      ctx->buflen += add;
 +
 +      if (ctx->buflen > 64)
-+	{
-+	  sha1_process_block (ctx->buffer, ctx->buflen & ~63, ctx);
++        {
++          sha1_process_block (ctx->buffer, ctx->buflen & ~63, ctx);
 +
-+	  ctx->buflen &= 63;
-+	  /* The regions in the following copy operation cannot overlap.  */
-+	  memcpy (ctx->buffer, &ctx->buffer[(left_over + add) & ~63],
-+		  ctx->buflen);
-+	}
++          ctx->buflen &= 63;
++          /* The regions in the following copy operation cannot overlap.  */
++          memcpy (ctx->buffer,
++                  &((char *) ctx->buffer)[(left_over + add) & ~63],
++                  ctx->buflen);
++        }
 +
 +      buffer = (const char *) buffer + add;
 +      len -= add;
@@ -387,19 +376,19 @@ diff -urN btpd-0.15/misc/sha1.c btpd-0.15-new/misc/sha1.c
 +# define alignof(type) offsetof (struct { char c; type x; }, x)
 +# define UNALIGNED_P(p) (((size_t) p) % alignof (uint32_t) != 0)
 +      if (UNALIGNED_P (buffer))
-+	while (len > 64)
-+	  {
-+	    sha1_process_block (memcpy (ctx->buffer, buffer, 64), 64, ctx);
-+	    buffer = (const char *) buffer + 64;
-+	    len -= 64;
-+	  }
++        while (len > 64)
++          {
++            sha1_process_block (memcpy (ctx->buffer, buffer, 64), 64, ctx);
++            buffer = (const char *) buffer + 64;
++            len -= 64;
++          }
 +      else
 +#endif
-+	{
-+	  sha1_process_block (buffer, len & ~63, ctx);
-+	  buffer = (const char *) buffer + (len & ~63);
-+	  len &= 63;
-+	}
++        {
++          sha1_process_block (buffer, len & ~63, ctx);
++          buffer = (const char *) buffer + (len & ~63);
++          len &= 63;
++        }
 +    }
 +
 +  /* Move remaining bytes in internal buffer.  */
@@ -407,14 +396,14 @@ diff -urN btpd-0.15/misc/sha1.c btpd-0.15-new/misc/sha1.c
 +    {
 +      size_t left_over = ctx->buflen;
 +
-+      memcpy (&ctx->buffer[left_over], buffer, len);
++      memcpy (&((char *) ctx->buffer)[left_over], buffer, len);
 +      left_over += len;
 +      if (left_over >= 64)
-+	{
-+	  sha1_process_block (ctx->buffer, 64, ctx);
-+	  left_over -= 64;
-+	  memcpy (ctx->buffer, &ctx->buffer[64], left_over);
-+	}
++        {
++          sha1_process_block (ctx->buffer, 64, ctx);
++          left_over -= 64;
++          memcpy (ctx->buffer, &ctx->buffer[16], left_over);
++        }
 +      ctx->buflen = left_over;
 +    }
 +}
@@ -422,10 +411,10 @@ diff -urN btpd-0.15/misc/sha1.c btpd-0.15-new/misc/sha1.c
 +/* --- Code below is the primary difference between md5.c and sha1.c --- */
 +
 +/* SHA1 round constants */
-+#define K1 0x5a827999L
-+#define K2 0x6ed9eba1L
-+#define K3 0x8f1bbcdcL
-+#define K4 0xca62c1d6L
++#define K1 0x5a827999
++#define K2 0x6ed9eba1
++#define K3 0x8f1bbcdc
++#define K4 0xca62c1d6
 +
 +/* Round functions.  Note that F2 is the same as F4.  */
 +#define F1(B,C,D) ( D ^ ( B & ( C ^ D ) ) )
@@ -457,28 +446,28 @@ diff -urN btpd-0.15/misc/sha1.c btpd-0.15-new/misc/sha1.c
 +  if (ctx->total[0] < len)
 +    ++ctx->total[1];
 +
-+#define rol(x, n) (((x) << (n)) | ((x) >> (32 - (n))))
++#define rol(x, n) (((x) << (n)) | ((uint32_t) (x) >> (32 - (n))))
 +
 +#define M(I) ( tm =   x[I&0x0f] ^ x[(I-14)&0x0f] \
-+		    ^ x[(I-8)&0x0f] ^ x[(I-3)&0x0f] \
-+	       , (x[I&0x0f] = rol(tm, 1)) )
++                    ^ x[(I-8)&0x0f] ^ x[(I-3)&0x0f] \
++               , (x[I&0x0f] = rol(tm, 1)) )
 +
 +#define R(A,B,C,D,E,F,K,M)  do { E += rol( A, 5 )     \
-+				      + F( B, C, D )  \
-+				      + K	      \
-+				      + M;	      \
-+				 B = rol( B, 30 );    \
-+			       } while(0)
++                                      + F( B, C, D )  \
++                                      + K             \
++                                      + M;            \
++                                 B = rol( B, 30 );    \
++                               } while(0)
 +
 +  while (words < endp)
 +    {
 +      uint32_t tm;
 +      int t;
 +      for (t = 0; t < 16; t++)
-+	{
-+	  x[t] = SWAP (*words);
-+	  words++;
-+	}
++        {
++          x[t] = SWAP (*words);
++          words++;
++        }
 +
 +      R( a, b, c, d, e, F1, K1, x[ 0] );
 +      R( e, a, b, c, d, F1, K1, x[ 1] );
@@ -568,13 +557,13 @@ diff -urN btpd-0.15/misc/sha1.c btpd-0.15-new/misc/sha1.c
 +      e = ctx->E += e;
 +    }
 +}
-diff -urN btpd-0.15/misc/sha1.h btpd-0.15-new/misc/sha1.h
---- btpd-0.15/misc/sha1.h	1969-12-31 19:00:00.000000000 -0500
-+++ btpd-0.15-new/misc/sha1.h	2009-06-19 15:02:20.000000000 -0400
-@@ -0,0 +1,90 @@
+--- /dev/null
++++ b/misc/sha1.h
+@@ -0,0 +1,92 @@
 +/* Declarations of functions and data types used for SHA1 sum
 +   library functions.
-+   Copyright (C) 2000, 2001, 2003, 2005 Free Software Foundation, Inc.
++   Copyright (C) 2000, 2001, 2003, 2005, 2006, 2008, 2009, 2010 Free Software
++   Foundation, Inc.
 +
 +   This program is free software; you can redistribute it and/or modify it
 +   under the terms of the GNU General Public License as published by the
@@ -593,11 +582,14 @@ diff -urN btpd-0.15/misc/sha1.h btpd-0.15-new/misc/sha1.h
 +#ifndef SHA1_H
 +# define SHA1_H 1
 +
-+#include <stdio.h>
++# include <stdio.h>
++# include <stdint.h>
 +
-+#include <inttypes.h>
++# ifdef __cplusplus
++extern "C" {
++# endif
 +
-+#define SHA_DIGEST_LENGTH 20
++#define SHA1_DIGEST_SIZE 20
 +
 +/* Structure to save state of computation between the single steps.  */
 +struct sha1_ctx
@@ -610,7 +602,7 @@ diff -urN btpd-0.15/misc/sha1.h btpd-0.15-new/misc/sha1.h
 +
 +  uint32_t total[2];
 +  uint32_t buflen;
-+  char buffer[128];
++  uint32_t buffer[32];
 +};
 +
 +
@@ -622,31 +614,25 @@ diff -urN btpd-0.15/misc/sha1.h btpd-0.15-new/misc/sha1.h
 +   starting at BUFFER.
 +   It is necessary that LEN is a multiple of 64!!! */
 +extern void sha1_process_block (const void *buffer, size_t len,
-+				struct sha1_ctx *ctx);
++                                struct sha1_ctx *ctx);
 +
 +/* Starting with the result of former calls of this function (or the
 +   initialization function update the context for the next LEN bytes
 +   starting at BUFFER.
 +   It is NOT required that LEN is a multiple of 64.  */
 +extern void sha1_process_bytes (const void *buffer, size_t len,
-+				struct sha1_ctx *ctx);
++                                struct sha1_ctx *ctx);
 +
 +/* Process the remaining bytes in the buffer and put result from CTX
 +   in first 20 bytes following RESBUF.  The result is always in little
 +   endian byte order, so that a byte-wise output yields to the wanted
-+   ASCII representation of the message digest.
-+
-+   IMPORTANT: On some systems it is required that RESBUF be correctly
-+   aligned for a 32 bits value.  */
++   ASCII representation of the message digest.  */
 +extern void *sha1_finish_ctx (struct sha1_ctx *ctx, void *resbuf);
 +
 +
 +/* Put result from CTX in first 20 bytes following RESBUF.  The result is
 +   always in little endian byte order, so that a byte-wise output yields
-+   to the wanted ASCII representation of the message digest.
-+
-+   IMPORTANT: On some systems it is required that RESBUF is correctly
-+   aligned for a 32 bits value.  */
++   to the wanted ASCII representation of the message digest.  */
 +extern void *sha1_read_ctx (const struct sha1_ctx *ctx, void *resbuf);
 +
 +
@@ -661,10 +647,13 @@ diff -urN btpd-0.15/misc/sha1.h btpd-0.15-new/misc/sha1.h
 +   digest.  */
 +extern void *sha1_buffer (const char *buffer, size_t len, void *resblock);
 +
++# ifdef __cplusplus
++}
++# endif
++
 +#endif
-diff -urN btpd-0.15/misc/stream.c btpd-0.15-new/misc/stream.c
---- btpd-0.15/misc/stream.c	2008-12-22 17:25:36.000000000 -0500
-+++ btpd-0.15-new/misc/stream.c	2009-06-19 15:02:20.000000000 -0400
+--- a/misc/stream.c
++++ b/misc/stream.c
 @@ -5,7 +5,7 @@
  #include <stdlib.h>
  #include <unistd.h>
@@ -674,7 +663,7 @@ diff -urN btpd-0.15/misc/stream.c btpd-0.15-new/misc/stream.c
  
  #include "metainfo.h"
  #include "subr.h"
-@@ -161,21 +161,21 @@
+@@ -161,21 +161,21 @@ bts_put(struct bt_stream *bts, off_t off
  int
  bts_sha(struct bt_stream *bts, off_t start, off_t length, uint8_t *hash)
  {
@@ -700,14 +689,8 @@ diff -urN btpd-0.15/misc/stream.c btpd-0.15-new/misc/stream.c
      return err;
  }
  
-diff -urN btpd-0.15/.pc/.version btpd-0.15-new/.pc/.version
---- btpd-0.15/.pc/.version	1969-12-31 19:00:00.000000000 -0500
-+++ btpd-0.15-new/.pc/.version	2009-06-19 15:00:46.000000000 -0400
-@@ -0,0 +1 @@
-+2
-diff -urN btpd-0.15/Makefile.am btpd-0.15.new/Makefile.am
---- btpd-0.15/Makefile.am	2009-02-03 12:09:25.000000000 +0100
-+++ btpd-0.15.new/Makefile.am	2009-07-02 17:39:47.000000000 +0200
+--- a/Makefile.am
++++ b/Makefile.am
 @@ -1,6 +1,6 @@
  AM_CFLAGS=-std=c99 -Wall @WARNNPS@
 -AM_CPPFLAGS=-D_FILE_OFFSET_BITS=64 -D@EVLOOP_METHOD@ -I$(top_srcdir)/misc -I$(top_srcdir)/evloop @openssl_CPPFLAGS@
@@ -717,7 +700,26 @@ diff -urN btpd-0.15/Makefile.am btpd-0.15.new/Makefile.am
  
  bin_PROGRAMS=btpd/btpd cli/btcli cli/btinfo
  noinst_LIBRARIES=misc/libmisc.a evloop/libevloop.a
-@@ -44,7 +44,8 @@
+@@ -25,15 +25,15 @@ btpd_btpd_SOURCES=\
+ 	btpd/upload.c btpd/upload.h\
+ 	btpd/util.c
+ btpd_btpd_CFLAGS=@TD_CFLAGS@ $(AM_CFLAGS)
+-btpd_btpd_LDADD=@TD_LIBS@ misc/libmisc.a evloop/libevloop.a -lcrypto -lm @CLOCKLIB@ @INETLIBS@
++btpd_btpd_LDADD=@TD_LIBS@ misc/libmisc.a evloop/libevloop.a -lm @CLOCKLIB@ @INETLIBS@
+ 
+ # btinfo
+ cli_btinfo_SOURCES=cli/btinfo.c
+-cli_btinfo_LDADD=misc/libmisc.a -lcrypto -lm
++cli_btinfo_LDADD=misc/libmisc.a -lm
+ 
+ # btcli
+ cli_btcli_SOURCES=cli/btcli.c cli/btcli.h cli/add.c cli/del.c cli/list.c cli/kill.c cli/start.c cli/stop.c cli/stat.c
+-cli_btcli_LDADD=misc/libmisc.a -lcrypto -lm @INETLIBS@
++cli_btcli_LDADD=misc/libmisc.a -lm @INETLIBS@
+ 
+ # libmisc
+ misc_libmisc_a_SOURCES=\
+@@ -45,7 +45,8 @@ misc_libmisc_a_SOURCES=\
  	misc/iobuf.c misc/iobuf.h\
  	misc/queue.h\
  	misc/stream.c misc/stream.h\
