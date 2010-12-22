@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lighttpd
-PKG_VERSION:=1.4.26
-PKG_RELEASE:=3
+PKG_VERSION:=1.4.28
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.lighttpd.net/lighttpd/releases-1.4.x/
-PKG_MD5SUM:=a682c8efce47a2f4263a247ba0813c9b
+PKG_MD5SUM:=586eb535d31ac299652495b058dd87c4
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -80,6 +80,12 @@ define Package/lighttpd-mod-evasive
   $(call Package/lighttpd/Default)
   DEPENDS:=lighttpd
   TITLE:=Evasive module
+endef
+
+define Package/lighttpd-mod-evhost
+  $(call Package/lighttpd/Default)
+  DEPENDS:=lighttpd
+  TITLE:=Exnhanced Virtual-Hosting module
 endef
 
 define Package/lighttpd-mod-expire
@@ -293,10 +299,12 @@ $(eval $(call BuildPlugin,lighttpd-mod-cgi,cgi))
 $(eval $(call BuildPlugin,lighttpd-mod-cml,cml))
 $(eval $(call BuildPlugin,lighttpd-mod-compress,compress))
 $(eval $(call BuildPlugin,lighttpd-mod-evasive,evasive))
-$(eval $(call BuildPlugin,lighttpd-mod-expire, expire))
-$(eval $(call BuildPlugin,lighttpd-mod-extforward, extforward))
+$(eval $(call BuildPlugin,lighttpd-mod-evhost,evhost))
+$(eval $(call BuildPlugin,lighttpd-mod-expire,expire))
+$(eval $(call BuildPlugin,lighttpd-mod-extforward,extforward))
 $(eval $(call BuildPlugin,lighttpd-mod-fastcgi,fastcgi))
 $(eval $(call BuildPlugin,lighttpd-mod-flv-streaming,flv_streaming))
+$(eval $(call BuildPlugin,lighttpd-mod-magnet,magnet))
 $(eval $(call BuildPlugin,lighttpd-mod-proxy,proxy))
 $(eval $(call BuildPlugin,lighttpd-mod-redirect,redirect))
 $(eval $(call BuildPlugin,lighttpd-mod-rewrite,rewrite))
