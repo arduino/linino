@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=liboping
-PKG_VERSION:=1.4.0
+PKG_VERSION:=1.5.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://verplant.org/liboping/files
-PKG_MD5SUM:=b3d3ef82c8b963266e0ce8db1509cac4
+PKG_MD5SUM:=61d17df8ef0a60ccafc8715de310b3f0
 
 PKG_FIXUP:=libtool
 
