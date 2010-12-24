@@ -76,7 +76,7 @@ endef
 CONFIGURE_ARGS += \
 	--disable-rpath \
 	--without-libssl32-prefix \
-	--without-libiconv-prefix \
+	--without-libintl-prefix \
 	--without-libgsasl \
 	--without-libidn
 
