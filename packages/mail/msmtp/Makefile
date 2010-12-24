@@ -9,14 +9,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=msmtp
-PKG_VERSION:=1.4.19
-PKG_RELEASE:=3
+PKG_VERSION:=1.4.21
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/msmtp
-PKG_MD5SUM:=f0afdc943bf7c8a3a3bf3fe1a73072c4
+PKG_MD5SUM:=9d764cd9036168f49bc9d6531a7f3dba
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -74,8 +75,8 @@ endef
 
 CONFIGURE_ARGS += \
 	--disable-rpath \
-	--without-libssl32 \
-	--without-libintl \
+	--without-libssl32-prefix \
+	--without-libiconv-prefix \
 	--without-libgsasl \
 	--without-libidn
 
@@ -97,19 +98,17 @@ define Package/msmtp/install
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/doc/msmtprc-system.example \
 		$(1)/etc/msmtprc
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/msmtp $(1)/usr/bin/msmtp
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/msmtpqueue/msmtp-enqueue.sh $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/msmtpqueue/msmtp-listqueue.sh $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/msmtpqueue/msmtp-runqueue.sh $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/msmtp $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/msmtpqueue/msmtp-{en,list,run}queue.sh $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/sbin
 endef
 
-define Package/msmtp/postinstall
+define Package/msmtp/postinst
 	ln -sf ../bin/msmtp $${IPKG_INSTROOT}/usr/sbin/sendmail
 endef
 
 Package/msmtp-nossl/install = $(Package/msmtp/install)
-Package/msmtp-nossl/postinstall = $(Package/msmtp/postinstall)
+Package/msmtp-nossl/postinst = $(Package/msmtp/postinst)
 
 $(eval $(call BuildPackage,msmtp))
 $(eval $(call BuildPackage,msmtp-nossl))
