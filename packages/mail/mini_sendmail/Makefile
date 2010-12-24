@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mini-sendmail
 PKG_VERSION:=1.3.6
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=mini_sendmail-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.acme.com/software/mini_sendmail/
@@ -27,21 +27,21 @@ define Package/mini-sendmail
 endef
 
 define Package/mini-sendmail/description
- mini_sendmail reads its standard input up to an end-of-file and sends a 
+ mini_sendmail reads its standard input up to an end-of-file and sends a
  copy of the message found there to all of the addresses listed.
- The message is sent by connecting to a local SMTP server. This means 
+ The message is sent by connecting to a local SMTP server. This means
  mini_sendmail can be used to send email from inside a chroot(2) area.
 endef
 
 MAKE_FLAGS += \
 	OFLAGS="$(TARGET_CFLAGS)"
 
-define Package/mini-sendmail/install	
+define Package/mini-sendmail/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mini_sendmail $(1)/usr/sbin/
 endef
 
-define Package/mini-sendmail/postinstall
+define Package/mini-sendmail/postinst
 	ln -sf mini_sendmail $${IPKG_INSTROOT}/usr/sbin/sendmail
 endef
 

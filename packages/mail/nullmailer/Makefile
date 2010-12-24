@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nullmailer
 PKG_VERSION:=1.05
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://untroubled.org/nullmailer/
@@ -47,7 +47,7 @@ define Package/nullmailer/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/protocols/smtp $(1)/usr/lib/nullmailer/
 endef
 
-define Package/nullmailer/postinstall
+define Package/nullmailer/postinst
 	ln -sf ../sbin/sendmail $(1)/usr/lib/sendmail
 	ln -sf nullmailer-sendmail $(1)/usr/sbin/sendmail
 endef
