@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mutt
-PKG_VERSION:=1.5.20
+PKG_VERSION:=1.5.21
 PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=@SF/mutt
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=027cdd9959203de0c3c64149a7ee351c
+PKG_MD5SUM:=a29db8f1d51e2f10c070bf88e8a553fd
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,11 +37,12 @@ CONFIGURE_ARGS += \
 	--oldincludedir=$(PKG_BUILD_DIR)/. \
 	--enable-pop \
 	--enable-imap \
-	--with-ssl
+	--with-ssl \
+	--without-idn
 
 define Package/mutt/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mutt $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/mutt $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,mutt))
