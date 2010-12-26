@@ -1,7 +1,6 @@
-diff -ruN gtkmm-2.16.0.orig/configure gtkmm-2.16.0/configure
---- gtkmm-2.16.0.orig/configure	2009-03-16 12:33:19.000000000 +0100
-+++ gtkmm-2.16.0/configure	2009-11-05 19:43:21.000000000 +0100
-@@ -22179,10 +22179,7 @@
+--- a/configure
++++ b/configure
+@@ -22179,10 +22179,7 @@ fi
  AUTOHEADER=':'
  
  
@@ -13,7 +12,7 @@ diff -ruN gtkmm-2.16.0.orig/configure gtkmm-2.16.0/configure
  
  
  ac_config_files="$ac_config_files scripts/Makefile"
-@@ -22870,22 +22867,6 @@
+@@ -22870,22 +22867,6 @@ do
      "gtk/src/Makefile") CONFIG_FILES="$CONFIG_FILES gtk/src/Makefile" ;;
      "gtk/gtkmm/Makefile") CONFIG_FILES="$CONFIG_FILES gtk/gtkmm/Makefile" ;;
      "gtk/gtkmm/private/Makefile") CONFIG_FILES="$CONFIG_FILES gtk/gtkmm/private/Makefile" ;;
@@ -36,10 +35,9 @@ diff -ruN gtkmm-2.16.0.orig/configure gtkmm-2.16.0/configure
      "scripts/Makefile") CONFIG_FILES="$CONFIG_FILES scripts/Makefile" ;;
      "MSVC_Net2005/Makefile") CONFIG_FILES="$CONFIG_FILES MSVC_Net2005/Makefile" ;;
      "MSVC_Net2005/gendef/Makefile") CONFIG_FILES="$CONFIG_FILES MSVC_Net2005/gendef/Makefile" ;;
-diff -ruN gtkmm-2.16.0.orig/configure.in gtkmm-2.16.0/configure.in
---- gtkmm-2.16.0.orig/configure.in	2009-03-16 12:19:50.000000000 +0100
-+++ gtkmm-2.16.0/configure.in	2009-11-05 19:42:17.000000000 +0100
-@@ -405,26 +405,6 @@
+--- a/configure.in
++++ b/configure.in
+@@ -405,26 +405,6 @@ AC_CONFIG_FILES([
      gtk/src/Makefile
      gtk/gtkmm/Makefile
        gtk/gtkmm/private/Makefile
@@ -66,10 +64,9 @@ diff -ruN gtkmm-2.16.0.orig/configure.in gtkmm-2.16.0/configure.in
  ])
  
  AC_CONFIG_FILES([
-diff -ruN gtkmm-2.16.0.orig/Makefile.am gtkmm-2.16.0/Makefile.am
---- gtkmm-2.16.0.orig/Makefile.am	2008-11-18 17:17:02.000000000 +0100
-+++ gtkmm-2.16.0/Makefile.am	2009-11-05 19:43:50.000000000 +0100
-@@ -4,7 +4,7 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -6,7 +6,7 @@ else
    ATK_SUBDIR=
  endif
  
@@ -78,10 +75,9 @@ diff -ruN gtkmm-2.16.0.orig/Makefile.am gtkmm-2.16.0/Makefile.am
  DIST_SUBDIRS	= $(SUBDIRS) scripts
  
  EXTRA_DIST	= build_shared/Makefile_build.am_fragment \
-diff -ruN gtkmm-2.16.0.orig/Makefile.in gtkmm-2.16.0/Makefile.in
---- gtkmm-2.16.0.orig/Makefile.in	2009-03-16 12:32:56.000000000 +0100
-+++ gtkmm-2.16.0/Makefile.in	2009-11-05 19:43:39.000000000 +0100
-@@ -213,7 +213,7 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -213,7 +213,7 @@ top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  @GTKMM_ATKMM_ENABLED_FALSE@ATK_SUBDIR = 
  @GTKMM_ATKMM_ENABLED_TRUE@ATK_SUBDIR = atk
