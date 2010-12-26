@@ -1,22 +1,30 @@
 --- a/proc/sysinfo.c
 +++ b/proc/sysinfo.c
-@@ -209,7 +209,7 @@ static int check_for_privs(void){
+@@ -209,7 +209,12 @@ static int check_for_privs(void){
    return !!rc;
  }
  
--static void init_libproc(void) __attribute__((constructor));
++#if __GNUC__ < 4
+ static void init_libproc(void) __attribute__((constructor));
++#else
 +static void init_libproc(void) __attribute__((constructor(200)));
++#endif
++
  static void init_libproc(void){
    have_privs = check_for_privs();
    // ought to count CPUs in /proc/stat instead of relying
 --- a/proc/version.c
 +++ b/proc/version.c
-@@ -33,7 +33,7 @@ void display_version(void) {
+@@ -33,7 +33,12 @@ void display_version(void) {
  
  int linux_version_code;
  
--static void init_Linux_version(void) __attribute__((constructor));
++#if __GNUC__ < 4
+ static void init_Linux_version(void) __attribute__((constructor));
++#else
 +static void init_Linux_version(void) __attribute__((constructor(100)));
++#endif
++
  static void init_Linux_version(void) {
      static struct utsname uts;
      int x = 0, y = 0, z = 0;	/* cleared in case sscanf() < 3 */
