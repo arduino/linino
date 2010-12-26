@@ -21,14 +21,8 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-TARGET_CFLAGS+=\
-	-I$(STAGING_DIR)/usr/lib/libintl/include/ \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include/
-
 TARGET_LDFLAGS+=\
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib/
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_gtk2 CONFIG_PACKAGE_gtk2-cups)
 
@@ -39,7 +33,7 @@ define Package/gtk2
   CATEGORY:=Xorg
   SUBMENU:=framework
   TITLE:=GTK+-2.0
-  DEPENDS:=@DISPLAY_SUPPORT +cairo +pango +libpng +libjpeg +atk +libtiff \
+  DEPENDS:=@DISPLAY_SUPPORT +cairo +pango +libpng +libjpeg +atk +libtiff +glib2 \
   +FEATURE_drawing-backend_DirectFB:directfb \
   +FEATURE_drawing-backend_libX11:libX11 \
   +FEATURE_drawing-backend_libX11:libXext \
