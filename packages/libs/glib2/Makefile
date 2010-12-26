@@ -67,6 +67,9 @@ define Build/InstallDev
 		$(PKG_INSTALL_DIR)/usr/include/glib-2.0 \
 		$(1)/usr/include/
 	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/glib-2.0/include/*.h \
+		$(1)/usr/include/glib-2.0/
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/include/gio-unix-2.0 \
 		$(1)/usr/include/
 
