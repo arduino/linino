@@ -48,8 +48,8 @@ define Package/nullmailer/install
 endef
 
 define Package/nullmailer/postinst
-	ln -sf ../sbin/sendmail $(1)/usr/lib/sendmail
-	ln -sf nullmailer-sendmail $(1)/usr/sbin/sendmail
+	ln -sf ../sbin/sendmail $${IPKG_INSTROOT}/usr/lib/sendmail
+	ln -sf nullmailer-sendmail $${IPKG_INSTROOT}/usr/sbin/sendmail
 endef
 
 $(eval $(call BuildPackage,nullmailer))
