@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sudo
-PKG_VERSION:=1.7.2p6
+PKG_VERSION:=1.7.4p4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sudo.ws/sudo/dist
-PKG_MD5SUM:=c4f1a43e8ba94f6bf06d2211442148c4
+PKG_MD5SUM:=55d9906535d70a1de347cd3d3550ee87
 
 PKG_INSTALL:=1
 
@@ -40,7 +40,9 @@ endef
 CONFIGURE_ARGS+= \
 	--without-pam \
 	--disable-pam-session \
-	--with-editor=/bin/vi
+	--with-editor=/bin/vi \
+	--without-lecture \
+	--disable-zlib
 
 CONFIGURE_VARS+= \
 	sudo_cv_uid_t_len=10 \
@@ -55,6 +57,7 @@ define Package/sudo/install
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/sudoers $(1)/etc/
 	chmod 0440 $(1)/etc/sudoers
+	$(INSTALL_DIR) $(1)/etc/sudoers.d
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/sudo_noexec.so $(1)/usr/lib/
 endef
