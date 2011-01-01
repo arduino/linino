@@ -37,8 +37,7 @@ define Package/lsm/conffiles
 endef
 
 define Build/Compile
-	echo sed -ie 's/\$$$$(CC)/mipsel-openwrt-linux-uclibc-gcc/g' $(PKG_BUILD_DIR)/Makefile
-	$(MAKE) -C $(PKG_BUILD_DIR) CC=$(TARGET_CC)
+	$(MAKE) -C $(PKG_BUILD_DIR) CC="$(TARGET_CC)"
 endef
 
 define Package/lsm/install
