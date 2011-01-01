@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnupg
-PKG_VERSION:=1.4.10
+PKG_VERSION:=1.4.11
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.franken.de/pub/crypt/mirror/ftp.gnupg.org/gcrypt/gnupg \
 	ftp://ftp.gnupg.org/gcrypt/gnupg
-PKG_MD5SUM:=dcf7ed712997888d616e029637bfc303
+PKG_MD5SUM:=411744e1ef8ce90b87938c4203f001f1
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -57,7 +59,7 @@ MAKE_FLAGS += \
 
 define Package/gnupg/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/g10/gpg $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/gpg $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,gnupg))
