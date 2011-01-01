@@ -1,21 +1,24 @@
 #
 # Copyright (C) 2010 OpenWrt.org
 #
-# This is free software, licensed under the GNU General Public License v2.
-# See /LICENSE for more information.
+# This Makefile and the code shipped in src/ is free software, licensed
+# under the GNU Lesser General Public License, version 2.1 and later.
+# See src/COPYING for more information.
+#
+# Refer to src/COPYRIGHT for copyright statements on the source files.
 #
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libiconv
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libiconv
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=Stub header for the GNU Character set conversion library
+  TITLE:=Tiny drop-in replacement for the GNU Character set conversion library
 endef
 
 define Build/Prepare

@@ -1,16 +1,12 @@
-/*
- * Very simple iconv api stub.
- */
-
 #ifndef _ICONV_H
 #define _ICONV_H 1
 
-#define _LIBICONV_VERSION 0x010B    /* version number: (major<<8) + minor */
-extern  int _libiconv_version; /* Likewise */
-
 #include <stddef.h>
 
-typedef void *iconv_t;
+#define _LIBICONV_VERSION 0x010B    /* version number: (major<<8) + minor */
+extern int _libiconv_version; /* Likewise */
+
+typedef long iconv_t;
 
 extern iconv_t
 iconv_open(const char *tocode, const char *fromcode);
