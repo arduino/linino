@@ -206,7 +206,7 @@ echo $$ > /var/run/dynamic_dns/$service_id.pid
 
 
 #determine when the last update was
-current_time=$(date +%s)
+current_time=$(monotonic_time)
 last_update=$(( $current_time - (2*$force_interval_seconds) ))
 if [ -e "/var/run/dynamic_dns/$service_id.update" ]
 then
@@ -231,7 +231,7 @@ do
 	current_ip=$(get_current_ip)
 
 
-	current_time=$(date +%s)
+	current_time=$(monotonic_time)
 	time_since_update=$(($current_time - $last_update))
 
 
@@ -270,7 +270,7 @@ do
 		verbose_echo ""
 
 		#save the time of the update
-		current_time=$(date +%s)
+		current_time=$(monotonic_time)
 		last_update=$current_time
 		time_since_update='0'
 		registered_ip=$current_ip

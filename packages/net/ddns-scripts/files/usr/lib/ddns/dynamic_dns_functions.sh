@@ -122,3 +122,10 @@ start_daemon_for_all_ddns_sections()
 		/usr/lib/ddns/dynamic_dns_updater.sh $section 0 > /dev/null 2>&1 &
 	done
 }
+
+monotonic_time()
+{
+	local uptime
+	read uptime < /proc/uptime
+	echo "${uptime%%.*}"
+}
