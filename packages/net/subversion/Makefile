@@ -24,7 +24,7 @@ define Package/subversion/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A compelling replacement for CVS
-  DEPENDS:=+zlib +libneon +libintl +libaprutil
+  DEPENDS:=+zlib +libneon +libaprutil
   URL:=http://subversion.apache.org/
   SUBMENU:=Version Control Systems
 endef
@@ -90,10 +90,10 @@ CONFIGURE_ARGS += \
 
 CONFIGURE_VARS += \
 	svn_lib_neon=yes \
-	LDFLAGS="$(TARGET_LDFLAGS) -lcrypt -lm -lintl -L$(STAGING_DIR)/usr/lib/libintl/lib/ \
+	LDFLAGS="$(TARGET_LDFLAGS) -lcrypt -lm \
 		-lz -lpthread -L$(TOOLCHAIN_DIR)/usr/lib \
 		-L$(TOOLCHAIN_DIR)/lib" \
-	CPPFLAGS="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/lib/libintl/include" \
+	CPPFLAGS="$(TARGET_CPPFLAGS)" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
