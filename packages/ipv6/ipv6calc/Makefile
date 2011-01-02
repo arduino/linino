@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ipv6calc
-PKG_VERSION:=0.73.0
+PKG_VERSION:=0.80.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/
-PKG_MD5SUM:=24141d637207532ea9a9881f968d086f
+PKG_SOURCE_URL:=ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc
+PKG_MD5SUM:=6a34588cabf62fc01cfd246c35f9c122
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -37,13 +39,9 @@ CONFIGURE_ARGS += \
 	--enable-static \
 	--enable-shared
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		COPTS="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+MAKE_FLAGS += \
+	CC="$(TARGET_CC)" \
+	COPTS="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR)"
 
 define Package/ipv6calc/install
 	$(INSTALL_DIR) $(1)/usr/bin
