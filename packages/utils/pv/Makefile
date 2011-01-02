@@ -1,5 +1,6 @@
-# 
-# Copyright (C) 2008 David Cooper, OpenWrt.org
+#
+# Copyright (C) 2008 David Cooper
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pv
-PKG_VERSION:=1.1.4
+PKG_VERSION:=1.2.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://pipeviewer.googlecode.com/files/
-PKG_MD5SUM:=63033e090d61a040407bfd043aeb6d27
+PKG_SOURCE_URL:=http://pipeviewer.googlecode.com/files
+PKG_MD5SUM:=67aedf6dbcd068d5feeaa76156153f4f
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,7 +37,7 @@ endef
 
 define Package/pv/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pv $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pv $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,pv))
