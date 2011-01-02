@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aoetools
-PKG_VERSION:=30
+PKG_VERSION:=32
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/aoetools
-PKG_MD5SUM:=b87eeb34d50921cdf852780f662630b9
+PKG_MD5SUM:=62c8b5664d413019d0008f27ab5dc4d1
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,6 +24,7 @@ define Package/aoetools
   CATEGORY:=Network
   TITLE:=ATA over Ethernet tools
   URL:=http://aoetools.sourceforge.net/
+  DEPENDS:=+kmod-aoe +libpthread
 endef
 
 define Package/aoetools/description
@@ -34,17 +37,11 @@ endef
 CONFIGURE_ARGS +=  NPERSHELF=16
 
 define Package/$(PKG_NAME)/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-discover $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-flush $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-interfaces $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-mkdevs $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-mkshelf $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-revalidate $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-stat $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoe-version $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoecfg $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aoeping $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/sbin/aoe-{discover,flush,interfaces,mkdevs,mkshelf,revalidate,sancheck,stat,version} \
+		$(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/aoe{cfg,ping} $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))
