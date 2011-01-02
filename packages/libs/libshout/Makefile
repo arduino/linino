@@ -20,7 +20,7 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-TARGET_CFLAGS += $(FPIC)
+TARGET_CFLAGS += $(FPIC) -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/libshout
   SECTION:=libs
@@ -40,7 +40,7 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
-		VORBIS_CFLAGS="-I$(STAGING_DIR)/usr/include/tremor/"\
+		VORBIS_CFLAGS="-I$(STAGING_DIR)/usr/include/tremor/" \
 		VORBIS_LIBS="$(TARGET_LDFLAGS) -lvorbis -lvorbisidec" \
 		--enable-shared \
 		--enable-static \
