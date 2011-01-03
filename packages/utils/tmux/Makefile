@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tmux
-PKG_VERSION:=1.3
+PKG_VERSION:=1.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/tmux
-PKG_MD5SUM:=96e60cb206de2db0610b9fb6a64c2251
+PKG_MD5SUM:=0bfc7dd9a5bab192406167589c716a21
 
 PKG_INSTALL:=1
 
@@ -23,7 +23,7 @@ define Package/tmux
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Terminal multiplexer
-  DEPENDS:=+libncurses +libevent +librt
+  DEPENDS:=+libncurses +libevent +libpthread
   URL:=http://tmux.sourceforge.net/
 endef
 
