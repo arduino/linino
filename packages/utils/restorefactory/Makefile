@@ -31,7 +31,7 @@ endef
 define Package/restorefactory/install
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/button
 	$(INSTALL_BIN) ./files/hotplug_restorefactory $(1)/etc/hotplug.d/button/50-restorefactory
-	$(INSTALL_DIR) $(1)/etc/defaults
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./files/uci_defaults_restorefactory $(1)/etc/uci-defaults/50-restorefactory
 endef
 

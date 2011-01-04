@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=watchcat
 PKG_VERSION:=1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -21,7 +21,7 @@ define Package/watchcat
 endef
 
 define Package/watchcat/description
-Allows to configure a periodically reboot, or after loosing internet connectivity. Configured trough UCI /etc/config/system
+Allows to configure a periodically reboot, or after loosing internet connectivity. Configured trough UCI /etc/config/system.
 endef
 
 define Package/watchcat/conffiles
@@ -37,7 +37,7 @@ define Package/watchcat/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) ./files/watchcat.sh $(1)/usr/bin/watchcat.sh
 	$(INSTALL_DIR) $(1)/etc/defaults	
-	$(INSTALL_BIN) ./files/uci_defaults_watchcat $(1)/etc/defaults/50-watchcat
+	$(INSTALL_BIN) ./files/uci_defaults_watchcat $(1)/etc/uci-defaults/50-watchcat
 endef
 
 $(eval $(call BuildPackage,watchcat))
