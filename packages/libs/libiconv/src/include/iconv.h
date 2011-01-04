@@ -1,9 +1,14 @@
 #ifndef _ICONV_H
 #define _ICONV_H 1
 
+#define _LIBICONV_VERSION 0x010B    /* version number: (major<<8) + minor */
+
 #include <stddef.h>
 
-#define _LIBICONV_VERSION 0x010B    /* version number: (major<<8) + minor */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern int _libiconv_version; /* Likewise */
 
 typedef long iconv_t;
@@ -17,5 +22,9 @@ iconv(iconv_t cd, char **inbuf, size_t *inbytesleft,
 
 extern int
 iconv_close(iconv_t cd);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _ICONV_H */
