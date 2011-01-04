@@ -78,7 +78,7 @@ load_server() {
 
 	config_get user 	$1 user
 	config_get hostname 	$1 hostname
-	config_get retrydelay 	$1 retrydelay	"10"
+	config_get retrydelay 	$1 retrydelay	"60"
 	config_get PKCS11Provider	$1 PKCS11Provider
 	config_get CheckHostIP		$1 CheckHostIP
 	config_get Compression		$1 Compression
