@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=i2c-tools
-PKG_VERSION:=3.0.2
-PKG_RELEASE:=2
+PKG_VERSION:=3.0.3
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://dl.lm-sensors.org/i2c-tools/releases/
-PKG_MD5SUM:=b546345ac19db56719dea6b8199f11e0
+PKG_SOURCE_URL:=http://dl.lm-sensors.org/i2c-tools/releases
+PKG_MD5SUM:=511376eed04455cdb277ef19c5f73bb4
 
 PKG_BUILD_DEPENDS:=python
 
@@ -49,8 +49,8 @@ define Package/i2c-tools/description
 endef
 
 define Package/python-smbus/description
- This package contains an heterogeneous set of I2C tools for Linux. 
- 
+ This package contains an heterogeneous set of I2C tools for Linux.
+
  This package contain the python bindings for Linux SMBus access through i2c-dev.
 endef
 
