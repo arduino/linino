@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=restorefactory
 PKG_VERSION:=1
-PKG_RELEASE:=3
+PKG_RELEASE:=5
 
 include $(INCLUDE_DIR)/package.mk
 
