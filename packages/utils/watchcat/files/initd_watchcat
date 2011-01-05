@@ -27,7 +27,7 @@ load_watchcat() {
 	config_get period	$1 period
 	config_get mode		$1 mode		"allways"
 	config_get pinghosts	$1 pinghosts	"8.8.8.8"
-	config_get pingperiod	$1 pingperiod	"600"
+	config_get pingperiod	$1 pingperiod
 	config_get forcedelay	$1 forcedelay	"0"
 
 	error=""
@@ -35,13 +35,27 @@ load_watchcat() {
 	timetoseconds "$period"
 	period="$seconds"
 	[ "$period" -ge 1 ] \
-		|| append_string "error" "period is not set or not recognized" "; "
+		|| append_string "error" 'period is not a valid time value (ex: "30"; "4m"; "6h"; "2d")' "; "
 	[ "$mode" = "allways" -o "$mode" = "ping" ] \
 		|| append_string "error" "mode must be 'allways' or 'ping'" "; "
 	[ -n "$pinghosts" -o "$mode" = "allways" ] \
-		|| append_string "error" "pinghosts must be set in 'ping' mode" "; "
-	timetoseconds "$pingperiod"
-	pingperiod="$seconds"
+		|| append_string "error" "pinghosts must be set when in 'ping' mode" "; "
+	[ "$mode" = "ping" ] && {
+		if [ -n "$pingperiod" ]
+		then
+			timetoseconds "$pingperiod"
+			pingperiod="$seconds"
+			if [ "$pingperiod" -ge 0 ]
+			then
+				[ "$pingperiod" -le "$period" ] \
+					|| append_string "error" "pingperiod must be less than period" "; "
+			else
+				append_string "error" 'pingperiod is not a valid time value (ex: "30"; "4m"; "6h"; "2d")' "; "
+			fi
+		else
+			pingperiod="$((period/20))"
+		fi
+	}
 	[ "$pingperiod" -lt "$period" -o "$mode" = "allways" ] \
 		|| append_string "error" "pingperiod is not recognized" "; "
 	[ "$forcedelay" -ge 0 ] \
@@ -55,7 +69,7 @@ load_watchcat() {
 		logger -p user.info -t "wathchat" "started task (mode=$mode;period=$period;forcedelay=$forcedelay)" 
 	else
 		/usr/bin/watchcat.sh "period" "$period" "$forcedelay" "$pinghosts" "$pingperiod" &
-		logger -p user.info -t "wathchat" "started task (mode=$mode;pinghosts=$pinghosts;pingperiod=$pingperiod;forcedelay=$forcedelay)" 
+		logger -p user.info -t "wathchat" "started task (mode=$mode;period=$period;pinghosts=$pinghosts;pingperiod=$pingperiod;forcedelay=$forcedelay)" 
 	fi
 
 	echo $! >> "${PIDFILE}.pids"
@@ -87,7 +101,7 @@ start() {
 	then
 		logger -p user.info -t "watchcat" "starting all tasks"
 		config_foreach load_watchcat watchcat
-		logger -p user.info -t "watchcat" "all tasks started"	
+		logger -p user.info -t "watchcat" "all tasks started"
 	else
 		logger -p user.info -t "watchcat" "no tasks defined"
 	fi
