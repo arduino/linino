@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nbd
-PKG_VERSION:=2.9.15
+PKG_VERSION:=2.9.18
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/nbd
-PKG_MD5SUM:=86545fee9fde3907d3e8cde428238825
+PKG_MD5SUM:=a327cd23688df45a1c889e28c6494d70
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -24,7 +26,7 @@ define Package/nbd
   CATEGORY:=Network
   TITLE:=Network Block Device utilities
   URL:=http://nbd.sourceforge.net
-  DEPENDS:=@!LINUX_2_4
+  DEPENDS:=@!LINUX_2_4 +kmod-nbd
 endef
 
 define Package/nbd/description
@@ -41,7 +43,7 @@ endef
 
 define Package/nbd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/nbd-client $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/nbd-client $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,nbd))
