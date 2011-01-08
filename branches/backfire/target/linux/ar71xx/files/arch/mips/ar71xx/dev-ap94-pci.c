@@ -17,8 +17,12 @@
 
 #include "dev-ap94-pci.h"
 
-static struct ath9k_platform_data ap94_wmac0_data;
-static struct ath9k_platform_data ap94_wmac1_data;
+static struct ath9k_platform_data ap94_wmac0_data = {
+	.led_pin = -1,
+};
+static struct ath9k_platform_data ap94_wmac1_data = {
+	.led_pin = -1,
+};
 static char ap94_wmac0_mac[6];
 static char ap94_wmac1_mac[6];
 static int ap94_pci_fixup_enabled;
@@ -127,8 +131,17 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_ATHEROS, PCI_ANY_ID, ap94_pci_fixup);
 
 void __init ap94_pci_enable_quirk_wndr3700(void)
 {
-	ap94_wmac0_data.quirk_wndr3700 = 1;
-	ap94_wmac1_data.quirk_wndr3700 = 1;
+	/* WNDR3700 uses GPIO 6-9 for antenna configuration */
+
+	ap94_wmac0_data.led_pin = 5;
+	ap94_wmac0_data.gpio_mask = (0xf << 6);
+	/* 2.4 GHz uses the first fixed antenna group (0, 1, 0, 1) */
+	ap94_wmac0_data.gpio_val = (10 << 6);
+
+	ap94_wmac1_data.led_pin = 5;
+	ap94_wmac1_data.gpio_mask = (0xf << 6);
+	/* 5 GHz uses the second fixed antenna group (0, 1, 1, 0) */
+	ap94_wmac1_data.gpio_val = (6 << 6);
 }
 
 void __init ap94_pci_init(u8 *cal_data0, u8 *mac_addr0,
