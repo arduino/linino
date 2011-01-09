@@ -130,7 +130,6 @@ define Package/freeswitch/Default
   SECTION:=net
   CATEGORY:=Network
   URL:=http://www.freeswitch.org/
-  MAINTAINER:=Daniel Dickinson <openwrt@cshore.neomailbox.net>
 endef
 
 
