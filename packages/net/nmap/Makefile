@@ -18,6 +18,7 @@ include $(INCLUDE_DIR)/package.mk
 NMAP_DEPENDS:=+libpcap +libstdcpp
 NCAT_DEPENDS:=+libpcap
 NPING_DEPENDS:=+libpcap +libpthread
+NDIFF_DEPENDS:=+python
 
 define Package/nmap/default
   SUBMENU:=NMAP Suite
@@ -30,47 +31,39 @@ endef
 define Package/nmap
 $(call Package/nmap/default)
   DEPENDS:=$(NMAP_DEPENDS)
-  TITLE:=nmap tool(without ssl support)
+  TITLE:=Utility for network exploration or security auditing
 endef
 
 define Package/nmap-ssl
 $(call Package/nmap/default)
   DEPENDS:=$(NMAP_DEPENDS) +libopenssl
   VARIANT:=ssl
-  TITLE:=nmap tool(with openssl support)
+  TITLE:=Nmap (with OpenSSL support)
 endef
 
 define Package/ncat
 $(call Package/nmap/default)
   DEPENDS:=$(NCAT_DEPENDS)
-  TITLE:=ncat tool(without ssl support)
+  TITLE:=Much-improved reimplementation of Netcat
 endef
 
 define Package/ncat-ssl
 $(call Package/nmap/default)
   DEPENDS:=$(NCAT_DEPENDS) +libopenssl
   VARIANT:=ssl
-  TITLE:=ncat tool(with openssl support)
+  TITLE:=Ncat (with OpenSSL support)
 endef
 
 define Package/nping
 $(call Package/nmap/default)
   DEPENDS:=$(NPING_DEPENDS)
-  TITLE:=nping tool
+  TITLE:=Network packet generation tool / ping utility
 endef
 
 define Package/ndiff
 $(call Package/nmap/default)
-  DEPENDS:=+python
-  TITLE:=ndiff tool
-endef
-
-define Package/nmap/config
-	source "$(SOURCE)/Config_nossl.in"
-endef
-
-define Package/nmap-ssl/config
-	source "$(SOURCE)/Config_ssl.in"
+  DEPENDS:=$(NDIFF_DEPENDS)
+  TITLE:=Utility to compare the results of Nmap scans
 endef
 
 CONFIGURE_ARGS += \
