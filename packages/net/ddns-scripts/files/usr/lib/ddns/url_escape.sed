@@ -1,9 +1,9 @@
 # sed url escaping
+s:%:%25:g
 s: :%20:g
 s:<:%3C:g
 s:>:%3E:g
 s:#:%23:g
-s:%:%25:g
 s:{:%7B:g
 s:}:%7D:g
 s:|:%7C:g
