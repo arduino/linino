@@ -98,6 +98,17 @@ static void ap91_pci_fixup(struct pci_dev *dev)
 }
 DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_ATHEROS, PCI_ANY_ID, ap91_pci_fixup);
 
+__init void ap91_pci_setup_wmac_led_pin(int pin)
+{
+	ap91_wmac_data.led_pin = pin;
+}
+
+__init void ap91_pci_setup_wmac_gpio(u32 mask, u32 val)
+{
+	ap91_wmac_data.gpio_mask = mask;
+	ap91_wmac_data.gpio_val = val;
+}
+
 void __init ap91_pci_init(u8 *cal_data, u8 *mac_addr)
 {
 	if (cal_data)
