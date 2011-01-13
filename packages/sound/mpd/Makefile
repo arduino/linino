@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpd
 PKG_VERSION:=0.15.8
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/musicpd
@@ -72,7 +72,6 @@ CONFIGURE_ARGS += \
 	--enable-mms \
 	--enable-curl \
 	--disable-oss \
-	--enable-aac \
 	--with-zeroconf=no \
 	--disable-libOggFLACtest \
 	--disable-test \
