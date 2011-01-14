@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vnstat
 PKG_VERSION:=1.10
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://humdi.net/vnstat
@@ -98,16 +98,14 @@ endef
 
 define Package/vnstat/postinst
 #!/bin/sh
-BIN_REL=/usr/bin/vnstat
-BIN=$${IPKG_INSTROOT}$${BIN_REL}
-LIB_D_REL=/var/lib/vnstat
-LIB_D=$${IPKG_INSTROOT}$${LIB_D_REL}
-[ -d $$LIB_D ] || mkdir -p $$LIB_D
-IFACE_WAN=$$(uci get network.wan.ifname)
-if [ -n $$IFACE_WAN ]; then
-	[ -e $$LIB_D/$$IFACE_WAN ] || ( [ -x $$BIN ] && $$BIN -u -i $$IFACE_WAN )
+local wan="$$(uci -P/var/state get network.wan.ifname)"
+if [ -n "$$wan" ]; then
+	uci -q batch <<-EOF >/dev/null
+		add_list vnstat.@vnstat[-1].interface=$$wan
+		commit vnstat
+	EOF
 fi
-true
+exit 0
 endef
 
 $(eval $(call BuildPackage,vnstat))
