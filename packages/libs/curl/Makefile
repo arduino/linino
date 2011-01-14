@@ -77,6 +77,7 @@ CONFIGURE_ARGS += \
 	--without-nss \
 	--without-libssh2 \
 	--with-zlib="$(STAGING_DIR)/usr" \
+	$(call autoconf_bool,CONFIG_IPV6,ipv6) \
 
 CONFIGURE_VARS += \
 	LDFLAGS="$$$$LDFLAGS -lcrypto -lssl -lz" \
