@@ -23,12 +23,43 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
+define Package/xmlrpc-c_common
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=XML-RPC library for C/C++ (Xmlrpc-c) - common
+  URL:=http://xmlrpc-c.sourceforge.net/
+endef
+
 define Package/xmlrpc-c
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=XML-RPC library for C/C++ (Xmlrpc-c)
   URL:=http://xmlrpc-c.sourceforge.net/
-  DEPENDS:=+libcurl +libxml2
+  DEPENDS:=+libxml2 +xmlrpc-c_common
+endef
+
+define Package/xmlrpc-c_client
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=XML-RPC library for C/C++ (Xmlrpc-c) - client
+  URL:=http://xmlrpc-c.sourceforge.net/
+  DEPENDS:=+xmlrpc-c +libcurl
+endef
+
+define Package/xmlrpc-c_server
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=XML-RPC library for C/C++ (Xmlrpc-c) - server
+  URL:=http://xmlrpc-c.sourceforge.net/
+  DEPENDS:=+xmlrpc-c
+endef
+
+define Package/xmlrpc-c_server-abyss
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=XML-RPC library for C/C++ (Xmlrpc-c) - abyss server
+  URL:=http://xmlrpc-c.sourceforge.net/
+  DEPENDS:=+xmlrpc-c_server
 endef
 
 define Package/xmlrpc-c/description
@@ -41,28 +72,94 @@ CONFIGURE_ARGS+= \
 	--enable-libxml2-backend \
 	--disable-wininet-client \
 	--disable-libwww-client \
-	--disable-abyss-server \
+	--enable-abyss-server \
 	--disable-cplusplus \
 	--disable-static \
+	--disable-abyss-threads \
+	--disable-cgi-server
+
+# define Build/Compile
+# 	( cd $(PKG_BUILD_DIR)/lib/expat/gennmtab && cc -I$(PKG_BUILD_DIR) -c gennmtab.c -o gennmtab.o && cc -o gennmtab  gennmtab.o )
+# 	$(call Build/Compile/Default)
+# endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/*.h $(1)/usr/include/
-	$(INSTALL_DIR) $(1)/usr/include/xmlrpc-c
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/xmlrpc-c/*.h $(1)/usr/include/xmlrpc-c
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxmlrpc*.{a,so*} $(1)/usr/lib/
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/xmlrpc-c-config $(1)/usr/bin/
-	$(SED) 's,HEADERINST_DIR="/usr/include",HEADERINST_DIR="$(STAGING_DIR)/usr/include",g' $(1)/usr/bin/xmlrpc-c-config
-	$(SED) 's,LIBINST_DIR="/usr/lib",LIBINST_DIR="$(STAGING_DIR)/usr/lib",g' $(1)/usr/bin/xmlrpc-c-config
-	$(INSTALL_DIR) $(2)/bin
-	ln -sf $(STAGING_DIR)/usr/bin/xmlrpc-c-config $(2)/bin/
+	$(INSTALL_DIR) \
+		$(1)/usr/include \
+		$(1)/usr/lib \
+		$(1)/usr/bin \
+		$(2)/bin
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/* \
+		$(1)/usr/include/
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxmlrpc*.{a,so*} \
+		$(1)/usr/lib/
+
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/xmlrpc-c-config \
+		$(2)/bin/
+
+	$(SED) \
+		's,HEADERINST_DIR="/usr/include",HEADERINST_DIR="$(STAGING_DIR)/usr/include",g' \
+		$(2)/bin/xmlrpc-c-config
+
+	$(SED) \
+		's,LIBINST_DIR="/usr/lib",LIBINST_DIR="$(STAGING_DIR)/usr/lib",g' \
+		$(2)/bin/xmlrpc-c-config
 endef
 
 define Package/xmlrpc-c/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libxmlrpc*.so* $(1)/usr/lib/
+	$(INSTALL_DIR) \
+		$(1)/usr/lib
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxmlrpc.so* \
+		$(1)/usr/lib/
 endef
 
+
+define Package/xmlrpc-c_server/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxmlrpc_server.so* \
+		$(1)/usr/lib/
+endef
+
+define Package/xmlrpc-c_server-abyss/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxmlrpc_server_abyss.so* \
+		$(1)/usr/lib/
+endef
+
+define Package/xmlrpc-c_client/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxmlrpc_client* \
+		$(1)/usr/lib/
+endef
+
+define Package/xmlrpc-c_common/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxmlrpc_util.so* \
+		$(1)/usr/lib/
+endef
+
+
 $(eval $(call BuildPackage,xmlrpc-c))
+$(eval $(call BuildPackage,xmlrpc-c_server))
+$(eval $(call BuildPackage,xmlrpc-c_server-abyss))
+$(eval $(call BuildPackage,xmlrpc-c_client))
+$(eval $(call BuildPackage,xmlrpc-c_common))
