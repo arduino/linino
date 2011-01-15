@@ -67,7 +67,7 @@ define Package/xmlrpc-c_server-abyss
   CATEGORY:=Libraries
   TITLE:=XML-RPC library for C/C++ (Xmlrpc-c) - abyss server
   URL:=http://xmlrpc-c.sourceforge.net/
-  DEPENDS:=+xmlrpc-c_server
+  DEPENDS:=+xmlrpc-c_server +xmlrpc-c_abyss
 endef
 
 define Package/xmlrpc-c/description
