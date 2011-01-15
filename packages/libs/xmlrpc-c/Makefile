@@ -54,6 +54,14 @@ define Package/xmlrpc-c_server
   DEPENDS:=+xmlrpc-c
 endef
 
+define Package/xmlrpc-c_abyss
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=XML-RPC library for C/C++ (Xmlrpc-c) - abyss
+  URL:=http://xmlrpc-c.sourceforge.net/
+  DEPENDS:=+xmlrpc-c_common
+endef
+
 define Package/xmlrpc-c_server-abyss
   SECTION:=libs
   CATEGORY:=Libraries
@@ -130,6 +138,15 @@ define Package/xmlrpc-c_server/install
 		$(1)/usr/lib/
 endef
 
+define Package/xmlrpc-c_abyss/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxmlrpc_abyss.so* \
+		$(1)/usr/lib/
+endef
+
 define Package/xmlrpc-c_server-abyss/install
 	$(INSTALL_DIR) \
 		$(1)/usr/lib
@@ -158,8 +175,9 @@ define Package/xmlrpc-c_common/install
 endef
 
 
+$(eval $(call BuildPackage,xmlrpc-c_common))
 $(eval $(call BuildPackage,xmlrpc-c))
 $(eval $(call BuildPackage,xmlrpc-c_server))
+$(eval $(call BuildPackage,xmlrpc-c_abyss))
 $(eval $(call BuildPackage,xmlrpc-c_server-abyss))
 $(eval $(call BuildPackage,xmlrpc-c_client))
-$(eval $(call BuildPackage,xmlrpc-c_common))
