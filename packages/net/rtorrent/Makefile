@@ -30,7 +30,7 @@ define Package/rtorrent
   CATEGORY:=Network
   TITLE:=BitTorrent client for ncurses
   URL:=http://libtorrent.rakshasa.no/
-  DEPENDS:=+libcurl +libtorrent +libncurses +libsigcxx +xmlrpc-c +libpthread
+  DEPENDS:=+libcurl +libtorrent +libncurses +libsigcxx +xmlrpc-c_server +libpthread
 endef
 
 define Package/rtorrent/description
@@ -44,13 +44,13 @@ ifneq ($(CONFIG_GCC_VERSION_3_4)$(CONFIG_GCC_VERSION_4_1),)
 TARGET_CPPFLAGS += -fno-strict-aliasing
 endif
 
-TARGET_LDFLAGS += -lpthread
+TARGET_LDFLAGS += -lpthread -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--disable-static \
 	--disable-debug \
-	--with-xmlrpc-c \
+	--with-xmlrpc-c
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); ./autogen.sh );
