@@ -21,43 +21,57 @@ PKG_SOURCE_PROTO:=svn
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/xmlrpc-c_common
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=XML-RPC library for C/C++ (Xmlrpc-c) - common
+  TITLE:=XML-RPC library - common
   URL:=http://xmlrpc-c.sourceforge.net/
 endef
 
-define Package/xmlrpc-c
+define Package/xmlrpc-c_internal
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=XML-RPC library for C/C++ (Xmlrpc-c)
+  TITLE:=XML-RPC library - (ueses internal expat variant)
   URL:=http://xmlrpc-c.sourceforge.net/
-  DEPENDS:=+libxml2 +xmlrpc-c_common
+  DEPENDS:=+xmlrpc-c_common
+  PROVIDES:=xmlrpc-c
+  VARIANT:=internal
+endef
+
+define Package/xmlrpc-c_libxml2
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=XML-RPC library - (uses libxml2)
+  URL:=http://xmlrpc-c.sourceforge.net/
+  DEPENDS:=+xmlrpc-c_common +libxml2
+  PROVIDES:=xmlrpc-c
+  VARIANT:=libxml2
 endef
 
 define Package/xmlrpc-c_client
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=XML-RPC library for C/C++ (Xmlrpc-c) - client
+  TITLE:=XML-RPC library - client
   URL:=http://xmlrpc-c.sourceforge.net/
-  DEPENDS:=+xmlrpc-c +libcurl
+  DEPENDS:=xmlrpc-c +libcurl
 endef
 
 define Package/xmlrpc-c_server
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=XML-RPC library for C/C++ (Xmlrpc-c) - server
+  TITLE:=XML-RPC library - server
   URL:=http://xmlrpc-c.sourceforge.net/
-  DEPENDS:=+xmlrpc-c
+  DEPENDS:=xmlrpc-c
 endef
 
 define Package/xmlrpc-c_abyss
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=XML-RPC library for C/C++ (Xmlrpc-c) - abyss
+  TITLE:=XML-RPC library - abyss
   URL:=http://xmlrpc-c.sourceforge.net/
   DEPENDS:=+xmlrpc-c_common
 endef
@@ -65,19 +79,25 @@ endef
 define Package/xmlrpc-c_server-abyss
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=XML-RPC library for C/C++ (Xmlrpc-c) - abyss server
+  TITLE:=XML-RPC library - abyss server
   URL:=http://xmlrpc-c.sourceforge.net/
   DEPENDS:=+xmlrpc-c_server +xmlrpc-c_abyss
 endef
 
-define Package/xmlrpc-c/description
+define Package/xmlrpc-c/description/Default
     Programming library for writing an XML-RPC server or client in C or C++.
     XML-RPC is a standard network protocol to allow a client program to make
     a simple remote procedure call (RPC) type request of a server.
 endef
 
+Package/xmlrpc-c_common/description = $(Package/xmlrpc-c/description/Default)
+Package/xmlrpc-c_libxml2/description = $(Package/xmlrpc-c/description/Default)
+Package/xmlrpc-c_internal/description = $(Package/xmlrpc-c/description/Default)
+
+Package/xmlrpc-c_libxml2/description += Uses external libxml2 library (quite big)
+Package/xmlrpc-c_internal/description += Uses internal expat variant (stripped down)
+
 CONFIGURE_ARGS+= \
-	--enable-libxml2-backend \
 	--disable-wininet-client \
 	--disable-libwww-client \
 	--enable-abyss-server \
@@ -86,10 +106,20 @@ CONFIGURE_ARGS+= \
 	--disable-abyss-threads \
 	--disable-cgi-server
 
-# define Build/Compile
-# 	( cd $(PKG_BUILD_DIR)/lib/expat/gennmtab && cc -I$(PKG_BUILD_DIR) -c gennmtab.c -o gennmtab.o && cc -o gennmtab  gennmtab.o )
-# 	$(call Build/Compile/Default)
-# endef
+ifeq ($(BUILD_VARIANT),libxml2)
+	CONFIGURE_ARGS += \
+		--enable-libxml2-backend
+endif
+
+ifeq ($(BUILD_VARIANT),internal)
+	CONFIGURE_ARGS += \
+		--disable-libxml2-backend
+endif
+
+define Build/Compile
+	( cd $(PKG_BUILD_DIR)/lib/expat/gennmtab && cc -I$(PKG_BUILD_DIR) -c gennmtab.c -o gennmtab.o && cc -o gennmtab  gennmtab.o )
+	$(call Build/Compile/Default)
+endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) \
@@ -119,7 +149,7 @@ define Build/InstallDev
 		$(2)/bin/xmlrpc-c-config
 endef
 
-define Package/xmlrpc-c/install
+define Package/xmlrpc-c_libxml2/install
 	$(INSTALL_DIR) \
 		$(1)/usr/lib
 
@@ -128,6 +158,22 @@ define Package/xmlrpc-c/install
 		$(1)/usr/lib/
 endef
 
+define Package/xmlrpc-c_internal/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxmlrpc.so* \
+		$(1)/usr/lib/
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxmlrpc_xmltok.so* \
+		$(1)/usr/lib/
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxmlrpc_xmlparse.so* \
+		$(1)/usr/lib/
+endef
 
 define Package/xmlrpc-c_server/install
 	$(INSTALL_DIR) \
@@ -176,7 +222,8 @@ endef
 
 
 $(eval $(call BuildPackage,xmlrpc-c_common))
-$(eval $(call BuildPackage,xmlrpc-c))
+$(eval $(call BuildPackage,xmlrpc-c_libxml2))
+$(eval $(call BuildPackage,xmlrpc-c_internal))
 $(eval $(call BuildPackage,xmlrpc-c_server))
 $(eval $(call BuildPackage,xmlrpc-c_abyss))
 $(eval $(call BuildPackage,xmlrpc-c_server-abyss))
