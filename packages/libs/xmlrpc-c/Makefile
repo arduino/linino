@@ -38,8 +38,16 @@ define Package/xmlrpc-c_internal
   TITLE:=XML-RPC library - (ueses internal expat variant)
   URL:=http://xmlrpc-c.sourceforge.net/
   DEPENDS:=+xmlrpc-c_common
-  PROVIDES:=xmlrpc-c
+#  PROVIDES:=xmlrpc-c
   VARIANT:=internal
+endef
+
+define Package/xmlrpc-c
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=XML-RPC library
+  URL:=http://xmlrpc-c.sourceforge.net/
+  DEPENDS:=+xmlrpc-c_internal
 endef
 
 define Package/xmlrpc-c_libxml2
@@ -47,8 +55,8 @@ define Package/xmlrpc-c_libxml2
   CATEGORY:=Libraries
   TITLE:=XML-RPC library - (uses libxml2)
   URL:=http://xmlrpc-c.sourceforge.net/
-  DEPENDS:=+xmlrpc-c_common +libxml2
-  PROVIDES:=xmlrpc-c
+  DEPENDS:=+xmlrpc-c_common +libxml2 @BROKEN
+#  PROVIDES:=xmlrpc-c
   VARIANT:=libxml2
 endef
 
@@ -57,7 +65,7 @@ define Package/xmlrpc-c_client
   CATEGORY:=Libraries
   TITLE:=XML-RPC library - client
   URL:=http://xmlrpc-c.sourceforge.net/
-  DEPENDS:=xmlrpc-c +libcurl
+  DEPENDS:=+xmlrpc-c +libcurl
 endef
 
 define Package/xmlrpc-c_server
@@ -65,7 +73,7 @@ define Package/xmlrpc-c_server
   CATEGORY:=Libraries
   TITLE:=XML-RPC library - server
   URL:=http://xmlrpc-c.sourceforge.net/
-  DEPENDS:=xmlrpc-c
+  DEPENDS:=+xmlrpc-c
 endef
 
 define Package/xmlrpc-c_abyss
@@ -221,6 +229,7 @@ define Package/xmlrpc-c_common/install
 endef
 
 
+$(eval $(call BuildPackage,xmlrpc-c))
 $(eval $(call BuildPackage,xmlrpc-c_common))
 $(eval $(call BuildPackage,xmlrpc-c_libxml2))
 $(eval $(call BuildPackage,xmlrpc-c_internal))
