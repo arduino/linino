@@ -26,8 +26,39 @@ start() {
 
 	init_ifaces() {
 		local cfg="$1"
-		init_iface() { /usr/bin/vnstat -u -i "$1" >/dev/null; }
+		local url lnk
+
+		init_iface() {
+			local ifn="$1"
+
+			[ -n "$url" ] && {
+				local try=0
+				local max=3
+				local hostname="$(cat /proc/sys/kernel/hostname)"
+
+				while [ $((++try)) -le $max ]; do
+					if wget -q -O "$lib/$ifn" "$url/${hostname}_$ifn" 2>/dev/null && [ -e "$lib/$ifn" ]; then
+						logger -t "vnstat" "Downloaded backup for database $ifn"
+						break
+					else
+						logger -t "vnstat" "Download try $try/$max for database $ifn failed"
+						sleep 30
+					fi
+				done
+			}
+
+			/usr/bin/vnstat -u -i "$ifn" >/dev/null
+
+			[ -n "$lnk" ] && {
+				mkdir -p "$lnk"
+				[ -L "$lnk/$ifn" ] || ln -s "$lib/$ifn" "$lnk/$ifn"
+			}
+		}
+
+		config_get url "$cfg" remote
+		config_get lnk "$cfg" symlink
 		config_list_foreach "$cfg" interface init_iface
+
 		return 1
 	}
 
