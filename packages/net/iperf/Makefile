@@ -11,6 +11,7 @@ PKG_NAME:=iperf
 PKG_VERSION:=2.0.5
 PKG_RELEASE:=1
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=44b5536b67719f4250faed632a3cd016
@@ -36,6 +37,7 @@ endef
 define Package/iperf
 $(call Package/iperf/Default)
   TITLE+= (with single thread support)
+  VARIANT:=single
 endef
 
 define Package/iperf/description
@@ -47,6 +49,7 @@ define Package/iperf-mt
 $(call Package/iperf/Default)
   DEPENDS+= +libpthread
   TITLE+= (with multithread support)
+  VARIANT:=mt
 endef
 
 define Package/iperf-mt/description
@@ -54,50 +57,25 @@ $(call Package/iperf/Default/description)
  This package is built with multithread support.
 endef
 
-define Build/Template
+CONFIGURE_ARGS += --disable-multicast
+CONFIGURE_VARS += ac_cv_func_malloc_0_nonnull=yes
 
-$(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
-	-$(MAKE) -C $(PKG_BUILD_DIR) clean
-	$(call Build/Configure/Default,$(3))
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)
-	( cd $(PKG_BUILD_DIR)/src; mv -f iperf iperf-$(2) )
-	touch $$@
-
-$(STAMP_BUILT): $(STAMP_BUILT)-$(2)
-
-define Package/$(1)/install
-	$(INSTALL_DIR) $$(1)/usr/bin
-	$(INSTALL_BIN) $$(PKG_BUILD_DIR)/src/iperf-$(2) $$(1)/usr/bin/iperf
-endef
-
-endef
-
-CONFIGURE_ARGS += \
-	--disable-multicast \
+ifeq ($(BUILD_VARIANT),st)
+  CONFIGURE_ARGS += --disable-threads
+else
+  CONFIGURE_ARGS += --enable-threads=posix
+  CONFIGURE_VARS += ac_cv_func_pthread_cancel=no
+endif
 
 CONFIGURE_VARS += \
 	CXX="g++-uc" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-rtti" \
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_iperf),)
-  define Build/singlethread
-    $(call Build/Template,iperf,singlethread, \
-	--disable-threads \
-    )
-  endef
-endif
-$(eval $(Build/singlethread))
-
-ifneq ($(SDK)$(CONFIG_PACKAGE_iperf-mt),)
-  define Build/multithread
-    $(call Build/Template,iperf-mt,multithread, \
-	--enable-threads=posix \
-	LDFLAGS="$(TARGET_LDFLAGS) -lpthread" \
-	ac_cv_func_pthread_cancel=no \
-    )
-  endef
-endif
-$(eval $(Build/multithread))
+define Package/iperf/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/iperf $(1)/usr/bin/iperf
+endef
+Package/iperf-mt/install = $(Package/iperf/install)
 
 $(eval $(call BuildPackage,iperf))
 $(eval $(call BuildPackage,iperf-mt))
