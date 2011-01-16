@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=ntfs-3g
 PKG_RELEASE:=1
 
-PKG_VERSION:=2010.8.8
+PKG_VERSION:=2010.10.2
 
 ## 2010.3.6 needs a recent uclibc 0.9.30.2 or greater
 ## this has been fixed in 2010.5.16, keeping this in case this happens again
@@ -27,6 +27,7 @@ PKG_MD5SUM_2010.3.6:=12ce21aa044c6068a4df6e8cbd3c5cfa
 PKG_MD5SUM_2010.5.16:=aeff7659a4943c9223d79116f051a863
 PKG_MD5SUM_2010.5.22:=caa08c73220a7106c76f697b7a7915ec
 PKG_MD5SUM_2010.8.8:=6c109746c2708f679725a2ea441c61c6
+PKG_MD5SUM_2010.10.2:=91405690f25822142cdcb43d03e62d3f
 PKG_MD5SUM:=$(PKG_MD5SUM_$(PKG_VERSION))
 
 PKG_FIXUP:=libtool
