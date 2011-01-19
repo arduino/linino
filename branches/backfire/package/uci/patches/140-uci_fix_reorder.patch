@@ -1,0 +1,25 @@
+From: Felix Fietkau <nbd@openwrt.org>
+Date: Wed, 19 Jan 2011 20:30:35 +0000 (+0100)
+Subject: fix uci_list_set_pos to reorder sections properly, even when moving a section to ...
+X-Git-Url: http://nbd.name/gitweb.cgi?p=uci.git;a=commitdiff_plain;h=a5eb996e0f04d911ff61479508bbc3e17b16ff0c
+
+fix uci_list_set_pos to reorder sections properly, even when moving a section to the last position
+---
+
+--- a/list.c
++++ b/list.c
+@@ -55,11 +55,12 @@ static inline void uci_list_set_pos(stru
+ 
+ 	uci_list_del(ptr);
+ 	uci_foreach_element(head, p) {
+-		new_head = &p->list;
+ 		if (pos-- <= 0)
+ 			break;
++		new_head = &p->list;
+ 	}
+-	uci_list_add(new_head, ptr);
++
++	uci_list_add(new_head->next, ptr);
+ }
+ 
+ static inline void uci_list_fixup(struct uci_list *ptr)
