@@ -1,3 +1,9 @@
+#
+# Copyright (C) 2011 Nuno Goncalves <nunojpg@gmail.com>
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+
 #TODO
 #
 # * uClibcpp not supported, performance +100x slower. libstdcpp is being used. https://bugs.busybox.net/show_bug.cgi?id=2545
@@ -6,11 +12,11 @@
 
 include $(TOPDIR)/rules.mk
 PKG_NAME:=nmap
-PKG_VERSION:=5.36TEST3
+PKG_VERSION:=5.36TEST4
 PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://nmap.org/dist/
-PKG_MD5SUM:=963fd9a3daec3c6770a411339c5a27e9
+PKG_MD5SUM:=3ff65aad7972e22bd38313de92df6868
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
