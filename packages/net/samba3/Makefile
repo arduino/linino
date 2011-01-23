@@ -31,6 +31,11 @@ define Package/samba3/Description
   Samba3 - made small with patches taken from AVM GPL releases and freetz 
 endef
 
+define Package/samba3/conffiles
+/etc/config/samba
+/etc/samba/smb.conf.template
+endef
+
 define Package/samba3/config
 	source "$(SOURCE)/Config.in"
 endef
