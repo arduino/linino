@@ -32,6 +32,10 @@ define Package/ntpclient/description
 	NTP client for setting system time from NTP servers.
 endef
 
+define Package/ntpclient/conffiles
+/etc/config/ntpclient
+endef
+
 MAKE_FLAGS += \
 	all adjtimex
 
