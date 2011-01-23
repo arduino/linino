@@ -1,22 +1,19 @@
 #
-# Copyright (C) 2008-2010 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# Want to test this package? Try this:
-# make package/tor-alpha/{clean,compile,install} V=99
-# 
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor-alpha
-PKG_VERSION:=0.2.2.20-alpha
+PKG_VERSION:=0.2.2.21-alpha
 PKG_RELEASE:=1
 
 PKG_SOURCE:=tor-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://www.torproject.org/dist
-PKG_MD5SUM:=e6c994419df864e2e89abfcf832d5961
+PKG_MD5SUM:=4543aa232eed38c80dfb1f6419807ea9
 PKG_BUILD_DIR=$(BUILD_DIR)/tor-$(PKG_VERSION)/
 
 PKG_INSTALL:=1
