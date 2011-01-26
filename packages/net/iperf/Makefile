@@ -67,9 +67,13 @@ else
   CONFIGURE_VARS += ac_cv_func_pthread_cancel=no
 endif
 
-CONFIGURE_VARS += \
-	CXX="g++-uc" \
-	CXXFLAGS="$$$$CXXFLAGS -fno-rtti" \
+TARGET_CXX=g++-uc
+
+CONFIGURE_VARS += CXXFLAGS="$$$$CXXFLAGS -fno-rtti"
+
+ifeq ($(BUILD_VARIANT),mt)
+  CONFIGURE_VARS += LIBS="-lpthread"
+endif
 
 define Package/iperf/install
 	$(INSTALL_DIR) $(1)/usr/bin
