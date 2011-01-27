@@ -22,7 +22,8 @@ include $(INCLUDE_DIR)/package.mk
 
 TARGET_CFLAGS+= \
     -I$(STAGING_DIR)/usr/lib/libintl/include/ \
-    -I$(STAGING_DIR)/usr/lib/libiconv/include/
+    -I$(STAGING_DIR)/usr/lib/libiconv/include/ \
+    -include $(STAGING_DIR)/usr/include/libintl.h
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
@@ -34,7 +35,7 @@ define Package/lxtask
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=lxtask
-  DEPENDS:=+gtk2 +lxde-common
+  DEPENDS:=+gtk2 +lxde-common +libintl +libiconv
 endef
 
 define Package/lxtask/install
