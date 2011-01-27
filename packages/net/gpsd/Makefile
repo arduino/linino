@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,15 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gpsd
 PKG_VERSION:=2.94
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.berlios.de/gpsd/
 PKG_MD5SUM:=ce70bcd707ac1df861d4c72f503c09d1
 
 PKG_INSTALL:=1
+PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=aclocal.m4 ltmain.sh
 
 PKG_BUILD_DEPENDS:=libncurses
 
@@ -24,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/gpsd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpthread
+  DEPENDS:=+libpthread +libusb-1.0
   TITLE:=An interface daemon for GPS receivers
   URL:=http://gpsd.berlios.de/
 endef
@@ -42,6 +44,10 @@ CONFIGURE_ARGS += \
         --disable-ntrip \
 	--disable-libgpsmm \
         --without-x \
+
+EXTRA_CFLAGS:=-I$(STAGING_DIR)/usr/include/libusb-1.0
+
+EXTRA_LDFLAGS:=-lusb-1.0
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
