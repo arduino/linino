@@ -1,8 +1,8 @@
 Index: gpsd-2.94/configure.ac
 ===================================================================
 --- gpsd-2.94.orig/configure.ac	2010-04-20 19:55:08.000000000 +0200
-+++ gpsd-2.94/configure.ac	2011-01-27 15:22:04.720000026 +0100
-@@ -233,30 +233,9 @@
++++ gpsd-2.94/configure.ac	2011-01-27 15:34:47.002000063 +0100
+@@ -233,30 +233,10 @@
  	AC_DEFINE([HAVE_LIBPTHREAD], [], [pthread libraries are present])])
  AC_SUBST(LIBPTHREAD)
  
@@ -30,6 +30,7 @@ Index: gpsd-2.94/configure.ac
 -fi
 -AC_SUBST(LIBUSB)
 -AC_SUBST(INCUSB)
++AC_DEFINE([HAVE_LIBUSB], [], [will link with -lusb-1.0; ])
 +ac_libusb=yes
 +AC_MSG_RESULT([OpenWRT: Crosscompile])
  
@@ -38,7 +39,7 @@ Index: gpsd-2.94/configure.ac
 Index: gpsd-2.94/Makefile.am
 ===================================================================
 --- gpsd-2.94.orig/Makefile.am	2010-04-20 11:37:21.000000000 +0200
-+++ gpsd-2.94/Makefile.am	2011-01-27 15:22:28.557999857 +0100
++++ gpsd-2.94/Makefile.am	2011-01-27 15:34:08.125000006 +0100
 @@ -245,9 +245,9 @@
  # Warning: This overrides autoconf's normal link-line generation process
  if LIBGPSMM_ENABLE
