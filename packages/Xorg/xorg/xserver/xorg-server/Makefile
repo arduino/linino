@@ -73,6 +73,8 @@ $(call Package/xorg/Default)
   TITLE:=meta-package
 endef
 
+EXTRA_LDFLAGS:=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--disable-dependency-tracking \
