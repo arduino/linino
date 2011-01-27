@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_BASE_NAME:=libSM
 PKG_NAME:=libSM
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_VERSION:=1.1.1
 
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/lib/
@@ -27,7 +27,7 @@ define Package/libSM
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+libICE
+  DEPENDS:=+libICE +libuuid
   TITLE:=libSM
   URL:=http://xorg.freedesktop.org/
 endef

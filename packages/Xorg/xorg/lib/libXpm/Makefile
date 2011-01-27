@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libXpm
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_VERSION:=3.5.8
 
 PKG_SOURCE_URL:=http://xorg.freedesktop.org/releases/individual/lib/
@@ -26,10 +26,12 @@ define Package/libXpm
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+libX11 +libXt +libXext
+  DEPENDS:=+libX11 +libXt +libXext +libSM
   TITLE:=libXpm
   URL:=http://xorg.freedesktop.org/
 endef
+
+TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/{lib/pkgconfig,include/X11}
