@@ -60,7 +60,7 @@ endef
 CONFIGURE_ARGS += --disable-multicast
 CONFIGURE_VARS += ac_cv_func_malloc_0_nonnull=yes
 
-ifeq ($(BUILD_VARIANT),st)
+ifeq ($(BUILD_VARIANT),single)
   CONFIGURE_ARGS += --disable-threads
 else
   CONFIGURE_ARGS += --enable-threads=posix
