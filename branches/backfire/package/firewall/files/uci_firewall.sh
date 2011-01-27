@@ -388,10 +388,10 @@ fw_rule() {
 		[ -n "$dest" ] && TARGET="zone_${dest}_${TARGET}"
 	fi
 
-	local pos
-	eval 'pos=$((++FW__RULE_COUNT_'$ZONE'))'
-
 	add_rule() {
+		local pos
+		eval 'pos=$((++FW__RULE_COUNT_'$ZONE'))'
+
 		$IPTABLES -t $TABLE -I $ZONE $pos \
 			$srcaddr $destaddr \
 			${proto:+-p $proto} \
