@@ -1,8 +1,8 @@
-diff --git a/src/glu/glu.pc.in b/src/glu/glu.pc.in
-index 8606b9b..4ed39f9 100644
---- a/src/glu/glu.pc.in
-+++ b/src/glu/glu.pc.in
-@@ -1,10 +1,10 @@
+Index: Mesa-7.2/src/glu/glu.pc.in
+===================================================================
+--- Mesa-7.2.orig/src/glu/glu.pc.in	2008-08-25 16:46:42.000000000 +0200
++++ Mesa-7.2/src/glu/glu.pc.in	2011-01-27 19:29:13.220654415 +0100
+@@ -1,7 +1,7 @@
 -prefix=@INSTALL_DIR@
 -exec_prefix=${prefix}
 -libdir=@INSTALL_LIB_DIR@
@@ -14,15 +14,11 @@ index 8606b9b..4ed39f9 100644
  
  Name: glu
  Description: Mesa OpenGL Utility library
- Requires: gl
--Version: @VERSION@
-+Version: @PACKAGE_VERSION@
- Libs: -L${libdir} -lGLU
-diff --git a/src/glw/glw.pc.in b/src/glw/glw.pc.in
-index 25f3f73..2b9a343 100644
---- a/src/glw/glw.pc.in
-+++ b/src/glw/glw.pc.in
-@@ -1,10 +1,10 @@
+Index: Mesa-7.2/src/glw/glw.pc.in
+===================================================================
+--- Mesa-7.2.orig/src/glw/glw.pc.in	2008-08-25 16:46:42.000000000 +0200
++++ Mesa-7.2/src/glw/glw.pc.in	2011-01-27 19:29:28.723225782 +0100
+@@ -1,7 +1,7 @@
 -prefix=@INSTALL_DIR@
 -exec_prefix=${prefix}
 -libdir=@INSTALL_LIB_DIR@
@@ -34,15 +30,11 @@ index 25f3f73..2b9a343 100644
  
  Name: glw
  Description: Mesa OpenGL widget library
- Requires: gl
--Version: @VERSION@
-+Version: @PACKAGE_VERSION@
- Libs: -L${libdir} -lGLw
-diff --git a/src/mesa/drivers/dri/dri.pc.in b/src/mesa/drivers/dri/dri.pc.in
-index c47ee9c..3abb846 100644
---- a/src/mesa/drivers/dri/dri.pc.in
-+++ b/src/mesa/drivers/dri/dri.pc.in
-@@ -1,10 +1,10 @@
+Index: Mesa-7.2/src/mesa/drivers/dri/dri.pc.in
+===================================================================
+--- Mesa-7.2.orig/src/mesa/drivers/dri/dri.pc.in	2008-08-25 16:46:43.000000000 +0200
++++ Mesa-7.2/src/mesa/drivers/dri/dri.pc.in	2011-01-27 19:29:49.747288575 +0100
+@@ -1,8 +1,8 @@
 -prefix=@INSTALL_DIR@
 -exec_prefix=${prefix}
 -libdir=@INSTALL_LIB_DIR@
@@ -56,14 +48,11 @@ index c47ee9c..3abb846 100644
  
  Name: dri
  Description: Direct Rendering Infrastructure
--Version: @VERSION@
-+Version: @PACKAGE_VERSION@
- Cflags: -I${includedir}
-diff --git a/src/mesa/gl.pc.in b/src/mesa/gl.pc.in
-index 1927880..716876b 100644
---- a/src/mesa/gl.pc.in
-+++ b/src/mesa/gl.pc.in
-@@ -1,10 +1,10 @@
+Index: Mesa-7.2/src/mesa/gl.pc.in
+===================================================================
+--- Mesa-7.2.orig/src/mesa/gl.pc.in	2008-08-25 16:46:44.000000000 +0200
++++ Mesa-7.2/src/mesa/gl.pc.in	2011-01-27 19:30:13.700079977 +0100
+@@ -1,7 +1,7 @@
 -prefix=@INSTALL_DIR@
 -exec_prefix=${prefix}
 -libdir=@INSTALL_LIB_DIR@
@@ -75,15 +64,11 @@ index 1927880..716876b 100644
  
  Name: gl
  Description: Mesa OpenGL library
- Requires:
--Version: @VERSION@
-+Version: @PACKAGE_VERSION@
- Libs: -L${libdir} -lGL
-diff --git a/configure b/configure
-index 77bc39b..4767483 100755
---- a/configure
-+++ b/configure
-@@ -8858,7 +8858,7 @@ fi
+Index: Mesa-7.2/configure
+===================================================================
+--- Mesa-7.2.orig/configure	2008-09-13 22:45:59.000000000 +0200
++++ Mesa-7.2/configure	2011-01-27 19:27:08.622125839 +0100
+@@ -8858,7 +8858,7 @@
  LDFLAGS="$_SAVE_LDFLAGS"
  CPPFLAGS="$_SAVE_CPPFLAGS"
  
@@ -92,7 +77,7 @@ index 77bc39b..4767483 100755
  
  
  ac_config_commands="$ac_config_commands configs"
-@@ -9435,6 +9435,10 @@ cat >>$CONFIG_STATUS <<\_ACEOF
+@@ -9435,6 +9435,10 @@
  for ac_config_target in $ac_config_targets
  do
    case $ac_config_target in
