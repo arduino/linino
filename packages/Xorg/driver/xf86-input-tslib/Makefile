@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xf86-input-tslib
-PKG_VERSION:=0.0.5
+PKG_VERSION:=0.0.6
 PKG_RELEASE:=3
 
 PKG_SOURCE_URL:=http://www.pengutronix.de/software/xf86-input-tslib/download/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
-PKG_MD5SUM:=4231b517d216e9f80ba66f13a0f30afd
+PKG_MD5SUM:=b7a4d2f11637ee3fcf432e044b1d017f
 
 PKG_BUILD_DEPENDS:=randrproto inputproto xproto
 PKG_FIXUP:=libtool
