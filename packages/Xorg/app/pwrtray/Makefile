@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pwrtray
-PKG_REV:=42323a7fea02494aa3ae4e74ffc01f0f4fa35ff4
+PKG_REV:=e93a705d313d1e7b595a0dce5b4ee8940037a799
 PKG_VERSION:=$(PKG_REV)
 PKG_RELEASE:=1
 
