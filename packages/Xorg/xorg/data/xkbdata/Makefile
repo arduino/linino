@@ -30,7 +30,7 @@ define Package/xkbdata
 endef
 
 define Package/xkbdata/install
-	$(INSTALL_DIR) $(1)/usr/share/X11/xkb/{rules,types,keycodes,geometry,compat}
+	$(INSTALL_DIR) $(1)/usr/share/X11/xkb/{rules,types,keycodes,geometry,compat,symbols}
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/share/X11/xkb/rules/xorg \
 		$(1)/usr/share/X11/xkb/rules/base
@@ -53,6 +53,12 @@ define Package/xkbdata/install
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/share/X11/xkb/compat/* \
 		$(1)/usr/share/X11/xkb/compat/
+
+	$(if $(filter y,$(CONFIG_TARGET_omap24xx_n810-gui)), \
+		$(INSTALL_DIR) $(1)/usr/share/X11/xkb/symbols/nokia_vndr; \
+		$(INSTALL_DATA) ./files/nokia_n810/rx-44 $(1)/usr/share/X11/xkb/symbols/nokia_vndr/; \
+		$(INSTALL_DATA) ./files/nokia_n810/su-8w $(1)/usr/share/X11/xkb/symbols/nokia_vndr/; \
+	)
 endef
 
 $(eval $(call BuildPackage,xkbdata))
