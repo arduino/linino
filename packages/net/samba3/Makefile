@@ -40,11 +40,9 @@ define Package/samba3/config
 	source "$(SOURCE)/Config.in"
 endef
 
-ifneq ($(CONFIG_LARGEFILE),)
-  define Build/Prepare/LFS
+define Build/Prepare/LFS
 	cat ./files/config-lfs.h >> $(PKG_BUILD_DIR)/source/include/config.h
-  endef
-endif
+endef
 
 define Build/Prepare
 $(call Build/Prepare/Default)

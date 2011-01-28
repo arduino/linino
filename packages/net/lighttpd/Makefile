@@ -229,11 +229,6 @@ CONFIGURE_ARGS+= \
 CONFIGURE_VARS+= \
 	PCRE_LIB="-lpcre" \
 
-ifneq ($(CONFIG_LARGEFILE),y)
-  CONFIGURE_ARGS+= \
-	--disable-lfs
-endif
-
 ifeq ($(CONFIG_IPV6),y)
   CONFIGURE_ARGS+= \
 	--enable-ipv6

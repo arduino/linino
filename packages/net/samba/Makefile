@@ -73,7 +73,6 @@ define Build/Compile
 			--mandir=/usr/share/man \
 			--sbindir=/usr/sbin \
 			--sysconfdir=/etc/samba \
-			$(DISABLE_LARGEFILE) \
 			$(DISABLE_NLS) \
 			--with-lockdir=/var/run/samba \
 			--with-privatedir=/etc/samba \
@@ -144,7 +143,6 @@ define Build/Compile
 			--mandir=/usr/share/man \
 			--sbindir=/usr/sbin \
 			--sysconfdir=/etc/samba \
-			$(DISABLE_LARGEFILE) \
 			$(DISABLE_NLS) \
 			--with-lockdir=/var/run/samba \
 			--with-privatedir=/etc/samba \

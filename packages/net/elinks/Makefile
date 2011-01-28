@@ -60,7 +60,6 @@ define Build/Configure
                         --mandir=/usr/share/man \
                         --sbindir=/usr/sbin \
                         --sysconfdir=/etc \
-                        $(DISABLE_LARGEFILE) \
                         $(DISABLE_NLS) \
                         --enable-small\
                         --enable-256-colors\

@@ -60,7 +60,6 @@ define Build/Configure
 			--sbindir=/usr/sbin \
 			--sysconfdir=/etc \
 			$(DISABLE_NLS) \
-			$(DISABLE_LARGEFILE) \
 			--enable-shared \
 			--enable-static \
 			--disable-java \

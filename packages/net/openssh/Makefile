@@ -110,7 +110,6 @@ OpenSSH SFTP server.
 endef
 
 CONFIGURE_ARGS+= \
-	$(DISABLE_LARGEFILE) \
 	$(DISABLE_NLS) \
 	--sysconfdir=/etc/ssh \
 	--enable-shared \

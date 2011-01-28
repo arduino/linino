@@ -85,7 +85,6 @@ endef
 TARGET_CFLAGS += $(FPIC) --std=c99
 
 CONFIGURE_ARGS += \
-	$(DISABLE_LARGEFILE) \
 	$(DISABLE_NLS) \
 	--enable-shared=yes \
 	--enable-static=yes \
