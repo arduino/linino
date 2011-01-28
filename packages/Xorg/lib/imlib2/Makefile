@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=imlib2
-PKG_VERSION:=1.4.1
-PKG_RELEASE:=4
+PKG_VERSION:=1.4.4
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/enlightenment
-PKG_MD5SUM:=16a3d885e523303be794282c0ed90841
+PKG_MD5SUM:=20d59c7cda06742015baade6f5975415
 
 PKG_FIXUP:=libtool
 
