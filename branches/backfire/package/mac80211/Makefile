@@ -10,10 +10,10 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=mac80211
 
-PKG_VERSION:=2011-01-05
+PKG_VERSION:=2011-01-24
 PKG_RELEASE:=1
 PKG_SOURCE_URL:=http://mirror2.openwrt.org/sources
-PKG_MD5SUM:=2b87fdd08d95fa5def39f56f49c4906d
+PKG_MD5SUM:=c91b57972276b26824d4b18e927a9e5f
 
 PKG_SOURCE:=compat-wireless-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/compat-wireless-$(PKG_VERSION)
@@ -991,7 +991,8 @@ MAKE_OPTS:= \
 	KLIB_BUILD="$(LINUX_DIR)" \
 	MODPROBE=: \
 	KLIB=$(TARGET_MODULES_DIR) \
-	KERNEL_SUBLEVEL=$(lastword $(subst ., ,$(KERNEL_PATCHVER)))
+	KERNEL_SUBLEVEL=$(lastword $(subst ., ,$(KERNEL_PATCHVER))) \
+	KBUILD_LDFLAGS_MODULE_PREREQ=
 
 ifeq ($(CONFIG_PACKAGE_kmod-libertas-sd)$(CONFIG_PACKAGE_kmod-libertas-usb)$(CONFIG_PACKAGE_kmod-rt2x00-lib),)
   MAKE_OPTS += CONFIG_COMPAT_KFIFO=
