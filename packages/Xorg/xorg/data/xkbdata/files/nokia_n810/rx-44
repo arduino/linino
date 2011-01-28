@@ -275,7 +275,8 @@ xkb_symbols "base" {
 
     key <COMP>	{	[	Multi_key,		Multi_key,		Multi_key,		Multi_key		]	};
     key <LFSH>	{	[	Shift_L,		Shift_L,		Shift_L,		Shift_L			]	};
-    key <FN>	{	[	ISO_Level3_Shift,	ISO_Level3_Shift,	ISO_Level3_Shift,	ISO_Level3_Shift	]	};
+//    key <FN>	{	[	ISO_Level3_Shift,	ISO_Level3_Shift,	ISO_Level3_Shift,	ISO_Level3_Shift	]	};
+    key <LALT>	{	[	ISO_Level3_Shift,	ISO_Level3_Shift,	ISO_Level3_Shift,	ISO_Level3_Shift	]	};
     key <SPCE>	{	[	space,			space,			space,			space			]	};
     key <RCTL>	{	[	Control_R,		Control_R,		Control_R,		Control_R		]	};
     key <TAB>	{	[	Tab,			Tab,			Tab,			Tab			]	};
