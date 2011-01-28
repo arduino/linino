@@ -50,6 +50,7 @@ taskbar_active_background_id = 0
 launcher_padding = 2 3 2
 launcher_background_id = 0
 launcher_icon_size = 16
+launcher_item_app = /usr/share/applications/matchbox-keyboard.desktop
 launcher_item_app = /usr/share/applications/xterm.desktop
 launcher_item_app = /usr/share/applications/dillo.desktop
 #launcher_item_app = /usr/share/applications/ADD_MY_APPLICATION_HERE.desktop
