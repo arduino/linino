@@ -72,7 +72,7 @@ endef
 
 define Package/tint2/install
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/share $(1)/etc/xdg/tint2
-	$(CP) $(PKG_INSTALL_DIR)/etc/xdg/tint2/* $(1)/etc/xdg/tint2/
+	$(CP) ./files/tint2rc $(1)/etc/xdg/tint2/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/* $(1)/usr/share/
 endef
