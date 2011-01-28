@@ -1,7 +1,7 @@
 Section "InputDevice"
 	Identifier "SlideKeyboard"
 	Driver "kbd"
-	Option "XkbRules" "base"
+	Option "XkbRules" "evdev"
 	Option "XkbModel" "pc105"
 	Option "XkbLayout" "nokia_vndr/rx-44"
 	Option "XkbVariant" "de"
