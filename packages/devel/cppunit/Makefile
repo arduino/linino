@@ -34,6 +34,10 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/include/cppunit/* $(1)/usr/include/cppunit/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/src/cppunit/.libs/libcppunit*so* $(1)/usr/lib/
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/include/cppunit
+	$(CP) $(PKG_BUILD_DIR)/include/cppunit/* $(STAGING_DIR)/usr/include/cppunit/
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/src/cppunit/.libs/libcppunit*so* $(STAGING_DIR)/usr/lib/
 endef
 
 define Package/cppunit/install
