@@ -225,14 +225,10 @@ CONFIGURE_ARGS+= \
 	--with-openssl="$(STAGING_DIR)/usr" \
 	--with-pcre \
 	--without-valgrind \
+	 $(call autoconf_bool,CONFIG_IPV6,ipv6)
 
 CONFIGURE_VARS+= \
 	PCRE_LIB="-lpcre" \
-
-ifeq ($(CONFIG_IPV6),y)
-  CONFIGURE_ARGS+= \
-	--enable-ipv6
-endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_lighttpd-mod-webdav),)
   CONFIGURE_ARGS+= \

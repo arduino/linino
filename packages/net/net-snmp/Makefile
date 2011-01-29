@@ -172,10 +172,10 @@ CONFIGURE_ARGS += \
 	--without-libwrap \
 	--without-rpm \
 	--without-zlib \
+	 $(call autoconf_bool,CONFIG_IPV6,ipv6) \
 
 ifeq ($(CONFIG_IPV6),y)
 SNMP_TRANSPORTS_INCLUDED+= UDPIPv6
-CONFIGURE_ARGS+= --enable-ipv6
 endif
 
 TARGET_LDFLAGS += -L$(TOOLCHAIN_DIR)/usr/lib
