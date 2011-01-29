@@ -34,6 +34,7 @@ endef
 define Package/calvaria/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/calvaria $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/cal2p54 $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,calvaria))

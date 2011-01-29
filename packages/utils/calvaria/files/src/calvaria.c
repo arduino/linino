@@ -3,8 +3,7 @@
  *
  * Copyright (c) 2011 Michael Buesch <mb@bu3sch.de>
  *
- * Licensed under the GNU General Public License
- * version 2 or (at your option) any later version.
+ * Licensed under the GNU General Public License version 2.
  */
 
 #include <stdlib.h>
@@ -35,6 +34,8 @@ struct header {
 } _packed;
 
 #define HDR_MAGIC	"ConF"
+
+#define INDEX_LAST	(0xFF + 1)
 
 
 static char toAscii(char c)
@@ -199,17 +200,19 @@ static void * map_file(const char *filepath, int readonly,
 
 static void unmap_file(void *mapping, uint64_t len)
 {
-	munmap(mapping, len);
+	if (mapping)
+		munmap(mapping, len);
 }
 
 static int64_t find_section(void *start, uint64_t count,
 			    int want_index, const char *want_name)
 {
-	uint64_t offset = 0;
+	int64_t offset = 0, found_offset = -1;
 	uint8_t *data = start;
 	struct header *hdr;
 	char sectname[sizeof(hdr->name) + 1] = { 0, };
 	uint32_t payload_len;
+	int previous_index = -1;
 
 	while (1) {
 		/* Find header start */
@@ -228,20 +231,29 @@ static int64_t find_section(void *start, uint64_t count,
 		}
 		memcpy(sectname, hdr->name, sizeof(hdr->name));
 
-		if (want_index >= 0 && want_index != hdr->index)
-			goto next;
+		if (want_index == INDEX_LAST) {
+			if ((int)hdr->index <= previous_index)
+				goto next;
+		} else {
+			if (want_index >= 0 && want_index != hdr->index)
+				goto next;
+		}
 		if (want_name && strcmp(sectname, want_name) != 0)
 			goto next;
 
 		/* Found it */
-		return offset;
+		found_offset = offset;
+		if (want_index == INDEX_LAST)
+			previous_index = hdr->index;
+		else
+			break;
 
 next:
 		count -= sizeof(struct header) + payload_len;
 		offset += sizeof(struct header) + payload_len;
 	}
 
-	return -1;
+	return found_offset;
 }
 
 static int dump_image(const char *filepath,
@@ -391,9 +403,13 @@ int main(int argc, char **argv)
 			action = ACTION_GETPAYLOAD;
 			break;
 		case 'i':
-			if (sscanf(optarg, "%d", &opt_index) != 1 || opt_index < 0) {
-				fprintf(stderr, "-i|--index is not a positive integer\n");
-				return 1;
+			if (strcasecmp(optarg, "last") == 0) {
+				opt_index = INDEX_LAST;
+			} else {
+				if (sscanf(optarg, "%d", &opt_index) != 1 || opt_index < 0) {
+					fprintf(stderr, "-i|--index is not a positive integer\n");
+					return 1;
+				}
 			}
 			break;
 		case 'n':
