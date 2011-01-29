@@ -159,6 +159,18 @@ radvd_write_interface() {
 		fi
 	done
 
+	config_get clients "$cfg" client
+	if [ -n "$clients" ]; then
+	        printf '\n\tclients\n\t{\n'
+
+	        for client in $clients; do
+        	        validate_ip6addr "$client" || continue
+                	printf '\t\t%s;\n' "$client"
+	        done
+
+	        printf '\t};\n'
+	fi
+
 	return 0
 }
 
@@ -352,38 +364,6 @@ radvd_write_dnssl() {
 	return 0
 }
 
-radvd_write_clients() {
-	local cfg=$1
-	validate_varname "$cfg" || return 0
-	local ignore
-	local interfaces
-	local interface
-	local clients
-	local client
-
-	config_get_bool ignore "$cfg" ignore 0
-	[ "$ignore" -ne 0 ] && return 0
-
-	config_get interfaces "$cfg" interface
-	exist=0
-	for interface in $interfaces; do
-		[ "$INTERFACE" = "$interface" ] && exist=1
-	done
-	[ "$exist" -eq 0 ] && return 0
-
-	printf '\n\tclients\n\t{\n'
-
-	config_get clients "$cfg" client
-	for client in $clients; do
-		validate_ip6addr "$client" || continue
-		printf '\t\t%s;\n' "$client"
-	done
-
-	printf '\t};\n'
-
-	return 0
-}
-
 radvd_write_config() {
 	include /lib/network
 
@@ -393,7 +373,6 @@ radvd_write_config() {
 	config_foreach radvd_add_interface route
 	config_foreach radvd_add_interface RDNSS
 	config_foreach radvd_add_interface DNSSL
-	config_foreach radvd_add_interface clients
 
 	for INTERFACE in $RADVD_INTERFACES; do
 		IFNAME=$(get_ifname "$INTERFACE") || continue
@@ -403,7 +382,6 @@ radvd_write_config() {
 		config_foreach radvd_write_route route
 		config_foreach radvd_write_rdnss rdnss
 		config_foreach radvd_write_dnssl dnssl
-		config_foreach radvd_write_clients clients
 		printf '};\n\n'
 	done
 
