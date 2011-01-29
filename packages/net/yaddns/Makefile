@@ -8,15 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=yaddns
-PKG_VERSION:=1.0-rc2
-PKG_REV:=1
+PKG_VERSION:=1.0-rc3
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=svn://patatrac.info/yaddns/tags/yaddns-1.0-rc2
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_SOURCE_PROTO:=svn
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://download.gna.org/yaddns/
+PKG_MD5SUM:=fa1492212a09e0f5f39d3fa65ddf257e
 
 PKG_INSTALL:=1
 
@@ -36,13 +33,6 @@ endef
 
 define Package/yaddns/conffiles
 /etc/config/ddns
-endef
-
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
-	$(SED) '/^AM_CFLAGS/ s/-Werror//' src/Makefile.am; \
-	./autogen.sh);
-	$(call Build/Configure/Default, )
 endef
 
 define Package/yaddns/install
