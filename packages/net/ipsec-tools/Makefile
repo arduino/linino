@@ -41,7 +41,8 @@ CONFIGURE_ARGS += \
 	--enable-hybrid \
 	--enable-security-context=no \
 	--enable-natt \
-	--enable-adminport
+	--enable-adminport \
+	 $(call autoconf_bool,CONFIG_IPV6,ipv6)
 
 # override CFLAGS holding "-Werror" that break builds on compile warnings
 MAKE_FLAGS+=\
