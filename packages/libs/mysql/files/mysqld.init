@@ -8,7 +8,7 @@ PID=/var/run/mysqld.pid
 CMD=/usr/bin/mysqld
 
 start() {
-	local datadir=$(sed -n -e 's/^[[:space:]]*datadir[[:space:]]*=[[:space:]]*//p' /etc/my.cnf)
+	local datadir=$(sed -n -e "s/^[[:space:]]*datadir[[:space:]]*=[[:space:]]*[\"']\?\([^\"']*\)[\"']\?/\1/p" /etc/my.cnf)
 	if [ ! -d "$datadir" ]; then
 		echo "Error: datadir in /etc/my.cnf ($datadir) doesn't exist"
 		return 1
