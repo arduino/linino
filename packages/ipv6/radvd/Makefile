@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=radvd
-PKG_VERSION:=1.6
+PKG_VERSION:=1.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://v6web.litech.org/radvd/dist \
 		http://download.sourcemage.org/mirror
-PKG_MD5SUM:=987e0660d68b4501b24dc5a068cea83c
+PKG_MD5SUM:=5ec417bde33964a07231ddf6353177c8
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,21 +32,13 @@ define Package/radvd/description
 IPv6 Routing Advertisement Daemon.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default,\
-		--with-configfile=/etc/radvd.conf \
-		--with-logfile=/var/log/radvd.log \
-		--with-pidfile=/var/run/radvd.pid \
-	)
-endef
+CONFIGURE_ARGS += \
+	--with-configfile=/etc/radvd.conf \
+	--with-logfile=/var/log/radvd.log \
+	--with-pidfile=/var/run/radvd.pid
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		radvd_LDADD=""
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		install
-endef
+MAKE_FLAGS += \
+	radvd_LDADD=""
 
 define Package/radvd/conffiles
 /etc/config/radvd
