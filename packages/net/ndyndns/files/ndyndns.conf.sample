@@ -1,4 +1,7 @@
-username=user
-password=password
-hostname=hostname.dyndns.org
+[config]
+
+[dyndns]
+username = user
+password = password
+hosts = hostname.dyndns.org
 wildcard

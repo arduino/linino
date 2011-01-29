@@ -1,14 +1,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ndyndns
-PKG_VERSION:=1.12
+PKG_VERSION:=2.1
 PKG_RELEASE:=1
 
-PKG_SOURCE:=ndyndns-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ndyndns.googlecode.com/files
-PKG_MD5SUM:=1ca356cf366cd617fe3fb5fad9eb961b
+PKG_MD5SUM:=0cdb4dcba5f8c1664f53884b3c2179e9
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -16,14 +15,14 @@ include $(INCLUDE_DIR)/package.mk
 MAKE_FLAGS:=PLATFORM=linux
 
 define Package/ndyndns
-	SECTION:=net
-	CATEGORY:=Network
-	TITLE:=DynDNS.com update daemon
-	URL:=http://ndyndns.googlecode.com/
-	DEPENDS:=+libcurl +libopenssl
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=DynDNS.com update daemon
+  URL:=http://ndyndns.googlecode.com/
+  DEPENDS:=+libcurl +libopenssl
 endef
 
-define Package/ndyndns/description 
+define Package/ndyndns/description
 	The ndyndns daemon is an update client for DynDNS.com. It
 	checks for an IP address change every two minutes, avoids
 	unnecessary updates, reports errors, logs to syslog, and
