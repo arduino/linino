@@ -6,7 +6,7 @@ start() {
 		ACTION=- . /etc/hotplug.d/firewall/50-miniupnpd
 
 	config_load "upnpd"
-	local extiface intiface upload download logging secure enabled
+	local extiface intiface upload download logging secure enabled natpmp
 
 	config_get extiface config external_iface
 	config_get intiface config internal_iface
@@ -14,6 +14,7 @@ start() {
 	config_get download config download
 	config_get_bool logging config log_output 0
 	config_get_bool secure config secure_mode 0
+	config_get_bool natpmp config enable_natpmp 0
 	config_get_bool enabled config enabled 0 
 
 	include /lib/network
@@ -40,11 +41,8 @@ start() {
 		[ "$secure" -gt 0 ] && \
 			append args "-S"
 
-		if [ "$logging" = "1" ]; then
-			[ "$enabled" -gt 0 ] && eval start-stop-daemon -S -x miniupnpd -- $args -d | logger -t miniupnpd &
-		else
-			[ "$enabled" -gt 0 ] && eval start-stop-daemon -S -x miniupnpd -- $args 2>/dev/null
-		fi
+		[ "$natpmp" -gt 0 ] && \
+			append args "-N"
 
 		# start firewall
 		local zone
@@ -52,6 +50,12 @@ start() {
 		config_get zone core "${extiface:-wan}_zone"
 		[ -n "$zone" ] && \
 			miniupnpd_add_rules "$zone" "${extiface:-wan}" "$ifname"
+
+		if [ "$logging" = "1" ]; then
+			[ "$enabled" -gt 0 ] && eval start-stop-daemon -S -x miniupnpd -- $args -d | logger -t miniupnpd &
+		else
+			[ "$enabled" -gt 0 ] && eval start-stop-daemon -S -x miniupnpd -- $args 2>/dev/null
+		fi
 	else
 		logger -t "upnp daemon" "external interface not found, not starting"
 	fi
