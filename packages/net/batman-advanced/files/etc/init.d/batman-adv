@@ -13,17 +13,20 @@ is_module_loaded() {
 
 start_mesh () {
 	local meshif="$1"
-	local interfaces orig_interval log_level aggregated_ogms bonding fragmentation vis_mode
+	local interfaces aggregated_ogms bonding fragmentation gw_bandwidth gw_mode gw_sel_class log_level orig_interval vis_mode
 
 	is_module_loaded
 	[ $? -ne 1 ] && return
 
 	config_get interfaces "$meshif" interfaces
-	config_get orig_interval "$meshif" orig_interval
-	config_get log_level "$meshif" log_level
 	config_get aggregated_ogms "$meshif" aggregated_ogms
 	config_get bonding "$meshif" bonding
 	config_get fragmentation "$meshif" fragmentation
+	config_get gw_bandwidth "$meshif" gw_bandwidth
+	config_get gw_mode "$meshif" gw_mode
+	config_get gw_sel_class "$meshif" gw_sel_class
+	config_get log_level "$meshif" log_level
+	config_get orig_interval "$meshif" orig_interval
 	config_get vis_mode "$meshif" vis_mode
 
 	if [ "$interfaces" = "" ]; then
@@ -55,6 +58,18 @@ start_mesh () {
 	
 	if [ $fragmentation ]; then
 		echo $fragmentation > /sys/class/net/$meshif/mesh/fragmentation
+	fi
+	
+	if [ $gw_bandwidth ]; then
+		echo $gw_bandwidth > /sys/class/net/$meshif/mesh/gw_bandwidth
+	fi
+	
+	if [ $gw_mode ]; then 
+		echo $gw_mode > /sys/class/net/$meshif/mesh/gw_mode
+	fi
+	
+	if [ $gw_sel_class ]; then
+		echo $gw_sel_class > /sys/class/net/$meshif/mesh/gw_sel_class
 	fi
 
 	if [ $vis_mode ]; then
