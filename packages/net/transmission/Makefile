@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=transmission
-PKG_VERSION:=2.13
+PKG_VERSION:=2.20b2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://mirrors.m0k.org/transmission/files
-PKG_MD5SUM:=eb126ae88b80487f2840896939019421
+PKG_MD5SUM:=523d73ddb0d5185b5b4425e19ff344d9
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -32,7 +32,7 @@ endef
 
 define Package/transmission-daemon
   $(call Package/transmission/template)
-  DEPENDS:=+libcurl +libopenssl +libpthread +libevent
+  DEPENDS:=+libcurl +libopenssl +libpthread +libevent2
   MENU:=1
 endef
 
