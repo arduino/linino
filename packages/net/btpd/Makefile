@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/btpd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpthread
+  DEPENDS:=+libpthread +libopenssl
   SUBMENU:=BitTorrent
   TITLE:=btpd - BitTorrent Protocol Daemon
   URL:=https://github.com/btpd/btpd/wiki/
