@@ -26,6 +26,7 @@ define Package/ntfsprogs
     SUBMENU:=Filesystem
     TITLE:=Linux-NTFS
     URL:=http://www.linux-ntfs.org/
+    DEPENDS:=+libgcrypt
     MAINTAINER:=Gianluigi Tiesi <sherpya@netfarm.it>
 endef
 
