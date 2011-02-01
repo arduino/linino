@@ -20,6 +20,10 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
+CONFIGURE_VARS += \
+	ac_cv_file__proc_stat=yes \
+	ac_cv_file__proc_meminfo=yes
+
 define Package/htop
   SECTION:=admin
   CATEGORY:=Administration
