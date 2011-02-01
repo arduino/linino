@@ -1,6 +1,5 @@
-diff -urN miredo-1.1.6/libteredo/maintain.c miredo-1.1.6.new/libteredo/maintain.c
---- miredo-1.1.6/libteredo/maintain.c	2009-04-13 11:15:15.000000000 +0200
-+++ miredo-1.1.6.new/libteredo/maintain.c	2009-05-26 16:37:14.000000000 +0200
+--- a/libteredo/maintain.c
++++ b/libteredo/maintain.c
 @@ -59,7 +59,7 @@
  
  static inline void gettime (struct timespec *now)
@@ -10,3 +9,13 @@ diff -urN miredo-1.1.6/libteredo/maintain.c miredo-1.1.6.new/libteredo/maintain.
  	if (clock_gettime (CLOCK_MONOTONIC, now) == 0)
  		return;
  #else
+--- a/libteredo/tunnel.h
++++ b/libteredo/tunnel.h
+@@ -32,6 +32,7 @@
+ # define LIBTEREDO_TUNNEL_H
+ 
+ # include <stdbool.h>
++# include <ctype.h>
+ 
+ # ifdef __cplusplus
+ extern "C" {
