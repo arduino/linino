@@ -15,6 +15,8 @@ PKG_SOURCE_URL:=http://downloads.xiph.org/releases/theora/
 PKG_MD5SUM:=c963937053f45a7878954bed37ceb182
 PKG_FIXUP:=libtool
 
+PKG_BUILD_DEPENDS:=libvorbis
+
 include $(INCLUDE_DIR)/package.mk
 
 PKG_INSTALL=1
