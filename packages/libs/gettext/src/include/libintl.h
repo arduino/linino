@@ -42,7 +42,7 @@
 	((Count) == 1 ? (const char *) (Singular) : (const char *) (Plural))
 
 #define _(String) (String)
-#define N_(String) (String)
+#define N_(String) String
 
 #ifndef _LOCALE_H
 /* #define setlocale(Category, Locale) ((char *)NULL) */
