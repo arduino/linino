@@ -23,6 +23,8 @@ iconv(iconv_t cd, char **inbuf, size_t *inbytesleft,
 extern int
 iconv_close(iconv_t cd);
 
+#define libiconv_set_relocation_prefix(...) do {} while(0)
+
 #ifdef __cplusplus
 }
 #endif
