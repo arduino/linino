@@ -46,7 +46,7 @@ CONFIGURE_ARGS += \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/gettext-full/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libintl.h $(1)/usr/lib/gettext-full/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/libintl.h $(1)/usr/lib/gettext-full/include/
 
 	$(INSTALL_DIR) $(1)/usr/lib/gettext-full/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libintl.{a,so*} $(1)/usr/lib/gettext-full/lib/
