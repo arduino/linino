@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=digitemp
 PKG_VERSION:=3.6.0
-PKG_RELEASE:=3
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.digitemp.com/software/linux
@@ -59,7 +59,7 @@ define Build/Compile
 			-I./src -I./userial" \
 		LIBS="$(TARGET_LDFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		ds9097
+		ds9097 ds9097u
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) -DLINUX $(TARGET_CPPFLAGS) \
@@ -71,7 +71,7 @@ endef
 
 define Package/digitemp/install
 	$(INSTALL_DIR) $(1)/usr/bin/
-	$(CP) $(PKG_BUILD_DIR)/digitemp_DS9097 $(1)/usr/bin/
+	$(CP) $(PKG_BUILD_DIR)/digitemp_{DS9097,DS9097U} $(1)/usr/bin/
 endef
 
 define Package/digitemp-usb/install
