@@ -14,6 +14,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.vips.ecs.soton.ac.uk/supported/7.22/
 PKG_MD5SUM:=852913223ce5dc115bc7088e7c9d1596
+PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -28,7 +29,7 @@ define Package/vips
   $(call Package/vips/Default)
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+libjpeg +libintl +glib2 +libxml2
+  DEPENDS:=+libjpeg +libintl +glib2 +libxml2 +imagemagick +libfreetype
 endef
 
 define Package/vips/description
@@ -39,16 +40,13 @@ TARGET_CFLAGS+= \
 	-I$(STAGING_DIR)/usr/lib/libintl/include
 
 TARGET_LDFLAGS+= \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib
+	-L$(STAGING_DIR)/usr/lib/libintl/lib \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
-define Build/Configure
-	( cd "$(PKG_BUILD_DIR)" && aclocal && libtoolize --force && autoconf )
-	$(call Build/Configure/Default, \
-		--disable-cxx \
-		--disable-threads \
-		--without-liboil \
-	)
-endef
+CONFIGURE_ARGS += \
+	--disable-cxx \
+	--disable-threads \
+	--without-liboil
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/vips
