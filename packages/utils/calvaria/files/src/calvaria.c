@@ -59,7 +59,7 @@ static void dump(FILE *outstream, const char *buf, size_t size)
 			}
 			fprintf(outstream, "[%04X]: ", (unsigned int)i);
 		}
-		fprintf(outstream, " %02X", buf[i]);
+		fprintf(outstream, " %02X", buf[i] & 0xFF);
 		ascii[ascii_cnt] = toAscii(buf[i]);
 		ascii[ascii_cnt + 1] = 0;
 		ascii_cnt++;
