@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libmms
-PKG_VERSION:=0.5
+PKG_VERSION:=0.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://code.launchpad.net/libmms/trunk/$(PKG_VERSION)/+download/
-PKG_MD5SUM:=cf83053ec891f14e73a04c84d9de08ee
+PKG_SOURCE_URL:=@SF/libmms
+PKG_MD5SUM:=650ad04a4c8bd79246390b81b29680b6
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -25,7 +25,7 @@ define Package/libmms
   CATEGORY:=Libraries
   DEPENDS:=+glib2
   TITLE:=MMS stream protocol library
-  URL:=https://launchpad.net/libmms
+  URL:=http://libmms.sourceforge.net
 endef
 
 define Package/libmms/description
@@ -50,7 +50,10 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libmms $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmms.{a,so*} $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/*.pc \
+		$(1)/usr/lib/pkgconfig
 endef
 
 define Package/libmms/install
