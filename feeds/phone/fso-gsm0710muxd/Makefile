@@ -19,9 +19,10 @@ PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
-EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include -I$(STAGING_DIR)/usr/lib/libiconv/include
-EXTRA_LDFLAGS+=-lintl -L$(STAGING_DIR)/usr/lib/libintl/lib -liconv -L$(STAGING_DIR)/usr/lib/libiconv/lib
+EXTRA_CFLAGS+=-I$(ICONV_PREFIX)/include -I$(INTL_PREFIX)/include
+EXTRA_LDFLAGS+=-L$(ICONV_PREFIX)/lib -liconv $(if $(INTL_FULL),-L$(INTL_PREFIX)/lib -lintl)
 
 define Package/fso-gsm0710muxd
   SECTION:=phone
