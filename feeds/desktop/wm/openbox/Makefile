@@ -15,13 +15,11 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://icculus.org/openbox/releases
 PKG_MD5SUM:=9e7589e90519bc6ac2f4656ea6869439
 
-TARGET_LDFLAGS+= \
-        -Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-        -Wl,-rpath-link=$(STAGING_DIR)/usr/lib/libiconv/lib \
-        -Wl,-rpath-link=$(STAGING_DIR)/usr/lib/libintl/lib
-
-
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
+
+TARGET_LDFLAGS+= \
+        -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/openbox
   TITLE:=The Openbox Window Manager
@@ -29,8 +27,8 @@ define Package/openbox
   CATEGORY:=Xorg
   SUBMENU:=window manager
   DEPENDS:=+glib2 +libxml2 +fontconfig +libXft +libXrandr +libXt \
-+libXcursor +pango +xextproto +xf86vidmodeproto +dejavu-fonts-ttf \
-+freedesktop-compliant
+	+libXcursor +pango +xextproto +xf86vidmodeproto +dejavu-fonts-ttf \
+	+freedesktop-compliant
   URL:=http://icculus.org/openbox/
 endef
 

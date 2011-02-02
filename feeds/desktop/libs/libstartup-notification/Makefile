@@ -11,13 +11,14 @@ PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
-EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include \
-			  -I$(STAGING_DIR)/usr/libiconv/include
+EXTRA_CFLAGS+=-I$(ICONV_PREFIX)/include \
+			  -I$(INTL_PREFIX)/include
 
 EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-			   -L$(STAGING_DIR)/usr/lib/libintl/lib/ \
-			   -L$(STAGING_DIR)/usr/lib/libiconv/lib/
+			   -L$(ICONV_PREFIX)/lib/ \
+			   -L$(INTL_PREFIX)/lib/
 
 define Package/libstartup-notification
   SECTION:=xorg-libs

@@ -19,16 +19,16 @@ PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
-TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libiconv/include
-TARGET_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv
+TARGET_LDFLAGS+=-liconv
 
 define Package/libisofs
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=libisofs
   URL:=http://www.libburnia-project.org
-  DEPENDS:=+libiconv +libburn +libpthread
+  DEPENDS:=+libburn +libpthread $(ICONV_DEPENDS)
 endef
 
 define Package/libisofs/description

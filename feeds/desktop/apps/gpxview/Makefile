@@ -21,6 +21,7 @@ PKG_BUILD_PARALLEL:=1
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION_BASE)
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/gpxview
   SECTION:=xorg-app
@@ -29,7 +30,7 @@ define Package/gpxview
   TITLE:=GPXView Geocaching app
   MAINTAINER:=Michael Buesch <mb@bu3sch.de>
   URL:=http://www.harbaum.org/till/maemo/index.shtml#gpxview
-  DEPENDS:=+gpsd +libxml2 +libcurl +libsoup +gtkhtml +gtk2 +glib2 +libintl +libiconv +libsqlite3
+  DEPENDS:=+gpsd +libxml2 +libcurl +libsoup +gtkhtml +gtk2 +glib2 +libsqlite3 $(ICONV_DEPENDS) $(INTL_DEPENDS)
 endef
 
 define Package/gpxview/description
@@ -37,12 +38,12 @@ define Package/gpxview/description
 endef
 
 EXTRA_CFLAGS:= \
-	-I$(STAGING_DIR)/usr/lib/libintl/include \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include
+	-I$(ICONV_PREFIX)/include \
+	-I$(INTL_PREFIX)/include
 
 EXTRA_LDFLAGS:= \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
+	-L$(ICONV_PREFIX)/lib \
+	-L$(INTL_PREFIX)/lib \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
 	-Wl,-rpath=/usr/lib/
 

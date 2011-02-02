@@ -16,14 +16,9 @@ PKG_SOURCE_URL:=http://tangogps.org/downloads
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-TARGET_CFLAGS+= \
-	-I$(STAGING_DIR)/usr/lib/libintl/include \
-	-I$(STAGING_DIR)/usr/libiconv/include
+include $(INCLUDE_DIR)/nls.mk
 
 TARGET_LDFLAGS+= \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/tangogps

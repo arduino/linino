@@ -17,13 +17,9 @@ PKG_MD5SUM:=6998b165540598965499bd99d8aa0eef
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
-TARGET_CFLAGS+= \
-	-I$(STAGING_DIR)/usr/lib/libintl/include \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include
 TARGET_LDFLAGS+= \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
 	-Wl,-rpath=/usr/lib \
 
@@ -34,7 +30,7 @@ define Package/recordmydesktop
   TITLE:=A X desktop session recorder
   URL:=http://recordmydesktop.sourceforge.net
   DEPENDS:=+libX11 +libSM +libICE +libXext +libXfixes +libXdamage +libvorbis \
-  +libtheora +libogg +libpthread +zlib
+	  +libtheora +libogg +libpthread +zlib $(ICONV_DEPENDS) $(INTL_DEPENDS)
 endef
 
 define Build/Configure
