@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ffmpeg
 PKG_VERSION:=0.5.2
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ffmpeg.org/releases/
@@ -162,6 +162,14 @@ define Package/libpostproc
  DEPENDS:=+libffmpeg
 endef
 
+define Package/libswscale
+ SECTION:=libs
+ CATEGORY:=Libraries
+ TITLE:=libswscale
+ URL:=http://ffmpeg.mplayerhq.hu/
+ DEPENDS:=+libffmpeg
+endef
+
 FILTER_CONFIG= \
 	$(foreach c, $(3), \
 		$(if $(CONFIG_FFMPEG_$(1)_$(c)),--enable-$(2)="$(c)") \
@@ -203,6 +211,7 @@ define Build/Configure
 		--disable-vhook \
 		--enable-zlib \
 		--enable-postproc \
+		--enable-swscale \
 		\
 		$(if $(CONFIG_PACKAGE_ffmpeg),,--disable-ffmpeg) \
 		$(if $(CONFIG_PACKAGE_ffserver),,--disable-ffserver) \
@@ -238,9 +247,11 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libav{codec,device,format,util}.{a,so*} $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpostproc.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libswscale.{a,so*} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libav{codec,device,format,util}.pc $(1)/usr/lib/pkgconfig/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libpostproc.pc $(1)/usr/lib/pkgconfig/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libswscale.pc $(1)/usr/lib/pkgconfig/
 endef
 
 define Package/ffmpeg/install
@@ -263,7 +274,13 @@ define Package/libpostproc/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpostproc.so.* $(1)/usr/lib/
 endef
 
+define Package/libswcale/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libswscale.so.* $(1)/usr/lib/
+endef
+
 $(eval $(call BuildPackage,ffmpeg))
 $(eval $(call BuildPackage,ffserver))
 $(eval $(call BuildPackage,libffmpeg))
 $(eval $(call BuildPackage,libpostproc))
+$(eval $(call BuildPackage,libswscale))
