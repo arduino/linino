@@ -19,23 +19,17 @@ PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-TARGET_CFLAGS+= \
-    -I$(STAGING_DIR)/usr/lib/libintl/include/ \
-    -I$(STAGING_DIR)/usr/lib/libiconv/include/ \
-    -include $(STAGING_DIR)/usr/include/libintl.h
+include $(INCLUDE_DIR)/nls.mk
 
 TARGET_LDFLAGS+= \
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/lxtask
   SECTION:=xorg-app
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=lxtask
-  DEPENDS:=+gtk2 +lxde-common +libintl +libiconv
+  DEPENDS:=+gtk2 +lxde-common $(ICONV_DEPENDS) $(INTL_DEPENDS)
 endef
 
 define Package/lxtask/install

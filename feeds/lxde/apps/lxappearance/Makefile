@@ -19,15 +19,10 @@ PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-TARGET_CFLAGS+= \
-    -I$(STAGING_DIR)/usr/lib/libintl/include/ \
-    -I$(STAGING_DIR)/usr/lib/libiconv/include/
+include $(INCLUDE_DIR)/nls.mk
 
 TARGET_LDFLAGS+= \
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/lxappearance
   SECTION:=xorg-app
