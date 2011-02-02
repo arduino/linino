@@ -20,15 +20,10 @@ PKG_INSTALL:=1
 PKG_BUILD_DEPENDS:=intltool/host
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
-TARGET_CFLAGS+= \
-	-I$(STAGING_DIR)/usr/lib/libintl/include/ \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include/ \
-	$(FPIC)
-
+TARGET_CFLAGS+=$(FPIC)
 TARGET_LDFLAGS+= \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib/ \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
 	-Wl,-rpath=/usr/lib
 
@@ -38,7 +33,7 @@ define Package/libwnck
   SUBMENU:=libraries
   TITLE:=Window Navigator Construction Kit
   URL:=http://ftp.gnome.org/
-  DEPENDS:=+libX11 +gtk2 +glib2 +libXext +libintl
+  DEPENDS:=+libX11 +gtk2 +glib2 +libXext $(INTL_DEPENDS)
 endef
 
 define Package/libwnck/description

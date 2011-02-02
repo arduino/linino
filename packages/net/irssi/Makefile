@@ -20,6 +20,7 @@ PKG_FIXUP:=libtool
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/irssi/Default
   SUBMENU:=Instant Messaging
@@ -66,15 +67,8 @@ CONFIGURE_ARGS += \
 	--without-bot \
 	--disable-proxy
 
-EXTRA_CFLAGS+= \
-	$(TARGET_CPPFLAGS) \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include \
-	-I$(STAGING_DIR)/usr/lib/libintl/include
-
-EXTRA_LDFLAGS+= \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-lncurses
+EXTRA_CFLAGS+=$(TARGET_CPPFLAGS) 
+EXTRA_LDFLAGS+=-lncurses
 
 ifeq ($(BUILD_VARIANT),ssl)
 	CONFIGURE_ARGS += \

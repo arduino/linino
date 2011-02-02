@@ -30,6 +30,7 @@ PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/ruby/Default
   SUBMENU:=Ruby
@@ -208,7 +209,7 @@ CONFIGURE_ARGS += \
 	--enable-ipv6 \
 	--enable-wide-getaddrinfo \
 	--with-ruby-version=minor \
-	--with-iconv-dir=$(STAGING_DIR_ROOT)/../usr/lib/libiconv \
+	--with-iconv-dir=$(ICONV_PREFIX) \
 
 TARGET_LDFLAGS += -L$(PKG_BUILD_DIR)
 

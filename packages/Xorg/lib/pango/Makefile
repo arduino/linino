@@ -21,11 +21,10 @@ PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=0
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 TARGET_LDFLAGS+= \
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/pango
   SECTION:=xorg-libraries

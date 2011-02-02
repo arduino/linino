@@ -17,12 +17,13 @@ PKG_MD5SUM:=c4ec4fdb2b1842e221ca39127e85682d
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 PKG_INSTALL=1
 
 EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-               -L$(STAGING_DIR)/usr/lib/libintl/lib/ \
-               -L$(STAGING_DIR)/usr/lib/libiconv/lib/
+               -L$(ICONV_PREFIX)/lib/ \
+               -L$(INTL_PREFIX)/lib/
 
 STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_librsvg CONFIG_PACKAGE_librsvg-pixbuf-loader)
 

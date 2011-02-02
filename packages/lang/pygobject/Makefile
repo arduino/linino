@@ -18,11 +18,11 @@ PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 $(call include_mk, python-package.mk)
 
 EXTRA_LDFLAGS+= \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib/
+	-L$(ICONV_PREFIX) -L$(INTL_PREFIX)
 
 TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += --enable-static

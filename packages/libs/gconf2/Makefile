@@ -12,18 +12,13 @@ PKG_MD5SUM:=4971d96f5ba94fe4a69396267bd5afe8
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 PKG_BUILD_DEPENDS:=orbit2/host intltool/host
 
 PKG_INSTALL=1
 
-TARGET_CFLAGS+= \
-	-I$(STAGING_DIR)/usr/lib/libintl/include \
-	-I$(STAGING_DIR)/usr/libiconv/include
-
 TARGET_LDFLAGS+= \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/libgconf2

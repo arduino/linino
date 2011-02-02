@@ -17,6 +17,7 @@ PKG_MD5SUM:=852913223ce5dc115bc7088e7c9d1596
 PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 PKG_INSTALL=1
 
@@ -29,18 +30,14 @@ define Package/vips
   $(call Package/vips/Default)
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+libjpeg +libintl +glib2 +libxml2 +imagemagick +libfreetype
+  DEPENDS:=+libjpeg +glib2 +libxml2 +imagemagick +libfreetype $(INTL_DEPENDS)
 endef
 
 define Package/vips/description
   An image manipulation library.
 endef
 
-TARGET_CFLAGS+= \
-	-I$(STAGING_DIR)/usr/lib/libintl/include
-
 TARGET_LDFLAGS+= \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 CONFIGURE_ARGS += \

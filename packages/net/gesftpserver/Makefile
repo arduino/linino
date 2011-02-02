@@ -21,11 +21,12 @@ PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/gesftpserver
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpthread +libiconv
+  DEPENDS:=+libpthread $(ICONV_DEPENDS)
   TITLE:=SFTP server
   URL:=http://www.greenend.org.uk/rjk/sftpserver/
 endef
@@ -41,12 +42,7 @@ CONFIGURE_CMD:=./prepare
 
 TAR_CMD:=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components 1 $(TAR_OPTIONS)
 
-TARGET_CFLAGS+= \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include/
-
-TARGET_LDFLAGS+= \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
-	-lpthread
+TARGET_LDFLAGS+=-lpthread
 
 define Package/gesftpserver/install	
 	$(INSTALL_DIR) $(1)/usr/bin

@@ -24,11 +24,12 @@ HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/glib-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/glib2
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libiconv +libintl
+  DEPENDS:=$(ICONV_DEPENDS) $(INTL_DEPENDS)
   TITLE:=glib 2.0
   URL:=http://www.gtk.org/
 endef
@@ -37,15 +38,6 @@ define Package/glib2/description
   The GLib library of C routines
 endef
 
-TARGET_CFLAGS+= \
-	$(FPIC) \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include \
-	-I$(STAGING_DIR)/usr/lib/libintl/include
-
-TARGET_LDFLAGS+= \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib
-
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
@@ -53,6 +45,7 @@ define Build/Configure
 		--enable-debug=no \
 		--disable-selinux \
         --disable-fam \
+        $(if $(ICONV_FULL),--with-libiconv=gnu) \
 		, \
 		glib_cv_stack_grows=no \
 		glib_cv_uscore=no \

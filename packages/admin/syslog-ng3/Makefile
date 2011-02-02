@@ -19,6 +19,7 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_IPV6 \
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/syslog-ng3
   SECTION:=admin
@@ -55,10 +56,6 @@ CONFIGURE_ARGS +=  \
 
 TARGET_CPPFLAGS += \
 	-I$(STAGING_DIR)/usr/include/eventlog
-
-TARGET_LDFLAGS += \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 CONFIGURE_VARS += \
 	LIBDBI_CFLAGS="-I$(STAGING_DIR)/usr/include"

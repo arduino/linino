@@ -17,17 +17,11 @@ PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 $(call include_mk, python-package.mk)
 
 
-TARGET_CFLAGS += $(FPIC) \
-	-I$(STAGING_DIR)/usr/lib/libintl/include \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include \
-
-TARGET_LDFLAGS += \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib
-
+TARGET_CFLAGS += $(FPIC)
 CONFIGURE_VARS += PYTHON=$(HOST_PYTHON)
 
 define Package/gst-python

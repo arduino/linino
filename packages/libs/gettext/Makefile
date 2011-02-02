@@ -30,8 +30,8 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/include/libintl.h $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/lib/libintl-stub/include
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/include/libintl.h $(1)/usr/lib/libintl-stub/include/
 
 	$(INSTALL_DIR) $(1)/usr/share/aclocal
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/m4/* $(1)/usr/share/aclocal/

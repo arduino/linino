@@ -17,6 +17,7 @@ PKG_SOURCE_URL:=http://www.imspector.org/downloads
 PKG_MD5SUM:=626abf7c2b8f15d56df679ad66624575
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/imspector
   SECTION:=net
@@ -25,7 +26,7 @@ define Package/imspector
   TITLE:=IMSpector is an Instant Messenger proxy
   URL:=http://www.imspector.org
   DEPENDS:=+libopenssl +libstdcpp +libmysqlclient +libsqlite3 +libpq \
-	+libiconv +libpthread
+	+libpthread $(ICONV_DEPENDS)
 endef
 
 define Package/imspector/description
@@ -54,7 +55,7 @@ define Build/Compile
 	    PREFIX="$(STAGING_DIR)/usr" \
 	    CXX=$(TARGET_CXX) \
 	    CXXFLAGS="$(TARGET_CXXFLAGS) $(TARGET_CFLAGS) $(FPIC) $(TARGET_CPPFLAGS) \
-			-I$(STAGING_DIR)/usr/lib/libiconv/include \
+			-I$(ICONV_PREFIX)/include \
 			$(TARGET_LDFLAGS) -DHAVE_SSL" \
 	    all
 endef

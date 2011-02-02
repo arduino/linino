@@ -19,6 +19,7 @@ PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/glibmm
   SECTION:=libs
@@ -32,14 +33,8 @@ define Package/glibmm/description
 c++ bindings for glib2
 endef
 
-TARGET_CFLAGS+= \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include \
-	-I$(STAGING_DIR)/usr/lib/libintl/include
-
 TARGET_LDFLAGS+= \
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 CONFIGURE_ARGS+= --disable-fulldocs
 

@@ -18,11 +18,12 @@ PKG_MD5SUM:=8818b71133049fe9c739166225aebe0c
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/synce-dccm
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libsynce +libiconv
+  DEPENDS:=+libsynce $(ICONV_DEPENDS)
   TITLE:=dccm for mobiles
   URL:=http://sourceforge.net/projects/synce/
 endef
@@ -32,14 +33,14 @@ Description TBD
 endef
 
 CONFIGURE_VARS+= \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libiconv/include" \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libintl/include" \
-	CPPFLAGS="$$$$CPPFLAGS -Wl,-rpath-link,$(STAGING_DIR)/usr/lib:$(STAGING_DIR)/usr/lib/libiconv/lib:$(STAGING_DIR)/usr/lib/libintl/lib" 
+	CPPFLAGS="$$$$CPPFLAGS -I$(ICONV_PREFIX)/include" \
+	CPPFLAGS="$$$$CPPFLAGS -I$(INTL_PREFIX)/include" \
+	CPPFLAGS="$$$$CPPFLAGS -Wl,-rpath-link,$(STAGING_DIR)/usr/lib:$(ICONV_PREFIX)/lib:$(INTL_PREFIX)/lib" 
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 	        DESTDIR="$(PKG_INSTALL_DIR)" \
-		LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
+		LDFLAGS="$(TARGET_LDFLAGS) -L$(ICONV_PREFIX)/lib" \
 		LIBS="-lsynce -liconv" \
 		all install
 endef

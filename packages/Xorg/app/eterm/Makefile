@@ -20,6 +20,7 @@ PKG_MD5SUM:=b8869ee9c9b9516231af9eefa595cee3
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/eterm/Default
   SECTION:=xorg-extra
@@ -31,7 +32,7 @@ endef
 define Package/eterm
 $(call Package/eterm/Default)
   TITLE:=eterm
-  DEPENDS:=+libX11 +libXcursor +imlib2 +libast +libiconv
+  DEPENDS:=+libX11 +libXcursor +imlib2 +libast $(ICONV_DEPENDS)
 endef
 
 define Package/esetroot
@@ -48,8 +49,8 @@ CONFIGURE_VARS += \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)\
-		CPPFLAGS="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/lib/libiconv/include/" \
-		LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib/libiconv/lib/"
+		CPPFLAGS="$(TARGET_CPPFLAGS) -I$(ICONV_PREFIX)/include/" \
+		LDFLAGS="$(TARGET_LDFLAGS) -L$(ICONV_PREFIX)/lib/"
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 

@@ -15,6 +15,7 @@ PKG_BUILD_DEPENDS:=libiconv
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/curlftpfs
   SECTION:=net
@@ -30,13 +31,13 @@ define Package/curlftpfs/description
 endef
 
 EXTRA_CFLAGS += \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include \
+	-I$(ICONV_PREFIX)/include \
 	-I$(STAGING_DIR)/usr/include/fuse \
 	-DICONV_CONST=const
 
 EXTRA_LDFLAGS += \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib
+	-L$(INTL_PREFIX)/lib \
+	-L$(ICONV_PREFIX)/lib
 
 define Package/curlftpfs/install
 	$(INSTALL_DIR) $(1)/usr/bin

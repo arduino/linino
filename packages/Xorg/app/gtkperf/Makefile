@@ -20,6 +20,7 @@ PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 TARGET_LDFLAGS+=\
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
@@ -32,11 +33,6 @@ define Package/gtkperf
   TITLE:=gtkperf
   URL:=http://gtkperf.sourceforge.net
 endef
-
-TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
-TARGET_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libintl/lib/
-TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libiconv/include/
-TARGET_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libiconv/lib/
 
 define Package/gtkperf/install
 	$(INSTALL_DIR) $(1)/usr/bin

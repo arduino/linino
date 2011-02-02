@@ -19,12 +19,11 @@ PKG_MD5SUM:=3e158dcf57823b55c926d95b245500fb
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
+include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
+
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib/libiconv/lib \
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib/libintl/lib
-
-include $(INCLUDE_DIR)/package.mk
 
 define Package/matchbox-window-manager
   TITLE:=matchbox window manager

@@ -23,14 +23,7 @@ PKG_INSTALL=1
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
-
-TARGET_CFLAGS += \
-	-I$(STAGING_DIR)/usr/lib/libintl/include \
-	-I$(STAGING_DIR)/usr/libiconv/include
-
-TARGET_LDFLAGS += \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib/
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/libIDL2
   SECTION:=libs

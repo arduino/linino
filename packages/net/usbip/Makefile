@@ -20,6 +20,7 @@ PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/usbip/Common
   TITLE:=USB-over-IP
@@ -92,11 +93,6 @@ MAKE_PATH:=./src
 LIBTOOL_PATHS:=./src
 
 CFLAGS+="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include"
-
-TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
-TARGET_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libintl/lib/
-TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libiconv/include/
-TARGET_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libiconv/lib/
 
 define Build/Prepare
 $(call Build/Prepare/Default)

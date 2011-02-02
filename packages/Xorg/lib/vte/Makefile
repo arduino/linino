@@ -19,16 +19,17 @@ PKG_FIXUP:=libtool
 PKG_BUILD_DEPENDS:=intltool/host
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 $(call include_mk, python-package.mk)
 
 PKG_INSTALL=1
 
-EXTRA_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include
+EXTRA_CFLAGS+=-I$(INTL_PREFIX)/include
 
 EXTRA_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib
+	-L$(ICONV_PREFIX)/lib \
+	-L$(INTL_PREFIX)/lib
 
 STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_vte CONFIG_PACKAGE_python-vte)
 

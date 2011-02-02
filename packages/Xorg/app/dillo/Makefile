@@ -20,6 +20,7 @@ PKG_SOURCE_URL:=http://hg.dillo.org/dillo
 PKG_BUILD_DIR=$(BUILD_DIR)/Xorg/$(_CATEGORY)/$(PKG_NAME)-$(PKG_VERSION)/
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/dillo
   SECTION:=xorg-app
@@ -27,7 +28,7 @@ define Package/dillo
   SUBMENU:=app
   TITLE:=Dillo2
   URL:=http://fltk.org/
-  DEPENDS:=+libXft +libstdcpp +libpthread +zlib +fltk2 +libjpeg +libiconv +libpng
+  DEPENDS:=+libXft +libstdcpp +libpthread +zlib +fltk2 +libjpeg +libpng $(ICONV_DEPENDS)
 endef
 
 define Package/dillo/description
@@ -39,8 +40,8 @@ define Package/dillo/description
   Note: This is the fltk2 based dillo.
 endef
 
-EXTRA_CPPFLAGS+=-I$(STAGING_DIR)/usr/lib/libiconv/include
-EXTRA_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/libiconv/lib -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+EXTRA_CPPFLAGS+=-I$(ICONV_PREFIX)/include
+EXTRA_LDFLAGS+=-L$(ICONV_PREFIX)/lib -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); ./autogen.sh );

@@ -11,15 +11,10 @@ PKG_SOURCE_URL:=@SF/gnuplot
 PKG_MD5SUM:=e708665bd512153ad5c35252fe499059
 
 include $(INCLUDE_DIR)/package.mk
-
-TARGET_CFLAGS += \
-	-I$(STAGING_DIR)/usr/lib/libintl/include \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include
+include $(INCLUDE_DIR)/nls.mk
 
 TARGET_LDFLAGS+= \
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-       	-L$(STAGING_DIR)/usr/lib/libiconv/lib
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
@@ -29,7 +24,7 @@ CONFIGURE_VARS += \
 define Package/gnuplot
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libncurses +uclibcxx +zlib +libpng +libfreetype +libgd +libintl +libiconv
+  DEPENDS:=+libncurses +uclibcxx +zlib +libpng +libfreetype +libgd $(INTL_DEPENDS) $(ICONV_DEPENDS)
   TITLE:=A portable command-line driven graphing utility
   URL:=http://sourceforge.net/projects/gnuplot/
 endef

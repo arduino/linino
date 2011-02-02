@@ -16,11 +16,12 @@ PKG_SOURCE_URL:=http://download.origo.ethz.ch/bemused-lnx-mpdhack/526
 PKG_MD5SUM:=aed8b41aed530e9177e43d9bebad10b7
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/bemusedlinuxserver
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+bluez-libs +glib1 +mpd +libstdcpp +libiconv
+  DEPENDS:=+bluez-libs +glib1 +mpd +libstdcpp $(ICONV_DEPENDS)
   TITLE:=Bemused linux server
   URL:=http://bemused-lnx-mpdhack.origo.ethz.ch/
 endef
@@ -38,8 +39,8 @@ define Build/Compile
 	CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS)" \
 	LDFLAGS="$(TARGET_LDFLAGS) " \
 	CPPFLAGS="$(TARGET_CPPFLAGS)" \
-	INCL="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include -I$(STAGING_DIR)/usr/lib/libiconv/include" \
-	MYLIBS="-lbluetooth -lglib -L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv"
+	INCL="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include -I$(ICONV_PREFIX)/include" \
+	MYLIBS="-lbluetooth -lglib -L$(ICONV_PREFIX)/lib -liconv"
 	$(STRIP) $(PKG_BUILD_DIR)/bemusedlinuxserver
 endef
 

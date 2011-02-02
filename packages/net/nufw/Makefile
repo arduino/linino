@@ -19,11 +19,12 @@ PKG_FIXUP:=libtool
 PKG_REMOVE_FILES:=autogen.sh aclocal.m4
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/nufw/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+glib2 +libgnutls +libsasl2 +libintl +libiconv +libnetfilter-queue
+  DEPENDS:=+glib2 +libgnutls +libsasl2 +libnetfilter-queue $(ICONV_DEPENDS) $(INTL_DEPENDS)
   TITLE:=nufw
   URL:=http://www.nufw.org/
 endef
@@ -79,11 +80,11 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) \
-			-I$(STAGING_DIR)/usr/lib/libintl/include \
-			-I$(STAGING_DIR)/usr/lib/libiconv/include" \
+			-I$(INTL_PREFIX)/include \
+			-I$(ICONV_PREFIX)/include" \
 		LDFLAGS="$(TARGET_LDFLAGS) \
-			-L$(STAGING_DIR)/usr/lib/libintl/lib \
-			-L$(STAGING_DIR)/usr/lib/libiconv/lib \
+			-L$(INTL_PREFIX)/lib \
+			-L$(ICONV_PREFIX)/lib \
 			-Wl,-rpath-link,$(STAGING_DIR)/usr/lib -liconv \
 			-lgnutls -lnetfilter_queue -lpthread" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \

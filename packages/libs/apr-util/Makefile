@@ -18,11 +18,12 @@ PKG_MD5SUM:=29dd557f7bd891fc2bfdffcfa081db59
 PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/libaprutil
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libapr +libexpat +libiconv +libpthread +libsqlite3 +libuuid
+  DEPENDS:=+libapr +libexpat +libpthread +libsqlite3 +libuuid $(ICONV_DEPENDS)
   TITLE:=Apache Portable Runtime Utility Library
   URL:=http://apr.apache.org/
 endef
@@ -35,14 +36,14 @@ CONFIGURE_ARGS += \
 	--with-expat="$(STAGING_DIR)/usr" \
 	--without-sqlite2 \
 	--with-sqlite3="$(STAGING_DIR)/usr" \
-	--with-iconv="$(STAGING_DIR)/usr/lib/libiconv" \
+	--with-iconv="$(ICONV_PREFIX)" \
 
 CONFIGURE_VARS += \
 	ac_cv_file_dbd_apr_dbd_mysql_c=no \
 	APR_BUILD_DIR="$(STAGING_DIR)/usr/share/build-1" \
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) APRUTIL_LIBS="-lsqlite3 $(TARGET_LDFLAGS) -lexpat -liconv -lapr-1 -luuid -lm -lcrypt" all
+	$(MAKE) -C $(PKG_BUILD_DIR) APRUTIL_LIBS="-lsqlite3 $(TARGET_LDFLAGS) -lexpat $(if $(ICONV_FULL),-liconv) -lapr-1 -luuid -lm -lcrypt" all
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 

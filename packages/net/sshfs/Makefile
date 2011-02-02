@@ -18,6 +18,7 @@ PKG_MD5SUM:=26e9206eb5169e87e6f95f54bc005a4f
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-fuse-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/sshfs
   TITLE:=SSHFS

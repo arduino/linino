@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=http://50hz.ws/mpdas
 PKG_MD5SUM:=8a694691dcb5d217c46754e40152186a
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/mpdas
   SECTION:=sound
@@ -33,12 +34,12 @@ define Package/mpdas/description
 endef
 
 EXTRA_CPPFLAGS:=\
-	-I$(STAGING_DIR)/usr/lib/libintl/include \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include \
+	-I$(ICONV_PREFIX)/include \
+	-I$(INTL_PREFIX)/include \
 
 EXTRA_LDFLAGS:=\
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
+	-L$(ICONV_PREFIX)/lib \
+	-L$(INTL_PREFIX)/lib \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 MAKE_FLAGS += \

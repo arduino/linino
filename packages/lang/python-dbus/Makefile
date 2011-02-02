@@ -19,17 +19,12 @@ PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 $(call include_mk, python-package.mk)
 
 
-TARGET_CFLAGS += \
-	-I$(STAGING_DIR)/usr/lib/libintl/include \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include
-
 TARGET_LDFLAGS += \
-	-Wl,-rpath=$(STAGING_DIR)/usr/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib
+	-Wl,-rpath=$(STAGING_DIR)/usr/lib
 
 define Package/dbus-python
   SUBMENU:=Python

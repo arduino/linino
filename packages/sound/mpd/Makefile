@@ -19,6 +19,7 @@ PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/mpd
   SECTION:=sound
@@ -84,15 +85,8 @@ CONFIGURE_VARS += \
 	$(if $(CONFIG_BUILD_PATENTED),MAD_CFLAGS="$(TARGET_CFLAGS)") \
 	$(if $(CONFIG_BUILD_PATENTED),MAD_LIBS="$(TARGET_LDFLAGS) -lmad") \
 
-TARGET_CFLAGS += \
-	-std=gnu99 \
-	-I$(STAGING_DIR)/usr/lib/libintl/include/ \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include/ \
-
-TARGET_LDFLAGS += \
-	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib/ \
+TARGET_CFLAGS += -std=gnu99
+TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 # use gcc instead of g++ to avoid unnecessary linking against libstdc++
 TARGET_CXX:=$(TARGET_CC)

@@ -21,10 +21,7 @@ PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-TARGET_LDFLAGS += \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib/ \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib/ \
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/atk
   SECTION:=xorg-libraries

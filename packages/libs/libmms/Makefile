@@ -19,6 +19,7 @@ PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/libmms
   SECTION:=libs
@@ -36,9 +37,6 @@ define Package/libmms/description
 endef
 
 TARGET_CFLAGS += $(FPIC)
-TARGET_LDFLAGS += \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); ./autogen.sh );

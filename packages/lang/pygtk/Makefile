@@ -17,15 +17,8 @@ PKG_MD5SUM:=a816346d750d61e3fa67a200e4292694
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 $(call include_mk, python-package.mk)
-
-TARGET_CFLAGS+= \
-	-I$(STAGING_DIR)/usr/lib/libintl/include/ \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include/
-
-TARGET_LDFLAGS+= \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Package/python-gtk
   SUBMENU:=Python

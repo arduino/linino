@@ -20,6 +20,7 @@ PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 
 define Package/libdbus-glib
@@ -27,7 +28,7 @@ define Package/libdbus-glib
   CATEGORY:=Libraries
   TITLE:=D-Bus Glib bindings
   URL:=http://dbus.freedesktop.org/doc/dbus-glib/
-  DEPENDS:=+libdbus +glib2 +libiconv +libintl
+  DEPENDS:=+libdbus +glib2 $(ICONV_DEPENDS) $(INTL_DEPENDS)
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -42,10 +43,10 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS+= \
 	ac_cv_func_posix_getpwnam_r="yes" \
 	ac_cv_have_abstract_sockets="yes" \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libiconv/include" \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libintl/include" \
-	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
-	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libintl/lib" \
+	CPPFLAGS="$$$$CPPFLAGS -I$(ICONV_PREFIX)/include" \
+	CPPFLAGS="$$$$CPPFLAGS -I$(INTL_PREFIX)/include" \
+	LDFLAGS="$$$$LDFLAGS -L$(ICONV_PREFIX)/lib" \
+	LDFLAGS="$$$$LDFLAGS -L$(INTL_PREFIX)/lib" \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/dbus-1.0/dbus

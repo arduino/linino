@@ -21,19 +21,12 @@ PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 PKG_INSTALL:=1
 
 HOST_BUILD_DEPENDS:=libIDL2/host
 PKG_BUILD_DEPENDS:=orbit2/host
-
-TARGET_CFLAGS+= \
-	-I$(STAGING_DIR)/usr/lib/libintl/include \
-	-I$(STAGING_DIR)/usr/libiconv/include
-
-TARGET_LDFLAGS+= \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 BIGENDIAN=no
 ifeq ($(CONFIG_BIG_ENDIAN),y)

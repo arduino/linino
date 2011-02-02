@@ -10,10 +10,10 @@ PKG_MD5SUM:=1429c597aa4b75fc610ab3a542c99209
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-               -L$(STAGING_DIR)/usr/lib/libintl/lib/ \
-			   -L$(STAGING_DIR)/usr/lib/libiconv/lib/
+               -L$(ICONV_PREFIX) -L$(INTL_PREFIX)
 
 define Package/libcroco
   SECTION:=libs

@@ -16,13 +16,14 @@ PKG_SOURCE_URL:=@SF/synce
 PKG_MD5SUM:=fd473d3deceda7912af4427dede1736f
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
-PKG_BUILD_DEPENDS:=libiconv
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
 PKG_FIXUP:=libtool
 
 define Package/libsynce
+  DEPENDS:=$(ICONV_DEPENDS) $(INTL_DEPENDS)
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=SynCE library
@@ -44,10 +45,10 @@ CONFIGURE_ARGS += \
 	--enable-odccm-support=no
 
 CONFIGURE_VARS+= \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libiconv/include" \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libintl/include" \
-	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
-	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libintl/lib" \
+	CPPFLAGS="$$$$CPPFLAGS -I$(ICONV_PREFIX)/include" \
+	CPPFLAGS="$$$$CPPFLAGS -I$(INTL_PREFIX)/include" \
+	LDFLAGS="$$$$LDFLAGS -L$(ICONV_PREFIX)/lib" \
+	LDFLAGS="$$$$LDFLAGS -L$(INTL_PREFIX)/lib" \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include

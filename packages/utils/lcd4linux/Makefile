@@ -24,7 +24,6 @@ PKG_INSTALL:=1
 PKG_BUILD_DEPENDS:= \
 	libdbus \
 	libgd \
-	libiconv \
 	libmysqlclient \
 	libncurses \
 	libnmeap \
@@ -39,6 +38,7 @@ PKG_BUILD_DEPENDS:= \
 #	python \
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/lcd4linux
   SECTION:=utils
@@ -46,7 +46,7 @@ define Package/lcd4linux
   DEPENDS:= \
 	+LCD4LINUX_NEEDS_libdbus:libdbus \
 	+LCD4LINUX_NEEDS_libgd:libgd \
-	+LCD4LINUX_NEEDS_libiconv:libiconv \
+	$(if $(ICONV_FULL),+LCD4LINUX_NEEDS_libiconv:libiconv-full) \
 	+LCD4LINUX_NEEDS_libmysqlclient:libmysqlclient \
 	+LCD4LINUX_NEEDS_libncurses:libncurses \
 	+LCD4LINUX_NEEDS_libnmeap:libnmeap \
@@ -195,7 +195,7 @@ EXTRA_LDFLAGS+= -Wl,-rpath-link,$(STAGING_DIR)/usr/lib
 
 ifneq ($(CONFIG_LCD4LINUX_NEEDS_libiconv),)
   CONFIGURE_ARGS+= \
-	--with-libiconv-prefix="$(STAGING_DIR)/usr/lib/libiconv"
+	--with-libiconv-prefix="$(ICONV_PREFIX)"
 else
   CONFIGURE_ARGS+= \
 	--without-libiconv-prefix

@@ -20,6 +20,7 @@ PKG_LIBTOOL_PATHS:=. libgphoto2_port
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/libgphoto2/Default
   SECTION:=libs
@@ -29,7 +30,7 @@ endef
 
 define Package/libgphoto2
   $(call Package/libgphoto2/Default)
-  DEPENDS:=+libusb +libexif +libjpeg +libpthread +libltdl +libiconv
+  DEPENDS:=+libusb +libexif +libjpeg +libpthread +libltdl $(ICONV_DEPENDS)
   TITLE:=The basic library of the gphoto2 program.
   MENU:=1
 endef
@@ -50,8 +51,8 @@ CONFIGURE_ARGS += \
 	--without-libintl-prefix \
 
 CONFIGURE_VARS += \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/lib/libiconv/include" \
-	LDFLAGS="$$$$LDFLAGS -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
+	CPPFLAGS="$$$$CPPFLAGS -I$(ICONV_PREFIX)/include" \
+	LDFLAGS="$$$$LDFLAGS -L$(ICONV_PREFIX)/lib" \
 	LIBEXIF_CFLAGS="$$$$CPPFLAGS" \
 	LIBEXIF_LIBS="$$$$LDFLAGS -lexif" \
 	LIBUSB_CFLAGS="$$$$CPPFLAGS" \

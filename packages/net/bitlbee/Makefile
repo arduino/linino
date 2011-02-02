@@ -18,15 +18,16 @@ PKG_SOURCE_URL:=http://get.bitlbee.org/src \
 	http://ftp.snt.utwente.nl/pub/software/bitlbee/src
 PKG_MD5SUM:=a4d7daa9b64898dd41a3a6d104692d9a
 
-PKG_BUILD_DEPENDS:=libopenssl glib1 libiconv
+PKG_BUILD_DEPENDS:=libopenssl glib1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/bitlbee
   SUBMENU:=Instant Messaging
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +glib1 +libiconv
+  DEPENDS:=+libopenssl +glib1 $(ICONV_DEPENDS)
   TITLE:=IRC gateway to IM chat networks
   URL:=http://www.bitlbee.org/
 endef
@@ -63,11 +64,11 @@ define Build/Configure
 	);
 	$(SED) 's,^CFLAGS=.*,CFLAGS=$(TARGET_CFLAGS),g'\
 		$(PKG_BUILD_DIR)/Makefile.settings
-	@echo 'CFLAGS+=-I$(STAGING_DIR)/usr/lib/libiconv/include' >> \
+	@echo 'CFLAGS+=-I$(ICONV_PREFIX)/include' >> \
 		$(PKG_BUILD_DIR)/Makefile.settings
 	@echo 'LFLAGS+=$(TARGET_LDFLAGS)' >> \
 		$(PKG_BUILD_DIR)/Makefile.settings
-	@echo 'LFLAGS+=-L$(STAGING_DIR)/usr/lib/libiconv/lib' >> \
+	@echo 'LFLAGS+=-L$(ICONV_PREFIX)/lib' >> \
 		$(PKG_BUILD_DIR)/Makefile.settings
 endef
 

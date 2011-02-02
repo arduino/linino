@@ -19,6 +19,7 @@ PKG_FIXUP = libtool
 PKG_CONFIG_DEPENDS = CONFIG_PACKAGE_weechat-mod-lua
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/weechat/Default
   SUBMENU:=Instant Messaging
@@ -36,7 +37,7 @@ endef
 define Package/weechat
 $(call Package/weechat/Default)
  MENU=1
- DEPENDS:=+libiconv +libgnutls +libncurses
+ DEPENDS:=+libgnutls +libncurses $(ICONV_DEPENDS)
 endef
 
 define Package/weechat/description
@@ -72,7 +73,7 @@ CONFIGURE_ARGS+= \
 	--with-debug=0 \
 	--with-libgnutls-prefix=$(STAGING_DIR)/usr \
 	--without-doc-xsl-prefix \
-	--with-libiconv-prefix="$(STAGING_DIR)/usr/lib/libiconv" \
+	--with-libiconv-prefix="$(ICONV_PREFIX)" \
 	--without-libintl-prefix \
 	--disable-aspell \
 	--disable-perl \
@@ -82,7 +83,7 @@ CONFIGURE_ARGS+= \
 	ac_cv_path_LIBGNUTLS_CONFIG="pkg-config gnutls" \
 
 TARGET_LDFLAGS += \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib \
+	-L$(ICONV_PREFIX)/lib \
 	-Wl,-rpath-link,$(STAGING_DIR)/usr/lib
 
 ifneq ($(CONFIG_PACKAGE_weechat-mod-lua),)

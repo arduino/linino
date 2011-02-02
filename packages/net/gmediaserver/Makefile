@@ -19,11 +19,12 @@ PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/gmediaserver
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+id3lib +libiconv +libmagic +file +libupnp +libuuid +uclibcxx +zlib
+  DEPENDS:=+id3lib +libmagic +file +libupnp +libuuid +uclibcxx +zlib $(ICONV_DEPENDS)
   TITLE:=An UPnP music media server
   URL:=http://www.nongnu.org/gmediaserver/
   SUBMENU:=multimedia
@@ -39,7 +40,7 @@ endef
 CONFIGURE_ARGS += \
 	--disable-rpath \
 	--enable-threads=posix \
-	--with-libiconv-prefix="$(STAGING_DIR)/usr/lib/libiconv" \
+	--with-libiconv-prefix="$(ICONV_PREFIX)" \
 	--without-libintl-prefix \
 	--with-id3lib="$(STAGING_DIR)/usr" \
 	--with-libupnp="$(STAGING_DIR)/usr" \

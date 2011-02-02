@@ -15,18 +15,17 @@ PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/2.22
 PKG_MD5SUM:=504877a973f6abc0788283232cd703cb
 PKG_FIXUP:=libtool
 
+# AM_PATH_GTK_2_0
+PKG_BUILD_DEPENDS:=gtk2
+
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 $(call include_mk, python-package.mk)
 
 PKG_INSTALL=1
 
-EXTRA_CFLAGS += \
-	-I$(STAGING_DIR)/usr/lib/libintl/include \
-	-I$(STAGING_DIR)/usr/lib/libiconv/include \
-
-EXTRA_LDFLAGS += \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib
+EXTRA_CFLAGS += -I$(ICONV_PREFIX) -I$(INTL_PREFIX)
+EXTRA_LDFLAGS += -L$(ICONV_PREFIX) -L$(INTL_PREFIX)
 
 STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_python-rsvg CONFIG_PACKAGE_python-wnck)
 

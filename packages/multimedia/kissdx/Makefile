@@ -18,11 +18,12 @@ PKG_MD5SUM:=ef213d2748f5a63b1c97ac7bfa942b2f
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/kissdx
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+libjpeg +libiconv +libdvdread
+  DEPENDS:=+libjpeg +libdvdread $(ICONV_DEPENDS)
   TITLE:=PC-Link clone for KiSS media players
   URL:=http://kissdx.vidartysse.net
 endef
@@ -35,8 +36,8 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CFLAGS="$(TARGET_CFLAGS) -DLinux -DUSE_INTERNAL_SENDFILE -std=gnu99 -Wall -Wstrict-prototypes -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DFILE_OFFSET_BITS=64 -D_GNU_SOURCE -I$(STAGING_DIR)/usr/lib/libiconv/include -I$(STAGING_DIR)/usr/include/dvdread $(TARGET_CPPFLAGS) $(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib/libiconv/lib $(TARGET_LDFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) -DLinux -DUSE_INTERNAL_SENDFILE -std=gnu99 -Wall -Wstrict-prototypes -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DFILE_OFFSET_BITS=64 -D_GNU_SOURCE -I$(ICONV_PREFIX)/include -I$(STAGING_DIR)/usr/include/dvdread $(TARGET_CPPFLAGS) $(TARGET_LDFLAGS) -L$(ICONV_PREFIX)/lib" \
+		LDFLAGS="-L$(ICONV_PREFIX)/lib $(TARGET_LDFLAGS)" \
 		STRIP=$(STRIP) \
 		CC="$(TARGET_CROSS)gcc" all
 endef

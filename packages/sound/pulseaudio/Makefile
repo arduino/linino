@@ -22,12 +22,13 @@ PKG_FIXUP = libtool
 PKG_INSTALL = 1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 #TODO: split pulse into executable and library (or even better into several libraries since they're used as loadable modules, so not linked into)
 define Package/pulseaudio
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libspeexdsp +libgdbm +liboil +libsndfile +libatomicops +libltdl +dbus +libpthread +librt +libintl +libiconv +alsa-lib @BROKEN
+  DEPENDS:=+libspeexdsp +libgdbm +liboil +libsndfile +libatomicops +libltdl +dbus +libpthread +librt +alsa-lib $(ICONV_DEPENDS) $(INTL_DEPENDS) @BROKEN
   TITLE:=Network sound server
   URL:=http://www.pulseaudio.org
 endef
@@ -66,7 +67,7 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
 
-#SUPP_LIBS:=-L$(STAGING_DIR)/usr/lib/libintl/lib -L$(STAGING_DIR)/usr/lib/libiconv/lib
+#SUPP_LIBS:=-L$(INTL_PREFIX)/lib -L$(ICONV_PREFIX)/lib
 TARGET_CFLAGS += -std=gnu99
 
 define Package/pulseaudio/install

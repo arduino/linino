@@ -19,6 +19,7 @@ PKG_FIXUP:=libtool no-autoreconf
 PKG_BUILD_PARALLEL:=1 
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/php5/Default
   SUBMENU:=PHP
@@ -182,7 +183,7 @@ endef
 
 define Package/php5-mod-iconv
   $(call Package/php5/Default)
-  DEPENDS:=php5 +libiconv
+  DEPENDS:=php5 $(ICONV_DEPENDS)
   TITLE:=iConv shared module
 endef
 define Package/php5-mod-iconv/config
@@ -350,7 +351,7 @@ endef
 
 define Package/php5-mod-xmlreader
   $(call Package/php5/Default)
-  DEPENDS:=php5 +libxml2 +libiconv
+  DEPENDS:=php5 +libxml2 $(ICONV_DEPENDS)
   TITLE:=XMLReader shared module
 endef
 define Package/php5-mod-xmlreader/config
@@ -360,7 +361,7 @@ endef
 
 define Package/php5-mod-xmlwriter
   $(call Package/php5/Default)
-  DEPENDS:=php5 +libxml2 +libiconv
+  DEPENDS:=php5 +libxml2 $(ICONV_DEPENDS)
   TITLE:=XMLWriter shared module
 endef
   define Package/php5-mod-xmlwriter/config
@@ -390,7 +391,7 @@ PKG_CONFIGURE_OPTS:= \
 	--disable-phar
 
 ifneq ($(SDK),)
-  PKG_BUILD_DEPENDS+=libopenssl zlib libcurl libgd libgmp libopenldap libmysqlclient libpq libsqlite2 libpthread libsqlite3 libpcre libxml2 libiconv
+  PKG_BUILD_DEPENDS+=libopenssl zlib libcurl libgd libgmp libopenldap libmysqlclient libpq libsqlite2 libpthread libsqlite3 libpcre libxml2
 # force PKG_CONFIGURE_{LIBS,OPTS} below when built in the SDK
   CONFIG_PACKAGE_php5-cli:=m
   CONFIG_PACKAGE_php5-cgi:=m
@@ -469,7 +470,7 @@ else
 endif
 
 ifneq ($(CONFIG_PACKAGE_php5-mod-iconv),)
-  PKG_CONFIGURE_OPTS+= --with-iconv=shared,"$(STAGING_DIR)/usr"
+  PKG_CONFIGURE_OPTS+= --with-iconv=shared,"$(ICONV_PREFIX)"
 else
   PKG_CONFIGURE_OPTS+= --without-iconv
 endif

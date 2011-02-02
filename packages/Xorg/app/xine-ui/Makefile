@@ -19,6 +19,7 @@ PKG_MD5SUM:=90ea1f76747e9788a30a73e7f4a76cf6
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 EXTRA_LDLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
@@ -27,7 +28,7 @@ define Package/xine-ui
   CATEGORY:=Xorg
   SUBMENU:=app
   TITLE:=xine user interface
-  DEPENDS:=+xine-lib +libpng +curl +libiconv +libXv +libXt +libICE +libXxf86vm +libpng +libfreetype
+  DEPENDS:=+xine-lib +libpng +curl +libXv +libXt +libICE +libXxf86vm +libpng +libfreetype $(ICONV_DEPENDS)
   URL:=http://www.xine-project.org/
 endef
 

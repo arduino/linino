@@ -18,11 +18,12 @@ PKG_MD5SUM:=4fc292b635ba7b442c7aaf5680199012
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/bluez-utils
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+bluez-libs +libpthread +dbus +libintl +libiconv
+  DEPENDS:=+bluez-libs +libpthread +dbus $(INTL_DEPENDS) $(ICONV_DEPENDS)
   TITLE:=Bluetooth utilities
   URL:=http://www.bluez.org/
 endef
@@ -49,8 +50,8 @@ CONFIGURE_ARGS += \
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		LDFLAGS="$(TARGET_LDFLAGS) \
-			-L$(STAGING_DIR)/usr/lib/libintl/lib \
-			-L$(STAGING_DIR)/usr/lib/libiconv/lib" \
+			-L$(ICONV_PREFIX)/lib \
+			-L$(INTL_PREFIX)/lib" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef

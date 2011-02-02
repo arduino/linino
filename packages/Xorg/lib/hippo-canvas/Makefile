@@ -17,12 +17,13 @@ PKG_MD5SUM:=9a0f64eb0258a3e8ba710eff9798a7d0
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
 PKG_INSTALL:=1
 
 EXTRA_CFLAGS += \
-	-I$(STAGING_DIR)/usr/lib/libintl/include \
+	-I$(INTL_PREFIX)/include \
 	-I$(STAGING_DIR)/usr/include/libcroco-0.6 \
 
 STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_hippo-canvas CONFIG_PACKAGE_python-hippo-canvas)

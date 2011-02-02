@@ -21,6 +21,7 @@ PKG_REMOVE_FILES:=autogen.sh aclocal.m4
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/gstreamer/Default
   CATEGORY:=Multimedia
@@ -95,8 +96,7 @@ CONFIGURE_ARGS += \
 
 EXTRA_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib
+	-L$(ICONV_PREFIX)/lib -L$(INTL_PREFIX)/lib
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/gstreamer-$(GST_VERSION)

@@ -19,14 +19,16 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/minidlna
 PKG_BUILD_PARALLEL:=0
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/minidlna
   SECTION:=multimedia
   CATEGORY:=Multimedia
   TITLE:=UPnP A/V & DLNA Media Server
   URL:=http://minidlna.sourceforge.net/
-  DEPENDS:=+libintl +libiconv +libpthread +libexif +libjpeg \
-+libsqlite3 +libffmpeg +libid3tag +libflac +libvorbis +libuuid
+  DEPENDS:= +libpthread +libexif +libjpeg +libsqlite3 +libffmpeg \
+  	+libid3tag +libflac +libvorbis +libuuid \
+  	$(ICONV_DEPENDS) $(INTL_DEPENDS)
 endef
 
 define Package/minidlna/description

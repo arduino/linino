@@ -18,6 +18,7 @@ PKG_MD5SUM:=530d9b48187e36f78fc21bb19e94326d
 PKG_BUILD_DEPENDS:=libgd
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/amule
   SUBMENU:=P2P
@@ -61,9 +62,12 @@ CONFIGURE_ARGS+= \
 	--with-libpng-prefix="$(STAGING_DIR)/usr" \
 	--with-wx-prefix="$(STAGING_DIR)/usr" \
 	--with-crypto-prefix="$(STAGING_DIR)/usr" \
-	--without-libiconv-prefix \
-	--without-libintl-prefix \
+	--with-libiconv-prefix="$(ICONV_PREFIX)" \
+	--with-libintl-prefix="$(INTL_PREFIX)" \
 	--without-x \
+
+TARGET_LDFLAGS += \
+	-liconv
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
