@@ -26,6 +26,7 @@ PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/ecore
   SECTION:=xorg-lib
@@ -33,8 +34,8 @@ define Package/ecore
   SUBMENU:=libraries
   TITLE:=Ecore is the core event abstraction layer and X abstraction layer
   URL:=http://wiki.enlightenment.org/index.php/Ecore
-  DEPENDS:=+fribidi +eina +evas +libiconv +libintl +libXtst +libXrandr +libX11 \
-  +libXcursor +libXdpms @!LINUX_2_4
+  DEPENDS:=+fribidi +eina +evas +libXtst +libXrandr +libX11 \
+	+libXcursor +libXdpms @!LINUX_2_4 $(ICONV_DEPENDS) $(INTL_DEPENDS)
 endef
 
 define Package/ecore/description
@@ -42,9 +43,8 @@ define Package/ecore/description
 endef
 
 # iconv needed for ecore-txt
-TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libiconv/include
 TARGET_LDFLAGS+= \
-	-L$(STAGING_DIR)/usr/lib/libiconv/lib -liconv \
+	-liconv \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
 	-Wl,-rpath=/usr/lib \
 

@@ -23,6 +23,7 @@ PKG_SOURCE_URL:=http://svn.enlightenment.org/svn/e/trunk/OLD/BINDINGS/python/$(P
 PKG_BUILD_DEPENDS:=cython python
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 -include $(if $(DUMP),,$(STAGING_DIR)/mk/python-package.mk)
 
 define Package/python-etk
@@ -36,9 +37,6 @@ endef
 define Package/python-etk/description
   etk python bindings
 endef
-
-TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libiconv/include
-TARGET_LDFLAGS+=-liconv -L$(STAGING_DIR)/usr/lib/libiconv/lib
 
 define Build/Compile
 	$(call Build/Compile/PyMod,,install --prefix="$(PKG_INSTALL_DIR)/usr")
