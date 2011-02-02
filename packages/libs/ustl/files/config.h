@@ -15,6 +15,9 @@
 // Define to the address where bug reports for this package should be sent.
 #define USTL_BUGREPORT	"Mike Sharov <msharov@users.sourceforge.net>"
 
+/// Define to 1 if you want to build without libstdc++
+#define WITHOUT_LIBSTDCPP 1
+
 /// Define to 1 if you want stream operations to throw exceptions on
 /// insufficient data or insufficient space. All these errors should
 /// be preventable in output code; the input code should verify the
@@ -23,12 +26,9 @@
 ///
 #undef WANT_STREAM_BOUNDS_CHECKING
 
-#if !defined(WANT_STREAM_BOUNDS_CHECKING) && !defined(NDEBUG)
+#if !defined(WANT_STREAM_BOUNDS_CHECKING) && !defined(NDEBUG) && !defined(WITHOUT_LIBSTDCPP)
     #define WANT_STREAM_BOUNDS_CHECKING 1
 #endif
-
-/// Define to 1 if you want to build without libstdc++
-#define WITHOUT_LIBSTDCPP 1
 
 /// Define to 1 if you don't want the standard streams.
 /// You will not be able to run bvt tests if you do this.
