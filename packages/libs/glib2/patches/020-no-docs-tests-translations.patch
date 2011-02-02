@@ -1,61 +1,6 @@
---- a/gio/Makefile.in
-+++ b/gio/Makefile.in
-@@ -242,7 +242,7 @@ ETAGS = etags
- CTAGS = ctags
- am__tty_colors = \
- red=; grn=; lgn=; blu=; std=
--DIST_SUBDIRS = libasyncns xdgmime inotify fen win32 . fam tests
-+DIST_SUBDIRS = libasyncns xdgmime inotify fen . fam
- DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
- am__relativize = \
-   dir0=`pwd`; \
-@@ -489,7 +489,7 @@ EXTRA_DIST = gio-marshal.list gio.symbol
- TEST_PROGS = 
- NULL = 
- SUBDIRS = $(am__append_1) $(am__append_2) $(am__append_6) \
--	$(am__append_9) . $(am__append_12) tests
-+	$(am__append_9) . $(am__append_12)
- @MS_LIB_AVAILABLE_TRUE@@OS_WIN32_AND_DLL_COMPILATION_TRUE@noinst_DATA = gio-2.0.lib
- @MS_LIB_AVAILABLE_TRUE@@OS_WIN32_AND_DLL_COMPILATION_TRUE@install_ms_lib_cmd = $(INSTALL) gio-2.0.lib $(DESTDIR)$(libdir)
- @MS_LIB_AVAILABLE_TRUE@@OS_WIN32_AND_DLL_COMPILATION_TRUE@uninstall_ms_lib_cmd = -rm $(DESTDIR)$(libdir)/gio-2.0.lib
---- a/glib/Makefile.in
-+++ b/glib/Makefile.in
-@@ -483,8 +483,8 @@ TEST_PROGS = 
- @ENABLE_REGEX_TRUE@gregex_c = gregex.c
- @ENABLE_REGEX_FALSE@gregex_h = 
- @ENABLE_REGEX_TRUE@gregex_h = gregex.h
--SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre . tests
--DIST_SUBDIRS = libcharset gnulib pcre update-pcre tests
-+SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre .
-+DIST_SUBDIRS = libcharset gnulib pcre update-pcre
- AM_CPPFLAGS = \
- 	-I$(top_srcdir) 		\
- 	$(pcre_inc) 			\
---- a/gobject/Makefile.in
-+++ b/gobject/Makefile.in
-@@ -413,7 +413,7 @@ TEST_PROGS = 
- # GObject - GLib Type, Object, Parameter and Signal Library
- # Copyright (C) 1997,98,99,2000 Tim Janik and Red Hat, Inc.
- #
--SUBDIRS = . tests
-+SUBDIRS = .
- AM_CPPFLAGS = \
- 	-DG_LOG_DOMAIN=\"GLib-GObject\"		\
- 	-I$(top_srcdir)				\
---- a/Makefile.in
-+++ b/Makefile.in
-@@ -398,7 +398,7 @@ EXTRA_DIST = ChangeLog.pre-2-20 ChangeLo
- 	gio-2.0-uninstalled.pc.in gio-unix-2.0-uninstalled.pc.in
- TEST_PROGS = 
- AUTOMAKE_OPTIONS = 1.7
--SUBDIRS = . m4macros glib gmodule gthread gobject gio tests po docs
-+SUBDIRS = . m4macros glib gmodule gthread gobject gio
- DIST_SUBDIRS = $(SUBDIRS) build
- bin_SCRIPTS = glib-gettextize
- AM_CPPFLAGS = \
---- a/configure.in
-+++ b/configure.in
-@@ -3470,18 +3470,6 @@ gio/fen/Makefile
+--- a/configure.ac
++++ b/configure.ac
+@@ -3737,18 +3737,6 @@ gio/fen/Makefile
  gio/fam/Makefile
  gio/win32/Makefile
  gio/tests/Makefile
@@ -76,7 +21,7 @@
  
 --- a/gio/Makefile.am
 +++ b/gio/Makefile.am
-@@ -174,8 +174,6 @@ win32_sources = \
+@@ -264,8 +264,6 @@ giowin32include_HEADERS = \
  
  endif
  
@@ -85,28 +30,20 @@
  libgio_2_0_la_SOURCES =		\
  	gappinfo.c 		\
  	gasynchelper.c 		\
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -3,7 +3,7 @@ include $(top_srcdir)/Makefile.decl
- 
- AUTOMAKE_OPTIONS = 1.7
- 
--SUBDIRS = . m4macros glib gmodule gthread gobject gio tests po docs
-+SUBDIRS = . m4macros glib gmodule gthread gobject gio
- DIST_SUBDIRS = $(SUBDIRS) build
- 
- bin_SCRIPTS = glib-gettextize
 --- a/glib/Makefile.am
 +++ b/glib/Makefile.am
-@@ -19,7 +19,7 @@ gregex_c =
- gregex_h =
+@@ -48,9 +48,9 @@ else
+ gatomic_c = gatomic.c
  endif
  
 -SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre . tests
 +SUBDIRS = libcharset $(PRINTF_SUBDIR) $(MAYBE_PCRE) update-pcre .
  
- DIST_SUBDIRS = libcharset gnulib pcre update-pcre tests
+-DIST_SUBDIRS = libcharset gnulib pcre update-pcre tests
++DIST_SUBDIRS = libcharset gnulib pcre update-pcre
  
+ AM_CPPFLAGS = 				\
+ 	$(glib_INCLUDES) 		\
 --- a/gobject/Makefile.am
 +++ b/gobject/Makefile.am
 @@ -4,7 +4,7 @@
@@ -116,5 +53,29 @@
 -SUBDIRS = . tests
 +SUBDIRS = .
  
- AM_CPPFLAGS = 					\
- 	-DG_LOG_DOMAIN=\"GLib-GObject\"		\
+ CLEANFILES=
+ 
+--- a/gthread/Makefile.am
++++ b/gthread/Makefile.am
+@@ -1,8 +1,8 @@
+ ## Process this file with automake to produce Makefile.in
+ include $(top_srcdir)/Makefile.decl
+ 
+-SUBDIRS = . tests
+-DIST_SUBDIRS = tests
++SUBDIRS = .
++DIST_SUBDIRS = 
+ 
+ AM_CPPFLAGS = 				\
+ 	$(glib_INCLUDES) 		\
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -3,7 +3,7 @@ include $(top_srcdir)/Makefile.decl
+ 
+ ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
+ 
+-SUBDIRS = . m4macros glib gmodule gthread gobject gio tests po docs
++SUBDIRS = . m4macros glib gmodule gthread gobject gio
+ DIST_SUBDIRS = $(SUBDIRS) build
+ 
+ bin_SCRIPTS = glib-gettextize

@@ -1,10 +1,10 @@
---- a/configure.in
-+++ b/configure.in
-@@ -2682,7 +2682,8 @@ dnl **************************
+--- a/configure.ac
++++ b/configure.ac
+@@ -2741,7 +2741,8 @@ dnl **************************
  dnl *** Checks for gtk-doc ***
  dnl **************************
  
--GTK_DOC_CHECK([1.11])
+-GTK_DOC_CHECK([1.15])
 +AM_CONDITIONAL([ENABLE_GTK_DOC], [false])
 +AM_CONDITIONAL([GTK_DOC_USE_LIBTOOL], [false])
  
