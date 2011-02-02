@@ -17,11 +17,12 @@ PKG_MD5SUM:=3dcfb28fa339090a1d29a9e148cce469
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/elfutils
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libintl
+  DEPENDS:=$(INTL_DEPENDS)
   TITLE:=ELF utilities
   URL:=https://fedorahosted.org/elfutils/
 endef
