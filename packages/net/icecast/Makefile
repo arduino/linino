@@ -53,12 +53,12 @@ define Build/Configure
 		BUILD_DIR="$(PKG_BUILD_DIR)" \
 		V=99 \
 		compile
-	$(SED) 's,-lvorbisidec,$(TREMOR_DIR)/lib/libvorbisidec.a,g' $(PKG_BUILD_DIR)/configure
+	$(SED) 's,-lvorbis ,$(TREMOR_DIR)/lib/libvorbisidec.a -logg ,g' $(PKG_BUILD_DIR)/configure
 	$(call Build/Configure/Default, \
 		--enable-yp \
 		--with-curl="yes" \
 		--with-curl-config="$(STAGING_DIR)/usr/bin/curl-config" \
-		--with-ogg="$(TREMOR_DIR)" \
+		--with-ogg="$(STAGING_DIR)/usr" \
 		--with-speex="no" \
 		--with-theora="no" \
 		--with-vorbis="$(TREMOR_DIR)" \
