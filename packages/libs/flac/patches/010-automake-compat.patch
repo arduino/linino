@@ -1,7 +1,6 @@
-diff -Naur flac-1.2.1/Makefile.am flac-1.2.1-patched/Makefile.am
---- flac-1.2.1/Makefile.am	2011-02-02 00:07:47.000000000 +0200
-+++ flac-1.2.1-patched/Makefile.am	2011-02-02 00:19:28.000000000 +0200
-@@ -34,6 +34,8 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -34,6 +34,8 @@ SUBDIRS = include m4 src build obj
  
  DISTCLEANFILES = libtool-disable-static
  
