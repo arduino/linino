@@ -71,7 +71,6 @@ endef
 
 CONFIGURE_ARGS+= \
 	--with-debug=0 \
-	--with-libgnutls-prefix=$(STAGING_DIR)/usr \
 	--without-doc-xsl-prefix \
 	--with-libiconv-prefix="$(ICONV_PREFIX)" \
 	--without-libintl-prefix \

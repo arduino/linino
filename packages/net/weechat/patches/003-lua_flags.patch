@@ -1,7 +1,6 @@
-diff -urN weechat-0.2.6/configure weechat-0.2.6.new/configure
---- weechat-0.2.6/configure	2007-09-05 16:16:21.000000000 +0200
-+++ weechat-0.2.6.new/configure	2008-01-20 16:29:38.000000000 +0100
-@@ -30180,14 +30180,6 @@
+--- a/configure
++++ b/configure
+@@ -30177,14 +30177,6 @@ fi
    test -n "$LUACONFIG" && break
  done
  
