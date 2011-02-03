@@ -45,8 +45,9 @@ static char toAscii(char c)
 	return '.';
 }
 
-static void dump(FILE *outstream, const char *buf, size_t size)
+static void dump_bytes(FILE *outstream, const void *_buf, size_t size)
 {
+	const char *buf = _buf;
 	size_t i, ascii_cnt = 0;
 	char ascii[17] = { 0, };
 
@@ -71,7 +72,6 @@ static void dump(FILE *outstream, const char *buf, size_t size)
 		}
 		fprintf(outstream, "  |%s|\n", ascii);
 	}
-	fprintf(outstream, "\n");
 }
 
 static uint32_t crc32(uint32_t crc, const void *_data, size_t size)
@@ -131,13 +131,56 @@ static int is_header(void *data, size_t size)
 	return 1;
 }
 
+void dump_bme_payload(FILE *outstream, const void *payload, size_t len)
+{
+	const uint8_t *pmm_area = payload;
+	unsigned int group, element, pmm_offset;
+	uint8_t active_group_mask;
+	static const uint8_t zero_element[16] = { 0, };
+
+	if (len != 0x600 || memcmp(payload, "BME-PMM-BLOCK01", 15) != 0) {
+		fprintf(outstream, "ERROR: The section payload is not "
+			"a BME PMM block\n");
+		return;
+	}
+
+	active_group_mask = pmm_area[16];
+
+	for (group = 0; group < 3; group++) {
+		for (element = 0; element < 32; element++) {
+			pmm_offset = group * 512 + element * 16;
+			if (memcmp(pmm_area + pmm_offset, zero_element, 16) == 0)
+				continue;
+			fprintf(outstream, "-- BME-PMM area -- group %u%s, element %u:\n",
+				group,
+				(active_group_mask & (1 << group)) ? "" : " (INACTIVE)",
+				element);
+			dump_bytes(outstream, pmm_area + pmm_offset, 16);
+		}
+	}
+}
+
+typedef void (*payload_dumper_t)(FILE *, const void *payload, size_t len);
+
+static payload_dumper_t get_payload_dumper(const char *section_name, int raw)
+{
+	if (!raw) {
+		if (strcmp(section_name, "bme") == 0)
+			return dump_bme_payload;
+	}
+
+	return dump_bytes;
+}
+
 static int dump_section(const struct header *hdr,
 			const void *payload, size_t payload_len,
 			int dump_payload,
+			int dump_raw_payload,
 			FILE *outstream)
 {
 	char name[sizeof(hdr->name) + 1] = { 0, };
 	int hdrsum_ok, datasum_ok;
+	payload_dumper_t dumper;
 
 	memcpy(name, hdr->name, sizeof(hdr->name));
 	hdrsum_ok = (crc32(0, hdr, sizeof(*hdr) - 4) == le32_to_cpu(hdr->hdrsum));
@@ -153,8 +196,10 @@ static int dump_section(const struct header *hdr,
 		datasum_ok ? "Ok" : "MISMATCH");
 	fprintf(outstream, "Header CRC32:  0x%08X (%s)\n", le32_to_cpu(hdr->hdrsum),
 		hdrsum_ok ? "Ok" : "MISMATCH");
-	if (dump_payload)
-		dump(outstream, payload, payload_len);
+	if (dump_payload) {
+		dumper = get_payload_dumper(name, dump_raw_payload);
+		dumper(outstream, payload, payload_len);
+	}
 	fprintf(outstream, "\n");
 
 	return 0;
@@ -259,6 +304,7 @@ next:
 static int dump_image(const char *filepath,
 		      int want_section_index, const char *want_section_name,
 		      int want_headers_only,
+		      int dump_raw_payload,
 		      FILE *outstream)
 {
 	int err, ret = 0;
@@ -290,6 +336,7 @@ static int dump_image(const char *filepath,
 		err = dump_section(hdr, section + sizeof(struct header),
 				   payload_len,
 				   !want_headers_only,
+				   dump_raw_payload,
 				   outstream);
 		if (err) {
 			ret = err;
@@ -355,6 +402,7 @@ static void usage(FILE *fd)
 	fprintf(fd, "Options:\n");
 	fprintf(fd, "  -i|--index NUMBER    Use this section index number\n");
 	fprintf(fd, "  -n|--name STRING     Use this section name\n");
+	fprintf(fd, "  -r|--raw             Dump raw data (for -d|--dump only)\n");
 	fprintf(fd, "\n");
 	fprintf(fd, "  -h|--help            Print this help text\n");
 }
@@ -373,6 +421,7 @@ int main(int argc, char **argv)
 	enum action action = ACTION_NONE;
 	int opt_index = -1;
 	const char *opt_name = NULL;
+	int opt_raw_payload = 0;
 
 	static struct option long_options[] = {
 		{ "dump", no_argument, 0, 'd', },
@@ -380,12 +429,13 @@ int main(int argc, char **argv)
 		{ "payload", no_argument, 0, 'p', },
 		{ "index", required_argument, 0, 'i', },
 		{ "name", required_argument, 0, 'n', },
+		{ "raw", no_argument, 0, 'r', },
 		{ "help", no_argument, 0, 'h', },
 		{ },
 	};
 
 	while (1) {
-		c = getopt_long(argc, argv, "dHphi:n:",
+		c = getopt_long(argc, argv, "dHphi:n:r",
 				long_options, &idx);
 		if (c == -1)
 			break;
@@ -414,6 +464,9 @@ int main(int argc, char **argv)
 			break;
 		case 'n':
 			opt_name = optarg;
+			break;
+		case 'r':
+			opt_raw_payload = 1;
 			break;
 		default:
 			return 1;
@@ -445,6 +498,7 @@ int main(int argc, char **argv)
 	case ACTION_DUMPHDRS:
 		err = dump_image(filepath, opt_index, opt_name,
 				 (action == ACTION_DUMPHDRS),
+				 opt_raw_payload,
 				 stdout);
 		if (err)
 			return 1;
