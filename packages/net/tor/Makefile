@@ -19,20 +19,30 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/tor
+define Package/tor/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libevent +libopenssl +libpthread
-  TITLE:=An anonymous Internet communication system
   URL:=http://www.torproject.org/
 endef
 
-define Package/tor/description
+define Package/tor/Default/description
  Tor is a toolset for a wide range of organizations and people that want to
  improve their safety and security on the Internet. Using Tor can help you
  anonymize web browsing and publishing, instant messaging, IRC, SSH, and
  more. Tor also provides a platform on which software developers can build
  new applications with built-in anonymity, safety, and privacy features.
+endef
+
+define Package/tor
+$(call Package/tor/Default)
+  TITLE:=An anonymous Internet communication system
+  DEPENDS:=+libevent +libopenssl +libpthread
+endef
+
+define Package/tor-geoip
+$(call Package/tor/Default)
+  TITLE:=GeoIP db for tor
+  DEPENDS:=+tor
 endef
 
 define Package/tor/conffiles
@@ -94,4 +104,10 @@ define Package/tor/install
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/tor/torrc.sample $(1)/etc/tor/torrc
 endef
 
+define Package/tor-geoip/install
+	$(INSTALL_DIR) $(1)/usr/share/tor
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/tor/geoip $(1)/usr/share/tor
+endef
+
 $(eval $(call BuildPackage,tor))
+$(eval $(call BuildPackage,tor-geoip))
