@@ -1,6 +1,6 @@
 --- a/rdnssd/Makefile.am
 +++ b/rdnssd/Makefile.am
-@@ -27,7 +27,8 @@ conf_SCRIPTS = merge-hook
+@@ -30,7 +30,8 @@ conf_SCRIPTS = merge-hook
  # rdnssd
  rdnssd_SOURCES = rdnssd.c rdnssd.h \
  	icmp.c \
@@ -12,16 +12,16 @@
  
 --- a/rdnssd/Makefile.in
 +++ b/rdnssd/Makefile.in
-@@ -58,7 +58,7 @@ CONFIG_CLEAN_FILES =
+@@ -60,7 +60,7 @@ CONFIG_CLEAN_FILES =
+ CONFIG_CLEAN_VPATH_FILES =
  am__installdirs = "$(DESTDIR)$(sbindir)" "$(DESTDIR)$(confdir)"
- sbinPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
  PROGRAMS = $(sbin_PROGRAMS)
 -am_rdnssd_OBJECTS = rdnssd.$(OBJEXT) icmp.$(OBJEXT) netlink.$(OBJEXT)
 +am_rdnssd_OBJECTS = rdnssd.$(OBJEXT) icmp.$(OBJEXT) netlink.$(OBJEXT) strverscmp.$(OBJEXT)
  rdnssd_OBJECTS = $(am_rdnssd_OBJECTS)
  am__DEPENDENCIES_1 =
  rdnssd_DEPENDENCIES = $(am__DEPENDENCIES_1) \
-@@ -213,7 +213,8 @@ conf_SCRIPTS = merge-hook
+@@ -251,7 +251,8 @@ conf_SCRIPTS = merge-hook
  # rdnssd
  rdnssd_SOURCES = rdnssd.c rdnssd.h \
  	icmp.c \
@@ -31,7 +31,7 @@
  
  rdnssd_LDADD = $(LIBRT) \
  		@top_builddir@/compat/libcompat.a
-@@ -336,6 +337,7 @@ distclean-compile:
+@@ -373,6 +374,7 @@ distclean-compile:
  
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icmp.Po@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/netlink.Po@am__quote@

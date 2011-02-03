@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ndisc6
-PKG_VERSION:=0.9.9
+PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
-PKG_MD5SUM:=aab2209fa7bf6b02ed2f49e7b8e9fa18
 
-PKG_SOURCE_URL:=http://www.remlab.net/files/ndisc6/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://www.remlab.net/files/ndisc6
+PKG_MD5SUM:=0aa142213f4b24a6c7dcf75d2a2c05a8
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,7 +24,7 @@ define Package/ndisc
   CATEGORY:=IPv6
   SUBMENU:=IPv6 discovery tools
   TITLE:=IPv6 discovery tools
-  URL:=http://people.via.ecp.fr/~rem/ndisc6/
+  URL:=http://www.remlab.net/ndisc6/
 endef
 
 define Package/ndisc/description
@@ -32,6 +34,7 @@ endef
 define Package/ndisc6
   $(call Package/ndisc)
   TITLE:=An ICMPv6 neighbour discovery tool
+  DEPENDS:=+libpthread
 endef
 
 define Package/ndisc6/description
@@ -41,6 +44,7 @@ endef
 define Package/rdisc6
   $(call Package/ndisc)
   TITLE:=An ICMPv6 router discovery tool
+  DEPENDS:=+libpthread
 endef
 
 define Package/rdisc6/description
@@ -59,7 +63,7 @@ endef
 define Package/rdnssd
   $(call Package/ndisc)
   TITLE:=DNS server discovery daemon
-  DEPENDS:=+librt
+  DEPENDS:=+libpthread
 endef
 
 define Package/rdnssd/description
@@ -67,32 +71,26 @@ A recursive DNS server discovery daemon gathering
 information through stateless IPv6 autoconfiguration (RFC5006)
 endef
 
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -std=c99" \
-		all
-endef
+TARGET_CFLAGS += -std=c99
 
 define Package/ndisc6/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/ndisc6 $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ndisc6 $(1)/usr/bin/
 endef
 
 define Package/rdisc6/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/rdisc6 $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rdisc6 $(1)/usr/bin/
 endef
 
 define Package/tcptraceroute6/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/tcptraceroute6 $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/tcptraceroute6 $(1)/usr/bin/
 endef
 
 define Package/rdnssd/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/rdnssd/rdnssd $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/rdnssd $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,ndisc6))
