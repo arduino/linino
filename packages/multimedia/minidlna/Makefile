@@ -21,6 +21,10 @@ PKG_BUILD_PARALLEL:=0
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
 
+MAKE_VARS += \
+	ICONV_PREFIX="$(ICONV_PREFIX)" \
+	INTL_PREFIX="$(INTL_PREFIX)"
+
 define Package/minidlna
   SECTION:=multimedia
   CATEGORY:=Multimedia
