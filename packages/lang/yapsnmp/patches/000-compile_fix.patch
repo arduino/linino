@@ -1,6 +1,32 @@
---- yapsnmp-0.7.8/configure	2004-03-08 05:21:26.000000000 -0600
-+++ yapsnmp-0.7.8.new/configure	2007-07-19 15:19:03.712465556 -0500
-@@ -9291,7 +9291,7 @@
+--- a/configure
++++ b/configure
+@@ -8757,13 +8757,13 @@ _ACEOF
+ fi
+ 
+ 
+-echo "$as_me:$LINENO: checking for init_snmp in -lsnmp" >&5
+-echo $ECHO_N "checking for init_snmp in -lsnmp... $ECHO_C" >&6
++echo "$as_me:$LINENO: checking for init_snmp in -lnetsnmp" >&5
++echo $ECHO_N "checking for init_snmp in -lnetsnmp... $ECHO_C" >&6
+ if test "${ac_cv_lib_snmp_init_snmp+set}" = set; then
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lsnmp  $LIBS"
++LIBS="-lnetsnmp  $LIBS"
+ cat >conftest.$ac_ext <<_ACEOF
+ #line $LINENO "configure"
+ /* confdefs.h.  */
+@@ -8816,7 +8816,7 @@ if test $ac_cv_lib_snmp_init_snmp = yes;
+ #define HAVE_LIBSNMP 1
+ _ACEOF
+ 
+-  LIBS="-lsnmp $LIBS"
++  LIBS="-lnetsnmp $LIBS"
+ 
+ else
+   { { echo "$as_me:$LINENO: error: Couldn't find libsnmp" >&5
+@@ -9291,7 +9291,7 @@ fi
  done
  
  
@@ -9,8 +35,8 @@
  do
   as_ac_Header=`echo "ac_cv_header_$PYTHONINCPATH/Python.h" | $as_tr_sh`
  if eval "test \"\${$as_ac_Header+set}\" = set"; then
---- yapsnmp-0.7.8/src/mib.h-patch	2004-03-07 17:09:53.000000000 -0600
-+++ yapsnmp-0.7.8.new/src/mib.h-patch	2007-07-19 15:12:46.266956163 -0500
+--- a/src/mib.h-patch
++++ b/src/mib.h-patch
 @@ -1,36 +1,11 @@
 -*** /usr/include/net-snmp/library/mib.h	2003-11-11 08:37:02.000000000 -0800
 ---- mib.h	2004-03-07 14:59:47.000000000 -0800
@@ -59,8 +85,8 @@
 + 
 +     char           *snmp_out_toggle_options(char *);
 +     void            snmp_out_toggle_options_usage(const char *, FILE *);
---- yapsnmp-0.7.8/src/snmp_api.h-patch	2004-03-07 17:09:53.000000000 -0600
-+++ yapsnmp-0.7.8.new/src/snmp_api.h-patch	2007-07-19 14:59:23.653217810 -0500
+--- a/src/snmp_api.h-patch
++++ b/src/snmp_api.h-patch
 @@ -1,147 +1,100 @@
 -*** /usr/include/net-snmp/library/snmp_api.h	2003-11-11 08:37:07.000000000 -0800
 ---- snmp_api.h	2004-03-07 15:02:18.000000000 -0800
@@ -306,33 +332,3 @@
 + 
 +     /*
 +      * use return value from snmp_sess_open as void * parameter 
---- yapsnmp-0.7.8/configure.old	2007-07-19 16:27:36.126818690 -0500
-+++ yapsnmp-0.7.8/configure	2007-07-19 16:28:12.692902474 -0500
-@@ -8816,7 +8816,7 @@
- #define HAVE_LIBSNMP 1
- _ACEOF
- 
--  LIBS="-lsnmp $LIBS"
-+  LIBS="-lnetsnmp $LIBS"
- 
- else
-   { { echo "$as_me:$LINENO: error: Couldn't find libsnmp" >&5
---- yapsnmp-0.7.8/configure.old	2007-07-19 16:30:48.185763508 -0500
-+++ yapsnmp-0.7.8/configure	2007-07-19 16:30:52.021982121 -0500
-@@ -8757,13 +8757,13 @@
- fi
- 
- 
--echo "$as_me:$LINENO: checking for init_snmp in -lsnmp" >&5
--echo $ECHO_N "checking for init_snmp in -lsnmp... $ECHO_C" >&6
-+echo "$as_me:$LINENO: checking for init_snmp in -lnetsnmp" >&5
-+echo $ECHO_N "checking for init_snmp in -lnetsnmp... $ECHO_C" >&6
- if test "${ac_cv_lib_snmp_init_snmp+set}" = set; then
-   echo $ECHO_N "(cached) $ECHO_C" >&6
- else
-   ac_check_lib_save_LIBS=$LIBS
--LIBS="-lsnmp  $LIBS"
-+LIBS="-lnetsnmp  $LIBS"
- cat >conftest.$ac_ext <<_ACEOF
- #line $LINENO "configure"
- /* confdefs.h.  */

@@ -17,7 +17,8 @@ PKG_MD5SUM:=8a3e9a5b814388d7907c639105cb2365
 
 PKG_BUILD_DEPENDS:=python
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=aclocal.m4 acinclude.m4
 
 include $(INCLUDE_DIR)/package.mk
 $(call include_mk, python-package.mk)
