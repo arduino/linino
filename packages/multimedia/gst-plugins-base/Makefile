@@ -22,6 +22,9 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
+# -liconv crept in from pkg-config, to be revisited later
+include $(INCLUDE_DIR)/nls.mk
+
 define Package/gstreamer/Default
   CATEGORY:=Multimedia
   SECTION:=multimedia
