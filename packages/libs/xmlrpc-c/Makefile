@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xmlrpc-c
-PKG_REV:=2042
-PKG_VERSION:=1.24.4_r$(PKG_REV)
+PKG_REV:=2080
+PKG_VERSION:=advanced_r$(PKG_REV)
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -227,6 +227,10 @@ define Package/xmlrpc-c-common/install
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/libxmlrpc_util.so* \
 		$(1)/usr/lib/
+endef
+
+define Package/xmlrpc-c/install
+	true
 endef
 
 
