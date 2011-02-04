@@ -40,6 +40,9 @@ MAKE_FLAGS += \
 	$(TARGET_CONFIGURE_OPTS) \
 	$(1) \
 
+TARGET_LDFLAGS += \
+	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+
 define Package/scmpc/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/src/scmpc $(1)/usr/bin/
