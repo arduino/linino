@@ -3,7 +3,7 @@
 START=94
 
 start() {
-	/usr/bin/mpdas -c /etc/mpdasrc
+	HOME=/root /usr/bin/mpdas -c /etc/mpdasrc &
 }
 
 stop() {

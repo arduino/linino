@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpdas
-PKG_VERSION:=0.2.4
+PKG_VERSION:=0.3.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://50hz.ws/mpdas
-PKG_MD5SUM:=8a694691dcb5d217c46754e40152186a
+PKG_MD5SUM:=d9f6e4d3b000d95835f39fb1aa3f4b28
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -33,6 +33,10 @@ define Package/mpdas/description
     cache the played songs to ~/.mpdascache.
 endef
 
+define Package/mpdas/conffiles
+/etc/mpdasrc
+endef
+
 EXTRA_CPPFLAGS:=\
 	-I$(ICONV_PREFIX)/include \
 	-I$(INTL_PREFIX)/include \
@@ -44,7 +48,7 @@ EXTRA_LDFLAGS:=\
 
 MAKE_FLAGS += \
 	CPPFLAGS="$(TARGET_CPPFLAGS) $(EXTRA_CPPFLAGS)" \
-	LDFLAGS="$(TARGET_LDPFLAGS) $(EXTRA_LDFLAGS)" \
+	LDFLAGS="$(TARGET_LDPFLAGS) $(EXTRA_LDFLAGS)"
 
 define Package/mpdas/install
 	$(INSTALL_DIR) $(1)/etc
