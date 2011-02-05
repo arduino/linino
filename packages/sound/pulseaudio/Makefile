@@ -28,7 +28,9 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/pulseaudio
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libspeexdsp +libgdbm +liboil +libsndfile +libatomicops +libltdl +dbus +libpthread +librt +alsa-lib $(ICONV_DEPENDS) $(INTL_DEPENDS) @BROKEN
+  DEPENDS:=+libspeexdsp +libgdbm +libsndfile \
+  	+libltdl +libpthread +librt +dbus \
+	+alsa-lib $(ICONV_DEPENDS) $(INTL_DEPENDS)
   TITLE:=Network sound server
   URL:=http://www.pulseaudio.org
 endef
@@ -44,11 +46,8 @@ endef
 CONFIGURE_ARGS += \
 	--with-system-user=root \
 	--with-system-group=root \
-	--with-realtime-group=root \
 	--with-access-group=root \
-	--without-x \
 	--enable-alsa \
-	--disable-dbus \
 	--disable-hal \
 	--disable-gconf \
 	--disable-tcpwrap \
@@ -57,8 +56,6 @@ CONFIGURE_ARGS += \
 	--disable-glib2 \
 	--disable-jack \
 	--disable-asyncns \
-	--disable-polkit \
-	--disable-samplerate \
 	--disable-lirc \
 	--disable-bluez \
 	--without-caps
@@ -69,6 +66,22 @@ CONFIGURE_VARS += \
 
 #SUPP_LIBS:=-L$(INTL_PREFIX)/lib -L$(ICONV_PREFIX)/lib
 TARGET_CFLAGS += -std=gnu99
+
+define Build/InstallDev
+	$(INSTALL_DIR) \
+		$(1)/usr/lib/pkgconfig \
+		$(1)/usr/include/pulse \
+		$(1)/usr/lib
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/pulse/* \
+		$(1)/usr/include/pulse
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/*.pc \
+		$(1)/usr/lib/pkgconfig
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/*.so* \
+		$(1)/usr/lib/
+endef
 
 define Package/pulseaudio/install
 	$(INSTALL_DIR) \
@@ -90,7 +103,10 @@ define Package/pulseaudio/install
 		$(1)/usr/lib/
 
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/pulse-$(PKG_VERSION)/modules/*.so \
+		$(PKG_INSTALL_DIR)/usr/lib/pulse-$(PKG_VERSION)/modules/lib*.so \
+		$(1)/usr/lib/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/pulse-$(PKG_VERSION)/modules/module*.so \
 		$(1)/usr/lib/pulse-$(PKG_VERSION)/modules/
 endef
 
