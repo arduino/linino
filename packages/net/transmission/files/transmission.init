@@ -58,7 +58,7 @@ start_service() {
 		incomplete_dir_enabled lazy_bitfield_enabled lpd_enabled message_level \
 		open_file_limit peer_limit_global peer_limit_per_torrent peer_port \
 		peer_port_random_high peer_port_random_low peer_port_random_on_start \
-		peer_socket_tos pex_enabled port_forwarding_enabled preallocation \
+		peer_socket_tos pex_enabled port_forwarding_enabled preallocation prefetch_enabled \
 		ratio_limit ratio_limit_enabled rename_partial_files rpc_authentication_required \
 		rpc_enabled rpc_port rpc_whitelist_enabled script_torrent_done_enabled \
 		speed_limit_down speed_limit_down_enabled speed_limit_up \
@@ -67,7 +67,7 @@ start_service() {
 
 	append_params_quotes "$s" \
 		blocklist_url bind_address_ipv4 bind_address_ipv6 download_dir incomplete_dir \
-		rpc_bind_address rpc_password \
+		rpc_bind_address rpc_password rpc_url \
 		rpc_username rpc_whitelist script_torrent_done_filename watch_dir
 
 	echo "\""invalid-key"\": false" >> $config_dir/settings.json
