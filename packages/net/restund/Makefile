@@ -28,6 +28,8 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		LIBRE_MK=../re-$(PKG_VERSION)/mk/re.mk \
+		LIBRE_INC=../re-$(PKG_VERSION)/include \
 		CC="$(TARGET_CC)" \
 		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \

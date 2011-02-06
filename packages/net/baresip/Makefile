@@ -28,6 +28,8 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		LIBRE_MK=../re-$(PKG_VERSION)/mk/re.mk \
+		LIBRE_INC=../re-$(PKG_VERSION)/include \
 		MOD_AUTODETECT= \
 		USE_G711=1 USE_L16=1 \
 		USE_STDIO=1 USE_CONS=1 USE_EVDEV=1 \
