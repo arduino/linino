@@ -72,7 +72,9 @@ start_service() {
 
 	echo "\""invalid-key"\": false" >> $config_dir/settings.json
 	echo "}" >> $config_dir/settings.json
-	
+
+	chown -R $run_as_usr $config_dir
+
 	eval "$SSD -c $run_as_usr -q -b -x $BIN -S -- -g $config_dir"
 }
 

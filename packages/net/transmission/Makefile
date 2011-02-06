@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=transmission
 PKG_VERSION:=2.20b4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://mirrors.m0k.org/transmission/files
@@ -81,7 +81,8 @@ CONFIGURE_ARGS += \
 	--enable-daemon \
 	--enable-cli \
 	--disable-gtk \
-	--enable-largefile
+	--enable-largefile \
+	--enable-lightweight
 
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
