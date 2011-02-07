@@ -31,6 +31,6 @@ define Build/Configure/Qmake
 endef
 
 define Build/Compile/Default
-	$(MAKE) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) \
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) \
 		$(1);
 endef
