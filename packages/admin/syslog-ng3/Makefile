@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=syslog-ng
 PKG_VERSION:=3.0.5
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE_URL:=http://www.balabit.com/downloads/files/syslog-ng/open-source-edition/$(PKG_VERSION)/source/
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/syslog-ng3
   SECTION:=admin
   CATEGORY:=Administration
-  DEPENDS:=+libpcre +glib2 +libeventlog +libopenssl +libwrap
+  DEPENDS:=+libpcre +glib2 +libeventlog +libopenssl +libwrap +libpthread +zlib
   TITLE:=A powerful syslog daemon
   URL:=http://www.balabit.com/network-security/syslog-ng/opensource-logging-system/
 endef
