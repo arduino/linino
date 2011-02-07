@@ -23,8 +23,14 @@ define Build/Configure/Qmake
 	TARGET_INCDIRS="$(TARGET_INCDIRS)" \
 	TARGET_LIBDIRS="$(TARGET_LIBDIRS)" \
 	STAGING_DIR_HOST="$(STAGING_DIR)/../host" \
+	STAGING_DIR="$(STAGING_DIR)" \
 	qmake \
 		-spec $(QMAKE_SPECFILE) \
 		-o $(PKG_BUILD_DIR)/Makefile \
 		$(PKG_BUILD_DIR)/$(1).pro
+endef
+
+define Build/Compile/Default
+	$(MAKE) -C $(PKG_BUILD_DIR)/$(MAKE_PATH) \
+		$(1);
 endef
