@@ -196,11 +196,7 @@ radvd_write_prefix() {
 	done
 	[ "$exist" -eq 0 ] && return 0
 
-	config_get prefixes "$cfg" prefix
-	if [ -z "$prefixes" ]; then
-		prefixes=$(get_ip6addr "$IFNAME") || return 0
-	fi
-
+	config_get prefixes "$cfg" prefix "::/64"
 	for prefix in $prefixes; do
 		validate_ip6prefix "$prefix" || continue
 		printf '\n\tprefix %s\n\t{\n' "$prefix"
