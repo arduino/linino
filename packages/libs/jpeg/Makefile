@@ -57,7 +57,11 @@ define Build/Compile
 	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		prefix="$(PKG_INSTALL_DIR)/usr" \
 		exec_prefix="$(PKG_INSTALL_DIR)/usr" \
-		all install install-headers install-lib
+		all
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		prefix="$(PKG_INSTALL_DIR)/usr" \
+		exec_prefix="$(PKG_INSTALL_DIR)/usr" \
+		install install-headers install-lib
 endef
 
 define Build/InstallDev
