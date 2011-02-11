@@ -11,6 +11,25 @@ get_ifname() {
 	return 0
 }
 
+dhcp6c_write_duid() {
+	local ifname="$1"
+	local mac=$(ifconfig "$client_ifname" | sed -ne 's/.*HWaddr //p')
+	local oIFS="$IFS"; IFS=":"; set -- $mac; IFS="$oIFS"
+
+	# low endian
+	if [ "$(printf \\1 | hexdump -n1 -ve '8/2 "%04x"')" = "0001" ]; then
+		printf \\x0a\\x00
+
+	# big endian
+	else
+		printf \\x00\\x0a
+	fi
+
+	printf \\x00\\x03\\x00\\x06\\x$1\\x$2\\x$3\\x$4\\x$5\\x$6
+
+	logger -t dhcp6c "Using DUID 00:03:00:06:$1:$2:$3:$4:$5:$6"
+}
+
 dhcp6c_write_interface() {
 	local cfg=$1
 	local sla_id
@@ -99,15 +118,17 @@ start() {
 	config_get_bool enabled basic enabled 0
 	[ $enabled -eq 0 ] && return 0
 	
-	logger starting dhcp6c
+	logger -t dhcp6c starting dhcp6c
 	
 	local client_interface
 	config_get client_interface basic interface
 	local client_ifname=$(get_ifname "$client_interface")
 	
 	local config_file="/var/etc/dhcp6c.conf"
+	local duid_file="/var/dhcp6c_duid"
 	mkdir -m 755 -p /var/etc
 	dhcp6c_write_config > $config_file
+	dhcp6c_write_duid > $duid_file
 	
 	local debug
 	local debug_option
@@ -124,7 +145,7 @@ start() {
 
 stop() {
 
-	logger stopping dhcp6c
+	logger -t dhcp6c stopping dhcp6c
 	rm -f /var/etc/dhcp6c.conf
 	kill -TERM `cat /var/run/dhcp6c.pid`
 	ACTION=stop /sbin/hotplug-call dhcp6c
