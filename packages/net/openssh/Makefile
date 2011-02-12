@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openssh-client
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +zlib
+  DEPENDS:=+libopenssl +zlib +libgcc
   TITLE:=OpenSSH client
   MAINTAINER:=Peter Wagner <tripolar@gmx.at>
   URL:=http://www.openssh.com/
@@ -43,7 +43,7 @@ endef
 define Package/openssh-client-utils
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+openssh-client +openssh-keygen
+  DEPENDS:=+openssh-client +openssh-keygen +libgcc
   TITLE:=OpenSSH client utilities
   URL:=http://www.openssh.com/
   SUBMENU:=SSH
@@ -56,7 +56,7 @@ endef
 define Package/openssh-keygen
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +zlib
+  DEPENDS:=+libopenssl +zlib +libgcc
   TITLE:=OpenSSH keygen
   URL:=http://www.openssh.com/
   SUBMENU:=SSH
@@ -69,7 +69,7 @@ endef
 define Package/openssh-server
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +zlib +openssh-keygen
+  DEPENDS:=+libopenssl +zlib +openssh-keygen +libgcc
   TITLE:=OpenSSH server
   URL:=http://www.openssh.com/
   SUBMENU:=SSH
@@ -86,7 +86,7 @@ endef
 define Package/openssh-sftp-client
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +zlib
+  DEPENDS:=+libopenssl +zlib +libgcc
   TITLE:=OpenSSH SFTP client
   URL:=http://www.openssh.com/
   SUBMENU:=SSH
@@ -99,7 +99,7 @@ endef
 define Package/openssh-sftp-server
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=
+  DEPENDS:=+libgcc
   TITLE:=OpenSSH SFTP server
   URL:=http://www.openssh.com/
   SUBMENU:=SSH
