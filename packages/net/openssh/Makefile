@@ -47,7 +47,7 @@ endef
 
 define Package/openssh-client-utils
   $(call Package/openssh/Default)
-  DEPENDS+= +openssh-client +openssh-keygen +libgcc
+  DEPENDS+= +openssh-client +openssh-keygen
   TITLE+= client utilities
 endef
 
