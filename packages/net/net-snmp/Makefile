@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=net-snmp
 PKG_VERSION:=5.4.2.1
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/net-snmp
@@ -26,10 +26,10 @@ define Package/net-snmp/Default
 endef
 
 define Package/net-snmp/Default/description
- Simple Network Management Protocol (SNMP) is a widely used protocol for 
- monitoring the health and welfare of network equipment (eg. routers), 
- computer equipment and even devices like UPSs. Net-SNMP is a suite of 
- applications used to implement SNMP v1, SNMP v2c and SNMP v3 using both 
+ Simple Network Management Protocol (SNMP) is a widely used protocol for
+ monitoring the health and welfare of network equipment (eg. routers),
+ computer equipment and even devices like UPSs. Net-SNMP is a suite of
+ applications used to implement SNMP v1, SNMP v2c and SNMP v3 using both
  IPv4 and IPv6.
 endef
 
@@ -98,6 +98,7 @@ SNMP_MIB_MODULES_INCLUDED = \
 	host/hr_storage \
 	host/hr_system \
 	ieee802dot11 \
+	if-mib/ifXTable \
 	mibII/at \
 	mibII/icmp \
 	mibII/ifTable \
@@ -144,13 +145,14 @@ SNMP_MIB_MODULES_EXCLUDED = \
 	udp-mib \
 	utilities \
 
-SNMP_TRANSPORTS_INCLUDED = Callback UDP 
+SNMP_TRANSPORTS_INCLUDED = Callback UDP
 
 SNMP_TRANSPORTS_EXCLUDED = TCP TCPIPv6 Unix
 
 TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
+	--enable-mfd-rewrites \
 	--enable-shared \
 	--enable-static \
 	--with-endianness=little \
@@ -193,7 +195,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
 		LDFLAGS="$(TARGET_LDFLAGS) -lm -lc" \
-		all install	
+		all install
 	$(Build/Compile/static)
 endef
 
