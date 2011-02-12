@@ -22,14 +22,19 @@ PKG_BUILD_DEPENDS:=libopenssl
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/openssh-client
+define Package/openssh/Default
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libopenssl +zlib +libgcc
-  TITLE:=OpenSSH client
+  TITLE:=OpenSSH
   MAINTAINER:=Peter Wagner <tripolar@gmx.at>
   URL:=http://www.openssh.com/
   SUBMENU:=SSH
+endef
+
+define Package/openssh-client
+  $(call Package/openssh/Default)
+  TITLE+= client
 endef
 
 define Package/openssh-client/description
@@ -41,12 +46,9 @@ define Package/openssh-client/conffiles
 endef
 
 define Package/openssh-client-utils
-  SECTION:=net
-  CATEGORY:=Network
-  DEPENDS:=+openssh-client +openssh-keygen +libgcc
-  TITLE:=OpenSSH client utilities
-  URL:=http://www.openssh.com/
-  SUBMENU:=SSH
+  $(call Package/openssh/Default)
+  DEPENDS += +openssh-client +openssh-keygen +libgcc
+  TITLE+= client utilities
 endef
 
 define Package/openssh-client-utils/description
@@ -54,12 +56,8 @@ OpenSSH client utilities.
 endef
 
 define Package/openssh-keygen
-  SECTION:=net
-  CATEGORY:=Network
-  DEPENDS:=+libopenssl +zlib +libgcc
-  TITLE:=OpenSSH keygen
-  URL:=http://www.openssh.com/
-  SUBMENU:=SSH
+  $(call Package/openssh/Default)
+  TITLE += keygen
 endef
 
 define Package/openssh-keygen/description
@@ -67,12 +65,8 @@ OpenSSH keygen.
 endef
 
 define Package/openssh-server
-  SECTION:=net
-  CATEGORY:=Network
-  DEPENDS:=+libopenssl +zlib +openssh-keygen +libgcc
-  TITLE:=OpenSSH server
-  URL:=http://www.openssh.com/
-  SUBMENU:=SSH
+  $(call Package/openssh/Default)
+  TITLE+= server
 endef
 
 define Package/openssh-server/description
@@ -84,12 +78,8 @@ define Package/openssh-server/conffiles
 endef
 
 define Package/openssh-sftp-client
-  SECTION:=net
-  CATEGORY:=Network
-  DEPENDS:=+libopenssl +zlib +libgcc
-  TITLE:=OpenSSH SFTP client
-  URL:=http://www.openssh.com/
-  SUBMENU:=SSH
+  $(call Package/openssh/Default)
+  TITLE+= SFTP client
 endef
 
 define Package/openssh-sftp-client/description
@@ -97,12 +87,9 @@ OpenSSH SFTP client.
 endef
 
 define Package/openssh-sftp-server
-  SECTION:=net
-  CATEGORY:=Network
+  $(call Package/openssh/Default)
   DEPENDS:=+libgcc
-  TITLE:=OpenSSH SFTP server
-  URL:=http://www.openssh.com/
-  SUBMENU:=SSH
+  TITLE+= SFTP server
 endef
 
 define Package/openssh-sftp-server/description
