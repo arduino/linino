@@ -32,7 +32,8 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_qt4-dbus \
 	CONFIG_PACKAGE_qt4-phonon \
 	CONFIG_PACKAGE_qt4-sqlite \
-	CONFIG_PACKAGE_qt4-mysql
+	CONFIG_PACKAGE_qt4-mysql \
+	CONFIG_PACKAGE_qt4-openssl
 
 include $(INCLUDE_DIR)/package.mk
 -include $(if $(DUMP),,./files/qmake.mk)
@@ -104,6 +105,12 @@ define Package/qt4-mysql
   $(call Package/qt4/Default)
   TITLE+=(mysql)
   DEPENDS+=+libmysqlclient
+endef
+
+define Package/qt4-openssl
+  $(call Package/qt4/Default)
+  TITLE+=(openssl)
+  DEPENDS+=+libopenssl
 endef
 
 #define Package/qt4-multimedia
@@ -342,7 +349,7 @@ define Build/Configure
 			$(if $(NPTL),-scripttools,-no-scripttools) \
 			-no-accessibility \
 			$(if $(NPTL),-declarative,-no-declarative) \
-			-no-openssl \
+			$(if $(CONFIG_PACKAGE_qt4-openssl),-openssl -I $(STAGING_DIR)/usr/include,-no-openssl) \
 			-no-nis \
 			-no-cups \
 			-no-iconv \
@@ -747,6 +754,7 @@ $(eval $(call BuildPackage,qt4-examples))
 $(eval $(call BuildPackage,qt4-network))
 $(eval $(call BuildPackage,qt4-sqlite))
 $(eval $(call BuildPackage,qt4-mysql))
+$(eval $(call BuildPackage,qt4-openssl))
 #$(eval $(call BuildPackage,qt4-multimedia))
 #$(eval $(call BuildPackage,qt4-audio-backend))
 $(eval $(call BuildPackage,qt4-phonon))
