@@ -3,6 +3,12 @@
 
 # DEBUG="echo"
 
+do_sysctl() {
+	[ -n "$2" ] && \
+		sysctl -n -e -w "$1=$2" >/dev/null || \
+		sysctl -n -e "$1"
+}
+
 find_config() {
 	local iftype device iface ifaces ifn
 	for ifn in $interfaces; do
@@ -403,6 +409,7 @@ unbridge() {
 
 		for brdev in $(brctl show | awk '$2 ~ /^[0-9].*\./ { print $1 }'); do
 			brctl delif "$brdev" "$dev" 2>/dev/null >/dev/null
+			do_sysctl "net.ipv6.conf.$dev.disable_ipv6" 0
 		done
 	}
 }
