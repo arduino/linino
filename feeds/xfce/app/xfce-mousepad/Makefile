@@ -19,13 +19,11 @@ PKG_MD5SUM:=d98854edb76d823ac20b266fdf5a64a1
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
+include $(INCLUDE_DIR)/nls.mk
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-Wl,-rpath=/usr/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib
+	-Wl,-rpath=/usr/lib
 
 define Package/xfce-mousepad
   SECTION:=xorg-app

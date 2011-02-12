@@ -19,8 +19,7 @@ PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/libxfce4util
   SECTION:=xorg-framework

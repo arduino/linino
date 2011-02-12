@@ -19,13 +19,11 @@ PKG_MD5SUM:=adb419d279c9fc16d02291c052190717
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
-
-TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/lib/libintl/include/
+include $(INCLUDE_DIR)/nls.mk
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-Wl,-rpath=/usr/lib \
-	-L$(STAGING_DIR)/usr/lib/libintl/lib
+	-Wl,-rpath=/usr/lib
 
 define Package/xfce-terminal
   SECTION:=xorg-app
