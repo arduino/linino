@@ -14,10 +14,13 @@ PKG_MD5SUM:=b0d1b8ec5c8c081a340cfc77bb8670cd
 PKG_SOURCE_URL:=@SF/nfs
 PKG_SOURCE:=nfs-utils-$(PKG_VERSION).tar.bz2
 
+HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/nfs-utils-$(PKG_VERSION)
 PKG_BUILD_DIR:=$(BUILD_DIR)/nfs-utils-$(PKG_VERSION)
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
+PKG_BUILD_DEPENDS:=$(PKG_NAME)/host
 
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/nfs-kernel-server/Default
@@ -76,7 +79,36 @@ CONFIGURE_ARGS += \
 MAKE_FLAGS += \
 	OPT="$(TARGET_CFLAGS)" \
 	INSTALLSUID="install -m 4755" \
-	DESTDIR="$(PKG_INSTALL_DIR)"
+	DESTDIR="$(PKG_INSTALL_DIR)" \
+	RPCGEN_PATH=$(STAGING_DIR_HOST)/bin/rpcgen \
+	RPCGEN=$(STAGING_DIR_HOST)/bin/rpcgen
+
+HOST_CFLAGS += -Dlinux
+
+HOST_CONFIGURE_ARGS += \
+	--disable-gss \
+	--disable-nfsv4
+
+HOST_CONFIGURE_VARS += \
+	ac_cv_lib_event_event_dispatch=yes \
+	ac_cv_lib_nfsidmap_nfs4_init_name_mapping=yes \
+	ac_cv_lib_blkid_blkid_get_library_version=yes \
+	ac_cv_header_event_h=yes \
+	ac_cv_header_nfsidmap_h=yes \
+	ac_cv_header_blkid_blkid_h=yes \
+	GSSGLUE_CFLAGS=" " \
+	GSSGLUE_LIBS=" " \
+	RPCSECGSS_CFLAGS=" " \
+	RPCSECGSS_LIBS=" " \
+
+
+define Host/Compile
+	$(MAKE) -C $(HOST_BUILD_DIR)/tools/rpcgen all
+endef
+
+define Host/Install
+	$(INSTALL_BIN) $(HOST_BUILD_DIR)/tools/rpcgen/rpcgen $(STAGING_DIR_HOST)/bin/rpcgen
+endef
 
 define Package/nfs-kernel-server/install
 	$(INSTALL_DIR) $(1)/etc/init.d $(1)/usr/sbin
@@ -101,6 +133,7 @@ define Package/nfs-utils/install
 	(cd $(1)/sbin; ln -sf mount.nfs mount.nfs4; ln -sf mount.nfs umount.nfs; ln -sf mount.nfs umount.nfs4)
 endef
 
+$(eval $(call HostBuild))
 $(eval $(call BuildPackage,nfs-kernel-server))
 $(eval $(call BuildPackage,nfs-kernel-server-utils))
 $(eval $(call BuildPackage,nfs-utils))

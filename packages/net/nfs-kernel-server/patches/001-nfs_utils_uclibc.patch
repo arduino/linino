@@ -33,15 +33,3 @@
    if (ret == 0 && rpcp != NULL)
      {
        /* First try name.  */
---- a/utils/statd/sm_inter_svc.c
-+++ b/utils/statd/sm_inter_svc.c
-@@ -10,7 +10,9 @@
- #include <stdlib.h>
- #include <netdb.h>
- #include <signal.h>
-+#ifndef __UCLIBC__
- #include <sys/ttycom.h>
-+#endif
- #include <memory.h>
- #include <sys/socket.h>
- #include <netinet/in.h>
