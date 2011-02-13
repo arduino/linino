@@ -35,6 +35,9 @@ define Package/unfs3/description
 	on the server.
 endef
 
+TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
+TARGET_LDFLAGS += $(LIBRPC)
+
 define Package/unfs3/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
