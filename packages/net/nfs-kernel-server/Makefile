@@ -64,14 +64,14 @@ define Package/nfs-utils/description
   Updated mount.nfs command - allows mounting nfs4 volumes
 endef
 
+TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib -I$(STAGING_DIR)/usr/include -Drpc_uint=uint
+TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib $(LIBRPC)
+
 CONFIGURE_ARGS += \
 	--disable-gss \
 	--disable-nfsv4 \
 	--enable-static \
 	--enable-shared
-
-TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib 
-TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib 
 
 MAKE_FLAGS += \
 	OPT="$(TARGET_CFLAGS)" \
