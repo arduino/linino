@@ -87,7 +87,8 @@ HOST_CFLAGS += -Dlinux
 
 HOST_CONFIGURE_ARGS += \
 	--disable-gss \
-	--disable-nfsv4
+	--disable-nfsv4 \
+	--without-tcp-wrappers
 
 HOST_CONFIGURE_VARS += \
 	ac_cv_lib_event_event_dispatch=yes \
