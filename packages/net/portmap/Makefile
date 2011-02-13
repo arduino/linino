@@ -35,7 +35,7 @@ endef
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -DHOSTS_ACCESS -DFACILITY=LOG_DAEMON -DIGNORE_SIGCHLD" \
 	RPCUSER="nobody" \
-	WRAP_LIB="$(TARGET_LDFLAGS) -lwrap" \
+	LDLIBS="$(TARGET_LDFLAGS) -lwrap $(LIBRPC)" \
 	all
 
 define Package/portmap/install
