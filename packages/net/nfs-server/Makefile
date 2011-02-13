@@ -34,6 +34,9 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)
 endef
 
+TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
+TARGET_LDFLAGS += $(LIBRPC)
+
 define Package/nfs-server/install	
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/nfsd.exports $(1)/etc/exports
