@@ -51,7 +51,9 @@ CONFIGURE_VARS += \
 	BUILD_CC="$(TARGET_CC)" \
 	HOSTCC="$(HOSTCC)" \
 	td_cv_buggygetaddrinfo="no" \
-	ac_cv_linux_vers=$(LINUX_VERSION)
+	ac_cv_linux_vers=$(LINUX_VERSION) \
+	ac_cv_header_rpc_rpcent_h=no \
+	ac_cv_lib_rpc_main=no
 
 MAKE_FLAGS :=
 
