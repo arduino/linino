@@ -67,7 +67,7 @@ start_service() {
 
 	append_params_quotes "$s" \
 		blocklist_url bind_address_ipv4 bind_address_ipv6 download_dir incomplete_dir \
-		rpc_bind_address rpc_password rpc_url \
+		peer_congestion_algorithm rpc_bind_address rpc_password rpc_url \
 		rpc_username rpc_whitelist script_torrent_done_filename watch_dir
 
 	echo "\""invalid-key"\": false" >> $config_dir/settings.json
@@ -84,7 +84,7 @@ start() {
 }
 
 stop() {
-	killall `basename $BIN`
+	service_kill $(basename $BIN)
 }
 
 restart() {
