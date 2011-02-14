@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/netatalk
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libdb47 +libgcrypt +libopenssl
+  DEPENDS:=+libdb47 +libgcrypt +libopenssl +USE_UCLIBC:librpc
   TITLE:=netatalk
   URL:=http://netatalk.sourceforge.net
   MAINTAINER:=W. Michael Petullo <mike@flyn.org>
@@ -33,6 +33,8 @@ define Package/netatalk/decription
 endef
 
 EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/include
+TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
+TARGET_LDFLAGS += $(LIBRPC)
 
 CONFIGURE_VARS += \
 	CFLAGS="$(TARGET_CFLAGS) -std=gnu99 -DNO_DEBUG "
