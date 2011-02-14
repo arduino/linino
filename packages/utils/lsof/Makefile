@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=lsof
 PKG_VERSION:=4.81
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).dfsg.1.orig.tar.gz
 PKG_SOURCE_URL:=http://ftp2.de.debian.org/debian/pool/main/l/lsof
@@ -20,9 +20,13 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION).dfsg.1
 
 include $(INCLUDE_DIR)/package.mk
 
+TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
+TARGET_LDFLAGS += $(LIBRPC)
+
 define Package/lsof
   SECTION:=utils
   CATEGORY:=Utilities
+  DEPENDS:=+USE_UCLIBC:librpc
   TITLE:=LiSt Open Files - a diagnostic tool
   URL:=http://people.freebsd.org/~abe/
 endef
