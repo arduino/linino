@@ -139,6 +139,17 @@ $(call Package/asterisk18/Default/description)
  This package provides the channel chan_mobile support to Asterisk.
 endef
 
+define Package/asterisk18-chan-mgcp
+$(call Package/asterisk18/Default)
+  TITLE:=MGCP channel support
+  DEPENDS:= +asterisk18
+endef
+
+define Package/asterisk18-chan-mgcp/description
+$(call Package/asterisk18/Default/description)
+ This package provides the channel chan_mgcp support to Asterisk.
+endef
+
 define Package/asterisk18-curl
 $(call Package/asterisk18/Default)
   TITLE:=CURL support
@@ -381,6 +392,17 @@ define Package/asterisk18-chan-mobile/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_mobile.so $(1)/usr/lib/asterisk/modules/
 endef
 
+define Package/asterisk18-chan-mgcp/conffiles
+/etc/asterisk/mgcp.conf
+endef
+
+define Package/asterisk18-chan-mgcp/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/mgcp.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_mgcp.so $(1)/usr/lib/asterisk/modules/
+endef
+
 define Package/asterisk18-curl/install
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/func_curl.so $(1)/usr/lib/asterisk/modules/
@@ -417,6 +439,7 @@ $(eval $(call BuildPackage,asterisk18-cdr))
 $(eval $(call BuildPackage,asterisk18-res-musiconhold))
 $(eval $(call BuildPackage,asterisk18-chan-gtalk))
 $(eval $(call BuildPackage,asterisk18-chan-mobile))
+$(eval $(call BuildPackage,asterisk18-chan-mgcp))
 $(eval $(call BuildPackage,asterisk18-curl))
 $(eval $(call Buildasterisk18ModuleTemplate,app_authenticate,Authenticate,support for executing arbitrary authenticate commands))
 $(eval $(call Buildasterisk18ModuleTemplate,app_chanisavail,Channel availability check,support for checking if a channel is available))
