@@ -128,6 +128,17 @@ $(call Package/asterisk18/Default/description)
  support to Asterisk.
 endef
 
+define Package/asterisk18-chan-mobile
+$(call Package/asterisk18/Default)
+  TITLE:=Mobile channel support
+  DEPENDS:= +asterisk18 +bluez-libs
+endef
+
+define Package/asterisk18-chan-mobile/description
+$(call Package/asterisk18/Default/description)
+ This package provides the channel chan_mobile support to Asterisk.
+endef
+
 define Package/asterisk18-curl
 $(call Package/asterisk18/Default)
   TITLE:=CURL support
@@ -359,6 +370,17 @@ define Package/asterisk18-chan-gtalk/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_jabber.so $(1)/usr/lib/asterisk/modules/
 endef
 
+define Package/asterisk18-chan-mobile/conffiles
+/etc/asterisk/chan_mobile.conf
+endef
+
+define Package/asterisk18-chan-mobile/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/chan_mobile.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_mobile.so $(1)/usr/lib/asterisk/modules/
+endef
+
 define Package/asterisk18-curl/install
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/func_curl.so $(1)/usr/lib/asterisk/modules/
@@ -394,6 +416,7 @@ $(eval $(call BuildPackage,asterisk18-chan-iax2))
 $(eval $(call BuildPackage,asterisk18-cdr))
 $(eval $(call BuildPackage,asterisk18-res-musiconhold))
 $(eval $(call BuildPackage,asterisk18-chan-gtalk))
+$(eval $(call BuildPackage,asterisk18-chan-mobile))
 $(eval $(call BuildPackage,asterisk18-curl))
 $(eval $(call Buildasterisk18ModuleTemplate,app_authenticate,Authenticate,support for executing arbitrary authenticate commands))
 $(eval $(call Buildasterisk18ModuleTemplate,app_chanisavail,Channel availability check,support for checking if a channel is available))
