@@ -7,13 +7,15 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=asterisk
+PKG_NAME:=asterisk14
 PKG_VERSION:=1.4.25.1
 PKG_RELEASE:=3
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=asterisk-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
 PKG_MD5SUM:=ca17be11559eb939ea16b8de98ddeefb
+
+PKG_BUILD_DIR=$(BUILD_DIR)/asterisk-$(PKG_VERSION)
 
 PKG_BUILD_DEPENDS:= libopenh323 pwlib
 
@@ -484,9 +486,9 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/asterisk/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk/*.h $(1)/usr/include/asterisk/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk.h $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/include/asterisk-1.4/include/asterisk/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk/*.h $(1)/usr/include/asterisk-1.4/include/asterisk/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk.h $(1)/usr/include/asterisk-1.4/include/
 endef
 
 

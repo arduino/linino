@@ -91,14 +91,11 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk14-mysql),)
 endif
 
 CONFIGURE_ARGS += \
-	--with-asterisk="$(STAGING_DIR)/usr" \
+	--with-asterisk="$(STAGING_DIR)/usr/include/asterisk-1.4" \
 	--with-bluetooth="$(STAGING_DIR)/usr" \
 	--with-ncurses="$(STAGING_DIR)/usr" \
 	--with-mysqlclient="$(STAGING_DIR)/usr" \
-
-CONFIGURE_VARS += \
-	ac_cv_file__usr_include_asterisk_channel_h="yes" \
-
+	
 define Build/Configure
 	( cd $(PKG_BUILD_DIR); ./bootstrap.sh )
 	$(call Build/Configure/Default,,,)

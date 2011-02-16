@@ -7,13 +7,15 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=asterisk
+PKG_NAME:=asterisk18
 PKG_VERSION:=1.8.2.3
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=asterisk-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
 PKG_MD5SUM:=e394b63dd71c07497620dc12883e0b80
+
+PKG_BUILD_DIR=$(BUILD_DIR)/asterisk-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -36,7 +38,7 @@ endef
 define Package/asterisk18
 $(call Package/asterisk18/Default)
   TITLE:=Complete open source PBX
-  DEPENDS:= +libopenssl +libncurses +libpopt +libpthread +zlib @!TARGET_avr32 @!PACKAGE_asterisk14
+  DEPENDS:= +libopenssl +libncurses +libpopt +libpthread +zlib @!TARGET_avr32
 endef
 
 define Package/asterisk18/description
@@ -112,18 +114,6 @@ define Package/asterisk18-res-musiconhold/description
 $(call Package/asterisk18/Default/description)
  This package provides Music On Hold support to
  Asterisk.
-endef
-
-define Package/asterisk18-res-rtp-asterisk
-$(call Package/asterisk18/Default)
-  TITLE:=RTP Support
-  DEPENDS:= +asterisk18
-endef
-
-define Package/asterisk18-res-rtp-asterisk/description
-$(call Package/asterisk18/Default/description)
- This package provides RTP support to Asterisk.
- It is needed by chan_sip.
 endef
 
 define Package/asterisk18-chan-gtalk
@@ -235,9 +225,9 @@ define Build/Compile
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/asterisk/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk/*.h $(1)/usr/include/asterisk/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk.h $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/include/asterisk-1.8/include/asterisk/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk/*.h $(1)/usr/include/asterisk-1.8/include/asterisk/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/asterisk.h $(1)/usr/include/asterisk-1.8/include/
 endef
 
 define Package/asterisk18/conffiles
@@ -264,7 +254,7 @@ define Package/asterisk18/install
 	done
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
 	for f in app_dial app_echo app_playback app_macro \
-		chan_sip \
+		chan_sip res_rtp \
 		codec_ulaw codec_gsm \
 		format_gsm format_pcm format_wav format_wav_gsm \
 		pbx_config \
@@ -355,16 +345,6 @@ define Package/asterisk18-res-musiconhold/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_musiconhold.so $(1)/usr/lib/asterisk/modules/
 endef
 
-define Package/asterisk18-res-rtp-asterisk/install
-	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_rtp*.so $(1)/usr/lib/asterisk/modules/
-endef
-
-define Package/asterisk18-res-rtp-asterisk/install 
-	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_rtp*.so $(1)/usr/lib/asterisk/modules/ 
-endef 
-
 define Package/asterisk18-chan-gtalk/conffiles
 /etc/asterisk/gtalk.conf
 /etc/asterisk/jabber.conf
@@ -413,7 +393,6 @@ $(eval $(call BuildPackage,asterisk18-sounds))
 $(eval $(call BuildPackage,asterisk18-chan-iax2))
 $(eval $(call BuildPackage,asterisk18-cdr))
 $(eval $(call BuildPackage,asterisk18-res-musiconhold))
-$(eval $(call BuildPackage,asterisk18-res-rtp-asterisk)) 
 $(eval $(call BuildPackage,asterisk18-chan-gtalk))
 $(eval $(call BuildPackage,asterisk18-curl))
 $(eval $(call Buildasterisk18ModuleTemplate,app_authenticate,Authenticate,support for executing arbitrary authenticate commands))

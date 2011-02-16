@@ -1,0 +1,16 @@
+--- asterisk-addons-1.4.8/configure.ac.org	2011-02-16 15:32:41.000000000 +0100
++++ asterisk-addons-1.4.8/configure.ac	2011-02-16 15:36:05.000000000 +0100
+@@ -191,11 +191,13 @@
+ fi
+ if test x"${MYSQL_CONFIG}" != xNo; then
+    MYSQLCLIENT_libs=`mysql_config --libs`
++   MYSQLCLIENT_include=`mysql_config --include`
+    
+    AC_CHECK_LIB([mysqlclient], [mysql_init], [], [], ${MYSQLCLIENT_libs})
+ 
+    if test "${ac_cv_lib_mysqlclient_mysql_init}" = "yes"; then
+       MYSQLCLIENT_LIB="${MYSQLCLIENT_libs}"
++      MYSQLCLIENT_INCLUDE="${MYSQLCLIENT_include}/.."
+       PBX_MYSQLCLIENT=1
+    elif test ! -z "${MYSQLCLIENT_MANDATORY}";
+    then
