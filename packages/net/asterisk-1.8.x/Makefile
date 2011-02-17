@@ -276,7 +276,7 @@ define Package/asterisk18/install
 	done
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
 	for f in app_dial app_echo app_playback app_macro \
-		chan_sip res_rtp \
+		chan_sip res_rtp_asterisk res_rtp_multicast \
 		codec_ulaw codec_gsm \
 		format_gsm format_pcm format_wav format_wav_gsm \
 		pbx_config \
