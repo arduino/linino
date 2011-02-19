@@ -42,6 +42,10 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--without-libwrap \
 		--with-loadavg \
+		, \
+		ac_cv_header_rpc_pmap_clnt_h=no \
+		ac_cv_header_rpc_rpc_h=no \
+		ac_cv_header_rpc_rpcent_h=no \
 	)
 endef
 
