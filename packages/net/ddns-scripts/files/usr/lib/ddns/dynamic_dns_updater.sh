@@ -45,6 +45,9 @@ fi
 #config_get domain $service_id domain
 #
 #
+#config_get use_https $service_id use_https
+#config_get cacert $service_id cacert
+#
 #config_get ip_source $service_id ip_source
 #config_get ip_interface $service_id ip_interface
 #config_get ip_network $service_id ip_network
@@ -81,11 +84,29 @@ then
 	force_unit="hours"
 fi
 
+if [ -z "$use_https" ]
+then
+	use_https=0
+fi
+
 
 
 #some constants
 
-retrieve_prog="/usr/bin/wget -O - ";
+if [ "x$use_https" = "x1" ]
+then
+	retrieve_prog="/usr/bin/curl "
+	if [ -f "$cacert" ]
+	then
+		retrieve_prog="${retrieve_prog}--cacert $cacert "
+	elif [ -d "$cacert" ]
+	then
+		retrieve_prog="${retrieve_prog}--capath $cacert "
+	fi
+else
+	retrieve_prog="/usr/bin/wget -O - ";
+fi
+
 service_file="/usr/lib/ddns/services"
 
 ip_regex="[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"
@@ -118,6 +139,10 @@ then
 	IFS=$OLD_IFS
 fi
 
+if [ "x$use_https" = x1 ]
+then
+	update_url=$(echo $update_url | sed -e 's/^http:/https:/')
+fi
 
 
 verbose_echo "update_url=$update_url"
