@@ -9,7 +9,8 @@ start_service() {
 	config_get slot "$section" slot
 	config_get netif "$section" netif
 	config_get device "$section" device
-	vbladed $shelf $slot $netif $device
+	config_get options "$section" options
+	vbladed $options $shelf $slot $netif $device
 }
 
 start() {
