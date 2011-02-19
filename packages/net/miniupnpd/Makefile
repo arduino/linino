@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=miniupnpd
 PKG_VERSION:=1.5
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 PKG_MD5SUM:=063f03a2a8363b9d4cb0f73b20b8dfce
 
 PKG_SOURCE_URL:=http://miniupnp.free.fr/files
@@ -41,11 +41,12 @@ define Build/Compile
 endef
 
 define Package/miniupnpd/install
-	$(INSTALL_DIR) $(1)/usr/bin $(1)/etc/init.d $(1)/etc/config $(1)/etc/hotplug.d/firewall
+	$(INSTALL_DIR) $(1)/usr/bin $(1)/etc/init.d $(1)/etc/config $(1)/etc/hotplug.d/iface $(1)/etc/hotplug.d/firewall
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/miniupnpd $(1)/usr/bin/miniupnpd
 	$(INSTALL_BIN) ./files/miniupnpd.init $(1)/etc/init.d/miniupnpd
 	$(INSTALL_CONF) ./files/upnpd.config $(1)/etc/config/upnpd
-	$(INSTALL_DATA) ./files/miniupnpd.hotplug $(1)/etc/hotplug.d/firewall/50-miniupnpd
+	$(INSTALL_DATA) ./files/miniupnpd.iface.hotplug $(1)/etc/hotplug.d/iface/50-miniupnpd
+	$(INSTALL_DATA) ./files/miniupnpd.firewall.hotplug $(1)/etc/hotplug.d/firewall/50-miniupnpd
 endef
 
 $(eval $(call BuildPackage,miniupnpd))
