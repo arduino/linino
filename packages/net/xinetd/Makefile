@@ -36,6 +36,8 @@ define Package/xinetd/conffiles
 /etc/xinetd.conf
 endef
 
+TARGET_CFLAGS += -DNO_RPC
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--without-libwrap \
