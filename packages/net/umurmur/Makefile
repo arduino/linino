@@ -7,12 +7,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=umurmur
-PKG_VERSION:=0.2.5
+PKG_VERSION:=0.2.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://umurmur.googlecode.com/files/
-PKG_MD5SUM:=c31fd72c0ac563cf75961ae4e49909d7
+PKG_MD5SUM:=06dc224be5160e172574c9248682140b
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -81,12 +81,12 @@ endef
 Package/umurmur-polarssl/install = $(Package/umurmur-openssl/install)
 
 ifeq ($(BUILD_VARIANT),openssl)
-  TARGET_CFLAGS += -DWRT_TARGET -I$(STAGING_DIR)/usr/include
+  TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
   TARGET_LDFLAGS += -lcrypto -lssl
 endif
 
 ifeq ($(BUILD_VARIANT),polarssl)
-  TARGET_CFLAGS += -DUSE_POLARSSL -DWRT_TARGET -I$(STAGING_DIR)/usr/include
+  TARGET_CFLAGS += -DUSE_POLARSSL -I$(STAGING_DIR)/usr/include
   TARGET_LDFLAGS += -lpolarssl
 endif
 

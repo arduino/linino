@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=muninlite
-PKG_VERSION:=1.0.2
+PKG_VERSION:=1.0.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=67fe45999fbd29f7d91fe342889e3dcb
+PKG_MD5SUM:=a8cc86f0cc536a6c22dc298f4ed55339
 
 include $(INCLUDE_DIR)/package.mk
 
