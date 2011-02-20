@@ -2,8 +2,8 @@
  linux/net/ipsec/ipsec_xmit.c |   21 +++++++++++++++++++++
  1 file changed, 21 insertions(+)
 
---- openswan-2.6.29.orig/linux/net/ipsec/ipsec_xmit.c
-+++ openswan-2.6.29/linux/net/ipsec/ipsec_xmit.c
+--- a/linux/net/ipsec/ipsec_xmit.c
++++ b/linux/net/ipsec/ipsec_xmit.c
 @@ -105,6 +105,15 @@ static __u32 zeroes[64];
  int ipsec_xmit_trap_count = 0;
  int ipsec_xmit_trap_sendcount = 0;

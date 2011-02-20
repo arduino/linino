@@ -1,8 +1,6 @@
-Index: openswan-2.6.29/programs/pluto/adns.c
-===================================================================
---- openswan-2.6.29.orig/programs/pluto/adns.c	2010-11-03 00:50:53.088000003 +0100
-+++ openswan-2.6.29/programs/pluto/adns.c	2010-11-03 00:54:26.985000001 +0100
-@@ -187,7 +187,7 @@
+--- a/programs/pluto/adns.c
++++ b/programs/pluto/adns.c
+@@ -187,7 +187,7 @@ write_pipe(int fd, const unsigned char *
      res_query(dname, class, type, answer, anslen)
  # define res_nclose(statp) res_close()
  

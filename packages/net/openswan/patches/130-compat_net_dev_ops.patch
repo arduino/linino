@@ -2,8 +2,8 @@
  linux/include/openswan/ipsec_kversion.h |    6 ++++++
  1 file changed, 6 insertions(+)
 
---- openswan-2.6.29.orig/linux/include/openswan/ipsec_kversion.h
-+++ openswan-2.6.29/linux/include/openswan/ipsec_kversion.h
+--- a/linux/include/openswan/ipsec_kversion.h
++++ b/linux/include/openswan/ipsec_kversion.h
 @@ -366,6 +366,12 @@
  #endif
  #endif
