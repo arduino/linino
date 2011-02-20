@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 - 2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,22 +8,23 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=udpxy
-PKG_REV=1.0
-PKG_TAG=Chipmunk-16
-PKG_VERSION=$(PKG_REV)-$(PKG_TAG)
+PKG_REV:=1.0
+PKG_TAG:=Chipmunk-19
+PKG_VERSION:=$(PKG_REV)-$(PKG_TAG)
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME).$(PKG_REV)-$(PKG_TAG).tgz
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_REV)
 PKG_SOURCE_URL:=@SF/udpxy
-PKG_MD5SUM:=0bba6fd3e0b0065424b198abdf0acb7d
+PKG_MD5SUM:=e1373a3bf30b2b3449a5b907aa4e29ce
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/udpxy
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=
   TITLE:=convert UDP IPTV streams into http stream
   URL:=http://sourceforge.net/projects/udpxy
 endef
@@ -38,9 +39,12 @@ define Package/udpxy/description
 	popcornhour/mediatomb/vlc/etc.
 endef
 
-define Package/udpxy/install	
+MAKE_FLAGS += \
+	INSTALLROOT="$(PKG_INSTALL_DIR)/usr"
+
+define Package/udpxy/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/udpxy $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/udpxy $(1)/usr/bin/
 	ln -sf udpxy $(1)/usr/bin/udpxrec
 endef
 
