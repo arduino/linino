@@ -30,7 +30,7 @@
  	# misc pre-Pluto setup
  
 -	perform test -d $subsysdir "&&" touch $subsyslock
-+	perfrom test -d "${subsyslock%/*}" "&&" touch $subsyslock "&&" rm -f $subsyslock
++	perform test -d "${subsyslock%/*}" "&&" touch $subsyslock "&&" rm -f $subsyslock
  
  	manualconns
  
