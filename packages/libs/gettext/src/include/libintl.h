@@ -5,10 +5,7 @@
 #ifndef _LIBINTL_H
 #define _LIBINTL_H      1
 
-#include <features.h>
 #include <locale.h>
-
-#if defined(__UCLIBC__) && !defined(__UCLIBC_HAS_GETTEXT_AWARENESS__)
 
 /* Undef gettext macros, if any... */
 #undef gettext
@@ -53,5 +50,4 @@
 #define bind_textdomain_codeset(Domain, Codeset) (Codeset)
 #define textdomain(String) (String) ?: "messages"
 
-#endif  /* GETTEXT */
 #endif  /* _LIBINTL_H */
