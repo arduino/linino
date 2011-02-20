@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tint2
-PKG_REV:=622
+PKG_REV:=626
 PKG_VERSION:=svn$(PKG_REV)
 PKG_RELEASE:=1
 
