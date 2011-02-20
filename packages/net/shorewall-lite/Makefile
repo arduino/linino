@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=shorewall-lite
 PKG_VERSION:=4.4.12.2
 PKG_DIRECTORY:=4.4.12
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE_URL:=http://www.shorewall.net/pub/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/ \
 	http://www1.shorewall.net/pub/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/ \
@@ -58,6 +58,7 @@ define Package/shorewall-lite/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/sbin/shorewall-lite $(1)/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/shorewall-lite $(1)/usr/share
 	$(INSTALL_BIN) ./files/hostname $(1)/usr/share/shorewall-lite
+	$(INSTALL_BIN) ./files/lsm_script $(1)/etc/lsm/script.d/45_shorewall-lite
 	$(CP) $(PKG_INSTALL_DIR)/etc/shorewall-lite $(1)/etc
 	$(CP) ./files/vardir $(1)/etc/shorewall-lite
 endef
