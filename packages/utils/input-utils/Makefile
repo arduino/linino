@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=input-utils
 PKG_VERSION:=20081014-101501
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/input/
 PKG_SOURCE:=input-$(PKG_VERSION).tar.gz
