@@ -18,6 +18,7 @@ PKG_MD5SUM:=17535accceef55bcb17a74d73f9c2aef
 
 PKG_FIXUP:=libtool
 PKG_BUILD_DEPENDS:=glib2/host libpthread zlib
+HOST_BUILD_DEPENDS:=gettext/host libiconv/host
 PKG_INSTALL:=1
 
 HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/glib-$(PKG_VERSION)
