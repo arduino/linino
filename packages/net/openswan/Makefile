@@ -83,6 +83,11 @@ define Build/Install
 	$(MAKE) $(OPENSWAN_MAKEFLAGS) install
 endef
 
+define Package/openswan/conffiles
+/etc/ipsec.conf
+/etc/ipsec.secrets
+endef
+
 define Package/openswan/install
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 	$(INSTALL_DIR) $(1)/etc/init.d
