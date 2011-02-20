@@ -5,32 +5,32 @@
  3 files changed, 7 insertions(+), 2 deletions(-)
 
 --- /dev/null
-+++ openswan-2.6.29/programs/loggerfix
++++ b/programs/loggerfix
 @@ -0,0 +1,5 @@
 +#!/bin/sh
 +# use filename instead of /dev/null to log, but dont log to flash or ram
 +# pref. log to nfs mount
 +echo "$*" >> /dev/null
 +exit 0
---- openswan-2.6.29.orig/programs/_plutorun/_plutorun.in
-+++ openswan-2.6.29/programs/_plutorun/_plutorun.in
+--- a/programs/_plutorun/_plutorun.in
++++ b/programs/_plutorun/_plutorun.in
 @@ -155,7 +155,7 @@ then
  			exit 1
  		fi
  	else
 -		if test ! -w "`dirname $stderrlog`"
-+		if test ! -w "`echo $stderrlog | sed -r 's/(^.*\/)(.*$)/\1/'`"
++		if test ! -w "${stderrlog%/*}"
  		then
  			echo Cannot write to directory to create \"$stderrlog\".
  			exit 1
---- openswan-2.6.29.orig/programs/_realsetup/_realsetup.in
-+++ openswan-2.6.29/programs/_realsetup/_realsetup.in
+--- a/programs/_realsetup/_realsetup.in
++++ b/programs/_realsetup/_realsetup.in
 @@ -290,7 +290,7 @@ case "$1" in
  
  	# misc pre-Pluto setup
  
 -	perform test -d $subsysdir "&&" touch $subsyslock
-+	rm test -d `echo $subsyslock | sed -r 's/(^.*\/)(.*$)/\1/'` "&&" touch $subsyslock "&&" rm -f $subsyslock
++	perfrom test -d "${subsyslock%/*}" "&&" touch $subsyslock "&&" rm -f $subsyslock
  
  	manualconns
  
