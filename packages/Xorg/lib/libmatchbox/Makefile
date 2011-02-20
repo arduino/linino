@@ -19,6 +19,7 @@ PKG_FIXUP:=libtool
 EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib/
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 PKG_INSTALL:=1
 
@@ -26,7 +27,7 @@ define Package/libmatchbox
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
-  DEPENDS:=+libX11 +libXft +libpng +libjpeg +libXext +pango
+  DEPENDS:=+libX11 +libXft +libpng +libjpeg +libXext +pango +check
   TITLE:=libmatchbox
   URL:=http://matchbox-project.org
 endef
