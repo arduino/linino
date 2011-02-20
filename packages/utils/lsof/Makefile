@@ -33,13 +33,17 @@ endef
 
 define Build/Configure
 	cd $(PKG_BUILD_DIR); \
-		LINUX_CLIB="-DGLIBCV=2" LSOF_VSTR="$(LINUX_VERSION)" \
+		LINUX_CLIB="-DGLIBCV=2" \
+		LSOF_CC="$(TARGET_CC)" \
+		LSOF_VSTR="$(LINUX_VERSION)" \
 		./Configure -n linux
 endef
 
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CC="$(TARGET_CC)" \
+		AR="$(TARGET_CROSS)ar cr" \
+		RANLIB="$(TARGET_CROSS)ranlib" \
 		DEBUG="$(TARGET_CFLAGS)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" 
 endef
