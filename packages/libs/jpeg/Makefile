@@ -52,9 +52,19 @@ HOST_CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
 
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	(cd $(PKG_BUILD_DIR); \
+		rm -f ltconfig ltmain.sh libtool; \
+		ln -s `which true` ltconfig; \
+		ln -s $(STAGING_DIR)/host/bin/libtool libtool; \
+	)
+endef
+
 define Build/Compile
 	$(INSTALL_DIR) $(PKG_INSTALL_DIR)/usr/{include,lib,bin,man/man1}
 	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+		LIBTOOL="./libtool --tag=CC" \
 		prefix="$(PKG_INSTALL_DIR)/usr" \
 		exec_prefix="$(PKG_INSTALL_DIR)/usr" \
 		all
