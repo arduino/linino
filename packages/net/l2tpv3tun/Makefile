@@ -38,7 +38,7 @@ MAKE_FLAGS += \
 	CC="$(TARGET_CC)" \
 	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(LINUX_DIR)/include" \
 	LD="$(TARGET_CC)" \
-	LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib -lnl"
+	LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib -lnl -lnl-genl"
 
 define Package/l2tpv3tun/install
 	$(INSTALL_DIR) $(1)/usr/bin
