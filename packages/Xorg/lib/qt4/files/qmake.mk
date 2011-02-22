@@ -8,8 +8,17 @@
 QMAKE_PLATFORM_PREFIX:=$(if $(CONFIG_QT4_WS_QWS),qws/)
 QMAKE_SPECFILE:=$(STAGING_DIR)/usr/share/mkspecs/$(QMAKE_PLATFORM_PREFIX)linux-openwrt-g++
 
-TARGET_INCDIRS+=$(STAGING_DIR)/include $(STAGING_DIR)/usr/include $(TOOLCHAIN_DIR)/include $(TOOLCHAIN_DIR)/usr/include
-TARGET_LIBDIRS+=$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib $(TOOLCHAIN_DIR)/lib $(TOOLCHAIN_DIR)/usr/lib
+TARGET_INCDIRS +=\
+	$(TOOLCHAIN_DIR)/include \
+	$(STAGING_DIR)/include \
+	$(TOOLCHAIN_DIR)/usr/include \
+	$(STAGING_DIR)/usr/include
+
+TARGET_LIBDIRS += \
+	$(TOOLCHAIN_DIR)/lib \
+	$(STAGING_DIR)/lib \
+	$(TOOLCHAIN_DIR)/usr/lib \
+	$(STAGING_DIR)/usr/lib 
 
 define Build/Configure/Qmake
 	TARGET_CC="$(TARGET_CROSS)gcc" \
