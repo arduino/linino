@@ -36,8 +36,8 @@ define Build/Configure/Qmake
 	STAGING_DIR="$(STAGING_DIR)" \
 	qmake \
 		-spec $(QMAKE_SPECFILE) \
-		-o $(PKG_BUILD_DIR)/Makefile \
-		$(PKG_BUILD_DIR)/$(1).pro
+		-o $(PKG_BUILD_DIR)/$(2)/Makefile \
+		$(PKG_BUILD_DIR)/$(2)/$(1).pro
 endef
 
 # we need to pass everything to $(MAKE) as well, as Makefiles may invoke qmake once again for creating further Makefiles
