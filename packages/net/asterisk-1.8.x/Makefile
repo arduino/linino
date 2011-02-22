@@ -162,6 +162,18 @@ $(call Package/asterisk18/Default/description)
  support to Asterisk.
 endef
  
+define Package/asterisk18-mysql
+$(call Package/asterisk18/Default)
+  TITLE:=MySQL support
+  DEPENDS:= +asterisk18 +libmysqlclient
+endef
+
+define Package/asterisk18-mysql/description
+$(call Package/asterisk18/Default/description)
+ This package provides MySQL
+ support to Asterisk.
+endef
+ 
 ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk18-app-meetme),)
   CONFIGURE_ARGS+= \
 	--with-dahdi="$(STAGING_DIR)/usr"
@@ -189,6 +201,22 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk18-curl),)
 else
   CONFIGURE_ARGS+= \
 	--without-curl
+endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk18-mysql),)
+  CONFIGURE_ARGS+= \
+	--with-mysqlclient="$(STAGING_DIR)/usr/bin"
+else
+  CONFIGURE_ARGS+= \
+	--without-mysqlclient
+endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk18-chan-mobile),)
+  CONFIGURE_ARGS+= \
+	--with-bluetooth="$(STAGING_DIR)/usr"
+else
+  CONFIGURE_ARGS+= \
+	--without-bluetooth
 endif
 
 CONFIGURE_ARGS+= \
@@ -409,6 +437,23 @@ define Package/asterisk18-curl/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_curl.so $(1)/usr/lib/asterisk/modules/
 endef
 
+define Package/asterisk18-mysql/conffiles
+/etc/asterisk/app_mysql.conf
+/etc/asterisk/res_config_mysql.conf
+/etc/asterisk/cdr_mysql.conf
+endef
+
+define Package/asterisk18-mysql/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/app_mysql.conf $(1)/etc/asterisk/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/res_config_mysql.conf $(1)/etc/asterisk/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/cdr_mysql.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/app_mysql.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/cdr_mysql.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_config_mysql.so $(1)/usr/lib/asterisk/modules/
+endef
+
 define Buildasterisk18ModuleTemplate
 
   define Package/asterisk18-$(subst _,-,$(1))
@@ -441,6 +486,7 @@ $(eval $(call BuildPackage,asterisk18-chan-gtalk))
 $(eval $(call BuildPackage,asterisk18-chan-mobile))
 $(eval $(call BuildPackage,asterisk18-chan-mgcp))
 $(eval $(call BuildPackage,asterisk18-curl))
+$(eval $(call BuildPackage,asterisk18-mysql))
 $(eval $(call Buildasterisk18ModuleTemplate,app_authenticate,Authenticate,support for executing arbitrary authenticate commands))
 $(eval $(call Buildasterisk18ModuleTemplate,app_chanisavail,Channel availability check,support for checking if a channel is available))
 $(eval $(call Buildasterisk18ModuleTemplate,app_chanspy,Channel listen in,support for listening in on any channel))
