@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vim
-PKG_VERSION:=7.1
-PKG_RELEASE:=3
-VIMVER:=71
+PKG_VERSION:=7.3
+PKG_RELEASE:=1
+VIMVER:=73
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.vim.org/pub/vim/unix/
-PKG_MD5SUM:=44c6b4914f38d6f9aa959640b89da329
+PKG_MD5SUM:=5b9510a17074e2b37d8bb38ae09edbf2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)$(VIMVER)
 PKG_BUILD_PARALLEL:=1
@@ -88,6 +88,16 @@ CONFIGURE_ARGS += \
 	--disable-cscope \
 	--disable-gpm \
 	--with-tlib=ncurses
+
+CONFIGURE_VARS += \
+        vim_cv_getcwd_broken=no \
+        vim_cv_memmove_handles_overlap=yes \
+        vim_cv_stat_ignores_slash=yes \
+        vim_cv_tgetent=zero \
+        vim_cv_terminfo=yes \
+        vim_cv_toupper_broken=no \
+        vim_cv_tty_group=root \
+        vim_cv_tty_mode=0620
 
 ifneq ($(CONFIG_PACKAGE_vim),)
 define Build/Compile/vim
