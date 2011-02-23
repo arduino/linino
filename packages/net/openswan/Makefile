@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=openswan
-PKG_VERSION:=2.6.29
-PKG_RELEASE:=2
+PKG_VERSION:=2.6.33
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.openswan.org/download
-PKG_MD5SUM:=cd6c127585ec6db63780e9a40d5387fb
+PKG_MD5SUM:=7e9c28585307b7ad4f59737debb0d940
 
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
@@ -49,6 +49,7 @@ define KernelPackage/openswan
 $(call Package/openswan/Default)
   SUBMENU:=Network Support
   TITLE+= (kernel module)
+  DEPENDS+=+PACKAGE_kmod-ipv6:kmod-ipv6
   FILES:=$(PKG_BUILD_DIR)/modobj*/ipsec.$(LINUX_KMOD_SUFFIX)
 endef
 

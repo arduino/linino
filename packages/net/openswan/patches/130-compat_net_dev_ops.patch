@@ -4,8 +4,8 @@
 
 --- a/linux/include/openswan/ipsec_kversion.h
 +++ b/linux/include/openswan/ipsec_kversion.h
-@@ -366,6 +366,12 @@
- #endif
+@@ -387,6 +387,12 @@
+ # endif
  #endif
  
 +#if LINUX_VERSION_CODE == KERNEL_VERSION(2,6,30)
