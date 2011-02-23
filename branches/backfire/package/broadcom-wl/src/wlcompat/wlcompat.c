@@ -38,7 +38,7 @@
 #include <wlioctl.h>
 
 char buf[WLC_IOCTL_MAXLEN];
-static struct net_device *dev;
+static struct net_device *dev = NULL;
 #ifndef DEBUG
 static int random = 1;
 #endif
@@ -981,10 +981,15 @@ static int __init wlcompat_init()
 	int found = 0, i;
 	char devname[4] = "wl0";
 
+	/* calling dev_get_by_name() will inc the open_counter in dev
+	 * we must put it back with dev_put() when we are finished to dec the counter */
 	while (!found && (dev = dev_get_by_name(devname))) {
 		if ((wl_ioctl(dev, WLC_GET_MAGIC, &i, sizeof(i)) == 0) && (i == WLC_IOCTL_MAGIC))
 			found = 1;
-		devname[2]++;
+		else {
+			dev_put(dev);
+			devname[2]++;
+		}
 	}
 
 
@@ -1026,6 +1031,9 @@ static void __exit wlcompat_exit()
 	dev->wireless_handlers = NULL;
 #endif
 	dev->do_ioctl = old_ioctl;
+
+	dev_put(dev);
+
 	return;
 }
 
