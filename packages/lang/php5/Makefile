@@ -30,8 +30,8 @@ define Package/php5/Default
 endef
 
 define Package/php5/Default/description
- PHP is a widely-used general-purpose scripting language that is especially 
- suited for Web development and can be embedded into HTML.
+  PHP is a widely-used general-purpose scripting language that is especially 
+  suited for Web development and can be embedded into HTML.
 endef
 
 define Package/php5/config
@@ -46,10 +46,6 @@ define Package/php5/config
 	config PHP5_LIBXML
 		bool "PHP5 LIBXML support"
 		depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-
-	config PHP5_SYSVIPC
-		bool "PHP5 Semaphore, Shared Memory and IPC support"
-		depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
 endef
 
 define Package/php5
@@ -61,9 +57,9 @@ define Package/php5
 endef
 
 define Package/php5/description
-$(call Package/php5/Default/description)
- This package contains only the PHP config file. You must actually choose 
- your PHP flavour (cli, cgi or fastcgi).
+  $(call Package/php5/Default/description)
+  This package contains only the PHP config file. You must actually choose 
+  your PHP flavour (cli, cgi or fastcgi).
 endef
 
 define Package/php5-cli
@@ -73,8 +69,8 @@ define Package/php5-cli
 endef
 
 define Package/php5-cli/description
-$(call Package/php5/Default/description)
- This package contains the CLI version of the PHP5 interpreter.
+  (call Package/php5/Default/description)
+  This package contains the CLI version of the PHP5 interpreter.
 endef
 
 define Package/php5-cgi
@@ -84,8 +80,8 @@ define Package/php5-cgi
 endef
 
 define Package/php5-cgi/description
-$(call Package/php5/Default/description)
- This package contains the CGI version of the PHP5 interpreter.
+  $(call Package/php5/Default/description)
+  This package contains the CGI version of the PHP5 interpreter.
 endef
 
 define Package/php5-fastcgi
@@ -95,278 +91,8 @@ define Package/php5-fastcgi
 endef
 
 define Package/php5-cgi/description
-As FastCGI support is now a core feature the php5-fastcgi package now depends
-on the php5-cgi package, containing just the startup script.
-endef
-
-define Package/php5-mod-ctype
-  $(call Package/php5/Default)
-  DEPENDS:=php5
-  TITLE:=ctype shared module
-endef
-define Package/php5-mod-ctype/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-curl
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libcurl
-  TITLE:=cURL shared module
-endef
-define Package/php5-mod-curl/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-fileinfo
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libmagic
-  TITLE:=Fileinfo shared module
-endef
-define Package/php5-mod-fileinfo/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-dom
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libxml2
-  TITLE:=DOM shared module
-endef
-define Package/php5-mod-dom/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-  depends on PHP5_LIBXML
-endef
-
-define Package/php5-mod-exif
-  $(call Package/php5/Default)
-  DEPENDS:=php5
-  TITLE:=EXIF shared module
-endef
-define Package/php5-mod-exif/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-ftp
-  $(call Package/php5/Default)
-  DEPENDS:=php5
-  TITLE:=FTP shared module
-endef
-define Package/php5-mod-ftp/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-gd
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libgd
-  TITLE:=GD graphics shared module
-endef
-define Package/php5-mod-gd/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-gmp
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libgmp
-  TITLE:=GMP shared module
-endef
-define Package/php5-mod-gmp/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-hash
-  $(call Package/php5/Default)
-  DEPENDS:=php5
-  TITLE:=Hash shared module
-endef
-define Package/php5-mod-hash/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-iconv
-  $(call Package/php5/Default)
-  DEPENDS:=php5 $(ICONV_DEPENDS)
-  TITLE:=iConv shared module
-endef
-define Package/php5-mod-iconv/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-json
-  $(call Package/php5/Default)
-  DEPENDS:=php5
-  TITLE:=JSON shared module
-endef
-define Package/php5-mod-json/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-ldap
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libopenldap +libsasl2
-  TITLE:=LDAP shared module
-endef
-define Package/php5-mod-ldap/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-mbstring
-  $(call Package/php5/Default)
-  DEPENDS:=php5
-  TITLE:=MBString shared module
-endef
-define Package/php5-mod-mbstring/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-mcrypt
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libmcrypt +libltdl
-  TITLE:=mcrypt shared module
-endef
-define Package/php5-mod-mcrypt/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-mysql
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libmysqlclient
-  TITLE:=MySQL shared module
-endef
-define Package/php5-mod-mysql/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-openssl
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libopenssl
-  TITLE:=OpenSSL shared module
-endef
-define Package/php5-mod-openssl/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-pdo
-  $(call Package/php5/Default)
-  DEPENDS:=php5
-  TITLE:=PHP Data Objects shared module
-endef
-define Package/php5-mod-pdo/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-pdo-mysql
-  $(call Package/php5/Default)
-  DEPENDS:=php5-mod-pdo +libmysqlclient
-  TITLE:=PDO driver for MySQL
-endef
-
-define Package/php5-mod-pdo-pgsql
-  $(call Package/php5/Default)
-  DEPENDS:=php5-mod-pdo +libpq
-  TITLE:=PDO driver for PostgreSQL
-endef
-
-define Package/php5-mod-pdo-sqlite
-  $(call Package/php5/Default)
-  DEPENDS:=php5-mod-pdo +libsqlite3 +libpthread
-  TITLE:=PDO driver for SQLite (3.x)
-endef
-
-define Package/php5-mod-pgsql
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libpq
-  TITLE:=PostgreSQL shared module
-endef
-define Package/php5-mod-pgsql/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-session
-  $(call Package/php5/Default)
-  DEPENDS:=php5
-  TITLE:=Session shared module
-endef
-define Package/php5-mod-session/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-soap
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libxml2
-  TITLE:=SOAP shared module
-endef
-define Package/php5-mod-soap/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-  depends on PHP5_LIBXML
-endef
-
-define Package/php5-mod-sockets
-  $(call Package/php5/Default)
-  DEPENDS:=php5
-  TITLE:=Sockets shared module
-endef
-define Package/php5-mod-sockets/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-sqlite
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libsqlite2
-  TITLE:=SQLite shared module (2.x)
-endef
-define Package/php5-mod-sqlite/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-sqlite3
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libsqlite3 +libpthread
-  TITLE:=SQLite3 shared module (3.x)
-endef
-define Package/php5-mod-sqlite3/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-tokenizer
-  $(call Package/php5/Default)
-  DEPENDS:=php5
-  TITLE:=Tokenizer shared module
-endef
-define Package/php5-mod-tokenizer/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-xml
-  $(call Package/php5/Default)
-  DEPENDS:=php5
-  ifneq ($(CONFIG_PHP5_LIBXML),)
-    DEPENDS+= +libxml2
-  else
-    DEPENDS+= +libexpat
-  endif
-  TITLE:=XML shared module
-endef
-define Package/php5-mod-xml/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-endef
-
-define Package/php5-mod-xmlreader
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libxml2 $(ICONV_DEPENDS)
-  TITLE:=XMLReader shared module
-endef
-define Package/php5-mod-xmlreader/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-  depends on PHP5_LIBXML
-endef
-
-define Package/php5-mod-xmlwriter
-  $(call Package/php5/Default)
-  DEPENDS:=php5 +libxml2 $(ICONV_DEPENDS)
-  TITLE:=XMLWriter shared module
-endef
-  define Package/php5-mod-xmlwriter/config
-  depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-  depends on PHP5_LIBXML
+   As FastCGI support is now a core feature the php5-fastcgi package now depends
+   on the php5-cgi package, containing just the startup script.
 endef
 
 CONFIGURE_VARS += \
@@ -380,6 +106,7 @@ PKG_CONFIGURE_OPTS:= \
 	--without-pear \
 	\
 	--with-config-file-path=/etc \
+	--with-config-file-scan-dir=/etc/php5 \
 	--enable-magic-quotes \
 	--disable-short-tags \
 	\
@@ -449,7 +176,6 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-gd),)
 	--with-jpeg-dir="$(STAGING_DIR)/usr" \
 	--with-png-dir="$(STAGING_DIR)/usr" \
 	--without-xpm-dir \
-	--without-ttf \
 	--without-t1lib \
 	--enable-gd-native-ttf \
 	--disable-gd-jis-conv
@@ -514,6 +240,12 @@ else
   PKG_CONFIGURE_OPTS+= --without-openssl
 endif
 
+ifneq ($(CONFIG_PACKAGE_php5-mod-pcntl),)
+  PKG_CONFIGURE_OPTS+= --enable-pcntl=shared
+else
+  PKG_CONFIGURE_OPTS+= --disable-pcntl
+endif
+
 ifneq ($(CONFIG_PACKAGE_php5-mod-pdo),)
   PKG_CONFIGURE_OPTS+= --enable-pdo=shared
   ifneq ($(CONFIG_PACKAGE_php5-mod-pdo-mysql),)
@@ -573,6 +305,24 @@ else
   PKG_CONFIGURE_OPTS+= --without-sqlite3
 endif
 
+ifneq ($(CONFIG_PACKAGE_php5-mod-sysvmsg),)
+  PKG_CONFIGURE_OPTS+= --enable-sysvmsg=shared
+else
+  PKG_CONFIGURE_OPTS+= --disable-sysvmsg
+endif
+
+ifneq ($(CONFIG_PACKAGE_php5-mod-sysvsem),)
+  PKG_CONFIGURE_OPTS+= --enable-sysvsem=shared
+else
+  PKG_CONFIGURE_OPTS+= --disable-sysvsem
+endif
+
+ifneq ($(CONFIG_PACKAGE_php5-mod-sysvshm),)
+  PKG_CONFIGURE_OPTS+= --enable-sysvshm=shared
+else
+  PKG_CONFIGURE_OPTS+= --disable-sysvshm
+endif
+
 ifneq ($(CONFIG_PACKAGE_php5-mod-tokenizer),)
   PKG_CONFIGURE_OPTS+= --enable-tokenizer=shared
 else
@@ -622,11 +372,6 @@ else
   PKG_CONFIGURE_OPTS+= --disable-libxml
 endif
 
-ifneq ($(CONFIG_PHP5_SYSVIPC),)
-  PKG_CONFIGURE_OPTS+= --enable-sysvsem --enable-sysvshm --enable-sysvmsg
-else
-  PKG_CONFIGURE_OPTS+= --disable-sysvsem --disable-sysvshm --disable-sysvmsg
-endif
 
 define Build/Configure
 endef
@@ -697,49 +442,74 @@ define Package/php5-fastcgi/install
 	$(INSTALL_BIN) ./files/php.init $(1)/etc/init.d/php
 endef
 
-define BuildPlugin
-  define Package/$(1)/install
-	[ -z "$(2)" ] || $(INSTALL_DIR) $$(1)/usr/lib/php
-	for m in $(2); do \
-		[ -z "$(CONFIG_PACKAGE_$(1))" ] \
-			 || $(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/$$$$$$$${m}.so $$(1)/usr/lib/php/ ; \
-	done
+PHP5_MODULES:=
+
+define BuildModule
+  define Package/php5-mod-$(1)
+    $(call Package/php5/Default)
+    ifneq ($(3),)
+      DEPENDS:=$(3)
+    else
+      DEPENDS:=php5
+    endif
+    TITLE:=$(2) shared module
   endef
 
-  $$(eval $$(call BuildPackage,$(1)))
+  define Package/php5-mod-$(1)/config
+    depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
+    $(4)
+  endef
+
+  define Package/php5-mod-$(1)/install
+	$(INSTALL_DIR) $$(1)/usr/lib/php
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/$(subst -,_,$(1)).so $$(1)/usr/lib/php/
+	$(INSTALL_DIR) $$(1)/etc/php5
+	echo "extension=$(subst -,_,$(1)).so" > $$(1)/etc/php5/$(subst -,_,$(1)).ini
+  endef
+
+  PHP5_MODULES+= php5-mod-$(1)
 endef
 
 $(eval $(call BuildPackage,php5))
 $(eval $(call BuildPackage,php5-cli))
 $(eval $(call BuildPackage,php5-cgi))
 $(eval $(call BuildPackage,php5-fastcgi))
-$(eval $(call BuildPlugin,php5-mod-ctype,ctype))
-$(eval $(call BuildPlugin,php5-mod-curl,curl))
-$(eval $(call BuildPlugin,php5-mod-fileinfo,fileinfo))
-$(eval $(call BuildPlugin,php5-mod-dom,dom))
-$(eval $(call BuildPlugin,php5-mod-exif,exif))
-$(eval $(call BuildPlugin,php5-mod-ftp,ftp))
-$(eval $(call BuildPlugin,php5-mod-gd,gd))
-$(eval $(call BuildPlugin,php5-mod-gmp,gmp))
-$(eval $(call BuildPlugin,php5-mod-hash,hash))
-$(eval $(call BuildPlugin,php5-mod-iconv,iconv))
-$(eval $(call BuildPlugin,php5-mod-json,json))
-$(eval $(call BuildPlugin,php5-mod-ldap,ldap))
-$(eval $(call BuildPlugin,php5-mod-mbstring,mbstring))
-$(eval $(call BuildPlugin,php5-mod-mcrypt,mcrypt))
-$(eval $(call BuildPlugin,php5-mod-mysql,mysql))
-$(eval $(call BuildPlugin,php5-mod-openssl,openssl))
-$(eval $(call BuildPlugin,php5-mod-pdo,pdo))
-$(eval $(call BuildPlugin,php5-mod-pdo-mysql,pdo_mysql))
-$(eval $(call BuildPlugin,php5-mod-pdo-pgsql,pdo_pgsql))
-$(eval $(call BuildPlugin,php5-mod-pdo-sqlite,pdo_sqlite))
-$(eval $(call BuildPlugin,php5-mod-pgsql,pgsql))
-$(eval $(call BuildPlugin,php5-mod-session,session))
-$(eval $(call BuildPlugin,php5-mod-soap,soap))
-$(eval $(call BuildPlugin,php5-mod-sockets,sockets))
-$(eval $(call BuildPlugin,php5-mod-sqlite,sqlite))
-$(eval $(call BuildPlugin,php5-mod-sqlite3,sqlite3))
-$(eval $(call BuildPlugin,php5-mod-tokenizer,tokenizer))
-$(eval $(call BuildPlugin,php5-mod-xml,xml))
-$(eval $(call BuildPlugin,php5-mod-xmlreader,xmlreader))
-$(eval $(call BuildPlugin,php5-mod-xmlwriter,xmlwriter))
+
+$(eval $(call BuildModule,ctype,Ctype))
+$(eval $(call BuildModule,curl,cURL,php5 +libcurl))
+$(eval $(call BuildModule,fileinfo,Fileinfo,php5 +libmagic))
+$(eval $(call BuildModule,dom,DOM,php5 +libxml2,depends on PHP5_LIBXML))
+$(eval $(call BuildModule,exif,EXIF))
+$(eval $(call BuildModule,ftp,FTP))
+$(eval $(call BuildModule,gd,GD graphics,php5 +libgd))
+$(eval $(call BuildModule,gmp,GMP,php5 +libgmp))
+$(eval $(call BuildModule,hash,Hash))
+$(eval $(call BuildModule,iconv,iConv,php5 +libiconv))
+$(eval $(call BuildModule,json,JSON))
+$(eval $(call BuildModule,ldap,LDAP,php5 +libopenldap +libsasl2))
+$(eval $(call BuildModule,mbstring,MBString))
+$(eval $(call BuildModule,mcrypt,Mcrypt,php5 +libmcrypt +libltdl))
+$(eval $(call BuildModule,mysql,MySQL,php5 +libmysqlclient))
+$(eval $(call BuildModule,openssl,OpenSSL,php5 +libopenssl))
+$(eval $(call BuildModule,pcntl,PCNTL))
+$(eval $(call BuildModule,pdo,PHP Data Objects))
+$(eval $(call BuildModule,pdo-mysql,PDO driver for MySQL,php5-mod-pdo +libmysqlclient))
+$(eval $(call BuildModule,pdo-pgsql,PDO driver for PostgreSQL,php5-mod-pdo +libpq))
+$(eval $(call BuildModule,pdo-sqlite,PDO driver for SQLite 3.x,php5-mod-pdo +libsqlite3 +libpthread))
+$(eval $(call BuildModule,pgsql,PostgreSQL,php5 +libpq))
+$(eval $(call BuildModule,session,Session))
+$(eval $(call BuildModule,simplexml,SimpleXML,php5 +libxml2,depends on PHP5_LIBXML))
+$(eval $(call BuildModule,soap,SOAP,php5 +libxml2,depends on PHP5_LIBXML))
+$(eval $(call BuildModule,sockets,Sockets))
+$(eval $(call BuildModule,sqlite,SQLite 2.x,php5 +libsqlite2))
+$(eval $(call BuildModule,sqlite3,SQLite3,php5 +libsqlite3 +libpthread))
+$(eval $(call BuildModule,sysvmsg,System V messages))
+$(eval $(call BuildModule,sysvsem,System V shared memory))
+$(eval $(call BuildModule,sysvshm,System V semaphore))
+$(eval $(call BuildModule,tokenizer,Tokenizer))
+$(eval $(call BuildModule,xml,XML,php5 $(if $(CONFIG_PHP5_LIBXML),+libxml2,+libexpat)))
+$(eval $(call BuildModule,xmlreader,XMLReader,php5 +libxml2 +libiconv,depends on PHP5_LIBXML))
+$(eval $(call BuildModule,xmlwriter,XMLWriter,php5 +libxml2 +libiconv,depends on PHP5_LIBXML))
+
+PKG_CONFIG_DEPENDS:= $(patsubst %,CONFIG_PACKAGE_%,$(PHP5_MODULES))
+$(foreach p,$(PHP5_MODULES),$(eval $(call BuildPackage,$(p))))
