@@ -54,6 +54,9 @@ define Package/php5
   ifneq ($(CONFIG_PHP5_LIBXML),)
     DEPENDS+= +libxml2
   endif
+  ifneq ($(CONFIG_PACKAGE_php5-mod-sqlite3)$(CONFIG_PACKAGE_php5-mod-pdo-sqlite),)
+    DEPENDS+= +libsqlite3 +libpthread
+  endif
 endef
 
 define Package/php5/description
