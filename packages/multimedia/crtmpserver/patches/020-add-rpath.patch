@@ -1,0 +1,15 @@
+Index: crtmpserver-r219/builders/make/linux.mk
+===================================================================
+--- crtmpserver-r219.orig/builders/make/linux.mk
++++ crtmpserver-r219/builders/make/linux.mk
+@@ -29,8 +29,8 @@ OPTIMIZATIONS = -O3
+ COMPILE_FLAGS = $(FPIC) $(OPTIMIZATIONS)
+ 
+ #linking flags
+-dynamic_lib_flags = $(FPIC) $(OPTIMIZATIONS) -Wl,-soname,$(DYNAMIC_LIB_PREFIX)$(1)$(DYNAMIC_LIB_SUFIX) -Wl,-rpath,"\$$ORIGIN"
+-dynamic_exec_flags = $(FPIC) $(OPTIMIZATIONS) -Wl,-rpath,"\$$ORIGIN"
++dynamic_lib_flags = $(FPIC) $(OPTIMIZATIONS) -Wl,-soname,$(DYNAMIC_LIB_PREFIX)$(1)$(DYNAMIC_LIB_SUFIX) -Wl,-rpath,/usr/lib/rtmpserver
++dynamic_exec_flags = $(FPIC) $(OPTIMIZATIONS) -Wl,-rpath,/usr/lib/rtmpserver
+ 
+ #compile switches
+ PLATFORM_DEFINES = \
