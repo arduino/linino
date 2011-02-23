@@ -529,3 +529,4 @@ $(eval $(call Buildasterisk18ModuleTemplate,app_verbose,Verbose logging,Verbose 
 $(eval $(call Buildasterisk18ModuleTemplate,func_channel,Channel info,Channel info dialplan function))
 $(eval $(call Buildasterisk18ModuleTemplate,func_blacklist,Blacklist on callerid,looking up the callerid number, and see if it is blacklisted))
 $(eval $(call Buildasterisk18ModuleTemplate,app_originate,Originate a call,originating an outbound call and connecting it to a specified extension or application))
+$(eval $(call Buildasterisk18ModuleTemplate,func_uri,URI encoding and decoding,Encodes and decodes URI-safe strings))
