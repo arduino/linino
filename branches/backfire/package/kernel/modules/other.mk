@@ -872,6 +872,21 @@ endef
 $(eval $(call KernelPackage,textsearch))
 
 
+define KernelPackage/oprofile
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=OProfile profiling support
+  KCONFIG:=CONFIG_OPROFILE
+  FILES:=$(LINUX_DIR)/arch/$(LINUX_KARCH)/oprofile/oprofile.$(LINUX_KMOD_SUFFIX)
+  DEPENDS:=@KERNEL_PROFILING @!LINUX_2_4
+endef
+
+define KernelPackage/oprofile/description
+  Kernel module for support for oprofile system profiling.
+endef
+
+$(eval $(call KernelPackage,oprofile))
+
+
 define KernelPackage/rfkill
   SUBMENU:=$(OTHER_MENU)
   TITLE:=RF switch subsystem support
