@@ -22,18 +22,6 @@ PKG_INSTALL:=1
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
 
-define KernelPackage/oprofile
-  SUBMENU:=Other modules
-  TITLE:=OProfile profiling support
-  KCONFIG:=CONFIG_OPROFILE @!LINUX_2_4
-  FILES:=$(LINUX_DIR)/arch/$(LINUX_KARCH)/oprofile/oprofile.$(LINUX_KMOD_SUFFIX)
-  DEPENDS:=@KERNEL_PROFILING
-endef
-
-define KernelPackage/oprofile/description
-  Kernel module for support for oprofile system profiling.
-endef
-
 define Package/oprofile
   SECTION:=devel
   CATEGORY:=Development
@@ -97,4 +85,3 @@ endef
 
 $(eval $(call BuildPackage,oprofile))
 $(eval $(call BuildPackage,oprofile-utils))
-$(eval $(call KernelPackage,oprofile))
