@@ -17,7 +17,7 @@ PKG_LIBTOOL_PATHS?=$(CONFIGURE_PATH)
 
 # replace copies of ltmain.sh with the build system's version
 update_libtool_common = \
-	$(foreach p,$(PKG_LIBTOOL_PATHS), \
+	$(foreach p,$(LIBTOOL_PATHS), \
 		$(call replace,ltmain.sh,$(STAGING_DIR)/host/share/libtool,$(p)/) \
 		$(call replace,libtool.m4,$(STAGING_DIR)/host/share/aclocal,$(p)/) \
 	)
