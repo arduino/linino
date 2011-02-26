@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -13,9 +13,10 @@ tools-y :=
 ifeq ($(CONFIG_EXTERNAL_TOOLCHAIN),)
 tools-$(CONFIG_GCC_VERSION_4_3)$(CONFIG_GCC_VERSION_4_4) += gmp mpfr
 endif
-tools-y += m4 autoconf automake bison pkg-config sed mklibs
+tools-y += m4 libtool autoconf automake bison pkg-config sed mklibs
 tools-y += sstrip ipkg-utils genext2fs libuuid mtd-utils mkimage
 tools-y += firmware-utils patch-cmdline quilt yaffs2 xz cmake
+tools-y += mm-macros xorg-macros missing-macros
 tools-$(CONFIG_TARGET_orion) += wrt350nv2-builder upslug2
 tools-$(CONFIG_TARGET_x86) += qemu
 ifneq ($(CONFIG_LINUX_2_4)$(CONFIG_LINUX_2_6_25),)
@@ -35,17 +36,21 @@ endif
 
 # builddir dependencies
 $(curdir)/pkg-config/compile := $(curdir)/sed/install
+$(curdir)/libtool/compile := $(curdir)/sed/install
 $(curdir)/squashfs/compile := $(curdir)/lzma-old/install
 $(curdir)/squashfs4/compile := $(curdir)/lzma/install
 $(curdir)/quilt/compile := $(curdir)/sed/install $(curdir)/autoconf/install
 $(curdir)/dtc/compile := $(curdir)/bison/install
-$(curdir)/autoconf/compile := $(curdir)/m4/install
-$(curdir)/automake/compile := $(curdir)/m4/install $(curdir)/autoconf/install
+$(curdir)/autoconf/compile := $(curdir)/m4/install $(curdir)/libtool/install
+$(curdir)/automake/compile := $(curdir)/m4/install $(curdir)/autoconf/install $(curdir)/pkg-config/install
 $(curdir)/mpfr/compile := $(curdir)/gmp/install
 $(curdir)/mtd-utils/compile := $(curdir)/libuuid/install
 $(curdir)/mkimage/compile := $(curdir)/sed/install
 $(curdir)/qemu/compile := $(curdir)/libuuid/install
 $(curdir)/upslug2/compile := $(curdir)/automake/install
+$(curdir)/mm-macros/compile := $(curdir)/automake/install
+$(curdir)/xorg-macros/compile := $(curdir)/automake/install
+$(curdir)/missing-macros/compile := $(curdir)/automake/install
 
 $(curdir)/builddirs := $(tools-y) $(tools-dep) $(tools-)
 $(curdir)/builddirs-default := $(tools-y)
