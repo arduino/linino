@@ -26,6 +26,7 @@ endef
 define Package/bc
   $(call Package/bc/Default)
   TITLE:=Arbitrary precision calculator language
+  DEPENDS:=+libreadline
 endef
 
 define Package/bc/description
@@ -43,6 +44,8 @@ define Package/dc/description
  dc is a reverse-polish desk calculator which supports unlimited 
  precision arithmetic.
 endef
+
+CONFIGURE_ARGS += --with-readline
 
 define Package/bc/install
 	$(INSTALL_DIR) $(1)/usr/bin
