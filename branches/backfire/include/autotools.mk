@@ -5,80 +5,110 @@
 # See /LICENSE for more information.
 #
 
-define replace
-	if [ -f "$(PKG_BUILD_DIR)/$(3)$(1)" -a -e "$(2)/$(if $(4),$(4),$(1))" ]; then \
-		rm -f $(PKG_BUILD_DIR)/$(3)$(1); \
-		ln -s $(2)/$(if $(4),$(4),$(1)) $(PKG_BUILD_DIR)/$(3)$(1); \
-	fi
-	
-endef
-
-PKG_LIBTOOL_PATHS?=$(CONFIGURE_PATH)
-
-# replace copies of ltmain.sh with the build system's version
-update_libtool_common = \
-	$(foreach p,$(LIBTOOL_PATHS), \
-		$(call replace,ltmain.sh,$(STAGING_DIR)/host/share/libtool,$(p)/) \
-		$(call replace,libtool.m4,$(STAGING_DIR)/host/share/aclocal,$(p)/) \
-	)
-update_libtool = \
-	$(foreach p,$(PKG_LIBTOOL_PATHS), \
-		$(call replace,libtool,$(STAGING_DIR)/host/bin,$(p)/) \
-	) \
-	$(call update_libtool_common)
-update_libtool_ucxx = \
-	$(foreach p,$(PKG_LIBTOOL_PATHS), \
-		$(call replace,libtool,$(STAGING_DIR)/host/bin,$(p)/,libtool-ucxx) \
-	) \
-	$(call update_libtool_common)
-
 autoconf_bool = $(patsubst %,$(if $($(1)),--enable,--disable)-%,$(2))
 
-# prevent libtool from linking against host development libraries
-define libtool_fixup_libdir
-	find $(1) -name '*.la' | $(XARGS) \
-		$(SED) "s,\(^libdir='\| \|-L\|^dependency_libs='\)/usr/lib,\1$(STAGING_DIR)/usr/lib,g" \
-		    -e "s,$(STAGING_DIR)/usr/lib/\(libstdc++\|libsupc++\).la,$(TOOLCHAIN_DIR)/usr/lib/\1.la,g"
+# delete *.la-files from staging_dir - we can not yet remove respective lines within all package
+# Makefiles, since backfire still uses libtool v1.5.x which (may) require those files
+define libtool_remove_files
+	find $(1) -name '*.la' | $(XARGS) rm -f;
 endef
 
-define remove_version_check
-	if [ -f "$(PKG_BUILD_DIR)/$(CONFIGURE_PATH)/configure" ]; then \
-		$(SED) \
-			's,\(gentoo\|pardus\)_ltmain_version=.*,\1_ltmain_version="$$$$\1_lt_version",' \
-			$(PKG_BUILD_DIR)/$(CONFIGURE_PATH)/configure; \
-	fi
-endef
 
+AM_TOOL_PATHS:= \
+	AUTOM4TE=$(STAGING_DIR_HOST)/bin/autom4te \
+	AUTOCONF=$(STAGING_DIR_HOST)/bin/autoconf \
+	AUTOMAKE=$(STAGING_DIR_HOST)/bin/automake \
+	ACLOCAL=$(STAGING_DIR_HOST)/bin/aclocal \
+	AUTOHEADER=$(STAGING_DIR_HOST)/bin/autoheader \
+	LIBTOOLIZE=$(STAGING_DIR_HOST)/bin/libtoolize \
+	LIBTOOL=$(STAGING_DIR_HOST)/bin/libtool \
+	M4=$(STAGING_DIR_HOST)/bin/m4 \
+	AUTOPOINT=true
+
+# 1: build dir
+# 2: remove files
+# 3: automake paths
+# 4: libtool paths
+# 5: extra m4 dirs
 define autoreconf
-	(cd $(PKG_BUILD_DIR); \
-		$(patsubst %,rm -f %;,$(PKG_REMOVE_FILES)) \
-		if [ -x ./autogen.sh ]; then \
-			./autogen.sh || true; \
-		elif [ -f ./configure.ac ] || [ -f ./configure.in ]; then \
-			[ -f ./aclocal.m4 ] && [ ! -f ./acinclude.m4 ] && mv aclocal.m4 acinclude.m4; \
-			[ -d ./autom4te.cache ] && rm -rf autom4te.cache; \
-			$(STAGING_DIR_HOST)/bin/autoreconf -v -f -i -s \
-				-B $(STAGING_DIR)/host/share/aclocal \
-				$(patsubst %,-I %,$(PKG_LIBTOOL_PATHS)) $(PKG_LIBTOOL_PATHS) || true; \
-		fi \
+	(cd $(1); \
+		$(patsubst %,rm -f %;,$(2)) \
+		$(foreach p,$(3), \
+			if [ -f $(p)/configure.ac ] || [ -f $(p)/configure.in ]; then \
+				[ -d $(p)/autom4te.cache ] && rm -rf autom4te.cache; \
+				touch NEWS AUTHORS COPYING ChangeLog; \
+				$(AM_TOOL_PATHS) $(STAGING_DIR_HOST)/bin/autoreconf -v -f -i -s \
+					-B $(STAGING_DIR_HOST)/share/aclocal \
+					$(patsubst %,-I %,$(5)) \
+					$(patsubst %,-I %,$(4)) $(4) || true; \
+			fi; \
+		) \
 	);
 endef
 
-ifneq ($(filter autoreconf,$(PKG_FIXUP)),)
-  Hooks/Configure/Pre += autoreconf
-endif
+
+PKG_LIBTOOL_PATHS?=$(CONFIGURE_PATH)
+PKG_AUTOMAKE_PATHS?=$(CONFIGURE_PATH)
+PKG_MACRO_PATHS?=m4
+PKG_REMOVE_FILES?=aclocal.m4
+
+Hooks/InstallDev/Post += libtool_remove_files
+
+define autoreconf_target
+  $(strip $(call autoreconf, \
+    $(PKG_BUILD_DIR), $(PKG_REMOVE_FILES), \
+    $(PKG_AUTOMAKE_PATHS), $(PKG_LIBTOOL_PATHS), \
+    $(STAGING_DIR)/host/share/aclocal $(STAGING_DIR)/usr/share/aclocal $(PKG_MACRO_PATHS)))
+endef
 
 ifneq ($(filter libtool,$(PKG_FIXUP)),)
   PKG_BUILD_DEPENDS += libtool libintl libiconv
-  Hooks/Configure/Pre += update_libtool remove_version_check
-  Hooks/Configure/Post += update_libtool
-  Hooks/InstallDev/Post += libtool_fixup_libdir
+ ifeq ($(filter no-autoreconf,$(PKG_FIXUP)),)
+  Hooks/Configure/Pre += autoreconf_target
+ endif
 endif
 
 ifneq ($(filter libtool-ucxx,$(PKG_FIXUP)),)
   PKG_BUILD_DEPENDS += libtool libintl libiconv
-  Hooks/Configure/Pre += update_libtool_ucxx remove_version_check
-  Hooks/Configure/Post += update_libtool_ucxx
-  Hooks/InstallDev/Post += libtool_fixup_libdir
+ ifeq ($(filter no-autoreconf,$(PKG_FIXUP)),)
+  Hooks/Configure/Pre += autoreconf_target
+ endif
 endif
 
+ifneq ($(filter autoreconf,$(PKG_FIXUP)),)
+  ifeq ($(filter autoreconf,$(Hooks/Configure/Pre)),)
+    Hooks/Configure/Pre += autoreconf_target
+  endif
+endif
+
+
+HOST_FIXUP?=$(PKG_FIXUP)
+HOST_LIBTOOL_PATHS?=$(if $(PKG_LIBTOOL_PATHS),$(PKG_LIBTOOL_PATHS),.)
+HOST_AUTOMAKE_PATHS?=$(if $(PKG_AUTOMAKE_PATHS),$(PKG_AUTOMAKE_PATHS),.)
+HOST_MACRO_PATHS?=$(if $(PKG_MACRO_PATHS),$(PKG_MACRO_PATHS),m4)
+HOST_REMOVE_FILES?=$(PKG_REMOVE_FILES)
+
+define autoreconf_host
+  $(strip $(call autoreconf, \
+    $(HOST_BUILD_DIR), $(HOST_REMOVE_FILES), \
+    $(HOST_AUTOMAKE_PATHS), $(HOST_LIBTOOL_PATHS), \
+    $(HOST_MACRO_PATHS)))
+endef
+
+ifneq ($(filter libtool,$(HOST_FIXUP)),)
+ ifeq ($(filter no-autoreconf,$(HOST_FIXUP)),)
+  Hooks/HostConfigure/Pre += autoreconf_host
+ endif
+endif
+
+ifneq ($(filter libtool-ucxx,$(HOST_FIXUP)),)
+ ifeq ($(filter no-autoreconf,$(HOST_FIXUP)),)
+  Hooks/HostConfigure/Pre += autoreconf_host
+ endif
+endif
+
+ifneq ($(filter autoreconf,$(HOST_FIXUP)),)
+  ifeq ($(filter autoreconf,$(Hooks/HostConfigure/Pre)),)
+    Hooks/HostConfigure/Pre += autoreconf_host
+  endif
+endif
