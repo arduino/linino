@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -68,8 +68,9 @@ CONFIGURE_ARGS+= \
 
 TARGET_CFLAGS += $(FPIC)
 
-define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/bin $(2)/bin $(1)/usr/include/libxslt $(1)/usr/lib \
+define Build/InstallDev/Xslt
+	$(INSTALL_DIR) $(1)/usr/bin $(2)/bin $(1)/usr/include/libxslt \
+		$(1)/usr/include/libexslt $(1)/usr/lib \
 		$(1)/usr/lib/pkgconfig $(2)/share/aclocal
 
 	$(INSTALL_BIN) \
@@ -97,6 +98,26 @@ define Build/InstallDev
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/share/aclocal/* \
 		$(2)/share/aclocal
+endef
+
+define Build/InstallDev/Exslt
+	$(INSTALL_DIR) $(1)/usr/include/libexslt $(1)/usr/lib/pkgconfig
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/include/libexslt/* \
+		$(1)/usr/include/libexslt/
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libexslt.{la,a,so*} \
+		$(1)/usr/lib/
+
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libexslt.pc \
+		$(1)/usr/lib/pkgconfig/
+endef
+
+define Build/InstallDev
+	 $(if $(CONFIG_PACKAGE_libxslt),$(call Build/InstallDev/Xslt,$(1)))
+	 $(if $(CONFIG_PACKAGE_libexslt),$(call Build/InstallDev/Exslt,$(1)))
 endef
 
 define Package/libxslt/install
