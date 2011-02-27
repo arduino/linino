@@ -1322,7 +1322,7 @@
 +	srv.addr.sin_family = AF_INET;
 +	srv.addr.sin_port = htons(rmtport); 
 +	srv.addr.sin_addr.s_addr = rmtlisten.s_addr;
-+	bzero(&(srv.addr.sin_zero),8); 
++	memset(&(srv.addr.sin_zero), 0, 8); 
 +
 +	if(bind(srv.fd,(struct sockaddr*)&srv.addr,sizeof(struct sockaddr))==-1) {
 +		printf("error en bind() \n");
