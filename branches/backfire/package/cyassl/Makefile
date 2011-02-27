@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).zip
 PKG_SOURCE_URL:=http://www.yassl.com/
 PKG_MD5SUM:=037397c7df84b9a12e614bf46135df1c
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=libtool no-autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
