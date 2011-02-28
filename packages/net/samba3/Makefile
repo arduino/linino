@@ -41,12 +41,20 @@ define Package/samba3/config
 endef
 
 define Build/Prepare/LFS
-	cat ./files/config-lfs.h >> $(PKG_BUILD_DIR)/source/include/config.h
 endef
 
 define Build/Prepare
 $(call Build/Prepare/Default)
-$(call Build/Prepare/LFS)
+endef
+
+define Build/Configure
+	[ -f "$(PKG_BUILD_DIR)/source/include/config.h.save" ] || \
+		$(CP) $(PKG_BUILD_DIR)/source/include/config.h \
+			$(PKG_BUILD_DIR)/source/include/config.h.save
+	cat \
+		$(PKG_BUILD_DIR)/source/include/config.h.save \
+		./files/config-lfs.h >> $(PKG_BUILD_DIR)/source/include/config.h
+	$(Build/Configure/Default)
 endef
 
 define Build/Compile
@@ -55,6 +63,7 @@ define Build/Compile
 	CPPFLAGS="$(TARGET_CPPFLAGS)" \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
 	$(MAKE) -C $(PKG_BUILD_DIR)/source \
+		$(TARGET_CONFIGURE_OPTS) \
 		all bin/smbpasswd
 endef
 
