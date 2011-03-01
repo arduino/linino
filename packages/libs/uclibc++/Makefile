@@ -51,7 +51,8 @@ MAKE_FLAGS:= \
 	CPU_CFLAGS="$(TARGET_CFLAGS)" \
 	CROSS="$(TARGET_CROSS)" \
 	CP="$(CP)" \
-	$(if $(CONFIG_TARGET_avr32),check_as_needed=)
+	GEN_LIBS="-lc $(LIBGCC_S)" \
+	check_as_needed=
 
 # check_as_needed overrides dependency on libgcc_s
 
