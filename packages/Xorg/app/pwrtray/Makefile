@@ -7,16 +7,21 @@
 
 include $(TOPDIR)/rules.mk
 
+#LOCAL_SRC:=1
+
 PKG_NAME:=pwrtray
-PKG_REV:=971ab4e53c62ace139405272272a7e5f224e5a92
-PKG_VERSION:=$(PKG_REV)
+PKG_REV:=7581cda95d1cbe10ef0665840801a3120004db79
+PKG_VERSION:=1
 PKG_RELEASE:=1
 
+ifeq ($(LOCAL_SRC),)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=git://git.bu3sch.de/pwrtray.git
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
+endif
+
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 
@@ -73,6 +78,19 @@ MAKE_VARS+= \
 
 #MAKE_FLAGS+= \
 #	V=1
+
+define Build/Prepare
+	$(if $(LOCAL_SRC), \
+		$(CP) ./files/src/* $(PKG_BUILD_DIR)/ \
+	, \
+		$(call Build/Prepare/Default) \
+	)
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) clean
+	$(call Build/Compile/Default)
+endef
 
 define Package/pwrtray-backend/install
 	$(INSTALL_DIR) $(1)/etc/init.d $(1)/usr/bin $(1)/usr/share
