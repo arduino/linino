@@ -56,7 +56,7 @@ ifdef PROFILE
     OPTFLAGS	+= -pg
 endif
 ifdef STANDALONE
-    LIBS	+= -lsupc++ -lgcc_eh -lgcc -lc
+    LIBS	+= -lsupc++ -lgcc_s -lc
 endif
 ifdef BUILD_SHARED
     CFLAGS	+= -fPIC
