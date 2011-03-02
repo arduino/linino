@@ -57,7 +57,7 @@ define Build/Compile
 		AM_CFLAGS_AMD64_LINUX="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR)/coregrind" \
 		AM_CFLAGS_PPC32_LINUX="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR)/coregrind" \
 		AM_CFLAGS_PPC64_LINUX="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR)/coregrind" \
-		TOOL_LDADD_COMMON="-lgcc $(PKG_BUILD_DIR)/abort.a" \
+		TOOL_LDADD_COMMON="$(LIBGCC_S) $(PKG_BUILD_DIR)/abort.a" \
 		all install
 endef
 
