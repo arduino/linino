@@ -8,12 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor
-PKG_VERSION:=0.2.1.29
+PKG_VERSION:=0.2.1.30
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.torproject.org/dist
-PKG_MD5SUM:=1cd4feea84f2b066717b500d090bcf65
+PKG_SOURCE_URL:=https://www.torproject.org/dist \
+	https://archive.torproject.org/tor-package-archive
+PKG_MD5SUM:=6c6d61e053af5969a245d025c4cfce9d
 
 PKG_INSTALL:=1
 
@@ -22,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/tor/Default
   SECTION:=net
   CATEGORY:=Network
-  URL:=http://www.torproject.org/
+  URL:=https://www.torproject.org/
 endef
 
 define Package/tor/Default/description
@@ -36,7 +37,7 @@ endef
 define Package/tor
 $(call Package/tor/Default)
   TITLE:=An anonymous Internet communication system
-  DEPENDS:=+libevent +libopenssl +libpthread
+  DEPENDS:=+libevent +libopenssl +libpthread +librt
 endef
 
 define Package/tor-geoip
@@ -106,7 +107,7 @@ endef
 
 define Package/tor-geoip/install
 	$(INSTALL_DIR) $(1)/usr/share/tor
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/tor/geoip $(1)/usr/share/tor
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/tor/geoip $(1)/usr/share/tor/
 endef
 
 $(eval $(call BuildPackage,tor))
