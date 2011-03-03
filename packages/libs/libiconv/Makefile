@@ -72,7 +72,7 @@ define Host/Install
 	$(INSTALL_DATA) ./src/include/iconv.h $(STAGING_DIR_HOST)/include/
 
 	$(INSTALL_DIR) $(STAGING_DIR_HOST)/share/aclocal
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/m4/* $(STAGING_DIR_HOST)/share/aclocal/
+	$(INSTALL_DATA) $(HOST_BUILD_DIR)/m4/* $(STAGING_DIR_HOST)/share/aclocal/
 endef
 
 $(eval $(call HostBuild))
