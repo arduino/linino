@@ -88,11 +88,16 @@ define Package/pulseaudio/install
 		$(1)/usr/bin \
 		$(1)/usr/lib \
 		$(1)/usr/lib/pulse-$(PKG_VERSION)/modules \
-		$(1)/etc/pulse
+		$(1)/etc/pulse \
+		$(1)/etc/init.d
 
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/pulseaudio \
 		$(1)/usr/bin/pulseaudio
+
+	$(INSTALL_BIN) \
+		./files/pulseaudio.init 
+		$(1)/etc/init.d/pulseaudio
 
 	$(INSTALL_CONF) \
 		$(PKG_INSTALL_DIR)/etc/pulse/* \

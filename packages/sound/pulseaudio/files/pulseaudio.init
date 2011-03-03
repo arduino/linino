@@ -1,0 +1,12 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2011 OpenWrt.org
+START=65
+
+start() {
+	mkdir -p /tmp/lib/pulse
+	/usr/bin/pulseaudio –daemonize –system –disallow-exit –disallow-module-loading –disable-shm –exit-idle-time=-1
+}
+
+stop() {
+	killall pulseaudio
+}
