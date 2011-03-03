@@ -26,7 +26,7 @@ TARGET_LDFLAGS += $(LIBRPC)
 define Package/lsof
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+USE_UCLIBC:librpc
+  DEPENDS:=$(LIBRPC_DEPENDS)
   TITLE:=LiSt Open Files - a diagnostic tool
   URL:=http://people.freebsd.org/~abe/
 endef

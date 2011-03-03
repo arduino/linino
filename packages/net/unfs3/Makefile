@@ -23,7 +23,7 @@ define Package/unfs3
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Filesystem
-  DEPENDS:=+portmap
+  DEPENDS:=+portmap $(LIBRPC_DEPENDS)
   TITLE:=User-space NFSv3 Server
   URL:=http://unfs3.sourceforge.net/
 endef

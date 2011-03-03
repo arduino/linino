@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/portmap
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libwrap +USE_UCLIBC:librpc
+  DEPENDS:=+libwrap $(LIBRPC_DEPENDS)
   TITLE:=The RPC Portmapper
   URL:=http://neil.brown.name/portmap/
 endef

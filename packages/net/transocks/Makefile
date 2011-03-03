@@ -34,7 +34,7 @@ define Package/transocks
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Transparent SOCKSifying proxy
-  DEPENDS:=+libsocks +USE_UCLIBC:librpc
+  DEPENDS:=+libsocks $(LIBRPC_DEPENDS)
 endef
 
 define Package/transocks/install
