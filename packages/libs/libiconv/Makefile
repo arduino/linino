@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2011 OpenWrt.org
 #
 # This Makefile and the code shipped in src/ is free software, licensed
 # under the GNU Lesser General Public License, version 2.1 and later.
@@ -72,7 +72,7 @@ define Host/Install
 	$(INSTALL_DATA) ./src/include/iconv.h $(STAGING_DIR_HOST)/include/
 
 	$(INSTALL_DIR) $(STAGING_DIR_HOST)/share/aclocal
-	$(INSTALL_DATA) $(HOST_BUILD_DIR)/m4/* $(STAGING_DIR_HOST)/share/aclocal/
+	$(INSTALL_DATA) ./src/m4/* $(STAGING_DIR_HOST)/share/aclocal/
 endef
 
 $(eval $(call HostBuild))
