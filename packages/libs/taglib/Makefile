@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,17 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=taglib
-PKG_VERSION:=1.4
-PKG_RELEASE:=2
+PKG_VERSION:=1.6.3
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://developer.kde.org/~wheeler/files/src/
-PKG_MD5SUM:=dcd50ddb2544faeae77f194804559404
-PKG_FIXUP:=libtool-ucxx
+PKG_MD5SUM:=ddf02f4e1d2dc30f76734df806e613eb
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/cmake.mk
 
-PKG_INSTALL=1
+PKG_INSTALL:=1
 
 define Package/taglib
   SECTION:=libs
@@ -37,17 +37,7 @@ define Package/taglibc
 endef
 
 TARGET_CFLAGS += $(FPIC)
-
-CONFIGURE_ARGS += \
-	--enable-shared \
-	--enable-static \
-	--enable-final \
-
-CONFIGURE_VARS += \
-    CXX="g++-uc"
-
-MAKE_FLAGS += \
-    CXX="g++-uc"
+CMAKE_OPTIONS += -DCMAKE_CXX_COMPILER="g++-uc"
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(2)/bin
@@ -60,7 +50,7 @@ define Build/InstallDev
 
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/libtag{,_c}.{la,a,so*} \
+		$(PKG_INSTALL_DIR)/usr/lib/libtag{,_c}.so* \
 		$(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/include/taglib
 	$(INSTALL_DATA) \
