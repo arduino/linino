@@ -1,20 +1,28 @@
+#
+# Copyright (C) 2010-2011 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ncftp
-PKG_VERSION:=3.2.4
+PKG_VERSION:=3.2.5
 PKG_RELEASE:=1
 
-PKG_INSTALL=1
+PKG_INSTALL:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.ncftp.com/ncftp
-PKG_MD5SUM:=bc4af9801f626d541f0bf6b7ac4dae1f
+PKG_MD5SUM:=b05c7a6d5269c04891f02f43d4312b30
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ncftp/Default
  SECTION:=net
  CATEGORY:=Network
+ SUBMENU:=FTP
  TITLE:=NcFTP Client
  URL:=http://www.ncftpd.com/
 endef
@@ -51,9 +59,9 @@ endef
 
 define Package/ncftp-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ncftpbatch $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/{ncftpget,ncftpls,ncftpput} $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ncftpspooler $(1)/usr/bin/
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/ncftp{batch,get,ls,put,spooler} \
+		$(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,ncftp))
