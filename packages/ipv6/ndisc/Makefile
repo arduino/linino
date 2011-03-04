@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ndisc6
-PKG_VERSION:=1.0.0
+PKG_VERSION:=1.0.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.remlab.net/files/ndisc6
-PKG_MD5SUM:=0aa142213f4b24a6c7dcf75d2a2c05a8
+PKG_MD5SUM:=d0b8233a60e29ad78d9aebb8cef0b3f2
 
 PKG_INSTALL:=1
 
@@ -34,7 +34,7 @@ endef
 define Package/ndisc6
   $(call Package/ndisc)
   TITLE:=An ICMPv6 neighbour discovery tool
-  DEPENDS:=+libpthread
+  DEPENDS:=+libpthread +librt
 endef
 
 define Package/ndisc6/description
@@ -44,7 +44,7 @@ endef
 define Package/rdisc6
   $(call Package/ndisc)
   TITLE:=An ICMPv6 router discovery tool
-  DEPENDS:=+libpthread
+  DEPENDS:=+libpthread +librt
 endef
 
 define Package/rdisc6/description
@@ -63,7 +63,7 @@ endef
 define Package/rdnssd
   $(call Package/ndisc)
   TITLE:=DNS server discovery daemon
-  DEPENDS:=+libpthread
+  DEPENDS:=+libpthread +librt
 endef
 
 define Package/rdnssd/description
