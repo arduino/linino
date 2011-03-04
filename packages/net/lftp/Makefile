@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2010 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lftp
-PKG_VERSION:=4.1.1
+PKG_VERSION:=4.1.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://lftp.cybermirror.org \
   http://lftp.cybermirror.org/old
-PKG_MD5SUM:=87717c30869a626cc53817c1c0a585ef
+PKG_MD5SUM:=dd769dcef10296271bff05d283680f9a
 
 PKG_INSTALL:=1
 
@@ -32,7 +32,8 @@ endef
 define Package/lftp/description
   lftp is sophisticated file transfer program with command line interface. It
   supports FTP, HTTP, FISH, SFTP and FILE (local FS) protocols. GNU Readline
-  library is used for input.
+  library is used for input. BitTorrent protocol is supported as built-in
+  `torrent' command.
 endef
 
 CONFIGURE_ARGS += \
