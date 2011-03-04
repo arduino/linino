@@ -70,13 +70,18 @@ static const uint8_t template_pda_country[] = {
 	/* struct pda_country */
 	0x03, 0x00, 0x08, 0x10,		/* PDR_DEFAULT_COUNTRY */
 		0x30, 0x00, 0x00, 0x00,		/* ETSI */
+};
 
+static const uint8_t template_antenna_gain[] = {
 	0x03, 0x00, 0x00, 0x11,		/* PDR_ANTENNA_GAIN */
 		0x08, 0x08, 0x08, 0x08,
+};
 
-	0x09, 0x00, 0xad, 0xde,		/* PDR_RSSI_LINEAR_APPROXIMATION_CUSTOM */
-		0x0a, 0x01, 0x72, 0xfe, 0x1a, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+static const uint8_t template_rssi_linear_approx_custom2[] = {
+	0x0a, 0x00, 0xff, 0xca,		/* PDR_RSSI_LINEAR_APPROXIMATION_CUSTOMV2 */
+		0x01, 0x00, 0x0a, 0x00,
+		0x00, 0x00, 0x0a, 0x00,
+			0x85, 0x09, 0x0a, 0x01, 0x72, 0xfe, 0x1a, 0x00, 0x00, 0x00,
 };
 
 static const uint8_t template_pa_cal_curve[] = {
@@ -688,7 +693,6 @@ static const uint8_t template_pda_iq_autocal[] = {
 
 static const uint8_t template_pdr_end[] = {
 	0x02, 0x00, 0x00, 0x00,		/* PDR_END */
-		/* CRC 0x67, 0x99, */
 };
 
 /*	linux/lib/crc-ccitt.c
@@ -826,6 +830,8 @@ static int generate_eeprom(FILE *outstream,
 	writebuf(template_bootrec_exp_if, 1);
 	writebuf(template_pda_country_list, 1);
 	writebuf(template_pda_country, 1);
+	writebuf(template_antenna_gain, 1);
+	writebuf(template_rssi_linear_approx_custom2, 1);
 	writebuf(gen_pa_cal_curve, 1);
 	writebuf(template_pa_cal_output_power_limits, 1);
 	writebuf(gen_pda_iq_autocal, 1);
