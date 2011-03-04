@@ -1,14 +1,18 @@
 --- a/ssl.c
 +++ b/ssl.c
-@@ -673,9 +673,11 @@ ssl_connection *new_ssl_connection(char 
-     ssl->method = SSLv23_client_method();
+@@ -635,6 +635,7 @@ ssl_connection *new_ssl_connection(char
+ #endif
      break;
  
 +#ifndef OPENSSL_NO_SSLV2
    case SSL_VERSION_SSLV2:
-     ssl->method = SSLv2_client_method();
+ #ifdef OPENSSL_FIPS
+     if (FIPS_mode()) {
+@@ -647,6 +648,7 @@ ssl_connection *new_ssl_connection(char
+     }
+ #endif
      break;
 +#endif
  
    case SSL_VERSION_SSLV3:
-     ssl->method = SSLv3_client_method();
+ #ifdef OPENSSL_FIPS

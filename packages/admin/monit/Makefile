@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=monit
-PKG_VERSION:=5.1.1
+PKG_VERSION:=5.2.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://mmonit.com/monit/dist/
-PKG_MD5SUM:=4bbd3845ae1cbab13ec211824e0486dc
+PKG_SOURCE_URL:=http://mmonit.com/monit/dist
+PKG_MD5SUM:=5dca6f016c1806d1ac5de5279878fd8f
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,6 +36,7 @@ define Package/monit
 $(call Package/monit/Default)
   DEPENDS+= +libopenssl
   TITLE+= (with SSL support)
+  VARIANT:=ssl
 endef
 
 define Package/monit/description
@@ -43,6 +47,7 @@ endef
 define Package/monit-nossl
 $(call Package/monit/Default)
   TITLE+= (without SSL support)
+  VARIANT:=nossl
 endef
 
 define Package/monit-nossl/description
@@ -50,56 +55,32 @@ $(call Package/monit/Default/description)
 	This package is built without SSL support.
 endef
 
-define Build/Template
+ifeq ($(BUILD_VARIANT),ssl)
+	CONFIGURE_ARGS += \
+		--with-ssl \
+		--with-ssl-dir="$(STAGING_DIR)/usr"
+endif
 
-$(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
-	-$(MAKE) -C $(PKG_BUILD_DIR) clean
-	$(call Build/Configure/Default,$(3))
-	$(MAKE) -C $(PKG_BUILD_DIR)
-	( cd $(PKG_BUILD_DIR); mv -f monit monit-$(2) )
-	touch $$@
+ifeq ($(BUILD_VARIANT),nossl)
+	CONFIGURE_ARGS += \
+		--without-ssl
+endif
 
-$(STAMP_BUILT): $(STAMP_BUILT)-$(2)
-
-define Package/$(1)/conffiles
+define Package/monit/conffiles
 /etc/monitrc
 endef
 
-define Package/$(1)/install
-	$(INSTALL_DIR) $$(1)/etc
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/monitrc $$(1)/etc/
-	$(INSTALL_DIR) $$(1)/etc/init.d
-	$(INSTALL_BIN) ./files/monit.init $$(1)/etc/init.d/monit
-	$(INSTALL_DIR) $$(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/monit-$(2) $$(1)/usr/sbin/monit
+define Package/monit/install
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/monitrc $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/monit.init $(1)/etc/init.d/monit
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/monit $(1)/usr/bin/
 endef
 
-endef
-
-define Build/Configure
-endef
-
-define Build/Compile
-endef
-
-ifneq ($(SDK)$(CONFIG_PACKAGE_monit),)
-  define Build/with-ssl
-    $(call Build/Template,monit,with-ssl, \
-	--with-ssl \
-	--with-ssl-dir="$(STAGING_DIR)/usr" \
-    )
-  endef
-endif
-$(eval $(Build/with-ssl))
-
-ifneq ($(SDK)$(CONFIG_PACKAGE_monit-nossl),)
-  define Build/without-ssl
-    $(call Build/Template,monit-nossl,without-ssl, \
-	--without-ssl \
-    )  
-  endef
-endif
-$(eval $(Build/without-ssl))
+Package/monit-nossl/conffiles = $(Package/monit/conffiles)
+Package/monit-nossl/install = $(Package/monit/install)
 
 $(eval $(call BuildPackage,monit))
 $(eval $(call BuildPackage,monit-nossl))
