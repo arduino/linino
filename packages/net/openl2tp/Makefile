@@ -25,7 +25,8 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openl2tp
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+kmod-pppol2tp +ppp +portmap +libreadline +libncurses @!LINUX_2_4
+  DEPENDS:=+kmod-pppol2tp +ppp +portmap +libreadline +libncurses \
+  	@!LINUX_2_4 $(LIBRPC_DEPENDS)
   TITLE:=An L2TP (Layer 2 Tunneling Protocol) daemon
   URL:=http://www.openl2tp.org/
   SUBMENU:=VPN
@@ -45,7 +46,9 @@ MAKE_FLAGS+= \
 	PPPD_VERSION="$(PKG_PPPD_VERSION)" \
 	READLINE_DIR="$(STAGING_DIR)/usr" \
 	PPPD_SRCDIR="$(STAGING_DIR)/usr/include" \
-	PPPD_LIBDIR="$(STAGING_DIR)/usr/lib"
+	PPPD_LIBDIR="$(STAGING_DIR)/usr/lib" \
+	CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
+	LIBS.dmalloc="-L$(STAGING_DIR)/usr/lib $(LIBRPC)"
 
 define Package/openl2tp/install
 	$(INSTALL_DIR) $(1)/usr/bin
