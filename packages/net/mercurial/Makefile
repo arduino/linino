@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mercurial
-PKG_VERSION:=1.7.2
+PKG_VERSION:=1.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://mercurial.selenic.com/release
-PKG_MD5SUM:=e9e99a0a20ded8f6d9463ffb94021b12
+PKG_MD5SUM:=c97b39832f2da60f951d1b7701688bd2
 
 PKG_BUILD_DEPENDS:=python-mini
 
