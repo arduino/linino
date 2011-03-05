@@ -96,7 +96,7 @@ define Package/pulseaudio/install
 		$(1)/usr/bin/pulseaudio
 
 	$(INSTALL_BIN) \
-		./files/pulseaudio.init \ 
+		./files/pulseaudio.init \
 		$(1)/etc/init.d/pulseaudio
 
 	$(INSTALL_CONF) \
