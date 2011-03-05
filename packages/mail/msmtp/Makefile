@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=msmtp
-PKG_VERSION:=1.4.22
+PKG_VERSION:=1.4.23
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/msmtp
-PKG_MD5SUM:=de0a4e6f3133519b301fc114daf81f49
+PKG_MD5SUM:=5fb7ae88186624cdb125d3efad3fdc16
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -28,10 +28,6 @@ define Package/msmtp/Default
   CATEGORY:=Mail
   TITLE:=Simple sendmail SMTP forwarding
   URL:=http://msmtp.sourceforge.net/
-endef
-
-define Package/msmtp/Default/conffiles
-/etc/msmtprc
 endef
 
 define Package/msmtp/Default/description
@@ -50,7 +46,7 @@ $(call Package/msmtp/Default)
 endef
 
 define Package/msmtp/conffiles
-$(call Package/msmtp/Default/conffiles)
+/etc/msmtprc
 endef
 
 define Package/msmtp/description
@@ -62,10 +58,6 @@ define Package/msmtp-nossl
 $(call Package/msmtp/Default)
   TITLE+= (without SSL support)
   VARIANT:=nossl
-endef
-
-define Package/msmtp-nossl/conffiles
-$(call Package/msmtp/Default/conffiles)
 endef
 
 define Package/msmtp-nossl/description
@@ -107,9 +99,9 @@ define Package/msmtp/postinst
 	ln -sf ../bin/msmtp $${IPKG_INSTROOT}/usr/sbin/sendmail
 endef
 
+Package/msmtp-nossl/conffiles = $(Package/msmtp/conffiles)
 Package/msmtp-nossl/install = $(Package/msmtp/install)
 Package/msmtp-nossl/postinst = $(Package/msmtp/postinst)
 
 $(eval $(call BuildPackage,msmtp))
 $(eval $(call BuildPackage,msmtp-nossl))
-
