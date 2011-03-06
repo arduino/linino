@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006-2010 OpenWrt.org
+#
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=polarssl
-PKG_VERSION:=0.14.0
+PKG_VERSION:=0.14.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-gpl.tgz
-PKG_SOURCE_URL:=http://polarssl.org/code/releases/
-PKG_MD5SUM:=669a0582a27a5ec381542f0c67e966b7
+PKG_SOURCE_URL:=http://polarssl.org/code/releases
+PKG_MD5SUM:=8519ff2bb0ae783a89c297fa1c60c337
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,7 +23,7 @@ define Package/polarssl/Default
   URL:=http://polarssl.org/
 endef
 
-define Package/libpolarssl/Default/description
+define Package/polarssl/Default/description
 The aim of the PolarSSL project is to provide a quality, open-source
 cryptographic library written in C and targeted at embedded systems.
 endef
@@ -35,12 +35,22 @@ $(call Package/polarssl/Default)
   TITLE+= (library)
 endef
 
+define Package/libpolarssl/description
+$(call Package/polarssl/Default/description)
+This package contains the PolarSSL library.
+endef
+
 define Package/polarssl-progs
 $(call Package/polarssl/Default)
   SECTION:=utils
   CATEGORY:=Utilities
   DEPENDS:=+libpolarssl
   TITLE+= (programs)
+endef
+
+define Package/polarssl-progs/description
+$(call Package/polarssl/Default/description)
+This package contains the PolarSSL programs.
 endef
 
 PKG_INSTALL:=1
