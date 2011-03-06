@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=miniupnpd
 PKG_VERSION:=1.5.20110302
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=9c2906a2f87d9b9504e4fc09488afe41
 
 PKG_SOURCE_URL:=http://miniupnp.free.fr/files
@@ -33,9 +33,11 @@ endef
 
 define Build/Compile
 	echo "OpenWRT/$(OPENWRTVERSION)" | tr \(\)\  _ >$(PKG_BUILD_DIR)/os.openwrt
-	$(MAKE) -C $(PKG_BUILD_DIR) -f Makefile.openwrt \
+	$(MAKE) -C $(PKG_BUILD_DIR) -f Makefile.linux \
 		$(TARGET_CONFIGURE_OPTS) \
 		STAGING_DIR="$(STAGING_DIR)" \
+		CC="$(TARGET_CC)" \
+		TARGET_OPENWRT=1 \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(firstword $(wildcard $(KERNEL_BUILD_DIR)/iptables-*/include)) -DIPTABLES_143" \
 		LIBS="$(STAGING_DIR)/usr/lib/libiptc.so $(STAGING_DIR)/usr/lib/libip4tc.so $(STAGING_DIR)/usr/lib/libip6tc.so"
 endef
@@ -47,6 +49,7 @@ define Package/miniupnpd/install
 	$(INSTALL_CONF) ./files/upnpd.config $(1)/etc/config/upnpd
 	$(INSTALL_DATA) ./files/miniupnpd.iface.hotplug $(1)/etc/hotplug.d/iface/50-miniupnpd
 	$(INSTALL_DATA) ./files/miniupnpd.firewall.hotplug $(1)/etc/hotplug.d/firewall/50-miniupnpd
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/miniupnpd.conf $(1)/etc/miniupnpd.conf.example
 endef
 
 $(eval $(call BuildPackage,miniupnpd))
