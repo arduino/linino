@@ -8,7 +8,7 @@ start() {
 	config_load "upnpd"
 	local extiface intiface upload download logging secure enabled natpmp
 	local extip port usesysuptime conffile serial_number model_number
-	local uuid
+	local uuid notify_interval presentation_url
 
 	config_get extiface config external_iface
 	config_get intiface config internal_iface
@@ -25,6 +25,8 @@ start() {
 	config_get serial_number config serial_number
 	config_get model_number config model_number
 	config_get uuid config uuid
+	config_get notify_interval config notify_interval
+	config_get presentation_url config presentation_url
 
 	include /lib/network
 	scan_interfaces
@@ -78,6 +80,11 @@ start() {
 		[ "$uuid" = "nocli" ] || \
 			append args "-u $uuid"
 		
+		[ -n "${notify_interval}" ] && \
+			append args "-t ${notify_interval}"
+			
+		[ -n "${presentation_url}" ] && \
+			append args "-w \"${presentation_url}\""			
 		# start firewall
 		local zone
 		config_load firewall
