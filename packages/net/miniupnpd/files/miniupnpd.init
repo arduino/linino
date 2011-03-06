@@ -7,9 +7,11 @@ start() {
 
 	config_load "upnpd"
 	local extiface intiface upload download logging secure enabled natpmp
+	local extip
 
 	config_get extiface config external_iface
 	config_get intiface config internal_iface
+	config_get extip config external_ip
 	config_get upload   config upload
 	config_get download config download
 	config_get_bool logging config log_output 0
@@ -27,6 +29,9 @@ start() {
 		local args="-i $ifname"
 		local iface
 
+		[ -n "$extip" ] && \
+			append args "-o $extip"
+		
 		for iface in ${intiface:-lan}; do
 			local ipaddr
 			config_get ipaddr "$iface" ipaddr
