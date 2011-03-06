@@ -7,7 +7,7 @@ start() {
 
 	config_load "upnpd"
 	local extiface intiface upload download logging secure enabled natpmp
-	local extip
+	local extip port usesystuptime
 
 	config_get extiface config external_iface
 	config_get intiface config internal_iface
@@ -19,6 +19,7 @@ start() {
 	config_get_bool secure config secure_mode 0
 	config_get_bool natpmp config enable_natpmp 0
 	config_get_bool enabled config enabled 0 
+	config_get_bool usesysuptime config use_system_uptime 1
 
 	include /lib/network
 	scan_interfaces
@@ -42,7 +43,8 @@ start() {
 		[ "$port" != "auto" ] && \
 			append args "-p $port"
 		
-		append args "-U"
+		[ "$usesysuptime" -eq 1 ] && \
+			append args "-U"
 
 		[ -n "$upload" -a -n "$download" ] && \
 			append args "-B $(($download * 1024 * 8)) $(($upload * 1024 * 8))"
