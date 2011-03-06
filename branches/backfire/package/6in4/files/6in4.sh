@@ -73,7 +73,11 @@ setup_interface_6in4() {
 		uci_set_state network "$cfg" ip6addr $local6
 
 		[ "$defaultroute" = 1 ] && {
-			ip -6 route add ::/0 ${metric:+metric $metric} dev $link
+			local inet="::/0"
+			local kern="$(uname -r)"
+			[ "${kern#2.4}" != "$kern" ] && inet="2000::/3"
+
+			ip -6 route add $inet ${metric:+metric $metric} dev $link
 			uci_set_state network "$cfg" defaultroute 1
 		}
 
@@ -94,7 +98,11 @@ stop_interface_6in4() {
 		env -i ACTION="ifdown" INTERFACE="$cfg" DEVICE="$link" PROTO=6in4 /sbin/hotplug-call "iface" &
 
 		[ "$defaultroute" = "1" ] && {
-			ip -6 route del ::/0 dev $link
+			local inet="::/0"
+			local kern="$(uname -r)"
+			[ "${kern#2.4}" != "$kern" ] && inet="2000::/3"
+
+			ip -6 route del $inet dev $link
 		}
 
 		ip addr del $local6 dev $link
