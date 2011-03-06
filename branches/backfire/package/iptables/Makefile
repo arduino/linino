@@ -189,6 +189,17 @@ Includes:
 - libipt_ULOG
 endef
 
+define Package/iptables-mod-hashlimit
+$(call Package/iptables/Module, +kmod-ipt-hashlimit)
+  TITLE:=hashlimit matching
+endef
+
+define Package/iptables-mod-hashlimit/description
+iptables extensions for hashlimit matching
+Includes:
+- libxt_hashlimit
+endef
+
 define Package/iptables-mod-iprange
 $(call Package/iptables/Module, +kmod-ipt-iprange)
   TITLE:=IP range extension
@@ -368,6 +379,7 @@ $(eval $(call BuildPlugin,iptables-mod-conntrack,$(IPT_CONNTRACK-m)))
 $(eval $(call BuildPlugin,iptables-mod-conntrack-extra,$(IPT_CONNTRACK_EXTRA-m)))
 $(eval $(call BuildPlugin,iptables-mod-extra,$(IPT_EXTRA-m)))
 $(eval $(call BuildPlugin,iptables-mod-filter,$(IPT_FILTER-m),$(L7_INSTALL)))
+$(eval $(call BuildPlugin,iptables-mod-hashlimit,$(IPT_HASHLIMIT-m)))
 $(eval $(call BuildPlugin,iptables-mod-imq,$(IPT_IMQ-m)))
 $(eval $(call BuildPlugin,iptables-mod-ipopt,$(IPT_IPOPT-m)))
 $(eval $(call BuildPlugin,iptables-mod-ipsec,$(IPT_IPSEC-m)))
