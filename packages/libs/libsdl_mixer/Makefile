@@ -52,6 +52,7 @@ define Build/Configure
 		--enable-music-mp3-shared \
 		--disable-smpegtest \
 		--disable-music-mp3-mad-gpl \
+		--with-sdl-exec-prefix="$(STAGING_DIR)/usr" \
 	)
 endef
 
