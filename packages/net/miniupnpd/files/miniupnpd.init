@@ -7,7 +7,7 @@ start() {
 
 	config_load "upnpd"
 	local extiface intiface upload download logging secure enabled natpmp
-	local extip port usesystuptime
+	local extip port usesysuptime conffile
 
 	config_get extiface config external_iface
 	config_get intiface config internal_iface
@@ -20,6 +20,7 @@ start() {
 	config_get_bool natpmp config enable_natpmp 0
 	config_get_bool enabled config enabled 0 
 	config_get_bool usesysuptime config use_system_uptime 1
+	config_get conffile config config_file
 
 	include /lib/network
 	scan_interfaces
@@ -54,6 +55,9 @@ start() {
 
 		[ "$natpmp" -gt 0 ] && \
 			append args "-N"
+
+		[ -n "$conffile" ] && \
+			append args "-f $conffile"
 
 		# start firewall
 		local zone
