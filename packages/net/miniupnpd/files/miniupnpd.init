@@ -8,6 +8,7 @@ start() {
 	config_load "upnpd"
 	local extiface intiface upload download logging secure enabled natpmp
 	local extip port usesysuptime conffile serial_number model_number
+	local uuid
 
 	config_get extiface config external_iface
 	config_get intiface config internal_iface
@@ -23,6 +24,7 @@ start() {
 	config_get conffile config config_file
 	config_get serial_number config serial_number
 	config_get model_number config model_number
+	config_get uuid config uuid
 
 	include /lib/network
 	scan_interfaces
@@ -67,6 +69,15 @@ start() {
 		[ -n "${model_number}" ] && \
 			append args "-m ${model_number}"
 			
+		[ -z "$uuid" ] && {
+			uuid="$(cat /proc/sys/kernel/random/uuid)"
+			uci set upnpd.config.uuid=$uuid
+			uci commit upnpd
+		}
+
+		[ "$uuid" = "nocli" ] || \
+			append args "-u $uuid"
+		
 		# start firewall
 		local zone
 		config_load firewall
