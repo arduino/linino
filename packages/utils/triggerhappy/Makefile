@@ -32,7 +32,6 @@ define Package/triggerhappy/description
 endef
 
 MAKE_FLAGS += \
-	LINUX_INPUT_H=$(TOOLCHAIN_DIR)/usr/include/linux/input.h \
 	$(TARGET_CONFIGURE_OPTS) \
 	$(1)
 
