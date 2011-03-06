@@ -16,6 +16,7 @@ OPKG:= \
 	--force-depends \
 	--force-overwrite \
 	--force-postinstall \
+	--force-maintainer \
 	--add-dest root:/ \
 	--add-arch all:100 \
 	--add-arch $(ARCH_PACKAGES):200
