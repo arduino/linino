@@ -37,11 +37,7 @@ endef
 
 EXTRA_CPPFLAGS:= \
 	-I$(STAGING_DIR)/usr/include/glib-1.2 \
-	-I$(STAGING_DIR)/usr/lib/glib/include \
-	-I$(ICONV_PREFIX)/include
-
-EXTRA_LDFLAGS:= \
-	-L$(ICONV_PREFIX)/lib
+	-I$(STAGING_DIR)/usr/lib/glib/include
 
 define Build/Compile
 	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
