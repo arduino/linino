@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.origo.ethz.ch/bemused-lnx-mpdhack/526
 PKG_MD5SUM:=aed8b41aed530e9177e43d9bebad10b7
 
+PKG_BUILD_PARALLEL:=1
+
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
 
@@ -33,15 +35,22 @@ define Package/bemusedlinuxserver/description
     Check http://jamse.sourceforge.net/ for a mobile phone client.
 endef
 
+EXTRA_CPPFLAGS:= \
+	-I$(STAGING_DIR)/usr/include/glib-1.2 \
+	-I$(STAGING_DIR)/usr/lib/glib/include \
+	-I$(ICONV_PREFIX)/include
+
+EXTRA_LDFLAGS:= \
+	-L$(ICONV_PREFIX)/lib
+
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-	$(TARGET_CONFIGURE_OPTS) \
-	CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CPPFLAGS)" \
-	LDFLAGS="$(TARGET_LDFLAGS) " \
-	CPPFLAGS="$(TARGET_CPPFLAGS)" \
-	INCL="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/glib-1.2 -I$(STAGING_DIR)/usr/lib/glib/include -I$(ICONV_PREFIX)/include" \
-	MYLIBS="-lbluetooth -lglib -L$(ICONV_PREFIX)/lib -liconv"
-	$(STRIP) $(PKG_BUILD_DIR)/bemusedlinuxserver
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
+		CXXFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
+		LDFLAGS="$(TARGET_LDFLAGS) $(EXTRA_LDFLAGS)" \
+		CPPFLAGS="$(TARGET_CPPFLAGS) $(EXTRA_CPPFLAGS)" \
+		LDLIBS="-lbluetooth -lglib -liconv"
 endef
 
 define Package/bemusedlinuxserver/install
