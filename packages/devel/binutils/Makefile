@@ -1,9 +1,10 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=binutils
@@ -17,7 +18,7 @@ PKG_MD5SUM:=
 
 PATCH_DIR:=$(TOPDIR)/toolchain/binutils/patches/$(PKG_VERSION)
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_LIBTOOL_PATHS:=. gas bfd opcodes gprof binutils ld libiberty gold intl
 PKG_REMOVE_FILES:=libtool.m4
 PKG_INSTALL:=1
@@ -51,6 +52,7 @@ CONFIGURE_ARGS = \
 		--disable-multilib \
 		--disable-werror \
 		--disable-nls \
+		--enable-shared \
 		$(SOFT_FLOAT_CONFIG_OPTION) \
 		$(call qstrip,$(CONFIG_EXTRA_BINUTILS_CONFIG_OPTIONS))
 
@@ -92,14 +94,15 @@ define Build/Compile
 endef
 
 define Package/objdump/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin/objdump $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/objdump $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libopcodes*.so $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libbfd*.so $(1)/usr/lib/
 endef
 
 define Package/binutils/install
 	$(INSTALL_DIR) $(1)/usr
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ $(1)/usr/
-	$(CP) $(PKG_INSTALL_DIR)/usr/$(REAL_GNU_TARGET_NAME) $(1)/usr
 	rm -f $(1)/usr/bin/objdump
 endef
 
