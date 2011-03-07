@@ -6,8 +6,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=triggerhappy
-PKG_VERSION:=0.3.2
-PKG_REV:=c0cedabf8d5bd56ae4cb151ebe708d1ac6a3025d
+PKG_VERSION:=0.3.3
+PKG_REV:=6ec420175771e14bebb522a2b682ff257b15810a
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
