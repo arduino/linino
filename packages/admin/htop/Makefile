@@ -20,10 +20,6 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-CONFIGURE_VARS += \
-	ac_cv_file__proc_stat=yes \
-	ac_cv_file__proc_meminfo=yes
-
 define Package/htop
   SECTION:=admin
   CATEGORY:=Administration
@@ -41,6 +37,8 @@ endef
 CONFIGURE_VARS += \
 	ac_cv_file__proc_stat=yes \
 	ac_cv_file__proc_meminfo=yes \
+	ac_cv_func_malloc_0_nonnull=yes \
+	ac_cv_func_realloc_0_nonnull=yes
 
 define Package/htop/install
 	$(INSTALL_DIR) $(1)/usr/bin
