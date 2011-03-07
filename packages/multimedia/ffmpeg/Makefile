@@ -112,7 +112,7 @@ $(call Package/ffmpeg/Default)
  SECTION:=multimedia
  CATEGORY:=Multimedia
  TITLE+= program
- DEPENDS+= +libpthread +libffmpeg +libpostproc
+ DEPENDS+= +libpthread +libffmpeg +libpostproc +libswscale
 endef
 
 define Package/ffmpeg/description
@@ -278,7 +278,7 @@ define Package/libpostproc/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpostproc.so.* $(1)/usr/lib/
 endef
 
-define Package/libswcale/install
+define Package/libswscale/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libswscale.so.* $(1)/usr/lib/
 endef
