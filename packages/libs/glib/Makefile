@@ -18,7 +18,9 @@ PKG_SOURCE_URL:=ftp://ftp.gtk.org/pub/gtk/v1.2 \
 	http://www.mirrorservice.org/sites/ftp.gimp.org/pub/gtk/v1.2/
 PKG_MD5SUM:=6fe30dad87c77b91b632def29dd69ef9
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
+PKG_REMOVE_FILES:=aclocal.m4 acinclude.m4
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -58,6 +60,11 @@ CONFIGURE_VARS += \
 	glib_cv_func_pthread_cond_timedwait_posix=yes \
 	glib_cv_sizeof_gmutex=24 \
 	glib_cv_byte_contents_gmutex="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" \
+	glib_cv_sys_pthread_getspecific_posix=yes \
+	glib_cv_sys_pthread_mutex_trylock_posix=yes \
+	glib_cv_sys_pthread_cond_timedwait_posix=yes \
+	ac_cv_func_getpwuid_r=yes \
+	ac_cv_func_getpwuid_r_posix=yes
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1) $(2)/bin
