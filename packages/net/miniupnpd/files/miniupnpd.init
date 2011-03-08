@@ -22,7 +22,7 @@ upnpd_get_port_range() {
 conf_rule_add() {
     local cfg="$1"
     local tmpconf="$2"
-    local action external_port_start external_port_end ip_mask
+    local action external_port_start external_port_end int_addr
     local internal_port_start internal_port_end
     config_get action "$cfg" action "deny"               # allow or deny
     upnpd_get_port_range "ext" "$cfg" ext_ports "0-65535" # external ports: x, x-y, x:y
