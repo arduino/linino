@@ -16,7 +16,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/glib-$(PKG_VERSION)
 PKG_SOURCE_URL:=@GNOME/glib/2.26
 PKG_MD5SUM:=17535accceef55bcb17a74d73f9c2aef
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_BUILD_DEPENDS:=glib2/host libpthread zlib
 HOST_BUILD_DEPENDS:=gettext/host libiconv/host
 PKG_INSTALL:=1
@@ -52,6 +52,8 @@ define Build/Configure
 		glib_cv_uscore=no \
 		ac_cv_path_GLIB_GENMARSHAL=$(STAGING_DIR_HOST)/bin/glib-genmarshal \
 		ac_cv_func_mmap_fixed_mapped=yes \
+		ac_cv_func_posix_getpwuid_r=yes \
+		ac_cv_func_posix_getgrgid_r=yes \
 	);
 endef
 
