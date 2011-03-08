@@ -1,17 +1,19 @@
 config upnpd config
 	option enable_natpmp	1
+	option enable_upnp	1
 	option secure_mode	1
 	option log_output	0
 	option download 	1024
 	option upload   	512
 	option external_iface	wan
 	option internal_iface	lan
+	option port		5000
 
 config perm_rule
-       option action deny
-       option ext_ports 0-65535
-       option int_addr 0.0.0.0/0
-       option int_ports '0:65535'
+       option action		deny
+       option ext_ports		0-65535
+       option int_addr		0.0.0.0/0
+       option int_ports		0-65535
 
 # Allow rule
 # Allow incoming on a port in the range 1024 to 65535 to be redirected to
