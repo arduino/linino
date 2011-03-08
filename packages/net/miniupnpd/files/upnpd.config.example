@@ -1,0 +1,43 @@
+config upnpd config
+	option enable_natpmp	1
+	option secure_mode	1
+	option log_output	0
+	option download 	1024
+	option upload   	512
+	option external_iface	wan
+	option internal_iface	lan
+
+config perm_rule
+       option action deny
+       option ext_ports 0-65535
+       option int_addr 0.0.0.0/0
+       option int_ports '0:65535'
+
+# Allow rule
+# Allow incoming on a port in the range 1024 to 65535 to be redirected to
+# any 192.168.1.0/24 subnet host (depending on secure_mod) on a port in the
+# range 1024 to 65535
+# config perm_rule
+#	option action allow
+#	option ext_ports 1024-65535
+#	option int_addr 192.168.1.0/24
+#	option int_ports 1024-65535
+
+# Single port
+# Allow incoming on 12233 to be redirected to 192.168.1.24 on a port in the
+# range 12233 to 12345 (inclusive)
+# config perm_rule
+#	option action allow
+#	option ext_ports 12233
+#	option int_addr 192.168.1.24/24
+#	option int_ports 12233-12345
+#
+
+# Deny rule (recommended at end)
+# Deny any redirection that matchs:
+#  incoming on port 0-65535, redirected to any port numbered 0-65535 on any ip
+# config perm_rule
+#       option action deny
+#       option ext_ports 0-65535
+#       option int_addr 0.0.0.0/0
+#       option int_ports 0-65535

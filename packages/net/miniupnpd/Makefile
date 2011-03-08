@@ -49,7 +49,9 @@ define Package/miniupnpd/install
 	$(INSTALL_CONF) ./files/upnpd.config $(1)/etc/config/upnpd
 	$(INSTALL_DATA) ./files/miniupnpd.iface.hotplug $(1)/etc/hotplug.d/iface/50-miniupnpd
 	$(INSTALL_DATA) ./files/miniupnpd.firewall.hotplug $(1)/etc/hotplug.d/firewall/50-miniupnpd
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/miniupnpd.conf $(1)/etc/miniupnpd.conf.example
+	$(INSTALL_DIR) $(1)/usr/share/miniupnpd
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/miniupnpd.conf $(1)/usr/share/miniupnpd/miniupnpd.conf.example
+	$(INSTALL_DATA) ./files/upnpd.config.example $(1)/etc/config/upnpd.example
 endef
 
 $(eval $(call BuildPackage,miniupnpd))
