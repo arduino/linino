@@ -1,7 +1,6 @@
-diff -ruN irssi-0.8.10.orig/configure irssi-0.8.10/configure
---- irssi-0.8.10.orig/configure	2005-12-11 23:46:06.000000000 +0100
-+++ irssi-0.8.10/configure	2006-02-24 13:19:21.570891250 +0100
-@@ -21848,13 +21848,6 @@
+--- a/configure
++++ b/configure
+@@ -21848,13 +21848,6 @@ _ACEOF
  
  echo "$as_me:$LINENO: checking size of off_t" >&5
  echo $ECHO_N "checking size of off_t... $ECHO_C" >&6
@@ -15,7 +14,7 @@ diff -ruN irssi-0.8.10.orig/configure irssi-0.8.10/configure
    cat >conftest.$ac_ext <<_ACEOF
  /* confdefs.h.  */
  _ACEOF
-@@ -21872,35 +21865,8 @@
+@@ -21872,35 +21865,8 @@ cat >>conftest.$ac_ext <<_ACEOF
    }
  
  _ACEOF
@@ -52,3 +51,11 @@ diff -ruN irssi-0.8.10.orig/configure irssi-0.8.10/configure
  echo "$as_me:$LINENO: result: $sizeof_off_t" >&5
  echo "${ECHO_T}$sizeof_off_t" >&6
  
+@@ -22905,6 +22871,7 @@ _ACEOF
+     echo "*** you can just unpack it to Irssi's source directory and"
+     echo "*** Irssi will automatically compile and use it."
+     echo
++    exit 1
+ 
+     glib_url=ftp://ftp.gtk.org/pub/gtk/v2.8/
+     glib_file=glib-2.8.3.tar.gz
