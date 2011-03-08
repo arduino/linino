@@ -1,6 +1,6 @@
---- gtkhtml-3.29.1/gtkhtml/gtkhtml.c	2009-10-26 07:49:58.000000000 +0100
-+++ gtkhtml-3.29.1.mod/gtkhtml/gtkhtml.c	2009-11-22 12:46:18.000000000 +0100
-@@ -128,8 +128,8 @@
+--- a/gtkhtml/gtkhtml.c
++++ b/gtkhtml/gtkhtml.c
+@@ -128,8 +128,8 @@ struct _ClipboardContents {
  
  static GtkLayoutClass *parent_class = NULL;
  
@@ -11,7 +11,7 @@
  
  enum {
  	TITLE_CHANGED,
-@@ -791,7 +791,7 @@
+@@ -791,7 +791,7 @@ destroy (GtkObject *object)
  		}
  
  		if (html->priv->notify_monospace_font_id) {
@@ -20,7 +20,7 @@
  			html->priv->notify_monospace_font_id = 0;
  		}
  
-@@ -832,61 +832,64 @@
+@@ -832,61 +832,64 @@ gtk_html_get_top_html (GtkHTML *html)
  static cairo_font_options_t *
  get_font_options (void)
  {
@@ -137,7 +137,7 @@
  	return font_options;
  }
  
-@@ -913,36 +916,36 @@
+@@ -913,36 +916,36 @@ gtk_html_set_fonts (GtkHTML *html, HTMLP
  	font_var_points = !pango_font_description_get_size_is_absolute (style->font_desc);
  
  	gtk_widget_style_get (GTK_WIDGET (top_level), "fixed_font_name", &fixed_name, NULL);
@@ -204,7 +204,7 @@
  
  	if (!fixed_name) {
  		fixed_family = "Monospace";
-@@ -2365,22 +2368,22 @@
+@@ -2365,22 +2368,22 @@ setup_class_properties (GtkHTML *html)
  	if (!klass->properties) {
  		klass->properties = gtk_html_class_properties_new (GTK_WIDGET (html));
  
@@ -242,7 +242,7 @@
  	}
  }
  
-@@ -2748,41 +2751,41 @@
+@@ -2748,41 +2751,41 @@ drag_motion (GtkWidget *widget, GdkDragC
  
  /* dnd end */
  
@@ -319,7 +319,7 @@
  
  static void
  gtk_html_direction_changed (GtkWidget *widget, GtkTextDirection previous_dir)
-@@ -2823,7 +2826,7 @@
+@@ -2823,7 +2826,7 @@ gtk_html_class_init (GtkHTMLClass *klass
  	GtkLayoutClass    *layout_class;
  	GtkContainerClass *container_class;
  	gchar *filename;
@@ -328,7 +328,7 @@
  
  	html_class = (GtkHTMLClass *) klass;
  #ifdef USE_PROPS
-@@ -3176,18 +3179,18 @@
+@@ -3176,18 +3179,18 @@ gtk_html_class_init (GtkHTMLClass *klass
  	gtk_rc_parse (filename);
  	g_free (filename);
  	html_class->emacs_bindings = gtk_binding_set_find ("gtkhtml-bindings-emacs");
@@ -355,7 +355,7 @@
  }
  
  static void
-@@ -3195,8 +3198,8 @@
+@@ -3195,8 +3198,8 @@ init_properties_widget (GtkHTML *html)
  {
  	setup_class_properties (html);
  
@@ -366,7 +366,7 @@
  
  }
  
-@@ -3478,9 +3481,9 @@
+@@ -3478,9 +3481,9 @@ gtk_html_init (GtkHTML* html)
  	g_signal_connect (G_OBJECT (html->priv->im_context), "delete_surrounding",
  			  G_CALLBACK (gtk_html_im_delete_surrounding_cb), html);
  
@@ -379,7 +379,7 @@
  
  	gtk_html_construct (html);
  }
-@@ -3579,7 +3582,7 @@
+@@ -3579,7 +3582,7 @@ gtk_html_construct (GtkHTML *html)
  	g_signal_connect (G_OBJECT (html->engine), "object_requested",
  			  G_CALLBACK (html_engine_object_requested_cb), html);
  
@@ -388,7 +388,7 @@
  }
  
  
-@@ -6044,7 +6047,7 @@
+@@ -6044,7 +6047,7 @@ gtk_html_edit_make_cursor_visible (GtkHT
  gboolean
  gtk_html_build_with_gconf (void)
  {
@@ -397,8 +397,8 @@
  }
  
  static void
---- gtkhtml-3.29.1/gtkhtml/gtkhtml-properties.h	2009-06-26 13:14:48.000000000 +0200
-+++ gtkhtml-3.29.1.mod/gtkhtml/gtkhtml-properties.h	2009-11-22 12:20:54.000000000 +0100
+--- a/gtkhtml/gtkhtml-properties.h
++++ b/gtkhtml/gtkhtml-properties.h
 @@ -27,7 +27,7 @@
  #define GTK_HTML_GNOME_CONFIG_PREFIX "/gtkhtml/Settings/"
  
@@ -408,7 +408,7 @@
  
  #include "gtkhtml-types.h"
  #include "gtkhtml.h"
-@@ -51,11 +51,11 @@
+@@ -51,11 +51,11 @@ GtkHTMLClassProperties * gtk_html_class_
  void                     gtk_html_class_properties_destroy   (GtkHTMLClassProperties *p);
  void                     gtk_html_class_properties_copy      (GtkHTMLClassProperties *p1,
  							      GtkHTMLClassProperties *p2);
@@ -425,9 +425,9 @@
  
  /* enum types */
  
---- gtkhtml-3.29.1/gtkhtml/gtkhtml-properties.c	2009-10-23 12:26:15.000000000 +0200
-+++ gtkhtml-3.29.1.mod/gtkhtml/gtkhtml-properties.c	2009-12-11 00:57:25.000000000 +0100
-@@ -102,20 +102,20 @@
+--- a/gtkhtml/gtkhtml-properties.c
++++ b/gtkhtml/gtkhtml-properties.c
+@@ -102,20 +102,20 @@ gtk_html_class_properties_destroy (GtkHT
  	g_free (p);
  }
  

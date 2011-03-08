@@ -1,16 +1,14 @@
-diff -ruN gtkhtml-3.29.1/components/Makefile.am gtkhtml-3.29.1.mod/components/Makefile.am
---- gtkhtml-3.29.1/components/Makefile.am	2009-10-23 12:25:35.000000000 +0200
-+++ gtkhtml-3.29.1.mod/components/Makefile.am	2009-10-30 18:33:25.000000000 +0100
+--- a/components/Makefile.am
++++ b/components/Makefile.am
 @@ -1,4 +1,4 @@
  
 -SUBDIRS = editor
 +SUBDIRS = 
  
  -include $(top_srcdir)/git.mk
-diff -ruN gtkhtml-3.29.1/components/Makefile.in gtkhtml-3.29.1.mod/components/Makefile.in
---- gtkhtml-3.29.1/components/Makefile.in	2009-10-26 09:22:21.000000000 +0100
-+++ gtkhtml-3.29.1.mod/components/Makefile.in	2009-10-30 18:32:41.000000000 +0100
-@@ -265,7 +265,7 @@
+--- a/components/Makefile.in
++++ b/components/Makefile.in
+@@ -265,7 +265,7 @@ target_alias = @target_alias@
  top_build_prefix = @top_build_prefix@
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
@@ -19,10 +17,9 @@ diff -ruN gtkhtml-3.29.1/components/Makefile.in gtkhtml-3.29.1.mod/components/Ma
  all: all-recursive
  
  .SUFFIXES:
-diff -ruN gtkhtml-3.29.1/configure gtkhtml-3.29.1.mod/configure
---- gtkhtml-3.29.1/configure	2009-10-26 09:22:19.000000000 +0100
-+++ gtkhtml-3.29.1.mod/configure	2009-10-30 18:39:32.000000000 +0100
-@@ -21911,7 +21911,7 @@
+--- a/configure
++++ b/configure
+@@ -21911,7 +21911,7 @@ fi
  
  
  
@@ -31,3 +28,14 @@ diff -ruN gtkhtml-3.29.1/configure gtkhtml-3.29.1.mod/configure
  
  pkg_failed=no
  { $as_echo "$as_me:$LINENO: checking for GTKHTML" >&5
+--- a/configure.ac
++++ b/configure.ac
+@@ -136,7 +136,7 @@ PKG_CHECK_MODULES(GTHREAD, $GTHREAD_MODU
+ AC_SUBST(GTHREAD_CFLAGS)
+ AC_SUBST(GTHREAD_LIBS)
+ 
+-GTKHTML_MODULES="gtk+-2.0 >= gtk_minimum_version enchant gconf-2.0 iso-codes"
++GTKHTML_MODULES="gtk+-2.0 >= gtk_minimum_version gconf-2.0"
+ PKG_CHECK_MODULES(GTKHTML, $GTKHTML_MODULES)
+ AC_SUBST(GTKHTML_CFLAGS)
+ AC_SUBST(GTKHTML_LIBS)
