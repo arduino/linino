@@ -93,21 +93,7 @@
  # Checks for header files.
  AC_HEADER_STDC
  
-@@ -218,13 +179,6 @@ AC_FUNC_VPRINTF
- 
- AC_CHECK_FUNCS(atexit on_exit)
- 
--AC_CHECK_SIZEOF(char)
--AC_CHECK_SIZEOF(short)
--AC_CHECK_SIZEOF(long)
--AC_CHECK_SIZEOF(int)
--AC_CHECK_SIZEOF(void *)
--AC_CHECK_SIZEOF(long long)
--
- dnl long doubles were not used, and a portability problem
- dnl AC_C_LONG_DOUBLE
- AC_C_CONST
-@@ -405,11 +359,13 @@ AC_CACHE_VAL(glib_cv_sane_realloc,[
+@@ -405,11 +366,13 @@ AC_CACHE_VAL(glib_cv_sane_realloc,[
  	  return realloc (0, sizeof (int)) == 0;
  	}],
  	glib_cv_sane_realloc=yes
@@ -122,7 +108,7 @@
  AC_MSG_RESULT($glib_cv_sane_realloc)
  
  
-@@ -485,7 +441,8 @@ AC_CACHE_VAL(glib_cv_va_val_copy,[
+@@ -485,7 +448,8 @@ AC_CACHE_VAL(glib_cv_va_val_copy,[
  ])
  if test "x$glib_cv_va_copy" = "xyes"; then
    AC_DEFINE(G_VA_COPY, va_copy)
@@ -132,7 +118,7 @@
    AC_DEFINE(G_VA_COPY, __va_copy)
  fi
  fi
-@@ -505,21 +462,13 @@ G_MODULE_NEED_USCORE=0
+@@ -505,21 +469,13 @@ G_MODULE_NEED_USCORE=0
  G_MODULE_BROKEN_RTLD_GLOBAL=0
  G_MODULE_HAVE_DLERROR=0
  dnl *** dlopen() and dlsym() in system libraries
@@ -159,32 +145,7 @@
  fi
  dnl *** shl_load() in libdld (HP-UX)
  if test -z "$G_MODULE_IMPL"; then
-@@ -784,13 +733,13 @@ AC_MSG_RESULT($G_THREAD_LIBS)
- dnl determination of G_THREAD_CFLAGS
- dnl ********************************
- 
--if test x"$have_threads" != xnone; then
-+if test "x$have_threads" != xnone; then
- G_THREAD_CFLAGS="$G_THREAD_CFLAGS -D_REENTRANT" # good default guess
- 
-     case $host in
- 	*-aix*)
- 		G_THREAD_CFLAGS="$G_THREAD_CFLAGS -D_THREAD_SAFE"
--		if test x"$GCC" = xyes; then
-+		if test "x$GCC" = xyes; then
-             	        G_THREAD_CFLAGS="$G_THREAD_CFLAGS -mthreads"
- 		fi
- 		;;
-@@ -822,7 +771,7 @@ fi
- dnl check for mt safe function variants
- dnl ***********************************
- 
--if test x"$have_threads" != xnone; then
-+if test "x$have_threads" != xnone; then
- 	glib_save_LIBS="$LIBS"
- 	glib_save_CFLAGS="$CFLAGS"
- 	# we are not doing the following for now, as this might require glib 
-@@ -854,49 +803,68 @@ if test x"$have_threads" != xnone; then
+@@ -854,49 +810,68 @@ if test x"$have_threads" != xnone; then
  			AC_MSG_CHECKING(whether getpwuid_r is posix like)
  			# The signature for the POSIX version is:
  			# int getpwuid_r(uid_t, struct passwd *, char *, size_t, struct passwd **)
@@ -209,8 +170,7 @@
 +			fi
  		fi
  	fi
--	if test x"$have_threads" = xposix; then
-+	if test "x$have_threads" = xposix; then
+ 	if test x"$have_threads" = xposix; then
  		LIBS="$LIBS $G_THREAD_LIBS"
  		AC_MSG_CHECKING(whether pthread_getspecific is posix like)
  		# PCThreads has pthread_getspecific(pthread_key_t, void **);
@@ -287,7 +247,7 @@
  	fi
  	LIBS="$glib_save_LIBS"
  	CFLAGS="$glib_save_CFLAGS"
-@@ -940,13 +908,21 @@ GLIB_IF_VAR_EQ(mutex_has_default, yes,
+@@ -940,12 +915,14 @@ GLIB_IF_VAR_EQ(mutex_has_default, yes,
  dnl ****************************************
  dnl *** GLib POLL* compatibility defines ***
  dnl ****************************************
@@ -300,15 +260,8 @@
  	=)
 +fi
  
-+dnl Needed for the gint* case switches further down ...
-+AC_CHECK_SIZEOF([short])
-+AC_CHECK_SIZEOF([int])
-+AC_CHECK_SIZEOF([long])
-+AC_CHECK_SIZEOF([long long])
-+AC_CHECK_SIZEOF([void *])
  
  dnl ******************************
- dnl *** output the whole stuff ***
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -70,7 +70,7 @@ configinclude_DATA = \
