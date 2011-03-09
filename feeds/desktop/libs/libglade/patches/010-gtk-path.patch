@@ -1,0 +1,11 @@
+--- a/configure.in
++++ b/configure.in
+@@ -32,7 +32,7 @@ m4_define([_LT_AC_TAGCONFIG],[])
+ AC_LIBTOOL_WIN32_DLL
+ AC_PROG_LIBTOOL
+ 
+-AM_PATH_GTK_2_0(required_gtk_version)
++m4_define([gtk_minimum_version], [2.16.0])
+ 
+ save_LIBS=$LIBS
+ LIBS="$GTK_LIBS $LIBS"
