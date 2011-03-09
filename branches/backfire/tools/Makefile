@@ -16,7 +16,7 @@ endif
 tools-y += m4 libtool autoconf automake bison pkg-config sed mklibs
 tools-y += sstrip ipkg-utils genext2fs libuuid mtd-utils mkimage
 tools-y += firmware-utils patch-cmdline quilt yaffs2 xz cmake
-tools-y += mm-macros xorg-macros missing-macros
+tools-y += mm-macros xorg-macros xfce-macros missing-macros
 tools-$(CONFIG_TARGET_orion) += wrt350nv2-builder upslug2
 tools-$(CONFIG_TARGET_x86) += qemu
 ifneq ($(CONFIG_LINUX_2_4)$(CONFIG_LINUX_2_6_25),)
@@ -50,6 +50,7 @@ $(curdir)/qemu/compile := $(curdir)/libuuid/install
 $(curdir)/upslug2/compile := $(curdir)/automake/install
 $(curdir)/mm-macros/compile := $(curdir)/automake/install
 $(curdir)/xorg-macros/compile := $(curdir)/automake/install
+$(curdir)/xfce-macros/compile := $(curdir)/automake/install
 $(curdir)/missing-macros/compile := $(curdir)/automake/install
 
 $(curdir)/builddirs := $(tools-y) $(tools-dep) $(tools-)
