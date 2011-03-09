@@ -47,31 +47,25 @@
  CLEANFILES = $(desktop_DATA) $(desktop_DATA_in)
 --- a/configure.ac
 +++ b/configure.ac
-@@ -18,12 +18,12 @@
- # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
- # USA.
- 
--AC_PREREQ(2.63)
-+AC_PREREQ(2.62)
- AC_INIT([avahi],[0.6.28],[avahi (at) lists (dot) freedesktop (dot) org])
+@@ -23,7 +23,7 @@ AC_INIT([avahi],[0.6.29],[avahi (at) lis
  AC_CONFIG_SRCDIR([avahi-core/server.c])
  AC_CONFIG_MACRO_DIR([common])
  AC_CONFIG_HEADERS([config.h])
 -AM_INIT_AUTOMAKE([foreign 1.11 -Wall -Wno-portability silent-rules tar-pax])
-+AM_INIT_AUTOMAKE([foreign 1.10 -Wall -Wno-portability tar-pax])
++AM_INIT_AUTOMAKE([foreign 1.11 -Wall -Wno-portability tar-pax])
  
  AC_SUBST(PACKAGE_URL, [http://avahi.org/])
  
-@@ -43,7 +43,7 @@ AC_SUBST(HOWL_COMPAT_VERSION, [0.9.8])
+@@ -43,8 +43,6 @@ AC_SUBST(HOWL_COMPAT_VERSION, [0.9.8])
  
  AC_CANONICAL_HOST
  
 -AM_SILENT_RULES([yes])
-+#AM_SILENT_RULES([yes])
- 
+-
  AC_CHECK_PROG([STOW], [stow], [yes], [no])
  
-@@ -412,12 +412,6 @@ if test "x$have_kqueue" = "xyes" ; then
+ AS_IF([test "x$STOW" = "xyes" && test -d /usr/local/stow], [
+@@ -412,12 +410,6 @@ if test "x$have_kqueue" = "xyes" ; then
      AC_DEFINE([HAVE_KQUEUE], 1, [Enable BSD kqueue() usage])
  fi
  

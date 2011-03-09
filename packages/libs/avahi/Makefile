@@ -8,16 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=avahi
-PKG_VERSION:=0.6.28
+PKG_VERSION:=0.6.29
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://avahi.org/download/
-PKG_MD5SUM:=d0143a5aa3265019072e53ab497818d0
+PKG_MD5SUM:=bb9d326770689610d1dbaceab5a787fc
 
 PKG_BUILD_DEPENDS:=libexpat libdaemon libgdbm intltool/host
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=autogen.sh
 
 PKG_INSTALL:=1
