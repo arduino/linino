@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/libv/libvorbisidec/
 PKG_MD5SUM:=bc617d4af1cd74b38d7c51451dd6eff0
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -35,14 +35,7 @@ define Package/libvorbisidec/description
 endef
 
 TARGET_CFLAGS += $(FPIC)
-
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); ./autogen.sh );
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-	)
-endef
+CONFIGURE_ARGS += --enable-shared --enable-static
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
