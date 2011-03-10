@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpd
-PKG_VERSION:=0.15.8
-PKG_RELEASE:=6
+PKG_VERSION:=0.16.1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/musicpd
-PKG_MD5SUM:=824e1ce46c0f468865d9e5e403cdaf5d
+PKG_MD5SUM:=4d07459125ab0154c5b4fe364331498a
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
@@ -74,7 +74,6 @@ CONFIGURE_ARGS += \
 	--enable-curl \
 	--disable-oss \
 	--with-zeroconf=no \
-	--disable-libOggFLACtest \
 	--disable-test \
 	--with-tremor=yes \
 	--with-faad="$(STAGING_DIR)/usr" \
