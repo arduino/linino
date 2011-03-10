@@ -40,6 +40,8 @@ start_service() {
 	local enable=0
 	local enabled=0
 	local run_as_usr='root'
+	local open_file_limit=0
+	local ulimit_files=`ulimit -n`
 
 	# disabled?
 	config_get_bool enable "$s" enable 0 # compatibility with prev version
@@ -74,6 +76,13 @@ start_service() {
 	echo "}" >> $config_dir/settings.json
 
 	chown -R $run_as_usr $config_dir
+
+	config_get open_file_limit "$s" open_file_limit
+	let open_limit_files="$open_file_limit + 8"
+
+	if [ ${open_file_limit} -gt ${ulimit_files} ]; then
+		ulimit -n $open_limit_files
+	fi
 
 	eval "$SSD -c $run_as_usr -q -b -x $BIN -S -- -g $config_dir"
 }
