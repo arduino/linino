@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zile
-PKG_VERSION:=2.3.21
+PKG_VERSION:=2.3.22
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/zile
-PKG_MD5SUM:=ec2834a42789477c55e7d44bc9438de1
+PKG_MD5SUM:=a22e2e7020896f17557685cf2e6d11a6
 
 PKG_INSTALL:=1
 
