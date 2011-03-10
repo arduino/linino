@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apr-util
-PKG_VERSION:=1.3.9
+PKG_VERSION:=1.3.10
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://apache.autinity.de/apr/
-PKG_MD5SUM:=29dd557f7bd891fc2bfdffcfa081db59
+PKG_SOURCE_URL:=http://apache.autinity.de/apr
+PKG_MD5SUM:=6a6f501a1b2a45166b8ffd6df29204bb
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -23,11 +24,10 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/libaprutil
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libapr +libexpat +libpthread +libsqlite3 +libuuid $(ICONV_DEPENDS)
+  DEPENDS:=+libapr +libexpat +libsqlite3 +libuuid $(ICONV_DEPENDS)
   TITLE:=Apache Portable Runtime Utility Library
   URL:=http://apr.apache.org/
 endef
-
 
 TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += \
@@ -42,10 +42,8 @@ CONFIGURE_VARS += \
 	ac_cv_file_dbd_apr_dbd_mysql_c=no \
 	APR_BUILD_DIR="$(STAGING_DIR)/usr/share/build-1" \
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) APRUTIL_LIBS="-lsqlite3 $(TARGET_LDFLAGS) -lexpat $(if $(ICONV_FULL),-liconv) -lapr-1 -luuid -lm -lcrypt" all
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
-endef
+MAKE_FLAGS += \
+	APRUTIL_LIBS="-lsqlite3 $(TARGET_LDFLAGS) -lexpat $(if $(ICONV_FULL),-liconv) -lapr-1 -luuid -lm -lcrypt" \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/include/apr-1/ $(1)/usr/lib  $(1)/usr/lib/pkgconfig/
@@ -64,7 +62,7 @@ define Build/InstallDev
 	$(SED) 's,-R$$$$libdir,,g' $(1)/usr/bin/apu-1-config
 endef
 
-define Package/libaprutil/install	
+define Package/libaprutil/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libaprutil-1.so.* $(1)/usr/lib/
 endef
