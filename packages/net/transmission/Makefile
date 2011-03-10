@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=transmission
 PKG_VERSION:=2.22
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://mirrors.m0k.org/transmission/files
@@ -75,7 +75,7 @@ define Package/transmission-daemon/conffiles
 endef
 
 CONFIGURE_VARS += \
-	LIBEVENT_LIBS="$(STAGING_DIR)/usr/lib/libevent.so"
+	LIBEVENT_LIBS="$(STAGING_DIR)/usr/lib/libevent-2.0.so.5"
 
 CONFIGURE_ARGS += \
 	--enable-daemon \
