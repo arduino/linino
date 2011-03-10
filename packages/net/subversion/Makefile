@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=subversion
-PKG_VERSION:=1.6.15
+PKG_VERSION:=1.6.16
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://subversion.tigris.org/downloads
-PKG_MD5SUM:=113fca1d9e4aa389d7dc2b210010fa69
+PKG_MD5SUM:=32f25a6724559fe8691d1f57a63f636e
 
 PKG_FIXUP:=libtool
 PKG_MACRO_PATHS:=build/ac-macros
