@@ -84,8 +84,8 @@ endef
 
 define Package/libupnp-sample/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/upnp_tv_device $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/upnp_tv_ctrlpt $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/tv_device $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/tv_ctrlpt $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/etc/upnp-tvdevice/web
 	$(CP) $(PKG_BUILD_DIR)/upnp/sample/web/* $(1)/etc/upnp-tvdevice
 endef
