@@ -8,18 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpc
-PKG_VERSION:=0.17
+PKG_VERSION:=0.20
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/musicpd
-PKG_MD5SUM:=3f642c2c2ad7a57a9be7a03351c8c558
+PKG_MD5SUM:=24c81ad6afe6099e8d7a6826ef4b7105
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mpc
   SECTION:=sound
   CATEGORY:=Sound
+  DEPENDS:=+libmpdclient
   TITLE:=Music Player Daemon Console Client
   URL:=http://www.musicpd.org/
 endef
