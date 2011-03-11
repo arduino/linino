@@ -26,6 +26,11 @@ define KernelPackage/alsa
   AUTOLOAD=$(call AutoLoad,70,$(shell cat ./files/alsa.modules))
 endef
 
+define KernelPackage/alsa/postinst
+	grep -qs "^audio:" "$$IPKG_INSTROOT/etc/group" || echo "audio:x:29:" >> "$$IPKG_INSTROOT/etc/group"
+	exit 0
+endef
+
 ifeq ($(KERNEL),2.4)
   ifeq ($(LINUX_KARCH),i386)
     KERNEL_C_OPTS:= -Os -mpreferred-stack-boundary=2 -march=i486 -fno-unit-at-a-time
