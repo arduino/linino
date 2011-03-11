@@ -17,7 +17,7 @@ PKG_MD5SUM:=21c034a762a5da252f91640e53bfe457
 
 PKG_BUILD_DEPENDS:= gstreamer gst-plugins-base liboil
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -59,7 +59,6 @@ CONFIGURE_ARGS += \
 	--disable-a52dec \
 	--disable-amrnb \
 	--disable-amrwb \
-	--disable-asfdemux \
 	--disable-cdio \
 	--disable-dvdlpcmdec \
 	--disable-dvdread \
@@ -121,5 +120,6 @@ endef
 
 $(eval $(call GstBuildPlugin,lame,MP3 encoder (using LAME),,,+lame-lib))
 $(eval $(call GstBuildPlugin,mad,MP3 decoder (using MAD),audio tag,,+libid3tag +libmad))
+$(eval $(call GstBuildPlugin,asf,ASF demuxer,,,))
 
 $(eval $(call BuildPackage,gst-plugins-ugly))
