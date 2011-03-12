@@ -23,7 +23,7 @@ define Package/amwall
   DEPENDS:=+libamsel
   TITLE:=PF to iptables
   URL:=http://www.amselinux.net/
-  SUBMENU:=firewall
+  SUBMENU:=Firewall
 endef
 
 define Build/Compile

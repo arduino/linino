@@ -23,7 +23,7 @@ define Package/iptables-snmp
   DEPENDS:=+snmpd +libiptc
   TITLE:=An snmpd plugin to access iptables rules
   URL:=http://www.nobiscuit.com/iptables-snmp/
-  SUBMENU:=firewall
+  SUBMENU:=Firewall
 endef
 
 define Package/iptables-snmp/description

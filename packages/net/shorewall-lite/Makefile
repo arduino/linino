@@ -30,7 +30,7 @@ define Package/shorewall-lite
   DEPENDS:=+ip +iptables +iptables-utils
   TITLE:=Shorewall Lite
   URL:=http://www.shorewall.net/
-  SUBMENU:=firewall
+  SUBMENU:=Firewall
 endef
 
 define Package/shorewall-lite/description
