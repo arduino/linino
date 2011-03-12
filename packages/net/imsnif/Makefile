@@ -20,6 +20,7 @@ PKG_UNPACK:=gzip -dc $(DL_DIR)/$(PKG_SOURCE) | $(TAR) -C $(PKG_BUILD_DIR) -xvf -
 define Package/imsnif
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Instant Messaging
   DEPENDS:=+libpcap +uclibcxx
   TITLE:=MSN Messenger sniffer
   URL:=http://sourceforge.net/projects/im-snif
