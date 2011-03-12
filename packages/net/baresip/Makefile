@@ -21,6 +21,7 @@ EXTRA_DEPS :=
 define Package/baresip
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Telephony
   DEPENDS:=+libre +libpthread $(EXTRA_DEPS)
   TITLE:=baresip Barebone SIP useragent
   URL:=http://www.creytiv.com/
