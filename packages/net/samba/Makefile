@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/samba
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=samba - NetBIOS/SMB implementation
+  SUBMENU:=Filesystem
   TITLE:=samba - NetBIOS/SMB implementation
   URL:=http://www.samba.org/
 endef  
@@ -32,22 +32,23 @@ The Samba software suite is a collection of programs that implements the
 	to as the LanManager or Netbios protocol.
 endef
 
-define Package/samba-common
+define Package/samba2-common
   $(call Package/samba)
+  MENU:=1
   TITLE:=NetBIOS/SMB server and client shared files
   DEPENDS:=+libgcc
 endef
 
-define Package/samba-server
+define Package/samba2-server
   $(call Package/samba)
   TITLE:=NetBIOS/SMB file and print server
-  DEPENDS:=samba-common
+  DEPENDS:=samba2-common
 endef
 
-define Package/samba-client
+define Package/samba2-client
   $(call Package/samba)
   TITLE:=NetBIOS/SMB simple client
-  DEPENDS:=samba-common
+  DEPENDS:=samba2-common
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -174,7 +175,7 @@ define Build/Compile
 		install
 endef
 
-define Package/samba-common/install
+define Package/samba2-common/install
 	$(INSTALL_DIR) $(1)/etc/samba
 	$(INSTALL_DATA) ./files/smb.conf $(1)/etc/samba/smb.conf
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -188,7 +189,7 @@ define Package/samba-common/install
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{866,ISO8859-5,KOI8-R,1251} $(1)/usr/share/samba/
 endef
 
-define Package/samba-server/install
+define Package/samba2-server/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/samba.init $(1)/etc/init.d/samba
 	$(INSTALL_DIR) $(1)/usr/lib
@@ -198,11 +199,11 @@ define Package/samba-server/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/smbd.shared $(1)/usr/sbin/smbd
 endef
 
-define Package/samba-client/install
+define Package/samba2-client/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/smbclient $(1)/usr/bin/
 endef
 
-$(eval $(call BuildPackage,samba-common))
-$(eval $(call BuildPackage,samba-server))
-$(eval $(call BuildPackage,samba-client))
+$(eval $(call BuildPackage,samba2-common))
+$(eval $(call BuildPackage,samba2-server))
+$(eval $(call BuildPackage,samba2-client))

@@ -22,6 +22,7 @@ TARGET_CFLAGS+=$(if $(CONFIG_SAMBA3_DEBUG),-DSAMBA_DEBUG)
 define Package/samba3
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Filesystem
   TITLE:=samba3
   DEPENDS:=+libpthread
   URL:=http://www.samba.org/

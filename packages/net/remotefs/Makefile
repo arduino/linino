@@ -22,6 +22,7 @@ define Package/remotefs
   TITLE:=RemoteFS
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Filesystem
   DEPENDS:=+libfuse +libc +libgcc +libpthread
   URL:=http://remotefs.sourceforge.net
 endef
