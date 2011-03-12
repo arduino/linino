@@ -20,11 +20,11 @@ PKG_FIXUP:=libtool
 include $(INCLUDE_DIR)/package.mk
 
 define Package/snort/Default
-  SUBMENU:=snort (Ligthweight Network Intrusion Detection System)
+  SUBMENU:=Firewall
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libnet0 +libpcap +libpcre
-  TITLE:=Ligthweight Network Intrusion Detection System
+  TITLE:=Lightweight Network Intrusion Detection System
   URL:=http://www.snort.org/
 endef
 
