@@ -23,7 +23,6 @@ define Package/rinetd
   CATEGORY:=Network
   TITLE:=rinetd - Internet Redirection Server
   URL:=http://www.boutell.com/rinetd/
-  SUBMENU:=Proxy Servers
 endef
 
 define Package/rinetd/conffiles
