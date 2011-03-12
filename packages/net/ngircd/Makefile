@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ngircd
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Instant Messaging
   DEPENDS:=+zlib
   TITLE:=Next Generation IRC Server
   URL:=http://ngircd.barton.de
