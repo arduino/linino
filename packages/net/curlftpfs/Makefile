@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/curlftpfs
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Filesystem
   DEPENDS:=+libcurl +libfuse +glib2
   TITLE:=CurlFtpFS
   URL:=http://curlftpfs.sourceforge.net/
