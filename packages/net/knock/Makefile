@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/knock/Default
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Firewall
   DEPENDS:=+libpcap
   TITLE:=Port-knocking
   URL:=http://www.zeroflux.org/projects/knock
