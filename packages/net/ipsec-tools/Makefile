@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ipsec-tools
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=VPN
   DEPENDS:=@!LINUX_2_4 +libopenssl +kmod-ipsec
   TITLE:=IPsec management tools
   URL:=http://ipsec-tools.sourceforge.net/
