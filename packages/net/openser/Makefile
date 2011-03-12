@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openser
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Telephony
   TITLE:=Configurable, free SIP server
   URL:=http://www.openser.org
   MENU:=1

@@ -20,7 +20,7 @@ PKG_BUILD_DIR=$(BUILD_DIR)/asterisk-$(PKG_VERSION)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/asterisk18/Default
-  SUBMENU:=asterisk18 (Complete Open Source PBX), v1.8.x
+  SUBMENU:=Telephony
   SECTION:=net
   CATEGORY:=Network
   URL:=http://www.asterisk.org/
@@ -37,7 +37,8 @@ endef
 
 define Package/asterisk18
 $(call Package/asterisk18/Default)
-  TITLE:=Complete open source PBX
+  TITLE:=Complete open source PBX, v1.8x
+  MENU:=1
   DEPENDS:= +libopenssl +libncurses +libpopt +libpthread +zlib @!TARGET_avr32
 endef
 
@@ -48,7 +49,7 @@ endef
 define Package/asterisk18-sounds
 $(call Package/asterisk18/Default)
   TITLE:=Sound files
-  DEPENDS:= +asterisk18
+  DEPENDS:= asterisk18
 endef
 
 define Package/asterisk18-sounds/description
@@ -60,7 +61,7 @@ endef
 define Package/asterisk18-voicemail
 $(call Package/asterisk18/Default)
   TITLE:=Voicemail support
-  DEPENDS:= +asterisk18
+  DEPENDS:= asterisk18
 endef
 
 define Package/asterisk18-voicemail/description
@@ -71,7 +72,7 @@ endef
 define Package/asterisk18-app-meetme
 $(call Package/asterisk18/Default)
   TITLE:=conferencing support
-  DEPENDS:= +asterisk18 +dahdi-tools-libtonezone +kmod-dahdi-linux
+  DEPENDS:= asterisk18 +dahdi-tools-libtonezone +kmod-dahdi-linux
 endef
 
 define Package/asterisk18-app-meetme/description
@@ -83,7 +84,7 @@ endef
 define Package/asterisk18-chan-iax2
 $(call Package/asterisk18/Default)
   TITLE:=IAX support
-  DEPENDS:= +asterisk18
+  DEPENDS:= asterisk18
 endef
 
 define Package/asterisk18-chan-iax2/description
@@ -95,7 +96,7 @@ endef
 define Package/asterisk18-cdr
 $(call Package/asterisk18/Default)
   TITLE:=CDR support
-  DEPENDS:= +asterisk18
+  DEPENDS:= asterisk18
 endef
 
 define Package/asterisk18-cdr/description
@@ -107,7 +108,7 @@ endef
 define Package/asterisk18-res-musiconhold
 $(call Package/asterisk18/Default)
   TITLE:=MOH support
-  DEPENDS:= +asterisk18
+  DEPENDS:= asterisk18
 endef
 
 define Package/asterisk18-res-musiconhold/description
@@ -119,7 +120,7 @@ endef
 define Package/asterisk18-chan-gtalk
 $(call Package/asterisk18/Default)
   TITLE:=GTalk support
-  DEPENDS:= +asterisk18 +libiksemel
+  DEPENDS:= asterisk18 +libiksemel
 endef
 
 define Package/asterisk18-chan-gtalk/description
@@ -131,7 +132,7 @@ endef
 define Package/asterisk18-chan-mobile
 $(call Package/asterisk18/Default)
   TITLE:=Mobile channel support
-  DEPENDS:= +asterisk18 +bluez-libs
+  DEPENDS:= asterisk18 +bluez-libs
 endef
 
 define Package/asterisk18-chan-mobile/description
@@ -142,7 +143,7 @@ endef
 define Package/asterisk18-chan-mgcp
 $(call Package/asterisk18/Default)
   TITLE:=MGCP channel support
-  DEPENDS:= +asterisk18
+  DEPENDS:= asterisk18
 endef
 
 define Package/asterisk18-chan-mgcp/description
@@ -153,7 +154,7 @@ endef
 define Package/asterisk18-curl
 $(call Package/asterisk18/Default)
   TITLE:=CURL support
-  DEPENDS:= +asterisk18 +libcurl
+  DEPENDS:= asterisk18 +libcurl
 endef
 
 define Package/asterisk18-curl/description
@@ -165,7 +166,7 @@ endef
 define Package/asterisk18-mysql
 $(call Package/asterisk18/Default)
   TITLE:=MySQL support
-  DEPENDS:= +asterisk18 +libmysqlclient
+  DEPENDS:= asterisk18 +libmysqlclient
 endef
 
 define Package/asterisk18-mysql/description
@@ -459,7 +460,7 @@ define Buildasterisk18ModuleTemplate
   define Package/asterisk18-$(subst _,-,$(1))
   $$(call Package/asterisk18/Default)
     TITLE:=$(2) support
-    DEPENDS:= +asterisk18
+    DEPENDS:= asterisk18
   endef
 
   define Package/asterisk18-$(subst _,-,$(1))/description

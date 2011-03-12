@@ -27,6 +27,7 @@ TARGET_CFLAGS += $(FPIC)
 define Package/kamailio/Default
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Telephony
   URL:=http://www.kamailio.org/
 endef
 

@@ -25,6 +25,7 @@ LIBTOOL="$(STAGING_DIR)/host/bin/libtool"
 define Package/smap
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Telephony
   TITLE:=A SIP network discovery tool
   MAINTAINER:=Daniel Dickinson <openwrt@cshore.neomailbox.net>
   URL:=http://www.wormulon.net/smap/

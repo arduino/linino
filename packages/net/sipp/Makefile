@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/sipp
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Telephony
   DEPENDS:= +libncurses +libpthread +uclibcxx
   TITLE:=test tool / traffic generator for the SIP protocol
   URL:=http://sipp.sourceforge.net/

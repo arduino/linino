@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/miax
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Telephony
   DEPENDS:=+libpthread +bluez-libs
   TITLE:=A console iax (asterisk) client
   URL:=http://www.eja.it/?l=en&n=miax

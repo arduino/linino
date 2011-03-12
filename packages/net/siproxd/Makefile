@@ -23,6 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/siproxd
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Telephony
   DEPENDS:=+libltdl +libosip2 +libpthread
   TITLE:=SIP (Session Initiation Protocol) proxy
   URL:=http://siproxd.sourceforge.net/

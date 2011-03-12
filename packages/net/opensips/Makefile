@@ -27,6 +27,7 @@ TARGET_CFLAGS += $(FPIC)
 define Package/opensips/Default
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Telephony
   URL:=http://www.opensips.org/
 endef
 

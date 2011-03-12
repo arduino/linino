@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/rtpproxy
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Telephony
   DEPENDS:=+libpthread
   TITLE:=RTP (Realtime Transport Protocol) proxy
   URL:=http://www.rtpproxy.org/
