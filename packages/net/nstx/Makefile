@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/nstx/Default
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Firewall Tunnel
   TITLE:=allows you to pass IP packets via DNS queries
   URL:=http://savannah.nongnu.org/projects/nstx/
 endef

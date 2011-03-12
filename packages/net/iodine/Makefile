@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/iodine/Default
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Firewall Tunnel
   DEPENDS:= +kmod-tun +zlib
   TITLE:=IP over DNS tunneling
   URL:=http://code.kryo.se/iodine/

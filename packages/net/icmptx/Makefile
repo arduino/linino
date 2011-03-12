@@ -23,6 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/icmptx
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Firewall Tunnel
   TITLE:=IP-over-ICMP tunnel 
   URL:=http://github.com/jakkarth/icmptx
 endef

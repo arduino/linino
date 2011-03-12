@@ -21,7 +21,7 @@ define Package/httptunnel
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libopenssl
-  SUBMENU:=Proxy Servers
+  SUBMENU:=Firewall Tunnel
   TITLE:=bidirectional tunnel in HTTP requests
   URL:=http://www.nocrew.org/software/httptunnel.html
 endef

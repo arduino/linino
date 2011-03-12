@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ptunnel
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Firewall Tunnel
   DEPENDS:=+libpthread +libpcap
   TITLE:=Tunnel TCP connections over ICMP packets
   URL:=http://www.cs.uit.no/~daniels/PingTunnel/
