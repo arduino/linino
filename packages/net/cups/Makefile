@@ -28,7 +28,6 @@ define Package/cups
   DEPENDS:=+zlib +libpthread +libpng +libjpeg +libstdcpp
   TITLE:=Common UNIX Printing System
   URL:=http://www.cups.org/
-  SUBMENU:=printing
 endef
 
 define Package/cups/description

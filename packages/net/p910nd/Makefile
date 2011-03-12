@@ -24,7 +24,6 @@ define Package/p910nd
   CATEGORY:=Network
   TITLE:=A small non-spooling printer server
   URL:=http://p910nd.sourceforge.net
-  SUBMENU:=printing
 endef
 
 define Package/p910nd/conffiles
