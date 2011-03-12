@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ekg
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Instant Messaging
   TITLE:=Eksperymentalny Klient Gadu-Gadu (Polish IM)
   URL:=http://ekg.chmurka.net
   DEPENDS:=+zlib +libncurses
