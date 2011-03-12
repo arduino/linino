@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ncftp/Default
  SECTION:=net
  CATEGORY:=Network
- SUBMENU:=FTP
+ SUBMENU:=File Transfer
  TITLE:=NcFTP Client
  URL:=http://www.ncftpd.com/
 endef

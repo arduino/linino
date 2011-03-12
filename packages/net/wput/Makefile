@@ -18,7 +18,7 @@ PKG_MD5SUM:=a14c4c13d91d04d6119bdc977e8a8bdf
 include $(INCLUDE_DIR)/package.mk
 
 define Package/wput
-  SUBMENU:=FTP
+  SUBMENU:=File Transfer
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A tiny wget-like ftp-client for uploading files

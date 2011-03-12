@@ -18,7 +18,7 @@ PKG_MD5SUM:=9bd0741bbb1f218be95c089dc06b2777
 include $(INCLUDE_DIR)/package.mk
 
 define Package/cmdftp
-  SUBMENU:=FTP
+  SUBMENU:=File Transfer
   SECTION:=net
   CATEGORY:=Network
   TITLE:=cmdftp is a tiny command line FTP client for Unix systems

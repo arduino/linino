@@ -23,7 +23,7 @@ define Package/atftp/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=TFTP
-  SUBMENU:=FTP
+  SUBMENU:=File Transfer
 endef
 
 define Package/atftp

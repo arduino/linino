@@ -21,7 +21,7 @@ PKG_REMOVE_FILES:=autogen.sh aclocal.m4
 include $(INCLUDE_DIR)/package.mk
 
 define Package/yafc
-  SUBMENU:=FTP
+  SUBMENU:=File Transfer
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libncurses +libreadline

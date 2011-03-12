@@ -23,6 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/rsync
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=File Transfer
   TITLE:=Fast remote file copy program (like rcp)
   DEPENDS:=+libpopt
   URL:=http://rsync.samba.org/

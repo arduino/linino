@@ -21,7 +21,7 @@ PKG_INSTALL:=1
 include $(INCLUDE_DIR)/package.mk
 
 define Package/proftpd
-  SUBMENU:=FTP
+  SUBMENU:=File Transfer
   SECTION:=net
   CATEGORY:=Network
   TITLE:=ProFTPD FTP server

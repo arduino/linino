@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/uucp
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=File Transfer
   TITLE:=copy files to or from another (usually *nix) system
   URL:=http://packages.debian.org/etch/uucp
 endef

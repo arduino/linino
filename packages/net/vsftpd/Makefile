@@ -18,7 +18,7 @@ PKG_MD5SUM:=2ea5d19978710527bb7444d93b67767a
 include $(INCLUDE_DIR)/package.mk
 
 define Package/vsftpd
-  SUBMENU:=FTP
+  SUBMENU:=File Transfer
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A fast and secure FTP server

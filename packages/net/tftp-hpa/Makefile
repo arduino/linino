@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/tftp-hpa/Default
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=File Transfer
   DEPENDS:=+libreadline
   URL:=http://www.kernel.org/pub/software/network/tftp
 endef
