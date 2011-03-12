@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/parprouted
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Routing and Redirection
   DEPENDS:=+libpthread
   TITLE:=Proxy ARP daemon
  URL:=http://www.hazard.maks.net/parprouted/
