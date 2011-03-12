@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/send-nsca
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Monitoring
   DEPENDS:=+libmcrypt
   TITLE:=Nagios Service Check Acceptor (NSCA) client
   URL:=http://www.nagios.org/
