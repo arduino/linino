@@ -21,6 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ipupdate
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   TITLE:=IPUpdate-Daemon
   URL:=http://ipupdate.sourceforge.net
 endef
