@@ -25,6 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/opennhrp
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=VPN
   DEPENDS:=+libcares +ipsec-tools +ip +kmod-gre
   TITLE:=NBMA Next Hop Resolution Protocol
   URL:=http://opennhrp.sourceforge.net/
