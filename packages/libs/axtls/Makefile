@@ -27,7 +27,7 @@ define Package/libaxtls
 endef
 
 define Package/axhttpd
-  SUBMENU:=Web
+  SUBMENU:=Web Servers/Proxies
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A small embedded web server using the axTLS library
@@ -39,7 +39,7 @@ define Package/axtlswrap
   SUBMENU:=SSL
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=Web
+  SUBMENU:=Web Servers/Proxies
   TITLE:=A simple TLS/SSL wrapper using the axTLS library
   URL:=http://sourceforge.net/projects/axtls
   DEPENDS:=+libaxtls

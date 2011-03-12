@@ -33,7 +33,7 @@ endef
 define Package/transocks
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=Proxy Servers
+  SUBMENU:=Web Servers/Proxies
   TITLE:=Transparent SOCKSifying proxy
   DEPENDS:=+libsocks $(LIBRPC_DEPENDS)
 endef

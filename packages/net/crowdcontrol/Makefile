@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/crowdcontrol
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=Proxy Servers
+  SUBMENU:=Web Servers/Proxies
   TITLE:=The extra-light http proxy server
   URL:=http://sourceforge.net/projects/crowdcontrol/
 endef

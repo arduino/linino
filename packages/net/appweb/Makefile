@@ -34,6 +34,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/appweb
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Web Servers/Proxies
   TITLE:=Appweb Web Server
   URL:=http://www.appwebserver.org/
   DEPENDS:=@!avr32 +libpthread

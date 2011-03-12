@@ -29,6 +29,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/nginx
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Web Servers/Proxies
   TITLE:=Nginx web server
   URL:=http://nginx.net/
   DEPENDS:=+libpcre +NGINX_SSL:libopenssl +zlib

@@ -20,7 +20,7 @@ PKG_INSTALL:=1
 include $(INCLUDE_DIR)/package.mk
 
 define Package/tinyproxy
-  SUBMENU:=Proxy Servers
+  SUBMENU:=Web Servers/Proxies
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Tinyproxy is a lightweight HTTP and HTTPS proxy

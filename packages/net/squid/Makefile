@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/squid/Default
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=Proxy Servers
+  SUBMENU:=Web Servers/Proxies
   URL:=http://www.squid-cache.org/
 endef
 

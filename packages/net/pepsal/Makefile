@@ -23,7 +23,7 @@ define Package/pepsal
   TITLE:=Performance Enhancing Proxy
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=Proxy Servers
+  SUBMENU:=Web Servers/Proxies
   URL:=http://pepsal.sourceforge.net/
   DEPENDS:=+libnetfilter-queue
 endef

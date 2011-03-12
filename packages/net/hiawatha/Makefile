@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/hiawatha
   CATEGORY:=Network
   SECTION:=net
-  SUBMENU:=Web
+  SUBMENU:=Web Servers/Proxies
   TITLE:=A very lightweight web server
   URL:=http://www.hiawatha-webserver.org/
   MAINTAINER:=Raphaël HUCK <rhk@cksum.org>

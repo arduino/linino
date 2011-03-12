@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/wccpd
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=Proxy Servers
+  SUBMENU:=Web Servers/Proxies
   TITLE:=a Web Cache Coordination daemon
   URL:=http://wccpd.sourceforge.net/
 endef

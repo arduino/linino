@@ -30,7 +30,6 @@ endef
 
 define Package/dante/default
   TITLE:=Dante SOCKS
-  SUBMENU:=Proxy Servers
   URL:=http://www.inet.no/dante/
 endef
 
@@ -62,6 +61,7 @@ endef
 
 define Package/sockd
   $(call Package/dante/default)
+  SUBMENU:=Web Servers/Proxies
   SECTION:=net
   CATEGORY:=Network
   TITLE+= Daemon
@@ -82,6 +82,7 @@ define Package/socksify
   $(call Package/dante/default)
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Web Servers/Proxies
   TITLE+= Client
 endef
 

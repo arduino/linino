@@ -21,7 +21,7 @@ PKG_INSTALL:=1
 include $(INCLUDE_DIR)/package.mk
 
 define Package/lighttpd/Default
-  SUBMENU:=Web
+  SUBMENU:=Web Servers/Proxies
   SECTION:=net
   CATEGORY:=Network
   URL:=http://www.lighttpd.net/

@@ -21,7 +21,7 @@ define Package/srelay
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libwrap
-  SUBMENU:=Proxy Servers
+  SUBMENU:=Web Servers/Proxies
   TITLE:=A socks 4/5 proxy server
   URL:=http://www.c-wind.com/srelay/
 endef

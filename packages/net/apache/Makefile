@@ -26,7 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/apache/Default
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=Web
+  SUBMENU:=Web Servers/Proxies
   TITLE:=The Apache Web Server
   URL:=http://httpd.apache.org/
 endef

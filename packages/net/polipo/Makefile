@@ -18,7 +18,7 @@ PKG_MD5SUM:=bfc5c85289519658280e093a270d6703
 include $(INCLUDE_DIR)/package.mk
 
 define Package/polipo
-  SUBMENU:=Proxy Servers
+  SUBMENU:=Web Servers/Proxies
   SECTION:=net
   CATEGORY:=Network
   TITLE:=A caching web proxy

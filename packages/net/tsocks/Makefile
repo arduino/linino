@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/tsocks
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=Proxy Servers
+  SUBMENU:=Web Servers/Proxies
   TITLE:=Transparent SOCKS v4 proxying library
   URL:=http://tsocks.sourceforge.net/
 endef

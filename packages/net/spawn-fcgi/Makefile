@@ -20,7 +20,7 @@ PKG_INSTALL = 1
 include $(INCLUDE_DIR)/package.mk
 
 define Package/spawn-fcgi
-  SUBMENU:=Web
+  SUBMENU:=Web Servers/Proxies
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Tool to spawn fastcgi applications

@@ -19,7 +19,7 @@ PKG_MD5SUM:=9cc607f914215b5a781a17f8524ffb6a
 include $(INCLUDE_DIR)/package.mk
 
 define Package/haproxy
-  SUBMENU:=Proxy Servers
+  SUBMENU:=Web Servers/Proxies
   SECTION:=net
   CATEGORY:=Network
   TITLE:=The Reliable, High Performance TCP/HTTP Load Balancer
