@@ -20,6 +20,7 @@ define Package/chaosvpn
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Config generator for chaos vpn
+  SUBMENU:=VPN
   DEPENDS:=+ip +tinc +kmod-tun +libopenssl
   URL:=https://wiki.hamburg.ccc.de/index.php/ChaosVPN::DebianHowto
   MAINTAINER:=Christopher J. Pilkington <cjp@0x1.net>
