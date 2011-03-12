@@ -19,6 +19,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/redir
 	SECTION:=net
 	CATEGORY:=Network
+	SUBMENU:=Routing and Redirection
 	TITLE=Redirect TCP connections
 	URL:=http://sammy.net/~sammy/hacks
 endef

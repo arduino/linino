@@ -29,6 +29,7 @@ define Package/wing
 	TITLE:=Wireless mesh networking toolkit
 	SECTION:=net
 	CATEGORY:=Network
+	SUBMENU:=Routing and Redirection
 	MAINTAINER:=Roberto Riggio <roberto.riggio@create-net.org>
 	DEPENDS:=+kmod-tun +libpcap +libstdcpp
 	URL:=http://www.wing-project.org/

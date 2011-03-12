@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/babeld
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Routing and Redirection
   TITLE:=A loop-free distance-vector routing protocol
   URL:=http://www.pps.jussieu.fr/~jch/software/babel/
   MAINTAINER:=Gabriel Kerneis <kerneis@pps.jussieu.fr>

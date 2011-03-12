@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/udp-broadcast-relay
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Routing and Redirection
   TITLE:=listens for packets on a specified UDP broadcast port
   URL:=http://www.joachim-breitner.de/udp-broadcast-relay/
 endef

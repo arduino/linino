@@ -19,6 +19,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/smcroute
 	SECTION:=net
 	CATEGORY:=Network
+	SUBMENU:=Routing and Redirection
 	TITLE:=Static multicast routing daemon
 	URL:=http://www.cschill.de/smcroute/
 endef

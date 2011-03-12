@@ -21,6 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/rinetd
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Routing and Redirection
   TITLE:=rinetd - Internet Redirection Server
   URL:=http://www.boutell.com/rinetd/
 endef

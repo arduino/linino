@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/vrrpd
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Routing and Redirection
   TITLE:=Virtual Router Redundancy Protocol daemon
   URL:=http://www.sourceforge.net/projects/vrrpd
 endef

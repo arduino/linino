@@ -182,6 +182,7 @@ endef
 define Package/net-tools-route
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Routing and Redirection
   TITLE:=net-tools - route
   URL:=http://www.tazenda.demon.co.uk/phil/net-tools
 endef
