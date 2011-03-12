@@ -21,6 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/umurmur/Default
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Instant Messaging
   TITLE:=uMurmur
   DEPENDS:=+libconfig
   URL:=http://code.google.com/p/umurmur
