@@ -25,6 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/peerguardian
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=P2P
   DEPENDS:= +libncurses +libpthread +libnetfilter-queue
   TITLE:=PeerGuardian for Linux
   URL:=http://phoenixlabs.org/
