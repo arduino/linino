@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/axel
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=File Transfer
   TITLE:=Axel Download Accelerator
   DEPENDS:=+libpthread
   URL:=http://axel.alioth.debian.org/
