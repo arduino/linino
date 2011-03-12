@@ -22,12 +22,11 @@ include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
 
 define Package/gmediaserver
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=multimedia
+  CATEGORY:=Multimedia
   DEPENDS:=+id3lib +libmagic +file +libupnp +libuuid +uclibcxx +zlib $(ICONV_DEPENDS)
   TITLE:=An UPnP music media server
   URL:=http://www.nongnu.org/gmediaserver/
-  SUBMENU:=multimedia
 endef
 
 define Package/gmediaserver/description

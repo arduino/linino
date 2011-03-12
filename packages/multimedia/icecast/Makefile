@@ -23,12 +23,11 @@ TREMOR_BUILD_DIR=$(PKG_BUILD_DIR)/libvorbisidec-1.2.0-dave
 TREMOR_DIR=$(TREMOR_BUILD_DIR)/ipkg-install/usr
 
 define Package/icecast
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=multimedia
+  CATEGORY:=Multimedia
   DEPENDS:=+libcurl +libxml2 +libxslt +libogg
   TITLE:=A streaming media server for Ogg/Vorbis and MP3 audio streams
   URL:=http://www.icecast.org/
-  SUBMENU:=multimedia
 endef
 
 define Package/icecast/description
