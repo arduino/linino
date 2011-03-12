@@ -30,6 +30,7 @@ endef
 
 define Package/dante/default
   TITLE:=Dante SOCKS
+  SUBMENU:=Proxy Servers
   URL:=http://www.inet.no/dante/
 endef
 
