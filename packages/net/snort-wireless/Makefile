@@ -18,11 +18,11 @@ PKG_MD5SUM:=1aa699ae279bf7a1140cf6cca02f9999
 include $(INCLUDE_DIR)/package.mk
 
 define Package/snort-wireless/Default
-  SUBMENU:=snort-wireless (Ligthweight Network Intrusion Detection System)
+  SUBMENU:=wireless
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libnet0 +libpcap +libpcre
-  TITLE:=Ligthweight Network Intrusion Detection System
+  TITLE:=Lightweight Network Intrusion Detection System
   URL:=http://www.snort-wireless.org/
 endef
 
