@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/rarpd
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=+libnet0
   TITLE:=Reverse ARP Daemon
   URL:=ftp://ftp.dementia.org/pub/net-tools/
