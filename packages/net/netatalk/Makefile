@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/netatalk
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Filesystem
   DEPENDS:=+libdb47 +libgcrypt +libopenssl $(LIBRPC_DEPENDS)
   TITLE:=netatalk
   URL:=http://netatalk.sourceforge.net
