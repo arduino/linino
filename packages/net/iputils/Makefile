@@ -77,6 +77,7 @@ endef
 
 define Package/iputils-tftpd
 $(call Package/iputils/Default)
+  SUBMENU:=File Transfer
   TITLE:=iputils - tftpd
 endef
 
