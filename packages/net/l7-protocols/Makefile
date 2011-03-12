@@ -15,7 +15,7 @@ define Package/l7-protocols
   CATEGORY:=Network
   TITLE:=Protocols for layer7 filtering
   URL:=http://l7-filter.sourceforge.net/
-  SUBMENU:=layer7
+  SUBMENU:=Firewall
   DEPENDS:=iptables-mod-filter
 endef
 
