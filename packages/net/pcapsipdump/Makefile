@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/pcapsipdump
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Telephony
   DEPENDS:=+libpcap +uclibcxx
   TITLE:=SIP sessions dumping tool
   URL:=http://sourceforge.net/projects/pcapsipdump/
