@@ -27,6 +27,7 @@ define Package/conntrack-tools
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libnetfilter-conntrack
+  SUBMENU:=Firewall
   TITLE:=Connection tracking userspace tools
   URL:=http://conntrack-tools.netfilter.org/
 endef

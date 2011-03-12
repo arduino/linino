@@ -13,6 +13,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/miniupnpc
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Firewall
   TITLE:=Lightweight UPnP client
   URL:=http://miniupnp.tuxfamily.org/
 endef

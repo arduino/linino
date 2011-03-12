@@ -23,6 +23,7 @@ define Package/miniupnpd
   CATEGORY:=Network
   DEPENDS:=+iptables
   TITLE:=Lightweight UPnP daemon
+  SUBMENU:=Firewall
   URL:=http://miniupnp.free.fr/
   MAINTAINER:=Daniel Dickinson <openwrt@cshore.neomailbox.net>
 endef

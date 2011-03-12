@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/scanlogd
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Firewall
   DEPENDS:=+libpcap +libnet0 +libnids
   TITLE:=Port scan detection tool
   URL:=http://www.openwall.com/scanlogd

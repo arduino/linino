@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/nufw/Default
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Firewall
   DEPENDS:=+glib2 +libgnutls +libsasl2 +libnetfilter-queue $(ICONV_DEPENDS) $(INTL_DEPENDS)
   TITLE:=nufw
   URL:=http://www.nufw.org/

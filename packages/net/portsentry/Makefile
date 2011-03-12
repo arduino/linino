@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/portsentry
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Firewall
   TITLE:=Portscan protection utility
   URL:=http://sourceforge.net/projects/sentrytools
 endef

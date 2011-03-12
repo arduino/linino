@@ -14,6 +14,7 @@ define Package/natpmp
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+ip
+  SUBMENU:=Firewall
   TITLE:=A daemon implementing NAT-PMP
   URL:=http://savannah.nongnu.org/projects/natpmp
 endef
