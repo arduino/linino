@@ -26,6 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/xtables-addons
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Firewall
   TITLE:=Extensions not distributed in the main Xtables
   URL:=http://xtables-addons.sourceforge.net/
 endef
