@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/unbound
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   TITLE:=A validating, recursive, and caching DNS resolver
   URL:=http://www.unbound.net/
   DEPENDS:=+libopenssl
