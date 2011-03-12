@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/xsupplicant
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=wireless
   DEPENDS:=+libopenssl +libiw
   TITLE:=A fully compliant 802.1x authenticator
   URL:=http://open1x.sourceforge.net/
