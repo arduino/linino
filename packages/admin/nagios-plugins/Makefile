@@ -23,9 +23,8 @@ include $(INCLUDE_DIR)/package.mk
 comma:= ,
 
 define Package/nagios-plugins
-  SECTION:=net
-  CATEGORY:=Network
-  SUBMENU:=Monitoring
+  SECTION:=admin
+  CATEGORY:=Administration
   DEPENDS:=+uclibcxx +libpq
   TITLE:=plugins for Nagios checks
   URL:=http://nagiosplug.sourceforge.net/

@@ -18,9 +18,8 @@ PKG_MD5SUM:=33a98e7975f633a9489d7a8938ed6131
 include $(INCLUDE_DIR)/package.mk
 
 define Package/send-nsca
-  SECTION:=net
-  CATEGORY:=Network
-  SUBMENU:=Monitoring
+  SECTION:=admin
+  CATEGORY:=Administration
   DEPENDS:=+libmcrypt
   TITLE:=Nagios Service Check Acceptor (NSCA) client
   URL:=http://www.nagios.org/

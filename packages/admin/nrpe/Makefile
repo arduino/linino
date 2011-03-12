@@ -19,9 +19,8 @@ PKG_MD5SUM:=b2d75e2962f1e3151ef58794d60c9e97
 include $(INCLUDE_DIR)/package.mk
 
 define Package/nrpe
-  SECTION:=net
-  CATEGORY:=Network
-  SUBMENU:=Monitoring
+  SECTION:=admin
+  CATEGORY:=Administration
   DEPENDS:=+libopenssl
   TITLE:=Daemon to execute Nagios check commands on remote hosts
   URL:=http://www.nagios.org/download

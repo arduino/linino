@@ -18,9 +18,8 @@ PKG_MD5SUM:=8c3a29e138f2ff8c8abbd3dd8a40c4b6
 include $(INCLUDE_DIR)/package.mk
 
 define Package/nagios
-  SECTION:=net
-  CATEGORY:=Network
-  SUBMENU:=Monitoring
+  SECTION:=admin
+  CATEGORY:=Administration
   DEPENDS:=+libpthread +microperl +libltdl
   TITLE:=service and network monitoring program
   URL:=http://www.nagios.org/
