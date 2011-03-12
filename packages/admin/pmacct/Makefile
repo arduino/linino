@@ -20,9 +20,8 @@ PKG_BUILD_DEPENDS:=libpcap
 include $(INCLUDE_DIR)/package.mk
 
 define Package/pmacct/Default
-  SECTION:=net
-  CATEGORY:=Network
-  SUBMENU:=pmacct (accounting and aggregation tools)
+  SECTION:=admin
+  CATEGORY:=Administration
   URL:=http://www.pmacct.net/
 endef
 
