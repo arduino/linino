@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/mdnsresponder
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   TITLE:=mDNSResponder
   URL:=http://developer.apple.com/networking/bonjour/
 endef

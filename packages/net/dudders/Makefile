@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/dudders
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=DNS
+  SUBMENU:=IP Addresses and Names
   TITLE:=DNS Update SIG(0) client
   MAINTAINER:=Dean Scarff <dos@scarff.id.au>
   URL:=http://dudders.sourceforge.net/

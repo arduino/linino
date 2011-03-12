@@ -23,6 +23,7 @@ CONFIGURE_ARGS += \
 define Package/dhcp-forwarder
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   TITLE:=DHCP relay agent
   URL:=http://www.nongnu.org/dhcp-fwd/
 endef

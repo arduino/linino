@@ -26,7 +26,7 @@ define Package/djbdns/Default
   SECTION:=net
   CATEGORY:=Network
   URL:=http://cr.yp.to/djbdns.html
-  SUBMENU:=DNS
+  SUBMENU:=IP Addresses and Names
 #  SUBMENU:=djbdns
 endef
 

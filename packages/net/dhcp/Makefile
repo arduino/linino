@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/dhcp/Default
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   TITLE:=ISC's DHCP
   URL:=https://www.isc.org/software/dhcp
 endef

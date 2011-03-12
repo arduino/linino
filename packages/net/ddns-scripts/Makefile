@@ -11,6 +11,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ddns-scripts
 	SECTION:=net
 	CATEGORY:=Network
+        SUBMENU:=IP Addresses and Names
 	TITLE:=Dynamic DNS Scripts
 	PKGARCH:=all
 endef

@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/yaddns
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   TITLE:=Yet Another DDNS client
   URL:=http://patatrac.info/yaddns
 endef

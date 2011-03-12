@@ -21,6 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ez-ipupdate
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   TITLE:=Dynamic DNS services client
   URL:=http://ez-ipupdate.com/
 endef

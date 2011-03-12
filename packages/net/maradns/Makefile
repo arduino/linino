@@ -23,7 +23,7 @@ define Package/maradns
   DEPENDS:=+libpthread
   TITLE:=Small and secure DNS Server
   URL:=http://www.maradns.org/
-  SUBMENU:=DNS
+  SUBMENU:=IP Addresses and Names
 endef
 
 define Package/maradns/description

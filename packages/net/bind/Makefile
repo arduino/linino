@@ -27,15 +27,14 @@ define Package/bind/Default
   DEPENDS:=+bind-libs +libopenssl
   TITLE:=bind
   URL:=https://www.isc.org/software/bind
-  SUBMENU:=DNS
+  SUBMENU:=IP Addresses and Names
 endef
 
 define Package/bind-libs
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=libs
+  CATEGORY:=Libraries
   TITLE:=bind shared libraries
   URL:=http://www.isc.org/sw/bind/
-  SUBMENU:=DNS
 endef
 
 define Package/bind-server

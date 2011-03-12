@@ -42,6 +42,7 @@ endef
 
 define Package/howl-autoipd
   $(call Package/howl/Default)
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=+libhowl
   TITLE:=An IPv4 Link-Local address self-assigner daemon
 endef
@@ -53,6 +54,7 @@ endef
 
 define Package/howl-mdnsresponder
   $(call Package/howl/Default)
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=+libhowl +libpthread
   TITLE:=An mDNS (Multicast DNS) service responder daemon
 endef
@@ -68,6 +70,7 @@ endef
 
 define Package/howl-nifd
   $(call Package/howl/Default)
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=+libhowl
   TITLE:=A network interface monitor daemon
 endef
@@ -78,6 +81,7 @@ endef
 
 define Package/howl-utils
   $(call Package/howl/Default)
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=+libhowl
   TITLE+= (utilities)
 endef

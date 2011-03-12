@@ -58,6 +58,7 @@ endef
 
 define Package/avahi-autoipd
   $(call Package/avahi/Default)
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=+libdaemon
   TITLE:=IPv4LL network address configuration daemon
 endef
@@ -74,6 +75,7 @@ endef
 
 define Package/avahi-daemon
   $(call Package/avahi/Default)
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=+libavahi +libexpat
   TITLE+= (daemon)
 endef
@@ -92,6 +94,7 @@ endef
 
 define Package/avahi-dnsconfd
   $(call Package/avahi/Default)
+  SUBMENU:=IP Addresses and Names
   DEPENDS:=+libavahi
   TITLE:=An Unicast DNS server from mDNS/DNS-SD configuration daemon
 endef

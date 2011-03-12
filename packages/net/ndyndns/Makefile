@@ -17,6 +17,7 @@ MAKE_FLAGS:=PLATFORM=linux
 define Package/ndyndns
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   TITLE:=DynDNS.com update daemon
   URL:=http://ndyndns.googlecode.com/
   DEPENDS:=+libcurl +libopenssl
