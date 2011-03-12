@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/horst
 	SECTION:=net
 	CATEGORY:=Network
+        SUBMENU:=wireless
 	DEPENDS:=+libncurses
 	MAINTAINER:=Bruno Randolf <br1@einfach.org>
 	TITLE:=Highly Optimized 802.11 Radio Scanning Tool
