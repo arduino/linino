@@ -19,7 +19,6 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/jtg
   TITLE:=Jugi's Traffic Generator
-  SUBMENU:=Monitoring
   SECTION:=net
   CATEGORY:=Network
   MAINTAINER:=Roberto Riggio <roberto.riggio@create-net.org>
