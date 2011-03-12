@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/rssh
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=SSH
   TITLE:=restricted shell for use with OpenSSH
   URL:=http://www.pizzashack.org/rssh/index.shtml
 endef
