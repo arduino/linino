@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/corkscrew
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=SSH
   TITLE:=Tunneling SSH through HTTP proxies.
   URL:=http://www.agroman.net/corkscrew/
 endef
