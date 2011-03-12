@@ -21,6 +21,7 @@ define Package/bahamut
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libopenssl +zlib
+  SUBMENU:=Instant Messaging
   TITLE:=Bahamut IRC server
   URL:=http://bahamut.dal.net
 endef
