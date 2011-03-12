@@ -26,6 +26,7 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/gesftpserver
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=SSH
   DEPENDS:=+libpthread $(ICONV_DEPENDS)
   TITLE:=SFTP server
   URL:=http://www.greenend.org.uk/rjk/sftpserver/
