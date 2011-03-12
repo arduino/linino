@@ -24,6 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/updatedd
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
   MENU:=1
   TITLE:=A tool to update dynamic dns services
   URL:=http://savannah.nongnu.org/projects/updatedd/
