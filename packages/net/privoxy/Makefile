@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/privoxy
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=Proxy Servers
+  SUBMENU:=Web Servers/Proxies
   DEPENDS:=+libpcre +libpthread
   TITLE:=web proxy with advanced filtering capabilities
   URL:=http://www.privoxy.org/
