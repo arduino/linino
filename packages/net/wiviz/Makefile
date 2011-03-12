@@ -16,6 +16,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/wiviz
   SECTION:=net
   CATEGORY:=Network
+  SUMENU:=wireless
   DEPENDS:=+libpcap
   TITLE:=Wireless Network Visualization
   URL:=http://devices.natetrue.com/wiviz/
