@@ -18,7 +18,6 @@ PKG_MD5SUM:=fcd087a6d2415cd4c6fd1db53dceb646
 include $(INCLUDE_DIR)/package.mk
 
 define Package/elinks
-  SUBMENU:=Web
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libopenssl
