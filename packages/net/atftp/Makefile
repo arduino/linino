@@ -38,17 +38,6 @@ define Package/atftpd
   TITLE+= server
 endef
 
-define Package/atftpd/postinst
-#!/bin/sh
-grep -q '^tftp[[:space:]]*69/tcp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
-if [ $$? -ne 0 ]; then
-	echo "tftp            69/tcp" >>$${IPKG_INSTROOT}/etc/services
-	echo "tftp            69/udp" >>$${IPKG_INSTROOT}/etc/services
-	echo "tftp-mcast    1758/tcp" >>$${IPKG_INSTROOT}/etc/services
-	echo "tftp-mcast    1758/udp" >>$${IPKG_INSTROOT}/etc/services
-fi
-endef
-
 CONFIGURE_ARGS += \
 	--disable-libwrap 
 
