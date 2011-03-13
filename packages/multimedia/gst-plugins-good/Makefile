@@ -1,4 +1,4 @@
-## Copyright (C) 2009-2010 OpenWrt.org
+## Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,7 +16,7 @@ PKG_MD5SUM:=9cddbb0e7e90677f0cc05c23feffef5c
 
 PKG_BUILD_DEPENDS:= gstreamer gst-plugins-base liboil
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -75,7 +75,6 @@ CONFIGURE_ARGS += \
 	--disable-goom \
 	--disable-goom2k1 \
 	--disable-gst_v4l2 \
-	--disable-icydemux \
 	--disable-hal \
 	--disable-jpeg \
 	--disable-law \
@@ -91,7 +90,6 @@ CONFIGURE_ARGS += \
 	--disable-rtspmanager \
 	--disable-smpte \
 	--disable-shout2 \
-	--disable-soup \
 	--disable-speex \
 	--disable-sunaudio \
 	--disable-taglib \
@@ -158,6 +156,7 @@ $(eval $(call GstBuildPlugin,debug,debugging,,,))
 $(eval $(call GstBuildPlugin,equalizer,audio equalizer,audio controller,,))
 $(eval $(call GstBuildPlugin,flac,FLAC codec,pbutils tag,,+libflac))
 $(eval $(call GstBuildPlugin,id3demux,ID3v1/v2 demuxer,pbutils tag,,))
+$(eval $(call GstBuildPlugin,icydemux,icy demuxer,audio,,))
 $(eval $(call GstBuildPlugin,interleave,audio interleave,audio,,))
 $(eval $(call GstBuildPlugin,level,audio level,audio,,))
 $(eval $(call GstBuildPlugin,multifile,multiple files access,,,))
@@ -166,6 +165,7 @@ $(eval $(call GstBuildPlugin,ossaudio,OSS audio support,audio,,))
 $(eval $(call GstBuildPlugin,replaygain,volume normalization,pbutils,,))
 $(eval $(call GstBuildPlugin,rtp,RTP,audio rtp tag,,))
 $(eval $(call GstBuildPlugin,rtsp,RTSP,interfaces rtp rtsp sdp,,))
+$(eval $(call GstBuildPlugin,souphttpsrc,soup input,audio,,+libsoup))
 $(eval $(call GstBuildPlugin,spectrum,spectrum data output,audio fft,,))
 $(eval $(call GstBuildPlugin,udp,UDP,netbuffer,,))
 $(eval $(call GstBuildPlugin,wavenc,Wav encoder,,,))
