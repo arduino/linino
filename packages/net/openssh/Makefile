@@ -178,11 +178,6 @@ if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
 	echo "adding user $$name to /etc/passwd"
 	echo "$${name}:x:$${id}:$${id}:$${name}:/var/empty/.$${name}:/bin/false" >> $${IPKG_INSTROOT}/etc/passwd
 fi
-
-grep -q '^ssh[[:space:]]*22/tcp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
-if [ $$? -ne 0 ]; then
-echo "ssh           22/tcp" >>$${IPKG_INSTROOT}/etc/services
-fi
 endef
 
 define Package/openssh-sftp-client/install
