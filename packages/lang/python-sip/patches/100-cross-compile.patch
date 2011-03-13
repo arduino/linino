@@ -1,11 +1,7 @@
----
- configure.py |   52 ++++++++++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 44 insertions(+), 8 deletions(-)
-
 Index: sip-4.12.1/configure.py
 ===================================================================
 --- sip-4.12.1.orig/configure.py	2011-01-22 14:47:21.000000000 +0100
-+++ sip-4.12.1/configure.py	2011-03-13 14:53:54.056261960 +0100
++++ sip-4.12.1/configure.py	2011-03-13 16:47:19.085716739 +0100
 @@ -19,7 +19,6 @@ import sys
  import os
  import glob
@@ -197,7 +193,7 @@ Index: sip-4.12.1/configure.py
 Index: sip-4.12.1/siputils.py
 ===================================================================
 --- sip-4.12.1.orig/siputils.py	2011-01-22 14:45:38.000000000 +0100
-+++ sip-4.12.1/siputils.py	2011-03-13 14:50:38.523221990 +0100
++++ sip-4.12.1/siputils.py	2011-03-13 16:47:19.087716533 +0100
 @@ -1044,9 +1044,11 @@ class Makefile:
  
          for f in self.optional_list("DEFINES"):
