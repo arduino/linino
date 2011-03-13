@@ -1,12 +1,8 @@
----
- configure.py |  218 ++++++++++++++++++++++++++++++++++++++++-------------------
- 1 file changed, 149 insertions(+), 69 deletions(-)
-
-Index: PyQt-x11-gpl-4.7.4/configure.py
+Index: PyQt-x11-gpl-4.8.3/configure.py
 ===================================================================
---- PyQt-x11-gpl-4.7.4.orig/configure.py	2010-07-12 12:41:15.000000000 +0200
-+++ PyQt-x11-gpl-4.7.4/configure.py	2010-10-27 12:30:01.000000000 +0200
-@@ -33,6 +33,7 @@
+--- PyQt-x11-gpl-4.8.3.orig/configure.py	2011-01-23 11:08:20.000000000 +0100
++++ PyQt-x11-gpl-4.8.3/configure.py	2011-03-13 15:03:08.279673485 +0100
+@@ -33,6 +33,7 @@ import os
  import glob
  import optparse
  import shutil
@@ -14,9 +10,9 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
  
  import sipconfig
  
-@@ -173,25 +174,17 @@
-             metavar="PLUGIN", dest="staticplugins", help="add PLUGIN to the "
-             "list be linked (if Qt is built as static libraries)")
+@@ -184,25 +185,17 @@ def create_optparser():
+                 "in the header comments of generated code [default: include "
+                 "timestamps]")
  
 -    if sys.platform != 'win32':
 -        if sys.platform in ('linux2', 'darwin'):
@@ -51,7 +47,7 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
  
      g.add_option("-s", "--dbus", action="callback", metavar="DIR",
              dest="pydbusincdir", callback=store_abspath_dir, type="string",
-@@ -199,13 +192,13 @@
+@@ -210,13 +203,13 @@ def create_optparser():
              "[default: supplied by pkg-config]")
      p.add_option_group(g)
  
@@ -72,7 +68,7 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
  
      # Installation.
      g = optparse.OptionGroup(p, title="Installation")
-@@ -264,12 +257,42 @@
+@@ -275,12 +268,42 @@ def create_optparser():
              "QTDIR/qsci]")
      p.add_option_group(g)
  
@@ -116,7 +112,7 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
      """
  
      def __init__(self):
-@@ -282,6 +305,8 @@
+@@ -294,6 +317,8 @@ class pyrccMakefile(sipconfig.ProgramMak
      def generate_target_default(self, mfile):
          """Generate the default target."""
          sipconfig.ProgramMakefile.generate_target_default(self, mfile)
@@ -125,7 +121,7 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
  
          # The correct call to pyrcc depends on the Python version.
          if sys.hexversion >= 0x03000000:
-@@ -772,7 +797,7 @@
+@@ -807,7 +832,7 @@ include(%s)
  
              f.close()
  
@@ -134,7 +130,7 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
              os.chdir(cwd)
  
          sipconfig.inform("Creating QPy support libraries Makefile...")
-@@ -825,12 +850,16 @@
+@@ -861,12 +886,16 @@ include(%s)
          # not on Windows (so that normal console use will work).
          sipconfig.inform("Creating pyuic4 wrapper...")
  
@@ -153,17 +149,17 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
 +                gui = False
 +                use_arch = ''
  
-         uicdir=os.path.join(pyqt_modroot, "uic")
-         wrapper = sipconfig.create_wrapper(os.path.join(uicdir, "pyuic.py"), os.path.join("pyuic", "pyuic4"), gui, use_arch)
-@@ -880,6 +909,7 @@
-             py_major = sipcfg.py_version >> 16
-             py_minor = (sipcfg.py_version >> 8) & 0x0ff
+         # The pyuic directory may not exist if we are building away from the
+         # source directory.
+@@ -926,6 +955,7 @@ include(%s)
+ 
+             abi = getattr(sys, 'abiflags', '')
  
 +            print "FIXME CROSSCOMPILE" #FIXME: Crosscompile
              if sys.platform == 'win32':
+                 # Use abiflags in case it is supported in a future version.
                  lib_dir_flag = quote("-L%s" % sipcfg.py_lib_dir)
-                 link = "%s -lpython%d%d" % (lib_dir_flag, py_major, py_minor)
-@@ -938,7 +968,7 @@
+@@ -988,7 +1018,7 @@ include(%s)
                  fout.write(prj)
                  fout.close()
  
@@ -172,7 +168,7 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
                  os.chdir(cwd)
  
                  tool.append("designer")
-@@ -1056,6 +1086,14 @@
+@@ -1106,6 +1136,14 @@ def create_config(module, template, macr
      sipconfig.create_config_module(module, template, content, macros)
  
  
@@ -184,10 +180,10 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
 +        spec = ""
 +    run_command(pfx + " " + opts.qmake + " " + spec + " " + args)
 +
- def run_command(cmd):
+ def run_command(cmd, envvars=None):
      """Run a command and display the output if verbose mode is enabled.
  
-@@ -1272,30 +1310,38 @@
+@@ -1334,30 +1372,38 @@ def check_dbus():
      """
      sipconfig.inform("Checking to see if the dbus support module should be built...")
  
@@ -247,7 +243,7 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
  
      # Try and find dbus-python.h.  We don't use pkg-config because it is broken
      # for dbus-python (at least for versions up to and including v0.81.0).
-@@ -1381,6 +1427,7 @@
+@@ -1443,6 +1489,7 @@ def set_sip_flags(pyqt):
  
      pyqt is the configuration instance.
      """
@@ -255,19 +251,19 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
      # If we don't check for signed interpreters, we exclude the 'VendorID'
      # feature
      if not opts.vendorcheck:
-@@ -1525,7 +1572,10 @@
+@@ -1588,7 +1635,10 @@ def generate_code(mname, extra_include_d
              needed_qt_libs(mname, qt_libs)
  
-     # Build the SIP command line.  Keyword argument support is enabled.
--    argv = ['"' + sipcfg.sip_bin + '"', '-k']
+     # Build the SIP command line.
+-    argv = ['"' + sipcfg.sip_bin + '"', '-w']
 +    sip_bin = sipcfg.sip_bin
 +    if opts.host_sip_bin:
 +        sip_bin = opts.host_sip_bin
-+    argv = ['"' + sip_bin + '"', '-k']
++    argv = ['"' + sip_bin + '"', '-w']
  
-     if not opts.no_docstrings:
-         argv.append("-o");
-@@ -1779,6 +1829,8 @@
+     if opts.no_timestamp:
+         argv.append("-T")
+@@ -1890,6 +1940,8 @@ def check_qt_installation(macros):
  def fix_qmake_args(args=""):
      """Make any platform specific adjustments to the arguments passed to qmake.
      """
@@ -276,7 +272,7 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
      if sys.platform == "darwin":
          # The Qt binary installer has macx-xcode as the default.
          args = "-spec %s %s" % (sipcfg.platform, args)
-@@ -1930,7 +1982,7 @@
+@@ -2041,7 +2093,7 @@ int main(int, char **)
  
      # Create the makefile, first making sure it doesn't already exist.
      remove_file(make_file)
@@ -285,7 +281,7 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
  
      if not os.access(make_file, os.F_OK):
          sipconfig.error("%s failed to create a makefile. %s" % (opts.qmake, MSG_CHECK_QMAKE))
-@@ -1952,15 +2004,30 @@
+@@ -2063,15 +2115,30 @@ int main(int, char **)
      if not os.access(exe_file, os.X_OK):
          sipconfig.error("Failed to determine the layout of your Qt installation. Try again using the --verbose flag to see more detail about the problem.")
  
@@ -323,7 +319,7 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
      lines = f.read().strip().split("\n")
      f.close()
  
-@@ -2022,6 +2089,24 @@
+@@ -2136,6 +2203,24 @@ int main(int, char **)
              sipconfig.error("Qt has been built as static libraries so either the -g or -k argument should be used.")
  
  
@@ -348,8 +344,8 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
  def main():
      """Create the configuration module module.
      """
-@@ -2036,7 +2121,7 @@
-     opts, args = p.parse_args()
+@@ -2154,7 +2239,7 @@ def main():
+         opts.no_timestamp = False
  
      # Provide defaults for platform-specific options.
 -    if sys.platform == 'win32':
@@ -357,7 +353,7 @@ Index: PyQt-x11-gpl-4.7.4/configure.py
          opts.qmake = find_default_qmake()
          opts.prot_is_public = False
  
-@@ -2069,12 +2154,14 @@
+@@ -2187,12 +2272,14 @@ def main():
              # Install the API file if the default directory exists.
              opts.api = os.path.isdir(opts.qscidir)
  

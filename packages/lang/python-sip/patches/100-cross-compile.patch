@@ -2,11 +2,11 @@
  configure.py |   52 ++++++++++++++++++++++++++++++++++++++++++++--------
  1 file changed, 44 insertions(+), 8 deletions(-)
 
-Index: sip-4.10.5/configure.py
+Index: sip-4.12.1/configure.py
 ===================================================================
---- sip-4.10.5.orig/configure.py	2010-07-16 16:15:08.000000000 +0200
-+++ sip-4.10.5/configure.py	2010-10-26 16:07:37.000000000 +0200
-@@ -19,7 +19,6 @@
+--- sip-4.12.1.orig/configure.py	2011-01-22 14:47:21.000000000 +0100
++++ sip-4.12.1/configure.py	2011-03-13 14:53:54.056261960 +0100
+@@ -19,7 +19,6 @@ import sys
  import os
  import glob
  import optparse
@@ -14,7 +14,7 @@ Index: sip-4.10.5/configure.py
  
  import siputils
  
-@@ -193,21 +192,45 @@
+@@ -197,21 +196,45 @@ def set_platform_directories():
      global plat_py_site_dir, plat_py_inc_dir, plat_py_conf_inc_dir
      global plat_bin_dir, plat_py_lib_dir, plat_sip_dir
  
@@ -73,8 +73,8 @@ Index: sip-4.10.5/configure.py
 +        siputils.error("Need to specify all --py-... options for crosscompile.")
  
  
- def create_config(module, template, macros):
-@@ -302,6 +325,11 @@
+ def patch_files():
+@@ -337,6 +360,11 @@ def create_optparser():
      def store_abspath(option, opt_str, value, parser):
          setattr(parser.values, option.dest, os.path.abspath(value))
  
@@ -86,7 +86,7 @@ Index: sip-4.10.5/configure.py
      p = optparse.OptionParser(usage="python %prog [opts] [macro=value] "
              "[macro+=value]", version=sip_version_str)
  
-@@ -369,9 +397,62 @@
+@@ -411,9 +439,62 @@ def create_optparser():
              "are normally installed [default: %s]" % default_sipsipdir)
      p.add_option_group(g)
  
@@ -149,7 +149,7 @@ Index: sip-4.10.5/configure.py
  def main(argv):
      """Create the configuration module module.
  
-@@ -382,9 +463,6 @@
+@@ -424,9 +505,6 @@ def main(argv):
      if py_version < 0x020300:
          siputils.error("This version of SIP requires Python v2.3 or later.")
  
@@ -159,7 +159,7 @@ Index: sip-4.10.5/configure.py
      # Build up the list of valid specs.
      for s in os.listdir(os.path.join(src_dir, "specs")):
          platform_specs.append(s)
-@@ -396,6 +474,9 @@
+@@ -438,6 +516,9 @@ def main(argv):
      p = create_optparser()
      opts, args = p.parse_args()
  
@@ -169,7 +169,7 @@ Index: sip-4.10.5/configure.py
      # Make sure MacOS specific options get initialised.
      if sys.platform != 'darwin':
          opts.universal = ''
-@@ -434,14 +515,16 @@
+@@ -477,14 +558,16 @@ def main(argv):
      else:
          opts.universal = ''
  
@@ -179,7 +179,7 @@ Index: sip-4.10.5/configure.py
 -            args)
 -
 -    if macros is None:
--        p.print_help()
+-        siputils.error("Unsupported macro name specified. Use the --show-build-macros flag to see a list of supported macros.")
 -        sys.exit(2)
 +    if opts.sipconfig_macros:
 +        macros = load_sipconfig_macros(opts.sipconfig_macros)
@@ -189,16 +189,16 @@ Index: sip-4.10.5/configure.py
 +                os.path.join(src_dir, "specs", opts.platform), build_macro_names,
 +                args)
 +        if macros is None:
-+            p.print_help()
++            siputils.error("Unsupported macro name specified. Use the --show-build-macros flag to see a list of supported macros.")
 +            sys.exit(2)
  
-     # Tell the user what's been found.
-     inform_user()
-Index: sip-4.10.5/siputils.py
+     # Fix the name of the sip module.
+     global sip_module_base
+Index: sip-4.12.1/siputils.py
 ===================================================================
---- sip-4.10.5.orig/siputils.py	2010-07-16 16:07:33.000000000 +0200
-+++ sip-4.10.5/siputils.py	2010-10-26 16:02:14.000000000 +0200
-@@ -1026,9 +1026,11 @@
+--- sip-4.12.1.orig/siputils.py	2011-01-22 14:45:38.000000000 +0100
++++ sip-4.12.1/siputils.py	2011-03-13 14:50:38.523221990 +0100
+@@ -1044,9 +1044,11 @@ class Makefile:
  
          for f in self.optional_list("DEFINES"):
              cppflags.append("-D" + f)
