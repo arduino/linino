@@ -348,6 +348,10 @@ define Image/Build/WNDR3700
 		-B WNDR3700 -v OpenWrt.$(REVISION) \
 		-i $(call imgname,$(1),$(2))-sysupgrade.bin \
 		-o $(call imgname,$(1),$(2))-factory.img
+	$(STAGING_DIR_HOST)/bin/mkdniimg \
+		-B WNDR3700 -v OpenWrt.$(REVISION) -r "NA" \
+		-i $(call imgname,$(1),$(2))-sysupgrade.bin \
+		-o $(call imgname,$(1),$(2))-factory-NA.img
 endef
 
 define Image/Build/WNDR3700/initramfs
