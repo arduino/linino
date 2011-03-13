@@ -65,8 +65,6 @@ endef
 
 define Package/leafnode/postinst
 #!/bin/sh
-grep -q '^nntp[[:space:]]*119/tcp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
-[ $$? -ne 0 ] && echo "nntp 119/tcp  # USENET News Transfer Protocol" >>$${IPKG_INSTROOT}/etc/services || exit 0
 grep -q '^news:' $${IPKG_INSTROOT}/etc/passwd 2>/dev/null
 [ $$? -ne 0 ] && echo "news:*:31:31:news:/var/spool/news:/bin/true" >>$${IPKG_INSTROOT}/etc/passwd && echo "news:x:31:" >>$${IPKG_INSTROOT}/etc/group || exit 0
 endef
