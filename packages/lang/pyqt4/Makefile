@@ -12,7 +12,7 @@ PKG_VERSION:=4.7.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=PyQt-x11-gpl-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.riverbankcomputing.co.uk/static/Downloads/PyQt4
+PKG_SOURCE_URL:=http://bu3sch.de/pyqt4/
 PKG_MD5SUM:=88e9f1bc467cccf424d2032e3470982c
 PKG_BUILD_DIR:=$(BUILD_DIR)/PyQt-x11-gpl-$(PKG_VERSION)
 PKG_INSTALL:=1

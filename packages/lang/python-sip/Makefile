@@ -12,7 +12,7 @@ PKG_VERSION:=4.10.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=sip-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.riverbankcomputing.co.uk/static/Downloads/sip4
+PKG_SOURCE_URL:=http://bu3sch.de/pyqt4/
 PKG_MD5SUM:=0a591ef6e59aa16e56822d3eb9fe21b8
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
