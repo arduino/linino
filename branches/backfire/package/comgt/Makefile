@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=comgt
 PKG_VERSION:=0.32
-PKG_RELEASE:=4
+PKG_RELEASE:=8
 
 PKG_SOURCE:=$(PKG_NAME).$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=@SF/comgt
@@ -49,7 +49,7 @@ define Package/comgt/install
 	$(INSTALL_DATA) ./files/3g.chat $(1)/etc/chatscripts/3g.chat
 	$(INSTALL_DATA) ./files/evdo.chat $(1)/etc/chatscripts/evdo.chat
 	$(INSTALL_DIR) $(1)/lib/network
-	$(INSTALL_DATA) ./files/3g.sh $(1)/lib/network/3g.sh
+	$(INSTALL_BIN) ./files/3g.sh $(1)/lib/network/3g.sh
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/button
 	$(INSTALL_DATA) ./files/3g.button $(1)/etc/hotplug.d/button/05-3g
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
