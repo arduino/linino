@@ -42,7 +42,7 @@ define Package/$(PKG_NAME)/Default/description
   SIP, H.323, IAX, PSTN, and more.
 endef
 
-TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include 
+TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include $(if $(findstring ${ac_cv_c_bigendian},yes),-DBIGENDIAN,)
 
 CONFIGURE_ARGS+= \
 	--without-libqt4 \
