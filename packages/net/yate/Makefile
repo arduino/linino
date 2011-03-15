@@ -32,7 +32,7 @@ endef
 
 define Package/$(PKG_NAME)
   $(call Package/yate/Default)
-  DEPENDS:=+libpthread @BROKEN
+  DEPENDS:=+libpthread +uclibcxx @BROKEN
   TITLE:=Yet Another Telphony Engine
   MENU:=1
 endef
@@ -42,7 +42,7 @@ define Package/$(PKG_NAME)/Default/description
   SIP, H.323, IAX, PSTN, and more.
 endef
 
-TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
+TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include 
 
 CONFIGURE_ARGS+= \
 	--sysconfdir=/etc/$(PKG_NAME) \
@@ -62,7 +62,9 @@ CONFIGURE_ARGS+= \
 	--with-zlib="$(STAGING_DIR)/usr"
 
 CONFIGURE_VARS+= \
-	LIBS="-lpthread -lresolv"
+	CFLAGS="$$$$CFLAGS -nostdinc++" \
+	LDFLAGS="$$$$LDFLAGS -nodefaultlibs" \
+	LIBS="-luClibc++ -lpthread -lresolv -ldl -lm -lc $(LIBGCC_S)"
 
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/lib
