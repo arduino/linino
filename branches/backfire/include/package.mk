@@ -84,6 +84,7 @@ define Build/Exports/Default
   $(1) : export CONFIG_SITE:=$$(CONFIG_SITE)
   $(1) : export PKG_CONFIG_PATH=$$(STAGING_DIR)/usr/lib/pkgconfig
   $(1) : export PKG_CONFIG_LIBDIR=$$(STAGING_DIR)/usr/lib/pkgconfig
+  $(1) : export CCACHE_DIR:=$(STAGING_DIR)/ccache
 endef
 Build/Exports=$(Build/Exports/Default)
 
