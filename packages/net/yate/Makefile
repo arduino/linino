@@ -45,7 +45,6 @@ endef
 TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include 
 
 CONFIGURE_ARGS+= \
-	--sysconfdir=/etc/$(PKG_NAME) \
 	--without-libqt4 \
 	--without-qtstatic \
 	--without-pwlib	\
