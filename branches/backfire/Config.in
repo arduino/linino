@@ -275,6 +275,7 @@ menu "Global build settings"
 
 	config USE_MKLIBS
 		bool "Strip unnecessary functions from libraries"
+		depends BROKEN
 		help
 		  Reduces libraries to only those functions that are necessary for using all
 		  selected packages (including those selected as <M>)
