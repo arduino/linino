@@ -84,10 +84,6 @@ define Build/Compile
 		all install install-root
 endef
 
-define Package/coreutils/install
-	true
-endef
-
 define BuildPlugin
   define Package/$(1)/install
 	$(INSTALL_DIR) $$(1)/usr/bin
