@@ -11,7 +11,7 @@ RELEASEVER:=3.2.0
 
 PKG_NAME:=yate
 PKG_VERSION:=$(RELEASEVER)-1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://yate.null.ro/tarballs/yate3/
@@ -35,6 +35,10 @@ define Package/$(PKG_NAME)
   DEPENDS:=+libpthread +uclibcxx @BROKEN
   TITLE:=Yet Another Telphony Engine
   MENU:=1
+endef
+
+define Package/$(PKG_NAME)/conffiles
+/etc/yate/yate.conf
 endef
 
 define Package/$(PKG_NAME)/Default/description
@@ -85,17 +89,23 @@ define BuildPlugin
     DEPENDS:= $(PKG_NAME) $(4)
     TITLE:=$(3)
   endef
+
+  $(if $(PKG_BUILD_DIR)/conf.d/$(1).conf.sample,
+  define Package/$(PKG_NAME)-mod-$(1)/conffiles
+    /etc/yate/$(1).conf
+  endef
+  ,)
   
   define Package/$(PKG_NAME)-mod-$(1)/description
     $(3) module for $(PKG_NAME)
   endef
   
   define Package/$(PKG_NAME)-mod-$(1)/install
-	$$(INSTALL_DIR) $$(1)/usr/lib/$(PKG_NAME)/$(2)
+	$$(INSTALL_DIR) $$(1)/usr/lib/yate/$(2)
 	$$(INSTALL_BIN) $$(PKG_BUILD_DIR)/modules/$(2)/$(1).yate $$(1)/usr/lib/yate/$(2)/$(1).yate
 	if [ -f $$(PKG_BUILD_DIR)/conf.d/$(1).conf.sample ]; then \
-		$$(INSTALL_DIR) $$(1)/etc/$(PKG_NAME) ;\
-		$$(INSTALL_DATA) $$(PKG_BUILD_DIR)/conf.d/$(1).conf.sample $$(1)/etc/$(PKG_NAME)/$(1).conf ;\
+		$$(INSTALL_DIR) $$(1)/etc/yate ;\
+		$$(INSTALL_DATA) $$(PKG_BUILD_DIR)/conf.d/$(1).conf.sample $$(1)/etc/yate/$(1).conf ;\
 	fi
   endef
 
