@@ -17,6 +17,8 @@ PKG_MD5SUM:=fa68528eaec1757f52bacf9fea8c68a9
 
 PKG_INSTALL:=1
 
+PKG_FIXUP:=autoreconf
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mtr
@@ -41,8 +43,8 @@ endef
 CONFIGURE_ARGS += \
 	--without-gtk \
 
-CONFIGURE_VARS += \
-	ac_cv_lib_resolv_res_mkquery=yes \
+#CONFIGURE_VARS += \
+#	ac_cv_lib_resolv_res_mkquery=no \
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); touch \
