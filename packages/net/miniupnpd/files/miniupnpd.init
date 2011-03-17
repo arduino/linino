@@ -28,6 +28,11 @@ conf_rule_add() {
     upnpd_get_port_range "ext" "$cfg" ext_ports "0-65535" # external ports: x, x-y, x:y
     config_get int_addr "$cfg" int_addr "0.0.0.0/0"       # ip or network and subnet mask (internal)
     upnpd_get_port_range "int" "$cfg" int_ports "0-65535" # internal ports: x, x-y, x:y or range
+    # Make a single IP IP/32 so that miniupnpd.conf can use it.
+    case "$int_addr" in
+	*/*) ;;
+	*) int_addr="$int_addr/32"  ;;
+    esac
     echo "${action} ${ext_start}${ext_end:+-}${ext_end} ${int_addr} ${int_start}${int_end:+-}${int_end}" >>$tmpconf   
 }
 
