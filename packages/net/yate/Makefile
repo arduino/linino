@@ -32,7 +32,7 @@ endef
 
 define Package/$(PKG_NAME)
   $(call Package/yate/Default)
-  DEPENDS:=+libpthread +uclibcxx @BROKEN
+  DEPENDS:=+libpthread +uclibcxx
   TITLE:=Yet Another Telphony Engine
   MENU:=1
 endef
