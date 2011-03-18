@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2011 SMBPhone
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -11,7 +12,7 @@ RELEASEVER:=3.2.0
 
 PKG_NAME:=yate
 PKG_VERSION:=$(RELEASEVER)-1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://yate.null.ro/tarballs/yate3/
