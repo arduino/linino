@@ -77,6 +77,8 @@ define Package/openvpn/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_CONF) files/$(PKG_NAME).config $(1)/etc/config/$(PKG_NAME)
 	$(INSTALL_DIR) $(1)/etc/openvpn
+	$(INSTALL_DIR) $(1)/lib/upgrade/keep.d
+	$(INSTALL_DATA) files/openvpn.upgrade $(1)/lib/upgrade/keep.d/openvpn
 endef
 
 define Package/openvpn-easy-rsa/install
