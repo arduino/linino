@@ -57,6 +57,7 @@ CONFIGURE_ARGS = \
 		$(call qstrip,$(CONFIG_EXTRA_BINUTILS_CONFIG_OPTIONS))
 
 TARGET_CFLAGS += $(FPIC)
+TARGET_LDFLAGS := -L$(PKG_BUILD_DIR)/libiberty $(TARGET_LDFLAGS)
 
 define Build/Configure
 	$(call Build/Configure/Default)
