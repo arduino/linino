@@ -19,7 +19,7 @@ PKG_SOURCE_URL:=http://yate.null.ro/tarballs/yate3/
 PKG_MD5SUM:=8ef5f0c420cb41ad2b5828fdba28c4ee
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
-PKG_FIXUP = libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -74,14 +74,21 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	
 	for yatelib in "" sig mgcp jabber; do \
-		$(INSTALL_BIN) $(PKG_BUILD_DIR)/libyate$$$${yatelib}.so.$(RELEASEVER) $(1)/usr/lib ;\
+		$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/libyate$$$${yatelib}.so.$(RELEASEVER) $(1)/usr/lib ;\
 		$(LN) ./libyate$$$${yatelib}.so.$(RELEASEVER) $(1)/usr/lib/libyate$$$${yatelib}.so ;\
 	done
 	
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/yate $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/yate $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/$(PKG_NAME)
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/conf.d/yate.conf.sample $(1)/etc/$(PKG_NAME)/yate.conf
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/yate/yate.conf	 $(1)/etc/$(PKG_NAME)/yate.conf
+endef
+
+define Build/InstallDev
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(STAGING_DIR)/usr/include/
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(STAGING_DIR)/usr/lib/
 endef
 
 define BuildPlugin
@@ -103,11 +110,15 @@ define BuildPlugin
   
   define Package/$(PKG_NAME)-mod-$(1)/install
 	$$(INSTALL_DIR) $$(1)/usr/lib/yate/$(2)
-	$$(INSTALL_BIN) $$(PKG_BUILD_DIR)/modules/$(2)/$(1).yate $$(1)/usr/lib/yate/$(2)/$(1).yate
-	if [ -f $$(PKG_BUILD_DIR)/conf.d/$(1).conf.sample ]; then \
+	$$(INSTALL_BIN) $$(PKG_INSTALL_DIR)/usr/lib/yate/$(2)/$(1).yate $$(1)/usr/lib/yate/$(2)/$(1).yate
+	if [ -f $$(PKG_INSTALL_DIR)/etc/yate/$(1).conf ]; then \
 		$$(INSTALL_DIR) $$(1)/etc/yate ;\
-		$$(INSTALL_DATA) $$(PKG_BUILD_DIR)/conf.d/$(1).conf.sample $$(1)/etc/yate/$(1).conf ;\
+		$$(INSTALL_DATA) $$(PKG_INSTALL_DIR)/etc/yate/$(1).conf $$(1)/etc/yate/ ;\
 	fi
+	$(if $(5),$(foreach extra_file,$(5),\
+		$(INSTALL_DIR) $$(1)$(dir $(extra_file)) ; \
+		$(CP) $(PKG_INSTALL_DIR)$(extra_file) $$(1)$(extra_file) ; \
+	),)
   endef
 
   $$(eval $$(call BuildPackage,$(PKG_NAME)-mod-$(1)))
@@ -185,7 +196,7 @@ $(eval $(call BuildPlugin,yradius,server,RADIUS Client,))
 $(eval $(call BuildPlugin,ysigchan,server,SS7/ISDN Protocols - Yate Signalling Library,))
 $(eval $(call BuildPlugin,ysipchan,,SIP Channel,))
 $(eval $(call BuildPlugin,ysockschan,,SOCKS Channel,))
-$(eval $(call BuildPlugin,ysnmpagent,server,SNMP Protocol Agent,))
+$(eval $(call BuildPlugin,ysnmpagent,server,SNMP Protocol Agent,,/usr/share/yate/data/NULL-TEAM-MIB.txt /usr/share/yate/data/snmp_mib.conf /usr/share/yate/data/YATE-MIB.txt))
 $(eval $(call BuildPlugin,ystunchan,,STUN Support,))
 $(eval $(call BuildPlugin,zapcard,server,Zaptel Card Signalling and Data Driver,+zaptel14-libtonezone))
 $(eval $(call BuildPlugin,zlibcompress,,Zlib Compression,+zlib))
