@@ -47,6 +47,44 @@ define Package/$(PKG_NAME)/Default/description
   SIP, H.323, IAX, PSTN, and more.
 endef
 
+define Package/$(PKG_NAME)-scripts-php
+  $(call Package/yate/Default)
+  DEPENDS += $(PKG_NAME) $(PKG_NAME)-mod-extmodule +php5 +php5-cli
+  TITLE:= PHP Scripts and script libraries for Yate
+endef
+
+define Package/$(PKG_NAME)-scripts-perl
+  $(call Package/yate/Default)
+  DEPENDS += $(PKG_NAME) $(PKG_NAME)-mod-extmodule +microperl
+  TITLE:= Perl module for Yate
+endef
+
+define Package/$(PKG_NAME)-scripts-python
+  $(call Package/yate/Default)
+  DEPENDS += $(PKG_NAME) $(PKG_NAME)-mod-extmodule +python-mini
+  TITLE:= Python module for Yate
+endef
+
+define Package/$(PKG_NAME)-sounds
+  $(call Package/yate/Default)
+  DEPENDS += $(PKG_NAME)
+  TITLE := Sounds for Yate
+endef
+
+define Package/$(PKG_NAME)-collection-basic
+  $(call Package/yate/Default)
+  DEPENDS += $(PKG_NAME) \
+	+$(PKG_NAME)-sounds \
+	+$(PKG_NAME)-mod-dumbchan \
+	+$(PKG_NAME)-mod-regfile \
+	+$(PKG_NAME)-mod-regexroute \
+	+$(PKG_NAME)-mod-rmanager \
+	+$(PKG_NAME)-mod-tonegen \
+	+$(PKG_NAME)-mod-yrtpchan \
+	+$(PKG_NAME)-mod-ysipchan
+   TITLE := Basic Yate Server
+endef
+
 TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include $(if $(CONFIG_BIG_ENDIAN),-DBIGENDIAN,)
 
 CONFIGURE_ARGS+= \
@@ -82,6 +120,37 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/yate $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/$(PKG_NAME)
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/yate/yate.conf	 $(1)/etc/$(PKG_NAME)/yate.conf
+endef
+
+define Package/$(PKG_NAME)-scripts-php/install
+	$(INSTALL_DIR) $(1)/usr/share/yate/scripts
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/share/yate/scripts/leavemail.php $(1)/usr/share/yate/scripts/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/share/yate/scripts/queue_in.php $(1)/usr/share/yate/scripts/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/share/yate/scripts/queue_out.php $(1)/usr/share/yate/scripts/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/share/yate/scripts/route.php $(1)/usr/share/yate/scripts/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/share/yate/scripts/voicemail.php $(1)/usr/share/yate/scripts/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/yate/scripts/libvoicemail.php $(1)/usr/share/yate/scripts/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/yate/scripts/libyatechan.php $(1)/usr/share/yate/scripts/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/yate/scripts/libyateivr.php $(1)/usr/share/yate/scripts/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/yate/scripts/libyate.php $(1)/usr/share/yate/scripts/
+endef
+
+define Package/$(PKG_NAME)-scripts-perl/install
+	$(INSTALL_DIR) $(1)/usr/share/yate/scripts
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/yate/scripts/Yate.pm $(1)/usr/share/yate/scripts/
+endef
+
+define Package/$(PKG_NAME)-scripts-python/install
+	$(INSTALL_DIR) $(1)/usr/share/yate/scripts
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/yate/scripts/libyate.py $(1)/usr/share/yate/scripts/
+endef
+
+define Package/$(PKG_NAME)-sounds/install
+	$(INSTALL_DIR) $(1)/usr/share/yate/sounds
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/yate/sounds/ $(1)/usr/share/yate/
+endef
+
+define Package/$(PKG_NAME)-collection-basic/install
 endef
 
 define Build/InstallDev
@@ -124,7 +193,12 @@ define BuildPlugin
   $$(eval $$(call BuildPackage,$(PKG_NAME)-mod-$(1)))
 endef
 
-$(eval $(call BuildPackage,yate))
+$(eval $(call BuildPackage,$(PKG_NAME)))
+$(eval $(call BuildPackage,$(PKG_NAME)-collection-basic))
+$(eval $(call BuildPackage,$(PKG_NAME)-scripts-php))
+$(eval $(call BuildPackage,$(PKG_NAME)-scripts-perl))
+$(eval $(call BuildPackage,$(PKG_NAME)-scripts-python))
+$(eval $(call BuildPackage,$(PKG_NAME)-sounds))
 $(eval $(call BuildPlugin,accfile,server,SIP or H.323 client (from file),))
 $(eval $(call BuildPlugin,alsachan,client,ALSA Sound Channel,+alsa-lib))
 $(eval $(call BuildPlugin,amrnbcodec,,AMR-NB Codec,@BROKEN)) # Missing amr-nb library
