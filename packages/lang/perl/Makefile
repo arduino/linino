@@ -87,7 +87,7 @@ define Build/perl/Configure
 	@echo "===> Stage 1: Configure host perl"
 	@echo
 	mkdir -p $(PKG_BUILD_DIR)/host-perl
-	(cd $(PKG_BUILD_DIR)/host-perl && sh ../Configure -der -Dmksymlinks -Uusedl)
+	(cd $(PKG_BUILD_DIR)/host-perl && sh ../Configure -der -Dmksymlinks -Uusedl -Dotherlibdirs=$(PERL_LIB))
 
 	@echo
 	@echo "===> Stage 2: Build host perl binary with static extensions"
