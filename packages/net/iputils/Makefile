@@ -122,7 +122,7 @@ define Package/iputils-traceroute6/description
 endef
 
 ifeq ($(BOARD),brcm47xx)
-  TARGET_CFLAGS = -D_GNU_SOURCE -O2 -Wstrict-prototypes -Wall -msoft-float
+  TARGET_CFLAGS += -O2 
 endif
 
 MAKE_FLAGS += \
