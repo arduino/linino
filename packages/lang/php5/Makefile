@@ -114,7 +114,6 @@ PKG_CONFIGURE_OPTS:= \
 	--disable-short-tags \
 	\
 	--without-gettext \
-	--disable-simplexml \
 	--with-zlib="$(STAGING_DIR)/usr" \
 	  --with-zlib-dir="$(STAGING_DIR)/usr" \
 	--with-pcre-regex="$(STAGING_DIR)/usr" \
@@ -281,6 +280,12 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-session),)
   PKG_CONFIGURE_OPTS+= --enable-session=shared
 else
   PKG_CONFIGURE_OPTS+= --disable-session
+endif
+
+ifneq ($(CONFIG_PACKAGE_php5-mod-simplexml),)
+  PKG_CONFIGURE_OPTS+= --enable-simplexml=shared
+else
+  PKG_CONFIGURE_OPTS+= --disable-simplexml
 endif
 
 ifneq ($(CONFIG_PACKAGE_php5-mod-soap),)
