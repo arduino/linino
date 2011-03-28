@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pmacct
-PKG_VERSION:=0.10.3
+PKG_VERSION:=0.12.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pmacct.net/
-PKG_MD5SUM:=0be1ffd9d4bda73575caa3240abbf4cb
+PKG_MD5SUM:=3d10f9301a17f034a0f221490a99a5d0
 
 PKG_BUILD_DEPENDS:=libpcap
 
@@ -98,7 +98,6 @@ $(PKG_BUILD_DIR)/nfacctd$(1) $(PKG_BUILD_DIR)/pmacctd$(1): $(STAMP_CONFIGURED)
 		,,\
 	);
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
 		all
 	mv -f $(PKG_BUILD_DIR)/src/nfacctd $(PKG_BUILD_DIR)/nfacctd$(1)
 	mv -f $(PKG_BUILD_DIR)/src/pmacctd $(PKG_BUILD_DIR)/pmacctd$(1)
