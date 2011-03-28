@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=squid
 PKG_VERSION:=2.7.STABLE9
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.squid-cache.org/Versions/v2/2.7/
@@ -127,6 +127,7 @@ CONFIGURE_ARGS += \
 	--enable-ntlm-auth-helpers="fakeauth SMB" \
 	--enable-digest-auth-helpers="password" \
 	--enable-external-acl-helpers="ip_user unix_group" \
+	--enable-storeio=null,ufs \
 	--enable-epoll \
 	--with-maxfd=4096
 
