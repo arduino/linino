@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dmapd
-PKG_VERSION:=0.0.35
+PKG_VERSION:=0.0.39
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.flyn.org/projects/dmapd
-PKG_MD5SUM:=a1647b4b5fda1fd6739a0ec085aeec94
+PKG_MD5SUM:=913130602c4d7cc4878d3135d4cb65ac
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
