@@ -1,6 +1,6 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2006 OpenWrt.org
-START=50
+START=61
 
 BIN=avahi-daemon
 DEFAULT=/etc/default/$BIN
