@@ -31,6 +31,8 @@ define Package/gpsd
   URL:=http://gpsd.berlios.de/
 endef
 
+CONFIGURE_CMD =./autogen.sh
+
 CONFIGURE_ARGS += \
         --disable-dbus \
         --disable-tsip \
