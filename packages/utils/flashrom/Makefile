@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=flashrom
-PKG_VERSION:=0.9.1
+PKG_VERSION:=0.9.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://qa.coreboot.org/releases/
-PKG_MD5SUM:=2b7cc0e45a0ac4c6d43c0f7cd05b041a
+PKG_MD5SUM:=eccdec2764223f5d2839bf577380eaa9
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,8 +23,8 @@ define Package/flashrom
   CATEGORY:=Utilities
   TITLE:=FlashROM Utility
   URL:=http://www.flashrom.org/
-# XXX: needs <sys/io.h>, only available on theese arch right now
-  DEPENDS:=+zlib +pciutils @(arm||armeb||i386||i686||x86_64)
+# XXX: needs <sys/io.h>, only available on these arch right now
+  DEPENDS:=+zlib +pciutils +dmidecode @(arm||armeb||i386||i686||x86_64)
 endef
 
 define Package/flashrom/description
