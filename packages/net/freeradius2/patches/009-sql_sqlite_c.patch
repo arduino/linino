@@ -1,0 +1,14 @@
+--- a/src/modules/rlm_sql/drivers/rlm_sql_sqlite/sql_sqlite.c
++++ b/src/modules/rlm_sql/drivers/rlm_sql_sqlite/sql_sqlite.c
+@@ -138,10 +138,7 @@ static int sql_query(SQLSOCK * sqlsocket
+ static int sql_select_query(SQLSOCK *sqlsocket, SQL_CONFIG *config,
+ 			    char *querystr)
+ {
+-	if (strstr(querystr, "nas") != NULL)
+-		return sql_query(sqlsocket, config, querystr);
+-		
+-	return 0;
++	return sql_query(sqlsocket, config, querystr);
+ }
+ 
+ 

@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeradius2
 PKG_VERSION:=2.1.10
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=freeradius-server-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/freeradius/
@@ -188,6 +188,16 @@ define Package/freeradius2-mod-files/conffiles
 /etc/freeradius2/modules/files
 endef
 
+define Package/freeradius2-mod-passwd
+  $(call Package/freeradius2/Default)
+  DEPENDS:=freeradius2
+  TITLE:=Rlm passwd module
+endef
+
+define Package/freeradius2-mod-passwd/conffiles
+/etc/freeradius2/modules/passwd
+endef
+
 define Package/freeradius2-mod-ldap
   $(call Package/freeradius2/Default)
   DEPENDS:=freeradius2 +libopenldap
@@ -276,6 +286,13 @@ define Package/freeradius2-mod-sql-pgsql
   TITLE:=PostgreSQL module
 endef
 
+define Package/freeradius2-mod-sql-sqlite
+  $(call Package/freeradius2/Default)
+  DEPENDS:=freeradius2-mod-sql \
+  	+PACKAGE_freeradius2-mod-sql-sqlite:libsqlite3
+  TITLE:=SQLite module
+endef
+
 define Package/freeradius2-mod-sqlcounter
   $(call Package/freeradius2/Default)
   DEPENDS:=freeradius2-mod-sql
@@ -331,7 +348,6 @@ CONFIGURE_ARGS+= \
 	--without-rlm_perl \
 	--without-rlm_python \
 	--without-rlm_smb \
-	--without-rlm_always \
 	--with-rlm_sql \
 	--with-rlm_sqlcounter \
 	--without-rlm_sqlhpwippool \
@@ -344,12 +360,12 @@ CONFIGURE_ARGS+= \
 	--without-rlm_sql_sybase \
 	--without-rlm_sql_unixodbc \
 	--without-rlm_sql_log \
-	--without-rlm_sql_sqlite \
 	--without-rlm_unix \
 	--without-rlm_eap_tnc \
 	--without-rlm_eap_ikev2 \
 	--without-rlm_opendirectory \
 	--without-rlm_wimax \
+	--without-rlm_ruby \
 
 PKG_DICTIONARIES:= \
 	freeradius freeradius.internal \
@@ -383,6 +399,16 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius2-mod-sql-pgsql),)
 		--with-rlm_sql_postgresql-lib-dir="$(STAGING_DIR)/usr/lib"
 else
   CONFIGURE_ARGS+= --without-rlm_sql_postgresql
+endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius2-mod-sql-sqlite),)
+  CONFIGURE_ARGS+= \
+	--with-rlm_sql_sqlite \
+	--with-experimental-modules \
+	--with-sqlite-include-dir="$(STAGING_DIR)/usr/include" \
+	--with-sqlite-lib-dir="$(STAGING_DIR)/usr/lib"
+else
+  CONFIGURE_ARGS+= --without-rlm_sql_sqlite
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius2-mod-eap-peap),)
@@ -496,7 +522,7 @@ endef
 
 define Package/freeradius2-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	for f in radclient radeapclient; do \
+	for f in radclient radeapclient radwho; do \
 		$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$$$${f} $(1)/usr/bin/ ; \
 	done
 endef
@@ -531,6 +557,7 @@ $(eval $(call BuildPlugin,freeradius2-mod-eap-ttls,rlm_eap_ttls,))
 $(eval $(call BuildPlugin,freeradius2-mod-exec,rlm_exec,modules/exec modules/echo ,modules,))
 $(eval $(call BuildPlugin,freeradius2-mod-attr-rewrite,rlm_attr_rewrite,modules/attr_rewrite,modules,))
 $(eval $(call BuildPlugin,freeradius2-mod-files,rlm_files,acct_users preproxy_users users modules/files,modules,))
+$(eval $(call BuildPlugin,freeradius2-mod-passwd,rlm_passwd,modules/passwd,modules,))
 $(eval $(call BuildPlugin,freeradius2-mod-ldap,rlm_ldap,ldap.attrmap modules/ldap,modules,))
 $(eval $(call BuildPlugin,freeradius2-mod-mschap,rlm_mschap,modules/mschap,modules,))
 $(eval $(call BuildPlugin,freeradius2-mod-pap,rlm_pap,modules/pap,modules,))
@@ -539,6 +566,7 @@ $(eval $(call BuildPlugin,freeradius2-mod-realm,rlm_realm,proxy.conf modules/rea
 $(eval $(call BuildPlugin,freeradius2-mod-sql,rlm_sql,sql.conf,))
 $(eval $(call BuildPlugin,freeradius2-mod-sql-mysql,rlm_sql_mysql,))
 $(eval $(call BuildPlugin,freeradius2-mod-sql-pgsql,rlm_sql_postgresql,))
+$(eval $(call BuildPlugin,freeradius2-mod-sql-sqlite,rlm_sql_sqlite,))
 $(eval $(call BuildPlugin,freeradius2-mod-sqlcounter,rlm_sqlcounter,))
 $(eval $(call BuildPlugin,freeradius2-mod-radutmp,rlm_radutmp,modules/radutmp modules/sradutmp,modules,))
 $(eval $(call BuildPlugin,freeradius2-mod-logintime,rlm_logintime,modules/logintime,modules,))
