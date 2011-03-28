@@ -8,19 +8,20 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mc
-PKG_VERSION:=4.6.2
+PKG_VERSION:=4.7.5.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.midnight-commander.org/downloads/
-PKG_MD5SUM:=ec92966f4d0c8b50c344fe901859ae2a
+PKG_MD5SUM:=e673b7ec0191e4061b5d8b69368aa113
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 
 define Package/mc
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+glib1 +libncurses
+  DEPENDS:=+glib2 +libncurses +libiconv
   TITLE:=midnight commander - a powerful file manager
   URL:=http://www.midnight-commander.org/
   SUBMENU:=filemanager
@@ -37,32 +38,12 @@ define Package/mc/description
 endef
 
 CONFIGURE_ARGS += \
-	--with-included-gettext \
-	--with-ncurses \
-	--without-sco \
-	--without-sunos-curses \
-	--without-osf1-curses \
-	--without-vcurses \
+	--without-edit \
 	--without-gpm-mouse \
-	--without-hsc \
-	--without-termnet \
-	--without-debug \
-	--without-efence \
-	--without-terminfo \
-	--without-termcap \
-	--without-slang \
-	--without-vfs \
-	--without-netrc \
-	--without-ext2undel \
-	--without-catgets \
-	--without-x \
-	--without-tk \
-	--without-xview \
 	--without-subshell \
-	--disable-glibtest \
-	--with-glib12 \
-	--with-glib-prefix="$(STAGING_DIR)/usr" \
-
+	--without-x \
+	--disable-vfs \
+	--with-screen=ncurses
 
 AM_HOST=$(firstword $(wildcard $(STAGING_DIR_HOST)/share/automake-*))
 
@@ -77,7 +58,6 @@ endef
 define Package/mc/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/mc $(1)/usr/bin/
-	ln -nsf mc $(1)/usr/bin/mcedit
 endef
 
 $(eval $(call BuildPackage,mc))
