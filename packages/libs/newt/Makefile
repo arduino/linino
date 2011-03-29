@@ -66,7 +66,7 @@ endef
 
 define Package/whiptail/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/whiptail $(1)/usr/bin/	
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/whiptail $(1)/usr/bin/	
 endef
 
 $(eval $(call BuildPackage,libnewt))
