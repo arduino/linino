@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/dmapd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libdmapsharing +gstreamer +vips
+  DEPENDS:=+libdmapsharing +vips
   TITLE:= dmapd
   URL:=http://www.flyn.org/projects/dmapd/
   MAINTAINER:=W. Michael Petullo <mike@flyn.org>
