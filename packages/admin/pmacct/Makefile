@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/pmacct/Default
   SECTION:=admin
   CATEGORY:=Administration
+  SUBMENU:=Pmacct suite
   URL:=http://www.pmacct.net/
 endef
 
@@ -80,6 +81,34 @@ define Package/pmacctd-sqlite
   DEPENDS+= +libsqlite3
 endef
 
+define Package/uacctd/Default
+  $(call Package/pmacct/Default)
+  DEPENDS+= +iptables-mod-ulog
+  TITLE:=ulog accounting daemon
+endef
+
+define Package/uacctd
+  $(call Package/pmacctd/Default)
+endef
+
+define Package/uacctd-mysql
+  $(call Package/pmacctd/Default)
+  TITLE+= with MySQL support
+  DEPENDS+= +libmysqlclient
+endef
+
+define Package/uacctd-pgsql
+  $(call Package/pmacctd/Default)
+  TITLE+= with PostreSQL support
+  DEPENDS+= +libpq
+endef
+
+define Package/uacctd-sqlite
+  $(call Package/pmacctd/Default)
+  TITLE+= with SQLite support
+  DEPENDS+= +libsqlite3
+endef
+
 define Package/pmacct-client
   $(call Package/pmacct/Default)
   TITLE:=Command-line client to gather data from the IMT plugin
@@ -87,11 +116,12 @@ endef
 
 define Compile/Template
 
-$(PKG_BUILD_DIR)/nfacctd$(1) $(PKG_BUILD_DIR)/pmacctd$(1): $(STAMP_CONFIGURED)
+$(PKG_BUILD_DIR)/nfacctd$(1) $(PKG_BUILD_DIR)/pmacctd$(1) $(PKG_BUILD_DIR)/uacctd$(1): $(STAMP_CONFIGURED)
 	-$(MAKE) -C $(PKG_BUILD_DIR) distclean
 	$(call Build/Configure/Default, \
 		--with-pcap-includes="$(STAGING_DIR)/usr/include" \
 		--with-pcap-libs="$(STAGING_DIR)/usr/lib" \
+		--enable-ulog \
 		$(2) \
 		,\
 		LIBS="-lz" \
@@ -101,8 +131,9 @@ $(PKG_BUILD_DIR)/nfacctd$(1) $(PKG_BUILD_DIR)/pmacctd$(1): $(STAMP_CONFIGURED)
 		all
 	mv -f $(PKG_BUILD_DIR)/src/nfacctd $(PKG_BUILD_DIR)/nfacctd$(1)
 	mv -f $(PKG_BUILD_DIR)/src/pmacctd $(PKG_BUILD_DIR)/pmacctd$(1)
+	mv -f $(PKG_BUILD_DIR)/src/uacctd $(PKG_BUILD_DIR)/uacctd$(1)
 
-$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/nfacctd$(1) $(PKG_BUILD_DIR)/pmacctd$(1)
+$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/nfacctd$(1) $(PKG_BUILD_DIR)/pmacctd$(1) $(PKG_BUILD_DIR)/uacctd$(1)
 
 endef
 
@@ -127,7 +158,7 @@ endef
 
 endef
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd)$(CONFIG_PACKAGE_pmacctd),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd)$(CONFIG_PACKAGE_pmacctd)$(CONFIG_PACKAGE_uacctd),)
   define Compile/pmacct/basic
     $(call Compile/Template,, \
 	--disable-mysql \
@@ -136,11 +167,12 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd)$(CONFIG_PACKAGE_pmacctd),)
     )
     $(call Install/Template,nfacctd,)
     $(call Install/Template,pmacctd,)
+	$(call Install/Template,uacctd,)
   endef
 endif
 $(eval $(Compile/pmacct/basic))
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd-mysql)$(CONFIG_PACKAGE_pmacctd-mysql),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd-mysql)$(CONFIG_PACKAGE_pmacctd-mysql)$(CONFIG_PACKAGE_uacctd-mysql),)
   define Compile/pmacct/mysql
     $(call Compile/Template,-mysql, \
 	--enable-mysql \
@@ -149,11 +181,12 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd-mysql)$(CONFIG_PACKAGE_pmacctd-mysql),)
     )
     $(call Install/Template,nfacctd,-mysql)
     $(call Install/Template,pmacctd,-mysql)
+	$(call Install/Template,uacctd,-mysql)
   endef
 endif
 $(eval $(Compile/pmacct/mysql))
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd-pgsql)$(CONFIG_PACKAGE_pmacctd-pgsql),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd-pgsql)$(CONFIG_PACKAGE_pmacctd-pgsql)$(CONFIG_PACKAGE_uacctd-pgsql),)
   define Compile/pmacct/pgsql
     $(call Compile/Template,-pgsql, \
 	--enable-pgsql \
@@ -162,11 +195,12 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd-pgsql)$(CONFIG_PACKAGE_pmacctd-pgsql),)
     )
     $(call Install/Template,nfacctd,-pgsql)
     $(call Install/Template,pmacctd,-pgsql)
+	$(call Install/Template,uacctd,-pgsql)
   endef
 endif
 $(eval $(Compile/pmacct/pgsql))
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd-sqlite)$(CONFIG_PACKAGE_pmacctd-sqlite),)
+ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd-sqlite)$(CONFIG_PACKAGE_pmacctd-sqlite)$(CONFIG_PACKAGE_uacctd-sqlite),)
   define Compile/pmacct/sqlite
     $(call Compile/Template,-sqlite, \
 	--enable-sqlite3 \
@@ -175,6 +209,7 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_nfacctd-sqlite)$(CONFIG_PACKAGE_pmacctd-sqlite),)
     )
     $(call Install/Template,nfacctd,-sqlite)
     $(call Install/Template,pmacctd,-sqlite)
+	$(call Install/Template,uacctd,-sqlite)
   endef
 endif
 $(eval $(Compile/pmacct/sqlite))
@@ -199,3 +234,8 @@ $(eval $(call BuildPackage,pmacctd-mysql))
 $(eval $(call BuildPackage,pmacctd-pgsql))
 $(eval $(call BuildPackage,pmacctd-sqlite))
 $(eval $(call BuildPackage,pmacct-client))
+$(eval $(call BuildPackage,uacctd))
+$(eval $(call BuildPackage,uacctd-mysql))
+$(eval $(call BuildPackage,uacctd-pgsql))
+$(eval $(call BuildPackage,uacctd-sqlite))
+
