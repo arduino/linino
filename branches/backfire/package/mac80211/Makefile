@@ -10,17 +10,26 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=mac80211
 
-PKG_VERSION:=2011-02-25
+PKG_VERSION:=2011-03-24
 PKG_RELEASE:=1
 PKG_SOURCE_URL:=http://mirror2.openwrt.org/sources
-PKG_MD5SUM:=c0242cc152a157902ff60fe05d1773b2
+PKG_MD5SUM:=f5713fb3ab59bdd3d0ce931b813ef960
 
 PKG_SOURCE:=compat-wireless-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/compat-wireless-$(PKG_VERSION)
 PKG_BUILD_PARALLEL:=1
 
+PKG_DRIVERS = \
+	ath5k libertas-usb libertas-sd p54-common p54-pci p54-usb p54-spi \
+	rt2x00-lib rt2x00-pci rt2x00-usb rt2x00-soc rt2800-lib rt2400-pci \
+	rt2500-pci rt2500-usb rt61-pci rt73-usb rt2800-pci rt2800-usb \
+	rtl8180 rtl8187 zd1211rw mac80211-hwsim carl9170 b43 b43legacy \
+	ath9k-common ath9k ath9k-htc ath net-libipw net-ipw2100 net-ipw2200 \
+	mwl8k net-hermes net-hermes-pci net-hermes-plx net-hermes-pcmcia
+
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_kmod-mac80211 \
+	$(patsubst %,CONFIG_PACKAGE_kmod-%,$(PKG_DRIVERS)) \
 	CONFIG_PACKAGE_MAC80211_DEBUGFS \
 	CONFIG_PACKAGE_ATH_DEBUG \
 	CONFIG_ATH_USER_REGD \
@@ -274,7 +283,7 @@ endef
 
 define KernelPackage/rt2800-lib
 $(call KernelPackage/rt2x00/Default)
-  DEPENDS+= @(PCI_SUPPORT||USB_SUPPORT||TARGET_ramips) +kmod-rt2x00-lib +USB_SUPPORT:kmod-rt2x00-usb +TARGET_ramips:kmod-rt2x00-soc
+  DEPENDS+= @(PCI_SUPPORT||USB_SUPPORT||TARGET_ramips) +kmod-rt2x00-lib +USB_SUPPORT:kmod-rt2x00-usb +TARGET_ramips:kmod-rt2x00-soc +@DRIVER_11N_SUPPORT
   TITLE+= (rt2800 LIB)
   FILES:=$(PKG_BUILD_DIR)/drivers/net/wireless/rt2x00/rt2800lib.ko
   AUTOLOAD:=$(call AutoLoad,27,rt2800lib)
@@ -427,16 +436,25 @@ define KernelPackage/ath5k/description
  Atheros 5xxx chipset.
 endef
 
-define KernelPackage/ath9k
+define KernelPackage/ath9k-common
   $(call KernelPackage/mac80211/Default)
-  TITLE:=Atheros 802.11n wireless cards support
+  TITLE:=Atheros 802.11n wireless devices (common code for ath9k and ath9k_htc)
   URL:=http://linuxwireless.org/en/users/Drivers/ath9k
-  DEPENDS+= @PCI_SUPPORT +kmod-ath
+  DEPENDS+= @PCI_SUPPORT +kmod-ath +@DRIVER_11N_SUPPORT
   FILES:= \
 	$(PKG_BUILD_DIR)/drivers/net/wireless/ath/ath9k/ath9k_common.ko \
-	$(PKG_BUILD_DIR)/drivers/net/wireless/ath/ath9k/ath9k_hw.ko \
+	$(PKG_BUILD_DIR)/drivers/net/wireless/ath/ath9k/ath9k_hw.ko
+  AUTOLOAD:=$(call AutoLoad,27,ath9k_hw ath9k_common)
+endef
+
+define KernelPackage/ath9k
+  $(call KernelPackage/mac80211/Default)
+  TITLE:=Atheros 802.11n PCI wireless cards support
+  URL:=http://linuxwireless.org/en/users/Drivers/ath9k
+  DEPENDS+= @PCI_SUPPORT +kmod-ath9k-common
+  FILES:= \
 	$(PKG_BUILD_DIR)/drivers/net/wireless/ath/ath9k/ath9k.ko
-  AUTOLOAD:=$(call AutoLoad,27,ath9k_hw ath9k_common ath9k)
+  AUTOLOAD:=$(call AutoLoad,28,ath9k)
 endef
 
 define KernelPackage/ath9k/description
@@ -444,10 +462,50 @@ This module adds support for wireless adapters based on
 Atheros IEEE 802.11n AR5008 and AR9001 family of chipsets.
 endef
 
+AR7010FW:=ar7010.fw
+AR7010_1_1_FW:=ar7010_1_1.fw
+AR9271FW:=ar9271.fw
+
+define Download/ar9271
+  FILE:=$(AR9271FW)
+  URL:=http://git.kernel.org/?p=linux/kernel/git/dwmw2/linux-firmware.git;a=blob_plain;f=ar9271.fw;h=d0ee74a1c8dccb7cc21f5be90f1d4048fa9dbf9e;hb=HEAD;?
+  MD5SUM:=2e6f5045ec4c5a42bb93ced242bad0ba
+endef
+$(eval $(call Download,ar9271))
+
+define Download/ar7010
+  FILE:=$(AR7010FW)
+  URL:=http://git.kernel.org/?p=linux/kernel/git/dwmw2/linux-firmware.git;a=blob_plain;f=ar7010.fw;h=840005d0f0c81838c581b8cd5d76c8dd3843731c;hb=HEAD;?
+  MD5SUM:=59823b82b1f72bed9b044e8cc78ad65c
+endef
+$(eval $(call Download,ar7010))
+
+define Download/ar7010_1_1
+  FILE:=$(AR7010_1_1_FW)
+  URL:=http://git.kernel.org/?p=linux/kernel/git/dwmw2/linux-firmware.git;a=blob_plain;f=ar7010_1_1.fw;h=684d4cd1a8cac4f58305589e31f9d856d03a8ef0;hb=HEAD;?
+  MD5SUM:=544fcbe5a93cfa53c7e6d3ded2b05347
+endef
+$(eval $(call Download,ar7010_1_1))
+
+define KernelPackage/ath9k-htc
+  $(call KernelPackage/mac80211/Default)
+  TITLE:=Atheros 802.11n USB device support
+  URL:=http://linuxwireless.org/en/users/Drivers/ath9k
+  DEPENDS+= @USB_SUPPORT +kmod-ath9k-common +kmod-usb-core
+  FILES:= \
+	$(PKG_BUILD_DIR)/drivers/net/wireless/ath/ath9k/ath9k_htc.ko
+  AUTOLOAD:=$(call AutoLoad,28,ath9k_htc)
+endef
+
+define KernelPackage/ath9k-htc/description
+This module adds support for wireless adapters based on
+Atheros USB AR9271 and AR7010 family of chipsets.
+endef
+
 define KernelPackage/carl9170
   $(call KernelPackage/mac80211/Default)
   TITLE:=Driver for Atheros AR9170 USB sticks
-  DEPENDS:=@USB_SUPPORT +kmod-mac80211 +kmod-ath +kmod-usb-core
+  DEPENDS:=@USB_SUPPORT +kmod-mac80211 +kmod-ath +kmod-usb-core +@DRIVER_11N_SUPPORT
   FILES:=$(PKG_BUILD_DIR)/drivers/net/wireless/ath/carl9170/carl9170.ko
   AUTOLOAD:=$(call AutoLoad,60,carl9170)
 endef
@@ -499,7 +557,7 @@ endef
 
 define KernelPackage/libertas-sd
   $(call KernelPackage/mac80211/Default)
-  DEPENDS+= +kmod-mac80211 +kmod-lib80211
+  DEPENDS+= +kmod-mac80211 +kmod-lib80211 +@DRIVER_WEXT_SUPPORT
   TITLE:=Marvell 88W8686 Wireless Driver
   FILES:= \
 	$(PKG_BUILD_DIR)/drivers/net/wireless/libertas/libertas.ko \
@@ -579,7 +637,7 @@ endef
 define KernelPackage/net-hermes
   $(call KernelPackage/mac80211/Default)
   TITLE:=Hermes 802.11b chipset support
-  DEPENDS:=@PCI_SUPPORT||PCMCIA_SUPPORT +kmod-cfg80211
+  DEPENDS:=@PCI_SUPPORT||PCMCIA_SUPPORT +kmod-cfg80211 +@DRIVER_WEXT_SUPPORT
   FILES:=$(PKG_BUILD_DIR)/drivers/net/wireless/orinoco/orinoco.ko
   AUTOLOAD:=$(call AutoLoad,50,orinoco)
 endef
@@ -910,12 +968,13 @@ MAKE_OPTS:= \
 	CONFIG_ATH5K_PCI=$(if $(CONFIG_TARGET_atheros),,y) \
 	CONFIG_ATH5K_AHB=$(if $(CONFIG_TARGET_atheros),y) \
 	CONFIG_ATH9K=$(if $(CONFIG_PACKAGE_kmod-ath9k),m) \
-	CONFIG_ATH9K_HW=$(if $(CONFIG_PACKAGE_kmod-ath9k),m) \
-	CONFIG_ATH9K_COMMON=$(if $(CONFIG_PACKAGE_kmod-ath9k),m) \
+	CONFIG_ATH9K_HTC=$(if $(CONFIG_PACKAGE_kmod-ath9k-htc),m) \
+	CONFIG_ATH9K_HW=$(if $(CONFIG_PACKAGE_kmod-ath9k-common),m) \
+	CONFIG_ATH9K_COMMON=$(if $(CONFIG_PACKAGE_kmod-ath9k-common),m) \
 	CONFIG_ATH9K_DEBUGFS=$(if $(CONFIG_PACKAGE_MAC80211_DEBUGFS),y) \
 	CONFIG_CARL9170=$(if $(CONFIG_PACKAGE_kmod-carl9170),m) \
 	CONFIG_CARL9170_DEBUGFS=$(if $(CONFIG_PACKAGE_MAC80211_DEBUGFS),y) \
-	CONFIG_ZD1211RW=$(if $(CONFIG_PACKAGE_kmod-zd1211rw),m) \
+	CONFIG_COMPAT_ZD1211RW=$(if $(CONFIG_PACKAGE_kmod-zd1211rw),m) \
 	CONFIG_P54_COMMON=$(if $(CONFIG_PACKAGE_kmod-p54-common),m) \
 	CONFIG_P54_PCI=$(if $(CONFIG_PACKAGE_kmod-p54-pci),m) \
 	CONFIG_P54_USB=$(if $(CONFIG_PACKAGE_kmod-p54-usb),m) \
@@ -987,7 +1046,6 @@ MAKE_OPTS:= \
 	CONFIG_AR9170_USB=$(if $(CONFIG_PACKAGE_kmod-ar9170),m) \
 	CONFIG_AR9170_LEDS=$(CONFIG_LEDS_TRIGGERS) \
 	CONFIG_IWM= \
-	CONFIG_ATH9K_HTC= \
 	CONFIG_MAC80211_RC_MINSTREL_HT=y \
 	MADWIFI= \
 	OLD_IWL= \
@@ -1101,6 +1159,15 @@ define KernelPackage/ar9170/install
 	$(INSTALL_DATA) $(DL_DIR)/$(AR9170FW) $(1)/lib/firmware/
 endef
 
+define KernelPackage/ath9k-htc/install
+	$(INSTALL_DIR) $(1)/lib/firmware
+	$(INSTALL_DATA) \
+		$(DL_DIR)/$(AR9271FW) \
+		$(DL_DIR)/$(AR7010FW) \
+		$(DL_DIR)/$(AR7010_1_1_FW) \
+		$(1)/lib/firmware/
+endef
+
 define KernelPackage/net-ipw2100/install
 	$(INSTALL_DIR) $(1)/lib/firmware
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/ipw2100-$(IPW2100_VERSION)*.fw $(1)/lib/firmware
@@ -1184,7 +1251,9 @@ $(eval $(call KernelPackage,rtl8180))
 $(eval $(call KernelPackage,rtl8187))
 $(eval $(call KernelPackage,zd1211rw))
 $(eval $(call KernelPackage,mac80211-hwsim))
+$(eval $(call KernelPackage,ath9k-common))
 $(eval $(call KernelPackage,ath9k))
+$(eval $(call KernelPackage,ath9k-htc))
 $(eval $(call KernelPackage,ath))
 $(eval $(call KernelPackage,carl9170))
 $(eval $(call KernelPackage,b43))

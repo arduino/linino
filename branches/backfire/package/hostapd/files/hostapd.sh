@@ -9,6 +9,9 @@ hostapd_set_bss_options() {
 
 	config_get device "$vif" device
 	config_get hwmode "$device" hwmode
+	config_get phy "$device" phy
+
+	append "$var" "ctrl_interface=/var/run/hostapd-$phy" "$N"
 
 	if [ "$ap_isolate" -gt 0 ]; then
 		append "$var" "ap_isolate=$ap_isolate" "$N"
@@ -127,32 +130,56 @@ hostapd_set_bss_options() {
 	config_get iapp_interface "$vif" iapp_interface
 
 	config_get_bool wps_pbc "$vif" wps_pushbutton 0
-	[ -n "$wps_possible" -a "$wps_pbc" -gt 0 ] && {
+	config_get_bool wps_label "$vif" wps_label 0
+
+	config_get config_methods "$vif" wps_config
+	[ "$wps_pbc" -gt 0 ] && append config_methods push_button
+
+	[ -n "$wps_possible" -a -n "$config_methods" ] && {
+		config_get device_type "$vif" wps_device_type "6-0050F204-1"
+		config_get device_name "$vif" wps_device_name "OpenWrt AP"
+		config_get manufacturer "$vif" wps_manufacturer "openwrt.org"
+
 		append "$var" "eap_server=1" "$N"
 		append "$var" "wps_state=2" "$N"
 		append "$var" "ap_setup_locked=1" "$N"
-		append "$var" "config_methods=push_button" "$N"
+		append "$var" "device_type=$device_type" "$N"
+		append "$var" "device_name=$device_name" "$N"
+		append "$var" "manufacturer=$manufacturer" "$N"
+		append "$var" "config_methods=$config_methods" "$N"
 	}
 
 	append "$var" "ssid=$ssid" "$N"
 	[ -n "$bridge" ] && append "$var" "bridge=$bridge" "$N"
 	[ -n "$ieee80211d" ] && append "$var" "ieee80211d=$ieee80211d" "$N"
-	[ -n "$iapp_interface" ] && append "$var" $(uci_get_state network "$iapp_interface" ifname "$iapp_interface") "$N"
+	[ -n "$iapp_interface" ] && append "$var" iapp_interface=$(uci_get_state network "$iapp_interface" ifname "$iapp_interface") "$N"
 
-	[ "$wpa" -ge "2" ] && config_get ieee80211w "$vif" ieee80211w
-	case "$ieee80211w" in
-		[012])
-			append "$var" "ieee80211w=$ieee80211w" "$N"
-			[ "$ieee80211w" -gt "0" ] && {
-				config_get ieee80211w_max_timeout "$vif" ieee80211w_max_timeout
-				config_get ieee80211w_retry_timeout "$vif" ieee80211w_retry_timeout
-				[ -n "$ieee80211w_max_timeout" ] && \
-					append "$var" "assoc_sa_query_max_timeout=$ieee80211w_max_timeout" "$N"
-				[ -n "$ieee80211w_retry_timeout" ] && \
-					append "$var" "assoc_sa_query_retry_timeout=$ieee80211w_retry_timeout" "$N"
-			}
-		;;
-	esac
+	if [ "$wpa" -ge "2" ]
+	then
+		# RSN -> allow preauthentication
+		config_get rsn_preauth "$vif" rsn_preauth
+		if [ -n "$bridge" -a "$rsn_preauth" = 1 ]
+		then
+			append "$var" "rsn_preauth=1" "$N"
+			append "$var" "rsn_preauth_interfaces=$bridge" "$N"
+		fi
+
+		# RSN -> allow management frame protection
+		config_get ieee80211w "$vif" ieee80211w
+		case "$ieee80211w" in
+			[012])
+				append "$var" "ieee80211w=$ieee80211w" "$N"
+				[ "$ieee80211w" -gt "0" ] && {
+					config_get ieee80211w_max_timeout "$vif" ieee80211w_max_timeout
+					config_get ieee80211w_retry_timeout "$vif" ieee80211w_retry_timeout
+					[ -n "$ieee80211w_max_timeout" ] && \
+						append "$var" "assoc_sa_query_max_timeout=$ieee80211w_max_timeout" "$N"
+					[ -n "$ieee80211w_retry_timeout" ] && \
+						append "$var" "assoc_sa_query_retry_timeout=$ieee80211w_retry_timeout" "$N"
+				}
+			;;
+		esac
+	fi
 }
 
 hostapd_setup_vif() {
@@ -172,7 +199,6 @@ hostapd_setup_vif() {
 	[ "$channel" = auto ] && channel=
 	[ -n "$channel" -a -z "$hwmode" ] && wifi_fixup_hwmode "$device"
 	cat > /var/run/hostapd-$ifname.conf <<EOF
-ctrl_interface=/var/run/hostapd-$ifname
 driver=$driver
 interface=$ifname
 ${hwmode:+hw_mode=${hwmode#11}}
