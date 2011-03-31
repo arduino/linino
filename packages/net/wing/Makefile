@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wing
-PKG_VERSION:=20101023
-PKG_RELEASE:=1
-PKG_REV:=daffb8d7642c4a343951d67159504ff4f4da49ed
+PKG_VERSION:=20110329
+PKG_RELEASE:=2
+PKG_REV:=4ef2a352b29c26ce76d8b3d7c6897d301362a101
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://github.com/create-net/click-wing.git
+PKG_SOURCE_URL:=git://github.com/rriggio/click.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
@@ -29,7 +29,6 @@ define Package/wing
 	TITLE:=Wireless mesh networking toolkit
 	SECTION:=net
 	CATEGORY:=Network
-	SUBMENU:=Routing and Redirection
 	MAINTAINER:=Roberto Riggio <roberto.riggio@create-net.org>
 	DEPENDS:=+kmod-tun +libpcap +libstdcpp
 	URL:=http://www.wing-project.org/
@@ -48,12 +47,14 @@ CONFIGURE_ARGS += \
 	--enable-userlevel \
 	--enable-wifi \
 	--enable-wing \
+	--enable-diffserv \
 	--disable-linuxmodule \
 	--disable-dynamic-linking \
 
 HOST_CONFIGURE_ARGS += \
 	--enable-userlevel \
 	--enable-wifi \
+	--enable-diffserv \
 	--enable-wing \
 	--disable-linuxmodule \
 
@@ -65,11 +66,11 @@ define Build/Compile
 	(cd $(PKG_BUILD_DIR)/userlevel; \
 		$(STAGING_DIR_HOST)/bin/click-mkmindriver -p $(PKG_NAME) -C $(STAGING_DIR_HOST) \
 		-f $(PKG_BUILD_DIR)/conf/wing/sample.click \
-		-A --all -E Discard -E Print -E Null \
+		-A --all -E Discard -E Print -E PrintWifi -E Null \
 		-E InfiniteSource -E RatedSource -E EtherEncap -E UDPIPEncap \
-		-E RadiotapDecap -E RadiotapEncap \
+		-E WINGETTMetric -E WINGETXMetric -E WINGHopCountMetric \
 		-E ProbeTXRate -E MadwifiRate -E AutoRateFallback -E Minstrel \
-		-E RoundRobinSched -E DRRSched; \
+		-E FairBuffer -E DeAggregator -E DWRRSched -E WFQSched -E WRRSched; \
 	);
 	$(call Build/Install/Default, MINDRIVER=$(PKG_NAME) install)
 endef

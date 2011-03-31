@@ -36,32 +36,32 @@ setup_interface_wing() {
 		exit 1
 	fi
 
-	local profile rc ls prefix debug
+	local profile rc ls metric prefix period tau debug
 
 	config_get profile $config profile "bulk"
-	config_get rc $config rc "static"
+	config_get rc $config rc "minstrel"
 	config_get ls $config ls "fcfs"
 	config_get metric $config metric "wcett"
 	config_get prefix $config prefix "6"
 	config_get period $config period "10000"
 	config_get tau $config tau "100000"
-	config_get_bool debug $config debug "False"
+	config_get_bool debug $config debug "false"
 
 	local hwaddr=$(echo $hwaddrs | sed 's/ .*//');
 	local ipaddr=$(printf "$prefix.%d.%d.%d" $(echo $hwaddr | awk -F: '{printf "0x%s 0x%s 0x%s",$4,$5,$6}'))
 	local netmask=255.0.0.0
 
-	if ! wing_template_available "profile" "$profile" "bulk"; then
+	if ! wing_template_available "profile" "$profile"; then
 		logger -t "$config" "Unable to configure router. Exiting."
 		exit 1
 	fi
 
-	if ! wing_template_available "rc" "$rc" "static"; then
+	if ! wing_template_available "rc" "$rc"; then
 		logger -t "$config" "Unable to configure rate control. Exiting."
 		exit 1
 	fi
 
-	if ! wing_template_available "ls" "$ls" "radiotap"; then
+	if ! wing_template_available "ls" "$ls"; then
 		logger -t "$config" "Unable to configure link scheduler. Exiting."
 		exit 1
 	fi
@@ -115,10 +115,7 @@ setup_interface_wing() {
 wing_template_available() { # prefix, template, default
 	local template="/etc/wing/$1.$2.click" 
 	[ ! -f $template ] && {
-		template="/etc/wing/$1.$3.click" 
-		[ ! -f $template ] && {
-			return 1
-		}
+		return 1
 	}
 	return 0
 }
@@ -131,8 +128,12 @@ wing_list_interfaces() {
 	config_get ifname $1 ifname
 	config_get device $1 device
 	config_get hwmode $device hwmode "11bg"
-	freq=$(iwlist $ifname freq | grep "Current Frequency" | sed -n "s/^.*Current Frequency:\([0-9.]*\) GHz (Channel \([0-9]*\))/\1/p" | awk '{print $1*1000}')
-	freq=${freq:-"0"}
+	config_get channel $device channel "0"
+	[ "$channel" = "0" -o "$channel" = "auto" ] && {
+		logger -t "$device" "Channel not specified. Ignoring."
+		return 0
+	}		
+	freq=$(iwlist $ifname freq | sed -n "s/^.*Channel 0*$channel : \([0-9.]*\).*/\1/p" | awk '{print $1*1000}')
 	hwaddr=$(/sbin/ifconfig $ifname 2>&1 | sed -n 's/^.*HWaddr \([0-9A-Za-z\-]*\).*/\1/p' | sed -e 's/\-/:/g' | cut -c1-17)
 	freqs=${freqs:+"$freqs "}$freq
 	hwmodes=${hwmodes:+"$hwmodes "}$hwmode
