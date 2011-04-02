@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rsync
-PKG_VERSION:=3.0.7
+PKG_VERSION:=3.0.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://rsync.samba.org/ftp/rsync/src
-PKG_MD5SUM:=b53525900817cf1ba7ad3a516ab5bfe9
+PKG_MD5SUM:=0ee8346ce16bdfe4c88a236e94c752b4
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
