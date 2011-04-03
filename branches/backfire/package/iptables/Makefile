@@ -44,7 +44,7 @@ define Package/iptables
 $(call Package/iptables/Default)
   TITLE:=IPv4 firewall administration tool
   MENU:=1
-  DEPENDS+= +kmod-ipt-core +libiptc +libxtables
+  DEPENDS+= +kmod-ipt-core +libip4tc +libxtables
 endef
 
 define Package/iptables/description
@@ -232,7 +232,7 @@ endef
 
 define Package/ip6tables
 $(call Package/iptables/Default)
-  DEPENDS:=+kmod-ip6tables
+  DEPENDS:=+kmod-ip6tables +libip6tc +libxtables
   CATEGORY:=IPv6
   TITLE:=IPv6 firewall administration tool
   MENU:=1
@@ -249,7 +249,22 @@ define Package/libiptc
 $(call Package/iptables/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=IPv4/IPv6 firewall - shared libiptc library
+  DEPENDS:=+libip4tc +libip6tc
+  TITLE:=IPv4/IPv6 firewall - shared libiptc library (compatibility stub)
+endef
+
+define Package/libip4tc
+$(call Package/iptables/Default)
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=IPv4 firewall - shared libiptc library
+endef
+
+define Package/libip6tc
+$(call Package/iptables/Default)
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=IPv6 firewall - shared libiptc library
 endef
 
 define Package/libxtables
@@ -346,7 +361,17 @@ endef
 
 define Package/libiptc/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libip*tc.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiptc.so* $(1)/usr/lib/
+endef
+
+define Package/libip4tc/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libip4tc.so* $(1)/usr/lib/
+endef
+
+define Package/libip6tc/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libip6tc.so* $(1)/usr/lib/
 endef
 
 define Package/libxtables/install
@@ -391,4 +416,6 @@ $(eval $(call BuildPlugin,iptables-mod-ulog,$(IPT_ULOG-m)))
 $(eval $(call BuildPackage,ip6tables))
 $(eval $(call BuildPackage,ip6tables-utils))
 $(eval $(call BuildPackage,libiptc))
+$(eval $(call BuildPackage,libip4tc))
+$(eval $(call BuildPackage,libip6tc))
 $(eval $(call BuildPackage,libxtables))
