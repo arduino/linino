@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ffmpeg
 PKG_VERSION:=0.5.4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ffmpeg.org/releases/
@@ -31,6 +31,7 @@ FFMPEG_DECODERS:= \
 	aac \
 	ac3 \
 	atrac3 \
+	flac \
 	gif \
 	h264 \
 	jpegls \
@@ -63,9 +64,14 @@ FFMPEG_MUXERS:= \
 	rtp \
 
 FFMPEG_DEMUXERS:= \
+	aac \
 	ac3 \
+	avi \
+	flac \
 	ffm \
 	h264 \
+	matroska \
+	mov \
 	mp3 \
 	mpegps \
 	mpegts \
@@ -81,8 +87,8 @@ FFMPEG_PARSERS:= \
 	ac3 \
 	h264 \
 	mpegaudio \
-	mpegvideo \
 	mpeg4video \
+	mpegvideo \
 
 FFMPEG_PROTOCOLS:= \
 	file http pipe rtp tcp udp
@@ -200,6 +206,7 @@ define Build/Configure
 		--enable-cross-compile \
 		--cross-prefix="$(TARGET_CROSS)" \
 		--arch="$(ARCH)" \
+		--target-os=linux \
 		--prefix="/usr" \
 		--enable-shared \
 		--enable-static \

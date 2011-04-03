@@ -90,6 +90,9 @@ config FFMPEG_DECODER_atrac3
 	bool "ATRAC3"
 	depends FFMPEG_PATENTED
 
+config FFMPEG_DECODER_flac
+	bool "FLAC"
+
 config FFMPEG_DECODER_gif
 	bool "GIF"
 
@@ -189,8 +192,17 @@ config FFMPEG_MUXER_rtp
 
 comment "Demuxers ---"
 
+config FFMPEG_DEMUXER_aac
+	bool "AAC"
+
+config FFMPEG_DEMUXER_avi
+	bool "AVI (Audio Video Interleave)"
+
 config FFMPEG_DEMUXER_ac3
 	bool "AC3"
+
+config FFMPEG_DEMUXER_flac
+	bool "FLAC"
 
 config FFMPEG_DEMUXER_ffm
 	bool "FFM (ffserver live feed)"
@@ -199,8 +211,17 @@ config FFMPEG_DEMUXER_h264
 	bool "H.264"
 	depends FFMPEG_PATENTED
 
+config FFMPEG_DEMUXER_matroska
+	bool "Matroska (MKA,MKV)"
+	select FFMPEG_DECODER_zlib
+
+config FFMPEG_DEMUXER_mov
+	bool "MOV/MP4/M4A/3GP/3G2/MJ2"
+	select FFMPEG_DECODER_zlib
+
 config FFMPEG_DEMUXER_mp3
 	bool "MP3 (MPEG Audio Layer 3)"
+	select FFMPEG_PARSER_mpegaudio
 
 config FFMPEG_DEMUXER_mpegvideo
 	bool "MPEG Video"
