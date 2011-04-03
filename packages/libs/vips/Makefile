@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vips
-PKG_VERSION:=7.22.4
+PKG_VERSION:=7.24.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.vips.ecs.soton.ac.uk/supported/7.22/
-PKG_MD5SUM:=852913223ce5dc115bc7088e7c9d1596
+PKG_SOURCE_URL:=http://www.vips.ecs.soton.ac.uk/supported/7.24/
+PKG_MD5SUM:=7e9d34960c3453f3b8d1d4300fe4b7a0
 PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
