@@ -37,6 +37,34 @@ config FFMPEG_LIBDLNA_SUPPORT
 	select FFMPEG_DEMUXER_mp3
 	select FFMPEG_DEMUXER_mpegvideo
 
+config FFMPEG_MINIDLNA_SUPPORT
+	bool "Include support for minidlna"
+	depends FFMPEG_PATENTED
+	select FFMPEG_DECODER_aac
+	select FFMPEG_DECODER_ac3
+	select FFMPEG_DECODER_flac
+	select FFMPEG_DECODER_h264
+	select FFMPEG_DECODER_jpegls
+	select FFMPEG_DECODER_mp3
+	select FFMPEG_DECODER_mpeg1video
+	select FFMPEG_DECODER_mpeg2video
+	select FFMPEG_DECODER_mpeg4
+	select FFMPEG_DECODER_mpeg4aac
+	select FFMPEG_DECODER_mpegvideo
+	select FFMPEG_DECODER_wmav1
+	select FFMPEG_DECODER_wmav2
+	select FFMPEG_DECODER_png
+	select FFMPEG_DEMUXER_aac
+	select FFMPEG_DEMUXER_ac3
+	select FFMPEG_DEMUXER_avi
+	select FFMPEG_DEMUXER_flac
+	select FFMPEG_DEMUXER_h264
+	select FFMPEG_DEMUXER_matroska
+	select FFMPEG_DEMUXER_mov
+	select FFMPEG_DEMUXER_mp3
+	select FFMPEG_DEMUXER_mpegvideo
+	select FFMPEG_PROTOCOL_file
+
 comment "Encoders ---"
 
 config FFMPEG_ENCODER_ac3
