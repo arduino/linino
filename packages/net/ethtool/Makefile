@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ethtool
-PKG_VERSION:=2.6.35
+PKG_VERSION:=2.6.38
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=@SF/gkernel
-PKG_MD5SUM:=e0f617779a58b77af061a9e5178d0b25
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=@KERNEL/software/network/ethtool
+PKG_MD5SUM:=4cc35c59e4fd0defff768f9f59fa41ad
 
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,32 +24,18 @@ define Package/ethtool
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Display or change ethernet card settings
-  URL:=http://sourceforge.net/projects/gkernel/
+  URL:=http://www.kernel.org/pub/software/network/ethtool/
+  MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 
 define Package/ethtool/description
-ethtool is used for querying settings of an ethernet device and changing them.
-endef
-
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
-		./autogen.sh \
-	);
-	$(call Build/Configure/Default, \
-	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		SPECIAL_CFLAGS="-pthread $(TARGET_LDFLAGS)"
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		install
+ ethtool is a small utility for examining and tuning your ethernet-based
+ network interface.
 endef
 
 define Package/ethtool/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ethtool $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ethtool $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,ethtool))
