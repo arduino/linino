@@ -8,7 +8,7 @@ start() {
 	mkdir -p /var/run/dmapd/
 	mkdir -p /var/lock/subsys/
 
-	/usr/sbin/dmapd
+	DMAPD_DB_MODULE=bdb /usr/sbin/dmapd --vips-disc-threshold 64k
 }
 
 stop() {
