@@ -48,7 +48,7 @@ define Package/firmwarehotplug/install
 endef
 
 define Require/working-sdcc
-	sdcc -v 2>&1 | awk '($$$$1 == "SDCC") && ($$$$3 ~ "mcs51/gbz80/z80/ds390/pic16/pic14/TININative/") { print "ok" }' | grep ok > /dev/null
+	sdcc -v 2>&1 | awk '($$$$1 == "SDCC") && ($$$$3 ~ "mcs51/gbz80/z80" && $$$$3 ~ "/ds390/pic16/pic14/TININative") { print "ok" }' | grep ok > /dev/null
 endef
 
 $(eval $(call RequireCommand,sdcc, \
