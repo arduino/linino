@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/miniupnpd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+iptables
+  DEPENDS:=+iptables +libip4tc +libip6tc
   TITLE:=Lightweight UPnP daemon
   SUBMENU:=Firewall
   URL:=http://miniupnp.free.fr/
@@ -40,7 +40,7 @@ define Build/Compile
 		CC="$(TARGET_CC)" \
 		TARGET_OPENWRT=1 \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(firstword $(wildcard $(KERNEL_BUILD_DIR)/iptables-*/include)) -DIPTABLES_143" \
-		LIBS="$(STAGING_DIR)/usr/lib/libiptc.so $(STAGING_DIR)/usr/lib/libip4tc.so $(STAGING_DIR)/usr/lib/libip6tc.so"
+		LIBS="$(STAGING_DIR)/usr/lib/libip4tc.so $(STAGING_DIR)/usr/lib/libip6tc.so"
 endef
 
 define Package/miniupnpd/install
