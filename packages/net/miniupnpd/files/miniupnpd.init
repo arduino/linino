@@ -163,9 +163,9 @@ start() {
 		miniupnpd_add_rules "$zone" "${extiface:-wan}" "$ifname"
 
 	    if [ "$logging" = "1" ]; then
-		eval start-stop-daemon -S -x miniupnpd -- $args -d | logger -t miniupnpd &
+		start-stop-daemon -b -S -x miniupnpd -- $args -d 
 	    else
-		eval start-stop-daemon -S -x miniupnpd -- $args 2>/dev/null
+		start-stop-daemon -S -x miniupnpd -- $args 
 	    fi
 	else
 		logger -t "upnp daemon" "external interface not found, not starting"
