@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=quicktun
-PKG_VERSION:=2.1.3
+PKG_VERSION:=2.1.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://oss.ucis.nl/quicktun/src
-PKG_MD5SUM:=f8449162c08954e1bbb2f3353ce43a5a
+PKG_MD5SUM:=04e322b431235b18a091438d9a880a9b
 
 PKG_BUILD_DEPENDS:=nacl
 
@@ -36,13 +36,12 @@ define Build/Compile
 		export CPATH=$(STAGING_DIR)/usr/include/nacl; \
 		\
 		$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -c -DCOMBINED_BINARY        src/proto.raw.c         -o obj/proto.raw.o; \
-		$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -c -DCOMBINED_BINARY        src/crypto_scalarmult_curve25519.c      -o obj/crypto_scalarmult_curve25519.o; \
 		$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -c -DCOMBINED_BINARY        src/proto.nacl0.c       -o obj/proto.nacl0.o; \
 		$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -c -DCOMBINED_BINARY        src/proto.nacltai.c     -o obj/proto.nacltai.o; \
 		$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -c -DCOMBINED_BINARY        src/run.combined.c      -o obj/run.combined.o; \
 		$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -c                          src/common.c            -o obj/common.o; \
 		$(TARGET_CC)  $(TARGET_LDFLAGS) -o out/quicktun.combined obj/common.o obj/run.combined.o obj/proto.raw.o obj/proto.nacl0.o obj/proto.nacltai.o \
-			obj/crypto_scalarmult_curve25519.o -lnacl; \
+			-lnacl; \
 		\
 		$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_CPPFLAGS) $(TARGET_LDFLAGS) -o out/quicktun.keypair     src/keypair.c           -lnacl \
 	)
