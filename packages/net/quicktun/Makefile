@@ -15,6 +15,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/quicktun
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+kmod-tun
   TITLE:=QuickTun is a simple and secure VPN software
   URL:=http://wiki.ucis.nl/QuickTun
   SUBMENU:=VPN
