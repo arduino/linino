@@ -60,12 +60,14 @@ start_service() {
 
 	eval env $OPTS "$SSD" -q -b -p "$PID" -m -x "$BIN" -S
 
-	sleep 1
+	while ! ifconfig "$interface" >/dev/null 2>&1; do
+		if ! $SSD -t -q -p $PID -x $BIN -K; then
+			echo "$s: daemon startup failed"
+			return 1
+		fi
 
-	if ! ifconfig "$interface" >/dev/null 2>&1; then
-		echo "$s: daemon startup failed"
-		return 1
-	fi
+		sleep 1
+	done
 
 	config_get up "$s" up
 	[ -n "$up" ] && sh -c "$up" - "$interface"
