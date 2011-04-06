@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=avahi
-PKG_VERSION:=0.6.29
-PKG_RELEASE:=2
+PKG_VERSION:=0.6.30
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://avahi.org/download/
-PKG_MD5SUM:=bb9d326770689610d1dbaceab5a787fc
+PKG_MD5SUM:=e4db89a2a403ff4c47d66ac66fad1f43
 
 PKG_BUILD_DEPENDS:=libexpat libdaemon libgdbm intltool/host libpthread dbus
 
@@ -56,7 +56,7 @@ $(call Package/avahi/Default/description)
  This package contains the mDNS/DNS-SD shared libraries, used by other programs.
  Specifically, it provides libavahi-core and libavahi-common libraries.
  By default, it is compiled without D-Bus support, i.e. the --disable-dbus compilation flag is set.
- To enable D-Bus support, add the package libavahi-dbus-support.
+ To enable D-Bus support, select the package libavahi-dbus-support.
 endef
 
 define Package/avahi-autoipd
@@ -105,7 +105,7 @@ endef
 define Package/avahi-dnsconfd/description
 $(call Package/avahi/Default/description)
  .
- This package contains an Unicast DNS server from mDNS/DNS-SD configuration
+ This package contains a Unicast DNS server from mDNS/DNS-SD configuration
  daemon, which may be used to configure conventional DNS servers using mDNS
  in a DHCP-like fashion. Especially useful on IPv6.
 endef
@@ -127,7 +127,7 @@ $(call Package/libavahi/description)
  and the libavahi-client library.
  It requires the D-Bus package to be included in the build.
  Selecting this modifies the contents of the libavahi package by setting
- the --enable-dbuscompilation flag; it does not generate a separate package of its own.
+ the --enable-dbus compilation flag; it does not generate a separate package of its own.
 endef
 
 define Package/libavahi-client
