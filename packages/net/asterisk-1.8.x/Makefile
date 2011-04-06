@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk18
-PKG_VERSION:=1.8.2.3
+PKG_VERSION:=1.8.3.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=asterisk-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
-PKG_MD5SUM:=e394b63dd71c07497620dc12883e0b80
+PKG_MD5SUM:=0bee03f4498a6081146a579b51130633
 
 PKG_BUILD_DIR=$(BUILD_DIR)/asterisk-$(PKG_VERSION)
 
@@ -267,12 +267,12 @@ define Build/Compile
 	ASTLDFLAGS="$(EXTRA_LDFLAGS)" \
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
 		ASTVARLIBDIR="/usr/lib/asterisk" \
+		ASTDATADIR="/usr/lib/asterisk" \
 		NOISY_BUILD="1" \
 		DEBUG="" \
 		OPTIMIZE="" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install samples
-	$(SED) 's|/var/lib/asterisk|/usr/lib/asterisk|g' $(PKG_INSTALL_DIR)/etc/asterisk/musiconhold.conf
 endef
 
 define Build/InstallDev
@@ -322,7 +322,7 @@ endef
 
 define Package/asterisk18-sounds/install
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/sounds/
-	$(CP) $(PKG_INSTALL_DIR)/var/lib/asterisk/sounds/en/* $(1)/usr/lib/asterisk/sounds/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/asterisk/sounds/en/* $(1)/usr/lib/asterisk/sounds/
 	rm -f $(1)/usr/lib/asterisk/sounds/vm-*
 	rm -f $(1)/usr/lib/asterisk/sounds/conf-*
 endef
@@ -339,7 +339,7 @@ define Package/asterisk18-voicemail/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/*voicemail.so $(1)/usr/lib/asterisk/modules/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_adsi.so $(1)/usr/lib/asterisk/modules/
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/sounds/
-	$(CP) $(PKG_INSTALL_DIR)/var/lib/asterisk/sounds/en/vm-*.gsm $(1)/usr/lib/asterisk/sounds/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/asterisk/sounds/en/vm-*.gsm $(1)/usr/lib/asterisk/sounds/
 endef
 
 define Package/asterisk18-app-meetme/conffiles
@@ -353,7 +353,7 @@ define Package/asterisk18-app-meetme/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/app_meetme.so $(1)/usr/lib/asterisk/modules/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_dahdi.so $(1)/usr/lib/asterisk/modules/
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/sounds/
-	$(CP) $(PKG_INSTALL_DIR)/var/lib/asterisk/sounds/en/conf-*.gsm $(1)/usr/lib/asterisk/sounds/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/asterisk/sounds/en/conf-*.gsm $(1)/usr/lib/asterisk/sounds/
 endef
 
 define Package/asterisk18-chan-iax2/conffiles
@@ -460,7 +460,7 @@ define Buildasterisk18ModuleTemplate
   define Package/asterisk18-$(subst _,-,$(1))
   $$(call Package/asterisk18/Default)
     TITLE:=$(2) support
-    DEPENDS:= asterisk18
+    DEPENDS:= asterisk18 $(4)
   endef
 
   define Package/asterisk18-$(subst _,-,$(1))/description
@@ -498,7 +498,7 @@ $(eval $(call Buildasterisk18ModuleTemplate,app_readexten,Extension to variable,
 $(eval $(call Buildasterisk18ModuleTemplate,app_read,Variable read,a trivial application to read a variable))
 $(eval $(call Buildasterisk18ModuleTemplate,app_sayunixtime,Say Unix time,an application to say Unix time))
 $(eval $(call Buildasterisk18ModuleTemplate,app_sms,SMS,SMS support (ETSI ES 201 912 protocol 1)))
-$(eval $(call Buildasterisk18ModuleTemplate,app_stack,Stack applications, stack applications Gosub Return etc.))
+$(eval $(call Buildasterisk18ModuleTemplate,app_stack,Stack applications, stack applications Gosub Return etc., +asterisk18-res-agi))
 $(eval $(call Buildasterisk18ModuleTemplate,app_system,System exec,support for executing system commands))
 $(eval $(call Buildasterisk18ModuleTemplate,app_talkdetect,File playback with audio detect,for file playback with audio detect))
 $(eval $(call Buildasterisk18ModuleTemplate,app_waituntil,Sleep,support sleeping until the given epoch))
