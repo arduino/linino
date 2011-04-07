@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk18
 PKG_VERSION:=1.8.3.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=asterisk-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.digium.com/pub/asterisk/releases/
@@ -84,7 +84,7 @@ endef
 define Package/asterisk18-chan-iax2
 $(call Package/asterisk18/Default)
   TITLE:=IAX support
-  DEPENDS:= asterisk18
+  DEPENDS:= asterisk18 +asterisk18-res-crypto
 endef
 
 define Package/asterisk18-chan-iax2/description
@@ -524,6 +524,7 @@ $(eval $(call Buildasterisk18ModuleTemplate,pbx_ael,Asterisk Extension Logic,sup
 $(eval $(call Buildasterisk18ModuleTemplate,res_ael_share,Shareable AEL code,support for shareable AEL code mainly between internal and external modules))
 $(eval $(call Buildasterisk18ModuleTemplate,pbx_spool,Call Spool,outgoing call spool support))
 $(eval $(call Buildasterisk18ModuleTemplate,res_agi,Asterisk Gateway Interface,support for the Asterisk Gateway Interface extension))
+$(eval $(call Buildasterisk18ModuleTemplate,res_crypto,Provide Crypto,Cryptographic Signature capability))
 $(eval $(call Buildasterisk18ModuleTemplate,app_alarmreceiver,Alarm receiver,Central Station Alarm receiver for Ademco Contact ID))
 $(eval $(call Buildasterisk18ModuleTemplate,app_setcallerid,Set callerid,support for setting callerid))
 $(eval $(call Buildasterisk18ModuleTemplate,app_verbose,Verbose logging,Verbose logging application))
