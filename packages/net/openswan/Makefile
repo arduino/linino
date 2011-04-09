@@ -49,7 +49,7 @@ define KernelPackage/openswan
 $(call Package/openswan/Default)
   SUBMENU:=Network Support
   TITLE+= (kernel module)
-  DEPENDS+=+PACKAGE_kmod-ipv6:kmod-ipv6
+  DEPENDS+=+IPV6:kmod-ipv6
   FILES:=$(PKG_BUILD_DIR)/modobj*/ipsec.$(LINUX_KMOD_SUFFIX)
 endef
 
