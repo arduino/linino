@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cyrus-sasl
-PKG_VERSION:=2.1.20
+PKG_VERSION:=2.1.23
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.andrew.cmu.edu/pub/cyrus-mail/
-PKG_MD5SUM:=268ead27f4ac39bcfe17d9e38e0f2977
+PKG_MD5SUM:=2eb0e48106f0e9cd8001e654f267ecbc
 
 PKG_BUILD_DEPENDS:=libopenssl
 PKG_FIXUP = libtool no-autoreconf
@@ -38,6 +38,7 @@ CONFIGURE_ARGS += \
 	--disable-checkapop \
 	--enable-cram \
 	--enable-digest \
+	--without-auth-sasldb \
 	--disable-otp \
 	--disable-srp \
 	--disable-srp-setpass \
@@ -49,7 +50,8 @@ CONFIGURE_ARGS += \
 	--disable-login \
 	--disable-ntlm \
 	--disable-sql \
-	--with-dblib="none" \
+	--disable-ldapdb \
+	--without-dblib \
 	--without-gdbm \
 	--with-devrandom="/dev/urandom" \
 	--without-pam \
@@ -75,6 +77,9 @@ define Build/Compile
 		CFLAGS="" \
 		CPPFLAGS="" \
 		makemd5
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install || \
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install

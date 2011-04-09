@@ -1,6 +1,6 @@
---- cyrus-sasl-2.1.20/config/config.sub.orig	2008-04-25 21:22:10.000000000 -0500
-+++ cyrus-sasl-2.1.20/config/config.sub	2008-04-25 21:22:59.000000000 -0500
-@@ -241,7 +241,7 @@
+--- a/config/config.sub
++++ b/config/config.sub
+@@ -241,7 +241,7 @@ case $basic_machine in
  		| mips64vr5000 | mips64vr5000el | mcore | s390 | s390x \
  		| sparc | sparclet | sparclite | sparc64 | sparcv9 | sparcv9b \
  		| v850 | c4x \
