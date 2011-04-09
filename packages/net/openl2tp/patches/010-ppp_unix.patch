@@ -1,8 +1,6 @@
-Index: openl2tp-1.7/plugins/ppp_unix.c
-===================================================================
---- openl2tp-1.7.orig/plugins/ppp_unix.c	2008-08-05 18:33:49.000000000 +0200
-+++ openl2tp-1.7/plugins/ppp_unix.c	2010-11-01 18:12:03.448000002 +0100
-@@ -643,6 +643,8 @@
+--- a/plugins/ppp_unix.c
++++ b/plugins/ppp_unix.c
+@@ -888,6 +888,8 @@ static int ppp_unix_pppd_spawn(struct pp
  
  		if (ppp->ppp_profile_data->proxy_arp) {
  			argv[arg++] = "proxyarp";

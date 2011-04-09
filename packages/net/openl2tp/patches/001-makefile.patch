@@ -1,8 +1,6 @@
-Index: openl2tp-1.7/Makefile
-===================================================================
---- openl2tp-1.7.orig/Makefile	2010-03-18 10:04:47.000000000 +0100
-+++ openl2tp-1.7/Makefile	2010-11-01 18:25:19.785000816 +0100
-@@ -8,7 +8,7 @@
+--- a/Makefile
++++ b/Makefile
+@@ -8,7 +8,7 @@ L2TP_FEATURE_LAIC_SUPPORT=	y
  L2TP_FEATURE_LAOC_SUPPORT=	y
  L2TP_FEATURE_LNIC_SUPPORT=	y
  L2TP_FEATURE_LNOC_SUPPORT=	y
@@ -11,39 +9,18 @@ Index: openl2tp-1.7/Makefile
  #L2TP_FEATURE_LOCAL_STAT_FILE=	y
  
  # Define USE_DMALLOC to enable dmalloc memory debugging
-@@ -29,31 +29,31 @@
- # Build for UML environment?
- # UML_TARGET=		y
- 
--ARCH=$(shell uname -p)
--ifeq ($(ARCH),x86_64)
--SYS_LIBDIR=/usr/lib64
--else
-+#ARCH=$(shell uname -p)
-+#ifeq ($(ARCH),x86_64)
-+#SYS_LIBDIR=/usr/lib64
-+#else
- SYS_LIBDIR=/usr/lib
--endif
-+#endif
- 
- # Point to kernel source tree
--KERNEL_SRCDIR=		/lib/modules/$(shell uname -r)/source
--KERNEL_BLDDIR=		/lib/modules/$(shell uname -r)/build
-+#KERNEL_SRCDIR=		/lib/modules/$(shell uname -r)/source
-+#KERNEL_BLDDIR=		/lib/modules/$(shell uname -r)/build
- 
- # Points to pppd install. 
- # By default, pppd headers are assumed to be in /usr/include/pppd. but 
- # can be pointed to a local pppd source tree if desired.
+@@ -55,17 +55,17 @@ endif
+ # in the pppd subdirectory of the compiler's default search path
+ # (e.g. /usr/include/pppd). but can be pointed to another directory if
+ # desired.
 -PPPD_VERSION=		2.4.5
 +#PPPD_VERSION=		2.4.5
- # PPPD_SRCDIR=		/usr/local/src/ppp-2.4.5
- # PPPD_LIBDIR=		/usr/lib/pppd/2.4.5
+ # PPPD_INCDIR=		/usr/include/pppd
+ # PPPD_LIBDIR=		$(SYS_LIBDIR)/pppd/$(PPPD_VERSION)
  
- # Points to readline install root. READLINE_DIR should have lib/ & include/ subdirs
- # If not defined, readline is assumed to be installed in the standard places that
- # the compiler looks.
+ # Points to readline install root. READLINE_DIR should have lib/ &
+ # include/ subdirs If not defined, readline is assumed to be installed
+ # in the standard places that the compiler looks.
 -READLINE_DIR=		
 +#READLINE_DIR=		
  
@@ -53,30 +30,21 @@ Index: openl2tp-1.7/Makefile
  
  # END CONFIGURABLE SETTINGS
  
-@@ -142,9 +142,9 @@
- 
- CPPFLAGS=		$(CPPFLAGS.l2tptest) $(CPPFLAGS-y)
- CFLAGS=			-I. -Iusl -Icli -isystem $(KERNEL_BLDDIR)/include \
--				-isystem $(KERNEL_SRCDIR)/include -MMD -Wall -Werror $(CPPFLAGS) $(CPPFLAGS.dmalloc) -DSYS_LIBDIR=$(SYS_LIBDIR)
-+				-isystem $(KERNEL_SRCDIR)/include -MMD -Wall $(CPPFLAGS) $(CPPFLAGS.dmalloc) -DSYS_LIBDIR=$(SYS_LIBDIR)
+@@ -158,7 +158,7 @@ CFLAGS=			-I. -Iusl -Icli -isystem inclu
+ 				$(CPPFLAGS) $(CPPFLAGS.dmalloc) \
+ 				-DSYS_LIBDIR=$(SYS_LIBDIR)
  LDFLAGS.l2tpd=		-Wl,-E -L. -Lusl -lusl -ldl $(LIBS.dmalloc) -lc
 -LDFLAGS.l2tpconfig=	-Lcli -lcli -lreadline $(LIBS.dmalloc) $(READLINE_LDFLAGS) -lc
 +LDFLAGS.l2tpconfig=	-Lcli -lcli -lreadline -lncurses $(LIBS.dmalloc) $(READLINE_LDFLAGS) -lc
  
  OPT_CFLAGS?=		-O
  
-@@ -171,7 +171,7 @@
+@@ -185,11 +185,11 @@ RPCGENFLAGS=		-N -M -C -L
  
- .PHONY:			all clean distclean install daemon app test check
+ .PHONY:			all clean distclean install daemon app test
  
--all:			check generated-files daemon $(APP)
-+all:			check daemon $(APP)
- 
- check:
- 			@if [ ! -f $(KERNEL_SRCDIR)/include/linux/if_pppol2tp.h ]; then \
-@@ -179,9 +179,9 @@
- 				false ;\
- 			fi
+-all:			generated-files daemon $(APP)
++all:			daemon $(APP)
  
 -daemon:			generated-files $(SUBDIRS:%=subdir-%) openl2tpd
 +daemon:			$(SUBDIRS:%=subdir-%) openl2tpd
@@ -86,7 +54,7 @@ Index: openl2tp-1.7/Makefile
  
  test:			subdir-test
  			$(MAKE) -C $@ $(MFLAGS) $@
-@@ -189,7 +189,7 @@
+@@ -197,7 +197,7 @@ test:			subdir-test
  
  .PHONY:			$(SUBDIRS:%=subdir-%)
  
@@ -95,7 +63,7 @@ Index: openl2tp-1.7/Makefile
  			$(MAKE) -C $(@:subdir-%=%) $(MFLAGS) EXTRA_CFLAGS="$(CPPFLAGS)"
  
  ifeq ($(L2TP_FEATURE_LOCAL_CONF_FILE),y)
-@@ -257,9 +257,13 @@
+@@ -265,9 +265,13 @@ TAGS:
  			@for d in $(SUBDIRS); do $(MAKE) -C $$d $(MFLAGS) $@; done
  			etags $(wildcard *.c) $(wildcard *.h)
  
@@ -109,37 +77,11 @@ Index: openl2tp-1.7/Makefile
  l2tpconfig:		$(L2TPCONFIG_SRCS.o)
  			$(CC) -o $@ $^ $(LDFLAGS.l2tpconfig)
  
-@@ -309,6 +313,7 @@
+@@ -317,6 +321,7 @@ endif
  	else \
  		mv $@.tmp $@ ;\
  	fi
 +	@echo '$@ generated.'
  
  .PHONY:			all install-all install-daemon install-app
- 
-Index: openl2tp-1.7/cli/Makefile
-===================================================================
---- openl2tp-1.7.orig/cli/Makefile	2008-02-03 15:55:30.000000000 +0100
-+++ openl2tp-1.7/cli/Makefile	2010-11-01 18:06:06.945000001 +0100
-@@ -7,7 +7,7 @@
- 
- LDFLAGS.cli_test=	-L.. -L. $(READLINE_LDFLAGS) -lcli -lusl -lreadline -lcurses -lc
- 
--CFLAGS=			$(CFLAGS.optimize) -MMD -Wall -Werror -I.. $(READLINE_CFLAGS)
-+CFLAGS=			$(CFLAGS.optimize) -MMD -Wall -I.. $(READLINE_CFLAGS)
- 
- .PHONY:			all test clean
- 
-Index: openl2tp-1.7/usl/Makefile
-===================================================================
---- openl2tp-1.7.orig/usl/Makefile	2008-02-24 12:52:50.000000000 +0100
-+++ openl2tp-1.7/usl/Makefile	2010-11-01 18:06:06.945000001 +0100
-@@ -14,7 +14,7 @@
- endif
- 
- CPPFLAGS+=		$(CFLAGS.optimize) -g
--CFLAGS=			-I. -MMD -Wall -Werror $(CPPFLAGS) $(CPPFLAGS.dmalloc)
-+CFLAGS=			-I. -MMD -Wall $(CPPFLAGS) $(CPPFLAGS.dmalloc)
- 
- .PHONY:			all test clean
  
