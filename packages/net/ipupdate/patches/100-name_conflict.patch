@@ -18,7 +18,7 @@
  {
  	char** args = NULL;
  	int inc;
-@@ -53,7 +53,7 @@
+@@ -53,7 +53,7 @@ char** split(char* str, const char* del,
  }
  
  /*
@@ -27,7 +27,7 @@
  **
  ** remove length elements from array starting at offset
  ** All trailing elements will be left aligned
-@@ -70,7 +70,7 @@
+@@ -70,7 +70,7 @@ char** split(char* str, const char* del,
  ** Returns the number of elements removed
  */
  
@@ -48,7 +48,7 @@
 +int array_splice(void**, int, int, int);
 --- a/ipupdate.c
 +++ b/ipupdate.c
-@@ -295,7 +295,7 @@
+@@ -295,7 +295,7 @@ int DoUpdate(int check)
  				free(zone->keyname);
  				free(server->zones[j]);
  
@@ -57,7 +57,7 @@
  				continue;
  			}
  
-@@ -317,7 +317,7 @@
+@@ -317,7 +317,7 @@ int DoUpdate(int check)
  			free(server->zones);
  			free(cfg.servers[i]);
  
@@ -66,7 +66,7 @@
  			continue;
  		}
  		i++;
-@@ -414,7 +414,7 @@
+@@ -414,7 +414,7 @@ int checkcname(int *s, struct server *se
  			asprintf(&msg, "checkcname: server %s: zone %s: host %s: host disabled", server->name, zone->name, zone->hosts[i]);
  			PostMsgFree(msg);
  
@@ -75,7 +75,7 @@
  			continue;
  		}
  
-@@ -446,7 +446,7 @@
+@@ -446,7 +446,7 @@ int checkcname(int *s, struct server *se
  			asprintf(&msg, "checkcname: server %s: zone %s: host %s: host disabled", server->name, zone->name, zone->hosts[i]);
  			PostMsgFree(msg);
  	
@@ -84,7 +84,7 @@
  			continue;
  		}
  		//append the record to the packet
-@@ -488,7 +488,7 @@
+@@ -488,7 +488,7 @@ int checkcname(int *s, struct server *se
  			asprintf(&msg, "checkcname: server %s: zone %s: host %s: host disabled", server->name, zone->name, zone->hosts[i]);
  			PostMsgFree(msg);
  
@@ -93,7 +93,7 @@
  			continue;
  		}
  
-@@ -561,7 +561,7 @@
+@@ -561,7 +561,7 @@ int checkip(int *s, struct server *serve
  			asprintf(&msg, "checkip: server %s: zone %s: host %s: host disabled", server->name, zone->name, zone->hosts[i]);
  			PostMsgFree(msg);
  
@@ -104,7 +104,7 @@
  				continue;
 --- a/config.c
 +++ b/config.c
-@@ -873,7 +873,7 @@
+@@ -873,7 +873,7 @@ void cfg_zone(struct server *server, str
  				switch (cfg_readblock(data, &term, &ptr)) {
  				case CFG_QUOTED:
  					zone->hostp = term;
