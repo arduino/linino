@@ -22,7 +22,7 @@
 -
 --- a/programs/pluto/Makefile
 +++ b/programs/pluto/Makefile
-@@ -191,35 +191,11 @@ doinstall: all
+@@ -195,35 +195,11 @@ doinstall: all
  	$(INSTALL) $(INSTBINFLAGS) $(BINNAMEPLUTO) $(BINNAMEWHACK) $(LIBEXECDIR)
  	#$(INSTALL) $(INSTSUIDFLAGS) $(BINNAMEWHACKINIT) $(LIBEXECDIR)
  	if $(USE_ADNS) ; then $(INSTALL) $(INSTBINFLAGS) $(BINNAMEADNS)  $(LIBEXECDIR) ; fi

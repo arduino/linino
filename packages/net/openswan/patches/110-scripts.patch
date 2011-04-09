@@ -14,7 +14,7 @@
 +exit 0
 --- a/programs/_plutorun/_plutorun.in
 +++ b/programs/_plutorun/_plutorun.in
-@@ -155,7 +155,7 @@ then
+@@ -157,7 +157,7 @@ then
  			exit 1
  		fi
  	else
@@ -25,7 +25,7 @@
  			exit 1
 --- a/programs/_realsetup/_realsetup.in
 +++ b/programs/_realsetup/_realsetup.in
-@@ -290,7 +290,7 @@ case "$1" in
+@@ -291,7 +291,7 @@ case "$1" in
  
  	# misc pre-Pluto setup
  
