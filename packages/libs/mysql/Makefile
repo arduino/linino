@@ -120,10 +120,10 @@ define Build/Compile
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		install
 	$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)/libmysql" \
-		CC="$(HOSTCC)" \
-		LINK="$(HOSTCC) -o conf_to_src -lc" \
-		CFLAGS="" \
-		CPPFLAGS="" \
+		CC="g++" \
+		CFLAGS="$(HOST_CFLAGS)" \
+		CPPFLAGS="$(HOST_CFLAGS)" \
+		LDFLAGS="$(HOST_LDFLAGS)" \
 		conf_to_src
 	$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)" \
 		SUBDIRS="libmysql" \
