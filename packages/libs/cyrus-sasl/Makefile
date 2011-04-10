@@ -68,7 +68,8 @@ CONFIGURE_ARGS += \
 	--without-sqlite \
 	--without-rc4 \
 	--without-dmalloc \
-	--without-sfio
+	--without-sfio \
+	--disable-sample
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/include \
@@ -77,9 +78,6 @@ define Build/Compile
 		CFLAGS="" \
 		CPPFLAGS="" \
 		makemd5
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install || \
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
