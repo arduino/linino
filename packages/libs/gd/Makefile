@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.libgd.org/releases
 PKG_MD5SUM:=6c6c3dbb7bf079e0bb5fbbfd3bb8a71c
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
@@ -51,11 +51,6 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	LIBPNG12_CONFIG="$(STAGING_DIR)/host/bin/libpng12-config" \
 	ac_cv_header_iconv_h=no
-
-define Build/Configure
-	( cd $(PKG_BUILD_DIR); aclocal; libtoolize --force; autoreconf; );
-	$(call Build/Configure/Default)
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/bin
