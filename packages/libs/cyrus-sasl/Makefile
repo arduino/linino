@@ -16,7 +16,11 @@ PKG_SOURCE_URL:=http://ftp.andrew.cmu.edu/pub/cyrus-mail/
 PKG_MD5SUM:=2eb0e48106f0e9cd8001e654f267ecbc
 
 PKG_BUILD_DEPENDS:=libopenssl
-PKG_FIXUP = libtool no-autoreconf
+
+PKG_FIXUP:=autoreconf
+PKG_MACRO_PATHS:=cmulocal config ../cmulocal ../config
+PKG_AUTOMAKE_PATHS:=. saslauthd
+PKG_REMOVE_FILES:=aclocal.m4 saslauthd/aclocal.m4
 
 include $(INCLUDE_DIR)/package.mk
 
