@@ -32,7 +32,7 @@
 -	print-vjc.c print-vqp.c print-vrrp.c print-vtp.c \
 -	print-wb.c print-zephyr.c setsignal.c tcpdump.c util.c
 +	print-ppp.c print-pppoe.c print-pptp.c print-radius.c print-raw.c print-rsvp.c \
-+	print-sctp.c print-sip.c print-snmp.c print-stp.c print-sunrpc.c \
++	print-sctp.c print-sll.c print-sip.c print-snmp.c print-stp.c print-sunrpc.c \
 +	print-syslog.c print-tcp.c print-telnet.c print-tftp.c print-udp.c \
 +	setsignal.c tcpdump.c util.c
 +
@@ -47,7 +47,7 @@
 +	print-ldp.c print-lmp.c print-lspping.c print-lwapp.c print-egp.c print-krb.c \
 +	print-lwres.c print-mobile.c print-mpcp.c print-mpls.c print-msdp.c \
 +	print-pim.c print-pgm.c print-rip.c print-rrcp.c print-rx.c print-sflow.c print-slow.c print-sl.c \
-+	print-sll.c print-sunatm.c print-symantec.c print-timed.c print-token.c print-udld.c \
++	print-sunatm.c print-symantec.c print-timed.c print-token.c print-udld.c \
 +	print-vjc.c print-vqp.c print-wb.c print-zephyr.c print-vrrp.c print-vtp.c
 +
  
@@ -245,7 +245,7 @@
  	{ atm_if_print,		DLT_ATM_RFC1483 },
  #ifdef DLT_C_HDLC
  	{ chdlc_if_print,	DLT_C_HDLC },
-@@ -181,15 +188,19 @@ static struct printer printers[] = {
+@@ -181,6 +188,7 @@ static struct printer printers[] = {
  #ifdef DLT_PPP_SERIAL
  	{ ppp_hdlc_if_print,    DLT_PPP_SERIAL },
  #endif
@@ -253,11 +253,7 @@
  #ifdef DLT_PPP_ETHER
  	{ pppoe_if_print,	DLT_PPP_ETHER },
  #endif
-+#ifndef TCPDUMP_MINI
- #ifdef DLT_LINUX_SLL
- 	{ sll_if_print,		DLT_LINUX_SLL },
- #endif
-+#endif
+@@ -190,6 +198,7 @@ static struct printer printers[] = {
  #ifdef DLT_IEEE802_11
  	{ ieee802_11_if_print,	DLT_IEEE802_11},
  #endif
@@ -265,7 +261,7 @@
  #ifdef DLT_LTALK
  	{ ltalk_if_print,	DLT_LTALK },
  #endif
-@@ -208,12 +219,14 @@ static struct printer printers[] = {
+@@ -208,12 +217,14 @@ static struct printer printers[] = {
  #ifdef DLT_IP_OVER_FC
  	{ ipfc_if_print,	DLT_IP_OVER_FC },
  #endif
@@ -280,7 +276,7 @@
  #ifdef DLT_ENC
  	{ enc_if_print, 	DLT_ENC },
  #endif
-@@ -223,9 +236,11 @@ static struct printer printers[] = {
+@@ -223,9 +234,11 @@ static struct printer printers[] = {
  #ifdef DLT_APPLE_IP_OVER_IEEE1394
  	{ ap1394_if_print,	DLT_APPLE_IP_OVER_IEEE1394 },
  #endif
@@ -292,7 +288,7 @@
  #ifdef DLT_JUNIPER_ATM1
  	{ juniper_atm1_print,	DLT_JUNIPER_ATM1 },
  #endif
-@@ -277,6 +292,7 @@ static struct printer printers[] = {
+@@ -277,6 +290,7 @@ static struct printer printers[] = {
  #if defined(DLT_BLUETOOTH_HCI_H4_WITH_PHDR) && defined(HAVE_PCAP_BLUETOOTH_H)
  	{ bt_if_print, DLT_BLUETOOTH_HCI_H4_WITH_PHDR},
  #endif
@@ -768,3 +764,22 @@
  		case IPPROTO_GRE:
  			gre_print(cp, len);
  			return;
+--- a/print-sll.c
++++ b/print-sll.c
+@@ -153,14 +153,14 @@ sll_if_print(const struct pcap_pkthdr *h
+ 		 * Yes - what type is it?
+ 		 */
+ 		switch (ether_type) {
+-
++#ifndef TCPDUMP_MINI
+ 		case LINUX_SLL_P_802_3:
+ 			/*
+ 			 * Ethernet_802.3 IPX frame.
+ 			 */
+ 			ipx_print(p, length);
+ 			break;
+-
++#endif
+ 		case LINUX_SLL_P_802_2:
+ 			/*
+ 			 * 802.2.
