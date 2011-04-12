@@ -7,7 +7,7 @@ PID=/var/run/rsyncd.pid
 SSD=start-stop-daemon
 
 start() {
-	$SSD -p $PID -S -x $BIN -- --daemon 
+	$SSD -p $PID -S -x $BIN -- --daemon
 }
 
 stop() {
