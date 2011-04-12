@@ -29,7 +29,7 @@ endef
 
 define Package/usbutils/postinst
 #!/bin/sh
-(cd $${IPKG_INSTROOT}/usr/share; $${PKG_ROOT}/usr/sbin/update-usbids.sh)
+(cd $${IPKG_INSTROOT}/usr/share; $${PKG_ROOT}/usr/sbin/update-usbids.sh ; rm usb.ids.gz.old)
 exit 0
 endef
 

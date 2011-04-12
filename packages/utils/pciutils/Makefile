@@ -34,7 +34,7 @@ endef
 
 define Package/pciutils/postinst
 #!/bin/sh
-(cd $${PKG_ROOT}/usr/share; $${PKG_ROOT}/usr/sbin/update-pciids)
+(cd $${PKG_ROOT}/usr/share; $${PKG_ROOT}/usr/sbin/update-pciids; rm pci.ids.gz.old)
 exit 0
 endef
 
