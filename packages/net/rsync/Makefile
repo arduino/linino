@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rsync
 PKG_VERSION:=3.0.8
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://rsync.samba.org/ftp/rsync/src
@@ -49,6 +49,10 @@ CONFIGURE_ARGS += \
 	--disable-acl-support \
 
 define Package/rsync/install
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/rsyncd.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/rsyncd.init $(1)/etc/init.d/rsyncd
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
 endef

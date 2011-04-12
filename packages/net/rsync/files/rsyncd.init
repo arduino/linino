@@ -1,0 +1,15 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2011 OpenWrt.org
+
+START=50
+BIN=/usr/bin/rsync
+PID=/var/run/rsyncd.pid
+SSD=start-stop-daemon
+
+start() {
+	$SSD -p $PID -S -x $BIN -- --daemon 
+}
+
+stop() {
+	$SSD -p $PID -K
+}
