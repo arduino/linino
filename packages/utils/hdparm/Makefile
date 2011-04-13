@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hdparm
-PKG_VERSION:=9.27
+PKG_VERSION:=9.37
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=e652dabb6c9233fb8a23ef60a17a1829
+PKG_MD5SUM:=0bb94ddd1bedd5c02b1ca62f1caaf6de
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,17 +23,12 @@ define Package/hdparm
   SUBMENU:=disc
   TITLE:=Hard disk drive configuration utilitity
   URL:=http://sourceforge.net/projects/hdparm/
+  MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 
 define Package/hdparm/description
-	Tune hard disk parameters for high performance.
-	Get/set hard disk parameters for Linux IDE drives.
-	Primary use is for enabling irq-unmasking and IDE multiplemode.
+ get/set SATA/IDE device parameters
 endef
-
-MAKE_FLAGS += \
-	CFLAGS="$(EXTRA_CFLAGS)" \
-	LDFLAGS="$(EXTRA_LDFLAGS)" \
 
 define Package/hdparm/install
 	$(INSTALL_DIR) $(1)/sbin
