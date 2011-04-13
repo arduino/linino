@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=usbutils
 PKG_VERSION:=002
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@KERNEL/linux/utils/usb/usbutils
@@ -29,6 +29,7 @@ endef
 
 define Package/usbutils/postinst
 #!/bin/sh
+[ -z "$${IPKG_INSTROOT}" ] || \
 (cd $${IPKG_INSTROOT}/usr/share; $${PKG_ROOT}/usr/sbin/update-usbids.sh ; rm usb.ids.gz.old)
 exit 0
 endef
