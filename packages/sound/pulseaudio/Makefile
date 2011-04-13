@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pulseaudio
 PKG_VERSION:=0.9.22
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://0pointer.de/lennart/projects/pulseaudio/
@@ -28,9 +28,9 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/pulseaudio
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libspeexdsp +libgdbm +libsndfile \
-  	+libltdl +libpthread +librt +dbus \
-	+alsa-lib $(ICONV_DEPENDS) $(INTL_DEPENDS)
+  DEPENDS:=+libspeexdsp +libgdbm +libsndfile +libsamplerate \
+	+libltdl +libpthread +librt +alsa-lib \
+	$(ICONV_DEPENDS) $(INTL_DEPENDS)
   TITLE:=Network sound server
   URL:=http://www.pulseaudio.org
 endef
@@ -48,6 +48,7 @@ CONFIGURE_ARGS += \
 	--with-system-group=root \
 	--with-access-group=root \
 	--enable-alsa \
+	--disable-dbus \
 	--disable-hal \
 	--disable-gconf \
 	--disable-tcpwrap \
@@ -59,7 +60,6 @@ CONFIGURE_ARGS += \
 	--disable-lirc \
 	--disable-bluez \
 	--without-caps
-
 
 CONFIGURE_VARS += \
 	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
