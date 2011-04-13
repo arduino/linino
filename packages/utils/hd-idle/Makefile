@@ -8,8 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hd-idle
-PKG_REV:=1.03
-PKG_VERSION:=$(PKG_REV)
+PKG_VERSION:=1.03
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
