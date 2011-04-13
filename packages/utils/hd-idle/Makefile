@@ -16,6 +16,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=049d6e6fc703a7e0474bdd9c24e6de77
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/hd-idle
