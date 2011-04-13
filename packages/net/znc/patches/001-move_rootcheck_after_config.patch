@@ -1,6 +1,15 @@
---- znc-0.094/main.cpp.orig	2010-10-25 02:30:18.000000000 +0200
-+++ znc-0.094/main.cpp	2010-10-25 02:52:03.000000000 +0200
-@@ -194,19 +194,6 @@
+From 5f655f9a25a377c01cb15517859eb514628a43d4 Mon Sep 17 00:00:00 2001
+From: Jonas Gorski <jonas.gorski+openwrt@gmail.com>
+Date: Wed, 6 Apr 2011 04:10:23 +0200
+Subject: [PATCH] Move the root check to after config parsing
+
+---
+ main.cpp |   27 ++++++++++++++-------------
+ 1 files changed, 14 insertions(+), 13 deletions(-)
+
+--- a/main.cpp
++++ b/main.cpp
+@@ -194,19 +194,6 @@ int main(int argc, char** argv) {
  	}
  #endif
  
@@ -20,7 +29,7 @@
  	if (bMakeConf) {
  		if (!pZNC->WriteNewConfig(sConfig)) {
  			delete pZNC;
-@@ -227,6 +214,20 @@
+@@ -227,6 +214,20 @@ int main(int argc, char** argv) {
  		return 1;
  	}
  

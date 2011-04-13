@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=znc
-PKG_VERSION:=0.096
+PKG_VERSION:=0.098
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=@SF/znc
-PKG_MD5SUM:=38eec4f1911a68b4d2fc704170e7cbf6
+PKG_SOURCE_URL:=http://znc.in/releases
+PKG_MD5SUM:=5667b4acb1f01309d6eded77abac700c
 
 PKG_BUILD_PARALLEL:=1
 
@@ -25,6 +25,7 @@ define Package/znc/default
   CATEGORY:=Network
   TITLE:=ZNC
   URL:=http://en.znc.in/
+  MAINTAINER:=Jonas Gorski <jonas.gorski+openwrt@gmail.com>
 endef
 
 define Package/znc
@@ -60,10 +61,12 @@ MAKE_FLAGS += \
 	CXX="$(STAGING_DIR)/host/bin/g++-uc"
 
 define Build/Configure
-	# webadmin doesn't compile
-	$(RM) $(PKG_BUILD_DIR)/modules/webadmin.cpp
 	$(call Build/Configure/Default,)
 	$(call libtool_disable_rpath)
+endef
+
+define Build/Compile
+	$(call Build/Compile/Default,znc modules)
 endef
 
 define Package/znc/install
@@ -183,6 +186,9 @@ $(eval $(call module,stickychan,Keeps you sticked to specific channels.))
 
 $(eval $(call module,watch,Monitor activity for specific text patterns from \
 	specific users and have the text sent to a special query window.))
+
+$(eval $(call module,webadmin,Allows you to add/remove/edit users and settings \
+	on the fly via a web browser.))
 
 $(eval $(call module,antiidle,Hides your idle time.,extra/))
 
