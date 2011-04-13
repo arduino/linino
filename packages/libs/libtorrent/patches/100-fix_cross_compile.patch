@@ -1,5 +1,7 @@
---- a/configure.ac
-+++ b/configure.ac
+Index: libtorrent-0.12.6_r1209/configure.ac
+===================================================================
+--- libtorrent-0.12.6_r1209.orig/configure.ac	2011-03-27 12:23:16.000000000 +0200
++++ libtorrent-0.12.6_r1209/configure.ac	2011-04-13 16:33:17.487339738 +0200
 @@ -17,7 +17,6 @@
  
  AM_INIT_AUTOMAKE
@@ -8,14 +10,16 @@
  AC_DISABLE_STATIC
  
  AM_DISABLE_STATIC
-@@ -117,5 +116,4 @@
+@@ -118,5 +117,4 @@
  	src/protocol/Makefile
  	src/tracker/Makefile
  	src/utils/Makefile
 -        test/Makefile
  ])
---- a/Makefile.am
-+++ b/Makefile.am
+Index: libtorrent-0.12.6_r1209/Makefile.am
+===================================================================
+--- libtorrent-0.12.6_r1209.orig/Makefile.am	2010-03-01 20:04:58.000000000 +0100
++++ libtorrent-0.12.6_r1209/Makefile.am	2011-04-13 16:33:17.487339738 +0200
 @@ -1,4 +1,4 @@
 -SUBDIRS = src test
 +SUBDIRS = src

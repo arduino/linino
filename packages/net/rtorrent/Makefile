@@ -1,17 +1,16 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
-#
 #
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rtorrent
-PKG_REV:=1189
+PKG_REV:=1209
 PKG_VERSION:=0.8.6_r$(PKG_REV)
-PKG_RELEASE:=2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=svn://rakshasa.no/libtorrent/trunk/rtorrent
@@ -31,6 +30,7 @@ define Package/rtorrent
   TITLE:=BitTorrent client for ncurses
   URL:=http://libtorrent.rakshasa.no/
   DEPENDS:=+libcurl +libtorrent +libncurses +libsigcxx +xmlrpc-c-server +libpthread
+  MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 
 define Package/rtorrent/description
@@ -40,10 +40,7 @@ define Package/rtorrent/description
  based clients in an ncurses client.
 endef
 
-ifneq ($(CONFIG_GCC_VERSION_3_4)$(CONFIG_GCC_VERSION_4_1),)
-TARGET_CPPFLAGS += -fno-strict-aliasing
-endif
-
+TARGET_CPPFLAGS += -fno-strict-aliasing -fno-inline
 TARGET_LDFLAGS += -lpthread -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 CONFIGURE_ARGS+= \
@@ -53,7 +50,7 @@ CONFIGURE_ARGS+= \
 	--with-xmlrpc-c
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); ./autogen.sh );
+	( cd $(PKG_BUILD_DIR); ./autogen.sh );
 	$(call Build/Configure/Default)
 endef
 

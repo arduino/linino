@@ -1,7 +1,7 @@
-diff --git a/rak/allocators.h b/rak/allocators.h
-index 0a1b711..2d7b98e 100644
---- a/rak/allocators.h
-+++ b/rak/allocators.h
+Index: rtorrent-0.8.6_r1209/rak/allocators.h
+===================================================================
+--- rtorrent-0.8.6_r1209.orig/rak/allocators.h	2010-11-10 12:40:28.000000000 +0100
++++ rtorrent-0.8.6_r1209/rak/allocators.h	2011-04-13 16:30:02.370840196 +0200
 @@ -42,6 +42,7 @@
  #include <cstddef>
  #include <limits>
@@ -10,7 +10,7 @@ index 0a1b711..2d7b98e 100644
  #include <sys/types.h>
  
  namespace rak {
-@@ -74,17 +75,13 @@ public:
+@@ -74,17 +75,13 @@
    size_type max_size () const throw() { return std::numeric_limits<size_t>::max() / sizeof(T); }
  
    pointer allocate(size_type num, const_void_pointer hint = 0) { return alloc_size(num*sizeof(T)); }
@@ -31,7 +31,7 @@ index 0a1b711..2d7b98e 100644
  };
  
  
-@@ -98,6 +95,36 @@ bool operator!= (const cacheline_allocator<T1>&, const cacheline_allocator<T2>&)
+@@ -98,6 +95,36 @@
    return false;
  }
  

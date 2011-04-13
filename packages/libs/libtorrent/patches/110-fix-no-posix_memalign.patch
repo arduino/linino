@@ -1,6 +1,8 @@
---- a/rak/allocators.h
-+++ b/rak/allocators.h
-@@ -74,17 +74,13 @@ public:
+Index: libtorrent-0.12.6_r1209/rak/allocators.h
+===================================================================
+--- libtorrent-0.12.6_r1209.orig/rak/allocators.h	2010-11-10 12:40:28.000000000 +0100
++++ libtorrent-0.12.6_r1209/rak/allocators.h	2011-04-13 16:33:28.179339669 +0200
+@@ -74,17 +74,13 @@
    size_type max_size () const throw() { return std::numeric_limits<size_t>::max() / sizeof(T); }
  
    pointer allocate(size_type num, const_void_pointer hint = 0) { return alloc_size(num*sizeof(T)); }
@@ -21,7 +23,7 @@
  };
  
  
-@@ -98,6 +94,36 @@ bool operator!= (const cacheline_allocator<T1>&, const cacheline_allocator<T2>&)
+@@ -98,6 +94,36 @@
    return false;
  }
  

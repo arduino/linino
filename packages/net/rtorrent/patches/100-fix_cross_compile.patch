@@ -1,5 +1,7 @@
---- a/configure.ac
-+++ b/configure.ac
+Index: rtorrent-0.8.6_r1209/configure.ac
+===================================================================
+--- rtorrent-0.8.6_r1209.orig/configure.ac	2010-10-05 05:36:14.000000000 +0200
++++ rtorrent-0.8.6_r1209/configure.ac	2011-04-13 16:29:48.619340344 +0200
 @@ -2,7 +2,6 @@
  
  AM_INIT_AUTOMAKE
@@ -14,8 +16,10 @@
  	src/utils/Makefile
 -        test/Makefile
  ])
---- a/Makefile.am
-+++ b/Makefile.am
+Index: rtorrent-0.8.6_r1209/Makefile.am
+===================================================================
+--- rtorrent-0.8.6_r1209.orig/Makefile.am	2010-03-19 10:33:25.000000000 +0100
++++ rtorrent-0.8.6_r1209/Makefile.am	2011-04-13 16:29:48.619340344 +0200
 @@ -1,7 +1,4 @@
 -SUBDIRS = \
 -	doc \
@@ -25,9 +29,11 @@
  
  EXTRA_DIST= \
  	autogen.sh \
---- a/scripts/common.m4
-+++ b/scripts/common.m4
-@@ -209,7 +209,7 @@ dnl   Need to fix this so that it uses t
+Index: rtorrent-0.8.6_r1209/scripts/common.m4
+===================================================================
+--- rtorrent-0.8.6_r1209.orig/scripts/common.m4	2009-12-19 22:36:44.000000000 +0100
++++ rtorrent-0.8.6_r1209/scripts/common.m4	2011-04-13 16:29:48.619340344 +0200
+@@ -209,7 +209,7 @@
  AC_DEFUN([TORRENT_CHECK_EXECINFO], [
    AC_MSG_CHECKING(for execinfo.h)
  

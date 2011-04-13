@@ -1,13 +1,7 @@
-fix the following build error on octeon & ppc
-
-In file included from ../../rak/priority_queue_default.h:41,
-                 from ./../dht/dht_router.h:40,
-                 from tracker_dht.cc:42:
-../../rak/allocators.h: In static member function 'static T* rak::cacheline_allocator<T>::alloc_size(size_t)':
-../../rak/allocators.h:109: error: 'uintptr_t' was not declared in this scope
-
---- a/rak/allocators.h
-+++ b/rak/allocators.h
+Index: libtorrent-0.12.6_r1209/rak/allocators.h
+===================================================================
+--- libtorrent-0.12.6_r1209.orig/rak/allocators.h	2011-04-13 16:33:28.179339669 +0200
++++ libtorrent-0.12.6_r1209/rak/allocators.h	2011-04-13 16:33:48.454840573 +0200
 @@ -41,6 +41,7 @@
  
  #include <cstddef>

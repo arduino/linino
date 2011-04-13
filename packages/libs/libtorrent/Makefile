@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libtorrent
-PKG_REV:=1189
+PKG_REV:=1209
 PKG_VERSION:=0.12.6_r$(PKG_REV)
-PKG_RELEASE:=3
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=svn://rakshasa.no/libtorrent/trunk/libtorrent
@@ -29,6 +29,7 @@ define Package/libtorrent
   TITLE:=Rakshasa's BitTorrent library
   URL:=http://libtorrent.rakshasa.no/
   DEPENDS:=+libopenssl +libsigcxx @!LINUX_2_4
+  MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 
 define Package/libtorrent/description
@@ -39,14 +40,9 @@ define Package/libtorrent/description
  the speed of the official client.
 endef
 
-ifneq ($(CONFIG_GCC_VERSION_3_4)$(CONFIG_GCC_VERSION_4_1),)
-  TARGET_CPPFLAGS += -fno-strict-aliasing
-endif
-
-TARGET_CPPFLAGS += -fno-inline
+TARGET_CPPFLAGS += -fno-strict-aliasing -fno-inline
 TARGET_LDFLAGS += $(LIBGCC_S)
 
-# XXX: rtorrent needs encryption (--enable-openssl)
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \
