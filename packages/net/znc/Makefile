@@ -17,7 +17,6 @@ PKG_MD5SUM:=5667b4acb1f01309d6eded77abac700c
 
 PKG_BUILD_PARALLEL:=1
 
-include $(INCLUDE_DIR)/package.mk
 
 define Package/znc/default
   SUBMENU:=Instant Messaging
@@ -45,30 +44,6 @@ define Package/znc/conffiles
 endef
 
 
-CONFIGURE_VARS += \
-	CXX="$(STAGING_DIR)/host/bin/g++-uc" \
-	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
-	CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-	LDFLAGS="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-	LIBS="-luClibc++ -lm -lssl -lcrypto $(LIBGCC_S) -lc"
-
-CONFIGURE_ARGS += \
-	--disable-c-ares \
-	--enable-extra \
-	--disable-perl
-
-MAKE_FLAGS += \
-	CXX="$(STAGING_DIR)/host/bin/g++-uc"
-
-define Build/Configure
-	$(call Build/Configure/Default,)
-	$(call libtool_disable_rpath)
-endef
-
-define Build/Compile
-	$(call Build/Compile/Default,znc modules)
-endef
-
 define Package/znc/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/znc $(1)/usr/bin/
@@ -82,6 +57,7 @@ endef
 
 
 ZNC_MODULES :=
+ZNC_MODULE_TARGETS := extra/droproot.so
 
 define module
   define Package/znc-mod-$(strip $(1))
@@ -96,10 +72,11 @@ define module
 
   define Package/znc-mod-$(strip $(1))/install
 	$(INSTALL_DIR) $$(1)/usr/lib/znc/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/$(strip $(3))$(subst -,_,$(strip $(1))).so $$(1)/usr/lib/znc/
+	$(INSTALL_BIN) $$(PKG_BUILD_DIR)/modules/$(strip $(3))$(subst -,_,$(strip $(1))).so $$(1)/usr/lib/znc/
   endef
 
   ZNC_MODULES += znc-mod-$(strip $(1))
+  $(if $(CONFIG_PACKAGE_znc-mod-$(strip $(1))),ZNC_MODULE_TARGETS += $(strip $(3))$(subst -,_,$(strip $(1))).so)
 endef
 
 
@@ -226,7 +203,36 @@ $(eval $(call module,send-raw,Allows you to send raw traffic to IRC from \
 $(eval $(call module,shell,Have your unix shell in a query window right inside \
 	of your IRC client.,extra/))
 
-$(eval $(call BuildPackage,znc))
 
 PKG_CONFIG_DEPENDS := $(patsubst %,CONFIG_PACKAGE_%,$(ZNC_MODULES))
+
+include $(INCLUDE_DIR)/package.mk
+
+CONFIGURE_VARS += \
+	CXX="$(STAGING_DIR)/host/bin/g++-uc" \
+	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
+	CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+	LDFLAGS="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+	LIBS="-luClibc++ -lm -lssl -lcrypto $(LIBGCC_S) -lc"
+
+CONFIGURE_ARGS += \
+	--disable-c-ares \
+	--enable-extra \
+	--disable-perl
+
+MAKE_FLAGS += \
+	CXX="$(STAGING_DIR)/host/bin/g++-uc"
+
+define Build/Configure
+	$(call Build/Configure/Default,)
+	$(call libtool_disable_rpath)
+endef
+
+define Build/Compile
+	$(call Build/Compile/Default,znc)
+	$(MAKE_VARS) $(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/modules \
+		$(MAKE_FLAGS) $(ZNC_MODULE_TARGETS)
+endef
+
+$(eval $(call BuildPackage,znc))
 $(foreach m,$(ZNC_MODULES),$(eval $(call BuildPackage,$(m))))
