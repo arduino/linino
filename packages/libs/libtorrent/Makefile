@@ -8,17 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libtorrent
-PKG_REV:=1209
-PKG_VERSION:=0.12.6_r$(PKG_REV)
+PKG_VERSION:=0.12.6
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=svn://rakshasa.no/libtorrent/trunk/libtorrent
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_SOURCE_PROTO:=svn
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://libtorrent.rakshasa.no/downloads
+PKG_MD5SUM:=037499ed708aaf72988cee60e5a8d96b
 
 PKG_FIXUP:=libtool
+PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -33,11 +31,11 @@ define Package/libtorrent
 endef
 
 define Package/libtorrent/description
- LibTorrent is a BitTorrent library written in C++ for *nix, with a focus
- on high performance and good code. The library differentiates itself from
- other implementations by transfering directly from file pages to the
- network stack. On high-bandwidth connections it is able to seed at 3 times
- the speed of the official client.
+ LibTorrent is a BitTorrent library written in C++ for *nix, with a focus on
+ high performance and good code. The library differentiates itself from other
+ implementations by transfering directly from file pages to the network stack.
+ On high-bandwidth connections it is able to seed at 3 times the speed of the
+ official client.
 endef
 
 TARGET_CPPFLAGS += -fno-strict-aliasing -fno-inline
@@ -51,7 +49,7 @@ CONFIGURE_ARGS+= \
 	--enable-openssl \
 
 define Build/Configure
-	(cd $(PKG_BUILD_DIR); ./autogen.sh );
+	( cd $(PKG_BUILD_DIR); ./autogen.sh );
 	$(call Build/Configure/Default)
 endef
 
@@ -70,4 +68,3 @@ define Package/libtorrent/install
 endef
 
 $(eval $(call BuildPackage,libtorrent))
-

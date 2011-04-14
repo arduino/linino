@@ -1,8 +1,8 @@
-Index: libtorrent-0.12.6_r1209/src/net/socket_datagram.cc
+Index: libtorrent-0.12.6/src/net/socket_datagram.cc
 ===================================================================
---- libtorrent-0.12.6_r1209.orig/src/net/socket_datagram.cc	2008-07-05 14:13:12.000000000 +0200
-+++ libtorrent-0.12.6_r1209/src/net/socket_datagram.cc	2011-04-13 16:33:33.266840379 +0200
-@@ -73,6 +73,23 @@
+--- libtorrent-0.12.6.orig/src/net/socket_datagram.cc
++++ libtorrent-0.12.6/src/net/socket_datagram.cc
+@@ -73,6 +73,23 @@ SocketDatagram::write_datagram(const voi
    int r;
  
    if (sa != NULL) {

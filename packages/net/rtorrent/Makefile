@@ -8,17 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rtorrent
-PKG_REV:=1209
-PKG_VERSION:=0.8.6_r$(PKG_REV)
+PKG_VERSION:=0.8.6
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=svn://rakshasa.no/libtorrent/trunk/rtorrent
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_SOURCE_PROTO:=svn
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://libtorrent.rakshasa.no/downloads
+PKG_MD5SUM:=b804c45c01c40312926bcea6b55bb084
 
 PKG_FIXUP:=libtool
+PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -35,9 +33,9 @@ endef
 
 define Package/rtorrent/description
  rTorrent is a BitTorrent client for ncurses, using the libtorrent library.
- The client and library are written in C++ with emphasis on speed and
- efficiency, while delivering equivalent features to those found in GUI
- based clients in an ncurses client.
+ The client and library is written in C++ with emphasis on speed and
+ efficiency, while delivering equivalent features to those found in GUI based
+ clients in an ncurses client. 
 endef
 
 TARGET_CPPFLAGS += -fno-strict-aliasing -fno-inline

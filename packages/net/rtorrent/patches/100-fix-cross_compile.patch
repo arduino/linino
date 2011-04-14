@@ -1,20 +1,7 @@
-Index: libtorrent-0.12.6/scripts/checks.m4
+Index: rtorrent-0.8.6/scripts/common.m4
 ===================================================================
---- libtorrent-0.12.6.orig/scripts/checks.m4
-+++ libtorrent-0.12.6/scripts/checks.m4
-@@ -96,7 +96,7 @@ AC_DEFUN([TORRENT_CHECK_KQUEUE], [
- AC_DEFUN([TORRENT_CHECK_KQUEUE_SOCKET_ONLY], [
-   AC_MSG_CHECKING(whether kqueue supports pipes and ptys)
- 
--  AC_RUN_IFELSE(
-+  AC_LINK_IFELSE(
-     [[#include <fcntl.h>
-       #include <stdlib.h>
-       #include <unistd.h>
-Index: libtorrent-0.12.6/scripts/common.m4
-===================================================================
---- libtorrent-0.12.6.orig/scripts/common.m4
-+++ libtorrent-0.12.6/scripts/common.m4
+--- rtorrent-0.8.6.orig/scripts/common.m4
++++ rtorrent-0.8.6/scripts/common.m4
 @@ -184,7 +184,7 @@ AC_DEFUN([TORRENT_CHECK_MADVISE], [
  AC_DEFUN([TORRENT_CHECK_EXECINFO], [
    AC_MSG_CHECKING(for execinfo.h)
