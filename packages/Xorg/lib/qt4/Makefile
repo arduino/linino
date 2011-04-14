@@ -254,11 +254,6 @@ define Package/qt4-drivers-kbd/Default
   DEPENDS+=@QT4_WS_QWS
 endef
 
-define Package/qt4-drivers-kbd-linuxinput
-  $(call Package/qt4-drivers-kbd/Default)
-  TITLE+=linuxinput
-endef
-
 
 TARGET_INCDIRS+=$(STAGING_DIR)/include $(STAGING_DIR)/usr/include $(TOOLCHAIN_DIR)/include $(TOOLCHAIN_DIR)/usr/include
 TARGET_LIBDIRS+=$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib $(TOOLCHAIN_DIR)/lib $(TOOLCHAIN_DIR)/usr/lib
@@ -388,7 +383,7 @@ define Build/Configure
 			-no-kbd-qvfb \
 			-no-kbd-qnx \
 			-qt-kbd-tty \
-			-plugin-kbd-linuxinput \
+			-qt-kbd-linuxinput \
 	)
 endef
 
@@ -735,15 +730,6 @@ define Package/qt4-drivers-gfx-linuxfb/install
 endef
 
 #  keyboard drivers
-define Package/qt4-drivers-kbd-linuxinput/install
-	$(INSTALL_DIR) \
-		$(1)/usr/lib/Qt/plugins/kbddrivers
-
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/Qt/plugins/kbddrivers/libqlinuxinputkbddriver.so \
-		$(1)/usr/lib/Qt/plugins/kbddrivers/
-endef
-
 
 
 
@@ -779,5 +765,3 @@ $(eval $(call BuildPackage,qt4-drivers-mouse-tslibmousedriver))
 
 $(eval $(call BuildPackage,qt4-drivers-gfx-directfb))
 $(eval $(call BuildPackage,qt4-drivers-gfx-linuxfb))
-
-$(eval $(call BuildPackage,qt4-drivers-kbd-linuxinput))
