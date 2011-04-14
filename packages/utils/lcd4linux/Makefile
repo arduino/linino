@@ -62,6 +62,7 @@ define Package/lcd4linux
   TITLE:=LCD display utility
   URL:=http://lcd4linux.bulix.org/
   MENU:=1
+  MAINTAINER:=Jonathan McCrohan <jmccrohan@gmail.com>
 endef
 
 define Package/lcd4linux/config
