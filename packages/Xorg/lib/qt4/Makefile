@@ -247,6 +247,11 @@ define Package/qt4-drivers-gfx-linuxfb
   TITLE+=linuxfb
 endef
 
+define Package/qt4-drivers-gfx-vnc
+  $(call Package/qt4-drivers-gfx/Default)
+  TITLE+=VNC
+endef
+
 ###
 define Package/qt4-drivers-kbd/Default
   $(call Package/qt4/Default)
@@ -369,7 +374,7 @@ define Build/Configure
 			$(if $(CONFIG_PACKAGE_qt4-qt3support),-qt3support,-no-qt3support) \
 			-no-gfx-transformed \
 			-no-gfx-qvfb \
-			-no-gfx-vnc \
+			$(if $(CONFIG_PACKAGE_qt4-drivers-gfx-vnc),-plugin-gfx-vnc,-no-gfx-vnc) \
 			-no-gfx-multiscreen \
 			-no-gfx-qnx \
 			$(if $(CONFIG_PACKAGE_directfb),-plugin-gfx-directfb) \
@@ -729,6 +734,15 @@ define Package/qt4-drivers-gfx-linuxfb/install
 		$(1)/usr/lib/Qt/plugins/gfxdrivers/
 endef
 
+define Package/qt4-drivers-gfx-vnc/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib/Qt/plugins/gfxdrivers
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/Qt/plugins/gfxdrivers/libqgfxvnc.so \
+		$(1)/usr/lib/Qt/plugins/gfxdrivers/
+endef
+
 #  keyboard drivers
 
 
@@ -765,3 +779,4 @@ $(eval $(call BuildPackage,qt4-drivers-mouse-tslibmousedriver))
 
 $(eval $(call BuildPackage,qt4-drivers-gfx-directfb))
 $(eval $(call BuildPackage,qt4-drivers-gfx-linuxfb))
+$(eval $(call BuildPackage,qt4-drivers-gfx-vnc))
