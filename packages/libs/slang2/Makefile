@@ -13,7 +13,8 @@ PKG_VERSION:=2.2.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://space.mit.edu/pub/davis/slang/v2.2/
+PKG_SOURCE_URL:=ftp://space.mit.edu/pub/davis/slang/v2.2 \
+	ftp://space.mit.edu/pub/davis/slang/v2.2/OLD
 PKG_MD5SUM:=17e1864de999ae9535a9f7350a010427
 
 PKG_INSTALL:=1
