@@ -47,7 +47,7 @@ static void ag71xx_mdio_dump_regs(struct ag71xx_mdio *am)
 		ag71xx_mdio_rr(am, AG71XX_REG_MII_IND));
 }
 
-static int ag71xx_mdio_mii_read(struct ag71xx_mdio *am, int addr, int reg)
+int ag71xx_mdio_mii_read(struct ag71xx_mdio *am, int addr, int reg)
 {
 	int ret;
 	int i;
@@ -73,12 +73,11 @@ static int ag71xx_mdio_mii_read(struct ag71xx_mdio *am, int addr, int reg)
 
 	DBG("mii_read: addr=%04x, reg=%04x, value=%04x\n", addr, reg, ret);
 
- out:
+out:
 	return ret;
 }
 
-static void ag71xx_mdio_mii_write(struct ag71xx_mdio *am,
-				  int addr, int reg, u16 val)
+void ag71xx_mdio_mii_write(struct ag71xx_mdio *am, int addr, int reg, u16 val)
 {
 	int i;
 
@@ -122,18 +121,24 @@ static int ag71xx_mdio_read(struct mii_bus *bus, int addr, int reg)
 {
 	struct ag71xx_mdio *am = bus->priv;
 
-	return ag71xx_mdio_mii_read(am, addr, reg);
+	if (am->pdata->is_ar7240)
+		return ar7240sw_phy_read(bus, addr, reg);
+	else
+		return ag71xx_mdio_mii_read(am, addr, reg);
 }
 
 static int ag71xx_mdio_write(struct mii_bus *bus, int addr, int reg, u16 val)
 {
 	struct ag71xx_mdio *am = bus->priv;
 
-	ag71xx_mdio_mii_write(am, addr, reg, val);
+	if (am->pdata->is_ar7240)
+		ar7240sw_phy_write(bus, addr, reg, val);
+	else
+		ag71xx_mdio_mii_write(am, addr, reg, val);
 	return 0;
 }
 
-static int __init ag71xx_mdio_probe(struct platform_device *pdev)
+static int __devinit ag71xx_mdio_probe(struct platform_device *pdev)
 {
 	struct ag71xx_mdio_platform_data *pdata;
 	struct ag71xx_mdio *am;
@@ -199,17 +204,17 @@ static int __init ag71xx_mdio_probe(struct platform_device *pdev)
 	platform_set_drvdata(pdev, am);
 	return 0;
 
- err_free_bus:
+err_free_bus:
 	mdiobus_free(am->mii_bus);
- err_iounmap:
+err_iounmap:
 	iounmap(am->mdio_base);
- err_free_mdio:
+err_free_mdio:
 	kfree(am);
- err_out:
+err_out:
 	return err;
 }
 
-static int __exit ag71xx_mdio_remove(struct platform_device *pdev)
+static int __devexit ag71xx_mdio_remove(struct platform_device *pdev)
 {
 	struct ag71xx_mdio *am = platform_get_drvdata(pdev);
 
@@ -232,7 +237,7 @@ static struct platform_driver ag71xx_mdio_driver = {
 	}
 };
 
-int ag71xx_mdio_driver_init(void)
+int __init ag71xx_mdio_driver_init(void)
 {
 	return platform_driver_register(&ag71xx_mdio_driver);
 }
