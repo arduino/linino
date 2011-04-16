@@ -1,30 +1,44 @@
---- /dev/null
-+++ b/builtin/daemon.c
+Index: git-1.7.4.4/builtin/daemon.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git-1.7.4.4/builtin/daemon.c	2011-04-08 15:33:59.605465617 +0200
 @@ -0,0 +1 @@
 +#include "../daemon.c"
---- /dev/null
-+++ b/builtin/fast-import.c
+Index: git-1.7.4.4/builtin/fast-import.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git-1.7.4.4/builtin/fast-import.c	2011-04-08 15:33:59.605465617 +0200
 @@ -0,0 +1 @@
 +#include "../fast-import.c"
---- /dev/null
-+++ b/builtin/http-backend.c
+Index: git-1.7.4.4/builtin/http-backend.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git-1.7.4.4/builtin/http-backend.c	2011-04-08 15:33:59.605465617 +0200
 @@ -0,0 +1 @@
 +#include "../http-backend.c"
---- /dev/null
-+++ b/builtin/imap-send.c
+Index: git-1.7.4.4/builtin/imap-send.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git-1.7.4.4/builtin/imap-send.c	2011-04-08 15:33:59.605465617 +0200
 @@ -0,0 +1 @@
 +#include "../imap-send.c"
---- /dev/null
-+++ b/builtin/shell.c
+Index: git-1.7.4.4/builtin/shell.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git-1.7.4.4/builtin/shell.c	2011-04-08 15:33:59.605465617 +0200
 @@ -0,0 +1 @@
 +#include "../shell.c"
---- /dev/null
-+++ b/builtin/upload-pack.c
+Index: git-1.7.4.4/builtin/upload-pack.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ git-1.7.4.4/builtin/upload-pack.c	2011-04-08 15:33:59.605465617 +0200
 @@ -0,0 +1 @@
 +#include "../upload-pack.c"
---- a/builtin.h
-+++ b/builtin.h
-@@ -139,5 +139,11 @@ extern int cmd_verify_pack(int argc, con
+Index: git-1.7.4.4/builtin.h
+===================================================================
+--- git-1.7.4.4/builtin.h	2011-04-03 10:22:36.000000000 +0200
++++ git-1.7.4.4/builtin.h	2011-04-08 15:33:59.605465617 +0200
+@@ -142,5 +142,11 @@
  extern int cmd_show_ref(int argc, const char **argv, const char *prefix);
  extern int cmd_pack_refs(int argc, const char **argv, const char *prefix);
  extern int cmd_replace(int argc, const char **argv, const char *prefix);
@@ -36,20 +50,24 @@
 +extern int cmd_fast_import(int argc, const char **argv, const char *prefix);
  
  #endif
---- a/daemon.c
-+++ b/daemon.c
-@@ -963,7 +963,7 @@ static int serve(char *listen_addr, int
- 	return service_loop(socknum, socklist);
+Index: git-1.7.4.4/daemon.c
+===================================================================
+--- git-1.7.4.4/daemon.c	2011-04-03 10:22:36.000000000 +0200
++++ git-1.7.4.4/daemon.c	2011-04-08 15:33:59.605465617 +0200
+@@ -1043,7 +1043,7 @@
+ 	return service_loop(&socklist);
  }
  
 -int main(int argc, char **argv)
 +int cmd_daemon(int argc, char **argv, const char *prefix)
  {
  	int listen_port = 0;
- 	char *listen_addr = NULL;
---- a/fast-import.c
-+++ b/fast-import.c
-@@ -2912,7 +2912,7 @@ static void parse_argv(void)
+ 	struct string_list listen_addr = STRING_LIST_INIT_NODUP;
+Index: git-1.7.4.4/fast-import.c
+===================================================================
+--- git-1.7.4.4/fast-import.c	2011-04-03 10:22:36.000000000 +0200
++++ git-1.7.4.4/fast-import.c	2011-04-08 15:33:59.609465154 +0200
+@@ -3083,7 +3083,7 @@
  		read_marks();
  }
  
@@ -58,9 +76,11 @@
  {
  	unsigned int i;
  
---- a/git.c
-+++ b/git.c
-@@ -240,11 +240,11 @@ const char git_version_string[] = GIT_VE
+Index: git-1.7.4.4/git.c
+===================================================================
+--- git-1.7.4.4/git.c	2011-04-03 10:22:36.000000000 +0200
++++ git-1.7.4.4/git.c	2011-04-08 15:33:59.609465154 +0200
+@@ -251,11 +251,11 @@
  
  struct cmd_struct {
  	const char *cmd;
@@ -74,7 +94,7 @@
  {
  	int status, help;
  	struct stat st;
-@@ -293,7 +293,7 @@ static int run_builtin(struct cmd_struct
+@@ -308,7 +308,7 @@
  	return 0;
  }
  
@@ -83,7 +103,7 @@
  {
  	const char *cmd = argv[0];
  	static struct cmd_struct commands[] = {
-@@ -405,6 +405,12 @@ static void handle_internal_command(int
+@@ -422,6 +422,12 @@
  		{ "verify-pack", cmd_verify_pack },
  		{ "show-ref", cmd_show_ref, RUN_SETUP },
  		{ "pack-refs", cmd_pack_refs, RUN_SETUP },
@@ -96,9 +116,11 @@
  	};
  	int i;
  	static const char ext[] = STRIP_EXTENSION;
---- a/http-backend.c
-+++ b/http-backend.c
-@@ -540,7 +540,7 @@ static struct service_cmd {
+Index: git-1.7.4.4/http-backend.c
+===================================================================
+--- git-1.7.4.4/http-backend.c	2011-04-03 10:22:36.000000000 +0200
++++ git-1.7.4.4/http-backend.c	2011-04-08 15:33:59.609465154 +0200
+@@ -540,7 +540,7 @@
  	{"POST", "/git-receive-pack$", service_rpc}
  };
  
@@ -107,9 +129,11 @@
  {
  	char *method = getenv("REQUEST_METHOD");
  	char *dir;
---- a/imap-send.c
-+++ b/imap-send.c
-@@ -1528,7 +1528,7 @@ static int git_imap_config(const char *k
+Index: git-1.7.4.4/imap-send.c
+===================================================================
+--- git-1.7.4.4/imap-send.c	2011-04-03 10:22:36.000000000 +0200
++++ git-1.7.4.4/imap-send.c	2011-04-08 15:33:59.609465154 +0200
+@@ -1528,7 +1528,7 @@
  	return 0;
  }
  
@@ -118,12 +142,15 @@
  {
  	struct msg_data all_msgs, msg;
  	struct store *ctx = NULL;
---- a/Makefile
-+++ b/Makefile
-@@ -398,12 +398,7 @@ EXTRA_PROGRAMS =
+Index: git-1.7.4.4/Makefile
+===================================================================
+--- git-1.7.4.4/Makefile	2011-04-03 10:22:36.000000000 +0200
++++ git-1.7.4.4/Makefile	2011-04-08 15:38:21.489032460 +0200
+@@ -406,13 +406,7 @@
  # ... and all the rest that could be moved out of bindir to gitexecdir
  PROGRAMS += $(EXTRA_PROGRAMS)
  
+-PROGRAM_OBJS += daemon.o
 -PROGRAM_OBJS += fast-import.o
 -PROGRAM_OBJS += imap-send.o
 -PROGRAM_OBJS += shell.o
@@ -133,7 +160,7 @@
  
  PROGRAMS += $(patsubst %.o,git-%$X,$(PROGRAM_OBJS))
  
-@@ -750,6 +745,12 @@ BUILTIN_OBJS += builtin/var.o
+@@ -769,6 +763,12 @@
  BUILTIN_OBJS += builtin/verify-pack.o
  BUILTIN_OBJS += builtin/verify-tag.o
  BUILTIN_OBJS += builtin/write-tree.o
@@ -146,19 +173,16 @@
  
  GITLIBS = $(LIB_FILE) $(XDIFF_LIB)
  EXTLIBS =
-@@ -1244,10 +1245,9 @@ endif
+@@ -1293,7 +1293,7 @@
  EXTLIBS += -lz
  
- ifndef NO_POSIX_ONLY_PROGRAMS
--	PROGRAM_OBJS += daemon.o
- endif
  ifndef NO_OPENSSL
 -	OPENSSL_LIBSSL = -lssl
 +	EXTLIBS += -lssl
  	ifdef OPENSSLDIR
  		BASIC_CFLAGS += -I$(OPENSSLDIR)/include
  		OPENSSL_LINK = -L$(OPENSSLDIR)/$(lib) $(CC_LD_DYNPATH)$(OPENSSLDIR)/$(lib)
-@@ -1923,10 +1923,6 @@ endif
+@@ -2003,10 +2003,6 @@
  git-%$X: %.o $(GITLIBS)
  	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) $(filter %.o,$^) $(LIBS)
  
@@ -169,7 +193,7 @@
  git-http-fetch$X: revision.o http.o http-walker.o http-fetch.o $(GITLIBS)
  	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) $(filter %.o,$^) \
  		$(LIBS) $(CURL_LIBCURL)
-@@ -2124,23 +2120,22 @@ endif
+@@ -2204,23 +2200,22 @@
  
  	bindir=$$(cd '$(DESTDIR_SQ)$(bindir_SQ)' && pwd) && \
  	execdir=$$(cd '$(DESTDIR_SQ)$(gitexec_instdir_SQ)' && pwd) && \
@@ -196,9 +220,11 @@
  		ln -s "git$X" "$$execdir/$$p" 2>/dev/null || \
  		cp "$$execdir/git$X" "$$execdir/$$p" || exit; \
  	done && \
---- a/shell.c
-+++ b/shell.c
-@@ -45,7 +45,7 @@ static struct commands {
+Index: git-1.7.4.4/shell.c
+===================================================================
+--- git-1.7.4.4/shell.c	2011-04-03 10:22:36.000000000 +0200
++++ git-1.7.4.4/shell.c	2011-04-08 15:33:59.613464996 +0200
+@@ -129,7 +129,7 @@
  	{ NULL },
  };
  
@@ -206,10 +232,12 @@
 +int cmd_shell(int argc, char **argv, const char *prefix)
  {
  	char *prog;
- 	struct commands *cmd;
---- a/upload-pack.c
-+++ b/upload-pack.c
-@@ -676,7 +676,7 @@ static void upload_pack(void)
+ 	const char **user_argv;
+Index: git-1.7.4.4/upload-pack.c
+===================================================================
+--- git-1.7.4.4/upload-pack.c	2011-04-03 10:22:36.000000000 +0200
++++ git-1.7.4.4/upload-pack.c	2011-04-08 15:33:59.613464996 +0200
+@@ -676,7 +676,7 @@
  	}
  }
  

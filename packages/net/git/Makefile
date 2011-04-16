@@ -4,19 +4,19 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# Alessandro Di Marco <dmr-wrt@ethzero.com>
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=git
-PKG_VERSION:=1.7.3.4
+PKG_VERSION:=1.7.4.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@KERNEL/software/scm/git
-PKG_MD5SUM:=3a2602016f98c529cda7b9fad1a6e216
+PKG_MD5SUM:=1313f71d62fa100b32fa313769a85f2a
 
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,6 +27,7 @@ define Package/git
   DEPENDS:=+libopenssl +libpthread
   TITLE:=The fast version control system
   URL:=http://git-scm.com
+  MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 
 define Package/git/description
@@ -55,9 +56,8 @@ define Build/Configure
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		configure
 
-	(cd $(PKG_BUILD_DIR); \
-		./configure \
-			--prefix=/usr \
+	( cd $(PKG_BUILD_DIR); \
+		./configure --prefix=/usr \
 	);
 endef
 
