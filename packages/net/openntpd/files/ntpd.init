@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 
 START=60
 
@@ -8,12 +8,11 @@ boot() {
 }
 
 start() {
-	mkdir -p `awk -F: '/^ntp:/{print $6}' /etc/passwd`
+	mkdir -p `awk -F: '/^network:/{print $6}' /etc/passwd`
 	mkdir -p /var/db/
 	/usr/sbin/ntpd -s
 }
 
 stop() {
-	# -1 seems insufficient to kill one of the two underlying processes.
-	killall -9 ntpd
+	service_kill ntpd
 }
