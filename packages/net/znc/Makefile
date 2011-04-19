@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=znc
 PKG_VERSION:=0.098
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://znc.in/releases
@@ -73,12 +73,58 @@ define module
   define Package/znc-mod-$(strip $(1))/install
 	$(INSTALL_DIR) $$(1)/usr/lib/znc/
 	$(INSTALL_BIN) $$(PKG_BUILD_DIR)/modules/$(strip $(3))$(subst -,_,$(strip $(1))).so $$(1)/usr/lib/znc/
+	# include webadmin page templates if existing
+	if [ -d $$(PKG_BUILD_DIR)/modules/$(strip $(3))$(subst -,_,$(strip $(1))) ]; then \
+		$(INSTALL_DIR) $$(1)/usr/share/znc/ ;\
+		$(CP) -r $$(PKG_BUILD_DIR)/modules/$(strip $(3))$(subst -,_,$(strip $(1))) $$(1)/usr/share/znc/ ;\
+	fi
   endef
 
   ZNC_MODULES += znc-mod-$(strip $(1))
   $(if $(CONFIG_PACKAGE_znc-mod-$(strip $(1))),ZNC_MODULE_TARGETS += $(strip $(3))$(subst -,_,$(strip $(1))).so)
 endef
 
+define webadmin
+  define Package/znc-mod-webadmin
+    $(Package/znc/default)
+    TITLE+= (webadmin plugin)
+    DEPENDS:=znc
+  endef
+
+  define Package/znc-mod-webadmin/description
+   Allows you to add/remove/edit users and settings on the fly via a web browser.
+  endef
+
+  define Package/znc-mod-webadmin/install
+	$(INSTALL_DIR) $$(1)/usr/lib/znc/
+	$(INSTALL_BIN) $$(PKG_BUILD_DIR)/modules/webadmin.so $$(1)/usr/lib/znc/
+	$(INSTALL_DIR) $$(1)/usr/share/znc/
+	$(CP) -r $$(PKG_BUILD_DIR)/modules/webadmin $$(1)/usr/share/znc/
+	$(INSTALL_DIR) $$(1)/usr/share/znc/webskins/
+	$(CP) -r $$(PKG_BUILD_DIR)/webskins/_default_ $$(1)/usr/share/znc/webskins/
+  endef
+
+  ZNC_MODULES += znc-mod-webadmin
+  $(if $(CONFIG_PACKAGE_znc-mod-webadmin),ZNC_MODULE_TARGETS += webadmin.so)
+endef
+
+define webskin
+  define Package/znc-webskin-$(strip $(1))
+    $(Package/znc/default)
+    TITLE+= ($(strip $(1)) webskin)
+    DEPENDS:=znc-mod-webadmin
+  endef
+
+  define Package/znc-webskin-$(strip $(1))/description
+    $(strip $(1)) webskin for webadmin
+  endef
+
+  define Package/znc-webskin-$(strip $(1))/install
+	$(INSTALL_DIR) $$(1)/usr/share/znc/webskins/
+	$(CP) -r $$(PKG_BUILD_DIR)/webskins/$(strip $(1)) $$(1)/usr/share/znc/webskins/
+  endef
+  ZNC_MODULES += znc-webskin-$(strip $(1))
+endef
 
 , := ,
 
@@ -164,9 +210,6 @@ $(eval $(call module,stickychan,Keeps you sticked to specific channels.))
 $(eval $(call module,watch,Monitor activity for specific text patterns from \
 	specific users and have the text sent to a special query window.))
 
-$(eval $(call module,webadmin,Allows you to add/remove/edit users and settings \
-	on the fly via a web browser.))
-
 $(eval $(call module,antiidle,Hides your idle time.,extra/))
 
 $(eval $(call module,autovoice,Autovoices everyone who joins some channel., \
@@ -203,6 +246,11 @@ $(eval $(call module,send-raw,Allows you to send raw traffic to IRC from \
 $(eval $(call module,shell,Have your unix shell in a query window right inside \
 	of your IRC client.,extra/))
 
+$(eval $(call webadmin))
+
+$(eval $(call webskin,dark-clouds))
+$(eval $(call webskin,forest))
+$(eval $(call webskin,ice))
 
 PKG_CONFIG_DEPENDS := $(patsubst %,CONFIG_PACKAGE_%,$(ZNC_MODULES))
 
