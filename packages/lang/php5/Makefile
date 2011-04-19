@@ -94,7 +94,7 @@ define Package/php5-fastcgi
   TITLE:=FastCGI startup script
 endef
 
-define Package/php5-cgi/description
+define Package/php5-fastcgi/description
    As FastCGI support is now a core feature the php5-fastcgi package now depends
    on the php5-cgi package, containing just the startup script.
 endef
