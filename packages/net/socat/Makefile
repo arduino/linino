@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=socat
-PKG_VERSION:=1.6.0.1
+PKG_VERSION:=1.7.1.3
 PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.dest-unreach.org/socat/download/
-PKG_MD5SUM:=6a0dd33cde2a18eb382433aca8f76ce2
+PKG_MD5SUM:=2081987fb0cb0290b8105574058cb329
 
 PKG_INSTALL:=1
 
@@ -44,6 +44,9 @@ define Build/Configure
 		--enable-termios \
 		, \
 		sc_cv_termios_ispeed="no" \
+		sc_cv_sys_crdly_shift=9 \
+		sc_cv_sys_tabdly_shift=11 \
+		sc_cv_sys_csize_shift=4 \
 	)
 endef
 
