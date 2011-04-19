@@ -1,0 +1,12 @@
+diff -urN bwping-1.2.orig/bwping.c bwping-1.2/bwping.c
+--- bwping-1.2.orig/bwping.c	2010-01-22 17:49:29.000000000 +0000
++++ bwping-1.2/bwping.c	2010-12-07 12:30:26.000000000 +0000
+@@ -221,7 +221,7 @@
+     unsigned int		bufsize, tos, transmitted_number, received_number;
+     unsigned long int		kbps, pktsize, volume, rperiod, received_volume;
+     unsigned long long int	min_interval, interval, current_interval, integral_error;
+-    char			ch;
++    int				ch;
+     char			*ep, *target;
+     fd_set			fds;
+     struct sockaddr_in		to;
