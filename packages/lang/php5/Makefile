@@ -27,6 +27,7 @@ define Package/php5/Default
   CATEGORY:=Languages
   TITLE:=PHP5 Hypertext preprocessor
   URL:=http://www.php.net/
+  MAINTAINER:=Michael Heimpold <mhei@heimpold.de>
 endef
 
 define Package/php5/Default/description
