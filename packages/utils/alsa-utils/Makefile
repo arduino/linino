@@ -39,6 +39,9 @@ define Build/Configure
 		--disable-rpath \
 		--disable-alsatest \
 		--disable-xmlto \
+		, \
+		ac_cv_prog_ncurses5_config=no \
+		ac_cv_prog_ncursesw5_config=no \
 	)
 endef
 
