@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lm-sensors
-PKG_VERSION:=3.2.0
-PKG_RELEASE:=2
+PKG_VERSION:=3.3.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=lm_sensors-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://dl.lm-sensors.org/lm-sensors/releases/
-PKG_MD5SUM:=829d88fb09d67723fbf42853eb84d1fd
+PKG_SOURCE_URL:=http://dl.lm-sensors.org/lm-sensors/releases
+PKG_MD5SUM:=5eb18d7531ead4f54f28a1133a606535
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/lm_sensors-$(PKG_VERSION)
 PKG_BUILD_PARALLEL:=1
@@ -23,6 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/lm-sensors/Default
   DEPENDS:=+sysfsutils
   URL:=http://www.lm-sensors.org/
+  MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 
 define Package/lm-sensors
@@ -72,22 +73,23 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) \
 		$(PKG_BUILD_DIR)/lib/libsensors.{a,so*} \
-		$(1)/usr/lib/
+		$(1)/usr/lib
 endef
 
 define Package/lm-sensors/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/prog/sensors/sensors $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/prog/detect/sensors-detect $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/prog/sensors/sensors $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/prog/detect/sensors-detect $(1)/usr/sbin
+ifeq ($(ARCH),i386)
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/sensors.conf $(1)/etc/sensors.conf
+endif
 endef
 
 define Package/libsensors/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/lib/libsensors.so* $(1)/usr/lib/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/lib/libsensors.so* $(1)/usr/lib
 endef
-
 
 $(eval $(call BuildPackage,lm-sensors))
 $(eval $(call BuildPackage,libsensors))
