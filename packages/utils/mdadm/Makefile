@@ -28,7 +28,7 @@ define Package/mdadm
   MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 
-define Package/at/description
+define Package/mdadm/description
  A tool for managing Linux Software RAID arrays.
 endef
 
