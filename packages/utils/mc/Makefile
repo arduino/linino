@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mc
-PKG_VERSION:=4.7.5.1
+PKG_VERSION:=4.7.5.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.midnight-commander.org/downloads/
-PKG_MD5SUM:=e673b7ec0191e4061b5d8b69368aa113
+PKG_MD5SUM:=9fdfe7c0fcff362436eb35fcd1adf0fd
+
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -25,25 +27,25 @@ define Package/mc
   TITLE:=midnight commander - a powerful file manager
   URL:=http://www.midnight-commander.org/
   SUBMENU:=filemanager
+  MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 
 define Package/mc/description
-	GNU Midnight Commander is a text-mode full-screen file manager. 
-	It uses a two panel interface and a subshell for command execution. 
-	It includes an internal editor with syntax highlighting and an 
-	internal viewer with support for binary files. Also included is 
-	Virtual Filesystem (VFS), that allows files on remote systems 
-	(e.g. FTP, SSH, SMB servers) and files inside archives to be 
-	manipulated like real files.
+ GNU Midnight Commander is a visual file manager, licensed under GNU General
+ Public License and therefore qualifies as Free Software. It's a feature rich
+ full-screen text mode application that allows you to copy, move and delete
+ files and whole directory trees, search for files and run commands in the
+ subshell.
 endef
 
 CONFIGURE_ARGS += \
+	--enable-utf8 \
+	--disable-vfs \
+	--with-screen=ncurses \
 	--without-edit \
 	--without-gpm-mouse \
 	--without-subshell \
-	--without-x \
-	--disable-vfs \
-	--with-screen=ncurses
+	--without-x
 
 AM_HOST=$(firstword $(wildcard $(STAGING_DIR_HOST)/share/automake-*))
 
@@ -58,6 +60,15 @@ endef
 define Package/mc/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/mc $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/mc
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/misc/mc.menu $(1)/etc/mc
+	$(INSTALL_DIR) $(1)/etc/mc/skins
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/misc/skins/default.ini $(1)/etc/mc/skins
+endef
+
+define Package/mc/conffiles
+/etc/mc/mc.menu
+/etc/mc/skins/default.ini
 endef
 
 $(eval $(call BuildPackage,mc))
