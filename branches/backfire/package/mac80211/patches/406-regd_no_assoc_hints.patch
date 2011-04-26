@@ -9,7 +9,7 @@
  	mutex_lock(&reg_mutex);
  
  	if (unlikely(!last_request))
-@@ -1791,6 +1793,8 @@ static void restore_regulatory_settings(
+@@ -1835,6 +1837,8 @@ static void restore_regulatory_settings(
  
  void regulatory_hint_disconnect(void)
  {
