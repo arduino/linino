@@ -42,6 +42,7 @@ static const unsigned char charsets[] =
 	"\001" "UTF-16LE"   "\0"
 	"\002" "UTF-32BE"   "\0"
 	"\003" "UTF-32LE"   "\0"
+	"\006" "ASCII"      "\0"
 	"\006" "US-ASCII"   "\0"
 	"\007" "ISO-8859-1" "\0"
 	"\007" "LATIN1"     "\0"
