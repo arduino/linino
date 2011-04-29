@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=quicktun
-PKG_VERSION:=2.1.6
+PKG_VERSION:=2.1.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://oss.ucis.nl/quicktun/src
-PKG_MD5SUM:=04e322b431235b18a091438d9a880a9b
+PKG_MD5SUM:=6cf38b17218deb8c908cc17d91f9cbd7
 
 PKG_BUILD_DEPENDS:=nacl
 
