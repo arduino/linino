@@ -1,6 +1,17 @@
---- a/src/modbus.c	2011-03-28 14:51:41.000000000 +0200
-+++ b/src/modbus.c	2011-03-28 14:52:12.000000000 +0200
-@@ -293,10 +293,8 @@
+--- a/src/modbus.c
++++ b/src/modbus.c
+@@ -281,10 +281,8 @@ static int mb_init_connection (mb_host_t
+ 
+   modbus_set_debug (&host->connection, 1);
+ 
+-#if 0
+   /* We'll do the error handling ourselves. */
+   modbus_set_error_handling (&host->connection, NOP_ON_ERROR);
+-#endif
+ 
+   if ((host->port < 1) || (host->port > 65535))
+     host->port = MODBUS_TCP_DEFAULT_PORT;
+@@ -293,10 +291,8 @@ static int mb_init_connection (mb_host_t
        host->node, host->port);
  
    modbus_init_tcp (&host->connection,
@@ -12,12 +23,12 @@
  
    status = modbus_connect (&host->connection);
    if (status != 0)
-@@ -366,7 +367,7 @@
-   {
-     status = read_holding_registers (&host->connection,
-         /* slave = */ slave->id, /* start_addr = */ data->register_base,
--        /* num_registers = */ values_num, /* buffer = */ values);
-+        /* num_registers = */ values_num, /* buffer = */ (uint16_t*)values);
-     if (status > 0)
-       break;
- 
+@@ -325,7 +321,7 @@ static int mb_init_connection (mb_host_t
+ static int mb_read_data (mb_host_t *host, mb_slave_t *slave, /* {{{ */
+     mb_data_t *data)
+ {
+-  int values[2];
++  uint16_t values[2];
+   int values_num;
+   const data_set_t *ds;
+   int status;
