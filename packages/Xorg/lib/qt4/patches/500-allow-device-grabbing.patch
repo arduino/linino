@@ -1,0 +1,60 @@
+--- qt-everywhere-opensource-src-4.7.0/src/gui/embedded/qkbdlinuxinput_qws.cpp	2010-09-10 11:05:24.000000000 +0200
++++ qt-everywhere-opensource-src-4.7.0/src/gui/embedded/qkbdlinuxinput_qws.cpp.mod	2011-04-28 21:57:04.208449828 +0200
+@@ -103,6 +103,7 @@
+     QString dev = QLatin1String("/dev/input/event1");
+     int repeat_delay = -1;
+     int repeat_rate = -1;
++    int grab = 0;
+ 
+     QStringList args = device.split(QLatin1Char(':'));
+     foreach (const QString &arg, args) {
+@@ -110,12 +111,16 @@
+             repeat_delay = arg.mid(13).toInt();
+         else if (arg.startsWith(QLatin1String("repeat-rate=")))
+             repeat_rate = arg.mid(12).toInt();
++        else if (arg.startsWith(QLatin1String("grab=")))
++            grab = arg.mid(5).toInt();
+         else if (arg.startsWith(QLatin1String("/dev/")))
+             dev = arg;
+     }
+ 
+     m_fd = QT_OPEN(dev.toLocal8Bit().constData(), O_RDWR, 0);
+     if (m_fd >= 0) {
++        ::printf("grab kbd: %d\n", grab);
++        ::ioctl(m_fd, EVIOCGRAB, grab);
+         if (repeat_delay > 0 && repeat_rate > 0) {
+             int kbdrep[2] = { repeat_delay, repeat_rate };
+             ::ioctl(m_fd, EVIOCSREP, kbdrep);
+--- qt-everywhere-opensource-src-4.7.0/src/gui/embedded/qmouselinuxinput_qws.cpp	2010-09-10 11:05:24.000000000 +0200
++++ qt-everywhere-opensource-src-4.7.0/src/gui/embedded/qmouselinuxinput_qws.cpp.mod	2011-04-28 21:57:13.358562410 +0200
+@@ -43,6 +43,7 @@
+ 
+ #include <QScreen>
+ #include <QSocketNotifier>
++#include <QStringList>
+ 
+ #include <qplatformdefs.h>
+ #include <private/qcore_unix_p.h> // overrides QT_OPEN
+@@ -101,11 +102,20 @@
+     setObjectName(QLatin1String("LinuxInputSubsystem Mouse Handler"));
+ 
+     QString dev = QLatin1String("/dev/input/event0");
+-    if (device.startsWith(QLatin1String("/dev/")))
+-        dev = device;
++    int grab = 0;
++
++    QStringList args = device.split(QLatin1Char(':'));
++    foreach (const QString &arg, args) {
++        if (arg.startsWith(QLatin1String("grab=")))
++            grab = arg.mid(5).toInt();
++        else if (arg.startsWith(QLatin1String("/dev/")))
++            dev = arg;
++    }
+ 
+     m_fd = QT_OPEN(dev.toLocal8Bit().constData(), O_RDONLY | O_NDELAY, 0);
+     if (m_fd >= 0) {
++        ::printf("grab mouse: %d\n", grab);
++        ::ioctl(m_fd, EVIOCGRAB, grab);
+         m_notify = new QSocketNotifier(m_fd, QSocketNotifier::Read, this);
+         connect(m_notify, SIGNAL(activated(int)), this, SLOT(readMouseData()));
+     } else {
