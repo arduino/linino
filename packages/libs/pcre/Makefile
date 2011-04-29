@@ -15,24 +15,40 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/pcre
 PKG_MD5SUM:=ef907b8792ec7f90f0dcd773848f0b3b
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/libpcre
+define Package/libpcre/default
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=A Perl Compatible Regular Expression library
   URL:=http://www.pcre.org/
 endef
+
+define Package/libpcre
+  $(call Package/libpcre/default)
+  TITLE:=A Perl Compatible Regular Expression library
+endef
+
+define Package/libpcrecpp
+  $(call Package/libpcre/default)
+  TITLE:=C++ wrapper for Perl Compatible Regular Expression library
+  DEPENDS:=+libpcre
+endef
+
 
 TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
 	--enable-utf8 \
-	--disable-cpp
+
+ifneq ($(CONFIG_PACKAGE_libpcrecpp),)
+  CONFIGURE_ARGS+= --enable-cpp
+else
+  CONFIGURE_ARGS+= --disable-cpp
+endif
 
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS)"
@@ -45,13 +61,13 @@ define Build/InstallDev
 	$(LN) $(STAGING_DIR)/usr/bin/pcre-config $(2)/bin
 
 	$(INSTALL_DIR) $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/pcre{,posix}.h $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/pcre*.h $(1)/usr/include/
 
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpcre{,posix}.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpcre*.{a,so*} $(1)/usr/lib//
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libpcre.pc $(1)/usr/lib/pkgconfig/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libpcre*.pc $(1)/usr/lib/pkgconfig/
 
 endef
 
@@ -60,4 +76,10 @@ define Package/libpcre/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpcre{,posix}.so.* $(1)/usr/lib/
 endef
 
+define Package/libpcrecpp/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpcrecpp.so.* $(1)/usr/lib/
+endef
+
 $(eval $(call BuildPackage,libpcre))
+$(eval $(call BuildPackage,libpcrecpp))
