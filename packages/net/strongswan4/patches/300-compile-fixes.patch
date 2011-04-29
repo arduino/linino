@@ -1,8 +1,6 @@
-Index: strongswan-4.3.7/src/pluto/adns.c
-===================================================================
---- strongswan-4.3.7.orig/src/pluto/adns.c	2010-11-04 01:34:39.497000001 +0100
-+++ strongswan-4.3.7/src/pluto/adns.c	2010-11-04 01:35:10.609000001 +0100
-@@ -179,7 +179,7 @@
+--- a/src/pluto/adns.c
++++ b/src/pluto/adns.c
+@@ -179,7 +179,7 @@ write_pipe(int fd, const unsigned char *
  	res_query(dname, class, type, answer, anslen)
  # define res_nclose(statp) res_close()
  

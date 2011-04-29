@@ -1,5 +1,5 @@
---- a/src/charon/plugins/uci/uci_parser.c
-+++ b/src/charon/plugins/uci/uci_parser.c
+--- a/src/libcharon/plugins/uci/uci_parser.c
++++ b/src/libcharon/plugins/uci/uci_parser.c
 @@ -80,7 +80,7 @@ static bool section_enumerator_enumerate
  		if (uci_lookup(this->ctx, &element, this->package,
  					   this->current->name, "name") == UCI_OK)

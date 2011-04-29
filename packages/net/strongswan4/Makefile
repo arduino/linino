@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=strongswan
-PKG_VERSION:=4.3.7
+PKG_VERSION:=4.5.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.strongswan.org/
-PKG_MD5SUM:=02adcea934ef536e704d03c5d0f934f8
+PKG_MD5SUM:=81a4a699c4a1a49b74061dfa47b5a033
 
 PKG_MOD_AVAILABLE:= \
 	aes \
@@ -21,12 +21,15 @@ PKG_MOD_AVAILABLE:= \
 	attr \
 	attr-sql \
 	blowfish \
+	constraints \
 	curl \
 	des \
+	dhcp \
 	dnskey \
 	eap-md5 \
 	eap-mschapv2 \
 	eap-radius \
+	farp \
 	fips-prf \
 	gcrypt \
 	gmp \
@@ -35,6 +38,7 @@ PKG_MOD_AVAILABLE:= \
 	kernel-netlink \
 	kernel-pfkey \
 	ldap \
+	led \
 	load-tester \
 	md5 \
 	medcli \
@@ -47,15 +51,19 @@ PKG_MOD_AVAILABLE:= \
 	pubkey \
 	random \
 	resolve \
+	revocation \
 	sha1 \
 	sha2 \
 	smp \
+	socket-default \
+	socket-raw \
 	sql \
 	sqlite \
 	stroke \
 	uci \
 	updown \
 	x509 \
+	xauth \
 	xcbc \
 
 PKG_BUILD_DEPENDS:= \
@@ -73,7 +81,7 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_STRONGSWAN4_ROUTING_TABLE_PRIO \
 	$(patsubst %,CONFIG_PACKAGE_strongswan4-mod-%,$(PKG_MOD_AVAILABLE)) \
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 
@@ -125,12 +133,15 @@ $(call Package/strongswan4/Default)
 	+strongswan4-mod-attr \
 	+strongswan4-mod-attr-sql \
 	+strongswan4-mod-blowfish \
+	+strongswan4-mod-constraints \
 	+strongswan4-mod-curl \
 	+strongswan4-mod-des \
+	+strongswan4-mod-dhcp \
 	+strongswan4-mod-dnskey \
 	+strongswan4-mod-eap-md5 \
 	+strongswan4-mod-eap-mschapv2 \
 	+strongswan4-mod-eap-radius \
+	+strongswan4-mod-farp \
 	+strongswan4-mod-fips-prf \
 	+strongswan4-mod-gcrypt \
 	+strongswan4-mod-gmp \
@@ -139,6 +150,7 @@ $(call Package/strongswan4/Default)
 	+strongswan4-mod-kernel-netlink \
 	+strongswan4-mod-kernel-pfkey \
 	+strongswan4-mod-ldap \
+	+strongswan4-mod-led \
 	+strongswan4-mod-load-tester \
 	+strongswan4-mod-md5 \
 	+strongswan4-mod-medcli \
@@ -151,15 +163,19 @@ $(call Package/strongswan4/Default)
 	+strongswan4-mod-pubkey \
 	+strongswan4-mod-random \
 	+strongswan4-mod-resolve \
+	+strongswan4-mod-revocation \
 	+strongswan4-mod-sha1 \
 	+strongswan4-mod-sha2 \
 	+strongswan4-mod-smp \
+	+strongswan4-mod-socket-default \
+	+strongswan4-mod-socket-raw \
 	+strongswan4-mod-sql \
 	+strongswan4-mod-sqlite \
 	+strongswan4-mod-stroke \
 	+strongswan4-mod-uci \
 	+strongswan4-mod-updown \
 	+strongswan4-mod-x509 \
+	+strongswan4-mod-xauth \
 	+strongswan4-mod-xcbc \
 	+strongswan4-utils
 endef
@@ -178,24 +194,29 @@ $(call Package/strongswan4/Default)
 	+strongswan4-app-charon \
 	+strongswan4-app-pluto \
 	+strongswan4-mod-aes \
+	+strongswan4-mod-constraints \
 	+strongswan4-mod-attr \
 	+strongswan4-mod-des \
 	+strongswan4-mod-dnskey \
 	+strongswan4-mod-fips-prf \
 	+strongswan4-mod-gmp \
 	+strongswan4-mod-hmac \
+	+strongswan4-mod-kernel-netlink \
 	+strongswan4-mod-md5 \
 	+strongswan4-mod-pem \
 	+strongswan4-mod-pgp \
 	+strongswan4-mod-pkcs1 \
 	+strongswan4-mod-pubkey \
 	+strongswan4-mod-random \
+	+strongswan4-mod-revocation \
 	+strongswan4-mod-resolve \
 	+strongswan4-mod-sha1 \
 	+strongswan4-mod-sha2 \
+	+strongswan4-mod-socket-raw \
 	+strongswan4-mod-stroke \
 	+strongswan4-mod-updown \
 	+strongswan4-mod-x509 \
+	+strongswan4-mod-xauth \
 	+strongswan4-mod-xcbc \
 	+strongswan4-utils
 endef
@@ -216,9 +237,11 @@ $(call Package/strongswan4/Default)
 	+strongswan4-mod-aes \
 	+strongswan4-mod-gmp \
 	+strongswan4-mod-hmac \
+	+strongswan4-mod-kernel-netlink \
 	+strongswan4-mod-pubkey \
 	+strongswan4-mod-random \
 	+strongswan4-mod-sha1 \
+	+strongswan4-mod-socket-default \
 	+strongswan4-mod-stroke \
 	+strongswan4-mod-updown \
 	+strongswan4-mod-x509 \
@@ -228,7 +251,7 @@ endef
 define Package/strongswan4-minimal/description
 $(call Package/strongswan4/description/Default)
  .
- This meta-package contains only dependencies for a minimal setup.
+ This meta-package contains only dependencies for a minimal IKEv2 setup.
 endef
 
 
@@ -324,14 +347,16 @@ define Package/strongswan4/install
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) -R $(PKG_INSTALL_DIR)/etc/ipsec.d $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libstrongswan.so.* $(1)/usr/lib/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libstrongswan.so.* \
+		$(PKG_INSTALL_DIR)/usr/lib/libhydra.so.* \
+		$(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ipsec $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/lib/ipsec
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/ipsec/_copyright \
 		$(PKG_INSTALL_DIR)/usr/lib/ipsec/starter \
-		$(PKG_INSTALL_DIR)/usr/lib/ipsec/whack \
 		$(1)/usr/lib/ipsec/
 	$(INSTALL_CONF) \
 		./files/ipsec.conf \
@@ -357,6 +382,8 @@ endef
 
 
 define Package/strongswan4-app-charon/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcharon.so.* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/ipsec
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/ipsec/charon \
@@ -370,6 +397,7 @@ define Package/strongswan4-app-pluto/install
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/ipsec/pluto \
 		$(PKG_INSTALL_DIR)/usr/lib/ipsec/_pluto_adns \
+		$(PKG_INSTALL_DIR)/usr/lib/ipsec/whack \
 		$(1)/usr/lib/ipsec/
 endef
 
@@ -413,12 +441,15 @@ $(eval $(call BuildPlugin,agent,SSH agent signing,))
 $(eval $(call BuildPlugin,attr,File-based config attr,))
 $(eval $(call BuildPlugin,attr-sql,SQL-based config attrib,+strongswan4-mod-sql))
 $(eval $(call BuildPlugin,blowfish,Blowfish crypto,))
+$(eval $(call BuildPlugin,constraints,X.509 constraint checking,))
 $(eval $(call BuildPlugin,curl,cURL,+libcurl))
 $(eval $(call BuildPlugin,des,DES crypto,))
+$(eval $(call BuildPlugin,dhcp,DHCP-based IP and DNS,))
 $(eval $(call BuildPlugin,dnskey,DNS RR key decoding,))
 $(eval $(call BuildPlugin,eap-md5,MD5 EAP (CHAP) auth,))
 $(eval $(call BuildPlugin,eap-mschapv2,MS-CHAPv2 EAP auth,))
 $(eval $(call BuildPlugin,eap-radius,RADIUS proxy auth,))
+$(eval $(call BuildPlugin,farp,Fake arp respsonses,))
 $(eval $(call BuildPlugin,fips-prf,FIPS PRF crypto,))
 $(eval $(call BuildPlugin,gcrypt,libgcrypt,+libgcrypt))
 $(eval $(call BuildPlugin,gmp,libgmp,+libgmp))
@@ -427,6 +458,7 @@ $(eval $(call BuildPlugin,kernel-klips,KLIPS kernel interface,))
 $(eval $(call BuildPlugin,kernel-netlink,netlink kernel interface,))
 $(eval $(call BuildPlugin,kernel-pfkey,PK_KEY kernel interface,))
 $(eval $(call BuildPlugin,ldap,LDAP,+libopenldap))
+$(eval $(call BuildPlugin,led,LED blink on IKE activity,))
 $(eval $(call BuildPlugin,load-tester,load testing,))
 $(eval $(call BuildPlugin,md5,MD5 crypto,))
 $(eval $(call BuildPlugin,medcli,mediation client configuration database,))
@@ -439,13 +471,17 @@ $(eval $(call BuildPlugin,pkcs1,PKCS1 key decoding,))
 $(eval $(call BuildPlugin,pubkey,raw public key,))
 $(eval $(call BuildPlugin,random,RNG,))
 $(eval $(call BuildPlugin,resolve,DNS resolver,))
+$(eval $(call BuildPlugin,revocation,X.509 revocation checking,))
 $(eval $(call BuildPlugin,sha1,SHA1 crypto,))
 $(eval $(call BuildPlugin,sha2,SHA2 crypto,))
 $(eval $(call BuildPlugin,smp,SMP configuration and control interface,+PACKAGE_strongswan4-mod-smp:libxml2))
+$(eval $(call BuildPlugin,socket-default,default socket for IKEv2,))
+$(eval $(call BuildPlugin,socket-raw,RAW socket for IKEv1 and IKEv2,))
 $(eval $(call BuildPlugin,sql,SQL database interface,))
 $(eval $(call BuildPlugin,sqlite,SQLite database interface,+strongswan4-mod-sql +PACKAGE_strongswan4-mod-sqlite:libsqlite3))
 $(eval $(call BuildPlugin,stroke,Stroke,))
 $(eval $(call BuildPlugin,uci,UCI config interface,+libuci))
 $(eval $(call BuildPlugin,updown,updown firewall,))
 $(eval $(call BuildPlugin,x509,x509 certificate,))
+$(eval $(call BuildPlugin,xauth,XAUTH authentication,))
 $(eval $(call BuildPlugin,xcbc,xcbc crypto,))
