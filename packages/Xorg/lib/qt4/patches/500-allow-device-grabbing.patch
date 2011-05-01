@@ -8,7 +8,7 @@
  
      QStringList args = device.split(QLatin1Char(':'));
      foreach (const QString &arg, args) {
-@@ -110,12 +111,16 @@
+@@ -110,12 +111,15 @@
              repeat_delay = arg.mid(13).toInt();
          else if (arg.startsWith(QLatin1String("repeat-rate=")))
              repeat_rate = arg.mid(12).toInt();
@@ -20,7 +20,6 @@
  
      m_fd = QT_OPEN(dev.toLocal8Bit().constData(), O_RDWR, 0);
      if (m_fd >= 0) {
-+        ::printf("grab kbd: %d\n", grab);
 +        ::ioctl(m_fd, EVIOCGRAB, grab);
          if (repeat_delay > 0 && repeat_rate > 0) {
              int kbdrep[2] = { repeat_delay, repeat_rate };
@@ -35,7 +34,7 @@
  
  #include <qplatformdefs.h>
  #include <private/qcore_unix_p.h> // overrides QT_OPEN
-@@ -101,11 +102,20 @@
+@@ -101,11 +102,19 @@
      setObjectName(QLatin1String("LinuxInputSubsystem Mouse Handler"));
  
      QString dev = QLatin1String("/dev/input/event0");
@@ -53,7 +52,6 @@
  
      m_fd = QT_OPEN(dev.toLocal8Bit().constData(), O_RDONLY | O_NDELAY, 0);
      if (m_fd >= 0) {
-+        ::printf("grab mouse: %d\n", grab);
 +        ::ioctl(m_fd, EVIOCGRAB, grab);
          m_notify = new QSocketNotifier(m_fd, QSocketNotifier::Read, this);
          connect(m_notify, SIGNAL(activated(int)), this, SLOT(readMouseData()));
