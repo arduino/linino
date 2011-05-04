@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -95,8 +95,8 @@ define Package/php5-fastcgi
 endef
 
 define Package/php5-fastcgi/description
-   As FastCGI support is now a core feature the php5-fastcgi package now depends
-   on the php5-cgi package, containing just the startup script.
+  As FastCGI support is now a core feature the php5-fastcgi package now depends
+  on the php5-cgi package, containing just the startup script.
 endef
 
 CONFIGURE_VARS += \
