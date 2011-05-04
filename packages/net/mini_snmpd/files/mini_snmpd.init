@@ -23,8 +23,11 @@ mini_snmpd_config() {
 	append_string "$cfg" contact "-C"
 	append_string "$cfg" disks "-d"
 	append_string "$cfg" interfaces "-i"
-	
-	config_get_bool enabled "$cfg" "enabled" '1'c
+
+	config_get_bool ipv6 "$cfg" "ipv6" '0'
+	[ "$ipv6" -gt 0 ] && append args "-6"
+
+	config_get_bool enabled "$cfg" "enabled" '1'
 	[ "$enabled" -gt 0 ] && $PROG $args &
 }
 

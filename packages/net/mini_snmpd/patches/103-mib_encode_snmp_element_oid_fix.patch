@@ -10,7 +10,7 @@
  	buffer = value->data.buffer;
  	length = 1;
  	for (i = 2; i < oid_value->subid_list_length; i++) {
-@@ -293,6 +296,8 @@ static int mib_build_entry(const oid_t *
+@@ -307,6 +310,8 @@ static int mib_build_entry(const oid_t *
  			value->data.encoded_length = 0;
  			value->data.buffer = malloc(value->data.max_length);
  			if (encode_snmp_element_oid(value, oid_aton((const char *)default_value)) == -1) {
