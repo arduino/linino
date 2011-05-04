@@ -36,10 +36,6 @@ define Package/php5/Default/description
 endef
 
 define Package/php5/config
-	config PHP5_APC
-		bool "PHP5 APC support"
-		depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
-
 	config PHP5_FILTER
 		bool "PHP5 Filter support"
 		depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
@@ -54,6 +50,9 @@ define Package/php5
   DEPENDS:=+libpcre +zlib
   ifneq ($(CONFIG_PHP5_LIBXML),)
     DEPENDS+= +libxml2
+  endif
+  ifneq ($(CONFIG_PACKAGE_php5-mod-apc),)
+    DEPENDS+= +librt
   endif
   ifneq ($(CONFIG_PACKAGE_php5-mod-sqlite3)$(CONFIG_PACKAGE_php5-mod-pdo-sqlite),)
     DEPENDS+= +libsqlite3 +libpthread
@@ -135,6 +134,13 @@ ifneq ($(SDK),)
   CONFIG_PACKAGE_php5-mod-sqlite:=m
   CONFIG_PACKAGE_php5-mod-sqlite3:=m
   CONFIG_PACKAGE_php5-mod-xml:=m
+endif
+
+ifneq ($(CONFIG_PACKAGE_php5-mod-apc),)
+  PKG_CONFIGURE_OPTS+= --enable-apc=shared --disable-apc-mmap --disable-apc-pthreadmutex
+  PKG_CONFIGURE_LIBS+= -lrt
+else
+  PKG_CONFIGURE_OPTS+= --disable-apc
 endif
 
 ifneq ($(CONFIG_PACKAGE_php5-mod-ctype),)
@@ -361,13 +367,6 @@ else
   PKG_CONFIGURE_OPTS+= --disable-xmlwriter
 endif
 
-ifneq ($(CONFIG_PHP5_APC),)
-  PKG_CONFIGURE_OPTS+= --enable-apc --disable-apc-mmap --disable-apc-pthreadmutex
-  PKG_CONFIGURE_LIBS+= -lrt
-else
-  PKG_CONFIGURE_OPTS+= --disable-apc
-endif
-
 ifneq ($(CONFIG_PHP5_FILTER),)
   PKG_CONFIGURE_OPTS+= --enable-filter
 else
@@ -484,6 +483,7 @@ $(eval $(call BuildPackage,php5-cli))
 $(eval $(call BuildPackage,php5-cgi))
 $(eval $(call BuildPackage,php5-fastcgi))
 
+$(eval $(call BuildModule,apc,APC))
 $(eval $(call BuildModule,ctype,Ctype))
 $(eval $(call BuildModule,curl,cURL,php5 +libcurl))
 $(eval $(call BuildModule,fileinfo,Fileinfo,php5 +libmagic))
