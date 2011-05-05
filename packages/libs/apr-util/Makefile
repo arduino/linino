@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=http://apache.autinity.de/apr
 PKG_MD5SUM:=6a6f501a1b2a45166b8ffd6df29204bb
 
 PKG_FIXUP:=libtool
+PKG_REMOVE_FILES:=aclocal.m4 build/ltmain.sh
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -40,6 +42,7 @@ CONFIGURE_ARGS += \
 
 CONFIGURE_VARS += \
 	ac_cv_file_dbd_apr_dbd_mysql_c=no \
+	ac_cv_path_ODBC_CONFIG= \
 	APR_BUILD_DIR="$(STAGING_DIR)/usr/share/build-1" \
 
 MAKE_FLAGS += \
