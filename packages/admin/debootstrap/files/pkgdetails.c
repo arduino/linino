@@ -6,6 +6,8 @@
 #define MAX_LINE 1000
 #define MAX_PKGS 100
 
+char *checksum_field=NULL;
+
 static char *fieldcpy(char *dst, char *fld) {
     while (*fld && *fld != ':') 
         fld++;
@@ -84,7 +86,7 @@ static void dopkgmirrorpkgs(int uniq, char *mirror, char *pkgsfile,
     char cur_ver[MAX_LINE];
     char cur_arch[MAX_LINE];
     char cur_size[MAX_LINE];
-    char cur_md5[MAX_LINE];
+    char cur_checksum[MAX_LINE];
     char cur_filename[MAX_LINE];
     char *pkgs[MAX_PKGS];
     int i;
@@ -112,8 +114,9 @@ static void dopkgmirrorpkgs(int uniq, char *mirror, char *pkgsfile,
             fieldcpy(cur_arch, buf);
         } else if (strncasecmp(buf, "Size:", 5) == 0) {
             fieldcpy(cur_size, buf);
-        } else if (strncasecmp(buf, "MD5sum:", 7) == 0) {
-            fieldcpy(cur_md5, buf);
+        } else if (strncasecmp(buf, checksum_field, strlen(checksum_field)) == 0
+	           && buf[strlen(checksum_field)] == ':') {
+            fieldcpy(cur_checksum, buf);
         } else if (strncasecmp(buf, "Filename:", 9) == 0) {
             fieldcpy(cur_filename, buf);
         } else if (!*buf) {
@@ -122,7 +125,7 @@ static void dopkgmirrorpkgs(int uniq, char *mirror, char *pkgsfile,
 		if (!pkgs[i]) continue;
 		any = 1;
                 if (strcmp(cur_field, pkgs[i]) == 0) {
-                    printf("%s %s %s %s %s %s %s\n", cur_pkg, cur_ver, cur_arch, mirror, cur_filename, cur_md5, cur_size);
+                    printf("%s %s %s %s %s %s %s\n", cur_pkg, cur_ver, cur_arch, mirror, cur_filename, cur_checksum, cur_size);
                     if (uniq) pkgs[i] = NULL;
 		    break;
 		}
@@ -230,6 +233,11 @@ static int dotranslatewgetpercent(int low, int high, int end, char *str) {
 }
 
 int main(int argc, char *argv[]) {
+    checksum_field=getenv("DEBOOTSTRAP_CHECKSUM_FIELD");
+    if (checksum_field == NULL) {
+        checksum_field="MD5sum";
+    }
+
     if ((argc == 6 || argc == 5) && strcmp(argv[1], "WGET%") == 0) {
 	if (dotranslatewgetpercent(atoi(argv[2]), atoi(argv[3]), 
 	                           atoi(argv[4]), argc == 6 ? argv[5] : NULL))
