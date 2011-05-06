@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lm-sensors
 PKG_VERSION:=3.3.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=lm_sensors-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://dl.lm-sensors.org/lm-sensors/releases
@@ -34,6 +34,14 @@ define Package/lm-sensors
   DEPENDS+=+libsensors
 endef
 
+define Package/lm-sensors-detect
+  $(call Package/lm-sensors/Default)
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=lm-sensors-detect
+  DEPENDS+=+lm-sensors +perl +perlbase-essential +perlbase-fcntl +perlbase-file +perlbase-xsloader
+endef
+
 define Package/libsensors
   $(call Package/lm-sensors/Default)
   SECTION:=libs
@@ -42,11 +50,15 @@ define Package/libsensors
 endef
 
 define Package/lm-sensors/description
-	Utility to read hardware sensor data
+ Utility to read hardware sensor data
+endef
+
+define Package/lm-sensors-detect/description
+ Script to autodetect sensor hardware
 endef
 
 define Package/libsensors/description
-	lm-sensors libraries
+ lm-sensors libraries
 endef
 
 define Package/lm-sensors/conffiles
@@ -79,11 +91,15 @@ endef
 define Package/lm-sensors/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/prog/sensors/sensors $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/prog/detect/sensors-detect $(1)/usr/sbin
 ifeq ($(ARCH),i386)
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/sensors.conf $(1)/etc/sensors.conf
 endif
+endef
+
+define Package/lm-sensors-detect/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/prog/detect/sensors-detect $(1)/usr/sbin
 endef
 
 define Package/libsensors/install
@@ -92,4 +108,5 @@ define Package/libsensors/install
 endef
 
 $(eval $(call BuildPackage,lm-sensors))
+$(eval $(call BuildPackage,lm-sensors-detect))
 $(eval $(call BuildPackage,libsensors))
