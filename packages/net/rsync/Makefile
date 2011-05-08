@@ -29,6 +29,14 @@ define Package/rsync
   URL:=http://rsync.samba.org/
 endef
 
+define Package/rsyncd
+  SECTION:=net
+  CATEGORY:=Network
+  SUBMENU:=File Transfer
+  TITLE:=Rsync daemon
+  DEPENDS:=+rsync
+endef
+
 define Package/rsync/description
 	rsync is a program that allows files to be copied to
 	and from remote machines in much the same way as rcp.
@@ -49,12 +57,16 @@ CONFIGURE_ARGS += \
 	--disable-acl-support \
 
 define Package/rsync/install
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) ./files/rsyncd.conf $(1)/etc/
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/rsyncd.init $(1)/etc/init.d/rsyncd
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
 endef
 
+define Package/rsyncd/install
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/rsyncd.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/rsyncd.init $(1)/etc/init.d/rsyncd
+endef
+
 $(eval $(call BuildPackage,rsync))
+$(eval $(call BuildPackage,rsyncd))
