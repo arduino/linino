@@ -96,7 +96,7 @@ define Package/php5-cli
 endef
 
 define Package/php5-cli/description
-  (call Package/php5/Default/description)
+  $(call Package/php5/Default/description)
   This package contains the CLI version of the PHP5 interpreter.
 endef
 
