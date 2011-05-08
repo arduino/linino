@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -109,6 +109,7 @@ define Build/Compile
 			-I$(PKG_BUILD_DIR)/include/ulogd \
 			-I$(PKG_BUILD_DIR)/include \
 			-I$(PKG_BUILD_DIR)/libipulog/include \
+			-Wl,--export-dynamic \
 			$(TARGET_CPPFLAGS)" \
 		all install
 endef
