@@ -20,7 +20,6 @@
 #freedns.afraid.org is weird, you just need an update code, for which we use the password variable
 "freedns.afraid.org"	"http://freedns.afraid.org/dynamic/update.php?[PASSWORD]"
 
-
 #### ADD YOURS HERE! ######################################################################################
 #                                                                                                         #
 # There are TONS of dynamic dns services out there. There's a huge list of them at:                       #
@@ -30,5 +29,8 @@
 ###########################################################################################################
 
 # DNS Max and resellers' update urls
-"dnsmax.com" "http://update.dnsmax.com/update/?username=[USERNAME]&password=[PASSWORD]&resellerid=1&clientname=openwrt&clientversion=8.09&protocolversion=2.0&updatehostname=[DOMAIN]&ip=[IP]"
-"thatip.com" "http://update.dnsmax.com/update/?username=[USERNAME]&password=[PASSWORD]&resellerid=2&clientname=openwrt&clientversion=8.09&protocolversion=2.0&updatehostname=[DOMAIN]&ip=[IP]"
+"dnsmax.com"	"http://update.dnsmax.com/update/?username=[USERNAME]&password=[PASSWORD]&resellerid=1&clientname=openwrt&clientversion=8.09&protocolversion=2.0&updatehostname=[DOMAIN]&ip=[IP]"
+"thatip.com"	"http://update.dnsmax.com/update/?username=[USERNAME]&password=[PASSWORD]&resellerid=2&clientname=openwrt&clientversion=8.09&protocolversion=2.0&updatehostname=[DOMAIN]&ip=[IP]"
+
+# Hurricane Electric Dynamic DNS
+"he.net"		"http://[DOMAIN]:[PASSWORD]@dyn.dns.he.net/nic/update?hostname=[DOMAIN]&myip=[IP]" 
