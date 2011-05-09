@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lcd4linux
-PKG_REV:=1143
+PKG_REV:=1144
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
