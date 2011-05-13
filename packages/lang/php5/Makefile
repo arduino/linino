@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
 PKG_VERSION:=5.3.6
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
@@ -25,7 +25,7 @@ PHP5_MODULES = \
 	dom \
 	exif \
 	ftp \
-	gd gmp \
+	gettext gd gmp \
 	hash \
 	iconv \
 	json \
@@ -129,7 +129,6 @@ CONFIGURE_ARGS+= \
 	--enable-magic-quotes \
 	--disable-short-tags \
 	\
-	--without-gettext \
 	--with-zlib="$(STAGING_DIR)/usr" \
 	  --with-zlib-dir="$(STAGING_DIR)/usr" \
 	--with-pcre-regex="$(STAGING_DIR)/usr" \
@@ -187,6 +186,12 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-fileinfo),)
   CONFIGURE_ARGS+= --enable-fileinfo=shared
 else
   CONFIGURE_ARGS+= --disable-fileinfo
+endif
+
+ifneq ($(CONFIG_PACKAGE_php5-mod-gettext),)
+  CONFIGURE_ARGS+= --with-gettext=shared,"$(STAGING_DIR)/usr/lib/libintl-full"
+else
+  CONFIGURE_ARGS+= --without-gettext
 endif
 
 ifneq ($(CONFIG_PACKAGE_php5-mod-dom),)
@@ -479,6 +484,7 @@ $(eval $(call BuildModule,fileinfo,Fileinfo,+libmagic))
 $(eval $(call BuildModule,dom,DOM,@PHP5_LIBXML +libxml2))
 $(eval $(call BuildModule,exif,EXIF))
 $(eval $(call BuildModule,ftp,FTP))
+$(eval $(call BuildModule,gettext,Gettext,+libintl-full))
 $(eval $(call BuildModule,gd,GD graphics,+libgd))
 $(eval $(call BuildModule,gmp,GMP,+libgmp))
 $(eval $(call BuildModule,hash,Hash))
