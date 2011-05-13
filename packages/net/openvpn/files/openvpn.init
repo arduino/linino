@@ -115,7 +115,7 @@ kill_service() {
 
 	# disabled?
 	config_get_bool enable "$s" enable 0
-	[ "$enable" == 0 ] && return 0
+	[ "$enable" == 1 ] || [ "$S" == "TERM" ] || return 0
 
 	PID="/var/run/openvpn-$s.pid"
 
