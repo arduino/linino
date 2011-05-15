@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pure-ftpd
-PKG_VERSION:=1.0.29
-PKG_RELEASE:=3
+PKG_VERSION:=1.0.32
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.pureftpd.org/pub/pure-ftpd/releases
-PKG_MD5SUM:=12a074824b509f9e7684fab333ed6915
+PKG_MD5SUM:=065211a4319e2089bd16b44c003eb0f8
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 

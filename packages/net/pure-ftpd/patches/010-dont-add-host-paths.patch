@@ -1,6 +1,6 @@
 --- a/configure
 +++ b/configure
-@@ -4893,18 +4893,6 @@ fi
+@@ -4825,18 +4825,6 @@ fi
  
  
  
@@ -19,7 +19,7 @@
  if uname | fgrep SunOS > /dev/null 2> /dev/null ; then
    CPPFLAGS="$CPPFLAGS -D_XPG4_2=1"
  fi
-@@ -9291,7 +9279,6 @@ if test $ac_have_func = no; then
+@@ -9222,7 +9210,6 @@ if test $ac_have_func = no; then
    # There is a commonly available library for RS/6000 AIX.
    # Since it is not a standard part of AIX, it might be installed locally.
    ac_getloadavg_LIBS=$LIBS

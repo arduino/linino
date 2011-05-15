@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 START=50
 
 SSD=start-stop-daemon
@@ -47,6 +47,7 @@ start_service() {
 	append_string "$section" minuid "-u"
 	append_string "$section" trustedip "-V"
 	append_string "$section" tls "-Y"
+	append_string "$section" tlsciphersuite "-J"
 
 	append_bool "$section" uploadscript "-o"
 	append_bool "$section" natmode "-N"
