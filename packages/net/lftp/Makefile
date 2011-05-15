@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lftp
-PKG_VERSION:=4.2.0
+PKG_VERSION:=4.2.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=http://lftp.cybermirror.org \
   http://lftp.cybermirror.org/old
-PKG_MD5SUM:=0ba993d4edda8d975a78b7e8f0c687d0
+PKG_MD5SUM:=7815af15e05472ac3ffbd5699ab842d4
 
 PKG_INSTALL:=1
 
@@ -53,7 +53,7 @@ CONFIGURE_VARS += \
 	i_cv_posix_fallocate_works=no
 
 MAKE_VARS += \
-	LD="\$$$$(CC)" \
+	LD="\$$$$(CC)"
 
 define Package/lftp/install
 	$(INSTALL_DIR) $(1)/usr/bin
