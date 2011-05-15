@@ -1,5 +1,5 @@
---- tcp_wrappers_7.6/hosts_access.5.orig	2011-05-05 22:34:39.000000000 -0600
-+++ tcp_wrappers_7.6/hosts_access.5	2011-05-05 22:39:43.000000000 -0600
+--- a/hosts_access.5
++++ b/hosts_access.5
 @@ -90,6 +90,9 @@ bitwise AND of the address and the `mask
  pattern `131.155.72.0/255.255.254.0' matches every address in the
  range `131.155.72.0' through `131.155.73.255'.
@@ -10,8 +10,8 @@
  A string that begins with a `/' character is treated as a file
  name. A host name or address is matched if it matches any host name
  or address pattern listed in the named file. The file format is
---- tcp_wrappers_7.6/tcpd.h.orig	2011-05-05 22:34:39.000000000 -0600
-+++ tcp_wrappers_7.6/tcpd.h	2011-05-05 22:40:14.000000000 -0600
+--- a/tcpd.h
++++ b/tcpd.h
 @@ -93,6 +93,7 @@ extern void refuse __P((struct request_i
  extern char *xgets __P((char *, int, FILE *));	/* fgets() on steroids */
  extern char *split_at __P((char *, int));	/* strchr() and split */
@@ -20,9 +20,9 @@
  
  /* Global variables. */
  
---- tcp_wrappers_7.6/misc.c.orig	1996-02-11 09:01:30.000000000 -0700
-+++ tcp_wrappers_7.6/misc.c	2011-05-05 22:41:49.000000000 -0600
-@@ -14,6 +14,8 @@ static char sccsic[] = "@(#) misc.c 1.2 
+--- a/misc.c
++++ b/misc.c
+@@ -14,6 +14,8 @@ static char sccsic[] = "@(#) misc.c 1.2
  #include <arpa/inet.h>
  #include <stdio.h>
  #include <string.h>
@@ -54,8 +54,8 @@
 +    return htonl(~0UL << (32 - prefix));
 +}
 +
---- tcp_wrappers_7.6/hosts_access.c.orig	2011-05-05 22:34:39.000000000 -0600
-+++ tcp_wrappers_7.6/hosts_access.c	2011-05-05 22:45:09.000000000 -0600
+--- a/hosts_access.c
++++ b/hosts_access.c
 @@ -345,7 +345,12 @@ char   *string;
      if ((addr = dot_quad_addr(string)) == INADDR_NONE)
  	return (NO);
