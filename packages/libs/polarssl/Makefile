@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=polarssl
-PKG_VERSION:=0.14.2
+PKG_VERSION:=0.14.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-gpl.tgz
 PKG_SOURCE_URL:=http://polarssl.org/code/releases
-PKG_MD5SUM:=8519ff2bb0ae783a89c297fa1c60c337
+PKG_MD5SUM:=f1b2fe9087ab64d7ea40a276a3628583
 
 include $(INCLUDE_DIR)/package.mk
 
