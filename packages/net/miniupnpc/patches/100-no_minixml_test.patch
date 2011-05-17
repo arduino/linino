@@ -1,6 +1,6 @@
---- miniupnpc-1.4/Makefile	2009-10-10 12:19:40.000000000 -0700
-+++ miniupnpc-1.4/Makefile	2010-03-03 13:31:02.000000000 -0800
-@@ -67,8 +67,8 @@
+--- a/Makefile
++++ b/Makefile
+@@ -107,8 +107,8 @@ installpythonmodule:	pythonmodule
  	python setup.py install
  
  validateminixml:	minixmlvalid

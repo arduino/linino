@@ -1,6 +1,6 @@
---- miniupnpc-1.4/upnpcommands.c	2009-07-13 01:44:43.000000000 -0700
-+++ miniupnpc-1.4/upnpcommands.c	2010-03-03 13:33:21.000000000 -0800
-@@ -335,7 +335,7 @@
+--- a/upnpcommands.c
++++ b/upnpcommands.c
+@@ -351,7 +351,7 @@ UPNP_AddPortMapping(const char * control
  	AddPortMappingArgs[5].elt = "NewEnabled";
  	AddPortMappingArgs[5].val = "1";
  	AddPortMappingArgs[6].elt = "NewPortMappingDescription";
@@ -8,4 +8,4 @@
 +	AddPortMappingArgs[6].val = desc?desc:"miniupnpc";
  	AddPortMappingArgs[7].elt = "NewLeaseDuration";
  	AddPortMappingArgs[7].val = "0";
- 	simpleUPnPcommand(-1, controlURL, servicetype, "AddPortMapping", AddPortMappingArgs, buffer, &bufsize);
+ 	if(simpleUPnPcommand(-1, controlURL, servicetype, "AddPortMapping", AddPortMappingArgs, buffer, &bufsize) < 0) {
