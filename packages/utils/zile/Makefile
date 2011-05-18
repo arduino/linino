@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zile
-PKG_VERSION:=2.3.23
+PKG_VERSION:=2.3.24
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/zile
-PKG_MD5SUM:=4a2fa0015403cdf0eb32a5e648169cae
+PKG_MD5SUM:=fe77d801ba69e0fb9b4914a04b9ff506
 
 PKG_INSTALL:=1
 
@@ -35,7 +35,7 @@ define Package/zile/description
 endef
 
 CONFIGURE_VARS += \
-	gl_cv_func_getopt_gnu=yes \
+	gl_cv_func_getopt_gnu=yes
 
 define Package/zile/install
 	$(INSTALL_DIR) $(1)/usr/bin
