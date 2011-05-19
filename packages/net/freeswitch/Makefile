@@ -282,7 +282,7 @@ ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-flite),)
 endif
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en),)
- $(eval $(call Download/files,sounds-en,$(PKG_NAME)-sounds-en-us-callie-8000-1.0.15.tar.gz,80738b255c89c5f4b229946f03d921c1,,))
+ $(eval $(call Download/files,sounds-en,$(PKG_NAME)-sounds-en-us-callie-8000-1.0.15.tar.gz,a0e466fe48164ac802f851312fd3fc79,,))
 	MAKE_INSTALL_TARGETS+= sounds-install
 endif
 
