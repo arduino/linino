@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=restorefactory
 PKG_VERSION:=1
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -20,7 +20,7 @@ define Package/restorefactory
   MAINTAINER:=Nuno Goncalves <nunojpg@gmail.com>
 endef
 
-define Package/restoreyfactory/description
+define Package/restorefactory/description
 RestoreFactory handles the reset button event and issues a "firstboot" command.
 Button and wait time can be configured with a UCI file.
 endef
