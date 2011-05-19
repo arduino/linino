@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2010 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libconfig
-PKG_VERSION:=1.4.4
+PKG_VERSION:=1.4.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.hyperrealm.com/libconfig/
-PKG_MD5SUM:=3ebfb70dcb0c2ee454cda50fc634f4f2
+PKG_SOURCE_URL:=http://www.hyperrealm.com/libconfig
+PKG_MD5SUM:=d57da7a91aadbfd53afedb5c1bade5f4
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -30,7 +30,7 @@ endef
 define Package/libconfig/description
  Libconfig is a simple library for manipulating structured configuration
  files. This file format is more compact and more readable than XML. And
- unlike XML, it is type-aware, so it is not necessary to do string 
+ unlike XML, it is type-aware, so it is not necessary to do string
  parsing in application code.
 
  Libconfig is very compact -- just 38K for the stripped C shared
@@ -45,11 +45,10 @@ CONFIGURE_ARGS += \
 	--disable-cxx
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libconfig.h $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libconfig.{a,so} $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libconfig.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libconfig.{a,so*} $(1)/usr/lib/
 endef
 
 define Package/libconfig/install
