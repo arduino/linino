@@ -322,6 +322,7 @@ CONFIGURE_ARGS+= \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-curl),--with-libcurl="$(STAGING_DIR)/usr",--without-libcurl) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-dingaling),--with-openssl="$(STAGING_DIR)/usr",--without-openssl) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-java),--with-java="$(STAGING_DIR)/usr",--without-java) \
+	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-spandsp),--enable-builtin-tiff,) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-cdr),--with-libcurl="$(STAGING_DIR)/usr",--without-libcurl) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-curl),--with-libcurl="$(STAGING_DIR)/usr",--without-libcurl) \
 
@@ -594,7 +595,7 @@ $(eval $(call BuildPlugin,sndfile,Multi-Format file transcoder,mod_sndfile,,))
 $(eval $(call BuildPlugin,snom,SNOM specific features,mod_snom,,))
 $(eval $(call BuildPlugin,sofia,SIP,mod_sofia,,))
 $(eval $(call BuildPlugin,soundtouch,Sound effects,mod_soundtouch,,@BROKEN)) # fails in soundtouch
-$(eval $(call BuildPlugin,spandsp,Span DSP,mod_spandsp,,@BROKEN))
+$(eval $(call BuildPlugin,spandsp,Span DSP,mod_spandsp,,+libjpeg))
 $(eval $(call BuildPlugin,speex,Speex codec,mod_speex,,))
 $(eval $(call BuildPlugin,spidermonkey,JavaScript,mod_spidermonkey,,@BROKEN)) # fails in js
 $(eval $(call BuildPlugin,spidermonkey-core_db,JavaScript DB,mod_spidermonkey_core_db,,@BROKEN))
