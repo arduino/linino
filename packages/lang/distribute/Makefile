@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=distribute
-PKG_VERSION:=0.6.10
+PKG_VERSION:=0.6.16
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://pypi.python.org/packages/source/d/$(PKG_NAME)/
-PKG_MD5SUM:=99fb4b3e4ef0861bba11aa1905e89fed
+PKG_MD5SUM:=19ba112f4916cca1d5a89dbad2b361da
 PKG_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)-$(PKG_VERSION)/
 
 include $(INCLUDE_DIR)/host-build.mk
@@ -56,6 +56,11 @@ define Package/distribute/install
 	$(CP) \
 	    $(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
 	    $(1)$(PYTHON_PKG_DIR)
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) \
+	    $(PKG_INSTALL_DIR)/usr/bin/easy_install \
+	    $(1)/usr/bin/
+	$(SED) '1s/#\!.*/#\!\/usr\/bin\/python/' $(1)/usr/bin/easy_install
 endef
 
 $(eval $(call HostBuild))
