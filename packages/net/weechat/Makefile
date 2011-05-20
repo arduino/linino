@@ -8,18 +8,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=weechat
-PKG_VERSION:=0.2.6
+PKG_VERSION:=0.3.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.weechat.org/files/src
-PKG_MD5SUM:=ccdecf663b0050a23049acb4b9a76193
+PKG_MD5SUM:=0d2a089bfbfa550e0c65618a171fb3c4
 
 PKG_FIXUP = libtool
-PKG_CONFIG_DEPENDS = CONFIG_PACKAGE_weechat-mod-lua
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
+include $(INCLUDE_DIR)/cmake.mk
 
 define Package/weechat/Default
   SUBMENU:=Instant Messaging
@@ -36,94 +36,29 @@ endef
 
 define Package/weechat
 $(call Package/weechat/Default)
- MENU=1
- DEPENDS:=+libgnutls +libncurses $(ICONV_DEPENDS)
+ DEPENDS:=+libgnutls +libncursesw $(ICONV_DEPENDS)
 endef
 
 define Package/weechat/description
 $(call Package/weechat/Default/description)
 endef
 
-
-define Package/weechat-mod-charset
-$(call Package/weechat/Default)
- TITLE+= (charset plugin)
- DEPENDS:=weechat
-endef
-
-define Package/weechat-mod-charset/description
-$(call Package/weechat/Default/description)
- This packages contains a charset plugin for Weechat.
-endef
-
-
-define Package/weechat-mod-lua
-$(call Package/weechat/Default)
- TITLE+= (Lua plugin)
- DEPENDS:=weechat +liblua @BROKEN
-endef
-
-define Package/weechat-mod-lua/description
-$(call Package/weechat/Default/description)
- This packages contains an Lua scripting plugin for Weechat.
-endef
-
-
-CONFIGURE_ARGS+= \
-	--with-debug=0 \
-	--without-doc-xsl-prefix \
-	--with-libiconv-prefix="$(ICONV_PREFIX)" \
-	--without-libintl-prefix \
-	--disable-aspell \
-	--disable-perl \
-	--disable-python \
-	--disable-ruby \
-	LUACONFIG="" \
-	ac_cv_path_LIBGNUTLS_CONFIG="pkg-config gnutls" \
+CMAKE_OPTIONS+= \
+	-DENABLE_PYTHON=OFF \
+	-DENABLE_PERL=OFF \
+	-DENABLE_LUA=OFF
 
 TARGET_LDFLAGS += \
 	-L$(ICONV_PREFIX)/lib \
 	-Wl,-rpath-link,$(STAGING_DIR)/usr/lib
 
-ifneq ($(CONFIG_PACKAGE_weechat-mod-lua),)
-  CONFIGURE_ARGS+= \
-	--enable-lua \
-	--enable-plugins \
-	--with-plugins="lua" \
-	--with-lua-inc="$(STAGING_DIR)/usr/include" \
-	--with-lua-lib="$(STAGING_DIR)/usr/lib"
-  CONFIGURE_VARS+= \
-	LIBS="-ldl -lm"
-  TARGET_LDFLAGS += -lcrypt
-else
-  CONFIGURE_ARGS+= \
-	--disable-lua
-endif
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(LUA_FLAGS) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		LUACONFIG="" \
-		all install
-endef
-
 define Package/weechat/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/weechat-curses $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/weechat/plugins
-endef
-
-define BuildPlugin
-
-  define Package/weechat-mod-$(1)/install
-	$(INSTALL_DIR) $$(1)/usr/lib/weechat/plugins
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/weechat/plugins/$(1).so* $$(1)/usr/lib/weechat/plugins/
-  endef
-
-  $$(eval $$(call BuildPackage,weechat-mod-$(1)))
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/weechat/plugins/* \
+		$(1)/usr/lib/weechat/plugins/
 endef
 
 $(eval $(call BuildPackage,weechat))
-$(eval $(call BuildPlugin,charset))
-$(eval $(call BuildPlugin,lua))
