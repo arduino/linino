@@ -13,11 +13,13 @@
 include $(TOPDIR)/rules.mk
 PKG_NAME:=nmap
 PKG_VERSION:=5.51
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://nmap.org/dist/
 PKG_MD5SUM:=0b80d2cb92ace5ebba8095a4c2850275
 PKG_INSTALL:=1
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -37,6 +39,7 @@ endef
 define Package/nmap
 $(call Package/nmap/default)
   DEPENDS:=$(NMAP_DEPENDS)
+  VARIANT:=nossl
   TITLE:=Utility for network exploration or security auditing
 endef
 
@@ -50,6 +53,7 @@ endef
 define Package/ncat
 $(call Package/nmap/default)
   DEPENDS:=$(NCAT_DEPENDS)
+  VARIANT:=nossl
   TITLE:=Much-improved reimplementation of Netcat
 endef
 
@@ -63,12 +67,14 @@ endef
 define Package/nping
 $(call Package/nmap/default)
   DEPENDS:=$(NPING_DEPENDS)
+  VARIANT:=nossl
   TITLE:=Network packet generation tool / ping utility
 endef
 
 define Package/ndiff
 $(call Package/nmap/default)
   DEPENDS:=$(NDIFF_DEPENDS)
+  VARIANT:=nossl
   TITLE:=Utility to compare the results of Nmap scans
 endef
 
