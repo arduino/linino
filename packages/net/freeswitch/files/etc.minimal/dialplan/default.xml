@@ -62,6 +62,13 @@
       </condition>
     </extension>
 
+    <extension name="google_in" continue="true">
+      <condition field="caller_id_name" expression="^(Google Voice|(.*)gmail.com(.*))$">
+        <action application="log" data="Google Voice Call Incoming"/>
+        <action application="set" data="execute_on_answer=send_dtmf 1"/>
+      </condition>
+    </extension>             
+
     <!-- 
 	 dial the extension (1000-1004) for 2 minutes before giving up 
 	 otherwise hang up after a successful bridge (hangup_after-bridge=true).

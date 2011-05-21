@@ -14,7 +14,7 @@ PKG_RELEASE:=$(PKG_SOURCE_VERSION)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=86d757d61bd82a73a13fbc387f788c33436c295d
+PKG_SOURCE_VERSION:=2146583663a5067f6ff71df1e48c3bb900e89db8
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -24,8 +24,12 @@ FS_MOD_AVAILABLE:= \
 	alsa \
 	amr \
 	amrwb \
+	avmd \
 	bv \
+	callcenter \
 	cdr-csv \
+	cdr-pg-csv \
+	cdr-sqlite \
 	celt \
 	cepstral \
 	cidlookup \
@@ -36,6 +40,7 @@ FS_MOD_AVAILABLE:= \
 	console \
 	curl \
 	dahdi-codec \
+	db \
 	dialplan-asterisk \
 	dialplan-directory \
 	dialplan-xml \
@@ -49,6 +54,7 @@ FS_MOD_AVAILABLE:= \
 	esf \
 	event-multicast \
 	event-socket \
+	event-zmq \
 	expr \
 	fifo \
 	file-string \
@@ -60,6 +66,7 @@ FS_MOD_AVAILABLE:= \
 	h323 \
 	hash \
 	ilbc \
+	java \
 	lcr \
 	ldap \
 	local-stream \
@@ -83,8 +90,10 @@ FS_MOD_AVAILABLE:= \
 	say-en \
 	say-es \
 	say-fr \
+	say-hu \
 	say-it \
 	say-nl \
+	say-pt \
 	say-ru \
 	say-th \
 	say-zh \
@@ -100,7 +109,6 @@ FS_MOD_AVAILABLE:= \
 	sndfile \
 	snom \
 	sofia \
-	soundtouch \
 	spandsp \
 	speex \
 	spidermonkey \
@@ -113,6 +121,7 @@ FS_MOD_AVAILABLE:= \
 	stress \
 	syslog \
 	tone-stream \
+	tts-commandline \
 	unimrcp \
 	valet-parking \
 	vmd \
@@ -194,21 +203,25 @@ $(call Package/$(PKG_NAME)/Default)
 		+$(PKG_NAME)-mod-codec2 \
 		+$(PKG_NAME)-mod-commands \
 		+$(PKG_NAME)-mod-conference \
-		+$(PKG_NAME)-mod-syslog \
 		+$(PKG_NAME)-mod-curl \
 		+$(PKG_NAME)-mod-dialplan-xml \
+		+$(PKG_NAME)-mod-dingaling \
 		+$(PKG_NAME)-mod-dptools \
 		+$(PKG_NAME)-mod-event-socket \
 		+$(PKG_NAME)-mod-g723-1 \
+		+$(PKG_NAME)-mod-g729 \
 		+$(PKG_NAME)-mod-hash \
 		+$(PKG_NAME)-mod-ilbc \
 		+$(PKG_NAME)-mod-local-stream \
 		+$(PKG_NAME)-mod-logfile \
 		+$(PKG_NAME)-mod-lua \
 		+$(PKG_NAME)-mod-native-file \
+		+$(PKG_NAME)-mod-siren \
 		+$(PKG_NAME)-mod-sndfile \
 		+$(PKG_NAME)-mod-sofia \
+		+$(PKG_NAME)-mod-spandsp \
 		+$(PKG_NAME)-mod-speex \
+		+$(PKG_NAME)-mod-syslog \
 		+$(PKG_NAME)-mod-tone-stream \
 		+$(PKG_NAME)-mod-xml-curl \
 		+$(PKG_NAME)-mod-xml-rpc \
@@ -222,7 +235,6 @@ $(call Package/$(PKG_NAME)/Default)
 		+$(PKG_NAME)-config-minimal \
 		+$(PKG_NAME)-mod-codec2 \
 		+$(PKG_NAME)-mod-commands \
-		+$(PKG_NAME)-mod-syslog \
 		+$(PKG_NAME)-mod-dialplan-xml \
 		+$(PKG_NAME)-mod-dptools \
 		+$(PKG_NAME)-mod-event-socket \
@@ -230,6 +242,7 @@ $(call Package/$(PKG_NAME)/Default)
 		+$(PKG_NAME)-mod-local-stream \
 		+$(PKG_NAME)-mod-sndfile \
 		+$(PKG_NAME)-mod-sofia \
+		+$(PKG_NAME)-mod-syslog \
 		+$(PKG_NAME)-mod-tone-stream \
 		+$(PKG_NAME)-tools
 endef
@@ -307,6 +320,7 @@ FS_TARGET_CFLAGS:= ${TARGET_CFLAGS} -DLUA_USE_LINUX $(FPIC) -std=gnu99 -Wno-form
 FS_TARGET_CXXFLAGS:= ${TARGET_CXXFLAGS} -DLUA_USE_LINUX $(FPIC) -Wno-format
 FS_TARGET_CPPFLAGS:= -I. -I./lua ${TARGET_CPPFLAGS}
 
+
 CONFIGURE_ARGS+= \
 	--prefix="/usr/share/$(PKG_NAME)" \
 	--bindir="/usr/bin" \
@@ -314,17 +328,14 @@ CONFIGURE_ARGS+= \
 	--sysconfdir="/etc/$(PKG_NAME)" \
 	--with-modinstdir="/usr/lib/$(PKG_NAME)" \
 	--enable-ipv6 \
-	--disable-zrtp \
+	--enable-optimization \
 	--with-random="/dev/urandom" \
-	--without-mysql \
-	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-cdr-pg-csv),--with-pgsql="$(STAGING_DIR)/usr",--without-pgsql) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-celt),--with-ogg="$(STAGING_DIR)/usr",--without-iogg) \
-	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-curl),--with-libcurl="$(STAGING_DIR)/usr",--without-libcurl) \
+	$(if ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-curl)|$(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-cdr)|$(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-curl)),--with-libcurl="$(STAGING_DIR)/usr",--without-libcurl) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-dingaling),--with-openssl="$(STAGING_DIR)/usr",--without-openssl) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-java),--with-java="$(STAGING_DIR)/usr",--without-java) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-spandsp),--enable-builtin-tiff,) \
-	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-cdr),--with-libcurl="$(STAGING_DIR)/usr",--without-libcurl) \
-	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-curl),--with-libcurl="$(STAGING_DIR)/usr",--without-libcurl) \
+
 
 CONFIGURE_VARS+= \
 	config_TARGET_CC="${TARGET_CC}" \
@@ -366,7 +377,7 @@ define Build/Prepare
 	$(call Prepare/json-c)
 	$(call Prepare/sounds-en)
 	$(call Prepare/sounds-moh)
-	(cd $(PKG_BUILD_DIR); [ -h noreg ] || touch noreg)	# Just to shut up Cluecon reg.
+	(cd $(PKG_BUILD_DIR); [ -h noreg ] || touch noreg)	# Just to shut up Cluecon reg. msg.
 	(cd $(PKG_BUILD_DIR); $(AM_TOOL_PATHS) ./bootstrap.sh)
 endef
 
@@ -516,9 +527,12 @@ $(eval $(call BuildPackage,$(PKG_NAME)-config-minimal))
 $(eval $(call BuildPlugin,alsa,Alsa endpoint,mod_alsa,,))
 $(eval $(call BuildPlugin,amr,GSM-AMR codec,mod_amr,,))
 $(eval $(call BuildPlugin,amrwb,GSM-AMRWB,mod_amrwb,,))
+$(eval $(call BuildPlugin,avmd,Advanced Voice Mail Detection,mod_avmd,,))
 $(eval $(call BuildPlugin,bv,codec mod_bv,mod_bv,,))
+$(eval $(call BuildPlugin,callcenter,Call Center,mod_callcenter,,))
 $(eval $(call BuildPlugin,cdr-csv,CSV-CDR handler,mod_cdr_csv,,))
-$(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR handler,mod_cdr_pg_csv,,+postgresql @BROKEN))
+$(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR handler,mod_cdr_pg_csv,,+postgresql))
+$(eval $(call BuildPlugin,cdr-sqlite,SQLite3 CDR handler,mod_cdr_sqlite,,+sqlite3))
 $(eval $(call BuildPlugin,celt,CELT ultra-low delay codec,mod_celt,,+libogg))
 $(eval $(call BuildPlugin,cepstral,Cepstral interface,mod_cepstral,,@BROKEN)) # needs <swift.h>
 $(eval $(call BuildPlugin,cidlookup,applications mod_cidlookup,mod_cidlookup,,))
@@ -529,6 +543,7 @@ $(eval $(call BuildPlugin,conference,Conference room,mod_conference,,))
 $(eval $(call BuildPlugin,console,Console logger,mod_console,,))
 $(eval $(call BuildPlugin,curl,HTTP request,mod_curl,,+libcurl))
 $(eval $(call BuildPlugin,dahdi-codec,DAHDI codecs,mod_dahdi_codec,,))
+$(eval $(call BuildPlugin,db,Dialplan & API to a database backend,mod_db,,))
 $(eval $(call BuildPlugin,dialplan-asterisk,Asterisk dialplan parser,mod_dialplan_asterisk,,))
 $(eval $(call BuildPlugin,dialplan-directory,Dialplan-Directory interface,mod_dialplan_directory,,))
 $(eval $(call BuildPlugin,dialplan-xml,Dialplan-XML interface,mod_dialplan_xml,,))
@@ -538,13 +553,14 @@ $(eval $(call BuildPlugin,distributor,application mod_distributor,mod_distributo
 $(eval $(call BuildPlugin,dptools,Dialplan tools,mod_dptools,,))
 $(eval $(call BuildPlugin,easyroute,DID routing,mod_easyroute,,))
 $(eval $(call BuildPlugin,enum,ENUM routing,mod_enum,,))
-$(eval $(call BuildPlugin,erlang-event,Erlang event handler,mod_erlang_event,,@BROKEN)) # needs <ei.h>
+$(eval $(call BuildPlugin,erlang-event,Erlang event handler,mod_erlang_event,,+erlang))
 $(eval $(call BuildPlugin,esf,Extra SIP Functionality,mod_esf,,))
 $(eval $(call BuildPlugin,event-multicast,Multicast event handler,mod_event_multicast,,))
 $(eval $(call BuildPlugin,event-socket,Socket event handler,mod_event_socket,,))
+$(eval $(call BuildPlugin,event-zmq,Socket event handler by Zero MQ,mod_event_zmq,,))
 $(eval $(call BuildPlugin,expr,Expression evaluation,mod_expr,,))
 $(eval $(call BuildPlugin,fifo,FIFO,mod_fifo,,))
-$(eval $(call BuildPlugin,file-string,File streaming,mod_file_string,,@OBSOLETE))
+$(eval $(call BuildPlugin,file-string,File streaming,mod_file_string,,@OBSOLETE)) # merged into dptools
 $(eval $(call BuildPlugin,flite,Festival TTS,mod_flite,,@(!(armeb||avr32)||BROKEN)))
 $(eval $(call BuildPlugin,fsv,Video,mod_fsv,,))
 $(eval $(call BuildPlugin,g723-1,G.723.1 codec,mod_g723_1,,))
@@ -552,8 +568,8 @@ $(eval $(call BuildPlugin,g729,G.729 codec,mod_g729,,))
 $(eval $(call BuildPlugin,h26x,H26X linear codec,mod_h26x,,))
 $(eval $(call BuildPlugin,h323,h323 endpoint,mod_h323,,@BROKEN)) # missing header files (other packages needed)
 $(eval $(call BuildPlugin,hash,API for manipulating a hash table,mod_hash,,))
-$(eval $(call BuildPlugin,java,Java language interface,mod_java,,@BROKEN)) # needs java
 $(eval $(call BuildPlugin,ilbc,ILBC codec,mod_ilbc,,))
+$(eval $(call BuildPlugin,java,Java language interface,mod_java,,@BROKEN)) # needs java
 $(eval $(call BuildPlugin,lcr,Least Cost Routing,mod_lcr,,))
 $(eval $(call BuildPlugin,ldap,LDAP interface,mod_ldap,,@BROKEN)) # fails in openldap
 $(eval $(call BuildPlugin,local-stream,Local streaming,mod_local_stream,,))
@@ -577,24 +593,25 @@ $(eval $(call BuildPlugin,say-de,German say,mod_say_de,,))
 $(eval $(call BuildPlugin,say-en,English say,mod_say_en,,))
 $(eval $(call BuildPlugin,say-es,Spanish say,mod_say_es,,))
 $(eval $(call BuildPlugin,say-fr,French say,mod_say_fr,,))
+$(eval $(call BuildPlugin,say-hu,Hungarian say,mod_say_hu,,))
 $(eval $(call BuildPlugin,say-it,Italian say,mod_say_it,,))
 $(eval $(call BuildPlugin,say-nl,Dutch say,mod_say_nl,,))
+$(eval $(call BuildPlugin,say-pt,Portugeese say,mod_say_pt,,))
 $(eval $(call BuildPlugin,say-ru,Russian say,mod_say_ru,,))
-$(eval $(call BuildPlugin,say-th,mod_th say,mod_say_th,,))
+$(eval $(call BuildPlugin,say-th,Thai say,mod_say_th,,))
 $(eval $(call BuildPlugin,say-zh,Chineese say,mod_say_zh,,))
-$(eval $(call BuildPlugin,shell-stream,,mod_shell_stream,,))
+$(eval $(call BuildPlugin,shell-stream,Shell stream,mod_shell_stream,,))
 $(eval $(call BuildPlugin,shout,MP3 and Shoutcast stream,mod_shout,,@BROKEN)) # needs Ogg/Vorbis
 $(eval $(call BuildPlugin,silk,codec mod_silk,mod_silk,,))
-$(eval $(call BuildPlugin,siren,G.722.1 codec,mod_siren,,@BROKEN)) # fails in libg722_1 - attempts to execute cross-compiled binary on host
+$(eval $(call BuildPlugin,siren,G.722.1 codec,mod_siren,,))
 $(eval $(call BuildPlugin,skinny,endpoint mod_skinny,mod_skinny,,))
 $(eval $(call BuildPlugin,skypopen,Skype compatible endpoint,mod_skypopen,,@BROKEN)) # needs <X11/Xlib.h>
 $(eval $(call BuildPlugin,sangoma-codec,codec sangoma-codec,mod_sangoma_codec,,@BROKEN)) # Untested
 $(eval $(call BuildPlugin,snapshot,application mod_snapshot,mod_snapshot,,))
-$(eval $(call BuildPlugin,snipe-hunt,application mod_snipe_hunt,mod_snipe_hunt,,))
 $(eval $(call BuildPlugin,sndfile,Multi-Format file transcoder,mod_sndfile,,))
+$(eval $(call BuildPlugin,snipe-hunt,application mod_snipe_hunt,mod_snipe_hunt,,))
 $(eval $(call BuildPlugin,snom,SNOM specific features,mod_snom,,))
 $(eval $(call BuildPlugin,sofia,SIP,mod_sofia,,))
-$(eval $(call BuildPlugin,soundtouch,Sound effects,mod_soundtouch,,@BROKEN)) # fails in soundtouch
 $(eval $(call BuildPlugin,spandsp,Span DSP,mod_spandsp,,+libjpeg))
 $(eval $(call BuildPlugin,speex,Speex codec,mod_speex,,))
 $(eval $(call BuildPlugin,spidermonkey,JavaScript,mod_spidermonkey,,@BROKEN)) # fails in js
@@ -607,6 +624,7 @@ $(eval $(call BuildPlugin,spy,User spy,mod_spy,,))
 $(eval $(call BuildPlugin,stress,application mod_stress,mod_stress,,))
 $(eval $(call BuildPlugin,syslog,SysLog logger,mod_syslog,,))
 $(eval $(call BuildPlugin,tone-stream,Tone generation stream,mod_tone_stream,,))
+$(eval $(call BuildPlugin,tts-commandline,ASR TTS cli,mod_tts_commandline,,))
 $(eval $(call BuildPlugin,unimrcp,MRCP interface,mod_unimrcp,,))
 $(eval $(call BuildPlugin,valet-parking,application mod_valet_parking,mod_valet_parking,,))
 $(eval $(call BuildPlugin,vmd,VoiceMail beep detection,mod_vmd,,))

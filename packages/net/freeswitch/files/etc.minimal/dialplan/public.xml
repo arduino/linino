@@ -27,6 +27,7 @@
     <extension name="outside_call" continue="true">
       <condition>
 	<action application="set" data="outside_call=true"/>
+	<action application="set" data="RFC2822_DATE=${strftime(%a, %d %b %Y %T %z)}"/>
       </condition>
     </extension>
 
@@ -37,7 +38,7 @@
     </extension>
 
     <extension name="public_extensions">
-      <condition field="destination_number" expression="^(100[0-4])$">
+      <condition field="destination_number" expression="^(10[01][0-9])$">
 	<action application="transfer" data="$1 XML default"/>
       </condition>
     </extension>
@@ -46,5 +47,22 @@
 	You can place files in the public directory to get included.
     -->
     <X-PRE-PROCESS cmd="include" data="public/*.xml"/>
+    <!--
+	If you have made it this far lets challenge the caller and if they authenticate
+	lets try what they dialed in the default context. (commented out by default)
+    -->
+    <!--
+    <extension name="check_auth" continue="true">
+      <condition field="${sip_authorized}" expression="^true$" break="never">
+	<anti-action application="respond" data="407"/>
+      </condition>
+    </extension>
+    
+    <extension name="transfer_to_default">
+      <condition>
+	<action application="transfer" data="${destination_number} XML default"/>
+      </condition>
+    </extension>
+    -->
   </context>
 </include>

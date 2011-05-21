@@ -1,6 +1,6 @@
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -292,7 +292,7 @@ endif
+@@ -295,7 +295,7 @@ endif
  ##
  fs_encode_SOURCES = src/fs_encode.c
  fs_encode_CFLAGS = $(AM_CFLAGS)
@@ -9,7 +9,7 @@
  fs_encode_LDADD = libfreeswitch.la
  
  ##
-@@ -300,7 +300,7 @@ fs_encode_LDADD = libfreeswitch.la
+@@ -303,7 +303,7 @@ fs_encode_LDADD = libfreeswitch.la
  ##
  tone2wav_SOURCES = src/tone2wav.c
  tone2wav_CFLAGS  = $(AM_CFLAGS)
