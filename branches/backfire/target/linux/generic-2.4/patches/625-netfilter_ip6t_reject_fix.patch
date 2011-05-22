@@ -1,0 +1,33 @@
+--- a/net/ipv6/ipv6_syms.c
++++ b/net/ipv6/ipv6_syms.c
+@@ -34,4 +34,4 @@ EXPORT_SYMBOL(ipv6_get_saddr);
+ EXPORT_SYMBOL(ipv6_chk_addr);
+ EXPORT_SYMBOL(in6_dev_finish_destroy);
+ EXPORT_SYMBOL(ipv6_skip_exthdr);
+-
++EXPORT_SYMBOL(rt6_lookup);
+--- a/net/ipv6/netfilter/ip6t_REJECT.c
++++ b/net/ipv6/netfilter/ip6t_REJECT.c
+@@ -15,7 +15,7 @@
+ #include <linux/netfilter_ipv6/ip6_tables.h>
+ #include <linux/netfilter_ipv6/ip6t_REJECT.h>
+ 
+-#if 1
++#if 0
+ #define DEBUGP printk
+ #else
+ #define DEBUGP(format, args...)
+@@ -164,7 +164,7 @@ static unsigned int reject6_target(struc
+ 		memcpy(&odev, out, sizeof(odev));
+ 	}
+ 
+-	printk(KERN_DEBUG "%s: medium point\n", __FUNCTION__);
++	DEBUGP(KERN_DEBUG "%s: medium point\n", __FUNCTION__);
+ 	/* WARNING: This code causes reentry within ip6tables.
+ 	   This means that the ip6tables jump stack is now crap.  We
+ 	   must return an absolute verdict. --RR */
+@@ -299,3 +299,4 @@ static void __exit fini(void)
+ 
+ module_init(init);
+ module_exit(fini);
++MODULE_LICENSE("GPL");
