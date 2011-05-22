@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wget
 PKG_VERSION:=1.12
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNU/$(PKG_NAME)
@@ -22,7 +22,6 @@ include $(INCLUDE_DIR)/package.mk
 define Package/wget/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libidn
   SUBMENU:=File Transfer
   TITLE:=Non-interactive network downloader
   URL:=http://www.gnu.org/software/wget/index.html
@@ -61,7 +60,8 @@ $(call Package/wget/Default/description)
 endef
 
 CONFIGURE_ARGS+= \
-	--disable-rpath
+	--disable-rpath \
+	--disable-iri
 
 ifeq ($(BUILD_VARIANT),ssl)
 	CONFIGURE_ARGS+= \
