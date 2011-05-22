@@ -15,7 +15,7 @@ KERNEL:=2.4
 
 include $(INCLUDE_DIR)/target.mk
 
-DEFAULT_PACKAGES += kmod-switch kmod-diag nvram 
+DEFAULT_PACKAGES := $(filter-out udevtrigger hotplug2,$(DEFAULT_PACKAGES)) kmod-switch kmod-diag nvram 
 
 define Target/Description
 	Build firmware images for Broadcom based routers

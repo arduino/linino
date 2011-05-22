@@ -17,11 +17,6 @@ DEFAULT_PACKAGES:=base-files libc libgcc busybox dropbear mtd uci opkg
 DEFAULT_PACKAGES.router:=dnsmasq iptables ppp ppp-mod-pppoe kmod-ipt-nathelper firewall
 DEFAULT_PACKAGES.bootloader:=
 
-# Additional packages for Linux 2.6
-ifneq ($(KERNEL),2.4)
-  DEFAULT_PACKAGES += udevtrigger hotplug2
-endif
-
 # Add device specific packages
 DEFAULT_PACKAGES += $(DEFAULT_PACKAGES.$(DEVICE_TYPE))
 
