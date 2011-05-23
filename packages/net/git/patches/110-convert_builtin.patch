@@ -227,11 +227,9 @@
  git-http-fetch$X: revision.o http.o http-walker.o http-fetch.o $(GITLIBS)
  	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) $(filter %.o,$^) \
  		$(LIBS) $(CURL_LIBCURL)
-@@ -2192,23 +2188,22 @@ endif
- 
+@@ -2193,22 +2189,20 @@ endif
  	bindir=$$(cd '$(DESTDIR_SQ)$(bindir_SQ)' && pwd) && \
  	execdir=$$(cd '$(DESTDIR_SQ)$(gitexec_instdir_SQ)' && pwd) && \
-+	ln -s ../../bin/git "$$execdir/git" && \
  	{ test "$$bindir/" = "$$execdir/" || \
 -	  for p in git$X $(filter $(install_bindir_programs),$(ALL_PROGRAMS)); do \
 +	  for p in $(filter $(install_bindir_programs),$(ALL_PROGRAMS)); do \
