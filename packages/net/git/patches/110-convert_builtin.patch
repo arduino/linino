@@ -1,44 +1,30 @@
-Index: git-1.7.4.4/builtin/daemon.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git-1.7.4.4/builtin/daemon.c	2011-04-08 15:33:59.605465617 +0200
+--- /dev/null
++++ b/builtin/daemon.c
 @@ -0,0 +1 @@
 +#include "../daemon.c"
-Index: git-1.7.4.4/builtin/fast-import.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git-1.7.4.4/builtin/fast-import.c	2011-04-08 15:33:59.605465617 +0200
+--- /dev/null
++++ b/builtin/fast-import.c
 @@ -0,0 +1 @@
 +#include "../fast-import.c"
-Index: git-1.7.4.4/builtin/http-backend.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git-1.7.4.4/builtin/http-backend.c	2011-04-08 15:33:59.605465617 +0200
+--- /dev/null
++++ b/builtin/http-backend.c
 @@ -0,0 +1 @@
 +#include "../http-backend.c"
-Index: git-1.7.4.4/builtin/imap-send.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git-1.7.4.4/builtin/imap-send.c	2011-04-08 15:33:59.605465617 +0200
+--- /dev/null
++++ b/builtin/imap-send.c
 @@ -0,0 +1 @@
 +#include "../imap-send.c"
-Index: git-1.7.4.4/builtin/shell.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git-1.7.4.4/builtin/shell.c	2011-04-08 15:33:59.605465617 +0200
+--- /dev/null
++++ b/builtin/shell.c
 @@ -0,0 +1 @@
 +#include "../shell.c"
-Index: git-1.7.4.4/builtin/upload-pack.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ git-1.7.4.4/builtin/upload-pack.c	2011-04-08 15:33:59.605465617 +0200
+--- /dev/null
++++ b/builtin/upload-pack.c
 @@ -0,0 +1 @@
 +#include "../upload-pack.c"
-Index: git-1.7.4.4/builtin.h
-===================================================================
---- git-1.7.4.4/builtin.h	2011-04-03 10:22:36.000000000 +0200
-+++ git-1.7.4.4/builtin.h	2011-04-08 15:33:59.605465617 +0200
-@@ -142,5 +142,11 @@
+--- a/builtin.h
++++ b/builtin.h
+@@ -143,5 +143,11 @@ extern int cmd_verify_pack(int argc, con
  extern int cmd_show_ref(int argc, const char **argv, const char *prefix);
  extern int cmd_pack_refs(int argc, const char **argv, const char *prefix);
  extern int cmd_replace(int argc, const char **argv, const char *prefix);
@@ -50,11 +36,9 @@ Index: git-1.7.4.4/builtin.h
 +extern int cmd_fast_import(int argc, const char **argv, const char *prefix);
  
  #endif
-Index: git-1.7.4.4/daemon.c
-===================================================================
---- git-1.7.4.4/daemon.c	2011-04-03 10:22:36.000000000 +0200
-+++ git-1.7.4.4/daemon.c	2011-04-08 15:33:59.605465617 +0200
-@@ -1043,7 +1043,7 @@
+--- a/daemon.c
++++ b/daemon.c
+@@ -1043,7 +1043,7 @@ static int serve(struct string_list *lis
  	return service_loop(&socklist);
  }
  
@@ -63,11 +47,9 @@ Index: git-1.7.4.4/daemon.c
  {
  	int listen_port = 0;
  	struct string_list listen_addr = STRING_LIST_INIT_NODUP;
-Index: git-1.7.4.4/fast-import.c
-===================================================================
---- git-1.7.4.4/fast-import.c	2011-04-03 10:22:36.000000000 +0200
-+++ git-1.7.4.4/fast-import.c	2011-04-08 15:33:59.609465154 +0200
-@@ -3083,7 +3083,7 @@
+--- a/fast-import.c
++++ b/fast-import.c
+@@ -3242,7 +3242,7 @@ static void parse_argv(void)
  		read_marks();
  }
  
@@ -76,11 +58,9 @@ Index: git-1.7.4.4/fast-import.c
  {
  	unsigned int i;
  
-Index: git-1.7.4.4/git.c
-===================================================================
---- git-1.7.4.4/git.c	2011-04-03 10:22:36.000000000 +0200
-+++ git-1.7.4.4/git.c	2011-04-08 15:33:59.609465154 +0200
-@@ -251,11 +251,11 @@
+--- a/git.c
++++ b/git.c
+@@ -251,11 +251,11 @@ const char git_version_string[] = GIT_VE
  
  struct cmd_struct {
  	const char *cmd;
@@ -94,7 +74,7 @@ Index: git-1.7.4.4/git.c
  {
  	int status, help;
  	struct stat st;
-@@ -308,7 +308,7 @@
+@@ -308,7 +308,7 @@ static int run_builtin(struct cmd_struct
  	return 0;
  }
  
@@ -103,24 +83,82 @@ Index: git-1.7.4.4/git.c
  {
  	const char *cmd = argv[0];
  	static struct cmd_struct commands[] = {
-@@ -422,6 +422,12 @@
- 		{ "verify-pack", cmd_verify_pack },
- 		{ "show-ref", cmd_show_ref, RUN_SETUP },
- 		{ "pack-refs", cmd_pack_refs, RUN_SETUP },
-+		{ "shell", cmd_shell },
-+		{ "upload-pack", cmd_upload_pack },
-+		{ "http-backend", cmd_http_backend },
+@@ -322,10 +322,9 @@ static void handle_internal_command(int
+ 		{ "bundle", cmd_bundle, RUN_SETUP_GENTLY },
+ 		{ "cat-file", cmd_cat_file, RUN_SETUP },
+ 		{ "check-attr", cmd_check_attr, RUN_SETUP },
+-		{ "check-ref-format", cmd_check_ref_format },
+ 		{ "checkout", cmd_checkout, RUN_SETUP | NEED_WORK_TREE },
+-		{ "checkout-index", cmd_checkout_index,
+-			RUN_SETUP | NEED_WORK_TREE},
++		{ "checkout-index", cmd_checkout_index, RUN_SETUP | NEED_WORK_TREE},
++		{ "check-ref-format", cmd_check_ref_format },
+ 		{ "cherry", cmd_cherry, RUN_SETUP },
+ 		{ "cherry-pick", cmd_cherry_pick, RUN_SETUP | NEED_WORK_TREE },
+ 		{ "clean", cmd_clean, RUN_SETUP | NEED_WORK_TREE },
+@@ -334,12 +333,14 @@ static void handle_internal_command(int
+ 		{ "commit-tree", cmd_commit_tree, RUN_SETUP },
+ 		{ "config", cmd_config, RUN_SETUP_GENTLY },
+ 		{ "count-objects", cmd_count_objects, RUN_SETUP },
 +		{ "daemon", cmd_daemon },
-+		{ "imap-send", cmd_imap_send },
+ 		{ "describe", cmd_describe, RUN_SETUP },
+ 		{ "diff", cmd_diff },
+ 		{ "diff-files", cmd_diff_files, RUN_SETUP | NEED_WORK_TREE },
+ 		{ "diff-index", cmd_diff_index, RUN_SETUP },
+ 		{ "diff-tree", cmd_diff_tree, RUN_SETUP },
+ 		{ "fast-export", cmd_fast_export, RUN_SETUP },
 +		{ "fast-import", cmd_fast_import },
- 	};
- 	int i;
- 	static const char ext[] = STRIP_EXTENSION;
-Index: git-1.7.4.4/http-backend.c
-===================================================================
---- git-1.7.4.4/http-backend.c	2011-04-03 10:22:36.000000000 +0200
-+++ git-1.7.4.4/http-backend.c	2011-04-08 15:33:59.609465154 +0200
-@@ -540,7 +540,7 @@
+ 		{ "fetch", cmd_fetch, RUN_SETUP },
+ 		{ "fetch-pack", cmd_fetch_pack, RUN_SETUP },
+ 		{ "fmt-merge-msg", cmd_fmt_merge_msg, RUN_SETUP },
+@@ -352,6 +353,8 @@ static void handle_internal_command(int
+ 		{ "grep", cmd_grep, RUN_SETUP_GENTLY },
+ 		{ "hash-object", cmd_hash_object },
+ 		{ "help", cmd_help },
++		{ "http-backend", cmd_http_backend },
++		{ "imap-send", cmd_imap_send },
+ 		{ "index-pack", cmd_index_pack, RUN_SETUP_GENTLY },
+ 		{ "init", cmd_init_db },
+ 		{ "init-db", cmd_init_db },
+@@ -361,8 +364,8 @@ static void handle_internal_command(int
+ 		{ "ls-tree", cmd_ls_tree, RUN_SETUP },
+ 		{ "mailinfo", cmd_mailinfo },
+ 		{ "mailsplit", cmd_mailsplit },
+-		{ "merge", cmd_merge, RUN_SETUP | NEED_WORK_TREE },
+ 		{ "merge-base", cmd_merge_base, RUN_SETUP },
++		{ "merge", cmd_merge, RUN_SETUP | NEED_WORK_TREE },
+ 		{ "merge-file", cmd_merge_file, RUN_SETUP_GENTLY },
+ 		{ "merge-index", cmd_merge_index, RUN_SETUP },
+ 		{ "merge-ours", cmd_merge_ours, RUN_SETUP },
+@@ -395,14 +398,15 @@ static void handle_internal_command(int
+ 		{ "repo-config", cmd_repo_config, RUN_SETUP_GENTLY },
+ 		{ "rerere", cmd_rerere, RUN_SETUP },
+ 		{ "reset", cmd_reset, RUN_SETUP },
++		{ "revert", cmd_revert, RUN_SETUP | NEED_WORK_TREE },
+ 		{ "rev-list", cmd_rev_list, RUN_SETUP },
+ 		{ "rev-parse", cmd_rev_parse },
+-		{ "revert", cmd_revert, RUN_SETUP | NEED_WORK_TREE },
+ 		{ "rm", cmd_rm, RUN_SETUP },
+ 		{ "send-pack", cmd_send_pack, RUN_SETUP },
++		{ "shell", cmd_shell },
+ 		{ "shortlog", cmd_shortlog, RUN_SETUP_GENTLY | USE_PAGER },
+-		{ "show", cmd_show, RUN_SETUP },
+ 		{ "show-branch", cmd_show_branch, RUN_SETUP },
++		{ "show", cmd_show, RUN_SETUP },
+ 		{ "show-ref", cmd_show_ref, RUN_SETUP },
+ 		{ "stage", cmd_add, RUN_SETUP | NEED_WORK_TREE },
+ 		{ "status", cmd_status, RUN_SETUP | NEED_WORK_TREE },
+@@ -416,6 +420,7 @@ static void handle_internal_command(int
+ 		{ "update-ref", cmd_update_ref, RUN_SETUP },
+ 		{ "update-server-info", cmd_update_server_info, RUN_SETUP },
+ 		{ "upload-archive", cmd_upload_archive },
++		{ "upload-pack", cmd_upload_pack },
+ 		{ "var", cmd_var, RUN_SETUP_GENTLY },
+ 		{ "verify-pack", cmd_verify_pack },
+ 		{ "verify-tag", cmd_verify_tag, RUN_SETUP },
+--- a/http-backend.c
++++ b/http-backend.c
+@@ -540,7 +540,7 @@ static struct service_cmd {
  	{"POST", "/git-receive-pack$", service_rpc}
  };
  
@@ -129,11 +167,9 @@ Index: git-1.7.4.4/http-backend.c
  {
  	char *method = getenv("REQUEST_METHOD");
  	char *dir;
-Index: git-1.7.4.4/imap-send.c
-===================================================================
---- git-1.7.4.4/imap-send.c	2011-04-03 10:22:36.000000000 +0200
-+++ git-1.7.4.4/imap-send.c	2011-04-08 15:33:59.609465154 +0200
-@@ -1528,7 +1528,7 @@
+--- a/imap-send.c
++++ b/imap-send.c
+@@ -1528,7 +1528,7 @@ static int git_imap_config(const char *k
  	return 0;
  }
  
@@ -142,11 +178,9 @@ Index: git-1.7.4.4/imap-send.c
  {
  	struct msg_data all_msgs, msg;
  	struct store *ctx = NULL;
-Index: git-1.7.4.4/Makefile
-===================================================================
---- git-1.7.4.4/Makefile	2011-04-03 10:22:36.000000000 +0200
-+++ git-1.7.4.4/Makefile	2011-04-08 15:38:21.489032460 +0200
-@@ -406,13 +406,7 @@
+--- a/Makefile
++++ b/Makefile
+@@ -407,13 +407,7 @@ EXTRA_PROGRAMS =
  # ... and all the rest that could be moved out of bindir to gitexecdir
  PROGRAMS += $(EXTRA_PROGRAMS)
  
@@ -160,7 +194,7 @@ Index: git-1.7.4.4/Makefile
  
  PROGRAMS += $(patsubst %.o,git-%$X,$(PROGRAM_OBJS))
  
-@@ -769,6 +763,12 @@
+@@ -771,6 +765,12 @@ BUILTIN_OBJS += builtin/var.o
  BUILTIN_OBJS += builtin/verify-pack.o
  BUILTIN_OBJS += builtin/verify-tag.o
  BUILTIN_OBJS += builtin/write-tree.o
@@ -173,7 +207,7 @@ Index: git-1.7.4.4/Makefile
  
  GITLIBS = $(LIB_FILE) $(XDIFF_LIB)
  EXTLIBS =
-@@ -1293,7 +1293,7 @@
+@@ -1289,7 +1289,7 @@ endif
  EXTLIBS += -lz
  
  ifndef NO_OPENSSL
@@ -182,7 +216,7 @@ Index: git-1.7.4.4/Makefile
  	ifdef OPENSSLDIR
  		BASIC_CFLAGS += -I$(OPENSSLDIR)/include
  		OPENSSL_LINK = -L$(OPENSSLDIR)/$(lib) $(CC_LD_DYNPATH)$(OPENSSLDIR)/$(lib)
-@@ -2003,10 +2003,6 @@
+@@ -1975,10 +1975,6 @@ endif
  git-%$X: %.o $(GITLIBS)
  	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) $(filter %.o,$^) $(LIBS)
  
@@ -193,7 +227,7 @@ Index: git-1.7.4.4/Makefile
  git-http-fetch$X: revision.o http.o http-walker.o http-fetch.o $(GITLIBS)
  	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) $(filter %.o,$^) \
  		$(LIBS) $(CURL_LIBCURL)
-@@ -2204,23 +2200,22 @@
+@@ -2192,23 +2188,22 @@ endif
  
  	bindir=$$(cd '$(DESTDIR_SQ)$(bindir_SQ)' && pwd) && \
  	execdir=$$(cd '$(DESTDIR_SQ)$(gitexec_instdir_SQ)' && pwd) && \
@@ -220,11 +254,9 @@ Index: git-1.7.4.4/Makefile
  		ln -s "git$X" "$$execdir/$$p" 2>/dev/null || \
  		cp "$$execdir/git$X" "$$execdir/$$p" || exit; \
  	done && \
-Index: git-1.7.4.4/shell.c
-===================================================================
---- git-1.7.4.4/shell.c	2011-04-03 10:22:36.000000000 +0200
-+++ git-1.7.4.4/shell.c	2011-04-08 15:33:59.613464996 +0200
-@@ -129,7 +129,7 @@
+--- a/shell.c
++++ b/shell.c
+@@ -129,7 +129,7 @@ static struct commands {
  	{ NULL },
  };
  
@@ -233,11 +265,9 @@ Index: git-1.7.4.4/shell.c
  {
  	char *prog;
  	const char **user_argv;
-Index: git-1.7.4.4/upload-pack.c
-===================================================================
---- git-1.7.4.4/upload-pack.c	2011-04-03 10:22:36.000000000 +0200
-+++ git-1.7.4.4/upload-pack.c	2011-04-08 15:33:59.613464996 +0200
-@@ -676,7 +676,7 @@
+--- a/upload-pack.c
++++ b/upload-pack.c
+@@ -697,7 +697,7 @@ static void upload_pack(void)
  	}
  }
  
