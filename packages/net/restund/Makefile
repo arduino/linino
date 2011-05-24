@@ -7,12 +7,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=restund
-PKG_VERSION:=0.1.0
+PKG_VERSION:=0.2.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.creytiv.com/pub/
-#PKG_MD5SUM:=ee345fe605ffcfce843dae4aed81122b
+PKG_MD5SUM:=b8fa2ab40d7952fd78c5d72ab1742232
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -28,10 +28,10 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		LIBRE_MK=../re-$(PKG_VERSION)/mk/re.mk \
-		LIBRE_INC=../re-$(PKG_VERSION)/include \
+		LIBRE_MK=$(STAGING_DIR)/usr/share/re/re.mk \
+		LIBRE_INC=$(STAGING_DIR)/usr/include/re \
 		CC="$(TARGET_CC)" \
-		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		$(PKG_MAKE_OPTS) \
 		SYSROOT="$(TOOLCHAIN_DIR)" \

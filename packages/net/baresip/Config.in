@@ -1,0 +1,66 @@
+menu "Configuration"
+	depends PACKAGE_baresip
+
+
+comment "Audio drivers ---"
+
+config BARESIP_MODULE_ALSA
+	bool "Alsa module"
+	depends PACKAGE_baresip && PACKAGE_alsa-lib
+	default n
+
+config BARESIP_MODULE_OSS
+	bool "OSS module"
+	depends PACKAGE_baresip
+	default y
+
+
+comment "Audio codecs ---"
+
+config BARESIP_MODULE_G711
+	bool "G.711 audio codec"
+	depends PACKAGE_baresip
+	default y
+
+config BARESIP_MODULE_G722
+	bool "G.722 audio codec"
+	depends PACKAGE_baresip && PACKAGE_libspandsp
+	default n
+
+config BARESIP_MODULE_SPEEX
+	bool "Speex audio codec"
+	depends PACKAGE_baresip && PACKAGE_libspeex
+	default n
+
+
+
+comment "Video codecs ---"
+
+config BARESIP_MODULE_AVCODEC
+	bool "FFmpeg avcodec module (H.263, H.264, MPEG4)"
+	depends PACKAGE_baresip && PACKAGE_libffmpeg
+	default n
+
+
+comment "Video source modules ---"
+
+config BARESIP_MODULE_V4L
+	bool "Video4Linux module"
+	depends PACKAGE_baresip
+	default n
+
+config BARESIP_MODULE_V4L2
+	bool "Video4Linux2 module"
+	depends PACKAGE_baresip && PACKAGE_libv4l
+	default n
+
+
+comment "Video display modules ---"
+
+config BARESIP_MODULE_SDL
+	bool "SDL module"
+	depends PACKAGE_baresip && PACKAGE_libsdl
+	default n
+
+
+endmenu
