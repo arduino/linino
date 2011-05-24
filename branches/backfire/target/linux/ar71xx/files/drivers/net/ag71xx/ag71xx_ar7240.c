@@ -233,37 +233,39 @@ static inline u16 mk_high_addr(u32 reg)
 
 static u32 __ar7240sw_reg_read(struct mii_bus *mii, u32 reg)
 {
+	unsigned long flags;
 	u16 phy_addr;
 	u16 phy_reg;
 	u32 hi, lo;
 
 	reg = (reg & 0xfffffffc) >> 2;
-
-	ag71xx_mdio_mii_write(mii->priv, 0x1f, 0x10, mk_high_addr(reg));
-
 	phy_addr = mk_phy_addr(reg);
 	phy_reg = mk_phy_reg(reg);
 
+	local_irq_save(flags);
+	ag71xx_mdio_mii_write(mii->priv, 0x1f, 0x10, mk_high_addr(reg));
 	lo = (u32) ag71xx_mdio_mii_read(mii->priv, phy_addr, phy_reg);
 	hi = (u32) ag71xx_mdio_mii_read(mii->priv, phy_addr, phy_reg + 1);
+	local_irq_restore(flags);
 
 	return (hi << 16) | lo;
 }
 
 static void __ar7240sw_reg_write(struct mii_bus *mii, u32 reg, u32 val)
 {
+	unsigned long flags;
 	u16 phy_addr;
 	u16 phy_reg;
 
 	reg = (reg & 0xfffffffc) >> 2;
-
-	ag71xx_mdio_mii_write(mii->priv, 0x1f, 0x10, mk_high_addr(reg));
-
 	phy_addr = mk_phy_addr(reg);
 	phy_reg = mk_phy_reg(reg);
 
+	local_irq_save(flags);
+	ag71xx_mdio_mii_write(mii->priv, 0x1f, 0x10, mk_high_addr(reg));
 	ag71xx_mdio_mii_write(mii->priv, phy_addr, phy_reg + 1, (val >> 16));
 	ag71xx_mdio_mii_write(mii->priv, phy_addr, phy_reg, (val & 0xffff));
+	local_irq_restore(flags);
 }
 
 static u32 ar7240sw_reg_read(struct mii_bus *mii, u32 reg_addr)
@@ -826,6 +828,30 @@ static struct ar7240sw *ar7240_probe(struct ag71xx *ag)
 	return as;
 }
 
+static void link_function(struct work_struct *work) {
+	struct ag71xx *ag = container_of(work, struct ag71xx, link_work.work);
+	unsigned long flags;
+	int i;
+	int status = 0;
+
+	for (i = 0; i < 4; i++) {
+		int link = ar7240sw_phy_read(ag->mii_bus, i, MII_BMSR);
+		if(link & BMSR_LSTATUS) {
+			status = 1;
+			break;
+		}
+	}
+
+	spin_lock_irqsave(&ag->lock, flags);
+	if(status != ag->link) {
+		ag->link = status;
+		ag71xx_link_adjust(ag);
+	}
+	spin_unlock_irqrestore(&ag->lock, flags);
+
+	schedule_delayed_work(&ag->link_work, HZ / 2);
+}
+
 void ag71xx_ar7240_start(struct ag71xx *ag)
 {
 	struct ar7240sw *as = ag->phy_priv;
@@ -834,15 +860,17 @@ void ag71xx_ar7240_start(struct ag71xx *ag)
 	ar7240sw_setup(as);
 
 	ag->speed = SPEED_1000;
-	ag->link = 1;
 	ag->duplex = 1;
 
 	ar7240_set_addr(as, ag->dev->dev_addr);
 	ar7240_hw_apply(&as->swdev);
+
+	schedule_delayed_work(&ag->link_work, HZ / 10);
 }
 
 void ag71xx_ar7240_stop(struct ag71xx *ag)
 {
+	cancel_delayed_work_sync(&ag->link_work);
 }
 
 int __devinit ag71xx_ar7240_init(struct ag71xx *ag)
@@ -856,10 +884,12 @@ int __devinit ag71xx_ar7240_init(struct ag71xx *ag)
 	ag->phy_priv = as;
 	ar7240sw_reset(as);
 
+	INIT_DELAYED_WORK(&ag->link_work, link_function);
+
 	return 0;
 }
 
-void __devexit ag71xx_ar7240_cleanup(struct ag71xx *ag)
+void ag71xx_ar7240_cleanup(struct ag71xx *ag)
 {
 	struct ar7240sw *as = ag->phy_priv;
 

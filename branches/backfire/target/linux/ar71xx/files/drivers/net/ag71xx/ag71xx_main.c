@@ -652,6 +652,7 @@ static netdev_tx_t ag71xx_hard_start_xmit(struct sk_buff *skb,
 				  DMA_TO_DEVICE);
 
 	ring->buf[i].skb = skb;
+	ring->buf[i].timestamp = jiffies;
 
 	/* setup descriptor fields */
 	desc->data = (u32) dma_addr;
@@ -713,7 +714,7 @@ static int ag71xx_do_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
 		if (ag->phy_dev == NULL)
 			break;
 
-		return phy_mii_ioctl(ag->phy_dev, ifr, cmd);
+		return phy_mii_ioctl(ag->phy_dev, if_mii(ifr), cmd);
 
 	default:
 		break;

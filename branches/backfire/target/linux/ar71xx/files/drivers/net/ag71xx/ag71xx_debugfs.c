@@ -99,11 +99,18 @@ static ssize_t read_file_napi_stats(struct file *file, char __user *user_buf,
 {
 	struct ag71xx *ag = file->private_data;
 	struct ag71xx_napi_stats *stats = &ag->debug.napi_stats;
-	char buf[2048];
+	char *buf;
+	unsigned int buflen;
 	unsigned int len = 0;
 	unsigned long rx_avg = 0;
 	unsigned long tx_avg = 0;
+	int ret;
 	int i;
+
+	buflen = 2048;
+	buf = kmalloc(buflen, GFP_KERNEL);
+	if (!buf)
+		return -ENOMEM;
 
 	if (stats->rx_count)
 		rx_avg = stats->rx_packets / stats->rx_count;
@@ -111,26 +118,29 @@ static ssize_t read_file_napi_stats(struct file *file, char __user *user_buf,
 	if (stats->tx_count)
 		tx_avg = stats->tx_packets / stats->tx_count;
 
-	len += snprintf(buf + len, sizeof(buf) - len, "%3s  %10s %10s\n",
+	len += snprintf(buf + len, buflen - len, "%3s  %10s %10s\n",
 			"len", "rx", "tx");
 
 	for (i = 1; i <= AG71XX_NAPI_WEIGHT; i++)
-		len += snprintf(buf + len, sizeof(buf) - len,
+		len += snprintf(buf + len, buflen - len,
 				"%3d: %10lu %10lu\n",
 				i, stats->rx[i], stats->tx[i]);
 
-	len += snprintf(buf + len, sizeof(buf) - len, "\n");
+	len += snprintf(buf + len, buflen - len, "\n");
 
-	len += snprintf(buf + len, sizeof(buf) - len, "%3s: %10lu %10lu\n",
+	len += snprintf(buf + len, buflen - len, "%3s: %10lu %10lu\n",
 			"sum", stats->rx_count, stats->tx_count);
-	len += snprintf(buf + len, sizeof(buf) - len, "%3s: %10lu %10lu\n",
+	len += snprintf(buf + len, buflen - len, "%3s: %10lu %10lu\n",
 			"avg", rx_avg, tx_avg);
-	len += snprintf(buf + len, sizeof(buf) - len, "%3s: %10lu %10lu\n",
+	len += snprintf(buf + len, buflen - len, "%3s: %10lu %10lu\n",
 			"max", stats->rx_packets_max, stats->tx_packets_max);
-	len += snprintf(buf + len, sizeof(buf) - len, "%3s: %10lu %10lu\n",
+	len += snprintf(buf + len, buflen - len, "%3s: %10lu %10lu\n",
 			"pkt", stats->rx_packets, stats->tx_packets);
 
-	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
+	ret = simple_read_from_buffer(user_buf, count, ppos, buf, len);
+	kfree(buf);
+
+	return ret;
 }
 
 static const struct file_operations ag71xx_fops_napi_stats = {
@@ -139,11 +149,98 @@ static const struct file_operations ag71xx_fops_napi_stats = {
 	.owner	= THIS_MODULE
 };
 
+#define DESC_PRINT_LEN	64
+
+static ssize_t read_file_ring(struct file *file, char __user *user_buf,
+			      size_t count, loff_t *ppos,
+			      struct ag71xx *ag,
+			      struct ag71xx_ring *ring,
+			      unsigned ring_size,
+			      unsigned desc_reg)
+{
+	char *buf;
+	unsigned int buflen;
+	unsigned int len = 0;
+	unsigned long flags;
+	ssize_t ret;
+	int curr;
+	int dirty;
+	u32 desc_hw;
+	int i;
+
+	buflen = (ring_size * DESC_PRINT_LEN);
+	buf = kmalloc(buflen, GFP_KERNEL);
+	if (!buf)
+		return -ENOMEM;
+
+	len += snprintf(buf + len, buflen - len,
+			"Idx ... %-8s %-8s %-8s %-8s . %-10s\n",
+			"desc", "next", "data", "ctrl", "timestamp");
+
+	spin_lock_irqsave(&ag->lock, flags);
+
+	curr = (ring->curr % ring_size);
+	dirty = (ring->dirty % ring_size);
+	desc_hw = ag71xx_rr(ag, desc_reg);
+	for (i = 0; i < ring_size; i++) {
+		struct ag71xx_buf *ab = &ring->buf[i];
+		u32 desc_dma = ((u32) ring->descs_dma) + i * ring->desc_size;
+
+		len += snprintf(buf + len, buflen - len,
+			"%3d %c%c%c %08x %08x %08x %08x %c %10lu\n",
+			i,
+			(i == curr) ? 'C' : ' ',
+			(i == dirty) ? 'D' : ' ',
+			(desc_hw == desc_dma) ? 'H' : ' ',
+			desc_dma,
+			ab->desc->next,
+			ab->desc->data,
+			ab->desc->ctrl,
+			(ab->desc->ctrl & DESC_EMPTY) ? 'E' : '*',
+			ab->timestamp);
+	}
+
+	spin_unlock_irqrestore(&ag->lock, flags);
+
+	ret = simple_read_from_buffer(user_buf, count, ppos, buf, len);
+	kfree(buf);
+
+	return ret;
+}
+
+static ssize_t read_file_tx_ring(struct file *file, char __user *user_buf,
+				 size_t count, loff_t *ppos)
+{
+	struct ag71xx *ag = file->private_data;
+
+	return read_file_ring(file, user_buf, count, ppos, ag, &ag->tx_ring,
+			      AG71XX_TX_RING_SIZE, AG71XX_REG_TX_DESC);
+}
+
+static const struct file_operations ag71xx_fops_tx_ring = {
+	.open	= ag71xx_debugfs_generic_open,
+	.read	= read_file_tx_ring,
+	.owner	= THIS_MODULE
+};
+
+static ssize_t read_file_rx_ring(struct file *file, char __user *user_buf,
+				 size_t count, loff_t *ppos)
+{
+	struct ag71xx *ag = file->private_data;
+
+	return read_file_ring(file, user_buf, count, ppos, ag, &ag->rx_ring,
+			      AG71XX_RX_RING_SIZE, AG71XX_REG_RX_DESC);
+}
+
+static const struct file_operations ag71xx_fops_rx_ring = {
+	.open	= ag71xx_debugfs_generic_open,
+	.read	= read_file_rx_ring,
+	.owner	= THIS_MODULE
+};
+
 void ag71xx_debugfs_exit(struct ag71xx *ag)
 {
-	debugfs_remove(ag->debug.debugfs_napi_stats);
-	debugfs_remove(ag->debug.debugfs_int_stats);
-	debugfs_remove(ag->debug.debugfs_dir);
+	debugfs_remove_recursive(ag->debug.debugfs_dir);
 }
 
 int ag71xx_debugfs_init(struct ag71xx *ag)
@@ -151,31 +248,18 @@ int ag71xx_debugfs_init(struct ag71xx *ag)
 	ag->debug.debugfs_dir = debugfs_create_dir(ag->dev->name,
 						   ag71xx_debugfs_root);
 	if (!ag->debug.debugfs_dir)
-		goto err;
+		return -ENOMEM;
 
-	ag->debug.debugfs_int_stats =
-			debugfs_create_file("int_stats",
-					    S_IRUGO,
-					    ag->debug.debugfs_dir,
-					    ag,
-					    &ag71xx_fops_int_stats);
-	if (!ag->debug.debugfs_int_stats)
-		goto err;
-
-	ag->debug.debugfs_napi_stats =
-			debugfs_create_file("napi_stats",
-					    S_IRUGO,
-					    ag->debug.debugfs_dir,
-					    ag,
-					    &ag71xx_fops_napi_stats);
-	if (!ag->debug.debugfs_napi_stats)
-		goto err;
+	debugfs_create_file("int_stats", S_IRUGO, ag->debug.debugfs_dir,
+			    ag, &ag71xx_fops_int_stats);
+	debugfs_create_file("napi_stats", S_IRUGO, ag->debug.debugfs_dir,
+			    ag, &ag71xx_fops_napi_stats);
+	debugfs_create_file("tx_ring", S_IRUGO, ag->debug.debugfs_dir,
+			    ag, &ag71xx_fops_tx_ring);
+	debugfs_create_file("rx_ring", S_IRUGO, ag->debug.debugfs_dir,
+			    ag, &ag71xx_fops_rx_ring);
 
 	return 0;
-
-err:
-	ag71xx_debugfs_exit(ag);
-	return -ENOMEM;
 }
 
 int ag71xx_debugfs_root_init(void)
