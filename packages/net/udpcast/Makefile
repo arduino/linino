@@ -18,8 +18,8 @@ PKG_MD5SUM:=f9ad942dfe3ecbd2da5d91479957e5a9
 include $(INCLUDE_DIR)/package.mk
 
 define Package/udpcast
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=net
+  CATEGORY:=Network
   TITLE:=UDP Cast
   URL:=http://udpcast.linux.lu/
 endef
