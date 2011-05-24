@@ -10,5 +10,5 @@
 +	TARGETS=$(IPV4_TARGETS) $(IPV6_TARGETS)
 +endif
  
- LASTTAG:=`git-describe HEAD | sed -e 's/-.*//'`
+ LASTTAG:=`git describe HEAD | sed -e 's/-.*//'`
  TAG:=`date +s%Y%m%d`
