@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,16 +8,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lft
-PKG_VERSION:=3.1
+PKG_VERSION:=3.32
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://pwhois.org/get
-PKG_MD5SUM:=70e69706e7600f34c0dfb54e2ee5eb01
+PKG_MD5SUM:=5f09c9ad2475cb237b8277a2d69c569c
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/lft
+define Package/lft/Default
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libpcap
@@ -25,7 +27,7 @@ define Package/lft
   URL:=http://pwhois.org/lft
 endef
 
-define Package/lft/description
+define Package/lft/Default/description
 	LFT, short for Layer Four Traceroute, is a sort of 'traceroute' that
 	often works much faster (than the commonly-used Van Jacobson method)
 	and goes through many configurations of packet-filters (firewalls).
@@ -34,19 +36,36 @@ define Package/lft/description
 	netblock name lookups, et al.
 endef
 
-define Build/Configure	
-	$(call Build/Configure/Default, \
-		--with-pcap="$(STAGING_DIR)/usr" \
-	)
+define Package/lft
+  $(call Package/lft/Default)
 endef
 
-define Build/Compile	
-	$(MAKE) -C $(PKG_BUILD_DIR)
+define Package/lft/description
+	$(call Package/lft/Default/description)
+	This package contains the lft 'traceroute' program.
 endef
 
-define Package/lft/install	
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lft $(1)/usr/sbin/
+define Package/whob
+  $(call Package/lft/Default)
+endef
+
+define Package/whob/description
+	$(call Package/lft/Default/description)
+	This package contains the whob 'whois' program.
+endef
+
+CONFIGURE_ARGS += \
+	--with-pcap="$(STAGING_DIR)/usr"
+
+define Package/lft/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/lft $(1)/usr/bin/
+endef
+
+define Package/whob/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/whob $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,lft))
+$(eval $(call BuildPackage,whob))
