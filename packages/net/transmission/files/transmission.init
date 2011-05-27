@@ -65,7 +65,8 @@ start_service() {
 		rpc_enabled rpc_port rpc_whitelist_enabled script_torrent_done_enabled \
 		speed_limit_down speed_limit_down_enabled speed_limit_up \
 		speed_limit_up_enabled start_added_torrents trash_original_torrent_files \
-		umask upload_slots_per_torrent utp_enabled watch_dir_enabled
+		umask upload_slots_per_torrent utp_enabled scrape_paused_torrents \
+		watch_dir_enabled
 
 	append_params_quotes "$s" \
 		blocklist_url bind_address_ipv4 bind_address_ipv6 download_dir incomplete_dir \
