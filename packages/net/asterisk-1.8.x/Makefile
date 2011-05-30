@@ -162,7 +162,7 @@ $(call Package/asterisk18/Default/description)
  This package provides CURL
  support to Asterisk.
 endef
- 
+
 define Package/asterisk18-mysql
 $(call Package/asterisk18/Default)
   TITLE:=MySQL support
@@ -174,7 +174,7 @@ $(call Package/asterisk18/Default/description)
  This package provides MySQL
  support to Asterisk.
 endef
- 
+
 ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk18-app-meetme),)
   CONFIGURE_ARGS+= \
 	--with-dahdi="$(STAGING_DIR)/usr"
@@ -505,10 +505,10 @@ $(eval $(call Buildasterisk18ModuleTemplate,app_waituntil,Sleep,support sleeping
 $(eval $(call Buildasterisk18ModuleTemplate,app_while,While loop,a while loop implementation))
 $(eval $(call Buildasterisk18ModuleTemplate,chan_agent,Agents proxy channel, an implementation of agents proxy channel))
 $(eval $(call Buildasterisk18ModuleTemplate,chan_local,Local proxy channel, an implementation of local proxy channel))
-$(eval $(call Buildasterisk18ModuleTemplate,codec_alaw,Signed linear to alaw translation,translation between signed linear and alaw codecs)) 
+$(eval $(call Buildasterisk18ModuleTemplate,codec_alaw,Signed linear to alaw translation,translation between signed linear and alaw codecs))
 $(eval $(call Buildasterisk18ModuleTemplate,codec_ulaw,Signed linear to ulaw translation,translation between signed linear and ulaw codecs))
 $(eval $(call Buildasterisk18ModuleTemplate,codec_a_mu,Alaw to ulaw translation,translation between alaw and ulaw codecs))
-$(eval $(call Buildasterisk18ModuleTemplate,codec_g722,G.722,a high bit rate 48/56/64Kbps ITU standard codec)) 
+$(eval $(call Buildasterisk18ModuleTemplate,codec_g722,G.722,a high bit rate 48/56/64Kbps ITU standard codec))
 $(eval $(call Buildasterisk18ModuleTemplate,codec_g726,Signed linear to G.726 translation,translation between signed linear and ITU G.726-32kbps codecs))
 $(eval $(call Buildasterisk18ModuleTemplate,format_g726,G.726,support for headerless G.726 16/24/32/40kbps data format))
 $(eval $(call Buildasterisk18ModuleTemplate,format_g729,G.729,support for raw headerless G729 data))
@@ -529,6 +529,6 @@ $(eval $(call Buildasterisk18ModuleTemplate,app_alarmreceiver,Alarm receiver,Cen
 $(eval $(call Buildasterisk18ModuleTemplate,app_setcallerid,Set callerid,support for setting callerid))
 $(eval $(call Buildasterisk18ModuleTemplate,app_verbose,Verbose logging,Verbose logging application))
 $(eval $(call Buildasterisk18ModuleTemplate,func_channel,Channel info,Channel info dialplan function))
-$(eval $(call Buildasterisk18ModuleTemplate,func_blacklist,Blacklist on callerid,looking up the callerid number, and see if it is blacklisted))
+$(eval $(call Buildasterisk18ModuleTemplate,func_blacklist,Blacklist on callerid,looking up the callerid number and see if it is blacklisted))
 $(eval $(call Buildasterisk18ModuleTemplate,app_originate,Originate a call,originating an outbound call and connecting it to a specified extension or application))
 $(eval $(call Buildasterisk18ModuleTemplate,func_uri,URI encoding and decoding,Encodes and decodes URI-safe strings))
