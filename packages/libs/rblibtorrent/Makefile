@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -16,7 +16,7 @@ PKG_SOURCE:=libtorrent-rasterbar-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/libtorrent
 PKG_MD5SUM:=6959f719245d82758235fd73d93373b2
 PKG_BUILD_DIR:=$(BUILD_DIR)/libtorrent-rasterbar-$(PKG_VERSION)
-PKG_BUILD_DEPENDS:=libtool bzlib
+PKG_BUILD_DEPENDS:=libtool
 BOOSTPOSTFIX=mt
 
 include $(INCLUDE_DIR)/package.mk
