@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2009 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mg
-PKG_VERSION:=20090107
+PKG_VERSION:=20110120
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.han.dds.nl/software/mg
-PKG_MD5SUM:=f25a139da44c3a2f760ffec531bd996e
+PKG_SOURCE_URL:=http://homepage.boetes.org/software/mg
+PKG_MD5SUM:=f2fa8016a491aa2a9d4c5698c593f31b
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,7 +22,7 @@ define Package/mg
   CATEGORY:=Utilities
   DEPENDS:=+libncurses
   TITLE:=microscopic GNU Emacs-style editor
-  URL:=http://www.han.dds.nl/software/mg/
+  URL:=http://homepage.boetes.org/software/mg/
   SUBMENU:=Editors
 endef
 
