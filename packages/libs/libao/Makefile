@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libao
-PKG_VERSION:=0.8.8
+PKG_VERSION:=1.1.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.xiph.org/releases/ao/
-PKG_MD5SUM:=b92cba3cbcf1ee9bc221118a85d23dcd
+PKG_MD5SUM:=2b2508c29bc97e4dc218fa162cf883c8
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -55,6 +55,8 @@ endef
 define Package/libao/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libao.so.* $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/ao/plugins-4
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ao/plugins-4/lib*.so $(1)/usr/lib/ao/plugins-4/
 endef
 
 $(eval $(call BuildPackage,libao))
