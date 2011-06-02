@@ -8,7 +8,7 @@
  #ifndef WIN32
  #include <sys/wait.h>
  #include <sys/resource.h>
-@@ -501,6 +502,7 @@ main(int argc, char **argv)
+@@ -566,6 +567,7 @@ main(int argc, char **argv)
  #ifdef HAVE_PCAP_FINDALLDEVS
  	pcap_if_t *devpointer;
  	int devnum;
@@ -16,7 +16,7 @@
  #endif
  	int status;
  #ifdef WIN32
-@@ -639,7 +641,8 @@ main(int argc, char **argv)
+@@ -708,7 +710,8 @@ main(int argc, char **argv)
  			 * It can be useful on Windows, where more than
  			 * one interface can have the same name.
  			 */

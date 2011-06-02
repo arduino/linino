@@ -1,6 +1,6 @@
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -68,34 +68,37 @@ RANLIB = @RANLIB@
+@@ -68,34 +68,38 @@ RANLIB = @RANLIB@
  
  CSRC =	addrtoname.c af.c checksum.c cpack.c gmpls.c oui.c gmt2local.c ipproto.c \
          nlpid.c l2vpn.c machdep.c parsenfsfh.c \
@@ -13,7 +13,7 @@
 -	print-eap.c print-eigrp.c\
 -	print-esp.c print-ether.c print-fddi.c print-fr.c \
 -	print-gre.c print-hsrp.c print-icmp.c print-igmp.c \
--	print-igrp.c print-ip.c print-ipcomp.c print-ipfc.c \
+-	print-igrp.c print-ip.c print-ipcomp.c print-ipfc.c print-ipnet.c \
 -	print-ipx.c print-isoclns.c print-juniper.c print-krb.c \
 -	print-l2tp.c print-lane.c print-ldp.c print-lldp.c print-llc.c \
 -        print-lmp.c print-lspping.c print-lwapp.c \
@@ -28,13 +28,13 @@
 -	print-rx.c print-sctp.c print-sflow.c print-sip.c print-sl.c print-sll.c \
 -	print-slow.c print-snmp.c print-stp.c print-sunatm.c print-sunrpc.c \
 -	print-symantec.c print-syslog.c print-tcp.c print-telnet.c print-tftp.c \
--	print-timed.c print-token.c print-udld.c print-udp.c \
--	print-vjc.c print-vqp.c print-vrrp.c print-vtp.c \
--	print-wb.c print-zephyr.c setsignal.c tcpdump.c util.c
+-	print-timed.c print-token.c print-udld.c print-udp.c print-usb.c \
+-	print-vjc.c print-vqp.c print-vrrp.c print-vtp.c print-forces.c \
+-	print-wb.c print-zephyr.c signature.c setsignal.c tcpdump.c util.c
 +	print-ppp.c print-pppoe.c print-pptp.c print-radius.c print-raw.c print-rsvp.c \
-+	print-sctp.c print-sll.c print-sip.c print-snmp.c print-stp.c print-sunrpc.c \
++	print-sctp.c print-sip.c print-snmp.c print-stp.c print-sunrpc.c \
 +	print-syslog.c print-tcp.c print-telnet.c print-tftp.c print-udp.c \
-+	setsignal.c tcpdump.c util.c
++	setsignal.c tcpdump.c util.c signature.c print-ipnet.c print-forces.c
 +
 +ifndef TCPDUMP_MINI
 +
@@ -47,8 +47,9 @@
 +	print-ldp.c print-lmp.c print-lspping.c print-lwapp.c print-egp.c print-krb.c \
 +	print-lwres.c print-mobile.c print-mpcp.c print-mpls.c print-msdp.c \
 +	print-pim.c print-pgm.c print-rip.c print-rrcp.c print-rx.c print-sflow.c print-slow.c print-sl.c \
-+	print-sunatm.c print-symantec.c print-timed.c print-token.c print-udld.c \
-+	print-vjc.c print-vqp.c print-wb.c print-zephyr.c print-vrrp.c print-vtp.c
++	print-sll.c print-sunatm.c print-symantec.c print-timed.c print-token.c print-udld.c \
++	print-vjc.c print-vqp.c print-wb.c print-zephyr.c print-vrrp.c print-vtp.c \
++	print-usb.c
 +
  
  LIBNETDISSECT_SRC=print-isakmp.c
@@ -60,7 +61,7 @@
  LOCALSRC = @LOCALSRC@
  GENSRC = version.c
  LIBOBJS = @LIBOBJS@
-@@ -279,10 +282,12 @@ $(PROG): $(OBJ) @V_PCAPDEP@
+@@ -358,10 +362,12 @@ $(PROG): $(OBJ) @V_PCAPDEP@
  	@rm -f $@
  	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJ) $(LIBS)
  
@@ -75,19 +76,20 @@
  	$(CC) $(CFLAGS) -o $@ -c $(srcdir)/missing/datalinks.c
 --- a/addrtoname.c
 +++ b/addrtoname.c
-@@ -518,9 +518,11 @@ linkaddr_string(const u_char *ep, const 
-             return etheraddr_string(ep);
-         }
+@@ -519,10 +519,10 @@ linkaddr_string(const u_char *ep, const
  
+ 	if (type == LINKADDR_ETHER && len == ETHER_ADDR_LEN)
+ 		return (etheraddr_string(ep));
+-
 +#ifndef TCPDUMP_MINI
-         if (type == LINKADDR_FRELAY) {
-             return q922_string(ep);
-         }
+ 	if (type == LINKADDR_FRELAY)
+ 		return (q922_string(ep));
+-
 +#endif
- 
  	tp = lookup_bytestring(ep, len);
  	if (tp->e_name)
-@@ -1121,6 +1123,7 @@ init_addrtoname(u_int32_t localnet, u_in
+ 		return (tp->e_name);
+@@ -1122,6 +1122,7 @@ init_addrtoname(u_int32_t localnet, u_in
  	init_ipxsaparray();
  }
  
@@ -95,7 +97,7 @@
  const char *
  dnaddr_string(u_short dnaddr)
  {
-@@ -1140,6 +1143,7 @@ dnaddr_string(u_short dnaddr)
+@@ -1141,6 +1142,7 @@ dnaddr_string(u_short dnaddr)
  
  	return(tp->name);
  }
@@ -152,7 +154,7 @@
  
  	if (ssap == LLCSAP_SNAP && dsap == LLCSAP_SNAP
  	    && control == LLC_UI) {
-@@ -447,6 +452,7 @@ snap_print(const u_char *p, u_int length
+@@ -443,6 +448,7 @@ snap_print(const u_char *p, u_int length
                  case PID_CISCO_CDP:
                          cdp_print(p, length, caplen);
                          return (1);
@@ -160,7 +162,7 @@
                  case PID_CISCO_DTP:
                          dtp_print(p, length); 
                          return (1);
-@@ -456,6 +462,7 @@ snap_print(const u_char *p, u_int length
+@@ -452,6 +458,7 @@ snap_print(const u_char *p, u_int length
                  case PID_CISCO_VTP:
                          vtp_print(p, length);
                          return (1);
@@ -168,15 +170,15 @@
                  case PID_CISCO_PVST:
                          stp_print(p, length);
                          return (1);
-@@ -486,6 +493,7 @@ snap_print(const u_char *p, u_int length
- 			ether_print(p, length, caplen);
+@@ -482,6 +489,7 @@ snap_print(const u_char *p, u_int length
+ 			ether_print(p, length, caplen, NULL, NULL);
  			return (1);
  
 +#ifndef TCPDUMP_MINI
  		case PID_RFC2684_802_5_FCS:
  		case PID_RFC2684_802_5_NOFCS:
  			/*
-@@ -527,6 +535,7 @@ snap_print(const u_char *p, u_int length
+@@ -523,6 +531,7 @@ snap_print(const u_char *p, u_int length
  			 */
  			fddi_print(p, length, caplen);
  			return (1);
@@ -206,8 +208,8 @@
  		if (!eflag)
 --- a/tcpdump.c
 +++ b/tcpdump.c
-@@ -139,11 +139,14 @@ struct printer {
- };
+@@ -148,11 +148,14 @@ struct ndo_printer {
+ 
  
  static struct printer printers[] = {
 +#ifndef TCPDUMP_MINI
@@ -221,7 +223,7 @@
  	{ token_if_print,	DLT_IEEE802 },
  #ifdef DLT_LANE8023
  	{ lane_if_print,        DLT_LANE8023 },
-@@ -158,19 +161,23 @@ static struct printer printers[] = {
+@@ -167,19 +170,23 @@ static struct printer printers[] = {
  #ifdef DLT_SLIP_BSDOS
  	{ sl_bsdos_if_print,	DLT_SLIP_BSDOS },
  #endif
@@ -245,15 +247,19 @@
  	{ atm_if_print,		DLT_ATM_RFC1483 },
  #ifdef DLT_C_HDLC
  	{ chdlc_if_print,	DLT_C_HDLC },
-@@ -181,6 +188,7 @@ static struct printer printers[] = {
+@@ -190,15 +197,19 @@ static struct printer printers[] = {
  #ifdef DLT_PPP_SERIAL
- 	{ ppp_hdlc_if_print,    DLT_PPP_SERIAL },
+ 	{ ppp_hdlc_if_print,	DLT_PPP_SERIAL },
  #endif
 +#endif
  #ifdef DLT_PPP_ETHER
  	{ pppoe_if_print,	DLT_PPP_ETHER },
  #endif
-@@ -190,6 +198,7 @@ static struct printer printers[] = {
++#ifndef TCPDUMP_MINI
+ #ifdef DLT_LINUX_SLL
+ 	{ sll_if_print,		DLT_LINUX_SLL },
+ #endif
++#endif
  #ifdef DLT_IEEE802_11
  	{ ieee802_11_if_print,	DLT_IEEE802_11},
  #endif
@@ -261,7 +267,7 @@
  #ifdef DLT_LTALK
  	{ ltalk_if_print,	DLT_LTALK },
  #endif
-@@ -208,12 +217,14 @@ static struct printer printers[] = {
+@@ -217,12 +228,14 @@ static struct printer printers[] = {
  #ifdef DLT_IP_OVER_FC
  	{ ipfc_if_print,	DLT_IP_OVER_FC },
  #endif
@@ -274,9 +280,9 @@
  #endif
 +#ifndef TCPDUMP_MINI
  #ifdef DLT_ENC
- 	{ enc_if_print, 	DLT_ENC },
+ 	{ enc_if_print,		DLT_ENC },
  #endif
-@@ -223,9 +234,11 @@ static struct printer printers[] = {
+@@ -232,9 +245,11 @@ static struct printer printers[] = {
  #ifdef DLT_APPLE_IP_OVER_IEEE1394
  	{ ap1394_if_print,	DLT_APPLE_IP_OVER_IEEE1394 },
  #endif
@@ -288,9 +294,9 @@
  #ifdef DLT_JUNIPER_ATM1
  	{ juniper_atm1_print,	DLT_JUNIPER_ATM1 },
  #endif
-@@ -277,6 +290,7 @@ static struct printer printers[] = {
- #if defined(DLT_BLUETOOTH_HCI_H4_WITH_PHDR) && defined(HAVE_PCAP_BLUETOOTH_H)
- 	{ bt_if_print, DLT_BLUETOOTH_HCI_H4_WITH_PHDR},
+@@ -300,6 +315,7 @@ static struct printer printers[] = {
+ #ifdef DLT_IPV6
+ 	{ raw_if_print,		DLT_IPV6 },
  #endif
 +#endif
  	{ NULL,			0 },
@@ -298,7 +304,7 @@
  
 --- a/print-ether.c
 +++ b/print-ether.c
-@@ -205,6 +205,7 @@ ether_encap_print(u_short ether_type, co
+@@ -269,6 +269,7 @@ ethertype_print(u_short ether_type, cons
    	        arp_print(gndo, p, length, caplen);
  		return (1);
  
@@ -306,18 +312,11 @@
  	case ETHERTYPE_DN:
  		decnet_print(p, length, caplen);
  		return (1);
-@@ -223,7 +224,7 @@ ether_encap_print(u_short ether_type, co
+@@ -287,11 +288,13 @@ ethertype_print(u_short ether_type, cons
  		printf("(NOV-ETHII) ");
  		ipx_print(p, length);
  		return (1);
--
 +#endif
- 	case ETHERTYPE_8021Q:
- 	        if (eflag)
- 		    printf("vlan %u, p %u%s, ",
-@@ -283,10 +284,11 @@ ether_encap_print(u_short ether_type, co
- 
-                 return (1);
  
 +#ifndef TCPDUMP_MINI
          case ETHERTYPE_ISO:
@@ -327,8 +326,8 @@
 +#endif
  	case ETHERTYPE_PPPOED:
  	case ETHERTYPE_PPPOES:
- 		pppoe_print(p, length);
-@@ -296,10 +298,11 @@ ether_encap_print(u_short ether_type, co
+ 	case ETHERTYPE_PPPOED2:
+@@ -303,10 +306,11 @@ ethertype_print(u_short ether_type, cons
  	        eap_print(gndo, p, length);
  		return (1);
  
@@ -341,7 +340,7 @@
  	case ETHERTYPE_PPP:
  		if (length) {
  			printf(": ");
-@@ -307,6 +310,7 @@ ether_encap_print(u_short ether_type, co
+@@ -314,6 +318,7 @@ ethertype_print(u_short ether_type, cons
  		}
  		return (1);
  
@@ -349,7 +348,7 @@
  	case ETHERTYPE_MPCP:
  	        mpcp_print(p, length);
  		return (1);
-@@ -319,7 +323,7 @@ ether_encap_print(u_short ether_type, co
+@@ -326,7 +331,7 @@ ethertype_print(u_short ether_type, cons
  	case ETHERTYPE_CFM_OLD:
  	        cfm_print(p, length);
  		return (1);
@@ -358,7 +357,7 @@
  	case ETHERTYPE_LLDP:
  	        lldp_print(p, length);
  		return (1);
-@@ -327,11 +331,12 @@ ether_encap_print(u_short ether_type, co
+@@ -334,11 +339,12 @@ ethertype_print(u_short ether_type, cons
          case ETHERTYPE_LOOPBACK:
                  return (1);
  
@@ -382,9 +381,9 @@
  	case ETHERTYPE_MPLS:
  		mpls_print(bp, len);
  		break;
-@@ -225,6 +226,7 @@ gre_print_0(const u_char *bp, u_int leng
- 	case ETHERTYPE_GRE_ISO:
- 		isoclns_print(bp, len, len);
+@@ -228,6 +229,7 @@ gre_print_0(const u_char *bp, u_int leng
+ 	case ETHERTYPE_TEB:
+ 		ether_print(bp, len, len, NULL, NULL);
  		break;
 +#endif
  	default:
@@ -473,9 +472,9 @@
  		break;
 -
  	case IPPROTO_PIM:
- 		pim_print(ipds->cp,  ipds->len);
- 		break;
-@@ -518,7 +523,7 @@ again:
+ 		pim_print(ipds->cp,  ipds->len,
+ 			  in_cksum((const u_short*)ipds->cp, ipds->len, 0));
+@@ -519,7 +524,7 @@ again:
  	case IPPROTO_PGM:
  		pgm_print(ipds->cp, ipds->len, (const u_char *)ipds->ip);
  		break;
@@ -551,7 +550,7 @@
   * Local Variables:
 --- a/print-tcp.c
 +++ b/print-tcp.c
-@@ -669,8 +669,10 @@ tcp_print(register const u_char *bp, reg
+@@ -649,8 +649,10 @@ tcp_print(register const u_char *bp, reg
  	else if (sport == SMB_PORT || dport == SMB_PORT)
  		smb_tcp_print(bp, length);
  #endif
@@ -562,7 +561,7 @@
          else if (length > 2 &&
                   (sport == NAMESERVER_PORT || dport == NAMESERVER_PORT ||
                    sport == MULTICASTDNS_PORT || dport == MULTICASTDNS_PORT)) {
-@@ -679,11 +681,12 @@ tcp_print(register const u_char *bp, reg
+@@ -659,11 +661,12 @@ tcp_print(register const u_char *bp, reg
                   * XXX packet could be unaligned, it can go strange
                   */
                  ns_print(bp + 2, length - 2, 0);
@@ -682,7 +681,7 @@
  #ifdef INET6
  		else if (ISPORT(RIPNG_PORT))
  			ripng_print((const u_char *)(up + 1), length);
-@@ -659,23 +673,28 @@ udp_print(register const u_char *bp, u_i
+@@ -659,21 +673,25 @@ udp_print(register const u_char *bp, u_i
  		/*
  		 * Kludge in test for whiteboard packets.
  		 */
@@ -702,16 +701,21 @@
  			hsrp_print((const u_char *)(up + 1), length);
  		else if (ISPORT(LWRES_PORT))
  			lwres_print((const u_char *)(up + 1), length);
-                 else if (ISPORT(LDP_PORT))
+ 		else if (ISPORT(LDP_PORT))
  			ldp_print((const u_char *)(up + 1), length);
 +#endif
-                 else if (ISPORT(OLSR_PORT))
- 			olsr_print((const u_char *)(up + 1), length);
+ 		else if (ISPORT(OLSR_PORT))
+ 			olsr_print((const u_char *)(up + 1), length,
+ #if INET6
+@@ -681,6 +699,7 @@ udp_print(register const u_char *bp, u_i
+ #else
+ 					0);
+ #endif
 +#ifndef TCPDUMP_MINI
-                 else if (ISPORT(MPLS_LSP_PING_PORT))
+ 		else if (ISPORT(MPLS_LSP_PING_PORT))
  			lspping_print((const u_char *)(up + 1), length);
  		else if (dport == BFD_CONTROL_PORT ||
-@@ -693,6 +712,7 @@ udp_print(register const u_char *bp, u_i
+@@ -698,6 +717,7 @@ udp_print(register const u_char *bp, u_i
                          lwapp_control_print((const u_char *)(up + 1), length, 0);
                  else if (ISPORT(LWAPP_DATA_PORT))
                          lwapp_data_print((const u_char *)(up + 1), length);
@@ -721,7 +725,7 @@
                  else if (ISPORT(SYSLOG_PORT))
 --- a/print-ip6.c
 +++ b/print-ip6.c
-@@ -160,9 +160,11 @@ ip6_print(register const u_char *bp, reg
+@@ -186,9 +186,11 @@ ip6_print(register const u_char *bp, reg
  		case IPPROTO_SCTP:
  			sctp_print(cp, (const u_char *)ip6, len);
  			return;
@@ -733,24 +737,24 @@
  		case IPPROTO_TCP:
  			tcp_print(cp, len, (const u_char *)ip6, fragmented);
  			return;
-@@ -172,6 +174,7 @@ ip6_print(register const u_char *bp, reg
+@@ -198,6 +200,7 @@ ip6_print(register const u_char *bp, reg
  		case IPPROTO_ICMPV6:
- 			icmp6_print(cp, len, (const u_char *)ip6, fragmented);
+ 			icmp6_print(gndo, cp, len, (const u_char *)ip6, fragmented);
  			return;
 +#ifndef TCPDUMP_MINI
  		case IPPROTO_AH:
  			advance = ah_print(cp);
  			nh = *cp;
-@@ -195,7 +198,7 @@ ip6_print(register const u_char *bp, reg
- 		case IPPROTO_PIM:
- 			pim_print(cp, len);
+@@ -222,7 +225,7 @@ ip6_print(register const u_char *bp, reg
+ 			pim_print(cp, len, nextproto6_cksum(ip6, (u_short *)cp, len,
+ 							    IPPROTO_PIM));
  			return;
 -
 +#endif
  		case IPPROTO_OSPF:
  			ospf6_print(cp, len);
  			return;
-@@ -207,11 +210,11 @@ ip6_print(register const u_char *bp, reg
+@@ -234,11 +237,11 @@ ip6_print(register const u_char *bp, reg
  		case IPPROTO_IPV4:
  		        ip_print(gndo, cp, len);
  			return;
@@ -764,22 +768,3 @@
  		case IPPROTO_GRE:
  			gre_print(cp, len);
  			return;
---- a/print-sll.c
-+++ b/print-sll.c
-@@ -153,14 +153,14 @@ sll_if_print(const struct pcap_pkthdr *h
- 		 * Yes - what type is it?
- 		 */
- 		switch (ether_type) {
--
-+#ifndef TCPDUMP_MINI
- 		case LINUX_SLL_P_802_3:
- 			/*
- 			 * Ethernet_802.3 IPX frame.
- 			 */
- 			ipx_print(p, length);
- 			break;
--
-+#endif
- 		case LINUX_SLL_P_802_2:
- 			/*
- 			 * 802.2.
