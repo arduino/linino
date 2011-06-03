@@ -14,7 +14,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ftpd-topfield
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=@USB_SUPPORT
+  DEPENDS:=@USB_SUPPORT +libusb
   TITLE:=Topfield PVR access via FTP
   URL:=http://puppy.sourceforge.net/
 endef
