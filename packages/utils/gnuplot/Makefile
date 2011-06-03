@@ -39,7 +39,8 @@ CONFIGURE_ARGS += \
 	--disable-mouse \
 	--without-tutorial \
 	--without-row-help \
-	--without-lisp-files
+	--without-lisp-files \
+	--disable-wxwidgets
 
 define Package/gnuplot/install
 	$(INSTALL_DIR) $(1)/usr/bin
