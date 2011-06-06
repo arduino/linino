@@ -19,7 +19,7 @@
 @@ -127,12 +127,12 @@ bsdinstall:
  
  # install binaries
- 	install -dm 755 $(DESTDIR)/var/db/vnstat
+ 	install -d -m 755 $(DESTDIR)/var/db/vnstat
 -	install -s -m 755 src/vnstat $(BIN_BSD)
 -	install -s -m 755 src/vnstatd $(SBIN_BSD)
 +	install -m 755 src/vnstat $(BIN_BSD)
