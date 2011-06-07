@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeswitch
 PKG_VERSION:=1.0.7
-PKG_RELEASE:=$(PKG_SOURCE_VERSION)
+PKG_REV:=2146583663a5067f6ff71df1e48c3bb900e89db8
+PKG_RELEASE:=$(PKG_REV)
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=2146583663a5067f6ff71df1e48c3bb900e89db8
+PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
