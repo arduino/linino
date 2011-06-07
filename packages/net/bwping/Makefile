@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bwping
-PKG_VERSION:=1.2
+PKG_VERSION:=1.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/bwping
-PKG_MD5SUM:=4c2215551df7f00de8559fd0cd1ff4db
+PKG_MD5SUM:=a1207f47ad53b058cf0f3597401469f4
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,7 +27,6 @@ define Package/bwping
 endef
 
 define Package/bwping/description
-  BWPing
   BWPing is a bandwidth measurement tool based on ICMP echo
   request/reply.  It is especially well suited for lossy links. BWPing
   does not not require any special software on the remote host (only
@@ -36,7 +35,7 @@ endef
 
 define Package/bwping/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/$(PKG_NAME) $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,bwping))
