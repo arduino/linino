@@ -97,16 +97,16 @@
                      archives.append({"type" : i[0], "extension": i[1],
 --- a/mercurial/hgweb/hgweb_mod.py
 +++ b/mercurial/hgweb/hgweb_mod.py
-@@ -39,7 +39,7 @@ class hgweb(object):
-         hook.redirect(True)
+@@ -40,7 +40,7 @@ class hgweb(object):
          self.mtime = -1
+         self.size = -1
          self.reponame = name
 -        self.archives = 'zip', 'gz', 'bz2'
 +        self.archives = 'zip', 'gz'
          self.stripecount = 1
          # a repo owner may set web.templates in .hg/hgrc to get any file
          # readable by the user running the CGI script
-@@ -280,7 +280,6 @@ class hgweb(object):
+@@ -284,7 +284,6 @@ class hgweb(object):
                  yield {"type" : i, "extension" : spec[2], "node" : nodeid}
  
      archive_specs = {
@@ -157,7 +157,7 @@
      bundletype = btypes.get(bundletype)
      if bundletype not in changegroup.bundletypes:
          raise util.Abort(_('unknown bundle type specified with --type'))
-@@ -4307,7 +4306,7 @@ table = {
+@@ -4316,7 +4315,7 @@ table = {
             _('a base changeset assumed to be available at the destination'),
             _('REV')),
            ('a', 'all', None, _('bundle all changesets in the repository')),
