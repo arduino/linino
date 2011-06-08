@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -14,7 +14,7 @@ PKG_RELEASE:=1
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_SUBDIR:=ap51-flash-$(PKG_VERSION)
-PKG_SOURCE_URL:=http://dev.open-mesh.com/downloads/svn/ap51-flash/trunk
+PKG_SOURCE_URL:=http://dev.cloudtrax.com/downloads/svn/ap51-flash/trunk
 PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
 
 include $(INCLUDE_DIR)/package.mk
@@ -27,7 +27,7 @@ define Package/ap51-flash
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=A tool for flashing (nearly) all ap51/ap61 based routers
-  URL:=http://dev.open-mesh.com/wiki/ap51-flash-station
+  URL:=http://dev.cloudtrax.com/wiki/ap51-flash-station
 endef
 
 TARGET_EXTRA_CFLAGS:=-DFLASH_FROM_FILE -DNO_LIBPCAP
