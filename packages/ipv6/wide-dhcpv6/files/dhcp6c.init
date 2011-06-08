@@ -11,23 +11,46 @@ get_ifname() {
 	return 0
 }
 
+get_device() {
+	local interface=$1
+	local ifname=$2
+	local device
+	scan_interfaces
+	config_get device "$interface" device
+	grep -qE "^ *$device:" /proc/net/dev && \
+		printf '%s\n' "$device" || \
+		printf '%s\n' "$ifname"
+	return 0
+}
+
 dhcp6c_write_duid() {
-	local ifname="$1"
-	local mac=$(ifconfig "$client_ifname" | sed -ne 's/.*HWaddr //p')
-	local oIFS="$IFS"; IFS=":"; set -- $mac; IFS="$oIFS"
+	local mac="${1:-$(ifconfig "$client_device" | sed -ne 's/[[:space:]]*$//; s/.*HWaddr //p')}"
+	local pat="[0-9A-F][0-9A-F]"
 
-	# low endian
-	if [ "$(printf \\1 | hexdump -n1 -ve '8/2 "%04x"')" = "0001" ]; then
-		printf \\x0a\\x00
+	case "$mac" in
+		$pat:$pat:$pat:$pat:$pat:$pat:$pat:$pat:$pat:$pat)
+			printf $(echo "$mac" | sed -e 's/^/\\x/; s/:/\\x/g')
+			logger -t dhcp6c "Using user provided DUID $mac"
+		;;
+		$pat:$pat:$pat:$pat:$pat:$pat)
+			local oIFS="$IFS"; IFS=":"; set -- $mac; IFS="$oIFS"
 
-	# big endian
-	else
-		printf \\x00\\x0a
-	fi
+			# low endian
+			if [ "$(printf \\1 | hexdump -n1 -ve '8/2 "%04x"')" = "0001" ]; then
+				printf \\x0a\\x00
 
-	printf \\x00\\x03\\x00\\x06\\x$1\\x$2\\x$3\\x$4\\x$5\\x$6
+			# big endian
+			else
+				printf \\x00\\x0a
+			fi
 
-	logger -t dhcp6c "Using DUID 00:03:00:06:$1:$2:$3:$4:$5:$6"
+			printf \\x00\\x03\\x00\\x06\\x$1\\x$2\\x$3\\x$4\\x$5\\x$6
+			logger -t dhcp6c "Using MAC address DUID 00:03:00:06:$1:$2:$3:$4:$5:$6"
+		;;
+		*)
+			logger -t dhcp6c "Unable to derive DUID from interface '$client_device' and no valid user DUID given"
+		;;
+	esac
 }
 
 dhcp6c_write_interface() {
@@ -117,18 +140,22 @@ start() {
 	local enabled
 	config_get_bool enabled basic enabled 0
 	[ $enabled -eq 0 ] && return 0
-	
+
+	local user_duid
+	config_get user_duid basic duid
+
 	logger -t dhcp6c starting dhcp6c
 	
 	local client_interface
 	config_get client_interface basic interface
 	local client_ifname=$(get_ifname "$client_interface")
+	local client_device=$(get_device "$client_interface" "$client_ifname")
 	
 	local config_file="/var/etc/dhcp6c.conf"
 	local duid_file="/var/dhcp6c_duid"
 	mkdir -m 755 -p /var/etc
 	dhcp6c_write_config > $config_file
-	dhcp6c_write_duid > $duid_file
+	dhcp6c_write_duid "$user_duid" > $duid_file
 	
 	local debug
 	local debug_option
@@ -146,8 +173,8 @@ start() {
 stop() {
 
 	logger -t dhcp6c stopping dhcp6c
-	rm -f /var/etc/dhcp6c.conf
-	kill -TERM `cat /var/run/dhcp6c.pid`
+	service_kill dhcp6c /var/run/dhcp6c.pid
+	rm -f /var/etc/dhcp6c.conf /var/run/dhcp6c.pid
 	ACTION=stop /sbin/hotplug-call dhcp6c
 	return 0
 	
