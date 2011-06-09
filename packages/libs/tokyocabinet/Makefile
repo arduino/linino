@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -19,7 +19,7 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/tokyocabinet
   SUBMENU:=database
-  SECTION:=lib
+  SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=A library of routines to manage databases
   URL:=http://fallabs.com/tokyocabinet/
