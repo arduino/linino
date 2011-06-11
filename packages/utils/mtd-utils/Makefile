@@ -21,17 +21,77 @@ PKG_SOURCE_VERSION:=$(PKG_REV)
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/mtd-utils
+FILES:= \
+	ubiupdatevol \
+	flash_otp_info \
+	nandtest \
+	ubimkvol \
+	ubigen \
+	serve_image \
+	recv_image \
+	ubinfo \
+	ubirename \
+	mkpfi \
+	nandwrite \
+	flash_eraseall \
+	mkbootenv \
+	ftl_format \
+	nand2bin \
+	ubiattach \
+	nftl_format \
+	nanddump \
+	ubinize \
+	docfdisk \
+	ubimirror \
+	ubicrc32.pl \
+	ftl_check \
+	flashcp \
+	jffs2dump \
+	ubiformat \
+	ubidetach \
+	flash_lock \
+	bin2nand \
+	pfiflash \
+	mtd_debug \
+	pddcustomize \
+	flash_unlock \
+	doc_loadbios \
+	nftldump \
+	mkfs.jffs2 \
+	flash_info \
+	ubicrc32 \
+	ubirmvol \
+	unubi \
+	pfi2bin \
+	mkfs.ubifs \
+	sumtool \
+	flash_erase \
+	rfddump \
+	flash_otp_dump \
+	rfdformat
+
+define PartGen
+define Package/mtd-utils-$(1)
+  TITLE:=MTD $(1)
+  URL:=http://www.linux-mtd.infradead.org/
   SECTION:=utils
   CATEGORY:=Utilities
+  DEPENDS:=mtd-utils +zlib +liblzo +libuuid
+endef
+endef
+
+define Package/mtd-utils
   TITLE:=Utilities for flash info/debug
-  URL:=http://www.linux-mtd.infradead.org/
-  DEPENDS:=+zlib +liblzo +libuuid
+  SECTION:=utils
+  CATEGORY:=Utilities
+  MENU:=1
 endef
 
 define Package/mtd-utils/description
   Utilities for manipulating memory technology devices.
 endef
+
+$(foreach file,$(FILES),$(eval $(call PartGen,$(file))))
 
 MAKE_FLAGS += \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
@@ -44,9 +104,18 @@ MAKE_FLAGS += \
 	SUBDIRS=""
 endif
 
-define Package/mtd-utils/install
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
+define PartInstall
+define Package/mtd-utils-$(1)/install
+	$(INSTALL_DIR) \
+		$$(1)/usr/sbin
+
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/sbin/$(1) \
+		$$(1)/usr/sbin/
+endef
 endef
 
+$(foreach file,$(FILES),$(eval $(call PartInstall,$(file))))
+
 $(eval $(call BuildPackage,mtd-utils))
+$(foreach file,$(FILES),$(eval $(call BuildPackage,mtd-utils-$(file))))
