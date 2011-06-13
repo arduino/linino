@@ -33,9 +33,13 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_qt4-phonon \
 	CONFIG_PACKAGE_qt4-sqlite \
 	CONFIG_PACKAGE_qt4-mysql \
+	CONFIG_PACKAGE_qt4-webkit \
+	CONFIG_PACKAGE_qt4-script \
+	CONFIG_PACKAGE_qt4-scriptools \
 	CONFIG_PACKAGE_qt4-openssl
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
 -include $(if $(DUMP),,./files/qmake.mk)
 
 # this should be moved to a more generic place later, as other packages are configured different as well depending on available nptl support
@@ -72,7 +76,6 @@ define Package/qt4-gui
   $(call Package/qt4/Default)
   DEFAULT:=
   DEPENDS+=+libpng +libtiff +libjpeg +libfreetype +qt4-network \
-	+FEATURE_drawing-backend_DirectFB:directfb \
 	+FEATURE_drawing-backend_libX11:libX11 \
 	+FEATURE_drawing-backend_libX11:libXext @DISPLAY_SUPPORT
   TITLE+=(gui)
@@ -343,16 +346,16 @@ define Build/Configure
 			$(if $(CONFIG_PACKAGE_qt4-phonon),-phonon,-no-phonon) \
 			-no-phonon-backend \
 			$(if $(CONFIG_PACKAGE_qt4-svg),-svg,-no-svg) \
-			$(if $(NPTL),-webkit,-no-webkit) \
+			$(if $(CONFIG_PACKAGE_qt4-webkit),-webkit,-no-webkit) \
 			-no-javascript-jit \
-			$(if $(NPTL),-script,-no-script) \
-			$(if $(NPTL),-scripttools,-no-scripttools) \
+			$(if $(CONFIG_PACKAGE_qt4-script),-script,-no-script) \
+			$(if $(CONFIG_PACKAGE_qt4-scripttools),-scripttools,-no-scripttools) \
 			-no-accessibility \
-			$(if $(NPTL),-declarative,-no-declarative) \
+			$(if $(CONFIG_PACKAGE_qt4-declarative),-declarative,-no-declarative) \
 			$(if $(CONFIG_PACKAGE_qt4-openssl),-openssl -I $(STAGING_DIR)/usr/include,-no-openssl) \
 			-no-nis \
 			-no-cups \
-			-no-iconv \
+			-iconv \
 			$(if $(CONFIG_PACKAGE_qt4-dbus),-dbus,-no-dbus) \
 			-no-gtkstyle \
 			-no-nas-sound \
