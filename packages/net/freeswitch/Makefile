@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,14 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeswitch
 PKG_VERSION:=1.0.7
-PKG_REV:=2146583663a5067f6ff71df1e48c3bb900e89db8
-PKG_RELEASE:=$(PKG_REV)
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=$(PKG_REV)
+PKG_SOURCE_VERSION:=079f48458e024a87c4ce6336a6f88d50a18d4f25
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_RELEASE:=$(PKG_SOURCE_VERSION)
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 PKG_FIXUP:=libtool
@@ -76,6 +75,7 @@ FS_MOD_AVAILABLE:= \
 	lua \
 	managed \
 	memcache \
+	mp4 \
 	native-file \
 	nibblebill \
 	opal \
@@ -296,7 +296,7 @@ ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-flite),)
 endif
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en),)
- $(eval $(call Download/files,sounds-en,$(PKG_NAME)-sounds-en-us-callie-8000-1.0.15.tar.gz,a0e466fe48164ac802f851312fd3fc79,,))
+ $(eval $(call Download/files,sounds-en,$(PKG_NAME)-sounds-en-us-callie-8000-1.0.16.tar.gz,bde0883eb75fe06f39bde11f50a1f858,,))
 	MAKE_INSTALL_TARGETS+= sounds-install
 endif
 
@@ -544,7 +544,7 @@ $(eval $(call BuildPlugin,conference,Conference room,mod_conference,,))
 $(eval $(call BuildPlugin,console,Console logger,mod_console,,))
 $(eval $(call BuildPlugin,curl,HTTP request,mod_curl,,+libcurl))
 $(eval $(call BuildPlugin,dahdi-codec,DAHDI codecs,mod_dahdi_codec,,))
-$(eval $(call BuildPlugin,db,Dialplan & API to a database backend,mod_db,,))
+$(eval $(call BuildPlugin,db,Database backend,mod_db,,))
 $(eval $(call BuildPlugin,dialplan-asterisk,Asterisk dialplan parser,mod_dialplan_asterisk,,))
 $(eval $(call BuildPlugin,dialplan-directory,Dialplan-Directory interface,mod_dialplan_directory,,))
 $(eval $(call BuildPlugin,dialplan-xml,Dialplan-XML interface,mod_dialplan_xml,,))
@@ -579,6 +579,7 @@ $(eval $(call BuildPlugin,loopback,Loopback endpoint,mod_loopback,,))
 $(eval $(call BuildPlugin,lua,Lua language interface,mod_lua,,+libstdcpp))
 $(eval $(call BuildPlugin,managed,language mod_managed,mod_managed,,@BROKEN)) # needs Mono
 $(eval $(call BuildPlugin,memcache,MemCached interface,mod_memcache,,@BROKEN)) # fails in libmemcached
+$(eval $(call BuildPlugin,mp4,MP4 File Format support for video apps,mod_mp4,,+libmp4v2))
 $(eval $(call BuildPlugin,native-file,Native files,mod_native_file,,))
 $(eval $(call BuildPlugin,nibblebill,Billing,mod_nibblebill,,))
 $(eval $(call BuildPlugin,opal,Multi-Protocol endpoint,mod_opal,,@BROKEN)) # needs Opal
