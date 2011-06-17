@@ -40,7 +40,7 @@ CONFIGURE_VARS += \
 		-I$(STAGING_DIR)/usr/lib/glib-2.0/include \
 		-I$(STAGING_DIR)/usr/include/fuse" \
 	SSHFS_LIBS=" \
-		-lglib-2.0 -liconv -lfuse -pthread -lgthread-2.0 \
+		-lglib-2.0 -liconv $(if $(INTL_FULL),-lintl) -lfuse -pthread -lgthread-2.0 \
 		-L$(STAGING_DIR)/usr/lib"
 
 define Build/Compile
