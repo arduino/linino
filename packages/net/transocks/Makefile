@@ -17,9 +17,9 @@ PKG_SOURCE_SUBDIR:=transocks
 PKG_SOURCE_VERSION:=-DNOW
 PKG_SOURCE_PROTO:=cvs
 
-PKG_BUILD_DIR:=transocks
-
 include $(INCLUDE_DIR)/package.mk
+
+PKG_UNPACK:=gzip -dc $(DL_DIR)/$(PKG_SOURCE) | $(TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xf -
 
 define Build/Compile
 	$(TARGET_CC) \
