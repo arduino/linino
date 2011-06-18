@@ -217,7 +217,6 @@ $(call Package/$(PKG_NAME)/Default)
 		+$(PKG_NAME)-mod-hash \
 		+$(PKG_NAME)-mod-ilbc \
 		+$(PKG_NAME)-mod-local-stream \
-		+$(PKG_NAME)-mod-logfile \
 		+$(PKG_NAME)-mod-lua \
 		+$(PKG_NAME)-mod-native-file \
 		+$(PKG_NAME)-mod-siren \
