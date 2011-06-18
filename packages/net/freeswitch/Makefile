@@ -14,7 +14,7 @@ PKG_RELEASE:=1
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_REV:=1c6b7d81618a943be9b1c0720bc0032b34b2876a
+PKG_REV:=0128bce4ac222c6e0ee17ee9f89b63678ff8cf97
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -88,6 +88,7 @@ FS_MOD_AVAILABLE:= \
 	python \
 	radius-cdr \
 	rss \
+	rtmp \
 	say-de \
 	say-en \
 	say-es \
@@ -137,6 +138,7 @@ FS_MOD_AVAILABLE:= \
 PKG_CONFIG_DEPENDS:= \
 	$(patsubst %,CONFIG_PACKAGE_$(PKG_NAME)-mod-%,$(FS_MOD_AVAILABLE)) \
 
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/$(PKG_NAME)/Default
@@ -472,6 +474,8 @@ define Package/$(PKG_NAME)-tools/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fs_cli $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fs_encode $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fs_ivrd $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fsxs $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/gentls_cert $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/tone2wav $(1)/usr/bin/
 endef
 
@@ -592,6 +596,7 @@ $(eval $(call BuildPlugin,portaudio-stream,format mod_portaudio_stream,mod_porta
 $(eval $(call BuildPlugin,python,Python language interface,mod_python,,@BROKEN)) # needs Python
 $(eval $(call BuildPlugin,radius-cdr,Radius-CDR interface,mod_radius_cdr,,@BROKEN)) # fails in freeradius-client
 $(eval $(call BuildPlugin,rss,RRS feeds via TTS,mod_rss,,))
+$(eval $(call BuildPlugin,rtmp,RTMP Protocol Handler,mod_rtmp,,))
 $(eval $(call BuildPlugin,say-de,German say,mod_say_de,,))
 $(eval $(call BuildPlugin,say-en,English say,mod_say_en,,))
 $(eval $(call BuildPlugin,say-es,Spanish say,mod_say_es,,))
@@ -628,7 +633,7 @@ $(eval $(call BuildPlugin,stress,application mod_stress,mod_stress,,))
 $(eval $(call BuildPlugin,syslog,SysLog logger,mod_syslog,,))
 $(eval $(call BuildPlugin,tone-stream,Tone generation stream,mod_tone_stream,,))
 $(eval $(call BuildPlugin,tts-commandline,ASR TTS cli,mod_tts_commandline,,))
-$(eval $(call BuildPlugin,unimrcp,MRCP interface,mod_unimrcp,,))
+$(eval $(call BuildPlugin,unimrcp,MRCP interface,mod_unimrcp,,@BROKEN))
 $(eval $(call BuildPlugin,valet-parking,application mod_valet_parking,mod_valet_parking,,))
 $(eval $(call BuildPlugin,vmd,VoiceMail beep detection,mod_vmd,,))
 $(eval $(call BuildPlugin,voicemail,VoiceMail,mod_voicemail,,))
