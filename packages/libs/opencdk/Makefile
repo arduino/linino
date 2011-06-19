@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -12,7 +12,7 @@ PKG_VERSION:=0.6.6
 PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://josefsson.org/gnutls/releases/opencdk/
+PKG_SOURCE_URL:=ftp://ftp.gnutls.org/pub/gnutls/attic/opencdk
 PKG_MD5SUM:=813d62d7afe7b2c2d8f3df0a6c9d9331
 PKG_FIXUP:=libtool
 
@@ -25,7 +25,7 @@ define Package/libopencdk
   CATEGORY:=Libraries
   DEPENDS:=+libgcrypt zlib
   TITLE:=The Open Crypto Development Kit library
-  URL:=ftp://ftp.gnutls.org/pub/gnutls/opencdk/
+  URL:=ftp://ftp.gnutls.org/pub/gnutls/attic/opencdk/
 endef
 
 define Package/libopencdk/description
