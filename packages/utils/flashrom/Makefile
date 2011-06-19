@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2010-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -12,11 +12,12 @@ PKG_VERSION:=0.9.3
 PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://qa.coreboot.org/releases/
+PKG_SOURCE_URL:=http://download.flashrom.org/releases
 PKG_MD5SUM:=eccdec2764223f5d2839bf577380eaa9
 
-include $(INCLUDE_DIR)/package.mk
+PKG_INSTALL:=1
 
+include $(INCLUDE_DIR)/package.mk
 
 define Package/flashrom
   SECTION:=utils
@@ -30,12 +31,15 @@ endef
 define Package/flashrom/description
  flashrom is a utility for identifying, reading, writing, verifying
  and erasing flash chips. It's often used to flash BIOS/EFI/coreboot
- /firmware images. 
+ /firmware images.
 endef
+
+MAKE_FLAGS += \
+	PREFIX="/usr"
 
 define Package/flashrom/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/flashrom $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/flashrom $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,flashrom))

@@ -1,5 +1,5 @@
---- flashrom-0.9.3/physmap.c.orig	2010-10-05 20:56:44.000000000 -0600
-+++ flashrom-0.9.3/physmap.c	2011-03-29 20:26:22.000000000 -0600
+--- a/physmap.c
++++ b/physmap.c
 @@ -352,7 +352,7 @@ int setup_cpu_msr(int cpu)
  {
  	char msrfilename[64];
