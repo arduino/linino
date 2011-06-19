@@ -17,7 +17,7 @@ define Package/cpusage
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Outputs CPU usage statistics once per second
-  URL:=http://www.net.t-labs.tu-berlin.de/~fabian/proj_en.html\#cpusage
+  URL:=http://www.net.t-labs.tu-berlin.de/~fabian/software_en.html\#cpusage
 endef
 
 define Package/cpusage/description
