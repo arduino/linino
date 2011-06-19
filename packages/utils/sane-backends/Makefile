@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sane-backends
 PKG_VERSION:=1.0.20
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.sane-project.org/pub/sane/$(PKG_NAME)-$(PKG_VERSION)/
@@ -76,6 +76,7 @@ CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \
 	--disable-translations \
+	--disable-latex \
 	--without-gphoto2 \
 	--disable-debug \
 
