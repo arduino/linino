@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lsqlite3
 PKG_VERSION:=7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://luaforge.net/frs/download.php/4472
@@ -35,7 +35,7 @@ endef
 
 TARGET_CFLAGS += $(FPIC) $(TARGET_CPPFLAGS) -std=c99
 
-TARGET_LDFLAGS += -llua
+TARGET_LDFLAGS += -llua -lsqlite3
 
 MAKE_FLAGS += \
 	CC="$(TARGET_CC)" \
