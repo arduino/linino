@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pulseaudio
-PKG_VERSION:=0.9.22
-PKG_RELEASE:=2
+PKG_VERSION:=0.9.23
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://0pointer.de/lennart/projects/pulseaudio/
-PKG_MD5SUM:=ca85ab470669b05e100861654cf5eb3c
+PKG_SOURCE_URL:=http://freedesktop.org/software/pulseaudio/releases/
+PKG_MD5SUM:=7391205a337d1e04a9ff38025f684034
 
 PKG_BUILD_DEPENDS:=intltool/host
 
