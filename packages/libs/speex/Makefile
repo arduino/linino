@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=speex
-PKG_VERSION:=1.2beta3.2
-PKG_RELEASE:=2
+PKG_VERSION:=1.2rc1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.us.xiph.org/releases/speex/
-PKG_MD5SUM:=b47396952c5fdd54b6468316c3bd339f
+PKG_MD5SUM:=c4438b22c08e5811ff10e2b06ee9b9ae
 
 PKG_FIXUP:=libtool
 
