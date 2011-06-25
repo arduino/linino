@@ -45,6 +45,10 @@ MAKE_FLAGS += \
 	HOST="$(GNU_TARGET_NAME)" \
 	ZLIB="yes" \
 
+ifneq ($(CONFIG_USE_EGLIBC)$(CONFIG_USE_GLIBC),)
+TARGET_LDFLAGS += -lresolv
+endif
+
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/lib/libpci.a $(1)/usr/lib
