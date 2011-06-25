@@ -16,7 +16,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://dl.lm-sensors.org/i2c-tools/releases
 PKG_MD5SUM:=511376eed04455cdb277ef19c5f73bb4
 
-PKG_BUILD_DEPENDS:=python
+PKG_BUILD_DEPENDS:=PACKAGE_python-smbus:python
 
 include $(INCLUDE_DIR)/package.mk
 $(call include_mk, python-package.mk)
@@ -35,7 +35,7 @@ define Package/python-smbus
   CATEGORY:=Languages
   TITLE:=Python bindings for the SMBUS
   URL:=http://www.lm-sensors.org/wiki/I2CTools
-  DEPENDS:= +python-mini +i2c-tools
+  DEPENDS:= +PACKAGE_python-smbus:python-mini +i2c-tools
 endef
 
 define Package/i2c-tools/description
@@ -56,15 +56,21 @@ endef
 
 TARGET_CPPFLAGS += -I$(LINUX_DIR)/include
 
+ifdef CONFIG_PACKAGE_python-smbus
+  define Build/Compile/python-smbus
+	$(if $(Build/Compile/PyMod),,@echo Python packaging code not found.; false)
+	$(call Build/Compile/PyMod,./py-smbus/, \
+		install --prefix="$(PKG_INSTALL_DIR)/usr", \
+	)
+  endef
+endif
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		LINUX="$(LINUX_DIR)" \
 		CC="$(TARGET_CC)" \
 		STAGING_DIR="$(STAGING_DIR)"
-	$(if $(Build/Compile/PyMod),,@echo Python packaging code not found.; false)
-	$(call Build/Compile/PyMod,./py-smbus/, \
-		install --prefix="$(PKG_INSTALL_DIR)/usr", \
-	)
+	$(Build/Compile/python-smbus)
 endef
 
 define Package/i2c-tools/install
