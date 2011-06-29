@@ -3,7 +3,7 @@ append_bool() {
 	local option="$2"
 	local value="$3"
 	local _loctmp
-	config_get_bool _loctmp "$section" "$option"
+	config_get_bool _loctmp "$section" "$option" 0
 	[ "$_loctmp" -gt 0 ] && append args "$value"
 }
 
