@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=darkstat
-PKG_VERSION:=3.0.713
+PKG_VERSION:=3.0.714
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://dmr.ath.cx/net/darkstat
-PKG_MD5SUM:=3fd2a4ddb123ad11bb99f1094a6206d9
+PKG_MD5SUM:=eef385fadc8dbb611d3d4c4d8fa94817
 
 PKG_INSTALL:=1
 
@@ -38,6 +38,7 @@ define Package/darkstat/conffiles
 endef
 
 CONFIGURE_ARGS += \
+	--disable-debug \
 	--with-chroot-dir=/var/empty
 
 define Build/Compile

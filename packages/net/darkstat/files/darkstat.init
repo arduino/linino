@@ -1,8 +1,9 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 
 START=60
 RUN_D=/var/empty
+PID_F=$RUN_D/darkstat.pid
 
 start() {
 	mkdir -p $RUN_D
@@ -24,9 +25,11 @@ start_darkstat() {
 		-i "$ifname" \
 		${httpaddr:+-b "$httpaddr"} \
 		${httpport:+-p "$httpport"} \
-		--chroot $RUN_D
+		--chroot $RUN_D \
+		--pidfile $PID_F
 }
 
 stop() {
-	killall darkstat
+	service_kill darkstat $PID_F
+	rm -f $PID_F
 }
