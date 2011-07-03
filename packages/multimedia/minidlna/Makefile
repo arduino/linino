@@ -39,6 +39,10 @@ define Package/minidlna/description
   being fully compliant with DLNA/UPnP-AV clients.
 endef
 
+define Package/minidlna/conffiles
+/etc/minidlna.conf
+endef
+
 define Package/minidlna/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/minidlna.conf $(1)/etc/
