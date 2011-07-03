@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apr
-PKG_VERSION:=1.4.2
-PKG_RELEASE:=2
+PKG_VERSION:=1.4.5
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.ibiblio.org/pub/mirrors/apache/apr
-PKG_MD5SUM:=4b00e8f70c067893d075577962656b35
+PKG_MD5SUM:=8b53f5a5669d0597f2da889a2f576eb6
 
 PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=aclocal.m4 build/ltmain.sh

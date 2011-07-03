@@ -10,7 +10,7 @@
  # APR (Apache Portable Runtime) library Makefile.
 --- a/configure.in
 +++ b/configure.in
-@@ -180,9 +180,6 @@ case $host in
+@@ -246,9 +246,6 @@ case $host in
      gcc $CFLAGS $CPPFLAGS -o $LIBTOOL.exe $LIBTOOL.c
      ;;
  *)
