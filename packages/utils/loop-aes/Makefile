@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=loop-aes
-PKG_VERSION:=3.4b
+PKG_VERSION:=3.6c
 PKG_RELEASE:=1
 
 PKG_SOURCE:=loop-AES-v$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=5552e8a2572c5fa416a28493f9e0ec8f
+PKG_MD5SUM:=a030eb9af42e167d11434e2475187f00
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/loop-AES-v$(PKG_VERSION)
 PKG_BUILD_PARALLEL:=1
