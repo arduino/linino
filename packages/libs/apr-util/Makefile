@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apr-util
-PKG_VERSION:=1.3.10
+PKG_VERSION:=1.3.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://apache.autinity.de/apr
-PKG_MD5SUM:=6a6f501a1b2a45166b8ffd6df29204bb
+PKG_SOURCE_URL:=http://www.ibiblio.org/pub/mirrors/apache/apr
+PKG_MD5SUM:=0f671b037ca62751a8a7005578085560
 
 PKG_FIXUP:=libtool
 PKG_REMOVE_FILES:=aclocal.m4 build/ltmain.sh
