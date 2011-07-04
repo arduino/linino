@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sqlite
-PKG_VERSION:=3070400
+PKG_VERSION:=3070701
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-autoconf-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.sqlite.org/
-PKG_MD5SUM:=8f0c690bfb33c3cbbc2471c3d9ba0158
+PKG_SOURCE_URL:=http://www.sqlite.org
+PKG_MD5SUM:=554026fe7fac47b1cf61c18d5fe43419
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-autoconf-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=libncurses libreadline
