@@ -7,39 +7,6 @@
 
 WIRELESS_MENU:=Wireless Drivers
 
-define KernelPackage/lib80211
-  SUBMENU:=$(WIRELESS_MENU)
-  TITLE:=802.11 Networking stack
-  DEPENDS:=@!LINUX_2_4
-  KCONFIG:= \
-	CONFIG_LIB80211 \
-	CONFIG_LIB80211_CRYPT_WEP \
-	CONFIG_LIB80211_CRYPT_TKIP \
-	CONFIG_LIB80211_CRYPT_CCMP
-  FILES:= \
-  	$(LINUX_DIR)/net/wireless/lib80211.$(LINUX_KMOD_SUFFIX) \
-  	$(LINUX_DIR)/net/wireless/lib80211_crypt_wep.$(LINUX_KMOD_SUFFIX) \
-  	$(LINUX_DIR)/net/wireless/lib80211_crypt_ccmp.$(LINUX_KMOD_SUFFIX) \
-  	$(LINUX_DIR)/net/wireless/lib80211_crypt_tkip.$(LINUX_KMOD_SUFFIX)
-  AUTOLOAD:=$(call AutoLoad,10, \
-	lib80211 \
-	lib80211_crypt_wep \
-	lib80211_crypt_ccmp \
-	lib80211_crypt_tkip \
-  )
-endef
-
-define KernelPackage/lib80211/description
- Kernel modules for 802.11 Networking stack
- Includes:
- - lib80211
- - lib80211_crypt_wep
- - lib80211_crypt_tkip
- - lib80211_crytp_ccmp
-endef
-
-$(eval $(call KernelPackage,lib80211))
-
 define KernelPackage/net-airo
   SUBMENU:=$(WIRELESS_MENU)
   TITLE:=Cisco Aironet driver
