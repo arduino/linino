@@ -1,619 +1,463 @@
---- a/net/wireless/reg.c
-+++ b/net/wireless/reg.c
-@@ -1456,7 +1456,8 @@ static void reg_process_hint(struct regu
- 	 * We only time out user hints, given that they should be the only
- 	 * source of bogus requests.
+--- a/net/mac80211/agg-rx.c
++++ b/net/mac80211/agg-rx.c
+@@ -176,6 +176,8 @@ static void ieee80211_send_addba_resp(st
+ 		memcpy(mgmt->bssid, sdata->vif.addr, ETH_ALEN);
+ 	else if (sdata->vif.type == NL80211_IFTYPE_STATION)
+ 		memcpy(mgmt->bssid, sdata->u.mgd.bssid, ETH_ALEN);
++	else if (sdata->vif.type == NL80211_IFTYPE_WDS)
++		memcpy(mgmt->bssid, da, ETH_ALEN);
+ 
+ 	mgmt->frame_control = cpu_to_le16(IEEE80211_FTYPE_MGMT |
+ 					  IEEE80211_STYPE_ACTION);
+@@ -262,7 +264,11 @@ void ieee80211_process_addba_request(str
+ 				"%pM on tid %u\n",
+ 				mgmt->sa, tid);
+ #endif /* CONFIG_MAC80211_HT_DEBUG */
+-		goto end;
++
++		/* delete existing Rx BA session on the same tid */
++		___ieee80211_stop_rx_ba_session(sta, tid, WLAN_BACK_RECIPIENT,
++						WLAN_STATUS_UNSPECIFIED_QOS,
++						false);
+ 	}
+ 
+ 	/* prepare A-MPDU MLME for Rx aggregation */
+--- a/net/mac80211/agg-tx.c
++++ b/net/mac80211/agg-tx.c
+@@ -79,7 +79,8 @@ static void ieee80211_send_addba_request
+ 	memcpy(mgmt->da, da, ETH_ALEN);
+ 	memcpy(mgmt->sa, sdata->vif.addr, ETH_ALEN);
+ 	if (sdata->vif.type == NL80211_IFTYPE_AP ||
+-	    sdata->vif.type == NL80211_IFTYPE_AP_VLAN)
++	    sdata->vif.type == NL80211_IFTYPE_AP_VLAN ||
++	    sdata->vif.type == NL80211_IFTYPE_WDS)
+ 		memcpy(mgmt->bssid, sdata->vif.addr, ETH_ALEN);
+ 	else if (sdata->vif.type == NL80211_IFTYPE_STATION)
+ 		memcpy(mgmt->bssid, sdata->u.mgd.bssid, ETH_ALEN);
+@@ -398,7 +399,8 @@ int ieee80211_start_tx_ba_session(struct
  	 */
--	if (reg_request->initiator == NL80211_REGDOM_SET_BY_USER)
-+	if (r != -EALREADY &&
-+	    reg_request->initiator == NL80211_REGDOM_SET_BY_USER)
- 		schedule_delayed_work(&reg_timeout, msecs_to_jiffies(3142));
+ 	if (sdata->vif.type != NL80211_IFTYPE_STATION &&
+ 	    sdata->vif.type != NL80211_IFTYPE_AP_VLAN &&
+-	    sdata->vif.type != NL80211_IFTYPE_AP)
++	    sdata->vif.type != NL80211_IFTYPE_AP &&
++	    sdata->vif.type != NL80211_IFTYPE_WDS)
+ 		return -EINVAL;
+ 
+ 	if (test_sta_flags(sta, WLAN_STA_BLOCK_BA)) {
+--- a/net/mac80211/debugfs_sta.c
++++ b/net/mac80211/debugfs_sta.c
+@@ -59,7 +59,7 @@ static ssize_t sta_flags_read(struct fil
+ 	char buf[100];
+ 	struct sta_info *sta = file->private_data;
+ 	u32 staflags = get_sta_flags(sta);
+-	int res = scnprintf(buf, sizeof(buf), "%s%s%s%s%s%s%s%s%s",
++	int res = scnprintf(buf, sizeof(buf), "%s%s%s%s%s%s%s%s",
+ 		staflags & WLAN_STA_AUTH ? "AUTH\n" : "",
+ 		staflags & WLAN_STA_ASSOC ? "ASSOC\n" : "",
+ 		staflags & WLAN_STA_PS_STA ? "PS (sta)\n" : "",
+@@ -67,7 +67,6 @@ static ssize_t sta_flags_read(struct fil
+ 		staflags & WLAN_STA_AUTHORIZED ? "AUTHORIZED\n" : "",
+ 		staflags & WLAN_STA_SHORT_PREAMBLE ? "SHORT PREAMBLE\n" : "",
+ 		staflags & WLAN_STA_WME ? "WME\n" : "",
+-		staflags & WLAN_STA_WDS ? "WDS\n" : "",
+ 		staflags & WLAN_STA_MFP ? "MFP\n" : "");
+ 	return simple_read_from_buffer(userbuf, count, ppos, buf, res);
  }
- 
---- a/drivers/net/wireless/ath/ath9k/ar9003_calib.c
-+++ b/drivers/net/wireless/ath/ath9k/ar9003_calib.c
-@@ -18,13 +18,13 @@
- #include "hw-ops.h"
- #include "ar9003_phy.h"
- 
--#define MPASS	3
- #define MAX_MEASUREMENT	8
--#define MAX_DIFFERENCE	10
-+#define MAX_MAG_DELTA	11
-+#define MAX_PHS_DELTA	10
- 
- struct coeff {
--	int mag_coeff[AR9300_MAX_CHAINS][MAX_MEASUREMENT][MPASS];
--	int phs_coeff[AR9300_MAX_CHAINS][MAX_MEASUREMENT][MPASS];
-+	int mag_coeff[AR9300_MAX_CHAINS][MAX_MEASUREMENT];
-+	int phs_coeff[AR9300_MAX_CHAINS][MAX_MEASUREMENT];
- 	int iqc_coeff[2];
- };
- 
-@@ -608,36 +608,48 @@ static bool ar9003_hw_calc_iq_corr(struc
- 	return true;
- }
- 
--static bool ar9003_hw_compute_closest_pass_and_avg(int *mp_coeff, int *mp_avg)
-+static void ar9003_hw_detect_outlier(int *mp_coeff, int nmeasurement,
-+				     int max_delta)
+--- a/net/mac80211/iface.c
++++ b/net/mac80211/iface.c
+@@ -178,7 +178,6 @@ static int ieee80211_do_open(struct net_
  {
--	int diff[MPASS];
--
--	diff[0] = abs(mp_coeff[0] - mp_coeff[1]);
--	diff[1] = abs(mp_coeff[1] - mp_coeff[2]);
--	diff[2] = abs(mp_coeff[2] - mp_coeff[0]);
--
--	if (diff[0] > MAX_DIFFERENCE &&
--	    diff[1] > MAX_DIFFERENCE &&
--	    diff[2] > MAX_DIFFERENCE)
--		return false;
--
--	if (diff[0] <= diff[1] && diff[0] <= diff[2])
--		*mp_avg = (mp_coeff[0] + mp_coeff[1]) / 2;
--	else if (diff[1] <= diff[2])
--		*mp_avg = (mp_coeff[1] + mp_coeff[2]) / 2;
--	else
--		*mp_avg = (mp_coeff[2] + mp_coeff[0]) / 2;
-+	int mp_max = -64, max_idx = 0;
-+	int mp_min = 63, min_idx = 0;
-+	int mp_avg = 0, i, outlier_idx = 0;
-+
-+	/* find min/max mismatch across all calibrated gains */
-+	for (i = 0; i < nmeasurement; i++) {
-+		mp_avg += mp_coeff[i];
-+		if (mp_coeff[i] > mp_max) {
-+			mp_max = mp_coeff[i];
-+			max_idx = i;
-+		} else if (mp_coeff[i] < mp_min) {
-+			mp_min = mp_coeff[i];
-+			min_idx = i;
-+		}
-+	}
+ 	struct ieee80211_sub_if_data *sdata = IEEE80211_DEV_TO_SUB_IF(dev);
+ 	struct ieee80211_local *local = sdata->local;
+-	struct sta_info *sta;
+ 	u32 changed = 0;
+ 	int res;
+ 	u32 hw_reconf_flags = 0;
+@@ -290,27 +289,6 @@ static int ieee80211_do_open(struct net_
  
--	return true;
-+	/* find average (exclude max abs value) */
-+	for (i = 0; i < nmeasurement; i++) {
-+		if ((abs(mp_coeff[i]) < abs(mp_max)) ||
-+		    (abs(mp_coeff[i]) < abs(mp_min)))
-+			mp_avg += mp_coeff[i];
-+	}
-+	mp_avg /= (nmeasurement - 1);
-+
-+	/* detect outlier */
-+	if (abs(mp_max - mp_min) > max_delta) {
-+		if (abs(mp_max - mp_avg) > abs(mp_min - mp_avg))
-+			outlier_idx = max_idx;
-+		else
-+			outlier_idx = min_idx;
-+	}
-+	mp_coeff[outlier_idx] = mp_avg;
- }
+ 	set_bit(SDATA_STATE_RUNNING, &sdata->state);
  
- static void ar9003_hw_tx_iqcal_load_avg_2_passes(struct ath_hw *ah,
- 						 u8 num_chains,
- 						 struct coeff *coeff)
- {
--	struct ath_common *common = ath9k_hw_common(ah);
- 	int i, im, nmeasurement;
--	int magnitude, phase;
- 	u32 tx_corr_coeff[MAX_MEASUREMENT][AR9300_MAX_CHAINS];
- 
- 	memset(tx_corr_coeff, 0, sizeof(tx_corr_coeff));
-@@ -657,37 +669,28 @@ static void ar9003_hw_tx_iqcal_load_avg_
- 
- 	/* Load the average of 2 passes */
- 	for (i = 0; i < num_chains; i++) {
--		if (AR_SREV_9485(ah))
--			nmeasurement = REG_READ_FIELD(ah,
--					AR_PHY_TX_IQCAL_STATUS_B0_9485,
--					AR_PHY_CALIBRATED_GAINS_0);
--		else
--			nmeasurement = REG_READ_FIELD(ah,
--					AR_PHY_TX_IQCAL_STATUS_B0,
--					AR_PHY_CALIBRATED_GAINS_0);
-+		nmeasurement = REG_READ_FIELD(ah,
-+				AR_PHY_TX_IQCAL_STATUS_B0,
-+				AR_PHY_CALIBRATED_GAINS_0);
- 
- 		if (nmeasurement > MAX_MEASUREMENT)
- 			nmeasurement = MAX_MEASUREMENT;
- 
--		for (im = 0; im < nmeasurement; im++) {
--			/*
--			 * Determine which 2 passes are closest and compute avg
--			 * magnitude
--			 */
--			if (!ar9003_hw_compute_closest_pass_and_avg(coeff->mag_coeff[i][im],
--								    &magnitude))
--				goto disable_txiqcal;
-+		/* detect outlier only if nmeasurement > 1 */
-+		if (nmeasurement > 1) {
-+			/* Detect magnitude outlier */
-+			ar9003_hw_detect_outlier(coeff->mag_coeff[i],
-+					nmeasurement, MAX_MAG_DELTA);
-+
-+			/* Detect phase outlier */
-+			ar9003_hw_detect_outlier(coeff->phs_coeff[i],
-+					nmeasurement, MAX_PHS_DELTA);
-+		}
- 
--			/*
--			 * Determine which 2 passes are closest and compute avg
--			 * phase
--			 */
--			if (!ar9003_hw_compute_closest_pass_and_avg(coeff->phs_coeff[i][im],
--								    &phase))
--				goto disable_txiqcal;
-+		for (im = 0; im < nmeasurement; im++) {
- 
--			coeff->iqc_coeff[0] = (magnitude & 0x7f) |
--					      ((phase & 0x7f) << 7);
-+			coeff->iqc_coeff[0] = (coeff->mag_coeff[i][im] & 0x7f) |
-+				((coeff->phs_coeff[i][im] & 0x7f) << 7);
- 
- 			if ((im % 2) == 0)
- 				REG_RMW_FIELD(ah, tx_corr_coeff[im][i],
-@@ -707,141 +710,37 @@ static void ar9003_hw_tx_iqcal_load_avg_
- 
- 	return;
- 
--disable_txiqcal:
--	REG_RMW_FIELD(ah, AR_PHY_TX_IQCAL_CONTROL_3,
--		      AR_PHY_TX_IQCAL_CONTROL_3_IQCORR_EN, 0x0);
--	REG_RMW_FIELD(ah, AR_PHY_RX_IQCAL_CORR_B0,
--		      AR_PHY_RX_IQCAL_CORR_B0_LOOPBACK_IQCORR_EN, 0x0);
--
--	ath_dbg(common, ATH_DBG_CALIBRATE, "TX IQ Cal disabled\n");
- }
- 
--static void ar9003_hw_tx_iq_cal(struct ath_hw *ah)
-+static bool ar9003_hw_tx_iq_cal_run(struct ath_hw *ah)
- {
- 	struct ath_common *common = ath9k_hw_common(ah);
--	static const u32 txiqcal_status[AR9300_MAX_CHAINS] = {
--		AR_PHY_TX_IQCAL_STATUS_B0,
--		AR_PHY_TX_IQCAL_STATUS_B1,
--		AR_PHY_TX_IQCAL_STATUS_B2,
--	};
--	static const u32 chan_info_tab[] = {
--		AR_PHY_CHAN_INFO_TAB_0,
--		AR_PHY_CHAN_INFO_TAB_1,
--		AR_PHY_CHAN_INFO_TAB_2,
--	};
--	struct coeff coeff;
--	s32 iq_res[6];
--	s32 i, j, ip, im, nmeasurement;
--	u8 nchains = get_streams(common->tx_chainmask);
--
--	for (ip = 0; ip < MPASS; ip++) {
--		REG_RMW_FIELD(ah, AR_PHY_TX_IQCAL_CONTROL_1,
--			      AR_PHY_TX_IQCAQL_CONTROL_1_IQCORR_I_Q_COFF_DELPT,
--			      DELPT);
--		REG_RMW_FIELD(ah, AR_PHY_TX_IQCAL_START,
--			      AR_PHY_TX_IQCAL_START_DO_CAL,
--			      AR_PHY_TX_IQCAL_START_DO_CAL);
--
--		if (!ath9k_hw_wait(ah, AR_PHY_TX_IQCAL_START,
--				   AR_PHY_TX_IQCAL_START_DO_CAL,
--				   0, AH_WAIT_TIMEOUT)) {
--			ath_dbg(common, ATH_DBG_CALIBRATE,
--				"Tx IQ Cal not complete.\n");
--			goto TX_IQ_CAL_FAILED;
+-	if (sdata->vif.type == NL80211_IFTYPE_WDS) {
+-		/* Create STA entry for the WDS peer */
+-		sta = sta_info_alloc(sdata, sdata->u.wds.remote_addr,
+-				     GFP_KERNEL);
+-		if (!sta) {
+-			res = -ENOMEM;
+-			goto err_del_interface;
 -		}
 -
--		nmeasurement = REG_READ_FIELD(ah, AR_PHY_TX_IQCAL_STATUS_B0,
--					      AR_PHY_CALIBRATED_GAINS_0);
--			if (nmeasurement > MAX_MEASUREMENT)
--				nmeasurement = MAX_MEASUREMENT;
+-		/* no locking required since STA is not live yet */
+-		sta->flags |= WLAN_STA_AUTHORIZED;
 -
--		for (i = 0; i < nchains; i++) {
--			ath_dbg(common, ATH_DBG_CALIBRATE,
--				"Doing Tx IQ Cal for chain %d.\n", i);
--			for (im = 0; im < nmeasurement; im++) {
--				if (REG_READ(ah, txiqcal_status[i]) &
--					     AR_PHY_TX_IQCAL_STATUS_FAILED) {
--					ath_dbg(common, ATH_DBG_CALIBRATE,
--						"Tx IQ Cal failed for chain %d.\n", i);
--					goto TX_IQ_CAL_FAILED;
--				}
--
--				for (j = 0; j < 3; j++) {
--					u8 idx = 2 * j,
--					   offset = 4 * (3 * im + j);
--
--					REG_RMW_FIELD(ah, AR_PHY_CHAN_INFO_MEMORY,
--						      AR_PHY_CHAN_INFO_TAB_S2_READ,
--						      0);
--
--					/* 32 bits */
--					iq_res[idx] = REG_READ(ah,
--							chan_info_tab[i] +
--							offset);
--
--					REG_RMW_FIELD(ah, AR_PHY_CHAN_INFO_MEMORY,
--						      AR_PHY_CHAN_INFO_TAB_S2_READ,
--						      1);
--
--					/* 16 bits */
--					iq_res[idx+1] = 0xffff & REG_READ(ah,
--								chan_info_tab[i] +
--								offset);
--
--					ath_dbg(common, ATH_DBG_CALIBRATE,
--						"IQ RES[%d]=0x%x IQ_RES[%d]=0x%x\n",
--						idx, iq_res[idx], idx+1, iq_res[idx+1]);
--				}
--
--				if (!ar9003_hw_calc_iq_corr(ah, i, iq_res,
--							    coeff.iqc_coeff)) {
--					ath_dbg(common, ATH_DBG_CALIBRATE,
--						"Failed in calculation of IQ correction.\n");
--					goto TX_IQ_CAL_FAILED;
--				}
--				coeff.mag_coeff[i][im][ip] =
--						coeff.iqc_coeff[0] & 0x7f;
--				coeff.phs_coeff[i][im][ip] =
--						(coeff.iqc_coeff[0] >> 7) & 0x7f;
--
--				if (coeff.mag_coeff[i][im][ip] > 63)
--					coeff.mag_coeff[i][im][ip] -= 128;
--				if (coeff.phs_coeff[i][im][ip] > 63)
--					coeff.phs_coeff[i][im][ip] -= 128;
--
--			}
+-		res = sta_info_insert(sta);
+-		if (res) {
+-			/* STA has been freed */
+-			goto err_del_interface;
 -		}
+-
+-		rate_control_rate_init(sta);
 -	}
 -
--	ar9003_hw_tx_iqcal_load_avg_2_passes(ah, nchains, &coeff);
--
--	return;
--
--TX_IQ_CAL_FAILED:
--	ath_dbg(common, ATH_DBG_CALIBRATE, "Tx IQ Cal failed\n");
--}
--
--static void ar9003_hw_tx_iq_cal_run(struct ath_hw *ah)
--{
- 	u8 tx_gain_forced;
+ 	/*
+ 	 * set_multicast_list will be invoked by the networking core
+ 	 * which will check whether any increments here were done in
+@@ -344,8 +322,7 @@ static int ieee80211_do_open(struct net_
+ 	netif_tx_start_all_queues(dev);
  
--	REG_RMW_FIELD(ah, AR_PHY_TX_IQCAL_CONTROL_1_9485,
--		      AR_PHY_TX_IQCAQL_CONTROL_1_IQCORR_I_Q_COFF_DELPT, DELPT);
- 	tx_gain_forced = REG_READ_FIELD(ah, AR_PHY_TX_FORCED_GAIN,
- 					AR_PHY_TXGAIN_FORCE);
- 	if (tx_gain_forced)
- 		REG_RMW_FIELD(ah, AR_PHY_TX_FORCED_GAIN,
- 			      AR_PHY_TXGAIN_FORCE, 0);
- 
--	REG_RMW_FIELD(ah, AR_PHY_TX_IQCAL_START_9485,
--		      AR_PHY_TX_IQCAL_START_DO_CAL_9485, 1);
-+	REG_RMW_FIELD(ah, AR_PHY_TX_IQCAL_START,
-+		      AR_PHY_TX_IQCAL_START_DO_CAL, 1);
+ 	return 0;
+- err_del_interface:
+-	drv_remove_interface(local, &sdata->vif);
 +
-+	if (!ath9k_hw_wait(ah, AR_PHY_TX_IQCAL_START,
-+			AR_PHY_TX_IQCAL_START_DO_CAL, 0,
-+			AH_WAIT_TIMEOUT)) {
-+		ath_dbg(common, ATH_DBG_CALIBRATE,
-+			"Tx IQ Cal is not completed.\n");
-+		return false;
-+	}
-+	return true;
+  err_stop:
+ 	if (!local->open_count)
+ 		drv_stop(local);
+@@ -718,6 +695,70 @@ static void ieee80211_if_setup(struct ne
+ 	dev->destructor = free_netdev;
  }
  
- static void ar9003_hw_tx_iq_cal_post_proc(struct ath_hw *ah)
- {
- 	struct ath_common *common = ath9k_hw_common(ah);
- 	const u32 txiqcal_status[AR9300_MAX_CHAINS] = {
--		AR_PHY_TX_IQCAL_STATUS_B0_9485,
-+		AR_PHY_TX_IQCAL_STATUS_B0,
- 		AR_PHY_TX_IQCAL_STATUS_B1,
- 		AR_PHY_TX_IQCAL_STATUS_B2,
- 	};
-@@ -853,7 +752,7 @@ static void ar9003_hw_tx_iq_cal_post_pro
- 	struct coeff coeff;
- 	s32 iq_res[6];
- 	u8 num_chains = 0;
--	int i, ip, im, j;
-+	int i, im, j;
- 	int nmeasurement;
- 
- 	for (i = 0; i < AR9300_MAX_CHAINS; i++) {
-@@ -861,71 +760,69 @@ static void ar9003_hw_tx_iq_cal_post_pro
- 			num_chains++;
- 	}
- 
--	for (ip = 0; ip < MPASS; ip++) {
--		for (i = 0; i < num_chains; i++) {
--			nmeasurement = REG_READ_FIELD(ah,
--					AR_PHY_TX_IQCAL_STATUS_B0_9485,
--					AR_PHY_CALIBRATED_GAINS_0);
--			if (nmeasurement > MAX_MEASUREMENT)
--				nmeasurement = MAX_MEASUREMENT;
-+	for (i = 0; i < num_chains; i++) {
-+		nmeasurement = REG_READ_FIELD(ah,
-+				AR_PHY_TX_IQCAL_STATUS_B0,
-+				AR_PHY_CALIBRATED_GAINS_0);
-+		if (nmeasurement > MAX_MEASUREMENT)
-+			nmeasurement = MAX_MEASUREMENT;
++static void ieee80211_wds_rx_queued_mgmt(struct ieee80211_sub_if_data *sdata,
++					 struct sk_buff *skb)
++{
++	struct ieee80211_local *local = sdata->local;
++	struct ieee80211_rx_status *rx_status;
++	struct ieee802_11_elems elems;
++	struct ieee80211_mgmt *mgmt;
++	struct sta_info *sta;
++	size_t baselen;
++	u32 rates = 0;
++	u16 stype;
++	bool new = false;
++	enum ieee80211_band band = local->hw.conf.channel->band;
++	struct ieee80211_supported_band *sband = local->hw.wiphy->bands[band];
 +
-+		for (im = 0; im < nmeasurement; im++) {
-+			ath_dbg(common, ATH_DBG_CALIBRATE,
-+				"Doing Tx IQ Cal for chain %d.\n", i);
- 
--			for (im = 0; im < nmeasurement; im++) {
-+			if (REG_READ(ah, txiqcal_status[i]) &
-+					AR_PHY_TX_IQCAL_STATUS_FAILED) {
- 				ath_dbg(common, ATH_DBG_CALIBRATE,
--					"Doing Tx IQ Cal for chain %d.\n", i);
--
--				if (REG_READ(ah, txiqcal_status[i]) &
--				    AR_PHY_TX_IQCAL_STATUS_FAILED) {
--					ath_dbg(common, ATH_DBG_CALIBRATE,
- 					"Tx IQ Cal failed for chain %d.\n", i);
--					goto tx_iqcal_fail;
--				}
-+				goto tx_iqcal_fail;
-+			}
- 
--				for (j = 0; j < 3; j++) {
--					u32 idx = 2 * j, offset = 4 * (3 * im + j);
-+			for (j = 0; j < 3; j++) {
-+				u32 idx = 2 * j, offset = 4 * (3 * im + j);
- 
--					REG_RMW_FIELD(ah,
-+				REG_RMW_FIELD(ah,
- 						AR_PHY_CHAN_INFO_MEMORY,
- 						AR_PHY_CHAN_INFO_TAB_S2_READ,
- 						0);
- 
--					/* 32 bits */
--					iq_res[idx] = REG_READ(ah,
--							chan_info_tab[i] +
--							offset);
-+				/* 32 bits */
-+				iq_res[idx] = REG_READ(ah,
-+						chan_info_tab[i] +
-+						offset);
- 
--					REG_RMW_FIELD(ah,
-+				REG_RMW_FIELD(ah,
- 						AR_PHY_CHAN_INFO_MEMORY,
- 						AR_PHY_CHAN_INFO_TAB_S2_READ,
- 						1);
- 
--					/* 16 bits */
--					iq_res[idx + 1] = 0xffff & REG_READ(ah,
--							  chan_info_tab[i] + offset);
--
--					ath_dbg(common, ATH_DBG_CALIBRATE,
--						"IQ RES[%d]=0x%x"
--						"IQ_RES[%d]=0x%x\n",
--						idx, iq_res[idx], idx + 1,
--						iq_res[idx + 1]);
--				}
-+				/* 16 bits */
-+				iq_res[idx + 1] = 0xffff & REG_READ(ah,
-+						chan_info_tab[i] + offset);
- 
--				if (!ar9003_hw_calc_iq_corr(ah, i, iq_res,
--							    coeff.iqc_coeff)) {
--					ath_dbg(common, ATH_DBG_CALIBRATE,
--					 "Failed in calculation of IQ correction.\n");
--					goto tx_iqcal_fail;
--				}
-+				ath_dbg(common, ATH_DBG_CALIBRATE,
-+					"IQ RES[%d]=0x%x"
-+					"IQ_RES[%d]=0x%x\n",
-+					idx, iq_res[idx], idx + 1,
-+					iq_res[idx + 1]);
-+			}
- 
--				coeff.mag_coeff[i][im][ip] =
--						coeff.iqc_coeff[0] & 0x7f;
--				coeff.phs_coeff[i][im][ip] =
--						(coeff.iqc_coeff[0] >> 7) & 0x7f;
--
--				if (coeff.mag_coeff[i][im][ip] > 63)
--					coeff.mag_coeff[i][im][ip] -= 128;
--				if (coeff.phs_coeff[i][im][ip] > 63)
--					coeff.phs_coeff[i][im][ip] -= 128;
-+			if (!ar9003_hw_calc_iq_corr(ah, i, iq_res,
-+						coeff.iqc_coeff)) {
-+				ath_dbg(common, ATH_DBG_CALIBRATE,
-+					"Failed in calculation of \
-+					IQ correction.\n");
-+				goto tx_iqcal_fail;
- 			}
++	rx_status = IEEE80211_SKB_RXCB(skb);
++	mgmt = (struct ieee80211_mgmt *) skb->data;
++	stype = le16_to_cpu(mgmt->frame_control) & IEEE80211_FCTL_STYPE;
 +
-+			coeff.mag_coeff[i][im] = coeff.iqc_coeff[0] & 0x7f;
-+			coeff.phs_coeff[i][im] =
-+				(coeff.iqc_coeff[0] >> 7) & 0x7f;
++	if (stype != IEEE80211_STYPE_BEACON)
++		return;
 +
-+			if (coeff.mag_coeff[i][im] > 63)
-+				coeff.mag_coeff[i][im] -= 128;
-+			if (coeff.phs_coeff[i][im] > 63)
-+				coeff.phs_coeff[i][im] -= 128;
- 		}
- 	}
- 	ar9003_hw_tx_iqcal_load_avg_2_passes(ah, num_chains, &coeff);
-@@ -941,6 +838,7 @@ static bool ar9003_hw_init_cal(struct at
- {
- 	struct ath_common *common = ath9k_hw_common(ah);
- 	int val;
-+	bool txiqcal_done = false;
- 
- 	val = REG_READ(ah, AR_ENT_OTP);
- 	ath_dbg(common, ATH_DBG_CALIBRATE, "ath9k: AR_ENT_OTP 0x%x\n", val);
-@@ -957,14 +855,22 @@ static bool ar9003_hw_init_cal(struct at
- 		ar9003_hw_set_chain_masks(ah, 0x7, 0x7);
- 
- 	/* Do Tx IQ Calibration */
--	if (AR_SREV_9485(ah))
--		ar9003_hw_tx_iq_cal_run(ah);
--	else
--		ar9003_hw_tx_iq_cal(ah);
-+	REG_RMW_FIELD(ah, AR_PHY_TX_IQCAL_CONTROL_1,
-+		      AR_PHY_TX_IQCAL_CONTROL_1_IQCORR_I_Q_COFF_DELPT,
-+		      DELPT);
- 
--	REG_WRITE(ah, AR_PHY_ACTIVE, AR_PHY_ACTIVE_DIS);
--	udelay(5);
--	REG_WRITE(ah, AR_PHY_ACTIVE, AR_PHY_ACTIVE_EN);
-+	/*
-+	 * For AR9485 or later chips, TxIQ cal runs as part of
-+	 * AGC calibration
-+	 */
-+	if (AR_SREV_9485_OR_LATER(ah))
-+		txiqcal_done = true;
-+	else {
-+		txiqcal_done = ar9003_hw_tx_iq_cal_run(ah);
-+		REG_WRITE(ah, AR_PHY_ACTIVE, AR_PHY_ACTIVE_DIS);
-+		udelay(5);
-+		REG_WRITE(ah, AR_PHY_ACTIVE, AR_PHY_ACTIVE_EN);
++	baselen = (u8 *) mgmt->u.probe_resp.variable - (u8 *) mgmt;
++	if (baselen > skb->len)
++		return;
++
++	ieee802_11_parse_elems(mgmt->u.probe_resp.variable,
++			       skb->len - baselen, &elems);
++
++	rates = ieee80211_sta_get_rates(local, &elems, band);
++
++	rcu_read_lock();
++
++	sta = sta_info_get(sdata, sdata->u.wds.remote_addr);
++
++	if (!sta) {
++		rcu_read_unlock();
++		sta = sta_info_alloc(sdata, sdata->u.wds.remote_addr,
++				     GFP_KERNEL);
++		if (!sta)
++			return;
++
++		new = true;
 +	}
- 
- 	/* Calibrate the AGC */
- 	REG_WRITE(ah, AR_PHY_AGC_CONTROL,
-@@ -979,7 +885,7 @@ static bool ar9003_hw_init_cal(struct at
- 		return false;
- 	}
- 
--	if (AR_SREV_9485(ah))
-+	if (txiqcal_done)
- 		ar9003_hw_tx_iq_cal_post_proc(ah);
- 
- 	/* Revert chainmasks to their original values before NF cal */
---- a/drivers/net/wireless/ath/ath9k/ar9003_phy.h
-+++ b/drivers/net/wireless/ath/ath9k/ar9003_phy.h
-@@ -548,15 +548,12 @@
- 
- #define AR_PHY_TXGAIN_TABLE      (AR_SM_BASE + 0x300)
- 
--#define AR_PHY_TX_IQCAL_START_9485		(AR_SM_BASE + 0x3c4)
--#define AR_PHY_TX_IQCAL_START_DO_CAL_9485	0x80000000
--#define AR_PHY_TX_IQCAL_START_DO_CAL_9485_S	31
--#define AR_PHY_TX_IQCAL_CONTROL_1_9485		(AR_SM_BASE + 0x3c8)
--#define AR_PHY_TX_IQCAL_STATUS_B0_9485		(AR_SM_BASE + 0x3f0)
--
--#define AR_PHY_TX_IQCAL_CONTROL_1   (AR_SM_BASE + 0x448)
--#define AR_PHY_TX_IQCAL_START       (AR_SM_BASE + 0x440)
--#define AR_PHY_TX_IQCAL_STATUS_B0   (AR_SM_BASE + 0x48c)
-+#define AR_PHY_TX_IQCAL_CONTROL_1   (AR_SM_BASE + AR_SREV_9485(ah) ? \
-+						 0x3c8 : 0x448)
-+#define AR_PHY_TX_IQCAL_START       (AR_SM_BASE + AR_SREV_9485(ah) ? \
-+						 0x3c4 : 0x440)
-+#define AR_PHY_TX_IQCAL_STATUS_B0   (AR_SM_BASE + AR_SREV_9485(ah) ? \
-+						 0x3f0 : 0x48c)
- #define AR_PHY_TX_IQCAL_CORR_COEFF_B0(_i)    (AR_SM_BASE + \
- 					     (AR_SREV_9485(ah) ? \
- 					      0x3d0 : 0x450) + ((_i) << 2))
-@@ -758,10 +755,10 @@
- #define AR_PHY_SPECTRAL_SCAN_SHORT_REPEAT   0x01000000
- #define AR_PHY_SPECTRAL_SCAN_SHORT_REPEAT_S 24
- #define AR_PHY_CHANNEL_STATUS_RX_CLEAR      0x00000004
--#define AR_PHY_TX_IQCAQL_CONTROL_1_IQCORR_I_Q_COFF_DELPT             0x01fc0000
--#define AR_PHY_TX_IQCAQL_CONTROL_1_IQCORR_I_Q_COFF_DELPT_S                   18
--#define AR_PHY_TX_IQCAL_START_DO_CAL        0x00000001
--#define AR_PHY_TX_IQCAL_START_DO_CAL_S      0
-+#define AR_PHY_TX_IQCAL_CONTROL_1_IQCORR_I_Q_COFF_DELPT             0x01fc0000
-+#define AR_PHY_TX_IQCAL_CONTROL_1_IQCORR_I_Q_COFF_DELPT_S                   18
-+#define AR_PHY_TX_IQCAL_START_DO_CAL	    0x00000001
-+#define AR_PHY_TX_IQCAL_START_DO_CAL_S	    0
- 
- #define AR_PHY_TX_IQCAL_STATUS_FAILED    0x00000001
- #define AR_PHY_CALIBRATED_GAINS_0	 0x3e
---- a/drivers/net/wireless/ath/ath9k/ath9k.h
-+++ b/drivers/net/wireless/ath/ath9k/ath9k.h
-@@ -453,6 +453,7 @@ void ath9k_btcoex_timer_pause(struct ath
- 
- #define ATH_LED_PIN_DEF 		1
- #define ATH_LED_PIN_9287		8
-+#define ATH_LED_PIN_9300		10
- #define ATH_LED_PIN_9485		6
- 
- #ifdef CONFIG_MAC80211_LEDS
---- a/drivers/net/wireless/ath/ath9k/gpio.c
-+++ b/drivers/net/wireless/ath/ath9k/gpio.c
-@@ -46,6 +46,8 @@ void ath_init_leds(struct ath_softc *sc)
- 			sc->sc_ah->led_pin = ATH_LED_PIN_9287;
- 		else if (AR_SREV_9485(sc->sc_ah))
- 			sc->sc_ah->led_pin = ATH_LED_PIN_9485;
-+		else if (AR_SREV_9300(sc->sc_ah))
-+			sc->sc_ah->led_pin = ATH_LED_PIN_9300;
- 		else
- 			sc->sc_ah->led_pin = ATH_LED_PIN_DEF;
- 	}
---- a/drivers/net/wireless/ath/ath9k/reg.h
-+++ b/drivers/net/wireless/ath/ath9k/reg.h
-@@ -868,6 +868,8 @@
- #define AR_SREV_9485_11(_ah) \
- 	(AR_SREV_9485(_ah) && \
- 	 ((_ah)->hw_version.macRev == AR_SREV_REVISION_9485_11))
-+#define AR_SREV_9485_OR_LATER(_ah) \
-+	(((_ah)->hw_version.macVersion >= AR_SREV_VERSION_9485))
- 
- #define AR_SREV_9285E_20(_ah) \
-     (AR_SREV_9285_12_OR_LATER(_ah) && \
++
++	sta->last_rx = jiffies;
++	sta->sta.supp_rates[local->hw.conf.channel->band] = rates;
++
++	if (elems.ht_cap_elem)
++		ieee80211_ht_cap_ie_to_sta_ht_cap(sband,
++				elems.ht_cap_elem, &sta->sta.ht_cap);
++
++	if (elems.wmm_param)
++		set_sta_flags(sta, WLAN_STA_WME);
++
++	if (new) {
++		sta->flags = WLAN_STA_AUTHORIZED;
++		rate_control_rate_init(sta);
++		sta_info_insert_rcu(sta);
++	}
++
++	rcu_read_unlock();
++}
++
+ static void ieee80211_iface_work(struct work_struct *work)
+ {
+ 	struct ieee80211_sub_if_data *sdata =
+@@ -822,6 +863,9 @@ static void ieee80211_iface_work(struct 
+ 				break;
+ 			ieee80211_mesh_rx_queued_mgmt(sdata, skb);
+ 			break;
++		case NL80211_IFTYPE_WDS:
++			ieee80211_wds_rx_queued_mgmt(sdata, skb);
++			break;
+ 		default:
+ 			WARN(1, "frame for unexpected interface type");
+ 			break;
 --- a/net/mac80211/rx.c
 +++ b/net/mac80211/rx.c
-@@ -652,7 +652,7 @@ static void ieee80211_sta_reorder_releas
-  set_release_timer:
+@@ -2137,7 +2137,8 @@ ieee80211_rx_h_action(struct ieee80211_r
+ 		 */
+ 		if (sdata->vif.type != NL80211_IFTYPE_STATION &&
+ 		    sdata->vif.type != NL80211_IFTYPE_AP_VLAN &&
+-		    sdata->vif.type != NL80211_IFTYPE_AP)
++		    sdata->vif.type != NL80211_IFTYPE_AP &&
++		    sdata->vif.type != NL80211_IFTYPE_WDS)
+ 			break;
  
- 		mod_timer(&tid_agg_rx->reorder_timer,
--			  tid_agg_rx->reorder_time[j] +
-+			  tid_agg_rx->reorder_time[j] + 1 +
- 			  HT_RX_REORDER_BUF_TIMEOUT);
- 	} else {
- 		del_timer(&tid_agg_rx->reorder_timer);
---- a/drivers/net/wireless/ath/ath9k/calib.c
-+++ b/drivers/net/wireless/ath/ath9k/calib.c
-@@ -69,15 +69,21 @@ static void ath9k_hw_update_nfcal_hist_b
- 					      int16_t *nfarray)
+ 		/* verify action_code is present */
+@@ -2335,13 +2336,14 @@ ieee80211_rx_h_mgmt(struct ieee80211_rx_
+ 
+ 	if (!ieee80211_vif_is_mesh(&sdata->vif) &&
+ 	    sdata->vif.type != NL80211_IFTYPE_ADHOC &&
+-	    sdata->vif.type != NL80211_IFTYPE_STATION)
++	    sdata->vif.type != NL80211_IFTYPE_STATION &&
++	    sdata->vif.type != NL80211_IFTYPE_WDS)
+ 		return RX_DROP_MONITOR;
+ 
+ 	switch (stype) {
+ 	case cpu_to_le16(IEEE80211_STYPE_BEACON):
+ 	case cpu_to_le16(IEEE80211_STYPE_PROBE_RESP):
+-		/* process for all: mesh, mlme, ibss */
++		/* process for all: mesh, mlme, ibss, wds */
+ 		break;
+ 	case cpu_to_le16(IEEE80211_STYPE_DEAUTH):
+ 	case cpu_to_le16(IEEE80211_STYPE_DISASSOC):
+@@ -2680,10 +2682,16 @@ static int prepare_for_handlers(struct i
+ 		}
+ 		break;
+ 	case NL80211_IFTYPE_WDS:
+-		if (bssid || !ieee80211_is_data(hdr->frame_control))
+-			return 0;
+ 		if (compare_ether_addr(sdata->u.wds.remote_addr, hdr->addr2))
+ 			return 0;
++
++		if (ieee80211_is_data(hdr->frame_control) ||
++		    ieee80211_is_action(hdr->frame_control)) {
++			if (compare_ether_addr(sdata->vif.addr, hdr->addr1))
++				return 0;
++		} else if (!ieee80211_is_beacon(hdr->frame_control))
++			return 0;
++
+ 		break;
+ 	default:
+ 		/* should never get here */
+--- a/net/mac80211/sta_info.h
++++ b/net/mac80211/sta_info.h
+@@ -31,7 +31,6 @@
+  *	frames.
+  * @WLAN_STA_ASSOC_AP: We're associated to that station, it is an AP.
+  * @WLAN_STA_WME: Station is a QoS-STA.
+- * @WLAN_STA_WDS: Station is one of our WDS peers.
+  * @WLAN_STA_CLEAR_PS_FILT: Clear PS filter in hardware (using the
+  *	IEEE80211_TX_CTL_CLEAR_PS_FILT control flag) when the next
+  *	frame to this station is transmitted.
+@@ -54,7 +53,6 @@ enum ieee80211_sta_info_flags {
+ 	WLAN_STA_SHORT_PREAMBLE	= 1<<4,
+ 	WLAN_STA_ASSOC_AP	= 1<<5,
+ 	WLAN_STA_WME		= 1<<6,
+-	WLAN_STA_WDS		= 1<<7,
+ 	WLAN_STA_CLEAR_PS_FILT	= 1<<9,
+ 	WLAN_STA_MFP		= 1<<10,
+ 	WLAN_STA_BLOCK_BA	= 1<<11,
+--- a/drivers/net/wireless/ath/ath9k/beacon.c
++++ b/drivers/net/wireless/ath/ath9k/beacon.c
+@@ -384,7 +384,9 @@ void ath_beacon_tasklet(unsigned long da
+ 			ath_dbg(common, ATH_DBG_BSTUCK,
+ 				"beacon is officially stuck\n");
+ 			sc->sc_flags |= SC_OP_TSF_RESET;
++			spin_lock(&sc->sc_pcu_lock);
+ 			ath_reset(sc, true);
++			spin_unlock(&sc->sc_pcu_lock);
+ 		}
+ 
+ 		return;
+--- a/drivers/net/wireless/ath/ath9k/main.c
++++ b/drivers/net/wireless/ath/ath9k/main.c
+@@ -617,8 +617,11 @@ void ath_hw_check(struct work_struct *wo
+ 	ath_dbg(common, ATH_DBG_RESET, "Possible baseband hang, "
+ 		"busy=%d (try %d)\n", busy, sc->hw_busy_count + 1);
+ 	if (busy >= 99) {
+-		if (++sc->hw_busy_count >= 3)
++		if (++sc->hw_busy_count >= 3) {
++			spin_lock_bh(&sc->sc_pcu_lock);
+ 			ath_reset(sc, true);
++			spin_unlock_bh(&sc->sc_pcu_lock);
++		}
+ 	} else if (busy >= 0)
+ 		sc->hw_busy_count = 0;
+ 
+@@ -637,7 +640,9 @@ static void ath_hw_pll_rx_hang_check(str
+ 			/* Rx is hung for more than 500ms. Reset it */
+ 			ath_dbg(common, ATH_DBG_RESET,
+ 				"Possible RX hang, resetting");
++			spin_lock_bh(&sc->sc_pcu_lock);
+ 			ath_reset(sc, true);
++			spin_unlock_bh(&sc->sc_pcu_lock);
+ 			count = 0;
+ 		}
+ 	} else
+@@ -674,7 +679,9 @@ void ath9k_tasklet(unsigned long data)
+ 
+ 	if ((status & ATH9K_INT_FATAL) ||
+ 	    (status & ATH9K_INT_BB_WATCHDOG)) {
++		spin_lock(&sc->sc_pcu_lock);
+ 		ath_reset(sc, true);
++		spin_unlock(&sc->sc_pcu_lock);
+ 		return;
+ 	}
+ 
+@@ -980,7 +987,6 @@ int ath_reset(struct ath_softc *sc, bool
+ 	del_timer_sync(&common->ani.timer);
+ 
+ 	ath9k_ps_wakeup(sc);
+-	spin_lock_bh(&sc->sc_pcu_lock);
+ 
+ 	ieee80211_stop_queues(hw);
+ 
+@@ -1023,7 +1029,6 @@ int ath_reset(struct ath_softc *sc, bool
+ 	}
+ 
+ 	ieee80211_wake_queues(hw);
+-	spin_unlock_bh(&sc->sc_pcu_lock);
+ 
+ 	/* Start ANI */
+ 	if (!common->disable_ani)
+@@ -2326,9 +2331,9 @@ static void ath9k_flush(struct ieee80211
+ 	ath9k_ps_wakeup(sc);
+ 	spin_lock_bh(&sc->sc_pcu_lock);
+ 	drain_txq = ath_drain_all_txq(sc, false);
+-	spin_unlock_bh(&sc->sc_pcu_lock);
+ 	if (!drain_txq)
+ 		ath_reset(sc, false);
++	spin_unlock_bh(&sc->sc_pcu_lock);
+ 	ath9k_ps_restore(sc);
+ 	ieee80211_wake_queues(hw);
+ 
+--- a/drivers/net/wireless/ath/ath9k/xmit.c
++++ b/drivers/net/wireless/ath/ath9k/xmit.c
+@@ -565,11 +565,8 @@ static void ath_tx_complete_aggr(struct 
+ 
+ 	rcu_read_unlock();
+ 
+-	if (needreset) {
+-		spin_unlock_bh(&sc->sc_pcu_lock);
++	if (needreset)
+ 		ath_reset(sc, false);
+-		spin_lock_bh(&sc->sc_pcu_lock);
+-	}
+ }
+ 
+ static u32 ath_lookup_rate(struct ath_softc *sc, struct ath_buf *bf,
+@@ -664,7 +661,8 @@ static int ath_compute_num_delims(struct
+ 	 * TODO - this could be improved to be dependent on the rate.
+ 	 *      The hardware can keep up at lower rates, but not higher rates
+ 	 */
+-	if (fi->keyix != ATH9K_TXKEYIX_INVALID)
++	if ((fi->keyix != ATH9K_TXKEYIX_INVALID) &&
++	    !(sc->sc_ah->caps.hw_caps & ATH9K_HW_CAP_EDMA))
+ 		ndelim += ATH_AGGR_ENCRYPTDELIM;
+ 
+ 	/*
+@@ -2169,7 +2167,9 @@ static void ath_tx_complete_poll_work(st
+ 	if (needreset) {
+ 		ath_dbg(ath9k_hw_common(sc->sc_ah), ATH_DBG_RESET,
+ 			"tx hung, resetting the chip\n");
++		spin_lock_bh(&sc->sc_pcu_lock);
+ 		ath_reset(sc, true);
++		spin_unlock_bh(&sc->sc_pcu_lock);
+ 	}
+ 
+ 	ieee80211_queue_delayed_work(sc->hw, &sc->tx_complete_work,
+--- a/drivers/net/wireless/ath/ath9k/ar9003_paprd.c
++++ b/drivers/net/wireless/ath/ath9k/ar9003_paprd.c
+@@ -236,7 +236,7 @@ static void ar9003_paprd_get_gain_table(
+ 	memset(entry, 0, sizeof(ah->paprd_gain_table_entries));
+ 	memset(index, 0, sizeof(ah->paprd_gain_table_index));
+ 
+-	for (i = 0; i < 32; i++) {
++	for (i = 0; i < PAPRD_GAIN_TABLE_ENTRIES; i++) {
+ 		entry[i] = REG_READ(ah, reg);
+ 		index[i] = (entry[i] >> 24) & 0xff;
+ 		reg += 4;
+@@ -246,13 +246,13 @@ static void ar9003_paprd_get_gain_table(
+ static unsigned int ar9003_get_desired_gain(struct ath_hw *ah, int chain,
+ 					    int target_power)
  {
- 	struct ath_common *common = ath9k_hw_common(ah);
-+	struct ieee80211_conf *conf = &common->hw->conf;
- 	struct ath_nf_limits *limit;
- 	struct ath9k_nfcal_hist *h;
- 	bool high_nf_mid = false;
-+	u8 chainmask = (ah->rxchainmask << 3) | ah->rxchainmask;
- 	int i;
+-	int olpc_gain_delta = 0;
++	int olpc_gain_delta = 0, cl_gain_mod;
+ 	int alpha_therm, alpha_volt;
+ 	int therm_cal_value, volt_cal_value;
+ 	int therm_value, volt_value;
+ 	int thermal_gain_corr, voltage_gain_corr;
+ 	int desired_scale, desired_gain = 0;
+-	u32 reg;
++	u32 reg_olpc  = 0, reg_cl_gain  = 0;
  
- 	h = cal->nfCalHist;
- 	limit = ath9k_hw_get_nf_limits(ah, ah->curchan);
+ 	REG_CLR_BIT(ah, AR_PHY_PAPRD_TRAINER_STAT1,
+ 		    AR_PHY_PAPRD_TRAINER_STAT1_PAPRD_TRAIN_DONE);
+@@ -271,15 +271,29 @@ static unsigned int ar9003_get_desired_g
+ 	volt_value = REG_READ_FIELD(ah, AR_PHY_BB_THERM_ADC_4,
+ 				    AR_PHY_BB_THERM_ADC_4_LATEST_VOLT_VALUE);
  
- 	for (i = 0; i < NUM_NF_READINGS; i++) {
-+		if (!(chainmask & (1 << i)) ||
-+		    ((i >= AR5416_MAX_CHAINS) && !conf_is_ht40(conf)))
-+			continue;
+-	if (chain == 0)
+-		reg = AR_PHY_TPC_11_B0;
+-	else if (chain == 1)
+-		reg = AR_PHY_TPC_11_B1;
+-	else
+-		reg = AR_PHY_TPC_11_B2;
++	switch (chain) {
++	case 0:
++		reg_olpc = AR_PHY_TPC_11_B0;
++		reg_cl_gain = AR_PHY_CL_TAB_0;
++		break;
++	case 1:
++		reg_olpc = AR_PHY_TPC_11_B1;
++		reg_cl_gain = AR_PHY_CL_TAB_1;
++		break;
++	case 2:
++		reg_olpc = AR_PHY_TPC_11_B2;
++		reg_cl_gain = AR_PHY_CL_TAB_2;
++		break;
++	default:
++		ath_dbg(ath9k_hw_common(ah), ATH_DBG_CALIBRATE,
++		"Invalid chainmask: %d\n", chain);
++		break;
++	}
+ 
+-	olpc_gain_delta = REG_READ_FIELD(ah, reg,
++	olpc_gain_delta = REG_READ_FIELD(ah, reg_olpc,
+ 					 AR_PHY_TPC_11_OLPC_GAIN_DELTA);
++	cl_gain_mod = REG_READ_FIELD(ah, reg_cl_gain,
++					 AR_PHY_CL_TAB_CL_GAIN_MOD);
+ 
+ 	if (olpc_gain_delta >= 128)
+ 		olpc_gain_delta = olpc_gain_delta - 256;
+@@ -289,7 +303,7 @@ static unsigned int ar9003_get_desired_g
+ 	voltage_gain_corr = (alpha_volt * (volt_value - volt_cal_value) +
+ 			     (128 / 2)) / 128;
+ 	desired_gain = target_power - olpc_gain_delta - thermal_gain_corr -
+-	    voltage_gain_corr + desired_scale;
++	    voltage_gain_corr + desired_scale + cl_gain_mod;
+ 
+ 	return desired_gain;
+ }
+@@ -727,7 +741,7 @@ int ar9003_paprd_setup_gain_table(struct
+ 	desired_gain = ar9003_get_desired_gain(ah, chain, train_power);
+ 
+ 	gain_index = 0;
+-	for (i = 0; i < 32; i++) {
++	for (i = 0; i < PAPRD_GAIN_TABLE_ENTRIES; i++) {
+ 		if (ah->paprd_gain_table_index[i] >= desired_gain)
+ 			break;
+ 		gain_index++;
+--- a/drivers/net/wireless/ath/ath9k/ar9003_phy.h
++++ b/drivers/net/wireless/ath/ath9k/ar9003_phy.h
+@@ -1121,6 +1121,9 @@
+ #define AR_PHY_POWERTX_RATE8_POWERTXHT40_5	0x3F00
+ #define AR_PHY_POWERTX_RATE8_POWERTXHT40_5_S	8
+ 
++#define AR_PHY_CL_TAB_CL_GAIN_MOD		0x1f
++#define AR_PHY_CL_TAB_CL_GAIN_MOD_S		0
 +
- 		h[i].nfCalBuffer[h[i].currIndex] = nfarray[i];
+ void ar9003_hw_set_chain_masks(struct ath_hw *ah, u8 rx, u8 tx);
  
- 		if (++h[i].currIndex >= ATH9K_NF_CAL_HIST_MAX)
-@@ -225,6 +231,7 @@ void ath9k_hw_loadnf(struct ath_hw *ah, 
- 	int32_t val;
- 	u8 chainmask = (ah->rxchainmask << 3) | ah->rxchainmask;
- 	struct ath_common *common = ath9k_hw_common(ah);
-+	struct ieee80211_conf *conf = &common->hw->conf;
- 	s16 default_nf = ath9k_hw_get_default_nf(ah, chan);
- 
- 	if (ah->caldata)
-@@ -234,6 +241,9 @@ void ath9k_hw_loadnf(struct ath_hw *ah, 
- 		if (chainmask & (1 << i)) {
- 			s16 nfval;
- 
-+			if ((i >= AR5416_MAX_CHAINS) && !conf_is_ht40(conf))
-+				continue;
-+
- 			if (h)
- 				nfval = h[i].privNF;
- 			else
-@@ -293,6 +303,9 @@ void ath9k_hw_loadnf(struct ath_hw *ah, 
- 	ENABLE_REGWRITE_BUFFER(ah);
- 	for (i = 0; i < NUM_NF_READINGS; i++) {
- 		if (chainmask & (1 << i)) {
-+			if ((i >= AR5416_MAX_CHAINS) && !conf_is_ht40(conf))
-+				continue;
-+
- 			val = REG_READ(ah, ah->nf_regs[i]);
- 			val &= 0xFFFFFE00;
- 			val |= (((u32) (-50) << 1) & 0x1ff);
+ #endif  /* AR9003_PHY_H */
