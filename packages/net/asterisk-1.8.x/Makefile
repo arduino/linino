@@ -248,6 +248,7 @@ CONFIGURE_ARGS+= \
 	--without-vorbis \
 	--without-vpb \
 	--with-z="$(STAGING_DIR)/usr" \
+	--with-sounds-cache="$(DL_DIR)" \
 	--disable-xmldoc
 
 EXTRA_CFLAGS+= $(TARGET_CPPFLAGS)
