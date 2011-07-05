@@ -69,6 +69,16 @@ define Package/imagemagick-png/description
   imagemagick tools (mogrify,convert)
 endef
 
+define Package/imagemagick-tiff
+  $(call Package/imagemagick/Default)
+  TITLE+= (tiff)
+  DEPENDS:=+imagemagick +libtiff +zlib
+endef
+
+define Package/imagemagick-tiff/description
+  imagemagick TIFF module
+endef
+
 
 CONFIGURE_ARGS += \
 	  --with-modules \
@@ -135,4 +145,5 @@ $(eval $(call BuildPackage,imagemagick))
 $(eval $(call BuildPackage,imagemagick-tools))
 $(eval $(call BuildPlugin,jpeg))
 $(eval $(call BuildPlugin,png))
+$(eval $(call BuildPlugin,tiff))
 
