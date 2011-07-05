@@ -1,0 +1,22 @@
+Index: wing-20110329/lib/radiotap.c
+===================================================================
+--- wing-20110329.orig/lib/radiotap.c	2011-07-05 15:33:21.000000000 +0200
++++ wing-20110329/lib/radiotap.c	2011-07-05 18:57:58.110124772 +0200
+@@ -16,6 +16,17 @@
+ #include <click/radiotap_iter.h>
+ #include <click/platform.h>
+ 
++#if !defined(le32toh) || !defined(le16toh)
++#  if BYTE_ORDER == LITTLE_ENDIAN
++#    define le32toh(x) (x)
++#    define le16toh(x) (x)
++#  else
++#    include <byteswap.h>
++#    define le32toh(x) bswap_32(x)
++#    define le16toh(x) bswap_16(x)
++#  endif
++#endif
++
+ /* function prototypes and related defs are in radiotap_iter.h */
+ 
+ static const struct radiotap_align_size rtap_namespace_sizes[] = {
