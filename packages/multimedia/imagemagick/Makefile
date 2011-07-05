@@ -59,6 +59,16 @@ define Package/imagemagick-png/description
   imagemagick PNG module
 endef
 
+define Package/imagemagick-tools
+  $(call Package/imagemagick/Default)
+  TITLE+= (tools)
+  DEPENDS:=+imagemagick
+endef
+
+define Package/imagemagick-png/description
+  imagemagick tools (mogrify,convert)
+endef
+
 
 CONFIGURE_ARGS += \
 	  --with-modules \
@@ -99,10 +109,22 @@ define Package/imagemagick/install
 		$(1)/usr/lib/
 endef
 
+define Package/imagemagick-tools/install
+	$(INSTALL_DIR) $(1)/usr/bin/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/bin/mogrify \
+		$(1)/usr/bin/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/bin/convert \
+		$(1)/usr/bin/
+endef
+
 define BuildPlugin
   define Package/imagemagick-$(1)/install
 	$(INSTALL_DIR) $$(1)/usr/lib/ImageMagick-$(PKG_VERSION)/modules-Q16/coders
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ImageMagick-$(PKG_VERSION)/modules-Q16/coders/$(1).so \
+		$$(1)/usr/lib/ImageMagick-$(PKG_VERSION)/modules-Q16/coders
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ImageMagick-$(PKG_VERSION)/modules-Q16/coders/$(1).la \
 		$$(1)/usr/lib/ImageMagick-$(PKG_VERSION)/modules-Q16/coders
   endef
 
@@ -110,6 +132,7 @@ define BuildPlugin
 endef
 
 $(eval $(call BuildPackage,imagemagick))
+$(eval $(call BuildPackage,imagemagick-tools))
 $(eval $(call BuildPlugin,jpeg))
 $(eval $(call BuildPlugin,png))
 
