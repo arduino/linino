@@ -1,7 +1,5 @@
-Index: wing-20110329/lib/radiotap.c
-===================================================================
---- wing-20110329.orig/lib/radiotap.c	2011-07-05 15:33:21.000000000 +0200
-+++ wing-20110329/lib/radiotap.c	2011-07-05 18:57:58.110124772 +0200
+--- a/lib/radiotap.c
++++ b/lib/radiotap.c
 @@ -16,6 +16,17 @@
  #include <click/radiotap_iter.h>
  #include <click/platform.h>
