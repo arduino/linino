@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/libc/libcrypto++/
 PKG_MD5SUM:=681f830145bf93cbc16113eaf61fbe2a
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -38,12 +38,8 @@ CONFIGURE_ARGS += \
 	--enable-static \
 	--enable-shared
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -f config.cache GNUmakefile; autoreconf --force --install)
-	$(call Build/Configure/Default,,\
-		LDFLAGS="$(TARGET_LDFLAGS) -lpthread" \
-	)
-endef
+TARGET_LDFLAGS += \
+	-lpthread
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/crypto++
