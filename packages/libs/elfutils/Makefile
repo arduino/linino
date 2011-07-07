@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/elfutils/Default
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=$(INTL_DEPENDS)
+  DEPENDS:=$(INTL_DEPENDS) +USE_UCLIBC:argp-standalone
   TITLE:=ELF manipulation libraries
   URL:=https://fedorahosted.org/elfutils/
 endef
@@ -36,6 +36,11 @@ define Package/libdw
   $(call Package/elfutils/Default)
   TITLE+= (libdw)
 endef
+
+ifdef CONFIG_USE_UCLIBC
+CONFIGURE_VARS += \
+	LIBS="-largp"
+endif
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
