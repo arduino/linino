@@ -45,7 +45,7 @@ endef
 
 define Package/openvpn-easy-rsa
   $(call Package/openvpn)
-  DEPENDS:=openvpn +openssl-util
+  DEPENDS:=+openssl-util
   TITLE:=Simple shell scripts to manage a Certificate Authority
 endef
 
