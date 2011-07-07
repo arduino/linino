@@ -44,7 +44,7 @@ define Package/boost/Default
   CATEGORY:=Libraries
   TITLE:=Boost C++ source libraries
   URL:=http://www.boost.org
-  DEPENDS:=+libstdcpp
+  DEPENDS:=+libstdcpp @!LINUX_2_4
 endef
 
 define Package/boost/Default/description
