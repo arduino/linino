@@ -57,7 +57,7 @@ define Package/libavahi-dbus
   $(call Package/avahi/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libdaemon +libpthread +libgdbm +dbus
+  DEPENDS:=+libdaemon +libpthread +libgdbm +dbus @!LINUX_2_4
   TITLE+= (library) (dbus)
   VARIANT:=dbus
 endef
