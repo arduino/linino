@@ -69,7 +69,7 @@ endef
 
 define Package/qt4
   $(call Package/qt4/Default)
-  DEPENDS:=+zlib +libstdcpp
+  DEPENDS:=+zlib +libstdcpp @!LINUX_2_4
 endef
 
 define Package/qt4-gui
