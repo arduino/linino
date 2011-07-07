@@ -21,11 +21,9 @@ define Package/argp-standalone/description
   GNU libc hierarchial argument parsing library broken out from glibc.
 endef
 
-#MAKE_FLAGS += \
-#        OPTIM="$(TARGET_CFLAGS)" \
-#        CFLAGS="$(TARGET_CFLAGS)" \
-#        DESTDIR="$(PKG_INSTALL_DIR)" \
-#        all install
+MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS) $(FPIC)"
+
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
