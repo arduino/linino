@@ -1,14 +1,17 @@
 # 
-# Copyright (C) 2008-2009 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gw6c
-PKG_VERSION:=5.0
+PKG_VERSION:=5.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://openwrt.linux-appliance.net/sources
+PKG_MD5SUM:=eeac7292a622681651ec3bd9b2e5b061
+PKG_BUILD_DIR:=$(BUILD_DIR)/gw6-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -25,13 +28,6 @@ define Package/gw6c/description
   Hexago/freenet6/go6.net's migration broker.
 endef
 
-define Build/Prepare
-	wget -t1 --timeout=20 -O $(DL_DIR)/$(PKG_NAME)-$(PKG_VERSION).tar.bz2 "http://go6.net/4105/file.asp?file_id=136"
-	$(INSTALL_DIR) $(PKG_BUILD_DIR)
-	bzcat $(DL_DIR)/$(PKG_NAME)-$(PKG_VERSION).tar.bz2 | $(TAR) -C $(PKG_BUILD_DIR) -xvf -
-	$(CP) $(PKG_BUILD_DIR)/gw6c/src/gw6c-config/gw6cconfig/gw6c_c_wrapper.h $(PKG_BUILD_DIR)/gw6c/src/gw6c/include
-endef
-
 GW6C_OPTS:= \
 	C_COMPILER="$(TARGET_CC) -c -DNO_STDLIBCXX" \
 	COMPILER="$(TARGET_CROSS)g++ -c -DNO_STDLIBCXX" \
@@ -40,20 +36,26 @@ GW6C_OPTS:= \
 	ARCHIVER="$(TARGET_CROSS)ar" \
 	C_LINKER="$(TARGET_CC)" \
 	LINKER="$(TARGET_CROSS)g++" \
-	exportdir=$(PKG_BUILD_DIR)/gw6c/src/gw6c \
+	exportdir=$(PKG_BUILD_DIR)/gw6c \
 	export
 
+define Build/Configure
+	$(INSTALL_DIR) $(PKG_BUILD_DIR)/gw6c/include
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/gw6c-config/gw6cconfig/gw6c_c_wrapper.h \
+		$(PKG_BUILD_DIR)/gw6c/include
+endef
+
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)/gw6c/src/gw6c-config \
+	$(MAKE) -C $(PKG_BUILD_DIR)/gw6c-config \
 		$(GW6C_OPTS)
-	$(MAKE) -C $(PKG_BUILD_DIR)/gw6c/src/gw6c-messaging \
+	$(MAKE) -C $(PKG_BUILD_DIR)/gw6c-messaging \
 		$(GW6C_OPTS)
-	$(MAKE) -C $(PKG_BUILD_DIR)/gw6c/src/gw6c \
+	$(MAKE) -C $(PKG_BUILD_DIR)/tspc-advanced \
 		CC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS) -fno-builtin -Wall -I$(PKG_BUILD_DIR)/gw6c/src/gw6c/include \
-			-I$(PKG_BUILD_DIR)/gw6c/src/gw6c/platform/openwrt -I$(PKG_BUILD_DIR)/gw6c/src/gw6c" \
-		LDFLAGS="-L$(PKG_BUILD_DIR)/gw6c/src/gw6c/gw6cconfig \
-			-L$(PKG_BUILD_DIR)/gw6c/src/gw6c/gw6cmessaging \
+		CFLAGS="$(TARGET_CFLAGS) -fno-builtin -Wall -I$(PKG_BUILD_DIR)/tspc-advanced/include \
+			-I$(PKG_BUILD_DIR)/tspc-advanced/platform/openwrt -I$(PKG_BUILD_DIR)/tspc-advanced" \
+		LDFLAGS="-L$(PKG_BUILD_DIR)/tspc-advanced/gw6cconfig \
+			-L$(PKG_BUILD_DIR)/tspc-advanced/gw6cmessaging \
 			$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++ $(LIBGCC_S)" \
 		target="openwrt" \
 		installdir="$(PKG_INSTALL_DIR)"
@@ -61,7 +63,7 @@ endef
 
 define Package/gw6c/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/gw6c/src/gw6c/bin/$(PKG_NAME) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tspc-advanced/bin/$(PKG_NAME) $(1)/usr/sbin
 	$(INSTALL_DIR) $(1)/usr/share/gw6c/template
 	$(CP) ./files/openwrt.sh $(1)/usr/share/gw6c/template
 	$(INSTALL_DIR) $(1)/etc/init.d
