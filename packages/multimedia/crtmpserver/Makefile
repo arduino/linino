@@ -44,10 +44,14 @@ server. For example, it enables you to do:
  * Simple/complex chat applications
 endef
 
+# XXX: this hack handles the usr/bin vs bin difference of backfire and trunk
+TS_BASE:=$(wildcard $(TOOLCHAIN_DIR)/bin/$(TARGET_CC))
+TS_BASE:=$(dir $(if $(TS_BASE),$(TS_BASE),$(wildcard $(TOOLCHAIN_DIR)/usr/bin/$(TARGET_CC))))
+
 define Build/Configure
 	(cd $(PKG_BUILD_DIR)/builders/make; \
 		cp linux.mk linux-openwrt-uclibc.mk; \
-		$(SED) 's,^TOOLCHAIN_BASE[[:space:]]*=.*,TOOLCHAIN_BASE=$(TOOLCHAIN_DIR)/bin/,' \
+		$(SED) 's,^TOOLCHAIN_BASE[[:space:]]*=.*,TOOLCHAIN_BASE=$(TS_BASE),' \
 			-e 's,^TOOLCHAIN_PREFIX[[:space:]]*=.*,TOOLCHAIN_PREFIX=$(TARGET_CROSS),' \
 			-e 's,^OPTIMIZATIONS[[:space:]]*=.*,OPTIMIZATIONS=-O2,' \
 			-e 's,^SSL_BASE[[:space:]]*=.*,SSL_BASE=$(STAGING_DIR)/usr,' \
