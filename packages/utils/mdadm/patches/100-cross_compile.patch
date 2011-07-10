@@ -1,7 +1,5 @@
-Index: mdadm-3.2/Makefile
-===================================================================
---- mdadm-3.2.orig/Makefile
-+++ mdadm-3.2/Makefile
+--- a/Makefile
++++ b/Makefile
 @@ -76,7 +76,6 @@ FAILED_SLOTS_DIR = /dev/.mdadm/failed-sl
  DIRFLAGS = -DMAP_DIR=\"$(MAP_DIR)\" -DMAP_FILE=\"$(MAP_FILE)\"
  DIRFLAGS += -DMDMON_DIR=\"$(MDMON_DIR)\"
