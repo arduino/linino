@@ -4,7 +4,7 @@
    return !!rc;
  }
  
-+#if __GNUC__ < 4
++#if __GNUC__ < 4 || __GNUC_MINOR__ < 3
  static void init_libproc(void) __attribute__((constructor));
 +#else
 +static void init_libproc(void) __attribute__((constructor(200)));
@@ -19,7 +19,7 @@
  
  int linux_version_code;
  
-+#if __GNUC__ < 4
++#if __GNUC__ < 4 || __GNUC_MINOR__ < 3
  static void init_Linux_version(void) __attribute__((constructor));
 +#else
 +static void init_Linux_version(void) __attribute__((constructor(100)));
