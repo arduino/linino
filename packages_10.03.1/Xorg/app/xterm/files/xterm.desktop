@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=XTerm
+Comment=XTerm Terminal Emulator
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Exec=xterm   
+Icon=terminal
+Terminal=false
+Categories=GTK;Application;PIM
+SingleInstance=false
+StartupNotify=true

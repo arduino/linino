@@ -1,0 +1,39 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=99
+
+ARGS=""
+
+screen() {
+	local cfg="$1"
+	config_get resolution $cfg resolution
+	config_get dpi $cfg dpi
+	[ -n "$resolution" ] && ARGS="$ARGS -screen $resolution"
+	[ -n "$dpi" ] && ARGS="$ARGS -dpi $dpi"
+}
+
+desktop() {
+	local cfg="$1"
+	config_get autostart $cfg autostart
+	[ -n "$autostart" ] && eval $autostart &
+	config_get fdo_compliance $cfg fdo_compliance
+	[ -n "`echo \"$fdo_compliance\" 2> /dev/null | grep autostart`" ] && exit # in case the environment provides its own functionality to do the autostart stuff exit here
+}
+
+start() {
+	export DISPLAY=":0"
+	config_load x11
+	config_foreach screen screen
+	TSLIB_TSDEVICE="/dev/event1" Xglamo $ARGS &
+	sleep 1 # give the xserver some time get initialized
+	config_foreach desktop desktop
+	test -d /etc/xdg/autostart || exit
+	sleep 1 # give the first x11 application some time to get present - afterwars we'll start the x11 autostart applications
+	for elem in `ls /etc/xdg/autostart/`; do
+		if grep "^Hidden=true" "/etc/xdg/autostart/$elem" > /dev/null; then
+			continue
+		fi
+		exec=`grep "^Exec=" "/etc/xdg/autostart/$elem"`
+		eval ${exec#*=} &
+	done
+}

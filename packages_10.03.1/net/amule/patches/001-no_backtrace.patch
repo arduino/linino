@@ -1,0 +1,11 @@
+--- a/src/libs/common/MuleDebug.cpp
++++ b/src/libs/common/MuleDebug.cpp
+@@ -168,7 +168,7 @@ wxString get_backtrace(unsigned n)
+ 	return walker.m_trace;
+ }
+ 
+-#elif defined(__LINUX__)
++#elif defined(__LINUX__) && !defined(__UCLIBC__)
+ 
+ #ifdef HAVE_BFD
+ 

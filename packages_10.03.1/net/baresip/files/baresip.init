@@ -1,0 +1,19 @@
+#!/bin/sh /etc/rc.common
+#
+# Copyright (C) 2010 Alfred E. Heggestad
+#
+
+START=92
+BIN=baresip
+DEFAULT=/etc/default/$BIN
+OPTIONS=-d
+
+start() {
+       [ -f $DEFAULT ] && . $DEFAULT
+       $BIN $OPTIONS
+}
+
+stop() {
+       killall $BIN
+}
+

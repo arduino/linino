@@ -1,0 +1,17 @@
+# Copyright (C) 2006 OpenWrt.org
+
+config screen
+	option	resolution	800x600
+	option	dpi	285
+
+config graphic
+	option	device	/dev/fb0
+
+config input mouse
+	option	device	/dev/psaux
+	option	driver	mouse
+
+config input keybd
+	option	driver	keyboard
+
+config 'desktop'

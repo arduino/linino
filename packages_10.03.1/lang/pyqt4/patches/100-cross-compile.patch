@@ -1,0 +1,376 @@
+Index: PyQt-x11-gpl-4.8.3/configure.py
+===================================================================
+--- PyQt-x11-gpl-4.8.3.orig/configure.py	2011-01-23 11:08:20.000000000 +0100
++++ PyQt-x11-gpl-4.8.3/configure.py	2011-03-13 15:03:08.279673485 +0100
+@@ -33,6 +33,7 @@ import os
+ import glob
+ import optparse
+ import shutil
++import re
+ 
+ import sipconfig
+ 
+@@ -184,25 +185,17 @@ def create_optparser():
+                 "in the header comments of generated code [default: include "
+                 "timestamps]")
+ 
+-    if sys.platform != 'win32':
+-        if sys.platform in ('linux2', 'darwin'):
+-            pip_default = True
+-            pip_default_str = "enabled"
+-        else:
+-            pip_default = False
+-            pip_default_str = "disabled"
+-
+-        g.add_option("--protected-is-public", action="store_true",
+-                default=pip_default, dest="prot_is_public",
+-                help="enable building with 'protected' redefined as 'public' "
+-                        "[default: %s]" % pip_default_str)
+-        g.add_option("--protected-not-public", action="store_false",
+-                dest="prot_is_public",
+-                help="disable building with 'protected' redefined as 'public'")
+-        g.add_option("-q", "--qmake", action="callback", metavar="FILE",
+-                default=qmake, dest="qmake", callback=store_abspath_file,
+-                type="string",
+-                help="the pathname of qmake [default: %s]" % (qmake or "none"))
++    g.add_option("--protected-is-public", action="store_true",
++            default=True, dest="prot_is_public",
++            help="enable building with 'protected' redefined as 'public' "
++                    "[default: True]")
++    g.add_option("--protected-not-public", action="store_false",
++            dest="prot_is_public",
++            help="disable building with 'protected' redefined as 'public'")
++    g.add_option("-q", "--qmake", action="callback", metavar="FILE",
++            default=qmake, dest="qmake", callback=store_abspath_file,
++            type="string",
++            help="the pathname of qmake [default: %s]" % (qmake or "none"))
+ 
+     g.add_option("-s", "--dbus", action="callback", metavar="DIR",
+             dest="pydbusincdir", callback=store_abspath_dir, type="string",
+@@ -210,13 +203,13 @@ def create_optparser():
+             "[default: supplied by pkg-config]")
+     p.add_option_group(g)
+ 
+-    if sys.platform == 'darwin':
+-        g = optparse.OptionGroup(p, title="MacOS X Configuration")
+-        g.add_option("--use-arch", action="store", metavar="ARCH",
+-                dest="use_arch", choices=["i386", "x86_64", "ppc"],
+-                help="the architecture to use when running pyuic4 "
+-                        "[default: system default]")
+-        p.add_option_group(g)
++    g = optparse.OptionGroup(p, title="Arch Configuration")
++    g.add_option("--use-arch", action="store", metavar="ARCH",
++            dest="use_arch", choices=["", "i386", "x86_64", "ppc", "arm"],
++            default="",
++            help="the architecture to use when running pyuic4 "
++                    "[default: system default]")
++    p.add_option_group(g)
+ 
+     # Installation.
+     g = optparse.OptionGroup(p, title="Installation")
+@@ -275,12 +268,42 @@ def create_optparser():
+             "QTDIR/qsci]")
+     p.add_option_group(g)
+ 
++    # Crosscompilation
++    g = optparse.OptionGroup(p, title="Crosscompilation")
++    g.add_option("--crosscompile", action="store_true",
++                 default=False, dest="crosscompile",
++                 help="Set, if cross-compiling")
++    g.add_option("--host-sip-bin", action="callback", metavar="FILE",
++                 default=None, dest="host_sip_bin", type="string",
++                 callback=store_abspath_file,
++                 help="Path to the host SIP binary")
++    g.add_option("--sipconfig-macros", action="callback", metavar="FILE",
++                 default=None, dest="sipconfig_macros", type="string",
++                 callback=store_abspath_file,
++                 help="Path to a file containing sipconfig macros")
++    g.add_option("--qmake-prefix", action="append",
++    		 default=[], dest="qmake_prefixes", type="string",
++		 help="Commandline prefix to qmake")
++    g.add_option("--qmake-spec", action="callback", metavar="FILE",
++                default=None, dest="qmake_spec", callback=store_abspath,
++                type="string",
++                help="the pathname to qmake spec file")
++    g.add_option("--qtdirs-file", action="callback", metavar="FILE",
++                 default=None, dest="qtdirs_file", callback=store_abspath_file,
++                 type="string",
++                 help="Path to a predefined qtdirs file")
++    g.add_option("--pydbus-installdir", action="callback", metavar="DIR",
++                 default=None, dest="pydbus_installdir", callback=store_abspath,
++                 type="string",
++                 help="Install dir for pydbus module")
++    p.add_option_group(g)
++
+     return p
+ 
+ 
+ class pyrccMakefile(sipconfig.ProgramMakefile):
+     """This class implements the Makefile for pyrcc.  This is specialised so
+-    that pyrcc is automatically run against the examples.
++    that pyrcc is automatically run against the examples, if not crosscompiling.
+     """
+ 
+     def __init__(self):
+@@ -294,6 +317,8 @@ class pyrccMakefile(sipconfig.ProgramMak
+     def generate_target_default(self, mfile):
+         """Generate the default target."""
+         sipconfig.ProgramMakefile.generate_target_default(self, mfile)
++        if opts.crosscompile:
++            return
+ 
+         # The correct call to pyrcc depends on the Python version.
+         if sys.hexversion >= 0x03000000:
+@@ -807,7 +832,7 @@ include(%s)
+ 
+             f.close()
+ 
+-            run_command("%s %s %s" % (opts.qmake, qmake_args, wrapped_pro))
++            run_qmake("%s %s" % (qmake_args, wrapped_pro))
+             os.chdir(cwd)
+ 
+         sipconfig.inform("Creating QPy support libraries Makefile...")
+@@ -861,12 +886,16 @@ include(%s)
+         # not on Windows (so that normal console use will work).
+         sipconfig.inform("Creating pyuic4 wrapper...")
+ 
+-        if sys.platform == 'darwin':
+-            gui = True
++        if opts.use_arch:
++            gui = False#FIXME
+             use_arch = opts.use_arch
+         else:
+-            gui = False
+-            use_arch = ''
++            if sys.platform == 'darwin':
++                gui = True
++                use_arch = opts.use_arch
++            else:
++                gui = False
++                use_arch = ''
+ 
+         # The pyuic directory may not exist if we are building away from the
+         # source directory.
+@@ -926,6 +955,7 @@ include(%s)
+ 
+             abi = getattr(sys, 'abiflags', '')
+ 
++            print "FIXME CROSSCOMPILE" #FIXME: Crosscompile
+             if sys.platform == 'win32':
+                 # Use abiflags in case it is supported in a future version.
+                 lib_dir_flag = quote("-L%s" % sipcfg.py_lib_dir)
+@@ -988,7 +1018,7 @@ include(%s)
+                 fout.write(prj)
+                 fout.close()
+ 
+-                run_command("%s %s" % (opts.qmake, qmake_args))
++                run_qmake(qmake_args)
+                 os.chdir(cwd)
+ 
+                 tool.append("designer")
+@@ -1106,6 +1136,14 @@ def create_config(module, template, macr
+     sipconfig.create_config_module(module, template, content, macros)
+ 
+ 
++def run_qmake(args):
++    pfx = " ".join(opts.qmake_prefixes)
++    if opts.qmake_spec:
++        spec = "-spec \"" + opts.qmake_spec + "\""
++    else:
++        spec = ""
++    run_command(pfx + " " + opts.qmake + " " + spec + " " + args)
++
+ def run_command(cmd, envvars=None):
+     """Run a command and display the output if verbose mode is enabled.
+ 
+@@ -1334,30 +1372,38 @@ def check_dbus():
+     """
+     sipconfig.inform("Checking to see if the dbus support module should be built...")
+ 
+-    sout = get_command_stdout("pkg-config --cflags-only-I --libs dbus-1")
+-    iflags = sout.read().strip()
++    if opts.crosscompile and not opts.pydbusincdir:
++       sipconfig.inform("Crosscompiling but no dbus incdir specified. Disabling dbus.")
++       return
++
++    if not opts.crosscompile:
++        sout = get_command_stdout("pkg-config --cflags-only-I --libs dbus-1")
++        iflags = sout.read().strip()
++
++        if not iflags:
++            sipconfig.inform("DBus v1 does not seem to be installed.")
++            return
++
++        # Using str() means it will work with both Python v2 and v3.
++        for f in str(iflags).split():
++            if f.startswith("-I"):
++                dbusincdirs.append(f[2:])
++            elif f.startswith("-L"):
++                dbuslibdirs.append(f[2:])
++            elif f.startswith("-l"):
++                dbuslibs.append(f[2:])
+ 
+-    if not iflags:
+-        sipconfig.inform("DBus v1 does not seem to be installed.")
+-        return
+-
+-    # Using str() means it will work with both Python v2 and v3.
+-    for f in str(iflags).split():
+-        if f.startswith("-I"):
+-            dbusincdirs.append(f[2:])
+-        elif f.startswith("-L"):
+-            dbuslibdirs.append(f[2:])
+-        elif f.startswith("-l"):
+-            dbuslibs.append(f[2:])
+-
+-    try:
+-        import dbus.mainloop
+-    except:
+-        sipconfig.inform("The Python dbus module doesn't seem to be installed.")
+-        return
++        try:
++            import dbus.mainloop
++        except:
++            sipconfig.inform("The Python dbus module doesn't seem to be installed.")
++            return
+ 
+     global pydbusmoddir
+-    pydbusmoddir = dbus.mainloop.__path__[0]
++    if opts.pydbus_installdir:
++        pydbusmoddir = opts.pydbus_installdir
++    else:
++        pydbusmoddir = dbus.mainloop.__path__[0]
+ 
+     # Try and find dbus-python.h.  We don't use pkg-config because it is broken
+     # for dbus-python (at least for versions up to and including v0.81.0).
+@@ -1443,6 +1489,7 @@ def set_sip_flags(pyqt):
+ 
+     pyqt is the configuration instance.
+     """
++    #FIXME: Needs some crosscompile fixes.
+     # If we don't check for signed interpreters, we exclude the 'VendorID'
+     # feature
+     if not opts.vendorcheck:
+@@ -1588,7 +1635,10 @@ def generate_code(mname, extra_include_d
+             needed_qt_libs(mname, qt_libs)
+ 
+     # Build the SIP command line.
+-    argv = ['"' + sipcfg.sip_bin + '"', '-w']
++    sip_bin = sipcfg.sip_bin
++    if opts.host_sip_bin:
++        sip_bin = opts.host_sip_bin
++    argv = ['"' + sip_bin + '"', '-w']
+ 
+     if opts.no_timestamp:
+         argv.append("-T")
+@@ -1890,6 +1940,8 @@ def check_qt_installation(macros):
+ def fix_qmake_args(args=""):
+     """Make any platform specific adjustments to the arguments passed to qmake.
+     """
++    if opts.crosscompile:
++        return args
+     if sys.platform == "darwin":
+         # The Qt binary installer has macx-xcode as the default.
+         args = "-spec %s %s" % (sipcfg.platform, args)
+@@ -2041,7 +2093,7 @@ int main(int, char **)
+ 
+     # Create the makefile, first making sure it doesn't already exist.
+     remove_file(make_file)
+-    run_command("%s %s %s" % (opts.qmake, qmake_args, pro_file))
++    run_qmake("%s %s" % (qmake_args, pro_file))
+ 
+     if not os.access(make_file, os.F_OK):
+         sipconfig.error("%s failed to create a makefile. %s" % (opts.qmake, MSG_CHECK_QMAKE))
+@@ -2063,15 +2115,30 @@ int main(int, char **)
+     if not os.access(exe_file, os.X_OK):
+         sipconfig.error("Failed to determine the layout of your Qt installation. Try again using the --verbose flag to see more detail about the problem.")
+ 
+-    # Create the output file, first making sure it doesn't exist.
+-    remove_file(out_file)
+-    run_command(exe_file)
++    if opts.qtdirs_file:
++        # The user supplied a partial qtdirs.out file. We're probably crosscompiling.
++        # Do _not_ try to execute our qtdirs exe. Take the supplied qtdirs.out files
++        # instead and add the PyQt_... flags by grepping through the executable.
++        # This assumes the executable is not compiled with -O0.
++        read_qtdirs_file(opts.qtdirs_file)
++        global qt_xfeatures
++        print("Got %d features from qtdirs.out file: %s" % (len(qt_xfeatures), str(qt_xfeatures)))
++        found = re.findall(r'PyQt_[\w]+', file(exe_file, "r").read())
++        print("Grepped %d features from qtdirs.exe file: %s" % (len(found), str(found)))
++        qt_xfeatures.extend(found)
++    else:
++        # Create the output file, first making sure it doesn't exist.
++        remove_file(out_file)
++        run_command(exe_file)
++
++        if not os.access(out_file, os.F_OK):
++            sipconfig.error("%s failed to create %s. Make sure your Qt v4 installation is correct." % (exe_file, out_file))
+ 
+-    if not os.access(out_file, os.F_OK):
+-        sipconfig.error("%s failed to create %s. Make sure your Qt v4 installation is correct." % (exe_file, out_file))
++        # Read the directories.
++        read_qtdirs_file(out_file)
+ 
+-    # Read the directories.
+-    f = open(out_file, "r")
++def read_qtdirs_file(filename):
++    f = open(filename, "r")
+     lines = f.read().strip().split("\n")
+     f.close()
+ 
+@@ -2136,6 +2203,24 @@ int main(int, char **)
+             sipconfig.error("Qt has been built as static libraries so either the -g or -k argument should be used.")
+ 
+ 
++def load_sipconfig_macros(filename):
++    macros = {}
++    fd = file(filename, "r")
++    for line in fd.readlines():
++        line = line.split()
++        try:
++            key = line[0]
++        except IndexError:
++            sipconfig.error("Invalid sipconfig macros file format")
++        value = ""
++        try:
++            value = " ".join(line[1:])
++        except IndexError:
++            pass
++        macros[key] = value
++    return macros
++
++
+ def main():
+     """Create the configuration module module.
+     """
+@@ -2154,7 +2239,7 @@ def main():
+         opts.no_timestamp = False
+ 
+     # Provide defaults for platform-specific options.
+-    if sys.platform == 'win32':
++    if sys.platform == 'win32' and not opts.crosscompile:
+         opts.qmake = find_default_qmake()
+         opts.prot_is_public = False
+ 
+@@ -2187,12 +2272,14 @@ def main():
+             # Install the API file if the default directory exists.
+             opts.api = os.path.isdir(opts.qscidir)
+ 
+-    # Replace the existing build macros with the ones from the Qt installation.
+-    macros = get_build_macros(args)
+-
+-    if macros is None:
+-        p.print_help()
+-        sys.exit(2)
++    if opts.sipconfig_macros:
++        macros = load_sipconfig_macros(opts.sipconfig_macros)
++    else:
++        # Replace the existing build macros with the ones from the Qt installation.
++        macros = get_build_macros(args)
++        if macros is None:
++            p.print_help()
++            sys.exit(2)
+ 
+     sipcfg.set_build_macros(macros)
+ 

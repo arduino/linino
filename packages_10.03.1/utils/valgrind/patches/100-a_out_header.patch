@@ -1,0 +1,10 @@
+--- a/coregrind/m_debuginfo/readstabs.c
++++ b/coregrind/m_debuginfo/readstabs.c
+@@ -44,6 +44,7 @@
+ #include "priv_readstabs.h"        /* self */
+ 
+ /* --- !!! --- EXTERNAL HEADERS start --- !!! --- */
++#define CONFIG_ARCH_SUPPORTS_AOUT /* XXX */
+ #include <a.out.h> /* stabs defns */
+ /* --- !!! --- EXTERNAL HEADERS end --- !!! --- */
+ 

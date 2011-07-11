@@ -1,0 +1,25 @@
+--- a/configure
++++ b/configure
+@@ -187,6 +187,13 @@
+     --prefix=* | --install_prefix=* )
+       INSTALL_PREFIX=`echo $option | sed -e 's/[^=]*=//;'`
+     ;;
++    --target=* )
++      TARGET=`echo $option | sed -e 's/[^=]*=//;'`
++      OPERATINGSYSTEM=`echo $TARGET | sed -e 's/.*-//;'`
++      MACHINE=`echo $TARGET | sed -e 's/-.*//;'`
++      VERSION=""
++      SYSTEM=${OPERATINGSYSTEM}-${MACHINE}
++    ;;
+     --trace )
+       EXTRA_DEFS="-DTRACEON"
+     ;;
+@@ -242,7 +249,7 @@
+         ;;
+     esac
+     ;;
+-    Linux* )
++    Linux* | linux* )
+         EXTRA_OBJECTS="sys_linux.o wrap_adjtimex.o"
+         if [ $feat_rtc -eq 1 ] ; then
+             EXTRA_OBJECTS+=" rtc_linux.o"

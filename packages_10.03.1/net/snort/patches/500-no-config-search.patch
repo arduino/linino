@@ -1,0 +1,42 @@
+--- a/src/snort.c
++++ b/src/snort.c
+@@ -4198,7 +4198,7 @@ static char *ConfigFileSearch(void)
+ {
+     struct stat st;
+     int i;
+-    char *conf_files[]={"/etc/snort.conf", "./snort.conf", NULL};
++    char *conf_files[]={"/etc/snort/snort.conf", NULL};
+     char *fname = NULL;
+     char *rval = NULL;
+ 
+@@ -4217,30 +4217,6 @@ static char *ConfigFileSearch(void)
+         i++;
+     }
+ 
+-    /* search for .snortrc in the HOMEDIR */
+-    if(!rval)
+-    {
+-        char *home_dir = NULL;
+-
+-        if((home_dir = getenv("HOME")) != NULL)
+-        {
+-            char *snortrc = "/.snortrc";
+-            int path_len;
+-
+-            path_len = strlen(home_dir) + strlen(snortrc) + 1;
+-
+-            /* create the full path */
+-            fname = (char *)SnortAlloc(path_len);
+-
+-            SnortSnprintf(fname, path_len, "%s%s", home_dir, snortrc);
+-
+-            if(stat(fname, &st) != -1)
+-                rval = fname;
+-            else
+-                free(fname);
+-        }
+-    }
+-
+     return rval;
+ }
+ 

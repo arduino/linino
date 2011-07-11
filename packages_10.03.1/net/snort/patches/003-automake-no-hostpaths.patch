@@ -1,0 +1,86 @@
+--- a/configure.in
++++ b/configure.in
+@@ -115,7 +115,6 @@ case "$host" in
+     # libpcap doesn't even LOOK at the timeout you give it under Linux
+        AC_DEFINE(PCAP_TIMEOUT_IGNORED,,[Define if PCAP_TIMEOUT_IGNORED])
+     AC_SUBST(extra_incl)
+-    extra_incl=-I/usr/include/pcap
+     ;;
+   *-hpux10*|*-hpux11*)
+     AC_DEFINE(HPUX,,[Define if HPUX])
+@@ -719,13 +718,13 @@ AC_ARG_WITH(pgsql_includes,
+ 
+ if test "x$with_postgresql" != "xno"; then
+   if test "x$with_postgresql" = "xyes"; then
+-    postgresql_directory="$default_directory /usr/local/pgsql /usr/pgsql /usr/local"
++    postgresql_directory="$default_directory"
+     postgresql_fail="yes"
+   elif test -d $withval; then
+-    postgresql_directory="$withval $default_directory /usr/local/pgsql /usr/pgsql"
++    postgresql_directory="$withval $default_directory"
+     postgresql_fail="yes"
+   elif test "$with_postgresql" = ""; then
+-    postgresql_directory="$default_directory /usr/local/pgsql /usr/pgsql"
++    postgresql_directory="$default_directory"
+     postgresql_fail="no"
+   fi
+ 
+@@ -1040,8 +1039,6 @@ if test "$enable_inline" != "no"; then
+         LIBNET_INC_DIR=""
+         if test -n "$with_libnet_includes" -a "$with_libnet_includes" != "no"; then
+             libnet_dir="${with_libnet_includes}"
+-         else
+-            libnet_dir="/usr/include /usr/local/include /sw/include"
+         fi
+         AC_MSG_CHECKING("for libnet.h version 1.0.x")
+         for i in $libnet_dir; do
+@@ -1089,7 +1086,6 @@ if test "x$enable_flexresp" != "xno" -a 
+     fi
+ 
+     if test `libnet-config --cflags | wc -c` = "1"; then
+-        CPPFLAGS="${CPPFLAGS} -I/usr/local/include -I/sw/include"
+         LIBNET_CONFIG_BROKEN_CFLAGS="yes"
+     fi
+ 
+@@ -1097,7 +1093,6 @@ if test "x$enable_flexresp" != "xno" -a 
+         AC_MSG_WARN(libnet-config --libs is broken on your system.  If you)
+         AC_MSG_WARN(are using a precompiled package please notify the) 
+         AC_MSG_WARN(maintainer.)
+-        LDFLAGS="${LDFLAGS} -L/usr/local/lib -L/sw/lib"
+         LIBS="${LIBS} -lnet"
+     fi
+ 
+@@ -1116,8 +1111,6 @@ if test "x$enable_flexresp" != "xno" -a 
+     if test "x${LIBNET_CONFIG_BROKEN_CFLAGS}" = "xyes"; then
+         if test -n "$with_libnet_includes" -a "x$with_libnet_includes" != "xno"; then
+             libnet_dir="${with_libnet_includes}"
+-        else
+-            libnet_dir="/usr/include /usr/local/include /sw/include"
+         fi
+     else
+         libnet_dir=`libnet-config --cflags | cut -dI -f2`
+@@ -1210,7 +1203,6 @@ if test "x$enable_react" != "xno" -a "x$
+     fi
+ 
+     if test `libnet-config --cflags | wc -c` = "1"; then
+-        CPPFLAGS="${CPPFLAGS} -I/usr/local/include -I/sw/include"
+         LIBNET_CONFIG_BROKEN_CFLAGS="yes"
+     fi
+ 
+@@ -1218,7 +1210,6 @@ if test "x$enable_react" != "xno" -a "x$
+         AC_MSG_WARN(libnet-config --libs is broken on your system.  If you)
+         AC_MSG_WARN(are using a precompiled package please notify the)
+         AC_MSG_WARN(maintainer.)
+-        LDFLAGS="${LDFLAGS} -L/usr/local/lib -L/sw/lib"
+         LIBS="${LIBS} -lnet"
+     fi
+ 
+@@ -1237,8 +1228,6 @@ if test "x$enable_react" != "xno" -a "x$
+     if test "x${LIBNET_CONFIG_BROKEN_CFLAGS}" = "xyes"; then
+         if test -n "$with_libnet_includes" -a "x$with_libnet_includes" != "xno"; then
+             libnet_dir="${with_libnet_includes}"
+-        else
+-            libnet_dir="/usr/include /usr/local/include /sw/include"
+         fi
+     else
+         libnet_dir=`libnet-config --cflags | cut -dI -f2`

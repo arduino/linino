@@ -1,0 +1,18 @@
+--- a/ssl.c
++++ b/ssl.c
+@@ -635,6 +635,7 @@ ssl_connection *new_ssl_connection(char
+ #endif
+     break;
+ 
++#ifndef OPENSSL_NO_SSLV2
+   case SSL_VERSION_SSLV2:
+ #ifdef OPENSSL_FIPS
+     if (FIPS_mode()) {
+@@ -647,6 +648,7 @@ ssl_connection *new_ssl_connection(char
+     }
+ #endif
+     break;
++#endif
+ 
+   case SSL_VERSION_SSLV3:
+ #ifdef OPENSSL_FIPS

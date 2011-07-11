@@ -1,0 +1,2 @@
+#!/bin/sh
+[ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" ] && /etc/init.d/aiccu enabled && /etc/init.d/aiccu restart

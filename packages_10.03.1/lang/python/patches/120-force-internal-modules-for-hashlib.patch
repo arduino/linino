@@ -1,0 +1,30 @@
+---
+ setup.py |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+--- Python-2.6.4.orig/setup.py
++++ Python-2.6.4/setup.py
+@@ -622,9 +622,10 @@ class PyBuildExt(build_ext):
+ 
+         #print 'openssl_ver = 0x%08x' % openssl_ver
+ 
+-        if (ssl_incs is not None and
+-            ssl_libs is not None and
+-            openssl_ver >= 0x00907000):
++#        if (ssl_incs is not None and
++#            ssl_libs is not None and
++#            openssl_ver >= 0x00907000):
++        if False:
+             # The _hashlib module wraps optimized implementations
+             # of hash functions from the OpenSSL library.
+             exts.append( Extension('_hashlib', ['_hashopenssl.c'],
+@@ -644,7 +645,8 @@ class PyBuildExt(build_ext):
+                             depends = ['md5.h']) )
+             missing.append('_hashlib')
+ 
+-        if (openssl_ver < 0x00908000):
++#        if (openssl_ver < 0x00908000):
++        if True:
+             # OpenSSL doesn't do these until 0.9.8 so we'll bring our own hash
+             exts.append( Extension('_sha256', ['sha256module.c']) )
+             exts.append( Extension('_sha512', ['sha512module.c']) )

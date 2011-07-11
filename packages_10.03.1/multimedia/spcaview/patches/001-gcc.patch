@@ -1,0 +1,16 @@
+diff -Naur spcaview-20061208-orig/Makefile spcaview-20061208/Makefile
+--- spcaview-20061208-orig/Makefile	2005-09-24 22:57:52.000000000 +0200
++++ spcaview-20061208/Makefile	2007-09-08 23:32:25.000000000 +0200
+@@ -59,10 +59,10 @@
+ 	chmod 755 $(APP_BINARY)
+ 
+ spcaserv: $(OBJSERVER)
+-	gcc $(SERVFLAGS) -o spcaserv $(OBJSERVER) $(SERVLIBS)
++	$(CC) $(SERVFLAGS) -o spcaserv $(OBJSERVER) $(SERVLIBS)
+ 	
+ spcacat: $(OBJCAT)
+-	gcc $(SERVFLAGS) -o spcacat $(OBJCAT) $(SERVLIBS)
++	$(CC) $(SERVFLAGS) -o spcacat $(OBJCAT) $(SERVLIBS)
+ 	
+ spcaview.o: spcaview.c  jconfig.h dpsh.h utils.h SDL_audioin.h
+ 

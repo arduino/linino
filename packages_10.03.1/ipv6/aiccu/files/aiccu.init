@@ -1,0 +1,52 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=51
+
+config_cb() {
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
+		aiccu)
+			append cfgs_sections "$cfg_name" "$N"
+		;;
+	esac
+}
+
+start() {
+	config_load aiccu
+	for cfgs_section in $cfgs_sections; do
+		config_get username $cfgs_section username
+		config_get password $cfgs_section password
+		config_get server $cfgs_section server
+		config_get protocol $cfgs_section protocol
+		config_get interface $cfgs_section interface
+		config_get tunnel_id $cfgs_section tunnel_id
+		config_get_bool requiretls $cfgs_section requiretls 0
+		config_get_bool defaultroute $cfgs_section defaultroute 1
+		config_get_bool nat $cfgs_section nat 1
+		config_get_bool heartbeat $cfgs_section heartbeat 1
+		mkdir -p /tmp/run
+		echo "username $username" > /tmp/run/aiccu-${cfgs_section}.conf
+		echo "password $password" >> /tmp/run/aiccu-${cfgs_section}.conf
+		[ -n "$server" ] && echo "server $server" >> /tmp/run/aiccu-${cfgs_section}.conf
+		[ -n "$protocol" ] && echo "protocol $protocol" >> /tmp/run/aiccu-${cfgs_section}.conf
+		[ -n "$interface" ] && echo "ipv6_interface $interface" >> /tmp/run/aiccu-${cfgs_section}.conf
+		[ -n "$tunnel_id" ] && echo "tunnel_id $tunnel_id" >> /tmp/run/aiccu-${cfgs_section}.conf
+		[ "$requiretls" = "1" ] && echo "requiretls true" >> /tmp/run/aiccu-${cfgs_section}.conf
+		[ "$defaultroute" != "1" ] && echo "defaultroute false" >> /tmp/run/aiccu-${cfgs_section}.conf
+		[ "$nat" = "1" ] && echo "behindnat true" >> /tmp/run/aiccu-${cfgs_section}.conf
+		[ "$heartbeat" != "1" ] && echo "makebeats false" >> /tmp/run/aiccu-${cfgs_section}.conf
+		echo 'daemonize true' >> /tmp/run/aiccu-${cfgs_section}.conf
+		echo "pidfile /var/run/aiccu-${cfgs_section}.pid" >> /tmp/run/aiccu-${cfgs_section}.conf
+	
+		aiccu start /tmp/run/aiccu-$cfgs_section.conf
+	done
+}
+
+stop() {
+	config_load aiccu
+	for cfgs_section in $cfgs_sections; do
+		aiccu stop /tmp/run/aiccu-$cfgs_section.conf
+	done
+}

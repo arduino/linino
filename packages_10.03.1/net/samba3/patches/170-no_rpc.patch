@@ -1,0 +1,28 @@
+--- a/source/include/config.h
++++ b/source/include/config.h
+@@ -986,13 +986,13 @@
+ /* #undef HAVE_ROOT */
+ 
+ /* Define to 1 if you have the <rpcsvc/nis.h> header file. */
+-#define HAVE_RPCSVC_NIS_H 1
++/* #define HAVE_RPCSVC_NIS_H 1 */
+ 
+ /* Define to 1 if you have the <rpcsvc/ypclnt.h> header file. */
+-#define HAVE_RPCSVC_YPCLNT_H 1
++/* #define HAVE_RPCSVC_YPCLNT_H 1 */
+ 
+ /* Define to 1 if you have the <rpcsvc/yp_prot.h> header file. */
+-#define HAVE_RPCSVC_YP_PROT_H 1
++/* #define HAVE_RPCSVC_YP_PROT_H 1 */
+ 
+ /* Whether there is a conflicting AUTH_ERROR define in rpc/rpc.h */
+ /* #undef HAVE_RPC_AUTH_ERROR_CONFLICT */
+@@ -1001,7 +1001,7 @@
+ /* #undef HAVE_RPC_NETTYPE_H */
+ 
+ /* Define to 1 if you have the <rpc/rpc.h> header file. */
+-#define HAVE_RPC_RPC_H 1
++/* #define HAVE_RPC_RPC_H 1 */
+ 
+ /* Whether mkstemp is secure */
+ #define HAVE_SECURE_MKSTEMP 1

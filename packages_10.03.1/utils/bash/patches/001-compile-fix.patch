@@ -1,0 +1,17 @@
+Index: bash-4.2/execute_cmd.c
+===================================================================
+--- bash-4.2.orig/execute_cmd.c	2011-07-04 11:16:23.000000000 +0200
++++ bash-4.2/execute_cmd.c	2011-07-04 11:17:33.000000000 +0200
+@@ -2202,7 +2202,11 @@
+   /* If the `lastpipe' option is set with shopt, and job control is not
+      enabled, execute the last element of non-async pipelines in the
+      current shell environment. */
+-  if (lastpipe_opt && job_control == 0 && asynchronous == 0 && pipe_out == NO_PIPE && prev > 0)
++  if (lastpipe_opt &&
++#if defined(JOB_CONTROL)
++               job_control == 0 && 
++#endif
++               asynchronous == 0 && pipe_out == NO_PIPE && prev > 0)
+     {
+       lstdin = move_to_high_fd (0, 0, 255);
+       if (lstdin > 0)

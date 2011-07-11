@@ -1,0 +1,11 @@
+--- fltk2/Makefile	2009-01-02 01:41:31.000000000 +0100
++++ fltk2/Makefile	2009-01-02 01:40:36.000000000 +0100
+@@ -25,7 +25,7 @@
+ 
+ include makeinclude
+ 
+-DIRS = src $(LOCALIMAGES) images OpenGL fluid glut test
++DIRS = src $(LOCALIMAGES) images
+ 
+ all: makeinclude
+ 	for dir in $(DIRS); do\

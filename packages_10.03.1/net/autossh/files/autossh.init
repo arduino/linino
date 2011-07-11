@@ -1,0 +1,25 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2007 OpenWrt.org
+START=80
+
+start_service () {
+	local section="$1"
+	config_get ssh "$section" ssh
+	config_get monitorport "$section" monitorport
+	config_get poll "$section" poll
+
+	AUTOSSH_POLL=${poll:-"600"} autossh -M ${monitorport:-"20000"} -f ${ssh}
+}
+
+boot() {
+	return
+}
+
+start() {
+	config_load "autossh"
+	config_foreach start_service autossh
+}
+
+stop() {
+	killall autossh
+}

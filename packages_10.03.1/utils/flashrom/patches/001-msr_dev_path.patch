@@ -1,0 +1,21 @@
+--- a/physmap.c
++++ b/physmap.c
+@@ -352,7 +352,7 @@ int setup_cpu_msr(int cpu)
+ {
+ 	char msrfilename[64];
+ 	memset(msrfilename, 0, sizeof(msrfilename));
+-	snprintf(msrfilename, sizeof(msrfilename), "/dev/cpu/%d/msr", cpu);
++	snprintf(msrfilename, sizeof(msrfilename), "/dev/msr%d", cpu);
+ 
+ 	if (fd_msr != -1) {
+ 		msg_pinfo("MSR was already initialized\n");
+@@ -362,7 +362,8 @@ int setup_cpu_msr(int cpu)
+ 	fd_msr = open(msrfilename, O_RDWR);
+ 
+ 	if (fd_msr < 0) {
+-		perror("Error while opening /dev/cpu/0/msr");
++		fprintf(stderr, "Error while opening %s: %s\n", msrfilename,
++			strerror(errno));
+ 		msg_pinfo("Did you run 'modprobe msr'?\n");
+ 		return -1;
+ 	}

@@ -1,0 +1,30 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2009 OpenWrt.org
+START=50
+
+NAME=gpsd
+PIDF=/var/run/$NAME.pid
+PROG=/usr/sbin/$NAME
+
+start() {
+    config_load gpsd
+    config_get device core device
+    config_get port core port
+    config_get_bool enabled core enabled
+    [ "$enabled" != "1" ] && exit
+    logger -t "$NAME" "Starting..."
+    [ ! -c "$device" ] && {
+        logger -t "$NAME" "Unable to find device $device. Exiting."
+        exit 1
+    }
+    $PROG -n -P $PIDF -S $port $device
+}
+
+stop() {
+    logger -t "$NAME" "Stopping..."
+    [ -f "$PIDF" ] && {
+        read PID < "$PIDF"
+        kill -9 $PID
+        rm $PIDF
+    }
+}

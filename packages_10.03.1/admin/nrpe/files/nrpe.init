@@ -1,0 +1,12 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2007 OpenWrt.org
+
+START=70
+
+start() {
+	/usr/sbin/nrpe -c /etc/nrpe.cfg -d
+}
+
+stop() {
+        killall nrpe
+}

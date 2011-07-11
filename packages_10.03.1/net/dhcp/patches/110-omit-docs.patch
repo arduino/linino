@@ -1,0 +1,159 @@
+diff -urN dhcp-3.1.0.orig/client/Makefile.dist dhcp-3.1.0/client/Makefile.dist
+--- dhcp-3.1.0.orig/client/Makefile.dist	2005-03-17 12:14:55.000000000 -0800
++++ dhcp-3.1.0/client/Makefile.dist	2008-06-12 01:12:58.000000000 -0700
+@@ -35,7 +35,7 @@
+ CFLAGS = $(DEBUG) $(PREDEFINES) $(INCLUDES) $(COPTS) \
+ 		-DCLIENT_PATH=${CLIENT_PATH}
+ 
+-all:	$(PROG) $(CATMANPAGES)
++all:	$(PROG)
+ 
+ install: all
+ 	for dir in $(CLIENTBINDIR) $(ETC) $(FFMANDIR) $(ADMMANDIR) $(VARDB); \
+@@ -58,14 +58,6 @@
+ 				$(DESTDIR)$(CLIENTBINDIR)/dhclient-script; \
+ 	  $(CHMOD) 700 $(DESTDIR)$(CLIENTBINDIR)/dhclient-script; \
+ 	fi
+-	$(MANINSTALL) $(MANFROM) dhclient.$(MANCAT)8 $(MANTO) \
+-			$(DESTDIR)$(ADMMANDIR)/dhclient$(ADMMANEXT)
+-	$(MANINSTALL) $(MANFROM) dhclient-script.$(MANCAT)8 $(MANTO) \
+-			$(DESTDIR)$(ADMMANDIR)/dhclient-script$(ADMMANEXT)
+-	$(MANINSTALL) $(MANFROM) dhclient.conf.$(MANCAT)5 $(MANTO) \
+-			$(DESTDIR)$(FFMANDIR)/dhclient.conf$(FFMANEXT)
+-	$(MANINSTALL) $(MANFROM) dhclient.leases.$(MANCAT)5 $(MANTO) \
+-			$(DESTDIR)$(FFMANDIR)/dhclient.leases$(FFMANEXT)
+ 
+ depend:
+ 	$(MKDEP) $(INCLUDES) $(PREDEFINES) $(SRCS)
+diff -urN dhcp-3.1.0.orig/common/Makefile.dist dhcp-3.1.0/common/Makefile.dist
+--- dhcp-3.1.0.orig/common/Makefile.dist	2005-03-17 12:14:56.000000000 -0800
++++ dhcp-3.1.0/common/Makefile.dist	2008-06-12 01:12:58.000000000 -0700
+@@ -35,7 +35,7 @@
+ INCLUDES = -I$(TOP) $(BINDINC) -I$(TOP)/includes
+ CFLAGS = $(DEBUG) $(PREDEFINES) $(INCLUDES) $(COPTS)
+ 
+-all:	libdhcp.a $(CATMANPAGES)
++all:	libdhcp.a
+ 
+ libdhcp.a:	$(OBJ)
+ 	rm -f libdhcp.a
+@@ -53,10 +53,6 @@
+ 	    fi; \
+ 	  done; \
+ 	done
+-	$(MANINSTALL) $(MANFROM) dhcp-options.$(MANCAT)5 $(MANTO) \
+-				$(DESTDIR)$(FFMANDIR)/dhcp-options$(FFMANEXT)
+-	$(MANINSTALL) $(MANFROM) dhcp-eval.$(MANCAT)5 $(MANTO) \
+-				$(DESTDIR)$(FFMANDIR)/dhcp-eval$(FFMANEXT)
+ 
+ depend:
+ 	$(MKDEP) $(INCLUDES) $(PREDEFINES) $(SRC)
+diff -urN dhcp-3.1.0.orig/dhcpctl/Makefile.dist dhcp-3.1.0/dhcpctl/Makefile.dist
+--- dhcp-3.1.0.orig/dhcpctl/Makefile.dist	2005-03-17 12:15:02.000000000 -0800
++++ dhcp-3.1.0/dhcpctl/Makefile.dist	2008-06-12 01:13:51.000000000 -0700
+@@ -34,7 +34,7 @@
+ DHCPCTLLIBS = libdhcpctl.a ../common/libdhcp.a $(BINDLIB) \
+ 		../omapip/libomapi.a ../dst/libdst.a
+ 
+-all:	libdhcpctl.a omshell cltest $(CATMANPAGES)
++all:	libdhcpctl.a omshell cltest
+ 
+ omshell:	omshell.o $(DHCPCTLLIBS)
+ 	$(CC) $(DEBUG) $(LFLAGS) -o omshell omshell.o $(DHCPCTLLIBS) $(LIBS)
+@@ -47,7 +47,7 @@
+ 	ar cruv libdhcpctl.a $(OBJ)
+ 	$(RANLIB) libdhcpctl.a
+ 
+-install: all $(CATMANPAGES)
++install: all
+ 	for dir in $(LIBDIR) $(LIBMANDIR) $(INCDIR) $(USRMANDIR) \
+ 		$(USERBINDIR); do \
+ 	  foo=""; \
+@@ -63,16 +63,8 @@
+ 	$(CHMOD) 644 $(DESTDIR)$(LIBDIR)/libdhcpctl.a
+ 	$(INSTALL) dhcpctl.h $(DESTDIR)$(INCDIR)
+ 	$(CHMOD) 644 $(DESTDIR)$(INCDIR)/dhcpctl.h
+-	for man in $(MAN); do \
+-	  prefix=`echo $$man |sed -e 's/\.[0-9]$$//'`; \
+-	  suffix=`echo $$man |sed -e 's/.*\.\([0-9]\)$$/\1/'`; \
+-	  $(MANINSTALL) $(MANFROM) $${prefix}.$(MANCAT)$${suffix} $(MANTO) \
+-			$(DESTDIR)$(LIBMANDIR)/$${prefix}$(LIBMANEXT); \
+-	done
+ 	$(INSTALL) omshell $(DESTDIR)$(USERBINDIR)
+ 	$(CHMOD) 755 $(DESTDIR)$(USERBINDIR)/omshell
+-	$(MANINSTALL) $(MANFROM) omshell.$(MANCAT)1 $(MANTO) \
+-				$(DESTDIR)$(USRMANDIR)/omshell$(USRMANEXT)
+ 
+ depend:
+ 	$(MKDEP) $(INCLUDES) $(PREDEFINES) $(SRC)
+diff -urN dhcp-3.1.0.orig/omapip/Makefile.dist dhcp-3.1.0/omapip/Makefile.dist
+--- dhcp-3.1.0.orig/omapip/Makefile.dist	2005-03-17 12:15:20.000000000 -0800
++++ dhcp-3.1.0/omapip/Makefile.dist	2008-06-12 01:12:58.000000000 -0700
+@@ -40,7 +40,7 @@
+ INCLUDES = $(BINDINC) -I$(TOP)/includes
+ CFLAGS = $(DEBUG) $(PREDEFINES) $(INCLUDES) $(COPTS)
+ 
+-all:	libomapi.a svtest $(CATMANPAGES)
++all:	libomapi.a svtest
+ 
+ svtest:	test.o libomapi.a $(BINDLIB) ../dst/libdst.a
+ 	$(CC) $(DEBUG) $(LFLAGS) -o svtest test.o $(BINDLIB) \
+@@ -75,12 +75,6 @@
+ 						$(DESTDIR)$(INCDIR)/isc-dhcp; \
+ 	  $(CHMOD) 644 $(DESTDIR)$(INCDIR)/isc-dhcp/$$file; \
+ 	done
+-	for man in $(MAN); do \
+-	  prefix=`echo $$man |sed -e 's/\.[0-9]$$//'`; \
+-	  suffix=`echo $$man |sed -e 's/.*\.\([0-9]\)$$/\1/'`; \
+-	  $(MANINSTALL) $(MANFROM) $${prefix}.$(MANCAT)$${suffix} $(MANTO) \
+-			$(DESTDIR)$(LIBMANDIR)/$${prefix}$(LIBMANEXT); \
+-	done
+ 
+ depend:
+ 	$(MKDEP) $(INCLUDES) $(PREDEFINES) $(SRC)
+diff -urN dhcp-3.1.0.orig/relay/Makefile.dist dhcp-3.1.0/relay/Makefile.dist
+--- dhcp-3.1.0.orig/relay/Makefile.dist	2005-03-17 12:15:24.000000000 -0800
++++ dhcp-3.1.0/relay/Makefile.dist	2008-06-12 01:12:58.000000000 -0700
+@@ -33,7 +33,7 @@
+ DHCPLIB = ../common/libdhcp.a $(BINDLIB) ../omapip/libomapi.a ../dst/libdst.a
+ CFLAGS = $(DEBUG) $(PREDEFINES) $(INCLUDES) $(COPTS)
+ 
+-all:	$(PROG) $(CATMANPAGES)
++all:	$(PROG)
+ 
+ install: all
+ 	for dir in $(BINDIR) $(ADMMANDIR); do \
+@@ -48,8 +48,6 @@
+ 	done
+ 	$(INSTALL) dhcrelay $(DESTDIR)$(BINDIR)
+ 	$(CHMOD) 755 $(DESTDIR)$(BINDIR)/dhcrelay
+-	$(MANINSTALL) $(MANFROM) dhcrelay.$(MANCAT)8 $(MANTO) \
+-				$(DESTDIR)$(ADMMANDIR)/dhcrelay$(ADMMANEXT)
+ 
+ depend:
+ 	$(MKDEP) $(INCLUDES) $(PREDEFINES) $(SRCS)
+diff -urN dhcp-3.1.0.orig/server/Makefile.dist dhcp-3.1.0/server/Makefile.dist
+--- dhcp-3.1.0.orig/server/Makefile.dist	2006-07-25 06:26:00.000000000 -0700
++++ dhcp-3.1.0/server/Makefile.dist	2008-06-12 01:12:58.000000000 -0700
+@@ -35,7 +35,7 @@
+ DHCPLIB = ../common/libdhcp.a $(BINDLIB) ../omapip/libomapi.a ../dst/libdst.a
+ CFLAGS = $(DEBUG) $(PREDEFINES) $(INCLUDES) $(COPTS)
+ 
+-all:	$(PROG) $(CATMANPAGES)
++all:	$(PROG)
+ 
+ install: all
+ 	for dir in $(BINDIR) $(ADMMANDIR) $(FFMANDIR) $(VARDB); do \
+@@ -50,12 +50,6 @@
+ 	done
+ 	$(INSTALL) dhcpd $(DESTDIR)$(BINDIR)
+ 	$(CHMOD) 755 $(DESTDIR)$(BINDIR)/dhcpd
+-	$(MANINSTALL) $(MANFROM) dhcpd.$(MANCAT)8 $(MANTO) \
+-			$(DESTDIR)$(ADMMANDIR)/dhcpd$(ADMMANEXT)
+-	$(MANINSTALL) $(MANFROM) dhcpd.conf.$(MANCAT)5 $(MANTO) \
+-			$(DESTDIR)$(FFMANDIR)/dhcpd.conf$(FFMANEXT)
+-	$(MANINSTALL) $(MANFROM) dhcpd.leases.$(MANCAT)5 $(MANTO) \
+-			$(DESTDIR)$(FFMANDIR)/dhcpd.leases$(FFMANEXT)
+ 	$(TOUCH) $(DESTDIR)$(VARDB)/dhcpd.leases
+ 	# Note file mode is hardcoded to mode 0664 in server/db.c (889).
+ 	$(CHMOD) 664 $(DESTDIR)$(VARDB)/dhcpd.leases

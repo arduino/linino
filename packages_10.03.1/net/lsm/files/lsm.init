@@ -1,0 +1,44 @@
+#!/bin/sh /etc/rc.common
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+NAME=lsm
+PROG=/usr/sbin/$NAME
+DESC="Link State Monitor"
+PIDFILE=/var/run/lsm.pid
+START=45
+
+test -x $PROG || exit 0
+set -e
+
+start() {
+	echo -n "Starting $DESC: $NAME"
+	start-stop-daemon -q -S -p $PIDFILE -x $PROG -- /etc/lsm/lsm.conf $PIDFILE
+
+	echo "."
+}
+
+stop() {
+	echo -n "Stopping $DESC: $NAME"
+	start-stop-daemon -q -K -p $PIDFILE -x $PROG -- /etc/lsm/lsm.conf $PIDFILE
+	echo "."
+}
+
+restart() {
+	echo -n "Restarting $DESC: $NAME... "
+	start-stop-daemon -q -K -p $PIDFILE -x $PROG -- /etc/lsm/lsm.conf $PIDFILE
+	sleep 1
+	start-stop-daemon -q -S -p $PIDFILE -x $PROG -- /etc/lsm/lsm.conf $PIDFILE
+	echo "done."
+}
+
+reload() {
+	#
+	#	If the daemon can reload its config files on the fly
+	#	for example by sending it SIGHUP, do it here.
+	#
+	#	If the daemon responds to changes in its config file
+	#	directly anyway, make this a do-nothing entry.
+	#
+	echo -n "Reloading $DESC configuration... "
+	start-stop-daemon -q -K -s HUP -p $PIDFILE -x $PROG -- /etc/lsm/lsm.conf $PIDFILE
+	echo "done."
+}

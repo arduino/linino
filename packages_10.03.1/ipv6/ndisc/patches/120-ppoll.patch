@@ -1,0 +1,47 @@
+--- a/compat/fixups.h
++++ b/compat/fixups.h
+@@ -50,13 +50,25 @@ int inet6_rth_add (void *bp, const struc
+ # define IPV6_RTHDR_TYPE_0 0
+ #endif
+ 
+-#ifndef HAVE_PPOLL
++#include <sys/poll.h>
++
++#ifdef HAVE_PPOLL
++static inline int
++compat_ppoll (struct pollfd *restrict fds, int n,
++              const struct timespec *restrict ts,
++              const sigset_t *restrict sigmask)
++{
++	return ppoll(fds, n, ts, sigmask);
++}
++
++#else
+ # include <signal.h>
+ struct pollfd;
+ struct timespec;
+ 
+-int ppoll (struct pollfd *restrict fds, int n,
+-           const struct timespec *restrict ts,
+-           const sigset_t *restrict sigmask);
++int compat_ppoll (struct pollfd *restrict fds, int n,
++                  const struct timespec *restrict ts,
++                  const sigset_t *restrict sigmask);
+ #endif
+ 
++#define ppoll compat_ppoll
+--- a/compat/ppoll.c
++++ b/compat/ppoll.c
+@@ -32,9 +32,9 @@
+ # include <pthread.h> // sigprocmask is not thread-safe
+ #endif
+ 
+-int ppoll (struct pollfd *restrict fds, int n,
+-           const struct timespec *restrict ts,
+-           const sigset_t *restrict sigset)
++int compat_ppoll (struct pollfd *restrict fds, int n,
++                  const struct timespec *restrict ts,
++                  const sigset_t *restrict sigset)
+ {
+ 	sigset_t origset;
+ 	int val;

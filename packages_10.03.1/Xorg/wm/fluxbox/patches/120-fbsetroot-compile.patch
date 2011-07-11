@@ -1,0 +1,8 @@
+diff -urN fluxbox-1.0rc3.orig/util/Makefile.in fluxbox-1.0rc3/util/Makefile.in
+--- fluxbox-1.0rc3.orig/util/Makefile.in	2007-09-17 19:56:45.000000000 +0200
++++ fluxbox-1.0rc3/util/Makefile.in	2007-09-17 19:58:11.000000000 +0200
+@@ -277,4 +277,4 @@
+ fbsetroot$(EXEEXT): $(fbsetroot_OBJECTS) $(fbsetroot_DEPENDENCIES) 
+ 	@rm -f fbsetroot$(EXEEXT)
+-	$(CXXLINK) $(fbsetroot_OBJECTS) $(fbsetroot_LDADD) $(LIBS)
++	$(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) -o $@ $(fbsetroot_OBJECTS) $(fbsetroot_LDADD) $(LDFLAGS) $(LIBS)

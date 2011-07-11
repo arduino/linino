@@ -1,0 +1,37 @@
+$Id$
+
+	• Part of the FreeWRT patches:
+	  – no hostname(1)
+	  – ls has no -o
+	• OpenWrt fix:
+	  – since this is not ~/.mkshrc make sure subshells find it
+
+--- a/dot.mkshrc
++++ b/dot.mkshrc
+@@ -20,7 +20,7 @@
+ #-
+ # ~/.mkshrc: mksh initialisation file for interactive shells
+ 
+-: ${EDITOR:=/bin/ed} ${TERM:=vt100} ${HOSTNAME:=$(ulimit -c 0;hostname -s 2>&-)}
++: ${EDITOR:=/bin/ed} ${TERM:=vt100} ${HOSTNAME:=$(</proc/sys/kernel/hostname)}
+ [[ $HOSTNAME = @(localhost|*([	 ])) ]] && HOSTNAME=$(ulimit -c 0;hostname 2>&-)
+ : ${HOSTNAME:=nil}; if (( USER_ID )); then PS1='$'; else PS1='#'; fi
+ function precmd {
+@@ -38,7 +38,7 @@ unalias ls
+ alias l='ls -F'
+ alias la='l -a'
+ alias ll='l -l'
+-alias lo='l -alo'
++alias lo='l -al'
+ alias which='whence -p'
+ whence -p rot13 >&- || alias rot13='tr \
+     abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ \
+@@ -304,4 +304,8 @@ function Lstripcom {
+ 	done; }
+ }
+ 
++# we need this in OpenWrt for subshells that are not login shells
++: ${ENV=/etc/mkshrc}
++[[ -z $ENV ]] || export ENV
++
+ : place customsations above this line

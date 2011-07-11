@@ -1,0 +1,30 @@
+--- a/configure
++++ b/configure
+@@ -27152,10 +27152,10 @@ fi;
+ 
+ 
+ 
+-    CPPFLAGS=`eval eval eval eval eval echo "-I$includedir -I$prefix/include $CPPFLAGS"`
++    CPPFLAGS=`eval eval eval eval eval echo "$CPPFLAGS"`
+     CPPFLAGS=`echo $CPPFLAGS | tr ' ' '\n' | uniq | grep -v NONE | tr '\n' ' '`
+     CFLAGS=${CFLAGS--O}
+-    LDFLAGS=`eval eval eval eval eval echo "-L$libdir -L$prefix/lib ${LDFLAGS--O}"`
++    LDFLAGS=`eval eval eval eval eval echo "${LDFLAGS--O}"`
+     LDFLAGS=`echo $LDFLAGS | tr ' ' '\n' | uniq | grep -v NONE | tr '\n' ' '`
+     LIBS="$GRLIBS $X_PRE_LIBS $LIBS $X_EXTRA_LIBS"
+ 
+--- a/libast.m4
++++ b/libast.m4
+@@ -398,10 +398,10 @@ dnl#
+ dnl# LibAST macro for flag post-processing
+ dnl#
+ AC_DEFUN([AST_FLAGS], [
+-    CPPFLAGS=`eval eval eval eval eval echo "-I$includedir -I$prefix/include $CPPFLAGS"`
++    CPPFLAGS=`eval eval eval eval eval echo "$CPPFLAGS"`
+     CPPFLAGS=`echo $CPPFLAGS | tr ' ' '\n' | uniq | grep -v NONE | tr '\n' ' '`
+     CFLAGS=${CFLAGS--O}
+-    LDFLAGS=`eval eval eval eval eval echo "-L$libdir -L$prefix/lib ${LDFLAGS--O}"`
++    LDFLAGS=`eval eval eval eval eval echo "${LDFLAGS--O}"`
+     LDFLAGS=`echo $LDFLAGS | tr ' ' '\n' | uniq | grep -v NONE | tr '\n' ' '`
+     LIBS="$GRLIBS $X_PRE_LIBS $LIBS $X_EXTRA_LIBS"
+ ])

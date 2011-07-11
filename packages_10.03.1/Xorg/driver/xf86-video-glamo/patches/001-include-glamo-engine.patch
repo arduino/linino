@@ -1,0 +1,12 @@
+diff --git a/src/glamo-engine.h b/src/glamo-engine.h
+index 0664341..92a5ed5 100644
+--- a/src/glamo-engine.h
++++ b/src/glamo-engine.h
+@@ -23,6 +23,7 @@
+ 
+ #ifdef HAVE_ENGINE_IOCTLS
+ #include <linux/glamofb.h>
++#include <linux/glamo-engine.h>
+ 
+ #define GLAMOEngine glamo_engine
+ #define GLAMO_ENGINE_ALL __NUM_GLAMO_ENGINES

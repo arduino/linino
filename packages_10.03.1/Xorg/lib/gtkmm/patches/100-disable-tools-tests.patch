@@ -1,0 +1,88 @@
+--- a/configure
++++ b/configure
+@@ -22179,10 +22179,7 @@ fi
+ AUTOHEADER=':'
+ 
+ 
+-ac_config_files="$ac_config_files Makefile gdk/Makefile gdk/gdkmm-2.4.pc gdk/src/Makefile gdk/gdkmm/Makefile gdk/gdkmm/private/Makefile gtk/Makefile gtk/gtkmm-2.4.pc gtk/src/Makefile gtk/gtkmm/Makefile gtk/gtkmm/private/Makefile tools/Makefile tools/m4/Makefile tools/extra_defs_gen/Makefile"
+-
+-
+-ac_config_files="$ac_config_files tests/Makefile tests/child_widget/Makefile tests/child_widget2/Makefile tests/child_widget_managed/Makefile tests/refcount_dialog/Makefile tests/dialog/Makefile tests/dialog_deletethis/Makefile tests/delete_cpp_child/Makefile tests/main_with_options/Makefile tests/menu_destruction/Makefile tests/property_notification/Makefile tests/scrolledwindow/Makefile tests/wrap_existing/Makefile"
++ac_config_files="$ac_config_files Makefile gdk/Makefile gdk/gdkmm-2.4.pc gdk/src/Makefile gdk/gdkmm/Makefile gdk/gdkmm/private/Makefile gtk/Makefile gtk/gtkmm-2.4.pc gtk/src/Makefile gtk/gtkmm/Makefile gtk/gtkmm/private/Makefile"
+ 
+ 
+ ac_config_files="$ac_config_files scripts/Makefile"
+@@ -22870,22 +22867,6 @@ do
+     "gtk/src/Makefile") CONFIG_FILES="$CONFIG_FILES gtk/src/Makefile" ;;
+     "gtk/gtkmm/Makefile") CONFIG_FILES="$CONFIG_FILES gtk/gtkmm/Makefile" ;;
+     "gtk/gtkmm/private/Makefile") CONFIG_FILES="$CONFIG_FILES gtk/gtkmm/private/Makefile" ;;
+-    "tools/Makefile") CONFIG_FILES="$CONFIG_FILES tools/Makefile" ;;
+-    "tools/m4/Makefile") CONFIG_FILES="$CONFIG_FILES tools/m4/Makefile" ;;
+-    "tools/extra_defs_gen/Makefile") CONFIG_FILES="$CONFIG_FILES tools/extra_defs_gen/Makefile" ;;
+-    "tests/Makefile") CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
+-    "tests/child_widget/Makefile") CONFIG_FILES="$CONFIG_FILES tests/child_widget/Makefile" ;;
+-    "tests/child_widget2/Makefile") CONFIG_FILES="$CONFIG_FILES tests/child_widget2/Makefile" ;;
+-    "tests/child_widget_managed/Makefile") CONFIG_FILES="$CONFIG_FILES tests/child_widget_managed/Makefile" ;;
+-    "tests/refcount_dialog/Makefile") CONFIG_FILES="$CONFIG_FILES tests/refcount_dialog/Makefile" ;;
+-    "tests/dialog/Makefile") CONFIG_FILES="$CONFIG_FILES tests/dialog/Makefile" ;;
+-    "tests/dialog_deletethis/Makefile") CONFIG_FILES="$CONFIG_FILES tests/dialog_deletethis/Makefile" ;;
+-    "tests/delete_cpp_child/Makefile") CONFIG_FILES="$CONFIG_FILES tests/delete_cpp_child/Makefile" ;;
+-    "tests/main_with_options/Makefile") CONFIG_FILES="$CONFIG_FILES tests/main_with_options/Makefile" ;;
+-    "tests/menu_destruction/Makefile") CONFIG_FILES="$CONFIG_FILES tests/menu_destruction/Makefile" ;;
+-    "tests/property_notification/Makefile") CONFIG_FILES="$CONFIG_FILES tests/property_notification/Makefile" ;;
+-    "tests/scrolledwindow/Makefile") CONFIG_FILES="$CONFIG_FILES tests/scrolledwindow/Makefile" ;;
+-    "tests/wrap_existing/Makefile") CONFIG_FILES="$CONFIG_FILES tests/wrap_existing/Makefile" ;;
+     "scripts/Makefile") CONFIG_FILES="$CONFIG_FILES scripts/Makefile" ;;
+     "MSVC_Net2005/Makefile") CONFIG_FILES="$CONFIG_FILES MSVC_Net2005/Makefile" ;;
+     "MSVC_Net2005/gendef/Makefile") CONFIG_FILES="$CONFIG_FILES MSVC_Net2005/gendef/Makefile" ;;
+--- a/configure.in
++++ b/configure.in
+@@ -405,26 +405,6 @@ AC_CONFIG_FILES([
+     gtk/src/Makefile
+     gtk/gtkmm/Makefile
+       gtk/gtkmm/private/Makefile
+-
+-  tools/Makefile
+-    tools/m4/Makefile
+-    tools/extra_defs_gen/Makefile
+-])
+-
+-AC_CONFIG_FILES([
+-  tests/Makefile
+-    tests/child_widget/Makefile
+-    tests/child_widget2/Makefile
+-    tests/child_widget_managed/Makefile
+-    tests/refcount_dialog/Makefile
+-    tests/dialog/Makefile
+-    tests/dialog_deletethis/Makefile
+-    tests/delete_cpp_child/Makefile
+-    tests/main_with_options/Makefile
+-    tests/menu_destruction/Makefile
+-    tests/property_notification/Makefile
+-    tests/scrolledwindow/Makefile
+-    tests/wrap_existing/Makefile
+ ])
+ 
+ AC_CONFIG_FILES([
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -6,7 +6,7 @@ else
+   ATK_SUBDIR=
+ endif
+ 
+-SUBDIRS		= tools $(ATK_SUBDIR) gdk gtk @DEMO_SUBDIR@ @DOCS_SUBDIR@ tests MSVC_Net2005 MSVC_Net2008 win32_installer
++SUBDIRS		= $(ATK_SUBDIR) gdk gtk @DEMO_SUBDIR@ @DOCS_SUBDIR@ MSVC_Net2005 MSVC_Net2008 win32_installer
+ DIST_SUBDIRS	= $(SUBDIRS) scripts
+ 
+ EXTRA_DIST	= build_shared/Makefile_build.am_fragment \
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -213,7 +213,7 @@ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ @GTKMM_ATKMM_ENABLED_FALSE@ATK_SUBDIR = 
+ @GTKMM_ATKMM_ENABLED_TRUE@ATK_SUBDIR = atk
+-SUBDIRS = tools $(ATK_SUBDIR) gdk gtk @DEMO_SUBDIR@ @DOCS_SUBDIR@ tests MSVC_Net2005 MSVC_Net2008 win32_installer
++SUBDIRS = $(ATK_SUBDIR) gdk gtk @DEMO_SUBDIR@ @DOCS_SUBDIR@ MSVC_Net2005 MSVC_Net2008 win32_installer
+ DIST_SUBDIRS = $(SUBDIRS) scripts
+ EXTRA_DIST = build_shared/Makefile_build.am_fragment \
+ 		  build_shared/Makefile_build_gensrc.am_fragment \

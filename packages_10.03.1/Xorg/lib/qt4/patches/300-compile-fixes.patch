@@ -1,0 +1,14 @@
+---
+ src/corelib/animation/qvariantanimation.h |    1 +
+ 1 file changed, 1 insertion(+)
+
+--- qt-everywhere-opensource-src-4.7.0-beta2.orig/src/corelib/animation/qvariantanimation.h
++++ qt-everywhere-opensource-src-4.7.0-beta2/src/corelib/animation/qvariantanimation.h
+@@ -117,6 +117,7 @@ private:
+ };
+ 
+ template <typename T>
++static inline __attribute__((__always_inline__))
+ void qRegisterAnimationInterpolator(QVariant (*func)(const T &from, const T &to, qreal progress)) {
+     QVariantAnimation::registerInterpolator(reinterpret_cast<QVariantAnimation::Interpolator>(func), qMetaTypeId<T>());
+ }

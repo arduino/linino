@@ -1,0 +1,14 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2009 OpenWrt.org
+
+START=60
+
+start() {
+	/usr/sbin/mDNSResponderPosix -b -f /etc/mdns.conf
+	/usr/sbin/mdnsd
+}
+
+stop() {
+	killall mDNSResponderPosix 2> /dev/null
+	killall mdnsd 2> /dev/null
+}

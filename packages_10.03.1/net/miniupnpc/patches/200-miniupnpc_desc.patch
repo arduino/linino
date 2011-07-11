@@ -1,0 +1,11 @@
+--- a/upnpcommands.c
++++ b/upnpcommands.c
+@@ -351,7 +351,7 @@ UPNP_AddPortMapping(const char * control
+ 	AddPortMappingArgs[5].elt = "NewEnabled";
+ 	AddPortMappingArgs[5].val = "1";
+ 	AddPortMappingArgs[6].elt = "NewPortMappingDescription";
+-	AddPortMappingArgs[6].val = desc?desc:"libminiupnpc";
++	AddPortMappingArgs[6].val = desc?desc:"miniupnpc";
+ 	AddPortMappingArgs[7].elt = "NewLeaseDuration";
+ 	AddPortMappingArgs[7].val = "0";
+ 	if(simpleUPnPcommand(-1, controlURL, servicetype, "AddPortMapping", AddPortMappingArgs, buffer, &bufsize) < 0) {

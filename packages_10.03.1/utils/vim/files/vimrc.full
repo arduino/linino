@@ -1,0 +1,24 @@
+set showcmd  " Show (partial) command in status line.
+set showmatch  " Show matching brackets.
+set ignorecase  " Do case insensitive matching
+set incsearch  " Incremental search
+set autowrite  " Automatically save before commands like :next and :make
+set nocompatible  " Use Vim defaults instead of 100% vi compatibility
+set backspace=indent,eol,start  " more powerful backspacing
+set autoindent  " always set autoindenting on
+set linebreak  " Don't wrap words by default
+set textwidth=0  " Don't wrap lines by default
+set ruler  " show the cursor position all the time
+if filereadable(expand("$VIMRUNTIME/syntax/synload.vim"))
+  syntax on
+endif
+if has("syntax") && &term =~ "xterm"
+  set t_Co=8
+  if has("terminfo")
+    set t_Sf=<Esc>[3%p1%dm
+    set t_Sb=<Esc>[4%p1%dm
+  else
+    set t_Sf=<Esc>[3%dm
+    set t_Sb=<Esc>[4%dm
+  endif
+endif

@@ -1,0 +1,11 @@
+--- a/scanner.l
++++ b/scanner.l
+@@ -21,6 +21,8 @@
+ 
+ extern char *conf_file;
+ 
++int yywrap(void) { return 1; }
++
+ int num_lines = 1;
+ %}
+ 

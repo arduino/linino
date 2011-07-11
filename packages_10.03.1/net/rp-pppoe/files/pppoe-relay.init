@@ -1,0 +1,15 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=50
+
+DEFAULT=/etc/default/pppoe-relay
+
+start() {
+	[ -f $DEFAULT ] && . $DEFAULT
+	pppoe-relay $OPTIONS
+}
+
+stop() {
+	killall pppoe-relay
+}
+

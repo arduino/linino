@@ -1,0 +1,13 @@
+Index: debootstrap-1.0.30/usr/share/debootstrap/functions
+===================================================================
+--- debootstrap-1.0.30.orig/usr/share/debootstrap/functions	2011-04-28 15:29:13.595340023 +0200
++++ debootstrap-1.0.30/usr/share/debootstrap/functions	2011-04-28 15:29:23.658843887 +0200
+@@ -800,8 +800,6 @@
+ 
+ 	if [ -n "$EXTRACTOR_OVERRIDE" ]; then
+ 		extractor="$EXTRACTOR_OVERRIDE"
+-	elif type dpkg-deb >/dev/null 2>&1; then
+-		extractor="dpkg-deb"
+ 	else
+ 		extractor="ar"
+ 	fi

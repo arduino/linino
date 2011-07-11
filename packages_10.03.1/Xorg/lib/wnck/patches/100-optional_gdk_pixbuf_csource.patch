@@ -1,0 +1,65 @@
+--- a/configure
++++ b/configure
+@@ -26634,7 +26634,7 @@
+ done
+ IFS=$as_save_IFS
+ 
+-  test -z "$ac_cv_path_GDK_PIXBUF_CSOURCE" && ac_cv_path_GDK_PIXBUF_CSOURCE="no"
++  test -z "$ac_cv_path_GDK_PIXBUF_CSOURCE" && ac_cv_path_GDK_PIXBUF_CSOURCE=""
+   ;;
+ esac
+ fi
+@@ -26649,14 +26649,6 @@
+ 
+ 
+ 
+-if test x"$GDK_PIXBUF_CSOURCE" = xno; then
+-  { { $as_echo "$as_me:$LINENO: error: gdk-pixbuf-csource executable not found in your path - should be installed with GTK" >&5
+-$as_echo "$as_me: error: gdk-pixbuf-csource executable not found in your path - should be installed with GTK" >&2;}
+-   { (exit 1); exit 1; }; }
+-fi
+-
+-
+-
+ ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
+ 
+ ##################################################
+--- a/configure.in
++++ b/configure.in
+@@ -128,11 +128,7 @@
+ GLIB_GENMARSHAL=`$PKG_CONFIG --variable=glib_genmarshal glib-2.0`  
+ AC_SUBST(GLIB_GENMARSHAL)
+ 
+-AC_PATH_PROG(GDK_PIXBUF_CSOURCE, gdk-pixbuf-csource, no)
+-
+-if test x"$GDK_PIXBUF_CSOURCE" = xno; then
+-  AC_MSG_ERROR([gdk-pixbuf-csource executable not found in your path - should be installed with GTK])
+-fi
++AC_PATH_PROG(GDK_PIXBUF_CSOURCE, gdk-pixbuf-csource)
+ 
+ AC_SUBST(GDK_PIXBUF_CSOURCE)
+ 
+--- a/libwnck/Makefile.am
++++ b/libwnck/Makefile.am
+@@ -163,7 +163,8 @@
+ 	$(wnck_built_cfiles)
+ 
+ inlinepixbufs.h: $(IMAGES)
+-	$(GDK_PIXBUF_CSOURCE) --raw --build-list $(VARIABLES) >$(srcdir)/inlinepixbufs.h
++	$(if $(GDK_PIXBUF_CSOURCE),$(GDK_PIXBUF_CSOURCE) --raw --build-list $(VARIABLES) >$(srcdir)/inlinepixbufs.h)
++	touch $@
+ 
+ $(OBJECTS): inlinepixbufs.h
+ 
+--- a/libwnck/Makefile.in
++++ b/libwnck/Makefile.in
+@@ -826,7 +826,8 @@
+ 	&& rm -f new-wnck-enum-types.c
+ 
+ inlinepixbufs.h: $(IMAGES)
+-	$(GDK_PIXBUF_CSOURCE) --raw --build-list $(VARIABLES) >$(srcdir)/inlinepixbufs.h
++	$(if $(GDK_PIXBUF_CSOURCE),$(GDK_PIXBUF_CSOURCE) --raw --build-list $(VARIABLES) >$(srcdir)/inlinepixbufs.h)
++	touch $@
+ 
+ $(OBJECTS): inlinepixbufs.h
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.

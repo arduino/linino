@@ -1,0 +1,24 @@
+---
+ src/omapfb-driver.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+--- xf86-video-omapfb-20100810.orig/src/omapfb-driver.c
++++ xf86-video-omapfb-20100810/src/omapfb-driver.c
+@@ -182,7 +182,7 @@ OMAPFBProbe(DriverPtr drv, int flags)
+ 		return FALSE;
+ 
+ /* FIXME: We don't really want to do it like this... */
+-#define DEFAULT_DEVICE "/dev/fb"
++#define DEFAULT_DEVICE "/dev/fb0"
+ 
+ 	for (i = 0; i < numDevSections; i++) {
+ 		int fd;
+@@ -831,7 +831,7 @@ static XF86ModuleVersionInfo OMAPFBVersR
+ 	MODINFOSTRING1,
+ 	MODINFOSTRING2,
+ 	XORG_VERSION_CURRENT,
+-	PACKAGE_VERSION_MAJOR, PACKAGE_VERSION_MINOR, PACKAGE_VERSION_PATCHLEVEL,
++	99, 99, 99,
+ 	ABI_CLASS_VIDEODRV,
+ 	ABI_VIDEODRV_VERSION,
+ 	NULL,

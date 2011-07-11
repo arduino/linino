@@ -1,0 +1,10 @@
+#!/bin/sh
+
+. /usr/lib/ddns/dynamic_dns_functions.sh
+
+if [ "$INTERFACE" = "wan" ] && [ "$ACTION" = "ifup" ]
+then
+	start_daemon_for_all_ddns_sections
+fi
+
+

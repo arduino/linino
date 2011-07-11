@@ -1,0 +1,22 @@
+--- a/configure
++++ b/configure
+@@ -23906,7 +23906,7 @@ else
+ 
+         mkdir conftest.d
+         if test "$cross_compiling" = yes; then
+-  dps_cv_symlink_open_buf=3
++  dps_cv_symlink_open_bug=3
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+--- a/libast.m4
++++ b/libast.m4
+@@ -573,7 +573,7 @@ int main(void)
+                 dps_cv_symlink_open_bug=1
+             fi
+         ],
+-        dps_cv_symlink_open_buf=3)
++        dps_cv_symlink_open_bug=3)
+         rm -rf conftest.d
+     ])
+     case "$dps_cv_symlink_open_bug" in

@@ -1,0 +1,143 @@
+diff --git a/modules/im/ximcp/Makefile.in b/modules/im/ximcp/Makefile.in
+index 905d526..6027e58 100644
+--- a/modules/im/ximcp/Makefile.in
++++ b/modules/im/ximcp/Makefile.in
+@@ -96,7 +96,7 @@ ximcp_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(ximcp_la_LDFLAGS) $(LDFLAGS) -o $@
+ @XLIB_LOADABLE_I18N_TRUE@am_ximcp_la_rpath = -rpath $(commonlibdir)
+-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include/X11
++DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include -I$(top_builddir)/include/X11
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+ am__mv = mv -f
+diff --git a/modules/lc/Utf8/Makefile.in b/modules/lc/Utf8/Makefile.in
+index 4078c1c..e7e52fa 100644
+--- a/modules/lc/Utf8/Makefile.in
++++ b/modules/lc/Utf8/Makefile.in
+@@ -88,7 +88,7 @@ xlcUTF8Load_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+ 	$@
+ @XLIB_LOADABLE_I18N_TRUE@am_xlcUTF8Load_la_rpath = -rpath \
+ @XLIB_LOADABLE_I18N_TRUE@	$(commonlibdir)
+-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include/X11
++DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include -I$(top_builddir)/include/X11
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+ am__mv = mv -f
+diff --git a/modules/lc/def/Makefile.in b/modules/lc/def/Makefile.in
+index b37cec6..89ce832 100644
+--- a/modules/lc/def/Makefile.in
++++ b/modules/lc/def/Makefile.in
+@@ -86,7 +86,7 @@ xlcDef_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(xlcDef_la_LDFLAGS) $(LDFLAGS) -o $@
+ @XLIB_LOADABLE_I18N_TRUE@am_xlcDef_la_rpath = -rpath $(commonlibdir)
+-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include/X11
++DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include -I$(top_builddir)/include/X11
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+ am__mv = mv -f
+diff --git a/modules/lc/gen/Makefile.in b/modules/lc/gen/Makefile.in
+index 6e2e522..e832723 100644
+--- a/modules/lc/gen/Makefile.in
++++ b/modules/lc/gen/Makefile.in
+@@ -86,7 +86,7 @@ xlibi18n_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(xlibi18n_la_LDFLAGS) $(LDFLAGS) -o $@
+ @XLIB_LOADABLE_I18N_TRUE@am_xlibi18n_la_rpath = -rpath $(commonlibdir)
+-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include/X11
++DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include -I$(top_builddir)/include/X11
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+ am__mv = mv -f
+diff --git a/modules/lc/xlocale/Makefile.in b/modules/lc/xlocale/Makefile.in
+index 7c947ee..b68b06e 100644
+--- a/modules/lc/xlocale/Makefile.in
++++ b/modules/lc/xlocale/Makefile.in
+@@ -86,7 +86,7 @@ xlocale_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(xlocale_la_LDFLAGS) $(LDFLAGS) -o $@
+ @XLIB_LOADABLE_I18N_TRUE@am_xlocale_la_rpath = -rpath $(commonlibdir)
+-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include/X11
++DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include -I$(top_builddir)/include/X11
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+ am__mv = mv -f
+diff --git a/modules/om/generic/Makefile.in b/modules/om/generic/Makefile.in
+index e39802b..0979207 100644
+--- a/modules/om/generic/Makefile.in
++++ b/modules/om/generic/Makefile.in
+@@ -89,7 +89,7 @@ xomGeneric_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ 	$(xomGeneric_la_LDFLAGS) $(LDFLAGS) -o $@
+ @XLIB_LOADABLE_I18N_TRUE@am_xomGeneric_la_rpath = -rpath \
+ @XLIB_LOADABLE_I18N_TRUE@	$(commonlibdir)
+-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include/X11
++DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include -I$(top_builddir)/include/X11
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+ am__mv = mv -f
+diff --git a/src/util/Makefile.in b/src/util/Makefile.in
+index 65c181e..bfa7c05 100644
+--- a/src/util/Makefile.in
++++ b/src/util/Makefile.in
+@@ -59,7 +59,7 @@ am__v_lt_0 = --silent
+ makekeys_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(makekeys_CFLAGS) \
+ 	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include/X11
++DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include -I$(top_builddir)/include/X11
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+ am__mv = mv -f
+diff --git a/src/xcms/Makefile.in b/src/xcms/Makefile.in
+index 6573196..a140221 100644
+--- a/src/xcms/Makefile.in
++++ b/src/xcms/Makefile.in
+@@ -65,7 +65,7 @@ libxcms_la_OBJECTS = $(am_libxcms_la_OBJECTS)
+ AM_V_lt = $(am__v_lt_$(V))
+ am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
+ am__v_lt_0 = --silent
+-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include/X11
++DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include -I$(top_builddir)/include/X11
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+ am__mv = mv -f
+diff --git a/src/xkb/Makefile.in b/src/xkb/Makefile.in
+index 0e52692..43a9660 100644
+--- a/src/xkb/Makefile.in
++++ b/src/xkb/Makefile.in
+@@ -57,7 +57,7 @@ libxkb_la_OBJECTS = $(am_libxkb_la_OBJECTS)
+ AM_V_lt = $(am__v_lt_$(V))
+ am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
+ am__v_lt_0 = --silent
+-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include/X11
++DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include -I$(top_builddir)/include/X11
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+ am__mv = mv -f
+diff --git a/src/xlibi18n/Makefile.in b/src/xlibi18n/Makefile.in
+index 50ac253..6c44c48 100644
+--- a/src/xlibi18n/Makefile.in
++++ b/src/xlibi18n/Makefile.in
+@@ -85,7 +85,7 @@ libi18n_la_OBJECTS = $(am_libi18n_la_OBJECTS)
+ AM_V_lt = $(am__v_lt_$(V))
+ am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
+ am__v_lt_0 = --silent
+-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include/X11
++DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src -I$(top_builddir)/include -I$(top_builddir)/include/X11
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+ am__mv = mv -f
+diff --git a/src/Makefile.in b/src/Makefile.in
+index a79daa8..ca7f366 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -218,7 +218,7 @@ libX11_la_OBJECTS = $(am_libX11_la_OBJECTS)
+ libX11_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+ 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(libX11_la_LDFLAGS) $(LDFLAGS) -o $@
+-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include/X11
++DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include/ -I$(top_builddir)/include/X11
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+ am__mv = mv -f

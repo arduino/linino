@@ -1,0 +1,22 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -37,7 +37,7 @@ EXTRA_DIST = CHANGES COPYING maketgz Mak
+ bin_SCRIPTS = curl-config
+ 
+ SUBDIRS = lib src
+-DIST_SUBDIRS = $(SUBDIRS) tests include packages docs
++DIST_SUBDIRS = $(SUBDIRS) include packages
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = libcurl.pc
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -312,7 +312,7 @@ EXTRA_DIST = CHANGES COPYING maketgz Mak
+ 
+ bin_SCRIPTS = curl-config
+ SUBDIRS = lib src
+-DIST_SUBDIRS = $(SUBDIRS) tests include packages docs
++DIST_SUBDIRS = $(SUBDIRS) include packages 
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = libcurl.pc
+ all: all-recursive

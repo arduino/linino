@@ -1,0 +1,58 @@
+commit 69fcc78ea931f8a84497f4ee9021f4493f45a778
+Author: Lars-Peter Clausen <lars@metafoo.de>
+Date:   Sun Feb 1 16:44:24 2009 +0100
+
+    Put #ifdef DEBUG around debug output.
+
+Index: xf86-input-tslib-0.0.6/src/tslib.c
+===================================================================
+--- xf86-input-tslib-0.0.6.orig/src/tslib.c	2009-10-19 17:07:18.000000000 +0200
++++ xf86-input-tslib-0.0.6/src/tslib.c	2011-01-27 22:36:41.772784019 +0100
+@@ -89,21 +89,27 @@
+ static void
+ BellProc(int percent, DeviceIntPtr pDev, pointer ctrl, int unused)
+ {
++#ifdef DEBUG
+ 	ErrorF("%s\n", __FUNCTION__);
++#endif
+ 	return;
+ }
+ 
+ static void
+ KeyControlProc(DeviceIntPtr pDev, KeybdCtrl * ctrl)
+ {
++#ifdef DEBUG
+ 	ErrorF("%s\n", __FUNCTION__);
++#endif
+ 	return;
+ }
+ 
+ static void
+ PointerControlProc(DeviceIntPtr dev, PtrCtrl * ctrl)
+ {
++#ifdef DEBUG
+ 	ErrorF("%s\n", __FUNCTION__);
++#endif
+ 	return;
+ }
+ 
+@@ -327,7 +333,9 @@
+ 	int i, axiswidth, axisheight;
+ 	struct ts_priv *priv;
+ 
++#ifdef DEBUG
+ 	ErrorF("%s\n", __FUNCTION__);
++#endif
+ 	pInfo = device->public.devicePrivate;
+ 	priv = pInfo->private;
+ 
+@@ -431,7 +439,9 @@
+ xf86TslibUninit(InputDriverPtr drv, InputInfoPtr pInfo, int flags)
+ {
+ 	struct ts_priv *priv = (struct ts_priv *)(pInfo->private);
++#ifdef DEBUG
+ 	ErrorF("%s\n", __FUNCTION__);
++#endif
+ 	xf86TslibControlProc(pInfo->dev, DEVICE_OFF);
+ 	ts_close(priv->ts);
+ 	xfree(pInfo->private);

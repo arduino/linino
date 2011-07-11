@@ -1,0 +1,16 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2009-2010 OpenWrt.org
+
+START=60
+
+start() {
+	mkdir -p /var/cache/dmapd/
+	mkdir -p /var/run/dmapd/
+	mkdir -p /var/lock/subsys/
+
+	DMAPD_DB_MODULE=bdb /usr/sbin/dmapd --vips-disc-threshold 64k
+}
+
+stop() {
+	killall dmapd 2> /dev/null
+}

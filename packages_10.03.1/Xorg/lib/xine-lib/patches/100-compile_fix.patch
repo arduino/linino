@@ -1,0 +1,13 @@
+Index: xine-lib-1.1.1/src/libw32dll/wine/Makefile.in
+===================================================================
+--- xine-lib-1.1.1.orig/src/libw32dll/wine/Makefile.in	2008-01-14 21:28:08.000000000 +0100
++++ xine-lib-1.1.1/src/libw32dll/wine/Makefile.in	2008-01-14 21:28:20.000000000 +0100
+@@ -74,7 +74,7 @@
+ DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+-LTCCASCOMPILE = $(LIBTOOL) --mode=compile $(CCAS) $(AM_CCASFLAGS) \
++LTCCASCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CCAS) $(AM_CCASFLAGS) \
+ 	$(CCASFLAGS)
+ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+ 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)

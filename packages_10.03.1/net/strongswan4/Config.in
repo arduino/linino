@@ -1,0 +1,52 @@
+menu "Configuration"
+	depends on PACKAGE_strongswan4
+
+# --enable-cisco-quirks
+config STRONGSWAN4_ENABLE_CISCO_QUIRKS
+	bool
+	prompt "Enable support of Cisco VPN client"
+	default y
+
+# --enable-nat-transport
+config STRONGSWAN4_ENABLE_NAT_TRANSPORT
+	bool
+	prompt "Enable NAT traversal with IPsec transport mode in"
+	default y
+
+# --enable-vendor-id
+config STRONGSWAN4_ENABLE_VENDOR_ID
+	bool
+	prompt "Enable sending of the strongSwan vendor ID"
+	default y
+
+# --enable-xauth-vid
+config STRONGSWAN4_ENABLE_XAUTH_VID
+	bool
+	prompt "Enable sending of the XAUTH vendor ID"
+	default y
+
+# --with-random-device
+config STRONGSWAN4_DEVICE_RANDOM
+	string
+	prompt "Set the device to read real random data from"
+	default "/dev/random"
+
+# --with-urandom-device
+config STRONGSWAN4_DEVICE_URANDOM
+	string
+	prompt "Set the device to read pseudo random data from"
+	default "/dev/urandom"
+
+# --with-routing-table
+config STRONGSWAN4_ROUTING_TABLE
+	string
+	prompt "Set the IPsec routing table ID"
+	default "220"
+
+#  --with-routing-table-prio
+config STRONGSWAN4_ROUTING_TABLE_PRIO
+	string
+	prompt "Set the IPsec routing table priority"
+	default "220"
+
+endmenu

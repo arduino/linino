@@ -1,0 +1,12 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2007 OpenWrt.org
+START=93
+
+start() {
+    /usr/sbin/cmdpad --quiet > /dev/null &
+}
+							
+stop() {
+    killall cmdpad
+}
+											

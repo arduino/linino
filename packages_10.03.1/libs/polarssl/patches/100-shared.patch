@@ -1,0 +1,11 @@
+--- a/library/Makefile
++++ b/library/Makefile
+@@ -29,7 +29,7 @@ OBJS=	aes.o		arc4.o		base64.o	\
+ 
+ .SILENT:
+ 
+-all: static
++all: static shared
+ 
+ static: libpolarssl.a
+ 

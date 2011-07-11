@@ -1,0 +1,13 @@
+Index: xine-ui-0.99.4/configure
+===================================================================
+--- xine-ui-0.99.4.orig/configure	2010-11-04 18:11:02.449000004 +0100
++++ xine-ui-0.99.4/configure	2010-11-04 18:11:08.594998937 +0100
+@@ -31102,8 +31102,6 @@
+     echo "your compiler to <xine-devel@lists.sf.net>"\!
+     echo
+     echo "*********************************************************************"
+-    echo "(sleeping one minute so you can read this...)"
+-    sleep 60
+ 
+     CFLAGS="-O3 $CFLAGS"
+     DEBUG_CFLAGS="-O $DEBUG_CFLAGS"

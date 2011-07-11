@@ -1,0 +1,12 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2007 OpenWrt.org
+
+START=99
+FILE=/etc/pango/pango.modules
+
+start() {
+    if [ ! -e ${FILE} ]; then
+        mkdir -p $(dirname ${FILE})
+        pango-querymodules > ${FILE}
+    fi
+}

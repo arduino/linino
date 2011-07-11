@@ -1,0 +1,40 @@
+--- a/lib/ssluse.c
++++ b/lib/ssluse.c
+@@ -1454,10 +1454,12 @@ ossl_connect_step1(struct connectdata *c
+     req_method = TLSv1_client_method();
+     use_sni(TRUE);
+     break;
++#ifndef OPENSSL_NO_SSL2
+   case CURL_SSLVERSION_SSLv2:
+     req_method = SSLv2_client_method();
+     use_sni(FALSE);
+     break;
++#endif
+   case CURL_SSLVERSION_SSLv3:
+     req_method = SSLv3_client_method();
+     use_sni(FALSE);
+--- a/src/main.c
++++ b/src/main.c
+@@ -888,7 +888,9 @@ static void help(void)
+     " -y/--speed-time    Time needed to trig speed-limit abort. Defaults to 30",
+     "    --ssl           Try SSL/TLS (FTP, IMAP, POP3, SMTP)",
+     "    --ssl-reqd      Require SSL/TLS (FTP, IMAP, POP3, SMTP)",
++#ifndef OPENSSL_NO_SSL2
+     " -2/--sslv2         Use SSLv2 (SSL)",
++#endif
+     " -3/--sslv3         Use SSLv3 (SSL)",
+     "    --stderr <file> Where to redirect stderr. - means stdout",
+     "    --tcp-nodelay   Use the TCP_NODELAY option",
+@@ -2470,10 +2472,12 @@ static ParameterError getparameter(char
+       /* TLS version 1 */
+       config->ssl_version = CURL_SSLVERSION_TLSv1;
+       break;
++#ifndef OPENSSL_NO_SSL2
+     case '2':
+       /* SSL version 2 */
+       config->ssl_version = CURL_SSLVERSION_SSLv2;
+       break;
++#endif
+     case '3':
+       /* SSL version 3 */
+       config->ssl_version = CURL_SSLVERSION_SSLv3;

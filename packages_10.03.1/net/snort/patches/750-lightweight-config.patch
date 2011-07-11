@@ -1,0 +1,266 @@
+--- a/etc/snort.conf
++++ b/etc/snort.conf
+@@ -6,6 +6,7 @@
+ #
+ ###################################################
+ # This file contains a sample snort configuration. 
++# Most preprocessors and rules were disabled to save memory.
+ # You can take the following steps to create your own custom configuration:
+ #
+ #  1) Set the variables for your network
+@@ -43,10 +44,10 @@
+ # or you can specify the variable to be any IP address
+ # like this:
+ 
+-var HOME_NET any
++var HOME_NET 192.168.1.0/24
+ 
+ # Set up the external network addresses as well.  A good start may be "any"
+-var EXTERNAL_NET any
++var EXTERNAL_NET !$HOME_NET
+ 
+ # Configure your server lists.  This allows snort to only look for attacks to
+ # systems that have a service up.  Why look for HTTP attacks if you are not
+@@ -107,8 +108,8 @@ var AIM_SERVERS [64.12.24.0/23,64.12.28.
+ # Path to your rules files (this can be a relative path)
+ # Note for Windows users:  You are advised to make this an absolute path,
+ # such as:  c:\snort\rules
+-var RULE_PATH ../rules
+-var PREPROC_RULE_PATH ../preproc_rules
++var RULE_PATH /etc/snort/rules
++var PREPROC_RULE_PATH /etc/snort/preproc_rules
+ 
+ # Configure the snort decoder
+ # ============================
+@@ -307,11 +308,11 @@ preprocessor stream5_tcp: policy first, 
+ # lots of options available here. See doc/README.http_inspect.
+ # unicode.map should be wherever your snort.conf lives, or given
+ # a full path to where snort can find it.
+-preprocessor http_inspect: global \
+-    iis_unicode_map unicode.map 1252 
++#preprocessor http_inspect: global \
++#    iis_unicode_map unicode.map 1252
+ 
+-preprocessor http_inspect_server: server default \
+-    profile all ports { 80 8080 8180 } oversize_dir_length 500
++#preprocessor http_inspect_server: server default \
++#    profile all ports { 80 8080 8180 } oversize_dir_length 500
+ 
+ #
+ #  Example unique server configuration
+@@ -345,7 +346,7 @@ preprocessor http_inspect_server: server
+ # no_alert_incomplete - don't alert when a single segment
+ #                       exceeds the current packet size
+ 
+-preprocessor rpc_decode: 111 32771
++#preprocessor rpc_decode: 111 32771
+ 
+ # bo: Back Orifice detector
+ # -------------------------
+@@ -368,7 +369,7 @@ preprocessor rpc_decode: 111 32771
+ #   3       Back Orifice Server Traffic Detected
+ #   4       Back Orifice Snort Buffer Attack
+ 
+-preprocessor bo
++#preprocessor bo
+ 
+ # ftp_telnet: FTP & Telnet normalizer, protocol enforcement and buff overflow
+ # ---------------------------------------------------------------------------
+@@ -391,32 +392,32 @@ preprocessor bo
+ # or use commandline option
+ # --dynamic-preprocessor-lib <full path to libsf_ftptelnet_preproc.so>
+ 
+-preprocessor ftp_telnet: global \
+-   encrypted_traffic yes \
+-   inspection_type stateful
+-
+-preprocessor ftp_telnet_protocol: telnet \
+-   normalize \
+-   ayt_attack_thresh 200
++#preprocessor ftp_telnet: global \
++#   encrypted_traffic yes \
++#   inspection_type stateful
++
++#preprocessor ftp_telnet_protocol: telnet \
++#   normalize \
++#   ayt_attack_thresh 200
+ 
+ # This is consistent with the FTP rules as of 18 Sept 2004.
+ # CWD can have param length of 200
+ # MODE has an additional mode of Z (compressed)
+ # Check for string formats in USER & PASS commands
+ # Check nDTM commands that set modification time on the file.
+-preprocessor ftp_telnet_protocol: ftp server default \
+-   def_max_param_len 100 \
+-   alt_max_param_len 200 { CWD } \
+-   cmd_validity MODE < char ASBCZ > \
+-   cmd_validity MDTM < [ date nnnnnnnnnnnnnn[.n[n[n]]] ] string > \
+-   chk_str_fmt { USER PASS RNFR RNTO SITE MKD } \
+-   telnet_cmds yes \
+-   data_chan
+-
+-preprocessor ftp_telnet_protocol: ftp client default \
+-   max_resp_len 256 \
+-   bounce yes \
+-   telnet_cmds yes
++#preprocessor ftp_telnet_protocol: ftp server default \
++#   def_max_param_len 100 \
++#   alt_max_param_len 200 { CWD } \
++#   cmd_validity MODE < char ASBCZ > \
++#   cmd_validity MDTM < [ date nnnnnnnnnnnnnn[.n[n[n]]] ] string > \
++#   chk_str_fmt { USER PASS RNFR RNTO SITE MKD } \
++#   telnet_cmds yes \
++#   data_chan
++
++#preprocessor ftp_telnet_protocol: ftp client default \
++#   max_resp_len 256 \
++#   bounce yes \
++#   telnet_cmds yes
+ 
+ # smtp: SMTP normalizer, protocol enforcement and buffer overflow
+ # ---------------------------------------------------------------------------
+@@ -434,15 +435,15 @@ preprocessor ftp_telnet_protocol: ftp cl
+ # or use commandline option
+ # --dynamic-preprocessor-lib <full path to libsf_smtp_preproc.so>
+ 
+-preprocessor smtp: \
+-  ports { 25 587 691 } \
+-  inspection_type stateful \
+-  normalize cmds \
+-  normalize_cmds { EXPN VRFY RCPT } \
+-  alt_max_command_line_len 260 { MAIL } \
+-  alt_max_command_line_len 300 { RCPT } \
+-  alt_max_command_line_len 500 { HELP HELO ETRN } \
+-  alt_max_command_line_len 255 { EXPN VRFY }
++#preprocessor smtp: \
++#  ports { 25 587 691 } \
++#  inspection_type stateful \
++#  normalize cmds \
++#  normalize_cmds { EXPN VRFY RCPT } \
++#  alt_max_command_line_len 260 { MAIL } \
++#  alt_max_command_line_len 300 { RCPT } \
++#  alt_max_command_line_len 500 { HELP HELO ETRN } \
++#  alt_max_command_line_len 255 { EXPN VRFY }
+ 
+ # sfPortscan
+ # ----------
+@@ -498,9 +499,9 @@ preprocessor smtp: \
+ #       false alerts, especially under heavy load with dropped packets; which is why
+ #       the option is off by default.
+ #
+-preprocessor sfportscan: proto  { all } \
+-                         memcap { 10000000 } \
+-                         sense_level { low }
++#preprocessor sfportscan: proto  { all } \
++#                         memcap { 10000000 } \
++#                         sense_level { low }
+ 
+ # arpspoof
+ #----------------------------------------
+@@ -623,9 +624,9 @@ preprocessor dcerpc2_server: default
+ # or use commandline option
+ # --dynamic-preprocessor-lib <full path to libsf_dns_preproc.so>
+ 
+-preprocessor dns: \
+-    ports { 53 } \
+-    enable_rdata_overflow
++#preprocessor dns: \
++#    ports { 53 } \
++#    enable_rdata_overflow
+ 
+ # SSL
+ #----------------------------------------
+@@ -649,7 +650,7 @@ preprocessor dns: \
+ #   To add reassembly on port 443 to Stream5, use 'port both 443' in the 
+ #   Stream5 configuration.
+ 
+-preprocessor ssl: noinspect_encrypted, trustservers
++#preprocessor ssl: noinspect_encrypted, trustservers
+ 
+ 
+ ####################################################################
+@@ -811,41 +812,41 @@ include $RULE_PATH/local.rules
+ include $RULE_PATH/bad-traffic.rules
+ include $RULE_PATH/exploit.rules
+ include $RULE_PATH/scan.rules
+-include $RULE_PATH/finger.rules
+-include $RULE_PATH/ftp.rules
+-include $RULE_PATH/telnet.rules
+-include $RULE_PATH/rpc.rules
+-include $RULE_PATH/rservices.rules
+-include $RULE_PATH/dos.rules
+-include $RULE_PATH/ddos.rules
+-include $RULE_PATH/dns.rules
+-include $RULE_PATH/tftp.rules
+-
+-include $RULE_PATH/web-cgi.rules
+-include $RULE_PATH/web-coldfusion.rules
+-include $RULE_PATH/web-iis.rules
+-include $RULE_PATH/web-frontpage.rules
+-include $RULE_PATH/web-misc.rules
+-include $RULE_PATH/web-client.rules
+-include $RULE_PATH/web-php.rules
+-
+-include $RULE_PATH/sql.rules
+-include $RULE_PATH/x11.rules
+-include $RULE_PATH/icmp.rules
+-include $RULE_PATH/netbios.rules
+-include $RULE_PATH/misc.rules
+-include $RULE_PATH/attack-responses.rules
+-include $RULE_PATH/oracle.rules
+-include $RULE_PATH/mysql.rules
+-include $RULE_PATH/snmp.rules
+-
+-include $RULE_PATH/smtp.rules
+-include $RULE_PATH/imap.rules
+-include $RULE_PATH/pop2.rules
+-include $RULE_PATH/pop3.rules
++#include $RULE_PATH/finger.rules
++#include $RULE_PATH/ftp.rules
++#include $RULE_PATH/telnet.rules
++#include $RULE_PATH/rpc.rules
++#include $RULE_PATH/rservices.rules
++#include $RULE_PATH/dos.rules
++#include $RULE_PATH/ddos.rules
++#include $RULE_PATH/dns.rules
++#include $RULE_PATH/tftp.rules
++
++#include $RULE_PATH/web-cgi.rules
++#include $RULE_PATH/web-coldfusion.rules
++#include $RULE_PATH/web-iis.rules
++#include $RULE_PATH/web-frontpage.rules
++#include $RULE_PATH/web-misc.rules
++#include $RULE_PATH/web-client.rules
++#include $RULE_PATH/web-php.rules
++
++#include $RULE_PATH/sql.rules
++#include $RULE_PATH/x11.rules
++#include $RULE_PATH/icmp.rules
++#include $RULE_PATH/netbios.rules
++#include $RULE_PATH/misc.rules
++#include $RULE_PATH/attack-responses.rules
++#include $RULE_PATH/oracle.rules
++#include $RULE_PATH/mysql.rules
++#include $RULE_PATH/snmp.rules
++
++#include $RULE_PATH/smtp.rules
++#include $RULE_PATH/imap.rules
++#include $RULE_PATH/pop2.rules
++#include $RULE_PATH/pop3.rules
+ 
+-include $RULE_PATH/nntp.rules
+-include $RULE_PATH/other-ids.rules
++#include $RULE_PATH/nntp.rules
++#include $RULE_PATH/other-ids.rules
+ # include $RULE_PATH/web-attacks.rules
+ # include $RULE_PATH/backdoor.rules
+ # include $RULE_PATH/shellcode.rules
+@@ -859,7 +860,7 @@ include $RULE_PATH/other-ids.rules
+ # include $RULE_PATH/p2p.rules
+ # include $RULE_PATH/spyware-put.rules
+ # include $RULE_PATH/specific-threats.rules
+-include $RULE_PATH/experimental.rules
++#include $RULE_PATH/experimental.rules
+ 
+ # include $PREPROC_RULE_PATH/preprocessor.rules
+ # include $PREPROC_RULE_PATH/decoder.rules

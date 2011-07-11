@@ -1,0 +1,64 @@
+# xorg configuration
+
+Section "ServerLayout"
+	Identifier     "Default Layout"
+	Screen      0  "Screen0" 0 0
+	InputDevice    "Mouse0" "CorePointer"
+	InputDevice    "Mouse1" "CorePointer"
+	InputDevice    "Keyboard0" "CoreKeyboard"
+EndSection
+
+Section "Module"
+	Load  "dbe"
+	Load  "extmod"
+	Load  "fbdevhw"
+#	Load  "glx"
+	Load  "record"
+	Load  "freetype"
+	Load  "type1"
+EndSection
+
+Section "InputDevice"
+	Identifier  "Keyboard0"
+	Driver      "keyboard"
+EndSection
+
+Section "InputDevice"
+	Identifier  "Mouse0"
+	Driver      "mouse"
+	Option	    "Protocol" "PS/2"
+	Option	    "Device" "/dev/psaux"
+EndSection
+
+Section "InputDevice"
+	Identifier  "Mouse1"
+	Driver      "mouse"
+	Option	    "Protocol" "IMPS/2"
+	Option	    "Device" "/dev/input/mice"
+EndSection
+
+Section "Monitor"
+	Identifier   "Monitor0"
+	VendorName   "Monitor Vendor"
+	ModelName    "OWRT"
+	Option	     "dpms"
+EndSection
+
+Section "Device"
+	Identifier  "Videocard0"
+	Driver      "vesa"
+	VendorName  "Videocard vendor"
+	BoardName   "Vesa driver"
+EndSection
+
+Section "Device"
+	Identifier  "FBDev"
+	Driver      "fbdev"
+EndSection
+
+Section "Screen"
+    Identifier	"Screen0"
+    Device	"Videocard0"
+    Monitor	"Monitor0"
+EndSection
+

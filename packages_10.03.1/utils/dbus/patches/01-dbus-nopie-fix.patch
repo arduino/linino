@@ -1,0 +1,22 @@
+--- a/configure
++++ b/configure
+@@ -20927,19 +20927,6 @@ if test "x$GCC" = "xyes"; then
+      ;;
+   esac
+ 
+-  case " $CFLAGS " in
+-  *[\ \	]-fPIE[\ \	]*) ;;
+-  *) if cc_supports_flag -fPIE; then
+-        PIE_CFLAGS="-fPIE"
+-        if ld_supports_flag -z,relro; then
+-           PIE_LDFLAGS="-pie -Wl,-z,relro"
+-        else
+-           PIE_LDFLAGS="-pie"
+-        fi
+-     fi
+-     ;;
+-  esac
+-
+   ### Disabled warnings, and compiler flag overrides
+ 
+   # Let's just ignore unused for now

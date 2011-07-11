@@ -1,0 +1,11 @@
+--- a/configure
++++ b/configure
+@@ -20787,7 +20787,7 @@ fi
+ 
+ 
+ CFLAGS="$CFLAGS $XORG_CFLAGS "' -I$(top_srcdir)/src'
+-INCLUDES="$XORG_INCS -I${sdkdir} "'-I$(top_srcdir)/src -I$(prefix)/include'
++INCLUDES="$XORG_INCS -I${sdkdir} "'-I$(top_srcdir)/src'
+ 
+ 
+ 

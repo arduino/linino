@@ -1,0 +1,16 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=50
+STOP=50
+
+start() {
+	/usr/sbin/portmap
+	/usr/sbin/rpc.mountd -r
+	/usr/sbin/rpc.nfsd
+}
+
+stop() {
+	killall rpc.nfsd
+	killall rpc.mountd
+	killall portmap
+}
