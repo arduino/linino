@@ -30,6 +30,8 @@ define Package/pulseaudio
   CATEGORY:=Sound
   DEPENDS:=+libspeexdsp +libgdbm +libsndfile +libsamplerate \
 	+libltdl +libpthread +librt +alsa-lib \
+	@!UCLIBC_VERSION_0_9_30_1 @!UCLIBC_VERSION_0_9_30_2 \
+	@!UCLIBC_VERSION_0_9_30_3 \
 	$(ICONV_DEPENDS) $(INTL_DEPENDS)
   TITLE:=Network sound server
   URL:=http://www.pulseaudio.org
