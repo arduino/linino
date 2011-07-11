@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.weechat.org/files/src
 PKG_MD5SUM:=0d2a089bfbfa550e0c65618a171fb3c4
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -49,7 +49,7 @@ CMAKE_OPTIONS+= \
 	-DENABLE_LUA=OFF
 
 TARGET_LDFLAGS += \
-	-L$(ICONV_PREFIX)/lib \
+	-L$(ICONV_PREFIX)/lib -ldl \
 	-Wl,-rpath-link,$(STAGING_DIR)/usr/lib
 
 define Package/weechat/install
