@@ -19,7 +19,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/restund
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libre
+  DEPENDS:=+libre @BROKEN
   TITLE:=libre stun server
   URL:=http://www.creytiv.com/
 endef
