@@ -1,7 +1,6 @@
-diff -urN totd-1.5.1/Makefile.in totd-1.5.1.new/Makefile.in
---- totd-1.5.1/Makefile.in	2005-01-31 12:55:14.000000000 +0100
-+++ totd-1.5.1.new/Makefile.in	2007-02-26 12:12:05.000000000 +0100
-@@ -19,7 +19,7 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -19,7 +19,7 @@ TOT_CONFIG_FILE=@sysconfdir@/totd.conf
  
  INSTALL = /usr/bin/install
  
