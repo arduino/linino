@@ -35,13 +35,12 @@
  
 -uudmap.h: generate_uudmap\$(EXE_EXT)
 -	\$(RUN) ./generate_uudmap\$(EXE_EXT) >uudmap.h
--
--generate_uudmap\$(EXE_EXT): generate_uudmap\$(OBJ_EXT)
--	\$(CC) -o generate_uudmap \$(LDFLAGS) generate_uudmap\$(OBJ_EXT) \$(libs)
 +uudmap.h: generate_uudmap
 +	chmod a+x generate_uudmap
 +	\$(RUN) ./generate_uudmap >uudmap.h
-+
+ 
+-generate_uudmap\$(EXE_EXT): generate_uudmap\$(OBJ_EXT)
+-	\$(CC) -o generate_uudmap \$(LDFLAGS) generate_uudmap\$(OBJ_EXT) \$(libs)
 +generate_uudmap:
 +	cp ../generate_uudmap .
 +	touch generate_uudmap
