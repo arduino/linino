@@ -1,0 +1,50 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -299,7 +299,7 @@ endif
+ ##
+ fs_encode_SOURCES = src/fs_encode.c
+ fs_encode_CFLAGS = $(AM_CFLAGS)
+-fs_encode_LDFLAGS = $(AM_LDFLAGS) $(CORE_LIBS)
++fs_encode_LDFLAGS = $(AM_LDFLAGS) -lpthread $(CORE_LIBS)
+ fs_encode_LDADD = libfreeswitch.la
+ 
+ ##
+@@ -307,7 +307,7 @@ fs_encode_LDADD = libfreeswitch.la
+ ##
+ tone2wav_SOURCES = src/tone2wav.c
+ tone2wav_CFLAGS  = $(AM_CFLAGS)
+-tone2wav_LDFLAGS = $(AM_LDFLAGS) $(CORE_LIBS)
++tone2wav_LDFLAGS = $(AM_LDFLAGS) -lpthread $(CORE_LIBS)
+ tone2wav_LDADD   = libfreeswitch.la
+ 
+ ##
+@@ -585,10 +585,13 @@ speex-reconf:
+ 
+ tiff-reconf:
+ 	cd libs/tiff-3.8.2 && autoreconf -fi
+-	cd libs/tiff-3.8.2 && sh ./configure.gnu
++	cd libs/tiff-3.8.2 && sh ./configure.gnu --host=$(HOST) --prefix=$(prefix)
+ 	cd libs/spandsp && autoreconf -fi
+-	cd libs/spandsp && sh ./configure.gnu
+-	make mod_voipcodecs-clean
++	cd libs/spandsp && sh ./configure.gnu --host=$(HOST) --prefix=$(prefix)
++	cd libs/tiff-3.8.2 && $(MAKE)
++
++spandsp-reconf: tiff-reconf
++	cd libs/spandsp && $(MAKE)
+ 
+ python-reconf:
+ 	rm -f src/mod/languages/mod_python/Makefile
+@@ -611,12 +614,6 @@ iks-reconf:
+ 	cd libs/iksemel && sh ./configure.gnu --prefix=$(prefix)
+ 	$(MAKE) mod_dingaling-clean
+ 
+-spandsp-reconf:
+-	cd libs/spandsp && $(MAKE) clean || echo
+-	cd libs/spandsp && autoreconf -fi
+-	cd libs/spandsp && sh ./configure.gnu --prefix=$(prefix)
+-	cd libs/spandsp && $(MAKE)
+-
+ sofia-reconf:
+ 	cd libs/sofia-sip && sh ./autogen.sh
+ 	cd libs/sofia-sip && $(MAKE) clean

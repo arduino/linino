@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -11,15 +11,35 @@ PKG_NAME:=freeswitch
 PKG_VERSION:=1.0.7
 PKG_RELEASE:=1
 
+#
+# PKG_REV contains FS git hash that can be updated from http://fisheye.freeswitch.org
+#
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_REV:=0128bce4ac222c6e0ee17ee9f89b63678ff8cf97
+PKG_REV:=ffac6a00e8481b85089eac6b7071d996fd12fc3f
 PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)_git-$(shell echo $(PKG_REV)|cut -b -9).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
+#
+# Set location of ptlib (Which needs to have been built already)
+#
+export PTLIBDIR=$(BUILD_DIR)/ptlib2
+export PTLIBPLUGINDIR=$(PTLIBDIR)/lib_linux_${ARCH}
+
+#
+# Needed by some modules
+#
+export HOST="$(GNU_TARGET_NAME)"
+export host="$(GNU_TARGET_NAME)"
+
+
+#PKG_REMOVE_FILES:=
 PKG_FIXUP:=libtool
+PKG_BUILD_PARALLEL:=1
+
+PKG_CONFIG_DEPENDS:=CONFIG_SOFIA_WITH_ODBC
 
 FS_MOD_AVAILABLE:= \
 	alsa \
@@ -60,32 +80,30 @@ FS_MOD_AVAILABLE:= \
 	fifo \
 	file-string \
 	flite \
+	fsk \
 	fsv \
 	g723-1 \
 	g729 \
+	gsmopen \
 	h26x \
 	h323 \
 	hash \
 	ilbc \
 	java \
+	json-cdr \
 	lcr \
-	ldap \
 	local-stream \
 	logfile \
 	loopback \
 	lua \
 	managed \
-	memcache \
 	mp4 \
 	native-file \
 	nibblebill \
-	opal \
 	openzap \
-	perl \
-	pocketsphinx \
+	opus \
 	portaudio \
 	portaudio-stream \
-	python \
 	radius-cdr \
 	rss \
 	rtmp \
@@ -101,12 +119,10 @@ FS_MOD_AVAILABLE:= \
 	say-th \
 	say-zh \
 	shell-stream \
-	shout \
 	silk \
 	siren \
 	skinny \
 	skypopen \
-	sangoma-codec \
 	snapshot \
 	snipe-hunt \
 	sndfile \
@@ -131,15 +147,15 @@ FS_MOD_AVAILABLE:= \
 	voicemail \
 	xml-cdr \
 	xml-curl \
-	xml-ldap \
 	xml-rpc \
 	yaml \
 
 PKG_CONFIG_DEPENDS:= \
 	$(patsubst %,CONFIG_PACKAGE_$(PKG_NAME)-mod-%,$(FS_MOD_AVAILABLE)) \
 
-include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/nls.mk
+
 
 define Package/$(PKG_NAME)/Default
   SECTION:=net
@@ -161,6 +177,19 @@ define Package/$(PKG_NAME)/description
   FreeSWITCH is an open source telephony platform designed to 
   facilitate the creation of voice and chat driven products scaling 
   from a soft-phone up to a soft-switch.  See http://wiki.$(PKG_NAME).org
+endef
+
+define Package/$(PKG_NAME)/config
+  menu "Enable with ODBC support (Requires unixodbc_svn)"
+    depends on PACKAGE_$(PKG_NAME)
+    config SOFIA_WITH_ODBC
+    bool "Compile mod_sofia with ODBC support (Requires unixodbc_svn)"
+    default n
+    select PACKAGE_$(PKG_NAME)-mod-sofia
+    select PACKAGE_unixodbc_svn
+    help
+            Compile mod_sofia with ODBC Support (Requires unixodbc_svn package).
+  endmenu
 endef
 
 define Package/$(PKG_NAME)-example-config
@@ -219,7 +248,6 @@ $(call Package/$(PKG_NAME)/Default)
 		+$(PKG_NAME)-mod-local-stream \
 		+$(PKG_NAME)-mod-lua \
 		+$(PKG_NAME)-mod-native-file \
-		+$(PKG_NAME)-mod-siren \
 		+$(PKG_NAME)-mod-sndfile \
 		+$(PKG_NAME)-mod-sofia \
 		+$(PKG_NAME)-mod-spandsp \
@@ -274,11 +302,11 @@ endef
 define Download/files
  define Download/$(1)
   FILE:=$(2)
-  URL:=http://files.$(PKG_NAME).org/$(4)
+  URL:=$(if $(4),$(4),http://files.$(PKG_NAME).org)/$(5)
   MD5SUM:=$(3)
  endef
  define Prepare/$(1)
-  $(LN) $(DL_DIR)/$(2) $(PKG_BUILD_DIR)/$(5)
+  $(LN) $(DL_DIR)/$(2) $(PKG_BUILD_DIR)/$(6)
  endef
  $$(eval $$(call Download,$(1)))
 endef
@@ -286,24 +314,32 @@ endef
 MAKE_INSTALL_TARGETS:=install
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-celt),)
- $(eval $(call Download/files,celt,celt-0.10.0.tar.gz,a656f6176e9be84027c0e51ceedd710f,downloads/libs/,libs/))
+ $(eval $(call Download/files,celt,celt-0.10.0.tar.gz,a656f6176e9be84027c0e51ceedd710f,,downloads/libs/,libs/))
 endif
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-curl),)
- $(eval $(call Download/files,json-c,json-c-0.9.tar.gz,4653b3b9c568bb9c782178abfaac128d,downloads/libs/,libs/))
+ $(eval $(call Download/files,json-cdr,json-c-0.9.tar.gz,4653b3b9c568bb9c782178abfaac128d,,downloads/libs/,libs/))
+endif
+
+ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-event-zmq),)
+ $(eval $(call Download/files,event-zmq,zeromq-2.1.7.tar.gz,7d3120f8a8fb913a7e55c57c6eb024f3,http://download.zeromq.org,historic/,libs/))
 endif
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-flite),)
- $(eval $(call Download/files,flite,flite-1.3.99-latest.tar.gz,365b60881715c5e13c0d8bc37d9be6ff,downloads/libs/,libs/))
+ $(eval $(call Download/files,flite,flite-1.3.99-latest.tar.gz,365b60881715c5e13c0d8bc37d9be6ff,,downloads/libs/,libs/))
+endif
+
+ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-opus),)
+ $(eval $(call Download/files,opus,opus-0.9.0.tar.gz,8a729db587430392e64280a499e9d061,,downloads/libs/,libs/))
 endif
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en),)
- $(eval $(call Download/files,sounds-en,$(PKG_NAME)-sounds-en-us-callie-8000-1.0.16.tar.gz,bde0883eb75fe06f39bde11f50a1f858,,))
+ $(eval $(call Download/files,sounds-en,$(PKG_NAME)-sounds-en-us-callie-8000-1.0.16.tar.gz,bde0883eb75fe06f39bde11f50a1f858,,,))
 	MAKE_INSTALL_TARGETS+= sounds-install
 endif
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-moh),)
- $(eval $(call Download/files,sounds-moh,$(PKG_NAME)-sounds-music-8000-1.0.8.tar.gz,f63ef3cc3507af079ae5c7b8b8a01e42,,))
+ $(eval $(call Download/files,sounds-moh,$(PKG_NAME)-sounds-music-8000-1.0.8.tar.gz,f63ef3cc3507af079ae5c7b8b8a01e42,,,))
 	MAKE_INSTALL_TARGETS+= moh-install
 endif
 
@@ -319,25 +355,31 @@ ifneq ($(CONFIG_USE_EGLIBC),)
   endif
 endif
 
+
 FS_TARGET_CFLAGS:= ${TARGET_CFLAGS} -DLUA_USE_LINUX $(FPIC) -std=gnu99 -Wno-format
 FS_TARGET_CXXFLAGS:= ${TARGET_CXXFLAGS} -DLUA_USE_LINUX $(FPIC) -Wno-format
 FS_TARGET_CPPFLAGS:= -I. -I./lua ${TARGET_CPPFLAGS}
 
 
 CONFIGURE_ARGS+= \
+	--host=$(GNU_TARGET_NAME) \
+	--build=$(GNU_HOST_NAME) \
 	--prefix="/usr/share/$(PKG_NAME)" \
 	--bindir="/usr/bin" \
 	--libdir="/usr/lib" \
+	--srcdir="$(PKG_BUILD_DIR)" \
 	--sysconfdir="/etc/$(PKG_NAME)" \
 	--with-modinstdir="/usr/lib/$(PKG_NAME)" \
 	--enable-ipv6 \
 	--enable-optimization \
 	--with-random="/dev/urandom" \
+	--without-mysql \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-celt),--with-ogg="$(STAGING_DIR)/usr",--without-iogg) \
 	$(if ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-curl)|$(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-cdr)|$(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-curl)),--with-libcurl="$(STAGING_DIR)/usr",--without-libcurl) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-dingaling),--with-openssl="$(STAGING_DIR)/usr",--without-openssl) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-java),--with-java="$(STAGING_DIR)/usr",--without-java) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-spandsp),--enable-builtin-tiff,) \
+	$(if $(CONFIG_SOFIA_WITH_ODBC),--enable-core-odbc-support --with-odbc="$(STAGING_DIR)/usr",) \
 
 
 CONFIGURE_VARS+= \
@@ -346,11 +388,13 @@ CONFIGURE_VARS+= \
 	config_TARGET_CXX="${TARGET_CXX}" \
 	config_TARGET_CXXFLAGS="${FS_TARGET_CPPFLAGS} ${FS_TARGET_CXXFLAGS}" \
 	config_TARGET_CPPFLAGS="${FS_TARGET_CPPFLAGS}" \
-	config_BUILD_CC="${HOSTCC}" \
 	config_TARGET_READLINE_INC="${FS_TARGET_CPPFLAGS}" \
 	config_TARGET_READLINE_LIBS="${TARGET_LDFLAGS} -lreadline -lncurses" \
 	config_TARGET_LIBS="${TARGET_LDFLAGS} -lpthread" \
+	config_BUILD_CC="${HOSTCC}" \
+	config_BUILD_CFLAGS="${HOST_CFLAGS}" \
 	CC_FOR_BUILD="${HOSTCC}" \
+	LDFLAGS="$$$$LDFLAGS" \
 	LDFLAGS_FOR_BUILD="${HOST_LDFLAGS}" \
 	CC="${TARGET_CC}" \
 	CXX="${TARGET_CXX}" \
@@ -358,6 +402,10 @@ CONFIGURE_VARS+= \
 	CXXFLAGS="${FS_TARGET_CPPFLAGS} ${FS_TARGET_CXXFLAGS}" \
 	CPPFLAGS="${FS_TARGET_CPPFLAGS}" \
 	LDFLAGS="${TARGET_LDFLAGS} -Wl,-rpath-link=\"${STAGING_DIR}/usr/lib\"" \
+	PATH="${PATH}:${STAGING_DIR}" \
+	HOST_CC="/usr/bin/cc" \
+	HOST_CXX="/usr/bin/g++" \
+	CROSS_COMPILE="1" \
 	ac_cv_dev_urandom="yes" \
 	ac_cv_file_dbd_apr_dbd_mysql_c="no" \
 	ac_cv_file__dev_random="no" \
@@ -371,20 +419,23 @@ CONFIGURE_VARS+= \
 	apr_cv_tcp_nodelay_with_cork="yes" \
 	apr_cv_type_rwlock_t="yes" \
 	ac_cv_path_LIBGNUTLS_CONFIG="no" \
+	libzmq_cv_cxx_werror_flag="" \
 
 
 define Build/Prepare
+	(cd $(PKG_BUILD_DIR); [ -h noreg ] || touch noreg)
 	$(call Build/Prepare/Default)
 	$(call Prepare/celt)
+	$(call Prepare/event-zmq)
 	$(call Prepare/flite)
-	$(call Prepare/json-c)
+	$(call Prepare/json-cdr)
+	$(call Prepare/opus)
 	$(call Prepare/sounds-en)
 	$(call Prepare/sounds-moh)
-	(cd $(PKG_BUILD_DIR); [ -h noreg ] || touch noreg)	# Just to shut up Cluecon reg. msg.
-	(cd $(PKG_BUILD_DIR); $(AM_TOOL_PATHS) ./bootstrap.sh)
 endef
 
 define Build/Configure
+	(cd $(PKG_BUILD_DIR); $(AM_TOOL_PATHS) ./bootstrap.sh)
 	$(call Build/Configure/Default,)
 	$(foreach m,$(FS_MOD_AVAILABLE),
 		$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-$(m)),
@@ -403,7 +454,7 @@ define Build/Compile
 		CXX="$(TARGET_CXX)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
-		all $(MAKE_INSTALL_TARGETS)
+		spandsp-reconf all $(MAKE_INSTALL_TARGETS)
 	$(SED) 's|^\([ \t]*\)\(.*\)"mod_console"\(.*\)$$$$|\1<!-- \2"mod_console"\3 -->|' $(PKG_INSTALL_DIR)/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
 	$(SED) 's|^\([ \t]*\)<!-- *\(.*\)"mod_syslog"\(.*\) *-->\(.*\)$$$$|\1\2"mod_syslog"\3\4|' $(PKG_INSTALL_DIR)/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
 endef
@@ -437,6 +488,7 @@ endef
 
 define Package/$(PKG_NAME)-example-config/install
 	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/examples/conf
+	#$(INSTALL_DIR) $(1)/var/log/$(PKG_NAME)/xml_cdr
 	$(CP) $(PKG_INSTALL_DIR)/etc/$(PKG_NAME)/* $(1)/usr/share/$(PKG_NAME)/examples/conf/
 endef
 
@@ -487,7 +539,7 @@ define BuildPlugin
   define Package/$(PKG_NAME)-mod-$(1)
     $$(call Package/$(PKG_NAME)/Default)
     TITLE:= FS $(2) module
-    DEPENDS:= $(PKG_NAME) $$(foreach m,$(4),+$(PKG_NAME)-mod-$$m) $(5)
+    DEPENDS:= $(PKG_NAME) $(foreach m,$(4),+$(PKG_NAME)-mod-$(m)) $(5)
   endef
 
   define Package/$(PKG_NAME)-mod-$(1)/install
@@ -528,7 +580,7 @@ $(eval $(call BuildPackage,$(PKG_NAME)-example-config))
 $(eval $(call BuildPackage,$(PKG_NAME)-config-upstream-defaults))
 $(eval $(call BuildPackage,$(PKG_NAME)-config-minimal))
 
-#$(eval $(call BuildPlugin,Name,Title,Files,Depends))
+#$(eval $(call BuildPlugin,Name,Title,Inter Depends,Extra Depends))
 $(eval $(call BuildPlugin,alsa,Alsa endpoint,mod_alsa,,))
 $(eval $(call BuildPlugin,amr,GSM-AMR codec,mod_amr,,))
 $(eval $(call BuildPlugin,amrwb,GSM-AMRWB,mod_amrwb,,))
@@ -536,7 +588,7 @@ $(eval $(call BuildPlugin,avmd,Advanced Voice Mail Detection,mod_avmd,,))
 $(eval $(call BuildPlugin,bv,codec mod_bv,mod_bv,,))
 $(eval $(call BuildPlugin,callcenter,Call Center,mod_callcenter,,))
 $(eval $(call BuildPlugin,cdr-csv,CSV-CDR handler,mod_cdr_csv,,))
-$(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR handler,mod_cdr_pg_csv,,+postgresql))
+$(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR handler,mod_cdr_pg_csv,,+libpq))
 $(eval $(call BuildPlugin,cdr-sqlite,SQLite3 CDR handler,mod_cdr_sqlite,,+sqlite3))
 $(eval $(call BuildPlugin,celt,CELT ultra-low delay codec,mod_celt,,+libogg))
 $(eval $(call BuildPlugin,cepstral,Cepstral interface,mod_cepstral,,@BROKEN)) # needs <swift.h>
@@ -567,33 +619,31 @@ $(eval $(call BuildPlugin,expr,Expression evaluation,mod_expr,,))
 $(eval $(call BuildPlugin,fifo,FIFO,mod_fifo,,))
 $(eval $(call BuildPlugin,file-string,File streaming,mod_file_string,,@OBSOLETE)) # merged into dptools
 $(eval $(call BuildPlugin,flite,Festival TTS,mod_flite,,@(!(armeb||avr32)||BROKEN)))
+$(eval $(call BuildPlugin,fsk,Bell-202 1200-baud FSK decoder,mod_fsk,,))
 $(eval $(call BuildPlugin,fsv,Video,mod_fsv,,))
 $(eval $(call BuildPlugin,g723-1,G.723.1 codec,mod_g723_1,,))
 $(eval $(call BuildPlugin,g729,G.729 codec,mod_g729,,))
+$(eval $(call BuildPlugin,gsmopen,SMS (some hardware required),mod_gsmopen,spandsp,+alsa-lib +gsmlib))
 $(eval $(call BuildPlugin,h26x,H26X linear codec,mod_h26x,,))
 $(eval $(call BuildPlugin,h323,h323 endpoint,mod_h323,,@BROKEN)) # missing header files (other packages needed)
 $(eval $(call BuildPlugin,hash,API for manipulating a hash table,mod_hash,,))
 $(eval $(call BuildPlugin,ilbc,ILBC codec,mod_ilbc,,))
 $(eval $(call BuildPlugin,java,Java language interface,mod_java,,@BROKEN)) # needs java
+$(eval $(call BuildPlugin,json-cdr,JSon-CDR interface,mod_json_cdr,,))
 $(eval $(call BuildPlugin,lcr,Least Cost Routing,mod_lcr,,))
-$(eval $(call BuildPlugin,ldap,LDAP interface,mod_ldap,,@BROKEN)) # fails in openldap
 $(eval $(call BuildPlugin,local-stream,Local streaming,mod_local_stream,,))
 $(eval $(call BuildPlugin,logfile,File logger,mod_logfile,,))
 $(eval $(call BuildPlugin,loopback,Loopback endpoint,mod_loopback,,))
 $(eval $(call BuildPlugin,lua,Lua language interface,mod_lua,,+libstdcpp))
-$(eval $(call BuildPlugin,managed,language mod_managed,mod_managed,,@BROKEN)) # needs Mono
-$(eval $(call BuildPlugin,memcache,MemCached interface,mod_memcache,,@BROKEN)) # fails in libmemcached
-$(eval $(call BuildPlugin,mp4,MP4 File Format support for video apps,mod_mp4,,+libmp4v2))
+$(eval $(call BuildPlugin,managed,language mod_managed,mod_managed,,+glib2 @BROKEN)) # needs Mono
+$(eval $(call BuildPlugin,mp4,MP4 File Format support for video apps.,mod_mp4,,+libmp4v2))
 $(eval $(call BuildPlugin,native-file,Native files,mod_native_file,,))
 $(eval $(call BuildPlugin,nibblebill,Billing,mod_nibblebill,,))
-$(eval $(call BuildPlugin,opal,Multi-Protocol endpoint,mod_opal,,@BROKEN)) # needs Opal
 $(eval $(call BuildPlugin,openzap,Zaptel hardware interface,mod_openzap ozmod_analog ozmod_analog_em ozmod_isdn ozmod_skel ozmod_zt,,+libpcap))
-$(eval $(call BuildPlugin,perl,Perl language interface,mod_perl,,+perl @BROKEN)) # needs Perl
-$(eval $(call BuildPlugin,pocketsphinx,PocketSphinx SR,mod_pocketsphinx,,@BROKEN)) # fails in sphinxbase
+$(eval $(call BuildPlugin,opus,Opus CoDec,mod_opus,,))
 $(eval $(call BuildPlugin,portaudio,Local audio endpoint,mod_portaudio,,+alsa-lib))
-$(eval $(call BuildPlugin,portaudio-stream,format mod_portaudio_stream,mod_portaudio_stream,,))
-$(eval $(call BuildPlugin,python,Python language interface,mod_python,,@BROKEN)) # needs Python
-$(eval $(call BuildPlugin,radius-cdr,Radius-CDR interface,mod_radius_cdr,,@BROKEN)) # fails in freeradius-client
+$(eval $(call BuildPlugin,portaudio-stream,portaudio stream format,mod_portaudio_stream,,))
+$(eval $(call BuildPlugin,radius-cdr,Radius-CDR interface,mod_radius_cdr,,+freeradius2 @BROKEN)) # fails in freeradius-client
 $(eval $(call BuildPlugin,rss,RRS feeds via TTS,mod_rss,,))
 $(eval $(call BuildPlugin,rtmp,RTMP Protocol Handler,mod_rtmp,,))
 $(eval $(call BuildPlugin,say-de,German say,mod_say_de,,))
@@ -608,12 +658,10 @@ $(eval $(call BuildPlugin,say-ru,Russian say,mod_say_ru,,))
 $(eval $(call BuildPlugin,say-th,Thai say,mod_say_th,,))
 $(eval $(call BuildPlugin,say-zh,Chineese say,mod_say_zh,,))
 $(eval $(call BuildPlugin,shell-stream,Shell stream,mod_shell_stream,,))
-$(eval $(call BuildPlugin,shout,MP3 and Shoutcast stream,mod_shout,,@BROKEN)) # needs Ogg/Vorbis
 $(eval $(call BuildPlugin,silk,codec mod_silk,mod_silk,,))
 $(eval $(call BuildPlugin,siren,G.722.1 codec,mod_siren,,))
 $(eval $(call BuildPlugin,skinny,endpoint mod_skinny,mod_skinny,,))
 $(eval $(call BuildPlugin,skypopen,Skype compatible endpoint,mod_skypopen,,@BROKEN)) # needs <X11/Xlib.h>
-$(eval $(call BuildPlugin,sangoma-codec,codec sangoma-codec,mod_sangoma_codec,,@BROKEN)) # Untested
 $(eval $(call BuildPlugin,snapshot,application mod_snapshot,mod_snapshot,,))
 $(eval $(call BuildPlugin,sndfile,Multi-Format file transcoder,mod_sndfile,,))
 $(eval $(call BuildPlugin,snipe-hunt,application mod_snipe_hunt,mod_snipe_hunt,,))
@@ -638,7 +686,6 @@ $(eval $(call BuildPlugin,vmd,VoiceMail beep detection,mod_vmd,,))
 $(eval $(call BuildPlugin,voicemail,VoiceMail,mod_voicemail,,))
 $(eval $(call BuildPlugin,xml-cdr,XML-CDR handler,mod_xml_cdr,,+libcurl))
 $(eval $(call BuildPlugin,xml-curl,XML-Curl gateway,mod_xml_curl,,+libcurl))
-$(eval $(call BuildPlugin,xml-ldap,LDAP-XML gateway,mod_xml_ldap,,@BROKEN)) # fails in openldap
 $(eval $(call BuildPlugin,xml-rpc,XML-RPC interface,mod_xml_rpc,,))
 $(eval $(call BuildPlugin,yaml,YAML dialplans,mod_yaml,,))
 
