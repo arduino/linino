@@ -59,6 +59,10 @@ define Package/dejavu-fonts-ttf
   DEPENDS:=@DISPLAY_SUPPORT
 endef
 
+define Package/dejavu-fonts-ttf/install
+	true
+endef
+
 $(foreach file,$(FILES),$(eval $(call PartGen,$(file))))
 
 define Build/Compile
