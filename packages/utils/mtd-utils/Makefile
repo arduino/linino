@@ -71,7 +71,7 @@ FILES:= \
 	rfdformat
 
 define PartGen
-define Package/mtd-utils-$(1)
+define Package/mtd-utils-$(subst _,-,$(1))
   TITLE:=MTD $(1)
   URL:=http://www.linux-mtd.infradead.org/
   SECTION:=utils
@@ -91,6 +91,10 @@ define Package/mtd-utils/description
   Utilities for manipulating memory technology devices.
 endef
 
+define Package/mtd-utils/install
+	true
+endef
+
 $(foreach file,$(FILES),$(eval $(call PartGen,$(file))))
 
 MAKE_FLAGS += \
@@ -105,7 +109,7 @@ MAKE_FLAGS += \
 endif
 
 define PartInstall
-define Package/mtd-utils-$(1)/install
+define Package/mtd-utils-$(subst _,-,$(1))/install
 	$(INSTALL_DIR) \
 		$$(1)/usr/sbin
 
@@ -118,4 +122,4 @@ endef
 $(foreach file,$(FILES),$(eval $(call PartInstall,$(file))))
 
 $(eval $(call BuildPackage,mtd-utils))
-$(foreach file,$(FILES),$(eval $(call BuildPackage,mtd-utils-$(file))))
+$(foreach file,$(FILES),$(eval $(call BuildPackage,mtd-utils-$(subst _,-,$(file)))))
