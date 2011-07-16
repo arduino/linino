@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sslh
 PKG_VERSION:=1.7a
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://rutschle.net/tech/
@@ -20,8 +20,13 @@ include $(INCLUDE_DIR)/package.mk
 define Package/sslh
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Routing and Redirection
   TITLE:=SSL/SSH multiplexer
   URL:=http://rutschle.net/tech/sslh.shtml
+endef
+
+define Package/sslh/conffiles
+/etc/config/sslh
 endef
 
 define Build/Compile
