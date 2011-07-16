@@ -39,7 +39,7 @@ export host="$(GNU_TARGET_NAME)"
 PKG_FIXUP:=libtool
 PKG_BUILD_PARALLEL:=1
 
-PKG_CONFIG_DEPENDS:=CONFIG_SOFIA_WITH_ODBC
+PKG_CONFIG_DEPENDS:=CONFIG_FS_SOFIA_WITH_ODBC
 
 FS_MOD_AVAILABLE:= \
 	alsa \
@@ -180,16 +180,12 @@ define Package/$(PKG_NAME)/description
 endef
 
 define Package/$(PKG_NAME)/config
-  menu "Enable with ODBC support (Requires unixodbc_svn)"
+    config FS_SOFIA_WITH_ODBC
+    bool "Compile $(PKG_NAME)-mod-sofia with ODBC support (Requires unixodbc_svn)"
     depends on PACKAGE_$(PKG_NAME)
-    config SOFIA_WITH_ODBC
-    bool "Compile mod_sofia with ODBC support (Requires unixodbc_svn)"
     default n
-    select PACKAGE_$(PKG_NAME)-mod-sofia
-    select PACKAGE_unixodbc_svn
     help
-            Compile mod_sofia with ODBC Support (Requires unixodbc_svn package).
-  endmenu
+            Compile $(PKG_NAME)-mod-sofia with ODBC Support (Requires unixodbc_svn package).
 endef
 
 define Package/$(PKG_NAME)-example-config
@@ -379,7 +375,7 @@ CONFIGURE_ARGS+= \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-dingaling),--with-openssl="$(STAGING_DIR)/usr",--without-openssl) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-java),--with-java="$(STAGING_DIR)/usr",--without-java) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-spandsp),--enable-builtin-tiff,) \
-	$(if $(CONFIG_SOFIA_WITH_ODBC),--enable-core-odbc-support --with-odbc="$(STAGING_DIR)/usr",) \
+	$(if $(CONFIG_FS_SOFIA_WITH_ODBC),--enable-core-odbc-support --with-odbc="$(STAGING_DIR)/usr",) \
 
 
 CONFIGURE_VARS+= \
