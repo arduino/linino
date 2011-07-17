@@ -1,8 +1,6 @@
-diff --git a/configure b/configure
-index cc79209..5f22d58 100755
 --- a/configure
 +++ b/configure
-@@ -5019,9 +5019,6 @@ else
+@@ -5070,9 +5070,6 @@ else
  fi
  
  
