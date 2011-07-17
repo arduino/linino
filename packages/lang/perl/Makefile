@@ -33,7 +33,7 @@ define Package/perl/Default
   CATEGORY:=Languages
   TITLE:=The Perl intepreter
   URL:=http://www.perl.com/
-  DEPENDS:=+(USE_EGLIBC||USE_GLIBC):libbsd
+  DEPENDS:=+USE_EGLIBC:libbsd +USE_GLIBC:libbsd
 endef
 
 define Package/microperl
