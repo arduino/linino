@@ -166,7 +166,7 @@ endef
 define Package/asterisk18-mysql
 $(call Package/asterisk18/Default)
   TITLE:=MySQL support
-  DEPENDS:= asterisk18 +libmysqlclient
+  DEPENDS:= asterisk18 +PACKAGE_asterisk18-mysql:libmysqlclient
 endef
 
 define Package/asterisk18-mysql/description
