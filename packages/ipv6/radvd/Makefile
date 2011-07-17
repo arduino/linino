@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=radvd
-PKG_VERSION:=1.7
+PKG_VERSION:=1.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://v6web.litech.org/radvd/dist \
 		http://download.sourcemage.org/mirror
-PKG_MD5SUM:=5ec417bde33964a07231ddf6353177c8
+PKG_MD5SUM:=50b4cfbdfa04d629d80437fd1d9e2aef
 
 PKG_INSTALL:=1
 
@@ -36,9 +36,6 @@ CONFIGURE_ARGS += \
 	--with-configfile=/etc/radvd.conf \
 	--with-logfile=/var/log/radvd.log \
 	--with-pidfile=/var/run/radvd.pid
-
-MAKE_FLAGS += \
-	radvd_LDADD=""
 
 define Package/radvd/conffiles
 /etc/config/radvd
