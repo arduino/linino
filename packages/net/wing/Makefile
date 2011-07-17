@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,17 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wing
-PKG_VERSION:=20110329
-PKG_RELEASE:=2
-PKG_REV:=4ef2a352b29c26ce76d8b3d7c6897d301362a101
+PKG_VERSION:=20110709
+PKG_RELEASE:=1
+PKG_REV:=6aaea18b8e199781dc600681882cb2648f43ec38
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=git://github.com/rriggio/click.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 PKG_BUILD_DEPENDS:=wing/host
 
@@ -34,11 +32,11 @@ define Package/wing
 	URL:=http://www.wing-project.org/
 endef
 
-define Package/wing/Description 
+define Package/wing/Description
 	Wing is a wireless mesh routing software. The routing protocol
-	is derived from Roofnet. It supports multiple radio interfaces 
+	is derived from Roofnet. It supports multiple radio interfaces
 	and link quality routing using the ETX, ETT, or WCETT metric.
-endef 
+endef
 
 EXTRA_CFLAGS=-MD
 
@@ -46,16 +44,12 @@ CONFIGURE_ARGS += \
 	--enable-tools=host \
 	--enable-userlevel \
 	--enable-wifi \
-	--enable-wing \
-	--enable-diffserv \
 	--disable-linuxmodule \
 	--disable-dynamic-linking \
 
 HOST_CONFIGURE_ARGS += \
 	--enable-userlevel \
 	--enable-wifi \
-	--enable-diffserv \
-	--enable-wing \
 	--disable-linuxmodule \
 
 define Host/Compile
@@ -66,8 +60,9 @@ define Build/Compile
 	(cd $(PKG_BUILD_DIR)/userlevel; \
 		$(STAGING_DIR_HOST)/bin/click-mkmindriver -p $(PKG_NAME) -C $(STAGING_DIR_HOST) \
 		-f $(PKG_BUILD_DIR)/conf/wing/sample.click \
-		-A --all -E Discard -E Print -E PrintWifi -E Null \
+		-A --all -E Discard -E Print -E PrintWifi -E Strip -E Null \
 		-E InfiniteSource -E RatedSource -E EtherEncap -E UDPIPEncap \
+		-E RadiotapEncapHT -E SetTXRateHT \
 		-E WINGETTMetric -E WINGETXMetric -E WINGHopCountMetric \
 		-E ProbeTXRate -E MadwifiRate -E AutoRateFallback -E Minstrel \
 		-E FairBuffer -E DeAggregator -E DWRRSched -E WFQSched -E WRRSched; \
