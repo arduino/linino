@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2010 OpenWrt.org
+# Copyright (C) 2005-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libgcrypt
-PKG_VERSION:=1.4.5
+PKG_VERSION:=1.5.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=ftp://ftp.gnupg.org/gcrypt/libgcrypt/
-PKG_MD5SUM:=cc2017ad09b4543f8b3b5e9a53cfd89d
+PKG_SOURCE_URL:=ftp://ftp.gnupg.org/gcrypt/libgcrypt
+PKG_MD5SUM:=693f9c64d50c908bc4d6e01da3ff76d8
 
 PKG_FIXUP:=libtool no-autoreconf
 PKG_INSTALL:=1
@@ -30,13 +30,13 @@ define Package/libgcrypt
 endef
 
 define Package/libgcrypt/description
- This is a general purpose cryptographic library based on the code from 
- GnuPG. It provides functions for all cryptograhic building blocks: 
- symmetric ciphers (AES, DES, Arcfour), hash algorithms (MD5, SHA-1,
+ This is a general purpose cryptographic library based on the code from
+ GnuPG. It provides functions for all cryptograhic building blocks:
+ symmetric ciphers (AES, DES, Arcfour, CAST5), hash algorithms (MD5, SHA-1,
  RIPE-MD160, SHA-224/256, SHA-384/512), MACs (HMAC for all hash
  algorithms), public key algorithms (RSA, DSA), large integer functions,
  random numbers and a lot of supporting functions. Some algorithms have
- been disabled to reduce size (Blowfish, CAST5, Twofish, Serpent,
+ been disabled to reduce size (Blowfish, Twofish, Serpent,
  RC2, SEED, Camellia, CRC, MD4, TIGER-192, Whirlpool, ElGamal, ECC).
 endef
 
@@ -46,8 +46,8 @@ CONFIGURE_ARGS += \
 	--disable-asm \
 	--with-gpg-error-prefix="$(STAGING_DIR)/usr" \
 	--enable-digests="md5 rmd160 sha1 sha256 sha512" \
-	--enable-ciphers="arcfour des aes" \
-	--enable-pubkey-ciphers="rsa dsa" \
+	--enable-ciphers="arcfour des aes cast5" \
+	--enable-pubkey-ciphers="rsa dsa"
 
 TARGET_CFLAGS += $(FPIC)
 
