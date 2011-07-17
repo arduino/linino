@@ -62,6 +62,7 @@
 
 config service "myddns"
 	option enabled		"0"
+	option interface	"wan"
 
 	option service_name	"dyndns.org"
 	option domain		"mypersonaldomain.dyndns.org"
