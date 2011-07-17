@@ -9,6 +9,8 @@ export VERBOSE=1
 export SAVE_CONFIG=1
 export DELAY=
 export CONF_IMAGE=
+export HELP=0
+
 # parse options
 while [ -n "$1" ]; do 
 	case "$1" in
@@ -18,6 +20,7 @@ while [ -n "$1" ]; do
 		-q) export VERBOSE="$(($VERBOSE - 1))";;
 		-n) export SAVE_CONFIG=0;;
 		-f) export CONF_IMAGE="$2"; shift;;
+		-h|--help) export HELP=1; break;;
 		-*)
 			echo "Invalid option: $1"
 			exit 1
@@ -33,7 +36,7 @@ export CONF_TAR=/tmp/sysupgrade.tgz
 export ARGV="$*"
 export ARGC="$#"
 
-[ -z "$ARGV" ] && {
+[ -z "$ARGV" -o $HELP -gt 0 ] && {
 	cat <<EOF
 Usage: $0 [options] <image file or URL>
 
@@ -44,6 +47,7 @@ Options:
 	-n	     do not save configuration over reflash
 	-q           less verbose
 	-v           more verbose
+	-h / --help  display this help
 
 EOF
 	exit 1
