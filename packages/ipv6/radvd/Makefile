@@ -46,6 +46,8 @@ define Package/radvd/install
 	$(INSTALL_CONF) ./files/radvd.config $(1)/etc/config/radvd
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/radvd.init $(1)/etc/init.d/radvd
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
+	$(INSTALL_DATA) ./files/radvd.hotplug $(1)/etc/hotplug.d/iface/05-radvd
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/radvd $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/radvdump $(1)/usr/sbin/
