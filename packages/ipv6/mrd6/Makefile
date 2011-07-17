@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mrd6
 PKG_VERSION:=0.9.6
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/m/mrd6/
@@ -25,6 +25,7 @@ define Package/mrd6
   CATEGORY:=IPv6
   TITLE:=IPv6 multicast routing daemon
   URL:=http://fivebits.net/proj/mrd6
+  DEPENDS:=+libstdcpp
 endef
 
 define Package/mrd6/description
