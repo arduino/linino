@@ -6,13 +6,14 @@ RADVD_INTERFACE_STRING_OPTIONS='MaxRtrAdvInterval MinRtrAdvInterval MinDelayBetw
 RADVD_INTERFACE_BOOLEAN_OPTIONS='IgnoreIfMissing AdvSendAdvert UnicastOnly AdvManagedFlag AdvOtherConfigFlag AdvSourceLLAddress AdvHomeAgentFlag AdvHomeAgentInfo AdvMobRtrSupportFlag AdvIntervalOpt'
 
 RADVD_PREFIX_STRING_OPTIONS='AdvValidLifetime AdvPreferredLifetime'
-RADVD_PREFIX_BOOLEAN_OPTIONS='AdvOnLink AdvAutonomous AdvRouterAddr'
+RADVD_PREFIX_BOOLEAN_OPTIONS='AdvOnLink AdvAutonomous AdvRouterAddr DeprecatePrefix DecrementLifetimes'
 
 RADVD_ROUTE_STRING_OPTIONS='AdvRouteLifetime AdvRoutePreference'
+RADVD_ROUTE_BOOLEAN_OPTIONS='RemoveRoute'
 
-RADVD_RDNSS_STRING_OPTIONS='AdvRDNSSLifetime'
+RADVD_RDNSS_STRING_OPTIONS='AdvRDNSSLifetime FlushRDNSS'
 
-RADVD_DNSSL_STRING_OPTIONS='AdvDNSSLLifetime'
+RADVD_DNSSL_STRING_OPTIONS='AdvDNSSLLifetime FlushDNSSL'
 
 validate_varname() {
 	local varname=$1
@@ -222,6 +223,13 @@ radvd_write_prefix() {
 			fi
 		done
 
+		config_get value "$cfg" Base6Interface
+		if [ -n "$value" ]; then
+			if ifname=$(get_ifname "$value"); then
+				printf '\t\t%s %s;\n' "Base6Interface" "$ifname"
+			fi
+		fi
+
 		config_get value "$cfg" Base6to4Interface
 		if [ -n "$value" ]; then
 			if ifname=$(get_ifname "$value"); then
@@ -265,6 +273,17 @@ radvd_write_route() {
 			config_get value "$cfg" "$name"
 			validate_radvd_string "$value" || continue
 			printf '\t\t%s %s;\n' "$name" "$value"
+		done
+
+		for name in $RADVD_ROUTE_BOOLEAN_OPTIONS; do
+			config_get value "$cfg" "$name"
+			[ -z "$value" ] && continue
+			config_get_bool value "$cfg" "$name" 0
+			if [ "$value" -ne 0 ]; then 
+				printf '\t\t%s on;\n' "$name"
+			else
+				printf '\t\t%s off;\n' "$name"
+			fi
 		done
 
 		printf '\t};\n'

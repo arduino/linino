@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=radvd
 PKG_VERSION:=1.8
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://v6web.litech.org/radvd/dist \
@@ -20,16 +20,36 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/radvd
+define Package/radvd/Default
   SECTION:=ipv6
   CATEGORY:=IPv6
-  TITLE:=IPv6 Routing Advertisement Daemon
+  TITLE:=IPv6 Routing Advertisement
   URL:=http://v6web.litech.org/radvd/
   DEPENDS:=+kmod-ipv6
 endef
 
+define Package/radvd
+  $(call Package/radvd/Default)
+  TITLE+= Daemon
+endef
+
 define Package/radvd/description
-IPv6 Routing Advertisement Daemon.
+radvd is the router advertisement daemon for IPv6. It listens to router
+solicitations and sends router advertisements as described in "Neighbor
+Discovery for IP Version 6 (IPv6)" (RFC 4861).  With these advertisements hosts
+can automatically configure their addresses and some other parameters. They also
+can choose a default router based on these advertisements.
+endef
+
+define Package/radvdump
+  $(call Package/radvd/Default)
+  TITLE+= Dumper
+endef
+
+define Package/radvdump/description
+radvdump prints out the contents of incoming router advertisements sent by radvd
+or some other software implementing (parts of) "Neighbor Discovery for IP
+Version 6 (IPv6)" (RFC 4861).
 endef
 
 CONFIGURE_ARGS += \
@@ -50,7 +70,12 @@ define Package/radvd/install
 	$(INSTALL_DATA) ./files/radvd.hotplug $(1)/etc/hotplug.d/iface/05-radvd
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/radvd $(1)/usr/sbin/
+endef
+
+define Package/radvdump/install
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/radvdump $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,radvd))
+$(eval $(call BuildPackage,radvdump))
