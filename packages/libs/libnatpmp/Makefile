@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libnatpmp
-PKG_VERSION:=20110618
+PKG_VERSION:=20110715
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://miniupnp.free.fr/files
-PKG_MD5SUM:=6a5fdc8aa6c8602ea96567dabe51d6d3
+PKG_MD5SUM:=56b9f784836f0783bcc862486aa19491
 
 PKG_INSTALL:=1
 
@@ -59,7 +59,8 @@ endef
 
 MAKE_FLAGS += \
 	COPTS="$(TARGET_CFLAGS)" \
-	PREFIX="$(PKG_INSTALL_DIR)"
+	PREFIX="$(PKG_INSTALL_DIR)" \
+	OS="Linux"
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
