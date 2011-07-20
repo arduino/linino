@@ -1,0 +1,17 @@
+--- a/process.c
++++ b/process.c
+@@ -132,12 +132,12 @@ process(struct Interface *ifacel, unsign
+ 
+ 	if (icmph->icmp6_type == ND_ROUTER_SOLICIT)
+ 	{
+-		flog(LOG_WARNING, "received RS from %s", addr_str);
++		dlog(LOG_DEBUG, 2, "received RS from %s", addr_str);
+ 		process_rs(iface, msg, len, addr);
+ 	}
+ 	else if (icmph->icmp6_type == ND_ROUTER_ADVERT)
+ 	{
+-		flog(LOG_WARNING, "received RA from %s", addr_str);
++		dlog(LOG_DEBUG, 2, "received RA from %s", addr_str);
+ 		process_ra(iface, msg, len, addr);
+ 	}
+ }
