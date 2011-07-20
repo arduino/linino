@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libgphoto2
 PKG_VERSION:=2.4.9
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/gphoto
@@ -51,13 +51,21 @@ CONFIGURE_ARGS += \
 	--without-libintl-prefix \
 
 CONFIGURE_VARS += \
-	CPPFLAGS="$$$$CPPFLAGS -I$(ICONV_PREFIX)/include" \
-	LDFLAGS="$$$$LDFLAGS -L$(ICONV_PREFIX)/lib" \
+	CPPFLAGS="$$$$CPPFLAGS $(ICONV_CFLAGS)" \
+	LDFLAGS="$$$$LDFLAGS $(ICONV_LDFLAGS)" \
 	LIBEXIF_CFLAGS="$$$$CPPFLAGS" \
 	LIBEXIF_LIBS="$$$$LDFLAGS -lexif" \
 	LIBUSB_CFLAGS="$$$$CPPFLAGS" \
 	LIBUSB_LIBS="$$$$LDFLAGS -lusb" \
 	LIBS="-lltdl" \
+
+# If OpenWrt is using the iconv stub, we disable iconv support 
+# in libgphoto2 entirely since the stub lacks some essential
+# conversions like UCS-2 to UTF-8 which will let certain drivers
+# fail with "Failed to create iconv converter" .
+ifneq ($(ICONV_FULL),1)
+  CONFIGURE_VARS += am_cv_func_iconv=no am_cv_lib_iconv=no
+endif
 
 MAKE_FLAGS += \
 	LIBLTDL="" \
