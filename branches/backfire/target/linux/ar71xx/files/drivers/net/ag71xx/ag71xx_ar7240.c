@@ -57,7 +57,13 @@
 #define   AR7240_VTUDATA_MEMBER		BITS(0, 10)
 #define   AR7240_VTUDATA_VALID		BIT(11)
 
+#define AR7240_REG_ATU			0x50
+#define AR7240_ATU_FLUSH_ALL		0x1
+
 #define AR7240_REG_AT_CTRL		0x5c
+#define AR7240_AT_CTRL_AGE_TIME		BITS(0, 15)
+#define AR7240_AT_CTRL_AGE_EN		BIT(17)
+#define AR7240_AT_CTRL_LEARN_CHANGE	BIT(18)
 #define AR7240_AT_CTRL_ARP_EN		BIT(20)
 
 #define AR7240_REG_TAG_PRIORITY		0x70
@@ -412,6 +418,37 @@ static void ar7240sw_disable_port(struct ar7240sw *as, unsigned port)
 			   AR7240_PORT_CTRL_STATE_DISABLED);
 }
 
+static void ar7240sw_setup(struct ar7240sw *as)
+{
+	struct mii_bus *mii = as->mii_bus;
+
+	/* Enable CPU port, and disable mirror port */
+	ar7240sw_reg_write(mii, AR7240_REG_CPU_PORT,
+			   AR7240_CPU_PORT_EN |
+			   (15 << AR7240_MIRROR_PORT_S));
+
+	/* Setup TAG priority mapping */
+	ar7240sw_reg_write(mii, AR7240_REG_TAG_PRIORITY, 0xfa50);
+
+	/* Enable ARP frame acknowledge, aging, MAC replacing */
+	ar7240sw_reg_write(mii, AR7240_REG_AT_CTRL,
+		0x2b /* 5 min age time */ |
+		AR7240_AT_CTRL_AGE_EN |
+		AR7240_AT_CTRL_ARP_EN |
+		AR7240_AT_CTRL_LEARN_CHANGE);
+
+	/* Enable Broadcast frames transmitted to the CPU */
+	ar7240sw_reg_set(mii, AR7240_REG_FLOOD_MASK,
+			 AR7240_FLOOD_MASK_BROAD_TO_CPU);
+
+	/* setup MTU */
+	ar7240sw_reg_rmw(mii, AR7240_REG_GLOBAL_CTRL, AR7240_GLOBAL_CTRL_MTU_M,
+			 1536);
+
+	/* setup Service TAG */
+	ar7240sw_reg_rmw(mii, AR7240_REG_SERVICE_TAG, AR7240_SERVICE_TAG_M, 0);
+}
+
 static int ar7240sw_reset(struct ar7240sw *as)
 {
 	struct mii_bus *mii = as->mii_bus;
@@ -431,34 +468,9 @@ static int ar7240sw_reset(struct ar7240sw *as)
 
 	ret = ar7240sw_reg_wait(mii, AR7240_REG_MASK_CTRL,
 				AR7240_MASK_CTRL_SOFT_RESET, 0, 1000);
+
+	ar7240sw_setup(as);
 	return ret;
-}
-
-static void ar7240sw_setup(struct ar7240sw *as)
-{
-	struct mii_bus *mii = as->mii_bus;
-
-	/* Enable CPU port, and disable mirror port */
-	ar7240sw_reg_write(mii, AR7240_REG_CPU_PORT,
-			   AR7240_CPU_PORT_EN |
-			   (15 << AR7240_MIRROR_PORT_S));
-
-	/* Setup TAG priority mapping */
-	ar7240sw_reg_write(mii, AR7240_REG_TAG_PRIORITY, 0xfa50);
-
-	/* Enable ARP frame acknowledge */
-	ar7240sw_reg_set(mii, AR7240_REG_AT_CTRL, AR7240_AT_CTRL_ARP_EN);
-
-	/* Enable Broadcast frames transmitted to the CPU */
-	ar7240sw_reg_set(mii, AR7240_REG_FLOOD_MASK,
-			 AR7240_FLOOD_MASK_BROAD_TO_CPU);
-
-	/* setup MTU */
-	ar7240sw_reg_rmw(mii, AR7240_REG_GLOBAL_CTRL, AR7240_GLOBAL_CTRL_MTU_M,
-			 1536);
-
-	/* setup Service TAG */
-	ar7240sw_reg_rmw(mii, AR7240_REG_SERVICE_TAG, AR7240_SERVICE_TAG_M, 0);
 }
 
 static void ar7240sw_setup_port(struct ar7240sw *as, unsigned port, u8 portmask)
@@ -857,7 +869,6 @@ void ag71xx_ar7240_start(struct ag71xx *ag)
 	struct ar7240sw *as = ag->phy_priv;
 
 	ar7240sw_reset(as);
-	ar7240sw_setup(as);
 
 	ag->speed = SPEED_1000;
 	ag->duplex = 1;
