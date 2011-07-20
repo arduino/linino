@@ -28,7 +28,7 @@ endef
 
 define Package/mpdas/description
     mpdas is an AudioScrobbler client for MPD written in C++.
-    It supports the latest AudioScrobbler protocol (1.21).
+    It supports the latest AudioScrobbler protocol (2.0).
     In case of a downtime or connectivity problems, mpdas will 
     cache the played songs to ~/.mpdascache.
 endef
