@@ -200,7 +200,7 @@ endef
 
 define Package/freeradius2-mod-ldap
   $(call Package/freeradius2/Default)
-  DEPENDS:=freeradius2 +libopenldap
+  DEPENDS:=freeradius2 +CONFIG_PACKAGE_freeradius2-mod-ldap:libopenldap
   TITLE:=LDAP module
 endef
 
