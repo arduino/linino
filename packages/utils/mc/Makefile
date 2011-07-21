@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mc
 PKG_VERSION:=4.7.5.2
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.midnight-commander.org/downloads/
@@ -45,7 +45,8 @@ CONFIGURE_ARGS += \
 	--without-edit \
 	--without-gpm-mouse \
 	--without-subshell \
-	--without-x
+	--without-x \
+	ac_cv_search_addwstr=no
 
 AM_HOST=$(firstword $(wildcard $(STAGING_DIR_HOST)/share/automake-*))
 
