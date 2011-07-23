@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=mtd-utils
 PKG_REV:=a2d010f8fca904fffa3c6e5a5d148cc96a37a08a
 PKG_VERSION:=20090227
-PKG_RELEASE:=1
+PKG_RELEASE:=1.1
 PKG_INSTALL:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -22,53 +22,57 @@ PKG_SOURCE_VERSION:=$(PKG_REV)
 include $(INCLUDE_DIR)/package.mk
 
 FILES:= \
-	ubiupdatevol \
-	flash_otp_info \
-	nandtest \
-	ubimkvol \
-	ubigen \
-	serve_image \
-	recv_image \
-	ubinfo \
-	ubirename \
-	mkpfi \
-	nandwrite \
-	flash_eraseall \
-	mkbootenv \
-	ftl_format \
-	nand2bin \
-	ubiattach \
-	nftl_format \
-	nanddump \
-	ubinize \
-	docfdisk \
-	ubimirror \
-	ubicrc32.pl \
-	ftl_check \
-	flashcp \
-	jffs2dump \
-	ubiformat \
-	ubidetach \
-	flash_lock \
-	bin2nand \
-	pfiflash \
-	mtd_debug \
-	pddcustomize \
-	flash_unlock \
 	doc_loadbios \
-	nftldump \
-	mkfs.jffs2 \
-	flash_info \
-	ubicrc32 \
-	ubirmvol \
-	unubi \
-	pfi2bin \
-	mkfs.ubifs \
-	sumtool \
+	docfdisk \
 	flash_erase \
-	rfddump \
+	flash_eraseall \
+	flash_info \
+	flash_lock \
 	flash_otp_dump \
-	rfdformat
+	flash_otp_info \
+	flash_unlock \
+	flashcp \
+	ftl_check \
+	ftl_format \
+	jffs2dump \
+	mkfs.jffs2 \
+	mtd_debug \
+	nanddump \
+	nandtest \
+	nandwrite \
+	nftl_format \
+	nftldump \
+	recv_image \
+	rfddump \
+	rfdformat \
+	serve_image \
+	sumtool
+
+ifneq ($(CONFIG_LINUX_2_4),y)
+FILES += \
+	bin2nand \
+	mkbootenv \
+	mkfs.ubifs \
+	mkpfi \
+	nand2bin \
+	pddcustomize \
+	pfi2bin \
+	pfiflash \
+	ubiattach \
+	ubicrc32 \
+	ubicrc32.pl \
+	ubidetach \
+	ubiformat \
+	ubigen \
+	ubimirror \
+	ubimkvol \
+	ubinfo \
+	ubinize \
+	ubirename \
+	ubirmvol \
+	ubiupdatevol \
+	unubi
+endif
 
 define PartGen
 define Package/mtd-utils-$(subst _,-,$(1))
