@@ -61,6 +61,7 @@ endef
 define KernelPackage/usbip
 $(call KernelPackage/usbip/Default)
   TITLE+= (kernel support)
+  DEPENDS+= +kmod-usb-core
   KCONFIG:= \
 	CONFIG_USB_IP_COMMON CONFIG_USB_IP_DEBUG_ENABLE=n \
 	CONFIG_USBIP_CORE CONFIG_USBIP_DEBUG=n
