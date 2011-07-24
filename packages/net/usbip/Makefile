@@ -61,9 +61,16 @@ endef
 define KernelPackage/usbip
 $(call KernelPackage/usbip/Default)
   TITLE+= (kernel support)
-  KCONFIG:= CONFIG_USB_IP_COMMON CONFIG_USB_IP_DEBUG_ENABLE=n
+  KCONFIG:= \
+	CONFIG_USB_IP_COMMON CONFIG_USB_IP_DEBUG_ENABLE=n \
+	CONFIG_USBIP_CORE CONFIG_USBIP_DEBUG=n
+ ifeq ($(strip $(call CompareKernelPatchVer,$(KERNEL_PATCHVER),le,2.6.39)),1)
   FILES:=$(LINUX_DIR)/drivers/staging/usbip/usbip_common_mod.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,98,usbip_common_mod)
+ else
+  FILES:=$(LINUX_DIR)/drivers/staging/usbip/usbip-core.ko
+  AUTOLOAD:=$(call AutoLoad,98,usbip-core)
+ endif
 endef
 
 define KernelPackage/usbip-client
@@ -71,7 +78,7 @@ $(call KernelPackage/usbip/Default)
   SUBMENU:=USB Support
   TITLE+= (kernel client driver)
   DEPENDS+= kmod-usbip
-  KCONFIG:= CONFIG_USB_IP_VHCI_HCD
+  KCONFIG:= CONFIG_USB_IP_VHCI_HCD CONFIG_USBIP_VHCI_HCD
   FILES:=$(LINUX_DIR)/drivers/staging/usbip/vhci-hcd.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,99,vhci-hcd)
 endef
@@ -81,9 +88,14 @@ $(call KernelPackage/usbip/Default)
   SUBMENU:=USB Support
   TITLE+= (kernel host driver)
   DEPENDS+= kmod-usbip
-  KCONFIG:= CONFIG_USB_IP_HOST
+  KCONFIG:= CONFIG_USB_IP_HOST CONFIG_USBIP_HOST
+ ifeq ($(strip $(call CompareKernelPatchVer,$(KERNEL_PATCHVER),le,2.6.39)),1)
   FILES:=$(LINUX_DIR)/drivers/staging/usbip/usbip.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,99,usbip)
+ else
+  FILES:=$(LINUX_DIR)/drivers/staging/usbip/usbip-host.ko
+  AUTOLOAD:=$(call AutoLoad,99,usbip-host)
+ endif
 endef
 
 include $(INCLUDE_DIR)/kernel-defaults.mk
@@ -105,6 +117,9 @@ define Build/Compile/kmod
 		CONFIG_USB_IP_COMMON=m \
 		CONFIG_USB_IP_VHCI_HCD=m \
 		CONFIG_USB_IP_HOST=m \
+		CONFIG_USBIP_CORE=m \
+		CONFIG_USBIP_VHCI_HCD=m \
+		CONFIG_USBIP_HOST=m \
 		modules
 endef
 
