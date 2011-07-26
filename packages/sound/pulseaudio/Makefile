@@ -50,6 +50,7 @@ CONFIGURE_ARGS += \
 	--with-system-group=root \
 	--with-access-group=root \
 	--enable-alsa \
+	--disable-avahi \
 	--disable-dbus \
 	--disable-hal \
 	--disable-gconf \
