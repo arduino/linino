@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pulseaudio
 PKG_VERSION:=0.9.23
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://freedesktop.org/software/pulseaudio/releases/
@@ -28,7 +28,7 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/pulseaudio
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libspeexdsp +libgdbm +libsndfile +libsamplerate \
+  DEPENDS:=+libspeexdsp +libsndfile +libsamplerate \
 	+libltdl +libpthread +librt +alsa-lib \
 	@!UCLIBC_VERSION_0_9_30_1 @!UCLIBC_VERSION_0_9_30_2 \
 	@!UCLIBC_VERSION_0_9_30_3 \
@@ -40,7 +40,7 @@ endef
 define Package/pa-tools
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libgdbm +libsndfile +pulseaudio #+libpulse
+  DEPENDS:=+libsndfile +pulseaudio #+libpulse
   TITLE:=Tools for Pulseaudio
   URL:=http://www.pulseaudio.org
 endef
