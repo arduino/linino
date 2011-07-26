@@ -86,7 +86,7 @@ endef
 define Build/Configure
 endef
 
-TARGET_CFLAGS += -DLUA_USE_LINUX $(FPIC) -std=gnu99
+TARGET_CFLAGS += -DLUA_USE_LINUX $(FPIC) -std=gnu99 -ggdb3
 
 ifneq ($(CONFIG_USE_EGLIBC),)
   ifeq ($(CONFIG_EGLIBC_OPTION_EGLIBC_UTMP),)
