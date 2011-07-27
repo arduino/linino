@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sispmctl
-PKG_VERSION:=2.7
+PKG_VERSION:=3.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=2457f76cd129f880634f3381be0aeb76
+PKG_MD5SUM:=eca3d5803a29617432ef9f609be59bad
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,16 +35,16 @@ define Package/sispmctl/description
  It can be used to switch on or off any of the programmable
  power sockets of the SIS-PM via USB. It can also show the
  current status of each power socket, and it can handle
- multiple SIS-PM devices, too. 
+ multiple SIS-PM devices, too.
 endef
 
 CONFIGURE_ARGS += \
 	--enable-webless \
-	--disable-dependency-tracking \
+	--disable-dependency-tracking
 
 define Package/sispmctl/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,sispmctl))
