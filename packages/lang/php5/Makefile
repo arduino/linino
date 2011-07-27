@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
 PKG_VERSION:=5.3.6
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
@@ -22,7 +22,7 @@ PHP5_MODULES = \
 	apc \
 	ctype curl \
 	fileinfo \
-	dom \
+	dio dom \
 	exif \
 	ftp \
 	gettext gd gmp \
@@ -192,6 +192,12 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-gettext),)
   CONFIGURE_ARGS+= --with-gettext=shared,"$(STAGING_DIR)/usr/lib/libintl-full"
 else
   CONFIGURE_ARGS+= --without-gettext
+endif
+
+ifneq ($(CONFIG_PACKAGE_php5-mod-dio),)
+  CONFIGURE_ARGS+= --enable-dio=shared
+else
+  CONFIGURE_ARGS+= --disable-dio
 endif
 
 ifneq ($(CONFIG_PACKAGE_php5-mod-dom),)
@@ -481,6 +487,7 @@ $(eval $(call BuildModule,apc,APC,+librt))
 $(eval $(call BuildModule,ctype,Ctype))
 $(eval $(call BuildModule,curl,cURL,+libcurl))
 $(eval $(call BuildModule,fileinfo,Fileinfo,+libmagic))
+$(eval $(call BuildModule,dio,Direct IO))
 $(eval $(call BuildModule,dom,DOM,@PHP5_LIBXML +libxml2))
 $(eval $(call BuildModule,exif,EXIF))
 $(eval $(call BuildModule,ftp,FTP))
