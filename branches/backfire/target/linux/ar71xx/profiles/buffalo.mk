@@ -11,7 +11,7 @@ define Profile/WZRHPG300NH
 endef
 
 define Profile/WZRHPG300NH/Description
-	Package set optimized for the Buffalo WZR-HP-G300NH
+	Package set optimized for the Buffalo WZR-HP-G300NH and WZR-HP-G301NH
 endef
 
 $(eval $(call Profile,WZRHPG300NH))

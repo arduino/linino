@@ -225,7 +225,7 @@ static struct platform_device wzrhpg300nh_rtl8366s_device = {
 	}
 };
 
-static struct platform_device wzrhpg301nh_rtl8366rb_device = {
+static struct platform_device wzrhpg300nh_rtl8366rb_device = {
 	.name		= RTL8366RB_DRIVER_NAME,
 	.id		= -1,
 	.dev = {
@@ -245,9 +245,9 @@ static void __init wzrhpg300nh_setup(void)
 
 	if (hasrtl8366rb) {
 		ar71xx_eth0_pll_data.pll_1000 = 0x1f000000;
-		ar71xx_eth0_data.mii_bus_dev = &wzrhpg301nh_rtl8366rb_device.dev;
+		ar71xx_eth0_data.mii_bus_dev = &wzrhpg300nh_rtl8366rb_device.dev;
 		ar71xx_eth1_pll_data.pll_1000 = 0x100;
-		ar71xx_eth1_data.mii_bus_dev = &wzrhpg301nh_rtl8366rb_device.dev;
+		ar71xx_eth1_data.mii_bus_dev = &wzrhpg300nh_rtl8366rb_device.dev;
 	} else {
 		ar71xx_eth0_pll_data.pll_1000 = 0x1e000100;
 		ar71xx_eth0_data.mii_bus_dev = &wzrhpg300nh_rtl8366s_device.dev;
