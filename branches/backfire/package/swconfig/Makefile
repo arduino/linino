@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=swconfig
-PKG_RELEASE:=8
+PKG_RELEASE:=9
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
@@ -16,7 +16,7 @@ include $(INCLUDE_DIR)/kernel.mk
 define Package/swconfig
   SECTION:=base
   CATEGORY:=Base system
-  DEPENDS:=@LINUX_2_6 @!TARGET_brcm47xx +libuci +libnl-tiny
+  DEPENDS:=@!TARGET_brcm47xx +libuci +libnl-tiny
   TITLE:=Switch configuration utility
 endef
 
