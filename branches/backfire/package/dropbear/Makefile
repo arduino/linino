@@ -8,14 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dropbear
-PKG_VERSION:=0.52
-PKG_RELEASE:=4
+PKG_VERSION:=0.53.1
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= \
 	http://matt.ucc.asn.au/dropbear/releases/ \
 	http://www.mirrors.wiretapped.net/security/cryptography/apps/ssh/dropbear/
-PKG_MD5SUM:=1c69ec674481d7745452f68f2ea5597e
+PKG_MD5SUM:=6b8d901859d9b8a18e2f6bfe0a892a03
+
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -61,7 +63,11 @@ CONFIGURE_ARGS += \
 	--disable-loginfunc \
 	--disable-pututline \
 	--disable-pututxline \
-	--disable-zlib
+	--disable-zlib \
+	--enable-bundled-libtom
+
+TARGET_CFLAGS += -DARGTYPE=3 -ffunction-sections -fdata-sections
+TARGET_LDFLAGS += -Wl,--gc-sections
 
 define Build/Configure
 	$(SED) 's,^/\* #define PKG_MULTI.*,#define PKG_MULTI,g' $(PKG_BUILD_DIR)/options.h
@@ -70,12 +76,12 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		LD="$(TARGET_CC)" \
 		PROGRAMS="dropbear dbclient dropbearkey scp" \
 		MULTI=1 SCPPROGRESS=1
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		LD="$(TARGET_CC)" \
 		PROGRAMS="dropbearconvert"
