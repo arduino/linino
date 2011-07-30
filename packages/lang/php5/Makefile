@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
 PKG_VERSION:=5.3.6
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
@@ -29,7 +29,7 @@ PHP5_MODULES = \
 	hash \
 	iconv \
 	json \
-	ldap \
+	ldap libevent \
 	mbstring mcrypt mysql \
 	openssl \
 	pcntl pdo pdo-mysql pdo-pgsql pdo-sqlite pgsql \
@@ -262,6 +262,12 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-ldap),)
 	--with-ldap-sasl="$(STAGING_DIR)/usr"
 else
   CONFIGURE_ARGS+= --without-ldap
+endif
+
+ifneq ($(CONFIG_PACKAGE_php5-mod-libevent),)
+  CONFIGURE_ARGS+= --with-libevent=shared,"$(STAGING_DIR)/usr"
+else
+  CONFIGURE_ARGS+= --without-libevent
 endif
 
 ifneq ($(CONFIG_PACKAGE_php5-mod-mbstring),)
@@ -498,6 +504,7 @@ $(eval $(call BuildModule,hash,Hash))
 $(eval $(call BuildModule,iconv,iConv,+libiconv))
 $(eval $(call BuildModule,json,JSON))
 $(eval $(call BuildModule,ldap,LDAP,+libopenldap +libsasl2))
+$(eval $(call BuildModule,libevent,libevent,+libevent))
 $(eval $(call BuildModule,mbstring,MBString))
 $(eval $(call BuildModule,mcrypt,Mcrypt,+libmcrypt +libltdl))
 $(eval $(call BuildModule,mysql,MySQL,+libmysqlclient))
