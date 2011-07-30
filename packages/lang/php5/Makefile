@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
 PKG_VERSION:=5.3.6
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
@@ -74,10 +74,7 @@ define Package/php5
   $(call Package/php5/Default)
 
   DEPENDS:=+libpcre +zlib \
-           +PHP5_LIBXML:libxml2 \
-           +PACKAGE_php5-mod-apc:librt \
-           +(PACKAGE_php5-mod-sqlite3||PACKAGE_php5-mod-pdo-sqlite):libsqlite3 \
-           +(PACKAGE_php5-mod-sqlite3||PACKAGE_php5-mod-pdo-sqlite):libpthread
+           +PHP5_LIBXML:libxml2
 endef
 
 define Package/php5/description
@@ -165,7 +162,6 @@ endif
 
 ifneq ($(CONFIG_PACKAGE_php5-mod-apc),)
   CONFIGURE_ARGS+= --enable-apc=shared --disable-apc-mmap --disable-apc-pthreadmutex
-  CONFIGURE_LIBS+= -lrt
 else
   CONFIGURE_ARGS+= --disable-apc
 endif
@@ -317,7 +313,6 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-pdo),)
   endif
   ifneq ($(CONFIG_PACKAGE_php5-mod-pdo-sqlite),)
     CONFIGURE_ARGS+= --with-pdo-sqlite=shared,"$(STAGING_DIR)/usr"
-    CONFIGURE_LIBS+= -lsqlite3 -lpthread
   else
     CONFIGURE_ARGS+= --without-pdo-sqlite
   endif
@@ -363,7 +358,6 @@ endif
 
 ifneq ($(CONFIG_PACKAGE_php5-mod-sqlite3),)
   CONFIGURE_ARGS+= --with-sqlite3=shared,"$(STAGING_DIR)/usr"
-  CONFIGURE_LIBS+= -lsqlite3 -lpthread
 else
   CONFIGURE_ARGS+= --without-sqlite3
 endif
