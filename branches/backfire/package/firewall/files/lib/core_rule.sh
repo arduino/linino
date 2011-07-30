@@ -16,23 +16,22 @@ fw_config_get_rule() {
 		string proto "tcpudp" \
 		string target "" \
 		string family "" \
+		string limit "" \
+		string limit_burst "" \
+		string extra "" \
 	} || return
 	[ -n "$rule_name" ] || rule_name=$rule__name
-	[ "$rule_proto" == "icmp" ] || rule_icmp_type=
 }
 
 fw_load_rule() {
 	fw_config_get_rule "$1"
 
-	[ "$rule_target" != "NOTRACK" ] || [ -n "$rule_src" ] || {
+	[ "$rule_target" != "NOTRACK" ] || [ -n "$rule_src" ] || [ "$rule_src" != "*" ] || {
 		fw_log error "NOTRACK rule ${rule_name}: needs src, skipping"
 		return 0
 	}
 
 	fw_callback pre rule
-
-	fw_get_port_range rule_src_port $rule_src_port
-	fw_get_port_range rule_dest_port $rule_dest_port
 
 	local table=f
 	local chain=input
@@ -41,8 +40,22 @@ fw_load_rule() {
 		table=r
 		chain="zone_${rule_src}_notrack"
 	else
-		[ -n "$rule_src" ] && chain="zone_${rule_src}${rule_dest:+_forward}"
-		[ -n "$rule_dest" ] && target="zone_${rule_dest}_${target}"
+		if [ -n "$rule_src" ]; then
+			if [ "$rule_src" != "*" ]; then
+				chain="zone_${rule_src}${rule_dest:+_forward}"
+			else
+				chain="${rule_dest:+forward}"
+				chain="${chain:-input}"
+			fi
+		fi
+
+		if [ -n "$rule_dest" ]; then
+			if [ "$rule_dest" != "*" ]; then
+				target="zone_${rule_dest}_${target}"
+			elif [ "$target" = REJECT ]; then
+				target=reject
+			fi
+		fi
 	fi
 
 	local mode
@@ -53,18 +66,44 @@ fw_load_rule() {
 	fw_get_negation dest_spec '-d' "${rule_dest_ip:+$rule_dest_ip/$rule_dest_ip_prefixlen}"
 
 	[ "$rule_proto" == "tcpudp" ] && rule_proto="tcp udp"
-	for rule_proto in $rule_proto; do
-		local rule_pos
-		eval 'rule_pos=$((++FW__RULE_COUNT_'${mode#G}'_'$chain'))'
-
-		fw add $mode $table $chain $target $rule_pos { $rule_src_ip $rule_dest_ip } { \
-			$src_spec $dest_spec \
-			${rule_proto:+-p $rule_proto} \
-			${rule_src_port:+--sport $rule_src_port} \
-			${rule_src_mac:+-m mac --mac-source $rule_src_mac} \
-			${rule_dest_port:+--dport $rule_dest_port} \
-			${rule_icmp_type:+--icmp-type $rule_icmp_type} \
-		}
+	local pr; for pr in $rule_proto; do
+		local sports dports itypes
+		case "$pr" in
+			icmp|icmpv6|1|58)
+				sports=""; dports=""
+				itypes="$rule_icmp_type"
+			;;
+			*)
+				sports="$rule_src_port"
+				dports="$rule_dest_port"
+				itypes=""
+			;;
+		esac
+	
+		fw_get_negation pr '-p' "$pr"
+		local sp; for sp in ${sports:-""}; do
+			fw_get_port_range sp $sp
+			fw_get_negation sp '--sport' "$sp"
+			local dp; for dp in ${dports:-""}; do
+				fw_get_port_range dp $dp
+				fw_get_negation dp '--dport' "$dp"
+				local sm; for sm in ${rule_src_mac:-""}; do
+					fw_get_negation sm '--mac-source' "$sm"
+					local it; for it in ${itypes:-""}; do
+						fw_get_negation it '--icmp-type' "$it"
+						fw add $mode $table $chain $target + \
+							{ $rule_src_ip $rule_dest_ip } { \
+							$src_spec $dest_spec \
+							$pr $sp $dp $it \
+							${sm:+-m mac $sm} \
+							${rule_limit:+-m limit --limit $rule_limit \
+								${rule_limit_burst:+--limit-burst $rule_limit_burst}} \
+							$rule_extra \
+						}
+					done
+				done
+			done
+		done
 	done
 
 	fw_callback post rule
