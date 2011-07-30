@@ -318,7 +318,7 @@ ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-curl),)
 endif
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-event-zmq),)
- $(eval $(call Download/files,event-zmq,zeromq-2.1.7.tar.gz,7d3120f8a8fb913a7e55c57c6eb024f3,http://download.zeromq.org,historic/,libs/))
+ $(eval $(call Download/files,event-zmq,zeromq-2.1.7.tar.gz,7d3120f8a8fb913a7e55c57c6eb024f3,http://download.zeromq.org,,libs/))
 endif
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-flite),)
