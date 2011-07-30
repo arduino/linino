@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=znc
 PKG_VERSION:=0.098
-PKG_RELEASE:=2
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://znc.in/releases
@@ -169,10 +169,6 @@ $(eval $(call module,disconkick,This module will kick your client from all \
 	channels where you are$(,) in case if ZNC disconnects from server.))
 
 $(eval $(call module,fail2ban,Block IPs for some time after a failed login.))
-
-$(eval $(call module,fixfreenode,This module blocks some freenode-specific \
-	feature which results in plus (+) and minus (-) signs being displayed in \
-	front of every message from a client.))
 
 $(eval $(call module,keepnick,Tries to get you your primary nick.))
 
