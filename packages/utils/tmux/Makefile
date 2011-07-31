@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tmux
 PKG_VERSION:=1.5
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/tmux
@@ -24,7 +24,7 @@ define Package/tmux
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Terminal multiplexer
-  DEPENDS:=+libncurses +libevent +libpthread
+  DEPENDS:=+libncurses +libevent2 +libpthread
   URL:=http://tmux.sourceforge.net/
 endef
 
