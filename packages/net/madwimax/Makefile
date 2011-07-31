@@ -7,7 +7,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=madwimax
 PKG_VERSION:=0.1.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=madwimax-0.1.1.tar.gz
 PKG_SOURCE_URL:=http://madwimax.googlecode.com/files/
