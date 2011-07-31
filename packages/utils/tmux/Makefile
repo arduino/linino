@@ -34,7 +34,7 @@ endef
 
 MAKE_FLAGS += \
 	PREFIX="/usr" \
-	TMUX_PLATFORM="Linux" \
+	PLATFORM="linux"
 
 define Package/tmux/install
 	$(INSTALL_DIR) $(1)/usr/bin
