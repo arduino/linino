@@ -156,6 +156,9 @@ endef
 
 TARGET_CFLAGS += $(FPIC)
 
+# because PROFILE means something else in the project Makefile
+unexport PROFILE
+
 define Build/Compile
 	$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
