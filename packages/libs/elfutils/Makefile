@@ -27,11 +27,6 @@ define Package/elfutils/Default
   URL:=https://fedorahosted.org/elfutils/
 endef
 
-define Package/libelf
-  $(call Package/elfutils/Default)
-  TITLE+= (libelf)
-endef
-
 define Package/libdw
   $(call Package/elfutils/Default)
   TITLE+= (libdw)
@@ -46,13 +41,7 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/libelf/libelf.{a,so*} $(1)/usr/lib/
 	$(CP) $(PKG_BUILD_DIR)/libdw/libdw.{a,so*} $(1)/usr/lib/
-endef
-
-define Package/libelf/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/libelf/libelf.so* $(1)/usr/lib/
 endef
 
 define Package/libdw/install
@@ -61,4 +50,3 @@ define Package/libdw/install
 endef
 
 $(eval $(call BuildPackage,libdw))
-$(eval $(call BuildPackage,libelf))
