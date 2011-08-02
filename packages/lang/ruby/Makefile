@@ -63,7 +63,7 @@ $(call Package/ruby/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= (shared library)
-  DEPENDS+= +libpthread
+  DEPENDS+= +libpthread +librt
 endef
 
 # Ongoing work to break up ruby's standard library into coherent pieces
