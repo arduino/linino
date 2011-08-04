@@ -150,6 +150,9 @@ struct ag71xx {
 	struct napi_struct	napi;
 	u32			msg_enable;
 
+	struct ag71xx_desc	*stop_desc;
+	dma_addr_t		stop_desc_dma;
+
 	struct ag71xx_ring	rx_ring;
 	struct ag71xx_ring	tx_ring;
 
@@ -350,6 +353,7 @@ static inline void ag71xx_check_reg_offset(struct ag71xx *ag, unsigned reg)
 	switch (reg) {
 	case AG71XX_REG_MAC_CFG1 ... AG71XX_REG_MAC_MFL:
 	case AG71XX_REG_MAC_IFCTL ... AG71XX_REG_INT_STATUS:
+	case AG71XX_REG_MII_CFG:
 		break;
 
 	default:
