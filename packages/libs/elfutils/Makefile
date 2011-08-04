@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/elfutils/Default
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=$(INTL_DEPENDS) +USE_UCLIBC:argp-standalone
+  DEPENDS:=$(INTL_DEPENDS) +USE_UCLIBC:argp-standalone @BROKEN
   TITLE:=ELF manipulation libraries
   URL:=https://fedorahosted.org/elfutils/
 endef
