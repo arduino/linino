@@ -32,7 +32,7 @@ define Package/at/description
 endef
 
 export SENDMAIL=/bin/true
-EXTRA_CFLAGS:=-DNEED_YYWRAP -I$(PKG_BUILD_DIR) -I$(STAGING_DIR)/usr/include \
+EXTRA_CFLAGS:=-DNEED_YYWRAP -I$(PKG_BUILD_DIR) -I$(STAGING_DIR)/usr/include/libelf \
 	$(TARGET_LDFLAGS)
 
 CONFIGURE_ARGS+=--prefix=/usr \
