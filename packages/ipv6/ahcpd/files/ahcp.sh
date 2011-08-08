@@ -71,21 +71,7 @@ ahcp_config() {
 setup_interface_ahcp() {
 	local interface="$1"
 	local config="$2"
-	local pid_file="/var/run/ahcpd-$interface.pid"
-	local id_file="/var/lib/ahcp-unique-id-$interface"
-	local log_file="/var/log/ahcpd-$interface.log"
-	unset args
 
-	mkdir -p /var/lib
-
-	ahcp_config "$config"
-	eval "/usr/sbin/ahcpd -D -I $pid_file -i $id_file -L $log_file $args $interface"
-}
-
-stop_interface_ahcp() {
-	local cfg="$1"
-	local interface
-	config_get interface "$cfg" device
-	local pid_file="/var/run/ahcpd-$interface.pid"
-	[ -f "$pid_file" ] && kill $(cat "$pid_file")
+    echo "WARNING: ahcp client cannot be configured in /etc/config/network anymore."
+    echo "Please add $interface to /etc/config/ahcpd instead."
 }
