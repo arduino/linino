@@ -4,42 +4,30 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-
+#
 include $(TOPDIR)/rules.mk
+
 
 PKG_NAME:=freeswitch
 PKG_VERSION:=1.0.7
 PKG_RELEASE:=1
+PKG_REV:=46f097c1b94f43e5dad2c0b9592e921ae6933665
+PKG_SOURCE_VERSION:=$(PKG_REV)
+
 
 #
-# PKG_REV contains FS git hash that can be updated from http://fisheye.freeswitch.org
+# The latest FS git hash in PKG_REV can be obtained from http://fisheye.freeswitch.org
 #
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_REV:=ffac6a00e8481b85089eac6b7071d996fd12fc3f
-PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)_git-$(shell echo $(PKG_REV)|cut -b -9).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
-#
-# Set location of ptlib (Which needs to have been built already)
-#
-export PTLIBDIR=$(BUILD_DIR)/ptlib2
-export PTLIBPLUGINDIR=$(PTLIBDIR)/lib_linux_${ARCH}
 
-#
-# Needed by some modules
-#
-export HOST="$(GNU_TARGET_NAME)"
-export host="$(GNU_TARGET_NAME)"
-
-
-#PKG_REMOVE_FILES:=
 PKG_FIXUP:=libtool
 PKG_BUILD_PARALLEL:=1
 
-PKG_CONFIG_DEPENDS:=CONFIG_FS_SOFIA_WITH_ODBC
 
 FS_MOD_AVAILABLE:= \
 	alsa \
@@ -124,6 +112,7 @@ FS_MOD_AVAILABLE:= \
 	skinny \
 	skypopen \
 	snapshot \
+	snmp \
 	snipe-hunt \
 	sndfile \
 	snom \
@@ -150,8 +139,11 @@ FS_MOD_AVAILABLE:= \
 	xml-rpc \
 	yaml \
 
+
 PKG_CONFIG_DEPENDS:= \
+	CONFIG_FS_SOFIA_WITH_ODBC \
 	$(patsubst %,CONFIG_PACKAGE_$(PKG_NAME)-mod-%,$(FS_MOD_AVAILABLE)) \
+
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -173,20 +165,24 @@ $(call Package/$(PKG_NAME)/Default)
   MENU:=1
 endef
 
+
 define Package/$(PKG_NAME)/description
   FreeSWITCH is an open source telephony platform designed to 
   facilitate the creation of voice and chat driven products scaling 
   from a soft-phone up to a soft-switch.  See http://wiki.$(PKG_NAME).org
 endef
 
+
 define Package/$(PKG_NAME)/config
     config FS_SOFIA_WITH_ODBC
-    bool "Compile $(PKG_NAME)-mod-sofia with ODBC support (Requires unixodbc_svn)"
     depends on PACKAGE_$(PKG_NAME)
+    bool "Compile $(PKG_NAME)-mod-sofia with ODBC support (Requires unixodbc_svn)"
     default n
+    select PACKAGE_unixodbc_svn
     help
             Compile $(PKG_NAME)-mod-sofia with ODBC Support (Requires unixodbc_svn package).
 endef
+
 
 define Package/$(PKG_NAME)-example-config
 $(call Package/$(PKG_NAME)/Default)
@@ -194,11 +190,13 @@ $(call Package/$(PKG_NAME)/Default)
   DEPENDS:= $(PKG_NAME)
 endef
 
+
 define Package/$(PKG_NAME)-example-config/description
   The default configuration included with FreeSWITCH. It is not intended to be
   a final product, and is thus moved to /usr/share/$(PKG_NAME)/examples/conf to
   be an example of how FreeSWITCH can be configured.
 endef
+
 
 define Package/$(PKG_NAME)-config-upstream-defaults
 $(call Package/$(PKG_NAME)/Default)
@@ -206,26 +204,30 @@ $(call Package/$(PKG_NAME)/Default)
   DEPENDS:= $(PKG_NAME)
 endef
 
+
 define Package/$(PKG_NAME)-config-upstream-defaults/description
   The default configuration included with FreeSWITCH. It is not intended to be
   a final product, and but is included for those who don't want to use the 
   OpenWRT configuration and/or want to try things as prepared by upstream.
 endef
 
+
 define Package/$(PKG_NAME)-config-minimal
 $(call Package/$(PKG_NAME)/Default)
-  TITLE:=FreeSWITCH a minimal FS config
+  TITLE:=FreeSWITCH minimal config
   DEPENDS:= $(PKG_NAME)
 endef
+
 
 define Package/$(PKG_NAME)-config-minimal/description
   A minimal configuration of FreeSWITCH for OpenWRT devices.  Is what the UCI 
   configuration began with.
 endef
 
+
 define Package/$(PKG_NAME)-collection-upstream-defaults
 $(call Package/$(PKG_NAME)/Default)
-  TITLE:=FreeSWITCH upstream default (sample) config
+  TITLE:=FS upstream def sample conf
   DEPENDS:= $(PKG_NAME) \
 		+$(PKG_NAME)-config-upstream-defaults \
 		+$(PKG_NAME)-mod-callcenter \
@@ -255,9 +257,10 @@ $(call Package/$(PKG_NAME)/Default)
 		+$(PKG_NAME)-tools
 endef
 
+
 define Package/$(PKG_NAME)-collection-minimal
 $(call Package/$(PKG_NAME)/Default)
-  TITLE:=A FreeSWITCH minimal package collection
+  TITLE:=FreeSWITCH minimal package collection
   DEPENDS:= $(PKG_NAME) \
 		+$(PKG_NAME)-config-minimal \
 		+$(PKG_NAME)-mod-codec2 \
@@ -273,6 +276,7 @@ $(call Package/$(PKG_NAME)/Default)
 		+$(PKG_NAME)-mod-tone-stream \
 		+$(PKG_NAME)-tools
 endef
+
 
 define Package/$(PKG_NAME)-sounds-en
 $(call Package/$(PKG_NAME)/Default)
@@ -307,43 +311,55 @@ define Download/files
  $$(eval $$(call Download,$(1)))
 endef
 
+
 MAKE_INSTALL_TARGETS:=install
+
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-celt),)
  $(eval $(call Download/files,celt,celt-0.10.0.tar.gz,a656f6176e9be84027c0e51ceedd710f,,downloads/libs/,libs/))
 endif
 
+
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-curl),)
  $(eval $(call Download/files,json-cdr,json-c-0.9.tar.gz,4653b3b9c568bb9c782178abfaac128d,,downloads/libs/,libs/))
 endif
+
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-event-zmq),)
  $(eval $(call Download/files,event-zmq,zeromq-2.1.7.tar.gz,7d3120f8a8fb913a7e55c57c6eb024f3,http://download.zeromq.org,,libs/))
 endif
 
+
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-flite),)
  $(eval $(call Download/files,flite,flite-1.3.99-latest.tar.gz,365b60881715c5e13c0d8bc37d9be6ff,,downloads/libs/,libs/))
 endif
 
+
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-opus),)
  $(eval $(call Download/files,opus,opus-0.9.0.tar.gz,8a729db587430392e64280a499e9d061,,downloads/libs/,libs/))
 endif
+
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en),)
  $(eval $(call Download/files,sounds-en,$(PKG_NAME)-sounds-en-us-callie-8000-1.0.16.tar.gz,bde0883eb75fe06f39bde11f50a1f858,,,))
 	MAKE_INSTALL_TARGETS+= sounds-install
 endif
 
+
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-moh),)
  $(eval $(call Download/files,sounds-moh,$(PKG_NAME)-sounds-music-8000-1.0.8.tar.gz,f63ef3cc3507af079ae5c7b8b8a01e42,,,))
 	MAKE_INSTALL_TARGETS+= moh-install
 endif
 
+
+#
 # XXX: -fgnu89-inline is not supported on all compiler versions, so only enable it on avr32 where it solves build issues
+#
 ifneq ($(CONFIG_avr32),)
   TARGET_CFLAGS += -fgnu89-inline
   TARGET_CXXFLAGS += -fgnu89-inline
 endif
+
 
 ifneq ($(CONFIG_USE_EGLIBC),)
   ifeq ($(CONFIG_EGLIBC_OPTION_EGLIBC_UTMP),)
@@ -375,7 +391,7 @@ CONFIGURE_ARGS+= \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-dingaling),--with-openssl="$(STAGING_DIR)/usr",--without-openssl) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-java),--with-java="$(STAGING_DIR)/usr",--without-java) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-spandsp),--enable-builtin-tiff,) \
-	$(if $(CONFIG_FS_SOFIA_WITH_ODBC),--enable-core-odbc-support --with-odbc="$(STAGING_DIR)/usr",) \
+	--$(if $(CONFIG_FS_SOFIA_WITH_ODBC),en,dis)able-core-odbc-support --with-odbc="$(STAGING_DIR)/usr" \
 
 
 CONFIGURE_VARS+= \
@@ -430,6 +446,7 @@ define Build/Prepare
 	$(call Prepare/sounds-moh)
 endef
 
+
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); $(AM_TOOL_PATHS) ./bootstrap.sh)
 	$(call Build/Configure/Default,)
@@ -441,6 +458,7 @@ define Build/Configure
 		)
 	)
 endef
+
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -455,12 +473,14 @@ define Build/Compile
 	$(SED) 's|^\([ \t]*\)<!-- *\(.*\)"mod_syslog"\(.*\) *-->\(.*\)$$$$|\1\2"mod_syslog"\3\4|' $(PKG_INSTALL_DIR)/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
 endef
 
+
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/$(PKG_NAME)
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/include/* $(1)/usr/include/$(PKG_NAME)/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib$(PKG_NAME).{a,so*} $(1)/usr/lib/
 endef
+
 
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -478,9 +498,11 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DATA) ./files/$(PKG_NAME).config $(1)/etc/config/$(PKG_NAME)
 endef
 
+
 define Package/$(PKG_NAME)-collection-upstream-defaults/install
 	$(INSTALL_DIR) $(1)/etc/$(PKG_NAME)
 endef
+
 
 define Package/$(PKG_NAME)-example-config/install
 	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/examples/conf
@@ -488,33 +510,40 @@ define Package/$(PKG_NAME)-example-config/install
 	$(CP) $(PKG_INSTALL_DIR)/etc/$(PKG_NAME)/* $(1)/usr/share/$(PKG_NAME)/examples/conf/
 endef
 
+
 define Package/$(PKG_NAME)-config-upstream-defaults/install
 	$(INSTALL_DIR) $(1)/etc/$(PKG_NAME)
 	$(CP) $(PKG_INSTALL_DIR)/etc/$(PKG_NAME)/* $(1)/etc/$(PKG_NAME)/
 endef
 
+
 define Package/$(PKG_NAME)-collection-minimal/install
 	$(INSTALL_DIR) $(1)/etc/$(PKG_NAME)
 endef
 
+
 define Package/$(PKG_NAME)-collection-uci-minimal/install
 	$(INSTALL_DIR) $(1)/etc/$(PKG_NAME)
 endef
+
 
 define Package/$(PKG_NAME)-config-minimal/install
 	$(INSTALL_DIR) $(1)/etc/$(PKG_NAME)
 	$(CP) ./files/etc.minimal/* $(1)/etc/$(PKG_NAME)/
 endef
 
+
 define Package/$(PKG_NAME)-sounds-en/install
 	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en $(1)/usr/share/$(PKG_NAME)/sounds/
 endef
 
+
 define Package/$(PKG_NAME)-sounds-moh/install
 	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/music $(1)/usr/share/$(PKG_NAME)/sounds/
 endef
+
 
 define Package/$(PKG_NAME)-tools/install
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -526,11 +555,14 @@ define Package/$(PKG_NAME)-tools/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/tone2wav $(1)/usr/bin/
 endef
 
+
+#
 # 1. Name
 # 2. Title
 # 3. Files
 # 4. Inter Depends
 # 5. Extra Depends
+#
 define BuildPlugin
   define Package/$(PKG_NAME)-mod-$(1)
     $$(call Package/$(PKG_NAME)/Default)
@@ -566,6 +598,7 @@ sed -i -e 's|^\([ \t]*\)\(.*\)"mod_$(subst -,_,$(1))"\(.*\)$$$$|\1<!-- \2"mod_$(
   $$(eval $$(call BuildPackage,$(PKG_NAME)-mod-$(1)))
 endef
 
+
 $(eval $(call BuildPackage,$(PKG_NAME)))
 $(eval $(call BuildPackage,$(PKG_NAME)-collection-upstream-defaults))
 $(eval $(call BuildPackage,$(PKG_NAME)-collection-minimal))
@@ -576,7 +609,10 @@ $(eval $(call BuildPackage,$(PKG_NAME)-example-config))
 $(eval $(call BuildPackage,$(PKG_NAME)-config-upstream-defaults))
 $(eval $(call BuildPackage,$(PKG_NAME)-config-minimal))
 
-#$(eval $(call BuildPlugin,Name,Title,Inter Depends,Extra Depends))
+
+#
+# $(eval $(call BuildPlugin,Name,Title,Inter Depends,Extra Depends))
+#
 $(eval $(call BuildPlugin,alsa,Alsa endpoint,mod_alsa,,))
 $(eval $(call BuildPlugin,amr,GSM-AMR codec,mod_amr,,))
 $(eval $(call BuildPlugin,amrwb,GSM-AMRWB,mod_amrwb,,))
@@ -598,7 +634,7 @@ $(eval $(call BuildPlugin,curl,HTTP request,mod_curl,,+libcurl))
 $(eval $(call BuildPlugin,dahdi-codec,DAHDI codecs,mod_dahdi_codec,,))
 $(eval $(call BuildPlugin,db,Database backend,mod_db,,))
 $(eval $(call BuildPlugin,dialplan-asterisk,Asterisk dialplan parser,mod_dialplan_asterisk,,))
-$(eval $(call BuildPlugin,dialplan-directory,Dialplan-Directory interface,mod_dialplan_directory,,))
+$(eval $(call BuildPlugin,dialplan-directory,Dialplan directory,mod_dialplan_directory,,))
 $(eval $(call BuildPlugin,dialplan-xml,Dialplan-XML interface,mod_dialplan_xml,,))
 $(eval $(call BuildPlugin,dingaling,Jabber interface,mod_dingaling,,+libgnutls-openssl)) 
 $(eval $(call BuildPlugin,directory,application mod_directory,mod_directory,,))
@@ -619,7 +655,7 @@ $(eval $(call BuildPlugin,fsk,Bell-202 1200-baud FSK decoder,mod_fsk,,))
 $(eval $(call BuildPlugin,fsv,Video,mod_fsv,,))
 $(eval $(call BuildPlugin,g723-1,G.723.1 codec,mod_g723_1,,))
 $(eval $(call BuildPlugin,g729,G.729 codec,mod_g729,,))
-$(eval $(call BuildPlugin,gsmopen,SMS (some hardware required),mod_gsmopen,spandsp,+alsa-lib +gsmlib))
+$(eval $(call BuildPlugin,gsmopen,Short Message Service (SMS),mod_gsmopen,spandsp,+alsa-lib +gsmlib))
 $(eval $(call BuildPlugin,h26x,H26X linear codec,mod_h26x,,))
 $(eval $(call BuildPlugin,h323,h323 endpoint,mod_h323,,@BROKEN)) # missing header files (other packages needed)
 $(eval $(call BuildPlugin,hash,API for manipulating a hash table,mod_hash,,))
@@ -657,11 +693,12 @@ $(eval $(call BuildPlugin,shell-stream,Shell stream,mod_shell_stream,,))
 $(eval $(call BuildPlugin,silk,codec mod_silk,mod_silk,,))
 $(eval $(call BuildPlugin,siren,G.722.1 codec,mod_siren,,))
 $(eval $(call BuildPlugin,skinny,endpoint mod_skinny,mod_skinny,,))
-$(eval $(call BuildPlugin,skypopen,Skype compatible endpoint,mod_skypopen,,@BROKEN)) # needs <X11/Xlib.h>
+$(eval $(call BuildPlugin,skypopen,Skype compatible endpoint,mod_skypopen,,+libX11))
 $(eval $(call BuildPlugin,snapshot,application mod_snapshot,mod_snapshot,,))
 $(eval $(call BuildPlugin,sndfile,Multi-Format file transcoder,mod_sndfile,,))
 $(eval $(call BuildPlugin,snipe-hunt,application mod_snipe_hunt,mod_snipe_hunt,,))
 $(eval $(call BuildPlugin,snom,SNOM specific features,mod_snom,,))
+$(eval $(call BuildPlugin,snmp,Simple Network Management Protocol,mod_snmp,,+libnetsnmp))
 $(eval $(call BuildPlugin,sofia,SIP,mod_sofia,,))
 $(eval $(call BuildPlugin,spandsp,Span DSP,mod_spandsp,,+libjpeg))
 $(eval $(call BuildPlugin,speex,Speex codec,mod_speex,,))
