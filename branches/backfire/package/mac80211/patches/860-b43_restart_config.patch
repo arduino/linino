@@ -57,13 +57,20 @@
  		b43_set_beacon_int(dev, conf->beacon_int);
  
  	if (changed & BSS_CHANGED_BASIC_RATES)
-@@ -4566,6 +4584,12 @@ static int b43_op_start(struct ieee80211
+@@ -4496,6 +4514,9 @@ static int b43_op_add_interface(struct i
   out_mutex_unlock:
  	mutex_unlock(&wl->mutex);
  
 +	if (err == 0)
 +		b43_op_bss_info_changed(hw, vif, &vif->bss_conf, ~0);
 +
+ 	return err;
+ }
+ 
+@@ -4566,6 +4587,9 @@ static int b43_op_start(struct ieee80211
+  out_mutex_unlock:
+ 	mutex_unlock(&wl->mutex);
+ 
 +	/* reload configuration */
 +	b43_op_config(hw, ~0);
 +
