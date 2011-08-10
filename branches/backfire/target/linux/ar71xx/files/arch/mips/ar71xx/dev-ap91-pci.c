@@ -47,6 +47,7 @@ static void ap91_pci_fixup(struct pci_dev *dev)
 	void __iomem *mem;
 	u16 *cal_data;
 	u16 cmd;
+	u32 bar0;
 	u32 val;
 
 	if (!ap91_pci_fixup_enabled)
@@ -69,7 +70,22 @@ static void ap91_pci_fixup(struct pci_dev *dev)
 	}
 
 	/* Setup the PCI device to allow access to the internal registers */
-	pci_write_config_dword(dev, PCI_BASE_ADDRESS_0, 0xffff);
+	pci_read_config_dword(dev, PCI_BASE_ADDRESS_0, &bar0);
+
+	switch (ar71xx_soc) {
+	case AR71XX_SOC_AR7240:
+		pci_write_config_dword(dev, PCI_BASE_ADDRESS_0, 0xffff);
+		break;
+
+	case AR71XX_SOC_AR7241:
+	case AR71XX_SOC_AR7242:
+		pci_write_config_dword(dev, PCI_BASE_ADDRESS_0, 0x1000ffff);
+		break;
+
+	default:
+		break;
+	}
+
 	pci_read_config_word(dev, PCI_COMMAND, &cmd);
 	cmd |= PCI_COMMAND_MASTER | PCI_COMMAND_MEMORY;
 	pci_write_config_word(dev, PCI_COMMAND, cmd);
@@ -93,6 +109,12 @@ static void ap91_pci_fixup(struct pci_dev *dev)
 	pci_read_config_dword(dev, PCI_CLASS_REVISION, &val);
 	dev->revision = val & 0xff;
 	dev->class = val >> 8; /* upper 3 bytes */
+
+	pci_read_config_word(dev, PCI_COMMAND, &cmd);
+	cmd &= ~(PCI_COMMAND_MASTER | PCI_COMMAND_MEMORY);
+	pci_write_config_word(dev, PCI_COMMAND, cmd);
+
+	pci_write_config_dword(dev, PCI_BASE_ADDRESS_0, bar0);
 
 	iounmap(mem);
 }
