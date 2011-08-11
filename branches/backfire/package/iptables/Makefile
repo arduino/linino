@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=iptables
 PKG_VERSION:=1.4.6
-PKG_RELEASE:=3
+PKG_RELEASE:=3.1
 
 PKG_MD5SUM:=c67cf30e281a924def6426be0973df56
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -290,7 +290,13 @@ endef
 
 define Package/iptables-utils
 $(call Package/iptables/Module, )
-  TITLE:=iptables save and restore utilities
+  TITLE:=iptables save and restore utilities (deprecated)
+endef
+
+define Package/iptables-utils/description
+This is a dummy package for backwards compatibility reasons.
+Everything that used to be provided by this package is part
+of iptables now.
 endef
 
 define Package/ip6tables
@@ -305,7 +311,13 @@ define Package/ip6tables-utils
 $(call Package/iptables/Default)
   DEPENDS:=ip6tables
   CATEGORY:=IPv6
-  TITLE:=ip6tables save and restore utilities
+  TITLE:=ip6tables save and restore utilities (deprecated)
+endef
+
+define Package/ip6tables-utils/description
+This is a dummy package for backwards compatibility reasons.
+Everything that used to be provided by this package is part
+of ip6tables now.
 endef
 
 define Package/libiptc
@@ -393,6 +405,8 @@ endef
 define Package/iptables/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/iptables $(1)/usr/sbin/
+	$(LN) iptables $(1)/usr/sbin/iptables-save
+	$(LN) iptables $(1)/usr/sbin/iptables-restore
 	$(INSTALL_DIR) $(1)/usr/lib/iptables
 	(cd $(PKG_INSTALL_DIR)/usr/lib/iptables ; \
 		for m in $(patsubst xt_%,ipt_%,$(IPT_BUILTIN)) $(patsubst ipt_%,xt_%,$(IPT_BUILTIN)); do \
@@ -404,15 +418,14 @@ define Package/iptables/install
 endef
 
 define Package/iptables-utils/install
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/iptables-multi $(1)/usr/sbin/
-	$(LN) iptables-multi $(1)/usr/sbin/iptables-save
-	$(LN) iptables-multi $(1)/usr/sbin/iptables-restore
+	true
 endef
 
 define Package/ip6tables/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ip6tables $(1)/usr/sbin/
+	$(LN) ip6tables $(1)/usr/sbin/ip6tables-save
+	$(LN) ip6tables $(1)/usr/sbin/ip6tables-restore
 	$(INSTALL_DIR) $(1)/usr/lib/iptables
 	(cd $(PKG_INSTALL_DIR)/usr/lib/iptables ; \
 		$(CP) libip6t_*.so $(1)/usr/lib/iptables/ \
@@ -420,10 +433,7 @@ define Package/ip6tables/install
 endef
 
 define Package/ip6tables-utils/install
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ip6tables-multi $(1)/usr/sbin/
-	$(LN) ip6tables-multi $(1)/usr/sbin/ip6tables-save
-	$(LN) ip6tables-multi $(1)/usr/sbin/ip6tables-restore
+	true
 endef
 
 define Package/libiptc/install
