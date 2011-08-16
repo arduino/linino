@@ -1,0 +1,31 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2010-2011 Openwrt.org
+
+START=90
+
+
+local NORUN=0
+
+start() {
+	. /lib/functions/bbstored.sh
+
+	create_config
+
+	if [ "$EXTERNAL_CONFIG" -eq 1 ]
+	then
+		BXBK_CONFIG_FILE="$EXTERNAL_CONF_FILE"		
+	fi
+	[ "$NORUN" != "1" ] && /usr/sbin/bbstored "$BXBK_CONFIG_FILE"
+}
+
+stop() {
+	. /lib/functions/bbstored.sh
+
+	if [ -f "$PID_FILE" ]
+	then
+		kill $(cat "$PID_FILE")
+	else
+		killall bbstored
+	fi
+}
+
