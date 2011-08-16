@@ -18,7 +18,7 @@ PKG_MD5SUM:=e3d08dedfb9e6a9a1e24f6766f6dadd0
 
 PKG_BUILD_DEPENDS:=libreadline libncurses
 PKG_BUILD_PARALLEL:=1
-PPPD_VERSION:=2.4.4
+PPPD_VERSION:=2.4.5
 
 include $(INCLUDE_DIR)/package.mk
 
