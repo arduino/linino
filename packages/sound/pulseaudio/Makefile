@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pulseaudio
-PKG_VERSION:=0.9.23
-PKG_RELEASE:=2
+PKG_VERSION:=0.99.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://freedesktop.org/software/pulseaudio/releases/
-PKG_MD5SUM:=7391205a337d1e04a9ff38025f684034
+PKG_MD5SUM:=c4deb071424e4f03fdf1d80bd62db267
 
 PKG_BUILD_DEPENDS:=intltool/host
 
@@ -29,7 +29,7 @@ define Package/pulseaudio
   SECTION:=sound
   CATEGORY:=Sound
   DEPENDS:=+libspeexdsp +libsndfile +libsamplerate \
-	+libltdl +libpthread +librt +alsa-lib \
+	+libltdl +libpthread +librt +alsa-lib +json-c \
 	@!UCLIBC_VERSION_0_9_30_1 @!UCLIBC_VERSION_0_9_30_2 \
 	@!UCLIBC_VERSION_0_9_30_3 \
 	$(ICONV_DEPENDS) $(INTL_DEPENDS)
@@ -90,7 +90,7 @@ define Package/pulseaudio/install
 	$(INSTALL_DIR) \
 		$(1)/usr/bin \
 		$(1)/usr/lib \
-		$(1)/usr/lib/pulse-$(PKG_VERSION)/modules \
+		$(1)/usr/lib/pulse-0.99/modules \
 		$(1)/etc/pulse \
 		$(1)/etc/init.d
 
@@ -111,11 +111,11 @@ define Package/pulseaudio/install
 		$(1)/usr/lib/
 
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/pulse-$(PKG_VERSION)/modules/lib*.so \
+		$(PKG_INSTALL_DIR)/usr/lib/pulse-0.99/modules/lib*.so \
 		$(1)/usr/lib/
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/pulse-$(PKG_VERSION)/modules/module*.so \
-		$(1)/usr/lib/pulse-$(PKG_VERSION)/modules/
+		$(PKG_INSTALL_DIR)/usr/lib/pulse-0.99/modules/module*.so \
+		$(1)/usr/lib/pulse-0.99/modules/
 endef
 
 define Package/pa-tools/install
