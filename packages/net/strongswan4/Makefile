@@ -17,6 +17,7 @@ PKG_MD5SUM:=ee7c50a90c91307b111e8085f2479890
 
 PKG_MOD_AVAILABLE:= \
 	aes \
+	af-alg \
 	agent \
 	attr \
 	attr-sql \
@@ -133,6 +134,7 @@ $(call Package/strongswan4/Default)
 	+strongswan4-app-pluto \
 	+strongswan4-libfast \
 	+strongswan4-mod-aes \
+	+strongswan4-mod-af-alg \
 	+strongswan4-mod-agent \
 	+strongswan4-mod-attr \
 	+strongswan4-mod-attr-sql \
@@ -444,6 +446,7 @@ $(eval $(call BuildPackage,strongswan4-utils))
 
 $(eval $(call BuildPlugin,aes,AES crypto,))
 $(eval $(call BuildPlugin,agent,SSH agent signing,))
+$(eval $(call BuildPlugin,af-alg,AF_ALG Linux crypto API,+kmod-crypto-user))
 $(eval $(call BuildPlugin,attr,File-based config attr,))
 $(eval $(call BuildPlugin,attr-sql,SQL-based config attrib,+strongswan4-mod-sql))
 $(eval $(call BuildPlugin,blowfish,Blowfish crypto,))
