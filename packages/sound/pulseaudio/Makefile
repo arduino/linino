@@ -29,7 +29,7 @@ define Package/pulseaudio
   SECTION:=sound
   CATEGORY:=Sound
   DEPENDS:=+libspeexdsp +libsndfile +libsamplerate \
-	+libltdl +libpthread +librt +alsa-lib +json-c \
+	+libltdl +libpthread +librt +alsa-lib +libjson \
 	@!UCLIBC_VERSION_0_9_30_1 @!UCLIBC_VERSION_0_9_30_2 \
 	@!UCLIBC_VERSION_0_9_30_3 \
 	$(ICONV_DEPENDS) $(INTL_DEPENDS)
