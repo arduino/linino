@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=strongswan
-PKG_VERSION:=4.5.2
+PKG_VERSION:=4.5.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.strongswan.org/
-PKG_MD5SUM:=ac33b8f849a274127f84df0838cae953
+PKG_MD5SUM:=ee7c50a90c91307b111e8085f2479890
 
 PKG_MOD_AVAILABLE:= \
 	aes \
@@ -371,8 +371,8 @@ define Package/strongswan4/install
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) -R $(PKG_INSTALL_DIR)/etc/ipsec.d $(1)/etc/
 	$(CP) $(PKG_INSTALL_DIR)/etc/{ipsec.conf,strongswan.conf} $(1)/etc/
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/{libstrongswan.so.*,libhydra.so.*} $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/ipsec
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ipsec/{libstrongswan.so.*,libhydra.so.*} $(1)/usr/lib/ipsec/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/ipsec $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/lib/ipsec
@@ -397,8 +397,8 @@ endef
 
 
 define Package/strongswan4-app-charon/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcharon.so.* $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/ipsec
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ipsec/libcharon.so.* $(1)/usr/lib/ipsec/
 	$(INSTALL_DIR) $(1)/usr/lib/ipsec
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ipsec/{charon,stroke} $(1)/usr/lib/ipsec/
 endef
@@ -411,8 +411,8 @@ endef
 
 
 define Package/strongswan4-libfast/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfast.so.* $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/ipsec
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ipsec/libfast.so.* $(1)/usr/lib/ipsec/
 endef
 
 
