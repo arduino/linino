@@ -39,3 +39,21 @@
  if [ -n "$MISSING" ]; then
  	echo -e "\nERROR!  Cannot continue."
  	echo -e "The following required libraries are either missing, or are missing development headers:\n"
+@@ -184,7 +184,7 @@ fi
+ echo "" >> ${CONFIGFILE}
+ 
+ echo "/* Enable if the system iconv.h exists.  ID3 tag reading in various character sets will not work properly otherwise. */" >> ${CONFIGFILE}
+-if [ -f /usr/include/iconv.h ]; then
++if [ -f ${ICONV_PREFIX}/include/iconv.h ]; then
+ echo "#define HAVE_ICONV_H" >> ${CONFIGFILE}
+ else
+ echo -e "\nWARNING!!  Iconv support not found.  ID3 tag reading may not work."
+@@ -193,7 +193,7 @@ fi
+ echo "" >> ${CONFIGFILE}
+ 
+ echo "/* Enable if the system libintl.h exists for NLS support. */" >> ${CONFIGFILE}
+-if [ -f /usr/include/libintl.h ]; then
++if [ -f ${INTL_PREFIX}/include/libintl.h ]; then
+ echo "#define ENABLE_NLS" >> ${CONFIGFILE}
+ else
+ echo "/*#define ENABLE_NLS*/" >> ${CONFIGFILE}

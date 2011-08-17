@@ -3,7 +3,7 @@
 @@ -2,7 +2,7 @@
  port=8200
  
- # network interface to bind to (this is the only interface that will serve files)
+ # network interfaces to serve, comma delimited
 -#network_interface=eth0
 +network_interface=br-lan
  
