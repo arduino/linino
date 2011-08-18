@@ -1,8 +1,8 @@
-Index: pulseaudio-0.9.22/src/pulsecore/memblock.c
+Index: pulseaudio-0.99.2/src/pulsecore/memblock.c
 ===================================================================
---- pulseaudio-0.9.22.orig/src/pulsecore/memblock.c	2011-03-08 09:25:27.000000000 +0100
-+++ pulseaudio-0.9.22/src/pulsecore/memblock.c	2011-03-08 09:27:21.000000000 +0100
-@@ -54,7 +54,7 @@
+--- pulseaudio-0.99.2.orig/src/pulsecore/memblock.c	2011-08-15 10:41:56.000000000 +0200
++++ pulseaudio-0.99.2/src/pulsecore/memblock.c	2011-08-18 13:54:53.000000000 +0200
+@@ -57,7 +57,7 @@
   * stored in SHM and our OS does not commit the memory before we use
   * it for the first time. */
  #define PA_MEMPOOL_SLOTS_MAX 1024
