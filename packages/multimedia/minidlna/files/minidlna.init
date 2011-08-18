@@ -7,7 +7,7 @@ PID=/var/run/minidlna.pid
 SSD=start-stop-daemon
 
 start() {
-	$SSD -p $PID -S -x $BIN -- -P $PID -R
+	$SSD -p $PID -S -x $BIN -- -P $PID
 }
 
 stop() {

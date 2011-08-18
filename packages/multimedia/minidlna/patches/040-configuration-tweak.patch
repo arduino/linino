@@ -22,12 +22,3 @@
  
  # set this if you would like to specify the directory where you want MiniDLNA to store its database and album art cache
  #db_dir=/var/cache/minidlna
-@@ -28,7 +28,7 @@ album_art_names=Cover.jpg/cover.jpg/Albu
- 
- # set this to no to disable inotify monitoring to automatically discover new files
- # note: the default is yes
--inotify=yes
-+inotify=no
- 
- # set this to yes to enable support for streaming .jpg and .mp3 files to a TiVo supporting HMO
- enable_tivo=no
