@@ -115,10 +115,6 @@ bbstored_global() {
 raidfile_section() {
 	local cfg="$1"
 
-	[ -z "$BXBK_RAIDFILE_CONF" ] && return 1
-	rm -f "$BXBK_RAIDFILE_CONF"
-	touch "$BXBK_RAIDFILE_CONF"
-	
 	local setnum
 	local blocksize
 	local path
@@ -155,6 +151,11 @@ create_config() {
 
 		config_load bbstored
 		config_foreach bbstored_global bbstored
+
+		[ -z "$BXBK_RAIDFILE_CONF" ] && return 1
+		rm -f "$BXBK_RAIDFILE_CONF"
+		touch "$BXBK_RAIDFILE_CONF"
+	
 		config_foreach raidfile_section raidfile
 
 		chown -R ${RUNAS_USER:-nobody}:${RUNAS_GROUP:-nogroup} "$BXBK_CONFIG_PATH"
