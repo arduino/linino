@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pulseaudio
 PKG_VERSION:=0.99.2
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://freedesktop.org/software/pulseaudio/releases/
@@ -82,6 +82,7 @@ define Package/pulseaudio-tools
   DEPENDS:=+libsndfile @PACKAGE_pulseaudio-daemon||PACKAGE_pulseaudio-daemon-avahi #+libpulse
   TITLE:=Tools for Pulseaudio
   URL:=http://www.pulseaudio.org
+  VARIANT:=noavahi
 endef
 
 define Package/pulseaudio-profiles
