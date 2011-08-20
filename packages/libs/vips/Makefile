@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vips
-PKG_VERSION:=7.24.5
+PKG_VERSION:=7.26.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.vips.ecs.soton.ac.uk/supported/7.24/
-PKG_MD5SUM:=00534ff42de0fcf662e0a4222e973a8c
+PKG_SOURCE_URL:=http://www.vips.ecs.soton.ac.uk/supported/7.26/
+PKG_MD5SUM:=518c5a2d4813afc097a17f3fca9f4532
 PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -30,7 +30,7 @@ define Package/vips
   $(call Package/vips/Default)
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+libjpeg +glib2 +libxml2 +imagemagick +libfreetype $(INTL_DEPENDS)
+  DEPENDS:=+libjpeg +glib2 +libxml2 +libfreetype $(INTL_DEPENDS)
 endef
 
 define Package/vips/description

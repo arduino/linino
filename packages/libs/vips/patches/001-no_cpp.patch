@@ -1,7 +1,7 @@
-diff -u --recursive vips-7.24.1-vanilla/configure.in vips-7.24.1/configure.in
---- vips-7.24.1-vanilla/configure.in	2011-03-29 22:09:45.465282663 -0500
-+++ vips-7.24.1/configure.in	2011-03-29 22:18:40.786482911 -0500
-@@ -143,7 +143,6 @@
+diff -u --recursive vips-7.26.1-vanilla/configure.in vips-7.26.1/configure.in
+--- vips-7.26.1-vanilla/configure.in	2011-08-10 21:31:05.386968954 -0500
++++ vips-7.26.1/configure.in	2011-08-10 21:31:50.747488580 -0500
+@@ -142,7 +142,6 @@
  AC_PROG_AWK
  AC_PROG_CC
  AC_PROG_CC_STDC
@@ -9,23 +9,23 @@ diff -u --recursive vips-7.24.1-vanilla/configure.in vips-7.24.1/configure.in
  AC_C_CONST
  AC_C_RESTRICT
  AC_PROG_RANLIB
-@@ -615,7 +614,6 @@
+@@ -604,7 +603,6 @@
  # in AC_OUTPUT, but that seems to break for some combinations of sh/m4
  AC_OUTPUT([
- 	vips-7.24.pc
--	vipsCC-7.24.pc
+ 	vips-7.26.pc
+-	vipsCC-7.26.pc
  	Makefile 
  	libvips/include/vips/version.h 
  	libvips/include/Makefile 
-@@ -624,7 +622,6 @@
- 	libvips/acquire/Makefile 
+@@ -612,7 +610,6 @@
+ 	libvips/Makefile 
  	libvips/arithmetic/Makefile 
  	libvips/boolean/Makefile 
 -	libvips/cimg/Makefile 
  	libvips/colour/Makefile 
  	libvips/conversion/Makefile 
  	libvips/convolution/Makefile 
-@@ -641,9 +638,6 @@
+@@ -629,9 +626,6 @@
  	libvips/relational/Makefile 
  	libvips/resample/Makefile 
  	libvips/video/Makefile 
@@ -33,19 +33,19 @@ diff -u --recursive vips-7.24.1-vanilla/configure.in vips-7.24.1/configure.in
 -	libvipsCC/include/vips/Makefile 
 -	libvipsCC/Makefile 
  	tools/Makefile 
- 	tools/iofuncs/Makefile 
- 	tools/mosaicing/Makefile 
-@@ -655,7 +649,6 @@
- 	tools/scripts/light_correct 
- 	tools/scripts/shrink_width 
+ 	tools/batch_crop 
+ 	tools/batch_image_convert 
+@@ -639,7 +633,6 @@
+ 	tools/light_correct 
+ 	tools/shrink_width 
  	swig/Makefile 
 -	swig/vipsCC/Makefile 
  	swig/python/setup.py 
  	man/Makefile
  	doc/Makefile
-diff -u --recursive vips-7.24.1-vanilla/libvips/Makefile.am vips-7.24.1/libvips/Makefile.am
---- vips-7.24.1-vanilla/libvips/Makefile.am	2011-03-29 22:09:45.525280200 -0500
-+++ vips-7.24.1/libvips/Makefile.am	2011-03-29 22:16:08.223081415 -0500
+diff -u --recursive vips-7.26.1-vanilla/libvips/Makefile.am vips-7.26.1/libvips/Makefile.am
+--- vips-7.26.1-vanilla/libvips/Makefile.am	2011-08-10 21:31:05.982949772 -0500
++++ vips-7.26.1/libvips/Makefile.am	2011-08-10 21:32:37.969906173 -0500
 @@ -1,14 +1,3 @@
 -# only build in the cimg dir if C++ is enabled
 -if ENABLE_CXX
@@ -60,8 +60,8 @@ diff -u --recursive vips-7.24.1-vanilla/libvips/Makefile.am vips-7.24.1/libvips/
 -
  SUBDIRS = \
  	include \
- 	acquire \
-@@ -19,7 +8,6 @@
+ 	arithmetic \
+@@ -18,7 +7,6 @@
  	conversion \
  	deprecated \
  	convolution \
@@ -69,7 +69,7 @@ diff -u --recursive vips-7.24.1-vanilla/libvips/Makefile.am vips-7.24.1/libvips/
  	format \
  	freq_filt \
  	histograms_lut \
-@@ -36,9 +24,6 @@
+@@ -35,9 +23,6 @@
  lib_LTLIBRARIES = libvips.la
  
  libvips_la_SOURCES = dummy.c 
@@ -79,7 +79,7 @@ diff -u --recursive vips-7.24.1-vanilla/libvips/Makefile.am vips-7.24.1/libvips/
  
  # DLLs need dependant libs there too ... put @VIPS_LIBS@ at the end
  libvips_la_LIBADD = \
-@@ -50,7 +35,6 @@
+@@ -48,7 +33,6 @@
  	conversion/libconversion.la \
  	convolution/libconvolution.la \
  	deprecated/libdeprecated.la \
@@ -87,7 +87,7 @@ diff -u --recursive vips-7.24.1-vanilla/libvips/Makefile.am vips-7.24.1/libvips/
  	format/libformat.la \
  	freq_filt/libfreq_filt.la \
  	histograms_lut/libhistograms_lut.la \
-@@ -64,13 +48,6 @@
+@@ -62,13 +46,6 @@
  	video/libvideo.la \
  	@VIPS_LIBS@
  
@@ -101,10 +101,10 @@ diff -u --recursive vips-7.24.1-vanilla/libvips/Makefile.am vips-7.24.1/libvips/
 -
 -EXTRA_DIST = \
 -	$(C_DIST_DIR)
-diff -u --recursive vips-7.24.1-vanilla/libvips/resample/Makefile.am vips-7.24.1/libvips/resample/Makefile.am
---- vips-7.24.1-vanilla/libvips/resample/Makefile.am	2011-03-29 22:09:45.546279339 -0500
-+++ vips-7.24.1/libvips/resample/Makefile.am	2011-03-29 22:16:28.918185323 -0500
-@@ -2,23 +2,6 @@
+diff -u --recursive vips-7.26.1-vanilla/libvips/resample/Makefile.am vips-7.26.1/libvips/resample/Makefile.am
+--- vips-7.26.1-vanilla/libvips/resample/Makefile.am	2011-08-10 21:31:06.658928005 -0500
++++ vips-7.26.1/libvips/resample/Makefile.am	2011-08-10 21:32:59.648166658 -0500
+@@ -2,22 +2,6 @@
  # you'd think we could just define a couple of variables, but that seems to
  # confuse libtool and make it link the library with g++
  # instead, have two completely different paths
@@ -114,7 +114,6 @@ diff -u --recursive vips-7.24.1-vanilla/libvips/resample/Makefile.am vips-7.24.1
 -	im_affine.c \
 -	interpolate.c \
 -	im_shrink.c \
--	im_stretch3.c \
 -	im_rightshift_size.c \
 -	transform.c \
 -	resample_dispatch.c \
@@ -128,7 +127,7 @@ diff -u --recursive vips-7.24.1-vanilla/libvips/resample/Makefile.am vips-7.24.1
  
  libresample_la_SOURCES = \
  	im_affine.c \
-@@ -29,15 +12,6 @@
+@@ -27,15 +11,6 @@
  	transform.c \
  	resample_dispatch.c 
  
