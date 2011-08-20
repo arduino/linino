@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ffmpeg
-PKG_VERSION:=0.5.4
-PKG_RELEASE:=2
+PKG_VERSION:=0.8.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ffmpeg.org/releases/
-PKG_MD5SUM:=87e771cd0f5d465fbf1a0a4824b7cc24
+PKG_MD5SUM:=967d481c98161582d149aced6e3b2f31
 
 FFMPEG_ENCODERS:= \
 	ac3 \
@@ -40,7 +40,6 @@ FFMPEG_DECODERS:= \
 	mpeg1video \
 	mpeg2video \
 	mpeg4 \
-	mpeg4aac \
 	mpegvideo \
 	pcm_s16be \
 	pcm_s16le \
@@ -60,7 +59,6 @@ FFMPEG_MUXERS:= \
 	mpeg2video \
 	mpegts \
 	ogg \
-	oss \
 	rtp \
 
 FFMPEG_DEMUXERS:= \
@@ -127,6 +125,20 @@ $(call Package/ffmpeg/Default/description)
  This package contains the FFmpeg command line tool.
 endef
 
+define Package/ffprobe
+$(call Package/ffmpeg/Default)
+ SECTION:=multimedia
+ CATEGORY:=Multimedia
+ TITLE+= CLI media identifier
+ DEPENDS+= +libffmpeg
+endef
+
+define Package/ffprobe/description
+$(call Package/ffmpeg/Default/description)
+ .
+ This package contains the FFprobe command line tool.
+endef
+
 define Package/ffserver
 $(call Package/ffserver/Default)
  SECTION:=multimedia
@@ -154,7 +166,7 @@ define Package/libffmpeg/config
 source "$(SOURCE)/Config.in"
 endef
 
-define Package/libffmeg/description
+define Package/libffmpeg/description
 $(call Package/ffmpeg/Default/description)
  .
  This package contains FFmpeg shared libraries.
@@ -211,37 +223,42 @@ define Build/Configure
 		--enable-shared \
 		--enable-static \
 		--disable-debug \
+		\
 		--enable-gpl \
-		--disable-libfaad \
+		--enable-version3 \
+		\
+		--disable-doc \
+		--disable-dxva2 \
 		--disable-mmx \
 		--disable-mmx2 \
 		--enable-pthreads \
 		--disable-optimizations \
 		--enable-small \
 		--disable-stripping \
-		--disable-vhook \
 		--enable-zlib \
 		--enable-postproc \
 		--enable-swscale \
 		\
-		$(if $(CONFIG_PACKAGE_ffmpeg),,--disable-ffmpeg) \
-		$(if $(CONFIG_PACKAGE_ffserver),,--disable-ffserver) \
-		$(if $(CONFIG_FFMPEG_IPV6),,--disable-ipv6) \
-		\
 		--disable-bsfs \
 		--disable-devices \
-		--disable-encoders \
-		$(FFMPEG_CONFIGURE_ENCODERS) \
-		--disable-decoders \
-		$(FFMPEG_CONFIGURE_DECODERS) \
-		--disable-muxers \
-		$(FFMPEG_CONFIGURE_MUXERS) \
-		--disable-demuxers \
-		$(FFMPEG_CONFIGURE_DEMUXERS) \
+		--disable-filters \
+		--disable-hwaccels \
 		--disable-parsers \
-		$(FFMPEG_CONFIGURE_PARSERS) \
 		--disable-protocols \
+		$(if $(CONFIG_FFMPEG_ENCODE),,--disable-encoders --disable-muxers) \
+		$(if $(CONFIG_FFMPEG_DECODE),,--disable-decoders --disable-demuxers) \
+		$(FFMPEG_CONFIGURE_ENCODERS) \
+		$(FFMPEG_CONFIGURE_DECODERS) \
+		$(FFMPEG_CONFIGURE_MUXERS) \
+		$(FFMPEG_CONFIGURE_DEMUXERS) \
+		$(FFMPEG_CONFIGURE_PARSERS) \
 		$(FFMPEG_CONFIGURE_PROTOCOLS) \
+		\
+		$(if $(CONFIG_PACKAGE_ffmpeg),,--disable-ffmpeg) \
+		--disable-ffplay \
+		$(if $(CONFIG_PACKAGE_ffprobe),,--disable-ffprobe) \
+		$(if $(CONFIG_PACKAGE_ffserver),,--disable-ffserver) \
+		\
 	)
 endef
 
@@ -270,6 +287,11 @@ define Package/ffmpeg/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ffmpeg $(1)/usr/bin/
 endef
 
+define Package/ffprobe/install
+	$(INSTALL_DIR_ $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ffprobe $(1)/usr/bin/
+endef
+
 define Package/ffserver/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ffserver $(1)/usr/bin/
@@ -291,6 +313,7 @@ define Package/libswscale/install
 endef
 
 $(eval $(call BuildPackage,ffmpeg))
+$(eval $(call BuildPackage,ffprobe))
 $(eval $(call BuildPackage,ffserver))
 $(eval $(call BuildPackage,libffmpeg))
 $(eval $(call BuildPackage,libpostproc))
