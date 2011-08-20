@@ -30,7 +30,7 @@ define Package/shorewall6-lite
   DEPENDS:=+ip +ip6tables
   TITLE:=Shorewall6 Lite
   URL:=http://www.shorewall.net/
-  SUBMENU:=firewall
+  SUBMENU:=Firewall
 endef
 
 define Package/shorewall6-lite/description
