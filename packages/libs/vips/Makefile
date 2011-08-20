@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vips
-PKG_VERSION:=7.24.1
+PKG_VERSION:=7.24.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.vips.ecs.soton.ac.uk/supported/7.24/
-PKG_MD5SUM:=7e9d34960c3453f3b8d1d4300fe4b7a0
+PKG_MD5SUM:=00534ff42de0fcf662e0a4222e973a8c
 PKG_FIXUP = libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -43,7 +43,8 @@ TARGET_LDFLAGS+= \
 CONFIGURE_ARGS += \
 	--disable-cxx \
 	--disable-threads \
-	--without-liboil
+	--without-liboil \
+	--without-magick
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/vips
