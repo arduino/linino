@@ -1,6 +1,6 @@
---- a/lib.base
-+++ b/lib.base
-@@ -260,7 +260,7 @@
+--- a/lib.common
++++ b/lib.common
+@@ -292,7 +292,7 @@
  
      [ -n "${MODULE_SUFFIX:=o gz ko o.gz ko.gz}" ]
  
@@ -9,7 +9,7 @@
      MODULES=$(lsmod | cut -d ' ' -f1)
  
      for directory in $(split $MODULESDIR); do
-@@ -296,7 +296,7 @@
+@@ -328,7 +328,7 @@
      [ -n "${MODULE_SUFFIX:=o gz ko o.gz ko.gz}" ]
  
      [ -z "$MODULESDIR" ] && \
