@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libsndfile
 PKG_VERSION:=1.0.25
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.mega-nerd.com/libsndfile/files/
@@ -36,8 +36,15 @@ endef
 CONFIGURE_ARGS+= \
 	--disable-alsa \
 	--disable-external-libs \
-	--disable-sqlite \
-	--disable-shave \
+	--disable-sqlite
+
+CONFIGURE_VARS += \
+	ac_cv_sys_file_offset_bits=64 \
+	ac_cv_sys_large_files=yes \
+	ac_cv_sys_largefile_CFLAGS=-D_LARGFILE_SOURCE \
+	ac_cv_sys_largefile_LDFLAGS= \
+	ac_cv_sys_largefile_LIBS= \
+	ac_cv_sys_largefile_source=yes
 
 TARGET_CFLAGS += $(FPIC)
 
