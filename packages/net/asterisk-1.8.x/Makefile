@@ -151,6 +151,17 @@ $(call Package/asterisk18/Default/description)
  This package provides the channel chan_mgcp support to Asterisk.
 endef
 
+define Package/asterisk18-chan-skinny
+$(call Package/asterisk18/Default)
+  TITLE:=Skinny channel support
+  DEPENDS:= asterisk18
+endef
+
+define Package/asterisk18-chan-skinny/description
+$(call Package/asterisk18/Default/description)
+ This package provides the channel chan_skinny support to Asterisk.
+endef
+
 define Package/asterisk18-curl
 $(call Package/asterisk18/Default)
   TITLE:=CURL support
@@ -340,6 +351,7 @@ define Package/asterisk18-voicemail/install
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/*voicemail.so $(1)/usr/lib/asterisk/modules/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_adsi.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_smdi.so $(1)/usr/lib/asterisk/modules/
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/sounds/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/asterisk/sounds/en/vm-*.gsm $(1)/usr/lib/asterisk/sounds/
 endef
@@ -434,6 +446,17 @@ define Package/asterisk18-chan-mgcp/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_mgcp.so $(1)/usr/lib/asterisk/modules/
 endef
 
+define Package/asterisk18-chan-skinny/conffiles
+/etc/asterisk/skinny.conf
+endef
+
+define Package/asterisk18-chan-skinny/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/skinny.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_skinny.so $(1)/usr/lib/asterisk/modules/
+endef
+
 define Package/asterisk18-curl/install
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/func_curl.so $(1)/usr/lib/asterisk/modules/
@@ -488,6 +511,7 @@ $(eval $(call BuildPackage,asterisk18-res-musiconhold))
 $(eval $(call BuildPackage,asterisk18-chan-gtalk))
 $(eval $(call BuildPackage,asterisk18-chan-mobile))
 $(eval $(call BuildPackage,asterisk18-chan-mgcp))
+$(eval $(call BuildPackage,asterisk18-chan-skinny))
 $(eval $(call BuildPackage,asterisk18-curl))
 $(eval $(call BuildPackage,asterisk18-mysql))
 $(eval $(call Buildasterisk18ModuleTemplate,app_authenticate,Authenticate,support for executing arbitrary authenticate commands))
