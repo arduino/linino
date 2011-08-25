@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mysql
 PKG_VERSION:=5.1.53
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=\
@@ -29,7 +29,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libmysqlclient/Default
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+zlib
+  DEPENDS:=+uclibcxx +zlib
   TITLE:=MySQL client library
   URL:=http://dev.mysql.com/
 endef
@@ -37,7 +37,7 @@ endef
 define Package/mysql-server/Default
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+zlib +libmysqlclient +uclibcxx
+  DEPENDS:=+libmysqlclient
   TITLE:=MySQL Server
   URL:=http://dev.mysql.com/
   SUBMENU:=database
