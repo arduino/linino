@@ -199,9 +199,19 @@ config LCD4LINUX_DRV_MatrixOrbitalGX
 	select LCD4LINUX_NEEDS_libgd
 	select LCD4LINUX_NEEDS_libusb
 
+config LCD4LINUX_DRV_mdm166a
+	bool
+	prompt "mdm166a"
+	select LCD4LINUX_HAS_AT_LEAST_ONE_DRIVER
+
 config LCD4LINUX_DRV_MilfordInstruments
 	bool
 	prompt "MilfordInstruments"
+	select LCD4LINUX_HAS_AT_LEAST_ONE_DRIVER
+
+config LCD4LINUX_DRV_Newhaven
+	bool
+	prompt "Newhaven"
 	select LCD4LINUX_HAS_AT_LEAST_ONE_DRIVER
 
 config LCD4LINUX_DRV_Noritake
