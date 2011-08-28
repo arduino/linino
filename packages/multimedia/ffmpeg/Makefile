@@ -288,7 +288,7 @@ define Package/ffmpeg/install
 endef
 
 define Package/ffprobe/install
-	$(INSTALL_DIR_ $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ffprobe $(1)/usr/bin/
 endef
 
