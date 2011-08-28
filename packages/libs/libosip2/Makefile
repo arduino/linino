@@ -17,6 +17,7 @@ PKG_MD5SUM:=7691546f6b3349d10007fc1aaff0f4e0
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -42,7 +43,6 @@ define Build/Configure
 		--disable-trace \
 		--enable-pthread \
 		--enable-semaphore \
-		--enable-ntimer \
 	)
 endef
 
