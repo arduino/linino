@@ -1,0 +1,84 @@
+menu "Configuration"
+	depends on PACKAGE_openvpn
+
+config OPENVPN_LZO
+	bool "Disable LZO compression support"
+	depends on PACKAGE_openvpn
+	default n
+
+config OPENVPN_CRYPTO
+	bool "Disable OpenSSL crypto support"
+	depends on PACKAGE_openvpn
+	default n
+
+config OPENVPN_SSL
+	bool "Disable OpenSSL SSL support for TLS-based key exchange"
+	depends on PACKAGE_openvpn
+	default n
+
+config OPENVPN_X509_ALT_USERNAME
+	bool "Enable the --x509-username-field feature"
+	depends on PACKAGE_openvpn
+	default n
+
+config OPENVPN_MULTI
+	bool "Disable client/server support (--mode server + client mode)"
+	depends on PACKAGE_openvpn
+	default n
+
+config OPENVPN_SERVER
+	bool "Disable server support only (but retain client support)"
+	depends on PACKAGE_openvpn
+	default n
+
+config OPENVPN_EUREPHIA
+	bool "Disable support for the eurephia plug-in"
+	depends on PACKAGE_openvpn
+	default y
+
+config OPENVPN_MANAGEMENT
+	bool "Disable management server support"
+	depends on PACKAGE_openvpn
+	default y
+
+config OPENVPN_PKCS11
+	bool "Disable pkcs11 support"
+	depends on PACKAGE_openvpn
+	default n
+
+config OPENVPN_HTTP
+	bool "Disable HTTP proxy support"
+	depends on PACKAGE_openvpn
+	default n
+
+config OPENVPN_FRAGMENT
+	bool "Disable internal fragmentation support (--fragment)"
+	depends on PACKAGE_openvpn
+	default n
+
+config OPENVPN_MULTIHOME
+	bool "Disable multi-homed UDP server support (--multihome)"
+	depends on PACKAGE_openvpn
+	default n
+
+config OPENVPN_PORT_SHARE
+	bool "Disable TCP server port-share support (--port-share)"
+	depends on PACKAGE_openvpn
+	default n
+
+config OPENVPN_ENABLE_PASSWORD_SAVE
+	bool "Allow --askpass and --auth-user-pass passwords to be read from a file"
+	depends on PACKAGE_openvpn
+	default n
+
+config OPENVPN_DEF_AUTH
+	bool "Disable deferred authentication"
+	depends on PACKAGE_openvpn
+	default n
+
+config OPENVPN_PF
+	bool "Disable internal packet filter"
+	depends on PACKAGE_openvpn
+	default n
+
+endmenu

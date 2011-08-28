@@ -8,40 +8,36 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openvpn
-PKG_VERSION:=2.1.4
-PKG_RELEASE:=3
+PKG_VERSION:=2.2.1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://swupdate.openvpn.net/community/releases @SF/openvpn
-PKG_MD5SUM:=96a11868082685802489254f03ff3bde
+PKG_MD5SUM:=500bee5449b29906150569aaf2eb2730
 
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/openvpn
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=VPN
   DEPENDS:=+kmod-tun +libopenssl +PACKAGE_openvpn_complzo:liblzo
   TITLE:=Open source VPN solution using SSL
   URL:=http://openvpn.net
-  SUBMENU:=VPN
-endef
-
-define Package/openvpn/config
-config PACKAGE_openvpn_complzo
-	bool "Enable --comp-lzo compression option"
-	depends on PACKAGE_openvpn
-	default y
-endef
-
-define Package/openvpn/conffiles
-/etc/config/openvpn
+  MENU:=1
 endef
 
 define Package/openvpn/description
-	 Open source VPN solution using SSL
+ Open source VPN solution using SSL
 endef
+
+define Package/openvpn/config
+	source "$(SOURCE)/Config.in"
+endef
+
 
 define Package/openvpn-easy-rsa
   $(call Package/openvpn)
@@ -59,18 +55,96 @@ CONFIGURE_ARGS+= \
 	--with-ifconfig-path=/sbin/ifconfig \
 	--with-iproute-path=/usr/sbin/ip \
 	--with-route-path=/sbin/route \
-	--disable-pthread \
 	--disable-debug \
 	--disable-plugins \
-	--enable-management \
+	--disable-pthread \
+	--disable-selinux \
 	--disable-socks \
-	--enable-password-save \
 	--enable-small
 
-ifndef CONFIG_PACKAGE_openvpn_complzo
+ifeq ($(CONFIG_OPENVPN_LZO),y)
 CONFIGURE_ARGS += \
 	--disable-lzo
 endif
+
+ifeq ($(CONFIG_OPENVPN_CRYPTO),y)
+CONFIGURE_ARGS += \
+	--disable-crypto
+endif
+
+ifeq ($(CONFIG_OPENVPN_SSL),y)
+CONFIGURE_ARGS += \
+	--disable-ssl
+endif
+
+ifeq ($(CONFIG_OPENVPN_X509_ALT_USERNAME),y)
+CONFIGURE_ARGS += \
+	--enable-x509-alt-username
+endif
+
+ifeq ($(CONFIG_OPENVPN_MULTI),y)
+CONFIGURE_ARGS += \
+	--disable-multi
+endif
+
+ifeq ($(CONFIG_OPENVPN_SERVER),y)
+CONFIGURE_ARGS += \
+	--disable-server
+endif
+
+ifeq ($(CONFIG_OPENVPN_EUREPHIA),y)
+CONFIGURE_ARGS += \
+	--disable-eurephia
+endif
+
+ifeq ($(CONFIG_OPENVPN_MANAGEMENT),y)
+CONFIGURE_ARGS += \
+	--disable-management
+endif
+
+ifeq ($(CONFIG_OPENVPN_PKCS11),y)
+CONFIGURE_ARGS += \
+	--disable-pkcs11
+endif
+
+ifeq ($(CONFIG_OPENVPN_HTTP),y)
+CONFIGURE_ARGS += \
+	--disable-http
+endif
+
+ifeq ($(CONFIG_OPENVPN_FRAGMENT),y)
+CONFIGURE_ARGS += \
+	--disable-fragment
+endif
+
+ifeq ($(CONFIG_OPENVPN_MULTIHOME),y)
+CONFIGURE_ARGS += \
+	--disable-multihome
+endif
+
+ifeq ($(CONFIG_OPENVPN_PORT_SHARE),y)
+CONFIGURE_ARGS += \
+	--disable-port-share
+endif
+
+ifeq ($(CONFIG_OPENVPN_ENABLE_PASSWORD_SAVE),y)
+CONFIGURE_ARGS += \
+	--enable-password-save
+endif
+
+ifeq ($(CONFIG_OPENVPN_DEF_AUTH),y)
+CONFIGURE_ARGS += \
+	--disable-def-auth
+endif
+
+ifeq ($(CONFIG_OPENVPN_PF),y)
+CONFIGURE_ARGS += \
+	--disable-pf
+endif
+
+define Package/openvpn/conffiles
+/etc/config/openvpn
+endef
 
 define Package/openvpn/install
 	$(INSTALL_DIR) $(1)/usr/sbin
@@ -88,7 +162,7 @@ define Package/openvpn-easy-rsa/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/easy-rsa/2.0/{build-*,clean-all,inherit-inter,list-crl,pkitool,revoke-full,sign-req,whichopensslcnf} $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/easy-rsa
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/easy-rsa/2.0/openssl.cnf $(1)/etc/easy-rsa/openssl.cnf
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/easy-rsa/2.0/openssl-1.0.0.cnf $(1)/etc/easy-rsa/openssl-1.0.0.cnf
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/easy-rsa/2.0/vars $(1)/etc/easy-rsa/vars
 	$(INSTALL_DIR) $(1)/etc/easy-rsa/keys
 	$(INSTALL_DATA) files/easy-rsa.index $(1)/etc/easy-rsa/keys/index.txt
