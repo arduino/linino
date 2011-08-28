@@ -1,0 +1,17 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2009 OpenWrt.org
+START=49
+# Copyright (C) 2011 Artem Makhutov
+
+start() {
+	setkey -f /etc/ipsec.conf
+	mkdir /var/racoon/
+
+	/usr/sbin/racoon -f /etc/racoon/racoon.conf
+}
+
+stop() {
+	killall racoon
+	killall racoonctl
+}
+
