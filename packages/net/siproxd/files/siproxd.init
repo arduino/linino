@@ -9,6 +9,10 @@ siproxd_conf_prefix="$siproxd_conf_dir"siproxd-
 siproxd_registration_dir="/var/lib/siproxd/"
 siproxd_pid_dir="/var/run/"
 
+deal_with_lists () {
+	echo "$2" = "$1" >> "$siproxd_conf_prefix$cfg"				
+}
+
 start_instance()
 {
 	local cfg="$1"
@@ -31,6 +35,12 @@ start_instance()
 	config_get rtp_port_high "$cfg" rtp_port_high 7089
 	config_get rtp_timeout "$cfg" rtp_timeout 300
 	config_get rtp_dscp "$cfg" rtp_dscp 46
+	config_get sip_dscp "$cfg" sip_dscp 0
+	config_get rtp_input_dejitter "$cfg" rtp_input_dejitter 0
+	config_get rtp_output_dejitter "$cfg" rtp_output_dejitter 0
+	config_get tcp_timeout "$cfg" tcp_timeout 600
+	config_get tcp_connect_timeout "$cfg" tcp_connect_timeout 500
+	config_get tcp_keepalive "$cfg" tcp_keepalive 20
 	config_get default_expires "$cfg" default_expires 600
 	config_get proxy_auth_realm "$cfg" proxy_auth_realm
 	config_get proxy_auth_passwd "$cfg" proxy_auth_passwd
@@ -99,6 +109,12 @@ start_instance()
 	echo rtp_port_high = "$rtp_port_high" >> "$siproxd_conf_prefix$cfg"
 	echo rtp_timeout = "$rtp_timeout" >> "$siproxd_conf_prefix$cfg"
 	echo rtp_dscp = "$rtp_dscp" >> "$siproxd_conf_prefix$cfg"
+	echo sip_dscp = "$sip_dscp" >> "$siproxd_conf_prefix$cfg"
+	echo rtp_input_dejitter = "$rtp_input_dejitter" >> "$siproxd_conf_prefix$cfg"
+	echo rtp_output_dejitter = "$rtp_output_dejitter" >> "$siproxd_conf_prefix$cfg"
+	echo tcp_timeout = "$tcp_timeout" >> "$siproxd_conf_prefix$cfg"
+	echo tcp_connect_timeout = "$tcp_connect_timeout" >> "$siproxd_conf_prefix$cfg"
+	echo tcp_keepalive = "$tcp_keepalive" >> "$siproxd_conf_prefix$cfg"
 	echo default_expires = "$default_expires" >> "$siproxd_conf_prefix$cfg"
 	if [ -n "$proxy_auth_realm" ]; then
 		echo proxy_auth_realm = "$proxy_auth_realm" >> "$siproxd_conf_prefix$cfg"
@@ -134,6 +150,66 @@ start_instance()
 	if [ -n "$outbound_domain_port" ]; then
 		echo outbound_domain_port = "$outbound_domain_port" >> "$siproxd_conf_prefix$cfg"
 	fi
+
+	# handle plugins
+	config_get plugindir "$cfg" plugindir "/usr/lib/siproxd/"
+	echo plugindir = "$plugindir" >> "$siproxd_conf_prefix$cfg"
+
+	config_list_foreach "$cfg" 'load_plugin' deal_with_lists "load_plugin"
+
+	# plugin_demo.so
+	config_get plugin_demo_string "$cfg" plugin_demo_string
+	if [ -n "$plugin_demo_string" ]; then
+		echo plugin_demo_string = "$plugin_demo_string" >> "$siproxd_conf_prefix$cfg"
+	fi
+
+	# plugin_shortdial.so
+	config_get plugin_shortdial_akey "$cfg" plugin_shortdial_akey
+	if [ -n "$plugin_shortdial_akey" ]; then
+		echo plugin_shortdial_akey = "$plugin_shortdial_akey" >> "$siproxd_conf_prefix$cfg"
+	fi
+	config_list_foreach "$cfg" 'plugin_shortdial_entry' deal_with_lists "plugin_shortdial_entry"
+
+	# plugin_defaulttarget.so
+	config_get_bool plugin_defaulttarget_log "$cfg" plugin_defaulttarget_log
+	if [ -n "$plugin_defaulttarget_log" ]; then
+		echo plugin_defaulttarget_log = "$plugin_defaulttarget_log" >> "$siproxd_conf_prefix$cfg"
+	fi
+	config_get plugin_defaulttarget_target "$cfg" plugin_defaulttarget_target
+	if [ -n "$plugin_defaulttarget_target" ]; then
+		echo plugin_defaulttarget_target = "$plugin_defaulttarget_target" >> "$siproxd_conf_prefix$cfg"
+	fi
+
+	# plugin_fix_bogus_via.so
+	config_get plugin_fix_bogus_via_networks "$cfg" plugin_fix_bogus_via_networks
+	if [ -n "$plugin_fix_bogus_via_networks" ]; then
+		echo plugin_fix_bogus_via_networks = "$plugin_fix_bogus_via_networks" >> "$siproxd_conf_prefix$cfg"
+	fi
+
+	# plugin_stun.so
+	config_get plugin_stun_server "$cfg" plugin_stun_server
+	if [ -n "$plugin_stun_server" ]; then
+		echo plugin_stun_server = "$plugin_stun_server" >> "$siproxd_conf_prefix$cfg"
+	fi
+	config_get plugin_stun_port "$cfg" plugin_stun_port
+	if [ -n "$plugin_stun_port" ]; then
+		echo plugin_stun_port = "$plugin_stun_port" >> "$siproxd_conf_prefix$cfg"
+	fi
+	config_get plugin_stun_period "$cfg" plugin_stun_period
+	if [ -n "$plugin_stun_period" ]; then
+		echo plugin_stun_period = "$plugin_stun_period" >> "$siproxd_conf_prefix$cfg"
+	fi
+
+	# plugin_prefix.so
+	config_get plugin_prefix_akey "$cfg" plugin_prefix_akey
+	if [ -n "$plugin_prefix_akey" ]; then
+		echo plugin_prefix_akey = "$plugin_prefix_akey" >> "$siproxd_conf_prefix$cfg"
+	fi
+
+	# plugin_regex.so
+	config_list_foreach "$cfg" 'plugin_regex_desc' deal_with_lists "plugin_regex_desc"
+	config_list_foreach "$cfg" 'plugin_regex_pattern' deal_with_lists "plugin_regex_pattern"
+	config_list_foreach "$cfg" 'plugin_regex_replace' deal_with_lists "plugin_regex_replace"
 
 	$siproxd_bin --config "$siproxd_conf_prefix$cfg"
 }

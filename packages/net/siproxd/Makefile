@@ -9,25 +9,29 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=siproxd
 PKG_VERSION:=0.8.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/siproxd
 PKG_MD5SUM:=1a6f9d13aeb2d650375c9a346ac6cbaf
 
-PKG_BUILD_DEPENDS:=libosip2
-
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/siproxd
+define Package/siproxd/Default
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Telephony
-  DEPENDS:=+libltdl +libpthread
-  TITLE:=SIP (Session Initiation Protocol) proxy
   URL:=http://siproxd.sourceforge.net/
+endef
+
+define Package/siproxd
+  $(call Package/siproxd/Default)
+  DEPENDS:=+libltdl +libpthread +libosip2
+  TITLE:=SIP (Session Initiation Protocol) proxy
+  MENU:=1
 endef
 
 define Package/siproxd/description
@@ -39,10 +43,8 @@ define Package/siproxd/conffiles
 endef
 
 CONFIGURE_ARGS+= \
-	--enable-static-libosip2 \
 	--with-libosip-prefix="$(STAGING_DIR)/usr" \
-	--disable-doc \
-	--disable-shared
+	--disable-doc
 
 MAKE_FLAGS+= \
 	SUBDIRS="src scripts contrib" \
@@ -57,4 +59,27 @@ define Package/siproxd/install
 	$(INSTALL_BIN) ./files/siproxd.init $(1)/etc/init.d/siproxd
 endef
 
+define BuildPlugin
+  define Package/siproxd-mod-$(1)
+    $$(call Package/siproxd/Default)
+    TITLE:= siproxd $(1) plugin
+    DEPENDS:=siproxd
+  endef
+
+  define Package/siproxd-mod-$(1)/install
+	$(INSTALL_DIR) $$(1)/usr/lib/siproxd
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/siproxd/plugin_$(1)*.so* $$(1)/usr/lib/siproxd
+  endef
+
+  $$(eval $$(call BuildPackage,siproxd-mod-$(1)))
+endef
+
 $(eval $(call BuildPackage,siproxd))
+$(eval $(call BuildPlugin,defaulttarget))
+$(eval $(call BuildPlugin,demo))
+$(eval $(call BuildPlugin,fix_bogus_via))
+$(eval $(call BuildPlugin,logcall))
+$(eval $(call BuildPlugin,prefix))
+$(eval $(call BuildPlugin,regex))
+$(eval $(call BuildPlugin,shortdial))
+$(eval $(call BuildPlugin,stun))
