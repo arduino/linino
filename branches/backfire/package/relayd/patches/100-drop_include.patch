@@ -1,0 +1,10 @@
+--- a/relayd.h
++++ b/relayd.h
+@@ -27,7 +27,6 @@
+ 
+ #include <linux/if_packet.h>
+ #include <linux/rtnetlink.h>
+-#include <linux/neighbour.h>
+ 
+ #include <stdint.h>
+ #include <stdbool.h>
