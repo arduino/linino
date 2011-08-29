@@ -24,7 +24,7 @@ define Package/openvpn
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=VPN
-  DEPENDS:=+kmod-tun +libopenssl +PACKAGE_openvpn_complzo:liblzo
+  DEPENDS:=+kmod-tun +libopenssl +!OPENVPN_DISABLE_LZO:liblzo
   TITLE:=Open source VPN solution using SSL
   URL:=http://openvpn.net
   MENU:=1
@@ -62,17 +62,17 @@ CONFIGURE_ARGS+= \
 	--disable-socks \
 	--enable-small
 
-ifeq ($(CONFIG_OPENVPN_LZO),y)
+ifeq ($(CONFIG_OPENVPN_DISABLE_LZO),y)
 CONFIGURE_ARGS += \
 	--disable-lzo
 endif
 
-ifeq ($(CONFIG_OPENVPN_CRYPTO),y)
+ifeq ($(CONFIG_OPENVPN_DISABLE_CRYPTO),y)
 CONFIGURE_ARGS += \
 	--disable-crypto
 endif
 
-ifeq ($(CONFIG_OPENVPN_SSL),y)
+ifeq ($(CONFIG_OPENVPN_DISABLE_SSL),y)
 CONFIGURE_ARGS += \
 	--disable-ssl
 endif
@@ -82,47 +82,47 @@ CONFIGURE_ARGS += \
 	--enable-x509-alt-username
 endif
 
-ifeq ($(CONFIG_OPENVPN_MULTI),y)
+ifeq ($(CONFIG_OPENVPN_DISABLE_MULTI),y)
 CONFIGURE_ARGS += \
 	--disable-multi
 endif
 
-ifeq ($(CONFIG_OPENVPN_SERVER),y)
+ifeq ($(CONFIG_OPENVPN_DISABLE_SERVER),y)
 CONFIGURE_ARGS += \
 	--disable-server
 endif
 
-ifeq ($(CONFIG_OPENVPN_EUREPHIA),y)
+ifeq ($(CONFIG_OPENVPN_DISABLE_EUREPHIA),y)
 CONFIGURE_ARGS += \
 	--disable-eurephia
 endif
 
-ifeq ($(CONFIG_OPENVPN_MANAGEMENT),y)
+ifeq ($(CONFIG_OPENVPN_DISABLE_MANAGEMENT),y)
 CONFIGURE_ARGS += \
 	--disable-management
 endif
 
-ifeq ($(CONFIG_OPENVPN_PKCS11),y)
+ifeq ($(CONFIG_OPENVPN_DISABLE_PKCS11),y)
 CONFIGURE_ARGS += \
 	--disable-pkcs11
 endif
 
-ifeq ($(CONFIG_OPENVPN_HTTP),y)
+ifeq ($(CONFIG_OPENVPN_DISABLE_HTTP),y)
 CONFIGURE_ARGS += \
 	--disable-http
 endif
 
-ifeq ($(CONFIG_OPENVPN_FRAGMENT),y)
+ifeq ($(CONFIG_OPENVPN_DISABLE_FRAGMENT),y)
 CONFIGURE_ARGS += \
 	--disable-fragment
 endif
 
-ifeq ($(CONFIG_OPENVPN_MULTIHOME),y)
+ifeq ($(CONFIG_OPENVPN_DISABLE_MULTIHOME),y)
 CONFIGURE_ARGS += \
 	--disable-multihome
 endif
 
-ifeq ($(CONFIG_OPENVPN_PORT_SHARE),y)
+ifeq ($(CONFIG_OPENVPN_DISABLE_PORT_SHARE),y)
 CONFIGURE_ARGS += \
 	--disable-port-share
 endif
@@ -132,12 +132,12 @@ CONFIGURE_ARGS += \
 	--enable-password-save
 endif
 
-ifeq ($(CONFIG_OPENVPN_DEF_AUTH),y)
+ifeq ($(CONFIG_OPENVPN_DISABLE_DEF_AUTH),y)
 CONFIGURE_ARGS += \
 	--disable-def-auth
 endif
 
-ifeq ($(CONFIG_OPENVPN_PF),y)
+ifeq ($(CONFIG_OPENVPN_DISABLE_PF),y)
 CONFIGURE_ARGS += \
 	--disable-pf
 endif
