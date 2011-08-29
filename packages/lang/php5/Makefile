@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
 PKG_VERSION:=5.3.6
-PKG_RELEASE:=6
+PKG_RELEASE:=7
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
@@ -26,7 +26,7 @@ PHP5_MODULES = \
 	exif \
 	ftp \
 	gettext gd gmp \
-	hash \
+	hash http \
 	iconv \
 	json \
 	ldap libevent \
@@ -238,6 +238,15 @@ ifneq ($(CONFIG_PACKAGE_php5-mod-hash),)
   CONFIGURE_ARGS+= --enable-hash=shared
 else
   CONFIGURE_ARGS+= --disable-hash
+endif
+
+ifneq ($(CONFIG_PACKAGE_php5-mod-http),)
+  CONFIGURE_ARGS+= \
+	--enable-http=shared \
+	--without-http-shared-deps \
+	--with-http-curl-requests="$(STAGING_DIR)/usr"
+else
+  CONFIGURE_ARGS+= --disable-http
 endif
 
 ifneq ($(CONFIG_PACKAGE_php5-mod-iconv),)
@@ -495,6 +504,7 @@ $(eval $(call BuildModule,gettext,Gettext,+libintl-full))
 $(eval $(call BuildModule,gd,GD graphics,+libgd))
 $(eval $(call BuildModule,gmp,GMP,+libgmp))
 $(eval $(call BuildModule,hash,Hash))
+$(eval $(call BuildModule,http,HTTP,+libcurl +librt))
 $(eval $(call BuildModule,iconv,iConv,+libiconv))
 $(eval $(call BuildModule,json,JSON))
 $(eval $(call BuildModule,ldap,LDAP,+libopenldap +libsasl2))
