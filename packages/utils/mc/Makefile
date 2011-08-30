@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mc
-PKG_VERSION:=4.7.5.2
-PKG_RELEASE:=3
+PKG_VERSION:=4.7.5.3
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.midnight-commander.org/downloads/
-PKG_MD5SUM:=9fdfe7c0fcff362436eb35fcd1adf0fd
+PKG_MD5SUM:=6a67e139e0032d8a871455a80d490941
 
 PKG_BUILD_PARALLEL:=1
 
@@ -28,6 +28,11 @@ define Package/mc
   URL:=http://www.midnight-commander.org/
   SUBMENU:=filemanager
   MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
+  MENU:=1
+endef
+
+define Package/mc/config
+	source "$(SOURCE)/Config.in"
 endef
 
 define Package/mc/description
@@ -40,13 +45,31 @@ endef
 
 CONFIGURE_ARGS += \
 	--enable-utf8 \
-	--disable-vfs \
+	--disable-doxygen-doc \
 	--with-screen=ncurses \
-	--without-edit \
 	--without-gpm-mouse \
-	--without-subshell \
 	--without-x \
 	ac_cv_search_addwstr=no
+
+ifeq ($(CONFIG_MC_DIFF_VIEWER),n)
+CONFIGURE_ARGS += \
+	--without-diff-viewer
+endif
+
+ifeq ($(CONFIG_MC_EDITOR),n)
+CONFIGURE_ARGS += \
+	--without-edit
+endif
+
+ifeq ($(CONFIG_MC_SUBSHELL),n)
+CONFIGURE_ARGS += \
+	--without-subshell
+endif
+
+ifeq ($(CONFIG_MC_DISABLE_VFS),y)
+CONFIGURE_ARGS += \
+	--without-vfs
+endif
 
 AM_HOST=$(firstword $(wildcard $(STAGING_DIR_HOST)/share/automake-*))
 
@@ -60,8 +83,14 @@ endef
 
 define Package/mc/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/mc $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/mc $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/etc/mc
+ifeq ($(CONFIG_MC_DIFF_VIEWER),y)
+	ln -sf mc $(1)/usr/bin/mcdiff
+endif
+ifeq ($(CONFIG_MC_EDITOR),y)
+	ln -sf mc $(1)/usr/bin/mcedit
+endif
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/misc/mc.menu $(1)/etc/mc
 	$(INSTALL_DIR) $(1)/etc/mc/skins
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/misc/skins/default.ini $(1)/etc/mc/skins
