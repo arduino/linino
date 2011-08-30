@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=binutils
 PKG_VERSION:=$(strip $(subst ",, $(CONFIG_BINUTILS_VERSION)))
 #"))
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE_URL:=@GNU/binutils
 PKG_SOURCE:=binutils-$(PKG_VERSION).tar.bz2
@@ -47,7 +47,6 @@ CONFIGURE_ARGS = \
 		--target=$(REAL_GNU_TARGET_NAME) \
 		--host=$(REAL_GNU_TARGET_NAME) \
 		--build=$(GNU_HOST_NAME) \
-		--with-sysroot=$(PKG_INSTALL_DIR) \
 		--prefix=/usr \
 		--disable-multilib \
 		--disable-werror \
@@ -72,7 +71,7 @@ define Build/Configure
 		configure-libiberty \
 		configure-opcodes \
 	)
-	$(MAKE) CFLAGS="$(TARGET_CFLAGS)"-C $(PKG_BUILD_DIR)/bfd/po Makefile
+	$(MAKE) CFLAGS="$(TARGET_CFLAGS)" -C $(PKG_BUILD_DIR)/bfd/po Makefile
 endef
 
 define Build/InstallDev
