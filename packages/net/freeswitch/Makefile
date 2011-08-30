@@ -11,17 +11,17 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=freeswitch
 PKG_VERSION:=1.0.7
 PKG_RELEASE:=1
-PKG_REV:=46f097c1b94f43e5dad2c0b9592e921ae6933665
-PKG_SOURCE_VERSION:=$(PKG_REV)
 
 
 #
 # The latest FS git hash in PKG_REV can be obtained from http://fisheye.freeswitch.org
 #
+PKG_REV:=f697e5aa37e0aae56ce7d07ce74080fe809ddf25
+PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)_git-$(shell echo $(PKG_REV)|cut -b -9).tar.bz2
+PKG_SOURCE:=$(PKG_SOURCE_SUBDIR)_git-$(shell echo $(PKG_REV)|cut -b -9).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 
@@ -141,7 +141,13 @@ FS_MOD_AVAILABLE:= \
 
 
 PKG_CONFIG_DEPENDS:= \
+	CONFIG_FS_SOFIA_WITH_GNUTLS \
+	CONFIG_FS_SOFIA_WITH_IPV6 \
 	CONFIG_FS_SOFIA_WITH_ODBC \
+	CONFIG_FS_SOFIA_WITH_OPT \
+	CONFIG_FS_SOFIA_WITH_SCTP \
+	CONFIG_FS_SOFIA_WITH_ZRTP_GIT \
+	CONFIG_FS_SOFIA_WITHOUT_MYSQL \
 	$(patsubst %,CONFIG_PACKAGE_$(PKG_NAME)-mod-%,$(FS_MOD_AVAILABLE)) \
 
 
@@ -161,7 +167,7 @@ endef
 define Package/$(PKG_NAME)
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH open source telephony platform
-  DEPENDS:= +libopenssl +libreadline +libncurses +libpthread +libstdcpp
+  DEPENDS:= +libreadline +libncurses +libpthread +libstdcpp
   MENU:=1
 endef
 
@@ -174,13 +180,64 @@ endef
 
 
 define Package/$(PKG_NAME)/config
-    config FS_SOFIA_WITH_ODBC
+    config FS_SOFIA_WITH_IPV6
     depends on PACKAGE_$(PKG_NAME)
-    bool "Compile $(PKG_NAME)-mod-sofia with ODBC support (Requires unixodbc_svn)"
+    bool "Compile with IPV6 support"
+    default y
+    help
+            Compile $(PKG_NAME) with IPV6 Support.
+
+    config FS_SOFIA_WITH_OPT
+    depends on PACKAGE_$(PKG_NAME)
+    bool "Compile with optimization"
+    default y
+    help
+            Compile $(PKG_NAME) with optimization enabled.
+
+    config FS_SOFIA_WITHOUT_MYSQL
+    depends on PACKAGE_$(PKG_NAME)
+    bool "Compile without MySQL"
+    default y
+    help
+            Compile $(PKG_NAME) without MySQL.
+endef
+
+
+define Package/$(PKG_NAME)-mod-dingaling/config
+    config FS_SOFIA_WITH_GNUTLS
+    depends on PACKAGE_$(PKG_NAME)-mod-dingaling
+    bool "Compile with GNU TLS (Requires libgnutls-openssl)"
+    default y
+    select PACKAGE_libgnutls-openssl
+    help
+            Compile $(PKG_NAME)-mod-dingaling with GNU TLS Support (Requires libgnutls-openssl package).
+endef
+
+
+define Package/$(PKG_NAME)-mod-sofia/config
+    config FS_SOFIA_WITH_ODBC
+    depends on PACKAGE_$(PKG_NAME)-mod-sofia
+    bool "Compile with ODBC support (BROKEN: Requires unixodbc_svn)"
     default n
     select PACKAGE_unixodbc_svn
     help
             Compile $(PKG_NAME)-mod-sofia with ODBC Support (Requires unixodbc_svn package).
+
+    config FS_SOFIA_WITH_SCTP
+    depends on PACKAGE_$(PKG_NAME)-mod-sofia
+    bool "Compile with SCTP support (BROKEN)"
+    default n
+    select PACKAGE_sctp
+    help
+            Compile $(PKG_NAME)-mod-sofia with SCTP (Stream Control Transfer Protocol) support.
+
+    config FS_SOFIA_WITH_ZRTP_GIT
+    depends on PACKAGE_$(PKG_NAME)-mod-sofia
+    bool "Compile with ZRTP support (BROKEN: Requires libzrtpcpp)"
+    default n
+    select PACKAGE_libzrtpcpp
+    help
+            Compile $(PKG_NAME)-mod-sofia with ZRTP Support (Requires libzrtpcpp package).
 endef
 
 
@@ -261,6 +318,7 @@ endef
 define Package/$(PKG_NAME)-collection-minimal
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH minimal package collection
+  DEFAULT:=y
   DEPENDS:= $(PKG_NAME) \
 		+$(PKG_NAME)-config-minimal \
 		+$(PKG_NAME)-mod-codec2 \
@@ -370,7 +428,7 @@ endif
 
 FS_TARGET_CFLAGS:= ${TARGET_CFLAGS} -DLUA_USE_LINUX $(FPIC) -std=gnu99 -Wno-format
 FS_TARGET_CXXFLAGS:= ${TARGET_CXXFLAGS} -DLUA_USE_LINUX $(FPIC) -Wno-format
-FS_TARGET_CPPFLAGS:= -I. -I./lua ${TARGET_CPPFLAGS}
+FS_TARGET_CPPFLAGS:= -I. -I./lua $(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-erlang-event),-I$(STAGING_DIR_HOST)/lib/erlang/lib/erl_interface-3.6/include) $(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-json-cdr),-Wno-error) ${TARGET_CPPFLAGS}
 
 
 CONFIGURE_ARGS+= \
@@ -382,16 +440,19 @@ CONFIGURE_ARGS+= \
 	--srcdir="$(PKG_BUILD_DIR)" \
 	--sysconfdir="/etc/$(PKG_NAME)" \
 	--with-modinstdir="/usr/lib/$(PKG_NAME)" \
-	--enable-ipv6 \
-	--enable-optimization \
 	--with-random="/dev/urandom" \
-	--without-mysql \
+	$(if $(CONFIG_FS_SOFIA_WITHOUT_MYSQL),--without-mysql) \
+	$(call autoconf_bool,CONFIG_FS_SOFIA_WITH_IPV6,ipv6) \
+	$(call autoconf_bool,CONFIG_FS_SOFIA_WITH_OPT,optimization) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-celt),--with-ogg="$(STAGING_DIR)/usr",--without-iogg) \
 	$(if ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-curl)|$(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-cdr)|$(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-curl)),--with-libcurl="$(STAGING_DIR)/usr",--without-libcurl) \
-	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-dingaling),--with-openssl="$(STAGING_DIR)/usr",--without-openssl) \
+	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-dingaling)|$(CONFIG_FS_SOFIA_WITH_GNUTLS),--with-libgnutls="$(STAGING_DIR)/usr") \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-java),--with-java="$(STAGING_DIR)/usr",--without-java) \
-	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-spandsp),--enable-builtin-tiff,) \
-	--$(if $(CONFIG_FS_SOFIA_WITH_ODBC),en,dis)able-core-odbc-support --with-odbc="$(STAGING_DIR)/usr" \
+	$(call autoconf_bool,CONFIG_PACKAGE_$(PKG_NAME)-mod-spandsp,builtin-tiff) \
+	$(call autoconf_bool,CONFIG_FS_SOFIA_WITH_SCTP,sctp) \
+	$(call autoconf_bool,CONFIG_FS_SOFIA_WITH_ZRTP_GIT,zrtp) \
+	$(call autoconf_bool,CONFIG_FS_SOFIA_WITH_ODBC,core-odbc-support) \
+	$(if $(CONFIG_FS_SOFIA_WITH_ODBC),--with-odbc="$(STAGING_DIR)/usr") \
 
 
 CONFIGURE_VARS+= \
@@ -418,6 +479,7 @@ CONFIGURE_VARS+= \
 	HOST_CC="/usr/bin/cc" \
 	HOST_CXX="/usr/bin/g++" \
 	CROSS_COMPILE="1" \
+	ax_cv_c_compiler_vendor="gnu" \
 	ac_cv_dev_urandom="yes" \
 	ac_cv_file_dbd_apr_dbd_mysql_c="no" \
 	ac_cv_file__dev_random="no" \
@@ -431,6 +493,7 @@ CONFIGURE_VARS+= \
 	apr_cv_tcp_nodelay_with_cork="yes" \
 	apr_cv_type_rwlock_t="yes" \
 	ac_cv_path_LIBGNUTLS_CONFIG="no" \
+	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-perl),ac_cv_path_PERL="yes",) \
 	libzmq_cv_cxx_werror_flag="" \
 
 
@@ -611,7 +674,7 @@ $(eval $(call BuildPackage,$(PKG_NAME)-config-minimal))
 
 
 #
-# $(eval $(call BuildPlugin,Name,Title,Inter Depends,Extra Depends))
+# $(eval $(call BuildPlugin,Name,Title,Files,Inter Depends,Extra Depends))
 #
 $(eval $(call BuildPlugin,alsa,Alsa endpoint,mod_alsa,,))
 $(eval $(call BuildPlugin,amr,GSM-AMR codec,mod_amr,,))
@@ -636,7 +699,7 @@ $(eval $(call BuildPlugin,db,Database backend,mod_db,,))
 $(eval $(call BuildPlugin,dialplan-asterisk,Asterisk dialplan parser,mod_dialplan_asterisk,,))
 $(eval $(call BuildPlugin,dialplan-directory,Dialplan directory,mod_dialplan_directory,,))
 $(eval $(call BuildPlugin,dialplan-xml,Dialplan-XML interface,mod_dialplan_xml,,))
-$(eval $(call BuildPlugin,dingaling,Jabber interface,mod_dingaling,,+libgnutls-openssl)) 
+$(eval $(call BuildPlugin,dingaling,Jabber interface,mod_dingaling,,)) 
 $(eval $(call BuildPlugin,directory,application mod_directory,mod_directory,,))
 $(eval $(call BuildPlugin,distributor,application mod_distributor,mod_distributor,,))
 $(eval $(call BuildPlugin,dptools,Dialplan tools,mod_dptools,,))
@@ -697,8 +760,8 @@ $(eval $(call BuildPlugin,skypopen,Skype compatible endpoint,mod_skypopen,,+libX
 $(eval $(call BuildPlugin,snapshot,application mod_snapshot,mod_snapshot,,))
 $(eval $(call BuildPlugin,sndfile,Multi-Format file transcoder,mod_sndfile,,))
 $(eval $(call BuildPlugin,snipe-hunt,application mod_snipe_hunt,mod_snipe_hunt,,))
-$(eval $(call BuildPlugin,snom,SNOM specific features,mod_snom,,))
 $(eval $(call BuildPlugin,snmp,Simple Network Management Protocol,mod_snmp,,+libnetsnmp))
+$(eval $(call BuildPlugin,snom,SNOM specific features,mod_snom,,))
 $(eval $(call BuildPlugin,sofia,SIP,mod_sofia,,))
 $(eval $(call BuildPlugin,spandsp,Span DSP,mod_spandsp,,+libjpeg))
 $(eval $(call BuildPlugin,speex,Speex codec,mod_speex,,))
