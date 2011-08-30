@@ -1,6 +1,6 @@
 --- a/configure
 +++ b/configure
-@@ -15979,7 +15979,7 @@
+@@ -16067,7 +16067,7 @@ fi
      ac_libs=$LIBS
      LIBS="$LIBS -ldl"
      if test "$cross_compiling" = yes; then
@@ -8,4 +8,4 @@
 +  found=$found
  else
    cat > conftest.$ac_ext <<EOF
- #line 15986 "configure"
+ #line 16074 "configure"
