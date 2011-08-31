@@ -24,7 +24,7 @@ define Package/relayd
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Transparent routing / relay daemon
-  DEPENDS:=+libubox
+  DEPENDS:=+libubox @!LINUX_2_4
 endef
 
 TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
