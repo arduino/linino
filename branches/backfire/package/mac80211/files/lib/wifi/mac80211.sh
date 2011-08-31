@@ -16,6 +16,9 @@ mac80211_hostapd_setup_base() {
 	config_get beacon_int "$device" beacon_int
 	config_get basic_rate_list "$device" basic_rate
 	config_get_bool noscan "$device" noscan
+
+	hostapd_set_log_options base_cfg "$device"
+
 	[ -n "$channel" -a -z "$hwmode" ] && wifi_fixup_hwmode "$device"
 
 	[ "$channel" = auto ] && {
@@ -279,6 +282,9 @@ enable_mac80211() {
 	local apidx=0
 	fixed=""
 	local hostapd_ctrl=""
+
+	config_get ath9k_chanbw "$device" ath9k_chanbw
+	[ -n "$ath9k_chanbw" -a -d /sys/kernel/debug/ieee80211/$phy/ath9k ] && echo "$ath9k_chanbw" > /sys/kernel/debug/ieee80211/$phy/ath9k/chanbw
 
 	[ -n "$country" ] && iw reg set "$country"
 	[ "$channel" = "auto" -o "$channel" = "0" ] || {
