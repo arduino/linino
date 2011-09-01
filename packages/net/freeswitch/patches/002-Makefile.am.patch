@@ -15,19 +15,19 @@
  fs_encode_CFLAGS = $(AM_CFLAGS)
 -fs_encode_LDFLAGS = $(AM_LDFLAGS) $(CORE_LIBS)
 +fs_encode_LDFLAGS = $(AM_LDFLAGS) -lpthread $(CORE_LIBS)
- fs_encode_LDADD = libfreeswitch.la
+ fs_encode_LDADD = libfreeswitch.la -lcrypt -lrt
  
  ##
-@@ -307,7 +312,7 @@ fs_encode_LDADD = libfreeswitch.la
+@@ -307,7 +312,7 @@ fs_encode_LDADD = libfreeswitch.la -lcry
  ##
  tone2wav_SOURCES = src/tone2wav.c
  tone2wav_CFLAGS  = $(AM_CFLAGS)
 -tone2wav_LDFLAGS = $(AM_LDFLAGS) $(CORE_LIBS)
 +tone2wav_LDFLAGS = $(AM_LDFLAGS) -lpthread $(CORE_LIBS)
- tone2wav_LDADD   = libfreeswitch.la
+ tone2wav_LDADD   = libfreeswitch.la -lcrypt -lrt
  
  ##
-@@ -585,10 +590,13 @@ speex-reconf:
+@@ -586,10 +591,13 @@ speex-reconf:
  
  tiff-reconf:
  	cd libs/tiff-3.8.2 && autoreconf -fi
@@ -44,7 +44,7 @@
  
  python-reconf:
  	rm -f src/mod/languages/mod_python/Makefile
-@@ -611,12 +619,6 @@ iks-reconf:
+@@ -612,12 +620,6 @@ iks-reconf:
  	cd libs/iksemel && sh ./configure.gnu --prefix=$(prefix)
  	$(MAKE) mod_dingaling-clean
  

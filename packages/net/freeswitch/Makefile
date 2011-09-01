@@ -16,7 +16,7 @@ PKG_RELEASE:=1
 #
 # The latest FS git hash in PKG_REV can be obtained from http://fisheye.freeswitch.org
 #
-PKG_REV:=f697e5aa37e0aae56ce7d07ce74080fe809ddf25
+PKG_REV:=cf9859ea6959699260ef928d2b9fb79f9f0c3389
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
@@ -384,7 +384,7 @@ endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-event-zmq),)
- $(eval $(call Download/files,event-zmq,zeromq-2.1.7.tar.gz,7d3120f8a8fb913a7e55c57c6eb024f3,http://download.zeromq.org,,libs/))
+ $(eval $(call Download/files,event-zmq,zeromq-2.1.9.tar.gz,94c5e0262a79c5f82bc0b178c1f8a33d,http://download.zeromq.org,,libs/))
 endif
 
 
