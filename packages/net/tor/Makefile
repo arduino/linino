@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor
-PKG_VERSION:=0.2.1.30
+PKG_VERSION:=0.2.2.32
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://www.torproject.org/dist \
 	https://archive.torproject.org/tor-package-archive
-PKG_MD5SUM:=6c6d61e053af5969a245d025c4cfce9d
+PKG_MD5SUM:=6d70db8da9513453d520168e017a272c
 
 PKG_INSTALL:=1
 
@@ -88,13 +88,14 @@ endef
 CONFIGURE_ARGS += \
 	--with-libevent-dir="$(STAGING_DIR)/usr" \
 	--with-ssl-dir="$(STAGING_DIR)/usr" \
+	--disable-asciidoc
 
 CONFIGURE_VARS += \
-	CROSS_COMPILE="yes" \
+	CROSS_COMPILE="yes"
 
 # pass CFLAGS again to override -O2 set by configure
 MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS)" \
+	CFLAGS="$(TARGET_CFLAGS)"
 
 define Package/tor/install
 	$(INSTALL_DIR) $(1)/usr/sbin
