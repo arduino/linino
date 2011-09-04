@@ -25,6 +25,7 @@ define Package/haproxy
   TITLE:=The Reliable, High Performance TCP/HTTP Load Balancer
   URL:=http://haproxy.1wt.eu/
   DEPENDS:=+libpcre +libltdl
+  MAINTAINER:=Thomas Heil <heil@terminal-consulting.de>
 endef
 
 define Package/haproxy/conffiles
