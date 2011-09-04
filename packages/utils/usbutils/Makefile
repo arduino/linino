@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=usbutils
-PKG_VERSION:=003
+PKG_VERSION:=004
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@KERNEL/linux/utils/usb/usbutils
-PKG_MD5SUM:=218208b8382ead0f7e49ef7ec0cf77f2
+PKG_MD5SUM:=fc69cde51b2094aa4bbd804c0ba97e35
 
 PKG_INSTALL:=1
 
