@@ -7,7 +7,7 @@
 
 define Profile/DefaultNoWifi
 	NAME:=Default Profile (no WiFi)
-	PACKAGES:=
+	PACKAGES:=-kmod-ath9k -wpad-mini
 endef
 
 define Profile/DefaultNoWifi/Description
