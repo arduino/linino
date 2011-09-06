@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vnstat
 PKG_VERSION:=1.11
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://humdi.net/vnstat
@@ -89,6 +89,8 @@ define Package/vnstat/install
 	$(INSTALL_CONF) ./files/vnstat-uci.conf $(1)/etc/config/vnstat
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/vnstat.init $(1)/etc/init.d/vnstat
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
+	$(INSTALL_BIN) ./files/vnstat.defaults $(1)/etc/uci-defaults/vnstat
 endef
 
 define Package/vnstati/install
@@ -98,13 +100,7 @@ endef
 
 define Package/vnstat/postinst
 #!/bin/sh
-local wan="$$(uci -P/var/state get network.wan.ifname)"
-if [ -n "$$wan" ]; then
-	uci -q batch <<-EOF >/dev/null
-		add_list vnstat.@vnstat[-1].interface=$$wan
-		commit vnstat
-	EOF
-fi
+[ -n "$${IPKG_INSTROOT}" ] || (. /etc/uci-defaults/vnstat) && rm -f /etc/uci-defaults/vnstat
 exit 0
 endef
 
