@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=perl
 PKG_VERSION:=5.10.0
-PKG_RELEASE:=6
+PKG_RELEASE:=7
 PKG_MD5SUM:=d2c39b002ebfd2c3c5dba589365c5a71
 
 PKG_SOURCE_URL:=ftp://ftp.cpan.org/pub/CPAN/src/5.0 \

@@ -51,7 +51,6 @@ define Package/$$_{package}
 SECTION:=lang
 CATEGORY:=Languages
 URL:=http://www.cpan.org/
-MAINTAINER:=Peter Colberg <peter\@petercolberg.org>
 TITLE:=$$_{module} perl module
 DEPENDS:=$$_{depends}
 endef

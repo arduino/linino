@@ -3,7 +3,6 @@ SUBMENU:=Perl
 SECTION:=lang
 CATEGORY:=Languages
 URL:=http://www.cpan.org/
-MAINTAINER:=Peter Colberg <peter@petercolberg.org>
 DEPENDS:=perl
 endef
 
