@@ -16,7 +16,7 @@ PKG_RELEASE:=1
 #
 # The latest FS git hash in PKG_REV can be obtained from http://fisheye.freeswitch.org
 #
-PKG_REV:=b31ebc9a69ac166223efaafb067b6e9387f35e89
+PKG_REV:=7d399cce96bd01a35e351b81b20f9792d5ee9ff0
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
@@ -683,7 +683,7 @@ $(eval $(call BuildPlugin,avmd,Advanced Voice Mail Detection,mod_avmd,,))
 $(eval $(call BuildPlugin,bv,codec mod_bv,mod_bv,,))
 $(eval $(call BuildPlugin,callcenter,Call Center,mod_callcenter,,))
 $(eval $(call BuildPlugin,cdr-csv,CSV-CDR handler,mod_cdr_csv,,))
-$(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR handler,mod_cdr_pg_csv,,+libpq))
+$(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR handler,mod_cdr_pg_csv,,+coreutils +libpq))
 $(eval $(call BuildPlugin,cdr-sqlite,SQLite3 CDR handler,mod_cdr_sqlite,,+sqlite3))
 $(eval $(call BuildPlugin,celt,CELT ultra-low delay codec,mod_celt,,+libogg))
 $(eval $(call BuildPlugin,cepstral,Cepstral interface,mod_cepstral,,@BROKEN)) # needs <swift.h>
