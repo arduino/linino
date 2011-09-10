@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor
 PKG_VERSION:=0.2.2.32
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://www.torproject.org/dist \
@@ -37,7 +37,7 @@ endef
 define Package/tor
 $(call Package/tor/Default)
   TITLE:=An anonymous Internet communication system
-  DEPENDS:=+libevent +libopenssl +libpthread +librt
+  DEPENDS:=+libevent2 +libopenssl +libpthread +librt
 endef
 
 define Package/tor-geoip
