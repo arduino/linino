@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=distribute
-PKG_VERSION:=0.6.16
+PKG_VERSION:=0.6.21
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://pypi.python.org/packages/source/d/$(PKG_NAME)/
-PKG_MD5SUM:=19ba112f4916cca1d5a89dbad2b361da
+PKG_MD5SUM:=c8cfcfd42ec9ab900fb3960a3308eef2
 PKG_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)-$(PKG_VERSION)/
 
 include $(INCLUDE_DIR)/host-build.mk
