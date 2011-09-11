@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gdbm
-PKG_VERSION:=1.8.3
+PKG_VERSION:=1.9.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/gdbm
-PKG_MD5SUM:=1d1b1d5c0245b1c00aff92da751e9aa1
+PKG_MD5SUM:=59f6e4c4193cb875964ffbe8aa384b58
 
 PKG_FIXUP:=libtool
 PKG_BUILD_PARALLEL:=1
@@ -37,7 +37,7 @@ define Build/Compile
 	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		BINOWN=`id -u` \
 		BINGRP=`id -g` \
-		INSTALL_ROOT="$(PKG_INSTALL_DIR)" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
 
