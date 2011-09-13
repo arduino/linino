@@ -42,8 +42,14 @@ define Package/lrzsz/install
 	(cd $(1)/usr/bin; \
 		ln -fs lrz lrx; \
 		ln -fs lrz lrb; \
+		ln -fs lrz rz; \
+		ln -fs lrz rx; \
+		ln -fs lrz rb; \
 		ln -fs lsz lsx; \
 		ln -fs lsz lsb; \
+		ln -fs lsz sz; \
+		ln -fs lsz sx; \
+		ln -fs lsz sb; \
 	);
 endef
 
