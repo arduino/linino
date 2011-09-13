@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hiawatha
-PKG_VERSION:=7.3
+PKG_VERSION:=7.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.hiawatha-webserver.org/files/
-PKG_MD5SUM:=52fd6bf798c07298e12ff69b882f3d76
+PKG_MD5SUM:=45e7c3229a94d19abb5d92daa36c61d9
 
 PKG_INSTALL:=1
 
@@ -30,7 +30,7 @@ define Package/hiawatha
 endef
 
 define Package/hiawatha/description
-Hiawatha is an open source webserver with a focus on security.
+  Hiawatha is an open source webserver with a focus on security.
 endef
 
 CONFIGURE_ARGS+= \

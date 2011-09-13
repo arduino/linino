@@ -1,0 +1,20 @@
+Index: configure
+===================================================================
+--- a/configure	(révision 185)
++++ b/configure	(copie de travail)
+@@ -29,13 +29,13 @@
+ Linux*)
+ 	DESTDIR="/usr/lib/asterisk/modules/"
+ 
+-	INCDIR="-I. -I/usr/include"
++	INCDIR="-I."
+ 	CFLAGS="-O2 -DICONV_CONST=\"\" -D__DEBUG__ -D__MANAGER__ -D__APP__"
+ 
+ 	LIBDIR=""
+ 	LIBS=""
+ 
+-	SOLINK="-shared -Xlinker -x"
++	SOLINK="-shared"
+ ;;
+ Darwin*)
+ 	DESTDIR="/opt/local/lib/asterisk/modules/"
