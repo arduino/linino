@@ -3,7 +3,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=perl-compress-bzip2
 PKG_VERSION:=2.09
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_MD5SUM:=1699fde3e86f2a036f135ae606d456bf
 
 PKG_SOURCE_URL:=http://search.cpan.org/CPAN/authors/id/A/AR/ARJAY
