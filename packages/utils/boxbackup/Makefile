@@ -12,8 +12,8 @@ PKG_VERSION:=0.11.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
-PKG_SOURCE_URL:=http://www.boxbackup.org/trac/browser/box/packages
-PKG_MD5SUM:=297ecb692b1ec2194c24d1dcbfb28599
+PKG_SOURCE_URL:=http://www.boxbackup.org/trac/export/2998/box/packages
+PKG_MD5SUM:=c4c4786a918a9c026f80833614c40a6b
 
 PKG_INSTALL:=1
 
