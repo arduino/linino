@@ -16,7 +16,7 @@ PKG_RELEASE:=1
 #
 # The latest FS git hash in PKG_REV can be obtained from http://fisheye.freeswitch.org
 #
-PKG_REV:=7d399cce96bd01a35e351b81b20f9792d5ee9ff0
+PKG_REV:=25417d3ea8d4f1b8e192d79ebad8e9d45dc85790
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
@@ -217,25 +217,28 @@ endef
 define Package/$(PKG_NAME)-mod-sofia/config
     config FS_SOFIA_WITH_ODBC
     depends on PACKAGE_$(PKG_NAME)-mod-sofia
+    depends on PACKAGE_unixodbc_svn
     bool "Compile with ODBC support (Requires unixodbc_svn NOT YET AVAILABLE)"
     default n
-    select PACKAGE_unixodbc_svn
+    #select PACKAGE_unixodbc_svn
     help
             Compile $(PKG_NAME)-mod-sofia with ODBC Support. Since unixodbc_svn package is not yet available on OpenWRT, $(PKG_NAME)-mod-sofia CAN NOT be compiled with ODBC support.
 
     config FS_SOFIA_WITH_SCTP
     depends on PACKAGE_$(PKG_NAME)-mod-sofia
+    depends on PACKAGE_sctp
     bool "Compile with SCTP (Stream Control Transfer Protocol) support"
     default n
-    select PACKAGE_sctp
+    #select PACKAGE_sctp
     help
             Compile $(PKG_NAME)-mod-sofia with SCTP support.
 
     config FS_SOFIA_WITH_ZRTP_GIT
     depends on PACKAGE_$(PKG_NAME)-mod-sofia
+    depends on PACKAGE_libzrtpcpp
     bool "Compile with ZRTP support (Requires libzrtpcpp NOT YET AVAILABLE)"
     default n
-    select PACKAGE_libzrtpcpp
+    #select PACKAGE_libzrtpcpp
     help
             Compile $(PKG_NAME)-mod-sofia with ZRTP Support. Since libzrtpcpp package is not yet available on OpenWRT, $(PKG_NAME)-mod-sofia CAN NOT be compiled with ZRTP support.
 endef
@@ -756,7 +759,7 @@ $(eval $(call BuildPlugin,shell-stream,Shell stream,mod_shell_stream,,))
 $(eval $(call BuildPlugin,silk,codec mod_silk,mod_silk,,))
 $(eval $(call BuildPlugin,siren,G.722.1 codec,mod_siren,,))
 $(eval $(call BuildPlugin,skinny,endpoint mod_skinny,mod_skinny,,))
-$(eval $(call BuildPlugin,skypopen,Skype compatible endpoint,mod_skypopen,,@FEATURE_drawing-backend_libX11 +libX11))
+$(eval $(call BuildPlugin,skypopen,Skype compatible endpoint,mod_skypopen,,+FEATURE_drawing-backend_libX11:libX11))
 $(eval $(call BuildPlugin,snapshot,application mod_snapshot,mod_snapshot,,))
 $(eval $(call BuildPlugin,sndfile,Multi-Format file transcoder,mod_sndfile,,))
 $(eval $(call BuildPlugin,snipe-hunt,application mod_snipe_hunt,mod_snipe_hunt,,))
