@@ -16,7 +16,7 @@ PKG_RELEASE:=1
 #
 # The latest FS git hash in PKG_REV can be obtained from http://fisheye.freeswitch.org
 #
-PKG_REV:=25417d3ea8d4f1b8e192d79ebad8e9d45dc85790
+PKG_REV:=379c9fc41dd0196ccd7bf9640ae704b995cbc15e
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
@@ -35,6 +35,7 @@ FS_MOD_AVAILABLE:= \
 	amrwb \
 	avmd \
 	bv \
+	blacklist \
 	callcenter \
 	cdr-csv \
 	cdr-pg-csv \
@@ -684,6 +685,7 @@ $(eval $(call BuildPlugin,amr,GSM-AMR codec,mod_amr,,))
 $(eval $(call BuildPlugin,amrwb,GSM-AMRWB,mod_amrwb,,))
 $(eval $(call BuildPlugin,avmd,Advanced Voice Mail Detection,mod_avmd,,))
 $(eval $(call BuildPlugin,bv,codec mod_bv,mod_bv,,))
+$(eval $(call BuildPlugin,blacklist,application blacklist,mod_blacklist,,))
 $(eval $(call BuildPlugin,callcenter,Call Center,mod_callcenter,,))
 $(eval $(call BuildPlugin,cdr-csv,CSV-CDR handler,mod_cdr_csv,,))
 $(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR handler,mod_cdr_pg_csv,,+coreutils +libpq))
@@ -759,7 +761,7 @@ $(eval $(call BuildPlugin,shell-stream,Shell stream,mod_shell_stream,,))
 $(eval $(call BuildPlugin,silk,codec mod_silk,mod_silk,,))
 $(eval $(call BuildPlugin,siren,G.722.1 codec,mod_siren,,))
 $(eval $(call BuildPlugin,skinny,endpoint mod_skinny,mod_skinny,,))
-$(eval $(call BuildPlugin,skypopen,Skype compatible endpoint,mod_skypopen,,+FEATURE_drawing-backend_libX11:libX11))
+$(eval $(call BuildPlugin,skypopen,Skype compatible endpoint,mod_skypopen,,@FEATURE_drawing-backend_libX11))
 $(eval $(call BuildPlugin,snapshot,application mod_snapshot,mod_snapshot,,))
 $(eval $(call BuildPlugin,sndfile,Multi-Format file transcoder,mod_sndfile,,))
 $(eval $(call BuildPlugin,snipe-hunt,application mod_snipe_hunt,mod_snipe_hunt,,))

@@ -11,7 +11,7 @@
 -LOCAL_OBJS=gsmopen_protocol.o 
 -#OUR_OBJS += /usr/src/gsmlib-1.10/gsmlib/libgsmme.la
 -include ../../../../build/modmake.rules
-+LOCAL_CFLAGS += $(SVNDEF) -I$(BASE)/libs/spandsp/src -I$(BASE)/libs/tiff-3.8.2/libtiff
++LOCAL_CFLAGS += $(SVNDEF) -I$(BASE)/libs/spandsp/src -I$(BASE)/libs/tiff-3.8.2/libtiff -fpermissive
 +LOCAL_LDFLAGS=-L$(BASE)/libs/spandsp/src -lasound -lgsmme -lspandsp
 +LOCAL_OBJS=gsmopen_protocol.o
 +
