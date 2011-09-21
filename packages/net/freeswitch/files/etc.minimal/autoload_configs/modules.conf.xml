@@ -4,7 +4,7 @@
     <!-- Loggers (I'd load these first) -->
     <load module="mod_console"/>
     <load module="mod_logfile"/>
-    <load module="mod_syslog"/>
+    <!-- <load module="mod_syslog"/> -->
 
     <!--<load module="mod_yaml"/>-->
 
@@ -18,7 +18,7 @@
     <!-- <load module="mod_xml_cdr"/> -->
 
     <!-- Event Handlers -->
-    <!-- <load module="mod_cdr_csv"/> -->
+    <load module="mod_cdr_csv"/>
     <!-- <load module="mod_cdr_sqlite"/> -->
     <!-- <load module="mod_event_multicast"/> -->
     <load module="mod_event_socket"/>
@@ -31,7 +31,7 @@
     <!-- <load module="mod_ldap"/> -->
 
     <!-- Endpoints -->
-    <load module="mod_dingaling"/>
+    <!-- <load module="mod_dingaling"/> -->
     <!-- <load module="mod_portaudio"/> -->
     <!-- <load module="mod_alsa"/> -->
     <load module="mod_sofia"/>
@@ -42,10 +42,11 @@
     <!-- <load module="mod_unicall"/> -->
     <!-- <load module="mod_skinny"/> -->
     <!-- <load module="mod_khomp"/>   -->
+    <!-- <load module="mod_rtmp"/>   -->
 
     <!-- Applications -->
     <load module="mod_commands"/>
-    <!-- <load module="mod_conference"/> -->
+    <load module="mod_conference"/>
     <load module="mod_db"/>
     <load module="mod_dptools"/>
     <!-- <load module="mod_expr"/> -->
@@ -101,11 +102,11 @@
     <!-- <load module="mod_timerfd"/> -->
 
     <!-- Languages -->
-    <load module="mod_lua"/>
     <!-- <load module="mod_spidermonkey"/> -->
     <!-- <load module="mod_perl"/> -->
     <!-- <load module="mod_python"/> -->
     <!-- <load module="mod_java"/> -->
+    <load module="mod_lua"/>
 
     <!-- ASR /TTS -->
     <!-- <load module="mod_flite"/> -->
@@ -121,6 +122,7 @@
 
     <!-- Third party modules -->
     <!--<load module="mod_nibblebill"/>-->
+    <!--<load module="mod_callcenter"/>-->
 
   </modules>
 </configuration>
