@@ -32,6 +32,17 @@ define Package/openssh/Default
   SUBMENU:=SSH
 endef
 
+define Package/openssh-moduli
+  $(call Package/openssh/Default)
+  DEPENDS+= +openssh-server
+  TITLE+= moduli file
+endef
+
+define Package/openssh-moduli/description
+OpenSSH server moduli file.
+endef
+
+
 define Package/openssh-client
   $(call Package/openssh/Default)
   TITLE+= client
@@ -133,6 +144,11 @@ define Build/Compile
 		all install
 endef
 
+define Package/openssh-moduli/install
+	$(INSTALL_DIR) $(1)/etc/ssh
+	$(CP) $(PKG_INSTALL_DIR)/etc/ssh/moduli $(1)/etc/ssh/
+endef
+
 define Package/openssh-client/install
 	$(INSTALL_DIR) $(1)/etc/ssh
 	chmod 0700 $(1)/etc/ssh
@@ -194,6 +210,7 @@ define Package/openssh-sftp-server/install
 endef
 
 $(eval $(call BuildPackage,openssh-client))
+$(eval $(call BuildPackage,openssh-moduli))
 $(eval $(call BuildPackage,openssh-client-utils))
 $(eval $(call BuildPackage,openssh-keygen))
 $(eval $(call BuildPackage,openssh-server))
