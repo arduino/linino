@@ -4,11 +4,13 @@ append DRIVERS "atheros"
 scan_atheros() {
 	local device="$1"
 	local wds
-	local adhoc ahdemo sta ap monitor
+	local adhoc ahdemo sta ap monitor disabled
 	
 	config_get vifs "$device" vifs
 	for vif in $vifs; do
-	
+		config_get_bool disabled "$vif" disabled 0
+		[ $disabled = 0 ] || continue
+
 		config_get ifname "$vif" ifname
 		config_set "$vif" ifname "${ifname:-ath}"
 		
