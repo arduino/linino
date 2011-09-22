@@ -16,7 +16,7 @@ PKG_RELEASE:=1
 #
 # The latest FS git hash in PKG_REV can be obtained from http://fisheye.freeswitch.org
 #
-PKG_REV:=5fe3a22d83867d07f30ef7974329b2fa966747ea
+PKG_REV:=decb286114a685ea7920030f60f733c3fe34358c
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
@@ -112,6 +112,7 @@ FS_MOD_AVAILABLE:= \
 	siren \
 	skinny \
 	skypopen \
+	sms \
 	snapshot \
 	snmp \
 	snipe-hunt \
@@ -762,6 +763,7 @@ $(eval $(call BuildPlugin,silk,codec mod_silk,mod_silk,,))
 $(eval $(call BuildPlugin,siren,G.722.1 codec,mod_siren,,))
 $(eval $(call BuildPlugin,skinny,endpoint mod_skinny,mod_skinny,,))
 $(eval $(call BuildPlugin,skypopen,Skype compatible endpoint,mod_skypopen,,@FEATURE_drawing-backend_libX11))
+$(eval $(call BuildPlugin,sms,SMS application,mod_sms,,))
 $(eval $(call BuildPlugin,snapshot,application mod_snapshot,mod_snapshot,,))
 $(eval $(call BuildPlugin,sndfile,Multi-Format file transcoder,mod_sndfile,,))
 $(eval $(call BuildPlugin,snipe-hunt,application mod_snipe_hunt,mod_snipe_hunt,,))
