@@ -64,7 +64,7 @@ start_service() {
 		peer_socket_tos pex_enabled port_forwarding_enabled preallocation prefetch_enabled \
 		ratio_limit ratio_limit_enabled rename_partial_files rpc_authentication_required \
 		rpc_enabled rpc_port rpc_whitelist_enabled queue_stalled_enabled \
-		queue_stalled-minutes scrape_paused_torrents_enabled script_torrent_done_enabled \
+		queue_stalled_minutes scrape_paused_torrents_enabled script_torrent_done_enabled \
 		seed_queue_enabled seed_queue_size \
 		speed_limit_down speed_limit_down_enabled speed_limit_up \
 		speed_limit_up_enabled start_added_torrents trash_original_torrent_files \
