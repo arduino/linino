@@ -30,7 +30,7 @@ TARGET_LDFLAGS+= \
 
 define Package/libdmapsharing
   SECTION:=libs
-  CATAGORY:=Libraries
+  CATEGORY:=Libraries
   DEPENDS:=+libsoup +mdnsresponder +gstreamer +gst-plugins-base
   TITLE:=libdmapsharing
   URL:=http://www.flyn.org/projects/libdmapsharing/
