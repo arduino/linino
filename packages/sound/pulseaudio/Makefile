@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pulseaudio
-PKG_VERSION:=0.99.4
+PKG_VERSION:=1.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://freedesktop.org/software/pulseaudio/releases/
-PKG_MD5SUM:=a73d30cc01ad430681e27160e22e7f8c
+PKG_MD5SUM:=e5749151dbbaa7e928793f020bf1208b
 
 PKG_BUILD_DIR=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=intltool/host
@@ -155,7 +155,7 @@ define Package/pulseaudio-daemon/install
 		$(1)/etc/init.d \
 		$(1)/usr/bin \
 		$(1)/usr/lib \
-		$(1)/usr/lib/pulse-0.99/modules 
+		$(1)/usr/lib/pulse-$(PKG_VERSION)/modules 
 
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/pulseaudio \
@@ -174,12 +174,12 @@ define Package/pulseaudio-daemon/install
 		$(1)/usr/lib/
 
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/pulse-0.99/modules/lib*.so \
+		$(PKG_INSTALL_DIR)/usr/lib/pulse-$(PKG_VERSION)/modules/lib*.so \
 		$(1)/usr/lib/
 
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/pulse-0.99/modules/module*.so \
-		$(1)/usr/lib/pulse-0.99/modules/
+		$(PKG_INSTALL_DIR)/usr/lib/pulse-$(PKG_VERSION)/modules/module*.so \
+		$(1)/usr/lib/pulse-$(PKG_VERSION)/modules/
 endef
 
 define Package/pulseaudio-daemon-avahi/install
@@ -188,7 +188,7 @@ define Package/pulseaudio-daemon-avahi/install
 		$(1)/etc/init.d \
 		$(1)/usr/bin \
 		$(1)/usr/lib \
-		$(1)/usr/lib/pulse-0.99/modules \
+		$(1)/usr/lib/pulse-$(PKG_VERSION)/modules \
 		$(1)/etc/dbus-1/system.d 
 
 	$(INSTALL_BIN) \
@@ -208,12 +208,12 @@ define Package/pulseaudio-daemon-avahi/install
 		$(1)/usr/lib/
 
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/pulse-0.99/modules/lib*.so \
+		$(PKG_INSTALL_DIR)/usr/lib/pulse-$(PKG_VERSION)/modules/lib*.so \
 		$(1)/usr/lib/
 
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/pulse-0.99/modules/module*.so \
-		$(1)/usr/lib/pulse-0.99/modules/
+		$(PKG_INSTALL_DIR)/usr/lib/pulse-$(PKG_VERSION)/modules/module*.so \
+		$(1)/usr/lib/pulse-$(PKG_VERSION)/modules/
 
 	$(INSTALL_CONF) \
 		$(PKG_INSTALL_DIR)/etc/dbus-1/system.d/pulseaudio-system.conf \
