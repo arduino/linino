@@ -1,0 +1,16 @@
+--- a/modules/pam_rhosts/pam_rhosts.c
++++ b/modules/pam_rhosts/pam_rhosts.c
+@@ -111,11 +111,13 @@ int pam_sm_authenticate (pam_handle_t *p
+       as_root = (lpwd->pw_uid == 0);
+     }
+ 
++#if	0
+ #ifdef HAVE_RUSEROK_AF
+     retval = ruserok_af (rhost, as_root, ruser, luser, PF_UNSPEC);
+ #else
+     retval = ruserok (rhost, as_root, ruser, luser);
+ #endif
++#endif
+     if (retval != 0) {
+       if (!opt_silent || opt_debug)
+ 	pam_syslog(pamh, LOG_WARNING, "denied access to %s@%s as %s",

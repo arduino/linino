@@ -11,28 +11,28 @@
  #ifdef HAVE_LIBAUDIT
 --- a/modules/pam_unix/pam_unix_passwd.c
 +++ b/modules/pam_unix/pam_unix_passwd.c
-@@ -55,10 +55,10 @@
- #include <sys/time.h>
- #include <sys/stat.h>
- #include <rpc/rpc.h>
--#ifdef HAVE_RPCSVC_YP_PROT_H
-+#ifdef HAVE_RPCSVC_YP_PROT_H && USE_NIS
- #include <rpcsvc/yp_prot.h>
- #endif
--#ifdef HAVE_RPCSVC_YPCLNT_H
-+#ifdef HAVE_RPCSVC_YPCLNT_H && USE_NIS
- #include <rpcsvc/ypclnt.h>
+@@ -74,18 +74,18 @@
+ #include "passverify.h"
+ #include "bigcrypt.h"
+ 
+-#if (HAVE_YP_GET_DEFAULT_DOMAIN || HAVE_GETDOMAINNAME) && HAVE_YP_MASTER
++#if (HAVE_YP_GET_DEFAULT_DOMAIN || HAVE_GETDOMAINNAME) && HAVE_YP_MASTER && USE_NIS
+ # define HAVE_NIS
  #endif
  
-@@ -104,7 +104,7 @@ extern int getrpcport(const char *host,
+ #ifdef HAVE_NIS
+ # include <rpc/rpc.h>
  
- static char *getNISserver(pam_handle_t *pamh, unsigned int ctrl)
- {
--#if (defined(HAVE_YP_GET_DEFAULT_DOMAIN) || defined(HAVE_GETDOMAINNAME)) && defined(HAVE_YP_MASTER)
-+#if (defined(HAVE_YP_GET_DEFAULT_DOMAIN) || defined(HAVE_GETDOMAINNAME)) && defined(HAVE_YP_MASTER) && defined(USE_NIS)
- 	char *master;
- 	char *domainname;
- 	int port, err;
+-# if HAVE_RPCSVC_YP_PROT_H
++# if HAVE_RPCSVC_YP_PROT_H && USE_NIS
+ #  include <rpcsvc/yp_prot.h>
+ # endif
+ 
+-# if HAVE_RPCSVC_YPCLNT_H
++# if HAVE_RPCSVC_YPCLNT_H && USE_NIS
+ #  include <rpcsvc/ypclnt.h>
+ # endif
+ 
 --- a/modules/pam_unix/support.c
 +++ b/modules/pam_unix/support.c
 @@ -19,7 +19,7 @@
