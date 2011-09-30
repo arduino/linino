@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006-2010 OpenWrt.org
+#
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -17,19 +17,37 @@ PKG_MD5SUM:=0f0be0239914ad87830a4fff594bda5b
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/smartmontools
+define Package/smartmontools/Default
   SECTION:=utils
   CATEGORY:=Utilities
   DEPENDS:=+uclibcxx
-  TITLE:=S.M.A.R.T Monitoring Tool
+  TITLE:=S.M.A.R.T Monitoring
   URL:=http://smartmontools.sourceforge.net/
 endef
 
+define Package/smartmontools
+  $(call Package/smartmontools/Default)
+  TITLE+= Tool
+endef
+
 define Package/smartmontools/description
-	smartmontools contains utility programs (smartctl, smartd) to
-	control/monitor storage systems using the Self-Monitoring, Analysis
-	and Reporting Technology System (S.M.A.R.T.) built into most modern
-	ATA and SCSI disks. It is derived from smartsuite.
+  smartmontools contains utility programs (smartctl) to
+  control/monitor storage systems using the Self-Monitoring, Analysis
+  and Reporting Technology System (S.M.A.R.T.) built into most modern
+  ATA and SCSI disks. It is derived from smartsuite.
+endef
+
+define Package/smartd
+  $(call Package/smartmontools/Default)
+  DEPENDS+= +rsync
+  TITLE+= Daemon
+endef
+
+define Package/smartd/description
+  smartmontools contains utility programs (smartd) to
+  control/monitor storage systems using the Self-Monitoring, Analysis
+  and Reporting Technology System (S.M.A.R.T.) built into most modern
+  ATA and SCSI disks. It is derived from smartsuite.
 endef
 
 # uses GNU configure
@@ -49,17 +67,22 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		LD="$(TARGET_CXX)" 
+		LD="$(TARGET_CXX)"
 endef
 
 define Package/smartmontools/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/smartctl $(1)/usr/sbin/
+endef
+
+define Package/smartd/install
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/smartd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) ./files/smartd.conf $(1)/etc
+	$(INSTALL_DATA) ./files/smartd.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/smartd.init $(1)/etc/init.d/smartd
 endef
 
 $(eval $(call BuildPackage,smartmontools))
+$(eval $(call BuildPackage,smartd))
