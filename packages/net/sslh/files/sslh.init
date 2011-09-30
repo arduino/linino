@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 
 NAME=sslh
 PROG=/usr/sbin/sslh
@@ -24,18 +24,24 @@ sslh_start()
 	local args="-P /var/run/${NAME}.${PIDCOUNT}.pid"
 	local val
 	# A) listen parameter
-	config_get val "${section}" listen
-	[ -n "${val}" ] && append args "-p ${val}"
+	config_get vals "${section}" listen
+	[ -n "${vals}" ] && for val in $vals; do append args "-p ${val}"; done
 	# B) ssh parameter
 	config_get val "${section}" ssh
-	[ -n "${val}" ] && append args "-s ${val}"
+	[ -n "${val}" ] && append args "--ssh ${val}"
 	# C) ssl parameter
 	config_get val "${section}" ssl
-	[ -n "${val}" ] && append args "-l ${val}"
-	# D) timeout (for ssh, then ssl is assumed)
+	[ -n "${val}" ] && append args "--ssl ${val}"
+	# D) openvpn parameter
+        config_get val "${section}" openvpn
+        [ -n "${val}" ] && append args "--openvpn ${val}"
+	# E) tinc parameter
+        config_get val "${section}" tinc
+        [ -n "${val}" ] && append args "--tinc ${val}"
+	# F) timeout (before a connection is considered to be SSH)
 	config_get val "${section}" timeout
 	[ -n "${val}" ] && append args "-t ${val}"
-	# E) verbose parameter
+	# G) verbose parameter
 	local verbosed
 	config_get_bool verbosed "${section}" verbose 0
 	[ "${verbosed}" -ne 0 ] && append args "-v"

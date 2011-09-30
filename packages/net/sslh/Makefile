@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sslh
-PKG_VERSION:=1.7a
-PKG_RELEASE:=2
+PKG_VERSION:=1.9
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://rutschle.net/tech/
-PKG_MD5SUM:=ee124654412198a5e11fe28acf10634d
+PKG_MD5SUM:=1c0193853ef35f80e3e4b1a744832cd1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -40,7 +40,7 @@ endef
 
 define Package/sslh/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/sslh $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/sslh-fork $(1)/usr/sbin/sslh
 	$(INSTALL_DIR) $(1)/etc/init.d/
 	$(INSTALL_BIN) files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
 	$(INSTALL_DIR) $(1)/etc/config
