@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=chrony
-PKG_VERSION:=1.23
-PKG_RELEASE:=3
+PKG_VERSION:=1.26
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= ftp://download.tuxfamily.org/projects/chrony/ \
 	http://download.tuxfamily.org/chrony/
-PKG_MD5SUM:=ffce77695e55d8efda19ab0b78309c23
+PKG_MD5SUM:=ad6dd619ff1986e4ff780363c64e2246
 
 include $(INCLUDE_DIR)/package.mk
 
