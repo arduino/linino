@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mjpg-streamer
-PKG_REV:=136
+PKG_REV:=148
 PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
@@ -24,7 +24,7 @@ define Package/mjpg-streamer
   SECTION:=multimedia
   CATEGORY:=Multimedia
   TITLE:=MJPG-streamer
-  DEPENDS:=@!LINUX_2_4 +libpthread +libjpeg
+  DEPENDS:=+libpthread +libjpeg
   URL:=http://mjpg-streamer.wiki.sourceforge.net/
 endef
 
@@ -42,8 +42,8 @@ define Package/mjpg-streamer/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/mjpg-streamer.init $(1)/etc/init.d/mjpg-streamer
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(foreach input_plugin,file uvc gspcav1,$(PKG_BUILD_DIR)/input_$(input_plugin).so) $(1)/usr/lib
-	$(CP) $(foreach output_plugin,http file autofocus,$(PKG_BUILD_DIR)/output_$(output_plugin).so) $(1)/usr/lib
+	$(CP) $(foreach input_plugin,file uvc,$(PKG_BUILD_DIR)/input_$(input_plugin).so) $(1)/usr/lib
+	$(CP) $(foreach output_plugin,http file,$(PKG_BUILD_DIR)/output_$(output_plugin).so) $(1)/usr/lib
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/usb
 	$(INSTALL_DATA) ./files/mjpg-streamer.hotplug $(1)/etc/hotplug.d/usb/20-mjpg-streamer
 endef
