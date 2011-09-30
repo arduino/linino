@@ -1,77 +1,13 @@
-append_bool() {
-	local section="$1"
-	local option="$2"
-	local value="$3"
-	local _loctmp
-	config_get_bool _loctmp "$section" "$option" 0
-	[ "$_loctmp" -gt 0 ] && append args "$value"
-}
-
-append_parm() {
-	local section="$1"
-	local option="$2"
-	local switch="$3"
-	local _loctmp
-	config_get _loctmp "$section" "$option"
-	[ -z "$_loctmp" ] && return 0
-	append args "$switch $_loctmp"
-}
-
-append_stmt() {
-	local name="$1"
-	local switch="$2"
-	append args "-C '$switch $name'"
-}
-
-append_opt_stmt() {
-	local section="$1"
-	local option="$2"
-	local switch="$3"
-	local _loctmp
-	config_get _loctmp "$section" "$option"
-	[ -z "$_loctmp" ] && return 0
-	append args "-C '$switch $_loctmp'"
-}
-
-ahcp_addif() {
-	local ifname=$(uci_get_state network "$1" ifname "$1")
-	append interfaces "$ifname"
-}
-
-ahcp_server() {
-	local cfg="$1"
-
-	append_opt_stmt "$cfg" 'mode' 'mode'
-	append_opt_stmt "$cfg" 'lease_dir' 'lease-dir'
-	config_list_foreach "$cfg" 'prefix' append_stmt 'prefix'
-	config_list_foreach "$cfg" 'name_server' append_stmt 'name-server'
-	config_list_foreach "$cfg" 'ntp_server' append_stmt 'ntp-server'
-
-	append_parm "$cfg" 'id_file' '-i'
-	append_parm "$cfg" 'log_file' '-L'
-}
-
-ahcp_config() {
-	local cfg="$1"
-
-	config_list_foreach "$cfg" 'interface' ahcp_addif
-
-	append_bool "$cfg" 'ipv4_only' '-4'
-	append_bool "$cfg" 'ipv6_only' '-6'
-	append_bool "$cfg" 'no_dns' '-N'
-
-	append_parm "$cfg" 'multicast_address' '-m'
-	append_parm "$cfg" 'port' '-p'
-	append_parm "$cfg" 'lease_time' '-t'
-	append_parm "$cfg" 'debug' '-d'
-	append_parm "$cfg" 'conf_file' '-c'
-	append_parm "$cfg" 'script' '-s'
-}
-
 setup_interface_ahcp() {
 	local interface="$1"
 	local config="$2"
 
-    echo "WARNING: ahcp client cannot be configured in /etc/config/network anymore."
-    echo "Please add $interface to /etc/config/ahcpd instead."
+	local mode=$(uci_get_state ahcpd "@ahcpd[0]" mode "client")
+	if [ "$mode" != "client" ]; then
+		echo "Warning: ahcp ignored for $interface (mode is $mode, should be client)."
+		echo "Fix ahcp mode in /etc/config/ahcpd."
+		return
+	fi
+	setup_interface_none "$interface" "$config"
+	/etc/init.d/ahcpd restart
 }
