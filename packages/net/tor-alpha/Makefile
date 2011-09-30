@@ -8,15 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor-alpha
-PKG_VERSION:=0.2.3.3-alpha
+PKG_VERSION:=0.2.3.5-alpha
 PKG_RELEASE:=1
 
 PKG_SOURCE:=tor-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://www.torproject.org/dist \
 	https://archive.torproject.org/tor-package-archive
-PKG_MD5SUM:=982feab67723b50cbad31dc73f0e3e16
+PKG_MD5SUM:=adae506a9599c2829fd3c25d1b3b77de
 
-PKG_BUILD_DEPENDS:=libminiupnpc libnatpmp
+PKG_BUILD_DEPENDS:=libnatpmp
 PKG_BUILD_DIR:=$(BUILD_DIR)/tor-$(PKG_VERSION)
 PKG_INSTALL:=1
 
@@ -50,7 +50,7 @@ endef
 define Package/tor-alpha-fw-helper
 $(call Package/tor-alpha/Default)
   TITLE:=Firewall helper for tor
-  DEPENDS:=+tor-alpha +libminiupnpc +libnatpmp
+  DEPENDS:=+tor-alpha +libnatpmp
 endef
 
 define Package/tor-alpha-fw-helper/description
@@ -111,8 +111,6 @@ endef
 CONFIGURE_ARGS += \
 	--with-libevent-dir="$(STAGING_DIR)/usr" \
 	--with-ssl-dir="$(STAGING_DIR)/usr" \
-	--enable-upnp \
-	--with-libminiupnpc-dir="$(STAGING_DIR)/usr" \
 	--enable-nat-pmp \
 	--with-libnatpmp-dir="$(STAGING_DIR)/usr" \
 	--enable-bufferevents \
