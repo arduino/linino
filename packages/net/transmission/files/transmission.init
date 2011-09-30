@@ -44,9 +44,8 @@ start_service() {
 	local ulimit_files=`ulimit -n`
 
 	# disabled?
-	config_get_bool enable "$s" enable 0 # compatibility with prev version
 	config_get_bool enabled "$s" enabled 0
-	[ "$enabled" == 0 -a "$enable" == 0 ] && return 0
+	[ "$enabled" = 0 ] && return 0
 	config_get config_dir "$s" config_dir '/tmp/transmission'
 	mkdir -p "$config_dir"
 	config_get run_as_usr "$s" run_daemon_as_user 'root'
