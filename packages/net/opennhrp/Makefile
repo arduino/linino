@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=opennhrp
-PKG_VERSION:=0.11.3
+PKG_VERSION:=0.12.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/opennhrp
-PKG_MD5SUM:=6f6f8571ccc0a9f97e52c6240fe9002a
+PKG_MD5SUM:=4d0ec7c0282e181ecca4d78e52067da3
 
 PKG_FIXUP:=libtool
 PKG_BUILD_PARALLEL:=1
@@ -49,6 +49,7 @@ define Package/opennhrp/install
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/opennhrp/opennhrp.conf $(1)/etc/opennhrp/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/etc/opennhrp/opennhrp-script $(1)/etc/opennhrp/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/etc/opennhrp/racoon-ph1down.sh $(1)/etc/opennhrp/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/etc/opennhrp/racoon-ph1dead.sh $(1)/etc/opennhrp/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/opennhrp.init $(1)/etc/init.d/opennhrp
 endef
