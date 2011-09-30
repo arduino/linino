@@ -1,17 +1,59 @@
 menu "Configuration"
 	depends PACKAGE_libffmpeg
 
-config FFMPEG_ENCODE
-	bool "Big Toggle for FFmpeg's encoder/muxer support"
+comment "Libav* build options ---"
+
+config FFMPEG_LIBAV_FULL
+	bool "Toggle for full libav* support"
+	select FFMPEG_BSFS
+	select FFMPEG_DECODE
+	select FFMPEG_ENCODE
+	select FFMPEG_FILTERS
+	select FFMPEG_INDEVS
+	select FFMPEG_OUTDEVS
+	select FFMPEG_HWACCELS
+	select FFMPEG_PARSERS
+	select FFMPEG_PROTOCOLS
 	depends FFMPEG_PATENTED
+	help
+	  This options selects each of the FFmpeg's toggles to create a full build
+	  of the libav* libraries. Note: This is a large binary and not suitable
+	  for most users.
+
+config FFMPEG_BSFS
+	bool "Toggle for FFmpeg's bitstream filter support"
 
 config FFMPEG_DECODE
-	bool "Big Toggle for FFmpeg's decoder/demuxer support"
+	bool "Toggle for FFmpeg's decoder/demuxer support"
 	depends FFMPEG_PATENTED
+
+config FFMPEG_ENCODE
+	bool "Toggle for FFmpeg's encoder/muxer support"
+	depends FFMPEG_PATENTED
+
+config FFMPEG_FILTERS
+	bool "Toggle for FFmpeg's video processing filter support"
+
+config FFMPEG_INDEVS
+	bool "Toggle for FFmpeg's input device (camera, etc) support"
+
+config FFMPEG_OUTDEVS
+	bool "Toggle for FFmpeg's output device support"
+
+config FFMPEG_HWACCELS
+	bool "Toggle for FFmpeg's video hardware acceleration support"
+
+config FFMPEG_PARSERS
+	bool "Toggle for FFmpeg's stream parsing support"
+
+config FFMPEG_PROTOCOLS
+	bool "Toggle for FFmpeg's protocol support"
 
 config FFMPEG_PATENTED
 	bool "Include patented codecs and technologies"
 	default BUILD_PATENTED
+
+comment "Package Profiles ---"
 
 config FFMPEG_FFSERVER_SUPPORT
 	bool "Include support for ffserver (FFmpeg streaming server)"

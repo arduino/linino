@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ffmpeg
 PKG_VERSION:=0.8.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ffmpeg.org/releases/
@@ -239,12 +239,13 @@ define Build/Configure
 		--enable-postproc \
 		--enable-swscale \
 		\
-		--disable-bsfs \
-		--disable-devices \
-		--disable-filters \
-		--disable-hwaccels \
-		--disable-parsers \
-		--disable-protocols \
+		$(if $(CONFIG_FFMPEG_BSFS),,--disable-bsfs) \
+		$(if $(CONFIG_FFMPEG_OUTDEVS),,--disable-outdevs) \
+		$(if $(CONFIG_FFMPEG_INDEVS),,--disable-indevs) \
+		$(if $(CONFIG_FFMPEG_FILTERS),,--disable-filters) \
+		$(if $(CONFIG_FFMPEG_HWACCELS),,--disable-hwaccels) \
+		$(if $(CONFIG_FFMPEG_PARSERS),,--disable-parsers) \
+		$(if $(CONFIG_FFMPEG_PROTOCOLS),,--disable-protocols) \
 		$(if $(CONFIG_FFMPEG_ENCODE),,--disable-encoders --disable-muxers) \
 		$(if $(CONFIG_FFMPEG_DECODE),,--disable-decoders --disable-demuxers) \
 		$(FFMPEG_CONFIGURE_ENCODERS) \
