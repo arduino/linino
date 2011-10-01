@@ -1,20 +1,15 @@
 --- a/modules/pam_rhosts/pam_rhosts.c
 +++ b/modules/pam_rhosts/pam_rhosts.c
-@@ -34,8 +34,10 @@
- 
- #include <pwd.h>
- #include <netdb.h>
-+#include <stdio.h>
- #include <string.h>
- #include <syslog.h>
-+#include <sys/stat.h>
- 
- #define PAM_SM_AUTH  /* only defines this management group */
- 
-@@ -43,6 +45,353 @@
+@@ -43,6 +43,361 @@
  #include <security/pam_modutil.h>
  #include <security/pam_ext.h>
  
++#ifdef __UCLIBC__
++
++#include <stdio.h>
++#include <sys/stat.h>
++
++
 +int  __check_rhosts_file = 1;
 +
 +/* Extremely paranoid file open function. */
@@ -361,6 +356,8 @@
 +	}
 +	return -1;
 +}
++
++#endif /* __UCLIBC__ */
 +
  PAM_EXTERN
  int pam_sm_authenticate (pam_handle_t *pamh, int flags, int argc,
