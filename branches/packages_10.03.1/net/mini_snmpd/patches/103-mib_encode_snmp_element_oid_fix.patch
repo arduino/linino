@@ -10,9 +10,9 @@
  	buffer = value->data.buffer;
  	length = 1;
  	for (i = 2; i < oid_value->subid_list_length; i++) {
-@@ -307,6 +310,8 @@ static int mib_build_entry(const oid_t *
- 			value->data.encoded_length = 0;
+@@ -310,6 +313,8 @@ static int mib_build_entry(const oid_t *
  			value->data.buffer = malloc(value->data.max_length);
+ 			memset(value->data.buffer, 0, value->data.max_length);
  			if (encode_snmp_element_oid(value, oid_aton((const char *)default_value)) == -1) {
 +				lprintf(LOG_ERR, "could not create MIB entry '%s.%d.%d': invalid oid '%s'\n",
 +					oid_ntoa(prefix), column, row, (char *)default_value);
