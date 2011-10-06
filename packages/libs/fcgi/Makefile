@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -21,17 +21,28 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/fcgi
+define Package/fcgi/Default
   SECTION:=libs
   CATEGORY:=Libraries
-  TITLE:=Shared library of FastCGI
-  DEPENDS:=+uclibcxx
   URL:=http://www.fastcgi.com/
 endef
 
+define Package/fcgi
+  $(call Package/fcgi/Default)
+  MENU:=1
+  DEPENDS:= +libpthread
+  TITLE:=Shared library of FastCGI
+endef
+
+define Package/fcgixx
+  $(call Package/fcgi/Default)
+  DEPENDS:=fcgi +USE_UCLIBC:uclibcxx
+  TITLE:=Shared library of FastCGI++
+endef
+
 define Package/fcgi/description
- FastCGI is a language independent, scalable, open extension to 
- CGI that provides high performance without the limitations of 
+ FastCGI is a language independent, scalable, open extension to
+ CGI that provides high performance without the limitations of
  server specific APIs.
 endef
 
@@ -42,7 +53,7 @@ CONFIGURE_ARGS += \
 	--enable-static \
 
 CONFIGURE_VARS += \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClic++" \
+	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
 	LIBS="-nodefaultlibs -luClibc++ -lm" \
 
@@ -51,7 +62,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/fastcgi.h $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/fcgi{app,_config,misc,o,os,_stdio}.h $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfcgi.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfcgi{,++}.{a,so*} $(1)/usr/lib/
 endef
 
 define Package/fcgi/install
@@ -61,4 +72,10 @@ define Package/fcgi/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfcgi.so.* $(1)/usr/lib/
 endef
 
+define Package/fcgixx/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfcgi++.so.* $(1)/usr/lib/
+endef
+
 $(eval $(call BuildPackage,fcgi))
+$(eval $(call BuildPackage,fcgixx))
