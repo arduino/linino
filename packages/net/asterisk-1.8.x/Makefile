@@ -532,7 +532,6 @@ $(eval $(call Buildasterisk18ModuleTemplate,app_while,While loop,a while loop im
 $(eval $(call Buildasterisk18ModuleTemplate,chan_agent,Agents proxy channel, an implementation of agents proxy channel))
 $(eval $(call Buildasterisk18ModuleTemplate,chan_local,Local proxy channel, an implementation of local proxy channel))
 $(eval $(call Buildasterisk18ModuleTemplate,codec_alaw,Signed linear to alaw translation,translation between signed linear and alaw codecs))
-$(eval $(call Buildasterisk18ModuleTemplate,codec_ulaw,Signed linear to ulaw translation,translation between signed linear and ulaw codecs))
 $(eval $(call Buildasterisk18ModuleTemplate,codec_a_mu,Alaw to ulaw translation,translation between alaw and ulaw codecs))
 $(eval $(call Buildasterisk18ModuleTemplate,codec_g722,G.722,a high bit rate 48/56/64Kbps ITU standard codec))
 $(eval $(call Buildasterisk18ModuleTemplate,codec_g726,Signed linear to G.726 translation,translation between signed linear and ITU G.726-32kbps codecs))
