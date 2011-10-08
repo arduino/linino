@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=radvd
-PKG_VERSION:=1.8.1
+PKG_VERSION:=1.8.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://v6web.litech.org/radvd/dist \
 		http://download.sourcemage.org/mirror
-PKG_MD5SUM:=4bccb2c5b1f805548f582a2017f8bad2
+PKG_MD5SUM:=ac8a862d2b232d25ea2622274a2da8a4
 
 PKG_INSTALL:=1
 
