@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://pypi.python.org/packages/source/d/$(PKG_NAME)/
-PKG_MD5SUM:=c8cfcfd42ec9ab900fb3960a3308eef2
+PKG_MD5SUM:=f783444754861f9b33e9f4083bd97b60
 PKG_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)-$(PKG_VERSION)/
 
 include $(INCLUDE_DIR)/host-build.mk
