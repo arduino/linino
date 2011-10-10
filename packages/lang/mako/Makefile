@@ -27,7 +27,7 @@ define Package/mako
   CATEGORY:=Languages
   TITLE:=Mako Templates for Python
   URL:=http://www.makotemplates.org/
-  DEPENDS:=+python @BROKEN
+  DEPENDS:=+python 
 endef
 
 define Package/mako/description
@@ -50,7 +50,7 @@ define Package/mako/install
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
 	$(CP) \
 	    $(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
-	    $(1)$(PYTHON_PKG_DIR)
+	    $(1)$(PYTHON_PKG_DIR)/
 endef
 
 $(eval $(call BuildPackage,mako))
