@@ -16,7 +16,7 @@ PKG_RELEASE:=1
 #
 # The latest FS git hash in PKG_REV can be obtained from http://fisheye.freeswitch.org
 #
-PKG_REV:=decb286114a685ea7920030f60f733c3fe34358c
+PKG_REV:=7b0d878925e4703278362cc5c11abff54f82ad54
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
@@ -77,6 +77,7 @@ FS_MOD_AVAILABLE:= \
 	h26x \
 	h323 \
 	hash \
+	http_cache \
 	ilbc \
 	java \
 	json-cdr \
@@ -304,6 +305,7 @@ $(call Package/$(PKG_NAME)/Default)
 		+$(PKG_NAME)-mod-g723-1 \
 		+$(PKG_NAME)-mod-g729 \
 		+$(PKG_NAME)-mod-hash \
+		+$(PKG_NAME)-mod-http-cache \
 		+$(PKG_NAME)-mod-ilbc \
 		+$(PKG_NAME)-mod-local-stream \
 		+$(PKG_NAME)-mod-lua \
@@ -728,6 +730,7 @@ $(eval $(call BuildPlugin,gsmopen,Short Message Service (SMS),mod_gsmopen,spands
 $(eval $(call BuildPlugin,h26x,H26X linear codec,mod_h26x,,))
 $(eval $(call BuildPlugin,h323,h323 endpoint,mod_h323,,@BROKEN)) # missing header files (other packages needed)
 $(eval $(call BuildPlugin,hash,API for manipulating a hash table,mod_hash,,))
+$(eval $(call BuildPlugin,http_cache,HTTP GET with caching,mod_http_cache,,))
 $(eval $(call BuildPlugin,ilbc,ILBC codec,mod_ilbc,,))
 $(eval $(call BuildPlugin,java,Java language interface,mod_java,,@BROKEN)) # needs java
 $(eval $(call BuildPlugin,json-cdr,JSon-CDR interface,mod_json_cdr,,))

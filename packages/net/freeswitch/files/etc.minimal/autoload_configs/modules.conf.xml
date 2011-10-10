@@ -46,6 +46,7 @@
 
     <!-- Applications -->
     <!-- <load module="mod_blacklist"/> -->
+    <!-- <load module="mod_http_cache"/> -->
     <load module="mod_commands"/>
     <load module="mod_conference"/>
     <load module="mod_db"/>
