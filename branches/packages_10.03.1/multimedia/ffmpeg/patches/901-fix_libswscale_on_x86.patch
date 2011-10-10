@@ -1,0 +1,35 @@
+Index: ffmpeg-0.5.4/libswscale/rgb2rgb.c
+===================================================================
+--- ffmpeg-0.5.4.orig/libswscale/rgb2rgb.c	2011-03-17 13:10:27.000000000 +0100
++++ ffmpeg-0.5.4/libswscale/rgb2rgb.c	2011-10-10 03:35:15.000000000 +0200
+@@ -149,7 +149,7 @@
+ #define RENAME(a) a ## _C
+ #include "rgb2rgb_template.c"
+ 
+-#if ARCH_X86 && CONFIG_GPL
++#if ARCH_X86 && CONFIG_GPL && 0
+ 
+ //MMX versions
+ #undef RENAME
+Index: ffmpeg-0.5.4/libswscale/swscale_template.c
+===================================================================
+--- ffmpeg-0.5.4.orig/libswscale/swscale_template.c	2011-10-10 03:33:19.000000000 +0200
++++ ffmpeg-0.5.4/libswscale/swscale_template.c	2011-10-10 03:38:37.000000000 +0200
+@@ -2219,7 +2219,7 @@
+     }
+     else // fast bilinear upscale / crap downscale
+     {
+-#if ARCH_X86 && CONFIG_GPL
++#if ARCH_X86 && CONFIG_GPL && 0
+ #if HAVE_MMX2
+         int i;
+ #if defined(PIC)
+@@ -2492,7 +2492,7 @@
+     }
+     else // fast bilinear upscale / crap downscale
+     {
+-#if ARCH_X86 && CONFIG_GPL
++#if ARCH_X86 && CONFIG_GPL && 0
+ #if HAVE_MMX2
+         int i;
+ #if defined(PIC)

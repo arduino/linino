@@ -213,6 +213,8 @@ define Build/Configure
 		--disable-debug \
 		--enable-gpl \
 		--disable-libfaad \
+		--disable-amd3dnow \
+		--disable-amd3dnowext \
 		--disable-mmx \
 		--disable-mmx2 \
 		--enable-pthreads \
@@ -255,6 +257,7 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libav{codec,device,format,util} $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpostproc $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/libswscale $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libav{codec,device,format,util}.{a,so*} $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpostproc.{a,so*} $(1)/usr/lib/
