@@ -41,10 +41,10 @@ define Host/Compile
 endef
 
 define Host/Install
-	$(INSTALL_DIR) $(STAGING_DIR_HOST)$(PYTHON_PKG_DIR)
+	$(INSTALL_DIR) $(STAGING_DIR)$(PYTHON_PKG_DIR)
 	$(CP) \
 	    $(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
-	    $(STAGING_DIR_HOST)$(PYTHON_PKG_DIR)
+	    $(STAGING_DIR)$(PYTHON_PKG_DIR)/
 endef
 
 define Build/Compile
@@ -55,7 +55,7 @@ define Package/distribute/install
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
 	$(CP) \
 	    $(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
-	    $(1)$(PYTHON_PKG_DIR)
+	    $(1)$(PYTHON_PKG_DIR)/
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) \
 	    $(PKG_INSTALL_DIR)/usr/bin/easy_install \
