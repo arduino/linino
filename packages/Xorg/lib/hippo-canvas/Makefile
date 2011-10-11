@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2010 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -28,13 +28,18 @@ EXTRA_CFLAGS += \
 
 STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_hippo-canvas CONFIG_PACKAGE_python-hippo-canvas)
 
+define Package/hippo-canvas/Default
+  URL:=http://developer.mugshot.org/wiki/Hippo_Canvas
+  DEPENDS:=@FEATURE_drawing-backend_libX11
+endef
+
 define Package/hippo-canvas
+$(call Package/hippo-canvas/Default)
   SECTION:=xorg-libraries
   CATEGORY:=Xorg
   SUBMENU:=libraries
   TITLE:=Hippo Canvas
-  URL:=http://developer.mugshot.org/wiki/Hippo_Canvas
-  DEPENDS:=+librsvg +gtk2 +cairo +libcroco +pango @FEATURE_drawing-backend_libX11
+  DEPENDS+=+librsvg +gtk2 +cairo +libcroco +pango
 endef
 
 define Package/hippo-canvas/description
@@ -43,12 +48,12 @@ support for flexible layout, CSS styling, and initial work on animations.
 endef
 
 define Package/python-hippo-canvas
+$(call Package/hippo-canvas/Default)
   SECTION:=lang-python
   CATEGORY:=Languages
   SUBMENU:=Python
   TITLE:=Python bindings for hippo canvas
-  URL:=http://developer.mugshot.org/wiki/Hippo_Canvas
-  DEPENDS:=+python-mini +PACKAGE_python-hippo-canvas:python-gtk +PACKAGE_python-hippo-canvas:pycairo +hippo-canvas
+  DEPENDS+=+python-mini +PACKAGE_python-hippo-canvas:python-gtk +PACKAGE_python-hippo-canvas:pycairo +hippo-canvas
 endef
 
 define Build/Configure
