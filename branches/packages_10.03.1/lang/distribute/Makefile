@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=http://pypi.python.org/packages/source/d/$(PKG_NAME)/
 PKG_MD5SUM:=19ba112f4916cca1d5a89dbad2b361da
 PKG_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)-$(PKG_VERSION)/
 
+HOST_BUILD_DEPENDS:=python
+
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 $(call include_mk, python-package.mk)
