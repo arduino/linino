@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2010 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -31,13 +31,15 @@ define Package/python-xapian
   DEPENDS:=+python-mini +libxapian
 endef
 
-define Build/Configure
-  $(call Build/Configure/Default, --with-python)
-endef
+CONFIGURE_ARGS+= \
+	--with-python \
+
+CONFIGURE_VARS+= \
+	PYTHON_LIB="$(PYTHON_PKG_DIR)" \
 
 define Package/python-xapian/install
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
-	$(CP) $(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* $(1)$(PYTHON_PKG_DIR)
+	$(CP) $(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* $(1)$(PYTHON_PKG_DIR)/
 endef
 
 $(eval $(call BuildPackage,python-xapian))

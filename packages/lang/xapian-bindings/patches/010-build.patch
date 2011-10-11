@@ -1,33 +1,6 @@
-diff -urN xapian-bindings-1.0.7.orig/configure xapian-bindings-1.0.7/configure
---- xapian-bindings-1.0.7.orig/configure	2008-08-26 18:19:07.000000000 +0200
-+++ xapian-bindings-1.0.7/configure	2008-08-26 19:06:25.000000000 +0200
-@@ -15079,7 +15079,7 @@
- 	{ $as_echo "$as_me:$LINENO: checking for directory to install python bindings in" >&5
- $as_echo_n "checking for directory to install python bindings in... " >&6; }
- 	if test -z "$PYTHON_LIB" ; then
--	  PYTHON_LIB=`$PYTHON -c 'import os,distutils.sysconfig;print(distutils.sysconfig.get_python_lib(1).replace(os.sep,"/"))'`
-+	  PYTHON_LIB=`$PYTHON -c "import os,distutils.sysconfig;print(distutils.sysconfig.get_python_lib(1, 0, chr(36)+'{exec_prefix}').replace(os.sep, '/'))"`
- 	fi
- 	{ $as_echo "$as_me:$LINENO: result: $PYTHON_LIB" >&5
- $as_echo "$PYTHON_LIB" >&6; }
-diff -urN xapian-bindings-1.0.7.orig/configure.ac xapian-bindings-1.0.7/configure.ac
---- xapian-bindings-1.0.7.orig/configure.ac	2008-08-26 18:19:07.000000000 +0200
-+++ xapian-bindings-1.0.7/configure.ac	2008-08-26 18:49:34.000000000 +0200
-@@ -243,7 +243,9 @@
- 	AC_MSG_RESULT(yes)
- 	AC_MSG_CHECKING([for directory to install python bindings in])
- 	if test -z "$PYTHON_LIB" ; then
--	  PYTHON_LIB=`$PYTHON -c 'import os,distutils.sysconfig;print(distutils.sysconfig.get_python_lib(1).replace(os.sep,"/"))'`
-+	  PYTHON_LIB=`$PYTHON -c 'import os,distutils.sysconfig;
-+      print(distutils.sysconfig.get_python_lib(1, 
-+      prefix='${exec_prefix}').replace(os.sep,"/"))'`
- 	fi
- 	AC_MSG_RESULT([$PYTHON_LIB])
- 	AC_ARG_VAR(PYTHON_LIB, [Directory to install python bindings in])
-diff -urN xapian-bindings-1.0.7.orig/python/Makefile.am xapian-bindings-1.0.7/python/Makefile.am
---- xapian-bindings-1.0.7.orig/python/Makefile.am	2008-08-26 18:19:07.000000000 +0200
-+++ xapian-bindings-1.0.7/python/Makefile.am	2008-08-26 18:49:34.000000000 +0200
-@@ -23,7 +23,7 @@
+--- a/python/Makefile.am
++++ b/python/Makefile.am
+@@ -23,7 +23,7 @@ pylibdir = @PYTHON_LIB@
  
  # Install as _DATA rather than _SCRIPTS because we don't want to make these
  # executable (they don't have a #! line).
@@ -36,7 +9,7 @@ diff -urN xapian-bindings-1.0.7.orig/python/Makefile.am xapian-bindings-1.0.7/py
  
  pylib_LTLIBRARIES = _xapian.la
  
-@@ -53,20 +53,12 @@
+@@ -53,20 +53,12 @@ _xapian_la_LIBADD = $(XAPIAN_LIBS) $(PYT
  xapian.py: modern/xapian.py
  	cp `test -f modern/xapian.py || echo '$(srcdir)/'`modern/xapian.py .
  
@@ -58,10 +31,9 @@ diff -urN xapian-bindings-1.0.7.orig/python/Makefile.am xapian-bindings-1.0.7/py
  
  if MAINTAINER_MODE
  # We need to explicitly set -outdir because on Windows, SWIG splits paths at
-diff -urN xapian-bindings-1.0.7.orig/python/Makefile.in xapian-bindings-1.0.7/python/Makefile.in
---- xapian-bindings-1.0.7.orig/python/Makefile.in	2008-08-26 18:19:07.000000000 +0200
-+++ xapian-bindings-1.0.7/python/Makefile.in	2008-08-26 18:49:34.000000000 +0200
-@@ -292,14 +292,14 @@
+--- a/python/Makefile.in
++++ b/python/Makefile.in
+@@ -292,14 +292,14 @@ pylibdir = @PYTHON_LIB@
  
  # Install as _DATA rather than _SCRIPTS because we don't want to make these
  # executable (they don't have a #! line).
@@ -78,7 +50,7 @@ diff -urN xapian-bindings-1.0.7.orig/python/Makefile.in xapian-bindings-1.0.7/py
  	testsuite.pyc $(am__append_2)
  @MAINTAINER_MODE_FALSE@MAINTAINERCLEANFILES = $(BUILT_SOURCES)
  all: $(BUILT_SOURCES)
-@@ -819,14 +819,6 @@
+@@ -819,14 +819,6 @@ uninstall-local:
  xapian.py: modern/xapian.py
  	cp `test -f modern/xapian.py || echo '$(srcdir)/'`modern/xapian.py .
  
