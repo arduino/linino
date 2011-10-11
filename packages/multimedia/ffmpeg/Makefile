@@ -173,19 +173,19 @@ $(call Package/ffmpeg/Default/description)
 endef
 
 define Package/libpostproc
+$(call Package/ffmpeg/Default)
  SECTION:=libs
  CATEGORY:=Libraries
  TITLE:=libpostproc
- URL:=http://ffmpeg.mplayerhq.hu/
- DEPENDS:=+libffmpeg
+ DEPENDS+= +libffmpeg
 endef
 
 define Package/libswscale
+$(call Package/ffmpeg/Default)
  SECTION:=libs
  CATEGORY:=Libraries
  TITLE:=libswscale
- URL:=http://ffmpeg.mplayerhq.hu/
- DEPENDS:=+libffmpeg
+ DEPENDS+= +libffmpeg
 endef
 
 FILTER_CONFIG= \
@@ -273,6 +273,7 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libav{codec,device,format,util} $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpostproc $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/libswscale $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libav{codec,device,format,util}.{a,so*} $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpostproc.{a,so*} $(1)/usr/lib/
