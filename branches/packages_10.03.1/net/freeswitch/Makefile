@@ -536,8 +536,8 @@ $(eval $(call BuildPlugin,avmd,Advanced Voice Mail Detection,mod_avmd,,))
 $(eval $(call BuildPlugin,bv,codec mod_bv,mod_bv,,))
 $(eval $(call BuildPlugin,callcenter,Call Center,mod_callcenter,,))
 $(eval $(call BuildPlugin,cdr-csv,CSV-CDR handler,mod_cdr_csv,,))
-$(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR handler,mod_cdr_pg_csv,,+postgresql))
-$(eval $(call BuildPlugin,cdr-sqlite,SQLite3 CDR handler,mod_cdr_sqlite,,+sqlite3))
+$(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR handler,mod_cdr_pg_csv,,+libpq))
+$(eval $(call BuildPlugin,cdr-sqlite,SQLite3 CDR handler,mod_cdr_sqlite,,+libsqlite3))
 $(eval $(call BuildPlugin,celt,CELT ultra-low delay codec,mod_celt,,+libogg))
 $(eval $(call BuildPlugin,cepstral,Cepstral interface,mod_cepstral,,@BROKEN)) # needs <swift.h>
 $(eval $(call BuildPlugin,cidlookup,applications mod_cidlookup,mod_cidlookup,,))
@@ -558,11 +558,11 @@ $(eval $(call BuildPlugin,distributor,application mod_distributor,mod_distributo
 $(eval $(call BuildPlugin,dptools,Dialplan tools,mod_dptools,,))
 $(eval $(call BuildPlugin,easyroute,DID routing,mod_easyroute,,))
 $(eval $(call BuildPlugin,enum,ENUM routing,mod_enum,,))
-$(eval $(call BuildPlugin,erlang-event,Erlang event handler,mod_erlang_event,,+erlang))
+$(eval $(call BuildPlugin,erlang-event,Erlang event handler,mod_erlang_event,,+erlang @BROKEN)) # fails to build
 $(eval $(call BuildPlugin,esf,Extra SIP Functionality,mod_esf,,))
 $(eval $(call BuildPlugin,event-multicast,Multicast event handler,mod_event_multicast,,))
 $(eval $(call BuildPlugin,event-socket,Socket event handler,mod_event_socket,,))
-$(eval $(call BuildPlugin,event-zmq,Socket event handler by Zero MQ,mod_event_zmq,,))
+$(eval $(call BuildPlugin,event-zmq,Socket event handler by Zero MQ,mod_event_zmq,, @BROKEN)) # needs ZeroMQ
 $(eval $(call BuildPlugin,expr,Expression evaluation,mod_expr,,))
 $(eval $(call BuildPlugin,fifo,FIFO,mod_fifo,,))
 $(eval $(call BuildPlugin,file-string,File streaming,mod_file_string,,@OBSOLETE)) # merged into dptools
@@ -583,7 +583,7 @@ $(eval $(call BuildPlugin,loopback,Loopback endpoint,mod_loopback,,))
 $(eval $(call BuildPlugin,lua,Lua language interface,mod_lua,,+libstdcpp))
 $(eval $(call BuildPlugin,managed,language mod_managed,mod_managed,,@BROKEN)) # needs Mono
 $(eval $(call BuildPlugin,memcache,MemCached interface,mod_memcache,,@BROKEN)) # fails in libmemcached
-$(eval $(call BuildPlugin,mp4,MP4 File Format support for video apps,mod_mp4,,+libmp4v2))
+$(eval $(call BuildPlugin,mp4,MP4 File Format support for video apps,mod_mp4,,@BROKEN)) # needs libmp4v2
 $(eval $(call BuildPlugin,native-file,Native files,mod_native_file,,))
 $(eval $(call BuildPlugin,nibblebill,Billing,mod_nibblebill,,))
 $(eval $(call BuildPlugin,opal,Multi-Protocol endpoint,mod_opal,,@BROKEN)) # needs Opal
@@ -619,7 +619,7 @@ $(eval $(call BuildPlugin,sndfile,Multi-Format file transcoder,mod_sndfile,,))
 $(eval $(call BuildPlugin,snipe-hunt,application mod_snipe_hunt,mod_snipe_hunt,,))
 $(eval $(call BuildPlugin,snom,SNOM specific features,mod_snom,,))
 $(eval $(call BuildPlugin,sofia,SIP,mod_sofia,,))
-$(eval $(call BuildPlugin,spandsp,Span DSP,mod_spandsp,,+libjpeg))
+$(eval $(call BuildPlugin,spandsp,Span DSP,mod_spandsp,,+libjpeg @BROKEN)) # fails to build because of -Werror
 $(eval $(call BuildPlugin,speex,Speex codec,mod_speex,,))
 $(eval $(call BuildPlugin,spidermonkey,JavaScript,mod_spidermonkey,,@BROKEN)) # fails in js
 $(eval $(call BuildPlugin,spidermonkey-core_db,JavaScript DB,mod_spidermonkey_core_db,,@BROKEN))
