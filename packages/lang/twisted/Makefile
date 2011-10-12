@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=http://tmrc.mit.edu/mirror/twisted/Twisted/2.5
 PKG_MD5SUM:=56df2ae66db57932515a491c03bf514f
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Twisted-$(PKG_VERSION)
-PKG_BUILD_DEPENDS:=python
+PKG_BUILD_DEPENDS:=python USE_UCLIBC:librpc
 
 include $(INCLUDE_DIR)/package.mk
 $(call include_mk, python-package.mk)
@@ -26,7 +26,7 @@ define Package/twisted/default
   SECTION:=lang
   CATEGORY:=Languages
   URL:=http://twistedmatrix.com/
-  DEPENDS:=+python-mini @BROKEN
+  DEPENDS:=+python-mini
 endef
 
 define Package/twisted/default/description
@@ -216,19 +216,13 @@ endef
 define Build/Compile
 	$(if $(Build/Compile/PyMod),,@echo Python packaging code not found.; false)
 	$(call Build/Compile/PyMod,., \
-		install --prefix="$(PKG_INSTALL_DIR)/usr" --no-compile, \
+		install --prefix="/usr" --root="$(PKG_INSTALL_DIR)" --no-compile, \
 		TWISTED_SUBPROJECTS="$(TWISTED_SUBPROJECTS)" \
-		PYTHONPATH="$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)" \
 	)
 	$(call Build/Compile/PyMod,zope.interface-$(ZOPE_IF_VER), \
-		install --prefix="$(PKG_INSTALL_DIR)/usr" --no-compile, \
-		PYTHONPATH="$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)" \
+		install --prefix="/usr" --root="$(PKG_INSTALL_DIR)" --no-compile, \
 	)
 	$(SED) 's,#!$(PYTHON),#!/usr/bin/python,' $(PKG_INSTALL_DIR)/usr/bin/*
-
-	$(CP) -a \
-		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/zope.interface-*.egg/zope \
-		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/
 endef
 
 $(eval $(call PyPackage,twisted))
