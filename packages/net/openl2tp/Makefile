@@ -22,6 +22,11 @@ PPPD_VERSION:=2.4.5
 
 include $(INCLUDE_DIR)/package.mk
 
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	$(CP) ./src/*.[ch] $(PKG_BUILD_DIR)/
+endef
+
 define Package/openl2tp
   SECTION:=net
   CATEGORY:=Network
