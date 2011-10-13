@@ -134,7 +134,7 @@ GST_VERSION:=0.10
 
 CONFIGURE_ARGS += \
 	--with-ffmpeg-extra-configure="--target-os=linux \
-	         --disable-bsfs \
+		--disable-bsfs \
 		--disable-devices \
 		--disable-encoders \
 		$(FFMPEG_CONFIGURE_ENCODERS) \
@@ -148,6 +148,10 @@ CONFIGURE_ARGS += \
 		$(FFMPEG_CONFIGURE_PARSERS) \
 		--disable-protocols \
 		$(FFMPEG_CONFIGURE_PROTOCOLS)"
+
+# XXX: trick to force use of embedded FFmpeg headers
+TARGET_CFLAGS += $(TARGET_CPPFLAGS)
+TARGET_CPPFLAGS :=
 
 TARGET_LDFLAGS += $(FPIC)
 
