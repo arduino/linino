@@ -27,7 +27,7 @@ define Package/nfs-kernel-server/Default
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Filesystem
-  DEPENDS:=+libwrap +libblkid +libuuid $(LIBRPC_DEPENDS)
+  DEPENDS:=+libwrap +libblkid +libuuid
   URL:=http://nfs.sourceforge.net/
 endef
 
@@ -59,7 +59,7 @@ define Package/nfs-utils
   $(call Package/nfs-kernel-server/Default)
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS+= +libevent +USE_UCLIBC:librpc
+  DEPENDS+= +libevent
   TITLE:=updated mount utility (includes nfs4)
 endef
 
