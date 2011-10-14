@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wshaper
-PKG_VERSION:=0.1
+PKG_VERSION:=0.2
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
@@ -44,6 +44,7 @@ define Package/wshaper/install
 	$(INSTALL_DIR) $(1)/usr/sbin/ $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/wshaper.htb $(1)/usr/sbin/
 	$(INSTALL_BIN) ./files/wshaper.init $(1)/etc/init.d/wshaper
+	$(INSTALL_DATA) ./files/wshaper.config $(1)/etc/config/wshaper
 endef
 
 $(eval $(call BuildPackage,wshaper))
