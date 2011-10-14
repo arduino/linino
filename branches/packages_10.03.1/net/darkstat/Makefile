@@ -41,6 +41,8 @@ CONFIGURE_ARGS += \
 	--disable-debug \
 	--with-chroot-dir=/var/empty
 
+TARGET_CFLAGS += -std=gnu99
+
 define Build/Compile
 	$(HOSTCC) $(PKG_BUILD_DIR)/static/c-ify.c \
 		-o $(PKG_BUILD_DIR)/c-ify
