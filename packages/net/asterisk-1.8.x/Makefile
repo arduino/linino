@@ -560,3 +560,4 @@ $(eval $(call Buildasterisk18ModuleTemplate,app_disa,Direct Inward System Access
 $(eval $(call Buildasterisk18ModuleTemplate,app_senddtmf,Send DTMF digits,Sends arbitrary DTMF digits))
 $(eval $(call Buildasterisk18ModuleTemplate,func_cut,CUT function,CUT function))
 $(eval $(call Buildasterisk18ModuleTemplate,res_clioriginate,Calls via CLI,Originate calls via the CLI))
+$(eval $(call Buildasterisk18ModuleTemplate,app_mixmonitor,Record a call and mix the audio,record a call and mix the audio during the recording))
