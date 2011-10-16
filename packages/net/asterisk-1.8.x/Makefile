@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk18
-PKG_VERSION:=1.8.4.4
+PKG_VERSION:=1.8.7.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=asterisk-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.asterisk.org/pub/telephony/asterisk/releases/
-PKG_MD5SUM:=bc2a1168603815c23f204927d1e73239
+PKG_MD5SUM:=5c6616a53fa3f300420ea17fd23abae9
 
 PKG_BUILD_DIR=$(BUILD_DIR)/asterisk-$(PKG_VERSION)
 
@@ -266,7 +266,6 @@ EXTRA_CFLAGS+= $(TARGET_CPPFLAGS)
 EXTRA_LDFLAGS+= $(TARGET_LDFLAGS)
 
 define Build/Configure
-	-rm $(PKG_BUILD_DIR)/menuselect.makeopts
 	$(call Build/Configure/Default,,$(SITE_VARS))
 endef
 
@@ -557,3 +556,7 @@ $(eval $(call Buildasterisk18ModuleTemplate,func_channel,Channel info,Channel in
 $(eval $(call Buildasterisk18ModuleTemplate,func_blacklist,Blacklist on callerid,looking up the callerid number and see if it is blacklisted))
 $(eval $(call Buildasterisk18ModuleTemplate,app_originate,Originate a call,originating an outbound call and connecting it to a specified extension or application))
 $(eval $(call Buildasterisk18ModuleTemplate,func_uri,URI encoding and decoding,Encodes and decodes URI-safe strings))
+$(eval $(call Buildasterisk18ModuleTemplate,app_disa,Direct Inward System Access,Direct Inward System Access))
+$(eval $(call Buildasterisk18ModuleTemplate,app_senddtmf,Send DTMF digits,Sends arbitrary DTMF digits))
+$(eval $(call Buildasterisk18ModuleTemplate,func_cut,CUT function,CUT function))
+$(eval $(call Buildasterisk18ModuleTemplate,res_clioriginate,Calls via CLI,Originate calls via the CLI))
