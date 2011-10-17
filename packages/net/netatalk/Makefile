@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=netatalk
-PKG_VERSION:=2.1.5
+PKG_VERSION:=2.2.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/netatalk
-PKG_MD5SUM:=2495f832643cef131bc3032274fbf926
+PKG_MD5SUM:=4a371025daf96adb73fa491efdbfef28
 
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
@@ -62,7 +62,10 @@ CONFIGURE_ARGS += \
 	--with-ssl-dir="$(STAGING_DIR)/usr" \
 	--with-uams-path="/usr/lib/uams" \
 	--disable-admin-group \
-	--disable-srvloc
+	--disable-srvloc \
+	--disable-zeroconf \
+	--without-shadow \
+	--without-ldap
 
 define Package/netatalk/install
 	$(INSTALL_DIR) $(1)/usr/bin
