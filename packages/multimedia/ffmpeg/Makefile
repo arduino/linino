@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ffmpeg.org/releases/
 PKG_MD5SUM:=967d481c98161582d149aced6e3b2f31
 
-FFMPEG_ENCODERS:= \
+FFMPEG_CUSTOM_ENCODERS:= \
 	ac3 \
 	jpegls \
 	mpeg1video \
@@ -27,7 +27,7 @@ FFMPEG_ENCODERS:= \
 	vorbis \
 	zlib \
 
-FFMPEG_DECODERS:= \
+FFMPEG_CUSTOM_DECODERS:= \
 	aac \
 	ac3 \
 	atrac3 \
@@ -49,7 +49,7 @@ FFMPEG_DECODERS:= \
 	wmav2 \
 	zlib \
 
-FFMPEG_MUXERS:= \
+FFMPEG_CUSTOM_MUXERS:= \
 	ac3 \
 	ffm \
 	h264 \
@@ -61,7 +61,7 @@ FFMPEG_MUXERS:= \
 	ogg \
 	rtp \
 
-FFMPEG_DEMUXERS:= \
+FFMPEG_CUSTOM_DEMUXERS:= \
 	aac \
 	ac3 \
 	avi \
@@ -80,7 +80,7 @@ FFMPEG_DEMUXERS:= \
 	sdp \
 	v4l2 \
 
-FFMPEG_PARSERS:= \
+FFMPEG_CUSTOM_PARSERS:= \
 	aac \
 	ac3 \
 	h264 \
@@ -88,16 +88,66 @@ FFMPEG_PARSERS:= \
 	mpeg4video \
 	mpegvideo \
 
-FFMPEG_PROTOCOLS:= \
+FFMPEG_CUSTOM_PROTOCOLS:= \
 	file http pipe rtp tcp udp
 
+FFMPEG_MINI_ENCODERS:= \
+
+FFMPEG_MINI_DECODERS:= \
+	aac \
+	ac3 \
+	atrac3 \
+	flac \
+	h263 \
+	h264 \
+	jpegls \
+	mp3 \
+	mpeg1video \
+	mpeg2video \
+	mpeg4 \
+	mpegvideo \
+	png \
+	wmav1 \
+	wmav2 \
+
+FFMPEG_MINI_MUXERS:= \
+	ffm \
+
+FFMPEG_MINI_DEMUXERS := \
+	aac \
+	ac3 \
+	asf \
+	avi \
+	ffm \
+	flac \
+	h264 \
+	matroska \
+	mov \
+	mp3 \
+	mpegts \
+	mpegvideo \
+	rtsp \
+
+FFMPEG_MINI_PARSERS:= \
+	ac3 \
+	flac \
+	h263 \
+	h264 \
+	mpeg4video \
+	mpegaudio \
+
+FFMPEG_MINI_PROTOCOLS := \
+	file http rtp tcp udp \
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
+
 PKG_CONFIG_DEPENDS:= \
-	$(patsubst %,CONFIG_FFMPEG_ENCODER_%,$(FFMPEG_ENCODERS)) \
-	$(patsubst %,CONFIG_FFMPEG_DECODER_%,$(FFMPEG_DECODERS)) \
-	$(patsubst %,CONFIG_FFMPEG_MUXER_%,$(FFMPEG_DEMUXERS)) \
-	$(patsubst %,CONFIG_FFMPEG_DEMUXER_%,$(FFMPEG_DEMUXERS)) \
-	$(patsubst %,CONFIG_FFMPEG_PARSER_%,$(FFMPEG_PARSERS)) \
-	$(patsubst %,CONFIG_FFMPEG_PROTOCOL_%,$(FFMPEG_PROTOCOLS))
+	$(patsubst %,CONFIG_FFMPEG_CUSTOM_ENCODER_%,$(FFMPEG_CUSTOM_ENCODERS)) \
+	$(patsubst %,CONFIG_FFMPEG_CUSTOM_DECODER_%,$(FFMPEG_CUSTOM_DECODERS)) \
+	$(patsubst %,CONFIG_FFMPEG_CUSTOM_MUXER_%,$(FFMPEG_CUSTOM_DEMUXERS)) \
+	$(patsubst %,CONFIG_FFMPEG_CUSTOM_DEMUXER_%,$(FFMPEG_CUSTOM_DEMUXERS)) \
+	$(patsubst %,CONFIG_FFMPEG_CUSTOM_PARSER_%,$(FFMPEG_CUSTOM_PARSERS)) \
+	$(patsubst %,CONFIG_FFMPEG_CUSTOM_PROTOCOL_%,$(FFMPEG_CUSTOM_PROTOCOLS))
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -111,12 +161,14 @@ define Package/ffmpeg/Default/description
  audio and video in numerous formats.
 endef
 
+
 define Package/ffmpeg
 $(call Package/ffmpeg/Default)
  SECTION:=multimedia
  CATEGORY:=Multimedia
  TITLE+= program
- DEPENDS+= +libpthread +libffmpeg +libpostproc +libswscale
+ DEPENDS+= +libpthread +libffmpeg
+ VARIANT:=full
 endef
 
 define Package/ffmpeg/description
@@ -125,12 +177,14 @@ $(call Package/ffmpeg/Default/description)
  This package contains the FFmpeg command line tool.
 endef
 
+
 define Package/ffprobe
 $(call Package/ffmpeg/Default)
  SECTION:=multimedia
  CATEGORY:=Multimedia
  TITLE+= CLI media identifier
  DEPENDS+= +libffmpeg
+ VARIANT:=full
 endef
 
 define Package/ffprobe/description
@@ -139,12 +193,14 @@ $(call Package/ffmpeg/Default/description)
  This package contains the FFprobe command line tool.
 endef
 
+
 define Package/ffserver
 $(call Package/ffserver/Default)
  SECTION:=multimedia
  CATEGORY:=Multimedia
  TITLE+= streaming server
- DEPENDS+= +libpthread +libffmpeg +@FFMPEG_FFSERVER_SUPPORT
+ DEPENDS+= +libpthread +libffmpeg
+ VARIANT:=full
 endef
 
 define Package/ffserver/description
@@ -153,114 +209,152 @@ $(call Package/ffmpeg/Default/description)
  This package contains the FFmpeg streaming server.
 endef
 
-define Package/libffmpeg
+
+define Package/libffmpeg/Default
 $(call Package/ffmpeg/Default)
  SECTION:=libs
  CATEGORY:=Libraries
  TITLE+= libraries
  DEPENDS+= +libpthread +zlib
+ PROVIDES:= libffmpeg
+endef
+
+
+define Package/libffmpeg-custom
+$(call Package/libffmpeg/Default)
+ TITLE+= (mini)
+ DEPENDS+= @DEVEL
+ VARIANT:=custom
  MENU:=1
 endef
 
-define Package/libffmpeg/config
+define Package/libffmpeg-custom/config
 source "$(SOURCE)/Config.in"
 endef
 
-define Package/libffmpeg/description
+define Package/libffmpeg-custom/description
 $(call Package/ffmpeg/Default/description)
  .
- This package contains FFmpeg shared libraries.
+ This package contains customized FFmpeg shared libraries.
 endef
 
-define Package/libpostproc
-$(call Package/ffmpeg/Default)
- SECTION:=libs
- CATEGORY:=Libraries
- TITLE:=libpostproc
- DEPENDS+= +libffmpeg
+
+define Package/libffmpeg-full
+$(call Package/libffmpeg/Default)
+ TITLE+= (full)
+ DEPENDS+= @BUILD_PATENTED +alsa-libs
+ VARIANT:=full
 endef
 
-define Package/libswscale
-$(call Package/ffmpeg/Default)
- SECTION:=libs
- CATEGORY:=Libraries
- TITLE:=libswscale
- DEPENDS+= +libffmpeg
+define Package/libffmpeg-full/description
+$(call Package/ffmpeg/Default/description)
+ .
+ This package contains full-featured FFmpeg shared libraries.
 endef
 
-FILTER_CONFIG= \
-	$(foreach c, $(3), \
-		$(if $(CONFIG_FFMPEG_$(1)_$(c)),--enable-$(2)="$(c)") \
-	)
 
-FFMPEG_CONFIGURE_ENCODERS:=$(call FILTER_CONFIG,ENCODER,encoder,$(FFMPEG_ENCODERS))
-FFMPEG_CONFIGURE_DECODERS:=$(call FILTER_CONFIG,DECODER,decoder,$(FFMPEG_DECODERS))
-FFMPEG_CONFIGURE_MUXERS:=$(call FILTER_CONFIG,MUXER,muxer,$(FFMPEG_MUXERS))
-FFMPEG_CONFIGURE_DEMUXERS:=$(call FILTER_CONFIG,DEMUXER,demuxer,$(FFMPEG_DEMUXERS))
-FFMPEG_CONFIGURE_PARSERS:=$(call FILTER_CONFIG,PARSER,parser,$(FFMPEG_PARSERS))
-FFMPEG_CONFIGURE_PROTOCOLS:=$(call FILTER_CONFIG,PROTOCOL,protocol,$(FFMPEG_PROTOCOLS))
+define Package/libffmpeg-mini
+$(call Package/libffmpeg/Default)
+ TITLE+= (mini)
+ DEPENDS+= @BUILD_PATENTED
+ VARIANT:=mini
+endef
 
-ifneq ($(CONFIG_TARGET_x86),)
-  TARGET_CFLAGS += -fomit-frame-pointer
-endif
+define Package/libffmpeg-mini/description
+$(call Package/ffmpeg/Default/description)
+ .
+ This package contains minimal-featured FFmpeg shared libraries.
+endef
+
 
 # XXX: add --disable-mmx & --disable-mmx2 to fix build failure on x86
 # libpostproc/postprocess_template.c:2195: error: can't find a register in class 'GENERAL_REGS' while reloading 'asm'
 # libpostproc/postprocess_template.c:3124: error: can't find a register in class 'GENERAL_REGS' while reloading 'asm'
 # libpostproc/postprocess_template.c:3207: error: can't find a register in class 'GENERAL_REGS' while reloading 'asm'
 
-define Build/Configure
-	# this is *NOT* GNU configure
-	( cd $(PKG_BUILD_DIR); \
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) $(FPIC)" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		./configure \
-		--enable-cross-compile \
-		--cross-prefix="$(TARGET_CROSS)" \
-		--arch="$(ARCH)" \
-		--target-os=linux \
-		--prefix="/usr" \
-		--enable-shared \
-		--enable-static \
-		--disable-debug \
-		\
-		--enable-gpl \
-		--enable-version3 \
-		\
-		--disable-doc \
-		--disable-dxva2 \
-		--disable-mmx \
-		--disable-mmx2 \
-		--enable-pthreads \
-		--disable-optimizations \
-		--enable-small \
-		--disable-stripping \
-		--enable-zlib \
-		--enable-postproc \
-		--enable-swscale \
-		\
-		$(if $(CONFIG_FFMPEG_BSFS),,--disable-bsfs) \
-		$(if $(CONFIG_FFMPEG_OUTDEVS),,--disable-outdevs) \
-		$(if $(CONFIG_FFMPEG_INDEVS),,--disable-indevs) \
-		$(if $(CONFIG_FFMPEG_FILTERS),,--disable-filters) \
-		$(if $(CONFIG_FFMPEG_HWACCELS),,--disable-hwaccels) \
-		$(if $(CONFIG_FFMPEG_PARSERS),,--disable-parsers) \
-		$(if $(CONFIG_FFMPEG_PROTOCOLS),,--disable-protocols) \
-		$(if $(CONFIG_FFMPEG_ENCODE),,--disable-encoders --disable-muxers) \
-		$(if $(CONFIG_FFMPEG_DECODE),,--disable-decoders --disable-demuxers) \
-		$(FFMPEG_CONFIGURE_ENCODERS) \
-		$(FFMPEG_CONFIGURE_DECODERS) \
-		$(FFMPEG_CONFIGURE_MUXERS) \
-		$(FFMPEG_CONFIGURE_DEMUXERS) \
-		$(FFMPEG_CONFIGURE_PARSERS) \
-		$(FFMPEG_CONFIGURE_PROTOCOLS) \
-		\
-		$(if $(CONFIG_PACKAGE_ffmpeg),,--disable-ffmpeg) \
-		--disable-ffplay \
-		$(if $(CONFIG_PACKAGE_ffprobe),,--disable-ffprobe) \
-		$(if $(CONFIG_PACKAGE_ffserver),,--disable-ffserver) \
-		\
+FFMPEG_CONFIGURE:= \
+	CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) $(FPIC)" \
+	LDFLAGS="$(TARGET_LDFLAGS)" \
+	PKG_CONFIG="pkg-config" \
+	./configure \
+	--enable-cross-compile \
+	--cross-prefix="$(TARGET_CROSS)" \
+	--arch="$(ARCH)" \
+	--target-os=linux \
+	--prefix="/usr" \
+	--enable-shared \
+	--enable-static \
+	--disable-debug \
+	\
+	--enable-gpl \
+	--enable-version3 \
+	\
+	--disable-doc \
+	--disable-dxva2 \
+	--disable-mmx \
+	--disable-mmx2 \
+	--enable-pthreads \
+	--disable-optimizations \
+	--enable-small \
+	--disable-stripping \
+	--enable-zlib \
+
+ifeq ($(BUILD_VARIANT),custom)
+
+  FFMPEG_ENABLE= \
+	$(foreach c, $(2), \
+		$(if $($(3)_$(c)),--enable-$(1)="$(c)") \
 	)
+
+  FFMPEG_CONFIGURE+= \
+	--disable-ffmpeg \
+	--disable-ffplay \
+	--disable-ffprobe \
+	--disable-ffserver \
+	--disable-avfilter \
+	--disable-postproc \
+	--disable-swscale \
+	--disable-everything \
+	$(call FFMPEG_ENABLE,encoder,$(FFMPEG_CUSTOM_ENCODERS),CONFIG_FFMPEG_ENCODER) \
+	$(call FFMPEG_ENABLE,decoder,$(FFMPEG_CUSTOM_DECODERS),CONFIG_FFMPEG_DECODER) \
+	$(call FFMPEG_ENABLE,muxer,$(FFMPEG_CUSTOM_MUXERS),CONFIG_FFMPEG_MUXER) \
+	$(call FFMPEG_ENABLE,demuxer,$(FFMPEG_CUSTOM_DEMUXERS),CONFIG_FFMPEG_DEMUXER) \
+	$(call FFMPEG_ENABLE,parser,$(FFMPEG_CUSTOM_PARSERS),CONFIG_FFMPEG_PARSER) \
+	$(call FFMPEG_ENABLE,protocol,$(FFMPEG_CUSTOM_PROTOCOLS),CONFIG_FFMPEG_PROTOCOL) \
+
+endif
+
+ifeq ($(BUILD_VARIANT),mini)
+
+  FFMPEG_ENABLE= \
+	$(foreach c, $(2), \
+		--enable-$(1)="$(c)" \
+	)
+
+  FFMPEG_CONFIGURE+= \
+	--disable-ffmpeg \
+	--disable-ffplay \
+	--disable-ffprobe \
+	--disable-ffserver \
+	--disable-avfilter \
+	--disable-postproc \
+	--disable-swscale \
+	--disable-everything \
+	$(call FFMPEG_ENABLE,encoder,$(FFMPEG_MINI_ENCODERS)) \
+	$(call FFMPEG_ENABLE,decoder,$(FFMPEG_MINI_DECODERS)) \
+	$(call FFMPEG_ENABLE,muxer,$(FFMPEG_MINI_MUXERS)) \
+	$(call FFMPEG_ENABLE,demuxer,$(FFMPEG_MINI_DEMUXERS)) \
+	$(call FFMPEG_ENABLE,parser,$(FFMPEG_MINI_PARSERS)) \
+	$(call FFMPEG_ENABLE,protocol,$(FFMPEG_MINI_PROTOCOLS)) \
+
+endif
+
+ifneq ($(CONFIG_TARGET_x86),)
+  TARGET_CFLAGS += -fomit-frame-pointer
+endif
+
+define Build/Configure
+	( cd $(PKG_BUILD_DIR); $(FFMPEG_CONFIGURE) )
 endef
 
 define Build/Compile
@@ -269,20 +363,16 @@ define Build/Compile
 		all install
 endef
 
-define Build/InstallDev
+ifeq ($(BUILD_VARIANT),full)
+  define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libav{codec,device,format,util} $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpostproc $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libswscale $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/lib{avcodec,avdevice,avfilter,avformat,avutil,postproc,swscale} $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libav{codec,device,format,util}.{a,so*} $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpostproc.{a,so*} $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libswscale.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{avcodec,avdevice,avfilter,avformat,avutil,postproc,swscale}.{a,so*} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libav{codec,device,format,util}.pc $(1)/usr/lib/pkgconfig/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libpostproc.pc $(1)/usr/lib/pkgconfig/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libswscale.pc $(1)/usr/lib/pkgconfig/
-endef
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/lib{avcodec,avdevice,avfilter,avformat,avutil,postproc,swscale}.pc $(1)/usr/lib/pkgconfig/
+  endef
+endif
 
 define Package/ffmpeg/install
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -299,24 +389,24 @@ define Package/ffserver/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ffserver $(1)/usr/bin/
 endef
 
-define Package/libffmpeg/install
+define Package/libffmpeg-custom/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libav{codec,device,format,util}.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{avcodec,avdevice,avformat,avutil}.so.* $(1)/usr/lib/
 endef
 
-define Package/libpostproc/install
+define Package/libffmpeg-full/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpostproc.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{avcodec,avdevice,avfilter,avformat,avutil,postproc,swscale}.so.* $(1)/usr/lib/
 endef
 
-define Package/libswscale/install
+define Package/libffmpeg-mini/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libswscale.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{avcodec,avdevice,avformat,avutil}.so.* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,ffmpeg))
 $(eval $(call BuildPackage,ffprobe))
 $(eval $(call BuildPackage,ffserver))
-$(eval $(call BuildPackage,libffmpeg))
-$(eval $(call BuildPackage,libpostproc))
-$(eval $(call BuildPackage,libswscale))
+$(eval $(call BuildPackage,libffmpeg-custom))
+$(eval $(call BuildPackage,libffmpeg-full))
+$(eval $(call BuildPackage,libffmpeg-mini))
