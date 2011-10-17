@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.draisberghof.de/usb_modeswitch
-PKG_MD5SUM:=76f6978f18cac41f269a346a5d0f1052
+PKG_MD5SUM:=6d3c77807adc0fb609635440036d86e9
 
 include $(INCLUDE_DIR)/package.mk
 
