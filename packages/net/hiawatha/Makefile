@@ -8,12 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hiawatha
-PKG_VERSION:=7.6
+PKG_VERSION:=7.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.hiawatha-webserver.org/files/
-PKG_MD5SUM:=45e7c3229a94d19abb5d92daa36c61d9
+PKG_MD5SUM:=7195c829c86f1ed37d314daa4e06d06b
+
+PKG_CONFIG_DEPENDS:= \
+	CONFIG_IPV6 \
 
 PKG_INSTALL:=1
 
@@ -34,6 +37,7 @@ define Package/hiawatha/description
 endef
 
 CONFIGURE_ARGS+= \
+	$(call autoconf_bool,CONFIG_IPV6,ipv6) \
 	--disable-cache \
 	--disable-monitor \
 	--disable-ssl \
