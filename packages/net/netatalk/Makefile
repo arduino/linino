@@ -17,6 +17,7 @@ PKG_MD5SUM:=4a371025daf96adb73fa491efdbfef28
 
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -40,12 +41,8 @@ define Package/netatalk/conffiles
 /etc/netatalk/afpd.conf
 endef
 
-EXTRA_CFLAGS += -I$(STAGING_DIR)/usr/include
-TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
+TARGET_CFLAGS += -std=c99 -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 TARGET_LDFLAGS += $(LIBRPC)
-
-CONFIGURE_VARS += \
-	CFLAGS="$(TARGET_CFLAGS) -std=gnu99 -DNO_DEBUG "
 
 CONFIGURE_ARGS += \
 	--disable-afs \
