@@ -5,7 +5,7 @@
  
  	result = (*pool_head)->base + (*pool_head)->used;
 -#ifdef __sparc__
-+#if defined(__sparc__) || defined(__mips__) || defined(__arm__)
++#if defined(__sparc__) || defined(__arm__)
  	/* SPARC requires that the allocation field be aligned. */
  	if ((long) result % sizeof(ast_string_field_allocation)) {
  		result++;
@@ -14,7 +14,7 @@
  	} else {
  		target = (*pool_head)->base + (*pool_head)->used + sizeof(ast_string_field_allocation);
 -#ifdef __sparc__
-+#if defined(__sparc__) || defined(__mips__) || defined(__arm__)
++#if defined(__sparc__) || defined(__arm__)
  		if ((long) target % sizeof(ast_string_field_allocation)) {
  			target++;
  			space--;
