@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
 PKG_VERSION:=5.3.8
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
@@ -40,7 +40,7 @@ PHP5_MODULES = \
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_php5-cgi CONFIG_PACKAGE_php5-cli \
 	$(patsubst %,CONFIG_PACKAGE_php5-mod-%,$(PHP5_MODULES)) \
-	CONFIG_PHP5_FILTER CONFIG_PHP5_LIBXML
+	CONFIG_PHP5_FILTER CONFIG_PHP5_LIBXML PHP5_SYSTEMTZDATA
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -68,6 +68,16 @@ define Package/php5/config
 	config PHP5_LIBXML
 		bool "PHP5 LIBXML support"
 		depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
+
+	config PHP5_SYSTEMTZDATA
+		bool "Use system timezone data instead of php's built-in database"
+		depends on PACKAGE_php5-cli || PACKAGE_php5-cgi
+		select PACKAGE_zoneinfo-core
+		default y
+		help
+			Enabling this feature automatically selects the zoneinfo-core package
+			which contains data for UTC timezone. To use other timezones you have
+			to install the corresponding zoneinfo-... package(s).
 endef
 
 define Package/php5
@@ -429,6 +439,12 @@ ifneq ($(CONFIG_PHP5_LIBXML),)
   CONFIGURE_ARGS+= --with-libxml-dir="$(STAGING_DIR)/usr/include/libxml2"
 else
   CONFIGURE_ARGS+= --disable-libxml
+endif
+
+ifneq ($(CONFIG_PHP5_SYSTEMTZDATA),)
+  CONFIGURE_ARGS+= --with-system-tzdata
+else
+  CONFIGURE_ARGS+= --without-system-tzdata
 endif
 
 CONFIGURE_VARS+= \
