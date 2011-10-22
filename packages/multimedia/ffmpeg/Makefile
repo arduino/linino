@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ffmpeg
 PKG_VERSION:=0.8.2
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ffmpeg.org/releases/
@@ -267,11 +267,6 @@ $(call Package/ffmpeg/Default/description)
 endef
 
 
-# XXX: add --disable-mmx & --disable-mmx2 to fix build failure on x86
-# libpostproc/postprocess_template.c:2195: error: can't find a register in class 'GENERAL_REGS' while reloading 'asm'
-# libpostproc/postprocess_template.c:3124: error: can't find a register in class 'GENERAL_REGS' while reloading 'asm'
-# libpostproc/postprocess_template.c:3207: error: can't find a register in class 'GENERAL_REGS' while reloading 'asm'
-
 FFMPEG_CONFIGURE:= \
 	CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) $(FPIC)" \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
@@ -289,10 +284,9 @@ FFMPEG_CONFIGURE:= \
 	--enable-gpl \
 	--enable-version3 \
 	\
+	--disable-asm \
 	--disable-doc \
 	--disable-dxva2 \
-	--disable-mmx \
-	--disable-mmx2 \
 	--enable-pthreads \
 	--disable-optimizations \
 	--enable-small \
