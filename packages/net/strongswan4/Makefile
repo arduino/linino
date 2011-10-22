@@ -112,11 +112,10 @@ $(call Package/strongswan4/Default)
 	+kmod-crypto-authenc \
 	+kmod-ipsec +kmod-ipsec4 \
 	+kmod-ipt-ipsec +iptables-mod-ipsec
-  MENU:=1
 endef
 
 define Package/strongswan4/config
-	source "$(SOURCE)/Config.in"
+  source "$(SOURCE)/Config.in"
 endef
 
 define Package/strongswan4/description
@@ -129,7 +128,7 @@ endef
 define Package/strongswan4-full
 $(call Package/strongswan4/Default)
   TITLE+= (full)
-  DEPENDS:= strongswan4 \
+  DEPENDS:= +strongswan4 \
 	+strongswan4-app-charon \
 	+strongswan4-app-pluto \
 	+strongswan4-libfast \
@@ -184,7 +183,8 @@ $(call Package/strongswan4/Default)
 	+strongswan4-mod-x509 \
 	+strongswan4-mod-xauth \
 	+strongswan4-mod-xcbc \
-	+strongswan4-utils
+	+strongswan4-utils \
+	@DEVEL
 endef
 
 define Package/strongswan4-full/description
@@ -199,7 +199,7 @@ endef
 define Package/strongswan4-default
 $(call Package/strongswan4/Default)
   TITLE+= (default)
-  DEPENDS:= strongswan4 \
+  DEPENDS:= +strongswan4 \
 	+strongswan4-app-charon \
 	+strongswan4-app-pluto \
 	+strongswan4-mod-aes \
@@ -241,7 +241,7 @@ endef
 define Package/strongswan4-minimal
 $(call Package/strongswan4/Default)
   TITLE+= (minimal)
-  DEPENDS:= strongswan4 \
+  DEPENDS:= +strongswan4 \
 	+strongswan4-app-charon \
 	+strongswan4-mod-aes \
 	+strongswan4-mod-gmp \
@@ -267,7 +267,7 @@ endef
 define Package/strongswan4-app-charon
 $(call Package/strongswan4/Default)
   TITLE+= IKEv2 keying daemon
-  DEPENDS:= strongswan4
+  DEPENDS:= +strongswan4
 endef
 
 define Package/strongswan4-app-charon/description
@@ -280,7 +280,7 @@ endef
 define Package/strongswan4-app-pluto
 $(call Package/strongswan4/Default)
   TITLE+= IKEv1 keying daemon
-  DEPENDS:= strongswan4
+  DEPENDS:= +strongswan4
 endef
 
 define Package/strongswan4-app-pluto/description
@@ -293,7 +293,7 @@ endef
 define Package/strongswan4-libfast
 $(call Package/strongswan4/Default)
   TITLE+= libfast
-  DEPENDS:= strongswan4
+  DEPENDS:= +strongswan4
 endef
 
 define Package/strongswan4-libfast/description
@@ -307,7 +307,7 @@ endef
 define Package/strongswan4-utils
 $(call Package/strongswan4/Default)
   TITLE+= utilities
-  DEPENDS:= strongswan4
+  DEPENDS:= +strongswan4
 endef
 
 define Package/strongswan4-utils/description
@@ -324,7 +324,7 @@ define BuildPlugin
   define Package/strongswan4-mod-$(1)
     $$(call Package/strongswan4/Default)
     TITLE:= StrongSwan $(2) plugin
-    DEPENDS:= strongswan4 $(3)
+    DEPENDS:= +strongswan4 $(3)
   endef
 
   define Package/strongswan4-mod-$(1)/install
