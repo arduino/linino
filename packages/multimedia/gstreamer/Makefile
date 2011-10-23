@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gstreamer
-PKG_VERSION:=0.10.29
+PKG_VERSION:=0.10.34
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gstreamer/
-PKG_MD5SUM:=c92d6bce4fc65fa9d5a3ad35cdd1a466
+PKG_MD5SUM:=e6938af242cd002be9f0b6441e848d83
 
 PKG_FIXUP:=libtool
 PKG_REMOVE_FILES:=autogen.sh aclocal.m4
