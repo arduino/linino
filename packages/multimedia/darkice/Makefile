@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=darkice
 PKG_VERSION:=1.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://darkice.googlecode.com/files/
@@ -25,7 +25,7 @@ define Package/darkice
   CATEGORY:=Multimedia
   SUBMENU:=Streaming
   TITLE:=DarkIce is a live audio streamer
-  DEPENDS:=+lame +alsa-lib +libpthread +libstdcpp
+  DEPENDS:=+lame +libpthread +libstdcpp
   MAINTAINER:=Artur Wronowski <arteqw@gmail.com>
 endef
 
