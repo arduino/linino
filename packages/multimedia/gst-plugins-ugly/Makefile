@@ -20,6 +20,7 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_gst-mod-asf \
 	CONFIG_PACKAGE_gst-mod-lame \
 	CONFIG_PACKAGE_gst-mod-mad \
+	CONFIG_PACKAGE_gst-mod-mpeg2dc \
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
@@ -73,6 +74,7 @@ CONFIGURE_ARGS += \
 	--disable-iec958 \
 	$(call GST_COND_SELECT,lame) \
 	$(call GST_COND_SELECT,mad) \
+	$(call GST_COND_SELECT,mpeg2dec) \
 	--disable-mpegaudioparse \
 	--disable-mpegstream \
 	--disable-realmedia \
@@ -128,5 +130,6 @@ endef
 $(eval $(call GstBuildPlugin,asf,ASF demuxer,audio riff rtp rtsp sdp tag,,))
 $(eval $(call GstBuildPlugin,lame,MP3 encoder (using LAME),,,+lame-lib))
 $(eval $(call GstBuildPlugin,mad,MP3 decoder (using MAD),audio tag,,+libid3tag +libmad))
+$(eval $(call GstBuildPlugin,mpeg2dec,MPEG decoder,video,,+libmpeg2))
 
 $(eval $(call BuildPackage,gst-plugins-ugly))
