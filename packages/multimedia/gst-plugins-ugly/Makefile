@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,17 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gst-plugins-ugly
 PKG_VERSION:=0.10.15
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gst-plugins-ugly/
 PKG_MD5SUM:=21c034a762a5da252f91640e53bfe457
 
 PKG_BUILD_DEPENDS:= gstreamer gst-plugins-base liboil
+PKG_CONFIG_DEPENDS:= \
+	CONFIG_PACKAGE_gst-mod-asf \
+	CONFIG_PACKAGE_gst-mod-lame \
+	CONFIG_PACKAGE_gst-mod-mad \
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
@@ -50,6 +54,8 @@ $(call Package/gstreamer/description/Default)
 endef
 
 
+GST_COND_SELECT = $(patsubst %,$(if $(CONFIG_PACKAGE_gst-mod-$(1)),--enable,--disable)-%,$(1))
+
 GST_VERSION:=0.10
 
 CONFIGURE_ARGS += \
@@ -59,12 +65,14 @@ CONFIGURE_ARGS += \
 	--disable-a52dec \
 	--disable-amrnb \
 	--disable-amrwb \
+	$(call GST_COND_SELECT,asf) \
 	--disable-cdio \
 	--disable-dvdlpcmdec \
 	--disable-dvdread \
 	--disable-dvdsub \
 	--disable-iec958 \
-	--disable-mpeg2dec \
+	$(call GST_COND_SELECT,lame) \
+	$(call GST_COND_SELECT,mad) \
 	--disable-mpegaudioparse \
 	--disable-mpegstream \
 	--disable-realmedia \
@@ -75,7 +83,6 @@ CONFIGURE_ARGS += \
 	\
 	--without-libiconv-prefix \
 	--without-libintl-prefix \
-	--without-x \
 
 EXTRA_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
