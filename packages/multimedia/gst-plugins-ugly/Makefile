@@ -20,7 +20,7 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_gst-mod-asf \
 	CONFIG_PACKAGE_gst-mod-lame \
 	CONFIG_PACKAGE_gst-mod-mad \
-	CONFIG_PACKAGE_gst-mod-mpeg2dc \
+	CONFIG_PACKAGE_gst-mod-mpeg2dec \
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
