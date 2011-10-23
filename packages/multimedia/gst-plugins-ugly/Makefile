@@ -125,8 +125,8 @@ define GstBuildPlugin
   $$(eval $$(call BuildPackage,gst-mod-$(1)))
 endef
 
+$(eval $(call GstBuildPlugin,asf,ASF demuxer,audio riff rtp rtsp sdp tag,,))
 $(eval $(call GstBuildPlugin,lame,MP3 encoder (using LAME),,,+lame-lib))
 $(eval $(call GstBuildPlugin,mad,MP3 decoder (using MAD),audio tag,,+libid3tag +libmad))
-$(eval $(call GstBuildPlugin,asf,ASF demuxer,,,))
 
 $(eval $(call BuildPackage,gst-plugins-ugly))
