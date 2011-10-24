@@ -280,6 +280,7 @@ define Build/Compile
 		ASTVARLIBDIR="/usr/lib/asterisk" \
 		ASTDATADIR="/usr/lib/asterisk" \
 		ASTKEYDIR="/usr/lib/asterisk" \
+		ASTDBDIR="/usr/lib/asterisk" \
 		NOISY_BUILD="1" \
 		DEBUG="" \
 		OPTIMIZE="" \
