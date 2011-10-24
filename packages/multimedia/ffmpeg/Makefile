@@ -357,15 +357,42 @@ define Build/Compile
 		all install
 endef
 
-ifeq ($(BUILD_VARIANT),full)
-  define Build/InstallDev
+define Build/InstallDev/custom
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/lib{avcodec,avdevice,avformat,avutil} $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{avcodec,avdevice,avformat,avutil}.{a,so*} $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/lib{avcodec,avdevice,avformat,avutil}.pc $(1)/usr/lib/pkgconfig/
+endef
+
+define Build/InstallDev/full
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/lib{avcodec,avdevice,avfilter,avformat,avutil,postproc,swscale} $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{avcodec,avdevice,avfilter,avformat,avutil,postproc,swscale}.{a,so*} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/lib{avcodec,avdevice,avfilter,avformat,avutil,postproc,swscale}.pc $(1)/usr/lib/pkgconfig/
-  endef
+endef
+
+Build/InstallDev/mini = $(Build/InstallDev/custom)
+
+# XXX: attempt at installing "best" dev files available
+ifeq ($(BUILD_VARIANT),custom)
+  # XXX: only install "custom" dev files if -full & -mini are not selected
+  ifeq ($(CONFIG_PACKAGE_libffmpeg-full)$(CONFIG_PACKAGE_libffmpeg-mini),)
+    Build/InstallDev = $(Build/InstallDev/custom)
+  endif
+endif
+ifeq ($(BUILD_VARIANT),full)
+  # XXX: always install "full" dev files if -full is selected
+  Build/InstallDev = $(Build/InstallDev/full)
+endif
+ifeq ($(BUILD_VARIANT),mini)
+  # XXX: only install "mini" dev files if -full is not selected
+  ifeq ($(CONFIG_PACKAGE_libffmpeg-full),)
+    Build/InstallDev = $(Build/InstallDev/mini)
+  endif
 endif
 
 define Package/ffmpeg/install
@@ -393,10 +420,7 @@ define Package/libffmpeg-full/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{avcodec,avdevice,avfilter,avformat,avutil,postproc,swscale}.so.* $(1)/usr/lib/
 endef
 
-define Package/libffmpeg-mini/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{avcodec,avdevice,avformat,avutil}.so.* $(1)/usr/lib/
-endef
+Package/libffmpeg-mini/install = $(Package/libffmpeg-custom/install)
 
 $(eval $(call BuildPackage,ffmpeg))
 $(eval $(call BuildPackage,ffprobe))
