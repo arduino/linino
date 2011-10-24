@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 
 START=65
 
@@ -9,7 +9,7 @@ start() {
 #	ln -sf /dev/ttyS0 /dev/gps0
 #	/usr/sbin/setgarmin -d /dev/gps -c /etc/setgarmin.conf
 	stop
-	/usr/sbin/ntpd -g -p $PIDFILE
+	/sbin/ntpd -g -p $PIDFILE
 }
 
 stop() {
