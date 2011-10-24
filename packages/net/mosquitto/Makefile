@@ -1,4 +1,5 @@
 #
+# Copyright (C) 2011 OpenWrt.org
 # Copyright (C) 2010 Jo-Philipp Wich <xm@subsignal.org>
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mosquitto
-PKG_VERSION:=0.12
+PKG_VERSION:=0.13
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://mosquitto.org/files/source/
-PKG_MD5SUM:=e21ecb18dc8f9c3103fab95bbf8cffc7
+PKG_MD5SUM:=e2cad39f430f91087cb9c248be26ece5
 
 include $(INCLUDE_DIR)/package.mk
 
