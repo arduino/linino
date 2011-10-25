@@ -27,7 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/shorewall-lite
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+ip +iptables +iptables-utils
+  DEPENDS:=+ip +iptables
   TITLE:=Shorewall Lite
   URL:=http://www.shorewall.net/
   SUBMENU:=Firewall
