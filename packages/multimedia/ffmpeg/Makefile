@@ -270,7 +270,6 @@ endef
 FFMPEG_CONFIGURE:= \
 	CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) $(FPIC)" \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
-	PKG_CONFIG="pkg-config" \
 	./configure \
 	--enable-cross-compile \
 	--cross-prefix="$(TARGET_CROSS)" \
@@ -280,6 +279,7 @@ FFMPEG_CONFIGURE:= \
 	--enable-shared \
 	--enable-static \
 	--disable-debug \
+	--pkg-config="pkg-config" \
 	\
 	--enable-gpl \
 	--enable-version3 \
