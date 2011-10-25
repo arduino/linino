@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wget
-PKG_VERSION:=1.12
-PKG_RELEASE:=3
+PKG_VERSION:=1.13.4
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@GNU/$(PKG_NAME)
-PKG_MD5SUM:=308a5476fc096a8a525d07279a6f6aa3
+PKG_MD5SUM:=12115c3750a4d92f9c6ac62bac372e85
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -65,7 +65,7 @@ CONFIGURE_ARGS+= \
 
 ifeq ($(BUILD_VARIANT),ssl)
 	CONFIGURE_ARGS+= \
-		--with-ssl \
+		--with-ssl=openssl \
 		--with-libssl-prefix="$(STAGING_DIR)/usr"
 endif
 
