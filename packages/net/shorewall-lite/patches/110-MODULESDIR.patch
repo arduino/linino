@@ -1,6 +1,6 @@
 --- a/lib.common
 +++ b/lib.common
-@@ -220,7 +220,7 @@ reload_kernel_modules() {
+@@ -273,7 +273,7 @@ reload_kernel_modules() {
  
      [ -z "$MODULESDIR" ] && \
  	uname=$(uname -r) && \
@@ -9,7 +9,7 @@
  
      MODULES=$(lsmod | cut -d ' ' -f1)
  
-@@ -259,7 +259,7 @@ load_kernel_modules() # $1 = Yes, if we
+@@ -312,7 +312,7 @@ load_kernel_modules() # $1 = Yes, if we
  
      [ -z "$MODULESDIR" ] && \
  	uname=$(uname -r) && \

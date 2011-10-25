@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=shorewall-lite
-PKG_VERSION:=4.4.12.2
-PKG_DIRECTORY:=4.4.12
-PKG_RELEASE:=2
+PKG_VERSION:=4.4.24
+PKG_DIRECTORY:=4.4.24
+PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=http://www.shorewall.net/pub/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/ \
 	http://www1.shorewall.net/pub/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/ \
@@ -20,7 +20,7 @@ PKG_SOURCE_URL:=http://www.shorewall.net/pub/shorewall/4.4/shorewall-$(PKG_DIREC
 	http://shorewall.infohiiway.com/pub/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/ \
 	http://www.shorewall.com.ar/pub/shorewall/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=b030e988c36fc1ef8c0e27447faef2a6
+PKG_MD5SUM:=b2b8accd7b87b9d9d091d72c290813c3
 
 include $(INCLUDE_DIR)/package.mk
 
