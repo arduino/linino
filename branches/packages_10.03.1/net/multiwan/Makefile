@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,7 +16,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/multiwan
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+ip +iptables +iptables-utils +iptables-mod-conntrack +iptables-mod-conntrack-extra +iptables-mod-ipopt
+  DEPENDS:=+ip +iptables +iptables-mod-conntrack +iptables-mod-conntrack-extra +iptables-mod-ipopt
   TITLE:=Simple multi WAN configuration
   URL:=ftp://ftp.netlab7.com/
   MAINTAINER:=Craig M. Coffee <craigc@netlab7.com>
