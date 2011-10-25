@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=netatalk
 PKG_VERSION:=2.2.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/netatalk
@@ -41,7 +41,7 @@ define Package/netatalk/conffiles
 /etc/netatalk/afpd.conf
 endef
 
-TARGET_CFLAGS += -std=c99 -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+TARGET_CFLAGS += -std=gnu99 -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 TARGET_LDFLAGS += $(LIBRPC)
 
 CONFIGURE_ARGS += \
