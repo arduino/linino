@@ -317,6 +317,7 @@ define Build/Configure
 			-sysconfdir /etc/Qt \
 			-no-rpath \
 			-force-pkg-config \
+			-continue \
 			-nomake tools \
 			$(if $(CONFIG_PACKAGE_qt4-demos),-make,-nomake) demos \
 			$(if $(CONFIG_PACKAGE_qt4-examples),-make,-nomake) examples \
