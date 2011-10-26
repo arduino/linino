@@ -14,8 +14,8 @@ PKG_RELEASE:=1
 include $(INCLUDE_DIR)/package.mk
 
 define Package/perf
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=devel
+  CATEGORY:=Development
   DEPENDS:= +libdw +libelf1 +libpthread +librt @BROKEN
   TITLE:=Linux performance monitoring tool
   VERSION:=$(LINUX_VERSION)-$(PKG_RELEASE)
