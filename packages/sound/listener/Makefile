@@ -31,11 +31,18 @@ define Package/listener/description
   again.
 endef
 
+MAKE_FLAGS+= \
+	INSTALL_PREFIX= \
+
+define Package/listener/conffiles
+/etc/listener.conf
+endef
+
 define Package/listener/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/{listener,listenersoundpipe,setlistener} $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/listener.conf $(1)/etc/
+	$(INSTALL_CONF) ./files/listener.conf $(1)/etc/
 endef
 
 $(eval $(call BuildPackage,listener))
