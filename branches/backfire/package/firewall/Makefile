@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=firewall
 
 PKG_VERSION:=2
-PKG_RELEASE:=34.4
+PKG_RELEASE:=34.5
 
 include $(INCLUDE_DIR)/package.mk
 
