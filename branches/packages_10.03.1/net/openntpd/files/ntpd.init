@@ -10,7 +10,7 @@ boot() {
 start() {
 	mkdir -p `awk -F: '/^network:/{print $6}' /etc/passwd`
 	mkdir -p /var/db/
-	/usr/sbin/ntpd -s
+	/sbin/ntpd -s
 }
 
 stop() {
