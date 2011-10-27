@@ -9,8 +9,14 @@ autodim_steps=15/65 20/50 25/25 30/10 35/0
 autodim_default_max=75
 # Enable auto-dimming by default?
 autodim_default_on=1
+# Force backlight to autodim-max, if on AC and autodim is enabled?
+# This effectively disables autodim if not on battery power.
+autodim_max_on_ac=0
 
 [SCREEN]
 # Framebuffer device for screen blanking
 fbdev=/dev/fb0
 
+[XEVREP]
+# X11 input event reporter grace period (in milliseconds)
+grace_period=2000
