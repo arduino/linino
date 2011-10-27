@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aiccu
 PKG_VERSION:=20070115
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sixxs.net/archive/sixxs/aiccu/unix
@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/aiccu
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+libpthread +ntpclient +ip +kmod-sit +kmod-tun
+  DEPENDS:=+libpthread +ip +kmod-sit +kmod-tun
   TITLE:=SixXS Automatic IPv6 Connectivity Client Utility
   URL:=http://www.sixxs.net/tools/aiccu/
 endef
