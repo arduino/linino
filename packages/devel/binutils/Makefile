@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=binutils
 PKG_VERSION:=$(strip $(subst ",, $(CONFIG_BINUTILS_VERSION)))
 #"))
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE_URL:=@GNU/binutils
 PKG_SOURCE:=binutils-$(PKG_VERSION).tar.bz2
@@ -101,8 +101,9 @@ define Package/objdump/install
 endef
 
 define Package/binutils/install
-	$(INSTALL_DIR) $(1)/usr
+	$(INSTALL_DIR) $(1)/usr $(1)/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ $(1)/usr/
+	mv $(1)/usr/bin/strings $(1)/bin/strings
 	rm -f $(1)/usr/bin/objdump
 endef
 
