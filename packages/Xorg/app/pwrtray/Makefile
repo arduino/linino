@@ -10,8 +10,8 @@ include $(TOPDIR)/rules.mk
 #LOCAL_SRC:=1
 
 PKG_NAME:=pwrtray
-PKG_REV:=7581cda95d1cbe10ef0665840801a3120004db79
-PKG_VERSION:=1
+PKG_REV:=f9b63119a568803fad582dc0796af91bb087919c
+PKG_VERSION:=2
 PKG_RELEASE:=1
 
 ifeq ($(LOCAL_SRC),)
@@ -62,9 +62,7 @@ define Package/pwrtray/description
 endef
 
 EXTRA_CFLAGS:= \
-	-I$(PKG_BUILD_DIR)/tray/moc \
-	-I$(STAGING_DIR)/usr/include/QtCore \
-	-I$(STAGING_DIR)/usr/include/QtGui
+	-I$(PKG_BUILD_DIR)/tray/moc
 
 EXTRA_LDFLAGS:= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
@@ -73,11 +71,15 @@ EXTRA_LDFLAGS:= \
 MAKE_VARS+= \
 	MOC="$(STAGING_DIR_HOST)/bin/moc" \
 	STRIP="$(STRIP)" \
+	QT_INCDIR="$(STAGING_DIR)/usr/include" \
+	QT_LIBDIR="$(STAGING_DIR)/usr/lib" \
+	PREFIX=/usr \
 	$(if $(CONFIG_PACKAGE_libX11),FEATURE_XLOCK=y,FEATURE_XLOCK=n) \
+	$(if $(CONFIG_PACKAGE_libX11),FEATURE_XEVREP=y,FEATURE_XEVREP=n) \
 	$(if $(CONFIG_PACKAGE_pwrtray),FEATURE_TRAY=y,FEATURE_TRAY=n)
 
-#MAKE_FLAGS+= \
-#	V=1
+MAKE_FLAGS+= \
+	V=1
 
 define Build/Prepare
 	$(if $(LOCAL_SRC), \
@@ -97,6 +99,7 @@ define Package/pwrtray-backend/install
 	$(INSTALL_BIN) ./files/etc/init.d/* $(1)/etc/init.d/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray-backend $(1)/usr/bin/
 	$(if $(CONFIG_PACKAGE_libX11),$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray-xlock $(1)/usr/bin/)
+	$(if $(CONFIG_PACKAGE_libX11),$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray-xevrep $(1)/usr/bin/)
 	$(if $(CONFIG_PACKAGE_pwrtray),$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray $(1)/usr/bin/)
 	$(if $(CONFIG_PACKAGE_pwrtray),$(CP) $(PKG_INSTALL_DIR)/usr/share/pwrtray $(1)/usr/share/)
 	[ -e $(1)/etc/pwrtray-backendrc ] || \
