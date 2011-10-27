@@ -667,6 +667,20 @@ config BUSYBOX_CONFIG_NSLOOKUP
 	help
 	  nslookup is a tool to query Internet name servers.
 
+config BUSYBOX_CONFIG_NTPD
+	bool "ntpd"
+	default n
+	help
+	  The NTP client/server daemon.
+
+config BUSYBOX_CONFIG_FEATURE_NTPD_SERVER
+	bool "Make ntpd usable as a NTP server"
+	default n
+	depends on BUSYBOX_CONFIG_NTPD
+	help
+	  Make ntpd usable as a NTP server. If you disable this option
+	  ntpd will be usable only as a NTP client.
+
 config BUSYBOX_CONFIG_PING
 	bool "ping"
 	default y
