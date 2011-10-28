@@ -1,6 +1,6 @@
 --- a/src/chan_sccp.h
 +++ b/src/chan_sccp.h
-@@ -172,15 +172,7 @@
+@@ -127,15 +127,7 @@ extern "C" {
  #        define CHECK_LEAKS()
  #    endif
  
