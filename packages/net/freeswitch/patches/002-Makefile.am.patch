@@ -9,6 +9,15 @@
  EXTRA_DIST =
  SUBDIRS = . src
  AUTOMAKE_OPTS = foreign
+@@ -61,7 +66,7 @@ cd-moh-install: uhd-moh-install sounds-m
+ # (1) if the variable is set in `config.status', edit `config.status'
+ #     (which will cause the Makefiles to be regenerated when you run `make');
+ # (2) otherwise, pass the desired values on the `make' command line.
+-all-recursive: libfreeswitch.la
++all-recursive: spandsp-reconf libfreeswitch.la
+ clean-recusive: clean_core
+ install-recursive: install-libLTLIBRARIES install-binPROGRAMS
+ $(RECURSIVE_TARGETS):
 @@ -299,7 +304,7 @@ endif
  ##
  fs_encode_SOURCES = src/fs_encode.c

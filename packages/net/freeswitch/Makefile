@@ -9,6 +9,7 @@ include $(TOPDIR)/rules.mk
 
 
 PKG_NAME:=freeswitch
+PKG_DISTNAME:=$(PKG_NAME)_git
 PKG_VERSION:=1.0.7
 PKG_RELEASE:=1
 
@@ -16,12 +17,12 @@ PKG_RELEASE:=1
 #
 # The latest FS git hash in PKG_REV can be obtained from http://fisheye.freeswitch.org
 #
-PKG_REV:=7b0d878925e4703278362cc5c11abff54f82ad54
+PKG_REV:=f8470594425d666a1000b386243df289d41c01ad
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE:=$(PKG_SOURCE_SUBDIR)_git-$(shell echo $(PKG_REV)|cut -b -9).tar.bz2
+PKG_SOURCE_SUBDIR:=$(PKG_DISTNAME)
+PKG_SOURCE:=$(PKG_SOURCE_SUBDIR)-$(shell echo $(PKG_REV)|cut -b -9).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 
@@ -34,8 +35,8 @@ FS_MOD_AVAILABLE:= \
 	amr \
 	amrwb \
 	avmd \
-	bv \
 	blacklist \
+	bv \
 	callcenter \
 	cdr-csv \
 	cdr-pg-csv \
@@ -115,9 +116,9 @@ FS_MOD_AVAILABLE:= \
 	skypopen \
 	sms \
 	snapshot \
-	snmp \
 	snipe-hunt \
 	sndfile \
+	snmp \
 	snom \
 	sofia \
 	spandsp \
@@ -144,18 +145,20 @@ FS_MOD_AVAILABLE:= \
 
 
 PKG_CONFIG_DEPENDS:= \
-	CONFIG_FS_SOFIA_WITH_GNUTLS \
 	CONFIG_FS_SOFIA_WITH_IPV6 \
+	CONFIG_FS_SOFIA_WITH_MYSQL \
 	CONFIG_FS_SOFIA_WITH_ODBC \
 	CONFIG_FS_SOFIA_WITH_OPT \
 	CONFIG_FS_SOFIA_WITH_SCTP \
 	CONFIG_FS_SOFIA_WITH_ZRTP_GIT \
-	CONFIG_FS_SOFIA_WITHOUT_MYSQL \
 	$(patsubst %,CONFIG_PACKAGE_$(PKG_NAME)-mod-%,$(FS_MOD_AVAILABLE)) \
 
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
+
+
+TAR_OPTIONS+= --strip-components=1 -C $(PKG_BUILD_DIR)
 
 
 define Package/$(PKG_NAME)/Default
@@ -196,43 +199,32 @@ define Package/$(PKG_NAME)/config
     default y
     help
             Compile $(PKG_NAME) with optimization enabled.
-
-    config FS_SOFIA_WITHOUT_MYSQL
-    depends on PACKAGE_$(PKG_NAME)
-    bool "Compile without MySQL"
-    default y
-    help
-            Compile $(PKG_NAME) without MySQL.
-endef
-
-
-define Package/$(PKG_NAME)-mod-dingaling/config
-    config FS_SOFIA_WITH_GNUTLS
-    depends on PACKAGE_$(PKG_NAME)-mod-dingaling
-    bool "Compile with GNU TLS (Requires libgnutls-openssl)"
-    default y
-    select PACKAGE_libgnutls-openssl
-    help
-            Compile $(PKG_NAME)-mod-dingaling with GNU TLS Support (Requires libgnutls-openssl package).
 endef
 
 
 define Package/$(PKG_NAME)-mod-sofia/config
+    config FS_SOFIA_WITH_MYSQL
+    depends on PACKAGE_$(PKG_NAME)-mod-sofia
+    bool "Compile with MySQL"
+    default n
+    select PACKAGE_libmysqlclient
+    help
+            Compile $(PKG_NAME) with MySQL.
+
     config FS_SOFIA_WITH_ODBC
     depends on PACKAGE_$(PKG_NAME)-mod-sofia
+    depends on PACKAGE_sqliteodbc
     depends on PACKAGE_unixodbc_svn
     bool "Compile with ODBC support (Requires unixodbc_svn NOT YET AVAILABLE)"
     default n
-    #select PACKAGE_unixodbc_svn
     help
-            Compile $(PKG_NAME)-mod-sofia with ODBC Support. Since unixodbc_svn package is not yet available on OpenWRT, $(PKG_NAME)-mod-sofia CAN NOT be compiled with ODBC support.
+            Compile $(PKG_NAME)-mod-sofia with ODBC Support. Since both sqliteodbc and unixodbc_svn packages are not yet available on OpenWRT, $(PKG_NAME)-mod-sofia CAN NOT be compiled with ODBC support.
 
     config FS_SOFIA_WITH_SCTP
     depends on PACKAGE_$(PKG_NAME)-mod-sofia
     depends on PACKAGE_sctp
     bool "Compile with SCTP (Stream Control Transfer Protocol) support"
-    default n
-    #select PACKAGE_sctp
+    default y
     help
             Compile $(PKG_NAME)-mod-sofia with SCTP support.
 
@@ -396,7 +388,7 @@ endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-flite),)
- $(eval $(call Download/files,flite,flite-1.3.99-latest.tar.gz,365b60881715c5e13c0d8bc37d9be6ff,,downloads/libs/,libs/))
+ $(eval $(call Download/files,flite,flite-1.5.1-current.tar.bz2,36e5d1c1307161211c8ffe9a75a623ae,,downloads/libs/,libs/))
 endif
 
 
@@ -448,18 +440,17 @@ CONFIGURE_ARGS+= \
 	--sysconfdir="/etc/$(PKG_NAME)" \
 	--with-modinstdir="/usr/lib/$(PKG_NAME)" \
 	--with-random="/dev/urandom" \
-	$(if $(CONFIG_FS_SOFIA_WITHOUT_MYSQL),--without-mysql) \
+	$(if $(CONFIG_FS_SOFIA_WITH_MYSQL),--with-mysql,--without-mysql) \
 	$(call autoconf_bool,CONFIG_FS_SOFIA_WITH_IPV6,ipv6) \
 	$(call autoconf_bool,CONFIG_FS_SOFIA_WITH_OPT,optimization) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-celt),--with-ogg="$(STAGING_DIR)/usr",--without-iogg) \
 	$(if ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-curl)|$(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-cdr)|$(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-curl)),--with-libcurl="$(STAGING_DIR)/usr",--without-libcurl) \
-	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-dingaling)|$(CONFIG_FS_SOFIA_WITH_GNUTLS),--with-libgnutls="$(STAGING_DIR)/usr") \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-java),--with-java="$(STAGING_DIR)/usr",--without-java) \
 	$(call autoconf_bool,CONFIG_PACKAGE_$(PKG_NAME)-mod-spandsp,builtin-tiff) \
-	$(call autoconf_bool,CONFIG_FS_SOFIA_WITH_SCTP,sctp) \
 	$(call autoconf_bool,CONFIG_FS_SOFIA_WITH_ZRTP_GIT,zrtp) \
 	$(call autoconf_bool,CONFIG_FS_SOFIA_WITH_ODBC,core-odbc-support) \
 	$(if $(CONFIG_FS_SOFIA_WITH_ODBC),--with-odbc="$(STAGING_DIR)/usr") \
+	$(if $(CONFIG_FS_SOFIA_WITH_ODBC),--with-odbc-lib="$(STAGING_DIR)/usr/lib") \
 
 
 CONFIGURE_VARS+= \
@@ -499,13 +490,11 @@ CONFIGURE_VARS+= \
 	apr_cv_process_shared_works="no" \
 	apr_cv_tcp_nodelay_with_cork="yes" \
 	apr_cv_type_rwlock_t="yes" \
-	ac_cv_path_LIBGNUTLS_CONFIG="no" \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-perl),ac_cv_path_PERL="yes",) \
 	libzmq_cv_cxx_werror_flag="" \
 
 
 define Build/Prepare
-	(cd $(PKG_BUILD_DIR); [ -h noreg ] || touch noreg)
 	$(call Build/Prepare/Default)
 	$(call Prepare/celt)
 	$(call Prepare/event-zmq)
@@ -538,7 +527,7 @@ define Build/Compile
 		CXX="$(TARGET_CXX)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
-		spandsp-reconf all $(MAKE_INSTALL_TARGETS)
+		all $(MAKE_INSTALL_TARGETS)
 	$(SED) 's|^\([ \t]*\)\(.*\)"mod_console"\(.*\)$$$$|\1<!-- \2"mod_console"\3 -->|' $(PKG_INSTALL_DIR)/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
 	$(SED) 's|^\([ \t]*\)<!-- *\(.*\)"mod_syslog"\(.*\) *-->\(.*\)$$$$|\1\2"mod_syslog"\3\4|' $(PKG_INSTALL_DIR)/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
 endef
@@ -576,7 +565,6 @@ endef
 
 define Package/$(PKG_NAME)-example-config/install
 	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/examples/conf
-	#$(INSTALL_DIR) $(1)/var/log/$(PKG_NAME)/xml_cdr
 	$(CP) $(PKG_INSTALL_DIR)/etc/$(PKG_NAME)/* $(1)/usr/share/$(PKG_NAME)/examples/conf/
 endef
 
