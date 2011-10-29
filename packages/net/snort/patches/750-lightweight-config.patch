@@ -32,6 +32,39 @@
  
  # Configure the snort decoder
  # ============================
+@@ -191,27 +192,27 @@ var PREPROC_RULE_PATH ../preproc_rules
+ # Load all dynamic preprocessors from the install path
+ # (same as command line option --dynamic-preprocessor-lib-dir)
+ #
+-dynamicpreprocessor directory /usr/local/lib/snort_dynamicpreprocessor/
++#dynamicpreprocessor directory /usr/lib/snort_dynamicpreprocessor/
+ #
+ # Load a specific dynamic preprocessor library from the install path
+ # (same as command line option --dynamic-preprocessor-lib)
+ #
+-# dynamicpreprocessor file /usr/local/lib/snort_dynamicpreprocessor/libdynamicexample.so
++# dynamicpreprocessor file /usr/lib/snort_dynamicpreprocessor/lib_sfdynamic_preprocessor_example.so
+ #
+ # Load a dynamic engine from the install path
+ # (same as command line option --dynamic-engine-lib)
+ #
+-dynamicengine /usr/local/lib/snort_dynamicengine/libsf_engine.so
++#dynamicengine /usr/lib/snort_dynamicengine/libsf_engine.so
+ #
+ # Load all dynamic rules libraries from the install path
+ # (same as command line option --dynamic-detection-lib-dir)
+ #
+-# dynamicdetection directory /usr/local/lib/snort_dynamicrule/
++# dynamicdetection directory /usr/lib/snort_dynamicrules/
+ #
+ # Load a specific dynamic rule library from the install path
+ # (same as command line option --dynamic-detection-lib)
+ #
+-# dynamicdetection file /usr/local/lib/snort_dynamicrule/libdynamicexamplerule.so
++# dynamicdetection file /usr/lib/snort_dynamicrules/lib_sfdynamic_example_rule.so
+ #
+ 
+ ###################################################
 @@ -307,11 +308,11 @@ preprocessor stream5_tcp: policy first, 
  # lots of options available here. See doc/README.http_inspect.
  # unicode.map should be wherever your snort.conf lives, or given
@@ -157,6 +190,17 @@
  
  # arpspoof
  #----------------------------------------
+@@ -605,8 +606,8 @@ preprocessor sfportscan: proto  { all } 
+ # See doc/README.dcerpc2 for explanations of what the
+ # preprocessor does and how to configure it.
+ #
+-preprocessor dcerpc2
+-preprocessor dcerpc2_server: default
++#preprocessor dcerpc2
++#preprocessor dcerpc2_server: default
+ 
+ 
+ # DNS
 @@ -623,9 +624,9 @@ preprocessor dcerpc2_server: default
  # or use commandline option
  # --dynamic-preprocessor-lib <full path to libsf_dns_preproc.so>
@@ -179,10 +223,13 @@
  
  
  ####################################################################
-@@ -811,41 +812,41 @@ include $RULE_PATH/local.rules
- include $RULE_PATH/bad-traffic.rules
- include $RULE_PATH/exploit.rules
- include $RULE_PATH/scan.rules
+@@ -808,44 +809,44 @@ include reference.config
+ #=========================================
+ 
+ include $RULE_PATH/local.rules
+-include $RULE_PATH/bad-traffic.rules
+-include $RULE_PATH/exploit.rules
+-include $RULE_PATH/scan.rules
 -include $RULE_PATH/finger.rules
 -include $RULE_PATH/ftp.rules
 -include $RULE_PATH/telnet.rules
@@ -215,6 +262,9 @@
 -include $RULE_PATH/imap.rules
 -include $RULE_PATH/pop2.rules
 -include $RULE_PATH/pop3.rules
++#include $RULE_PATH/bad-traffic.rules
++#include $RULE_PATH/exploit.rules
++#include $RULE_PATH/scan.rules
 +#include $RULE_PATH/finger.rules
 +#include $RULE_PATH/ftp.rules
 +#include $RULE_PATH/telnet.rules
