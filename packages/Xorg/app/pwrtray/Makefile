@@ -75,7 +75,7 @@ MAKE_VARS+= \
 	QT_LIBDIR="$(STAGING_DIR)/usr/lib" \
 	PREFIX=/usr \
 	$(if $(CONFIG_PACKAGE_libX11),FEATURE_XLOCK=y,FEATURE_XLOCK=n) \
-	$(if $(CONFIG_PACKAGE_libX11),FEATURE_XEVREP=y,FEATURE_XEVREP=n) \
+	FEATURE_XEVREP=n \
 	$(if $(CONFIG_PACKAGE_pwrtray),FEATURE_TRAY=y,FEATURE_TRAY=n)
 
 MAKE_FLAGS+= \
@@ -99,7 +99,6 @@ define Package/pwrtray-backend/install
 	$(INSTALL_BIN) ./files/etc/init.d/* $(1)/etc/init.d/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray-backend $(1)/usr/bin/
 	$(if $(CONFIG_PACKAGE_libX11),$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray-xlock $(1)/usr/bin/)
-	$(if $(CONFIG_PACKAGE_libX11),$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray-xevrep $(1)/usr/bin/)
 	$(if $(CONFIG_PACKAGE_pwrtray),$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pwrtray $(1)/usr/bin/)
 	$(if $(CONFIG_PACKAGE_pwrtray),$(CP) $(PKG_INSTALL_DIR)/usr/share/pwrtray $(1)/usr/share/)
 	[ -e $(1)/etc/pwrtray-backendrc ] || \
