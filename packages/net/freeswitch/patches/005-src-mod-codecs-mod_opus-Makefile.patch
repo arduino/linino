@@ -1,60 +1,18 @@
 --- a/src/mod/codecs/mod_opus/Makefile
 +++ b/src/mod/codecs/mod_opus/Makefile
-@@ -1,29 +1,41 @@
- BASE=../../../..
- 
--OPUS=opus-0.9.0
--
--OPUS_DIR=$(switch_srcdir)/libs/$(OPUS)
--OPUS_BUILDDIR=$(switch_builddir)/libs/$(OPUS)
--LOCAL_CFLAGS=-I$(OPUS_DIR)/src -g -O2
--
--IETF_LA=$(OPUS_BUILDDIR)/src/libietfcodec.la
--CELT_LA=$(OPUS_BUILDDIR)/celt/libcelt/libcelt0.la
--SILK_LA=$(OPUS_BUILDDIR)/silk/libSKP_SILK_SDK.la
-+PKG_NAME=opus
-+PKG_VERSION=0.9.0
-+PKG_SOURCE_SUBDIR=$(PKG_NAME)-$(PKG_VERSION)
-+PKG_SOURCE=$(PKG_SOURCE_SUBDIR).tar.gz
-+PKG_BUILD_DIR=$(switch_builddir)/libs/$(PKG_SOURCE_SUBDIR)
-+PKG_SOURCE_DIR=$(switch_srcdir)/libs/$(PKG_SOURCE_SUBDIR)
-+
-+PKG_FIXUP:=libtool autoreconf
-+PKG_BUILD_PARALLEL:=1
-+
-+LOCAL_CFLAGS=-I$(PKG_SOURCE_DIR)/src -g -O2
-+
-+IETF_LA=$(PKG_BUILD_DIR)/src/libietfcodec.la
-+CELT_LA=$(PKG_BUILD_DIR)/celt/libcelt/libcelt0.la
-+SILK_LA=$(PKG_BUILD_DIR)/silk/libSKP_SILK_SDK.la
- 
+@@ -13,13 +13,14 @@ SILK_LA=$(OPUS_BUILDDIR)/silk/libSKP_SIL
  LOCAL_LIBADD=$(IETF_LA) $(CELT_LA) $(SILK_LA) -lm -lz
  
  include $(BASE)/build/modmake.rules
-+include $(BASE)/../../../rules.mk
-+include $(BASE)/../../../include/package.mk
++include $(BASE)/build/openwrt_rules.mk
  
--$(OPUS_DIR):
--	$(GETLIB) $(OPUS).tar.gz
-+MY_DEFAULT_ARGS:=--host=$(GNU_TARGET_NAME) --disable-shared --with-pic --srcdir=$(PKG_SOURCE_DIR)
+ $(OPUS_DIR):
+ 	$(GETLIB) $(OPUS).tar.gz
  
--$(OPUS_BUILDDIR)/Makefile: $(OPUS_DIR)
--	mkdir -p $(OPUS_BUILDDIR)
+ $(OPUS_BUILDDIR)/Makefile: $(OPUS_DIR)
+ 	mkdir -p $(OPUS_BUILDDIR)
 -	cd $(OPUS_BUILDDIR) && $(DEFAULT_VARS) $(OPUS_DIR)/configure --disable-shared --with-pic --srcdir=$(OPUS_DIR)
-+$(PKG_SOURCE_DIR):
-+	$(GETLIB) $(PKG_SOURCE)
-+	(cd $(PKG_BUILD_DIR); ${autoreconf_target})
-+
-+$(PKG_BUILD_DIR)/Makefile: $(PKG_SOURCE_DIR)
-+	mkdir -p $(PKG_BUILD_DIR)
-+	#cd $(PKG_BUILD_DIR) && $(DEFAULT_VARS) $(PKG_SOURCE_DIR)/configure $(MY_DEFAULT_ARGS)
-+	(cd $(PKG_BUILD_DIR); $(call Build/Configure/Default,${MY_DEFAULT_ARGS}))
++	cd $(OPUS_BUILDDIR) && $(DEFAULT_VARS) $(OPUS_DIR)/configure --host=$(GNU_TARGET_NAME) --disable-shared --with-pic --srcdir=$(OPUS_DIR)
  	$(TOUCH_TARGET)
  
--$(IETF_LA): $(OPUS_BUILDDIR)/Makefile
--	cd $(OPUS_BUILDDIR) && $(MAKE)
-+$(IETF_LA): $(PKG_BUILD_DIR)/Makefile
-+	(cd $(PKG_BUILD_DIR) && $(MAKE))
- 	$(TOUCH_TARGET)
- 
- $(CELT_LA): $(IETF_LA)
+ $(IETF_LA): $(OPUS_BUILDDIR)/Makefile

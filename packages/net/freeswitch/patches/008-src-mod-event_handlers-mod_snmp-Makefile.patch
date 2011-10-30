@@ -5,7 +5,7 @@
 +BASE=../../../..
 +
 +include $(BASE)/build/modmake.rules
-+include $(BASE)/../../../rules.mk
++include $(BASE)/build/openwrt_rules.mk
 +
 +LOCAL_CFLAGS=$(shell $(STAGING_DIR)/host/bin/net-snmp-config --cflags --agent-libs) -DNETSNMP_NO_INLINE
  

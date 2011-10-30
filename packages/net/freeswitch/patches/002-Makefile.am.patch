@@ -1,15 +1,14 @@
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -1,3 +1,8 @@
+@@ -1,3 +1,7 @@
 +BASE=.
 +
-+include $(BASE)/../../../rules.mk
-+include $(BASE)/../../../include/package.mk
++include $(BASE)/build/openwrt_rules.mk
 +
  EXTRA_DIST =
  SUBDIRS = . src
  AUTOMAKE_OPTS = foreign
-@@ -61,7 +66,7 @@ cd-moh-install: uhd-moh-install sounds-m
+@@ -61,7 +65,7 @@ cd-moh-install: uhd-moh-install sounds-m
  # (1) if the variable is set in `config.status', edit `config.status'
  #     (which will cause the Makefiles to be regenerated when you run `make');
  # (2) otherwise, pass the desired values on the `make' command line.
@@ -18,7 +17,7 @@
  clean-recusive: clean_core
  install-recursive: install-libLTLIBRARIES install-binPROGRAMS
  $(RECURSIVE_TARGETS):
-@@ -299,7 +304,7 @@ endif
+@@ -299,7 +303,7 @@ endif
  ##
  fs_encode_SOURCES = src/fs_encode.c
  fs_encode_CFLAGS = $(AM_CFLAGS)
@@ -27,7 +26,7 @@
  fs_encode_LDADD = libfreeswitch.la -lcrypt -lrt
  
  ##
-@@ -307,7 +312,7 @@ fs_encode_LDADD = libfreeswitch.la -lcry
+@@ -307,7 +311,7 @@ fs_encode_LDADD = libfreeswitch.la -lcry
  ##
  tone2wav_SOURCES = src/tone2wav.c
  tone2wav_CFLAGS  = $(AM_CFLAGS)
@@ -36,7 +35,7 @@
  tone2wav_LDADD   = libfreeswitch.la -lcrypt -lrt
  
  ##
-@@ -586,10 +591,13 @@ speex-reconf:
+@@ -586,10 +590,13 @@ speex-reconf:
  
  tiff-reconf:
  	cd libs/tiff-3.8.2 && autoreconf -fi
@@ -53,7 +52,7 @@
  
  python-reconf:
  	rm -f src/mod/languages/mod_python/Makefile
-@@ -612,12 +620,6 @@ iks-reconf:
+@@ -612,12 +619,6 @@ iks-reconf:
  	cd libs/iksemel && sh ./configure.gnu --prefix=$(prefix)
  	$(MAKE) mod_dingaling-clean
  
