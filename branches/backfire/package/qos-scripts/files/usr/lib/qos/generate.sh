@@ -404,11 +404,11 @@ start_cg() {
 		append up "iptables -t mangle -A OUTPUT -o $device -j qos_${cg}" "$N"
 		append up "iptables -t mangle -A FORWARD -o $device -j qos_${cg}" "$N"
 		[ -z "$download" ] || {
-			append down "iptables -t mangle -A POSTROUTING -o $device -j ${cg}" "$N"
+			append down "iptables -t mangle -A POSTROUTING -o $device -j qos_${cg}" "$N"
 			[ -z "$halfduplex" ] || {
 				append down "iptables -t mangle -A POSTROUTING -o $device -j IMQ --todev $imqdev" "$N"
 			}
-			append down "iptables -t mangle -A PREROUTING -i $device -j ${cg}" "$N"
+			append down "iptables -t mangle -A PREROUTING -i $device -j qos_${cg}" "$N"
 			append down "iptables -t mangle -A PREROUTING -i $device -j IMQ --todev $imqdev" "$N"
 		}
 	done
