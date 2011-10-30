@@ -13,6 +13,10 @@ set system.wan_led=led
 set system.wan_led.sysfs='wndr3700:green:wan'
 set system.wan_led.name='WAN LED (green)'
 set system.wan_led.default='0'
+set system.usb_led=led
+set system.usb_led.sysfs='wndr3700:green:usb'
+set system.usb_led.name='USB LED (green)'
+set system.usb_led.default='0'
 commit system
 EOF
 }
