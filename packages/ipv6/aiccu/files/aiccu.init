@@ -52,7 +52,7 @@ start_instance() {
 
 stop_instance() {
 	local cfg="$1"
-	aiccu stop /tmp/run/aiccu-"$cfg".conf
+	aiccu stop "/var/etc/aiccu-${cfg}.conf"
 }
 
 restart_instance() {
