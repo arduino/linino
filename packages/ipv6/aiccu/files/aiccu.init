@@ -29,7 +29,7 @@ start_instance() {
 	CFGFILE="/var/etc/aiccu-${cfg}.conf"
 	PIDFILE="/var/run/aiccu-${cfg}.pid"
 	args=""
-	
+
 	add_config "$cfg" username username
 	add_config "$cfg" password password
 	add_config "$cfg" server server
@@ -43,7 +43,7 @@ start_instance() {
 	append args "daemonize true" "\n"
 	append args "pidfile $PIDFILE" "\n"
 
-	mkdir -p /var/run
+	mkdir -p /var/run /var/etc
 	echo -e "$args" > "$CFGFILE"
 
 	config_get_bool enabled "$cfg" enabled '1'
