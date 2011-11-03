@@ -115,7 +115,7 @@
  #include <linux/kernel.h> /* printk() */
 --- a/linux/net/ipsec/ipsec_alg_cryptoapi.c
 +++ b/linux/net/ipsec/ipsec_alg_cryptoapi.c
-@@ -28,10 +28,11 @@
+@@ -26,10 +26,11 @@
   *   modprobe ipsec_cryptoapi des_ede3=0                 (everything but 3DES)
   */
  #include <linux/version.h>
