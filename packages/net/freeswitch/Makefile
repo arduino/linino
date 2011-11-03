@@ -17,7 +17,7 @@ PKG_RELEASE:=1
 #
 # The latest FS git hash in PKG_REV can be obtained from http://fisheye.freeswitch.org
 #
-PKG_REV:=50328a663452006b78e79e2004c20d111ffb263f
+PKG_REV:=84d029e4b92c5161aca2c6317f3ff1087c60d52a
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
@@ -714,7 +714,7 @@ $(eval $(call BuildPlugin,fsk,Bell-202 1200-baud FSK decoder,mod_fsk,,))
 $(eval $(call BuildPlugin,fsv,Video,mod_fsv,,))
 $(eval $(call BuildPlugin,g723-1,G.723.1 codec,mod_g723_1,,))
 $(eval $(call BuildPlugin,g729,G.729 codec,mod_g729,,))
-$(eval $(call BuildPlugin,gsmopen,Short Message Service (SMS),mod_gsmopen,spandsp,+alsa-lib +gsmlib))
+$(eval $(call BuildPlugin,gsmopen,Short Message Service (SMS),mod_gsmopen,spandsp,+alsa-lib +libgsm))
 $(eval $(call BuildPlugin,h26x,H26X linear codec,mod_h26x,,))
 $(eval $(call BuildPlugin,h323,h323 endpoint,mod_h323,,@BROKEN)) # missing header files (other packages needed)
 $(eval $(call BuildPlugin,hash,API for manipulating a hash table,mod_hash,,))
