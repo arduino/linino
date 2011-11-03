@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libevent2
-PKG_VERSION:=2.0.14
+PKG_VERSION:=2.0.15
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libevent-$(PKG_VERSION)-stable
 PKG_SOURCE:=libevent-$(PKG_VERSION)-stable.tar.gz
 PKG_SOURCE_URL:=http://www.monkey.org/~provos/ \
 	@SF/levent
-PKG_MD5SUM:=cac0f379da35d3b98f83ac16fcfe1df4
+PKG_MD5SUM:=2643abe7ba242df15c08b2cc14ec8759
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
