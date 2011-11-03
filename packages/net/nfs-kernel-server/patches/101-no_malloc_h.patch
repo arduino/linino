@@ -1,6 +1,6 @@
 --- a/tools/rpcgen/rpc_cout.c
 +++ b/tools/rpcgen/rpc_cout.c
-@@ -38,7 +38,6 @@ static char sccsid[] = "@(#)rpc_cout.c 1
+@@ -36,7 +36,6 @@ static char sccsid[] = "@(#)rpc_cout.c 1
  #include <stdio.h>
  #include <string.h>
  #include <stdlib.h>

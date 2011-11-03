@@ -7,9 +7,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nfs-kernel-server
-PKG_VERSION:=1.1.6
+PKG_VERSION:=1.2.5
 PKG_RELEASE:=1
-PKG_MD5SUM:=b0d1b8ec5c8c081a340cfc77bb8670cd
+PKG_MD5SUM:=8395ac770720b83c5c469f88306d7765
 
 PKG_SOURCE_URL:=@SF/nfs
 PKG_SOURCE:=nfs-utils-$(PKG_VERSION).tar.bz2
@@ -73,6 +73,7 @@ TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib $(LIBRPC)
 CONFIGURE_ARGS += \
 	--disable-gss \
 	--disable-nfsv4 \
+	--disable-nfsv41 \
 	--enable-static \
 	--enable-shared
 
@@ -88,6 +89,7 @@ HOST_CFLAGS += -Dlinux
 HOST_CONFIGURE_ARGS += \
 	--disable-gss \
 	--disable-nfsv4 \
+	--disable-nfsv41 \
 	--without-tcp-wrappers
 
 HOST_CONFIGURE_VARS += \
