@@ -1,6 +1,6 @@
 # 
+# Copyright (C) 2009-2011 OpenWrt.org
 # Copyright (C) 2009 David Cooper <dave@kupesoft.com>
-# Copyright (C) 2009 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -18,12 +18,13 @@ PKG_MD5SUM:=0d0d96d77c98871d2e5466c10cb30a0a
 
 include $(INCLUDE_DIR)/package.mk
 
+# XXX: v4l1 support has been removed in 2.6.38
 define Package/libv4l
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Video 4 Linux wrapper libraries
   URL:=http://people.atrpms.net/~hdegoede/
-  DEPENDS:=+libpthread @!LINUX_2_4
+  DEPENDS:=+libpthread @(LINUX_2_6_30||LINUX_2_6_31||LINUX_2_6_32||LINUX_2_6_33||LINUX_2_6_34||LINUX_2_6_35||LINUX_2_6_36||LINUX_2_6_37)
 endef
 
 define Package/libv4l/description
