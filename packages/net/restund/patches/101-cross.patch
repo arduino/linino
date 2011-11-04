@@ -1,0 +1,38 @@
+--- a/Makefile
++++ b/Makefile
+@@ -18,6 +18,7 @@ VERSION   := $(VER_MAJOR).$(VER_MINOR).$
+ MODULES	  := binding auth turn stat status
+ MODULES	  += $(EXTRA_MODULES)
+ 
++ifndef LIBRE_MK
+ LIBRE_MK  := $(shell [ -f ../re/mk/re.mk ] && \
+ 	echo "../re/mk/re.mk")
+ ifeq ($(LIBRE_MK),)
+@@ -28,19 +29,27 @@ ifeq ($(LIBRE_MK),)
+ LIBRE_MK  := $(shell [ -f /usr/local/share/re/re.mk ] && \
+ 	echo "/usr/local/share/re/re.mk")
+ endif
++endif
+ 
+ include $(LIBRE_MK)
+ 
+ # Optional syslog module
++ifndef USE_SYSLOG
+ ifneq ($(OS),win32)
++USE_SYSLOG := 1
++endif
++endif
++ifneq ($(USE_SYSLOG),)
+ MODULES   += syslog
+ endif
+ 
+ # Optional MySQL client module
++ifndef USE_MYSQL
+ USE_MYSQL := $(shell [ -f $(SYSROOT)/include/mysql/mysql.h ] || \
+ 		[ -f $(SYSROOT)/local/include/mysql/mysql.h ] || \
+ 		[ -f $(SYSROOT_ALT)/include/mysql/mysql.h ] || \
+ 		[ -f $(SYSROOT_ALT)/include/mysql5/mysql/mysql.h ] && echo "1")
++endif
+ ifneq ($(USE_MYSQL),)
+ MODULES += mysql_ser
+ endif
