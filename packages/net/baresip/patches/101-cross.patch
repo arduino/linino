@@ -1,0 +1,25 @@
+--- a/Makefile
++++ b/Makefile
+@@ -15,6 +15,7 @@ USE_VIDEO := 1
+ PROJECT	  := baresip
+ VERSION   := 0.3.0
+ 
++ifndef LIBRE_MK
+ LIBRE_MK  := $(shell [ -f ../re/mk/re.mk ] && \
+ 	echo "../re/mk/re.mk")
+ ifeq ($(LIBRE_MK),)
+@@ -29,11 +30,14 @@ ifeq ($(LIBRE_MK),)
+ LIBRE_MK  := $(shell [ -f /usr/local/share/re/re.mk ] && \
+ 	echo "/usr/local/share/re/re.mk")
+ endif
++endif
+ 
+ include $(LIBRE_MK)
+ include mk/modules.mk
+ 
++ifndef LIBREM_PATH
+ LIBREM_PATH	:= $(shell [ -d ../rem ] && echo "../rem")
++endif
+ 
+ 
+ CFLAGS    += -I. -Iinclude -I$(LIBRE_INC) -I$(SYSROOT)/include
