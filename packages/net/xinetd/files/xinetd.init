@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 START=50
 
 DEFAULT=/etc/default/xinetd
@@ -9,7 +9,7 @@ PID_F=$RUN_D/xinetd.pid
 start() {
 	[ -f $DEFAULT ] && . $DEFAULT
 	[ -d $RUN_D ] || mkdir -p $RUN_D
-	xinetd $OPTIONS
+	xinetd -pidfile $PID_F $OPTIONS
 }
 
 stop() {
