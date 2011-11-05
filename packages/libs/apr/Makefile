@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apr
 PKG_VERSION:=1.4.5
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.ibiblio.org/pub/mirrors/apache/apr
@@ -39,10 +39,11 @@ CONFIGURE_ARGS += \
 # XXX: ac_cv_sizeof_struct_iovec=1 is just to trick configure
 CONFIGURE_VARS += \
 	ac_cv_sizeof_struct_iovec=1 \
+	ac_cv_struct_rlimit=yes \
 	apr_cv_process_shared_works=no \
 	apr_cv_mutex_robust_shared=no \
 	apr_cv_tcp_nodelay_with_cork=yes \
-	ac_cv_struct_rlimit=yes \
+	apr_cv_use_lfs64=yes \
 	LDFLAGS="$$$$LDFLAGS -lpthread" \
 
 define Build/InstallDev
