@@ -17,7 +17,7 @@ PKG_RELEASE:=1
 #
 # The latest FS git hash in PKG_REV can be obtained from http://fisheye.freeswitch.org
 #
-PKG_REV:=84d029e4b92c5161aca2c6317f3ff1087c60d52a
+PKG_REV:=54b4b088d911d4c80f224ed561d8e278229a75ff
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
