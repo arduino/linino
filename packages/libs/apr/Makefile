@@ -31,6 +31,8 @@ define Package/libapr
 endef
 
 TARGET_CFLAGS += $(FPIC)
+TARGET_CPPFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE
+
 CONFIGURE_ARGS += \
 	--with-devrandom=/dev/urandom \
 	--disable-dso \
