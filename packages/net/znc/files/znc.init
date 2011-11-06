@@ -52,7 +52,7 @@ znc_global() {
 		config_get serverthrottle "$znc" serverthrottle
 		config_get znc_pem_file "$znc" znc_ssl_cert
 
-		[ -z $znc_pem_file -o -f $ZNC_CONFIG_PATH/znc.pem ] || ln -s "$znc_pem_file" $ZNC_CONFIG_PATH/znc.pem
+		[ -z "$znc_pem_file" ] || ln -sf "$znc_pem_file" $ZNC_CONFIG_PATH/znc.pem
 
 		[ -z $anoniplimit ] || echo "AnonIPLimit = $anoniplimit" >> $ZNC_CONFIG
 		[ -z $maxbuffersize ] || echo "MaxBufferSize = $maxbuffersize" >> $ZNC_CONFIG
@@ -127,7 +127,7 @@ start() {
 		config_foreach add_listener listener
 		config_foreach add_user user
 
-		chown -R ${RUNAS_USER:-nobody}:${RUNAS_GROUP:-nogroup} /tmp/etc/znc
+		chown -hR ${RUNAS_USER:-nobody}:${RUNAS_GROUP:-nogroup} /tmp/etc/znc
 	fi
 
 	if [ "$EXTERNAL_CONFIG" -eq 1 -a "$RUNAS_USER"  ]
