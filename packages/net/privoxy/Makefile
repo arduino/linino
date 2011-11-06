@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=@SF/ijbswa
 PKG_MD5SUM:=9d363d738a3f3d73e774d6dfeafdb15f
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-stable
+PKG_FIXUP:=autoreconf
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -37,22 +39,10 @@ define Package/privoxy/description
 	has application for both stand-alone systems and multi-user networks.
 endef
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
-		autoheader && autoconf \
-	);
-	$(call Build/Configure/Default, \
-		--sysconfdir=/etc/privoxy \
-	)
-endef
+CONFIGURE_ARGS += \
+	--sysconfdir=/etc/privoxy \
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		SPECIAL_CFLAGS="-pthread $(TARGET_LDFLAGS)"
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		install
-endef
+MAKE_FLAGS :=
 
 define Package/privoxy/conffiles
 /etc/privoxy/config
@@ -60,7 +50,7 @@ endef
 
 define Package/privoxy/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/privoxy $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/privoxy $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/privoxy
 	$(CP) $(PKG_INSTALL_DIR)/etc/privoxy/* $(1)/etc/privoxy/
 	$(INSTALL_CONF) ./files/privoxy.config $(1)/etc/privoxy/config
