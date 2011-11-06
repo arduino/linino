@@ -17,7 +17,6 @@ PKG_MD5SUM:=fadf8e38fbd2d3434a2c46097d9932d5
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
-PKG_LIBTOOL_PATHS:= ./libtool
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,10 +33,10 @@ CONFIGURE_ARGS += \
 	--with-ssl="$(STAGING_DIR)/usr"
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/ldns
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/ldns/*.h $(1)/usr/include/ldns/
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/ldns $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libldns.{so*,a,la} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libldns.{a,so*} $(1)/usr/lib/
 endef
 
 define Package/libldns/install
