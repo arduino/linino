@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=znc
-PKG_VERSION:=0.098
-PKG_RELEASE:=5
+PKG_VERSION:=0.202
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://znc.in/releases \
 		http://znc.in/releases/archive
-PKG_MD5SUM:=5667b4acb1f01309d6eded77abac700c
+PKG_MD5SUM:=3c6ff4620e139e3d9745cd53111bab20
 
 PKG_BUILD_PARALLEL:=1
 
@@ -75,9 +75,9 @@ define module
 	$(INSTALL_DIR) $$(1)/usr/lib/znc/
 	$(INSTALL_BIN) $$(PKG_BUILD_DIR)/modules/$(strip $(3))$(subst -,_,$(strip $(1))).so $$(1)/usr/lib/znc/
 	# include webadmin page templates if existing
-	if [ -d $$(PKG_BUILD_DIR)/modules/$(strip $(3))$(subst -,_,$(strip $(1))) ]; then \
-		$(INSTALL_DIR) $$(1)/usr/share/znc/ ;\
-		$(CP) -r $$(PKG_BUILD_DIR)/modules/$(strip $(3))$(subst -,_,$(strip $(1))) $$(1)/usr/share/znc/ ;\
+	if [ -d $$(PKG_BUILD_DIR)/modules/$(strip $(3))data/$(subst -,_,$(strip $(1))) ]; then \
+		$(INSTALL_DIR) $$(1)/usr/share/znc/modules ;\
+		$(CP) -r $$(PKG_BUILD_DIR)/modules/$(strip $(3))data/$(subst -,_,$(strip $(1))) $$(1)/usr/share/znc/modules ;\
 	fi
   endef
 
@@ -99,8 +99,8 @@ define webadmin
   define Package/znc-mod-webadmin/install
 	$(INSTALL_DIR) $$(1)/usr/lib/znc/
 	$(INSTALL_BIN) $$(PKG_BUILD_DIR)/modules/webadmin.so $$(1)/usr/lib/znc/
-	$(INSTALL_DIR) $$(1)/usr/share/znc/
-	$(CP) -r $$(PKG_BUILD_DIR)/modules/webadmin $$(1)/usr/share/znc/
+	$(INSTALL_DIR) $$(1)/usr/share/znc/modules
+	$(CP) -r $$(PKG_BUILD_DIR)/modules/data/webadmin $$(1)/usr/share/znc/modules
 	$(INSTALL_DIR) $$(1)/usr/share/znc/webskins/
 	$(CP) -r $$(PKG_BUILD_DIR)/webskins/_default_ $$(1)/usr/share/znc/webskins/
   endef
@@ -145,18 +145,21 @@ $(eval $(call module,autoop,Auto op the good guys.))
 $(eval $(call module,autoreply,Gives a automatic reply if someone messages you \
 	if you are away.))
 
-$(eval $(call module,away,Stores messages while away$(,) also auto away.))
-
 $(eval $(call module,awaynick,Change your nick while you are away.))
 
 $(eval $(call module,blockuser,Blocks certain users from using ZNC saying \
 	their account was disabled.))
 
+$(eval $(call module,bouncedcc,Bounces dcc transfers through the znc server \
+	instead of sending them directly to the user.))
+
 $(eval $(call module,buffextras,Add nick changes$(,) joins$(,) parts$(,) topic \
 	changes etc. to your playback buffer.))
 
-$(eval $(call module,certauth,This module allows users to log in via SSL \
-	client keys.))
+$(eval $(call module,cert,Use a SSL certificate for connecting to a server.))
+
+$(eval $(call module,certauth,This module allows users to log in to ZNC via \
+	SSL client keys.))
 
 $(eval $(call module,chansaver,Keeping config up to date when user joins and \
 	parts.))
@@ -170,6 +173,9 @@ $(eval $(call module,disconkick,This module will kick your client from all \
 	channels where you are$(,) in case if ZNC disconnects from server.))
 
 $(eval $(call module,fail2ban,Block IPs for some time after a failed login.))
+
+$(eval $(call module,identfile,Places the ident of a user to a file when they \
+	 are trying to connect.))
 
 $(eval $(call module,keepnick,Tries to get you your primary nick.))
 
@@ -212,6 +218,8 @@ $(eval $(call module,antiidle,Hides your idle time.,extra/))
 $(eval $(call module,autovoice,Autovoices everyone who joins some channel., \
 	extra/))
 
+$(eval $(call module,away,Stores messages while away$(,) also auto away.,extra/))
+
 $(eval $(call module,block-motd,This module blocks the server's Message of the \
 	Day.,extra/))
 
@@ -219,6 +227,10 @@ $(eval $(call module,clearbufferonmsg,This module keeps the buffer until the \
 	next message from the client.,extra/))
 
 $(eval $(call module,ctcpflood,This module tries to block ctcp floods.,extra/))
+
+$(eval $(call module,dcc,Allows you to transfer files to and from ZNC.,extra/))
+
+$(eval $(call module,email,Watches a local mailbox for new mails.,extra/))
 
 $(eval $(call module,fakeonline,This module fakes the online status of \
 	ZNC-*users.,extra/))
