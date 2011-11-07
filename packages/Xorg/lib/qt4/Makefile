@@ -384,7 +384,7 @@ define Build/Configure
 			$(if $(CONFIG_PACKAGE_qt4-drivers-gfx-vnc),-plugin-gfx-vnc,-no-gfx-vnc) \
 			-no-gfx-multiscreen \
 			-no-gfx-qnx \
-			$(if $(CONFIG_PACKAGE_directfb),-plugin-gfx-directfb) \
+			$(if $(CONFIG_FEATURE_drawing-backend_DirectFB),$(if $(CONFIG_PACKAGE_directfb),-plugin-gfx-directfb)) \
 			-plugin-gfx-linuxfb \
 			-no-mouse-qvfb \
 			-no-mouse-qnx \
