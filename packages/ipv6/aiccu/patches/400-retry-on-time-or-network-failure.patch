@@ -1,0 +1,111 @@
+--- a/common/tic.c
++++ b/common/tic.c
+@@ -60,7 +60,7 @@ int tic_checktime(time_t epochtime)
+ 	return 0;
+ }
+ 
+-bool tic_Login(struct TIC_conf *tic, const char *username, const char *password, const char *server)
++bool tic_Login(struct TIC_conf *tic, const char *username, const char *password, const char *server, bool *fatal)
+ {
+ 	char		buf[1024], sSignature[33], sChallenge[1024];
+ 	int		i;
+@@ -74,6 +74,7 @@ bool tic_Login(struct TIC_conf *tic, con
+ #endif
+ 
+ 	D(dolog(LOG_DEBUG, "Trying to connect to TIC server %s\n", server));
++	*fatal = false;
+ 
+ 	/* Connect to the TIC server */
+ 	tic->sock = connect_client(server, TIC_PORT, AF_INET, SOCK_STREAM);
+@@ -166,6 +167,7 @@ bool tic_Login(struct TIC_conf *tic, con
+ 	if (buf[0] != '2')
+ 	{
+ 		dolog(LOG_ERR, "Time not available? %s\n", &buf[4]);
++		*fatal = true;
+ 		return false;
+ 	}
+ 
+@@ -199,6 +201,7 @@ bool tic_Login(struct TIC_conf *tic, con
+ 		if (g_aiccu->requiretls)
+ 		{
+ 			dolog(LOG_ERR, "TIC Server does not support TLS and TLS is required\n");
++			*fatal = true;
+ 			return false;
+ 		}
+ 		if (g_aiccu->verbose) dolog(LOG_WARNING, "TIC Server does not support TLS but TLS is not required, continuing\n");
+@@ -217,6 +220,7 @@ bool tic_Login(struct TIC_conf *tic, con
+ 	if (buf[0] != '2')
+ 	{
+ 		dolog(LOG_ERR, "Username not accepted: %s.\n", &buf[4]);
++		*fatal = true;
+ 		return false;
+ 	}
+ 	
+@@ -231,6 +235,7 @@ bool tic_Login(struct TIC_conf *tic, con
+ 	if (buf[0] != '2')
+ 	{
+ 		dolog(LOG_ERR, "Challenge not correct: %s.\n", &buf[4]);
++		*fatal = true;
+ 		return false;
+ 	}
+ 
+@@ -252,6 +257,7 @@ bool tic_Login(struct TIC_conf *tic, con
+ 	{
+ 		tic_Logout(tic, NULL);
+ 		dolog(LOG_ERR, "Response not accepted: %s.\n", &buf[4]);
++		*fatal = true;
+ 		return false;
+ 	}
+ 
+--- a/unix-console/main.c
++++ b/unix-console/main.c
+@@ -76,8 +76,9 @@ int list_tunnels(void);
+ int list_tunnels(void)
+ {
+ 	struct TIC_sTunnel *hsTunnel, *t;
++	bool is_fatal = false;
+ 
+-	if (!tic_Login(g_aiccu->tic, g_aiccu->username, g_aiccu->password, g_aiccu->server)) return 0;
++	if (!tic_Login(g_aiccu->tic, g_aiccu->username, g_aiccu->password, g_aiccu->server, &is_fatal)) return 0;
+ 
+ 	hsTunnel = tic_ListTunnels(g_aiccu->tic);
+ 
+@@ -153,9 +154,26 @@ struct TIC_Tunnel *get_tunnel(void)
+ 	
+ 	struct TIC_sTunnel	*hsTunnel, *t;
+ 	struct TIC_Tunnel	*hTunnel;
++	bool is_fatal = false;
++	int retry_intv = 10;
+ 
+ 	/* Login to the TIC Server */
+-	if (!tic_Login(g_aiccu->tic, g_aiccu->username, g_aiccu->password, g_aiccu->server)) return NULL;
++	while (!tic_Login(g_aiccu->tic, g_aiccu->username, g_aiccu->password, g_aiccu->server, &is_fatal))
++	{
++		if (!is_fatal)
++		{
++			dolog(LOG_ERR, "Retrying TIC login in %d seconds...\n", retry_intv);
++			sleep(retry_intv);
++
++			if (retry_intv < 120)
++				retry_intv += 10;
++		}
++		else
++		{
++			dolog(LOG_ERR, "Fatal error occured during login, aborting\n");
++			return NULL;
++		}
++	}
+ 
+ 	/* 
+ 	 * Don't try to list the tunnels when
+--- a/common/tic.h
++++ b/common/tic.h
+@@ -120,7 +120,7 @@ struct TIC_conf
+ **********************************************************/
+ 
+ /* Login to/Logout from the TIC Server */
+-bool tic_Login(struct TIC_conf *tic, const char *username, const char *password, const char *server);
++bool tic_Login(struct TIC_conf *tic, const char *username, const char *password, const char *server, bool *fatal);
+ void tic_Logout(struct TIC_conf *tic, const char *quitmsg);
+ 
+ /* Check if the time is in range */
