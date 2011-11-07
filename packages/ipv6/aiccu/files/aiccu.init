@@ -47,7 +47,7 @@ start_instance() {
 	echo -e "$args" > "$CFGFILE"
 
 	config_get_bool enabled "$cfg" enabled '1'
-	[ "$enabled" -gt 0 ] && aiccu start "$CFGFILE"
+	[ "$enabled" -gt 0 ] && aiccu start "$CFGFILE" &
 }
 
 stop_instance() {
