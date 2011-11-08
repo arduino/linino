@@ -273,6 +273,7 @@ static void __init ubnt_nano_m_setup(void)
 	ar71xx_eth1_data.fifo_cfg1 = 0x0010ffff;
 	ar71xx_eth1_data.fifo_cfg2 = 0x015500aa;
 	ar71xx_eth1_data.fifo_cfg3 = 0x01f00140;
+	ar71xx_eth1_data.has_ar7240_switch = 1;
 
 	ar71xx_add_device_eth(1);
 }
