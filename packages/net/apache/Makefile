@@ -105,7 +105,7 @@ define Build/Configure
 		--sysconfdir=/etc/apache \
 		ap_cv_void_ptr_lt_long=no \
 		logfiledir="/var/log" \
-		runtimedir="/var/log" \
+		runtimedir="/var/run" \
 	)
 endef
 
