@@ -1,13 +1,15 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
+
 START=50
 
-PID_F=/var/run/miredo.pid
+# XXX: miredo create a pid file but using it doesn't seem to work
+#SERVICE_USE_PID=1
 
 start() {
-	miredo
+	service_start /usr/sbin/miredo
 }
 
 stop() {
-	[ -f $PID_F ] && kill $(cat $PID_F)
+	service_stop /usr/sbin/miredo
 }
