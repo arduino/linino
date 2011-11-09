@@ -4,8 +4,7 @@
 START=60
 STOP=60
 
-SERVICE_DAEMONIZE=1
-SERVICE_WRITE_PID=1
+SERVICE_USE_PID=1
 
 NFS_D=/var/lib/nfs
 LOCK_D=/var/lib/nfs/sm
@@ -21,6 +20,8 @@ start() {
 	service_start /usr/sbin/rpc.statd -p 32778 -o 32779
 	/usr/sbin/exportfs -r
 	/usr/sbin/rpc.nfsd
+	SERVICE_WRITE_PID=1 \
+	SERVICE_DAEMONIZE=1 \
 	service_start /usr/sbin/rpc.mountd -p 32780 -F
 }
 
