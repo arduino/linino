@@ -2,14 +2,13 @@
 # Copyright (C) 2011 OpenWrt.org
 
 START=50
-BIN=/usr/bin/rsync
-PID=/var/run/rsyncd.pid
-SSD=start-stop-daemon
+
+SERVICE_PID_FILE=/var/run/rsyncd.pid
 
 start() {
-	$SSD -p $PID -S -x $BIN -- --daemon
+	service_start /usr/bin/rsync --daemon
 }
 
 stop() {
-	$SSD -p $PID -K
+	service_stop /usr/bin/rsync
 }
