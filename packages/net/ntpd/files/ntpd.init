@@ -3,13 +3,13 @@
 
 START=65
 
-SERVICE_WRITE_PID=1
+SERVICE_USE_PID=1
 SERVICE_DAEMONIZE=1
 
 start() {
 #	ln -sf /dev/ttyS0 /dev/gps0
 #	/usr/sbin/setgarmin -d /dev/gps -c /etc/setgarmin.conf
-	service_start /sbin/ntpd -g -n
+	service_start /sbin/ntpd -g -p /var/run/ntpd.pid
 }
 
 stop() {
