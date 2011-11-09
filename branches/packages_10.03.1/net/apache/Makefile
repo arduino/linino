@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apache
 PKG_VERSION:=2.2.15
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_SOURCE_NAME:=httpd
 
 PKG_SOURCE:=$(PKG_SOURCE_NAME)-$(PKG_VERSION).tar.bz2
@@ -87,6 +87,9 @@ $(call Package/apache/Default/description)
  This package contains the icons from Apache.
 endef
 
+TARGET_CFLAGS += $(FPIC)
+TARGET_CPPFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--with-apr="$(STAGING_DIR)/usr/bin/apr-1-config" \
@@ -102,6 +105,7 @@ define Build/Configure
 		--sysconfdir=/etc/apache \
 		ap_cv_void_ptr_lt_long=no \
 		logfiledir="/var/log" \
+		runtimedir="/var/run" \
 	)
 endef
 
