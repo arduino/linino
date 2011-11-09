@@ -3,12 +3,17 @@
 
 START=60
 
+SERVICE_USE_PID=1
+
 start() {
-	mkdir -p /var/openldap-data
-	
-	/usr/sbin/slapd
+	mkdir -m 0755 -p /var/openldap-data
+	service_start /usr/sbin/slapd
 }
 
 stop() {
-	killall slapd 2> /dev/null
+	service_stop /usr/sbin/slapd
+}
+
+reload() {
+	service_reload /usr/sbin/slapd
 }
