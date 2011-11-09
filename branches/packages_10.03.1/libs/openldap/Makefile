@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openldap
 PKG_VERSION:=2.4.23
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/ \
@@ -136,8 +136,12 @@ define Package/openldap-server/install
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/openldap/schema/* $(1)/etc/openldap/schema/
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/openldap/slapd.conf $(1)/etc/openldap/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	# OpenLDAP installs slapd into libexecdir, not sbindir:
+	# XXX: OpenLDAP installs slapd into libexecdir, not sbindir:
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/slapd $(1)/usr/sbin/
+	# XXX: switch default backend to ldif, since bdb is disabled
+	$(SED) 's|^\(database\)\([ \t]\+\)bdb|\1\2ldif|g' \
+	    -e 's|^\(index\)|#\1|g' \
+	    $(1)/etc/openldap/slapd.conf
 endef
 
 $(eval $(call BuildPackage,libopenldap))
