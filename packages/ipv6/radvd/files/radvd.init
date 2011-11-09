@@ -1,6 +1,10 @@
 #!/bin/sh /etc/rc.common
+# Copyright (C) 2008-2011 OpenWrt.org
 # Copyright (C) 2008  Alina Friedrichsen <x-alina@gmx.net>
+
 START=50
+
+SERVICE_USE_PID=1
 
 RADVD_INTERFACE_STRING_OPTIONS='MaxRtrAdvInterval MinRtrAdvInterval MinDelayBetweenRAs AdvLinkMTU AdvReachableTime AdvRetransTimer AdvCurHopLimit AdvDefaultLifetime AdvDefaultPreference HomeAgentLifetime HomeAgentPreference'
 RADVD_INTERFACE_BOOLEAN_OPTIONS='IgnoreIfMissing AdvSendAdvert UnicastOnly AdvManagedFlag AdvOtherConfigFlag AdvSourceLLAddress AdvHomeAgentFlag AdvHomeAgentInfo AdvMobRtrSupportFlag AdvIntervalOpt'
@@ -425,9 +429,9 @@ start() {
 
 	sysctl -w net.ipv6.conf.all.forwarding=1 > /dev/null 2> /dev/null
 
-	radvd -C "$RADVD_CONFIG_FILE" -m stderr_syslog -p /var/run/radvd.pid
+	service_start /usr/sbin/radvd -C "$RADVD_CONFIG_FILE" -m stderr_syslog -p /var/run/radvd.pid
 }
 
 stop() {
-	killall radvd
+	service_stop /usr/sbin/radvd
 }
