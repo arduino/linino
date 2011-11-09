@@ -1,62 +1,67 @@
 #!/bin/sh /etc/rc.common
-#Copyright (C) 2007 RoadRunner.cx
+# Copyright (C) 2007-2011 OpenWrt.org
+# Copyright (C) 2007 RoadRunner.cx
+
 START=52
+
+SERVICE_DAEMONIZE=1
+SERVICE_WRITE_PID=1
 
 genconf() {
 
-    [ -f /etc/config/gw6c ] || {
-	echo "You are missing configuration file /etc/config/gw6c"
-	return 0
-    }
+	[ -f /etc/config/gw6c ] || {
+		echo "You are missing configuration file /etc/config/gw6c"
+		return 1
+	}
 
-    config_load "gw6c"
-    
-    config_get DISABLED basic disabled
-    
-    [ "$DISABLED" == "1" ] && {
-	echo "You haven't edited your configuration file. Gateway6 is disabled."
-	return 0
-    }
-    
-    config_get USERID basic userid
-    config_get PASSWORD basic passwd
-    config_get SERVER basic server
-    config_get AUTH_METHOD basic auth_method
-    
-    config_get HOST_TYPE routing host_type
-    config_get PREFIX_LEN routing prefixlen
-    config_get IF_PREFIX routing ifprefix
-    config_get DNS_SERVER routing dns_server
-    
-    config_get GW6C_CONF advanced gw6c_conf
-    config_get GW6C_DIR advanced gw6c_dir
-    config_get AUTO_RETRY advanced auto_retry
-    config_get RETRY_DELAY advanced retry_delay
-    config_get KEEPALIVE advanced keepalive
-    config_get KEEPALIVE_INTERVAL advanced interval
-    config_get TUNNEL_MODE advanced if_tunnel_mode
-    config_get IF_V6V4 advanced if_v6v4
-    config_get IF_V6UDPV4 advanced if_v6udpv4
-    config_get IF_V4V6 advanced if_v4v6
-    config_get CLIENT_V4 advanced client_v4
-    config_get CLIENT_V6 advanced client_v6
-    config_get TEMPLATE advanced template
-    config_get PROXY_CLIENT advanced proxy_client
-    
-    config_get BROKER_LIST broker broker_list
-    config_get LAST_SERVER broker last_server
-    config_get ALWAYS_SAMESERV broker always_same_serv
-    
-    config_get LOG_CONSOLE logging log_console
-    config_get LOG_STDERR logging log_stderr
-    config_get LOG_FILE logging log_file
-    config_get LOG_SYSLOG logging log_syslog
-    config_get LOG_FILENAME logging log_filename
-    config_get LOG_ROTATE logging log_rotation
-    config_get LOG_MAXSIZE logging log_maxsize
-    config_get SYSLOG_FACILITY logging syslog_facility
-    
-    cat >$GW6C_CONF <<EOF
+	config_load "gw6c"
+
+	config_get DISABLED basic disabled
+
+	[ "$DISABLED" == "1" ] && {
+		echo "You haven't edited your configuration file. Gateway6 is disabled."
+		return 1
+	}
+
+	config_get USERID basic userid
+	config_get PASSWORD basic passwd
+	config_get SERVER basic server
+	config_get AUTH_METHOD basic auth_method
+
+	config_get HOST_TYPE routing host_type
+	config_get PREFIX_LEN routing prefixlen
+	config_get IF_PREFIX routing ifprefix
+	config_get DNS_SERVER routing dns_server
+
+	config_get GW6C_CONF advanced gw6c_conf
+	config_get GW6C_DIR advanced gw6c_dir
+	config_get AUTO_RETRY advanced auto_retry
+	config_get RETRY_DELAY advanced retry_delay
+	config_get KEEPALIVE advanced keepalive
+	config_get KEEPALIVE_INTERVAL advanced interval
+	config_get TUNNEL_MODE advanced if_tunnel_mode
+	config_get IF_V6V4 advanced if_v6v4
+	config_get IF_V6UDPV4 advanced if_v6udpv4
+	config_get IF_V4V6 advanced if_v4v6
+	config_get CLIENT_V4 advanced client_v4
+	config_get CLIENT_V6 advanced client_v6
+	config_get TEMPLATE advanced template
+	config_get PROXY_CLIENT advanced proxy_client
+
+	config_get BROKER_LIST broker broker_list
+	config_get LAST_SERVER broker last_server
+	config_get ALWAYS_SAMESERV broker always_same_serv
+
+	config_get LOG_CONSOLE logging log_console
+	config_get LOG_STDERR logging log_stderr
+	config_get LOG_FILE logging log_file
+	config_get LOG_SYSLOG logging log_syslog
+	config_get LOG_FILENAME logging log_filename
+	config_get LOG_ROTATE logging log_rotation
+	config_get LOG_MAXSIZE logging log_maxsize
+	config_get SYSLOG_FACILITY logging syslog_facility
+
+	cat >$GW6C_CONF <<EOF
 userid=$USERID
 passwd=$PASSWORD
 server=$SERVER
@@ -93,19 +98,14 @@ EOF
 }
 
 start() {
-    genconf
-    if [ -z "$GW6C_CONF" ] || [ ! -f "$GW6C_CONF" ]; then
-	echo "Gateway6 client cannot start."
-    else
-	echo "Starting Gateway6 client."
-	/usr/sbin/gw6c -f "$GW6C_CONF"
-    fi
+	genconf
+	[ -n "$GW6C_CONF" ] || return 1
+	[ -f "$GW6C_CONF" ] || return 1
+	service_start /usr/sbin/gw6c -f "$GW6C_CONF"
 }
 
 stop() {
-    [ `ps ax|grep -v grep|grep -c gw6c` != "0" ] && {
-    killall -q gw6c
-    [ `ps ax|grep -v grep|grep -c radvd` != "0" ] && killall -q radvd
-    echo 0 > /proc/sys/net/ipv6/conf/all/forwarding
-    }
+	service_stop /usr/sbin/gw6c && {
+		echo 0 > /proc/sys/net/ipv6/conf/all/forwarding
+	}
 }
