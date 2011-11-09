@@ -1,7 +1,10 @@
 #!/bin/sh /etc/rc.common
+# Copyright (C) 2007-2011 OpenWrt.org
 
 START=71
-PID_F="/var/run/ahcpd.pid"
+
+SERVICE_USE_PID=1
+
 EXTRA_COMMANDS="status"
 EXTRA_HELP="        status Print ahcpd's status to the log file."
 
@@ -94,13 +97,13 @@ start() {
 	config_foreach ahcp_config ahcpd
 	config_foreach ahcp_server ahcpd
 	[ -z "$interfaces" ] && return 0
-	eval "/usr/sbin/ahcpd -D -I $PID_F $args $interfaces"
+	service_start /usr/sbin/ahcpd -D $args $interfaces
 }
 
 stop() {
-	service_kill "ahcpd" "$PID_F"
+	service_stop /usr/sbin/ahcpd
 }
 
 status() {
-	[ -f $PID_F ] && kill -USR1 $(cat $PID_F)
+	SERVICE_SIG="USR1" service_signal /usr/sbin/ahcpd
 }
