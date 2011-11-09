@@ -1,7 +1,10 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
+
 START=50
 STOP=50
+
+SERVICE_USE_PID=1
 
 start() {
 	for type in rsa dsa; do {
@@ -15,15 +18,29 @@ start() {
 			exit 0
 		}
 	}; done
-	mkdir -p /var/empty
-	chmod 0700 /var/empty
-	/usr/sbin/sshd
+	user_exists sshd 22 || user_add sshd 22
+	group_exists sshd 22 || group_add ssh 22
+	mkdir -m 0700 -p /var/empty
+	mkdir -m 0755 -p /var/run/sshd
+	service_start /usr/sbin/sshd
 }
 
 stop() {
-	kill $(cat /var/run/sshd.pid)
+	service_stop /usr/sbin/sshd
 }
 
 shutdown() {
-	killall sshd
+	local pid
+	local pids
+	local pid_mine
+
+	stop
+
+	# kill active clients
+	pid_mine="$$"
+	pids="$(pidof sshd)"
+	for pid in $pids; do
+		[ "$pid" = "$pid_mine" ] && continue
+		[ -e "/proc/$pid/stat" ] && kill $pid
+	done
 }

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006,2008-2011 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssh
 PKG_VERSION:=5.9p1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/ \
@@ -177,23 +177,6 @@ define Package/openssh-server/install
 	$(INSTALL_BIN) ./files/sshd.init $(1)/etc/init.d/sshd
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/sshd $(1)/usr/sbin/
-endef
-
-define Package/openssh-server/postinst
-#!/bin/sh
-
-name=sshd
-id=22
-
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then
-	echo "adding group $$name to /etc/group"
-	echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group
-fi
-
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
-	echo "adding user $$name to /etc/passwd"
-	echo "$${name}:x:$${id}:$${id}:$${name}:/var/empty/.$${name}:/bin/false" >> $${IPKG_INSTROOT}/etc/passwd
-fi
 endef
 
 define Package/openssh-sftp-client/install
