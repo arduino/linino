@@ -3,15 +3,15 @@
 
 START=65
 
-PIDFILE="/var/run/ntpd.pid"
+SERVICE_WRITE_PID=1
+SERVICE_DAEMONIZE=1
 
 start() {
 #	ln -sf /dev/ttyS0 /dev/gps0
 #	/usr/sbin/setgarmin -d /dev/gps -c /etc/setgarmin.conf
-	stop
-	/sbin/ntpd -g -p $PIDFILE
+	service_start /sbin/ntpd -g -n
 }
 
 stop() {
-	[ -f "$PIDFILE" ] && kill $(cat "$PIDFILE") 2>/dev/null >/dev/null
+	service_stop /sbin/ntpd
 }
