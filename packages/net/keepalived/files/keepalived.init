@@ -1,13 +1,14 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 
 START=70
 
+SERVICE_USE_PID=1
+
 start() {
-        [ -f /etc/keepalived/keepalived.conf ] && /usr/sbin/keepalived
+	service_start /usr/sbin/keepalived
 }
 
 stop() {
-        killall keepalived      
+	service_stop /usr/sbin/keepalived
 }
-
