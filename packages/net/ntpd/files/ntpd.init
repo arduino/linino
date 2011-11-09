@@ -4,7 +4,6 @@
 START=65
 
 SERVICE_USE_PID=1
-SERVICE_DAEMONIZE=1
 
 start() {
 #	ln -sf /dev/ttyS0 /dev/gps0
