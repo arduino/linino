@@ -1,14 +1,19 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
+
 START=50
 
-RARPD=/usr/sbin/rarpd
-DEFAULT=/etc/default/rarpd
+SERVICE_DAEMONIZE=1
+
+PROG="rarpd"
+COMMAND="/usr/sbin/$PROG"
+DEFAULT="/etc/default/$PROG"
 
 start() {
 	[ -f $DEFAULT ] && . $DEFAULT
-	$RARPD $OPTIONS
+	service_start $COMMAND -n $OPTIONS
 }
+
 stop() {
-	killall rarpd
+	service_stop $COMMAND
 }
