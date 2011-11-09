@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dovecot
 PKG_VERSION:=1.2.13
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.dovecot.org/releases/1.2
@@ -73,42 +73,5 @@ endef
 define Package/dovecot/conffiles
 /etc/dovecot.conf
 endef
-
-define Package/dovecot/postinst
-#!/bin/sh
-
-id=59
-name=dovecot
-home=/var/run/dovecot
-shell=/bin/false
-
-# do not change below
-# check if we are on real system
-if [ -z "$${IPKG_INSTROOT}" ]; then
-        # create copies of passwd and group, if we use squashfs
-        rootfs=`mount |awk '/root/ { print $$5 }'`
-        if [ "$$rootfs" = "squashfs" ]; then
-                if [ -h /etc/group ]; then
-                        rm /etc/group
-                        cp -p /rom/etc/group /etc/group
-                fi
-                if [ -h /etc/passwd ]; then
-                        rm /etc/passwd
-                        cp -p /rom/etc/passwd /etc/passwd
-                fi
-        fi
-fi
-
-echo ""
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then
-        echo "adding group $$name to /etc/group"
-        echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group
-fi
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
-        echo "adding user $$name to /etc/passwd"
-        echo "$${name}:x:$${id}:$${id}:$${name}:$${home}:$${shell}" >> $${IPKG_INSTROOT}/etc/passwd
-fi
-endef
-
 
 $(eval $(call BuildPackage,dovecot))
