@@ -19,4 +19,4 @@
  #ExitPolicy reject *:*
  
 +User tor
-+PidFile @LOCALSTATEDIR@/run/tor.pid
++PidFile @LOCALSTATEDIR@/run/tor/tor.pid

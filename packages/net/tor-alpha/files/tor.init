@@ -1,26 +1,29 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
+
 START=50
 
-BIN=tor
-DEFAULT=/etc/default/$BIN
-LOG_D=/var/log/$BIN
-LIB_D=/var/lib/$BIN
-RUN_D=/var/run
-PID_F=$RUN_D/$BIN.pid
-RUN_USER=$BIN
-RUN_GROUP=$BIN
+SERVICE_PID_FILE=/var/run/tor/tor.pid
 
 start() {
-	[ -f $DEFAULT ] && . $DEFAULT
-	[ -d $LOG_D ] || ( mkdir -m 0755 -p $LOG_D && chown $RUN_USER:$RUN_GROUP $LOG_D )
-	[ -d $LIB_D ] || ( mkdir -m 0700 -p $LIB_D && chown $RUN_USER:$RUN_GROUP $LIB_D )
-	[ -d $RUN_D ] || mkdir -p $RUN_D
-	[ -f $PID_F ] || ( touch $PID_F && chown $RUN_USER:$RUN_GROUP $PID_F )
-	$BIN $OPTIONS
+	user_exists tor 52 || user_add tor 52
+	group_exists tor 52 || group_add tor 52
+	[ -d /var/run/tor ] || {
+		mkdir -m 0755 -p /var/run/tor
+		chown tor:tor /var/run/tor
+	}
+	[ -d /var/lib/tor ] || {
+		mkdir -m 0755 -p /var/lib/tor
+		chmod 0700 /var/lib/tor
+		chown tor:tor /var/lib/tor
+	}
+	[ -d /var/log/tor ] || {
+		mkdir -m 0755 -p /var/log/tor
+		chown tor:tor /var/log/tor
+	}
+	service_start /usr/sbin/tor
 }
 
 stop() {
-	[ -f $PID_F ] && kill $(cat $PID_F)
+	service_stop /usr/sbin/tor
 }
-
