@@ -18,10 +18,9 @@ start() {
 			exit 0
 		}
 	}; done
-	user_exists sshd 22 || user_add sshd 22
-	group_exists sshd 22 || group_add ssh 22
+	user_exists sshd 22 || user_add sshd 22 22 sshd /var/empty
+	group_exists sshd 22 || group_add sshd 22 
 	mkdir -m 0700 -p /var/empty
-	mkdir -m 0755 -p /var/run/sshd
 	service_start /usr/sbin/sshd
 }
 
