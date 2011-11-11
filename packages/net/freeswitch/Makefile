@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -11,7 +11,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=freeswitch
 PKG_DISTNAME:=$(PKG_NAME)_git
 PKG_VERSION:=1.0.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 
 #
@@ -78,7 +78,7 @@ FS_MOD_AVAILABLE:= \
 	h26x \
 	h323 \
 	hash \
-	http_cache \
+	http-cache \
 	ilbc \
 	java \
 	json-cdr \
@@ -680,7 +680,7 @@ $(eval $(call BuildPlugin,blacklist,application blacklist,mod_blacklist,,))
 $(eval $(call BuildPlugin,callcenter,Call Center,mod_callcenter,,))
 $(eval $(call BuildPlugin,cdr-csv,CSV-CDR handler,mod_cdr_csv,,))
 $(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR handler,mod_cdr_pg_csv,,+coreutils +libpq))
-$(eval $(call BuildPlugin,cdr-sqlite,SQLite3 CDR handler,mod_cdr_sqlite,,+sqlite3))
+$(eval $(call BuildPlugin,cdr-sqlite,SQLite3 CDR handler,mod_cdr_sqlite,,+libsqlite3))
 $(eval $(call BuildPlugin,celt,CELT ultra-low delay codec,mod_celt,,+libogg))
 $(eval $(call BuildPlugin,cepstral,Cepstral interface,mod_cepstral,,@BROKEN)) # needs <swift.h>
 $(eval $(call BuildPlugin,cidlookup,applications mod_cidlookup,mod_cidlookup,,))
@@ -718,7 +718,7 @@ $(eval $(call BuildPlugin,gsmopen,Short Message Service (SMS),mod_gsmopen,spands
 $(eval $(call BuildPlugin,h26x,H26X linear codec,mod_h26x,,))
 $(eval $(call BuildPlugin,h323,h323 endpoint,mod_h323,,@BROKEN)) # missing header files (other packages needed)
 $(eval $(call BuildPlugin,hash,API for manipulating a hash table,mod_hash,,))
-$(eval $(call BuildPlugin,http_cache,HTTP GET with caching,mod_http_cache,,))
+$(eval $(call BuildPlugin,http-cache,HTTP GET with caching,mod_http_cache,,))
 $(eval $(call BuildPlugin,ilbc,ILBC codec,mod_ilbc,,))
 $(eval $(call BuildPlugin,java,Java language interface,mod_java,,@BROKEN)) # needs java
 $(eval $(call BuildPlugin,json-cdr,JSon-CDR interface,mod_json_cdr,,))
@@ -728,7 +728,7 @@ $(eval $(call BuildPlugin,logfile,File logger,mod_logfile,,))
 $(eval $(call BuildPlugin,loopback,Loopback endpoint,mod_loopback,,))
 $(eval $(call BuildPlugin,lua,Lua language interface,mod_lua,,+libstdcpp))
 $(eval $(call BuildPlugin,managed,language mod_managed,mod_managed,,+glib2 @BROKEN)) # needs Mono
-$(eval $(call BuildPlugin,mp4,MP4 File Format support for video apps.,mod_mp4,,+libmp4v2))
+$(eval $(call BuildPlugin,mp4,MP4 File Format support for video apps.,mod_mp4,,@BROKEN)) # needs libmp4v2
 $(eval $(call BuildPlugin,native-file,Native files,mod_native_file,,))
 $(eval $(call BuildPlugin,nibblebill,Billing,mod_nibblebill,,))
 $(eval $(call BuildPlugin,openzap,Zaptel hardware interface,mod_openzap ozmod_analog ozmod_analog_em ozmod_isdn ozmod_skel ozmod_zt,,+libpcap))
