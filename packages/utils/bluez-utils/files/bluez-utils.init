@@ -10,7 +10,7 @@ append_bool() {
 	local value="$3"
 	local _val
 	config_get_bool _val "$section" "$option" '0'
-	[ "$_val" -gt 0 ] && append args "$3"
+	[ $_val -gt 0 ] && append args "$3"
 }
 
 append_string() {
@@ -25,35 +25,40 @@ append_string() {
 
 hcid_config() {
 	local cfg="$1"
+	config_get_bool enabled "$cfg" "enabled" '1'
+	[ $enabled -gt 0 ] || return 1
 	args=""
 	append_bool "$cfg" nodaemon "-n"
 	append_string "$cfg" config "-f"
-	config_get_bool enabled "$cfg" "enabled" '1'
-	[ "$enabled" -gt 0 ] && /usr/sbin/hcid $args
+	service_start /usr/sbin/hcid $args
 }
 
 hciattach_config() {
 	local cfg="$1"
+	config_get_bool enabled "$cfg" "enabled" '1'
+	[ $enabled -gt 0 ] || return 1
 	args=""
 	append_string "$cfg" initspeed "-s" "115200"
 	append_string "$cfg" tty " " "ttyS1"
 	append_string "$cfg" type " " "csr"
 	append_string "$cfg" speed " " "115200"
 	append_string "$cfg" flow " " "noflow"
-	config_get_bool enabled "$cfg" "enabled" '1'
-	[ "$enabled" -gt 0 ] && /usr/sbin/hciattach $args
+	service_start /usr/sbin/hciattach $args
 }
 
 rfcomm_config() {
 	local cfg="$1"
+	config_get_bool enabled "$cfg" "enabled" '1'
+	[ $enabled -gt 0 ] || return 1
 	args=""
 	append_string "$cfg" config "-f"
-	config_get_bool enabled "$cfg" "enabled" '1'
-	[ "$enabled" -gt 0 ] && /usr/bin/rfcomm $args bind all
+	/usr/bin/rfcomm $args bind all
 }
 
 dund_config() {
 	local cfg="$1"
+	config_get_bool enabled "$cfg" "enabled" '1'
+	[ $enabled -gt 0 ] || return 1
 	args=""
 	append_bool "$cfg" listen "--listen"
 	append_string "$cfg" connect "--connect"
@@ -80,12 +85,13 @@ dund_config() {
 		[ -z "$unit" ] || append args "unit $unit ipparam $ifn linkname $ifn"
 	fi
 
-	config_get_bool enabled "$cfg" "enabled" '1'
-	[ "$enabled" -gt 0 ] && /usr/bin/dund $args
+	service_start /usr/bin/dund $args
 }
 
 pand_config() {
 	local cfg="$1"
+	config_get_bool enabled "$cfg" "enabled" '1'
+	[ $enabled -gt 0 ] || return 1
 	args=""
 	append_bool "$cfg" listen "--listen"
 	append_string "$cfg" connect "--connect"
@@ -104,8 +110,7 @@ pand_config() {
 	append_bool "$cfg" persist "--persist"
 	append_bool "$cfg" cache "--cache"
 	append_string "$cfg" pidfile "--pidfile"
-	config_get_bool enabled "$cfg" "enabled" '1'
-	[ "$enabled" -gt 0 ] && /usr/bin/pand $args
+	service_start /usr/bin/pand $args
 }
 
 start() {
@@ -121,9 +126,9 @@ start() {
 }
 
 stop() {
-	killall dund
-	killall pand
+	service_stop /usr/bin/dund
+	service_stop /usr/bin/pand
 	/usr/bin/rfcomm release all
-	killall hciattach
-	killall hcid
+	service_stop /usr/sbin/hciattach
+	service_stop /usr/sbin/hcid
 }
