@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/pcmciautils
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libsysfs @!LINUX_2_4 @PCMCIA_SUPPORT
+  DEPENDS:=+libsysfs @PCMCIA_SUPPORT
   TITLE:=PCMCIA Utilities
   URL:=http://www.kernel.org/pub/linux/utils/kernel/pcmcia/pcmcia.html
 endef

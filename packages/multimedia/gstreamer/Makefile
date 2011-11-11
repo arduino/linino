@@ -28,7 +28,6 @@ define Package/gstreamer/Default
   SECTION:=multimedia
   TITLE:=GStreamer
   URL:=http://gstreamer.freedesktop.org/
-  DEPENDS:= @!LINUX_2_4
 endef
 
 define Package/gstreamer/description/Default

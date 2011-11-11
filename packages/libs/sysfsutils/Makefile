@@ -25,7 +25,6 @@ define Package/libsysfs
   SECTION:=libs
   CATEGORY:=Libraries
   SUBMENU:=Filesystem
-  DEPENDS:=@!LINUX_2_4
   TITLE:=Sysfs library
   URL:=http://linux-diag.sourceforge.net/Sysfsutils.html
 endef
@@ -34,7 +33,7 @@ define Package/sysfsutils
   SECTION:=utils
   CATEGORY:=Utilities
   SUBMENU:=Filesystem
-  DEPENDS:=@!LINUX_2_4 +libsysfs
+  DEPENDS:=+libsysfs
   TITLE:=System Utilities Based on Sysfs
   URL:=http://linux-diag.sourceforge.net/Sysfsutils.html
 endef

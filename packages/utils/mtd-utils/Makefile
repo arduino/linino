@@ -103,11 +103,6 @@ MAKE_FLAGS += \
 	LDLIBS+="$(LIBGCC_S)" \
 	WITHOUT_XATTR=1
 
-ifeq ($(CONFIG_LINUX_2_4),y)
-MAKE_FLAGS += \
-	SUBDIRS=""
-endif
-
 define PartInstall
 define Package/mtd-utils-$(subst _,-,$(1))/install
 	$(INSTALL_DIR) \

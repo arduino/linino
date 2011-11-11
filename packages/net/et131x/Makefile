@@ -29,7 +29,7 @@ define KernelPackage/et131x
   KCONFIG:= \
   	CONFIG_ET131X=m \
 	CONFIG_ET131X_DEBUG=n
-  DEPENDS:=@!LINUX_2_4 @PCI_SUPPORT
+  DEPENDS:=@PCI_SUPPORT
   AUTOLOAD:=$(call AutoLoad,70,et131x)
 endef
 

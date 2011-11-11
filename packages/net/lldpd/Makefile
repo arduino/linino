@@ -22,7 +22,6 @@ define Package/lldpd
   CATEGORY:=Network
   SUBMENU:=Routing and Redirection
   TITLE:=Link Layer Discovery Protocol damon
-  DEPENDS:=@!LINUX_2_4
   URL:=https://trac.luffy.cx/lldpd/
 endef
 

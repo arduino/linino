@@ -25,7 +25,6 @@ define Package/i2c-tools
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=I2C tools for Linux
-  DEPENDS:=@!LINUX_2_4
   URL:=http://www.lm-sensors.org/wiki/I2CTools
 endef
 

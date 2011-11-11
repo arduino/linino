@@ -27,7 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libnetfilter-log
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=@!LINUX_2_4 +libnfnetlink +kmod-nfnetlink-log
+  DEPENDS:=+libnfnetlink +kmod-nfnetlink-log
   TITLE:=API to packets logged by the kernel packet filter
   URL:=http://www.netfilter.org/projects/libnetfilter_log/
 endef

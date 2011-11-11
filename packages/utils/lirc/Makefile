@@ -30,7 +30,6 @@ endef
 define  Package/lirc
     $(call Package/lirc/Default)
     TITLE:=LIRC - Linux Infrared Remote Control
-    DEPENDS:=@!LINUX_2_4
     MENU:=1
 endef
 

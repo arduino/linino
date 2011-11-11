@@ -23,7 +23,6 @@ $(call include_mk, python-package.mk)
 define Package/cwiid/Default
   TITLE:=Linux Nintendo Wiimote interface
   URL:=http://abstrakraft.org/cwiid/
-  DEPENDS:= @!LINUX_2_4
 endef
 
 define Package/libcwiid

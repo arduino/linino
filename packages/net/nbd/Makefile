@@ -29,7 +29,7 @@ define Package/nbd
   CATEGORY:=Network
   TITLE:=Network Block Device utilities
   URL:=http://nbd.sourceforge.net
-  DEPENDS:=@!LINUX_2_4 +kmod-nbd
+  DEPENDS:=+kmod-nbd
 endef
 
 define Package/nbd/description

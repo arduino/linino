@@ -20,7 +20,6 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libaio
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=@!LINUX_2_4
   TITLE:=Linux kernel AIO interface access library
   URL:=http://lse.sourceforge.net/io/aio.html
 endef

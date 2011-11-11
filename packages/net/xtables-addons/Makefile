@@ -71,7 +71,7 @@ define BuildTemplate
     $$(call Package/xtables-addons)
     CATEGORY:=Network
     TITLE:=$(2) iptables extension
-    DEPENDS:= @!LINUX_2_4 iptables $(if $(4),+kmod-ipt-$(1))
+    DEPENDS:=iptables $(if $(4),+kmod-ipt-$(1))
   endef
 
   define Package/iptables-mod-$(1)/install
@@ -90,7 +90,7 @@ define BuildTemplate
   define KernelPackage/ipt-$(1)
     SUBMENU:=Netfilter Extensions
     TITLE:=$(2) netfilter module
-    DEPENDS:= @!LINUX_2_4 kmod-ipt-core $(6)
+    DEPENDS:=kmod-ipt-core $(6)
     FILES:=$(foreach mod,$(4),$(PKG_BUILD_DIR)/extensions/$(mod).$(LINUX_KMOD_SUFFIX))
     AUTOLOAD:=$(call AutoLoad,$(5),$(notdir $(4)))
   endef

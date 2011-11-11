@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ksymoops
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=@!LINUX_2_4 @mips||mipsel||m68k||i386
+  DEPENDS:=@mips||mipsel||m68k||i386
   TITLE:=Interpret oops of the kernel
   URL:=http://www.kernel.org/pub/linux/utils/kernel/ksymoops/v2.4/
   MENU:=1

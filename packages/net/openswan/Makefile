@@ -24,7 +24,6 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openswan/Default
   TITLE:=Openswan
   URL:=http://www.openswan.org/
-  DEPENDS:=@!LINUX_2_4
 endef
 
 define Package/openswan/Default/description

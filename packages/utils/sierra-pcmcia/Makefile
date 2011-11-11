@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define KernelPackage/pcmcia-serial-sierra
   SUBMENU:=Other modules
   TITLE:=Sierra AirCard PCMCIA support
-  DEPENDS:=kmod-pcmcia-serial @!LINUX_2_4
+  DEPENDS:=kmod-pcmcia-serial
   URL:=http://www.sierrawireless.com/faq/ShowFAQ.aspx?ID=118
 endef
 

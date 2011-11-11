@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/keynote
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=@!LINUX_2_4 +libopenssl
+  DEPENDS:=+libopenssl
   TITLE:=Simple and flexible trust-management system
   URL:=http://www1.cs.columbia.edu/~angelos/keynote.html
 endef

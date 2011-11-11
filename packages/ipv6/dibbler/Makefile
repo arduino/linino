@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/dibbler/Default
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+libstdcpp @!LINUX_2_4 +libpthread
+  DEPENDS:=+libstdcpp +libpthread
   TITLE:=Dibbler, a portable DHCPv6 implementation
   URL:=http://klub.com.pl/dhcpv6/
 endef
