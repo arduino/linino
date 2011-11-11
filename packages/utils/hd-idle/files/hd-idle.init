@@ -76,5 +76,5 @@ start() {
 }
 
 stop() {
-	service_start /usr/bin/hd-idle
+	service_stop /usr/bin/hd-idle
 }
