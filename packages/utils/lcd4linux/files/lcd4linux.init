@@ -1,18 +1,15 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
+
 START=98
 
-NAME=lcd4linux
-BIN_F=/usr/bin/$NAME
-PID_F=/var/run/lcd4linux.pid
-SSD=start-stop-daemon
-OPTIONS="-q -p $PID_F -f /etc/lcd4linux.conf"
+SERVICE_USE_PID=1
 
 start() {
-	$SSD -S -q -p $PID_F -b -x $BIN_F -- $OPTIONS
+	service_start /usr/bin/lcd4linux -o /tmp/lcd4linux.png -q
 }
 
 stop() {
-	$SSD -K -q -p $PID_F
+	service_stop /usr/bin/lcd4linux
 }
 
