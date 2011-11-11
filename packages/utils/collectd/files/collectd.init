@@ -1,28 +1,15 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 
 START=80
-BINARY="/usr/sbin/collectd"
-PIDFILE="/var/run/collectd.pid"
-DATADIR="/var/lib/collectd"
+
+SERVICE_USE_PID=1
 
 start() {
-	[ -x "$BINARY" ] || exit 1
-	[ -d "$DATADIR" ] || mkdir -p "$DATADIR";
-
-	rm -f $PIDFILE
-	start-stop-daemon -S -q -b -x $BINARY -m -p $PIDFILE -- -f
+	mkdir -m 0755 -p /var/lib/collectd
+	service_start /usr/sbin/collectd
 }
 
 stop() {
-	[ -s "$PIDFILE" ] && {
-		local pid="$(cat $PIDFILE)"
-
-		start-stop-daemon -K -q -n ${BINARY##*/} -p $PIDFILE
-
-		for i in 1 2 3 4 5; do
-			kill -0 $pid 2>/dev/null || return
-			sleep 1
-		done
-	}
+	service_stop /usr/sbin/collectd
 }
