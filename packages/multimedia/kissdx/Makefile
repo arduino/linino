@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kissdx
 PKG_VERSION:=0.14.0.b1a
-PKG_RELEASE:=7
+PKG_RELEASE:=8
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).zip
 PKG_SOURCE_URL:=http://kissdx.vidartysse.net

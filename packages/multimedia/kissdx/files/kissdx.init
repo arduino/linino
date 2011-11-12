@@ -2,6 +2,9 @@
 # Copyright (C) 2008 OpenWrt.org
 
 START=65
+
+SERVICE_USE_PID=1
+
 CFGFILE=/tmp/kissdx.conf
 
 create_configfile() {
@@ -98,9 +101,9 @@ create_configfile() {
 start () {
 	config_load kissdx
 	create_configfile
-	/usr/bin/kissdx -c $CFGFILE -d
+	service_start /usr/bin/kissdx -c $CFGFILE -d
 }
 
 stop() {
-	killall -9 kissdx
+	service_stop /usr/bin/kissdx
 }
