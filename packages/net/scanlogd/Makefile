@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=scanlogd
 PKG_VERSION:=2.2.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.openwall.com/scanlogd/ \
@@ -38,8 +38,9 @@ define Package/scanlogd/description
 endef
 
 define Build/Configure	
-	$(SED) "s,/var/empty,/tmp/.scanlogd," $(PKG_BUILD_DIR)/params.h
-	$(SED) "s,#undef SCANLOGD_DEVICE,#define SCANLOGD_DEVICE \"all\"," $(PKG_BUILD_DIR)/params.h
+	$(SED) 's,^#define \(SCANLOGD_CHROOT\).*,#define \1 "/var/run/scanlogd",' \
+	    -e 's,^#undef \(SCANLOGD_DEVICE\),#define \1 "all",' \
+	    $(PKG_BUILD_DIR)/params.h
 endef
 
 define Build/Compile	
