@@ -1,5 +1,6 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
+
 START=99
 
 append_bool() {
@@ -21,10 +22,11 @@ append_parm() {
 	append args "$switch $_loctmp"
 }
 
-directory=""
 
 btpd() {
 	local cfg="$1"
+	args=""
+	directory=""
 	append_bool "$cfg" useipv4 "-4"
 	append_bool "$cfg" useipv6 "-6"
 	append_bool "$cfg" emptystart "--empty-start"
@@ -38,30 +40,22 @@ btpd() {
 }
 
 start() {
-	include /lib/network
 	config_load btpd
-	args=""
 	config_foreach btpd btpd
-	/usr/bin/btpd $args
+
+	service_start /usr/bin/btpd $args
 }
 
 stop() {
-	include /lib/network
 	config_load btpd
-	args=""
 	config_foreach btpd btpd
-	
+
 	[ -d $directory ] && args="-d $directory "
-	echo -n "stop btpd "
-	
+
 	while btcli $args kill ; do
-		echo -n .
 		sleep 3
 	done 2>/dev/null
-	
-	killall /usr/bin/btpd > /dev/null 2>&1
-	
-	echo " done"
-	return 0
+
+	service_stop /usr/bin/btpd
 }
 
