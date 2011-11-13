@@ -1,14 +1,13 @@
 #!/bin/sh /etc/rc.common
+# Copyright (C) 2006-2011 OpenWrt.org
 
 START=50
 
-RUN_D=/var/tftpd-hpa
-
 start() {
-	[ -d $RUN_D ] || mkdir -p $RUN_D
-	tftpd-hpa -l -s $RUN_D
+	mkdir -m 0755 -p /var/tftpd-hpa
+	service_start /usr/sbin/tftpd-hpa -l -s /var/tftpd-hpa
 }
 
 stop() {
-	killall tftpd-hpa
+	service_stop /usr/sbin/tftpd-hpa
 }
