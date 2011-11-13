@@ -1,16 +1,18 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
+
 START=50
 
-BIN=frickin
-DEFAULT=/etc/default/$BIN
-[ -f $DEFAULT ] && . $DEFAULT
+SERVICE_DAEMONIZE=1
+SERVICE_WRITE_PID=1
+
+DEFAULT=/etc/default/frickin
 
 start() {
-	$BIN $OPTIONS &
+	[ -f $DEFAULT ] && . $DEFAULT
+	service_start /usr/sbin/frickin $OPTIONS
 }
 
 stop() {
-	killall $BIN
+	service_stop /usr/sbin/frickin
 }
-
