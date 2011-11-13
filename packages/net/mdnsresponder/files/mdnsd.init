@@ -6,10 +6,6 @@ START=60
 SERVICE_USE_PID=1
 
 start() {
-	[ -d /var/run/mdnsd ] || {
-		mkdir -m 0755 -p /var/run/mdnsd
-		chown nobody:nogroup /var/run/mdnsd
-	}
 	service_start /usr/sbin/mdnsd
 }
 
