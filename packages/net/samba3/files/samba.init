@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2008-2010 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 
 START=60
 
@@ -59,11 +59,11 @@ start() {
 	config_load samba
 	config_foreach smb_header samba
 	config_foreach smb_add_share sambashare
-	smbd -D
-	nmbd -D
+	service_start /usr/sbin/smbd -D
+	service_start /usr/sbin/nmbd -D
 }
 
 stop() {
-	killall smbd
-	killall nmbd
+	service_stop /usr/sbin/smbd
+	service_stop /usr/sbin/nmbd
 }

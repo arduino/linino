@@ -8,7 +8,8 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=samba3
 PKG_VERSION:=3.0.24
-PKG_RELEASE:=8
+PKG_RELEASE:=9
+
 PKG_MD5SUM:=89273f67a6d8067cbbecefaa13747153
 
 PKG_SOURCE_URL:=ftp://ftp.samba.org/pub/samba/old-versions/
@@ -74,10 +75,10 @@ define Package/samba3/install
 	$(INSTALL_DATA) ./files/samba.config $(1)/etc/config/samba
 	$(INSTALL_DATA) ./files/smb.conf.template $(1)/etc/samba/
 	touch $(1)/etc/samba/smbpasswd
-	$(INSTALL_DIR) $(1)/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/smbpasswd $(1)/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/smbd $(1)/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/nmbd $(1)/bin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/smbpasswd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/smbd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/source/bin/nmbd $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,samba3))
