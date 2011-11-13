@@ -37,11 +37,10 @@ append_params_quotes() {
 
 start_service() {
 	local s="$1"
-	local enable=0
 	local enabled=0
 	local run_as_usr='root'
 	local open_file_limit=0
-	local ulimit_files=`ulimit -n`
+	local ulimit_files=$(ulimit -n)
 
 	# disabled?
 	config_get_bool enabled "$s" enabled 0
@@ -81,7 +80,7 @@ start_service() {
 	chown -R $run_as_usr $config_dir
 
 	config_get open_file_limit "$s" open_file_limit 32
-	let open_limit_files="$open_file_limit + 8"
+	open_limit_files=$(($open_file_limit + 8))
 
 	if [ ${open_file_limit} -gt ${ulimit_files} ]; then
 		ulimit -n $open_limit_files
