@@ -1,14 +1,17 @@
 --- a/globals.c
 +++ b/globals.c
-@@ -31,6 +31,8 @@
- const struct in_addr inaddr_any = { INADDR_ANY };
- #endif
+@@ -27,9 +27,9 @@
+  * Global variables
+  */
  
-+int g_family = AF_INET;
+-#ifdef __IPV4__
+ const struct in_addr inaddr_any = { INADDR_ANY };
+-#endif
 +
++int g_family = AF_INET;
+ 
  in_port_t g_udp_port = 161;
  in_port_t g_tcp_port = 161;
- int g_timeout = 100;
 --- a/mini_snmpd.c
 +++ b/mini_snmpd.c
 @@ -54,6 +54,10 @@ static void print_help(void)
@@ -99,7 +102,21 @@
  		{ "timeout", 1, 0, 't' },
  		{ "traps", 1, 0, 'T' },
  		{ "auth", 0, 0, 'a' },
-@@ -396,6 +408,14 @@ int main(int argc, char *argv[])
+@@ -327,7 +339,12 @@ int main(int argc, char *argv[])
+ 	int option_index = 1;
+ 	int c;
+ 
+-	struct my_sockaddr_t sockaddr;
++	union {
++		struct sockaddr_in sa;
++#ifdef __IPV6__
++		struct sockaddr_in6 sa6;
++#endif
++	} sockaddr;
+ 	my_socklen_t socklen;
+ 	struct timeval tv_last;
+ 	struct timeval tv_now;
+@@ -396,6 +413,14 @@ int main(int argc, char *argv[])
  			case 'v':
  				g_verbose = 1;
  				break;
@@ -114,7 +131,7 @@
  			case 'l':
  				print_version();
  				exit(EXIT_ARGS);
-@@ -435,12 +455,12 @@ int main(int argc, char *argv[])
+@@ -435,15 +460,24 @@ int main(int argc, char *argv[])
  #endif
  
  	/* Open the server's UDP port and prepare it for listening */
@@ -125,11 +142,26 @@
  		exit(EXIT_SYSCALL);
  	}
 -	sockaddr.my_sin_family = my_af_inet;
-+	sockaddr.my_sin_family = g_family;
- 	sockaddr.my_sin_port = htons(g_udp_port);
- 	sockaddr.my_sin_addr = my_inaddr_any;
- 	socklen = sizeof (sockaddr);
-@@ -457,7 +477,7 @@ int main(int argc, char *argv[])
+-	sockaddr.my_sin_port = htons(g_udp_port);
+-	sockaddr.my_sin_addr = my_inaddr_any;
+-	socklen = sizeof (sockaddr);
++	if (g_family == AF_INET) {
++		sockaddr.sa.sin_family = g_family;
++		sockaddr.sa.sin_port = htons(g_udp_port);
++		sockaddr.sa.sin_addr = inaddr_any;
++		socklen = sizeof(sockaddr.sa);
++#ifdef __IPV6__
++	} else {
++		sockaddr.sa6.sin6_family = g_family;
++		sockaddr.sa6.sin6_port = htons(g_udp_port);
++		sockaddr.sa6.sin6_addr = in6addr_any;
++		socklen = sizeof(sockaddr.sa6);
++#endif
++	}
+ 	if (bind(g_udp_sockfd, (struct sockaddr *)&sockaddr, socklen) == -1) {
+ 		lprintf(LOG_ERR, "could not bind UDP socket to port %d: %m\n", g_udp_port);
+ 		exit(EXIT_SYSCALL);
+@@ -457,7 +491,7 @@ int main(int argc, char *argv[])
  	}
  
  	/* Open the server's TCP port and prepare it for listening */
@@ -138,15 +170,30 @@
  	if (g_tcp_sockfd == -1) {
  		lprintf(LOG_ERR, "could not create TCP socket: %m\n");
  		exit(EXIT_SYSCALL);
-@@ -474,7 +494,7 @@ int main(int argc, char *argv[])
+@@ -474,10 +508,19 @@ int main(int argc, char *argv[])
  		lprintf(LOG_WARNING, "could not set SO_REUSEADDR on TCP socket: %m\n");
  		exit(EXIT_SYSCALL);
  	}
 -	sockaddr.my_sin_family = my_af_inet;
-+	sockaddr.my_sin_family = g_family;
- 	sockaddr.my_sin_port = htons(g_tcp_port);
- 	sockaddr.my_sin_addr = my_inaddr_any;
- 	socklen = sizeof (sockaddr);
+-	sockaddr.my_sin_port = htons(g_tcp_port);
+-	sockaddr.my_sin_addr = my_inaddr_any;
+-	socklen = sizeof (sockaddr);
++	if (g_family == AF_INET) {
++		sockaddr.sa.sin_family = g_family;
++		sockaddr.sa.sin_port = htons(g_udp_port);
++		sockaddr.sa.sin_addr = inaddr_any;
++		socklen = sizeof(sockaddr.sa);
++#ifdef __IPV6__
++	} else {
++		sockaddr.sa6.sin6_family = g_family;
++		sockaddr.sa6.sin6_port = htons(g_udp_port);
++		sockaddr.sa6.sin6_addr = in6addr_any;
++		socklen = sizeof(sockaddr.sa6);
++#endif
++	}
+ 	if (bind(g_tcp_sockfd, (struct sockaddr *)&sockaddr, socklen) == -1) {
+ 		lprintf(LOG_ERR, "could not bind TCP socket to port %d: %m\n", g_tcp_port);
+ 		exit(EXIT_SYSCALL);
 --- a/mini_snmpd.h
 +++ b/mini_snmpd.h
 @@ -255,6 +255,7 @@ typedef struct demoinfo_s {
@@ -157,3 +204,15 @@
  extern int g_timeout;
  extern int g_auth;
  extern int g_verbose;
+@@ -265,9 +266,9 @@ extern char *g_vendor;
+ extern char *g_location;
+ extern char *g_contact;
+ extern char *g_bind_to_device;
+-#ifdef __IPV4__
++
+ extern const struct in_addr inaddr_any;
+-#endif
++
+ 
+ extern char *g_disk_list[MAX_NR_DISKS];
+ extern int g_disk_list_length;
