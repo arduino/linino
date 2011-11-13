@@ -1,41 +1,43 @@
 --- a/Makefile
 +++ b/Makefile
-@@ -13,9 +13,22 @@
+@@ -10,19 +10,23 @@
+ # or :
+ # $ make install
+ #
++PREFIX ?= /usr
++ICONV_PREFIX ?= $(PREFIX)
++INTL_PREFIX ?= $(PREFIX)
  #CFLAGS = -Wall -O -D_GNU_SOURCE -g -DDEBUG
  #CFLAGS = -Wall -g -Os -D_GNU_SOURCE
  CFLAGS = -Wall -g -O3 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 \
 -	 -I/usr/include/ffmpeg \
 -	 -I/usr/include/libavutil -I/usr/include/libavcodec -I/usr/include/libavformat \
 -	 -I/usr/include/ffmpeg/libavutil -I/usr/include/ffmpeg/libavcodec -I/usr/include/ffmpeg/libavformat
-+	 -I$(STAGING_DIR)/usr/include \
-+	 -I$(STAGING_DIR)/usr/include/FLAC \
-+	 -I$(STAGING_DIR)/usr/include/libavcodec \
-+	 -I$(STAGING_DIR)/usr/include/libavformat \
-+	 -I$(STAGING_DIR)/usr/include/libavutil \
-+	 -I$(STAGING_DIR)/usr/include/libexif \
-+	 -I$(STAGING_DIR)/usr/include/uuid \
-+	 -I$(STAGING_DIR)/usr/include/vorbis \
-+	 -I$(ICONV_PREFIX)/include \
-+	 -I$(INTL_PREFIX)/include
-+LDFLAGS = -L$(STAGING_DIR)/usr/lib \
-+	 -L$(ICONV_PREFIX)/lib \
-+	 -L$(INTL_PREFIX)/include \
-+	 -Wl,-rpath=$(STAGING_DIR)/usr/lib \
-+	 -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
++	 -I$(PREFIX)/include/ffmpeg \
++	 -I$(PREFIX)/include/libavutil -I$(PREFIX)/include/libavcodec -I$(PREFIX)/include/libavformat \
++	 -I$(PREFIX)/include/ffmpeg/libavutil -I$(PREFIX)/include/ffmpeg/libavcodec -I$(PREFIX)/include/ffmpeg/libavformat
 +
  #STATIC_LINKING: CFLAGS += -DSTATIC
  #STATIC_LINKING: LDFLAGS = -static
  CC = gcc
-@@ -37,7 +50,7 @@ BASEOBJS = minidlna.o upnphttp.o upnpdes
+ RM = rm -f
+ INSTALL = install
+ 
+-INSTALLPREFIX ?= $(DESTDIR)/usr
++INSTALLPREFIX ?= $(DESTDIR)$(PREFIX)
+ SBININSTALLDIR = $(INSTALLPREFIX)/sbin
+ ETCINSTALLDIR = $(DESTDIR)/etc
+ 
+@@ -37,7 +41,7 @@ BASEOBJS = minidlna.o upnphttp.o upnpdes
  
  ALLOBJS = $(BASEOBJS) $(LNXOBJS)
  
 -LIBS = -lpthread -lexif -ljpeg -lsqlite3 -lavformat -lavutil -lavcodec -lid3tag -lFLAC -logg -lvorbis
-+LIBS = -liconv -lpthread -lexif -ljpeg -lsqlite3 -lavformat -lavutil -lavcodec -lid3tag -lFLAC -logg -lvorbis -luuid
++LIBS = -lpthread -lexif -ljpeg -lsqlite3 -lavformat -lavutil -lavcodec -lid3tag -lFLAC -logg -lvorbis -luuid $(ICONV_LIBS)
  #STATIC_LINKING: LIBS = -lvorbis -logg -lm -lsqlite3 -lpthread -lexif -ljpeg -lFLAC -lm -lid3tag -lz -lavformat -lavutil -lavcodec -lm
  
  TESTUPNPDESCGENOBJS = testupnpdescgen.o upnpdescgen.o
-@@ -62,7 +75,7 @@ install:	minidlna
+@@ -62,7 +66,7 @@ install:	minidlna
  	$(INSTALL) -d $(ETCINSTALLDIR)
  	$(INSTALL) --mode=0644 minidlna.conf $(ETCINSTALLDIR)
  

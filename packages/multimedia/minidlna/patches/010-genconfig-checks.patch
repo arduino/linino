@@ -1,6 +1,29 @@
 --- a/genconfig.sh
 +++ b/genconfig.sh
-@@ -41,22 +41,22 @@ ${RM} ${CONFIGFILE}
+@@ -24,14 +24,18 @@ RM="rm -f"
+ CONFIGFILE="config.h"
+ CONFIGMACRO="__CONFIG_H__"
+ 
++PREFIX="${PREFIX:-/usr}"
++ICONV_PREFIX="${ICONV_PREFIX:-$PREFIX}"
++INTL_PREFIX="${INTL_PREFIX:-$PREFIX}"
++
+ # Database path
+-DB_PATH="/tmp/minidlna"
++DB_PATH="${DB_PATH:-/tmp/minidlna}"
+ # Log path
+-LOG_PATH="${DB_PATH}"
++LOG_PATH="${LOG_PATH:-$DB_PATH}"
+ 
+ # detecting the OS name and version
+-OS_NAME=`uname -s`
+-OS_VERSION=`uname -r`
++OS_NAME="${OS_NAME:-$(uname -s)}"
++OS_VERSION="${OS_VERSION:-$(uname -r)}"
+ TIVO="/*#define TIVO_SUPPORT*/"
+ NETGEAR="/*#define NETGEAR*/"
+ READYNAS="/*#define READYNAS*/"
+@@ -41,22 +45,22 @@ ${RM} ${CONFIGFILE}
  
  # Detect if there are missing headers
  # NOTE: This check only works with a normal distro
@@ -20,26 +43,36 @@
 -[ ! -e "/usr/include/ffmpeg/avcodec.h" -a \
 -  ! -e "/usr/include/libavcodec/avcodec.h" -a \
 -  ! -e "/usr/include/ffmpeg/libavcodec/avcodec.h" ] && MISSING="libavcodec $MISSING"
-+[ ! -e "${STAGING_DIR}/usr/include/sqlite3.h" ] && MISSING="libsqlite3 $MISSING"
-+[ ! -e "${STAGING_DIR}/usr/include/jpeglib.h" ] && MISSING="libjpeg $MISSING"
-+[ ! -e "${STAGING_DIR}/usr/include/libexif/exif-loader.h" ] && MISSING="libexif $MISSING"
-+[ ! -e "${STAGING_DIR}/usr/include/id3tag.h" ] && MISSING="libid3tag $MISSING"
-+[ ! -e "${STAGING_DIR}/usr/include/ogg/ogg.h" ] && MISSING="libogg $MISSING"
-+[ ! -e "${STAGING_DIR}/usr/include/vorbis/codec.h" ] && MISSING="libvorbis $MISSING"
-+[ ! -e "${STAGING_DIR}/usr/include/FLAC/metadata.h" ] && MISSING="libflac $MISSING"
-+[ ! -e "${STAGING_DIR}/usr/include/ffmpeg/avutil.h" -a \
-+  ! -e "${STAGING_DIR}/usr/include/libavutil/avutil.h" -a \
-+  ! -e "${STAGING_DIR}/usr/include/ffmpeg/libavutil/avutil.h" ] && MISSING="libavutil $MISSING"
-+[ ! -e "${STAGING_DIR}/usr/include/ffmpeg/avformat.h" -a \
-+  ! -e "${STAGING_DIR}/usr/include/libavformat/avformat.h" -a \
-+  ! -e "${STAGING_DIR}/usr/include/ffmpeg/libavformat/avformat.h" ] && MISSING="libavformat $MISSING"
-+[ ! -e "${STAGING_DIR}/usr/include/ffmpeg/avcodec.h" -a \
-+  ! -e "${STAGING_DIR}/usr/include/libavcodec/avcodec.h" -a \
-+  ! -e "${STAGING_DIR}/usr/include/ffmpeg/libavcodec/avcodec.h" ] && MISSING="libavcodec $MISSING"
++[ ! -e "${PREFIX}/include/sqlite3.h" ] && MISSING="libsqlite3 $MISSING"
++[ ! -e "${PREFIX}/include/jpeglib.h" ] && MISSING="libjpeg $MISSING"
++[ ! -e "${PREFIX}/include/libexif/exif-loader.h" ] && MISSING="libexif $MISSING"
++[ ! -e "${PREFIX}/include/id3tag.h" ] && MISSING="libid3tag $MISSING"
++[ ! -e "${PREFIX}/include/ogg/ogg.h" ] && MISSING="libogg $MISSING"
++[ ! -e "${PREFIX}/include/vorbis/codec.h" ] && MISSING="libvorbis $MISSING"
++[ ! -e "${PREFIX}/include/FLAC/metadata.h" ] && MISSING="libflac $MISSING"
++[ ! -e "${PREFIX}/include/ffmpeg/avutil.h" -a \
++  ! -e "${PREFIX}/include/libavutil/avutil.h" -a \
++  ! -e "${PREFIX}/include/ffmpeg/libavutil/avutil.h" ] && MISSING="libavutil $MISSING"
++[ ! -e "${PREFIX}/include/ffmpeg/avformat.h" -a \
++  ! -e "${PREFIX}/include/libavformat/avformat.h" -a \
++  ! -e "${PREFIX}/include/ffmpeg/libavformat/avformat.h" ] && MISSING="libavformat $MISSING"
++[ ! -e "${PREFIX}/include/ffmpeg/avcodec.h" -a \
++  ! -e "${PREFIX}/include/libavcodec/avcodec.h" -a \
++  ! -e "${PREFIX}/include/ffmpeg/libavcodec/avcodec.h" ] && MISSING="libavcodec $MISSING"
  if [ -n "$MISSING" ]; then
  	echo -e "\nERROR!  Cannot continue."
  	echo -e "The following required libraries are either missing, or are missing development headers:\n"
-@@ -184,7 +184,7 @@ fi
+@@ -152,8 +156,7 @@ case $OS_NAME in
+ 		fi
+ 		;;
+ 	*)
+-		echo "Unknown OS : $OS_NAME"
+-		exit 1
++		echo "WARNING: Unknown OS : $OS_NAME" 1>&2
+ 		;;
+ esac
+ 
+@@ -184,7 +187,7 @@ fi
  echo "" >> ${CONFIGFILE}
  
  echo "/* Enable if the system iconv.h exists.  ID3 tag reading in various character sets will not work properly otherwise. */" >> ${CONFIGFILE}
@@ -48,7 +81,7 @@
  echo "#define HAVE_ICONV_H" >> ${CONFIGFILE}
  else
  echo -e "\nWARNING!!  Iconv support not found.  ID3 tag reading may not work."
-@@ -193,7 +193,7 @@ fi
+@@ -193,7 +196,7 @@ fi
  echo "" >> ${CONFIGFILE}
  
  echo "/* Enable if the system libintl.h exists for NLS support. */" >> ${CONFIGFILE}

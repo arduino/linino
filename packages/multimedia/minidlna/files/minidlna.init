@@ -2,14 +2,15 @@
 # Copyright (C) 2010 OpenWrt.org
 
 START=50
-BIN=/usr/bin/minidlna
-PID=/var/run/minidlna.pid
-SSD=start-stop-daemon
+
+SERVICE_USE_PID=1
 
 start() {
-	$SSD -p $PID -S -x $BIN -- -P $PID
+	mkdir -m 0755 -p /var/log
+	mkdir -m 0755 -p /var/run/minidlna
+	service_start /usr/bin/minidlna
 }
 
 stop() {
-	$SSD -p $PID -K -s SIGINT
+	service_stop /usr/bin/minidlna
 }
