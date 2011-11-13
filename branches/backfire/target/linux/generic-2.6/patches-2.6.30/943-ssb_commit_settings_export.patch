@@ -1,6 +1,6 @@
 --- a/drivers/ssb/driver_pcicore.c
 +++ b/drivers/ssb/driver_pcicore.c
-@@ -476,30 +476,6 @@ static void ssb_pcie_mdio_write(struct s
+@@ -505,30 +505,6 @@ static void ssb_pcie_mdio_write(struct s
  	pcicore_write32(pc, mdio_control, 0);
  }
  
@@ -33,7 +33,7 @@
  {
 --- a/drivers/ssb/main.c
 +++ b/drivers/ssb/main.c
-@@ -1406,6 +1406,31 @@ error:
+@@ -1301,6 +1301,31 @@ error:
  }
  EXPORT_SYMBOL(ssb_bus_powerup);
  
@@ -67,7 +67,7 @@
  	u32 base = 0;
 --- a/include/linux/ssb/ssb.h
 +++ b/include/linux/ssb/ssb.h
-@@ -675,6 +675,7 @@ extern int ssb_bus_may_powerdown(struct 
+@@ -671,6 +671,7 @@ extern int ssb_bus_may_powerdown(struct
   * Otherwise static always-on powercontrol will be used. */
  extern int ssb_bus_powerup(struct ssb_bus *bus, bool dynamic_pctl);
  

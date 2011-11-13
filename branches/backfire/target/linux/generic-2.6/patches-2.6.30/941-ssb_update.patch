@@ -1,6 +1,6 @@
 --- a/drivers/ssb/driver_chipcommon_pmu.c
 +++ b/drivers/ssb/driver_chipcommon_pmu.c
-@@ -28,6 +28,21 @@ static void ssb_chipco_pll_write(struct 
+@@ -28,6 +28,21 @@ static void ssb_chipco_pll_write(struct
  	chipco_write32(cc, SSB_CHIPCO_PLLCTL_DATA, value);
  }
  
@@ -43,7 +43,7 @@
  		/* We keep the default settings:
  		 * min_msk = 0xCBB
  		 * max_msk = 0x7FFFF
-@@ -506,3 +528,82 @@ void ssb_pmu_init(struct ssb_chipcommon 
+@@ -506,3 +528,82 @@ void ssb_pmu_init(struct ssb_chipcommon
  	ssb_pmu_pll_init(cc);
  	ssb_pmu_resources_init(cc);
  }
@@ -342,7 +342,7 @@
  
  static inline u8 ssb_crc8(u8 crc, u8 data)
  {
-@@ -247,7 +253,7 @@ static int sprom_do_read(struct ssb_bus 
+@@ -247,7 +253,7 @@ static int sprom_do_read(struct ssb_bus
  	int i;
  
  	for (i = 0; i < bus->sprom_size; i++)
@@ -432,7 +432,7 @@
  
  	/* Extract the antenna gain values. */
  	SPEX(antenna_gain.ghz24.a0, SSB_SPROM8_AGAIN01,
-@@ -549,6 +600,7 @@ static int sprom_extract(struct ssb_bus 
+@@ -549,6 +600,7 @@ static int sprom_extract(struct ssb_bus
  			ssb_printk(KERN_WARNING PFX "Unsupported SPROM"
  				   "  revision %d detected. Will extract"
  				   " v1\n", out->revision);
@@ -1345,7 +1345,7 @@
  	}
  	bus->mmio = NULL;
  	bus->mapped_device = NULL;
-@@ -230,6 +240,8 @@ static void __iomem *ssb_ioremap(struct 
+@@ -230,6 +240,8 @@ static void __iomem *ssb_ioremap(struct
  		SSB_BUG_ON(1); /* Can't reach this code. */
  #endif
  		break;
