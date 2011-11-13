@@ -5,14 +5,19 @@ scan_atheros() {
 	local device="$1"
 	local wds
 	local adhoc ahdemo sta ap monitor disabled
-	
+
+	local ifidx=0
+
 	config_get vifs "$device" vifs
 	for vif in $vifs; do
 		config_get_bool disabled "$vif" disabled 0
 		[ $disabled = 0 ] || continue
 
+		local vifname
+		[ $ifidx -gt 0 ] && vifname="ath${device#wifi}-$ifidx" || vifname="ath${device#wifi}"
+
 		config_get ifname "$vif" ifname
-		config_set "$vif" ifname "${ifname:-ath}"
+		config_set "$vif" ifname "${ifname:-$vifname}"
 		
 		config_get mode "$vif" mode
 		case "$mode" in
@@ -31,6 +36,8 @@ scan_atheros() {
 			;;
 			*) echo "$device($vif): Invalid mode, ignored."; continue;;
 		esac
+
+		ifidx=$(($ifidx + 1))
 	done
 
 	case "${adhoc:+1}:${sta:+1}:${ap:+1}" in
@@ -169,7 +176,7 @@ enable_atheros() {
 		esac
 		
 		[ "$nosbeacon" = 1 ] || nosbeacon=""
-		ifname=$(wlanconfig "$ifname" create wlandev "$device" wlanmode "$mode" ${nosbeacon:+nosbeacon})
+		ifname=$(wlanconfig "$ifname" create nounit wlandev "$device" wlanmode "$mode" ${nosbeacon:+nosbeacon})
 		[ $? -ne 0 ] && {
 			echo "enable_atheros($device): Failed to set up $mode vif $ifname" >&2
 			continue
