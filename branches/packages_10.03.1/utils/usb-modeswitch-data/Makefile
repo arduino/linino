@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010-2011 OpenWrt.org
+# Copyright (C) 2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=usb-modeswitch-data
-PKG_VERSION:=20111023
+PKG_VERSION:=20110705
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.draisberghof.de/usb_modeswitch/
-PKG_MD5SUM:=6e7cb67d0428bda241600b038ba11aeb
+PKG_MD5SUM:=5046e7be8d10d2fe699f9af21a0c3769
 
 include $(INCLUDE_DIR)/package.mk
 
