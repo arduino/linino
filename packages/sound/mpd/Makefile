@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mpd
 PKG_VERSION:=0.16.5
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/musicpd
@@ -193,14 +193,14 @@ define Package/mpd/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/mpd $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_BUILD_DIR)/doc/mpdconf.example $(1)/etc/mpd.conf
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/mpd.init $(1)/etc/init.d/mpd
 endef
 
 define Package/mpd-full/install
 $(call Package/mpd/install,$1)
 	$(INSTALL_DIR) $(1)/etc/avahi/services
 	$(INSTALL_DATA) ./files/mpd.service $(1)/etc/avahi/services/
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/mpd.init $(1)/etc/init.d/mpd
 endef
 
 define Package/mpd-mini/install
