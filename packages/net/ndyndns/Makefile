@@ -1,8 +1,15 @@
+#
+# Copyright (C) 2008-2011 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ndyndns
 PKG_VERSION:=2.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ndyndns.googlecode.com/files
@@ -33,18 +40,15 @@ endef
 
 define Package/ndyndns/conffiles
 /etc/ndyndns/ndyndns.conf.sample
-/etc/default/ndyndns
 endef
 
 define Package/ndyndns/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ndyndns $(1)/usr/sbin
-	$(INSTALL_DIR) $(1)/etc/default
-	$(INSTALL_BIN) files/$(PKG_NAME).default $(1)/etc/default/$(PKG_NAME)
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ndyndns $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d/
-	$(INSTALL_BIN) files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
-	$(INSTALL_DIR) $(1)/etc/$(PKG_NAME)
-	$(INSTALL_CONF) files/$(PKG_NAME).conf.sample $(1)/etc/$(PKG_NAME)
+	$(INSTALL_BIN) files/ndyndns.init $(1)/etc/init.d/ndyndns
+	$(INSTALL_DIR) $(1)/etc/ndyndns
+	$(INSTALL_CONF) files/ndyndns.conf.sample $(1)/etc/ndyndns
 endef
 
 $(eval $(call BuildPackage,ndyndns))

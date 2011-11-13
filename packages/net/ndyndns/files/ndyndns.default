@@ -1,3 +1,0 @@
-CHROOT="/etc/ndyndns"
-CONFIG="/etc/ndyndns/ndyndns.conf"
-OPTIONS=""
