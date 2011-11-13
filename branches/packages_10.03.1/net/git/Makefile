@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=git
 PKG_VERSION:=1.7.5.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@KERNEL/software/scm/git
@@ -64,6 +64,7 @@ endef
 define Package/git/install
 	$(INSTALL_DIR) $(1)
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+	ln -s /usr/bin/git $(1)/usr/libexec/git-core/git
 endef
 
 $(eval $(call BuildPackage,git))
