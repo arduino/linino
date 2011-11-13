@@ -82,6 +82,9 @@ ar71xx_board_name() {
 	*TEW-632BRP)
 		name="tew-632brp"
 		;;
+	*TL-MR3420)
+		name="tl-mr3420"
+		;;
 	*TL-WR1043ND)
 		name="tl-wr1043nd"
 		;;
