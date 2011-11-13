@@ -3,9 +3,6 @@
 
 START=90
 
-
-local NORUN=0
-
 start() {
 	. /lib/functions/bbstored.sh
 
@@ -13,19 +10,13 @@ start() {
 
 	if [ "$EXTERNAL_CONFIG" -eq 1 ]
 	then
-		BXBK_CONFIG_FILE="$EXTERNAL_CONF_FILE"		
+		BXBK_CONFIG_FILE="$EXTERNAL_CONF_FILE"
 	fi
-	[ "$NORUN" != "1" ] && /usr/sbin/bbstored "$BXBK_CONFIG_FILE"
+	service_start /usr/sbin/bbstored "$BXBK_CONFIG_FILE"
 }
 
 stop() {
 	. /lib/functions/bbstored.sh
 
-	if [ -f "$PID_FILE" ]
-	then
-		kill $(cat "$PID_FILE")
-	else
-		killall bbstored
-	fi
+	service_stop /usr/sbin/bbstored
 }
-
