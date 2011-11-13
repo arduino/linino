@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pulseaudio
 PKG_VERSION:=1.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://freedesktop.org/software/pulseaudio/releases/
@@ -94,9 +94,9 @@ define Package/pulseaudio-profiles
 endef
 
 CONFIGURE_ARGS += \
-	--with-system-user=root \
-	--with-system-group=root \
-	--with-access-group=root \
+	--with-system-user=pulse \
+	--with-system-group=pulse \
+	--with-access-group=audio \
 	--with-database=simple \
 	--enable-alsa \
 	--disable-hal \
@@ -104,7 +104,7 @@ CONFIGURE_ARGS += \
 	--disable-tcpwrap \
 	--disable-nls \
 	--disable-manpages \
-	--disable-oss-output \
+	--enable-oss-output \
 	--disable-oss-wrapper \
 	--disable-samplerate \
 	--disable-per-user-esound-socket \
@@ -124,7 +124,7 @@ endif
 ifeq ($(BUILD_VARIANT),noavahi)
 CONFIGURE_ARGS += \
 	--disable-avahi \
-	--disable-dbus	
+	--disable-dbus
 endif
 
 CONFIGURE_VARS += \
