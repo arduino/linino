@@ -127,6 +127,11 @@ CONFIGURE_ARGS+= \
 	--without-pam \
 	--without-x
 
+ifdef CONFIG_OPENSSL_ENGINE
+CONFIGURE_ARGS+= \
+	--with-ssl-engine
+endif
+
 ifneq ($(CONFIG_SSP_SUPPORT),y)
 CONFIGURE_ARGS += \
 	--without-stackprotect
