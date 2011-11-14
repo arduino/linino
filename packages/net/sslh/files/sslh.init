@@ -1,27 +1,20 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2009-2011 OpenWrt.org
 
-NAME=sslh
-PROG=/usr/sbin/sslh
 START=95
-PIDCOUNT=0
-EXTRA_COMMANDS="killclients"
-EXTRA_HELP="	killclients Kill ${NAME} processes except servers and yourself"
 
-sslh_start()
-{
+# XXX: pid-files are useless because sslh forks after creating them
+SERVICE_USE_PID=
+
+start_instance() {
 	local section="$1"
 
 	# check if section is enabled (default)
 	local enabled
-	config_get_bool enabled "${section}" enable 1
-	[ "${enabled}" -eq 0 ] && return 1
+	config_get_bool enabled "${section}" 'enabled' '0'
+	[ ${enabled} -gt 0 ] || return 1
 
-	# increase pid file count to handle multiple instances correctly
-	PIDCOUNT="$(( ${PIDCOUNT} + 1 ))"
-
-	# prepare parameters (initialise with pid file)
-	local args="-P /var/run/${NAME}.${PIDCOUNT}.pid"
+	local args=""
 	local val
 	# A) listen parameter
 	config_get vals "${section}" listen
@@ -46,104 +39,16 @@ sslh_start()
 	config_get_bool verbosed "${section}" verbose 0
 	[ "${verbosed}" -ne 0 ] && append args "-v"
 
-	# execute program and return its exit code
-	[ "${verbosed}" -ne 0 ] && echo "${initscript}: section ${section} started via ${PROG} ${args}"
-	${PROG} ${args}
-	return $?
+	# XXX: allow more that one instance to run simultaneously
+	SERVICE_MATCH_NAME=1 SERVICE_NAME="sslh-dummy-$$" \
+	service_start /usr/sbin/sslh ${args}
 }
 
-start()
-{
-	config_load "${NAME}"
-	config_foreach sslh_start sslh
+start() {
+	config_load 'sslh'
+	config_foreach start_instance 'sslh'
 }
 
-stop()
-{
-	local pidfile
-	local rc=0
-
-	# killing all server processes
-	for pidfile in `ls /var/run/${NAME}.*.pid`
-	 do
-		start-stop-daemon -q -K -s KILL -p "${pidfile}" -n "${NAME}"
-		[ $? -ne 0 ] && rc=1
-		rm -f "${pidfile}"
-	done
-	[ -z "${pidfile}" ] && echo "${initscript}: no pid files, if you get problems with start then try killclients"
-	[ ${rc} -ne 0 ] && echo "${initscript}: inconsistency in pid files, if you get problems with start then try killclients"
-}
-
-killclients()
-{
-	local ignore=''
-	local server
-	local pid
-	local connection
-	local proto
-	local address
-
-	# if this script is run from inside a client session, then ignore that session
-	pid="$$"
-	while [ "${pid}" -ne 0 ]
-	 do
-		# get parent process id
-		pid=`cut -d ' ' -f 4 "/proc/${pid}/stat"`
-		[ "${pid}" -eq 0 ] && break
-
-		# check if pid is connected to a client connection
-		# a) get established connection for pid
-		connection=`netstat -tupn 2>/dev/null | sed "s/[ ]\+/ /g" | grep -e "ESTABLISHED ${pid}/"`
-		[ -z "${connection}" ] && continue
-		#    get connection details for foreign address
-		proto=`echo ${connection} | cut -d ' ' -f 1`
-		address=`echo ${connection} | cut -d ' ' -f 5`
-
-		# b) get pid for foreign address, only possible if foreign address is from this machine itself
-		connection=`netstat -tupn 2>/dev/null | sed "s/[ ]\+/ /g" | grep -e "^${proto}.*${address}.*ESTABLISHED.*/${NAME}"`
-		[ -z "${connection}" ] && continue
-		#    check that the local address (field 4) corresponds to the foreign address of the previous connection
-		server=`echo ${connection} | cut -d ' ' -f 4`
-		[ "${server}" != "${address}" ] && continue
-		#    get pid from connection
-		server=`echo ${connection} | cut -d ' ' -f 7 | cut -d '/' -f 1`
-
-		# check if client connection
-		grep -F -q -e "${PROG}" "/proc/${server}/cmdline" && {
-			append ignore "${server}"
-			break
-		}
-	done
-
-	# get all server pids that should be ignored
-	for server in `cat /var/run/${NAME}.*.pid`
-	 do
-		append ignore "${server}"
-	done
-
-	# get all running pids and kill client connections
-	local skip
-	for pid in `pidof "${NAME}"`
-	 do
-		# check if correct program, otherwise process next pid
-		grep -F -q -e "${PROG}" "/proc/${pid}/cmdline" || {
-			continue
-		}
-
-		# check if pid should be ignored (servers, ourself)
-		skip=0
-		for server in ${ignore}
-		 do
-			if [ "${pid}" == "${server}" ]
-			 then
-				skip=1
-				break
-			fi
-		done
-		[ "${skip}" -ne 0 ] && continue
-
-		# kill process
-		echo "${initscript}: Killing ${pid}..."
-		kill -KILL ${pid}
-	done
+stop() {
+	service_stop /usr/sbin/sslh
 }
