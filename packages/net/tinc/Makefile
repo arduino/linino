@@ -9,12 +9,10 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tinc
 PKG_VERSION:=1.0.16
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.tinc-vpn.org/packages \
-	http://ftp.yi.se/pub/tinc \
-	http://www.mirrors.wiretapped.net/security/network-security/tinc
+PKG_SOURCE_URL:=http://www.tinc-vpn.org/packages 
 PKG_MD5SUM:=f1c7ed94878725fb2cf4efb02bf160da
 
 PKG_INSTALL:=1
@@ -45,6 +43,13 @@ CONFIGURE_ARGS += \
 define Package/tinc/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/tincd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/init.d/
+	$(INSTALL_BIN) files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) files/$(PKG_NAME).config $(1)/etc/config/$(PKG_NAME)
+	$(INSTALL_DIR) $(1)/etc/openvpn
+	$(INSTALL_DIR) $(1)/lib/upgrade/keep.d
+	$(INSTALL_DATA) files/tinc.upgrade $(1)/lib/upgrade/keep.d/tinc
 endef
 
 $(eval $(call BuildPackage,tinc))

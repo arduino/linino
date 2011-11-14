@@ -1,0 +1,241 @@
+#!/bin/sh /etc/rc.common
+# Tinc init script
+# Copyright (C) 2011 Linus Lüssing
+#  Based on Jo-Philipp Wich's OpenVPN init script
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+
+START=42
+BIN=/usr/sbin/tincd
+SSD=start-stop-daemon
+EXTRA_COMMANDS="up down"
+
+LIST_SEP="
+"
+TMP_TINC="/tmp/tinc"
+
+append_param() {
+	local v="$1"
+	case "$v" in
+		*_*_*_*) v=${v%%_*}-${v#*_}; v=${v%%_*}-${v#*_}; v=${v%%_*}-${v#*_} ;;
+		*_*_*)   v=${v%%_*}-${v#*_}; v=${v%%_*}-${v#*_} ;;
+		*_*)     v=${v%%_*}-${v#*_} ;;
+	esac
+	ARGS="$ARGS --$v"
+	return 0
+}
+
+append_conf_bools() {
+	local p; local v; local s="$1"; local f="$2"; shift; shift
+	for p in $*; do
+		config_get_bool v "$s" "$p"
+		[ "$v" == 1 ] && echo "$p = yes" >> "$f"
+		[ "$v" == 0 ] && echo "$p = no" >> "$f"
+	done
+}
+
+append_params() {
+	local p; local v; local s="$1"; shift
+	for p in $*; do
+		config_get v "$s" "$p"
+		IFS="$LIST_SEP"
+		for v in $v; do
+			[ -n "$v" ] && append_param "$p" && ARGS="$ARGS $v"
+		done
+		unset IFS
+	done
+}
+
+append_conf_params() {
+	local p; local v; local s="$1"; local f="$2"; shift; shift
+	for p in $*; do
+		config_get v "$s" "$p"
+		IFS="$LIST_SEP"
+		for v in $v; do
+			# Look up OpenWRT interface names
+			[ "$p" = "BindToInterface" ] && {
+				local ifname=$(uci -P /var/state get network.$v.ifname 2>&-)
+				[ -n "$ifname" ] && v="$ifname"
+			}
+
+			[ -n "$v" ] && echo "$p = $v" >> "$f"
+		done
+		unset IFS
+	done
+}
+
+prepare_host() {
+	local s="$1"; local n
+	local disabled=0
+
+	# net disabled?
+	config_get n "$s" net
+	config_get_bool disabled "$n" disabled 0
+	[ "$disabled" == 1 ] && return 0
+
+	if [ "$#" = "2" ]; then
+		[ "$2" != "$n" ] && return 0
+	fi
+
+	# host disabled?
+	config_get_bool disabled "$s" disabled 0
+	[ "$disabled" == 1 ] && {
+		[ -f "$TMP_TINC/$n/hosts/$s" ] && rm "$TMP_TINC/$n/hosts/$s"
+		return 0
+	}
+
+	[ ! -f "/etc/tinc/$n/hosts/$s" ] && {
+		echo -n "tinc: Warning, public key for $s for network $n "
+		echo -n "missing in /etc/tinc/$n/hosts/$s, "
+		echo "skipping configuration of $s"
+		return 0
+	}
+
+	# append flags
+	append_conf_bools "$s" "$TMP_TINC/$n/hosts/$s" \
+		ClampMSS IndirectData PMTUDiscovery
+
+	# append params
+	append_conf_params "$s" "$TMP_TINC/$n/hosts/$s" \
+		Address Cipher Compression Digest MACLength PMTU Port Subnet
+}
+
+check_gen_own_key() {
+	local s="$1"; local n; local k
+
+	config_get n "$s" Name
+	config_get_bool k "$s" generate_keys 0
+	[ "$k" == 0 ] && return 0
+
+	([ -z "$n" ] || [ -f "$TMP_TINC/$s/hosts/$n" ] || [ -f "$TMP_TINC/$s/rsa_key.priv" ]) && \
+		return 0
+	[ ! -d "$TMP_TINC/$s/hosts" ] && mkdir -p "$TMP_TINC/$s/hosts"
+
+	config_get k "$s" key_size
+	if [ -z "$k" ]; then
+		$BIN -c "$TMP_TINC/$s" --generate-keys </dev/null
+	else
+		$BIN -c "$TMP_TINC/$s" "--generate-keys=$k" </dev/null
+	fi
+
+	[ ! -d "/etc/tinc/$s/hosts" ] && mkdir -p "/etc/tinc/$s/hosts"
+	cp "$TMP_TINC/$s/rsa_key.priv" "/etc/tinc/$s/"
+	[ -n "$n" ] && cp "$TMP_TINC/$s/hosts/$n" "/etc/tinc/$s/hosts/"
+}
+
+prepare_net() {
+	local s="$1"
+	local disabled=0
+	local n
+
+	# disabled?
+	config_get_bool disabled "$s" disabled 0
+	[ "$disabled" == 1 ] && return 0
+
+	[ ! -d "$TMP_TINC/$s" ] && mkdir -p "$TMP_TINC/$s"
+	[ -d "/etc/tinc/$s" ] && cp -r "/etc/tinc/$s" "$TMP_TINC/"
+
+	# append flags
+	append_conf_bools "$s" "$TMP_TINC/$s/tinc.conf" \
+		DirectOnly Hostnames IffOneQueue PriorityInheritance \
+		StrictSubnets TunnelServer \
+		ClampMSS IndirectData PMTUDiscovery
+
+	# append params
+	append_conf_params "$s" "$TMP_TINC/$s/tinc.conf" \
+		AddressFamily BindToAddress ConnectTo BindToInterface \
+		Forwarding GraphDumpFile Interface KeyExpire MACExpire \
+		MaxTimeout Mode Name PingInterval PingTimeout PrivateKeyFile \
+		ProcessPriority ReplayWindow UDPRcvBuf UDPSndBuf \
+		Address Cipher Compression Digest MACLength PMTU Port Subnet
+
+	check_gen_own_key "$s" && return 0
+}
+
+start_net() {
+	local s="$1"
+	local disabled=0
+
+	# disabled?
+	config_get_bool disabled "$s" disabled 0
+	[ "$disabled" == 1 ] && return 0
+
+	PID="/var/run/tinc.$s.pid"
+	ARGS=""
+
+	# append params
+	append_params "$s" \
+		log debug
+
+	$BIN -c "$TMP_TINC/$s" -n $s $ARGS --pidfile="$PID"
+}
+
+kill_net() {
+	local s="$1"
+	local S="${2:-TERM}"
+	local disabled=0
+
+	# disabled?
+	config_get_bool disabled "$s" disabled 0
+	[ "$disabled" == 0 ] || [ "$S" == "TERM" ] || return 0
+
+	PID="/var/run/tinc.$s.pid"
+
+	$SSD -q -p $PID -x $BIN -K -s $S
+	[ "$S" == "TERM" ] && {
+		rm -f "$PID"
+		[ -n "$s" ] && rm -rf "$TMP_TINC/$s"
+	}
+}
+
+hup_net()  { kill_net "$1" HUP;  }
+stop_net() { kill_net "$1" TERM; }
+
+start() {
+	config_load tinc
+
+	config_foreach prepare_net tinc-net
+	config_foreach prepare_host tinc-host
+
+	config_foreach start_net tinc-net
+}
+
+stop() {
+	config_load tinc
+	config_foreach stop_net tinc-net
+}
+
+reload() {
+	config_load tinc
+	config_foreach hup_net tinc-net
+}
+
+restart() {
+	stop; sleep 5; start
+}
+
+up() {
+	local exists
+	local INSTANCE
+	config_load tinc
+	for INSTANCE in "$@"; do
+		config_get exists "$INSTANCE" TYPE
+		if [ "$exists" == "tinc-net" ]; then
+			prepare_net "$INSTANCE"
+			config_foreach prepare_host tinc-host "$INSTANCE"
+			start_net "$INSTANCE"
+		fi
+	done
+}
+
+down() {
+	local exists
+	local INSTANCE
+	config_load tinc
+	for INSTANCE in "$@"; do
+		config_get exists "$INSTANCE" TYPE
+		if [ "$exists" == "tinc-net" ]; then
+			stop_net "$INSTANCE"
+		fi
+	done
+}
