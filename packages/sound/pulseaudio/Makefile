@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pulseaudio
 PKG_VERSION:=1.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://freedesktop.org/software/pulseaudio/releases/
@@ -217,10 +217,6 @@ define Package/pulseaudio-daemon-avahi/install
 
 	$(INSTALL_CONF) \
 		$(PKG_INSTALL_DIR)/etc/dbus-1/system.d/pulseaudio-system.conf \
-		$(1)/etc/dbus-1/system.d/pulseaudio-system.conf
-
-	$(SED) \
-		's/user="pulse"/user="root"/' \
 		$(1)/etc/dbus-1/system.d/pulseaudio-system.conf
 endef
 
