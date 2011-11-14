@@ -238,9 +238,14 @@ enable_broadcom() {
 			*wpa*|*WPA*)
 				wsec_r=1
 				eap_r=1
-				config_get key "$vif" key
-				config_get server "$vif" server
-				config_get port "$vif" port
+				config_get auth_server "$vif" auth_server
+				[ -z "$auth_server" ] && config_get auth_server "$vif" server
+				config_get auth_port "$vif" auth_port
+				[ -z "$auth_port" ] && config_get auth_port "$vif" port
+				config_get auth_secret "$vif" auth_secret
+				[ -z "$auth_secret" ] && config_get auth_secret "$vif" key
+
+				# wpa version + default cipher
 				case "$enc" in
 					wpa*+wpa2*|WPA*+WPA2*) auth=66; wsec=6;;
 					wpa2*|WPA2*) auth=64; wsec=4;;
@@ -249,8 +254,8 @@ enable_broadcom() {
 				# group rekey interval
 				config_get rekey "$vif" wpa_group_rekey
 
-				eval "${vif}_key=\"\$key\""
-				nasopts="-r \"\$${vif}_key\" -h $server -p ${port:-1812}${rekey:+ -g $rekey}"
+				eval "${vif}_key=\"\$auth_secret\""
+				nasopts="-r \"\$${vif}_key\" -h $auth_server -p ${auth_port:-1812}${rekey:+ -g $rekey}"
 			;;
 		esac
 		append vif_do_up "wsec $wsec" "$N"
