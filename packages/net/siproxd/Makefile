@@ -9,7 +9,8 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=siproxd
 PKG_VERSION:=0.8.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
+
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/siproxd
 PKG_MD5SUM:=1a6f9d13aeb2d650375c9a346ac6cbaf

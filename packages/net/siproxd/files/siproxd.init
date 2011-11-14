@@ -3,19 +3,22 @@
 # Copyright (C) 2011 OpenWrt.org
 
 START=50
+
+SERVICE_USE_PID=1
+
 siproxd_bin="/usr/sbin/siproxd"
-siproxd_conf_dir="/var/etc/"
-siproxd_conf_prefix="$siproxd_conf_dir"siproxd-
-siproxd_registration_dir="/var/lib/siproxd/"
-siproxd_pid_dir="/var/run/"
+siproxd_conf_dir="/var/etc"
+siproxd_conf_prefix="$siproxd_conf_dir/siproxd-"
+siproxd_registration_dir="/var/lib/siproxd"
+siproxd_pid_dir="/var/run/siproxd"
 
 deal_with_lists () {
-	echo "$2" = "$1" >> "$siproxd_conf_prefix$cfg"				
+	echo "$2" = "$1" >> "$siproxd_conf_prefix$cfg"
 }
 
-start_instance()
-{
+start_instance() {
 	local cfg="$1"
+
 	config_get if_inbound "$cfg" if_inbound
 	config_get if_outbound "$cfg" if_outbound
 	config_get host_outbound "$cfg" host_outbound
@@ -27,9 +30,9 @@ start_instance()
 	config_get silence_log "$cfg" silence_log 4
 	config_get user "$cfg" user nobody
 	config_get chrootjail "$cfg" chrootjail
-	config_get registration_file "$cfg" registration_file "$siproxd_registration_dir"siproxd_registrations-"$cfg"
+	config_get registration_file "$cfg" registration_file "$siproxd_registration_dir/siproxd_registrations-$cfg"
 	config_get autosave_registrations "$cfg" autosave_registrations 300
-	config_get pid_file "$cfg" pid_file "$siproxd_pid_dir"siproxd-"$cfg".pid
+	config_get pid_file "$cfg" pid_file "$siproxd_pid_dir/siproxd-$cfg.pid"
 	config_get_bool rtp_proxy_enable "$cfg" rtp_proxy_enable 1
 	config_get rtp_port_low "$cfg" rtp_port_low 7070
 	config_get rtp_port_high "$cfg" rtp_port_high 7089
@@ -57,10 +60,6 @@ start_instance()
 	config_get outbound_domain_host "$cfg" outbound_domain_host
 	config_get outbound_domain_port "$cfg" outbound_domain_port
 
-	if [ ! -d "$siproxd_conf_dir" ]; then
-		mkdir -p "$siproxd_conf_dir"
-		chmod 0755 "$siproxd_conf_dir"
-	fi
 	if [ -f "$siproxd_conf_prefix$cfg" ]; then
 		rm "$siproxd_conf_prefix$cfg"
 	fi
@@ -93,16 +92,9 @@ start_instance()
 		fi
 		echo chrootjail = "$chrootjail" >> "$siproxd_conf_prefix$cfg"
 	fi
-	if [ ! -d "$siproxd_registration_dir" ]; then
-		mkdir -p "$siproxd_registration_dir"
-		chmod 0755 "$siproxd_registration_dir"
-	fi
 	echo registration_file = "$registration_file" >> "$siproxd_conf_prefix$cfg"
 	echo autosave_registrations = "$autosave_registrations" >> "$siproxd_conf_prefix$cfg"
-	if [ ! -d "$siproxd_pid_dir" ]; then
-		mkdir -p "$siproxd_pid_dir"
-		chmod 0755 "$siproxd_pid_dir"
-	fi
+
 	echo pid_file = "$pid_file" >> "$siproxd_conf_prefix$cfg"
 	echo rtp_proxy_enable = "$rtp_proxy_enable" >> "$siproxd_conf_prefix$cfg"
 	echo rtp_port_low = "$rtp_port_low" >> "$siproxd_conf_prefix$cfg"
@@ -211,30 +203,33 @@ start_instance()
 	config_list_foreach "$cfg" 'plugin_regex_pattern' deal_with_lists "plugin_regex_pattern"
 	config_list_foreach "$cfg" 'plugin_regex_replace' deal_with_lists "plugin_regex_replace"
 
-	$siproxd_bin --config "$siproxd_conf_prefix$cfg"
+	SERVICE_PID_FILE="$pid_file" \
+	service_start $siproxd_bin --config "$siproxd_conf_prefix$cfg"
 }
 
-stop_instance()
-{
+stop_instance() {
 	local cfg="$1"
 
-	[ -f "$siproxd_pid_dir"siproxd-"$cfg".pid ] && {
-		start-stop-daemon -K -q -n ${siproxd_bin##*/} \
-			-p "$siproxd_pid_dir"siproxd-"$cfg".pid -s TERM
+	config_get pid_file "$cfg" pid_file "$siproxd_pid_dir/siproxd-$cfg.pid"
 
-		rm "$siproxd_pid_dir"siproxd-"$cfg".pid
-	}
+	SERVICE_PID_FILE="$pid_file" \
+	service_stop $siproxd_bin
 }
 
 start() {
-	config_load siproxd
-	config_foreach start_instance siproxd
+	mkdir -m 0755 -p "$siproxd_conf_dir"
+	mkdir -m 0755 -p "$siproxd_registration_dir"
+	[ -d "$siproxd_pid_dir" ] || {
+		mkdir -m 0755 -p "$siproxd_pid_dir"
+		chmod 0750 "$siproxd_pid_dir"
+		chown nobody:nogroup "$siproxd_pid_dir"
+	}
+
+	config_load 'siproxd'
+	config_foreach start_instance 'siproxd'
 }
 
 stop() {
-	config_load siproxd
-	config_foreach stop_instance siproxd
-	# for case when pid file was not written
-	# because of permission issues
-	pkill ${siproxd_bin##*/}
+	config_load 'siproxd'
+	config_foreach stop_instance 'siproxd'
 }
