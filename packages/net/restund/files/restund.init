@@ -5,13 +5,11 @@
 #
 
 START=60
-BIN=restund
-OPTIONS=
 
 start() {
-	start-stop-daemon -S -q -x $BIN -- $OPTIONS
+	service_start /usr/sbin/restund
 }
 
 stop() {
-	start-stop-daemon -K -q -x $BIN
+	service_stop /usr/sbin/restund
 }
