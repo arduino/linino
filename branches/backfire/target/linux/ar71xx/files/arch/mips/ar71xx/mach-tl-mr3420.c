@@ -123,8 +123,8 @@ static void __init tl_mr3420_setup(void)
 					tl_mr3420_gpio_buttons);
 
 	ar71xx_eth1_data.has_ar7240_switch = 1;
-	ar71xx_init_mac(ar71xx_eth0_data.mac_addr, mac, 0);
-	ar71xx_init_mac(ar71xx_eth1_data.mac_addr, mac, 1);
+
+	ar71xx_set_mac_base(mac);
 
 	/* WAN port */
 	ar71xx_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RMII;
