@@ -44,8 +44,8 @@
 #define DIR825B1_CAL_LOCATION_0			0x1f661000
 #define DIR825B1_CAL_LOCATION_1			0x1f665000
 
-#define DIR825B1_MAC_LOCATION_0			0x2ffa81b8
-#define DIR825B1_MAC_LOCATION_1			0x2ffa8370
+#define DIR825B1_MAC_LOCATION_0			0x1f66ffa0
+#define DIR825B1_MAC_LOCATION_1			0x1f66ffb4
 
 #ifdef CONFIG_MTD_PARTITIONS
 static struct mtd_partition dir825b1_partitions[] = {
@@ -149,15 +149,38 @@ static struct platform_device dir825b1_rtl8366s_device = {
 	}
 };
 
+static void dir825b1_read_ascii_mac(u8 *dest, unsigned int src_addr, int off)
+{
+	int ret;
+	u32 add;
+	u8 *src = (u8 *)KSEG1ADDR(src_addr);
+
+	ret = sscanf(src, "%02hhx:%02hhx:%02hhx:%02hhx:%02hhx:%02hhx",
+	             &dest[0], &dest[1], &dest[2],
+	             &dest[3], &dest[4], &dest[5]);
+
+	if (ret != ETH_ALEN) {
+		memset(dest, 0, ETH_ALEN);
+		return;
+	}
+
+	add = (((u32)dest[3]) << 16) + (((u32)dest[4]) << 8) + ((u32)dest[5]);
+	add += off;
+
+	dest[3] = (add >> 16) & 0xFF;
+	dest[4] = (add >> 8) & 0xFF;
+	dest[5] = add & 0xFF;
+}
+
 static void __init dir825b1_setup(void)
 {
-        u8 mac[6], i;
+	u8 mac_base[ETH_ALEN], wmac1[ETH_ALEN], wmac2[ETH_ALEN];
 
-	memcpy(mac, (u8*)KSEG1ADDR(DIR825B1_MAC_LOCATION_1), 6);
-	for(i = 5; i >= 3; i--)
-		if(++mac[i] != 0x00) break;
+	dir825b1_read_ascii_mac(mac_base, DIR825B1_MAC_LOCATION_0, 2);
+	dir825b1_read_ascii_mac(wmac1,    DIR825B1_MAC_LOCATION_0, 0);
+	dir825b1_read_ascii_mac(wmac2,    DIR825B1_MAC_LOCATION_1, 0);
 
-	ar71xx_set_mac_base(mac);
+	ar71xx_set_mac_base(mac_base);
 
 	ar71xx_add_device_mdio(0x0);
 
@@ -191,10 +214,8 @@ static void __init dir825b1_setup(void)
 	ap94_pci_setup_wmac_led_pin(0, 5);
 	ap94_pci_setup_wmac_led_pin(1, 5);
 
-	ap94_pci_init((u8 *) KSEG1ADDR(DIR825B1_CAL_LOCATION_0),
-		      (u8 *) KSEG1ADDR(DIR825B1_MAC_LOCATION_0),
-		      (u8 *) KSEG1ADDR(DIR825B1_CAL_LOCATION_1),
-		      (u8 *) KSEG1ADDR(DIR825B1_MAC_LOCATION_1));
+	ap94_pci_init((u8 *) KSEG1ADDR(DIR825B1_CAL_LOCATION_0), wmac1,
+	              (u8 *) KSEG1ADDR(DIR825B1_CAL_LOCATION_1), wmac2);
 }
 
 MIPS_MACHINE(AR71XX_MACH_DIR_825_B1, "DIR-825-B1", "D-Link DIR-825 rev. B1",
