@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=unbound
 PKG_VERSION:=1.4.5
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.unbound.net/downloads
@@ -27,10 +27,11 @@ define Package/unbound
   SUBMENU:=IP Addresses and Names
   TITLE:=A validating, recursive, and caching DNS resolver
   URL:=http://www.unbound.net/
-  DEPENDS:=+libopenssl
+  DEPENDS:=+libldns +libopenssl
 endef
 
 CONFIGURE_ARGS += \
+	--with-ldns="$(STAGING_DIR)/usr" \
 	--with-ssl="$(STAGING_DIR)/usr" \
 	--without-pthreads \
 
