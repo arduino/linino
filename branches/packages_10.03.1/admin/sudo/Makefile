@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sudo
-PKG_VERSION:=1.7.4p4
+PKG_VERSION:=1.7.8p1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sudo.ws/sudo/dist
-PKG_MD5SUM:=55d9906535d70a1de347cd3d3550ee87
+PKG_MD5SUM:=5552b9aabc43e34bbc8dc557c098a933
 
 PKG_INSTALL:=1
 
@@ -60,6 +60,17 @@ define Package/sudo/install
 	$(INSTALL_DIR) $(1)/etc/sudoers.d
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/sudo_noexec.so $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/sudo.init $(1)/etc/init.d/sudo
+endef
+
+define Package/sudo/postinst
+#!/bin/sh
+
+[ -n "$$IPKG_INSTROOT" ] || {
+	/etc/init.d/sudo enable
+	/etc/init.d/sudo start
+}
 endef
 
 $(eval $(call BuildPackage,sudo))
