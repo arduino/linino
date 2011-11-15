@@ -11,21 +11,24 @@
 #
 
 include $(TOPDIR)/rules.mk
+
 PKG_NAME:=nmap
 PKG_VERSION:=5.51
-PKG_RELEASE:=2
+PKG_RELEASE:=3
+
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://nmap.org/dist/
 PKG_MD5SUM:=0b80d2cb92ace5ebba8095a4c2850275
+
 PKG_INSTALL:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
-NMAP_DEPENDS:=+libpcap +libstdcpp
+NMAP_DEPENDS:=+libnl +libpcap +libstdcpp
 NCAT_DEPENDS:=+libpcap
-NPING_DEPENDS:=+libpcap +libpthread
+NPING_DEPENDS:=+libnl +libpcap +libpthread
 NDIFF_DEPENDS:=+python
 
 define Package/nmap/default
