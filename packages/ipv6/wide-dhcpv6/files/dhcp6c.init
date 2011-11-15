@@ -33,7 +33,7 @@ dhcp6c_write_duid() {
 			local oIFS="$IFS"; IFS=":"; set -- $mac; IFS="$oIFS"
 
 			# low endian
-			if [ "$(printf \\1 | hexdump -n1 -ve '8/2 "%04x"')" = "0001" ]; then
+			if [ "$(printf \\1 | hexdump -n1 -ve '8/2 "" "%04x" ""')" = "0001" ]; then
 				printf \\x0a\\x00
 
 			# big endian
