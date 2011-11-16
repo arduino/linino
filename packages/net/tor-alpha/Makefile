@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor-alpha
 PKG_VERSION:=0.2.3.5-alpha
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=tor-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://www.torproject.org/dist \

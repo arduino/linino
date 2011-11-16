@@ -2,15 +2,16 @@
 # Copyright (C) 2006-2011 OpenWrt.org
 
 START=50
+STOP=50
 
-SERVICE_PID_FILE=/var/run/tor/tor.pid
+SERVICE_USE_PID=1
 
 start() {
-	user_exists tor 52 || user_add tor 52
+	user_exists tor 52 || user_add tor 52 52 /var/lib/tor
 	group_exists tor 52 || group_add tor 52
-	[ -d /var/run/tor ] || {
-		mkdir -m 0755 -p /var/run/tor
-		chown tor:tor /var/run/tor
+	[ -f /var/run/tor.pid ] || {
+		touch /var/run/tor.pid
+		chown tor:tor /var/run/tor.pid
 	}
 	[ -d /var/lib/tor ] || {
 		mkdir -m 0755 -p /var/lib/tor
@@ -21,7 +22,7 @@ start() {
 		mkdir -m 0755 -p /var/log/tor
 		chown tor:tor /var/log/tor
 	}
-	service_start /usr/sbin/tor
+	service_start /usr/sbin/tor --PidFile /var/run/tor.pid
 }
 
 stop() {
