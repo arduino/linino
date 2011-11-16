@@ -1,5 +1,9 @@
 #!/bin/sh /etc/rc.common
+# Copyright (C) 2006-2011 OpenWrt.org
+
 START=95
+
+SERVICE_USE_PID=1
 
 upnpd_get_port_range() {
 	local _var="$1"; shift
@@ -166,9 +170,11 @@ start() {
 			miniupnpd_add_rules "$zone" "${extiface:-wan}" "$ifname"
 
 		if [ "$logging" = "1" ]; then
-			start-stop-daemon -b -S -x miniupnpd -- $args -d
+			SERVICE_DAEMONIZE=1 \
+			service_start /usr/sbin/miniupnpd $args -d
 		else
-			start-stop-daemon -S -x miniupnpd -- $args
+			SERVICE_DAEMONIZE= \
+			service_start /usr/sbin/miniupnpd $args
 		fi
 	else
 		logger -t "upnp daemon" "external interface not found, not starting"
@@ -176,8 +182,7 @@ start() {
 }
 
 stop() {
-	start-stop-daemon -K -q -x miniupnpd -p /var/run/miniupnpd.pid
-	rm -f /var/run/miniupnpd.pid
+	service_stop /usr/sbin/miniupnpd
 
 	type miniupnpd_remove_rules >/dev/null 2>/dev/null || \
 		ACTION=- . /etc/hotplug.d/firewall/50-miniupnpd
