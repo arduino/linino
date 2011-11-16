@@ -2,8 +2,8 @@
 # Copyright (C) 2008 OpenWrt.org
 START=50
 
-BIN=/usr/bin/ushare
-SSD=start-stop-daemon
+SERVICE_DAEMONIZE=1
+SERVICE_WRITE_PID=1
 
 append_bool() {
 	local section="$1"
@@ -23,36 +23,46 @@ append_string() {
 	[ -n "$_val" ] && append args "$3 $_val"
 }
 
-start_service() {
-	local section="$1"
-	args=""
-	config_get username		"$section" "username"
-	config_get servername		"$section" "servername"
-	config_get interface		"$section" "interface"
-	config_get options		"$section" "options"
-	config_get content_directories	"$section" "content_directories"
-	append_bool                     "$section" "disable_webif" "-w"
-	append_bool                     "$section" "disable_telnet" "-t"
-	config_get_bool "enabled"	"$section" "enabled" '1'
-
-	[ "$enabled" -gt 0 ] && $SSD -x $BIN -c ${username:-nobody} -S -b -p /var/run/ushare.pid -m -- -n "${servername:-OpenWrt}" -i ${interface:-br-lan} -c ${content_directories:-/tmp} $args ${options} &
+section_enabled() {
+	config_get_bool enabled "$1" 'enabled' 0
+	[ $enabled -gt 0 ]
 }
 
-stop_service() {
+start_instance() {
 	local section="$1"
-	args=""
-	config_get username		"$section" "username"
 
-	$SSD -K -x $BIN -c ${username:-nobody} -s 2 -p /var/run/ushare.pid
+	section_enabled "$section" || return 1
+
+	args=""
+	config_get uid "$section" 'user'
+	config_get servername "$section" 'servername'
+	config_get interface "$section" 'interface'
+	config_get options "$section" 'options'
+	config_get content_directories "$section" 'content_directories'
+	append_bool "$section" 'disable_webif' '-w'
+	append_bool "$section" 'disable_telnet' '-t'
+
+	SERVICE_UID="$uid" \
+	service_start /usr/bin/ushare -n "${servername:-OpenWrt}" -i "${interface:-br-lan}" -c "${content_directories:-/tmp}" $args ${options}
+}
+
+stop_instance() {
+	local section="$1"
+
+	section_enabled "$section" || return 1
+
+	config_get uid "$section" "user"
+
+	SERVICE_UID="$uid" \
+	service_stop /usr/bin/ushare
 }
 
 start() {
-	config_load ushare
-	config_foreach start_service ushare
+	config_load 'ushare'
+	config_foreach start_instance 'ushare'
 }
 
 stop() {
-	config_load ushare
-	config_foreach stop_service ushare
+	config_load 'ushare'
+	config_foreach stop_instance 'ushare'
 }
-
