@@ -107,7 +107,7 @@ start_instance() {
 		down push up
 
 
-	SERVICE_PID_FILE="/var/run/openvpn-$s.pid" \
+	SERVICE_PID_FILE="/var/run/openvpn-$s.pid"
 	service_start /usr/sbin/openvpn --syslog "openvpn($s)" --writepid "$SERVICE_PID_FILE" $ARGS
 }
 
@@ -116,7 +116,7 @@ stop_instance() {
 
 	section_enabled "$s" || return 1
 
-	SERVICE_PID_FILE="/var/run/openvpn-$s.pid" \
+	SERVICE_PID_FILE="/var/run/openvpn-$s.pid"
 	service_stop /usr/sbin/openvpn
 }
 
@@ -125,7 +125,7 @@ reload_instance() {
 
 	section_enabled "$s" || return 1
 
-	SERVICE_PID_FILE="/var/run/openvpn-$s.pid" \
+	SERVICE_PID_FILE="/var/run/openvpn-$s.pid"
 	service_reload /usr/sbin/openvpn
 }
 
