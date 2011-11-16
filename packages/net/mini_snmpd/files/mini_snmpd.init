@@ -1,9 +1,22 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 
-NAME=mini_snmpd
-PROG=/usr/bin/$NAME
 START=50
+
+SERVICE_DAEMONIZE=1
+SERVICE_WRITE_PID=1
+
+append_disk() {
+	local disk="$1"
+	append disks "$disk" ','
+}
+
+append_interface() {
+	local name="$1"
+	local interface
+	config_get interface "$name" 'ifname'
+	append interfaces "$interface" ','
+}
 
 append_string() {
 	local section="$1"
@@ -14,28 +27,39 @@ append_string() {
 	[ -n "$_val" ] && append args "$3 $_val"
 }
 
-mini_snmpd_config() {
+start_instance() {
 	local cfg="$1"
-	args=""
+	local args=""
+	local disks=""
+	local interfaces=""
+	local ipv6
 
 	append_string "$cfg" community "-c"
 	append_string "$cfg" location "-L"
 	append_string "$cfg" contact "-C"
-	append_string "$cfg" disks "-d"
-	append_string "$cfg" interfaces "-i"
 
 	config_get_bool ipv6 "$cfg" "ipv6" '0'
 	[ "$ipv6" -gt 0 ] && append args "-6"
 
 	config_get_bool enabled "$cfg" "enabled" '1'
-	[ "$enabled" -gt 0 ] && $PROG $args &
+	[ "$enabled" -gt 0 ] || return 1
+
+	config_list_foreach "$section" 'disks' append_disk
+	args="${args}${disks:+ -d $disks}"
+
+	config_list_foreach "$section" 'interfaces' append_interface
+	args="${args}${interfaces:+ -i $interfaces}"
+
+	service_start /usr/bin/mini_snmpd $args
 }
 
 start() {
-	config_load mini_snmpd
-	config_foreach mini_snmpd_config mini_snmpd
+	include /lib/network
+	scan_interfaces
+	config_load 'mini_snmpd'
+	config_foreach start_instance 'mini_snmpd'
 }
 
 stop() {
-	killall mini_snmpd
+	service_stop /usr/bin/mini_snmpd
 }

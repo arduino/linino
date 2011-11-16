@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mini_snmpd
 PKG_VERSION:=1.2b
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://members.aon.at/linuxfreak/linux/
@@ -52,6 +52,10 @@ define Package/mini-snmpd/install
 	$(INSTALL_CONF) ./files/mini_snmpd.config $(1)/etc/config/mini_snmpd
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/mini_snmpd.init $(1)/etc/init.d/mini_snmpd
+endef
+
+define Package/mini-snmpd/conffiles
+/etc/config/mini_snmpd
 endef
 
 $(eval $(call BuildPackage,mini-snmpd))
