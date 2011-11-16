@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2009 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=motion
 PKG_VERSION:=20110826-051001
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.lavrsen.dk/sources/motion-daily \
@@ -33,10 +33,13 @@ define Package/motion/conffiles
 endef
 
 CONFIGURE_ARGS+= \
+	--without-optimizecpu \
 	--without-ffmpeg \
 	--without-jpeg-mmx \
+	--without-sdl \
 	--without-mysql \
 	--without-pgsql \
+	--without-sqlite3 \
 
 define Package/motion/install
 	$(INSTALL_DIR) $(1)/etc
