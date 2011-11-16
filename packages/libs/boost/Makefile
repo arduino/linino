@@ -10,15 +10,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=boost
-PKG_VERSION:=1_38_0
+PKG_VERSION:=1_46_0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/boost
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
-PKG_MD5SUM:=a4fc691c4e7c49b3b9b54a667d8f5529
+HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)_$(PKG_VERSION)
+PKG_MD5SUM:=820393d5746553c192db7b81ba0e53fe
 
-PKG_BUILD_DEPENDS:=boost-jam/host
+PKG_BUILD_DEPENDS:=boost/host
 PKG_BUILD_PARALLEL:=1
 
 PKG_CONFIG_DEPENDS := \
@@ -38,6 +39,7 @@ PKG_CONFIG_DEPENDS := \
 	CONFIG_PACKAGE_boost-wave \
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/host-build.mk
 
 define Package/boost/Default
   SECTION:=libs
@@ -59,12 +61,6 @@ endef
 define Package/boost-filesystem
   $(call Package/boost/Default)
   TITLE+= (filesystem)
-endef
-
-define Package/boost-function_types
-  $(call Package/boost/Default)
-  TITLE+= (function_types)
-  BUILD_ONLY:=1
 endef
 
 define Package/boost-graph
@@ -143,7 +139,14 @@ endef
 define Build/Configure
 endef
 
+define Host/Compile
+	# bjam does not provide a configure-script nor a Makefile
+	( cd $(HOST_BUILD_DIR)/tools/build/v2/engine/src ; ./build.sh gcc )
+endef
+
 CONFIGURE_PREFIX:=$(PKG_INSTALL_DIR)
+TARGET_LDFLAGS += -pthreads -lrt
+
 define Build/Compile
 	( cd $(PKG_BUILD_DIR) ; \
 		echo "using gcc : : $(GNU_TARGET_NAME)-gcc : <cflags>$(TARGET_CFLAGS) <cxxflags>$(TARGET_CXXFLAGS) <linkflags>$(TARGET_LDFLAGS) ;" > tools/build/v2/site-config.jam ; \
@@ -159,7 +162,6 @@ define Build/Compile
 			$(CONFIGURE_ARGS) \
 			$(if $(CONFIG_PACKAGE_boost-date_time),--with-date_time) \
 			$(if $(CONFIG_PACKAGE_boost-filesystem),--with-filesystem) \
-			$(if $(CONFIG_PACKAGE_boost-function_types),--with-function_types) \
 			$(if $(CONFIG_PACKAGE_boost-graph),--with-graph) \
 			$(if $(CONFIG_PACKAGE_boost-iostreams),--with-iostreams) \
 			$(if $(CONFIG_PACKAGE_boost-math),--with-math) \
@@ -189,6 +191,11 @@ define Build/InstallDev
 		$(CP) $(PKG_INSTALL_DIR)/lib/*.a $(1)/usr/lib/; \
 		$(CP) $(PKG_INSTALL_DIR)/lib/*.so* $(1)/usr/lib/; \
 	fi
+endef
+
+define Host/Install
+	$(INSTALL_DIR) $(STAGING_DIR_HOST)/bin
+	$(CP) $(HOST_BUILD_DIR)/tools/build/v2/engine/src/bin.*/bjam $(STAGING_DIR_HOST)/bin/
 endef
 
 define Package/boost/Default/install
@@ -258,10 +265,10 @@ define Package/boost-wave/install
   $(call Package/boost/Default/install,$(1),wave)
 endef
 
+$(eval $(call HostBuild))
 $(eval $(call BuildPackage,boost))
 $(eval $(call BuildPackage,boost-date_time))
 $(eval $(call BuildPackage,boost-filesystem))
-$(eval $(call BuildPackage,boost-function_types))
 $(eval $(call BuildPackage,boost-graph))
 $(eval $(call BuildPackage,boost-iostreams))
 $(eval $(call BuildPackage,boost-math))
