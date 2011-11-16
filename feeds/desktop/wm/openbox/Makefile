@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openbox
-PKG_VERSION:=3.4.7.2
+OB_VERSION:=3.5
+OB_PATCH:=0
+PKG_VERSION:=$(OB_VERSION).$(OB_PATCH)
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://icculus.org/openbox/releases
-PKG_MD5SUM:=9e7589e90519bc6ac2f4656ea6869439
+PKG_MD5SUM:=00441b53cf14c03566c8e82643544ff9
+
+PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -27,8 +32,14 @@ define Package/openbox
   CATEGORY:=Xorg
   SUBMENU:=window manager
   DEPENDS:=+glib2 +libxml2 +fontconfig +libXft +libXrandr +libXt \
-	+libXcursor +pango +xextproto +xf86vidmodeproto +dejavu-fonts-ttf \
-	+freedesktop-compliant
+	+libXcursor +pango +xextproto +xf86vidmodeproto +freedesktop-compliant \
+	+imlib2 +libXcursor \
+	+dejavu-fonts-ttf \
+	+dejavu-fonts-ttf-DejaVuSans \
+	+dejavu-fonts-ttf-DejaVuSans-Bold \
+	+dejavu-fonts-ttf-DejaVuSerif \
+	+dejavu-fonts-ttf-DejaVuSerif-Bold \
+	+dejavu-fonts-ttf-DejaVuSerif-Italic
   URL:=http://icculus.org/openbox/
 endef
 
@@ -37,9 +48,8 @@ define Package/openbox/description
   with extensive standards support.
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
-endef
+CONFIGURE_ARGS+= \
+	--disable-startup-notification
 
 define Package/openbox/install
 	$(INSTALL_DIR) $(1)/etc/xdg/openbox
@@ -62,11 +72,9 @@ define Package/openbox/install
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.so.* \
 		$(1)/usr/lib/
-
-	$(INSTALL_DIR) $(1)/usr/lib/openbox
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/openbox/* \
-		$(1)/usr/lib/openbox/
+		$(PKG_INSTALL_DIR)/usr/lib/openbox-* \
+		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/share/pixmaps
 	$(INSTALL_DATA) \
@@ -80,10 +88,10 @@ define Package/openbox/install
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/openbox/3.4/openbox
-	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/include/openbox/3.4/openbox/* \
-		$(1)/usr/include/openbox/3.4/openbox/
+	$(INSTALL_DIR) $(1)/usr/include/openbox/$(OB_VERSION)/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/openbox/$(OB_VERSION)/* \
+		$(1)/usr/include/openbox/$(OB_VERSION)/
 
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_DATA) \
@@ -95,11 +103,9 @@ define Build/InstallDev
 	$(INSTALL_DATA) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.la \
 		$(1)/usr/lib/
-
-	$(INSTALL_DIR) $(1)/usr/lib/openbox
 	$(INSTALL_DATA) \
-		$(PKG_INSTALL_DIR)/usr/lib/openbox/* \
-		$(1)/usr/lib/openbox/
+		$(PKG_INSTALL_DIR)/usr/lib/openbox-* \
+		$(1)/usr/lib/
 
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig/
 	$(INSTALL_DATA) \
