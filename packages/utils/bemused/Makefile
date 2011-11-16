@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bemused-mpd
 PKG_VERSION:=r062
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.origo.ethz.ch/bemused-lnx-mpdhack/526
@@ -57,6 +57,11 @@ define Package/bemusedlinuxserver/install
 	$(INSTALL_CONF) ./files/bemused-bookmarks $(1)/etc/bemused-bookmarks
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/bemused.init $(1)/etc/init.d/bemused
+endef
+
+define Package/bemusedlinuxserver/conffiles
+/etc/bemused.conf
+/etc/bemused-bookmarks
 endef
 
 $(eval $(call BuildPackage,bemusedlinuxserver))

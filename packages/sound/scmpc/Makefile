@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=scmpc
 PKG_VERSION:=0.2.2
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.berlios.de/scmpc
@@ -49,7 +49,11 @@ define Package/scmpc/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/scmpc.init $(1)/etc/init.d/scmpc
 	$(INSTALL_DIR) $(1)/etc
-	$(CP) $(PKG_BUILD_DIR)/examples/scmpc.conf $(1)/etc
+	$(CP) $(PKG_BUILD_DIR)/examples/scmpc.conf $(1)/etc/
+endef
+
+define Package/scmpc/conffiles
+/etc/scmpc.conf
 endef
 
 $(eval $(call BuildPackage,scmpc))

@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lldpd
 PKG_VERSION:=0.3
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.luffy.cx/lldpd/
@@ -53,6 +53,10 @@ define Package/lldpd/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/lldpctl $(1)/usr/sbin/
 	$(INSTALL_BIN) ./files/lldpd.init $(1)/etc/init.d/lldpd
 	$(INSTALL_DATA) ./files/lldpd.config $(1)/etc/config/lldpd
+endef
+
+define Package/lldpd/conffiles
+/etc/config/lldpd
 endef
 
 $(eval $(call BuildPackage,lldpd))

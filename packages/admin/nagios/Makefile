@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008-2009 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nagios
 PKG_VERSION:=2.10
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/nagios
@@ -56,6 +56,14 @@ define Package/nagios/install
 	$(INSTALL_BIN)	$(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
 	$(INSTALL_DIR)	$(1)/usr/share
 	$(CP)	$(PKG_INSTALL_DIR)/usr/share/* $(1)/usr/share/
+endef
+
+define Package/nagios/conffiles
+/etc/nagios/cgi.cfg
+/etc/nagios/commands.cfg
+/etc/nagios/localhost.cfg
+/etc/nagios/nagios.cfg
+/etc/nagios/resource.cfg
 endef
 
 $(eval $(call BuildPackage,nagios))

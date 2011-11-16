@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=stund
 PKG_VERSION:=0.96
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION)_Aug13.tgz
 PKG_SOURCE_URL:=@SF/stun
@@ -71,6 +71,10 @@ define Package/stund/install
 	$(INSTALL_BIN) ./files/stund.init $(1)/etc/init.d/stund
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/stund.config $(1)/etc/config/stund
+endef
+
+define Package/stund/conffiles
+/etc/config/stund
 endef
 
 define Package/stun-client/install

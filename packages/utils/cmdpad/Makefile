@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cmdpad
 PKG_VERSION:=0.0.3
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=@SF/cmdpad
@@ -45,9 +45,13 @@ define Package/cmdpad/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DIR) $(1)/etc/init.d 
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/cmdpad $(1)/usr/sbin
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/src/cmdpad.conf $(1)/etc
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/cmdpad $(1)/usr/sbin/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/src/cmdpad.conf $(1)/etc/
 	$(INSTALL_BIN) ./files/cmdpad.init $(1)/etc/init.d/cmdpad
+endef
+
+define Package/cmdpad/conffiles
+/etc/cmdpad.conf
 endef
 
 $(eval $(call BuildPackage,cmdpad))

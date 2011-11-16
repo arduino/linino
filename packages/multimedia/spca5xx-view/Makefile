@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=spca5xx-view
 PKG_VERSION:=1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=spca5xx-view.tar.bz2
 PKG_SOURCE_URL:=http://www.acmesystems.it/download/owrt
@@ -45,6 +45,10 @@ define Package/spca5xx-view/install
 	$(INSTALL_DATA) ./files/servfox.config $(1)/etc/config/servfox
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/servfox.init $(1)/etc/init.d/servfox
+endef
+
+define Package/spca5xx-view/conffiles
+/etc/config/servfox
 endef
 
 $(eval $(call BuildPackage,spca5xx-view))

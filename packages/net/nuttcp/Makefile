@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nuttcp
 PKG_VERSION:=6.1.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.lcp.nrl.navy.mil/pub/nuttcp
@@ -68,6 +68,12 @@ define Package/nuttcp-xinetd/install
 	$(INSTALL_DIR) $(1)/etc/xinetd.d
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/xinetd.d/nuttcp* $(1)/etc/xinetd.d/
 	$(SED) 's,/local,,' $(1)/etc/xinetd.d/nuttcp*
+endef
+
+define Package/nuttcp-xinetd/conffiles
+/etc/xinetd.d/nuttcp
+/etc/xinetd.d/nuttcp4
+/etc/xinetd.d/nuttcp6
 endef
 
 $(eval $(call BuildPackage,nuttcp))

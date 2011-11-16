@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kissdx
 PKG_VERSION:=0.14.0.b1a
-PKG_RELEASE:=8
+PKG_RELEASE:=9
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).zip
 PKG_SOURCE_URL:=http://kissdx.vidartysse.net
@@ -50,6 +50,10 @@ define Package/kissdx/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/kissdx.config $(1)/etc/config/kissdx
 	$(INSTALL_BIN) ./files/kissdx.init $(1)/etc/init.d/kissdx
+endef
+
+define Package/kissdx/conffiles
+/etc/config/kissdx
 endef
 
 $(eval $(call BuildPackage,kissdx))

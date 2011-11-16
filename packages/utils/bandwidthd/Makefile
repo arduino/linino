@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bandwidthd
 PKG_VERSION:=2.0.1
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=@SF/bandwidthd
@@ -51,6 +51,10 @@ define Package/bandwidthd/install
 	$(INSTALL_DIR) $(1)/www
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/htdocs/legend.gif $(1)/www/
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/htdocs/logo.gif $(1)/www/
+endef
+
+define Package/bandwidthd/conffiles
+/etc/config/bandwidthd
 endef
 
 $(eval $(call BuildPackage,bandwidthd))

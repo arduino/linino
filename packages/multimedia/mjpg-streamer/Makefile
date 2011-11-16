@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=mjpg-streamer
 PKG_REV:=148
 PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://mjpg-streamer.svn.sourceforge.net/svnroot/mjpg-streamer/mjpg-streamer/
@@ -46,6 +46,10 @@ define Package/mjpg-streamer/install
 	$(CP) $(foreach output_plugin,http file,$(PKG_BUILD_DIR)/output_$(output_plugin).so) $(1)/usr/lib
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/usb
 	$(INSTALL_DATA) ./files/mjpg-streamer.hotplug $(1)/etc/hotplug.d/usb/20-mjpg-streamer
+endef
+
+define Package/mjpg-streamer/conffiles
+/etc/config/mjpg-streamer
 endef
 
 $(eval $(call BuildPackage,mjpg-streamer))

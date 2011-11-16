@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lsm
 PKG_VERSION:=0.60
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://lsm.foobar.fi/download
@@ -51,6 +51,10 @@ define Package/lsm/install
 	$(INSTALL_DATA) ./files/lsm.conf $(1)/etc/lsm/lsm.conf
 	$(INSTALL_BIN) ./files/lsm_script $(1)/etc/lsm/script
 	$(INSTALL_BIN) ./files/lsm.init $(1)/etc/init.d/lsm
+endef
+
+define Package/lsm/conffiles
+/etc/lsm/lsm.conf
 endef
 
 $(eval $(call BuildPackage,lsm))

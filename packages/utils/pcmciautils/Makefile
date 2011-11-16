@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pcmciautils
 PKG_VERSION:=018
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@KERNEL/linux/utils/kernel/pcmcia
@@ -45,4 +45,9 @@ define Package/pcmciautils/install
 	$(CP) $(PKG_BUILD_DIR)/config/config.opts $(1)/etc/pcmcia/
 	$(CP) files/* $(1)/
 endef
+
+define Package/pcmciautils/conffiles
+/etc/pcmcia/config.opts
+endef
+
 $(eval $(call BuildPackage,pcmciautils))

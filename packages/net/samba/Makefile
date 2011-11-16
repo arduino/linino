@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,11 +9,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=samba
 PKG_VERSION:=2.0.10
-PKG_RELEASE:=6
-PKG_MD5SUM:=54870482fe036b7e69dd48c90661eec6
+PKG_RELEASE:=7
 
 PKG_SOURCE_URL:=ftp://ftp.samba.org/pub/samba/old-versions
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_MD5SUM:=54870482fe036b7e69dd48c90661eec6
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -187,6 +187,10 @@ define Package/samba2-common/install
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{852,ISO8859-2} $(1)/usr/share/samba/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/codepage.{866,1251} $(1)/usr/share/samba/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/samba/unicode_map.{866,ISO8859-5,KOI8-R,1251} $(1)/usr/share/samba/
+endef
+
+define Package/samba2-common/conffiles
+/etc/samba/smb.conf
 endef
 
 define Package/samba2-server/install

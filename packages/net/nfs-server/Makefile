@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nfs-server
 PKG_VERSION:=2.2beta47
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/n/nfs-user-server
 PKG_SOURCE:=nfs-user-server_$(PKG_VERSION).orig.tar.gz
@@ -44,6 +44,10 @@ define Package/nfs-server/install
 	$(INSTALL_BIN) ./files/nfsd.init $(1)/etc/init.d/nfsd
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/rpc.* $(1)/usr/sbin/
+endef
+
+define Package/nfs-server/conffiles
+/etc/exports
 endef
 
 $(eval $(call BuildPackage,nfs-server))

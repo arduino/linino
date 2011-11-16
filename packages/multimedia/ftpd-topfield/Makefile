@@ -1,9 +1,15 @@
+#
+# Copyright (C) 2008-2011 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ftpd-topfield
 PKG_VERSION:=0.7.4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/puppy
@@ -33,6 +39,10 @@ define Package/ftpd-topfield/install
 	$(INSTALL_BIN) ./files/ftpd-topfield.sh $(1)/etc/init.d/ftpd-topfield
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/ftpd-topfield.conf $(1)/etc/config/ftpd-topfield
+endef
+
+define Package/ftpd-topfield/conffiles
+/etc/config/ftpd-topfield
 endef
 
 $(eval $(call BuildPackage,ftpd-topfield))

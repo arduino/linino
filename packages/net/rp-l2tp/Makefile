@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rp-l2tp
 PKG_VERSION:=0.4
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/rp-l2tp
@@ -34,7 +34,7 @@ endef
 
 TARGET_CFLAGS := -I$(PKG_BUILD_DIR)/libevent $(TARGET_CFLAGS)
 
-define Package/rp-l2tpd/install	
+define Package/rp-l2tpd/install
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/l2tp.conf.example $(1)/etc/l2tp.conf
 	$(INSTALL_DIR) $(1)/usr/lib/l2tp
@@ -47,7 +47,11 @@ define Package/rp-l2tpd/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/l2tp-control $(1)/usr/sbin/
 endef
 
-#define Package/rp-l2tpd-mod-cmd/install	
+define Package/rp-l2tpd/conffiles
+/etc/l2tp.conf
+endef
+
+#define Package/rp-l2tpd-mod-cmd/install
 #	$(INSTALL_DIR) $(1)/usr/lib/l2tp
 #	$(CP) $(PKG_INSTALL_DIR)/usr/lib/l2tp/cmd.so $(1)/usr/lib/l2tp/
 #	$(INSTALL_DIR) $(1)/usr/sbin

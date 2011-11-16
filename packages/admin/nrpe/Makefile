@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nrpe
 PKG_VERSION:=2.12
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/nagios
@@ -45,6 +45,10 @@ define Package/nrpe/install
 	$(INSTALL_DATA) ./files/nrpe.cfg $(1)/etc/nrpe.cfg
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/nrpe $(1)/usr/sbin
 	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
+endef
+
+define Package/nrpe/conffiles
+/etc/nrpe.cfg
 endef
 
 $(eval $(call RequireCommand,openssl, \

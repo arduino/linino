@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=aprx
 PKG_REV:=421
 PKG_VERSION:=2.00_r$(PKG_REV)
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://repo.ham.fi/svn/aprx/trunk/
@@ -43,6 +43,10 @@ define Package/aprx/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aprx $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/aprx-stat $(1)/usr/sbin/
+endef
+
+define Package/aprx/conffiles
+/etc/aprx.conf
 endef
 
 $(eval $(call BuildPackage,aprx))

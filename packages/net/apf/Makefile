@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apf
 PKG_VERSION:=0.8.4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://gray-world.net/projects/af/
@@ -36,6 +36,11 @@ define Package/apf/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/doc/afclient_example.conf $(1)/etc/afclient.conf
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/doc/afserver_example.conf $(1)/etc/afserver.conf
+endef
+
+define Package/apf/conffiles
+/etc/afclient.conf
+/etc/afserver.conf
 endef
 
 $(eval $(call BuildPackage,apf))

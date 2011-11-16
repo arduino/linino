@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bash-completion
 PKG_VERSION:=20080705
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/b/bash-completion/
@@ -42,8 +42,12 @@ define Build/Compile
 endef
 
 define Package/bash-completion/install
-	$(INSTALL_DIR) $(1)/etc/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bash_completion $(1)/etc
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bash_completion $(1)/etc/
+endef
+
+define Package/bash-completion/conffiles
+/etc/bash_completion
 endef
 
 $(eval $(call BuildPackage,bash-completion))

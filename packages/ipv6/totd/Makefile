@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=totd
 PKG_VERSION:=1.5.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.dillema.net/software/totd
@@ -51,6 +51,10 @@ define Package/totd/install
 	$(INSTALL_CONF) ./files/totd.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d/
 	$(INSTALL_BIN) ./files/totd.init $(1)/etc/init.d/totd
+endef
+
+define Package/totd/conffiles
+/etc/totd.conf
 endef
 
 $(eval $(call BuildPackage,totd))

@@ -52,4 +52,8 @@ define Package/tinc/install
 	$(INSTALL_DATA) files/tinc.upgrade $(1)/lib/upgrade/keep.d/tinc
 endef
 
+define Package/tinc/conffiles
+/etc/config/tinc
+endef
+
 $(eval $(call BuildPackage,tinc))

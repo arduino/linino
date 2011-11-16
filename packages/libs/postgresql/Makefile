@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=postgresql
 PKG_VERSION:=9.0.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=\
@@ -197,6 +197,10 @@ define Package/pgsql-server/install
 	$(CP) -r \
 		$(PKG_INSTALL_DIR)/usr/lib/postgresql \
 		$(1)/usr/lib
+endef
+
+define Package/pgsql-server/conffiles
+/etc/config/postgresql
 endef
 
 define Package/pgsql-server/postinst

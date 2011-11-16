@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=crowdcontrol
 PKG_VERSION:=0.4b
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.openwrt.org/sources/
@@ -43,6 +43,15 @@ define Package/crowdcontrol/install
 	$(INSTALL_DIR) $(1)/etc/crowdcontrol
 	$(CP) $(PKG_BUILD_DIR)/crowdcontrol $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/*-{domains,expressions,urls} $(1)/etc/crowdcontrol/
+endef
+
+define Package/crowdcontrol/conffiles
+/etc/crowdcontrol/blocked-domains
+/etc/crowdcontrol/blocked-expressions
+/etc/crowdcontrol/blocked-urls
+/etc/crowdcontrol/permitted-domains
+/etc/crowdcontrol/permitted-expressions
+/etc/crowdcontrol/permitted-urls
 endef
 
 $(eval $(call BuildPackage,crowdcontrol))

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nullmailer
 PKG_VERSION:=1.05
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://untroubled.org/nullmailer/
@@ -45,6 +45,10 @@ define Package/nullmailer/install
 	$(INSTALL_DIR) $(1)/usr/lib/nullmailer
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/protocols/qmqp $(1)/usr/lib/nullmailer/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/protocols/smtp $(1)/usr/lib/nullmailer/
+endef
+
+define Package/nullmailer/conffiles
+/etc/nullmailer/remotes
 endef
 
 define Package/nullmailer/postinst

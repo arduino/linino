@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=smartmontools
 PKG_VERSION:=5.40
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/smartmontools
@@ -82,6 +82,10 @@ define Package/smartd/install
 	$(INSTALL_DATA) ./files/smartd.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/smartd.init $(1)/etc/init.d/smartd
+endef
+
+define Package/smartd/conffiles
+/etc/smartd.conf
 endef
 
 $(eval $(call BuildPackage,smartmontools))

@@ -1,4 +1,5 @@
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,11 +9,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=uob-nomad
 PKG_VERSION:=0.11
-PKG_RELEASE:=1
-PKG_MD5SUM:=9c7445cefaf8d6160017aef606f2e558
+PKG_RELEASE:=2
 
 PKG_SOURCE_URL:=http://www.comnets.uni-bremen.de/~mab/openwrt/source/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_MD5SUM:=9c7445cefaf8d6160017aef606f2e558
 
 PKG_BUILD_PARALLEL:=0
 
@@ -50,6 +51,10 @@ define Package/uob-nomad/install
 	$(CP) $(PKG_BUILD_DIR)/Agent/mipagent $(1)/usr/bin/
 	$(CP) $(PKG_BUILD_DIR)/Client/mipmn $(1)/usr/bin
 	$(CP) $(PKG_BUILD_DIR)/conf/mip{agent,mn,mn-filters}.conf $(1)/etc/
+endef
+
+define Package/uob-nomad/conffiles
+/etc/mip{agent,mn,mn-filters}.conf
 endef
 
 $(eval $(call BuildPackage,uob-nomad))

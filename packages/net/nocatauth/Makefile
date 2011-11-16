@@ -1,16 +1,15 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nocatauth
 PKG_VERSION:=nightly
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=NoCatAuth-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://nocat.net/downloads/NoCatAuth/
@@ -60,6 +59,10 @@ define Package/nocatauth/install
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/nocat.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/nocatauth-gateway $(1)/etc/init.d/nocatauth-gateway
+endef
+
+define Package/nocatauth/conffiles
+/etc/nocat.conf
 endef
 
 $(eval $(call BuildPackage,nocatauth))

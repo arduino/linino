@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=muninlite
 PKG_VERSION:=1.0.4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
@@ -42,6 +42,10 @@ define Package/muninlite/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/munin-node $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/xinetd.d
 	$(INSTALL_DATA) ./files/etc/xinetd.d/munin $(1)/etc/xinetd.d/
+endef
+
+define Package/muninlite/conffiles
+/etc/xinetd.d/munin
 endef
 
 define Build/Configure

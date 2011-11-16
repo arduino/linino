@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mDNSResponder
 PKG_VERSION:=214.3.2
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=mDNSResponder-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://opensource.apple.com/tarballs/mDNSResponder/
@@ -140,6 +140,10 @@ define Package/mdns-utils/install
 	$(INSTALL_DATA) ./files/mDNSResponder.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/mDNSResponder.init $(1)/etc/init.d/mDNSResponder
+endef
+
+define Package/mdns-utils/conffiles
+/etc/mDNSResponder.conf
 endef
 
 define Package/mdnsd/install

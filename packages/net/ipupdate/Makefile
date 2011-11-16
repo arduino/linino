@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ipupdate
 PKG_VERSION:=1.1.1
-PKG_RELEASE:=0
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/ipupdate
@@ -61,6 +61,10 @@ define Package/ipupdate/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ifip $(1)/etc/ipupdate/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/whatismyip $(1)/etc/ipupdate/
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/ipupdate.conf $(1)/etc/
+endef
+
+define Package/ipupdate/conffiles
+/etc/ipupdate.conf
 endef
 
 $(eval $(call BuildPackage,ipupdate))

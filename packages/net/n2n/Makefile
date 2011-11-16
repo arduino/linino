@@ -1,9 +1,9 @@
 #
-## Copyright (C) 2007-2011 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
-## This is free software, licensed under the GNU General Public License v2.
+# This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
-
+#
 
 include $(TOPDIR)/rules.mk
 
@@ -13,7 +13,7 @@ PKG_REV:=3875
 
 PKG_NAME:=n2n
 PKG_VERSION:=$(PKG_REV)
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
@@ -46,6 +46,10 @@ define Package/n2n/install
 	$(INSTALL_DATA) ./files/n2n.config $(1)/etc/config/n2n
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/n2n.init $(1)/etc/init.d/n2n
+endef
+
+define Package/n2n/conffiles
+/etc/config/n2n
 endef
 
 $(eval $(call BuildPackage,n2n))
