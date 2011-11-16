@@ -1,11 +1,11 @@
 #!/bin/sh /etc/rc.common
+# Copyright (C) 2010-2011 OpenWrt.org
 
 START=99
-BIN=/usr/bin/transmission-daemon
-SSD=start-stop-daemon
 
 LIST_SEP="
 "
+
 append_params() {
 	local p; local v; local s="$1"; shift
 	for p in $*; do
@@ -13,7 +13,7 @@ append_params() {
 		IFS="$LIST_SEP"
 		for v in $v; do
 			[ -n "$v" ] && (
-				echo "\""$p"\": "$v"," | sed -e 's|_|-|g' >> $config_dir/settings.json
+				echo "\""$p"\": "$v"," | sed -e 's|_|-|g' >> $config_file
 			)
 		done
 		unset IFS
@@ -27,29 +27,38 @@ append_params_quotes() {
 		IFS="$LIST_SEP"
 		for v in $v; do
 			[ -n "$v" ] && (
-				echo -n "\""$p | sed -e 's|/|\\/|g;s|_|-|g' >> $config_dir/settings.json; \
-				echo "\": \""$v"\"," >> $config_dir/settings.json
+				echo -n "\""$p | sed -e 's|/|\\/|g;s|_|-|g' >> $config_file; \
+				echo "\": \""$v"\"," >> $config_file
 			)
 		done
 		unset IFS
 	done
 }
 
-start_service() {
+section_enabled() {
+	config_get_bool enabled "$1" 'enabled' 0
+	[ $enabled -gt 0 ]
+}
+
+start_instance() {
 	local s="$1"
-	local enabled=0
-	local run_as_usr='root'
+	local user
 	local open_file_limit=0
 	local ulimit_files=$(ulimit -n)
 
-	# disabled?
-	config_get_bool enabled "$s" enabled 0
-	[ "$enabled" = 0 ] && return 0
-	config_get config_dir "$s" config_dir '/tmp/transmission'
-	mkdir -p "$config_dir"
-	config_get run_as_usr "$s" run_daemon_as_user 'root'
+	section_enabled "$section" || return 1
 
-	echo "{" > $config_dir/settings.json
+	config_get config_dir "$s" 'config_dir' '/var/etc/transmission'
+	config_get user "$s" 'user'
+
+	config_file="$config_dir/settings.json"
+	[ -d $config_dir ] || {
+		mkdir -m 0755 -p "$config_dir"
+		touch $config_file
+		[ -z "$user" ] || chown -R $user $config_dir
+	}
+
+	echo "{" > $config_file
 
 	append_params "$s" \
 		alt_speed_down alt_speed_enabled alt_speed_time_begin alt_speed_time_day \
@@ -74,30 +83,38 @@ start_service() {
 		peer_congestion_algorithm rpc_bind_address rpc_password rpc_url \
 		rpc_username rpc_whitelist script_torrent_done_filename watch_dir
 
-	echo "\""invalid-key"\": false" >> $config_dir/settings.json
-	echo "}" >> $config_dir/settings.json
+	echo "\""invalid-key"\": false" >> $config_file
+	echo "}" >> $config_file
 
-	chown -R $run_as_usr $config_dir
-
-	config_get open_file_limit "$s" open_file_limit 32
+	config_get open_file_limit "$s" 'open_file_limit' 32
 	open_limit_files=$(($open_file_limit + 8))
 
 	if [ ${open_file_limit} -gt ${ulimit_files} ]; then
 		ulimit -n $open_limit_files
 	fi
 
-	eval "$SSD -c $run_as_usr -q -b -x $BIN -S -- -g $config_dir"
+	SERVICE_UID="$user" \
+	service_start /usr/bin/transmission-daemon -g $config_dir
+}
+
+stop_instance() {
+	local s="$1"
+	local user
+
+	section_enabled "$section" || return 1
+
+	config_get user "$s" 'user'
+
+	SERVICE_UID="$user" \
+	service_stop /usr/bin/transmission-daemon
 }
 
 start() {
-	config_load transmission
-	config_foreach start_service transmission
+	config_load 'transmission'
+	config_foreach start_instance 'transmission'
 }
 
 stop() {
-	service_kill $(basename $BIN)
-}
-
-restart() {
-	stop; sleep 5; start
+	config_load 'transmission'
+	config_foreach stop_instance 'transmission'
 }
