@@ -1,13 +1,15 @@
 #!/bin/sh /etc/rc.common
-# Tinc init script
+# Copyright (C) 2011 OpenWrt.org
 # Copyright (C) 2011 Linus Lüssing
 #  Based on Jo-Philipp Wich's OpenVPN init script
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 
 START=42
+
+SERVICE_USE_PID=1
+
 BIN=/usr/sbin/tincd
-SSD=start-stop-daemon
 EXTRA_COMMANDS="up down"
 
 LIST_SEP="
@@ -64,31 +66,34 @@ append_conf_params() {
 	done
 }
 
+section_enabled() {
+	config_get_bool enabled "$1" 'enabled' 0
+	[ $enabled -gt 0 ]
+}
+
 prepare_host() {
-	local s="$1"; local n
-	local disabled=0
+	local s="$1"
+	local n
 
 	# net disabled?
 	config_get n "$s" net
-	config_get_bool disabled "$n" disabled 0
-	[ "$disabled" == 1 ] && return 0
+	section_enabled "$n" || return 1
 
 	if [ "$#" = "2" ]; then
-		[ "$2" != "$n" ] && return 0
+		[ "$2" != "$n" ] && return 1
 	fi
 
 	# host disabled?
-	config_get_bool disabled "$s" disabled 0
-	[ "$disabled" == 1 ] && {
+	section_enabled "$s" || {
 		[ -f "$TMP_TINC/$n/hosts/$s" ] && rm "$TMP_TINC/$n/hosts/$s"
-		return 0
+		return 1
 	}
 
 	[ ! -f "/etc/tinc/$n/hosts/$s" ] && {
 		echo -n "tinc: Warning, public key for $s for network $n "
 		echo -n "missing in /etc/tinc/$n/hosts/$s, "
 		echo "skipping configuration of $s"
-		return 0
+		return 1
 	}
 
 	# append flags
@@ -125,12 +130,9 @@ check_gen_own_key() {
 
 prepare_net() {
 	local s="$1"
-	local disabled=0
 	local n
 
-	# disabled?
-	config_get_bool disabled "$s" disabled 0
-	[ "$disabled" == 1 ] && return 0
+	section_enabled "$s" || return 1
 
 	[ ! -d "$TMP_TINC/$s" ] && mkdir -p "$TMP_TINC/$s"
 	[ -d "/etc/tinc/$s" ] && cp -r "/etc/tinc/$s" "$TMP_TINC/"
@@ -152,90 +154,79 @@ prepare_net() {
 	check_gen_own_key "$s" && return 0
 }
 
-start_net() {
+start_instance() {
 	local s="$1"
-	local disabled=0
 
-	# disabled?
-	config_get_bool disabled "$s" disabled 0
-	[ "$disabled" == 1 ] && return 0
+	section_enabled "$s" || return 1
 
-	PID="/var/run/tinc.$s.pid"
 	ARGS=""
 
 	# append params
-	append_params "$s" \
-		log debug
+	append_params "$s" log debug
 
-	$BIN -c "$TMP_TINC/$s" -n $s $ARGS --pidfile="$PID"
+	SERVICE_PID_FILE="/var/run/tinc.$s.pid" \
+	service_start $BIN -c "$TMP_TINC/$s" -n $s $ARGS --pidfile="$PID"
 }
 
-kill_net() {
+stop_instance() {
 	local s="$1"
-	local S="${2:-TERM}"
-	local disabled=0
 
-	# disabled?
-	config_get_bool disabled "$s" disabled 0
-	[ "$disabled" == 0 ] || [ "$S" == "TERM" ] || return 0
+	section_enabled "$s" || return 1
 
-	PID="/var/run/tinc.$s.pid"
-
-	$SSD -q -p $PID -x $BIN -K -s $S
-	[ "$S" == "TERM" ] && {
-		rm -f "$PID"
-		[ -n "$s" ] && rm -rf "$TMP_TINC/$s"
-	}
+	SERVICE_PID_FILE="/var/run/tinc.$s.pid" \
+	service_stop $BIN
 }
 
-hup_net()  { kill_net "$1" HUP;  }
-stop_net() { kill_net "$1" TERM; }
+reload_instance() {
+	local s="$1"
+
+	section_enabled "$s" || return 1
+
+	SERVICE_PID_FILE="/var/run/tinc.$s.pid" \
+	service_reload $BIN
+}
 
 start() {
-	config_load tinc
+	config_load 'tinc'
 
-	config_foreach prepare_net tinc-net
-	config_foreach prepare_host tinc-host
+	config_foreach prepare_net 'tinc-net'
+	config_foreach prepare_host 'tinc-host'
 
-	config_foreach start_net tinc-net
+	config_foreach start_instance 'tinc-net'
 }
 
 stop() {
-	config_load tinc
-	config_foreach stop_net tinc-net
+	config_load 'tinc'
+	config_foreach stop_instance 'tinc-net'
 }
 
 reload() {
-	config_load tinc
-	config_foreach hup_net tinc-net
-}
-
-restart() {
-	stop; sleep 5; start
+	config_load 'tinc'
+	config_foreach reload_instance 'tinc-net'
 }
 
 up() {
 	local exists
-	local INSTANCE
-	config_load tinc
-	for INSTANCE in "$@"; do
-		config_get exists "$INSTANCE" TYPE
+	local instance
+	config_load 'tinc'
+	for instance in "$@"; do
+		config_get exists "$instance" 'TYPE'
 		if [ "$exists" == "tinc-net" ]; then
-			prepare_net "$INSTANCE"
-			config_foreach prepare_host tinc-host "$INSTANCE"
-			start_net "$INSTANCE"
+			prepare_net "$instance"
+			config_foreach prepare_host 'tinc-host' "$instance"
+			start_instance "$instance"
 		fi
 	done
 }
 
 down() {
 	local exists
-	local INSTANCE
-	config_load tinc
-	for INSTANCE in "$@"; do
-		config_get exists "$INSTANCE" TYPE
+	local instance
+	config_load 'tinc'
+	for instance in "$@"; do
+		config_get exists "$instance" 'TYPE'
 		if [ "$exists" == "tinc-net" ]; then
-			stop_net "$INSTANCE"
+			stop_instance "$instance"
 		fi
 	done
 }
