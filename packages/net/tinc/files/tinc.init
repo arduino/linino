@@ -164,8 +164,8 @@ start_instance() {
 	# append params
 	append_params "$s" log debug
 
-	SERVICE_PID_FILE="/var/run/tinc.$s.pid" \
-	service_start $BIN -c "$TMP_TINC/$s" -n $s $ARGS --pidfile="$PID"
+	SERVICE_PID_FILE="/var/run/tinc.$s.pid"
+	service_start $BIN -c "$TMP_TINC/$s" -n $s $ARGS --pidfile="$SERVICE_PID_FILE"
 }
 
 stop_instance() {
@@ -173,7 +173,7 @@ stop_instance() {
 
 	section_enabled "$s" || return 1
 
-	SERVICE_PID_FILE="/var/run/tinc.$s.pid" \
+	SERVICE_PID_FILE="/var/run/tinc.$s.pid"
 	service_stop $BIN
 }
 
@@ -182,7 +182,7 @@ reload_instance() {
 
 	section_enabled "$s" || return 1
 
-	SERVICE_PID_FILE="/var/run/tinc.$s.pid" \
+	SERVICE_PID_FILE="/var/run/tinc.$s.pid"
 	service_reload $BIN
 }
 
