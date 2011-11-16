@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ushare
 PKG_VERSION:=1.1a
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ushare.geexbox.org/releases/
@@ -57,6 +57,7 @@ define Build/Configure
 endef
 
 define Package/ushare/conffiles
+/etc/config/ushare
 /etc/ushare.conf
 endef
 
