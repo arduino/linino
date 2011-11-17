@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wide-dhcpv6
 PKG_VERSION:=20080615
-PKG_RELEASE:=8
+PKG_RELEASE:=9
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
@@ -100,11 +100,11 @@ define Package/wide-dhcpv6-client/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dhcp6c $(1)/usr/sbin
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_CONF) ./files/dhcp6c.conf $(1)/etc/config/dhcp6c
+	$(INSTALL_CONF) ./files/dhcp6c.config $(1)/etc/config/dhcp6c
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/dhcp6c.init $(1)/etc/init.d/dhcp6c
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
-	$(INSTALL_DATA) ./files/dhcp6c.hotplug $(1)/etc/hotplug.d/iface/40-dhcp6c	
+	$(INSTALL_DATA) ./files/dhcp6c.hotplug $(1)/etc/hotplug.d/iface/40-dhcp6c
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/dhcp6c
 	$(INSTALL_DATA) ./files/dhcp6c-dnsmasq.hotplug $(1)/etc/hotplug.d/dhcp6c/10-dnsmasq
 	$(INSTALL_DATA) ./files/dhcp6c-radvd.hotplug $(1)/etc/hotplug.d/dhcp6c/20-radvd
@@ -122,11 +122,11 @@ define Package/wide-dhcpv6-server/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/dhcp6s.conf.sample $(1)/etc
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_CONF) ./files/dhcp6s.conf $(1)/etc/config/dhcp6s
+	$(INSTALL_CONF) ./files/dhcp6s.config $(1)/etc/config/dhcp6s
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/dhcp6s.init $(1)/etc/init.d/dhcp6s
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
-	$(INSTALL_DATA) ./files/dhcp6s.hotplug $(1)/etc/hotplug.d/iface/50-dhcp6s	
+	$(INSTALL_DATA) ./files/dhcp6s.hotplug $(1)/etc/hotplug.d/iface/50-dhcp6s
 endef
 
 define Package/wide-dhcpv6-relay/install
