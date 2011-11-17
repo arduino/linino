@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ftpd-topfield
 PKG_VERSION:=0.7.4
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/puppy
@@ -36,9 +36,9 @@ define Package/ftpd-topfield/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ftpd $(1)/usr/sbin/ftpd-topfield
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/ftpd-topfield.sh $(1)/etc/init.d/ftpd-topfield
+	$(INSTALL_BIN) ./files/ftpd-topfield.init $(1)/etc/init.d/ftpd-topfield
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DATA) ./files/ftpd-topfield.conf $(1)/etc/config/ftpd-topfield
+	$(INSTALL_DATA) ./files/ftpd-topfield.config $(1)/etc/config/ftpd-topfield
 endef
 
 define Package/ftpd-topfield/conffiles
