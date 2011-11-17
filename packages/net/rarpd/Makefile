@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rarpd
 PKG_VERSION:=1.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.dementia.org/pub/net-tools
@@ -36,22 +36,24 @@ define Package/rarpd/description
 	database.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--with-libnet="$(STAGING_DIR)/usr/lib/libnet-1.0.x" \
-		--with-pcap="$(STAGING_DIR)/usr" \
-		, \
-		CFLAGS="$$$$CFLAGS -DNEW_LIBNET_INTERFACE" \
-	)
-endef
+CONFIGURE_ARGS+= \
+	--with-libnet="$(STAGING_DIR)/usr/lib/libnet-1.0.x" \
+	--with-pcap="$(STAGING_DIR)/usr" \
+
+CONFIGURE_VARS+= \
+	CFLAGS="$$$$CFLAGS -DNEW_LIBNET_INTERFACE" \
 
 define Package/rarpd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/rarpd $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc/default
-	install -m644 ./files/rarpd.default $(1)/etc/default/rarpd
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/rarpd $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/rarpd.config $(1)/etc/config/rarpd
 	$(INSTALL_DIR) $(1)/etc/init.d
-	install -m755 ./files/rarpd.init $(1)/etc/init.d/rarpd
+	$(INSTALL_BIN) ./files/rarpd.init $(1)/etc/init.d/rarpd
+endef
+
+define Package/rarpd/conffiles
+/etc/config/rarpd
 endef
 
 $(eval $(call BuildPackage,rarpd))

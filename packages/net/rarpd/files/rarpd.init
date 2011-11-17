@@ -4,16 +4,83 @@
 START=50
 
 SERVICE_DAEMONIZE=1
+SERVICE_WRITE_PID=1
 
-PROG="rarpd"
-COMMAND="/usr/sbin/$PROG"
-DEFAULT="/etc/default/$PROG"
+append_bool() {
+	local var="$1"
+	local section="$2"
+	local option="$3"
+	local value="$4"
+	local _val
+	config_get_bool _val "$section" "$option" 0
+	[ $_val -gt 0 ] && append "$var" "$value"
+}
+
+append_string() {
+	local var="$1"
+	local section="$2"
+	local option="$3"
+	local val="$4"
+	local _val
+	config_get _val "$section" "$option"
+	[ -n "$_val" ] && append "$var" "$val $_val"
+}
+
+config_get_ifname() {
+	local var="$1"
+	local section="$2"
+	local option="$3"
+	local val="$4"
+	local _val
+	config_get _val "$section" "$option" "$val"
+	[ -n "$_val" ] && config_get "$var" "$_val" 'ifname' "$_val"
+}
+
+section_enabled() {
+	local enabled
+	config_get_bool enabled "$1" 'enabled' 0
+	[ $enabled -gt 0 ]
+}
+
+start_instance() {
+	local section="$1"
+	local if
+	local args
+
+	section_enabled "$section" || return 1
+
+	config_get_ifname if "$section" 'interface' 'lan'
+	args="-n -i $if"
+	append_string args "$section" 'ethers' '-e'
+	append_bool args "$section" 'verbose' '-v'
+
+	SERVICE_PID_FILE="/var/run/rarpd-${if}.pid"
+	service_start /usr/sbin/rarpd $args
+}
+
+stop_instance() {
+	local section="$1"
+	local id
+	local if
+
+	section_enabled "$section" || return 1
+
+	config_get_ifname if "$section" 'interface' 'lan'
+
+	SERVICE_PID_FILE="/var/run/rarpd-${if}.pid"
+	service_stop /usr/sbin/rarpd
+}
 
 start() {
-	[ -f $DEFAULT ] && . $DEFAULT
-	service_start $COMMAND -n $OPTIONS
+	include /lib/network
+	scan_interfaces
+	config_load 'rarpd'
+	config_foreach start_instance 'rarpd'
 }
 
 stop() {
-	service_stop $COMMAND
+	include /lib/network
+	scan_interfaces
+	config_load 'rarpd'
+	config_foreach stop_instance 'rarpd'
 }
