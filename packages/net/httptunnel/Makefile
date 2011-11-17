@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=httptunnel
 PKG_VERSION:=3.3
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.nocrew.org/pub/nocrew/unix/
@@ -38,7 +38,7 @@ define Package/httptunnel/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/httptunnel.init $(1)/etc/init.d/httptunnel
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DATA) ./files/httptunnel.conf $(1)/etc/config/httptunnel
+	$(INSTALL_DATA) ./files/httptunnel.config $(1)/etc/config/httptunnel
 endef
 
 define Package/httptunnel/conffiles
