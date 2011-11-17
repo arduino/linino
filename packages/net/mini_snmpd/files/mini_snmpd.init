@@ -14,7 +14,7 @@ append_disk() {
 append_interface() {
 	local name="$1"
 	local interface
-	config_get interface "$name" 'ifname'
+	config_get interface "$name" 'ifname' "$name"
 	append interfaces "$interface" ','
 }
 
