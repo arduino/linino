@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ptunnel
 PKG_VERSION:=0.71
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=PingTunnel-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.cs.uit.no/~daniels/PingTunnel
@@ -56,7 +56,7 @@ define Package/ptunnel/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/ptunnel.init $(1)/etc/init.d/ptunnel
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_CONF) ./files/ptunnel.conf $(1)/etc/config/ptunnel
+	$(INSTALL_CONF) ./files/ptunnel.config $(1)/etc/config/ptunnel
 endef
 
 $(eval $(call BuildPackage,ptunnel))
