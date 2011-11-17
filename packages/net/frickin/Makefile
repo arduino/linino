@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=frickin
 PKG_VERSION:=1.3
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/frickin
@@ -31,10 +31,6 @@ define Package/frickin/description
 	Translation (NAT).
 endef
 
-define Package/frickin/conffiles
-/etc/default/frickin
-endef
-
 define Build/Configure
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
@@ -43,12 +39,16 @@ define Build/Configure
 endef
 
 define Package/frickin/install
-	$(INSTALL_DIR) $(1)/etc/default
-	$(INSTALL_DATA) ./files/frickin.default $(1)/etc/default/frickin
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/frickin.config $(1)/etc/config/frickin
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/frickin.init $(1)/etc/init.d/frickin
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/frickin $(1)/usr/sbin/
+endef
+
+define Package/frickin/conffiles
+/etc/config/frickin
 endef
 
 $(eval $(call BuildPackage,frickin))
