@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=ap51-flash
 PKG_REV:=232
 PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
@@ -47,7 +47,7 @@ define Package/ap51-flash/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ap51-flash $(1)/usr/sbin/
 	$(INSTALL_BIN) ./files/ap51-flash.init $(1)/etc/init.d/ap51-flash
 	$(INSTALL_BIN) ./files/ap51-flash.sh $(1)/usr/lib/ap51-flash/ap51-flash.sh
-	$(INSTALL_DATA) ./files/ap51-flash.conf $(1)/etc/config/ap51-flash
+	$(INSTALL_DATA) ./files/ap51-flash.config $(1)/etc/config/ap51-flash
 endef
 
 define Package/ap51-flash/conffiles
