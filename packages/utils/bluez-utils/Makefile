@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bluez-utils
 PKG_VERSION:=3.36
-PKG_RELEASE:=8
+PKG_RELEASE:=9
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://bluez.sourceforge.net/download
@@ -56,18 +56,16 @@ define Build/Compile
 		all install
 endef
 
-#copy bluetooth.conf nach /etc/dbus-1/system.d/
-
 define Package/bluez-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/bluetooth
-	$(CP) $(PKG_INSTALL_DIR)/../hcid/hcid.conf $(1)/etc/bluetooth/
-	$(CP) $(PKG_INSTALL_DIR)/../rfcomm/rfcomm.conf $(1)/etc/bluetooth/
+	$(CP) $(PKG_INSTALL_DIR)/etc/bluetooth/hcid/hcid.conf $(1)/etc/bluetooth/
+	$(CP) $(PKG_INSTALL_DIR)/etc/bluetooth/rfcomm/rfcomm.conf $(1)/etc/bluetooth/
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DATA) ./files/bluetooth.conf $(1)/etc/config/bluetooth
+	$(INSTALL_DATA) ./files/bluetooth.config $(1)/etc/config/bluetooth
 	$(INSTALL_DIR) $(1)/etc/dbus-1/system.d/
 	$(INSTALL_DATA) ./files/bluetooth.dbus $(1)/etc/dbus-1/system.d/bluetooth.conf
 	$(INSTALL_DIR) $(1)/etc/init.d
