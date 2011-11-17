@@ -4,15 +4,13 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id:$
-#
 # Author: Michael Geddes
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zoneinfo
 PKG_VERSION:=2011i
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=tzdata$(PKG_VERSION).tar.gz
 PKG_SOURCE_CODE:=tzcode${PKG_VERSION}.tar.gz
@@ -124,9 +122,9 @@ define Package/zoneinfo-core/install
 	for i in \
 		CET CST6CDT EET EST EST5EDT GB-Eire Eire \
 		GB    GMT   GMT+0 GMT-0 GMT0  Greenwich  \
-		HST   MET   MST   MST7MDT NZ    NZ-CHAT  \
+		HST   MET   MST   MST7MDT                \
 		PRC   PST8PDT ROC ROK     UCT   UTC      \
-		Universal W-SU WET Zulu Etc/*  ; do \
+		Universal W-SU WET Zulu Etc/* zone.tab ; do \
 	  $(CP) $(PKG_INSTALL_DIR)/zoneinfo/$$$$i \
 	      $(1)/usr/share/zoneinfo ; \
 	done
