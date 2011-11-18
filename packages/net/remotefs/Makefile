@@ -3,13 +3,14 @@
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=remotefs
 PKG_REV:=854
 PKG_VERSION:=$(PKG_REV)
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
@@ -23,7 +24,7 @@ define Package/remotefs
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Filesystem
-  DEPENDS:=+libfuse +libc +libgcc +libpthread
+  DEPENDS:=+libfuse +libpthread
   URL:=http://remotefs.sourceforge.net
 endef
 
@@ -37,11 +38,6 @@ endef
 define Package/remotefs-server
   $(call Package/remotefs)
   TITLE:=RemoteFS server
-  DEPENDS:=+libc +libgcc
-endef
-
-define Package/opkg/conffiles
-/etc/rfs-exports
 endef
 
 define Build/Compile
@@ -69,6 +65,10 @@ define Package/remotefs-server/install
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/rfs-exports $(1)/etc/rfs-exports
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/rfsd $(1)/etc/init.d/rfsd
+endef
+
+define Package/remotefs-server/conffiles
+/etc/rfs-exports
 endef
 
 $(eval $(call BuildPackage,remotefs))
