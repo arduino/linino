@@ -1,550 +1,367 @@
---- a/linux/net/ipsec/ipsec_ocf.c
-+++ b/linux/net/ipsec/ipsec_ocf.c
-@@ -15,10 +15,12 @@
-  * for more details.
-  */
- 
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- 
- #define __NO_VERSION__
- #include <linux/module.h>
---- a/linux/net/ipsec/pfkey_v2_ext_process.c
-+++ b/linux/net/ipsec/pfkey_v2_ext_process.c
-@@ -19,10 +19,12 @@
-  *		Template from klips/net/ipsec/ipsec/ipsec_netlink.c.
-  */
- 
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- #include <linux/kernel.h> /* printk() */
- 
- #include "openswan/ipsec_param.h"
---- a/linux/net/ipsec/version.in.c
-+++ b/linux/net/ipsec/version.in.c
-@@ -15,10 +15,12 @@
-  */
- 
+--- a/linux/include/ocf-compat.h
++++ b/linux/include/ocf-compat.h
+@@ -35,10 +35,11 @@
+ /****************************************************************************/
  #ifdef __KERNEL__
--# ifndef AUTOCONF_INCLUDED
--#  include <linux/config.h>
--# endif
- # include <linux/version.h>
-+# if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+# include <generated/autoconf.h>
-+# else
-+# include <linux/autoconf.h>
-+# endif
- # define __NO_VERSION__
- # include <linux/module.h>
- # if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,0) && LINUX_VERSION_CODE >= KERNEL_VERSION(2,4,26)
---- a/linux/net/ipsec/ipsec_ipcomp.c
-+++ b/linux/net/ipsec/ipsec_ipcomp.c
-@@ -13,10 +13,12 @@
-  * for more details.
-  */
- 
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
  #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- 
- #define __NO_VERSION__
- #include <linux/module.h>
---- a/linux/net/ipsec/radij.c
-+++ b/linux/net/ipsec/radij.c
-@@ -53,10 +53,12 @@
-  * Routines to build and maintain radix trees for routing lookups.
-  */
- 
--#ifndef AUTOCONF_INCLUDED
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
 -#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- #include <linux/kernel.h> /* printk() */
- 
- #include "openswan/ipsec_param.h"
---- a/linux/net/ipsec/ipsec_mast.c
-+++ b/linux/net/ipsec/ipsec_mast.c
-@@ -17,9 +17,12 @@ char ipsec_mast_c_version[] = "Please us
- 
- #define __NO_VERSION__
- #include <linux/module.h>
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif	/* for CONFIG_IP_FORWARD */
-+#include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif /* For Config IP-FORWARD */
- #include <linux/version.h>
- #include <linux/kernel.h> /* printk() */
- 
---- a/linux/net/ipsec/ipsec_xmit.c
-+++ b/linux/net/ipsec/ipsec_xmit.c
-@@ -21,9 +21,12 @@
- 
- #define __NO_VERSION__
- #include <linux/module.h>
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif	/* for CONFIG_IP_FORWARD */
-+#include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif /* for CONFIG_IP_FORWARD */
- #include <linux/version.h>
- #include <linux/kernel.h> /* printk() */
- 
---- a/linux/net/ipsec/ipsec_ipip.c
-+++ b/linux/net/ipsec/ipsec_ipip.c
-@@ -13,8 +13,11 @@
-  * for more details.
-  */
- 
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
-+#include <linux/version.h>
 +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
 +#include <generated/autoconf.h>
 +#else
 +#include <linux/autoconf.h>
  #endif
- #include <linux/version.h>
- 
---- a/linux/net/ipsec/ipsec_snprintf.c
-+++ b/linux/net/ipsec/ipsec_snprintf.c
-@@ -18,10 +18,12 @@
-  * Split out from ipsec_proc.c.
-  */
- 
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- #define __NO_VERSION__
- #include <linux/module.h>
- #include <linux/kernel.h> /* printk() */
---- a/linux/net/ipsec/ipsec_xform.c
-+++ b/linux/net/ipsec/ipsec_xform.c
-@@ -16,10 +16,12 @@
-  * RCSID $Id: ipsec_xform.c,v 1.65 2005/04/29 05:10:22 mcr Exp $
-  */
- 
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- #include <linux/kernel.h> /* printk() */
- 
- #include "freeswan/ipsec_param.h"
---- a/linux/net/ipsec/alg/ipsec_alg_cryptoapi.c
-+++ b/linux/net/ipsec/alg/ipsec_alg_cryptoapi.c
-@@ -27,11 +27,12 @@
-  *   modprobe ipsec_cryptoapi aes=128,128                (force these keylens)
-  *   modprobe ipsec_cryptoapi des_ede3=0                 (everything but 3DES)
-  */
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
 -
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- /*	
-  *	special case: ipsec core modular with this static algo inside:
-  *	must avoid MODULE magic for this file
---- a/linux/net/ipsec/aes/ipsec_alg_aes.c
-+++ b/linux/net/ipsec/aes/ipsec_alg_aes.c
-@@ -21,10 +21,12 @@
-  * 	PK:	make XCBC comply with latest draft (keylength)
-  *
+ /*
+  * fake some BSD driver interface stuff specifically for OCF use
   */
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- 
- /*	
-  *	special case: ipsec core modular with this static algo inside:
---- a/linux/net/ipsec/ipsec_proc.c
-+++ b/linux/net/ipsec/ipsec_proc.c
-@@ -18,10 +18,12 @@
-  * Split out from ipsec_init.c version 1.70.
-  */
- 
--#ifndef AUTOCONF_INCLUDED
--# include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- #define __NO_VERSION__
- #include <linux/module.h>
- #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,0) && LINUX_VERSION_CODE >= KERNEL_VERSION(2,4,26)
---- a/linux/net/ipsec/ipcomp.c
-+++ b/linux/net/ipsec/ipcomp.c
-@@ -18,10 +18,12 @@
- 
- /* SSS */
- 
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- 
- #define __NO_VERSION__
- #include <linux/module.h>
---- a/linux/net/ipsec/ipsec_sa.c
-+++ b/linux/net/ipsec/ipsec_sa.c
-@@ -18,10 +18,12 @@
-  *
-  */
- 
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- #include <linux/kernel.h> /* printk() */
- 
- #include "openswan/ipsec_param.h"
---- a/linux/net/ipsec/des/ipsec_alg_3des.c
-+++ b/linux/net/ipsec/des/ipsec_alg_3des.c
-@@ -18,10 +18,12 @@
-  * for more details.
-  *
-  */
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- 
- /*	
-  *	special case: ipsec core modular with this static algo inside:
---- a/linux/net/ipsec/ipsec_radij.c
-+++ b/linux/net/ipsec/ipsec_radij.c
-@@ -15,10 +15,12 @@
-  *
-  */
- 
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- #include <linux/kernel.h> /* printk() */
- 
- #include "openswan/ipsec_param.h"
---- a/linux/net/ipsec/ipsec_rcv.c
-+++ b/linux/net/ipsec/ipsec_rcv.c
-@@ -20,10 +20,12 @@
-  * for more details.
-  */
- 
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- 
- #define __NO_VERSION__
- #include <linux/module.h>
---- a/linux/net/ipsec/ipsec_esp.c
-+++ b/linux/net/ipsec/ipsec_esp.c
-@@ -13,10 +13,12 @@
-  * for more details.
-  */
- 
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- 
- #define __NO_VERSION__
- #include <linux/module.h>
---- a/linux/net/ipsec/ipsec_life.c
-+++ b/linux/net/ipsec/ipsec_life.c
-@@ -30,9 +30,12 @@
- 
- #define __NO_VERSION__
- #include <linux/module.h>
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif	/* for CONFIG_IP_FORWARD */
-+#include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif /* for CONFIG_IP_FORWARD */
- #include <linux/version.h>
- #include <linux/kernel.h> /* printk() */
- 
---- a/linux/net/ipsec/ipsec_alg.c
-+++ b/linux/net/ipsec/ipsec_alg.c
-@@ -18,10 +18,12 @@
-  * for more details.
-  *
-  */
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- 
- #define __NO_VERSION__
- #include <linux/module.h>
---- a/linux/net/ipsec/pfkey_v2.c
-+++ b/linux/net/ipsec/pfkey_v2.c
-@@ -22,8 +22,10 @@
- #define __NO_VERSION__
- #include <linux/module.h>
- #include <linux/version.h>
--#ifndef AUTOCONF_INCLUDED
--# include <linux/config.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
- #endif
- #include <linux/kernel.h>
- 
---- a/linux/net/ipsec/ipsec_tunnel.c
-+++ b/linux/net/ipsec/ipsec_tunnel.c
-@@ -20,9 +20,12 @@
- 
- #define __NO_VERSION__
- #include <linux/module.h>
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif	/* for CONFIG_IP_FORWARD */
-+#include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif /* for CONFIG_IP_FORWARD */
- #include <linux/version.h>
- #include <linux/kernel.h> /* printk() */
- 
 --- a/linux/include/openswan/ipsec_kversion.h
 +++ b/linux/include/openswan/ipsec_kversion.h
-@@ -43,8 +43,11 @@
+@@ -43,10 +43,11 @@
   * We use a lot of config defines,  on older kernels that means we
   * need to include config.h
   */
--#ifndef AUTOCONF_INCLUDED
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
 -#include <linux/config.h>
-+#include <linux/version.h>
 +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
 +#include <generated/autoconf.h>
 +#else
 +#include <linux/autoconf.h>
  #endif
- 
+-
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
---- a/linux/include/openswan/ipsec_rcv.h
-+++ b/linux/include/openswan/ipsec_rcv.h
-@@ -36,9 +36,12 @@
- /* struct options; */
- 
- #define __NO_VERSION__
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif	/* for CONFIG_IP_FORWARD */
-+#include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif /* for CONFIG_IP_FORWARD */
- #ifdef CONFIG_MODULES
- #include <linux/module.h>
- #endif
---- a/linux/net/ipsec/ipsec_ocf.h
-+++ b/linux/net/ipsec/ipsec_ocf.h
-@@ -18,10 +18,12 @@
-  * for more details.
-  */
- 
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- #include <linux/kernel.h>
- 
- #ifdef CONFIG_KLIPS_OCF
---- a/linux/net/ipsec/ipsec_ah.c
-+++ b/linux/net/ipsec/ipsec_ah.c
-@@ -13,10 +13,12 @@
-  * for more details.
-  */
- 
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- 
- #define __NO_VERSION__
- #include <linux/module.h>
---- a/linux/net/ipsec/pfkey_v2_parser.c
-+++ b/linux/net/ipsec/pfkey_v2_parser.c
-@@ -22,10 +22,12 @@
-  */
- 
- 
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- #include <linux/kernel.h> /* printk() */
- 
- #include "openswan/ipsec_param.h"
---- a/linux/net/ipsec/ipsec_init.c
-+++ b/linux/net/ipsec/ipsec_init.c
-@@ -18,10 +18,12 @@
+ /* Only enable IPv6 support on newer kernels with IPv6 enabled */
+ # if defined(CONFIG_IPV6) || defined(CONFIG_IPV6_MODULE)
+--- a/linux/net/ipsec/aes/ipsec_alg_aes.c
++++ b/linux/net/ipsec/aes/ipsec_alg_aes.c
+@@ -22,8 +22,10 @@
   *
   */
- 
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
--#endif
  #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- #include <linux/module.h>
- #include <linux/kernel.h> /* printk() */
- 
---- a/linux/net/ipsec/ipsec_alg_cryptoapi.c
-+++ b/linux/net/ipsec/ipsec_alg_cryptoapi.c
-@@ -27,10 +27,12 @@
-  *   modprobe ipsec_cryptoapi aes=128,128                (force these keylens)
-  *   modprobe ipsec_cryptoapi des_ede3=0                 (everything but 3DES)
-  */
--#ifndef AUTOCONF_INCLUDED
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
 -#include <linux/config.h>
--#endif
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#include <generated/autoconf.h>
-+#else
-+#include <linux/autoconf.h>
-+#endif
- 
- /*	
-  *	special case: ipsec core modular with this static algo inside:
---- a/linux/include/ocf-compat.h
-+++ b/linux/include/ocf-compat.h
-@@ -34,8 +34,11 @@
-  */
- /****************************************************************************/
- #ifdef __KERNEL__
--#ifndef AUTOCONF_INCLUDED
--#include <linux/config.h>
-+#include <linux/version.h>
 +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
 +#include <generated/autoconf.h>
 +#else
 +#include <linux/autoconf.h>
  #endif
+ #include <linux/version.h>
  
- /*
+--- a/linux/net/ipsec/des/ipsec_alg_3des.c
++++ b/linux/net/ipsec/des/ipsec_alg_3des.c
+@@ -19,8 +19,10 @@
+  *
+  */
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+ #include <linux/version.h>
+ 
+--- a/linux/net/ipsec/ipcomp.c
++++ b/linux/net/ipsec/ipcomp.c
+@@ -19,10 +19,11 @@
+ /* SSS */
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+-
+ #define __NO_VERSION__
+ #include <linux/module.h>
+ #include <linux/kernel.h> /* printk() */
+--- a/linux/net/ipsec/ipsec_ah.c
++++ b/linux/net/ipsec/ipsec_ah.c
+@@ -14,10 +14,11 @@
+  */
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+-
+ #define __NO_VERSION__
+ #include <linux/module.h>
+ #include <linux/kernel.h> /* printk() */
+--- a/linux/net/ipsec/ipsec_alg.c
++++ b/linux/net/ipsec/ipsec_alg.c
+@@ -19,10 +19,11 @@
+  *
+  */
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+-
+ #define __NO_VERSION__
+ #include <linux/module.h>
+ #include <linux/kernel.h> /* printk() */
+--- a/linux/net/ipsec/ipsec_alg_cryptoapi.c
++++ b/linux/net/ipsec/ipsec_alg_cryptoapi.c
+@@ -26,10 +26,11 @@
+  *   modprobe ipsec_cryptoapi des_ede3=0                 (everything but 3DES)
+  */
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+-
+ /*	
+  *	special case: ipsec core modular with this static algo inside:
+  *	must avoid MODULE magic for this file
+--- a/linux/net/ipsec/ipsec_esp.c
++++ b/linux/net/ipsec/ipsec_esp.c
+@@ -14,10 +14,11 @@
+  */
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+-
+ #define __NO_VERSION__
+ #include <linux/module.h>
+ #include <linux/kernel.h> /* printk() */
+--- a/linux/net/ipsec/ipsec_init.c
++++ b/linux/net/ipsec/ipsec_init.c
+@@ -19,8 +19,10 @@
+  */
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+ #include <linux/module.h>
+ #include <linux/kernel.h> /* printk() */
+--- a/linux/net/ipsec/ipsec_ipcomp.c
++++ b/linux/net/ipsec/ipsec_ipcomp.c
+@@ -14,10 +14,11 @@
+  */
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+-
+ #define __NO_VERSION__
+ #include <linux/module.h>
+ #include <linux/kernel.h> /* printk() */
+--- a/linux/net/ipsec/ipsec_ipip.c
++++ b/linux/net/ipsec/ipsec_ipip.c
+@@ -14,10 +14,11 @@
+  */
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+-
+ #define __NO_VERSION__
+ #include <linux/module.h>
+ #include <linux/kernel.h> /* printk() */
+--- a/linux/net/ipsec/ipsec_ocf.c
++++ b/linux/net/ipsec/ipsec_ocf.c
+@@ -16,10 +16,11 @@
+  */
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+-
+ #define __NO_VERSION__
+ #include <linux/module.h>
+ #include <linux/kernel.h> /* printk() */
+--- a/linux/net/ipsec/ipsec_ocf.h
++++ b/linux/net/ipsec/ipsec_ocf.h
+@@ -19,8 +19,10 @@
+  */
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+ #include <linux/kernel.h>
+ 
+--- a/linux/net/ipsec/ipsec_radij.c
++++ b/linux/net/ipsec/ipsec_radij.c
+@@ -16,8 +16,10 @@
+  */
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+ #include <linux/kernel.h> /* printk() */
+ 
+--- a/linux/net/ipsec/ipsec_rcv.c
++++ b/linux/net/ipsec/ipsec_rcv.c
+@@ -21,10 +21,11 @@
+  */
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+-
+ #define __NO_VERSION__
+ #include <linux/module.h>
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,0) && LINUX_VERSION_CODE >= KERNEL_VERSION(2,4,26)
+--- a/linux/net/ipsec/ipsec_sa.c
++++ b/linux/net/ipsec/ipsec_sa.c
+@@ -19,8 +19,10 @@
+  */
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+ #include <linux/kernel.h> /* printk() */
+ 
+--- a/linux/net/ipsec/ipsec_snprintf.c
++++ b/linux/net/ipsec/ipsec_snprintf.c
+@@ -19,8 +19,10 @@
+  */
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+ #define __NO_VERSION__
+ #include <linux/module.h>
+--- a/linux/net/ipsec/ipsec_tunnel.c
++++ b/linux/net/ipsec/ipsec_tunnel.c
+@@ -24,8 +24,10 @@
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,0) && LINUX_VERSION_CODE >= KERNEL_VERSION(2,4,26)
+ # include <linux/moduleparam.h>
+ #endif
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+ #include <linux/kernel.h> /* printk() */
+ 
+--- a/linux/net/ipsec/ipsec_xform.c
++++ b/linux/net/ipsec/ipsec_xform.c
+@@ -17,8 +17,10 @@
+  */
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+ #include <linux/kernel.h> /* printk() */
+ 
+--- a/linux/net/ipsec/pfkey_v2_ext_process.c
++++ b/linux/net/ipsec/pfkey_v2_ext_process.c
+@@ -20,8 +20,10 @@
+  */
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+ #include <linux/kernel.h> /* printk() */
+ 
+--- a/linux/net/ipsec/pfkey_v2_parser.c
++++ b/linux/net/ipsec/pfkey_v2_parser.c
+@@ -23,8 +23,10 @@
+ 
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+ #include <linux/kernel.h> /* printk() */
+ 
+--- a/linux/net/ipsec/radij.c
++++ b/linux/net/ipsec/radij.c
+@@ -54,8 +54,10 @@
+  */
+ 
+ #include <linux/version.h>
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
+-#include <linux/config.h>
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++#include <generated/autoconf.h>
++#else
++#include <linux/autoconf.h>
+ #endif
+ #include <linux/kernel.h> /* printk() */
+ 

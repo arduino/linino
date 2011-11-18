@@ -4,7 +4,7 @@
 
 --- a/linux/include/openswan/ipsec_kversion.h
 +++ b/linux/include/openswan/ipsec_kversion.h
-@@ -387,6 +387,12 @@
+@@ -393,6 +393,12 @@
  # endif
  #endif
  

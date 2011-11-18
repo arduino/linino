@@ -12,25 +12,3 @@
 +# pref. log to nfs mount
 +echo "$*" >> /dev/null
 +exit 0
---- a/programs/_plutorun/_plutorun.in
-+++ b/programs/_plutorun/_plutorun.in
-@@ -157,7 +157,7 @@ then
- 			exit 1
- 		fi
- 	else
--		if test ! -w "`dirname $stderrlog`"
-+		if test ! -w "${stderrlog%/*}"
- 		then
- 			echo Cannot write to directory to create \"$stderrlog\".
- 			exit 1
---- a/programs/_realsetup/_realsetup.in
-+++ b/programs/_realsetup/_realsetup.in
-@@ -291,7 +291,7 @@ case "$1" in
- 
- 	# misc pre-Pluto setup
- 
--	perform test -d $subsysdir "&&" touch $subsyslock
-+	perform test -d "${subsyslock%/*}" "&&" touch $subsyslock "&&" rm -f $subsyslock
- 
- 	manualconns
- 
