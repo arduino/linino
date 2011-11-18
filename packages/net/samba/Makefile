@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=samba
 PKG_VERSION:=2.0.10
-PKG_RELEASE:=7
+PKG_RELEASE:=8
 
 PKG_SOURCE_URL:=ftp://ftp.samba.org/pub/samba/old-versions
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -36,7 +36,6 @@ define Package/samba2-common
   $(call Package/samba)
   MENU:=1
   TITLE:=NetBIOS/SMB server and client shared files
-  DEPENDS:=+libgcc
 endef
 
 define Package/samba2-server
