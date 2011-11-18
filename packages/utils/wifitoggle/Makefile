@@ -1,4 +1,5 @@
 # 
+# Copyright (C) 2010-2011 OpenWrt.org
 # Copyright (C) 2010 segal.di.ubi.pt 
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -34,9 +35,9 @@ endef
 
 define Package/wifitoggle/install
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/button
-	$(INSTALL_BIN) ./files/hotplug_wifitoggle $(1)/etc/hotplug.d/button/50-wifitoggle
+	$(INSTALL_BIN) ./files/wifitoggle.hotplug $(1)/etc/hotplug.d/button/50-wifitoggle
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DATA) ./files/uci_wifitoggle $(1)/etc/config/wifitoggle
+	$(INSTALL_DATA) ./files/wifitoggle.config $(1)/etc/config/wifitoggle
 endef
 
 $(eval $(call BuildPackage,wifitoggle))
