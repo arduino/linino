@@ -1,18 +1,21 @@
---- a/Makefile
-+++ b/Makefile
-@@ -104,22 +104,18 @@ BINDIR?=$(DESTDIR)${PREFIX}/bin
+--- a/Makefile	2011-08-16 20:28:19.968069040 +0200
++++ b/Makefile	2011-08-16 20:27:57.968069032 +0200
+@@ -106,10 +106,10 @@
  MANDIR?=$(DESTDIR)${PREFIX}/share/man
  
  
--all: $(EXEC) pfc
-+all: $(EXEC)
+-all: $(EXEC) pfc $(CONTROL_EXEC)
++all: $(EXEC) $(CONTROL_EXEC)
  
  clean:
--	rm -f $(OBJS) $(EXEC) pfc.o pfc
-+	rm -f $(OBJS) $(EXEC)
+-	rm -f $(OBJS) $(EXEC) pfc.o pfc $(CONTROL_EXEC)
++	rm -f $(OBJS) $(EXEC) $(CONTROL_EXEC)
  
  $(EXEC): $(OBJS) $(HDRS)
  	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LDLIBS)
+@@ -117,14 +117,10 @@
+ $(CONTROL_EXEC): $(CONTROL_SRCS)
+ 	$(CC) $(CONTROL_SRCS) -o $@
  
 -pfc:
 -	$(CC) $(CFLAGS) -c contrib/pfc.c
@@ -21,12 +24,12 @@
  romfs:
  	$(ROMFSINST) /bin/$(EXEC)
  
--install: ${EXEC} pfc
-+install: ${EXEC}
+-install: ${EXEC} pfc ${CONTROL_EXEC}
++install: ${EXEC} ${CONTROL_EXEC}
  	install -d -m 0755 ${SBINDIR}
  	install -m 0755 $(EXEC) ${SBINDIR}/$(EXEC)
  	install -d -m 0755 ${MANDIR}/man5
-@@ -127,11 +123,6 @@ install: ${EXEC} pfc
+@@ -132,11 +128,6 @@
  	install -m 0644 doc/xl2tpd.8 ${MANDIR}/man8/
  	install -m 0644 doc/xl2tpd.conf.5 doc/l2tp-secrets.5 \
  		 ${MANDIR}/man5/
@@ -35,6 +38,6 @@
 -	install -m 0755 pfc ${BINDIR}/pfc
 -	install -d -m 0755 ${MANDIR}/man1
 -	install -m 0644 contrib/pfc.1 ${MANDIR}/man1/
- 
- # openbsd
- #	install -d -m 0755 /var/run/xl2tpd
+ 	# control exec
+ 	install -d -m 0755 ${SBINDIR}
+ 	install -m 0755 $(CONTROL_EXEC) ${SBINDIR}/$(CONTROL_EXEC)

@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xl2tpd
-PKG_VERSION:=1.2.8
+PKG_VERSION:=1.3.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.xelerance.com/xl2tpd/
-PKG_MD5SUM:=8748ac5e2f5289963d9a908eede546b5
+PKG_MD5SUM:=28264284552c442b24cf421755a2bb48
 
 PKG_INSTALL:=1
 
@@ -22,7 +22,6 @@ include $(INCLUDE_DIR)/package.mk
 define Package/xl2tpd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=
   TITLE:=An L2TP (Layer 2 Tunneling Protocol) daemon
   URL:=http://www.xelerance.com/software/xl2tpd/
   SUBMENU:=VPN
