@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2009 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=avrusbboot
 PKG_VERSION:=2006-06-25
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME).$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.fischl.de/avrusbboot/
@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/avrusbboot
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libusb +uclibcxx +libgcc
+  DEPENDS:=+libusb +uclibcxx
   TITLE:=USB bootloader for Atmel AVR controllers
   URL:=http://www.fischl.de/avrusbboot/
 endef
