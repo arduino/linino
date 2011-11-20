@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=darkice
 PKG_VERSION:=1.0
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://darkice.googlecode.com/files/
@@ -42,6 +42,7 @@ CONFIGURE_ARGS += \
 	--without-samplerate \
 	--without-twolame \
 	--without-vorbis \
+	--with-lame-prefix="$(STAGING_DIR)/usr" \
 
 define Package/darkice/install
 	$(INSTALL_DIR) $(1)/usr/sbin
