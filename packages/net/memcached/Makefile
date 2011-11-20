@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=memcached
-PKG_VERSION:=1.2.6
-PKG_RELEASE:=2
+PKG_VERSION:=1.4.7
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://memcached.googlecode.com/files
-PKG_MD5SUM:=200d22f7ac2d114f74a6904552e9eb70
+PKG_MD5SUM:=cf0becfa65753c3b5a1fc8f84861bb23
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -44,7 +44,11 @@ endif
 CONFIGURE_ARGS += \
 	--disable-docs \
 	--disable-dtrace \
+	--disable-coverage  \
 	--disable-sasl
+
+TARGET_CFLAGS+= \
+    -std=gnu99
 
 define Package/memcached/install
 	$(INSTALL_DIR) $(1)/usr/bin
