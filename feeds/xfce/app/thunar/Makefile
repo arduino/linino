@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=Thunar-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/Thunar-$(PKG_VERSION)
-PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-4.6.1/src/
+PKG_SOURCE_URL:=http://archive.xfce.org/xfce/4.6.1/src/
 PKG_MD5SUM:=218373aa45d74b6ba8c69c4d5af3bb19
 
 PKG_FIXUP:=libtool

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -12,7 +12,7 @@ PKG_VERSION:=4.6.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.tx-us.xfce.org/archive/xfce-$(PKG_VERSION)/src/
+PKG_SOURCE_URL:=http://archive.xfce.org/xfce/$(PKG_VERSION)/src/
 PKG_MD5SUM:=dc1c8704471c5b0104fa10c30eb60cb6
 
 PKG_FIXUP:=libtool
