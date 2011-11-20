@@ -239,7 +239,6 @@ define PyPackage/python/filespec
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/syslog.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/time.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/unicodedata.so
--|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/zlib.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_weakref.so
 -|/usr/lib/python$(PYTHON_VERSION)/linecache.py
 -|/usr/lib/python$(PYTHON_VERSION)/md5.py
@@ -318,7 +317,6 @@ define PyPackage/python-mini/filespec
 +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/syslog.so
 +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/time.so
 +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/unicodedata.so
-+|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/zlib.so
 +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_weakref.so
 +|/usr/lib/python$(PYTHON_VERSION)/linecache.py
 +|/usr/lib/python$(PYTHON_VERSION)/md5.py
