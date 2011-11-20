@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sane-backends
 PKG_VERSION:=1.0.22
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.sane-project.org/pub/sane/$(PKG_NAME)-$(PKG_VERSION) \
@@ -34,7 +34,7 @@ define Package/sane-backends
 $(call Package/sane-backends/Default)
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+sane-libs +libtiff
+  DEPENDS:=+sane-libs
   TITLE+= (backends)
 endef
 
@@ -47,7 +47,7 @@ define Package/sane-libs
   $(call Package/sane-backends/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libjpeg +libpthread +libusb
+  DEPENDS:=+libjpeg +libtiff +libusb
   TITLE+= (libraries)
 endef
 
