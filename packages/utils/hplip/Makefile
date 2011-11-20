@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hplip
 PKG_VERSION:=3.9.12
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/hplip
@@ -25,7 +25,7 @@ define Package/hplip
   CATEGORY:=Utilities
   TITLE:=HP Linux Imaging and Printing
   URL:=http://sourceforge.net/projects/hplip/
-  DEPENDS+=+libjpeg +sane-libs +cups +libusb
+  DEPENDS+=+libjpeg +libtiff +libusb +cups +sane-libs
 endef
 
 define Package/hplip/description
