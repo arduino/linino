@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pure-ftpd
 PKG_VERSION:=1.0.32
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.pureftpd.org/pub/pure-ftpd/releases
@@ -61,7 +61,8 @@ Package/pure-ftpd-tls/conffiles=$(Package/pure-ftpd/conffiles)
 
 CONFIGURE_ARGS += \
 	--with-everything \
-	--with-virtualchroot
+	--with-virtualchroot \
+	--without-capabilities \
 
 ifeq ($(BUILD_VARIANT),tls)
 CONFIGURE_ARGS += \
