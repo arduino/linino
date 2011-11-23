@@ -68,12 +68,9 @@ if !LINUX_2_4
 		default y if powerpc64
 		default y if TARGET_coldfire
 
-	config GCC_VERSION_4_3_4
-		default y if TARGET_gemini
-
 	config GCC_VERSION_4_3_3_CS
 		default y if (mips || mipsel) && !(TARGET_octeon || TARGET_sibyte)
-		default y if (arm || armeb) && !TARGET_gemini
+		default y if (arm || armeb)
 
 	config GCC_VERSION_4_4_1
 		default y if ubicom32
