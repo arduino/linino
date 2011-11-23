@@ -76,9 +76,6 @@ endif
 ifeq ($(BOARD),ixp4xx)
   HAL_TARGET:=xscale-be-elf$(if $(CONFIG_EABI_SUPPORT),gnueabi)
 endif
-ifeq ($(BOARD),iop32x)
-  HAL_TARGET:=xscale-le-elf$(if $(CONFIG_EABI_SUPPORT),gnueabi)
-endif
 ifeq ($(BOARD),kirkwood)
   HAL_TARGET:=xscale-le-elf$(if $(CONFIG_EABI_SUPPORT),gnueabi)
 endif
