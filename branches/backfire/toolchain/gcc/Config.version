@@ -62,7 +62,7 @@ if !LINUX_2_4
 		default y if powerpc64
 
 	config GCC_VERSION_4_3_3_CS
-		default y if (mips || mipsel) && !(TARGET_octeon)
+		default y if (mips || mipsel)
 		default y if (arm || armeb)
 
 	config GCC_VERSION_4_4_1
@@ -70,7 +70,6 @@ if !LINUX_2_4
 
 	config GCC_VERSION_4_4_3
 		default y if powerpc
-		default y if (TARGET_octeon)
 
 endif
 endif

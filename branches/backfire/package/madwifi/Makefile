@@ -156,7 +156,7 @@ define KernelPackage/madwifi
   TITLE:=Driver for Atheros wireless chipsets
   URL:=http://madwifi-project.org/
   MAINTAINER:=Felix Fietkau <nbd@openwrt.org>
-  DEPENDS:=+wireless-tools @LINUX_2_6 @PCI_SUPPORT @(!(TARGET_avr32||TARGET_ep93xx||TARGET_octeon)||BROKEN)
+  DEPENDS:=+wireless-tools @LINUX_2_6 @PCI_SUPPORT @(!(TARGET_avr32||TARGET_ep93xx)||BROKEN)
   FILES:=$(MADWIFI_FILES)
   AUTOLOAD:=$(call AutoLoad,50,$(MADWIFI_AUTOLOAD))
   MENU:=1

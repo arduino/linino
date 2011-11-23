@@ -128,20 +128,6 @@ endef
 
 $(eval $(call KernelPackage,usb-adm5120))
 
-define KernelPackage/usb-octeon
-$(call KernelPackage/usb/Depends,@TARGET_octeon)
-  TITLE:=Support for the Octeon USB OTG controller
-  KCONFIG:=CONFIG_USB_DWC_OTG
-  FILES:=$(LINUX_DIR)/drivers/usb/host/dwc_otg/dwc_otg.$(LINUX_KMOD_SUFFIX)
-  AUTOLOAD:=$(call AutoLoad,50,dwc_otg)
-endef
-
-define KernelPackage/usb-octeon/description
-  Kernel support for the Octeon USB host controller
-endef
-
-$(eval $(call KernelPackage,usb-octeon))
-
 
 define KernelPackage/usb-isp116x-hcd
 $(call KernelPackage/usb/Depends,@TARGET_ppc40x)

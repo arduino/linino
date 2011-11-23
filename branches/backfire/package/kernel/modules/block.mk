@@ -83,21 +83,6 @@ endef
 
 $(eval $(call KernelPackage,ata-artop))
 
-define KernelPackage/ata-octeon-cf
-$(call KernelPackage/ata/Depends,@TARGET_octeon)
-  TITLE:=Octeon Compact Flash support
-  KCONFIG:=CONFIG_PATA_OCTEON_CF
-  FILES:=$(LINUX_DIR)/drivers/ata/pata_octeon_cf.$(LINUX_KMOD_SUFFIX)
-  AUTOLOAD:=$(call AutoLoad,41,pata_octeon_cf,1)
-endef
-
-define KernelPackage/ata-octeon-cf/description
-  Octeon Compact Flash support.
-endef
-
-$(eval $(call KernelPackage,ata-octeon-cf))
-
-
 define KernelPackage/ata-ixp4xx-cf
 $(call KernelPackage/ata/Depends,@TARGET_ixp4xx)
   TITLE:=IXP4XX Compact Flash support
