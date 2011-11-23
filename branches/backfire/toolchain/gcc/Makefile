@@ -25,44 +25,32 @@ GCC_VERSION:=$(call qstrip,$(CONFIG_GCC_VERSION))
 PKG_VERSION:=$(firstword $(subst +, ,$(GCC_VERSION)))
 GCC_DIR:=$(PKG_NAME)-$(PKG_VERSION)
 
-ifdef CONFIG_GCC_VERSION_LLVM
-  PKG_SOURCE_VERSION:=c98c494b72ff875884c0c7286be67f16f9f6d7ab
-  PKG_REV:=83504
-  GCC_DIR:=llvm-gcc-4.2-r$(PKG_REV)
-  PKG_VERSION:=4.2.1
-  PKG_SOURCE:=$(GCC_DIR).tar.gz
-  PKG_SOURCE_PROTO:=git
-  PKG_SOURCE_URL:=git://repo.or.cz/llvm-gcc-4.2.git
-  PKG_SOURCE_SUBDIR:=$(GCC_DIR)
-  HOST_BUILD_DIR:=$(BUILD_DIR_TOOLCHAIN)/$(GCC_DIR)
-else
-  PKG_SOURCE_URL:=@GNU/gcc/gcc-$(PKG_VERSION)
-  PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=@GNU/gcc/gcc-$(PKG_VERSION)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 
-  ifeq ($(PKG_VERSION),3.4.6)
-    PKG_MD5SUM:=4a21ac777d4b5617283ce488b808da7b
-  endif
-  ifeq ($(PKG_VERSION),4.1.2)
-    PKG_MD5SUM:=a4a3eb15c96030906d8494959eeda23c
-  endif
-  ifeq ($(PKG_VERSION),4.2.4)
-    PKG_MD5SUM:=d79f553e7916ea21c556329eacfeaa16
-  endif
-  ifeq ($(PKG_VERSION),4.3.3)
-    PKG_MD5SUM:=cc3c5565fdb9ab87a05ddb106ba0bd1f
-  endif
-  ifeq ($(PKG_VERSION),4.4.0)
-    PKG_MD5SUM:=cf5d787bee57f38168b74d65a7c0e6fd
-  endif
-  ifeq ($(PKG_VERSION),4,4,1)
-    PKG_MD5SUM:=927eaac3d44b22f31f9c83df82f26436
-  endif
-  ifeq ($(PKG_VERSION),4.4.2)
-    PKG_MD5SUM:=70f5ac588a79e3c9901d5b34f58d896d
-  endif
-  ifeq ($(PKG_VERSION),4.4.3)
-    PKG_MD5SUM:=fe1ca818fc6d2caeffc9051fe67ff103
-  endif
+ifeq ($(PKG_VERSION),3.4.6)
+  PKG_MD5SUM:=4a21ac777d4b5617283ce488b808da7b
+endif
+ifeq ($(PKG_VERSION),4.1.2)
+  PKG_MD5SUM:=a4a3eb15c96030906d8494959eeda23c
+endif
+ifeq ($(PKG_VERSION),4.2.4)
+  PKG_MD5SUM:=d79f553e7916ea21c556329eacfeaa16
+endif
+ifeq ($(PKG_VERSION),4.3.3)
+  PKG_MD5SUM:=cc3c5565fdb9ab87a05ddb106ba0bd1f
+endif
+ifeq ($(PKG_VERSION),4.3.4)
+  PKG_MD5SUM:=60df63222dbffd53ca11492a2545044f
+endif
+ifeq ($(PKG_VERSION),4,4,1)
+  PKG_MD5SUM:=927eaac3d44b22f31f9c83df82f26436
+endif
+ifeq ($(PKG_VERSION),4.4.2)
+  PKG_MD5SUM:=70f5ac588a79e3c9901d5b34f58d896d
+endif
+ifeq ($(PKG_VERSION),4.4.3)
+  PKG_MD5SUM:=fe1ca818fc6d2caeffc9051fe67ff103
 endif
 
 PATCH_DIR=./patches/$(GCC_VERSION)
@@ -96,9 +84,7 @@ GCC_CONFIGURE:= \
 		$(if $(CONFIG_GCC_USE_GRAPHITE),--with-host-libstdcxx=-lstdc++) \
 		$(SOFT_FLOAT_CONFIG_OPTION) \
 		$(call qstrip,$(CONFIG_EXTRA_GCC_CONFIG_OPTIONS)) \
-		$(if $(CONFIG_mips64)$(CONFIG_mips64el),--with-arch=mips64 --with-abi=64) \
-		$(if $(CONFIG_GCC_VERSION_LLVM),--enable-llvm=$(BUILD_DIR_BASE)/host/llvm) \
-		$(if $(CONFIG_GCC_VERSION_4_3_3_CS)$(CONFIG_GCC_VERSION_4_4_1_CS)$(CONFIG_GCC_VERSION_4_4_3_CS),--enable-poison-system-directories)
+		$(if $(CONFIG_GCC_VERSION_4_3_3_CS),--enable-poison-system-directories)
 
 ifneq ($(CONFIG_GCC_VERSION_4_3)$(CONFIG_GCC_VERSION_4_4),)
   GCC_BUILD_TARGET_LIBGCC:=y
