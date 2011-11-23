@@ -68,7 +68,7 @@ config SSP_SUPPORT
 
 config TLS_SUPPORT
 	bool
-	depends !GCC_VERSION_3_4_6 && UCLIBC_VERSION_NPTL
+	depends !GCC_VERSION_3_4_6
 	prompt "Enable Thread-local storage (TLS) support" if TOOLCHAINOPTS
 	default n
 	help

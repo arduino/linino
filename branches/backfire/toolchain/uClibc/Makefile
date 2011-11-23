@@ -9,18 +9,11 @@ include $(INCLUDE_DIR)/target.mk
 
 PKG_NAME:=uClibc
 PKG_VERSION:=$(call qstrip,$(CONFIG_UCLIBC_VERSION))
-ifeq ($(CONFIG_UCLIBC_VERSION_NPTL),y)
-  PKG_SOURCE_URL:=git://git.busybox.net/uClibc
-  PKG_SOURCE_PROTO:=git
-  PKG_SOURCE_VERSION:=ef18cfe8ebab25f5ef92e81956f50e2dc57df602
-  PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-  PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
-  LIBC_SO_VERSION:=0.9.30-git
-else
-  PKG_SOURCE_URL:=http://www.uclibc.org/downloads
-  PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-  LIBC_SO_VERSION:=$(PKG_VERSION)
-endif
+
+PKG_SOURCE_URL:=http://www.uclibc.org/downloads
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+LIBC_SO_VERSION:=$(PKG_VERSION)
+
 PATCH_DIR:=./patches-$(PKG_VERSION)
 CONFIG_DIR:=./config-$(PKG_VERSION)
 
