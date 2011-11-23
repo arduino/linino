@@ -78,7 +78,7 @@ endef
 define Package/libgcc
 $(call Package/gcc/Default)
   TITLE:=GCC support library
-  DEPENDS+=@!(TARGET_avr32||TARGET_coldfire)
+  DEPENDS+=@!(TARGET_avr32)
 endef
 
 define Package/libgcc/config
@@ -161,7 +161,7 @@ define Package/libc/Default
   SECTION:=libs
   CATEGORY:=Base system
   VERSION:=$(LIBC_VERSION)-$(PKG_RELEASE)
-ifneq ($(TARGET_avr32)$(TARGET_coldfire),)
+ifneq ($(TARGET_avr32),)
   DEPENDS:=+libgcc
 endif
   URL:=$(LIBC_URL)
