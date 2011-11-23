@@ -277,7 +277,7 @@ define KernelPackage/bluetooth
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Bluetooth support
   DEPENDS:=@USB_SUPPORT +!(LINUX_2_4||TARGET_xburst):kmod-crc16 +kmod-usb-core +!TARGET_x86:kmod-hid \
-	+(TARGET_x86||TARGET_s3c24xx||TARGET_brcm47xx||TARGET_ar71xx):kmod-rfkill
+	+(TARGET_x86||TARGET_brcm47xx||TARGET_ar71xx):kmod-rfkill
   KCONFIG:= \
 	CONFIG_BLUEZ \
 	CONFIG_BLUEZ_L2CAP \
@@ -890,7 +890,7 @@ $(eval $(call KernelPackage,oprofile))
 define KernelPackage/rfkill
   SUBMENU:=$(OTHER_MENU)
   TITLE:=RF switch subsystem support
-  DEPENDS:=@TARGET_x86||TARGET_s3c24xx||TARGET_brcm47xx||TARGET_ar71xx
+  DEPENDS:=@TARGET_x86||TARGET_brcm47xx||TARGET_ar71xx
   KCONFIG:= \
     CONFIG_RFKILL \
     CONFIG_RFKILL_INPUT=y \
