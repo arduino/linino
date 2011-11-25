@@ -518,7 +518,8 @@ $(eval $(call KernelPackage,usb-storage))
 define KernelPackage/usb-storage-extras
   SUBMENU:=$(USB_MENU)
   TITLE:=Extra drivers for usb-storage
-  DEPENDS:=@LINUX_2_6 +kmod-usb-storage
+  DEPENDS:=@LINUX_2_6 +kmod-usb-storage \
+	@!(TARGET_ixp4xx_harddisk||TARGET_orion_harddisk||TARGET_x86_olpc)
   KCONFIG:= \
 	CONFIG_USB_STORAGE_ALAUDA \
 	CONFIG_USB_STORAGE_CYPRESS_ATACB \
