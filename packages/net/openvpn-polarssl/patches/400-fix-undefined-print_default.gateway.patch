@@ -1,0 +1,36 @@
+--- a/init.c
++++ b/init.c
+@@ -696,6 +696,7 @@ init_static (void)
+ #endif
+ 
+ #ifdef TEST_GET_DEFAULT_GATEWAY
++#ifdef ENABLE_DEBUG
+   {
+     struct route_gateway_info rgi;
+     get_default_gateway(&rgi);
+@@ -703,6 +704,7 @@ init_static (void)
+     return false;
+   }
+ #endif
++#endif
+ 
+ #ifdef GEN_PATH_TEST
+   {
+--- a/options.c
++++ b/options.c
+@@ -3859,6 +3859,7 @@ add_option (struct options *options,
+ 
+       read_config_file (options, p[1], level, file, line, msglevel, permission_mask, option_types_found, es);
+     }
++#ifdef ENABLE_DEBUG
+   else if (streq (p[0], "show-gateway"))
+     {
+       struct route_gateway_info rgi;
+@@ -3867,6 +3868,7 @@ add_option (struct options *options,
+       print_default_gateway(M_INFO, &rgi);
+       openvpn_exit (OPENVPN_EXIT_STATUS_GOOD); /* exit point */
+     }
++#endif
+ #if 0
+   else if (streq (p[0], "foreign-option") && p[1])
+     {

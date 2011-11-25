@@ -1,0 +1,118 @@
+--- a/init.c
++++ b/init.c
+@@ -1337,7 +1337,11 @@ do_route (const struct options *options,
+ 
+   if (plugin_defined (plugins, OPENVPN_PLUGIN_ROUTE_UP))
+     {
+-      if (plugin_call (plugins, OPENVPN_PLUGIN_ROUTE_UP, NULL, NULL, es) != OPENVPN_PLUGIN_FUNC_SUCCESS)
++      if (plugin_call (plugins, OPENVPN_PLUGIN_ROUTE_UP, NULL, NULL, es
++#ifdef USE_SSL
++                       , -1, NULL
++#endif
++                       ) != OPENVPN_PLUGIN_FUNC_SUCCESS)
+ 	msg (M_WARN, "WARNING: route-up plugin call failed");
+     }
+ 
+--- a/misc.c
++++ b/misc.c
+@@ -213,7 +213,11 @@ run_up_down (const char *command,
+ 		   ifconfig_local, ifconfig_remote,
+ 		   context);
+ 
+-      if (plugin_call (plugins, plugin_type, &argv, NULL, es) != OPENVPN_PLUGIN_FUNC_SUCCESS)
++      if (plugin_call (plugins, plugin_type, &argv, NULL, es
++#ifdef USE_SSL
++                       , -1, NULL
++#endif
++                      ) != OPENVPN_PLUGIN_FUNC_SUCCESS)
+ 	msg (M_FATAL, "ERROR: up/down plugin call failed");
+ 
+       argv_reset (&argv);
+--- a/multi.c
++++ b/multi.c
+@@ -91,7 +91,11 @@ learn_address_script (const struct multi
+ 		   mroute_addr_print (addr, &gc));
+       if (mi)
+ 	argv_printf_cat (&argv, "%s", tls_common_name (mi->context.c2.tls_multi, false));
+-      if (plugin_call (plugins, OPENVPN_PLUGIN_LEARN_ADDRESS, &argv, NULL, es) != OPENVPN_PLUGIN_FUNC_SUCCESS)
++      if (plugin_call (plugins, OPENVPN_PLUGIN_LEARN_ADDRESS, &argv, NULL, es
++#ifdef USE_SSL
++                       , -1, NULL
++#endif
++                      ) != OPENVPN_PLUGIN_FUNC_SUCCESS)
+ 	{
+ 	  msg (M_WARN, "WARNING: learn-address plugin call failed");
+ 	  ret = false;
+@@ -476,7 +480,11 @@ multi_client_disconnect_script (struct m
+ 
+       if (plugin_defined (mi->context.plugins, OPENVPN_PLUGIN_CLIENT_DISCONNECT))
+ 	{
+-	  if (plugin_call (mi->context.plugins, OPENVPN_PLUGIN_CLIENT_DISCONNECT, NULL, NULL, mi->context.c2.es) != OPENVPN_PLUGIN_FUNC_SUCCESS)
++	  if (plugin_call (mi->context.plugins, OPENVPN_PLUGIN_CLIENT_DISCONNECT, NULL, NULL, mi->context.c2.es
++#ifdef USE_SSL
++	                   , -1, NULL
++#endif
++	                  ) != OPENVPN_PLUGIN_FUNC_SUCCESS)
+ 	    msg (M_WARN, "WARNING: client-disconnect plugin call failed");
+ 	}
+ 
+--- a/socket.c
++++ b/socket.c
+@@ -2117,7 +2117,11 @@ link_socket_connection_initiated (const 
+     {
+       struct argv argv = argv_new ();
+       ipchange_fmt (false, &argv, info, &gc);
+-      if (plugin_call (info->plugins, OPENVPN_PLUGIN_IPCHANGE, &argv, NULL, es) != OPENVPN_PLUGIN_FUNC_SUCCESS)
++      if (plugin_call (info->plugins, OPENVPN_PLUGIN_IPCHANGE, &argv, NULL, es
++#ifdef USE_SSL
++                       , -1, NULL
++#endif
++                      ) != OPENVPN_PLUGIN_FUNC_SUCCESS)
+ 	msg (M_WARN, "WARNING: ipchange plugin call failed");
+       argv_reset (&argv);
+     }
+--- a/ssl.c
++++ b/ssl.c
+@@ -1939,7 +1939,11 @@ key_method_2_read (struct buffer *buf, s
+    */
+   if (ks->authenticated && plugin_defined (session->opt->plugins, OPENVPN_PLUGIN_TLS_FINAL))
+     {
+-      if (plugin_call (session->opt->plugins, OPENVPN_PLUGIN_TLS_FINAL, NULL, NULL, session->opt->es) != OPENVPN_PLUGIN_FUNC_SUCCESS)
++      if (plugin_call (session->opt->plugins, OPENVPN_PLUGIN_TLS_FINAL, NULL, NULL, session->opt->es
++#ifdef USE_SSL
++                       , -1, NULL
++#endif
++                      ) != OPENVPN_PLUGIN_FUNC_SUCCESS)
+ 	ks->authenticated = false;
+     }
+ 
+--- a/pf.c
++++ b/pf.c
+@@ -563,7 +563,11 @@ pf_init_context (struct context *c)
+       if( pf_file ) {
+         setenv_str (c->c2.es, "pf_file", pf_file);
+ 
+-        if (plugin_call (c->plugins, OPENVPN_PLUGIN_ENABLE_PF, NULL, NULL, c->c2.es) == OPENVPN_PLUGIN_FUNC_SUCCESS)
++        if (plugin_call (c->plugins, OPENVPN_PLUGIN_ENABLE_PF, NULL, NULL, c->c2.es
++#ifdef USE_SSL
++                         , -1, NULL
++#endif
++                        ) == OPENVPN_PLUGIN_FUNC_SUCCESS)
+           {
+             event_timeout_init (&c->c2.pf.reload, 1, now);
+             c->c2.pf.filename = string_alloc (pf_file, NULL);
+--- a/ssl_verify.c
++++ b/ssl_verify.c
+@@ -1029,7 +1029,11 @@ verify_user_pass_plugin (struct tls_sess
+ #endif
+ 
+       /* call command */
+-      retval = plugin_call (session->opt->plugins, OPENVPN_PLUGIN_AUTH_USER_PASS_VERIFY, NULL, NULL, session->opt->es);
++      retval = plugin_call (session->opt->plugins, OPENVPN_PLUGIN_AUTH_USER_PASS_VERIFY, NULL, NULL, session->opt->es
++#ifdef USE_SSL
++                            , -1, NULL
++#endif
++                           );
+ 
+ #ifdef PLUGIN_DEF_AUTH
+       /* purge auth control filename (and file itself) for non-deferred returns */
