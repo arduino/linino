@@ -1,28 +1,23 @@
---- a/source/include/config.h
-+++ b/source/include/config.h
-@@ -986,13 +986,13 @@
- /* #undef HAVE_ROOT */
+
+Index: samba-3.0.37/source/configure
+===================================================================
+--- samba-3.0.37.orig/source/configure	2011-04-03 20:35:20.000000000 +0200
++++ samba-3.0.37/source/configure	2011-04-03 20:36:51.000000000 +0200
+@@ -22548,6 +22548,17 @@
+ { $as_echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+ $as_echo "$ac_header_preproc" >&6; }
  
- /* Define to 1 if you have the <rpcsvc/nis.h> header file. */
--#define HAVE_RPCSVC_NIS_H 1
-+/* #define HAVE_RPCSVC_NIS_H 1 */
- 
- /* Define to 1 if you have the <rpcsvc/ypclnt.h> header file. */
--#define HAVE_RPCSVC_YPCLNT_H 1
-+/* #define HAVE_RPCSVC_YPCLNT_H 1 */
- 
- /* Define to 1 if you have the <rpcsvc/yp_prot.h> header file. */
--#define HAVE_RPCSVC_YP_PROT_H 1
-+/* #define HAVE_RPCSVC_YP_PROT_H 1 */
- 
- /* Whether there is a conflicting AUTH_ERROR define in rpc/rpc.h */
- /* #undef HAVE_RPC_AUTH_ERROR_CONFLICT */
-@@ -1001,7 +1001,7 @@
- /* #undef HAVE_RPC_NETTYPE_H */
- 
- /* Define to 1 if you have the <rpc/rpc.h> header file. */
--#define HAVE_RPC_RPC_H 1
-+/* #define HAVE_RPC_RPC_H 1 */
- 
- /* Whether mkstemp is secure */
- #define HAVE_SECURE_MKSTEMP 1
++# Force disable RPC
++$as_echo "test=$ac_header" >&6
++if test "$ac_header" = "rpc/rpc.h"; then
++    if test "$ac_header_compiler" = "yes" -o "$ac_header_preproc" = "yes"; then
++        $as_echo "RPC support force disabled by OpenWRT patch" >&5
++        $as_echo "RPC support force disabled by OpenWRT patch" >&6
++    fi
++fi
++ac_header_compiler=no
++ac_header_preproc=no
++
+ # So?  What about this header?
+ case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+   yes:no: )

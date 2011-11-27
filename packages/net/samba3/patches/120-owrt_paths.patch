@@ -1,57 +1,39 @@
-Index: samba-3.0.24/source/Makefile
+Index: samba-3.0.37/source/Makefile.in
 ===================================================================
---- samba-3.0.24.orig/source/Makefile	2008-08-06 23:33:20.000000000 +0200
-+++ samba-3.0.24/source/Makefile	2008-08-06 23:34:48.000000000 +0200
-@@ -12,7 +12,7 @@
- 
- # AR7
- # prefix=/usr/local/samba
--prefix=/var/samba
-+prefix=
- exec_prefix=${prefix}
- 
- # AR7
-@@ -108,11 +108,11 @@
- # These can be overridden by command line switches (see smbd(8))
+--- samba-3.0.37.orig/source/Makefile.in	2009-09-30 14:21:56.000000000 +0200
++++ samba-3.0.37/source/Makefile.in	2011-04-03 20:35:19.000000000 +0200
+@@ -92,7 +92,7 @@
  # or in smb.conf (see smb.conf(5))
- LOGFILEBASE = ${VARDIR}
--CONFIGFILE = $(CONFIGDIR)/smb.conf
+ LOGFILEBASE = @logfilebase@
+ CONFIGFILE = $(CONFIGDIR)/smb.conf
 -LMHOSTSFILE = $(CONFIGDIR)/lmhosts
-+CONFIGFILE = /etc/samba/smb.conf
 +LMHOSTSFILE = /etc/lmhosts
  
  # This is where smbpasswd et al go
--PRIVATEDIR = ${prefix}/private
-+PRIVATEDIR = /etc/samba/
- 
- SMB_PASSWD_FILE = $(PRIVATEDIR)/smbpasswd
- PRIVATE_DIR = $(PRIVATEDIR)
-@@ -121,10 +121,10 @@
- SWATDIR = ${prefix}/swat
- 
- # the directory where lock files go
--LOCKDIR = ${VARDIR}/locks
-+LOCKDIR = ${VARDIR}/lock
- 
- # the directory where pid files go
--PIDDIR = ${VARDIR}/locks
-+PIDDIR = ${VARDIR}/lock
- 
- LIBSMBCLIENT=bin/libsmbclient.a bin/libsmbclient.so
- LIBSMBCLIENT_MAJOR=0
-Index: samba-3.0.24/source/lib/util.c
+ PRIVATEDIR = @privatedir@
+Index: samba-3.0.37/source/configure
 ===================================================================
---- samba-3.0.24.orig/source/lib/util.c	2008-08-06 23:41:58.000000000 +0200
-+++ samba-3.0.24/source/lib/util.c	2008-08-06 23:42:10.000000000 +0200
-@@ -300,11 +300,7 @@
- 	char *p;
- 	if ((p = getenv("TMPDIR")))
- 		return p;
--#if 1 /* AR7 */
--	return "/var/tmp";
--#else
- 	return "/tmp";
--#endif
- }
+--- samba-3.0.37.orig/source/configure	2009-09-30 15:08:58.000000000 +0200
++++ samba-3.0.37/source/configure	2011-04-03 20:35:20.000000000 +0200
+@@ -1536,8 +1536,8 @@
+   --with-fhs              Use FHS-compliant paths (default=no)
+   --with-privatedir=DIR   Where to put smbpasswd ($ac_default_prefix/private)
+   --with-rootsbindir=DIR  Which directory to use for root sbin ($ac_default_prefix/sbin)
+-  --with-lockdir=DIR      Where to put lock files ($ac_default_prefix/var/locks)
+-  --with-piddir=DIR       Where to put pid files ($ac_default_prefix/var/locks)
++  --with-lockdir=DIR      Where to put lock files ($ac_default_prefix/var/lock)
++  --with-piddir=DIR       Where to put pid files ($ac_default_prefix/var/run)
+   --with-swatdir=DIR      Where to put SWAT files ($ac_default_prefix/swat)
+   --with-configdir=DIR    Where to put configuration files ($libdir)
+   --with-logfilebase=DIR  Where to put log files ($VARDIR)
+@@ -2295,8 +2295,8 @@
  
- /****************************************************************************
+ 
+ rootsbindir="\${SBINDIR}"
+-lockdir="\${VARDIR}/locks"
+-piddir="\${VARDIR}/locks"
++lockdir="\${VARDIR}/lock"
++piddir="\${VARDIR}/run"
+ test "${mandir}" || mandir="\${prefix}/man"
+ logfilebase="\${VARDIR}"
+ privatedir="\${prefix}/private"

@@ -1,4 +1,23 @@
-config SAMBA3_DEBUG 
+config SAMBA3_CONFIG_DEBUG 
 	bool "Enable Logging for samba3"
 	depends PACKAGE_samba3
 	default n
+	help
+		Enables debugging support (will make binaries *much* bigger)
+		Also increases MAX_DEBUG_LEVEL to get more messages (also increases binary sizes!)
+
+config SAMBA3_CONFIG_SMALLER
+	bool "Make samba3 even smaller"
+	depends PACKAGE_samba3
+	default y
+	help
+		Removes support for ???
+		Saves about 18kB for smbd, about 16kB for nmbd and about 17kB for smbpasswd
+
+config SAMBA3_CONFIG_NO_PRINTING
+	bool "Remove shared printing support"
+	depends PACKAGE_samba3
+	default y
+   	help
+		Removes shared printing support.
+		Saves about 18kB for smbd, about 15kB for nmbd and about 18kB for smbpasswd

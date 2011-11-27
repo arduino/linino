@@ -60,10 +60,8 @@ start() {
 	config_foreach smb_header samba
 	config_foreach smb_add_share sambashare
 	service_start /usr/sbin/smbd -D
-	service_start /usr/sbin/nmbd -D
 }
 
 stop() {
 	service_stop /usr/sbin/smbd
-	service_stop /usr/sbin/nmbd
 }
