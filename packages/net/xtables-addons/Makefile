@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=xtables-addons
 PKG_VERSION:=1.31
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_MD5SUM:=97ac895a67df67c28def98763023d51b
@@ -108,5 +108,5 @@ $(eval $(call BuildTemplate,delude,DELUDE,xt_DELUDE,xt_DELUDE,46,+kmod-ipt-compa
 $(eval $(call BuildTemplate,tarpit,TARPIT,xt_TARPIT,xt_TARPIT,46,+kmod-ipt-compat-xtables))
 #$(eval $(call BuildTemplate,tee,TEE,xt_TEE,xt_TEE,46,+kmod-ipt-compat-xtables))
 $(eval $(call BuildTemplate,ipp2p,IPP2P,xt_ipp2p,xt_ipp2p,46,))
-$(eval $(call BuildTemplate,rawpost,RAWPOST,,iptable_rawpost,46,+kmod-ipt-compat-xtables))
+$(eval $(call BuildTemplate,rawpost,RAWPOST,,iptable_rawpost $(if $(CONFIG_IPV6),ip6table_rawpost),50,+kmod-ipt-compat-xtables))
 $(eval $(call BuildTemplate,rawnat,RAWNAT,xt_RAWDNAT xt_RAWSNAT,xt_RAWNAT,46,+kmod-ipt-compat-xtables))
