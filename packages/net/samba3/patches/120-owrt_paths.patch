@@ -1,8 +1,6 @@
-Index: samba-3.0.37/source/Makefile.in
-===================================================================
---- samba-3.0.37.orig/source/Makefile.in	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/Makefile.in	2011-04-03 20:35:19.000000000 +0200
-@@ -92,7 +92,7 @@
+--- a/source/Makefile.in
++++ b/source/Makefile.in
+@@ -92,7 +92,7 @@ INSTALLPERMS = 0755
  # or in smb.conf (see smb.conf(5))
  LOGFILEBASE = @logfilebase@
  CONFIGFILE = $(CONFIGDIR)/smb.conf
@@ -11,11 +9,9 @@ Index: samba-3.0.37/source/Makefile.in
  
  # This is where smbpasswd et al go
  PRIVATEDIR = @privatedir@
-Index: samba-3.0.37/source/configure
-===================================================================
---- samba-3.0.37.orig/source/configure	2009-09-30 15:08:58.000000000 +0200
-+++ samba-3.0.37/source/configure	2011-04-03 20:35:20.000000000 +0200
-@@ -1536,8 +1536,8 @@
+--- a/source/configure
++++ b/source/configure
+@@ -1536,8 +1536,8 @@ Optional Packages:
    --with-fhs              Use FHS-compliant paths (default=no)
    --with-privatedir=DIR   Where to put smbpasswd ($ac_default_prefix/private)
    --with-rootsbindir=DIR  Which directory to use for root sbin ($ac_default_prefix/sbin)
@@ -26,7 +22,7 @@ Index: samba-3.0.37/source/configure
    --with-swatdir=DIR      Where to put SWAT files ($ac_default_prefix/swat)
    --with-configdir=DIR    Where to put configuration files ($libdir)
    --with-logfilebase=DIR  Where to put log files ($VARDIR)
-@@ -2295,8 +2295,8 @@
+@@ -2295,8 +2295,8 @@ fi
  
  
  rootsbindir="\${SBINDIR}"

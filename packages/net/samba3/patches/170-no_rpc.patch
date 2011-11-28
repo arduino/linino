@@ -1,9 +1,7 @@
 
-Index: samba-3.0.37/source/configure
-===================================================================
---- samba-3.0.37.orig/source/configure	2011-04-03 20:35:20.000000000 +0200
-+++ samba-3.0.37/source/configure	2011-04-03 20:36:51.000000000 +0200
-@@ -22548,6 +22548,17 @@
+--- a/source/configure
++++ b/source/configure
+@@ -22548,6 +22548,17 @@ rm -f conftest.err conftest.$ac_ext
  { $as_echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
  $as_echo "$ac_header_preproc" >&6; }
  

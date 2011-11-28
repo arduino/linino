@@ -1,8 +1,6 @@
-Index: samba-3.0.37/source/Makefile.in
-===================================================================
---- samba-3.0.37.orig/source/Makefile.in	2011-08-08 23:40:18.004444730 +0200
-+++ samba-3.0.37/source/Makefile.in	2011-08-08 23:40:19.054444730 +0200
-@@ -538,10 +538,7 @@
+--- a/source/Makefile.in
++++ b/source/Makefile.in
+@@ -538,10 +538,7 @@ TESTPARM_OBJ = utils/testparm.o \
  
  PASSWD_UTIL_OBJ = utils/passwd_util.o
  
@@ -14,10 +12,8 @@ Index: samba-3.0.37/source/Makefile.in
  
  PDBEDIT_OBJ = utils/pdbedit.o $(PASSWD_UTIL_OBJ) $(PARAM_OBJ) $(PASSDB_OBJ) \
  		$(LIBSAMBA_OBJ) $(LIB_NONSMBD_OBJ) $(GROUPDB_OBJ) \
-Index: samba-3.0.37/source/utils/owrt_smbpasswd.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ samba-3.0.37/source/utils/owrt_smbpasswd.c	2011-08-08 23:40:19.064444730 +0200
+--- /dev/null
++++ b/source/utils/owrt_smbpasswd.c
 @@ -0,0 +1,195 @@
 +/*
 + * Copyright (C) John Crispin <blogic@openwrt.org>

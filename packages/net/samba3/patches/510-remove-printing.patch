@@ -1,0 +1,47 @@
+--- a/source/Makefile.in
++++ b/source/Makefile.in
+@@ -319,7 +319,7 @@ LIBMSRPC_GEN_OBJ = librpc/gen_ndr/cli_wk
+ 
+ REGOBJS_OBJ = registry/reg_objects.o
+ 
+-REGISTRY_OBJ = registry/reg_frontend.o registry/reg_cachehook.o registry/reg_printing.o \
++REGISTRY_OBJ = registry/reg_frontend.o registry/reg_cachehook.o $(if $(OWRT_NO_PRINTING),,registry/reg_printing.o) \
+                registry/reg_db.o registry/reg_eventlog.o registry/reg_shares.o \
+                registry/reg_util.o registry/reg_dynamic.o registry/reg_perfcount.o
+ 
+@@ -349,7 +349,7 @@ RPC_NTSVCS_OBJ = $(if $(OWRT_SMALLER),,r
+ 
+ RPC_DFS_OBJ =  $(if $(OWRT_SMALLER),,rpc_server/srv_dfs.o rpc_server/srv_dfs_nt.o)
+ 
+-RPC_SPOOLSS_OBJ = $(if $(OWRT_SMALLER),,rpc_server/srv_spoolss.o rpc_server/srv_spoolss_nt.o)
++RPC_SPOOLSS_OBJ = $(if $(OWRT_SMALLER)$(OWRT_NO_PRINTING),,rpc_server/srv_spoolss.o rpc_server/srv_spoolss_nt.o)
+ 
+ RPC_EVENTLOG_OBJ = $(if $(OWRT_SMALLER),,rpc_server/srv_eventlog.o rpc_server/srv_eventlog_nt.o rpc_server/srv_eventlog_lib.o)
+ 
+@@ -463,7 +463,7 @@ SMBD_OBJ_SRV = smbd/files.o smbd/chgpass
+ 	       smbd/vfs.o smbd/statcache.o \
+                smbd/posix_acls.o lib/sysacls.o $(SERVER_MUTEX_OBJ) \
+ 	       smbd/process.o smbd/service.o smbd/error.o \
+-	       printing/printfsp.o lib/sysquotas.o lib/sysquotas_linux.o \
++	       $(if $(OWRT_NO_PRINTING),,printing/printfsp.o) lib/sysquotas.o lib/sysquotas_linux.o \
+ 	       lib/sysquotas_xfs.o lib/sysquotas_4A.o \
+ 	       smbd/change_trust_pw.o smbd/fake_file.o \
+ 	       smbd/ntquotas.o $(AFS_OBJ) smbd/msdfs.o \
+@@ -480,13 +480,13 @@ SMBD_OBJ_BASE = $(PARAM_OBJ) $(SMBD_OBJ_
+ 		$(REGISTRY_OBJ) $(POPT_LIB_OBJ) \
+ 		$(BUILDOPT_OBJ) $(SMBLDAP_OBJ)
+ 
+-PRINTING_OBJ = printing/pcap.o printing/print_svid.o printing/print_aix.o \
++PRINTING_OBJ = $(if $(OWRT_NO_PRINTING),,printing/pcap.o printing/print_svid.o printing/print_aix.o \
+                printing/print_cups.o printing/print_generic.o \
+                printing/lpq_parse.o printing/load.o \
+-               printing/print_iprint.o printing/print_test.o
++               printing/print_iprint.o printing/print_test.o)
+ 
+-PRINTBASE_OBJ = printing/notify.o printing/printing_db.o
+-PRINTBACKEND_OBJ = printing/printing.o printing/nt_printing.o $(PRINTBASE_OBJ)
++PRINTBASE_OBJ = $(if $(OWRT_NO_PRINTING),,printing/notify.o printing/printing_db.o)
++PRINTBACKEND_OBJ = $(if $(OWRT_NO_PRINTING),,printing/printing.o printing/nt_printing.o $(PRINTBASE_OBJ))
+ 
+ SMBD_OBJ = $(SMBD_OBJ_BASE) $(SMBD_OBJ_MAIN)
+ NMBD_OBJ1 = nmbd/asyncdns.o nmbd/nmbd.o nmbd/nmbd_become_dmb.o \

@@ -1,8 +1,6 @@
-Index: samba-3.0.37/source/auth/auth_util.c
-===================================================================
---- samba-3.0.37.orig/source/auth/auth_util.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/auth/auth_util.c	2011-08-09 00:02:34.854444169 +0200
-@@ -2284,18 +2284,20 @@
+--- a/source/auth/auth_util.c
++++ b/source/auth/auth_util.c
+@@ -2284,18 +2284,20 @@ BOOL is_trusted_domain(const char* dom_n
  		/* The only other possible result is that winbind is not up
  		   and running. We need to update the trustdom_cache
  		   ourselves */
@@ -25,10 +23,8 @@ Index: samba-3.0.37/source/auth/auth_util.c
  	return False;
  }
  
-Index: samba-3.0.37/source/include/local.h
-===================================================================
---- samba-3.0.37.orig/source/include/local.h	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/include/local.h	2011-08-09 00:02:34.854444169 +0200
+--- a/source/include/local.h
++++ b/source/include/local.h
 @@ -49,7 +49,8 @@
  #define MAX_DIRECTORY_HANDLES 2048
  
@@ -39,11 +35,9 @@ Index: samba-3.0.37/source/include/local.h
  
  /* define what facility to use for syslog */
  #ifndef SYSLOG_FACILITY
-Index: samba-3.0.37/source/lib/iconv.c
-===================================================================
---- samba-3.0.37.orig/source/lib/iconv.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/lib/iconv.c	2011-08-09 00:02:34.854444169 +0200
-@@ -385,7 +385,10 @@
+--- a/source/lib/iconv.c
++++ b/source/lib/iconv.c
+@@ -385,7 +385,10 @@ static size_t latin1_push(void *cd, cons
  
  	while (*inbytesleft >= 2 && *outbytesleft >= 1) {
  		(*outbuf)[0] = (*inbuf)[0];
@@ -55,11 +49,9 @@ Index: samba-3.0.37/source/lib/iconv.c
  		(*inbytesleft)  -= 2;
  		(*outbytesleft) -= 1;
  		(*inbuf)  += 2;
-Index: samba-3.0.37/source/lib/pidfile.c
-===================================================================
---- samba-3.0.37.orig/source/lib/pidfile.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/lib/pidfile.c	2011-08-09 00:02:34.854444169 +0200
-@@ -87,6 +87,7 @@
+--- a/source/lib/pidfile.c
++++ b/source/lib/pidfile.c
+@@ -87,6 +87,7 @@ void pidfile_create(const char *program_
  	pstring pidFile;
  	pid_t pid;
  
@@ -67,7 +59,7 @@ Index: samba-3.0.37/source/lib/pidfile.c
  	/* Add a suffix to the program name if this is a process with a
  	 * none default configuration file name. */
  	if (strcmp( CONFIGFILE, dyn_CONFIGFILE) == 0) {
-@@ -103,6 +104,9 @@
+@@ -103,6 +104,9 @@ void pidfile_create(const char *program_
  		slprintf( name, sizeof( name)-1, "%s-%s", program_name,
  			  short_configfile );
  	}
@@ -77,11 +69,9 @@ Index: samba-3.0.37/source/lib/pidfile.c
  
  	slprintf(pidFile, sizeof(pidFile)-1, "%s/%s.pid", lp_piddir(), name);
  
-Index: samba-3.0.37/source/lib/system.c
-===================================================================
---- samba-3.0.37.orig/source/lib/system.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/lib/system.c	2011-08-09 00:02:34.864444169 +0200
-@@ -1499,7 +1499,11 @@
+--- a/source/lib/system.c
++++ b/source/lib/system.c
+@@ -1499,7 +1499,11 @@ int sys_pclose(int fd)
  void *sys_dlopen(const char *name, int flags)
  {
  #if defined(HAVE_DLOPEN)
@@ -93,11 +83,9 @@ Index: samba-3.0.37/source/lib/system.c
  #else
  	return NULL;
  #endif
-Index: samba-3.0.37/source/lib/util.c
-===================================================================
---- samba-3.0.37.orig/source/lib/util.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/lib/util.c	2011-08-09 00:02:34.864444169 +0200
-@@ -301,7 +301,11 @@
+--- a/source/lib/util.c
++++ b/source/lib/util.c
+@@ -301,7 +301,11 @@ const char *tmpdir(void)
  	char *p;
  	if ((p = getenv("TMPDIR")))
  		return p;
@@ -109,10 +97,8 @@ Index: samba-3.0.37/source/lib/util.c
  }
  
  /****************************************************************************
-Index: samba-3.0.37/source/libsmb/clifile.c
-===================================================================
---- samba-3.0.37.orig/source/libsmb/clifile.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/libsmb/clifile.c	2011-08-09 00:02:34.864444169 +0200
+--- a/source/libsmb/clifile.c
++++ b/source/libsmb/clifile.c
 @@ -21,6 +21,8 @@
  
  #include "includes.h"
@@ -122,7 +108,7 @@ Index: samba-3.0.37/source/libsmb/clifile.c
  /****************************************************************************
   Hard/Symlink a file (UNIX extensions).
   Creates new name (sym)linked to oldname.
-@@ -71,6 +73,9 @@
+@@ -71,6 +73,9 @@ static BOOL cli_link_internal(struct cli
  	return True;
  }
  
@@ -132,7 +118,7 @@ Index: samba-3.0.37/source/libsmb/clifile.c
  /****************************************************************************
   Map standard UNIX permissions onto wire representations.
  ****************************************************************************/
-@@ -165,6 +170,9 @@
+@@ -165,6 +170,9 @@ static mode_t unix_filetype_from_wire(ui
  	}
  }
  
@@ -142,7 +128,7 @@ Index: samba-3.0.37/source/libsmb/clifile.c
  /****************************************************************************
   Do a POSIX getfacl (UNIX extensions).
  ****************************************************************************/
-@@ -647,6 +655,7 @@
+@@ -647,6 +655,7 @@ int cli_nt_delete_on_close(struct cli_st
  
  	return True;
  }
@@ -150,7 +136,7 @@ Index: samba-3.0.37/source/libsmb/clifile.c
  
  /****************************************************************************
   Open a file - exposing the full horror of the NT API :-).
-@@ -718,6 +727,7 @@
+@@ -718,6 +727,7 @@ int cli_nt_create(struct cli_state *cli,
  				FILE_SHARE_READ|FILE_SHARE_WRITE, FILE_OPEN, 0x0, 0x0);
  }
  
@@ -158,7 +144,7 @@ Index: samba-3.0.37/source/libsmb/clifile.c
  /****************************************************************************
   Open a file
   WARNING: if you open with O_WRONLY then getattrE won't work!
-@@ -796,6 +806,7 @@
+@@ -796,6 +806,7 @@ int cli_open(struct cli_state *cli, cons
  
  	return SVAL(cli->inbuf,smb_vwv2);
  }
@@ -166,7 +152,7 @@ Index: samba-3.0.37/source/libsmb/clifile.c
  
  /****************************************************************************
   Close a file.
-@@ -823,6 +834,7 @@
+@@ -823,6 +834,7 @@ BOOL cli_close(struct cli_state *cli, in
  	return !cli_is_error(cli);
  }
  
@@ -174,18 +160,16 @@ Index: samba-3.0.37/source/libsmb/clifile.c
  
  /****************************************************************************
   send a lock with a specified locktype 
-@@ -1972,3 +1984,6 @@
+@@ -1972,3 +1984,6 @@ int cli_posix_rmdir(struct cli_state *cl
  {
  	return cli_posix_unlink_internal(cli, fname, True);
  }
 +
 +#endif /* AVM_SMALLER */
 +
-Index: samba-3.0.37/source/libsmb/namequery.c
-===================================================================
---- samba-3.0.37.orig/source/libsmb/namequery.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/libsmb/namequery.c	2011-08-09 00:02:34.864444169 +0200
-@@ -1114,6 +1114,7 @@
+--- a/source/libsmb/namequery.c
++++ b/source/libsmb/namequery.c
+@@ -1114,6 +1114,7 @@ static BOOL resolve_ads(const char *name
  			const char *sitename,
                           struct ip_service **return_iplist, int *return_count)
  {
@@ -193,7 +177,7 @@ Index: samba-3.0.37/source/libsmb/namequery.c
  	int 			i, j;
  	NTSTATUS  		status;
  	TALLOC_CTX		*ctx;
-@@ -1194,6 +1195,9 @@
+@@ -1194,6 +1195,9 @@ static BOOL resolve_ads(const char *name
  		
  	talloc_destroy(ctx);
  	return True;
@@ -203,11 +187,9 @@ Index: samba-3.0.37/source/libsmb/namequery.c
  }
  
  /*******************************************************************
-Index: samba-3.0.37/source/libsmb/namequery_dc.c
-===================================================================
---- samba-3.0.37.orig/source/libsmb/namequery_dc.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/libsmb/namequery_dc.c	2011-08-09 00:02:34.864444169 +0200
-@@ -52,6 +52,9 @@
+--- a/source/libsmb/namequery_dc.c
++++ b/source/libsmb/namequery_dc.c
+@@ -52,6 +52,9 @@ static BOOL ads_dc_name(const char *doma
  			struct in_addr *dc_ip,
  			fstring srv_name)
  {
@@ -217,7 +199,7 @@ Index: samba-3.0.37/source/libsmb/namequery_dc.c
  	ADS_STRUCT *ads;
  	char *sitename;
  	int i;
-@@ -139,6 +142,7 @@
+@@ -139,6 +142,7 @@ static BOOL ads_dc_name(const char *doma
  		 srv_name, inet_ntoa(*dc_ip)));
  	
  	return True;
@@ -225,10 +207,8 @@ Index: samba-3.0.37/source/libsmb/namequery_dc.c
  }
  
  /****************************************************************************
-Index: samba-3.0.37/source/modules/vfs_default.c
-===================================================================
---- samba-3.0.37.orig/source/modules/vfs_default.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/modules/vfs_default.c	2011-08-09 14:13:37.593167315 +0200
+--- a/source/modules/vfs_default.c
++++ b/source/modules/vfs_default.c
 @@ -24,6 +24,78 @@
  #undef DBGC_CLASS
  #define DBGC_CLASS DBGC_VFS
@@ -308,7 +288,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  /* Check for NULL pointer parameters in vfswrap_* functions */
  
  /* We don't want to have NULL function pointers lying around.  Someone
-@@ -88,6 +160,10 @@
+@@ -88,6 +160,10 @@ static int vfswrap_get_shadow_copy_data(
  
  static int vfswrap_statvfs(struct vfs_handle_struct *handle,  const char *path, vfs_statvfs_struct *statbuf)
  {
@@ -319,7 +299,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	return sys_statvfs(path, statbuf);
  }
  
-@@ -97,6 +173,10 @@
+@@ -97,6 +173,10 @@ static SMB_STRUCT_DIR *vfswrap_opendir(v
  {
  	SMB_STRUCT_DIR *result;
  
@@ -330,7 +310,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_opendir);
  	result = sys_opendir(fname);
  	END_PROFILE(syscall_opendir);
-@@ -141,6 +221,10 @@
+@@ -141,6 +221,10 @@ static int vfswrap_mkdir(vfs_handle_stru
  	int result;
  	BOOL has_dacl = False;
  
@@ -341,7 +321,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_mkdir);
  
  	if (lp_inherit_acls(SNUM(handle->conn)) && (has_dacl = directory_has_default_acl(handle->conn, parent_dirname(path))))
-@@ -169,6 +253,10 @@
+@@ -169,6 +253,10 @@ static int vfswrap_rmdir(vfs_handle_stru
  {
  	int result;
  
@@ -352,7 +332,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_rmdir);
  	result = rmdir(path);
  	END_PROFILE(syscall_rmdir);
-@@ -192,6 +280,10 @@
+@@ -192,6 +280,10 @@ static int vfswrap_open(vfs_handle_struc
  {
  	int result;
  
@@ -363,7 +343,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_open);
  	result = sys_open(fname, flags, mode);
  	END_PROFILE(syscall_open);
-@@ -361,6 +453,11 @@
+@@ -361,6 +453,11 @@ static int copy_reg(const char *source, 
  	int ifd = -1;
  	int ofd = -1;
  
@@ -375,7 +355,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	if (sys_lstat (source, &source_stats) == -1)
  		return -1;
  
-@@ -442,6 +539,11 @@
+@@ -442,6 +539,11 @@ static int vfswrap_rename(vfs_handle_str
  {
  	int result;
  
@@ -387,7 +367,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_rename);
  	result = rename(oldname, newname);
  	if ((result == -1) && (errno == EXDEV)) {
-@@ -471,6 +573,10 @@
+@@ -471,6 +573,10 @@ static int vfswrap_stat(vfs_handle_struc
  {
  	int result;
  
@@ -398,7 +378,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_stat);
  	result = sys_stat(fname, sbuf);
  	END_PROFILE(syscall_stat);
-@@ -491,6 +597,10 @@
+@@ -491,6 +597,10 @@ int vfswrap_lstat(vfs_handle_struct *han
  {
  	int result;
  
@@ -409,7 +389,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_lstat);
  	result = sys_lstat(path, sbuf);
  	END_PROFILE(syscall_lstat);
-@@ -501,6 +611,10 @@
+@@ -501,6 +611,10 @@ static int vfswrap_unlink(vfs_handle_str
  {
  	int result;
  
@@ -420,7 +400,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_unlink);
  	result = unlink(path);
  	END_PROFILE(syscall_unlink);
-@@ -511,6 +625,10 @@
+@@ -511,6 +625,10 @@ static int vfswrap_chmod(vfs_handle_stru
  {
  	int result;
  
@@ -431,7 +411,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_chmod);
  
  	/*
-@@ -572,6 +690,10 @@
+@@ -572,6 +690,10 @@ static int vfswrap_chown(vfs_handle_stru
  {
  	int result;
  
@@ -442,7 +422,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_chown);
  	result = sys_chown(path, uid, gid);
  	END_PROFILE(syscall_chown);
-@@ -597,6 +719,10 @@
+@@ -597,6 +719,10 @@ static int vfswrap_chdir(vfs_handle_stru
  {
  	int result;
  
@@ -453,7 +433,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_chdir);
  	result = chdir(path);
  	END_PROFILE(syscall_chdir);
-@@ -717,6 +843,44 @@
+@@ -717,6 +843,44 @@ static int vfswrap_ftruncate(vfs_handle_
  		return result;
  	}
  
@@ -498,7 +478,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	/* we used to just check HAVE_FTRUNCATE_EXTEND and only use
  	   sys_ftruncate if the system supports it. Then I discovered that
  	   you can have some filesystems that support ftruncate
-@@ -830,6 +994,11 @@
+@@ -830,6 +994,11 @@ static int vfswrap_symlink(vfs_handle_st
  {
  	int result;
  
@@ -510,7 +490,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_symlink);
  	result = sys_symlink(oldpath, newpath);
  	END_PROFILE(syscall_symlink);
-@@ -840,6 +1009,10 @@
+@@ -840,6 +1009,10 @@ static int vfswrap_readlink(vfs_handle_s
  {
  	int result;
  
@@ -521,7 +501,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_readlink);
  	result = sys_readlink(path, buf, bufsiz);
  	END_PROFILE(syscall_readlink);
-@@ -850,6 +1023,11 @@
+@@ -850,6 +1023,11 @@ static int vfswrap_link(vfs_handle_struc
  {
  	int result;
  
@@ -533,7 +513,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_link);
  	result = sys_link(oldpath, newpath);
  	END_PROFILE(syscall_link);
-@@ -860,6 +1038,9 @@
+@@ -860,6 +1038,9 @@ static int vfswrap_mknod(vfs_handle_stru
  {
  	int result;
  
@@ -543,7 +523,7 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_mknod);
  	result = sys_mknod(pathname, mode, dev);
  	END_PROFILE(syscall_mknod);
-@@ -870,6 +1051,9 @@
+@@ -870,6 +1051,9 @@ static char *vfswrap_realpath(vfs_handle
  {
  	char *result;
  
@@ -553,11 +533,9 @@ Index: samba-3.0.37/source/modules/vfs_default.c
  	START_PROFILE(syscall_realpath);
  	result = sys_realpath(path, resolved_path);
  	END_PROFILE(syscall_realpath);
-Index: samba-3.0.37/source/param/loadparm.c
-===================================================================
---- samba-3.0.37.orig/source/param/loadparm.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/param/loadparm.c	2011-08-09 00:02:34.874444169 +0200
-@@ -2713,8 +2713,11 @@
+--- a/source/param/loadparm.c
++++ b/source/param/loadparm.c
+@@ -2713,8 +2713,11 @@ static BOOL lp_add_ipc(const char *ipc_n
  
  	slprintf(comment, sizeof(comment) - 1,
  		 "IPC Service (%s)", Globals.szServerString);
@@ -570,11 +548,9 @@ Index: samba-3.0.37/source/param/loadparm.c
  	string_set(&ServicePtrs[i]->szUsername, "");
  	string_set(&ServicePtrs[i]->comment, comment);
  	string_set(&ServicePtrs[i]->fstype, "IPC");
-Index: samba-3.0.37/source/registry/reg_frontend.c
-===================================================================
---- samba-3.0.37.orig/source/registry/reg_frontend.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/registry/reg_frontend.c	2011-08-09 00:02:34.874444169 +0200
-@@ -35,9 +35,11 @@
+--- a/source/registry/reg_frontend.c
++++ b/source/registry/reg_frontend.c
+@@ -35,9 +35,11 @@ extern REGISTRY_OPS regdb_ops;		/* these
  
  REGISTRY_HOOK reg_hooks[] = {
  #ifndef REG_TDB_ONLY 
@@ -586,11 +562,9 @@ Index: samba-3.0.37/source/registry/reg_frontend.c
    { KEY_SHARES,      		&shares_reg_ops },
  #endif
    { NULL, NULL }
-Index: samba-3.0.37/source/rpc_client/cli_pipe.c
-===================================================================
---- samba-3.0.37.orig/source/rpc_client/cli_pipe.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/rpc_client/cli_pipe.c	2011-08-09 00:02:34.874444169 +0200
-@@ -619,7 +619,11 @@
+--- a/source/rpc_client/cli_pipe.c
++++ b/source/rpc_client/cli_pipe.c
+@@ -619,7 +619,11 @@ static NTSTATUS cli_pipe_validate_curren
  
  			DEBUG(1, ("cli_pipe_validate_current_pdu: RPC fault code %s received from remote machine %s "
  				"pipe %s fnum 0x%x!\n",
@@ -602,11 +576,9 @@ Index: samba-3.0.37/source/rpc_client/cli_pipe.c
  				cli->cli->desthost,
  				cli->pipe_name,
  				(unsigned int)cli->fnum));
-Index: samba-3.0.37/source/rpc_parse/parse_prs.c
-===================================================================
---- samba-3.0.37.orig/source/rpc_parse/parse_prs.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/rpc_parse/parse_prs.c	2011-08-09 00:02:34.874444169 +0200
-@@ -796,7 +796,12 @@
+--- a/source/rpc_parse/parse_prs.c
++++ b/source/rpc_parse/parse_prs.c
+@@ -796,7 +796,12 @@ BOOL prs_dcerpc_status(const char *name,
  	}
  
  	DEBUG(5,("%s%04x %s: %s\n", tab_depth(depth), ps->data_offset, name, 
@@ -620,11 +592,9 @@ Index: samba-3.0.37/source/rpc_parse/parse_prs.c
  
  	ps->data_offset += sizeof(uint32);
  
-Index: samba-3.0.37/source/rpc_parse/parse_sec.c
-===================================================================
---- samba-3.0.37.orig/source/rpc_parse/parse_sec.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/rpc_parse/parse_sec.c	2011-08-09 00:02:34.874444169 +0200
-@@ -104,7 +104,7 @@
+--- a/source/rpc_parse/parse_sec.c
++++ b/source/rpc_parse/parse_sec.c
+@@ -104,7 +104,7 @@ BOOL sec_io_ace(const char *desc, SEC_AC
   for you as it reads them.
  ********************************************************************/
  
@@ -633,11 +603,9 @@ Index: samba-3.0.37/source/rpc_parse/parse_sec.c
  {
  	unsigned int i;
  	uint32 old_offset;
-Index: samba-3.0.37/source/rpc_parse/parse_spoolss.c
-===================================================================
---- samba-3.0.37.orig/source/rpc_parse/parse_spoolss.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/rpc_parse/parse_spoolss.c	2011-08-09 00:02:34.874444169 +0200
-@@ -227,8 +227,13 @@
+--- a/source/rpc_parse/parse_spoolss.c
++++ b/source/rpc_parse/parse_spoolss.c
+@@ -227,8 +227,13 @@ static BOOL smb_io_notify_option_type_da
  	if(!prs_uint32("count2", ps, depth, &type->count2))
  		return False;
  	
@@ -652,11 +620,9 @@ Index: samba-3.0.37/source/rpc_parse/parse_spoolss.c
  
  	if (type->count2 > MAX_NOTIFY_TYPE_FOR_NOW) {
  		return False;
-Index: samba-3.0.37/source/rpc_server/srv_pipe.c
-===================================================================
---- samba-3.0.37.orig/source/rpc_server/srv_pipe.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/rpc_server/srv_pipe.c	2011-08-09 00:02:34.884444169 +0200
-@@ -2335,6 +2335,7 @@
+--- a/source/rpc_server/srv_pipe.c
++++ b/source/rpc_server/srv_pipe.c
+@@ -2335,6 +2335,7 @@ void get_pipe_fns( int idx, struct api_s
  	int               n_cmds = 0;
  
  	switch ( idx ) {
@@ -664,7 +630,7 @@ Index: samba-3.0.37/source/rpc_server/srv_pipe.c
  		case PI_LSARPC:
  			lsa_get_pipe_fns( &cmds, &n_cmds );
  			break;
-@@ -2347,12 +2348,14 @@
+@@ -2347,12 +2348,14 @@ void get_pipe_fns( int idx, struct api_s
  		case PI_NETLOGON:
  			netlog_get_pipe_fns( &cmds, &n_cmds );
  			break;
@@ -679,7 +645,7 @@ Index: samba-3.0.37/source/rpc_server/srv_pipe.c
  		case PI_WINREG:
  			reg_get_pipe_fns( &cmds, &n_cmds );
  			break;
-@@ -2371,6 +2374,8 @@
+@@ -2371,6 +2374,8 @@ void get_pipe_fns( int idx, struct api_s
  		case PI_NTSVCS:
  			ntsvcs_get_pipe_fns( &cmds, &n_cmds );
  			break;
@@ -688,10 +654,8 @@ Index: samba-3.0.37/source/rpc_server/srv_pipe.c
  #ifdef DEVELOPER
  		case PI_ECHO:
  			echo_get_pipe_fns( &cmds, &n_cmds );
-Index: samba-3.0.37/source/smbd/change_trust_pw.c
-===================================================================
---- samba-3.0.37.orig/source/smbd/change_trust_pw.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/smbd/change_trust_pw.c	2011-08-09 00:02:34.884444169 +0200
+--- a/source/smbd/change_trust_pw.c
++++ b/source/smbd/change_trust_pw.c
 @@ -30,6 +30,10 @@
  
  NTSTATUS change_trust_account_password( const char *domain, const char *remote_machine)
@@ -703,17 +667,15 @@ Index: samba-3.0.37/source/smbd/change_trust_pw.c
  	NTSTATUS nt_status = NT_STATUS_UNSUCCESSFUL;
  	struct in_addr pdc_ip;
  	fstring dc_name;
-@@ -97,4 +101,5 @@
+@@ -97,4 +101,5 @@ failed:
  		DEBUG(5,("change_trust_account_password: sucess!\n"));
    
  	return nt_status;
 +#endif /* AVM_SMALLER */
  }
-Index: samba-3.0.37/source/smbd/close.c
-===================================================================
---- samba-3.0.37.orig/source/smbd/close.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/smbd/close.c	2011-08-09 00:02:34.884444169 +0200
-@@ -353,7 +353,9 @@
+--- a/source/smbd/close.c
++++ b/source/smbd/close.c
+@@ -353,7 +353,9 @@ static NTSTATUS close_normal_file(files_
  	saved_status2 = close_filestruct(fsp);
  
  	if (fsp->print_file) {
@@ -723,11 +685,9 @@ Index: samba-3.0.37/source/smbd/close.c
  		file_free(fsp);
  		return NT_STATUS_OK;
  	}
-Index: samba-3.0.37/source/smbd/conn.c
-===================================================================
---- samba-3.0.37.orig/source/smbd/conn.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/smbd/conn.c	2011-08-09 00:02:34.884444169 +0200
-@@ -216,9 +216,12 @@
+--- a/source/smbd/conn.c
++++ b/source/smbd/conn.c
+@@ -216,9 +216,12 @@ BOOL conn_idle_all(time_t t, int deadtim
  	 * idle with a handle open.
  	 */
  
@@ -740,11 +700,9 @@ Index: samba-3.0.37/source/smbd/conn.c
  	
  	return allidle;
  }
-Index: samba-3.0.37/source/smbd/dfree.c
-===================================================================
---- samba-3.0.37.orig/source/smbd/dfree.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/smbd/dfree.c	2011-08-09 00:02:34.884444169 +0200
-@@ -130,11 +130,13 @@
+--- a/source/smbd/dfree.c
++++ b/source/smbd/dfree.c
+@@ -130,11 +130,13 @@ SMB_BIG_UINT sys_disk_free(connection_st
  		}
  	}
  
@@ -758,11 +716,9 @@ Index: samba-3.0.37/source/smbd/dfree.c
  
  	/* FIXME : Any reason for this assumption ? */
  	if (*bsize < 256) {
-Index: samba-3.0.37/source/smbd/dosmode.c
-===================================================================
---- samba-3.0.37.orig/source/smbd/dosmode.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/smbd/dosmode.c	2011-08-09 00:02:34.884444169 +0200
-@@ -40,12 +40,15 @@
+--- a/source/smbd/dosmode.c
++++ b/source/smbd/dosmode.c
+@@ -40,12 +40,15 @@ static uint32 set_offline_flag(connectio
  	if (ISDOT(path) || ISDOTDOT(path)) {
  		return 0;
  	}
@@ -779,11 +735,9 @@ Index: samba-3.0.37/source/smbd/dosmode.c
  }
  
  /****************************************************************************
-Index: samba-3.0.37/source/smbd/fileio.c
-===================================================================
---- samba-3.0.37.orig/source/smbd/fileio.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/smbd/fileio.c	2011-08-09 00:02:34.884444169 +0200
-@@ -176,6 +176,8 @@
+--- a/source/smbd/fileio.c
++++ b/source/smbd/fileio.c
+@@ -176,6 +176,8 @@ static ssize_t real_write_file(files_str
  
  static int wcp_file_size_change(files_struct *fsp)
  {
@@ -792,7 +746,7 @@ Index: samba-3.0.37/source/smbd/fileio.c
  	int ret;
  	write_cache *wcp = fsp->wcp;
  
-@@ -199,6 +201,10 @@
+@@ -199,6 +201,10 @@ ssize_t write_file(files_struct *fsp, co
  	int write_path = -1; 
  
  	if (fsp->print_file) {
@@ -803,7 +757,7 @@ Index: samba-3.0.37/source/smbd/fileio.c
  		fstring sharename;
  		uint32 jobid;
  
-@@ -210,6 +216,7 @@
+@@ -210,6 +216,7 @@ ssize_t write_file(files_struct *fsp, co
  		}
  
  		return print_job_write(SNUM(fsp->conn), jobid, data, pos, n);
@@ -811,11 +765,9 @@ Index: samba-3.0.37/source/smbd/fileio.c
  	}
  
  	if (!fsp->can_write) {
-Index: samba-3.0.37/source/smbd/files.c
-===================================================================
---- samba-3.0.37.orig/source/smbd/files.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/smbd/files.c	2011-08-09 00:02:34.884444169 +0200
-@@ -203,10 +203,12 @@
+--- a/source/smbd/files.c
++++ b/source/smbd/files.c
+@@ -203,10 +203,12 @@ open files, %d are available.\n", reques
  		exit_server("out of memory in file_init");
  	}
  	
@@ -828,11 +780,9 @@ Index: samba-3.0.37/source/smbd/files.c
  }
  
  /****************************************************************************
-Index: samba-3.0.37/source/smbd/lanman.c
-===================================================================
---- samba-3.0.37.orig/source/smbd/lanman.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/smbd/lanman.c	2011-08-09 00:02:34.884444169 +0200
-@@ -400,6 +400,7 @@
+--- a/source/smbd/lanman.c
++++ b/source/smbd/lanman.c
+@@ -400,6 +400,7 @@ static void PACKS(struct pack_desc* desc
  	PACK(desc,t,v);
  }
  
@@ -840,7 +790,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  /****************************************************************************
   Get a print queue.
  ****************************************************************************/
-@@ -781,6 +782,7 @@
+@@ -781,6 +782,7 @@ static int get_printerdrivernumber(int s
  
  	return result;
  }
@@ -848,7 +798,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  
  static BOOL api_DosPrintQGetInfo(connection_struct *conn, uint16 vuid,
  				char *param, int tpscnt,
-@@ -789,6 +791,9 @@
+@@ -789,6 +791,9 @@ static BOOL api_DosPrintQGetInfo(connect
  				char **rdata,char **rparam,
  				int *rdata_len,int *rparam_len)
  {
@@ -858,7 +808,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  	char *str1 = get_safe_str_ptr(param,tpscnt,param,2);
  	char *str2 = skip_string(param,tpscnt,str1);
  	char *p = skip_string(param,tpscnt,str2);
-@@ -901,6 +906,7 @@
+@@ -901,6 +906,7 @@ static BOOL api_DosPrintQGetInfo(connect
  	SAFE_FREE(tmpdata);
  
  	return(True);
@@ -866,7 +816,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  }
  
  /****************************************************************************
-@@ -914,6 +920,9 @@
+@@ -914,6 +920,9 @@ static BOOL api_DosPrintQEnum(connection
  				char **rdata, char** rparam,
  				int *rdata_len, int *rparam_len)
  {
@@ -876,7 +826,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  	char *param_format = get_safe_str_ptr(param,tpscnt,param,2);
  	char *output_format1 = skip_string(param,tpscnt,param_format);
  	char *p = skip_string(param,tpscnt,output_format1);
-@@ -1046,6 +1055,7 @@
+@@ -1046,6 +1055,7 @@ static BOOL api_DosPrintQEnum(connection
  	SAFE_FREE(status);
  
  	return False;
@@ -884,7 +834,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  }
  
  /****************************************************************************
-@@ -2539,6 +2549,9 @@
+@@ -2539,6 +2549,9 @@ static BOOL api_RDosPrintJobDel(connecti
  				char **rdata,char **rparam,
  				int *rdata_len,int *rparam_len)
  {
@@ -894,7 +844,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  	int function = get_safe_SVAL(param,tpscnt,param,0,0);
  	char *str1 = get_safe_str_ptr(param,tpscnt,param,2);
  	char *str2 = skip_string(param,tpscnt,str1);
-@@ -2609,6 +2622,7 @@
+@@ -2609,6 +2622,7 @@ static BOOL api_RDosPrintJobDel(connecti
  	SSVAL(*rparam,2,0);		/* converter word */
  
  	return(True);
@@ -902,7 +852,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  }
  
  /****************************************************************************
-@@ -2622,6 +2636,9 @@
+@@ -2622,6 +2636,9 @@ static BOOL api_WPrintQueueCtrl(connecti
  				char **rdata,char **rparam,
  				int *rdata_len,int *rparam_len)
  {
@@ -912,7 +862,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  	int function = get_safe_SVAL(param,tpscnt,param,0,0);
  	char *str1 = get_safe_str_ptr(param,tpscnt,param,2);
  	char *str2 = skip_string(param,tpscnt,str1);
-@@ -2674,6 +2691,7 @@
+@@ -2674,6 +2691,7 @@ static BOOL api_WPrintQueueCtrl(connecti
  	SSVAL(*rparam,2,0);		/* converter word */
  
  	return(True);
@@ -920,7 +870,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  }
  
  /****************************************************************************
-@@ -2714,6 +2732,9 @@
+@@ -2714,6 +2732,9 @@ static BOOL api_PrintJobInfo(connection_
  				char **rdata,char **rparam,
  				int *rdata_len,int *rparam_len)
  {
@@ -930,7 +880,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  	struct pack_desc desc;
  	char *str1 = get_safe_str_ptr(param,tpscnt,param,2);
  	char *str2 = skip_string(param,tpscnt,str1);
-@@ -2788,6 +2809,7 @@
+@@ -2788,6 +2809,7 @@ static BOOL api_PrintJobInfo(connection_
  	SSVAL(*rparam,2,0);		/* converter word */
  	
  	return(True);
@@ -938,7 +888,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  }
  
  
-@@ -3579,6 +3601,9 @@
+@@ -3579,6 +3601,9 @@ static BOOL api_WPrintJobGetInfo(connect
  				char **rdata,char **rparam,
  				int *rdata_len,int *rparam_len)
  {
@@ -948,7 +898,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  	char *str1 = get_safe_str_ptr(param,tpscnt,param,2);
  	char *str2 = skip_string(param,tpscnt,str1);
  	char *p = skip_string(param,tpscnt,str2);
-@@ -3669,6 +3694,7 @@
+@@ -3669,6 +3694,7 @@ static BOOL api_WPrintJobGetInfo(connect
  	DEBUG(4,("WPrintJobGetInfo: errorcode %d\n",desc.errcode));
  
  	return True;
@@ -956,7 +906,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  }
  
  static BOOL api_WPrintJobEnumerate(connection_struct *conn, uint16 vuid,
-@@ -3678,6 +3704,9 @@
+@@ -3678,6 +3704,9 @@ static BOOL api_WPrintJobEnumerate(conne
  				char **rdata,char **rparam,
  				int *rdata_len,int *rparam_len)
  {
@@ -966,7 +916,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  	char *str1 = get_safe_str_ptr(param,tpscnt,param,2);
  	char *str2 = skip_string(param,tpscnt,str1);
  	char *p = skip_string(param,tpscnt,str2);
-@@ -3760,6 +3789,7 @@
+@@ -3760,6 +3789,7 @@ static BOOL api_WPrintJobEnumerate(conne
  	DEBUG(4,("WPrintJobEnumerate: errorcode %d\n",desc.errcode));
  
  	return True;
@@ -974,7 +924,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  }
  
  static int check_printdest_info(struct pack_desc* desc,
-@@ -3835,6 +3865,9 @@
+@@ -3835,6 +3865,9 @@ static BOOL api_WPrintDestGetInfo(connec
  				char **rdata,char **rparam,
  				int *rdata_len,int *rparam_len)
  {
@@ -984,7 +934,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  	char *str1 = get_safe_str_ptr(param,tpscnt,param,2);
  	char *str2 = skip_string(param,tpscnt,str1);
  	char *p = skip_string(param,tpscnt,str2);
-@@ -3906,6 +3939,7 @@
+@@ -3906,6 +3939,7 @@ static BOOL api_WPrintDestGetInfo(connec
  	SAFE_FREE(tmpdata);
  
  	return True;
@@ -992,7 +942,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  }
  
  static BOOL api_WPrintDestEnum(connection_struct *conn, uint16 vuid,
-@@ -3915,6 +3949,9 @@
+@@ -3915,6 +3949,9 @@ static BOOL api_WPrintDestEnum(connectio
  				char **rdata,char **rparam,
  				int *rdata_len,int *rparam_len)
  {
@@ -1002,7 +952,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  	char *str1 = get_safe_str_ptr(param,tpscnt,param,2);
  	char *str2 = skip_string(param,tpscnt,str1);
  	char *p = skip_string(param,tpscnt,str2);
-@@ -3987,6 +4024,7 @@
+@@ -3987,6 +4024,7 @@ static BOOL api_WPrintDestEnum(connectio
  	DEBUG(4,("WPrintDestEnumerate: errorcode %d\n",desc.errcode));
  
  	return True;
@@ -1010,7 +960,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  }
  
  static BOOL api_WPrintDriverEnum(connection_struct *conn, uint16 vuid,
-@@ -3996,6 +4034,9 @@
+@@ -3996,6 +4034,9 @@ static BOOL api_WPrintDriverEnum(connect
  				char **rdata,char **rparam,
  				int *rdata_len,int *rparam_len)
  {
@@ -1020,7 +970,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  	char *str1 = get_safe_str_ptr(param,tpscnt,param,2);
  	char *str2 = skip_string(param,tpscnt,str1);
  	char *p = skip_string(param,tpscnt,str2);
-@@ -4050,6 +4091,7 @@
+@@ -4050,6 +4091,7 @@ static BOOL api_WPrintDriverEnum(connect
  	DEBUG(4,("WPrintDriverEnum: errorcode %d\n",desc.errcode));
  
  	return True;
@@ -1028,7 +978,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  }
  
  static BOOL api_WPrintQProcEnum(connection_struct *conn, uint16 vuid,
-@@ -4059,6 +4101,9 @@
+@@ -4059,6 +4101,9 @@ static BOOL api_WPrintQProcEnum(connecti
  				char **rdata,char **rparam,
  				int *rdata_len,int *rparam_len)
  {
@@ -1038,7 +988,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  	char *str1 = get_safe_str_ptr(param,tpscnt,param,2);
  	char *str2 = skip_string(param,tpscnt,str1);
  	char *p = skip_string(param,tpscnt,str2);
-@@ -4113,6 +4158,7 @@
+@@ -4113,6 +4158,7 @@ static BOOL api_WPrintQProcEnum(connecti
  	DEBUG(4,("WPrintQProcEnum: errorcode %d\n",desc.errcode));
  
  	return True;
@@ -1046,7 +996,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  }
  
  static BOOL api_WPrintPortEnum(connection_struct *conn, uint16 vuid,
-@@ -4122,6 +4168,9 @@
+@@ -4122,6 +4168,9 @@ static BOOL api_WPrintPortEnum(connectio
  				char **rdata,char **rparam,
  				int *rdata_len,int *rparam_len)
  {
@@ -1056,7 +1006,7 @@ Index: samba-3.0.37/source/smbd/lanman.c
  	char *str1 = get_safe_str_ptr(param,tpscnt,param,2);
  	char *str2 = skip_string(param,tpscnt,str1);
  	char *p = skip_string(param,tpscnt,str2);
-@@ -4178,6 +4227,7 @@
+@@ -4178,6 +4227,7 @@ static BOOL api_WPrintPortEnum(connectio
  	DEBUG(4,("WPrintPortEnum: errorcode %d\n",desc.errcode));
  
  	return True;
@@ -1064,11 +1014,9 @@ Index: samba-3.0.37/source/smbd/lanman.c
  }
  
  /****************************************************************************
-Index: samba-3.0.37/source/smbd/open.c
-===================================================================
---- samba-3.0.37.orig/source/smbd/open.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/smbd/open.c	2011-08-09 00:02:34.884444169 +0200
-@@ -1155,8 +1155,11 @@
+--- a/source/smbd/open.c
++++ b/source/smbd/open.c
+@@ -1155,8 +1155,11 @@ NTSTATUS open_file_ntcreate(connection_s
  		}
  
  		DEBUG(10, ("open_file_ntcreate: printer open fname=%s\n", fname));
@@ -1081,11 +1029,9 @@ Index: samba-3.0.37/source/smbd/open.c
  	}
  
  	if (!parent_dirname_talloc(tmp_talloc_ctx(), fname, &parent_dir,
-Index: samba-3.0.37/source/smbd/process.c
-===================================================================
---- samba-3.0.37.orig/source/smbd/process.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/smbd/process.c	2011-08-09 00:02:34.894444169 +0200
-@@ -1028,7 +1028,9 @@
+--- a/source/smbd/process.c
++++ b/source/smbd/process.c
+@@ -1028,7 +1028,9 @@ static int construct_reply(char *inbuf,c
  
  	chain_size = 0;
  	file_chain_reset();
@@ -1095,7 +1041,7 @@ Index: samba-3.0.37/source/smbd/process.c
  
  	if (msg_type != 0)
  		return(reply_special(inbuf,outbuf));  
-@@ -1268,9 +1270,11 @@
+@@ -1268,9 +1270,11 @@ static int setup_select_timeout(void)
  
  	select_timeout = blocking_locks_timeout_ms(SMBD_SELECT_TIMEOUT*1000);
  
@@ -1107,7 +1053,7 @@ Index: samba-3.0.37/source/smbd/process.c
  
  	return select_timeout;
  }
-@@ -1461,9 +1465,10 @@
+@@ -1461,9 +1465,10 @@ machine %s in domain %s.\n", global_myna
  	 */
  	process_blocking_lock_queue();
  
@@ -1119,7 +1065,7 @@ Index: samba-3.0.37/source/smbd/process.c
    
  	/*
  	 * Now we are root, check if the log files need pruning.
-@@ -1472,9 +1477,10 @@
+@@ -1472,9 +1477,10 @@ machine %s in domain %s.\n", global_myna
  	force_check_log_size();
  	check_log_size();
  
@@ -1131,11 +1077,9 @@ Index: samba-3.0.37/source/smbd/process.c
  
  	/*
  	 * Modify the select timeout depending upon
-Index: samba-3.0.37/source/smbd/reply.c
-===================================================================
---- samba-3.0.37.orig/source/smbd/reply.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/smbd/reply.c	2011-08-09 00:02:34.894444169 +0200
-@@ -3606,7 +3606,10 @@
+--- a/source/smbd/reply.c
++++ b/source/smbd/reply.c
+@@ -3606,7 +3606,10 @@ int reply_printopen(connection_struct *c
  	NTSTATUS status;
  	
  	START_PROFILE(SMBsplopen);
@@ -1147,7 +1091,7 @@ Index: samba-3.0.37/source/smbd/reply.c
  	if (!CAN_PRINT(conn)) {
  		END_PROFILE(SMBsplopen);
  		return ERROR_DOS(ERRDOS,ERRnoaccess);
-@@ -3628,6 +3631,7 @@
+@@ -3628,6 +3631,7 @@ int reply_printopen(connection_struct *c
  
  	END_PROFILE(SMBsplopen);
  	return(outsize);
@@ -1155,7 +1099,7 @@ Index: samba-3.0.37/source/smbd/reply.c
  }
  
  /****************************************************************************
-@@ -3644,6 +3648,10 @@
+@@ -3644,6 +3648,10 @@ int reply_printclose(connection_struct *
  
  	CHECK_FSP(fsp,conn);
  
@@ -1166,7 +1110,7 @@ Index: samba-3.0.37/source/smbd/reply.c
  	if (!CAN_PRINT(conn)) {
  		END_PROFILE(SMBsplclose);
  		return ERROR_NT(NT_STATUS_DOS(ERRSRV, ERRerror));
-@@ -3661,6 +3669,7 @@
+@@ -3661,6 +3669,7 @@ int reply_printclose(connection_struct *
  
  	END_PROFILE(SMBsplclose);
  	return(outsize);
@@ -1174,7 +1118,7 @@ Index: samba-3.0.37/source/smbd/reply.c
  }
  
  /****************************************************************************
-@@ -3670,6 +3679,10 @@
+@@ -3670,6 +3679,10 @@ int reply_printclose(connection_struct *
  int reply_printqueue(connection_struct *conn,
  		     char *inbuf,char *outbuf, int dum_size, int dum_buffsize)
  {
@@ -1185,7 +1129,7 @@ Index: samba-3.0.37/source/smbd/reply.c
  	int outsize = set_message(outbuf,2,3,True);
  	int max_count = SVAL(inbuf,smb_vwv0);
  	int start_index = SVAL(inbuf,smb_vwv1);
-@@ -3732,6 +3745,7 @@
+@@ -3732,6 +3745,7 @@ int reply_printqueue(connection_struct *
    
  	END_PROFILE(SMBsplretq);
  	return(outsize);
@@ -1193,10 +1137,8 @@ Index: samba-3.0.37/source/smbd/reply.c
  }
  
  /****************************************************************************
-Index: samba-3.0.37/source/smbd/server.c
-===================================================================
---- samba-3.0.37.orig/source/smbd/server.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/smbd/server.c	2011-08-09 00:02:34.894444169 +0200
+--- a/source/smbd/server.c
++++ b/source/smbd/server.c
 @@ -22,7 +22,7 @@
  
  #include "includes.h"
@@ -1206,7 +1148,7 @@ Index: samba-3.0.37/source/smbd/server.c
  
  static int am_parent = 1;
  
-@@ -617,6 +617,7 @@
+@@ -617,6 +617,7 @@ static BOOL open_sockets_smbd(BOOL is_da
  **************************************************************************/
  void reload_printers(void)
  {
@@ -1214,7 +1156,7 @@ Index: samba-3.0.37/source/smbd/server.c
  	int snum;
  	int n_services = lp_numservices();
  	int pnum = lp_servicenumber(PRINTERS_NAME);
-@@ -643,6 +644,7 @@
+@@ -643,6 +644,7 @@ void reload_printers(void)
  	}
  
  	load_printers();
@@ -1222,7 +1164,7 @@ Index: samba-3.0.37/source/smbd/server.c
  }
  
  /****************************************************************************
-@@ -725,7 +727,9 @@
+@@ -725,7 +727,9 @@ static void exit_server_common(enum serv
  
  	invalidate_all_vuids();
  
@@ -1232,7 +1174,7 @@ Index: samba-3.0.37/source/smbd/server.c
  
  	/* delete our entry in the connections database. */
  	yield_connection(NULL,"");
-@@ -739,7 +743,9 @@
+@@ -739,7 +743,9 @@ static void exit_server_common(enum serv
  #endif
  
  	locking_end();
@@ -1242,7 +1184,7 @@ Index: samba-3.0.37/source/smbd/server.c
  
  	if (how != SERVER_EXIT_NORMAL) {
  		int oldlevel = DEBUGLEVEL;
-@@ -820,7 +826,9 @@
+@@ -820,7 +826,9 @@ static BOOL init_structs(void )
     mkproto.h.  Mixing $(builddir) and $(srcdir) source files in the current
     prototype generation system is too complicated. */
  
@@ -1252,7 +1194,7 @@ Index: samba-3.0.37/source/smbd/server.c
  
   int main(int argc,const char *argv[])
  {
-@@ -833,6 +841,13 @@
+@@ -833,6 +841,13 @@ extern void build_options(BOOL screen);
  	static char *ports = NULL;
  	static char *profile_level = NULL;
  	int opt;
@@ -1266,7 +1208,7 @@ Index: samba-3.0.37/source/smbd/server.c
  	poptContext pc;
  
  	struct poptOption long_options[] = {
-@@ -842,7 +857,9 @@
+@@ -842,7 +857,9 @@ extern void build_options(BOOL screen);
  	{"foreground", 'F', POPT_ARG_VAL, &Fork, False, "Run daemon in foreground (for daemontools, etc.)" },
  	{"no-process-group", '\0', POPT_ARG_VAL, &no_process_group, True, "Don't create a new process group" },
  	{"log-stdout", 'S', POPT_ARG_VAL, &log_stdout, True, "Log to stdout" },
@@ -1276,7 +1218,7 @@ Index: samba-3.0.37/source/smbd/server.c
  	{"port", 'p', POPT_ARG_STRING, &ports, 0, "Listen on the specified ports"},
  	{"profiling-level", 'P', POPT_ARG_STRING, &profile_level, 0, "Set profiling level","PROFILE_LEVEL"},
  	POPT_COMMON_SAMBA
-@@ -861,21 +878,31 @@
+@@ -861,21 +878,31 @@ extern void build_options(BOOL screen);
  	pc = poptGetContext("smbd", argc, argv, long_options, 0);
  	
  	while((opt = poptGetNextOpt(pc)) != -1) {
@@ -1308,7 +1250,7 @@ Index: samba-3.0.37/source/smbd/server.c
  	sec_init();
  
  	set_remote_machine_name("smbd", False);
-@@ -903,6 +930,16 @@
+@@ -903,6 +930,16 @@ extern void build_options(BOOL screen);
  	/* make absolutely sure we run as root - to handle cases where people
  	   are crazy enough to have it setuid */
  
@@ -1325,7 +1267,7 @@ Index: samba-3.0.37/source/smbd/server.c
  	gain_root_privilege();
  	gain_root_group_privilege();
  
-@@ -945,8 +982,10 @@
+@@ -945,8 +982,10 @@ extern void build_options(BOOL screen);
  	DEBUG(2,("uid=%d gid=%d euid=%d egid=%d\n",
  		 (int)getuid(),(int)getgid(),(int)geteuid(),(int)getegid()));
  
@@ -1336,7 +1278,7 @@ Index: samba-3.0.37/source/smbd/server.c
  
  	if (sizeof(uint16) < 2 || sizeof(uint32) < 4) {
  		DEBUG(0,("ERROR: Samba is not configured correctly for the word size on your machine\n"));
-@@ -1042,16 +1081,20 @@
+@@ -1042,16 +1081,20 @@ extern void build_options(BOOL screen);
  
  	namecache_enable();
  
@@ -1357,7 +1299,7 @@ Index: samba-3.0.37/source/smbd/server.c
  
  	if (!init_guest_info()) {
  		DEBUG(0,("ERROR: failed to setup guest info.\n"));
-@@ -1068,14 +1111,18 @@
+@@ -1068,14 +1111,18 @@ extern void build_options(BOOL screen);
  	   smbd is launched via inetd and we fork a copy of 
  	   ourselves here */
  
@@ -1376,7 +1318,7 @@ Index: samba-3.0.37/source/smbd/server.c
  
  	if (!open_sockets_smbd(is_daemon, interactive, ports))
  		exit(1);
-@@ -1084,7 +1131,12 @@
+@@ -1084,7 +1131,12 @@ extern void build_options(BOOL screen);
  	 * everything after this point is run after the fork()
  	 */ 
  
@@ -1389,11 +1331,9 @@ Index: samba-3.0.37/source/smbd/server.c
  
  	init_modules();
  
-Index: samba-3.0.37/source/smbd/service.c
-===================================================================
---- samba-3.0.37.orig/source/smbd/service.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/smbd/service.c	2011-08-09 00:02:34.894444169 +0200
-@@ -288,6 +288,7 @@
+--- a/source/smbd/service.c
++++ b/source/smbd/service.c
+@@ -288,6 +288,7 @@ int find_service(fstring service)
  		iService = add_home_service(service,service /* 'username' */, phome_dir);
  	}
  
@@ -1401,7 +1341,7 @@ Index: samba-3.0.37/source/smbd/service.c
  	/* If we still don't have a service, attempt to add it as a printer. */
  	if (iService < 0) {
  		int iPrinterService;
-@@ -307,6 +308,7 @@
+@@ -307,6 +308,7 @@ int find_service(fstring service)
  			}
  		}
  	}
@@ -1409,7 +1349,7 @@ Index: samba-3.0.37/source/smbd/service.c
  
  	/* Check for default vfs service?  Unsure whether to implement this */
  	if (iService < 0) {
-@@ -1225,7 +1227,9 @@
+@@ -1225,7 +1227,9 @@ connection_struct *make_connection(const
  void close_cnum(connection_struct *conn, uint16 vuid)
  {
  	if (IS_IPC(conn)) {
@@ -1419,11 +1359,9 @@ Index: samba-3.0.37/source/smbd/service.c
  	} else {
  		file_close_conn(conn);
  		dptr_closecnum(conn);
-Index: samba-3.0.37/source/smbd/trans2.c
-===================================================================
---- samba-3.0.37.orig/source/smbd/trans2.c	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/smbd/trans2.c	2011-08-09 00:02:34.904444169 +0200
-@@ -2878,11 +2878,14 @@
+--- a/source/smbd/trans2.c
++++ b/source/smbd/trans2.c
+@@ -2878,11 +2878,14 @@ cap_low = 0x%x, cap_high = 0x%x\n",
  				/* unknown_2 6 NULL bytes follow*/
  		
  				/* now set the quotas */
@@ -1439,10 +1377,8 @@ Index: samba-3.0.37/source/smbd/trans2.c
  				break;
  			}
  		default:
-Index: samba-3.0.37/source/utils/avm_smbpasswd.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ samba-3.0.37/source/utils/avm_smbpasswd.c	2011-08-09 00:02:34.904444169 +0200
+--- /dev/null
++++ b/source/utils/avm_smbpasswd.c
 @@ -0,0 +1,212 @@
 +/*
 + * Unix SMB/CIFS implementation.
@@ -1656,11 +1592,9 @@ Index: samba-3.0.37/source/utils/avm_smbpasswd.c
 +fprintf(stderr, "%u samba users written to %s\n", nusers, passwd_filename);
 +	return 0;
 +}
-Index: samba-3.0.37/source/Makefile.in
-===================================================================
---- samba-3.0.37.orig/source/Makefile.in	2009-09-30 14:21:56.000000000 +0200
-+++ samba-3.0.37/source/Makefile.in	2011-08-09 14:13:50.623167315 +0200
-@@ -257,7 +257,7 @@
+--- a/source/Makefile.in
++++ b/source/Makefile.in
+@@ -257,7 +257,7 @@ LIB_WITH_PROTO_OBJ = $(VERSION_OBJ) lib/
  	  lib/adt_tree.o lib/gencache.o $(TDB_OBJ) \
  	  lib/module.o lib/events.o lib/ldap_escape.o @CHARSET_STATIC@ \
  	  lib/secdesc.o lib/util_seaccess.o lib/secace.o lib/secacl.o \
@@ -1669,7 +1603,7 @@ Index: samba-3.0.37/source/Makefile.in
  
  LIB_OBJ = $(LIB_WITHOUT_PROTO_OBJ) $(LIB_WITH_PROTO_OBJ)
  
-@@ -272,7 +272,7 @@
+@@ -272,7 +272,7 @@ POPT_LIB_OBJ = lib/popt_common.o
  
  PARAM_OBJ = dynconfig.o param/loadparm.o param/params.o lib/sharesec.o lib/ldap_debug_handler.o
  
@@ -1678,7 +1612,7 @@ Index: samba-3.0.37/source/Makefile.in
  
  LIBADDNS_OBJ0 = libaddns/dnsrecord.o libaddns/dnsutils.o  libaddns/dnssock.o \
  	       libaddns/dnsgss.o libaddns/dnsmarshall.o
-@@ -282,14 +282,9 @@
+@@ -282,14 +282,9 @@ LIBGPO_OBJ0 = libgpo/gpo_ldap.o libgpo/g
  	      libgpo/gpo_fetch.o libgpo/gpo_filesync.o
  LIBGPO_OBJ = $(LIBGPO_OBJ0)
  
@@ -1695,7 +1629,7 @@ Index: samba-3.0.37/source/Makefile.in
  
  SECRETS_OBJ = passdb/secrets.o passdb/machine_sid.o
  
-@@ -471,7 +466,7 @@
+@@ -471,7 +466,7 @@ SMBD_OBJ_SRV = smbd/files.o smbd/chgpass
  	       printing/printfsp.o lib/sysquotas.o lib/sysquotas_linux.o \
  	       lib/sysquotas_xfs.o lib/sysquotas_4A.o \
  	       smbd/change_trust_pw.o smbd/fake_file.o \
@@ -1704,7 +1638,7 @@ Index: samba-3.0.37/source/Makefile.in
  	       $(AFS_SETTOKEN_OBJ) smbd/aio.o smbd/statvfs.o \
  	       smbd/dmapi.o $(MANGLE_OBJ) @VFS_STATIC@
  
-@@ -821,9 +816,9 @@
+@@ -821,9 +816,9 @@ TDBDUMP_OBJ = tdb/tools/tdbdump.o $(TDBB
  NTLM_AUTH_OBJ1 = utils/ntlm_auth.o utils/ntlm_auth_diagnostics.o
  
  NTLM_AUTH_OBJ = ${NTLM_AUTH_OBJ1} $(LIBSAMBA_OBJ) $(POPT_LIB_OBJ) \
