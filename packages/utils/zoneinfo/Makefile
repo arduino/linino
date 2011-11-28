@@ -9,13 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zoneinfo
-PKG_VERSION:=2011i
-PKG_RELEASE:=2
+PKG_VERSION:=2011n
+PKG_VERSION_CODE:=2011i
+PKG_RELEASE:=1
 
 PKG_SOURCE:=tzdata$(PKG_VERSION).tar.gz
-PKG_SOURCE_CODE:=tzcode${PKG_VERSION}.tar.gz
+PKG_SOURCE_CODE:=tzcode$(PKG_VERSION_CODE).tar.gz
 PKG_SOURCE_URL:=http://source.icu-project.org/repos/icu/data/trunk/tzdata/mirror/
-PKG_MD5SUM:=c7a86ec34f30f8d6aa77ef94902a3047
+PKG_MD5SUM:=20dbfb28efa008ddbf6dd34601ea40fa
 
 include $(INCLUDE_DIR)/package.mk
 
