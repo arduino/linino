@@ -58,8 +58,9 @@ append_params_quoted() {
 }
 
 section_enabled() {
+	config_get_bool enable  "$1" 'enable'  0
 	config_get_bool enabled "$1" 'enabled' 0
-	[ $enabled -gt 0 ]
+	[ $enable -gt 0 ] || [ $enabled -gt 0 ]
 }
 
 start_instance() {
