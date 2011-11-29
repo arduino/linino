@@ -78,6 +78,7 @@ TARGET_CFLAGS+=$(if $(CONFIG_SAMBA3_CONFIG_NO_PRINTING),-DAVM_NO_PRINTING)
 CONFIGURE_PATH:=source
 CONFIGURE_ARGS+= \
 	$(if $(CONFIG_SAMBA3_CONFIG_DEBUG),--enable-debug) \
+	$(if $(CONFIG_SAMBA3_CONFIG_NO_PRINTING),--enable-cups=no --enable-iprint=no) \
 	--without-krb5 \
 	--without-ads \
 	--without-ldap \
