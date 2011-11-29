@@ -8,23 +8,37 @@ smb_header() {
 	local workgroup
 	local description
 	local homes
+	local interface
 
 	config_get name $1 name
 	config_get workgroup $1 workgroup
 	config_get description $1 description
 	config_get homes $1 homes
+	config_get interface $1 interface "lan"
+
+	# resolve interfaces
+	local interfaces=$(
+		include /lib/network
+		scan_interfaces
+		local net ifname; for net in $interface; do
+			config_get ifname "$net" ifname "$net"
+			echo -n "$ifname "
+		done
+	)
 
 	[ -z "$name" ] && name=openwrt
 	[ -z "$workgroup" ] && workgroup=openwrt
 	[ -z "$description" ] && description=openwrt
 
-	cp /etc/samba/smb.conf.template /tmp/smb.conf
-	[ -L /etc/samba/smb.conf ] || ln -nsf /tmp/smb.conf /etc/samba/smb.conf
-	sed -i "s/|NAME|/$name/g" /tmp/smb.conf
-	sed -i "s/|WORKGROUP|/$workgroup/g" /tmp/smb.conf
-	sed -i "s/|DESCRIPTION|/$description/g" /tmp/smb.conf
+	mkdir -p /var/etc
+	cp /etc/samba/smb.conf.template /var/etc/smb.conf
+	[ -L /etc/samba/smb.conf ] || ln -nsf /var/etc/smb.conf /etc/samba/smb.conf
+	sed -i "s/|NAME|/$name/g" /var/etc/smb.conf
+	sed -i "s/|WORKGROUP|/$workgroup/g" /var/etc/smb.conf
+	sed -i "s/|DESCRIPTION|/$description/g" /var/etc/smb.conf
+	sed -i "s/|INTERFACES|/$interfaces/g" /var/etc/smb.conf
 	[ "$homes" == "1" ] && {
-		echo -e "\n[homes]\n\tcomment = Home Directories\n\tbrowseable = no\n\tread only = no\n\tcreate mode = 0750" >> /tmp/smb.conf
+		echo -e "\n[homes]\n\tcomment = Home Directories\n\tbrowseable = no\n\tread only = no\n\tcreate mode = 0750" >> /var/etc/smb.conf
 	}
 }
 
@@ -47,12 +61,12 @@ smb_add_share() {
 
 	[ -z "$name" -o -z "$path" ] && return
 
-	echo -e "\n[$name]\n\tpath = $path" >> /tmp/smb.conf
-	[ -n "$users" ] && echo -e "\tvalid users = $users" >> /tmp/smb.conf
-	[ -n "$read_only" ] && echo -e "\tread only = $read_only" >> /tmp/smb.conf
-	[ -n "$guest_ok" ] && echo -e "\tguest ok = $guest_ok" >> /tmp/smb.conf
-	[ -n "$create_mask" ] && echo -e "\tcreate mask = $create_mask" >> /tmp/smb.conf
-	[ -n "$dir_mask" ] && echo -e "\tdirectory mask = $dir_mask" >> /tmp/smb.conf
+	echo -e "\n[$name]\n\tpath = $path" >> /var/etc/smb.conf
+	[ -n "$users" ] && echo -e "\tvalid users = $users" >> /var/etc/smb.conf
+	[ -n "$read_only" ] && echo -e "\tread only = $read_only" >> /var/etc/smb.conf
+	[ -n "$guest_ok" ] && echo -e "\tguest ok = $guest_ok" >> /var/etc/smb.conf
+	[ -n "$create_mask" ] && echo -e "\tcreate mask = $create_mask" >> /var/etc/smb.conf
+	[ -n "$dir_mask" ] && echo -e "\tdirectory mask = $dir_mask" >> /var/etc/smb.conf
 }
 
 start() {
