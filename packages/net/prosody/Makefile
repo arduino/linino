@@ -83,3 +83,5 @@ define Package/prosody/install
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/prosody/util/*.lua $(1)/usr/lib/prosody/util/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/prosody/util/*.so $(1)/usr/lib/prosody/util/
 endef
+
+$(eval $(call BuildPackage,prosody))
