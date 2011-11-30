@@ -15,7 +15,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=tzdata$(PKG_VERSION).tar.gz
 PKG_SOURCE_CODE:=tzcode$(PKG_VERSION_CODE).tar.gz
-PKG_SOURCE_URL:=http://source.icu-project.org/repos/icu/data/trunk/tzdata/mirror/
+PKG_SOURCE_URL:=http://www.iana.org/time-zones/repository/releases
 PKG_MD5SUM:=20dbfb28efa008ddbf6dd34601ea40fa
 
 include $(INCLUDE_DIR)/package.mk
