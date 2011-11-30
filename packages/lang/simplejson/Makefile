@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=simplejson
-PKG_VERSION:=2.1.6
+PKG_VERSION:=2.2.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://pypi.python.org/packages/source/s/simplejson/
-PKG_MD5SUM:=2f8351f6e6fe7ef25744805dfa56c0d5
+PKG_MD5SUM:=070c6467462bd63306f1756b01df6d70
 PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
