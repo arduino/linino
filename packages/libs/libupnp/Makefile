@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libupnp
 PKG_VERSION:=1.6.12
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/pupnp
@@ -50,24 +50,6 @@ define Package/libupnp-sample/description
 TVcontrolpoint & tvdevice sample applications run inside /etc/upnp-tvdevice/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-	);
-endef
-
-TARGET_CFLAGS += $(FPIC)
-
-define Build/Compile/libupnp-sample
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		check
-	$(MAKE) -C $(PKG_BUILD_DIR)/upnp/sample \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		upnp_tv_device upnp_tv_ctrlpt
-endef
-
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/upnp $(1)/usr/include/
@@ -84,10 +66,9 @@ endef
 
 define Package/libupnp-sample/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/tv_device $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/tv_ctrlpt $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/.libs/* $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/etc/upnp-tvdevice/web
-	$(CP) $(PKG_BUILD_DIR)/upnp/sample/web/* $(1)/etc/upnp-tvdevice
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/upnp/sample/web/* $(1)/etc/upnp-tvdevice
 endef
 
 $(eval $(call BuildPackage,libupnp))
