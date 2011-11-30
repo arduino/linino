@@ -14,7 +14,7 @@
  RPC_DFS_OBJ =  $(if $(OWRT_SMALLER),,rpc_server/srv_dfs.o rpc_server/srv_dfs_nt.o)
  
 -RPC_SPOOLSS_OBJ = $(if $(OWRT_SMALLER),,rpc_server/srv_spoolss.o rpc_server/srv_spoolss_nt.o)
-+RPC_SPOOLSS_OBJ = $(if $(OWRT_SMALLER)$(OWRT_NO_PRINTING),,rpc_server/srv_spoolss.o rpc_server/srv_spoolss_nt.o)
++RPC_SPOOLSS_OBJ = $(if $(OWRT_NO_PRINTING),,rpc_server/srv_spoolss.o rpc_server/srv_spoolss_nt.o)
  
  RPC_EVENTLOG_OBJ = $(if $(OWRT_SMALLER),,rpc_server/srv_eventlog.o rpc_server/srv_eventlog_nt.o rpc_server/srv_eventlog_lib.o)
  
