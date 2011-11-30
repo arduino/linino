@@ -2,8 +2,8 @@
  Makefile.pre.in |    6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
---- Python-2.6.4.orig/Makefile.pre.in
-+++ Python-2.6.4/Makefile.pre.in
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
 @@ -1118,11 +1118,11 @@ TAGS::
  # Sanitation targets -- clean leaves libraries, executables and tags
  # files, which clobber removes as well

@@ -2,8 +2,8 @@
  Lib/distutils/command/build_scripts.py |   43 +++------------------------------
  1 file changed, 4 insertions(+), 39 deletions(-)
 
---- Python-2.6.4.orig/Lib/distutils/command/build_scripts.py
-+++ Python-2.6.4/Lib/distutils/command/build_scripts.py
+--- a/Lib/distutils/command/build_scripts.py
++++ b/Lib/distutils/command/build_scripts.py
 @@ -54,10 +54,7 @@ class build_scripts (Command):
  
  

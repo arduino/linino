@@ -2,8 +2,8 @@
  setup.py |   10 ++++++----
  1 file changed, 6 insertions(+), 4 deletions(-)
 
---- Python-2.6.4.orig/setup.py
-+++ Python-2.6.4/setup.py
+--- a/setup.py
++++ b/setup.py
 @@ -622,9 +622,10 @@ class PyBuildExt(build_ext):
  
          #print 'openssl_ver = 0x%08x' % openssl_ver

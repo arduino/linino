@@ -2,8 +2,8 @@
  Makefile.pre.in |   16 ----------------
  1 file changed, 16 deletions(-)
 
---- Python-2.6.4.orig/Makefile.pre.in
-+++ Python-2.6.4/Makefile.pre.in
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
 @@ -887,22 +887,6 @@ libinstall:	build_all $(srcdir)/Lib/$(PL
  		done; \
  	done
