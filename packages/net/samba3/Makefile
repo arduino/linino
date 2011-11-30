@@ -30,7 +30,7 @@ endef
 define Package/samba3
 $(call Package/samba3/Default)
   TITLE:=SMB server for file and printer sharing
-  DEPENDS:=+libpthread +libpopt $(ICONV_DEPENDS) +!CONFIG_SAMBA3_CONFIG_NO_PRINTING:cups
+  DEPENDS:=+libpthread +libpopt $(ICONV_DEPENDS) +!SAMBA3_CONFIG_NO_PRINTING:cups
 endef
 
 define Package/samba3-nmbd
