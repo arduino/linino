@@ -30,13 +30,13 @@ endef
 define Package/samba3
 $(call Package/samba3/Default)
   TITLE:=SMB server for file and printer sharing
-  DEPENDS:=+libpthread +libpopt $(ICONV_DEPENDS) +!SAMBA3_CONFIG_NO_PRINTING:cups
+  DEPENDS:=+libpthread +libpopt $(ICONV_DEPENDS)
 endef
 
 define Package/samba3-nmbd
 $(call Package/samba3/Default)
   TITLE:=NetBIOS name server
-  DEPENDS:=+samba3
+  DEPENDS:=samba3
 endef
 
 define Package/samba3-mountcifs
@@ -74,11 +74,11 @@ endef
 
 TARGET_CFLAGS+=$(if $(CONFIG_SAMBA3_CONFIG_DEBUG),-DSAMBA_DEBUG,-DMAX_DEBUG_LEVEL=2)
 TARGET_CFLAGS+=$(if $(CONFIG_SAMBA3_CONFIG_SMALLER),-DAVM_SMALLER)
-TARGET_CFLAGS+=$(if $(CONFIG_SAMBA3_CONFIG_NO_PRINTING),-DAVM_NO_PRINTING)
+TARGET_CFLAGS+=$(if $(CONFIG_SAMBA3_CONFIG_PRINTING),,-DAVM_NO_PRINTING)
 CONFIGURE_PATH:=source
 CONFIGURE_ARGS+= \
 	$(if $(CONFIG_SAMBA3_CONFIG_DEBUG),--enable-debug) \
-	$(if $(CONFIG_SAMBA3_CONFIG_NO_PRINTING),--enable-cups=no --enable-iprint=no) \
+	$(if $(CONFIG_SAMBA3_CONFIG_PRINTING),,--enable-cups=no --enable-iprint=no) \
 	--without-krb5 \
 	--without-ads \
 	--without-ldap \
@@ -99,7 +99,7 @@ CONFIGURE_VARS+= \
 
 MAKE_PATH=source
 MAKE_FLAGS += \
-	$(if $(CONFIG_SAMBA3_CONFIG_NO_PRINTING),OWRT_NO_PRINTING=1) \
+	$(if $(CONFIG_SAMBA3_CONFIG_PRINTING),,OWRT_NO_PRINTING=1) \
 	$(if $(CONFIG_SAMBA3_CONFIG_SMALLER),OWRT_SMALLER=1)
 
 define Build/Compile
