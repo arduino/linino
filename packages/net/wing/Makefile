@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wing
-PKG_VERSION:=20110709
+PKG_VERSION:=20111103
 PKG_RELEASE:=1
-PKG_REV:=6aaea18b8e199781dc600681882cb2648f43ec38
+PKG_REV:=23e6455a1cfe0877334f0d18068a3fb47425b8a4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=git://github.com/rriggio/click.git
@@ -24,9 +24,10 @@ include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/host-build.mk
 
 define Package/wing
-	TITLE:=Wireless mesh networking toolkit
 	SECTION:=net
 	CATEGORY:=Network
+	SUBMENU:=Routing and Redirection
+	TITLE:=Wireless mesh networking toolkit
 	MAINTAINER:=Roberto Riggio <roberto.riggio@create-net.org>
 	DEPENDS:=+kmod-tun +libpcap +libstdcpp
 	URL:=http://www.wing-project.org/
@@ -44,12 +45,16 @@ CONFIGURE_ARGS += \
 	--enable-tools=host \
 	--enable-userlevel \
 	--enable-wifi \
+	--enable-wing \
+	--enable-diffserv \
 	--disable-linuxmodule \
 	--disable-dynamic-linking \
 
 HOST_CONFIGURE_ARGS += \
 	--enable-userlevel \
 	--enable-wifi \
+	--enable-wing \
+	--enable-diffserv \
 	--disable-linuxmodule \
 
 define Host/Compile
@@ -62,6 +67,7 @@ define Build/Compile
 		-f $(PKG_BUILD_DIR)/conf/wing/sample.click \
 		-A --all -E Discard -E Print -E PrintWifi -E Strip -E Null \
 		-E InfiniteSource -E RatedSource -E EtherEncap -E UDPIPEncap \
+		-E AggregateWingPacketType -E AggregateCounter \
 		-E RadiotapEncapHT -E SetTXRateHT \
 		-E WINGETTMetric -E WINGETXMetric -E WINGHopCountMetric \
 		-E ProbeTXRate -E MadwifiRate -E AutoRateFallback -E Minstrel \

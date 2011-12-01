@@ -1,13 +1,6 @@
 uci delete network.mesh
 uci set network.mesh=interface
 uci set network.mesh.proto=wing
-uci set network.mesh.rc=minstrel
-uci set network.mesh.ls=fcfs
-uci set network.mesh.metric=wcett
-uci set network.mesh.prefix=6
-uci set network.mesh.period=10000
-uci set network.mesh.tau=100000
-uci set network.mesh.debug=false
 
 uci add firewall zone
 uci set firewall.@zone[-1].name="mesh"

@@ -107,7 +107,9 @@ setup_interface_wing() {
 	ps | grep /usr/bin/click | grep -v grep | awk '{print $1}' > /var/run/$iface.pid
 
 	ifconfig "$iface" "$ipaddr" netmask "$netmask"
-	route add default dev "$iface"
+        route -n | grep -q '^0.0.0.0' || {
+        route add default dev "$iface"
+       }
 
 	uci_set_state network $config ifname "$iface"
 	uci_set_state network $config ipaddr "$ipaddr"
