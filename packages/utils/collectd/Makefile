@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=collectd
 PKG_VERSION:=4.10.2
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://collectd.org/files/
@@ -80,6 +80,7 @@ COLLECTD_PLUGINS_SELECTED:= \
 	interface \
 	iptables \
 	irq \
+	iwinfo \
 	load \
 	logfile \
 	madwifi \
@@ -139,6 +140,8 @@ define Package/collectd/description
  collectd is a small daemon which collects system information periodically
  and provides mechanismns to store the values in a variety of ways.
 endef
+
+TARGET_CFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 ifneq ($(CONFIG_avr32),)
   TARGET_CFLAGS += -fsigned-char
@@ -270,6 +273,7 @@ $(eval $(call BuildPlugin,fscache,file-system based caching framework input,fsca
 $(eval $(call BuildPlugin,interface,network interfaces input,interface,))
 $(eval $(call BuildPlugin,iptables,iptables status input,iptables,+PACKAGE_collectd-mod-iptables:iptables))
 $(eval $(call BuildPlugin,irq,interrupt usage input,irq,))
+$(eval $(call BuildPlugin,iwinfo,libiwinfo wireless statistics,iwinfo,+PACKAGE_collectd-mod-iwinfo:libiwinfo))
 $(eval $(call BuildPlugin,load,system load input,load,))
 $(eval $(call BuildPlugin,logfile,log files output,logfile,))
 $(eval $(call BuildPlugin,madwifi,MadWifi status input,madwifi,))
