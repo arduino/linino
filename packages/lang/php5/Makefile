@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
 PKG_VERSION:=5.3.8
-PKG_RELEASE:=6
+PKG_RELEASE:=7
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
@@ -35,7 +35,7 @@ PHP5_MODULES = \
 	pcntl pdo pdo-mysql pdo-pgsql pdo-sqlite pgsql \
 	session simplexml soap sockets sqlite sqlite3 sysvmsg sysvsem sysvshm \
 	tokenizer \
-	xml xmlreader xmlwriter \
+	xml xmlreader xmlwriter zip \
 
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_php5-cgi CONFIG_PACKAGE_php5-cli \
@@ -411,6 +411,12 @@ else
   CONFIGURE_ARGS+= --disable-xmlwriter
 endif
 
+ifneq ($(CONFIG_PACKAGE_php5-mod-zip),)
+  CONFIGURE_ARGS+= --enable-zip=shared
+else
+  CONFIGURE_ARGS+= --disable-zip
+endif
+
 ifneq ($(SDK)$(CONFIG_PHP5_FILTER),)
   CONFIGURE_ARGS+= --enable-filter
 else
@@ -534,3 +540,4 @@ $(eval $(call BuildModule,tokenizer,Tokenizer))
 $(eval $(call BuildModule,xml,XML,+PHP5_LIBXML:libxml2 +!PHP5_LIBXML:libexpat))
 $(eval $(call BuildModule,xmlreader,XMLReader,+@PHP5_LIBXML +PACKAGE_php5-mod-xmlreader:libxml2 +PACKAGE_php5-mod-xmlreader:libiconv))
 $(eval $(call BuildModule,xmlwriter,XMLWriter,+@PHP5_LIBXML +PACKAGE_php5-mod-xmlwriter:libxml2 +PACKAGE_php5-mod-xmlwriter:libiconv))
+$(eval $(call BuildModule,zip,ZIP,+PACKAGE_php5-mod-zip:zip))
