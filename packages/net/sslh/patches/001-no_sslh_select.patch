@@ -1,6 +1,6 @@
 --- a/Makefile
 +++ b/Makefile
-@@ -27,16 +27,12 @@
+@@ -32,16 +32,12 @@ all: sslh $(MAN) echosrv
  	$(CC) $(CFLAGS) -D'VERSION=$(VERSION)' -c $<
  
  
@@ -9,21 +9,21 @@
  
  sslh-fork: $(OBJS) sslh-fork.o Makefile common.h
  	$(CC) $(CFLAGS) -D'VERSION=$(VERSION)' -o sslh-fork sslh-fork.o $(OBJS) $(LIBS)
- 	strip sslh-fork
+ 	#strip sslh-fork
  
 -sslh-select: $(OBJS) sslh-select.o Makefile common.h 
 -	$(CC) $(CFLAGS) -D'VERSION=$(VERSION)' -o sslh-select sslh-select.o $(OBJS) $(LIBS)
--	strip sslh-select
+-	#strip sslh-select
 -
+ echosrv: $(OBJS) echosrv.o
+ 	$(CC) $(CFLAGS) -o echosrv echosrv.o common.o $(LIBS)
  
- $(MAN): sslh.pod Makefile
- 	pod2man --section=8 --release=$(VERSION) --center=" " sslh.pod | gzip -9 - > $(MAN)
-@@ -58,7 +54,7 @@
+@@ -65,7 +61,7 @@ uninstall:
  	update-rc.d sslh remove
  
  clean:
--	rm -f sslh-fork sslh-select $(MAN) *.o
-+	rm -f sslh-fork $(MAN) *.o
+-	rm -f sslh-fork sslh-select echosrv $(MAN) *.o *.gcov *.gcno *.gcda *.png *.html *.css *.info 
++	rm -f sslh-fork echosrv $(MAN) *.o *.gcov *.gcno *.gcda *.png *.html *.css *.info 
  
  tags:
  	ctags -T *.[ch]

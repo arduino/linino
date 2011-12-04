@@ -31,10 +31,13 @@ start_instance() {
 	# E) tinc parameter
         config_get val "${section}" tinc
         [ -n "${val}" ] && append args "--tinc ${val}"
-	# F) timeout (before a connection is considered to be SSH)
+	# F) xmpp parameter
+	config_get val "${section}" xmpp
+	[ -n "${val}" ] && append args "--xmpp ${val}"
+	# G) timeout (before a connection is considered to be SSH)
 	config_get val "${section}" timeout
 	[ -n "${val}" ] && append args "-t ${val}"
-	# G) verbose parameter
+	# H) verbose parameter
 	local verbosed
 	config_get_bool verbosed "${section}" verbose 0
 	[ "${verbosed}" -ne 0 ] && append args "-v"
