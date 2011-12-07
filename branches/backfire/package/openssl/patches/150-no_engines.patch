@@ -1,6 +1,6 @@
 --- a/Configure
 +++ b/Configure
-@@ -1904,6 +1904,11 @@ EOF
+@@ -1907,6 +1907,11 @@ EOF
  	close(OUT);
    }
    

@@ -9,7 +9,7 @@
  #
  # --test-sanity Make a number of sanity checks on the data in this file.
  #               This is a debugging tool for OpenSSL developers.
-@@ -554,6 +556,10 @@ my %table=(
+@@ -557,6 +559,10 @@ my %table=(
  ##### Compaq Non-Stop Kernel (Tandem)
  "tandem-c89","c89:-Ww -D__TANDEM -D_XOPEN_SOURCE -D_XOPEN_SOURCE_EXTENDED=1 -D_TANDEM_SOURCE -DB_ENDIAN::(unknown):::THIRTY_TWO_BIT:::",
  
@@ -20,7 +20,7 @@
  );
  
  my @MK1MF_Builds=qw(VC-WIN64I VC-WIN64A
-@@ -610,6 +616,8 @@ my $montasm=1;   # but "no-montasm" is d
+@@ -613,6 +619,8 @@ my $montasm=1;   # but "no-montasm" is d
  my $no_asm=0;
  my $no_dso=0;
  my $no_gmp=0;
@@ -29,7 +29,7 @@
  my @skip=();
  my $Makefile="Makefile";
  my $des_locl="crypto/des/des_locl.h";
-@@ -758,6 +766,14 @@ PROCESS_ARGS:
+@@ -761,6 +769,14 @@ PROCESS_ARGS:
  			{
  			exit(&test_sanity());
  			}
@@ -44,7 +44,7 @@
  		elsif (/^--strict-warnings/)
  			{
  			$strict_warnings = 1;
-@@ -1055,6 +1071,7 @@ foreach (sort (keys %disabled))
+@@ -1058,6 +1074,7 @@ foreach (sort (keys %disabled))
  			print " OPENSSL_NO_$ALGO";
  		
  			if (/^err$/)	{ $flags .= "-DOPENSSL_NO_ERR "; }
@@ -52,7 +52,7 @@
  			elsif (/^asm$/)	{ $no_asm = 1; }
  			}
  		else
-@@ -1184,6 +1201,16 @@ if (!$no_krb5)
+@@ -1187,6 +1204,16 @@ if (!$no_krb5)
  		   $withargs{"krb5-dir"} ne "";
  	}
  
