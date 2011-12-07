@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tcpdump
 PKG_VERSION:=4.1.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.tcpdump.org/release/ \
@@ -53,7 +53,8 @@ CONFIGURE_VARS += \
 	td_cv_buggygetaddrinfo="no" \
 	ac_cv_linux_vers=$(LINUX_VERSION) \
 	ac_cv_header_rpc_rpcent_h=no \
-	ac_cv_lib_rpc_main=no
+	ac_cv_lib_rpc_main=no \
+	ac_cv_path_PCAP_CONFIG=""
 
 MAKE_FLAGS :=
 
