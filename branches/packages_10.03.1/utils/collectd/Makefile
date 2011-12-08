@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=collectd
 PKG_VERSION:=4.10.2
-PKG_RELEASE:=2
+PKG_RELEASE:=2.1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://collectd.org/files/
@@ -80,6 +80,7 @@ COLLECTD_PLUGINS_SELECTED:= \
 	interface \
 	iptables \
 	irq \
+	iwinfo \
 	load \
 	logfile \
 	madwifi \
@@ -139,6 +140,8 @@ define Package/collectd/description
  collectd is a small daemon which collects system information periodically
  and provides mechanismns to store the values in a variety of ways.
 endef
+
+TARGET_CFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 ifneq ($(CONFIG_avr32),)
   TARGET_CFLAGS += -fsigned-char
@@ -270,6 +273,7 @@ $(eval $(call BuildPlugin,fscache,file-system based caching framework input,fsca
 $(eval $(call BuildPlugin,interface,network interfaces input,interface,))
 $(eval $(call BuildPlugin,iptables,iptables status input,iptables,+PACKAGE_collectd-mod-iptables:iptables @(!LINUX_2_4||BROKEN)))
 $(eval $(call BuildPlugin,irq,interrupt usage input,irq,))
+$(eval $(call BuildPlugin,iwinfo,libiwinfo wireless statistics,iwinfo,+PACKAGE_collectd-mod-iwinfo:libiwinfo))
 $(eval $(call BuildPlugin,load,system load input,load,))
 $(eval $(call BuildPlugin,logfile,log files output,logfile,))
 $(eval $(call BuildPlugin,madwifi,MadWifi status input,madwifi,))
