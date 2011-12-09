@@ -231,7 +231,7 @@
 +			continue;
 +
 +		if (strstr(ifname, "mon.") || strstr(ifname, ".sta") ||
-+		    strstr(ifname, "wmaster") || strstr(ifname, "wifi"))
++		    strstr(ifname, "tmp.") || strstr(ifname, "wifi"))
 +			continue;
 +
 +		iwinfo_process(ifname);
