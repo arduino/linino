@@ -471,6 +471,14 @@ define Package/php5-fastcgi/install
 	$(INSTALL_BIN) ./files/php5-fastcgi.init $(1)/etc/init.d/php5-fastcgi
 endef
 
+define Build/InstallDev
+	make -C $(PKG_BUILD_DIR) install INSTALL_ROOT=$(PKG_BUILD_DIR)/staging
+	rm $(PKG_BUILD_DIR)/staging/usr/bin/php
+	$(CP) $(PKG_BUILD_DIR)/staging/* $(STAGING_DIR_HOST)
+	sed -i -e "s#prefix='/usr'#prefix='$(STAGING_DIR_HOST)/usr'#" $(STAGING_DIR_HOST)/usr/bin/phpize
+	sed -i -e "s#exec_prefix=\"\`eval echo /usr\`\"#exec_prefix='$(STAGING_DIR_HOST)/usr'#" $(STAGING_DIR_HOST)/usr/bin/phpize
+endef
+
 define BuildModule
 
   define Package/php5-mod-$(1)
