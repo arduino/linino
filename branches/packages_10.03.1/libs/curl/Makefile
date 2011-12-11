@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007-2009 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -83,13 +83,6 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	LDFLAGS="$$$$LDFLAGS -lcrypto -lssl -lz" \
 	CC="$(filter-out ccache,$(TARGET_CC))"
-
-#define Build/Configure
-#	(cd $(PKG_BUILD_DIR); \
-#		autoreconf -v --install || exit 1 \
-#	);
-#	$(call Build/Configure/Default)
-#endef
 
 define Build/Compile
 	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
