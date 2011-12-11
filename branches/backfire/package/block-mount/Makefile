@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 # Copyright 2010 Vertical Communications
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=block-mount
 PKG_VERSION:=0.1.0
-PKG_RELEASE:=2.1
+PKG_RELEASE:=2.2
 
 include $(INCLUDE_DIR)/package.mk
 

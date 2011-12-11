@@ -225,8 +225,10 @@ config_get_mount_section_by_device() {
 		return 0	
 	}
 	config_foreach config_get_mount mount "$msbd_device"
-	[ -n "$msbd_mount_device" ] && config_create_mount_fstab_entry "$msbd_mount_device" "$msbd_target" "$msbd_fstype" "$msbd_options" "$msbd_enabled" 
-	mount_dev_section_cb "$msbd_mount_cfg" "$msbd_target" "$msbd_mount_device" "$msbd_fstype" "$msbd_options" "$msbd_enabled" "$msbd_enabled_fsck" "$msbd_uuid" "$msbd_label" "$msbd_is_rootfs"
+	[ "$msbd_is_rootfs" -gt 0 ] || {
+		[ -n "$msbd_mount_device" ] && config_create_mount_fstab_entry "$msbd_mount_device" "$msbd_target" "$msbd_fstype" "$msbd_options" "$msbd_enabled" 
+		mount_dev_section_cb "$msbd_mount_cfg" "$msbd_target" "$msbd_mount_device" "$msbd_fstype" "$msbd_options" "$msbd_enabled" "$msbd_enabled_fsck" "$msbd_uuid" "$msbd_label" "$msbd_is_rootfs"
+	}
 	reset_block_cb
 }
 
