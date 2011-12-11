@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=radsecproxy
-PKG_VERSION:=1.4.2
-PKG_RELEASE:=3
+PKG_VERSION:=1.5
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://software.uninett.no/radsecproxy/
-PKG_MD5SUM:=ccdff609c72c0862235b9119323345a8
+PKG_MD5SUM:=c65742a1b471c572ca7f6d11000d41f5
 
 PKG_INSTALL:=1
 
@@ -34,6 +34,11 @@ endef
 
 CONFIGURE_ARGS+= \
 	--with-ssl="$(STAGING_DIR)/usr"
+
+#TARGET_CFLAGS += -ansi
+#TARGET_CFLAGS += -std=c99
+TARGET_CFLAGS += -Wno-long-long
+
 
 define Package/radsecproxy/install
 	$(INSTALL_DIR) $(1)/usr/sbin/
