@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk18
-PKG_VERSION:=1.8.7.1
+PKG_VERSION:=1.8.7.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=asterisk-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.asterisk.org/pub/telephony/asterisk/releases/
-PKG_MD5SUM:=a732a608ce60fd523646be618e9da616
+PKG_MD5SUM:=27ab62d75be35e623e4798d58a0959fc
 
 PKG_BUILD_DIR=$(BUILD_DIR)/asterisk-$(PKG_VERSION)
 
@@ -562,3 +562,4 @@ $(eval $(call Buildasterisk18ModuleTemplate,app_senddtmf,Send DTMF digits,Sends 
 $(eval $(call Buildasterisk18ModuleTemplate,func_cut,CUT function,CUT function))
 $(eval $(call Buildasterisk18ModuleTemplate,res_clioriginate,Calls via CLI,Originate calls via the CLI))
 $(eval $(call Buildasterisk18ModuleTemplate,app_mixmonitor,Record a call and mix the audio,record a call and mix the audio during the recording))
+$(eval $(call Buildasterisk18ModuleTemplate,app_playtones,Playtones application,play a tone list))
