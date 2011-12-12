@@ -7,7 +7,7 @@
 	passdb backend = smbpasswd
 	obey pam restrictions = yes
 	socket options = TCP_NODELAY
-	unix charset = ISO-8859-1
+	unix charset = |CHARSET|
 	preferred master = yes
 	os level = 20
 	security = share

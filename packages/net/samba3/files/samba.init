@@ -4,42 +4,63 @@
 START=60
 
 smb_header() {
-	local name
-	local workgroup
-	local description
-	local homes
 	local interface
-
-	config_get name $1 name
-	config_get workgroup $1 workgroup
-	config_get description $1 description
-	config_get homes $1 homes
-	config_get interface $1 interface "lan"
+	config_get interface $1 interface "loopback lan"
 
 	# resolve interfaces
 	local interfaces=$(
 		include /lib/network
 		scan_interfaces
-		local net ifname; for net in $interface; do
-			config_get ifname "$net" ifname "$net"
-			echo -n "$ifname "
+
+		local net
+		for net in $interface; do
+			local ifname
+			config_get ifname "$net" ifname
+			[ -n "$ifname" ] && {
+				local ipaddr netmask
+				config_get ipaddr  "$net" ipaddr
+				config_get netmask "$net" netmask
+				[ -n "$ipaddr" ] && echo -n "$ipaddr/${netmask:-255.255.255.255} "
+
+				local ip6addr
+				config_get ip6addr "$net" ip6addr
+				[ -n "$ip6addr" ] && echo -n "$ip6addr "
+			}
+
+			echo -n "${ifname:-$net} "
 		done
 	)
 
-	[ -z "$name" ] && name=openwrt
-	[ -z "$workgroup" ] && workgroup=openwrt
-	[ -z "$description" ] && description=openwrt
+	local name workgroup description charset
+	local hostname="$(uci_get system.@system[0].hostname)"
+
+	config_get name        $1 name        "${hostname:-OpenWrt}"
+	config_get workgroup   $1 workgroup   "${hostname:-OpenWrt}"
+	config_get description $1 description "Samba on ${hostname:-OpenWrt}"
+	config_get charset     $1 charset     "UTF-8"
 
 	mkdir -p /var/etc
-	cp /etc/samba/smb.conf.template /var/etc/smb.conf
-	[ -L /etc/samba/smb.conf ] || ln -nsf /var/etc/smb.conf /etc/samba/smb.conf
-	sed -i "s/|NAME|/$name/g" /var/etc/smb.conf
-	sed -i "s/|WORKGROUP|/$workgroup/g" /var/etc/smb.conf
-	sed -i "s/|DESCRIPTION|/$description/g" /var/etc/smb.conf
-	sed -i "s/|INTERFACES|/$interfaces/g" /var/etc/smb.conf
-	[ "$homes" == "1" ] && {
-		echo -e "\n[homes]\n\tcomment = Home Directories\n\tbrowseable = no\n\tread only = no\n\tcreate mode = 0750" >> /var/etc/smb.conf
+	sed -e "s#|NAME|#$name#g" \
+	    -e "s#|WORKGROUP|#$workgroup#g" \
+	    -e "s#|DESCRIPTION|#$description#g" \
+	    -e "s#|INTERFACES|#$interfaces#g" \
+	    -e "s#|CHARSET|#$charset#g" \
+	    /etc/samba/smb.conf.template > /var/etc/smb.conf
+
+	local homes
+	config_get_bool homes $1 homes 0
+	[ $homes -gt 0 ] && {
+		cat <<EOT >> /var/etc/smb.conf
+
+[homes]
+	comment     = Home Directories
+	browsable   = no
+	read only   = no
+	create mode = 0750
+EOT
 	}
+
+	[ -L /etc/samba/smb.conf ] || ln -nsf /var/etc/smb.conf /etc/samba/smb.conf
 }
 
 smb_add_share() {
