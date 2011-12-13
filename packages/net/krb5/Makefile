@@ -76,11 +76,12 @@ CONFIGURE_ARGS += \
 	--disable-ipv6
 
 define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include \
+		$(1)/usr/include/krb5
 	$(INSTALL_DIR) $(1)/usr
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/include \
-		$(PKG_INSTALL_DIR)/usr/lib \
-		$(1)/usr/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib \
+		$(1)/usr
 endef
 
 define Package/krb5-libs/install
