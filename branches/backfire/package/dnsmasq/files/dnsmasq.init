@@ -322,10 +322,10 @@ dhcp_domain_add() {
 	local cfg="$1"
 	local ip name names
 
-	config_get names "$cfg" name
+	config_get names "$cfg" name "$2"
 	[ -n "$names" ] || return 0
 
-	config_get ip "$cfg" ip
+	config_get ip "$cfg" ip "$3"
 	[ -n "$ip" ] || return 0
 
 	local oIFS="$IFS"; IFS="."; set -- $ip; IFS="$oIFS"
@@ -349,6 +349,10 @@ dhcp_domain_add() {
 start() {
 	include /lib/network
 	scan_interfaces
+
+	local lanaddr
+	config_get lanaddr "lan" ipaddr
+
 	config_load dhcp
 
 	args=""
@@ -363,6 +367,12 @@ start() {
 	config_foreach dhcp_subscrid_add subscrid
 	config_foreach dhcp_domain_add domain
 	config_foreach dhcp_add dhcp
+
+	# add own hostname
+	[ -z "$lanaddr" ] || {
+		local hostname="$(uci_get system.@system[0].hostname)"
+		dhcp_domain_add "" "${hostname:-OpenWrt}" "$lanaddr"
+	}
 
 	/usr/sbin/dnsmasq $args && {
 		rm -f /tmp/resolv.conf
