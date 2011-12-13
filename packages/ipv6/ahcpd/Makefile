@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ahcpd
-PKG_VERSION:=0.52
-PKG_RELEASE:=4
+PKG_VERSION:=0.53
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/
-PKG_MD5SUM:=a354b55e775c9f7d26561de360309358
+PKG_MD5SUM:=a1a610bf20965aa522cd766bf3d5829a
 
 
 include $(INCLUDE_DIR)/package.mk
