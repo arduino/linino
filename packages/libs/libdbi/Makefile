@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -29,9 +29,7 @@ define Package/libdbi
 endef
 
 define Package/libdbi/description
-	SQLite is a small C library that implements a self-contained, embeddable, 
-	zero-configuration SQL database engine.	This package contains the SQLite
-	(v3.x) shared library, used by other programs.
+       libdbi implements a database-independent abstraction layer in C.
 endef
 
 define Build/InstallDev
