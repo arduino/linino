@@ -1,5 +1,0 @@
-#!/bin/sh
-
-if [ "$ACTION" = ifup ]; then
-	killall -HUP radvd 2>/dev/null
-fi
