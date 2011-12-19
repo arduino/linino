@@ -59,7 +59,7 @@ NetBIOS name server
 Made small with patches taken from AVM GPL releases and freetz 
 endef
 
-define Package/cifsmount/description
+define Package/samba3-mountcifs/description
 An user space helper utility for mounting remote CIFS shares.
 endef
 
