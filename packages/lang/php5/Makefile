@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
 PKG_VERSION:=5.3.8
-PKG_RELEASE:=8
+PKG_RELEASE:=9
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
@@ -30,7 +30,7 @@ PHP5_MODULES = \
 	iconv \
 	json \
 	ldap libevent \
-	mbstring mcrypt mysql \
+	mbstring mcrypt mysql mysqli \
 	openssl \
 	pcntl pdo pdo-mysql pdo-pgsql pdo-sqlite pgsql \
 	session simplexml soap sockets sqlite sqlite3 sysvmsg sysvsem sysvshm \
@@ -286,6 +286,12 @@ else
   CONFIGURE_ARGS+= --without-mysql
 endif
 
+ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-mysqli),)
+  CONFIGURE_ARGS+= --with-mysqli=shared,"$(STAGING_DIR)/usr/bin/mysql_config"
+else
+  CONFIGURE_ARGS+= --without-mysqli
+endif
+
 ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-openssl),)
   CONFIGURE_ARGS+= \
 	--with-openssl=shared,"$(STAGING_DIR)/usr" \
@@ -528,6 +534,7 @@ $(eval $(call BuildModule,libevent,libevent,+PACKAGE_php5-mod-libevent:libevent)
 $(eval $(call BuildModule,mbstring,MBString))
 $(eval $(call BuildModule,mcrypt,Mcrypt,+PACKAGE_php5-mod-mcrypt:libmcrypt +PACKAGE_php5-mod-mcrypt:libltdl))
 $(eval $(call BuildModule,mysql,MySQL,+PACKAGE_php5-mod-mysql:libmysqlclient))
+$(eval $(call BuildModule,mysqli,MySQL Improved Extension,+PACKAGE_php5-mod-mysqli:libmysqlclient))
 $(eval $(call BuildModule,openssl,OpenSSL,+PACKAGE_php5-mod-openssl:libopenssl))
 $(eval $(call BuildModule,pcntl,PCNTL))
 $(eval $(call BuildModule,pdo,PHP Data Objects))
