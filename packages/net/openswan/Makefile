@@ -97,6 +97,8 @@ define Package/openswan/install
 	rm -rf $(1)/var
 	rm -rf $(1)/etc/rc.d
 	find $(1) -name \*.old | xargs rm -rf
+	$(INSTALL_DIR) $(1)/lib/upgrade/keep.d
+	$(INSTALL_DATA) files/ipsec.upgrade $(1)/lib/upgrade/keep.d/ipsec
 endef
 
 $(eval $(call BuildPackage,openswan))
