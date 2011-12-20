@@ -86,12 +86,17 @@ endef
 define Package/openswan/conffiles
 /etc/ipsec.conf
 /etc/ipsec.secrets
+/etc/config/ipsec
 endef
 
 define Package/openswan/install
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(CP) ./files/ipsec.init $(1)/etc/init.d/ipsec
+	$(CP) ./files/ipsec.conf $(1)/etc/ipsec.conf
+	$(CP) ./files/ipsec.secrets $(1)/etc/ipsec.secrets
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) ./files/ipsec.config $(1)/etc/config/ipsec
 	rm -rf $(1)/usr/share
 	rm -rf $(1)/usr/man
 	rm -rf $(1)/var
