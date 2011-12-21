@@ -1,0 +1,11 @@
+--- a/libbb/dump.c
++++ b/libbb/dump.c
+@@ -304,7 +304,7 @@ static void rewrite(priv_dumper_t *dumpe
+ 		) {
+ 			fu->reps += (dumper->blocksize - fs->bcnt) / fu->bcnt;
+ 		}
+-		if (fu->reps > 1) {
++		if (fu->reps > 1 && fu->nextpr) {
+ 			for (pr = fu->nextpr;; pr = pr->nextpr)
+ 				if (!pr->nextpr)
+ 					break;

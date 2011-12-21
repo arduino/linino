@@ -1,0 +1,47 @@
+--- a/Makefile
++++ b/Makefile
+@@ -29,7 +29,6 @@ obj-$(CONFIG_COMPAT_WIRELESS_MODULES) +=
+ 
+ obj-$(CONFIG_COMPAT_NET_USB_MODULES) += drivers/net/usb/
+ 
+-obj-$(CONFIG_COMPAT_VAR_MODULES) += drivers/ssb/
+ obj-$(CONFIG_COMPAT_VAR_MODULES) += drivers/bcma/
+ obj-$(CONFIG_COMPAT_VAR_MODULES) += drivers/misc/eeprom/
+ 
+--- a/config.mk
++++ b/config.mk
+@@ -9,7 +9,6 @@ ifeq ($(wildcard $(KLIB_BUILD)/.config),
+  CONFIG_PCI=y
+  CONFIG_USB=y
+  CONFIG_PCMCIA=y
+- CONFIG_SSB=m
+ else
+ include $(KLIB_BUILD)/.config
+ endif
+@@ -315,7 +314,8 @@ CONFIG_IPW2200_QOS=y
+ # % echo 1 > /sys/bus/pci/drivers/ipw2200/*/rtap_iface
+ endif #CONFIG_WIRELESS_EXT
+ 
+-ifdef CONFIG_SSB
++# disabled
++ifdef __CONFIG_SSB
+ # Sonics Silicon Backplane
+ CONFIG_SSB_SPROM=y
+ 
+@@ -328,7 +328,7 @@ endif #CONFIG_PCMCIA
+ # CONFIG_SSB_DEBUG=y
+ CONFIG_SSB_DRIVER_PCICORE=y
+ CONFIG_B43_SSB=y
+-endif #CONFIG_SSB
++endif #__CONFIG_SSB
+ 
+ CONFIG_BCMA=m
+ CONFIG_BCMA_BLOCKIO=y
+@@ -535,7 +535,6 @@ endif #CONFIG_SPI_MASTER end of SPI driv
+ 
+ ifdef CONFIG_MMC
+ 
+-CONFIG_SSB_SDIOHOST=y
+ CONFIG_B43_SDIO=y
+ 
+ ifdef CONFIG_CRC7

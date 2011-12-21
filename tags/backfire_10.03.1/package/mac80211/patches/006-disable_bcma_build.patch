@@ -1,0 +1,30 @@
+--- a/Makefile
++++ b/Makefile
+@@ -29,7 +29,6 @@ obj-$(CONFIG_COMPAT_WIRELESS_MODULES) +=
+ 
+ obj-$(CONFIG_COMPAT_NET_USB_MODULES) += drivers/net/usb/
+ 
+-obj-$(CONFIG_COMPAT_VAR_MODULES) += drivers/bcma/
+ obj-$(CONFIG_COMPAT_VAR_MODULES) += drivers/misc/eeprom/
+ 
+ ifeq ($(CONFIG_STAGING_EXCLUDE_BUILD),)
+--- a/config.mk
++++ b/config.mk
+@@ -330,12 +330,12 @@ CONFIG_SSB_DRIVER_PCICORE=y
+ CONFIG_B43_SSB=y
+ endif #__CONFIG_SSB
+ 
+-CONFIG_BCMA=m
+-CONFIG_BCMA_BLOCKIO=y
+-CONFIG_BCMA_HOST_PCI=y
++# CONFIG_BCMA=m
++# CONFIG_BCMA_BLOCKIO=y
++# CONFIG_BCMA_HOST_PCI=y
+ # CONFIG_BCMA_DEBUG=y
+-CONFIG_B43_BCMA=y
+-CONFIG_B43_BCMA_PIO=y
++# CONFIG_B43_BCMA=y
++# CONFIG_B43_BCMA_PIO=y
+ 
+ CONFIG_P54_PCI=m
+ 

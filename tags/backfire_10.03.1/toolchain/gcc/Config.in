@@ -1,0 +1,88 @@
+# Choose gcc version.
+
+choice
+	prompt "GCC compiler Version" if TOOLCHAINOPTS
+	default GCC_VERSION_3_4_6 if LINUX_2_4
+	default GCC_VERSION_4_2_4 if avr32
+	default GCC_VERSION_4_3_3 if powerpc64
+	default GCC_VERSION_4_4_1 if ubicom32
+	default GCC_VERSION_4_3_3_CS if (mips || mipsel)
+	default GCC_VERSION_4_3_3_CS if (arm || armeb)
+	default GCC_VERSION_4_4_3 if powerpc
+	default GCC_VERSION_4_1_2
+	help
+	    Select the version of gcc you wish to use.
+
+	config GCC_VERSION_3_4_6
+		bool "gcc 3.4.6"
+
+if !LINUX_2_4
+	config GCC_VERSION_4_1_2
+		bool "gcc 4.1.2"
+
+	config GCC_VERSION_4_2_4
+		bool "gcc 4.2.4"
+
+	config GCC_VERSION_4_3_3
+		bool "gcc 4.3.3"
+
+	config GCC_VERSION_4_3_3_CS
+		bool "gcc 4.3.3 with CodeSourcery enhancements"
+
+	config GCC_VERSION_4_3_4
+		bool "gcc 4.3.4"
+
+	config GCC_VERSION_4_4_1
+		bool "gcc 4.4.1"
+
+	config GCC_VERSION_4_4_2
+		bool "gcc 4.4.2"
+
+	config GCC_VERSION_4_4_3
+		bool "gcc 4.4.3"
+
+endif
+
+endchoice
+
+config GCC_USE_GRAPHITE
+	bool
+	prompt "Compile in support for the new Graphite framework in GCC 4.4+" if TOOLCHAINOPTS
+	depends GCC_VERSION_4_4_1 || GCC_VERSION_4_4_2 || GCC_VERSION_4_4_3
+
+config EXTRA_GCC_CONFIG_OPTIONS
+	string
+	prompt "Additional gcc configure options" if TOOLCHAINOPTS
+	default ""
+	help
+	    Any additional gcc options you may want to include....
+
+config SSP_SUPPORT
+	bool
+	depends !GCC_VERSION_3_4_6
+	prompt "Enable Stack-Smashing Protection support" if TOOLCHAINOPTS
+	default n
+	help
+	    Enable Stack-Smashing Protection support
+
+config TLS_SUPPORT
+	bool
+	depends !GCC_VERSION_3_4_6
+	prompt "Enable Thread-local storage (TLS) support" if TOOLCHAINOPTS
+	default n
+	help
+	    Enable Thread-local storage support
+
+config INSTALL_LIBSTDCPP
+	bool
+	prompt "Build/install c++ compiler and libstdc++?" if TOOLCHAINOPTS
+	default y
+	help
+	    Build/install c++ compiler and libstdc++?
+
+config INSTALL_LIBGCJ
+	bool
+	prompt "Build/install java compiler and GNU classpath ?" if TOOLCHAINOPTS
+	default n
+	help
+	    Build/install java compiler and GNU classpath ?

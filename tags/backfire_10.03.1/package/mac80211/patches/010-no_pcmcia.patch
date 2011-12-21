@@ -1,0 +1,20 @@
+--- a/config.mk
++++ b/config.mk
+@@ -8,7 +8,7 @@ ifeq ($(wildcard $(KLIB_BUILD)/.config),
+ # These will be ignored by compat autoconf
+  CONFIG_PCI=y
+  CONFIG_USB=y
+- CONFIG_PCMCIA=y
++# CONFIG_PCMCIA=y
+ else
+ include $(KLIB_BUILD)/.config
+ endif
+@@ -247,7 +247,7 @@ CONFIG_B43=m
+ CONFIG_B43_HWRNG=y
+ CONFIG_B43_PCI_AUTOSELECT=y
+ ifdef CONFIG_PCMCIA
+-CONFIG_B43_PCMCIA=y
++# CONFIG_B43_PCMCIA=y
+ endif #CONFIG_PCMCIA
+ ifdef CONFIG_MAC80211_LEDS
+ CONFIG_B43_LEDS=y

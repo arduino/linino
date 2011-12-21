@@ -1,0 +1,11 @@
+--- a/ifx_udp_redirect.c
++++ b/ifx_udp_redirect.c
+@@ -256,7 +256,7 @@
+    {
+       if (redtab.channels[i].in_use == IFX_TRUE)
+       {
+-         if (redtab.channels[i].sk->sk_lock.owner != 0)
++         if (redtab.channels[i].sk->sk_lock.owned != 0)
+ 				return IFX_TRUE;
+       }
+    }

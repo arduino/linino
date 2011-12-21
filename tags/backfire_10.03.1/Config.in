@@ -1,0 +1,376 @@
+# Copyright (C) 2006-2009 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
+mainmenu "OpenWrt Configuration"
+
+config HAVE_DOT_CONFIG
+	bool
+	default y
+
+source "target/Config.in"
+
+menu "Target Images"
+
+	menuconfig TARGET_ROOTFS_INITRAMFS
+		bool "ramdisk"
+		default y if USES_INITRAMFS
+		depends LINUX_2_6
+		help
+		  Embed the rootfs into the kernel (initramfs)
+
+		choice
+			prompt "Compression"
+			default TARGET_INITRAMFS_COMPRESSION_LZMA if TARGET_ar71xx
+			default TARGET_INITRAMFS_COMPRESSION_LZMA if TARGET_ramips
+			default TARGET_INITRAMFS_COMPRESSION_NONE
+			depends TARGET_ROOTFS_INITRAMFS
+			depends !LINUX_2_6_25
+			help
+			  Select ramdisk compression.
+
+			config TARGET_INITRAMFS_COMPRESSION_NONE
+				bool "none"
+
+			config TARGET_INITRAMFS_COMPRESSION_GZIP
+				bool "gzip"
+
+			config TARGET_INITRAMFS_COMPRESSION_BZIP2
+				bool "bzip2"
+
+			config TARGET_INITRAMFS_COMPRESSION_LZMA
+				bool "lzma"
+
+			config TARGET_INITRAMFS_COMPRESSION_LZO
+				bool "lzo"
+		endchoice
+
+	comment "Root filesystem archives"
+
+	config TARGET_ROOTFS_CPIOGZ
+		bool "cpio.gz"
+		default y if USES_CPIOGZ
+		help
+		  Build a compressed cpio archive of the the root filesystem
+
+	config TARGET_ROOTFS_TARGZ
+		bool "tar.gz"
+		default y if USES_TARGZ
+		help
+		  Build a compressed tar archive of the the root filesystem
+
+	comment "Root filesystem images"
+
+	config TARGET_ROOTFS_EXT2FS
+		bool "ext2"
+		default y if USES_EXT2
+		depends !TARGET_ROOTFS_INITRAMFS
+		help
+		  Ext2 file system with some free space for uml images
+
+	config TARGET_ROOTFS_ISO
+		bool "iso"
+		default n
+		depends TARGET_ROOTFS_INITRAMFS && TARGET_x86
+		help
+		  Create some bootable ISO image
+
+	config TARGET_ROOTFS_JFFS2
+		bool "jffs2"
+		default y if USES_JFFS2
+		depends !TARGET_ROOTFS_INITRAMFS
+		help
+		  Build a jffs2 root filesystem
+
+	config TARGET_ROOTFS_SQUASHFS
+		bool "squashfs"
+		default y if USES_SQUASHFS
+		depends !TARGET_ROOTFS_INITRAMFS
+		help
+		  Build a squashfs-lzma root filesystem
+
+	config TARGET_ROOTFS_UBIFS
+		bool "ubifs"
+		default y if USES_UBIFS
+		depends !TARGET_ROOTFS_INITRAMFS && USES_UBIFS
+		help
+		  Build a ubifs root filesystem
+
+	comment "Image Options"
+
+	source "target/linux/*/image/Config.in"
+
+	config TARGET_ROOTFS_PARTSIZE
+		int "Root filesystem partition size (in MB)"
+		depends X86_GRUB_IMAGES || TARGET_ROOTFS_EXT2FS || TARGET_rb532
+		default 48
+		help
+		    Allows you to change the root filesystem partition size
+
+	config TARGET_ROOTFS_MAXINODE
+		int "Maximum number of inodes in root filesystem"
+		depends TARGET_ROOTFS_EXT2FS
+		default 6000
+		help
+		    Allows you to change the maximum number of inodes in the root filesystem
+
+endmenu
+
+menu "Global build settings"
+
+	config ALL
+		bool "Select all packages by default"
+		default n
+
+	comment "General build options"
+
+	config DISPLAY_SUPPORT
+		bool "Show packages that require graphics support (local or remote)"
+		default n
+
+	config BUILD_PATENTED
+		default y
+		bool "Compile with support for patented functionality"
+		help
+		  When this option is disabled, software which provides patented functionality will not be built.
+		  In case software provides optional support for patented functionality,
+		  this optional support will get disabled for this package.
+
+	config BUILD_NLS
+		default n
+		bool "Compile with full language support"
+		help
+		  When this option is enabled, packages are built with the full versions of iconv and GNU gettext
+		  instead of the default OpenWrt stubs.
+
+	config LARGEFILE
+		bool
+		prompt "Enable large file (files > 2 GB) support"
+		default y
+		help
+		  Enable large file (files > 2 GB) support.
+
+	config SHADOW_PASSWORDS
+		bool
+		prompt "Enable shadow password support"
+		default y
+		help
+		  Enable shadow password support.
+
+	config CLEAN_IPKG
+		bool
+		prompt "Remove ipkg/opkg status data files in final images"
+		default n
+		help
+			This removes all ipkg/opkg status data files from the target directory before building the root fs
+
+	config COLLECT_KERNEL_DEBUG
+		bool
+		prompt "Collect kernel debug information"
+		select KERNEL_DEBUG_INFO
+		default n
+		help
+			This collects debugging symbols from the kernel and all compiled modules.
+			Useful for release builds, so that kernel issues can be debugged offline later.
+
+	comment "Kernel build options"
+
+	config KERNEL_DEBUG_FS
+		bool "Compile the kernel with Debug FileSystem enabled"
+		default y
+		depends LINUX_2_6
+		help
+		  debugfs is a virtual file system that kernel developers use to put
+		  debugging files into. Enable this option to be able to read and
+		  write to these files.
+
+	config KERNEL_PROFILING
+		bool "Compile the kernel with profiling enabled"
+		default n
+		help
+		  Enable the extended profiling support mechanisms used by profilers such
+		  as OProfile.
+
+	config KERNEL_KALLSYMS
+		bool "Compile the kernel with symbol table information"
+		default n
+		help
+		  This will give you more information in stack traces from kernel oopses
+
+	config KERNEL_DEBUG_KERNEL
+		bool
+		default n
+
+	config KERNEL_DEBUG_INFO
+		bool "Compile the kernel with debug information"
+		default n
+		select KERNEL_DEBUG_KERNEL
+		help
+		  This will compile your kernel and modules with debug information.
+
+	comment "Package build options"
+
+	config DEBUG
+		bool
+		prompt "Compile packages with debugging info"
+		default n
+		help
+		  Adds -g3 to the CFLAGS
+
+	config IPV6
+		bool
+		prompt "Enable IPv6 support in packages"
+		default y
+		help
+		  Enable IPV6 support in packages (passes --enable-ipv6 to configure scripts).
+
+	comment "Stripping options"
+
+	choice
+		prompt "Binary stripping method"
+		default USE_STRIP   if EXTERNAL_TOOLCHAIN
+		default USE_STRIP   if USE_GLIBC || USE_EGLIBC
+		default USE_SSTRIP
+		help
+		  Select the binary stripping method you wish to use.
+
+		config NO_STRIP
+			bool "none"
+			help
+			  This will install unstripped binaries (useful for native compiling/debugging)
+
+		config USE_STRIP
+			bool "strip"
+			help
+			  This will install binaries stripped using strip from binutils
+
+
+		config USE_SSTRIP
+			bool "sstrip"
+			depends !DEBUG
+			depends !USE_GLIBC
+			depends !USE_EGLIBC
+			help
+			  This will install binaries stripped using sstrip
+	endchoice
+
+	config STRIP_ARGS
+		string
+		prompt "Strip arguments"
+		depends USE_STRIP
+		default "--strip-unneeded --remove-section=.comment --remove-section=.note" if DEBUG
+		default "--strip-all"
+		help
+		  Specifies arguments passed to the strip command when stripping binaries
+
+	config STRIP_KERNEL_EXPORTS
+		depends LINUX_2_6
+		bool "Strip unnecessary exports from the kernel image"
+		help
+		  Reduces kernel size by stripping unused kernel exports from the kernel image
+		  Note that this might make the kernel incompatible with any kernel modules that
+		  were not selected at the time the kernel image was created
+
+	config USE_MKLIBS
+		bool "Strip unnecessary functions from libraries"
+		depends BROKEN
+		help
+		  Reduces libraries to only those functions that are necessary for using all
+		  selected packages (including those selected as <M>)
+		  Note that this will make the system libraries incompatible with most of the packages
+		  that are not selected during the build process
+
+endmenu
+
+menuconfig DEVEL
+	bool "Advanced configuration options (for developers)"
+	default n
+
+	config BROKEN
+		bool "Show broken platforms / packages" if DEVEL
+		default n
+
+	config DOWNLOAD_FOLDER
+		string "Download folder" if DEVEL
+		default ""
+
+	config LOCALMIRROR
+		string "Local mirror for source packages" if DEVEL
+		default ""
+
+	config AUTOREBUILD
+		bool "Automatic rebuild of packages" if DEVEL
+		default y
+		help
+		  Automatically rebuild packages when their files change
+
+	config BUILD_SUFFIX
+		string "Build suffix to append to the BUILD_DIR variable" if DEVEL
+		default ""
+		help
+		  Build suffix to append to the BUILD_DIR variable, i.e: build_dir_suffix
+
+	config TARGET_ROOTFS_DIR
+		string "Override the default TARGET_ROOTFS_DIR variable" if DEVEL
+		default ""
+		help
+		  Override the default TARGET_ROOTFS_DIR variable content $(BUILD_DIR) with custom path.
+		  Use this option to re-define the location of the target root file system directory.
+
+	config CCACHE
+		bool "Use ccache" if DEVEL
+		default n
+		help
+		  Compiler cache; see http://ccache.samba.org/
+
+	config EXTERNAL_KERNEL_TREE
+		string "Use external kernel tree" if DEVEL
+		default ""
+
+	config KERNEL_GIT_CLONE_URI
+		string "Enter git repository to clone" if DEVEL
+		default ""
+		help
+		  Enter the full git repository path i.e.:
+		  git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux-2.6.git
+		  This will create a git clone of the kernel in your build
+		  directory.
+
+	config KERNEL_GIT_LOCAL_REPOSITORY
+		string "Enter path to local reference repository" if DEVEL
+		default ""
+		help
+		  Enter a full pathname to a local reference git repository.
+		  In this instance, the --refererence option of git clone will
+		  be used thus creating a quick local clone of your repo.
+
+menuconfig TARGET_OPTIONS
+	bool "Target Options"  if DEVEL
+
+	config TARGET_OPTIMIZATION
+		string "Target Optimizations" if TARGET_OPTIONS
+		default DEFAULT_TARGET_OPTIMIZATION
+		help
+		  Optimizations to use when building for the target host.
+
+	config SOFT_FLOAT
+		bool "Use software floating point by default" if TARGET_OPTIONS
+		default y
+		depends on (arm || armeb || powerpc || mipsel || mips) && !HAS_FPU
+		help
+		  If your target CPU does not have a Floating Point Unit (FPU) or a
+		  kernel FPU emulator, but you still wish to support floating point
+		  functions, then everything will need to be compiled with soft floating
+		  point support (-msoft-float).
+
+		  Most people will answer N.
+
+source "toolchain/Config.in"
+
+source "target/imagebuilder/Config.in"
+source "target/sdk/Config.in"
+source "target/toolchain/Config.in"
+
+source "tmp/.config-package.in"

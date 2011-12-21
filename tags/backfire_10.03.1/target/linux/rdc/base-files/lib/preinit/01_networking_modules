@@ -1,0 +1,13 @@
+#!/bin/sh
+# Copyright (C) 2011 OpenWrt.org
+
+. /lib/functions/boot.sh
+
+load_networking_modules() {
+	insmod llc
+	insmod stp
+	insmod bridge
+	insmod 8021q
+}
+
+boot_hook_add preinit_main load_networking_modules

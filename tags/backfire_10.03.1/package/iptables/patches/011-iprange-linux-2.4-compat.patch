@@ -1,0 +1,24 @@
+--- a/extensions/libxt_iprange.c
++++ b/extensions/libxt_iprange.c
+@@ -96,7 +96,8 @@ static int iprange_parse(int c, char **a
+ 		if (invert)
+ 			info->flags |= IPRANGE_SRC_INV;
+ 		iprange_parse_range(optarg, range, NFPROTO_IPV4, "--src-range");
+-
++		info->src.min_ip = range[0].in.s_addr;
++		info->src.max_ip = range[1].in.s_addr;
+ 		break;
+ 
+ 	case '2':
+@@ -110,8 +111,9 @@ static int iprange_parse(int c, char **a
+ 		if (invert)
+ 			info->flags |= IPRANGE_DST_INV;
+ 
+-		iprange_parse_range(optarg, range, NFPROTO_IPV4, "--src-range");
+-
++		iprange_parse_range(optarg, range, NFPROTO_IPV4, "--dst-range");
++		info->dst.min_ip = range[0].in.s_addr;
++		info->dst.max_ip = range[1].in.s_addr;
+ 		break;
+ 
+ 	default:

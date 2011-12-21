@@ -1,0 +1,57 @@
+
+DEVICENAME ~~ (null|full|ptmx|zero|gpio|hvc) {
+	nothrottle
+	makedev /dev/%DEVICENAME% 0666
+	next
+}
+
+DEVICENAME ~~ (tun|tap[0-9]) {
+	nothrottle
+	makedev /dev/net/%DEVICENAME% 0644
+}
+
+DEVICENAME ~~ (controlC[0-9]|pcmC0D0*|timer) {
+	nothrottle
+	makedev /dev/snd/%DEVICENAME% 0644
+	next
+}
+
+DEVICENAME ~~ (lp[0-9]) {
+	nothrottle
+	makedev /dev/%DEVICENAME% 0644
+	next
+}
+
+DEVPATH is set, SUBSYSTEM ~~ (input) {
+	nothrottle
+	makedev /dev/input/%DEVICENAME% 0644
+}
+
+DEVICENAME == device-mapper {
+	nothrottle
+	makedev /dev/mapper/control 0600
+	next
+}
+
+ACTION == add, DEVPATH is set {
+	nothrottle
+	makedev /dev/%DEVICENAME% 0644
+}
+
+ACTION == add, DEVPATH is set, DEVICENAME ~~ ^tty {
+	chmod 0666 /dev/%DEVICENAME%
+}
+
+ACTION == add, DEVPATH is set, DEVICENAME ~~ ^ppp {
+	chmod 0600 /dev/%DEVICENAME%
+}
+
+ACTION == remove, DEVPATH is set, MAJOR is set, MINOR is set {
+	remove /dev/%DEVICENAME%
+}
+
+FIRMWARE is set, ACTION == add {
+	nothrottle
+	load-firmware /lib/firmware
+	next
+}

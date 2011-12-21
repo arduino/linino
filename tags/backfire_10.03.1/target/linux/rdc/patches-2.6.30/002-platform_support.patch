@@ -1,0 +1,12 @@
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -124,6 +124,9 @@ core-y += $(fcore-y)
+ # Xen paravirtualization support
+ core-$(CONFIG_XEN) += arch/x86/xen/
+ 
++# RDC R-321X support
++core-$(CONFIG_X86_RDC321X)   += arch/x86/mach-rdc321x/
++
+ # lguest paravirtualization support
+ core-$(CONFIG_LGUEST_GUEST) += arch/x86/lguest/
+ 

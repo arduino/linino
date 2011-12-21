@@ -1,0 +1,142 @@
+--- a/drivers/net/wireless/ath/ath9k/ath9k.h
++++ b/drivers/net/wireless/ath/ath9k/ath9k.h
+@@ -591,6 +591,7 @@ struct ath_softc {
+ 	struct ieee80211_hw *hw;
+ 	struct device *dev;
+ 
++	u32 chan_bw;
+ 	int chan_idx;
+ 	int chan_is_ht;
+ 	struct survey_info *cur_survey;
+@@ -654,6 +655,7 @@ struct ath_softc {
+ 	u8 ant_tx, ant_rx;
+ };
+ 
++int ath9k_config(struct ieee80211_hw *hw, u32 changed);
+ void ath9k_tasklet(unsigned long data);
+ int ath_cabq_update(struct ath_softc *);
+ 
+--- a/drivers/net/wireless/ath/ath9k/debug.c
++++ b/drivers/net/wireless/ath/ath9k/debug.c
+@@ -1663,6 +1663,50 @@ static const struct file_operations fops
+ 	.owner = THIS_MODULE
+ };
+ 
++
++static ssize_t read_file_chan_bw(struct file *file, char __user *user_buf,
++			     size_t count, loff_t *ppos)
++{
++	struct ath_softc *sc = file->private_data;
++	char buf[32];
++	unsigned int len;
++
++	len = sprintf(buf, "0x%08x\n", sc->chan_bw);
++	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
++}
++
++static ssize_t write_file_chan_bw(struct file *file, const char __user *user_buf,
++			     size_t count, loff_t *ppos)
++{
++	struct ath_softc *sc = file->private_data;
++	unsigned long chan_bw;
++	char buf[32];
++	ssize_t len;
++
++	len = min(count, sizeof(buf) - 1);
++	if (copy_from_user(buf, user_buf, len))
++		return -EFAULT;
++
++	buf[len] = '\0';
++	if (strict_strtoul(buf, 0, &chan_bw))
++		return -EINVAL;
++
++	sc->chan_bw = chan_bw;
++	if (!(sc->sc_flags & SC_OP_INVALID))
++		ath9k_config(sc->hw, IEEE80211_CONF_CHANGE_CHANNEL);
++
++	return count;
++}
++
++static const struct file_operations fops_chanbw = {
++	.read = read_file_chan_bw,
++	.write = write_file_chan_bw,
++	.open = ath9k_debugfs_open,
++	.owner = THIS_MODULE,
++	.llseek = default_llseek,
++};
++
++
+ int ath9k_init_debug(struct ath_hw *ah)
+ {
+ 	struct ath_common *common = ath9k_hw_common(ah);
+@@ -1724,6 +1768,9 @@ int ath9k_init_debug(struct ath_hw *ah)
+ 	debugfs_create_file("eeprom", S_IRUSR, sc->debug.debugfs_phy, sc,
+ 			    &fops_eeprom);
+ 
++	debugfs_create_file("chanbw", S_IRUSR | S_IWUSR, sc->debug.debugfs_phy,
++			    sc, &fops_chanbw);
++
+ 	sc->debug.regidx = 0;
+ 	memset(&sc->debug.bb_mac_samp, 0, sizeof(sc->debug.bb_mac_samp));
+ 	sc->debug.sampidx = 0;
+--- a/drivers/net/wireless/ath/ath9k/main.c
++++ b/drivers/net/wireless/ath/ath9k/main.c
+@@ -1554,7 +1554,7 @@ static void ath9k_disable_ps(struct ath_
+ 
+ }
+ 
+-static int ath9k_config(struct ieee80211_hw *hw, u32 changed)
++int ath9k_config(struct ieee80211_hw *hw, u32 changed)
+ {
+ 	struct ath_softc *sc = hw->priv;
+ 	struct ath_hw *ah = sc->sc_ah;
+@@ -1606,9 +1606,10 @@ static int ath9k_config(struct ieee80211
+ 
+ 	if (changed & IEEE80211_CONF_CHANGE_CHANNEL) {
+ 		struct ieee80211_channel *curchan = hw->conf.channel;
+-		struct ath9k_channel old_chan;
++		struct ath9k_channel old_chan, *hchan;
+ 		int pos = curchan->hw_value;
+ 		int old_pos = -1;
++		u32 oldflags;
+ 		unsigned long flags;
+ 
+ 		if (ah->curchan)
+@@ -1661,7 +1662,23 @@ static int ath9k_config(struct ieee80211
+ 			memset(&sc->survey[pos], 0, sizeof(struct survey_info));
+ 		}
+ 
+-		if (ath_set_channel(sc, hw, &sc->sc_ah->channels[pos]) < 0) {
++		hchan = &sc->sc_ah->channels[pos];
++		oldflags = hchan->channelFlags;
++		switch (sc->chan_bw) {
++		case 5:
++			hchan->channelFlags &= ~CHANNEL_HALF;
++			hchan->channelFlags |= CHANNEL_QUARTER;
++			break;
++		case 10:
++			hchan->channelFlags &= ~CHANNEL_QUARTER;
++			hchan->channelFlags |= CHANNEL_HALF;
++			break;
++		default:
++			hchan->channelFlags &= ~(CHANNEL_HALF | CHANNEL_QUARTER);
++			break;
++		}
++
++		if (ath_set_channel(sc, hw, hchan) < 0) {
+ 			ath_err(common, "Unable to set channel\n");
+ 			mutex_unlock(&sc->mutex);
+ 			return -EINVAL;
+--- a/drivers/net/wireless/ath/ath9k/hw.c
++++ b/drivers/net/wireless/ath/ath9k/hw.c
+@@ -1549,6 +1549,10 @@ int ath9k_hw_reset(struct ath_hw *ah, st
+ 	    caldata->rtt_hist.num_readings)
+ 		allow_fbs = true;
+ 
++	if (!ah->curchan || ((ah->curchan->channelFlags ^ chan->channelFlags) &
++	    (CHANNEL_HALF | CHANNEL_QUARTER)))
++		bChannelChange = false;
++
+ 	if (bChannelChange &&
+ 	    (ah->chip_fullsleep != true) &&
+ 	    (ah->curchan != NULL) &&
