@@ -1,0 +1,89 @@
+--- Makefile	2011-12-22 06:58:51.000000000 +0100
++++ /Users/nbd/openwrt/package/mac80211/Makefile	2011-12-17 16:40:06.000000000 +0100
+@@ -49,7 +49,7 @@
+   SUBMENU:=$(WMENU)
+   URL:=http://linuxwireless.org/
+   MAINTAINER:=Felix Fietkau <nbd@openwrt.org>
+-  DEPENDS:=@(!(TARGET_avr32||TARGET_ep93xx)||BROKEN) @!LINUX_2_4
++  DEPENDS:=@(!(TARGET_avr32||TARGET_ep93xx||TARGET_ps3||TARGET_pxcab||LINUX_3_2)||BROKEN)
+ endef
+ 
+ define KernelPackage/cfg80211
+@@ -164,7 +164,7 @@
+ 
+ define KernelPackage/p54-common
+   $(call KernelPackage/p54/Default)
+-  DEPENDS+= @PCI_SUPPORT||@USB_SUPPORT||@TARGET_omap24xx +kmod-mac80211 +kmod-crc-ccitt
++  DEPENDS+= @PCI_SUPPORT||@USB_SUPPORT||@TARGET_omap24xx +kmod-mac80211 +kmod-lib-crc-ccitt
+   TITLE+= (COMMON)
+   FILES:=$(PKG_BUILD_DIR)/drivers/net/wireless/p54/p54common.ko
+   AUTOLOAD:=$(call AutoLoad,30,p54common)
+@@ -207,7 +207,7 @@
+ 
+ define KernelPackage/rt2x00-lib
+ $(call KernelPackage/rt2x00/Default)
+-  DEPENDS+= @(PCI_SUPPORT||USB_SUPPORT||TARGET_ramips) +kmod-mac80211 +kmod-crc-itu-t
++  DEPENDS+= @(PCI_SUPPORT||USB_SUPPORT||TARGET_ramips) +kmod-mac80211 +kmod-lib-crc-itu-t
+   TITLE+= (LIB)
+   FILES:=$(PKG_BUILD_DIR)/drivers/net/wireless/rt2x00/rt2x00lib.ko
+   AUTOLOAD:=$(call AutoLoad,25,rt2x00lib)
+@@ -308,7 +308,7 @@
+ 
+ define KernelPackage/rt2800-pci
+ $(call KernelPackage/rt2x00/Default)
+-  DEPENDS+= @(PCI_SUPPORT||TARGET_ramips) +kmod-rt2x00-pci +kmod-rt2800-lib +kmod-crc-ccitt +TARGET_ramips:kmod-rt2x00-soc
++  DEPENDS+= @(PCI_SUPPORT||TARGET_ramips) +kmod-rt2x00-pci +kmod-rt2800-lib +kmod-lib-crc-ccitt +TARGET_ramips:kmod-rt2x00-soc
+   TITLE+= (RT2860 PCI)
+   FILES:=$(PKG_BUILD_DIR)/drivers/net/wireless/rt2x00/rt2800pci.ko
+   AUTOLOAD:=$(call AutoLoad,28,rt2800pci)
+@@ -316,7 +316,7 @@
+ 
+ define KernelPackage/rt2800-usb
+ $(call KernelPackage/rt2x00/Default)
+-  DEPENDS+= @USB_SUPPORT +kmod-rt2x00-usb +kmod-rt2800-lib +kmod-crc-ccitt
++  DEPENDS+= @USB_SUPPORT +kmod-rt2x00-usb +kmod-rt2800-lib +kmod-lib-crc-ccitt
+   TITLE+= (RT2870 USB)
+   FILES:=$(PKG_BUILD_DIR)/drivers/net/wireless/rt2x00/rt2800usb.ko
+   AUTOLOAD:=$(call AutoLoad,28,rt2800usb)
+@@ -859,6 +859,7 @@
+ 
+ define KernelPackage/b43
+ $(call KernelPackage/b43-common)
++  DEPENDS+= +@DRIVER_11N_SUPPORT +!TARGET_brcm47xx:kmod-bcma
+   TITLE:=Broadcom 43xx wireless support
+   FILES:=$(PKG_BUILD_DIR)/drivers/net/wireless/b43/b43.ko
+   AUTOLOAD:=$(call AutoLoad,30,b43)
+@@ -938,7 +939,7 @@
+ 	config B43_FW_SQUASH_COREREVS
+ 		string "Core revisions to include"
+ 		depends on B43_FW_SQUASH
+-		default "5,6,7,8,9,10,13,14,15"
++		default "5,6,7,8,9,10,11,13,14,15,16"
+ 		help
+ 		  This is a comma seperated list of core revision numbers.
+ 
+@@ -951,7 +952,7 @@
+ 	config B43_FW_SQUASH_PHYTYPES
+ 		string "PHY types to include"
+ 		depends on B43_FW_SQUASH
+-		default "G,LP"
++		default "G,LP,N"
+ 		help
+ 		  This is a comma seperated list of PHY types:
+ 		    A  => A-PHY
+@@ -977,7 +978,6 @@
+ 
+ 	config PACKAGE_B43_PIO
+ 		bool "Enable support for PIO transfer mode"
+-		depends BROKEN
+ 		default n
+ 		help
+ 		  Enable support for using PIO instead of DMA. Unless you have DMA
+@@ -1250,6 +1250,7 @@
+ 	$(TAR) -C $(PKG_BUILD_DIR) -xjf $(DL_DIR)/$(ZD1211FW_NAME)-$(ZD1211FW_VERSION).tar.bz2
+ 	$(TAR) -C $(PKG_BUILD_DIR) -xjf $(DL_DIR)/$(PKG_LINUX_FIRMWARE_SOURCE)
+ 	rm -rf $(PKG_BUILD_DIR)/include/linux/ssb
++	rm -rf $(PKG_BUILD_DIR)/include/linux/bcma
+ 	rm -f $(PKG_BUILD_DIR)/include/net/ieee80211.h
+ endef
+ 

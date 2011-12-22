@@ -10,10 +10,10 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=mac80211
 
-PKG_VERSION:=2011-11-15
+PKG_VERSION:=2011-12-01
 PKG_RELEASE:=1
 PKG_SOURCE_URL:=http://mirror2.openwrt.org/sources
-PKG_MD5SUM:=0bb667c7fecbc244840d806df0604661
+PKG_MD5SUM:=8d1fe2fd6bbabc4fbbf31dfbf015c62c
 
 PKG_SOURCE:=compat-wireless-$(PKG_VERSION).tar.bz2
 PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/compat-wireless-$(PKG_VERSION)
@@ -32,6 +32,7 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_kmod-mac80211 \
 	$(patsubst %,CONFIG_PACKAGE_kmod-%,$(PKG_DRIVERS)) \
 	CONFIG_PACKAGE_MAC80211_DEBUGFS \
+	CONFIG_PACKAGE_MAC80211_MESH \
 	CONFIG_PACKAGE_ATH_DEBUG \
 	CONFIG_PACKAGE_B43_DEBUG \
 	CONFIG_PACKAGE_B43_PIO \
@@ -88,6 +89,10 @@ define KernelPackage/mac80211/config
 		  the internal state of mac80211 in debugfs.
 
 		  Say N unless you know you need this.
+
+	config PACKAGE_MAC80211_MESH
+		bool "Enable 802.11s mesh support"
+		default y
 
 	endmenu
 endef
@@ -704,7 +709,7 @@ define KernelPackage/iwl-legacy
   $(call KernelPackage/mac80211/Default)
   DEPENDS:= +kmod-mac80211 @PCI_SUPPORT
   TITLE:=Intel legacy Wireless support
-  FILES:=$(PKG_BUILD_DIR)/drivers/net/wireless/iwlegacy/iwl-legacy.ko
+  FILES:=$(PKG_BUILD_DIR)/drivers/net/wireless/iwlegacy/iwlegacy.ko
   AUTOLOAD:=$(call AutoLoad,60,iwl-legacy)
 endef
 
@@ -767,12 +772,21 @@ ifneq ($(CONFIG_B43_FW_4_178),)
   PKG_B43_FWV4_SOURCE_URL:=http://mirror2.openwrt.org/sources/
   PKG_B43_FWV4_MD5SUM:=14477e8cbbb91b11896affac9b219fdb
 else
+ifneq ($(CONFIG_B43_FW_5_100_138),)
+  PKG_B43_FWV4_NAME:=broadcom-wl
+  PKG_B43_FWV4_VERSION:=5.100.138
+  PKG_B43_FWV4_OBJECT:=$(PKG_B43_FWV4_NAME)-$(PKG_B43_FWV4_VERSION)/linux/wl_apsta.o
+  PKG_B43_FWV4_SOURCE:=$(PKG_B43_FWV4_NAME)-$(PKG_B43_FWV4_VERSION).tar.bz2
+  PKG_B43_FWV4_SOURCE_URL:=http://www.lwfinger.com/b43-firmware/
+  PKG_B43_FWV4_MD5SUM:=f4e357b09eaf5d8b1f1920cf3493a555
+else
   PKG_B43_FWV4_NAME:=broadcom-wl
   PKG_B43_FWV4_VERSION:=4.150.10.5
   PKG_B43_FWV4_OBJECT:=$(PKG_B43_FWV4_NAME)-$(PKG_B43_FWV4_VERSION)/driver/wl_apsta_mimo.o
   PKG_B43_FWV4_SOURCE:=$(PKG_B43_FWV4_NAME)-$(PKG_B43_FWV4_VERSION).tar.bz2
   PKG_B43_FWV4_SOURCE_URL:=http://mirror2.openwrt.org/sources/
   PKG_B43_FWV4_MD5SUM:=0c6ba9687114c6b598e8019e262d9a60
+endif
 endif
 endif
 ifneq ($(CONFIG_B43_OPENFIRMWARE),)
@@ -801,11 +815,11 @@ ifeq ($(CONFIG_B43_OPENFIRMWARE),y)
   PKG_B43_FWCUTTER_OBJECT:=$(PKG_B43_FWCUTTER_NAME)-$(PKG_B43_FWCUTTER_VERSION)/fwcutter/
 else
   PKG_B43_FWCUTTER_NAME:=b43-fwcutter
-  PKG_B43_FWCUTTER_VERSION:=014
+  PKG_B43_FWCUTTER_VERSION:=015
   PKG_B43_FWCUTTER_SOURCE:=$(PKG_B43_FWCUTTER_NAME)-$(PKG_B43_FWCUTTER_VERSION).tar.bz2
   PKG_B43_FWCUTTER_PROTO:=default
   PKG_B43_FWCUTTER_SOURCE_URL:=http://bu3sch.de/b43/fwcutter/
-  PKG_B43_FWCUTTER_MD5SUM:=dd63f9149510bd6e01b89314e955083b
+  PKG_B43_FWCUTTER_MD5SUM:=628e030565222a107bc40300313cbe76
   PKG_B43_FWCUTTER_SUBDIR:=b43-fwcutter-$(PKG_B43_FWCUTTER_VERSION)
   PKG_B43_FWCUTTER_OBJECT:=$(PKG_B43_FWCUTTER_NAME)-$(PKG_B43_FWCUTTER_VERSION)/
 endif
@@ -879,6 +893,15 @@ define KernelPackage/b43/config
 
 	config B43_FW_5_10
 		bool "Firmware 508.1084 from driver 5.10.56.27"
+		help
+		  Newer experimental firmware for BCM43xx devices.
+
+		  This firmware is mostly untested. It is needed for some N-PHY devices.
+
+		  If unsure, select the "stable" firmware.
+
+	config B43_FW_5_100_138
+		bool "Firmware 666.2 from driver 5.100.138"
 		help
 		  Newer experimental firmware for BCM43xx devices.
 
@@ -964,13 +987,32 @@ define KernelPackage/b43/config
 
 	config PACKAGE_B43_PHY_N
 		bool "Enable support for N-PHYs"
-		select B43_FW_5_10
-		depends BROKEN
-		default n
+		depends on BROKEN
+		select B43_FW_5_100_138
 		help
 		  Enable support for BCM4321 and BCM4322.
 
 		  Currently only 11g speed is available.
+
+		  If unsure, say Y.
+
+	config PACKAGE_B43_PHY_HT
+		bool "Enable support for HT-PHYs"
+		depends on BROKEN
+		select B43_FW_5_100_138
+		default n
+		help
+		  Currently broken.
+
+		  If unsure, say N.
+
+	config PACKAGE_B43_PHY_LCN
+		bool "Enable support for LCN-PHYs"
+		depends on BROKEN
+		select B43_FW_5_100_138
+		default n
+		help
+		  Currently broken.
 
 		  If unsure, say N.
 
@@ -1032,13 +1074,18 @@ BUILDFLAGS:= \
 	$(if $(CONFIG_PCI),-DCONFIG_ATH9K_PCI) \
 	$(if $(CONFIG_TARGET_ar71xx),-DCONFIG_ATH9K_AHB) \
 	$(if $(CONFIG_PACKAGE_MAC80211_DEBUGFS), -DCONFIG_CFG80211_DEBUGFS -DCONFIG_MAC80211_DEBUGFS -DCONFIG_ATH9K_DEBUGFS -DCONFIG_CARL9170_DEBUGFS -DCONFIG_ATH9K_HTC_DEBUGFS -DCONFIG_ATH5K_DEBUG) \
+	$(if $(CONFIG_PACKAGE_MAC80211_MESH),-DCONFIG_MAC80211_MESH) \
 	$(if $(CONFIG_PACKAGE_ATH_DEBUG),-DCONFIG_ATH_DEBUG -DCONFIG_ATH9K_PKTLOG) \
 	-D__CONFIG_MAC80211_RC_DEFAULT=minstrel \
 	-DCONFIG_MAC80211_RC_MINSTREL_HT \
 	$(if $(CONFIG_ATH_USER_REGD),-DATH_USER_REGD=1) \
 	$(if $(CONFIG_PACKAGE_B43_DEBUG),-DCONFIG_B43_DEBUG) \
 	$(if $(CONFIG_PACKAGE_B43_PIO),-DCONFIG_B43_PIO) \
+	$(if $(CONFIG_PACKAGE_B43_PIO),-DCONFIG_B43_BCMA_PIO) \
 	$(if $(CONFIG_PACKAGE_B43_PHY_N),-DCONFIG_B43_PHY_N) \
+	$(if $(CONFIG_PACKAGE_B43_PHY_HT),-DCONFIG_B43_PHY_HT) \
+	$(if $(CONFIG_PACKAGE_B43_PHY_LCN),-DCONFIG_B43_PHY_LCN) \
+	-DCONFIG_B43_BCMA \
 	-DCONFIG_B43_SSB \
 	$(if $(CONFIG_PACKAGE_RT2X00_LIB_DEBUGFS),-DCONFIG_RT2X00_LIB_DEBUGFS) \
 	$(if $(CONFIG_PACKAGE_RT2X00_DEBUG),-DCONFIG_RT2X00_DEBUG) \
@@ -1062,6 +1109,7 @@ MAKE_OPTS:= \
 	CONFIG_CFG80211=$(if $(CONFIG_PACKAGE_kmod-cfg80211),m) \
 	CONFIG_MAC80211=$(if $(CONFIG_PACKAGE_kmod-mac80211),m) \
 	CONFIG_MAC80211_RC_MINSTREL=y \
+	CONFIG_MAC80211_MESH=$(CONFIG_PACKAGE_MAC80211_MESH) \
 	CONFIG_MAC80211_LEDS=$(CONFIG_LEDS_TRIGGERS) \
 	CONFIG_CFG80211_DEBUGFS=$(if $(CONFIG_PACKAGE_MAC80211_DEBUGFS),y) \
 	CONFIG_MAC80211_DEBUGFS=$(if $(CONFIG_PACKAGE_MAC80211_DEBUGFS),y) \
@@ -1076,7 +1124,11 @@ MAKE_OPTS:= \
 	CONFIG_B43LEGACY=$(if $(CONFIG_PACKAGE_kmod-b43legacy),m) \
 	CONFIG_B43_DEBUG=$(if $(CONFIG_PACKAGE_B43_DEBUG),y) \
 	CONFIG_B43_PIO=$(if $(CONFIG_PACKAGE_B43_PIO),y) \
+	CONFIG_B43_BCMA_PIO=$(if $(CONFIG_PACKAGE_B43_PIO),y) \
 	CONFIG_B43_PHY_N=$(if $(CONFIG_PACKAGE_B43_PHY_N),y) \
+	CONFIG_B43_PHY_HT=$(if $(CONFIG_PACKAGE_B43_PHY_HT),y) \
+	CONFIG_B43_PHY_LCN=$(if $(CONFIG_PACKAGE_B43_PHY_LCN),y) \
+	CONFIG_B43_BCMA=y \
 	CONFIG_B43_SSB=y \
 	CONFIG_ATH_COMMON=$(if $(CONFIG_PACKAGE_kmod-ath),m) \
 	CONFIG_ATH_DEBUG=$(if $(CONFIG_PACKAGE_ATH_DEBUG),y) \
@@ -1142,7 +1194,7 @@ MAKE_OPTS:= \
 	CONFIG_LIB80211_CRYPT_CCMP=$(if $(CONFIG_PACKAGE_kmod-lib80211),m) \
 	CONFIG_LIB80211_CRYPT_TKIP=$(if $(CONFIG_PACKAGE_kmod-lib80211),m) \
 	CONFIG_IWLWIFI=$(if $(CONFIG_PACKAGE_kmod-iwlagn),m) \
-	CONFIG_IWLWIFI_LEGACY=$(if $(CONFIG_PACKAGE_kmod-iwl-legacy),m) \
+	CONFIG_IWLEGACY=$(if $(CONFIG_PACKAGE_kmod-iwl-legacy),m) \
 	CONFIG_COMPAT_IWL4965=$(if $(CONFIG_PACKAGE_kmod-iwl4965),m) \
 	CONFIG_IWL3945=$(if $(CONFIG_PACKAGE_kmod-iwl3945),m) \
 	CONFIG_MWL8K=$(if $(CONFIG_PACKAGE_kmod-mwl8k),m) \
