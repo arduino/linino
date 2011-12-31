@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006-2010 OpenWrt.org
+#
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libupnp
-PKG_VERSION:=1.6.12
-PKG_RELEASE:=2
+PKG_VERSION:=1.6.14
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/pupnp
-PKG_MD5SUM:=d48938efe69d07142be8aaaeaa9a2d3e
+PKG_MD5SUM:=a0497cf15b3e15f7e7ede88b3d04861b
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
