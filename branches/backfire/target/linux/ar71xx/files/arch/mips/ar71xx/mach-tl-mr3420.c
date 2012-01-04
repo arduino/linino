@@ -90,14 +90,14 @@ static struct gpio_button tl_mr3420_gpio_buttons[] __initdata = {
 	{
 		.desc		= "reset",
 		.type		= EV_KEY,
-		.code		= KEY_RESTART,
+		.code		= BTN_0,
 		.threshold	= 3,
 		.gpio		= TL_MR3420_GPIO_BTN_RESET,
 		.active_low	= 1,
 	}, {
 		.desc		= "qss",
 		.type		= EV_KEY,
-		.code		= KEY_WPS_BUTTON,
+		.code		= BTN_1,
 		.threshold	= 3,
 		.gpio		= TL_MR3420_GPIO_BTN_QSS,
 		.active_low	= 1,
@@ -123,13 +123,13 @@ static void __init tl_mr3420_setup(void)
 					tl_mr3420_gpio_buttons);
 
 	ar71xx_eth1_data.has_ar7240_switch = 1;
-
 	ar71xx_set_mac_base(mac);
 
 	/* WAN port */
 	ar71xx_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RMII;
 	ar71xx_eth0_data.speed = SPEED_100;
 	ar71xx_eth0_data.duplex = DUPLEX_FULL;
+	ar71xx_eth0_data.phy_mask = BIT(4);
 
 	/* LAN ports */
 	ar71xx_eth1_data.phy_if_mode = PHY_INTERFACE_MODE_RMII;
@@ -142,7 +142,10 @@ static void __init tl_mr3420_setup(void)
 
 	ar71xx_add_device_usb();
 
+	ap91_pci_setup_wmac_led_pin(0);
+
 	ap91_pci_init(ee, mac);
 }
+
 MIPS_MACHINE(AR71XX_MACH_TL_MR3420, "TL-MR3420", "TP-LINK TL-MR3420",
 	     tl_mr3420_setup);
