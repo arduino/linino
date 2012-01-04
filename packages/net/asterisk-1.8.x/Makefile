@@ -117,6 +117,18 @@ $(call Package/asterisk18/Default/description)
  Asterisk.
 endef
 
+define Package/asterisk18-res-srtp
+$(call Package/asterisk18/Default)
+  TITLE:=SRTP support
+  DEPENDS:= asterisk18 +asterisk18-res-crypto +libsrtp
+endef
+
+define Package/asterisk18-res-srtp/description
+$(call Package/asterisk18/Default/description)
+ This package provides SRTP support to
+ Asterisk.
+endef
+
 define Package/asterisk18-chan-gtalk
 $(call Package/asterisk18/Default)
   TITLE:=GTalk support
@@ -229,6 +241,14 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk18-chan-mobile),)
 else
   CONFIGURE_ARGS+= \
 	--without-bluetooth
+endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk18-res-srtp),)
+  CONFIGURE_ARGS+= \
+	--with-srtp="$(STAGING_DIR)/usr"
+else
+  CONFIGURE_ARGS+= \
+	--without-srtp
 endif
 
 CONFIGURE_ARGS+= \
@@ -480,6 +500,11 @@ define Package/asterisk18-mysql/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_config_mysql.so $(1)/usr/lib/asterisk/modules/
 endef
 
+define Package/asterisk18-res-srtp/install
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_srtp.so $(1)/usr/lib/asterisk/modules/
+endef
+
 define Buildasterisk18ModuleTemplate
 
   define Package/asterisk18-$(subst _,-,$(1))
@@ -514,6 +539,7 @@ $(eval $(call BuildPackage,asterisk18-chan-mgcp))
 $(eval $(call BuildPackage,asterisk18-chan-skinny))
 $(eval $(call BuildPackage,asterisk18-curl))
 $(eval $(call BuildPackage,asterisk18-mysql))
+$(eval $(call BuildPackage,asterisk18-res-srtp))
 $(eval $(call Buildasterisk18ModuleTemplate,app_authenticate,Authenticate,support for executing arbitrary authenticate commands))
 $(eval $(call Buildasterisk18ModuleTemplate,app_chanisavail,Channel availability check,support for checking if a channel is available))
 $(eval $(call Buildasterisk18ModuleTemplate,app_chanspy,Channel listen in,support for listening in on any channel))
