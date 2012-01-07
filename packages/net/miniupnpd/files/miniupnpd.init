@@ -106,10 +106,11 @@ start() {
 
 		local iface
 		for iface in ${intiface:-lan}; do
-			local ipaddr
+			local ipaddr netmask
 			config_get ipaddr "$iface" ipaddr
+			config_get netmask "$iface" netmask "255.255.255.0"
 			[ -n "$ipaddr" ] && \
-				echo "listening_ip=$ipaddr" >>$tmpconf
+				echo "listening_ip=$ipaddr/$netmask" >>$tmpconf
 		done
 
 		[ "$port" != "auto" ] && \
