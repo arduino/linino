@@ -44,7 +44,9 @@ endef
 CONFIGURE_ARGS += \
 	--with-java-runtime-library=gnuclasspath \
 	--with-classpath-install-dir=/usr \
-	--disable-int-inlining
+	--disable-int-inlining \
+	--disable-shared \
+	--without-pic
 
 MAKE_FLAGS += \
 	GLIBJ_ZIP=$(STAGING_DIR)/usr/share/classpath/glibj.zip
@@ -53,7 +55,6 @@ define Package/jamvm/install
 	$(INSTALL_DIR) $(1)/usr
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/bin \
-		$(PKG_INSTALL_DIR)/usr/lib \
 		$(PKG_INSTALL_DIR)/usr/share \
 		$(1)/usr/
 endef
