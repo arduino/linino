@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=classpath
 PKG_VERSION:=0.98
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/classpath
@@ -26,7 +26,6 @@ define Package/classpath
   TITLE:=GNU Classpath
   URL:=http://www.gnu.org/software/classpath/
   MAINTAINER:=Roberto Riggio <roberto.riggio@create-net.org>
-  DEPENDS:=@BROKEN
 endef
 
 define Package/classpath/Description
@@ -35,21 +34,37 @@ define Package/classpath/Description
 	machines and compilers for the java programming language.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--with-javac \
-		--enable-jni \
-		--disable-gtk-peer \
-		--disable-gconf-peer \
-		--disable-plugin \
-	)
+define Download/antlr
+  URL:=http://www.antlr.org/download
+  FILE:=antlr-3.4-complete.jar
+  MD5SUM:=1b91dea1c7d480b3223f7c8a9aa0e172
 endef
+$(eval $(call Download,antlr))
+
+CONFIGURE_ARGS += \
+	--without-x \
+	--disable-gtk-peer \
+	--disable-qt-peer \
+	--disable-dssi \
+	--disable-plugin \
+	--disable-gconf-peer \
+	--disable-gjdoc \
+	--with-antlr-jar=$(DL_DIR)/antlr-3.4-complete.jar
 
 define Package/classpath/install
-	$(INSTALL_DIR) $(1)/usr/share/classpath
-	$(INSTALL_DIR) $(1)/usr/lib/classpath
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/classpath/glibj.zip $(1)/usr/share/classpath/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/classpath/* $(1)/usr/lib/classpath/
+	$(INSTALL_DIR) \
+		$(1)/usr/lib/classpath \
+		$(1)/usr/share/classpath
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/security \
+		$(PKG_INSTALL_DIR)/usr/lib/logging.properties \
+		$(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/classpath/*.so* $(1)/usr/lib/classpath/
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/classpath/*.zip $(1)/usr/share/classpath/
+endef
+
+define Build/InstallDev
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 $(eval $(call BuildPackage,classpath))
