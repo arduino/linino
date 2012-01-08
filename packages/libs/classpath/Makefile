@@ -60,7 +60,7 @@ define Package/classpath/install
 		$(PKG_INSTALL_DIR)/usr/lib/logging.properties \
 		$(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/classpath/*.so* $(1)/usr/lib/classpath/
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/classpath/*.zip $(1)/usr/share/classpath/
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/classpath/glibj.zip $(1)/usr/share/classpath/
 endef
 
 define Build/InstallDev
