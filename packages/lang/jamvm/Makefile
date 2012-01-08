@@ -29,7 +29,7 @@ define Package/jamvm
   CATEGORY:=Languages
   TITLE:=A compact Java Virtual Machine
   URL:=http://sourceforge.net/projects/jamvm
-  DEPENDS:=+libffi +zlib +libpthread +librt +classpath @!avr32
+  DEPENDS:=+zlib +libpthread +librt +classpath @!avr32
 endef
 
 define Package/jamvm/description
@@ -42,10 +42,9 @@ define Package/jamvm/description
 endef
 
 CONFIGURE_ARGS += \
-	--enable-ffi \
 	--with-java-runtime-library=gnuclasspath \
 	--with-classpath-install-dir=/usr \
-	--disable-int-threading
+	--disable-int-inlining
 
 MAKE_FLAGS += \
 	GLIBJ_ZIP=$(STAGING_DIR)/usr/share/classpath/glibj.zip
