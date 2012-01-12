@@ -57,6 +57,23 @@ upnpd_write_bool() {
 	fi
 }
 
+upnpd_netmask2prefix() {
+	local octet
+	local prefix=0
+	local IFS="."
+
+	set -- $1
+
+	for octet in $1 $2 $3 $4; do
+		while [ $octet -gt 0 ]; do
+			prefix=$(($prefix + ($octet & 1)))
+			octet=$(($octet >> 1))
+		done
+	done
+
+	return $prefix
+}
+
 start() {
 	type miniupnpd_add_rules >/dev/null 2>/dev/null || \
 		ACTION=- . /etc/hotplug.d/firewall/50-miniupnpd
@@ -109,8 +126,10 @@ start() {
 			local ipaddr netmask
 			config_get ipaddr "$iface" ipaddr
 			config_get netmask "$iface" netmask "255.255.255.0"
-			[ -n "$ipaddr" ] && \
-				echo "listening_ip=$ipaddr/$netmask" >>$tmpconf
+			[ -n "$ipaddr" ] && {
+				upnpd_netmask2prefix "$netmask"
+				echo "listening_ip=$ipaddr/$?" >>$tmpconf
+			}
 		done
 
 		[ "$port" != "auto" ] && \
