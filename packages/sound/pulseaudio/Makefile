@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pulseaudio
 PKG_VERSION:=1.1
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://freedesktop.org/software/pulseaudio/releases/
@@ -44,7 +44,7 @@ endef
 
 define Package/pulseaudio-daemon-avahi
   $(call Package/pulseaudio/Default)
-  DEPENDS+=+dbus +libavahi-client +avahi-daemon-dbus
+  DEPENDS+=+dbus +libavahi-client
   TITLE+= (avahi)
   VARIANT:=avahi
 endef
