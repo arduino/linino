@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pulseaudio
 PKG_VERSION:=1.1
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://freedesktop.org/software/pulseaudio/releases/
@@ -121,6 +121,7 @@ CONFIGURE_ARGS += \
 	--enable-avahi \
 	--enable-dbus
 endif
+
 ifeq ($(BUILD_VARIANT),noavahi)
 CONFIGURE_ARGS += \
 	--disable-avahi \
@@ -180,6 +181,8 @@ define Package/pulseaudio-daemon/install
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/pulse-$(PKG_VERSION)/modules/module*.so \
 		$(1)/usr/lib/pulse-$(PKG_VERSION)/modules/
+
+	chmod -R 0644 $(1)/etc/pulse/*
 endef
 
 define Package/pulseaudio-daemon-avahi/install
@@ -218,6 +221,8 @@ define Package/pulseaudio-daemon-avahi/install
 	$(INSTALL_CONF) \
 		$(PKG_INSTALL_DIR)/etc/dbus-1/system.d/pulseaudio-system.conf \
 		$(1)/etc/dbus-1/system.d/pulseaudio-system.conf
+
+	chmod -R 0644 $(1)/etc/pulse/* $(1)/etc/dbus-1/system.d/pulseaudio-system.conf
 endef
 
 define Package/pulseaudio-tools/install
