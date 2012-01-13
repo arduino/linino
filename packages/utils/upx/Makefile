@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=upx
-PKG_VERSION:=3.07
+PKG_VERSION:=3.08
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.bz2
 PKG_SOURCE_URL:=http://upx.sourceforge.net/download \
 	http://upx.sourceforge.net/download/00-OLD-VERSIONS
-PKG_MD5SUM:=8186ab103288242f7e8ecad1acd4af03
+PKG_MD5SUM:=54c76fa52cad578ff23ef98aee91e3f5
 
 include $(INCLUDE_DIR)/package.mk
 
