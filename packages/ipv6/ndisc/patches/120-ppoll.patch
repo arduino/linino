@@ -44,4 +44,4 @@
 +                  const sigset_t *restrict sigset)
  {
  	sigset_t origset;
- 	int val;
+ 	int timeout;

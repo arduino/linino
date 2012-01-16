@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ndisc6
-PKG_VERSION:=1.0.1
+PKG_VERSION:=1.0.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.remlab.net/files/ndisc6
-PKG_MD5SUM:=d0b8233a60e29ad78d9aebb8cef0b3f2
+PKG_MD5SUM:=50cb4c19606cf6ff2b7388e71832f579
 
 PKG_INSTALL:=1
 
@@ -25,6 +25,7 @@ define Package/ndisc
   SUBMENU:=IPv6 discovery tools
   TITLE:=IPv6 discovery tools
   URL:=http://www.remlab.net/ndisc6/
+  DEPENDS:=+libpthread +librt
 endef
 
 define Package/ndisc/description
@@ -34,7 +35,6 @@ endef
 define Package/ndisc6
   $(call Package/ndisc)
   TITLE:=An ICMPv6 neighbour discovery tool
-  DEPENDS:=+libpthread +librt
 endef
 
 define Package/ndisc6/description
@@ -44,26 +44,24 @@ endef
 define Package/rdisc6
   $(call Package/ndisc)
   TITLE:=An ICMPv6 router discovery tool
-  DEPENDS:=+libpthread +librt
 endef
 
 define Package/rdisc6/description
 An ICMPv6 router discovery tool
 endef
 
-define Package/tcptraceroute6
+define Package/traceroute6
   $(call Package/ndisc)
-  TITLE:=A TCP/IPv6-based traceroute implementation
+  TITLE:=An IPv6-based traceroute implementation
 endef
 
-define Package/tcptraceroute6/description
-A TCP/IPv6-based traceroute implementation
+define Package/traceroute6/description
+An IPv6-based traceroute implementation
 endef
 
 define Package/rdnssd
   $(call Package/ndisc)
   TITLE:=DNS server discovery daemon
-  DEPENDS:=+libpthread +librt
 endef
 
 define Package/rdnssd/description
@@ -83,9 +81,10 @@ define Package/rdisc6/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/rdisc6 $(1)/usr/bin/
 endef
 
-define Package/tcptraceroute6/install
+define Package/traceroute6/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/tcptraceroute6 $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/{rl,tcp}traceroute6 $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/tracert6 $(1)/usr/bin/
 endef
 
 define Package/rdnssd/install
@@ -95,5 +94,5 @@ endef
 
 $(eval $(call BuildPackage,ndisc6))
 $(eval $(call BuildPackage,rdisc6))
-$(eval $(call BuildPackage,tcptraceroute6))
+$(eval $(call BuildPackage,traceroute6))
 $(eval $(call BuildPackage,rdnssd))
