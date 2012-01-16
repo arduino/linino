@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2011 OpenWrt.org
+# Copyright (C) 2008-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lftp
-PKG_VERSION:=4.3.1
+PKG_VERSION:=4.3.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=http://lftp.cybermirror.org \
   http://lftp.cybermirror.org/old
-PKG_MD5SUM:=ccef0f84416fc964b7b8a5e3f2e87631
+PKG_MD5SUM:=fbbc296f8c8c73e4b38b2b3228bd94f5
 
 PKG_INSTALL:=1
 
@@ -25,7 +25,7 @@ define Package/lftp
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libncurses +libopenssl +libreadline +uclibcxx +libexpat
-  TITLE:=lftp
+  TITLE:=Sophisticated file transfer program
   URL:=http://lftp.yar.ru/
 endef
 
