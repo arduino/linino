@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011 OpenWrt.org
+# Copyright (C) 2011-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libnatpmp
-PKG_VERSION:=20110715
+PKG_VERSION:=20110808
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://miniupnp.free.fr/files
-PKG_MD5SUM:=56b9f784836f0783bcc862486aa19491
+PKG_MD5SUM:=22a1225b890471a7750a9bf26eb863f7
 
 PKG_INSTALL:=1
 
