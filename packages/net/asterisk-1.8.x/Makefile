@@ -120,7 +120,7 @@ endef
 define Package/asterisk18-res-srtp
 $(call Package/asterisk18/Default)
   TITLE:=SRTP support
-  DEPENDS:= asterisk18 +asterisk18-res-crypto +libsrtp
+  DEPENDS:= asterisk18 libsrtp +asterisk18-res-crypto
 endef
 
 define Package/asterisk18-res-srtp/description
