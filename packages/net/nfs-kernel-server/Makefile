@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nfs-kernel-server
 PKG_VERSION:=1.2.5
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=8395ac770720b83c5c469f88306d7765
 
 PKG_SOURCE_URL:=@SF/nfs
@@ -75,7 +75,8 @@ CONFIGURE_ARGS += \
 	--disable-nfsv4 \
 	--disable-nfsv41 \
 	--enable-static \
-	--enable-shared
+	--enable-shared \
+	--disable-caps
 
 MAKE_FLAGS += \
 	OPT="$(TARGET_CFLAGS)" \
