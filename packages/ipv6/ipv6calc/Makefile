@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2011 OpenWrt.org
+# Copyright (C) 2008-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ipv6calc
-PKG_VERSION:=0.90.0
+PKG_VERSION:=0.92.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc
-PKG_MD5SUM:=c1a654214058fdac5f8c2ba6a196e2b8
+PKG_MD5SUM:=0517e88f7b70d7b1f5c501ebc59e0c1c
 
 PKG_INSTALL:=1
 
