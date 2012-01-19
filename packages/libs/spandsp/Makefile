@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -11,7 +11,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=spandsp
 PKG_VERSION:=0.0.6
 PKG_VERSION_SUFFIX:=pre17
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)$(PKG_VERSION_SUFFIX).tgz
 PKG_SOURCE_URL:=http://www.soft-switch.org/downloads/spandsp/
@@ -19,6 +19,7 @@ PKG_MD5SUM:=cc860f77270cf3b881f8ccd42d2d0238
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -28,8 +29,6 @@ define Package/libspandsp
   TITLE:=spandsp library
   DEPENDS:=+libtiff
 endef
-
-CONFIGURE_ARGS+= LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
 
 TARGET_CFLAGS += $(FPIC)
 
