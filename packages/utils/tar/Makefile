@@ -37,7 +37,7 @@ define Package/tar/postinst
 if [ -e $${IPKG_INSTROOT}/bin/tar ]; then
   rm -r $${IPKG_INSTROOT}/bin/tar;
 fi
-ln -sf $${IPKG_INSTROOT}/usr/bin/tar $${IPKG_INSTROOT}/bin/tar
+ln -sf /usr/bin/tar $${IPKG_INSTROOT}/bin/tar
 endef
 
 define Package/tar/postrm
