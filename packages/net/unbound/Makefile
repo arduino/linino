@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010-2011 OpenWrt.org
+# Copyright (C) 2010-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,18 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=unbound
-PKG_VERSION:=1.4.12
+PKG_VERSION:=1.4.14
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.unbound.net/downloads
-PKG_MD5SUM:=673a224c76345003fd168448ca12fbb2
+PKG_MD5SUM:=cd69fdaaa6af01ea0b6fbc59802f74ba
 
 PKG_BUILD_DEPENDS:=libexpat
 PKG_BUILD_PARALLEL:=1
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
-PKG_LIBTOOL_PATHS:= ./libtool ./ldns-src/libtool
 
 include $(INCLUDE_DIR)/package.mk
 
