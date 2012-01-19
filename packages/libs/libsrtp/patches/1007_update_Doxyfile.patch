@@ -3,7 +3,7 @@ Author: Jonas Smedegaard <dr@jones.dk>
 Last-Update: 2010-02-28
 --- a/doc/Makefile.in
 +++ b/doc/Makefile.in
-@@ -25,6 +25,7 @@
+@@ -25,6 +25,7 @@ libsrtpdoc: 
  		echo "*** Sorry, can't build doc outside source dir"; exit 1; \
  	fi
  	sed 's/LIBSRTPVERSION/$(version)/' header.template > header.tex
@@ -11,7 +11,7 @@ Last-Update: 2010-02-28
  	doxygen
  	sed 's/\subsection/\section/' latex/index.tex > latex/index.tmp
  	mv latex/index.tmp latex/index.tex
-@@ -38,7 +39,7 @@
+@@ -38,7 +39,7 @@ cryptodoc: clean
  	cp latex/refman.pdf crypto.pdf
  
  clean:
@@ -81,7 +81,7 @@ Last-Update: 2010-02-28
  \begin{titlepage}
  \vspace*{4cm}
  %\begin{center}
-@@ -107,9 +121,6 @@
+@@ -107,9 +121,6 @@ This reference material in this documena
  \clearemptydoublepage
  \pagenumbering{roman}
  \tableofcontents

@@ -13,7 +13,7 @@ Last-Update: 2010-03-19
  
  runtest: build_table_apps test
  	@echo "running libsrtp test applications..."
-@@ -67,7 +67,7 @@
+@@ -67,7 +67,7 @@ libdir = @libdir@
  # implicit rules for object files and test apps
  
  %.o: %.c
@@ -22,7 +22,7 @@ Last-Update: 2010-03-19
  
  %$(EXE): %.c
  	$(COMPILE) $(LDFLAGS) $< -o $@ $(SRTPLIB) $(LIBS)
-@@ -105,6 +105,9 @@
+@@ -105,6 +105,9 @@ libsrtp.a: $(srtpobj) $(cryptobj) $(gdoi
  	ar cr libsrtp.a $^
  	$(RANLIB) libsrtp.a
  
@@ -32,9 +32,9 @@ Last-Update: 2010-03-19
  # libcryptomath.a contains general-purpose routines that are used to
  # generate tables and verify cryptoalgorithm implementations - this
  # library is not meant to be included in production code
-@@ -198,6 +201,11 @@
- 	cp $(srcdir)/crypto/include/*.h $(DESTDIR)$(includedir)/srtp
- 	if [ "$(srcdir)" != "." ]; then cp crypto/include/*.h $(DESTDIR)$(includedir)/srtp; fi
+@@ -197,6 +200,11 @@ install:
+ 	cp include/*.h $(DESTDIR)$(includedir)/srtp  
+ 	cp crypto/include/*.h $(DESTDIR)$(includedir)/srtp
  	if [ -f libsrtp.a ]; then cp libsrtp.a $(DESTDIR)$(libdir)/; fi
 +	if [ -f libsrtp.so.0.0 ]; then \
 +		cp libsrtp.so.0.0 $(DESTDIR)$(libdir)/; \
@@ -43,8 +43,8 @@ Last-Update: 2010-03-19
 +	fi
  
  uninstall:
- 	rm -f $(DESTDIR)$(includedir)/srtp/*.h
-@@ -206,7 +214,7 @@
+ 	rm -rf $(DESTDIR)$(includedir)/srtp
+@@ -204,7 +212,7 @@ uninstall:
  
  clean:
  	rm -rf $(cryptobj) $(srtpobj) $(cryptomath) TAGS \
