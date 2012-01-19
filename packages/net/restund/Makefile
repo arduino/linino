@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=restund
-PKG_VERSION:=0.3.0
-PKG_RELEASE:=3
+PKG_VERSION:=0.4.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.creytiv.com/pub/
-PKG_MD5SUM:=e82bdb994b26b8c16d799b3dc8dd0008
+PKG_MD5SUM:=fcfda012e04b5402e898da211dc10b6b
 
 restund-mods:= \
 	mysql \
