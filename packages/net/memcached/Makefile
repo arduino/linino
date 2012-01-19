@@ -1,6 +1,6 @@
 #
-# Copyright (C) 2009-2011 OpenWrt.org
-# Copyright (C) 2009-2010 Thomas Heil <heil@terminal-consulting.de>
+# Copyright (C) 2009-2012 OpenWrt.org
+# Copyright (C) 2009-2012 Thomas Heil <heil@terminal-consulting.de>
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,19 +9,21 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=memcached
-PKG_VERSION:=1.4.7
+PKG_VERSION:=1.4.11
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://memcached.googlecode.com/files
-PKG_MD5SUM:=cf0becfa65753c3b5a1fc8f84861bb23
+PKG_MD5SUM:=50ee313639531d4d2f8eb9c688f58948
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/memcached
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libevent
+  DEPENDS:=+libevent +libpthread
   TITLE:=The high-performance, distributed memory object caching system
   MAINTAINER:=Thomas Heil <heil@terminal-consulting.de>
   URL:=http://memcached.org/
@@ -44,15 +46,15 @@ endif
 CONFIGURE_ARGS += \
 	--disable-docs \
 	--disable-dtrace \
-	--disable-coverage  \
+	--disable-coverage \
 	--disable-sasl
 
-TARGET_CFLAGS+= \
-    -std=gnu99
+TARGET_CFLAGS += \
+	-std=gnu99
 
 define Package/memcached/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/memcached $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/memcached $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_CONF) ./files/memcached.config $(1)/etc/config/memcached
 	$(INSTALL_DIR) $(1)/etc/init.d

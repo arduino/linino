@@ -1,8 +1,8 @@
 --- a/memcached.c
 +++ b/memcached.c
-@@ -15,6 +15,10 @@
- std *
-  *  $Id$
+@@ -13,6 +13,10 @@
+  *      Anatoly Vorobey <mellon@pobox.com>
+  *      Brad Fitzpatrick <brad@danga.com>
   */
 +#ifndef __need_IOV_MAX
 +#define __need_IOV_MAX
