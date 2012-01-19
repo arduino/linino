@@ -1,0 +1,4 @@
+1003_fix_mips_namespace_collision.patch
+1005_fix_data_alignment.patch
+1007_update_Doxyfile.patch
+1008_shared-lib.patch
