@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011 OpenWrt.org
+# Copyright (C) 2011-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,28 +8,54 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ldns
-PKG_VERSION:=1.6.11
+PKG_VERSION:=1.6.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.nlnetlabs.nl/downloads/ldns
-PKG_MD5SUM:=c55b592a679672281712c457fbb41eb5
+PKG_MD5SUM:=e7428ed0d19baed02459e2c55660c9b3
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/libldns
-  SECTION:=libs
-  CATEGORY:=Libraries
-  TITLE:=A library to simplify DNS programming
+define Package/libldns/Default
   URL:=http://www.nlnetlabs.nl/projects/ldns/
   DEPENDS:=+libopenssl
 endef
 
+define Package/libldns
+  $(call Package/libldns/Default)
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=A library to simplify DNS programming
+endef
+
+define Package/libldns/description
+  The goal of ldns is to simplify DNS programming, it supports recent RFCs like
+  the DNSSEC documents, and allows developers to easily create software
+  conforming to current RFCs, and experimental software for current Internet
+  Drafts.
+endef
+
+define Package/drill
+  $(call Package/libldns/Default)
+  SECTION:=net
+  CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
+  TITLE:=DNS(SEC) information tool
+  DEPENDS+= +libldns
+endef
+
+define Package/drill/description
+  drill is a tool to designed to get all sorts of information out of the DNS. It
+  is specificly designed to be used with DNSSEC.
+endef
+
 CONFIGURE_ARGS += \
 	--disable-gost \
+	--with-drill \
 	--with-ssl="$(STAGING_DIR)/usr"
 
 define Build/InstallDev
@@ -44,4 +70,10 @@ define Package/libldns/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libldns.so.* $(1)/usr/lib/
 endef
 
+define Package/drill/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/drill $(1)/usr/bin/
+endef
+
 $(eval $(call BuildPackage,libldns))
+$(eval $(call BuildPackage,drill))
