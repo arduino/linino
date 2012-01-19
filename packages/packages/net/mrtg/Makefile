@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2011 OpenWrt.org
+# Copyright (C) 2011-2012 OpenWrt.org
 # Copyright (C) 2011 Paolo Pisati <p.pisati@gmail.com>
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,20 +10,26 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mrtg
 PKG_VERSION:=2.17.3
-PKG_RELEASE:=
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://oss.oetiker.ch/mrtg/pub/
 PKG_MD5SUM:=c803f671d04367ee719039ea71fb5b37
 
 PKG_INSTALL:=1
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mrtg
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libgd +libpng +zlib +perl +perlbase-essential +perlbase-findbin +perlbase-cwd +perlbase-config +perlbase-file +perlbase-getopt +perlbase-math +perlbase-integer +perlbase-xsloader +perlbase-pod +perlbase-universal +perlbase-socket +perlbase-posix +perlbase-autoloader +perlbase-fcntl +perlbase-tie +perlbase-io +perlbase-symbol +perlbase-selectsaver +perlbase-errno
+  DEPENDS:=+libgd +libpng +zlib +perl +perlbase-essential +perlbase-findbin \
+    +perlbase-cwd +perlbase-config +perlbase-file +perlbase-getopt \
+    +perlbase-math +perlbase-integer +perlbase-xsloader +perlbase-pod \
+    +perlbase-universal +perlbase-socket +perlbase-posix +perlbase-autoloader \
+    +perlbase-fcntl +perlbase-tie +perlbase-io +perlbase-symbol \
+    +perlbase-selectsaver +perlbase-errno
   TITLE:=The Multi Router Traffic Grapher
   URL:=http://oss.oetiker.ch/mrtg/index.en.html
 endef
@@ -36,9 +42,6 @@ define Package/mrtg/description
   traffic, but has developed into a tool that can create graphs and statistics
   for almost anything.
 endef
-
-EXTRA_CFLAGS+= $(TARGET_CPPFLAGS)
-EXTRA_LDFLAGS+= $(TARGET_LDFLAGS) -Wl,-rpath-link,$(STAGING_DIR)/usr/lib
 
 define Package/mrtg/install
 	$(INSTALL_DIR) $(1)/usr/bin
