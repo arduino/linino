@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011 OpenWrt.org
+# Copyright (C) 2011-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=jansson
-PKG_VERSION:=2.2
+PKG_VERSION:=2.2.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.digip.org/jansson/releases/
-PKG_MD5SUM:=198fbff8265686894b6d088dca22896d
+PKG_MD5SUM:=ebf4ebc7af47de27f7b9d79ad5853176
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
@@ -26,8 +26,6 @@ define Package/jansson
   CATEGORY:=Libraries
   TITLE:=JSON library
 endef
-
-CONFIGURE_ARGS+= LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib"
 
 TARGET_CFLAGS += $(FPIC)
 
