@@ -13,7 +13,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=qt4
 PKG_VERSION:=4.7.0
-PKG_RELEASE:=2
+PKG_RELEASE:=1
 PKG_MD5SUM:=3a2f25b9b115037277f4fb759194a7a5
 
 PKG_SOURCE:=qt-everywhere-opensource-src-$(PKG_VERSION).tar.gz
@@ -76,7 +76,6 @@ define Package/qt4-gui
   $(call Package/qt4/Default)
   DEFAULT:=
   DEPENDS+=+libpng +libtiff +libjpeg +libfreetype +qt4-network \
-	+font-base \
 	+FEATURE_drawing-backend_libX11:libX11 \
 	+FEATURE_drawing-backend_libX11:libXext @DISPLAY_SUPPORT
   TITLE+=(gui)
