@@ -141,8 +141,6 @@ define Package/collectd/description
  and provides mechanismns to store the values in a variety of ways.
 endef
 
-TARGET_CFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
-
 ifneq ($(CONFIG_avr32),)
   TARGET_CFLAGS += -fsigned-char
 endif
@@ -153,6 +151,7 @@ CONFIGURE_ARGS+= \
 	--enable-daemon \
 	--enable-getifaddrs \
 	--with-nan-emulation \
+	--without-libgcrypt
 
 CONFIGURE_VARS+= \
 	CFLAGS="$$$$CFLAGS $(FPIC)" \
