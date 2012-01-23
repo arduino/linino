@@ -21,7 +21,7 @@ Subject: [PATCH] Don't rebuild everything when the Makefile's timestamp changed
  	$(Q)$(CXX) $(CXXFLAGS) -c -o $@ $< -MMD -MF .depend/$@.dep
 --- a/modules/Makefile.in
 +++ b/modules/Makefile.in
-@@ -114,7 +114,7 @@ install_metadirs: create_install_dir
+@@ -114,7 +114,7 @@ install_datadir:
  clean:
  	rm -rf $(CLEAN)
  

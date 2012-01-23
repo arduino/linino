@@ -23,7 +23,7 @@ Subject: [PATCH] Add a uClibc++ build workaround
  
  /* Stuff to be able to write this:
     // i will be name of local variable, see below
-@@ -58,7 +60,7 @@ class CWebAdminMod : public CGlobalModul
+@@ -55,7 +57,7 @@ class CWebAdminMod : public CGlobalModul
  public:
  	GLOBALMODCONSTRUCTOR(CWebAdminMod) {
  		VPair vParams;

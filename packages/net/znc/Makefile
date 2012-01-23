@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=znc
-PKG_VERSION:=0.202
-PKG_RELEASE:=2
+PKG_VERSION:=0.204
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://znc.in/releases \
 		http://znc.in/releases/archive
-PKG_MD5SUM:=3c6ff4620e139e3d9745cd53111bab20
+PKG_MD5SUM:=7c7247423fc08b0c5c62759a50a9bca3
 
 PKG_BUILD_PARALLEL:=1
 
@@ -137,9 +137,6 @@ $(eval $(call module,adminlog,Log user connects and disconnects and failed \
 
 $(eval $(call module,autoattach,Reattaches you to channels on activity.))
 
-$(eval $(call module,autocycle,Cycles a channel when you are the only one in \
-	there and you don't have op.))
-
 $(eval $(call module,autoop,Auto op the good guys.))
 
 $(eval $(call module,autoreply,Gives a automatic reply if someone messages you \
@@ -214,6 +211,9 @@ $(eval $(call module,watch,Monitor activity for specific text patterns from \
 	specific users and have the text sent to a special query window.))
 
 $(eval $(call module,antiidle,Hides your idle time.,extra/))
+
+$(eval $(call module,autocycle,Cycles a channel when you are the only one in \
+	there and you don't have op.,extra/))
 
 $(eval $(call module,autovoice,Autovoices everyone who joins some channel., \
 	extra/))
