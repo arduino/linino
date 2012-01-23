@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 
 START=60
 
@@ -14,11 +14,14 @@ start() {
 		mkdir -m 0755 -p /var/db/dmapd/DAAP
 		chown dmapd:dmapd /var/db/dmapd/DAAP
 	}
+	[ -d /var/db/dmapd/DPAP ] || {
+		mkdir -m 0755 -p /var/db/dmapd/DPAP
+		chown dmapd:dmapd /var/db/dmapd/DPAP
+	}
 	mkdir -m 0755 -p /var/lock/subsys
 	mkdir -m 0755 -p /var/media/music
 	mkdir -m 0755 -p /var/media/pictures
 
-	DMAPD_DB_MODULE=bdb \
 	service_start /usr/sbin/dmapd -m /var/media/music -p /var/media/pictures --vips-disc-threshold 64k
 }
 
