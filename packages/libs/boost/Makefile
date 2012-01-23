@@ -149,7 +149,7 @@ TARGET_LDFLAGS += -pthreads -lrt
 
 define Build/Compile
 	( cd $(PKG_BUILD_DIR) ; \
-		echo "using gcc : : $(GNU_TARGET_NAME)-gcc : <cflags>$(TARGET_CFLAGS) <cxxflags>$(TARGET_CXXFLAGS) <linkflags>$(TARGET_LDFLAGS) ;" > tools/build/v2/site-config.jam ; \
+		echo "using gcc : : $(GNU_TARGET_NAME)-gcc : <compileflags>\"$(TARGET_CFLAGS)\" <cxxflags>\"$(TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > tools/build/v2/site-config.jam ; \
 		$(if $(CONFIG_PACKAGE_boost-python), \
 			echo "using python : : $(STAGING_DIR_ROOT)/usr/bin/python :	$(STAGING_DIR)/usr/include/python2.6/ ;" >> \
 				tools/build/v2/site-config.jam; \

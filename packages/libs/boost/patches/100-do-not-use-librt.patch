@@ -1,7 +1,6 @@
-diff -ruN boost_1_48_0.orig/tools/build/v2/tools/gcc.jam boost_1_48_0/tools/build/v2/tools/gcc.jam
---- boost_1_48_0.orig/tools/build/v2/tools/gcc.jam	2011-06-06 22:36:21.000000000 +0200
-+++ boost_1_48_0/tools/build/v2/tools/gcc.jam	2011-11-16 13:15:49.071254804 +0100
-@@ -1063,8 +1063,7 @@
+--- a/tools/build/v2/tools/gcc.jam
++++ b/tools/build/v2/tools/gcc.jam
+@@ -1018,8 +1018,7 @@ rule setup-threading ( targets * : sourc
              }
              case * :
              {
@@ -11,10 +10,9 @@ diff -ruN boost_1_48_0.orig/tools/build/v2/tools/gcc.jam boost_1_48_0/tools/buil
              }
          }
      
-diff -ruN boost_1_48_0.orig/tools/build/v2/tools/gcc.py boost_1_48_0/tools/build/v2/tools/gcc.py
---- boost_1_48_0.orig/tools/build/v2/tools/gcc.py	2011-01-25 19:06:12.000000000 +0100
-+++ boost_1_48_0/tools/build/v2/tools/gcc.py	2011-11-16 13:16:12.601254423 +0100
-@@ -685,8 +685,8 @@
+--- a/tools/build/v2/tools/gcc.py
++++ b/tools/build/v2/tools/gcc.py
+@@ -685,8 +685,8 @@ elif bjam.variable('UNIX'):
          # Darwin has no threading options, don't set anything here.
          pass
      else:
