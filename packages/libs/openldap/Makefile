@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006-2011 OpenWrt.org
+#
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openldap
 PKG_VERSION:=2.4.23
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/ \
@@ -28,6 +28,11 @@ define Package/openldap/Default
   MAINTAINER:=W. Michael Petullo <mike@flyn.org>
 endef
 
+define Package/openldap/Default/description
+	OpenLDAP Software is an open source implementation of the
+	Lightweight Directory Access Protocol (LDAP).
+endef
+
 define Package/libopenldap
   $(call Package/openldap/Default)
   SECTION:=libs
@@ -37,8 +42,7 @@ define Package/libopenldap
 endef
 
 define Package/libopenldap/description
-	OpenLDAP Software is an open source implementation of the 
-	Lightweight Directory Access Protocol (LDAP).	
+	$(call Package/openldap/Default/description)
 	This package contains the shared LDAP client libraries, needed by other programs.
 endef
 
@@ -55,8 +59,7 @@ define Package/openldap-utils
 endef
 
 define Package/openldap-utils/description
-	OpenLDAP Software is an open source implementation of the 
-	Lightweight Directory Access Protocol (LDAP).	
+	$(call Package/openldap/Default/description)
 	This package contains client programs required to access LDAP servers.
 endef
 
@@ -64,13 +67,12 @@ define Package/openldap-server
   $(call Package/openldap/Default)
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenldap
+  DEPENDS:=+libopenldap +libuuid
   TITLE+= (server)
 endef
 
 define Package/openldap-server/description
-	OpenLDAP Software is an open source implementation of the 
-	Lightweight Directory Access Protocol (LDAP).	
+	$(call Package/openldap/Default/description)
 	This package contains server programs required to provide LDAP services.
 endef
 
@@ -113,25 +115,24 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/include/{lber,ldap}*.h $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/lib{lber,ldap}*.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{lber,ldap}*.{a,so*} $(1)/usr/lib/
 endef
 
 define Package/libopenldap/install
 	$(INSTALL_DIR) $(1)/etc/openldap
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/openldap/ldap.conf $(1)/etc/openldap/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/lib{lber,ldap}*.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{lber,ldap}*.so.* $(1)/usr/lib/
 endef
-	
+
 define Package/openldap-utils/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ldap* $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ldap* $(1)/usr/bin/
 endef
-	
+
 define Package/openldap-server/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/ldap.init $(1)/etc/init.d/ldap
-	$(INSTALL_DIR) $(1)/etc/openldap/ldif
 	$(INSTALL_DIR) $(1)/etc/openldap/schema
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/openldap/schema/* $(1)/etc/openldap/schema/
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/openldap/slapd.conf $(1)/etc/openldap/
