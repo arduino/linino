@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ssmtp
 PKG_VERSION:=2.64
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.bz2
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/s/ssmtp
@@ -55,7 +55,8 @@ define Package/ssmtp/install
 endef
 
 define Package/ssmtp/postinst
-	ln -sf ssmtp $${IPKG_INSTROOT}/usr/sbin/sendmail
+#!/bin/sh
+ln -sf ssmtp $${IPKG_INSTROOT}/usr/sbin/sendmail
 endef
 
 $(eval $(call BuildPackage,ssmtp))
