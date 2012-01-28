@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=psmisc
 PKG_VERSION:=22.14
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/psmisc
@@ -30,7 +30,7 @@ endef
 
 define Package/psmisc/description
  psmisc is a set of additional small useful utilities that use
- the proc filesystem: fuser, killall, peekfd, pstree, and prtstat
+ the proc filesystem: fuser, killall, pstree, and prtstat
 endef
 
 MAKE_FLAGS += \
@@ -48,7 +48,7 @@ endef
 define Package/psmisc/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) \
-		$(PKG_INSTALL_DIR)/usr/bin/{fuser,killall,peekfd,prtstat,pstree} \
+		$(PKG_INSTALL_DIR)/usr/bin/{fuser,killall,prtstat,pstree} \
 		$(1)/usr/bin/
 endef
 
