@@ -71,7 +71,7 @@ export libgcc_cv_fixed_point=no
 GCC_CONFIGURE:= \
 	SHELL="$(BASH)" \
 	$(HOST_BUILD_DIR)/configure \
-		--prefix=$(TOOLCHAIN_DIR)/usr \
+		--prefix=$(TOOLCHAIN_DIR) \
 		--build=$(GNU_HOST_NAME) \
 		--host=$(GNU_HOST_NAME) \
 		--target=$(REAL_GNU_TARGET_NAME) \
@@ -201,7 +201,7 @@ define Stage1/Install
 		$(if $(GCC_BUILD_TARGET_LIBGCC),install-target-libgcc)
 	
 	# XXX: glibc insists on linking against libgcc_eh
-	( cd $(TOOLCHAIN_DIR)/usr/lib/gcc/$(REAL_GNU_TARGET_NAME)/$(PKG_VERSION) ; \
+	( cd $(TOOLCHAIN_DIR)/lib/gcc/$(REAL_GNU_TARGET_NAME)/$(PKG_VERSION) ; \
 		[ -e libgcc_eh.a ] || ln -sf libgcc.a libgcc_eh.a ; \
 		cp libgcc.a libgcc_initial.a; \
 	)
@@ -209,13 +209,13 @@ endef
 
 
 define Stage2/Configure
-	mkdir -p $(HOST_BUILD_DIR2) $(TOOLCHAIN_DIR)/usr/$(REAL_GNU_TARGET_NAME)
+	mkdir -p $(HOST_BUILD_DIR2) $(TOOLCHAIN_DIR)/$(REAL_GNU_TARGET_NAME)
 	# Important!  Required for limits.h to be fixed.
-	rm -rf $(TOOLCHAIN_DIR)/usr/$(REAL_GNU_TARGET_NAME)/sys-include
-	ln -sf ../include $(TOOLCHAIN_DIR)/usr/$(REAL_GNU_TARGET_NAME)/sys-include
-	rm -rf $(TOOLCHAIN_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
-	ln -sf ../lib $(TOOLCHAIN_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
-	$(if $(CONFIG_mips64)$(CONFIG_mips64el)$(CONFIG_x86_64),ln -sf ../lib64 $(TOOLCHAIN_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib64)
+	rm -rf $(TOOLCHAIN_DIR)/$(REAL_GNU_TARGET_NAME)/sys-include
+	ln -sf ../include $(TOOLCHAIN_DIR)/$(REAL_GNU_TARGET_NAME)/sys-include
+	rm -rf $(TOOLCHAIN_DIR)/$(REAL_GNU_TARGET_NAME)/lib
+	ln -sf ../lib $(TOOLCHAIN_DIR)/$(REAL_GNU_TARGET_NAME)/lib
+	$(if $(CONFIG_mips64)$(CONFIG_mips64el)$(CONFIG_x86_64),ln -sf ../lib64 $(TOOLCHAIN_DIR)/$(REAL_GNU_TARGET_NAME)/lib64)
 	(cd $(HOST_BUILD_DIR2); rm -f config.cache; \
 		$(GCC_CONFIGURE_STAGE2) \
 	);
@@ -226,15 +226,15 @@ define Stage2/Compile
 endef
 
 define SetupExtraArch
-	for app in $(TOOLCHAIN_DIR)/usr/bin/$(OPTIMIZE_FOR_CPU)*-{gcc,gcc-*,g++}; do \
+	for app in $(TOOLCHAIN_DIR)/bin/$(OPTIMIZE_FOR_CPU)*-{gcc,gcc-*,g++}; do \
 		[ -e $$$$app ] || continue; \
 		old_base=$$$$(basename $$$$app); \
 		new_base=$(call qstrip,$(CONFIG_EXTRA_TARGET_ARCH_NAME))-$$$${old_base##$(OPTIMIZE_FOR_CPU)-}; \
 		sed -e "s/@CC_BASE@/$$$$old_base/" \
 			-e 's/@EXTRA_ARCH_OPTS@/$(call qstrip,$(CONFIG_EXTRA_TARGET_ARCH_OPTS))/' \
 			 ./files/alternate-arch-cc.in > \
-			 $(TOOLCHAIN_DIR)/usr/bin/$$$$new_base; \
-		chmod a+x $(TOOLCHAIN_DIR)/usr/bin/$$$$new_base; \
+			 $(TOOLCHAIN_DIR)/bin/$$$$new_base; \
+		chmod a+x $(TOOLCHAIN_DIR)/bin/$$$$new_base; \
 	done
 endef
 
@@ -242,7 +242,7 @@ define Stage2/Install
 	$(_SINGLE)$(GCC_MAKE) -C $(HOST_BUILD_DIR2) install
 	# Set up the symlinks to enable lying about target name.
 	set -e; \
-	(cd $(TOOLCHAIN_DIR)/usr; \
+	(cd $(TOOLCHAIN_DIR); \
 		ln -sf $(REAL_GNU_TARGET_NAME) $(GNU_TARGET_NAME); \
 		cd bin; \
 		for app in $(REAL_GNU_TARGET_NAME)-* ; do \
@@ -295,9 +295,9 @@ define Host/Clean
 		$(HOST_BUILD_DIR1) \
 		$(HOST_BUILD_DIR2) \
 		$(BUILD_DIR_TOOLCHAIN)/$(PKG_NAME) \
-		$(TOOLCHAIN_DIR)/usr/$(REAL_GNU_TARGET_NAME) \
-		$(TOOLCHAIN_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gc* \
-		$(TOOLCHAIN_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-c*
+		$(TOOLCHAIN_DIR)/$(REAL_GNU_TARGET_NAME) \
+		$(TOOLCHAIN_DIR)/bin/$(REAL_GNU_TARGET_NAME)-gc* \
+		$(TOOLCHAIN_DIR)/bin/$(REAL_GNU_TARGET_NAME)-c*
 endef
 
 $(eval $(call HostBuild))

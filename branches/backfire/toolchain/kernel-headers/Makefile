@@ -56,19 +56,19 @@ endef
 
 ifneq ($(LINUX_HAS_HEADERS_INSTALL),)
   define Host/Prepare/all
-	mkdir -p $(BUILD_DIR_TOOLCHAIN)/linux-dev/usr
+	mkdir -p $(BUILD_DIR_TOOLCHAIN)/linux-dev
 	$(KMAKE) \
 		CROSS_COMPILE=$(TARGET_CROSS) \
-		INSTALL_HDR_PATH="$(BUILD_DIR_TOOLCHAIN)/linux-dev/usr/" \
+		INSTALL_HDR_PATH="$(BUILD_DIR_TOOLCHAIN)/linux-dev/" \
 		headers_install
   endef
 else
   define Host/Prepare/all
-	mkdir -p $(BUILD_DIR_TOOLCHAIN)/linux-dev/usr/include
-	cp -pLR $(HOST_BUILD_DIR)/include/asm $(BUILD_DIR_TOOLCHAIN)/linux-dev/usr/include/
-	cp -pLR $(HOST_BUILD_DIR)/include/asm-generic $(BUILD_DIR_TOOLCHAIN)/linux-dev/usr/include/
-	cp -pLR $(HOST_BUILD_DIR)/include/asm-$(LINUX_KARCH) $(BUILD_DIR_TOOLCHAIN)/linux-dev/usr/include/
-	cp -pLR $(HOST_BUILD_DIR)/include/linux $(BUILD_DIR_TOOLCHAIN)/linux-dev/usr/include/
+	mkdir -p $(BUILD_DIR_TOOLCHAIN)/linux-dev/include
+	cp -pLR $(HOST_BUILD_DIR)/include/asm $(BUILD_DIR_TOOLCHAIN)/linux-dev/include/
+	cp -pLR $(HOST_BUILD_DIR)/include/asm-generic $(BUILD_DIR_TOOLCHAIN)/linux-dev/include/
+	cp -pLR $(HOST_BUILD_DIR)/include/asm-$(LINUX_KARCH) $(BUILD_DIR_TOOLCHAIN)/linux-dev/include/
+	cp -pLR $(HOST_BUILD_DIR)/include/linux $(BUILD_DIR_TOOLCHAIN)/linux-dev/include/
   endef
 endif
 
@@ -77,17 +77,17 @@ define Host/Prepare/lzma
 	$(CP) \
 		$(HOST_BUILD_DIR)/include/asm-mips/asm.h \
 		$(HOST_BUILD_DIR)/include/asm-mips/regdef.h \
-		$(BUILD_DIR_TOOLCHAIN)/linux-dev/usr/include/asm/
+		$(BUILD_DIR_TOOLCHAIN)/linux-dev/include/asm/
 endef
 
 define Host/Prepare/post/cris
 	$(CP) \
 		$(HOST_BUILD_DIR)/include/linux/user.h \
 		$(HOST_BUILD_DIR)/include/linux/autoconf.h \
-		$(BUILD_DIR_TOOLCHAIN)/linux-dev/usr/include/linux/
-	ln -snf $(BUILD_DIR_TOOLCHAIN)/linux-dev/usr/include/arch-v10/arch \
-		$(BUILD_DIR_TOOLCHAIN)/linux-dev/usr/include/arch
-	$(SED) '/#include <asm\/page\.h>/d' $(BUILD_DIR_TOOLCHAIN)/linux-dev/usr/include/asm/user.h
+		$(BUILD_DIR_TOOLCHAIN)/linux-dev/include/linux/
+	ln -snf $(BUILD_DIR_TOOLCHAIN)/linux-dev/include/arch-v10/arch \
+		$(BUILD_DIR_TOOLCHAIN)/linux-dev/include/arch
+	$(SED) '/#include <asm\/page\.h>/d' $(BUILD_DIR_TOOLCHAIN)/linux-dev/include/asm/user.h
 endef
 
 define Host/Prepare/post/ubicom32
@@ -96,7 +96,7 @@ define Host/Prepare/post/ubicom32
 		$(HOST_BUILD_DIR)/arch/ubicom32/include/asm/user.h \
 		$(HOST_BUILD_DIR)/arch/ubicom32/include/asm/page.h \
 		$(HOST_BUILD_DIR)/arch/ubicom32/include/asm/page_offset.h \
-		$(BUILD_DIR_TOOLCHAIN)/linux-dev/usr/include/asm/
+		$(BUILD_DIR_TOOLCHAIN)/linux-dev/include/asm/
 endef
 
 define Host/Prepare/post/mips

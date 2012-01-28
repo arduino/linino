@@ -111,7 +111,7 @@ TARGET_PATH:=$(STAGING_DIR_HOST)/bin:$(PATH)
 TARGET_CFLAGS:=$(TARGET_OPTIMIZATION)$(if $(CONFIG_DEBUG), -g3)
 TARGET_CPPFLAGS:=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
 TARGET_LDFLAGS:=-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib
-LIBGCC_A=$(wildcard $(TOOLCHAIN_DIR)/usr/lib/gcc/*/*/libgcc.a)
+LIBGCC_A=$(wildcard $(TOOLCHAIN_DIR)/lib/gcc/*/*/libgcc.a)
 LIBGCC_S=$(if $(wildcard $(TOOLCHAIN_DIR)/lib/libgcc_s.so),-L$(TOOLCHAIN_DIR)/lib -lgcc_s,$(LIBGCC_A))
 
 ifndef DUMP
@@ -119,9 +119,9 @@ ifndef DUMP
     -include $(TOOLCHAIN_DIR)/info.mk
     TARGET_CROSS:=$(if $(TARGET_CROSS),$(TARGET_CROSS),$(OPTIMIZE_FOR_CPU)-openwrt-linux$(if $(TARGET_SUFFIX),-$(TARGET_SUFFIX))-)
     TARGET_CFLAGS+= -fhonour-copts
-    TARGET_CPPFLAGS+= -I$(TOOLCHAIN_DIR)/usr/include -I$(TOOLCHAIN_DIR)/include
-    TARGET_LDFLAGS+= -L$(TOOLCHAIN_DIR)/usr/lib -L$(TOOLCHAIN_DIR)/lib
-    TARGET_PATH:=$(TOOLCHAIN_DIR)/usr/bin:$(TARGET_PATH)
+    TARGET_CPPFLAGS+= -I$(TOOLCHAIN_DIR)/include
+    TARGET_LDFLAGS+= -L$(TOOLCHAIN_DIR)/lib
+    TARGET_PATH:=$(TOOLCHAIN_DIR)/bin:$(TARGET_PATH)
   else
     ifeq ($(CONFIG_NATIVE_TOOLCHAIN),)
       TARGET_CROSS:=$(call qstrip,$(CONFIG_TOOLCHAIN_PREFIX))
