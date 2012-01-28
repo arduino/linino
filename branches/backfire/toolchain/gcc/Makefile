@@ -251,6 +251,7 @@ define Stage2/Install
 		done; \
 	);
 	$(if $(CONFIG_EXTRA_TARGET_ARCH),$(call SetupExtraArch))
+	$(SCRIPT_DIR)/patch-specs.sh "$(TOOLCHAIN_DIR)"
 endef
 
 
