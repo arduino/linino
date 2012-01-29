@@ -1,7 +1,6 @@
-diff -urN gcc-3.4.1-dist/boehm-gc/configure gcc-3.4.1/boehm-gc/configure
---- gcc-3.4.1-dist/boehm-gc/configure	2004-07-01 14:14:03.000000000 -0500
-+++ gcc-3.4.1/boehm-gc/configure	2004-08-12 16:22:57.000000000 -0500
-@@ -1947,6 +1947,11 @@
+--- a/boehm-gc/configure
++++ b/boehm-gc/configure
+@@ -1947,6 +1947,11 @@ linux-gnu*)
    lt_cv_file_magic_test_file=`echo /lib/libc.so* /lib/libc-*.so`
    ;;
  
@@ -13,10 +12,9 @@ diff -urN gcc-3.4.1-dist/boehm-gc/configure gcc-3.4.1/boehm-gc/configure
  netbsd*)
    if echo __ELF__ | $CC -E - | grep __ELF__ > /dev/null; then
      lt_cv_deplibs_check_method='match_pattern /lib[^/\.]+\.so\.[0-9]+\.[0-9]+$'
-diff -urN gcc-3.4.1-dist/boehm-gc/ltconfig gcc-3.4.1/boehm-gc/ltconfig
---- gcc-3.4.1-dist/boehm-gc/ltconfig	2002-11-20 09:59:06.000000000 -0600
-+++ gcc-3.4.1/boehm-gc/ltconfig	2004-08-12 15:54:42.000000000 -0500
-@@ -1981,6 +1981,23 @@
+--- a/boehm-gc/ltconfig
++++ b/boehm-gc/ltconfig
+@@ -1981,6 +1981,23 @@ linux-gnu*)
    fi
    ;;
  
@@ -40,9 +38,8 @@ diff -urN gcc-3.4.1-dist/boehm-gc/ltconfig gcc-3.4.1/boehm-gc/ltconfig
  netbsd*)
    version_type=sunos
    if echo __ELF__ | $CC -E - | grep __ELF__ >/dev/null; then
-diff -urN gcc-3.4.1-dist/gcc/config/arm/linux-elf.h gcc-3.4.1/gcc/config/arm/linux-elf.h
---- gcc-3.4.1-dist/gcc/config/arm/linux-elf.h	2004-01-31 00:18:11.000000000 -0600
-+++ gcc-3.4.1/gcc/config/arm/linux-elf.h	2004-08-12 15:54:42.000000000 -0500
+--- a/gcc/config/arm/linux-elf.h
++++ b/gcc/config/arm/linux-elf.h
 @@ -81,6 +81,18 @@
    "%{!shared:crtend.o%s} %{shared:crtendS.o%s} crtn.o%s"
  
@@ -70,10 +67,9 @@ diff -urN gcc-3.4.1-dist/gcc/config/arm/linux-elf.h gcc-3.4.1/gcc/config/arm/lin
  
  #define TARGET_OS_CPP_BUILTINS() LINUX_TARGET_OS_CPP_BUILTINS()
  
-diff -urN gcc-3.4.1-dist/gcc/config/cris/linux.h gcc-3.4.1/gcc/config/cris/linux.h
---- gcc-3.4.1-dist/gcc/config/cris/linux.h	2003-11-28 21:08:09.000000000 -0600
-+++ gcc-3.4.1/gcc/config/cris/linux.h	2004-08-12 15:54:43.000000000 -0500
-@@ -79,6 +79,25 @@
+--- a/gcc/config/cris/linux.h
++++ b/gcc/config/cris/linux.h
+@@ -79,6 +79,25 @@ Boston, MA 02111-1307, USA.  */
  #undef CRIS_DEFAULT_CPU_VERSION
  #define CRIS_DEFAULT_CPU_VERSION CRIS_CPU_NG
  
@@ -99,7 +95,7 @@ diff -urN gcc-3.4.1-dist/gcc/config/cris/linux.h gcc-3.4.1/gcc/config/cris/linux
  #undef CRIS_SUBTARGET_VERSION
  #define CRIS_SUBTARGET_VERSION " - cris-axis-linux-gnu"
  
-@@ -93,6 +112,8 @@
+@@ -93,6 +112,8 @@ Boston, MA 02111-1307, USA.  */
    %{!shared:%{!static:%{rdynamic:-export-dynamic}}}\
    %{!r:%{O2|O3: --gc-sections}}"
  
@@ -108,17 +104,15 @@ diff -urN gcc-3.4.1-dist/gcc/config/cris/linux.h gcc-3.4.1/gcc/config/cris/linux
  
  /* Node: Run-time Target */
  
-diff -urN gcc-3.4.1-dist/gcc/config/cris/t-linux-uclibc gcc-3.4.1/gcc/config/cris/t-linux-uclibc
---- gcc-3.4.1-dist/gcc/config/cris/t-linux-uclibc	1969-12-31 18:00:00.000000000 -0600
-+++ gcc-3.4.1/gcc/config/cris/t-linux-uclibc	2004-08-12 15:54:43.000000000 -0500
+--- /dev/null
++++ b/gcc/config/cris/t-linux-uclibc
 @@ -0,0 +1,3 @@
 +T_CFLAGS = -DUSE_UCLIBC
 +TARGET_LIBGCC2_CFLAGS += -fPIC
 +CRTSTUFF_T_CFLAGS_S = $(TARGET_LIBGCC2_CFLAGS)
-diff -urN gcc-3.4.1-dist/gcc/config/i386/linux.h gcc-3.4.1/gcc/config/i386/linux.h
---- gcc-3.4.1-dist/gcc/config/i386/linux.h	2003-11-28 21:08:10.000000000 -0600
-+++ gcc-3.4.1/gcc/config/i386/linux.h	2004-08-12 15:54:43.000000000 -0500
-@@ -118,6 +118,15 @@
+--- a/gcc/config/i386/linux.h
++++ b/gcc/config/i386/linux.h
+@@ -118,6 +118,15 @@ Boston, MA 02111-1307, USA.  */
  	%{!dynamic-linker:-dynamic-linker /lib/ld-linux.so.1}} \
  	%{static:-static}}}"
  #else
@@ -134,7 +128,7 @@ diff -urN gcc-3.4.1-dist/gcc/config/i386/linux.h gcc-3.4.1/gcc/config/i386/linux
  #define LINK_SPEC "-m elf_i386 %{shared:-shared} \
    %{!shared: \
      %{!ibcs: \
-@@ -126,6 +135,7 @@
+@@ -126,6 +135,7 @@ Boston, MA 02111-1307, USA.  */
  	%{!dynamic-linker:-dynamic-linker /lib/ld-linux.so.2}} \
  	%{static:-static}}}"
  #endif
@@ -142,10 +136,9 @@ diff -urN gcc-3.4.1-dist/gcc/config/i386/linux.h gcc-3.4.1/gcc/config/i386/linux
  
  /* A C statement (sans semicolon) to output to the stdio stream
     FILE the assembler definition of uninitialized global DECL named
-diff -urN gcc-3.4.1-dist/gcc/config/mips/linux.h gcc-3.4.1/gcc/config/mips/linux.h
---- gcc-3.4.1-dist/gcc/config/mips/linux.h	2004-06-15 20:42:24.000000000 -0500
-+++ gcc-3.4.1/gcc/config/mips/linux.h	2004-08-12 15:54:43.000000000 -0500
-@@ -109,6 +109,17 @@
+--- a/gcc/config/mips/linux.h
++++ b/gcc/config/mips/linux.h
+@@ -109,6 +109,17 @@ Boston, MA 02111-1307, USA.  */
  
  /* Borrowed from sparc/linux.h */
  #undef LINK_SPEC
@@ -163,7 +156,7 @@ diff -urN gcc-3.4.1-dist/gcc/config/mips/linux.h gcc-3.4.1/gcc/config/mips/linux
  #define LINK_SPEC \
   "%(endian_spec) \
    %{shared:-shared} \
-@@ -118,6 +129,7 @@
+@@ -118,6 +129,7 @@ Boston, MA 02111-1307, USA.  */
          %{rdynamic:-export-dynamic} \
          %{!dynamic-linker:-dynamic-linker /lib/ld.so.1}} \
          %{static:-static}}}"
@@ -171,10 +164,9 @@ diff -urN gcc-3.4.1-dist/gcc/config/mips/linux.h gcc-3.4.1/gcc/config/mips/linux
  
  #undef SUBTARGET_ASM_SPEC
  #define SUBTARGET_ASM_SPEC "\
-diff -urN gcc-3.4.1-dist/gcc/config/rs6000/linux.h gcc-3.4.1/gcc/config/rs6000/linux.h
---- gcc-3.4.1-dist/gcc/config/rs6000/linux.h	2004-02-25 09:11:19.000000000 -0600
-+++ gcc-3.4.1/gcc/config/rs6000/linux.h	2004-08-12 15:54:43.000000000 -0500
-@@ -61,7 +61,11 @@
+--- a/gcc/config/rs6000/linux.h
++++ b/gcc/config/rs6000/linux.h
+@@ -69,7 +69,11 @@
  #define LINK_START_DEFAULT_SPEC "%(link_start_linux)"
  
  #undef	LINK_OS_DEFAULT_SPEC
@@ -186,10 +178,9 @@ diff -urN gcc-3.4.1-dist/gcc/config/rs6000/linux.h gcc-3.4.1/gcc/config/rs6000/l
  
  #define LINK_GCC_C_SEQUENCE_SPEC \
    "%{static:--start-group} %G %L %{static:--end-group}%{!static:%G}"
-diff -urN gcc-3.4.1-dist/gcc/config/rs6000/sysv4.h gcc-3.4.1/gcc/config/rs6000/sysv4.h
---- gcc-3.4.1-dist/gcc/config/rs6000/sysv4.h	2004-06-10 01:39:50.000000000 -0500
-+++ gcc-3.4.1/gcc/config/rs6000/sysv4.h	2004-08-12 15:54:43.000000000 -0500
-@@ -947,6 +947,7 @@
+--- a/gcc/config/rs6000/sysv4.h
++++ b/gcc/config/rs6000/sysv4.h
+@@ -949,6 +949,7 @@ extern int fixuplabelno;
    mcall-linux  : %(link_os_linux)       ; \
    mcall-gnu    : %(link_os_gnu)         ; \
    mcall-netbsd : %(link_os_netbsd)      ; \
@@ -197,7 +188,7 @@ diff -urN gcc-3.4.1-dist/gcc/config/rs6000/sysv4.h gcc-3.4.1/gcc/config/rs6000/s
    mcall-openbsd: %(link_os_openbsd)     ; \
                 : %(link_os_default)     }"
  
-@@ -1124,6 +1125,10 @@
+@@ -1127,6 +1128,10 @@ extern int fixuplabelno;
    %{rdynamic:-export-dynamic} \
    %{!dynamic-linker:-dynamic-linker /lib/ld.so.1}}}"
  
@@ -208,7 +199,7 @@ diff -urN gcc-3.4.1-dist/gcc/config/rs6000/sysv4.h gcc-3.4.1/gcc/config/rs6000/s
  #if defined(HAVE_LD_EH_FRAME_HDR)
  # define LINK_EH_SPEC "%{!static:--eh-frame-hdr} "
  #endif
-@@ -1290,6 +1295,7 @@
+@@ -1293,6 +1298,7 @@ ncrtn.o%s"
    { "link_os_sim",		LINK_OS_SIM_SPEC },			\
    { "link_os_freebsd",		LINK_OS_FREEBSD_SPEC },			\
    { "link_os_linux",		LINK_OS_LINUX_SPEC },			\
@@ -216,10 +207,9 @@ diff -urN gcc-3.4.1-dist/gcc/config/rs6000/sysv4.h gcc-3.4.1/gcc/config/rs6000/s
    { "link_os_gnu",		LINK_OS_GNU_SPEC },			\
    { "link_os_netbsd",		LINK_OS_NETBSD_SPEC },			\
    { "link_os_openbsd",		LINK_OS_OPENBSD_SPEC },			\
-diff -urN gcc-3.4.1-dist/gcc/config/sh/linux.h gcc-3.4.1/gcc/config/sh/linux.h
---- gcc-3.4.1-dist/gcc/config/sh/linux.h	2004-01-11 20:29:13.000000000 -0600
-+++ gcc-3.4.1/gcc/config/sh/linux.h	2004-08-12 15:54:43.000000000 -0500
-@@ -73,12 +73,21 @@
+--- a/gcc/config/sh/linux.h
++++ b/gcc/config/sh/linux.h
+@@ -73,12 +73,21 @@ do { \
  #undef SUBTARGET_LINK_EMUL_SUFFIX
  #define SUBTARGET_LINK_EMUL_SUFFIX "_linux"
  #undef SUBTARGET_LINK_SPEC
@@ -241,9 +231,8 @@ diff -urN gcc-3.4.1-dist/gcc/config/sh/linux.h gcc-3.4.1/gcc/config/sh/linux.h
  
  #undef LIB_SPEC
  #define LIB_SPEC \
-diff -urN gcc-3.4.1-dist/gcc/config/sh/t-linux-uclibc gcc-3.4.1/gcc/config/sh/t-linux-uclibc
---- gcc-3.4.1-dist/gcc/config/sh/t-linux-uclibc	1969-12-31 18:00:00.000000000 -0600
-+++ gcc-3.4.1/gcc/config/sh/t-linux-uclibc	2004-08-12 15:54:43.000000000 -0500
+--- /dev/null
++++ b/gcc/config/sh/t-linux-uclibc
 @@ -0,0 +1,13 @@
 +T_CFLAGS = -DUSE_UCLIBC
 +
@@ -258,9 +247,8 @@ diff -urN gcc-3.4.1-dist/gcc/config/sh/t-linux-uclibc gcc-3.4.1/gcc/config/sh/t-
 +MULTILIB_EXCEPTIONS=
 +
 +EXTRA_MULTILIB_PARTS= crtbegin.o crtend.o crtbeginS.o crtendS.o crtbeginT.o
-diff -urN gcc-3.4.1-dist/gcc/config/sh/t-sh64-uclibc gcc-3.4.1/gcc/config/sh/t-sh64-uclibc
---- gcc-3.4.1-dist/gcc/config/sh/t-sh64-uclibc	1969-12-31 18:00:00.000000000 -0600
-+++ gcc-3.4.1/gcc/config/sh/t-sh64-uclibc	2004-08-12 15:54:43.000000000 -0500
+--- /dev/null
++++ b/gcc/config/sh/t-sh64-uclibc
 @@ -0,0 +1,13 @@
 +EXTRA_MULTILIB_PARTS= crt1.o crti.o crtn.o crtbegin.o crtend.o
 +
@@ -275,9 +263,8 @@ diff -urN gcc-3.4.1-dist/gcc/config/sh/t-sh64-uclibc gcc-3.4.1/gcc/config/sh/t-s
 +MULTILIB_DIRNAMES= $(MULTILIB_ENDIAN) nofpu compact nofpu/compact media64 nofpu/media64
 +MULTILIB_MATCHES=
 +MULTILIB_EXCEPTIONS=
-diff -urN gcc-3.4.1-dist/gcc/config/t-linux-uclibc gcc-3.4.1/gcc/config/t-linux-uclibc
---- gcc-3.4.1-dist/gcc/config/t-linux-uclibc	1969-12-31 18:00:00.000000000 -0600
-+++ gcc-3.4.1/gcc/config/t-linux-uclibc	2004-08-12 15:54:43.000000000 -0500
+--- /dev/null
++++ b/gcc/config/t-linux-uclibc
 @@ -0,0 +1,15 @@
 +T_CFLAGS = -DUSE_UCLIBC
 +
@@ -294,10 +281,9 @@ diff -urN gcc-3.4.1-dist/gcc/config/t-linux-uclibc gcc-3.4.1/gcc/config/t-linux-
 +LIB2ADDEH = $(srcdir)/unwind-dw2.c $(srcdir)/unwind-dw2-fde.c \
 +  $(srcdir)/unwind-sjlj.c $(srcdir)/gthr-gnat.c $(srcdir)/unwind-c.c
 +LIB2ADDEHDEP = unwind.inc unwind-dw2-fde.h
-diff -urN gcc-3.4.1-dist/gcc/config.gcc gcc-3.4.1/gcc/config.gcc
---- gcc-3.4.1-dist/gcc/config.gcc	2004-04-21 10:12:35.000000000 -0500
-+++ gcc-3.4.1/gcc/config.gcc	2004-08-12 15:59:46.000000000 -0500
-@@ -664,6 +664,12 @@
+--- a/gcc/config.gcc
++++ b/gcc/config.gcc
+@@ -676,6 +676,12 @@ arm*-*-netbsd*)
  	extra_parts=""
  	use_collect2=yes
  	;;
@@ -310,7 +296,7 @@ diff -urN gcc-3.4.1-dist/gcc/config.gcc gcc-3.4.1/gcc/config.gcc
  arm*-*-linux*)			# ARM GNU/Linux with ELF
  	tm_file="dbxelf.h elfos.h linux.h arm/elf.h  arm/linux-gas.h arm/linux-elf.h arm/aout.h arm/arm.h"
  	tmake_file="t-slibgcc-elf-ver t-linux arm/t-linux"
-@@ -725,6 +731,10 @@
+@@ -741,6 +747,10 @@ cris-*-elf | cris-*-none)
  	tmake_file="cris/t-cris cris/t-elfmulti"
  	gas=yes
  	;;
@@ -321,7 +307,7 @@ diff -urN gcc-3.4.1-dist/gcc/config.gcc gcc-3.4.1/gcc/config.gcc
  cris-*-linux*)
  	tm_file="dbxelf.h elfos.h svr4.h ${tm_file} linux.h cris/linux.h"
  	tmake_file="cris/t-cris t-slibgcc-elf-ver cris/t-linux"
-@@ -988,6 +998,11 @@
+@@ -1004,6 +1014,11 @@ i[34567]86-*-linux*libc1)	# Intel 80386'
  		thread_file='single'
  	fi
  	;;
@@ -333,7 +319,7 @@ diff -urN gcc-3.4.1-dist/gcc/config.gcc gcc-3.4.1/gcc/config.gcc
  i[34567]86-*-linux*)	# Intel 80386's running GNU/Linux
  			# with ELF format using glibc 2
  			# aka GNU/Linux C library 6
-@@ -1547,6 +1562,16 @@
+@@ -1563,6 +1578,16 @@ mips64*-*-linux*)
  	gnu_ld=yes
  	gas=yes
  	;;
@@ -350,7 +336,7 @@ diff -urN gcc-3.4.1-dist/gcc/config.gcc gcc-3.4.1/gcc/config.gcc
  mips*-*-linux*)				# Linux MIPS, either endian.
          tm_file="dbxelf.h elfos.h svr4.h linux.h ${tm_file} mips/linux.h"
  	case ${target} in
-@@ -1764,6 +1789,10 @@
+@@ -1776,6 +1801,10 @@ powerpc-*-linux*spe*)
  	tm_file="${tm_file} dbxelf.h elfos.h svr4.h freebsd-spec.h rs6000/sysv4.h rs6000/linux.h rs6000/linuxspe.h"
  	tmake_file="rs6000/t-fprules rs6000/t-ppcos t-slibgcc-elf-ver t-linux rs6000/t-ppccomm"
  	;;
@@ -359,9 +345,9 @@ diff -urN gcc-3.4.1-dist/gcc/config.gcc gcc-3.4.1/gcc/config.gcc
 +	tmake_file="rs6000/t-fprules rs6000/t-ppcos t-slibgcc-elf-ver t-linux-uclibc rs6000/t-ppccomm"
 +	;;
  powerpc-*-linux*)
- 	tm_file="${tm_file} dbxelf.h elfos.h svr4.h freebsd-spec.h rs6000/sysv4.h rs6000/linux.h"
+ 	tm_file="${tm_file} dbxelf.h elfos.h svr4.h freebsd-spec.h rs6000/sysv4.h"
  	tmake_file="rs6000/t-fprules rs6000/t-ppcos t-slibgcc-elf-ver t-linux rs6000/t-ppccomm"
-@@ -1916,7 +1945,7 @@
+@@ -1940,7 +1969,7 @@ sh-*-rtems*)
  	tm_file="${tm_file} dbxelf.h elfos.h svr4.h sh/elf.h sh/embed-elf.h sh/rtemself.h rtems.h"
  	;;
  sh-*-linux* | sh[2346lbe]*-*-linux*)
@@ -370,7 +356,7 @@ diff -urN gcc-3.4.1-dist/gcc/config.gcc gcc-3.4.1/gcc/config.gcc
  	case ${target} in
  	sh*be-*-* | sh*eb-*-*) ;;
  	*)
-@@ -1924,9 +1953,17 @@
+@@ -1948,9 +1977,17 @@ sh-*-linux* | sh[2346lbe]*-*-linux*)
  		tmake_file="${tmake_file} sh/t-le"
  		;;
  	esac
@@ -389,10 +375,9 @@ diff -urN gcc-3.4.1-dist/gcc/config.gcc gcc-3.4.1/gcc/config.gcc
  	sh64*)
  		tmake_file="${tmake_file} sh/t-sh64"
  		tm_file="${tm_file} sh/sh64.h"
-diff -urN gcc-3.4.1-dist/libtool.m4 gcc-3.4.1/libtool.m4
---- gcc-3.4.1-dist/libtool.m4	2004-05-18 04:08:37.000000000 -0500
-+++ gcc-3.4.1/libtool.m4	2004-08-12 15:54:43.000000000 -0500
-@@ -689,6 +689,11 @@
+--- a/libtool.m4
++++ b/libtool.m4
+@@ -689,6 +689,11 @@ linux-gnu*)
    lt_cv_file_magic_test_file=`echo /lib/libc.so* /lib/libc-*.so`
    ;;
  
@@ -404,10 +389,9 @@ diff -urN gcc-3.4.1-dist/libtool.m4 gcc-3.4.1/libtool.m4
  netbsd*)
    if echo __ELF__ | $CC -E - | grep __ELF__ > /dev/null; then
      [lt_cv_deplibs_check_method='match_pattern /lib[^/\.]+\.so\.[0-9]+\.[0-9]+$']
-diff -urN gcc-3.4.1-dist/ltconfig gcc-3.4.1/ltconfig
---- gcc-3.4.1-dist/ltconfig	2004-03-05 15:05:41.000000000 -0600
-+++ gcc-3.4.1/ltconfig	2004-08-12 15:55:48.000000000 -0500
-@@ -602,6 +602,7 @@
+--- a/ltconfig
++++ b/ltconfig
+@@ -602,6 +602,7 @@ host_os=`echo $host | sed 's/^\([^-]*\)-
  
  # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
  case $host_os in
@@ -415,7 +399,7 @@ diff -urN gcc-3.4.1-dist/ltconfig gcc-3.4.1/ltconfig
  linux-gnu*) ;;
  linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
  esac
-@@ -1262,6 +1263,24 @@
+@@ -1262,6 +1263,24 @@ linux-gnu*)
    dynamic_linker='GNU/Linux ld.so'
    ;;
  

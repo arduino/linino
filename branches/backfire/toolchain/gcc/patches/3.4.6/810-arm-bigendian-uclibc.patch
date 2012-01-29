@@ -1,6 +1,5 @@
-diff -urN gcc-3.4.1-dist/gcc/config/arm/linux-elf.h gcc-3.4.1/gcc/config/arm/linux-elf.h
---- gcc-3.4.1-dist/gcc/config/arm/linux-elf.h	2004-08-16 16:08:18.000000000 -0500
-+++ gcc-3.4.1/gcc/config/arm/linux-elf.h	2004-08-16 16:06:24.000000000 -0500
+--- a/gcc/config/arm/linux-elf.h
++++ b/gcc/config/arm/linux-elf.h
 @@ -107,7 +107,7 @@
     %{rdynamic:-export-dynamic} \
     %{!dynamic-linker:-dynamic-linker /lib/ld-uClibc.so.0} \
@@ -10,10 +9,9 @@ diff -urN gcc-3.4.1-dist/gcc/config/arm/linux-elf.h gcc-3.4.1/gcc/config/arm/lin
     SUBTARGET_EXTRA_LINK_SPEC
  #else
  #define LINK_SPEC "%{h*} %{version:-v} \
-diff -urN gcc-3.4.1-dist/gcc/config.gcc gcc-3.4.1/gcc/config.gcc
---- gcc-3.4.1-dist/gcc/config.gcc	2004-08-16 16:08:18.000000000 -0500
-+++ gcc-3.4.1/gcc/config.gcc	2004-08-16 16:03:25.000000000 -0500
-@@ -666,6 +666,11 @@
+--- a/gcc/config.gcc
++++ b/gcc/config.gcc
+@@ -678,6 +678,11 @@ arm*-*-netbsd*)
  	;;
  arm*-*-linux-uclibc*)		# ARM GNU/Linux with ELF - uClibc
  	tm_file="dbxelf.h elfos.h linux.h arm/elf.h  arm/linux-gas.h arm/linux-elf.h arm/aout.h arm/arm.h"
