@@ -48,14 +48,16 @@
 # it) and how often we need to force an update ( many services
 # will expire your domain if you don't connect and do an update
 # every so often).  Use the "check_interval" to specify how
-# often to check whether an update is necessary, and the 
-# "force_interval" option to specify how often to force an
-# update.  Specify the units for these values with the "check_unit"
-# and the "force_unit" options.  Units can be "days", "hours",
-# "minutes" or "seconds".  The default force_unit is hours and the
-# default check_unit is seconds.  The default check_interval is
-# 600 seconds, or ten minutes.  The default force_interval is 
-# 72 hours or 3 days.
+# often to check whether an update is necessary, the "retry_interval"
+# to specify how often to retry in case the update has failed, and
+# the "force_interval" option to specify how often to force an
+# update.  Specify the units for these values with the "check_unit",
+# the "retry_init" and the "force_unit" options.  Units can be
+# "days", "hours", "minutes" or "seconds".  The default force_unit
+# is hours, the default retry_unit is seconds and the default
+# check_unit is seconds.  The default check_interval is 600 seconds,
+# or ten minutes.  The default retry_interval is 60 seconds, or one
+# minute. The default force_interval is 72 hours or 3 days.
 #
 #
 #########################################################
@@ -77,6 +79,8 @@ config service "myddns"
 	option force_unit	"hours"
 	option check_interval	"10"
 	option check_unit	"minutes"
+	option retry_interval	"60"
+	option retry_unit	"seconds"
 
 	#option ip_source	"interface"
 	#option ip_interface	"eth0.1"

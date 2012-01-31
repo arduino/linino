@@ -68,6 +68,11 @@ then
 	check_interval=600
 fi
 
+if [ -z "$retry_interval" ]
+then
+	retry_interval=60
+fi
+
 if [ -z "$check_unit" ]
 then
 	check_unit="seconds"
@@ -203,6 +208,28 @@ esac
 
 
 
+#compute retry interval in seconds
+case "$retry_unit" in
+	"days" )
+		retry_interval_seconds=$(($retry_interval*60*60*24))
+		;;
+	"hours" )
+		retry_interval_seconds=$(($retry_interval*60*60))
+		;;
+	"minutes" )
+		retry_interval_seconds=$(($retry_interval*60))
+		;;
+	"seconds" )
+		retry_interval_seconds=$retry_interval
+		;;
+	* )
+		#default is seconds
+		retry_interval_seconds=$retry_interval
+		;;
+esac
+
+
+
 verbose_echo "force seconds = $force_interval_seconds"
 verbose_echo "check seconds = $check_interval_seconds"
 
@@ -289,6 +316,12 @@ do
 
 		#here we actually connect, and perform the update
 		update_output=$( $retrieve_prog "$final_url" )
+		if [ $? -gt 0 ]
+		then
+			verbose_echo "update failed"
+			sleep $retry_interval_seconds
+			continue
+		fi
 
 		verbose_echo "Update Output:"
 		verbose_echo "$update_output"
