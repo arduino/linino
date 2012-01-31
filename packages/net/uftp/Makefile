@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011 OpenWrt.org
+# Copyright (C) 2011-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=uftp
-PKG_VERSION:=3.5.1
-PKG_RELEASE:=2
+PKG_VERSION:=3.6.1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar
 PKG_SOURCE_URL:=https://www.tcnj.edu/~bush/downloads
-PKG_MD5SUM:=dcf922327a7fc76159d11226b9bc0579
+PKG_MD5SUM:=7a0d41a728cd9e36ad396d7c2adeed5c
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
