@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,15 +15,8 @@ PKG_MD5SUM:=c2972c4d9b3e29c03d5f2af86249876f
 
 include $(INCLUDE_DIR)/host-build.mk
 
-define Host/Configure
-	$(call Host/Configure/Default,\
-		--datarootdir=$(STAGING_DIR_HOST)/share \
-	)
-endef
-
-define Host/Compile
-	$(MAKE) -C $(HOST_BUILD_DIR)
-endef
+HOST_CONFIGURE_ARGS += --datarootdir=$(STAGING_DIR_HOST)/share
+HOST_CONFIGURE_VARS += am_cv_prog_PERL_ithreads=no
 
 define Host/Install
 	$(MAKE) -C $(HOST_BUILD_DIR) install
