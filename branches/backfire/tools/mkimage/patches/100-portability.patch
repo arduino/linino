@@ -1,10 +1,11 @@
 --- a/tools/kwbimage.c
 +++ b/tools/kwbimage.c
-@@ -206,6 +206,28 @@ INVL_DATA:
+@@ -206,6 +206,30 @@ INVL_DATA:
  	exit (EXIT_FAILURE);
  }
  
 +#ifndef __GLIBC__
++#if !defined(__APPLE__) || __DARWIN_C_LEVEL < 200809L
 +static ssize_t
 +getline(char **line, size_t *len, FILE *fd)
 +{
@@ -24,6 +25,7 @@
 +	line[tmplen] = 0;
 +	return tmplen;
 +}
++#endif
 +#endif
 +
  /*
