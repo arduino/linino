@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mc
 PKG_VERSION:=4.7.5.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.midnight-commander.org/downloads/
 PKG_MD5SUM:=6a67e139e0032d8a871455a80d490941
 
 PKG_BUILD_PARALLEL:=1
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -23,7 +24,7 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/mc
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+glib2 +libncurses +libiconv
+  DEPENDS:=+glib2 +libncurses $(ICONV_DEPENDS)
   TITLE:=midnight commander - a powerful file manager
   URL:=http://www.midnight-commander.org/
   SUBMENU:=filemanager
@@ -71,16 +72,6 @@ CONFIGURE_ARGS += \
 	--without-vfs
 endif
 
-AM_HOST=$(firstword $(wildcard $(STAGING_DIR_HOST)/share/automake-*))
-
-define Build/Prepare
-	$(Build/Prepare/Default)
-	for script in config.guess config.sub depcomp install-sh missing; do \
-		rm -f $(PKG_BUILD_DIR)/config/$$$$script; \
-		ln -s $(AM_HOST)/$$$$script $(PKG_BUILD_DIR)/config/$$$$script; \
-	done
-endef
-
 define Package/mc/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/mc $(1)/usr/bin
@@ -94,7 +85,7 @@ endif
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/misc/mc.menu $(1)/etc/mc
 	$(INSTALL_DIR) $(1)/etc/mc/skins
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/misc/skins/default.ini $(1)/etc/mc/skins
-	$(INSTALL_DIR) $(1)/root/.mc
+	$(INSTALL_DIR) $(1)/root/.mc/cedit/Syntax
 endef
 
 define Package/mc/conffiles
