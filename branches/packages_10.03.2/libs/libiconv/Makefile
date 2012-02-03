@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010-2011 OpenWrt.org
+# Copyright (C) 2010-2012 OpenWrt.org
 #
 # This Makefile and the code shipped in src/ is free software, licensed
 # under the GNU Lesser General Public License, version 2.1 and later.
@@ -11,7 +11,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libiconv
-PKG_RELEASE:=5
+PKG_RELEASE:=7
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/host-build.mk
