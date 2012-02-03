@@ -1,0 +1,16 @@
+# pwrtray-backend configuration
+
+[BACKLIGHT]
+# List of auto-dimming steps.
+#   idle-seconds/brightness-percent idle-seconds/brightness-percent ...
+# idle-seconds value must be growing.
+autodim_steps=15/65 20/50 25/25 30/10 35/0
+# Default maximum brightness value for the autodimmer, in percent.
+autodim_default_max=75
+# Enable auto-dimming by default?
+autodim_default_on=1
+
+[SCREEN]
+# Framebuffer device for screen blanking
+fbdev=/dev/fb0
+

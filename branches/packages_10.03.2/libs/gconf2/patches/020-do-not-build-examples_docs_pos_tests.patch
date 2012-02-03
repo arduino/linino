@@ -1,0 +1,23 @@
+--- GConf-2.24.0.orig/Makefile.in	2008-09-22 20:03:56.000000000 +0200
++++ GConf-2.24.0/Makefile.in	2010-12-10 13:52:16.027379891 +0100
+@@ -267,8 +267,8 @@
+ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+-SUBDIRS = gconf backends po doc examples $(am__append_1)
+-DIST_SUBDIRS = tests $(SUBDIRS) 
++SUBDIRS = gconf backends $(am__append_1)
++DIST_SUBDIRS = $(SUBDIRS) 
+ EXTRA_DIST = \
+ 	TODO                \
+ 	gtk-doc.make        \
+diff -ruN GConf-2.24.0.orig//Makefile.am GConf-2.24.0//Makefile.am
+--- GConf-2.24.0.orig//Makefile.am	2008-08-19 11:41:58.000000000 +0200
++++ GConf-2.24.0//Makefile.am	2010-12-10 18:49:14.591378059 +0100
+@@ -1,5 +1,5 @@
+ 
+-SUBDIRS = gconf backends po doc examples 
++SUBDIRS = gconf backends
+ 
+ if ENABLE_DEFAULTS_SERVICE
+ SUBDIRS += defaults

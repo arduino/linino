@@ -1,0 +1,31 @@
+--- a/drv_generic_parport.c
++++ b/drv_generic_parport.c
+@@ -39,16 +39,6 @@
+ #include <sys/stat.h>
+ #include <sys/ioctl.h>
+ 
+-#ifdef HAVE_SYS_IO_H
+-#include <sys/io.h>
+-#define WITH_OUTB
+-#else
+-#ifdef HAVE_ASM_IO_H
+-#include <asm/io.h>
+-#define WITH_OUTB
+-#endif
+-#endif
+-
+ #if defined (HAVE_LINUX_PARPORT_H) && defined (HAVE_LINUX_PPDEV_H)
+ #define WITH_PPDEV
+ #include <linux/parport.h>
+@@ -68,6 +58,11 @@
+ /* these signals are inverted by hardware on the parallel port */
+ #define PARPORT_CONTROL_INVERTED (PARPORT_CONTROL_STROBE | PARPORT_CONTROL_SELECT | PARPORT_CONTROL_AUTOFD)
+ 
++#ifndef WITH_OUTB
++#define inb(foo) 0
++#define outb(foo,bar) 0
++#endif
++
+ #if !defined(WITH_OUTB) && !defined(WITH_PPDEV)
+ #error neither outb() nor ppdev() possible
+ #error cannot compile parallel port driver

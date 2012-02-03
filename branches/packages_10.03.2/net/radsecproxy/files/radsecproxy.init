@@ -1,0 +1,16 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006-2008 OpenWrt.org
+
+START=50
+
+DEFAULT=/etc/default/radsecproxy
+OPTIONS=""
+
+start() {
+	[ -f $DEFAULT ] && . $DEFAULT
+	/usr/sbin/radsecproxy $OPTIONS
+}
+
+stop() {
+	killall radsecproxy
+}

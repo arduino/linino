@@ -1,0 +1,37 @@
+--- a/builders/cmake/rtmpserver/rtmpserver.lua
++++ b/builders/cmake/rtmpserver/rtmpserver.lua
+@@ -4,7 +4,7 @@ configuration=
+ {
+ 	-- if true, the server will run as a daemon.
+ 	-- NOTE: all console appenders will be ignored if this is a daemon
+-	daemon=false,
++	daemon=true,
+ 	-- the OS's path separator. Used in composing paths
+ 	pathSeparator="/",
+ 	-- this is the async DNS resolver. This is a "clinet" connection
+@@ -58,7 +58,7 @@ configuration=
+ 	{
+ 		-- this is the root directory of all applications
+ 		-- usually this is relative to the binary execuable
+-		rootDirectory="applications",
++		rootDirectory="/usr/lib/rtmpserver",
+ 		
+ 		
+ 		--this is where the applications array starts
+@@ -82,7 +82,7 @@ configuration=
+ 			-- this is the folder from where the current application gets it's content.
+ 			-- It is optional. If not specified, it will be defaulted to:
+ 			-- <rootDirectory>/<name>/mediaFolder
+-			-- mediaFolder="/some/directory/where/media/files/are/stored"
++			mediaFolder="/usr/share/rtmpserver/appselector",
+ 			-- the application will also be known by that names. It is optional
+ 			--aliases=
+ 			--{
+@@ -119,6 +119,7 @@ configuration=
+ 			description="FLV Playback Sample",
+ 			name="flvplayback",
+ 			protocol="dynamiclinklibrary",
++			mediaFolder="/usr/share/rtmpserver/media",
+ 			aliases=
+ 			{
+ 				"simpleLive",

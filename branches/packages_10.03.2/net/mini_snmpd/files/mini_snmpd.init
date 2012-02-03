@@ -1,0 +1,41 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2009 OpenWrt.org
+
+NAME=mini_snmpd
+PROG=/usr/bin/$NAME
+START=50
+
+append_string() {
+	local section="$1"
+	local option="$2"
+	local value="$3"
+	local _val
+	config_get _val "$section" "$option"
+	[ -n "$_val" ] && append args "$3 $_val"
+}
+
+mini_snmpd_config() {
+	local cfg="$1"
+	args=""
+
+	append_string "$cfg" community "-c"
+	append_string "$cfg" location "-L"
+	append_string "$cfg" contact "-C"
+	append_string "$cfg" disks "-d"
+	append_string "$cfg" interfaces "-i"
+
+	config_get_bool ipv6 "$cfg" "ipv6" '0'
+	[ "$ipv6" -gt 0 ] && append args "-6"
+
+	config_get_bool enabled "$cfg" "enabled" '1'
+	[ "$enabled" -gt 0 ] && $PROG $args &
+}
+
+start() {
+	config_load mini_snmpd
+	config_foreach mini_snmpd_config mini_snmpd
+}
+
+stop() {
+	killall mini_snmpd
+}

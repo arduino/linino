@@ -1,0 +1,15 @@
+--- qt/examples/qws/qws.pro	2010-02-11 16:55:17.000000000 +0100
++++ qt/examples/qws/qws.pro.mod	2010-03-22 10:56:10.372868670 +0100
+@@ -1,7 +1,11 @@
+ TEMPLATE      = subdirs
+ # no /dev/fbX
+ !qnx:!vxworks:SUBDIRS = framebuffer
+-SUBDIRS      += mousecalibration simpledecoration
++SUBDIRS      += mousecalibration
++
++!isEmpty( decorations ) {
++	SUBDIRS	+= simpledecoration
++}
+ 
+ # install
+ sources.files = $$SOURCES $$HEADERS $$RESOURCES $$FORMS README *.pro

@@ -1,0 +1,13 @@
+--- a/Makefile
++++ b/Makefile
+@@ -107,8 +107,8 @@ installpythonmodule:	pythonmodule
+ 	python setup.py install
+ 
+ validateminixml:	minixmlvalid
+-	@echo "minixml validation test"
+-	./minixmlvalid
++	@echo "(skipping) minixml validation test"
++#	./minixmlvalid
+ 	touch $@
+ 
+ clean:

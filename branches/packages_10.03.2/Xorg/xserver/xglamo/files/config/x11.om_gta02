@@ -1,0 +1,7 @@
+# Copyright (C) 2006 OpenWrt.org
+
+config 'screen'
+	option	'resolution'	'480x640'
+	option	'dpi'	'285'
+
+config 'desktop'

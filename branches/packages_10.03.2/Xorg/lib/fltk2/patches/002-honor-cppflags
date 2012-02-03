@@ -1,0 +1,26 @@
+Index: fltk2-r6671/makeinclude.in
+===================================================================
+--- fltk2-r6671.orig/makeinclude.in	2010-11-03 02:16:42.106000002 +0100
++++ fltk2-r6671/makeinclude.in	2010-11-03 02:16:43.163002267 +0100
+@@ -54,6 +54,7 @@
+ 
+ # flags for C++ compiler:
+ OPTIM		= @OPTIM@
++CPPFLAGS	= @CPPFLAGS@
+ CFLAGS		= $(OPTIM) @CFLAGS@
+ CXXFLAGS	= $(OPTIM) @CXXFLAGS@
+ 
+@@ -124,11 +125,11 @@
+ 
+ .c.o:
+ 	echo Compiling $<...
+-	$(CC) -I.. -I../fltk/compat $(CFLAGS) -c $<
++	$(CC) $(CPPFLAGS) -I.. -I../fltk/compat $(CFLAGS) -c $<
+ 
+ .cxx.o:
+ 	echo Compiling $<...
+-	$(CXX) -I.. -I../fltk/compat $(CXXFLAGS) -c $<
++	$(CXX) $(CPPFLAGS) -I.. -I../fltk/compat $(CXXFLAGS) -c $<
+ 
+ .man.0 .man.1 .man.3:
+ 	echo Formatting $<...

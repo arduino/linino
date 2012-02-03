@@ -1,0 +1,11 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+START=85
+start() {
+	/usr/sbin/oidentd -m -f 113
+}
+
+stop() {
+	killall oidentd
+}

@@ -1,0 +1,10 @@
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,6 @@ all: sslh $(MAN)
+ 
+ sslh: sslh.c Makefile
+ 	$(CC) $(CFLAGS) -D'VERSION=$(VERSION)' -o sslh sslh.c $(LIBS)
+-	strip sslh
+ 
+ $(MAN): sslh.pod Makefile
+ 	pod2man --section=8 --release=$(VERSION) --center=" " sslh.pod | gzip -9 - > $(MAN)

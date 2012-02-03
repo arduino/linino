@@ -1,0 +1,13 @@
+#!/bin/sh /etc/rc.common
+
+START=50
+DAEMON=vpzone
+PID_F=/var/run/$DAEMON.pid
+
+start() {
+	start-stop-daemon -p $PID_F -x $DAEMON -S -b -m
+}
+
+stop() {
+	start-stop-daemon -p $PID_F -x $DAEMON -K
+}

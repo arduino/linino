@@ -1,0 +1,11 @@
+--- LVM2.2.02.84/make.tmpl.in	2011-04-11 16:00:37.430840340 +0200
++++ LVM2.2.02.84/make.tmpl.in	2011-04-11 16:00:54.399401160 +0200
+@@ -17,7 +17,7 @@
+ 
+ @SET_MAKE@
+ 
+-CC ?= @CC@
++CC = @CC@
+ RANLIB = @RANLIB@
+ INSTALL = @INSTALL@
+ MKDIR_P = @MKDIR_P@

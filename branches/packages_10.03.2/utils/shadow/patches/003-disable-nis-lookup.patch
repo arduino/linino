@@ -1,0 +1,41 @@
+--- a/libmisc/login_access.c
++++ b/libmisc/login_access.c
+@@ -53,7 +53,6 @@ RCSID("$Id: login_access.c,v 1.6 1998/01
+ #include <arpa/inet.h>  /* for inet_ntoa() */
+ 
+ extern struct group *getgrnam();
+-extern int innetgr();
+ #if 0  /* should be defined by <errno.h> */
+ extern int errno;
+ #endif
+@@ -193,29 +192,7 @@ myhostname(void)
+ static int
+ netgroup_match(const char *group, const char *machine, const char *user)
+ {
+-#if 0  /* original code */
+-#ifdef NIS
+-    static char *mydomain = 0;
+-
+-    if (mydomain == 0)
+-	yp_get_default_domain(&mydomain);
+-    return (innetgr(group, machine, user, mydomain));
+-#else
+-    syslog(LOG_ERR, "NIS netgroup support not configured");
+-    return (NO);
+-#endif
+-#else  /* works better with glibc? */
+-	static char *mydomain = 0;
+-
+-	if (mydomain == 0) {
+-		static char domain[MAXHOSTNAMELEN+1];
+-
+-		getdomainname(domain, MAXHOSTNAMELEN);
+-		mydomain = domain;
+-	}
+-
+-	return innetgr(group, machine, user, mydomain);
+-#endif
++	return (NO);
+ }
+ 
+ /* user_match - match a username against one token */

@@ -1,0 +1,35 @@
+--- xrandr-1.2.3/xrandr.c.orig	2007-10-25 17:18:55.001346494 +0200
++++ xrandr-1.2.3/xrandr.c	2007-10-25 17:21:07.222276308 +0200
+@@ -189,7 +189,7 @@
+ 
+ #if HAS_RANDR_1_2
+ typedef enum _policy {
+-    clone, extend
++    p_clone, p_extend
+ } policy_t;
+ 
+ typedef enum _relation {
+@@ -1602,7 +1602,7 @@
+     int		ret = 0;
+ #if HAS_RANDR_1_2
+     output_t	*output = NULL;
+-    policy_t	policy = clone;
++    policy_t	policy = p_clone;
+     Bool    	setit_1_2 = False;
+     Bool    	query_1_2 = False;
+     Bool	modeit = False;
+@@ -1863,12 +1863,12 @@
+ 	    continue;
+ 	}
+ 	if (!strcmp ("--clone", argv[i])) {
+-	    policy = clone;
++	    policy = p_clone;
+ 	    setit_1_2 = True;
+ 	    continue;
+ 	}
+ 	if (!strcmp ("--extend", argv[i])) {
+-	    policy = extend;
++	    policy = p_extend;
+ 	    setit_1_2 = True;
+ 	    continue;
+ 	}

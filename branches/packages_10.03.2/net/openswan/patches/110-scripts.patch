@@ -1,0 +1,14 @@
+---
+ programs/_plutorun/_plutorun.in   |    2 +-
+ programs/_realsetup/_realsetup.in |    2 +-
+ programs/loggerfix                |    5 +++++
+ 3 files changed, 7 insertions(+), 2 deletions(-)
+
+--- /dev/null
++++ b/programs/loggerfix
+@@ -0,0 +1,5 @@
++#!/bin/sh
++# use filename instead of /dev/null to log, but dont log to flash or ram
++# pref. log to nfs mount
++echo "$*" >> /dev/null
++exit 0

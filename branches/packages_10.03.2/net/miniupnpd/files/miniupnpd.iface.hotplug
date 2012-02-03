@@ -1,0 +1,8 @@
+#!/bin/sh
+
+/etc/init.d/miniupnpd enabled && [ -n "`pidof miniupnpd`" ] && [ "$ACTION" = "ifup" ] && {
+	local intif
+	for intif in $(uci_get upnpd config internal_iface); do
+		[ "$INTERFACE" = "$intif" ] && /etc/init.d/miniupnpd restart
+	done
+}

@@ -1,0 +1,21 @@
+--- a/configure
++++ b/configure
+@@ -9192,7 +9192,7 @@ cat >>confdefs.h <<\EOF
+ EOF
+ 
+ cat >>confdefs.h <<\EOF
+-#define RUSEROK 0
++/* #define RUSEROK 1 */
+ EOF
+ 
+ cat >>confdefs.h <<\EOF
+--- a/configure.in
++++ b/configure.in
+@@ -150,7 +150,6 @@ dnl XXX - quick hack, should disappear b
+ AC_DEFINE(USG)
+ AC_DEFINE(USE_SYSLOG)
+ AC_DEFINE(RLOGIN)
+-AC_DEFINE(RUSEROK, 0)
+ AC_DEFINE_UNQUOTED(_WTMP_FILE, "/var/log/wtmp")
+ AC_DEFINE_UNQUOTED(LASTLOG_FILE, "/var/log/lastlog")
+ AC_DEFINE_UNQUOTED(FAILLOG_FILE, "/var/log/faillog")

@@ -1,0 +1,17 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006-2011 OpenWrt.org
+
+START=65
+
+PIDFILE="/var/run/ntpd.pid"
+
+start() {
+#	ln -sf /dev/ttyS0 /dev/gps0
+#	/usr/sbin/setgarmin -d /dev/gps -c /etc/setgarmin.conf
+	stop
+	/sbin/ntpd -g -p $PIDFILE
+}
+
+stop() {
+	[ -f "$PIDFILE" ] && kill $(cat "$PIDFILE") 2>/dev/null >/dev/null
+}

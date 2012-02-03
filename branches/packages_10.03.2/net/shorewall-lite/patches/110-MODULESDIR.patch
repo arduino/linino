@@ -1,0 +1,20 @@
+--- a/lib.common
++++ b/lib.common
+@@ -220,7 +220,7 @@ reload_kernel_modules() {
+ 
+     [ -z "$MODULESDIR" ] && \
+ 	uname=$(uname -r) && \
+-	MODULESDIR=/lib/modules/$uname/kernel/net/ipv4/netfilter:/lib/modules/$uname/kernel/net/netfilter:/lib/modules/$uname/kernel/net/sched:/lib/modules/$uname/extra:/lib/modules/$uname/extra/ipset
++	MODULESDIR=/lib/modules/$uname/kernel/net/ipv4/netfilter:/lib/modules/$uname/kernel/net/netfilter:/lib/modules/$uname/kernel/net/sched:/lib/modules/$uname/extra:/lib/modules/$uname/extra/ipset:/lib/modules/$uname
+ 
+     MODULES=$(lsmod | cut -d ' ' -f1)
+ 
+@@ -259,7 +259,7 @@ load_kernel_modules() # $1 = Yes, if we
+ 
+     [ -z "$MODULESDIR" ] && \
+ 	uname=$(uname -r) && \
+-	MODULESDIR=/lib/modules/$uname/kernel/net/ipv4/netfilter:/lib/modules/$uname/kernel/net/netfilter:/lib/modules/$uname/kernel/net/sched:/lib/modules/$uname/extra:/lib/modules/$uname/extra/ipset
++	MODULESDIR=/lib/modules/$uname/kernel/net/ipv4/netfilter:/lib/modules/$uname/kernel/net/netfilter:/lib/modules/$uname/kernel/net/sched:/lib/modules/$uname/extra:/lib/modules/$uname/extra/ipset:/lib/modules/$uname
+ 
+     for directory in $(split $MODULESDIR); do
+ 	[ -d $directory ] && moduledirectories="$moduledirectories $directory"

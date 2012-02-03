@@ -1,0 +1,90 @@
+Index: Mesa-7.2/src/glu/glu.pc.in
+===================================================================
+--- Mesa-7.2.orig/src/glu/glu.pc.in	2008-08-25 16:46:42.000000000 +0200
++++ Mesa-7.2/src/glu/glu.pc.in	2011-01-27 19:29:13.220654415 +0100
+@@ -1,7 +1,7 @@
+-prefix=@INSTALL_DIR@
+-exec_prefix=${prefix}
+-libdir=@INSTALL_LIB_DIR@
+-includedir=@INSTALL_INC_DIR@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
+ 
+ Name: glu
+ Description: Mesa OpenGL Utility library
+Index: Mesa-7.2/src/glw/glw.pc.in
+===================================================================
+--- Mesa-7.2.orig/src/glw/glw.pc.in	2008-08-25 16:46:42.000000000 +0200
++++ Mesa-7.2/src/glw/glw.pc.in	2011-01-27 19:29:28.723225782 +0100
+@@ -1,7 +1,7 @@
+-prefix=@INSTALL_DIR@
+-exec_prefix=${prefix}
+-libdir=@INSTALL_LIB_DIR@
+-includedir=@INSTALL_INC_DIR@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
+ 
+ Name: glw
+ Description: Mesa OpenGL widget library
+Index: Mesa-7.2/src/mesa/drivers/dri/dri.pc.in
+===================================================================
+--- Mesa-7.2.orig/src/mesa/drivers/dri/dri.pc.in	2008-08-25 16:46:43.000000000 +0200
++++ Mesa-7.2/src/mesa/drivers/dri/dri.pc.in	2011-01-27 19:29:49.747288575 +0100
+@@ -1,8 +1,8 @@
+-prefix=@INSTALL_DIR@
+-exec_prefix=${prefix}
+-libdir=@INSTALL_LIB_DIR@
+-includedir=@INSTALL_INC_DIR@
+-dridriverdir=@DRI_DRIVER_DIR@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
++dridriverdir=@DRI_DRIVER_INSTALL_DIR@
+ 
+ Name: dri
+ Description: Direct Rendering Infrastructure
+Index: Mesa-7.2/src/mesa/gl.pc.in
+===================================================================
+--- Mesa-7.2.orig/src/mesa/gl.pc.in	2008-08-25 16:46:44.000000000 +0200
++++ Mesa-7.2/src/mesa/gl.pc.in	2011-01-27 19:30:13.700079977 +0100
+@@ -1,7 +1,7 @@
+-prefix=@INSTALL_DIR@
+-exec_prefix=${prefix}
+-libdir=@INSTALL_LIB_DIR@
+-includedir=@INSTALL_INC_DIR@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
+ 
+ Name: gl
+ Description: Mesa OpenGL library
+Index: Mesa-7.2/configure
+===================================================================
+--- Mesa-7.2.orig/configure	2008-09-13 22:45:59.000000000 +0200
++++ Mesa-7.2/configure	2011-01-27 19:27:08.622125839 +0100
+@@ -8858,7 +8858,7 @@
+ LDFLAGS="$_SAVE_LDFLAGS"
+ CPPFLAGS="$_SAVE_CPPFLAGS"
+ 
+-ac_config_files="$ac_config_files configs/autoconf"
++ac_config_files="$ac_config_files configs/autoconf src/glu/glu.pc src/glw/glw.pc src/mesa/drivers/dri/dri.pc src/mesa/gl.pc"
+ 
+ 
+ ac_config_commands="$ac_config_commands configs"
+@@ -9435,6 +9435,10 @@
+ for ac_config_target in $ac_config_targets
+ do
+   case $ac_config_target in
++    "src/glu/glu.pc") CONFIG_FILES="$CONFIG_FILES src/glu/glu.pc" ;;
++    "src/glw/glw.pc") CONFIG_FILES="$CONFIG_FILES src/glw/glw.pc" ;;
++    "src/mesa/drivers/dri/dri.pc") CONFIG_FILES="$CONFIG_FILES src/mesa/drivers/dri/dri.pc" ;;
++    "src/mesa/gl.pc") CONFIG_FILES="$CONFIG_FILES src/mesa/gl.pc" ;;
+     "configs/autoconf") CONFIG_FILES="$CONFIG_FILES configs/autoconf" ;;
+     "configs") CONFIG_COMMANDS="$CONFIG_COMMANDS configs" ;;
+ 

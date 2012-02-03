@@ -1,0 +1,10 @@
+--- a/Makefile
++++ b/Makefile
+@@ -42,6 +42,7 @@ export DESTDIR := $(R)
+ install:
+ 	$(INSTALL) -d -m 755	$(R)$(sbindir)
+ 	$(INSTALL) -d -m 755	$(R)$(bindir)
++	$(INSTALL) -d -m 755	$(R)$(libdir)
+ 	$(INSTALL) -d -m 755	$(R)$(raddbdir)
+ 	$(INSTALL) -d -m 755	$(R)$(mandir)
+ 	$(INSTALL) -d -m 755	$(R)$(RUNDIR)

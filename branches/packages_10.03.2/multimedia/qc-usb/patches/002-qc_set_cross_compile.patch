@@ -1,0 +1,11 @@
+--- a/Makefile
++++ b/Makefile
+@@ -183,7 +183,7 @@ install: $(MODULE_NAME)
+ 	-$(DEPMOD) -a
+ 
+ qcset: qcset.c quickcam.h
+-	gcc -Wall -O2 -s qcset.c -o qcset -lm
++	$(CC) -Wall -O2 -s qcset.c -o qcset -lm
+ 
+ .PHONY: patch
+ patch: kernel-patch kernel-files

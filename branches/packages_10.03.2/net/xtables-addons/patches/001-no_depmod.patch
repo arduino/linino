@@ -1,0 +1,24 @@
+---
+ Makefile.in |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -754,8 +754,7 @@ install-dvi: install-dvi-recursive
+ install-dvi-am:
+ 
+ install-exec-am:
+-	@$(NORMAL_INSTALL)
+-	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
++
+ install-html: install-html-recursive
+ 
+ install-html-am:
+@@ -827,7 +826,6 @@ xtables-addons.8: FORCE
+ 	${MAKE} -f Makefile.mans all;
+ 
+ install-exec-hook:
+-	depmod -a || :;
+ 
+ config.status: Makefile.iptrules.in
+ 

@@ -1,0 +1,33 @@
+--- a/minidlna.conf
++++ b/minidlna.conf
+@@ -2,7 +2,7 @@
+ port=8200
+ 
+ # network interface to bind to (this is the only interface that will serve files)
+-#network_interface=eth0
++network_interface=br-lan
+ 
+ # set this to the directory you want scanned.
+ # * if have multiple directories, you can have multiple media_dir= lines
+@@ -11,10 +11,10 @@ port=8200
+ #   + "A" for audio  (eg. media_dir=A,/home/jmaggard/Music)
+ #   + "V" for video  (eg. media_dir=V,/home/jmaggard/Videos)
+ #   + "P" for images (eg. media_dir=P,/home/jmaggard/Pictures)
+-media_dir=/opt
++media_dir=/mnt
+ 
+ # set this if you want to customize the name that shows up on your clients
+-#friendly_name=My DLNA Server
++friendly_name=My DLNA Server
+ 
+ # set this if you would like to specify the directory where you want MiniDLNA to store its database and album art cache
+ #db_dir=/var/cache/minidlna
+@@ -28,7 +28,7 @@ album_art_names=Cover.jpg/cover.jpg/Albu
+ 
+ # set this to no to disable inotify monitoring to automatically discover new files
+ # note: the default is yes
+-inotify=yes
++inotify=no
+ 
+ # set this to yes to enable support for streaming .jpg and .mp3 files to a TiVo supporting HMO
+ enable_tivo=no

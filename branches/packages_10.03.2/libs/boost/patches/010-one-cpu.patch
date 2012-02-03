@@ -1,0 +1,12 @@
+diff -Naur boost_1_35_0.orig/libs/thread/src/pthread/thread.cpp boost_1_35_0/libs/thread/src/pthread/thread.cpp
+--- boost_1_35_0.orig/libs/thread/src/pthread/thread.cpp	2008-05-08 06:18:57.000000000 -0400
++++ boost_1_35_0/libs/thread/src/pthread/thread.cpp	2008-05-08 06:20:15.000000000 -0400
+@@ -419,7 +419,7 @@
+ #if defined(PTW32_VERSION) || defined(__hpux)
+         return pthread_num_processors_np();
+ #elif defined(__linux__)
+-        return get_nprocs();
++        return 1;
+ #elif defined(__APPLE__) || defined(__FreeBSD__)
+         int count;
+         size_t size=sizeof(count);

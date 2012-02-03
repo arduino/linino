@@ -1,0 +1,108 @@
+The following upstream commit renders qc-usb FTBS:
+
+Gitweb:     http://git.kernel.org/git/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commit;h=601e9444f249d219009ec05674268d90f6f1cdcb
+Commit:     601e9444f249d219009ec05674268d90f6f1cdcb
+Parent:     e138c592b50370621653fd962b2bc3f4e25dfe78
+Author:     Hans Verkuil <hverkuil@xs4all.nl>
+AuthorDate: Sat Aug 23 07:24:07 2008 -0300
+Committer:  Mauro Carvalho Chehab <mchehab@redhat.com>
+CommitDate: Sun Oct 12 09:36:54 2008 -0200
+
+    V4L/DVB (8786): v4l2: remove the priv field, use dev_get_drvdata instead
+    
+    Remove the priv field and let video_get/set_drvdata use dev_get_drvdata
+    and dev_set_drvdata instead.
+    
+    Convert all drivers that still used priv directly.
+    
+    Signed-off-by: Hans Verkuil <hverkuil@xs4all.nl>
+    Signed-off-by: Mauro Carvalho Chehab <mchehab@redhat.com>
+
+Copyright (C) 2008 Stefan Lippers-Hollmann <s.l-h@gmx.de>
+
+--- a/qc-driver.c
++++ b/qc-driver.c
+@@ -2255,7 +2255,11 @@ static unsigned int qc_v4l_poll(struct v
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
+ 	struct video_device *dev = video_devdata(file);
+ #endif
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,28)
++	struct quickcam *qc = (struct quickcam *)video_get_drvdata(dev);
++#else
+ 	struct quickcam *qc = (struct quickcam *)dev->priv;
++#endif
+ 	struct qc_frame_data *fd = &qc->frame_data;
+ 	int mask;
+ 
+@@ -2307,7 +2311,11 @@ static int qc_v4l_open(struct video_devi
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
+ 	struct video_device *dev = video_devdata(file);
+ #endif
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,28)
++	struct quickcam *qc = video_get_drvdata(dev);
++#else
+ 	struct quickcam *qc = dev->priv;
++#endif
+ 	int r;
+ 
+ 	if (qcdebug&QC_DEBUGLOGIC || qcdebug&QC_DEBUGUSER) PDEBUG("qc_v4l_open(qc=%p)", qc);
+@@ -2375,7 +2383,11 @@ static void qc_v4l_close(struct video_de
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
+ 	struct video_device *dev = video_devdata(file);
+ #endif
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,28)
++	struct quickcam *qc = (struct quickcam *)video_get_drvdata(dev);
++#else
+ 	struct quickcam *qc = (struct quickcam *)dev->priv;
++#endif
+ 	if (qcdebug&QC_DEBUGLOGIC || qcdebug&QC_DEBUGUSER) PDEBUG("qc_v4l_close(dev=%p,qc=%p)",dev,qc);
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
+ 	TEST_BUGR_MSG(qc==NULL, "qc==NULL");
+@@ -2423,7 +2435,11 @@ static long qc_v4l_read(struct video_dev
+ 	struct video_device *dev = video_devdata(file);
+ 	int noblock = file->f_flags & O_NONBLOCK;
+ #endif
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,28)
++	struct quickcam *qc = (struct quickcam *)video_get_drvdata(dev);
++#else
+ 	struct quickcam *qc = (struct quickcam *)dev->priv;
++#endif
+ 	int frame_len;
+ 	unsigned char *frame;
+ 	long r = 0;
+@@ -2478,7 +2494,11 @@ static int qc_v4l_mmap(
+ 	const void *start = (void *)vma->vm_start;
+ 	unsigned long size  = vma->vm_end - vma->vm_start;
+ #endif
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,28)
++	struct quickcam *qc = (struct quickcam *)video_get_drvdata(dev);
++#else
+ 	struct quickcam *qc = (struct quickcam *)dev->priv;
++#endif
+ 	unsigned char *frame;
+ 	int ret = 0,  frame_size;
+ #if !HAVE_VMA && LINUX_VERSION_CODE<KERNEL_VERSION(2,6,0)
+@@ -2510,7 +2530,11 @@ static int qc_v4l_ioctl(struct video_dev
+ 	struct video_device *dev = video_devdata(file);
+ 	void *argp = (void *)arg;
+ #endif
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,28)
++	struct quickcam *qc = (struct quickcam *)video_get_drvdata(dev);
++#else
+ 	struct quickcam *qc = (struct quickcam *)dev->priv;
++#endif
+ 	int i, retval = 0;
+ 
+ 	if (qcdebug&QC_DEBUGLOGIC || qcdebug&QC_DEBUGUSER) PDEBUG("qc_v4l_ioctl(dev=%p,cmd=%u,arg=%p,qc=%p)",dev,cmd,argp,qc);
+@@ -3165,7 +3189,11 @@ PDEBUG("poisoning qc in qc_usb_init");
+ 
+ 		/* Register V4L video device */
+ 		memcpy(&qc->vdev, &qc_v4l_template, sizeof(qc_v4l_template));
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,28)
++		video_set_drvdata(&qc->vdev, qc);
++#else
+ 		qc->vdev.priv = qc;
++#endif
+ 		r = video_register_device(&qc->vdev, VFL_TYPE_GRABBER, video_nr);
+ 		if (r<0) goto fail3;
+ 		PRINTK(KERN_INFO, "Registered device: /dev/video%i", qc->vdev.minor);

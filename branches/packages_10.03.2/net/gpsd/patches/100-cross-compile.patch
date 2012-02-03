@@ -1,0 +1,54 @@
+Index: gpsd-2.94/configure.ac
+===================================================================
+--- gpsd-2.94.orig/configure.ac	2010-04-20 19:55:08.000000000 +0200
++++ gpsd-2.94/configure.ac	2011-01-27 15:34:47.002000063 +0100
+@@ -233,30 +233,10 @@
+ 	AC_DEFINE([HAVE_LIBPTHREAD], [], [pthread libraries are present])])
+ AC_SUBST(LIBPTHREAD)
+ 
+-#
+-# We want libusb-1.x or later.  Checking for this is messy in 2010
+-# since many Linux systems ship with .0,1.x versions and that's 
+-# what you get if you check naively for -lusb.  
+-#
+-# We use the fact that the obsolete versions put their include file in
+-# /usr/include/usb.h, while the newer ones have it in 
+-# /usr/include/libusb-*/libusb.h
+-#
+ AC_MSG_CHECKING([for libusb version >= 1.0.0])
+-if test -f /usr/include/libusb-*/libusb.h ;
+-then
+-    usb=$(basename /usr/lib/libusb-*.so | sed -e s/\.so// -e s/^lib//)
+-    AC_DEFINE([HAVE_LIBUSB], [], [will link with -l$usb; ])
+-    LIBUSB=-l${usb}
+-    INCUSB=-I/usr/include/lib${usb}
+-    ac_libusb=yes
+-    AC_MSG_RESULT([found.])
+-else
+-    ac_libusb=yes
+-    AC_MSG_RESULT([not found.])
+-fi
+-AC_SUBST(LIBUSB)
+-AC_SUBST(INCUSB)
++AC_DEFINE([HAVE_LIBUSB], [], [will link with -lusb-1.0; ])
++ac_libusb=yes
++AC_MSG_RESULT([OpenWRT: Crosscompile])
+ 
+ AH_VERBATIM([_GNU_SOURCE],
+ 	  [/* Some libc's don't have strlcat/strlcpy. Local copies are provided */
+Index: gpsd-2.94/Makefile.am
+===================================================================
+--- gpsd-2.94.orig/Makefile.am	2010-04-20 11:37:21.000000000 +0200
++++ gpsd-2.94/Makefile.am	2011-01-27 15:34:08.125000006 +0100
+@@ -245,9 +245,9 @@
+ # Warning: This overrides autoconf's normal link-line generation process
+ if LIBGPSMM_ENABLE
+ libgps_la_SOURCES += libgpsmm.cpp
+-libgps_la_LINK = /bin/sh ./libtool --tag=CXX --mode=link g++ $(libgps_la_LDFLAGS) -o $@
++libgps_la_LINK = $(LIBTOOL) --tag=CXX --mode=link $(CXX) $(libgps_la_LDFLAGS) -o $@
+ else
+-libgps_la_LINK = /bin/sh ./libtool --tag=CC --mode=link gcc $(libgps_la_LDFLAGS) -o $@
++libgps_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(CC) $(libgps_la_LDFLAGS) -o $@
+ endif
+ 
+ nodist_libgpsd_la_SOURCES = packet_names.h ais_json.i

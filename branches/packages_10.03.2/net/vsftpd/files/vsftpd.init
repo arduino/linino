@@ -1,0 +1,14 @@
+#!/bin/sh /etc/rc.common
+
+START=50
+
+RUN_D=/var/run/vsftpd
+
+start() {
+	[ -d $RUN_D ] || mkdir -p $RUN_D
+	vsftpd
+}
+
+stop() {
+	killall vsftpd
+}

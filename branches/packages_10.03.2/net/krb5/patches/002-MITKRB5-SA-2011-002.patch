@@ -1,0 +1,112 @@
+diff --git a/src/plugins/kdb/ldap/libkdb_ldap/kdb_ldap.h b/src/plugins/kdb/ldap/libkdb_ldap/kdb_ldap.h
+index 1ca09b4..60caf3d 100644
+--- a/src/plugins/kdb/ldap/libkdb_ldap/kdb_ldap.h
++++ b/src/plugins/kdb/ldap/libkdb_ldap/kdb_ldap.h
+@@ -102,14 +102,18 @@ extern void prepend_err_str (krb5_context ctx, const char *s, krb5_error_code er
+ #define LDAP_SEARCH(base, scope, filter, attrs)   LDAP_SEARCH_1(base, scope, filter, attrs, CHECK_STATUS)
+ 
+ #define LDAP_SEARCH_1(base, scope, filter, attrs, status_check)         \
+-    do {                                                                \
+-        st = ldap_search_ext_s(ld, base, scope, filter, attrs, 0, NULL, NULL, &timelimit, LDAP_NO_LIMIT, &result); \
+-        if (translate_ldap_error(st, OP_SEARCH) == KRB5_KDB_ACCESS_ERROR) { \
+-            tempst = krb5_ldap_rebind(ldap_context, &ldap_server_handle); \
+-            if (ldap_server_handle)                                     \
+-                ld = ldap_server_handle->ldap_handle;                   \
+-        }                                                               \
+-    }while (translate_ldap_error(st, OP_SEARCH) == KRB5_KDB_ACCESS_ERROR && tempst == 0); \
++    tempst = 0;                                                         \
++    st = ldap_search_ext_s(ld, base, scope, filter, attrs, 0, NULL,     \
++                           NULL, &timelimit, LDAP_NO_LIMIT, &result);   \
++    if (translate_ldap_error(st, OP_SEARCH) == KRB5_KDB_ACCESS_ERROR) { \
++        tempst = krb5_ldap_rebind(ldap_context, &ldap_server_handle);   \
++        if (ldap_server_handle)                                         \
++            ld = ldap_server_handle->ldap_handle;                       \
++        if (tempst == 0)                                                \
++            st = ldap_search_ext_s(ld, base, scope, filter, attrs, 0,   \
++                                   NULL, NULL, &timelimit,              \
++                                   LDAP_NO_LIMIT, &result);             \
++    }                                                                   \
+                                                                         \
+     if (status_check != IGNORE_STATUS) {                                \
+         if (tempst != 0) {                                              \
+diff --git a/src/plugins/kdb/ldap/libkdb_ldap/kdb_ldap_conn.c b/src/plugins/kdb/ldap/libkdb_ldap/kdb_ldap_conn.c
+index 82b0333..84e80ee 100644
+--- a/src/plugins/kdb/ldap/libkdb_ldap/kdb_ldap_conn.c
++++ b/src/plugins/kdb/ldap/libkdb_ldap/kdb_ldap_conn.c
+@@ -302,6 +302,7 @@ krb5_ldap_rebind(krb5_ldap_context *ldap_context,
+ {
+     krb5_ldap_server_handle     *handle = *ldap_server_handle;
+ 
++    ldap_unbind_ext_s(handle->ldap_handle, NULL, NULL);
+     if ((ldap_initialize(&handle->ldap_handle, handle->server_info->server_name) != LDAP_SUCCESS)
+         || (krb5_ldap_bind(ldap_context, handle) != LDAP_SUCCESS))
+         return krb5_ldap_request_next_handle_from_pool(ldap_context, ldap_server_handle);
+diff --git a/src/plugins/kdb/ldap/libkdb_ldap/ldap_misc.c b/src/plugins/kdb/ldap/libkdb_ldap/ldap_misc.c
+index f549e23..b70940f 100644
+--- a/src/plugins/kdb/ldap/libkdb_ldap/ldap_misc.c
++++ b/src/plugins/kdb/ldap/libkdb_ldap/ldap_misc.c
+@@ -446,12 +446,11 @@ is_principal_in_realm(krb5_ldap_context *ldap_context,
+      * portion, then the first portion of the principal name SHOULD be
+      * "krbtgt".  All this check is done in the immediate block.
+      */
+-    if (searchfor->length == 2)
+-        if ((strncasecmp(searchfor->data[0].data, "krbtgt",
+-                         FIND_MAX(searchfor->data[0].length, strlen("krbtgt"))) == 0) &&
+-            (strncasecmp(searchfor->data[1].data, defrealm,
+-                         FIND_MAX(searchfor->data[1].length, defrealmlen)) == 0))
++    if (searchfor->length == 2) {
++        if (data_eq_string(searchfor->data[0], "krbtgt") &&
++            data_eq_string(searchfor->data[1], defrealm))
+             return 0;
++    }
+ 
+     /* first check the length, if they are not equal, then they are not same */
+     if (strlen(defrealm) != searchfor->realm.length)
+diff --git a/src/plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c b/src/plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c
+index 7ad31da..626ed1f 100644
+--- a/src/plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c
++++ b/src/plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c
+@@ -103,10 +103,10 @@ krb5_ldap_get_principal(krb5_context context, krb5_const_principal searchfor,
+                         unsigned int flags, krb5_db_entry *entries,
+                         int *nentries, krb5_boolean *more)
+ {
+-    char                        *user=NULL, *filter=NULL, **subtree=NULL;
++    char                        *user=NULL, *filter=NULL, *filtuser=NULL;
+     unsigned int                tree=0, ntrees=1, princlen=0;
+     krb5_error_code             tempst=0, st=0;
+-    char                        **values=NULL, *cname=NULL;
++    char                        **values=NULL, **subtree=NULL, *cname=NULL;
+     LDAP                        *ld=NULL;
+     LDAPMessage                 *result=NULL, *ent=NULL;
+     krb5_ldap_context           *ldap_context=NULL;
+@@ -142,12 +142,18 @@ krb5_ldap_get_principal(krb5_context context, krb5_const_principal searchfor,
+     if ((st=krb5_ldap_unparse_principal_name(user)) != 0)
+         goto cleanup;
+ 
+-    princlen = strlen(FILTER) + strlen(user) + 2 + 1;      /* 2 for closing brackets */
++    filtuser = ldap_filter_correct(user);
++    if (filtuser == NULL) {
++        st = ENOMEM;
++        goto cleanup;
++    }
++
++    princlen = strlen(FILTER) + strlen(filtuser) + 2 + 1;  /* 2 for closing brackets */
+     if ((filter = malloc(princlen)) == NULL) {
+         st = ENOMEM;
+         goto cleanup;
+     }
+-    snprintf(filter, princlen, FILTER"%s))", user);
++    snprintf(filter, princlen, FILTER"%s))", filtuser);
+ 
+     if ((st = krb5_get_subtree_info(ldap_context, &subtree, &ntrees)) != 0)
+         goto cleanup;
+@@ -231,6 +237,9 @@ cleanup:
+     if (user)
+         free(user);
+ 
++    if (filtuser)
++        free(filtuser);
++
+     if (cname)
+         free(cname);
+ 

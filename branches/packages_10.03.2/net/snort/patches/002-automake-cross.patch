@@ -1,0 +1,214 @@
+--- a/configure.in
++++ b/configure.in
+@@ -163,28 +163,6 @@ else
+      AC_MSG_RESULT(no)
+ fi
+ 
+-# check for sparc %time register
+-if eval "echo $host_cpu|grep -i sparc >/dev/null"; then
+-    OLD_CFLAGS="$CFLAGS"
+-    CFLAGS="$CFLAGS -mcpu=v9 "
+-    AC_MSG_CHECKING([for sparc %time register])
+-    AC_RUN_IFELSE(
+-    [AC_LANG_PROGRAM(
+-    [[]],
+-    [[
+-        int val;
+-        __asm__ __volatile__("rd %%tick, %0" : "=r"(val));
+-    ]])],
+-    [sparcv9="yes"],
+-    [sparcv9="no"])
+-    AC_MSG_RESULT($sparcv9)
+-    if test "x$sparcv9" = "xyes"; then
+-        AC_DEFINE([SPARCV9], [], [For sparc v9 with %time register])
+-    else
+-        CFLAGS="$OLD_CFLAGS"
+-    fi
+-fi
+-
+ dnl checking headers
+ AC_CHECK_HEADERS(strings.h)
+ AC_CHECK_HEADERS(string.h)
+@@ -282,22 +260,12 @@ AC_CHECK_FUNCS(vswprintf)
+ AC_CHECK_FUNCS(wprintf)
+ 
+ AC_MSG_CHECKING([for sizeof(unsigned long)])
+-AC_RUN_IFELSE(
+-[AC_LANG_PROGRAM(
+-[],
+-[[
+-    if (sizeof(unsigned long) == 8)
+-        return 0;
+-
+-    return 1;
+-]])],
+-[ulong_is_64_bit="yes"],
+-[ulong_is_64_bit="no"])
+-if test "x$ulong_is_64_bit" = "xyes"; then
+-    AC_MSG_RESULT([64 bits])
+-    AC_DEFINE([ULONGIS64BIT], [], [If unsigned long is 64 bits])
++AC_CHECK_SIZEOF([unsigned long])
++if test $ac_cv_sizeof_unsigned_long = 8; then
++	AC_MSG_RESULT([64 bits])
++	AC_DEFINE([ULONGIS64BIT], [], [If unsigned long is 64 bits])
+ else
+-    AC_MSG_RESULT([32 bits])
++	AC_MSG_RESULT([32 bits])
+ fi
+ 
+ AC_TRY_COMPILE([
+@@ -412,88 +380,7 @@ if test "x$LPCAP" = "xno"; then
+ fi
+ 
+ 
+-# This is to determine which pcap library version is being used.  The reason being
+-# that versions < 0.9 do not accumulate packet statistics whereas >= 0.9 do accumulate.
+-# This is Linux only.  The check is done after pcre because the code below uses pcre.
+-# It seems Phil Wood's pcap does not accumulate - 0.9x
+-pcap_version_check="yes"
+-if test "x$linux" = "xyes"; then
+-    if test "x$pcap_version_check" = "xyes"; then
+-        AC_MSG_CHECKING([for libpcap version >= 0.9])
+-        AC_RUN_IFELSE(
+-        [AC_LANG_PROGRAM(
+-        [[
+-        #include <pcap.h>
+-        #include <string.h>
+-        extern char pcap_version[];
+-        ]],
+-        [[
+-           if (strcmp(pcap_version, "0.9x") == 0)
+-               return 1;
+-
+-           if (strcmp(pcap_version, "0.9.0") < 0)
+-               return 1;
+-        ]])],
+-        [libpcap_version_09="yes"],
+-        [libpcap_version_09="no"])
+-        AC_MSG_RESULT($libpcap_version_09)
+-        if test "x$libpcap_version_09" = "xyes"; then
+-            AC_DEFINE([LIBPCAP_ACCUMULATES], [], [For libpcap versions that accumulate stats])
+-        fi
+-    else
+-        libpcap_version_09="no"
+-        AC_DEFINE([LIBPCAP_ACCUMULATES], [], [For libpcap versions that accumulate stats])
+-    fi
+-
+-    # there is a bug in the Linux code in 0.9.0 - 0.9.4 where the pcap
+-    # stats are doubled.
+-    if test "x$libpcap_version_09" = "xyes"; then
+-        AC_MSG_CHECKING(for libpcap version 0.9.0 - 0.9.4)
+-        AC_RUN_IFELSE(
+-        [AC_LANG_PROGRAM(
+-        [[
+-        #include <pcap.h>
+-        #include <string.h>
+-        extern char pcap_version[];
+-        ]],
+-        [[
+-           if (strcmp(pcap_version, "0.9.5") < 0)
+-               return 1;
+-        ]])],
+-        [libpcap_version_09_bug="no"],
+-        [libpcap_version_09_bug="yes"])
+-        AC_MSG_RESULT($libpcap_version_09_bug)
+-    else
+-        libpcap_version_09_bug="no"
+-    fi
+-
+-    if test "x$libpcap_version_09_bug" = "xyes"; then
+-        AC_DEFINE([LINUX_LIBPCAP_DOUBLES_STATS], [], [For Linux libpcap versions 0.9.0 to 0.9.4])
+-    fi
+-else
+-    AC_DEFINE([LIBPCAP_ACCUMULATES], [], [For libpcap versions that accumulate stats])
+-fi
+-
+-# In case INADDR_NONE is not defined (like on Solaris)
+-have_inaddr_none="no"
+-AC_MSG_CHECKING([for INADDR_NONE])
+-AC_RUN_IFELSE(
+-[AC_LANG_PROGRAM(
+-[[
+-#include <sys/types.h>
+-#include <netinet/in.h>
+-]],
+-[[
+-	if (inet_addr("10,5,2") == INADDR_NONE);
+-]])],
+-[have_inaddr_none="yes"],
+-[have_inaddr_none="no"])
+-AC_MSG_RESULT($have_inaddr_none)
+-if test "x$have_inaddr_none" = "xno"; then
+-	AC_DEFINE([INADDR_NONE], [-1], [For INADDR_NONE definition])
+-fi
+-
+-default_directory="/usr /usr/local"
++AC_DEFINE([LIBPCAP_ACCUMULATES], [], [For libpcap versions that accumulate stats])
+ 
+ AC_DEFUN([FAIL_MESSAGE],[
+    echo
+@@ -745,64 +632,6 @@ if test "x$with_mysql" != "xno"; then
+       LIBS="-lmysqlclient ${LIBS}"
+     fi
+   fi
+-
+-  AC_MSG_CHECKING([for mysql default client reconnect])
+-
+-  AC_RUN_IFELSE(
+-  [AC_LANG_PROGRAM(
+-  [[
+-  #include <mysql.h>
+-  ]],
+-  [[
+-      if (mysql_get_client_version() < 50003)
+-          return 1;
+-  ]])],
+-  [mysql_default_reconnect="no"],
+-  [mysql_default_reconnect="yes"])
+-
+-  AC_MSG_RESULT($mysql_default_reconnect)
+-
+-  if test "x$mysql_default_reconnect" = "xno"; then
+-      AC_MSG_CHECKING([for mysql reconnect option])
+-
+-      AC_RUN_IFELSE(
+-      [AC_LANG_PROGRAM(
+-      [[
+-      #include <mysql.h>
+-      ]],
+-      [[
+-          if (mysql_get_client_version() < 50013)
+-              return 1;
+-      ]])],
+-      [mysql_has_reconnect="yes"],
+-      [mysql_has_reconnect="no"])
+-
+-      AC_MSG_RESULT($mysql_has_reconnect)
+-
+-      if test "x$mysql_has_reconnect" = "xyes"; then
+-          AC_DEFINE([MYSQL_HAS_OPT_RECONNECT], [], [For MySQL versions 5.0.13 and greater])
+-
+-          AC_MSG_CHECKING([for mysql setting of reconnect option before connect bug])
+-
+-          AC_RUN_IFELSE(
+-          [AC_LANG_PROGRAM(
+-          [[
+-          #include <mysql.h>
+-          ]],
+-          [[
+-              if (mysql_get_client_version() < 50019)
+-                  return 1;
+-          ]])],
+-          [mysql_has_reconnect_bug="no"],
+-          [mysql_has_reconnect_bug="yes"])
+-
+-          AC_MSG_RESULT($mysql_has_reconnect_bug)
+-
+-          if test "x$mysql_has_reconnect_bug" = "xyes"; then
+-              AC_DEFINE([MYSQL_HAS_OPT_RECONNECT_BUG], [], [For MySQL versions 5.0.13 to 5.0.18])
+-          fi
+-      fi
+-  fi
+ fi
+ 
+ AC_ARG_WITH(odbc, 

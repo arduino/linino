@@ -1,0 +1,26 @@
+Index: palantir-2.7/server/libgsm/Makefile
+===================================================================
+--- palantir-2.7.orig/server/libgsm/Makefile	2008-04-07 22:35:39.000000000 +0200
++++ palantir-2.7/server/libgsm/Makefile	2008-04-07 22:35:39.000000000 +0200
+@@ -53,7 +53,7 @@
+ endif
+ 
+ CC		+= -ansi -pedantic
+-CCFLAGS 	= -c -O2 -DNeedFunctionPrototypes=1
++CCFLAGS 	= -c $(COPTS) -DNeedFunctionPrototypes=1
+ 
+ LD 		= $(CC)
+ 
+Index: palantir-2.7/server/Makefile
+===================================================================
+--- palantir-2.7.orig/server/Makefile	2008-04-07 22:35:39.000000000 +0200
++++ palantir-2.7/server/Makefile	2008-04-07 22:35:39.000000000 +0200
+@@ -47,7 +47,7 @@
+ .PHONY : tools man
+ 
+ 
+-CFLAGS= -Wall -D_REENTRANT -O2 -g
++CFLAGS= -Wall -D_REENTRANT $(COPTS)
+ # -O3
+ CC= gcc
+ libjpeg= -ljpeg

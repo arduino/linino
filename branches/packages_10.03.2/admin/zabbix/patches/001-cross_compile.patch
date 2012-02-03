@@ -1,0 +1,13 @@
+diff -urN zabbix-1.6/configure zabbix-1.6.new/configure
+--- zabbix-1.6/configure	2008-09-18 22:15:39.000000000 +0200
++++ zabbix-1.6.new/configure	2008-09-30 19:20:43.000000000 +0200
+@@ -4826,8 +4826,7 @@
+   { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
+ See \`config.log' for more details." >&5
+ echo "$as_me: error: cannot run test program while cross compiling
+-See \`config.log' for more details." >&2;}
+-   { (exit 1); exit 1; }; }
++See \`config.log' for more details." >&2;} }
+ else
+   cat >conftest.$ac_ext <<_ACEOF
+ 

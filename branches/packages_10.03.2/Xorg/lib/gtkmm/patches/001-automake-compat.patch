@@ -1,0 +1,29 @@
+--- a/configure.in
++++ b/configure.in
+@@ -119,15 +119,15 @@ AL_PROG_GNU_MAKE(AC_MSG_ERROR([dnl
+ SUN make does not work for building gtkmm.
+ Please install GNU make.]))
+ 
+-# This macro is installed by glibmm
++# This macro is installed by mm-macros
+ # Doxygen needs the path to the installed perl.
+-GLIBMM_CHECK_PERL([5.6.0])
++MM_CHECK_PERL([5.6.0])
+ 
+ #########################################################################
+ #  Function checks
+ #########################################################################
+ 
+-AC_CHECK_FUNC(mkfifo, AC_DEFINE(HAVE_MKFIFO))
++AC_CHECK_FUNC(mkfifo, AC_DEFINE([HAVE_MKFIFO], [], [Define if mkfifo is available]))
+ 
+ # functions used in demos/gtk-demo. Undefined in config.h.
+ AC_LANG_PUSH(C++)
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,3 +1,5 @@
++ACLOCAL_AMFLAGS = -I scripts
++
+ if GTKMM_ATKMM_ENABLED
+   ATK_SUBDIR=atk
+ else

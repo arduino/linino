@@ -1,0 +1,96 @@
+--- a/protocol_parser.c
++++ b/protocol_parser.c
+@@ -23,6 +23,7 @@
+ #include <net/if_arp.h>
+ #include <netinet/ip.h>
+ #include <netinet/udp.h>
++#include <asm/byteorder.h>
+ 
+ #include "prism_header.h"
+ #include "ieee80211_radiotap.h"
+@@ -166,6 +167,7 @@ parse_radiotap_header(unsigned char** bu
+ 	__le32 present; /* the present bitmap */
+ 	unsigned char* b; /* current byte */
+ 	int i;
++	int rt_len;
+ 
+ 	DEBUG("RADIOTAP HEADER\n");
+ 
+@@ -176,21 +178,22 @@ parse_radiotap_header(unsigned char** bu
+ 
+ 	rh = (struct ieee80211_radiotap_header*)*buf;
+ 	b = *buf + sizeof(struct ieee80211_radiotap_header);
+-	present = rh->it_present;
++	present = __le32_to_cpu(rh->it_present);
+ 
+ 	DEBUG("%08x\n", present);
+ 
++	rt_len = __le16_to_cpu(rh->it_len);
+ 	/* check for header extension - ignore for now, just advance current position */
+-	while (present & 0x80000000  && b - *buf < rh->it_len) {
++	while (present & 0x80000000  && b - *buf < rt_len) {
+ 		DEBUG("extension\n");
+ 		b = b + 4;
+-		present = *(__le32*)b;
++		present = __le32_to_cpu(*(__le32*)b);
+ 	}
+-	present = rh->it_present; // in case it moved
++	present = __le32_to_cpu(rh->it_present); // in case it moved
+ 
+ 	/* radiotap bitmap has 32 bit, but we are only interrested until
+ 	 * bit 12 (IEEE80211_RADIOTAP_DB_ANTSIGNAL) => i<13 */
+-	for (i = 0; i < 13 && b - *buf < rh->it_len; i++) {
++	for (i = 0; i < 13 && b - *buf < rt_len; i++) {
+ 		if ((present >> i) & 1) {
+ 			DEBUG("1");
+ 			switch (i) {
+@@ -252,7 +255,7 @@ parse_radiotap_header(unsigned char** bu
+ 					break;
+ 				case IEEE80211_RADIOTAP_CHANNEL:
+ 					/* channel & channel type */
+-					current_packet.phy_freq = *(u_int16_t*)b;
++					current_packet.phy_freq = __le16_to_cpu(*(u_int16_t*)b);
+ 					DEBUG("[chan %d ", current_packet.phy_freq);
+ 					b = b + 2;
+ 					if (*(u_int16_t*)b & IEEE80211_CHAN_A) {
+@@ -298,8 +301,8 @@ parse_radiotap_header(unsigned char** bu
+ 	DEBUG("noise: %d\n", current_packet.noise);
+ 	DEBUG("snr: %d\n", current_packet.snr);
+ 
+-	*buf = *buf + rh->it_len;
+-	return len - rh->it_len;
++	*buf = *buf + rt_len;
++	return len - rt_len;
+ }
+ 
+ 
+@@ -312,22 +315,25 @@ parse_80211_header(unsigned char** buf, 
+ 	u8* sa = NULL;
+ 	u8* da = NULL;
+ 	u8* bssid = NULL;
++	u16 fc;
+ 
+ 	if (len < 2) /* not even enough space for fc */
+ 		return -1;
+ 
+ 	wh = (struct ieee80211_hdr*)*buf;
+-	hdrlen = ieee80211_get_hdrlen(wh->frame_control);
++	fc = __le16_to_cpu(wh->frame_control);
++	hdrlen = ieee80211_get_hdrlen(fc);
+ 
+ 	if (len < hdrlen)
+ 		return -1;
+ 
+ 	current_packet.len = len;
+-	current_packet.wlan_type = (wh->frame_control & (IEEE80211_FCTL_FTYPE | IEEE80211_FCTL_STYPE));
++	current_packet.wlan_type = (fc & (IEEE80211_FCTL_FTYPE | IEEE80211_FCTL_STYPE));
+ 
+-	DEBUG("wlan_type %x - type %x - stype %x\n", wh->frame_control, wh->frame_control & IEEE80211_FCTL_FTYPE, wh->frame_control & IEEE80211_FCTL_STYPE );
++	DEBUG("wlan_type %x - type %x - stype %x\n", fc, 
++	      fc & IEEE80211_FCTL_FTYPE, fc & IEEE80211_FCTL_STYPE );
+ 
+-	DEBUG("%s\n", get_packet_type_name(wh->frame_control));
++	DEBUG("%s\n", get_packet_type_name(fc));
+ 
+ 	bssid = ieee80211_get_bssid(wh, len);
+ 

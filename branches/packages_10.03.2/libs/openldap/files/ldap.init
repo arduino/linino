@@ -1,0 +1,14 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2009-2011 OpenWrt.org
+
+START=60
+
+start() {
+	mkdir -p /var/openldap-data
+	
+	/usr/sbin/slapd
+}
+
+stop() {
+	killall slapd 2> /dev/null
+}

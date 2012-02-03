@@ -1,0 +1,13 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=50
+
+start() {
+	if [ -f /etc/srelay.conf ];then
+		srelay -c /etc/srelay.conf -r -s 
+	fi
+}
+
+stop() {
+	killall srelay
+}

@@ -1,0 +1,48 @@
+#
+# Copyright (C) 2008-2009 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=radsecproxy
+PKG_VERSION:=1.4.2
+PKG_RELEASE:=1
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://software.uninett.no/radsecproxy/
+PKG_MD5SUM:=ccdff609c72c0862235b9119323345a8
+
+PKG_INSTALL:=1
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/radsecproxy
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libopenssl +libpthread
+  TITLE:=radsecproxy
+  URL:=http://software.uninett.no/radsecproxy
+  MAINTAINER:=Hans Zandbelt <hans.zandbelt@gmail.com>
+endef
+
+define Package/radsecproxy/description
+  A generic radius proxy for UDP/TLS (RadSec)
+endef
+
+CONFIGURE_ARGS+= \
+	--with-ssl="$(STAGING_DIR)/usr"
+
+define Package/radsecproxy/install
+	$(INSTALL_DIR) $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/radsecproxy $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/
+	$(CP) $(PKG_BUILD_DIR)/radsecproxy.conf-example $(1)/etc/radsecproxy.conf
+	$(INSTALL_DIR) $(1)/etc/init.d/
+	$(INSTALL_BIN) ./files/radsecproxy.init $(1)/etc/init.d/radsecproxy
+endef
+
+$(eval $(call BuildPackage,radsecproxy))
+

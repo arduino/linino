@@ -1,0 +1,36 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=60
+
+DEFAULT=/etc/default/samba
+RUN_D=/var/run/samba
+NMBD_PID_F=$RUN_D/nmbd.pid
+SMBD_PID_F=$RUN_D/smbd.pid
+
+config_cb() {
+        local cfg="$CONFIG_SECTION"
+        local cfgtype
+        config_get cfgtype "$cfg" TYPE
+
+        case "$cfgtype" in
+                timezone)
+                        config_get posixtz      $cfg posixtz
+                        config_get zoneinfo     $cfg zoneinfo
+			echo "$posixtz" > /etc/TZ
+                ;;
+        esac
+}
+
+
+start() {
+	[ -f $DEFAULT ] && . $DEFAULT
+	config_load timezone&
+	mkdir -p $RUN_D
+	nmbd -D $NMBD_OPTIONS
+	smbd -D $SMBD_OPTIONS
+}
+stop() {
+	[ -f $SMBD_PID_F ] && kill $(cat $SMBD_PID_F)
+	[ -f $NMBD_PID_F ] && kill $(cat $NMBD_PID_F)
+}
+

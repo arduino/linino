@@ -1,0 +1,15 @@
+diff -Naur kissdx-0.14.0.b1a.orig/Makefile kissdx-0.14.0.b1a/Makefile
+--- kissdx-0.14.0.b1a.orig/Makefile	2007-10-24 00:13:33.000000000 +0300
++++ kissdx-0.14.0.b1a/Makefile	2009-03-05 22:53:51.000000000 +0200
+@@ -27,9 +27,9 @@
+ 
+ kissdx: $(OBJS)
+ # remove -liconv below if your system has libiconv built in
+-	$(CC) -o $@ $(OBJS) -ldvdread -liconv -ljpeg -lm $(EXTRA_LIBS) 
++	$(CC) -o $@ $(OBJS) -ldvdread -liconv -ljpeg -lm $(LDFLAGS) $(EXTRA_LIBS) 
+ #	$(CC) -o $@ $(OBJS) -ldvdread -ljpeg -lm $(EXTRA_LIBS) 
+-	strip kissdx.exe
++	$(STRIP) kissdx
+ 
+ all: kissdx
+ 

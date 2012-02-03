@@ -1,0 +1,11 @@
+--- a/builders/make/compile.mk
++++ b/builders/make/compile.mk
+@@ -65,7 +65,7 @@ LUA_OBJS = $(LUA_SRCS:.c=.lua.o)
+ 
+ #common
+ COMMON_INCLUDE=$(LUA_INCLUDE) $(SSL_INCLUDE) -I$(PROJECT_BASE_PATH)/sources/common/include
+-COMMON_LIBS=$(SSL_LIB) -L$(OUTPUT_DYNAMIC) -llua
++COMMON_LIBS=$(SSL_LIB) -L$(OUTPUT_DYNAMIC) -llua -lcrypt
+ COMMON_SRCS = $(shell find $(PROJECT_BASE_PATH)/sources/common/src -type f -name "*.cpp")
+ COMMON_OBJS = $(COMMON_SRCS:.cpp=.common.o)
+ 

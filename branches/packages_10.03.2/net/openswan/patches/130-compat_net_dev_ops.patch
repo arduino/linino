@@ -1,0 +1,19 @@
+---
+ linux/include/openswan/ipsec_kversion.h |    6 ++++++
+ 1 file changed, 6 insertions(+)
+
+--- a/linux/include/openswan/ipsec_kversion.h
++++ b/linux/include/openswan/ipsec_kversion.h
+@@ -393,6 +393,12 @@
+ # endif
+ #endif
+ 
++#if LINUX_VERSION_CODE == KERNEL_VERSION(2,6,30)
++# ifndef CONFIG_COMPAT_NET_DEV_OPS
++#  define USE_NETDEV_OPS
++# endif
++#endif
++
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31)
+ # define USE_NETDEV_OPS
+ #else

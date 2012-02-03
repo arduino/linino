@@ -1,0 +1,14 @@
+diff -ruN git/configure.ac xglamo/git/configure.ac
+--- git.orig/configure.ac	2008-11-18 23:42:32.000000000 +0100
++++ git/configure.ac	2008-11-18 23:51:31.000000000 +0100
+@@ -1688,7 +1688,9 @@
+ DIX_CFLAGS="-DHAVE_DIX_CONFIG_H"
+ AC_SUBST([DIX_CFLAGS])
+ 
+-AC_SUBST([libdir exec_prefix prefix])
++AC_SUBST([libdir])
++AC_SUBST([exec_prefix])
++AC_SUBST([prefix])
+ 
+ # Man page sections - used in config utils & generating man pages
+ XORG_MANPAGE_SECTIONS

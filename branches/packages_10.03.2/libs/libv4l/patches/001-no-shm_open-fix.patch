@@ -1,0 +1,48 @@
+--- a/libv4lconvert/control/libv4lcontrol.c
++++ b/libv4lconvert/control/libv4lcontrol.c
+@@ -338,7 +338,7 @@ static void v4lcontrol_init_flags(struct
+ 
+ struct v4lcontrol_data *v4lcontrol_create(int fd, int always_needs_conversion)
+ {
+-  int shm_fd;
++  int shm_fd, fdflags;
+   int i, rc, init = 0;
+   char *s, shm_name[256], pwd_buf[1024];
+   struct v4l2_capability cap;
+@@ -392,25 +392,31 @@ struct v4lcontrol_data *v4lcontrol_creat
+   }
+ 
+   if (getpwuid_r(geteuid(), &pwd, pwd_buf, sizeof(pwd_buf), &pwd_p) == 0) {
+-    snprintf(shm_name, 256, "/libv4l-%s:%s:%s", pwd.pw_name,
++    snprintf(shm_name, 256, "/dev/shm/libv4l-%s:%s:%s", pwd.pw_name,
+ 	     cap.bus_info, cap.card);
+   } else {
+     perror("libv4lcontrol: error getting username using uid instead");
+-    snprintf(shm_name, 256, "/libv4l-%lu:%s:%s", (unsigned long)geteuid(),
++    snprintf(shm_name, 256, "/dev/shm/libv4l-%lu:%s:%s", (unsigned long)geteuid(),
+ 	     cap.bus_info, cap.card);
+   }
+ 
+   /* / is not allowed inside shm names */
+-  for (i = 1; shm_name[i]; i++)
++  for (i = 9; shm_name[i]; i++) /* start after "/dev/shm", i = 9 */
+     if (shm_name[i] == '/')
+       shm_name[i] = '-';
+ 
+   /* Open the shared memory object identified by shm_name */
+-  if ((shm_fd = shm_open(shm_name, (O_CREAT | O_EXCL | O_RDWR),
++  if ((shm_fd = open(shm_name, (O_CREAT | O_EXCL | O_RDWR),
+ 			 (S_IREAD | S_IWRITE))) >= 0)
+     init = 1;
+   else
+-    shm_fd = shm_open(shm_name, O_RDWR, (S_IREAD | S_IWRITE));
++    shm_fd = open(shm_name, O_RDWR, (S_IREAD | S_IWRITE));
++
++  /* This is all uClibc > 0.9.30 seems to do for shm_open() in librt/shm.c */
++  fdflags = fcntl(shm_fd, F_GETFD, 0);
++  
++  if (fdflags >= 0)
++    fdflags = fcntl(fd, F_SETFD, fdflags | FD_CLOEXEC);
+ 
+   if (shm_fd >= 0) {
+     /* Set the shared memory size */

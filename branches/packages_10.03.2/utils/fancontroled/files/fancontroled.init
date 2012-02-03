@@ -1,0 +1,22 @@
+#!/bin/sh /etc/rc.common
+
+START=75
+STOP=75
+
+TEMP_SENSOR_CHIP=lm75
+TEMP_READ_FIELD=temp1_input
+MIN_TEMP=30
+MAX_TEMP=50
+FAN_SENSOR_CHIP=g760a
+FAN_CONTROL_FIELD=pwm1
+PWM_FAN_MIN=1
+PWM_FAN_MAX=180
+PID_FILENAME=/var/run/fancontroled.pid
+
+start() {
+	/usr/sbin/fancontroled -t $TEMP_SENSOR_CHIP -r $TEMP_READ_FIELD -m $MIN_TEMP -M $MAX_TEMP -f $FAN_SENSOR_CHIP -c $FAN_CONTROL_FIELD -p $PWM_FAN_MIN -P $PWM_FAN_MAX -z $PID_FILENAME
+}
+
+stop() {
+	kill $(cat $PID_FILENAME)
+}

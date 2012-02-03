@@ -1,0 +1,43 @@
+Section "InputDevice"
+	Identifier "SlideKeyboard"
+	Driver "kbd"
+	Option "XkbRules" "evdev"
+	Option "XkbModel" "pc105"
+	Option "XkbLayout" "nokia_vndr/rx-44"
+	Option "XkbVariant" "de"
+	Option "XkbOptions" "lv3:ralt_switch"
+EndSection
+
+Section "InputDevice"
+	Identifier "Touchscreen"
+	Driver "tslib"
+	Option "CorePointer" "true"
+	Option "SendCoreEvents" "true"
+	Option "Device" "/dev/input/event1"
+	Option "Protocol" "Auto"
+	Option "Width" "800"
+	Option "Height" "480"
+EndSection
+
+Section "Monitor"
+	Identifier "InternalLCD"
+EndSection
+
+Section "Device"
+	Identifier "FramebufferDevice"
+	Driver "omapfb"
+	Option "fb" "/dev/fb0"
+EndSection
+
+Section "Screen"
+	Identifier "InternalScreen"
+	Device "FramebufferDevice"
+	Monitor "InternalLCD"
+EndSection
+
+Section "ServerLayout"
+	Identifier "DefaultLayout"
+	Screen "InternalScreen"
+	InputDevice "Touchscreen" "CorePointer"
+	InputDevice "SlideKeyboard" "CoreKeyboard"
+EndSection

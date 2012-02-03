@@ -1,0 +1,50 @@
+--- atk-1.22.0.orig/Makefile.in	2008-03-10 08:30:11.000000000 +0100
++++ atk-1.22.0/Makefile.in	2010-12-10 16:10:24.239380634 +0100
+@@ -243,7 +243,7 @@
+ sharedstatedir = @sharedstatedir@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+-SUBDIRS = atk tests docs po
++SUBDIRS = atk
+ EXTRA_DIST = \
+ 	MAINTAINERS		\
+ 	atk-uninstalled.pc.in	\
+--- atk-1.22.0.orig/Makefile.am	2007-12-17 17:36:22.000000000 +0100
++++ atk-1.22.0/Makefile.am	2010-12-10 16:17:15.255377279 +0100
+@@ -1,6 +1,6 @@
+ # Process this file with automake to create Makefile.in.
+ 
+-SUBDIRS=atk tests docs po
++SUBDIRS=atk
+ 
+ EXTRA_DIST = 			\
+ 	MAINTAINERS		\
+--- atk-1.22.0.orig/Makefile.in	2010-12-10 18:56:15.011379161 +0100
++++ atk-1.22.0/Makefile.in	2010-12-10 18:57:34.439378866 +0100
+@@ -486,7 +486,7 @@
+ distdir: $(DISTFILES)
+ 	$(am__remove_distdir)
+ 	mkdir $(distdir)
+-	$(mkdir_p) $(distdir)/. $(distdir)/atk $(distdir)/docs $(distdir)/po
++	$(mkdir_p) $(distdir)/. $(distdir)/atk
+ 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
+ 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
+ 	list='$(DISTFILES)'; for file in $$list; do \
+diff -ruN atk-1.22.0/configure.in atk-1.22.0.mod//configure.in
+--- atk-1.22.0/configure.in	2010-12-10 19:11:38.335379754 +0100
++++ atk-1.22.0.mod//configure.in	2010-12-10 19:08:56.155380379 +0100
+@@ -197,14 +197,10 @@
+ 
+ AC_CONFIG_FILES([
+ Makefile
+-po/Makefile.in
+ atk.pc
+ atk-uninstalled.pc
+ atk/Makefile
+ atk/atk.rc
+-tests/Makefile
+-docs/Makefile
+-docs/version.xml
+ atk.spec
+ atk-zip.sh
+ ])

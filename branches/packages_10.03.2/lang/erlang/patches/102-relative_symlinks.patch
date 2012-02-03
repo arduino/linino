@@ -1,0 +1,25 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -809,9 +809,10 @@ install.Install:
+ # Install erlang base public files
+ #
+ install.bin:
++	cd $(BINDIR); \
+ 	for file in $(ERL_BASE_PUB_FILES); do \
+ 		rm -f $(BINDIR)/$$file; \
+-		${LN_S} $(ERLANG_BINDIR)/$$file $(BINDIR)/$$file; \
++		${LN_S} ../lib/erlang/bin/$$file .; \
+ 	done
+ 
+ #
+--- a/erts/etc/unix/Install.src
++++ b/erts/etc/unix/Install.src
+@@ -104,7 +104,7 @@ if [ -h epmd ]; then
+   /bin/rm -f epmd
+ fi
+ 
+-ln -s $ERL_ROOT/erts-%I_VSN%/bin/epmd epmd
++ln -s ../erts-%I_VSN%/bin/epmd epmd
+ 
+ cp -p $ERL_ROOT/erts-%I_VSN%/bin/run_erl .
+ cp -p $ERL_ROOT/erts-%I_VSN%/bin/to_erl .

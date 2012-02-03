@@ -1,0 +1,31 @@
+[begin] (Fluxbox-OpenWrt)
+      [exec] (xterm) {xterm}
+      [exec]   (vi) {xterm -e vi}
+      [exec]   (xmms) {xmms}
+      [exec]   (alsamixer) {xterm -e alsamixer}
+      [exec]   (vlc) {vlc}
+      [exec]   (xclock) {xclock}
+      [exec]   (xmag) {xmag}
+      [exec]   (xclock) {xclock}
+      [exec]   (xcalc) {xcalc}
+      [exec]   (xpdf) {xpdf}
+      [exec]   (top) {xterm -e top}
+[submenu] (fluxbox menu)
+      [config] (Configure)
+[submenu] (System Styles) {Choose a style...}
+      [stylesdir] (/usr/share/fluxbox/styles)
+[end]
+      [workspaces] (Workspace List)
+[submenu] (Tools)
+      [exec]   (fluxconf) {fluxconf}
+      [exec]   (fluxkeys) {fluxkeys}
+      [exec]   (fluxmenu) {fluxmenu}
+[end]
+      [commanddialog] (Fluxbox Command)
+      [reconfig] (Reload config)
+      [restart] (Restart)
+      [exec] (About) {(fluxbox -v; fluxbox -info | sed 1d) 2> /dev/null | xmessage -file - -center}
+      [separator]
+      [exit] (Exit)
+[end]
+[end]

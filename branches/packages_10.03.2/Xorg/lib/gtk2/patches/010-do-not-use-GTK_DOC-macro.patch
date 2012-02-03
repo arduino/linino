@@ -1,0 +1,11 @@
+--- gtk+-2.17.0.orig/configure.in	2009-05-04 06:43:43.000000000 +0200
++++ gtk+-2.17.0/configure.in	2010-12-10 16:28:28.359377713 +0100
+@@ -1929,7 +1929,7 @@
+ # Checks for gtk-doc and docbook-tools
+ ##################################################
+ 
+-GTK_DOC_CHECK([1.11])
++#GTK_DOC_CHECK([1.11])
+ 
+ AC_CHECK_PROG(DB2HTML, db2html, true, false)
+ AM_CONDITIONAL(HAVE_DOCBOOK, $DB2HTML)

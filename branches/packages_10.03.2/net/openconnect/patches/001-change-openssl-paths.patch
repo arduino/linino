@@ -1,0 +1,11 @@
+--- a/Makefile
++++ b/Makefile
+@@ -15,7 +15,7 @@ endif
+ # dir; there's no need to install it anywhere (we link it statically).
+ ifdef OPENSSL
+ SSL_CFLAGS += -I$(OPENSSL)/include
+-SSL_LDFLAGS += $(OPENSSL)/libssl.a $(OPENSSL)/libcrypto.a
++SSL_LDFLAGS += $(OPENSSL)/lib/libssl.a $(OPENSSL)/lib/libcrypto.a
+ else
+ ifeq ($(wildcard /usr/include/openssl),)
+ $(error "No OpenSSL in /usr/include/openssl. Cannot continue");

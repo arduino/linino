@@ -1,0 +1,18 @@
+--- a/logrotate.c
++++ b/logrotate.c
+@@ -567,9 +567,14 @@ int findNeedRotating(struct logInfo *log
+ 	    /* rotate if:
+ 	       1) the current weekday is before the weekday of the
+ 	       last rotation
++	       1) the day of the week is the same as the day of the week of
++	       the previous rotation but not the same day of the year
++	       this will rotate it on the same day every week, but not
++	       twice a day.
+ 	       2) more then a week has passed since the last
+ 	       rotation */
+-	    state->doRotate = ((now.tm_wday < state->lastRotated.tm_wday)
++	    state->doRotate = ((now.tm_wday == state->lastRotated.tm_wday
++			             && now.tm_yday != state->lastRotated.tm_yday)
+ 			       ||
+ 			       ((mktime(&now) -
+ 				 mktime(&state->lastRotated)) >

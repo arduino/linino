@@ -1,0 +1,13 @@
+[Desktop Entry]
+GenericName=Terminal
+Name=rxvt
+Encoding=UTF-8
+Version=1.0
+Comment=Terminal Emulator
+StartupNotify=false
+Exec=rxvt
+Icon=/usr/share/icons/rxvt.png
+Terminal=false
+Type=Application
+SingleInstance=true
+Categories=Utility

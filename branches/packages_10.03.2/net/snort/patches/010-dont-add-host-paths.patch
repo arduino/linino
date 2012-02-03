@@ -1,0 +1,43 @@
+--- a/configure
++++ b/configure
+@@ -20668,8 +20668,6 @@ cat >>confdefs.h <<\_ACEOF
+ #define PCAP_TIMEOUT_IGNORED
+ _ACEOF
+ 
+-
+-    extra_incl=-I/usr/include/pcap
+     ;;
+   *-hpux10*|*-hpux11*)
+ 
+@@ -26218,7 +26216,6 @@ if test "x$enable_flexresp" != "xno" -a 
+     fi
+ 
+     if test `libnet-config --cflags | wc -c` = "1"; then
+-        CPPFLAGS="${CPPFLAGS} -I/usr/local/include -I/sw/include"
+         LIBNET_CONFIG_BROKEN_CFLAGS="yes"
+     fi
+ 
+@@ -26229,7 +26226,6 @@ echo "$as_me: WARNING: libnet-config --l
+ echo "$as_me: WARNING: are using a precompiled package please notify the" >&2;}
+         { echo "$as_me:$LINENO: WARNING: maintainer." >&5
+ echo "$as_me: WARNING: maintainer." >&2;}
+-        LDFLAGS="${LDFLAGS} -L/usr/local/lib -L/sw/lib"
+         LIBS="${LIBS} -lnet"
+     fi
+ 
+@@ -26804,7 +26800,6 @@ if test "x$enable_react" != "xno" -a "x$
+     fi
+ 
+     if test `libnet-config --cflags | wc -c` = "1"; then
+-        CPPFLAGS="${CPPFLAGS} -I/usr/local/include -I/sw/include"
+         LIBNET_CONFIG_BROKEN_CFLAGS="yes"
+     fi
+ 
+@@ -26815,7 +26810,6 @@ echo "$as_me: WARNING: libnet-config --l
+ echo "$as_me: WARNING: are using a precompiled package please notify the" >&2;}
+         { echo "$as_me:$LINENO: WARNING: maintainer." >&5
+ echo "$as_me: WARNING: maintainer." >&2;}
+-        LDFLAGS="${LDFLAGS} -L/usr/local/lib -L/sw/lib"
+         LIBS="${LIBS} -lnet"
+     fi
+ 

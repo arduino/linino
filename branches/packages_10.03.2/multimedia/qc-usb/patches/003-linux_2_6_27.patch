@@ -1,0 +1,25 @@
+---
+--- a/qc-driver.c
++++ b/qc-driver.c
+@@ -2528,7 +2528,11 @@ static int qc_v4l_ioctl(struct video_dev
+ 			if (qcdebug&QC_DEBUGUSER) PDEBUG("VIDIOCGCAP");
+ 			memset(&b, 0, sizeof(b));
+ 			strcpy(b.name, "Logitech QuickCam USB");	/* Max 31 characters */
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27)
++			b.type      = VID_TYPE_CAPTURE | VID_TYPE_SUBCAPTURE;
++#else
+ 			b.type      = qc->vdev.type;
++#endif
+ 			b.channels  = 1;
+ 			b.audios    = 0;
+ 			b.maxwidth  = qc->sensor_data.maxwidth;
+@@ -3007,7 +3011,9 @@ static struct file_operations qc_v4l_fop
+ 
+ static struct video_device qc_v4l_template = {
+ 	name:		"QuickCam USB",
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27)
+ 	type:		VID_TYPE_CAPTURE | VID_TYPE_SUBCAPTURE,
++#endif
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,23)
+ 	hardware:	VID_HARDWARE_QCAM_USB,
+ #endif

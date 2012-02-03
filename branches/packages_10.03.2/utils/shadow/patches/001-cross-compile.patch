@@ -1,0 +1,131 @@
+--- a/configure.in
++++ b/configure.in
+@@ -135,67 +135,26 @@ ac_cv_libc_shadowgrp=yes,ac_cv_libc_shad
+ if test "$ac_cv_libc_shadowgrp" = "yes"; then
+ 	AC_DEFINE(HAVE_SHADOWGRP)
+ fi
+-fi
+ 
+-AC_MSG_CHECKING(location of shared mail directory)
+-for maildir in /var/spool/mail /var/mail /usr/spool/mail /usr/mail NONE; do
+-	if test "$maildir" = "NONE"; then
+-		AC_MSG_RESULT(None)
+-	elif test -d $maildir; then
+-		AC_DEFINE_UNQUOTED(MAIL_SPOOL_DIR, "$maildir")
+-		AC_MSG_RESULT($maildir)
+-		break
+-	fi
+-done
+-
+-AC_MSG_CHECKING(location of user mail file)
+-for mailfile in Mailbox mailbox Mail mail .mail NONE; do
+-	if test "$mailfile" = "NONE"; then
+-		AC_MSG_RESULT(None)
+-	elif test -f $HOME/$mailfile; then
+-		AC_DEFINE_UNQUOTED(MAIL_SPOOL_FILE, "$mailfile")
+-		AC_MSG_RESULT($mailfile)
+-		break
+-	fi
+-done
+-
+-AC_MSG_CHECKING(location of utmp)
+-for utmpdir in /var/run /var/adm /usr/adm /etc NONE; do
+-	if test "$utmpdir" = "NONE"; then
+-		AC_MSG_WARN(utmp file not found)
+-	elif test -f $utmpdir/utmp; then
+-		AC_DEFINE_UNQUOTED(_UTMP_FILE, "$utmpdir/utmp")
+-		AC_MSG_RESULT($utmpdir)
+-		break
+-	fi
+-done
+-
+-AC_MSG_CHECKING(location of faillog/lastlog/wtmp)
+-for logdir in /var/log /var/adm /usr/adm /etc; do
+-	if test -d $logdir; then
+-		AC_DEFINE_UNQUOTED(_WTMP_FILE, "$logdir/wtmp")
+-		AC_DEFINE_UNQUOTED(LASTLOG_FILE, "$logdir/lastlog")
+-		AC_DEFINE_UNQUOTED(FAILLOG_FILE, "$logdir/faillog")
+-		AC_MSG_RESULT($logdir)
+-		break
+-	fi
+-done
+-
+-AC_MSG_CHECKING(location of the passwd program)
+-if test -f /usr/bin/passwd; then
+-	passwd_dir=/usr/bin
+-else
+-	passwd_dir=/bin
++AC_CACHE_CHECK(for shadow password support,
++ac_cv_shadow_support, AC_TRY_COMPILE([#include <shadow.h>],
++[ struct spwd *spw = getspnam("root"); ],
++ac_cv_shadow_support=yes, ac_cv_shadow_support=no))
++
++if test "$ac_cv_shadow_support" = "yes"; then
++	AC_DEFINE(SHADOWPWD)
++fi
+ fi
+-AC_DEFINE_UNQUOTED(PASSWD_PROGRAM, "$passwd_dir/passwd")
+-AC_MSG_RESULT($passwd_dir)
+ 
+ dnl XXX - quick hack, should disappear before anyone notices :).
+-AC_DEFINE(SHADOWPWD)
+ AC_DEFINE(USG)
+ AC_DEFINE(USE_SYSLOG)
+ AC_DEFINE(RLOGIN)
+ AC_DEFINE(RUSEROK, 0)
++AC_DEFINE_UNQUOTED(_WTMP_FILE, "/var/log/wtmp")
++AC_DEFINE_UNQUOTED(LASTLOG_FILE, "/var/log/lastlog")
++AC_DEFINE_UNQUOTED(FAILLOG_FILE, "/var/log/faillog")
++AC_DEFINE_UNQUOTED(PASSWD_PROGRAM, "/usr/bin/passwd")
+ 
+ dnl Use our own version of getpass(), which handles long passwords
+ dnl (unlike many systems which have a limit of 8 characters), and can
+@@ -282,25 +241,8 @@ else
+ 	AC_MSG_RESULT(yes)
+ fi
+ 
+-ALL_LINGUAS="cs de el fr ja ko pl sv uk"
+-AM_GNU_GETTEXT
+-
+ AC_OUTPUT([
+ 	Makefile
+-	intl/Makefile
+-	po/Makefile.in
+-	doc/Makefile
+-	man/Makefile
+-	man/cs/Makefile
+-	man/de/Makefile
+-	man/fr/Makefile
+-	man/hu/Makefile
+-	man/id/Makefile
+-	man/it/Makefile
+-	man/ja/Makefile
+-	man/ko/Makefile
+-	man/pl/Makefile
+-	man/pt_BR/Makefile
+ 	libmisc/Makefile
+ 	lib/Makefile
+ 	src/Makefile
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -111,8 +111,8 @@ EXTRA_DIST = NEWS README TODO shadow.spe
+ 
+ AUTOMAKE_OPTIONS = 1.5 dist-bzip2 foreign
+ 
+-SUBDIRS = intl po man libmisc lib src \
+-	contrib debian doc etc
++SUBDIRS = libmisc lib src \
++	contrib debian etc
+ 
+ subdir = .
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -4,5 +4,5 @@ EXTRA_DIST = NEWS README TODO shadow.spe
+ 
+ AUTOMAKE_OPTIONS = 1.5 dist-bzip2 foreign
+ 
+-SUBDIRS = intl po man libmisc lib src \
+-	contrib debian doc etc
++SUBDIRS = libmisc lib src \
++	contrib debian etc

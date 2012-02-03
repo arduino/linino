@@ -1,0 +1,263 @@
+commit 57ad39ec62175eeea023ca802448ebb1605dca23
+Author: Andreas Kling <andreas.kling@nokia.com>
+Date:   Fri Nov 12 16:08:35 2010 +0100
+
+    Don't pack Harfbuzz structs, this causes unaligned access crashes.
+    
+    The memory-greediest structs have been reordered anyway, so the gain
+    from forcibly packing them is mostly negligible.
+    
+    Task-number: QTBUG-13395
+    Reviewed-by: Thiago Macieira <thiago.macieira@nokia.com>
+
+diff --git a/src/3rdparty/harfbuzz/src/harfbuzz-buffer.h b/src/3rdparty/harfbuzz/src/harfbuzz-buffer.h
+index 0d7c2c2..0d631b2 100644
+--- a/src/3rdparty/harfbuzz/src/harfbuzz-buffer.h
++++ b/src/3rdparty/harfbuzz/src/harfbuzz-buffer.h
+@@ -32,10 +32,6 @@
+ 
+ HB_BEGIN_HEADER
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(push, 1)
+-#endif
+-
+ typedef struct HB_GlyphItemRec_ {
+   HB_UInt     gindex;
+   HB_UInt     properties;
+@@ -93,10 +89,6 @@ hb_buffer_add_glyph( HB_Buffer buffer,
+ 		      HB_UInt    properties,
+ 		      HB_UInt    cluster );
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(pop)
+-#endif
+-
+ HB_END_HEADER
+ 
+ #endif /* HARFBUZZ_BUFFER_H */
+diff --git a/src/3rdparty/harfbuzz/src/harfbuzz-gdef-private.h b/src/3rdparty/harfbuzz/src/harfbuzz-gdef-private.h
+index 2a6d958..94e9b43 100644
+--- a/src/3rdparty/harfbuzz/src/harfbuzz-gdef-private.h
++++ b/src/3rdparty/harfbuzz/src/harfbuzz-gdef-private.h
+@@ -33,11 +33,6 @@
+ 
+ HB_BEGIN_HEADER
+ 
+-
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(push, 1)
+-#endif
+-
+ /* Attachment related structures */
+ 
+ struct  HB_AttachPoint_
+@@ -126,10 +121,6 @@ _HB_GDEF_LoadMarkAttachClassDef_From_LookupFlags( HB_GDEFHeader* gdef,
+ 						  HB_Lookup*     lo,
+ 						  HB_UShort      num_lookups );
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(pop)
+-#endif
+-
+ HB_END_HEADER
+ 
+ #endif /* HARFBUZZ_GDEF_PRIVATE_H */
+diff --git a/src/3rdparty/harfbuzz/src/harfbuzz-gdef.h b/src/3rdparty/harfbuzz/src/harfbuzz-gdef.h
+index f9a03dd..ccb6bf9 100644
+--- a/src/3rdparty/harfbuzz/src/harfbuzz-gdef.h
++++ b/src/3rdparty/harfbuzz/src/harfbuzz-gdef.h
+@@ -31,10 +31,6 @@
+ 
+ HB_BEGIN_HEADER
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(push, 1)
+-#endif
+-
+ /* GDEF glyph properties.  Note that HB_GDEF_COMPONENT has no corresponding
+  * flag in the LookupFlag field.     */
+ #define HB_GDEF_BASE_GLYPH  0x0002
+@@ -131,10 +127,6 @@ HB_Error  HB_GDEF_Build_ClassDefinition( HB_GDEFHeader*  gdef,
+ 					 HB_UShort*       glyph_array,
+ 					 HB_UShort*       class_array );
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(pop)
+-#endif
+-
+ HB_END_HEADER
+ 
+ #endif /* HARFBUZZ_GDEF_H */
+diff --git a/src/3rdparty/harfbuzz/src/harfbuzz-global.h b/src/3rdparty/harfbuzz/src/harfbuzz-global.h
+index bccd6a2..d4e6b46 100644
+--- a/src/3rdparty/harfbuzz/src/harfbuzz-global.h
++++ b/src/3rdparty/harfbuzz/src/harfbuzz-global.h
+@@ -39,10 +39,6 @@
+ #define HB_END_HEADER  /* nothing */
+ #endif
+ 
+-#if defined(__GNUC__) || defined(_MSC_VER)
+-#define HB_USE_PACKED_STRUCTS
+-#endif
+-
+ HB_BEGIN_HEADER
+ 
+ #ifndef FALSE
+diff --git a/src/3rdparty/harfbuzz/src/harfbuzz-gpos-private.h b/src/3rdparty/harfbuzz/src/harfbuzz-gpos-private.h
+index 39f3159..63ba907 100644
+--- a/src/3rdparty/harfbuzz/src/harfbuzz-gpos-private.h
++++ b/src/3rdparty/harfbuzz/src/harfbuzz-gpos-private.h
+@@ -32,10 +32,6 @@
+ 
+ HB_BEGIN_HEADER
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(push, 1)
+-#endif
+-
+ /* shared tables */
+ 
+ #define VR_X_PLACEMENT_DEVICE 0
+@@ -720,10 +716,6 @@ HB_INTERNAL void
+ _HB_GPOS_Free_SubTable( HB_GPOS_SubTable* st,
+ 			      HB_UShort     lookup_type );
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(pop)
+-#endif
+-
+ HB_END_HEADER
+ 
+ #endif /* HARFBUZZ_GPOS_PRIVATE_H */
+diff --git a/src/3rdparty/harfbuzz/src/harfbuzz-gsub-private.h b/src/3rdparty/harfbuzz/src/harfbuzz-gsub-private.h
+index 7eb329e..df0c3f6 100644
+--- a/src/3rdparty/harfbuzz/src/harfbuzz-gsub-private.h
++++ b/src/3rdparty/harfbuzz/src/harfbuzz-gsub-private.h
+@@ -32,10 +32,6 @@
+ 
+ HB_BEGIN_HEADER
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(push, 1)
+-#endif
+-
+ typedef union HB_GSUB_SubTable_  HB_GSUB_SubTable;
+ 
+ /* LookupType 1 */
+@@ -474,10 +470,6 @@ HB_INTERNAL void
+ _HB_GSUB_Free_SubTable( HB_GSUB_SubTable* st,
+ 			      HB_UShort     lookup_type );
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(pop)
+-#endif
+-
+ HB_END_HEADER
+ 
+ #endif /* HARFBUZZ_GSUB_PRIVATE_H */
+diff --git a/src/3rdparty/harfbuzz/src/harfbuzz-gsub.h b/src/3rdparty/harfbuzz/src/harfbuzz-gsub.h
+index b00df44..6e452bd 100644
+--- a/src/3rdparty/harfbuzz/src/harfbuzz-gsub.h
++++ b/src/3rdparty/harfbuzz/src/harfbuzz-gsub.h
+@@ -31,11 +31,6 @@
+ 
+ HB_BEGIN_HEADER
+ 
+-
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(push, 1)
+-#endif
+-
+ /* Lookup types for glyph substitution */
+ 
+ #define HB_GSUB_LOOKUP_SINGLE        1
+@@ -139,10 +134,6 @@ HB_Error  HB_GSUB_Register_Alternate_Function( HB_GSUBHeader*  gsub,
+ HB_Error  HB_GSUB_Apply_String( HB_GSUBHeader*   gsub,
+ 				HB_Buffer        buffer );
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(pop)
+-#endif
+-
+ HB_END_HEADER
+ 
+ #endif /* HARFBUZZ_GSUB_H */
+diff --git a/src/3rdparty/harfbuzz/src/harfbuzz-open.h b/src/3rdparty/harfbuzz/src/harfbuzz-open.h
+index 4ba6cf5..9ad7c98 100644
+--- a/src/3rdparty/harfbuzz/src/harfbuzz-open.h
++++ b/src/3rdparty/harfbuzz/src/harfbuzz-open.h
+@@ -30,10 +30,6 @@
+ 
+ HB_BEGIN_HEADER
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(push, 1)
+-#endif
+-
+ /* Use this if a feature applies to all glyphs */
+ #define HB_ALL_GLYPHS                    0xFFFF
+ 
+@@ -279,10 +275,6 @@ enum  HB_Type_
+ 
+ typedef enum HB_Type_  HB_Type;
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(pop)
+-#endif
+-
+ HB_END_HEADER
+ 
+ #endif /* HARFBUZZ_OPEN_H */
+diff --git a/src/3rdparty/harfbuzz/src/harfbuzz-shaper.h b/src/3rdparty/harfbuzz/src/harfbuzz-shaper.h
+index ab5c07a..470e27b 100644
+--- a/src/3rdparty/harfbuzz/src/harfbuzz-shaper.h
++++ b/src/3rdparty/harfbuzz/src/harfbuzz-shaper.h
+@@ -34,10 +34,6 @@
+ 
+ HB_BEGIN_HEADER
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(push, 1)
+-#endif
+-
+ /*
+    using anything else than signed or unsigned for bitfields in C is non standard,
+    but accepted by almost all compilers. And it gives a significant reduction in
+@@ -258,10 +254,6 @@ typedef struct HB_Font_ {
+     void *userData;
+ } HB_FontRec;
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(pop)
+-#endif
+-
+ typedef struct HB_ShaperItem_ HB_ShaperItem;
+ 
+ struct HB_ShaperItem_ {
+diff --git a/src/3rdparty/harfbuzz/src/harfbuzz-stream.h b/src/3rdparty/harfbuzz/src/harfbuzz-stream.h
+index a155cc2..cfbfb1c 100644
+--- a/src/3rdparty/harfbuzz/src/harfbuzz-stream.h
++++ b/src/3rdparty/harfbuzz/src/harfbuzz-stream.h
+@@ -30,10 +30,6 @@
+ 
+ HB_BEGIN_HEADER
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(push, 1)
+-#endif
+-
+ typedef struct HB_StreamRec_
+ {
+     HB_Byte*       base;
+@@ -42,10 +38,6 @@ typedef struct HB_StreamRec_
+     HB_UInt        pos;
+ } HB_StreamRec;
+ 
+-#ifdef HB_USE_PACKED_STRUCTS
+-#pragma pack(pop)
+-#endif
+-
+ HB_END_HEADER
+ 
+ #endif

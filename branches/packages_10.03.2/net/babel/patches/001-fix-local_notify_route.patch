@@ -1,0 +1,18 @@
+Sat Mar  5 19:13:54 CET 2011  Gabriel Kerneis <kerneis@pps.jussieu.fr>
+  * Fix unique id in local_notify_route
+diff -rN -u old-babeld/local.c new-babeld/local.c
+--- old-babeld/local.c	2011-03-14 14:37:03.000000000 +0100
++++ new-babeld/local.c	2011-03-14 14:37:03.000000000 +0100
+@@ -197,11 +197,10 @@
+         return;
+ 
+     rc = snprintf(buf, 512,
+-                  "%s route %s-%s-%lx prefix %s installed %s "
++                  "%s route %s-%lx prefix %s installed %s "
+                   "id %s metric %d refmetric %d via %s if %s\n",
+                   local_kind(kind),
+                   format_prefix(route->src->prefix, route->src->plen),
+-                  format_eui64(route->src->id),
+                   (unsigned long)route->neigh,
+                   format_prefix(route->src->prefix, route->src->plen),
+                   route->installed ? "yes" : "no",

@@ -1,0 +1,67 @@
+--- a/python/Makefile.am
++++ b/python/Makefile.am
+@@ -23,7 +23,7 @@ pylibdir = @PYTHON_LIB@
+ 
+ # Install as _DATA rather than _SCRIPTS because we don't want to make these
+ # executable (they don't have a #! line).
+-pylib_DATA = xapian.py xapian.pyc xapian.pyo
++pylib_DATA = xapian.py
+ 
+ pylib_LTLIBRARIES = _xapian.la
+ 
+@@ -53,20 +53,12 @@ _xapian_la_LIBADD = $(XAPIAN_LIBS) $(PYT
+ xapian.py: modern/xapian.py
+ 	cp `test -f modern/xapian.py || echo '$(srcdir)/'`modern/xapian.py .
+ 
+-# We "import _xapian" first so that if we fail to import the glue library
+-# we don't generate a broken xapian.pyc or xapian.pyo.
+-xapian.pyc: xapian.py _xapian$(PYTHON_SO)
+-	PYTHONPATH=. $(PYTHON) -c "import _xapian;import xapian"
+-
+-xapian.pyo: xapian.py _xapian$(PYTHON_SO)
+-	PYTHONPATH=. $(PYTHON) -O -c "import _xapian;import xapian"
+-
+ _xapian$(PYTHON_SO): _xapian.la
+ 	$(LIBTOOL) --config > libtoolconfig.tmp
+ 	. ./libtoolconfig.tmp; cp $$objdir/_xapian$(PYTHON_SO) .
+ 	rm -f libtoolconfig.tmp
+ 
+-CLEANFILES = _xapian$(PYTHON_SO) xapian.py xapian.pyc xapian.pyo testsuite.pyc
++CLEANFILES = _xapian$(PYTHON_SO) xapian.py testsuite.pyc
+ 
+ if MAINTAINER_MODE
+ # We need to explicitly set -outdir because on Windows, SWIG splits paths at
+--- a/python/Makefile.in
++++ b/python/Makefile.in
+@@ -292,14 +292,14 @@ pylibdir = @PYTHON_LIB@
+ 
+ # Install as _DATA rather than _SCRIPTS because we don't want to make these
+ # executable (they don't have a #! line).
+-pylib_DATA = xapian.py xapian.pyc xapian.pyo
++pylib_DATA = xapian.py
+ pylib_LTLIBRARIES = _xapian.la
+ AM_CPPFLAGS = -I$(PYTHON_INC)
+ AM_CXXFLAGS = $(SWIG_CXXFLAGS) $(XAPIAN_CXXFLAGS)
+ _xapian_la_LDFLAGS = -avoid-version -module -shrext "$(PYTHON_SO)" $(NO_UNDEFINED)
+ _xapian_la_SOURCES = modern/xapian_wrap.cc
+ _xapian_la_LIBADD = $(XAPIAN_LIBS) $(PYTHON_LIBS)
+-CLEANFILES = _xapian$(PYTHON_SO) xapian.py xapian.pyc xapian.pyo \
++CLEANFILES = _xapian$(PYTHON_SO) xapian.py \
+ 	testsuite.pyc $(am__append_2)
+ @MAINTAINER_MODE_FALSE@MAINTAINERCLEANFILES = $(BUILT_SOURCES)
+ all: $(BUILT_SOURCES)
+@@ -819,14 +819,6 @@ uninstall-local:
+ xapian.py: modern/xapian.py
+ 	cp `test -f modern/xapian.py || echo '$(srcdir)/'`modern/xapian.py .
+ 
+-# We "import _xapian" first so that if we fail to import the glue library
+-# we don't generate a broken xapian.pyc or xapian.pyo.
+-xapian.pyc: xapian.py _xapian$(PYTHON_SO)
+-	PYTHONPATH=. $(PYTHON) -c "import _xapian;import xapian"
+-
+-xapian.pyo: xapian.py _xapian$(PYTHON_SO)
+-	PYTHONPATH=. $(PYTHON) -O -c "import _xapian;import xapian"
+-
+ _xapian$(PYTHON_SO): _xapian.la
+ 	$(LIBTOOL) --config > libtoolconfig.tmp
+ 	. ./libtoolconfig.tmp; cp $$objdir/_xapian$(PYTHON_SO) .

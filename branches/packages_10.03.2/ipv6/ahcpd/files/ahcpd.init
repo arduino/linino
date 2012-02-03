@@ -1,0 +1,27 @@
+#!/bin/sh /etc/rc.common
+
+START=71
+PID_F="/var/run/ahcpd.pid"
+EXTRA_COMMANDS="status"
+EXTRA_HELP="        status Print ahcpd's status to the log file."
+
+. /lib/network/ahcp.sh
+
+start() {
+	mkdir -p /var/lib
+	config_load ahcpd
+	unset args
+	unset interfaces
+	config_foreach ahcp_config ahcpd
+	config_foreach ahcp_server ahcpd
+	[ -z "$interfaces" ] && return 0
+	eval "/usr/sbin/ahcpd -D -I $PID_F $args $interfaces"
+}
+
+stop() {
+	[ -f "$PID_F" ] && kill $(cat "$PID_F")
+}
+
+status() {
+	[ -f $PID_F ] && kill -USR1 $(cat $PID_F)
+}

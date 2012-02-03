@@ -1,0 +1,35 @@
+#!/bin/sh /etc/rc.common
+
+START=90
+
+start() {
+	local enable_cdp
+	local enable_fdp
+	local enable_sonmp
+	local enable_edp
+	local lldp_class
+	local lldp_location
+	local args="-d"
+	
+	config_load lldpd
+	config_get_bool enable_cdp config enable_cdp
+	config_get_bool enable_fdp config enable_fdp
+	config_get_bool enable_sonmp config enable_sonmp
+	config_get_bool enable_edp config enable_edp
+	config_get lldp_class config lldp_class
+	config_get lldp_location config lldp_location
+	
+	[ "$enable_cdp" == 1 ] && append args "-c"
+	[ "$enable_fdp" == 1 ] && append args "-f"
+	[ "$enable_sonmp" == 1 ] && append args "-s"
+	[ "$enable_edp" == 1 ] && append args "-e"
+	[ -n "$lldp_location" ] && append args "-L '$lldp_location'"
+	append args "-M ${lldp_class:-4}"
+	
+	eval start-stop-daemon -S -x lldpd -b -q -- $args
+}
+
+stop() {
+	start-stop-daemon -K -q -x lldpd
+	rm -f /var/run/lldpd.socket
+}

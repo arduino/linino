@@ -1,0 +1,136 @@
+--- a/auto/cc/conf
++++ b/auto/cc/conf
+@@ -135,7 +135,8 @@ if [ "$NGX_PLATFORM" != win32 ]; then
+     ngx_feature_test="char  buf[30]; buf[0] = '0';
+                       var(0, buf, \"%d\", 1);
+                       if (buf[0] != '1') return 1"
+-    . auto/feature
++    #. auto/feature
++    have=$ngx_feature_name . auto/have
+ 
+ 
+     if [ "$NGX_CC_NAME" = "ccc" ]; then
+@@ -151,7 +152,8 @@ if [ "$NGX_PLATFORM" != win32 ]; then
+         ngx_feature_test="char  buf[30]; buf[0] = '0';
+                           var(0, buf, \"%d\", 1);
+                           if (buf[0] != '1') return 1"
+-        . auto/feature
++        #. auto/feature
++        have=$ngx_feature_name . auto/have
+      fi
+ 
+ 
+--- a/auto/cc/name
++++ b/auto/cc/name
+@@ -13,12 +13,12 @@ if [ "$NGX_PLATFORM" != win32 ]; then
+     ngx_feature_test=
+     . auto/feature
+ 
+-    if [ $ngx_found = no ]; then
+-        echo
+-        echo $0: error: C compiler $CC is not found
+-        echo
+-        exit 1
+-    fi
++    #if [ $ngx_found = no ]; then
++    #    echo
++    #    echo $0: error: C compiler $CC is not found
++    #    echo
++    #    exit 1
++    #fi
+ 
+ fi
+ 
+--- a/auto/os/linux
++++ b/auto/os/linux
+@@ -49,7 +49,8 @@ ngx_feature_test="int efd = 0, fd = 1, n
+                   ee.data.ptr = NULL;
+                   efd = epoll_create(100);
+                   if (efd == -1) return 1;"
+-. auto/feature
++#. auto/feature
++have=$ngx_feature_name . auto/have
+ 
+ if [ $ngx_found = yes ]; then
+     have=NGX_HAVE_CLEAR_EVENT . auto/have
+@@ -73,7 +74,8 @@ ngx_feature_test="int s = 0, fd = 1;
+                   ssize_t n; off_t off = 0;
+                   n = sendfile(s, fd, &off, 1);
+                   if (n == -1 && errno == ENOSYS) return 1"
+-. auto/feature
++#. auto/feature
++have=$ngx_feature_name . auto/have
+ 
+ if [ $ngx_found = yes ]; then
+     CORE_SRCS="$CORE_SRCS $LINUX_SENDFILE_SRCS"
+@@ -94,7 +96,8 @@ ngx_feature_test="int s = 0, fd = 1;
+                   ssize_t n; off_t off = 0;
+                   n = sendfile(s, fd, &off, 1);
+                   if (n == -1 && errno == ENOSYS) return 1"
+-. auto/feature
++#. auto/feature
++have=$ngx_feature_name . auto/have
+ 
+ 
+ ngx_include="sys/prctl.h"; . auto/include
+@@ -108,7 +111,8 @@ ngx_feature_incs="#include <sys/prctl.h>
+ ngx_feature_path=
+ ngx_feature_libs=
+ ngx_feature_test="if (prctl(PR_SET_DUMPABLE, 1, 0, 0, 0) == -1) return 1"
+-. auto/feature
++#. auto/feature
++have=$ngx_feature_name . auto/have
+ 
+ 
+ # sched_setaffinity()
+--- a/auto/unix
++++ b/auto/unix
+@@ -117,7 +117,7 @@ ngx_feature_path=
+ ngx_feature_libs=
+ ngx_feature_test="char buf[1024]; long n; n = strerror_r(1, buf, 1024);
+                   if (n < 0 || n > 1024) return 1;"
+-. auto/feature
++#. auto/feature
+ 
+ 
+ # GNU style strerror_r() returns not length, but pointer
+@@ -130,7 +130,8 @@ ngx_feature_path=
+ ngx_feature_libs=
+ ngx_feature_test="char buf[1024]; long n; n = strerror_r(1, buf, 1024);
+                   if (n >= 0 && n < 1024) return 1;"
+-. auto/feature
++#. auto/feature
++have=$ngx_feature_name . auto/have
+ 
+ 
+ ngx_feature="localtime_r()"
+@@ -173,7 +174,8 @@ ngx_feature_test="void *p;
+                   p = mmap(NULL, 4096, PROT_READ|PROT_WRITE,
+                            MAP_ANON|MAP_SHARED, -1, 0);
+                   if (p == MAP_FAILED) return 1;"
+-. auto/feature
++#. auto/feature
++have=$ngx_feature_name . auto/have
+ 
+ 
+ ngx_feature='mmap("/dev/zero", MAP_SHARED)'
+@@ -188,7 +190,8 @@ ngx_feature_test='void *p; int  fd;
+                   fd = open("/dev/zero", O_RDWR);
+                   p = mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+                   if (p == MAP_FAILED) return 1;'
+-. auto/feature
++#. auto/feature
++have=$ngx_feature_name . auto/have
+ 
+ 
+ ngx_feature="System V shared memory"
+@@ -202,7 +205,8 @@ ngx_feature_test="int  id;
+                   id = shmget(IPC_PRIVATE, 4096, (SHM_R|SHM_W|IPC_CREAT));
+                   if (id == -1) return 1;
+                   shmctl(id, IPC_RMID, NULL);"
+-. auto/feature
++#. auto/feature
++have=$ngx_feature_name . auto/have
+ 
+ 
+ ngx_feature="struct msghdr.msg_control"

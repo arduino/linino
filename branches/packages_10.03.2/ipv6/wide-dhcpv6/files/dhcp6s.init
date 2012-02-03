@@ -1,0 +1,50 @@
+#!/bin/sh /etc/rc.common 
+
+get_ifname() {
+	local interface=$1
+	local ifname
+	scan_interfaces
+	config_get ifname "$interface" ifname
+	printf '%s\n' "$ifname"
+	return 0
+}
+
+start() {
+
+	[ ! -e /etc/dhcp6sctlkey ] && `dd if=/dev/urandom count=1 2> /dev/null | md5sum | cut -d" " -f1 > /etc/dhcp6sctlkey`
+
+	[ -e /var/run/dhcp6s.pid ] && return 0
+
+	include /lib/network
+
+	config_load "dhcp6s"
+	
+	local enabled
+	config_get_bool enabled basic enabled 0
+	[ $enabled -eq 0 ] && return 0
+	
+	logger starting dhcp6s
+	
+	local server_interface 
+	config_get server_interface basic interface
+	local server_ifname=$(get_ifname "$server_interface")
+	
+	local config_file
+	config_get config_file basic config_file
+
+	[ ! -e $config_file ] && return 1
+	
+	/usr/sbin/dhcp6s -c $config_file $server_ifname
+	
+	return 0
+	
+}
+
+stop() {
+
+	logger stopping dhcp6s
+	kill -TERM `cat /var/run/dhcp6s.pid`
+	return 0
+	
+}
+

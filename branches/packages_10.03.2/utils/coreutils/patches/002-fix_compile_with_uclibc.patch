@@ -1,0 +1,12 @@
+--- a/lib/pthread.in.h
++++ b/lib/pthread.in.h
+@@ -225,6 +225,9 @@
+ 
+ /* Approximate spinlocks with mutexes.  */
+ 
++#ifdef __UCLIBC__
++#define pthread_spinlock_t original_pthread_spinlock_t
++#endif
+ typedef pthread_mutex_t pthread_spinlock_t;
+ 
+ static inline int

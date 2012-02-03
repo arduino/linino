@@ -1,0 +1,13 @@
+Index: vte-0.17.4/termcaps/Makefile.am
+===================================================================
+--- vte-0.17.4.orig/termcaps/Makefile.am	2011-01-27 18:14:40.165998453 +0100
++++ vte-0.17.4/termcaps/Makefile.am	2011-01-27 18:14:51.964899492 +0100
+@@ -1,6 +1,6 @@
+ EXTRA_DIST = xterm xterm.baseline
+ termcapdir = $(pkgdatadir)/termcap
+-termcap_DATA = xterm $(VTE_DEFAULT_EMULATION)
+-$(VTE_DEFAULT_EMULATION): xterm
++termcap_DATA = $(VTE_DEFAULT_EMULATION)
++$(VTE_DEFAULT_EMULATION):
+ 	sed -e s,^xterm:,$(VTE_DEFAULT_EMULATION):,g \
+ 	    -e s,^xterm\|,$(VTE_DEFAULT_EMULATION)\|,g $< > $@

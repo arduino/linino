@@ -1,0 +1,11 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2009 OpenWrt.org
+START=94
+
+start() {
+	HOME=/root /usr/bin/mpdas -c /etc/mpdasrc &
+}
+
+stop() {
+	killall mpdas
+}

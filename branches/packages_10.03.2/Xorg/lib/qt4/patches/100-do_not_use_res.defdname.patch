@@ -1,0 +1,35 @@
+--- qt-everywhere-opensource-src-4.7.0-beta1/src/network/kernel/qhostinfo_unix.cpp	2010-05-04 02:43:25.000000000 +0200
++++ qt-everywhere-opensource-src-4.7.0-beta1/src/network/kernel/qhostinfo_unix.cpp.new	2010-06-20 14:43:48.565315801 +0200
+@@ -326,7 +326,7 @@
+ 
+ QString QHostInfo::localDomainName()
+ {
+-#if !defined(Q_OS_VXWORKS)
++#if 0
+     resolveLibrary();
+     if (local_res_ninit) {
+         // using thread-safe version
+--- qt-everywhere-opensource-src-4.7.0-beta1/src/qt3support/network/q3dns.cpp	2010-05-04 02:43:25.000000000 +0200
++++ qt-everywhere-opensource-src-4.7.0-beta1/src/qt3support/network/q3dns.cpp.new	2010-06-20 14:43:48.565315801 +0200
+@@ -2499,8 +2499,8 @@
+ 		break;
+ 	}
+ #  endif
+-	if ( *res.defdname )
+-	    theDomains->append( QString::fromLatin1( res.defdname ).lower().local8Bit() );
++//	if ( *res.defdname )
++//	    theDomains->append( QString::fromLatin1( res.defdname ).lower().local8Bit() );
+ #else
+ 	res_init();
+ 	int i;
+@@ -2515,8 +2515,8 @@
+ 		break;
+ 	}
+ #  endif
+-	if ( *_res.defdname )
+-	    theDomains->append( QString::fromLatin1( _res.defdname ).lower().local8Bit() );
++//	if ( *_res.defdname )
++//	    theDomains->append( QString::fromLatin1( _res.defdname ).lower().local8Bit() );
+ #endif
+ 
+ 	// the code above adds "0.0.0.0" as a name server at the slightest

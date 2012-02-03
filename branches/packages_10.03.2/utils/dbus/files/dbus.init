@@ -1,0 +1,27 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2007-2008 OpenWrt.org
+
+SSD=start-stop-daemon
+PIDF=/var/run/dbus.pid
+PROG=/usr/sbin/dbus-daemon
+ARGS=--system
+
+START=60
+start() {
+	if [ -x /usr/bin/dbus-uuidgen ]; then
+		mkdir -p /var/lib/dbus/
+		/usr/bin/dbus-uuidgen --ensure
+	fi
+
+	mkdir -p /var/run/dbus
+	$SSD -S -p $PIDF -q -x $PROG -- $ARGS
+}
+
+stop() {
+	$SSD -K -p $PIDF -q
+}
+
+status() {
+	ps | grep -q "^ *$(cat $PIDF 2>/dev/null) *.*$PROG"
+}
+

@@ -1,0 +1,12 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2010 OpenWrt.org
+
+START=99
+
+start() {
+	[ -x /usr/bin/pwrtray-backend ] && /usr/bin/pwrtray-backend -B -f
+}
+
+stop() {
+	killall -q pwrtray-backend
+}

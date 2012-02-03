@@ -1,0 +1,13 @@
+diff --git a/src/Makefile.in b/src/Makefile.in
+index eff87e9..3a9834e 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -126,7 +126,7 @@ libXaw7_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+ 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libXaw7_la_CFLAGS) \
+ 	$(CFLAGS) $(libXaw7_la_LDFLAGS) $(LDFLAGS) -o $@
+ @BUILD_XAW7_TRUE@am_libXaw7_la_rpath = -rpath $(libdir)
+-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
++DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir) -I$(top_builddir)/include
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+ am__depfiles_maybe = depfiles
+ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \

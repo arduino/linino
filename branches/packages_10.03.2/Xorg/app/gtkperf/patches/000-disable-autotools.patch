@@ -1,0 +1,19 @@
+diff -ruN gtkperf.orig/Makefile.in gtkperf/Makefile.in
+--- gtkperf.orig/Makefile.in	2005-06-07 18:09:49.000000000 +0200
++++ gtkperf/Makefile.in	2009-10-14 12:29:30.000000000 +0200
+@@ -40,10 +40,10 @@
+ 
+ top_builddir = .
+ 
+-ACLOCAL = @ACLOCAL@
+-AUTOCONF = @AUTOCONF@
+-AUTOMAKE = @AUTOMAKE@
+-AUTOHEADER = @AUTOHEADER@
++ACLOCAL = /bin/true
++AUTOCONF = /bin/true
++AUTOMAKE = /bin/true
++AUTOHEADER = /bin/true
+ 
+ INSTALL = @INSTALL@
+ INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+Binary files gtkperf.orig/.Makefile.in.swp and gtkperf/.Makefile.in.swp differ

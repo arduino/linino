@@ -1,0 +1,65 @@
+diff -ruN oprofile-0.9.4.bak/events//Makefile.am oprofile-0.9.4/events//Makefile.am
+--- oprofile-0.9.4.bak/events//Makefile.am	2008-02-22 17:17:48.000000000 +0100
++++ oprofile-0.9.4/events//Makefile.am	2011-02-22 18:04:40.058491002 +0100
+@@ -4,15 +4,15 @@
+ 	alpha/ev67/events alpha/ev67/unit_masks \
+ 	alpha/ev6/events alpha/ev6/unit_masks \
+ 	alpha/pca56/events alpha/pca56/unit_masks \
+-	i386/athlon/events i386/athlon/unit_masks \
+-	i386/core_2/events i386/core_2/unit_masks \
+-	i386/p4/events i386/p4-ht/events \
+-	i386/p4-ht/unit_masks i386/p4/unit_masks \
+-	i386/pii/events i386/pii/unit_masks \
+-	i386/piii/events i386/piii/unit_masks \
+-	i386/ppro/events i386/ppro/unit_masks \
+-	i386/p6_mobile/events i386/p6_mobile/unit_masks \
+-	i386/core/events i386/core/unit_masks \
++	x86/athlon/events x86/athlon/unit_masks \
++	x86/core_2/events x86/core_2/unit_masks \
++	x86/p4/events x86/p4-ht/events \
++	x86/p4-ht/unit_masks x86/p4/unit_masks \
++	x86/pii/events x86/pii/unit_masks \
++	x86/piii/events x86/piii/unit_masks \
++	x86/ppro/events x86/ppro/unit_masks \
++	x86/p6_mobile/events x86/p6_mobile/unit_masks \
++	x86/core/events x86/core/unit_masks \
+ 	ia64/ia64/events ia64/ia64/unit_masks \
+ 	ia64/itanium2/events ia64/itanium2/unit_masks \
+ 	ia64/itanium/events ia64/itanium/unit_masks \
+diff -ruN oprofile-0.9.4.bak/events//Makefile.in oprofile-0.9.4/events//Makefile.in
+--- oprofile-0.9.4.bak/events//Makefile.in	2008-07-18 01:14:45.000000000 +0200
++++ oprofile-0.9.4/events//Makefile.in	2011-02-22 18:04:32.208491002 +0100
+@@ -213,15 +213,15 @@
+ 	alpha/ev67/events alpha/ev67/unit_masks \
+ 	alpha/ev6/events alpha/ev6/unit_masks \
+ 	alpha/pca56/events alpha/pca56/unit_masks \
+-	i386/athlon/events i386/athlon/unit_masks \
+-	i386/core_2/events i386/core_2/unit_masks \
+-	i386/p4/events i386/p4-ht/events \
+-	i386/p4-ht/unit_masks i386/p4/unit_masks \
+-	i386/pii/events i386/pii/unit_masks \
+-	i386/piii/events i386/piii/unit_masks \
+-	i386/ppro/events i386/ppro/unit_masks \
+-	i386/p6_mobile/events i386/p6_mobile/unit_masks \
+-	i386/core/events i386/core/unit_masks \
++	x86/athlon/events x86/athlon/unit_masks \
++	x86/core_2/events x86/core_2/unit_masks \
++	x86/p4/events x86/p4-ht/events \
++	x86/p4-ht/unit_masks x86/p4/unit_masks \
++	x86/pii/events x86/pii/unit_masks \
++	x86/piii/events x86/piii/unit_masks \
++	x86/ppro/events x86/ppro/unit_masks \
++	x86/p6_mobile/events x86/p6_mobile/unit_masks \
++	x86/core/events x86/core/unit_masks \
+ 	ia64/ia64/events ia64/ia64/unit_masks \
+ 	ia64/itanium2/events ia64/itanium2/unit_masks \
+ 	ia64/itanium/events ia64/itanium/unit_masks \
+@@ -310,7 +310,7 @@
+ 
+ 
+ distdir: $(DISTFILES)
+-	$(mkdir_p) $(distdir)/alpha/ev4 $(distdir)/alpha/ev5 $(distdir)/alpha/ev6 $(distdir)/alpha/ev67 $(distdir)/alpha/pca56 $(distdir)/arm/armv6 $(distdir)/arm/mpcore $(distdir)/arm/xscale1 $(distdir)/arm/xscale2 $(distdir)/avr32 $(distdir)/i386/athlon $(distdir)/i386/core $(distdir)/i386/core_2 $(distdir)/i386/p4 $(distdir)/i386/p4-ht $(distdir)/i386/p6_mobile $(distdir)/i386/pii $(distdir)/i386/piii $(distdir)/i386/ppro $(distdir)/ia64/ia64 $(distdir)/ia64/itanium $(distdir)/ia64/itanium2 $(distdir)/mips/20K $(distdir)/mips/24K $(distdir)/mips/25K $(distdir)/mips/34K $(distdir)/mips/5K $(distdir)/mips/r10000 $(distdir)/mips/r12000 $(distdir)/mips/rm7000 $(distdir)/mips/rm9000 $(distdir)/mips/sb1 $(distdir)/mips/vr5432 $(distdir)/mips/vr5500 $(distdir)/ppc/7450 $(distdir)/ppc/e300 $(distdir)/ppc/e500 $(distdir)/ppc/e500v2 $(distdir)/ppc64/970 $(distdir)/ppc64/970MP $(distdir)/ppc64/cell-be $(distdir)/ppc64/pa6t $(distdir)/ppc64/power4 $(distdir)/ppc64/power5 $(distdir)/ppc64/power5+ $(distdir)/ppc64/power5++ $(distdir)/ppc64/power6 $(distdir)/rtc $(distdir)/x86-64/family10 $(distdir)/x86-64/hammer
++	$(mkdir_p) $(distdir)/alpha/ev4 $(distdir)/alpha/ev5 $(distdir)/alpha/ev6 $(distdir)/alpha/ev67 $(distdir)/alpha/pca56 $(distdir)/arm/armv6 $(distdir)/arm/mpcore $(distdir)/arm/xscale1 $(distdir)/arm/xscale2 $(distdir)/avr32 $(distdir)/x86/athlon $(distdir)/x86/core $(distdir)/x86/core_2 $(distdir)/x86/p4 $(distdir)/x86/p4-ht $(distdir)/x86/p6_mobile $(distdir)/x86/pii $(distdir)/x86/piii $(distdir)/x86/ppro $(distdir)/ia64/ia64 $(distdir)/ia64/itanium $(distdir)/ia64/itanium2 $(distdir)/mips/20K $(distdir)/mips/24K $(distdir)/mips/25K $(distdir)/mips/34K $(distdir)/mips/5K $(distdir)/mips/r10000 $(distdir)/mips/r12000 $(distdir)/mips/rm7000 $(distdir)/mips/rm9000 $(distdir)/mips/sb1 $(distdir)/mips/vr5432 $(distdir)/mips/vr5500 $(distdir)/ppc/7450 $(distdir)/ppc/e300 $(distdir)/ppc/e500 $(distdir)/ppc/e500v2 $(distdir)/ppc64/970 $(distdir)/ppc64/970MP $(distdir)/ppc64/cell-be $(distdir)/ppc64/pa6t $(distdir)/ppc64/power4 $(distdir)/ppc64/power5 $(distdir)/ppc64/power5+ $(distdir)/ppc64/power5++ $(distdir)/ppc64/power6 $(distdir)/rtc $(distdir)/x86-64/family10 $(distdir)/x86-64/hammer
+ 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
+ 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
+ 	list='$(DISTFILES)'; for file in $$list; do \
