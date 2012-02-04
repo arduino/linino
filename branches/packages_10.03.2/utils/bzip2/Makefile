@@ -17,37 +17,60 @@ PKG_MD5SUM:=00b516f4704d4a7cb50a1d97e6e8e15b
 
 include $(INCLUDE_DIR)/package.mk
 
+define Package/libbz2
+  SECTION:=libs
+  CATEGORY:=Libraries
+  DEPENDS:=
+  TITLE:=bzip2 library.
+  URL:=http://www.bzip.org/
+endef
+
+define Package/libbz2/description
+	bzip2 is a freely available, patent free, high-quality
+	data compressor. This packages provides libbz2 library.
+endef
+
 define Package/bzip2
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=
+  DEPENDS:=+libbz2
   TITLE:=bzip2 is a compression utility.
   URL:=http://www.bzip.org/
 endef
 
 define Package/bzip2/description
 	bzip2 is a freely available, patent free, high-quality
-	data compressor.
+	data compressor. This package provides the binary.
 endef
 
 TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += --prefix=/usr
 
 MAKE_FLAGS += \
+	-f Makefile-libbz2_so \
 	CFLAGS="$(TARGET_CFLAGS)" \
 	LDFLAGS="$(TARGET_LDLAGS)" \
-	bzip2 \
+	all
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_BUILD_DIR)/bzlib.h $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/libbz2.a $(1)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/libbz2.so.$(PKG_VERSION) $(1)/usr/lib/
+	$(LN) libbz2.so.$(PKG_VERSION) $(1)/usr/lib/libbz2.so.1.0
+	$(LN) libbz2.so.$(PKG_VERSION) $(1)/usr/lib/libbz2.so
+endef
+
+define Package/libbz2/install
+	$(INSTALL_DIR) $(1)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/libbz2.so.$(PKG_VERSION) $(1)/usr/lib/
+	$(LN) libbz2.so.$(PKG_VERSION) $(1)/usr/lib/libbz2.so.1.0
 endef
 
 define Package/bzip2/install
 	$(INSTALL_DIR) $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bzip2-shared $(1)/usr/bin/bzip2
 endef
 
+$(eval $(call BuildPackage,libbz2))
 $(eval $(call BuildPackage,bzip2))
