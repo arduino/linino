@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hplip
 PKG_VERSION:=3.9.12
-PKG_RELEASE:=1
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/hplip
@@ -25,7 +25,7 @@ define Package/hplip
   CATEGORY:=Utilities
   TITLE:=HP Linux Imaging and Printing
   URL:=http://sourceforge.net/projects/hplip/
-  DEPENDS+=+libjpeg +sane-libs +cups +libusb
+  DEPENDS+=+libjpeg +libtiff +libusb +cups +sane-libs
 endef
 
 define Package/hplip/description
@@ -68,6 +68,13 @@ define Package/hplip/install
 
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/usb/
 	$(INSTALL_BIN) ./files/20-hplip $(1)/etc/hotplug.d/usb/
+
+	$(INSTALL_DIR) $(1)/etc/sane.d/dll.d/
+	$(INSTALL_DATA) ./files/hplib.conf $(1)/etc/sane.d/dll.d/hplib
+endef
+
+define Package/hplip/conffiles
+/etc/hp/hplip.conf
 endef
 
 $(eval $(call BuildPackage,hplip))
