@@ -2,8 +2,8 @@
  configure.in |   46 ++++++++++++++++++++++++++++++++++------------
  1 file changed, 34 insertions(+), 12 deletions(-)
 
---- Python-2.6.4.orig/configure.in
-+++ Python-2.6.4/configure.in
+--- a/configure.in
++++ b/configure.in
 @@ -2653,6 +2653,7 @@ AC_CHECK_LIB(c, inet_aton, [$ac_cv_prog_
  # On Tru64, chflags seems to be present, but calling it will
  # exit Python

@@ -2,8 +2,8 @@
  setup.py |   30 ------------------------------
  1 file changed, 30 deletions(-)
 
---- Python-2.6.4.orig/setup.py
-+++ Python-2.6.4/setup.py
+--- a/setup.py
++++ b/setup.py
 @@ -270,36 +270,6 @@ class PyBuildExt(build_ext):
          ext_filename = os.path.join(
              self.build_lib,

@@ -2,8 +2,8 @@
  Makefile.pre.in |   25 +++++++++++++------------
  1 file changed, 13 insertions(+), 12 deletions(-)
 
---- Python-2.6.4.orig/Makefile.pre.in
-+++ Python-2.6.4/Makefile.pre.in
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
 @@ -175,6 +175,7 @@ UNICODE_OBJS=   @UNICODE_OBJS@
  
  PYTHON=		python$(EXE)

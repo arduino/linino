@@ -2,8 +2,8 @@
  setup.py |   15 ++-------------
  1 file changed, 2 insertions(+), 13 deletions(-)
 
---- Python-2.6.4.orig/setup.py
-+++ Python-2.6.4/setup.py
+--- a/setup.py
++++ b/setup.py
 @@ -309,9 +309,6 @@ class PyBuildExt(build_ext):
          return sys.platform
  
