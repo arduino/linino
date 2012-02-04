@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=msmtp
-PKG_VERSION:=1.4.23
+PKG_VERSION:=1.4.24
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/msmtp
-PKG_MD5SUM:=5fb7ae88186624cdb125d3efad3fdc16
+PKG_MD5SUM:=3ed704fbd3e7419cab5c65bb7928d9ba
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -67,7 +67,6 @@ endef
 
 CONFIGURE_ARGS += \
 	--disable-rpath \
-	--without-libssl32-prefix \
 	--without-libintl-prefix \
 	--without-libgsasl \
 	--without-libidn
@@ -76,8 +75,7 @@ MAKE_FLAGS :=
 
 ifeq ($(BUILD_VARIANT),ssl)
 	CONFIGURE_ARGS += \
-		--with-ssl=openssl \
-		--with-libssl-prefix="$(STAGING_DIR)/usr/include"
+		--with-ssl=openssl
 endif
 
 ifeq ($(BUILD_VARIANT),nossl)
