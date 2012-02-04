@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2010 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeradius2
 PKG_VERSION:=2.1.10
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=freeradius-server-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/freeradius/
@@ -89,7 +89,7 @@ endef
 
 define Package/freeradius2-mod-eap-mschapv2
   $(call Package/freeradius2/Default)
-  DEPENDS:=freeradius2-mod-eap
+  DEPENDS:=freeradius2-mod-eap +freeradius2-mod-mschap
   TITLE:=EAP/MS-CHAPv2 module
 endef
 
@@ -200,7 +200,7 @@ endef
 
 define Package/freeradius2-mod-ldap
   $(call Package/freeradius2/Default)
-  DEPENDS:=freeradius2 +libopenldap
+  DEPENDS:=freeradius2 +PACKAGE_freeradius2-mod-ldap:libopenldap
   TITLE:=LDAP module
 endef
 
