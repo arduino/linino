@@ -18,7 +18,7 @@
 "noip.com"		"http://[USERNAME]:[PASSWORD]@dynupdate.no-ip.com/nic/update?hostname=[DOMAIN]&myip=[IP]"
 
 #freedns.afraid.org is weird, you just need an update code, for which we use the password variable
-"freedns.afraid.org"	"http://freedns.afraid.org/dynamic/update.php?[PASSWORD]"
+"freedns.afraid.org"	"http://freedns.afraid.org/dynamic/update.php?[PASSWORD]&address=[IP]"
 
 #### ADD YOURS HERE! ######################################################################################
 #                                                                                                         #
