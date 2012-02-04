@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libftdi
-PKG_VERSION:=0.18
+PKG_VERSION:=0.19
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.intra2net.com/en/developer/libftdi/download/
-PKG_MD5SUM:=916f65fa68d154621fc0cf1f405f2726
+PKG_MD5SUM:=e6e25f33b4327b1b7aa1156947da45f3
 
 PKG_INSTALL:=1
 
@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libftdi
   SECTION:=libs
   CATEGORY:=Libraries
+  DEPENDS:=+libusb
   TITLE:=library to talk to FTDI chips
   URL:=http://www.intra2net.com/en/developer/libftdi/
 endef
