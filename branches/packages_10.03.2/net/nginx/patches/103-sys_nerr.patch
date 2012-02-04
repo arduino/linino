@@ -1,0 +1,13 @@
+--- a/src/os/unix/ngx_errno.c
++++ b/src/os/unix/ngx_errno.c
+@@ -7,6 +7,10 @@
+ #include <ngx_config.h>
+ #include <ngx_core.h>
+ 
++#ifndef NGX_SYS_NERR
++#define NGX_SYS_NERR  128
++#endif
++
+ 
+ /*
+  * The strerror() messages are copied because:
