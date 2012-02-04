@@ -1,4 +1,5 @@
-# Copyright (C) 2007 OpenWrt.org
+#
+# Copyright (C) 2007-2011 OpenWrt.org
 # Original port by FreeWRT project.
 #
 # 2007     Alexander Tsvyashchenko  Adapted FreeWRT port for OpenWRT (Trac ticket 2497)
@@ -13,7 +14,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=djbdns
 PKG_VERSION:=1.05
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 
 PKG_SOURCE:=${PKG_NAME}-${PKG_VERSION}.tar.gz
 PKG_SOURCE_URL:=http://cr.yp.to/djbdns/
@@ -134,6 +135,10 @@ endef
 define Package/djbdns-base/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/djbdns.conf $(1)/etc/config/djbdns
+endef
+
+define Package/djbdns-base/conffiles
+/etc/config/djbdns
 endef
 
 define Package/djbdns-dnscache/install
