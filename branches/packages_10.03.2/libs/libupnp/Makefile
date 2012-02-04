@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006-2010 OpenWrt.org
+#
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libupnp
-PKG_VERSION:=1.6.12
+PKG_VERSION:=1.6.14
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/pupnp
-PKG_MD5SUM:=d48938efe69d07142be8aaaeaa9a2d3e
+PKG_MD5SUM:=a0497cf15b3e15f7e7ede88b3d04861b
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -50,24 +50,6 @@ define Package/libupnp-sample/description
 TVcontrolpoint & tvdevice sample applications run inside /etc/upnp-tvdevice/
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--enable-shared \
-		--enable-static \
-	);
-endef
-
-TARGET_CFLAGS += $(FPIC)
-
-define Build/Compile/libupnp-sample
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		check
-	$(MAKE) -C $(PKG_BUILD_DIR)/upnp/sample \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		upnp_tv_device upnp_tv_ctrlpt
-endef
-
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/upnp $(1)/usr/include/
@@ -84,10 +66,9 @@ endef
 
 define Package/libupnp-sample/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/tv_device $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/tv_ctrlpt $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/upnp/sample/.libs/* $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/etc/upnp-tvdevice/web
-	$(CP) $(PKG_BUILD_DIR)/upnp/sample/web/* $(1)/etc/upnp-tvdevice
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/upnp/sample/web/* $(1)/etc/upnp-tvdevice
 endef
 
 $(eval $(call BuildPackage,libupnp))
