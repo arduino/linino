@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=shorewall6-lite
-PKG_VERSION:=4.4.5.4
-PKG_DIRECTORY:=4.4.5
-PKG_RELEASE:=1
+PKG_VERSION:=4.4.22.2
+PKG_DIRECTORY:=4.4.22
+PKG_RELEASE:=2
 
 PKG_SOURCE_URL:=http://www.shorewall.net/pub/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/ \
 	http://www1.shorewall.net/pub/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/ \
@@ -20,17 +20,17 @@ PKG_SOURCE_URL:=http://www.shorewall.net/pub/shorewall/4.4/shorewall-$(PKG_DIREC
 	http://shorewall.infohiiway.com/pub/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/ \
 	http://www.shorewall.com.ar/pub/shorewall/shorewall/4.4/shorewall-$(PKG_DIRECTORY)/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=498f622be657df38beec256876adabb6
+PKG_MD5SUM:=3ad7ba3790388bb562d3c937ba02fa31
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/shorewall6-lite
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+ip +ip6tables +ip6tables-utils
+  DEPENDS:=+ip +ip6tables
   TITLE:=Shorewall6 Lite
   URL:=http://www.shorewall.net/
-  SUBMENU:=firewall
+  SUBMENU:=Firewall
 endef
 
 define Package/shorewall6-lite/description

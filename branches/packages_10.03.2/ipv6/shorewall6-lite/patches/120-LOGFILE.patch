@@ -7,5 +7,4 @@
 -LOGFILE=
 +LOGFILE=/dev/null
  
- LOGFORMAT=
- 
+
