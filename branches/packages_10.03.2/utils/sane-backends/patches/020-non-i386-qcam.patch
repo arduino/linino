@@ -1,5 +1,5 @@
---- ./backend/qcam.c.orig	2009-12-01 06:11:04.000000000 +0000
-+++ ./backend/qcam.c	2009-12-01 15:12:40.000000000 +0000
+--- a/backend/qcam.c
++++ b/backend/qcam.c
 @@ -105,6 +105,17 @@
  
  #include "qcam.h"
