@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=yaddns
-PKG_VERSION:=1.1-rc2
+PKG_VERSION:=1.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.gna.org/yaddns/
-PKG_MD5SUM:=919a25bd66abf926e049f3afea619e19
+PKG_MD5SUM:=d8b6ed9bed61dabaa17188d831e352d1
 
 PKG_INSTALL:=1
 
