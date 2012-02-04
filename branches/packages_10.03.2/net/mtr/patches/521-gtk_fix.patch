@@ -11,9 +11,6 @@
 -                   AC_DEFINE(NO_GTK, 1, [Define if you don't have the GTK+ libraries available.])
 -                           GTK_OBJ="")
 -else
--	AC_DEFINE(NO_GTK)
--	GTK_OBJ=""
--fi
 +#if test "x$WANTS_GTK" = "xyes"; then
 +#        AM_PATH_GTK_2_0(2.6.0, CFLAGS="$CFLAGS $GTK_CFLAGS"
 +#                           LIBS="$LIBS $GTK_LIBS -lm",
@@ -21,8 +18,9 @@
 +#                   AC_DEFINE(NO_GTK, 1, [Define if you don't have the GTK+ libraries available.])
 +#                           GTK_OBJ="")
 +#else
-+	AC_DEFINE(NO_GTK)
-+	GTK_OBJ=""
+ 	AC_DEFINE(NO_GTK)
+ 	GTK_OBJ=""
+-fi
 +#fi
  
  AC_CHECK_FUNC(socket, , 

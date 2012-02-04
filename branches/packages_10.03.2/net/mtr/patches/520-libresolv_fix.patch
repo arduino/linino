@@ -8,8 +8,8 @@
 -  AC_CHECK_LIB(bind, res_mkquery, , 
 -   AC_CHECK_LIB(resolv, res_mkquery, ,
 -     AC_CHECK_LIB(resolv, __res_mkquery, , AC_MSG_ERROR(No resolver library found)))))
-+#AC_CHECK_FUNC(res_mkquery, , 
-+#  AC_CHECK_LIB(bind, res_mkquery, , 
++#AC_CHECK_FUNC(res_mkquery, ,
++#  AC_CHECK_LIB(bind, res_mkquery, ,
 +#   AC_CHECK_LIB(resolv, res_mkquery, ,
 +#     AC_CHECK_LIB(resolv, __res_mkquery, , AC_MSG_ERROR(No resolver library found)))))
  # This next line would override the just detected-or-not -lresolv. 
