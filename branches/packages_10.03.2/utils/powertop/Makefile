@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=powertop
 PKG_VERSION:=1.11
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.lesswatts.org/projects/powertop/download/
@@ -24,15 +24,13 @@ define Package/powertop
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=PowerTOP
-  DEFAULT:=n
-  DEPENDS:=+libncurses +libgcc
-  KCONFIG:=CONFIG_DEBUG_KERNEL=y CONFIG_TIMER_STATS=y
+  DEPENDS:=+libncurses
   URL:=http://www.lesswatts.org
 endef
 
 define Package/powertop/description
-PowerTOP is a Linux tool that helps you find those programs that are misbehaving
-while your computer is idle.
+ PowerTOP is a Linux tool that helps you find those programs that are 
+ misbehaving while your computer is idle.
 endef
 
 define Package/powertop/install
@@ -40,4 +38,3 @@ define Package/powertop/install
 endef
 
 $(eval $(call BuildPackage,powertop))
-
