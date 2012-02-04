@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nzbget
 PKG_VERSION:=0.7.0
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/nzbget
@@ -67,6 +67,10 @@ define Package/nzbget/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/nzbget $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/nzbget.conf.example $(1)/etc/nzbget.conf
+endef
+
+define Package/nzbget/conffiles
+/etc/nzbget.conf
 endef
 
 $(eval $(call BuildPackage,nzbget))
