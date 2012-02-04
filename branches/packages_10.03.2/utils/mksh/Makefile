@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2008 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 # Copyright (c) 2009 Thorsten Glaser <tg@mirbsd.org>
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mksh
 PKG_VERSION:=39
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-R$(PKG_VERSION).cpio.gz
 PKG_SOURCE_URL:=http://www.mirbsd.org/MirOS/dist/mir/mksh
@@ -74,6 +74,10 @@ define Package/mksh/install
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/dot.mkshrc $(1)/etc/mkshrc
 	$(INSTALL_DIR) $(1)/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mksh $(1)/bin/
+endef
+
+define Package/mksh/conffiles
+/etc/mkshrc
 endef
 
 $(eval $(call BuildPackage,mksh))
