@@ -1,6 +1,8 @@
---- a/builders/make/linux.mk
-+++ b/builders/make/linux.mk
-@@ -36,7 +36,7 @@ dynamic_exec_flags = $(FPIC) $(OPTIMIZAT
+Index: crtmpserver-r726/builders/make/linux.mk
+===================================================================
+--- crtmpserver-r726.orig/builders/make/linux.mk
++++ crtmpserver-r726/builders/make/linux.mk
+@@ -38,7 +38,7 @@ dynamic_exec_flags = $(FPIC) $(OPTIMIZAT
  PLATFORM_DEFINES = \
  	-DLINUX \
  	-DLITTLE_ENDIAN_BYTE_ALIGNED \
