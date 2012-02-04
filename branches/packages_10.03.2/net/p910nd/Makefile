@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=p910nd
 PKG_VERSION:=0.95
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/p910nd
@@ -45,11 +45,11 @@ MAKE_FLAGS += \
 
 define Package/p910nd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/$(PKG_NAME) $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/p910nd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DATA) ./files/$(PKG_NAME).conf $(1)/etc/config/$(PKG_NAME)
+	$(INSTALL_DATA) ./files/p910nd.config $(1)/etc/config/p910nd
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
+	$(INSTALL_BIN) ./files/p910nd.init $(1)/etc/init.d/p910nd
 endef
 
 $(eval $(call BuildPackage,p910nd))
