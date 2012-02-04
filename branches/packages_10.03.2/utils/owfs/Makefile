@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=owfs
-PKG_VERSION:=2.8p4
-PKG_RELEASE:=2
+PKG_VERSION:=2.8p13
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=beccd8765184b2abea0a3f28dc466ea3
+PKG_MD5SUM:=cc3e2542aed41c753bffca13f2a0a84e
 
-PKG_FIXUP:=libtool 
+PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -167,16 +167,12 @@ CONFIGURE_ARGS += \
 	--with-fuseinclude="$(STAGING_DIR)/usr/include" \
 	--with-fuselib="$(STAGING_DIR)/usr/lib" \
 	--enable-shared \
-	--disable-rpath \
 	--enable-zero \
 	--disable-parport \
-	--disable-ownfsd \
 	--disable-ownet \
 	--disable-owpython \
-	--disable-libow-perl \
 	--disable-owphp \
 	--disable-owtcl \
-	--disable-owside \
 	--disable-swig \
 
 CONFIGURE_VARS += \
@@ -185,13 +181,9 @@ CONFIGURE_VARS += \
 	lt_cv_sys_lib_search_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
 	shrext_cmds=".so" \
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		HOST_CPU="$(PKGARCH)" \
-		all install
-endef
+MAKE_FLAGS += \
+	CC="$(TARGET_CC)" \
+	HOST_CPU="$(PKGARCH)"
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(STAGING_DIR)/usr/include
