@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=darkstat
 PKG_VERSION:=3.0.714
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://dmr.ath.cx/net/darkstat
@@ -55,7 +55,7 @@ define Package/darkstat/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/darkstat.init $(1)/etc/init.d/darkstat
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_CONF) ./files/darkstat.conf $(1)/etc/config/darkstat
+	$(INSTALL_CONF) ./files/darkstat.config $(1)/etc/config/darkstat
 endef
 
 $(eval $(call BuildPackage,darkstat))
