@@ -1,35 +1,5 @@
 --- a/Makefile
 +++ b/Makefile
-@@ -8,7 +8,7 @@ L2TP_FEATURE_LAIC_SUPPORT=	y
- L2TP_FEATURE_LAOC_SUPPORT=	y
- L2TP_FEATURE_LNIC_SUPPORT=	y
- L2TP_FEATURE_LNOC_SUPPORT=	y
--L2TP_FEATURE_LOCAL_CONF_FILE=	y
-+#L2TP_FEATURE_LOCAL_CONF_FILE=	y
- #L2TP_FEATURE_LOCAL_STAT_FILE=	y
- 
- # Define USE_DMALLOC to enable dmalloc memory debugging
-@@ -55,17 +55,17 @@ endif
- # in the pppd subdirectory of the compiler's default search path
- # (e.g. /usr/include/pppd). but can be pointed to another directory if
- # desired.
--PPPD_VERSION=		2.4.5
-+#PPPD_VERSION=		2.4.5
- # PPPD_INCDIR=		/usr/include/pppd
- # PPPD_LIBDIR=		$(SYS_LIBDIR)/pppd/$(PPPD_VERSION)
- 
- # Points to readline install root. READLINE_DIR should have lib/ &
- # include/ subdirs If not defined, readline is assumed to be installed
- # in the standard places that the compiler looks.
--READLINE_DIR=		
-+#READLINE_DIR=		
- 
- # For cross-compiling
--CROSS_COMPILE=
-+#CROSS_COMPILE=
- 
- # END CONFIGURABLE SETTINGS
- 
 @@ -158,7 +158,7 @@ CFLAGS=			-I. -Iusl -Icli -isystem inclu
  				$(CPPFLAGS) $(CPPFLAGS.dmalloc) \
  				-DSYS_LIBDIR=$(SYS_LIBDIR)
@@ -63,6 +33,19 @@
  			$(MAKE) -C $(@:subdir-%=%) $(MFLAGS) EXTRA_CFLAGS="$(CPPFLAGS)"
  
  ifeq ($(L2TP_FEATURE_LOCAL_CONF_FILE),y)
+@@ -212,10 +212,10 @@ LDFLAGS.l2tpd+=		-lfl
+ 			$(YACC) -d -o l2tp_config_parse.c $<
+ 
+ l2tp_config_token.o:	l2tp_config_token.c
+-			$(CC) -I. -MMD -w $(CFLAGS.optimize) -c -DYY_NO_UNPUT $<
++			$(CC) -I. -MMD -w $(CFLAGS.optimize) -c $(CPPFLAGS) -DYY_NO_UNPUT $<
+ 
+ l2tp_config_parse.o:	l2tp_config_parse.c l2tp_config_parse.h
+-			$(CC) -I. -MMD -w $(CFLAGS.optimize) -c -DYY_NO_UNPUT $<
++			$(CC) -I. -MMD -w $(CFLAGS.optimize) -c $(CPPFLAGS) -DYY_NO_UNPUT $<
+ endif
+ 
+ # Compile without -Wall because rpcgen-generated code is full of warnings.
 @@ -265,9 +265,13 @@ TAGS:
  			@for d in $(SUBDIRS); do $(MAKE) -C $$d $(MFLAGS) $@; done
  			etags $(wildcard *.c) $(wildcard *.h)
