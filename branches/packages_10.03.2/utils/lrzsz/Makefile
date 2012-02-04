@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lrzsz
 PKG_VERSION:=0.12.20
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.ohse.de/uwe/releases/
@@ -29,7 +29,7 @@ endef
 define Package/lrzsz/description
 	Transfer files in your login sessions.
 	Very leightweight and straight forward.
-	You just need a terminal client that can do 
+	You just need a terminal client that can do
 	either X, Y or Z-modem file transfers.
 endef
 
@@ -42,8 +42,14 @@ define Package/lrzsz/install
 	(cd $(1)/usr/bin; \
 		ln -fs lrz lrx; \
 		ln -fs lrz lrb; \
+		ln -fs lrz rz; \
+		ln -fs lrz rx; \
+		ln -fs lrz rb; \
 		ln -fs lsz lsx; \
 		ln -fs lsz lsb; \
+		ln -fs lsz sz; \
+		ln -fs lsz sx; \
+		ln -fs lsz sb; \
 	);
 endef
 
