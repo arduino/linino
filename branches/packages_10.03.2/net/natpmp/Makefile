@@ -1,8 +1,15 @@
+#
+# Copyright (C) 2007-2011 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=natpmp
 PKG_VERSION:=0.2.3
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE_URL:=http://download.savannah.nongnu.org/releases/natpmp/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -45,6 +52,10 @@ define Package/natpmp/install
 	$(INSTALL_DATA) ./files/natpmp.config $(1)/etc/config/natpmp
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/natpmp.init $(1)/etc/init.d/natpmp
+endef
+
+define Package/natpmp/conffiles
+/etc/config/natpmp
 endef
 
 $(eval $(call BuildPackage,natpmp))
