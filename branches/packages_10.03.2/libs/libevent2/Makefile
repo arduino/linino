@@ -8,13 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libevent2
-PKG_VERSION:=2.0.12
+PKG_VERSION:=2.0.16
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libevent-$(PKG_VERSION)-stable
 PKG_SOURCE:=libevent-$(PKG_VERSION)-stable.tar.gz
-PKG_SOURCE_URL:=http://www.monkey.org/~provos/
-PKG_MD5SUM:=42986228baf95e325778ed328a93e070
+PKG_SOURCE_URL:=http://www.monkey.org/~provos/ \
+	@SF/levent
+PKG_MD5SUM:=899efcffccdb3d5111419df76e7dc8df
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -43,7 +44,7 @@ endef
 
 define Package/libevent2
   $(call Package/libevent2/Default)
-  TITLE+=  library (version 2.0)
+  TITLE+= library (version 2.0)
 endef
 
 define Package/libevent2/description
