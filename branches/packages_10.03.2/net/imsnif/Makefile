@@ -1,17 +1,19 @@
 # 
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
-# $ Id:$
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=imsnif
 PKG_VERSION:=0.04
-PKG_RELEASE:=2
-PKG_MD5SUM:=689c456f8edb77b9b4199a25514ac683
+PKG_RELEASE:=3
 
 PKG_SOURCE_URL:=@SF/im-snif
 PKG_SOURCE:=$(PKG_NAME)f_$(PKG_VERSION).tgz
+PKG_MD5SUM:=689c456f8edb77b9b4199a25514ac683
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -51,6 +53,10 @@ define Package/imsnif/install
 	$(INSTALL_BIN) ./files/imsnif $(1)/etc/init.d
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/imsnif $(1)/usr/bin
+endef
+
+define Package/imsnif/conffiles
+/etc/imsnif.conf
 endef
 
 $(eval $(call BuildPackage,imsnif))
