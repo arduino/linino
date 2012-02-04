@@ -4,7 +4,7 @@
  #include "utils.h"
  #include "error.h"
  
-+#define VERSION "1.4.4"
++#define VERSION "1.5.2"
 +
  static volatile int stop = 0;
  
@@ -13,12 +13,12 @@
  
  void version(void)
  {
--	fprintf(stderr, "HTTPing v" VERSION ", (C) 2003-2010 folkert@vanheusden.com\n");
-+	fprintf(stderr, "HTTPing v%s (C) 2003-2010 folkert@vanheusden.com\n", VERSION);
+-	fprintf(stderr, "HTTPing v" VERSION ", (C) 2003-2011 folkert@vanheusden.com\n");
++	fprintf(stderr, "HTTPing v%s (C) 2003-2011 folkert@vanheusden.com\n", VERSION);
  #ifndef NO_SSL
  	fprintf(stderr, "SSL support included\n");
  #endif
-@@ -606,7 +608,7 @@ int main(int argc, char *argv[])
+@@ -639,7 +641,7 @@ int main(int argc, char *argv[])
  	if (useragent)
  		sprintf(&request[strlen(request)], "User-Agent: %s\r\n", useragent);
  	else
