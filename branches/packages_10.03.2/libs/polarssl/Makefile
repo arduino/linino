@@ -1,5 +1,5 @@
-#
-# Copyright (C) 2006-2011 OpenWrt.org
+# 
+# Copyright (C) 2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=polarssl
-PKG_VERSION:=0.14.3
+PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-gpl.tgz
 PKG_SOURCE_URL:=http://polarssl.org/code/releases
-PKG_MD5SUM:=f1b2fe9087ab64d7ea40a276a3628583
+PKG_MD5SUM:=9e0ef5090070ae95363f201851ca62f2
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/cmake.mk
 
 define Package/polarssl/Default
   SUBMENU:=SSL
@@ -55,27 +56,25 @@ endef
 
 PKG_INSTALL:=1
 
-define Build/Configure
-endef
-
-TARGET_CFLAGS += $(FPIC)
-MAKE_FLAGS += OFLAGS="$(TARGET_CFLAGS)"
+CMAKE_OPTIONS += \
+	-DCMAKE_BUILD_TYPE:String="Release" \
+	-DUSE_SHARED_POLARSSL_LIBRARY:Bool=ON \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/include/polarssl $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/polarssl $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/lib/libpolarssl.{a,so} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpolarssl.so* $(1)/usr/lib/
 endef
 
 define Package/libpolarssl/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/lib/libpolarssl.so $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpolarssl.so* $(1)/usr/lib/
 endef
 
 define Package/polarssl-progs/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/polarssl_* $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,libpolarssl))
