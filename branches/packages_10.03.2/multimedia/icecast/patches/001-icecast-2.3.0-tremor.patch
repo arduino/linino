@@ -1,6 +1,5 @@
-diff -urN icecast-2.3.2/src/format_flac.c icecast-2.3.2.new/src/format_flac.c
---- icecast-2.3.2/src/format_flac.c	2006-09-21 03:49:16.000000000 +0200
-+++ icecast-2.3.2.new/src/format_flac.c	2008-09-29 19:43:54.000000000 +0200
+--- a/src/format_flac.c
++++ b/src/format_flac.c
 @@ -18,7 +18,7 @@
  #endif
  
@@ -10,9 +9,8 @@ diff -urN icecast-2.3.2/src/format_flac.c icecast-2.3.2.new/src/format_flac.c
  #include <string.h>
  
  typedef struct source_tag source_t;
-diff -urN icecast-2.3.2/src/format_midi.c icecast-2.3.2.new/src/format_midi.c
---- icecast-2.3.2/src/format_midi.c	2006-09-21 03:49:16.000000000 +0200
-+++ icecast-2.3.2.new/src/format_midi.c	2008-09-29 19:44:15.000000000 +0200
+--- a/src/format_midi.c
++++ b/src/format_midi.c
 @@ -18,7 +18,7 @@
  #endif
  
@@ -22,9 +20,8 @@ diff -urN icecast-2.3.2/src/format_midi.c icecast-2.3.2.new/src/format_midi.c
  #include <string.h>
  
  typedef struct source_tag source_t;
-diff -urN icecast-2.3.2/src/format_ogg.c icecast-2.3.2.new/src/format_ogg.c
---- icecast-2.3.2/src/format_ogg.c	2008-04-19 15:45:30.000000000 +0200
-+++ icecast-2.3.2.new/src/format_ogg.c	2008-09-29 19:44:32.000000000 +0200
+--- a/src/format_ogg.c
++++ b/src/format_ogg.c
 @@ -24,7 +24,7 @@
  #include <stdlib.h>
  #include <string.h>
@@ -34,9 +31,8 @@ diff -urN icecast-2.3.2/src/format_ogg.c icecast-2.3.2.new/src/format_ogg.c
  
  #include "refbuf.h"
  #include "source.h"
-diff -urN icecast-2.3.2/src/format_ogg.h icecast-2.3.2.new/src/format_ogg.h
---- icecast-2.3.2/src/format_ogg.h	2006-09-21 03:49:16.000000000 +0200
-+++ icecast-2.3.2.new/src/format_ogg.h	2008-09-29 19:44:38.000000000 +0200
+--- a/src/format_ogg.h
++++ b/src/format_ogg.h
 @@ -18,7 +18,7 @@
  #ifndef __FORMAT_OGG_H__
  #define __FORMAT_OGG_H__
@@ -46,9 +42,8 @@ diff -urN icecast-2.3.2/src/format_ogg.h icecast-2.3.2.new/src/format_ogg.h
  #include "refbuf.h"
  #include "format.h"
  
-diff -urN icecast-2.3.2/src/format_speex.c icecast-2.3.2.new/src/format_speex.c
---- icecast-2.3.2/src/format_speex.c	2007-10-04 04:07:57.000000000 +0200
-+++ icecast-2.3.2.new/src/format_speex.c	2008-09-29 19:44:56.000000000 +0200
+--- a/src/format_speex.c
++++ b/src/format_speex.c
 @@ -18,7 +18,7 @@
  #endif
  
@@ -58,9 +53,8 @@ diff -urN icecast-2.3.2/src/format_speex.c icecast-2.3.2.new/src/format_speex.c
  #include <speex/speex_header.h>
  
  typedef struct source_tag source_t;
-diff -urN icecast-2.3.2/src/format_theora.c icecast-2.3.2.new/src/format_theora.c
---- icecast-2.3.2/src/format_theora.c	2006-09-21 03:49:16.000000000 +0200
-+++ icecast-2.3.2.new/src/format_theora.c	2008-09-29 19:46:36.000000000 +0200
+--- a/src/format_theora.c
++++ b/src/format_theora.c
 @@ -18,7 +18,7 @@
  #endif
  
@@ -70,9 +64,8 @@ diff -urN icecast-2.3.2/src/format_theora.c icecast-2.3.2.new/src/format_theora.
  #include <theora/theora.h>
  
  typedef struct source_tag source_t;
-diff -urN icecast-2.3.2/src/format_vorbis.c icecast-2.3.2.new/src/format_vorbis.c
---- icecast-2.3.2/src/format_vorbis.c	2007-09-13 00:40:55.000000000 +0200
-+++ icecast-2.3.2.new/src/format_vorbis.c	2008-09-29 19:47:25.000000000 +0200
+--- a/src/format_vorbis.c
++++ b/src/format_vorbis.c
 @@ -18,8 +18,8 @@
  #endif
  
@@ -84,9 +77,8 @@ diff -urN icecast-2.3.2/src/format_vorbis.c icecast-2.3.2.new/src/format_vorbis.
  #include <memory.h>
  #include <string.h>
  
-diff -urN icecast-2.3.2/src/source.c icecast-2.3.2.new/src/source.c
---- icecast-2.3.2/src/source.c	2008-05-15 15:25:04.000000000 +0200
-+++ icecast-2.3.2.new/src/source.c	2008-09-29 19:47:40.000000000 +0200
+--- a/src/source.c
++++ b/src/source.c
 @@ -19,7 +19,7 @@
  #include <stdlib.h>
  #include <string.h>
@@ -96,28 +88,21 @@ diff -urN icecast-2.3.2/src/source.c icecast-2.3.2.new/src/source.c
  #include <errno.h>
  
  #ifndef _WIN32
---- icecast-2.3.2/configure	2008-05-27 02:21:57.000000000 +0200
-+++ icecast-2.3.2.new/configure	2008-09-29 20:05:43.000000000 +0200
-@@ -22199,7 +22199,7 @@
- if test "${xt_cv_lib_ogg+set}" = set; then
-   echo $ECHO_N "(cached) $ECHO_C" >&6
- else
--  OGG_LIBS="-logg"
-+  OGG_LIBS="-lvorbisidec"
+--- a/src/format_kate.c
++++ b/src/format_kate.c
+@@ -19,7 +19,7 @@
  
- #
- # check if the installed Ogg is sufficiently new.
-@@ -22261,7 +22261,7 @@
- cat confdefs.h >>conftest.$ac_ext
- cat >>conftest.$ac_ext <<_ACEOF
- /* end confdefs.h.  */
+ #include <stdlib.h>
+ #include <string.h>
 -#include <ogg/ogg.h>
 +#include <tremor/ogg.h>
- int
- main ()
- {
-@@ -22410,9 +22410,9 @@
- 
+ #ifdef HAVE_KATE
+ #include <kate/oggkate.h>
+ #endif
+--- a/m4/vorbis.m4
++++ b/m4/vorbis.m4
+@@ -38,9 +38,9 @@ if test "x$vorbis_prefix" != "x$ogg_pref
+             ])
  fi
  
 -VORBIS_LIBS="-lvorbis"
@@ -129,31 +114,42 @@ diff -urN icecast-2.3.2/src/source.c icecast-2.3.2.new/src/source.c
  
  xt_save_LIBS="$LIBS"
  xt_save_LDFLAGS="$LDFLAGS"
-@@ -22537,14 +22537,13 @@
- cat >>conftest.$ac_ext <<_ACEOF
- /* end confdefs.h.  */
+@@ -58,18 +58,6 @@ AC_TRY_LINK_FUNC(ogg_stream_init, [xt_li
+             )
+         ])
  
+-if test "x$xt_lib_vorbis" = "xok"; then
+-#
+-# Now check if the installed Vorbis is sufficiently new.
+-#
+-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
 -#include <vorbis/codec.h>
 -#include <vorbis/vorbisenc.h>
-+#include <tremor/ivorbiscodec.h>
- 
- int
- main ()
- {
- 
+-        ], [
 -struct ovectl_ratemanage_arg a;
-+/*struct ovectl_ratemanage_arg a;*/
+-])],,[xt_lib_vorbis="old version found"])
+-AC_MSG_RESULT([$xt_lib_vorbis])
+-fi
+ CPPFLAGS="$xt_save_CPPFLAGS"
+ LIBS="$xt_save_LIBS"
+ LDFLAGS="$xt_save_LDFLAGS"
+--- a/m4/ogg.m4
++++ b/m4/ogg.m4
+@@ -29,7 +29,7 @@ XIPH_GCC_WARNING([-I$ogg_prefix/include]
+       ])
+ AC_CACHE_CHECK([for libogg], xt_cv_lib_ogg,
+ [dnl
+-OGG_LIBS="-logg"
++OGG_LIBS="-lvorbisidec"
  
-   ;
-   return 0;
---- icecast-2.3.2/src/format_kate.c	2008-04-18 18:29:28.000000000 +0200
-+++ icecast-2.3.2.new/src/format_kate.c	2008-10-01 08:27:00.000000000 +0200
-@@ -19,7 +19,7 @@
- 
- #include <stdlib.h>
- #include <string.h>
--#include <ogg/ogg.h>
-+#include <tremor/ogg.h>
- #ifdef HAVE_KATE
- #include <kate/oggkate.h>
- #endif
+ #
+ # check if the installed Ogg is sufficiently new.
+@@ -42,7 +42,7 @@ LIBS="$LIBS $OGG_LIBS"
+ LDFLAGS="$LDFLAGS $OGG_LDFLAGS"
+ AC_TRY_LINK_FUNC(ogg_sync_init,
+     [ xt_cv_lib_ogg=ok ],
+-    [ AC_TRY_LINK([#include <ogg/ogg.h>],, 
++    [ AC_TRY_LINK([#include <tremor/ogg.h>],, 
+         [ xt_cv_lib_ogg="pre v1.0, needs updating" ],
+         [ xt_cv_lib_ogg="not found" ])
+     ])

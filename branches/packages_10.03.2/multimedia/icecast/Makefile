@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=icecast
 PKG_VERSION:=2.3.2
-PKG_RELEASE:=2
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.us.xiph.org/releases/icecast/
 PKG_MD5SUM:=ff516b3ccd2bcc31e68f460cd316093f
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -74,7 +74,7 @@ define Build/Compile
 		all install
 endef
 
-define Package/icecast/install	
+define Package/icecast/install
 	$(INSTALL_DIR) $(1)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/icecast.xml $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -82,6 +82,10 @@ define Package/icecast/install
 	$(INSTALL_DIR) $(1)/usr/share/icecast
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/icecast/admin $(1)/usr/share/icecast/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/icecast/web $(1)/usr/share/icecast/
+endef
+
+define Package/icecast/conffiles
+/etc/icecast.xml
 endef
 
 $(eval $(call BuildPackage,icecast))
