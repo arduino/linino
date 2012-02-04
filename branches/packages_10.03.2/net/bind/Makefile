@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bind
-PKG_VERSION:=9.7.2-P3
-PKG_RELEASE:=1
+PKG_VERSION:=9.8.0-P4
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= \
 	ftp://ftp.isc.org/isc/bind9/$(PKG_VERSION) \
 	http://www.mirrorservice.org/sites/ftp.isc.org/isc/bind9/$(PKG_VERSION)
-PKG_MD5SUM:=b4537cbae38b2daef36775bf49f33db9
+PKG_MD5SUM:=13e36e3f28dc1ce7675b45a4192e8389
 
 PKG_FIXUP:=libtool
 
@@ -112,11 +112,27 @@ endef
 define Package/bind-server/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/named $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc
-	$(CP) ./files/bind $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/bind
+	$(CP) \
+		./files/bind/db.0 \
+		./files/bind/db.127 \
+		./files/bind/db.255 \
+		./files/bind/db.local \
+		./files/bind/db.root \
+		$(1)/etc/bind/
+	$(CP) ./files/bind/named.conf.example $(1)/etc/bind/named.conf
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/named.init $(1)/etc/init.d/named
 	find $(1)/etc/bind/ -name ".svn" | xargs rm -rf
+endef
+
+define Package/bind-server/conffiles
+/etc/bind/db.0
+/etc/bind/db.127
+/etc/bind/db.255
+/etc/bind/db.local
+/etc/bind/db.root
+/etc/bind/named.conf
 endef
 
 define Package/bind-client/install

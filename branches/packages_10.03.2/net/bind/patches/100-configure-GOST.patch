@@ -1,0 +1,13 @@
+--- a/configure.in	2011-06-29 19:14:25.053420788 +0400
++++ b/configure.in	2011-06-29 19:26:34.860280457 +0400
+@@ -699,7 +699,9 @@
+ 		[AC_MSG_RESULT(yes)
+ 		have_gost="yes"],
+ 		[AC_MSG_RESULT(no)
+-		have_gost="no"])
++		have_gost="no"],
++		[AC_MSG_RESULT(assuming target platform has no GOST support)
++		have_gost="no"])
+ 		case $have_gost in
+ 		yes)
+ 			OPENSSL_GOST="yes"
