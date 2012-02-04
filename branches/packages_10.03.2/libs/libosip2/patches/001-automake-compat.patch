@@ -5,4 +5,4 @@
 +
  EXTRA_DIST = README BUGS FEATURES HISTORY autogen.sh libosip2.pc.in
  
- SUBDIRS = include src scripts help platform debian
+ SUBDIRS = include src scripts help platform
