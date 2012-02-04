@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vnstat
 PKG_VERSION:=1.11
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://humdi.net/vnstat
@@ -80,13 +80,13 @@ endef
 
 define Package/vnstat/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/vnstat $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/vnstat $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/vnstatd $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/vnstatd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/vnstat.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_CONF) ./files/vnstat-uci.conf $(1)/etc/config/vnstat
+	$(INSTALL_CONF) ./files/vnstat.config $(1)/etc/config/vnstat
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/vnstat.init $(1)/etc/init.d/vnstat
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
@@ -95,7 +95,7 @@ endef
 
 define Package/vnstati/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/vnstati $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/vnstati $(1)/usr/bin/
 endef
 
 define Package/vnstat/postinst
