@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=htop
-PKG_VERSION:=0.9
-PKG_RELEASE:=1
+PKG_VERSION:=1.0
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=7c5507f35f363f3f40183a2ba3c561f8
+PKG_MD5SUM:=325112ca7947ea1f6d6441f631e00384
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
@@ -33,6 +33,11 @@ define Package/htop/description
  it allows to scroll the list vertically and horizontally to
  see all processes and their full command lines.
 endef
+
+CONFIGURE_ARGS += \
+	--disable-native-affinity \
+	--disable-unicode \
+	--enable-hwloc
 
 CONFIGURE_VARS += \
 	ac_cv_file__proc_stat=yes \
