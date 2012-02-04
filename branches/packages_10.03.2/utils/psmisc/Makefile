@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=psmisc
-PKG_VERSION:=22.13
-PKG_RELEASE:=1
+PKG_VERSION:=22.14
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/psmisc
-PKG_MD5SUM:=e2c339e6b65b730042084023784a729e
+PKG_MD5SUM:=ba3f4e971895c92bba7770d81c981503
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
