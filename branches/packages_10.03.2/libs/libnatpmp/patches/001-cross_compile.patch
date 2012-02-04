@@ -1,17 +1,9 @@
 --- a/Makefile
 +++ b/Makefile
-@@ -4,14 +4,15 @@
- # (c) 2007-2011 Thomas Bernard
- # http://miniupnp.free.fr/libnatpmp.html
- 
--OS = $(shell uname -s)
-+OS = Linux
- CC = gcc
- INSTALL = install
- 
+@@ -11,7 +11,8 @@ INSTALL = install
  # APIVERSION is used in soname
  APIVERSION = 1
- LDFLAGS = -Wl,--no-undefined
+ #LDFLAGS = -Wl,--no-undefined
 -CFLAGS = -O -fPIC -Wall -DENABLE_STRNATPMPERR
 +COPTS = -O
 +CFLAGS = $(COPTS) -fPIC -Wall -DENABLE_STRNATPMPERR
