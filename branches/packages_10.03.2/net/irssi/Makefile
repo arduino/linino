@@ -15,7 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://irssi.org/files/
 PKG_MD5SUM:=1dcb3f511b88df94b0c996f36668c7da
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
+PKG_INSTALL:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -81,9 +82,14 @@ ifeq ($(BUILD_VARIANT),nossl)
 		--disable-ssl
 endif
 
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/include/irssi
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/irssi/* $(1)/usr/include/irssi/
+endef
+
 define Package/irssi/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/fe-text/$(PKG_NAME) $(1)/usr/bin/$(PKG_NAME)
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/$(PKG_NAME)
 endef
 
 Package/irssi-nossl/install = $(Package/irssi/install)
