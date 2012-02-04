@@ -29,7 +29,7 @@ setup_interface_wing() {
 
 	config_load wireless
 	config_foreach wing_list_interfaces wifi-iface
-	
+
 	# start click router
 	if [ "$hwmodes" = "" -o "$freqs" = "" -o "$ifnames" = "" -o "$hwaddrs" = "" ]; then
 		logger -t "$config" "No raw interfaces available. Exiting."
@@ -49,6 +49,7 @@ setup_interface_wing() {
 
 	local hwaddr=$(echo $hwaddrs | sed 's/ .*//');
 	local ipaddr=$(printf "$prefix.%d.%d.%d" $(echo $hwaddr | awk -F: '{printf "0x%s 0x%s 0x%s",$4,$5,$6}'))
+	local bcast="$prefix.255.255.255"
 	local netmask=255.0.0.0
 
 	if ! wing_template_available "profile" "$profile"; then
@@ -77,6 +78,7 @@ setup_interface_wing() {
 		-m "$hwmodes" -c "$freqs" -n "$ifnames" -a "$hwaddrs" $dbg \
 		| sed -e "s/__XR_IFNAME__/$iface/g" \
 		| sed -e "s/__XR_IP__/$ipaddr/g" \
+		| sed -e "s/__XR_BCAST__/$bcast/g" \
 		| sed -e "s/__XR_NM__/$netmask/g" \
 		| sed -e "s/__XR_PERIOD__/$period/g" \
 		| sed -e "s/__XR_TAU__/$tau/g" > /tmp/$iface.click
@@ -104,16 +106,22 @@ setup_interface_wing() {
 
 	ps | grep /usr/bin/click | grep -v grep | awk '{print $1}' > /var/run/$iface.pid
 
-	ifconfig "$iface" "$ipaddr" netmask "$netmask" 
+	ifconfig "$iface" "$ipaddr" netmask "$netmask"
+        route -n | grep -q '^0.0.0.0' || {
+        route add default dev "$iface"
+       }
+
+	uci_set_state network $config ifname "$iface"
 	uci_set_state network $config ipaddr "$ipaddr"
 	uci_set_state network $config netmask "$netmask"
+	uci_set_state network $config gateway "0.0.0.0"
 
 	env -i ACTION="ifup" INTERFACE="$config" DEVICE="$iface" PROTO=wing /sbin/hotplug-call "iface" &
 
-} 
+}
 
 wing_template_available() { # prefix, template, default
-	local template="/etc/wing/$1.$2.click" 
+	local template="/etc/wing/$1.$2.click"
 	[ ! -f $template ] && {
 		return 1
 	}
@@ -132,7 +140,7 @@ wing_list_interfaces() {
 	[ "$channel" = "0" -o "$channel" = "auto" ] && {
 		logger -t "$device" "Channel not specified. Ignoring."
 		return 0
-	}		
+	}
 	freq=$(iwlist $ifname freq | sed -n "s/^.*Channel 0*$channel : \([0-9.]*\).*/\1/p" | awk '{print $1*1000}')
 	hwaddr=$(/sbin/ifconfig $ifname 2>&1 | sed -n 's/^.*HWaddr \([0-9A-Za-z\-]*\).*/\1/p' | sed -e 's/\-/:/g' | cut -c1-17)
 	freqs=${freqs:+"$freqs "}$freq

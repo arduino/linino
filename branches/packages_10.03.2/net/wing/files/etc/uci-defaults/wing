@@ -1,26 +1,19 @@
+uci delete network.mesh
 uci set network.mesh=interface
 uci set network.mesh.proto=wing
-uci set network.mesh.profile=bulk
-uci set network.mesh.rc=minstrel
-uci set network.mesh.ls=fcfs
-uci set network.mesh.metric=wcett
-uci set network.mesh.prefix=6
-uci set network.mesh.period=10000
-uci set network.mesh.tau=100000
-uci set network.mesh.debug=false
 
-cfg=$(uci add firewall zone)
-uci set firewall.$cfg.name="mesh"
-uci set firewall.$cfg.input="ACCEPT"
-uci set firewall.$cfg.output="ACCEPT"
-uci set firewall.$cfg.forward="REJECT"
-uci set firewall.$cfg.masq="1"
+uci add firewall zone
+uci set firewall.@zone[-1].name="mesh"
+uci set firewall.@zone[-1].input="ACCEPT"
+uci set firewall.@zone[-1].output="ACCEPT"
+uci set firewall.@zone[-1].forward="REJECT"
+uci set firewall.@zone[-1].masq="1"
 
-cfg=$(uci add firewall forwarding)
-uci set firewall.$cfg.src="lan"
-uci set firewall.$cfg.dest="mesh"
+uci add firewall forwarding
+uci set firewall.@forwarding[-1].src="lan"
+uci set firewall.@forwarding[-1].dest="mesh"
 
-cfg=$(uci add firewall forwarding)
-uci set firewall.$cfg.src="mesh"
-uci set firewall.$cfg.dest="wan"
+uci add firewall forwarding
+uci set firewall.@forwarding[-1].src="mesh"
+uci set firewall.@forwarding[-1].dest="wan"
 
