@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -43,10 +43,11 @@ define Package/libgsl/install
 endef
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include/gsl $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/include/gsl $(1)/usr/lib $(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/gsl/*.h $(1)/usr/include/gsl
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgsl.* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgslcblas.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/gsl.pc $(1)/usr/lib/pkgconfig/
 endef
 
 $(eval $(call BuildPackage,libgsl))
