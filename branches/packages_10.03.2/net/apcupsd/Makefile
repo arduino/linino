@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apcupsd
 PKG_VERSION:=3.14.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/apcupsd
@@ -59,6 +59,16 @@ define Package/apcupsd/install
 	$(INSTALL_BIN) ./files/apccontrol $(1)/etc/apcupsd/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN)	./files/apcupsd.init $(1)/etc/init.d/apcupsd
+endef
+
+define Package/apcupsd/conffiles
+/etc/apcupsd/apcupsd.conf
+/etc/apcupsd/apcupsd_mail.conf
+/etc/apcupsd/changeme
+/etc/apcupsd/commfailure
+/etc/apcupsd/commok
+/etc/apcupsd/offbattery
+/etc/apcupsd/onbattery
 endef
 
 $(eval $(call BuildPackage,apcupsd))
