@@ -5,7 +5,7 @@ START=50
 
 SERVICE_USE_PID=1
 
-PROG="uacctd"
+PROG="sfacctd"
 DEFAULT="/etc/default/$PROG"
 COMMAND="/usr/sbin/$PROG"
 
