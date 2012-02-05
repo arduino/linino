@@ -56,13 +56,11 @@ define Package/httping-nossl/description
 	This package is built without SSL support.
 endef
 
-MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)"
+TARGET_CFLAGS += -D_GNU_SOURCE
 
 ifeq ($(BUILD_VARIANT),nossl)
-	MAKE_FLAGS += \
-		SSL="no" \
-		CFLAGS+="-DNO_SSL"
+	MAKE_FLAGS += SSL="no"
+	TARGET_CFLAGS += -DNO_SSL
 endif
 
 define Package/httping/install
