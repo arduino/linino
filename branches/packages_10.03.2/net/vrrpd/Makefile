@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vrrpd
 PKG_VERSION:=1.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/vrrpd
@@ -33,11 +33,7 @@ define Package/vrrpd/description
 	routers.
 endef
 
-define Package/vrrpd/conffiles
-/etc/default/vrrpd
-endef
-
-define Build/Compile	
+define Build/Compile
 	$(call Build/Compile/Default, \
 		DBG_OPT="" \
 		MAIN_OPT="$(TARGET_CFLAGS)" \
@@ -45,13 +41,17 @@ define Build/Compile
 	)
 endef
 
-define Package/vrrpd/install	
+define Package/vrrpd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/vrrpd $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc/default
-	$(INSTALL_DATA) ./files/vrrpd.default $(1)/etc/default/vrrpd
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/vrrpd.config $(1)/etc/config/vrrpd
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/vrrpd.init $(1)/etc/init.d/vrrpd
+endef
+
+define Package/vrrpd/conffiles
+/etc/config/vrrpd
 endef
 
 $(eval $(call BuildPackage,vrrpd))
