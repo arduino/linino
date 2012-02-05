@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lldpd
 PKG_VERSION:=0.3
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.luffy.cx/lldpd/
@@ -54,6 +54,10 @@ define Package/lldpd/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/lldpctl $(1)/usr/sbin/
 	$(INSTALL_BIN) ./files/lldpd.init $(1)/etc/init.d/lldpd
 	$(INSTALL_DATA) ./files/lldpd.config $(1)/etc/config/lldpd
+endef
+
+define Package/lldpd/conffiles
+/etc/config/lldpd
 endef
 
 $(eval $(call BuildPackage,lldpd))
