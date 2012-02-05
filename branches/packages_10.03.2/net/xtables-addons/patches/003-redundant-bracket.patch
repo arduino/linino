@@ -1,6 +1,6 @@
---- a/configure.ac	2010-11-05 19:42:22.000000000 +0100
-+++ b/configure.ac	2011-01-08 17:36:12.000000000 +0100
-@@ -28,7 +28,7 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -31,7 +31,7 @@ PKG_CHECK_MODULES([libmnl], [libmnl >= 1
  
  AC_ARG_WITH([xtlibdir],
  	AS_HELP_STRING([--with-xtlibdir=PATH],
