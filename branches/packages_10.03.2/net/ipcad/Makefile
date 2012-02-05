@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ipcad
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcap $(LIBRPC_DEPENDS)
+  DEPENDS:=+libpcap
   TITLE:=listens for traffic on the specified interfaces
   URL:=http://lionet.info/ipcad/
 endef
@@ -50,8 +50,6 @@ CONFIGURE_VARS += \
 	ac_cv_header_ifaddrs_h=no \
 	ac_cv_header_linux_netfilter_ipv4_ip_queue_h=no \
 	ac_cv_header_linux_netfilter_ipv4_ipt_ULOG_h=no \
-
-TARGET_LDFLAGS += $(LIBRPC)
 
 define Package/ipcad/install
 	$(INSTALL_DIR) $(1)/etc

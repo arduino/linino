@@ -23,7 +23,7 @@ define Package/unfs3
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Filesystem
-  DEPENDS:=+portmap $(LIBRPC_DEPENDS)
+  DEPENDS:=+portmap
   TITLE:=User-space NFSv3 Server
   URL:=http://unfs3.sourceforge.net/
 endef
@@ -36,7 +36,6 @@ define Package/unfs3/description
 endef
 
 TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
-TARGET_LDFLAGS += $(LIBRPC)
 
 define Package/unfs3/install
 	$(INSTALL_DIR) $(1)/etc/init.d

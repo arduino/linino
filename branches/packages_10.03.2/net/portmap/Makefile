@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/portmap
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libwrap $(LIBRPC_DEPENDS)
+  DEPENDS:=+libwrap
   TITLE:=The RPC Portmapper
   URL:=http://neil.brown.name/portmap/
 endef
@@ -35,7 +35,7 @@ endef
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -DHOSTS_ACCESS -DFACILITY=LOG_DAEMON -DIGNORE_SIGCHLD" \
 	RPCUSER="nobody" \
-	LDLIBS="$(TARGET_LDFLAGS) -lwrap $(LIBRPC)" \
+	LDLIBS="$(TARGET_LDFLAGS) -lwrap" \
 	all
 
 define Package/portmap/install

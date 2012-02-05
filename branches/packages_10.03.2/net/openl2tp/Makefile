@@ -16,7 +16,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/openl2tp
 PKG_MD5SUM:=e3d08dedfb9e6a9a1e24f6766f6dadd0
 
-PKG_BUILD_DEPENDS:=libreadline libncurses USE_UCLIBC:librpc
+PKG_BUILD_DEPENDS:=libreadline libncurses
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_PARALLEL:=1
 PPPD_VERSION:=2.4.4
@@ -46,7 +46,7 @@ define Package/openl2tp-full
 $(call Package/openl2tp/Default)
   TITLE+=(full)
   VARIANT:=full
-  DEPENDS+=+portmap +libreadline +libncurses $(LIBRPC_DEPENDS)
+  DEPENDS+=+portmap +libreadline +libncurses
 endef
 
 define Package/openl2tp-full/description
@@ -85,7 +85,7 @@ ifeq ($(BUILD_VARIANT),full)
   MAKE_FLAGS += \
 	L2TP_FEATURE_RPC_MANAGEMENT=y \
 	L2TP_FEATURE_LOCAL_STAT_FILE=y \
-	LIBS.dmalloc="-L$(STAGING_DIR)/usr/lib $(LIBRPC)" \
+	LIBS.dmalloc="-L$(STAGING_DIR)/usr/lib" \
 
 endif
 ifeq ($(BUILD_VARIANT),mini)

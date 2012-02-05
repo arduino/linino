@@ -25,7 +25,7 @@ define Build/Compile
 	$(TARGET_CC) \
 		-I$(STAGING_DIR)/usr/include \
 		$(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-		$(LIBRPC) -lsocks -o \
+		-lsocks -o \
 		$(PKG_BUILD_DIR)/transocks \
 		$(PKG_BUILD_DIR)/transocks.c
 endef
@@ -35,7 +35,7 @@ define Package/transocks
   CATEGORY:=Network
   SUBMENU:=Web Servers/Proxies
   TITLE:=Transparent SOCKSifying proxy
-  DEPENDS:=+libsocks $(LIBRPC_DEPENDS)
+  DEPENDS:=+libsocks
 endef
 
 define Package/transocks/install

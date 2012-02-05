@@ -21,7 +21,7 @@ define Package/nfs-server
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Filesystem
-  DEPENDS:=+portmap $(LIBRPC_DEPENDS)
+  DEPENDS:=+portmap
   TITLE:=User Space NFS server
   URL:=http://packages.debian.org/nfs-user-server
 endef
@@ -35,7 +35,6 @@ define Build/Compile
 endef
 
 TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
-TARGET_LDFLAGS += $(LIBRPC)
 
 define Package/nfs-server/install
 	$(INSTALL_DIR) $(1)/etc

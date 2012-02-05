@@ -21,12 +21,10 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION).dfsg.1
 include $(INCLUDE_DIR)/package.mk
 
 TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
-TARGET_LDFLAGS += $(LIBRPC)
 
 define Package/lsof
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=$(LIBRPC_DEPENDS)
   TITLE:=LiSt Open Files - a diagnostic tool
   URL:=http://people.freebsd.org/~abe/
 endef
