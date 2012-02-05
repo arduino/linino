@@ -1,16 +1,17 @@
-# Copyright (C) 2007-2009 OpenWrt.org
+#
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-#
 # Author: Carlos Cesario
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=imspector
 PKG_VERSION:=0.9
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.imspector.org/downloads
