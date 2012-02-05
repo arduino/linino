@@ -1,11 +1,12 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
+
 START=50
 
 start() {
-	/usr/bin/netserver
+	service_start /usr/bin/netserver
 }
 
 stop() {
-	killall netserver
+	service_stop /usr/bin/netserver
 }
