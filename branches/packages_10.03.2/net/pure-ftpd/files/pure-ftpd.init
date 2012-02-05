@@ -1,10 +1,14 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2006-2011 OpenWrt.org
+
 START=50
 
-SSD=start-stop-daemon
-PIDF=/var/run/pure-ftpd.pid
-PROG=/usr/sbin/pure-ftpd
+# TODO: allow multiple instance to run with different pid-files
+
+# XXX: pure-ftpd changes it's name to 'pure-ftpd (SERVER) ...'
+SERVICE_MATCH_EXEC=
+SERVICE_MATCH_NAME=1
+SERVICE_USE_PID=1
 
 append_bool() {
 	local section="$1"
@@ -24,10 +28,13 @@ append_string() {
 	[ -n "$_val" ] && append args "$3 $_val"
 }
 
-start_service() {
+start_instance() {
 	local section="$1"
-	args=""
 
+	config_get_bool enabled "$section" 'enabled' '1'
+	[ $enabled -gt 0 ] || return 1
+
+	args=""
 	append_string "$section" trustedgid "-a"
 	append_string "$section" syslogfacility "-f"
 	append_string "$section" fortunesfile "-F"
@@ -87,23 +94,14 @@ start_service() {
 	append_string "$section" port "-S"
 	append_string "$section" authentication "-l"
 
-	config_get_bool "enabled" "$section" "enabled" '1'
-	[ "$enabled" -gt 0 ] && $SSD -S -p $PIDF -q -x $PROG -- -g $PIDF -B $args
-}
-
-stop_service() {
-	killall pure-ftpd 2>&1 > /dev/null
-
-	# FIXME: Fix Busybox start-stop-daemon to work with multiple PIDs
-	# $SSD -K -p $PIDF -q
+	service_start /usr/sbin/pure-ftpd -B $args
 }
 
 start() {
 	config_load "pure-ftpd"
-	config_foreach start_service "pure-ftpd"
+	config_foreach start_instance "pure-ftpd"
 }
 
 stop() {
-	config_load "pure-ftpd"
-	config_foreach stop_service "pure-ftpd"
+	service_stop /usr/sbin/pure-ftpd
 }
