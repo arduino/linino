@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nrpe
 PKG_VERSION:=2.12
-PKG_RELEASE:=2
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/nagios
@@ -34,42 +34,6 @@ define Package/nrpe/description
 	the remote Linux/Unix machines.
 endef
 
-define Package/nrpe/postinst
-#!/bin/sh
-
-id=50
-name=nagios
-home=/var/run/nagios
-shell=/bin/false
-
-# do not change below
-# check if we are on real system
-if [ -z "$${IPKG_INSTROOT}" ]; then
-        # create copies of passwd and group, if we use squashfs
-        rootfs=`mount |awk '/root/ { print $$5 }'`
-        if [ "$$rootfs" = "squashfs" ]; then
-                if [ -h /etc/group ]; then
-                        rm /etc/group
-                        cp -p /rom/etc/group /etc/group
-                fi
-                if [ -h /etc/passwd ]; then
-                        rm /etc/passwd
-                        cp -p /rom/etc/passwd /etc/passwd
-                fi
-        fi
-fi
-
-echo ""
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then
-        echo "adding group $$name to /etc/group"
-        echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group
-fi
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
-        echo "adding user $$name to /etc/passwd"
-        echo "$${name}:x:$${id}:$${id}:$${name}:$${home}:$${shell}" >> $${IPKG_INSTROOT}/etc/passwd
-fi
-endef
-
 CONFIGURE_ARGS += \
 	--with-ssl="$(STAGING_DIR)/usr" \
 	--with-ssl-lib="$(STAGING_DIR)/usr/lib"
@@ -81,6 +45,10 @@ define Package/nrpe/install
 	$(INSTALL_DATA) ./files/nrpe.cfg $(1)/etc/nrpe.cfg
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/nrpe $(1)/usr/sbin
 	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/$(PKG_NAME)
+endef
+
+define Package/nrpe/conffiles
+/etc/nrpe.cfg
 endef
 
 $(eval $(call RequireCommand,openssl, \
