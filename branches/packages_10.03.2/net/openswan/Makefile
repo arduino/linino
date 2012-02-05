@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=openswan
 PKG_VERSION:=2.6.37
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.openswan.org/download
@@ -37,7 +37,7 @@ $(call Package/openswan/Default)
   SECTION:=net
   CATEGORY:=Network
   TITLE+= (daemon)
-  DEPENDS+= +kmod-openswan +libgmp +ip
+  DEPENDS+= +libgmp +ip
 endef
 
 define Package/openswan/description
@@ -87,17 +87,24 @@ endef
 define Package/openswan/conffiles
 /etc/ipsec.conf
 /etc/ipsec.secrets
+/etc/config/ipsec
 endef
 
 define Package/openswan/install
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(CP) ./files/ipsec.init $(1)/etc/init.d/ipsec
+	$(CP) ./files/ipsec.conf $(1)/etc/ipsec.conf
+	$(CP) ./files/ipsec.secrets $(1)/etc/ipsec.secrets
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) ./files/ipsec.config $(1)/etc/config/ipsec
 	rm -rf $(1)/usr/share
 	rm -rf $(1)/usr/man
 	rm -rf $(1)/var
 	rm -rf $(1)/etc/rc.d
 	find $(1) -name \*.old | xargs rm -rf
+	$(INSTALL_DIR) $(1)/lib/upgrade/keep.d
+	$(INSTALL_DATA) files/ipsec.upgrade $(1)/lib/upgrade/keep.d/ipsec
 endef
 
 $(eval $(call BuildPackage,openswan))
