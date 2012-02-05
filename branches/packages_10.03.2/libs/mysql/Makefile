@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mysql
 PKG_VERSION:=5.1.53
-PKG_RELEASE:=2
+PKG_RELEASE:=6
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=\
@@ -29,7 +29,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libmysqlclient/Default
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+zlib
+  DEPENDS:=+uclibcxx +zlib
   TITLE:=MySQL client library
   URL:=http://dev.mysql.com/
 endef
@@ -37,7 +37,7 @@ endef
 define Package/mysql-server/Default
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+zlib +libmysqlclient +uclibcxx
+  DEPENDS:=+libmysqlclient +libncurses +libreadline
   TITLE:=MySQL Server
   URL:=http://dev.mysql.com/
   SUBMENU:=database
@@ -193,6 +193,10 @@ define Package/mysql-server/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/share/mysql/fill_help_tables.sql $(1)/usr/share/mysql/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/share/mysql/mysql_system_tables.sql $(1)/usr/share/mysql/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/share/mysql/mysql_system_tables_data.sql $(1)/usr/share/mysql/
+endef
+
+define Package/mysql-server/conffiles
+/etc/my.cnf
 endef
 
 $(eval $(call BuildPackage,mysql-server))
