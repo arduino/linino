@@ -19,7 +19,7 @@ PKG_BUILD_DEPENDS:=libopenssl
 
 PKG_FIXUP:=autoreconf
 PKG_MACRO_PATHS:=cmulocal config ../cmulocal ../config
-PKG_AUTOMAKE_PATHS:=. saslauthd
+PKG_AUTOMAKE_PATHS:=. saslauthd sasldb
 PKG_REMOVE_FILES:=aclocal.m4 saslauthd/aclocal.m4
 
 include $(INCLUDE_DIR)/package.mk
