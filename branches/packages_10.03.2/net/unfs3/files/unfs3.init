@@ -1,17 +1,12 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
+
 START=50
 
 start() {
-	/usr/sbin/unfsd
+	service_start /usr/sbin/unfsd
 }
 
 stop() {
-	killall unfsd
-}
-
-restart() {
-	stop
-	sleep 1
-	start
+	service_stop /usr/sbin/unfsd
 }

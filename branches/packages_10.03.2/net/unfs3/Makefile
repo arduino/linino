@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=unfs3
 PKG_VERSION:=0.9.22
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
@@ -45,6 +45,10 @@ define Package/unfs3/install
 	$(INSTALL_DATA) ./files/$(PKG_NAME).exports $(1)/etc/exports
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/unfsd $(1)/usr/sbin
+endef
+
+define Package/unfs3/conffiles
+/etc/exports
 endef
 
 $(eval $(call BuildPackage,unfs3))
