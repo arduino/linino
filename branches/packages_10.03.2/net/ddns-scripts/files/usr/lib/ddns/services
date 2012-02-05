@@ -40,3 +40,17 @@
 
 # dnsExit.com free dynamic DNS update url
 "dnsexit.com"		"http://www.dnsexit.com/RemoteUpdate.sv?login=[USERNAME]&password=[PASSWORD]&host=[DOMAIN]&myip=[IP]"
+
+# OVH
+"ovh.com" "http://[USERNAME]:[PASSWORD]@www.ovh.com/nic/update?system=dyndns&hostname=[DOMAIN]&myip=[IP]"
+
+# dns-o-matic is a free service by opendns.com for updating multiple hosts and
+# dynamic dns services in one api call. To update all your configured services
+# at once, use "all.dnsomatic.com as the hostname.
+"dnsomatic.com" "http://[USERNAME]:[PASSWORD]@updates.dnsomatic.com/nic/update?hostname=[DOMAIN]&myip=[IP]"
+
+# 3322.org
+"3322.org"  "http://[USERNAME]:[PASSWORD]@members.3322.org/dyndns/update?system=dyndns&hostname=[DOMAIN]&myip=[IP]"
+
+# namecheap.com
+"namecheap.com" "http://dynamicdns.park-your-domain.com/update?host=[USERNAME]&domain=[DOMAIN]&password=[PASSWORD]&ip=[IP]"
