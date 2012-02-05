@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rp-pppoe
 PKG_VERSION:=3.10
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://roaringpenguin.com/files/download
@@ -29,8 +29,8 @@ define Package/rp-pppoe/Default
 endef
 
 define Package/rp-pppoe/Default/description
-	Dubbed RP-PPPoE, this open-source product is ideal for Linux users with
-	a DSL "modem" whose Internet service provider uses PPPoE.
+  Dubbed RP-PPPoE, this open-source product is ideal for Linux users with
+  a DSL "modem" whose Internet service provider uses PPPoE.
 endef
 
 define Package/rp-pppoe-client
@@ -39,8 +39,9 @@ define Package/rp-pppoe-client
 endef
 
 define Package/rp-pppoe-client/description
-        $(call Package/rp-pppoe/Default/description)
-        This package contains pppoe-connect.
+$(call Package/rp-pppoe/Default/description)
+ .
+ This package contains pppoe-connect.
 endef
 
 define Package/rp-pppoe-relay
@@ -49,8 +50,9 @@ define Package/rp-pppoe-relay
 endef
 
 define Package/rp-pppoe-relay/description
-        $(call Package/rp-pppoe/Default/description)
-        This package contains pppoe-relay.
+$(call Package/rp-pppoe/Default/description)
+ .
+ This package contains pppoe-relay.
 endef
 
 define Package/rp-pppoe-server
@@ -64,8 +66,9 @@ define Package/rp-pppoe-server/conffiles
 endef
 
 define Package/rp-pppoe-server/description
-        $(call Package/rp-pppoe/Default/description)
-        This package contains pppoe-server.
+$(call Package/rp-pppoe/Default/description)
+ .
+ This package contains pppoe-server.
 endef
 
 define Package/rp-pppoe-sniff
@@ -74,8 +77,9 @@ define Package/rp-pppoe-sniff
 endef
 
 define Package/rp-pppoe-sniff/description
-        $(call Package/rp-pppoe/Default/description)
-        This package contains pppoe-sniff.
+$(call Package/rp-pppoe/Default/description)
+ .
+ This package contains pppoe-sniff.
 endef
 
 TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/src/libevent
@@ -84,44 +88,44 @@ CONFIGURE_ARGS += ac_cv_path_PPPD=/usr/sbin/pppd --enable-plugin=$(STAGING_DIR)/
 MAKE_FLAGS := DESTDIR="$(PKG_INSTALL_DIR)" install
 MAKE_PATH := ./src
 
-define Package/rp-pppoe-client/install	
+define Package/rp-pppoe-client/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/pppoe-client.init $(1)/etc/init.d/pppoe-client
 	$(INSTALL_DIR) $(1)/etc/ppp
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/ppp/pppoe.conf $(1)/etc/ppp/
+	$(CP) $(PKG_INSTALL_DIR)/etc/ppp/pppoe.conf $(1)/etc/ppp/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/pppoe $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pppoe $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/pppoe-connect $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/pppoe-start $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/pppoe-stop $(1)/usr/sbin/
 	$(SED) 's,modprobe,insmod,g' $(1)/usr/sbin/pppoe-connect
 endef
 
-define Package/rp-pppoe-relay/install	
+define Package/rp-pppoe-relay/install
 	$(INSTALL_DIR) $(1)/etc/default
 	$(INSTALL_BIN) ./files/pppoe-relay.default $(1)/etc/default/pppoe-relay
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/pppoe-relay.init $(1)/etc/init.d/pppoe-relay
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/pppoe-relay $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pppoe-relay $(1)/usr/sbin/
 endef
 
-define Package/rp-pppoe-server/install	
+define Package/rp-pppoe-server/install
 	$(INSTALL_DIR) $(1)/etc/default
 	$(INSTALL_BIN) ./files/pppoe-server.default $(1)/etc/default/pppoe-server
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/pppoe-server.init $(1)/etc/init.d/pppoe-server
 	$(INSTALL_DIR) $(1)/etc/ppp
 	$(INSTALL_DIR) $(1)/etc/ppp/plugins
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/ppp/pppoe-server-options $(1)/etc/ppp/
+	$(CP) $(PKG_INSTALL_DIR)/etc/ppp/pppoe-server-options $(1)/etc/ppp/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/pppoe-server $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/etc/ppp/plugins/rp-pppoe.so $(1)/etc/ppp/plugins/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pppoe-server $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/etc/ppp/plugins/rp-pppoe.so $(1)/etc/ppp/plugins/
 endef
 
-define Package/rp-pppoe-sniff/install	
+define Package/rp-pppoe-sniff/install
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/pppoe-sniff $(1)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pppoe-sniff $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,rp-pppoe-client))
