@@ -1,5 +1,6 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
+
 START=99
 
 config_cb() {
@@ -79,9 +80,9 @@ start() {
 		unset conffile
 	done
 	cd /
-	bandwidthd
+	service_start /usr/sbin/bandwidthd
 }
 
 stop() {
-	killall bandwidthd
+	service_stop /usr/sbin/bandwidthd
 }

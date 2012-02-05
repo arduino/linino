@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bandwidthd
 PKG_VERSION:=2.0.1
-PKG_RELEASE:=2
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=@SF/bandwidthd
@@ -51,6 +51,10 @@ define Package/bandwidthd/install
 	$(INSTALL_DIR) $(1)/www
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/htdocs/legend.gif $(1)/www/
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/htdocs/logo.gif $(1)/www/
+endef
+
+define Package/bandwidthd/conffiles
+/etc/config/bandwidthd
 endef
 
 $(eval $(call BuildPackage,bandwidthd))
