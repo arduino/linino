@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ahcpd
-PKG_VERSION:=0.51
-PKG_RELEASE:=4
+PKG_VERSION:=0.53
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/
-PKG_MD5SUM:=86b70d278dfb5a1e33cd1a1ceae9e715
+PKG_MD5SUM:=a1a610bf20965aa522cd766bf3d5829a
 
 
 include $(INCLUDE_DIR)/package.mk
