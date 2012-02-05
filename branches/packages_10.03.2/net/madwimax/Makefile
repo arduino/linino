@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 
@@ -7,7 +7,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=madwimax
 PKG_VERSION:=0.1.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=madwimax-0.1.1.tar.gz
 PKG_SOURCE_URL:=http://madwimax.googlecode.com/files/
@@ -43,7 +43,7 @@ define Package/madwimax/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/20-madwimax $(1)/etc/hotplug.d/usb/
 	$(INSTALL_BIN) ./files/event.sh $(1)/etc/madwimax/
-	$(INSTALL_BIN) ./files/madwimax $(1)/etc/init.d/
+	$(INSTALL_BIN) ./files/madwimax.init $(1)/etc/init.d/madwimax
 endef
 
 $(eval $(call BuildPackage,madwimax))
