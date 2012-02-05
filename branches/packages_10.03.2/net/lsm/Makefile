@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2010-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,15 +9,15 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lsm
 PKG_VERSION:=0.60
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://lsm.foobar.fi/download
 PKG_MD5SUM:=f4748308c0a1caa98d7e756778954116
 
-include $(INCLUDE_DIR)/package.mk
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
-PKG_UNPACK += && rmdir $(PKG_BUILD_DIR) && mv $(BUILD_DIR)/lsm $(PKG_BUILD_DIR)
+include $(INCLUDE_DIR)/package.mk
 
 define Package/lsm
   SECTION:=net
@@ -37,7 +37,9 @@ define Package/lsm/conffiles
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) CC="$(TARGET_CC)"
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CC="$(TARGET_CC)" \
+		CFLAGS="$(TARGET_CFLAGS)"
 endef
 
 define Package/lsm/install
@@ -49,6 +51,10 @@ define Package/lsm/install
 	$(INSTALL_DATA) ./files/lsm.conf $(1)/etc/lsm/lsm.conf
 	$(INSTALL_BIN) ./files/lsm_script $(1)/etc/lsm/script
 	$(INSTALL_BIN) ./files/lsm.init $(1)/etc/init.d/lsm
+endef
+
+define Package/lsm/conffiles
+/etc/lsm/lsm.conf
 endef
 
 $(eval $(call BuildPackage,lsm))

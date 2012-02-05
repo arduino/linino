@@ -1,44 +1,19 @@
 #!/bin/sh /etc/rc.common
-PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-NAME=lsm
-PROG=/usr/sbin/$NAME
-DESC="Link State Monitor"
-PIDFILE=/var/run/lsm.pid
+# Copyright (C) 2010-2011 OpenWrt.org
+
 START=45
 
-test -x $PROG || exit 0
-set -e
+SERVICE_USE_PID=1
+SERVICE_PID_FILE=/var/run/lsm.pid
 
 start() {
-	echo -n "Starting $DESC: $NAME"
-	start-stop-daemon -q -S -p $PIDFILE -x $PROG -- /etc/lsm/lsm.conf $PIDFILE
-
-	echo "."
+	service_start /usr/sbin/lsm /etc/lsm/lsm.conf $SERVICE_PID_FILE
 }
 
 stop() {
-	echo -n "Stopping $DESC: $NAME"
-	start-stop-daemon -q -K -p $PIDFILE -x $PROG -- /etc/lsm/lsm.conf $PIDFILE
-	echo "."
-}
-
-restart() {
-	echo -n "Restarting $DESC: $NAME... "
-	start-stop-daemon -q -K -p $PIDFILE -x $PROG -- /etc/lsm/lsm.conf $PIDFILE
-	sleep 1
-	start-stop-daemon -q -S -p $PIDFILE -x $PROG -- /etc/lsm/lsm.conf $PIDFILE
-	echo "done."
+	service_stop /usr/sbin/lsm
 }
 
 reload() {
-	#
-	#	If the daemon can reload its config files on the fly
-	#	for example by sending it SIGHUP, do it here.
-	#
-	#	If the daemon responds to changes in its config file
-	#	directly anyway, make this a do-nothing entry.
-	#
-	echo -n "Reloading $DESC configuration... "
-	start-stop-daemon -q -K -s HUP -p $PIDFILE -x $PROG -- /etc/lsm/lsm.conf $PIDFILE
-	echo "done."
+	service_reload /usr/sbin/lsm
 }
