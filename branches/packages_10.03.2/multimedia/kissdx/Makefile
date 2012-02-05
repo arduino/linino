@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kissdx
 PKG_VERSION:=0.14.0.b1a
-PKG_RELEASE:=7
+PKG_RELEASE:=9
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).zip
 PKG_SOURCE_URL:=http://kissdx.vidartysse.net
@@ -50,6 +50,10 @@ define Package/kissdx/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/kissdx.config $(1)/etc/config/kissdx
 	$(INSTALL_BIN) ./files/kissdx.init $(1)/etc/init.d/kissdx
+endef
+
+define Package/kissdx/conffiles
+/etc/config/kissdx
 endef
 
 $(eval $(call BuildPackage,kissdx))
