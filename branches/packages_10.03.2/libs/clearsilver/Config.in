@@ -1,7 +1,6 @@
 config CLEARSILVER_ENABLE_COMPRESSION
 	bool "HTML compression support"
 	default y if PACKAGE_zlib
-	select PACKAGE_zlib
 
 config CLEARSILVER_ENABLE_REMOTE_DEBUGGER
 	bool "Remote X CGI debugging"
