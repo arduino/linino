@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=portsentry
 PKG_VERSION:=1.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-1.2.tar.gz
 PKG_SOURCE_URL:=@SF/sentrytools
@@ -32,14 +32,18 @@ define Package/portsentry/conffiles
 endef
 
 MAKE_FLAGS += \
+	CFLAGS="$(TARGET_CFLAGS) -DNODAEMON" \
 	linux \
 
 define Package/portsentry/install	
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/$(PKG_NAME).conf $(1)/etc/
-	$(INSTALL_BIN) ./files/$(PKG_NAME).init $(1)/etc/init.d/
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/portsentry $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/portsentry.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/portsentry.init $(1)/etc/init.d/portsentry
+	$(SED) 's|^\(.*_FILE\)="/usr/local/psionic/\(portsentry/.*\)"|\1="/var/run/\2"|g' \
+	     $(1)/etc/portsentry.conf
 endef
 
 $(eval $(call BuildPackage,portsentry))
