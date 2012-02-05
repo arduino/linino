@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -129,7 +129,8 @@ CONFIGURE_ARGS += \
 	--enable-external-acl-helpers="ip_user unix_group" \
 	--enable-storeio=null,ufs \
 	--enable-epoll \
-	--with-maxfd=4096
+	--with-maxfd=4096 \
+	--without-libcap
 
 CONFIGURE_VARS += \
 	ac_cv_header_linux_netfilter_ipv4_h=yes \
