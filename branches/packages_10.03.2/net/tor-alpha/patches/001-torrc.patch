@@ -14,9 +14,8 @@
  
  ## The port on which Tor will listen for local connections from Tor
  ## controller applications, as documented in control-spec.txt.
-@@ -168,3 +168,5 @@ SocksListenAddress 127.0.0.1 # accept co
+@@ -168,3 +168,4 @@ SocksListenAddress 127.0.0.1 # accept co
  #BridgeRelay 1
  #ExitPolicy reject *:*
  
 +User tor
-+PidFile @LOCALSTATEDIR@/run/tor.pid
