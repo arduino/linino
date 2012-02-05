@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=anyremote
 PKG_VERSION:=4.7.1
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/${PKG_NAME}
@@ -42,6 +42,10 @@ define Package/anyremote/install
 	$(INSTALL_CONF) ./files/anyremote.cfg $(1)/etc/anyremote.cfg
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/anyremote.init $(1)/etc/init.d/anyremote
+endef
+
+define Package/anyremote/conffiles
+/etc/anyremote.cfg
 endef
 
 $(eval $(call BuildPackage,anyremote))
