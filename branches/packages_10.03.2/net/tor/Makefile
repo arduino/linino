@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor
-PKG_VERSION:=0.2.1.30
+PKG_VERSION:=0.2.2.35
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://www.torproject.org/dist \
 	https://archive.torproject.org/tor-package-archive
-PKG_MD5SUM:=6c6d61e053af5969a245d025c4cfce9d
+PKG_MD5SUM:=dcecf699c4b929319d5f1ce0358d4835
 
 PKG_INSTALL:=1
 
@@ -37,7 +37,7 @@ endef
 define Package/tor
 $(call Package/tor/Default)
   TITLE:=An anonymous Internet communication system
-  DEPENDS:=+libevent +libopenssl +libpthread +librt
+  DEPENDS:=+libevent2 +libopenssl +libpthread +librt
 endef
 
 define Package/tor-geoip
@@ -50,51 +50,17 @@ define Package/tor/conffiles
 /etc/tor/torrc
 endef
 
-define Package/tor/postinst
-#!/bin/sh
-
-name=tor
-id=52
-
-# do not change below
-# # check if we are on real system
-if [ -z "$${IPKG_INSTROOT}" ]; then
-        # create copies of passwd and group, if we use squashfs
-        rootfs=`mount |awk '/root/ { print $$5 }'`
-        if [ "$$rootfs" = "squashfs" ]; then
-                if [ -h /etc/group ]; then
-                        rm /etc/group
-                        cp /rom/etc/group /etc/group
-                fi
-                if [ -h /etc/passwd ]; then
-                        rm /etc/passwd
-                        cp /rom/etc/passwd /etc/passwd
-                fi
-        fi
-fi
-
-echo ""
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then
-        echo "adding group $$name to /etc/group"
-        echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group
-fi
-
-if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
-        echo "adding user $$name to /etc/passwd"
-        echo "$${name}:x:$${id}:$${id}:$${name}:/tmp/.$${name}:/bin/false" >> $${IPKG_INSTROOT}/etc/passwd
-fi
-endef
-
 CONFIGURE_ARGS += \
 	--with-libevent-dir="$(STAGING_DIR)/usr" \
 	--with-ssl-dir="$(STAGING_DIR)/usr" \
+	--disable-asciidoc
 
 CONFIGURE_VARS += \
-	CROSS_COMPILE="yes" \
+	CROSS_COMPILE="yes"
 
 # pass CFLAGS again to override -O2 set by configure
 MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS)" \
+	CFLAGS="$(TARGET_CFLAGS)"
 
 define Package/tor/install
 	$(INSTALL_DIR) $(1)/usr/sbin
