@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=leafnode
 PKG_VERSION:=1.11.8
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/leafnode
@@ -63,12 +63,6 @@ define Package/leafnode/conffiles
 /etc/crontabs/news
 endef
 
-define Package/leafnode/postinst
-#!/bin/sh
-grep -q '^news:' $${IPKG_INSTROOT}/etc/passwd 2>/dev/null
-[ $$? -ne 0 ] && echo "news:*:31:31:news:/var/spool/news:/bin/true" >>$${IPKG_INSTROOT}/etc/passwd && echo "news:x:31:" >>$${IPKG_INSTROOT}/etc/group || exit 0
-endef
-
 define Package/leafnode/install
   	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/leafnode $(1)/usr/sbin/
@@ -80,6 +74,8 @@ define Package/leafnode/install
 	$(INSTALL_DATA) ./files/nntp $(1)/etc/xinetd.d/
 	$(INSTALL_DIR) $(1)/etc/crontabs
 	$(INSTALL_DATA) ./files/news $(1)/etc/crontabs/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/leafnode.init $(1)/etc/init.d/leafnode
 endef
 
 define Package/leafnode-extra/install
