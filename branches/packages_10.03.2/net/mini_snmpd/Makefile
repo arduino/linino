@@ -9,40 +9,35 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mini_snmpd
 PKG_VERSION:=1.2b
-PKG_RELEASE:=3
+PKG_RELEASE:=6
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://members.aon.at/linuxfreak/linux/
 PKG_MD5SUM:=9e432c50ba8216d7fab0983b11b7112a
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)/$(PKG_NAME)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/mini-snmpd/Default
+define Package/mini-snmpd
+  SECTION:=net
+  CATEGORY:=Network
   TITLE:=SNMP server for embedded systems
   URL:=http://members.aon.at/linuxfreak/linux/mini_snmpd.html
 endef
 
-define Package/mini-snmpd
-$(call Package/mini-snmpd/Default)
-  SECTION:=net
-  CATEGORY:=Network
-  TITLE+= Mini Snmpd
-endef
-
-PKG_OFLAGS:=$(TARGET_CFLAGS) -DSYSLOG
-
-ifeq ($(CONFIG_IPV6),y)
-  PKG_OFLAGS+= -D__IPV6__
+ifneq ($(CONFIG_IPV6),)
+  TARGET_CFLAGS+= -D__IPV6__
 else
-  PKG_OFLAGS+= -D__IPV4__
+  TARGET_CFLAGS+= -D__IPV4__
 endif
 
+TARGET_CFLAGS+= -DSYSLOG
+
 MAKE_FLAGS+= \
-	OFLAGS="$(PKG_OFLAGS)" \
+	OFLAGS="$(TARGET_CFLAGS)" \
 	STRIP="/bin/true" \
 	INSTALL_ROOT="$(PKG_INSTALL_DIR)"
 
@@ -59,6 +54,8 @@ define Package/mini-snmpd/install
 	$(INSTALL_BIN) ./files/mini_snmpd.init $(1)/etc/init.d/mini_snmpd
 endef
 
-Package/mini-snmpd6/install=$(Package/mini-snmpd/install)
+define Package/mini-snmpd/conffiles
+/etc/config/mini_snmpd
+endef
 
 $(eval $(call BuildPackage,mini-snmpd))
