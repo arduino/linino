@@ -1,28 +1,16 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 
 START=95
+
 start() {
-  [ -f /etc/smartd.conf ] || {
-    echo "/etc/smartd.conf does not exist !";
-    exit 0;
-  };
-  [ -d /var/run ] || mkdir -p /var/run
-  [ -x /usr/sbin/smartd ] && /usr/sbin/smartd -q never -p /var/run/smartd.pid
+	service_start /usr/sbin/smartd -q never
 }
 
 stop() {
-  killall smartd
-}
-
-restart() {
-        stop
-        sleep 1
-        start
+	service_stop /usr/sbin/smartd
 }
 
 reload() {
-        kill -HUP `cat /var/run/smartd.pid` &>/dev/null
+	service_reload /usr/sbin/smartd
 }
-
-
