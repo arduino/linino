@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=parprouted
 PKG_VERSION:=0.64
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.hazard.maks.net/parprouted/
@@ -43,13 +43,17 @@ define Build/Compile
 	)
 endef
 
-define Package/parprouted/install	
+define Package/parprouted/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/parprouted $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc/default
-	$(INSTALL_BIN) ./files/parprouted.default $(1)/etc/default/parprouted
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_BIN) ./files/parprouted.config $(1)/etc/config/parprouted
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/parprouted.init $(1)/etc/init.d/parprouted
+endef
+
+define Package/parprouted/conffiles
+/etc/config/parprouted
 endef
 
 $(eval $(call BuildPackage,parprouted))
