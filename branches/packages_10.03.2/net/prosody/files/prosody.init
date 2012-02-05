@@ -1,7 +1,8 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2011 OpenWrt.org
 
 START=99
+
 EXTRA_COMMANDS="status"
 EXTRA_HELP="	status	Print the status of the service"
 
@@ -13,8 +14,16 @@ RUN_USER=prosody
 RUN_GROUP=prosody
 
 start() {
-	[ -d $LOG_D ] || ( mkdir -p $LOG_D && chown $RUN_USER:$RUN_GROUP $LOG_D )
-	[ -d $RUN_D ] || ( mkdir -p $RUN_D && chown $RUN_USER:$RUN_GROUP $RUN_D )
+	user_exists prosody 54 || user_add prosody 54
+	group_exists prosody 54 || group_add prosody 54
+	[ -d /var/run/prosody ] || {
+		mkdir -m 0755 -p /var/run/prosody
+		chown prosody:prosody /var/run/prosody
+	}
+	[ -d /var/log/prosody ] || {
+		mkdir -m 0755 -p /var/log/prosody
+		chown prosody:prosody /var/log/prosody
+	}
 
 	$BIN start
 }

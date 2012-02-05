@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=prosody
 PKG_VERSION:=0.6.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://prosody.im/downloads/source
@@ -82,44 +82,6 @@ define Package/prosody/install
 	$(INSTALL_DIR) $(1)/usr/lib/prosody/util
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/prosody/util/*.lua $(1)/usr/lib/prosody/util/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/prosody/util/*.so $(1)/usr/lib/prosody/util/
-endef
-
-define Package/prosody/postinst
-#!/bin/sh
-
-id=54
-name=prosody
-home=/tmp/.$${name}
-shell=/bin/false
-
-# do not change below
-# check if we are on real system
-if [ -z "$${IPKG_INSTROOT}" ]; then
-	# create copies of passwd and group, if we use squashfs
-	rootfs=`mount |awk '/root/ { print $$5 }'`
-	if [ "$$rootfs" = "squashfs" ]; then
-		if [ -h /etc/group ]; then
-			rm /etc/group
-			cp -p /rom/etc/group /etc/group
-		fi
-		if [ -h /etc/passwd ]; then
-			rm /etc/passwd
-			cp -p /rom/etc/passwd /etc/passwd
-		fi
-	fi
-
-	echo ""
-	if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/group)" ]; then
-		echo "adding group $$name to /etc/group"
-		echo "$${name}:x:$${id}:" >> $${IPKG_INSTROOT}/etc/group
-	fi
-	if [ -z "$$(grep ^\\$${name}: $${IPKG_INSTROOT}/etc/passwd)" ]; then
-		echo "adding user $$name to /etc/passwd"
-		echo "$${name}:x:$${id}:$${id}:$${name}:$${home}:$${shell}" >> $${IPKG_INSTROOT}/etc/passwd
-	fi
-
-	chown -R $${name}:$${name} $${IPKG_INSTROOT}/etc/prosody
-fi
 endef
 
 $(eval $(call BuildPackage,prosody))
