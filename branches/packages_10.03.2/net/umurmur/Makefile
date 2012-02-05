@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=umurmur
 PKG_VERSION:=0.2.8
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://umurmur.googlecode.com/files/
@@ -82,13 +82,13 @@ endef
 Package/umurmur-polarssl/install = $(Package/umurmur-openssl/install)
 
 ifeq ($(BUILD_VARIANT),openssl)
-  TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include
-  TARGET_LDFLAGS += -lcrypto -lssl
+  CONFIGURE_ARGS += \
+	--with-ssl=openssl
 endif
 
 ifeq ($(BUILD_VARIANT),polarssl)
-  TARGET_CFLAGS += -DUSE_POLARSSL -I$(STAGING_DIR)/usr/include
-  TARGET_LDFLAGS += -lpolarssl
+  CONFIGURE_ARGS += \
+	--with-ssl=polarssl
 endif
 
 $(eval $(call BuildPackage,umurmur-openssl))
