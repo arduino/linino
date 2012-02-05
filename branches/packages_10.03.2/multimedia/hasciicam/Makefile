@@ -8,15 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hasciicam
-PKG_REV:=262f56eb307f9a0d4bee04d38e0adde7e4257d87
-PKG_VERSION:=20080922
+PKG_VERSION:=1.1.2
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=git://git.dyne.org/$(PKG_NAME).git
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=$(PKG_REV)
+PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=ftp://ftp.dyne.org/hasciicam/releases/
+PKG_MD5SUM:=2c7393270e18ab913043683fa3390d8c
 
 PKG_INSTALL:=1
 
@@ -27,7 +24,7 @@ define Package/hasciicam
   CATEGORY:=Multimedia
   TITLE:=Live ASCII video feeds
   URL:=http://ascii.dyne.org/
-  DEPENDS:= +libaa
+  DEPENDS:= +libaa +ftplib
 endef
 
 
