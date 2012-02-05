@@ -1,24 +1,23 @@
 #!/bin/sh /etc/rc.common
+# Copyright (C) 2010-2011 OpenWrt.org
 
 START=70
 
 MAXCONS="7"
-CONFIGFILE="/etc/netatalk/afpd.conf"
-PIDFILE="/var/run/afpd.pid"
 
 start()
 {
-	/usr/sbin/cnid_metad
-	/usr/sbin/afpd -F ${CONFIGFILE} -P ${PIDFILE} -c ${MAXCONS}
+	service_start /usr/sbin/cnid_metad
+	service_start /usr/sbin/afpd -c ${MAXCONS}
 }
 
 stop()
 {
-	kill `cat "${PIDFILE}"`
-	killall cnid_metad
+	service_stop /usr/sbin/afpd
+	service_stop /usr/sbin/cnid_metad
 }
 
 reload()
 {
-	kill -s HUP `cat "${PIDFILE}"`
+	service_relaod /usr/sbin/afpd
 }
