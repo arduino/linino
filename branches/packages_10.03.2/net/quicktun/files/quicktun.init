@@ -1,12 +1,15 @@
 #!/bin/sh /etc/rc.common
-# Quicktun init script
-# Partly taken the the OpenVPN init script (Copyright (C) 2008 Jo-Philipp Wich)
+# Copyright (C) 2010-2011 OpenWrt.org
+
+# Partly taken the OpenVPN init script (Copyright (C) 2008 Jo-Philipp Wich)
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 
 START=95
-BIN=/usr/sbin/quicktun
-SSD=start-stop-daemon
+
+SERVICE_DAEMONIZE=1
+SERVICE_WRITE_PID=1
+
 EXTRA_COMMANDS="up down"
 
 LIST_SEP="
@@ -27,25 +30,31 @@ append_opts() {
 	done
 }
 
-start_service() {
+section_enabled() {
+	config_get_bool enabled "$1" 'enabled' 0
+	[ $enabled -gt 0 ]
+}
+
+error() {
+	echo "${initscript}:" "$@" 1>&2
+}
+
+start_instance() {
 	local s="$1"
-	local enable=0
 
-	# disabled?
-	config_get_bool enable "$s" enable 0
-	[ "$enable" == 0 ] && return 0
+	section_enabled "$s" || return 1
 
-	PID="/var/run/quicktun-$s.pid"
+	SERVICE_PID_FILE="/var/run/quicktun-$s.pid"
 	OPTS=""
 
 	config_get interface "$s" interface
 	if [ -z "$interface" ]; then
-		echo "$s: interface not set"
+		error "$s: interface '$interface' is not set"
 		return 1
 	fi
 
-	if ifconfig "$interface" >/dev/null 2>&1; then
-		echo "$s: interface $interface is already in use"
+	if ifconfig "$interface" &>/dev/null; then
+		error "$s: interface '$interface' is already in use"
 		return 1
 	fi
 
@@ -58,11 +67,11 @@ start_service() {
 	config_get_bool remote_float "$s" remote_float 0
 	[ "$remote_float" == 1 ] && append_opt remote_float 1
 
-	eval env $OPTS "$SSD" -q -b -p "$PID" -m -x "$BIN" -S
+	eval env $OPTS service_start /usr/sbin/quicktun
 
 	while ! ifconfig "$interface" >/dev/null 2>&1; do
-		if ! $SSD -t -q -p $PID -x $BIN -K; then
-			echo "$s: daemon startup failed"
+		if ! service_check /usr/sbin/quicktun; then
+			error "$s: startup failed"
 			return 1
 		fi
 
@@ -73,68 +82,60 @@ start_service() {
 	[ -n "$up" ] && sh -c "$up" - "$interface"
 }
 
-stop_service() {
+stop_instance() {
 	local s="$1"
-	local enable=0
 
-	# disabled?
-	config_get_bool enable "$s" enable 0
-	[ "$enable" == 0 ] && return 0
+	section_enabled "$s" || return 1
+
+	SERVICE_PID_FILE="/var/run/quicktun-$s.pid"
 
 	config_get interface "$s" interface
 	if [ -z "$interface" ]; then
-		echo "$s: interface not set"
+		error "$s: interface '$interface' is not set"
 		return 1
 	fi
 
-	if ! ifconfig "$interface" >/dev/null 2>&1; then
-		echo "$s: interface $interface does not exist"
+	if ! ifconfig "$interface" &>/dev/null; then
+		error "$s: interface '$interface' does not exist"
 		return 1
 	fi
 
 	config_get down "$s" down
 	[ -n "$down" ] && sh -c "$down" - "$interface"
 
-	PID="/var/run/quicktun-$s.pid"
-
-	$SSD -q -p $PID -x $BIN -K
-	rm -f "$PID"
+	service_stop /usr/sbin/quicktun
 }
 
 start() {
-	config_load quicktun
-	config_foreach start_service quicktun
+	config_load 'quicktun'
+	config_foreach start_instance 'quicktun'
 }
 
 stop() {
-	config_load quicktun
-	config_foreach stop_service quicktun
-}
-
-restart() {
-	stop; start
+	config_load 'quicktun'
+	config_foreach stop_instance 'quicktun'
 }
 
 up() {
 	local exists
-	local INSTANCE
-	config_load quicktun
-	for INSTANCE in "$@"; do
-		config_get exists "$INSTANCE" TYPE
+	local instance
+	config_load 'quicktun'
+	for instance in "$@"; do
+		config_get exists "$instance" 'TYPE'
 		if [ "$exists" == "quicktun" ]; then
-			start_service "$INSTANCE"
+			start_instance "$instance"
 		fi
 	done
 }
 
 down() {
 	local exists
-	local INSTANCE
-	config_load quicktun
-	for INSTANCE in "$@"; do
-		config_get exists "$INSTANCE" TYPE
+	local instance
+	config_load 'quicktun'
+	for instance in "$@"; do
+		config_get exists "$instance" 'TYPE'
 		if [ "$exists" == "quicktun" ]; then
-			stop_service "$INSTANCE"
+			stop_instance "$instance"
 		fi
 	done
 }
