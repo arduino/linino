@@ -1,13 +1,15 @@
 #!/bin/sh /etc/rc.common
+# Copyright (C) 2010-2011 OpenWrt.org
 
 START=50
-DAEMON=vpzone
-PID_F=/var/run/$DAEMON.pid
+
+SERVICE_DAEMONIZE=1
+SERVICE_WRITE_PID=1
 
 start() {
-	start-stop-daemon -p $PID_F -x $DAEMON -S -b -m
+	service_start /usr/bin/vpzone
 }
 
 stop() {
-	start-stop-daemon -p $PID_F -x $DAEMON -K
+	service_stop /usr/bin/vpzone
 }
