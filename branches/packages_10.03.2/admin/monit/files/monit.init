@@ -1,19 +1,16 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 
 START=60
-BIN=monit
-DEFAULT=/etc/default/$BIN
-RUN_D=/var/run
-PID_F=$RUN_D/$BIN.pid
+
+SERVICE_USE_PID=1
 
 start() {
-	[ -f $DEFAULT ] && . $DEFAULT
-	mkdir -p $RUN_D
-	$BIN $OPTIONS
+	[ -f /etc/monitrc ] || return 1
+	[ "$(stat -c "%a" /etc/monitrc)" = "0700" ] || chmod 0700 /etc/monitrc
+	service_start /usr/bin/monit -d 60
 }
 
 stop() {
-	[ -f $PID_F ] && kill $(cat $PID_F)
+	service_stop /usr/bin/monit
 }
-
