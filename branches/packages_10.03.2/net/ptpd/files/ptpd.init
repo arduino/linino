@@ -1,11 +1,12 @@
 #!/bin/sh /etc/rc.common
+# Copyright (C) 2011 OpenWrt.org
 
 START=50
 
 start() {
-	ptpd
+	service_start /usr/sbin/ptpd
 }
 
 stop() {
-	killall ptpd
+	service_stop /usr/sbin/ptpd
 }
