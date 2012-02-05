@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lighttpd
-PKG_VERSION:=1.4.28
-PKG_RELEASE:=2
+PKG_VERSION:=1.4.29
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://download.lighttpd.net/lighttpd/releases-1.4.x/
-PKG_MD5SUM:=586eb535d31ac299652495b058dd87c4
+PKG_SOURCE_URL:=http://download.lighttpd.net/lighttpd/releases-1.4.x
+PKG_MD5SUM:=e6e67b09986cb504db630b5a86b2dd76
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -252,14 +252,11 @@ endef
 
 define Package/lighttpd/conffiles
 /etc/lighttpd/lighttpd.conf
-/etc/default/lighttpd
 endef
 
 define Package/lighttpd/install
 	$(INSTALL_DIR) $(1)/etc/lighttpd
 	$(INSTALL_DATA) ./files/lighttpd.conf $(1)/etc/lighttpd/
-	$(INSTALL_DIR) $(1)/etc/default
-	$(INSTALL_DATA) ./files/lighttpd.default $(1)/etc/default/lighttpd
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/lighttpd.init $(1)/etc/init.d/lighttpd
 	$(INSTALL_DIR) $(1)/usr/lib/lighttpd
