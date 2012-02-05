@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openvpn-devel
 PKG_VERSION:=201120
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE:=openvpn-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.secure-computing.net/pub/FreeBSD/ports/openvpn-devel \
