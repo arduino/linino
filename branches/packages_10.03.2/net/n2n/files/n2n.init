@@ -1,37 +1,56 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2011 OpenWrt.org
+
 START=90
 
-config_cb() {
-	local cfg="$CONFIG_SECTION"
-	config_get configname "$cfg" TYPE
+start_instance() {
+	local cfg="$1"
 
-	case "$configname" in
-		edge)
-			config_get ipaddr "$cfg" ipaddr
-			config_get supernode "$cfg" supernode
-			config_get port "$cfg" port
-			config_get community "$cfg" community
-			config_get key "$cfg" key
-			config_get_bool route "$cfg" route 0
-			[ "$route" = "1" ] && args='-r'
-			if [ "$ipaddr" != "" ]; then
-				edge -f $args -a $ipaddr -c $community -k $key -l ${supernode}:${port}
-			fi
+	config_get type "$cfg" TYPE
+
+	case "$type" in
+	  edge)
+		config_get ipaddr "$cfg" 'ipaddr'
+		[ -n "$ipaddr" ] || return 1
+		config_get supernode "$cfg" 'supernode'
+		config_get port "$cfg" 'port'
+		config_get community "$cfg" 'community'
+		config_get key "$cfg" 'key'
+		config_get_bool route "$cfg" 'route' '0'
+		[ "$route" = "1" ] && args='-r'
+		service_start /usr/sbin/edge -f $args -a $ipaddr -c $community -k $key -l ${supernode}:${port}
 		;;
-		supernode)
-			config_get port "$cfg" port
-			if [ "$port" != "" ]; then
-				supernode -l $port &
-			fi
+	  supernode)
+		config_get port "$cfg" port
+		[ -n "$port" ] || return 1
+		service_start /usr/sbin/supernode -l $port
+		;;
+	esac
+}
+
+stop_instance() {
+	local cfg="$1"
+
+	config_get type "$cfg" TYPE
+
+	case "$type" in
+	  edge)
+		service_stop /usr/sbin/edge
+		;;
+	  supernode)
+		service_stop /usr/sbin/supernode
 		;;
 	esac
 }
 
 start() {
-	config_load n2n
+	config_load 'n2n'
+	config_foreach start_instance 'edge'
+	config_foreach start_instance 'superndoe'
 }
+
 stop() {
-	killall edge
-	killall supernode
+	config_load 'n2n'
+	config_foreach stop_instance 'edge'
+	config_foreach stop_instance 'supernode'
 }
