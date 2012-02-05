@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=syslog-ng
 PKG_VERSION:=1.6.12
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 PKG_MD5SUM:=a3cbfdb6e1e5beea181a7349749719f3
 
 PKG_SOURCE_URL:= \
