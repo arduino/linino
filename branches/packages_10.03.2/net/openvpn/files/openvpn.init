@@ -1,12 +1,14 @@
 #!/bin/sh /etc/rc.common
-# OpenVPN init script
+# Copyright (C) 2008-2011 OpenWrt.org
 # Copyright (C) 2008 Jo-Philipp Wich
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 
 START=95
-BIN=/usr/sbin/openvpn
-SSD=start-stop-daemon
+
+SERVICE_DAEMONIZE=1
+SERVICE_WRITE_PID=1
+
 EXTRA_COMMANDS="up down"
 
 LIST_SEP="
@@ -55,15 +57,17 @@ append_params_quoted() {
 	done
 }
 
-start_service() {
+section_enabled() {
+	config_get_bool enable  "$1" 'enable'  0
+	config_get_bool enabled "$1" 'enabled' 0
+	[ $enable -gt 0 ] || [ $enabled -gt 0 ]
+}
+
+start_instance() {
 	local s="$1"
-	local enable=0
 
-	# disabled?
-	config_get_bool enable "$s" enable 0
-	[ "$enable" == 0 ] && return 0
+	section_enabled "$s" || return 1
 
-	PID="/var/run/openvpn-$s.pid"
 	ARGS=""
 
 	# append flags
@@ -104,67 +108,63 @@ start_service() {
 		down push up
 
 
-	[ -n "$ARGS" ] && \
-		eval "$SSD -q -b -p '$PID' -x $BIN -S -- --syslog 'openvpn($s)' --writepid '$PID' $ARGS"
+	SERVICE_PID_FILE="/var/run/openvpn-$s.pid"
+	service_start /usr/sbin/openvpn --syslog "openvpn($s)" --writepid "$SERVICE_PID_FILE" $ARGS
 }
 
-kill_service() {
+stop_instance() {
 	local s="$1"
-	local S="${2:-TERM}"
-	local enable=0
 
-	# disabled?
-	config_get_bool enable "$s" enable 0
-	[ "$enable" == 1 ] || [ "$S" == "TERM" ] || return 0
+	section_enabled "$s" || return 1
 
-	PID="/var/run/openvpn-$s.pid"
-
-	$SSD -q -p $PID -x $BIN -K -s $S
-	[ "$S" == "TERM" ] && rm -f "$PID"
+	SERVICE_PID_FILE="/var/run/openvpn-$s.pid"
+	service_stop /usr/sbin/openvpn
 }
 
-hup_service()  { kill_service "$1" HUP;  }
-stop_service() { kill_service "$1" TERM; }
+reload_instance() {
+	local s="$1"
+
+	section_enabled "$s" || return 1
+
+	SERVICE_PID_FILE="/var/run/openvpn-$s.pid"
+	service_reload /usr/sbin/openvpn
+}
 
 start() {
-	config_load openvpn
-	config_foreach start_service openvpn
+	config_load 'openvpn'
+	config_foreach start_instance 'openvpn'
 }
 
 stop() {
-	config_load openvpn
-	config_foreach stop_service openvpn
+	config_load 'openvpn'
+	config_foreach stop_instance 'openvpn'
 }
 
 reload() {
-	config_load openvpn
-	config_foreach hup_service openvpn
-}
-
-restart() {
-	stop; sleep 5; start
+	config_load 'openvpn'
+	config_foreach reload_instance 'openvpn'
 }
 
 up() {
 	local exists
-	local INSTANCE
-	config_load openvpn
-	for INSTANCE in "$@"; do
-		config_get exists "$INSTANCE" TYPE
+	local instance
+	config_load 'openvpn'
+	for instance in "$@"; do
+		config_get exists "$instance" 'TYPE'
 		if [ "$exists" == "openvpn" ]; then
-			start_service "$INSTANCE"
+			start_instance "$instance"
 		fi
 	done
 }
 
 down() {
 	local exists
-	local INSTANCE
-	config_load openvpn
-	for INSTANCE in "$@"; do
-		config_get exists "$INSTANCE" TYPE
+	local instance
+	config_load 'openvpn'
+	for instance in "$@"; do
+		config_get exists "$instance" 'TYPE'
 		if [ "$exists" == "openvpn" ]; then
-			stop_service "$INSTANCE"
+			stop_instance "$instance"
 		fi
 	done
 }
