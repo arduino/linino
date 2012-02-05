@@ -1,24 +1,24 @@
 #
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: Makefile 5624 2006-11-23 00:29:07Z nbd $
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=batman-adv
 
-PKG_VERSION:=2011.2.0
-PKG_MD5SUM:=1ef45406201913cc08ac01e47ad2d034
-BATCTL_MD5SUM:=69e7fe915f2c1867b74e6efe7c627dd5
+PKG_VERSION:=2011.4.0
+BATCTL_VERSION:=2011.4.0
+PKG_MD5SUM:=3987d693bd26d8057506b542c3635910
+BATCTL_MD5SUM:=325b25dbb8261f7fa19c6e1d9bfba6e1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.open-mesh.org/batman/releases/batman-adv-$(PKG_VERSION)
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_TOOL_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)/batctl-$(PKG_VERSION)
+PKG_BATCTL_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)/batctl-$(BATCTL_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
@@ -27,7 +27,7 @@ define KernelPackage/batman-adv
   URL:=http://www.open-mesh.org/
   MAINTAINER:=Marek Lindner <lindner_marek@yahoo.de>
   SUBMENU:=Network Support
-  DEPENDS:=@!LINUX_2_4
+  DEPENDS:=@!LINUX_2_4 +kmod-crc16
   TITLE:=B.A.T.M.A.N. Adv
   FILES:=$(PKG_BUILD_DIR)/batman-adv.$(LINUX_KMOD_SUFFIX)
   AUTOLOAD:=$(call AutoLoad,50,batman-adv)
@@ -61,27 +61,28 @@ MAKE_BATCTL_ARGS += \
 	CC="$(TARGET_CC)" \
 	NODEBUG=1 \
 	UNAME="Linux" \
-	INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
+	DESTDIR="$(PKG_INSTALL_DIR)" \
 	STRIP="/bin/true" \
 	batctl install
 
 ifneq ($(DEVELOPER)$(CONFIG_KMOD_BATMAN_ADV_BATCTL),)
 define Download/batctl
-  FILE:=batctl-$(PKG_VERSION).tar.gz
+  FILE:=batctl-$(BATCTL_VERSION).tar.gz
   URL:=$(PKG_SOURCE_URL)
   MD5SUM:=$(BATCTL_MD5SUM)
 endef
 $(eval $(call Download,batctl))
 
-EXTRACT_BATCTL = tar xzf "$(DL_DIR)/batctl-$(PKG_VERSION).tar.gz" -C "$(BUILD_DIR)/$(PKG_NAME)"
+EXTRACT_BATCTL = tar xzf "$(DL_DIR)/batctl-$(BATCTL_VERSION).tar.gz" -C "$(BUILD_DIR)/$(PKG_NAME)"
 PATCH_BATCTL = $(call Build/DoPatch,"$(PKG_BATCTL_BUILD_DIR)","$(PATCH_DIR)","*batctl*")
-BUILD_BATCTL = $(MAKE) -C $(PKG_TOOL_BUILD_DIR) $(MAKE_BATCTL_ARGS)
+BUILD_BATCTL = $(MAKE) -C $(PKG_BATCTL_BUILD_DIR) $(MAKE_BATCTL_ARGS)
 endif
 
+KPATCH ?= $(PATCH)
 define Build/DoPatch
 	@if [ -d "$(2)" ]; then \
 		if [ "$$$$(ls $(2) | grep -Ec $(3))" -gt 0 ]; then \
-			$(PATCH) "$(1)" "$(2)" "$(3)"; \
+			$(KPATCH) "$(1)" "$(2)" "$(3)"; \
 		fi; \
 	fi
 endef
@@ -104,16 +105,18 @@ endef
 
 ifneq ($(DEVELOPER)$(CONFIG_KMOD_BATMAN_ADV_BATCTL),)
 define KernelPackage/batman-adv/install
-	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/init.d $(1)/lib/batman-adv
 	$(INSTALL_BIN) ./files/etc/init.d/batman-adv $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/lib/batman-adv/config.sh $(1)/lib/batman-adv
 	$(INSTALL_DATA) ./files/etc/config/batman-adv $(1)/etc/config
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/batctl $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/local/sbin/batctl $(1)/usr/sbin/
 endef
 else
 define KernelPackage/batman-adv/install
-	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/config $(1)/etc/init.d $(1)/lib/batman-adv
 	$(INSTALL_BIN) ./files/etc/init.d/batman-adv $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/lib/batman-adv/config.sh $(1)/lib/batman-adv
 	$(INSTALL_DATA) ./files/etc/config/batman-adv $(1)/etc/config
 endef
 endif
