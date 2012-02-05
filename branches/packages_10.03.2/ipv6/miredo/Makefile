@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miredo
-PKG_VERSION:=1.2.3
+PKG_VERSION:=1.2.4
 PKG_RELEASE:=2
 
-PKG_SOURCE_URL:=http://www.remlab.net/files/miredo/
+PKG_SOURCE_URL:=http://www.remlab.net/files/miredo
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=6ba484ad5e331514a8a3452da2b144e7
+PKG_MD5SUM:=1281e7e75bddbde244cd778d99fa22d4
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -30,7 +30,7 @@ endef
 define Package/miredo-common
 $(call Package/miredo/Default)
   TITLE:=Teredo (IPv6 tunneling over UDP through NAT) shared libraries
-  DEPENDS+= +libpthread +uclibcxx +kmod-ipv6 +kmod-tun
+  DEPENDS+= +ip +libpthread +librt +uclibcxx +kmod-ipv6 +kmod-tun
 endef
 
 define Package/miredo-server
