@@ -32,6 +32,11 @@ define Package/libdw
   TITLE+= (libdw)
 endef
 
+define Package/libelf1
+  $(call Package/elfutils/Default)
+  TITLE+= (libelf)
+endef
+
 ifdef CONFIG_USE_UCLIBC
 CONFIGURE_VARS += \
 	LIBS="-largp"
@@ -42,6 +47,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/libdw/libdw.{a,so*} $(1)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/libelf/libelf.{a,so*} $(1)/usr/lib/
 endef
 
 define Package/libdw/install
@@ -49,4 +55,10 @@ define Package/libdw/install
 	$(CP) $(PKG_BUILD_DIR)/libdw/libdw.so* $(1)/usr/lib/
 endef
 
+define Package/libelf1/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/libelf/libelf.so* $(1)/usr/lib/
+endef
+
 $(eval $(call BuildPackage,libdw))
+$(eval $(call BuildPackage,libelf1))
