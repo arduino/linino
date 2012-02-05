@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gphoto2
-PKG_VERSION:=2.4.9
+PKG_VERSION:=2.4.11
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/gphoto
-PKG_MD5SUM:=a08a93a425cde03ca8f9bade83bbd26a
+PKG_MD5SUM:=2635075f702b40eb2e95a80658bd4773
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -25,7 +25,7 @@ define Package/gphoto2
   CATEGORY:=Multimedia
   TITLE:=Gphoto Digital Camera Control
   URL:=http://www.gphoto.org/
-  DEPENDS:=+libgphoto2 +libpopt +libpthread
+  DEPENDS:=+libgphoto2 +libpopt +libpthread +libreadline
 endef
 
 define Package/gphoto2/description
