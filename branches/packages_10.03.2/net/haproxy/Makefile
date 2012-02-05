@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2011 OpenWrt.org
 # Copyright (C) 2009-2010 Thomas Heil <heil@terminal-consulting.de> 
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=haproxy
-PKG_VERSION:=1.4.15
-PKG_RELEASE:=1
+PKG_VERSION:=1.4.19
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://haproxy.1wt.eu/download/1.4/src
-PKG_MD5SUM:=c1b4fc6028c6d8e23dde8c91ff47eabe
+PKG_MD5SUM:=41392d738460dbf99295fd928031c6a4
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -24,7 +24,8 @@ define Package/haproxy
   CATEGORY:=Network
   TITLE:=The Reliable, High Performance TCP/HTTP Load Balancer
   URL:=http://haproxy.1wt.eu/
-  DEPENDS:=+libpcre +libltdl
+  DEPENDS:=@!LINUX_2_4 +libpcre +libltdl
+  MAINTAINER:=Thomas Heil <heil@terminal-consulting.de>
 endef
 
 define Package/haproxy/conffiles
@@ -36,13 +37,13 @@ define Package/haproxy/description
 endef
 
 define Build/Compile
-	$(MAKE) TARGET=$(if $(CONFIG_LINUX_2_4),linux24,linux26) -C $(PKG_BUILD_DIR) \
+	$(MAKE) TARGET=linux26 -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		CC="$(TARGET_CC)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		LD="$(TARGET_CC)" \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
-		SMALL_OPTS="-DBUFSIZE=16384 -DMAXREWRITE=8192 -DSYSTEM_MAXCONN=65530" USE_LINUX_TPROXY=1 \
+		SMALL_OPTS="-DBUFSIZE=16384 -DMAXREWRITE=8192 -DSYSTEM_MAXCONN=65530" USE_LINUX_TPROXY=1 USE_LINUX_SPLICE=1 \
 		all install
 endef
 
