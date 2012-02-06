@@ -1,6 +1,8 @@
---- a/drv_T6963.c
-+++ b/drv_T6963.c
-@@ -114,7 +114,9 @@ static void drv_T6_status1(void)
+Index: lcd4linux-847/drv_T6963.c
+===================================================================
+--- lcd4linux-847.orig/drv_T6963.c	2007-12-01 17:15:10.000000000 +0100
++++ lcd4linux-847/drv_T6963.c	2007-12-01 17:15:11.000000000 +0100
+@@ -114,7 +114,9 @@
      /* wait for STA0=1 and STA1=1 */
      n = 0;
      do {
@@ -10,7 +12,7 @@
  	if (++n > 1000) {
  	    debug("hang in status1");
  	    bug = 1;
-@@ -150,7 +152,9 @@ static void drv_T6_status2(void)
+@@ -150,7 +152,9 @@
      /* wait for STA3=1 */
      n = 0;
      do {

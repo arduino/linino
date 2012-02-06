@@ -1,5 +1,6 @@
---- a/drv_G15.c
-+++ b/drv_G15.c
+diff -urN lcd4linux-r877/drv_G15.c lcd4linux-r877.new/drv_G15.c
+--- lcd4linux-r877/drv_G15.c	2008-06-01 22:47:45.000000000 +0200
++++ lcd4linux-r877.new/drv_G15.c	2008-08-06 17:31:04.000000000 +0200
 @@ -42,6 +42,7 @@
  
  #include <usb.h>
@@ -8,7 +9,7 @@
  #include <linux/input.h>
  #include <linux/uinput.h>
  
-@@ -269,8 +270,13 @@ void drv_G15_initKeyHandling(char *devic
+@@ -258,8 +259,13 @@
      }
      memset(&device, 0, sizeof(device));
      strncpy(device.name, "G15 Keys", UINPUT_MAX_NAME_SIZE);
