@@ -1,0 +1,20 @@
+Index: psmisc-22.14/src/fuser.c
+===================================================================
+--- psmisc-22.14.orig/src/fuser.c
++++ psmisc-22.14/src/fuser.c
+@@ -1852,6 +1852,7 @@ clear_mntinfo(void)
+ static void
+ init_mntinfo(void)
+ {
++#if 0
+ 	char mpoint[PATH_MAX+1];
+ 	int mid, parid, max = 0;
+ 	uint maj, min;
+@@ -1904,6 +1905,7 @@ init_mntinfo(void)
+ 		errno = EBADE;
+ 	}
+ 	join(&sort, &mntinfo);
++#endif
+ }
+ 
+ /*
