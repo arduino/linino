@@ -34,8 +34,8 @@
  ACLOCAL_AMFLAGS = -I auto-m4 -I m4m
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -238,7 +238,7 @@ sysconfdir = @sysconfdir@
- target_alias = @target_alias@
+@@ -278,7 +278,7 @@ target_alias = @target_alias@
+ top_build_prefix = @top_build_prefix@
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
 -SUBDIRS = m4m contrib doc gphoto2 packaging po
