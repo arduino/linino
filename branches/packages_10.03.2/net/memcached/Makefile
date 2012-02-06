@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=memcached
-PKG_VERSION:=1.4.11
+PKG_VERSION:=1.4.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://memcached.googlecode.com/files
-PKG_MD5SUM:=50ee313639531d4d2f8eb9c688f58948
+PKG_MD5SUM:=4194de21b58a92de684ce69b8e501c44
 
 PKG_INSTALL:=1
 
