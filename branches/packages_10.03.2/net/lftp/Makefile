@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lftp
 PKG_VERSION:=4.3.4
-PKG_RELEASE:=1
+PKG_RELEASE:=1.1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=http://lftp.cybermirror.org \
@@ -50,7 +50,8 @@ CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	LDFLAGS="$$$$LDFLAGS" \
 	LIBS="-nodefaultlibs -lz -lutil -lc -luClibc++ -lcurses $(LIBGCC_S) -ldl" \
-	i_cv_posix_fallocate_works=no
+	i_cv_posix_fallocate_works=no \
+	ac_cv_posix_fadvise=no
 
 MAKE_VARS += \
 	LD="\$$$$(CC)"
