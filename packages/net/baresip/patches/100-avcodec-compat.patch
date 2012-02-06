@@ -1,0 +1,13 @@
+--- a/modules/avformat/avf.c
++++ b/modules/avformat/avf.c
+@@ -27,10 +27,7 @@
+ 
+ 
+ /* backward compat */
+-#if defined (CODEC_TYPE_VIDEO)
+-#undef  AVMEDIA_TYPE_VIDEO
+ #define AVMEDIA_TYPE_VIDEO CODEC_TYPE_VIDEO
+-#endif
+ 
+ 
+ struct vidsrc_st {
