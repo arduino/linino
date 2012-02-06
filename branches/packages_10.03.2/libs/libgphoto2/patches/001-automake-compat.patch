@@ -1,6 +1,6 @@
 --- a/configure.ac
 +++ b/configure.ac
-@@ -227,7 +227,6 @@ ALL_LINGUAS="da de es eu fr hu it ja nl 
+@@ -227,7 +227,6 @@ ALL_LINGUAS="da de es eu fr hu it ja nl
  GP_GETTEXT_HACK([${PACKAGE}-${LIBGPHOTO2_CURRENT_MIN}],[The gPhoto Team],[${MAIL_GPHOTO_TRANSLATION}])
  AM_GNU_GETTEXT_VERSION([0.14.1])
  AM_GNU_GETTEXT([external])
@@ -20,7 +20,7 @@
  
 --- a/libgphoto2_port/libgphoto2_port/Makefile.in
 +++ b/libgphoto2_port/libgphoto2_port/Makefile.in
-@@ -14,6 +14,8 @@
+@@ -15,6 +15,8 @@
  
  @SET_MAKE@
  
@@ -28,10 +28,10 @@
 +
  VPATH = @srcdir@
  pkgdatadir = $(datadir)/@PACKAGE@
- pkglibdir = $(libdir)/@PACKAGE@
+ pkgincludedir = $(includedir)/@PACKAGE@
 --- a/libgphoto2_port/Makefile.in
 +++ b/libgphoto2_port/Makefile.in
-@@ -14,7 +14,7 @@
+@@ -15,7 +15,7 @@
  
  @SET_MAKE@
  
@@ -42,7 +42,7 @@
  pkgdatadir = $(datadir)/@PACKAGE@
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -19,7 +19,7 @@
+@@ -20,7 +20,7 @@
  ########################################################################
  # put file lists and special compile rules here
  

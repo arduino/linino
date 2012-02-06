@@ -1,6 +1,6 @@
 --- a/configure.ac
 +++ b/configure.ac
-@@ -628,20 +628,11 @@ camlibs/konica/localization/Makefile
+@@ -637,20 +637,11 @@ camlibs/konica/localization/Makefile
  libgphoto2/Makefile
  libgphoto2.pc
  libgphoto2-uninstalled.pc
@@ -23,7 +23,7 @@
  dnl with ac_file set to the filename.
 --- a/libgphoto2_port/configure.ac
 +++ b/libgphoto2_port/configure.ac
-@@ -483,7 +483,6 @@ AC_SUBST([AM_LDFLAGS])
+@@ -485,7 +485,6 @@ AC_SUBST([AM_LDFLAGS])
  # ---------------------------------------------------------------------------
  AC_CONFIG_FILES([
  Makefile
@@ -31,7 +31,7 @@
  libgphoto2_port/Makefile
  libgphoto2_port.pc
  libgphoto2_port-uninstalled.pc
-@@ -494,8 +493,6 @@ usbscsi/Makefile
+@@ -497,8 +496,6 @@ usbscsi/Makefile
  disk/Makefile
  ptpip/Makefile
  gphoto2-port-config
@@ -53,7 +53,7 @@
  	AUTHORS \
 --- a/libgphoto2_port/Makefile.in
 +++ b/libgphoto2_port/Makefile.in
-@@ -271,7 +271,7 @@ VERSION_FLAGS = -DLIBGPPORT_VERSION=\"@L
+@@ -325,7 +325,7 @@ VERSION_FLAGS = -DLIBGPPORT_VERSION=\"@L
  bin_SCRIPTS = gphoto2-port-config
  
  # Note: @subdirs@ lists all the directories from AC_CONFIG_SUBDIRS()
@@ -75,7 +75,7 @@
  pkgconfig_DATA = libgphoto2.pc
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -302,7 +302,7 @@ EXTRA_DIST = HACKING MAINTAINERS TESTERS
+@@ -357,7 +357,7 @@ EXTRA_DIST = HACKING MAINTAINERS TESTERS
  	ChangeLog INSTALL README.in README README.packaging
  
  # Note: @subdirs@ lists all the directories from AC_CONFIG_SUBDIRS()
