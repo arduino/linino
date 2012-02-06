@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ntp
 PKG_VERSION:=4.2.6p5
-PKG_RELEASE:=1
+PKG_RELEASE:=1.1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/
@@ -30,7 +30,6 @@ define Package/ntpd/Default
   TITLE:=ISC ntp
   MAINTAINER:=Peter Wagner <tripolar@gmx.at>
   URL:=http://www.ntp.org/
-  DEPENDS:=+libcap
 endef
 
 define Package/ntpd/Default/description
@@ -133,7 +132,7 @@ CONFIGURE_ARGS += \
 	--enable-NMEA \
 	--enable-LOCAL-CLOCK \
 	--enable-SHM \
-	--enable-linuxcaps
+	--disable-linuxcaps
 
 ifeq ($(BUILD_VARIANT),ssl)
   CONFIGURE_ARGS += \
