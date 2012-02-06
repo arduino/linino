@@ -79,7 +79,7 @@ define Build/Compile
 		CC="$(TARGET_CC)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		EXTRA_CFLAGS="$(TARGET_CFLAGS) -DOPENWRT" \
-		SYSROOT="$$$$(echo '#include <pthread.h>' | $(TARGET_CROSS)cpp -x c | sed -ne 's,^# [0-9]* \"\(.*\)/include/pthread\.h\".*,\1,p' | head -n1)" \
+		SYSROOT="$$$$($(FIND) $(TOOLCHAIN_DIR) -path '*/include/pthread.h' | sed -ne '1s#/include/pthread.h##p')" \
 		SYSROOT_ALT="$(STAGING_DIR)/usr" \
 		RELEASE=1 \
 		CROSS_COMPILE="$(TARGET_CROSS)" \
