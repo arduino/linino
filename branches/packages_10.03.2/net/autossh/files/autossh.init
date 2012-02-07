@@ -12,7 +12,7 @@ start_instance() {
 	config_get poll "$section" 'poll'
 
 	AUTOSSH_GATETIME="${gatetime:-30}" \
-	AUTOSSH_POLL="${poll:-600"}" \
+	AUTOSSH_POLL="${poll:-600}" \
 	service_start /usr/sbin/autossh -M ${monitorport:-20000} -f ${ssh}
 }
 
