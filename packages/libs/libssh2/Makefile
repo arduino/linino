@@ -14,6 +14,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.libssh2.org/download/
 PKG_MD5SUM:=ee670161d8c5dff93ae84a3f34f15669
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -28,24 +29,11 @@ endef
 TARGET_CFLAGS += $(FPIC)
 CONFIGURE_ARGS += --with-libssl-prefix=$(STAGING_DIR)/usr
 
-define Build/Compile
-	$(MAKE) $(MAKE_FLAGS) -C $(PKG_BUILD_DIR)/src all
-endef
-
-define Build/Install
-	$(MAKE) $(MAKE_FLAGS) -C $(PKG_BUILD_DIR)/src install DESTDIR=$(PKG_INSTALL_DIR)
-	$(MAKE) $(MAKE_FLAGS) -C $(PKG_BUILD_DIR) install-includeHEADERS DESTDIR=$(PKG_INSTALL_DIR)
-endef
-
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/include/*h \
-		$(1)/usr/include/
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/libssh2.so* \
-		$(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/*.h $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libssh2.so* $(1)/usr/lib/
 endef
 
 define Package/libssh2/install
