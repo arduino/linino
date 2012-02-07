@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=syslog-ng
 PKG_VERSION:=1.6.12
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 PKG_MD5SUM:=a3cbfdb6e1e5beea181a7349749719f3
 
 PKG_SOURCE_URL:= \
