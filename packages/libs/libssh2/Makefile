@@ -26,7 +26,12 @@ define Package/libssh2
   DEPENDS:=+libopenssl +zlib
 endef
 
+define Package/libssh2/description
+	libssh2 is a client-side C library implementing the SSH2 protocol
+endef
+
 TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += --with-libssl-prefix=$(STAGING_DIR)/usr
 
 define Build/InstallDev
