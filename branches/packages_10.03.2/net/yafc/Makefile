@@ -30,6 +30,13 @@ define Package/yafc
 endef
 
 # uses GNU configure
+CONFIGURE_ARGS += \
+	--with-socks=no \
+	--with-socks5=no \
+	--with-krb4=no \
+	--with-krb5=no \
+	--with-gssapi=no
+
 CONFIGURE_VARS += \
 	bash_cv_func_sigsetjmp=missing
 
