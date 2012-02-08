@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=lcd4linux
 PKG_REV:=1159
 PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=3.1
+PKG_RELEASE:=3.2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://ssl.bulix.org/svn/lcd4linux/trunk/
@@ -221,7 +221,7 @@ ifeq ($(BUILD_VARIANT),custom)
   LCD4LINUX_CUSTOM_DRIVERS:= $(strip $(foreach c, $(LCD4LINUX_DRIVERS), \
     $(if $(CONFIG_LCD4LINUX_CUSTOM_DRIVER_$(c)),$(c),) \
  ))
-  ifeq ($(LCD4LINUX_CUSTOM_DRIVER),)
+  ifeq ($(LCD4LINUX_CUSTOM_DRIVERS),)
     LCD4LINUX_CUSTOM_DRIVERS:=Sample
   endif
 
