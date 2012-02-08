@@ -144,7 +144,7 @@ define Package/lcd4linux/Default
 endef
 
 define Package/lcd4linux/Default/description
- LCD4Linux is a small program that grabs information from the kernel and 
+ LCD4Linux is a small program that grabs information from the kernel and
  some subsystems and displays it on an external liquid crystal display.
 endef
 
