@@ -240,6 +240,12 @@ config LCD4LINUX_CUSTOM_DRIVER_T6963
 	prompt "T6963"
 	select LCD4LINUX_CUSTOM_NEEDS_libgd
 
+config LCD4LINUX_CUSTOM_DRIVER_TEW673GRU
+	bool
+	select LCD4LINUX_CUSTOM_NEEDS_libgd
+	depends on TARGET_ar71xx
+	default TARGET_ar71xx
+
 config LCD4LINUX_CUSTOM_DRIVER_Trefon
 	bool
 	prompt "Trefon"

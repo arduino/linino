@@ -1,0 +1,289 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -71,6 +71,8 @@ drv_generic_i2c.c             \
+ drv_generic_i2c.h             \
+ drv_generic_keypad.c          \
+ drv_generic_keypad.h          \
++drv_generic_spidev.c          \
++drv_generic_spidev.h          \
+ drv_ASTUSB.c                  \
+ drv_BeckmannEgle.c            \
+ drv_BWCT.c                    \
+--- /dev/null
++++ b/drv_generic_spidev.c
+@@ -0,0 +1,89 @@
++/* $Id$
++ * $URL$
++ *
++ * generic driver helper for displays connected via SPI bus
++ *
++ * Copyright (C) 2012 Gabor Juhos <juhosg@openwrt.org>
++ *
++ * This file is part of LCD4Linux.
++ *
++ * LCD4Linux is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2, or (at your option)
++ * any later version.
++ *
++ * LCD4Linux is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ *
++ */
++
++#include "config.h"
++
++#include <stdlib.h>
++#include <stdio.h>
++#include <string.h>
++#include <errno.h>
++#include <unistd.h>
++#include <fcntl.h>
++#include <sys/types.h>
++#include <sys/ioctl.h>
++
++#include "debug.h"
++#include "qprintf.h"
++#include "cfg.h"
++#include "drv_generic_spidev.h"
++
++static char *generic_spidev_section = "";
++static char *generic_spidev_driver = "";
++static int generic_spidev_fd;
++
++int drv_generic_spidev_open(const char *section, const char *driver)
++{
++    char *spidev;
++
++    udelay_init();
++
++    generic_spidev_section = (char *) section;
++    generic_spidev_driver = (char *) driver;
++
++    spidev = cfg_get(generic_spidev_section, "Port", NULL);
++
++    info("%s: initializing SPI device %s", generic_spidev_driver, spidev);
++    generic_spidev_fd = open(spidev, O_WRONLY);
++    if (generic_spidev_fd < 0) {
++	error("%s: unable to open SPI device %s!\n", generic_spidev_driver, spidev);
++	goto exit_error;
++    }
++
++    return 0;
++
++  exit_error:
++    free(spidev);
++    return -1;
++}
++
++int drv_generic_spidev_close(void)
++{
++    close(generic_spidev_fd);
++    return 0;
++}
++
++int drv_generic_spidev_transfer(const int count, struct spi_ioc_transfer *tr)
++{
++    int ret;
++
++    ret = ioctl(generic_spidev_fd, SPI_IOC_MESSAGE(count), tr);
++    if (ret < count) {
++	error("%s: can't send SPI message! (%s)\n",
++		generic_spidev_driver, strerror(errno));
++	return -1;
++    }
++
++    return 0;
++}
+--- /dev/null
++++ b/drv_generic_spidev.h
+@@ -0,0 +1,54 @@
++/* $Id$
++ * $URL$
++ *
++ * generic driver helper for displays connected via SPI bus
++ *
++ * Copyright (C) 2012 Gabor Juhos <juhosg@openwrt.org>
++ * Copyright (C) 2012 The LCD4Linux Team <lcd4linux-devel@users.sourceforge.net>
++ *
++ * This file is part of LCD4Linux.
++ *
++ * LCD4Linux is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2, or (at your option)
++ * any later version.
++ *
++ * LCD4Linux is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ *
++ */
++
++/*
++ *
++ * exported fuctions:
++ *
++ * int drv_generic_spidev_open (const char *section, const char *driver)
++ *   reads 'Port' entry from config and opens
++ *   the SPI device
++ *   returns 0 if ok, -1 on failure
++ *
++ * int drv_generic_spidev_close (void)
++ *   closes SPI device
++ *   returns 0 if ok, -1 on failure
++ *
++ * void drv_generic_spidev_transfer (int count, struct spi_ioc_transfer *tr)
++ *   transfer data to/from the SPI device
++ *
++ */
++
++#ifndef _DRV_GENERIC_SPIDEV_H_
++#define _DRV_GENERIC_SPIDEV_H_
++
++#include <linux/spi/spidev.h>
++
++int drv_generic_spidev_open(const char *section, const char *driver);
++int drv_generic_spidev_close(void);
++int drv_generic_spidev_transfer(const int count, struct spi_ioc_transfer *tr);
++
++#endif /* _DRV_GENERIC_SPIDEV_H_ */
+--- a/drivers.m4
++++ b/drivers.m4
+@@ -232,9 +232,9 @@ for driver in $drivers; do
+       serdisplib)
+          SERDISPLIB=$val;
+          ;;
+-      ShuttleVFD) 
++      ShuttleVFD)
+ 	 SHUTTLEVFD=$val
+-	 ;;          
++	 ;;
+       SimpleLCD)
+          SIMPLELCD=$val
+          ;;
+@@ -285,6 +285,7 @@ PARPORT="no"
+ SERIAL="no"
+ I2C="no"
+ KEYPAD="no"
++SPIDEV="no"
+ 
+ # generic libraries
+ LIBUSB="no"
+@@ -544,17 +545,17 @@ if test "$MATRIXORBITALGX" = "yes"; then
+     fi
+ fi
+ 
+-if test "$MDM166A" = "yes"; then 
+-   if test "$has_usb10" = "true"; then 
++if test "$MDM166A" = "yes"; then
++   if test "$has_usb10" = "true"; then
+       GRAPHIC="yes"
+-      DRIVERS="$DRIVERS drv_mdm166a.o" 
+-      GPIO="yes" 
++      DRIVERS="$DRIVERS drv_mdm166a.o"
++      GPIO="yes"
+       LIBUSB10="yes"
+-      AC_DEFINE(WITH_MDM166A,1,[MDM166A driver]) 
+-    else 
+-      AC_MSG_WARN(libusb-1.0/libusb.h not found: MDM166A driver disabled) 
+-    fi 
+-fi 
++      AC_DEFINE(WITH_MDM166A,1,[MDM166A driver])
++    else
++      AC_MSG_WARN(libusb-1.0/libusb.h not found: MDM166A driver disabled)
++    fi
++fi
+ 
+ if test "$MILINST" = "yes"; then
+    TEXT="yes"
+@@ -630,7 +631,7 @@ if test "$PICOLCDGRAPHIC" = "yes"; then
+    if test "$has_usb" = "true"; then
+       TEXT="yes"
+       GRAPHIC="yes"
+-      KEYPAD="yes"      
++      KEYPAD="yes"
+       GPIO="yes"
+       SERIAL="yes"
+       LIBUSB="yes"
+@@ -698,17 +699,17 @@ if test "$SERDISPLIB" = "yes"; then
+    fi
+ fi
+ 
+-if test "$SHUTTLEVFD" = "yes"; then 
+-   if test "$has_usb" = "true"; then 
+-      TEXT="yes" 
+-      GPIO="yes" 
+-      DRIVERS="$DRIVERS drv_ShuttleVFD.o" 
+-      LIBUSB="yes" 
+-      AC_DEFINE(WITH_SHUTTLEVFD,1,[ShuttleVFD driver]) 
+-    else 
+-      AC_MSG_WARN(usb.h not found: ShuttleVFD driver disabled) 
+-    fi 
+-fi 
++if test "$SHUTTLEVFD" = "yes"; then
++   if test "$has_usb" = "true"; then
++      TEXT="yes"
++      GPIO="yes"
++      DRIVERS="$DRIVERS drv_ShuttleVFD.o"
++      LIBUSB="yes"
++      AC_DEFINE(WITH_SHUTTLEVFD,1,[ShuttleVFD driver])
++    else
++      AC_MSG_WARN(usb.h not found: ShuttleVFD driver disabled)
++    fi
++fi
+ 
+ if test "$SIMPLELCD" = "yes"; then
+    TEXT="yes"
+@@ -786,7 +787,7 @@ fi
+ if test "$VNC" = "yes"; then
+    if test "$has_vncserverlib" = "true"; then
+       GRAPHIC="yes"
+-      KEYPAD="yes"      
++      KEYPAD="yes"
+       DRIVERS="$DRIVERS drv_vnc.o"
+       DRVLIBS="$DRVLIBS -L/usr/local/lib -lvncserver -lz"
+       AC_DEFINE(WITH_VNC,1,[vnc driver])
+@@ -874,6 +875,12 @@ if test "$KEYPAD" = "yes"; then
+    DRIVERS="$DRIVERS drv_generic_keypad.o"
+ fi
+ 
++# generic spidev driver
++if test "$SPIDEV" = "yes"; then
++   DRIVERS="$DRIVERS drv_generic_spidev.o"
++   AC_DEFINE(WITH_SPIDEV, 1, [SPIDEV driver])
++fi
++
+ # libusb
+ if test "$LIBUSB" = "yes"; then
+    DRVLIBS="$DRVLIBS -lusb"
+@@ -892,6 +899,6 @@ fi
+ if test "$DRIVERS" = ""; then
+    AC_MSG_ERROR([You should include at least one driver...])
+ fi
+-   
++
+ AC_SUBST(DRIVERS)
+ AC_SUBST(DRVLIBS)
+--- a/configure.in
++++ b/configure.in
+@@ -108,6 +108,9 @@ fi
+ #AC_CHECK_HEADERS(asm/io.h)
+ AC_CHECK_HEADERS([asm/io.h] [linux/parport.h linux/ppdev.h], [has_parport="true"], [has_parport="false"])
+ 
++# check for spidev
++AC_CHECK_HEADERS([linux/spi/spidev.h], [has_spidev="true"], [has_spidev="false"])
++
+ # drivers
+ sinclude(drivers.m4)
+ 
