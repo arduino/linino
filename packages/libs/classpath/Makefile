@@ -34,6 +34,14 @@ define Package/classpath/Description
 	machines and compilers for the java programming language.
 endef
 
+define Package/classpath-tools
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=GNU Classpath tools
+  URL:=http://www.gnu.org/software/classpath/
+  MAINTAINER:=Roberto Riggio <roberto.riggio@create-net.org>
+endef
+
 define Download/antlr
   URL:=http://www.antlr.org/download
   FILE:=antlr-3.4-complete.jar
@@ -63,8 +71,17 @@ define Package/classpath/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/classpath/glibj.zip $(1)/usr/share/classpath/
 endef
 
+define Package/classpath-tools/install
+	$(INSTALL_DIR) \
+		$(1)/usr/bin \
+		$(1)/usr/share/classpath
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/classpath/tools.zip $(1)/usr/share/classpath/
+endef
+
 define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 $(eval $(call BuildPackage,classpath))
+$(eval $(call BuildPackage,classpath-tools))
