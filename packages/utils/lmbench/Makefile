@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -13,10 +13,8 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=@SF/lmbench/
-PKG_MD5SUM:=784b0873361cd5442e02b2544d42917b
-PKG_CAT:=cat
+PKG_MD5SUM:=b3351a3294db66a72e2864a199d37cbf
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=librpc
 
 include $(INCLUDE_DIR)/package.mk
