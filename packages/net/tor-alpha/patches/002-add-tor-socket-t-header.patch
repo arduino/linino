@@ -1,0 +1,10 @@
+--- a/src/tools/tor-fw-helper/tor-fw-helper-natpmp.c
++++ b/src/tools/tor-fw-helper/tor-fw-helper-natpmp.c
+@@ -8,6 +8,7 @@
+   **/
+ 
+ #include "orconfig.h"
++#include "compat.h"
+ #ifdef NAT_PMP
+ #ifdef MS_WINDOWS
+ #define STATICLIB
