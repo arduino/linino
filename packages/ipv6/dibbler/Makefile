@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,23 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dibbler
-PKG_VERSION:=0.7.3
-PKG_RELEASE:=6
+PKG_VERSION:=0.8.1
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.gz
-PKG_SOURCE_URL:=http://klub.com.pl/dhcpv6/dibbler/
-PKG_MD5SUM:=39be72da38c2e6d33fd43a2811a276b1
-
-PKG_FIXUP:=libtool
-PKG_LIBTOOL_PATHS:=poslib
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://klub.com.pl/dhcpv6/dibbler
+PKG_MD5SUM:=0e52acedd838c43a264441a933780ead
 
 include $(INCLUDE_DIR)/package.mk
 
-# add dependency on 2.6 since recent dibbler needs <linux/ip_mp_alg.h>
 define Package/dibbler/Default
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+libstdcpp +libpthread
+  DEPENDS:=+uclibcxx +libpthread
   TITLE:=Dibbler, a portable DHCPv6 implementation
   URL:=http://klub.com.pl/dhcpv6/
 endef
@@ -35,24 +31,18 @@ define Package/dibbler/Default/description
 	autoconfiguration for IPv6.
 endef
 
-define Package/dibbler-poslib
-  $(call Package/dibbler/Default)
-  TITLE+= (helper lib)
-endef
-
-define Package/dibbler-poslib/description
-  $(call Package/dibbler/Default/description)
-  This package contains the pos library.
-endef
-
 define Package/dibbler-client
   $(call Package/dibbler/Default)
   TITLE+= (client)
 endef
 
+define Package/dibbler-client/conffiles
+/etc/dibbler/client.conf
+endef
+
 define Package/dibbler-client/description
-  $(call Package/dibbler/Default/description)
-  This package contains the dibbler client.
+	$(call Package/dibbler/Default/description)
+	This package contains the dibbler client.
 endef
 
 define Package/dibbler-relay
@@ -60,82 +50,86 @@ define Package/dibbler-relay
   TITLE+= (relay)
 endef
 
+define Package/dibbler-relay/conffiles
+/etc/dibbler/relay.conf
+endef
+
 define Package/dibbler-relay/description
-  $(call Package/dibbler/Default/description)
-  This package contains the dibbler relay.
+	$(call Package/dibbler/Default/description)
+	This package contains the dibbler relay.
+endef
+
+define Package/dibbler-requestor
+  $(call Package/dibbler/Default)
+  TITLE+= (requestor)
+endef
+
+define Package/dibbler-requestor/description
+	$(call Package/dibbler/Default/description)
+	This package contains the dibbler requestor.
 endef
 
 define Package/dibbler-server
   $(call Package/dibbler/Default)
-  DEPENDS += +dibbler-poslib
   TITLE+= (server)
 endef
 
+define Package/dibbler-server/conffiles
+/etc/dibbler/server.conf
+endef
+
 define Package/dibbler-server/description
-  $(call Package/dibbler/Default/description)
-  This package contains the dibbler server.
+	$(call Package/dibbler/Default/description)
+	This package contains the dibbler server.
 endef
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR)/poslib; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="$(TARGET_CPPFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=/usr/lib \
-			--libexecdir=/usr/lib \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc \
-			$(DISABLE_NLS) \
-	);
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		PORT_CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
-		PORT_LDFLAGS="$(TARGET_LDFLAGS)" \
-		DEBUGINFO= \
-		server client relay
-endef
-
-define Package/dibbler-poslib/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/./poslib/poslib/.libs/libposlib.so* $(1)/usr/lib/
-endef
+TARGET_CXX = $(STAGING_DIR)/host/bin/g++-uc
 
 define Package/dibbler-client/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dibbler-client $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/dibbler
+	$(INSTALL_CONF) \
+		$(PKG_BUILD_DIR)/doc/examples/client.conf \
+		$(1)/etc/dibbler/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) \
+		./files/dibbler-client.init \
+		$(1)/etc/init.d/dibbler-client
 endef
 
 define Package/dibbler-relay/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dibbler-relay $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/dibbler
+	$(INSTALL_CONF) \
+		$(PKG_BUILD_DIR)/doc/examples/relay.conf \
+		$(1)/etc/dibbler/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) \
+		./files/dibbler-relay.init \
+		$(1)/etc/init.d/dibbler-relay
+endef
+
+define Package/dibbler-requestor/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dibbler-requestor $(1)/usr/sbin/
 endef
 
 define Package/dibbler-server/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dibbler-server $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/dibbler
+	$(INSTALL_CONF) \
+		$(PKG_BUILD_DIR)/doc/examples/server.conf \
+		$(1)/etc/dibbler/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) ./files/dibbler.init $(1)/etc/init.d/
+	$(INSTALL_BIN) \
+		./files/dibbler-server.init \
+		$(1)/etc/init.d/dibbler-server
 endef
 
-$(eval $(call BuildPackage,dibbler-poslib))
 $(eval $(call BuildPackage,dibbler-client))
 $(eval $(call BuildPackage,dibbler-relay))
+$(eval $(call BuildPackage,dibbler-requestor))
 $(eval $(call BuildPackage,dibbler-server))
