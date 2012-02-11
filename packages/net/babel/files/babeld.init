@@ -104,7 +104,6 @@ babel_config() {
 	append_parm "$cfg" 'state_file' '-S'
 	append_parm "$cfg" 'hello_interval' '-h'
 	append_parm "$cfg" 'wired_hello_interval' '-H'
-	append_parm "$cfg" 'idle_hello_interval' '-i'
 	append_parm "$cfg" 'diversity' '-z'
 	append_parm "$cfg" 'kernel_priority' '-k'
 	append_parm "$cfg" 'duplication_priority' '-A'
