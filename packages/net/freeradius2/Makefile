@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeradius2
-PKG_VERSION:=2.1.10
-PKG_RELEASE:=3
+PKG_VERSION:=2.1.12
+PKG_RELEASE:=1
 
 PKG_SOURCE:=freeradius-server-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/freeradius/
-PKG_MD5SUM:=8ea2bd39460a06212decf2c14fdf3fb8
+PKG_MD5SUM:=862d3a2c11011e61890ba84fa636ed8c
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/freeradius-server-$(PKG_VERSION)
 PKG_FIXUP:=libtool
@@ -366,6 +366,25 @@ CONFIGURE_ARGS+= \
 	--without-rlm_opendirectory \
 	--without-rlm_wimax \
 	--without-rlm_ruby \
+	--without-rlm_caching \
+	--without-rlm_redis \
+	--without-rlm_rediswho \
+	--without-rlm_soh \
+	--without-rlm_sim \
+	--without-rlm_replicate \
+	--without-rlm_protocol_filter \
+	--without-rlm_policy \
+	--without-rlm_linelog \
+	--without-rlm_jradius \
+	--without-rlm_fastusers \
+	--without-rlm_eap_leap \
+	--without-rlm_dynamic_clients \
+	--without-rlm_digest \
+	--without-rlm_cram \
+	--without-rlm_copy_packet \
+	--without-rlm_acct_unique \
+	--without-rlm_acctlog
+	
 
 PKG_DICTIONARIES:= \
 	freeradius freeradius.internal \

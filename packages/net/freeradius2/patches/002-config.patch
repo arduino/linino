@@ -1,6 +1,6 @@
 --- a/raddb/dictionary.in
 +++ b/raddb/dictionary.in
-@@ -11,7 +11,7 @@
+@@ -23,7 +23,7 @@
  #
  #	The filename given here should be an absolute path. 
  #
@@ -80,16 +80,16 @@
  
  			#  Check the Certificate Revocation List
  			#
-@@ -271,7 +271,7 @@
- 			#  configuration.  It is here ONLY to make
- 			#  initial deployments easier.
+@@ -281,7 +281,7 @@
+ 			# for the server to print out an error message,
+ 			# and refuse to start.
  			#
 -			make_cert_command = "${certdir}/bootstrap"
 +		#	make_cert_command = "${certdir}/bootstrap"
  
  			#
- 			#  Session resumption / fast reauthentication
-@@ -299,7 +299,7 @@
+ 			#  Elliptical cryptography configuration
+@@ -316,7 +316,7 @@
  			#  You probably also want "use_tunneled_reply = yes"
  			#  when using fast session resumption.
  			#
@@ -98,7 +98,7 @@
  			      #
  			      #  Enable it.  The default is "no".
  			      #  Deleting the entire "cache" subsection
-@@ -315,14 +315,14 @@
+@@ -332,14 +332,14 @@
  			      #  enable resumption for just one user
  			      #  by setting the above attribute to "yes".
  			      #
@@ -115,7 +115,7 @@
  
  			      #
  			      #  The maximum number of entries in the
-@@ -331,8 +331,8 @@
+@@ -348,8 +348,8 @@
  			      #  This could be set to the number of users
  			      #  who are logged in... which can be a LOT.
  			      #
@@ -126,7 +126,7 @@
  
  			#
  			#  As of version 2.1.10, client certificates can be
-@@ -394,7 +394,7 @@
+@@ -449,7 +449,7 @@
  		#
  		#  in the control items for a request.
  		#
@@ -135,7 +135,7 @@
  			#  The tunneled EAP session needs a default
  			#  EAP type which is separate from the one for
  			#  the non-tunneled EAP module.  Inside of the
-@@ -402,7 +402,7 @@
+@@ -457,7 +457,7 @@
  			#  If the request does not contain an EAP
  			#  conversation, then this configuration entry
  			#  is ignored.
@@ -144,7 +144,7 @@
  
  			#  The tunneled authentication request does
  			#  not usually contain useful attributes
-@@ -418,7 +418,7 @@
+@@ -473,7 +473,7 @@
  			#  is copied to the tunneled request.
  			#
  			# allowed values: {no, yes}
@@ -153,7 +153,7 @@
  
  			#  The reply attributes sent to the NAS are
  			#  usually based on the name of the user
-@@ -431,7 +431,7 @@
+@@ -486,7 +486,7 @@
  			#  the tunneled request.
  			#
  			# allowed values: {no, yes}
@@ -162,7 +162,7 @@
  
  			#
  			#  The inner tunneled request can be sent
-@@ -443,13 +443,13 @@
+@@ -498,13 +498,13 @@
  			#  the virtual server that processed the
  			#  outer requests.
  			#
@@ -178,7 +178,7 @@
  
  		##################################################
  		#
-@@ -518,14 +518,14 @@
+@@ -573,14 +573,14 @@
  
  			#  the PEAP module also has these configuration
  			#  items, which are the same as for TTLS.
@@ -196,16 +196,16 @@
  
  			#
  			#  The inner tunneled request can be sent
-@@ -537,7 +537,8 @@
+@@ -592,7 +592,8 @@
  			#  the virtual server that processed the
  			#  outer requests.
  			#
 -			virtual_server = "inner-tunnel"
 +		#	virtual_server = "inner-tunnel"
 +			EAP-TLS-Require-Client-Cert = no
- 		}
  
- 		#
+ 			# This option enables support for MS-SoH
+ 			# see doc/SoH.txt for more info.
 --- a/raddb/modules/counter
 +++ b/raddb/modules/counter
 @@ -69,7 +69,7 @@
@@ -219,9 +219,9 @@
  	reset = daily
 --- a/raddb/modules/pap
 +++ b/raddb/modules/pap
-@@ -14,5 +14,5 @@
- #  with the correct value.  It will also automatically handle
- #  Base-64 encoded data, hex strings, and binary data.
+@@ -18,5 +18,5 @@
+ #
+ #  http://www.openldap.org/faq/data/cache/347.html
  pap {
 -	auto_header = no
 +	auto_header = yes
@@ -288,7 +288,7 @@
  
  
  # CLIENTS CONFIGURATION
-@@ -722,7 +722,7 @@ instantiate {
+@@ -739,7 +739,7 @@ instantiate {
  	#  The entire command line (and output) must fit into 253 bytes.
  	#
  	#  e.g. Framed-Pool = `%{exec:/bin/echo foo}`
@@ -297,7 +297,7 @@
  
  	#
  	#  The expression module doesn't do authorization,
-@@ -735,15 +735,15 @@ instantiate {
+@@ -752,15 +752,15 @@ instantiate {
  	#  listed in any other section.  See 'doc/rlm_expr' for
  	#  more information.
  	#
@@ -316,7 +316,7 @@
  
  	# subsections here can be thought of as "virtual" modules.
  	#
-@@ -767,7 +767,7 @@ instantiate {
+@@ -784,7 +784,7 @@ instantiate {
  #	to multiple times.
  #
  ######################################################################
@@ -325,7 +325,7 @@
  
  ######################################################################
  #
-@@ -777,9 +777,9 @@ $INCLUDE policy.conf
+@@ -794,9 +794,9 @@ $INCLUDE policy.conf
  #	match the regular expression: /[a-zA-Z0-9_.]+/
  #
  #	It allows you to define new virtual servers simply by placing
@@ -337,7 +337,7 @@
  
  ######################################################################
  #
-@@ -787,7 +787,7 @@ $INCLUDE sites-enabled/
+@@ -804,7 +804,7 @@ $INCLUDE sites-enabled/
  #	"authenticate {}", "accounting {}", have been moved to the
  #	the file:
  #
@@ -348,7 +348,7 @@
  #	configuration as in version 1.0.x and 1.1.x.  The default
 --- a/raddb/sites-available/default
 +++ b/raddb/sites-available/default
-@@ -67,7 +67,7 @@ authorize {
+@@ -85,7 +85,7 @@ authorize {
  	#
  	#  It takes care of processing the 'raddb/hints' and the
  	#  'raddb/huntgroups' files.
@@ -357,7 +357,7 @@
  
  	#
  	#  If you want to have a log of authentication requests,
-@@ -78,7 +78,7 @@ authorize {
+@@ -96,7 +96,7 @@ authorize {
  	#
  	#  The chap module will set 'Auth-Type := CHAP' if we are
  	#  handling a CHAP request and Auth-Type has not already been set
@@ -366,7 +366,7 @@
  
  	#
  	#  If the users are logging in with an MS-CHAP-Challenge
-@@ -86,13 +86,13 @@ authorize {
+@@ -104,13 +104,13 @@ authorize {
  	#  the MS-CHAP-Challenge attribute, and add 'Auth-Type := MS-CHAP'
  	#  to the request, which will cause the server to then use
  	#  the mschap module for authentication.
@@ -382,7 +382,7 @@
  
  	#
  	#  The WiMAX specification says that the Calling-Station-Id
-@@ -115,7 +115,7 @@ authorize {
+@@ -133,7 +133,7 @@ authorize {
  	#  Otherwise, when the first style of realm doesn't match,
  	#  the other styles won't be checked.
  	#
@@ -391,7 +391,7 @@
  #	ntdomain
  
  	#
-@@ -177,8 +177,8 @@ authorize {
+@@ -195,8 +195,8 @@ authorize {
  	# Use the checkval module
  #	checkval
  
@@ -402,7 +402,7 @@
  
  	#
  	#  If no other module has claimed responsibility for
-@@ -259,7 +259,7 @@ authenticate {
+@@ -277,7 +277,7 @@ authenticate {
  	#  If you have a Cisco SIP server authenticating against
  	#  FreeRADIUS, uncomment the following line, and the 'digest'
  	#  line in the 'authorize' section.
@@ -411,7 +411,7 @@
  
  	#
  	#  Pluggable Authentication Modules.
-@@ -276,7 +276,7 @@ authenticate {
+@@ -294,7 +294,7 @@ authenticate {
  	#  be used for authentication ONLY for compatibility with legacy
  	#  FreeRADIUS configurations.
  	#
@@ -420,7 +420,7 @@
  
  	# Uncomment it if you want to use ldap for authentication
  	#
-@@ -312,8 +312,8 @@ authenticate {
+@@ -330,8 +330,8 @@ authenticate {
  #
  #  Pre-accounting.  Decide which accounting type to use.
  #
@@ -431,7 +431,7 @@
  
  	#
  	#  Session start times are *implied* in RADIUS.
-@@ -336,7 +336,7 @@ preacct {
+@@ -354,7 +354,7 @@ preacct {
  	#
  	#  Ensure that we have a semi-unique identifier for every
  	#  request, and many NAS boxes are broken.
@@ -440,7 +440,7 @@
  
  	#
  	#  Look for IPASS-style 'realm/', and if not found, look for
-@@ -346,13 +346,13 @@ preacct {
+@@ -364,13 +364,13 @@ preacct {
  	#  Accounting requests are generally proxied to the same
  	#  home server as authentication requests.
  #	IPASS
@@ -457,7 +457,7 @@
  
  #
  #  Accounting.  Log the accounting data.
-@@ -362,7 +362,7 @@ accounting {
+@@ -380,7 +380,7 @@ accounting {
  	#  Create a 'detail'ed log of the packets.
  	#  Note that accounting requests which are proxied
  	#  are also logged in the detail file.
@@ -466,7 +466,7 @@
  #	daily
  
  	#  Update the wtmp file
-@@ -414,7 +414,7 @@ accounting {
+@@ -432,7 +432,7 @@ accounting {
  	exec
  
  	#  Filter attributes from the accounting response.
@@ -475,7 +475,7 @@
  
  	#
  	#  See "Autz-Type Status-Server" for how this works.
-@@ -440,7 +440,7 @@ session {
+@@ -458,7 +458,7 @@ session {
  #  Post-Authentication
  #  Once we KNOW that the user has been authenticated, there are
  #  additional steps we can take.
@@ -484,7 +484,7 @@
  	#  Get an address from the IP Pool.
  #	main_pool
  
-@@ -470,7 +470,7 @@ post-auth {
+@@ -488,7 +488,7 @@ post-auth {
  #	ldap
  
  	# For Exec-Program and Exec-Program-Wait
@@ -493,7 +493,7 @@
  
  	#
  	#  Calculate the various WiMAX keys.  In order for this to work,
-@@ -540,12 +540,12 @@ post-auth {
+@@ -558,12 +558,12 @@ post-auth {
  	#  Add the ldap module name (or instance) if you have set 
  	#  'edir_account_policy_check = yes' in the ldap module configuration
  	#
@@ -511,7 +511,7 @@
  
  #
  #  When the server decides to proxy a request to a home server,
-@@ -555,7 +555,7 @@ post-auth {
+@@ -573,7 +573,7 @@ post-auth {
  #
  #  Only a few modules currently have this method.
  #
@@ -520,7 +520,7 @@
  #	attr_rewrite
  
  	#  Uncomment the following line if you want to change attributes
-@@ -571,14 +571,14 @@ pre-proxy {
+@@ -589,14 +589,14 @@ pre-proxy {
  	#  server, un-comment the following line, and the
  	#  'detail pre_proxy_log' section, above.
  #	pre_proxy_log
@@ -537,7 +537,7 @@
  
  	#  If you want to have a log of replies from a home server,
  	#  un-comment the following line, and the 'detail post_proxy_log'
-@@ -602,7 +602,7 @@ post-proxy {
+@@ -620,7 +620,7 @@ post-proxy {
  	#  hidden inside of the EAP packet, and the end server will
  	#  reject the EAP request.
  	#
@@ -546,7 +546,7 @@
  
  	#
  	#  If the server tries to proxy a request and fails, then the
-@@ -624,5 +624,5 @@ post-proxy {
+@@ -642,5 +642,5 @@ post-proxy {
  #	Post-Proxy-Type Fail {
  #			detail
  #	}
