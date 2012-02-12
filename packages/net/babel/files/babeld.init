@@ -98,6 +98,7 @@ babel_config() {
 	append_bool "$cfg" 'assume_wireless' '-w'
 	append_bool "$cfg" 'no_split_horizon' '-s'
 	append_bool "$cfg" 'parasitic' '-P'
+	append_bool "$cfg" 'keep_unfeasible' '-u'
 
 	append_parm "$cfg" 'multicast_address' '-m'
 	append_parm "$cfg" 'port' '-p'
@@ -109,7 +110,6 @@ babel_config() {
 	append_parm "$cfg" 'duplication_priority' '-A'
 	append_parm "$cfg" 'debug' '-d'
 	append_parm "$cfg" 'local_server' '-g'
-	append_parm "$cfg" 'keep_unfeasible' '-u'
 	append_parm "$cfg" 'export_table' '-t'
 	append_parm "$cfg" 'import_table' '-T'
 	append_parm "$cfg" 'conf_file' '-c'
