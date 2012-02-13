@@ -1,0 +1,60 @@
+--- a/source3/smbd/server_exit.c
++++ b/source3/smbd/server_exit.c
+@@ -154,7 +154,9 @@ static void exit_server_common(enum serv
+ 		rpc_spoolss_shutdown();
+ #endif
+ 
++#ifdef SRVSVC_SUPPORT
+ 		rpc_srvsvc_shutdown();
++#endif
+ #ifdef WINREG_SUPPORT
+ 		rpc_winreg_shutdown();
+ #endif
+--- a/source3/librpc/rpc/rpc_common.c
++++ b/source3/librpc/rpc/rpc_common.c
+@@ -108,9 +108,11 @@ static bool initialize_interfaces(void)
+ 		return false;
+ 	}
+ #endif
++#ifdef SRVSVC_SUPPORT
+ 	if (!smb_register_ndr_interface(&ndr_table_srvsvc)) {
+ 		return false;
+ 	}
++#endif
+ #ifdef WKSSVC_SUPPORT
+ 	if (!smb_register_ndr_interface(&ndr_table_wkssvc)) {
+ 		return false;
+--- a/source3/rpc_server/rpc_ep_setup.c
++++ b/source3/rpc_server/rpc_ep_setup.c
+@@ -459,6 +459,7 @@ static bool winreg_init_cb(void *ptr)
+ }
+ #endif
+ 
++#ifdef SRVSVC_SUPPORT
+ static bool srvsvc_init_cb(void *ptr)
+ {
+ 	struct dcesrv_ep_context *ep_ctx =
+@@ -507,6 +508,7 @@ static bool srvsvc_init_cb(void *ptr)
+ 
+ 	return true;
+ }
++#endif
+ 
+ static bool lsarpc_init_cb(void *ptr)
+ {
+@@ -1098,13 +1100,14 @@ bool dcesrv_ep_setup(struct tevent_conte
+ 	}
+ #endif
+ 
++#ifdef SRVSVC_SUPPORT
+ 	srvsvc_cb.init         = srvsvc_init_cb;
+ 	srvsvc_cb.shutdown     = NULL;
+ 	srvsvc_cb.private_data = ep_ctx;
+ 	if (!NT_STATUS_IS_OK(rpc_srvsvc_init(&srvsvc_cb))) {
+ 		return false;
+ 	}
+-
++#endif
+ 
+ 	lsarpc_cb.init         = lsarpc_init_cb;
+ 	lsarpc_cb.shutdown     = NULL;
