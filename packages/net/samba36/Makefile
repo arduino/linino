@@ -38,7 +38,7 @@ define Package/samba36-server/description
  to as the LanManager or Netbios protocol.
 endef
 
-TARGET_CFLAGS += -DMAX_DEBUG_LEVEL=2 -ffunction-sections -fdata-sections
+TARGET_CFLAGS += -DMAX_DEBUG_LEVEL=2 -D__location__=\\\"\\\" -ffunction-sections -fdata-sections
 TARGET_LDFLAGS += -Wl,--gc-sections
 
 CONFIGURE_VARS += \
@@ -67,6 +67,7 @@ CONFIGURE_ARGS += \
 	--disable-relro \
 	--disable-static \
 	--disable-swat \
+	--disable-shared-libs \
 	--with-codepagedir=/etc/samba \
 	--with-configdir=/etc/samba \
 	--with-included-iniparser \
@@ -82,9 +83,16 @@ CONFIGURE_ARGS += \
 	--without-krb5 \
 	--without-ldap \
 	--without-pam \
-	--without-winbind
+	--without-winbind \
+	--without-libtdb \
+	--without-libtalloc \
+	--without-libnetapi \
+	--without-libsmbclient \
+	--without-libsmbsharemodes \
+	--without-libaddns \
+	--with-shared-modules=
 
-MAKE_FLAGS += DYNEXP=
+MAKE_FLAGS += DYNEXP= PICFLAG= MODULES=
 
 define Package/samba36-server/install
 	$(INSTALL_DIR) $(1)/etc/config
@@ -94,9 +102,6 @@ define Package/samba36-server/install
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/codepages/lowcase.dat $(1)/etc/samba
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/codepages/upcase.dat $(1)/etc/samba
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/codepages/valid.dat $(1)/etc/samba
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_BUILD_BIN)/libtalloc.so.2 $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_BUILD_BIN)/libtdb.so.1 $(1)/usr/lib
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/samba.init $(1)/etc/init.d/samba
 	$(INSTALL_DIR) $(1)/usr/sbin
