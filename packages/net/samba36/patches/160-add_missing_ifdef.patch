@@ -1,0 +1,14 @@
+--- a/source3/librpc/rpc/rpc_common.c
++++ b/source3/librpc/rpc/rpc_common.c
+@@ -127,9 +127,11 @@ static bool initialize_interfaces(void)
+ 		return false;
+ 	}
+ #endif
++#ifdef DEVELOPER
+ 	if (!smb_register_ndr_interface(&ndr_table_rpcecho)) {
+ 		return false;
+ 	}
++#endif
+ 	if (!smb_register_ndr_interface(&ndr_table_initshutdown)) {
+ 		return false;
+ 	}
