@@ -58,3 +58,15 @@
  
  	lsarpc_cb.init         = lsarpc_init_cb;
  	lsarpc_cb.shutdown     = NULL;
+--- a/source3/rpcclient/rpcclient.c
++++ b/source3/rpcclient/rpcclient.c
+@@ -630,7 +630,9 @@ static struct cmd_set *rpcclient_command
+ #ifdef NETLOGON_SUPPORT
+ 	netlogon_commands,
+ #endif
++#ifdef NETLOGON_SUPPORT
+ 	srvsvc_commands,
++#endif
+ #ifdef DFS_SUPPORT
+ 	dfs_commands,
+ #endif

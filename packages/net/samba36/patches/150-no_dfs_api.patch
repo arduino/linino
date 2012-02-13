@@ -57,3 +57,15 @@
  		rpc_initshutdown_shutdown();
  #ifdef EXTRA_SERVICES
  		rpc_eventlog_shutdown();
+--- a/source3/rpcclient/rpcclient.c
++++ b/source3/rpcclient/rpcclient.c
+@@ -629,7 +629,9 @@ static struct cmd_set *rpcclient_command
+ #endif
+ 	netlogon_commands,
+ 	srvsvc_commands,
++#ifdef DFS_SUPPORT
+ 	dfs_commands,
++#endif
+ 	echo_commands,
+ 	epmapper_commands,
+ 	shutdown_commands,

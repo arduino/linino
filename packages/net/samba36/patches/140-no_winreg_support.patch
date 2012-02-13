@@ -132,3 +132,15 @@
  	tmp_ctx = talloc_stackframe();
  	if (tmp_ctx == NULL) {
  		return NULL;
+--- a/source3/rpcclient/rpcclient.c
++++ b/source3/rpcclient/rpcclient.c
+@@ -640,7 +640,9 @@ static struct cmd_set *rpcclient_command
+ 	drsuapi_commands,
+ 	eventlog_commands,
+ #endif
++#ifdef WINREG_SUPPORT
+ 	winreg_commands,
++#endif
+ 	NULL
+ };
+ 

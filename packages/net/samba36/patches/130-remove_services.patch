@@ -82,3 +82,17 @@
  #ifdef PRINTER_SUPPORT
  		rpc_spoolss_shutdown();
  #endif
+--- a/source3/rpcclient/rpcclient.c
++++ b/source3/rpcclient/rpcclient.c
+@@ -635,9 +635,11 @@ static struct cmd_set *rpcclient_command
+ 	shutdown_commands,
+  	test_commands,
+ 	wkssvc_commands,
++#ifdef EXTRA_SERVICES
+ 	ntsvcs_commands,
+ 	drsuapi_commands,
+ 	eventlog_commands,
++#endif
+ 	winreg_commands,
+ 	NULL
+ };

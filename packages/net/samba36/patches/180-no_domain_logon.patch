@@ -85,3 +85,15 @@
  	in_addr_to_sockaddr_storage(&ss, p->ip);
  	pss = iface_ip((struct sockaddr *)&ss);
  	if (!pss) {
+--- a/source3/rpcclient/rpcclient.c
++++ b/source3/rpcclient/rpcclient.c
+@@ -627,7 +627,9 @@ static struct cmd_set *rpcclient_command
+ #ifdef PRINTER_SUPPORT
+ 	spoolss_commands,
+ #endif
++#ifdef NETLOGON_SUPPORT
+ 	netlogon_commands,
++#endif
+ 	srvsvc_commands,
+ #ifdef DFS_SUPPORT
+ 	dfs_commands,

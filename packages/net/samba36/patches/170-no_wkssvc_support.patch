@@ -59,13 +59,13 @@
  		return false;
 --- a/source3/rpcclient/rpcclient.c
 +++ b/source3/rpcclient/rpcclient.c
-@@ -634,7 +634,9 @@ static struct cmd_set *rpcclient_command
+@@ -638,7 +638,9 @@ static struct cmd_set *rpcclient_command
  	epmapper_commands,
  	shutdown_commands,
   	test_commands,
 +#ifdef WKSSVC_SUPPORT
  	wkssvc_commands,
 +#endif
+ #ifdef EXTRA_SERVICES
  	ntsvcs_commands,
  	drsuapi_commands,
- 	eventlog_commands,

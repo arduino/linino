@@ -12,3 +12,15 @@
  	if (!smb_register_ndr_interface(&ndr_table_initshutdown)) {
  		return false;
  	}
+--- a/source3/rpcclient/rpcclient.c
++++ b/source3/rpcclient/rpcclient.c
+@@ -632,7 +632,9 @@ static struct cmd_set *rpcclient_command
+ #ifdef DFS_SUPPORT
+ 	dfs_commands,
+ #endif
++#ifdef DEVELOPER
+ 	echo_commands,
++#endif
+ 	epmapper_commands,
+ 	shutdown_commands,
+  	test_commands,
