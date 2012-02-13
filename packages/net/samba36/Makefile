@@ -31,6 +31,13 @@ define Package/samba36-server
   URL:=http://www.samba.org/
 endef
 
+define Package/samba36-server/config
+	config PACKAGE_SAMBA_MAX_DEBUG_LEVEL
+		int "Maximum level of compiled-in debug messages"
+		default -1
+
+endef
+
 define Package/samba36-server/description
  The Samba software suite is a collection of programs that implements the
  SMB protocol for UNIX systems, allowing you to serve files and printers to
@@ -38,7 +45,7 @@ define Package/samba36-server/description
  to as the LanManager or Netbios protocol.
 endef
 
-TARGET_CFLAGS += -DMAX_DEBUG_LEVEL=2 -D__location__=\\\"\\\" -ffunction-sections -fdata-sections
+TARGET_CFLAGS += -DMAX_DEBUG_LEVEL=$(CONFIG_PACKAGE_SAMBA_MAX_DEBUG_LEVEL) -D__location__=\\\"\\\" -ffunction-sections -fdata-sections
 TARGET_LDFLAGS += -Wl,--gc-sections
 
 CONFIGURE_VARS += \
