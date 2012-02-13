@@ -103,6 +103,7 @@ define Package/samba36-server/install
 	$(INSTALL_BIN) $(PKG_BUILD_BIN)/samba_multicall $(1)/usr/sbin
 	ln -sf samba_multicall $(1)/usr/sbin/smbd
 	ln -sf samba_multicall $(1)/usr/sbin/nmbd
+	ln -sf samba_multicall $(1)/usr/sbin/smbpasswd
 endef
 
 $(eval $(call BuildPackage,samba36-server))
