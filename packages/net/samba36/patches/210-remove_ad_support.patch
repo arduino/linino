@@ -12,7 +12,7 @@
  	if (!smb_register_ndr_interface(&ndr_table_samr)) {
  		return false;
  	}
-@@ -139,9 +141,11 @@ static bool initialize_interfaces(void)
+@@ -141,9 +143,11 @@ static bool initialize_interfaces(void)
  	if (!smb_register_ndr_interface(&ndr_table_epmapper)) {
  		return false;
  	}

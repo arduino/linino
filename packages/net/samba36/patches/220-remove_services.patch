@@ -1,6 +1,6 @@
 --- a/source3/librpc/rpc/rpc_common.c
 +++ b/source3/librpc/rpc/rpc_common.c
-@@ -129,6 +129,7 @@ static bool initialize_interfaces(void)
+@@ -131,6 +131,7 @@ static bool initialize_interfaces(void)
  	if (!smb_register_ndr_interface(&ndr_table_initshutdown)) {
  		return false;
  	}
@@ -8,7 +8,7 @@
  	if (!smb_register_ndr_interface(&ndr_table_svcctl)) {
  		return false;
  	}
-@@ -138,6 +139,7 @@ static bool initialize_interfaces(void)
+@@ -140,6 +141,7 @@ static bool initialize_interfaces(void)
  	if (!smb_register_ndr_interface(&ndr_table_ntsvcs)) {
  		return false;
  	}
@@ -84,7 +84,7 @@
  #endif
 --- a/source3/rpcclient/rpcclient.c
 +++ b/source3/rpcclient/rpcclient.c
-@@ -635,9 +635,11 @@ static struct cmd_set *rpcclient_command
+@@ -637,9 +637,11 @@ static struct cmd_set *rpcclient_command
  	shutdown_commands,
   	test_commands,
  	wkssvc_commands,

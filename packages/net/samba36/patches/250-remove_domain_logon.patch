@@ -16,7 +16,7 @@
  
  static bool spoolss_init_cb(void *ptr)
  {
-@@ -1118,12 +1120,15 @@ bool dcesrv_ep_setup(struct tevent_conte
+@@ -1116,12 +1118,15 @@ bool dcesrv_ep_setup(struct tevent_conte
  		return false;
  	}
  
@@ -48,7 +48,7 @@
  	}
 --- a/source3/smbd/server_exit.c
 +++ b/source3/smbd/server_exit.c
-@@ -159,7 +159,9 @@ static void exit_server_common(enum serv
+@@ -157,7 +157,9 @@ static void exit_server_common(enum serv
  		rpc_winreg_shutdown();
  #endif
  
@@ -97,3 +97,27 @@
  	srvsvc_commands,
  #ifdef DFS_SUPPORT
  	dfs_commands,
+--- a/source3/rpc_server/wkssvc/srv_wkssvc_nt.c
++++ b/source3/rpc_server/wkssvc/srv_wkssvc_nt.c
+@@ -820,6 +820,10 @@ WERROR _wkssvc_NetrJoinDomain2(struct pi
+ 	WERROR werr;
+ 	struct security_token *token = p->session_info->security_token;
+ 
++#ifndef NETLOGON_SUPPORT
++	return WERR_NOT_SUPPORTED;
++#endif
++
+ 	if (!r->in.domain_name) {
+ 		return WERR_INVALID_PARAM;
+ 	}
+@@ -897,6 +901,10 @@ WERROR _wkssvc_NetrUnjoinDomain2(struct 
+ 	WERROR werr;
+ 	struct security_token *token = p->session_info->security_token;
+ 
++#ifndef NETLOGON_SUPPORT
++	return WERR_NOT_SUPPORTED;
++#endif
++
+ 	if (!r->in.account || !r->in.encrypted_password) {
+ 		return WERR_INVALID_PARAM;
+ 	}

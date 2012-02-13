@@ -134,7 +134,7 @@
  		return NULL;
 --- a/source3/rpcclient/rpcclient.c
 +++ b/source3/rpcclient/rpcclient.c
-@@ -640,7 +640,9 @@ static struct cmd_set *rpcclient_command
+@@ -642,7 +642,9 @@ static struct cmd_set *rpcclient_command
  	drsuapi_commands,
  	eventlog_commands,
  #endif

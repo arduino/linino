@@ -42,9 +42,9 @@
  		return false;
  	}
 +#endif
+ #ifdef DEVELOPER
  	if (!smb_register_ndr_interface(&ndr_table_rpcecho)) {
  		return false;
- 	}
 --- a/source3/smbd/server_exit.c
 +++ b/source3/smbd/server_exit.c
 @@ -139,7 +139,9 @@ static void exit_server_common(enum serv
@@ -66,6 +66,6 @@
 +#ifdef DFS_SUPPORT
  	dfs_commands,
 +#endif
+ #ifdef DEVELOPER
  	echo_commands,
- 	epmapper_commands,
- 	shutdown_commands,
+ #endif
