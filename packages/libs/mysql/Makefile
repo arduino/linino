@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mysql
 PKG_VERSION:=5.1.53
-PKG_RELEASE:=6
+PKG_RELEASE:=7
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=\
@@ -62,8 +62,8 @@ CONFIGURE_VARS += \
         CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
         CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
         LDFLAGS="$$$$LDFLAGS" \
-        LIBS="-nodefaultlibs -luClibc++ -lm $(LIBGCC_S)" \
-        CLIENTCLIBS="-nodefaultlibs -luClibc++ -lm $(LIBGCC_S)" \
+        LIBS="-nodefaultlibs -luClibc++ -lm -lc $(LIBGCC_S)" \
+        CLIENTCLIBS="-nodefaultlibs -luClibc++ -lm -lc $(LIBGCC_S)" \
 
 
 define Build/Configure
