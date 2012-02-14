@@ -106,7 +106,7 @@ CONFIGURE_ARGS+= \
 CONFIGURE_VARS+= \
 	CFLAGS="$$$$CFLAGS -nostdinc++" \
 	LDFLAGS="$$$$LDFLAGS -nodefaultlibs" \
-	LIBS="-luClibc++ -lpthread -lresolv -ldl -lm -lc $(LIBGCC_S)"
+	LIBS="-lc -luClibc++ -lpthread -lresolv -ldl -lm -lc $(LIBGCC_S)"
 
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/lib

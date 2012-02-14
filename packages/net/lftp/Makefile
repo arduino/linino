@@ -49,7 +49,7 @@ CONFIGURE_VARS += \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -I$(STAGING_DIR)/usr/include/uClibc++ -nostdinc++" \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	LDFLAGS="$$$$LDFLAGS" \
-	LIBS="-nodefaultlibs -lz -lutil -lc -luClibc++ -lcurses $(LIBGCC_S) -ldl" \
+	LIBS="-nodefaultlibs -lc -lz -lutil -lc -luClibc++ -lcurses $(LIBGCC_S) -ldl" \
 	i_cv_posix_fallocate_works=no
 
 MAKE_VARS += \

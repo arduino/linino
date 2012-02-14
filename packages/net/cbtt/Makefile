@@ -44,7 +44,7 @@ $(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -nostdinc++" \
-		LFLAGS="$(TARGET_LDFLAGS) -L. -nodefaultlibs $(4) -lz -luClibc++ -lm -lpthread $(LIBGCC_S)" \
+		LFLAGS="$(TARGET_LDFLAGS) -L. -nodefaultlibs -lc $(4) -lz -luClibc++ -lm -lpthread $(LIBGCC_S)" \
 		$(3)
 	touch $$@
 

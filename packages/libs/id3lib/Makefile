@@ -36,7 +36,7 @@ CONFIGURE_ARGS += \
 
 #CONFIGURE_VARS += \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti"  \
-	LIBS="-nodefaultlibs -lz -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm" \
+	LIBS="-nodefaultlibs -lc -lz -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm" \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include

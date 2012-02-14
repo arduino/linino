@@ -43,7 +43,7 @@ endef
 define Build/Compile
 	$(call Build/Compile/Default, \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++" \
-		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++ -lc $(LIBGCC_S)" \
+		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -lc -luClibc++ -lc $(LIBGCC_S)" \
 		repeater \
 	)
 endef

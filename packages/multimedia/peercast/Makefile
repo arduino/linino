@@ -47,7 +47,7 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
-	LIBS="-nodefaultlibs -luClibc++ -lpthread" \
+	LIBS="-nodefaultlibs -lc -luClibc++ -lpthread" \
 
 define Package/peercast/install
 	$(INSTALL_DIR) $(1)/usr/sbin

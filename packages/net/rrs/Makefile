@@ -48,7 +48,7 @@ $(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CC="$(TARGET_CC)" \
 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++" \
-		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs $(4) -luClibc++ -lm -lutil" \
+		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -lc $(4) -luClibc++ -lm -lutil" \
 		LDFLAGSNOSSL="$(TARGET_LDFLAGS) -nodefaultlibs $(4) -luClibc++ -lm -lutil" \
 		$(3)
 	( cd $(PKG_BUILD_DIR); mv -f rrs rrs-$(2); )

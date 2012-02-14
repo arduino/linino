@@ -64,7 +64,7 @@ ifneq ($(CONFIG_PACKAGE_kmod-video-quickcam),)
 		ARCH="$(LINUX_KARCH)" \
 		CROSS_COMPILE="$(TARGET_CROSS)" \
 		CC="$(TARGET_CC)" \
-		LD="$(TARGET_CC) -nodefaultlibs -nostartfiles" \
+		LD="$(TARGET_CC) -nodefaultlibs -lc -nostartfiles" \
 		USER_OPT="$(KERNEL_C_OPTS)" \
 		quickcam.$(LINUX_KMOD_SUFFIX)
   endef

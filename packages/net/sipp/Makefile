@@ -47,7 +47,7 @@ define Build/Compile
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS_linux="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++" \
 		LFLAGS_linux="$(TARGET_LDFLAGS)" \
-		LIBS="-nodefaultlibs -lncurses -luClibc++ -ldl -lpthread -lm $(LIBGCC_S)" \
+		LIBS="-nodefaultlibs -lc -lncurses -luClibc++ -ldl -lpthread -lm $(LIBGCC_S)" \
 		all
 endef
 

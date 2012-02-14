@@ -56,7 +56,7 @@ define Build/Compile
 			-I$(PKG_BUILD_DIR)/tspc-advanced/platform/openwrt -I$(PKG_BUILD_DIR)/tspc-advanced" \
 		LDFLAGS="-L$(PKG_BUILD_DIR)/tspc-advanced/gw6cconfig \
 			-L$(PKG_BUILD_DIR)/tspc-advanced/gw6cmessaging \
-			$(TARGET_LDFLAGS) -nodefaultlibs -luClibc++ $(LIBGCC_S)" \
+			$(TARGET_LDFLAGS) -nodefaultlibs -lc -luClibc++ $(LIBGCC_S)" \
 		target="openwrt" \
 		installdir="$(PKG_INSTALL_DIR)"
 endef

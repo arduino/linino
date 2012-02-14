@@ -42,7 +42,7 @@ define Build/Compile
 			$(PKG_BUILD_DIR)/src/util.cpp \
 			$(PKG_BUILD_DIR)/src/msn_conntrack.cpp \
 			$(PKG_BUILD_DIR)/src/msn_handlers.cpp \
-		-L$(STAGING_DIR)/usr/lib -nodefaultlibs -luClibc++ $(LIBGCC_S) -lpcap \
+		-L$(STAGING_DIR)/usr/lib -nodefaultlibs -lc -luClibc++ $(LIBGCC_S) -lpcap \
 			$(PKG_BUILD_DIR)/src/pcap_stuff.cpp
 endef
 

@@ -37,7 +37,7 @@ define Build/Compile
 		$(TARGET_CONFIGURE_OPTS) \
 		LD="\$$$$(CC)" \
 		CPPFLAGS="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++" \
-		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -lcrypto -lssl -luClibc++ -ldl -lm -lpthread $(LIBGCC_S)" \
+		LDFLAGS="$(TARGET_LDFLAGS) -nodefaultlibs -lc -lcrypto -lssl -luClibc++ -ldl -lm -lpthread $(LIBGCC_S)" \
 		all
 	tar -cjf $(PKG_BUILD_DIR)/MailRoot.tar.bz2 -C $(PKG_BUILD_DIR)/MailRoot --exclude bin .
 endef

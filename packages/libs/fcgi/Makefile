@@ -55,7 +55,7 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
-	LIBS="-nodefaultlibs -luClibc++ -lm" \
+	LIBS="-nodefaultlibs -lc -luClibc++ -lm" \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include

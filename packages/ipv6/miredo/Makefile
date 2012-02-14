@@ -66,7 +66,7 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
-	LIBS="-nodefaultlibs -luClibc++ -lm" \
+	LIBS="-nodefaultlibs -lc -luClibc++ -lm" \
 	ac_cv_file__proc_self_maps=yes\
 
 # XXX: override (:=), don't append (+=)
