@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libsigc++
-PKG_VERSION:=2.2.8
+PKG_VERSION:=2.2.10
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=@GNOME/libsigc++/2.2
-PKG_MD5SUM:=1198425eab9fd605721a278c651b8dd8
+PKG_MD5SUM:=73419b477f3bb9ddb9905c88a92f4b4c
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
