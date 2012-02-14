@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,14 +10,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=boost
-PKG_VERSION:=1_46_0
+PKG_VERSION:=1_48_0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/boost
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
 HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)_$(PKG_VERSION)
-PKG_MD5SUM:=820393d5746553c192db7b81ba0e53fe
+PKG_MD5SUM:=313a11e97eb56eb7efd18325354631be
 
 PKG_BUILD_DEPENDS:=boost/host
 PKG_BUILD_PARALLEL:=1
@@ -141,11 +141,11 @@ endef
 
 define Host/Compile
 	# bjam does not provide a configure-script nor a Makefile
-	( cd $(HOST_BUILD_DIR)/tools/build/v2/engine/src ; ./build.sh gcc )
+	( cd $(HOST_BUILD_DIR)/tools/build/v2/engine ; ./build.sh gcc )
 endef
 
 CONFIGURE_PREFIX:=$(PKG_INSTALL_DIR)
-TARGET_LDFLAGS += -pthreads -lrt
+TARGET_LDFLAGS += -pthread -lrt
 
 define Build/Compile
 	( cd $(PKG_BUILD_DIR) ; \
@@ -195,7 +195,7 @@ endef
 
 define Host/Install
 	$(INSTALL_DIR) $(STAGING_DIR_HOST)/bin
-	$(CP) $(HOST_BUILD_DIR)/tools/build/v2/engine/src/bin.*/bjam $(STAGING_DIR_HOST)/bin/
+	$(CP) $(HOST_BUILD_DIR)/tools/build/v2/engine/bin.*/bjam $(STAGING_DIR_HOST)/bin/
 endef
 
 define Package/boost/Default/install

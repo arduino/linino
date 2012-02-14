@@ -1,6 +1,6 @@
 --- a/tools/build/v2/tools/gcc.jam
 +++ b/tools/build/v2/tools/gcc.jam
-@@ -1018,8 +1018,7 @@ rule setup-threading ( targets * : sourc
+@@ -1063,8 +1063,7 @@ rule setup-threading ( targets * : sourc
              }
              case * :
              {
