@@ -215,17 +215,6 @@
  	return NT_STATUS_UNSUCCESSFUL;
  }
  
---- a/source3/smbd/build_options.c
-+++ b/source3/smbd/build_options.c
-@@ -54,7 +54,7 @@ options set at build time for the samba 
- ****************************************************************************/
- void build_options(bool screen)
- {
--       if ((DEBUGLEVEL < 4) && (!screen)) {
-+       if ((DEBUGLEVEL < 4) || (!screen)) {
- 	       return;
-        }
- 
 --- a/lib/tdb/common/tdb_private.h
 +++ b/lib/tdb/common/tdb_private.h
 @@ -69,7 +69,11 @@ typedef uint32_t tdb_off_t;
@@ -240,3 +229,25 @@
  
  #ifdef TDB_TRACE
  void tdb_trace(struct tdb_context *tdb, const char *op);
+--- a/source3/script/mkbuildoptions.awk
++++ b/source3/script/mkbuildoptions.awk
+@@ -55,7 +55,7 @@ BEGIN {
+ 	print "****************************************************************************/";
+ 	print "void build_options(bool screen)";
+ 	print "{";
+-	print "       if ((DEBUGLEVEL < 4) && (!screen)) {";
++	print "       if ((DEBUGLEVEL < 4) || (!screen)) {";
+ 	print "	       return;";
+ 	print "       }";
+ 	print "";
+--- a/source3/script/mkbuildoptions-waf.awk
++++ b/source3/script/mkbuildoptions-waf.awk
+@@ -55,7 +55,7 @@ BEGIN {
+ 	print "****************************************************************************/";
+ 	print "void build_options(bool screen)";
+ 	print "{";
+-	print "       if ((DEBUGLEVEL < 4) && (!screen)) {";
++	print "       if ((DEBUGLEVEL < 4) || (!screen)) {";
+ 	print "	       return;";
+ 	print "       }";
+ 	print "";
