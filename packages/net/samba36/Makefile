@@ -97,7 +97,7 @@ CONFIGURE_ARGS += \
 	--without-libsmbclient \
 	--without-libsmbsharemodes \
 	--without-libaddns \
-	--with-shared-modules=pdb_wbc_sam,idmap_nss,nss_info_template,auth_winbind,auth_wbc,auth_domain
+	--with-shared-modules=pdb_tdbsam,pdb_wbc_sam,idmap_nss,nss_info_template,auth_winbind,auth_wbc,auth_domain
 
 MAKE_FLAGS += DYNEXP= PICFLAG= MODULES=
 
