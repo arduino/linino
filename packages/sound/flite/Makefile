@@ -33,6 +33,8 @@ Festival Lite is a stripped down version of Festival,
 	This program is written in C to keep memory usage low.
 endef
 
+TARGET_LDFLAGS += -lm
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
