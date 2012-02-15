@@ -6,5 +6,5 @@
  #include "orconfig.h"
 +#include "compat.h"
  #ifdef NAT_PMP
- #ifdef MS_WINDOWS
+ #ifdef _WIN32
  #define STATICLIB
