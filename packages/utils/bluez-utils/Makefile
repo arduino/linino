@@ -51,7 +51,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		LDFLAGS="$(TARGET_LDFLAGS) \
 			-L$(ICONV_PREFIX)/lib \
-			-L$(INTL_PREFIX)/lib" \
+			-L$(INTL_PREFIX)/lib -lm" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
