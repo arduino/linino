@@ -86,7 +86,7 @@ CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	LDFLAGS="$$$$LDFLAGS" \
 	LIBS="-nodefaultlibs -lc -luClibc++ -lm $(LIBGCC_S)" \
-	CLIENTCLIBS="-nodefaultlibs -luClibc++ -lm $(LIBGCC_S)" \
+	CLIENTCLIBS="-nodefaultlibs -lc -luClibc++ -lm $(LIBGCC_S)" \
 	libnl1_LIBS="-libnl-tiny"
 
 define Build/Compile
