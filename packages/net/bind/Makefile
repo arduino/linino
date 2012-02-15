@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bind
-PKG_VERSION:=9.8.0-P4
-PKG_RELEASE:=2
+PKG_VERSION:=9.8.1-P1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= \
 	ftp://ftp.isc.org/isc/bind9/$(PKG_VERSION) \
 	http://www.mirrorservice.org/sites/ftp.isc.org/isc/bind9/$(PKG_VERSION)
-PKG_MD5SUM:=13e36e3f28dc1ce7675b45a4192e8389
+PKG_MD5SUM:=afa41f8203d50bedad65071f9b6f96d7
 
 PKG_FIXUP:=libtool
 
@@ -34,7 +34,7 @@ define Package/bind-libs
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=bind shared libraries
-  URL:=http://www.isc.org/sw/bind/
+  URL:=https://www.isc.org/software/bind
 endef
 
 define Package/bind-server
@@ -88,6 +88,7 @@ CONFIGURE_ARGS += \
 	--with-libtool \
 	--with-libxml2=no \
 	--enable-epoll=yes \
+	--with-gost=no
 
 CONFIGURE_VARS += \
 	BUILD_CC="$(TARGET_CC)" \
