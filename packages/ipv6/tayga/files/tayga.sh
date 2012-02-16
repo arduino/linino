@@ -81,7 +81,7 @@ setup_interface_tayga() {
 
 	[ -n "$wanip4" ] && [ -n "$wanip6" ] || {
 		echo "Cannot determine local IPv4 and IPv6 addressed for tayga NAT64 $cfg - skipping"
-		return
+		return 1
 	}
 
 	local tmpconf="/var/etc/tayga-$cfg.conf"
@@ -107,7 +107,9 @@ setup_interface_tayga() {
 	uci_set_state network "$cfg" ifname $link
 	uci_set_state network "$cfg" auto 0
 
-	tayga $args --mktun
+	# here we create TUN device and check configuration
+	tayga $args --mktun || return 1
+
 	ip link set "$link" up
 
 	ip addr add "$wanip4" dev "$link"
