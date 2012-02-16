@@ -112,7 +112,7 @@ endef
 
 MAKE_FLAGS += \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
-	ARCH="$(LINUX_KARCH)"
+	SUBDIRS="daemons tools"
 
 define  Package/lirc/install
 	$(INSTALL_DIR) $(1)/usr/sbin/
