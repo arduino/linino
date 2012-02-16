@@ -25,7 +25,7 @@ define Package/linuxigd
   CATEGORY:=Network
   TITLE:=UPnP daemon
   SUBMENU:=Firewall
-  DEPENDS:=+libiptc +libupnp +libpthread
+  DEPENDS:=+libip4tc +libupnp +libpthread
   URL:=http://linux-igd.sourceforge.net/
 endef
 
@@ -46,6 +46,7 @@ define Build/Compile
 		HAVE_LIBIPTC=1 \
 		LIBIPTC_PREFIX="$(STAGING_DIR)/usr" \
 		LIBUPNP_PREFIX="$(STAGING_DIR)/usr" \
+		LIBS="-lpthread -lupnp -lixml -lthreadutil -lip4tc -L../lib" \
 		all
 endef
 
