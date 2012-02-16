@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2010-2011 OpenWrt.org
+# Copyright (C) 2010-2012 OpenWrt.org
 
 START=99
 
@@ -43,8 +43,6 @@ section_enabled() {
 start_instance() {
 	local s="$1"
 	local user
-	local open_file_limit=0
-	local ulimit_files=$(ulimit -n)
 
 	section_enabled "$section" || return 1
 
@@ -66,7 +64,7 @@ start_instance() {
 		cache_size_mb download_queue_enabled download_queue_size \
 		dht_enabled encryption idle_seeding_limit idle_seeding_limit_enabled \
 		incomplete_dir_enabled lazy_bitfield_enabled lpd_enabled message_level \
-		open_file_limit peer_limit_global peer_limit_per_torrent peer_port \
+		peer_limit_global peer_limit_per_torrent peer_port \
 		peer_port_random_high peer_port_random_low peer_port_random_on_start \
 		pex_enabled port_forwarding_enabled preallocation prefetch_enabled \
 		ratio_limit ratio_limit_enabled rename_partial_files rpc_authentication_required \
@@ -85,13 +83,6 @@ start_instance() {
 
 	echo "\""invalid-key"\": false" >> $config_file
 	echo "}" >> $config_file
-
-	config_get open_file_limit "$s" 'open_file_limit' 32
-	open_limit_files=$(($open_file_limit + 8))
-
-	if [ ${open_file_limit} -gt ${ulimit_files} ]; then
-		ulimit -n $open_limit_files
-	fi
 
 	SERVICE_UID="$user" \
 	service_start /usr/bin/transmission-daemon -g $config_dir
