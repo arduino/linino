@@ -8,15 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tcpdump
-PKG_VERSION:=4.1.1
-PKG_RELEASE:=2
+PKG_VERSION:=4.2.1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.tcpdump.org/release/ \
 	http://ftp.gwdg.de/pub/misc/tcpdump/ \
 	http://www.at.tcpdump.org/ \
 	http://www.br.tcpdump.org/
-PKG_MD5SUM:=d0dd58bbd6cd36795e05c6f1f74420b0
+PKG_MD5SUM:=c202878c6db054767b52651041b9e60e
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 

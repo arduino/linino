@@ -1,6 +1,6 @@
 --- a/configure
 +++ b/configure
-@@ -9440,28 +9440,6 @@ echo "${ECHO_T}Using $pfopen" >&6; }
+@@ -7130,28 +7130,6 @@ echo "${ECHO_T}Using $pfopen" >&6; }
  		    LIBS="$LIBS $pfopen"
  	    fi
      fi
@@ -29,10 +29,15 @@
  	    #
  	    # Look for pcap-config.
  	    #
-@@ -9580,40 +9558,6 @@ fi
- echo "$as_me: error: see the INSTALL doc for more info" >&2;}
-    { (exit 1); exit 1; }; }
- 		fi
+@@ -7335,45 +7313,6 @@ if test $ac_cv_lib_pcap_main = yes; then
+   libpcap="-lpcap"
+ fi
+ 
+-		if test $libpcap = FAIL ; then
+-		    { { echo "$as_me:$LINENO: error: see the INSTALL doc for more info" >&5
+-echo "$as_me: error: see the INSTALL doc for more info" >&2;}
+-   { (exit 1); exit 1; }; }
+-		fi
 -																																								{ echo "$as_me:$LINENO: checking for extraneous pcap header directories" >&5
 -echo $ECHO_N "checking for extraneous pcap header directories... $ECHO_C" >&6; }
 -		if test \( ! -r /usr/local/include/pcap.h \) -a \
