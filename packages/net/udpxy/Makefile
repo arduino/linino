@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=udpxy
-PKG_REV:=1.0
-PKG_TAG:=Chipmunk-20
+PKG_REV:=1.0.21
+PKG_TAG:=2
 PKG_VERSION:=$(PKG_REV)-$(PKG_TAG)
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME).$(PKG_REV)-$(patsubst Chipmunk-%,Chipmunk-BLD%,$(PKG_TAG)).tgz
+PKG_SOURCE:=$(PKG_NAME).$(PKG_REV)-$(patsubst %,%-prod,$(PKG_TAG)).tgz
 PKG_SOURCE_URL:=@SF/udpxy
-PKG_MD5SUM:=da0a587cfc81fb4a501b07ed84237469
+PKG_MD5SUM:=d969fc34604b3abcc8ef62510967f2b0
 
 PKG_INSTALL:=1
 
@@ -42,6 +42,8 @@ MAKE_FLAGS += \
 	INSTALLROOT="$(PKG_INSTALL_DIR)/usr"
 
 define Package/udpxy/install
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/udpxy.init $(1)/etc/init.d/udpxy
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/udpxy $(1)/usr/bin/
 	ln -sf udpxy $(1)/usr/bin/udpxrec
