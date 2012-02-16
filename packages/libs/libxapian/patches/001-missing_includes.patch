@@ -1,7 +1,6 @@
-diff -urN xapian-core-1.0.7/backends/flint/flint_version.cc xapian-core-1.0.7.new/backends/flint/flint_version.cc
---- xapian-core-1.0.7/backends/flint/flint_version.cc	2008-07-16 06:42:34.000000000 +0200
-+++ xapian-core-1.0.7.new/backends/flint/flint_version.cc	2010-03-29 09:59:58.000000000 +0200
-@@ -19,6 +19,7 @@
+--- a/backends/flint/flint_version.cc
++++ b/backends/flint/flint_version.cc
+@@ -20,6 +20,7 @@
   */
  
  #include <config.h>
@@ -9,19 +8,8 @@ diff -urN xapian-core-1.0.7/backends/flint/flint_version.cc xapian-core-1.0.7.ne
  
  #include "safeerrno.h"
  
-diff -urN xapian-core-1.0.7/bin/quartzdump.cc xapian-core-1.0.7.new/bin/quartzdump.cc
---- xapian-core-1.0.7/bin/quartzdump.cc	2008-07-16 06:42:28.000000000 +0200
-+++ xapian-core-1.0.7.new/bin/quartzdump.cc	2010-03-29 10:18:26.000000000 +0200
-@@ -29,6 +29,7 @@
- #include <vector>
- #include <string>
- #include <ctype.h>
-+#include <stdio.h>
- 
- #include "autoptr.h"
- #include "gnu_getopt.h"
---- xapian-core-1.0.7/bin/xapian-progsrv.cc	2008-07-16 06:42:28.000000000 +0200
-+++ xapian-core-1.0.7.new/bin/xapian-progsrv.cc	2010-03-29 10:31:16.000000000 +0200
+--- a/bin/xapian-progsrv.cc
++++ b/bin/xapian-progsrv.cc
 @@ -19,6 +19,7 @@
   */
  
@@ -30,19 +18,18 @@ diff -urN xapian-core-1.0.7/bin/quartzdump.cc xapian-core-1.0.7.new/bin/quartzdu
  
  #include "remoteserver.h"
  
---- xapian-core-1.0.7/bin/xapian-tcpsrv.cc	2008-07-16 06:42:28.000000000 +0200
-+++ xapian-core-1.0.7.new/bin/xapian-tcpsrv.cc	2010-03-29 10:41:56.000000000 +0200
+--- a/bin/xapian-tcpsrv.cc
++++ b/bin/xapian-tcpsrv.cc
 @@ -21,6 +21,7 @@
   */
  
  #include <config.h>
 +#include <stdio.h>
  
- #include <stdlib.h>
+ #include <cstdlib>
  
-diff -urN xapian-core-1.0.7/examples/delve.cc xapian-core-1.0.7.new/examples/delve.cc
---- xapian-core-1.0.7/examples/delve.cc	2008-07-16 06:42:35.000000000 +0200
-+++ xapian-core-1.0.7.new/examples/delve.cc	2010-03-29 11:14:26.000000000 +0200
+--- a/examples/delve.cc
++++ b/examples/delve.cc
 @@ -21,6 +21,7 @@
   */
  
@@ -51,8 +38,8 @@ diff -urN xapian-core-1.0.7/examples/delve.cc xapian-core-1.0.7.new/examples/del
  
  #include <xapian.h>
  
---- xapian-core-1.0.7/examples/quest.cc	2008-07-16 06:42:35.000000000 +0200
-+++ xapian-core-1.0.7.new/examples/quest.cc	2010-03-29 11:33:03.000000000 +0200
+--- a/examples/quest.cc
++++ b/examples/quest.cc
 @@ -19,6 +19,7 @@
   */
  

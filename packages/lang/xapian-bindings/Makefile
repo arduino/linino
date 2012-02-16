@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xapian-bindings
-PKG_VERSION:=1.0.7
+PKG_VERSION:=1.2.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://oligarchy.co.uk/xapian/$(PKG_VERSION)
-PKG_MD5SUM:=a80e51f4971d7505abcc0bdde912266b
+PKG_MD5SUM:=4bfe673c71ac074e349ef691d7ba56d0
 
 PKG_FIXUP:=libtool
 
@@ -30,6 +30,9 @@ define Package/python-xapian
   URL:=http://xapian.org/
   DEPENDS:=+python-mini +libxapian
 endef
+
+MAKE_FLAGS += \
+	pkgpylib_DATA=xapian/__init__.py
 
 CONFIGURE_ARGS+= \
 	--with-python \
