@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011 OpenWrt.org
+# Copyright (C) 2011-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libmbus
-PKG_VERSION:=0.6.1
+PKG_VERSION:=0.7.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.freescada.com/public-dist/
-PKG_MD5SUM:=842d13b14ad4a88f9d1b9f321725c802
+PKG_MD5SUM:=2f1a7ba0ccd683e6708364a13310a6d1
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
