@@ -46,6 +46,7 @@ define Build/Compile
 		DEF_MAP='\"$(LINUX_DIR)/System.map\"' \
 		CROSS="$(TARGET_CROSS)" \
 		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
+		LDFLAGS="-lz" \
 		all install
 endef
 
