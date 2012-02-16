@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cryptsetup
-PKG_VERSION:=1.3.1
+PKG_VERSION:=1.4.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://cryptsetup.googlecode.com/files/
-PKG_MD5SUM:=1f5b5a9d538e8a3c191fb7dd85b9b013
+PKG_MD5SUM:=9253b3f29abf5c6f333eb74128b0df1c
 
 include $(INCLUDE_DIR)/package.mk
 
