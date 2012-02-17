@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2010 OpenWrt.org
+# Copyright (C) 2007-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=argtable
-PKG_VERSION:=2.12
+PKG_VERSION:=2.13
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)2-12.tar.gz
+PKG_SOURCE:=$(PKG_NAME)2-13.tar.gz
 PKG_SOURCE_URL:=@SF/argtable
-PKG_MD5SUM:=291e249ea60f4d0637e467356a8ae41a
+PKG_MD5SUM:=156773989d0d6406cea36526d3926668
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)2-12
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)2-13
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
@@ -39,6 +39,7 @@ define Package/argtable/description
 endef
 
 TARGET_CFLAGS += $(FPIC)
+
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
