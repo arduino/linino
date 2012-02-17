@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,20 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pcsc-lite
-PKG_VERSION:=1.5.5
-PKG_RELEASE:=4
+PKG_VERSION:=1.8.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://alioth.debian.org/frs/download.php/3082
-PKG_MD5SUM:=6707e967fc8bb398a5d1b1089d4dff63
+PKG_SOURCE_URL:=http://alioth.debian.org/frs/download.php/3695
+PKG_MD5SUM:=cb7156346e9478c19085c918b605ed43
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/pcsc-lite/Default
-  SECTION:=utils
-  CATEGORY:=Utilities
   TITLE:=Middleware to access a smart card using SCard API (PC/SC).
   URL:=http://pcsclite.alioth.debian.org/
 endef
@@ -37,7 +36,7 @@ define Package/libpcsclite
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= (library)
-  DEPENDS:=+libusb +libpthread
+  DEPENDS:=+libusb +libpthread +librt
 endef
 
 define Package/libpcsclite/description
@@ -63,19 +62,11 @@ endef
 TARGET_CFLAGS += $(FPIC)
 TARGET_LDFLAGS += -lpthread
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-	  --disable-libhal \
-	  --enable-libusb \
-	  --enable-usbdropdir=/usr/lib/pcsc/drivers \
-	)
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
+CONFIGURE_ARGS += \
+	--disable-libudev \
+	--enable-libusb \
+	--enable-static \
+	--enable-usbdropdir=/usr/lib/pcsc/drivers
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/PCSC
@@ -100,9 +91,7 @@ define Package/pcscd/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/pcscd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/pcscd.init $(1)/etc/init.d/pcscd
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/update-reader.conf $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/reader.conf.d
-	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/reader.conf.d/reader.conf $(1)/etc/reader.conf.d/
 endef
 
 $(eval $(call BuildPackage,libpcsclite))
