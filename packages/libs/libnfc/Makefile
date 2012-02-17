@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libnfc
-PKG_VERSION:=1.3.4
+PKG_VERSION:=1.4.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://libnfc.googlecode.com/files/
-PKG_MD5SUM:=f89f58e70b72bf4aac0567d0741719c8
+PKG_SOURCE_URL:=http://libnfc.googlecode.com/files
+PKG_MD5SUM:=c99b2b9212b1a1b064055a199779bdd8
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -29,22 +29,40 @@ define Package/libnfc
 $(call Package/libnfc/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libpcsclite +libusb +pcscd +ccid
+  DEPENDS:=+libusb +pcscd +ccid
 endef
 
 define Package/libnfc/description
-  libnfc is a free software library used to communicate with NFC 
-  capable devices or tags. It support the four main NFC modulations:
-  * ISO14443-A (NXP MIFARE),
-  * ISO14443-B,
-  * JIS X 6319-4 (Sony Felica) and
-  * Jewel Topaz (Innovision Research & Development).
-  Supported NFC hardware devices are theorically all readers based 
-  on the NXP PN53x NFC Controller.
+  libnfc is a free software library used to handle NFC capable devices.
+  It supports the four main NFC modulations:
+   * ISO14443-A (NXP MIFARE),
+   * ISO14443-B,
+   * JIS X 6319-4 (Sony Felica) and
+   * Jewel Topaz (Innovision Research & Development).
+  And depending on hardware, it supports:
+   * Read (RFID @13.56Mhz),
+   * Emulation and
+   * Peer2Peer mode.  
+endef
+
+define Package/libnfc-bin
+$(call Package/libnfc/Default)
+  TITLE+= (binaries)
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=+libnfc
+endef
+
+define Package/libnfc-bin/description
+  libnfc is provided with some useful tools:
+   * nfc-list: target listing;
+   * nfc-mfclassic: Mifare Classic operations;
+   * nfc-mfultralight: Mifare Ultralight operations.
 endef
 
 define Package/libnfc-examples
 $(call Package/libnfc/Default)
+  TITLE+= (examples)
   SECTION:=utils
   CATEGORY:=Utilities
   DEPENDS:=+libnfc
@@ -52,9 +70,10 @@ endef
 
 define Package/libnfc-examples/description
   libnfc is provided with some examples like:
-   * tag listing
-   * relaying NFC
-   * simple UID emulation
+   * various targets emulation;
+   * NFC frames relay (ie. over network);
+   * manually done anticollision;
+   * etc.
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -73,10 +92,26 @@ define Package/libnfc/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnfc.so.* $(1)/usr/lib/
 endef
 
+define Package/libnfc-bin/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-list $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-mfclassic $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-mfultralight $(1)/usr/bin/
+endef
+
 define Package/libnfc-examples/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc* $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-anticol $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-dep-initiator $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-dep-target $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-emulate-forum-tag4 $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-emulate-tag $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-emulate-uid $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-poll $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-relay $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nfc-relay-picc $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,libnfc))
+$(eval $(call BuildPackage,libnfc-bin))
 $(eval $(call BuildPackage,libnfc-examples))
