@@ -1,6 +1,6 @@
 #
 # Copyright (C) 2009 David Cooper <dave@kupesoft.com>
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=msmtp
-PKG_VERSION:=1.4.24
+PKG_VERSION:=1.4.27
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/msmtp
-PKG_MD5SUM:=3ed704fbd3e7419cab5c65bb7928d9ba
+PKG_MD5SUM:=2d6d10d9c59ed2b2635554ed35fb9226
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -65,6 +65,17 @@ $(call Package/msmtp/Default/description)
  This package is built without SSL support.
 endef
 
+define Package/msmtp-queue
+$(call Package/msmtp/Default)
+  DEPENDS+= +bash
+  TITLE+= (queue scripts)
+endef
+
+define Package/msmtp-queue/description
+$(call Package/msmtp/Default/description)
+ This package contains the msmtp queue scripts.
+endef
+
 CONFIGURE_ARGS += \
 	--disable-rpath \
 	--without-libintl-prefix \
@@ -89,7 +100,6 @@ define Package/msmtp/install
 		$(1)/etc/msmtprc
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/msmtp $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/msmtpqueue/msmtp-{en,list,run}queue.sh $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/sbin
 endef
 
@@ -101,5 +111,12 @@ Package/msmtp-nossl/conffiles = $(Package/msmtp/conffiles)
 Package/msmtp-nossl/install = $(Package/msmtp/install)
 Package/msmtp-nossl/postinst = $(Package/msmtp/postinst)
 
+define Package/msmtp-queue/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/msmtpq/msmtp{q,-queue} $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/msmtpqueue/msmtp-{en,list,run}queue.sh $(1)/usr/bin/
+endef
+
 $(eval $(call BuildPackage,msmtp))
 $(eval $(call BuildPackage,msmtp-nossl))
+$(eval $(call BuildPackage,msmtp-queue))
