@@ -1,8 +1,6 @@
-Index: debootstrap-1.0.30/usr/share/debootstrap/functions
-===================================================================
---- debootstrap-1.0.30.orig/usr/share/debootstrap/functions	2011-04-28 15:29:13.595340023 +0200
-+++ debootstrap-1.0.30/usr/share/debootstrap/functions	2011-04-28 15:29:23.658843887 +0200
-@@ -800,8 +800,6 @@
+--- a/usr/share/debootstrap/functions
++++ b/usr/share/debootstrap/functions
+@@ -839,8 +839,6 @@ choose_extractor () {
  
  	if [ -n "$EXTRACTOR_OVERRIDE" ]; then
  		extractor="$EXTRACTOR_OVERRIDE"
