@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2011 OpenWrt.org
+# Copyright (C) 2008-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=at
-PKG_VERSION:=3.1.12
-PKG_RELEASE:=2
+PKG_VERSION:=3.1.13
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/a/at
-PKG_MD5SUM:=1e67991776148fb319fd77a2e599a765
+PKG_MD5SUM:=1da61af6c29e323abaaf13ee1a8dad79
 
 include $(INCLUDE_DIR)/package.mk
 

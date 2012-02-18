@@ -1,6 +1,6 @@
---- at-3.1.12/getloadavg.c	2009-11-23 16:11:52.000000000 +0100
-+++ at-3.1.12/getloadavg.c	2011-03-30 13:59:32.261558198 +0200
-@@ -69,8 +69,9 @@
+--- a/getloadavg.c
++++ b/getloadavg.c
+@@ -69,8 +69,9 @@ Boston, MA  02110-1301  USA */
  #include <config.h>
  #endif
  
