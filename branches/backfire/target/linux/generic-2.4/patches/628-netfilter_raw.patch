@@ -37,7 +37,7 @@
    The REJECT target allows a filtering rule to specify that an ICMP
 --- a/include/linux/netfilter_ipv4/ip_conntrack.h
 +++ b/include/linux/netfilter_ipv4/ip_conntrack.h
-@@ -286,6 +286,9 @@ extern void ip_ct_refresh_acct(struct ip
+@@ -283,6 +283,9 @@ extern void ip_ct_refresh_acct(struct ip
  /* Call me when a conntrack is destroyed. */
  extern void (*ip_conntrack_destroyed)(struct ip_conntrack *conntrack);
  
@@ -81,7 +81,7 @@
  	NF_IP_PRI_NAT_DST = -100,
 --- a/net/ipv4/netfilter/Config.in
 +++ b/net/ipv4/netfilter/Config.in
-@@ -153,6 +153,15 @@ if [ "$CONFIG_IP_NF_IPTABLES" != "n" ]; 
+@@ -145,6 +145,15 @@ if [ "$CONFIG_IP_NF_IPTABLES" != "n" ]; 
    dep_tristate '  TTL target support' CONFIG_IP_NF_TARGET_TTL $CONFIG_IP_NF_IPTABLES
    dep_tristate '  ULOG target support' CONFIG_IP_NF_TARGET_ULOG $CONFIG_IP_NF_IPTABLES
    dep_tristate '  TCPMSS target support' CONFIG_IP_NF_TARGET_TCPMSS $CONFIG_IP_NF_IPTABLES
@@ -509,7 +509,7 @@
  		statebit = IPT_STATE_BIT(ctinfo);
 --- a/net/ipv4/netfilter/Makefile
 +++ b/net/ipv4/netfilter/Makefile
-@@ -77,6 +77,7 @@ obj-$(CONFIG_IP_NF_IPTABLES) += ip_table
+@@ -71,6 +71,7 @@ obj-$(CONFIG_IP_NF_IPTABLES) += ip_table
  obj-$(CONFIG_IP_NF_FILTER) += iptable_filter.o
  obj-$(CONFIG_IP_NF_MANGLE) += iptable_mangle.o
  obj-$(CONFIG_IP_NF_NAT) += iptable_nat.o
@@ -517,7 +517,7 @@
  
  # matches
  obj-$(CONFIG_IP_NF_MATCH_HELPER) += ipt_helper.o
-@@ -131,6 +132,7 @@ obj-$(CONFIG_IP_NF_TARGET_CONNMARK) += i
+@@ -125,6 +126,7 @@ obj-$(CONFIG_IP_NF_TARGET_CONNMARK) += i
  obj-$(CONFIG_IP_NF_TARGET_TTL) += ipt_TTL.o
  obj-$(CONFIG_IP_NF_TARGET_ULOG) += ipt_ULOG.o
  obj-$(CONFIG_IP_NF_TARGET_TCPMSS) += ipt_TCPMSS.o

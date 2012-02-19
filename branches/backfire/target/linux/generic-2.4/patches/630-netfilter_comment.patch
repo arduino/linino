@@ -75,7 +75,7 @@
 +module_exit(fini);
 --- a/net/ipv4/netfilter/Makefile
 +++ b/net/ipv4/netfilter/Makefile
-@@ -113,6 +113,7 @@ obj-$(CONFIG_IP_NF_MATCH_UNCLEAN) += ipt
+@@ -107,6 +107,7 @@ obj-$(CONFIG_IP_NF_MATCH_UNCLEAN) += ipt
  obj-$(CONFIG_IP_NF_MATCH_STRING) += ipt_string.o
  obj-$(CONFIG_IP_NF_MATCH_TCPMSS) += ipt_tcpmss.o
  obj-$(CONFIG_IP_NF_MATCH_LAYER7) += ipt_layer7.o
@@ -85,7 +85,7 @@
  obj-$(CONFIG_IP_NF_TARGET_REJECT) += ipt_REJECT.o
 --- a/net/ipv4/netfilter/Config.in
 +++ b/net/ipv4/netfilter/Config.in
-@@ -44,6 +44,7 @@ if [ "$CONFIG_IP_NF_IPTABLES" != "n" ]; 
+@@ -43,6 +43,7 @@ if [ "$CONFIG_IP_NF_IPTABLES" != "n" ]; 
    dep_tristate '  LENGTH match support' CONFIG_IP_NF_MATCH_LENGTH $CONFIG_IP_NF_IPTABLES
    dep_tristate '  TTL match support' CONFIG_IP_NF_MATCH_TTL $CONFIG_IP_NF_IPTABLES
    dep_tristate '  tcpmss match support' CONFIG_IP_NF_MATCH_TCPMSS $CONFIG_IP_NF_IPTABLES
