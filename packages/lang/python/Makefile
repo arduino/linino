@@ -236,6 +236,7 @@ define PyPackage/python/filespec
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_md5.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/operator.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_random.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/readline.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/select.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_sha.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_sha256.so
