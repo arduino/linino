@@ -16,7 +16,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/multiwan
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+ip +iptables +iptables-mod-conntrack +iptables-mod-conntrack-extra +iptables-mod-ipopt
+  DEPENDS:=+ip +iptables +kmod-ipt-conntrack +iptables-mod-conntrack-extra +iptables-mod-ipopt
   TITLE:=Simple multi WAN configuration
   URL:=ftp://ftp.netlab7.com/
   MAINTAINER:=Craig M. Coffee <craigc@netlab7.com>
