@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dhcp
 PKG_VERSION:=3.1.0
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.isc.org/isc/dhcp/
@@ -69,7 +69,6 @@ define Package/dhcp-server/install
 	$(INSTALL_DIR) $(1)/usr/local/lib
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dhcpd $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/omshell $(1)/usr/bin/
-	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/local/lib/*.a $(1)/usr/local/lib
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/dhcpd.init $(1)/etc/init.d/dhcpd
 endef
