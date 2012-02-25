@@ -54,3 +54,6 @@
 
 # namecheap.com
 "namecheap.com" "http://dynamicdns.park-your-domain.com/update?host=[USERNAME]&domain=[DOMAIN]&password=[PASSWORD]&ip=[IP]"
+
+# easydns.com dynamic DNS
+"easydns.com"		"http://[USERNAME]:[PASSWORD]@api.cp.easydns.com/dyn/tomato.php?hostname=[DOMAIN]&myip=[IP]"
