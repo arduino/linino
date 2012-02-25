@@ -45,18 +45,6 @@ append_params() {
 	done
 }
 
-append_params_quoted() {
-	local p; local v; local s="$1"; shift
-	for p in $*; do
-		config_get v "$s" "$p"
-		IFS="$LIST_SEP"
-		for v in $v; do
-			[ -n "$v" ] && append_param "$p" && ARGS="$ARGS '$v'"
-		done
-		unset IFS
-	done
-}
-
 section_enabled() {
 	config_get_bool enable  "$1" 'enable'  0
 	config_get_bool enabled "$1" 'enabled' 0
@@ -101,11 +89,7 @@ start_instance() {
 		route_metric route_up rport script_security secret server server_bridge setenv shaper sndbuf \
 		socks_proxy status status_version syslog tcp_queue_limit tls_auth \
 		tls_cipher tls_remote tls_timeout tls_verify tmp_dir topology tran_window \
-		tun_mtu tun_mtu_extra txqueuelen user verb
-
-	# append multi-value params
-	append_params_quoted "$s" \
-		down push up
+		tun_mtu tun_mtu_extra txqueuelen user verb down push up
 
 
 	SERVICE_PID_FILE="/var/run/openvpn-$s.pid"
