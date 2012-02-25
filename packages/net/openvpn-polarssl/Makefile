@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011 OpenWrt.org
+# Copyright (C) 2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openvpn-polarssl
 PKG_VERSION:=v2.2-RC2-345-g03ab4ea
-PKG_RELEASE=$(PKG_SOURCE_VERSION)
+PKG_RELEASE=$(PKG_SOURCE_VERSION)-2
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_URL:=git://openvpn.git.sourceforge.net/gitroot/openvpn/openvpn.git
