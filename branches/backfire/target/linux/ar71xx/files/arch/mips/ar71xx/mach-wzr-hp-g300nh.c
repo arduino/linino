@@ -270,7 +270,11 @@ static void __init wzrhpg300nh_setup(void)
 
 	platform_device_register(&wzrhpg300nh_74hc153_device);
 	platform_device_register(&wzrhpg300nh_flash_device);
-	platform_device_register(&wzrhpg300nh_rtl8366s_device);
+
+	if (hasrtl8366rb)
+		platform_device_register(&wzrhpg300nh_rtl8366rb_device);
+	else
+		platform_device_register(&wzrhpg300nh_rtl8366s_device);
 
 	ar71xx_add_device_leds_gpio(-1, ARRAY_SIZE(wzrhpg300nh_leds_gpio),
 				    wzrhpg300nh_leds_gpio);
