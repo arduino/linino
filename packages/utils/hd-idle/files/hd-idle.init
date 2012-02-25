@@ -63,11 +63,11 @@ start_service() {
 	args=""
 	config_get "interval" "$section" "idle_time_interval"
 	config_get "unit" "$section" "idle_time_unit"
-	append_string "$section" "disk" "-t"
+	append_string "$section" "disk" "-a"
 	append_bool "$section" "enable_debug" "-d"
 	config_get_bool "enabled" "$section" "enabled" '1'
 	[ "$enabled" -gt 0 ] || return 1
-	service_start /usr/bin/hd-idle -i "$(compute_seconds $interval $unit)" $args
+	service_start /usr/bin/hd-idle $args -i "$(compute_seconds $interval $unit)"
 }
 
 start() {
