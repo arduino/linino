@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2010-2011 OpenWrt.org
+#
+# Copyright (C) 2010-2012 OpenWrt.org
 # Copyright (C) 2010 Alfred E. Heggestad
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=baresip
 PKG_VERSION:=0.4.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.creytiv.com/pub/
@@ -145,5 +145,5 @@ $(eval $(call BuildPlugin,oss,OSS audio driver,oss,))
 $(eval $(call BuildPlugin,speex,Speex audio codec,speex,+PACKAGE_baresip-mod-speex:libspeex))
 $(eval $(call BuildPlugin,stdio,standard I/O UI,stdio,))
 $(eval $(call BuildPlugin,uuid,UUID,uuid,+libuuid))
-$(eval $(call BuildPlugin,v4l,Video4Linux video source,v4l,+PACKAGE_baresip-mod-v4l:libv4l @(LINUX_2_6_30||LINUX_2_6_31||LINUX_2_6_32||LINUX_2_6_33||LINUX_2_6_34||LINUX_2_6_35||LINUX_2_6_36||LINUX_2_6_37)))
-$(eval $(call BuildPlugin,v4l2,Video4Linux2 video source,v4l2,+PACKAGE_baresip-mod-v4l2:libv4l @(LINUX_2_6_30||LINUX_2_6_31||LINUX_2_6_32||LINUX_2_6_33||LINUX_2_6_34||LINUX_2_6_35||LINUX_2_6_36||LINUX_2_6_37)))
+$(eval $(call BuildPlugin,v4l,Video4Linux video source,v4l,+PACKAGE_baresip-mod-v4l:libv4l))
+$(eval $(call BuildPlugin,v4l2,Video4Linux2 video source,v4l2,+PACKAGE_baresip-mod-v4l2:libv4l))
