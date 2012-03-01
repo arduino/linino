@@ -49,6 +49,7 @@ define Build/Configure
 	)
 endef
 
+TARGET_CXXFLAGS += -fpermissive
 TARGET_LDFLAGS := -L$(STAGING_DIR)/usr/lib $(TARGET_LDFLAGS)
 
 define Package/oprofile-utils/install
