@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,10 +16,11 @@ PKG_SOURCE_URL:=@SF/nzbget
 PKG_MD5SUM:=27971846aba75f5e312d80dce7edbc5d
 
 PKG_FIXUP:=libtool
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-TARGET_LDFLAGS+=-Wl,-rpath-link="$(STAGING_DIR)/usr/lib"
+TARGET_LDFLAGS+=-Wl,-rpath-link="$(STAGING_DIR)/usr/lib" -lcrypto -lsigc-2.0
 TARGET_CFLAGS += $(FPIC)
 
 define Package/nzbget
@@ -37,7 +38,6 @@ A command-line client/server based binary newsgrabber for nzb-files.
 endef
 
 CONFIGURE_ARGS += \
-	--disable-static \
 	--disable-nls \
 	--with-tlslib=OpenSSL \
 	--with-libpar2-includes=$(STAGING_DIR)/usr/include/libpar2 \
@@ -53,18 +53,11 @@ CONFIGURE_ARGS += \
 
 CONFIGURE_VARS += \
 	ac_cv_header_regex_h=no \
-	CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2 $$$$CPPFLAGS" 
-	
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-	$(TARGET_CONFIGURE_OPTS) \
-	DESTDIR="$(PKG_INSTALL_DIR)" \
-	install all
-endef
+	CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2 $$$$CPPFLAGS"
 
 define Package/nzbget/install
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/nzbget $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/nzbget $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/nzbget.conf.example $(1)/etc/nzbget.conf
 endef
