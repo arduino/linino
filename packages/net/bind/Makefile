@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bind
-PKG_VERSION:=9.8.1-P1
-PKG_RELEASE:=2
+PKG_VERSION:=9.9.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= \
 	ftp://ftp.isc.org/isc/bind9/$(PKG_VERSION) \
 	http://www.mirrorservice.org/sites/ftp.isc.org/isc/bind9/$(PKG_VERSION)
-PKG_MD5SUM:=afa41f8203d50bedad65071f9b6f96d7
+PKG_MD5SUM:=9281d0b04f711d28153ba1ab04a54026
 
 PKG_FIXUP:=libtool
 
@@ -89,7 +89,8 @@ CONFIGURE_ARGS += \
 	--with-libxml2=no \
 	--enable-epoll=yes \
 	--with-gost=no \
-	--with-gssapi=no
+	--with-gssapi=no \
+	--with-readline=no
 
 CONFIGURE_VARS += \
 	BUILD_CC="$(TARGET_CC)" \
