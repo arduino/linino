@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dibbler
-PKG_VERSION:=0.8.1
+PKG_VERSION:=0.8.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://klub.com.pl/dhcpv6/dibbler
-PKG_MD5SUM:=0e52acedd838c43a264441a933780ead
+PKG_MD5SUM:=313044c95af3091607127a05c338d8ec
 
 include $(INCLUDE_DIR)/package.mk
 
