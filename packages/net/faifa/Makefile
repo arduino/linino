@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -22,19 +22,35 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/faifa
-  SECTION:=net
-  CATEGORY:=Network
-  DEPENDS:=+libpthread +libopenssl +libpcap
+define Package/faifa/Default
   TITLE:=configure HomePlug 1.0/AV PLC devices
   URL:=http://open-plc.org/
 endef
 
+define Package/libfaifa
+  $(call Package/faifa/Default)
+  TITLE+= (library)
+  SECTION:=libs
+  CATEGORY:=Libraries
+endef
+
+define Package/libfaifa/description
+  Faifa companion library.
+endef
+
+define Package/faifa
+  $(call Package/faifa/Default)
+  SECTION:=net
+  CATEGORY:=Network
+  DEPENDS:=+libpthread +libopenssl +libpcap +libfaifa
+  TITLE+= (command line)
+endef
+
 define Package/faifa/description
-Faifa can configure any Intellon-based Power Line Communication device using
-Intellon INT5000 and INT6000 series chips (6000 and 6300 chips). It supports all
-Intellon-specific management and control frames as well as standard management
-frames.
+  Faifa can configure any Intellon-based Power Line Communication device using
+  Intellon INT5000 and INT6000 series chips (6000 and 6300 chips). It supports all
+  Intellon-specific management and control frames as well as standard management
+  frames.
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -55,4 +71,10 @@ define Package/faifa/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/faifa $(1)/usr/bin/
 endef
 
+define Package/libfaifa/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfaifa.so* $(1)/usr/lib
+endef
+
 $(eval $(call BuildPackage,faifa))
+$(eval $(call BuildPackage,libfaifa))
