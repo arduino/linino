@@ -257,10 +257,10 @@ clear_rules() {
     local restore_single=$1
     local group 
 
-    iptables -t mangle -F PREROUTING 
-    iptables -t mangle -F FORWARD
-    iptables -t mangle -F POSTROUTING
-    iptables -t mangle -F OUTPUT
+    iptables -t mangle -D PREROUTING -j MultiWan
+    iptables -t mangle -D FORWARD -j MultiWan
+    iptables -t mangle -D OUTPUT -j MultiWan
+    iptables -t mangle -D POSTROUTING -j MultiWan
     iptables -t mangle -F MultiWan
     iptables -t mangle -X MultiWan
     iptables -t mangle -F MultiWanRules
@@ -285,6 +285,10 @@ clear_rules() {
     done
 
     if [ ! -z "$CHKFORQOS" ]; then
+	iptables -t mangle -F PREROUTING
+	iptables -t mangle -F FORWARD
+	iptables -t mangle -F OUTPUT
+	iptables -t mangle -F POSTROUTING
 	iptables -t mangle -F MultiWanQoS
 	iptables -t mangle -X MultiWanQoS
 
