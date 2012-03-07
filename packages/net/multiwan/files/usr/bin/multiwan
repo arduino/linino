@@ -1011,6 +1011,8 @@ max_interval=$(((1<<31) - 1))
 
 config_clear
 config_load "multiwan"
+config_get_bool	enabled	config	enabled '1'
+[ "$enabled" -gt 0 ] || exit
 config_get default_route	config default_route
 config_get health_monitor	config health_monitor
 config_get iptables_interval	config iptables_interval '30'

@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=multiwan
-PKG_VERSION:=1.0.19
+PKG_VERSION:=1.0.20
 PKG_RELEASE:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -37,6 +37,11 @@ endef
 
 define Package/multiwan/install
 	$(CP) ./files/* $(1)
+endef
+
+define Package/multiwan/postinst
+[ -n "$${IPKG_INSTROOT}" ] || /etc/init.d/multiwan enable
+exit 0
 endef
 
 $(eval $(call BuildPackage,multiwan))

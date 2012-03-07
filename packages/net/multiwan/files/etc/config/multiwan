@@ -1,5 +1,8 @@
 
 config 'multiwan' 'config'
+	# REMOVE THIS LINE OR PUT TO 1 TO ENABLE MULTIWAN
+	option 'enabled' '0'
+
 	option 'default_route' 'balancer'
 	# health_monitor below is defaulted to parallel, and can be set to
 	# serial to save system resources.
