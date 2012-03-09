@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dosfstools
-PKG_VERSION:=3.0.11
+PKG_VERSION:=3.0.12
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.daniel-baumann.ch/software/dosfstools
-PKG_MD5SUM:=8d2211d5bd813164e20740e7c852aa06
+PKG_MD5SUM:=4c1f1e72b82371704f93ebdd3c7b6259
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -73,6 +73,8 @@ define Build/Compile
 endef
 
 define Package/dosfsck/install
+	$(INSTALL_DIR) $(1)/lib/functions/fsck
+	$(INSTALL_DATA) ./files/dosfsck.sh $(1)/lib/functions/fsck/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dosfsck $(1)/usr/sbin/
 	(cd $(1)/usr/sbin; ln -sf dosfsck fsck.msdos; ln -sf dosfsck fsck.vfat)
