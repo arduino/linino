@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2010-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fswebcam
-PKG_VERSION:=20100405
+PKG_VERSION:=20110717
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.sanslogic.co.uk/fswebcam/files/
-PKG_MD5SUM:=1ca864c8cef096fb4ace71cf14085424
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
+PKG_SOURCE_URL:=http://www.sanslogic.co.uk/fswebcam/files
+PKG_MD5SUM:=0b343a827771b7546cf4ede19a5ed000
 
 PKG_INSTALL:=1
 
