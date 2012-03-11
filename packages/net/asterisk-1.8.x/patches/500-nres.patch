@@ -1,0 +1,11 @@
+--- a/configure
++++ b/configure
+@@ -24234,7 +24234,7 @@ $as_echo "$ac_try_echo") >&5
+ $as_echo "yes" >&6; }
+ 
+ cat >>confdefs.h <<\_ACEOF
+-#define HAVE_RES_NINIT 1
++//#define HAVE_RES_NINIT 1
+ _ACEOF
+ 
+ 	{ $as_echo "$as_me:$LINENO: checking for library containing res_9_ndestroy" >&5
