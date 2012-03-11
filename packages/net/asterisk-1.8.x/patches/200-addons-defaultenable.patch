@@ -64,3 +64,14 @@
  	<support_level>extended</support_level>
   ***/
  
+--- a/res/res_pktccops.c
++++ b/res/res_pktccops.c
+@@ -31,7 +31,7 @@
+  */
+ 
+ /*** MODULEINFO
+-        <defaultenabled>no</defaultenabled>
++        <defaultenabled>yes</defaultenabled>
+ 	<support_level>extended</support_level>
+  ***/
+ 
