@@ -152,6 +152,30 @@ $(call Package/asterisk18/Default/description)
  This package provides the channel chan_mobile support to Asterisk.
 endef
 
+define Package/asterisk18-res-timing-timerfd
+$(call Package/asterisk18/Default)
+  TITLE:= Timerfd Timing Interface
+  DEPENDS:= asterisk18
+endef
+
+define Package/asterisk18-res-timing-pthread
+$(call Package/asterisk18/Default)
+  TITLE:= pthread Timing Interface
+  DEPENDS:= asterisk18
+endef
+
+define Package/asterisk18-res-fax
+$(call Package/asterisk18/Default)
+  TITLE:=Generic FAX Resource for FAX technology resource modules
+  DEPENDS:= asterisk18 +asterisk18-res-timing-pthread
+endef
+
+define Package/asterisk18-res-fax-spandsp
+$(call Package/asterisk18/Default)
+  TITLE:=Spandsp T.38 and G.711 FAX Resource
+  DEPENDS:= asterisk18 +asterisk18-res-fax +libspandsp
+endef
+
 define Package/asterisk18-chan-mgcp
 $(call Package/asterisk18/Default)
   TITLE:=MGCP channel support
@@ -235,6 +259,14 @@ else
 	--without-mysqlclient
 endif
 
+ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk18-res-fax-spandsp),)
+  CONFIGURE_ARGS+= \
+    --with-spandsp="$(STAGING_DIR)/usr"
+else
+  CONFIGURE_ARGS+= \
+    --without-spandsp
+endif
+
 ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk18-chan-mobile),)
   CONFIGURE_ARGS+= \
 	--with-bluetooth="$(STAGING_DIR)/usr"
@@ -271,7 +303,6 @@ CONFIGURE_ARGS+= \
 	--without-qt \
 	--without-radius \
 	--without-sdl \
-	--without-spandsp \
 	--without-suppserv \
 	--without-tds \
 	--without-termcap \
@@ -455,6 +486,33 @@ define Package/asterisk18-chan-mobile/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/chan_mobile.so $(1)/usr/lib/asterisk/modules/
 endef
 
+define Package/asterisk18-res-timing-timerfd/install
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_timing_timerfd.so $(1)/usr/lib/asterisk/modules/
+endef
+
+define Package/asterisk18-res-timing-pthread/install
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_timing_pthread.so $(1)/usr/lib/asterisk/modules/
+endef
+
+define Package/asterisk18-res-fax/conffiles
+/etc/asterisk/res_fax.conf
+endef
+
+define Package/asterisk18-res-fax/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/asterisk/res_fax.conf $(1)/etc/asterisk/
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_fax.so $(1)/usr/lib/asterisk/modules/
+endef
+
+define Package/asterisk18-res-fax-spandsp/install
+	$(INSTALL_DIR) $(1)/etc/asterisk
+	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/res_fax_spandsp.so $(1)/usr/lib/asterisk/modules/
+endef
+
 define Package/asterisk18-chan-mgcp/conffiles
 /etc/asterisk/mgcp.conf
 endef
@@ -535,6 +593,10 @@ $(eval $(call BuildPackage,asterisk18-cdr))
 $(eval $(call BuildPackage,asterisk18-res-musiconhold))
 $(eval $(call BuildPackage,asterisk18-chan-gtalk))
 $(eval $(call BuildPackage,asterisk18-chan-mobile))
+$(eval $(call BuildPackage,asterisk18-res-fax))
+$(eval $(call BuildPackage,asterisk18-res-fax-spandsp))
+$(eval $(call BuildPackage,asterisk18-res-timing-timerfd))
+$(eval $(call BuildPackage,asterisk18-res-timing-pthread))
 $(eval $(call BuildPackage,asterisk18-chan-mgcp))
 $(eval $(call BuildPackage,asterisk18-chan-skinny))
 $(eval $(call BuildPackage,asterisk18-curl))
