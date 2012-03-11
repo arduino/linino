@@ -8,15 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=obfsproxy
-PKG_REV:=0ba2d3bbb829cc71e38ecae6d5d9134af9045a22
-PKG_VERSION:=20120210
+PKG_VERSION:=0.1.1
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=git://git.torproject.org/obfsproxy.git
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_SOURCE_PROTO:=git
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=https://www.torproject.org/dist/obfsproxy \
+        https://archive.torproject.org/tor-package-archive/obfsproxy
+PKG_MD5SUM:=26db002adfb014873e982b398cb5d7eb
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
