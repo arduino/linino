@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -179,8 +179,8 @@ endef
 
 
 define Package/$(PKG_NAME)/description
-  FreeSWITCH is an open source telephony platform designed to 
-  facilitate the creation of voice and chat driven products scaling 
+  FreeSWITCH is an open source telephony platform designed to
+  facilitate the creation of voice and chat driven products scaling
   from a soft-phone up to a soft-switch.  See http://wiki.$(PKG_NAME).org
 endef
 
@@ -262,7 +262,7 @@ endef
 
 define Package/$(PKG_NAME)-config-upstream-defaults/description
   The default configuration included with FreeSWITCH. It is not intended to be
-  a final product, and but is included for those who don't want to use the 
+  a final product, and but is included for those who don't want to use the
   OpenWRT configuration and/or want to try things as prepared by upstream.
 endef
 
@@ -275,7 +275,7 @@ endef
 
 
 define Package/$(PKG_NAME)-config-minimal/description
-  A minimal configuration of FreeSWITCH for OpenWRT devices.  Is what the UCI 
+  A minimal configuration of FreeSWITCH for OpenWRT devices.  Is what the UCI
   configuration began with.
 endef
 
@@ -383,7 +383,7 @@ endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-event-zmq),)
- $(eval $(call Download/files,event-zmq,zeromq-2.1.9.tar.gz,94c5e0262a79c5f82bc0b178c1f8a33d,http://download.zeromq.org,,libs/))
+ $(eval $(call Download/files,event-zmq,zeromq-2.1.9.tar.gz,94c5e0262a79c5f82bc0b178c1f8a33d,http://download.zeromq.org http://download.zeromq.org/historic,,libs/))
 endif
 
 
@@ -695,7 +695,7 @@ $(eval $(call BuildPlugin,db,Database backend,mod_db,,))
 $(eval $(call BuildPlugin,dialplan-asterisk,Asterisk dialplan parser,mod_dialplan_asterisk,,))
 $(eval $(call BuildPlugin,dialplan-directory,Dialplan directory,mod_dialplan_directory,,))
 $(eval $(call BuildPlugin,dialplan-xml,Dialplan-XML interface,mod_dialplan_xml,,))
-$(eval $(call BuildPlugin,dingaling,Jabber interface,mod_dingaling,,)) 
+$(eval $(call BuildPlugin,dingaling,Jabber interface,mod_dingaling,,))
 $(eval $(call BuildPlugin,directory,application mod_directory,mod_directory,,))
 $(eval $(call BuildPlugin,distributor,application mod_distributor,mod_distributor,,))
 $(eval $(call BuildPlugin,dptools,Dialplan tools,mod_dptools,,))
@@ -714,7 +714,7 @@ $(eval $(call BuildPlugin,fsk,Bell-202 1200-baud FSK decoder,mod_fsk,,))
 $(eval $(call BuildPlugin,fsv,Video,mod_fsv,,))
 $(eval $(call BuildPlugin,g723-1,G.723.1 codec,mod_g723_1,,))
 $(eval $(call BuildPlugin,g729,G.729 codec,mod_g729,,))
-$(eval $(call BuildPlugin,gsmopen,Short Message Service (SMS),mod_gsmopen,spandsp,+alsa-lib +libgsm))
+$(eval $(call BuildPlugin,gsmopen,Short Message Service (SMS),mod_gsmopen,spandsp,+alsa-lib @BROKEN)) # needs gsmlib
 $(eval $(call BuildPlugin,h26x,H26X linear codec,mod_h26x,,))
 $(eval $(call BuildPlugin,h323,h323 endpoint,mod_h323,,@BROKEN)) # missing header files (other packages needed)
 $(eval $(call BuildPlugin,hash,API for manipulating a hash table,mod_hash,,))
