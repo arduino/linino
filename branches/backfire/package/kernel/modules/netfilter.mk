@@ -120,7 +120,7 @@ define KernelPackage/ipt-ipopt/description
  - tcpmss
  - time
  - tos/TOS (prior to 2.6.25)
- - ttl/TTL (prior to 2.6.30)
+ - ttl/TTL
  - unclean
 endef
 
