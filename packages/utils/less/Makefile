@@ -8,30 +8,64 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=less
-PKG_VERSION:=436
-PKG_RELEASE:=2
+PKG_VERSION:=444
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.greenwoodsoftware.com/less
-PKG_MD5SUM:=817bf051953ad2dea825a1cdf460caa4
+PKG_MD5SUM:=56f9f76ffe13f70155f47f6b3c87d421
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/less
+define Package/less/Default
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Pager program similar to more
-  DEPENDS:= +libncurses
   URL:=http://www.greenwoodsoftware.com/less/
 endef
 
-define Package/less/description
+define Package/less/Default/description
   Full version of GNU less utility
 endef
 
+define Package/less
+  $(call Package/less/Default)
+  DEPENDS:=+libncurses
+  VARIANT:=narrow
+endef
+
+define Package/less/description
+  $(call Package/less/Default/description)
+endef
+
+define Package/less-wide
+  $(call Package/less/Default)
+  TITLE+= (Unicode)
+  DEPENDS:=+libncursesw
+  VARIANT:=wide
+endef
+
+define Package/less-wide/description
+  $(call Package/less/Default/description)
+  This package contains the Unicode enabled version of less.
+endef
+
+ifeq ($(BUILD_VARIANT),narrow)
+	CONFIGURE_VARS += \
+		ac_cv_lib_ncursesw_initscr=no		
+endif
+
+ifeq ($(BUILD_VARIANT),wide)
+	CONFIGURE_VARS += \
+		ac_cv_lib_ncursesw_initscr=yes
+endif
+
 define Package/less/install
 	$(INSTALL_DIR) $(1)/bin
-	$(CP) $(PKG_BUILD_DIR)/less $(1)/bin/less
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/less $(1)/bin/less
 endef
 
 define Package/less/postinst
@@ -46,4 +80,9 @@ define Package/less/postrm
 exit 0
 endef
 
+Package/less-wide/install = $(Package/less/install)
+Package/less-wide/postinst = $(Package/less/postinst)
+Package/less-wide/postrm = $(Package/less/postrm)
+
 $(eval $(call BuildPackage,less))
+$(eval $(call BuildPackage,less-wide))
