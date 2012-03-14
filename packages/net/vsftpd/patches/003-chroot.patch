@@ -1,6 +1,6 @@
 --- a/tunables.c
 +++ b/tunables.c
-@@ -244,7 +244,7 @@ tunables_load_defaults()
+@@ -250,7 +250,7 @@ tunables_load_defaults()
    /* -rw------- */
    tunable_chown_upload_mode = 0600;
  
