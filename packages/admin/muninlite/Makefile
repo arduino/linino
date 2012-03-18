@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=muninlite
 PKG_VERSION:=1.0.4
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
@@ -28,13 +28,6 @@ endef
 define Package/muninlite/Default/description
 	Munin node implemented in shell.
 	Munin is a monitoring system for Unix networks.
-endef
-
-define Package/muninlite/postinst
-#!/bin/sh
-grep -q '^munin[[:space:]]*4949/tcp' $${IPKG_INSTROOT}/etc/services 2>/dev/null
-[ $$? -ne 0 ] && echo "munin       4949/tcp" >> $${IPKG_INSTROOT}/etc/services
-exit 0
 endef
 
 define Package/muninlite/install
