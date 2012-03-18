@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pyrrd
 PKG_VERSION:=0.1.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=PyRRD-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://pypi.python.org/packages/source/P/PyRRD/
@@ -27,7 +27,7 @@ define Package/pyrrd
   CATEGORY:=Languages
   TITLE:=PyRRD - An Object-Oriented Python Interface for RRDTool
   URL:=http://code.google.com/p/pyrrd/
-  DEPENDS:=+python +distribute
+  DEPENDS:=+python +distribute +rrdtool
 endef
 
 define Package/pyrrd/description
