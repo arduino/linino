@@ -1,7 +1,5 @@
-Index: haproxy-1.4.19/doc/configuration.txt
-===================================================================
---- haproxy-1.4.19.orig/doc/configuration.txt
-+++ haproxy-1.4.19/doc/configuration.txt
+--- a/doc/configuration.txt
++++ b/doc/configuration.txt
 @@ -1337,6 +1337,7 @@ bind [<address>]:<port_range> [, ...] tr
  bind [<address>]:<port_range> [, ...] id <id>
  bind [<address>]:<port_range> [, ...] name <name>
@@ -64,10 +62,8 @@ Index: haproxy-1.4.19/doc/configuration.txt
  
    - "client_port" is the TCP port of the client which initiated the connection.
  
-Index: haproxy-1.4.19/include/common/standard.h
-===================================================================
---- haproxy-1.4.19.orig/include/common/standard.h
-+++ haproxy-1.4.19/include/common/standard.h
+--- a/include/common/standard.h
++++ b/include/common/standard.h
 @@ -269,6 +269,28 @@ static inline unsigned int __strl2uic(co
  	return i;
  }
@@ -105,10 +101,8 @@ Index: haproxy-1.4.19/include/common/standard.h
  unsigned int inetaddr_host(const char *text);
  unsigned int inetaddr_host_lim(const char *text, const char *stop);
  unsigned int inetaddr_host_lim_ret(const char *text, char *stop, const char **ret);
-Index: haproxy-1.4.19/include/proto/client.h
-===================================================================
---- haproxy-1.4.19.orig/include/proto/client.h
-+++ haproxy-1.4.19/include/proto/client.h
+--- a/include/proto/client.h
++++ b/include/proto/client.h
 @@ -25,6 +25,7 @@
  #include <common/config.h>
  #include <types/session.h>
@@ -117,10 +111,8 @@ Index: haproxy-1.4.19/include/proto/client.h
  void get_frt_addr(struct session *s);
  int event_accept(int fd);
  
-Index: haproxy-1.4.19/include/types/buffers.h
-===================================================================
---- haproxy-1.4.19.orig/include/types/buffers.h
-+++ haproxy-1.4.19/include/types/buffers.h
+--- a/include/types/buffers.h
++++ b/include/types/buffers.h
 @@ -135,16 +135,16 @@
   * The field is blanked by buffer_init() and only by analysers themselves
   * afterwards.
@@ -148,10 +140,8 @@ Index: haproxy-1.4.19/include/types/buffers.h
  #define AN_REQ_PRST_RDP_COOKIE  0x00000400  /* persistence on rdp cookie */
  #define AN_REQ_HTTP_XFER_BODY   0x00000800  /* forward request body */
  
-Index: haproxy-1.4.19/include/types/protocols.h
-===================================================================
---- haproxy-1.4.19.orig/include/types/protocols.h
-+++ haproxy-1.4.19/include/types/protocols.h
+--- a/include/types/protocols.h
++++ b/include/types/protocols.h
 @@ -72,6 +72,7 @@
  #define LI_O_FOREIGN	0x0002	/* permit listening on foreing addresses */
  #define LI_O_NOQUICKACK	0x0004	/* disable quick ack of immediate data (linux) */
@@ -160,10 +150,8 @@ Index: haproxy-1.4.19/include/types/protocols.h
  
  /* The listener will be directly referenced by the fdtab[] which holds its
   * socket. The listener provides the protocol-specific accept() function to
-Index: haproxy-1.4.19/src/cfgparse.c
-===================================================================
---- haproxy-1.4.19.orig/src/cfgparse.c
-+++ haproxy-1.4.19/src/cfgparse.c
+--- a/src/cfgparse.c
++++ b/src/cfgparse.c
 @@ -1464,6 +1464,16 @@ int cfg_parse_listen(const char *file, i
  #endif
  			}
@@ -190,7 +178,7 @@ Index: haproxy-1.4.19/src/cfgparse.c
  			      file, linenum, args[0]);
  			err_code |= ERR_ALERT | ERR_FATAL;
  			goto out;
-@@ -5702,6 +5712,9 @@ out_uri_auth_compat:
+@@ -5710,6 +5720,9 @@ out_uri_auth_compat:
  			listener->handler = process_session;
  			listener->analysers |= curproxy->fe_req_ana;
  
@@ -200,10 +188,8 @@ Index: haproxy-1.4.19/src/cfgparse.c
  			/* smart accept mode is automatic in HTTP mode */
  			if ((curproxy->options2 & PR_O2_SMARTACC) ||
  			    (curproxy->mode == PR_MODE_HTTP &&
-Index: haproxy-1.4.19/src/client.c
-===================================================================
---- haproxy-1.4.19.orig/src/client.c
-+++ haproxy-1.4.19/src/client.c
+--- a/src/client.c
++++ b/src/client.c
 @@ -22,6 +22,7 @@
  
  #include <common/compat.h>
@@ -404,11 +390,9 @@ Index: haproxy-1.4.19/src/client.c
  /* Retrieves the original destination address used by the client, and sets the
   * SN_FRT_ADDR_SET flag.
   */
-Index: haproxy-1.4.19/src/proto_http.c
-===================================================================
---- haproxy-1.4.19.orig/src/proto_http.c
-+++ haproxy-1.4.19/src/proto_http.c
-@@ -4028,7 +4028,8 @@ void http_end_txn_clean_session(struct s
+--- a/src/proto_http.c
++++ b/src/proto_http.c
+@@ -4029,7 +4029,8 @@ void http_end_txn_clean_session(struct s
  	if (s->rep->lr >= s->rep->data + s->rep->size)
  		s->rep->lr -= s->req->size;
  
@@ -418,7 +402,7 @@ Index: haproxy-1.4.19/src/proto_http.c
  	s->rep->analysers = 0;
  
  	http_silent_debug(__LINE__, s);
-@@ -7553,7 +7554,6 @@ void http_reset_txn(struct session *s)
+@@ -7562,7 +7563,6 @@ void http_reset_txn(struct session *s)
  	http_init_txn(s);
  
  	s->be = s->fe;
@@ -426,10 +410,8 @@ Index: haproxy-1.4.19/src/proto_http.c
  	s->logs.logwait = s->fe->to_log;
  	s->srv = s->prev_srv = s->srv_conn = NULL;
  	/* re-init store persistence */
-Index: haproxy-1.4.19/src/session.c
-===================================================================
---- haproxy-1.4.19.orig/src/session.c
-+++ haproxy-1.4.19/src/session.c
+--- a/src/session.c
++++ b/src/session.c
 @@ -1055,6 +1055,12 @@ resync_stream_interface:
  			while (ana_list && max_loops--) {
  				/* Warning! ensure that analysers are always placed in ascending order! */
@@ -443,10 +425,8 @@ Index: haproxy-1.4.19/src/session.c
  				if (ana_list & AN_REQ_INSPECT) {
  					if (!tcp_inspect_request(s, s->req, AN_REQ_INSPECT))
  						break;
-Index: haproxy-1.4.19/src/standard.c
-===================================================================
---- haproxy-1.4.19.orig/src/standard.c
-+++ haproxy-1.4.19/src/standard.c
+--- a/src/standard.c
++++ b/src/standard.c
 @@ -569,6 +569,11 @@ unsigned int strl2uic(const char *s, int
  	return __strl2uic(s, len);
  }
