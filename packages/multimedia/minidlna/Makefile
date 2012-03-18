@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010-2011 OpenWrt.org
+# Copyright (C) 2010-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=minidlna
-PKG_VERSION:=1.0.22
-PKG_RELEASE:=2
+PKG_VERSION:=1.0.24
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION)_src.tar.gz
 PKG_SOURCE_URL:=@SF/minidlna
-PKG_MD5SUM:=3de2f6b54f43bb998dfad3c8fa75cef3
+PKG_MD5SUM:=be9b4c91e3fcde592dc3f9828098ca0f
 
 PKG_BUILD_PARALLEL:=0
 

@@ -37,7 +37,7 @@
  #STATIC_LINKING: LIBS = -lvorbis -logg -lm -lsqlite3 -lpthread -lexif -ljpeg -lFLAC -lm -lid3tag -lz -lavformat -lavutil -lavcodec -lm
  
  TESTUPNPDESCGENOBJS = testupnpdescgen.o upnpdescgen.o
-@@ -62,7 +66,7 @@ install:	minidlna
+@@ -64,7 +68,7 @@ install-conf:
  	$(INSTALL) -d $(ETCINSTALLDIR)
  	$(INSTALL) --mode=0644 minidlna.conf $(ETCINSTALLDIR)
  

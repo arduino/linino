@@ -1,6 +1,6 @@
 --- a/genconfig.sh
 +++ b/genconfig.sh
-@@ -24,14 +24,18 @@ RM="rm -f"
+@@ -23,14 +23,18 @@ RM="rm -f"
  CONFIGFILE="config.h"
  CONFIGMACRO="__CONFIG_H__"
  
@@ -23,7 +23,7 @@
  TIVO="/*#define TIVO_SUPPORT*/"
  NETGEAR="/*#define NETGEAR*/"
  READYNAS="/*#define READYNAS*/"
-@@ -41,22 +45,22 @@ ${RM} ${CONFIGFILE}
+@@ -40,22 +44,22 @@ ${RM} ${CONFIGFILE}
  
  # Detect if there are missing headers
  # NOTE: This check only works with a normal distro
@@ -62,7 +62,7 @@
  if [ -n "$MISSING" ]; then
  	echo -e "\nERROR!  Cannot continue."
  	echo -e "The following required libraries are either missing, or are missing development headers:\n"
-@@ -152,8 +156,7 @@ case $OS_NAME in
+@@ -151,8 +155,7 @@ case $OS_NAME in
  		fi
  		;;
  	*)
@@ -72,7 +72,7 @@
  		;;
  esac
  
-@@ -184,7 +187,7 @@ fi
+@@ -183,7 +186,7 @@ fi
  echo "" >> ${CONFIGFILE}
  
  echo "/* Enable if the system iconv.h exists.  ID3 tag reading in various character sets will not work properly otherwise. */" >> ${CONFIGFILE}
@@ -81,7 +81,7 @@
  echo "#define HAVE_ICONV_H" >> ${CONFIGFILE}
  else
  echo -e "\nWARNING!!  Iconv support not found.  ID3 tag reading may not work."
-@@ -193,7 +196,7 @@ fi
+@@ -192,7 +195,7 @@ fi
  echo "" >> ${CONFIGFILE}
  
  echo "/* Enable if the system libintl.h exists for NLS support. */" >> ${CONFIGFILE}
