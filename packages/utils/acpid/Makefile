@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010 OpenWrt.org
+# Copyright (C) 2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -22,7 +22,7 @@ define Package/acpid
   CATEGORY:=Utilities
   TITLE:=The ACPI Daemon (acpid) With Netlink Support
   URL:=http://tedfelix.com/linux/acpid-netlink.html
-  DEPENDS:=+kmod-input-evdev +kmod-button 
+  DEPENDS:=+kmod-input-evdev +kmod-acpi-button
 endef
 
 define Package/acpid/description
@@ -56,7 +56,7 @@ define Package/acpid/postinst
 	echo "waiting for input devices to come up"
 	/etc/init.d/acpid enable
 	sleep 5
-	/usr/sbin/acpid
+	/etc/init.d/acpid start
 	echo "please try the power button"
 	exit 0
 }
