@@ -63,7 +63,9 @@ CONFIGURE_VARS += \
 	samba_cv_USE_SETREUID=yes \
 	samba_cv_USE_SETRESUID=yes \
 	samba_cv_have_setreuid=yes \
-	samba_cv_have_setresuid=yes
+	samba_cv_have_setresuid=yes \
+	ac_cv_header_zlib_h=no \
+	samba_cv_zlib_1_2_3=no
 
 CONFIGURE_ARGS += \
 	--exec-prefix=/usr \
