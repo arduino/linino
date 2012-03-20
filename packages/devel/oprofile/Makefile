@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=oprofile
-PKG_VERSION:=0.9.4
-PKG_RELEASE:=2
+PKG_VERSION:=0.9.7
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/oprofile/
-PKG_MD5SUM:=82b059379895cf125261d7d773465915
+PKG_MD5SUM:=8b5d1d9b65f84420bcc3234777ad3be3
 
 PKG_BUILD_DEPENDS:=binutils
 PKG_FIXUP:=libtool
@@ -80,7 +80,7 @@ define Package/oprofile/install
 	$(INSTALL_DIR) $(1)/usr/share/oprofile
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/share/oprofile/stl.pat \
-		$(PKG_INSTALL_DIR)/usr/share/oprofile/$(LINUX_KARCH) \
+		$(PKG_INSTALL_DIR)/usr/share/oprofile/$(patsubst x86,i386,$(LINUX_KARCH)) \
 		$(1)/usr/share/oprofile/
 endef
 
