@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/mc
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+glib2 +libncurses $(ICONV_DEPENDS)
+  DEPENDS:=+glib2 +libncurses $(LIBRPC_DEPENDS) $(ICONV_DEPENDS)
   TITLE:=midnight commander - a powerful file manager
   URL:=http://www.midnight-commander.org/
   SUBMENU:=filemanager
