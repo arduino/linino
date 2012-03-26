@@ -33,6 +33,7 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_qt4-phonon \
 	CONFIG_PACKAGE_qt4-sqlite \
 	CONFIG_PACKAGE_qt4-mysql \
+	CONFIG_PACKAGE_qt4-pgsql \
 	CONFIG_PACKAGE_qt4-webkit \
 	CONFIG_PACKAGE_qt4-script \
 	CONFIG_PACKAGE_qt4-scriptools \
@@ -108,6 +109,18 @@ define Package/qt4-mysql
   $(call Package/qt4/Default)
   TITLE+=(mysql)
   DEPENDS+=+libmysqlclient
+endef
+
+define Package/qt4-pgsql
+  $(call Package/qt4/Default)
+  TITLE+=(pgsql)
+  DEPENDS+=+libpq
+endef
+
+define Package/qt4-pgsql
+  $(call Package/qt4/Default)
+  TITLE+=(pgsql)
+  DEPENDS+=+libpq
 endef
 
 define Package/qt4-openssl
@@ -341,6 +354,7 @@ define Build/Configure
 			-system-sqlite \
 			$(if $(CONFIG_PACKAGE_qt4-sqlite),-plugin-sql-sqlite) \
 			$(if $(CONFIG_PACKAGE_qt4-mysql),-plugin-sql-mysql) \
+			$(if $(CONFIG_PACKAGE_qt4-pgsql),-plugin-sql-psql) \
 			-no-decoration-styled \
 			-no-decoration-windows \
 			-no-decoration-default \
@@ -575,6 +589,19 @@ define Package/qt4-mysql/install
 		$(1)/usr/lib/Qt/plugins/sqldrivers/
 endef
 
+define Package/qt4-pgsql/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib/Qt/plugins/sqldrivers
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libQtSql.so* \
+		$(1)/usr/lib/
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/Qt/plugins/sqldrivers/libqsqlpsql.so \
+		$(1)/usr/lib/Qt/plugins/sqldrivers/
+endef
+
 #define Package/qt4-multimedia/install
 #	$(INSTALL_DIR) \
 #		$(1)/usr/bin
@@ -761,6 +788,7 @@ $(eval $(call BuildPackage,qt4-examples))
 $(eval $(call BuildPackage,qt4-network))
 $(eval $(call BuildPackage,qt4-sqlite))
 $(eval $(call BuildPackage,qt4-mysql))
+$(eval $(call BuildPackage,qt4-pgsql))
 $(eval $(call BuildPackage,qt4-openssl))
 #$(eval $(call BuildPackage,qt4-multimedia))
 #$(eval $(call BuildPackage,qt4-audio-backend))
