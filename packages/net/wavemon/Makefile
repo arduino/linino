@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wavemon
-PKG_VERSION:=0.7.3
+PKG_VERSION:=0.7.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://eden-feed.erg.abdn.ac.uk/wavemon/stable-releases
-PKG_MD5SUM:=a96bad0359592ac56532067002b9e862
+PKG_MD5SUM:=7dc34d568dbaa1cb30c8cfc7ad0bb856
 
 PKG_INSTALL:=1
 
