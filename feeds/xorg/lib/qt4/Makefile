@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2010 OpenWrt.org
+# Copyright (C) 2008-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -66,6 +66,7 @@ define Package/qt4/Default
   DEPENDS:=qt4
   DEFAULT:=m if PACKAGE_qt4-gui && ALL
   URL:=http://qt.nokia.com/
+  MAINTAINER:=Mirko Vogt <mirko@openwrt.org>
 endef
 
 define Package/qt4
