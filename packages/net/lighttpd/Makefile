@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lighttpd
 PKG_VERSION:=1.4.30
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=http://download.lighttpd.net/lighttpd/releases-1.4.x
@@ -30,8 +30,19 @@ endef
 define Package/lighttpd
   $(call Package/lighttpd/Default)
   MENU:=1
-  DEPENDS:=+libopenssl +libpcre +libpthread
+  DEPENDS:=+LIGHTTPD_SSL:libopenssl +libpcre +libpthread
   TITLE:=A flexible and lightweight web server
+endef
+
+define Package/lighttpd/config
+config LIGHTTPD_SSL
+	bool "SSL support"
+	depends on PACKAGE_lighttpd
+	default y if PACKAGE_libopenssl
+	help
+	  Implements SSL support in lighttpd (using libopenssl). This
+	  option is required if you enable the SSL engine in your
+	  lighttpd confguration file.
 endef
 
 define Package/lighttpd-mod-access
@@ -222,13 +233,20 @@ CONFIGURE_ARGS+= \
 	--without-lua \
 	--without-memcache \
 	--without-mysql \
-	--with-openssl="$(STAGING_DIR)/usr" \
 	--with-pcre \
 	--without-valgrind \
 	 $(call autoconf_bool,CONFIG_IPV6,ipv6)
 
 CONFIGURE_VARS+= \
 	PCRE_LIB="-lpcre" \
+
+ifneq ($(strip $(CONFIG_LIGHTTPD_SSL)),)
+  CONFIGURE_ARGS+= \
+	--with-openssl="$(STAGING_DIR)/usr"
+else
+  CONFIGURE_ARGS+= \
+	--without-openssl
+endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_lighttpd-mod-webdav),)
   CONFIGURE_ARGS+= \
