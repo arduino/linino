@@ -1,0 +1,675 @@
+diff --git a/lang/python/Makefile b/lang/python/Makefile
+index 95e036e..2a541d0 100644
+--- a/lang/python/Makefile
++++ b/lang/python/Makefile
+@@ -8,12 +8,12 @@
+ include $(TOPDIR)/rules.mk
+ 
+ PKG_NAME:=python
+-PKG_VERSION:=2.6.4
+-PKG_RELEASE:=4
++PKG_VERSION:=2.7.3rc2
++PKG_RELEASE:=1
+ 
+ PKG_SOURCE:=Python-$(PKG_VERSION).tar.bz2
+ PKG_SOURCE_URL:=http://www.python.org/ftp/python/$(PKG_VERSION)/
+-PKG_MD5SUM:=fee5408634a54e721a93531aba37f8c1
++PKG_MD5SUM:=67059e1bcaf19e19394d16b80637f75f
+ 
+ PKG_INSTALL:=1
+ PKG_BUILD_PARALLEL:=1
+@@ -105,10 +105,11 @@ $(call Package/python/Default)
+   DEPENDS+=+python-mini
+ endef
+ 
++# Needs datetime
+ define Package/python-sqlite3
+ $(call Package/python/Default)
+  TITLE:=Python support for sqlite3
+- DEPENDS+=+python-mini +libsqlite3
++ DEPENDS+=+python +libsqlite3
+ endef
+ 
+ define Package/python-gdbm
+@@ -117,39 +118,41 @@ $(call Package/python/Default)
+  DEPENDS+=+python-mini +libgdbm
+ endef
+ 
+-PY_DISABLED_MODULES:= \
+-	readline _curses _curses_panel _tkinter nis
+-
+ MAKE_FLAGS:=\
+ 	$(TARGET_CONFIGURE_OPTS) \
+-	PYTHON_DISABLE_MODULES="$(PY_DISABLED_MODULES)" \
+-	PYTHON_MODULES_INCLUDE="$(STAGING_DIR)/usr/include" \
+-	PYTHON_MODULES_LIB="$(STAGING_DIR)/usr/lib" \
+ 	DESTDIR="$(PKG_INSTALL_DIR)" \
+ 	CROSS_COMPILE=yes \
+-	CFLAGS="$(TARGET_CFLAGS) -fno-inline" \
++	CFLAGS="$(TARGET_CFLAGS) -DNDEBUG -fno-inline" \
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	LD="$(TARGET_CC)" \
+ 	HOSTPYTHON=./hostpython \
+ 	HOSTPGEN=./hostpgen
+ 
++ENABLE_IPV6:=
++ifeq ($(CONFIG_IPV6),y)
++	ENABLE_IPV6 += --enable-ipv6
++endif
++
+ define Build/Configure
+ 	-$(MAKE) -C $(PKG_BUILD_DIR) distclean
+ 	(cd $(PKG_BUILD_DIR); autoreconf --force --install || exit 0)
+ 	# The python executable needs to stay in the rootdir since its location will
+ 	# be used to compute the path of the config files.
+ 	$(CP) $(STAGING_DIR_HOST)/bin/pgen $(PKG_BUILD_DIR)/hostpgen
+-	$(CP) $(STAGING_DIR_HOST)/bin/python $(PKG_BUILD_DIR)/hostpython
++	$(CP) $(STAGING_DIR_HOST)/bin/python$(PYTHON_VERSION) $(PKG_BUILD_DIR)/hostpython
+ 	$(call Build/Configure/Default, \
+ 		--sysconfdir=/etc \
+ 		--disable-shared \
+ 		--without-cxx-main \
+ 		--with-threads \
+-		--with-system-ffi \
++		--with-system-ffi="$(STAGING_DIR)/usr" \
++		$(ENABLE_IPV6) \
+ 		ac_cv_lib_readline_readline=no \
+ 		ac_cv_have_chflags=no \
+ 		ac_cv_have_lchflags=no \
+ 		ac_cv_py_format_size_t=no \
++		ac_cv_have_long_long_format=yes \
++		ac_cv_buggy_getaddrinfo=no \
+ 		OPT="$(TARGET_CFLAGS)" \
+ 	)
+ endef
+@@ -170,7 +173,7 @@ define Build/InstallDev
+ 		$(1)/usr/lib/python$(PYTHON_VERSION)/
+ 
+ 	$(CP) \
+-		$(STAGING_DIR_HOST)/bin/python \
++		$(STAGING_DIR_HOST)/bin/python$(PYTHON_VERSION) \
+ 		$(1)/usr/bin/hostpython
+ 	(cd $(2)/bin; \
+ 	ln -sf ../../usr/bin/hostpython python$(PYTHON_VERSION); \
+@@ -189,7 +192,6 @@ define PyPackage/python/filespec
+ +|/usr/lib/python$(PYTHON_VERSION)
+ -|/usr/lib/python$(PYTHON_VERSION)/bsddb/test
+ -|/usr/lib/python$(PYTHON_VERSION)/config
+-+|/usr/lib/python$(PYTHON_VERSION)/config/Makefile
+ -|/usr/lib/python$(PYTHON_VERSION)/ctypes/test
+ -|/usr/lib/python$(PYTHON_VERSION)/distutils/command/wininst-*.exe
+ -|/usr/lib/python$(PYTHON_VERSION)/distutils/tests
+@@ -206,7 +208,7 @@ define PyPackage/python/filespec
+ -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_sqlite3.so
+ -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_ssl.so
+ -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/pyexpat.so
+--|/usr/lib/python$(PYTHON_VERSION)/pydoc_topics.py
++-|/usr/lib/python$(PYTHON_VERSION)/pydoc_data
+ -|/usr/lib/python$(PYTHON_VERSION)/pydoc.py
+ -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_ctypes_test.so
+ -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_testcapi.so
+@@ -247,7 +249,6 @@ define PyPackage/python/filespec
+ -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/syslog.so
+ -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/time.so
+ -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/unicodedata.so
+--|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_weakref.so
+ -|/usr/lib/python$(PYTHON_VERSION)/linecache.py
+ -|/usr/lib/python$(PYTHON_VERSION)/md5.py
+ -|/usr/lib/python$(PYTHON_VERSION)/new.py
+@@ -285,6 +286,17 @@ define PyPackage/python/filespec
+ -|/usr/lib/python$(PYTHON_VERSION)/UserDict.py
+ -|/usr/lib/python$(PYTHON_VERSION)/warnings.py
+ -|/usr/lib/python$(PYTHON_VERSION)/weakref.py
++-|/usr/lib/python$(PYTHON_VERSION)/_weakrefset.py
++-|/usr/lib/python$(PYTHON_VERSION)/sysconfig.py
++-|/usr/lib/python$(PYTHON_VERSION)/functools.py
++-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_functools.so
++-|/usr/lib/python$(PYTHON_VERSION)/collections.py
++-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_collections.so
++-|/usr/lib/python$(PYTHON_VERSION)/keyword.py
++-|/usr/lib/python$(PYTHON_VERSION)/heapq.py
++-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_heapq.so
++-|/usr/lib/python$(PYTHON_VERSION)/bisect.py
++-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_bisect.so
+ endef
+ 
+ define PyPackage/python-mini/filespec
+@@ -325,7 +337,6 @@ define PyPackage/python-mini/filespec
+ +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/syslog.so
+ +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/time.so
+ +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/unicodedata.so
+-+|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_weakref.so
+ +|/usr/lib/python$(PYTHON_VERSION)/linecache.py
+ +|/usr/lib/python$(PYTHON_VERSION)/md5.py
+ +|/usr/lib/python$(PYTHON_VERSION)/new.py
+@@ -363,6 +374,18 @@ define PyPackage/python-mini/filespec
+ +|/usr/lib/python$(PYTHON_VERSION)/UserDict.py
+ +|/usr/lib/python$(PYTHON_VERSION)/warnings.py
+ +|/usr/lib/python$(PYTHON_VERSION)/weakref.py
+++|/usr/lib/python$(PYTHON_VERSION)/_weakrefset.py
+++|/usr/lib/python$(PYTHON_VERSION)/config/Makefile
+++|/usr/lib/python$(PYTHON_VERSION)/sysconfig.py
+++|/usr/lib/python$(PYTHON_VERSION)/functools.py
+++|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_functools.so
+++|/usr/lib/python$(PYTHON_VERSION)/collections.py
+++|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_collections.so
+++|/usr/lib/python$(PYTHON_VERSION)/keyword.py
+++|/usr/lib/python$(PYTHON_VERSION)/heapq.py
+++|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_heapq.so
+++|/usr/lib/python$(PYTHON_VERSION)/bisect.py
+++|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_bisect.so
+ +|/usr/include/python$(PYTHON_VERSION)/pyconfig.h
+ endef
+ 
+@@ -371,7 +394,7 @@ define PyPackage/python-mini/install
+ endef
+ 
+ define PyPackage/python-doc/filespec
+-+|/usr/lib/python$(PYTHON_VERSION)/pydoc_topics.py
+++|/usr/lib/python$(PYTHON_VERSION)/pydoc_data
+ +|/usr/lib/python$(PYTHON_VERSION)/pydoc.py
+ endef
+ 
+diff --git a/lang/python/files/python-package.mk b/lang/python/files/python-package.mk
+index 995e411..70e6300 100644
+--- a/lang/python/files/python-package.mk
++++ b/lang/python/files/python-package.mk
+@@ -5,7 +5,7 @@
+ # See /LICENSE for more information.
+ #
+ 
+-PYTHON_VERSION=2.6
++PYTHON_VERSION=2.7
+ 
+ PYTHON_DIR:=$(STAGING_DIR)/usr
+ PYTHON_BIN_DIR:=$(PYTHON_DIR)/bin
+diff --git a/lang/python/patches/000-cross-compile.patch b/lang/python/patches/000-cross-compile.patch
+index efbe070..a6f208e 100644
+--- a/lang/python/patches/000-cross-compile.patch
++++ b/lang/python/patches/000-cross-compile.patch
+@@ -4,7 +4,7 @@
+ 
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -175,6 +175,7 @@ UNICODE_OBJS=   @UNICODE_OBJS@
++@@ -182,6 +182,7 @@ UNICODE_OBJS=   @UNICODE_OBJS@
+  
+  PYTHON=		python$(EXE)
+  BUILDPYTHON=	python$(BUILDEXE)
+@@ -12,16 +12,15 @@
+  
+  # The task to run while instrument when building the profile-opt target
+  PROFILE_TASK=	$(srcdir)/Tools/pybench/pybench.py -n 2 --with-gc --with-syscheck
+-@@ -205,7 +206,7 @@ GRAMMAR_INPUT=	$(srcdir)/Grammar/Grammar
++@@ -214,6 +215,7 @@ LIBFFI_INCLUDEDIR=	@LIBFFI_INCLUDEDIR@
+  ##########################################################################
+  # Parser
+  PGEN=		Parser/pgen$(EXE)
+--
+ +HOSTPGEN=	$(PGEN)$(EXE)
++ 
+  POBJS=		\
+  		Parser/acceler.o \
+- 		Parser/grammar1.o \
+-@@ -370,7 +371,7 @@ build_all_generate_profile:
++@@ -384,7 +386,7 @@ build_all_generate_profile:
+  	$(MAKE) all CFLAGS="$(CFLAGS) -fprofile-generate" LIBS="$(LIBS) -lgcov"
+  
+  run_profile_task:
+@@ -30,12 +29,12 @@
+  
+  build_all_use_profile:
+  	$(MAKE) all CFLAGS="$(CFLAGS) -fprofile-use"
+-@@ -388,14 +389,14 @@ $(BUILDPYTHON):	Modules/python.o $(LIBRA
++@@ -402,14 +404,14 @@ $(BUILDPYTHON):	Modules/python.o $(LIBRA
+  			$(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
+  
+  platform: $(BUILDPYTHON)
+--	$(RUNSHARED) ./$(BUILDPYTHON) -E -c 'import sys ; from distutils.util import get_platform ; print get_platform()+"-"+sys.version[0:3]' >platform
+-+	$(RUNSHARED) $(HOSTPYTHON) -E -c 'import sys ; from distutils.util import get_platform ; print get_platform()+"-"+sys.version[0:3]' >platform
++-	$(RUNSHARED) ./$(BUILDPYTHON) -E -c 'import sys ; from sysconfig import get_platform ; print get_platform()+"-"+sys.version[0:3]' >platform
+++	$(RUNSHARED) $(HOSTPYTHON) -E -c 'import sys ; from sysconfig import get_platform ; print get_platform()+"-"+sys.version[0:3]' >platform
+  
+  
+  # Build the shared modules
+@@ -48,34 +47,34 @@
+  	esac
+  
+  # Build static library
+-@@ -517,7 +518,7 @@ Modules/python.o: $(srcdir)/Modules/pyth
+- 
+- $(GRAMMAR_H) $(GRAMMAR_C): $(PGEN) $(GRAMMAR_INPUT)
++@@ -543,7 +545,7 @@ Modules/python.o: $(srcdir)/Modules/pyth
++ $(GRAMMAR_H) $(GRAMMAR_C): Parser/pgen.stamp
++ Parser/pgen.stamp: $(PGEN) $(GRAMMAR_INPUT)
+  		-@$(INSTALL) -d Include
+--		-$(PGEN) $(GRAMMAR_INPUT) $(GRAMMAR_H) $(GRAMMAR_C)
+-+		-$(HOSTPGEN) $(GRAMMAR_INPUT) $(GRAMMAR_H) $(GRAMMAR_C)
++-		$(PGEN) $(GRAMMAR_INPUT) $(GRAMMAR_H) $(GRAMMAR_C)
+++		$(HOSTPGEN) $(GRAMMAR_INPUT) $(GRAMMAR_H) $(GRAMMAR_C)
++ 		-touch Parser/pgen.stamp
+  
+  $(PGEN):	$(PGENOBJS)
+- 		$(CC) $(OPT) $(LDFLAGS) $(PGENOBJS) $(LIBS) -o $(PGEN)
+-@@ -676,7 +677,7 @@ $(LIBRARY_OBJS) $(MODOBJS) Modules/pytho
++@@ -708,7 +710,7 @@ $(LIBRARY_OBJS) $(MODOBJS) Modules/pytho
+  
+  TESTOPTS=	-l $(EXTRATESTOPTS)
+  TESTPROG=	$(srcdir)/Lib/test/regrtest.py
+--TESTPYTHON=	$(RUNSHARED) ./$(BUILDPYTHON) -E -tt
+-+TESTPYTHON=	$(RUNSHARED) $(HOSTPYTHON) -E -tt
++-TESTPYTHON=	$(RUNSHARED) ./$(BUILDPYTHON) -Wd -3 -E -tt $(TESTPYTHONOPTS)
+++TESTPYTHON=	$(RUNSHARED) $(HOSTPYTHON) -Wd -3 -E -tt $(TESTPYTHONOPTS)
+  test:		all platform
+  		-find $(srcdir)/Lib -name '*.py[co]' -print | xargs rm -f
+  		-$(TESTPYTHON) $(TESTPROG) $(TESTOPTS)
+-@@ -1001,7 +1002,7 @@ libainstall:	all
++@@ -1062,7 +1064,7 @@ libainstall:	all python-config
+  # Install the dynamically loadable modules
+  # This goes into $(exec_prefix)
+- sharedinstall:
++ sharedinstall: sharedmods
+ -	$(RUNSHARED) ./$(BUILDPYTHON) -E $(srcdir)/setup.py install \
+ +	$(RUNSHARED) $(HOSTPYTHON) -E $(srcdir)/setup.py install \
+  	   	--prefix=$(prefix) \
+  		--install-scripts=$(BINDIR) \
+  		--install-platlib=$(DESTSHARED) \
+-@@ -1039,7 +1040,7 @@ frameworkinstallstructure:	$(LDLIBRARY)
++@@ -1100,7 +1102,7 @@ frameworkinstallstructure:	$(LDLIBRARY)
+  		fi; \
+  	done
+  	$(LN) -fsn include/python$(VERSION) $(DESTDIR)$(prefix)/Headers
+@@ -84,7 +83,7 @@
+  	$(LN) -fsn $(VERSION) $(DESTDIR)$(PYTHONFRAMEWORKINSTALLDIR)/Versions/Current
+  	$(LN) -fsn Versions/Current/$(PYTHONFRAMEWORK) $(DESTDIR)$(PYTHONFRAMEWORKINSTALLDIR)/$(PYTHONFRAMEWORK)
+  	$(LN) -fsn Versions/Current/Headers $(DESTDIR)$(PYTHONFRAMEWORKINSTALLDIR)/Headers
+-@@ -1081,7 +1082,7 @@ frameworkinstallextras:
++@@ -1135,7 +1137,7 @@ frameworkinstallextras:
+  # This installs a few of the useful scripts in Tools/scripts
+  scriptsinstall:
+  	SRCDIR=$(srcdir) $(RUNSHARED) \
+@@ -92,8 +91,8 @@
+ +	$(HOSTPYTHON) $(srcdir)/Tools/scripts/setup.py install \
+  	--prefix=$(prefix) \
+  	--install-scripts=$(BINDIR) \
+- 	--root=/$(DESTDIR)
+-@@ -1103,7 +1104,7 @@ config.status:	$(srcdir)/configure
++ 	--root=$(DESTDIR)/
++@@ -1157,7 +1159,7 @@ config.status:	$(srcdir)/configure
+  
+  # Run reindent on the library
+  reindent:
+@@ -102,7 +101,7 @@
+  
+  # Rerun configure with the same options as it was run last time,
+  # provided the config.status script exists
+-@@ -1200,7 +1201,7 @@ funny:
++@@ -1260,7 +1262,7 @@ funny:
+  
+  # Perform some verification checks on any modified files.
+  patchcheck:
+diff --git a/lang/python/patches/010-cannot-run-test-programm.patch b/lang/python/patches/010-cannot-run-test-programm.patch
+deleted file mode 100644
+index c981b46..0000000
+--- a/lang/python/patches/010-cannot-run-test-programm.patch
++++ /dev/null
+@@ -1,89 +0,0 @@
+----
+- configure.in |   46 ++++++++++++++++++++++++++++++++++------------
+- 1 file changed, 34 insertions(+), 12 deletions(-)
+-
+---- a/configure.in
+-+++ b/configure.in
+-@@ -2653,6 +2653,7 @@ AC_CHECK_LIB(c, inet_aton, [$ac_cv_prog_
+- # On Tru64, chflags seems to be present, but calling it will
+- # exit Python
+- AC_MSG_CHECKING(for chflags)
+-+AC_CACHE_VAL(ac_cv_have_chflags, [
+- AC_TRY_RUN([
+- #include <sys/stat.h>
+- #include <unistd.h>
+-@@ -2662,12 +2663,19 @@ int main(int argc, char*argv[])
+-     return 1;
+-   return 0;
+- }
+--],AC_DEFINE(HAVE_CHFLAGS, 1, Define to 1 if you have the `chflags' function.)
+--  AC_MSG_RESULT(yes),
+--  AC_MSG_RESULT(no)
+--)
+-+],
+-+ac_cv_have_chflags=yes,
+-+ac_cv_have_chflags=no,
+-+ac_cv_have_chflags=no)])
+-+AC_MSG_RESULT($ac_cv_have_chflags)
+-+if test "$ac_cv_have_chflags" = yes
+-+then
+-+  AC_DEFINE(HAVE_CHFLAGS, 1,
+-+  [Define to 1 if you have the `chflags' function.])
+-+fi
+- 
+- AC_MSG_CHECKING(for lchflags)
+-+AC_CACHE_VAL(ac_cv_have_lchflags, [
+- AC_TRY_RUN([
+- #include <sys/stat.h>
+- #include <unistd.h>
+-@@ -2677,10 +2685,16 @@ int main(int argc, char*argv[])
+-     return 1;
+-   return 0;
+- }
+--],AC_DEFINE(HAVE_LCHFLAGS, 1, Define to 1 if you have the `lchflags' function.)
+--  AC_MSG_RESULT(yes),
+--  AC_MSG_RESULT(no)
+--)
+-+],
+-+ac_cv_have_lchflags=yes,
+-+ac_cv_have_lchflags=no,
+-+ac_cv_have_lchflags=no)])
+-+AC_MSG_RESULT($ac_cv_have_lchflags)
+-+if test "$ac_cv_have_lchflags" = yes
+-+then
+-+  AC_DEFINE(HAVE_CHFLAGS, 1,
+-+  [Define to 1 if you have the `lchflags' function.])
+-+fi
+- 
+- dnl Check if system zlib has *Copy() functions
+- dnl
+-@@ -3781,6 +3795,7 @@ else
+- fi
+- 
+- AC_MSG_CHECKING(for %zd printf() format support)
+-+AC_CACHE_VAL(ac_cv_py_format_size_t, [
+- AC_TRY_RUN([#include <stdio.h>
+- #include <stddef.h>
+- #include <string.h>
+-@@ -3814,10 +3829,17 @@ int main()
+- 	return 1;
+- 
+-     return 0;
+--}],
+--[AC_MSG_RESULT(yes)
+-- AC_DEFINE(PY_FORMAT_SIZE_T, "z", [Define to printf format modifier for Py_ssize_t])],
+-- AC_MSG_RESULT(no))
+-+}
+-+],
+-+ac_cv_py_format_size_t=yes,
+-+ac_cv_py_format_size_t=no,
+-+ac_cv_py_format_size_t=no)])
+-+AC_MSG_RESULT($ac_cv_py_format_size_t)
+-+if test "$ac_cv_pyt_format_t" = yes
+-+then
+-+  AC_DEFINE(PY_FORMAT_SIZE_T, "z",
+-+  [Define to printf format modifier for Py_ssize_t])
+-+fi
+- 
+- AC_CHECK_TYPE(socklen_t,,
+-   AC_DEFINE(socklen_t,int,
+diff --git a/lang/python/patches/011-linux-3.x-compat.patch b/lang/python/patches/011-linux-3.x-compat.patch
+deleted file mode 100644
+index 088618d..0000000
+--- a/lang/python/patches/011-linux-3.x-compat.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+---- a/configure
+-+++ b/configure
+-@@ -2070,6 +2070,7 @@ then
+- 	MACHDEP="$ac_md_system$ac_md_release"
+- 
+- 	case $MACHDEP in
+-+	linux3) MACHDEP="linux2";;
+- 	cygwin*) MACHDEP="cygwin";;
+- 	darwin*) MACHDEP="darwin";;
+- 	atheos*) MACHDEP="atheos";;
+---- a/configure.in
+-+++ b/configure.in
+-@@ -240,6 +240,7 @@ then
+- 	MACHDEP="$ac_md_system$ac_md_release"
+- 
+- 	case $MACHDEP in
+-+	linux3) MACHDEP="linux2";;
+- 	cygwin*) MACHDEP="cygwin";;
+- 	darwin*) MACHDEP="darwin";;
+- 	atheos*) MACHDEP="atheos";;
+diff --git a/lang/python/patches/020-dont-compile-python-files.patch b/lang/python/patches/020-dont-compile-python-files.patch
+index d9c092b..57bd51d 100644
+--- a/lang/python/patches/020-dont-compile-python-files.patch
++++ b/lang/python/patches/020-dont-compile-python-files.patch
+@@ -4,18 +4,20 @@
+ 
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -887,22 +887,6 @@ libinstall:	build_all $(srcdir)/Lib/$(PL
+- 		done; \
+- 	done
+- 	$(INSTALL_DATA) $(srcdir)/LICENSE $(DESTDIR)$(LIBDEST)/LICENSE.txt
++@@ -940,26 +940,6 @@ libinstall:	build_all $(srcdir)/Lib/$(PL
++ 		$(INSTALL_DATA) $(srcdir)/Modules/xxmodule.c \
++ 			$(DESTDIR)$(LIBDEST)/distutils/tests ; \
++ 	fi
+ -	PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
+ -		./$(BUILDPYTHON) -Wi -tt $(DESTDIR)$(LIBDEST)/compileall.py \
+ -		-d $(LIBDEST) -f \
+--		-x 'bad_coding|badsyntax|site-packages' $(DESTDIR)$(LIBDEST)
++-		-x 'bad_coding|badsyntax|site-packages|lib2to3/tests/data' \
++-		$(DESTDIR)$(LIBDEST)
+ -	PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
+ -		./$(BUILDPYTHON) -Wi -tt -O $(DESTDIR)$(LIBDEST)/compileall.py \
+ -		-d $(LIBDEST) -f \
+--		-x 'bad_coding|badsyntax|site-packages' $(DESTDIR)$(LIBDEST)
++-		-x 'bad_coding|badsyntax|site-packages|lib2to3/tests/data' \
++-		$(DESTDIR)$(LIBDEST)
+ -	-PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
+ -		./$(BUILDPYTHON) -Wi -t $(DESTDIR)$(LIBDEST)/compileall.py \
+ -		-d $(LIBDEST)/site-packages -f \
+@@ -24,6 +26,8 @@
+ -		./$(BUILDPYTHON) -Wi -t -O $(DESTDIR)$(LIBDEST)/compileall.py \
+ -		-d $(LIBDEST)/site-packages -f \
+ -		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
+- 	-PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
+- 		./$(BUILDPYTHON) -Wi -t -c "import lib2to3.pygram, lib2to3.patcomp;lib2to3.patcomp.PatternCompiler()"
++-	-PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
++-		./$(BUILDPYTHON) -Wi -t -c "import lib2to3.pygram, lib2to3.patcomp;lib2to3.patcomp.PatternCompiler()"
+  
++ # Create the PLATDIR source directory, if one wasn't distributed..
++ $(srcdir)/Lib/$(PLATDIR):
+diff --git a/lang/python/patches/030-fixup-include-dirs.patch b/lang/python/patches/030-fixup-include-dirs.patch
+index 409b3e6..6cc6bba 100644
+--- a/lang/python/patches/030-fixup-include-dirs.patch
++++ b/lang/python/patches/030-fixup-include-dirs.patch
+@@ -4,29 +4,37 @@
+ 
+ --- a/setup.py
+ +++ b/setup.py
+-@@ -309,9 +309,6 @@ class PyBuildExt(build_ext):
+-         return sys.platform
++@@ -368,11 +368,6 @@ class PyBuildExt(build_ext):
++             os.unlink(tmpfile)
+  
+      def detect_modules(self):
+ -        # Ensure that /usr/local is always used
+ -        add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
+ -        add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
+- 
++-        self.add_multiarch_paths()
++-
+          # Add paths specified in the environment variables LDFLAGS and
+          # CPPFLAGS for header and library files.
+-@@ -347,11 +344,6 @@ class PyBuildExt(build_ext):
++         # We must get the values from the Makefile and not the environment
++@@ -407,17 +402,6 @@ class PyBuildExt(build_ext):
+                      for directory in reversed(options.dirs):
+                          add_dir_to_list(dir_list, directory)
+  
+--        if os.path.normpath(sys.prefix) != '/usr':
++-        if os.path.normpath(sys.prefix) != '/usr' \
++-                and not sysconfig.get_config_var('PYTHONFRAMEWORK'):
++-            # OSX note: Don't add LIBDIR and INCLUDEDIR to building a framework
++-            # (PYTHONFRAMEWORK is set) to avoid # linking problems when
++-            # building a framework with different architectures than
++-            # the one that is currently installed (issue #7473)
+ -            add_dir_to_list(self.compiler.library_dirs,
+ -                            sysconfig.get_config_var("LIBDIR"))
+ -            add_dir_to_list(self.compiler.include_dirs,
+ -                            sysconfig.get_config_var("INCLUDEDIR"))
+- 
++-
+          try:
+              have_unicode = unicode
+-@@ -361,11 +353,8 @@ class PyBuildExt(build_ext):
++         except NameError:
++@@ -426,11 +410,8 @@ class PyBuildExt(build_ext):
+          # lib_dirs and inc_dirs are used to search for files;
+          # if a file is found in one of those directories, it can
+          # be assumed that no additional -I,-L directives are needed.
+diff --git a/lang/python/patches/040-dont-import-cross-compiled-modules.patch b/lang/python/patches/040-dont-import-cross-compiled-modules.patch
+index 5c99598..1793569 100644
+--- a/lang/python/patches/040-dont-import-cross-compiled-modules.patch
++++ b/lang/python/patches/040-dont-import-cross-compiled-modules.patch
+@@ -4,7 +4,7 @@
+ 
+ --- a/setup.py
+ +++ b/setup.py
+-@@ -270,36 +270,6 @@ class PyBuildExt(build_ext):
++@@ -307,36 +307,6 @@ class PyBuildExt(build_ext):
+          ext_filename = os.path.join(
+              self.build_lib,
+              self.get_ext_filename(self.get_ext_fullname(ext.name)))
+diff --git a/lang/python/patches/070-dont-clean-ipkg-install.patch b/lang/python/patches/070-dont-clean-ipkg-install.patch
+index 593bcff..0796c19 100644
+--- a/lang/python/patches/070-dont-clean-ipkg-install.patch
++++ b/lang/python/patches/070-dont-clean-ipkg-install.patch
+@@ -4,7 +4,7 @@
+ 
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -1118,11 +1118,11 @@ TAGS::
++@@ -1169,12 +1169,12 @@ TAGS::
+  # Sanitation targets -- clean leaves libraries, executables and tags
+  # files, which clobber removes as well
+  pycremoval:
+@@ -12,10 +12,12 @@
+ +	find $(srcdir) ! -path './ipkg-install/*' -name '*.py[co]' -exec rm -f {} ';'
+  
+  clean: pycremoval
+--	find . -name '*.o' -exec rm -f {} ';'
++-	find . -name '*.[oa]' -exec rm -f {} ';'
+ -	find . -name '*.s[ol]' -exec rm -f {} ';'
+-+	find . ! -path './ipkg-install/*' -name '*.o' -exec rm -f {} ';'
++-	find . -name '*.so.[0-9]*.[0-9]*' -exec rm -f {} ';'
+++	find . ! -path './ipkg-install/*' -name '*.[oa]' -exec rm -f {} ';'
+ +	find . ! -path './ipkg-install/*' -name '*.s[ol]' -exec rm -f {} ';'
+- 	find $(srcdir)/build -name 'fficonfig.h' -exec rm -f {} ';' || true
+- 	find $(srcdir)/build -name 'fficonfig.py' -exec rm -f {} ';' || true
+++	find . ! -path './ipkg-install/*' -name '*.so.[0-9]*.[0-9]*' -exec rm -f {} ';'
++ 	find build -name 'fficonfig.h' -exec rm -f {} ';' || true
++ 	find build -name 'fficonfig.py' -exec rm -f {} ';' || true
+  	-rm -f Lib/lib2to3/*Grammar*.pickle
+diff --git a/lang/python/patches/080-distutils-dont_adjust_files.patch b/lang/python/patches/080-distutils-dont_adjust_files.patch
+index a32e034..97d62fb 100644
+--- a/lang/python/patches/080-distutils-dont_adjust_files.patch
++++ b/lang/python/patches/080-distutils-dont_adjust_files.patch
+@@ -4,7 +4,7 @@
+ 
+ --- a/Lib/distutils/command/build_scripts.py
+ +++ b/Lib/distutils/command/build_scripts.py
+-@@ -54,10 +54,7 @@ class build_scripts (Command):
++@@ -51,10 +51,7 @@ class build_scripts (Command):
+  
+  
+      def copy_scripts (self):
+@@ -14,9 +14,9 @@
+ -        line to refer to the current Python interpreter as we copy.
+ +        """Copy each script listed in 'self.scripts'
+          """
++         _sysconfig = __import__('sysconfig')
+          self.mkpath(self.build_dir)
+-         outfiles = []
+-@@ -80,41 +77,9 @@ class build_scripts (Command):
++@@ -78,41 +75,9 @@ class build_scripts (Command):
+                  if not self.dry_run:
+                      raise
+                  f = None
+@@ -36,16 +36,16 @@
+ -                         self.build_dir)
+ -                if not self.dry_run:
+ -                    outf = open(outfile, "w")
+--                    if not sysconfig.python_build:
++-                    if not _sysconfig.is_python_build():
+ -                        outf.write("#!%s%s\n" %
+ -                                   (self.executable,
+ -                                    post_interp))
+ -                    else:
+ -                        outf.write("#!%s%s\n" %
+ -                                   (os.path.join(
+--                            sysconfig.get_config_var("BINDIR"),
+--                           "python%s%s" % (sysconfig.get_config_var("VERSION"),
+--                                           sysconfig.get_config_var("EXE"))),
++-                            _sysconfig.get_config_var("BINDIR"),
++-                           "python%s%s" % (_sysconfig.get_config_var("VERSION"),
++-                                           _sysconfig.get_config_var("EXE"))),
+ -                                    post_interp))
+ -                    outf.writelines(f.readlines())
+ -                    outf.close()
+diff --git a/lang/python/patches/090-fix-ctypes.patch b/lang/python/patches/090-fix-ctypes.patch
+deleted file mode 100644
+index 6e93182..0000000
+--- a/lang/python/patches/090-fix-ctypes.patch
++++ /dev/null
+@@ -1,16 +0,0 @@
+----
+- Lib/ctypes/__init__.py |    6 ------
+- 1 file changed, 6 deletions(-)
+-
+---- a/Lib/ctypes/__init__.py
+-+++ b/Lib/ctypes/__init__.py
+-@@ -538,9 +538,3 @@ for kind in [c_ushort, c_uint, c_ulong, 
+-     elif sizeof(kind) == 4: c_uint32 = kind
+-     elif sizeof(kind) == 8: c_uint64 = kind
+- del(kind)
+--
+--# XXX for whatever reasons, creating the first instance of a callback
+--# function is needed for the unittests on Win64 to succeed.  This MAY
+--# be a compiler bug, since the problem occurs only when _ctypes is
+--# compiled with the MS SDK compiler.  Or an uninitialized variable?
+--CFUNCTYPE(c_int)(lambda: None)
+diff --git a/lang/python/patches/120-force-internal-modules-for-hashlib.patch b/lang/python/patches/120-force-internal-modules-for-hashlib.patch
+index ca29aa6..ad10a44 100644
+--- a/lang/python/patches/120-force-internal-modules-for-hashlib.patch
++++ b/lang/python/patches/120-force-internal-modules-for-hashlib.patch
+@@ -4,26 +4,21 @@
+ 
+ --- a/setup.py
+ +++ b/setup.py
+-@@ -622,9 +622,10 @@ class PyBuildExt(build_ext):
++@@ -704,8 +704,7 @@ class PyBuildExt(build_ext):
+  
+-         #print 'openssl_ver = 0x%08x' % openssl_ver
++         min_openssl_ver = 0x00907000
++         have_any_openssl = ssl_incs is not None and ssl_libs is not None
++-        have_usable_openssl = (have_any_openssl and
++-                               openssl_ver >= min_openssl_ver)
+++        have_usable_openssl = False
+  
+--        if (ssl_incs is not None and
+--            ssl_libs is not None and
+--            openssl_ver >= 0x00907000):
+-+#        if (ssl_incs is not None and
+-+#            ssl_libs is not None and
+-+#            openssl_ver >= 0x00907000):
+-+        if False:
+-             # The _hashlib module wraps optimized implementations
+-             # of hash functions from the OpenSSL library.
+-             exts.append( Extension('_hashlib', ['_hashopenssl.c'],
+-@@ -644,7 +645,8 @@ class PyBuildExt(build_ext):
++         if have_any_openssl:
++             if have_usable_openssl:
++@@ -730,7 +729,7 @@ class PyBuildExt(build_ext):
+                              depends = ['md5.h']) )
+-             missing.append('_hashlib')
+  
+--        if (openssl_ver < 0x00908000):
+-+#        if (openssl_ver < 0x00908000):
++         min_sha2_openssl_ver = 0x00908000
++-        if COMPILED_WITH_PYDEBUG or openssl_ver < min_sha2_openssl_ver:
+ +        if True:
+              # OpenSSL doesn't do these until 0.9.8 so we'll bring our own hash
+              exts.append( Extension('_sha256', ['sha256module.c']) )
