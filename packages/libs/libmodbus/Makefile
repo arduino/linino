@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libmodbus
-PKG_VERSION:=2.0.3
+PKG_VERSION:=3.0.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://github.com/downloads/stephane/libmodbus/
-PKG_MD5SUM:=0646f3edca6d7783d0356dc2fc4f9f4c
+PKG_MD5SUM:=1aaacce9d9779d3a84f7d1a75774c943
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -39,7 +39,7 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmodbus.{so*,la} $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/modbus.pc $(1)/usr/lib/pkgconfig/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libmodbus.pc $(1)/usr/lib/pkgconfig/
 endef
 
 define Package/libmodbus/install
