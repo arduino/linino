@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openconnect
-PKG_VERSION:=2.25
+PKG_VERSION:=3.15
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.infradead.org/pub/openconnect/
-PKG_MD5SUM:=796a32b611ee6210a5367eb9684d6778
+PKG_MD5SUM:=94245f4bac42a288100becab0b4ca29a
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,22 +34,12 @@ define Package/openconnect/description
         3800, 7200 Series and Cisco 7301 Routers.  
 endef
 
-define Build/Compile
-	$(call Build/Compile/Default, \
-		SSL_CFLAGS="" \
-		OPT_FLAGS="$(TARGET_CPPFLAGS) $(TARGET_CFLAGS)" \
-		OS="Linux" \
-		STAGING_DIR="$(STAGING_DIR)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		PREFIX=/usr \
-		all install \
-	)
-endef
+CONFIGURE_ARGS+=--disable-shared
 
 define Package/openconnect/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP)	$(PKG_INSTALL_DIR)/usr/bin/openconnect \
-		$(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/openconnect \
+		$(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,openconnect))
