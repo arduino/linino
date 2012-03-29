@@ -5,7 +5,7 @@
 # See /LICENSE for more information.
 #
 
-PYTHON_VERSION=2.6
+PYTHON_VERSION=2.7
 
 PYTHON_DIR:=$(STAGING_DIR)/usr
 PYTHON_BIN_DIR:=$(PYTHON_DIR)/bin
