@@ -8,11 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python
-PKG_VERSION:=2.7.3rc2
-PKG_RELEASE:=1
+
+PY_VERSION:=2.7.3
+PY_RC:=rc2
+PKG_VERSION:=$(PY_VERSION)$(PY_RC)
+PKG_RELEASE:=2
 
 PKG_SOURCE:=Python-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.python.org/ftp/python/$(PKG_VERSION)/
+PKG_SOURCE_URL:=http://www.python.org/ftp/python/$(PY_VERSION)/
 PKG_MD5SUM:=67059e1bcaf19e19394d16b80637f75f
 
 PKG_INSTALL:=1
@@ -118,6 +121,12 @@ $(call Package/python/Default)
  DEPENDS+=+python-mini +libgdbm
 endef
 
+define Package/python-readline
+$(call Package/python/Default)
+ TITLE:=Python support for readline
+ DEPENDS+=+python-mini +libreadline +libncurses @BROKEN
+endef
+
 MAKE_FLAGS:=\
 	$(TARGET_CONFIGURE_OPTS) \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
@@ -147,7 +156,6 @@ define Build/Configure
 		--with-threads \
 		--with-system-ffi="$(STAGING_DIR)/usr" \
 		$(ENABLE_IPV6) \
-		ac_cv_lib_readline_readline=no \
 		ac_cv_have_chflags=no \
 		ac_cv_have_lchflags=no \
 		ac_cv_py_format_size_t=no \
@@ -427,6 +435,10 @@ define PyPackage/python-gdbm/filespec
 +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/gdbm.so
 endef
 
+define PyPackage/python-readline/filespec
++|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/readline.so
+endef
+
 define Host/Configure
 	-$(MAKE) -C $(HOST_BUILD_DIR) distclean
 	(cd $(HOST_BUILD_DIR); autoreconf --force --install || exit 0)
@@ -467,6 +479,7 @@ $(eval $(call PyPackage,python-openssl))
 $(eval $(call PyPackage,python-shutil))
 $(eval $(call PyPackage,python-sqlite3))
 $(eval $(call PyPackage,python-gdbm))
+$(eval $(call PyPackage,python-readline))
 
 $(eval $(call BuildPackage,python))
 $(eval $(call BuildPackage,python-mini))
@@ -478,3 +491,4 @@ $(eval $(call BuildPackage,python-openssl))
 $(eval $(call BuildPackage,python-shutil))
 $(eval $(call BuildPackage,python-sqlite3))
 $(eval $(call BuildPackage,python-gdbm))
+$(eval $(call BuildPackage,python-readline))
