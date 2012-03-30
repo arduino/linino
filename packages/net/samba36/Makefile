@@ -1,16 +1,15 @@
 #
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=samba
 PKG_VERSION:=3.6.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE_URL_SUBDIR:=/
 PKG_SOURCE_URL:=http://ftp.samba.org/pub/samba$(PKG_SOURCE_URL_SUBDIR)
