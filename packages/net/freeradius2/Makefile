@@ -316,6 +316,12 @@ define Package/freeradius2-utils
   TITLE:=Misc. client utilities
 endef
 
+define Package/freeradius2-mod-sqllog
+  $(call Package/freeradius2/Default)
+  DEPENDS:=freeradius2
+  TITLE:=SQL Logging module
+endef
+
 CONFIGURE_ARGS+= \
 	--libdir=/usr/lib/freeradius2 \
 	--libexecdir=/usr/lib/freeradius2 \
@@ -419,6 +425,15 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius2-mod-sql-pgsql),)
 else
   CONFIGURE_ARGS+= --without-rlm_sql_postgresql
 endif
+
+ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius2-mod-sqllog),)
+  CONFIGURE_ARGS+= \
+        --with-rlm_sql_log \
+        --with-experimental-modules \
+else
+  CONFIGURE_ARGS+= --without-rlm_sql_log
+endif
+
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_freeradius2-mod-sql-sqlite),)
   CONFIGURE_ARGS+= \
@@ -587,6 +602,7 @@ $(eval $(call BuildPlugin,freeradius2-mod-sql-mysql,rlm_sql_mysql,))
 $(eval $(call BuildPlugin,freeradius2-mod-sql-pgsql,rlm_sql_postgresql,))
 $(eval $(call BuildPlugin,freeradius2-mod-sql-sqlite,rlm_sql_sqlite,))
 $(eval $(call BuildPlugin,freeradius2-mod-sqlcounter,rlm_sqlcounter,))
+$(eval $(call BuildPlugin,freeradius2-mod-sqllog,rlm_sql_log,))
 $(eval $(call BuildPlugin,freeradius2-mod-radutmp,rlm_radutmp,modules/radutmp modules/sradutmp,modules,))
 $(eval $(call BuildPlugin,freeradius2-mod-logintime,rlm_logintime,modules/logintime,modules,))
 $(eval $(call BuildPlugin,freeradius2-mod-expr,rlm_expr,modules/expr,modules,))
