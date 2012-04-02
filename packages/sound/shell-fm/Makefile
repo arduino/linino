@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/shell-fm
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libao +madplay +libpthread
+  DEPENDS:=+libao +libpthread +libmad
   TITLE:=Console Based Last.FM Radio Player
   URL:=http://nex.scrapping.cc
 endef
@@ -43,7 +43,7 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -I./include/ $(TARGET_CPPFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) -I./include/ -DLIBAO $(TARGET_CPPFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		LDFLAGS="$(TARGET_LDFLAGS) -lmad -lao -lpthread" \
 		all install
