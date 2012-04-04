@@ -15,7 +15,7 @@ PKG_SOURCE:=fftw-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.fftw.org
 PKG_MD5SUM:=b616e5c91218cc778b5aa735fefb61ae
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/fftw-$(PKG_VERSION)
+PKG_BUILD_DIR=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/fftw-$(PKG_VERSION)
 PKG_FIXUP:=libtool
 
 include $(INCLUDE_DIR)/package.mk
@@ -24,8 +24,21 @@ define Package/fftw3
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=@!avr32
+  VARIANT:=double
   TITLE:=Fast Fourier transform library
   URL:=http://www.fftw.org/
+endef
+
+define Package/fftw3f
+  $(call Package/fftw3)
+  VARIANT:=single
+  TITLE+= (single precision)
+endef
+
+define Package/fftw3l
+  $(call Package/fftw3)
+  VARIANT:=long-double
+  TITLE+= (long-double precision)
 endef
 
 define Package/fftw3/description
@@ -33,6 +46,18 @@ define Package/fftw3/description
 	Discrete Fourier Transform in one or more dimensions. It
 	includes complex, real, and parallel transforms, and can
 	handle arbitrary array sizes efficiently.
+endef
+
+define Package/fftw3f/description
+  $(call Package/fftw3/description)
+
+  This package contains the single precision library.
+endef
+
+define Package/fftw3l/description
+  $(call Package/fftw3/description)
+
+  This package contains the long-double precision library.
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -44,10 +69,19 @@ CONFIGURE_ARGS += \
 	--disable-nls \
 	--enable-shared \
 	--enable-threads \
-	--enable-double \
 	--enable-type-prefix \
 	--disable-debug \
-	--disable-fortran \
+	--disable-fortran
+
+ifeq ($(BUILD_VARIANT), single)
+CONFIGURE_ARGS += \
+	--enable-single
+endif
+
+ifeq ($(BUILD_VARIANT), long-double)
+CONFIGURE_ARGS += \
+	--enable-long-double
+endif
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
@@ -59,6 +93,8 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfftw3*.{a,la} $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfftw3*.so* $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* $(1)/usr/lib/pkgconfig/
 endef
 
 define Package/fftw3/install
@@ -66,4 +102,16 @@ define Package/fftw3/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfftw3.so* $(1)/usr/lib/
 endef
 
+define Package/fftw3f/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfftw3f.so* $(1)/usr/lib/
+endef
+
+define Package/fftw3l/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfftw3l.so* $(1)/usr/lib/
+endef
+
 $(eval $(call BuildPackage,fftw3))
+$(eval $(call BuildPackage,fftw3f))
+$(eval $(call BuildPackage,fftw3l))
