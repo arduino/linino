@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=collectd
-PKG_VERSION:=4.10.2
-PKG_RELEASE:=6
+PKG_VERSION:=4.10.6
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://collectd.org/files/
-PKG_MD5SUM:=85d9d8d0a1327782661e3c89800aa70e
+PKG_MD5SUM:=d446c399d839a32f2f581111d7256f8b
 
 PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=aclocal.m4 libltdl/aclocal.m4

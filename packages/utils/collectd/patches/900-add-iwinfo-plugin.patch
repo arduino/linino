@@ -1,6 +1,6 @@
 --- a/configure.in
 +++ b/configure.in
-@@ -471,6 +471,9 @@ AC_CHECK_HEADERS(netinet/if_ether.h, [],
+@@ -490,6 +490,9 @@ AC_CHECK_HEADERS(netinet/if_ether.h, [],
  have_termios_h="no"
  AC_CHECK_HEADERS(termios.h, [have_termios_h="yes"])
  
@@ -10,7 +10,7 @@
  #
  # Checks for typedefs, structures, and compiler characteristics.
  #
-@@ -3985,6 +3988,7 @@ plugin_interface="no"
+@@ -4006,6 +4009,7 @@ plugin_interface="no"
  plugin_ipmi="no"
  plugin_ipvs="no"
  plugin_irq="no"
@@ -18,7 +18,7 @@
  plugin_libvirt="no"
  plugin_load="no"
  plugin_memory="no"
-@@ -4292,6 +4296,7 @@ AC_PLUGIN([ipmi],        [$plugin_ipmi],
+@@ -4313,6 +4317,7 @@ AC_PLUGIN([ipmi],        [$plugin_ipmi],
  AC_PLUGIN([iptables],    [$with_libiptc],      [IPTables rule counters])
  AC_PLUGIN([ipvs],        [$plugin_ipvs],       [IPVS connection statistics])
  AC_PLUGIN([irq],         [$plugin_irq],        [IRQ statistics])
@@ -26,7 +26,7 @@
  AC_PLUGIN([java],        [$with_java],         [Embed the Java Virtual Machine])
  AC_PLUGIN([libvirt],     [$plugin_libvirt],    [Virtual machine statistics])
  AC_PLUGIN([load],        [$plugin_load],       [System load])
-@@ -4570,6 +4575,7 @@ Configuration:
+@@ -4591,6 +4596,7 @@ Configuration:
      protobuf-c  . . . . . $have_protoc_c
      oracle  . . . . . . . $with_oracle
      python  . . . . . . . $with_python
@@ -34,7 +34,7 @@
  
    Features:
      daemon mode . . . . . $enable_daemon
-@@ -4609,6 +4615,7 @@ Configuration:
+@@ -4630,6 +4636,7 @@ Configuration:
      iptables  . . . . . . $enable_iptables
      ipvs  . . . . . . . . $enable_ipvs
      irq . . . . . . . . . $enable_irq
@@ -52,7 +52,7 @@
  #@BUILD_PLUGIN_JAVA_TRUE@LoadPlugin java
  #@BUILD_PLUGIN_LIBVIRT_TRUE@LoadPlugin libvirt
  @BUILD_PLUGIN_LOAD_TRUE@@BUILD_PLUGIN_LOAD_TRUE@LoadPlugin load
-@@ -372,6 +373,12 @@ FQDNLookup   true
+@@ -376,6 +377,12 @@ FQDNLookup   true
  #	IgnoreSelected true
  #</Plugin>
  
@@ -249,7 +249,7 @@
 +}
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
-@@ -452,6 +452,15 @@ collectd_LDADD += "-dlopen" irq.la
+@@ -454,6 +454,15 @@ collectd_LDADD += "-dlopen" irq.la
  collectd_DEPENDENCIES += irq.la
  endif
  
