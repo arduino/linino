@@ -14,8 +14,8 @@ include $(INCLUDE_DIR)/package.mk
 define Package/4th
 	MAINTAINER:="Xiangfu Liu" <xiangfu@sharism.cc>
 	TITLE:=4th
-	SECTION:=Programming
-	CATEGORY:=prog
+	SECTION:=lang
+	CATEGORY:=Languages
 	URL:=http://thebeez.home.xs4all.nl/4tH/
 endef
 PKG_BUILD_DIR:=$(BUILD_DIR)/4th-$(PKG_VERSION)
