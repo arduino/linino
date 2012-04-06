@@ -272,14 +272,11 @@ verbose_echo "time_since_update = $human_time_since_update hours"
 
 
 
-
-registered_ip=$(echo $(nslookup "$domain" 2>/dev/null) |  grep -o "Name:.*" | grep -o "$ip_regex")
-
-
 #do update and then loop endlessly, checking ip every check_interval and forcing an updating once every force_interval
 
 while [ true ]
 do
+	registered_ip=$(echo $(nslookup "$domain" 2>/dev/null) |  grep -o "Name:.*" | grep -o "$ip_regex")
 	current_ip=$(get_current_ip)
 
 
