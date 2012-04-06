@@ -75,12 +75,12 @@ MAKE_VARS +=\
 
 
 define Package/minidlna/install
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/minidlna.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/minidlna $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/minidlna.init $(1)/etc/init.d/minidlna
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_BIN) ./files/minidlna.config $(1)/etc/config/minidlna
 endef
 
 $(eval $(call BuildPackage,minidlna))
