@@ -47,19 +47,5 @@ define Package/firmwarehotplug/install
 	install -m644 $(PKG_BUILD_DIR)/ezusb/midi/original/ezusbmidi2x2.ihx $(1)/usr/share/usb/ezusbmidi
 endef
 
-define Require/working-sdcc
-	sdcc -v 2>&1 | awk '($$$$1 == "SDCC") && ($$$$3 ~ "mcs51/gbz80/z80" && $$$$3 ~ "/ds390/pic16/pic14/TININative") { print "ok" }' | grep ok > /dev/null
-endef
-
-$(eval $(call RequireCommand,sdcc, \
-        $(PKG_NAME) requires the SDCC Cross Compiler (sdcc). \
-))
-
-$(eval $(call Require,working-sdcc, \
-        $(PKG_NAME) requires a SDCC Cross Compiler (sdcc) that supports the following targets : \
-	mcs51/gbz80/z80/avr/ds390/pic16/pic14/TININative/xa51/ds400/hc08. You might consider \
-	installing the non-free version. \
-))
-
 $(eval $(call BuildPackage,firmwarehotplug))
 
