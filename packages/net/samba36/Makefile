@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=samba
-PKG_VERSION:=3.6.3
-PKG_RELEASE:=2
+PKG_VERSION:=3.6.4
+PKG_RELEASE:=1
 
 PKG_SOURCE_URL_SUBDIR:=/
 PKG_SOURCE_URL:=http://ftp.samba.org/pub/samba$(PKG_SOURCE_URL_SUBDIR)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=98ac9db9f4b6ebfc3f013aa193ffb0d1
+PKG_MD5SUM:=d8e070e2a3b12f202f347e4427469bc2
 
 include $(INCLUDE_DIR)/package.mk
 
