@@ -1,13 +1,13 @@
 --- a/Makefile
 +++ b/Makefile
-@@ -5,8 +5,8 @@ IFLAGS  = -idirafter dummyinc
- #CFLAGS = -g
- CFLAGS	=	-O2 -Wall -W -Wshadow #-pedantic -Werror -Wconversion
+@@ -8,8 +8,8 @@
+ 	-D_FORTIFY_SOURCE=2 \
+ 	#-pedantic -Wconversion
  
 -LIBS	=	`./vsf_findlibs.sh`
 -LINK	=	-Wl,-s
 +LIBS	=	-lcrypt -lnsl
 +LINK	=
+ LDFLAGS	=	-fPIE -pie -Wl,-z,relro -Wl,-z,now
  
  OBJS	=	main.o utility.o prelogin.o ftpcmdio.o postlogin.o privsock.o \
- 		tunables.o ftpdataio.o secbuf.o ls.o \
