@@ -7,7 +7,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gawk
 PKG_VERSION:=3.1.8
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=gawk-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.gnu.org/gnu/gawk/
@@ -38,7 +38,6 @@ endef
 define Package/gawk/install
 	$(INSTALL_DIR) $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/gawk $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/gawk $(1)/usr/bin/gawk-3.1.8
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/awklib/igawk $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pgawk $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/libexec/
