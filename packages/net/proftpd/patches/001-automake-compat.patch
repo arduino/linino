@@ -20,7 +20,7 @@
        fi
      fi
    ])
-@@ -522,15 +522,6 @@ AC_ARG_ENABLE(dso,
+@@ -657,15 +657,6 @@ AC_ARG_ENABLE(dso,
        LIB_DEPS="libltdl"
        MODULE_DEPS="libltdl"
        AC_DEFINE(PR_USE_DSO, 1, [Define if using DSO support.])
@@ -36,7 +36,7 @@
      fi
    ])
  
-@@ -802,9 +793,9 @@ AC_ARG_ENABLE(scoreboard-updates,
+@@ -1029,9 +1020,9 @@ AC_ARG_ENABLE(scoreboard-updates,
    [
      if test x"$enableval" = xyes || test x"$enableval" = xno ; then
        AC_MSG_WARN(scoreboard updates defaulting to 10)
@@ -48,7 +48,7 @@
      fi
    ])
  
-@@ -1027,13 +1018,13 @@ if test x"$force_shadow" != xno ; then
+@@ -1267,13 +1258,13 @@ if test x"$force_shadow" != xno ; then
          AC_DEFINE(PR_USE_SHADOW, 1, [Define if using shadow password support.])
  
          AC_CHECK_MEMBER(struct spwd.sp_warn,
@@ -65,7 +65,7 @@
            [#include <shadow.h>])
  
        fi ])
-@@ -2266,19 +2257,19 @@ pr_saved_exec_prefix="$exec_prefix"
+@@ -2696,19 +2687,19 @@ pr_saved_exec_prefix="$exec_prefix"
  test "x$prefix" = xNONE && prefix=$ac_default_prefix
  test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
  
@@ -92,7 +92,7 @@
  
  prefix="$pr_saved_prefix"
  exec_prefix="$pr_saved_exec_prefix"
-@@ -2328,11 +2319,11 @@ if test "$OSTYPE" = "-DDARWIN6" -o "$OST
+@@ -2764,11 +2755,11 @@ if test "$OSTYPE" = "-DDARWIN6" -o "$OST
  fi
  
  my_cflags="\"$CFLAGS\""
