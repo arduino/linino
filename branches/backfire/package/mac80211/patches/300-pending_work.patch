@@ -322,17 +322,18 @@
  
  	mutex_unlock(&sc->mutex);
  
-@@ -1627,8 +1588,8 @@ static int ath9k_config(struct ieee80211
+@@ -1627,8 +1588,9 @@ static int ath9k_config(struct ieee80211
  	struct ath_hw *ah = sc->sc_ah;
  	struct ath_common *common = ath9k_hw_common(ah);
  	struct ieee80211_conf *conf = &hw->conf;
 -	bool disable_radio = false;
++	bool reset_channel = false;
  
 +	ath9k_ps_wakeup(sc);
  	mutex_lock(&sc->mutex);
  
  	/*
-@@ -1639,13 +1600,8 @@ static int ath9k_config(struct ieee80211
+@@ -1639,13 +1601,14 @@ static int ath9k_config(struct ieee80211
  	 */
  	if (changed & IEEE80211_CONF_CHANGE_IDLE) {
  		sc->ps_idle = !!(conf->flags & IEEE80211_CONF_IDLE);
@@ -345,18 +346,27 @@
 -		}
 +		if (sc->ps_idle)
 +			ath_cancel_work(sc);
++		else
++			/*
++			 * The chip needs a reset to properly wake up from
++			 * full sleep
++			 */
++			reset_channel = ah->chip_fullsleep;
  	}
  
  	/*
-@@ -1678,7 +1634,6 @@ static int ath9k_config(struct ieee80211
+@@ -1676,9 +1639,8 @@ static int ath9k_config(struct ieee80211
+ 		}
+ 	}
  
- 	if (changed & IEEE80211_CONF_CHANGE_CHANNEL) {
+-	if (changed & IEEE80211_CONF_CHANGE_CHANNEL) {
++	if ((changed & IEEE80211_CONF_CHANGE_CHANNEL) || reset_channel) {
  		struct ieee80211_channel *curchan = hw->conf.channel;
 -		struct ath9k_channel old_chan;
  		int pos = curchan->hw_value;
  		int old_pos = -1;
  		unsigned long flags;
-@@ -1704,11 +1659,8 @@ static int ath9k_config(struct ieee80211
+@@ -1704,11 +1666,8 @@ static int ath9k_config(struct ieee80211
  		 * Preserve the current channel values, before updating
  		 * the same channel
  		 */
@@ -370,7 +380,7 @@
  
  		ath9k_cmn_update_ichannel(&sc->sc_ah->channels[pos],
  					  curchan, conf->channel_type);
-@@ -1752,18 +1704,12 @@ static int ath9k_config(struct ieee80211
+@@ -1752,18 +1711,12 @@ static int ath9k_config(struct ieee80211
  		ath_dbg(common, ATH_DBG_CONFIG,
  			"Set power: %d\n", conf->power_level);
  		sc->config.txpowlimit = 2 * conf->power_level;
@@ -390,7 +400,7 @@
  
  	return 0;
  }
-@@ -2331,9 +2277,6 @@ static void ath9k_flush(struct ieee80211
+@@ -2331,9 +2284,6 @@ static void ath9k_flush(struct ieee80211
  		return;
  	}
  
@@ -400,7 +410,7 @@
  	for (j = 0; j < timeout; j++) {
  		bool npend = false;
  
-@@ -2351,21 +2294,22 @@ static void ath9k_flush(struct ieee80211
+@@ -2351,21 +2301,22 @@ static void ath9k_flush(struct ieee80211
  		}
  
  		if (!npend)
