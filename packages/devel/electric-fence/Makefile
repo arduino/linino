@@ -22,24 +22,40 @@ define Package/electric-fence
   CATEGORY:=Development
   TITLE:=electric-fence
   URL:=http://perens.com/FreeSoftware/ElectricFence/
+  DEPENDS:=@USE_GLIBC||@USE_EGLIBC
+  MAINTAINER:=Mirko Vogt <mirko@openwrt.org>
 endef
 
 TARGET_CFLAGS += -fPIC
-TARGET_LDFLAGS += -shared -lpthread
+TARGET_LDFLAGS += -lpthread
 
 define Build/Compile
-	rm -f $(PKG_BUILD_DIR)/libefence.so
+	rm -f $(PKG_BUILD_DIR)/libefence.so $(PKG_BUILD_DIR)/libefence.a
 	$(TARGET_CC) $(TARGET_CFLAGS) -c $(PKG_BUILD_DIR)/efence.c -o $(PKG_BUILD_DIR)/efence.o
 	$(TARGET_CC) $(TARGET_CFLAGS) -c $(PKG_BUILD_DIR)/page.c -o $(PKG_BUILD_DIR)/page.o
 	$(TARGET_CC) $(TARGET_CFLAGS) -c $(PKG_BUILD_DIR)/print.c -o $(PKG_BUILD_DIR)/print.o
-	$(TARGET_CC) $(TARGET_LDFLAGS) -o $(PKG_BUILD_DIR)/libefence.so $(PKG_BUILD_DIR)/efence.o $(PKG_BUILD_DIR)/page.o $(PKG_BUILD_DIR)/print.o
+	$(TARGET_CC) -shared $(TARGET_LDFLAGS) -o $(PKG_BUILD_DIR)/libefence.so $(PKG_BUILD_DIR)/efence.o $(PKG_BUILD_DIR)/page.o $(PKG_BUILD_DIR)/print.o
+	$(AR) crv $(LD_FLAGS) $(PKG_BUILD_DIR)/libefence.a $(PKG_BUILD_DIR)/efence.o $(PKG_BUILD_DIR)/page.o $(PKG_BUILD_DIR)/print.o
+endef
+
+define Build/InstallDev
+	$(INSTALL_DIR) \
+		$(1)/usr/lib
+
+	$(INSTALL_DATA) \
+		$(PKG_BUILD_DIR)/libefence.so \
+		$(1)/usr/lib/
+
+	$(INSTALL_DATA) \
+		$(PKG_BUILD_DIR)/libefence.a \
+		$(1)/usr/lib/
 endef
 
 define Package/electric-fence/install
 	$(INSTALL_DIR) \
 		$(1)/usr/lib
 
-	$(INSTALL_BIN) \
+	$(INSTALL_DATA) \
 		$(PKG_BUILD_DIR)/libefence.so \
 		$(1)/usr/lib/
 endef
