@@ -823,7 +823,7 @@
 +#endif /* _IP_CONNTRACK_RTSP_H */
 --- /dev/null
 +++ b/extensions/rtsp/nf_nat_rtsp.c
-@@ -0,0 +1,489 @@
+@@ -0,0 +1,491 @@
 +/*
 + * RTSP extension for TCP NAT alteration
 + * (C) 2003 by Tom Marshall <tmarshall at real.com>
@@ -870,6 +870,8 @@
 +#include "netfilter_helpers.h"
 +#define NF_NEED_MIME_NEXTLINE
 +#include "netfilter_mime.h"
++
++#include "../compat_xtables.h"
 +
 +#define MAX_PORTS       8
 +#define DSTACT_AUTO     0
@@ -1256,7 +1258,7 @@
 +
 +static void expected(struct nf_conn* ct, struct nf_conntrack_expect *exp)
 +{
-+    struct nf_nat_multi_range_compat mr;
++    struct nf_nat_ipv4_multi_range_compat mr;
 +    u_int32_t newdstip, newsrcip, newip;
 +
 +    struct nf_conn *master = ct->master;
@@ -1264,7 +1266,7 @@
 +    newdstip = master->tuplehash[IP_CT_DIR_ORIGINAL].tuple.src.u3.ip;
 +    newsrcip = ct->tuplehash[IP_CT_DIR_ORIGINAL].tuple.src.u3.ip;
 +    //FIXME (how to port that ?)
-+    //code from 2.4 : newip = (HOOK2MANIP(hooknum) == IP_NAT_MANIP_SRC) ? newsrcip : newdstip;
++    //code from 2.4 : newip = (HOOK2MANIP(hooknum) == NF_NAT_MANIP_SRC) ? newsrcip : newdstip;
 +    newip = newdstip;
 +
 +    pr_debug("newsrcip=%pI4, newdstip=%pI4, newip=%pI4\n",
@@ -1272,10 +1274,10 @@
 +
 +    mr.rangesize = 1;
 +    // We don't want to manip the per-protocol, just the IPs. 
-+    mr.range[0].flags = IP_NAT_RANGE_MAP_IPS;
++    mr.range[0].flags = NF_NAT_RANGE_MAP_IPS;
 +    mr.range[0].min_ip = mr.range[0].max_ip = newip;
 +
-+    nf_nat_setup_info(ct, &mr.range[0], IP_NAT_MANIP_DST);
++    nf_nat_setup_info(ct, &mr.range[0], NF_NAT_MANIP_DST);
 +}
 +
 +
@@ -1315,7 +1317,7 @@
 +module_exit(fini);
 --- a/extensions/Kbuild
 +++ b/extensions/Kbuild
-@@ -34,6 +34,7 @@ obj-${build_lscan}       += xt_lscan.o
+@@ -33,6 +33,7 @@ obj-${build_lscan}       += xt_lscan.o
  obj-${build_pknock}      += pknock/
  obj-${build_psd}         += xt_psd.o
  obj-${build_quota2}      += xt_quota2.o
@@ -1325,7 +1327,7 @@
  -include ${M}/Kbuild.*
 --- a/mconfig
 +++ b/mconfig
-@@ -27,3 +27,4 @@ build_lscan=m
+@@ -26,3 +26,4 @@ build_lscan=m
  build_pknock=m
  build_psd=m
  build_quota2=m
