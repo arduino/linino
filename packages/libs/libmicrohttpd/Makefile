@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2011 OpenWrt.org
+# Copyright (C) 2011-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libmicrohttpd
-PKG_VERSION:=0.4.4
+PKG_VERSION:=0.9.19
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/libmicrohttpd
-PKG_MD5SUM:=bcd61ebb10286379f55c7db9c79e0465
+PKG_MD5SUM:=0f4c55ba224ce75b3b993b558e072a6b
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -47,8 +47,7 @@ endef
 
 define Package/libmicrohttpd/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmicrohttpd.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libmicrohttpd.so* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libmicrohttpd))
-
