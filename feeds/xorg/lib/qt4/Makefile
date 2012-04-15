@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2012 OpenWrt.org
+# Copyright (C) 2008-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -12,9 +12,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=qt4
-PKG_VERSION:=4.7.0
+PKG_VERSION:=4.8.1
 PKG_RELEASE:=1
-PKG_MD5SUM:=3a2f25b9b115037277f4fb759194a7a5
+PKG_MD5SUM:=7960ba8e18ca31f0c6e4895a312f92ff
 
 PKG_SOURCE:=qt-everywhere-opensource-src-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.qt.nokia.com/qt/source
@@ -42,17 +42,6 @@ PKG_CONFIG_DEPENDS:= \
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
 -include $(if $(DUMP),,./files/qmake.mk)
-
-# this should be moved to a more generic place later, as other packages are configured different as well depending on available nptl support
-ifeq ($(CONFIG_USE_GLIBC),y)
-  NPTL:=y
-endif
-ifeq ($(CONFIG_USE_EGLIBC),y)
-  NPTL:=y
-endif
-ifeq ($(CONFIG_UCLIBC_VERSION_0_9_32),y)
-  NPTL:=y
-endif
 
 define Package/qt4/config
 	source "$(SOURCE)/Config.in"
@@ -118,12 +107,6 @@ define Package/qt4-pgsql
   DEPENDS+=+libpq
 endef
 
-define Package/qt4-pgsql
-  $(call Package/qt4/Default)
-  TITLE+=(pgsql)
-  DEPENDS+=+libpq
-endef
-
 define Package/qt4-openssl
   $(call Package/qt4/Default)
   TITLE+=(openssl)
@@ -160,13 +143,12 @@ endef
 define Package/qt4-webkit
   $(call Package/qt4/Default)
   TITLE+=(webkit)
-  DEPENDS+=@USE_GLIBC||@USE_EGLIBC||@UCLIBC_VERSION_0_9_32 +libsqlite3 +qt4-phonon +qt4-dbus +qt4-xml +qt4-gui +qt4-network # versions of uclibc prior 0.9.32 do not have nptl support
+  DEPENDS+=+libsqlite3 +qt4-phonon +qt4-dbus +qt4-xml +qt4-gui +qt4-network
 endef
 
 define Package/qt4-script
   $(call Package/qt4/Default)
   TITLE+=(script)
-  DEPENDS+=@USE_GLIBC||@USE_EGLIBC||@UCLIBC_VERSION_0_9_32 # versions of uclibc prior 0.9.32 do not have nptl support
 endef
 
 define Package/qt4-scripttools
@@ -221,6 +203,11 @@ endef
 define Package/qt4-xml
   $(call Package/qt4/Default)
   TITLE+=(xml)
+endef
+
+define Package/qt4-xmlpatterns
+  $(call Package/qt4/Default)
+  TITLE+=(xmlpatterns)
 endef
 
 ###
@@ -281,6 +268,7 @@ TARGET_INCDIRS+=$(STAGING_DIR)/include $(STAGING_DIR)/usr/include $(TOOLCHAIN_DI
 TARGET_LIBDIRS+=$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib $(TOOLCHAIN_DIR)/lib $(TOOLCHAIN_DIR)/usr/lib
 TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib,-rpath-link=$(PKG_BUILD_DIR)/lib
 TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/include/freetype2 -I$(PKG_BUILD_DIR)/include -I$(STAGING_DIR)/usr/include/directfb
+TARGET_CFLAGS+=-fpermissive
 
 ifeq ($(CONFIG_QT4_WS_QWS),y)
   FILEPFX:=qws-
@@ -343,10 +331,22 @@ define Build/Configure
 			-release \
 			-confirm-license \
 			-opensource \
+			-stl \
+			$(if $(CONFIG_PACKAGE_qt4-xmlpatterns),-xmlpatterns,-no-xmlpatterns) \
+			-no-fast \
+			-no-largefile \
+			-exceptions \
 			-no-mmx \
 			-no-3dnow \
 			-no-sse \
 			-no-sse2 \
+			-no-sse3 \
+			-no-ssse3 \
+			-no-sse4.1 \
+			-no-sse4.2 \
+			-no-avx \
+			-no-neon \
+			-no-armfpa \
 			-system-zlib \
 			-system-libtiff \
 			-system-libpng \
@@ -721,6 +721,15 @@ define Package/qt4-xml/install
 		$(1)/usr/lib/
 endef
 
+define Package/qt4-xmlpatterns/install
+	$(INSTALL_DIR) \
+		$(1)/usr/lib
+
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libQtXmlPatterns.so* \
+		$(1)/usr/lib/
+endef
+
 # plugins
 #  mouse drivers
 define Package/qt4-drivers-mouse-tpmousedriver/install
@@ -808,6 +817,7 @@ $(eval $(call BuildPackage,qt4-dbus))
 $(eval $(call BuildPackage,qt4-qt3support))
 $(eval $(call BuildPackage,qt4-declarative))
 $(eval $(call BuildPackage,qt4-xml))
+$(eval $(call BuildPackage,qt4-xmlpatterns))
 
 $(eval $(call BuildPackage,qt4-drivers-mouse-tpmousedriver))
 $(eval $(call BuildPackage,qt4-drivers-mouse-pcmousedriver))
