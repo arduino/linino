@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
 PKG_VERSION:=5.3.10
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
@@ -33,7 +33,7 @@ PHP5_MODULES = \
 	mbstring mcrypt mysql mysqli \
 	openssl \
 	pcntl pdo pdo-mysql pdo-pgsql pdo-sqlite pgsql \
-	session simplexml soap sockets sqlite sqlite3 sysvmsg sysvsem sysvshm \
+	session shmop simplexml soap sockets sqlite sqlite3 sysvmsg sysvsem sysvshm \
 	tokenizer \
 	xml xmlreader xmlwriter zip \
 
@@ -340,6 +340,12 @@ else
   CONFIGURE_ARGS+= --disable-session
 endif
 
+ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-shmop),)
+  CONFIGURE_ARGS+= --enable-shmop=shared
+else
+  CONFIGURE_ARGS+= --disable-shmop
+endif
+
 ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-simplexml),)
   CONFIGURE_ARGS+= --enable-simplexml=shared
 else
@@ -543,6 +549,7 @@ $(eval $(call BuildModule,pdo-pgsql,PDO driver for PostgreSQL,+php5-mod-pdo +PAC
 $(eval $(call BuildModule,pdo-sqlite,PDO driver for SQLite 3.x,+php5-mod-pdo +PACKAGE_php5-mod-pdo-sqlite:libsqlite3 +PACKAGE_php5-mod-pdo-sqlite:libpthread))
 $(eval $(call BuildModule,pgsql,PostgreSQL,+PACKAGE_php5-mod-pgsql:libpq))
 $(eval $(call BuildModule,session,Session))
+$(eval $(call BuildModule,shmop,Shared Memory))
 $(eval $(call BuildModule,simplexml,SimpleXML,+@PHP5_LIBXML +PACKAGE_php5-mod-simplexml:libxml2))
 $(eval $(call BuildModule,soap,SOAP,+@PHP5_LIBXML +PACKAGE_php5-mod-soap:libxml2))
 $(eval $(call BuildModule,sockets,Sockets))
