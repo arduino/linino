@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openconnect
-PKG_VERSION:=3.15
+PKG_VERSION:=3.16
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.infradead.org/pub/openconnect/
-PKG_MD5SUM:=94245f4bac42a288100becab0b4ca29a
+PKG_MD5SUM:=ce258b996e6af9128f20fb797938f7b7
 
 include $(INCLUDE_DIR)/package.mk
 
