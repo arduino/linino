@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2010-2011 OpenWrt.org
+# Copyright (C) 2010-2012 OpenWrt.org
 
 START=70
 
@@ -19,5 +19,5 @@ stop()
 
 reload()
 {
-	service_relaod /usr/sbin/afpd
+	service_reload /usr/sbin/afpd
 }
