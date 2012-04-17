@@ -9,13 +9,15 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=igmpproxy
 PKG_VERSION:=0.1
-PKG_RELEASE:=6
+PKG_RELEASE:=7
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/igmpproxy
 PKG_MD5SUM:=c56f41ec195bc1fe016369bf74efc5a1
 
 include $(INCLUDE_DIR)/package.mk
+
+PKG_FIXUP:=autoreconf
 
 define Package/igmpproxy
   SECTION:=net
