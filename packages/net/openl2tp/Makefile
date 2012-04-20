@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=openl2tp
 PKG_VERSION:=1.8
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/openl2tp
@@ -79,6 +79,7 @@ MAKE_FLAGS+= \
 	CFLAGS.optimize="$(TARGET_CFLAGS)" \
 	CPPFLAGS-y="-I$(STAGING_DIR)/usr/include" \
 	L2TP_FEATURE_LOCAL_CONF_FILE=y \
+	CROSS_COMPILE="$(TARGET_CROSS)" \
 
 ifeq ($(BUILD_VARIANT),full)
 
