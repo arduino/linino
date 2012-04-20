@@ -1,0 +1,18 @@
+#!/bin/sh /etc/rc.common
+# Basic init script for mosquitto
+# April 2012, OpenWrt.org
+
+START=80
+APP=`which mosquitto`
+
+SERVICE_DAEMONIZE=1
+SERVICE_WRITE_PID=1
+
+start() {
+        user_exists mosquitto 200 || user_add mosquitto 200
+        service_start $APP -c /etc/mosquitto/mosquitto.conf
+}
+
+stop() {
+        service_stop $APP
+}
