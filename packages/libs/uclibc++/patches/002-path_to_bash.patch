@@ -5,8 +5,8 @@ diff -ur old/bin/Makefile dev/bin/Makefile
  	$(INSTALL) -m 755 $(WRAPPER) $(PREFIX)$(UCLIBCXX_RUNTIME_BINDIR)
  
  $(WRAPPER):
--	echo "#!/bin/bash" > $(WRAPPER)
-+	echo "#!/usr/bin/env bash" > $(WRAPPER)
- 	echo "" >> $(WRAPPER)
+-	echo '#!/bin/sh' > $(WRAPPER)
++	echo '#!/usr/bin/env bash' > $(WRAPPER)
+ 	echo '' >> $(WRAPPER)
  	echo 'WRAPPER_INCLUDEDIR="$${WRAPPER_INCLUDEDIR:=-I$(UCLIBCXX_RUNTIME_INCLUDEDIR)}"' >> $(WRAPPER)
  	echo 'WRAPPER_LIBDIR="$${WRAPPER_LIBDIR:=-L$(UCLIBCXX_RUNTIME_LIBDIR)}"' >> $(WRAPPER)
