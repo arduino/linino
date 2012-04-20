@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=znc
-PKG_VERSION:=0.204
+PKG_VERSION:=0.206
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://znc.in/releases \
 		http://znc.in/releases/archive
-PKG_MD5SUM:=7c7247423fc08b0c5c62759a50a9bca3
+PKG_MD5SUM:=b7d3f21da81abaeb553066b0e10beb53
 
 PKG_BUILD_PARALLEL:=1
 
