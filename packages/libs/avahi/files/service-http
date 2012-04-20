@@ -5,6 +5,6 @@
   <service>
    <type>_http._tcp</type>
    <port>80</port>
-   <txt-record>path=/index.html</txt-record>
+   <txt-record>path=/</txt-record>
   </service>
 </service-group>
