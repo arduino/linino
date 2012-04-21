@@ -1,6 +1,6 @@
 --- a/programs/_confread/Makefile
 +++ b/programs/_confread/Makefile
-@@ -16,7 +16,6 @@
+@@ -14,7 +14,6 @@
  OPENSWANSRCDIR?=$(shell cd ../..; pwd)
  include ${OPENSWANSRCDIR}/Makefile.inc
  
@@ -8,7 +8,7 @@
  CONFFILES=ipsec.conf
  EXCONFILES=ipsec.win2k.conf
  SOURCEDIR=_confread
-@@ -26,11 +25,3 @@ CONFDFILES=clear clear-or-private privat
+@@ -24,11 +23,3 @@ CONFDFILES=clear clear-or-private privat
  
  include ${srcdir}../Makefile.program
  
@@ -22,7 +22,7 @@
 -
 --- a/programs/pluto/Makefile
 +++ b/programs/pluto/Makefile
-@@ -195,35 +195,11 @@ doinstall: all
+@@ -196,35 +196,11 @@ doinstall: all
  	$(INSTALL) $(INSTBINFLAGS) $(BINNAMEPLUTO) $(BINNAMEWHACK) $(LIBEXECDIR)
  	#$(INSTALL) $(INSTSUIDFLAGS) $(BINNAMEWHACKINIT) $(LIBEXECDIR)
  	if $(USE_ADNS) ; then $(INSTALL) $(INSTBINFLAGS) $(BINNAMEADNS)  $(LIBEXECDIR) ; fi

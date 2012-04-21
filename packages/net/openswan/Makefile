@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=openswan
-PKG_VERSION:=2.6.37
-PKG_RELEASE:=2
+PKG_VERSION:=2.6.38
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.openswan.org/download
-PKG_MD5SUM:=e5c948555088df06cfadcfbe6c13adfe
+PKG_MD5SUM:=13073eb5314b83a31be88e4117e8bbcd
 
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1

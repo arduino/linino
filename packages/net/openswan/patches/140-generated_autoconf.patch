@@ -17,21 +17,19 @@
   */
 --- a/linux/include/openswan/ipsec_kversion.h
 +++ b/linux/include/openswan/ipsec_kversion.h
-@@ -43,10 +43,11 @@
+@@ -57,8 +57,10 @@
   * We use a lot of config defines,  on older kernels that means we
   * need to include config.h
   */
 -#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38) && !defined(AUTOCONF_INCLUDED)
--#include <linux/config.h>
+-# include <linux/config.h>
 +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
 +#include <generated/autoconf.h>
 +#else
 +#include <linux/autoconf.h>
  #endif
--
- #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
- /* Only enable IPv6 support on newer kernels with IPv6 enabled */
- # if defined(CONFIG_IPV6) || defined(CONFIG_IPV6_MODULE)
+ 
+ #if !defined(RHEL_RELEASE_CODE) 
 --- a/linux/net/ipsec/aes/ipsec_alg_aes.c
 +++ b/linux/net/ipsec/aes/ipsec_alg_aes.c
 @@ -22,8 +22,10 @@
@@ -230,7 +228,7 @@
  
 --- a/linux/net/ipsec/ipsec_radij.c
 +++ b/linux/net/ipsec/ipsec_radij.c
-@@ -16,8 +16,10 @@
+@@ -21,8 +21,10 @@
   */
  
  #include <linux/version.h>
@@ -307,7 +305,7 @@
  
 --- a/linux/net/ipsec/ipsec_xform.c
 +++ b/linux/net/ipsec/ipsec_xform.c
-@@ -17,8 +17,10 @@
+@@ -15,8 +15,10 @@
   */
  
  #include <linux/version.h>
