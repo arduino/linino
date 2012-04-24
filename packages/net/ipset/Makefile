@@ -34,10 +34,11 @@ $(call Package/ipset/Default)
   URL:=http://ipset.netfilter.org/
 endef
 
-include $(INCLUDE_DIR)/kernel-defaults.mk
-
 CONFIGURE_ARGS += \
 	--with-kbuild="$(LINUX_DIR)"
+
+MAKE_FLAGS += \
+	ARCH="$(LINUX_KARCH)"
 
 IPSET_MODULES:= \
 	ipset/ip_set \
