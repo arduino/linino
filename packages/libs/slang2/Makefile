@@ -9,13 +9,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=slang
-PKG_VERSION:=2.2.3
+PKG_VERSION:=2.2.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://space.mit.edu/pub/davis/slang/v2.2 \
 	ftp://space.mit.edu/pub/davis/slang/v2.2/OLD
-PKG_MD5SUM:=17e1864de999ae9535a9f7350a010427
+PKG_MD5SUM:=7fcfd447e378f07dd0c0bae671fe6487
 
 PKG_INSTALL:=1
 
