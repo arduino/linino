@@ -80,7 +80,11 @@ define Package/minidlna/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/minidlna.init $(1)/etc/init.d/minidlna
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_BIN) ./files/minidlna.config $(1)/etc/config/minidlna
+	$(INSTALL_CONF) ./files/minidlna.config $(1)/etc/config/minidlna
+endef
+
+define Package/minidlna/conffiles
+/etc/config/minidlna
 endef
 
 $(eval $(call BuildPackage,minidlna))
