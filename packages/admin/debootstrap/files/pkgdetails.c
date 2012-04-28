@@ -12,7 +12,7 @@ char *checksum_field=NULL;
 
 static void oom_die(void)
 {
-    fprintf(stderr, "Out of memory!\n");
+    fputs("Out of memory!\n", stderr);
     exit(1);
 }
 

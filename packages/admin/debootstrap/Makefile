@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=debootstrap
-PKG_VERSION:=1.0.38
+PKG_VERSION:=1.0.40
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-udeb_$(PKG_VERSION)_all.udeb
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/d/debootstrap
-PKG_MD5SUM:=9bc9c55504c73bad27105aeed1a94f42
+PKG_MD5SUM:=298ed4d39eda12b9db46f446465d6f7f
 
 UNPACK_CMD=ar -p "$(DL_DIR)/$(PKG_SOURCE)" data.tar.gz | ( cd $(1) && tar -xzf - )
 
@@ -37,7 +37,7 @@ define Package/debootstrap/description
 endef
 
 define Build/Compile
-# file pkgdetails.c was imported from debian package base-installer version 1.122
+# file pkgdetails.c was imported from debian package base-installer version 1.123
 	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) ./files/pkgdetails.c -o $(PKG_BUILD_DIR)/usr/share/debootstrap/pkgdetails
 endef
 
