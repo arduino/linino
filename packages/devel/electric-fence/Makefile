@@ -22,7 +22,7 @@ define Package/electric-fence
   CATEGORY:=Development
   TITLE:=electric-fence
   URL:=http://perens.com/FreeSoftware/ElectricFence/
-  DEPENDS:=@USE_GLIBC||@USE_EGLIBC
+  DEPENDS:=@USE_EGLIBC
   MAINTAINER:=Mirko Vogt <mirko@openwrt.org>
 endef
 

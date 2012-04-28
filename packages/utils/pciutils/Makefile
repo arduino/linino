@@ -45,7 +45,7 @@ MAKE_FLAGS += \
 	HOST="$(GNU_TARGET_NAME)" \
 	ZLIB="yes" \
 
-ifneq ($(CONFIG_USE_EGLIBC)$(CONFIG_USE_GLIBC),)
+ifneq ($(CONFIG_USE_EGLIBC),)
 TARGET_LDFLAGS += -lresolv
 endif
 

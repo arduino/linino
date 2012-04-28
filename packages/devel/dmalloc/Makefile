@@ -30,7 +30,7 @@ endef
 define Package/libdmalloc
   $(call Package/dmalloc/Default)
   TITLE+= (library)
-  DEPENDS:=@USE_GLIBC||@USE_EGLIBC
+  DEPENDS:=@USE_EGLIBC
 endef
 
 define Package/dmalloc-utils

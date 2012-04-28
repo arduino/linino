@@ -22,7 +22,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/perl/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
-ifneq ($(CONFIG_USE_EGLIBC)$(CONFIG_USE_GLIBC),)
+ifneq ($(CONFIG_USE_EGLIBC),)
 EXTRA_LIBS:=bsd
 EXTRA_LIBDIRS:=$(STAGING_DIR)/lib
 endif
@@ -33,7 +33,7 @@ define Package/perl/Default
   CATEGORY:=Languages
   TITLE:=The Perl intepreter
   URL:=http://www.perl.com/
-  DEPENDS:=+USE_EGLIBC:libbsd +USE_GLIBC:libbsd
+  DEPENDS:=+USE_EGLIBC:libbsd
 endef
 
 define Package/microperl
