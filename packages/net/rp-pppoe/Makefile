@@ -35,6 +35,7 @@ endef
 
 define Package/rp-pppoe-client
   $(call Package/rp-pppoe/Default)
+  DEPENDS += @BROKEN
   TITLE+= client
 endef
 
