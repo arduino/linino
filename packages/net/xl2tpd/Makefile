@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xl2tpd
-PKG_VERSION:=1.3.0
+PKG_VERSION:=1.3.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.xelerance.com/xl2tpd/
-PKG_MD5SUM:=28264284552c442b24cf421755a2bb48
+# Host seems to be down.
+#PKG_SOURCE_URL:=ftp://ftp.xelerance.com/xl2tpd/
+PKG_MD5SUM:=cf61576fef5c2d6c68279a408ec1f0d5
+PKG_SOURCE_URL:=http://pkgs.fedoraproject.org/lookaside/pkgs/xl2tpd/xl2tpd-$(PKG_VERSION).tar.gz/$(PKG_MD5SUM)/
 
 PKG_INSTALL:=1
 
@@ -25,6 +27,7 @@ define Package/xl2tpd
   TITLE:=An L2TP (Layer 2 Tunneling Protocol) daemon
   URL:=http://www.xelerance.com/software/xl2tpd/
   SUBMENU:=VPN
+  DEPENDS:=+ppp-mod-pppol2tp +ip +resolveip
 endef
 
 define Package/xl2tpd/description
@@ -46,6 +49,7 @@ endef
 define Package/xl2tpd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/local/sbin/xl2tpd $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/local/sbin/xl2tpd-control $(1)/usr/sbin/
 
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/xl2tpd.init $(1)/etc/init.d/xl2tpd
@@ -56,6 +60,9 @@ define Package/xl2tpd/install
 
 	$(INSTALL_DIR) $(1)/etc/ppp
 	$(INSTALL_DATA) ./files/options.xl2tpd $(1)/etc/ppp/
+
+	$(INSTALL_DIR) $(1)/lib/network
+	$(INSTALL_DATA) ./files/l2tp.sh $(1)/lib/network
 endef
 
 $(eval $(call BuildPackage,xl2tpd))
