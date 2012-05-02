@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=openl2tp
 PKG_VERSION:=1.8
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/openl2tp
@@ -30,7 +30,7 @@ define Package/openl2tp/Default
   TITLE:=An L2TP (Layer 2 Tunneling Protocol) daemon
   URL:=http://www.openl2tp.org/
   PROVIDES:=openl2tp
-  DEPENDS:=+ppp +kmod-pppol2tp
+  DEPENDS:=+ppp-mod-pppol2tp
 endef
 
 define Package/openl2tp/description/Default
@@ -109,7 +109,6 @@ define Package/openl2tp-full/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/openl2tpd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/lib/pppd/$(PPPD_VERSION)
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pppd/openl2tp.so $(1)/usr/lib/pppd/$(PPPD_VERSION)/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pppd/pppol2tp.so $(1)/usr/lib/pppd/$(PPPD_VERSION)/
 	$(INSTALL_DIR) $(1)/usr/lib/openl2tp
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/plugins/event_sock.so $(1)/usr/lib/openl2tp/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/plugins/ipsec.so $(1)/usr/lib/openl2tp/
@@ -120,8 +119,6 @@ endef
 define Package/openl2tp-mini/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/openl2tpd $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/usr/lib/pppd/$(PPPD_VERSION)
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pppd/pppol2tp.so $(1)/usr/lib/pppd/$(PPPD_VERSION)/
 	$(INSTALL_DIR) $(1)/usr/lib/openl2tp
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/plugins/ipsec.so $(1)/usr/lib/openl2tp/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/plugins/ppp_unix.so $(1)/usr/lib/openl2tp/
