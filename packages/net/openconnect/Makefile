@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openconnect
 PKG_VERSION:=3.16
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.infradead.org/pub/openconnect/
@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openconnect
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libxml2 +libopenssl +kmod-tun
+  DEPENDS:=+libxml2 +libopenssl +kmod-tun +vpnc-scripts
   TITLE:=VPN client for Cisco's AnyConnect SSL VPN
   URL:=http://www.infradead.org/openconnect/
   SUBMENU:=VPN
@@ -37,9 +37,11 @@ endef
 CONFIGURE_ARGS+=--disable-shared
 
 define Package/openconnect/install
+	$(INSTALL_DIR) $(1)/lib/network
+	$(INSTALL_BIN) ./files/openconnect.sh $(1)/lib/network/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/openconnect \
-		$(1)/usr/sbin/
+	$(INSTALL_BIN) ./files/run-openconnect $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/openconnect $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,openconnect))
