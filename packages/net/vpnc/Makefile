@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vpnc
 PKG_VERSION:=0.5.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.unix-ag.uni-kl.de/~massar/vpnc/
@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/vpnc
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libgpg-error +libgcrypt +kmod-tun +ip
+  DEPENDS:=+libgpg-error +libgcrypt +kmod-tun +vpnc-scripts
   TITLE:=VPN client for Cisco EasyVPN
   URL:=http://www.unix-ag.uni-kl.de/~massar/vpnc/
   SUBMENU:=VPN
@@ -36,7 +36,6 @@ endef
 
 define Package/vpnc/conffiles
 /etc/vpnc/default.conf
-/etc/vpnc/vpnc-script
 endef
 
 define Build/Compile
@@ -57,7 +56,6 @@ define Package/vpnc/install
 		$(1)/usr/sbin/
 	install -d -m0700 $(1)/etc/vpnc
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/vpnc/default.conf $(1)/etc/vpnc/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/etc/vpnc/vpnc-script $(1)/etc/vpnc/
 endef
 
 $(eval $(call BuildPackage,vpnc))
