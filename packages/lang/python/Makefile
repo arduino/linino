@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,15 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python
+PKG_VERSION:=2.7.3
+PKG_RELEASE:=1
 
-PY_VERSION:=2.7.3
-PY_RC:=rc2
-PKG_VERSION:=$(PY_VERSION)$(PY_RC)
-PKG_RELEASE:=2
-
-PKG_SOURCE:=Python-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.python.org/ftp/python/$(PY_VERSION)/
-PKG_MD5SUM:=67059e1bcaf19e19394d16b80637f75f
+PKG_SOURCE:=Python-$(PKG_VERSION).tar.xz
+PKG_SOURCE_URL:=http://www.python.org/ftp/python/$(PKG_VERSION)
+PKG_MD5SUM:=62c4c1699170078c469f79ddfed21bc0
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
