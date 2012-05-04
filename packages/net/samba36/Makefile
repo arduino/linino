@@ -30,9 +30,17 @@ define Package/samba36-server
   URL:=http://www.samba.org/
 endef
 
+define Package/samba36-client
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=Samba 3.6 SMB/CIFS client
+  URL:=http://www.samba.org/
+endef
+
 define Package/samba36-server/config
 	config PACKAGE_SAMBA_MAX_DEBUG_LEVEL
 		int "Maximum level of compiled-in debug messages"
+		depends PACKAGE_samba36-server || PACKAGE_samba36-client
 		default -1
 
 endef
@@ -119,5 +127,12 @@ define Package/samba36-server/install
 	ln -sf samba_multicall $(1)/usr/sbin/smbpasswd
 endef
 
+define Package/samba36-client/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_BIN)/smbclient $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_BIN)/nmblookup $(1)/usr/sbin
+endef
+
+$(eval $(call BuildPackage,samba36-client))
 $(eval $(call BuildPackage,samba36-server))
 
