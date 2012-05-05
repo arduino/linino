@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pmacct
-PKG_VERSION:=0.12.5
-PKG_RELEASE:=3
+PKG_VERSION:=0.14.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.pmacct.net/
-PKG_MD5SUM:=3d10f9301a17f034a0f221490a99a5d0
+PKG_MD5SUM:=4588531f0e8033fe82ad7fb22d1bbdb7
 
 PKG_BUILD_DEPENDS:=libpcap
 
@@ -21,6 +21,8 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSI
 
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_IPV6 \
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -113,13 +115,6 @@ ifeq ($(BUILD_VARIANT),sqlite)
 endif
 
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
-
 define Package/pmacct-client/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/src/pmacct $(1)/usr/sbin/
@@ -142,8 +137,8 @@ define BuildPackage/Template
   endef
 
   define Package/$(2)$(3)/conffiles
-    /etc/default/$(2)
-    /etc/$(2).conf
+/etc/default/$(2)
+/etc/$(2).conf
   endef
 
   define Package/$(2)$(3)/install
