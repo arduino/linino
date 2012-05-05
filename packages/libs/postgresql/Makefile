@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=postgresql
 PKG_VERSION:=9.0.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=\
@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libpq
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+zlib +libreadline +libncurses +coreutils-su
+  DEPENDS:=+zlib +libreadline +libpthread +libncurses +coreutils-su
   TITLE:=PostgreSQL client library
   URL:=http://www.postgresql.org/
   SUBMENU:=database
