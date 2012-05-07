@@ -2,6 +2,9 @@
 
 START=70
 
+SERVICE_DAEMONIZE=1
+SERVICE_WRITE_PID=1
+
 IP=$(which ip)
 IPTABLES=$(which iptables)
 NATPMP=/usr/sbin/natpmp
@@ -9,7 +12,7 @@ PIDFILE=/var/run/natpmp.pid
 
 natpmp_config() {
 	local cfg="$1"
-	
+
 	config_get PUBLIC_IF "$cfg" outbound_interface
 	config_get PRIVATE_IFS "$cfg" inbound_interfaces
 	config_get IPTABLES_CHAIN "$cfg" iptables_chain
@@ -18,46 +21,55 @@ natpmp_config() {
 start() {
 	config_load natpmp
 	config_foreach natpmp_config natpmp
-	
-    # Flush all the rules in the natpmp chain, or create it, if it doesn't exists.
-    $IPTABLES -t nat -F $IPTABLES_CHAIN 2>/dev/null || \
-    $IPTABLES -t nat -N $IPTABLES_CHAIN
 
-    # Handle all incoming connections in the natpmp chain.
-    $IPTABLES -t nat -D PREROUTING -j $IPTABLES_CHAIN 2>/dev/null || true
-    $IPTABLES -t nat -A PREROUTING -j $IPTABLES_CHAIN
+	include /lib/network
+	scan_interfaces
 
-    # Iterate through the private interfaces.
-    BIND_ARGS=""
-    for IF in $PRIVATE_IFS; do
-            # Get the IP address of this interface.
-            ADDR=`$IP addr show dev $IF 2>/dev/null | grep "^ *inet .* $IF\$" | cut -d " " -f 6 | cut -d / -f 1`
-            if [ -n "$ADDR" ] ; then
-                    # Add the IP address to the argument list.
-                    BIND_ARGS="$BIND_ARGS -a $ADDR"
-            else
-                    echo "Could not get IP address of interface $IF. Skipping." >&2
-            fi
-    done
+	# Flush all the rules in the natpmp chain, or create it, if it doesn't exists.
+	$IPTABLES -t nat -F $IPTABLES_CHAIN 2>/dev/null || \
+	$IPTABLES -t nat -N $IPTABLES_CHAIN
 
-    if [ -z "$BIND_ARGS" ] ; then
-            echo "No IP addresses to bind to. Exiting." >&2
-            exit 1
-    fi
+	# Handle all incoming connections in the natpmp chain.
+	$IPTABLES -t nat -D PREROUTING -j $IPTABLES_CHAIN 2>/dev/null || true
+	$IPTABLES -t nat -A PREROUTING -j $IPTABLES_CHAIN
 
-    $NATPMP -p $PIDFILE -b -i "$PUBLIC_IF" $BIND_ARGS -- "$IPTABLES_CHAIN"
+	# Iterate through the private interfaces.
+	BIND_ARGS=""
+	for IF in $PRIVATE_IFS; do
+		config_get IF "$IF" ifname "$IF"
+
+		# Get the IP address of this interface.
+		ADDR=`$IP addr show dev $IF 2>/dev/null | grep "^ *inet .* $IF\$" | cut -d " " -f 6 | cut -d / -f 1`
+		if [ -n "$ADDR" ] ; then
+			# Add the IP address to the argument list.
+			BIND_ARGS="$BIND_ARGS -a $ADDR"
+		else
+			echo "Could not get IP address of interface $IF. Skipping." >&2
+		fi
+	done
+
+	if [ -z "$BIND_ARGS" ] ; then
+		echo "No IP addresses to bind to. Exiting." >&2
+		exit 1
+	fi
+
+	config_get PUBLIC_IF "$PUBLIC_IF" ifname "$PUBLIC_IF"
+
+	SERVICE_PID_FILE="$PIDFILE"
+	service_start $NATPMP -i "$PUBLIC_IF" $BIND_ARGS -- "$IPTABLES_CHAIN"
 }
 
 stop() {
-    config_load natpmp
-    config_foreach natpmp_config natpmp
+	config_load natpmp
+	config_foreach natpmp_config natpmp
 
-    # Unlink chain
-    $IPTABLES -t nat -D PREROUTING -j $IPTABLES_CHAIN 2>/dev/null || true
+	# Unlink chain
+	$IPTABLES -t nat -D PREROUTING -j $IPTABLES_CHAIN 2>/dev/null || true
 
-    # Flush all the rules in the natpmp chain
-    $IPTABLES -t nat -F $IPTABLES_CHAIN 2>/dev/null && \
-    $IPTABLES -t nat -X $IPTABLES_CHAIN
+	# Flush all the rules in the natpmp chain
+	$IPTABLES -t nat -F $IPTABLES_CHAIN 2>/dev/null && \
+	$IPTABLES -t nat -X $IPTABLES_CHAIN
 
-    kill $(cat $PIDFILE)
+	SERVICE_PID_FILE="$PIDFILE"
+	service_stop $NATPMP
 }
