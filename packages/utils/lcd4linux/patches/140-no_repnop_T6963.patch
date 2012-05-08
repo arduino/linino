@@ -4,9 +4,9 @@
      /* wait for STA0=1 and STA1=1 */
      n = 0;
      do {
-+#if 0    
++#if 0
  	rep_nop();
-+#endif	
++#endif
  	if (++n > 1000) {
  	    debug("hang in status1");
  	    bug = 1;
@@ -14,9 +14,9 @@
      /* wait for STA3=1 */
      n = 0;
      do {
-+#if 0    
++#if 0
  	rep_nop();
-+#endif	
++#endif
  	if (++n > 1000) {
  	    debug("hang in status2");
  	    bug = 1;

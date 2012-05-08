@@ -3,6 +3,9 @@ if PACKAGE_lcd4linux-custom
 config LCD4LINUX_CUSTOM_NEEDS_libdbus
 	bool
 
+config LCD4LINUX_CUSTOM_NEEDS_libdpf
+	bool
+
 #config LCD4LINUX_CUSTOM_NEEDS_libftdi
 #	bool
 
@@ -10,6 +13,9 @@ config LCD4LINUX_CUSTOM_NEEDS_libgd
 	bool
 
 config LCD4LINUX_CUSTOM_NEEDS_libiconv
+	bool
+
+config LCD4LINUX_CUSTOM_NEEDS_libjpeg
 	bool
 
 config LCD4LINUX_CUSTOM_NEEDS_libmpdclient
@@ -51,6 +57,10 @@ config LCD4LINUX_CUSTOM_NEEDS_st2205tool
 
 comment "Drivers ---"
 
+config LCD4LINUX_CUSTOM_DRIVER_ASTUSB
+	bool
+	prompt "ASTUSB"
+
 config LCD4LINUX_CUSTOM_DRIVER_BeckmannEgle
 	bool
 	prompt "BeckmannEgle"
@@ -77,10 +87,27 @@ config LCD4LINUX_CUSTOM_DRIVER_D4D
 	bool
 	prompt "D4D"
 
+config LCD4LINUX_CUSTOM_DRIVER_dpf
+	bool
+	prompt "dpf"
+	select LCD4LINUX_CUSTOM_NEEDS_libdpf
+
 config LCD4LINUX_CUSTOM_DRIVER_EA232graphic
 	bool
 	prompt "EA232graphic"
 	select LCD4LINUX_CUSTOM_NEEDS_libgd
+
+config LCD4LINUX_CUSTOM_DRIVER_EFN
+	bool
+	prompt "EFN"
+
+config LCD4LINUX_CUSTOM_DRIVER_FutabaVFD
+	bool
+	prompt "FutabaVFD"
+
+config LCD4LINUX_CUSTOM_DRIVER_FW8888
+	bool
+	prompt "FW8888"
 
 config LCD4LINUX_CUSTOM_DRIVER_G15
 	bool
@@ -157,6 +184,10 @@ config LCD4LINUX_CUSTOM_DRIVER_MatrixOrbitalGX
 	select LCD4LINUX_CUSTOM_NEEDS_libgd
 	select LCD4LINUX_CUSTOM_NEEDS_libusb
 
+config LCD4LINUX_CUSTOM_DRIVER_mdm166a
+	bool
+	prompt "mdm166a"
+
 config LCD4LINUX_CUSTOM_DRIVER_MilfordInstruments
 	bool
 	prompt "MilfordInstruments"
@@ -214,6 +245,11 @@ config LCD4LINUX_CUSTOM_DRIVER_RouterBoard
 	prompt "RouterBoard"
 	depends on TARGET_rb532
 
+config LCD4LINUX_CUSTOM_DRIVER_SamsungSPF
+	bool
+	prompt "SamsungSPF"
+	select LCD4LINUX_CUSTOM_NEEDS_libjpeg
+
 config LCD4LINUX_CUSTOM_DRIVER_serdisplib
 	bool
 	prompt "serdisplib"
@@ -239,6 +275,10 @@ config LCD4LINUX_CUSTOM_DRIVER_T6963
 	bool
 	prompt "T6963"
 	select LCD4LINUX_CUSTOM_NEEDS_libgd
+
+config LCD4LINUX_CUSTOM_DRIVER_TeakLCM
+	bool
+	prompt "TeakLCM"
 
 config LCD4LINUX_CUSTOM_DRIVER_TEW673GRU
 	bool

@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lcd4linux
-PKG_REV:=1159
+PKG_REV:=1187
 PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=5
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://ssl.bulix.org/svn/lcd4linux/trunk/
@@ -19,13 +19,18 @@ PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=svn
 
 LCD4LINUX_DRIVERS:= \
+	ASTUSB \
 	BeckmannEgle \
 	BWCT \
 	CrystalFontz \
 	Curses \
 	Cwlinux \
 	D4D \
+	DPF \
 	EA232graphic \
+	EFN \
+	FutabaVFD \
+	FW8888 \
 	G15 \
 	GLCD2USB \
 	IRLCD \
@@ -41,6 +46,7 @@ LCD4LINUX_DRIVERS:= \
 	M50530 \
 	MatrixOrbital \
 	MatrixOrbitalGX \
+	mda166a \
 	MilfordInstruments \
 	Newhaven \
 	Noritake \
@@ -53,11 +59,13 @@ LCD4LINUX_DRIVERS:= \
 	PNG \
 	PPM \
 	$(if $(CONFIG_TARGET_rb532),RouterBoard) \
+	$(if $(CONFIG_BROKEN),SamsungSPF) \
 	serdisplib \
 	ShuttleVFD \
 	SimpleLCD \
 	st2205 \
 	T6963 \
+	TeakLCM \
 	$(if $(CONFIG_TARGET_ar71xx),TEW673GRU) \
 	Trefon \
 	USBHUB \
@@ -154,8 +162,10 @@ define Package/lcd4linux-custom
 $(call Package/lcd4linux/Default)
   DEPENDS:= \
 	+LCD4LINUX_CUSTOM_NEEDS_libdbus:libdbus \
+	+LCD4LINUX_CUSTOM_NEEDS_libdpf:libdpf \
 	+LCD4LINUX_CUSTOM_NEEDS_libgd:libgd \
 	$(if $(ICONV_FULL),+LCD4LINUX_CUSTOM_NEEDS_libiconv:libiconv-full) \
+	+LCD4LINUX_CUSTOM_NEEDS_libjpeg:libjpeg \
 	+LCD4LINUX_CUSTOM_NEEDS_libmpdclient:libmpdclient \
 	+LCD4LINUX_CUSTOM_NEEDS_libmysqlclient:libmysqlclient \
 	+LCD4LINUX_CUSTOM_NEEDS_libncurses:libncurses \
@@ -187,6 +197,7 @@ define Package/lcd4linux-full
 $(call Package/lcd4linux/Default)
   DEPENDS:= @DEVEL \
 	+libdbus \
+	+libdpf \
 	+libgd \
 	$(if $(ICONV_FULL),+libiconv-full) \
 	+libmpdclient \

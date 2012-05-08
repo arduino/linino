@@ -160,18 +160,6 @@
 +#endif /* _DRV_GENERIC_SPIDEV_H_ */
 --- a/drivers.m4
 +++ b/drivers.m4
-@@ -232,9 +232,9 @@ for driver in $drivers; do
-       serdisplib)
-          SERDISPLIB=$val;
-          ;;
--      ShuttleVFD) 
-+      ShuttleVFD)
- 	 SHUTTLEVFD=$val
--	 ;;          
-+	 ;;
-       SimpleLCD)
-          SIMPLELCD=$val
-          ;;
 @@ -285,6 +285,7 @@ PARPORT="no"
  SERIAL="no"
  I2C="no"
@@ -180,82 +168,8 @@
  
  # generic libraries
  LIBUSB="no"
-@@ -544,17 +545,17 @@ if test "$MATRIXORBITALGX" = "yes"; then
-     fi
- fi
- 
--if test "$MDM166A" = "yes"; then 
--   if test "$has_usb10" = "true"; then 
-+if test "$MDM166A" = "yes"; then
-+   if test "$has_usb10" = "true"; then
-       GRAPHIC="yes"
--      DRIVERS="$DRIVERS drv_mdm166a.o" 
--      GPIO="yes" 
-+      DRIVERS="$DRIVERS drv_mdm166a.o"
-+      GPIO="yes"
-       LIBUSB10="yes"
--      AC_DEFINE(WITH_MDM166A,1,[MDM166A driver]) 
--    else 
--      AC_MSG_WARN(libusb-1.0/libusb.h not found: MDM166A driver disabled) 
--    fi 
--fi 
-+      AC_DEFINE(WITH_MDM166A,1,[MDM166A driver])
-+    else
-+      AC_MSG_WARN(libusb-1.0/libusb.h not found: MDM166A driver disabled)
-+    fi
-+fi
- 
- if test "$MILINST" = "yes"; then
-    TEXT="yes"
-@@ -630,7 +631,7 @@ if test "$PICOLCDGRAPHIC" = "yes"; then
-    if test "$has_usb" = "true"; then
-       TEXT="yes"
-       GRAPHIC="yes"
--      KEYPAD="yes"      
-+      KEYPAD="yes"
-       GPIO="yes"
-       SERIAL="yes"
-       LIBUSB="yes"
-@@ -698,17 +699,17 @@ if test "$SERDISPLIB" = "yes"; then
-    fi
- fi
- 
--if test "$SHUTTLEVFD" = "yes"; then 
--   if test "$has_usb" = "true"; then 
--      TEXT="yes" 
--      GPIO="yes" 
--      DRIVERS="$DRIVERS drv_ShuttleVFD.o" 
--      LIBUSB="yes" 
--      AC_DEFINE(WITH_SHUTTLEVFD,1,[ShuttleVFD driver]) 
--    else 
--      AC_MSG_WARN(usb.h not found: ShuttleVFD driver disabled) 
--    fi 
--fi 
-+if test "$SHUTTLEVFD" = "yes"; then
-+   if test "$has_usb" = "true"; then
-+      TEXT="yes"
-+      GPIO="yes"
-+      DRIVERS="$DRIVERS drv_ShuttleVFD.o"
-+      LIBUSB="yes"
-+      AC_DEFINE(WITH_SHUTTLEVFD,1,[ShuttleVFD driver])
-+    else
-+      AC_MSG_WARN(usb.h not found: ShuttleVFD driver disabled)
-+    fi
-+fi
- 
- if test "$SIMPLELCD" = "yes"; then
-    TEXT="yes"
-@@ -786,7 +787,7 @@ fi
- if test "$VNC" = "yes"; then
-    if test "$has_vncserverlib" = "true"; then
-       GRAPHIC="yes"
--      KEYPAD="yes"      
-+      KEYPAD="yes"
-       DRIVERS="$DRIVERS drv_vnc.o"
-       DRVLIBS="$DRVLIBS -L/usr/local/lib -lvncserver -lz"
-       AC_DEFINE(WITH_VNC,1,[vnc driver])
-@@ -874,6 +875,12 @@ if test "$KEYPAD" = "yes"; then
-    DRIVERS="$DRIVERS drv_generic_keypad.o"
+@@ -940,6 +941,12 @@ if test "$LIBJPEG" = "yes"; then
+    DRVLIBS="$DRVLIBS -ljpeg"
  fi
  
 +# generic spidev driver
@@ -267,18 +181,10 @@
  # libusb
  if test "$LIBUSB" = "yes"; then
     DRVLIBS="$DRVLIBS -lusb"
-@@ -892,6 +899,6 @@ fi
- if test "$DRIVERS" = ""; then
-    AC_MSG_ERROR([You should include at least one driver...])
- fi
--   
-+
- AC_SUBST(DRIVERS)
- AC_SUBST(DRVLIBS)
 --- a/configure.in
 +++ b/configure.in
-@@ -108,6 +108,9 @@ fi
- #AC_CHECK_HEADERS(asm/io.h)
+@@ -118,6 +118,9 @@ AC_ARG_WITH(outb,
+ 
  AC_CHECK_HEADERS([asm/io.h] [linux/parport.h linux/ppdev.h], [has_parport="true"], [has_parport="false"])
  
 +# check for spidev

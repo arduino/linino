@@ -1,25 +1,25 @@
 --- a/drivers.m4
 +++ b/drivers.m4
-@@ -38,7 +38,7 @@ AC_ARG_WITH(
-   [                        LW_ABP, M50530, MatrixOrbital, MatrixOrbitalGX, MilfordInstruments, MDM166A,]
+@@ -39,7 +39,7 @@ AC_ARG_WITH(
    [                        Newhaven, Noritake, NULL, Pertelian, PHAnderson,]
    [                        PICGraphic, picoLCD, picoLCDGraphic, PNG, PPM, RouterBoard,]
--  [                        Sample, serdisplib, ShuttleVFD, SimpleLCD, st2205, T6963,]
-+  [                        Sample, serdisplib, ShuttleVFD, SimpleLCD, st2205, T6963, TEW673GRU]
-   [                        Trefon, ULA200, USBHUB, USBLCD, VNC, WincorNixdorf, X11],
+   [                        Sample, SamsungSPF, serdisplib, ShuttleVFD, SimpleLCD, st2205, T6963,]
+-  [                        TeakLCM, Trefon, ULA200, USBHUB, USBLCD, VNC, WincorNixdorf, X11],
++  [                        TeakLCM, TEW673GRU, Trefon, ULA200, USBHUB, USBLCD, VNC, WincorNixdorf, X11],
    drivers=$withval,
    drivers=all
-@@ -104,6 +104,7 @@ for driver in $drivers; do
+ )
+@@ -107,6 +107,7 @@ for driver in $drivers; do
  	 SHUTTLEVFD="yes"
           SIMPLELCD="yes"
           T6963="yes"
 +         TEW673GRU="yes"
+          TeakLCM="yes"
           Trefon="yes"
           ULA200="yes"
- 	 USBHUB="yes"
-@@ -244,6 +245,9 @@ for driver in $drivers; do
-       T6963)
-          T6963=$val
+@@ -260,6 +261,9 @@ for driver in $drivers; do
+       TeakLCM)
+          TeakLCM=$val
           ;;
 +      TEW673GRU)
 +         TEW673GRU=$val
@@ -27,8 +27,8 @@
        Trefon)
           Trefon=$val
           ;;
-@@ -740,6 +744,18 @@ if test "$T6963" = "yes"; then
-    fi
+@@ -800,6 +804,18 @@ if test "$TeakLCM" = "yes"; then
+    AC_DEFINE(WITH_TEAK_LCM,1,[TeakLCM driver])
  fi
  
 +if test "$TEW673GRU" = "yes"; then
@@ -48,17 +48,17 @@
        TEXT="yes"
 --- a/drv.c
 +++ b/drv.c
-@@ -89,6 +89,7 @@ extern DRIVER drv_serdisplib;
+@@ -92,6 +92,7 @@ extern DRIVER drv_serdisplib;
  extern DRIVER drv_ShuttleVFD;
  extern DRIVER drv_SimpleLCD;
  extern DRIVER drv_T6963;
 +extern DRIVER drv_TEW673GRU;
+ extern DRIVER drv_TeakLCM;
  extern DRIVER drv_Trefon;
  extern DRIVER drv_ula200;
- extern DRIVER drv_USBHUB;
-@@ -232,6 +233,9 @@ DRIVER *Driver[] = {
- #ifdef WITH_T6963
-     &drv_T6963,
+@@ -248,6 +249,9 @@ DRIVER *Driver[] = {
+ #ifdef WITH_TEAK_LCM
+     &drv_TeakLCM,
  #endif
 +#ifdef WITH_TEW673GRU
 +    &drv_TEW673GRU,
@@ -68,10 +68,10 @@
  #endif
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -115,6 +115,7 @@ drv_serdisplib.c              \
- drv_ShuttleVFD.c              \
+@@ -117,6 +117,7 @@ drv_ShuttleVFD.c              \
  drv_SimpleLCD.c               \
  drv_T6963.c                   \
+ drv_TeakLCM.c                 \
 +drv_TEW673GRU.c               \
  drv_Trefon.c                  \
  drv_ula200.c                  \
@@ -538,8 +538,8 @@
 +};
 --- a/lcd4linux.conf.sample
 +++ b/lcd4linux.conf.sample
-@@ -547,6 +547,12 @@ Display VNC {
-     HttpPort	 '5800'
+@@ -571,6 +571,11 @@ Display FutabaVFD {
+     }
  }
  
 +Display TEW673GRU {
@@ -547,7 +547,6 @@
 +    Font         '6x8'
 +    Port         '/dev/spidev1.0'
 +}
-+
+ 
  #Plugin KVV {
  #    StationID '12_701'
- #    Refresh 30
