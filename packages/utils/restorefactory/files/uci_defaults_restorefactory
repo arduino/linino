@@ -1,6 +1,6 @@
 #!/bin/sh
 
-uci -q show system.@restorefactory[0]) || {
+uci -q show system.@restorefactory[0] || {
 	uci add system restorefactory
 	uci set system.@restorefactory[0].button=reset
 	uci set system.@restorefactory[0].action=pressed
