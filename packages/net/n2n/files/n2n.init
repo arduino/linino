@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2008-2011 OpenWrt.org
+# Copyright (C) 2008-2012 OpenWrt.org
 
 START=90
 
@@ -46,7 +46,7 @@ stop_instance() {
 start() {
 	config_load 'n2n'
 	config_foreach start_instance 'edge'
-	config_foreach start_instance 'superndoe'
+	config_foreach start_instance 'supernode'
 }
 
 stop() {
