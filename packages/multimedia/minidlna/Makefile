@@ -16,6 +16,7 @@ PKG_SOURCE_URL:=@SF/minidlna
 PKG_MD5SUM:=be9b4c91e3fcde592dc3f9828098ca0f
 
 PKG_BUILD_PARALLEL:=0
+PKG_BUILD_DEPENDS:=util-linux
 
 include $(INCLUDE_DIR)/kernel.mk
 include $(INCLUDE_DIR)/package.mk
