@@ -29,11 +29,19 @@ define Package/tayga/description
   kernel, which is the same driver used by OpenVPN and QEMU/KVM.
 endef
 
-define Package/tayga/install
+# TODO: port scripts to netifd
+ifdef CONFIG_PACAKGE_netifd
+  define Package/tayga/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tayga $(1)/usr/sbin/
+  endef
+else
+  define Package/tayga/install
 	$(INSTALL_DIR) $(1)/usr/sbin $(1)/lib/network $(1)/etc/hotplug.d/iface
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tayga $(1)/usr/sbin/
 	$(INSTALL_DATA) ./files/tayga.sh $(1)/lib/network/tayga.sh
 	$(INSTALL_DATA) ./files/tayga.hotplug $(1)/etc/hotplug.d/iface/95-tayga
-endef
+  endef
+endif
 
 $(eval $(call BuildPackage,tayga))
