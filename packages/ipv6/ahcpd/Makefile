@@ -46,8 +46,6 @@ define Package/ahcpd/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ahcpd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_CONF) ./files/ahcpd.config $(1)/etc/config/ahcpd
-	$(INSTALL_DIR) $(1)/lib/network
-	$(INSTALL_BIN) ./files/ahcp.sh $(1)/lib/network/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/ahcpd.init $(1)/etc/init.d/ahcpd
 endef
