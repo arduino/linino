@@ -1,39 +1,56 @@
-find_gw() {
-	route -n | awk '$1 == "0.0.0.0" { print $2; exit }'
+#!/bin/sh
+. /etc/functions.sh
+. ../netifd-proto.sh
+init_proto "$@"
+
+proto_openconnect_init_config() {
+	proto_config_add_string "server"
+	proto_config_add_int "port"
+	proto_config_add_string "username"
+	proto_config_add_string "cookie"
+	proto_config_add_string "password"
+	no_device=1
+	available=1
 }
 
-scan_openconnect() {
-	config_set "$1" device "vpn-$1"
-}
-
-stop_interface_openconnect() {
+proto_openconnect_setup() {
 	local config="$1"
-	local lock="/var/lock/openconnect-$config"
 
-        uci_set_state network "$config" up 0
+	json_get_vars server port username cookie password
 
-	lock "$lock"
+	grep -q tun /proc/modules || insmod tun
 
-	SERVICE_PID_FILE="/var/run/openconnect-${config}.pid" \
-	  SERVICE_SIG=HUP service_stop /bin/sh
+	serv_addr=
+	for ip in $(resolveip -t 5 "$server"); do
+		proto_add_host_dependency "$config" "$server"
+		serv_addr=1
+	done
+	[ -n "$serv_addr" ] || {
+		echo "Could not resolve server address"
+		sleep 5
+		proto_setup_failed "$config"
+		exit 1
+	}
 
-	remove_dns "$config"
+	[ -n "$port" ] && port=":$port"
 
-	lock -u "$lock"
+	cmdline="$server$port -i vpn-$config --no-cert-check --non-inter --syslog --script /lib/netifd/vpnc-script"
+
+	[ -n "$cookie" ] && append cmdline "-C $cookie"
+	[ -n "$username" ] && append cmdline "-u $username"
+	[ -n "$password" ] && {
+		umask 077
+		pwfile="/var/run/openconnect-$config.passwd"
+		echo "$password" > "$pwfile"
+		append cmdline "--passwd-file=$pwfile"
+	}
+
+	proto_export INTERFACE="$config"
+	proto_run_command "$config" /usr/sbin/openconnect $cmdline
 }
 
-setup_interface_openconnect() {
-	local config="$2"
-
-	/sbin/insmod tun 2>&- >&-
-
-	# creating the tunnel below will trigger a net subsystem event
-        # prevent it from touching or iface by disabling .auto here
-        uci_set_state network "$config" ifname "vpn-$config"
-        uci_set_state network "$config" auto 0
-        uci_set_state network "$config" up 1
-
-	SERVICE_PID_FILE="/var/run/openconnect-${config}.pid" \
-          SERVICE_WRITE_PID=1  SERVICE_DAEMONIZE=1 \
-        service_start /usr/sbin/run-openconnect $config
+proto_openconnect_teardown() {
+	proto_kill_command "$config"
 }
+
+add_protocol openconnect

@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openconnect
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libxml2 +libopenssl +kmod-tun +vpnc-scripts
+  DEPENDS:=+libxml2 +libopenssl +kmod-tun +resolveip +!PACKAGE_netifd:vpnc-scripts
   TITLE:=VPN client for Cisco's AnyConnect SSL VPN
   URL:=http://www.infradead.org/openconnect/
   SUBMENU:=VPN
@@ -35,13 +35,26 @@ define Package/openconnect/description
 endef
 
 CONFIGURE_ARGS+=--disable-shared
+ifdef CONFIG_PACKAGE_netifd
+  CONFIGURE_ARGS += --with-vpnc-script=/lib/netifd/vpnc-script
 
-define Package/openconnect/install
-	$(INSTALL_DIR) $(1)/lib/network
-	$(INSTALL_BIN) ./files/openconnect.sh $(1)/lib/network/
+  define Package/openconnect/install
+	$(INSTALL_DIR) $(1)/lib/netifd/proto
+	$(INSTALL_BIN) ./files/openconnect.sh $(1)/lib/netifd/proto/
+	$(INSTALL_BIN) ./files/vpnc-script $(1)/lib/netifd/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) ./files/run-openconnect $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/openconnect $(1)/usr/sbin/
-endef
+  endef
+else
+  CONFIGURE_ARGS += --with-vpnc-script=/etc/vpnc/vpnc-script
+
+  define Package/openconnect/install
+	$(INSTALL_DIR) $(1)/lib/network
+	$(INSTALL_BIN) ./files.old/openconnect.sh $(1)/lib/network/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) ./files.old/run-openconnect $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/openconnect $(1)/usr/sbin/
+  endef
+endif
 
 $(eval $(call BuildPackage,openconnect))
