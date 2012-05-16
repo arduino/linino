@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openvpn
 PKG_VERSION:=2.2.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://swupdate.openvpn.net/community/releases @SF/openvpn
@@ -55,6 +55,7 @@ CONFIGURE_ARGS+= \
 	--with-ifconfig-path=/sbin/ifconfig \
 	--with-iproute-path=/usr/sbin/ip \
 	--with-route-path=/sbin/route \
+	--enable-password-save \
 	--disable-debug \
 	--disable-plugins \
 	--disable-pthread \
