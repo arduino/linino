@@ -66,11 +66,6 @@ config OPENVPN_DISABLE_PORT_SHARE
 	depends on PACKAGE_openvpn
 	default n
 
-config OPENVPN_ENABLE_PASSWORD_SAVE
-	bool "Allow --askpass and --auth-user-pass passwords to be read from a file"
-	depends on PACKAGE_openvpn
-	default n
-
 config OPENVPN_DISABLE_DEF_AUTH
 	bool "Disable deferred authentication"
 	depends on PACKAGE_openvpn

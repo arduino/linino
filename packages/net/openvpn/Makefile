@@ -128,11 +128,6 @@ CONFIGURE_ARGS += \
 	--disable-port-share
 endif
 
-ifeq ($(CONFIG_OPENVPN_ENABLE_PASSWORD_SAVE),y)
-CONFIGURE_ARGS += \
-	--enable-password-save
-endif
-
 ifeq ($(CONFIG_OPENVPN_DISABLE_DEF_AUTH),y)
 CONFIGURE_ARGS += \
 	--disable-def-auth
