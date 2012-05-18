@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bluelog
-PKG_VERSION:=1.0.2
+PKG_VERSION:=1.0.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.digifail.com/downloads/software/bluelog
-PKG_MD5SUM:=f406d47ec94970be219cbb38f49402f9
+PKG_MD5SUM:=cbbb5a7d04ac7160f3f7389e05cd4257
 
 PKG_INSTALL:=1
 
