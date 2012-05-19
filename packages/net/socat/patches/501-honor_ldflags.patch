@@ -1,6 +1,6 @@
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -37,7 +37,8 @@
+@@ -38,7 +38,8 @@ INSTALL = @INSTALL@
  
  #0 CFLAGS = @CFLAGS@ $(CCOPTS) $(DEFS) $(INCLS)
  CFLAGS = @CFLAGS@ $(CCOPTS) $(DEFS) $(CPPFLAGS)

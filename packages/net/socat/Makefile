@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=socat
-PKG_VERSION:=1.7.1.3
-PKG_RELEASE:=2
+PKG_VERSION:=1.7.2.1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.dest-unreach.org/socat/download/
-PKG_MD5SUM:=2081987fb0cb0290b8105574058cb329
+PKG_SOURCE_URL:=http://www.dest-unreach.org/socat/download
+PKG_MD5SUM:=7ddfea7e9e85f868670f94d3ea08358b
 
 PKG_INSTALL:=1
 
@@ -36,19 +36,17 @@ define Package/socat/description
 	many more options.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--disable-libwrap \
-		--disable-readline \
-		--disable-openssl \
-		--enable-termios \
-		, \
-		sc_cv_termios_ispeed="no" \
-		sc_cv_sys_crdly_shift=9 \
-		sc_cv_sys_tabdly_shift=11 \
-		sc_cv_sys_csize_shift=4 \
-	)
-endef
+CONFIGURE_ARGS += \
+	--disable-libwrap \
+	--disable-readline \
+	--disable-openssl \
+	--enable-termios
+
+CONFIGURE_VARS += \
+	sc_cv_termios_ispeed="no" \
+	sc_cv_sys_crdly_shift=9 \
+	sc_cv_sys_tabdly_shift=11 \
+	sc_cv_sys_csize_shift=4
 
 define Package/socat/install
 	$(INSTALL_DIR) $(1)/usr/bin
