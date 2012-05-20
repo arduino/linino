@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnuplot
-PKG_VERSION:=4.4.4
+PKG_VERSION:=4.6.0
 PKG_RELEASE:=1
 
 PKG_INSTALL:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/gnuplot
-PKG_MD5SUM:=97a43328e81e57ebed7f135ca0c07e82
+PKG_MD5SUM:=8e6e92b4596ea0eb75e16a57fc79efec
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -49,7 +49,8 @@ CONFIGURE_ARGS += \
 	--without-row-help \
 	--without-lisp-files \
 	--disable-wxwidgets \
-	--without-lua
+	--without-lua \
+	--without-cairo
 
 define Package/gnuplot/install
 	$(INSTALL_DIR) $(1)/usr/bin
