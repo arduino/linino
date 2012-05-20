@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011 OpenWrt.org
+# Copyright (C) 2011-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libevent2
-PKG_VERSION:=2.0.16
+PKG_VERSION:=2.0.19
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libevent-$(PKG_VERSION)-stable
 PKG_SOURCE:=libevent-$(PKG_VERSION)-stable.tar.gz
 PKG_SOURCE_URL:=http://www.monkey.org/~provos/ \
 	@SF/levent
-PKG_MD5SUM:=899efcffccdb3d5111419df76e7dc8df
+PKG_MD5SUM:=91111579769f46055b0a438f5cc59572
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
