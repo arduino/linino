@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=setpwc
-PKG_VERSION:=1.2
+PKG_VERSION:=1.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
-PKG_SOURCE_URL:=http://www.vanheusden.com/setpwc/
-PKG_MD5SUM:=1bc721cdfcbac24027e2afc93685d29f
+PKG_SOURCE_URL:=http://www.vanheusden.com/setpwc
+PKG_MD5SUM:=79d5ee468c0076feb3cac473bef661d2
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,6 +22,7 @@ define Package/setpwc
   CATEGORY:=Utilities
   TITLE:=Philips (and compatibles) WebCams (PWC) control utility
   URL:=http://www.vanheusden.com/setpwc/
+  DEPENDS:=+kmod-video-pwc
 endef
 
 define Package/setpwc/description
@@ -29,11 +30,11 @@ define Package/setpwc/description
 	compatibles) WebCams with the 'PWC chipset'.
 endef
 
-define Build/Compile		
-	$(TARGET_CC) $(TARGET_CFLAGS) -DVERSION=\"$(PKG_VERSION)\" -o $(PKG_BUILD_DIR)/setpwc $(PKG_BUILD_DIR)/setpwc.c 
+define Build/Compile
+	$(TARGET_CC) $(TARGET_CFLAGS) -DVERSION=\"$(PKG_VERSION)\" -o $(PKG_BUILD_DIR)/setpwc $(PKG_BUILD_DIR)/setpwc.c
 endef
 
-define Package/setpwc/install	
+define Package/setpwc/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/setpwc $(1)/usr/bin/
 endef
