@@ -152,7 +152,7 @@
   * socket. The listener provides the protocol-specific accept() function to
 --- a/src/cfgparse.c
 +++ b/src/cfgparse.c
-@@ -1464,6 +1464,16 @@ int cfg_parse_listen(const char *file, i
+@@ -1466,6 +1466,16 @@ int cfg_parse_listen(const char *file, i
  #endif
  			}
  
@@ -169,7 +169,7 @@
  			if (!strcmp(args[cur_arg], "name")) {
  				struct listener *l;
  
-@@ -1516,7 +1526,7 @@ int cfg_parse_listen(const char *file, i
+@@ -1518,7 +1528,7 @@ int cfg_parse_listen(const char *file, i
  				continue;
  			}
  
@@ -178,7 +178,7 @@
  			      file, linenum, args[0]);
  			err_code |= ERR_ALERT | ERR_FATAL;
  			goto out;
-@@ -5710,6 +5720,9 @@ out_uri_auth_compat:
+@@ -5731,6 +5741,9 @@ out_uri_auth_compat:
  			listener->handler = process_session;
  			listener->analysers |= curproxy->fe_req_ana;
  
@@ -392,7 +392,7 @@
   */
 --- a/src/proto_http.c
 +++ b/src/proto_http.c
-@@ -4029,7 +4029,8 @@ void http_end_txn_clean_session(struct s
+@@ -4087,7 +4087,8 @@ void http_end_txn_clean_session(struct s
  	if (s->rep->lr >= s->rep->data + s->rep->size)
  		s->rep->lr -= s->req->size;
  
@@ -402,7 +402,7 @@
  	s->rep->analysers = 0;
  
  	http_silent_debug(__LINE__, s);
-@@ -7562,7 +7563,6 @@ void http_reset_txn(struct session *s)
+@@ -7624,7 +7625,6 @@ void http_reset_txn(struct session *s)
  	http_init_txn(s);
  
  	s->be = s->fe;
