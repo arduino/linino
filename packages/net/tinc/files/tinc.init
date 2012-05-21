@@ -98,11 +98,12 @@ prepare_host() {
 
 	# append flags
 	append_conf_bools "$s" "$TMP_TINC/$n/hosts/$s" \
-		ClampMSS IndirectData PMTUDiscovery
+		ClampMSS IndirectData PMTUDiscovery TCPOnly
 
 	# append params
 	append_conf_params "$s" "$TMP_TINC/$n/hosts/$s" \
-		Address Cipher Compression Digest MACLength PMTU Port Subnet
+		Address Cipher Compression Digest MACLength PMTU \
+		Port PublicKey PublicKeyFile Subnet
 }
 
 check_gen_own_key() {
@@ -139,17 +140,20 @@ prepare_net() {
 
 	# append flags
 	append_conf_bools "$s" "$TMP_TINC/$s/tinc.conf" \
-		DirectOnly Hostnames IffOneQueue PriorityInheritance \
-		StrictSubnets TunnelServer \
-		ClampMSS IndirectData PMTUDiscovery
+		DecrementTTL DirectOnly Hostnames IffOneQueue \
+		LocalDiscovery PriorityInheritance StrictSubnets TunnelServer \
+		ClampMSS IndirectData PMTUDiscovery TCPOnly
 
 	# append params
 	append_conf_params "$s" "$TMP_TINC/$s/tinc.conf" \
 		AddressFamily BindToAddress ConnectTo BindToInterface \
-		Forwarding GraphDumpFile Interface KeyExpire MACExpire \
-		MaxTimeout Mode Name PingInterval PingTimeout PrivateKeyFile \
-		ProcessPriority ReplayWindow UDPRcvBuf UDPSndBuf \
-		Address Cipher Compression Digest MACLength PMTU Port Subnet
+		Broadcast Device DeviceType Forwarding \
+		GraphDumpFile Interface KeyExpire MACExpire \
+		MaxTimeout Mode Name PingInterval PingTimeout \
+		PrivateKey PrivateKeyFile ProcessPriority ReplayWindow \
+		UDPRcvBuf UDPSndBuf \
+		Address Cipher Compression Digest MACLength PMTU \
+		Port PublicKey PublicKeyFile Subnet
 
 	check_gen_own_key "$s" && return 0
 }
