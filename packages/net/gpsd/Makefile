@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,22 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gpsd
-PKG_REV:=ffcc14068ada0d565f237efa56c7cd723847ca04
-PKG_VERSION:=3.5-20120414
-#PKG_VERSION:=20110917
-PKG_RELEASE:=5
+PKG_VERSION:=3.6
+PKG_RELEASE:=1
 
-#PKG_SOURCE_URL:=http://download-mirror.savannah.gnu.org/releases/gpsd/
-#PKG_MD5SUM:=c01353459faa68834309109d4e868460
-
-#PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=git://git.sv.gnu.org/gpsd.git
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://download-mirror.savannah.gnu.org/releases/gpsd
+PKG_MD5SUM:=064a5ad75593f8c3ea3fe85010647832
 
-PKG_BUILD_DEPENDS:=libncurses
+PKG_BUILD_DEPENDS:=libncurses libusb-1.0
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/scons.mk
@@ -60,23 +52,25 @@ define Package/gpsd/description
   This package contains the GPS daemon.
 endef
 
-define Package/cgps
+define Package/gpsd-clients
   $(call Package/gpsd/Default)
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS+= +libgps +libncurses
-  TITLE:=Test client for gpsd
+  DEPENDS+= +libgps +libgpsd +libncurses
+  TITLE:=GPS tools and clients
 endef
 
-define Package/cgps/description
+define Package/gpsd-clients/description
   $(call Package/gpsd/Default/description)
-  This package contains a GPS test client.
+  This package contains auxiliary tools and example clients for monitoring and
+  testing the GPS daemon.
 endef
 
 define Package/libgps
   $(call Package/gpsd/Default)
   SECTION:=libs
   CATEGORY:=Libraries
+  DEPENDS+= +libcap
   TITLE:=C service library for communicating with the GPS daemon
 endef
 
@@ -89,6 +83,7 @@ define Package/libgpsd
   $(call Package/gpsd/Default)
   SECTION:=libs
   CATEGORY:=Libraries
+  DEPENDS+= +libcap +libusb-1.0
   TITLE:=C service library for GPS applications
 endef
 
@@ -113,8 +108,8 @@ SCONS_OPTIONS += \
 	bluez=no \
 	strip=no \
 	python=no \
-	usb=no \
-	implicit_link=no
+	implicit_link=no \
+	chrpath=no
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
@@ -138,9 +133,14 @@ define Package/gpsd/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/gpsd $(1)/usr/sbin/
 endef
 
-define Package/cgps/install
+define Package/gpsd-clients/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/cgps $(1)/usr/bin/
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/bin/cgps \
+		$(PKG_INSTALL_DIR)/usr/bin/gps{ctl,decode,mon,pipe} \
+		$(PKG_INSTALL_DIR)/usr/bin/gpxlogger \
+		$(PKG_INSTALL_DIR)/usr/bin/lcdgps \
+		$(1)/usr/bin/
 endef
 
 define Package/libgps/install
@@ -154,6 +154,6 @@ define Package/libgpsd/install
 endef
 
 $(eval $(call BuildPackage,gpsd))
-$(eval $(call BuildPackage,cgps))
+$(eval $(call BuildPackage,gpsd-clients))
 $(eval $(call BuildPackage,libgps))
 $(eval $(call BuildPackage,libgpsd))
