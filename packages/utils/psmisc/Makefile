@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=psmisc
-PKG_VERSION:=22.14
-PKG_RELEASE:=2
+PKG_VERSION:=22.16
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/psmisc
-PKG_MD5SUM:=ba3f4e971895c92bba7770d81c981503
+PKG_MD5SUM:=d52caf26159c905574c2ce4bd792b9ee
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -33,10 +33,13 @@ define Package/psmisc/description
  the proc filesystem: fuser, killall, pstree, and prtstat
 endef
 
+CONFIGURE_ARGS += \
+	--disable-harden-flags
+
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS)" \
 	CPPFLAGS="$(TARGET_CPPFLAGS)" \
-	LDFLAGS="$(TARGET_LDFLAGS)" \
+	LDFLAGS="$(TARGET_LDFLAGS)"
 
 define Package/psmisc/preinst
 #!/bin/sh
