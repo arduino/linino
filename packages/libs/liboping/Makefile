@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,18 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=liboping
-PKG_VERSION:=1.6.1
+PKG_VERSION:=1.6.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://verplant.org/liboping/files
-PKG_MD5SUM:=748554a18e1771913f4f402ee9f957c9
+PKG_MD5SUM:=64a6f31310093d2517cfe7f05aa011e0
 
 PKG_FIXUP:=libtool
 
 PKG_INSTALL:=1
 
-include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/liboping/Default
