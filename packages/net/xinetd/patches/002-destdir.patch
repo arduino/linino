@@ -1,6 +1,6 @@
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -75,15 +75,15 @@
+@@ -75,15 +75,15 @@ dlibxlog: dlibsio dlibstr
  
  install: build
  	for i in $(DAEMONDIR) $(BINDIR) $(MANDIR)/man5 $(MANDIR)/man8 ; do \

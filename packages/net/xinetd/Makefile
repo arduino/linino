@@ -1,5 +1,5 @@
-# 
-# Copyright (C) 2006-2011 OpenWrt.org
+#
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xinetd
-PKG_VERSION:=2.3.14
-PKG_RELEASE:=3
+PKG_VERSION:=2.3.15
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.xinetd.org/
-PKG_MD5SUM:=567382d7972613090215c6c54f9b82d9
+PKG_SOURCE_URL:=http://www.xinetd.org
+PKG_MD5SUM:=77358478fd58efa6366accae99b8b04c
+
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -38,22 +40,14 @@ endef
 
 TARGET_CFLAGS += -DNO_RPC
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--without-libwrap \
-		--with-loadavg \
-		, \
-		ac_cv_header_rpc_pmap_clnt_h=no \
-		ac_cv_header_rpc_rpc_h=no \
-		ac_cv_header_rpc_rpcent_h=no \
-	)
-endef
+CONFIGURE_ARGS += \
+	--without-libwrap \
+	--with-loadavg
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		build install
-endef
+CONFIGURE_VARS += \
+	ac_cv_header_rpc_pmap_clnt_h=no \
+	ac_cv_header_rpc_rpc_h=no \
+	ac_cv_header_rpc_rpcent_h=no
 
 define Package/xinetd/install
 	$(INSTALL_DIR) $(1)/usr/sbin

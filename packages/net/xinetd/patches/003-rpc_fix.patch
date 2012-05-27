@@ -1,6 +1,6 @@
 --- a/xinetd/confparse.c
 +++ b/xinetd/confparse.c
-@@ -716,7 +716,7 @@ static status_e check_entry( struct serv
+@@ -745,7 +745,7 @@ static status_e check_entry( struct serv
  	   }
     }
  
@@ -9,7 +9,7 @@
  #if defined(HAVE_RPC_RPCENT_H) || defined(HAVE_NETDB_H)
     if ( SC_IS_RPC( scp ) && !SC_IS_UNLISTED( scp ) )
     {
-@@ -730,6 +730,7 @@ static status_e check_entry( struct serv
+@@ -759,6 +759,7 @@ static status_e check_entry( struct serv
        SC_RPCDATA( scp )->rd_program_number = rep->r_number ;
     }
     else

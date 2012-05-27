@@ -1,6 +1,6 @@
 --- a/libs/src/misc/Makefile.in
 +++ b/libs/src/misc/Makefile.in
-@@ -62,7 +62,7 @@
+@@ -62,7 +62,7 @@ libopt: clean
  
  
  $(LIBNAME): $(OBJECTS)
@@ -11,7 +11,7 @@
  install: $(LIBNAME)
 --- a/libs/src/portable/Makefile.in
 +++ b/libs/src/portable/Makefile.in
-@@ -57,7 +57,7 @@
+@@ -57,7 +57,7 @@ libopt: clean
  
  
  $(LIBNAME): $(OBJECTS)
@@ -22,7 +22,7 @@
  install: $(LIBNAME)
 --- a/libs/src/pset/Makefile.in
 +++ b/libs/src/pset/Makefile.in
-@@ -53,7 +53,7 @@
+@@ -53,7 +53,7 @@ libopt: clean
  	mv $(LIBNAME) $(LIBDIR)/optimized
  
  $(LIBNAME): $(OBJECTS)
@@ -33,7 +33,7 @@
  install: $(LIBNAME)
 --- a/libs/src/sio/Makefile.in
 +++ b/libs/src/sio/Makefile.in
-@@ -52,7 +52,7 @@
+@@ -52,7 +52,7 @@ libopt: clean
  	$(INSTALL) $(FMODE) $(LIBNAME) $(LIBDIR)/optimized
  
  $(LIBNAME): $(OBJECTS)
@@ -44,7 +44,7 @@
  install: $(LIBNAME)
 --- a/libs/src/str/Makefile.in
 +++ b/libs/src/str/Makefile.in
-@@ -63,7 +63,7 @@
+@@ -63,7 +63,7 @@ libopt: clean
  	$(INSTALL) $(FMODE) $(LIBNAME) $(LIBDIR)-O
  
  $(LIBNAME): $(OBJECTS)
@@ -55,7 +55,7 @@
  LINT_IGNORE=possible pointer alignment|RCSid unused
 --- a/libs/src/xlog/Makefile.in
 +++ b/libs/src/xlog/Makefile.in
-@@ -58,7 +58,7 @@
+@@ -58,7 +58,7 @@ libopt: clean
  	$(INSTALL) $(FMODE) $(LIBNAME) $(LIBDIR)/optimized
  
  $(LIBNAME): $(OBJECTS)
