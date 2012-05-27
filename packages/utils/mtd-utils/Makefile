@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2009-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,75 +8,68 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mtd-utils
-PKG_REV:=a2d010f8fca904fffa3c6e5a5d148cc96a37a08a
-PKG_VERSION:=20090227
-PKG_RELEASE:=2
+PKG_REV:=5319b84974fcb71504aed2d1b8285e9c0a4a4bb8
+PKG_VERSION:=1.4.5
+PKG_RELEASE:=1
 PKG_INSTALL:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=git://git.infradead.org/mtd-utils.git
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 
+PKG_BUILD_DEPENDS:=util-linux
+
 include $(INCLUDE_DIR)/package.mk
 
 FILES:= \
-	ubiupdatevol \
-	flash_otp_info \
-	nandtest \
-	ubimkvol \
-	ubigen \
-	serve_image \
-	recv_image \
-	ubinfo \
-	ubirename \
-	mkpfi \
-	nandwrite \
-	flash_eraseall \
-	mkbootenv \
-	ftl_format \
-	nand2bin \
-	ubiattach \
-	nftl_format \
-	nanddump \
-	ubinize \
-	docfdisk \
-	ubimirror \
-	ubicrc32.pl \
-	ftl_check \
-	flashcp \
-	jffs2dump \
-	ubiformat \
-	ubidetach \
-	flash_lock \
-	bin2nand \
-	pfiflash \
-	mtd_debug \
-	pddcustomize \
-	flash_unlock \
 	doc_loadbios \
-	nftldump \
-	mkfs.jffs2 \
-	flash_info \
-	ubicrc32 \
-	ubirmvol \
-	unubi \
-	pfi2bin \
-	mkfs.ubifs \
-	sumtool \
+	docfdisk \
 	flash_erase \
-	rfddump \
+	flash_eraseall \
+	flash_info \
+	flash_lock \
 	flash_otp_dump \
-	rfdformat
+	flash_otp_info \
+	flash_unlock \
+	flashcp \
+	ftl_check \
+	ftl_format \
+	jffs2dump \
+	mkfs.jffs2 \
+	mkfs.ubifs:+libuuid \
+	mtd_debug \
+	mtdinfo \
+	nanddump \
+	nandtest \
+	nandwrite \
+	nftldump \
+	nftl_format \
+	recv_image \
+	rfddump \
+	rfdformat \
+	serve_image \
+	sumtool \
+	ubiattach \
+	ubicrc32 \
+	ubidetach \
+	ubiformat \
+	ubimkvol \
+	ubinfo \
+	ubinize \
+	ubirename \
+	ubirmvol \
+	ubirsvol \
+	ubiupdatevol
 
 define PartGen
-define Package/mtd-utils-$(subst _,-,$(1))
-  TITLE:=MTD $(1)
+define Package/mtd-utils-$(subst _,-,$(firstword $(subst :, ,$(1))))
+  TITLE:=$(firstword $(subst :, ,$(1))) package from mtd-utils
   URL:=http://www.linux-mtd.infradead.org/
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=mtd-utils +zlib +liblzo +libuuid
+  DEPENDS:=mtd-utils $(wordlist 2,$(words $(subst :, ,$(1))),$(subst :, ,$(1)))
 endef
 endef
 
@@ -84,6 +77,7 @@ define Package/mtd-utils
   TITLE:=Utilities for flash info/debug
   SECTION:=utils
   CATEGORY:=Utilities
+  URL:=http://www.linux-mtd.infradead.org/
   MENU:=1
 endef
 
@@ -101,15 +95,16 @@ MAKE_FLAGS += \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
 	BUILDDIR="$(PKG_BUILD_DIR)" \
 	LDLIBS+="$(LIBGCC_S)" \
-	WITHOUT_XATTR=1
+	WITHOUT_XATTR=1 \
+	WITHOUT_LZO=1
 
 define PartInstall
-define Package/mtd-utils-$(subst _,-,$(1))/install
+define Package/mtd-utils-$(subst _,-,$(firstword $(subst :, ,$(1))))/install
 	$(INSTALL_DIR) \
 		$$(1)/usr/sbin
 
 	$(INSTALL_BIN) \
-		$(PKG_INSTALL_DIR)/usr/sbin/$(1) \
+		$(PKG_INSTALL_DIR)/usr/sbin/$(firstword $(subst :, ,$(1))) \
 		$$(1)/usr/sbin/
 endef
 endef
@@ -117,4 +112,4 @@ endef
 $(foreach file,$(FILES),$(eval $(call PartInstall,$(file))))
 
 $(eval $(call BuildPackage,mtd-utils))
-$(foreach file,$(FILES),$(eval $(call BuildPackage,mtd-utils-$(subst _,-,$(file)))))
+$(foreach file,$(FILES),$(eval $(call BuildPackage,mtd-utils-$(subst _,-,$(firstword $(subst :, ,$(file)))))))
