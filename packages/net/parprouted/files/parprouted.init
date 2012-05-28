@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 
 START=50
 
@@ -11,9 +11,9 @@ section_enabled() {
 
 append_interface() {
 	local name="$1"
-	local interface
-	config_get interface "$name" 'ifname' "$name"
-	append args "$interface"
+	local device
+	network_get_device device "$name"
+	append args "${device:-$name}"
 }
 
 start_instance() {
@@ -33,8 +33,8 @@ start_instance() {
 }
 
 start() {
-	include /lib/network
-	scan_interfaces
+	. /lib/network/functions.sh
+
 	config_load 'parprouted'
 	config_foreach start_instance 'parprouted'
 }
