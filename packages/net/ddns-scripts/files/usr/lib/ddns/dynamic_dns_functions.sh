@@ -8,8 +8,8 @@
 
 
 
-. /etc/functions.sh
-include /lib/network
+. /lib/functions.sh
+. /lib/functions/network.sh
 
 
 #loads all options for a given package and section
@@ -64,13 +64,13 @@ get_current_ip()
 		then
 			ip_network="wan"
 		fi
-		scan_interfaces
-		config_load /var/state/network
-		config_get ip_interface $ip_network ifname
 	fi
 
 	current_ip='';
-	if [ "$ip_source" = "network" ] || [ "$ip_source" = "interface" ]
+	if [ "$ip_source" = "network" ]
+	then
+		network_get_ipaddr current_ip "$ip_network" || return
+	elif [ "$ip_source" = "interface" ]
 	then
 		current_ip=$(ifconfig $ip_interface | grep -o 'inet addr:[0-9.]*' | grep -o "$ip_regex")
 	elif [ "$ip_source" = "script" ]
