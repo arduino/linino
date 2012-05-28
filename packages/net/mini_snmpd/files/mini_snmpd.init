@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 
 START=50
 
@@ -13,9 +13,9 @@ append_disk() {
 
 append_interface() {
 	local name="$1"
-	local interface
-	config_get interface "$name" 'ifname' "$name"
-	append interfaces "$interface" ','
+	local device
+	network_get_device device "$name"
+	append interfaces "${device:-$name}" ','
 }
 
 append_string() {
@@ -54,8 +54,8 @@ start_instance() {
 }
 
 start() {
-	include /lib/network
-	scan_interfaces
+	. /lib/functions/network.sh
+
 	config_load 'mini_snmpd'
 	config_foreach start_instance 'mini_snmpd'
 }
