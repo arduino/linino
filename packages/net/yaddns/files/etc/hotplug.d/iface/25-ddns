@@ -5,8 +5,8 @@ YADDNS_PID=/var/run/yaddns.pid
 
 prepare_yaddns_conf ()
 {
-	. /etc/functions.sh
-	include /lib/network
+	. /lib/functions.sh
+	. /lib/functions/network.sh
 
 	> $YADDNS_CONF
 
@@ -33,9 +33,7 @@ prepare_yaddns_conf ()
 					if [ -z "$ip_network" ]; then
 						ip_network="wan"
 					fi
-					scan_interfaces
-					config_load /var/state/network
-					config_get ip_interface $ip_network ifname
+					network_get_device ip_interface $ip_network
 				fi
 				if [ "$ip_source" = "web" ]; then
 					config_get ip_url $section ip_url
