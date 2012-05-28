@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2011 OpenWrt.org
+# Copyright (C) 2007-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=darkstat
-PKG_VERSION:=3.0.714
-PKG_RELEASE:=2
+PKG_VERSION:=3.0.715
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://dmr.ath.cx/net/darkstat
-PKG_MD5SUM:=eef385fadc8dbb611d3d4c4d8fa94817
+PKG_SOURCE_URL:=http://unix4lyfe.org/darkstat
+PKG_MD5SUM:=5b7abc7538dcd8e30667dac150e81d77
 
 PKG_INSTALL:=1
 
@@ -24,7 +24,7 @@ define Package/darkstat
   CATEGORY:=Network
   DEPENDS:=+libpcap +zlib
   TITLE:=Network bandwidth monitor
-  URL:=http://dmr.ath.cx/net/darkstat/
+  URL:=http://unix4lyfe.org/darkstat/
 endef
 
 define Package/darkstat/description
