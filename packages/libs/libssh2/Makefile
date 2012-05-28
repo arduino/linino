@@ -8,12 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libssh2
-PKG_VERSION:=1.4.0
+PKG_VERSION:=1.4.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.libssh2.org/download/
-PKG_MD5SUM:=ee670161d8c5dff93ae84a3f34f15669
+PKG_SOURCE_URL:=http://www.libssh2.org/download
+PKG_MD5SUM:=42e2b3796ac07fc1dbafc7abcc002cd3
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -32,7 +33,9 @@ endef
 
 TARGET_CFLAGS += $(FPIC)
 
-CONFIGURE_ARGS += --with-libssl-prefix=$(STAGING_DIR)/usr
+CONFIGURE_ARGS += \
+	--disable-examples-build \
+	--with-libssl-prefix=$(STAGING_DIR)/usr
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
