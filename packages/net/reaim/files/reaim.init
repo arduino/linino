@@ -1,20 +1,20 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 
 START=60
 
 IPT=/usr/sbin/iptables
 
 set_rules() {
-	include /lib/network
-	scan_interfaces
-	config_get WAN wan ifname
+	. /lib/functions/network.sh
 
-	[ -z "$WAN" ] && exit
-	$IPT $1 input_rule -i $WAN -p tcp --dport 1863:1864 -j ACCEPT
-	$IPT $1 input_rule -i $WAN -p tcp --dport 4443 -j ACCEPT
-	$IPT $1 input_rule -i $WAN -p tcp --dport 5566 -j ACCEPT
-	$IPT $1 input_rule -i $WAN -p tcp --dport 40000:40099 -j ACCEPT
+	local device
+	network_get_device device wan && {
+		$IPT $1 input_rule -i $device -p tcp --dport 1863:1864 -j ACCEPT
+		$IPT $1 input_rule -i $device -p tcp --dport 4443 -j ACCEPT
+		$IPT $1 input_rule -i $device -p tcp --dport 5566 -j ACCEPT
+		$IPT $1 input_rule -i $device -p tcp --dport 40000:40099 -j ACCEPT
+	}
 }
 
 start() {
