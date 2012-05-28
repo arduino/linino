@@ -124,7 +124,7 @@
  
  	# Harden against out of zone rrsets, to avoid spoofing attempts. 
  	# harden-glue: yes
-@@ -321,7 +342,7 @@ server:
+@@ -328,7 +349,7 @@ server:
  	# you start unbound (i.e. in the system boot scripts).  And enable:
  	# Please note usage of unbound-anchor root anchor is at your own risk
  	# and under the terms of our LICENSE (see that file in the source).
@@ -133,7 +133,7 @@
  
  	# File with DLV trusted keys. Same format as trust-anchor-file.
  	# There can be only one DLV configured, it is trusted from root down.
-@@ -407,15 +428,18 @@ server:
+@@ -414,15 +435,18 @@ server:
  	# the amount of memory to use for the key cache.
  	# plain value in bytes or you can append k, m or G. default is "4Mb". 
  	# key-cache-size: 4m

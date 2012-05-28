@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=unbound
-PKG_VERSION:=1.4.16
+PKG_VERSION:=1.4.17
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.unbound.net/downloads
-PKG_MD5SUM:=5158d03d2ab0a8e60925c7a9b9903631
+PKG_MD5SUM:=812d49064a78c92765970a1364736da7
 
 PKG_BUILD_DEPENDS:=libexpat
 PKG_BUILD_PARALLEL:=1
@@ -105,6 +105,7 @@ define Package/libunbound/description
 endef
 
 CONFIGURE_ARGS += \
+	--disable-ecdsa \
 	--disable-gost \
 	--enable-allsymbols \
 	--with-ldns="$(STAGING_DIR)/usr" \
