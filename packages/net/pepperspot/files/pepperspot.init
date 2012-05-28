@@ -1,20 +1,19 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2012 OpenWrt.org
+
 START=50
 
-RUN_D=/var/run
-PID_F=$RUN_D/pepper.pid
+SERVICE_USE_PID=1
+SERVICE_PID_FILE=/var/run/pepper.pid
 
 start() {
-	include /lib/network
-	scan_interfaces
-	/sbin/insmod tun >/dev/null 2>&1
-	/sbin/insmod ipv6 >/dev/null 2>&1
-	[ -d $RUN_D ] || mkdir -p $RUN_D
-	config_get ipaddr lan ipaddr
-	/usr/sbin/pepper --dns1="$ipaddr"
+	. /lib/functions/network.sh
+
+	local ipaddr
+	network_get_ipaddr ipaddr lan && \
+		service_start /usr/sbin/pepper --dns1="$ipaddr"
 }
 
 stop() {
-	[ -f $PID_F ] && kill $(cat $PID_F) >/dev/null 2>&1
+	service_stop /usr/sbin/pepper
 }
