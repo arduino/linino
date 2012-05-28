@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2008-2011 OpenWrt.org
+# Copyright (C) 2008-2012 OpenWrt.org
 
 START=60
 
@@ -9,25 +9,18 @@ smb_header() {
 
 	# resolve interfaces
 	local interfaces=$(
-		include /lib/network
-		scan_interfaces
+		. /lib/functions/network.sh
 
 		local net
 		for net in $interface; do
-			local ifname
-			config_get ifname "$net" ifname
-			[ -n "$ifname" ] && {
-				local ipaddr netmask
-				config_get ipaddr  "$net" ipaddr
-				config_get netmask "$net" netmask
-				[ -n "$ipaddr" ] && echo -n "$ipaddr/${netmask:-255.255.255.255} "
-
-				local ip6addr
-				config_get ip6addr "$net" ip6addr
-				[ -n "$ip6addr" ] && echo -n "$ip6addr "
+			local device
+			network_get_device device "$net" && {
+				local subnet
+				network_get_subnet  subnet "$net" && echo -n "$subnet "
+				network_get_subnet6 subnet "$net" && echo -n "$subnet "
 			}
 
-			echo -n "${ifname:-$net} "
+			echo -n "${device:-$net} "
 		done
 	)
 
