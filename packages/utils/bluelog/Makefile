@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bluelog
-PKG_VERSION:=1.0.3
+PKG_VERSION:=1.0.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.digifail.com/downloads/software/bluelog
-PKG_MD5SUM:=cbbb5a7d04ac7160f3f7389e05cd4257
+PKG_MD5SUM:=93fb5b0f707643a14ff94dc780bdcb9c
 
 PKG_INSTALL:=1
 
@@ -50,7 +50,7 @@ endef
 
 define Package/bluelog-live/description
   $(call Package/bluelog/Default/description)
-  This package contains the bluelog live output files for use with an SSI
+  This package contains the bluelog live output files for use with a CGI or SSI
   capable web server.
 endef
 
