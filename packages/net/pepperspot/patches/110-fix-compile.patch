@@ -1,0 +1,263 @@
+Index: pepperspot-0.4/src/cmdline.c
+===================================================================
+--- pepperspot-0.4.orig/src/cmdline.c	2010-01-16 14:25:11.000000000 +0200
++++ pepperspot-0.4/src/cmdline.c	2012-05-28 16:21:56.000000000 +0300
+@@ -1335,7 +1335,7 @@
+ #endif
+ 
+ int
+-cmdline_parser_internal (int argc, char * const *argv, struct gengetopt_args_info *args_info, int override, int initialize, int check_required, const char *additional_error)
++cmdline_parser_internal (int argc, char * const *argv, struct gengetopt_args_info *args_info, int override, int initialize, int check_required __attribute__((__unused__)), const char *additional_error)
+ {
+   int c;  /* Character of the parsed option.  */
+   char *multi_token, *multi_next; /* for multiple options */
+Index: pepperspot-0.4/src/ippool.c
+===================================================================
+--- pepperspot-0.4.orig/src/ippool.c	2010-01-20 09:42:01.000000000 +0200
++++ pepperspot-0.4/src/ippool.c	2012-05-28 16:22:57.000000000 +0300
+@@ -267,7 +267,7 @@
+ 
+ /* Get IP address and mask */
+ int ippool_aton(struct in_addr *addr, struct in_addr *mask,
+-                char *pool, int number)
++                char *pool, int number __attribute__((__unused__)))
+ {
+   /* Parse only first instance of network for now */
+   /* Eventually "number" will indicate the token which we want to parse */
+Index: pepperspot-0.4/src/pepper.c
+===================================================================
+--- pepperspot-0.4.orig/src/pepper.c	2012-05-28 16:09:54.000000000 +0300
++++ pepperspot-0.4/src/pepper.c	2012-05-28 16:10:39.000000000 +0300
+@@ -3305,7 +3305,7 @@
+  * \return 0
+  * \author Sebastien Vincent
+  */
+-static int cb_tun6_ind(struct tun6_t* tun_obj, void* pack, unsigned len)
++static int cb_tun6_ind(struct tun6_t* tun_obj __attribute__((__unused__)), void* pack, unsigned len)
+ {
+   struct ippoolm_t* ipm = NULL;
+   struct in6_addr dst;
+@@ -3377,7 +3377,7 @@
+  * \param len data length
+  * \return 0
+  */
+-int cb_tun_ind(struct tun_t *tun_obj, void *pack, unsigned len)
++int cb_tun_ind(struct tun_t *tun_obj __attribute__((__unused__)), void *pack, unsigned len)
+ {
+   struct ippoolm_t *ipm = NULL;
+   struct in_addr dst;
+@@ -3459,7 +3459,7 @@
+  * \param conn redir connection that we will filled up up-to-date value
+  * \return 0 if success, -1 otherwise
+  */
+-static int cb_redir_getstate(struct redir_t *redir_obj, struct in_addr *addr,
++static int cb_redir_getstate(struct redir_t *redir_obj __attribute__((__unused__)), struct in_addr *addr,
+                              struct redir_conn_t *conn)
+ {
+   struct ippoolm_t *ipm = NULL;
+@@ -3524,7 +3524,7 @@
+  * \param conn redir connection that we will filled up up-to-date value
+  * \return 0 if success, -1 otherwise
+  */
+-static int cb_redir_getstatev6(struct redir_t* redir_obj, struct in6_addr* addr, struct redir_conn_t* conn)
++static int cb_redir_getstatev6(struct redir_t* redir_obj __attribute__((__unused__)), struct in6_addr* addr, struct redir_conn_t* conn)
+ {
+   struct ippoolm_t *ipm = NULL;
+   struct app_conn_t *appconn = NULL;
+@@ -4354,9 +4354,9 @@
+  * \param pack_req packet for request
+  * \return 0 if success, -1 otherwise
+  */
+-int radius_conf(struct radius_t *radius_obj,
++int radius_conf(struct radius_t *radius_obj __attribute__((__unused__)),
+                 struct radius_packet_t *pack,
+-                struct radius_packet_t *pack_req)
++                struct radius_packet_t *pack_req __attribute__((__unused__)))
+ {
+   struct radius_attr_t *attr = NULL;
+ 
+Index: pepperspot-0.4/src/tun.c
+===================================================================
+--- pepperspot-0.4.orig/src/tun.c	2010-01-27 14:05:01.000000000 +0200
++++ pepperspot-0.4/src/tun.c	2012-05-28 16:20:10.000000000 +0300
+@@ -226,7 +226,7 @@
+   struct sockaddr_nl local;
+   int addr_len = 0;
+   int fd = -1;
+-  int status = 0;
++  int status __attribute__((__unused__)) = 0;
+ 
+   struct sockaddr_nl nladdr;
+   struct iovec iov;
+@@ -507,7 +507,7 @@
+  * \param delete 1 = delete route, 0 = add route
+  * \return 0 if success, -1 otherwise
+  */
+-static int tun_route(struct tun_t *this,
++static int tun_route(struct tun_t *this __attribute__((__unused__)),
+                      struct in_addr *dst,
+                      struct in_addr *gateway,
+                      struct in_addr *mask,
+Index: pepperspot-0.4/src/dhcp.c
+===================================================================
+--- pepperspot-0.4.orig/src/dhcp.c	2012-05-28 15:57:59.000000000 +0300
++++ pepperspot-0.4/src/dhcp.c	2012-05-28 16:42:50.000000000 +0300
+@@ -2111,7 +2111,7 @@
+   return 0;
+ }
+ 
+-struct timeval* dhcp_timeleft(struct dhcp_t *this, struct timeval *tvp)
++struct timeval* dhcp_timeleft(struct dhcp_t *this __attribute__((__unused__)), struct timeval *tvp)
+ {
+   /* To avoid unused parameter warning */
+   this = NULL;
+@@ -2640,7 +2640,7 @@
+  * \return 0 if success, -1 otherwise4
+  */
+ static int dhcp_sendOFFER(struct dhcp_conn_t *conn,
+-                          struct dhcp_fullpacket_t *pack, int len)
++                          struct dhcp_fullpacket_t *pack, int len __attribute__((__unused__)))
+ {
+   struct dhcp_t *this = conn->parent;
+   struct dhcp_fullpacket_t packet;
+@@ -2762,7 +2762,7 @@
+  * \return 0 if success, -1 otherwise
+  */
+ static int dhcp_sendACK(struct dhcp_conn_t *conn,
+-                        struct dhcp_fullpacket_t *pack, int len)
++                        struct dhcp_fullpacket_t *pack, int len __attribute__((__unused__)))
+ {
+   struct dhcp_t *this = conn->parent;
+   struct dhcp_fullpacket_t packet;
+@@ -2895,7 +2895,7 @@
+  * \return 0 if success, -1 otherwise
+  */
+ static int dhcp_sendNAK(struct dhcp_conn_t *conn,
+-                        struct dhcp_fullpacket_t *pack, int len)
++                        struct dhcp_fullpacket_t *pack, int len __attribute__((__unused__)))
+ {
+   struct dhcp_t *this = conn->parent;
+   struct dhcp_fullpacket_t packet;
+@@ -3496,7 +3496,7 @@
+  * \return 0
+  */
+ static int dhcp_sendARP(struct dhcp_conn_t *conn,
+-                        struct dhcp_arp_fullpacket_t *pack, int len)
++                        struct dhcp_arp_fullpacket_t *pack, int len __attribute__((__unused__)))
+ {
+   struct dhcp_t *this = conn->parent;
+   struct dhcp_arp_fullpacket_t packet;
+Index: pepperspot-0.4/src/radius.c
+===================================================================
+--- pepperspot-0.4.orig/src/radius.c	2012-05-28 15:57:59.000000000 +0300
++++ pepperspot-0.4/src/radius.c	2012-05-28 16:37:47.000000000 +0300
+@@ -210,7 +210,7 @@
+  * \param secretlen length of secret
+  * \return 0
+  */
+-static int radius_authresp_authenticator(struct radius_t *this,
++static int radius_authresp_authenticator(struct radius_t *this __attribute__((__unused__)),
+                                   struct radius_packet_t *pack,
+                                   uint8_t *req_auth,
+                                   char *secret, int secretlen)
+@@ -801,7 +801,7 @@
+   return 0;
+ }
+ 
+-int radius_addattrv6(struct radius_t *this, struct radius_packet_t *pack,
++int radius_addattrv6(struct radius_t *this __attribute__((__unused__)), struct radius_packet_t *pack,
+                  uint8_t type, uint32_t vendor_id, uint8_t vendor_type,
+                  struct in6_addr value, uint8_t *data, uint16_t dlen)
+ {
+@@ -1124,7 +1124,7 @@
+   return 0;
+ }
+ 
+-int radius_keydecode(struct radius_t *this, uint8_t *dst, int dstsize,
++int radius_keydecode(struct radius_t *this __attribute__((__unused__)), uint8_t *dst, int dstsize,
+                      int *dstlen, uint8_t *src, int srclen,
+                      uint8_t *authenticator, char *secret, int secretlen)
+ {
+@@ -1346,7 +1346,7 @@
+   return 0;
+ }
+ 
+-int radius_pwencode(struct radius_t *this, uint8_t *dst, int dstsize,
++int radius_pwencode(struct radius_t *this __attribute__((__unused__)), uint8_t *dst, int dstsize,
+                     int *dstlen, uint8_t *src, int srclen,
+                     uint8_t *authenticator, char *secret, int secretlen)
+ {
+Index: pepperspot-0.4/src/redir.c
+===================================================================
+--- pepperspot-0.4.orig/src/redir.c	2012-05-28 15:57:59.000000000 +0300
++++ pepperspot-0.4/src/redir.c	2012-05-28 16:41:17.000000000 +0300
+@@ -974,7 +974,7 @@
+  * \param dstsize size of dst
+  * \return 0 if success, -1 otherwise
+  */
+-static int redir_getpath(struct redir_t *redir, char *src, char *dst, int dstsize)
++static int redir_getpath(struct redir_t *redir __attribute__((__unused__)), char *src, char *dst, int dstsize)
+ {
+   char *p1 = NULL;
+   char *p2 = NULL;
+@@ -1045,7 +1045,7 @@
+ /**
+  * \brief Get the url of an HTTP request.
+  */
+-static int redir_geturl(struct redir_t *redir, char *src, char *dst, int dstsize)
++static int redir_geturl(struct redir_t *redir __attribute__((__unused__)), char *src, char *dst, int dstsize)
+ {
+   char *p1 = NULL;
+   char *p3 = NULL;
+@@ -1128,7 +1128,7 @@
+  * \return 0 if found, -1 otherwise (not found, malformed HTTP response)
+  */
+ /* TODO: Should be merged with other parsers */
+-static int redir_getparam(struct redir_t *redir, char *src,
++static int redir_getparam(struct redir_t *redir __attribute__((__unused__)), char *src,
+                           char *param,
+                           char *dst, int dstsize)
+ {
+@@ -1362,9 +1362,9 @@
+  * \param cbp pointer for callback
+  * \return 0
+  */
+-static int redir_cb_radius_auth_conf(struct radius_t *radius,
++static int redir_cb_radius_auth_conf(struct radius_t *radius __attribute__((__unused__)),
+                                      struct radius_packet_t *pack,
+-                                     struct radius_packet_t *pack_req, void *cbp)
++                                     struct radius_packet_t *pack_req __attribute__((__unused__)), void *cbp)
+ {
+   struct radius_attr_t *interimattr = NULL;
+   struct radius_attr_t *stateattr = NULL;
+@@ -1696,7 +1696,7 @@
+  * \param conn redir connection
+  * \return 0 if success, -1 otherwise
+  */
+-static int redir_radius(struct redir_t *redir, struct sockaddr_storage *addr,
++static int redir_radius(struct redir_t *redir, struct sockaddr_storage *addr __attribute__((__unused__)),
+                         struct redir_conn_t *conn)
+ {
+   struct radius_t *radius = NULL;      /* Radius client instance */
+Index: pepperspot-0.4/src/tun6.c
+===================================================================
+--- pepperspot-0.4.orig/src/tun6.c	2009-11-09 17:01:57.000000000 +0200
++++ pepperspot-0.4/src/tun6.c	2012-05-28 16:44:07.000000000 +0300
+@@ -1080,7 +1080,7 @@
+   return code;
+ }
+ 
+-int tun6_addroute(struct tun6_t *this, struct in6_addr *dst, struct in6_addr *gateway, uint8_t prefixlen)
++int tun6_addroute(struct tun6_t *this __attribute__((__unused__)), struct in6_addr *dst __attribute__((__unused__)), struct in6_addr *gateway __attribute__((__unused__)), uint8_t prefixlen __attribute__((__unused__)))
+ {
+   /* TODO : use _iface_route */
+   this = NULL;
+@@ -1096,7 +1096,7 @@
+   return 0;
+ }
+ 
+-int tun6_runscript(struct tun6_t *tun, char* script)
++int tun6_runscript(struct tun6_t *tun __attribute__((__unused__)), char* script __attribute__((__unused__)))
+ {
+   /* TODO */
+   tun = NULL;
