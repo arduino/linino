@@ -7,12 +7,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=umurmur
-PKG_VERSION:=0.2.8
-PKG_RELEASE:=2
+PKG_VERSION:=0.2.10
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://umurmur.googlecode.com/files/
-PKG_MD5SUM:=67adca861dcd46958066081e57b15de5
+PKG_SOURCE_URL:=http://umurmur.googlecode.com/files
+PKG_MD5SUM:=4d71a699bddce3df0996b5dd0a279b47
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
