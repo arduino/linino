@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 
 START=50
 
@@ -48,15 +48,11 @@ stop_instance() {
 }
 
 start() {
-	include /lib/network
-	scan_interfaces
 	config_load 'frickin'
 	config_foreach start_instance 'frickin'
 }
 
 stop() {
-	include /lib/network
-	scan_interfaces
 	config_load 'frickin'
 	config_foreach stop_instance 'frickin'
 }
