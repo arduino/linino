@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ldns
-PKG_VERSION:=1.6.12
+PKG_VERSION:=1.6.13
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.nlnetlabs.nl/downloads/ldns
-PKG_MD5SUM:=e7428ed0d19baed02459e2c55660c9b3
+PKG_MD5SUM:=bcada4f2e62aa40fcdd5d73aec46f284
 
 PKG_FIXUP:=libtool
 PKG_INSTALL:=1
@@ -54,6 +54,7 @@ define Package/drill/description
 endef
 
 CONFIGURE_ARGS += \
+	--disable-ecdsa \
 	--disable-gost \
 	--with-drill \
 	--with-ssl="$(STAGING_DIR)/usr"
