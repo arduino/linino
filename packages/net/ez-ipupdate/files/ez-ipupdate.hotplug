@@ -16,7 +16,7 @@ case "$ACTION" in
 	    [ "$program" = "$NAME" ] && {
 		config_get interface $cfg interface
 		[ "$interface" = "$INTERFACE" ] && {
-		    config_get dev "$INTERFACE" ifname
+		    network_get_device dev "$INTERFACE" || return
 
 		    config_get enabled $cfg enabled
 		    enabled=${enabled:-1}
@@ -73,11 +73,9 @@ EOF
 	    }
 	}
 
+	. /lib/functions/network.sh
 
-	include /lib/network
-	scan_interfaces
 	config_load ddns
-
 	config_foreach ddns ddns
 	;;
 esac
