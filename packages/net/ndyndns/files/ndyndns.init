@@ -1,19 +1,19 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2007-2011 OpenWrt.org
+# Copyright (C) 2007-2012 OpenWrt.org
 
 START=80
 
-include /lib/network
-
 start() {
-	scan_interfaces
-	config_get wan_if 'wan' 'ifname'
-	[ -n "$wan_if" ] || return 1
+	. /lib/functions/network.sh
+
 	[ -f /etc/ndyndns/ndyndns.conf ] || {
 		echo "$0: missing config file '/etc/ndyndns/ndyndns.conf'" 1>&2
 		return 1
 	}
-	service_start /usr/sbin/ndyndns -c /etc/ndyndns -f /etc/ndyndns/ndyndns.conf -i $wan_if
+
+	local device
+	network_get_device device wan && \
+		service_start /usr/sbin/ndyndns -c /etc/ndyndns -f /etc/ndyndns/ndyndns.conf -i $device
 }
 
 stop() {
