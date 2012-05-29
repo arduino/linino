@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2012 OpenWrt.org
 #
 # version 20090401 jhalfmoon
 
@@ -34,9 +34,8 @@ start_daemon() {
     config_get logging "$cfg" logging
     config_get iface   "$cfg" interface
 # Translate listening interfaces to ip addresses
-    include /lib/network
-    scan_interfaces
-    config_get IP "$iface" ipaddr
+    . /lib/functions/network.sh
+    network_get_ipaddr IP "$iface"
     export ROOT
     if [ "$DEBUG" == 1 ] ; then
         $DAEMON

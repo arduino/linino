@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2007 OpenWrt.org
+# Copyright (C) 2007-2012 OpenWrt.org
 #
 # version 20090401 jhalfmoon
 
@@ -46,9 +46,8 @@ start_daemon() {
 # Unset AXFR if it is empty
     [ -z $AXFR ] && export -n AXFR
 # Translate listening interfaces to ip addresses
-    include /lib/network
-    scan_interfaces
-    config_get IP "$iface" ipaddr
+    . /lib/functions/network.sh
+    network_get_ipaddr IP "$iface" || return 1
     export ROOT
     if [ "$DEBUG" == 1 ] ; then
         $DAEMON -vDRHl0 -c40 -b10 -x $ROOT/tcp.cdb -- $IP 53 $APP
