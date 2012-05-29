@@ -22,8 +22,7 @@ start() {
 	config_load natpmp
 	config_foreach natpmp_config natpmp
 
-	include /lib/network
-	scan_interfaces
+	. /lib/functions/network.sh
 
 	# Flush all the rules in the natpmp chain, or create it, if it doesn't exists.
 	$IPTABLES -t nat -F $IPTABLES_CHAIN 2>/dev/null || \
@@ -36,15 +35,16 @@ start() {
 	# Iterate through the private interfaces.
 	BIND_ARGS=""
 	for IF in $PRIVATE_IFS; do
-		config_get IF "$IF" ifname "$IF"
+		local dev
+		network_get_device dev "$IF" || dev="$IF"
 
 		# Get the IP address of this interface.
-		ADDR=`$IP addr show dev $IF 2>/dev/null | grep "^ *inet .* $IF\$" | cut -d " " -f 6 | cut -d / -f 1`
+		ADDR=`$IP addr show dev $dev 2>/dev/null | grep "^ *inet .* $dev\$" | cut -d " " -f 6 | cut -d / -f 1`
 		if [ -n "$ADDR" ] ; then
 			# Add the IP address to the argument list.
 			BIND_ARGS="$BIND_ARGS -a $ADDR"
 		else
-			echo "Could not get IP address of interface $IF. Skipping." >&2
+			echo "Could not get IP address of interface $dev. Skipping." >&2
 		fi
 	done
 
@@ -53,10 +53,11 @@ start() {
 		exit 1
 	fi
 
-	config_get PUBLIC_IF "$PUBLIC_IF" ifname "$PUBLIC_IF"
+	local pubdev
+	network_get_device pubdev "$PUBLIC_IF" || pubdev="$PUBLIC_IF"
 
 	SERVICE_PID_FILE="$PIDFILE"
-	service_start $NATPMP -i "$PUBLIC_IF" $BIND_ARGS -- "$IPTABLES_CHAIN"
+	service_start $NATPMP -i "$pubdev" $BIND_ARGS -- "$IPTABLES_CHAIN"
 }
 
 stop() {
