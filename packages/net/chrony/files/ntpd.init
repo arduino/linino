@@ -15,8 +15,8 @@ start() {
 		config_get NTP_SERVERS $CONFIG_SECTION TimeServers
 		config_get CLIENT_NETWORKS $CONFIG_SECTION ClientAccessFrom
 		CHRONY_KEY=$(awk '/^1 / { print $2; }' /etc/chrony/chrony.keys)
-		include /lib/network
-		scan_interfaces
+
+		. /lib/functions/network.sh
 
 		# Define servers and do a rapid series of time measurements
 		# to get up to date
@@ -35,18 +35,9 @@ start() {
 			echo password $CHRONY_KEY
 			echo makestep
 			for NETNAME in $CLIENT_NETWORKS; do
-				local INTERFACE
-				local IP
-				local NETMASK
-				local BROADCAST
-				local NETWORK
-				local PREFIX
-
-				config_get INTERFACE "$NETNAME" ifname
-				if [ -n "$INTERFACE" ] ; then
-					eval $(ifconfig $INTERFACE | grep inet | sed -e 's/.*addr:/IP=/' -e 's/ .*Mask:/; NETMASK=/')
-					eval $(ipcalc.sh $IP $NETMASK)
-					echo allow $NETWORK/$PREFIX
+				local subnet
+				if network_get_subnet subnet "$NETNAME"; then
+					echo allow $subnet
 				fi
 			done
 		) | chronyc > /dev/null 2>&1
