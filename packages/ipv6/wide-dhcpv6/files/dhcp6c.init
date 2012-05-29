@@ -2,27 +2,6 @@
 
 DHCP6C_REQUEST_OPTIONS='domain_name_servers domain_name ntp_servers sip_server_address sip_domain_name nis_server_address nis_domain_name nisp_server_address nisp_domain_name bcmcs_server_address bcmcs_domain_name'
 
-get_ifname() {
-	local interface=$1
-	local ifname
-	scan_interfaces
-	config_get ifname "$interface" ifname
-	printf '%s\n' "$ifname"
-	return 0
-}
-
-get_device() {
-	local interface=$1
-	local ifname=$2
-	local device
-	scan_interfaces
-	config_get device "$interface" device
-	grep -qE "^ *$device:" /proc/net/dev && \
-		printf '%s\n' "$device" || \
-		printf '%s\n' "$ifname"
-	return 0
-}
-
 dhcp6c_write_duid() {
 	local mac="${1:-$(ifconfig "$client_device" | sed -ne 's/[[:space:]]*$//; s/.*HWaddr //p')}"
 	local pat="[0-9A-F][0-9A-F]"
@@ -73,6 +52,7 @@ dhcp6c_write_interface() {
 	local sla_id
 	local sla_len
 	local enabled
+	local device
 
 	config_get_bool enabled "$cfg" enabled 0
 
@@ -80,10 +60,12 @@ dhcp6c_write_interface() {
 		config_get sla_id "$cfg" sla_id
 		config_get sla_len "$cfg" sla_len
 
-		printf '\tprefix-interface %s {\n' "$(get_ifname $cfg)"
-		printf '\t\tsla-id %s;\n' "$sla_id"
-		printf '\t\tsla-len %s;\n' "$sla_len"
-		printf '\t};\n'
+		network_get_device device "$cfg" && {
+			printf '\tprefix-interface %s {\n' "$device"
+			printf '\t\tsla-id %s;\n' "$sla_id"
+			printf '\t\tsla-len %s;\n' "$sla_len"
+			printf '\t};\n'
+		}
 	fi
 }
 
@@ -143,7 +125,7 @@ start() {
 
 	[ -e /var/run/dhcp6c.pid ] && return 0
 
-	include /lib/network
+	. /lib/functions/network.sh
 
 	config_load "dhcp6c"
 
@@ -156,10 +138,10 @@ start() {
 
 	logger -t dhcp6c starting dhcp6c
 
-	local client_interface
+	local client_interface client_ifname client_device
 	config_get client_interface basic interface
-	local client_ifname=$(get_ifname "$client_interface")
-	local client_device=$(get_device "$client_interface" "$client_ifname")
+	network_get_device  client_ifname "$client_interface"
+	network_get_physdev client_device "$client_interface" || client_device="$client_ifname"
 
 	local config_file="/var/etc/dhcp6c.conf"
 	local duid_file="/var/dhcp6c_duid"

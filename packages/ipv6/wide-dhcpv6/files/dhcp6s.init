@@ -1,23 +1,14 @@
-#!/bin/sh /etc/rc.common 
-# Copyright (C) 2010-2011 OpenWrt.org
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2010-2012 OpenWrt.org
 
 SERVICE_USE_PID=1
-
-get_ifname() {
-	local interface=$1
-	local ifname
-	scan_interfaces
-	config_get ifname "$interface" ifname
-	printf '%s\n' "$ifname"
-	return 0
-}
 
 start() {
 	[ ! -e /etc/dhcp6sctlkey ] && `dd if=/dev/urandom count=1 2> /dev/null | md5sum | cut -d" " -f1 > /etc/dhcp6sctlkey`
 
 	[ -e /var/run/dhcp6s.pid ] && return 0
 
-	include /lib/network
+	. /lib/functions/network.sh
 
 	config_load "dhcp6s"
 
@@ -27,9 +18,9 @@ start() {
 
 	logger starting dhcp6s
 
-	local server_interface 
+	local server_interface server_ifname
 	config_get server_interface basic interface
-	local server_ifname=$(get_ifname "$server_interface")
+	network_get_device server_ifname "$server_interface" || return 1
 
 	local config_file
 	config_get config_file basic config_file
