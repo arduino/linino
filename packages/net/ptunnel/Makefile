@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ptunnel
 PKG_VERSION:=0.71
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=PingTunnel-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.cs.uit.no/~daniels/PingTunnel
