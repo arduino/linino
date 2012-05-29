@@ -114,10 +114,6 @@ pand_config() {
 }
 
 start() {
-	include /lib/network
-	scan_interfaces
-	config_load bluetooth
-
 	config_foreach hcid_config hcid
 	config_foreach hciattach_config hciattach
 	config_foreach rfcomm_config rfcomm
