@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 
 START=50
 
@@ -29,16 +29,6 @@ append_string() {
 	[ -n "$_val" ] && append "$var" "$val $_val"
 }
 
-config_get_ifname() {
-	local var="$1"
-	local section="$2"
-	local option="$3"
-	local val="$4"
-	local _val
-	config_get _val "$section" "$option" "$val"
-	config_get "$var" "$_val" 'ifname' "$_val"
-}
-
 section_enabled() {
 	local enabled
 	config_get_bool enabled "$1" 'enabled' 0
@@ -49,47 +39,49 @@ start_instance() {
 	local section="$1"
 	local id
 	local if
+	local dev
 	local args
 
 	section_enabled "$section" || return 1
 
 	config_get id "$section" 'virtual_id' '1'
-	config_get_ifname if "$section" 'interface' 'lan'
+	config_get if "$section" 'interface' 'lan'
+	network_get_device dev "$if" && {
+		args="-v $id -i $dev"
+		append_string args "$section" 'delay' '-d'
+		append_string args "$section" 'priority' '-p'
+		append_bool args "$section" 'no_virtual_mac' '-n'
+		config_list_foreach "$section" 'virtual_ip' append_list_item args
 
-	args="-v $id -i $if"
-	append_string args "$section" 'delay' '-d'
-	append_string args "$section" 'priority' '-p'
-	append_bool args "$section" 'no_virtual_mac' '-n'
-	config_list_foreach "$section" 'virtual_ip' append_list_item args
-
-	SERVICE_PID_FILE="/var/run/vrrpd_${if}_${id}.pid"
-	service_start /usr/sbin/vrrpd $args
+		SERVICE_PID_FILE="/var/run/vrrpd_${dev}_${id}.pid"
+		service_start /usr/sbin/vrrpd $args
+	}
 }
 
 stop_instance() {
 	local section="$1"
 	local id
 	local if
+	local dev
 
 	section_enabled "$section" || return 1
 
 	config_get id "$section" 'virtual_id' '1'
-	config_get_ifname if "$section" 'interface' 'lan'
+	config_get if "$section" 'interface' 'lan'
+	network_get_device dev "$if"
 
-	SERVICE_PID_FILE="/var/run/vrrpd_${if}_${id}.pid"
+	SERVICE_PID_FILE="/var/run/vrrpd_${dev}_${id}.pid"
 	service_stop /usr/sbin/vrrpd
 }
 
 start() {
-	include /lib/network
-	scan_interfaces
+	. /lib/functions/network.sh
 	config_load 'vrrpd'
 	config_foreach start_instance 'vrrpd'
 }
 
 stop() {
-	include /lib/network
-	scan_interfaces
+	. /lib/functions/network.sh
 	config_load 'vrrpd'
 	config_foreach stop_instance 'vrrpd'
 }
