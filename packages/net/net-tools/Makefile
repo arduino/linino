@@ -222,6 +222,7 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 	CC="$(TARGET_CC)" \
+	AR="$(TARGET_CROSS)ar" \
 	COPTS="$(TARGET_CFLAGS)" 
 endef
 
