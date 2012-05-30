@@ -77,6 +77,7 @@ define Package/libnfc-examples/description
 endef
 
 TARGET_CFLAGS += $(FPIC)
+CONFIGURE_ARGS += --without-readline
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
