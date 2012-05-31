@@ -46,7 +46,6 @@ LCD4LINUX_DRIVERS:= \
 	M50530 \
 	MatrixOrbital \
 	MatrixOrbitalGX \
-	mda166a \
 	MilfordInstruments \
 	Newhaven \
 	Noritake \
