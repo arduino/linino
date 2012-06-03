@@ -37,7 +37,11 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_qt4-webkit \
 	CONFIG_PACKAGE_qt4-script \
 	CONFIG_PACKAGE_qt4-scriptools \
-	CONFIG_PACKAGE_qt4-openssl
+	CONFIG_PACKAGE_qt4-openssl \
+	CONFIG_PACKAGE_qt4-xmlpatterns \
+	CONFIG_PACKAGE_qt4-tslibmousedriver \
+	CONFIG_PACKAGE_qt4-declarative \
+	CONFIG_PACKAGE_qt4-drivers-gfx-vnc \
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -66,7 +70,7 @@ endef
 define Package/qt4-gui
   $(call Package/qt4/Default)
   DEFAULT:=
-  DEPENDS+=+libpng +libtiff +libjpeg +libfreetype +qt4-network \
+  DEPENDS+=+PACKAGE_qt4-gui:libpng +PACKAGE_qt4-gui:libtiff +PACKAGE_qt4-gui:libjpeg +PACKAGE_qt4-gui:libfreetype +qt4-network \
 	+FEATURE_drawing-backend_libX11:libX11 \
 	+FEATURE_drawing-backend_libX11:libXext @DISPLAY_SUPPORT
   TITLE+=(gui)
@@ -92,25 +96,25 @@ endef
 define Package/qt4-sqlite
   $(call Package/qt4/Default)
   TITLE+=(sqlite)
-  DEPENDS+=+libsqlite3
+  DEPENDS+=+PACKAGE_qt4-sqlite:libsqlite3
 endef
 
 define Package/qt4-mysql
   $(call Package/qt4/Default)
   TITLE+=(mysql)
-  DEPENDS+=+libmysqlclient
+  DEPENDS+=+PACKAGE_qt4-mysql:libmysqlclient
 endef
 
 define Package/qt4-pgsql
   $(call Package/qt4/Default)
   TITLE+=(pgsql)
-  DEPENDS+=+libpq
+  DEPENDS+=+PACKAGE_qt4-pgsql:libpq
 endef
 
 define Package/qt4-openssl
   $(call Package/qt4/Default)
   TITLE+=(openssl)
-  DEPENDS+=+libopenssl
+  DEPENDS+=+PACKAGE_qt4-openssl:libopenssl
 endef
 
 #define Package/qt4-multimedia
@@ -143,7 +147,7 @@ endef
 define Package/qt4-webkit
   $(call Package/qt4/Default)
   TITLE+=(webkit)
-  DEPENDS+=+libsqlite3 +qt4-phonon +qt4-dbus +qt4-xml +qt4-gui +qt4-network
+  DEPENDS+=+PACKAGE_qt4-webkit:libsqlite3 +qt4-phonon +qt4-dbus +qt4-xml +qt4-gui +qt4-network
 endef
 
 define Package/qt4-script
@@ -175,7 +179,7 @@ endef
 define Package/qt4-dbus
   $(call Package/qt4/Default)
   TITLE+=(dbus)
-  DEPENDS+=+libdbus +qt4-xml
+  DEPENDS+=+PACKAGE_qt4-dbus:libdbus +qt4-xml
 endef
 
 #define Package/qt4-gtkstyle
@@ -230,7 +234,7 @@ endef
 define Package/qt4-drivers-mouse-tslibmousedriver
   $(call Package/qt4-drivers-mouse/Default)
   TITLE+=tslibmousedriver
-  DEPENDS+=+tslib
+  DEPENDS+=+PACKAGE_qt4-tslibmousedriver:tslib
 endef
 
 ###
@@ -243,7 +247,7 @@ endef
 define Package/qt4-drivers-gfx-directfb
   $(call Package/qt4-drivers-gfx/Default)
   TITLE+=directfb
-  DEPENDS+=@FEATURE_drawing-backend_DirectFB +FEATURE_drawing-backend_DirectFB:directfb
+  DEPENDS+=@FEATURE_drawing-backend_DirectFB +qt4-drivers-gfx-directfb:directfb
 endef
 
 define Package/qt4-drivers-gfx-linuxfb
@@ -406,7 +410,7 @@ define Build/Configure
 			-qt-mouse-linuxinput \
 			-plugin-mouse-linuxtp \
 			-plugin-mouse-pc \
-			-plugin-mouse-tslib \
+			$(if $(CONFIG_PACKAGE_qt4-tslibmousedriver),-plugin-mouse-tslib,-no-plugin-mouse-tslib) \
 			-no-kbd-qvfb \
 			-no-kbd-qnx \
 			-qt-kbd-tty \
