@@ -10,7 +10,7 @@ PKG_NAME:=binutils
 PKG_VERSION:=$(call qstrip,$(CONFIG_BINUTILS_VERSION))
 BIN_VERSION:=$(PKG_VERSION)
 
-PKG_SOURCE_URL:=@GNU/binutils/
+PKG_SOURCE_URL:=http://mirror2.openwrt.org/sources
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 
 ifeq ($(PKG_VERSION),2.18)
