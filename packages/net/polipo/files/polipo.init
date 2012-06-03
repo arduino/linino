@@ -57,7 +57,7 @@ polipo_config() {
 
 	multistate_options='censorReferer dnsQueryIPv6 dnsUseGethostbyname
 		dontTrustVaryETag expectContinue pipelineAdditionalRequests
-		useTemporarySourceAddress'
+		useTemporarySourceAddress relaxTransparency'
 
 	boolean_options='cacheIsShared daemonise disableConfiguration disableIndexing
 		disableLocalInterface disableProxy disableServersList disableVia
