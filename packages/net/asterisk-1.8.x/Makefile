@@ -224,7 +224,7 @@ endef
 define Package/asterisk18-chan-lantiq
 $(call Package/asterisk18/Default)
   TITLE:=Lantiq TAPI support
-  DEPENDS:= asterisk18
+  DEPENDS:= asterisk18 kmod-ltq-vmmc
   URL:=http://git.nanl.de/?p=asterisk_channel_lantiq.git
 endef
 
