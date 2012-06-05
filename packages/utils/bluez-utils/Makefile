@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bluez-utils
 PKG_VERSION:=3.36
-PKG_RELEASE:=11
+PKG_RELEASE:=12
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://bluez.sourceforge.net/download

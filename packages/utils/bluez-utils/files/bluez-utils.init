@@ -114,6 +114,7 @@ pand_config() {
 }
 
 start() {
+	config_load bluetooth
 	config_foreach hcid_config hcid
 	config_foreach hciattach_config hciattach
 	config_foreach rfcomm_config rfcomm
