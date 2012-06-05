@@ -57,6 +57,10 @@ upnpd_write_bool() {
 	fi
 }
 
+boot() {
+	return
+}
+
 start() {
 	type miniupnpd_add_rules >/dev/null 2>/dev/null || \
 		ACTION=- . /etc/hotplug.d/firewall/50-miniupnpd
