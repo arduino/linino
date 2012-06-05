@@ -58,6 +58,7 @@ CONFIGURE_ARGS += \
 
 TARGET_CFLAGS += $(FPIC)
 TARGET_CPPFLAGS += -I$(PKG_BUILD_DIR)/libcwiid/
+TARGET_LDFLAGS += -lpthread -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Build/Prepare
 	$(call Build/Prepare/Default)
