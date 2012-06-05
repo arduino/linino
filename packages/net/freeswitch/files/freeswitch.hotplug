@@ -1,12 +1,12 @@
 #!/bin/sh
 
-. /etc/functions.sh
+. /lib/functions.sh
 LOAD_STATE=1
 
 if [ "$ACTION" = "ifup" ]; then
 	/etc/init.d/freeswitch enabled && {
 		local not_all_up="$(sh -c '
-			. /etc/functions.sh
+			. /lib/functions.sh
 
 			LOAD_STATE=1
 			local if_is_down=0

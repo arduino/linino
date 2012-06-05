@@ -7,7 +7,7 @@
 
 # All config needs to be done in /etc/config/wshaper
 
-. /etc/functions.sh
+. /lib/functions.sh
 config_load wshaper
 for s in downlink uplink network nopriohostdst nopriohostsrc noprioportdst noprioportsrc; do
 	config_get $s settings $s

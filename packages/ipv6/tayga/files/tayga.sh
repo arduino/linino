@@ -36,7 +36,7 @@ tayga_add_static_mappings() {
 	local tmpconf="$1"
 
 	(
-		. /etc/functions.sh
+		. /lib/functions.sh
 		config_load firewall
 
 		tayga_map_rule_add() {

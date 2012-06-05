@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. /etc/functions.sh
+. /lib/functions.sh
 
 save_print_table_chain() {
 	local table="$1"

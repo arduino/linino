@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. /etc/functions.sh
+. /lib/functions.sh
 
 uci_revert_state dhcp6c state
 uci_set_state dhcp6c state "" dhcp6c_state
