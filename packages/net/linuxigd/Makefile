@@ -25,7 +25,7 @@ define Package/linuxigd
   CATEGORY:=Network
   TITLE:=UPnP daemon
   SUBMENU:=Firewall
-  DEPENDS:=+libip4tc +libupnp +libpthread
+  DEPENDS:=+libip4tc +libupnp +libpthread @BROKEN
   URL:=http://linux-igd.sourceforge.net/
 endef
 
