@@ -87,7 +87,7 @@ define Build/Compile
 			-L$(INTL_PREFIX)/lib \
 			-L$(ICONV_PREFIX)/lib \
 			-Wl,-rpath-link,$(STAGING_DIR)/usr/lib -liconv \
-			-lgnutls -lnetfilter_queue -lpthread" \
+			-lgnutls -lnetfilter_queue -lpthread -lgcrypt" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 endef
