@@ -1,0 +1,11 @@
+--- a/configure
++++ b/configure
+@@ -868,6 +868,8 @@ RPCSECGSS_LIBS'
+ 
+ 
+ # Initialize some variables set by options.
++CONFIG_SQLITE3_TRUE='#'
++CONFIG_NFSDCLD_TRUE='#'
+ ac_init_help=
+ ac_init_version=false
+ ac_unrecognized_opts=

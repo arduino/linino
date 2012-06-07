@@ -31,7 +31,7 @@
  		ret = getservbyname_r(rpcp->r_name, proto, &servbuf, servdata,
 --- a/utils/mountd/cache.c
 +++ b/utils/mountd/cache.c
-@@ -162,6 +162,7 @@ static void auth_unix_gid(FILE *f)
+@@ -168,6 +168,7 @@ static void auth_unix_gid(FILE *f)
  	pw = getpwuid(uid);
  	if (!pw)
  		rv = -1;
@@ -39,7 +39,7 @@
  	else {
  		rv = getgrouplist(pw->pw_name, pw->pw_gid, groups, &ngroups);
  		if (rv == -1 && ngroups >= groups_len) {
-@@ -176,6 +177,7 @@ static void auth_unix_gid(FILE *f)
+@@ -182,6 +183,7 @@ static void auth_unix_gid(FILE *f)
  			}
  		}
  	}
