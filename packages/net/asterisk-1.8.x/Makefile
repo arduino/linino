@@ -224,7 +224,7 @@ endef
 define Package/asterisk18-chan-lantiq
 $(call Package/asterisk18/Default)
   TITLE:=Lantiq TAPI support
-  DEPENDS:= asterisk18 kmod-ltq-vmmc
+  DEPENDS:= asterisk18 @TARGET_lantiq +TARGET_lantiq:kmod-ltq-vmmc +TARGET_lantiq:kmod-ltq-tapi
   URL:=http://git.nanl.de/?p=asterisk_channel_lantiq.git
 endef
 
@@ -327,11 +327,11 @@ CONFIGURE_ARGS+= \
 EXTRA_CFLAGS+= $(TARGET_CPPFLAGS)
 EXTRA_LDFLAGS+= $(TARGET_LDFLAGS)
 
-#TARGET_CFLAGS+= -I$(STAGING_DIR)/usr/include/drv_tapi
-
 define Build/Prepare
 	$(call Build/Prepare/Default)
-	$(CP) ./src/* $(PKG_BUILD_DIR)/
+ifneq ($(CONFIG_TARGET_lantiq),)
+	$(CP) ./src-lantiq/* $(PKG_BUILD_DIR)/
+endif
 endef
 
 define Build/Configure
