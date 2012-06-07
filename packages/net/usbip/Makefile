@@ -6,7 +6,6 @@
 #
 
 include $(TOPDIR)/rules.mk
-include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=usbip
 PKG_VERSION:=0.1.7
@@ -59,45 +58,6 @@ $(call Package/usbip/Common)
   SUBMENU:=USB Support
 endef
 
-define KernelPackage/usbip
-$(call KernelPackage/usbip/Default)
-  TITLE+= (kernel support)
-  DEPENDS+= +kmod-usb-core
-  KCONFIG:= \
-	CONFIG_USB_IP_COMMON CONFIG_USB_IP_DEBUG_ENABLE=n \
-	CONFIG_USBIP_CORE CONFIG_USBIP_DEBUG=n
- ifeq ($(strip $(call CompareKernelPatchVer,$(KERNEL_PATCHVER),le,2.6.39)),1)
-  FILES:=$(LINUX_DIR)/drivers/staging/usbip/usbip_common_mod.$(LINUX_KMOD_SUFFIX)
-  AUTOLOAD:=$(call AutoLoad,98,usbip_common_mod)
- else
-  FILES:=$(LINUX_DIR)/drivers/staging/usbip/usbip-core.ko
-  AUTOLOAD:=$(call AutoLoad,98,usbip-core)
- endif
-endef
-
-define KernelPackage/usbip-client
-$(call KernelPackage/usbip/Default)
-  TITLE+= (kernel client driver)
-  DEPENDS+= kmod-usbip
-  KCONFIG:= CONFIG_USB_IP_VHCI_HCD CONFIG_USBIP_VHCI_HCD
-  FILES:=$(LINUX_DIR)/drivers/staging/usbip/vhci-hcd.$(LINUX_KMOD_SUFFIX)
-  AUTOLOAD:=$(call AutoLoad,99,vhci-hcd)
-endef
-
-define KernelPackage/usbip-server
-$(call KernelPackage/usbip/Default)
-  TITLE+= (kernel host driver)
-  DEPENDS+= kmod-usbip
-  KCONFIG:= CONFIG_USB_IP_HOST CONFIG_USBIP_HOST
- ifeq ($(strip $(call CompareKernelPatchVer,$(KERNEL_PATCHVER),le,2.6.39)),1)
-  FILES:=$(LINUX_DIR)/drivers/staging/usbip/usbip.$(LINUX_KMOD_SUFFIX)
-  AUTOLOAD:=$(call AutoLoad,99,usbip)
- else
-  FILES:=$(LINUX_DIR)/drivers/staging/usbip/usbip-host.ko
-  AUTOLOAD:=$(call AutoLoad,99,usbip-host)
- endif
-endef
-
 include $(INCLUDE_DIR)/kernel-defaults.mk
 
 CONFIGURE_PATH:=./src
@@ -105,23 +65,6 @@ MAKE_PATH:=./src
 LIBTOOL_PATHS:=./src
 
 CFLAGS+="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include"
-
-define Build/Compile/kmod
-	$(MAKE) $(KERNEL_MAKEOPTS) \
-		SUBDIRS="$(LINUX_DIR)/drivers/staging/usbip" \
-		CONFIG_USB_IP_COMMON=m \
-		CONFIG_USB_IP_VHCI_HCD=m \
-		CONFIG_USB_IP_HOST=m \
-		CONFIG_USBIP_CORE=m \
-		CONFIG_USBIP_VHCI_HCD=m \
-		CONFIG_USBIP_HOST=m \
-		modules
-endef
-
-define Build/Compile
-$(call Build/Compile/Default)
-$(call Build/Compile/kmod)
-endef
 
 define Package/usbip/install
 	$(INSTALL_DIR) $(1)/usr/lib
@@ -154,6 +97,3 @@ endef
 $(eval $(call BuildPackage,usbip))
 $(eval $(call BuildPackage,usbip-client))
 $(eval $(call BuildPackage,usbip-server))
-$(eval $(call KernelPackage,usbip))
-$(eval $(call KernelPackage,usbip-client))
-$(eval $(call KernelPackage,usbip-server))
