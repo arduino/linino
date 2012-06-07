@@ -53,13 +53,6 @@ $(call Package/usbip/Default)
   DEPENDS+= usbip +glib2 +kmod-usbip-server
 endef
 
-define KernelPackage/usbip/Default
-$(call Package/usbip/Common)
-  SUBMENU:=USB Support
-endef
-
-include $(INCLUDE_DIR)/kernel-defaults.mk
-
 CONFIGURE_PATH:=./src
 MAKE_PATH:=./src
 LIBTOOL_PATHS:=./src
