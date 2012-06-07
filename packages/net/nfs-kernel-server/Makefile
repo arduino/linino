@@ -80,6 +80,10 @@ CONFIGURE_ARGS += \
 	--disable-tirpc \
 	--disable-nfsdcld
 
+CONFIGURE_VARS += \
+	CONFIG_SQLITE3_TRUE="\#" \
+	CONFIG_NFSDCLD_TRUE="\#"
+
 MAKE_FLAGS += \
 	OPT="$(TARGET_CFLAGS)" \
 	INSTALLSUID="install -m 4755" \
@@ -106,7 +110,8 @@ HOST_CONFIGURE_VARS += \
 	GSSGLUE_LIBS=" " \
 	RPCSECGSS_CFLAGS=" " \
 	RPCSECGSS_LIBS=" " \
-
+	CONFIG_SQLITE3_TRUE="\#" \
+	CONFIG_NFSDCLD_TRUE="\#"
 
 define Host/Compile
 	$(MAKE) -C $(HOST_BUILD_DIR)/tools/rpcgen all
