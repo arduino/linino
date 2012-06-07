@@ -148,10 +148,12 @@ choice
 	config USE_EGLIBC
 		bool "Use eglibc"
 		depends !avr32
+		depends BROKEN
 	
 	config USE_GLIBC
 		bool "Use glibc"
 		depends !avr32
+		depends BROKEN
 	
 	config USE_UCLIBC
 		bool "Use uClibc"
