@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2010 OpenWrt.org
+# Copyright (C) 2008-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=diffutils
 PKG_VERSION:=3.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/diffutils
@@ -41,15 +41,17 @@ endef
 
 define Package/diffutils/preinst
 #!/bin/sh
-if [ -e $${IPKG_INSTROOT}/usr/bin/diff ]; then
-  rm $${IPKG_INSTROOT}/usr/bin/diff;
-fi
+for x in sdiff diff3 diff cmp; do
+  [ -L "$${IPKG_INSTROOT}/usr/bin/$$x" ] && rm -f "$${IPKG_INSTROOT}/usr/bin/$$x"
+done
+exit 9
 endef
 
 define Package/diffutils/postrm
 #!/bin/sh
-ln -sf ../../bin/busybox $${IPKG_INSTROOT}/usr/bin/diff
-$${IPKG_INSTROOT}/usr/bin/diff 2>&1 | grep 'applet not found' > /dev/null 2>&1 && rm $${IPKG_INSTROOT}/usr/bin/diff
+for x in sdiff diff3 diff cmp; do
+  /bin/busybox $$x -h 2>&1 | grep -q BusyBox && ln -sf ../../bin/busybox /usr/bin/$$x
+done
 exit 0
 endef
 
