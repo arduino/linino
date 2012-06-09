@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hdparm
-PKG_VERSION:=9.37
+PKG_VERSION:=9.39
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=0bb94ddd1bedd5c02b1ca62f1caaf6de
+PKG_MD5SUM:=2bc17b72403885d4faf959682944243b
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,7 +23,6 @@ define Package/hdparm
   SUBMENU:=disc
   TITLE:=Hard disk drive configuration utilitity
   URL:=http://sourceforge.net/projects/hdparm/
-  MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 
 define Package/hdparm/description
