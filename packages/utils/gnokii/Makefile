@@ -45,6 +45,7 @@ define Build/Configure
 		--disable-debug \
 		--enable-shared \
 		--disable-static \
+		--disable-libpcsclite \
 		--without-x \
 		)
 endef
