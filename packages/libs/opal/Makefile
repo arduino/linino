@@ -51,6 +51,7 @@ CONFIGURE_ARGS += \
 	--disable-ivr \
 	--disable-rfc4175 \
 	--disable-versioncheck \
+	--disable-theora \
 	--enable-localgsm
 
 CONFIGURE_VARS += \
