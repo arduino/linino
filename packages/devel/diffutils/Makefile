@@ -44,7 +44,7 @@ define Package/diffutils/preinst
 for x in sdiff diff3 diff cmp; do
   [ -L "$${IPKG_INSTROOT}/usr/bin/$$x" ] && rm -f "$${IPKG_INSTROOT}/usr/bin/$$x"
 done
-exit 9
+exit 0
 endef
 
 define Package/diffutils/postrm
