@@ -7,7 +7,6 @@
 
 include $(TOPDIR)/rules.mk
 
-#http://swupdate.openvpn.org/community/releases/openvpn-2.3-alpha1.tar.gz
 PKG_NAME:=openvpn-polarssl
 PKG_VERSION:=2.3-alpha1
 PKG_RELEASE=1
