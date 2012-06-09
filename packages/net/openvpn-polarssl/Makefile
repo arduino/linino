@@ -7,20 +7,21 @@
 
 include $(TOPDIR)/rules.mk
 
+#http://swupdate.openvpn.org/community/releases/openvpn-2.3-alpha1.tar.gz
 PKG_NAME:=openvpn-polarssl
-PKG_VERSION:=v2.2-RC2-345-g03ab4ea
-PKG_RELEASE=$(PKG_SOURCE_VERSION)-2
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_URL:=git://openvpn.git.sourceforge.net/gitroot/openvpn/openvpn.git
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=03ab4ead8295e005f72dbffcffdaa74487d9668c
+PKG_VERSION:=2.3-alpha1
+PKG_RELEASE=1
+PKG_SOURCE:=openvpn-$(PKG_VERSION).tar.gz
+PKG_SOURCE_SUBDIR:=openvpn-$(PKG_VERSION)
+PKG_SOURCE_URL:=http://swupdate.openvpn.org/community/releases
 
 PKG_INSTALL:=1
 PKG_FIXUP:=autoreconf
 PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
+
+TAR_OPTIONS += --strip-components=1 -C $(PKG_BUILD_DIR)
 
 define Package/openvpn-polarssl
   SECTION:=net
