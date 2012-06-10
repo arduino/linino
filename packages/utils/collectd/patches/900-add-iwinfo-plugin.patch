@@ -97,7 +97,7 @@
  The I<Java> plugin makes it possible to write extensions for collectd in Java.
 --- /dev/null
 +++ b/src/iwinfo.c
-@@ -0,0 +1,149 @@
+@@ -0,0 +1,150 @@
 +/**
 + * collectd - src/iwinfo.c
 + * Copyright (C) 2011  Jo-Philipp Wich
@@ -198,7 +198,8 @@
 +
 +		if (iw->assoclist(ifname, buf, &val))
 +			val = 0;
-+		iwinfo_submit(ifname, "stations", val);
++		iwinfo_submit(ifname, "stations",
++		              val / sizeof(struct iwinfo_assoclist_entry));
 +	}
 +
 +	iwinfo_finish();
