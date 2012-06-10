@@ -1,6 +1,6 @@
---- lsof_4.77/print.orig.c	2006-08-23 13:37:43.000000000 -0600
-+++ lsof_4.77/print.c	2006-08-23 13:38:29.000000000 -0600
-@@ -148,6 +148,7 @@
+--- a/print.c
++++ b/print.c
+@@ -161,6 +161,7 @@ endnm(sz)
  static void
  fill_portmap()
  {
@@ -8,11 +8,11 @@
  	char buf[128], *cp, *nm;
  	CLIENT *c;
  	int h, port, pr;
-@@ -266,6 +267,7 @@
+@@ -279,6 +280,7 @@ fill_portmap()
  	    Pth[pr][h] = pt;
  	}
  	clnt_destroy(c);
 +#endif
  }
- 
+ #endif	/* !defined(HASNORPC_H) */
  

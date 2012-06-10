@@ -1,6 +1,6 @@
 --- a/Configure
 +++ b/Configure
-@@ -2547,6 +2547,9 @@
+@@ -2682,6 +2682,9 @@ LOCKF_OWNER4
      if test "X$LSOF_CC" = "X"	# {
      then
        LSOF_CC=cc
@@ -9,4 +9,4 @@
 +    then
        LSOF_CCV=`$LSOF_CC -v 2>&1 | sed -n 's/.*version \(.*\)/\1/p'`
      fi	# }
-     LSOF_DIALECT_DIR=""
+     if test "X$LINUX_CONF_CC" = "X"	# {
