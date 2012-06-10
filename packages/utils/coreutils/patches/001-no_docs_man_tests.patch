@@ -11,7 +11,7 @@
    ChangeLog-2005			\
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -1238,7 +1238,7 @@ top_srcdir = @top_srcdir@
+@@ -1639,7 +1639,7 @@ top_srcdir = @top_srcdir@
  
  # Some tests always need root privileges, others need them only sometimes.
  ALL_RECURSIVE_TARGETS = install-root check-root distcheck-hook

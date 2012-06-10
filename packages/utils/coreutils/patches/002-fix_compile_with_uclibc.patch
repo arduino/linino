@@ -1,6 +1,6 @@
 --- a/lib/pthread.in.h
 +++ b/lib/pthread.in.h
-@@ -225,6 +225,9 @@
+@@ -232,6 +232,9 @@ pthread_mutex_unlock (pthread_mutex_t *m
  
  /* Approximate spinlocks with mutexes.  */
  

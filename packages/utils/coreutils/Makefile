@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2010 OpenWrt.org
+# Copyright (C) 2008-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,26 +8,28 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=coreutils
-PKG_VERSION:=8.8
+PKG_VERSION:=8.16
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=@GNU/coreutils
-PKG_MD5SUM:=bad596d9654e299eedea0eaf93f178fa
+PKG_MD5SUM:=89b06f91634208dceba7b36ad1f9e8b9
 PKG_BUILD_DEPENDS:=libpthread
+
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-COREUTILS_APPLETS:=\
-	base64 basename cat chcon chgrp chmod chown chroot cksum comm cp \
-	csplit cut date dd dir dircolors dirname du echo env expand expr \
-	factor false fmt fold groups head hostid id install join kill link \
-	ln logname ls md5sum mkdir mkfifo mknod mktemp mv nice nl nohup nproc \
-	od paste pathchk pinky pr printenv printf ptx pwd readlink rm rmdir \
-	runcon seq sha1sum sha224sum sha256sum sha384sum sha512sum shred shuf \
-	sleep sort split stat stdbuf stty su sum sync tac tail tee test timeout \
-	touch tr true truncate tsort tty uname unexpand uniq unlink uptime users \
-	vdir wc who whoami yes
+COREUTILS_APPLETS := \
+	base64 basename cat chcon chgrp chmod chown chroot cksum comm cp csplit \
+	cut date dd dir dircolors dirname du echo env expand expr factor	\
+	false fmt fold groups head hostid id install join kill link ln logname	\
+	ls md5sum mkdir mkfifo mknod mktemp mv nice nl nohup nproc od paste	\
+	pathchk pinky pr printenv printf ptx pwd readlink realpath rm rmdir	\
+	runcon seq sha1sum sha224sum sha256sum sha384sum sha512sum shred	\
+	shuf sleep sort split stat stdbuf stty sum sync tac tail tee test	\
+	timeout touch tr true truncate tsort tty uname unexpand	uniq unlink	\
+	uptime users vdir wc who whoami yes
 
 define Package/coreutils/Default
   SECTION:=utils
@@ -43,23 +45,22 @@ define Package/coreutils
 endef
 
 define Package/coreutils/description
-	Full versions of standard GNU utilities.  Normally, you would not
-	use this package, since the functionality in BusyBox is more than
-        sufficient and much smaller.
+ Full versions of standard GNU utilities. Normally, you would not use this
+ package, since the functionality in BusyBox is more than sufficient and
+ smaller.
 endef
 
 define GenPlugin
-  define Package/$(1)
-     $(call Package/coreutils/Default)
-     DEPENDS:=coreutils
-     TITLE:=Utility $(2) from the GNU core utilities
-  endef
+ define Package/$(1)
+   $(call Package/coreutils/Default)
+   DEPENDS:=coreutils
+   TITLE:=Utility $(2) from the GNU core utilities
+ endef
 
-  define Package/$(1)/description
-	Full version of standard GNU $(2) utility.  Normally, you would not
-	use this package, since the functionality in BusyBox is more than
-	sufficient.
-  endef
+ define Package/$(1)/description
+  Full version of standard GNU $(2) utility. Normally, you would not use this
+  package, since the functionality in BusyBox is more than sufficient.
+ endef
 endef
 
 $(foreach a,$(COREUTILS_APPLETS),$(eval $(call GenPlugin,coreutils-$(a),$(a))))
