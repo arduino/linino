@@ -25,6 +25,7 @@ define Package/liboil
   CATEGORY:=Libraries
   TITLE:=simple functions optimized for various CPUs
   URL:=http://liboil.freedesktop.org/wiki/
+  DEPENDS:=+librt
 endef
 
 define Package/liboil/description
