@@ -50,6 +50,7 @@ define Build/Configure
 		--without-php \
 		--enable-shared \
 		--enable-image \
+		--disable-libusb \
 		--disable-dbus \
 		--disable-dnssd \
 		--disable-launchd \
