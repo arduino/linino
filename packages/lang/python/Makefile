@@ -124,6 +124,12 @@ $(call Package/python/Default)
  DEPENDS+=+python-mini +libreadline +libncurses @BROKEN
 endef
 
+define Package/python-ncurses
+$(call Package/python/Default)
+ TITLE:=Python support for readline
+ DEPENDS+=+python-mini +libncurses
+endef
+
 MAKE_FLAGS:=\
 	$(TARGET_CONFIGURE_OPTS) \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
@@ -236,6 +242,10 @@ define PyPackage/python/filespec
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/array.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/binascii.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/cStringIO.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_curses.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_curses_panel.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/dbm.so
+-|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_bsddb.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/fcntl.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/grp.so
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/itertools.so
@@ -436,6 +446,11 @@ define PyPackage/python-readline/filespec
 +|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/readline.so
 endef
 
+define PyPackage/python-ncurses/filespec
++|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_curses.so
++|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_curses_panel.so
+endef
+
 define Host/Configure
 	-$(MAKE) -C $(HOST_BUILD_DIR) distclean
 	(cd $(HOST_BUILD_DIR); autoreconf --force --install || exit 0)
@@ -477,6 +492,7 @@ $(eval $(call PyPackage,python-shutil))
 $(eval $(call PyPackage,python-sqlite3))
 $(eval $(call PyPackage,python-gdbm))
 $(eval $(call PyPackage,python-readline))
+$(eval $(call PyPackage,python-ncurses))
 
 $(eval $(call BuildPackage,python))
 $(eval $(call BuildPackage,python-mini))
@@ -489,3 +505,4 @@ $(eval $(call BuildPackage,python-shutil))
 $(eval $(call BuildPackage,python-sqlite3))
 $(eval $(call BuildPackage,python-gdbm))
 $(eval $(call BuildPackage,python-readline))
+$(eval $(call BuildPackage,python-ncurses))
