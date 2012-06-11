@@ -24,6 +24,7 @@ define Package/cdparanoia
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Cdparanoia
+  DEPENDS:=+librt
   URL:=http://www.xiph.org/paranoia/index.html
 endef
 
