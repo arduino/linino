@@ -29,6 +29,8 @@ TARGET_CFLAGS += -Wno-error
 CONFIGURE_ARGS += \
 	--exec-prefix=/usr \
 	--prefix=/ \
+	--with-libcap-ng=no \
+	--with-libcap=no
 
 define Package/cifsmount/install
 	$(INSTALL_DIR) $(1)/usr/sbin
