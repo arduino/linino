@@ -36,7 +36,7 @@ endef
 
 define Package/fcgixx
   $(call Package/fcgi/Default)
-  DEPENDS:=fcgi +USE_UCLIBC:uclibcxx
+  DEPENDS:=fcgi +uclibcxx
   TITLE:=Shared library of FastCGI++
 endef
 
@@ -46,6 +46,7 @@ define Package/fcgi/description
  server specific APIs.
 endef
 
+TARGET_CXX=g++-uc
 TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
@@ -53,9 +54,7 @@ CONFIGURE_ARGS += \
 	--enable-static \
 
 CONFIGURE_VARS += \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
-	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
-	LIBS="-nodefaultlibs -lc -luClibc++ -lm" \
+	LIBS="-lm" \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
