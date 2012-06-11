@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/nagiosplug
 PKG_MD5SUM:=a1835a48a777863ed2583de3c82446a9
 
-PKG_FIXUP:=libtool no-autoreconf
+PKG_FIXUP:=patch-libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -25,7 +25,7 @@ comma:= ,
 define Package/nagios-plugins
   SECTION:=admin
   CATEGORY:=Administration
-  DEPENDS:=+uclibcxx +libpq
+  DEPENDS:=+uclibcxx +libpq +libopenssl
   TITLE:=plugins for Nagios checks
   URL:=http://nagiosplug.sourceforge.net/
 endef
