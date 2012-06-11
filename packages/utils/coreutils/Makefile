@@ -31,6 +31,10 @@ COREUTILS_APPLETS := \
 	timeout touch tr true truncate tsort tty uname unexpand	uniq unlink	\
 	uptime users vdir wc who whoami yes
 
+DEPENDS_sort = +libpthread
+DEPENDS_timeout = +librt
+DEPENDS_uptime = +libelf
+
 define Package/coreutils/Default
   SECTION:=utils
   CATEGORY:=Utilities
@@ -53,7 +57,7 @@ endef
 define GenPlugin
  define Package/$(1)
    $(call Package/coreutils/Default)
-   DEPENDS:=coreutils
+   DEPENDS:=coreutils $(DEPENDS_$(2))
    TITLE:=Utility $(2) from the GNU core utilities
  endef
 
