@@ -149,8 +149,6 @@ define Image/Build
 	$(call Image/Build/CFE,$(1),D-4P-W,6348,DSL2640B)
 	# D-Link DSL-2650U
 	$(call Image/Build/CFE,$(1),96358VW2,6358,DSL2650U)
-	# D-Link DSL-2740B
-	$(call Image/Build/CFE,$(1),96358GW,6358,DSL2740B)
 
 	# TP-Link TD-8810A, TD-8810B, TD-8811A, TD-8811B
 	$(call Image/Build/CFE,$(1),8L-2M-8M,6338,TP8810_8811)
