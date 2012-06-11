@@ -37,6 +37,7 @@ endef
 
 define Package/fftw3l
   $(call Package/fftw3)
+  DEPENDS:=@BROKEN
   VARIANT:=long-double
   TITLE+= (long-double precision)
 endef
