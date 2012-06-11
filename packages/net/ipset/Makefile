@@ -71,7 +71,7 @@ define KernelPackage/ipt-ipset
 $(call Package/ipset/Default)
   SUBMENU:=Netfilter Extensions
   TITLE:=IPset netfilter modules
-  DEPENDS+= kmod-ipt-core +kmod-nfnetlink
+  DEPENDS+= +kmod-ipt-core +kmod-nfnetlink
   FILES:=$(foreach mod,$(IPSET_MODULES),$(PKG_BUILD_DIR)/kernel/net/netfilter/$(mod).ko)
   AUTOLOAD:=$(call AutoLoad,49,$(notdir $(IPSET_MODULES)))
 endef
