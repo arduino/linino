@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/id3lib
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+zlib +uclibcxx
+  DEPENDS:=+zlib +libstdcpp
   TITLE:=An ID3v1/ID3v2 tag manipulation library
   URL:=http://www.id3lib.org/
 endef
