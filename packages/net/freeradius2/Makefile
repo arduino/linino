@@ -275,7 +275,7 @@ endef
 define Package/freeradius2-mod-sql-mysql
   $(call Package/freeradius2/Default)
   DEPENDS:=freeradius2-mod-sql \
-  	+PACKAGE_freeradius2-mod-sql-mysql:libmysqlclient_r
+  	+PACKAGE_freeradius2-mod-sql-mysql:libmysqlclient-r
   TITLE:=MySQL module
 endef
 

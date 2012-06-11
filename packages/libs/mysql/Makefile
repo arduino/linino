@@ -51,7 +51,7 @@ define Package/libmysqlclient
   $(call Package/libmysqlclient/Default)
 endef
 
-define Package/libmysqlclient_r
+define Package/libmysqlclient-r
   $(call Package/libmysqlclient/Default)
   TITLE += threadsafe
   DEPENDS+= +libpthread
@@ -171,7 +171,7 @@ define Package/libmysqlclient/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/mysql/libmysqlclient.so.* $(1)/usr/lib/
 endef
-define Package/libmysqlclient_r/install
+define Package/libmysqlclient-r/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/mysql/libmysqlclient_r.so.* $(1)/usr/lib/
 endef
@@ -202,4 +202,4 @@ endef
 
 $(eval $(call BuildPackage,mysql-server))
 $(eval $(call BuildPackage,libmysqlclient))
-$(eval $(call BuildPackage,libmysqlclient_r))
+$(eval $(call BuildPackage,libmysqlclient-r))
