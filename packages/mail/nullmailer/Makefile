@@ -20,6 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/nullmailer
   SECTION:=mail
   CATEGORY:=Mail
+  DEPENDS:=+libstdcpp
   TITLE:=A minimal MTA for hosts which relay to a fixed set of smart relays
   URL:=http://untroubled.org/nullmailer/
 endef
