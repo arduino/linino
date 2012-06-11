@@ -37,7 +37,7 @@ endef
 define Package/mysql-server/Default
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libmysqlclient +libncurses +libreadline
+  DEPENDS:=+libmysqlclient +libpthread +libncursesw +libreadline
   TITLE:=MySQL Server
   URL:=http://dev.mysql.com/
   SUBMENU:=database
@@ -54,6 +54,7 @@ endef
 define Package/libmysqlclient_r
   $(call Package/libmysqlclient/Default)
   TITLE += threadsafe
+  DEPENDS+= +libpthread
 endef
 
 TARGET_CXX=g++-uc
