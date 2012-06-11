@@ -14,11 +14,11 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/calcurse-$(PKG_VERSION)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/calcurse
-	SECTION:=utils
-	CATEGORY:=Utilities
-	TITLE:=Calcurse
-	DEPENDS:=+libncurses +libreadline
-	URL:=http://culot.org/calcurse
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Calcurse
+  DEPENDS:=+libncursesw +libreadline +libpthread
+  URL:=http://culot.org/calcurse
 endef
 
 define Package/calcurse/description
