@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2010 OpenWrt.org
+# Copyright (C) 2008-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=shadow
-PKG_VERSION:=4.0.3
+PKG_VERSION:=4.1.5.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://ftp.pld-linux.org/software/shadow
-PKG_MD5SUM:=4fa404ebb4e29828232b3c9a2abddefd
+PKG_SOURCE_URL:=http://pkg-shadow.alioth.debian.org/releases
+PKG_MD5SUM:=a00449aa439c69287b6d472191dc2247
 
 PKG_FIXUP:=libtool
 
@@ -22,13 +22,23 @@ PKG_INSTALL:=1
 include $(INCLUDE_DIR)/package.mk
 
 UTILS := \
-	groupadd groupdel groupmod useradd userdel usermod
+	groupadd groupdel groupmod useradd userdel usermod \
+	su passwd groups
+
+CONFIGURE_ARGS += \
+	--without-audit \
+	--without-libpam \
+	--without-selinux \
+	--without-acl \
+	--without-attr \
+	--without-tcb \
+	--without-nscd
 
 define Package/shadow
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=The PLD Linux shadow utilities
-  URL:=http://ftp.pld-linux.org/software/shadow/
+  URL:=http://pkg-shadow.alioth.debian.org/
   DEPENDS:=$(foreach u,$(UTILS),+shadow-$(u))
 endef
 
@@ -43,12 +53,30 @@ define Package/shadow/install
 endef
 
 
+define Package/shadow-common
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Shared definitions for the shadow utilities
+  URL:=http://pkg-shadow.alioth.debian.org/
+endef
+
+define Package/shadow-common/conffiles
+/etc/login.defs
+endef
+
+define Package/shadow-common/install
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/login.defs $(1)/etc/
+endef
+
+
 define program
   define Package/shadow-$(1)
     SECTION:=utils
     CATEGORY:=Utilities
     TITLE:=Utility $(1) from the PLD Linux shadow utilities
-    URL:=http://ftp.pld-linux.org/software/shadow/
+    URL:=http://pkg-shadow.alioth.debian.org/
+    DEPENDS:=+shadow-common
   endef
 
   define Package/shadow-$(1)/description
@@ -70,4 +98,5 @@ define program
 endef
 
 $(eval $(call BuildPackage,shadow))
+$(eval $(call BuildPackage,shadow-common))
 $(foreach u,$(UTILS),$(eval $(call program,$(u))))

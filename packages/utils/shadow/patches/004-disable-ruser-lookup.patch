@@ -1,21 +1,10 @@
---- a/configure
-+++ b/configure
-@@ -9192,7 +9192,7 @@ cat >>confdefs.h <<\EOF
- EOF
- 
- cat >>confdefs.h <<\EOF
--#define RUSEROK 0
-+/* #define RUSEROK 1 */
- EOF
- 
- cat >>confdefs.h <<\EOF
 --- a/configure.in
 +++ b/configure.in
-@@ -150,7 +150,6 @@ dnl XXX - quick hack, should disappear b
- AC_DEFINE(USG)
- AC_DEFINE(USE_SYSLOG)
- AC_DEFINE(RLOGIN)
--AC_DEFINE(RUSEROK, 0)
- AC_DEFINE_UNQUOTED(_WTMP_FILE, "/var/log/wtmp")
- AC_DEFINE_UNQUOTED(LASTLOG_FILE, "/var/log/lastlog")
- AC_DEFINE_UNQUOTED(FAILLOG_FILE, "/var/log/faillog")
+@@ -195,7 +195,6 @@ AC_DEFINE_UNQUOTED(PASSWD_PROGRAM, "$sha
+ dnl XXX - quick hack, should disappear before anyone notices :).
+ AC_DEFINE(USE_SYSLOG, 1, [Define to use syslog().])
+ AC_DEFINE(RLOGIN, 1, [Define if login should support the -r flag for rlogind.])
+-AC_DEFINE(RUSEROK, 0, [Define to the ruserok() "success" return value (0 or 1).])
+ 
+ AC_ARG_ENABLE(shadowgrp,
+ 	[AC_HELP_STRING([--enable-shadowgrp], [enable shadow group support @<:@default=yes@:>@])],
