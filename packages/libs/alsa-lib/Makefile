@@ -26,7 +26,7 @@ define Package/alsa-lib
   CATEGORY:=Libraries
   TITLE:=ALSA (Advanced Linux Sound Architecture) library
   URL:=http://www.alsa-project.org/
-  DEPENDS:=@AUDIO_SUPPORT +kmod-sound-core
+  DEPENDS:=@AUDIO_SUPPORT +kmod-sound-core +libpthread +librt
 endef
 
 define Package/alsa-lib/description
