@@ -21,7 +21,10 @@ PKG_INSTALL:=1
 include $(INCLUDE_DIR)/package.mk
 
 TARGET_CFLAGS += -D_GNU_SOURCE
-CONFIGURE_ARGS += --without-upnp --without-pam
+CONFIGURE_ARGS += \
+	--without-upnp \
+	--without-pam \
+	--disable-libwrap
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
