@@ -26,7 +26,7 @@ define Package/cmus
   SECTION:=sound
   CATEGORY:=Sound
   DEPENDS:= \
-	+libpthread +librt +libncurses $(ICONV_DEPENDS) \
+	+libpthread +librt +libncursesw $(ICONV_DEPENDS) \
 	+AUDIO_SUPPORT:alsa-lib \
 	+BUILD_PATENTED:libmad +libvorbisidec +libflac
   TITLE:=C* Music Player
