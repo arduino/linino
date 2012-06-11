@@ -26,6 +26,7 @@ define Package/libevent
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Event notification library
+  DEPENDS:=+librt
   URL:=http://www.monkey.org/~provos/libevent/
 endef
 
