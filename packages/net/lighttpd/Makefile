@@ -38,7 +38,7 @@ define Package/lighttpd/config
 config LIGHTTPD_SSL
 	bool "SSL support"
 	depends on PACKAGE_lighttpd
-	default y if PACKAGE_libopenssl
+	default y
 	help
 	  Implements SSL support in lighttpd (using libopenssl). This
 	  option is required if you enable the SSL engine in your
