@@ -34,6 +34,9 @@ define Package/clish/description
  and forks the appropriate system commands to perform any actions.
 endef
 
+MAKE_FLAGS += \
+	bin_PROGRAMS=bin/clish
+
 define Package/clish/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
