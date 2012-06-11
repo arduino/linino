@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/fftw3
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=@!avr32
+  DEPENDS:=@!avr32 +libpthread
   VARIANT:=double
   TITLE:=Fast Fourier transform library
   URL:=http://www.fftw.org/
