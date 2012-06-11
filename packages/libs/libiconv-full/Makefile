@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=@GNU/libiconv
 PKG_MD5SUM:=d42b97f6ef5dd0ba4469d520ed732fed
 PKG_BUILD_DIR:=$(BUILD_DIR)/libiconv-$(PKG_VERSION)
 
-PKG_FIXUP = libtool no-autoreconf
+PKG_FIXUP:=patch-libtool
 
 include $(INCLUDE_DIR)/package.mk
 
