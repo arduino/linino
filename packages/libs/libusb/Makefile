@@ -25,6 +25,7 @@ define Package/libusb
   CATEGORY:=Libraries
   TITLE:=A library for accessing Linux USB devices
   URL:=http://libusb.sourceforge.net/
+  DEPENDS:=+libstdcpp
 endef
 
 define Build/Configure
