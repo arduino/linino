@@ -46,7 +46,7 @@ define Package/boost/Default
   CATEGORY:=Libraries
   TITLE:=Boost C++ source libraries
   URL:=http://www.boost.org
-  DEPENDS:=+libstdcpp
+  DEPENDS:=+libstdcpp +libpthread +librt
   MAINTAINER:=Mirko Vogt <mirko@openwrt.org>
 endef
 
