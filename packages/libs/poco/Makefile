@@ -25,7 +25,7 @@ define Package/poco
   CATEGORY:=Libraries
   TITLE:=Poco C++ libraries
   URL:=http://www.pocoproject.org/
-  DEPENDS:=+libstdcpp
+  DEPENDS:=+libstdcpp +libpthread +librt
 endef
 
 define Package/poco/description
