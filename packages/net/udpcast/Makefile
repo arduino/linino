@@ -22,6 +22,7 @@ define Package/udpcast
   CATEGORY:=Network
   TITLE:=UDP Cast
   URL:=http://udpcast.linux.lu/
+  DEPENDS:=+libpthread
 endef
 
 define Package/udpcast/description
