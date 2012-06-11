@@ -23,7 +23,6 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libv4l/Default
   TITLE:=Video 4 Linux
   URL:=http://www.linuxtv.org/
-  DEPENDS:=+libpthread
 endef
 
 define Package/libv4l/Default/description
@@ -46,6 +45,7 @@ define Package/libv4l
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= wrapper libraries
+  DEPENDS := +libpthread +librt
 endef
 
 define Package/libv4l/description
@@ -57,7 +57,7 @@ define Package/v4l-utils
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE+= utilities
-  DEPENDS+= +librt +libv4l +uclibcxx
+  DEPENDS := +libv4l +uclibcxx
 endef
 
 define Package/v4l-utils/description
