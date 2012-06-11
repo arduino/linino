@@ -24,6 +24,7 @@ define Package/flow-tools
   CATEGORY:=Network
   TITLE:=flow-tools
   URL:=http://www.splintered.net/sw/flow-tools/
+  DEPENDS:=+zlib
 endef
 
 define Package/flow-tools/description
