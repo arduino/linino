@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/net-snmp
 PKG_MD5SUM:=984932520143f0c8bf7b7ce1fc9e1da1
 
-PKG_FIXUP = libtool no-autoreconf
+PKG_FIXUP = patch-libtool
 
 include $(INCLUDE_DIR)/package.mk
 
