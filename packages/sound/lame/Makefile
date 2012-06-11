@@ -31,6 +31,7 @@ define Package/lame
 $(call Package/lame/Default)
   TITLE:=lame
   MENU:=1
+  DEPENDS += +libncurses
 endef
 
 define Package/lame/description
