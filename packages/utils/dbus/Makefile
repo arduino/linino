@@ -44,6 +44,7 @@ define Package/libdbus
 $(call Package/dbus/Default)
   CATEGORY:=Libraries
   TITLE+= (library)
+  DEPENDS:= +librt
 endef
 
 define Package/libdbus/Description
@@ -54,7 +55,7 @@ endef
 define Package/dbus
 $(call Package/dbus/Default)
  TITLE+= (daemon)
- DEPENDS:= +libexpat +libdbus +librt
+ DEPENDS:= +libexpat +libdbus
 endef
 
 define Package/dbus/Description
