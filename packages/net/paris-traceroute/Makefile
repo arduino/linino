@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=http://www.paris-traceroute.net/downloads
 PKG_MD5SUM:=18643a62fdcabd038cdeb14b5cbedb8b
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-current
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

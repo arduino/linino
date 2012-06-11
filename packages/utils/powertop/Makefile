@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=http://www.lesswatts.org/projects/powertop/download/
 PKG_MD5SUM:=3498f5983c683c3a57dce7379a722082
 
 PKG_INSTALL:=1
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

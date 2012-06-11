@@ -26,7 +26,7 @@ PKG_SOURCE:=$(PKG_SOURCE_SUBDIR)-$(shell echo $(PKG_REV)|cut -b -9).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_BUILD_PARALLEL:=1
 
 

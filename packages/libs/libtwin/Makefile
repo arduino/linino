@@ -14,7 +14,7 @@ PKG_RELEASE:=2
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ozlabs.org/~jk/projects/petitboot/downloads/
 PKG_MD5SUM:=ebd7c5cca3c9e108208a7bf17b256a6c
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

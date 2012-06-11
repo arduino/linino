@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://pkg-shadow.alioth.debian.org/releases
 PKG_MD5SUM:=a00449aa439c69287b6d472191dc2247
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1
 

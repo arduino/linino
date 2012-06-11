@@ -19,7 +19,7 @@ PKG_SOURCE_URL:= \
 	ftp://ftp.sunet.se/pub/network/monitoring/rrdtool/rrdtool-1.0.x
 PKG_MD5SUM:=c466e2e7df95fa8e318e46437da87686
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

@@ -18,7 +18,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.isc.org/isc/dhcp/$(PKG_VERSION)
 PKG_MD5SUM:=04599f1557a5cafd10d7745267a68c8b
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk

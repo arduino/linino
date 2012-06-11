@@ -17,7 +17,7 @@ PKG_SOURCE_URL:= \
 	http://www.68k.org/~michael/audiofile/
 PKG_MD5SUM:=a39be317a7b1971b408805dc5e371862
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL=1
 
 include $(INCLUDE_DIR)/package.mk

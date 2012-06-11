@@ -12,7 +12,7 @@ PKG_VERSION:=0.8.2
 PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ipython.scipy.org/dist/
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_MD5SUM:=fd5a1b6e518898a4aee8b8d8b428af70
 
 include $(INCLUDE_DIR)/package.mk

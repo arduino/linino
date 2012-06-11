@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=@SF/hplip
 PKG_MD5SUM:=2b0906b4a57b437988829557ca62adfd
 
 PKG_BUILD_DEPENDS := python
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

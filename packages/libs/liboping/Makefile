@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://verplant.org/liboping/files
 PKG_MD5SUM:=64a6f31310093d2517cfe7f05aa011e0
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1
 

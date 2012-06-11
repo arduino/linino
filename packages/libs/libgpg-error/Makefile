@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=ftp://ftp.gnupg.org/gcrypt/libgpg-error
 PKG_MD5SUM:=521b98aa9395e7eaf0ef2236233a0796
 
 PKG_BUILD_PARALLEL:=1
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

@@ -16,7 +16,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/linux-ntfs
 PKG_MD5SUM:=2c402b647bb7aeb1d3f8ce1cc354fd68
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 PKG_BUILD_DEPENDS:=libgcrypt
 

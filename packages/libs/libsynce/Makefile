@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/nls.mk
 
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 define Package/libsynce
   DEPENDS:=$(ICONV_DEPENDS) $(INTL_DEPENDS)

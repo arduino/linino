@@ -14,7 +14,7 @@ PKG_RELEASE:=3
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.gnutls.org/pub/gnutls/attic/opencdk
 PKG_MD5SUM:=813d62d7afe7b2c2d8f3df0a6c9d9331
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

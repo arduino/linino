@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://oligarchy.co.uk/xapian/$(PKG_VERSION)
 PKG_MD5SUM:=4bfe673c71ac074e349ef691d7ba56d0
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 $(call include_mk, python-package.mk)

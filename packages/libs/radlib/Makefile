@@ -21,7 +21,7 @@ else
 PATCH_DIR:=./patches
 endif
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

@@ -17,7 +17,7 @@ PKG_MD5SUM:=26cec15a90885042dd4a15c4003b08ae
 
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

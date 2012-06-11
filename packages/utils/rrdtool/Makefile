@@ -21,7 +21,7 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_python-rrd \
 	CONFIG_PACKAGE_rrdcgi \
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1
 

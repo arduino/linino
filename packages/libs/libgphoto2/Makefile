@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/gphoto
 PKG_MD5SUM:=735c50ebb15cb8be61bac400ee4afb1e
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_LIBTOOL_PATHS:=. libgphoto2_port
 PKG_INSTALL:=1
 

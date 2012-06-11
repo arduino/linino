@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=http://xmlsoft.org/sources/ \
 	ftp://fr.rpmfind.net/pub/libxml/
 PKG_MD5SUM:=e61d0364a30146aaa3001296f853b2b9
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

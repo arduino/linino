@@ -14,7 +14,7 @@ PKG_RELEASE:=3
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://files.musepack.net/source/
 PKG_MD5SUM:=7f7a060e83b4278acf4b77d7a7b9d2c0
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

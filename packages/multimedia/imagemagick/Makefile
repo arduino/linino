@@ -17,7 +17,7 @@ PKG_SOURCE:=ImageMagick-$(PKG_VERSION)-$(PKG_REVISION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.fifi.org/pub/ImageMagick/
 PKG_MD5SUM:=
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=aclocal.m4 m4/libtool.m4
 
 include $(INCLUDE_DIR)/package.mk

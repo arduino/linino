@@ -16,7 +16,7 @@ PKG_SOURCE:=db-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.oracle.com/berkeley-db/
 PKG_MD5SUM:=073ab7f20d24b3872a51ca762f5090e7
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_LIBTOOL_PATHS:=. build_unix
 PKG_BUILD_PARALLEL:=1
 

@@ -17,7 +17,7 @@ PKG_SOURCE_URL:= \
 	http://www.very-clever.com/download/nongnu/linphone/ortp/sources/
 PKG_MD5SUM:=2b0281600cb958d1c94e318a86b62fe3
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

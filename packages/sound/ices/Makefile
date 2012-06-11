@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=http://downloads.xiph.org/releases/ices/
 PKG_MD5SUM:=0d95ac34d59fed337028d5e7771076d8
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

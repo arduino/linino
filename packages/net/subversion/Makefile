@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://subversion.tigris.org/downloads
 PKG_MD5SUM:=81e5dc5beee4b3fc025ac70c0b6caa14
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_MACRO_PATHS:=build/ac-macros
 
 include $(INCLUDE_DIR)/package.mk

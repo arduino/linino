@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=@SF/flac
 PKG_MD5SUM:=
 PKG_INSTALL:=1
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=autogen.sh aclocal.m4
 
 include $(INCLUDE_DIR)/package.mk

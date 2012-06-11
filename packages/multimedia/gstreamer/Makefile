@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gstreamer/
 PKG_MD5SUM:=e6938af242cd002be9f0b6441e848d83
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=autogen.sh aclocal.m4
 
 PKG_INSTALL:=1

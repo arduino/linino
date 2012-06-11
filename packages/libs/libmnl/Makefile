@@ -17,7 +17,7 @@ PKG_SOURCE_URL:= \
 	ftp://ftp.netfilter.org/pub/libmnl
 PKG_MD5SUM:=e936236bb57a2375afa4e70e75dc3ba9
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

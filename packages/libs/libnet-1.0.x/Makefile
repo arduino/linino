@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=http://www.packetfactory.net/libnet/dist/deprecated/
 PKG_MD5SUM:=ddf53f0f484184390e8c2a1bd0853667
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Libnet-$(PKG_VERSION)
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

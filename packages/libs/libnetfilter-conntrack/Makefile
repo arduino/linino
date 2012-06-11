@@ -17,7 +17,7 @@ PKG_SOURCE_URL:= \
 	ftp://ftp.netfilter.org/pub/libnetfilter_conntrack/
 PKG_MD5SUM:=b7506cbb7580433859809d8eac53a199
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1
 

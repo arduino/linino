@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=@SF/oprofile/
 PKG_MD5SUM:=8b5d1d9b65f84420bcc3234777ad3be3
 
 PKG_BUILD_DEPENDS:=binutils
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

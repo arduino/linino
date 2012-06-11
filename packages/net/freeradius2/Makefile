@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/freeradius/
 PKG_MD5SUM:=862d3a2c11011e61890ba84fa636ed8c
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/freeradius-server-$(PKG_VERSION)
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

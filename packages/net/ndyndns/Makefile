@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ndyndns.googlecode.com/files
 PKG_MD5SUM:=0cdb4dcba5f8c1664f53884b3c2179e9
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

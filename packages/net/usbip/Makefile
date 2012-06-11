@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=@SF/usbip
 PKG_MD5SUM:=d1094b6d4449787864f8be001639232c
 
 PKG_BUILD_DEPENDS:=glib2 sysfsutils
-PKG_FIXUP:=libtool autoreconf
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

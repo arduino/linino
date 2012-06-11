@@ -19,7 +19,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/sqlite-$(PKG_VERSION)
 
 PKG_BUILD_DEPENDS:=libncurses libreadline
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1
 

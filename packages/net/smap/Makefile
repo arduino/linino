@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=http://www.wormulon.net/smap/
 PKG_MD5SUM:=814456ccc8fea5688382b7ec55fe44eb
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/smap-$(PKG_VERSION)/smap
-PKG_FIXUP = libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

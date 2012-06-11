@@ -15,7 +15,7 @@ PKG_SOURCE_URL:=http://www.remlab.net/files/miredo
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_MD5SUM:=1281e7e75bddbde244cd778d99fa22d4
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

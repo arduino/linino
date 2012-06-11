@@ -18,7 +18,7 @@ PKG_MD5SUM:=eb7bbd258913518ad30971ea7ecb0ca9
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-autoconf-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=libncurses libreadline
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1
 

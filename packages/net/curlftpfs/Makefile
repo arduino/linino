@@ -12,7 +12,7 @@ PKG_SOURCE_URL:=@SF/curlftpfs
 PKG_MD5SUM:=b452123f755114cd4461d56c648d9f12
 
 PKG_BUILD_DEPENDS:=libiconv
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk

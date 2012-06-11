@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/gdbm
 PKG_MD5SUM:=59f6e4c4193cb875964ffbe8aa384b58
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_BUILD_PARALLEL:=0
 
 include $(INCLUDE_DIR)/package.mk

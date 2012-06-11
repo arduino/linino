@@ -31,7 +31,7 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_gst-mod-volume \
 	CONFIG_PACKAGE_gst-mod-vorbis \
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

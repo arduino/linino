@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://alioth.debian.org/download.php/2332/
 PKG_MD5SUM:=0ebe7a91898384ca906787cc4e2c3f25
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

@@ -18,7 +18,7 @@ PKG_MD5SUM:=0d4cdee46a98731b1b71e30504589281
 PKG_BUILD_DEPENDS:=libgssapi
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=1d368a86f3c284e95d260a94767a8ded
 
 PKG_BUILD_DEPENDS:=+libopenssl +libgcrypt
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

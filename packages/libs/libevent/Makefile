@@ -16,7 +16,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-stable.tar.gz
 PKG_SOURCE_URL:=http://www.monkey.org/~provos/
 PKG_MD5SUM:=a00e037e4d3f9e4fe9893e8a2d27918c
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 

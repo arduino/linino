@@ -17,7 +17,7 @@ PKG_MD5SUM:=0bb72abec367f4ef12551f79dda11b23
 
 PKG_BUILD_DEPENDS:=libogg
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1
 

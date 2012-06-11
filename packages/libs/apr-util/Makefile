@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.ibiblio.org/pub/mirrors/apache/apr
 PKG_MD5SUM:=0f671b037ca62751a8a7005578085560
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=aclocal.m4 build/ltmain.sh
 
 PKG_INSTALL:=1

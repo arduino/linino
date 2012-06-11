@@ -13,7 +13,7 @@ PKG_RELEASE:=3
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.xiph.org/releases/theora/
 PKG_MD5SUM:=c963937053f45a7878954bed37ceb182
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_BUILD_DEPENDS:=libvorbis
 

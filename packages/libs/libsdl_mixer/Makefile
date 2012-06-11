@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.libsdl.org/projects/SDL_mixer/release/
 PKG_MD5SUM:=65ada3d997fe85109191a5fb083f248c
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_MACRO_PATHS:=acinclude
 PKG_INSTALL:=1
 

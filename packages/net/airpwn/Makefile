@@ -17,7 +17,7 @@ PKG_MD5SUM:=15b6f1cd287b4bb20dd586bb6c83628d
 
 PKG_BUILD_DEPENDS:=libnet1 libopenssl libpcap libpcre
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_LIBTOOL_PATHS:=. lorcon
 
 include $(INCLUDE_DIR)/package.mk

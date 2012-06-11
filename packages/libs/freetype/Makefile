@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/freetype
 PKG_MD5SUM:=dbf2caca1d3afd410a29217a9809d397
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_LIBTOOL_PATHS:=builds/unix
 
 include $(INCLUDE_DIR)/host-build.mk

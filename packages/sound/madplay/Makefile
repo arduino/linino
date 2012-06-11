@@ -16,7 +16,7 @@ PKG_SOURCE_URL:=@SF/mad \
 	ftp://ftp.mars.org/pub/mpeg/
 PKG_MD5SUM:=6814b47ceaa99880c754c5195aa1aac1
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk

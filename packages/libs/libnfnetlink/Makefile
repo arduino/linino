@@ -18,7 +18,7 @@ PKG_SOURCE_URL:= \
 	http://mirrors.evolva.ro/netfilter.org/libnfnetlink/
 PKG_MD5SUM:=016fdec8389242615024c529acc1adb8
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1
 

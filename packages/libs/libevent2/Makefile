@@ -17,7 +17,7 @@ PKG_SOURCE_URL:=http://www.monkey.org/~provos/ \
 	@SF/levent
 PKG_MD5SUM:=91111579769f46055b0a438f5cc59572
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 

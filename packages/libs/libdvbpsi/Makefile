@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.videolan.org/pub/libdvbpsi/$(PKG_VERSION)/
 PKG_MD5SUM:=bd2d9861be3311e1e03c91cd9345f542
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

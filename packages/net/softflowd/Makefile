@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.mindrot.org/files/softflowd/
 PKG_MD5SUM:=0054d1c80494396cc15edb0a1c7748b1
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 

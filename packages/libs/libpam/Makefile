@@ -15,7 +15,7 @@ PKG_SOURCE:=Linux-PAM-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://pkgs.fedoraproject.org/repo/pkgs/pam/Linux-PAM-1.1.4.tar.bz2/e9af5fb27bb22edb55d077e2888b3ebc/
 PKG_MD5SUM:=e9af5fb27bb22edb55d077e2888b3ebc
 PKG_INSTALL:=1
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Linux-PAM-$(PKG_VERSION)
 
