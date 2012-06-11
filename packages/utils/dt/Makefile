@@ -26,7 +26,7 @@ define Package/dt
   SECTION:=utils
   TITLE:=A generic data test program
   URL:=http://www.scsifaq.org/RMiller_Tools/index.html
-  DEPENDS:=+libpthread
+  DEPENDS:=+libpthread +librt
 endef
 
 define Package/dt/description
