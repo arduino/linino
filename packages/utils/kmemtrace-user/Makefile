@@ -27,6 +27,7 @@ define Package/kmemtrace-user
   CATEGORY:=Utilities
   TITLE:=trace slab allocator functions
   URL:=http://repo.or.cz/w/kmemtrace-user.git
+  DEPENDS:=+libpthread
   KCONFIG:= \
 	CONFIG_KMEMTRACE=y
 endef
