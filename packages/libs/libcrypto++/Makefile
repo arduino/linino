@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libcryptoxx
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libpthread
+  DEPENDS:=+libpthread +libstdcpp
   TITLE:=Crypto++ is library for creating C++ programs which use cryptographic algorithms
   URL:=http://packages.debian.org/sid/libcrypto++-dev
 endef
