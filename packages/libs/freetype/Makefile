@@ -26,7 +26,7 @@ define Package/libfreetype
   CATEGORY:=Libraries
   TITLE:=A free, high-quality and portable font engine
   URL:=http://www.freetype.org/
-  DEPENDS:=+zlib
+  DEPENDS:=+zlib +libbz2
 endef
 
 define Package/libfreetype/description
