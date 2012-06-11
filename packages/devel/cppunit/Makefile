@@ -23,6 +23,7 @@ define Package/cppunit
   CATEGORY:=Development
   TITLE:=Unit Testing Library for C++
   URL:=http://cppunit.sourceforge.net/
+  DEPENDS:=+libstdcpp
 endef
 
 define Package/cppunit/description
