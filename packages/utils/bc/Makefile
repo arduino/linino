@@ -26,7 +26,7 @@ endef
 define Package/bc
   $(call Package/bc/Default)
   TITLE:=Arbitrary precision calculator language
-  DEPENDS:=+libreadline
+  DEPENDS:=+libreadline +libncurses
 endef
 
 define Package/bc/description
