@@ -38,12 +38,15 @@ This is an implementation of NOMADv4 (Filters for
 	status information to the UoB-NOMAD-GUI (ver 0.1).
 endef
 
+MAKE_FLAGS = \
+	CC="$(TARGET_CC) $(TARGET_CFLAGS)"
+
 define Build/Compile
-$(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/Agent mipagent)
+$(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/Agent clean mipagent)
 $(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/Client/net-tools clean)
 $(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/Client/net-tools/lib clean)
 $(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/Client/net-tools all)
-$(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/Client mipmn)
+$(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/Client clean mipmn)
 endef
 
 define Package/uob-nomad/install
