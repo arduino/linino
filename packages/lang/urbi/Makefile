@@ -25,7 +25,7 @@ TARGET_CFLAGS += $(FPIC)
 define Package/urbi
   SECTION:=lang
   CATEGORY:=Languages
-  DEPENDS:=+uclibcxx +libpthread
+  DEPENDS:=+uclibcxx +libpthread @BROKEN
   TITLE:=URBI SDK
   URL:=http://www.urbiforge.com
 endef
