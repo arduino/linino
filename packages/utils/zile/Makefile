@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/zile
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libncurses
+  DEPENDS:=+libncursesw
   TITLE:=very small emacs-like editor
   URL:=http://www.gnu.org/software/zile/
   SUBMENU:=Editors
