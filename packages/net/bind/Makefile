@@ -86,6 +86,7 @@ CONFIGURE_ARGS += \
 	--enable-static \
 	--with-randomdev="/dev/urandom" \
 	--disable-threads \
+	--disable-linux-caps \
 	--with-openssl="$(STAGING_DIR)/usr" \
 	--with-libtool \
 	--with-libxml2=no \
