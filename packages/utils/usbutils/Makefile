@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2011 OpenWrt.org
+# Copyright (C) 2007-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=usbutils
-PKG_VERSION:=004
+PKG_VERSION:=005
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@KERNEL/linux/utils/usb/usbutils
-PKG_MD5SUM:=fc69cde51b2094aa4bbd804c0ba97e35
+PKG_MD5SUM:=6a21f7b6c02b76df5e8a7c208d746654
 
 PKG_INSTALL:=1
 
