@@ -33,6 +33,7 @@ define Package/unixodbc
   TITLE+= (libraries)
   SECTION:=libs
   CATEGORY:=Libraries
+  DEPENDS:=+libltdl +libpthread
 endef
 
 define Package/unixodbc/description
