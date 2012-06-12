@@ -25,6 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/tcl
   SECTION:=lang
   CATEGORY:=Languages
+  DEPENDS:=+libpthread
   TITLE:=TCL Lang
   URL:=http://www.tcl.tk
 endef
