@@ -27,6 +27,7 @@ define Package/GraphicsMagick/Default
   CATEGORY:=Multimedia
   TITLE:=GraphicsMagick
   URL:=http://www.graphicsmagick.org/
+  DEPENDS:=+libbz2 +libfreetype +libltdl +libpthread +libstdcpp +zlib
 endef
 
 define Package/GraphicsMagick
