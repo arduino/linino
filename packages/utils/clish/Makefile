@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/clish
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libstdcpp
+  DEPENDS:=+libstdcpp +libpthread
   TITLE:=Command Line Interface SHell
   URL:=http://clish.sourceforge.net/
 endef
@@ -33,6 +33,9 @@ define Package/clish/description
  This software handles the user interaction,
  and forks the appropriate system commands to perform any actions.
 endef
+
+CONFIGURE_VARS += \
+	ac_cv_header_bfd_h=no
 
 MAKE_FLAGS += \
 	bin_PROGRAMS=bin/clish
