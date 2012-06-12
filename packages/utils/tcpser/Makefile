@@ -20,21 +20,21 @@ PKG_MD5SUM:=e712ae9fe6893bc825026b6dee6da9c0
 include $(INCLUDE_DIR)/package.mk
 
 define Package/tcpser
-	SECTION:=utils
-	CATEGORY:=Utilities
-	TITLE:=Hayes compatible modem emulator
-	URL:=http://www.jbrain.com/pub/linux/serial/
-	DEPENDS:=libpthread
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Hayes compatible modem emulator
+  URL:=http://www.jbrain.com/pub/linux/serial/
+  DEPENDS:=libpthread
 endef
 
 define Package/tcpser/description
-	TCPSER turns a PC serial port into an emulated Hayes compatible modem 
-	that uses TCP/IP for incoming and outgoing connections. It can be used 
-	to allow older applications and systems designed for modem use 
-	to operate on the Internet. TCPSER supports all standard Hayes commands,
-	and understands extended and vendor proprietary commands (though it does
-	not implement many of them). TCPSER can be used for both inbound and 
-	outbound connections. 
+ TCPSER turns a PC serial port into an emulated Hayes compatible modem 
+ that uses TCP/IP for incoming and outgoing connections. It can be used 
+ to allow older applications and systems designed for modem use 
+ to operate on the Internet. TCPSER supports all standard Hayes commands,
+ and understands extended and vendor proprietary commands (though it does
+ not implement many of them). TCPSER can be used for both inbound and 
+ outbound connections. 
 endef
 
 define Build/Prepare
