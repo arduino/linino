@@ -25,6 +25,7 @@ define Package/dudders
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=IP Addresses and Names
+  DEPENDS:=+libopenssl +libgcrypt +libgpg-error
   TITLE:=DNS Update SIG(0) client
   MAINTAINER:=Dean Scarff <dos@scarff.id.au>
   URL:=http://dudders.sourceforge.net/
