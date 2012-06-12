@@ -21,6 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/phidget21
   SECTION:=libs
   CATEGORY:=Libraries
+  DEPENDS:=+libpthread
   TITLE:=Phidget API
   URL:=http://www.phidgets.com/
 endef
