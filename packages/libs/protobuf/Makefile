@@ -27,7 +27,7 @@ define Package/protobuf
   CATEGORY:=Libraries
   TITLE:=A structured data encoding library
   URL:=http://code.google.com/p/protobuf/
-  DEPENDS:=+zlib
+  DEPENDS:=+zlib +libpthread +libstdcpp
   MAINTAINER:=Obinou <obconseil@gmail.com>
 endef
 
