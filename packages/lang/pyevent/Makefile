@@ -26,7 +26,7 @@ define Package/python-event
   CATEGORY:=Languages
   TITLE:=Python interface to libevent
   URL:=http://code.google.com/p/pyevent/
-  DEPENDS:=+python-mini +libevent
+  DEPENDS:=+python-mini +libevent2
 endef
 
 define PyPackage/python-event/filespec
