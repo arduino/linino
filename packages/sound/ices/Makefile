@@ -25,7 +25,7 @@ define Package/ices
   CATEGORY:=Sound
   TITLE:=ices client for Icecast media streaming servers
   URL:=http://xiph.org/
-  DEPENDS:=+libshout +libxml2 +zlib +libogg +libvorbis
+  DEPENDS:=+libshout +libxml2 +zlib +libogg +libvorbis +alsa-lib
 endef
 
 define Package/ices/description
