@@ -27,7 +27,7 @@ define Package/airpwn
 	CATEGORY:=Network
         SUBMENU:=wireless
 	TITLE:=Packet injection pwnage
-	DEPENDS:=+libnet1 +libopenssl +libpcap +libpcre
+	DEPENDS:=+libnet1 +libopenssl +libpcap +libpcre +libpthread
 	URL:=http://airpwn.sourceforge.net/Airpwn.html
 endef
 
