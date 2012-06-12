@@ -43,6 +43,7 @@ define Build/Configure
 			--prefix=/usr \
 			--with-readline-includes=$(STAGING_DIR)/usr/include \
 			--with-readline-library=$(STAGING_DIR)/usr/lib \
+			--disable-linuxcaps \
 	)
 endef
 
