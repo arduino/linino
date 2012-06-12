@@ -42,7 +42,9 @@ MAKE_FLAGS += \
 
 CONFIGURE_ARGS += \
 	--disable-cap \
-	--enable-devel
+	--enable-devel \
+	ac_cv_header_curses_h=no \
+	ac_cv_header_ncurses_h=no
 
 define Package/proftpd/install
 	$(INSTALL_DIR) $(1)/etc
