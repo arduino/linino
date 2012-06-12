@@ -27,7 +27,7 @@ define Package/pyopenssl
   CATEGORY:=Languages
   TITLE:=pyopenssl
   URL:=http://pyopenssl.sourceforge.net/
-  DEPENDS:=+python
+  DEPENDS:=+python +libopenssl
 endef
 
 define Package/pyopenssl/description
