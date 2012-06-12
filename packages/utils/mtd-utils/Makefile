@@ -37,8 +37,8 @@ FILES:= \
 	ftl_check \
 	ftl_format \
 	jffs2dump \
-	mkfs.jffs2 \
-	mkfs.ubifs:+libuuid \
+	mkfs.jffs2:+zlib \
+	mkfs.ubifs:+libuuid:+zlib \
 	mtd_debug \
 	mtdinfo \
 	nanddump \
