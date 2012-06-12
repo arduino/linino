@@ -134,8 +134,8 @@ endef
 $(eval $(call BuildPackage,baresip))
 
 $(eval $(call BuildPlugin,alsa,ALSA audio driver,alsa,+PACKAGE_baresip-mod-alsa:alsa-lib))
-$(eval $(call BuildPlugin,avcodec,FFmpeg video codecs,avcodec,+PACKAGE_baresip-mod-avcodec:libffmpeg))
-$(eval $(call BuildPlugin,avformat,FFmpeg video source,avformat,+PACKAGE_baresip-mod-avformat:libffmpeg))
+$(eval $(call BuildPlugin,avcodec,FFmpeg video codecs,avcodec,+PACKAGE_baresip-mod-avcodec:libffmpeg-mini))
+$(eval $(call BuildPlugin,avformat,FFmpeg video source,avformat,+PACKAGE_baresip-mod-avformat:libffmpeg-mini))
 $(eval $(call BuildPlugin,cons,console UI,cons,))
 $(eval $(call BuildPlugin,evdev,input event device UI,evdev,))
 $(eval $(call BuildPlugin,g711,G.711 audio codec,g711,))
