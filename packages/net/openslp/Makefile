@@ -23,6 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openslp
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+libopenssl
   TITLE:=openslp
   URL:=http://www.openslp.org/
 endef
