@@ -34,6 +34,7 @@ COREUTILS_APPLETS := \
 DEPENDS_sort = +libpthread
 DEPENDS_timeout = +librt
 DEPENDS_uptime = +libelf
+DEPENDS_expr = +libgmp
 
 define Package/coreutils/Default
   SECTION:=utils
