@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=transmission
 PKG_VERSION:=2.52
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://mirrors.m0k.org/transmission/files
@@ -43,6 +43,7 @@ endef
 
 define Package/transmission-remote
   $(call Package/transmission/template)
+  DEPENDS:=+libcurl +libopenssl +libpthread +libevent2 +librt +libminiupnpc
 endef
 
 define Package/transmission-web
