@@ -46,6 +46,9 @@ define Build/Configure
 		--enable-shared \
 		--disable-static \
 		--disable-libpcsclite \
+		--disable-libical \
+		--disable-irda \
+		--disable-bluetooth \
 		--without-x \
 		)
 endef
