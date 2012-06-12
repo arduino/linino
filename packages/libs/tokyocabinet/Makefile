@@ -23,7 +23,7 @@ define Package/tokyocabinet
   CATEGORY:=Libraries
   TITLE:=A library of routines to manage databases
   URL:=http://fallabs.com/tokyocabinet/
-  DEPENDS:=+zlib +bzip2 +libpthread
+  DEPENDS:=+zlib +bzip2 +libpthread +librt
   MAINTAINER:=Obinou <obconseil@gmail.com>
 endef
 
