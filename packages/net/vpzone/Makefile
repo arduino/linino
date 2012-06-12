@@ -26,7 +26,7 @@ define Package/vpzone
   SUBMENU:=VPN
   TITLE:=A flexible multipurpose layer 3 VPN daemon
   URL:=http://vpzone.sourceforge.net/
-  DEPENDS:=+libcares +libevent +libgnutls +kmod-ipv6 +kmod-tun
+  DEPENDS:=+libcares +libevent2 +libgnutls +kmod-ipv6 +kmod-tun
 endef
 
 define Package/vpzone/conffiles
