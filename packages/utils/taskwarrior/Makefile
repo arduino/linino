@@ -26,7 +26,7 @@ define Package/taskwarrior
   TITLE:=taskwarrior
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libncurses
+  DEPENDS:=+libncurses +libstdcpp
   URL:=http://taskwarrior.org/projects/show/taskwarrior
   MAINTAINER:=Xiangfu Liu <xiangfu@sharism.cc>
 endef
