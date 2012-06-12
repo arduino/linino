@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kismetwireless.net/code
 PKG_MD5SUM:=85e59186eb529889118b5635f35cf57d
 
-PKG_BUILD_DEPENDS:=libpcap libncurses uclibcxx libpcre libnl-tiny
+PKG_BUILD_DEPENDS:=libpcap libncurses uclibcxx libpcre
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -23,7 +23,7 @@ define Package/kismet/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Kismet
-  DEPENDS:= +uclibcxx +libnl-tiny
+  DEPENDS:= +uclibcxx +libnl
   URL:=http://www.kismetwireless.net/
   SUBMENU:=wireless
 endef
@@ -50,7 +50,7 @@ endef
 
 define Package/kismet-drone
 $(call Package/kismet/Default)
-  DEPENDS+= +libpcap +libpcre
+  DEPENDS+= +libpcap +libpcre +libcap
   TITLE+= drone
 endef
 
@@ -65,7 +65,7 @@ endef
 
 define Package/kismet-server
 $(call Package/kismet/Default)
-  DEPENDS+= +libpcap +libpcre
+  DEPENDS+= +libpcap +libpcre +libcap
   TITLE+= server
 endef
 
@@ -86,8 +86,7 @@ CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	LDFLAGS="$$$$LDFLAGS" \
 	LIBS="-nodefaultlibs -lc -luClibc++ -lm $(LIBGCC_S)" \
-	CLIENTCLIBS="-nodefaultlibs -lc -luClibc++ -lm $(LIBGCC_S)" \
-	libnl1_LIBS="-libnl-tiny"
+	CLIENTCLIBS="-nodefaultlibs -lc -luClibc++ -lm $(LIBGCC_S)"
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
