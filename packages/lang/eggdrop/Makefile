@@ -25,7 +25,7 @@ define Package/eggdrop
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=EggDrop IRC BOT
-  DEPENDS:=+tcl
+  DEPENDS:=+tcl +zlib
   URL:=http://www.eggheads.org
 endef
 
