@@ -36,7 +36,7 @@ define Package/libpcsclite
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= (library)
-  DEPENDS:=+libusb +libpthread +librt
+  DEPENDS:=+libusb-1.0 +libpthread +librt
 endef
 
 define Package/libpcsclite/description
