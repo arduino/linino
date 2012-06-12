@@ -32,6 +32,7 @@ define Package/libfaifa
   TITLE+= (library)
   SECTION:=libs
   CATEGORY:=Libraries
+  DEPENDS:=+libopenssl +libpcap +libpthread
 endef
 
 define Package/libfaifa/description
