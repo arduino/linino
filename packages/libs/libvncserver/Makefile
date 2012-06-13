@@ -24,7 +24,7 @@ PKG_INSTALL=1
 define Package/libvncserver
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+zlib $(ICONV_DEPENDS)
+  DEPENDS:=+zlib +libjpeg +libpthread $(ICONV_DEPENDS)
   TITLE:=VNC Server Library
   URL:=http://libvncserver.sourceforge.net/
 endef
