@@ -25,7 +25,7 @@ define Package/directfb
     SECTION:=libs
     CATEGORY:=Libraries
     URL:=http://directfb.org
-    DEPENDS:=+libpng +libjpeg +libpthread +libfreetype
+    DEPENDS:=+libpng +libjpeg +libpthread +libfreetype +libsysfs
 endef
 
 define Package/directfb/description
