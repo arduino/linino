@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/nprobe
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libpcap +libpcre +libpthread +NPROBE_MYSQL_SUPPORT:libmysqlclient
+  DEPENDS:=+libpcap +libpcre +libpthread +NPROBE_MYSQL_SUPPORT:libmysqlclient +zlib
   TITLE:=nProbe
   URL:=http://invisible-island.net/dialog/
 endef
