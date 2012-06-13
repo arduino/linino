@@ -24,7 +24,7 @@ define Package/luaposix
   CATEGORY:=Languages
   TITLE:=luaposix
   URL:=http://luaposix.luaforge.net/
-  DEPENDS:=+lua
+  DEPENDS:=+lua +librt
 endef
 
 define Package/luaposix/description
