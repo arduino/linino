@@ -24,7 +24,7 @@ define Package/ushare
  CATEGORY:=Multimedia
  TITLE:= UPnP A/V & DLNA Media Server
  URL:=http://ushare.geexbox.org/
- DEPENDS:=+libdlna +libupnp
+ DEPENDS:=+libdlna +libupnp +libffmpeg
 endef
 
 define Package/ushare/description
