@@ -27,7 +27,7 @@ define Package/rtorrent
   CATEGORY:=Network
   TITLE:=BitTorrent client for ncurses
   URL:=http://libtorrent.rakshasa.no/
-  DEPENDS:=+libcurl +libtorrent +libncurses +libsigcxx +xmlrpc-c-server +libpthread
+  DEPENDS:=+libcurl +libtorrent +libncursesw +libsigcxx +xmlrpc-c-server +libpthread
   MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 
