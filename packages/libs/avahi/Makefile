@@ -94,7 +94,7 @@ endef
 define Package/avahi-daemon
   $(call Package/avahi/Default)
   SUBMENU:=IP Addresses and Names
-  DEPENDS:=+libavahi +libexpat
+  DEPENDS:=+libavahi +libexpat +librt +libdbus
   TITLE+= (daemon)
 endef
 
@@ -233,6 +233,7 @@ endif
 
 CONFIGURE_VARS+= \
 	CFLAGS="$$$$CFLAGS -DNDEBUG -DDISABLE_SYSTEMD" \
+	ac_cv_header_sys_capability_h=no \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
