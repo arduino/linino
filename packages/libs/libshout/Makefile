@@ -24,7 +24,7 @@ TARGET_CFLAGS += $(FPIC) -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/libshout
   SECTION:=libs
-  DEPENDS:= +libspeex +libtheora +libvorbis +libvorbisidec
+  DEPENDS:= +libspeex +libtheora +libvorbis +libvorbisidec +libpthread
   CATEGORY:=Libraries
   TITLE:=Library which can be used to write a source client like ices
   URL:=http://www.icecast.org/download.php
