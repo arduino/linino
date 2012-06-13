@@ -27,7 +27,7 @@ define Package/apf
   CATEGORY:=Network
   TITLE:=Active port forwarder
   URL:=http://gray-world.net/pr_af.shtml
-  DEPENDS:=+libopenssl
+  DEPENDS:=+libopenssl +libpthread
 endef
 
 define Package/apf/install
