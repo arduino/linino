@@ -41,7 +41,7 @@ endef
 
 define Package/erlang
 $(call Package/erlang/Default)
-  DEPENDS+= +libncurses +librt
+  DEPENDS+= +libncurses +librt +zlib
   PROVIDES:= erlang-erts=5.7 erlang-kernel=2.13 erlang-sasl=2.1.6 erlang-stdlib=1.16
 endef
 
