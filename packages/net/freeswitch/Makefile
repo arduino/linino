@@ -173,7 +173,7 @@ endef
 define Package/$(PKG_NAME)
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH open source telephony platform
-  DEPENDS:= +libreadline +libncurses +libpthread +libstdcpp
+  DEPENDS:= +libreadline +libncurses +libpthread +libstdcpp +libopenssl +libpq +librt +zlib
   MENU:=1
 endef
 
