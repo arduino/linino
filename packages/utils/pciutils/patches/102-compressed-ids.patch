@@ -1,7 +1,7 @@
 --- a/update-pciids.sh
 +++ b/update-pciids.sh
 @@ -6,9 +6,8 @@ set -e
- SRC="http://pciids.sourceforge.net/v2.2/pci.ids"
+ SRC="http://pci-ids.ucw.cz/v2.2/pci.ids"
  DEST=pci.ids
  PCI_COMPRESSED_IDS=
 -GREP=grep
@@ -12,7 +12,7 @@
  if ! touch ${DEST} >/dev/null 2>&1 ; then
  	${quiet} || echo "${DEST} is read-only, exiting." 1>&2
 @@ -18,7 +17,7 @@ fi
- if [ -n "$PCI_COMPRESSED_IDS" ] ; then
+ if [ "$PCI_COMPRESSED_IDS" -eq 1 ] ; then
  	DECOMP="cat"
  	SRC="$SRC.gz"
 -	GREP=zgrep

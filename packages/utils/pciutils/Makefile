@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2011 OpenWrt.org
+# Copyright (C) 2007-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pciutils
-PKG_VERSION:=3.1.7
-PKG_RELEASE:=3
+PKG_VERSION:=3.1.9
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@KERNEL/software/utils/pciutils
-PKG_MD5SUM:=35222edb86b50a6641352c66fe829b2e
+PKG_MD5SUM:=79cc1d0bff8603d3a550fa63802cd1db
 
 PKG_INSTALL:=1
 
@@ -28,8 +28,8 @@ define Package/pciutils
 endef
 
 define Package/pciutils/description
-	This package contains various utilities for inspecting and setting of
-	devices connected to the PCI bus.
+ contains collection of programs for inspecting and manipulating configuration
+ of PCI devices
 endef
 
 define Package/pciutils/postinst
