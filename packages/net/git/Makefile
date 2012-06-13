@@ -24,7 +24,7 @@ define Package/git
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Version Control Systems
-  DEPENDS:=+libopenssl +libcurl +libpthread
+  DEPENDS:=+libopenssl +libpthread
   TITLE:=The fast version control system
   URL:=http://git-scm.com
 endef
@@ -40,9 +40,11 @@ MAKE_FLAGS := \
 	CFLAGS="$(TARGET_CFLAGS)" \
 	CPPFLAGS="$(TARGET_CPPFLAGS)" \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
+	NO_CURL="YesPlease" \
 	NO_EXPAT="YesPlease" \
 	NO_MKSTEMPS="YesPlease" \
 	NO_GETTEXT="YesPlease" \
+	NO_UNIX_SOCKETS="YesPlease" \
 	NO_IPV6="YesPlease" \
 	NO_ICONV="YesPlease" \
 	NO_NSEC="YesPlease" \
