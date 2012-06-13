@@ -30,7 +30,7 @@ $(call Package/cwiid/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= (library)
-  DEPENDS+= +bluez-libs
+  DEPENDS+= +bluez-libs +libpthread +librt
 endef
 
 define Package/wminput
