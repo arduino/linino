@@ -46,7 +46,7 @@ define Package/unixodbc-tools
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE+= Tools
-  DEPENDS:=+unixodbc
+  DEPENDS:=+unixodbc +libncurses +libreadline
 endef
 
 define Package/unixodbc-tools/description
