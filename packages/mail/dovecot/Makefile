@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/dovecot
   SECTION:=mail
   CATEGORY:=Mail
-  DEPENDS:=+libopenssl +librt
+  DEPENDS:=+libopenssl +librt +zlib +libbz2
   TITLE:=An IMAP and POP3 daemon
   URL:=http://www.dovecot.org/
 endef
@@ -35,6 +35,7 @@ endef
 CONFIGURE_ARGS += \
 	--without-gssapi \
 	--without-pam \
+	--without-libcap \
 	--with-moduledir=/usr/lib/dovecot/modules \
 	--with-notify=dnotify \
 
@@ -50,13 +51,6 @@ CONFIGURE_VARS += \
 	lib_cv_va_copy=yes \
 	lib_cv___va_copy=yes \
 	lib_cv_va_val_copy=yes \
-
-define Build/Configure
-	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status}; \
-		autoconf \
-	);
-	$(call Build/Configure/Default)
-endef
 
 define Package/dovecot/install
 	$(INSTALL_DIR) $(1)/etc/init.d
