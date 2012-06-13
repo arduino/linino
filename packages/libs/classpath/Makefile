@@ -26,6 +26,7 @@ define Package/classpath
   TITLE:=GNU Classpath
   URL:=http://www.gnu.org/software/classpath/
   MAINTAINER:=Roberto Riggio <roberto.riggio@create-net.org>
+  DEPENDS:=+alsa-lib +libgmp +libmagic
 endef
 
 define Package/classpath/Description
