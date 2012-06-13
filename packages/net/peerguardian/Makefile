@@ -26,7 +26,7 @@ define Package/peerguardian
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=P2P
-  DEPENDS:= +libncurses +libpthread +libnetfilter-queue
+  DEPENDS:= +libncurses +libpthread +libnetfilter-queue +libipq +libstdcpp
   TITLE:=PeerGuardian for Linux
   URL:=http://phoenixlabs.org/
 endef
