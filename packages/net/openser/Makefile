@@ -35,7 +35,7 @@ endef
 define Package/openser-mod-acc
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=openser
+  DEPENDS:=openser +libradiusclient-ng
   TITLE:=Accounting support
   SUBMENU:=Telephony
 endef
