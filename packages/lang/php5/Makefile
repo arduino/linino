@@ -543,7 +543,7 @@ $(eval $(call BuildModule,http,HTTP,+PACKAGE_php5-mod-http:libcurl +PACKAGE_php5
 $(eval $(call BuildModule,iconv,iConv,+PACKAGE_php5-mod-iconv:libiconv))
 $(eval $(call BuildModule,json,JSON))
 $(eval $(call BuildModule,ldap,LDAP,+PACKAGE_php5-mod-ldap:libopenldap +PACKAGE_php5-mod-ldap:libsasl2))
-$(eval $(call BuildModule,libevent,libevent,+PACKAGE_php5-mod-libevent:libevent))
+$(eval $(call BuildModule,libevent,libevent,+PACKAGE_php5-mod-libevent:libevent2))
 $(eval $(call BuildModule,mbstring,MBString))
 $(eval $(call BuildModule,mcrypt,Mcrypt,+PACKAGE_php5-mod-mcrypt:libmcrypt +PACKAGE_php5-mod-mcrypt:libltdl))
 $(eval $(call BuildModule,mysql,MySQL,+PACKAGE_php5-mod-mysql:libmysqlclient))
