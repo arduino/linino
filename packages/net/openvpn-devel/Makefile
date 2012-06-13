@@ -8,58 +8,145 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openvpn-devel
-PKG_VERSION:=201120
-PKG_RELEASE:=4
 
+PKG_REV:=10b4b65e0318ce305e05cdec4b44b8f6bcd3915f
+PKG_VERSION:=r$(PKG_REV)
+PKG_RELEASE=1
+
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=git://openvpn.git.sourceforge.net/gitroot/openvpn/openvpn.git
+PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE:=openvpn-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.secure-computing.net/pub/FreeBSD/ports/openvpn-devel \
-	ftp://ftp2.secure-computing.net/pub/FreeBSD/ports/openvpn-devel
-PKG_MD5SUM:=58d219359d5e086cc7749f23428c0bb0
+PKG_SOURCE_SUBDIR:=openvpn-$(PKG_VERSION)
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/openvpn-$(PKG_VERSION)
 
 PKG_INSTALL:=1
+PKG_FIXUP:=autoreconf
 PKG_BUILD_PARALLEL:=1
-PKG_BUILD_DIR:=$(BUILD_DIR)/openvpn-devel
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/openvpn-devel
+define Package/openvpn-devel/Default
+  TITLE:=Open source VPN solution using $(2)
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+kmod-tun +kmod-ipv6 +libopenssl +liblzo +ip
-  TITLE:=Open source VPN solution using SSL (devel version)
   URL:=http://openvpn.net
   SUBMENU:=VPN
+  MENU:=1
+  DEPENDS:=+kmod-tun +OPENVPN_DEVEL_$(1)_ENABLE_LZO:liblzo +OPENVPN_DEVEL_$(1)_ENABLE_IPROUTE2:ip $(3)
+  VARIANT:=$(1)
+  MAINTAINER:=Mirko Vogt <mirko@openwrt.org>
 endef
 
-define Package/openvpn-devel/conffiles
+Package/openvpn-devel-openssl=$(call Package/openvpn-devel/Default,openssl,OpenSSL,+libopenssl)
+Package/openvpn-devel-polarssl=$(call Package/openvpn-devel/Default,polarssl,PolarSSL,+libpolarssl)
+Package/openvpn-devel-nossl=$(call Package/openvpn-devel/Default,nossl,plaintext (no SSL))
+
+define Package/openvpn-devel/config/Default
+	source "$(SOURCE)/Config-$(1).in"
+endef
+
+Package/openvpn-devel-openssl/config=$(call Package/openvpn-devel/config/Default,openssl)
+Package/openvpn-devel-polarssl/config=$(call Package/openvpn-devel/config/Default,polarssl)
+Package/openvpn-devel-nossl/config=$(call Package/openvpn-devel/config/Default,nossl)
+
+#define Package/openvpn-devel-easy-rsa
+#  $(call Package/openvpn-devel-openssl)
+#  DEPENDS:=+openssl-util
+#  TITLE:=Simple shell scripts to manage a Certificate Authority
+#endef
+
+#define Package/openvpn-devel-easy-rsa/conffiles
+#/etc/easy-rsa/keys/serial
+#/etc/easy-rsa/keys/index.txt
+#/etc/easy-rsa/vars
+#endef
+
+
+ifeq ($(BUILD_VARIANT),polarssl)
+CONFIG_OPENVPN_DEVEL_POLARSSL:=y
+endif
+ifeq ($(BUILD_VARIANT),openssl)
+CONFIG_OPENVPN_DEVEL_OPENSSL:=y
+endif
+ifeq ($(BUILD_VARIANT),nossl)
+CONFIG_OPENVPN_DEVEL_NOSSL:=y
+endif
+
+CONFIGURE_VARS += \
+	IFCONFIG=/sbin/ifconfig \
+	ROUTE=/sbin/route \
+	IPROUTE=/usr/sbin/ip \
+	NETSTAT=/sbin/netstat
+
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--enable-small \
+		--disable-selinux \
+		--disable-systemd \
+		--disable-plugins \
+		--disable-debug \
+		--disable-eurephia \
+		--disable-pkcs11 \
+		$(if $(CONFIG_OPENVPN_DEVEL_$(BUILD_VARIANT)_ENABLE_LZO),--enable,--disable)-lzo \
+		$(if $(CONFIG_OPENVPN_DEVEL_$(BUILD_VARIANT)_ENABLE_CRYPTO),--enable,--disable)-crypto \
+		$(if $(CONFIG_OPENVPN_DEVEL_$(BUILD_VARIANT)_ENABLE_X509_ALT_USERNAME),enable,disable-x509-alt-username)-ssl \
+		$(if $(CONFIG_OPENVPN_DEVEL_$(BUILD_VARIANT)_ENABLE_SERVER),--enable,--disable)-server \
+		$(if $(CONFIG_OPENVPN_DEVEL_$(BUILD_VARIANT)_ENABLE_MANAGEMENT),--enable,--disable)-management \
+		$(if $(CONFIG_OPENVPN_DEVEL_$(BUILD_VARIANT)_ENABLE_SOCKS),--enable,--disable)-socks \
+		$(if $(CONFIG_OPENVPN_DEVEL_$(BUILD_VARIANT)_ENABLE_HTTP),--enable,--disable)-http \
+		$(if $(CONFIG_OPENVPN_DEVEL_$(BUILD_VARIANT)_ENABLE_FRAGMENT),--enable,--disable)-fragment \
+		$(if $(CONFIG_OPENVPN_DEVEL_$(BUILD_VARIANT)_ENABLE_MULTIHOME),--enable,--disable)-multihome \
+		$(if $(CONFIG_OPENVPN_DEVEL_$(BUILD_VARIANT)_ENABLE_IPROUTE2),--enable,--disable)-iproute2 \
+		$(if $(CONFIG_OPENVPN_DEVEL_$(BUILD_VARIANT)_ENABLE_DEF_AUTH),--enable,--disable)-def-auth \
+		$(if $(CONFIG_OPENVPN_DEVEL_$(BUILD_VARIANT)_ENABLE_PF),--enable,--disable)-pf \
+		$(if $(CONFIG_OPENVPN_DEVEL_NOSSL),--disable-ssl --disable-crypto,--enable-ssl --enable-crypto) \
+		$(if $(CONFIG_OPENVPN_DEVEL_OPENSSL),--with-crypto-library=openssl) \
+		$(if $(CONFIG_OPENVPN_DEVEL_POLARSSL),--with-crypto-library=polarssl) \
+	)
+endef
+
+define Package/openvpn-devel-$(BUILD_VARIANT)/conffiles
 /etc/config/openvpn
 endef
 
-define Package/openvpn-devel/description
-	 Open source VPN solution using SSL - DEVEL VERSION, Week $(PKG_VERSION)
+define Package/openvpn-devel-$(BUILD_VARIANT)/install
+	$(INSTALL_DIR) \
+		$(1)/usr/sbin \
+		$(1)/etc/init.d \
+		$(1)/etc/config \
+		$(1)/etc/openvpn \
+		$(1)/lib/upgrade/keep.d
+
+	$(INSTALL_BIN) \
+		$(PKG_INSTALL_DIR)/usr/sbin/openvpn \
+		$(1)/usr/sbin/
+
+	$(INSTALL_BIN) \
+		files/openvpn.init \
+		$(1)/etc/init.d/openvpn
+
+	$(INSTALL_CONF) files/openvpn.config \
+		$(1)/etc/config/openvpn
+
+	$(INSTALL_DATA) \
+		files/openvpn.upgrade \
+		$(1)/lib/upgrade/keep.d/openvpn
 endef
 
-CONFIGURE_ARGS += \
-	--disable-debug \
-	--disable-plugins \
-	--enable-management \
-	--enable-small \
-	--disable-socks \
-	--enable-password-save \
-	--enable-iproute2 \
-	--with-iproute-path=/usr/sbin/ip
+#define Package/openvpn-devel-easy-rsa/install
+#	$(INSTALL_DIR) $(1)/usr/sbin
+#	$(CP) $(PKG_BUILD_DIR)/easy-rsa/2.0/{build-*,clean-all,inherit-inter,list-crl,pkitool,revoke-full,sign-req,whichopensslcnf} $(1)/usr/sbin/
+#	$(INSTALL_DIR) $(1)/etc/easy-rsa
+#	$(INSTALL_DATA) $(PKG_BUILD_DIR)/easy-rsa/2.0/openssl-1.0.0.cnf $(1)/etc/easy-rsa/openssl-1.0.0.cnf
+#	$(INSTALL_DATA) $(PKG_BUILD_DIR)/easy-rsa/2.0/vars $(1)/etc/easy-rsa/vars
+#	$(INSTALL_DIR) $(1)/etc/easy-rsa/keys
+#	$(INSTALL_DATA) files/easy-rsa.index $(1)/etc/easy-rsa/keys/index.txt
+#	$(INSTALL_DATA) files/easy-rsa.serial $(1)/etc/easy-rsa/keys/serial
+#endef
 
-CONFIGURE_VARS += \
-	ac_cv_func_epoll_create=no
-
-define Package/openvpn-devel/install
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/openvpn $(1)/usr/sbin/
-	$(INSTALL_DIR) $(1)/etc/init.d/
-	$(INSTALL_BIN) files/openvpn.init $(1)/etc/init.d/openvpn
-	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_CONF) files/openvpn.config $(1)/etc/config/openvpn
-	$(INSTALL_DIR) $(1)/etc/openvpn
-endef
-
-$(eval $(call BuildPackage,openvpn-devel))
+$(eval $(call BuildPackage,openvpn-devel-openssl))
+$(eval $(call BuildPackage,openvpn-devel-polarssl))
+$(eval $(call BuildPackage,openvpn-devel-nossl))
+#$(eval $(call BuildPackage,openvpn-devel-easy-rsa))
