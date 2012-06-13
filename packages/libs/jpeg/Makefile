@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,8 +16,8 @@ PKG_SOURCE_URL:=http://www.ijg.org/files/ \
         ftp://ftp.uu.net/graphics/jpeg/
 PKG_MD5SUM:=dbd5f3b47ed13132f04c685d608a7547
 
-PKG_FIXUP:=autoreconf
 PKG_BUILD_PARALLEL:=1
+PKG_BUILD_DEPENDS:=libltdl
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
