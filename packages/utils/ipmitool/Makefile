@@ -18,7 +18,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ipmitool
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libopenssl
+  DEPENDS:=+libopenssl +libncurses +libreadline
   TITLE:=IPMI remote computer management utility
   URL:=http://ipmitool.sourceforge.net/
 endef
