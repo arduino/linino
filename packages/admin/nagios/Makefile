@@ -31,6 +31,12 @@ endef
 
 EXTRA_CFLAGS += $(TARGET_CPPFLAGS)
 
+CONFIGURE_VARS += \
+	ac_cv_lib_gd_gdImagePng_1=no \
+	ac_cv_lib_gd_gdImagePng_2=no \
+	ac_cv_lib_gd_gdImagePng_3=no \
+	ac_cv_lib_gd_gdImagePng_4=no
+
 CONFIGURE_ARGS += \
 	--with-nagios-user="root" \
 	--with-nagios-group="root" \
