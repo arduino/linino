@@ -25,7 +25,7 @@ define Package/darkice
   CATEGORY:=Multimedia
   SUBMENU:=Streaming
   TITLE:=DarkIce is a live audio streamer
-  DEPENDS:=+lame +libpthread +libstdcpp
+  DEPENDS:=+lame-lib +librt +libpthread +libstdcpp
   MAINTAINER:=Artur Wronowski <arteqw@gmail.com>
 endef
 
