@@ -35,6 +35,9 @@ define Package/wavemon/description
   and higher), e.g. the Lucent Orinoco cards.
 endef
 
+CONFIGURE_VARS += \
+	ac_cv_lib_cap_cap_get_flag=no
+
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS) -L$(STAGING_DIR)/usr/lib -I$(STAGING_DIR)/usr/include"
 
