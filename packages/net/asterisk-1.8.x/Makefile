@@ -297,6 +297,7 @@ endif
 CONFIGURE_ARGS+= \
 	--without-curses \
 	--with-gsm=internal \
+	--without-cap \
 	--without-gtk \
 	--without-gtk2 \
 	--without-isdnnet \
