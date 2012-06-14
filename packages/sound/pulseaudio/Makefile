@@ -113,7 +113,8 @@ CONFIGURE_ARGS += \
 	--disable-asyncns \
 	--disable-lirc \
 	--disable-bluez \
-	--without-caps
+	--without-caps \
+	--without-fftw
 
 ifeq ($(BUILD_VARIANT),avahi)
 CONFIGURE_ARGS += \
