@@ -492,6 +492,8 @@ CONFIGURE_VARS+= \
 	apr_cv_type_rwlock_t="yes" \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-perl),ac_cv_path_PERL="yes",) \
 	libzmq_cv_cxx_werror_flag="" \
+	ac_cv_path_PKG_CONFIG=no \
+	ac_cv_path_LIBGNUTLS_CONFIG=no
 
 
 define Build/Prepare
