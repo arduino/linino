@@ -30,9 +30,7 @@ define Package/pulseaudio/Default
   SECTION:=sound
   CATEGORY:=Sound
   DEPENDS:=+libspeexdsp +libsndfile +libltdl +libpthread \
-	+librt +alsa-lib +libjson +libopenssl +udev $(ICONV_DEPENDS) $(INTL_DEPENDS) \
-	@!UCLIBC_VERSION_0_9_30_1 @!UCLIBC_VERSION_0_9_30_2 \
-	@!UCLIBC_VERSION_0_9_30_3
+	+librt +alsa-lib +libjson +libopenssl +udev $(ICONV_DEPENDS) $(INTL_DEPENDS)
   TITLE:=Network sound server
   URL:=http://www.pulseaudio.org
 endef
