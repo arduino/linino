@@ -28,40 +28,16 @@ endef
 define Package/package/description
 endef
 
+# add extra configure flags here
 CONFIGURE_ARGS += \
 	--enable-static \
 	--enable-shared
 
-# If you wish to link against uclibc++ consider using the
-# following variables :
-CONFIGURE_VARS += \
-	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
-	LDFLAGS="$$$$LDFLAGS" \
-	LIBS="-nodefaultlibs -luClibc++ -lm -lnotimpl" \
-
-MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS)"
-
-define Build/Compile
-	# pass CFLAGS again to override -O2 set by configure
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
-endef
-
+# add make variable overrides here
+MAKE_FLAGS +=
 
 define Build/InstallDev
-	mkdir -p $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/*.h $(1)/usr/include/
-	mkdir -p $(1)/usr/package
-	$(CP) $(PKG_INSTALL_DIR)/usr/package/package.{a,so*} $(1)/usr/package/
-endef
-
-define Build/UninstallDev
-	rm -rf	$(1)/usr/include/package \
-		$(1)/usr/package/package.{a,so*}
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
 endef
 
 define Package/package/install
