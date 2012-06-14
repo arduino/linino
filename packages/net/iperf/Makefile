@@ -18,12 +18,13 @@ PKG_MD5SUM:=44b5536b67719f4250faed632a3cd016
 
 PKG_BUILD_PARALLEL:=1
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/iperf/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:= +uclibcxx
+  DEPENDS:= $(CXX_DEPENDS)
   TITLE:=Internet Protocol bandwidth measuring tool
   URL:=http://sourceforge.net/projects/iperf/
 endef
@@ -66,8 +67,6 @@ else
   CONFIGURE_ARGS += --enable-threads=posix
   CONFIGURE_VARS += ac_cv_func_pthread_cancel=no
 endif
-
-TARGET_CXX=g++-uc
 
 CONFIGURE_VARS += CXXFLAGS="$$$$CXXFLAGS -fno-rtti"
 
