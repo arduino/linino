@@ -95,7 +95,7 @@ endef
 define Package/asterisk18-cdr
 $(call Package/asterisk18/Default)
   TITLE:=CDR support
-  DEPENDS:= asterisk18
+  DEPENDS:= asterisk18 @BROKEN
 endef
 
 define Package/asterisk18-cdr/description
