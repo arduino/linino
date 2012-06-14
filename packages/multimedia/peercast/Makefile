@@ -20,12 +20,13 @@ PKG_REMOVE_FILES:=aclocal.m4 acinclude.m4
 
 PKG_INSTALL:=1
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/peercast
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+libpthread +uclibcxx
+  DEPENDS:=+libpthread $(CXX_DEPENDS)
   TITLE:=P2P audio and video streaming server
   URL:=http://www.peercast.org/
 endef
@@ -45,9 +46,7 @@ CONFIGURE_ARGS += \
 	--enable-staticbin \
 
 CONFIGURE_VARS += \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
-	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
-	LIBS="-nodefaultlibs -lc -luClibc++ -lpthread -lgcc_s" \
+	LIBS="-lpthread"
 
 define Package/peercast/install
 	$(INSTALL_DIR) $(1)/usr/sbin
