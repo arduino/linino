@@ -33,6 +33,7 @@ define Package/pulseaudio/Default
 	+librt +alsa-lib +libjson +libopenssl +udev $(ICONV_DEPENDS) $(INTL_DEPENDS)
   TITLE:=Network sound server
   URL:=http://www.pulseaudio.org
+  PROVIDES:=pulseaudio
 endef
 
 define Package/pulseaudio-daemon
@@ -77,7 +78,7 @@ endef
 define Package/pulseaudio-tools
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+libsndfile @PACKAGE_pulseaudio-daemon||PACKAGE_pulseaudio-daemon-avahi #+libpulse
+  DEPENDS:=+libsndfile pulseaudio
   TITLE:=Tools for Pulseaudio
   URL:=http://www.pulseaudio.org
   VARIANT:=noavahi
@@ -86,7 +87,7 @@ endef
 define Package/pulseaudio-profiles
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=@PACKAGE_pulseaudio-daemon||PACKAGE_pulseaudio-daemon-avahi
+  DEPENDS:=pulseaudio
   TITLE:=Profiles for Pulseaudio
   URL:=http://www.pulseaudio.org
 endef
