@@ -355,6 +355,12 @@ $(call Package/$(PKG_NAME)/Default)
   DEPENDS:= $(PKG_NAME)
 endef
 
+define Package/libopenzap
+$(call Package/$(PKG_NAME)/Default)
+  TITLE:=FreeSWITCH openzap library
+  DEPENDS:=+libpthread
+endef
+
 
 define Download/files
  define Download/$(1)
@@ -604,6 +610,10 @@ define Package/$(PKG_NAME)-sounds-moh/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/music $(1)/usr/share/$(PKG_NAME)/sounds/
 endef
 
+define Package/libopenzap/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libopenzap.so* $(1)/usr/lib/
+endef
 
 define Package/$(PKG_NAME)-tools/install
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -668,12 +678,13 @@ $(eval $(call BuildPackage,$(PKG_NAME)-tools))
 $(eval $(call BuildPackage,$(PKG_NAME)-example-config))
 $(eval $(call BuildPackage,$(PKG_NAME)-config-upstream-defaults))
 $(eval $(call BuildPackage,$(PKG_NAME)-config-minimal))
+$(eval $(call BuildPackage,libopenzap))
 
 
 #
 # $(eval $(call BuildPlugin,Name,Title,Files,Inter Depends,Extra Depends))
 #
-$(eval $(call BuildPlugin,alsa,Alsa endpoint,mod_alsa,,))
+$(eval $(call BuildPlugin,alsa,Alsa endpoint,mod_alsa,,+alsa-lib))
 $(eval $(call BuildPlugin,amr,GSM-AMR codec,mod_amr,,))
 $(eval $(call BuildPlugin,amrwb,GSM-AMRWB,mod_amrwb,,))
 $(eval $(call BuildPlugin,avmd,Advanced Voice Mail Detection,mod_avmd,,))
@@ -685,7 +696,7 @@ $(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR handler,mod_cdr_pg_csv,,+core
 $(eval $(call BuildPlugin,cdr-sqlite,SQLite3 CDR handler,mod_cdr_sqlite,,+libsqlite3))
 $(eval $(call BuildPlugin,celt,CELT ultra-low delay codec,mod_celt,,+libogg))
 $(eval $(call BuildPlugin,cepstral,Cepstral interface,mod_cepstral,,@BROKEN)) # needs <swift.h>
-$(eval $(call BuildPlugin,cidlookup,applications mod_cidlookup,mod_cidlookup,,))
+$(eval $(call BuildPlugin,cidlookup,applications mod_cidlookup,mod_cidlookup,,+libcurl))
 $(eval $(call BuildPlugin,cluechoo,Framework Demo,mod_cluechoo,,))
 $(eval $(call BuildPlugin,codec2,CoDec 2,mod_codec2,,))
 $(eval $(call BuildPlugin,commands,API commands,mod_commands,,))
@@ -720,10 +731,10 @@ $(eval $(call BuildPlugin,gsmopen,Short Message Service (SMS),mod_gsmopen,spands
 $(eval $(call BuildPlugin,h26x,H26X linear codec,mod_h26x,,))
 $(eval $(call BuildPlugin,h323,h323 endpoint,mod_h323,,@BROKEN)) # missing header files (other packages needed)
 $(eval $(call BuildPlugin,hash,API for manipulating a hash table,mod_hash,,))
-$(eval $(call BuildPlugin,http-cache,HTTP GET with caching,mod_http_cache,,))
+$(eval $(call BuildPlugin,http-cache,HTTP GET with caching,mod_http_cache,,+libcurl))
 $(eval $(call BuildPlugin,ilbc,ILBC codec,mod_ilbc,,))
 $(eval $(call BuildPlugin,java,Java language interface,mod_java,,@BROKEN)) # needs java
-$(eval $(call BuildPlugin,json-cdr,JSon-CDR interface,mod_json_cdr,,))
+$(eval $(call BuildPlugin,json-cdr,JSon-CDR interface,mod_json_cdr,,+libcurl))
 $(eval $(call BuildPlugin,lcr,Least Cost Routing,mod_lcr,,))
 $(eval $(call BuildPlugin,local-stream,Local streaming,mod_local_stream,,))
 $(eval $(call BuildPlugin,logfile,File logger,mod_logfile,,))
@@ -733,10 +744,10 @@ $(eval $(call BuildPlugin,managed,language mod_managed,mod_managed,,+glib2 @BROK
 $(eval $(call BuildPlugin,mp4,MP4 File Format support for video apps.,mod_mp4,,@BROKEN)) # needs libmp4v2
 $(eval $(call BuildPlugin,native-file,Native files,mod_native_file,,))
 $(eval $(call BuildPlugin,nibblebill,Billing,mod_nibblebill,,))
-$(eval $(call BuildPlugin,openzap,Zaptel hardware interface,mod_openzap ozmod_analog ozmod_analog_em ozmod_isdn ozmod_skel ozmod_zt,,+libpcap))
+$(eval $(call BuildPlugin,openzap,Zaptel hardware interface,mod_openzap ozmod_analog ozmod_analog_em ozmod_isdn ozmod_skel ozmod_zt,,+libpcap +libopenzap))
 $(eval $(call BuildPlugin,opus,Opus CoDec,mod_opus,,))
 $(eval $(call BuildPlugin,portaudio,Local audio endpoint,mod_portaudio,,+alsa-lib))
-$(eval $(call BuildPlugin,portaudio-stream,portaudio stream format,mod_portaudio_stream,,))
+$(eval $(call BuildPlugin,portaudio-stream,portaudio stream format,mod_portaudio_stream,,+alsa-lib))
 $(eval $(call BuildPlugin,radius-cdr,Radius-CDR interface,mod_radius_cdr,,+freeradius2 @BROKEN)) # fails in freeradius-client
 $(eval $(call BuildPlugin,rss,RRS feeds via TTS,mod_rss,,))
 $(eval $(call BuildPlugin,rtmp,RTMP Protocol Handler,mod_rtmp,,))
