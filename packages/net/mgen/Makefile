@@ -37,8 +37,8 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/unix \
-		CC="$(TARGET_CXX)" \
-		CPPFLAGS="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++"  \
+		CC="g++-uc" \
+		CPPFLAGS="$(TARGET_CPPFLAGS)"  \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 		SYSTEM_LIBS="-ldl -lpthread -luClibc++" \
 		-f Makefile.linux mgen
