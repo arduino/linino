@@ -410,7 +410,7 @@ define Build/Configure
 			-qt-mouse-linuxinput \
 			-plugin-mouse-linuxtp \
 			-plugin-mouse-pc \
-			$(if $(CONFIG_PACKAGE_qt4-tslibmousedriver),-plugin-mouse-tslib,-no-plugin-mouse-tslib) \
+			$(if $(CONFIG_PACKAGE_qt4-tslibmousedriver),-plugin-mouse-tslib) \
 			-no-kbd-qvfb \
 			-no-kbd-qnx \
 			-qt-kbd-tty \
