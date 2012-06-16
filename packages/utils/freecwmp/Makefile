@@ -33,7 +33,7 @@ define Package/freecwmp/Default
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=CWMP client
-  DEPENDS:=+libubox +libmicroxml +shflags
+  DEPENDS:=+libubox +libmicroxml +shflags @BROKEN
   MENU:=1
 endef
 
