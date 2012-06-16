@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor-alpha
-PKG_VERSION:=0.2.3.15-alpha
+PKG_VERSION:=0.2.3.17-beta
 PKG_RELEASE:=1
 
 PKG_SOURCE:=tor-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://www.torproject.org/dist \
 	https://archive.torproject.org/tor-package-archive
-PKG_MD5SUM:=80c6019b6cfa5106282e46ae81c9b59c
+PKG_MD5SUM:=d07158942df1c9e869a25a8a53446862
 
 PKG_BUILD_DEPENDS:=libminiupnpc libnatpmp
 PKG_BUILD_DIR:=$(BUILD_DIR)/tor-$(PKG_VERSION)
@@ -80,8 +80,12 @@ CONFIGURE_ARGS += \
 	--with-libminiupnpc-dir="$(STAGING_DIR)/usr" \
 	--enable-nat-pmp \
 	--with-libnatpmp-dir="$(STAGING_DIR)/usr" \
-	--enable-bufferevents \
 	--disable-asciidoc
+
+ifneq ($(CONFIG_SSP_SUPPORT),y)
+	CONFIGURE_ARGS += \
+		--disable-gcc-hardening
+endif
 
 CONFIGURE_VARS += \
 	CROSS_COMPILE="yes"
