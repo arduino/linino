@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/crtmpserver
   SECTION:=multimedia
   CATEGORY:=Multimedia
-  DEPENDS:=+libopenssl +libstdcpp
+  DEPENDS:=+libopenssl +libstdcpp +liblua
   TITLE:=C++ RTMP Server
   URL:=http://www.rtmpd.com/
 endef
