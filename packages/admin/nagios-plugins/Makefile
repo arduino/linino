@@ -18,6 +18,7 @@ PKG_MD5SUM:=a1835a48a777863ed2583de3c82446a9
 PKG_FIXUP:=patch-libtool
 PKG_INSTALL:=1
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 comma:= ,
@@ -25,7 +26,7 @@ comma:= ,
 define Package/nagios-plugins
   SECTION:=admin
   CATEGORY:=Administration
-  DEPENDS:=+uclibcxx +libpq +libopenssl
+  DEPENDS:=+uclibcxx +libpq +libopenssl +libradiusclient-ng +libopenldap
   TITLE:=plugins for Nagios checks
   URL:=http://nagiosplug.sourceforge.net/
 endef
