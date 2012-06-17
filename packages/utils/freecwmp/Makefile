@@ -33,8 +33,7 @@ define Package/freecwmp/Default
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=CWMP client
-  DEPENDS:=+libubox +libmicroxml +shflags @BROKEN
-  MENU:=1
+  DEPENDS:=+libuci +libubox +libmicroxml +shflags
 endef
 
 define Package/freecwmp/description
@@ -44,23 +43,19 @@ endef
 define Package/freecwmp-curl
   $(call Package/freecwmp/Default)
   TITLE+= (using libcurl)
-  DEPENDS += +libcurl
+  DEPENDS+= +libcurl
   VARIANT:=curl
 endef
 
 define Package/freecwmp-zstream
   $(call Package/freecwmp/Default)
-  TITLE += (using libzstream)
-  DEPENDS += +libzstream
+  TITLE+= (using libzstream)
+  DEPENDS+= +libzstream
   VARIANT:=zstream
 endef
 
-define Package/freecwmp-curl/config
-	source "$(SOURCE)/Config-curl.in"
-endef
-
 define Package/freecwmp-zstream/config
-	source "$(SOURCE)/Config-zstream.in"
+	source "$(SOURCE)/Config.in"
 endef
 
 USE_LOCAL=$(shell ls ./src/ 2>/dev/null >/dev/null && echo 1)

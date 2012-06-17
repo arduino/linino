@@ -1,5 +1,4 @@
-menu "Configuration"
-	depends on PACKAGE_freecwmp-zstream
+if PACKAGE_freecwmp-curl || PACKAGE_freecwmp-zstream
 
 config FREECWMP_SCRIPTS_FULL
 	bool "Install all freecwmp scripts"
@@ -24,4 +23,4 @@ config FREECWMP_DEVEL_DEBUG
 	bool "Compile with development debug options"
 	default n
 
-endmenu
+endif
