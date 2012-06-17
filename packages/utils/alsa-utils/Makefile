@@ -32,6 +32,7 @@ define Package/alsa-utils-tests
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=ALSA utilities test data (adds ~1.3M to image)
+  DEPENDS:=+alsa-lib +libpthread
 endef
 
 define Build/Configure
