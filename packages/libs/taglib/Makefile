@@ -15,6 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://developer.kde.org/~wheeler/files/src/
 PKG_MD5SUM:=ddf02f4e1d2dc30f76734df806e613eb
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
 
@@ -37,7 +38,6 @@ define Package/taglibc
 endef
 
 TARGET_CFLAGS += $(FPIC)
-CMAKE_OPTIONS += -DCMAKE_CXX_COMPILER="g++-uc"
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(2)/bin
