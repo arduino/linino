@@ -31,6 +31,7 @@ define Package/pmacct/Default
   CATEGORY:=Administration
   SUBMENU:=Pmacct suite
   URL:=http://www.pmacct.net/
+  DEPENDS=+libpcap
 endef
 
 define Package/pmacct-client
@@ -46,13 +47,11 @@ endef
 
 define Package/pmacctd/Default
   $(call Package/pmacct/Default)
-  DEPENDS+= +libpcap
   TITLE:=IP pcap-based accounting daemon
 endef
 
 define Package/sfacctd/Default
   $(call Package/pmacct/Default)
-  DEPENDS+= +libpcap
   TITLE:=sFlow accounting daemon
 endef
 
@@ -173,7 +172,7 @@ $(eval $(call BuildPackage/Template,pgsql,pmacctd,-pgsql,with PostgreSQL support
 $(eval $(call BuildPackage/Template,pgsql,sfacctd,-pgsql,with PostgreSQL support,+libpq))
 $(eval $(call BuildPackage/Template,pgsql,uacctd,-pgsql,with PostgreSQL support,+libpq))
 
-$(eval $(call BuildPackage/Template,sqlite,nfacctd,-sqlite,with SQLite support,+libsqlite3))
-$(eval $(call BuildPackage/Template,sqlite,pmacctd,-sqlite,with SQLite support,+libsqlite3))
-$(eval $(call BuildPackage/Template,sqlite,sfacctd,-sqlite,with SQLite support,+libsqlite3))
-$(eval $(call BuildPackage/Template,sqlite,uacctd,-sqlite,with SQLite support,+libsqlite3))
+$(eval $(call BuildPackage/Template,sqlite,nfacctd,-sqlite,with SQLite support,+libsqlite3 +zlib))
+$(eval $(call BuildPackage/Template,sqlite,pmacctd,-sqlite,with SQLite support,+libsqlite3 +zlib))
+$(eval $(call BuildPackage/Template,sqlite,sfacctd,-sqlite,with SQLite support,+libsqlite3 +zlib))
+$(eval $(call BuildPackage/Template,sqlite,uacctd,-sqlite,with SQLite support,+libsqlite3 +zlib))
