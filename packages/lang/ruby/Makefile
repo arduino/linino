@@ -72,7 +72,7 @@ endef
 define Package/ruby-core
 $(call Package/ruby/Default)
   TITLE:=Ruby standard libraries
-  DEPENDS:=ruby
+  DEPENDS:=ruby +libdb47 +libffi
 endef
 
 define Package/ruby-cgi
@@ -126,7 +126,7 @@ endef
 define Package/ruby-ncurses
 $(call Package/ruby/Default)
   TITLE:=Ruby support for ncurses
-  DEPENDS:=ruby +libncurses
+  DEPENDS:=ruby +libncurses +libncursesw
 endef
 
 define Package/ruby-nkf
