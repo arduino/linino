@@ -51,6 +51,8 @@ CONFIGURE_ARGS += \
 	--without-tcl \
 	--without-gpm-support
 
+MAKE_FLAGS += AR="$(TARGET_CROSS)ar"
+
 define Package/libnewt/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/libnewt.so* $(1)/usr/lib/

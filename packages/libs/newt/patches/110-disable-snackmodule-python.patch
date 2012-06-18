@@ -1,6 +1,6 @@
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -50,7 +50,7 @@ else
+@@ -51,7 +51,7 @@ else
  TARGET=depend $(PROGS)
  endif
  
@@ -9,7 +9,7 @@
  
  test:	test.o $(LIBNEWT)
  	$(CC) $(CFLAGS) -g -o test test.o $(LIBNEWT) $(LIBS)
-@@ -67,14 +67,6 @@ showchars:	showchars.o $(LIBNEWT)
+@@ -68,14 +68,6 @@ showchars:	showchars.o $(LIBNEWT)
  showkey:	showkey.o $(LIBNEWT)
  	$(CC) $(CFLAGS) -g -o showkey showkey.o $(LIBNEWT) $(LIBS)
  
@@ -24,7 +24,7 @@
  whiptail: $(NDIALOGOBJS) $(LIBNEWTSH)
  	$(CC) $(CFLAGS) -g -o whiptail $(NDIALOGOBJS) -L . -lnewt $(LIBS) -lpopt
  
-@@ -121,17 +113,12 @@ install: $(LIBNEWT) install-sh whiptail
+@@ -122,17 +114,12 @@ install: $(LIBNEWT) install-sh whiptail
  	make -C po datadir=$(instroot)/$(datadir) install
  	install -m 644 -D libnewt.pc $(instroot)/$(pkgconfigdir)/libnewt.pc
  
