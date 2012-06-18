@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/openssh/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libopenssl +zlib
+  DEPENDS:=+libopenssl +zlib +SSP_SUPPORT:libssp
   TITLE:=OpenSSH
   MAINTAINER:=Peter Wagner <tripolar@gmx.at>
   URL:=http://www.openssh.com/
