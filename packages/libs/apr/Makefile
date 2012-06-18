@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libapr
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libpthread +librt
+  DEPENDS:=+libpthread +librt +libuuid
   TITLE:=Apache Portable Runtime Library
   URL:=http://apr.apache.org/
 endef
