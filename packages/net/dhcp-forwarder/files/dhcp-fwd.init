@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
+
 START=50
 
 LOG_D=/var/log
@@ -15,4 +15,3 @@ start() {
 stop() {
 	[ -f $PID_F ] && kill $(cat $PID_F)
 }
-
