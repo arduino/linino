@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bluelog
-PKG_VERSION:=1.0.3
+PKG_VERSION:=1.0.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.digifail.com/downloads/software/bluelog
-PKG_MD5SUM:=cbbb5a7d04ac7160f3f7389e05cd4257
+PKG_MD5SUM:=2791fbb0333b0b414a4d2230c1e9e8e6
 
 PKG_INSTALL:=1
 
@@ -50,8 +50,8 @@ endef
 
 define Package/bluelog-live/description
   $(call Package/bluelog/Default/description)
-  This package contains the bluelog live output files for use with an SSI
-  capable web server.
+  This package contains the files for "Bluelog Live", an optional mode of
+  Bluelog which creates a real-time webpage of discovered Bluetooth devices.
 endef
 
 TARGET_CFLAGS += -DOPENWRT
@@ -67,8 +67,21 @@ define Package/bluelog/install
 endef
 
 define Package/bluelog-live/install
-	$(INSTALL_DIR) $(1)/www
-	$(CP) $(PKG_INSTALL_DIR)/var/lib/bluelog $(1)/www/
+	$(INSTALL_DIR) $(1)/www/bluelog
+	$(CP) $(PKG_INSTALL_DIR)/var/lib/bluelog/*.html $(1)/www/bluelog/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/var/lib/bluelog/openwrt.css \
+		$(1)/www/bluelog/style.css
+	$(INSTALL_DIR) $(1)/www/bluelog/images
+	$(CP) \
+		$(PKG_INSTALL_DIR)/var/lib/bluelog/images/digifail_logo.png \
+		$(PKG_INSTALL_DIR)/var/lib/bluelog/images/email.png \
+		$(PKG_INSTALL_DIR)/var/lib/bluelog/images/favicon.png \
+		$(PKG_INSTALL_DIR)/var/lib/bluelog/images/openwrt_logo.png \
+		$(PKG_INSTALL_DIR)/var/lib/bluelog/images/qrcontact.png \
+		$(1)/www/bluelog/images/
+	$(INSTALL_DIR) $(1)/www/cgi-bin
+	$(CP) $(PKG_INSTALL_DIR)/var/lib/bluelog/cgi-bin/* $(1)/www/cgi-bin/
 endef
 
 $(eval $(call BuildPackage,bluelog))
