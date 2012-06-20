@@ -1,7 +1,0 @@
-config DHCP4_ENABLE_IPV6
-	bool "Enable IPv6 capabilities (DHCPv6)"
-	depends on PACKAGE_kmod-ipv6 && PACKAGE_dhcp4
-	default y
-	help
-	  Enables IPv6 features in all built DHCP4 packages
-

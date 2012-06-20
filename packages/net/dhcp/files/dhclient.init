@@ -1,4 +1,5 @@
 #!/bin/sh /etc/rc.common
+
 START=60
 
 lease_file=/var/dhclient.leases
@@ -7,27 +8,23 @@ pid_file=/var/run/dhclient.pid
 script_file=/usr/sbin/dhclient-script
 
 start() {
-	echo Starting isc-dhclient
-
 	/usr/sbin/dhclient -q -nw -cf $config_file -lf $lease_file -pf $pid_file -sf $script_file `/sbin/uci get network.wan.ifname`
 	
 	if [ $? -ne 0 ]; then
-		echo "  isc-dhclient failed to start"
+		return 1
 	fi
 }
 
 stop() {
-	echo Stopping isc-dhclient
-	if [ -e $pid_file ]; then
-		kill -9 `cat $pid_file`
-
-		if [ $? -ne 0 ]; then
-			echo "  PID " `cat $pid_file` not found
-			echo "  Is the DHCP client running?"
-		fi
-	
-		rm $pid_file
-	else
-		echo "  $pid_file not found"
+	if [ ! -e $pid_file ]; then
+		return 1
 	fi
+
+	kill -9 `cat $pid_file`
+
+	if [ $? -ne 0 ]; then
+		return 1
+	fi
+
+	rm $pid_file
 }
