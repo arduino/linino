@@ -24,7 +24,7 @@
 +#include "../upload-pack.c"
 --- a/builtin.h
 +++ b/builtin.h
-@@ -150,5 +150,11 @@ extern int cmd_verify_pack(int argc, con
+@@ -151,5 +151,11 @@ extern int cmd_verify_pack(int argc, con
  extern int cmd_show_ref(int argc, const char **argv, const char *prefix);
  extern int cmd_pack_refs(int argc, const char **argv, const char *prefix);
  extern int cmd_replace(int argc, const char **argv, const char *prefix);
@@ -127,7 +127,7 @@
  {
  	const char *cmd = argv[0];
  	static struct cmd_struct commands[] = {
-@@ -352,12 +352,14 @@ static void handle_internal_command(int
+@@ -353,12 +353,14 @@ static void handle_internal_command(int
  		{ "commit-tree", cmd_commit_tree, RUN_SETUP },
  		{ "config", cmd_config, RUN_SETUP_GENTLY },
  		{ "count-objects", cmd_count_objects, RUN_SETUP },
@@ -142,7 +142,7 @@
  		{ "fetch", cmd_fetch, RUN_SETUP },
  		{ "fetch-pack", cmd_fetch_pack, RUN_SETUP },
  		{ "fmt-merge-msg", cmd_fmt_merge_msg, RUN_SETUP },
-@@ -370,6 +372,8 @@ static void handle_internal_command(int
+@@ -371,6 +373,8 @@ static void handle_internal_command(int
  		{ "grep", cmd_grep, RUN_SETUP_GENTLY },
  		{ "hash-object", cmd_hash_object },
  		{ "help", cmd_help },
@@ -151,7 +151,7 @@
  		{ "index-pack", cmd_index_pack, RUN_SETUP_GENTLY },
  		{ "init", cmd_init_db },
  		{ "init-db", cmd_init_db },
-@@ -418,6 +422,7 @@ static void handle_internal_command(int
+@@ -419,6 +423,7 @@ static void handle_internal_command(int
  		{ "revert", cmd_revert, RUN_SETUP | NEED_WORK_TREE },
  		{ "rm", cmd_rm, RUN_SETUP },
  		{ "send-pack", cmd_send_pack, RUN_SETUP },
@@ -159,7 +159,7 @@
  		{ "shortlog", cmd_shortlog, RUN_SETUP_GENTLY | USE_PAGER },
  		{ "show", cmd_show, RUN_SETUP },
  		{ "show-branch", cmd_show_branch, RUN_SETUP },
-@@ -435,6 +440,7 @@ static void handle_internal_command(int
+@@ -436,6 +441,7 @@ static void handle_internal_command(int
  		{ "update-server-info", cmd_update_server_info, RUN_SETUP },
  		{ "upload-archive", cmd_upload_archive },
  		{ "upload-archive--writer", cmd_upload_archive_writer },
@@ -169,24 +169,24 @@
  		{ "verify-tag", cmd_verify_tag, RUN_SETUP },
 --- a/Makefile
 +++ b/Makefile
-@@ -454,15 +454,7 @@ EXTRA_PROGRAMS =
+@@ -464,15 +464,7 @@ EXTRA_PROGRAMS =
  # ... and all the rest that could be moved out of bindir to gitexecdir
  PROGRAMS += $(EXTRA_PROGRAMS)
  
+-PROGRAM_OBJS += credential-store.o
 -PROGRAM_OBJS += daemon.o
 -PROGRAM_OBJS += fast-import.o
+-PROGRAM_OBJS += http-backend.o
 -PROGRAM_OBJS += imap-send.o
+-PROGRAM_OBJS += sh-i18n--envsubst.o
 -PROGRAM_OBJS += shell.o
 -PROGRAM_OBJS += show-index.o
 -PROGRAM_OBJS += upload-pack.o
--PROGRAM_OBJS += http-backend.o
--PROGRAM_OBJS += sh-i18n--envsubst.o
--PROGRAM_OBJS += credential-store.o
 +PROGRAM_OBJS =
  
  # Binary suffix, set to .exe for Windows builds
  X =
-@@ -852,6 +844,12 @@ BUILTIN_OBJS += builtin/var.o
+@@ -900,6 +892,12 @@ BUILTIN_OBJS += builtin/var.o
  BUILTIN_OBJS += builtin/verify-pack.o
  BUILTIN_OBJS += builtin/verify-tag.o
  BUILTIN_OBJS += builtin/write-tree.o
@@ -199,7 +199,7 @@
  
  GITLIBS = $(LIB_FILE) $(XDIFF_LIB)
  EXTLIBS =
-@@ -1447,7 +1445,7 @@ endif
+@@ -1498,7 +1496,7 @@ endif
  EXTLIBS += -lz
  
  ifndef NO_OPENSSL
@@ -208,7 +208,7 @@
  	ifdef OPENSSLDIR
  		BASIC_CFLAGS += -I$(OPENSSLDIR)/include
  		OPENSSL_LINK = -L$(OPENSSLDIR)/$(lib) $(CC_LD_DYNPATH)$(OPENSSLDIR)/$(lib)
-@@ -2228,10 +2226,6 @@ endif
+@@ -2279,10 +2277,6 @@ endif
  git-%$X: %.o GIT-LDFLAGS $(GITLIBS)
  	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) $(filter %.o,$^) $(LIBS)
  
@@ -219,14 +219,14 @@
  git-http-fetch$X: revision.o http.o http-walker.o http-fetch.o GIT-LDFLAGS $(GITLIBS)
  	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) $(filter %.o,$^) \
  		$(LIBS) $(CURL_LIBCURL)
-@@ -2526,22 +2520,20 @@ endif
+@@ -2579,24 +2573,22 @@ endif
  	bindir=$$(cd '$(DESTDIR_SQ)$(bindir_SQ)' && pwd) && \
  	execdir=$$(cd '$(DESTDIR_SQ)$(gitexec_instdir_SQ)' && pwd) && \
  	{ test "$$bindir/" = "$$execdir/" || \
 -	  for p in git$X $(filter $(install_bindir_programs),$(ALL_PROGRAMS)); do \
 +	  for p in $(filter $(install_bindir_programs),$(ALL_PROGRAMS)); do \
  		$(RM) "$$execdir/$$p" && \
- 		test -z "$(NO_CROSS_DIRECTORY_HARDLINKS)" && \
+ 		test -z "$(NO_INSTALL_HARDLINKS)$(NO_CROSS_DIRECTORY_HARDLINKS)" && \
 -		ln "$$bindir/$$p" "$$execdir/$$p" 2>/dev/null || \
 +		ln -s git "$$execdir/$$p" 2>/dev/null || \
  		cp "$$bindir/$$p" "$$execdir/$$p" || exit; \
@@ -234,12 +234,14 @@
  	} && \
  	for p in $(filter $(install_bindir_programs),$(BUILT_INS)); do \
  		$(RM) "$$bindir/$$p" && \
+ 		test -z "$(NO_INSTALL_HARDLINKS)" && \
 -		ln "$$bindir/git$X" "$$bindir/$$p" 2>/dev/null || \
  		ln -s "git$X" "$$bindir/$$p" 2>/dev/null || \
  		cp "$$bindir/git$X" "$$bindir/$$p" || exit; \
  	done && \
  	for p in $(BUILT_INS); do \
  		$(RM) "$$execdir/$$p" && \
+ 		test -z "$(NO_INSTALL_HARDLINKS)" && \
 -		ln "$$execdir/git$X" "$$execdir/$$p" 2>/dev/null || \
  		ln -s "git$X" "$$execdir/$$p" 2>/dev/null || \
  		cp "$$execdir/git$X" "$$execdir/$$p" || exit; \
