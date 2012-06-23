@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=strongswan
 PKG_VERSION:=4.5.3
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.strongswan.org/
@@ -87,7 +87,6 @@ PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-
 define Package/strongswan4/Default
   SUBMENU:=VPN
   SECTION:=net
@@ -97,10 +96,9 @@ define Package/strongswan4/Default
 endef
 
 define Package/strongswan4/description/Default
- StrongSwan is an OpenSource IPsec implementation for the Linux 
- operating system.
-endef
+ StrongSwan is an OpenSource IPsec implementation for the Linux operating system.
 
+endef
 
 define Package/strongswan4
 $(call Package/strongswan4/Default)
@@ -116,10 +114,8 @@ endef
 
 define Package/strongswan4/description
 $(call Package/strongswan4/description/Default)
- .
  This package contains shared libraries and scripts.
 endef
-
 
 define Package/strongswan4-full
 $(call Package/strongswan4/Default)
@@ -185,10 +181,9 @@ endef
 
 define Package/strongswan4-full/description
 $(call Package/strongswan4/description/Default)
- .
- This meta-package contains dependencies for all of the strongswan4 
- plugins except kernel-klips and socket-default which are ommitted in 
- favor of the kernel-netlink and socket-raw plugins.
+ This meta-package contains dependencies for all of the strongswan4 plugins
+ except kernel-klips and socket-default which are ommitted in favor of the
+ kernel-netlink and socket-raw plugins.
 endef
 
 
@@ -228,11 +223,8 @@ endef
 
 define Package/strongswan4-default/description
 $(call Package/strongswan4/description/Default)
- .
- This meta-package contains only dependencies to match upstream
- defaults.
+ This meta-package contains only dependencies to match upstream defaults.
 endef
-
 
 define Package/strongswan4-minimal
 $(call Package/strongswan4/Default)
@@ -255,10 +247,8 @@ endef
 
 define Package/strongswan4-minimal/description
 $(call Package/strongswan4/description/Default)
- .
  This meta-package contains only dependencies for a minimal IKEv2 setup.
 endef
-
 
 define Package/strongswan4-app-charon
 $(call Package/strongswan4/Default)
@@ -268,10 +258,8 @@ endef
 
 define Package/strongswan4-app-charon/description
 $(call Package/strongswan4/description/Default)
- .
  This package contains charon, an IKEv2 keying daemon.
 endef
-
 
 define Package/strongswan4-app-pluto
 $(call Package/strongswan4/Default)
@@ -281,24 +269,23 @@ endef
 
 define Package/strongswan4-app-pluto/description
 $(call Package/strongswan4/description/Default)
- .
  This package contains pluto, an IKEv1 keying daemon.
 endef
-
 
 define Package/strongswan4-libfast
 $(call Package/strongswan4/Default)
   TITLE+= libfast
-  DEPENDS:= +strongswan4 +PACKAGE_strongswan4-libfast:zlib +PACKAGE_strongswan4-libfast:fcgi
+  DEPENDS:= +strongswan4 \
+		+PACKAGE_strongswan4-libfast:zlib \
+		+PACKAGE_strongswan4-libfast:fcgi \
+		+PACKAGE_strongswan4-libfast:clearsilver
 endef
 
 define Package/strongswan4-libfast/description
 $(call Package/strongswan4/description/Default)
- .
- This package contains libfast, a lightweight framework to build native 
- web applications using ClearSilver and FastCGI.
+ This package contains libfast, a lightweight framework to build native web
+ applications using ClearSilver and FastCGI.
 endef
-
 
 define Package/strongswan4-utils
 $(call Package/strongswan4/Default)
@@ -308,14 +295,9 @@ endef
 
 define Package/strongswan4-utils/description
 $(call Package/strongswan4/description/Default)
- .
  This package contains the openac, pki & scepclient utilities.
 endef
 
-
-# 1. Name
-# 2. Title
-# 3. Depends
 define BuildPlugin
   define Package/strongswan4-mod-$(1)
     $$(call Package/strongswan4/Default)
@@ -325,15 +307,13 @@ define BuildPlugin
 
   define Package/strongswan4-mod-$(1)/install
 	$(INSTALL_DIR) $$(1)/usr/lib/ipsec/plugins
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/ipsec/plugins/libstrongswan-$(1).so \
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ipsec/plugins/libstrongswan-$(1).so \
 		$$(1)/usr/lib/ipsec/plugins/ ;
 	$(call Plugin/$(1)/install,$$(1))
   endef
 
   $$(eval $$(call BuildPackage,strongswan4-mod-$(1)))
 endef
-
 
 CONFIGURE_ARGS+= \
 	$(if $(CONFIG_STRONGSWAN4_ENABLE_CISCO_QUIRKS),--enable-cisco-quirks,--disable-cisco-quirks) \
@@ -358,7 +338,6 @@ endif
 
 EXTRA_LDFLAGS+= -Wl,-rpath-link,$(STAGING_DIR)/usr/lib
 
-
 define Package/strongswan4/conffiles
 /etc/ipsec.conf
 /etc/ipsec.secrets
@@ -378,21 +357,17 @@ define Package/strongswan4/install
 	$(INSTALL_CONF) ./files/ipsec.secrets $(1)/etc/
 endef
 
-
 define Package/strongswan4-default/install
 	true
 endef
-
 
 define Package/strongswan4-full/install
 	true
 endef
 
-
 define Package/strongswan4-minimal/install
 	true
 endef
-
 
 define Package/strongswan4-app-charon/install
 	$(INSTALL_DIR) $(1)/usr/lib/ipsec
@@ -401,24 +376,20 @@ define Package/strongswan4-app-charon/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ipsec/{charon,stroke} $(1)/usr/lib/ipsec/
 endef
 
-
 define Package/strongswan4-app-pluto/install
 	$(INSTALL_DIR) $(1)/usr/lib/ipsec
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ipsec/{pluto,_pluto_adns,whack} $(1)/usr/lib/ipsec/
 endef
-
 
 define Package/strongswan4-libfast/install
 	$(INSTALL_DIR) $(1)/usr/lib/ipsec
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ipsec/libfast.so.* $(1)/usr/lib/ipsec/
 endef
 
-
 define Package/strongswan4-utils/install
 	$(INSTALL_DIR) $(1)/usr/lib/ipsec
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ipsec/{openac,pki,scepclient} $(1)/usr/lib/ipsec/
 endef
-
 
 define Plugin/attr-sql/install
 	$(INSTALL_DIR) $(1)/usr/lib/ipsec
@@ -430,7 +401,6 @@ define Plugin/updown/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/ipsec/{_updown,_updown_espmark} $(1)/usr/lib/ipsec/
 endef
 
-
 $(eval $(call BuildPackage,strongswan4))
 $(eval $(call BuildPackage,strongswan4-default))
 $(eval $(call BuildPackage,strongswan4-full))
@@ -439,7 +409,6 @@ $(eval $(call BuildPackage,strongswan4-app-charon))
 $(eval $(call BuildPackage,strongswan4-app-pluto))
 $(eval $(call BuildPackage,strongswan4-libfast))
 $(eval $(call BuildPackage,strongswan4-utils))
-
 $(eval $(call BuildPlugin,aes,AES crypto,))
 $(eval $(call BuildPlugin,agent,SSH agent signing,))
 $(eval $(call BuildPlugin,af-alg,AF_ALG Linux crypto API,+kmod-crypto-user))
