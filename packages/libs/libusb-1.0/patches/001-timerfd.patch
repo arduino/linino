@@ -12,8 +12,6 @@ Date:   Thu Jan 27 06:39:16 2011 +0300
     
     Signed-off-by: Alexander Gordeev <lasaine@lvk.cs.msu.su>
 
-diff --git a/libusb/io.c b/libusb/io.c
-index 1379eb3..250b8dc 100644
 --- a/libusb/io.c
 +++ b/libusb/io.c
 @@ -20,6 +20,7 @@
@@ -21,10 +19,10 @@ index 1379eb3..250b8dc 100644
  #include <config.h>
  #include <errno.h>
 +#include <fcntl.h>
- #include <poll.h>
- #include <pthread.h>
  #include <signal.h>
-@@ -1025,7 +1026,7 @@ int usbi_io_init(struct libusb_context *ctx)
+ #include <stdint.h>
+ #include <stdlib.h>
+@@ -1072,7 +1073,7 @@ int usbi_io_init(struct libusb_context *
  
  #ifdef USBI_TIMERFD_AVAILABLE
  	ctx->timerfd = timerfd_create(usbi_backend->get_timerfd_clockid(),
