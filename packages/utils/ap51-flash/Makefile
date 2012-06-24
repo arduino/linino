@@ -16,6 +16,7 @@ PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_SUBDIR:=ap51-flash-$(PKG_VERSION)
 PKG_SOURCE_URL:=http://dev.cloudtrax.com/downloads/svn/ap51-flash/trunk
 PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
+PKG_MIRROR_MD5SUM:=3bff5b2ffa77ee80a807f3d24165b7cf
 
 include $(INCLUDE_DIR)/package.mk
 
