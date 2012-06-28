@@ -1,6 +1,6 @@
---- cups-1.4.2.orig/ppdc/Makefile	2010-01-28 18:06:41.000000000 +0100
-+++ cups-1.4.2/ppdc/Makefile	2010-01-28 20:25:09.000000000 +0100
-@@ -239,12 +239,7 @@
+--- a/ppdc/Makefile
++++ b/ppdc/Makefile
+@@ -239,12 +239,7 @@ framedhelp:
  
  genstrings:		genstrings.o libcupsppdc.a ../cups/libcups.a \
  			sample.drv ../data/media.defs

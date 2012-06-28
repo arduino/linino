@@ -1,6 +1,6 @@
 --- a/configure
 +++ b/configure
-@@ -1926,7 +1926,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+@@ -1966,7 +1966,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
  
  
  

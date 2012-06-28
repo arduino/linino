@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cups
 PKG_VERSION:=1.4.4
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-source.tar.bz2
 PKG_SOURCE_URL:= \
@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/cups
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+zlib +libpthread +libpng +libjpeg +libstdcpp
+  DEPENDS:=+zlib +libpthread +libpng +libjpeg +libstdcpp +libusb
   TITLE:=Common UNIX Printing System
   URL:=http://www.cups.org/
 endef
@@ -50,7 +50,7 @@ define Build/Configure
 		--without-php \
 		--enable-shared \
 		--enable-image \
-		--disable-libusb \
+		--enable-libusb \
 		--disable-dbus \
 		--disable-dnssd \
 		--disable-launchd \

@@ -1,6 +1,6 @@
 --- a/cups-config.in
 +++ b/cups-config.in
-@@ -53,7 +53,7 @@ else
+@@ -54,7 +54,7 @@ else
  	CFLAGS="$CFLAGS -I$includedir"
      fi
  
@@ -33,7 +33,7 @@
  		HP-UX*)
 --- a/configure
 +++ b/configure
-@@ -9254,7 +9254,7 @@ if test "$libdir" = "\${exec_prefix}/lib
+@@ -10003,7 +10003,7 @@ if test "$libdir" = "\${exec_prefix}/lib
  			;;
  		Linux*)
  			if test -d /usr/lib64; then
@@ -42,7 +42,7 @@
  			fi
  			;;
  		HP-UX*)
-@@ -9792,9 +9792,6 @@ case "$uname" in
+@@ -10626,9 +10626,6 @@ case "$uname" in
  			LIB32CUPS="32bit/libcups.so.2"
  			LIB32CUPSIMAGE="32bit/libcupsimage.so.2"
  			LIB32DIR="$exec_prefix/lib"
@@ -52,7 +52,7 @@
  			UNINSTALL32="uninstall32bit"
  		fi
  
-@@ -9804,9 +9801,6 @@ case "$uname" in
+@@ -10638,9 +10635,6 @@ case "$uname" in
  			LIB64CUPS="64bit/libcups.so.2"
  			LIB64CUPSIMAGE="64bit/libcupsimage.so.2"
  			LIB64DIR="$exec_prefix/lib"

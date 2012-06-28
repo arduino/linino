@@ -1,6 +1,6 @@
 --- a/Makefile
 +++ b/Makefile
-@@ -19,8 +19,8 @@ include Makedefs
+@@ -20,8 +20,8 @@ include Makedefs
  # Directories to make...
  #
  
