@@ -39,7 +39,16 @@ define Package/atftpd
 endef
 
 CONFIGURE_ARGS += \
-	--disable-libwrap 
+	--disable-libwrap
+
+ifdef CONFIG_USE_EGLIBC
+  TARGET_CFLAGS += -DHAVE_ARGZ=1
+
+  define Build/Prepare
+	$(Build/Prepare/Default)
+	echo '#include_next <argz.h>' > $(PKG_BUILD_DIR)/argz.h
+  endef
+endif
 
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS) -Wall -D_REENTRANT" \
