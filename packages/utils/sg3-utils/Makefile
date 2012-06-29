@@ -36,7 +36,7 @@ endef
 
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) -f no_lib/Makefile.linux_static \
+	$(MAKE) -C $(PKG_BUILD_DIR) -f no_lib/Makefile.linux \
 		DESTDIR=$(STAGING_DIR) \
 		CC="$(TARGET_CC)" \
 		CFLAGS="$(TARGET_CFLAGS) -DSG3_UTILS_LINUX" \
