@@ -22,3 +22,9 @@
    fun:*
    obj:/lib/ld-*
 }
+{
+	strlen(Cond)
+	Memcheck:Cond
+	fun:strlen
+	fun:*
+}
