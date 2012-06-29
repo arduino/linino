@@ -48,6 +48,8 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	LIBS="-lpthread"
 
+TARGET_CFLAGS += -fpermissive
+
 define Package/peercast/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/peercast $(1)/usr/sbin/
