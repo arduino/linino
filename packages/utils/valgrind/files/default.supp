@@ -28,3 +28,9 @@
 	fun:strlen
 	fun:*
 }
+{
+	strnlen(Cond)
+	Memcheck:Cond
+	fun:strnlen
+	fun:*
+}
