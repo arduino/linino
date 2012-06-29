@@ -8,21 +8,65 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=valgrind
-PKG_VERSION:=3.3.1
-PKG_RELEASE:=2
+PKG_REV:=r12684
+PKG_VERSION:=3.7.0+svn_$(PKG_REV)
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://valgrind.org/downloads/
-PKG_MD5SUM:=0539e2fa4aadb2cd4ca4bba65b1fe8b5
+PKG_SOURCE_URL:=svn://svn.valgrind.org/valgrind/trunk
+PKG_SOURCE_SUBDIR=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=$(PKG_REV)
+PKG_MIRROR_MD5SUM:=841cfcaf265fae0b866c6cb4c563e3c0
+
+PKG_FIXUP = autoreconf
+PKG_INSTALL := 1
+
+PKG_BUILD_DIR=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/kernel.mk
 
 define Package/valgrind
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=@TARGET_x86||@TARGET_rdc||@TARGET_ps3||@TARGET_magicbox||@TARGET_amcc||@TARGET_uml
-  TITLE:=debugging and profiling Linux programs
+  DEPENDS:=@mips||mipsel||i386||arm||armeb||powerpc +libpthread +librt
+  TITLE:=debugging and profiling tools for Linux
   URL:=http://www.valgrind.org
+endef
+
+define Package/valgrind/default
+  $(Package/valgrind)
+  DEPENDS := valgrind
+endef
+
+define Package/valgrind-cachegrind
+  $(Package/valgrind/default)
+  TITLE += (cache profiling)
+endef
+
+define Package/valgrind-callgrind
+  $(Package/valgrind/default)
+  TITLE += (callgraph profiling)
+endef
+
+define Package/valgrind-drd
+  $(Package/valgrind/default)
+  TITLE += (thread error detection)
+endef
+
+define Package/valgrind-massif
+  $(Package/valgrind/default)
+  TITLE += (heap profiling)
+endef
+
+define Package/valgrind-helgrind
+  $(Package/valgrind/default)
+  TITLE += (thread debugging)
+endef
+
+define Package/valgrind-vgdb
+  $(Package/valgrind/default)
+  TITLE += (GDB interface)
 endef
 
 define Package/valgrind/description
@@ -34,9 +78,12 @@ define Package/valgrind/description
 	to speed up and reduce memory use of your programs.
 endef
 
+CONFIGURE_VARS += \
+	UNAME_R=$(LINUX_VERSION)
+
 CONFIGURE_ARGS += \
-	--disable-tls \
 	--enable-only32bit \
+	--enable-tls \
 	--without-x \
 	--without-uiout \
 	--disable-valgrindmi \
@@ -44,30 +91,75 @@ CONFIGURE_ARGS += \
 	--disable-valgrindtk \
 	--without-included-gettext
 
-DEFAULT_SUPP += "uclibc.supp"
-
-define Build/Compile
-	$(TARGET_CC) $(TARGET_CFLAGS) -c -o $(PKG_BUILD_DIR)/abort.o ./src/abort.c
-	$(TARGET_CROSS)ar rcu $(PKG_BUILD_DIR)/abort.a $(PKG_BUILD_DIR)/abort.o
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		AM_CFLAGS_X86_LINUX="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR)/coregrind" \
-		AM_CFLAGS_AMD64_LINUX="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR)/coregrind" \
-		AM_CFLAGS_PPC32_LINUX="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR)/coregrind" \
-		AM_CFLAGS_PPC64_LINUX="$(TARGET_CFLAGS) -I$(PKG_BUILD_DIR)/coregrind" \
-		TOOL_LDADD_COMMON="$(LIBGCC_A) $(PKG_BUILD_DIR)/abort.a" \
-		all install
-endef
-
 define Package/valgrind/install	
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
-	$(INSTALL_BIN) ./files/valgrind.sh $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/valgrind* $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib/valgrind
-	$(CP) ./files/uclibc.supp $(1)/usr/lib/valgrind/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/valgrind/*-linux $(1)/usr/lib/valgrind/
+	$(CP) \
+		./files/default.supp \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/none-* \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/vgpreload_core*.so \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/$(LINUX_KARCH)-*.xml \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/32bit-core*.xml \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/32bit-linux*.xml \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/memcheck-* \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/vgpreload_memcheck*.so \
+		$(1)/usr/lib/valgrind/
+endef
+
+define Package/valgrind-cachegrind/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/cg_* $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/lib/valgrind
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/cachegrind-* \
+		$(1)/usr/lib/valgrind/
+endef
+
+define Package/valgrind-callgrind/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/callgrind* $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/lib/valgrind
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/callgrind-* \
+		$(1)/usr/lib/valgrind/
+endef
+
+define Package/valgrind-drd/install
+	$(INSTALL_DIR) $(1)/usr/lib/valgrind
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/drd-* \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/vgpreload_drd*.so \
+		$(1)/usr/lib/valgrind/
+endef
+
+define Package/valgrind-massif/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ms_print $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/usr/lib/valgrind
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/massif-* \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/vgpreload_massif*.so \
+		$(1)/usr/lib/valgrind/
+endef
+
+define Package/valgrind-helgrind/install
+	$(INSTALL_DIR) $(1)/usr/lib/valgrind
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/helgrind-* \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/vgpreload_helgrind*.so \
+		$(1)/usr/lib/valgrind/
+endef
+
+define Package/valgrind-vgdb/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/vgdb $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,valgrind))
+$(eval $(call BuildPackage,valgrind-cachegrind))
+$(eval $(call BuildPackage,valgrind-callgrind))
+$(eval $(call BuildPackage,valgrind-drd))
+$(eval $(call BuildPackage,valgrind-massif))
+$(eval $(call BuildPackage,valgrind-helgrind))
+$(eval $(call BuildPackage,valgrind-vgdb))

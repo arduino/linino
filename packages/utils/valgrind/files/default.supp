@@ -1,0 +1,24 @@
+{
+   ld(Addr1)
+   Memcheck:Addr1
+   fun:*
+   obj:/lib/ld-*
+}
+{
+   ld(Addr2)
+   Memcheck:Addr2
+   fun:*
+   obj:/lib/ld-*
+}
+{
+   ld(Addr4)
+   Memcheck:Addr4
+   fun:*
+   obj:/lib/ld-*
+}
+{
+   ld(Cond)
+   Memcheck:Cond
+   fun:*
+   obj:/lib/ld-*
+}
