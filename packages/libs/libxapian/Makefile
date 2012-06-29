@@ -18,6 +18,8 @@ PKG_MD5SUM:=6c9f9e7ac43aa4e086283201329e98ee
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
+PKG_BUILD_DEPENDS:=util-linux
+
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
 
