@@ -21,7 +21,7 @@ define Package/uhub
   SUBMENU:=P2P
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libevent
+  DEPENDS:=+libevent +USE_EGLIBC:librt
   TITLE:=High performance ADC hub
   URL:=http://www.extatic.org/uhub/
 endef
@@ -31,6 +31,10 @@ define Package/uhub/description
         Its low memory footprint allows it to handle several thousand users
         on high-end servers, or a small private hub on embedded hardware.
 endef
+
+ifdef CONFIG_USE_EGLIBC
+TARGET_LDFLAGS += -lrt
+endif
 
 define Package/uhub/install
 	$(INSTALL_DIR) $(1)/usr/local/bin
