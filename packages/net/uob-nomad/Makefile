@@ -38,6 +38,8 @@ This is an implementation of NOMADv4 (Filters for
 	status information to the UoB-NOMAD-GUI (ver 0.1).
 endef
 
+TARGET_CFLAGS += -include stddef.h -include string.h
+
 MAKE_FLAGS = \
 	CC="$(TARGET_CC) $(TARGET_CFLAGS)"
 
