@@ -34,7 +34,7 @@
 +int quiet = 0;
  char progress[] = "-\\|/";
 +
-+void inline dprintf(const char *format, ...) {
++void inline __dprintf(const char *format, ...) {
 +    if(!quiet) {
 +        va_list ap;
 +        va_start(ap, format);
@@ -50,10 +50,10 @@
      fflush(stdout);
      for (j = 0; j < 16; j++) {
 -        printf("\b\b\b\b\b\b\b\b\b\b\b");
-+        dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++        __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
          p1 = (ulv *) bufa;
 -        printf("setting %3u", j);
-+        dprintf("setting %3u", j);
++        __dprintf("setting %3u", j);
          fflush(stdout);
          for (i = 0; i < count; i++) {
              *p1 = ((j + i) % 2) == 0 ? (ul) p1 : ~((ul) p1);
@@ -61,8 +61,8 @@
          }
 -        printf("\b\b\b\b\b\b\b\b\b\b\b");
 -        printf("testing %3u", j);
-+        dprintf("\b\b\b\b\b\b\b\b\b\b\b");
-+        dprintf("testing %3u", j);
++        __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++        __dprintf("testing %3u", j);
          fflush(stdout);
          p1 = (ulv *) bufa;
          for (i = 0; i < count; i++, p1++) {
@@ -71,7 +71,7 @@
          }
      }
 -    printf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
-+    dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
++    __dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
      fflush(stdout);
      return 0;
  }
@@ -87,7 +87,7 @@
          }
      }
 -    printf("\b \b");
-+    dprintf("\b \b");
++    __dprintf("\b \b");
      fflush(stdout);
      return compare_regions(bufa, bufb, count);
  }
@@ -96,10 +96,10 @@
      fflush(stdout);
      for (j = 0; j < 64; j++) {
 -        printf("\b\b\b\b\b\b\b\b\b\b\b");
-+        dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++        __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
          q = (j % 2) == 0 ? UL_ONEBITS : 0;
 -        printf("setting %3u", j);
-+        dprintf("setting %3u", j);
++        __dprintf("setting %3u", j);
          fflush(stdout);
          p1 = (ulv *) bufa;
          p2 = (ulv *) bufb;
@@ -108,15 +108,15 @@
          }
 -        printf("\b\b\b\b\b\b\b\b\b\b\b");
 -        printf("testing %3u", j);
-+        dprintf("\b\b\b\b\b\b\b\b\b\b\b");
-+        dprintf("testing %3u", j);
++        __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++        __dprintf("testing %3u", j);
          fflush(stdout);
          if (compare_regions(bufa, bufb, count)) {
              return -1;
          }
      }
 -    printf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
-+    dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
++    __dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
      fflush(stdout);
      return 0;
  }
@@ -125,10 +125,10 @@
      fflush(stdout);
      for (j = 0; j < 64; j++) {
 -        printf("\b\b\b\b\b\b\b\b\b\b\b");
-+        dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++        __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
          q = (j % 2) == 0 ? CHECKERBOARD1 : CHECKERBOARD2;
 -        printf("setting %3u", j);
-+        dprintf("setting %3u", j);
++        __dprintf("setting %3u", j);
          fflush(stdout);
          p1 = (ulv *) bufa;
          p2 = (ulv *) bufb;
@@ -137,15 +137,15 @@
          }
 -        printf("\b\b\b\b\b\b\b\b\b\b\b");
 -        printf("testing %3u", j);
-+        dprintf("\b\b\b\b\b\b\b\b\b\b\b");
-+        dprintf("testing %3u", j);
++        __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++        __dprintf("testing %3u", j);
          fflush(stdout);
          if (compare_regions(bufa, bufb, count)) {
              return -1;
          }
      }
 -    printf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
-+    dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
++    __dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
      fflush(stdout);
      return 0;
  }
@@ -154,30 +154,30 @@
      size_t i;
  
 -    printf("           ");
-+    dprintf("           ");
++    __dprintf("           ");
      fflush(stdout);
      for (j = 0; j < 256; j++) {
 -        printf("\b\b\b\b\b\b\b\b\b\b\b");
-+        dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++        __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
          p1 = (ulv *) bufa;
          p2 = (ulv *) bufb;
 -        printf("setting %3u", j);
-+        dprintf("setting %3u", j);
++        __dprintf("setting %3u", j);
          fflush(stdout);
          for (i = 0; i < count; i++) {
              *p1++ = *p2++ = (ul) UL_BYTE(j);
          }
 -        printf("\b\b\b\b\b\b\b\b\b\b\b");
 -        printf("testing %3u", j);
-+        dprintf("\b\b\b\b\b\b\b\b\b\b\b");
-+        dprintf("testing %3u", j);
++        __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++        __dprintf("testing %3u", j);
          fflush(stdout);
          if (compare_regions(bufa, bufb, count)) {
              return -1;
          }
      }
 -    printf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
-+    dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
++    __dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
      fflush(stdout);
      return 0;
  }
@@ -186,11 +186,11 @@
      fflush(stdout);
      for (j = 0; j < UL_LEN * 2; j++) {
 -        printf("\b\b\b\b\b\b\b\b\b\b\b");
-+        dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++        __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
          p1 = (ulv *) bufa;
          p2 = (ulv *) bufb;
 -        printf("setting %3u", j);
-+        dprintf("setting %3u", j);
++        __dprintf("setting %3u", j);
          fflush(stdout);
          for (i = 0; i < count; i++) {
              if (j < UL_LEN) { /* Walk it up. */
@@ -200,15 +200,15 @@
          }
 -        printf("\b\b\b\b\b\b\b\b\b\b\b");
 -        printf("testing %3u", j);
-+        dprintf("\b\b\b\b\b\b\b\b\b\b\b");
-+        dprintf("testing %3u", j);
++        __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++        __dprintf("testing %3u", j);
          fflush(stdout);
          if (compare_regions(bufa, bufb, count)) {
              return -1;
          }
      }
 -    printf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
-+    dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
++    __dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
      fflush(stdout);
      return 0;
  }
@@ -217,15 +217,15 @@
      size_t i;
  
 -    printf("           ");
-+    dprintf("           ");
++    __dprintf("           ");
      fflush(stdout);
      for (j = 0; j < UL_LEN * 2; j++) {
 -        printf("\b\b\b\b\b\b\b\b\b\b\b");
-+        dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++        __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
          p1 = (ulv *) bufa;
          p2 = (ulv *) bufb;
 -        printf("setting %3u", j);
-+        dprintf("setting %3u", j);
++        __dprintf("setting %3u", j);
          fflush(stdout);
          for (i = 0; i < count; i++) {
              if (j < UL_LEN) { /* Walk it up. */
@@ -235,15 +235,15 @@
          }
 -        printf("\b\b\b\b\b\b\b\b\b\b\b");
 -        printf("testing %3u", j);
-+        dprintf("\b\b\b\b\b\b\b\b\b\b\b");
-+        dprintf("testing %3u", j);
++        __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++        __dprintf("testing %3u", j);
          fflush(stdout);
          if (compare_regions(bufa, bufb, count)) {
              return -1;
          }
      }
 -    printf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
-+    dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
++    __dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
      fflush(stdout);
      return 0;
  }
@@ -252,15 +252,15 @@
      size_t i;
  
 -    printf("           ");
-+    dprintf("           ");
++    __dprintf("           ");
      fflush(stdout);
      for (j = 0; j < UL_LEN * 2; j++) {
 -        printf("\b\b\b\b\b\b\b\b\b\b\b");
-+        dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++        __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
          p1 = (ulv *) bufa;
          p2 = (ulv *) bufb;
 -        printf("setting %3u", j);
-+        dprintf("setting %3u", j);
++        __dprintf("setting %3u", j);
          fflush(stdout);
          for (i = 0; i < count; i++) {
              if (j < UL_LEN) { /* Walk it up. */
@@ -270,15 +270,15 @@
          }
 -        printf("\b\b\b\b\b\b\b\b\b\b\b");
 -        printf("testing %3u", j);
-+        dprintf("\b\b\b\b\b\b\b\b\b\b\b");
-+        dprintf("testing %3u", j);
++        __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++        __dprintf("testing %3u", j);
          fflush(stdout);
          if (compare_regions(bufa, bufb, count)) {
              return -1;
          }
      }
 -    printf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
-+    dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
++    __dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
      fflush(stdout);
      return 0;
  }
@@ -287,16 +287,16 @@
      size_t i;
  
 -    printf("           ");
-+    dprintf("           ");
++    __dprintf("           ");
      fflush(stdout);
      for (k = 0; k < UL_LEN; k++) {
          q = ONE << k;
          for (j = 0; j < 8; j++) {
 -            printf("\b\b\b\b\b\b\b\b\b\b\b");
-+            dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++            __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
              q = ~q;
 -            printf("setting %3u", k * 8 + j);
-+            dprintf("setting %3u", k * 8 + j);
++            __dprintf("setting %3u", k * 8 + j);
              fflush(stdout);
              p1 = (ulv *) bufa;
              p2 = (ulv *) bufb;
@@ -305,8 +305,8 @@
              }
 -            printf("\b\b\b\b\b\b\b\b\b\b\b");
 -            printf("testing %3u", k * 8 + j);
-+            dprintf("\b\b\b\b\b\b\b\b\b\b\b");
-+            dprintf("testing %3u", k * 8 + j);
++            __dprintf("\b\b\b\b\b\b\b\b\b\b\b");
++            __dprintf("testing %3u", k * 8 + j);
              fflush(stdout);
              if (compare_regions(bufa, bufb, count)) {
                  return -1;
@@ -314,7 +314,7 @@
          }
      }
 -    printf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
-+    dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
++    __dprintf("\b\b\b\b\b\b\b\b\b\b\b           \b\b\b\b\b\b\b\b\b\b\b");
      fflush(stdout);
      return 0;
  }
