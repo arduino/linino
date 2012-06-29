@@ -30,9 +30,12 @@ define Package/procmail/description
  Very useful in conjunction with mutt.
 endef
 
+TARGET_CFLAGS += -DPROCMAIL
+
 define Build/Compile	
 	$(MAKE) -C $(PKG_BUILD_DIR)/src -f ../Makefile.openwrt  \
-		$(TARGET_CONFIGURE_OPTS)
+		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS)"
 endef
 
 define Package/procmail/install
