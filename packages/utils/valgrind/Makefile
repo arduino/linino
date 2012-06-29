@@ -78,6 +78,8 @@ define Package/valgrind/description
 	to speed up and reduce memory use of your programs.
 endef
 
+CPU := $(patsubst x86,i386,$(LINUX_KARCH))
+
 CONFIGURE_VARS += \
 	UNAME_R=$(LINUX_VERSION)
 
@@ -99,7 +101,7 @@ define Package/valgrind/install
 		./files/default.supp \
 		$(PKG_INSTALL_DIR)/usr/lib/valgrind/none-* \
 		$(PKG_INSTALL_DIR)/usr/lib/valgrind/vgpreload_core*.so \
-		$(PKG_INSTALL_DIR)/usr/lib/valgrind/$(LINUX_KARCH)-*.xml \
+		$(PKG_INSTALL_DIR)/usr/lib/valgrind/$(CPU)-*.xml \
 		$(PKG_INSTALL_DIR)/usr/lib/valgrind/32bit-core*.xml \
 		$(PKG_INSTALL_DIR)/usr/lib/valgrind/32bit-linux*.xml \
 		$(PKG_INSTALL_DIR)/usr/lib/valgrind/memcheck-* \
