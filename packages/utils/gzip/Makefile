@@ -33,6 +33,7 @@ endef
 
 CONFIGURE_VARS += \
 	gl_cv_func_getopt_gnu=yes \
+	ac_cv_search_clock_gettime=no
 
 define Package/gzip/install
 	$(SED) 's,/bin/bash,/bin/sh,g' $(PKG_INSTALL_DIR)/usr/bin/{gunzip,zcat}
