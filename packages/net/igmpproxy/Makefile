@@ -23,6 +23,7 @@ define Package/igmpproxy
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Routing and Redirection
+  DEPENDS:=+USE_EGLIBC:librt
   TITLE:=Multicast Routing Daemon
   URL:=http://sourceforge.net/projects/igmpproxy
 endef
