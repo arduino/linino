@@ -34,3 +34,9 @@
 	fun:strnlen
 	fun:*
 }
+{
+	index(Cond)
+	Memcheck:Cond
+	fun:index
+	fun:*
+}
