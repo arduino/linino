@@ -1,124 +1,115 @@
-find_route() {
-	ip route get $1 | sed -e 's/ /\n/g' | \
-            sed -ne '1p;/via/{N;p};/dev/{N;p};/src/{N;p};/mtu/{N;p}'
+#!/bin/sh
+
+[ -x /usr/sbin/xl2tpd ] || exit 0
+
+[ -n "$INCLUDE_ONLY" ] || {
+	. /lib/functions.sh
+	. ../netifd-proto.sh
+	init_proto "$@"
 }
 
-scan_l2tp() {
-	config_set "$1" device "l2tp-$1"
+proto_l2tp_init_config() {
+	proto_config_add_string "username"
+	proto_config_add_string "password"
+	proto_config_add_string "keepalive"
+	proto_config_add_string "pppd_options"
+	proto_config_add_boolean "defaultroute"
+	proto_config_add_boolean "peerdns"
+	proto_config_add_boolean "ipv6"
+	proto_config_add_int "mtu"
+	proto_config_add_string "server"
+	available=1
+	no_device=1
 }
 
-stop_interface_l2tp() {
+proto_l2tp_setup() {
 	local config="$1"
-	local lock="/var/lock/l2tp-${config}"
-	local optfile="/tmp/l2tp/options.${config}"
-	local l2tpcontrol=/var/run/xl2tpd/l2tp-control
-
-	lock "$lock"
-
-	[ -p ${l2tpcontrol} ] && echo "r l2tp-${config}" > ${l2tpcontrol}
-	rm -f ${optfile}
-
-	for ip in $(uci_get_state network "$1" serv_addrs); do
-	    ip route del "$ip" 2>/dev/null
-	done
-
-	lock -u "$lock"
-}
-
-setup_interface_l2tp() {
-	local config="$2"
-	local lock="/var/lock/l2tp-${config}"
+	local iface="$2"
 	local optfile="/tmp/l2tp/options.${config}"
 
-	lock "$lock"
+	local ip serv_addr server
+	json_get_var server server && {
+		for ip in $(resolveip -t 5 "$server"); do
+			( proto_add_host_dependency "$config" "$ip" )
+			serv_addr=1
+		done
+	}
+	[ -n "$serv_addr" ] || {
+		echo "Could not resolve server address"
+		sleep 5
+		proto_setup_failed "$config"
+		exit 1
+	}
 
 	if [ ! -p /var/run/xl2tpd/l2tp-control ]; then
-	    /etc/init.d/xl2tpd start
+		/etc/init.d/xl2tpd start
 	fi
-	
-	local device
-	config_get device "$config" device "l2tp-$config"
 
-	local server
-	config_get server "$config" server
+	json_get_vars ipv6 peerdns defaultroute demand keepalive username password pppd_options
+	[ "$ipv6" = 1 ] || ipv6=""
+	[ "$peerdns" = 0 ] && peerdns="" || peerdns="1"
+	if [ "$defaultroute" = 1 ]; then
+		defaultroute="defaultroute replacedefaultroute";
+	else
+		defaultroute="nodefaultroute"
+	fi
+	if [ "${demand:-0}" -gt 0 ]; then
+		demand="precompiled-active-filter /etc/ppp/filter demand idle $demand"
+	else
+		demand="persist"
+	fi
 
-	local username
-	config_get username "$config" username
-
-	local password
-	config_get password "$config" password
-
-	local keepalive
-	config_get keepalive "$config" keepalive
-
-	local pppd_options
-	config_get pppd_options "$config" pppd_options
-
-	local defaultroute
-	config_get_bool defaultroute "$config" defaultroute 1
-	[ "$defaultroute" -eq 1 ] && \
-		defaultroute="defaultroute replacedefaultroute" || defaultroute="nodefaultroute"
+	[ -n "$mtu" ] || json_get_var mtu mtu
 
 	local interval="${keepalive##*[, ]}"
 	[ "$interval" != "$keepalive" ] || interval=5
 
-	local dns
-	config_get dns "$config" dns
-
-	local has_dns=0
-	local peer_default=1
-	[ -n "$dns" ] && {
-		has_dns=1
-		peer_default=0
-	}
-
-	local peerdns
-	config_get_bool peerdns "$config" peerdns $peer_default
-
-	[ "$peerdns" -eq 1 ] && {
-		peerdns="usepeerdns"
-	} || {
-		peerdns=""
-		add_dns "$config" $dns
-	}
-
-	local ipv6
-	config_get ipv6 "$config" ipv6 1
-	[ "$ipv6" -eq 1 ] && ipv6="+ipv6" || ipv6=""
-
-	local serv_addrs=""
-	for ip in $(resolveip -t 3 "$server"); do
-		append serv_addrs "$ip"
-		ip route replace $(find_route $ip)
-	done
-	uci_toggle_state network "$config" serv_addrs "$serv_addrs"
-
-	# fix up the netmask
-	config_get netmask "$config" netmask
-	[ -z "$netmask" -o -z "$device" ] || ifconfig $device netmask $netmask
-
-	config_get mtu "$config" mtu
-
 	mkdir -p /tmp/l2tp
 
 	echo ${keepalive:+lcp-echo-interval $interval lcp-echo-failure ${keepalive%%[, ]*}} > "${optfile}"
-	echo "$peerdns" >> "${optfile}"
+	echo "${peerdns:+usepeerdns}" >> "${optfile}"
 	echo "$defaultroute" >> "${optfile}"
 	echo "${username:+user \"$username\" password \"$password\"}" >> "${optfile}"
 	echo "ipparam \"$config\"" >> "${optfile}"
 	echo "ifname \"l2tp-$config\"" >> "${optfile}"
+	echo "ip-up-script /lib/netifd/ppp-up" >> "${optfile}"
+	echo "ipv6-up-script /lib/netifd/ppp-up" >> "${optfile}"
+	echo "ip-down-script /lib/netifd/ppp-down" >> "${optfile}"
+	echo "ipv6-down-script /lib/netifd/ppp-down" >> "${optfile}"
 	# Don't wait for LCP term responses; exit immediately when killed.
 	echo "lcp-max-terminate 0" >> "${optfile}"
 	echo "${ipv6} ${pppd_options}" >> "${optfile}"
+	echo "${mtu:+mtu $mtu mru $mtu}" >> "${optfile}"
 
-	xl2tpd-control remove l2tp-${config}
-	# Wait and ensure pppd has died.
-	while [ -d /sys/class/net/l2tp-${config} ]; do
-	    sleep 1
-	done
-	
 	xl2tpd-control add l2tp-${config} pppoptfile=${optfile} lns=${server} redial=yes redial timeout=20
 	xl2tpd-control connect l2tp-${config}
+}
 
-	lock -u "${lock}"
+proto_l2tp_teardown() {
+	local interface="$1"
+	local optfile="/tmp/l2tp/options.${interface}"
+
+	case "$ERROR" in
+		11|19)
+			proto_notify_error "$interface" AUTH_FAILED
+			proto_block_restart "$interface"
+		;;
+		2)
+			proto_notify_error "$interface" INVALID_OPTIONS
+			proto_block_restart "$interface"
+		;;
+	esac
+
+	xl2tpd-control disconnect l2tp-${interface}
+	# Wait for interface to go down
+        while [ -d /sys/class/net/l2tp-${interface} ]; do
+		sleep 1
+	done
+
+	xl2tpd-control remove l2tp-${interface}
+	rm -f ${optfile}
+}
+
+[ -n "$INCLUDE_ONLY" ] || {
+	add_protocol l2tp
 }
