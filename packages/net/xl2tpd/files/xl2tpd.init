@@ -8,16 +8,6 @@ RUN_D=/var/run
 PID_F=$RUN_D/$BIN.pid
 
 start() {
-	# make sure kernel modules are loaded before starting xl2tpd, otherwise
-	# kernel-mode l2tp support won't work
-	local load
-	for module in slhc ppp_generic ppp_async pppox l2tp_core l2tp_netlink l2tp_ppp ; do
-		grep -q "$module" /proc/modules && continue
-		/sbin/insmod $module 2>&- >&-
-		load=1
-	done
-	[ "$load" = "1" ] && sleep 1
-
 	mkdir -p $RUN_D/$BIN
 	[ -f $DEFAULT ] && . $DEFAULT
 	$BIN $OPTIONS
