@@ -1,9 +1,9 @@
 --- a/netlink.c
 +++ b/netlink.c
-@@ -65,7 +65,7 @@ void process_netlink_msg(int sock)
-                 else {
-                         dlog(LOG_DEBUG, 3, "%s, ifindex %d, flags is *NOT* running", ifname, ifinfo->ifi_index);
-                 }
+@@ -63,7 +63,7 @@ void process_netlink_msg(int sock)
+ 		else {
+ 			dlog(LOG_DEBUG, 3, "%s, ifindex %d, flags is *NOT* running", ifname, ifinfo->ifi_index);
+ 		}
 -		reload_config();
 +		reload_config(LOG_DEBUG);
  	}
@@ -11,16 +11,16 @@
  
 --- a/radvd.c
 +++ b/radvd.c
-@@ -443,7 +443,7 @@ void main_loop(void)
- 
+@@ -456,7 +456,7 @@ void main_loop(void)
  		if (sighup_received)
  		{
+ 			dlog(LOG_INFO, 3, "sig hup received.\n");
 -			reload_config();
 +			reload_config(LOG_INFO);
  			sighup_received = 0;
  		}
  
-@@ -551,11 +551,11 @@ stop_adverts(void)
+@@ -565,11 +565,11 @@ stop_adverts(void)
  	}
  }
  
@@ -32,9 +32,9 @@
 -	flog(LOG_INFO, "attempting to reread config file");
 +	flog(loglevel, "attempting to reread config file");
  
- 	dlog(LOG_DEBUG, 4, "reopening log");
- 	if (log_reopen() < 0) {
-@@ -631,7 +631,7 @@ void reload_config(void)
+ 	iface=IfaceList;
+ 	while(iface)
+@@ -639,7 +639,7 @@ void reload_config(void)
  	config_interface();
  	kickoff_adverts();
  
@@ -45,7 +45,7 @@
  void
 --- a/radvd.h
 +++ b/radvd.h
-@@ -186,7 +186,7 @@ int yylex(void);
+@@ -185,7 +185,7 @@ int yylex(void);
  
  /* radvd.c */
  int check_ip6_forwarding(void);
@@ -56,7 +56,7 @@
  /* timer.c */
 --- a/send.c
 +++ b/send.c
-@@ -154,7 +154,7 @@ send_ra(struct Interface *iface, struct 
+@@ -153,7 +153,7 @@ send_ra(struct Interface *iface, struct
  			 * reload_config() will kick off new timers anyway.  This avoids
  			 * timer list corruption.
  			 */
