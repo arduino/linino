@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=babeld
-PKG_VERSION:=1.3.1
-PKG_RELEASE:=2
+PKG_VERSION:=1.3.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.pps.jussieu.fr/~jch/software/files/
-PKG_MD5SUM:=bc1cb1924c61b4dad6410e342827e8c5
+PKG_SOURCE_URL:=http://www.pps.univ-paris-diderot.fr/~jch/software/files/
+PKG_MD5SUM:=56ca5107112aec09279995b7985c5ac3
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -22,8 +22,8 @@ define Package/babeld
   CATEGORY:=Network
   SUBMENU:=Routing and Redirection
   TITLE:=A loop-free distance-vector routing protocol
-  URL:=http://www.pps.jussieu.fr/~jch/software/babel/
-  MAINTAINER:=Gabriel Kerneis <kerneis@pps.jussieu.fr>
+  URL:=http://www.pps.univ-paris-diderot.fr/~jch/software/babel/
+  MAINTAINER:=Gabriel Kerneis <kerneis@pps.univ-paris-diderot.fr>
   DEPENDS:=+kmod-ipv6 +librt
 endef
 

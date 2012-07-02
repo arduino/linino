@@ -97,7 +97,6 @@ babel_config() {
 	append_bool "$cfg" 'carrier_sense' '-l'
 	append_bool "$cfg" 'assume_wireless' '-w'
 	append_bool "$cfg" 'no_split_horizon' '-s'
-	append_bool "$cfg" 'parasitic' '-P'
 	append_bool "$cfg" 'keep_unfeasible' '-u'
 
 	append_parm "$cfg" 'multicast_address' '-m'
