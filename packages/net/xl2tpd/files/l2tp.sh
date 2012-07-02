@@ -66,7 +66,7 @@ proto_l2tp_setup() {
 
 	mkdir -p /tmp/l2tp
 
-	echo ${keepalive:+lcp-echo-interval $interval lcp-echo-failure ${keepalive%%[, ]*}} > "${optfile}"
+	echo "${keepalive:+lcp-echo-interval $interval lcp-echo-failure ${keepalive%%[, ]*}}" > "${optfile}"
 	echo "${peerdns:+usepeerdns}" >> "${optfile}"
 	echo "$defaultroute" >> "${optfile}"
 	echo "${username:+user \"$username\" password \"$password\"}" >> "${optfile}"
@@ -78,7 +78,7 @@ proto_l2tp_setup() {
 	echo "ipv6-down-script /lib/netifd/ppp-down" >> "${optfile}"
 	# Don't wait for LCP term responses; exit immediately when killed.
 	echo "lcp-max-terminate 0" >> "${optfile}"
-	echo "${ipv6} ${pppd_options}" >> "${optfile}"
+	echo "${ipv6:++ipv6} ${pppd_options}" >> "${optfile}"
 	echo "${mtu:+mtu $mtu mru $mtu}" >> "${optfile}"
 
 	xl2tpd-control add l2tp-${config} pppoptfile=${optfile} lns=${server} redial=yes redial timeout=20
