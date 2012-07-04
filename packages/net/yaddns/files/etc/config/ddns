@@ -54,14 +54,14 @@ config service "myddns"
 	option username		"myusername"
 	option password		"mypassword"
 
-	option ip_source	"network" 
-	option ip_network	"wan"
+	#option ip_source	"network" 
+	#option ip_network	"wan"
 
 	#option ip_source	"interface"
 	#option ip_interface	"eth0.1"
 
-	#option ip_source	"web"
-	#option ip_url		"http://checkip.dyndns.org"
-	#option check_interval	"10"
-	#option check_unit	"minutes"
+	option ip_source	"web"
+	option ip_url		"http://checkip.dyndns.org"
+	option check_interval	"10"
+	option check_unit	"minutes"
 
