@@ -58,6 +58,7 @@ endef
 define Package/iptraf/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/iptraf $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/rvnamed $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,iptraf))
