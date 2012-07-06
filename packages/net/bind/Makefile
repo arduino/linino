@@ -18,6 +18,8 @@ PKG_SOURCE_URL:= \
 PKG_MD5SUM:=4ed20e77f2967c13eaab5563d0c45c76
 
 PKG_FIXUP:=autoreconf
+PKG_REMOVE_FILES:=aclocal.m4 libtool.m4
+
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
