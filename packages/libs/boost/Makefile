@@ -116,7 +116,7 @@ endef
 define Package/boost-python
   $(call Package/boost/Default)
   TITLE+= (python)
-  DEPENDS+= +python
+  DEPENDS+= +PACKAGE_boost-python:python
 endef
 
 define Package/boost-random
