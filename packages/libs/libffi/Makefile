@@ -40,6 +40,15 @@ A layer must exist above libffi that handles type conversions for values passed
 between the two languages.
 endef
 
+CONFIGURE_PATH = build
+CONFIGURE_CMD = ../configure
+MAKE_PATH = build
+
+define Build/Configure
+	mkdir -p $(PKG_BUILD_DIR)/build
+	$(Build/Configure/Default)
+endef
+
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
 	$(CP) \
