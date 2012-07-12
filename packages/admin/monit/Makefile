@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=monit
-PKG_VERSION:=5.2.5
-PKG_RELEASE:=2
+PKG_VERSION:=5.4
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://mmonit.com/monit/dist
-PKG_MD5SUM:=862fb7939ad6f73fc0cc82096c2309c7
+PKG_MD5SUM:=f1f391241d44059d0d3e5d26f4ec5ddf
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL:=1
@@ -54,6 +54,11 @@ define Package/monit-nossl/description
 $(call Package/monit/Default/description)
 	This package is built without SSL support.
 endef
+
+CONFIGURE_ARGS += \
+	--without-pam \
+	libmonit_cv_setjmp_available=yes \
+	libmonit_cv_vsnprintf_c99_conformant=yes
 
 ifeq ($(BUILD_VARIANT),ssl)
 	CONFIGURE_ARGS += \

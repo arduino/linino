@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 
 START=60
 
@@ -7,8 +7,8 @@ SERVICE_USE_PID=1
 
 start() {
 	[ -f /etc/monitrc ] || return 1
-	[ "$(stat -c "%a" /etc/monitrc)" = "0700" ] || chmod 0700 /etc/monitrc
-	service_start /usr/bin/monit -d 60
+	#chmod 0700 /etc/monitrc
+	service_start /usr/bin/monit
 }
 
 stop() {
