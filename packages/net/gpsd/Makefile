@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gpsd
-PKG_VERSION:=3.6
+PKG_VERSION:=3.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download-mirror.savannah.gnu.org/releases/gpsd
-PKG_MD5SUM:=064a5ad75593f8c3ea3fe85010647832
+PKG_MD5SUM:=52d9785eaf1a51298bb8900dbde88f98
 
 PKG_BUILD_DEPENDS:=libncurses libusb-1.0
 
