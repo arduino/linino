@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=erlang
-PKG_VERSION:=R13A
-PKG_RELEASE:=2
+PKG_VERSION:=R15B01
+PKG_RELEASE:=1
 
 PKG_SOURCE:=otp_src_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= http://www.erlang.org/download/ \
 	http://erlang.mirror.su.se/	
-PKG_MD5SUM:=76804ff9c18710184cf0c0230a0443fc
+PKG_MD5SUM:=f12d00f6e62b36ad027d6c0c08905fad
 
 PKG_BUILD_DEPENDS:=erlang/host openssl
 
@@ -42,7 +42,7 @@ endef
 define Package/erlang
 $(call Package/erlang/Default)
   DEPENDS+= +libncurses +librt +zlib
-  PROVIDES:= erlang-erts=5.7 erlang-kernel=2.13 erlang-sasl=2.1.6 erlang-stdlib=1.16
+  PROVIDES:= erlang-erts=5.9 erlang-kernel=2.15 erlang-sasl=2.2 erlang-stdlib=1.18
 endef
 
 define Package/erlang/description
@@ -56,7 +56,7 @@ endef
 define Package/erlang-asn1
 $(call Package/erlang/Default)
   TITLE:=Abstract Syntax Notation One (ASN.1) support
-  VERSION:=1.6.8
+  VERSION:=1.6.19
   DEPENDS+= +erlang +erlang-syntax-tools
 endef
 
@@ -71,7 +71,7 @@ endef
 define Package/erlang-compiler
 $(call Package/erlang/Default)
   TITLE:=Byte code compiler
-  VERSION:=4.6
+  VERSION:=4.8
   DEPENDS+= +erlang +erlang-hipe
 endef
 
@@ -86,7 +86,7 @@ endef
 define Package/erlang-crypto
 $(call Package/erlang/Default)
   TITLE:=Cryptography support
-  VERSION:=4.6
+  VERSION:=2.1
   DEPENDS+= +erlang +libopenssl
 endef
 
@@ -101,7 +101,7 @@ endef
 define Package/erlang-hipe
 $(call Package/erlang/Default)
   TITLE:=High Performance Erlang
-  VERSION:=5.0.13
+  VERSION:=3.9
   DEPENDS+= +erlang
 endef
 
@@ -116,7 +116,7 @@ endef
 define Package/erlang-inets
 $(call Package/erlang/Default)
   TITLE:=Internet clients and servers
-  VERSION:=5.0.13
+  VERSION:=5.8
   DEPENDS+= +erlang
 endef
 
@@ -132,7 +132,7 @@ endef
 define Package/erlang-mnesia
 $(call Package/erlang/Default)
   TITLE:=Distributed database
-  VERSION:=4.4.8
+  VERSION:=4.6
   DEPENDS+= +erlang
 endef
 
@@ -149,7 +149,7 @@ endef
 define Package/erlang-runtime-tools
 $(call Package/erlang/Default)
   TITLE:=Low-profile debugging/tracing tools
-  VERSION:=1.8
+  VERSION:=1.8.7
   DEPENDS+= +erlang
 endef
 
@@ -164,7 +164,7 @@ endef
 define Package/erlang-snmp
 $(call Package/erlang/Default)
   TITLE:=Simple Network Management Protocol (SNMP) support
-  VERSION:=4.13
+  VERSION:=4.21.4
   DEPENDS+= +erlang +erlang-asn1
 endef
 
@@ -180,7 +180,7 @@ endef
 define Package/erlang-ssh
 $(call Package/erlang/Default)
   TITLE:=Secure Shell (SSH) support
-  VERSION:=1.1.1
+  VERSION:=2.0.9
   DEPENDS+= +erlang +erlang-crypto
 endef
 
@@ -195,7 +195,7 @@ endef
 define Package/erlang-ssl
 $(call Package/erlang/Default)
   TITLE:=Secure Sockets Layer (SSL) support
-  VERSION:=3.10.1
+  VERSION:=5.0
   DEPENDS+= +erlang +erlang-crypto
 endef
 
@@ -210,7 +210,7 @@ endef
 define Package/erlang-syntax-tools
 $(call Package/erlang/Default)
   TITLE:=Abstract Erlang syntax trees handling support
-  VERSION:=1.6
+  VERSION:=1.6.7.2
   DEPENDS+= +erlang
 endef
 
@@ -225,14 +225,10 @@ endef
 # Host
 
 HOST_CONFIGURE_ARGS += \
+	--disable-nls \
 	--disable-hipe \
 	--disable-smp-support \
-	--without-java \
 	--without-ssl
-
-HOST_CONFIGURE_VARS += \
-	ac_cv_prog_JAVAC="" \
-	ac_cv_prog_javac_ver_1_2=no
 
 define Host/Compile
 	$(MAKE) -C $(HOST_BUILD_DIR) all
@@ -246,10 +242,9 @@ endef
 # Target
 
 CONFIGURE_ARGS += \
+	--disable-nls \
 	--disable-hipe \
 	--disable-smp-support \
-	--disable-threads \
-	--without-java \
 	--with-ssl="$(STAGING_DIR)/usr" \
 	--enable-dynamic-ssl-lib
 
@@ -257,8 +252,6 @@ CONFIGURE_VARS += \
 	SHLIB_LD="$(TARGET_CC)" \
 	TARGET_ARCH="$(TARGET_ARCH)" \
 	ac_cv_prog_RX_LD="$(TARGET_LD)" \
-	ac_cv_prog_JAVAC="" \
-	ac_cv_prog_javac_ver_1_2=no \
 	ac_cv_func_getaddrinfo=no \
 	ac_cv_func_mmap_fixed_mapped=yes \
 	ac_cv_path_WX_CONFIG_PATH=no
