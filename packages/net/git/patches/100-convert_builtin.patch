@@ -24,7 +24,7 @@
 +#include "../upload-pack.c"
 --- a/builtin.h
 +++ b/builtin.h
-@@ -151,5 +151,11 @@ extern int cmd_verify_pack(int argc, con
+@@ -153,5 +153,11 @@ extern int cmd_verify_pack(int argc, con
  extern int cmd_show_ref(int argc, const char **argv, const char *prefix);
  extern int cmd_pack_refs(int argc, const char **argv, const char *prefix);
  extern int cmd_replace(int argc, const char **argv, const char *prefix);
@@ -169,7 +169,7 @@
  		{ "verify-tag", cmd_verify_tag, RUN_SETUP },
 --- a/Makefile
 +++ b/Makefile
-@@ -464,15 +464,7 @@ EXTRA_PROGRAMS =
+@@ -467,15 +467,7 @@ EXTRA_PROGRAMS =
  # ... and all the rest that could be moved out of bindir to gitexecdir
  PROGRAMS += $(EXTRA_PROGRAMS)
  
@@ -186,7 +186,7 @@
  
  # Binary suffix, set to .exe for Windows builds
  X =
-@@ -900,6 +892,12 @@ BUILTIN_OBJS += builtin/var.o
+@@ -903,6 +895,12 @@ BUILTIN_OBJS += builtin/var.o
  BUILTIN_OBJS += builtin/verify-pack.o
  BUILTIN_OBJS += builtin/verify-tag.o
  BUILTIN_OBJS += builtin/write-tree.o
@@ -199,7 +199,7 @@
  
  GITLIBS = $(LIB_FILE) $(XDIFF_LIB)
  EXTLIBS =
-@@ -1498,7 +1496,7 @@ endif
+@@ -1502,7 +1500,7 @@ endif
  EXTLIBS += -lz
  
  ifndef NO_OPENSSL
@@ -208,7 +208,7 @@
  	ifdef OPENSSLDIR
  		BASIC_CFLAGS += -I$(OPENSSLDIR)/include
  		OPENSSL_LINK = -L$(OPENSSLDIR)/$(lib) $(CC_LD_DYNPATH)$(OPENSSLDIR)/$(lib)
-@@ -2279,10 +2277,6 @@ endif
+@@ -2287,10 +2285,6 @@ endif
  git-%$X: %.o GIT-LDFLAGS $(GITLIBS)
  	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) $(filter %.o,$^) $(LIBS)
  
@@ -219,7 +219,7 @@
  git-http-fetch$X: revision.o http.o http-walker.o http-fetch.o GIT-LDFLAGS $(GITLIBS)
  	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) $(filter %.o,$^) \
  		$(LIBS) $(CURL_LIBCURL)
-@@ -2579,24 +2573,22 @@ endif
+@@ -2587,24 +2581,22 @@ endif
  	bindir=$$(cd '$(DESTDIR_SQ)$(bindir_SQ)' && pwd) && \
  	execdir=$$(cd '$(DESTDIR_SQ)$(gitexec_instdir_SQ)' && pwd) && \
  	{ test "$$bindir/" = "$$execdir/" || \
