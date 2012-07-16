@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=erlang
 PKG_VERSION:=R15B01
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=otp_src_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= http://www.erlang.org/download/ \
@@ -228,6 +228,7 @@ HOST_CONFIGURE_ARGS += \
 	--disable-nls \
 	--disable-hipe \
 	--disable-smp-support \
+	--without-javac \
 	--without-ssl
 
 define Host/Compile
@@ -246,6 +247,7 @@ CONFIGURE_ARGS += \
 	--disable-hipe \
 	--disable-smp-support \
 	--with-ssl="$(STAGING_DIR)/usr" \
+	--without-javac \
 	--enable-dynamic-ssl-lib
 
 CONFIGURE_VARS += \
