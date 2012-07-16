@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,16 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=logrotate
-PKG_VERSION:=3.7.8
+PKG_VERSION:=3.8.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
 PKG_SOURCE_URL:= \
-	http://ftp.de.debian.org/debian/pool/main/l/logrotate \
 	http://ftp.debian.org/debian/pool/main/l/logrotate \
+	http://ftp.de.debian.org/debian/pool/main/l/logrotate \
 	http://ftp.fr.debian.org/debian/pool/main/l/logrotate \
 	http://ftp.us.debian.org/debian/pool/main/l/logrotate
-PKG_MD5SUM:=b3589bea6d8d5afc8a84134fddaae973
+PKG_MD5SUM:=bd2e20d8dc644291b08f9215397d28a5
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,10 +30,10 @@ define Package/logrotate
 endef
 
 define Package/logrotate/description
-	logrotate is designed to ease administration of systems that generate 
-	large numbers of log files. It allows auto-matic rotation, compression, 
-	removal and mailing of log files. Each log file may be handled daily, 
-	weekly, monthly or when it grows too large.
+ logrotate is designed to ease administration of systems that generate large
+ numbers of log files. It allows auto-matic rotation, compression, removal and
+ mailing of log files. Each log file may be handled daily, weekly, monthly or
+ when it grows too large.
 endef
 
 define Package/logrotate/conffiles
