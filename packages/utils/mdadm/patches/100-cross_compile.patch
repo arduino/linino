@@ -1,6 +1,6 @@
 --- a/Makefile
 +++ b/Makefile
-@@ -76,7 +76,6 @@ FAILED_SLOTS_DIR = /dev/.mdadm/failed-sl
+@@ -76,7 +76,6 @@ FAILED_SLOTS_DIR = /run/mdadm/failed-slo
  DIRFLAGS = -DMAP_DIR=\"$(MAP_DIR)\" -DMAP_FILE=\"$(MAP_FILE)\"
  DIRFLAGS += -DMDMON_DIR=\"$(MDMON_DIR)\"
  DIRFLAGS += -DFAILED_SLOTS_DIR=\"$(FAILED_SLOTS_DIR)\"
@@ -8,7 +8,7 @@
  
  # The glibc TLS ABI requires applications that call clone(2) to set up
  # TLS data structures, use pthreads until mdmon implements this support
-@@ -184,7 +183,7 @@ test_stripe : restripe.c mdadm.h
+@@ -183,7 +182,7 @@ raid6check : raid6check.o mdadm.h $(CHEC
  
  mdassemble : $(ASSEMBLE_SRCS) $(INCL)
  	rm -f $(OBJS)

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2011 OpenWrt.org
+# Copyright (C) 2008-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mdadm
-PKG_VERSION:=3.2.3
+PKG_VERSION:=3.2.5
 PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=@KERNEL/linux/utils/raid/mdadm
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=7ba1649353b60d8a028af27d9c3ca788
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
+PKG_MD5SUM:=2fd33dedcdb06f0d1461f50ddabb7e4a
 
 PKG_BUILD_PARALLEL:=1
 
@@ -24,7 +24,6 @@ define Package/mdadm
   CATEGORY:=Utilities
   TITLE:=A tool for managing Soft RAID under Linux
   URL:=http://www.kernel.org/pub/linux/utils/raid/mdadm/
-  MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 
 define Package/mdadm/description
