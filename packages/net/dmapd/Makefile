@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dmapd
-PKG_VERSION:=0.0.46
+PKG_VERSION:=0.0.50
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.flyn.org/projects/dmapd
-PKG_MD5SUM:=2bbd2378f90866b603e8b82c3c3cb929
+PKG_MD5SUM:=2e04d7fb8437f9e7bd370dc3af450aae
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/nls.mk
 define Package/dmapd
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libdmapsharing +libdb47 +vips +GraphicsMagick
+  DEPENDS:=+libdmapsharing +libdb47 +vips
   TITLE:= dmapd
   URL:=http://www.flyn.org/projects/dmapd/
   MAINTAINER:=W. Michael Petullo <mike@flyn.org>
