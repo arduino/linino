@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,12 +10,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libdmapsharing
-PKG_VERSION:=2.9.13
+PKG_VERSION:=2.9.15
 PKG_RELEASE:=1
 
 PKG_SOURCE:=libdmapsharing-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.flyn.org/projects/libdmapsharing/
-PKG_MD5SUM:=05aa705af3550107e7801b58735777ae
+PKG_MD5SUM:=52c9e4d3de931d9013eeaccf7371bb2d
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/libdmapsharing-$(PKG_VERSION)
 
