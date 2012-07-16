@@ -1,7 +1,7 @@
-diff -u --recursive vips-7.26.3-vanilla/configure.in vips-7.26.3/configure.in
---- vips-7.26.3-vanilla/configure.in	2011-10-07 20:43:26.474844552 -0500
-+++ vips-7.26.3/configure.in	2011-10-07 21:00:33.633107256 -0500
-@@ -142,7 +142,6 @@
+diff -u --recursive vips-7.28.9-vanilla/configure.in vips-7.28.9/configure.in
+--- vips-7.28.9-vanilla/configure.in	2012-07-14 22:35:08.209029299 -0500
++++ vips-7.28.9/configure.in	2012-07-14 22:36:25.634927858 -0500
+@@ -182,7 +182,6 @@
  AC_PROG_AWK
  AC_PROG_CC
  AC_PROG_CC_STDC
@@ -9,7 +9,7 @@ diff -u --recursive vips-7.26.3-vanilla/configure.in vips-7.26.3/configure.in
  AC_C_CONST
  AC_C_RESTRICT
  AC_PROG_RANLIB
-@@ -150,45 +149,6 @@
+@@ -190,45 +189,6 @@
  AC_PROG_LN_S
  AM_WITH_DMALLOC
  
@@ -55,7 +55,7 @@ diff -u --recursive vips-7.26.3-vanilla/configure.in vips-7.26.3/configure.in
  # we need a fully expanded version of $libdir
  # without this we get something like
  #    define VIPS_LIBDIR ${exec_prefix}/lib
-@@ -614,7 +574,6 @@
+@@ -681,7 +641,6 @@
  AC_SUBST(VIPS_CFLAGS)
  AC_SUBST(VIPS_INCLUDES)
  AC_SUBST(VIPS_LIBS)
@@ -63,24 +63,23 @@ diff -u --recursive vips-7.26.3-vanilla/configure.in vips-7.26.3/configure.in
  AC_SUBST(PACKAGES_USED)
  
  # you'd think we could have 
-@@ -622,7 +581,6 @@
+@@ -689,14 +648,12 @@
  # in AC_OUTPUT, but that seems to break for some combinations of sh/m4
  AC_OUTPUT([
- 	vips-7.26.pc
--	vipsCC-7.26.pc
+ 	vips-7.28.pc
+-	vipsCC-7.28.pc
  	Makefile 
  	libvips/include/vips/version.h 
  	libvips/include/Makefile 
-@@ -630,7 +588,6 @@
+ 	libvips/include/vips/Makefile 
  	libvips/Makefile 
  	libvips/arithmetic/Makefile 
- 	libvips/boolean/Makefile 
 -	libvips/cimg/Makefile 
  	libvips/colour/Makefile 
  	libvips/conversion/Makefile 
  	libvips/convolution/Makefile 
-@@ -647,9 +604,6 @@
- 	libvips/relational/Makefile 
+@@ -711,9 +668,6 @@
+ 	libvips/other/Makefile 
  	libvips/resample/Makefile 
  	libvips/video/Makefile 
 -	libvipsCC/include/Makefile 
@@ -89,7 +88,7 @@ diff -u --recursive vips-7.26.3-vanilla/configure.in vips-7.26.3/configure.in
  	tools/Makefile 
  	tools/batch_crop 
  	tools/batch_image_convert 
-@@ -657,7 +611,6 @@
+@@ -721,7 +675,6 @@
  	tools/light_correct 
  	tools/shrink_width 
  	swig/Makefile 
@@ -97,11 +96,11 @@ diff -u --recursive vips-7.26.3-vanilla/configure.in vips-7.26.3/configure.in
  	swig/python/setup.py 
  	man/Makefile
  	doc/Makefile
-diff -u --recursive vips-7.26.3-vanilla/libvips/Makefile.am vips-7.26.3/libvips/Makefile.am
---- vips-7.26.3-vanilla/libvips/Makefile.am	2011-10-07 20:43:26.909839013 -0500
-+++ vips-7.26.3/libvips/Makefile.am	2011-10-07 20:45:25.074274823 -0500
-@@ -1,14 +1,3 @@
--# only build in the cimg dir if C++ is enabled
+diff -u --recursive vips-7.28.9-vanilla/libvips/Makefile.am vips-7.28.9/libvips/Makefile.am
+--- vips-7.28.9-vanilla/libvips/Makefile.am	2012-07-14 22:35:08.206029420 -0500
++++ vips-7.28.9/libvips/Makefile.am	2012-07-14 22:37:24.446571912 -0500
+@@ -1,14 +1,4 @@
+ # only build in the cimg dir if C++ is enabled
 -if ENABLE_CXX
 -C_COMPILE_DIR = cimg
 -C_DIST_DIR =
@@ -114,39 +113,39 @@ diff -u --recursive vips-7.26.3-vanilla/libvips/Makefile.am vips-7.26.3/libvips/
 -
  SUBDIRS = \
  	include \
- 	arithmetic \
-@@ -18,7 +7,6 @@
+ 	foreign \
+@@ -18,7 +8,6 @@
  	conversion \
  	deprecated \
  	convolution \
 -	$(C_COMPILE_DIR) \
- 	format \
  	freq_filt \
  	histograms_lut \
-@@ -37,14 +25,6 @@
+ 	inplace \
+@@ -34,14 +23,6 @@
  # empty means default to C linking
  libvips_la_SOURCES = 
  
 -# if we have C++ components enabled, make sure we link the top-level with c++
 -#
--# sadly the if/enndif isn't enough to stop automake detecting a c++ link even
+-# sadly the if/endif isn't enough to stop automake detecting a c++ link even
 -# when c++ is disabled ... comment out this line if you have linking problems
 -if ENABLE_CXX
--nodist_EXTRA_libvips_la_SOURCES = cimg/dummy2.cxx
+-nodist_EXTRA_libvips_la_SOURCES = cimg/dummy2.cc
 -endif
 -
  # DLLs need dependant libs there too ... put @VIPS_LIBS@ at the end
  libvips_la_LIBADD = \
  	resample/libresample.la \
-@@ -54,7 +34,6 @@
+@@ -50,7 +31,6 @@
  	conversion/libconversion.la \
  	convolution/libconvolution.la \
  	deprecated/libdeprecated.la \
 -	$(C_LIB) \
- 	format/libformat.la \
+ 	foreign/libforeign.la \
  	freq_filt/libfreq_filt.la \
  	histograms_lut/libhistograms_lut.la \
-@@ -68,13 +47,6 @@
+@@ -62,17 +42,10 @@
  	video/libvideo.la \
  	@VIPS_LIBS@
  
@@ -157,12 +156,16 @@ diff -u --recursive vips-7.26.3-vanilla/libvips/Makefile.am vips-7.26.3/libvips/
  libvips_la_LDFLAGS = \
  	-no-undefined \
  	-version-info @LIBRARY_CURRENT@:@LIBRARY_REVISION@:@LIBRARY_AGE@ 
--
+ 
 -EXTRA_DIST = \
 -	$(C_DIST_DIR)
-diff -u --recursive vips-7.26.3-vanilla/libvips/resample/Makefile.am vips-7.26.3/libvips/resample/Makefile.am
---- vips-7.26.3-vanilla/libvips/resample/Makefile.am	2011-10-07 20:43:27.173835707 -0500
-+++ vips-7.26.3/libvips/resample/Makefile.am	2011-10-07 20:45:49.360933471 -0500
+-
+ CLEANFILES = 
+ 
+ -include $(INTROSPECTION_MAKEFILE)
+diff -u --recursive vips-7.28.9-vanilla/libvips/resample/Makefile.am vips-7.28.9/libvips/resample/Makefile.am
+--- vips-7.28.9-vanilla/libvips/resample/Makefile.am	2012-07-14 22:35:08.191030020 -0500
++++ vips-7.28.9/libvips/resample/Makefile.am	2012-07-14 22:37:49.470569578 -0500
 @@ -2,22 +2,6 @@
  # you'd think we could just define a couple of variables, but that seems to
  # confuse libtool and make it link the library with g++
@@ -202,9 +205,9 @@ diff -u --recursive vips-7.26.3-vanilla/libvips/resample/Makefile.am vips-7.26.3
  noinst_LTLIBRARIES = libresample.la
  
  INCLUDES = -I${top_srcdir}/libvips/include @VIPS_CFLAGS@ @VIPS_INCLUDES@ 
-diff -u --recursive vips-7.26.3-vanilla/Makefile.am vips-7.26.3/Makefile.am
---- vips-7.26.3-vanilla/Makefile.am	2011-10-07 20:43:26.476844503 -0500
-+++ vips-7.26.3/Makefile.am	2011-10-07 22:31:54.034586656 -0500
+diff -u --recursive vips-7.28.9-vanilla/Makefile.am vips-7.28.9/Makefile.am
+--- vips-7.28.9-vanilla/Makefile.am	2012-07-14 22:35:08.220028859 -0500
++++ vips-7.28.9/Makefile.am	2012-07-14 22:38:43.217417048 -0500
 @@ -1,43 +1,17 @@
 -
 -# turn off libvipsCC if C++ is disabled
@@ -251,114 +254,9 @@ diff -u --recursive vips-7.26.3-vanilla/Makefile.am vips-7.26.3/Makefile.am
  
  pkgconfigdir = $(libdir)/pkgconfig
  pkgconfig_DATA = vips-7.${VIPS_MINOR_VERSION}.pc $(C_PKGCONFIG)
-diff -u --recursive vips-7.26.3-vanilla/Makefile.in vips-7.26.3/Makefile.in
---- vips-7.26.3-vanilla/Makefile.in	2011-10-07 20:43:26.766840803 -0500
-+++ vips-7.26.3/Makefile.in	2011-10-07 22:30:18.980820947 -0500
-@@ -37,7 +37,6 @@
- subdir = .
- DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
- 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
--	$(srcdir)/vips-7.26.pc.in $(srcdir)/vipsCC-7.26.pc.in \
- 	$(top_srcdir)/configure $(top_srcdir)/swig/python/setup.py.in \
- 	AUTHORS COPYING ChangeLog INSTALL NEWS THANKS TODO \
- 	config.guess config.sub depcomp install-sh ltmain.sh missing \
-@@ -51,7 +50,7 @@
-  configure.lineno config.status.lineno
- mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
- CONFIG_HEADER = config.h
--CONFIG_CLEAN_FILES = vips-7.26.pc vipsCC-7.26.pc swig/python/setup.py
-+CONFIG_CLEAN_FILES = vips-7.26.pc swig/python/setup.py
- CONFIG_CLEAN_VPATH_FILES =
- SOURCES =
- DIST_SOURCES =
-@@ -92,7 +91,7 @@
- 	distdir dist dist-all distcheck
- ETAGS = etags
- CTAGS = ctags
--DIST_SUBDIRS = libvips tools po man doc libvipsCC swig
-+DIST_SUBDIRS = libvips tools po man doc swig
- DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
- distdir = $(PACKAGE)-$(VERSION)
- top_distdir = $(distdir)
-@@ -146,10 +145,6 @@
- CFLAGS = @CFLAGS@
- CPP = @CPP@
- CPPFLAGS = @CPPFLAGS@
--CXX = @CXX@
--CXXCPP = @CXXCPP@
--CXXDEPMODE = @CXXDEPMODE@
--CXXFLAGS = @CXXFLAGS@
- CYGPATH_W = @CYGPATH_W@
- DATADIRNAME = @DATADIRNAME@
- DEFS = @DEFS@
-@@ -262,7 +257,6 @@
- USE_NLS = @USE_NLS@
- VERSION = @VERSION@
- VIPS_CFLAGS = @VIPS_CFLAGS@
--VIPS_CXX_LIBS = @VIPS_CXX_LIBS@
- VIPS_EXEEXT = @VIPS_EXEEXT@
- VIPS_INCLUDES = @VIPS_INCLUDES@
- VIPS_LIBDIR = @VIPS_LIBDIR@
-@@ -285,7 +279,6 @@
- abs_top_builddir = @abs_top_builddir@
- abs_top_srcdir = @abs_top_srcdir@
- ac_ct_CC = @ac_ct_CC@
--ac_ct_CXX = @ac_ct_CXX@
- ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
- am__include = @am__include@
- am__leading_dot = @am__leading_dot@
-@@ -337,39 +330,21 @@
- top_build_prefix = @top_build_prefix@
- top_builddir = @top_builddir@
- top_srcdir = @top_srcdir@
--@ENABLE_CXX_FALSE@C_COMPILE_DIR = 
- 
--# turn off libvipsCC if C++ is disabled
--@ENABLE_CXX_TRUE@C_COMPILE_DIR = libvipsCC
--@ENABLE_CXX_FALSE@C_DIST_DIR = libvipsCC 
--@ENABLE_CXX_TRUE@C_DIST_DIR = 
--@ENABLE_CXX_FALSE@C_PKGCONFIG = 
--@ENABLE_CXX_TRUE@C_PKGCONFIG = vipsCC-7.${VIPS_MINOR_VERSION}.pc
--@ENABLE_CXX_FALSE@P_COMPILE_DIR = 
--
--# turn on Python if we can (requires C++)
--@ENABLE_CXX_TRUE@@HAVE_PYTHON_TRUE@P_COMPILE_DIR = swig
--@ENABLE_CXX_FALSE@P_DIST_DIR = swig
--@ENABLE_CXX_TRUE@@HAVE_PYTHON_TRUE@P_DIST_DIR = 
- SUBDIRS = \
- 	libvips \
- 	tools \
- 	po \
- 	man \
- 	doc \
--	$(C_COMPILE_DIR) \
--	$(P_COMPILE_DIR) 
- 
- EXTRA_DIST = \
- 	m4 \
- 	benchmark \
- 	bootstrap.sh \
- 	vips-7.${VIPS_MINOR_VERSION}.pc.in \
--	vipsCC-7.${VIPS_MINOR_VERSION}.pc.in \
- 	acinclude.m4 \
- 	depcomp \
--	$(C_DIST_DIR) \
--	$(P_DIST_DIR)
- 
- pkgconfigdir = $(libdir)/pkgconfig
- pkgconfig_DATA = vips-7.${VIPS_MINOR_VERSION}.pc $(C_PKGCONFIG)
-@@ -431,8 +406,6 @@
- 	-rm -f config.h stamp-h1
- vips-7.26.pc: $(top_builddir)/config.status $(srcdir)/vips-7.26.pc.in
- 	cd $(top_builddir) && $(SHELL) ./config.status $@
--vipsCC-7.26.pc: $(top_builddir)/config.status $(srcdir)/vipsCC-7.26.pc.in
--	cd $(top_builddir) && $(SHELL) ./config.status $@
- swig/python/setup.py: $(top_builddir)/config.status $(top_srcdir)/swig/python/setup.py.in
- 	cd $(top_builddir) && $(SHELL) ./config.status $@
- 
-diff -u --recursive vips-7.26.3-vanilla/tools/Makefile.am vips-7.26.3/tools/Makefile.am
---- vips-7.26.3-vanilla/tools/Makefile.am	2011-10-07 20:43:26.495844193 -0500
-+++ vips-7.26.3/tools/Makefile.am	2011-10-07 22:34:56.215304397 -0500
+diff -u --recursive vips-7.28.9-vanilla/tools/Makefile.am vips-7.28.9/tools/Makefile.am
+--- vips-7.28.9-vanilla/tools/Makefile.am	2012-07-14 22:35:08.221028819 -0500
++++ vips-7.28.9/tools/Makefile.am	2012-07-14 22:40:51.397283833 -0500
 @@ -16,9 +16,6 @@
  INCLUDES = -I${top_srcdir}/libvips/include @VIPS_CFLAGS@ @VIPS_INCLUDES@
  AM_LDFLAGS = @LDFLAGS@ 
@@ -369,9 +267,9 @@ diff -u --recursive vips-7.26.3-vanilla/tools/Makefile.am vips-7.26.3/tools/Make
  
  bin_SCRIPTS = \
  	light_correct \
-diff -u --recursive vips-7.26.3-vanilla/vips-7.26.pc.in vips-7.26.3/vips-7.26.pc.in
---- vips-7.26.3-vanilla/vips-7.26.pc.in	2011-10-07 20:43:26.769840766 -0500
-+++ vips-7.26.3/vips-7.26.pc.in	2011-10-07 22:25:21.633810254 -0500
+diff -u --recursive vips-7.28.9-vanilla/vips-7.28.pc.in vips-7.28.9/vips-7.28.pc.in
+--- vips-7.28.9-vanilla/vips-7.28.pc.in	2012-07-14 22:35:08.208029340 -0500
++++ vips-7.28.9/vips-7.28.pc.in	2012-07-14 22:41:03.591795535 -0500
 @@ -7,5 +7,5 @@
  Description: Image processing library
  Version: @VERSION@
