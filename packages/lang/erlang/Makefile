@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=erlang
 PKG_VERSION:=R15B01
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=otp_src_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= http://www.erlang.org/download/ \
@@ -254,7 +254,8 @@ CONFIGURE_VARS += \
 	ac_cv_prog_RX_LD="$(TARGET_LD)" \
 	ac_cv_func_getaddrinfo=no \
 	ac_cv_func_mmap_fixed_mapped=yes \
-	ac_cv_path_WX_CONFIG_PATH=no
+	ac_cv_path_WX_CONFIG_PATH=no \
+	erl_xcomp_sysroot="$(STAGING_DIR)"
 
 EXTRA_LDFLAGS+=-lz
 
