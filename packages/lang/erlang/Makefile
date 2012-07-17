@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=erlang
 PKG_VERSION:=R15B01
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=otp_src_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= http://www.erlang.org/download/ \
@@ -225,7 +225,6 @@ endef
 # Host
 
 HOST_CONFIGURE_ARGS += \
-	--disable-nls \
 	--disable-hipe \
 	--disable-smp-support \
 	--without-javac \
@@ -243,17 +242,14 @@ endef
 # Target
 
 CONFIGURE_ARGS += \
-	--disable-nls \
 	--disable-hipe \
 	--disable-smp-support \
-	--with-ssl="$(STAGING_DIR)/usr" \
 	--without-javac \
 	--enable-dynamic-ssl-lib
 
 CONFIGURE_VARS += \
 	SHLIB_LD="$(TARGET_CC)" \
 	TARGET_ARCH="$(TARGET_ARCH)" \
-	ac_cv_prog_RX_LD="$(TARGET_LD)" \
 	ac_cv_func_mmap_fixed_mapped=yes \
 	ac_cv_path_WX_CONFIG_PATH=no \
 	erl_xcomp_getaddrinfo=no \
