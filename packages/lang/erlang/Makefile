@@ -254,9 +254,9 @@ CONFIGURE_VARS += \
 	SHLIB_LD="$(TARGET_CC)" \
 	TARGET_ARCH="$(TARGET_ARCH)" \
 	ac_cv_prog_RX_LD="$(TARGET_LD)" \
-	ac_cv_func_getaddrinfo=no \
 	ac_cv_func_mmap_fixed_mapped=yes \
 	ac_cv_path_WX_CONFIG_PATH=no \
+	erl_xcomp_getaddrinfo=no \
 	erl_xcomp_sysroot="$(STAGING_DIR)"
 
 EXTRA_LDFLAGS+=-lz
