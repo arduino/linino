@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vips
 PKG_VERSION:=7.28.9
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.vips.ecs.soton.ac.uk/supported/7.28/
@@ -37,7 +37,7 @@ CONFIGURE_ARGS += \
 	--disable-cxx \
 	--disable-threads \
 	--without-cfitsio \
-	--without-fftw3 \
+	--without-fftw \
 	--without-lcms \
 	--without-magick \
 	--without-matio \
