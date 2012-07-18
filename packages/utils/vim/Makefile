@@ -136,6 +136,13 @@ define Build/Compile/vim-full
 endef
 endif
 
+ifneq ($(CONFIG_PACKAGE_xxd),)
+define Build/Compile/xxd
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" all
+endef
+endif
+
 define Build/Compile/vim-runtime
 	$(MAKE) -C $(PKG_BUILD_DIR)/src DESTDIR="$(PKG_INSTALL_DIR)" installrtbase
 	(cd $(PKG_INSTALL_DIR) && tar -cf $(PKG_BUILD_DIR)/docs.tar ./usr/share/vim/vim$(VIMVER)/doc)
@@ -147,6 +154,7 @@ define Build/Compile
 $(call Build/Compile/vim)
 $(call Build/Compile/vim-full)
 $(call Build/Compile/vim-runtime)
+$(call Build/Compile/xxd)
 endef
 
 define Package/vim/install
@@ -155,7 +163,6 @@ define Package/vim/install
 	$(INSTALL_DIR) $(1)/usr/share/vim
 	$(INSTALL_CONF) ./files/vimrc $(1)/usr/share/vim/
 endef
-
 
 define Package/vim-full/install
 	$(INSTALL_DIR) $(1)/usr/bin
