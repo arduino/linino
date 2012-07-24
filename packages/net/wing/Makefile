@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wing
-PKG_VERSION:=20111103
+PKG_VERSION:=20120625
 PKG_RELEASE:=1
-PKG_REV:=23e6455a1cfe0877334f0d18068a3fb47425b8a4
+PKG_REV:=ce245718dd01fad9a9bd78dd5792245b7cdd09aa
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=git://github.com/rriggio/click.git
@@ -67,7 +67,6 @@ define Build/Compile
 		-f $(PKG_BUILD_DIR)/conf/wing/sample.click \
 		-A --all -E Discard -E Print -E PrintWifi -E Strip -E Null \
 		-E InfiniteSource -E RatedSource -E EtherEncap -E UDPIPEncap \
-		-E AggregateWingPacketType -E AggregateCounter \
 		-E RadiotapEncapHT -E SetTXRateHT \
 		-E WINGETTMetric -E WINGETXMetric -E WINGHopCountMetric \
 		-E ProbeTXRate -E MadwifiRate -E AutoRateFallback -E Minstrel \

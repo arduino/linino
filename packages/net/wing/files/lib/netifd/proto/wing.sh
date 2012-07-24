@@ -1,31 +1,40 @@
+#!/bin/sh
 
-scan_wing() {
-	config_set "$1" device "wing-$1"
+. /etc/functions.sh
+. ../netifd-proto.sh
+init_proto "$@"
+
+proto_wing_init_config() {
+	no_device=1
+	available=1
+        proto_config_add_string "ipaddr"
+	proto_config_add_string "netmask"
 }
 
-coldplug_interface_wing() {
-	setup_interface_wing "wing-$1" "$1"
-}
-
-stop_interface_wing() {
+proto_wing_teardown() {
 	local config="$1"
-	local iface="wing-$config"
-	env -i ACTION="ifdown" INTERFACE="$config" DEVICE="$iface" PROTO=wing /sbin/hotplug-call "iface" &
-	[ -f "/var/run/$iface.pid" ] && {
-		kill -9 $(cat /var/run/$iface.pid)
-		rm /var/run/$iface.pid
+	local link="wing-$config"
+	[ -f "/var/run/$link.pid" ] && {
+		kill -9 $(cat /var/run/$link.pid)
+		rm /var/run/$link.pid
 	}
+	env -i ACTION="ifdown" INTERFACE="$config" DEVICE="$link" PROTO=wing /sbin/hotplug-call "link" &
 }
 
-setup_interface_wing() {
+proto_wing_setup() {
 
-	local iface="$1"
-	local config="$2"
+	local iface="$2"
+	local config="$1"
+	local link="wing-$config"
 
 	local hwmodes=""
 	local freqs=""
 	local ifnames=""
 	local hwaddrs=""
+
+	# temporary hack waiting for a way to delay wing interfaces until the
+	# wifi sub-system has been brought up
+	sleep 15
 
 	config_load wireless
 	config_foreach wing_list_interfaces wifi-iface
@@ -76,14 +85,14 @@ setup_interface_wing() {
 
 	/usr/bin/click_config -p $profile -r $rc -s $ls -l $metric \
 		-m "$hwmodes" -c "$freqs" -n "$ifnames" -a "$hwaddrs" $dbg \
-		| sed -e "s/__XR_IFNAME__/$iface/g" \
+		| sed -e "s/__XR_IFNAME__/$link/g" \
 		| sed -e "s/__XR_IP__/$ipaddr/g" \
 		| sed -e "s/__XR_BCAST__/$bcast/g" \
 		| sed -e "s/__XR_NM__/$netmask/g" \
 		| sed -e "s/__XR_PERIOD__/$period/g" \
-		| sed -e "s/__XR_TAU__/$tau/g" > /tmp/$iface.click
+		| sed -e "s/__XR_TAU__/$tau/g" > /tmp/$link.click
 
-	/usr/bin/click-align /tmp/$iface.click > /tmp/$iface-aligned.click 2>/var/log/$iface.log
+	/usr/bin/click-align /tmp/$link.click > /tmp/$link-aligned.click 2>/var/log/$link.log
 	[ ! -c /dev/net/tun ] && {
 		mkdir -p /dev/net/
 		mknod /dev/net/tun c 10 200
@@ -93,30 +102,25 @@ setup_interface_wing() {
 		fi
 	}
 
-	# creating the tun interface below will trigger a net subsystem event
-	# prevent it from touching iface by disabling .auto here
-	uci_set_state network "$config" auto 0
-
-	(/usr/bin/click /tmp/$iface-aligned.click >> /var/log/$iface.log 2>&1 &) &
+	(/usr/bin/click /tmp/$link-aligned.click >> /var/log/$link.log 2>&1 &) &
 	sleep 2
 	ps | grep /usr/bin/click | grep -q -v grep || {
 		logger -t "$config" "Unable to start click. Exiting."
 		exit 1
 	}
 
-	ps | grep /usr/bin/click | grep -v grep | awk '{print $1}' > /var/run/$iface.pid
+	ps | grep /usr/bin/click | grep -v grep | awk '{print $1}' > /var/run/$link.pid
 
-	ifconfig "$iface" "$ipaddr" netmask "$netmask"
-        route -n | grep -q '^0.0.0.0' || {
-        route add default dev "$iface"
-       }
+	env -i ACTION="ifup" INTERFACE="$config" DEVICE="$link" PROTO=wing /sbin/hotplug-call "link" &
 
-	uci_set_state network $config ifname "$iface"
-	uci_set_state network $config ipaddr "$ipaddr"
-	uci_set_state network $config netmask "$netmask"
-	uci_set_state network $config gateway "0.0.0.0"
+	proto_init_update "$link" 1
+	proto_add_ipv4_address "$ipaddr" "$netmasj"
 
-	env -i ACTION="ifup" INTERFACE="$config" DEVICE="$iface" PROTO=wing /sbin/hotplug-call "iface" &
+	route -n | grep -q '^0.0.0.0' || {
+		proto_add_ipv4_route "0.0.0.0" 0
+	}
+	
+	proto_send_update "$config"
 
 }
 
@@ -151,4 +155,6 @@ wing_list_interfaces() {
 	/sbin/ifconfig $ifname txqueuelen 5
 	/sbin/ifconfig $ifname up
 }
+
+add_protocol wing
 
