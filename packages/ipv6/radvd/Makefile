@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=radvd
-PKG_VERSION:=1.8.5
+PKG_VERSION:=1.9.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://v6web.litech.org/radvd/dist \
 		http://download.sourcemage.org/mirror
-PKG_MD5SUM:=bdeca76d976282c306f3c454d6ff1f67
+PKG_MD5SUM:=e807ad7e9a76d46b6133df391385cd31
 
 PKG_INSTALL:=1
 
@@ -25,7 +25,7 @@ define Package/radvd/Default
   CATEGORY:=IPv6
   TITLE:=IPv6 Routing Advertisement
   URL:=http://v6web.litech.org/radvd/
-  DEPENDS:=+kmod-ipv6
+  DEPENDS:=+kmod-ipv6 +libdaemon
 endef
 
 define Package/radvd
