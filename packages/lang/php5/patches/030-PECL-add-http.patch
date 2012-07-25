@@ -1802,7 +1802,7 @@
 +# End Project
 --- /dev/null
 +++ b/ext/http/http_api.c
-@@ -0,0 +1,745 @@
+@@ -0,0 +1,754 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -1815,7 +1815,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: http_api.c 310302 2011-04-18 08:24:49Z rrichards $ */
++/* $Id: http_api.c 323405 2012-02-21 10:05:05Z mike $ */
 +
 +#define HTTP_WANT_SAPI
 +#include "php_http.h"
@@ -2057,10 +2057,14 @@
 +		STR_FREE(body);
 +		return FAILURE;
 +	}
-+	
-+	if (!php_ob_handler_used("zlib output compression") && !php_ob_handler_used("ob_gzhandler") && !OG(ob_lock)) {
++
++#ifndef PHP_OUTPUT_NEWAPI
++	if (!OG(ob_lock) &&
++		!php_ob_handler_used("zlib output compression" TSRMLS_CC) && !php_ob_handler_used("ob_gzhandler" TSRMLS_CC)) {
 +		php_end_ob_buffers(0 TSRMLS_CC);
 +	}
++#endif
++
 +	if ((SUCCESS == sapi_send_headers(TSRMLS_C)) && body) {
 +		PHPWRITE(body, strlen(body));
 +	}
@@ -2083,7 +2087,11 @@
 +	if (HTTP_G->force_exit) {
 +		zend_bailout();
 +	} else {
++#ifdef PHP_OUTPUT_NEWAPI
++		php_output_start_devnull(TSRMLS_C);
++#else
 +		php_ob_set_internal_handler(http_ob_blackhole, 4096, "blackhole", 0 TSRMLS_CC);
++#endif
 +	}
 +	
 +	return SUCCESS;
@@ -2207,6 +2215,7 @@
 +			int len;
 +			
 +			while (0 < (len = sapi_module.read_post(buf, 4096 TSRMLS_CC))) {
++				SG(read_post_bytes) += len;
 +				php_stream_write(s, buf, len);
 +				if (len < 4096) {
 +					break;
@@ -2550,7 +2559,7 @@
 +
 --- /dev/null
 +++ b/ext/http/http_cache_api.c
-@@ -0,0 +1,256 @@
+@@ -0,0 +1,267 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -2563,7 +2572,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: http_cache_api.c 292841 2009-12-31 08:48:57Z mike $ */
++/* $Id: http_cache_api.c 323304 2012-02-17 21:13:24Z mike $ */
 +
 +#define HTTP_WANT_SAPI
 +#include "php_http.h"
@@ -2735,13 +2744,24 @@
 +PHP_HTTP_API STATUS _http_start_ob_etaghandler(TSRMLS_D)
 +{
 +	/* already running? */
++#ifdef PHP_OUTPUT_NEWAPI
++    STATUS rv;
++
++    if (php_output_handler_conflict(ZEND_STRL("ob_etaghandler"), ZEND_STRL("ob_etaghandler") TSRMLS_CC)) {
++        return FAILURE;
++    }
++#else
 +	if (php_ob_handler_used("ob_etaghandler" TSRMLS_CC)) {
 +		http_error(HE_WARNING, HTTP_E_RUNTIME, "ob_etaghandler can only be used once");
 +		return FAILURE;
 +	}
-+	
++#endif
 +	HTTP_G->etag.started = 1;
++#ifdef PHP_OUTPUT_NEWAPI
++    return php_output_start_internal(ZEND_STRL("ob_etaghandler"), _http_ob_etaghandler, HTTP_G->send.buffer_size, 0 TSRMLS_CC);
++#else
 +	return php_start_ob_buffer_named("ob_etaghandler", HTTP_G->send.buffer_size, 0 TSRMLS_CC);
++#endif
 +}
 +
 +PHP_HTTP_API zend_bool _http_interrupt_ob_etaghandler(TSRMLS_D)
@@ -3543,7 +3563,7 @@
 +
 --- /dev/null
 +++ b/ext/http/http_deflatestream_object.c
-@@ -0,0 +1,312 @@
+@@ -0,0 +1,317 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -3556,7 +3576,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: http_deflatestream_object.c 300299 2010-06-09 06:23:16Z mike $ */
++/* $Id: http_deflatestream_object.c 323304 2012-02-17 21:13:24Z mike $ */
 +
 +#define HTTP_WANT_ZLIB
 +#include "php_http.h"
@@ -3653,9 +3673,14 @@
 +		o->stream = s;
 +	}
 +
++#ifdef ZEND_ENGINE_2_4
++	zend_object_std_init(o, ce TSRMLS_CC);
++	object_properties_init(o, ce);
++#else
 +	ALLOC_HASHTABLE(OBJ_PROP(o));
 +	zend_hash_init(OBJ_PROP(o), zend_hash_num_elements(&ce->default_properties), NULL, ZVAL_PTR_DTOR, 0);
 +	zend_hash_copy(OBJ_PROP(o), &ce->default_properties, (copy_ctor_func_t) zval_add_ref, NULL, sizeof(zval *));
++#endif
 +
 +	ov.handle = putObject(http_deflatestream_object, o);
 +	ov.handlers = &http_deflatestream_object_handlers;
@@ -3858,7 +3883,7 @@
 +
 --- /dev/null
 +++ b/ext/http/http_encoding_api.c
-@@ -0,0 +1,780 @@
+@@ -0,0 +1,796 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -3871,7 +3896,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: http_encoding_api.c 305668 2010-11-22 20:17:41Z iliaa $ */
++/* $Id: http_encoding_api.c 323304 2012-02-17 21:13:24Z mike $ */
 +
 +#define HTTP_WANT_ZLIB
 +#include "php_http.h"
@@ -3907,10 +3932,18 @@
 +PHP_RINIT_FUNCTION(http_encoding)
 +{
 +	if (HTTP_G->send.inflate.start_auto) {
++#ifdef PHP_OUTPUT_NEWAPI
++		php_output_start_internal(ZEND_STRL("http inflate"), _http_ob_inflatehandler, HTTP_INFLATE_BUFFER_SIZE, 0 TSRMLS_CC);
++#else
 +		php_ob_set_internal_handler(_http_ob_inflatehandler, HTTP_INFLATE_BUFFER_SIZE, "http inflate", 0 TSRMLS_CC);
++#endif
 +	}
 +	if (HTTP_G->send.deflate.start_auto) {
++#ifdef PHP_OUTPUT_NEWAPI
++		php_output_start_internal(ZEND_STRL("http deflate"), _http_ob_deflatehandler, HTTP_DEFLATE_BUFFER_SIZE, 0 TSRMLS_CC);
++#else
 +		php_ob_set_internal_handler(_http_ob_deflatehandler, HTTP_DEFLATE_BUFFER_SIZE, "http deflate", 0 TSRMLS_CC);
++#endif
 +	}
 +	return SUCCESS;
 +}
@@ -4022,10 +4055,18 @@
 +PHP_HTTP_API int _http_encoding_response_start(size_t content_length, zend_bool ignore_http_ohandler TSRMLS_DC)
 +{
 +	int response = HTTP_G->send.deflate.response;
++#ifdef PHP_OUTPUT_NEWAPI
++	int ohandler = php_output_handler_started(ZEND_STRL("ob_gzhandler") TSRMLS_CC) || php_output_handler_started(ZEND_STRL("zlib output compression") TSRMLS_CC);
++#else
 +	int ohandler = php_ob_handler_used("ob_gzhandler" TSRMLS_CC) || php_ob_handler_used("zlib output compression" TSRMLS_CC);
++#endif
 +	
 +	if (!ohandler && !ignore_http_ohandler) {
++#ifdef PHP_OUTPUT_NEWAPI
++		ohandler = php_output_handler_started(ZEND_STRL("ob_defaltehandler") TSRMLS_CC) || php_output_handler_started(ZEND_STRL("http deflate") TSRMLS_CC);
++#else
 +		ohandler = php_ob_handler_used("ob_deflatehandler" TSRMLS_CC) || php_ob_handler_used("http deflate" TSRMLS_CC);
++#endif
 +	}
 +	
 +	if (response && !ohandler) {
@@ -7331,7 +7372,7 @@
 +
 --- /dev/null
 +++ b/ext/http/http_inflatestream_object.c
-@@ -0,0 +1,292 @@
+@@ -0,0 +1,297 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -7344,7 +7385,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: http_inflatestream_object.c 300299 2010-06-09 06:23:16Z mike $ */
++/* $Id: http_inflatestream_object.c 323304 2012-02-17 21:13:24Z mike $ */
 +
 +#define HTTP_WANT_ZLIB
 +#include "php_http.h"
@@ -7430,9 +7471,14 @@
 +		o->stream = s;
 +	}
 +
++#ifdef ZEND_ENGINE_2_4
++	zend_object_std_init(o, ce TSRMLS_CC);
++	object_properties_init(o, ce);
++#else
 +	ALLOC_HASHTABLE(OBJ_PROP(o));
 +	zend_hash_init(OBJ_PROP(o), zend_hash_num_elements(&ce->default_properties), NULL, ZVAL_PTR_DTOR, 0);
 +	zend_hash_copy(OBJ_PROP(o), &ce->default_properties, (copy_ctor_func_t) zval_add_ref, NULL, sizeof(zval *));
++#endif
 +
 +	ov.handle = putObject(http_inflatestream_object, o);
 +	ov.handlers = &http_inflatestream_object_handlers;
@@ -7784,7 +7830,7 @@
 +
 --- /dev/null
 +++ b/ext/http/http_message_api.c
-@@ -0,0 +1,735 @@
+@@ -0,0 +1,739 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -7797,7 +7843,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: http_message_api.c 298689 2010-04-28 06:50:06Z mike $ */
++/* $Id: http_message_api.c 323304 2012-02-17 21:13:24Z mike $ */
 +
 +#define HTTP_WANT_SAPI
 +#define HTTP_WANT_CURL
@@ -7906,7 +7952,11 @@
 +			
 +			http_message_set_info(message, &inf);
 +			http_get_response_headers(&message->hdrs);
++#ifdef PHP_OUTPUT_NEWAPI
++			if (SUCCESS == php_output_get_contents(&tval TSRMLS_CC)) {
++#else
 +			if (SUCCESS == php_ob_get_buffer(&tval TSRMLS_CC)) {
++#endif
 +				message->body.data = Z_STRVAL(tval);
 +				message->body.used = Z_STRLEN(tval);
 +				message->body.free = 1; /* "\0" */
@@ -8522,7 +8572,7 @@
 +
 --- /dev/null
 +++ b/ext/http/http_message_object.c
-@@ -0,0 +1,1546 @@
+@@ -0,0 +1,1555 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -8535,7 +8585,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: http_message_object.c 309640 2011-03-24 09:26:11Z mike $ */
++/* $Id: http_message_object.c 323304 2012-02-17 21:13:24Z mike $ */
 +
 +#define HTTP_WANT_SAPI
 +#define HTTP_WANT_CURL
@@ -9038,9 +9088,15 @@
 +		}
 +	}
 +
++	
++#ifdef ZEND_ENGINE_2_4
++	zend_object_std_init(o, ce TSRMLS_CC);
++	object_properties_init(o, ce);
++#else
 +	ALLOC_HASHTABLE(OBJ_PROP(o));
 +	zend_hash_init(OBJ_PROP(o), zend_hash_num_elements(&ce->default_properties), NULL, ZVAL_PTR_DTOR, 0);
 +	zend_hash_copy(OBJ_PROP(o), &ce->default_properties, (copy_ctor_func_t) zval_add_ref, NULL, sizeof(zval *));
++#endif
 +
 +	ov.handle = putObject(http_message_object, o);
 +	ov.handlers = &http_message_object_handlers;
@@ -9142,9 +9198,12 @@
 +	zval *headers;
 +	getObjectEx(http_message_object, obj, object);
 +	http_message *msg = obj->message;
-+	HashTable *props = OBJ_PROP(obj);
 +	zval array, *parent;
-+	
++#ifdef ZEND_ENGINE_2_4
++	HashTable *props = zend_get_std_object_handlers()->get_properties(object TSRMLS_CC);
++#else
++	HashTable *props = OBJ_PROP(obj);
++#endif
 +	INIT_ZARR(array, props);
 +
 +#define ASSOC_PROP(array, ptype, name, val) \
@@ -9206,7 +9265,7 @@
 +	}
 +	ASSOC_PROP(array, zval, "parentMessage", parent);
 +
-+	return OBJ_PROP(obj);
++	return props;
 +}
 +
 +/* ### USERLAND ### */
@@ -10685,7 +10744,7 @@
 + */
 --- /dev/null
 +++ b/ext/http/http_querystring_object.c
-@@ -0,0 +1,628 @@
+@@ -0,0 +1,633 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -10698,7 +10757,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: http_querystring_object.c 300299 2010-06-09 06:23:16Z mike $ */
++/* $Id: http_querystring_object.c 323304 2012-02-17 21:13:24Z mike $ */
 +
 +#define HTTP_WANT_SAPI
 +#include "php_http.h"
@@ -10879,9 +10938,14 @@
 +		*ptr = o;
 +	}
 +
++#ifdef ZEND_ENGINE_2_4
++	zend_object_std_init(o, ce TSRMLS_CC);
++	object_properties_init(o, ce);
++#else
 +	ALLOC_HASHTABLE(OBJ_PROP(o));
 +	zend_hash_init(OBJ_PROP(o), zend_hash_num_elements(&ce->default_properties), NULL, ZVAL_PTR_DTOR, 0);
 +	zend_hash_copy(OBJ_PROP(o), &ce->default_properties, (copy_ctor_func_t) zval_add_ref, NULL, sizeof(zval *));
++#endif
 +
 +	ov.handle = putObject(http_querystring_object, o);
 +	ov.handlers = &http_querystring_object_handlers;
@@ -13271,7 +13335,7 @@
 +
 --- /dev/null
 +++ b/ext/http/http_request_info.c
-@@ -0,0 +1,198 @@
+@@ -0,0 +1,213 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -13284,7 +13348,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: http_request_info.c 293136 2010-01-05 08:48:52Z mike $ */
++/* $Id: http_request_info.c 323304 2012-02-17 21:13:24Z mike $ */
 +
 +#define HTTP_WANT_CURL
 +#include "php_http.h"
@@ -13422,6 +13486,21 @@
 +		add_assoc_long_ex(&array, "condition_unmet", sizeof("condition_unmet"), l);
 +	}
 +#endif
++#if HTTP_CURL_VERSION(7,21,0)
++	if (CURLE_OK == curl_easy_getinfo(request->ch, CURLINFO_PRIMARY_PORT, &l)) {
++		add_assoc_long_ex(&array, "primary_port", sizeof("primary_port"), l);
++	}
++#endif
++#if HTTP_CURL_VERSION(7,21,0)
++	if (CURLE_OK == curl_easy_getinfo(request->ch, CURLINFO_LOCAL_IP, &c)) {
++		add_assoc_string_ex(&array, "local_ip", sizeof("local_ip"), c ? c : "", 1);
++	}
++#endif
++#if HTTP_CURL_VERSION(7,21,0)
++	if (CURLE_OK == curl_easy_getinfo(request->ch, CURLINFO_LOCAL_PORT, &l)) {
++		add_assoc_long_ex(&array, "local_port", sizeof("local_port"), l);
++	}
++#endif
 +/* END */
 +#if HTTP_CURL_VERSION(7,19,1) && defined(HTTP_HAVE_OPENSSL)
 +	{
@@ -13472,7 +13551,7 @@
 + */
 --- /dev/null
 +++ b/ext/http/http_request_method_api.c
-@@ -0,0 +1,321 @@
+@@ -0,0 +1,322 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -13485,7 +13564,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: http_request_method_api.c 292841 2009-12-31 08:48:57Z mike $ */
++/* $Id: http_request_method_api.c 323406 2012-02-21 10:05:52Z mike $ */
 +
 +#define HTTP_WANT_CURL
 +#include "php_http.h"
@@ -13689,7 +13768,8 @@
 +	for (i = 0; i < method_name_len; ++i) {
 +		switch (method_name[i]) {
 +			case '-':
-+				cncl[i] = '-';
++			case '_':
++				cncl[i] = method_name[i];
 +				break;
 +			
 +			default:
@@ -13796,7 +13876,7 @@
 +
 --- /dev/null
 +++ b/ext/http/http_request_object.c
-@@ -0,0 +1,1922 @@
+@@ -0,0 +1,1931 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -13809,7 +13889,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: http_request_object.c 300299 2010-06-09 06:23:16Z mike $ */
++/* $Id: http_request_object.c 323304 2012-02-17 21:13:24Z mike $ */
 +
 +#define HTTP_WANT_CURL
 +#include "php_http.h"
@@ -14291,9 +14371,14 @@
 +		*ptr = o;
 +	}
 +
++#ifdef ZEND_ENGINE_2_4
++	zend_object_std_init(o, ce TSRMLS_CC);
++	object_properties_init(o, ce);
++#else
 +	ALLOC_HASHTABLE(OBJ_PROP(o));
 +	zend_hash_init(OBJ_PROP(o), zend_hash_num_elements(&ce->default_properties), NULL, ZVAL_PTR_DTOR, 0);
 +	zend_hash_copy(OBJ_PROP(o), &ce->default_properties, (copy_ctor_func_t) zval_add_ref, NULL, sizeof(zval *));
++#endif
 +
 +	ov.handle = putObject(http_request_object, o);
 +	ov.handlers = &http_request_object_handlers;
@@ -14477,7 +14562,7 @@
 +			
 +			if (	(Z_TYPE_P(options) != IS_ARRAY)
 +				||	(SUCCESS != zend_hash_find(Z_ARRVAL_P(options), "onprogress", sizeof("onprogress"), (void *) &entry)
-+				||	(!IS_CALLABLE(*entry, 0, NULL)))) {
++				||	(!HTTP_IS_CALLABLE(*entry, 0, NULL)))) {
 +				MAKE_STD_ZVAL(pcb);
 +				array_init(pcb);
 +				ZVAL_ADDREF(getThis());
@@ -14582,8 +14667,12 @@
 +	
 +	return ret;
 +}
-+
-+static int apply_pretty_key(void *pDest, int num_args, va_list args, zend_hash_key *hash_key)
++#ifdef ZEND_ENGINE_2_4
++#	define APK_DC TSRMLS_DC
++#else
++#	define APK_DC
++#endif
++static int apply_pretty_key(void *pDest APK_DC, int num_args, va_list args, zend_hash_key *hash_key)
 +{
 +	if (hash_key->arKey && hash_key->nKeyLength > 1) {
 +		hash_key->h = zend_hash_func(pretty_key(hash_key->arKey, hash_key->nKeyLength - 1, 1, 0), hash_key->nKeyLength);
@@ -16384,7 +16473,7 @@
 +
 --- /dev/null
 +++ b/ext/http/http_requestdatashare_object.c
-@@ -0,0 +1,315 @@
+@@ -0,0 +1,332 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -16397,7 +16486,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: http_requestdatashare_object.c 300299 2010-06-09 06:23:16Z mike $ */
++/* $Id: http_requestdatashare_object.c 323304 2012-02-17 21:13:24Z mike $ */
 +
 +#define HTTP_WANT_CURL
 +#include "php_http.h"
@@ -16512,9 +16601,14 @@
 +		*ptr = o;
 +	}
 +
++#ifdef ZEND_ENGINE_2_4
++	zend_object_std_init(o, ce TSRMLS_CC);
++	object_properties_init(o, ce);
++#else
 +	ALLOC_HASHTABLE(OBJ_PROP(o));
 +	zend_hash_init(OBJ_PROP(o), zend_hash_num_elements(&ce->default_properties), NULL, ZVAL_PTR_DTOR, 0);
 +	zend_hash_copy(OBJ_PROP(o), &ce->default_properties, (copy_ctor_func_t) zval_add_ref, NULL, sizeof(zval *));
++#endif
 +
 +	ov.handle = putObject(http_requestdatashare_object, o);
 +	ov.handlers = &http_requestdatashare_object_handlers;
@@ -16534,7 +16628,13 @@
 +
 +static zval *_http_requestdatashare_object_read_prop(zval *object, zval *member, int type ZEND_LITERAL_KEY_DC TSRMLS_DC)
 +{
-+	if (type == BP_VAR_W && zend_hash_exists(&THIS_CE->default_properties, Z_STRVAL_P(member), Z_STRLEN_P(member)+1)) {
++	if (type == BP_VAR_W && 
++#ifdef ZEND_ENGINE_2_4	
++	zend_hash_exists(&THIS_CE->properties_info, Z_STRVAL_P(member), Z_STRLEN_P(member)+1)
++#else
++	zend_hash_exists(&THIS_CE->default_properties, Z_STRVAL_P(member), Z_STRLEN_P(member)+1)
++#endif
++	) {
 +		zend_error(E_ERROR, "Cannot access HttpRequestDataShare default properties by reference or array key/index");
 +		return NULL;
 +	}
@@ -16544,7 +16644,13 @@
 +
 +static void _http_requestdatashare_object_write_prop(zval *object, zval *member, zval *value ZEND_LITERAL_KEY_DC TSRMLS_DC)
 +{
-+	if (zend_hash_exists(&THIS_CE->default_properties, Z_STRVAL_P(member), Z_STRLEN_P(member)+1)) {
++	if (
++#ifdef ZEND_ENGINE_2_4
++	zend_hash_exists(&THIS_CE->properties_info, Z_STRVAL_P(member), Z_STRLEN_P(member)+1)
++#else
++	zend_hash_exists(&THIS_CE->default_properties, Z_STRVAL_P(member), Z_STRLEN_P(member)+1)
++#endif
++	) {
 +		int status;
 +		getObjectEx(http_requestdatashare_object, obj, object);
 +		
@@ -16702,7 +16808,7 @@
 +
 --- /dev/null
 +++ b/ext/http/http_requestpool_object.c
-@@ -0,0 +1,466 @@
+@@ -0,0 +1,471 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -16715,7 +16821,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: http_requestpool_object.c 300299 2010-06-09 06:23:16Z mike $ */
++/* $Id: http_requestpool_object.c 323304 2012-02-17 21:13:24Z mike $ */
 +
 +#define HTTP_WANT_CURL
 +#include "php_http.h"
@@ -16834,9 +16940,14 @@
 +
 +	http_request_pool_init(&o->pool);
 +
++#ifdef ZEND_ENGINE_2_4
++	zend_object_std_init(o, ce TSRMLS_CC);
++	object_properties_init(o, ce);
++#else
 +	ALLOC_HASHTABLE(OBJ_PROP(o));
 +	zend_hash_init(OBJ_PROP(o), zend_hash_num_elements(&ce->default_properties), NULL, ZVAL_PTR_DTOR, 0);
 +	zend_hash_copy(OBJ_PROP(o), &ce->default_properties, (copy_ctor_func_t) zval_add_ref, NULL, sizeof(zval *));
++#endif
 +
 +	ov.handle = putObject(http_requestpool_object, o);
 +	ov.handlers = &http_requestpool_object_handlers;
@@ -17171,7 +17282,7 @@
 +
 --- /dev/null
 +++ b/ext/http/http_response_object.c
-@@ -0,0 +1,915 @@
+@@ -0,0 +1,927 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -17184,7 +17295,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: http_response_object.c 298891 2010-05-03 08:26:38Z mike $ */
++/* $Id: http_response_object.c 323304 2012-02-17 21:13:24Z mike $ */
 +
 +#define HTTP_WANT_SAPI
 +#define HTTP_WANT_MAGIC
@@ -17919,7 +18030,11 @@
 +		zval *zetag, *the_data;
 +
 +		MAKE_STD_ZVAL(the_data);
++#ifdef PHP_OUTPUT_NEWAPI
++		php_output_get_contents(the_data TSRMLS_CC);
++#else
 +		php_ob_get_buffer(the_data TSRMLS_CC);
++#endif
 +		zend_update_static_property(THIS_CE, ZEND_STRS("data")-1, the_data TSRMLS_CC);
 +		ZVAL_LONG(*zend_std_get_static_property(THIS_CE, ZEND_STRS("mode")-1, 0 ZEND_LITERAL_NIL_CC TSRMLS_CC), SEND_DATA);
 +
@@ -17941,7 +18056,11 @@
 +		/* interrupt on-the-fly etag generation */
 +		HTTP_G->etag.started = 0;
 +		/* discard previous output buffers */
++#ifdef PHP_OUTPUT_NEWAPI
++		php_output_discard_all(TSRMLS_C);
++#else
 +		php_end_ob_buffers(0 TSRMLS_CC);
++#endif
 +	}
 +
 +	/* caching */
@@ -18053,9 +18172,13 @@
 +	HTTP_CHECK_HEADERS_SENT(RETURN_FALSE);
 +
 +	zend_update_static_property_long(THIS_CE, ZEND_STRS("catch")-1, 1 TSRMLS_CC);
-+
++#ifdef PHP_OUTPUT_NEWAPI
++	php_output_discard_all(TSRMLS_C);
++	php_output_start_default(TSRMLS_C);
++#else
 +	php_end_ob_buffers(0 TSRMLS_CC);
 +	php_start_ob_buffer(NULL, 0, 0 TSRMLS_CC);
++#endif
 +
 +	/* register shutdown function */
 +	{
@@ -18089,7 +18212,7 @@
 +
 --- /dev/null
 +++ b/ext/http/http_send_api.c
-@@ -0,0 +1,607 @@
+@@ -0,0 +1,611 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -18102,7 +18225,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: http_send_api.c 300299 2010-06-09 06:23:16Z mike $ */
++/* $Id: http_send_api.c 312028 2011-06-10 22:03:12Z felipe $ */
 +
 +#define HTTP_WANT_SAPI
 +#define HTTP_WANT_ZLIB
@@ -18126,12 +18249,16 @@
 +	/*	we really only need to flush when throttling is enabled,
 +		because we push the data as fast as possible anyway if not */
 +	if (HTTP_G->send.throttle_delay >= HTTP_DIFFSEC) {
++#if defined(PHP_VERSION_ID) && (PHP_VERSION_ID >= 50399)
++		php_output_end_all(TSRMLS_C);
++#else
 +		if (OG(ob_nesting_level)) {
 +			php_end_ob_buffer(1, 1 TSRMLS_CC);
 +		}
 +		if (!OG(implicit_flush)) {
 +			sapi_flush(TSRMLS_C);
 +		}
++#endif
 +		http_sleep(HTTP_G->send.throttle_delay);
 +	}
 +}
@@ -20310,7 +20437,7 @@
 +
 --- /dev/null
 +++ b/ext/http/missing.h
-@@ -0,0 +1,180 @@
+@@ -0,0 +1,184 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -20323,12 +20450,16 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: missing.h 298892 2010-05-03 08:29:31Z mike $ */
++/* $Id: missing.h 323304 2012-02-17 21:13:24Z mike $ */
 +
 +#ifndef PHP_HTTP_MISSING
 +#define PHP_HTTP_MISSING
 +
 +#include "php_version.h"
++
++#if ZEND_MODULE_API_NO >= 20100409
++#define ZEND_ENGINE_2_4
++#endif
 +
 +#if defined(PHP_VERSION_ID) && (PHP_VERSION_ID >= 50399)
 +#	define ZEND_LITERAL_KEY_DC , const zend_literal *_zend_literal_key
@@ -20379,7 +20510,7 @@
 +#	define HTTP_ZAPI_CONST_CAST(t) (const t)
 +#	define GLOBAL_ERROR_HANDLING EG(error_handling)
 +#	define GLOBAL_EXCEPTION_CLASS EG(exception_class)
-+#	define IS_CALLABLE(cb_zv, flags, cb_sp) zend_is_callable((cb_zv), (flags), (cb_sp) TSRMLS_CC)
++#	define HTTP_IS_CALLABLE(cb_zv, flags, cb_sp) zend_is_callable((cb_zv), (flags), (cb_sp) TSRMLS_CC)
 +#	define HTTP_STATIC_ARG_INFO
 +#else
 +#	define HTTP_ZAPI_HASH_TSRMLS_CC
@@ -20387,7 +20518,7 @@
 +#	define HTTP_ZAPI_CONST_CAST(t) (t)
 +#	define GLOBAL_ERROR_HANDLING PG(error_handling)
 +#	define GLOBAL_EXCEPTION_CLASS PG(exception_class)
-+#	define IS_CALLABLE(cb_zv, flags, cb_sp) zend_is_callable((cb_zv), (flags), (cb_sp))
++#	define HTTP_IS_CALLABLE(cb_zv, flags, cb_sp) zend_is_callable((cb_zv), (flags), (cb_sp))
 +#	define HTTP_STATIC_ARG_INFO static
 +#endif
 +
@@ -20506,12 +20637,12 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: php_http.h 310776 2011-05-05 06:35:46Z mike $ */
++/* $Id: php_http.h 324012 2012-03-08 08:44:32Z mike $ */
 +
 +#ifndef PHP_EXT_HTTP_H
 +#define PHP_EXT_HTTP_H
 +
-+#define PHP_HTTP_VERSION "1.7.1"
++#define PHP_HTTP_VERSION "1.7.4"
 +
 +#ifdef HAVE_CONFIG_H
 +#	include "config.h"
@@ -20758,7 +20889,7 @@
 +
 --- /dev/null
 +++ b/ext/http/php_http_api.h
-@@ -0,0 +1,318 @@
+@@ -0,0 +1,326 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -20771,7 +20902,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: php_http_api.h 298891 2010-05-03 08:26:38Z mike $ */
++/* $Id: php_http_api.h 323304 2012-02-17 21:13:24Z mike $ */
 +
 +#ifndef PHP_HTTP_API_H
 +#define PHP_HTTP_API_H
@@ -20857,12 +20988,18 @@
 +		http_error_ex(HE_WARNING, HTTP_E_INVALID_PARAM, "Invalid compression level (-1 to 9): %d", level); \
 +		action; \
 +	}
-+
++#ifndef PHP_OUTPUT_NEWAPI
++#	define HTTP_GET_OUTPUT_START() \
++		char *output_start_filename = php_get_output_start_filename(TSRMLS_C); \
++		int output_start_lineno = php_get_output_start_lineno(TSRMLS_C)
++#else
++#	define HTTP_GET_OUTPUT_START() \
++		char *output_start_filename = php_output_get_start_filename(TSRMLS_C); \
++		int output_start_lineno = php_output_get_start_lineno(TSRMLS_C)
++#endif
 +#define HTTP_CHECK_HEADERS_SENT(action) \
 +	if (SG(headers_sent) && !SG(request_info).no_headers) { \
-+		char *output_start_filename = php_get_output_start_filename(TSRMLS_C); \
-+		int output_start_lineno = php_get_output_start_lineno(TSRMLS_C); \
-+		 \
++		HTTP_GET_OUTPUT_START(); \
 +		if (output_start_filename) { \
 +			http_error_ex(HE_WARNING, HTTP_E_HEADER, "Cannot modify header information - headers already sent by (output started at %s:%d)", \
 +				output_start_filename, output_start_lineno); \
@@ -21012,7 +21149,7 @@
 +#define http_zsep(t, z) _http_zsep_ex((t), (z), NULL)
 +#define http_zsep_ex(t, z, p) _http_zsep_ex((t), (z), (p))
 +static inline zval *_http_zsep_ex(int type, zval *z, zval **p) {
-+	SEPARATE_ARG_IF_REF(z);
++	ZVAL_ADDREF(z);
 +	if (Z_TYPE_P(z) != type) {
 +		switch (type) {
 +			case IS_NULL:	convert_to_null_ex(&z);		break;
@@ -21023,6 +21160,8 @@
 +			case IS_ARRAY:	convert_to_array_ex(&z);	break;
 +			case IS_OBJECT:	convert_to_object_ex(&z);	break;
 +		}
++	} else {
++		SEPARATE_ZVAL_IF_NOT_REF(&z);
 +	}
 +	if (p) {
 +		*p = z;
@@ -23367,7 +23506,7 @@
 +
 --- /dev/null
 +++ b/ext/http/php_http_std_defs.h
-@@ -0,0 +1,406 @@
+@@ -0,0 +1,410 @@
 +/*
 +    +--------------------------------------------------------------------+
 +    | PECL :: http                                                       |
@@ -23380,7 +23519,7 @@
 +    +--------------------------------------------------------------------+
 +*/
 +
-+/* $Id: php_http_std_defs.h 310777 2011-05-05 06:43:10Z mike $ */
++/* $Id: php_http_std_defs.h 323304 2012-02-17 21:13:24Z mike $ */
 +
 +#ifndef PHP_HTTP_STD_DEFS_H
 +#define PHP_HTTP_STD_DEFS_H
@@ -23552,7 +23691,11 @@
 +#	define getObject(t, o) getObjectEx(t, o, getThis())
 +#	define getObjectEx(t, o, v) t * o = ((t *) zend_object_store_get_object(v TSRMLS_CC))
 +#	define putObject(t, o) zend_objects_store_put(o, (zend_objects_store_dtor_t) zend_objects_destroy_object, (zend_objects_free_object_storage_t) _ ##t## _free, NULL TSRMLS_CC);
-+#	ifndef WONKY
++#	if defined(ZEND_ENGINE_2_4)
++#		define freeObject(o) \
++			zend_object_std_dtor(o TSRMLS_CC); \
++			efree(o);
++#	elif !defined(WONKY)
 +#		define freeObject(o) \
 +			if (OBJ_GUARDS(o)) { \
 +				zend_hash_destroy(OBJ_GUARDS(o)); \
@@ -26458,7 +26601,7 @@
 +Done
 --- /dev/null
 +++ b/ext/http/tests/HttpRequest_007.phpt
-@@ -0,0 +1,64 @@
+@@ -0,0 +1,63 @@
 +--TEST--
 +HttpRequest PUT
 +--SKIPIF--
@@ -26504,7 +26647,6 @@
 +HTTP/1.1 200 OK
 +Date: %a
 +Server: %a
-+X-Powered-By: %a
 +Vary: Accept-Encoding
 +Content-Length: %d
 +Content-Type: text/html
@@ -26895,7 +27037,7 @@
 +  ["ssl"]=>
 +  array(1) refcount(1){
 +    ["verifypeer"]=>
-+    string(1) "1" refcount(2)
++    string(1) "1" refcount(3)
 +  }
 +}
 +array(1) refcount(2){
@@ -28881,7 +29023,7 @@
 +  ["responseStatus"]=>
 +  string(2) "OK"
 +  ["headers"]=>
-+  array(8) {
++  array(%d) {
 +    %a
 +    ["Vary"]=>
 +    string(15) "Accept-Encoding"
