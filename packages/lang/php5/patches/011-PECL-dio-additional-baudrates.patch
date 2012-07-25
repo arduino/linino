@@ -1,6 +1,6 @@
 --- a/ext/dio/dio.c
 +++ b/ext/dio/dio.c
-@@ -442,6 +442,26 @@ PHP_FUNCTION(dio_tcsetattr)
+@@ -501,6 +501,26 @@ PHP_FUNCTION(dio_tcsetattr)
  
  	/* assign to correct values... */
  	switch (Baud_Rate)  {
