@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
-PKG_VERSION:=5.3.10
-PKG_RELEASE:=5
+PKG_VERSION:=5.4.5
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
-PKG_MD5SUM:=816259e5ca7d0a7e943e56a3bb32b17f
+PKG_MD5SUM:=ffcc7f4dcf2b79d667fe0c110e6cb724
 
 PKG_FIXUP:=libtool no-autoreconf
 PKG_BUILD_PARALLEL:=1
@@ -40,7 +40,7 @@ PHP5_MODULES = \
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_php5-cgi CONFIG_PACKAGE_php5-cli \
 	$(patsubst %,CONFIG_PACKAGE_php5-mod-%,$(PHP5_MODULES)) \
-	CONFIG_PHP5_FILTER CONFIG_PHP5_LIBXML CONFIG_PHP5_SYSTEMTZDATA
+	CONFIG_PHP5_FILTER CONFIG_PHP5_LIBXML PHP5_SYSTEMTZDATA
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -133,7 +133,6 @@ CONFIGURE_ARGS+= \
 	\
 	--with-config-file-path=/etc \
 	--with-config-file-scan-dir=/etc/php5 \
-	--enable-magic-quotes \
 	--disable-short-tags \
 	\
 	--with-zlib="$(STAGING_DIR)/usr" \
@@ -486,6 +485,11 @@ define Package/php5-fastcgi/install
 
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/php5-fastcgi.init $(1)/etc/init.d/php5-fastcgi
+endef
+
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	( cd $(PKG_BUILD_DIR); touch configure.in; ./buildconf --force )
 endef
 
 define Build/InstallDev
