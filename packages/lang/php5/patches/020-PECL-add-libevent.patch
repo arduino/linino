@@ -59,7 +59,7 @@
 +fi
 --- /dev/null
 +++ b/ext/libevent/libevent.c
-@@ -0,0 +1,1564 @@
+@@ -0,0 +1,1663 @@
 +/*
 +  +----------------------------------------------------------------------+
 +  | PHP Version 5                                                        |
@@ -79,7 +79,7 @@
 +  +----------------------------------------------------------------------+
 +*/
 +
-+/* $Id: libevent.c 300303 2010-06-09 10:43:38Z tony2001 $ */
++/* $Id: libevent.c 318910 2011-11-08 12:34:37Z tony2001 $ */
 +
 +#ifdef HAVE_CONFIG_H
 +#include "config.h"
@@ -97,6 +97,11 @@
 +#if PHP_VERSION_ID >= 50301 && (HAVE_SOCKETS || defined(COMPILE_DL_SOCKETS))
 +# include "ext/sockets/php_sockets.h"
 +# define LIBEVENT_SOCKETS_SUPPORT
++#endif
++
++#ifndef ZEND_FETCH_RESOURCE_NO_RETURN 
++# define ZEND_FETCH_RESOURCE_NO_RETURN(rsrc, rsrc_type, passed_id, default_id, resource_type_name, resource_type) \
++	(rsrc = (rsrc_type) zend_fetch_resource(passed_id TSRMLS_CC, default_id, resource_type_name, NULL, 1, resource_type))
 +#endif
 +
 +#include <event.h>
@@ -413,7 +418,11 @@
 +
 +	base->events = 0;
 +
++#if PHP_MAJOR_VERSION >= 5 && PHP_MINOR_VERSION >= 4
++	base->rsrc_id = zend_list_insert(base, le_event_base TSRMLS_CC);
++#else
 +	base->rsrc_id = zend_list_insert(base, le_event_base);
++#endif
 +	RETURN_RESOURCE(base->rsrc_id);
 +}
 +/* }}} */
@@ -601,7 +610,11 @@
 +	event->in_free = 0;
 +	TSRMLS_SET_CTX(event->thread_ctx);
 +
++#if PHP_MAJOR_VERSION >= 5 && PHP_MINOR_VERSION >= 4
++	event->rsrc_id = zend_list_insert(event, le_event TSRMLS_CC);
++#else
 +	event->rsrc_id = zend_list_insert(event, le_event);
++#endif
 +	RETURN_RESOURCE(event->rsrc_id);
 +}
 +/* }}} */
@@ -660,7 +673,7 @@
 +}
 +/* }}} */
 +
-+/* {{{ proto bool event_set(resource event, resource fd, int events, mixed callback[, mixed arg]) 
++/* {{{ proto bool event_set(resource event, mixed fd, int events, mixed callback[, mixed arg]) 
 + */
 +static PHP_FUNCTION(event_set)
 +{
@@ -674,6 +687,7 @@
 +#ifdef LIBEVENT_SOCKETS_SUPPORT
 +	php_socket *php_sock;
 +#endif
++	int ret;
 +
 +	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rZlz|z", &zevent, &fd, &events, &zcallback, &zarg) != SUCCESS) {
 +		return;
@@ -690,22 +704,37 @@
 +			RETURN_FALSE;
 +		}
 +	} else {
-+		if (ZEND_FETCH_RESOURCE_NO_RETURN(stream, php_stream *, fd, -1, NULL, php_file_le_stream())) {
-+			if (php_stream_cast(stream, PHP_STREAM_AS_FD_FOR_SELECT | PHP_STREAM_CAST_INTERNAL, (void*)&file_desc, 1) != SUCCESS || file_desc < 0) {
++		if (Z_TYPE_PP(fd) == IS_RESOURCE) {
++			if (ZEND_FETCH_RESOURCE_NO_RETURN(stream, php_stream *, fd, -1, NULL, php_file_le_stream())) {
++				if (php_stream_cast(stream, PHP_STREAM_AS_FD_FOR_SELECT | PHP_STREAM_CAST_INTERNAL, (void*)&file_desc, 1) != SUCCESS || file_desc < 0) {
++					RETURN_FALSE;
++				}
++			} else {
++#ifdef LIBEVENT_SOCKETS_SUPPORT
++				if (ZEND_FETCH_RESOURCE_NO_RETURN(php_sock, php_socket *, fd, -1, NULL, php_sockets_le_socket())) {
++					file_desc = php_sock->bsd_socket;
++				} else {
++					php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be either valid PHP stream or valid PHP socket resource");
++					RETURN_FALSE;
++				}
++#else
++				php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be valid PHP stream resource");
++				RETURN_FALSE;
++#endif
++			}
++		} else if (Z_TYPE_PP(fd) == IS_LONG) {
++			file_desc = Z_LVAL_PP(fd);
++			if (file_desc < 0) {
++				php_error_docref(NULL TSRMLS_CC, E_WARNING, "invalid file descriptor passed");
 +				RETURN_FALSE;
 +			}
 +		} else {
 +#ifdef LIBEVENT_SOCKETS_SUPPORT
-+			if (ZEND_FETCH_RESOURCE_NO_RETURN(php_sock, php_socket *, fd, -1, NULL, php_sockets_le_socket())) {
-+				file_desc = php_sock->bsd_socket;
-+			} else {
-+				php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be either valid PHP stream or valid PHP socket resource");
-+				RETURN_FALSE;
-+			}
++			php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be valid PHP stream or socket resource or a file descriptor of type long");
 +#else
-+			php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be valid PHP stream resource");
-+			RETURN_FALSE;
++			php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be valid PHP stream resource or a file descriptor of type long");
 +#endif
++			RETURN_FALSE;
 +		}
 +	}
 +
@@ -741,6 +770,13 @@
 +	if (old_callback) {
 +		_php_event_callback_free(old_callback);
 +	}
++
++	if (event->base) {
++		ret = event_base_set(event->base->base, event->event);
++		if (ret != 0) {
++			RETURN_FALSE;
++		}
++	}
 +	RETURN_TRUE;
 +}
 +/* }}} */
@@ -770,6 +806,34 @@
 +}
 +/* }}} */
 +
++/* {{{ proto bool event_priority_set(resource event, int priority) 
++ */
++static PHP_FUNCTION(event_priority_set)
++{
++	zval *zevent;
++	php_event_t *event;
++	long priority;
++	int ret;
++
++	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rl", &zevent, &priority) != SUCCESS) {
++		return;
++	}
++
++	ZVAL_TO_EVENT(zevent, event);
++
++	if (!event->base) {
++		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Unable to set event priority without an event base");
++		RETURN_FALSE;
++	}
++
++	ret = event_priority_set(event->event, priority);
++
++	if (ret == 0) {
++		RETURN_TRUE;
++	}
++	RETURN_FALSE;
++}
++/* }}} */
 +
 +/* {{{ proto bool event_timer_set(resource event, mixed callback[, mixed arg]) 
 + */
@@ -854,39 +918,50 @@
 +
 +
 +
-+/* {{{ proto resource event_buffer_new(resource stream, mixed readcb, mixed writecb, mixed errorcb[, mixed arg]) 
++/* {{{ proto resource event_buffer_new(mixed fd, mixed readcb, mixed writecb, mixed errorcb[, mixed arg]) 
 + */
 +static PHP_FUNCTION(event_buffer_new)
 +{
 +	php_bufferevent_t *bevent;
 +	php_stream *stream;
-+	zval *zstream, *zreadcb, *zwritecb, *zerrorcb, *zarg = NULL;
++	zval *zfd, *zreadcb, *zwritecb, *zerrorcb, *zarg = NULL;
 +	php_socket_t fd;
 +	char *func_name;
 +#ifdef LIBEVENT_SOCKETS_SUPPORT
 +	php_socket *php_sock;
 +#endif
 +
-+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rzzz|z", &zstream, &zreadcb, &zwritecb, &zerrorcb, &zarg) != SUCCESS) {
++	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "zzzz|z", &zfd, &zreadcb, &zwritecb, &zerrorcb, &zarg) != SUCCESS) {
 +		return;
 +	}
-+
-+	if (ZEND_FETCH_RESOURCE_NO_RETURN(stream, php_stream *, &zstream, -1, NULL, php_file_le_stream())) {
-+		if (php_stream_cast(stream, PHP_STREAM_AS_FD_FOR_SELECT | PHP_STREAM_CAST_INTERNAL, (void*)&fd, 1) != SUCCESS || fd < 0) {
++	
++	if (Z_TYPE_P(zfd) == IS_RESOURCE) {
++		if (ZEND_FETCH_RESOURCE_NO_RETURN(stream, php_stream *, &zfd, -1, NULL, php_file_le_stream())) {
++			if (php_stream_cast(stream, PHP_STREAM_AS_FD_FOR_SELECT | PHP_STREAM_CAST_INTERNAL, (void*)&fd, 1) != SUCCESS || fd < 0) {
++				RETURN_FALSE;
++			}
++		} else {
++#ifdef LIBEVENT_SOCKETS_SUPPORT
++			if (ZEND_FETCH_RESOURCE_NO_RETURN(php_sock, php_socket *, &zfd, -1, NULL, php_sockets_le_socket())) {
++				fd = php_sock->bsd_socket;
++			} else {
++				php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be valid PHP stream or socket resource or a file descriptor of type long");
++				RETURN_FALSE;
++			}
++#else
++			php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be valid PHP stream resource or a file descriptor of type long");
 +			RETURN_FALSE;
++#endif
 +		}
++	} else if (Z_TYPE_P(zfd) == IS_LONG) {
++		fd = Z_LVAL_P(zfd);
 +	} else {
 +#ifdef LIBEVENT_SOCKETS_SUPPORT
-+		if (ZEND_FETCH_RESOURCE_NO_RETURN(php_sock, php_socket *, &zstream, -1, NULL, php_sockets_le_socket())) {
-+			fd = php_sock->bsd_socket;
-+		} else {
-+			php_error_docref(NULL TSRMLS_CC, E_WARNING, "stream argument must be either valid PHP stream or valid PHP socket resource");
-+			RETURN_FALSE;
-+		}
++		php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be valid PHP stream or socket resource or a file descriptor of type long");
 +#else
-+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "stream argument must be valid PHP stream resource");
-+		RETURN_FALSE;
++		php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be valid PHP stream resource or a file descriptor of type long");
 +#endif
++		RETURN_FALSE;
 +	}
 +
 +	if (Z_TYPE_P(zreadcb) != IS_NULL) {
@@ -945,7 +1020,11 @@
 +
 +	TSRMLS_SET_CTX(bevent->thread_ctx);
 +
++#if PHP_MAJOR_VERSION >= 5 && PHP_MINOR_VERSION >= 4
++	bevent->rsrc_id = zend_list_insert(bevent, le_bufferevent TSRMLS_CC);
++#else
 +	bevent->rsrc_id = zend_list_insert(bevent, le_bufferevent);
++#endif
 +	RETURN_RESOURCE(bevent->rsrc_id);
 +}
 +/* }}} */
@@ -1198,27 +1277,39 @@
 +	php_socket *php_sock;
 +#endif
 +
-+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rr", &zbevent, &zfd) != SUCCESS) {
++	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rz", &zbevent, &zfd) != SUCCESS) {
 +		return;
 +	}
 +
 +	ZVAL_TO_BEVENT(zbevent, bevent);
-+	if (ZEND_FETCH_RESOURCE_NO_RETURN(stream, php_stream *, &zfd, -1, NULL, php_file_le_stream())) {
-+		if (php_stream_cast(stream, PHP_STREAM_AS_FD_FOR_SELECT | PHP_STREAM_CAST_INTERNAL, (void*)&fd, 1) != SUCCESS || fd < 0) {
++
++	if (Z_TYPE_P(zfd) == IS_RESOURCE) {
++		if (ZEND_FETCH_RESOURCE_NO_RETURN(stream, php_stream *, &zfd, -1, NULL, php_file_le_stream())) {
++			if (php_stream_cast(stream, PHP_STREAM_AS_FD_FOR_SELECT | PHP_STREAM_CAST_INTERNAL, (void*)&fd, 1) != SUCCESS || fd < 0) {
++				RETURN_FALSE;
++			}
++		} else {
++#ifdef LIBEVENT_SOCKETS_SUPPORT
++			if (ZEND_FETCH_RESOURCE_NO_RETURN(php_sock, php_socket *, &zfd, -1, NULL, php_sockets_le_socket())) {
++				fd = php_sock->bsd_socket;
++			} else {
++				php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be valid PHP stream or socket resource or a file descriptor of type long");
++				RETURN_FALSE;
++			}
++#else
++			php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be valid PHP stream resource or a file descriptor of type long");
 +			RETURN_FALSE;
++#endif
 +		}
++	} else if (Z_TYPE_P(zfd) == IS_LONG) {
++		fd = Z_LVAL_P(zfd);
 +	} else {
 +#ifdef LIBEVENT_SOCKETS_SUPPORT
-+		if (ZEND_FETCH_RESOURCE_NO_RETURN(php_sock, php_socket *, &zfd, -1, NULL, php_sockets_le_socket())) {
-+			fd = php_sock->bsd_socket;
-+		} else {
-+			php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be either valid PHP stream or valid PHP socket resource");
-+			RETURN_FALSE;
-+		}
++		php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be valid PHP stream or socket resource or a file descriptor of type long");
 +#else
-+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be valid PHP stream resource");
-+		RETURN_FALSE;
++		php_error_docref(NULL TSRMLS_CC, E_WARNING, "fd argument must be valid PHP stream resource or a file descriptor of type long");
 +#endif
++		RETURN_FALSE;
 +	}
 +
 +	bufferevent_setfd(bevent->bevent, fd);
@@ -1358,7 +1449,7 @@
 +	php_info_print_table_start();
 +	php_info_print_table_header(2, "libevent support", "enabled");
 +	php_info_print_table_row(2, "extension version", PHP_LIBEVENT_VERSION);
-+	php_info_print_table_row(2, "Revision", "$Revision: 300303 $");
++	php_info_print_table_row(2, "Revision", "$Revision: 318910 $");
 +	
 +	snprintf(buf, sizeof(buf) - 1, "%s", event_get_version());
 +	php_info_print_table_row(2, "libevent version", buf);
@@ -1426,6 +1517,12 @@
 +EVENT_ARGINFO
 +ZEND_BEGIN_ARG_INFO_EX(arginfo_event_del, 0, 0, 1)
 +	ZEND_ARG_INFO(0, event)
++ZEND_END_ARG_INFO()
++
++EVENT_ARGINFO
++ZEND_BEGIN_ARG_INFO_EX(arginfo_event_priority_set, 0, 0, 2)
++	ZEND_ARG_INFO(0, event)
++	ZEND_ARG_INFO(0, priority)
 +ZEND_END_ARG_INFO()
 +
 +EVENT_ARGINFO
@@ -1535,6 +1632,7 @@
 +	PHP_FE(event_add, 					arginfo_event_add)
 +	PHP_FE(event_set, 					arginfo_event_set)
 +	PHP_FE(event_del, 					arginfo_event_del)
++	PHP_FE(event_priority_set, 			arginfo_event_priority_set)
 +	PHP_FE(event_buffer_new, 			arginfo_event_buffer_new)
 +	PHP_FE(event_buffer_free, 			arginfo_event_buffer_free)
 +	PHP_FE(event_buffer_base_set, 		arginfo_event_buffer_base_set)
@@ -1571,6 +1669,7 @@
 +	PHP_FE(event_add, 					NULL)
 +	PHP_FE(event_set, 					NULL)
 +	PHP_FE(event_del, 					NULL)
++	PHP_FE(event_priority_set, 			NULL)
 +	PHP_FE(event_buffer_new, 			NULL)
 +	PHP_FE(event_buffer_free, 			NULL)
 +	PHP_FE(event_buffer_base_set, 		NULL)
