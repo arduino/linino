@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=asterisk-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.asterisk.org/pub/telephony/asterisk/releases/
-PKG_MD5SUM:=553ea59a4cc2d4b963d25ca6c82c0d71311331ac
+PKG_MD5SUM:=415738d347b9037cbe5f8bfbe66843de
 
 PKG_BUILD_DIR=$(BUILD_DIR)/asterisk-$(PKG_VERSION)
 
