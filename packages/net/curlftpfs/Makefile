@@ -38,7 +38,8 @@ EXTRA_CFLAGS += \
 
 EXTRA_LDFLAGS += \
 	-L$(INTL_PREFIX)/lib \
-	-L$(ICONV_PREFIX)/lib
+	-L$(ICONV_PREFIX)/lib \
+	-lpthread
 
 define Package/curlftpfs/install
 	$(INSTALL_DIR) $(1)/usr/bin
