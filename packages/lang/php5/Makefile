@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
 PKG_VERSION:=5.3.10
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
@@ -40,7 +40,7 @@ PHP5_MODULES = \
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_php5-cgi CONFIG_PACKAGE_php5-cli \
 	$(patsubst %,CONFIG_PACKAGE_php5-mod-%,$(PHP5_MODULES)) \
-	CONFIG_PHP5_FILTER CONFIG_PHP5_LIBXML PHP5_SYSTEMTZDATA
+	CONFIG_PHP5_FILTER CONFIG_PHP5_LIBXML CONFIG_PHP5_SYSTEMTZDATA
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -455,7 +455,6 @@ else
 endif
 
 CONFIGURE_VARS+= \
-	LIBS="$(CONFIGURE_LIBS)" \
 	ac_cv_c_bigendian_php=$(if $(CONFIG_BIG_ENDIAN),yes,no) \
 	php_cv_cc_rpath="no" \
 	iconv_impl_name="gnu_libiconv" \
