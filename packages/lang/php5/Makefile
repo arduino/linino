@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
 PKG_VERSION:=5.4.5
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
@@ -214,7 +214,7 @@ endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-gd),)
   CONFIGURE_ARGS+= \
-	--with-gd=shared,"$(STAGING_DIR)/usr" \
+	--with-gd=shared \
 	--without-freetype-dir \
 	--with-jpeg-dir="$(STAGING_DIR)/usr" \
 	--with-png-dir="$(STAGING_DIR)/usr" \
@@ -539,7 +539,7 @@ $(eval $(call BuildModule,dom,DOM,+@PHP5_LIBXML +PACKAGE_php5-mod-dom:libxml2))
 $(eval $(call BuildModule,exif,EXIF))
 $(eval $(call BuildModule,ftp,FTP,+PACKAGE_php5-mod-ftp:libopenssl))
 $(eval $(call BuildModule,gettext,Gettext,+PACKAGE_php5-mod-gettext:libintl-full))
-$(eval $(call BuildModule,gd,GD graphics,+PACKAGE_php5-mod-gd:libgd))
+$(eval $(call BuildModule,gd,GD graphics))
 $(eval $(call BuildModule,gmp,GMP,+PACKAGE_php5-mod-gmp:libgmp))
 $(eval $(call BuildModule,hash,Hash))
 $(eval $(call BuildModule,http,HTTP,+PACKAGE_php5-mod-http:libcurl +PACKAGE_php5-mod-http:libevent2 +PACKAGE_php5-mod-http:librt))
