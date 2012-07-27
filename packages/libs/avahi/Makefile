@@ -15,13 +15,13 @@ endif
 
 
 PKG_NAME:=avahi
-PKG_VERSION:=0.6.30
-PKG_RELEASE:=4
+PKG_VERSION:=0.6.31
+PKG_RELEASE:=1
 
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://avahi.org/download/
-PKG_MD5SUM:=e4db89a2a403ff4c47d66ac66fad1f43
+PKG_MD5SUM:=2f22745b8f7368ad5a0a3fddac343f2d
 
 PKG_BUILD_DEPENDS:=libexpat libdaemon libgdbm intltool/host libpthread dbus
 
