@@ -3,8 +3,10 @@
 
 START=50
 STOP=50
+ESSENTIAL_PROCESSES="ssh sshd"
 
 SERVICE_USE_PID=1
+
 
 start() {
 	for type in rsa dsa; do {
