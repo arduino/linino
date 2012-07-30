@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/memcached
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libevent +libpthread
+  DEPENDS:=+libevent2 +libpthread
   TITLE:=The high-performance, distributed memory object caching system
   MAINTAINER:=Thomas Heil <heil@terminal-consulting.de>
   URL:=http://memcached.org/
