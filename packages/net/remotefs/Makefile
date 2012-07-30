@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=remotefs
-PKG_REV:=854
+PKG_REV:=1297
 PKG_VERSION:=$(PKG_REV)
-PKG_RELEASE:=2
+PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
@@ -62,7 +62,7 @@ define Package/remotefs-server/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/rfsd $(1)/bin/rfsd
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/rfspasswd $(1)/bin/rfspasswd
 	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/rfs-exports $(1)/etc/rfs-exports
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/build/etc/rfs-exports $(1)/etc/rfs-exports
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/rfsd $(1)/etc/init.d/rfsd
 endef
