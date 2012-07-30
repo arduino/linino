@@ -52,10 +52,10 @@ MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS)" \
 
 define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{a,so} $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/include/libevent
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include/libevent/
+	$(INSTALL_DIR) $(1)/usr/lib/libevent
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.{a,so} $(1)/usr/lib/libevent/
 endef
 
 define Package/libevent/install
