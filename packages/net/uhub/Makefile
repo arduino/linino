@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=uhub
 PKG_VERSION:=0.2.8
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.gz
 PKG_SOURCE_URL:=http://www.extatic.org/downloads/uhub/
@@ -21,7 +21,7 @@ define Package/uhub
   SUBMENU:=P2P
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libevent +USE_EGLIBC:librt
+  DEPENDS:=+libevent2 +USE_EGLIBC:librt
   TITLE:=High performance ADC hub
   URL:=http://www.extatic.org/uhub/
 endef
