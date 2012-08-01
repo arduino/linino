@@ -14,7 +14,7 @@ PKG_RELEASE:=$(PKG_SOURCE_VERSION)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://github.com/ffainelli/faifa.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=cc654aca7f0350a53620738a4d569b5bb4790ee5
+PKG_SOURCE_VERSION:=ec156fd31fbf630392ec326d5a2371e68e7e7b6e
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
 
 PKG_INSTALL:=1
@@ -53,6 +53,17 @@ define Package/faifa/description
   frames.
 endef
 
+define Package/hpavcfg
+  $(call Package/faifa/Default)
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=HomePlug AV lightweight configurator
+endef
+
+define Package/hpavcfg/description
+   Lightweight configuration tool, only capable of setting a local device key
+endef
+
 TARGET_CFLAGS += $(FPIC)
 
 MAKE_FLAGS += \
@@ -75,5 +86,11 @@ define Package/libfaifa/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfaifa.so* $(1)/usr/lib
 endef
 
+define Package/hpavcfg/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/hpav_cfg $(1)/usr/bin
+endef
+
 $(eval $(call BuildPackage,faifa))
 $(eval $(call BuildPackage,libfaifa))
+$(eval $(call BuildPackage,hpavcfg))
