@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=faifa
-PKG_VERSION:=2012-07-23
+PKG_VERSION:=2012-08-01
 PKG_RELEASE:=$(PKG_SOURCE_VERSION)
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://github.com/ffainelli/faifa.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=2b57e69e17a55aa3c539c3c4a7d8f586bb59536a
+PKG_SOURCE_VERSION:=cc654aca7f0350a53620738a4d569b5bb4790ee5
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
 
 PKG_INSTALL:=1
@@ -31,7 +31,7 @@ define Package/libfaifa
   TITLE+= (library)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libopenssl +libpcap +libpthread
+  DEPENDS:=+libpcap +libpthread
 endef
 
 define Package/libfaifa/description
@@ -42,7 +42,7 @@ define Package/faifa
   $(call Package/faifa/Default)
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpthread +libopenssl +libpcap +libfaifa
+  DEPENDS:=+libpthread +libpcap +libfaifa
   TITLE+= (command line)
 endef
 
