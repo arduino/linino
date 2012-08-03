@@ -18,13 +18,14 @@ PKG_MD5SUM:=ffcdbaec5d1416cb6dd754efd43fa61a
 
 PKG_INSTALL:=1
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/lftp
   SUBMENU:=File Transfer
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libncurses +libopenssl +libreadline +uclibcxx +libexpat
+  DEPENDS:=+libncurses +libopenssl +libreadline $(CXX_DEPENDS) +libexpat
   TITLE:=Sophisticated file transfer program
   URL:=http://lftp.yar.ru/
 endef
@@ -45,7 +46,6 @@ CONFIGURE_ARGS += \
 	--disable-static
 
 CONFIGURE_VARS += \
-	CXX="$(STAGING_DIR)/host/bin/g++-uc" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -I$(STAGING_DIR)/usr/include/uClibc++ -nostdinc++" \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	LDFLAGS="$$$$LDFLAGS" \
