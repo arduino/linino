@@ -17,6 +17,7 @@ PKG_MD5SUM:=609736113de729df833ac691d1c44ead
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/D-ITG-$(PKG_VERSION)
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ditg
@@ -25,7 +26,7 @@ define Package/ditg
   CATEGORY:=Network
   URL:=http://www.grid.unina.it/software/ITG/
   MAINTAINER:=Giovanni Di Stasi <giovanni.distasi@unina.it>
-  DEPENDS:=+libpthread +uclibcxx
+  DEPENDS:=+libpthread $(CXX_DEPENDS)
 endef
 
 define Package/ditg/description
@@ -40,8 +41,6 @@ define Package/ditg/description
 endef
 
 MAKE_PATH := src
-
-TARGET_CXX = $(STAGING_DIR)/host/bin/g++-uc
 
 MAKE_FLAGS += \
 	CXXOPT="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -DMULTIPORT -DARM"
