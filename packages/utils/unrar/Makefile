@@ -18,6 +18,7 @@ PKG_MD5SUM:=41b0a9bca945b4ae2608421afd8f606e
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)/unrar
 PKG_INSTALL:=1
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/unrar
@@ -26,7 +27,7 @@ define Package/unrar
   SUBMENU:=compression
   TITLE:=unrar application
   URL:=http://www.rarlab.com/
-  DEPENDS:=+uclibcxx
+  DEPENDS:=$(CXX_DEPENDS)
 endef
 
 define Package/unrar/description
@@ -38,9 +39,6 @@ define Build/Configure
 	$(call Build/Configure/Default, )
 	ln -s $(PKG_BUILD_DIR)/makefile.unix $(PKG_BUILD_DIR)/Makefile
 endef
-
-MAKE_FLAGS += \
-	CXX="$(STAGING_DIR)/host/bin/g++-uc"
 
 define Package/unrar/install
 	$(INSTALL_DIR) $(1)/usr/bin
