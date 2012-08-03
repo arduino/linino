@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/memcached
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libevent2 +libpthread
+  DEPENDS:=+libevent +libpthread
   TITLE:=The high-performance, distributed memory object caching system
   MAINTAINER:=Thomas Heil <heil@terminal-consulting.de>
   URL:=http://memcached.org/
@@ -44,6 +44,7 @@ CONFIGURE_VARS += ac_cv_c_endian=little
 endif
 
 CONFIGURE_ARGS += \
+	--with-libevent=$(STAGING_DIR)/usr/include/libevent \
 	--disable-docs \
 	--disable-dtrace \
 	--disable-coverage \
@@ -51,6 +52,9 @@ CONFIGURE_ARGS += \
 
 TARGET_CFLAGS += \
 	-std=gnu99
+
+TARGET_LDFLAGS += \
+	-L$(STAGING_DIR)/usr/lib/libevent
 
 define Package/memcached/install
 	$(INSTALL_DIR) $(1)/usr/bin
