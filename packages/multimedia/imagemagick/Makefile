@@ -9,13 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=imagemagick
 PKG_VERSION:=6.7.8
-PKG_REVISION:=6
+PKG_REVISION:=7
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/ImageMagick-$(PKG_VERSION)-$(PKG_REVISION)
 PKG_SOURCE:=ImageMagick-$(PKG_VERSION)-$(PKG_REVISION).tar.bz2
 PKG_SOURCE_URL:=ftp://ftp.fifi.org/pub/ImageMagick/
-PKG_MD5SUM:=e9d90a09b42fe8d9a8cf807274adff30
+PKG_MD5SUM:=11d5d5b3c6477077292183edcdf99da9
 
 PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=aclocal.m4 m4/libtool.m4
