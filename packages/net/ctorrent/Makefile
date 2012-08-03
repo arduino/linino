@@ -18,13 +18,14 @@ PKG_MD5SUM:=59b23dd05ff70791cd6449effa7fc3b6
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ctorrent/Default
   SUBMENU:=BitTorrent
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+uclibcxx
+  DEPENDS:=$(CXX_DEPENDS)
   TITLE:=console-based BitTorrent client
   MAINTAINER:=Peter Wagner <tripolar@gmx.at>
   URL:=http://www.rahul.net/dholmes/ctorrent/
@@ -60,7 +61,6 @@ $(call Package/ctorrent/Default/description)
 endef
 
 CONFIGURE_VARS += \
-	CXX="g++-uc" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-rtti" \
 	LIBS="-nodefaultlibs -lc -luClibc++ $(LIBGCC_S) -lc"
 
