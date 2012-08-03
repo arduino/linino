@@ -17,13 +17,14 @@ PKG_MD5SUM:=1e467131446d649c8a0aebdcd8e5f2a9
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/mgen
   TITLE:=Multi-Generator
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpthread +uclibcxx
+  DEPENDS:=+libpthread $(CXX_DEPENDS)
   URL:=http://cs.itd.nrl.navy.mil/work/mgen/
 endef
 
@@ -37,7 +38,7 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/unix \
-		CC="g++-uc" \
+		CC="$(TARGET_CXX)" \
 		CPPFLAGS="$(TARGET_CPPFLAGS)"  \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
 		SYSTEM_LIBS="-ldl -lpthread -luClibc++" \
