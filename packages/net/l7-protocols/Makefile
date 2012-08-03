@@ -8,6 +8,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/l7-filter
 PKG_MD5SUM:=91be154d12134dcdbc560cc7aa7fe4ce
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/l7-protocols
@@ -41,7 +42,7 @@ endef
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_l7-protocols-testing),)
   define Build/Compile
-	cd $(PKG_BUILD_DIR)/testing && $(MAKE) $(TARGET_CONFIGURE_OPTS) CXX="$(STAGING_DIR)/host/bin/g++-uc"
+	cd $(PKG_BUILD_DIR)/testing && $(MAKE) $(TARGET_CONFIGURE_OPTS)
   endef
 else
   define Build/Compile
