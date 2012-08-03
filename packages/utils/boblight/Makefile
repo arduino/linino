@@ -20,6 +20,7 @@ PKG_SOURCE_VERSION:=$(PKG_REV)
 
 PKG_INSTALL:=1
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/boblight/Default
@@ -27,7 +28,7 @@ define Package/boblight/Default
   CATEGORY:=Utilities
   TITLE:=Tools for driving lights connected to an external controller
   URL:=http://code.google.com/p/boblight/
-  DEPENDS:=+librt +uclibcxx
+  DEPENDS:=+librt $(CXX_DEPENDS)
 endef
 
 define Package/boblight/Default/description
@@ -91,7 +92,6 @@ CONFIGURE_ARGS += \
 	--without-portaudio \
 	--without-x11
 
-TARGET_CXX = $(STAGING_DIR)/host/bin/g++-uc
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/libboblight
