@@ -15,12 +15,13 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://klub.com.pl/dhcpv6/dibbler
 PKG_MD5SUM:=313044c95af3091607127a05c338d8ec
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/dibbler/Default
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+uclibcxx +libpthread
+  DEPENDS:=$(CXX_DEPENDS) +libpthread
   TITLE:=Dibbler, a portable DHCPv6 implementation
   URL:=http://klub.com.pl/dhcpv6/
 endef
@@ -82,8 +83,6 @@ define Package/dibbler-server/description
 	$(call Package/dibbler/Default/description)
 	This package contains the dibbler server.
 endef
-
-TARGET_CXX = $(STAGING_DIR)/host/bin/g++-uc
 
 define Package/dibbler-client/install
 	$(INSTALL_DIR) $(1)/usr/sbin
