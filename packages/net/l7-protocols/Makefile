@@ -30,7 +30,7 @@ endef
 define Package/l7-protocols-testing
 	$(call Package/l7-protocols)
 	TITLE:=testing utilities for layer7
-	DEPENDS+=l7-protocols +uclibcxx
+	DEPENDS+=l7-protocols $(CXX_DEPENDS)
 endef
 
 define Package/l7-protocols-testing/description
