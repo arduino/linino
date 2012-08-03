@@ -30,7 +30,7 @@ endef
 
 define Package/znc
   $(Package/znc/default)
-  DEPENDS:=+libopenssl +uclibcxx
+  DEPENDS:=+libopenssl $(CXX_DEPENDS)
   MENU:=1
 endef
 
@@ -263,10 +263,10 @@ $(eval $(call webskin,ice))
 
 PKG_CONFIG_DEPENDS := $(patsubst %,CONFIG_PACKAGE_%,$(ZNC_MODULES))
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 CONFIGURE_VARS += \
-	CXX="$(STAGING_DIR)/host/bin/g++-uc" \
 	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
 	CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 	LDFLAGS="-nodefaultlibs -lc -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
@@ -276,9 +276,6 @@ CONFIGURE_ARGS += \
 	--disable-c-ares \
 	--enable-extra \
 	--disable-perl
-
-MAKE_FLAGS += \
-	CXX="$(STAGING_DIR)/host/bin/g++-uc"
 
 define Build/Configure
 	$(call Build/Configure/Default,)
