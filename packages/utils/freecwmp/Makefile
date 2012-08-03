@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freecwmp
-PKG_VERSION:=2012-06-11
+PKG_VERSION:=2012-08-02
 PKG_RELEASE=$(PKG_SOURCE_VERSION)
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://dev.freecwmp.org/freecwmp
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=dffa3fa23842e5dc3e69228692a6087bf22bf68e
+PKG_SOURCE_VERSION:=e5b23acadfd06e6ea9fac40e0bf9975fe25ee1e5
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
 
 PKG_FIXUP:=autoreconf
@@ -33,7 +33,7 @@ define Package/freecwmp/Default
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=CWMP client
-  DEPENDS:=+libuci +libubox +libmicroxml +shflags
+  DEPENDS:=+libuci +libubox +libubus +libmicroxml +shflags
 endef
 
 define Package/freecwmp/description
@@ -73,7 +73,8 @@ TARGET_LDFLAGS += \
 
 CONFIGURE_ARGS += \
 	--with-uci-include-path=$(STAGING_DIR)/usr/include \
-	--with-libubox-include-path=$(STAGING_DIR)/usr/include
+	--with-libubox-include-path=$(STAGING_DIR)/usr/include \
+	--with-libubus-include-path=$(STAGING_DIR)/usr/include
 
 ifeq ($(BUILD_VARIANT),zstream)
 CONFIGURE_ARGS += \
