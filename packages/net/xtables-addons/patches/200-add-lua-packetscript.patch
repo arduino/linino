@@ -18014,7 +18014,7 @@
 +	else if (pskb->transport_header)
 +		p->start = pskb->transport_header;
 +	p->offset = 0;
-+	p->length = pskb->tail - p->start;
++	p->length = (unsigned long)pskb->tail - (unsigned long)p->start;
 +	p->changes = NULL;
 +
 +	/* marking userdata 'lua_packet_seg' with the corresponding metatable */

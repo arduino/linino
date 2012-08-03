@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=xtables-addons
 PKG_VERSION:=1.42
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_MD5SUM:=7c996a0400667b57ab4fb53a013ae742
@@ -44,7 +44,6 @@ define Build/Compile
 		CROSS_COMPILE="$(TARGET_CROSS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		DEPMOD="/bin/true" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
 		all
 endef
 
@@ -54,7 +53,6 @@ define Build/Install
 		CROSS_COMPILE="$(TARGET_CROSS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		DEPMOD="/bin/true" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
 		install
 endef
 
