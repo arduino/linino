@@ -18,6 +18,7 @@ PKG_MD5SUM:=80062780ae90e5955473b09b31e9828a
 
 PKG_BUILD_DEPENDS:=argp-standalone
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libv4l/Default
@@ -57,7 +58,7 @@ define Package/v4l-utils
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE+= utilities
-  DEPENDS := +libv4l +uclibcxx
+  DEPENDS := +libv4l $(CXX_DEPENDS)
 endef
 
 define Package/v4l-utils/description
@@ -66,7 +67,6 @@ define Package/v4l-utils/description
 endef
 
 TARGET_CFLAGS += $(FPIC)
-TARGET_CXX = $(STAGING_DIR)/host/bin/g++-uc
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
