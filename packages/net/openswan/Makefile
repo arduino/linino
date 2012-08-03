@@ -71,7 +71,6 @@ OPENSWAN_MAKEFLAGS:= \
 	INC_USRLOCAL="/usr" \
 	INC_RCDEFAULT="/etc/init.d" \
 	MODPROBE="/sbin/insmod" \
-	LDFLAGS="$(TARGET_LDFLAGS)" \
 	DESTDIR="$(PKG_INSTALL_DIR)"
 
 define Build/Compile
