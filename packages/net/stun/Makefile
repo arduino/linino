@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=stund
 PKG_VERSION:=0.96
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION)_Aug13.tgz
 PKG_SOURCE_URL:=@SF/stun
@@ -17,12 +17,13 @@ PKG_MD5SUM:=3273abb1a6f299f4e611b658304faefa
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/stun/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+uclibcxx
+  DEPENDS:=$(CXX_DEPENDS)
   URL:=http://sourceforge.net/projects/stun
 endef
 
@@ -57,9 +58,9 @@ define Build/Compile
 		CXX="$(TARGET_CXX)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
-		CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ $(TARGET_CPPFLAGS)" \
-		LDFLAGS="$$$$LDFLAGS $(TARGET_LDFLAGS) -nodefaultlibs -lc -luClibc++ $(LIBGCC_S)" \
+		CXXFLAGS="$$$$CXXFLAGS -fno-rtti"  \
+		CPPFLAGS="$$$$CPPFLAGS $(TARGET_CPPFLAGS)" \
+		LDFLAGS="$$$$LDFLAGS $(TARGET_LDFLAGS)" \
 		all
 endef
 
