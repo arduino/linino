@@ -9,13 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libusb
 PKG_VERSION:=0.1.12
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/libusb
 PKG_MD5SUM:=caf182cbc7565dac0fd72155919672e6
 PKG_FIXUP:=autoreconf
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 PKG_INSTALL=1
@@ -32,7 +33,7 @@ define Package/libusbpp
   CATEGORY:=Libraries
   TITLE:=A C++ library for accessing Linux USB devices
   URL:=http://libusb.sourceforge.net/
-  DEPENDS:=+libstdcpp +libusb
+  DEPENDS:=$(CXX_DEPENDS) +libusb
 endef
 
 define Build/Configure
