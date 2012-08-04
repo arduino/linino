@@ -61,8 +61,7 @@ $(call Package/ctorrent/Default/description)
 endef
 
 CONFIGURE_VARS += \
-	CXXFLAGS="$$$$CXXFLAGS -fno-rtti" \
-	LIBS="-nodefaultlibs -lc -luClibc++ $(LIBGCC_S) -lc"
+	CXXFLAGS="$$$$CXXFLAGS -fno-rtti"
 
 ifeq ($(BUILD_VARIANT),ssl)
 	CONFIGURE_ARGS += \
