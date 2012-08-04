@@ -6,19 +6,20 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gw6c
 PKG_VERSION:=5.1
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://openwrt.linux-appliance.net/sources
 PKG_MD5SUM:=eeac7292a622681651ec3bd9b2e5b061
 PKG_BUILD_DIR:=$(BUILD_DIR)/gw6-$(PKG_VERSION)
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/gw6c
   SECTION:=ipv6
   CATEGORY:=IPv6
-  DEPENDS:=+libpthread +ip +kmod-tun +kmod-ipv6 +uclibcxx +radvd
+  DEPENDS:=+libpthread +ip +kmod-tun +kmod-ipv6 $(CXX_DEPENDS) +radvd
   TITLE:=IPv6 tunnel client software
   URL:=http://www.go6.net
 endef
@@ -30,12 +31,12 @@ endef
 
 GW6C_OPTS:= \
 	C_COMPILER="$(TARGET_CC) -c -DNO_STDLIBCXX" \
-	COMPILER="$(TARGET_CROSS)g++ -c -DNO_STDLIBCXX" \
-	CPP_FLAGS="$(TARGET_CFLAGS) -fno-builtin -nostdinc++ -I. -Wall -DNDEBUG -I$(STAGING_DIR)/usr/include/uClibc++ $(TARGET_CPPFLAGS)" \
+	COMPILER="$(TARGET_CXX) -c -DNO_STDLIBCXX" \
+	CPP_FLAGS="$(TARGET_CFLAGS) -I. -Wall -DNDEBUG  $(TARGET_CPPFLAGS)" \
 	RANLIB="$(TARGET_CROSS)ranlib" \
 	ARCHIVER="$(TARGET_CROSS)ar" \
 	C_LINKER="$(TARGET_CC)" \
-	LINKER="$(TARGET_CROSS)g++" \
+	LINKER="$(TARGET_CXX)" \
 	exportdir=$(PKG_BUILD_DIR)/gw6c \
 	export
 
@@ -56,7 +57,7 @@ define Build/Compile
 			-I$(PKG_BUILD_DIR)/tspc-advanced/platform/openwrt -I$(PKG_BUILD_DIR)/tspc-advanced" \
 		LDFLAGS="-L$(PKG_BUILD_DIR)/tspc-advanced/gw6cconfig \
 			-L$(PKG_BUILD_DIR)/tspc-advanced/gw6cmessaging \
-			$(TARGET_LDFLAGS) -nodefaultlibs -lc -luClibc++ $(LIBGCC_S)" \
+			$(TARGET_LDFLAGS)" \
 		target="openwrt" \
 		installdir="$(PKG_INSTALL_DIR)"
 endef
