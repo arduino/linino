@@ -9,19 +9,20 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sipp
 PKG_VERSION:=3.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME).$(PKG_VERSION).src.tar.gz
 PKG_SOURCE_URL:=@SF/sipp
 PKG_MD5SUM:=452a6f88f2d314dbb2f44e318a60982b
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/sipp
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Telephony
-  DEPENDS:= +libncurses +libpthread +uclibcxx
+  DEPENDS:= +libncurses +libpthread $(CXX_DEPENDS)
   TITLE:=test tool / traffic generator for the SIP protocol
   URL:=http://sipp.sourceforge.net/
 endef
@@ -41,13 +42,13 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CC_linux="$(TARGET_CC)" \
-		CPP_linux="$(TARGET_CC)" \
-		CCLINK_linux="$(TARGET_CC)" \
+		CC_linux="$(TARGET_CXX)" \
+		CPP_linux="$(TARGET_CXX)" \
+		CCLINK_linux="$(TARGET_CXX)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS_linux="$(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -fno-rtti -nostdinc++" \
+		CPPFLAGS_linux="$(TARGET_CPPFLAGS) -fno-rtti" \
 		LFLAGS_linux="$(TARGET_LDFLAGS)" \
-		LIBS="-nodefaultlibs -lc -lncurses -luClibc++ -ldl -lpthread -lm $(LIBGCC_S)" \
+		LIBS="-lncurses -ldl -lpthread -lm" \
 		all
 endef
 
