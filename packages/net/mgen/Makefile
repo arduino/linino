@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mgen
 PKG_VERSION:=5.01b
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=src-$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=http://downloads.pf.itd.nrl.navy.mil/mgen/
@@ -41,7 +41,7 @@ define Build/Compile
 		CC="$(TARGET_CXX)" \
 		CPPFLAGS="$(TARGET_CPPFLAGS)"  \
 		LDFLAGS="$(TARGET_LDFLAGS)" \
-		SYSTEM_LIBS="-ldl -lpthread -luClibc++" \
+		SYSTEM_LIBS="-ldl -lpthread" \
 		-f Makefile.linux mgen
 endef
 
