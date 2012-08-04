@@ -8,21 +8,22 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cbtt
 PKG_VERSION:=20060727
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)80-$(PKG_VERSION)-src.tar.gz
-PKG_SOURCE_URL:=@SF/bnbtusermods 
+PKG_SOURCE_URL:=@SF/bnbtusermods
 PKG_MD5SUM:=d6edf0a11d7e68fa3d121e91308f22f5
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)80-$(PKG_VERSION)-src
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/cbtt/Default
   SUBMENU:=BitTorrent
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpthread +uclibcxx +zlib
+  DEPENDS:=+libpthread $(CXX_DEPENDS) +zlib
   TITLE:=Bittorrent tracker
   URL:=http://bnbtusermods.sourceforge.net/
 endef
@@ -43,8 +44,8 @@ define Build/Template
 $(STAMP_BUILT)-$(2): $(STAMP_PREPARED)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/uClibc++ -fno-builtin -nostdinc++" \
-		LFLAGS="$(TARGET_LDFLAGS) -L. -nodefaultlibs -lc $(4) -lz -luClibc++ -lm -lpthread $(LIBGCC_S)" \
+		CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
+		LFLAGS="$(TARGET_LDFLAGS) -L. $(4) -lz -lm -lpthread" \
 		$(3)
 	touch $$@
 
