@@ -9,21 +9,22 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kismet
 PKG_VERSION:=2010-07-R1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kismetwireless.net/code
 PKG_MD5SUM:=85e59186eb529889118b5635f35cf57d
 
-PKG_BUILD_DEPENDS:=libpcap libncurses uclibcxx libpcre
+PKG_BUILD_DEPENDS:=libpcap libncurses libpcre
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/kismet/Default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Kismet
-  DEPENDS:= +uclibcxx +libnl
+  DEPENDS:= $(CXX_DEPENDS) +libnl
   URL:=http://www.kismetwireless.net/
   SUBMENU:=wireless
 endef
@@ -82,11 +83,9 @@ CONFIGURE_ARGS += \
 	--sysconfdir=/etc/kismet \
 
 CONFIGURE_VARS += \
-	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
-	LDFLAGS="$$$$LDFLAGS" \
-	LIBS="-nodefaultlibs -lc -luClibc++ -lm $(LIBGCC_S)" \
-	CLIENTCLIBS="-nodefaultlibs -lc -luClibc++ -lm $(LIBGCC_S)"
+	CXXFLAGS="$$$$CXXFLAGS -fno-rtti"  \
+	LIBS="-lm" \
+	CLIENTCLIBS="-lm"
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
