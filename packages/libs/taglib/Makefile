@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=taglib
 PKG_VERSION:=1.6.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://developer.kde.org/~wheeler/files/src/
@@ -24,7 +24,7 @@ PKG_INSTALL:=1
 define Package/taglib
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:= +uclibcxx +zlib @!TARGET_avr32
+  DEPENDS:= $(CXX_DEPENDS) +zlib @!TARGET_avr32
   TITLE:=Audio output library
   URL:=http://developer.kde.org/~wheeler/taglib.html
 endef
