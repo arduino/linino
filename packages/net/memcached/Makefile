@@ -53,8 +53,8 @@ CONFIGURE_ARGS += \
 TARGET_CFLAGS += \
 	-std=gnu99
 
-TARGET_LDFLAGS += \
-	-L$(STAGING_DIR)/usr/lib/libevent
+TARGET_LDFLAGS = \
+	-L$(STAGING_DIR)/usr/lib/libevent -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib
 
 define Package/memcached/install
 	$(INSTALL_DIR) $(1)/usr/bin
