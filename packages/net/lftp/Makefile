@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lftp
 PKG_VERSION:=4.3.6
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=http://lftp.cybermirror.org \
@@ -46,14 +46,11 @@ CONFIGURE_ARGS += \
 	--disable-static
 
 CONFIGURE_VARS += \
-	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -I$(STAGING_DIR)/usr/include/uClibc++ -nostdinc++" \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
-	LDFLAGS="$$$$LDFLAGS" \
-	LIBS="-nodefaultlibs -lc -lz -lutil -lc -luClibc++ -lcurses $(LIBGCC_S) -ldl" \
+	LIBS="-lz -lutil -lcurses -ldl" \
 	i_cv_posix_fallocate_works=no
 
 MAKE_VARS += \
-	LD="\$$$$(CC)"
+	LD="$(TARGET_CXX)"
 
 define Package/lftp/install
 	$(INSTALL_DIR) $(1)/usr/bin
