@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nagios-plugins
 PKG_VERSION:=1.4.14
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/nagiosplug
@@ -26,7 +26,7 @@ comma:= ,
 define Package/nagios-plugins
   SECTION:=admin
   CATEGORY:=Administration
-  DEPENDS:=+uclibcxx +libpq +libopenssl +libradiusclient-ng +libopenldap
+  DEPENDS:=$(CXX_DEPENDS) +libpq +libopenssl +libradiusclient-ng +libopenldap
   TITLE:=plugins for Nagios checks
   URL:=http://nagiosplug.sourceforge.net/
 endef
