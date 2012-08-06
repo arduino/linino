@@ -20,10 +20,13 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
+TARGET_LDFLAGS+=-lpthread
+
 define Package/libburn
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=libburn
+  DEPENDS:=+libpthread
   URL:=http://www.libburnia-project.org
 endef
 
