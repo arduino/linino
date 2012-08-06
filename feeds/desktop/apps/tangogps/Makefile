@@ -27,7 +27,7 @@ define Package/tangogps
   SUBMENU:=app
   TITLE:=Mapping application
   URL:=http://tangogps.org
-  DEPENDS:=+libgconf2 +gtk2 +libcurl +libexif +libsqlite3
+  DEPENDS:=+libgconf2 +gtk2 +libcurl +libexif +libsqlite3 @BROKEN
 endef
 
 define Package/tangogps/install
