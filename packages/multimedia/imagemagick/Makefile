@@ -19,6 +19,7 @@ PKG_MD5SUM:=11d5d5b3c6477077292183edcdf99da9
 
 PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=aclocal.m4 m4/libtool.m4
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,6 +34,7 @@ endef
 
 define Package/imagemagick
   $(call Package/imagemagick/Default)
+  DEPENDS:=+libpthread +libltdl +libjpeg +libtiff +zlib
 endef
 
 define Package/imagemagick/description
@@ -42,7 +44,7 @@ endef
 define Package/imagemagick-jpeg
   $(call Package/imagemagick/Default)
   TITLE+= (jpeg)
-  DEPENDS:=+imagemagick +libjpeg +zlib
+  DEPENDS:=+imagemagick
 endef
 
 define Package/imagemagick-jpeg/description
@@ -52,7 +54,7 @@ endef
 define Package/imagemagick-png
   $(call Package/imagemagick/Default)
   TITLE+= (png)
-  DEPENDS:=+imagemagick +libpng +zlib
+  DEPENDS:=+imagemagick +libpng
 endef
 
 define Package/imagemagick-png/description
@@ -72,7 +74,7 @@ endef
 define Package/imagemagick-tiff
   $(call Package/imagemagick/Default)
   TITLE+= (tiff)
-  DEPENDS:=+imagemagick +libtiff +zlib
+  DEPENDS:=+imagemagick
 endef
 
 define Package/imagemagick-tiff/description
@@ -85,7 +87,8 @@ CONFIGURE_ARGS += \
 	  --enable-shared \
 	  --enable-static \
 	  --without-xml \
-	  --without-x
+	  --without-x \
+	  --without-magick-plus-plus
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -95,7 +98,6 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/magick
-	$(INSTALL_DIR) $(1)/usr/include/Magick++
 	$(INSTALL_DIR) $(1)/usr/include/wand
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/include/* \
