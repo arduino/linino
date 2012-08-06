@@ -30,7 +30,7 @@ define Package/gpxview
   TITLE:=GPXView Geocaching app
   MAINTAINER:=Michael Buesch <mb@bu3sch.de>
   URL:=http://www.harbaum.org/till/maemo/index.shtml#gpxview
-  DEPENDS:=+gpsd +libxml2 +libcurl +libsoup +gtkhtml +gtk2 +glib2 +libsqlite3 $(ICONV_DEPENDS) $(INTL_DEPENDS)
+  DEPENDS:=+gpsd +libxml2 +libcurl +libsoup +gtkhtml +gtk2 +glib2 +libsqlite3 $(ICONV_DEPENDS) $(INTL_DEPENDS) @BROKEN
 endef
 
 define Package/gpxview/description
