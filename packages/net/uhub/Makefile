@@ -33,7 +33,7 @@ define Package/uhub/description
 endef
 
 TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include/libevent
-TARGET_LDFLAGS += -L$(STAGING_DIR)/usr/lib/libevent
+TARGET_LDFLAGS = -L$(STAGING_DIR)/usr/lib/libevent -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib
 
 ifdef CONFIG_USE_EGLIBC
 TARGET_LDFLAGS += -lrt
