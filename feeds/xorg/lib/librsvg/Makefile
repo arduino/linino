@@ -22,8 +22,9 @@ include $(INCLUDE_DIR)/nls.mk
 PKG_INSTALL=1
 
 EXTRA_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-               -L$(ICONV_PREFIX)/lib/ \
-               -L$(INTL_PREFIX)/lib/
+		-L$(ICONV_PREFIX)/lib/ \
+		-L$(INTL_PREFIX)/lib/ \
+		-lm
 
 STAMP_CONFIGURED:=$(STAMP_CONFIGURED)_$(call confvar,CONFIG_PACKAGE_librsvg CONFIG_PACKAGE_librsvg-pixbuf-loader)
 
