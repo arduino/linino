@@ -42,6 +42,7 @@ CONFIGURE_ARGS += \
 	--enable-static \
 	--disable-rpath \
 	--without-x \
+	--without-fontconfig \
 	--without-freetype \
 	--with-jpeg=$(STAGING_DIR)/usr \
 	--with-png=$(STAGING_DIR)/usr \
