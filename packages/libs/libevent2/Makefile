@@ -28,6 +28,7 @@ define Package/libevent2/Default
   CATEGORY:=Libraries
   TITLE:=Event notification
   URL:=http://www.monkey.org/~provos/libevent/
+  DEPENDS:=+USE_EGLIBC:librt
 endef
 
 define Package/libevent2/Default/description
@@ -81,7 +82,7 @@ endef
 define Package/libevent2-openssl
   $(call Package/libevent2/Default)
   TITLE+= OpenSSL library (version 2.0)
-  DEPENDS:=+libopenssl
+  DEPENDS+=+libopenssl
 endef
 
 define Package/libevent2-openssl/description
@@ -94,7 +95,7 @@ endef
 define Package/libevent2-pthreads
   $(call Package/libevent2/Default)
   TITLE+= Pthreads library (version 2.0)
-  DEPENDS:=+libpthread
+  DEPENDS+=+libpthread
 endef
 
 define Package/libevent2-pthreads/description
