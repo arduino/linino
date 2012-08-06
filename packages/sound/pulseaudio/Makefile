@@ -108,6 +108,7 @@ CONFIGURE_ARGS += \
 	--disable-samplerate \
 	--disable-per-user-esound-socket \
 	--disable-solaris \
+	--disable-gtk2 \
 	--disable-glib2 \
 	--disable-jack \
 	--disable-asyncns \
