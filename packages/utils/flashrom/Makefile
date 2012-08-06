@@ -25,7 +25,7 @@ define Package/flashrom
   TITLE:=FlashROM Utility
   URL:=http://www.flashrom.org/
 # XXX: needs <sys/io.h>, only available on these arch right now
-  DEPENDS:=+zlib +pciutils +dmidecode @(arm||armeb||i386||i686||x86_64)
+  DEPENDS:=+zlib +pciutils +dmidecode +libftdi +libusb @(arm||armeb||i386||i686||x86_64)
 endef
 
 define Package/flashrom/description
