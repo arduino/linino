@@ -34,7 +34,7 @@ define Package/giflib/description
 endef
 
 TARGET_CFLAGS += $(FPIC)
-CONFIGURE_ARGS += --without-x
+CONFIGURE_ARGS += --enable-x11=no
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)
