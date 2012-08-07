@@ -47,6 +47,7 @@ proto_wing_setup() {
 
 	local profile rc ls metric prefix period tau debug
 
+	config_load network
 	config_get profile $config profile "bulk"
 	config_get rc $config rc "minstrel"
 	config_get ls $config ls "fcfs"
@@ -83,6 +84,8 @@ proto_wing_setup() {
 
 	[ "$debug" == 0 ] && dbg="" || dbg="-d"
 
+	export CLICK_BACKTRACE=1
+
 	/usr/bin/click_config -p $profile -r $rc -s $ls -l $metric \
 		-m "$hwmodes" -c "$freqs" -n "$ifnames" -a "$hwaddrs" $dbg \
 		| sed -e "s/__XR_IFNAME__/$link/g" \
@@ -111,13 +114,19 @@ proto_wing_setup() {
 
 	ps | grep /usr/bin/click | grep -v grep | awk '{print $1}' > /var/run/$link.pid
 
+        uci_set_state network $config ifname "$iface"
+        uci_set_state network $config ipaddr "$ipaddr"
+        uci_set_state network $config netmask "$netmask"
+        uci_set_state network $config gateway "0.0.0.0"
+
 	env -i ACTION="ifup" INTERFACE="$config" DEVICE="$link" PROTO=wing /sbin/hotplug-call "link" &
 
 	proto_init_update "$link" 1
-	proto_add_ipv4_address "$ipaddr" "$netmasj"
+	proto_add_ipv4_address "$ipaddr" "$netmask"
+	proto_add_ipv4_route "$prefix.0.0.0" "255.0.0.0" "$iface"
 
 	route -n | grep -q '^0.0.0.0' || {
-		proto_add_ipv4_route "0.0.0.0" 0
+		proto_add_ipv4_route "0.0.0.0" "0" "$iface"
 	}
 	
 	proto_send_update "$config"

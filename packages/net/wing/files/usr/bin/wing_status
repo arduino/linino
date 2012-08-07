@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright (c) 2006, Roberto Riggio
+# Copyright (c) 2012, Roberto Riggio
 #
 # All rights reserved.
 #
@@ -37,6 +37,7 @@ LINKS=0
 ARP=0
 GATEWAY=0
 PROBES=0
+INTERFACES=0
 
 show_status() {
 
@@ -56,6 +57,11 @@ show_status() {
 		read_handler lt.ip
 		printf "\nHosts:\n"
 		read_handler lt.hosts
+	}
+
+	[ $INTERFACES = 1 ] && {
+		printf "\nInterfaces:\n"
+		read_handler lt.interfaces
 	}
 
 	[ $LINKS = 1 ] && {
@@ -82,6 +88,8 @@ show_status() {
 		for interface in $interfaces; do
 			printf "\nBroadcast statistics ($interface):\n"
 			read_handler wr/es/es_$interface.bcast_stats
+			printf "\nBroadcast statistics HT ($interface):\n"
+			read_handler wr/es/es_$interface.bcast_stats_ht
 		done
 	}
 
@@ -97,9 +105,10 @@ if [ $# -eq 0 ]; then
 	ARP=1
 	GATEWAY=1
 	PROBES=1
+	INTERFACES=1
 fi
 
-while getopts "rshlagp" OPTVAL
+while getopts "rshlagpi" OPTVAL
 do
 	case $OPTVAL in
 	r) ROUTES=1
@@ -109,6 +118,8 @@ do
 	h) HOSTS=1
 	  ;;
 	l) LINKS=1
+	  ;;
+	i) INTERFACES=1
 	  ;;
 	a) ARP=1
 	  ;;

@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wing
-PKG_VERSION:=20120625
+PKG_VERSION:=20120805
 PKG_RELEASE:=1
-PKG_REV:=ce245718dd01fad9a9bd78dd5792245b7cdd09aa
+PKG_REV:=d189e36d111788a647cd784536137acbe7a92e17
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=git://github.com/rriggio/click.git
@@ -67,7 +67,7 @@ define Build/Compile
 		-f $(PKG_BUILD_DIR)/conf/wing/sample.click \
 		-A --all -E Discard -E Print -E PrintWifi -E Strip -E Null \
 		-E InfiniteSource -E RatedSource -E EtherEncap -E UDPIPEncap \
-		-E RadiotapEncapHT -E SetTXRateHT \
+		-E SetTXRateHT \
 		-E WINGETTMetric -E WINGETXMetric -E WINGHopCountMetric \
 		-E ProbeTXRate -E MadwifiRate -E AutoRateFallback -E Minstrel \
 		-E FairBuffer -E DeAggregator -E DWRRSched -E WFQSched -E WRRSched; \
