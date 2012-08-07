@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vpnc
 PKG_VERSION:=0.5.3
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.unix-ag.uni-kl.de/~massar/vpnc/
@@ -54,7 +54,7 @@ define Package/vpnc/install
 	$(CP)	$(PKG_INSTALL_DIR)/usr/sbin/vpnc \
 		$(PKG_INSTALL_DIR)/usr/sbin/vpnc-disconnect \
 		$(1)/usr/sbin/
-	install -d -m0700 $(1)/etc/vpnc
+	$(INSTALL_DIR) $(1)/etc/vpnc
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/vpnc/default.conf $(1)/etc/vpnc/
 endef
 
