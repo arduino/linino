@@ -32,7 +32,7 @@ define Package/pwlib/description
  System.
 endef
 
-TARGET_CFLAGS += $(FPIC)
+TARGET_CFLAGS += $(FPIC) -fpermissive
 
 CONFIGURE_ARGS += \
 	--enable-minsize \
