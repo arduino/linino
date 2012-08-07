@@ -32,6 +32,7 @@ CONFIGURE_ARGS += \
 	--enable-minsize \
 	--enable-audio \
 	--disable-video \
+	--enable-localspeex \
 
 CONFIGURE_VARS += \
 	CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti" \
