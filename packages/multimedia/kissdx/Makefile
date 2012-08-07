@@ -8,14 +8,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kissdx
-PKG_VERSION:=0.14.0.b1a
-PKG_RELEASE:=9
+PKG_REV:=193
+PKG_VERSION:=r$(PKG_REV)
+PKG_RELEASE:=3
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).zip
-PKG_SOURCE_URL:=http://kissdx.vidartysse.net
-PKG_MD5SUM:=ef213d2748f5a63b1c97ac7bfa942b2f
+PKG_SOURCE_PROTO:=svn
+PKG_SOURCE_VERSION:=$(PKG_REV)
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_URL:=http://www.famille-kahn.com/svn/kissdx/kissdx/trunk
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_VERSION:=$(PKG_REV)
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
@@ -39,6 +43,7 @@ define Build/Compile
 		CFLAGS="$(TARGET_CFLAGS) -DLinux -DUSE_INTERNAL_SENDFILE -std=gnu99 -Wall -Wstrict-prototypes -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DFILE_OFFSET_BITS=64 -D_GNU_SOURCE -I$(ICONV_PREFIX)/include -I$(STAGING_DIR)/usr/include/dvdread $(TARGET_CPPFLAGS) $(TARGET_LDFLAGS) -L$(ICONV_PREFIX)/lib" \
 		LDFLAGS="-L$(ICONV_PREFIX)/lib $(TARGET_LDFLAGS)" \
 		STRIP=$(STRIP) \
+		IconvExternal=defined \
 		CC="$(TARGET_CROSS)gcc" all
 endef
 
