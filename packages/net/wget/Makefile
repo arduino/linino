@@ -38,7 +38,7 @@ endef
 
 define Package/wget
 $(call Package/wget/Default)
-  DEPENDS+= +libopenssl
+  DEPENDS+= +libopenssl +librt
   TITLE+= (with SSL support)
   VARIANT:=ssl
 endef
