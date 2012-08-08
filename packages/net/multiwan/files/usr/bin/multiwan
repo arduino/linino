@@ -1,6 +1,7 @@
 #!/bin/sh
 
 . /lib/functions.sh
+. /lib/functions/network.sh
 
 silencer() {
     if [ -z "$debug" -o "$debug" == "0" ]; then
@@ -136,9 +137,10 @@ acquire_wan_data() {
     local old_ipaddr
     local old_gateway
 
-    local ifname=$(uci_get_state network ${1} ifname 'x')
-    local ipaddr=$(uci_get_state network ${1} ipaddr 'x')
-    local gateway=$(uci_get_state network ${1} gateway 'x')
+    local ifname ipaddr gateway
+    network_get_device  ifname  ${1} || ifname=x
+    network_get_ipaddr  ipaddr  ${1} || ipaddr=x
+    network_get_gateway gateway ${1} || gateway=x
 
     check_old_map=$(echo $wan_id_map 2>&1 | grep -o "$1\[")
 
@@ -459,7 +461,7 @@ refresh_dns() {
 	failchk=$(query_config failchk $group)
 
 	dns=$(uci_get_state multiwan ${group} dns 'auto')
-	[ "$dns" == "auto" ] && dns=$(uci_get_state network ${group} dns)
+	[ "$dns" == "auto" ] && network_get_dnsserver dns ${group}
 	dns=$(echo $dns | sed -e "s/ /\n/g")
 
 	if [ ! -z "$dns" -a "$failchk" != "x" -a "$ipaddr" != "x" -a "$gateway" != "x" -a "$ifname" != "x" ]; then
@@ -796,9 +798,9 @@ monitor_wan() {
     while :; do
 	[ "${health_monitor%.*}" = 'parallel' ] && sleep $health_interval
 
-	ifname=$(uci_get_state network ${1} ifname 'x')
-	ipaddr=$(uci_get_state network ${1} ipaddr 'x')
-	gateway=$(uci_get_state network ${1} gateway 'x')
+	network_get_device  ifname  ${1} || ifname=x
+	network_get_ipaddr  ipaddr  ${1} || ipaddr=x
+	network_get_gateway gateway ${1} || gateway=x
 
 	if [ "$ifname_cur" != "$ifname" -o "$ipaddr_cur" != "$ipaddr" -o "$gateway_cur" != "$gateway" ]; then
 	    add_task "$1" acquire
@@ -819,7 +821,7 @@ monitor_wan() {
 	    elif [ "$icmp_hosts" == "dns" ]; then
 		icmp_hosts_acquire=$(uci_get_state multiwan $1 dns 'auto')
 		[ "$icmp_hosts_acquire" == "auto" ] &&
-		    icmp_hosts_acquire=$(uci_get_state network $1 dns)
+			network_get_dnsserver icmp_hosts_acquire $1
 	    else
 		icmp_hosts_acquire=$icmp_hosts
 	    fi
