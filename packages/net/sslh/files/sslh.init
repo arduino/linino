@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2009-2011 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 
 START=95
 
@@ -10,9 +10,9 @@ start_instance() {
 	local section="$1"
 
 	# check if section is enabled (default)
-	local enabled
-	config_get_bool enabled "${section}" 'enabled' '0'
-	[ ${enabled} -gt 0 ] || return 1
+	local enable
+	config_get_bool enable "${section}" 'enable' '0'
+	[ ${enable} -gt 0 ] || return 1
 
 	local args=""
 	local val
