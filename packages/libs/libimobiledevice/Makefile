@@ -58,6 +58,10 @@ define Package/libimobiledevice-utils/description
   This package contains the libimobiledevice utilities.
 endef
 
+CONFIGURE_VARS += \
+	libusbmuxd_CFLAGS="-I$(STAGING_DIR)/usr/include" \
+	libusbmuxd_LIBS="-L$(STAGING_DIR)/usr/lib -lusbmuxd"
+
 CONFIGURE_ARGS += \
 	--without-swig \
 	--disable-largefile
