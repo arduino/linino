@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=libimobiledevice
 PKG_REV:=c182599c8c18ed729726ea7cbbd0a3b89790d2db
 PKG_VERSION:=20120112
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=git://git.sukimashita.com/libimobiledevice.git
@@ -58,7 +58,9 @@ define Package/libimobiledevice-utils/description
   This package contains the libimobiledevice utilities.
 endef
 
-CONFIGURE_ARGS += --without-swig
+CONFIGURE_ARGS += \
+	--without-swig \
+	--disable-largefile
 
 TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
