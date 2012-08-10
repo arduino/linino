@@ -63,9 +63,11 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/*.h $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libusbmuxd.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib$(LIB_SUFFIX)/libusbmuxd.so* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libusbmuxd.pc $(1)/usr/lib/pkgconfig/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib$(LIB_SUFFIX)/pkgconfig/libusbmuxd.pc $(1)/usr/lib/pkgconfig/
+	$(SED) 's,lib$(LIB_SUFFIX),lib,g' $(1)/usr/lib/pkgconfig/libusbmuxd.pc
+	$(SED) 's,\-dirty,$(PKG_VERSION),g' $(1)/usr/lib/pkgconfig/libusbmuxd.pc
 endef
 
 define Package/usbmuxd/install
@@ -77,7 +79,7 @@ endef
 
 define Package/libusbmuxd/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libusbmuxd.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib$(LIB_SUFFIX)/libusbmuxd.so* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,usbmuxd))
