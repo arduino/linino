@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=faifa
-PKG_VERSION:=2012-08-01
+PKG_VERSION:=2012-08-11
 PKG_RELEASE:=$(PKG_SOURCE_VERSION)
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://github.com/ffainelli/faifa.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=ec156fd31fbf630392ec326d5a2371e68e7e7b6e
+PKG_SOURCE_VERSION:=5705a7403b34c24e4852edf1909274c88fb75398
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
 
 PKG_INSTALL:=1
@@ -61,7 +61,7 @@ define Package/hpavcfg
 endef
 
 define Package/hpavcfg/description
-   Lightweight configuration tool, only capable of setting a local device key
+   Lightweight configuration tool, only capable of setting a local device key (NMK)
 endef
 
 TARGET_CFLAGS += $(FPIC)
