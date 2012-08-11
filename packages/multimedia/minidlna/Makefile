@@ -62,7 +62,7 @@ TARGET_LDFLAGS += \
 MAKE_FLAGS +=\
 	CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
 	LDFLAGS="$(TARGET_LDFLAGS)" \
-	ICONV_LIBS="-liconv" \
+	ICONV_LIBS="-liconv $(if $(INTL_FULL),-lintl)" \
 
 MAKE_VARS +=\
 	PREFIX="$(STAGING_DIR)/usr" \
