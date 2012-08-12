@@ -160,7 +160,7 @@
 +#endif /* _DRV_GENERIC_SPIDEV_H_ */
 --- a/drivers.m4
 +++ b/drivers.m4
-@@ -285,6 +285,7 @@ PARPORT="no"
+@@ -301,6 +301,7 @@ PARPORT="no"
  SERIAL="no"
  I2C="no"
  KEYPAD="no"

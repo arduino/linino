@@ -27,7 +27,7 @@
        Trefon)
           Trefon=$val
           ;;
-@@ -800,6 +804,18 @@ if test "$TeakLCM" = "yes"; then
+@@ -801,6 +805,18 @@ if test "$TeakLCM" = "yes"; then
     AC_DEFINE(WITH_TEAK_LCM,1,[TeakLCM driver])
  fi
  
@@ -68,7 +68,7 @@
  #endif
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -117,6 +117,7 @@ drv_ShuttleVFD.c              \
+@@ -119,6 +119,7 @@ drv_ShuttleVFD.c              \
  drv_SimpleLCD.c               \
  drv_T6963.c                   \
  drv_TeakLCM.c                 \
