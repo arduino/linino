@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gzip
 PKG_VERSION:=1.4
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/gzip
@@ -44,7 +44,7 @@ endef
 define Package/gzip/postinst
 #!/bin/sh
 for app in gunzip gzip zcat; do
-  ln -sf $${IPKG_INSTROOT}/usr/bin/$$app $${IPKG_INSTROOT}/bin/$$app
+  ln -sf ../usr/bin/$$app $${IPKG_INSTROOT}/bin/$$app
 done
 endef
 
