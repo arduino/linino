@@ -20,10 +20,32 @@ include $(INCLUDE_DIR)/package.mk
 define Package/vtun
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+kmod-tun +liblzo +libopenssl
+  DEPENDS:=+kmod-tun +VTUN_LZO:liblzo +VTUN_LZO:zlib +VTUN_SSL:libopenssl
   TITLE:=VPN tunneling daemon
   URL:=http://vtun.sourceforge.net
   SUBMENU:=VPN
+  MENU:=1
+endef
+
+define Package/vtun/config
+menu "Configuration"
+        depends on PACKAGE_vtun
+
+config VTUN_config
+
+	depends on PACKAGE_vtun
+	config VTUN_LZO
+		bool "enable vtun compression"
+		help
+			vtun tunnels will be compressed
+		default y
+
+	config VTUN_SSL
+		bool "enable vtun ssl encryption"
+		help
+			vtun tunnels will be encrypted
+		default y
+endmenu
 endef
 
 define Package/vtun/conffiles
@@ -31,15 +53,15 @@ define Package/vtun/conffiles
 endef
 
 CONFIGURE_ARGS += \
-	--with-lzo-headers="$(STAGING_DIR)/usr/include/lzo" \
-	--with-lzo-lib="$(STAGING_DIR)/usr/lib/" \
-	--with-ssl-headers="$(STAGING_DIR)/usr/include/openssl" \
+	$(if $(CONFIG_VTUN_LZO),--with-lzo-lib="$(STAGING_DIR)/usr/lib/",--disable-zlib) \
+	$(if $(CONFIG_VTUN_LZO),--with-lzo-headers="$(STAGING_DIR)/usr/include/lzo",--disable-lzo) \
+	$(if $(CONFIG_VTUN_SSL),--with-ssl-headers="$(STAGING_DIR)/usr/lib/",--disable-ssl) \
 
 CONFIGURE_VARS += \
 	LIBS="$(TARGET_LDFLAGS)" \
-	BLOWFISH_HDR_DIR="$(STAGING_DIR)/usr/include/openssl" \
-	LZO_HDR_DIR="$(STAGING_DIR)/usr/include/lzo" \
-	SSL_HDR_DIR="$(STAGING_DIR)/usr/include/openssl" \
+	$(if $(CONFIG_VTUN_LZO),LZO_HDR_DIR="$(STAGING_DIR)/usr/include/lzo") \
+	$(if $(CONFIG_VTUN_SSL),BLOWFISH_HDR_DIR="$(STAGING_DIR)/usr/include/openssl") \
+	$(if $(CONFIG_VTUN_SSL),SSL_HDR_DIR="$(STAGING_DIR)/usr/include/openssl") \
 
 define Build/Compile
 	$(call Build/Compile/Default,vtund)
