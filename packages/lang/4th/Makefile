@@ -5,26 +5,31 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=4th
-PKG_VERSION:=3.61.3
-PKG_RELEASE:=4
+PKG_VERSION:=3.61.5
+PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-nano.tar.gz
 PKG_SOURCE_URL:=http://4th.googlecode.com/files/
+PKG_MD5SUM:=2d6ddad0e595a7549a425ce33cebd830
 
 include $(INCLUDE_DIR)/package.mk
+
 define Package/4th
-	MAINTAINER:="Xiangfu Liu" <xiangfu@sharism.cc>
-	TITLE:=4th
-	SECTION:=lang
-	CATEGORY:=Languages
-	URL:=http://thebeez.home.xs4all.nl/4tH/
-endef
-PKG_BUILD_DIR:=$(BUILD_DIR)/4th-$(PKG_VERSION)
-define Package/4th/description
-4th forth compiler
+  MAINTAINER:="Xiangfu Liu" <xiangfu@sharism.cc>
+  TITLE:=4th
+  SECTION:=lang
+  CATEGORY:=Languages
+  URL:=http://thebeez.home.xs4all.nl/4tH/
 endef
 
-MAKE_VARS+=LIBRARIES="${PKG_INSTALL_DIR}/usr/lib" BINARIES="${PKG_INSTALL_DIR}/usr/bin"
-MAKE_FLAGS+=-C $(PKG_BUILD_DIR)/sources -f Makefile.NAN
+define Package/4th/description
+  4th forth compiler
+endef
+
+MAKE_VARS += \
+	LIBRARIES="${PKG_INSTALL_DIR}/usr/lib" \
+	BINARIES="${PKG_INSTALL_DIR}/usr/bin"
+MAKE_FLAGS += \
+	-C $(PKG_BUILD_DIR)/sources -f Makefile.NAN
 
 define Package/4th/install
 	$(INSTALL_DIR) $(1)/usr/bin
