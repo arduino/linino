@@ -22,21 +22,13 @@ include $(INCLUDE_DIR)/package.mk
 define Package/radlib
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libpthread
+  DEPENDS:=+libpthread +libsqlite3
   TITLE:=Rapid Application Development Library
   URL:=http://www.radlib.teel.ws/
-  VARIANT:=nosql
 endef
 
 define Package/radlib/description
 	radlib is a rapid application development library for unix multi-process applications
-endef
-
-define Package/radlib-sqlite
-  $(call Package/radlib)
-  VARIANT:=sqlite
-  DEPENDS+=+libsqlite3
-  TITLE+= (sqlite)
 endef
 
 define Package/radlib-sqlite/description
@@ -44,18 +36,10 @@ define Package/radlib-sqlite/description
   This package comes with sqlite support
 endef
 
-
-CONFIGURE_ARGS += \
-		  --prefix="$(TOOLCHAIN_DIR)/usr"
-
-ifeq ($(BUILD_VARIANT),sqlite)
 EXTRA_LDFLAGS=-lsqlite3
 CONFIGURE_ARGS += \
-        --enable-sqlite
-else
-CONFIGURE_ARGS += \
-	--disable-sqlite
-endif
+	--prefix="$(TOOLCHAIN_DIR)/usr" \
+	--enable-sqlite
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
@@ -76,4 +60,3 @@ define Package/radlib-sqlite/install
 endef
 
 $(eval $(call BuildPackage,radlib))
-$(eval $(call BuildPackage,radlib-sqlite))
