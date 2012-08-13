@@ -32,11 +32,12 @@ define Package/libdaq/description
 endef
 
 CONFIGURE_ARGS+= \
-        --disable-static \
-        --with-dnet-includes="$(STAGING_DIR)/usr/include" \
-        --with-dnet-libraries="$(STAGING_DIR)/usr/lib" \
-        --with-libpcap-includes="$(STAGING_DIR)/usr/include" \
-        --with-libpcap-libraries="$(STAGING_DIR)/usr/lib" \
+	--disable-static \
+	--disable-nfq-module \
+	--with-dnet-includes="$(STAGING_DIR)/usr/include" \
+	--with-dnet-libraries="$(STAGING_DIR)/usr/lib" \
+	--with-libpcap-includes="$(STAGING_DIR)/usr/include" \
+	--with-libpcap-libraries="$(STAGING_DIR)/usr/lib" \
 
 define Build/Compile
 	$(MAKE) $(MAKE_FLAGS) -C $(PKG_BUILD_DIR)
