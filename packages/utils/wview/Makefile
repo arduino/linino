@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/wview
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libcurl +zlib +libpng +libgd +libreadline +libsqlite3 +libusb-1.0 +radlib-sqlite +sqlite3-cli
+  DEPENDS:=+libcurl +zlib +libpng +libgd +libreadline +libsqlite3 +libusb-1.0 +radlib +sqlite3-cli
   TITLE:=Wview Weather Station Software
   URL:=http://www.wviewweather.com/
 endef
