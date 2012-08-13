@@ -25,6 +25,7 @@ define Package/radlib
   DEPENDS:=+libpthread
   TITLE:=Rapid Application Development Library
   URL:=http://www.radlib.teel.ws/
+  VARIANT:=nosql
 endef
 
 define Package/radlib/description
@@ -43,12 +44,17 @@ define Package/radlib-sqlite/description
   This package comes with sqlite support
 endef
 
+
 CONFIGURE_ARGS += \
 		  --prefix="$(TOOLCHAIN_DIR)/usr"
 
 ifeq ($(BUILD_VARIANT),sqlite)
+EXTRA_LDFLAGS=-lsqlite3
 CONFIGURE_ARGS += \
         --enable-sqlite
+else
+CONFIGURE_ARGS += \
+	--disable-sqlite
 endif
 
 define Build/InstallDev
