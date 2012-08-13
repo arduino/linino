@@ -1,12 +1,9 @@
 #!/bin/sh
 #
-# (C) 2009 Mika Ilmaranta <ilmis at nullnet.fi>
+# (C) 2009 Mika Ilmaranta <ilmis@nullnet.fi>
+# (C) 2009 Tom Eastep <teastep@shorewall.net>
 #
 # License: GPLv2
-#
-
-#
-# default event handling script
 #
 
 DATE=$(/bin/date)
@@ -25,42 +22,56 @@ CONS_WAIT=${11}
 CONS_MISS=${12}
 AVG_RTT=${13}
 
-cat <<EOM | mail -s "LSM: ${NAME} ${STATE}, IP ${CHECKIP}" ${WARN_EMAIL}
+if [ -f /usr/share/shorewall-lite/lib.base ]; then
+    VARDIR=/etc/shorewall-lite/state
+    STATEDIR=/etc/shorewall-lite
+else
+    VARDIR=/var/lib/shorewall
+    STATEDIR=/etc/shorewall
+fi
+
+[ -f ${STATEDIR}/vardir ] && . ${STATEDIR}/vardir
+
+cat <<EOM | ssmtp ${WARN_EMAIL}
+Subject: "LSM: ${NAME} ${STATE}, DEV ${DEVICE}"
 
 Hi,
 
 Your connection ${NAME} has changed it's state to ${STATE} at ${DATE}.
 
 Following parameters were passed:
+
 newstate     = ${STATE}
 name         = ${NAME}
 checkip      = ${CHECKIP}
 device       = ${DEVICE}
 warn_email   = ${WARN_EMAIL}
 
-Packet statuses:
+Packet counters:
+
 replied      = ${REPLIED} packets replied
 waiting      = ${WAITING} packets waiting for reply
-timeout      = ${TIMEOUT} packets that have timeout (= packet loss)
+timeout      = ${TIMEOUT} packets that have timed out (= packet loss)
 reply_late   = ${REPLY_LATE} packets that received a reply after timeout
 cons_rcvd    = ${CONS_RCVD} consecutively received replies in sequence
 cons_wait    = ${CONS_WAIT} consecutive packets waiting for reply
 cons_miss    = ${CONS_MISS} consecutive packets that have timed out
-avg_rtt      = ${AVG_RTT} average rtt [usec], calculated from received packets
+avg_rtt      = ${AVG_RTT} average rtt, notice that waiting and timed out packets have rtt = 0 when calculating this
 
-BR,
-Your LSM installation
+Your LSM Daemon
 
 EOM
 
-cd /etc/lsm/script.d/
-for script in $(ls); do
-    if [ ! -x $script ]; then
-        continue
-    fi
-    ./$script "$@"
-done
+if [ ${STATE} = up ]; then
+    echo 0 > ${VARDIR}/${DEVICE}.status # Uncomment this line if you are running Shorewall 4.4.x or earlier
+    ${VARDIR}/firewall enable ${DEVICE}
+else
+    echo 1 > ${VARDIR}/${DEVICE}.status # Uncomment this line if you are running Shorewall 4.4.x or earlier
+    ${VARDIR}/firewall disable ${DEVICE}
+fi
 
-exit 0;
+/sbin/shorewall-lite show routing > /var/log/lsm
+
+exit 0
 
 #EOF
