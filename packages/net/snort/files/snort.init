@@ -1,23 +1,20 @@
-#!/bin/sh
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2012 OpenWrt.org
 
+START=99
+APP=snort
+BIN_FILE="/usr/bin/"$APP
+PID_FILE="/var/run/"$APP"_"$INTERFACE".pid"
+OPTIONS=
 DEFAULT=/etc/default/snort
 LOG_D=/var/log/snort
-RUN_D=/var/run
-[ -f $DEFAULT ] && . $DEFAULT
-PID_F=$RUN_D/snort_$INTERFACE.pid
 
-case $1 in
- start)
-  [ -d $LOG_D ] || mkdir -p $LOG_D
-  [ -d $RUN_D ] || mkdir -p $RUN_D
-  snort $OPTIONS
-  ;;
- stop)
-  [ -f $PID_F ] && kill $(cat $PID_F)
-  ;;
- *)
-  echo "usage: $0 (start|stop)"
-  exit 1
-esac
+start() {
+	[ -d $LOG_D ] || mkdir -p $LOG_D
+	start-stop-daemon -S -x $BIN_FILE -p $PID_FILE -b -m -- $OPTIONS
+}
 
-exit $?
+stop() {
+	start-stop-daemon -K -x $BIN_FILE -p $PID_FILE -q
+	rm -rf $PID_FILE
+}

@@ -1,4 +1,4 @@
-#
+
 # Copyright (C) 2006-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=snort
-PKG_VERSION:=2.8.4.1
-PKG_RELEASE:=3
+PKG_VERSION:=2.9.2.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://dl.snort.org/snort-current/
-PKG_MD5SUM:=63f4e76ae96a2d133f4c7b741bad5458
+PKG_SOURCE_URL:=http://snort.org/dl/snort-current/
+PKG_MD5SUM:=4254389550e3be31afebc70e64e6002f
 
 PKG_BUILD_DEPENDS:=librpc
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
@@ -26,7 +26,7 @@ define Package/snort/Default
   SUBMENU:=Firewall
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libnet0 +libpcap +libpcre
+  DEPENDS:=+libpcap +libpcre +libdnet +libdaq +libpthread +zlib
   TITLE:=Lightweight Network Intrusion Detection System
   URL:=http://www.snort.org/
 endef
@@ -74,13 +74,17 @@ endef
 
 
 CONFIGURE_ARGS += \
+	--prefix="/usr" \
 	--enable-flexresp \
-	--with-libnet-includes="$(STAGING_DIR)/usr/lib/libnet-1.0.x/include" \
-	--with-libnet-libraries="$(STAGING_DIR)/usr/lib/libnet-1.0.x/lib" \
+	--with-dnet-includes="$(STAGING_DIR)/usr/include" \
+	--with-dnet-libraries="$(STAGING_DIR)/usr/lib" \
 	--with-libpcap-includes="$(STAGING_DIR)/usr/include" \
 	--with-libpcap-libraries="$(STAGING_DIR)/usr/lib" \
 	--with-libpcre-includes="$(STAGING_DIR)/usr/include" \
 	--with-libpcre-libraries="$(STAGING_DIR)/usr/lib" \
+	--with-daq-includes="$(STAGING_DIR)/usr/include" \
+	--with-daq-libraries="$(STAGING_DIR)/usr/lib" \
+	--disable-static-daq
 
 CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/mysql" \
@@ -98,6 +102,8 @@ ifeq ($(BUILD_VARIANT),basic)
 
 endif
 ifeq ($(BUILD_VARIANT),mysql)
+  CONFIGURE_VARS += \
+	mysql_has_reconnect=yes
 
   CONFIGURE_ARGS += \
 	--with-mysql="$(STAGING_DIR)/usr" \
@@ -112,6 +118,24 @@ ifeq ($(BUILD_VARIANT),pgsql)
 
 endif
 
+define Build/InstallDev
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/include/snort/dynamic_preproc
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include/snort/dynamic_preproc/* \
+		$(STAGING_DIR)/usr/include/snort/dynamic_preproc/
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib/snort/dynamic_preproc
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/snort/dynamic_preproc/* \
+		$(STAGING_DIR)/usr/lib/snort/dynamic_preproc/
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib/snort_dynamicengine
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/snort_dynamicengine/* \
+		$(STAGING_DIR)/usr/lib/snort_dynamicengine/
+	$(INSTALL_DIR) $(STAGING_DIR)/usr/lib/snort_dynamicpreprocessor
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/snort_dynamicpreprocessor/* \
+		$(STAGING_DIR)/usr/lib/snort_dynamicpreprocessor/
+endef
 
 define Package/snort/conffiles
 /etc/default/snort
@@ -121,17 +145,19 @@ endef
 
 define Package/snort/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/snort $(1)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/snort $(1)/usr/bin/snort.bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/u2{boat,spewfoo} $(1)/usr/bin
+	$(INSTALL_BIN) ./files/snort.bin $(1)/usr/bin/snort
 	$(INSTALL_DIR) $(1)/usr/lib/snort_dynamicengine
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/snort_dynamicengine/libsf_engine.so* $(1)/usr/lib/snort_dynamicengine/
 	$(INSTALL_DIR) $(1)/usr/lib/snort_dynamicpreprocessor
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/snort_dynamicpreprocessor/libsf_{dce2,dcerpc,dns,ftptelnet,smtp,ssh,ssl}_preproc.so* $(1)/usr/lib/snort_dynamicpreprocessor/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/snort_dynamicpreprocessor/libsf*.so* $(1)/usr/lib/snort_dynamicpreprocessor/
 	$(INSTALL_DIR) $(1)/etc/snort
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/snort.conf $(1)/etc/snort/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/attribute_table.dtd $(1)/etc/snort/
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/classification.config $(1)/etc/snort/
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/gen-msg.map $(1)/etc/snort/
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/reference.config $(1)/etc/snort/
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/sid-msg.map $(1)/etc/snort/
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/threshold.conf $(1)/etc/snort/
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/unicode.map $(1)/etc/snort/
 	$(INSTALL_DIR) $(1)/etc/snort/preproc_rules
