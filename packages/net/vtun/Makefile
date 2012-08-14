@@ -32,6 +32,7 @@ menu "Configuration"
         depends on PACKAGE_vtun
 
 config VTUN_config
+	bool
 
 	depends on PACKAGE_vtun
 	config VTUN_LZO
