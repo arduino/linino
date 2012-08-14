@@ -86,8 +86,11 @@ CONFIGURE_ARGS += \
 	--with-modules \
 	--enable-shared \
 	--enable-static \
+	--without-pango \
 	--without-bzlib \
 	--without-freetype \
+	--without-fontconfig \
+	--without-rsvg \
 	--without-fftw \
 	--without-xml \
 	--without-x \
