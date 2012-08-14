@@ -30,8 +30,10 @@ endef
 
 TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include/libowfat \
 		 -I$(ICONV_PREFIX)/include
+
 TARGET_LDFLAGS += -L$(STAGING_DIR)/usr/lib \
-		  -L$(ICONV_PREFIX)/lib
+		  -L$(ICONV_PREFIX)/lib \
+		  -Wl,-Bdynamic,$(LIBGCC_S)
 
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/bin
