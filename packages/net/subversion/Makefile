@@ -39,7 +39,7 @@ endef
 
 define Package/subversion-libs
   $(call Package/subversion/Default)
-  DEPENDS+=unixodbc
+  DEPENDS+=+unixodbc
   TITLE:=subversion libs
 endef
 
