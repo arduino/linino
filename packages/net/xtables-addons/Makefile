@@ -99,6 +99,26 @@ define BuildTemplate
 
 endef
 
+
+define Package/iptaccount
+  $(call Package/xtables-addons)
+  CATEGORY:=Network
+  TITLE:=iptables-mod-account control utility
+  DEPENDS:=iptables +iptables-mod-account
+endef
+
+define Package/iptaccount/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libxt_ACCOUNT_cl.so* \
+		$(1)/usr/lib/
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/sbin/iptaccount \
+		$(1)/usr/sbin/
+endef
+
+
 #$(eval $(call BuildTemplate,SUFFIX,DESCRIPTION,EXTENSION,MODULE,PRIORITY,DEPENDS))
 
 $(eval $(call BuildTemplate,compat-xtables,API compatibilty layer,,compat_xtables,45,,CONFIG_NF_CONNTRACK_MARK=y))
@@ -127,3 +147,5 @@ $(eval $(call BuildTemplate,rawnat,RAWNAT,xt_RAWDNAT xt_RAWSNAT,xt_RAWNAT,46,+km
 $(eval $(call BuildTemplate,steal,STEAL,xt_STEAL,xt_STEAL,46,+kmod-ipt-compat-xtables))
 $(eval $(call BuildTemplate,sysrq,SYSRQ,xt_SYSRQ,xt_SYSRQ,46,+kmod-ipt-compat-xtables))
 $(eval $(call BuildTemplate,tarpit,TARPIT,xt_TARPIT,xt_TARPIT,46,+kmod-ipt-compat-xtables))
+
+$(eval $(call BuildPackage,iptaccount))
