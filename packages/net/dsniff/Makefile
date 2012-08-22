@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/dsniff
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpcap +libnids +libnet0 +libopenssl +libgdbm $(LIBRPC_DEPENDS)
+  DEPENDS:=+libpcap +libnids +libnet0 +libopenssl +libgdbm $(LIBRPC_DEPENDS) @BROKEN
   TITLE:=A collection of tools for network auditing and penetration testing
   URL:=http://www.monkey.org/~dugsong/dsniff/
 endef
