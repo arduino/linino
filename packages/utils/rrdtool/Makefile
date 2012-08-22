@@ -137,5 +137,5 @@ $(eval $(call BuildPackage,librrd))
 $(eval $(call BuildPackage,rrdcgi))
 $(eval $(call BuildPackage,rrdtool))
 
-$(eval $(call PyPackage,python-rrd))
-$(eval $(call BuildPackage,python-rrd))
+#$(eval $(call PyPackage,python-rrd))
+#$(eval $(call BuildPackage,python-rrd))
