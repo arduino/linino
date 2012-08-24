@@ -48,12 +48,7 @@ endef
 config_files=nginx.conf mime.types fastcgi_params koi-utf koi-win win-utf
 
 define Package/nginx/conffiles
-/etc/nginx/nginx.conf
-/etc/nginx/mime.types
-/etc/nginx/fastcgi_params
-/etc/nginx/koi-utf
-/etc/nginx/koi-win
-/etc/nginx/win-utf
+/etc/nginx/
 endef
 
 ADDITIONAL_MODULES:=
