@@ -22,6 +22,7 @@ define Package/cutter
   CATEGORY:=Network
   TITLE:=allows an user to abort TCP/IP connections
   URL:=http://www.lowth.com/cutter/
+  DEPENDS:=@BROKEN
 endef
 
 define Package/cutter/description
