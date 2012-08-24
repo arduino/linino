@@ -16,7 +16,7 @@ endif
 
 PKG_NAME:=avahi
 PKG_VERSION:=0.6.31
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -94,7 +94,11 @@ endef
 define Package/avahi-daemon
   $(call Package/avahi/Default)
   SUBMENU:=IP Addresses and Names
+  ifeq ($(BUILD_VARIANT),dbus)
   DEPENDS:=+libavahi +libexpat +librt +libdbus
+  else
+  DEPENDS:=+libavahi +libexpat +librt
+  endif
   TITLE+= (daemon)
 endef
 
