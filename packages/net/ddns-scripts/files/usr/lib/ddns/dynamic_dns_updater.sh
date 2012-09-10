@@ -305,7 +305,7 @@ do
 				final_url=$(echo $final_url | sed s^"$replace_name"^"$replace_value"^g )
 			fi
 		done
-		final_url=$(echo $final_url | sed s/"\[HTTPAUTH\]"/"$username${password:+:$password}"/g )
+		final_url=$(echo $final_url | sed s^"\[HTTPAUTH\]"^"${username//^/\\^}${password:+:${password//^/\\^}}"^g )
 		final_url=$(echo $final_url | sed s/"\[IP\]"/"$current_ip"/g )
 
 
