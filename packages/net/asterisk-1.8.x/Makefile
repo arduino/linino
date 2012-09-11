@@ -25,7 +25,6 @@ define Package/asterisk18/Default
   SECTION:=net
   CATEGORY:=Network
   URL:=http://www.asterisk.org/
-  MAINTAINER:=Hans Zandbelt <hans.zandbelt@gmail.com>
 endef
 
 define Package/asterisk18/Default/description
