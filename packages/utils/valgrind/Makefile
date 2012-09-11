@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,20 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=valgrind
-PKG_REV:=r12684
-PKG_VERSION:=3.7.0+svn_$(PKG_REV)
+PKG_VERSION:=3.8.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=svn://svn.valgrind.org/valgrind/trunk
-PKG_SOURCE_SUBDIR=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=$(PKG_REV)
-PKG_MIRROR_MD5SUM:=841cfcaf265fae0b866c6cb4c563e3c0
+PKG_SOURCE_URL:=http://valgrind.org/downloads/
+PKG_MD5SUM:=ec04dfd1256307432b2a7b520398c526
 
 PKG_FIXUP = autoreconf
 PKG_INSTALL := 1
-
-PKG_BUILD_DIR=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
