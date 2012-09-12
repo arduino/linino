@@ -1,30 +1,22 @@
-diff -urN sox-14.0.1/src/Makefile.am sox-14.0.1.new/src/Makefile.am
---- sox-14.0.1/src/Makefile.am	2008-01-14 04:40:59.000000000 +0100
-+++ sox-14.0.1.new/src/Makefile.am	2008-07-14 14:14:37.000000000 +0200
-@@ -288,10 +288,9 @@
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -144,7 +144,7 @@ EXTRA_DIST = monkey.wav optional-fmts.am
+ 	     CMakeLists.txt soxconfig.h.cmake \
+ 	     tests.sh testall.sh tests.bat testall.bat test-comments
  
- EXTRA_DIST = tests.sh testall.sh tests.bat testall.bat monkey.au monkey.wav sox_sample_test.c amr-wb-test CMakeLists.txt soxstdint.h.cmake soxconfig.h.cmake example1.c
- 
--all: sox$(EXEEXT) play rec sox_sample_test$(EXEEXT) example1$(EXEEXT)
+-all: sox$(EXEEXT) play rec soxi sox_sample_test$(EXEEXT) example0$(EXEEXT) example1$(EXEEXT) example2$(EXEEXT) example3$(EXEEXT) example4$(EXEEXT) example5$(EXEEXT)
 +all: sox$(EXEEXT) play rec
  
  play rec: sox$(EXEEXT)
--	./sox --help > /dev/null
- 	test -f .libs/lt-sox && ( $(RM) $@ && $(LN_S) .libs/lt-sox $@ ) || $(LN_S) sox$(EXEEXT) $@
- 
- install-exec-hook:
-diff -urN sox-14.0.1/src/Makefile.in sox-14.0.1.new/src/Makefile.in
---- sox-14.0.1/src/Makefile.in	2008-01-28 23:47:49.000000000 +0100
-+++ sox-14.0.1.new/src/Makefile.in	2008-07-14 14:15:12.000000000 +0200
-@@ -2426,10 +2426,9 @@
- 	uninstall-libLTLIBRARIES uninstall-pkglibLTLIBRARIES
+ 	if test "$(PLAYRECLINKS)" = "yes"; then	\
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -2849,7 +2849,7 @@ uninstall-am: uninstall-binPROGRAMS unin
+ 	uninstall-pkglibLTLIBRARIES
  
  
--all: sox$(EXEEXT) play rec sox_sample_test$(EXEEXT) example1$(EXEEXT)
-+all: sox$(EXEEXT) play rec 
+-all: sox$(EXEEXT) play rec soxi sox_sample_test$(EXEEXT) example0$(EXEEXT) example1$(EXEEXT) example2$(EXEEXT) example3$(EXEEXT) example4$(EXEEXT) example5$(EXEEXT)
++all: sox$(EXEEXT) play rec
  
  play rec: sox$(EXEEXT)
--	./sox --help > /dev/null
- 	test -f .libs/lt-sox && ( $(RM) $@ && $(LN_S) .libs/lt-sox $@ ) || $(LN_S) sox$(EXEEXT) $@
- 
- install-exec-hook:
+ 	if test "$(PLAYRECLINKS)" = "yes"; then	\

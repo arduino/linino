@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sox
-PKG_VERSION:=14.0.1
-PKG_RELEASE:=3
+PKG_VERSION:=14.4.0
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/sox
-PKG_MD5SUM:=6c95af60b20b9655531bf3162c0be937
+PKG_MD5SUM:=813807c6d6fcd4b0af5c995e61f46687
 
 PKG_FIXUP:=autoreconf
 
@@ -30,7 +30,7 @@ TARGET_LDFLAGS+= \
 define Package/sox
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+BUILD_PATENTED:lame-lib +BUILD_PATENTED:libmad +BUILD_PATENTED:libid3tag +libvorbis +libvorbisidec +libgsm +alsa-lib +libsndfile
+  DEPENDS:=+BUILD_PATENTED:lame-lib +BUILD_PATENTED:libmad +BUILD_PATENTED:libid3tag +libvorbis +libvorbisidec +libgsm +alsa-lib +libsndfile +libflac +ffmpeg +libmagic +libpng
   TITLE:=Sox is a general purpose sound converter/player/recorder
   URL:=http://sox.sourceforge.net/
 endef
@@ -51,8 +51,8 @@ define Build/Configure
 		--disable-libao \
 		--without-libltdl \
 		--with-ogg \
-		--without-flac \
-		--without-ffmpeg \
+		--with-flac \
+		--with-ffmpeg \
 		--without-amr-wb \
 		--without-amr-nb \
 		--without-samplerate \
@@ -63,11 +63,25 @@ define Build/Configure
 	)
 endef
 
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/include \
+		$(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libsox.{a,so*,la} \
+		$(1)/usr/lib/
+	$(INSTALL_DATA) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/* \
+		$(1)/usr/lib/pkgconfig/
+endef
+
 define Package/sox/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/{play,rec,sox} $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/{libsfx.so*,libsox.so*} $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsox.so* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,sox))
