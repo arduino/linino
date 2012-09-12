@@ -1,6 +1,6 @@
 # 
 # Copyright (C) 2008 David Cooper <dave@kupesoft.com>
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -33,6 +33,7 @@ define Package/sox
   DEPENDS:=+BUILD_PATENTED:lame-lib +BUILD_PATENTED:libmad +BUILD_PATENTED:libid3tag +libvorbis +libvorbisidec +libgsm +alsa-lib +libsndfile +libflac +ffmpeg +libmagic +libpng
   TITLE:=Sox is a general purpose sound converter/player/recorder
   URL:=http://sox.sourceforge.net/
+  MAINTAINER:=Hamish Guthrie <hcg@openwrt.org>
 endef
 
 define Package/sox/description
