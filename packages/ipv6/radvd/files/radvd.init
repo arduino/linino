@@ -39,7 +39,7 @@ validate_ip6prefix() {
 
 validate_radvd_string() {
 	local radvd_string=$1
-	[ -z "$radvd_string" -o "$radvd_string" != "${radvd_string%%[!a-z0-9.:_-]*}" ] && return 1
+	[ -z "$radvd_string" -o "$radvd_string" != "${radvd_string%%[!A-Za-z0-9.:_-]*}" ] && return 1
 	return 0
 }
 
