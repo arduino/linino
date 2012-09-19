@@ -493,6 +493,7 @@ define Build/Prepare
 endef
 
 define Build/InstallDev
+	mkdir -p $(PKG_BUILD_DIR)/staging/usr/bin
 	make -C $(PKG_BUILD_DIR) install INSTALL_ROOT=$(PKG_BUILD_DIR)/staging
 	rm -f $(PKG_BUILD_DIR)/staging/usr/bin/php
 	$(CP) $(PKG_BUILD_DIR)/staging/* $(STAGING_DIR_HOST)
