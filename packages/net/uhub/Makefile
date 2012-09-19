@@ -21,7 +21,7 @@ define Package/uhub
   SUBMENU:=P2P
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libevent +USE_EGLIBC:librt
+  DEPENDS:=+libevent
   TITLE:=High performance ADC hub
   URL:=http://www.extatic.org/uhub/
 endef

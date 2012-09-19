@@ -30,7 +30,7 @@ define Package/ntpd/Default
   TITLE:=ISC ntp
   MAINTAINER:=Peter Wagner <tripolar@gmx.at>
   URL:=http://www.ntp.org/
-  DEPENDS:=+libcap +USE_EGLIBC:librt
+  DEPENDS:=+libcap
 endef
 
 define Package/ntpd/Default/description
