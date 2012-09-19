@@ -16,7 +16,7 @@ endif
 
 PKG_NAME:=avahi
 PKG_VERSION:=0.6.31
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -58,7 +58,7 @@ define Package/libavahi
   $(call Package/avahi/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libdaemon +libpthread +libgdbm
+  DEPENDS:=+libdaemon +libpthread +libgdbm +SSP_SUPPORT:libssp
   TITLE+= (library)
 endef
 
