@@ -967,7 +967,7 @@ do_tasks() {
 			pass) recover_wan $1;;
 			acquire)
 			    acquire_wan_data $1
-			    [ "${health_monitor%.* }" = 'parallel' ] && {
+			    [ "${health_monitor%.*}" = 'parallel' ] && {
 				monitor_wan $1 &
 				echo "## Started background monitor_wan ##"
 			    }
