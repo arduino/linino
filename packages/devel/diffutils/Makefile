@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=diffutils
 PKG_VERSION:=3.0
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/diffutils
@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/diffutils
   SECTION:=devel
   CATEGORY:=Development
+  DEPENDS:=+USE_EGLIBC:librt
   TITLE:=diffutils
   URL:=http://www.gnu.org/software/diffutils/
 endef
