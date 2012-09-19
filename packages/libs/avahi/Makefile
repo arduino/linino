@@ -8,15 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 ifeq ($(BUILD_VARIANT),dbus)
-PKG_BUILD_DIR=$(BUILD_DIR)/$(PKG_NAME)-dbus/$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_DIR=$(BUILD_DIR)/$(PKG_NAME)/dbus/$(PKG_NAME)-$(PKG_VERSION)
+PKG_ALT_DIR=$(BUILD_DIR)/$(PKG_NAME)/nodbus/$(PKG_NAME)-$(PKG_VERSION)
 else
-PKG_BUILD_DIR=$(BUILD_DIR)/$(PKG_NAME)-nodbus/$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_DIR=$(BUILD_DIR)/$(PKG_NAME)/nodbus/$(PKG_NAME)-$(PKG_VERSION)
+PKG_ALT_DIR=$(BUILD_DIR)/$(PKG_NAME)/dbus/$(PKG_NAME)-$(PKG_VERSION)
 endif
 
 
 PKG_NAME:=avahi
 PKG_VERSION:=0.6.31
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -68,8 +70,8 @@ $(call Package/avahi/Default/description)
  The libavahi package contains the mDNS/DNS-SD shared libraries,
  used by other programs. Specifically, it provides
  libavahi-core and libavahi-common libraries.
- By default, it is compiled without D-Bus support,
- i.e. the --disable-dbus compilation flag is set.
+ By default, it is built without D-Bus support,
+ i.e. the --disable-dbus configuration flag is set.
  To enable D-Bus support, select the package
  libavahi-dbus-support.
 endef
@@ -142,10 +144,10 @@ define Package/libavahi-dbus-support/description
 $(call Package/libavahi/description)
  .
  The libavahi-dbus-support package enables
- D-Bus support in libavahi, needed to support
+ D-Bus support in avahi, needed to support
  the libavahi-client library and avahi-utils.
- Selecting this package modifies the contents of the
- libavahi package by setting the --enable-dbus compilation flag;
+ Selecting this package modifies the build configuration
+ so that avahi packages are built with support for D-BUS enabled;
  it does not generate a separate binary of its own.
  It also automatically adds the D-Bus package to the build.
  libavahi-dbus-support is selected automatically if you select
@@ -249,16 +251,20 @@ define Build/InstallDev
 endef
 
 define Package/libavahi-dbus-support/install
-	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_DIR) $(1)/etc/dbus-1/system.d
+	$(CP) $(PKG_INSTALL_DIR)/etc/dbus-1/system.d/* $(1)/etc/dbus-1/system.d
 endef
 
 define Package/libavahi/install
+	# The next line removes the ".build" file from the "other" build.
+	# The effect is that, if the other build is re-selected in the future,
+	# the build system will be forced to replace all the code in the
+	# installer packages, removing anything from the current build.
+	# "Other" means this: if the current build is "dbus", the other is "nodebus",
+	# and if the current build is "nodbus", the other is "dbus".
+	$(RM) -f $(PKG_ALT_DIR)/.built
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libavahi-{common,core}.so.* $(1)/usr/lib/
-ifeq ($(BUILD_VARIANT),dbus)
-	$(INSTALL_DIR) $(1)/etc/dbus-1/system.d
-	$(CP) $(PKG_INSTALL_DIR)/etc/dbus-1/system.d/* $(1)/etc/dbus-1/system.d
-endif
 endef
 
 define Package/libavahi-client/install
