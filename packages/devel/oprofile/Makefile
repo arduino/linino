@@ -18,6 +18,7 @@ PKG_MD5SUM:=8b5d1d9b65f84420bcc3234777ad3be3
 PKG_BUILD_DEPENDS:=binutils
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
