@@ -23,6 +23,8 @@ PKG_LIBTOOL_PATHS:=. gas bfd opcodes gprof binutils ld libiberty gold intl
 PKG_REMOVE_FILES:=libtool.m4
 PKG_INSTALL:=1
 
+PKG_BUILD_PARALLEL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/binutils
@@ -89,7 +91,7 @@ define Build/InstallDev
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)/bfd/doc/ CFLAGS="-I$(PKG_BUILD_DIR)/include" chew
+	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/bfd/doc/ CFLAGS="-I$(PKG_BUILD_DIR)/include" chew
 	$(call Build/Compile/Default)
 endef
 
