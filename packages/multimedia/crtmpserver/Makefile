@@ -61,7 +61,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/builders/make \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/builders/make \
 		PLATFORM=linux-openwrt-uclibc
 endef
 

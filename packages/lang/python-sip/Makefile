@@ -75,7 +75,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		CC="$(TARGET_CROSS)gcc" \
 		CXX="$(TARGET_CROSS)g++" \
 		LINK="$(TARGET_CROSS)g++" \

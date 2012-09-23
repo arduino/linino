@@ -34,7 +34,7 @@ CONFIGURE_ARGS += \
 	--enable-static \
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		BINOWN=`id -u` \
 		BINGRP=`id -g` \
 		DESTDIR="$(PKG_INSTALL_DIR)" \

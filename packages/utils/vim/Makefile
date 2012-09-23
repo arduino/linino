@@ -117,7 +117,7 @@ define Build/Compile/vim
 		--disable-multibyte \
 	)
 	$(MAKE) -C $(PKG_BUILD_DIR) clean
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" all
 	$(CP) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(PKG_BUILD_DIR)/vim_tiny
 endef
@@ -130,7 +130,7 @@ define Build/Compile/vim-full
 		--enable-multibyte \
 	)
 	$(MAKE) -C $(PKG_BUILD_DIR) clean
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" all
 	$(CP) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(PKG_BUILD_DIR)/vim_normal
 endef
@@ -138,7 +138,7 @@ endif
 
 ifneq ($(CONFIG_PACKAGE_xxd),)
 define Build/Compile/xxd
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" all
 endef
 endif

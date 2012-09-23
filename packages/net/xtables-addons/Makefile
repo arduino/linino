@@ -39,7 +39,7 @@ CONFIGURE_ARGS+= \
 	--with-xtlibdir="/usr/lib/iptables" \
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		ARCH="$(LINUX_KARCH)" \
 		CROSS_COMPILE="$(TARGET_CROSS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \

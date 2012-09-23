@@ -63,7 +63,7 @@ endef
 
 define Build/Compile
 	$(INSTALL_DIR) $(PKG_INSTALL_DIR)/usr/{include,lib,bin,man/man1}
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		LIBTOOL="./libtool --tag=CC" \
 		prefix="$(PKG_INSTALL_DIR)/usr" \
 		exec_prefix="$(PKG_INSTALL_DIR)/usr" \

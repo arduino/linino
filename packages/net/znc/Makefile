@@ -284,7 +284,7 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/Default,znc)
-	$(MAKE_VARS) $(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/modules \
+	+$(MAKE_VARS) $(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/modules \
 		$(MAKE_FLAGS) $(ZNC_MODULE_TARGETS)
 endef
 

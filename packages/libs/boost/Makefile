@@ -190,7 +190,7 @@ define Build/Compile
 			echo "using python : : $(STAGING_DIR_ROOT)/usr/bin/python :	$(STAGING_DIR)/usr/include/python2.7/ ;" >> \
 				tools/build/v2/user-config.jam; \
 		) \
-		bjam \
+		+bjam \
 			'-sBUILD=release <optimization>space <inlining>on <debug-symbols>off' \
 			$(filter -j%,$(PKG_JOBS)) \
 			--toolset=gcc-$(ARCH) --build-type=minimal --layout=system \

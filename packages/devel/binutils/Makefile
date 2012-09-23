@@ -91,7 +91,7 @@ define Build/InstallDev
 endef
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/bfd/doc/ CFLAGS="-I$(PKG_BUILD_DIR)/include" chew
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/bfd/doc/ CFLAGS="-I$(PKG_BUILD_DIR)/include" chew
 	$(call Build/Compile/Default)
 endef
 

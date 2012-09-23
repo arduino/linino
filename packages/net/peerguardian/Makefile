@@ -47,7 +47,7 @@ CONFIGURE_VARS+= \
 	LIBS="-lm"
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		CXXLD="$(TARGET_CXX)"
 endef
 

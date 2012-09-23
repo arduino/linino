@@ -36,7 +36,7 @@ endef
 TARGET_CFLAGS += $(FPIC)
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/src \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/src \
 		$(TARGET_CONFIGURE_OPTS) \
 		DFLAGS="$(TARGET_CFLAGS) -Wall"
 endef

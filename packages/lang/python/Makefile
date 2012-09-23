@@ -463,9 +463,9 @@ define Host/Configure
 endef
 
 define Host/Compile
-	$(MAKE) $(HOST_JOBS) -C $(HOST_BUILD_DIR) \
+	+$(MAKE) $(HOST_JOBS) -C $(HOST_BUILD_DIR) \
 		python Parser/pgen
-	$(MAKE) $(HOST_JOBS) -C $(HOST_BUILD_DIR) \
+	+$(MAKE) $(HOST_JOBS) -C $(HOST_BUILD_DIR) \
 		HOSTPYTHON=$(HOST_BUILD_DIR)/python \
 		sharedmods
 endef

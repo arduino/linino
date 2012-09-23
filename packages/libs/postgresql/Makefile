@@ -160,10 +160,10 @@ TARGET_CFLAGS += $(FPIC)
 unexport PROFILE
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)" \
+	+$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all
-	$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)" \
+	+$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		install
 endef

@@ -49,7 +49,7 @@ MRD6_MAKEFLAGS:= \
 	PREFIX="/usr"
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/src $(MRD6_MAKEFLAGS) all
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/src $(MRD6_MAKEFLAGS) all
 endef
 
 define Build/Install

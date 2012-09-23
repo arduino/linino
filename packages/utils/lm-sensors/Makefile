@@ -65,7 +65,7 @@ define Package/lm-sensors/conffiles
 endef
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		KERNELVERSION="$(LINUX_VERSION)" \
 		LINUX="$(LINUX_DIR)" \

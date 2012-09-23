@@ -74,8 +74,8 @@ OPENSWAN_MAKEFLAGS:= \
 	DESTDIR="$(PKG_INSTALL_DIR)"
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) $(OPENSWAN_MAKEFLAGS) programs
-	$(MAKE) $(PKG_JOBS) $(OPENSWAN_MAKEFLAGS) module
+	+$(MAKE) $(PKG_JOBS) $(OPENSWAN_MAKEFLAGS) programs
+	+$(MAKE) $(PKG_JOBS) $(OPENSWAN_MAKEFLAGS) module
 endef
 
 define Build/Install

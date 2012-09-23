@@ -40,7 +40,7 @@ EXTRA_CPPFLAGS:= \
 	-I$(STAGING_DIR)/usr/lib/glib/include
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
 		CXXFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \

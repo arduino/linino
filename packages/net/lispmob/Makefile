@@ -90,7 +90,7 @@ endif
 
 ifdef CONFIG_PACKAGE_lispd
   define Build/Compile/lispd
-	$(MAKE_VARS) \
+	+$(MAKE_VARS) \
 	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/lispd \
 		$(MAKE_FLAGS)
   endef
@@ -98,7 +98,7 @@ endif
 
 ifdef CONFIG_PACKAGE_lispconf
   define Build/Compile/lispconf
-	$(MAKE_VARS) \
+	+$(MAKE_VARS) \
 	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR)/lispconf \
 		$(MAKE_FLAGS)
   endef
