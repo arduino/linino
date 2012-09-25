@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vsftpd
-PKG_VERSION:=3.0.0
+PKG_VERSION:=3.0.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://security.appspot.com/downloads/
-PKG_MD5SUM:=ad9fa952558c2c5b0426ccaccff0f972
+PKG_MD5SUM:=8b00c749719089401315bd3c44dddbb2
 
 include $(INCLUDE_DIR)/package.mk
 
