@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tcpser
 PKG_VERSION:=1.0rc12
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.jbrain.com/pub/linux/serial/
@@ -24,7 +24,7 @@ define Package/tcpser
   CATEGORY:=Utilities
   TITLE:=Hayes compatible modem emulator
   URL:=http://www.jbrain.com/pub/linux/serial/
-  DEPENDS:=libpthread
+  DEPENDS:=+libpthread
 endef
 
 define Package/tcpser/description
