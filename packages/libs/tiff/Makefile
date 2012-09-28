@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tiff
-PKG_VERSION:=4.0.2
+PKG_VERSION:=4.0.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.osgeo.org/libtiff
-PKG_MD5SUM:=04a08fa1e07e696e820a0c3f32465a13
+PKG_MD5SUM:=051c1068e6a0627f461948c365290410
 
 PKG_FIXUP:=libtool-ucxx
 PKG_REMOVE_FILES:=autogen.sh aclocal.m4
