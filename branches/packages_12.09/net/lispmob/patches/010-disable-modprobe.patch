@@ -1,0 +1,29 @@
+--- a/lispd/lispd.c
++++ b/lispd/lispd.c
+@@ -160,6 +160,7 @@ int main(int argc, char **argv)
+      *  Unload/load LISP kernel modules
+      */
+ 
++/*
+     system("/sbin/modprobe -r lisp lisp_int");
+ 
+     if (system("/sbin/modprobe lisp")) {
+@@ -175,6 +176,7 @@ int main(int argc, char **argv)
+     }
+     syslog(LOG_DAEMON, "Loaded the 'lisp_int' kernel module");
+     sleep(1);
++*/
+ 
+     /*
+      *  Setup LISP and routing netlink sockets
+--- a/lispd/lispd_iface_mgmt.c
++++ b/lispd/lispd_iface_mgmt.c
+@@ -1624,7 +1624,7 @@ void exit_cleanup(void) {
+     close(netlink_fd);
+ 
+     /* Remove lisp modules */
+-    system("/sbin/modprobe -r lisp lisp_int");
++//    system("/sbin/modprobe -r lisp lisp_int");
+ 
+     /* Remove source routing ip rule */
+     delete_source_routing(ctrl_iface, &source_rloc, NULL);
