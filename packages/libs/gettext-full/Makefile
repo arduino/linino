@@ -15,12 +15,15 @@ PKG_SOURCE:=gettext-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/gettext
 PKG_MD5SUM:=3dd55b952826d2b32f51308f2f91aa89
 PKG_BUILD_DIR:=$(BUILD_DIR)/gettext-$(PKG_VERSION)
+HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/gettext-$(PKG_VERSION)
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=0
+PKG_BUILD_DEPENDS:=gettext-full/host
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/host-build.mk
 
 define Package/libintl-full
   SECTION:=libs
@@ -60,4 +63,5 @@ define Package/libintl-full/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libintl.so* $(1)/usr/lib/
 endef
 
+$(eval $(call HostBuild))
 $(eval $(call BuildPackage,libintl-full))
