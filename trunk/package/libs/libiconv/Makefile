@@ -13,6 +13,8 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=libiconv
 PKG_RELEASE:=7
 
+PKG_MAINTAINER:=Jo-Philipp Wich <jow@openwrt.org>
+
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/host-build.mk
 
