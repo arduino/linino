@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.ex-parrot.com/~pdw/iftop/download
 PKG_MD5SUM:=062bc8fb3856580319857326e0b8752d
 
+PKG_MAINTAINER:=Jo-Philipp Wich <jow@openwrt.org>
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/iftop
