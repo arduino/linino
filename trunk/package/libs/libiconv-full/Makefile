@@ -11,6 +11,8 @@ PKG_NAME:=libiconv-full
 PKG_VERSION:=1.11.1
 PKG_RELEASE:=1
 
+PKG_MAINTAINER:=Jo-Philipp Wich <jow@openwrt.org>
+
 PKG_SOURCE:=libiconv-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/libiconv
 PKG_MD5SUM:=d42b97f6ef5dd0ba4469d520ed732fed
