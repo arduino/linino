@@ -18,6 +18,8 @@ PKG_SOURCE_URL:= \
 	http://mirrors.evolva.ro/netfilter.org/conntrack-tools
 PKG_MD5SUM:=5add24d4761baf17af630d5627a71752
 
+PKG_MAINTAINER:=Jo-Philipp Wich <jow@openwrt.org>
+
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
