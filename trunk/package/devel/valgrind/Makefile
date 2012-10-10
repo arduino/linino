@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://valgrind.org/downloads/
 PKG_MD5SUM:=ec04dfd1256307432b2a7b520398c526
 
+PKG_MAINTAINER:=Felix Fietkau <nbd@openwrt.org>
+
 PKG_FIXUP = autoreconf
 PKG_INSTALL := 1
 
