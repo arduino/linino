@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.inet.no/dante/files/
 PKG_MD5SUM:=69b9d6234154d7d6a91fcbd98c68e62a
 
+PKG_MAINTAINER:=Jo-Philipp Wich <jow@openwrt.org>
+
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
