@@ -16,6 +16,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ipset.netfilter.org
 PKG_MD5SUM:=bfcc92e30a0fcf10ae6e7c4affa03c84
 
+PKG_MAINTAINER:=Jo-Philipp Wich <jow@openwrt.org>
+
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
