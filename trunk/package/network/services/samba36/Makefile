@@ -16,6 +16,8 @@ PKG_SOURCE_URL:=http://ftp.samba.org/pub/samba \
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_MD5SUM:=2f0c14547333c1b48fd4728b031e7040
 
+PKG_MAINTAINER:=Felix Fietkau <nbd@openwrt.org>
+
 include $(INCLUDE_DIR)/package.mk
 
 MAKE_PATH:=source3
