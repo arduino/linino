@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://media.luffy.cx/files/lldpd
 PKG_MD5SUM:=77279577e3b6d85a33dc0afe7c960b27
 
+PKG_MAINTAINER:=Jo-Philipp Wich <jow@openwrt.org>
+
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
