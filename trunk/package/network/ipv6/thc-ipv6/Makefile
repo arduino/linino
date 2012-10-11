@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2011 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -14,6 +14,8 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://freeworld.thc.org/releases/
 PKG_MD5SUM:=01715cfa7f5d4a53fe8f142a10c38c78
+
+PKG_MAINTAINER:=Jo-Philipp Wich <jow@openwrt.org>
 
 include $(INCLUDE_DIR)/package.mk
 
