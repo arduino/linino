@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011 OpenWrt.org
+# Copyright (C) 2011-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,6 +16,8 @@ PKG_SOURCE_URL:= \
 	http://www.netfilter.org/projects/libmnl/files \
 	ftp://ftp.netfilter.org/pub/libmnl
 PKG_MD5SUM:=e936236bb57a2375afa4e70e75dc3ba9
+
+PKG_MAINTAINER:=Jo-Philipp Wich <jow@openwrt.org>
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
