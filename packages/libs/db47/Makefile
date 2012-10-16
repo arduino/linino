@@ -1,11 +1,12 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
 
 include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/uclibc++.mk
 
 PKG_NAME:=db47
 PKG_VERSION:=4.7.25.NC
@@ -33,6 +34,19 @@ endef
 
 define Package/libdb47/description
   Berkeley DB library (4.7).
+endef
+
+define Package/libdb47xx
+  SECTION:=libs
+  CATEGORY:=Libraries
+  DEPENDS:=+libdb47 $(CXX_DEPENDS)
+  TITLE:=Berkeley DB library (4.7) for C++
+  URL:=http://www.sleepycat.com/products/db.shtml
+  MAINTAINER:=W. Michael Petullo <mike@flyn.org>
+endef
+
+define Package/libdb47xx/description
+  Berkeley DB library (4.7).  C++ wrapper.
 endef
 
 define Build/Configure
@@ -63,7 +77,7 @@ define Build/Configure
 			--enable-shared \
 			--enable-static \
 			--disable-java \
-			--disable-cxx \
+			--enable-cxx \
 			--with-mutex=UNIX/fcntl \
 			--disable-tcl \
 			--disable-rpc \
@@ -88,11 +102,19 @@ define Package/libdb47/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdb-*.so $(1)/usr/lib/
 endef
 
+define Package/libdb47xx/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdb_cxx-*.so $(1)/usr/lib/
+endef
+
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/db.h $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/db_cxx.h $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libdb*.{a,so} $(1)/usr/lib
 endef
 
 $(eval $(call BuildPackage,libdb47))
+$(eval $(call BuildPackage,libdb47xx))
+
