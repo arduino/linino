@@ -9,51 +9,111 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mosquitto
-PKG_VERSION:=0.15
+PKG_VERSION:=1.0.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://mosquitto.org/files/source/
-PKG_MD5SUM:=7ae0ac38f1f379578ab5530e5dc7269e
+PKG_MD5SUM:=9c9e06c57fcca80d76068c53ad140186
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/mosquitto/default
+MAKE_FLAGS+=WITH_MEMORY_TRACKING=no
+TARGET_CFLAGS+=-ggdb3
+
+define Package/$(PKG_NAME)/default
   SECTION:=net
   CATEGORY:=Network
   TITLE:=mosquitto - an MQTT message broker
   URL:=http://www.mosquitto.org/
 endef
 
-define Package/mosquitto
-    $(Package/mosquitto/default)
+define Package/$(PKG_NAME)
+    $(call Package/mosquitto/default)
+    TITLE+= (with SSL support)
+    DEPENDS+= +libopenssl
+    VARIANT:=ssl
 endef
 
-define Package/mosquitto/description
+define Package/$(PKG_NAME)-nossl
+    $(call Package/$(PKG_NAME)/default)
+    TITLE+= (without SSL support)
+    VARIANT:=nossl
+endef
+
+define Package/$(PKG_NAME)/default/description
  mosquitto is a message broker that supports v3.1 of the MQ Telemetry
 Transport protocol. MQTT provides a lightweight method for
 messaging using a publish/subscribe model.
+
+This package also includes some basic support for configuring via UCI
 endef
 
-define Package/mosquitto-client
+define Package/$(PKG_NAME)/description
+	$(call Package/$(PKG_NAME)/default/description)
+	This package is built with SSL support
+endef
+
+define Package/$(PKG_NAME)-nossl/description
+        $(call Package/$(PKG_NAME)/default/description)
+        This package is built WITHOUT SSL support.
+endef
+
+
+define Package/mosquitto-client/default
     $(Package/mosquitto/default)
     TITLE:= mosquitto - client tools
-    DEPENDS:= +libmosquitto
+endef
+define Package/mosquitto-client
+    $(call Package/mosquitto-client/default)
+    TITLE+= (With SSL support)
+    DEPENDS+=+libmosquitto
+    VARIANT:=ssl
+endef
+define Package/mosquitto-client-nossl
+    $(call Package/mosquitto-client/default)
+    TITLE+= (Without SSL support)
+    DEPENDS+=+libmosquitto-nossl
+    VARIANT:=nossl
 endef
 
-define Package/mosquitto-client/description
+define Package/mosquitto-client/default/description
  Command line client tools for publishing messages to MQTT servers
 and subscribing to topics.
 endef
 
-define Package/libmosquitto
+define Package/mosquitto-client/description
+$(call Package/mosquitto-client/default/description)
+        This package is built with SSL support
+endef
+define Package/mosquitto-client-nossl/description
+$(call Package/mosquitto-client/default/description)
+        This package is built without SSL support
+endef
+
+define Package/libmosquitto/default
     $(Package/mosquitto/default)
     SECTION:=libs
     CATEGORY:=Libraries
+    DEPENDS:=+libpthread
     TITLE:= mosquitto - client library
 endef
 
-define Package/libmosquitto/description
+define Package/libmosquitto
+    $(call Package/libmosquitto/default)
+    TITLE+= (With SSL Support)
+    DEPENDS+= +libopenssl
+    VARIANT=ssl
+endef
+define Package/libmosquitto-nossl
+    $(call Package/libmosquitto/default)
+    TITLE+= (Without SSL Support)
+    VARIANT=nossl
+endef
+
+define Package/libmosquitto/default/description
  Library required for mosquitto's command line client tools, also for
 use by any third party software that wants to communicate with a
 mosquitto server.
@@ -62,25 +122,42 @@ Should be useable for communicating with any MQTT v3.1 compatible
 server, such as IBM's RSMB, in addition to Mosquitto
 endef
 
-
-define Package/mosquitto/conffiles
-/etc/mosquitto/mosquitto.conf
+define Package/libmosquitto/description
+    $(call Package/libmosquitto/default/description)
+    This package is built with SSL support
+endef
+define Package/libmosquitto-nossl/description
+    $(call Package/libmosquitto/default/description)
+    This package is built without SSL support
 endef
 
-define Package/mosquitto/install
+
+define Package/$(PKG_NAME)/conffiles
+/etc/mosquitto/mosquitto.conf
+/etc/config/mosquitto
+endef
+
+Package/$(PKG_NAME)-nossl/conffiles = $(Package/$(PKG_NAME)/conffiles)
+
+define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/mosquitto $(1)/usr/sbin/mosquitto
 	$(INSTALL_DIR) $(1)/etc/mosquitto
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/mosquitto.conf $(1)/etc/mosquitto/mosquitto.conf
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/mosquitto.init $(1)/etc/init.d/mosquitto
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) ./files/mosquitto.uci.convert $(1)/usr/bin
 endef
+Package/$(PKG_NAME)-nossl/install = $(Package/$(PKG_NAME)/install)
+
 
 define Package/mosquitto-client/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client/mosquitto_pub $(1)/usr/bin/mosquitto_pub
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/client/mosquitto_sub $(1)/usr/bin/mosquitto_sub
 endef
+Package/mosquitto-client-nossl/install = $(Package/mosquitto-client/install)
 
 # This installs files into ./staging_dir/. so that you can cross compile from the host
 define Build/InstallDev
@@ -88,14 +165,24 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/lib/mosquitto.h $(1)/usr/include
 	$(INSTALL_DIR) $(1)/usr/lib
 	# This should just get symlinked, but I can't work out the magic syntax :(
-	$(CP) $(PKG_BUILD_DIR)/lib/libmosquitto.so.0 $(1)/usr/lib/libmosquitto.so
+	$(CP) $(PKG_BUILD_DIR)/lib/libmosquitto.so.1 $(1)/usr/lib/
 endef
 
 # This installs files on the target.  Compare with Build/InstallDev
 define Package/libmosquitto/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/libmosquitto.so.0 $(1)/usr/lib/libmosquitto.so.0
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/libmosquitto.so.1 $(1)/usr/lib/libmosquitto.so.1
 endef
-$(eval $(call BuildPackage,mosquitto))
+Package/libmosquitto-nossl/install = $(Package/libmosquitto/install)
+
+# Applies to all...
+ifeq ($(BUILD_VARIANT),nossl)
+        MAKE_FLAGS += WITH_TLS=no
+endif
+
+$(eval $(call BuildPackage,$(PKG_NAME)))
+$(eval $(call BuildPackage,$(PKG_NAME)-nossl))
 $(eval $(call BuildPackage,libmosquitto))
+$(eval $(call BuildPackage,libmosquitto-nossl))
 $(eval $(call BuildPackage,mosquitto-client))
+$(eval $(call BuildPackage,mosquitto-client-nossl))
