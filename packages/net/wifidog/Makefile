@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006,2008 OpenWrt.org
+# Copyright (C) 2006,2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wifidog
-PKG_VERSION:=20090925
+PKG_REV:=1464
+PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:= @SF/$(PKG_NAME)
-PKG_MD5SUM:=e3ecacba67a91b6ea3c1072ba6c5a0b4
+PKG_SOURCE_URL:=https://dev.wifidog.org/svn/trunk/wifidog
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=$(PKG_REV)
+PKG_SOURCE_PROTO:=svn
+PKG_SOURCE_MIRROR:=0
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
