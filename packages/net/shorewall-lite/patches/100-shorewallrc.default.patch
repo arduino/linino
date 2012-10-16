@@ -1,0 +1,26 @@
+--- a/shorewallrc.default	2012-08-08 17:42:31.000000000 +0200
++++ b/shorewallrc.default	2012-08-13 11:53:38.479048989 +0200
+@@ -2,7 +2,7 @@
+ # Default Shorewall 4.5 rc file
+ #
+ HOST=linux                              #Generic Linux
+-BUILD=                                  #Default is to detect the build system
++BUILD=linux                             #Default is to detect the build system
+ PREFIX=/usr                             #Top-level directory for shared files, libraries, etc.
+ SHAREDIR=${PREFIX}/share                #Directory for arch-neutral files.
+ LIBEXECDIR=${PREFIX}/share              #Directory for executable scripts.
+@@ -10,7 +10,7 @@
+ CONFDIR=/etc                            #Directory where subsystem configurations are installed
+ SBINDIR=/sbin                           #Directory where system administration programs are installed
+ MANDIR=${PREFIX}/man                    #Directory where manpages are installed.
+-INITDIR=etc/init.d                      #Directory where SysV init scripts are installed.
++INITDIR=/etc/init.d                     #Directory where SysV init scripts are installed.
+ INITFILE=$PRODUCT                       #Name of the product's installed SysV init script
+ INITSOURCE=init.sh                      #Name of the distributed file to be installed as the SysV init script
+ ANNOTATED=                              #If non-zero, annotated configuration files are installed
+@@ -18,4 +18,4 @@
+ SYSCONFFILE=                            #Name of the distributed file to be installed in $SYSCONFDIR
+ SYSCONFDIR=                             #Directory where SysV init parameter files are installed
+ SPARSE=                                 #If non-empty, only install $PRODUCT/$PRODUCT.conf in $CONFDIR
+-VARDIR=/var/lib                         #Directory where product variable data is stored.
++VARDIR=/etc/shorewall-lite/state        #Directory where product variable data is stored.
