@@ -1,0 +1,20 @@
+--- a/lib.common	2012-08-08 16:29:23.000000000 +0200
++++ b/lib.common	2012-08-13 10:14:23.574529864 +0200
+@@ -372,7 +372,7 @@
+ 
+     [ -z "$MODULESDIR" ] && \
+ 	uname=$(uname -r) && \
+-	MODULESDIR=/lib/modules/$uname/kernel/net/ipv${g_family}/netfilter:/lib/modules/$uname/kernel/net/netfilter:/lib/modules/$uname/kernel/net/sched:/lib/modules/$uname/extra:/lib/modules/$uname/extra/ipset
++	MODULESDIR=/lib/modules/$uname/kernel/net/ipv${g_family}/netfilter:/lib/modules/$uname/kernel/net/netfilter:/lib/modules/$uname/kernel/net/sched:/lib/modules/$uname/extra:/lib/modules/$uname/extra/ipset:/lib/modules/$uname
+ 
+     [ -d /sys/module/ ] || MODULES=$(lsmod | cut -d ' ' -f1)
+ 
+@@ -411,7 +411,7 @@
+ 
+     [ -z "$MODULESDIR" ] && \
+ 	uname=$(uname -r) && \
+-	MODULESDIR=/lib/modules/$uname/kernel/net/ipv${g_family}/netfilter:/lib/modules/$uname/kernel/net/netfilter:/lib/modules/$uname/kernel/net/sched:/lib/modules/$uname/extra:/lib/modules/$uname/extra/ipset
++	MODULESDIR=/lib/modules/$uname/kernel/net/ipv${g_family}/netfilter:/lib/modules/$uname/kernel/net/netfilter:/lib/modules/$uname/kernel/net/sched:/lib/modules/$uname/extra:/lib/modules/$uname/extra/ipset:/lib/modules/$uname
+ 
+     for directory in $(split $MODULESDIR); do
+ 	[ -d $directory ] && moduledirectories="$moduledirectories $directory"

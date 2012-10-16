@@ -1,0 +1,11 @@
+--- a/shorewallrc.default	2012-08-08 16:29:23.000000000 +0200
++++ b/shorewallrc.default	2012-08-13 10:15:46.769381221 +0200
+@@ -2,7 +2,7 @@
+ # Default Shorewall 4.5 rc file
+ #
+ HOST=linux                              #Generic Linux
+-BUILD=                                  #Default is to detect the build system
++BUILD=linux                             #Default is to detect the build system
+ PREFIX=/usr                             #Top-level directory for shared files, libraries, etc.
+ SHAREDIR=${PREFIX}/share                #Directory for arch-neutral files.
+ LIBEXECDIR=${PREFIX}/share              #Directory for executable scripts.
