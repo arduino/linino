@@ -29,7 +29,8 @@ define Package/mrtg
     +perlbase-math +perlbase-integer +perlbase-xsloader +perlbase-pod \
     +perlbase-universal +perlbase-socket +perlbase-posix +perlbase-autoloader \
     +perlbase-fcntl +perlbase-tie +perlbase-io +perlbase-symbol \
-    +perlbase-selectsaver +perlbase-errno
+    +perlbase-selectsaver +perlbase-errno +perlbase-scalar +perlbase-list \
+	+perlbase-base
   TITLE:=The Multi Router Traffic Grapher
   URL:=http://oss.oetiker.ch/mrtg/index.en.html
 endef
