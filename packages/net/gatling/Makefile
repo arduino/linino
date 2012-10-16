@@ -21,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/gatling
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=Web
+  SUBMENU:=Web Servers/Proxies
   TITLE:=gatling - a high performance web server
   VERSION:=$(PKG_VERSION)-$(PKG_RELEASE)
   URL:=http://www.fefe.de/gatling/
