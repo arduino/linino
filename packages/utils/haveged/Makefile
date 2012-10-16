@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=haveged
-PKG_VERSION:=1.4
+PKG_VERSION:=1.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.issihosts.com/$(PKG_NAME)
-PKG_MD5SUM:=39a03d4b8a4225706f78dbef3f623b0e
+PKG_MD5SUM:=c1f34be00c3f438ec83862e90e192e4b
 
 #ensure this is consistent with the dir in the tarball!!!
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
