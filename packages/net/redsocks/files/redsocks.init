@@ -1,0 +1,14 @@
+#!/bin/sh /etc/rc.common
+
+START=80
+APP=redsocks
+PID_FILE=/var/run/$APP.pid
+
+start() {
+        start-stop-daemon -S -x $APP -p $PID_FILE -m -b -- -c /etc/redsocks.conf
+}
+
+stop() {
+        start-stop-daemon -K -n $APP -p $PID_FILE -s TERM
+        rm -rf $PID_FILE
+}

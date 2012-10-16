@@ -1,0 +1,28 @@
+diff -ur redsocks-0.4.orig/redudp.c redsocks-0.4/redudp.c
+--- redsocks-0.4.orig/redudp.c 2012-07-27 20:30:40.283988208 +0200
++++ redsocks-0.4/redudp.c      2012-07-27 20:31:35.759985938 +0200
+@@ -33,6 +33,10 @@
+ #include "redsocks.h"
+ #include "redudp.h"
+ 
++#define IP_ORIGDSTADDR 20
++#define IP_TRANSPARENT 19
++#define IP_RECVORIGDSTADDR IP_ORIGDSTADDR
++
+ #define redudp_log_error(client, prio, msg...) \
+       redsocks_log_write_plain(__FILE__, __LINE__, __func__, 0, &(client)->clientaddr, get_destaddr(client), prio, ## msg)
+ #define redudp_log_errno(client, prio, msg...) \
+diff -ur redsocks-0.4.orig/utils.c redsocks-0.4/utils.c
+--- redsocks-0.4.orig/utils.c  2012-07-27 20:30:40.283988208 +0200
++++ redsocks-0.4/utils.c       2012-07-27 20:31:20.075986580 +0200
+@@ -26,6 +26,10 @@
+ #include "utils.h"
+ #include "redsocks.h" // for redsocks_close
+ 
++#define IP_ORIGDSTADDR 20
++#define IP_TRANSPARENT 19
++#define IP_RECVORIGDSTADDR IP_ORIGDSTADDR
++
+ int red_recv_udp_pkt(int fd, char *buf, size_t buflen, struct sockaddr_in *inaddr, struct sockaddr_in *toaddr)
+ {
+       socklen_t addrlen = sizeof(*inaddr);
