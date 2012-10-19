@@ -73,6 +73,24 @@ load_tunnelD() {
 	append_string "ARGS_tunnels" "-D $localaddress:$localport"
 }
 
+load_tunnelW() {
+        config_get section_server $1 server
+        [ "$server" = "$section_server" ] || return 0 # continue to read next section if this is not for the current server
+        let count++ # count nr of valid sections to make sure there are at least one
+
+        config_get localdev     $1 localdev "*"
+        config_get remotedev    $1 remotedev "*"
+        config_get vpntype      $1 vpntype "*"
+
+        [ "$vpntype" == "ethernet" ] || [ "$vpntype" == "point-to-point" ] || append_string "error" "[tunnelW: $1] vpntype must be \"ethernet\" (tap) or \"pointopoint\" (tun)" "; "
+        [ "$localdev" == "any" ] || [ "$localdev" -ge 0 ] || append_string "error" "[tunnelW: $1] localdev must be an integer or \"any\"" "; "
+        [ "$remotedev" == "any" ] || [ "$remotedev" -ge 0 ] || append_string "error" "[tunnelW: $1] remotedev must be an integer or \"any\"" "; "
+        [ "$user" == "root" ] || logger -p user.warn -t "sshtunnel" "warning: root is required unless the tunnel device has been created manually"
+        [ -n "$error" ] && return 1
+
+        append_string "ARGS_tunnels" "-w $localdev:$remotedev -o Tunnel=$vpntype"
+}
+
 load_server() {
 	server="$1"
 

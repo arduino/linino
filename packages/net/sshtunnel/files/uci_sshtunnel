@@ -49,3 +49,15 @@
 #	option server		disney
 #	option localaddress	*
 #	option localport	4055
+
+# tunnelW - creates TUN/TAP devices on client and server to establish a VPN tunnel between them
+# vpntypes:
+#  point-to-point = TUN
+#  ethernet = TAP
+#
+#config tunnelW proxy
+#	option server           disney
+#	option vpntype		point-to-point|ethernet
+#	option localdev		any|0|1|2|...
+#	option remotedev	any|0|1|2|...
+
