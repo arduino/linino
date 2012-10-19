@@ -16,6 +16,7 @@ PKG_SOURCE:=libevent-$(PKG_VERSION)-stable.tar.gz
 PKG_SOURCE_URL:=http://www.monkey.org/~provos/ \
 	@SF/levent
 PKG_MD5SUM:=91111579769f46055b0a438f5cc59572
+PKG_MAINTAINER:=Jo-Philipp Wich <jow@openwrt.org>
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
