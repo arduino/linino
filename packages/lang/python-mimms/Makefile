@@ -18,6 +18,9 @@ PKG_MD5SUM:=ec629d8899551b4789ba15c17402c36f
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=python
 
+PKG_LICENSE:=GPLv3
+PKG_LICENSE_FILES:=COPYING
+
 include $(INCLUDE_DIR)/package.mk
 $(call include_mk, python-package.mk)
 

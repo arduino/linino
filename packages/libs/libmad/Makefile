@@ -16,6 +16,9 @@ PKG_SOURCE_URL:=@SF/mad \
 	ftp://ftp.mars.org/pub/mpeg/
 PKG_MD5SUM:=1be543bc30c56fb6bea1d7bf6a64e66c
 
+PKG_LICENSE:=GPLv2
+PKG_LICENSE_FILES:=COPYING
+
 PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1

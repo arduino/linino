@@ -21,6 +21,9 @@ PKG_SOURCE_URL:=http://curl.haxx.se/download/ \
 	http://curl.mirrors.cyberservers.net/download/
 PKG_MD5SUM:=0296d3196b4bf82c896a869b38dbc5f2
 
+PKG_LICENSE:=MIT
+PKG_LICENSE_FILES:=COPYING
+
 PKG_FIXUP:=autoreconf
 PKG_BUILD_PARALLEL:=1
 

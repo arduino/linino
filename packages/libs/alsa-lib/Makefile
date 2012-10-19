@@ -16,6 +16,9 @@ PKG_SOURCE_URL:=ftp://ftp.alsa-project.org/pub/lib/ \
 		http://alsa.cybermirror.org/lib/
 PKG_MD5SUM:=7cc05f25e1d5b65da8fb3fdcd540f226
 
+PKG_LICENSE:=LGPLv2.1 GPLv2
+PKG_LICENSE_FILE:=COPYING aserver/COPYING
+
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 

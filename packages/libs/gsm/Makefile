@@ -15,6 +15,9 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://user.cs.tu-berlin.de/~jutta/gsm/
 PKG_MD5SUM:=c1ba392ce61dc4aff1c29ea4e92f6df4
 
+PKG_LICENSE:=FREE
+PKG_LICENSE_FILES:=COPYRIGHT
+
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-1.0-pl13
 
 include $(INCLUDE_DIR)/package.mk

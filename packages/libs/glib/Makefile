@@ -18,6 +18,9 @@ PKG_SOURCE_URL:=ftp://ftp.gtk.org/pub/gtk/v1.2 \
 	http://www.mirrorservice.org/sites/ftp.gimp.org/pub/gtk/v1.2/
 PKG_MD5SUM:=6fe30dad87c77b91b632def29dd69ef9
 
+PKG_LICENSE:=GPLv2
+PKG_LICENSE_FILES:=COPYING docs/reference/COPYING glib/pcre/COPYING gmodule/COPYING
+
 PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=aclocal.m4 acinclude.m4
 

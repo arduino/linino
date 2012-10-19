@@ -15,6 +15,9 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.xiph.org/releases/ogg/
 PKG_MD5SUM:=10200ec22543841d9d1c23e0aed4e5e9
 
+PKG_LICENSE:=BSD-3c
+PKG_LICENSE_FILES:=COPYING
+
 PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1

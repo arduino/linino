@@ -9,6 +9,9 @@ PKG_MD5SUM:=69a8a019eeb952fe97e3ac0767c726da
 PKG_SOURCE_URL:=http://search.cpan.org/CPAN/authors/id/O/OV/OVID
 PKG_SOURCE:=Test-Harness-$(PKG_VERSION).tar.gz
 
+PKG_LICENSE:=GPLv2 ARTISTIC
+PKG_LICENSE_FILES:=
+
 PKG_BUILD_DIR:=$(BUILD_DIR)/perl/Test-Harness-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk

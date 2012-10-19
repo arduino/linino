@@ -15,6 +15,9 @@ PKG_SOURCE:=flup-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://pypi.python.org/packages/source/f/flup/
 PKG_MD5SUM:=24dad7edc5ada31dddd49456ee8d5254
 
+PKG_LICENSE:=BSD
+PKG_LICENSE_FILES:PKG-INFO
+
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=python
 

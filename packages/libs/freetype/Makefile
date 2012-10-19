@@ -15,6 +15,9 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/freetype
 PKG_MD5SUM:=dbf2caca1d3afd410a29217a9809d397
 
+PKG_LICENSE:=FTL GPLv2 MIT ZLIB
+PKG_LICENSE_FILES:=docs/LICENSE.TXT docs/FTL.TXT docs/GPLv2.TXT src/bdf/README src/pcf/README src/gzip/zlib.h
+
 PKG_FIXUP:=autoreconf
 PKG_LIBTOOL_PATHS:=builds/unix
 

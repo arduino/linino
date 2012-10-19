@@ -15,6 +15,9 @@ PKG_SOURCE:=$(PKG_NAME)-autoconf-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.sqlite.org
 PKG_MD5SUM:=eb7bbd258913518ad30971ea7ecb0ca9
 
+PKG_LICENSE:=PUBLICDOMAIN
+PKG_LICENSE_FILES:=
+
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-autoconf-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=libncurses libreadline
 

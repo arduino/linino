@@ -17,6 +17,9 @@ PKG_SOURCE_URL:=http://gd.tuwien.ac.at/languages/libxml/ \
 	ftp://fr.rpmfind.net/pub/libxml/
 PKG_MD5SUM:=8127a65e8c3b08856093099b52599c86
 
+PKG_LICENSE:=MIT
+PKG_LICENSE_FILES:=COPYING
+
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1

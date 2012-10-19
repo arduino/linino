@@ -15,6 +15,9 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.andrew.cmu.edu/pub/cyrus-mail/
 PKG_MD5SUM:=2eb0e48106f0e9cd8001e654f267ecbc
 
+PKG_LICENSE:=BSD-4c BSD
+PKG_LICENSE_FILES:=COPYING cmulocal/COPYING saslauthd/COPYING
+
 PKG_BUILD_DEPENDS:=libopenssl
 
 PKG_FIXUP:=autoreconf
