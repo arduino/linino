@@ -52,44 +52,21 @@ define Package/libdb47xx/description
   Berkeley DB library (4.7).  C++ wrapper.
 endef
 
-define Build/Configure
-	(cd $(PKG_BUILD_DIR)/build_unix; rm -f config.cache; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="$(TARGET_CPPFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		../dist/configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=/usr/lib \
-			--libexecdir=/usr/lib \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc \
-			$(DISABLE_NLS) \
-			--enable-shared \
-			--enable-static \
-			--disable-java \
-			--enable-cxx \
-			--with-mutex=UNIX/fcntl \
-			--disable-tcl \
-			--disable-rpc \
-			--enable-compat185 \
-			--enable-smallbuild \
-			--disable-debug \
-			--enable-cryptography \
-	);
-endef
+CONFIGURE_PATH = build_unix
+CONFIGURE_CMD = ../dist/configure
+
+CONFIGURE_ARGS += \
+	--enable-shared \
+	--enable-static \
+	--disable-java \
+	--with-mutex=UNIX/fcntl \
+	--disable-tcl \
+	--disable-rpc \
+	--enable-compat185 \
+	--enable-smallbuild \
+	--disable-debug \
+	--enable-cryptography \
+	$(if $(CONFIG_PACKAGE_libdb47xx),--enable-cxx,--disable-cxx)
 
 TARGET_CFLAGS += $(FPIC)
 
