@@ -7,6 +7,7 @@
 #
 
 include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/uclibc++.mk
 
 RELEASEVER:=3.2.0
 
@@ -33,7 +34,7 @@ endef
 
 define Package/$(PKG_NAME)
   $(call Package/yate/Default)
-  DEPENDS:=+libpthread +uclibcxx
+  DEPENDS:=+libpthread $(CXX_DEPENDS)
   TITLE:=Yet Another Telphony Engine
   MENU:=1
 endef

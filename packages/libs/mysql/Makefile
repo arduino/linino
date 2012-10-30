@@ -6,6 +6,7 @@
 #
 
 include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/uclibc++.mk
 
 PKG_NAME:=mysql
 PKG_VERSION:=5.1.53
@@ -29,7 +30,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libmysqlclient/Default
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+uclibcxx +zlib
+  DEPENDS:=$(CXX_DEPENDS) +zlib
   TITLE:=MySQL client library
   URL:=http://dev.mysql.com/
 endef

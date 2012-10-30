@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/smartmontools/Default
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+uclibcxx
+  DEPENDS:=$(CXX_DEPENDS)
   TITLE:=S.M.A.R.T Monitoring
   URL:=http://smartmontools.sourceforge.net/
 endef

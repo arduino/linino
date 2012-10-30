@@ -1,11 +1,12 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
 
 include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/uclibc++.mk
 
 PKG_NAME:=rrs
 PKG_VERSION:=1.70
@@ -20,7 +21,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/rrs/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+uclibcxx
+  DEPENDS:=$(CXX_DEPENDS)
   TITLE:=A reverse (connecting) remote shell
   URL:=http://www.cycom.se/dl/rrs/
 endef

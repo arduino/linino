@@ -6,6 +6,7 @@
 #
 
 include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/uclibc++.mk
 
 PKG_NAME:=opal
 PKG_VERSION:=3.2.1
@@ -26,7 +27,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libopal
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+ptlib +uclibcxx
+  DEPENDS:=+ptlib $(CXX_DEPENDS)
   TITLE:=Open Phone Abstraction Library
   URL:=http://www.opalvoip.org/
 endef
