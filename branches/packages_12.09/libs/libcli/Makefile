@@ -22,6 +22,7 @@ define Package/libcli
   CATEGORY:=Libraries
   TITLE:=A Cisco-like CLI library
   URL:=http://code.google.com/p/libcli/
+  DEPENDS:=+EXTERNAL_TOOLCHAIN:libc +EXTERNAL_TOOLCHAIN:+libgcc
 endef
 
 define Package/libcli/description
