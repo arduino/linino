@@ -27,7 +27,7 @@ define Package/haveged
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Feeds the kernel entropy pool by timing CPU loops.
-  DEPENDS:=+librt
+  DEPENDS:=+librt +libpthread
   URL:=http://www.issihosts.com/haveged/
 endef
 
