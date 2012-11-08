@@ -105,16 +105,24 @@ enum channel_state {
 };
 
 static struct lantiq_pvt {
-	struct ast_channel *owner;         /* Channel we belong to, possibly NULL  */
-	int port_id;                       /* Port number of this object, 0..n     */
+	struct ast_channel *owner;         /* Channel we belong to, possibly NULL   */
+	int port_id;                       /* Port number of this object, 0..n      */
 	int channel_state;
-	char context[AST_MAX_CONTEXT];     /* this port's dialplan context         */
-	char ext[AST_MAX_EXTENSION+1];     /* the extension this port is connecting*/
-	int dial_timer;                    /* timer handle for autodial timeout    */
-	char dtmfbuf[AST_MAX_EXTENSION+1]; /* buffer holding dialed digits         */
-	int dtmfbuf_len;                   /* lenght of dtmfbuf                    */
-	int rtp_timestamp;                 /* timestamp for RTP packets            */
-	uint16_t rtp_seqno;                /* Sequence nr for RTP packets          */
+	char context[AST_MAX_CONTEXT];     /* this port's dialplan context          */
+	char ext[AST_MAX_EXTENSION+1];     /* the extension this port is connecting */
+	int dial_timer;                    /* timer handle for autodial timeout     */
+	char dtmfbuf[AST_MAX_EXTENSION+1]; /* buffer holding dialed digits          */
+	int dtmfbuf_len;                   /* lenght of dtmfbuf                     */
+	int rtp_timestamp;                 /* timestamp for RTP packets             */
+	uint16_t rtp_seqno;                /* Sequence nr for RTP packets           */
+	uint32_t call_setup_start;         /* Start of dialling in ms               */
+	uint32_t call_setup_delay;         /* time between ^ and 1st ring in ms     */
+	uint16_t jb_size;                  /* Jitter buffer size                    */
+	uint32_t jb_underflow;             /* Jitter buffer injected samples        */
+	uint32_t jb_overflow;              /* Jitter buffer dropped samples         */
+	uint16_t jb_delay;                 /* Jitter buffer: playout delay          */
+	uint16_t jb_invalid;               /* Jitter buffer: Nr. of invalid packets */
+
 } *iflist = NULL;
 
 static struct lantiq_ctx {
@@ -134,6 +142,8 @@ static struct ast_frame *ast_lantiq_exception(struct ast_channel *ast);
 static int ast_lantiq_indicate(struct ast_channel *chan, int condition, const void *data, size_t datalen);
 static int ast_lantiq_fixup(struct ast_channel *old, struct ast_channel *new);
 static struct ast_channel *ast_lantiq_requester(const char *type, format_t format, const struct ast_channel *requestor, void *data, int *cause);
+static int acf_channel_read(struct ast_channel *chan, const char *funcname, char *args, char *buf, size_t buflen);
+static void lantiq_jb_get_stats(int c);
 
 static const struct ast_channel_tech lantiq_tech = {
 	.type = "TAPI",
@@ -149,7 +159,8 @@ static const struct ast_channel_tech lantiq_tech = {
 	.exception = ast_lantiq_exception,
 	.indicate = ast_lantiq_indicate,
 	.fixup = ast_lantiq_fixup,
-	.requester = ast_lantiq_requester
+	.requester = ast_lantiq_requester,
+	.func_channel_read = acf_channel_read
 };
 
 /* Protect the interface list (of lantiq_pvt's) */
@@ -193,6 +204,14 @@ typedef struct rtp_header
   uint32_t ssrc;
 } rtp_header_t;
 
+static uint32_t now(void) {
+	struct timespec ts;
+	clock_gettime(CLOCK_MONOTONIC, &ts);
+
+	uint64_t tmp = ts.tv_sec*1000 + (ts.tv_nsec/1000000);
+	return (uint32_t) tmp;
+}
+
 static int lantiq_dev_open(const char *dev_path, const int32_t ch_num)
 {
 	char dev_name[PATH_MAX];
@@ -201,12 +220,31 @@ static int lantiq_dev_open(const char *dev_path, const int32_t ch_num)
 	return open((const char*)dev_name, O_RDWR, 0644);
 }
 
-static void lantiq_ring(int c, int r)
+static void lantiq_ring(int c, int r, const char *cid)
 {
 	uint8_t status;
 
 	if (r) {
-		status = (uint8_t) ioctl(dev_ctx.ch_fd[c], IFX_TAPI_RING_START, 0);
+		if (!cid) {
+			status = (uint8_t) ioctl(dev_ctx.ch_fd[c], IFX_TAPI_RING_START, 0);
+		} else {
+			IFX_TAPI_CID_MSG_t msg;
+			IFX_TAPI_CID_MSG_STRING_t cid_el;
+
+			memset(&msg, 0, sizeof(msg));
+			memset(&cid_el, 0, sizeof(cid_el));
+			
+			cid_el.elementType = IFX_TAPI_CID_ST_CLI;
+			cid_el.len = strlen(cid);
+			strncpy((char*)cid_el.element, cid, (size_t)cid_el.len);
+
+			msg.txMode = IFX_TAPI_CID_HM_ONHOOK;
+			msg.messageType = IFX_TAPI_CID_MT_CSUP;
+			msg.message = (IFX_TAPI_CID_MSG_ELEMENT_t *)&cid_el;
+			msg.nMsgElements = 1;
+
+			status = (uint8_t) ioctl(dev_ctx.ch_fd[c], IFX_TAPI_CID_TX_SEQ_START, (IFX_int32_t) &msg);
+		}
 	} else {
 		status = (uint8_t) ioctl(dev_ctx.ch_fd[c], IFX_TAPI_RING_STOP, 0);
 	}
@@ -379,6 +417,7 @@ static int ast_lantiq_indicate(struct ast_channel *chan, int condition, const vo
 			}
 		case AST_CONTROL_RINGING:
 			{
+				pvt->call_setup_delay = now() - pvt->call_setup_start;
 				lantiq_play_tone(pvt->port_id, TAPI_TONE_LOCALE_RINGING_CODE);
 				return 0;
 			}
@@ -419,7 +458,11 @@ static int ast_lantiq_call(struct ast_channel *ast, char *dest, int timeout)
 
 	if (pvt->channel_state == ONHOOK) {
 		ast_log(LOG_DEBUG, "port %i is ringing\n", pvt->port_id);
-		lantiq_ring(pvt->port_id, 1);
+
+		char *cid = ast->connected.id.number.valid ? ast->connected.id.number.str : NULL;
+		ast_log(LOG_DEBUG, "port %i CID: %s\n", pvt->port_id, cid ? cid : "none");
+
+		lantiq_ring(pvt->port_id, 1, cid);
 		pvt->channel_state = RINGING;
 
 		ast_setstate(ast, AST_STATE_RINGING);
@@ -429,7 +472,7 @@ static int ast_lantiq_call(struct ast_channel *ast, char *dest, int timeout)
 		ast_setstate(ast, AST_STATE_BUSY);
 		ast_queue_control(ast, AST_CONTROL_BUSY);
 	}
-		
+
 	ast_mutex_unlock(&iflock);
 
 	return 0;
@@ -451,7 +494,7 @@ static int ast_lantiq_hangup(struct ast_channel *ast)
 	switch (pvt->channel_state) {
 		case RINGING:
 		case ONHOOK: 
-			lantiq_ring(pvt->port_id, 0);
+			lantiq_ring(pvt->port_id, 0, NULL);
 			pvt->channel_state = ONHOOK;
 			break;
 		default:
@@ -459,6 +502,8 @@ static int ast_lantiq_hangup(struct ast_channel *ast)
 			pvt->channel_state = CALL_ENDED;
 			lantiq_play_tone(pvt->port_id, TAPI_TONE_LOCALE_BUSY_CODE);
 	}
+
+	lantiq_jb_get_stats(pvt->port_id);
 
 	ast_setstate(ast, AST_STATE_DOWN);
 	ast_module_unref(ast_module_info->self);
@@ -538,11 +583,76 @@ static int ast_lantiq_write(struct ast_channel *ast, struct ast_frame *frame)
 	return 0;
 }
 
+static int acf_channel_read(struct ast_channel *chan, const char *funcname, char *args, char *buf, size_t buflen)
+{
+	struct lantiq_pvt *pvt;
+	int res = 0;
+
+	if (!chan || chan->tech != &lantiq_tech) {
+		ast_log(LOG_ERROR, "This function requires a valid Lantiq TAPI channel\n");
+		return -1;
+	}
+
+	ast_mutex_lock(&iflock);
+
+	pvt = (struct lantiq_pvt*) chan->tech_pvt;
+
+	if (!strcasecmp(args, "csd")) {
+		snprintf(buf, buflen, "%lu", (unsigned long int) pvt->call_setup_delay);
+	} else if (!strcasecmp(args, "jitter_stats")){
+		lantiq_jb_get_stats(pvt->port_id);
+		snprintf(buf, buflen, "jbBufSize=%u,jbUnderflow=%u,jbOverflow=%u,jbDelay=%u,jbInvalid=%u",
+				(uint32_t) pvt->jb_size,
+				(uint32_t) pvt->jb_underflow,
+				(uint32_t) pvt->jb_overflow,
+				(uint32_t) pvt->jb_delay,
+				(uint32_t) pvt->jb_invalid);
+	} else {
+		res = -1;
+	}
+
+	ast_mutex_unlock(&iflock);
+
+	return res;
+}
+
+
 static struct ast_frame * ast_lantiq_exception(struct ast_channel *ast)
 {
 	ast_log(LOG_DEBUG, "entering... no code here...\n");
 	return NULL;
 }
+
+static void lantiq_jb_get_stats(int c) {
+	struct lantiq_pvt *pvt = &iflist[c];
+
+	IFX_TAPI_JB_STATISTICS_t param;
+	memset (&param, 0, sizeof (param));
+	if (ioctl (dev_ctx.ch_fd[c], IFX_TAPI_JB_STATISTICS_GET, (IFX_int32_t) &param) != IFX_SUCCESS) {
+		ast_debug(1, "Error getting jitter buffer  stats.\n");
+	} else {
+#if !defined (TAPI_VERSION3) && defined (TAPI_VERSION4)
+		ast_debug(1, "Jitter buffer stats:  dev=%u, ch=%u, nType=%u, nBufSize=%u, nIsUnderflow=%u, nDsOverflow=%u, nPODelay=%u, nInvalid=%u", 
+				(uint32_t) param.dev,
+				(uint32_t) param.ch,
+#else
+		ast_debug(1, "Jitter buffer stats:  nType=%u, nBufSize=%u, nIsUnderflow=%u, nDsOverflow=%u, nPODelay=%u, nInvalid=%u", 
+#endif
+				(uint32_t) param.nType,
+				(uint32_t) param.nBufSize,
+				(uint32_t) param.nIsUnderflow,
+				(uint32_t) param.nDsOverflow,
+				(uint32_t) param.nPODelay,
+				(uint32_t) param.nInvalid);
+		
+		pvt->jb_size = param.nBufSize;
+		pvt->jb_underflow = param.nIsUnderflow;
+		pvt->jb_overflow = param.nDsOverflow;
+		pvt->jb_invalid = param.nInvalid;
+		pvt->jb_delay = param.nPODelay;
+	}
+}
+
 
 static int lantiq_standby(int c)
 {
@@ -566,7 +676,7 @@ static int lantiq_standby(int c)
 
 static int lantiq_end_dialing(int c)
 {
-	ast_log(LOG_DEBUG, "TODO - DEBUG MSG");
+	ast_log(LOG_DEBUG, "TODO - DEBUG MSG\n");
 	struct lantiq_pvt *pvt = &iflist[c];
 
 	if (pvt->dial_timer) {
@@ -583,11 +693,12 @@ static int lantiq_end_dialing(int c)
 
 static int lantiq_end_call(int c)
 {
-	ast_log(LOG_DEBUG, "TODO - DEBUG MSG");
+	ast_log(LOG_DEBUG, "TODO - DEBUG MSG\n");
 
 	struct lantiq_pvt *pvt = &iflist[c];
 	
 	if(pvt->owner) {
+		lantiq_jb_get_stats(c);
 		ast_queue_hangup(pvt->owner);
 	}
 
@@ -596,7 +707,7 @@ static int lantiq_end_call(int c)
 
 static struct ast_channel * lantiq_channel(int state, int c, char *ext, char *ctx)
 {
-	ast_log(LOG_DEBUG, "TODO - DEBUG MSG");
+	ast_log(LOG_DEBUG, "TODO - DEBUG MSG\n");
 
 	struct ast_channel *chan = NULL;
 
@@ -670,7 +781,6 @@ static int lantiq_dev_data_handler(int c)
 	frame.datalen = res - RTP_HEADER_LEN;
 	frame.data.ptr = buf + RTP_HEADER_LEN;
 
-	ast_mutex_lock(&iflock);
 	struct lantiq_pvt *pvt = (struct lantiq_pvt *) &iflist[c];
 	if (pvt->owner && (pvt->owner->_state == AST_STATE_UP)) {
 		if(!ast_channel_trylock(pvt->owner)) {
@@ -678,8 +788,6 @@ static int lantiq_dev_data_handler(int c)
 			ast_channel_unlock(pvt->owner);
 		}
 	}
-
-	ast_mutex_unlock(&iflock);
 
 /*	ast_debug(1, "lantiq_dev_data_handler(): size: %i version: %i padding: %i extension: %i csrc_count: %i \n"
 				 "marker: %i payload_type: %s seqno: %i timestamp: %i ssrc: %i\n", 
@@ -699,7 +807,7 @@ static int lantiq_dev_data_handler(int c)
 
 static int accept_call(int c)
 { 
-	ast_log(LOG_DEBUG, "TODO - DEBUG MSG");
+	ast_log(LOG_DEBUG, "TODO - DEBUG MSG\n");
 
 	struct lantiq_pvt *pvt = &iflist[c];
 
@@ -708,6 +816,7 @@ static int accept_call(int c)
 
 		switch (chan->_state) {
 			case AST_STATE_RINGING:
+				lantiq_play_tone(c, TAPI_TONE_LOCALE_NONE);
 				ast_queue_control(pvt->owner, AST_CONTROL_ANSWER);
 				pvt->channel_state = INCALL;
 				break;
@@ -726,7 +835,7 @@ static int lantiq_dev_event_hook(int c, int state)
 	ast_log(LOG_DEBUG, "on port %i detected event %s hook\n", c, state ? "on" : "off");
 
 	int ret = -1;
-	if (state) {
+	if (state) { /* going onhook */
 		switch (iflist[c].channel_state) {
 			case OFFHOOK: 
 				ret = lantiq_standby(c);
@@ -744,7 +853,7 @@ static int lantiq_dev_event_hook(int c, int state)
 				break;
 		}
 		iflist[c].channel_state = ONHOOK;
-	} else {
+	} else { /* going offhook */
 		if (ioctl(dev_ctx.ch_fd[c], IFX_TAPI_LINE_FEED_SET, IFX_TAPI_LINE_FEED_ACTIVE)) {
 			ast_log(LOG_ERROR, "IFX_TAPI_LINE_FEED_SET ioctl failed\n");
 			goto out;
@@ -799,13 +908,15 @@ static void lantiq_dial(struct lantiq_pvt *pvt)
 
 		ast_verbose(VERBOSE_PREFIX_3 " extension exists, starting PBX %s\n", pvt->ext);
 
-		chan = lantiq_channel(AST_STATE_UP, 1, pvt->ext+1, pvt->context);
+		chan = lantiq_channel(AST_STATE_UP, pvt->port_id, pvt->ext+1, pvt->context);
 		chan->tech_pvt = pvt;
 		pvt->owner = chan;
 
 		strcpy(chan->exten, pvt->ext);
 		ast_setstate(chan, AST_STATE_RING);
 		pvt->channel_state = INCALL;
+
+		pvt->call_setup_start = now();
 
 		if (ast_pbx_start(chan)) {
 			ast_log(LOG_WARNING, " unable to start PBX on %s\n", chan->name);
@@ -1104,6 +1215,13 @@ static struct lantiq_pvt *lantiq_init_pvt(struct lantiq_pvt *pvt)
 		pvt->dial_timer = 0;
 		pvt->dtmfbuf[0] = '\0';
 		pvt->dtmfbuf_len = 0;
+		pvt->call_setup_start = 0;
+		pvt->call_setup_delay = 0;
+		pvt->jb_size = 0;
+		pvt->jb_underflow = 0;
+		pvt->jb_overflow = 0;
+		pvt->jb_delay = 0;
+		pvt->jb_invalid = 0;
 	} else {
 		ast_log(LOG_ERROR, "unable to clear pvt structure\n");
 	}
@@ -1327,6 +1445,7 @@ static int load_module(void)
 				return AST_MODULE_LOAD_DECLINE;
 			}
 		} else if (!strcasecmp(v->name, "calleridtype")) {
+			ast_log(LOG_DEBUG, "Setting CID type to %s.\n", v->value);
 			if (!strcasecmp(v->value, "telecordia")) {
 				cid_type = IFX_TAPI_CID_STD_TELCORDIA;
 			} else if (!strcasecmp(v->value, "etsifsk")) {
