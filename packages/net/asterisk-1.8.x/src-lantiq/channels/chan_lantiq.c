@@ -631,9 +631,13 @@ static void lantiq_jb_get_stats(int c) {
 	if (ioctl (dev_ctx.ch_fd[c], IFX_TAPI_JB_STATISTICS_GET, (IFX_int32_t) &param) != IFX_SUCCESS) {
 		ast_debug(1, "Error getting jitter buffer  stats.\n");
 	} else {
+#if !defined (TAPI_VERSION3) && defined (TAPI_VERSION4)
 		ast_debug(1, "Jitter buffer stats:  dev=%u, ch=%u, nType=%u, nBufSize=%u, nIsUnderflow=%u, nDsOverflow=%u, nPODelay=%u, nInvalid=%u", 
 				(uint32_t) param.dev,
 				(uint32_t) param.ch,
+#else
+		ast_debug(1, "Jitter buffer stats:  nType=%u, nBufSize=%u, nIsUnderflow=%u, nDsOverflow=%u, nPODelay=%u, nInvalid=%u", 
+#endif
 				(uint32_t) param.nType,
 				(uint32_t) param.nBufSize,
 				(uint32_t) param.nIsUnderflow,
