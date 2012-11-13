@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=fltk2
 PKG_REV:=6671
 PKG_VERSION:=r$(PKG_REV)
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
@@ -30,7 +30,7 @@ define Package/fltk2
   SUBMENU:=framework
   TITLE:=Fltk2
   URL:=http://fltk.org/
-  DEPENDS:=+libXi +libstdcpp +libfreetype
+  DEPENDS:=+libXi +libstdcpp +libfreetype +libXft +libpthread
 endef
 
 define Package/fltk2/description
