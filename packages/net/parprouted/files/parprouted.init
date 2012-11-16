@@ -33,7 +33,7 @@ start_instance() {
 }
 
 start() {
-	. /lib/network/functions.sh
+	. /lib/functions/network.sh
 
 	config_load 'parprouted'
 	config_foreach start_instance 'parprouted'
