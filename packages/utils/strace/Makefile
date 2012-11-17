@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,11 +10,11 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=strace
 
-PKG_VERSION:=4.5.20
+PKG_VERSION:=4.7
 PKG_RELEASE:=1
-PKG_MD5SUM:=64dfe10d9db0c1e34030891695ffca4b
+PKG_MD5SUM:=6054c3880a00c6703f83b57f15e04642
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 
 PKG_LICENSE:=BSD-3c
