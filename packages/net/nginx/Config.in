@@ -36,4 +36,135 @@ config NGINX_DAV
 	help
 		Enable the HTTP and WebDAV methods PUT, DELETE, MKCOL, COPY and MOVE.
 
+config NGINX_MODULE_LUA
+	bool
+	prompt "Enable LUA module"
+	default n
+	help
+		Enable support for LUA scripts.
+
+	menu "Disable features"
+
+	config NGINX_DISABLE_PCRE
+	      bool
+	      prompt "Disable PCRE library usage"
+	      default n
+
+	config NGINX_DISABLE_HTTP_CACHE
+	      depends on NGINX_SSL=y
+	      bool
+	      prompt "Disable HTTP cache"
+	      default y
+
+	config NGINX_DISABLE_HTTP_CHARSET_MODULE
+	      bool
+	      prompt "Disable HTTP charset module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_GZIP_MODULE
+	      bool
+	      prompt "Disable HTTP gzip module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_SSI_MODULE
+	      bool
+	      prompt "Disable HTTP ssi module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_USERID_MODULE
+	      bool
+	      prompt "Disable HTTP userid module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_ACCESS_MODULE
+	      bool
+	      prompt "Disable HTTP access module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_AUTH_BASIC_MODULE
+	      bool
+	      prompt "Disable HTTP auth basic"
+	      default n
+
+	config NGINX_DISABLE_HTTP_AUTOINDEX_MODULE
+	      bool
+	      prompt "Disable HTTP autoindex module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_GEO_MODULE
+	      bool
+	      prompt "Disable HTTP geo module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_MAP_MODULE
+	      bool
+	      prompt "Disable HTTP map module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_SPLIT_CLIENTS_MODULE
+	      bool
+	      prompt "Disable HTTP split clients"
+	      default n
+
+	config NGINX_DISABLE_HTTP_REFERER_MODULE
+	      bool
+	      prompt "Disable HTTP referer module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_REWRITE_MODULE
+	      bool
+	      prompt "Disable HTTP rewrite module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_PROXY_MODULE
+	      bool
+	      prompt "Disable HTTP proxy module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_FASTCGI_MODULE
+	      bool
+	      prompt "Disable HTTP fastcgi module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_UWSGI_MODULE
+	      bool
+	      prompt "Disable HTTP uwsgi module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_SCGI_MODULE
+	      bool
+	      prompt "Disable HTTP scgi module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_MEMCACHED_MODULE
+	      bool
+	      prompt "Disable HTTP memcached module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_LIMIT_CONN_MODULE
+	      bool
+	      prompt "Disable HTTP limit conn"
+	      default n
+
+	config NGINX_DISABLE_HTTP_LIMIT_REQ_MODULE
+	      bool
+	      prompt "Disable HTTP limit req"
+	      default n
+
+	config NGINX_DISABLE_HTTP_EMPTY_GIF_MODULE
+	      bool
+	      prompt "Disable HTTP empty gif"
+	      default n
+
+	config NGINX_DISABLE_HTTP_BROWSER_MODULE
+	      bool
+	      prompt "Disable HTTP browser module"
+	      default n
+
+	config NGINX_DISABLE_HTTP_UPSTREAM_IP_HASH_MODULE
+	      bool
+	      prompt "Disable HTTP IP hash module"
+	      default n
+
+	endmenu
 endmenu
