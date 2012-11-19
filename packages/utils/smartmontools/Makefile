@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/uclibc++.mk
 
 PKG_NAME:=smartmontools
 PKG_VERSION:=5.40
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/smartmontools
@@ -68,6 +68,7 @@ endef
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		BUILD_INFO='"(localbuild)"' \
 		LD="$(TARGET_CXX)"
 endef
 
