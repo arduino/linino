@@ -1,6 +1,6 @@
 --- a/extensions/libxt_geoip.c
 +++ b/extensions/libxt_geoip.c
-@@ -59,13 +59,13 @@
+@@ -59,13 +59,13 @@ geoip_get_subnets(const char *code, uint
  
  	/* Use simple integer vector files */
  	if (nfproto == NFPROTO_IPV6) {

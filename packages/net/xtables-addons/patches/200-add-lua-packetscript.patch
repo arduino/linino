@@ -18206,7 +18206,7 @@
 +
 --- a/extensions/Kbuild
 +++ b/extensions/Kbuild
-@@ -34,6 +34,7 @@ obj-${build_pknock}      += pknock/
+@@ -36,6 +36,7 @@ obj-${build_pknock}      += pknock/
  obj-${build_psd}         += xt_psd.o
  obj-${build_quota2}      += xt_quota2.o
  obj-${build_rtsp}        += rtsp/

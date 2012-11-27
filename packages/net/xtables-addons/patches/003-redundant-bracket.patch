@@ -1,6 +1,6 @@
 --- a/configure.ac
 +++ b/configure.ac
-@@ -30,7 +30,7 @@ xtlibdir="$(pkg-config --variable=xtlibd
+@@ -31,7 +31,7 @@ xtlibdir="$(pkg-config --variable=xtlibd
  
  AC_ARG_WITH([xtlibdir],
  	AS_HELP_STRING([--with-xtlibdir=PATH],
