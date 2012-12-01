@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tor
-PKG_VERSION:=0.2.2.39
+PKG_VERSION:=0.2.3.25
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://www.torproject.org/dist \
 	https://archive.torproject.org/tor-package-archive
-PKG_MD5SUM:=9157a1f02fcda9d7d2c5744176373abd
+PKG_MD5SUM:=a1c364189a9a66ed9daa8e6436489daf
 
+PKG_BUILD_DEPENDS:=libminiupnpc libnatpmp
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -37,13 +38,34 @@ endef
 define Package/tor
 $(call Package/tor/Default)
   TITLE:=An anonymous Internet communication system
-  DEPENDS:=+libevent2 +libopenssl +libpthread +librt
+  DEPENDS:=+libevent2 +libopenssl +libpthread +librt +SSP_SUPPORT:libssp
+endef
+
+define Package/tor/description
+$(call Package/tor/Default/description)
+ This package contains the tor daemon.
+endef
+
+define Package/tor-fw-helper
+$(call Package/tor/Default)
+  TITLE:=Firewall helper for tor
+  DEPENDS:=+tor +libminiupnpc +libnatpmp
+endef
+
+define Package/tor-fw-helper/description
+$(call Package/tor/Default/description)
+ This package contains a helper for automatically configuring port forwarding.
 endef
 
 define Package/tor-geoip
 $(call Package/tor/Default)
   TITLE:=GeoIP db for tor
   DEPENDS:=+tor
+endef
+
+define Package/tor-geoip/description
+$(call Package/tor/Default/description)
+ This package contains a GeoIP database mapping IP addresses to countries.
 endef
 
 define Package/tor/conffiles
@@ -53,7 +75,16 @@ endef
 CONFIGURE_ARGS += \
 	--with-libevent-dir="$(STAGING_DIR)/usr" \
 	--with-ssl-dir="$(STAGING_DIR)/usr" \
+	--enable-upnp \
+	--with-libminiupnpc-dir="$(STAGING_DIR)/usr" \
+	--enable-nat-pmp \
+	--with-libnatpmp-dir="$(STAGING_DIR)/usr" \
 	--disable-asciidoc
+
+ifneq ($(CONFIG_SSP_SUPPORT),y)
+	CONFIGURE_ARGS += \
+		--disable-gcc-hardening
+endif
 
 CONFIGURE_VARS += \
 	CROSS_COMPILE="yes"
@@ -71,10 +102,16 @@ define Package/tor/install
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/tor/torrc.sample $(1)/etc/tor/torrc
 endef
 
+define Package/tor-fw-helper/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/tor-fw-helper $(1)/usr/bin/
+endef
+
 define Package/tor-geoip/install
 	$(INSTALL_DIR) $(1)/usr/share/tor
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/tor/geoip $(1)/usr/share/tor/
 endef
 
 $(eval $(call BuildPackage,tor))
+$(eval $(call BuildPackage,tor-fw-helper))
 $(eval $(call BuildPackage,tor-geoip))
