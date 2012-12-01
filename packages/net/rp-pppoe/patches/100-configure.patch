@@ -1,6 +1,32 @@
 --- a/src/configure
 +++ b/src/configure
-@@ -6303,7 +6303,7 @@
+@@ -3610,7 +3610,7 @@ _ACEOF
+ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+-#include<sys/socket.h>
++#include <sys/socket.h>
+ 
+ #include <$ac_header>
+ _ACEOF
+@@ -3669,11 +3669,11 @@ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+ 
+-#include<sys/socket.h>
+-#include<net/ethernet.h>
+-#include<linux/if.h>
+-#include<linux/in.h>
+-
++#include <sys/socket.h>
++#include <net/ethernet.h>
++#include <linux/if.h>
++#include <linux/in.h>
++#include <linux/in6.h>
+ 
+ #include <$ac_header>
+ _ACEOF
+@@ -6272,7 +6272,7 @@ esac
  { echo "$as_me:$LINENO: checking packing order of bit fields" >&5
  echo $ECHO_N "checking packing order of bit fields... $ECHO_C" >&6; }
  if test "$cross_compiling" = yes; then
