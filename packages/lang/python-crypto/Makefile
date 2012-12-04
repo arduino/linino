@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pycrypto
-PKG_VERSION:=2.0.1
+PKG_VERSION:=2.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.amk.ca/files/python/crypto/
-PKG_MD5SUM:=4d5674f3898a573691ffb335e8d749cd
+PKG_SOURCE_URL:=http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto/
+PKG_MD5SUM:=88dad0a270d1fe83a39e0467a66a22bb
 
 include $(INCLUDE_DIR)/package.mk
 $(call include_mk, python-package.mk)
