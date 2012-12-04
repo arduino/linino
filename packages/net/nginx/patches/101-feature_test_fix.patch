@@ -11,7 +11,7 @@
      ngx_feature_libs=
 --- a/auto/cc/conf
 +++ b/auto/cc/conf
-@@ -149,7 +149,7 @@ if [ "$NGX_PLATFORM" != win32 ]; then
+@@ -155,7 +155,7 @@ if [ "$NGX_PLATFORM" != win32 ]; then
      else
          ngx_feature="C99 variadic macros"
          ngx_feature_name="NGX_HAVE_C99_VARIADIC_MACROS"
@@ -20,7 +20,7 @@
          ngx_feature_incs="#include <stdio.h>
  #define var(dummy, ...)  sprintf(__VA_ARGS__)"
          ngx_feature_path=
-@@ -163,7 +163,7 @@ if [ "$NGX_PLATFORM" != win32 ]; then
+@@ -169,7 +169,7 @@ if [ "$NGX_PLATFORM" != win32 ]; then
  
      ngx_feature="gcc variadic macros"
      ngx_feature_name="NGX_HAVE_GCC_VARIADIC_MACROS"
