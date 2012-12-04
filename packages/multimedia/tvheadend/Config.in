@@ -1,0 +1,21 @@
+config TVHEADEND_CWC_SUPPORT
+	bool "NewCamD support"
+	default n
+
+config TVHEADEND_V4L_SUPPORT
+	bool "Video4Linux v2 support"
+	default n
+
+config TVHEADEND_LINUXDVB_SUPPORT
+	bool "Linux DVB support"
+	default n
+
+config TVHEADEND_DVBSCAN_SUPPORT
+	bool "Fetch DVB-scan data"
+	depends TVHEADEND_LINUXDVB_SUPPORT
+	default TVHEADEND_LINUXDVB_SUPPORT
+
+config TVHEADEND_AVAHI_SUPPORT
+	bool "Avahi client support"
+	select PACKAGE_libavahi-client
+	default n

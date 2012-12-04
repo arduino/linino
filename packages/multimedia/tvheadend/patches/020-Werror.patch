@@ -1,0 +1,30 @@
+diff -urN tvheadend-3.2-orig/src/trap.c tvheadend-3.2/src/trap.c
+--- tvheadend-3.2-orig/src/trap.c	2012-10-24 21:01:34.254818786 +0400
++++ tvheadend-3.2/src/trap.c	2012-10-24 21:05:09.122437531 +0400
+@@ -67,6 +67,7 @@
+ /**
+  *
+  */
++#if ENABLE_EXECINFO
+ static int
+ add2lineresolve(const char *binary, void *addr, char *buf0, size_t buflen)
+ {
+@@ -126,6 +127,7 @@
+   close(fd[0]);
+   return 0;
+ }
++#endif /* ENABLE_EXECINFO */
+ 
+ 
+ 
+@@ -133,8 +135,8 @@
+ traphandler(int sig, siginfo_t *si, void *UC)
+ {
+   ucontext_t *uc = UC;
+-  char buf[200];
+ #if ENABLE_EXECINFO
++  char buf[200];
+   static void *frames[MAXFRAMES];
+   int nframes = backtrace(frames, MAXFRAMES);
+   Dl_info dli;
+Binary files tvheadend-3.2-orig/src/.trap.c.swp and tvheadend-3.2/src/.trap.c.swp differ
