@@ -19,12 +19,21 @@ PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/procps
+PROCPS_APPLETS := \
+    ps free pgrep pkill pmap pwdx skill w \
+    slabtop snice tload top vmstat watch
+
+define Package/procps/Default
   SECTION:=utils
   CATEGORY:=Utilities
   DEPENDS:=+libncurses
   TITLE:=proc utilities
   URL:=http://procps.sourceforge.net/
+endef
+
+define Package/procps
+  $(call Package/procps/Default)
+  MENU:=1
 endef
 
 define Package/procps/description
@@ -33,6 +42,21 @@ define Package/procps/description
  includes the programs ps, top, vmstat, w, kill, free, slabtop, and skill.
 endef
 
+define GenPlugin
+ define Package/$(1)
+   $(call Package/procps/Default)
+   DEPENDS:=procps
+   TITLE:=Applet $(2) from the procps package
+   DEFAULT:=y
+ endef
+
+ define Package/$(1)/description
+  Installs the applet $(2).
+ endef
+endef
+
+$(foreach a,$(PROCPS_APPLETS),$(eval $(call GenPlugin,procps-$(a),$(a))))
+
 MAKE_FLAGS += \
 	CFLAGS="$(TARGET_CFLAGS)" \
 	CPPFLAGS="$(TARGET_CPPFLAGS)" \
@@ -40,22 +64,20 @@ MAKE_FLAGS += \
 
 define Package/procps/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/free $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ps/ps $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pgrep $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pkill $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pmap $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/pwdx $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/skill $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/slabtop $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/snice $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tload $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/top $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/vmstat $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/w $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/watch $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/proc/libproc-$(PKG_VERSION).so $(1)/usr/lib/
 endef
 
+AUXDIR_ps := "ps/"
+
+define BuildPlugin
+  define Package/$(1)/install
+  	$(INSTALL_DIR) $$(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(AUXDIR_$(2))$(2) $$(1)/usr/bin/
+  endef
+
+  $$(eval $$(call BuildPackage,$(1)))
+endef
+
+$(foreach a,$(PROCPS_APPLETS),$(eval $(call BuildPlugin,procps-$(a),$(a))))
 $(eval $(call BuildPackage,procps))
