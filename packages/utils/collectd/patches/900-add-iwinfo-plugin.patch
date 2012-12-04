@@ -10,7 +10,7 @@
  #
  # Checks for typedefs, structures, and compiler characteristics.
  #
-@@ -4008,6 +4011,7 @@ plugin_interface="no"
+@@ -4081,6 +4084,7 @@ plugin_interface="no"
  plugin_ipmi="no"
  plugin_ipvs="no"
  plugin_irq="no"
@@ -18,7 +18,7 @@
  plugin_libvirt="no"
  plugin_load="no"
  plugin_memory="no"
-@@ -4315,6 +4319,7 @@ AC_PLUGIN([ipmi],        [$plugin_ipmi],
+@@ -4388,6 +4392,7 @@ AC_PLUGIN([ipmi],        [$plugin_ipmi],
  AC_PLUGIN([iptables],    [$with_libiptc],      [IPTables rule counters])
  AC_PLUGIN([ipvs],        [$plugin_ipvs],       [IPVS connection statistics])
  AC_PLUGIN([irq],         [$plugin_irq],        [IRQ statistics])
@@ -26,7 +26,7 @@
  AC_PLUGIN([java],        [$with_java],         [Embed the Java Virtual Machine])
  AC_PLUGIN([libvirt],     [$plugin_libvirt],    [Virtual machine statistics])
  AC_PLUGIN([load],        [$plugin_load],       [System load])
-@@ -4593,6 +4598,7 @@ Configuration:
+@@ -4666,6 +4671,7 @@ Configuration:
      protobuf-c  . . . . . $have_protoc_c
      oracle  . . . . . . . $with_oracle
      python  . . . . . . . $with_python
@@ -34,7 +34,7 @@
  
    Features:
      daemon mode . . . . . $enable_daemon
-@@ -4632,6 +4638,7 @@ Configuration:
+@@ -4705,6 +4711,7 @@ Configuration:
      iptables  . . . . . . $enable_iptables
      ipvs  . . . . . . . . $enable_ipvs
      irq . . . . . . . . . $enable_irq
@@ -67,7 +67,7 @@
  #	JVMArg "-Djava.class.path=@prefix@/share/collectd/java/collectd-api.jar"
 --- a/src/collectd.conf.pod
 +++ b/src/collectd.conf.pod
-@@ -1468,6 +1468,27 @@ and all other interrupts are collected.
+@@ -1478,6 +1478,27 @@ and all other interrupts are collected.
  
  =back
  
@@ -250,7 +250,7 @@
 +}
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
-@@ -454,6 +454,15 @@ collectd_LDADD += "-dlopen" irq.la
+@@ -453,6 +453,15 @@ collectd_LDADD += "-dlopen" irq.la
  collectd_DEPENDENCIES += irq.la
  endif
  
