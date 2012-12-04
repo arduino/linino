@@ -1,0 +1,54 @@
+diff --git a/conf/zabbix_agentd.conf b/conf/zabbix_agentd.conf
+index ed04751..e714c4d 100644
+--- a/conf/zabbix_agentd.conf
++++ b/conf/zabbix_agentd.conf
+@@ -3,12 +3,8 @@
+ 
+ ############ GENERAL PARAMETERS #################
+ 
+-### Option: PidFile
+-#	Name of PID file.
+-#
+-# Mandatory: no
+-# Default:
+-# PidFile=/tmp/zabbix_agentd.pid
++# Only /var/run/zabbix_agentd.pid supported
++PidFile=/var/run/zabbix_agentd.pid
+ 
+ ### Option: LogFile
+ #	Name of log file.
+@@ -18,8 +14,6 @@
+ # Default:
+ # LogFile=
+ 
+-LogFile=/tmp/zabbix_agentd.log
+-
+ ### Option: LogFileSize
+ #	Maximum size of log file in MB.
+ #	0 - disable automatic log rotation.
+@@ -105,6 +99,7 @@ Server=127.0.0.1
+ # Range: 0-100
+ # Default:
+ # StartAgents=3
++StartAgents=1
+ 
+ ##### Active checks related
+ 
+@@ -120,8 +115,6 @@ Server=127.0.0.1
+ # Default:
+ # ServerActive=
+ 
+-ServerActive=127.0.0.1
+-
+ ### Option: Hostname
+ #	Unique, case sensitive hostname.
+ #	Required for active checks and must match hostname as configured on the server.
+@@ -131,8 +124,6 @@ ServerActive=127.0.0.1
+ # Default:
+ # Hostname=
+ 
+-Hostname=Zabbix server
+-
+ ### Option: HostnameItem
+ #	Item used for generating Hostname if it is undefined.
+ #	Ignored if Hostname is defined.

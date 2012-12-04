@@ -3,23 +3,31 @@
 
 START=60
 
-SERVICE_PID_FILE=/var/run/zabbix/zabbix_agentd.pid
+PROG=/usr/sbin/zabbix_agentd
+CONFIG=/etc/zabbix_agentd.conf
+SERVICE_PID_FILE=/var/run/zabbix_agentd.pid
 
 start() {
-	[ -f /etc/zabbix/zabbix_agentd.conf ] || return 1
-	user_exists zabbix 53 || user_add zabbix 53
-	group_exists zabbix 53 || group_add zabbix 53
-	[ -d /var/log/zabbix ] || {
-		mkdir -m0755 -p /var/log/zabbix
-		chown zabbix:zabbix /var/log/zabbix
+	# Sometimes the agentd config was installed in /etc/zabbix/zabbix_agentd.conf
+	[ -f /etc/zabbix/zabbix_agentd.conf ] && mv /etc/zabbix/zabbix_agentd.conf ${CONFIG}
+
+	[ -f ${CONFIG} ] || return 1
+
+	grep -q "^PidFile=${SERVICE_PID_FILE}" ${CONFIG} || {
+		logger -s -t ${CONFIG} -p daemon.error "Only \"PidFile=${SERVICE_PID_FILE}\" supported"
+		return 1
 	}
-	[ -d /var/run/zabbix ] || {
-		mkdir -m0755 -p /var/run/zabbix
-		chown zabbix:zabbix /var/run/zabbix
+
+	grep -q "^AllowRoot=1" ${CONFIG} || {
+		user_exists zabbix 53 || user_add zabbix 53
+		group_exists zabbix 53 || group_add zabbix 53
+		touch ${SERVICE_PID_FILE}
+		chown zabbix:zabbix ${SERVICE_PID_FILE}
 	}
-	service_start /usr/sbin/zabbix_agentd
+
+	service_start ${PROG} -c ${CONFIG}
 }
 
 stop() {
-	service_stop /usr/sbin/zabbix_agentd
+	service_stop ${PROG}
 }
