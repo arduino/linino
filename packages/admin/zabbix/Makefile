@@ -63,6 +63,11 @@ define Package/zabbix-proxy
   DEPENDS += +libsqlite3
 endef
 
+define Package/zabbix-agentd/config
+  select BUSYBOX_CONFIG_HOSTNAME if !PACKAGE_net-tools-hostname
+  select BUSYBOX_CONFIG_UNAME if !PACKAGE_coreutils-uname
+endef
+
 CONFIGURE_ARGS+= \
 	--enable-agent \
 	--enable-server \
@@ -108,8 +113,17 @@ define Package/zabbix/install/init.d
 		$(1)/etc/init.d/zabbix_$(2)
 endef
 
-define Package/zabbix-$(1)/conffiles
-  /etc/zabbix/zabbix_$(1).conf
+define Package/zabbix-agent/conffiles
+/etc/zabbix_agent.conf
+endef
+define Package/zabbix-agentd/conffiles
+/etc/zabbix_agentd.conf
+endef
+define Package/zabbix-server/conffiles
+/etc/zabbix_server.conf
+endef
+define Package/zabbix-proxy/conffiles
+/etc/zabbix_proxy.conf
 endef
 
 define Package/zabbix-agent/install
