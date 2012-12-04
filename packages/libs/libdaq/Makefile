@@ -24,7 +24,7 @@ define Package/libdaq
   CATEGORY:=Libraries
   TITLE:=DAQ library
   URL:=$(PKG_SOURCE_URL)
-  DEPENDS:=+libdnet +libipq +libpcap
+  DEPENDS:=+libdnet +libpcap
 endef
 
 define Package/libdaq/description
