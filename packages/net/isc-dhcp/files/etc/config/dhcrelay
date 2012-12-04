@@ -1,0 +1,10 @@
+
+config dhcrelay ipv4
+    option dhcpserver '192.0.2.10'
+
+config dhcrelay ipv6
+#    option dhcpserver '2001:db8:1::1'
+    option upper 'eth1'
+    list lower 'eth0.2'
+    list lower 'eth0.3'
+

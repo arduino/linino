@@ -1,0 +1,22 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2012 OpenWrt.org
+
+START=91
+
+SERVICE_SIG="KILL"
+SERVICE_PID_FILE="/var/run/dhcrelay4.pid"
+SERVICE_USE_PID=1
+
+start() {
+    local relay_dhcpserver
+
+    config_load dhcrelay
+    config_get relay_dhcpserver ipv4 dhcpserver
+
+    service_start /usr/sbin/dhcrelay -4 -q \
+        -pf $SERVICE_PID_FILE $relay_dhcpserver
+}
+
+stop() {
+    service_stop /usr/sbin/dhcrelay
+}
