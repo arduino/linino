@@ -11,8 +11,8 @@ start_instance() {
 	config_get monitorport "$section" 'monitorport'
 	config_get poll "$section" 'poll'
 
-	AUTOSSH_GATETIME="${gatetime:-30}" \
-	AUTOSSH_POLL="${poll:-600}" \
+	export AUTOSSH_GATETIME="${gatetime:-30}"
+	export AUTOSSH_POLL="${poll:-600}"
 	service_start /usr/sbin/autossh -M ${monitorport:-20000} -f ${ssh}
 }
 
