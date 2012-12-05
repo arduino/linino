@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 OpenWrt.org
+# Copyright (C) 2008-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,11 +8,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libtheora
-PKG_VERSION:=1.0
-PKG_RELEASE:=3
+PKG_VERSION:=1.1.1
+PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.xiph.org/releases/theora/
-PKG_MD5SUM:=c963937053f45a7878954bed37ceb182
+PKG_MD5SUM:=292ab65cedd5021d6b7ddd117e07cd8e
 PKG_FIXUP:=autoreconf
 
 PKG_BUILD_DEPENDS:=libvorbis
