@@ -1,0 +1,11 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -2,7 +2,7 @@
+ 
+ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+ 
+-SUBDIRS = . tests
++SUBDIRS = .
+ 
+ pkgconfig_DATA= gupnp-vala-1.0.pc
+ pkgconfigdir = $(libdir)/pkgconfig
