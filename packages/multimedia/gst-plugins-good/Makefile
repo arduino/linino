@@ -1,4 +1,5 @@
-## Copyright (C) 2009-2011 OpenWrt.org
+#
+# Copyright (C) 2009-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -7,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gst-plugins-good
-PKG_VERSION:=0.10.23
+PKG_VERSION:=0.10.31
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gst-plugins-good/
-PKG_MD5SUM:=9cddbb0e7e90677f0cc05c23feffef5c
+PKG_MD5SUM:=
 
 PKG_BUILD_DEPENDS:= gstreamer gst-plugins-base liboil
 
@@ -150,6 +151,7 @@ endef
 
 $(eval $(call GstBuildPlugin,audiofx,audio effects,audio fft controller,,))
 $(eval $(call GstBuildPlugin,autodetect,format auto-detection,,,))
+$(eval $(call GstBuildPlugin,audioparsers,audio parsers,audio tag,,))
 $(eval $(call GstBuildPlugin,cutter,audio cutter,audio,,))
 $(eval $(call GstBuildPlugin,debug,debugging,,,))
 $(eval $(call GstBuildPlugin,equalizer,audio equalizer,audio controller,,))
@@ -157,14 +159,15 @@ $(eval $(call GstBuildPlugin,flac,FLAC codec,audio pbutils tag,,+libflac))
 $(eval $(call GstBuildPlugin,id3demux,ID3v1/v2 demuxer,pbutils tag,,))
 $(eval $(call GstBuildPlugin,icydemux,icy demuxer,audio tag,,))
 $(eval $(call GstBuildPlugin,interleave,audio interleave,audio,,))
+$(eval $(call GstBuildPlugin,isomp4,isomp4,riff rtp tag pbutils audio,,))
 $(eval $(call GstBuildPlugin,level,audio level,audio,,))
-$(eval $(call GstBuildPlugin,multifile,multiple files access,,,))
+$(eval $(call GstBuildPlugin,multifile,multiple files access,video,,))
 $(eval $(call GstBuildPlugin,multipart,multipart stream handling,,,))
-$(eval $(call GstBuildPlugin,ossaudio,OSS audio support,audio,,))
+$(eval $(call GstBuildPlugin,ossaudio,OSS audio support,audio interfaces,,))
 $(eval $(call GstBuildPlugin,replaygain,volume normalization,pbutils,,))
-$(eval $(call GstBuildPlugin,rtp,RTP,audio rtp tag,,))
+$(eval $(call GstBuildPlugin,rtp,RTP,audio rtp tag pbutils,,))
 $(eval $(call GstBuildPlugin,rtsp,RTSP,interfaces rtp rtsp sdp,,))
-$(eval $(call GstBuildPlugin,souphttpsrc,soup input,audio tag,,+libsoup))
+$(eval $(call GstBuildPlugin,souphttpsrc,soup input,tag,,+libsoup))
 $(eval $(call GstBuildPlugin,spectrum,spectrum data output,audio fft,,))
 $(eval $(call GstBuildPlugin,udp,UDP,netbuffer,,))
 $(eval $(call GstBuildPlugin,wavenc,Wav encoder,riff,,))
