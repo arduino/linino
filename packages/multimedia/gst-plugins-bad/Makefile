@@ -77,7 +77,6 @@ CONFIGURE_ARGS += \
 	--disable-resindvd \
 	--disable-metadata \
 	--disable-faac \
-	--disable-faad \
 	--disable-fbdev \
 	--disable-flite \
 	--disable-gsm \
@@ -208,6 +207,7 @@ $(eval $(call GstBuildPlugin,dccp,dccp support,,,))
 $(eval $(call GstBuildPlugin,debugutilsbad,debugutils support,interfaces video,,))
 $(eval $(call GstBuildPlugin,dtmf,dtmf support,rtp,,))
 $(eval $(call GstBuildPlugin,dvdspu,dvdspu support,video,,))
+$(eval $(call GstBuildPlugin,faad,faad support,audio,,+libfaad2))
 $(eval $(call GstBuildPlugin,festival,festival support,audio,,))
 $(eval $(call GstBuildPlugin,freeze,freeze support,,,))
 $(eval $(call GstBuildPlugin,frei0r,frei0r support,controller video,,))
