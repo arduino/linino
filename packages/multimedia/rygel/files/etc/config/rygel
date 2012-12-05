@@ -1,0 +1,6 @@
+# This file is converted to the rygel config syntax.
+# Underscores in option names are changed to hyphens.
+
+config plugin Playbin
+	option enabled true
+	option title 'Audio/Video playback on @HOSTNAME@'

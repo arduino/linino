@@ -1,0 +1,30 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2012 OpenWrt.org
+ 
+START=90
+STOP=10
+ 
+SERVICE_DAEMONIZE=1
+
+cfgfile="/var/run/rygel.conf"
+rm -f $cfgfile
+
+config_cb() {
+	local section="$2"
+	[ -n "$section" ] && echo "[$section]" >> $cfgfile
+}
+
+option_cb() {
+	local name=$(echo "$1" | tr _ -)
+	local value="$2"
+	echo "$name=$value" >> $cfgfile
+}
+
+start() {        
+	config_load rygel
+	service_start /usr/bin/rygel -c $cfgfile
+}                 
+ 
+stop() {          
+	service_stop /usr/bin/rygel
+}

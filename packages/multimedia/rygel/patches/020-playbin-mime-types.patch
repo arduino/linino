@@ -1,0 +1,10 @@
+--- a/src/plugins/playbin/rygel-playbin-player.vala
++++ b/src/plugins/playbin/rygel-playbin-player.vala
+@@ -37,6 +37,7 @@
+                                         "audio/x-wav",
+                                         "audio/x-ac3",
+                                         "audio/x-m4a",
++                                        "audio/mp4",
+                                         "image/jpeg",
+                                         "image/png",
+                                         "video/x-theora",

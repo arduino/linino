@@ -1,0 +1,18 @@
+--- a/src/rygel/rygel-plugin-loader.vala
++++ b/src/rygel/rygel-plugin-loader.vala
+@@ -126,13 +126,12 @@
+         foreach (var info in infos) {
+             var file = dir.get_child (info.get_name ());
+             FileType file_type = info.get_file_type ();
+-            string content_type = info.get_content_type ();
+-            string mime = ContentType.get_mime_type (content_type);
++            string file_name = info.get_name ();
+ 
+             if (file_type == FileType.DIRECTORY) {
+                 // Recurse into directories
+                 this.load_modules_from_dir.begin (file);
+-            } else if (mime == "application/x-sharedlib") {
++            } else if (file_name.has_suffix (Module.SUFFIX)) {
+                 // Seems like we found a module
+                 this.load_module_from_file (file);
+             }
