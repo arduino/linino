@@ -8,15 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gst-plugins-ugly
-PKG_VERSION:=0.10.15
-PKG_RELEASE:=2
+PKG_VERSION:=0.10.19
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gst-plugins-ugly/
-PKG_MD5SUM:=21c034a762a5da252f91640e53bfe457
+PKG_MD5SUM:=ba26045c8c8c91f0d48d327ccf53ac0c
 
 PKG_BUILD_DEPENDS:= gstreamer gst-plugins-base liboil
-PKG_CONFIG_DEPENDS:= \
+PKG_CONFIG_Dba26045c8c8c91f0d48d327ccf53ac0cEPENDS:= \
 	CONFIG_PACKAGE_gst-mod-asf \
 	CONFIG_PACKAGE_gst-mod-lame \
 	CONFIG_PACKAGE_gst-mod-mad \
@@ -127,7 +127,7 @@ define GstBuildPlugin
 endef
 
 $(eval $(call GstBuildPlugin,asf,ASF demuxer,audio riff rtp rtsp sdp tag,,))
-$(eval $(call GstBuildPlugin,lame,MP3 encoder (using LAME),,,+lame-lib))
+$(eval $(call GstBuildPlugin,lame,MP3 encoder (using LAME),audio,,+lame-lib))
 $(eval $(call GstBuildPlugin,mad,MP3 decoder (using MAD),audio tag,,+libid3tag +libmad))
 $(eval $(call GstBuildPlugin,mpeg2dec,MPEG decoder,video,,+libmpeg2))
 
