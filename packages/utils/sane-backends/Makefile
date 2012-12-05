@@ -8,13 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sane-backends
-PKG_VERSION:=1.0.22
-PKG_RELEASE:=3
+PKG_VERSION:=1.0.23
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=ftp://ftp.sane-project.org/pub/sane/$(PKG_NAME)-$(PKG_VERSION) \
+PKG_SOURCE_URL:=http://fossies.org/linux/misc \
+	ftp://ftp.sane-project.org/pub/sane/$(PKG_NAME)-$(PKG_VERSION) \
 	https://alioth.debian.org/frs/download.php/3503
-PKG_MD5SUM:=fadf56a60f4776bfb24491f66b617cf5
+PKG_MD5SUM:=e226a89c54173efea80e91e9a5eb6573
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
@@ -47,7 +48,7 @@ define Package/sane-libs
   $(call Package/sane-backends/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libjpeg +libtiff +libusb +libv4l
+  DEPENDS:=+libjpeg +libtiff +libusb +libv4l +cups
   TITLE+= (libraries)
 endef
 
