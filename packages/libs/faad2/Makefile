@@ -9,11 +9,15 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=faad2
 PKG_VERSION:=2.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/faac
 PKG_MD5SUM:=4c332fa23febc0e4648064685a3d4332
+
+PKG_CONFIG_DEPENDS := \
+	CONFIG_SOFT_FLOAT \
+	CONFIG_FAAD2_ALWAYS_USE_FLOATING_POINT
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
@@ -21,6 +25,12 @@ PKG_INSTALL:=1
 include $(INCLUDE_DIR)/package.mk
 
 TARGET_CFLAGS += $(FPIC)
+
+# Use fixed point math, if we're using soft floats, and the user didn't
+# specifically ask to use floats anyways.
+ifeq ($(CONFIG_SOFT_FLOAT)-$(CONFIG_FAAD2_ALWAYS_USE_FLOATING_POINT),y-)
+TARGET_CFLAGS+= -DFIXED_POINT
+endif
 
 define Package/faad2/Default
   URL:=http://www.audiocoding.com/faad2.html
@@ -52,6 +62,11 @@ $(call Package/faad2/Default)
   CATEGORY:=Libraries
   TITLE+=library
   DEPENDS:=@BUILD_PATENTED
+  MENU:=1
+endef
+
+define Package/libfaad2/config
+	source "$(SOURCE)/Config.in"
 endef
 
 define Package/libfaad2/description
