@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libsml
-PKG_VERSION:=0.1
+PKG_VERSION:=0.2
 PKG_RELEASE:=1
-PKG_REV:=4e546fb0db0bd4c0a2c3c2f3d29ac0a0ba6651a3
+PKG_REV:=550aa8216295ff76076f35ce2eb00872dfd83f8f
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=git://github.com/dailab/libsml.git
@@ -27,6 +27,9 @@ define Package/libsml
   TITLE:=Library which implements the Smart Messaging Language (SML) protocol
   DEPENDS:=+libuuid
 endef
+
+MAKE_FLAGS += \
+	      UNAME="Linux"
 
 define Package/libsml/description
   libSML is a library which implements the Smart Messaging Language (SML) protocol specified by
