@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008-2011 OpenWrt.org
+# Copyright (C) 2008-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gst-plugins-base
-PKG_VERSION:=0.10.29
-PKG_RELEASE:=2
+PKG_VERSION:=0.10.36
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://gstreamer.freedesktop.org/src/gst-plugins-base/
-PKG_MD5SUM:=d07e251152cccbaa81807c14cf0fd8c0
+PKG_MD5SUM:=776c73883e567f67b9c4a2847d8d041a
 
 PKG_BUILD_DEPENDS:= gstreamer liboil
 PKG_CONFIG_DEPENDS:= \
@@ -175,7 +175,7 @@ define GstBuildLibrary
 endef
 
 $(eval $(call GstBuildLibrary,app,app,,))
-$(eval $(call GstBuildLibrary,audio,audio,interfaces,))
+$(eval $(call GstBuildLibrary,audio,audio,interfaces pbutils,))
 $(eval $(call GstBuildLibrary,cdda,CDDA,tag,))
 $(eval $(call GstBuildLibrary,fft,FFT,,))
 $(eval $(call GstBuildLibrary,interfaces,interfaces,))
@@ -234,7 +234,7 @@ $(eval $(call GstBuildPlugin,ogg,Ogg,riff tag,,+libogg))
 $(eval $(call GstBuildPlugin,playbin,playback,video interfaces pbutils,,))
 $(eval $(call GstBuildPlugin,tcp,TCP,dataprotocol,,))
 $(eval $(call GstBuildPlugin,theora,Theora,video tag,ogg,+libtheora))
-$(eval $(call GstBuildPlugin,typefindfunctions,'typefind' functions,,,))
+$(eval $(call GstBuildPlugin,typefindfunctions,'typefind' functions,pbutils,,))
 $(eval $(call GstBuildPlugin,videotestsrc,video test,,,+liboil))
 $(eval $(call GstBuildPlugin,volume,volume,audio controller,,+liboil))
 $(eval $(call GstBuildPlugin,vorbis,Vorbis,audio tag,ogg,+libvorbis))
