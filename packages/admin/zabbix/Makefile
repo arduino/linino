@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zabbix
-PKG_VERSION:=2.0.0
+PKG_VERSION:=2.0.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/zabbix
-PKG_MD5SUM:=d34d398beddee0eaa999789100cf74e3
+PKG_MD5SUM:=bef75dd149abc8a6da4adafc08eb61de
 
 PKG_INSTALL:=1
 
