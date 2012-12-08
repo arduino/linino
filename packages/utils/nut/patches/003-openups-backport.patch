@@ -1,0 +1,35 @@
+--- nut-2.6.5/drivers/openups-hid.c~	2012-12-06 15:07:29.000000000 +0000
++++ nut-2.6.5/drivers/openups-hid.c	2012-12-06 15:14:45.541936770 +0000
+@@ -329,24 +329,18 @@ static const char *openups_format_serial
+  * the device is supported by this subdriver, else 0. */
+ static int openups_claim(HIDDevice_t * hd)
+ {
+-	int status = is_usb_device_supported(openups_usb_device_table, hd);
+-
+-	switch (status) {
+-	case POSSIBLY_SUPPORTED:
+-		/* by default, reject, unless the productid option is given */
+-		if (getval("productid")) {
+-			return 1;
+-		}
+-		possibly_supported("openUPS", hd);
++	if (hd->VendorID != OPENUPS_VENDORID)
+ 		return 0;
+ 
+-	case SUPPORTED:
++	if (hd->ProductID == 0xd004)
+ 		return 1;
+ 
+-	case NOT_SUPPORTED:
+-	default:
+-		return 0;
+-	}
++	/* by default, reject, unless the productid option is given */
++	if (getval("productid"))
++		return 1;
++
++	possibly_supported("openUPS", hd);
++	return 0;
+ }
+ 
+ subdriver_t openups_subdriver = {
