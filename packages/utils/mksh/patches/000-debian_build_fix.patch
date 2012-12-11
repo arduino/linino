@@ -1,0 +1,18 @@
+This patch is a backport of the fix proposed at:
+https://bugs.launchpad.net/ubuntu/+source/mksh/+bug/1058035
+
+diff -urN mksh/Build.sh mksh.new/Build.sh
+--- mksh/Build.sh	2012-12-11 14:28:56.632807230 +0100
++++ mksh.new/Build.sh	2012-12-11 14:35:23.704817141 +0100
+@@ -1530,9 +1530,11 @@
+ /* but the next three are; we REQUIRE signed integer wraparound */
+ cta(ari_is_signed, (mksh_ari_t)-1 < (mksh_ari_t)0);
+ cta(ari_has_31_bit, 0 < (mksh_ari_t)(((((mksh_ari_t)1 << 15) << 15) - 1) * 2 + 1));
++#if !defined(MKSH_GCC565048)
+ cta(ari_sign_32_bit_and_wrap,
+     (mksh_ari_t)(((((mksh_ari_t)1 << 15) << 15) - 1) * 2 + 1) >
+     (mksh_ari_t)(((((mksh_ari_t)1 << 15) << 15) - 1) * 2 + 2));
++#endif
+ /* the next assertion is probably not really needed */
+ cta(uari_is_4_char, sizeof(mksh_uari_t) == 4);
+ /* but the next four are; we REQUIRE unsigned integer wraparound */
