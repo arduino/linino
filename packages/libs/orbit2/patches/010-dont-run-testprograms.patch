@@ -1,17 +1,6 @@
---- a/configure
-+++ b/configure
-@@ -24219,7 +24219,7 @@ if test "$cross_compiling" = yes; then
- See \`config.log' for more details." >&5
- $as_echo "$as_me: error: cannot run test program while cross compiling
- See \`config.log' for more details." >&2;}
--   { (exit 1); exit 1; }; }
-+   }
- else
-   cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
---- a/configure.in
-+++ b/configure.in
-@@ -196,24 +196,6 @@ dnl This generates warnings from autocon
+--- ORBit2-2.14.19/configure.in	2010-07-01 15:57:01.000000000 +0200
++++ ORBit2-2.14.19.new/configure.in	2012-12-11 14:02:51.624767158 +0100
+@@ -213,25 +213,6 @@
  AC_C_BIGENDIAN
  
  
@@ -30,7 +19,8 @@
 -Linking is badly borked on your system. Please ensure your library path is correct
 -Check config.log for details - check near the end of the log above 'failed program was'
 -Alternatively ensure that your /etc/ld.so.conf (and/or LD_LIBRARY_PATH) includes the
--prefix you're compiling on: '${prefix}' ]))
+-prefix you're compiling on: '${prefix}' ]), 
+-AC_MSG_WARN([Could not check for borked linking while cross-compiling]))
 -LIBS="$dofus_save_libs"
 -
  orig_CPPFLAGS=$CPPFLAGS
