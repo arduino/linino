@@ -2,11 +2,10 @@
 # Copyright (C) 2006 OpenWrt.org
 START=50
 
-BIN=peerguardnf
-CFG_F=/etc/PG.conf
-OPTIONS="-c $CFG_F -d"
+CONTROL_MAIN="/usr/lib/pgl/pglcmd.main"
+BIN=pgctl
 
 start() {
-	$BIN $OPTIONS
+	$BIN $1
 }
 
