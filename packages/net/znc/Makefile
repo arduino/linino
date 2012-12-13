@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=znc
-PKG_VERSION:=0.206
-PKG_RELEASE:=2
+PKG_VERSION:=1.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://znc.in/releases \
 		http://znc.in/releases/archive
-PKG_MD5SUM:=b7d3f21da81abaeb553066b0e10beb53
+PKG_MD5SUM:=23807ca830c27392cccb6774f542df6e
 
 PKG_BUILD_PARALLEL:=1
 
@@ -30,7 +30,7 @@ endef
 
 define Package/znc
   $(Package/znc/default)
-  DEPENDS:=+libopenssl $(CXX_DEPENDS)
+  DEPENDS:=+libopenssl +libpthread $(CXX_DEPENDS)
   MENU:=1
 endef
 
@@ -53,12 +53,12 @@ define Package/znc/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/znc.conf $(1)/etc/config/znc
 	$(INSTALL_DIR) $(1)/usr/lib/znc/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/extra/droproot.so $(1)/usr/lib/znc/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/droproot.so $(1)/usr/lib/znc/
 endef
 
 
 ZNC_MODULES :=
-ZNC_MODULE_TARGETS := extra/droproot.so
+ZNC_MODULE_TARGETS := droproot.so
 
 define module
   define Package/znc-mod-$(strip $(1))
@@ -73,16 +73,16 @@ define module
 
   define Package/znc-mod-$(strip $(1))/install
 	$(INSTALL_DIR) $$(1)/usr/lib/znc/
-	$(INSTALL_BIN) $$(PKG_BUILD_DIR)/modules/$(strip $(3))$(subst -,_,$(strip $(1))).so $$(1)/usr/lib/znc/
+	$(INSTALL_BIN) $$(PKG_BUILD_DIR)/modules/$(subst -,_,$(strip $(1))).so $$(1)/usr/lib/znc/
 	# include webadmin page templates if existing
-	if [ -d $$(PKG_BUILD_DIR)/modules/$(strip $(3))data/$(subst -,_,$(strip $(1))) ]; then \
+	if [ -d $$(PKG_BUILD_DIR)/modules/data/$(subst -,_,$(strip $(1))) ]; then \
 		$(INSTALL_DIR) $$(1)/usr/share/znc/modules ;\
-		$(CP) -r $$(PKG_BUILD_DIR)/modules/$(strip $(3))data/$(subst -,_,$(strip $(1))) $$(1)/usr/share/znc/modules ;\
+		$(CP) -r $$(PKG_BUILD_DIR)/modules/data/$(subst -,_,$(strip $(1))) $$(1)/usr/share/znc/modules ;\
 	fi
   endef
 
   ZNC_MODULES += znc-mod-$(strip $(1))
-  $(if $(CONFIG_PACKAGE_znc-mod-$(strip $(1))),ZNC_MODULE_TARGETS += $(strip $(3))$(subst -,_,$(strip $(1))).so)
+  $(if $(CONFIG_PACKAGE_znc-mod-$(strip $(1))),ZNC_MODULE_TARGETS += $(subst -,_,$(strip $(1))).so)
 endef
 
 define webadmin
@@ -129,20 +129,27 @@ endef
 
 , := ,
 
-$(eval $(call module,admin,Allows you to add/remove/edit users and settings on \
-	the fly via IRC messages.))
-
 $(eval $(call module,adminlog,Log user connects and disconnects and failed \
 	logins to file or syslog.))
 
 $(eval $(call module,autoattach,Reattaches you to channels on activity.))
+
+$(eval $(call module,autocycle,Cycles a channel when you are the only one in \
+	there and you don't have op.))
 
 $(eval $(call module,autoop,Auto op the good guys.))
 
 $(eval $(call module,autoreply,Gives a automatic reply if someone messages you \
 	if you are away.))
 
+$(eval $(call module,autovoice,Autovoices everyone who joins some channel.))
+
 $(eval $(call module,awaynick,Change your nick while you are away.))
+
+$(eval $(call module,awaystore,Stores messages while away$(,) also auto away.))
+
+$(eval $(call module,block-motd,This module blocks the server's Message of the \
+	Day.))
 
 $(eval $(call module,blockuser,Blocks certain users from using ZNC saying \
 	their account was disabled.))
@@ -161,15 +168,28 @@ $(eval $(call module,certauth,This module allows users to log in to ZNC via \
 $(eval $(call module,chansaver,Keeping config up to date when user joins and \
 	parts.))
 
+$(eval $(call module,clearbufferonmsg,This module keeps the buffer until the \
+	next message from the client.))
+
 $(eval $(call module,clientnotify,Notify about new incoming connections to \
 	your user.))
 
+$(eval $(call module,controlpanel,Allows you to add/remove/edit users and \
+	settings on the fly via IRC messages.))
+
 $(eval $(call module,crypt,Encryption for channel/private messages.))
+
+$(eval $(call module,ctcpflood,This module tries to block ctcp floods.))
+
+$(eval $(call module,dcc,Allows you to transfer files to and from ZNC.))
 
 $(eval $(call module,disconkick,This module will kick your client from all \
 	channels where you are$(,) in case if ZNC disconnects from server.))
 
 $(eval $(call module,fail2ban,Block IPs for some time after a failed login.))
+
+$(eval $(call module,flooddetach,This module detaches you from channels which \
+	are flooded.))
 
 $(eval $(call module,identfile,Places the ident of a user to a file when they \
 	 are trying to connect.))
@@ -180,10 +200,18 @@ $(eval $(call module,kickrejoin,Implements auto-rejoin-on-kick.))
 
 $(eval $(call module,lastseen,Logs when a user last logged in to ZNC.))
 
+$(eval $(call module,listsockets,This module displays a list of all open \
+	sockets in ZNC.))
+
+$(eval $(call module,log,Log conversations to file.))
+
 $(eval $(call module,nickserv,Auths you with NickServ.))
 
 $(eval $(call module,notes,This modules stores and displays short notes using \
 	a key/note pairs and shows them to you on connect.))
+
+$(eval $(call module,notify-connect,Sends a notice to all admins when a user \
+	logs in or out.))
 
 $(eval $(call module,partyline,Allows ZNC users to join internal channels and \
 	query other ZNC users on the same ZNC.))
@@ -197,63 +225,27 @@ $(eval $(call module,raw,View all of the raw traffic.))
 $(eval $(call module,route-replies,Routes back answers to the right client \
 	when connected with multiple clients.))
 
+$(eval $(call module,sasl,The SASL module allows you to authenticate to an \
+	IRC network via SASL.))
+
 $(eval $(call module,savebuff,Saves your channel buffers into an encrypted \
 	file so they can survive restarts and reboots.))
 
 $(eval $(call module,schat,SSL (encrypted) DCC chats.))
 
+$(eval $(call module,send-raw,Allows you to send raw traffic to IRC from \
+	other users.))
+
 $(eval $(call module,simple-away,This module will automatically set you away \
 	on IRC while you are disconnected from the bouncer.))
+
+$(eval $(call module,shell,Have your unix shell in a query window right inside \
+	of your IRC client.))
 
 $(eval $(call module,stickychan,Keeps you sticked to specific channels.))
 
 $(eval $(call module,watch,Monitor activity for specific text patterns from \
 	specific users and have the text sent to a special query window.))
-
-$(eval $(call module,antiidle,Hides your idle time.,extra/))
-
-$(eval $(call module,autocycle,Cycles a channel when you are the only one in \
-	there and you don't have op.,extra/))
-
-$(eval $(call module,autovoice,Autovoices everyone who joins some channel., \
-	extra/))
-
-$(eval $(call module,away,Stores messages while away$(,) also auto away.,extra/))
-
-$(eval $(call module,block-motd,This module blocks the server's Message of the \
-	Day.,extra/))
-
-$(eval $(call module,clearbufferonmsg,This module keeps the buffer until the \
-	next message from the client.,extra/))
-
-$(eval $(call module,ctcpflood,This module tries to block ctcp floods.,extra/))
-
-$(eval $(call module,dcc,Allows you to transfer files to and from ZNC.,extra/))
-
-$(eval $(call module,email,Watches a local mailbox for new mails.,extra/))
-
-$(eval $(call module,fakeonline,This module fakes the online status of \
-	ZNC-*users.,extra/))
-
-$(eval $(call module,flooddetach,This module detaches you from channels which \
-	are flooded.,extra/))
-
-$(eval $(call module,listsockets,This module displays a list of all open \
-	sockets in ZNC.,extra/))
-
-$(eval $(call module,log,Log conversations to file.,extra/))
-
-$(eval $(call module,motdfile,Reads a MOTD from a file and displays it to \
-	users when they login.,extra/))
-
-$(eval $(call module,notify-connect,Sends a notice to all admins when a user \
-	logs in or out.,extra/))
-
-$(eval $(call module,send-raw,Allows you to send raw traffic to IRC from \
-	other users.,extra/))
-
-$(eval $(call module,shell,Have your unix shell in a query window right inside \
-	of your IRC client.,extra/))
 
 $(eval $(call webadmin))
 
@@ -274,7 +266,6 @@ CONFIGURE_VARS += \
 
 CONFIGURE_ARGS += \
 	--disable-c-ares \
-	--enable-extra \
 	--disable-perl
 
 define Build/Configure

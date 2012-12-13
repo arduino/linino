@@ -4,11 +4,11 @@ Date: Wed, 6 Apr 2011 04:10:23 +0200
 Subject: [PATCH] Move the root check to after config parsing
 
 ---
- main.cpp |   27 ++++++++++++++-------------
+ src/main.cpp |   27 ++++++++++++++-------------
  1 files changed, 14 insertions(+), 13 deletions(-)
 
---- a/main.cpp
-+++ b/main.cpp
+--- a/src/main.cpp
++++ b/src/main.cpp
 @@ -211,19 +211,6 @@ int main(int argc, char** argv) {
  	}
  #endif
