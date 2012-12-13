@@ -8,6 +8,7 @@ PID_FILE=${ZNC_CONFIG_PATH}/znc.pid
 ZNC_CONFIG=${ZNC_CONFIG_PATH}/configs/znc.conf
 
 EXTERNAL_CONFIG=0
+DISABLED=
 
 RUNAS_USER=
 RUNAS_GROUP=
@@ -32,6 +33,10 @@ znc_global() {
 	local serverthrottle
 	local znc_config_path
 	local znc_pem_file
+
+	config_get_bool DISABLED "$znc" disabled 0
+
+	[ "$DISABLED" -eq 0 ] || return 0
 
 	config_get znc_config_path "$znc" znc_config_path
 
@@ -121,6 +126,10 @@ add_user() {
 start() {
 	config_load znc
 	config_foreach znc_global znc
+
+	if [ "$DISABLED" -eq 1 ]; then
+		return 0
+	fi
 
 	if [ "$EXTERNAL_CONFIG" -eq 0 ]
 	then
