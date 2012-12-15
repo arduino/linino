@@ -1,20 +1,59 @@
 --- a/src/othptab.c
 +++ b/src/othptab.c
-@@ -18,6 +18,7 @@ details.
+@@ -18,9 +18,10 @@ details.
  
  #include <stdlib.h>
  #include <asm/types.h>
 +#include <sys/types.h>
  #include <sys/socket.h>
  #include <linux/if_ether.h>
- #include <linux/if_tr.h>
+-#include <linux/if_tr.h>
++#include <netinet/if_tr.h>
+ #include <linux/netdevice.h>
+ #include <winops.h>
+ #include "arphdr.h"
 --- a/src/tr.c
 +++ b/src/tr.c
-@@ -7,6 +7,7 @@
+@@ -7,7 +7,8 @@
   */
  
  #include <asm/types.h>
+-#include <linux/if_tr.h>
 +#include <sys/types.h>
- #include <linux/if_tr.h>
++#include <netinet/if_tr.h>
  #include <netinet/in.h>
  
+ unsigned int get_tr_ip_offset(unsigned char *pkt)
+--- a/src/tcptable.h
++++ b/src/tcptable.h
+@@ -23,7 +23,7 @@
+ #include <linux/if_packet.h>
+ #include <linux/if_ether.h>
+ #include <linux/netdevice.h>
+-#include <linux/if_tr.h>
++#include <netinet/if_tr.h>
+ // #include <net/if.h>
+ #include <netinet/ip.h>
+ #include <netinet/udp.h>
+--- a/src/hostmon.c
++++ b/src/hostmon.c
+@@ -31,7 +31,7 @@ details.
+ #include <linux/if_packet.h>
+ #include <linux/if_ether.h>
+ #include <linux/netdevice.h>
+-#include <linux/if_tr.h>
++#include <netinet/if_tr.h>
+ #include <net/if_arp.h>
+ #include <stdlib.h>
+ #include <time.h>
+--- a/src/packet.c
++++ b/src/packet.c
+@@ -35,7 +35,7 @@ details.
+ #include <linux/if_packet.h>
+ #include <linux/if_ether.h>
+ #include <linux/netdevice.h>
+-#include <linux/if_tr.h>
++#include <netinet/if_tr.h>
+ #include <linux/isdn.h>
+ #include <linux/sockios.h>
+ #include <msgboxes.h>
