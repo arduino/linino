@@ -1,6 +1,6 @@
 --- a/Makefile
 +++ b/Makefile
-@@ -107,8 +107,8 @@ installpythonmodule:	pythonmodule
+@@ -129,8 +129,8 @@ installpythonmodule:	pythonmodule
  	python setup.py install
  
  validateminixml:	minixmlvalid
@@ -10,4 +10,4 @@
 +#	./minixmlvalid
  	touch $@
  
- clean:
+ validateminiwget:	testminiwget minihttptestserver testminiwget.sh

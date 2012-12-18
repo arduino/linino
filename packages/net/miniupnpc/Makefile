@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010-2011 OpenWrt.org
+# Copyright (C) 2010-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miniupnpc
-PKG_VERSION:=1.6
+PKG_VERSION:=1.7
 PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=http://miniupnp.free.fr/files
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=88055f2d4a061cfd4cfe25a9eae22f67
+PKG_MD5SUM:=297bee441b56af87c6622fc4002179fd
 
 PKG_INSTALL:=1
 
@@ -43,6 +43,7 @@ endef
 TARGET_CFLAGS += $(FPIC)
 
 MAKE_FLAGS += \
+	OS="Linux" \
 	PREFIX="$(PKG_INSTALL_DIR)"
 
 define Build/InstallDev
