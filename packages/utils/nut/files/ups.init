@@ -1,0 +1,87 @@
+#!/bin/sh /etc/rc.common
+# Copyright © 2012 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+START=50
+
+DEFAULT=/etc/default/nut
+RUN_D=/var/run
+PID_F=$RUN_D/upsd.pid
+UPS_C=$RUN_D/ups.conf
+USERS_C=$RUN_D/upsd.users
+
+nut_user_add() {
+	local cfg="$1"
+	local a
+	local val
+
+	config_get val "$cfg" username "$1"
+	echo "[$val]" >> $USERS_C
+
+	config_get val "$cfg" password
+	echo "  password = $val" >> $USERS_C
+
+	config_get val "$cfg" actions
+	for a in $val; do
+	    echo "  actions = $a" >> $USERS_C
+	done
+
+	config_get val "$cfg" instcmds
+	for a in $val; do
+	    echo "  instcmds = $a" >> $USERS_C
+	done
+
+	config_get val "$cfg" upsmon
+	if [ -n "$val" ]; then
+	    echo "  upsmon $val" >> $USERS_C
+	fi
+}
+
+start() {
+        local in_driver have_drivers
+	config_cb() {
+	    if [ "$1" != "driver" ]; then
+		in_driver=
+	    else
+		echo "[$2]" >> $UPS_C
+		in_driver=true
+		have_drivers=true
+	    fi
+	}
+	option_cb() {
+	    if [ "$in_driver" = "true" ]; then
+		echo " $1 = $2" >> $UPS_C
+	    fi
+	}
+
+	[ -d $RUN_D ] || mkdir -p $RUN_D
+	echo "# Config file automatically generated from UCI config" > $UPS_C
+	echo "# Config file automatically generated from UCI config" > $USERS_C
+
+	config_load ups
+
+	config_foreach nut_user_add user
+
+	[ -f $DEFAULT ] && . $DEFAULT
+	if [ "$have_drivers" = "true" ]; then
+	    $DEBUG /usr/sbin/upsd $OPTIONS
+	    $DEBUG /lib/nut/upsdrvctl start
+	fi
+}
+
+nut_driver_stop() {
+	local cfg="$1"
+	local driver
+
+	config_get driver "$cfg" driver
+
+	[ -r /var/run/$driver-$cfg ] && /lib/nut/upsdrvctl stop $cfg
+}
+
+stop() {
+	[ -r $PID_F ] && /usr/sbin/upsd -c stop
+	config_load ups
+	config_foreach nut_driver_stop driver
+}

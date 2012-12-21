@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nut
 PKG_VERSION:=2.6.5
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.networkupstools.org/source/2.6/
@@ -72,12 +72,11 @@ define Package/nut/install
 	$(INSTALL_DIR) $(1)/etc/nut
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libupsclient.so* $(1)/usr/lib/
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/nut/nut.conf.sample $(1)/etc/nut/nut.conf
-	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/nut/ups.conf.sample $(1)/etc/nut/ups.conf
+	ln -sf /var/run/ups.conf $(1)/etc/nut/ups.conf
 endef
 
 define Package/nut/conffiles
 /etc/nut/nut.conf
-/etc/nut/ups.conf
 endef
 
 define Package/nut-client/install
@@ -92,17 +91,17 @@ define Package/nut-server/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_DIR) $(1)/lib/nut
 	$(INSTALL_DIR) $(1)/usr/share/nut
-
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/ups.init $(1)/etc/init.d/ups
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/upsd $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/lib/nut/upsdrvctl $(1)/lib/nut
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/nut/upsd.conf.sample $(1)/etc/nut/upsd.conf
-	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/nut/upsd.users.sample $(1)/etc/nut/upsd.users
+	ln -sf /var/run/upsd.users $(1)/etc/nut/upsd.users
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/nut/cmdvartab $(1)/usr/share/nut/cmdvartab
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/share/nut/driver.list $(1)/usr/share/nut/driver.list
 endef
 
 define Package/nut-server/conffiles
-/etc/nut/upsd.users
 /etc/nut/upsd.conf
 endef
 
@@ -114,14 +113,15 @@ endef
 define Package/nut-monitor/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_DIR) $(1)/etc/nut
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/upsmon.init $(1)/etc/init.d/upsmon
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/upsmon $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/upssched $(1)/usr/sbin
-	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/nut/upsmon.conf.sample $(1)/etc/nut/upsmon.conf
+	ln -sf /var/run/upsmon.conf $(1)/etc/nut/upsmon.conf
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/nut/upssched.conf.sample $(1)/etc/nut/upssched.conf
 endef
 
 define Package/nut-monitor/conffiles
-/etc/nut/upsmon.conf
 /etc/nut/upssched.conf
 endef
 
