@@ -75,6 +75,14 @@ define Package/nut/install
 	ln -sf /var/run/ups.conf $(1)/etc/nut/ups.conf
 endef
 
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/*.h $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/*.pc $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib* $(1)/usr/lib
+endef
+
 define Package/nut/conffiles
 /etc/nut/nut.conf
 endef
@@ -282,7 +290,8 @@ CONFIGURE_ARGS += \
   --with-group=root \
   --with-usb \
   --with-snmp \
-  --without-libltdl
+  --without-libltdl \
+  --with-dev
 
 
 $(eval $(call BuildPackage,nut))
