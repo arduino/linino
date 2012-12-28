@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/at
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libelf
+  DEPENDS:=+libelf1
   TITLE:=Delayed job execution and batch processing
   URL:=http://packages.debian.org/stable/at
   MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
@@ -32,7 +32,7 @@ define Package/at/description
 endef
 
 export SENDMAIL=/bin/true
-EXTRA_CFLAGS:=-DNEED_YYWRAP -I$(PKG_BUILD_DIR) -I$(STAGING_DIR)/usr/include/libelf \
+EXTRA_CFLAGS:=-DNEED_YYWRAP -I$(PKG_BUILD_DIR) \
 	$(TARGET_LDFLAGS)
 
 CONFIGURE_ARGS+=--prefix=/usr \

@@ -25,7 +25,7 @@ define Package/pure-ftpd/Default
   SUBMENU:=File Transfer
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libelf
+  DEPENDS:=+libelf1
   TITLE:=Secure FTP made easy!
   URL:=http://www.pureftpd.org/project/pure-ftpd
 endef

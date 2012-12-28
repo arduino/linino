@@ -33,7 +33,7 @@ COREUTILS_APPLETS := \
 
 DEPENDS_sort = +libpthread
 DEPENDS_timeout = +librt
-DEPENDS_uptime = +libelf
+DEPENDS_uptime = +libelf1
 DEPENDS_expr = +libgmp
 DEPENDS_factor = +libgmp
 

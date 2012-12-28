@@ -17,7 +17,7 @@ PKG_MD5SUM:=00df80a84ec9528fcfb09498075525bc
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
-PKG_BUILD_DEPENDS:=libelf
+PKG_BUILD_DEPENDS:=libelf1
 PKG_FIXUP:=autoreconf
 PKG_LIBTOOL_PATHS:=. sntp
 
@@ -116,9 +116,6 @@ endef
 define Package/ntpd/conffiles
 /etc/ntp.conf
 endef
-
-TARGET_CPPFLAGS += \
-	-I$(STAGING_DIR)/usr/include/libelf
 
 CONFIGURE_VARS += \
 	ac_cv_header_md5_h=no \

@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/make
   SECTION:=devel
   CATEGORY:=Development
-  DEPENDS:=+libelf
+  DEPENDS:=+libelf1
   TITLE:=make
   URL:=http://www.gnu.org/software/make/
 endef
