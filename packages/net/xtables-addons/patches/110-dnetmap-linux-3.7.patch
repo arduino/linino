@@ -1,0 +1,22 @@
+--- xtables-addons-2.0/extensions/xt_DNETMAP.c~	2012-11-12 18:03:51.000000000 +0000
++++ xtables-addons-2.0/extensions/xt_DNETMAP.c	2012-12-20 00:06:10.656675731 +0000
+@@ -27,7 +27,7 @@
+ #include <linux/netfilter_ipv4.h>
+ #include <linux/netfilter/x_tables.h>
+ #include <linux/version.h>
+-#include <net/netfilter/nf_nat_rule.h>
++#include <net/netfilter/nf_nat.h>
+ #include <net/net_namespace.h>
+ #include <net/netns/generic.h>
+ #include <linux/netfilter/nf_nat.h>
+--- xtables-addons-2.0/mconfig	2012-12-20 00:55:11.445085492 +0000
++++ xtables-addons-2.0/mconfig~	2012-12-20 00:54:29.000000000 +0000
+@@ -4,7 +4,7 @@ build_ACCOUNT=m
+ build_CHAOS=m
+ build_DELUDE=m
+ build_DHCPMAC=m
+-build_DNETMAP=
++build_DNETMAP=m
+ build_ECHO=m
+ build_IPMARK=m
+ build_LOGMARK=m

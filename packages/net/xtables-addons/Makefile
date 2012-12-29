@@ -9,11 +9,18 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=xtables-addons
+ifeq ($(strip $(call CompareKernelPatchVer,$(KERNEL_PATCHVER),ge,3.7.0)),1)
+PKG_VERSION:=2.0
+PKG_RELEASE:=1
+PKG_MD5SUM:=26b1b1dbb4a8faff24597723ebde04c9
+else
 PKG_VERSION:=1.45
 PKG_RELEASE:=3
+PKG_MD5SUM:=802d2f556a5e545f44e4b69937bf8490
+PATCH_DIR:=./patches-1.x
+endif
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_MD5SUM:=802d2f556a5e545f44e4b69937bf8490
 PKG_SOURCE_URL:=@SF/xtables-addons
 PKG_BUILD_DEPENDS:=iptables
 PKG_INSTALL:=1
