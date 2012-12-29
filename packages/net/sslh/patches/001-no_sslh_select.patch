@@ -1,6 +1,6 @@
 --- a/Makefile
 +++ b/Makefile
-@@ -32,16 +32,12 @@ all: sslh $(MAN) echosrv
+@@ -37,16 +37,12 @@ all: sslh $(MAN) echosrv
  	$(CC) $(CFLAGS) -D'VERSION=$(VERSION)' -c $<
  
  
@@ -16,9 +16,9 @@
 -	#strip sslh-select
 -
  echosrv: $(OBJS) echosrv.o
- 	$(CC) $(CFLAGS) -o echosrv echosrv.o common.o $(LIBS)
+ 	$(CC) $(CFLAGS) -o echosrv echosrv.o probe.o common.o $(LIBS)
  
-@@ -65,7 +61,7 @@ uninstall:
+@@ -77,7 +73,7 @@ uninstall:
  	update-rc.d sslh remove
  
  clean:
@@ -26,4 +26,4 @@
 +	rm -f sslh-fork echosrv $(MAN) *.o *.gcov *.gcno *.gcda *.png *.html *.css *.info 
  
  tags:
- 	ctags -T *.[ch]
+ 	ctags --globals -T *.[ch]

@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sslh
-PKG_VERSION:=1.10
-PKG_RELEASE:=2
+PKG_VERSION:=1.14
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://rutschle.net/tech/
-PKG_MD5SUM:=bc34e9a4770d634633e70589c72708cc
+PKG_MD5SUM:=36e64bd6c7d0a299d5acd1109988099b
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,6 +34,7 @@ define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CC="$(TARGET_CC)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
+		USELIBCONFIG= \
 		USELIBWRAP= \
 		all
 endef

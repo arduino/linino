@@ -42,6 +42,11 @@ start_instance() {
 	config_get_bool verbosed "${section}" verbose 0
 	[ "${verbosed}" -ne 0 ] && append args "-v"
 
+	# Defaults were removed for --user and --pidfile options
+	# in sslh 1.11; Define them here instead.
+	append args "--user nobody"
+	append args "--pidfile /var/run/sslh.pid"
+
 	# XXX: allow more that one instance to run simultaneously
 	SERVICE_MATCH_NAME=1 SERVICE_NAME="sslh-dummy-$$" \
 	service_start /usr/sbin/sslh ${args}
