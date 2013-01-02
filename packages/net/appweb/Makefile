@@ -16,10 +16,10 @@ PKG_RELEASE:=1
 #
 #	Build stable
 #
-PKG_VERSION:=3.2.2-1
-PKG_SOURCE:=$(PKG_NAME)-src-$(PKG_VERSION).tar.gz
+PKG_VERSION:=3.4.1-0
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tgz
 PKG_SOURCE_URL:=http://www.appwebserver.org/software/
-PKG_MD5SUM:=060d43c8194fa6a119cada966fc807a7
+PKG_MD5SUM:=23540af5852e4b0f6789bc47013d311c
 
 #
 #	Build the latest snapshot from the default trunk
@@ -59,7 +59,7 @@ define Package/appweb
   SUBMENU:=Web Servers/Proxies
   TITLE:=Appweb Web Server
   URL:=http://www.appwebserver.org/
-  DEPENDS:=@!avr32 +libpthread
+  DEPENDS:=@!avr32 +libpthread +libpcre +libsqlite3
 endef
 
 define Package/appweb/description
