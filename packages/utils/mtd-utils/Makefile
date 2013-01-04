@@ -27,7 +27,7 @@ FILES:= \
 	doc_loadbios \
 	docfdisk \
 	flash_erase \
-	flash_eraseall \
+	flash_eraseall:+mtd-utils-flash-erase \
 	flash_info \
 	flash_lock \
 	flash_otp_dump \
