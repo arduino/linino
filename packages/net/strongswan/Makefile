@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=strongswan
-PKG_VERSION:=5.0.0
+PKG_VERSION:=5.0.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.strongswan.org/
-PKG_MD5SUM:=c8b861305def7c0abae04f7bbefec212
+PKG_MD5SUM:=58fdeb49f133139a58f4d8adafc69a16
 
 PKG_MOD_AVAILABLE:= \
 	addrblock \
@@ -69,11 +69,11 @@ PKG_MOD_AVAILABLE:= \
 	smp \
 	socket-default \
 	socket-dynamic \
-	socket-raw \
 	sql \
 	sqlite \
 	stroke \
 	test-vectors \
+	unity \
 	uci \
 	updown \
 	whitelist \
@@ -185,6 +185,7 @@ $(call Package/strongswan/Default)
 	+strongswan-mod-stroke \
 	+strongswan-mod-test-vectors \
 	+strongswan-mod-uci \
+	+strongswan-mod-unity \
 	+strongswan-mod-updown \
 	+strongswan-mod-whitelist \
 	+strongswan-mod-x509 \
@@ -198,7 +199,7 @@ endef
 define Package/strongswan-full/description
 $(call Package/strongswan/description/Default)
  This meta-package contains dependencies for all of the strongswan plugins
- except kernel-klips, kernel-pfkey, socket-dynamic and socket-raw which are
+ except kernel-klips, kernel-pfkey, socket-dynamic and which are
  ommitted in favor of the kernel-netlink and socket-default plugins.
 endef
 
@@ -484,12 +485,12 @@ $(eval $(call BuildPlugin,sha2,SHA2 crypto,))
 $(eval $(call BuildPlugin,smp,SMP configuration and control interface,+PACKAGE_strongswan-mod-smp:libxml2))
 $(eval $(call BuildPlugin,socket-default,default socket implementation for charon,))
 $(eval $(call BuildPlugin,socket-dynamic,dynamic socket implementation for charon,))
-$(eval $(call BuildPlugin,socket-raw,raw socket implementation for charon,))
 $(eval $(call BuildPlugin,sql,SQL database interface,))
 $(eval $(call BuildPlugin,sqlite,SQLite database interface,+strongswan-mod-sql +PACKAGE_strongswan-mod-sqlite:libsqlite3))
 $(eval $(call BuildPlugin,stroke,Stroke,+strongswan-utils))
 $(eval $(call BuildPlugin,test-vectors,crypto test vectors,))
 $(eval $(call BuildPlugin,uci,UCI config interface,+PACKAGE_strongswan-mod-uci:libuci))
+$(eval $(call BuildPlugin,unity,Cisco Unity extension,))
 $(eval $(call BuildPlugin,updown,updown firewall,))
 $(eval $(call BuildPlugin,whitelist,peer identity whitelisting,))
 $(eval $(call BuildPlugin,x509,x509 certificate,))
