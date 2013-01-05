@@ -1,5 +1,3 @@
-diff --git a/Makefile b/Makefile
-index 6f6481f..778f38d 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -62,8 +62,8 @@
@@ -13,11 +11,9 @@ index 6f6481f..778f38d 100644
  #
  # Uncomment the next line for FreeBSD
  #
-diff --git a/call.c b/call.c
-index d1b1858..b672f91 100644
 --- a/call.c
 +++ b/call.c
-@@ -680,6 +680,8 @@ struct call *get_call (int tunnel, int call,  struct in_addr addr, int port,
+@@ -680,6 +680,8 @@
          st->peer.sin_port = port;
  	st->refme  = refme;
  	st->refhim = refhim;
@@ -26,11 +22,9 @@ index d1b1858..b672f91 100644
          bcopy (&addr, &st->peer.sin_addr, sizeof (addr));
          st->next = tunnels.head;
          tunnels.head = st;
-diff --git a/control.c b/control.c
-index 0892df9..9362ffd 100644
 --- a/control.c
 +++ b/control.c
-@@ -596,6 +596,9 @@ int control_finish (struct tunnel *t, struct call *c)
+@@ -596,6 +596,9 @@
          if (gconfig.debug_state)
              l2tp_log (LOG_DEBUG, "%s: sending SCCCN\n", __FUNCTION__);
          control_xmit (buf);
@@ -40,7 +34,7 @@ index 0892df9..9362ffd 100644
          /* Schedule a HELLO */
          tv.tv_sec = HELLO_DELAY;
          tv.tv_usec = 0;
-@@ -608,6 +611,7 @@ int control_finish (struct tunnel *t, struct call *c)
+@@ -608,6 +611,7 @@
  		  "Connection established to %s, %d.  Local: %d, Remote: %d (ref=%u/%u).\n",
  		  IPADDY (t->peer.sin_addr),
  		  ntohs (t->peer.sin_port), t->ourtid, t->tid, t->refme, t->refhim);
@@ -48,7 +42,7 @@ index 0892df9..9362ffd 100644
          if (t->lac)
          {
              /* This is part of a LAC, so we want to go ahead
-@@ -635,6 +639,9 @@ int control_finish (struct tunnel *t, struct call *c)
+@@ -635,6 +639,9 @@
  		  IPADDY (t->peer.sin_addr),
  		  ntohs (t->peer.sin_port), t->ourtid, t->tid, t->refme, t->refhim,
  		  t->lns->entname);
@@ -58,11 +52,9 @@ index 0892df9..9362ffd 100644
          /* Schedule a HELLO */
          tv.tv_sec = HELLO_DELAY;
          tv.tv_usec = 0;
-diff --git a/l2tp.h b/l2tp.h
-index 2724fff..856423f 100644
 --- a/l2tp.h
 +++ b/l2tp.h
-@@ -167,6 +167,8 @@ struct tunnel
+@@ -167,6 +167,8 @@
      int ourrws;                 /* Receive Window Size */
      int rxspeed;		/* Receive bps */
      int txspeed;		/* Transmit bps */
@@ -71,7 +63,7 @@ index 2724fff..856423f 100644
      struct call *self;
      struct lns *lns;            /* LNS that owns us */
      struct lac *lac;            /* LAC that owns us */
-@@ -220,6 +222,7 @@ extern void control_xmit (void *);
+@@ -220,6 +222,7 @@
  extern int ppd;
  extern int switch_io;           /* jz */
  extern int control_fd;
@@ -79,19 +71,63 @@ index 2724fff..856423f 100644
  extern int start_pppd (struct call *c, struct ppp_opts *);
  extern void magic_lac_dial (void *);
  extern int get_entropy (unsigned char *, int);
-diff --git a/linux/include/linux/if_pppol2tp.h b/linux/include/linux/if_pppol2tp.h
-index a7d6a22..0795e4a 100644
 --- a/linux/include/linux/if_pppol2tp.h
 +++ b/linux/include/linux/if_pppol2tp.h
-@@ -36,6 +36,20 @@ struct pppol2tp_addr
+@@ -2,7 +2,7 @@
+  * Linux PPP over L2TP (PPPoL2TP) Socket Implementation (RFC 2661)
+  *
+  * This file supplies definitions required by the PPP over L2TP driver
+- * (pppol2tp.c).  All version information wrt this file is located in pppol2tp.c
++ * (l2tp_ppp.c).  All version information wrt this file is located in l2tp_ppp.c
+  *
+  * License:
+  *		This program is free software; you can redistribute it and/or
+@@ -15,18 +15,13 @@
+ #ifndef __LINUX_IF_PPPOL2TP_H
+ #define __LINUX_IF_PPPOL2TP_H
+ 
+-#include <asm/types.h>
+-
+-#ifdef __KERNEL__
+-#include <linux/in.h>
+-#endif
++#include <linux/types.h>
+ 
+ /* Structure used to connect() the socket to a particular tunnel UDP
+- * socket.
++ * socket over IPv4.
+  */
+-struct pppol2tp_addr
+-{
+-	pid_t	pid;			/* pid that owns the fd.
++struct pppol2tp_addr {
++	__kernel_pid_t	pid;		/* pid that owns the fd.
+ 					 * 0 => current */
+ 	int	fd;			/* FD of UDP socket to use */
+ 
+@@ -36,6 +31,45 @@
  	__u16 d_tunnel, d_session;	/* For sending outgoing packets */
  };
  
++/* Structure used to connect() the socket to a particular tunnel UDP
++ * socket over IPv6.
++ */
++struct pppol2tpin6_addr {
++	__kernel_pid_t	pid;		/* pid that owns the fd.
++					 * 0 => current */
++	int	fd;			/* FD of UDP socket to use */
++
++	__u16 s_tunnel, s_session;	/* For matching incoming packets */
++	__u16 d_tunnel, d_session;	/* For sending outgoing packets */
++
++	struct sockaddr_in6 addr;	/* IP address and port to send to */
++};
++
 +/* The L2TPv3 protocol changes tunnel and session ids from 16 to 32
 + * bits. So we need a different sockaddr structure.
 + */
 +struct pppol2tpv3_addr {
-+	pid_t	pid;			/* pid that owns the fd.
++	__kernel_pid_t	pid;		/* pid that owns the fd.
 +					 * 0 => current */
 +	int	fd;			/* FD of UDP or IP socket to use */
 +
@@ -101,14 +137,29 @@ index a7d6a22..0795e4a 100644
 +	__u32 d_tunnel, d_session;	/* For sending outgoing packets */
 +};
 +
++struct pppol2tpv3in6_addr {
++	__kernel_pid_t	pid;		/* pid that owns the fd.
++					 * 0 => current */
++	int	fd;			/* FD of UDP or IP socket to use */
++
++	__u32 s_tunnel, s_session;	/* For matching incoming packets */
++	__u32 d_tunnel, d_session;	/* For sending outgoing packets */
++
++	struct sockaddr_in6 addr;	/* IP address and port to send to */
++};
++
  /* Socket options:
   * DEBUG	- bitmask of debug message categories
   * SENDSEQ	- 0 => don't send packets with sequence numbers
-diff --git a/network.c b/network.c
-index 241bd82..fde250e 100644
+@@ -66,4 +100,4 @@
+ 
+ 
+ 
+-#endif
++#endif /* __LINUX_IF_PPPOL2TP_H */
 --- a/network.c
 +++ b/network.c
-@@ -45,6 +91,7 @@ int init_network (void)
+@@ -45,6 +45,7 @@
      server.sin_family = AF_INET;
      server.sin_addr.s_addr = gconfig.listenaddr; 
      server.sin_port = htons (gconfig.port);
@@ -116,7 +167,7 @@ index 241bd82..fde250e 100644
      if ((server_socket = socket (PF_INET, SOCK_DGRAM, 0)) < 0)
      {
          l2tp_log (LOG_CRIT, "%s: Unable to allocate socket. Terminating.\n",
-@@ -52,6 +99,10 @@ int init_network (void)
+@@ -52,6 +53,10 @@
          return -EINVAL;
      };
  
@@ -127,7 +178,7 @@ index 241bd82..fde250e 100644
      if (bind (server_socket, (struct sockaddr *) &server, sizeof (server)))
      {
          close (server_socket);
-@@ -321,6 +373,11 @@ int build_fdset (fd_set *readfds)
+@@ -321,6 +326,11 @@
  
  	while (tun)
  	{
@@ -139,7 +190,7 @@ index 241bd82..fde250e 100644
  		call = tun->call_head;
  		while (call)
  		{
-@@ -390,6 +447,8 @@ void network_thread ()
+@@ -390,6 +400,8 @@
      struct iovec iov;
      char cbuf[256];
      unsigned int refme, refhim;
@@ -148,7 +199,7 @@ index 241bd82..fde250e 100644
  
      /* This one buffer can be recycled for everything except control packets */
      buf = new_buf (MAX_RECV_SIZE);
-@@ -428,7 +487,21 @@ void network_thread ()
+@@ -428,7 +440,21 @@
          {
              do_control ();
          }
@@ -171,7 +222,7 @@ index 241bd82..fde250e 100644
          {
              /*
               * Okay, now we're ready for reading and processing new data.
-@@ -457,12 +530,19 @@ void network_thread ()
+@@ -457,12 +483,19 @@
  	    msgh.msg_flags = 0;
  	    
  	    /* Receive one packet. */
@@ -192,7 +243,7 @@ index 241bd82..fde250e 100644
                      if (errno != EAGAIN)
                          l2tp_log (LOG_WARNING,
                               "%s: recvfrom returned error %d (%s)\n",
-@@ -567,6 +647,8 @@ void network_thread ()
+@@ -567,6 +600,8 @@
  		}
  	    };
  	}
@@ -201,7 +252,7 @@ index 241bd82..fde250e 100644
  
  	/*
  	 * finished obvious sources, look for data from PPP connections.
-@@ -639,3 +721,82 @@ void network_thread ()
+@@ -639,3 +674,82 @@
      }
  
  }
@@ -284,11 +335,9 @@ index 241bd82..fde250e 100644
 +#endif
 +    return 0;
 +}
-diff --git a/xl2tpd.c b/xl2tpd.c
-index 307ac2e..3fb6dd7 100644
 --- a/xl2tpd.c
 +++ b/xl2tpd.c
-@@ -278,7 +278,11 @@ void death_handler (int signal)
+@@ -278,7 +278,11 @@
      struct tunnel *st, *st2;
      int sec;
      l2tp_log (LOG_CRIT, "%s: Fatal signal %d received\n", __FUNCTION__, signal);
@@ -300,7 +349,7 @@ index 307ac2e..3fb6dd7 100644
                  st = tunnels.head;
                  while (st)
                  {
-@@ -349,7 +353,7 @@ int start_pppd (struct call *c, struct ppp_opts *opts)
+@@ -349,7 +353,7 @@
      int flags;
  #endif
      int pos = 1;
@@ -309,7 +358,7 @@ index 307ac2e..3fb6dd7 100644
  #ifdef DEBUG_PPPD
      int x;
  #endif
-@@ -397,7 +401,7 @@ int start_pppd (struct call *c, struct ppp_opts *opts)
+@@ -397,7 +401,7 @@
         sax.sa_family = AF_PPPOX;
         sax.sa_protocol = PX_PROTO_OL2TP;
         sax.pppol2tp.pid = 0;
@@ -318,7 +367,7 @@ index 307ac2e..3fb6dd7 100644
         sax.pppol2tp.addr.sin_addr.s_addr = c->container->peer.sin_addr.s_addr;
         sax.pppol2tp.addr.sin_port = c->container->peer.sin_port;
         sax.pppol2tp.addr.sin_family = AF_INET;
-@@ -408,6 +412,7 @@ int start_pppd (struct call *c, struct ppp_opts *opts)
+@@ -408,6 +412,7 @@
         if (connect(fd2, (struct sockaddr *)&sax, sizeof(sax)) < 0) {
             l2tp_log (LOG_WARNING, "%s: Unable to connect PPPoL2TP socket.\n",
                  __FUNCTION__);
@@ -326,7 +375,7 @@ index 307ac2e..3fb6dd7 100644
             return -EINVAL;
         }
         stropt[pos++] = strdup ("plugin");
-@@ -484,7 +489,7 @@ int start_pppd (struct call *c, struct ppp_opts *opts)
+@@ -484,7 +489,7 @@
          dup2 (fd2, 0);
          dup2 (fd2, 1);
  	close(fd2);
@@ -335,7 +384,7 @@ index 307ac2e..3fb6dd7 100644
          /* close all the calls pty fds */
          st = tunnels.head;
          while (st)
-@@ -492,12 +497,17 @@ int start_pppd (struct call *c, struct ppp_opts *opts)
+@@ -492,12 +497,17 @@
              sc = st->call_head;
              while (sc)
              {
@@ -355,7 +404,7 @@ index 307ac2e..3fb6dd7 100644
  
          /* close the UDP socket fd */
          close (server_socket);
-@@ -615,6 +625,10 @@ void destroy_tunnel (struct tunnel *t)
+@@ -615,6 +625,10 @@
         the memory pointed to by t->chal_us.vector at some other place */
      if (t->chal_them.vector)
          free (t->chal_them.vector);
