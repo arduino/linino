@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011-2012 OpenWrt.org
+# Copyright (C) 2011-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=boblight
 PKG_REV:=412
 PKG_VERSION:=$(PKG_REV)
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://boblight.googlecode.com/svn/trunk
@@ -20,7 +20,6 @@ PKG_SOURCE_VERSION:=$(PKG_REV)
 
 PKG_INSTALL:=1
 
-include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/boblight/Default
@@ -28,7 +27,7 @@ define Package/boblight/Default
   CATEGORY:=Utilities
   TITLE:=Tools for driving lights connected to an external controller
   URL:=http://code.google.com/p/boblight/
-  DEPENDS:=+librt $(CXX_DEPENDS)
+  DEPENDS:=+librt +libstdcpp
 endef
 
 define Package/boblight/Default/description
