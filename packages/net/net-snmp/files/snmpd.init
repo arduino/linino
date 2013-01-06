@@ -41,6 +41,16 @@ snmpd_com2sec_add() {
 	[ -n "$community" ] || return 0
 	echo "com2sec $secname $source $community" >> $RUN_C
 }
+snmpd_com2sec6_add() {
+	local cfg="$1"
+	config_get secname "$cfg" secname
+	[ -n "$secname" ] || return 0
+	config_get source "$cfg" source
+	[ -n "$source" ] || return 0
+	config_get community "$cfg" community
+	[ -n "$community" ] || return 0
+	echo "com2sec6 $secname $source $community" >> $RUN_C
+}
 snmpd_group_add() {
 	local cfg="$1"
 	config_get group "$cfg" group
@@ -120,6 +130,7 @@ start() {
 	config_foreach snmpd_agent_add agent
 	config_foreach snmpd_system_add system
 	config_foreach snmpd_com2sec_add com2sec
+	config_foreach snmpd_com2sec6_add com2sec6
 	config_foreach snmpd_group_add group
 	config_foreach snmpd_view_add view
 	config_foreach snmpd_access_add access
