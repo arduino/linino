@@ -34,7 +34,7 @@ proto_wing_setup() {
 
 	# temporary hack waiting for a way to delay wing interfaces until the
 	# wifi sub-system has been brought up
-	sleep 15
+	sleep 30
 
 	config_load wireless
 	config_foreach wing_list_interfaces wifi-iface
@@ -106,7 +106,9 @@ proto_wing_setup() {
 	}
 
 	(/usr/bin/click /tmp/$link-aligned.click >> /var/log/$link.log 2>&1 &) &
+
 	sleep 2
+
 	ps | grep /usr/bin/click | grep -q -v grep || {
 		logger -t "$config" "Unable to start click. Exiting."
 		exit 1
@@ -125,10 +127,9 @@ proto_wing_setup() {
 	proto_add_ipv4_address "$ipaddr" "$netmask"
 	proto_add_ipv4_route "$prefix.0.0.0" "255.0.0.0" "$iface"
 
-	route -n | grep -q '^0.0.0.0' || {
-		proto_add_ipv4_route "0.0.0.0" "0" "$iface"
-	}
-	
+	wing_load_static_routes
+	wing_load_static_hnas
+
 	proto_send_update "$config"
 
 }
@@ -145,7 +146,14 @@ wing_list_interfaces() {
 	local channel freq hwmode hwaddr ifname mode
 	config_get mode $1 mode
 	config_get_bool up $1 up
-	[ "$up" = "1" -a "$mode" = "monitor" ] || return 0
+	[ "$up" = "1" ] || {
+		logger -t "$1" "Device not up. Ignoring."
+		return 0
+	}
+	[ "$mode" = "monitor" ] || {
+		logger -t "$1" "Device not in monitor mode. Ignoring."
+		return 0
+	}
 	config_get ifname $1 ifname
 	config_get device $1 device
 	config_get hwmode $device hwmode "11bg"
@@ -154,7 +162,7 @@ wing_list_interfaces() {
 		logger -t "$device" "Channel not specified. Ignoring."
 		return 0
 	}
-	freq=$(iwlist $ifname freq | sed -n "s/^.*Channel 0*$channel : \([0-9.]*\).*/\1/p" | awk '{print $1*1000}')
+	freq=$(iw phy $device info | grep "MHz" | grep "\[$channel\]" | sed -n "s/^.* \([0-9]*\) MHz.*/\1/p")
 	hwaddr=$(/sbin/ifconfig $ifname 2>&1 | sed -n 's/^.*HWaddr \([0-9A-Za-z\-]*\).*/\1/p' | sed -e 's/\-/:/g' | cut -c1-17)
 	freqs=${freqs:+"$freqs "}$freq
 	hwmodes=${hwmodes:+"$hwmodes "}$hwmode
@@ -163,6 +171,101 @@ wing_list_interfaces() {
 	/sbin/ifconfig $ifname mtu 1900
 	/sbin/ifconfig $ifname txqueuelen 5
 	/sbin/ifconfig $ifname up
+}
+
+#
+# HNAs functions
+#
+
+wing_add_static_hna() {
+	logger "Adding hna: $1"
+	uci add_list network.mesh.hna=$1
+	uci commit
+	wing_load_static_hnas
+}
+
+wing_clear_static_hna() {
+	logger "Deleting hna: $1"
+	local list="$(uci get network.mesh.hna)"
+	local elem
+	uci delete network.mesh.hna
+	for elem in $list; do
+		if [ "$elem" != "$1" ]; then
+			uci add_list network.mesh.hna=$elem
+		fi
+	done
+	uci commit
+}
+
+wing_load_static_hna() {
+	logger "Loading hna: $1"
+	output=$(/usr/bin/write_handler wr/gw.hna_add $1)
+	[ "$output" != "" ] && {
+		logger "Invalid hna: $1"
+		wing_clear_static_hna "$1"
+	}
+}
+
+wing_load_static_hnas() {
+	logger "Loading hnas"
+	/usr/bin/write_handler wr/gw.hnas_clear true
+	config_load network
+	config_list_foreach mesh hna wing_load_static_hna
+}
+
+wing_clear_static_hnas() {
+	logger "Clearing hnas"
+	/usr/bin/write_handler wr/gw.hnas_clear true
+	config_load network
+	config_list_foreach mesh hna wing_clear_static_hna
+}
+
+#
+# Static routes functions
+#
+
+wing_add_static_route() {
+	logger "Adding route: $1"
+	uci add_list network.mesh.route=$1
+	uci commit
+	wing_load_static_routes
+}
+
+wing_clear_static_route() {
+	logger "Deleting route: $1"
+	local list="$(uci get network.mesh.route)"
+	local elem
+	uci delete network.mesh.route
+	for elem in $list; do
+		if [ "$elem" != "$1" ]; then
+			uci add_list network.mesh.route=$elem
+		fi
+	done
+	uci commit
+}
+
+wing_load_static_route() {
+	logger "Loading route: $1"
+	route=$(echo $1 | sed 's/@/ /')
+	output=$(/usr/bin/write_handler wr/querier.add $route)
+	[ "$output" != "" ] && {
+		logger "Invalid route: $1"
+		wing_clear_static_route "$1"
+	}
+}
+
+wing_load_static_routes() {
+	logger "Loading routes"
+	/usr/bin/write_handler wr/querier.clear_static_routes true
+	config_load network
+	config_list_foreach mesh route wing_load_static_route
+}
+
+wing_clear_static_routes() {
+	logger "Clearing routes"
+	/usr/bin/write_handler wr/querier.clear_static_routes true
+	config_load network
+	config_list_foreach mesh route wing_clear_static_route
 }
 
 add_protocol wing
