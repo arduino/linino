@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 20011 OpenWrt.org
+# Copyright (C) 2012 OpenWrt.org
 #
 # This is free software, licensed under the wxWindows Library Licence, Version 3.1.
 # See /LICENSE for more information.
