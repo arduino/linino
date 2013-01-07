@@ -17,12 +17,12 @@ PKG_RELEASE:=1
 #
 # The latest FS git hash in PKG_REV can be obtained from http://fisheye.freeswitch.org
 #
-PKG_REV:=5e3a6fc5e6f40be5d68c8b3cfbbfa3227fe06c2f
+PKG_REV:=1e5beafe97ba0d0582444c8c037aa0de319f0817
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
 PKG_SOURCE_SUBDIR:=$(PKG_DISTNAME)
-PKG_SOURCE:=$(PKG_SOURCE_SUBDIR)-$(shell echo $(PKG_REV)|cut -b -7).tar.xz
+PKG_SOURCE:=$(PKG_SOURCE_SUBDIR)-$(shell echo $(PKG_REV)|cut -b -7).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 
@@ -413,7 +413,7 @@ endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-opus),)
- $(eval $(call Download/files,opus,opus-1.0.2.tar.gz,ic503ad05a59ddb44deab96204401be03,,downloads/libs/,libs/))
+ $(eval $(call Download/files,opus,opus-1.0.2.tar.gz,c503ad05a59ddb44deab96204401be03,,downloads/libs/,libs/))
 endif
 
 
