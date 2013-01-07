@@ -6,7 +6,7 @@
  SILK_DIR=$(switch_srcdir)/libs/silk
  SILK_BUILDDIR=$(switch_builddir)/libs/silk
  LOCAL_CFLAGS=-I$(SILK_DIR)/src  -I$(SILK_DIR)/interface
-@@ -7,5 +8,5 @@ LOCAL_LIBADD=$(SILK_LA)
+@@ -8,5 +9,5 @@ LOCAL_OBJS=$(BASE)/libs/stfu/stfu.o
  include $(BASE)/build/modmake.rules
  
  $(SILK_LA): $(SILK_DIR)/.update	
