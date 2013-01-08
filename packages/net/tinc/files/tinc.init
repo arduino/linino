@@ -135,6 +135,9 @@ prepare_net() {
 
 	section_enabled "$s" || return 1
 
+        # rm old config
+        rm -rf "$TMP_TINC/$s/"
+
 	[ ! -d "$TMP_TINC/$s" ] && mkdir -p "$TMP_TINC/$s"
 	[ -d "/etc/tinc/$s" ] && cp -r "/etc/tinc/$s" "$TMP_TINC/"
 
@@ -179,6 +182,8 @@ stop_instance() {
 
 	SERVICE_PID_FILE="/var/run/tinc.$s.pid"
 	service_stop $BIN
+	# rm old config
+	rm -rf "$TMP_TINC/$s/"
 }
 
 reload_instance() {
