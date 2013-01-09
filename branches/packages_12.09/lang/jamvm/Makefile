@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,14 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=jamvm
 PKG_VERSION:=1.6.0-git
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.berlios.de/jamvm
 PKG_SOURCE_VERSION:=4617da717ecb05654ea5bb9572338061106a414d
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
-PKG_MIRROR_MD5SUM:=fd546a48f9e248d21d879664240892a1
+PKG_MIRROR_MD5SUM:=66a728a3cb8dad0e3773035c4049eb5f
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
