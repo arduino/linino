@@ -12,15 +12,11 @@ write before aborting.
 
 This fix should be backported to 1.4 too.
 (cherry picked from commit a7a7ebc38280d7a04192bf95e6852222f4bd8140)
----
- src/session.c |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
-
-diff --git a/src/session.c b/src/session.c
-index 239d4f5..6211a45 100644
---- a/src/session.c
-+++ b/src/session.c
-@@ -203,7 +203,8 @@ int sess_update_st_con_tcp(struct session *s, struct stream_interface *si)
+Index: haproxy-1.4.22/src/session.c
+===================================================================
+--- haproxy-1.4.22.orig/src/session.c
++++ haproxy-1.4.22/src/session.c
+@@ -203,7 +203,8 @@ int sess_update_st_con_tcp(struct sessio
  	}
  
  	/* OK, maybe we want to abort */
@@ -30,6 +26,3 @@ index 239d4f5..6211a45 100644
  		     ((req->flags & BF_SHUTW_NOW) && /* FIXME: this should not prevent a connection from establishing */
  		      (((req->flags & (BF_OUT_EMPTY|BF_WRITE_ACTIVITY)) == BF_OUT_EMPTY) ||
  		       s->be->options & PR_O_ABRT_CLOSE)))) {
--- 
-1.7.1
-
